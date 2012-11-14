@@ -20,30 +20,93 @@
 
 #include <QtGui/QTextDocument>
 
-#include <klocale.h>
+#include <KLocale>
+
+#include <KTextEditor/Editor>
+#include <KTextEditor/Document>
+#include <KTextEditor/View>
+#include <KTextEditor/ConfigInterface>
+#include <KTextEditor/HighlightInterface>
 
 #include <language/duchain/duchain.h>
+#include <interfaces/icore.h>
+#include <interfaces/ipartcontroller.h>
+
+#include <QVBoxLayout>
+#include <QLabel>
 
 #include "../../parser/rpp/macrorepository.h"
 #include "../../parser/rpp/chartools.h"
+
 
 namespace Cpp {
 using namespace KDevelop;
 using namespace rpp;
 
+KTextEditor::View* createDocAndView(const QString& data, KTextEditor::Document** docPtr)
+{
+  if (data.isEmpty()) {
+    return 0;
+  }
+  KTextEditor::Document* doc = ICore::self()->partController()->editorPart()->createDocument(0);
+  *docPtr = doc;
+  doc->setText(data);
+  doc->setMode("C++");
+  doc->setReadWrite(false);
+  KTextEditor::View* view = doc->createView(0);
+  if (KTextEditor::ConfigInterface* config = qobject_cast<KTextEditor::ConfigInterface*>(view)) {
+    config->setConfigValue("icon-bar", false);
+    config->setConfigValue("line-numbers", false);
+    config->setConfigValue("dynamic-word-wrap", true);
+  }
+  return view;
+}
+
 MacroNavigationContext::MacroNavigationContext(const pp_macro& macro, QString preprocessedBody)
-  : AbstractNavigationContext(TopDUContextPointer(0)),
-    m_macro(new rpp::pp_macro(macro)), m_body(preprocessedBody)
-{}
+: AbstractNavigationContext(TopDUContextPointer(0))
+, m_macro(new rpp::pp_macro(macro))
+, m_body(preprocessedBody)
+, m_preprocessed(0)
+, m_definition(0)
+, m_widget(0)
+{
+  KTextEditor::View* preprocessedView = createDocAndView(preprocessedBody.trimmed(), &m_preprocessed);
+  QString definition = QString::fromUtf8(stringFromContents((uint*)m_macro->definition(), m_macro->definitionSize()).trimmed());
+  KTextEditor::View* definitionView = createDocAndView(definition, &m_definition);
+
+  m_widget = new QWidget;
+  QVBoxLayout* layout = new QVBoxLayout(m_widget);
+  if (m_preprocessed) {
+    layout->addWidget(new QLabel(i18n("Preprocessed Body:")));
+    layout->addWidget(preprocessedView);
+  } else {
+    layout->addWidget(new QLabel(i18n("Preprocessed Body: (empty)")));
+  }
+  if (m_definition) {
+    layout->addWidget(new QLabel(i18n("Body:")));
+    layout->addWidget(definitionView);
+  } else {
+    layout->addWidget(new QLabel(i18n("Body: (empty)")));
+  }
+  m_widget->setLayout(layout);
+}
 
 MacroNavigationContext::~MacroNavigationContext()
 {
+  delete m_preprocessed;
+  delete m_definition;
+  delete m_widget;
   delete m_macro;
 }
 
 QString MacroNavigationContext::name() const
 {
   return m_macro->name.str();
+}
+
+QWidget* MacroNavigationContext::widget() const
+{
+  return m_widget;
 }
 
 QString MacroNavigationContext::html(bool shorten)
@@ -68,30 +131,16 @@ QString MacroNavigationContext::html(bool shorten)
     args += ')';
   }
 
-  modifyHtml() += (m_macro->function_like ? i18n("Function macro") : i18n("Macro")) + " " + importantHighlight(m_macro->name.str()) + " " + args +  "<br />";
-
   const KUrl url = m_macro->file.toUrl();
-  NavigationAction action(url, KTextEditor::Cursor(m_macro->sourceLine,0));
-  QList<TopDUContext*> duchains = DUChain::self()->chainsForDocument(m_macro->file);
-
-  if(!shorten) {
-    modifyHtml() += "<br />";
-
-    if(!m_body.isEmpty()) {
-    modifyHtml() += labelHighlight(i18n("Preprocessed body:")) + "<br />";
-    modifyHtml() += codeHighlight(Qt::escape(m_body));
-    modifyHtml() += "<br />";
-    }
-
-
-    modifyHtml() += labelHighlight(i18n("Body:")) + "<br />";
-
-    modifyHtml() += codeHighlight(Qt::escape(QString::fromUtf8(stringFromContents((uint*)m_macro->definition(), m_macro->definitionSize()))));
-    modifyHtml() += "<br />";
-  }
-
   const QString path = url.pathOrUrl();
-  makeLink(path, path, action);
+  NavigationAction action(url, KTextEditor::Cursor(m_macro->sourceLine,0));
+  modifyHtml() += i18nc("%1: macro type, i.e.: 'Function macro' or just 'Macro'"
+                        "%2: the macro name and arguments"
+                        "%3 the link to the definition",
+                        "%1: %2, defined in %3",
+                        (m_macro->function_like ? i18n("Function macro") : i18n("Macro")),
+                        importantHighlight(m_macro->name.str()) + args,
+                        createLink(path, path, action) );
 
   modifyHtml() += fontSizeSuffix(shorten) + "</p></body></html>";
   return currentHtml();

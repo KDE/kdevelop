@@ -22,6 +22,10 @@
 #include <language/duchain/navigation/abstractnavigationcontext.h>
 #include "../../parser/rpp/pp-macro.h"
 
+namespace KTextEditor {
+class View;
+}
+
 namespace Cpp {
 
 class MacroNavigationContext : public KDevelop::AbstractNavigationContext
@@ -30,12 +34,16 @@ public:
   MacroNavigationContext(const rpp::pp_macro& macro, QString preprocessedBody);
   ~MacroNavigationContext();
 
+  virtual QWidget* widget() const;
   virtual QString html(bool shorten);
   virtual QString name() const;
 
 private:
   rpp::pp_macro* m_macro;
   QString m_body;
+  KTextEditor::Document* m_preprocessed;
+  KTextEditor::Document* m_definition;
+  QWidget* m_widget;
 };
 
 }
