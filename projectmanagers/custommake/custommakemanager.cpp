@@ -142,7 +142,7 @@ bool CustomMakeManager::isValid(const KUrl& url, const bool isFolder, IProject* 
     } else if (!isFolder && (name.endsWith(".o") || name.endsWith(".a")
                           || name.startsWith("moc_") || name.endsWith(".moc")
                           || name.endsWith(".so") || name.contains(".so.")
-                          || name.startsWith(".swp.")
+                          || name.startsWith(".swp.") || name.endsWith('~')
                           || (name.startsWith('.') && name.endsWith(".kate-swp"))))
     {
         return false;
