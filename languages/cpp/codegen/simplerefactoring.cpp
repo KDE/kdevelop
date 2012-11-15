@@ -220,17 +220,18 @@ void SimpleRefactoring::executeMoveIntoSourceAction() {
           KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("Insertion failed"));
           return;
         }
-        KTextEditor::Range range = decl->internalContext()->rangeInCurrentRevision().textRange();
+        KTextEditor::Cursor start = funDecl->internalFunctionContext()->rangeInCurrentRevision().textRange().end();
+        start.setColumn(start.column() +  1); // skip )
+        KTextEditor::Cursor end = decl->internalContext()->rangeInCurrentRevision().textRange().end();
         lock.unlock();
         if(!ins.changes().applyAllChanges()) {
           KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("Applying changes failed"));
           return;
         }
-        
-        doc->textDocument()->replaceText(range, QString(";"));
+
+        doc->textDocument()->replaceText(KTextEditor::Range(start, end), QString(";"));
         ICore::self()->languageController()->backgroundParser()->addDocument(url);
         ICore::self()->languageController()->backgroundParser()->addDocument(indexedTargetUrl);
-        
       }else{
         lock.unlock();
         KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("No document for %1", decl->url().toUrl().prettyUrl()));
