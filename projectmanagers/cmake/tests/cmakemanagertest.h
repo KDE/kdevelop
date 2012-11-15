@@ -39,6 +39,7 @@ private slots:
     void testIncludePaths();
     void testRelativePaths();
     void testTargetIncludePaths();
+    void testConditionsInSubdirectoryBasedOnRootVariables();
 };
 
 #endif // CMAKEMANAGERTEST_H
