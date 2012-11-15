@@ -201,3 +201,30 @@ void CMakeManagerTest::testTargetIncludePaths()
     }
     QVERIFY(foundInTarget);
 }
+
+void CMakeManagerTest::testConditionsInSubdirectoryBasedOnRootVariables()
+{
+    const TestProjectPaths paths = projectPaths("conditions_in_subdirectory_based_on_root_variables");
+    defaultConfigure(paths);
+
+    ICore::self()->projectController()->openProject(paths.projectFile);
+
+    WAIT_FOR_OPEN_SIGNAL;
+
+    IProject* project = ICore::self()->projectController()->findProjectByName("conditions_in_subdirectory_based_on_root_variables");
+    QVERIFY(project);
+    QVERIFY(project->buildSystemManager());
+
+    QCOMPARE(paths.projectFile, project->projectFileUrl());
+    QCOMPARE(paths.sourceDir, project->folder());
+
+    KUrl rootFooCpp(paths.sourceDir, "foo.cpp");
+    QVERIFY(QFile::exists(rootFooCpp.toLocalFile()));
+    QList< ProjectBaseItem* > rootFooItems = project->itemsForUrl(rootFooCpp);
+    QCOMPARE(rootFooItems.size(), 4); // three items for the targets, one item for the plain file
+
+    KUrl subdirectoryFooCpp(paths.sourceDir, "subdirectory/foo.cpp");
+    QVERIFY(QFile::exists(subdirectoryFooCpp.toLocalFile()));
+    QList< ProjectBaseItem* > subdirectoryFooItems = project->itemsForUrl(subdirectoryFooCpp);
+    QCOMPARE(subdirectoryFooItems.size(), 4); // three items for the targets, one item for the plain file
+}

@@ -737,7 +737,6 @@ QStringList resolvePaths(const KUrl& baseUrl, const QStringList& pathsToResolve)
 QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolderItem* item )
 {
     Q_ASSERT(isReloading(item->project()));
-    QList<KDevelop::ProjectFolderItem*> folderList;
     CMakeFolderItem* folder = dynamic_cast<CMakeFolderItem*>( item );
 
     {
@@ -775,7 +774,6 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
 
         data.vm.pushScope();
         ReferencedTopDUContext ctx = includeScript(cmakeListsPath.toLocalFile(), folder->project(), item->url().toLocalFile(), curr);
-        data.vm.popScope();
         folder->setTopDUContext(ctx);
        /*{
         kDebug() << "dumpiiiiiing" << folder->url();
@@ -783,6 +781,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
         KDevelop::dumpDUContext(v.context(), false);
         }*/
 
+        QList<KDevelop::ProjectFolderItem*> folderList;
         QStringList alreadyAdded;
         deleteAllLater(castToBase(folder->cleanupBuildFolders(data.subdirectories)));
         foreach (const Subdirectory& subf, data.subdirectories)
@@ -947,13 +946,16 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
             
             setTargetFiles(targetItem, tfiles);
         }
-        
         qRegisterMetaType<QList<Test> >("QList<Test>");
         qRegisterMetaType<KDevelop::ProjectFolderItem* >("KDevelop::ProjectFolderItem*");
         QMetaObject::invokeMethod(this, "createTestSuites", Qt::QueuedConnection,
                                   Q_ARG(QList<Test>, data.testSuites),
                                   Q_ARG(KDevelop::ProjectFolderItem*, item));
         
+        foreach(KDevelop::ProjectFolderItem* item, folderList) {
+            parse(item);
+        }
+        data.vm.popScope();
     } else if( folder ) {
         // Only do cmake-stuff if its a cmake folder
         deleteAllLater(castToBase(folder->cleanupBuildFolders(QList<Subdirectory>())));
@@ -965,7 +967,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
     // Use item here since folder may be 0.
     reloadFiles(item);
 
-    return folderList;
+    return QList<KDevelop::ProjectFolderItem*>();
 }
 
 ProjectFileItem* containsFile(const KUrl& file, const QList<ProjectFileItem*>& tfiles)
