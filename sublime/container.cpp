@@ -98,6 +98,7 @@ struct ContainerPrivate {
     QWeakPointer<QWidget> leftCornerWidget;
     QToolButton* documentListButton;
     QMenu* documentListMenu;
+    QMap<View*, QAction*> documentListActionForView;
 
     /**
      * Updates the context menu which is shown when
@@ -108,7 +109,8 @@ struct ContainerPrivate {
      */
     void updateDocumentListPopupMenu()
     {
-        qDeleteAll(documentListMenu->actions());
+        qDeleteAll(documentListActionForView);
+        documentListActionForView.clear();
         documentListMenu->clear();
 
         // create a lexicographically sorted list
@@ -124,10 +126,10 @@ struct ContainerPrivate {
         foreach(View* view, views) {
             QAction* action = documentListMenu->addAction(view->document()->title());
             action->setData(QVariant::fromValue(view));
+            documentListActionForView[view] = action;
+            action->setIcon(view->document()->statusIcon());
             ///FIXME: push this code somehow into shell, such that we can access the project model for
             ///       icons and also get a neat, short path like the document switcher.
-            ///FIXME: update icon when document changed:
-            /// action->setIcon(view->document()->statusIcon());
         }
     }
 };
@@ -319,15 +321,18 @@ void Container::addWidget(View *view, int position)
     d->tabBar->insertTab(idx, view->document()->statusIcon(), view->document()->title());
     Q_ASSERT(view);
     d->viewForWidget[w] = view;
+
+    // Update document list context menu. This has to be called before
+    // setCurrentWidget, because we call the status icon and title update slots
+    // already, which in turn need the document list menu to be setup.
+    d->updateDocumentListPopupMenu();
+
     setCurrentWidget(d->stack->currentWidget());
-    
+
     // This fixes a strange layouting bug, that could be reproduced like this: Open a few files in KDevelop, activate the rightmost tab.
     // Then temporarily switch to another area, and then switch back. After that, the tab-bar was gone.
     // The problem could only be fixed by closing/opening another view.
     d->tabBar->setMinimumHeight(d->tabBar->sizeHint().height());
-
-    // Update document list context menu
-    d->updateDocumentListPopupMenu();
 
     connect(view, SIGNAL(statusChanged(Sublime::View*)), this, SLOT(statusChanged(Sublime::View*)));
     connect(view->document(), SIGNAL(statusIconChanged(Sublime::Document*)), this, SLOT(statusIconChanged(Sublime::Document*)));
@@ -350,6 +355,11 @@ void Container::statusIconChanged(Document* doc)
             if (tabIndex != -1) {
                 d->tabBar->setTabIcon(tabIndex, doc->statusIcon());
             }
+
+            // Update the document title's menu associated action
+            // using the View* index map
+            Q_ASSERT(d->documentListActionForView.contains(it.value()));
+            d->documentListActionForView[it.value()]->setIcon(doc->statusIcon());
             break;
         }
     }
@@ -379,12 +389,13 @@ void Container::documentTitleChanged(Sublime::Document* doc)
             if (tabIndex != -1) {
                 d->tabBar->setTabText(tabIndex, doc->title());
             }
+
+            // Update document list popup title
+            Q_ASSERT(d->documentListActionForView.contains(it.value()));
+            d->documentListActionForView[it.value()]->setText(doc->title());
             break;
         }
     }
-
-    // Update document list popup
-    d->updateDocumentListPopupMenu();
 }
 
 int Container::count() const
@@ -450,10 +461,11 @@ void Sublime::Container::removeWidget(QWidget *w)
             disconnect(view->document(), SIGNAL(titleChanged(Sublime::Document*)), this, SLOT(documentTitleChanged(Sublime::Document*)));
             disconnect(view->document(), SIGNAL(statusIconChanged(Sublime::Document*)), this, SLOT(statusIconChanged(Sublime::Document*)));
             disconnect(view, SIGNAL(statusChanged(Sublime::View*)), this, SLOT(statusChanged(Sublime::View*)));
-        }
 
-        // Update document list context menu
-        d->updateDocumentListPopupMenu();
+            // Update document list context menu
+            Q_ASSERT(d->documentListActionForView.contains(view));
+            delete d->documentListActionForView.take(view);
+        }
     }
 }
 
