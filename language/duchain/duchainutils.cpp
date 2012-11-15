@@ -331,6 +331,27 @@ Declaration* DUChainUtils::itemUnderCursor(const KUrl& url, const KDevelop::Simp
   return 0;
 }
 
+KTextEditor::Range DUChainUtils::itemRangeUnderCursor(const KUrl& url, const KDevelop::SimpleCursor& cursor)
+{
+  KDevelop::TopDUContext* chosen = standardContextForUrl(url);
+
+  if( chosen ) {
+    CursorInRevision c = chosen->transformToLocalRevision(cursor);
+    DUContext* ctx = chosen->findContextAt(c);
+    Declaration* decl = declarationUnderCursor(c, ctx);
+    if (decl && decl->range().contains(c) ) {
+      return decl->rangeInCurrentRevision().textRange();
+    }
+
+    for(int a = 0; a < ctx->usesCount(); ++a) {
+      if( ctx->uses()[a].m_range.contains(c) ) {
+        return ctx->transformFromLocalRevision(ctx->uses()[a].m_range).textRange();
+      }
+    }
+  }
+  return KTextEditor::Range();
+}
+
 Declaration* DUChainUtils::declarationForDefinition(Declaration* definition, TopDUContext* topContext)
 {
   if(!definition)

@@ -67,6 +67,10 @@ namespace DUChainUtils {
    * Must only be called from the foreground or with the foreground lock held.
    * If the item under the cursor is a use, the declaration is returned. */
   KDEVPLATFORMLANGUAGE_EXPORT Declaration* itemUnderCursor(const KUrl& url, const SimpleCursor& cursor);
+  /** Returns the Declaration/Definition/Use range under the cursor or empty range.
+   * DUChain must be locked.
+   * Must only be called from the foreground or with the foreground lock held. */
+  KDEVPLATFORMLANGUAGE_EXPORT KTextEditor::Range itemRangeUnderCursor(const KUrl& url, const SimpleCursor& cursor);
   /**If the given declaration is a definition, and has a real declaration
     *attached, returns that declarations. Else returns the given argument. */
   KDEVPLATFORMLANGUAGE_EXPORT Declaration* declarationForDefinition(Declaration* definition, TopDUContext* topContext = 0);
