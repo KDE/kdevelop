@@ -82,7 +82,9 @@ KompareProcess::KompareProcess( DiffSettings* diffSettings, Kompare::DiffMode di
 
 void KompareProcess::writeDefaultCommandLine()
 {
-	if ( !m_diffSettings || m_diffSettings->m_diffProgram.isEmpty() )
+	Q_ASSERT(m_diffSettings);
+
+	if ( m_diffSettings->m_diffProgram.isEmpty() )
 	{
 		*this << "diff" << "-dr";
 	}
