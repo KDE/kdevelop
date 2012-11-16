@@ -181,8 +181,8 @@ public:
         // Important to also include the "top" builder for the project, so
         // projects with only one such builder are kept working. Otherwise the project config
         // dialog is empty for such cases.
-        buildersForKcm << project->buildSystemManager()->builder();
         if( IBuildSystemManager* buildSystemManager = project->buildSystemManager() ) {
+            buildersForKcm << buildSystemManager->builder();
             collectBuilders( buildersForKcm, buildSystemManager->builder(), project );
         }
 
