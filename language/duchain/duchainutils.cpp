@@ -338,14 +338,16 @@ KTextEditor::Range DUChainUtils::itemRangeUnderCursor(const KUrl& url, const KDe
   if( chosen ) {
     CursorInRevision c = chosen->transformToLocalRevision(cursor);
     DUContext* ctx = chosen->findContextAt(c);
-    Declaration* decl = declarationUnderCursor(c, ctx);
-    if (decl && decl->range().contains(c) ) {
-      return decl->rangeInCurrentRevision().textRange();
-    }
+    if (ctx) {
+      Declaration* decl = declarationUnderCursor(c, ctx);
+      if (decl && decl->range().contains(c) ) {
+        return decl->rangeInCurrentRevision().textRange();
+      }
 
-    for(int a = 0; a < ctx->usesCount(); ++a) {
-      if( ctx->uses()[a].m_range.contains(c) ) {
-        return ctx->transformFromLocalRevision(ctx->uses()[a].m_range).textRange();
+      for(int a = 0; a < ctx->usesCount(); ++a) {
+        if( ctx->uses()[a].m_range.contains(c) ) {
+          return ctx->transformFromLocalRevision(ctx->uses()[a].m_range).textRange();
+        }
       }
     }
   }
