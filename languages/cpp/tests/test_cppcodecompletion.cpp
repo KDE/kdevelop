@@ -842,7 +842,7 @@ void TestCppCodeCompletion::testKeywords() {
   QCOMPARE(testCase2.names, QStringList());
   CompletionItemTester testReturn(context->childContexts()[ctxt], "return ");
   QVERIFY(testReturn.completionContext->isValid());
-  QCOMPARE(testReturn.names, QStringList()  << "return int" << "a" << "Values" << "v" << "test");
+  QCOMPARE(testReturn.names, QStringList()  << "return int" << "a" << "Values" << "v" << "test" << "v.Value1" << "v.Value2");
   CompletionItemTester testReturn2(context->childContexts()[ctxt], "return v.");
   QVERIFY(testReturn2.completionContext->isValid());
   QCOMPARE(testReturn2.names, QStringList() << "return int" << "Value1" << "Value2");
@@ -3632,6 +3632,50 @@ void TestCppCodeCompletion::testNoQuadrupleColon()
   QCOMPARE( doc->line( 0 ), QString("Foobar::var;") );
 
   doc->endEditing();
+}
+
+void TestCppCodeCompletion::testLookaheadMatches_data()
+{
+  QTest::addColumn<QString>("insert");          // inserted code
+  QTest::addColumn<QStringList>("completions"); // completions offered
+
+  QTest::newRow("Function Arg") << "m_smartOne.setOne(" << (
+    QStringList() << "setOne" << "m_one" << "m_two" << "m_smartOne" << "ThreeTwoOne" << "One" << "Two" << "OneSmartPointer"
+                  << "OneTwoThree" << "m_two.hatPointer" << "m_smartOne.operator->" << "this");
+  QTest::newRow("Smart Pointer") << "int foo = " << (
+    QStringList() << "int =" << "m_one" << "m_two" << "m_smartOne" << "ThreeTwoOne" << "One" << "Two" << "OneSmartPointer"
+                  << "OneTwoThree" << "m_one.alsoRan" << "m_two.meToo" << "m_smartOne->alsoRan" << "this");
+  QTest::newRow("Type Converstions") << "m_smartOne = " << (
+    QStringList() << "OneSmartPointer m_smartOne =" << "m_one" << "m_two" << "m_smartOne" << "ThreeTwoOne" << "One" << "Two"
+                  << "OneSmartPointer" << "OneTwoThree" << "m_two.hatPointer" << "m_smartOne.operator->" << "this" );
+  QTest::newRow("Assignment") << "m_one =  " << (
+    QStringList() << "One m_one =" << "m_one" << "m_two" << "m_smartOne" << "ThreeTwoOne" << "One" << "Two" << "OneSmartPointer"
+                  << "OneTwoThree" << "m_two.hat" << "this" );
+  QTest::newRow("Equality") << "m_one == " << (
+    QStringList() << "m_one" << "m_two" << "m_smartOne" << "ThreeTwoOne" << "One" << "Two" << "OneSmartPointer" << "OneTwoThree"
+                  << "m_two.hat" << "this" );
+  QTest::newRow("ReturnAccess") << "return" << (
+    QStringList() << "return int" << "m_one" << "m_two" << "m_smartOne" << "ThreeTwoOne" << "One" << "Two" << "OneSmartPointer"
+                  << "OneTwoThree" << "m_one.alsoRan" << "m_two.meToo" << "m_smartOne->alsoRan" << "this" );
+  QTest::newRow("No Lookahead") << "One::NoLookahead test = " << (
+    QStringList() << "One::NoLookahead NoLookahead =" << "m_one" << "m_two" << "m_smartOne" << "ThreeTwoOne" << "One" << "Two"
+                  << "OneSmartPointer" << "OneTwoThree" << "NO" << "CAN" << "SEE" << "this" );
+}
+
+void TestCppCodeCompletion::testLookaheadMatches()
+{
+  QByteArray test = "struct One { enum NoLookahead { NO, CAN, SEE, }; int alsoRan; typedef int myInt; };"
+                    "struct Two { One hat; One *hatPointer; int meToo(); };"
+                    "struct OneSmartPointer { OneSmartPointer(One*) {}; void setOne(One*); One* operator->() const {} };"
+                    "struct OneTwoThree { One m_one; Two m_two; OneSmartPointer m_smartOne; int ThreeTwoOne() { } };";
+  QFETCH(QString, insert);
+  QFETCH(QStringList, completions);
+  TopDUContext* top = parse(test, DumpNone);
+  DUChainWriteLocker lock(DUChain::lock());
+  DUContext *testContext = top->childContexts()[3]->childContexts()[1];
+  CompletionItemTester tester(testContext, insert);
+  QCOMPARE(tester.names, completions);
+  release(top);
 }
 
 #include "test_cppcodecompletion.moc"

@@ -59,6 +59,7 @@
 #include <language/duchain/classdeclaration.h>
 #include "qpropertydeclaration.h"
 #include "model.h"
+#include "helpers.h"
 
 // #define ifDebug(x) x
 
@@ -349,6 +350,67 @@ QString getUnaryOperator(const QString &context)
       return QString();
   }
   return unOp;
+}
+
+//Returns the class or struct declaration for the given type
+Declaration* containerDeclForType(AbstractType::Ptr givenType, TopDUContext* top, bool &typeIsPointer)
+{
+  if (PointerType::Ptr ptrType = givenType.cast<PointerType>())
+  {
+    if (!typeIsPointer)
+    {
+      typeIsPointer = true;
+      return containerDeclForType(ptrType->baseType(), top, typeIsPointer);
+    }
+    else
+      return 0; //The given type is a pointer to a pointer, and so cannot be accessed with ->
+  }
+
+  if (TypeAliasType::Ptr typeAliasType = givenType.cast<TypeAliasType>())
+    return containerDeclForType(typeAliasType->type(), top, typeIsPointer);
+
+  if (const IdentifiedType* identifiedType = dynamic_cast<const IdentifiedType*>(givenType.unsafeData()))
+  {
+    if (Declaration *ret = identifiedType->declaration(top))
+    {
+      if (dynamic_cast<ClassDeclaration*>(ret->logicalDeclaration(top)))
+        return ret;
+    }
+  }
+
+  return 0; //Type could not be identified or was not a class declaration
+}
+
+typedef QPair<Declaration*, bool> DeclAccessPair;
+//Look through localDeclarations of "container" for items matching "type"
+QList<DeclAccessPair> containedItemsMatchingType(Declaration *container, const IndexedType& type, TopDUContext *top, bool isPointer)
+{
+  static const Identifier arrowOpIdentifier("operator->");
+  QList<DeclAccessPair> ret;
+  if (!container || !container->internalContext())
+    return ret;
+  Cpp::TypeConversion conv(top);
+  Declaration *arrowOperator = 0;
+  QVector<Declaration*> containedDeclarations = container->internalContext()->localDeclarations(top);
+  foreach(Declaration *decl, containedDeclarations)
+  {
+    if (decl->isTypeAlias() || decl->isForwardDeclaration() || decl->type<EnumerationType>())
+      continue; //Skip declarations that are not accessed via ./->
+
+    if (!isPointer && decl->identifier() == arrowOpIdentifier)
+      arrowOperator = decl;
+
+    AbstractType::Ptr declEffectiveType = Cpp::effectiveType(decl);
+    if (!declEffectiveType.isNull() && conv.implicitConversion(declEffectiveType->indexed(), type))
+      ret << DeclAccessPair(decl, isPointer);
+  }
+  //If we found an "->", try to treat it as a smart pointer
+  if (arrowOperator)
+  {
+    //containerDeclForType will likely change isPointer... good thing we don't use it again
+    ret += containedItemsMatchingType(containerDeclForType(Cpp::effectiveType(arrowOperator), top, isPointer), type, top, true);
+  }
+  return ret;
 }
 
 CodeCompletionContext::
@@ -1346,20 +1408,27 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::memberAccessCompletionIt
   return items;
 }
 
+AbstractType::Ptr functionReturnType(DUContext* startContext)
+{
+  while(startContext && !startContext->owner())
+    startContext = startContext->parentContext();
+  if(startContext && startContext->owner())
+  {
+    FunctionType::Ptr funType = startContext->owner()->type<FunctionType>();
+    if (funType && funType->returnType())
+      return funType->returnType();
+  }
+  return AbstractType::Ptr();
+}
+
 QList<CompletionTreeItemPointer> CodeCompletionContext::returnAccessCompletionItems()
 {
   QList<CompletionTreeItemPointer> items;
   LOCKDUCHAIN; if (!m_duContext) return items;
 
-  DUContext* functionContext = m_duContext.data();
-  while(functionContext && !functionContext->owner())
-    functionContext = functionContext->parentContext();
-  if(functionContext && functionContext->owner()) {
-    FunctionType::Ptr funType = functionContext->owner()->type<FunctionType>();
-    if(funType && funType->returnType()) {
-        items << CompletionTreeItemPointer( new TypeConversionCompletionItem( "return " + funType->returnType()->toString(), funType->returnType()->indexed(), depth(), KSharedPtr <Cpp::CodeCompletionContext >(this) ) );
-    }
-  }
+  AbstractType::Ptr returnType = functionReturnType(m_duContext.data());
+  if (returnType)
+    items << CompletionTreeItemPointer( new TypeConversionCompletionItem( "return " + returnType->toString(), returnType->indexed(), depth(), KSharedPtr <Cpp::CodeCompletionContext >(this) ) );
   return items;
 }
 
@@ -1614,6 +1683,51 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::signalSlotAccessCompleti
   return items;
 }
 
+QList<IndexedType> CodeCompletionContext::matchTypes()
+{
+  QSet<KDevelop::IndexedType> ret;
+  if (m_accessType == BinaryOpFunctionCallAccess || m_accessType == FunctionCallAccess )
+  {
+    //MatchTypes for custom operator functions
+    foreach(const Function &func, m_matchingFunctionOverloads)
+    {
+      if (!func.function.isValid() || !func.function.isViable() || !func.function.declaration())
+        continue;
+      FunctionType::Ptr funcType = func.function.declaration()->type<FunctionType>();
+      if(funcType && funcType->indexedArgumentsSize() > (uint)func.matchedArguments)
+        ret << funcType->indexedArguments()[func.matchedArguments];
+    }
+    /* generally matching the other side's type is only useful for "=" or "==" ... Consider:
+     * if (foo && foo == "str" || <complete here>)
+     * The expressionResult preceeding the "||" operator is ["str"] and not [foo == "str"] as it should be
+     * therefore the matchType will be "const char *" and not "boolean" as it should be
+     * If this is fixed, we could use more operators here. See expressionBefore().
+     */
+    if (!m_matchingFunctionOverloads.size() && (m_operator == "=" || m_operator == "=="))
+      ret << m_expressionResult.type;
+  }
+  else if (m_accessType == ReturnAccess)
+  {
+    if (AbstractType::Ptr returnType = functionReturnType(m_duContext.data()))
+      ret << returnType->indexed();
+  }
+  //As of now, no other access types have any matchTypes
+  return ret.toList();
+}
+
+QList<DeclAccessPair> CodeCompletionContext::getLookaheadMatches(Declaration* forDecl, const QList<IndexedType>& matchTypes) const
+{
+  QList<DeclAccessPair> ret;
+  if (forDecl->isFunctionDeclaration() || forDecl->kind() != Declaration::Instance || !forDecl->abstractType())
+    return ret; //We can only use instances, for now no sub decls of functions either TODO: be nice to get no-arg functions at least
+  bool typeIsPointer = false;
+  Declaration *containerDecl = containerDeclForType(Cpp::effectiveType(forDecl), m_duContext->topContext(), typeIsPointer);
+  foreach(const IndexedType &matchType, matchTypes)
+    ret += containedItemsMatchingType(containerDecl, matchType, m_duContext->topContext(), typeIsPointer);
+  //Could use hideOverloadedDeclarations theoretically here, but it would do very little since we don't have the real declaration depth
+  return ret;
+}
+
 QList< CompletionTreeItemPointer > CodeCompletionContext::standardAccessCompletionItems() {
   QList<CompletionTreeItemPointer> items;
   LOCKDUCHAIN; if (!m_duContext) return items;
@@ -1625,7 +1739,6 @@ QList< CompletionTreeItemPointer > CodeCompletionContext::standardAccessCompleti
     if (func->abstractType() && (func->abstractType()->modifiers() & AbstractType::ConstModifier))
       typeIsConst = true;
   }
-
   QList<DeclarationDepthPair> decls = m_duContext->allDeclarations(m_duContext->type() == DUContext::Class ? m_duContext->range().end : m_position, m_duContext->topContext());
 
   //Collect the contents of unnamed namespaces
@@ -1689,6 +1802,10 @@ QList< CompletionTreeItemPointer > CodeCompletionContext::standardAccessCompleti
     
   decls = Cpp::hideOverloadedDeclarations(decls, typeIsConst);
 
+  QList<IndexedType> matchTypes;
+  if (m_parentContext)
+    matchTypes = parentContext()->matchTypes();
+  QList<CompletionTreeItemPointer> lookaheadMatches;
   foreach( const DeclarationDepthPair& decl, decls ) {
     NormalDeclarationCompletionItem* item = new NormalDeclarationCompletionItem(DeclarationPointer(decl.first), KDevelop::CodeCompletionContext::Ptr(this), decl.second );
 
@@ -1696,7 +1813,23 @@ QList< CompletionTreeItemPointer > CodeCompletionContext::standardAccessCompleti
       item->m_fixedMatchQuality = 0;
 
     items << CompletionTreeItemPointer(item);
+
+    if (!matchTypes.size())
+      continue;
+
+    QList<DeclAccessPair> lookaheadDecls = getLookaheadMatches(decl.first, matchTypes);
+    foreach(const DeclAccessPair &lookaheadDecl, lookaheadDecls)
+    {
+      NormalDeclarationCompletionItem* lookaheadItem =
+          new NormalDeclarationCompletionItem(DeclarationPointer(lookaheadDecl.first), KDevelop::CodeCompletionContext::Ptr(this));
+      lookaheadItem->prefixText = decl.first->identifier().toString() + (lookaheadDecl.second ? "->" : ".");
+      //Perhaps it'd be nice to have these stand out more without polluting the "Best Matches"
+      //NormalDeclarationCompletionItem should be refactored in order to make subclassing simpler
+      lookaheadItem->m_fixedMatchQuality = 0;
+      lookaheadMatches << CompletionTreeItemPointer(lookaheadItem);
+    }
   }
+  eventuallyAddGroup(i18n("Lookahead Matches"), 100, lookaheadMatches);
 
   ///Eventually show additional specificly known items for the matched argument-type, like for example enumerators for enum types
   CodeCompletionContext* parent = parentContext();

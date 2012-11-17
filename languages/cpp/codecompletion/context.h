@@ -108,6 +108,8 @@ namespace Cpp {
 
       ///@return the used access-operation
       AccessType accessType() const;
+      ///@return the list of IndexedTypes that this CodeCompletionContext expects
+      QList<IndexedType> matchTypes();
 
       /**
        * When the access-operation is a MemberAccess or ArrowMemberAccess, this
@@ -250,6 +252,9 @@ namespace Cpp {
       QList<CompletionTreeItemPointer> standardAccessCompletionItems();
       QList<CompletionTreeItemPointer> getImplementationHelpers();
       QList<CompletionTreeItemPointer> getImplementationHelpersInternal(const QualifiedIdentifier& minimumScope, DUContext* context);
+      ///If @param forDecl is an instance of a class, find declarations in that class which match @param matchTypes
+      ///@returns the list of matching declarations and whether or not you need the arrow operator (->) to access them
+      QList<QPair<Declaration*, bool>> getLookaheadMatches(Declaration* forDecl, const QList<IndexedType>& matchTypes) const;
 
       ///*DUChain must be locked*
       bool  filterDeclaration(Declaration* decl, DUContext* declarationContext = 0, bool dynamic = true);

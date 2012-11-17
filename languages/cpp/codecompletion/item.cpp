@@ -209,6 +209,7 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
   }else{
     newText = alternativeText;
   }
+  newText.prepend(prefixText);
   
   // Text that will be removed in a separate editing step (so the user can undo it)
   std::auto_ptr<KTextEditor::MovingRange> removeInSecondStep;
@@ -452,20 +453,8 @@ KDevelop::QualifiedIdentifier NormalDeclarationCompletionItem::stripPrefix() con
 
 QList<KDevelop::IndexedType> NormalDeclarationCompletionItem::typeForArgumentMatching() const {
   QList<KDevelop::IndexedType> ret;
-  if( m_declaration && completionContext() && completionContext()->accessType() == Cpp::CodeCompletionContext::FunctionCallAccess )
-  {
-    if(listOffset < completionContext()->functions().count()) {
-      Cpp::CodeCompletionContext::Function f( completionContext()->functions()[listOffset] );
-
-      if( f.function.isValid() && f.function.isViable() && f.function.declaration() && f.function.declaration()->type<FunctionType>() && f.function.declaration()->type<FunctionType>()->indexedArgumentsSize() > (uint) f.matchedArguments ) {
-        ret << f.function.declaration()->type<FunctionType>()->indexedArguments()[f.matchedArguments];
-      }
-    }
-    
-    if(ret.isEmpty() && m_declaration->kind() == Declaration::Instance && !m_declaration->isFunctionDeclaration()) {
-      ret << m_declaration->indexedType();
-    }
-  }
+  if (m_declaration && completionContext())
+    ret = completionContext()->matchTypes();
   return ret;
 }
 
@@ -666,7 +655,7 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
         {
           if(alternativeText.isEmpty())
             alternativeText = declarationName();
-          return alternativeText;
+          return QString(prefixText + alternativeText);
         }
         case CodeCompletionModel::Postfix:
         {

@@ -151,6 +151,8 @@ private slots:
   void testAfterVisibility_data();
   void testAfterVisibility();
   void testNoQuadrupleColon();
+  void testLookaheadMatches_data();
+  void testLookaheadMatches();
 public:
   enum DumpArea {
     DumpNone = 0,
