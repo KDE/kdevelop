@@ -258,6 +258,13 @@ bool TemplateResolver::templateHandleIdentifiedType(const AbstractType::Ptr& arg
 
 void TemplateResolver::matchTemplateParameterTypesInternal ( const AbstractType::Ptr& argumentType, const AbstractType::Ptr& parameterType, QMap< IndexedString, AbstractType::Ptr >& instantiatedTypes, TemplateMatchType& res ) const
 {
+  if (!argumentType || !parameterType)
+  {
+    kWarning() << "Invalid Type Encountered";
+    res.valid = false;
+    return;
+  }
+
   if (templateHandleConstIntegralType(argumentType, parameterType, res))
     return;
   if (templateHandleDelayedType(argumentType, parameterType, instantiatedTypes, res))
