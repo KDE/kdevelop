@@ -3,6 +3,7 @@
     Copyright 2007 Andreas Pakulat <apaku@gmx.de>
     Copyright 2007 Dukju Ahn <dukjuahn@gmail.com>
     Copyright 2008 Hamish Rodda <rodda@kde.org>
+    Copyright 2012 Ivan Shapovalov <intelfx100@gmail.com>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -26,18 +27,12 @@
 
 #include <KDebug>
 #include <KShell>
+#include <KConfig>
+#include <KConfigGroup>
 #include <KGlobal>
-#include <KProcess>
+#include <KLocalizedString>
 
-#include <util/environmentgrouplist.h>
-#include <util/processlinemaker.h>
-
-#include <interfaces/icore.h>
-#include <interfaces/iplugincontroller.h>
 #include <interfaces/iproject.h>
-#include <outputview/outputdelegate.h>
-#include <outputview/outputmodel.h>
-
 #include <project/projectmodel.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 
@@ -48,37 +43,28 @@ using namespace KDevelop;
 MakeJob::MakeJob(MakeBuilder* builder, KDevelop::ProjectBaseItem* item,
                  CommandType c,  const QStringList& overrideTargets,
                  const MakeVariables& variables )
-    : OutputJob(builder)
+    : OutputExecuteJob(builder)
     , m_builder(builder)
     , m_item(item)
     , m_command(c)
     , m_overrideTargets(overrideTargets)
     , m_variables(variables)
-    , m_lineMaker(0)
-    , m_process(0)
-    , m_killed(false)
-    , firstError(false)
 {
-    setCapabilities(Killable);
+    setCapabilities( Killable );
+    setFilteringStrategy( OutputModel::CompilerFilter );
+    setProperties( NeedWorkingDirectory | PortableMessages | DisplayStderr | IsBuilderHint );
 
     QString title;
     if( !m_overrideTargets.isEmpty() )
-        title = i18n("Make: %1", m_overrideTargets.join(" "));
+        title = i18n("Make (%1): %2", m_item->text(), m_overrideTargets.join(" "));
     else
-        title = i18n("Make: %1", m_item->text());
-
-    setTitle(title);
-    setObjectName(title);
+        title = i18n("Make (%1)", m_item->text());
+    setJobName( title );
+    setToolTitle( i18n("Make") );
 }
 
 MakeJob::~MakeJob()
 {
-    if(!m_killed && m_process && m_process->state() != KProcess::NotRunning)
-    {
-        m_process->kill();
-        m_process->waitForFinished();
-    }
-    Q_ASSERT(!m_process || m_process->state() == KProcess::NotRunning);
 }
 
 void MakeJob::start()
@@ -97,59 +83,10 @@ void MakeJob::start()
         return emitResult();
     }
 
-    KUrl buildDir = computeBuildDir(m_item);
-    if( !buildDir.isValid() ) {
-        setError(InvalidBuildDirectoryError);
-        setErrorText(i18n("Invalid build directory '%1'", buildDir.prettyUrl()));
-        return emitResult();
-    }
-    else if( !buildDir.isLocalFile() ) {
-        setError(InvalidBuildDirectoryError);
-        setErrorText(i18n("'%1' is not a local path", buildDir.prettyUrl()));
-        return emitResult();
-    }
-    else if ( !QFileInfo(buildDir.toLocalFile()).isDir() ) {
-        setError(InvalidBuildDirectoryError);
-        setErrorText(i18n("'%1' is not a directory", buildDir.prettyUrl()));
-        return emitResult();
-    }
-
-    QStringList cmd = computeBuildCommand();
-    if( cmd.isEmpty() ) {
-        setError(BuildCommandError);
-        setErrorText(i18n("Could not create build command for targets '%1'", m_overrideTargets.join(" ")));
-        return emitResult();
-    }
-
     setStandardToolView(IOutputView::BuildView);
     setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll);
 
-    setModel(new KDevelop::OutputModel(buildDir));
-    model()->setFilteringStrategy(KDevelop::OutputModel::CompilerFilter);
-    setDelegate(new OutputDelegate);
-
-    startOutput();
-
-    model()->appendLine( buildDir.toLocalFile() + "> " + cmd.join(" ") );
-
-    QString command = cmd.first();
-    cmd.pop_front();
-
-    m_process = new KProcess(this);
-    m_process->setOutputChannelMode( KProcess::MergedChannels );
-    m_lineMaker = new ProcessLineMaker( m_process );
-    connect( m_lineMaker, SIGNAL(receivedStdoutLines(QStringList)),
-             this, SLOT(addStandardOutput(QStringList)) );
-    connect( m_process, SIGNAL(error(QProcess::ProcessError)),
-             this, SLOT(procError(QProcess::ProcessError)) );
-    connect( m_process, SIGNAL(finished(int,QProcess::ExitStatus)),
-             this, SLOT(procFinished(int,QProcess::ExitStatus)) );
-
-    m_process->setEnvironment( environmentVars() );
-    m_process->setWorkingDirectory( buildDir.toLocalFile() );
-    m_process->setProgram( command, cmd );
-    kDebug(9037) << "Starting build:" << command << cmd << "Build directory" << buildDir;
-    m_process->start();
+    OutputExecuteJob::start();
 }
 
 KDevelop::ProjectBaseItem * MakeJob::item() const
@@ -167,30 +104,55 @@ QStringList MakeJob::customTargets() const
     return m_overrideTargets;
 }
 
-KUrl MakeJob::computeBuildDir(KDevelop::ProjectBaseItem* item) const
+KUrl MakeJob::workingDirectory() const
 {
-    KUrl buildDir;
-    KDevelop::IBuildSystemManager *bldMan = item->project()->buildSystemManager();
+    KDevelop::IBuildSystemManager *bldMan = m_item->project()->buildSystemManager();
     if( bldMan )
-        buildDir = bldMan->buildDirectory( item ); // the correct build dir
+        return bldMan->buildDirectory( m_item ); // the correct build dir
     else
     {
-        switch( item->type() )
-        {
+        // Just build in-source, where the build directory equals the one with particular target/source.
+        for( ProjectBaseItem* item = m_item; item; item = item->parent() ) {
+            switch( item->type() ) {
             case KDevelop::ProjectBaseItem::Folder:
             case KDevelop::ProjectBaseItem::BuildFolder:
                 return static_cast<KDevelop::ProjectFolderItem*>(item)->url();
                 break;
             case KDevelop::ProjectBaseItem::Target:
             case KDevelop::ProjectBaseItem::File:
-                buildDir = computeBuildDir( static_cast<KDevelop::ProjectBaseItem*>( item->parent() ) );
                 break;
+            }
         }
+        return KUrl();
     }
-    return buildDir;
 }
 
-QStringList MakeJob::computeBuildCommand() const
+QStringList MakeJob::privilegedExecutionCommand() const
+{
+    KSharedConfig::Ptr configPtr = m_item->project()->projectConfiguration();
+    KConfigGroup builderGroup( configPtr, "MakeBuilder" );
+
+    bool runAsRoot = builderGroup.readEntry( "Install As Root", false );
+    if ( runAsRoot && m_command == InstallCommand )
+    {
+        int suCommand = builderGroup.readEntry( "Su Command", 0 );
+        QStringList arguments;
+        QString suCommandName;
+        switch( suCommand ) {
+            case 1:
+                return QStringList() << "kdesudo" << "-t";
+
+            case 2:
+                return QStringList() << "sudo";
+
+            default:
+                return QStringList() << "kdesu" << "-t";
+        }
+    }
+    return QStringList();
+}
+
+QStringList MakeJob::commandLine() const
 {
     QStringList cmdline;
 
@@ -256,100 +218,14 @@ QStringList MakeJob::computeBuildCommand() const
         cmdline += m_overrideTargets;
     }
 
-    bool runAsRoot = builderGroup.readEntry("Install As Root", false);
-    if (runAsRoot && m_command == InstallCommand)
-    {
-        int suCommand = builderGroup.readEntry("Su Command", 0);
-        QStringList arguments;
-        QString suCommandName;
-        if (suCommand == 1) {
-          suCommandName = "kdesudo";
-          arguments << "-t" << "--" << cmdline;
-        } else if (suCommand == 2) {
-          suCommandName = "sudo";
-          arguments << cmdline;
-        } else { //default
-          suCommandName = "kdesu";
-          arguments << "-t" << "--" << cmdline;
-        }
-        cmdline = QStringList() << suCommandName << arguments;
-    }
-
     return cmdline;
 }
 
-QStringList MakeJob::environmentVars() const
+QString MakeJob::environmentProfile() const
 {
     KSharedConfig::Ptr configPtr = m_item->project()->projectConfiguration();
     KConfigGroup builderGroup( configPtr, "MakeBuilder" );
-    QString defaultProfile = builderGroup.readEntry(
-            "Default Make Environment Profile", "default" );
-
-    const KDevelop::EnvironmentGroupList l(KGlobal::config());
-    QStringList env = QProcess::systemEnvironment();
-    QStringList::iterator it, end = env.end();
-    for( it = env.begin(); it != end; it++ ) {
-        if( (*it).startsWith("LC_MESSAGES") || (*it).startsWith("LC_ALL") ) {
-            env.erase( it );
-        }
-    }
-    env.append( "LC_MESSAGES=C" );
-    return l.createEnvironment( defaultProfile, env );
-}
-
-void MakeJob::addStandardOutput( const QStringList& lines )
-{
-    model()->appendLines( lines );
-}
-
-void MakeJob::procError( QProcess::ProcessError err )
-{
-    //This slot might be called twice for a given process, once when a real error 
-    //occurs and then again when the process has exited due to the error
-    //via procFinished() slot. So make sure we run the code only once.
-    if( error() )
-    {
-        return;
-    } 
-    Q_UNUSED(err)
-    m_lineMaker->flushBuffers();
-
-    if (!m_killed) {
-        setError(FailedError);
-        setErrorText(i18n("Job failed"));
-        model()->appendLine( i18n("*** Failed ***") );
-
-    }
-    emitResult();
-}
-
-void MakeJob::procFinished( int code, QProcess::ExitStatus status )
-{
-    Q_UNUSED(code)
-    m_lineMaker->flushBuffers();
-    if( code==0 && status == QProcess::NormalExit )
-    {
-        model()->appendLine( i18n("*** Finished ***") );
-        emitResult();
-    }
-    else
-    {
-        procError(QProcess::UnknownError);
-    }
-}
-
-bool MakeJob::doKill()
-{
-    model()->appendLine( i18n("*** Aborted ***") );
-    m_killed = true;
-    m_process->kill();
-    m_process->waitForFinished();
-    return true;
-}
-
-KDevelop::OutputModel* MakeJob::model() const
-{
-    return dynamic_cast<KDevelop::OutputModel*>( OutputJob::model() );
+    return builderGroup.readEntry( "Default Make Environment Profile", "default" );
 }
 
 void MakeJob::setItem( ProjectBaseItem* item )
