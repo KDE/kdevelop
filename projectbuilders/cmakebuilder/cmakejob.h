@@ -22,7 +22,7 @@
 #ifndef CMAKEJOB_H
 #define CMAKEJOB_H
 
-#include <outputview/outputjob.h>
+#include <outputview/outputexecutejob.h>
 #include <QProcess>
 #include <QString>
 
@@ -34,7 +34,7 @@ class CommandExecutor;
 
 class KUrl;
 
-class CMakeJob: public KDevelop::OutputJob
+class CMakeJob: public KDevelop::OutputExecuteJob
 {
     Q_OBJECT
 
@@ -50,23 +50,22 @@ public:
     void setProject(KDevelop::IProject* project);
 
     virtual void start();
-    
-protected:
-    bool doKill();
 
-private Q_SLOTS:
-    void slotFailed( QProcess::ProcessError );
-    void slotCompleted(int);
+    // This returns the build directory for registered item.
+    virtual KUrl workingDirectory() const;
+
+    // This returns the "cmake" command line.
+    virtual QStringList commandLine() const;
+
+    // This returns the configured global environment profile.
+    virtual QString environmentProfile() const;
 
 private:
-    QStringList buildEnvironment();
     QStringList cmakeArguments( KDevelop::IProject* project );
     KUrl buildDir( KDevelop::IProject* project );
     QString cmakeBinary( KDevelop::IProject* project );
 
     KDevelop::IProject* m_project;
-    KDevelop::CommandExecutor* m_executor;
-    bool m_killed;
 };
 
 #endif // CMAKEJOB_H
