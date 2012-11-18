@@ -20,7 +20,7 @@
 #include "assistantpopup.h"
 
 #include <QVBoxLayout>
-#include <QLabel>>
+#include <QLabel>
 #include <QDebug>
 
 #include <KLocalizedString>
