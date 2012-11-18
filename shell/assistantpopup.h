@@ -49,7 +49,7 @@ private slots:
 private:
     virtual bool eventFilter(QObject* object, QEvent* event);
     void updateActions();
-    QWidget* widgetForAction(const KDevelop::IAssistantAction::Ptr& action);
+    QWidget* widgetForAction(const KDevelop::IAssistantAction::Ptr& action, int& mnemonic);
     KDevelop::IAssistant::Ptr m_assistant;
     QList<KDevelop::IAssistantAction::Ptr> m_assistantActions;
     QWidget* m_contextWidget;

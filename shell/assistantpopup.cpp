@@ -99,19 +99,21 @@ void AssistantPopup::updateActions()
         title->setEnabled(false);
         addWidget(title);
     }
+    int mnemonic = 1;
     ///@todo Add some intelligent layouting to make sure the widget doesn't become too wide
     foreach(IAssistantAction::Ptr action, m_assistantActions)
     {
         if(haveTitle || action != m_assistantActions.first())
             addSeparator();
-        addWidget(widgetForAction(action));
+        addWidget(widgetForAction(action, mnemonic));
     }
     addSeparator();
-    addWidget(widgetForAction(IAssistantAction::Ptr()));
+    mnemonic = 0;
+    addWidget(widgetForAction(IAssistantAction::Ptr(), mnemonic));
     resize(sizeHint());
 }
 
-QWidget* AssistantPopup::widgetForAction(const IAssistantAction::Ptr& action)
+QWidget* AssistantPopup::widgetForAction(const IAssistantAction::Ptr& action, int& mnemonic)
 {
     KAction* realAction = action ? action->toKAction() : 0;
     RichTextToolButton* button = new RichTextToolButton;
@@ -127,16 +129,17 @@ QWidget* AssistantPopup::widgetForAction(const IAssistantAction::Ptr& action)
     int index = m_assistantActions.indexOf(action);
     if (index == -1) {
         realAction = new KAction(button);
-        buttonText = "<u>0</u> - " + i18n("Hide");
+        buttonText = i18n("Hide");
     } else {
         realAction = action->toKAction();
-        buttonText = QString("<u>%1</u> - ").arg(index+1) + action->description();
+        buttonText = action->description();
     }
     realAction->setParent(button);
     connect(realAction, SIGNAL(triggered(bool)), SLOT(executeHideAction()));
     button->setDefaultAction(realAction);
-    button->setText(QString("&%1").arg(index+1)); // Let the button care about the shortcut
-    button->setHtml(buttonText);
+    button->setText(QString("&%1").arg(mnemonic)); // Let the button care about the shortcut
+    button->setHtml(QString("<u>%1</u> - ").arg(mnemonic) + buttonText);
+    mnemonic++;
     return button;
 }
 
