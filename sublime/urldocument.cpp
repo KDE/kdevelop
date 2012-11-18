@@ -20,6 +20,8 @@
 
 #include <QWidget>
 #include <KTextEdit>
+#include <KIcon>
+#include <KMimeType>
 
 #include <kdebug.h>
 
@@ -73,6 +75,11 @@ QString UrlDocument::documentType() const
 QString UrlDocument::documentSpecifier() const
 {
     return d->url.url();
+}
+
+QIcon UrlDocument::defaultIcon() const
+{
+    return KIcon(KMimeType::iconNameForUrl(d->url));
 }
 
 }

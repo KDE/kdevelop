@@ -118,7 +118,6 @@ void DocumentSwitcherPlugin::walkForward()
     view->selectionModel()->setCurrentIndex( idx, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows );
 }
 
-
 void DocumentSwitcherPlugin::fillModel( Sublime::MainWindow* window )
 {
     model->clear();
@@ -143,9 +142,8 @@ void DocumentSwitcherPlugin::fillModel( Sublime::MainWindow* window )
             }
             txt = txt + " (" + path + ')';
         }
-        model->appendRow( new QStandardItem( v->document()->statusIcon(), txt ) );
+        model->appendRow( new QStandardItem( v->document()->icon(), txt ) );
     }
-    
 }
 
 void DocumentSwitcherPlugin::walkBackward()

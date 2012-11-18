@@ -40,7 +40,12 @@ public:
     virtual QString documentSpecifier() const;
 
     KUrl url() const;
-    
+
+    /**
+     * @return the icon for the mimetype of the document url.
+     */
+    QIcon defaultIcon() const;
+
 protected:
     virtual QWidget *createViewWidget(QWidget *parent = 0);
     void setUrl(const KUrl& newUrl);

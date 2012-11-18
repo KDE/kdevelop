@@ -709,6 +709,18 @@ QString KDevelop::TextDocument::documentType() const
     return "Text";
 }
 
+QIcon KDevelop::TextDocument::defaultIcon() const
+{
+    if (d->document) {
+        KMimeType::Ptr mime = KMimeType::mimeType(d->document->mimeType());
+        KIcon icon(mime->iconName());
+        if (!icon.isNull()) {
+            return icon;
+        }
+    }
+    return PartDocument::defaultIcon();
+}
+
 KTextEditor::View *KDevelop::TextView::textView() const
 {  
     if (d->editor)

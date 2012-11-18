@@ -94,8 +94,24 @@ public:
     virtual bool closeDocument(bool silent = false);
 
     void setStatusIcon(QIcon icon);
-    
+
+    /**
+     * @return The status icon of the document.
+     */
     QIcon statusIcon() const;
+
+    /**
+     * @return The status icon of the document, or, if none is present, an icon
+     *         that resembles the document, i.e. based on its mime type.
+     * @see defaultIcon()
+     */
+    QIcon icon() const;
+
+    /**
+     * Optionally override this to return a default icon when no status
+     * icon is set for the document. The default returns an invalid icon.
+     */
+    virtual QIcon defaultIcon() const;
 
 Q_SIGNALS:
     /**Emitted when the view is added or deleted. Use Document::views to find out

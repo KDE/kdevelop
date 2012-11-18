@@ -158,6 +158,20 @@ bool Document::closeDocument(bool silent)
     return true;
 }
 
+QIcon Document::icon() const
+{
+    QIcon ret = statusIcon();
+    if (!ret.isNull()) {
+        return ret;
+    }
+    return defaultIcon();
+}
+
+QIcon Document::defaultIcon() const
+{
+    return QIcon();
+}
+
 }
 
 #include "document.moc"

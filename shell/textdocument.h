@@ -67,6 +67,8 @@ public:
 
     virtual QString documentType() const;
 
+    virtual QIcon defaultIcon() const;
+
 public Q_SLOTS:
     virtual void reload();
 
@@ -104,7 +106,7 @@ public:
     virtual void setState(const QString& state);
 
     void setInitialRange(KTextEditor::Range range);
-    
+
 private Q_SLOTS:
     void sendStatusChanged();
     void editorDestroyed(QObject* obj);

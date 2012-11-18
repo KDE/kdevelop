@@ -88,15 +88,6 @@ bool sortViews(const View* const lhs, const View* const rhs)
         return lhs->document()->title().compare(rhs->document()->title(), Qt::CaseInsensitive) < 0;
 }
 
-QIcon iconForDocument(Sublime::Document* doc) {
-    QIcon icon = doc->statusIcon();
-    if (icon.isNull()) {
-        if (UrlDocument* withUrl = dynamic_cast<UrlDocument*>(doc)) {
-            icon = KIcon(KMimeType::iconNameForUrl(withUrl->url()));
-        }
-    }
-    return icon;
-}
 struct ContainerPrivate {
     QMap<QWidget*, View*> viewForWidget;
 
@@ -137,7 +128,7 @@ struct ContainerPrivate {
             QAction* action = documentListMenu->addAction(view->document()->title());
             action->setData(QVariant::fromValue(view));
             documentListActionForView[view] = action;
-            action->setIcon(iconForDocument(view->document()));
+            action->setIcon(view->document()->icon());
             ///FIXME: push this code somehow into shell, such that we can access the project model for
             ///       icons and also get a neat, short path like the document switcher.
         }
@@ -369,7 +360,7 @@ void Container::statusIconChanged(Document* doc)
             // Update the document title's menu associated action
             // using the View* index map
             Q_ASSERT(d->documentListActionForView.contains(it.value()));
-            d->documentListActionForView[it.value()]->setIcon(iconForDocument(doc));
+            d->documentListActionForView[it.value()]->setIcon(doc->icon());
             break;
         }
     }
