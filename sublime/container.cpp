@@ -207,15 +207,6 @@ Container::Container(QWidget *parent)
     m_tabBarLayout->setMargin(0);
     m_tabBarLayout->setSpacing(0);
 
-    d->tabBar = new ContainerTabBar(this);
-    d->tabBar->setContextMenuPolicy(Qt::CustomContextMenu);
-    m_tabBarLayout->addWidget(d->tabBar);
-    d->fileStatus = new QLabel( this );
-    d->fileStatus->setFixedSize( QSize( 16, 16 ) );
-    m_tabBarLayout->addWidget(d->fileStatus);
-    d->fileNameCorner = new UnderlinedLabel(d->tabBar, this);
-    m_tabBarLayout->addWidget(d->fileNameCorner);
-    d->statusCorner = new StatusLabel(d->tabBar, this);
     d->documentListMenu = new QMenu(this);
     d->documentListButton = new QToolButton(this);
     d->documentListButton->setIcon(KIcon("format-list-unordered"));
@@ -225,6 +216,15 @@ Container::Container(QWidget *parent)
     d->documentListButton->setToolTip(i18n("Show sorted list of opened documents"));
     d->documentListButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
     m_tabBarLayout->addWidget(d->documentListButton);
+    d->tabBar = new ContainerTabBar(this);
+    d->tabBar->setContextMenuPolicy(Qt::CustomContextMenu);
+    m_tabBarLayout->addWidget(d->tabBar);
+    d->fileStatus = new QLabel( this );
+    d->fileStatus->setFixedSize( QSize( 16, 16 ) );
+    m_tabBarLayout->addWidget(d->fileStatus);
+    d->fileNameCorner = new UnderlinedLabel(d->tabBar, this);
+    m_tabBarLayout->addWidget(d->fileNameCorner);
+    d->statusCorner = new StatusLabel(d->tabBar, this);
     m_tabBarLayout->addWidget(d->statusCorner);
     l->addLayout(m_tabBarLayout);
 
