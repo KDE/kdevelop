@@ -1,6 +1,7 @@
 /*
    Copyright 2009 David Nolden <david.nolden.kdevelop@art-master.de>
-   
+   Copyright 2012 Milian Wolff <mail@milianw.de>
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License version 2 as published by the Free Software Foundation.
@@ -30,18 +31,28 @@ class AssistantPopup : public QToolBar
 
 public:
     typedef KSharedPtr<AssistantPopup> Ptr;
-
-    AssistantPopup(QWidget* parent, const KDevelop::IAssistant::Ptr& assistant);
+    /**
+     * @p widget The widget below which the assistant should be shown.
+     * The current main window will be used as parent widget for the popup.
+     * This is to make use of the maximal space available and prevent any lines
+     * in e.g. the editor to be hidden by the popup.
+     */
+    AssistantPopup(QWidget* widget, const KDevelop::IAssistant::Ptr& assistant);
     KDevelop::IAssistant::Ptr assistant() const;
 
 public slots:
     void executeHideAction();
 
+private slots:
+    void updatePosition();
+
 private:
+    virtual bool eventFilter(QObject* object, QEvent* event);
     void updateActions();
     QWidget* widgetForAction(const KDevelop::IAssistantAction::Ptr& action);
     KDevelop::IAssistant::Ptr m_assistant;
     QList<KDevelop::IAssistantAction::Ptr> m_assistantActions;
+    QWidget* m_contextWidget;
 };
 
 #endif // ASSISTANTPOPUP_H
