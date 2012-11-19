@@ -181,6 +181,26 @@ ProjectFolderItem* QMakeProjectManager::createFolderItem( IProject* project, con
     }
 }
 
+QString findBasicMkSpec( const QHash<QString,QString>& qmakeVars )
+{
+    QString path;
+    if (qmakeVars.contains("QMAKE_MKSPECS")) {
+        // qt4
+        path = qmakeVars["QMAKE_MKSPECS"] + "/default";
+    } else if (!qmakeVars.contains("QMAKE_MKSPECS") && qmakeVars.contains("QT_INSTALL_PREFIX") && qmakeVars.contains("QMAKE_SPEC")) {
+        // qt5 doesn't have the MKSPECS nor default anymore
+        path = qmakeVars["QT_INSTALL_PREFIX"] + "/mkspecs/" + qmakeVars["QMAKE_SPEC"];
+    }
+    path += "/qmake.conf";
+
+    QFileInfo fi( path );
+    qDebug() << path << fi.exists();
+    if( !fi.exists() )
+        return QString();
+
+    return fi.absoluteFilePath();
+}
+
 ProjectFolderItem* QMakeProjectManager::projectRootItem( IProject* project, const KUrl& url )
 {
     QFileInfo fi( url.toLocalFile() );
@@ -203,7 +223,7 @@ ProjectFolderItem* QMakeProjectManager::projectRootItem( IProject* project, cons
     projecturl.adjustPath( KUrl::AddTrailingSlash );
     projecturl.setFileName( projectfile );
     QHash<QString,QString> qmvars = queryQMake( project );
-    QMakeMkSpecs* mkspecs = new QMakeMkSpecs( findBasicMkSpec( qmvars["QMAKE_MKSPECS"] ), qmvars );
+    QMakeMkSpecs* mkspecs = new QMakeMkSpecs( findBasicMkSpec( qmvars ), qmvars );
     mkspecs->setProject( project );
     mkspecs->read();
     QMakeCache* cache = findQMakeCache( project );
@@ -468,16 +488,6 @@ QHash< QString, QString > QMakeProjectManager::defines(ProjectBaseItem* item) co
     return d;
 }
 
-QString QMakeProjectManager::findBasicMkSpec( const QString& mkspecdir ) const
-{
-    Q_ASSERT(!mkspecdir.isEmpty());
-    QFileInfo fi( mkspecdir+"/default/qmake.conf" );
-    if( !fi.exists() )
-        return QString();
-
-    return fi.absoluteFilePath();
-}
-
 QHash<QString,QString> QMakeProjectManager::queryQMake( IProject* project ) const
 {
     if( !project->folder().isLocalFile() || !m_builder )
@@ -500,10 +510,6 @@ QHash<QString,QString> QMakeProjectManager::queryQMake( IProject* project ) cons
         const QByteArray key = line.left(colon);
         const QByteArray value = line.mid(colon + 1);
         hash.insert(key, value);
-    }
-    if (!hash.contains("QMAKE_MKSPECS") && hash.contains("QT_INSTALL_PREFIX")) {
-        // qt5 doesn't have the MKSPECS anymore
-        hash.insert("QMAKE_MKSPECS", hash["QT_INSTALL_PREFIX"] + "/mkspecs");
     }
     kDebug(9024) << "Ran qmake (" << p.program().join(" ") << "), found:" << hash;
     return hash;
