@@ -538,7 +538,7 @@ void UsesWidget::redrawHeaderLine()
 
 const QString UsesWidget::headerLineText() const
 {
-  return i18n("%1 uses found", countAllUses()) + " &bull; "
+  return i18np("1 use found", "%1 uses found", countAllUses()) + " &bull; "
               "<a href='expandAll'>[" + i18n("Expand all") + "]</a> &bull; "
               "<a href='collapseAll'>[" + i18n("Collapse all") + "]</a>";
 }
