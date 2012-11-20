@@ -144,7 +144,7 @@ void CommandExecutor::setCommand( const QString& command )
 
 void CommandExecutor::kill()
 {
-    d->m_process->close();
+    d->m_process->kill();
 }
 
 QString CommandExecutor::command() const
