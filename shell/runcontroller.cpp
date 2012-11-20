@@ -646,6 +646,7 @@ void KDevelop::RunController::finished(KJob * job)
             KDialog* dialog = new KDialog;
             dialog->setAttribute(Qt::WA_DeleteOnClose);
             dialog->setWindowTitle(i18n("Process Error"));
+            dialog->setButtons(KDialog::Close);
             KMessageBox::createKMessageBox(dialog, QMessageBox::Warning,
                                            job->errorString(), QStringList(),
                                            QString(), 0, KMessageBox::NoExec
