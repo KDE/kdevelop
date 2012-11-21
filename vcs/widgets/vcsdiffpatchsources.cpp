@@ -235,7 +235,9 @@ bool VCSCommitDiffPatchSource::finishReview(QList< KUrl > selection) {
 
     text += i18n("\nWith message:\n %1", message);
 
-    int res = KMessageBox::warningContinueCancel(0, text, i18n("About to commit to repository"));
+    int res = KMessageBox::warningContinueCancel(0, text, i18n("About to commit to repository"),
+                                                 KStandardGuiItem::cont(), KStandardGuiItem::cancel(),
+                                                 "ShouldAskConfirmCommit");
     if (res != KMessageBox::Continue) {
         return false;
     }
