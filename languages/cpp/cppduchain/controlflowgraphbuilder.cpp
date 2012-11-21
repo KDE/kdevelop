@@ -245,7 +245,7 @@ void ControlFlowGraphBuilder::visitJumpStatement(JumpStatementAST* node)
     case Token_goto: {
 //       qDebug() << "goto!";
       IndexedString tag = m_session->token_stream->symbol(node->identifier);
-      QMap< IndexedString, ControlFlowNode* >::const_iterator tagIt = m_taggedNodes.find(tag);
+      QMap< IndexedString, ControlFlowNode* >::const_iterator tagIt = m_taggedNodes.constFind(tag);
       if(tagIt!=m_taggedNodes.constEnd())
         m_currentNode->setNext(*tagIt);
       else {
