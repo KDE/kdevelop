@@ -8,6 +8,11 @@
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
 
+#include "config-kdevplatform.h"
+#ifdef HAVE_UNORDERED_MAP
+#include <unordered_map>
+#endif
+
 struct TestItem {
   TestItem(uint hash, uint dataSize) : m_hash(hash), m_dataSize(dataSize) {
   }
@@ -66,6 +71,12 @@ struct TestItemRequest {
   //Should return whether the here requested item equals the given item
   bool equals(const TestItem* item) const {
     return hash() == item->hash();
+  }
+};
+
+struct IndexedStringHash {
+  uint operator() (const KDevelop::IndexedString& str) const {
+    return str.hash();
   }
 };
 
@@ -207,6 +218,71 @@ class TestItemRepository : public QObject {
         strings[i] = indexedString.str();
         QCOMPARE(qString, strings[i]);
       }
+    }
+    void testStringHashPerformance()
+    {
+      QFETCH(bool, useStl);
+      QFETCH(int, numStrings);
+      // similar to e.g. modificationrevision.cpp
+      struct DataT {
+        timeval a;
+        QDateTime b;
+      };
+      DataT data;
+      QVector<KDevelop::IndexedString> strings;
+      for(int i = 0; i < numStrings; ++i) {
+        strings << KDevelop::IndexedString(QString::number(i));
+      }
+      Q_ASSERT(numStrings == strings.size());
+      if (useStl) {
+#ifdef HAVE_UNORDERED_MAP
+        typedef std::unordered_map<KDevelop::IndexedString, DataT, IndexedStringHash> StlHash;
+        StlHash hash;
+        QBENCHMARK {
+          foreach(const KDevelop::IndexedString& s, strings) {
+            hash.insert(std::make_pair(s, data));
+          }
+          QVERIFY(hash.size() == numStrings);
+          foreach(const KDevelop::IndexedString& s, strings) {
+            (void) hash.find(s);
+          }
+          foreach(const KDevelop::IndexedString& s, strings) {
+            hash.erase(s);
+          }
+          QVERIFY(hash.size() == 0);
+        }
+#endif
+      } else {
+        QHash<KDevelop::IndexedString, DataT> hash;
+        QBENCHMARK {
+          foreach(const KDevelop::IndexedString& s, strings) {
+            hash.insert(s, data);
+          }
+          QVERIFY(hash.size() == numStrings);
+          foreach(const KDevelop::IndexedString& s, strings) {
+            (void) hash.constFind(s);
+          }
+          foreach(const KDevelop::IndexedString& s, strings) {
+            hash.remove(s);
+          }
+          QVERIFY(hash.size() == 0);
+        }
+      }
+    }
+    void testStringHashPerformance_data()
+    {
+      QTest::addColumn<bool>("useStl");
+      QTest::addColumn<int>("numStrings");
+#ifdef HAVE_UNORDERED_MAP
+      QTest::newRow("unordered_map-100") << true << 100;
+      QTest::newRow("unordered_map-1000") << true << 1000;
+      QTest::newRow("unordered_map-10000") << true << 10000;
+      QTest::newRow("unordered_map-100000") << true << 100000;
+#endif
+      QTest::newRow("qhash-100") << false << 100;
+      QTest::newRow("qhash-1000") << false << 1000;
+      QTest::newRow("qhash-10000") << false << 10000;
+      QTest::newRow("qhash-100000") << false << 100000;
     }
 };
 
