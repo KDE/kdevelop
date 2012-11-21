@@ -1090,6 +1090,7 @@ bool CodeCompletionContext::doIncludeCompletion()
   if(!line.startsWith("#"))
     return false;
 
+  m_accessType = IncludeListAccess;
   if(line.count('"') == 2 || line.endsWith('>'))
     return true; //We are behind a complete include-directive
 
@@ -1122,8 +1123,6 @@ bool CodeCompletionContext::doIncludeCompletion()
   bool local = line.startsWith('"');
   m_includeItems = CppUtils::allFilesInIncludePath(KUrl(m_duContext->url().str()), local, prefixPath);
 #endif
-
-  m_accessType = IncludeListAccess;
 
   return true;
 }
