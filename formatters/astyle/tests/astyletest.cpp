@@ -311,4 +311,15 @@ void AstyleTest::testTabIndentation()
     QCOMPARE(formatted, expected);
 }
 
+void AstyleTest::testForeach()
+{
+    AStyleFormatter formatter;
+    QVERIFY(formatter.predefinedStyle("KDELibs"));
+
+    const QString initial("int a(){QList<int> v;foreach(int i,v){return i;}}\n");
+    const QString expected("int a()\n{\n    QList<int> v;\n    foreach (int i, v) {\n        return i;\n    }\n}\n");
+    const QString formatted = formatter.formatSource(initial);
+    QCOMPARE(formatted, expected);
+}
+
 #include "astyletest.moc"
