@@ -4,11 +4,11 @@ set(kdevastyle_PART_SRCS
     astyle_plugin.cpp
     astyle_preferences.cpp
     astyle_formatter.cpp
+    astyle_stringiterator.cpp
     lib/ASBeautifier.cpp
     lib/ASEnhancer.cpp
     lib/ASFormatter.cpp
     lib/ASResource.cpp
-    lib/astyle_stringiterator.cpp
 )
 
 set(astyle_preferences_UI

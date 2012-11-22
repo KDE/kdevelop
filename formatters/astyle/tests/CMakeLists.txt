@@ -1,10 +1,10 @@
 set(astyletest_SRCS astyletest.cpp
   ../astyle_formatter.cpp
+  ../astyle_stringiterator.cpp
   ../lib/ASFormatter.cpp
   ../lib/ASResource.cpp
   ../lib/ASEnhancer.cpp
   ../lib/ASBeautifier.cpp
-  ../lib/astyle_stringiterator.cpp
 )
 
 kde4_add_unit_test(astyletest ${astyletest_SRCS})
