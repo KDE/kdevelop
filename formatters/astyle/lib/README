@@ -1,0 +1,21 @@
+This is a copy of the official AStyle library.
+
+See: http://astyle.sourceforge.net/
+License: http://astyle.sourceforge.net/license.html
+
+You should *not* touch this code, besides rebasing it against an official
+Astyle release.
+
+When you find a bug, fix it upstream, see e.g. http://astyle.sourceforge.net/subversion.html
+
+When you still have to touch this code, please mark your changes explicitly,
+for example this would be good:
+
+  ...
+  //BEGIN KDEVELOP
+  // see also: {link to reviewboard or bug}
+  ... your changes here
+  //END KDEVELOP
+  ...
+
+This makes it easier to rebase them afterwards onto a new AStyle release.
