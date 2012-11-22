@@ -57,7 +57,7 @@ Boston, MA 02110-1301, USA.
 #define BRACKET_BREAK 2
 #define BRACKET_LINUX 3
 #define BRACKET_STROUSTRUP 4
-#define BRACKET_HORSTMANN 5
+#define BRACKET_RUNINMODE 5
 
 #define POINTERALIGN_NOCHANGE 0
 #define POINTERALIGN_NAME 1
@@ -326,7 +326,7 @@ void AStylePreferences::bracketsChanged()
         case BRACKET_BREAK: m_formatter->setBracketFormatMode(astyle::BREAK_MODE); break;
         case BRACKET_LINUX: m_formatter->setBracketFormatMode(astyle::BDAC_MODE); break;
         case BRACKET_STROUSTRUP: m_formatter->setBracketFormatMode(astyle::STROUSTRUP_MODE); break;
-        case BRACKET_HORSTMANN: m_formatter->setBracketFormatMode(astyle::HORSTMANN_MODE); break;
+        case BRACKET_RUNINMODE: m_formatter->setBracketFormatMode(astyle::RUN_IN_MODE); break;
     }
 
     m_formatter->setBreakClosingHeaderBracketsMode(chkBracketsCloseHeaders->isChecked());
@@ -408,17 +408,17 @@ void AStylePreferences::pointerAlignChanged()
         return;
     switch (cbPointerAlign->currentIndex()) {
         case POINTERALIGN_NAME:
-            m_formatter->setPointerAlignment(astyle::ALIGN_NAME);
+            m_formatter->setPointerAlignment(astyle::PTR_ALIGN_NAME);
             break;
         case POINTERALIGN_TYPE:
-            m_formatter->setPointerAlignment(astyle::ALIGN_TYPE);
+            m_formatter->setPointerAlignment(astyle::PTR_ALIGN_TYPE);
             break;
         case POINTERALIGN_MIDDLE:
-            m_formatter->setPointerAlignment(astyle::ALIGN_MIDDLE);
+            m_formatter->setPointerAlignment(astyle::PTR_ALIGN_MIDDLE);
             break;
         default:
         case POINTERALIGN_NOCHANGE:
-            m_formatter->setPointerAlignment(astyle::ALIGN_NONE);
+            m_formatter->setPointerAlignment(astyle::PTR_ALIGN_NONE);
             break;
     }
 

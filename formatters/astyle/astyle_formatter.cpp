@@ -115,8 +115,8 @@ void AStyleFormatter::updateFormatter()
         AStyleFormatter::setBracketFormatMode(astyle::BDAC_MODE);
     else if(s == "Stroustrup")
         AStyleFormatter::setBracketFormatMode(astyle::STROUSTRUP_MODE);
-    else if(s == "Horstmann")
-        AStyleFormatter::setBracketFormatMode(astyle::HORSTMANN_MODE);
+    else if(s == "Horstmann" || s == "RunInMode")
+        AStyleFormatter::setBracketFormatMode(astyle::RUN_IN_MODE);
     else
         AStyleFormatter::setBracketFormatMode(astyle::NONE_MODE);
 
@@ -140,13 +140,13 @@ void AStyleFormatter::updateFormatter()
     // pointer
     s = m_options["PointerAlign"].toString();
     if(s == "Name")
-        AStyleFormatter::setPointerAlignment(astyle::ALIGN_NAME);
+        AStyleFormatter::setPointerAlignment(astyle::PTR_ALIGN_NAME);
     else if(s == "Middle")
-        AStyleFormatter::setPointerAlignment(astyle::ALIGN_MIDDLE);
+        AStyleFormatter::setPointerAlignment(astyle::PTR_ALIGN_MIDDLE);
     else if(s == "Type")
-        AStyleFormatter::setPointerAlignment(astyle::ALIGN_TYPE);
+        AStyleFormatter::setPointerAlignment(astyle::PTR_ALIGN_TYPE);
     else
-        AStyleFormatter::setPointerAlignment(astyle::ALIGN_NONE);
+        AStyleFormatter::setPointerAlignment(astyle::PTR_ALIGN_NONE);
 }
 
 void AStyleFormatter::resetStyle()
@@ -232,30 +232,18 @@ bool AStyleFormatter::predefinedStyle( const QString & style )
         setBracketFormatMode(astyle::STROUSTRUP_MODE);
         setBlockIndent(false);
         setBracketIndent(false);
-        if (!getIndentManuallySet())
-        {
-            if (getIndentString() == "\t")
-                setTabIndentation(5, getForceTabIndentation());
-            else
-                setSpaceIndentation(5);
-        }
+        setSpaceIndentation(5);
         setClassIndent(false);
         setSwitchIndent(false);
         setNamespaceIndent(false);
         return true;
     } else if (style == "Horstmann") {
         resetStyle();
-        setBracketFormatMode(astyle::HORSTMANN_MODE);
+        setBracketFormatMode(astyle::RUN_IN_MODE);
         setBlockIndent(false);
         setBracketIndent(false);
         setSwitchIndent(true);
-        if (!getIndentManuallySet())
-        {
-            if (getIndentString() == "\t")
-                setTabIndentation(3, getForceTabIndentation());
-            else
-                setSpaceIndentation(3);
-        }
+        setSpaceIndentation(3);
         setClassIndent(false);
         setNamespaceIndent(false);
         return true;
@@ -295,7 +283,7 @@ bool AStyleFormatter::predefinedStyle( const QString & style )
         resetStyle();
         setSpaceIndentation(4);
         setBracketFormatMode(astyle::LINUX_MODE);
-        setPointerAlignment(astyle::ALIGN_TYPE);
+        setPointerAlignment(astyle::PTR_ALIGN_TYPE);
         setLabelIndent(true);
         setOperatorPaddingMode(true);
         setParensInsidePaddingMode(false);
@@ -312,7 +300,7 @@ bool AStyleFormatter::predefinedStyle( const QString & style )
     } else if (style == "Qt") {
         // http://qt-project.org/wiki/Qt_Coding_Style
         resetStyle();
-        setPointerAlignment(astyle::ALIGN_NAME);
+        setPointerAlignment(astyle::PTR_ALIGN_NAME);
         setOperatorPaddingMode(true);
         setBracketFormatMode(astyle::LINUX_MODE);
         setSwitchIndent(false);
@@ -486,8 +474,8 @@ void AStyleFormatter::setBracketFormatMode(astyle::BracketMode mode)
     case astyle::STROUSTRUP_MODE:
         m_options["Brackets"] = "Stroustrup";
         break;
-    case astyle::HORSTMANN_MODE:
-        m_options["Brackets"] = "Horstmann";
+    case astyle::RUN_IN_MODE:
+        m_options["Brackets"] = "RunInMode";
         break;
     }
     ASFormatter::setBracketFormatMode(mode);
@@ -561,16 +549,16 @@ void AStyleFormatter::setSingleStatementsMode(bool state)
 void AStyleFormatter::setPointerAlignment(astyle::PointerAlign alignment)
 {
     switch (alignment) {
-        case astyle::ALIGN_NONE:
+        case astyle::PTR_ALIGN_NONE:
             m_options["PointerAlign"] = "None";
             break;
-        case astyle::ALIGN_NAME:
+        case astyle::PTR_ALIGN_NAME:
             m_options["PointerAlign"] = "Name";
             break;
-        case astyle::ALIGN_MIDDLE:
+        case astyle::PTR_ALIGN_MIDDLE:
             m_options["PointerAlign"] = "Middle";
             break;
-        case astyle::ALIGN_TYPE:
+        case astyle::PTR_ALIGN_TYPE:
             m_options["PointerAlign"] = "Type";
             break;
     }

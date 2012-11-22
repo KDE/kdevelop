@@ -19,3 +19,5 @@ for example this would be good:
   ...
 
 This makes it easier to rebase them afterwards onto a new AStyle release.
+
+Also make sure you add a unit test!
