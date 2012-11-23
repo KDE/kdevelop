@@ -210,7 +210,11 @@ void FramestackWidget::copySelection()
     QString content;
     Q_FOREACH( QModelIndex index, indexes) {
         IFrameStackModel::FrameItem frame = m_session->frameStackModel()->frame(index);
-        content += QString("#%1 %2() at %3:%4\n").arg(frame.nr).arg(frame.name).arg(frame.file.pathOrUrl(KUrl::RemoveTrailingSlash)).arg(frame.line);
+        if (frame.line == -1) {
+            content += QString("#%1 %2() at %3\n").arg(frame.nr).arg(frame.name).arg(frame.file.pathOrUrl(KUrl::RemoveTrailingSlash));
+        } else {
+            content += QString("#%1 %2() at %3:%4\n").arg(frame.nr).arg(frame.name).arg(frame.file.pathOrUrl(KUrl::RemoveTrailingSlash)).arg(frame.line+1);
+        }
     }
     cb->setText(content);
 }
