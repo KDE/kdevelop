@@ -32,20 +32,6 @@
 #include <cppparserexport.h>
 #include "commentformatter.h"
 
-#if defined(HAVE_UNORDERED_MAP) // CXX-0
-#include <unordered_map>
-template <class Key, class Data>
-class  hash_map : public std::unordered_map<Key, Data> { };
-
-#elif defined(HAVE_EXT_HASH_MAP)
-#include <ext/hash_map>
-using namespace __gnu_cxx;
-
-#elif defined(Q_CC_MSVC)
-#include <hash_map>
-using namespace stdext;
-#endif
-
 class TokenStream;
 class Control;
 
@@ -294,7 +280,7 @@ private:
   Comment m_currentComment;
   CommentStore m_commentStore;
  
-  hash_map<uint, TokenMarkers> m_tokenMarkers;
+  QHash<uint, TokenMarkers> m_tokenMarkers;
   int _M_problem_count;
   int _M_max_problem_count;
   ParseSession* session;

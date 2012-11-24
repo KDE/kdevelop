@@ -34,25 +34,6 @@ add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
 
 include_directories(${KDevelop_SOURCE_DIR} ${KDevelop_BINARY_DIR} ${KDE4_INCLUDES} )
 
-# TODO: Remove when LTS for g++ < 4.3 has ended.
-#       See also: languages/cpp/parser/parser.h
-if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    # unordered_map depends on the -std=c++0x parameter, so add it temporarily here
-    set(oldFlags ${CMAKE_REQUIRED_FLAGS})
-    set(CMAKE_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS} -std=c++0x)
-    include(CheckIncludeFileCXX)
-    check_include_file_cxx(unordered_map HAVE_UNORDERED_MAP)
-    # reset CMAKE_REQUIRED_FLAGS again
-    set(CMAKE_REQUIRED_FLAGS ${oldFlags})
-
-    if(HAVE_UNORDERED_MAP)
-        message(STATUS "Enabling c++0x support for unordered map")
-        add_definitions( -std=c++0x ) # For unordered_map
-    else(HAVE_UNORDERED_MAP)
-        check_include_file_cxx(ext/hash_map HAVE_EXT_HASH_MAP)
-    endif(HAVE_UNORDERED_MAP)
-endif(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-
 # create config.h
 configure_file (config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h )
 

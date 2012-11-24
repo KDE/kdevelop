@@ -287,20 +287,16 @@ void Parser::clear()
 
 void Parser::addTokenMarkers(uint tokenNumber, Parser::TokenMarkers markers)
 {
-  hash_map<uint, TokenMarkers>::iterator it = m_tokenMarkers.find(tokenNumber);
+  QHash<uint, TokenMarkers>::iterator it = m_tokenMarkers.find(tokenNumber);
   if(it != m_tokenMarkers.end())
-    (*it).second = (TokenMarkers)((*it).second | markers);
+    it.value() = (TokenMarkers)(it.value() | markers);
   else
-    m_tokenMarkers.insert(std::make_pair(tokenNumber, markers));
+    m_tokenMarkers.insert(tokenNumber, markers);
 }
 
 Parser::TokenMarkers Parser::tokenMarkers(uint tokenNumber) const
 {
-  hash_map<uint, TokenMarkers>::const_iterator it = m_tokenMarkers.find(tokenNumber);
-  if(it != m_tokenMarkers.end())
-    return (*it).second;
-  else
-    return None;
+  return m_tokenMarkers.value(tokenNumber, None);
 }
 
 bool Parser::parseWinDeclSpec(WinDeclSpecAST *&node)
