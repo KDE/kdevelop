@@ -21,29 +21,44 @@
 
 #include "contextbrowser.h"
 
+#include "contextbrowserview.h"
 #include "browsemanager.h"
 
-///TODO: cleanup includes
+///TODO: remove unneeded includes
+#include <memory>
+#include <cstdlib>
+
 #include <QTimer>
 #include <QApplication>
+#include <QToolButton>
+#include <QLayout>
 #include <qalgorithms.h>
-#include <klocale.h>
-#include <kaction.h>
-#include <kpluginfactory.h>
-#include <kpluginloader.h>
-#include <ktexteditor/view.h>
-#include <ktexteditor/document.h>
+
+#include <KLocale>
+#include <KAction>
+#include <KPluginFactory>
+#include <KPluginLoader>
+#include <KActionCollection>
+#include <KAboutData>
+#include <KDebug>
+
+#include <KTextEditor/View>
+#include <KTextEditor/Document>
 #include <KTextEditor/TextHintInterface>
-#include <kactioncollection.h>
-#include <kaboutdata.h>
-#include <kdebug.h>
+#include <KTextEditor/CodeCompletionInterface>
+
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/ilanguage.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/contextmenuextension.h>
+#include <interfaces/iplugincontroller.h>
+
 #include <language/interfaces/codecontext.h>
+#include <language/interfaces/ilanguagesupport.h>
+#include <language/interfaces/iquickopen.h>
+
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/ducontext.h>
@@ -53,23 +68,19 @@
 #include <language/duchain/dumpchain.h>
 #include <language/duchain/functiondefinition.h>
 #include <language/duchain/parsingenvironment.h>
-#include <language/interfaces/ilanguagesupport.h>
-#include <language/backgroundparser/backgroundparser.h>
-#include <language/backgroundparser/parsejob.h>
-#include "contextbrowserview.h"
 #include <language/duchain/uses.h>
 #include <language/duchain/specializationstore.h>
 #include <language/duchain/aliasdeclaration.h>
-#include <language/util/navigationtooltip.h>
-#include <language/duchain/navigation/abstractnavigationwidget.h>
-#include <language/interfaces/iquickopen.h>
-#include <interfaces/iplugincontroller.h>
-#include <sublime/mainwindow.h>
-#include <memory>
-#include <QToolButton>
-#include <QLayout>
 #include <language/duchain/types/functiontype.h>
-#include <ktexteditor/codecompletioninterface.h>
+
+#include <language/duchain/navigation/abstractnavigationwidget.h>
+
+#include <language/backgroundparser/backgroundparser.h>
+#include <language/backgroundparser/parsejob.h>
+
+#include <language/util/navigationtooltip.h>
+
+#include <sublime/mainwindow.h>
 
 static const unsigned int highlightingTimeout = 150;
 static const float highlightingZDepth = -5000;
