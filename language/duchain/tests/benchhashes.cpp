@@ -27,7 +27,7 @@
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
 
-#include "config-kdevplatform.h"
+#include "hashconfig.h"
 
 // similar to e.g. modificationrevision.cpp
 struct DataT {

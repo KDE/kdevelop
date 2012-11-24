@@ -43,23 +43,6 @@ macro_bool_to_01(KOMPARE_FOUND HAVE_KOMPARE)
 add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS -DQURL_NO_CAST_FROM_QSTRING)
 
-# TODO: Remove when LTS for g++ < 4.3 has ended.
-#       See also: languages/cpp/parser/parser.h in KDevelop
-if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    include(CheckIncludeFileCXX)
-    set(CMAKE_REQUIRED_FLAGS "-std=c++0x")
-    check_include_file_cxx(unordered_map HAVE_UNORDERED_MAP)
-    set(CMAKE_REQUIRED_FLAGS "")
-
-    if(HAVE_UNORDERED_MAP)
-        message(STATUS "Enabling c++0x support for unordered map")
-        add_definitions( -std=c++0x )
-    else(HAVE_UNORDERED_MAP)
-        message(STATUS "Using ext/hash_map")
-        check_include_file_cxx(ext/hash_map HAVE_EXT_HASH_MAP)
-    endif(HAVE_UNORDERED_MAP)
-endif(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-
 configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/config-kdevplatform.h.cmake
                 ${CMAKE_CURRENT_BINARY_DIR}/config-kdevplatform.h )
 
