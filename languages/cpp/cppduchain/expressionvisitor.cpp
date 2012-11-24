@@ -94,22 +94,6 @@ namespace Cpp {
 using namespace KDevelop;
 using namespace TypeUtils;
 
-bool isNumber( const IndexedString& str ) {
-  static IndexedString _0("0");
-  static IndexedString _1("1");
-  static IndexedString _2("2");
-  static IndexedString _3("3");
-  static IndexedString _4("4");
-  static IndexedString _5("5");
-  static IndexedString _6("6");
-  static IndexedString _7("7");
-  static IndexedString _8("8");
-  static IndexedString _9("9");
-  if( str.isEmpty() )
-    return false;
-  return str == _0 || str == _1 || str == _2 || str == _3 || str == _4 || str == _5 || str == _6 || str == _7 || str == _8 || str == _9;
-}
-
 QHash<quint16, QString> initOperatorNames() {
   QHash<quint16, QString> ret;
   ret['+'] = "+";
@@ -613,73 +597,78 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
   {
     clearLast();
 
-    if( node->literal ) {
-      visit( node->literal );
-      return; //We had a string-literal
+    switch (node->type) {
+      case PrimaryExpressionAST::Literal:
+        visit( node->literal );
+        break;
+      case PrimaryExpressionAST::Name:
+        visit( node->name );
+        break;
+      case PrimaryExpressionAST::SubExpression:
+        visit( node->sub_expression );
+        break;
+      case PrimaryExpressionAST::Statement:
+        visit( node->expression_statement );
+        break;
+      case PrimaryExpressionAST::Token:
+        visitExpressionToken( node->token, node );
+        break;
     }
 
-    if( !node->sub_expression && !node->expression_statement && !node->name )
-    {
-      IndexedString startNumber = IndexedString::fromIndex(m_session->contents()[tokenFromIndex(node->start_token).position]); //Extracts the first digit
+    if ( m_lastType ) {
+      expressionType( node, m_lastType, m_lastInstance );
+    }
+  }
 
-      if( isNumber(startNumber) )
-      {
-        QString num = m_session->stringForNode(node, true);
+  void ExpressionVisitor::visitExpressionToken(uint tokenIndex, AST* node)
+  {
+    const Token& token(tokenFromIndex(tokenIndex));
 
-        LOCKDUCHAIN;
-        if( num.indexOf('.') != -1 || num.endsWith('f') || num.endsWith('d') ) {
-          double val = 0;
-          bool ok = false;
-          while( !num.isEmpty() && !ok ) {
-            val = num.toDouble(&ok);
-            num.truncate(num.length()-1);
-          }
+    if (token.kind == Token_number_literal) {
+      QString num = m_session->token_stream->symbolString(token);
 
-
-          if( num.endsWith('f') ) {
-            m_lastType = AbstractType::Ptr(new ConstantIntegralType(IntegralType::TypeFloat));
-            static_cast<ConstantIntegralType*>(m_lastType.unsafeData())->setValue<float>((float)val);
-          } else {
-            m_lastType = AbstractType::Ptr(new ConstantIntegralType(IntegralType::TypeDouble));
-            static_cast<ConstantIntegralType*>(m_lastType.unsafeData())->setValue<double>(val);
-          }
-        } else {
-          qint64 val = 0;
-          uint mod = AbstractType::NoModifiers;
-
-          if( num.endsWith("u") || ( num.length() > 1 && num[1] == 'x' ) )
-            mod = AbstractType::UnsignedModifier;
-
-          bool ok = false;
-          while( !num.isEmpty() && !ok ) {
-            val = num.toLongLong(&ok, 0);
-            num.truncate(num.length()-1);
-          }
-
-          m_lastType = AbstractType::Ptr(new ConstantIntegralType(IntegralType::TypeInt));
-          m_lastType->setModifiers(mod);
-
-          if( mod & AbstractType::UnsignedModifier )
-            ConstantIntegralType::Ptr::staticCast(m_lastType)->setValue<quint64>(val);
-          else
-            ConstantIntegralType::Ptr::staticCast(m_lastType)->setValue<qint64>(val);
+      LOCKDUCHAIN;
+      if( num.indexOf('.') != -1 || num.endsWith('f') || num.endsWith('d') ) {
+        double val = 0;
+        bool ok = false;
+        while( !num.isEmpty() && !ok ) {
+          val = num.toDouble(&ok);
+          num.truncate(num.length()-1);
         }
-        m_lastInstance = Instance(true);
 
-        return;
+
+        if( num.endsWith('f') ) {
+          m_lastType = AbstractType::Ptr(new ConstantIntegralType(IntegralType::TypeFloat));
+          static_cast<ConstantIntegralType*>(m_lastType.unsafeData())->setValue<float>((float)val);
+        } else {
+          m_lastType = AbstractType::Ptr(new ConstantIntegralType(IntegralType::TypeDouble));
+          static_cast<ConstantIntegralType*>(m_lastType.unsafeData())->setValue<double>(val);
+        }
+      } else {
+        qint64 val = 0;
+        uint mod = AbstractType::NoModifiers;
+
+        if( num.endsWith("u") || ( num.length() > 1 && num[1] == 'x' ) )
+          mod = AbstractType::UnsignedModifier;
+
+        bool ok = false;
+        while( !num.isEmpty() && !ok ) {
+          val = num.toLongLong(&ok, 0);
+          num.truncate(num.length()-1);
+        }
+
+        m_lastType = AbstractType::Ptr(new ConstantIntegralType(IntegralType::TypeInt));
+        m_lastType->setModifiers(mod);
+
+        if( mod & AbstractType::UnsignedModifier )
+          ConstantIntegralType::Ptr::staticCast(m_lastType)->setValue<quint64>(val);
+        else
+          ConstantIntegralType::Ptr::staticCast(m_lastType)->setValue<qint64>(val);
       }
-    }
+      m_lastInstance = Instance(true);
 
-    visit( node->sub_expression );
-    visit( node->expression_statement );
-    visit( node->name );
-
-    const Token& token(tokenFromIndex(node->token));
-
-    static const IndexedString True("true");
-    static const IndexedString False("false");
-
-    if(token.kind == Token_char_literal) {
+      return;
+    } else if(token.kind == Token_char_literal) {
       // char literal e.g. 'x'
       LOCKDUCHAIN;
       ConstantIntegralType* charType = new ConstantIntegralType(IntegralType::TypeChar);
@@ -710,16 +699,13 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
 
       m_lastType = AbstractType::Ptr(charType);
       m_lastInstance = Instance( true );
-    } else if(token.kind == Token_true || token.kind == Token_false) {
+    } else if (token.kind == Token_true || token.kind == Token_false) {
       ///We have a boolean constant, we need to catch that here
       LOCKDUCHAIN;
       m_lastType = AbstractType::Ptr(new ConstantIntegralType(IntegralType::TypeBoolean));
       m_lastInstance = Instance( true );
       static_cast<ConstantIntegralType*>(m_lastType.unsafeData())->setValue<qint64>( token.kind == Token_true );
-    }
-
-    //Respect "this" token
-    if( token.kind == Token_this ) {
+    } else if( token.kind == Token_this ) {
       LOCKDUCHAIN;
 
       AbstractType::Ptr thisType;
@@ -781,10 +767,9 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
         else
           problem(node, "\"this\" used in non-function context with invalid type");
       }
+    } else {
+      // TODO: handle nullptr
     }
-
-    if( m_lastType )
-      expressionType( node, m_lastType, m_lastInstance );
   }
 
   /** Translation-units just forward to their encapsulated expression */

@@ -343,6 +343,8 @@ private:
   virtual void visitLambdaExpression(LambdaExpressionAST *);
   virtual void visit(AST* node);
 
+  void visitExpressionToken(uint tokenIndex, AST* node);
+
   void putStringType();
   AbstractType::Ptr qObjectPtrType() const;
   

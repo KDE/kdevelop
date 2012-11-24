@@ -950,11 +950,21 @@ public:
 
   DECLARE_AST_NODE(PrimaryExpression)
 
-  StringLiteralAST *literal;
-  uint token;
-  StatementAST *expression_statement;
-  ExpressionAST *sub_expression;
-  NameAST *name;
+  union {
+    StringLiteralAST *literal;
+    StatementAST *expression_statement;
+    ExpressionAST *sub_expression;
+    NameAST *name;
+    uint token;
+  };
+  enum Type {
+    Literal,
+    Token,
+    Statement,
+    SubExpression,
+    Name
+  };
+  Type type;
 };
 
 class PtrOperatorAST : public AST

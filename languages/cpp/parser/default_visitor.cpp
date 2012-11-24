@@ -327,10 +327,23 @@ void DefaultVisitor::visitPostfixExpression(PostfixExpressionAST *node)
 
 void DefaultVisitor::visitPrimaryExpression(PrimaryExpressionAST *node)
 {
-  visit(node->literal);
-  visit(node->expression_statement);
-  visit(node->sub_expression);
-  visit(node->name);
+  switch(node->type) {
+    case PrimaryExpressionAST::Literal:
+      visit(node->literal);
+      break;
+    case PrimaryExpressionAST::Statement:
+      visit(node->expression_statement);
+      break;
+    case PrimaryExpressionAST::SubExpression:
+      visit(node->sub_expression);
+      break;
+    case PrimaryExpressionAST::Name:
+      visit(node->name);
+      break;
+    case PrimaryExpressionAST::Token:
+      // nothing to do
+      break;
+  }
 }
 
 void DefaultVisitor::visitPtrOperator(PtrOperatorAST *node)

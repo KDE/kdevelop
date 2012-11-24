@@ -4196,6 +4196,7 @@ bool Parser::parsePrimaryExpression(ExpressionAST *&node)
       PrimaryExpressionAST *ast = 0;
       ast = CreateNode<PrimaryExpressionAST>(session->mempool);
       parseStringLiteral(ast->literal);
+      ast->type = PrimaryExpressionAST::Literal;
       node = ast;
       }
       break;
@@ -4211,6 +4212,7 @@ bool Parser::parsePrimaryExpression(ExpressionAST *&node)
       ast = CreateNode<PrimaryExpressionAST>(session->mempool);
       ast->token = session->token_stream->cursor();
       advance();
+      ast->type = PrimaryExpressionAST::Token;
       node = ast;
       }
       break;
@@ -4227,6 +4229,7 @@ bool Parser::parsePrimaryExpression(ExpressionAST *&node)
             return false;
           ast = CreateNode<PrimaryExpressionAST>(session->mempool);
           ast->expression_statement = expressionStatement;
+          ast->type = PrimaryExpressionAST::Statement;
         }
       else
         {
@@ -4235,6 +4238,7 @@ bool Parser::parsePrimaryExpression(ExpressionAST *&node)
             return false;
           ast = CreateNode<PrimaryExpressionAST>(session->mempool);
           ast->sub_expression = expression;
+          ast->type = PrimaryExpressionAST::SubExpression;
         }
 
       CHECK(')');
@@ -4249,6 +4253,7 @@ bool Parser::parsePrimaryExpression(ExpressionAST *&node)
           PrimaryExpressionAST *ast = 0;
           ast = CreateNode<PrimaryExpressionAST>(session->mempool);
           ast->name = name;
+          ast->type = PrimaryExpressionAST::Name;
           node = ast;
         }
       else if(!parseLambdaExpression(node))

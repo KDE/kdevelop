@@ -619,18 +619,21 @@ void CodeGenerator::visitPostfixExpression(PostfixExpressionAST* node)
 
 void CodeGenerator::visitPrimaryExpression(PrimaryExpressionAST* node)
 {
-  print(node->token);
-
-  visit(node->literal);
-
-  if (node->expression_statement || node->sub_expression) {
+  if (node->type == PrimaryExpressionAST::Token) {
+    print(node->token);
+  } else if (node->type == PrimaryExpressionAST::Literal) {
+    visit(node->literal);
+  } else if (node->type == PrimaryExpressionAST::Name) {
+    visit(node->name);
+  } else if (node->type == PrimaryExpressionAST::Statement || node->type == PrimaryExpressionAST::SubExpression) {
     m_output << "(";
-    visit(node->expression_statement);
-    visit(node->sub_expression);
+    if (node->type == PrimaryExpressionAST::Statement) {
+      visit(node->expression_statement);
+    } else {
+      visit(node->sub_expression);
+    }
     m_output << ")";
   }
-
-  visit(node->name);
 }
 
 void CodeGenerator::visitPtrOperator(PtrOperatorAST* node)
