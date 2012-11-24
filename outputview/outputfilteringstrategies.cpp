@@ -63,6 +63,17 @@ struct CompilerFilterStrategyPrivate
     PositionMap m_positionInCurrentDirs;
 };
 
+// All the possible string that indicate an error if we via Regex have been able to
+// extract file and linenumber from a given outputline
+const QVector<QString> ERROR_INDICATORS = QVector<QString>()
+    // ld
+    << "undefined reference"
+    << "undefined symbol"
+    << "ld: cannot find"
+    << "No such file"
+    // Gcc
+    << "error";
+
 // A list of filters for possible compiler, linker, and make errors
 const QList<ErrorFormat> ERROR_FILTERS = QList<ErrorFormat>()
     // GCC - another case, eg. for #include "pixmap.xpm" which does not exists
@@ -73,11 +84,6 @@ const QList<ErrorFormat> ERROR_FILTERS = QList<ErrorFormat>()
     << ErrorFormat( "^([^: \\t]+)\\(([0-9]+)\\):([^0-9]+)", 1, 2, 3, "intel" )
     //libtool link
     << ErrorFormat( "^(libtool):( link):( warning): ", 0, 0, 0 )
-    // ld
-    << ErrorFormat( "undefined reference", 0, 0, 0 )
-    << ErrorFormat( "undefined symbol", 0, 0, 0 )
-    << ErrorFormat( "ld: cannot find", 0, 0, 0 )
-    << ErrorFormat( "No such file", 0, 0, 0 )
     // make
     << ErrorFormat( "No rule to make target", 0, 0, 0 )
     // Fortran
@@ -110,7 +116,7 @@ QList<ActionFormat> ACTION_FILTERS = QList<ActionFormat>()
                      "linking"), 1, 2, "^linking (.*)" )
     //cmake
     << ActionFormat( i18n("built"), -1, 1, "\\[.+%\\] Built target (.*)" )
-    << ActionFormat( i18n("compiling"), "cmake", "\\[.+%\\] Building .* object (.*)/CMakeFiles/", 1 )
+    << ActionFormat( i18n("compiling"), "cmake", "\\[.+%\\] Building .* object (.*)CMakeFiles/", 1 )
     << ActionFormat( i18n("generating"), -1, 1, "\\[.+%\\] Generating (.*)" )
     << ActionFormat( i18nc("Linking object files into a library or executable",
                      "linking"), -1, 1, "^Linking (.*)" )
@@ -236,9 +242,11 @@ FilteredItem CompilerFilterStrategy::errorInLine(const QString& line)
             }
 
             QString txt = regEx.cap(curErrFilter.textGroup);
-
-            if(txt.contains("error", Qt::CaseInsensitive)) {
-                item.type = FilteredItem::ErrorItem;
+            foreach( const QString curErrIndicator , ERROR_INDICATORS ) {
+                if(txt.contains(curErrIndicator, Qt::CaseInsensitive)) {
+                    item.type = FilteredItem::ErrorItem;
+                    break;
+                }
             }
 
             if(txt.contains("warning", Qt::CaseInsensitive)) {

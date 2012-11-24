@@ -73,8 +73,10 @@ void FilteringStrategyTest::testCompilerFilterstrategy_data()
     << buildCompilerLine() << FilteredItem::InvalidItem << FilteredItem::InvalidItem;
     QTest::newRow("compiler-error-line")
     << buildCompilerErrorLine() << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
-    QTest::newRow("compiler-action-line")
+    QTest::newRow("linker-action-line")
     << "linking testCustombuild (g++)" << FilteredItem::InvalidItem << FilteredItem::ActionItem;
+    QTest::newRow("linker-error-line")
+    << buildLinkerErrorLine() << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
     QTest::newRow("python-error-line")
     << buildPythonErrorLine() << FilteredItem::InvalidItem << FilteredItem::InvalidItem;
 }
@@ -177,17 +179,19 @@ void FilteringStrategyTest::testCompilerFilterstrategyUrlFromAction_data()
 
 
     QTest::newRow("cmake-line1")
-    << "[ 25%] Building CXX object /path/to/one/CMakeFiles/file.o" << QString( basepath + "path/to/one" );
+    << "[ 25%] Building CXX object /path/to/one/CMakeFiles/file.o" << QString( basepath + "path/to/one/" );
     QTest::newRow("cmake-line2")
-    << "[ 26%] Building CXX object /path/to/two/CMakeFiles/file.o" << QString( basepath + "path/to/two");
+    << "[ 26%] Building CXX object /path/to/two/CMakeFiles/file.o" << QString( basepath + "path/to/two/");
     QTest::newRow("cmake-line3")
-    << "[ 26%] Building CXX object /path/to/three/CMakeFiles/file.o" << QString( basepath + "path/to/three");
+    << "[ 26%] Building CXX object /path/to/three/CMakeFiles/file.o" << QString( basepath + "path/to/three/");
     QTest::newRow("cmake-line4")
-    << "[ 26%] Building CXX object /path/to/four/CMakeFiles/file.o" << QString( basepath + "path/to/four");
+    << "[ 26%] Building CXX object /path/to/four/CMakeFiles/file.o" << QString( basepath + "path/to/four/");
     QTest::newRow("cmake-line5")
-    << "[ 26%] Building CXX object /path/to/two/CMakeFiles/file.o" << QString( basepath + "path/to/two");
+    << "[ 26%] Building CXX object /path/to/two/CMakeFiles/file.o" << QString( basepath + "path/to/two/");
     QTest::newRow("cd-line6")
     << QString("make[4]: Entering directory '" + basepath + "path/to/one/'") << QString( basepath + "path/to/one/");
+    QTest::newRow("cmake-line7")
+    << QString("[ 50%] Building CXX object CMakeFiles/testdeque.dir/RingBuffer.cpp.o") << QString( basepath);
 }
 
 void FilteringStrategyTest::testCompilerFilterstrategyUrlFromAction()

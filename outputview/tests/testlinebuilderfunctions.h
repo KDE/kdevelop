@@ -108,6 +108,11 @@ QString buildCompilerActionLine()
     return QString("linking testCustombuild (g++)");
 }
 
+QString buildLinkerErrorLine()
+{
+    return QString("/path/to/file/Buffer.cpp:66: undefined reference to `Buffer::does_not_exist()'");
+}
+
 QString buildPythonErrorLine()
 {
     KUrl projecturl( PROJECTS_SOURCE_DIR"/onefileproject/" );
