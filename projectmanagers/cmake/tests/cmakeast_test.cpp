@@ -340,10 +340,12 @@ void CMakeAstTest::testAddSubdirectoryBadParse_data()
 void CMakeAstTest::testAddTestGoodParse()
 {
     QFETCH( CMakeFunctionDesc, function );
+    QFETCH( QStringList, args );
     CMakeAst* ast = AstFactory::self()->createAst("add_test");
     QVERIFY( ast->parseFunctionInfo( function ) == true );
     QCOMPARE( ((AddTestAst*)ast)->testName(), QString("test_name") );
     QCOMPARE( ((AddTestAst*)ast)->exeName(), QString("exec_name") );
+    QCOMPARE( ((AddTestAst*)ast)->testArgs(), args );
     delete ast;
 }
 
@@ -367,10 +369,11 @@ void CMakeAstTest::testAddTestGoodParse_data()
     func4.addArguments( argList4 );
 
     QTest::addColumn<CMakeFunctionDesc>( "function" );
-    QTest::newRow( "good req args" ) << func1;
-    QTest::newRow( "good opt args" ) << func2;
-    QTest::newRow( "good extended req args" ) << func3;
-    QTest::newRow( "good extended opt args" ) << func4;
+    QTest::addColumn<QStringList>( "args" );
+    QTest::newRow( "good req args" ) << func1 << QStringList();
+    QTest::newRow( "good opt args" ) << func2 << (QStringList() << "arg1");
+    QTest::newRow( "good extended req args" ) << func3 << QStringList();
+    QTest::newRow( "good extended opt args" ) << func4 << (QStringList() << "arg1");
 }
 
 void CMakeAstTest::testAddTestBadParse()
