@@ -342,25 +342,35 @@ void CMakeAstTest::testAddTestGoodParse()
     QFETCH( CMakeFunctionDesc, function );
     CMakeAst* ast = AstFactory::self()->createAst("add_test");
     QVERIFY( ast->parseFunctionInfo( function ) == true );
+    QCOMPARE( ((AddTestAst*)ast)->testName(), QString("test_name") );
+    QCOMPARE( ((AddTestAst*)ast)->exeName(), QString("exec_name") );
     delete ast;
 }
 
 void CMakeAstTest::testAddTestGoodParse_data()
 {
-    CMakeFunctionDesc func1, func2;
+    CMakeFunctionDesc func1, func2, func3, func4;
     func1.name = "add_test";
     func2.name = "add_test";
+    func3.name = "add_test";
+    func4.name = "add_test";
 
-    QStringList argList1, argList2;
+    QStringList argList1, argList2, argList3, argList4;
     argList1 << "test_name" << "exec_name";
     argList2 << "test_name" << "exec_name" << "arg1";
+    argList3 << "NAME" << "test_name" << "COMMAND" << "exec_name";
+    argList4 << "NAME" << "test_name" << "CONFIGURATIONS" << "Debug" << "WORKING_DIRECTORY" << "/home/user" << "COMMAND" << "exec_name" << "arg1";
 
     func1.addArguments( argList1 );
     func2.addArguments( argList2 );
+    func3.addArguments( argList3 );
+    func4.addArguments( argList4 );
 
     QTest::addColumn<CMakeFunctionDesc>( "function" );
     QTest::newRow( "good req args" ) << func1;
     QTest::newRow( "good opt args" ) << func2;
+    QTest::newRow( "good extended req args" ) << func3;
+    QTest::newRow( "good extended opt args" ) << func4;
 }
 
 void CMakeAstTest::testAddTestBadParse()
@@ -373,22 +383,25 @@ void CMakeAstTest::testAddTestBadParse()
 
 void CMakeAstTest::testAddTestBadParse_data()
 {
-    CMakeFunctionDesc func1, func2, func3;
+    CMakeFunctionDesc func1, func2, func3, func4;
     func1.name = "wrong_name";
-    func2.name = func3.name = "add_test";
+    func2.name = func3.name = func4.name = "add_test";
 
-    QStringList argList1, argList2, argList3;
+    QStringList argList1, argList2, argList3, argList4;
     argList1 << "some" << "args";
     argList2 << "one arg";
+    argList4 << "NAME" << "test_name" << "CONFIGURATIONS" << "Debug" << "WORKING_DIRECTORY" << "/home/user";
 
     func1.addArguments( argList1 );
     func2.addArguments( argList2 );
     func3.addArguments( argList3 );
+    func4.addArguments( argList4 );
 
     QTest::addColumn<CMakeFunctionDesc>( "function" );
     QTest::newRow( "wrong name" ) << func1;
     QTest::newRow( "not enough args" ) << func2;
     QTest::newRow( "no args" ) << func3;
+    QTest::newRow( "no command" ) << func4;
 
 }
 

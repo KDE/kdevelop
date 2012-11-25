@@ -593,14 +593,37 @@ bool AddTestAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     if ( func.arguments.size() < 2 )
         return false;
 
-    m_testName = func.arguments[0].value;
-    m_exeName = func.arguments[1].value;
     QList<CMakeFunctionArgument>::const_iterator it, itEnd = func.arguments.constEnd();
-    it = func.arguments.constBegin() + 2;
+    it = func.arguments.constBegin();
+    enum {Name, Command, Arg, Unsupported} state = Unsupported;
+    if (it->value != "NAME")
+    {
+        m_testName = (it++)->value;
+        m_exeName = (it++)->value;
+        state = Arg;
+    }
     for ( ; it != itEnd; ++it )
-        m_testArgs << it->value;
+    {
+        if ( it->value == "NAME" ) state = Name;
+        else if ( it->value == "COMMAND" ) state = Command;
+        else if ( it->value == "CONFIGURATIONS" || it->value == "WORKING_DIRECTORY" ) state = Unsupported;
+        else switch (state) {
+            case Name:
+                m_testName = it->value;
+                break;
+            case Command:
+                m_exeName = it->value;
+                state = Arg;
+                break;
+            case Arg:
+                m_testArgs << it->value;
+                break;
+            default:
+                break;
+        }
+    }
 
-    return true;
+    return !m_exeName.isEmpty();
 }
 
 AuxSourceDirectoryAst::AuxSourceDirectoryAst()
