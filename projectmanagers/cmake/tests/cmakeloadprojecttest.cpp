@@ -79,7 +79,7 @@ void CMakeLoadProjectTest::testSmallKDE4Project()
                                                       << CMAKE_TESTS_PROJECTS_DIR "/kde4app/ui_prefs_base.h" 
                                                       << CMAKE_TESTS_PROJECTS_DIR "/kde4app/settings.cpp" 
                                                       << CMAKE_TESTS_PROJECTS_DIR "/kde4app/settings.h" );
-    QCOMPARE(v.targets.at( 1 ).name, QString("test") );
+    QCOMPARE(v.targets.at( 1 ).name, QString("testkde4app") );
     
     QCOMPARE(v.targets.at( 1 ).files, QStringList() << "kde4app.cpp");
     QCOMPARE(v.targets.at( 2 ).name, QString("uninstall") );
@@ -136,6 +136,7 @@ CMakeProjectData CMakeLoadProjectTest::parseProject( const QString& sourcedir )
     data.vm.insert("CMAKE_CURRENT_BINARY_DIR", QStringList(sourcedir));
     data.vm.insert("CMAKE_CURRENT_LIST_FILE", QStringList(projectfile));
     data.vm.insert("CMAKE_CURRENT_SOURCE_DIR", QStringList(sourcedir));
+    data.vm.insert("KDE4_BUILD_TESTS", QStringList("True"));
 
     CMakeProjectVisitor v(projectfile, ref);
     v.setVariableMap(&data.vm);
