@@ -28,7 +28,6 @@
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/icore.h>
-#include <util/environmentgrouplist.h>
 #include <interfaces/iplugincontroller.h>
 #include "configconstants.h"
 
@@ -40,7 +39,6 @@ using KDevelop::ProjectBuildFolderItem;
 using KDevelop::ProjectBaseItem;
 using KDevelop::ProjectFileItem;
 using KDevelop::IPlugin;
-using KDevelop::EnvironmentGroupList;
 using KDevelop::ICore;
 using KDevelop::IOutputView;
 using KDevelop::IGenericProjectManager;
