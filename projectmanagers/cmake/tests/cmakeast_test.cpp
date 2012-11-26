@@ -145,9 +145,9 @@ void CMakeAstTest::testAddExecutableGoodParse_data()
     func5.addArguments( argList5 );
     
     CMakeFunctionDesc func6;
-    func5.name = "add_executable";
+    func6.name = "add_executable";
     QStringList argList6=QString("KDE4__kconfig_compiler IMPORTED").split(' ');
-    func5.addArguments( argList6 );
+    func6.addArguments( argList6 );
 
     QTest::addColumn<CMakeFunctionDesc>( "function" );
     QTest::newRow( "only sources" ) << func;
@@ -155,6 +155,7 @@ void CMakeAstTest::testAddExecutableGoodParse_data()
     QTest::newRow( "mac os bundle" ) << func3;
     QTest::newRow( "exclude from all" ) << func4;
     QTest::newRow( "all" ) << func5;
+    QTest::newRow( "imported" ) << func6;
 }
 
 void CMakeAstTest::testAddExecutableBadParse()
