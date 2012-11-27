@@ -36,6 +36,10 @@ struct LicensePagePrivate
         QString name;
         QString path;
         QString contents;
+        bool operator< (const LicenseInfo& o) const
+        {
+            return name < o.name;
+        }
     };
     typedef QList<LicenseInfo> LicenseList;
 
@@ -71,19 +75,23 @@ void LicensePagePrivate::initializeLicenses()
         QDirIterator it(currentDir, QDir::Files | QDir::Readable);
         while(it.hasNext())
         {
-            LicensePagePrivate::LicenseInfo newLicense;
+            LicenseInfo newLicense;
             newLicense.path = it.next();
             newLicense.name = it.fileName();
 
             kDebug() << "Found License: " << newLicense.name;
 
             availableLicenses.push_back(newLicense);
-            license->licenseComboBox->addItem(newLicense.name);
         }
     }
 
+    qSort(availableLicenses);
+
+    foreach(const LicenseInfo& info, availableLicenses) {
+        license->licenseComboBox->addItem(info.name);
+    }
     //Finally add the option other for user specified licenses
-    LicensePagePrivate::LicenseInfo otherLicense;
+    LicenseInfo otherLicense;
     availableLicenses.push_back(otherLicense);
     license->licenseComboBox->addItem("Other");
 }
