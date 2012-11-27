@@ -20,7 +20,6 @@
  */
 
 #include "templatepreview.h"
-#include "ui_templatepreview.h"
 
 #include <language/codegen/templaterenderer.h>
 #include <language/codegen/codedescription.h>
