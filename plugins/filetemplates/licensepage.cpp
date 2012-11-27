@@ -38,7 +38,7 @@ struct LicensePagePrivate
         QString contents;
         bool operator< (const LicenseInfo& o) const
         {
-            return name < o.name;
+            return name.localeAwareCompare(o.name) < 0;
         }
     };
     typedef QList<LicenseInfo> LicenseList;
