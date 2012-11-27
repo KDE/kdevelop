@@ -133,6 +133,7 @@ QString TemplatePreview::setFileTemplate(const QString& file)
         url.addPath(out.outputName);
         fileUrls.insert(out.identifier, url);
     }
+    m_renderer->setEmptyLinesPolicy(TemplateRenderer::TrimEmptyLines);
     DocumentChangeSet changes = m_renderer->renderFileTemplate(fileTemplate, base, fileUrls);
     changes.setActivationPolicy(DocumentChangeSet::DoNotActivate);
     changes.setUpdateHandling(DocumentChangeSet::NoUpdate);
@@ -141,13 +142,8 @@ QString TemplatePreview::setFileTemplate(const QString& file)
         return result.m_failureReason;
     }
 
-    m_preview->setMode(fileTemplate.languageName());
-    QFile renderedFile(fileUrls[fileTemplate.outputFiles().first().identifier].toLocalFile());
-    if (!renderedFile.open(QIODevice::ReadOnly)) {
-        return i18n("Could not open rendered template preview: %1", renderedFile.fileName());
-    }
-    m_renderer->setEmptyLinesPolicy(TemplateRenderer::TrimEmptyLines);
-    return setText(QString::fromUtf8(renderedFile.readAll()));
+    m_preview->openUrl(fileUrls[fileTemplate.outputFiles().first().identifier]);
+    return QString();
 }
 
 KTextEditor::Document* TemplatePreview::document() const
