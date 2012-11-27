@@ -64,6 +64,11 @@ OpenWithPlugin::~OpenWithPlugin()
 
 KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension( KDevelop::Context* context )
 {
+    // do not recurse
+    if (context->hasType(KDevelop::Context::OpenWithContext)) {
+        return ContextMenuExtension();
+    }
+
     m_urls.clear();
     m_actionMap.reset();
     m_services.clear();
