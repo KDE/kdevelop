@@ -196,7 +196,7 @@ public:
      *
      * @param fileTemplate the source file template to render
      * @param baseUrl the base URL used for calculating relative output file URLs
-     * @param fileUrls destination URLs of the output files
+     * @param fileUrls maps output file identifiers to desired destination URLs
      * @return KDevelop::DocumentChangeSet
      */
     DocumentChangeSet renderFileTemplate(const KDevelop::SourceFileTemplate& fileTemplate,
