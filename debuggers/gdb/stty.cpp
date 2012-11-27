@@ -324,7 +324,6 @@ bool STTY::findExternalTTY(const QString &termApp)
                     "exec<&-;exec>&-;"		        // close stdin and stdout
                     "while :;do sleep 3600;done");
         const char* scriptStr = script.toLatin1();
-        const char* end       = 0;
 
         QByteArray rawAppName = appName.toLocal8Bit();
         if ( termApp == "konsole" )
@@ -333,14 +332,14 @@ bool STTY::findExternalTTY(const QString &termApp)
                   "-caption", i18n("kdevelop: Debug application console").toLocal8Bit().data(),
                   "-e",       "sh",
                   "-c",       scriptStr,
-                      end);
+                  (char *)0);
         }
         else
         {        
             ::execlp( rawAppName, rawAppName,
                   "-e",       "sh",
                   "-c",       scriptStr,
-                  end);
+                  (char *)0);
         }
 
         // Should not get here, as above should always work
