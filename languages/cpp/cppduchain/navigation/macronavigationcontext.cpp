@@ -56,6 +56,7 @@ KTextEditor::View* createDocAndView(const QString& data, KTextEditor::Document**
   KTextEditor::View* view = doc->createView(0);
   if (KTextEditor::ConfigInterface* config = qobject_cast<KTextEditor::ConfigInterface*>(view)) {
     config->setConfigValue("icon-bar", false);
+    config->setConfigValue("folding-bar", false);
     config->setConfigValue("line-numbers", false);
     config->setConfigValue("dynamic-word-wrap", true);
   }
