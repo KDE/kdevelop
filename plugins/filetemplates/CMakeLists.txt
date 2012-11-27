@@ -56,5 +56,7 @@ licenses/BSD
 licenses/Boost
 licenses/MIT\ X11
 licenses/Mozilla\ v1.1
+"licenses/LGPL v2+ (KDE)"
+"licenses/GPL v2+ (KDE)"
 DESTINATION ${DATA_INSTALL_DIR}/kdevcodegen/licenses
 )
