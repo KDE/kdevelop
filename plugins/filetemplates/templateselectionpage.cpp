@@ -67,9 +67,11 @@ void TemplateSelectionPagePrivate::currentTemplateChanged(const QModelIndex& ind
     {
         // invalid or has child
         assistant->setValid(assistant->currentPage(), false);
+        ui->preview->setText(QString());
     } else {
         selectedTemplate = model->data(index, TemplatesModel::DescriptionFileRole).toString();
         assistant->setValid(assistant->currentPage(), true);
+        ui->preview->setFileTemplate(selectedTemplate);
     }
 }
 
@@ -180,6 +182,11 @@ TemplateSelectionPage::~TemplateSelectionPage()
 {
     delete d->ui;
     delete d;
+}
+
+QSize TemplateSelectionPage::sizeHint() const
+{
+    return QSize(600, 600);
 }
 
 QString TemplateSelectionPage::selectedTemplate() const

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>TemplatePreview</class>
+ <class>TemplatePreviewToolView</class>
  <widget class="QWidget" name="TemplatePreview">
   <property name="geometry">
    <rect>

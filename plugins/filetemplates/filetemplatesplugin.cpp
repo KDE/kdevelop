@@ -1,6 +1,6 @@
 #include "filetemplatesplugin.h"
-#include "templatepreview.h"
 #include "templateclassassistant.h"
+#include "templatepreviewtoolview.h"
 
 #include <language/codegen/templatesmodel.h>
 #include <language/interfaces/editorcontext.h>
@@ -46,7 +46,7 @@ public:
 
     virtual QWidget* create(QWidget* parent = 0)
     {
-        return new TemplatePreview(m_plugin, parent);
+        return new TemplatePreviewToolView(m_plugin, parent);
     }
 
     virtual QString id() const
@@ -276,7 +276,7 @@ void FileTemplatesPlugin::previewTemplate()
     {
         return;
     }
-    TemplatePreview* preview = qobject_cast<TemplatePreview*>(core()->uiController()->findToolView(i18n("Template Preview"), m_toolView));
+    TemplatePreviewToolView* preview = qobject_cast<TemplatePreviewToolView*>(core()->uiController()->findToolView(i18n("Template Preview"), m_toolView));
     if (!preview)
     {
         return;
