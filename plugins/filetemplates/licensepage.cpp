@@ -192,6 +192,25 @@ bool LicensePagePrivate::saveLicense()
         return false;
     }
 
+    // also add to our data structures, this esp. needed for proper saving
+    // of the license index so it can be restored the next time we show up
+    LicenseInfo info;
+    info.name = license->licenseName->text();
+    info.path = localDataDir;
+    availableLicenses << info;
+    // find index of the new the license, omitting the very last item ('Other')
+    int idx = availableLicenses.count() - 1;
+    for(int i = 0; i < availableLicenses.size() - 1; ++i) {
+        if (info < availableLicenses.at(i)) {
+            idx = i;
+            break;
+        }
+    }
+    availableLicenses.insert(idx, info);
+    license->licenseComboBox->insertItem(idx, info.name);
+    license->licenseComboBox->setCurrentIndex(idx);
+
+
     return true;
 }
 
