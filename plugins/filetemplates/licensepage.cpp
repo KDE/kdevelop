@@ -51,9 +51,9 @@ struct LicensePagePrivate
     }
 
     // methods
-    void        initializeLicenses();
-    QString&    readLicense(int licenseIndex);
-    bool        saveLicense();
+    void initializeLicenses();
+    QString readLicense(int licenseIndex);
+    bool saveLicense();
     // slots
     void licenseComboChanged(int license);
 
@@ -97,7 +97,7 @@ void LicensePagePrivate::initializeLicenses()
 }
 
 // Read a license index, if it is not loaded, open it from the file
-QString& LicensePagePrivate::readLicense(int licenseIndex)
+QString LicensePagePrivate::readLicense(int licenseIndex)
 {
     //If the license is not loaded into memory, read it in
     if(availableLicenses[licenseIndex].contents.isEmpty())
