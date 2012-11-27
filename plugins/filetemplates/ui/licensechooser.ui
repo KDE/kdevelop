@@ -63,7 +63,11 @@
        </widget>
       </item>
       <item row="2" column="0" colspan="2">
-       <widget class="KTextEdit" name="licenseTextEdit"/>
+       <widget class="KTextEdit" name="licenseTextEdit">
+        <property name="acceptRichText">
+         <bool>false</bool>
+        </property>
+       </widget>
       </item>
      </layout>
      <zorder>saveLicense</zorder>
