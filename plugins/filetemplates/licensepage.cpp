@@ -93,7 +93,7 @@ void LicensePagePrivate::initializeLicenses()
     //Finally add the option other for user specified licenses
     LicenseInfo otherLicense;
     availableLicenses.push_back(otherLicense);
-    license->licenseComboBox->addItem("Other");
+    license->licenseComboBox->addItem(i18n("Other"));
 }
 
 // Read a license index, if it is not loaded, open it from the file
