@@ -220,6 +220,9 @@ LicensePage::LicensePage(QWidget* parent)
 
 LicensePage::~LicensePage()
 {
+    if (d->license->saveLicense->isChecked() && !d->license->licenseName->text().isEmpty()) {
+        d->saveLicense();
+    }
     KConfigGroup config(KGlobal::config()->group("CodeGeneration"));
     //Do not save invalid license numbers'
     int index = d->license->licenseComboBox->currentIndex();
