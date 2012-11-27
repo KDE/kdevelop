@@ -35,6 +35,7 @@
 #include <KTextEditor/ConfigInterface>
 
 #include <KTempDir>
+#include <KLocalizedString>
 #include <kmacroexpander.h>
 
 using namespace KDevelop;
