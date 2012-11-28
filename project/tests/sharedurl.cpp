@@ -285,8 +285,13 @@ void SharedUrl::testOptimized()
     OptimizedUrl optUrl(input);
 
     QCOMPARE(optUrl.toUrl(), url);
-    QCOMPARE(optUrl.pathOrUrl(), url.pathOrUrl());
     QCOMPARE(optUrl.isLocalFile(), url.isLocalFile());
+    if (url.hasPass()) {
+        // KUrl::pathOrUrl omits the password
+        QCOMPARE(optUrl.pathOrUrl(), url.url());
+    } else {
+        QCOMPARE(optUrl.pathOrUrl(), url.pathOrUrl());
+    }
     QCOMPARE(optUrl.isValid(), url.isValid());
 
     QCOMPARE(optUrl, OptimizedUrl(input));
@@ -305,6 +310,7 @@ void SharedUrl::testOptimized_data()
     QTest::newRow("file") << "file:///tmp/foo/asdf.txt";
     QTest::newRow("file-folder") << "file:///tmp/foo/bar/";
     QTest::newRow("ftps") << "ftps://user@host.com/tmp/foo/asdf.txt";
+    QTest::newRow("password") << "ftps://user:password@host.com/tmp/asdf.txt";
 }
 
 void SharedUrl::testOptimizedInvalid()
