@@ -42,7 +42,7 @@ set( sharedurltest_SRCS
     sharedurl.cpp
 )
 
-kde4_add_executable(sharedurltest ${sharedurltest_SRCS})
+kde4_add_unit_test(sharedurltest ${sharedurltest_SRCS})
 target_link_libraries(sharedurltest
     ${QT_QTTEST_LIBRARY}
     ${QT_QTCORE_LIBRARY}
