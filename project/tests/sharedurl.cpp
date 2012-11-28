@@ -39,19 +39,30 @@ struct OptimizedUrl
         }
 
         KUrl parser(pathOrUrl);
-        // we do not support urls with fragments
-        Q_ASSERT(!parser.hasFragment());
-        // nor do we support sub urls
-        Q_ASSERT(!parser.hasSubUrl());
-        // we also do not want queries
-        Q_ASSERT(!parser.hasQuery());
-        // nor relative URLs
-        Q_ASSERT(!parser.isRelative());
+
+        // we do not support urls with:
+        // - fragments
+        // - sub urls
+        // - query
+        // nor do we support relative urls
+        if (parser.hasFragment() || parser.hasQuery() || parser.hasSubUrl()
+            || parser.isRelative())
+        {
+            // invalid
+            return;
+        }
+
+        // remove /../ parts
         parser.cleanPath();
+
+        // store the path
         m_data = parser.path(KUrl::RemoveTrailingSlash).split('/', QString::SkipEmptyParts).toVector();
+
         if (parser.isLocalFile()) {
             return;
         }
+
+        // handle remote urls
         m_urlPrefix += parser.protocol();
         m_urlPrefix += "://";
         if (parser.hasUser()) {
@@ -268,13 +279,30 @@ void SharedUrl::testOptimized_data()
 {
     QTest::addColumn<QString>("input");
 
-    QTest::newRow("invalid") << "" ;
+    QTest::newRow("invalid") << "";
     QTest::newRow("path") << "/tmp/foo/asdf.txt";
     QTest::newRow("path-folder") << "/tmp/foo/asdf/";
     QTest::newRow("http") << "http://www.test.com/tmp/asdf.txt";
     QTest::newRow("file") << "file:///tmp/foo/asdf.txt";
     QTest::newRow("file-folder") << "file:///tmp/foo/bar/";
     QTest::newRow("ftps") << "ftps://user@host.com/tmp/foo/asdf.txt";
+}
+
+void SharedUrl::testOptimizedInvalid()
+{
+    QFETCH(QString, input);
+    OptimizedUrl url(input);
+    QVERIFY(!url.isValid());
+}
+
+void SharedUrl::testOptimizedInvalid_data()
+{
+    QTest::addColumn<QString>("input");
+    QTest::newRow("empty") << "";
+    QTest::newRow("fragment") << "http://test.com/#hello";
+    QTest::newRow("query") << "http://test.com/?hello";
+    QTest::newRow("suburl") << "file:///home/weis/kde.tgz#gzip:/#tar:/kdebase";
+    QTest::newRow("relative") << "../foo/bar";
 }
 
 #include "sharedurl.moc"

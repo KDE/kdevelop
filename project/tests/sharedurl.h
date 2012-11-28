@@ -35,6 +35,8 @@ private slots:
 
     void testOptimized();
     void testOptimized_data();
+    void testOptimizedInvalid();
+    void testOptimizedInvalid_data();
 };
 
 #endif // SHAREDURL_H
