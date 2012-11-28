@@ -58,6 +58,8 @@ private:
     QVector<QString> m_data;
 };
 
+Q_DECLARE_TYPEINFO(OptimizedUrl, Q_MOVABLE_TYPE);
+
 template<typename T>
 T stringToUrl(const QString& path)
 {
