@@ -47,4 +47,6 @@ target_link_libraries(sharedurltest
     ${QT_QTTEST_LIBRARY}
     ${QT_QTCORE_LIBRARY}
     ${KDE4_KDECORE_LIBS}
+    kdevplatformtests
+    kdevplatformlanguage
 )

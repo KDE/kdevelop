@@ -28,6 +28,9 @@ class SharedUrl : public QObject
 {
     Q_OBJECT
 private slots:
+    void initTestCase();
+    void cleanupTestCase();
+
     void kurl();
     void qurl();
     void qstringlist();

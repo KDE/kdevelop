@@ -20,11 +20,18 @@
  */
 #include "sharedurl.h"
 
+#include <language/duchain/indexedstring.h>
+
+#include <tests/autotestshell.h>
+#include <tests/testcore.h>
+
 #include <QtTest>
 
 #include <KUrl>
 
 QTEST_MAIN(SharedUrl);
+
+using namespace KDevelop;
 
 static const int FILES_PER_FOLDER = 10;
 static const int FOLDERS_PER_FOLDER = 5;
@@ -67,9 +74,6 @@ struct OptimizedUrl
         m_urlPrefix += "://";
         if (parser.hasUser()) {
             m_urlPrefix += parser.user();
-            if (parser.hasPass()) {
-                m_urlPrefix += ':' + parser.pass();
-            }
             m_urlPrefix += '@';
         }
         m_urlPrefix += parser.host();
@@ -141,6 +145,11 @@ struct OptimizedUrl
     bool isLocalFile() const
     {
         return !m_data.isEmpty() && m_urlPrefix.isEmpty();
+    }
+
+    KDevelop::IndexedString toIndexed() const
+    {
+        return IndexedString(pathOrUrl());
     }
 
 private:
@@ -254,6 +263,17 @@ void generateData()
     }
 }
 
+void SharedUrl::initTestCase()
+{
+    AutoTestShell::init();
+    TestCore::initialize(Core::NoUi);
+}
+
+void SharedUrl::cleanupTestCase()
+{
+    TestCore::shutdown();
+}
+
 void SharedUrl::kurl()
 {
     generateData<KUrl>();
@@ -284,19 +304,22 @@ void SharedUrl::testOptimized()
 
     OptimizedUrl optUrl(input);
 
-    QCOMPARE(optUrl.toUrl(), url);
-    QCOMPARE(optUrl.isLocalFile(), url.isLocalFile());
     if (url.hasPass()) {
-        // KUrl::pathOrUrl omits the password
-        QCOMPARE(optUrl.pathOrUrl(), url.url());
+        KUrl urlNoPass = url;
+        urlNoPass.setPass(QString());
+        QCOMPARE(optUrl.toUrl(), urlNoPass);
     } else {
-        QCOMPARE(optUrl.pathOrUrl(), url.pathOrUrl());
+        QCOMPARE(optUrl.toUrl(), url);
     }
+    QCOMPARE(optUrl.isLocalFile(), url.isLocalFile());
+    QCOMPARE(optUrl.pathOrUrl(), url.pathOrUrl());
     QCOMPARE(optUrl.isValid(), url.isValid());
 
     QCOMPARE(optUrl, OptimizedUrl(input));
     QCOMPARE(optUrl, OptimizedUrl(optUrl));
     QVERIFY(optUrl != OptimizedUrl(input + "/asdf"));
+
+    QCOMPARE(optUrl.toIndexed(), IndexedString(url));
 }
 
 void SharedUrl::testOptimized_data()
