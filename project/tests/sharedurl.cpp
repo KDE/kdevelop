@@ -150,6 +150,15 @@ private:
     QString m_urlPrefix;
 };
 
+/**
+ * qDebug() stream operator.  Writes the string to the debug output.
+ */
+QDebug operator<<(QDebug s, const OptimizedUrl& string)
+{
+    s.nospace() << string.pathOrUrl();
+    return s.space();
+}
+
 namespace QTest {
     template<>
     char *toString(const OptimizedUrl &url)
