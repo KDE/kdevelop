@@ -105,7 +105,8 @@ public:
     virtual QString viewState() const;
     virtual void setState(const QString& state);
 
-    void setInitialRange(KTextEditor::Range range);
+    void setInitialRange(const KTextEditor::Range& range);
+    KTextEditor::Range initialRange() const;
 
 private Q_SLOTS:
     void sendStatusChanged();
@@ -119,11 +120,10 @@ class KDEVPLATFORMSHELL_EXPORT TextEditorWidget : public QWidget, public KXMLGUI
 {
     Q_OBJECT
 public:
-    TextEditorWidget(QWidget* parent = 0);
+    TextEditorWidget(const KDevelop::TextView* view, QWidget* parent = 0);
     virtual ~TextEditorWidget();
 
-    void setEditorView(KTextEditor::View* view);
-    KTextEditor::View* editorView() const;
+    KTextEditor::View* editorView();
 
     QString status() const;
 
@@ -131,9 +131,11 @@ Q_SIGNALS:
     void statusChanged();
 
 public Q_SLOTS:
+    void initialize();
     void viewStatusChanged(KTextEditor::View*, const KTextEditor::Cursor& newPosition);
 
 private:
+    void setEditorView(KTextEditor::View* view);
     class TextEditorWidgetPrivate* const d;
 
 };
