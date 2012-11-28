@@ -68,10 +68,13 @@ void TemplateSelectionPagePrivate::currentTemplateChanged(const QModelIndex& ind
         // invalid or has child
         assistant->setValid(assistant->currentPage(), false);
         ui->preview->setText(QString());
+        ui->previewLabel->setText(i18n("<b>Preview:</b>"));
     } else {
         selectedTemplate = model->data(index, TemplatesModel::DescriptionFileRole).toString();
         assistant->setValid(assistant->currentPage(), true);
         ui->preview->setFileTemplate(selectedTemplate);
+        ui->previewLabel->setText(i18nc("%1: template comment", "<b>Preview:</b> %1",
+                                        index.data(TemplatesModel::CommentRole).toString()));
     }
 }
 
