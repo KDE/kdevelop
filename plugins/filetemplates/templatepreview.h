@@ -45,21 +45,13 @@ public:
     virtual ~TemplatePreview();
 
     /**
-     * Set the template contents.
+     * Set the template contents which will be rendered.
      *
      * @p text the template contents
      * @p isProject set to true if the contents resemble a project template
      * @return an error message, or an empty string if everything worked
      */
     QString setText(const QString& text, bool isProject = false);
-
-    /**
-     * Show a preview of a file template.
-     *
-     * @p file the file template
-     * @return an error message, or an empty string if everything worked
-     */
-    QString setFileTemplate(const QString& file);
 
     /**
      * @return The read-only document.

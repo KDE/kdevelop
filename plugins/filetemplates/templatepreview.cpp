@@ -23,8 +23,6 @@
 
 #include <language/codegen/templaterenderer.h>
 #include <language/codegen/codedescription.h>
-#include <language/codegen/sourcefiletemplate.h>
-#include <language/codegen/documentchangeset.h>
 
 #include <QDir>
 #include <QVBoxLayout>
@@ -34,7 +32,6 @@
 #include <KTextEditor/View>
 #include <KTextEditor/ConfigInterface>
 
-#include <KTempDir>
 #include <KLocalizedString>
 #include <kmacroexpander.h>
 
@@ -116,34 +113,6 @@ QString TemplatePreview::setText(const QString& text, bool isProject)
     m_preview->setReadWrite(false);
 
     return errorString;
-}
-
-QString TemplatePreview::setFileTemplate(const QString& file)
-{
-    SourceFileTemplate fileTemplate(file);
-    if (!fileTemplate.isValid() || fileTemplate.outputFiles().isEmpty()) {
-        return i18n("invalid file template: %1", file);
-    }
-
-    KTempDir dir;
-    KUrl base(dir.name());
-    QHash<QString, KUrl> fileUrls;
-    foreach(const SourceFileTemplate::OutputFile& out, fileTemplate.outputFiles()) {
-        KUrl url(base);
-        url.addPath(out.outputName);
-        fileUrls.insert(out.identifier, url);
-    }
-    m_renderer->setEmptyLinesPolicy(TemplateRenderer::TrimEmptyLines);
-    DocumentChangeSet changes = m_renderer->renderFileTemplate(fileTemplate, base, fileUrls);
-    changes.setActivationPolicy(DocumentChangeSet::DoNotActivate);
-    changes.setUpdateHandling(DocumentChangeSet::NoUpdate);
-    DocumentChangeSet::ChangeResult result = changes.applyAllChanges();
-    if (!result) {
-        return result.m_failureReason;
-    }
-
-    m_preview->openUrl(fileUrls[fileTemplate.outputFiles().first().identifier]);
-    return QString();
 }
 
 KTextEditor::Document* TemplatePreview::document() const

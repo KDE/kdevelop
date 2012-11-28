@@ -18,9 +18,14 @@
 */
 
 #include "templateselectionpage.h"
+
 #include "templateclassassistant.h"
+#include "templatepreview.h"
 
 #include <language/codegen/templatesmodel.h>
+#include <language/codegen/sourcefiletemplate.h>
+#include <language/codegen/documentchangeset.h>
+#include <language/codegen/templaterenderer.h>
 #include <language/interfaces/icreateclasshelper.h>
 #include <language/interfaces/ilanguagesupport.h>
 #include <interfaces/icore.h>
@@ -37,6 +42,8 @@
 #include <KLocalizedString>
 #include <KComponentData>
 #include <KFileDialog>
+#include <KTempDir>
+#include <KTextEditor/Document>
 
 using namespace KDevelop;
 
@@ -59,23 +66,75 @@ public:
     void currentTemplateChanged(const QModelIndex& index);
     void getMoreClicked();
     void loadFileClicked();
+    void previewTemplate(const QString& templateFile);
 };
 
 void TemplateSelectionPagePrivate::currentTemplateChanged(const QModelIndex& index)
 {
+    // delete preview tabs
     if (!index.isValid() || index.child(0, 0).isValid())
     {
         // invalid or has child
         assistant->setValid(assistant->currentPage(), false);
-        ui->preview->setText(QString());
-        ui->previewLabel->setText(i18n("<b>Preview:</b>"));
+        ui->previewLabel->setVisible(false);
+        ui->tabWidget->setVisible(false);
     } else {
         selectedTemplate = model->data(index, TemplatesModel::DescriptionFileRole).toString();
         assistant->setValid(assistant->currentPage(), true);
-        ui->preview->setFileTemplate(selectedTemplate);
+        previewTemplate(selectedTemplate);
+        ui->previewLabel->setVisible(true);
+        ui->tabWidget->setVisible(true);
         ui->previewLabel->setText(i18nc("%1: template comment", "<b>Preview:</b> %1",
                                         index.data(TemplatesModel::CommentRole).toString()));
     }
+}
+
+void TemplateSelectionPagePrivate::previewTemplate(const QString& file)
+{
+    SourceFileTemplate fileTemplate(file);
+    if (!fileTemplate.isValid() || fileTemplate.outputFiles().isEmpty()) {
+        return;
+    }
+
+    KTempDir dir;
+    KUrl base(dir.name());
+    QHash<QString, KUrl> fileUrls;
+    foreach(const SourceFileTemplate::OutputFile& out, fileTemplate.outputFiles()) {
+        KUrl url(base);
+        url.addPath(out.outputName);
+        fileUrls.insert(out.identifier, url);
+    }
+    TemplateRenderer renderer;
+    renderer.setEmptyLinesPolicy(TemplateRenderer::TrimEmptyLines);
+    DocumentChangeSet changes = renderer.renderFileTemplate(fileTemplate, base, fileUrls);
+    changes.setActivationPolicy(DocumentChangeSet::DoNotActivate);
+    changes.setUpdateHandling(DocumentChangeSet::NoUpdate);
+    DocumentChangeSet::ChangeResult result = changes.applyAllChanges();
+    if (!result) {
+        return;
+    }
+
+    int idx = 0;
+    foreach(const SourceFileTemplate::OutputFile& out, fileTemplate.outputFiles()) {
+        TemplatePreview* preview = 0;
+        if (ui->tabWidget->count() > idx) {
+            // reuse existing tab
+            preview = qobject_cast<TemplatePreview*>(ui->tabWidget->widget(idx));
+            ui->tabWidget->setTabText(idx, out.label);
+            Q_ASSERT(preview);
+        } else {
+            // create new tabs on demand
+            preview = new TemplatePreview(page);
+            ui->tabWidget->addTab(preview, out.label);
+        }
+        preview->document()->openUrl(fileUrls.value(out.identifier));
+        ++idx;
+    }
+    // remove superflous tabs from last time
+    while (ui->tabWidget->count() > fileUrls.size()) {
+        delete ui->tabWidget->widget(fileUrls.size());
+    }
+    return;
 }
 
 void TemplateSelectionPagePrivate::getMoreClicked()
