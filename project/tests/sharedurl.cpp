@@ -306,6 +306,7 @@ void SharedUrl::testOptimized_data()
     QTest::newRow("invalid") << "";
     QTest::newRow("path") << "/tmp/foo/asdf.txt";
     QTest::newRow("path-folder") << "/tmp/foo/asdf/";
+    QTest::newRow("clean-path") << "/tmp/..///asdf/";
     QTest::newRow("http") << "http://www.test.com/tmp/asdf.txt";
     QTest::newRow("file") << "file:///tmp/foo/asdf.txt";
     QTest::newRow("file-folder") << "file:///tmp/foo/bar/";
