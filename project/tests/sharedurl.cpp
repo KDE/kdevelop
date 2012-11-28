@@ -32,22 +32,36 @@ static const int TREE_DEPTH = 5;
 
 struct OptimizedUrl
 {
-    OptimizedUrl()
-    { }
-
-    OptimizedUrl(const QString& pathOrUrl)
+    OptimizedUrl(const QString& pathOrUrl = QString())
     {
+        if (pathOrUrl.isEmpty()) {
+            return;
+        }
+
         KUrl parser(pathOrUrl);
         // we do not support urls with fragments
         Q_ASSERT(!parser.hasFragment());
         // nor do we support sub urls
         Q_ASSERT(!parser.hasSubUrl());
+        // we also do not want queries
+        Q_ASSERT(!parser.hasQuery());
+        // nor relative URLs
+        Q_ASSERT(!parser.isRelative());
         parser.cleanPath();
         m_data = parser.path(KUrl::RemoveTrailingSlash).split('/', QString::SkipEmptyParts).toVector();
         if (parser.isLocalFile()) {
             return;
         }
         m_urlPrefix += parser.protocol();
+        m_urlPrefix += "://";
+        if (parser.hasUser()) {
+            m_urlPrefix += parser.user();
+            if (parser.hasPass()) {
+                m_urlPrefix += ':' + parser.pass();
+            }
+            m_urlPrefix += '@';
+        }
+        m_urlPrefix += parser.host();
     }
 
     OptimizedUrl(const OptimizedUrl& other, const QString& child = QString())
@@ -244,8 +258,6 @@ void SharedUrl::testOptimized()
 
     OptimizedUrl optUrl(input);
 
-    QEXPECT_FAIL("http", "not implemented yet", Abort);
-    QEXPECT_FAIL("ftps", "not implemented yet", Abort);
     QCOMPARE(optUrl.toUrl(), url);
     QCOMPARE(optUrl.pathOrUrl(), url.pathOrUrl());
     QCOMPARE(optUrl.isLocalFile(), url.isLocalFile());
