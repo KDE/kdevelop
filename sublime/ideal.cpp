@@ -423,8 +423,11 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
     KMenu menu;
     menu.addTitle(windowIcon(), windowTitle());
 
-    menu.addActions(m_view->contextMenuActions());
-    menu.addSeparator();
+    QList< QAction* > viewActions = m_view->contextMenuActions();
+    if(!viewActions.isEmpty()) {
+        menu.addActions(viewActions);
+        menu.addSeparator();
+    }
 
     ///TODO: can this be cleaned up?
     if(QToolBar* toolBar = widget()->findChild<QToolBar*>()) {
