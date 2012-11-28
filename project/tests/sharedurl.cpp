@@ -37,8 +37,24 @@ static const int FILES_PER_FOLDER = 10;
 static const int FOLDERS_PER_FOLDER = 5;
 static const int TREE_DEPTH = 5;
 
+/**
+ * URL data type optimized for memory consumption.
+ *
+ * In the project model e.g. we usually store whole trees such as
+ *
+ * /foo/
+ * /foo/bar/
+ * /foo/bar/asdf.txt
+ *
+ * Normal KUrl/QUrl would not share any memory for these URLs at all.
+ * This type though, will share the sub string data and thus consume
+ * far less total memory.
+ */
 struct OptimizedUrl
 {
+    /**
+     * Create a URL out of a string representation of a path or URL.
+     */
     OptimizedUrl(const QString& pathOrUrl = QString())
     {
         if (pathOrUrl.isEmpty()) {
@@ -84,6 +100,9 @@ struct OptimizedUrl
         m_data = path.toVector();
     }
 
+    /**
+     * Create a copy of @p other and optionally append a path segment @p child.
+     */
     OptimizedUrl(const OptimizedUrl& other, const QString& child = QString())
     : m_data(other.m_data)
     {
@@ -104,11 +123,17 @@ struct OptimizedUrl
         return !operator==(other);
     }
 
+    /**
+     * @return whether the URL is valid, i.e. contains data, or not.
+     */
     bool isValid() const
     {
         return !m_data.isEmpty();
     }
 
+    /**
+     * @return a string representation of this URL.
+     */
     QString pathOrUrl() const
     {
         // more or less a copy of QtPrivate::QStringList_join
@@ -137,20 +162,33 @@ struct OptimizedUrl
         return res;
     }
 
+    /**
+     * @return the type converted to an IndexedString.
+     *
+     * NOTE: If we'd introduce an IndexedUrl we could
+     *       optimize this quite a lot I think since
+     *       we could get rid of the string conversion.
+     */
+    KDevelop::IndexedString toIndexed() const
+    {
+        return IndexedString(pathOrUrl());
+    }
+
+    /**
+     * @return the type converted to a KUrl.
+     */
     KUrl toUrl() const
     {
         return KUrl(pathOrUrl());
     }
 
+    /**
+     * @return true when this URL points to a local file, false otherwise.
+     */
     bool isLocalFile() const
     {
         // if the first data element contains a '/' it is a URL prefix
         return !m_data.isEmpty() && !m_data.first().contains('/');
-    }
-
-    KDevelop::IndexedString toIndexed() const
-    {
-        return IndexedString(pathOrUrl());
     }
 
 private:
