@@ -63,28 +63,29 @@ struct OptimizedUrl
         parser.cleanPath();
 
         // store the path
-        m_data = parser.path(KUrl::RemoveTrailingSlash).split('/', QString::SkipEmptyParts).toVector();
+        QStringList path = parser.path(KUrl::RemoveTrailingSlash).split('/', QString::SkipEmptyParts);
 
-        if (parser.isLocalFile()) {
-            return;
+        if (!parser.isLocalFile()) {
+            // handle remote urls
+            QString urlPrefix;
+            urlPrefix += parser.protocol();
+            urlPrefix += "://";
+            if (parser.hasUser()) {
+                urlPrefix += parser.user();
+                urlPrefix += '@';
+            }
+            urlPrefix += parser.host();
+            if (parser.port() != -1) {
+                urlPrefix += ':' + QString::number(parser.port());
+            }
+            path.prepend(urlPrefix);
         }
 
-        // handle remote urls
-        m_urlPrefix += parser.protocol();
-        m_urlPrefix += "://";
-        if (parser.hasUser()) {
-            m_urlPrefix += parser.user();
-            m_urlPrefix += '@';
-        }
-        m_urlPrefix += parser.host();
-        if (parser.port() != -1) {
-            m_urlPrefix += ':' + QString::number(parser.port());
-        }
+        m_data = path.toVector();
     }
 
     OptimizedUrl(const OptimizedUrl& other, const QString& child = QString())
     : m_data(other.m_data)
-    , m_urlPrefix(other.m_urlPrefix)
     {
         if (!child.isEmpty()) {
             Q_ASSERT(!child.startsWith('/'));
@@ -95,7 +96,7 @@ struct OptimizedUrl
 
     bool operator==(const OptimizedUrl& other) const
     {
-        return m_urlPrefix == other.m_urlPrefix && m_data == other.m_data;
+        return m_data == other.m_data;
     }
 
     bool operator!=(const OptimizedUrl& other) const
@@ -117,24 +118,20 @@ struct OptimizedUrl
         }
 
         int totalLength = 0;
-        // url prefix
-        totalLength += m_urlPrefix.size();
         // separators: '/'
         totalLength += size;
-        // path
+        // path and url prefix
         for (int i = 0; i < size; ++i) {
             totalLength += m_data.at(i).size();
         }
 
+        // build string representation
         QString res;
         res.reserve(totalLength);
-        // url prefix
-        if (!m_urlPrefix.isEmpty()) {
-            res += m_urlPrefix;
-        }
-        // path
         for (int i = 0; i < size; ++i) {
-            res += '/';
+            if (i || isLocalFile()) {
+                res += '/';
+            }
             res += m_data.at(i);
         }
         return res;
@@ -147,7 +144,8 @@ struct OptimizedUrl
 
     bool isLocalFile() const
     {
-        return !m_data.isEmpty() && m_urlPrefix.isEmpty();
+        // if the first data element contains a '/' it is a URL prefix
+        return !m_data.isEmpty() && !m_data.first().contains('/');
     }
 
     KDevelop::IndexedString toIndexed() const
@@ -156,11 +154,13 @@ struct OptimizedUrl
     }
 
 private:
+    // for remote urls the first element contains the a URL prefix
+    // containing the protocol, user, port etc. pp.
     QVector<QString> m_data;
-    // for remote urls this contains the path prefix
-    // containing the protocol, user, password etc. pp.
-    QString m_urlPrefix;
 };
+
+Q_DECLARE_TYPEINFO(OptimizedUrl, Q_MOVABLE_TYPE);
+Q_DECLARE_METATYPE(OptimizedUrl)
 
 /**
  * qDebug() stream operator.  Writes the string to the debug output.
@@ -186,9 +186,6 @@ namespace QTest {
         return qstrdup(qPrintable(url.pathOrUrl()));
     }
 }
-
-Q_DECLARE_TYPEINFO(OptimizedUrl, Q_MOVABLE_TYPE);
-Q_DECLARE_METATYPE(OptimizedUrl)
 
 template<typename T>
 T stringToUrl(const QString& path)
