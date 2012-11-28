@@ -140,7 +140,6 @@ private:
     View *m_view;
     Qt::DockWidgetArea m_docking_area;
     IdealController *m_controller;
-    Sublime::MainWindow *m_mainWindow;
 };
 
 class View;

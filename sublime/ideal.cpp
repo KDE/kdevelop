@@ -366,8 +366,7 @@ IdealDockWidget::IdealDockWidget(IdealController *controller, Sublime::MainWindo
       m_area(0),
       m_view(0),
       m_docking_area(Qt::NoDockWidgetArea),
-      m_controller(controller),
-      m_mainWindow(parent)
+      m_controller(controller)
 {
     setAutoFillBackground(true);
     setContextMenuPolicy(Qt::CustomContextMenu);
