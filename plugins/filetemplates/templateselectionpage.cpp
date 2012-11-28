@@ -187,9 +187,9 @@ TemplateSelectionPage::~TemplateSelectionPage()
     delete d;
 }
 
-QSize TemplateSelectionPage::sizeHint() const
+QSize TemplateSelectionPage::minimumSizeHint() const
 {
-    return QSize(600, 600);
+    return QSize(400, 600);
 }
 
 QString TemplateSelectionPage::selectedTemplate() const
