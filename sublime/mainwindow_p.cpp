@@ -139,9 +139,11 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
     idealController = new IdealController(m_mainWindow);
 
     IdealToolBar* leftToolBar = new IdealToolBar(i18n("Left Button Bar"), idealController->leftBarWidget, m_mainWindow);
+    leftToolBar->hideWhenEmpty();
     m_mainWindow->addToolBar(Qt::LeftToolBarArea, leftToolBar);
 
     IdealToolBar* rightToolBar = new IdealToolBar(i18n("Right Button Bar"), idealController->rightBarWidget, m_mainWindow);
+    rightToolBar->hideWhenEmpty();
     m_mainWindow->addToolBar(Qt::RightToolBarArea, rightToolBar);
 
     IdealToolBar* bottomToolBar = new IdealToolBar(i18n("Bottom Button Bar"), idealController->bottomBarWidget, m_mainWindow);
