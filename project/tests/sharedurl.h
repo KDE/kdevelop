@@ -32,6 +32,9 @@ private slots:
     void qurl();
     void qstringlist();
     void optimized();
+
+    void testOptimized();
+    void testOptimized_data();
 };
 
 #endif // SHAREDURL_H

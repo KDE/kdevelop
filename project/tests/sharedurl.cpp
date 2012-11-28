@@ -34,12 +34,13 @@ struct OptimizedUrl
 {
     OptimizedUrl()
     { }
-    OptimizedUrl(const QString& path)
-    : m_data(path.split('/', QString::SkipEmptyParts).toVector())
+
+    OptimizedUrl(const QString& pathOrUrl)
+    : m_data(pathOrUrl.split('/', QString::SkipEmptyParts).toVector())
     {
-        Q_ASSERT(path.startsWith('/'));
-        Q_ASSERT(!path.contains("/../"));
+        Q_ASSERT(!pathOrUrl.contains("/../"));
     }
+
     OptimizedUrl(const OptimizedUrl& other, const QString& child = QString())
     : m_data(other.m_data)
     {
@@ -49,16 +50,67 @@ struct OptimizedUrl
             m_data += child.split('/', QString::SkipEmptyParts).toVector();
         }
     }
+
     bool operator==(const OptimizedUrl& other) const
     {
         return m_data == other.m_data;
+    }
+
+    bool isValid() const
+    {
+        return !m_data.isEmpty();
+    }
+
+    QString pathOrUrl() const
+    {
+        // more or less a copy of QtPrivate::QStringList_join
+        const int size = m_data.size();
+        if (size == 0) {
+            return QString();
+        }
+
+        // separators: '/'
+        int totalLength = size;
+        for (int i = 0; i < size; ++i) {
+            totalLength += m_data.at(i).size();
+        }
+
+        QString res;
+        res.reserve(totalLength);
+        for (int i = 0; i < size; ++i) {
+            res += '/';
+            res += m_data.at(i);
+        }
+        return res;
+    }
+
+    KUrl toUrl() const
+    {
+        return KUrl(pathOrUrl());
     }
 
 private:
     QVector<QString> m_data;
 };
 
+namespace QTest {
+    template<>
+    char *toString(const OptimizedUrl &url)
+    {
+        return qstrdup(qPrintable(url.pathOrUrl()));
+    }
+}
+
+namespace QTest {
+    template<>
+    char *toString(const KUrl &url)
+    {
+        return qstrdup(qPrintable(url.pathOrUrl()));
+    }
+}
+
 Q_DECLARE_TYPEINFO(OptimizedUrl, Q_MOVABLE_TYPE);
+Q_DECLARE_METATYPE(OptimizedUrl)
 
 template<typename T>
 T stringToUrl(const QString& path)
@@ -156,5 +208,31 @@ void SharedUrl::optimized()
     generateData<OptimizedUrl>();
 }
 
+void SharedUrl::testOptimized()
+{
+    QFETCH(QString, input);
+
+    KUrl url(input);
+    url.cleanPath();
+
+    OptimizedUrl optUrl(input);
+
+    QEXPECT_FAIL("http", "not implemented yet", Abort);
+    QEXPECT_FAIL("file", "not implemented yet", Abort);
+    QEXPECT_FAIL("ftps", "not implemented yet", Abort);
+    QCOMPARE(optUrl.toUrl(), url);
+    QCOMPARE(optUrl.pathOrUrl(), input);
+}
+
+void SharedUrl::testOptimized_data()
+{
+    QTest::addColumn<QString>("input");
+
+    QTest::newRow("invalid") << "" ;
+    QTest::newRow("path") << "/tmp/foo/asdf.txt";
+    QTest::newRow("http") << "http://www.test.com/tmp/asdf.txt";
+    QTest::newRow("file") << "file:///tmp/foo/asdf.txt";
+    QTest::newRow("ftps") << "ftps://user@host.com/tmp/foo/asdf.txt";
+}
 
 #include "sharedurl.moc"
