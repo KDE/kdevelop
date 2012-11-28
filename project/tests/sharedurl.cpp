@@ -126,33 +126,32 @@ QVector<T> generateData(const T& parent, int level)
 }
 
 template<typename T>
-QVector<T> generateData()
+void generateData()
 {
     const T base = stringToUrl<T>("/tmp/foo/bar");
-    QVector<T> ret;
-    ret << base;
-    ret += generateData(base, 0);
-    return ret;
+    QBENCHMARK {
+        generateData(base, 0);
+    }
 }
 
 void SharedUrl::kurl()
 {
-    QVector<KUrl> urls = generateData<KUrl>();
+    generateData<KUrl>();
 }
 
 void SharedUrl::qurl()
 {
-    QVector<QUrl> urls = generateData<QUrl>();
+    generateData<QUrl>();
 }
 
 void SharedUrl::qstringlist()
 {
-    QVector<QStringList> urls = generateData<QStringList>();
+    generateData<QStringList>();
 }
 
 void SharedUrl::optimized()
 {
-    QVector<OptimizedUrl> urls = generateData<OptimizedUrl>();
+    generateData<OptimizedUrl>();
 }
 
 
