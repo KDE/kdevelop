@@ -22,6 +22,8 @@ Comment[sv]=CMake-modul för att hitta ett bibliotek med användning av pkg-conf
 Comment[uk]=Модуль CMake для пошуку бібліотеки за допомогою pkg-config
 Comment[x-test]=xxCMake module for finding a library using pkg-configxx
 Category=CMake/Module
+Language=CMake
+Type=Other
 Files=Module
 OptionsFile=options.kcfg
 

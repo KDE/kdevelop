@@ -22,7 +22,9 @@ Comment[pt_BR]=Teste unitário que usa a plataforma PyUnit
 Comment[sv]=En enhetstest som använder ramverket PyUnit
 Comment[uk]=Перевірка модулів за допомогою комплексу PyUnit
 Comment[x-test]=xxA unit test using the PyUnit frameworkxx
-Category=Test/Python
+Category=Python/Basic
+Language=Python
+Type=Test
 Files=Implementation
 
 [Implementation]

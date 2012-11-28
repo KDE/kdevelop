@@ -21,7 +21,9 @@ Comment[pt_BR]=Classe em C++ com um ponteiro-D privado
 Comment[sv]=C++ klass med en privat D-pekare
 Comment[uk]=Клас C++ з закритим (private) D-вказівником
 Comment[x-test]=xxC++ Class with a private D-pointerxx
-Category=Class/C++/Basic
+Category=C++/Basic
+Language=C++
+Type=Class
 Files=Header,PrivateHeader,Implementation
 OptionsFile=options.kcfg
 

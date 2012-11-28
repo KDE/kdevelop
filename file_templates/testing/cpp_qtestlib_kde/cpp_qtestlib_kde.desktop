@@ -21,7 +21,9 @@ Comment[pt_BR]=Teste unitário que usa a biblioteca QTest com as extensões do K
 Comment[sv]=En enhetstest som använder QTest-biblioteket med KDE-utökningar
 Comment[uk]=Перевірка модулів за допомогою бібліотеки QTest з розширеннями KDE
 Comment[x-test]=xxA unit test using the QTest library with KDE extensionsxx
-Category=Test/C++
+Category=C++/KDE
+Language=C++
+Type=Test
 Files=Header,Implementation
 
 [Header]

@@ -24,7 +24,9 @@ Comment[pt_BR]=Uma subclasse GObject simples
 Comment[sv]=En enkelt GObject-delklass
 Comment[uk]=Простий підклас GObject
 Comment[x-test]=xxA simple GObject subclassxx
-Category=Class/C/GLib
+Category=C/GLib
+Language=C
+Type=Class
 Files=Header,Implementation
 
 [Header]

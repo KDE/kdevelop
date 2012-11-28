@@ -22,7 +22,9 @@ Comment[pt_BR]=Classe básica em Python
 Comment[sv]=Enkel Python-klass
 Comment[uk]=Базовий клас Python
 Comment[x-test]=xxBasic Python Classxx
-Category=Class/Python/Basic
+Category=Python/Basic
+Language=Python
+Type=Class
 Files=Definition
 
 [Definition]

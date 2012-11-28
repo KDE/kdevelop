@@ -1,5 +1,5 @@
 [General]
-Name=QTestLib
+Name=Test Suite
 Name[el]=QTestLib
 Name[es]=QTestLib
 Name[et]=QTestLib
@@ -12,7 +12,7 @@ Name[sk]=QTestLib
 Name[sv]=QTest-bibliotek
 Name[uk]=QTestLib
 Name[x-test]=xxQTestLibxx
-Comment=A unit test using the QTest library without a graphical user interface
+Comment=A unit test suite using the QTest library without a graphical user interface
 Comment[el]=Ένα unit test με χρήση βιβλιοθήκης QTest χωρίς γραφικό περιβάλλον χρήστη
 Comment[es]=Una prueba unitaria que usa la biblioteca QTest sin una interfaz gráfica de usuario
 Comment[et]=Unit test QTesti teegi abil ilma graafilise kasutajaliideseta
@@ -23,7 +23,9 @@ Comment[pt_BR]=Teste unitário que usa a biblioteca QTest sem uma interface grá
 Comment[sv]=En enhetstest som använder QTest-biblioteket utan grafiskt gränssnitt
 Comment[uk]=Перевірка модулів за допомогою бібліотеки QTest без графічного інтерфейсу користувача
 Comment[x-test]=xxA unit test using the QTest library without a graphical user interfacexx
-Category=Test/C++
+Category=C++/Qt
+Language=C++
+Type=Test
 Files=Header,Implementation
 
 [Header]

@@ -21,7 +21,9 @@ Comment[pt_BR]=Subclasse de QWidget com um arquivo Qt Designer separado
 Comment[sv]=QWidget-delklass med en separat Qt Designer-fil
 Comment[uk]=Підклас QWidget з окремим файлом Qt Designer
 Comment[x-test]=xxQWidget subclass with a separate Qt Designer filexx
-Category=Class/C++/Qt
+Category=C++/Qt
+Language=C++
+Type=Class
 BaseClasses=public QWidget
 Files=Header,Implementation,UI
 

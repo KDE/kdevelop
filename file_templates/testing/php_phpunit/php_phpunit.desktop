@@ -22,7 +22,9 @@ Comment[pt_BR]=Teste unitário que usa a plataforma PHPUnit
 Comment[sv]=En enhetstest som använder ramverket PHPUnit
 Comment[uk]=Перевірка модулів за допомогою комплексу PHPUnit
 Comment[x-test]=xxA unit test using the PHPUnit frameworkxx
-Category=Test/Php
+Category=PHP/Basic
+Language=Php
+Type=Test
 Files=Implementation
 
 [Implementation]

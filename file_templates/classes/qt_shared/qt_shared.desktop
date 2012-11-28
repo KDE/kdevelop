@@ -21,7 +21,9 @@ Comment[pt_BR]=Classe com um membro QSharedData privado
 Comment[sv]=Klass med en privat QSharedData-medlem
 Comment[uk]=Клас з закритим елементом QSharedData
 Comment[x-test]=xxClass with a private QSharedData memberxx
-Category=Class/C++/Qt
+Category=C++/Qt
+Language=C++
+Type=Class
 Files=Header,Implementation
 
 [Header]

@@ -22,7 +22,9 @@ Comment[pt_BR]=Classe básica em C++
 Comment[sv]=Enkel C++ klass
 Comment[uk]=Базовий клас C++
 Comment[x-test]=xxBasic C++ Classxx
-Category=Class/C++/Basic
+Category=C++/Basic
+Language=C++
+Type=Class
 Files=Header,Implementation
 
 [Header]

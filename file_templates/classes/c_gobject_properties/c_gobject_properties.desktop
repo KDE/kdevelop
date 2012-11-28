@@ -21,7 +21,9 @@ Comment[pt_BR]=Subclasse de GObject com um ponteiro privado e com propriedades
 Comment[sv]=En GObject-delklass med en privat pekare och egenskaper
 Comment[uk]=Підклас GObject з закритим (private) вказівником і властивостями
 Comment[x-test]=xxA GObject subclass with a private pointer and propertiesxx
-Category=Class/C/GLib
+Category=C/GLib
+Language=C
+Type=Class
 Files=Header,Implementation
 
 [Header]
