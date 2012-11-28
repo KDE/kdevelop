@@ -132,7 +132,7 @@ TemplateSelectionPage::TemplateSelectionPage(TemplateClassAssistant* parent, Qt:
     d->model->refresh();
 
     d->ui->view->setLevels(3);
-    d->ui->view->setHeaderLabels(QStringList() << i18n("Category") << i18n("Language") << i18n("Template"));
+    d->ui->view->setHeaderLabels(QStringList() << i18n("Language") << i18n("Framework") << i18n("Template"));
     d->ui->view->setModel(d->model);
 
     connect(d->ui->view, SIGNAL(currentIndexChanged(QModelIndex,QModelIndex)),

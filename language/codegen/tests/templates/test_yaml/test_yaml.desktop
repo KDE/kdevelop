@@ -21,7 +21,8 @@ Comment[pt_BR]=Descreve uma classe que usa a sintaxe em YAML
 Comment[sv]=Beskriver en klass med YAML-syntax
 Comment[uk]=Описує клас з використанням синтаксису YAML
 Comment[x-test]=xxDescribes a class using YAML syntaxxx
-Category=Class/Testing/YAML
+Category=Testing/YAML
+Type=Class
 Files=Description
 OptionsFile=options.kcfg
 
