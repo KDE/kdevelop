@@ -77,6 +77,7 @@ struct OptimizedUrl
 
     OptimizedUrl(const OptimizedUrl& other, const QString& child = QString())
     : m_data(other.m_data)
+    , m_urlPrefix(other.m_urlPrefix)
     {
         if (!child.isEmpty()) {
             Q_ASSERT(!child.startsWith('/'));
@@ -87,7 +88,12 @@ struct OptimizedUrl
 
     bool operator==(const OptimizedUrl& other) const
     {
-        return m_data == other.m_data;
+        return m_urlPrefix == other.m_urlPrefix && m_data == other.m_data;
+    }
+
+    bool operator!=(const OptimizedUrl& other) const
+    {
+        return !operator==(other);
     }
 
     bool isValid() const
@@ -273,6 +279,10 @@ void SharedUrl::testOptimized()
     QCOMPARE(optUrl.pathOrUrl(), url.pathOrUrl());
     QCOMPARE(optUrl.isLocalFile(), url.isLocalFile());
     QCOMPARE(optUrl.isValid(), url.isValid());
+
+    QCOMPARE(optUrl, OptimizedUrl(input));
+    QCOMPARE(optUrl, OptimizedUrl(optUrl));
+    QVERIFY(optUrl != OptimizedUrl(input + "/asdf"));
 }
 
 void SharedUrl::testOptimized_data()
