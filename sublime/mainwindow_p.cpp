@@ -27,6 +27,7 @@
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QToolButton>
 #include <QtGui/QCommonStyle>
+#include <QTimer>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -65,8 +66,13 @@ class IdealToolBar : public QToolBar
         void hideWhenEmpty()
         {
             refresh();
-            connect(this, SIGNAL(visibilityChanged(bool)), SLOT(refresh()));
-            connect(m_buttons, SIGNAL(emptyChanged()), SLOT(refresh()));
+            
+            QTimer* t = new QTimer(this);
+            t->setInterval(100);
+            t->setSingleShot(true);
+            connect(t, SIGNAL(timeout()), SLOT(refresh()));
+            connect(this, SIGNAL(visibilityChanged(bool)), t, SLOT(start()));
+            connect(m_buttons, SIGNAL(emptyChanged()), t, SLOT(start()));
         }
 
     public slots:
