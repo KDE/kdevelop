@@ -36,9 +36,18 @@ struct OptimizedUrl
     { }
 
     OptimizedUrl(const QString& pathOrUrl)
-    : m_data(pathOrUrl.split('/', QString::SkipEmptyParts).toVector())
     {
-        Q_ASSERT(!pathOrUrl.contains("/../"));
+        KUrl parser(pathOrUrl);
+        // we do not support urls with fragments
+        Q_ASSERT(!parser.hasFragment());
+        // nor do we support sub urls
+        Q_ASSERT(!parser.hasSubUrl());
+        parser.cleanPath();
+        m_data = parser.path(KUrl::RemoveTrailingSlash).split('/', QString::SkipEmptyParts).toVector();
+        if (parser.isLocalFile()) {
+            return;
+        }
+        m_urlPrefix += parser.protocol();
     }
 
     OptimizedUrl(const OptimizedUrl& other, const QString& child = QString())
@@ -69,14 +78,23 @@ struct OptimizedUrl
             return QString();
         }
 
+        int totalLength = 0;
+        // url prefix
+        totalLength += m_urlPrefix.size();
         // separators: '/'
-        int totalLength = size;
+        totalLength += size;
+        // path
         for (int i = 0; i < size; ++i) {
             totalLength += m_data.at(i).size();
         }
 
         QString res;
         res.reserve(totalLength);
+        // url prefix
+        if (!m_urlPrefix.isEmpty()) {
+            res += m_urlPrefix;
+        }
+        // path
         for (int i = 0; i < size; ++i) {
             res += '/';
             res += m_data.at(i);
@@ -89,8 +107,16 @@ struct OptimizedUrl
         return KUrl(pathOrUrl());
     }
 
+    bool isLocalFile() const
+    {
+        return !m_data.isEmpty() && m_urlPrefix.isEmpty();
+    }
+
 private:
     QVector<QString> m_data;
+    // for remote urls this contains the path prefix
+    // containing the protocol, user, password etc. pp.
+    QString m_urlPrefix;
 };
 
 namespace QTest {
@@ -214,14 +240,16 @@ void SharedUrl::testOptimized()
 
     KUrl url(input);
     url.cleanPath();
+    url.adjustPath(KUrl::RemoveTrailingSlash);
 
     OptimizedUrl optUrl(input);
 
     QEXPECT_FAIL("http", "not implemented yet", Abort);
-    QEXPECT_FAIL("file", "not implemented yet", Abort);
     QEXPECT_FAIL("ftps", "not implemented yet", Abort);
     QCOMPARE(optUrl.toUrl(), url);
-    QCOMPARE(optUrl.pathOrUrl(), input);
+    QCOMPARE(optUrl.pathOrUrl(), url.pathOrUrl());
+    QCOMPARE(optUrl.isLocalFile(), url.isLocalFile());
+    QCOMPARE(optUrl.isValid(), url.isValid());
 }
 
 void SharedUrl::testOptimized_data()
@@ -230,8 +258,10 @@ void SharedUrl::testOptimized_data()
 
     QTest::newRow("invalid") << "" ;
     QTest::newRow("path") << "/tmp/foo/asdf.txt";
+    QTest::newRow("path-folder") << "/tmp/foo/asdf/";
     QTest::newRow("http") << "http://www.test.com/tmp/asdf.txt";
     QTest::newRow("file") << "file:///tmp/foo/asdf.txt";
+    QTest::newRow("file-folder") << "file:///tmp/foo/bar/";
     QTest::newRow("ftps") << "ftps://user@host.com/tmp/foo/asdf.txt";
 }
 
