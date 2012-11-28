@@ -77,6 +77,9 @@ struct OptimizedUrl
             m_urlPrefix += '@';
         }
         m_urlPrefix += parser.host();
+        if (parser.port() != -1) {
+            m_urlPrefix += ':' + QString::number(parser.port());
+        }
     }
 
     OptimizedUrl(const OptimizedUrl& other, const QString& child = QString())
@@ -335,6 +338,7 @@ void SharedUrl::testOptimized_data()
     QTest::newRow("file-folder") << "file:///tmp/foo/bar/";
     QTest::newRow("ftps") << "ftps://user@host.com/tmp/foo/asdf.txt";
     QTest::newRow("password") << "ftps://user:password@host.com/tmp/asdf.txt";
+    QTest::newRow("port") << "http://localhost:8080/foo/bar/test.txt";
 }
 
 void SharedUrl::testOptimizedInvalid()
