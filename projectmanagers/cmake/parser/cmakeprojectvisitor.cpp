@@ -877,7 +877,6 @@ int CMakeProjectVisitor::visit(const FindPathAst *fpath)
         return 1;
     }
 
-    bool error=false;
     QStringList locationOptions = fpath->path()+fpath->hints();
     QStringList path, files=fpath->filenames();
     QStringList suffixes=fpath->pathSuffixes();
@@ -907,7 +906,6 @@ int CMakeProjectVisitor::visit(const FindPathAst *fpath)
         if(p1.isEmpty())
         {
             kDebug(9042) << p << "not found";
-            error=true;
         }
         else
         {
@@ -938,7 +936,6 @@ int CMakeProjectVisitor::visit(const FindLibraryAst *flib)
         return 1;
     }
 
-    bool error=false;
     QStringList locationOptions = flib->path()+flib->hints();
     QStringList files=flib->filenames();
     QString path;
@@ -970,7 +967,6 @@ int CMakeProjectVisitor::visit(const FindLibraryAst *flib)
                 if(p1.isEmpty())
                 {
                     kDebug(9042) << p << "not found";
-                    error=true;
                 }
                 else
                 {
@@ -1006,7 +1002,6 @@ int CMakeProjectVisitor::visit(const FindFileAst *ffile)
         return 1;
     }
 
-    bool error=false;
     QStringList locationOptions = ffile->path()+ffile->hints();
     if(!ffile->noDefaultPath())
     {
@@ -1035,7 +1030,6 @@ int CMakeProjectVisitor::visit(const FindFileAst *ffile)
         if(p1.isEmpty())
         {
             kDebug(9042) << p << "not found";
-            error=true;
         }
         else
         {
@@ -1205,7 +1199,6 @@ int CMakeProjectVisitor::visit(const MacroCallAst *call)
             QStringList::const_iterator mit = code.knownArgs.constBegin();
             QStringList::const_iterator cit = call->arguments().constBegin();
             QStringList argn;
-            bool haveArgn=false;
             int i=0;
             while(cit != call->arguments().constEnd())
             {
@@ -1218,7 +1211,6 @@ int CMakeProjectVisitor::visit(const MacroCallAst *call)
                 }
                 else
                 {
-                    haveArgn=true;
                     argn += *cit;
                 }
                 cit++;
