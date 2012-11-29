@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "sharedurl.h"
+#include "testurl.h"
 
 #include <project/url.h>
 
@@ -31,7 +31,7 @@
 
 #include <KUrl>
 
-QTEST_MAIN(SharedUrl);
+QTEST_MAIN(TestURL);
 
 using namespace KDevelop;
 
@@ -123,46 +123,46 @@ QVector<T> generateData(const T& parent, int level)
 }
 
 template<typename T>
-void generateData()
+void runBenchmark()
 {
-    const T base = stringToUrl<T>("/tmp/foo/bar");
     QBENCHMARK {
+        const T base = stringToUrl<T>("/tmp/foo/bar");
         generateData(base, 0);
     }
 }
 
-void SharedUrl::initTestCase()
+void TestURL::initTestCase()
 {
     AutoTestShell::init();
     TestCore::initialize(Core::NoUi);
 }
 
-void SharedUrl::cleanupTestCase()
+void TestURL::cleanupTestCase()
 {
     TestCore::shutdown();
 }
 
-void SharedUrl::kurl()
+void TestURL::bench_kurl()
 {
-    generateData<KUrl>();
+    runBenchmark<KUrl>();
 }
 
-void SharedUrl::qurl()
+void TestURL::bench_qurl()
 {
-    generateData<QUrl>();
+    runBenchmark<QUrl>();
 }
 
-void SharedUrl::qstringlist()
+void TestURL::bench_qstringlist()
 {
-    generateData<QStringList>();
+    runBenchmark<QStringList>();
 }
 
-void SharedUrl::optimized()
+void TestURL::bench_optimized()
 {
-    generateData<URL>();
+    runBenchmark<URL>();
 }
 
-void SharedUrl::testOptimized()
+void TestURL::testURL()
 {
     QFETCH(QString, input);
 
@@ -190,7 +190,7 @@ void SharedUrl::testOptimized()
     QCOMPARE(optUrl.toIndexed(), IndexedString(url));
 }
 
-void SharedUrl::testOptimized_data()
+void TestURL::testURL_data()
 {
     QTest::addColumn<QString>("input");
 
@@ -206,14 +206,14 @@ void SharedUrl::testOptimized_data()
     QTest::newRow("port") << "http://localhost:8080/foo/bar/test.txt";
 }
 
-void SharedUrl::testOptimizedInvalid()
+void TestURL::testURLInvalid()
 {
     QFETCH(QString, input);
     URL url(input);
     QVERIFY(!url.isValid());
 }
 
-void SharedUrl::testOptimizedInvalid_data()
+void TestURL::testURLInvalid_data()
 {
     QTest::addColumn<QString>("input");
     QTest::newRow("empty") << "";
@@ -223,4 +223,4 @@ void SharedUrl::testOptimizedInvalid_data()
     QTest::newRow("relative") << "../foo/bar";
 }
 
-#include "sharedurl.moc"
+#include "testurl.moc"

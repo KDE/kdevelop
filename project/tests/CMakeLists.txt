@@ -38,15 +38,16 @@ target_link_libraries(projectmodelperformancetest
 
 ###########
 
-set( sharedurltest_SRCS
-    sharedurl.cpp
+set( urltest_SRCS
+    testurl.cpp
 )
 
-kde4_add_unit_test(sharedurltest ${sharedurltest_SRCS})
-target_link_libraries(sharedurltest
+kde4_add_unit_test(urltest ${urltest_SRCS})
+target_link_libraries(urltest
     ${QT_QTTEST_LIBRARY}
     ${QT_QTCORE_LIBRARY}
     ${KDE4_KDECORE_LIBS}
     kdevplatformtests
     kdevplatformlanguage
+    kdevplatformproject
 )

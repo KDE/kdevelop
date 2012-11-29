@@ -19,27 +19,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SHAREDURL_H
-#define SHAREDURL_H
+#ifndef TESTURL_H
+#define TESTURL_H
 
 #include <QObject>
 
-class SharedUrl : public QObject
+class TestURL : public QObject
 {
     Q_OBJECT
 private slots:
     void initTestCase();
     void cleanupTestCase();
 
-    void kurl();
-    void qurl();
-    void qstringlist();
-    void optimized();
+    void bench_kurl();
+    void bench_qurl();
+    void bench_qstringlist();
+    void bench_optimized();
 
-    void testOptimized();
-    void testOptimized_data();
-    void testOptimizedInvalid();
-    void testOptimizedInvalid_data();
+    void testURL();
+    void testURL_data();
+    void testURLInvalid();
+    void testURLInvalid_data();
 };
 
-#endif // SHAREDURL_H
+#endif // TESTURL_H
