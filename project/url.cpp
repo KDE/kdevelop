@@ -128,12 +128,8 @@ KUrl URL::toUrl() const
     return KUrl(pathOrUrl());
 }
 
-namespace KDevelop {
-
 QDebug operator<<(QDebug s, const URL& string)
 {
     s.nospace() << string.pathOrUrl();
     return s.space();
-}
-
 }
