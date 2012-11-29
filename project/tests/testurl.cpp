@@ -234,6 +234,7 @@ void TestURL::testURLInvalid_data()
     QTest::newRow("query") << "http://test.com/?hello";
     QTest::newRow("suburl") << "file:///home/weis/kde.tgz#gzip:/#tar:/kdebase";
     QTest::newRow("relative") << "../foo/bar";
+    QTest::newRow("name") << "asdfasdf";
 }
 
 void TestURL::testURLOperators()

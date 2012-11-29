@@ -52,10 +52,10 @@ void URL::init(KUrl url)
     // - sub urls
     // - query
     // nor do we support relative urls
-    if (url.hasFragment() || url.hasQuery() || url.hasSubUrl()
-        || url.isRelative())
+    if (!url.isValid() || url.hasFragment() || url.hasQuery() || url.hasSubUrl() || url.isRelative())
     {
         // invalid
+        qWarning() << "URL::init: invalid/unsupported URL encountered:" << url;
         return;
     }
 
