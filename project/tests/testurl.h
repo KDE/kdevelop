@@ -40,6 +40,8 @@ private slots:
     void testURL_data();
     void testURLInvalid();
     void testURLInvalid_data();
+    void testURLOperators();
+    void testURLOperators_data();
 };
 
 #endif // TESTURL_H

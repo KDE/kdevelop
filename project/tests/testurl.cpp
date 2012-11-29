@@ -223,4 +223,49 @@ void TestURL::testURLInvalid_data()
     QTest::newRow("relative") << "../foo/bar";
 }
 
+void TestURL::testURLOperators()
+{
+    QFETCH(URL, left);
+    QFETCH(URL, right);
+
+    QFETCH(bool, equal);
+    QFETCH(bool, less);
+    bool greater = !equal && !less;
+
+    QVERIFY(left == left);
+    QVERIFY(right == right);
+    QCOMPARE(left == right, equal);
+    QCOMPARE(right == left, equal);
+
+    QCOMPARE(left < right, less);
+    QCOMPARE(left <= right, less || equal);
+    QCOMPARE(left > right, greater);
+    QCOMPARE(left >= right, greater || equal);
+
+    QCOMPARE(right < left, greater);
+    QCOMPARE(right <= left, greater || equal);
+    QCOMPARE(right > left, less);
+    QCOMPARE(right >= left, less || equal);
+}
+
+void TestURL::testURLOperators_data()
+{
+    QTest::addColumn<URL>("left");
+    QTest::addColumn<URL>("right");
+    QTest::addColumn<bool>("equal");
+    QTest::addColumn<bool>("less");
+
+    URL a("/tmp/a");
+    URL b("/tmp/b");
+    URL c("/tmp/ac");
+    URL d("/d");
+    URL invalid;
+
+    QTest::newRow("a-b") << a << b << false << true;
+    QTest::newRow("a-copy") << a << URL(a) << true << false;
+    QTest::newRow("c-a") << c << a << false << false;
+    QTest::newRow("c-invalid") << c << invalid << false << false;
+    QTest::newRow("c-d") << c << d << false << false;
+}
+
 #include "testurl.moc"

@@ -89,6 +89,43 @@ public:
     }
 
     /**
+     * Less-than path comparison between @p other and this URL.
+     *
+     * @return true if this URL is less than @p other.
+     */
+    bool operator<(const URL& other) const;
+
+    /**
+     * Greater-than path comparison between @p other and this URL.
+     *
+     * @return true if this URL is greater than @p other.
+     */
+    inline bool operator>(const URL& other) const
+    {
+        return other < *this;
+    }
+
+    /**
+     * Less-than-equal path comparison between @p other and this URL.
+     *
+     * @return true if this URL is less than @p other or equal.
+     */
+    inline bool operator<=(const URL& other) const
+    {
+        return *this < other || other == *this;
+    }
+
+    /**
+     * Greater-than-equal path comparison between @p other and this URL.
+     *
+     * @return true if this URL is greater than @p other or equal.
+     */
+    inline bool operator>=(const URL& other) const
+    {
+        return other < *this || other == *this;
+    }
+
+    /**
      * Check whether this URL is valid.
      *
      * Empty URLs or URLs containing one of the following are considered invalid:

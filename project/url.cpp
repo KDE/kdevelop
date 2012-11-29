@@ -118,6 +118,28 @@ QString URL::pathOrUrl() const
     return res;
 }
 
+bool URL::operator<(const URL& other) const
+{
+    const int size = m_data.size();
+    const int otherSize = other.m_data.size();
+    const int toCompare = qMin(size, otherSize);
+
+    // compare each URL segment in turn and try to return early
+    for (int i = 0; i < toCompare; ++i) {
+        int comparison = m_data.at(i).compare(other.m_data.at(i));
+        if (comparison == 0) {
+            // equal, try next segment
+            continue;
+        } else {
+            // return whether our segment is less then the other one
+            return comparison < 0;
+        }
+    }
+    // when we reach this point, all elements that we compared where equal
+    // thus return whether we have less items than the other URL
+    return size < otherSize;
+}
+
 IndexedString URL::toIndexed() const
 {
     return IndexedString(pathOrUrl());
