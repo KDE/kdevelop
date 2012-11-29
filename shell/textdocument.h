@@ -126,6 +126,7 @@ public:
     KTextEditor::View* editorView();
 
     QString status() const;
+    bool isInitialized() const;
 
 Q_SIGNALS:
     void statusChanged();

@@ -378,13 +378,8 @@ struct DocumentControllerPrivate {
             }
             
             KDevelop::TextView* textView = dynamic_cast<KDevelop::TextView*>(partView);
-            if(textView && textView->textView()) {
+            if(textView) {
                 applyRange = false;
-                if (range.isEmpty())
-                    doc->setCursorPosition( range.start() );
-                else
-                    doc->setTextSelection( range );
-            }else if(textView) {
                 textView->setInitialRange(range);
             }
             

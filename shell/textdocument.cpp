@@ -671,8 +671,16 @@ QString KDevelop::TextView::viewState() const
     }
 }
 
-void KDevelop::TextView::setInitialRange(const KTextEditor::Range& range) {
-    d->initialRange = range;
+void KDevelop::TextView::setInitialRange(const KTextEditor::Range& range)
+{
+    if(d->editor->isInitialized()) {
+        if (range.isEmpty())
+            d->editor->editorView()->setCursorPosition( range.start() );
+        else
+            d->editor->editorView()->setSelection( range );
+    } else {
+        d->initialRange = range;
+    }
 }
 
 KTextEditor::Range KDevelop::TextView::initialRange() const
@@ -685,17 +693,10 @@ void KDevelop::TextView::setState(const QString & state)
     static QRegExp reCursor("Cursor=([\\d]+),([\\d]+)");
     static QRegExp reSelection("Selection=([\\d]+),([\\d]+),([\\d]+),([\\d]+)");
     if (reCursor.exactMatch(state)) {
-        if (d->editor && d->isInitialized())
-            d->editor->editorView()->setCursorPosition(KTextEditor::Cursor(reCursor.cap(1).toInt(), reCursor.cap(2).toInt()));
-        else
-            setInitialRange(KTextEditor::Range(KTextEditor::Cursor(reCursor.cap(1).toInt(), reCursor.cap(2).toInt()), 0));
+        setInitialRange(KTextEditor::Range(KTextEditor::Cursor(reCursor.cap(1).toInt(), reCursor.cap(2).toInt()), 0));
     } else if (reSelection.exactMatch(state)) {
         KTextEditor::Range range(reSelection.cap(1).toInt(), reSelection.cap(2).toInt(), reSelection.cap(3).toInt(), reSelection.cap(4).toInt());
-        if (d->editor && d->isInitialized()) {
-            d->editor->editorView()->setCursorPosition(range.end());
-            d->editor->editorView()->setSelection(range);
-        } else
-            setInitialRange(range);
+        setInitialRange(range);
     }
 }
 
@@ -811,6 +812,11 @@ KTextEditor::View* KDevelop::TextEditorWidget::editorView()
     if(!d->view)
         initialize();
     return d->view;
+}
+
+bool KDevelop::TextEditorWidget::isInitialized() const
+{
+    return d->view!=0;
 }
 
 #include "textdocument.moc"
