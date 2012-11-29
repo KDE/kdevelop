@@ -46,3 +46,7 @@ install(FILES
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/tests/
     COMPONENT Devel
 )
+
+if(QJSON_FOUND)
+    add_subdirectory(json)
+endif(QJSON_FOUND)
