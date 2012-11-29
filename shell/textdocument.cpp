@@ -271,7 +271,6 @@ class TextViewPrivate
 {
 public:
     TextViewPrivate() : editor(0) {}
-    bool isInitialized() const { return editor==0; }
     TextEditorWidget* editor;
     KTextEditor::Range initialRange;
 };
