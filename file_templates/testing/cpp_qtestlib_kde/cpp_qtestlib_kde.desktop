@@ -23,6 +23,12 @@ Comment[uk]=Перевірка модулів за допомогою біблі
 Comment[x-test]=xxA unit test using the QTest library with KDE extensionsxx
 Category=C++/KDE
 Language=C++
+Language[es]=C++
+Language[nl]=C++
+Language[pt]=C++
+Language[sv]=C++
+Language[uk]=C++
+Language[x-test]=xxC++xx
 Type=Test
 Files=Header,Implementation
 

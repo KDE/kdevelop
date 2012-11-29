@@ -24,6 +24,12 @@ Comment[uk]=Перевірка модулів за допомогою компл
 Comment[x-test]=xxA unit test using the PyUnit frameworkxx
 Category=Python/Basic
 Language=Python
+Language[es]=Python
+Language[nl]=Python
+Language[pt]=Python
+Language[sv]=Python
+Language[uk]=Python
+Language[x-test]=xxPythonxx
 Type=Test
 Files=Implementation
 

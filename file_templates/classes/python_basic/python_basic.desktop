@@ -24,6 +24,12 @@ Comment[uk]=Базовий клас Python
 Comment[x-test]=xxBasic Python Classxx
 Category=Python/Basic
 Language=Python
+Language[es]=Python
+Language[nl]=Python
+Language[pt]=Python
+Language[sv]=Python
+Language[uk]=Python
+Language[x-test]=xxPythonxx
 Type=Class
 Files=Definition
 

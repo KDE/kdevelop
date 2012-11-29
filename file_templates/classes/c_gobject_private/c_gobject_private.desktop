@@ -23,6 +23,12 @@ Comment[uk]=Підклас GObject з закритим (private) вказівн�
 Comment[x-test]=xxA GObject subclass with a private pointerxx
 Category=C/GLib
 Language=C
+Language[es]=C
+Language[nl]=C
+Language[pt]=C
+Language[sv]=C
+Language[uk]=C
+Language[x-test]=xxCxx
 Type=Class
 Files=Header,Implementation
 

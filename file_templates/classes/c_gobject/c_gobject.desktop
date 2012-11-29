@@ -26,6 +26,12 @@ Comment[uk]=Простий підклас GObject
 Comment[x-test]=xxA simple GObject subclassxx
 Category=C/GLib
 Language=C
+Language[es]=C
+Language[nl]=C
+Language[pt]=C
+Language[sv]=C
+Language[uk]=C
+Language[x-test]=xxCxx
 Type=Class
 Files=Header,Implementation
 

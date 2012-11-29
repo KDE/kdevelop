@@ -23,6 +23,12 @@ Comment[uk]=Клас з закритим елементом QSharedData
 Comment[x-test]=xxClass with a private QSharedData memberxx
 Category=C++/Qt
 Language=C++
+Language[es]=C++
+Language[nl]=C++
+Language[pt]=C++
+Language[sv]=C++
+Language[uk]=C++
+Language[x-test]=xxC++xx
 Type=Class
 Files=Header,Implementation
 

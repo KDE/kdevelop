@@ -24,6 +24,12 @@ Comment[uk]=Перевірка модулів за допомогою компл
 Comment[x-test]=xxA unit test using the PHPUnit frameworkxx
 Category=PHP/Basic
 Language=Php
+Language[es]=Php
+Language[nl]=PHP
+Language[pt]=PHP
+Language[sv]=PHP
+Language[uk]=PHP
+Language[x-test]=xxPhpxx
 Type=Test
 Files=Implementation
 
