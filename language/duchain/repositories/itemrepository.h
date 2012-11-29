@@ -142,9 +142,13 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractRepositoryManager {
  * For the global standard registry, the storing is triggered from within duchain, so you don't need to care about it.
  */
 class KDEVPLATFORMLANGUAGE_EXPORT ItemRepositoryRegistry {
+    ItemRepositoryRegistry();
+
   public:
-    ItemRepositoryRegistry(QString openPath = QString(), KLockFile::Ptr lock = KLockFile::Ptr());
     ~ItemRepositoryRegistry();
+
+    /// @returns the global item-repository registry
+    static ItemRepositoryRegistry* self();
 
     /// @returns item-repository path (e. g. ~/cache/.kdevduchain) for the given session, creating it if needed.
     static QString repositoryPathForSession(const QUuid& uuid);
@@ -154,7 +158,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepositoryRegistry {
     ///If this returns false, loading has failed, and all repositories have been discarded.
     ///@note Currently the given path must reference a hidden directory, just to make sure we're
     ///      not accidentally deleting something important
-    bool open(const QString& path, bool clear = false, KLockFile::Ptr lock = KLockFile::Ptr());
+    bool open(const QString& path, bool clear = false);
     ///@warning The current state is not stored to disk.
     void close();
     ///The registered repository will automatically be opened with the current path, if one is set.
@@ -190,10 +194,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepositoryRegistry {
     QMutex& mutex();
   private:
     void deleteDataDirectory();
+    static ItemRepositoryRegistry* m_self;
     QString m_path;
     QMap<AbstractItemRepository*, AbstractRepositoryManager*> m_repositories;
     QMap<QString, QAtomicInt*> m_customCounters;
-    KLockFile::Ptr m_lock;
     mutable QMutex m_mutex;
 };
 

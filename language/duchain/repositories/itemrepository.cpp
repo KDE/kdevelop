@@ -41,6 +41,9 @@ namespace KDevelop {
 //If KDevelop crashed this many times consicutively, clean up the repository
 const int crashesBeforeCleanup = 2;
 
+//The global item-reposity registry
+ItemRepositoryRegistry* ItemRepositoryRegistry::m_self = 0;
+
 uint staticItemRepositoryVersion() {
   //Increase this to reset incompatible item-repositories
   return 72;
@@ -49,11 +52,23 @@ uint staticItemRepositoryVersion() {
 AbstractItemRepository::~AbstractItemRepository() {
 }
 
-ItemRepositoryRegistry::ItemRepositoryRegistry(QString openPath, KLockFile::Ptr lock) : m_mutex(QMutex::Recursive) {
-  if(!openPath.isEmpty())
-    open(openPath, false, lock);
+
+ItemRepositoryRegistry::ItemRepositoryRegistry() : m_mutex(QMutex::Recursive) {
+  Q_ASSERT( ICore::self() );
+  Q_ASSERT( ICore::self()->activeSession() );
+  QString repositoryPath = repositoryPathForSession( ICore::self()->activeSession()->id() );
+  open( repositoryPath, false );
 }
 
+ItemRepositoryRegistry* ItemRepositoryRegistry::self()
+{
+  if( !m_self ) {
+    ///We intentionally leak the registry, to prevent problems in the destruction order, where
+    ///the actual repositories might get deleted later than the repository registry.
+    m_self = new ItemRepositoryRegistry;
+  }
+  return m_self;
+}
 
 QString ItemRepositoryRegistry::repositoryPathForSession(const QUuid& uuid) {
   QString xdgCacheDir = QProcessEnvironment::systemEnvironment().value( "XDG_CACHE_HOME", QDir::homePath() + "/.cache" ) + "/kdevduchain";
@@ -73,81 +88,9 @@ QAtomicInt& ItemRepositoryRegistry::getCustomCounter(const QString& identity, in
   return *m_customCounters[identity];
 }
 
-bool processExists(int pid) {
-  ///@todo Find a cross-platform way of doing this!
-  QFileInfo f(QString("/proc/%1").arg(pid));
-  return f.exists();
-}
-
-QPair<QString, KLockFile::Ptr> allocateRepository() {
-  KLockFile::Ptr lock;
-  QString repoPath;
-  
-   KComponentData component("item repositories temp", QByteArray(), KComponentData::SkipMainComponentRegistration);
-
-    Q_ASSERT( ICore::self() );
-    Q_ASSERT( ICore::self()->activeSession() );
-
-    QString baseDir = ItemRepositoryRegistry::repositoryPathForSession( ICore::self()->activeSession()->id() );
-
-    //Since each instance of kdevelop needs an own directory, iterate until we find a not-yet-used one
-    for(int a = 0; a < 100; ++a) {
-      QString specificDir = baseDir + QString("/%1").arg(a);
-      KStandardDirs::makeDir(specificDir);
-
-       lock = new KLockFile(specificDir + "/lock", component);
-       KLockFile::LockResult result = lock->lock(KLockFile::NoBlockFlag | KLockFile::ForceFlag);
-       bool useDir = false;
-       if(result != KLockFile::LockOK) {
-         int pid;
-         QString hostname, appname;
-         if(lock->getLockInfo(pid, hostname, appname)) {
-           if(!processExists(pid)) {
-             kDebug() << "The process holding" << specificDir << "with pid" << pid << "does not exists any more. Re-using the directory.";
-             QFile::remove(specificDir + "/lock");
-             useDir = true;
-             if(lock->lock(KLockFile::NoBlockFlag | KLockFile::ForceFlag) != KLockFile::LockOK) {
-               kWarning() << "Failed to re-establish the lock in" << specificDir;
-               continue;
-             }
-           }
-         }
-       }else {
-         useDir = true;
-       }
-       if(useDir) {
-          repoPath = specificDir;
-          if(result == KLockFile::LockStale) {
-            kWarning() << "stale lock detected:" << specificDir + "/lock";
-          }
-          break;
-       }
-    }
-    
-    if(repoPath.isEmpty()) {
-      kError() << "could not create a directory for the duchain data";
-    }else{
-      kDebug() << "picked duchain directory" << repoPath;
-    }
-    
-    return qMakePair(repoPath, lock);
-}
-
-///The global item-repository registry that is used by default
-static ItemRepositoryRegistry& allocateGlobalItemRepositoryRegistry() {
-  QPair<QString, KLockFile::Ptr> repo = allocateRepository();
-  
-  ///We intentionally leak the registry, to prevent problems in the destruction order, where
-  ///the actual repositories might get deleted later than the repository registry.
-  static ItemRepositoryRegistry* global = new ItemRepositoryRegistry(repo.first, repo.second);
-  return *global;
-}
-
 ///The global item-repository registry that is used by default
 ItemRepositoryRegistry& globalItemRepositoryRegistry() {
-  
-  static ItemRepositoryRegistry& global(allocateGlobalItemRepositoryRegistry());
-  return global;
+  return *ItemRepositoryRegistry::self();
 }
 
 void ItemRepositoryRegistry::registerRepository(AbstractItemRepository* repository, AbstractRepositoryManager* manager) {
@@ -196,19 +139,12 @@ void ItemRepositoryRegistry::deleteDataDirectory() {
   //lockForWriting creates a file, that prevents any other KDevelop instance from using the directory as it is.
   //Instead, the other instance will try to delete the directory as well.
   lockForWriting();
-  
-  // Have to release the lock here, else it will delete the new lock and windows needs all file-handles
-  // to be released before deleting a directory that contains these files
-  
-  m_lock->unlock();
+
   bool result = removeDirectory(m_path);
   Q_ASSERT(result);
   Q_UNUSED(result);
-  Q_ASSERT(m_lock);
-  //Just remove the old directory, and allocate a new one. Probably it'll be the same one.
-  QPair<QString, KLockFile::Ptr> repo = allocateRepository();
-  m_path = repo.first;
-  m_lock = repo.second;
+  // Just recreate the directory then; leave old path (as it is dependent on appname and session only).
+  KStandardDirs::makeDir(m_path);
 }
 
 void setCrashCounter(QFile& crashesFile, int count) {
@@ -218,109 +154,96 @@ void setCrashCounter(QFile& crashesFile, int count) {
   writeStream << count;
 }
 
-bool ItemRepositoryRegistry::open(const QString& path, bool clear, KLockFile::Ptr lock) {
+bool ItemRepositoryRegistry::open(const QString& path, bool clear) {
   QMutexLocker mlock(&m_mutex);
-  if(m_path == path && !clear)
+  if(m_path == path && !clear) {
     return true;
-  
-  m_lock = lock;
+  }
   m_path = path;
 
-  bool needRepoCheck = true;
-  
-  while(needRepoCheck) {
+  if(QFile::exists(m_path + "/is_writing")) {
+    kWarning() << "repository" << m_path << "was write-locked, it probably is inconsistent";
+    clear = true;
+  }
 
-    if(QFile::exists(m_path + "/is_writing")) {
-      kWarning() << "repository" << m_path << "was write-locked, it probably is inconsistent";
-      clear = true;
-    }
-  
-    QDir pathDir(m_path);
-    pathDir.setFilter(QDir::Files);
-    
-    //When there is only one file in the repository, it's the lock-file, and the repository has just been cleared
-    if(pathDir.count() != 1)
-    {
-      if(!QFile::exists( m_path + QString("/version_%1").arg(staticItemRepositoryVersion()) ))
-      {
+  QDir pathDir(m_path);
+  pathDir.setFilter(QDir::Files);
+
+  // If there is no files in the repository, it has been just cleared
+  if(!pathDir.count()) {
+    if(!QFile::exists( m_path + QString("/version_%1").arg(staticItemRepositoryVersion()) )) {
       kWarning() << "version-hint not found, seems to be an old version";
       clear = true;
-      }else if(getenv("CLEAR_DUCHAIN_DIR"))
-      {
-        kWarning() << "clearing duchain directory because CLEAR_DUCHAIN_DIR is set";
-        clear = true;
-      }
-    }
-    
-    QFile crashesFile(m_path + QString("/crash_counter"));
-    if(crashesFile.open(QIODevice::ReadOnly)) {
-      int count;
-      QDataStream stream(&crashesFile);
-      stream >> count;
-
-      kDebug() << "current count of crashes: " << count;
-      
-      if(count >= crashesBeforeCleanup && !getenv("DONT_CLEAR_DUCHAIN_DIR"))
-      {
-        int userAnswer = 0;
-        ///NOTE: we don't want to crash our beloved tools when run in no-gui mode
-        ///NOTE 2: create a better, reusable version of the below for other tools
-        if (QApplication::type() == QApplication::Tty) {
-          // no ui-mode e.g. for duchainify and other tools
-          QTextStream out(stdout);
-          out << i18np("Session crashed %1 time in a row", "Session crashed %1 times in a row", count) << endl;
-          out << endl;
-          QTextStream in(stdin);
-          QString input;
-          while(true) {
-            out << i18n("Clear cache: [Y/n] ") << flush;
-            input = in.readLine().trimmed();
-            if (input.toLower() == "y" || input.isEmpty()) {
-              userAnswer = KMessageBox::Yes;
-              break;
-            } else if (input.toLower() == "n") {
-              userAnswer = KMessageBox::No;
-              break;
-            }
-          }
-        } else {
-          userAnswer = KMessageBox::questionYesNo(0,
-            i18np("The Session crashed once.", "The Session crashed %1 times in a row.", count) + "\n\n" + i18n("The crash may be caused by a corruption of cached data.\n\nPress OK if you want KDevelop to clear the cache, otherwise press Cancel if you are sure the crash has another origin."),
-            i18n("Session crashed"),
-            KStandardGuiItem::ok(),
-            KStandardGuiItem::cancel());
-        }
-        if (userAnswer == KMessageBox::Yes) {
-          clear = true;
-          kDebug() << "User chose to clean repository";
-        } else {
-          setCrashCounter(crashesFile, 1);
-          kDebug() << "User chose to reset crash counter";
-        }
-      }else{
-        ///Increase the crash-count. It will be reset if kdevelop is shut down cleanly.
-        setCrashCounter(crashesFile, ++count);
-      }
-    }else{
-      setCrashCounter(crashesFile, 1);
-    }
-    
-    if(clear) {
-        kWarning() << QString("The data-repository at %1 has to be cleared.").arg(m_path);
-  //     KMessageBox::information( 0, i18n("The data-repository at %1 has to be cleared. Either the disk format has changed, or KDevelop crashed while writing the repository.", m_path ) );
-#ifdef Q_OS_WIN
-        /// on Windows a file can't be deleted unless the last file handle gets closed
-        /// deleteDataDirectory would enter a never ending loop
-        crashesFile.close();
-#endif
-        deleteDataDirectory();
-        clear = false;
-        //We need to re-check, because a new data-directory may have been picked
-    }else{
-        needRepoCheck = false;
+    } else if(getenv("CLEAR_DUCHAIN_DIR")) {
+      kWarning() << "clearing duchain directory because CLEAR_DUCHAIN_DIR is set";
+      clear = true;
     }
   }
-  
+
+  QFile crashesFile(m_path + QString("/crash_counter"));
+  if(crashesFile.open(QIODevice::ReadOnly)) {
+    int count;
+    QDataStream stream(&crashesFile);
+    stream >> count;
+
+    kDebug() << "current count of crashes: " << count;
+
+    if(count >= crashesBeforeCleanup && !getenv("DONT_CLEAR_DUCHAIN_DIR"))
+    {
+      int userAnswer = 0;
+      ///NOTE: we don't want to crash our beloved tools when run in no-gui mode
+      ///NOTE 2: create a better, reusable version of the below for other tools
+      if (QApplication::type() == QApplication::Tty) {
+        // no ui-mode e.g. for duchainify and other tools
+        QTextStream out(stdout);
+        out << i18np("Session crashed %1 time in a row", "Session crashed %1 times in a row", count) << endl;
+        out << endl;
+        QTextStream in(stdin);
+        QString input;
+        while(true) {
+          out << i18n("Clear cache: [Y/n] ") << flush;
+          input = in.readLine().trimmed();
+          if (input.toLower() == "y" || input.isEmpty()) {
+            userAnswer = KMessageBox::Yes;
+            break;
+          } else if (input.toLower() == "n") {
+            userAnswer = KMessageBox::No;
+            break;
+          }
+        }
+      } else {
+        userAnswer = KMessageBox::questionYesNo(0,
+                                                i18np("The Session crashed once.", "The Session crashed %1 times in a row.", count) + "\n\n" + i18n("The crash may be caused by a corruption of cached data.\n\nPress OK if you want KDevelop to clear the cache, otherwise press Cancel if you are sure the crash has another origin."),
+                                                i18n("Session crashed"),
+                                                KStandardGuiItem::ok(),
+                                                KStandardGuiItem::cancel());
+      }
+      if (userAnswer == KMessageBox::Yes) {
+        clear = true;
+        kDebug() << "User chose to clean repository";
+      } else {
+        setCrashCounter(crashesFile, 1);
+        kDebug() << "User chose to reset crash counter";
+      }
+    } else {
+      ///Increase the crash-count. It will be reset if kdevelop is shut down cleanly.
+      setCrashCounter(crashesFile, ++count);
+    }
+  } else {
+    setCrashCounter(crashesFile, 1);
+  }
+
+  if(clear) {
+    kWarning() << QString("The data-repository at %1 has to be cleared.").arg(m_path);
+//     KMessageBox::information( 0, i18n("The data-repository at %1 has to be cleared. Either the disk format has changed, or KDevelop crashed while writing the repository.", m_path ) );
+#ifdef Q_OS_WIN
+    /// on Windows a file can't be deleted unless the last file handle gets closed
+    /// deleteDataDirectory would enter a never ending loop
+    crashesFile.close();
+#endif
+    deleteDataDirectory();
+  }
+
   foreach(AbstractItemRepository* repository, m_repositories.keys()) {
     if(!repository->open(path)) {
       deleteDataDirectory();
@@ -417,8 +340,6 @@ ItemRepositoryRegistry::~ItemRepositoryRegistry() {
 
 void ItemRepositoryRegistry::shutdown() {
   QFile::remove(m_path + QString("/crash_counter"));
-  if(m_lock)
-    m_lock->unlock();
 }
 
 }
