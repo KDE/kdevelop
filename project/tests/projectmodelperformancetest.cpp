@@ -49,13 +49,11 @@ using KDevelop::ProjectFileItem;
 void generateChilds( ProjectBaseItem* parent, int count, int depth )
 {
     for( int i = 0; i < 10; i++ ) {
-        KUrl url = parent->url();
-        url.addPath( QString( "file:///f%1" ).arg( i ) );
         if( depth > 0 ) {
-            ProjectFolderItem* item = new ProjectFolderItem( 0, url, parent );
+            ProjectFolderItem* item = new ProjectFolderItem( 0, QString( "f%1" ).arg( i ), parent );
             generateChilds( item, count, depth - 1 );
         } else {
-            new ProjectFileItem( 0, url, parent );
+            new ProjectFileItem( 0, QString( "f%1" ).arg( i ), parent );
         }
     }
 }

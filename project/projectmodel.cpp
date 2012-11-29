@@ -42,6 +42,8 @@
 #include <QMetaClassInfo>
 #include <QThread>
 
+#include "url.h"
+
 // Utility function to determine between direct connection and blocking-queued-connection
 // for emitting of signals for data changes/row addition/removal
 // BlockingQueuedConnection is necessary here as slots connected to the "aboutToBe" signals
@@ -89,9 +91,14 @@ QStringList joinProjectBasePath( const QStringList& partialpath, KDevelop::Proje
     return basePath + partialpath;
 }
 
-inline uint indexForUrl(const KUrl& url)
+inline uint indexForUrl( const URL& url )
 {
-    return IndexedString::indexForString(url.pathOrUrl(KUrl::RemoveTrailingSlash));
+    return IndexedString::indexForString(url.pathOrUrl());
+}
+
+inline uint indexForUrl( const KUrl& url )
+{
+    return IndexedString::indexForString(url.pathOrUrl());
 }
 
 class ProjectModelPrivate
@@ -128,7 +135,7 @@ public:
     ProjectBaseItem::ProjectItemType type;
     Qt::ItemFlags flags;
     ProjectModel* model;
-    KUrl m_url;
+    URL m_url;
     uint m_urlIndex;
     QString iconName;
 };
@@ -428,6 +435,16 @@ void ProjectBaseItem::appendRow( ProjectBaseItem* item )
 KUrl ProjectBaseItem::url( ) const
 {
     Q_D(const ProjectBaseItem);
+    KUrl url = d->m_url.toUrl();
+    if (folder()) {
+        url.adjustPath(KUrl::AddTrailingSlash);
+    }
+    return url;
+}
+
+URL ProjectBaseItem::getUrl() const
+{
+    Q_D(const ProjectBaseItem);
     return d->m_url;
 }
 
@@ -436,7 +453,12 @@ QString ProjectBaseItem::baseName() const
     return text();
 }
 
-void ProjectBaseItem::setUrl( const KUrl& url )
+void ProjectBaseItem::setUrl(const KUrl& url)
+{
+    setUrl(URL(url));
+}
+
+void ProjectBaseItem::setUrl( const KDevelop::URL& url)
 {
     Q_D(ProjectBaseItem);
 
@@ -571,16 +593,24 @@ ProjectFolderItem::ProjectFolderItem( IProject* project, const KUrl & dir, Proje
     setUrl( dir );
 }
 
+ProjectFolderItem::ProjectFolderItem( IProject* project, const QString & name, ProjectBaseItem * parent )
+        : ProjectBaseItem( project, name, parent )
+{
+    setUrl( URL(parent->getUrl(), name) );
+
+    setFlags(flags() | Qt::ItemIsDropEnabled);
+    if (project && project->folder() != url())
+        setFlags(flags() | Qt::ItemIsDragEnabled);
+}
+
 ProjectFolderItem::~ProjectFolderItem()
 {
 }
 
-void ProjectFolderItem::setUrl( const KUrl& url )
+void ProjectFolderItem::setUrl( const URL& url )
 {
-    KUrl copy(url);
-    copy.adjustPath(KUrl::AddTrailingSlash);
-    ProjectBaseItem::setUrl(copy);
-    
+    ProjectBaseItem::setUrl(url);
+
     propagateRename(url);
 }
 
@@ -599,15 +629,15 @@ QString ProjectFolderItem::folderName() const
     return baseName();
 }
 
-void ProjectFolderItem::propagateRename(const KUrl& newBase) const
+void ProjectFolderItem::propagateRename( const URL& newBase ) const
 {
-    KUrl url = newBase;
+    URL url = newBase;
     url.addPath("dummy");
     foreach( KDevelop::ProjectBaseItem* child, children() )
     {
         url.setFileName( child->text() );
         child->setUrl( url );
-        
+
         const ProjectFolderItem* folder = child->folder();
         if ( folder ) {
             folder->propagateRename( url );
@@ -671,6 +701,12 @@ ProjectBuildFolderItem::ProjectBuildFolderItem( IProject* project, const KUrl &d
 {
 }
 
+ProjectBuildFolderItem::ProjectBuildFolderItem( IProject* project, const QString& name, ProjectBaseItem* parent )
+    : ProjectFolderItem( project, name, parent )
+{
+
+}
+
 QString ProjectFolderItem::iconName() const
 {
     return "folder";
@@ -691,6 +727,13 @@ ProjectFileItem::ProjectFileItem( IProject* project, const KUrl & file, ProjectB
 {
     setFlags(flags() | Qt::ItemIsDragEnabled);
     setUrl( file );
+}
+
+ProjectFileItem::ProjectFileItem( IProject* project, const QString& name, ProjectBaseItem* parent )
+    : ProjectBaseItem( project, name, parent )
+{
+    setFlags(flags() | Qt::ItemIsDragEnabled);
+    setUrl( URL(parent->getUrl(), name) );
 }
 
 ProjectFileItem::~ProjectFileItem()
@@ -760,7 +803,7 @@ bool isNumeric(const QStringRef& str)
 class IconNameCache
 {
 public:
-    QString iconNameForUrl(const KUrl& url, const QString& fileName)
+    QString iconNameForUrl(const URL& url, const QString& fileName)
     {
         // find icon name based on file extension, if possible
         QString extension;
@@ -781,7 +824,7 @@ public:
             }
         }
 
-        KMimeType::Ptr mime = KMimeType::findByUrl( url, 0, false, true );
+        KMimeType::Ptr mime = KMimeType::findByUrl( KUrl::fromPath(url.fileName()), 0, false, true );
         QMutexLocker lock(&mutex);
         QHash< QString, QString >::const_iterator it = mimeToIcon.constFind( mime->name() );
         QString iconName;
@@ -815,7 +858,7 @@ QString ProjectFileItem::iconName() const
     return d_ptr->iconName;
 }
 
-void ProjectFileItem::setUrl( const KUrl& url )
+void ProjectFileItem::setUrl( const URL& url )
 {
     if (url == d_ptr->m_url) {
         return;
@@ -858,9 +901,9 @@ QString ProjectTargetItem::iconName() const
     return "system-run";
 }
 
-void ProjectTargetItem::setUrl(const KUrl& url)
+void ProjectTargetItem::setUrl( const URL& url )
 {
-    d_ptr->m_url=url;
+    d_ptr->m_url = url;
 }
 
 int ProjectTargetItem::type() const

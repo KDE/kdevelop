@@ -42,6 +42,7 @@ class ProjectExecutableTargetItem;
 class ProjectLibraryTargetItem;
 class ProjectModel;
 class IndexedString;
+class URL;
 
 /**
  * Base class to implement the visitor pattern for the project item tree.
@@ -200,10 +201,14 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem
          * Note this function never renames the item in the project manager or on the filesystem,
          * it only changes the url and possibly the text nothing else.
          */
-        virtual void setUrl( const KUrl& );
+        virtual void setUrl( const URL& );
+        void setUrl( const KUrl& );
 
         /** Get the url of this item (if any) */
         KUrl url() const;
+        /** FIXME: this is just for compatibility to test the new URL
+            without too many API changes **/
+        URL getUrl() const;
 
         /** Gets the basename of this url (if any)
          *  convenience function, returns the same as @c text() for most items
@@ -257,10 +262,12 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectFolderItem: public ProjectBaseItem
 {
 public:
     ProjectFolderItem( IProject*, const KUrl &dir, ProjectBaseItem *parent = 0 );
+    ProjectFolderItem( IProject*, const QString& name, ProjectBaseItem *parent );
 
     virtual ~ProjectFolderItem();
 
-    virtual void setUrl(const KUrl& );
+    using ProjectBaseItem::setUrl;
+    virtual void setUrl(const URL& );
 
     virtual ProjectFolderItem *folder() const;
 
@@ -275,8 +282,9 @@ public:
     
     virtual QString iconName() const;
     virtual RenameStatus rename(const QString& newname);
-    
-    void propagateRename( const KUrl& newBase ) const;
+
+private:
+    void propagateRename( const URL& newBase ) const;
 };
 
 
@@ -287,6 +295,7 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBuildFolderItem: public ProjectFolderIte
 {
 public:
     ProjectBuildFolderItem( IProject*, const KUrl &dir, ProjectBaseItem *parent = 0 );
+    ProjectBuildFolderItem( IProject*, const QString &name, ProjectBaseItem *parent );
 
     ///Reimplemented from QStandardItem
     virtual int type() const;
@@ -308,7 +317,8 @@ public:
 
     virtual ProjectTargetItem *target() const;
     virtual QString iconName() const;
-    virtual void setUrl(const KUrl& );
+    using ProjectBaseItem::setUrl;
+    virtual void setUrl(const URL& url );
 };
 
 /**
@@ -348,6 +358,7 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectFileItem: public ProjectBaseItem
 {
 public:
     ProjectFileItem( IProject*, const KUrl& file, ProjectBaseItem *parent = 0 );
+    ProjectFileItem( IProject*, const QString& name, ProjectBaseItem *parent );
     ~ProjectFileItem();
 
     ///Reimplemented from QStandardItem
@@ -358,7 +369,8 @@ public:
     /** Get the file name, equal to url().fileName() but faster (precomputed) */
     QString fileName() const;
 
-    virtual void setUrl( const KUrl& );
+    using ProjectBaseItem::setUrl;
+    virtual void setUrl( const URL& );
     virtual QString iconName() const;
     virtual RenameStatus rename(const QString& newname);
 
