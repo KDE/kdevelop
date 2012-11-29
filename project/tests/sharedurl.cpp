@@ -20,6 +20,8 @@
  */
 #include "sharedurl.h"
 
+#include <project/url.h>
+
 #include <language/duchain/indexedstring.h>
 
 #include <tests/autotestshell.h>
@@ -37,181 +39,9 @@ static const int FILES_PER_FOLDER = 10;
 static const int FOLDERS_PER_FOLDER = 5;
 static const int TREE_DEPTH = 5;
 
-/**
- * URL data type optimized for memory consumption.
- *
- * In the project model e.g. we usually store whole trees such as
- *
- * /foo/
- * /foo/bar/
- * /foo/bar/asdf.txt
- *
- * Normal KUrl/QUrl would not share any memory for these URLs at all.
- * This type though, will share the sub string data and thus consume
- * far less total memory.
- */
-struct OptimizedUrl
-{
-    /**
-     * Create a URL out of a string representation of a path or URL.
-     */
-    OptimizedUrl(const QString& pathOrUrl = QString())
-    {
-        if (pathOrUrl.isEmpty()) {
-            return;
-        }
-
-        KUrl parser(pathOrUrl);
-
-        // we do not support urls with:
-        // - fragments
-        // - sub urls
-        // - query
-        // nor do we support relative urls
-        if (parser.hasFragment() || parser.hasQuery() || parser.hasSubUrl()
-            || parser.isRelative())
-        {
-            // invalid
-            return;
-        }
-
-        // remove /../ parts
-        parser.cleanPath();
-
-        // store the path
-        QStringList path = parser.path(KUrl::RemoveTrailingSlash).split('/', QString::SkipEmptyParts);
-
-        if (!parser.isLocalFile()) {
-            // handle remote urls
-            QString urlPrefix;
-            urlPrefix += parser.protocol();
-            urlPrefix += "://";
-            if (parser.hasUser()) {
-                urlPrefix += parser.user();
-                urlPrefix += '@';
-            }
-            urlPrefix += parser.host();
-            if (parser.port() != -1) {
-                urlPrefix += ':' + QString::number(parser.port());
-            }
-            path.prepend(urlPrefix);
-        }
-
-        m_data = path.toVector();
-    }
-
-    /**
-     * Create a copy of @p other and optionally append a path segment @p child.
-     */
-    OptimizedUrl(const OptimizedUrl& other, const QString& child = QString())
-    : m_data(other.m_data)
-    {
-        if (!child.isEmpty()) {
-            Q_ASSERT(!child.startsWith('/'));
-            Q_ASSERT(!child.contains("../"));
-            m_data += child.split('/', QString::SkipEmptyParts).toVector();
-        }
-    }
-
-    bool operator==(const OptimizedUrl& other) const
-    {
-        return m_data == other.m_data;
-    }
-
-    bool operator!=(const OptimizedUrl& other) const
-    {
-        return !operator==(other);
-    }
-
-    /**
-     * @return whether the URL is valid, i.e. contains data, or not.
-     */
-    bool isValid() const
-    {
-        return !m_data.isEmpty();
-    }
-
-    /**
-     * @return a string representation of this URL.
-     */
-    QString pathOrUrl() const
-    {
-        // more or less a copy of QtPrivate::QStringList_join
-        const int size = m_data.size();
-        if (size == 0) {
-            return QString();
-        }
-
-        int totalLength = 0;
-        // separators: '/'
-        totalLength += size;
-        // path and url prefix
-        for (int i = 0; i < size; ++i) {
-            totalLength += m_data.at(i).size();
-        }
-
-        // build string representation
-        QString res;
-        res.reserve(totalLength);
-        for (int i = 0; i < size; ++i) {
-            if (i || isLocalFile()) {
-                res += '/';
-            }
-            res += m_data.at(i);
-        }
-        return res;
-    }
-
-    /**
-     * @return the type converted to an IndexedString.
-     *
-     * NOTE: If we'd introduce an IndexedUrl we could
-     *       optimize this quite a lot I think since
-     *       we could get rid of the string conversion.
-     */
-    KDevelop::IndexedString toIndexed() const
-    {
-        return IndexedString(pathOrUrl());
-    }
-
-    /**
-     * @return the type converted to a KUrl.
-     */
-    KUrl toUrl() const
-    {
-        return KUrl(pathOrUrl());
-    }
-
-    /**
-     * @return true when this URL points to a local file, false otherwise.
-     */
-    bool isLocalFile() const
-    {
-        // if the first data element contains a '/' it is a URL prefix
-        return !m_data.isEmpty() && !m_data.first().contains('/');
-    }
-
-private:
-    // for remote urls the first element contains the a URL prefix
-    // containing the protocol, user, port etc. pp.
-    QVector<QString> m_data;
-};
-
-Q_DECLARE_TYPEINFO(OptimizedUrl, Q_MOVABLE_TYPE);
-Q_DECLARE_METATYPE(OptimizedUrl)
-
-/**
- * qDebug() stream operator.  Writes the string to the debug output.
- */
-QDebug operator<<(QDebug s, const OptimizedUrl& string)
-{
-    s.nospace() << string.pathOrUrl();
-    return s.space();
-}
-
 namespace QTest {
     template<>
-    char *toString(const OptimizedUrl &url)
+    char *toString(const URL &url)
     {
         return qstrdup(qPrintable(url.pathOrUrl()));
     }
@@ -329,7 +159,7 @@ void SharedUrl::qstringlist()
 
 void SharedUrl::optimized()
 {
-    generateData<OptimizedUrl>();
+    generateData<URL>();
 }
 
 void SharedUrl::testOptimized()
@@ -340,7 +170,7 @@ void SharedUrl::testOptimized()
     url.cleanPath();
     url.adjustPath(KUrl::RemoveTrailingSlash);
 
-    OptimizedUrl optUrl(input);
+    URL optUrl(input);
 
     if (url.hasPass()) {
         KUrl urlNoPass = url;
@@ -353,9 +183,9 @@ void SharedUrl::testOptimized()
     QCOMPARE(optUrl.pathOrUrl(), url.pathOrUrl());
     QCOMPARE(optUrl.isValid(), url.isValid());
 
-    QCOMPARE(optUrl, OptimizedUrl(input));
-    QCOMPARE(optUrl, OptimizedUrl(optUrl));
-    QVERIFY(optUrl != OptimizedUrl(input + "/asdf"));
+    QCOMPARE(optUrl, URL(input));
+    QCOMPARE(optUrl, URL(optUrl));
+    QVERIFY(optUrl != URL(input + "/asdf"));
 
     QCOMPARE(optUrl.toIndexed(), IndexedString(url));
 }
@@ -379,7 +209,7 @@ void SharedUrl::testOptimized_data()
 void SharedUrl::testOptimizedInvalid()
 {
     QFETCH(QString, input);
-    OptimizedUrl url(input);
+    URL url(input);
     QVERIFY(!url.isValid());
 }
 
