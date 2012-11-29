@@ -19,7 +19,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "url.h"
+#include "path.h"
 
 #include <KUrl>
 
@@ -30,22 +30,22 @@
 
 using namespace KDevelop;
 
-URL::URL()
+Path::Path()
 {
 
 }
 
-URL::URL(const QString& pathOrUrl)
+Path::Path(const QString& pathOrUrl)
 {
     init(KUrl(pathOrUrl));
 }
 
-URL::URL(const KUrl& url)
+Path::Path(const KUrl& url)
 {
     init(url);
 }
 
-void URL::init(KUrl url)
+void Path::init(KUrl url)
 {
     // we do not support urls with:
     // - fragments
@@ -55,7 +55,7 @@ void URL::init(KUrl url)
     if (!url.isValid() || url.hasFragment() || url.hasQuery() || url.hasSubUrl() || url.isRelative())
     {
         // invalid
-        qWarning() << "URL::init: invalid/unsupported URL encountered:" << url;
+        qWarning() << "Path::init: invalid/unsupported Path encountered:" << url;
         return;
     }
 
@@ -84,7 +84,7 @@ void URL::init(KUrl url)
     m_data = path.toVector();
 }
 
-URL::URL(const URL& other, const QString& child)
+Path::Path(const Path& other, const QString& child)
 : m_data(other.m_data)
 {
     addPath(child);
@@ -103,7 +103,7 @@ QString generatePathOrUrl(bool onlyPath, bool isLocalFile, const QVector<QString
     // separators: '/'
     totalLength += size;
 
-    // skip URL segment if we only want the path
+    // skip Path segment if we only want the path
     const int start = (onlyPath && !isLocalFile) ? 1 : 0;
 
     // path and url prefix
@@ -126,23 +126,23 @@ QString generatePathOrUrl(bool onlyPath, bool isLocalFile, const QVector<QString
     return res;
 }
 
-QString URL::pathOrUrl() const
+QString Path::pathOrUrl() const
 {
     return generatePathOrUrl(false, isLocalFile(), m_data);
 }
 
-QString URL::path() const
+QString Path::path() const
 {
     return generatePathOrUrl(true, isLocalFile(), m_data);
 }
 
-bool URL::operator<(const URL& other) const
+bool Path::operator<(const Path& other) const
 {
     const int size = m_data.size();
     const int otherSize = other.m_data.size();
     const int toCompare = qMin(size, otherSize);
 
-    // compare each URL segment in turn and try to return early
+    // compare each Path segment in turn and try to return early
     for (int i = 0; i < toCompare; ++i) {
         int comparison = m_data.at(i).compare(other.m_data.at(i));
         if (comparison == 0) {
@@ -154,34 +154,35 @@ bool URL::operator<(const URL& other) const
         }
     }
     // when we reach this point, all elements that we compared where equal
-    // thus return whether we have less items than the other URL
+    // thus return whether we have less items than the other Path
     return size < otherSize;
 }
 
-IndexedString URL::toIndexed() const
+// NOTE: If we'd introduce an IndexedPath this could maybe be optimized
+IndexedString Path::toIndexed() const
 {
     return IndexedString(pathOrUrl());
 }
 
-KUrl URL::toUrl() const
+KUrl Path::toUrl() const
 {
     return KUrl(pathOrUrl());
 }
 
-QString URL::fileName() const
+QString Path::fileName() const
 {
-    // remote URLs are offset by one, thus never return the first item of them as file name
+    // remote Paths are offset by one, thus never return the first item of them as file name
     if (m_data.isEmpty() || (!isLocalFile() && m_data.size() == 1)) {
         return QString();
     }
     return m_data.last();
 }
 
-void URL::setFileName(const QString& name)
+void Path::setFileName(const QString& name)
 {
-    // remote URLs are offset by one, thus never return the first item of them as file name
+    // remote Paths are offset by one, thus never return the first item of them as file name
     if (m_data.isEmpty() || (!isLocalFile() && m_data.size() == 1)) {
-        // append the name to empty URLs or remote URLs only containing the URL prefix
+        // append the name to empty Paths or remote Paths only containing the Path prefix
         m_data.append(name);
     } else {
         // overwrite the last data member
@@ -189,7 +190,7 @@ void URL::setFileName(const QString& name)
     }
 }
 
-void URL::addPath(const QString& path)
+void Path::addPath(const QString& path)
 {
     if (path.isEmpty()) {
         return;
@@ -200,7 +201,7 @@ void URL::addPath(const QString& path)
     m_data += path.split('/', QString::SkipEmptyParts).toVector();
 }
 
-QDebug operator<<(QDebug s, const URL& string)
+QDebug operator<<(QDebug s, const Path& string)
 {
     s.nospace() << string.pathOrUrl();
     return s.space();

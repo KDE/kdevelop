@@ -18,9 +18,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "testurl.h"
 
-#include <project/url.h>
+#include "testpath.h"
+
+#include <project/path.h>
 
 #include <language/duchain/indexedstring.h>
 
@@ -31,7 +32,7 @@
 
 #include <KUrl>
 
-QTEST_MAIN(TestURL);
+QTEST_MAIN(TestPath);
 
 using namespace KDevelop;
 
@@ -41,9 +42,9 @@ static const int TREE_DEPTH = 5;
 
 namespace QTest {
     template<>
-    char *toString(const URL &url)
+    char *toString(const Path &path)
     {
-        return qstrdup(qPrintable(url.pathOrUrl()));
+        return qstrdup(qPrintable(path.pathOrUrl()));
     }
 }
 
@@ -131,38 +132,38 @@ void runBenchmark()
     }
 }
 
-void TestURL::initTestCase()
+void TestPath::initTestCase()
 {
     AutoTestShell::init();
     TestCore::initialize(Core::NoUi);
 }
 
-void TestURL::cleanupTestCase()
+void TestPath::cleanupTestCase()
 {
     TestCore::shutdown();
 }
 
-void TestURL::bench_kurl()
+void TestPath::bench_kurl()
 {
     runBenchmark<KUrl>();
 }
 
-void TestURL::bench_qurl()
+void TestPath::bench_qurl()
 {
     runBenchmark<QUrl>();
 }
 
-void TestURL::bench_qstringlist()
+void TestPath::bench_qstringlist()
 {
     runBenchmark<QStringList>();
 }
 
-void TestURL::bench_optimized()
+void TestPath::bench_path()
 {
-    runBenchmark<URL>();
+    runBenchmark<Path>();
 }
 
-void TestURL::testURL()
+void TestPath::testPath()
 {
     QFETCH(QString, input);
 
@@ -170,7 +171,7 @@ void TestURL::testURL()
     url.cleanPath();
     url.adjustPath(KUrl::RemoveTrailingSlash);
 
-    URL optUrl(input);
+    Path optUrl(input);
 
     if (url.hasPass()) {
         KUrl urlNoPass = url;
@@ -185,12 +186,12 @@ void TestURL::testURL()
     QCOMPARE(optUrl.fileName(), url.fileName());
     QCOMPARE(optUrl.path(), url.path());
 
-    QCOMPARE(optUrl, URL(input));
-    QCOMPARE(optUrl, URL(optUrl));
-    QVERIFY(optUrl != URL(input + "/asdf"));
+    QCOMPARE(optUrl, Path(input));
+    QCOMPARE(optUrl, Path(optUrl));
+    QVERIFY(optUrl != Path(input + "/asdf"));
 
     QCOMPARE(optUrl.toIndexed(), IndexedString(url));
-    QCOMPARE(optUrl, URL(url));
+    QCOMPARE(optUrl, Path(url));
 
     url.addPath("test/foo/bar");
     optUrl.addPath("test/foo/bar");
@@ -203,7 +204,7 @@ void TestURL::testURL()
     QCOMPARE(optUrl.path(), url.path());
 }
 
-void TestURL::testURL_data()
+void TestPath::testPath_data()
 {
     QTest::addColumn<QString>("input");
 
@@ -219,14 +220,14 @@ void TestURL::testURL_data()
     QTest::newRow("port") << "http://localhost:8080/foo/bar/test.txt";
 }
 
-void TestURL::testURLInvalid()
+void TestPath::testPathInvalid()
 {
     QFETCH(QString, input);
-    URL url(input);
+    Path url(input);
     QVERIFY(!url.isValid());
 }
 
-void TestURL::testURLInvalid_data()
+void TestPath::testPathInvalid_data()
 {
     QTest::addColumn<QString>("input");
     QTest::newRow("empty") << "";
@@ -237,10 +238,10 @@ void TestURL::testURLInvalid_data()
     QTest::newRow("name") << "asdfasdf";
 }
 
-void TestURL::testURLOperators()
+void TestPath::testPathOperators()
 {
-    QFETCH(URL, left);
-    QFETCH(URL, right);
+    QFETCH(Path, left);
+    QFETCH(Path, right);
 
     QFETCH(bool, equal);
     QFETCH(bool, less);
@@ -262,24 +263,24 @@ void TestURL::testURLOperators()
     QCOMPARE(right >= left, less || equal);
 }
 
-void TestURL::testURLOperators_data()
+void TestPath::testPathOperators_data()
 {
-    QTest::addColumn<URL>("left");
-    QTest::addColumn<URL>("right");
+    QTest::addColumn<Path>("left");
+    QTest::addColumn<Path>("right");
     QTest::addColumn<bool>("equal");
     QTest::addColumn<bool>("less");
 
-    URL a("/tmp/a");
-    URL b("/tmp/b");
-    URL c("/tmp/ac");
-    URL d("/d");
-    URL invalid;
+    Path a("/tmp/a");
+    Path b("/tmp/b");
+    Path c("/tmp/ac");
+    Path d("/d");
+    Path invalid;
 
     QTest::newRow("a-b") << a << b << false << true;
-    QTest::newRow("a-copy") << a << URL(a) << true << false;
+    QTest::newRow("a-copy") << a << Path(a) << true << false;
     QTest::newRow("c-a") << c << a << false << false;
     QTest::newRow("c-invalid") << c << invalid << false << false;
     QTest::newRow("c-d") << c << d << false << false;
 }
 
-#include "testurl.moc"
+#include "testpath.moc"

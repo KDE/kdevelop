@@ -42,7 +42,7 @@
 #include <QMetaClassInfo>
 #include <QThread>
 
-#include "url.h"
+#include "path.h"
 
 // Utility function to determine between direct connection and blocking-queued-connection
 // for emitting of signals for data changes/row addition/removal
@@ -91,9 +91,9 @@ QStringList joinProjectBasePath( const QStringList& partialpath, KDevelop::Proje
     return basePath + partialpath;
 }
 
-inline uint indexForUrl( const URL& url )
+inline uint indexForPath( const Path& path )
 {
-    return IndexedString::indexForString(url.pathOrUrl());
+    return IndexedString::indexForString(path.pathOrUrl());
 }
 
 inline uint indexForUrl( const KUrl& url )
@@ -119,14 +119,14 @@ public:
         return model->itemFromIndex( idx );
     }
 
-    // a hash of IndexedString::indexForString(url) <-> ProjectBaseItem for fast lookup
-    QMultiHash<uint, ProjectBaseItem*> urlLookupTable;
+    // a hash of IndexedString::indexForString(path) <-> ProjectBaseItem for fast lookup
+    QMultiHash<uint, ProjectBaseItem*> pathLookupTable;
 };
 
 class ProjectBaseItemPrivate
 {
 public:
-    ProjectBaseItemPrivate() : project(0), parent(0), row(-1), model(0), m_urlIndex(0) {}
+    ProjectBaseItemPrivate() : project(0), parent(0), row(-1), model(0), m_pathIndex(0) {}
     IProject* project;
     ProjectBaseItem* parent;
     int row;
@@ -135,8 +135,8 @@ public:
     ProjectBaseItem::ProjectItemType type;
     Qt::ItemFlags flags;
     ProjectModel* model;
-    URL m_url;
-    uint m_urlIndex;
+    Path m_path;
+    uint m_pathIndex;
     QString iconName;
 };
 
@@ -158,8 +158,8 @@ ProjectBaseItem::~ProjectBaseItem()
 {
     Q_D(ProjectBaseItem);
 
-    if (model() && d->m_urlIndex) {
-        model()->d->urlLookupTable.remove(d->m_urlIndex, this);
+    if (model() && d->m_pathIndex) {
+        model()->d->pathLookupTable.remove(d->m_pathIndex, this);
     }
 
     if( parent() ) {
@@ -315,14 +315,14 @@ void ProjectBaseItem::setModel( ProjectModel* model )
         return;
     }
 
-    if (d->model && d->m_urlIndex) {
-        d->model->d->urlLookupTable.remove(d->m_urlIndex, this);
+    if (d->model && d->m_pathIndex) {
+        d->model->d->pathLookupTable.remove(d->m_pathIndex, this);
     }
 
     d->model = model;
 
-    if (model && d->m_urlIndex) {
-        model->d->urlLookupTable.insert(d->m_urlIndex, this);
+    if (model && d->m_pathIndex) {
+        model->d->pathLookupTable.insert(d->m_pathIndex, this);
     }
 
     foreach( ProjectBaseItem* item, d->children ) {
@@ -435,17 +435,17 @@ void ProjectBaseItem::appendRow( ProjectBaseItem* item )
 KUrl ProjectBaseItem::url( ) const
 {
     Q_D(const ProjectBaseItem);
-    KUrl url = d->m_url.toUrl();
+    KUrl url = d->m_path.toUrl();
     if (folder()) {
         url.adjustPath(KUrl::AddTrailingSlash);
     }
     return url;
 }
 
-URL ProjectBaseItem::getUrl() const
+Path ProjectBaseItem::path() const
 {
     Q_D(const ProjectBaseItem);
-    return d->m_url;
+    return d->m_path;
 }
 
 QString ProjectBaseItem::baseName() const
@@ -455,24 +455,24 @@ QString ProjectBaseItem::baseName() const
 
 void ProjectBaseItem::setUrl(const KUrl& url)
 {
-    setUrl(URL(url));
+    setPath(Path(url));
 }
 
-void ProjectBaseItem::setUrl( const KDevelop::URL& url)
+void ProjectBaseItem::setPath( const Path& path)
 {
     Q_D(ProjectBaseItem);
 
-    if (model() && d->m_urlIndex) {
-        model()->d->urlLookupTable.remove(d->m_urlIndex, this);
+    if (model() && d->m_pathIndex) {
+        model()->d->pathLookupTable.remove(d->m_pathIndex, this);
     }
 
-    d->m_url = url;
-    d->m_urlIndex = indexForUrl(url);
-    const QString baseName = url.fileName();
+    d->m_path = path;
+    d->m_pathIndex = indexForPath(path);
+    const QString baseName = path.fileName();
     setText( baseName );
 
-    if (model() && d->m_urlIndex) {
-        model()->d->urlLookupTable.insert(d->m_urlIndex, this);
+    if (model() && d->m_pathIndex) {
+        model()->d->pathLookupTable.insert(d->m_pathIndex, this);
     }
 }
 
@@ -593,10 +593,20 @@ ProjectFolderItem::ProjectFolderItem( IProject* project, const KUrl & dir, Proje
     setUrl( dir );
 }
 
+ProjectFolderItem::ProjectFolderItem(IProject* project, const Path& path)
+    : ProjectBaseItem( project, path.fileName() )
+{
+    setPath( path );
+
+    setFlags(flags() | Qt::ItemIsDropEnabled);
+    if (project && project->folder() != url())
+        setFlags(flags() | Qt::ItemIsDragEnabled);
+}
+
 ProjectFolderItem::ProjectFolderItem( IProject* project, const QString & name, ProjectBaseItem * parent )
         : ProjectBaseItem( project, name, parent )
 {
-    setUrl( URL(parent->getUrl(), name) );
+    setPath( Path(parent->path(), name) );
 
     setFlags(flags() | Qt::ItemIsDropEnabled);
     if (project && project->folder() != url())
@@ -607,9 +617,9 @@ ProjectFolderItem::~ProjectFolderItem()
 {
 }
 
-void ProjectFolderItem::setUrl( const URL& url )
+void ProjectFolderItem::setPath( const Path& url )
 {
-    ProjectBaseItem::setUrl(url);
+    ProjectBaseItem::setPath(url);
 
     propagateRename(url);
 }
@@ -629,18 +639,18 @@ QString ProjectFolderItem::folderName() const
     return baseName();
 }
 
-void ProjectFolderItem::propagateRename( const URL& newBase ) const
+void ProjectFolderItem::propagateRename( const Path& newBase ) const
 {
-    URL url = newBase;
-    url.addPath("dummy");
+    Path path = newBase;
+    path.addPath("dummy");
     foreach( KDevelop::ProjectBaseItem* child, children() )
     {
-        url.setFileName( child->text() );
-        child->setUrl( url );
+        path.setFileName( child->text() );
+        child->setPath( path );
 
         const ProjectFolderItem* folder = child->folder();
         if ( folder ) {
-            folder->propagateRename( url );
+            folder->propagateRename( path );
         }
     }
 }
@@ -648,7 +658,7 @@ void ProjectFolderItem::propagateRename( const URL& newBase ) const
 ProjectBaseItem::RenameStatus ProjectFolderItem::rename(const QString& newname)
 {
     //TODO: Same as ProjectFileItem, so should be shared somehow
-    KUrl dest = url().upUrl();
+    KUrl dest = path().toUrl().upUrl();
     dest.addPath(newname);
     if( !newname.contains('/') )
     {
@@ -701,6 +711,11 @@ ProjectBuildFolderItem::ProjectBuildFolderItem( IProject* project, const KUrl &d
 {
 }
 
+ProjectBuildFolderItem::ProjectBuildFolderItem(IProject* project, const Path& path)
+    : ProjectFolderItem( project, path )
+{
+}
+
 ProjectBuildFolderItem::ProjectBuildFolderItem( IProject* project, const QString& name, ProjectBaseItem* parent )
     : ProjectFolderItem( project, name, parent )
 {
@@ -729,23 +744,35 @@ ProjectFileItem::ProjectFileItem( IProject* project, const KUrl & file, ProjectB
     setUrl( file );
 }
 
+ProjectFileItem::ProjectFileItem( IProject* project, const Path& path)
+    : ProjectBaseItem( project, path.fileName() )
+{
+    setFlags(flags() | Qt::ItemIsDragEnabled);
+    setPath( path );
+}
+
 ProjectFileItem::ProjectFileItem( IProject* project, const QString& name, ProjectBaseItem* parent )
     : ProjectBaseItem( project, name, parent )
 {
     setFlags(flags() | Qt::ItemIsDragEnabled);
-    setUrl( URL(parent->getUrl(), name) );
+    setPath( Path(parent->path(), name) );
 }
 
 ProjectFileItem::~ProjectFileItem()
 {
-    if( project() && d_ptr->m_urlIndex ) {
+    if( project() && d_ptr->m_pathIndex ) {
         project()->removeFromFileSet( indexedUrl() );
     }
 }
 
+IndexedString ProjectFileItem::indexedPath() const
+{
+    return IndexedString::fromIndex( d_ptr->m_pathIndex );
+}
+
 IndexedString ProjectFileItem::indexedUrl() const
 {
-    return IndexedString::fromIndex( d_ptr->m_urlIndex );
+    return indexedPath();
 }
 
 ProjectBaseItem::RenameStatus ProjectFileItem::rename(const QString& newname)
@@ -803,7 +830,7 @@ bool isNumeric(const QStringRef& str)
 class IconNameCache
 {
 public:
-    QString iconNameForUrl(const URL& url, const QString& fileName)
+    QString iconNameForUrl(const Path& url, const QString& fileName)
     {
         // find icon name based on file extension, if possible
         QString extension;
@@ -851,27 +878,27 @@ QString ProjectFileItem::iconName() const
     // think of d_ptr->iconName as mutable, possible since d_ptr is not const
     if (d_ptr->iconName.isEmpty()) {
         // lazy load implementation of icon lookup
-        d_ptr->iconName = s_cache->iconNameForUrl( d_ptr->m_url, d_ptr->text );
+        d_ptr->iconName = s_cache->iconNameForUrl( d_ptr->m_path, d_ptr->text );
         // we should always get *some* icon name back
         Q_ASSERT(!d_ptr->iconName.isEmpty());
     }
     return d_ptr->iconName;
 }
 
-void ProjectFileItem::setUrl( const URL& url )
+void ProjectFileItem::setPath( const Path& path )
 {
-    if (url == d_ptr->m_url) {
+    if (path == d_ptr->m_path) {
         return;
     }
 
-    if( project() && d_ptr->m_urlIndex ) {
+    if( project() && d_ptr->m_pathIndex ) {
         // remove from fileset if we are in there
         project()->removeFromFileSet( indexedUrl() );
     }
 
-    ProjectBaseItem::setUrl( url );
+    ProjectBaseItem::setPath( path );
 
-    if( project() && d_ptr->m_urlIndex ) {
+    if( project() && d_ptr->m_pathIndex ) {
         // add to fileset with new url index
         project()->addToFileSet( indexedUrl() );
     }
@@ -901,9 +928,11 @@ QString ProjectTargetItem::iconName() const
     return "system-run";
 }
 
-void ProjectTargetItem::setUrl( const URL& url )
+void ProjectTargetItem::setPath( const Path& path )
 {
-    d_ptr->m_url = url;
+    // don't call base class, it calls setText with the new path's filename
+    // which we do not want for target items
+    d_ptr->m_path = path;
 }
 
 int ProjectTargetItem::type() const
@@ -1128,18 +1157,34 @@ bool ProjectModel::setData(const QModelIndex&, const QVariant&, int)
     return false;
 }
 
-QList< ProjectBaseItem* > ProjectModel::itemsForUrl ( const KUrl& url ) const
+QList< ProjectBaseItem*> ProjectModel::itemsForPath(const Path& path) const
 {
-    if (!url.isValid()) {
-        return QList<ProjectBaseItem*>();
-    }
+    return itemsForPath(path.toIndexed());
+}
 
-    return d->urlLookupTable.values(indexForUrl(url));
+QList<ProjectBaseItem*> ProjectModel::itemsForPath(const IndexedString& path) const
+{
+    return d->pathLookupTable.values(path.index());
+}
+
+QList<ProjectBaseItem*> ProjectModel::itemsForUrl( const KUrl& url ) const
+{
+    return itemsForPath(IndexedString(url));
 }
 
 ProjectBaseItem* ProjectModel::itemForUrl(const IndexedString& url) const
 {
-    return d->urlLookupTable.value(url.index());
+    return itemForPath(url);
+}
+
+ProjectBaseItem* ProjectModel::itemForPath(const Path& path) const
+{
+    return itemForPath(path.toIndexed());
+}
+
+ProjectBaseItem* ProjectModel::itemForPath(const IndexedString& path) const
+{
+    return d->pathLookupTable.value(path.index());
 }
 
 void ProjectVisitor::visit( ProjectModel* model )
@@ -1183,7 +1228,6 @@ void ProjectVisitor::visit ( ProjectBuildFolderItem* folder )
     }
 }
 
-
 void ProjectVisitor::visit ( ProjectExecutableTargetItem* exec )
 {
     foreach( ProjectFileItem* item, exec->fileList() )
@@ -1191,7 +1235,6 @@ void ProjectVisitor::visit ( ProjectExecutableTargetItem* exec )
         visit( item );
     }
 }
-
 
 void ProjectVisitor::visit ( ProjectFolderItem* folder )
 {

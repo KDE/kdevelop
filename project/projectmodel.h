@@ -42,7 +42,7 @@ class ProjectExecutableTargetItem;
 class ProjectLibraryTargetItem;
 class ProjectModel;
 class IndexedString;
-class URL;
+class Path;
 
 /**
  * Base class to implement the visitor pattern for the project item tree.
@@ -149,7 +149,7 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem
         QList<ProjectFileItem*> fileList() const;
 
         virtual bool lessThan( const KDevelop::ProjectBaseItem* ) const;
-        static bool urlLessThan(KDevelop::ProjectBaseItem* item1, KDevelop::ProjectBaseItem* item2);
+        KDE_DEPRECATED static bool urlLessThan(KDevelop::ProjectBaseItem* item1, KDevelop::ProjectBaseItem* item2);
 
         /** @returns the @p row item in the list of children of this item or 0 if there is no such child. */
         ProjectBaseItem* child( int row ) const;
@@ -201,17 +201,28 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem
          * Note this function never renames the item in the project manager or on the filesystem,
          * it only changes the url and possibly the text nothing else.
          */
-        virtual void setUrl( const URL& );
-        void setUrl( const KUrl& );
+        KDE_DEPRECATED void setUrl( const KUrl& );
 
         /** Get the url of this item (if any) */
-        KUrl url() const;
-        /** FIXME: this is just for compatibility to test the new URL
-            without too many API changes **/
-        URL getUrl() const;
+        KDE_DEPRECATED KUrl url() const;
 
-        /** Gets the basename of this url (if any)
-         *  convenience function, returns the same as @c text() for most items
+        /**
+         * Set the path of this item.
+         *
+         * @note This function never renames the item in the project manager or
+         * on the filesystem, it only changes the path and possibly the text nothing else.
+         */
+        virtual void setPath( const Path& );
+
+        /**
+         * @returns the path of this item.
+         */
+        Path path() const;
+
+        /**
+         * @returns the basename of this items path (if any)
+         *
+         * Convenience function, returns the same as @c text() for most items.
          */
         QString baseName() const;
 
@@ -261,20 +272,29 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem
 class KDEVPLATFORMPROJECT_EXPORT ProjectFolderItem: public ProjectBaseItem
 {
 public:
-    ProjectFolderItem( IProject*, const KUrl &dir, ProjectBaseItem *parent = 0 );
-    ProjectFolderItem( IProject*, const QString& name, ProjectBaseItem *parent );
+    KDE_DEPRECATED ProjectFolderItem( IProject*, const KUrl &dir, ProjectBaseItem *parent = 0 );
+    /**
+     * Create a new ProjectFolderItem without a parent.
+     */
+    ProjectFolderItem( IProject* project, const Path &path );
+    /**
+     * Create a new ProjectFolderItem with a path pointing to @p name
+     * using the path of @p parent as basis.
+     */
+    ProjectFolderItem( IProject* project, const QString& name, ProjectBaseItem *parent );
 
     virtual ~ProjectFolderItem();
 
-    using ProjectBaseItem::setUrl;
-    virtual void setUrl(const URL& );
+    virtual void setPath(const Path& );
 
     virtual ProjectFolderItem *folder() const;
 
     ///Reimplemented from QStandardItem
     virtual int type() const;
 
-    /** Get the folder name, equal to url().fileName() but faster (precomputed) */
+    /**
+     * Get the folder name, equal to path().fileName() or text().
+     */
     QString folderName() const;
 
     /** @returns Returns whether this folder directly contains the specified file or folder. */
@@ -284,7 +304,7 @@ public:
     virtual RenameStatus rename(const QString& newname);
 
 private:
-    void propagateRename( const URL& newBase ) const;
+    void propagateRename( const Path& newBase ) const;
 };
 
 
@@ -294,8 +314,17 @@ private:
 class KDEVPLATFORMPROJECT_EXPORT ProjectBuildFolderItem: public ProjectFolderItem
 {
 public:
-    ProjectBuildFolderItem( IProject*, const KUrl &dir, ProjectBaseItem *parent = 0 );
-    ProjectBuildFolderItem( IProject*, const QString &name, ProjectBaseItem *parent );
+    KDE_DEPRECATED ProjectBuildFolderItem( IProject*, const KUrl &dir, ProjectBaseItem *parent = 0 );
+
+    /**
+     * Create a new ProjectBuildFolderItem without a parent.
+     */
+    ProjectBuildFolderItem( IProject* project, const Path &path );
+    /**
+     * Create a new ProjectBuildFolderItem with a path pointing to @p name
+     * using the path of @p parent as basis.
+     */
+    ProjectBuildFolderItem( IProject* project, const QString &name, ProjectBaseItem *parent );
 
     ///Reimplemented from QStandardItem
     virtual int type() const;
@@ -317,8 +346,7 @@ public:
 
     virtual ProjectTargetItem *target() const;
     virtual QString iconName() const;
-    using ProjectBaseItem::setUrl;
-    virtual void setUrl(const URL& url );
+    virtual void setPath(const Path& url );
 };
 
 /**
@@ -333,8 +361,9 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectExecutableTargetItem: public ProjectTarg
 
         virtual ProjectExecutableTargetItem *executable() const;
         virtual int type() const;
-        virtual KUrl builtUrl() const=0;
-        virtual KUrl installedUrl() const=0;
+        KDE_DEPRECATED virtual KUrl builtUrl() const=0;
+        KDE_DEPRECATED virtual KUrl installedUrl() const=0;
+        ///TODO: create new Path versions
 };
 
 
@@ -357,7 +386,15 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectLibraryTargetItem: public ProjectTargetI
 class KDEVPLATFORMPROJECT_EXPORT ProjectFileItem: public ProjectBaseItem
 {
 public:
-    ProjectFileItem( IProject*, const KUrl& file, ProjectBaseItem *parent = 0 );
+    KDE_DEPRECATED ProjectFileItem( IProject*, const KUrl& file, ProjectBaseItem *parent = 0 );
+    /**
+     * Create a new ProjectFileItem without a parent.
+     */
+    ProjectFileItem( IProject*, const Path& path );
+    /**
+     * Create a new ProjectFileItem with a path pointing to @p name
+     * using the path of @p parent as basis.
+     */
     ProjectFileItem( IProject*, const QString& name, ProjectBaseItem *parent );
     ~ProjectFileItem();
 
@@ -366,19 +403,21 @@ public:
 
     virtual ProjectFileItem *file() const;
 
-    /** Get the file name, equal to url().fileName() but faster (precomputed) */
+    /**
+     * @returns the file name, equal to path().fileName() or text()
+     */
     QString fileName() const;
 
-    using ProjectBaseItem::setUrl;
-    virtual void setUrl( const URL& );
+    virtual void setPath( const Path& );
     virtual QString iconName() const;
     virtual RenameStatus rename(const QString& newname);
 
     /**
-     * Get the indexed URL, which is often required for performant lookups
-     * or memory efficient storage.
+     * @return the items indexed path, which is often required for performant
+     * lookups or memory efficient storage.
      */
-    IndexedString indexedUrl() const;
+    IndexedString indexedPath() const;
+    KDE_DEPRECATED IndexedString indexedUrl() const;
 };
 
 /**
@@ -424,14 +463,33 @@ public:
     virtual Qt::DropActions supportedDropActions() const;
 
     /**
-     * Returns all items for the given URL.
+     * @return all items for the given path.
+     *
+     * @note If you already have an indexed path, use the function taking
+     * that instead as it will be faster.
      */
-    QList<ProjectBaseItem*> itemsForUrl(const KUrl& url) const;
+    QList<ProjectBaseItem*> itemsForPath(const Path& path) const;
+    /**
+     * @return all items for the given indexed path.
+     */
+    QList<ProjectBaseItem*> itemsForPath(const IndexedString& path) const;
+
+    KDE_DEPRECATED QList<ProjectBaseItem*> itemsForUrl(const KUrl& url) const;
 
     /**
-     * Returns first item for the given indexed URL.
+     * Returns the first item for the given indexed path.
+     *
+     * @note If you already have an indexed path, use the function taking
+     * that instead as it will be faster.
      */
-    ProjectBaseItem* itemForUrl(const IndexedString& url) const;
+    ProjectBaseItem* itemForPath(const Path& path) const;
+    /**
+     * Returns the first item for the given indexed path.
+     */
+    ProjectBaseItem* itemForPath(const IndexedString& path) const;
+
+    KDE_DEPRECATED ProjectBaseItem* itemForUrl(const IndexedString& url) const;
+
 private:
     class ProjectModelPrivate* const d;
     friend class ProjectBaseItem;

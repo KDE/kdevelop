@@ -14,7 +14,7 @@ set(kdevplatformproject_LIB_SRCS
     interfaces/iprojectbuilder.cpp
     interfaces/iprojectfilemanager.cpp
     interfaces/ibuildsystemmanager.cpp
-    url.cpp
+    path.cpp
 )
 
 
@@ -52,6 +52,6 @@ install(FILES
     builderjob.h
     helper.h
     abstractfilemanagerplugin.h
-    url.h
+    path.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/project COMPONENT Devel
  )

@@ -19,12 +19,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TESTURL_H
-#define TESTURL_H
+#ifndef TESTPATH_H
+#define TESTPATH_H
 
 #include <QObject>
 
-class TestURL : public QObject
+class TestPath : public QObject
 {
     Q_OBJECT
 private slots:
@@ -34,14 +34,14 @@ private slots:
     void bench_kurl();
     void bench_qurl();
     void bench_qstringlist();
-    void bench_optimized();
+    void bench_path();
 
-    void testURL();
-    void testURL_data();
-    void testURLInvalid();
-    void testURLInvalid_data();
-    void testURLOperators();
-    void testURLOperators_data();
+    void testPath();
+    void testPath_data();
+    void testPathInvalid();
+    void testPathInvalid_data();
+    void testPathOperators();
+    void testPathOperators_data();
 };
 
-#endif // TESTURL_H
+#endif // TESTPATH_H

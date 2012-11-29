@@ -38,12 +38,12 @@ target_link_libraries(projectmodelperformancetest
 
 ###########
 
-set( urltest_SRCS
-    testurl.cpp
+set( pathtest_SRCS
+    testpath.cpp
 )
 
-kde4_add_unit_test(urltest ${urltest_SRCS})
-target_link_libraries(urltest
+kde4_add_unit_test(pathtest ${pathtest_SRCS})
+target_link_libraries(pathtest
     ${QT_QTTEST_LIBRARY}
     ${QT_QTCORE_LIBRARY}
     ${KDE4_KDECORE_LIBS}
