@@ -35,7 +35,9 @@ public:
     CMakeProjectVisitorTest();
 
 private slots:
-    
+    void init();
+    void cleanup();
+
     void testVariables();
     void testVariables_data();
 
@@ -54,6 +56,7 @@ private:
     QStringList modulePath;    
     QStringList buildstrap;
     VariableMap initialVariables;
+    KDevelop::ReferencedTopDUContext fakeContext;
 };
 
 #endif
