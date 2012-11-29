@@ -674,7 +674,7 @@ QString KDevelop::TextView::viewState() const
 
 void KDevelop::TextView::setInitialRange(const KTextEditor::Range& range)
 {
-    if(d->editor->isInitialized()) {
+    if(d->editor && d->editor->isInitialized()) {
         if (range.isEmpty())
             d->editor->editorView()->setCursorPosition( range.start() );
         else
