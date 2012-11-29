@@ -54,6 +54,15 @@ ItemRepositoryRegistry::ItemRepositoryRegistry(QString openPath, KLockFile::Ptr 
     open(openPath, false, lock);
 }
 
+
+QString ItemRepositoryRegistry::repositoryPathForSession(const QUuid& uuid) {
+  QString xdgCacheDir = QProcessEnvironment::systemEnvironment().value( "XDG_CACHE_HOME", QDir::homePath() + "/.cache" ) + "/kdevduchain";
+  QString baseDir = QProcessEnvironment::systemEnvironment().value( "KDEV_DUCHAIN_DIR", xdgCacheDir );
+  baseDir += QString( "/%1-%2" ).arg( qAppName() ).arg( uuid.toString() );
+  KStandardDirs::makeDir( baseDir );
+  return baseDir;
+}
+
 QMutex& ItemRepositoryRegistry::mutex() {
   return m_mutex;
 }
@@ -75,14 +84,11 @@ QPair<QString, KLockFile::Ptr> allocateRepository() {
   QString repoPath;
   
    KComponentData component("item repositories temp", QByteArray(), KComponentData::SkipMainComponentRegistration);
-    QString xdgCacheDir = QProcessEnvironment::systemEnvironment().value("XDG_CACHE_HOME", QDir::homePath() + "/.cache") + "/kdevduchain";
-    QString baseDir = QProcessEnvironment::systemEnvironment().value("KDEV_DUCHAIN_DIR", xdgCacheDir);
-    KStandardDirs::makeDir(baseDir);
 
     Q_ASSERT( ICore::self() );
     Q_ASSERT( ICore::self()->activeSession() );
 
-    baseDir += '/' + ICore::self()->activeSession()->id().toString();
+    QString baseDir = ItemRepositoryRegistry::repositoryPathForSession( ICore::self()->activeSession()->id() );
 
     //Since each instance of kdevelop needs an own directory, iterate until we find a not-yet-used one
     for(int a = 0; a < 100; ++a) {

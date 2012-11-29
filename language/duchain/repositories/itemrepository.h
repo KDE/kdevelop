@@ -146,6 +146,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepositoryRegistry {
     ItemRepositoryRegistry(QString openPath = QString(), KLockFile::Ptr lock = KLockFile::Ptr());
     ~ItemRepositoryRegistry();
 
+    /// @returns item-repository path (e. g. ~/cache/.kdevduchain) for the given session, creating it if needed.
+    static QString repositoryPathForSession(const QUuid& uuid);
+
     ///Path is supposed to be a shared directory-name that the item-repositories are to be loaded from
     ///@param clear Whether a fresh start should be done, and all repositories cleared
     ///If this returns false, loading has failed, and all repositories have been discarded.
