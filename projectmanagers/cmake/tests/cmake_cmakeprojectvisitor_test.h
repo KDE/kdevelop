@@ -52,6 +52,9 @@ private slots:
     void testGlobs_data();
 
     void testForeachLines();
+
+    void testTargetProperties();
+    void testTargetProperties_data();
 private:
     QStringList modulePath;    
     QStringList buildstrap;

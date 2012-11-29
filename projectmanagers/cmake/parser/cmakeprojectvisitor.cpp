@@ -461,18 +461,27 @@ void CMakeProjectVisitor::defineTarget(const QString& id, const QStringList& sou
     m_targetForId[id]=target;
 
     QString exe=id;
+    QString locationDir = m_vars->value("CMAKE_CURRENT_BINARY_DIR").join(QString());
     switch(t) {
         case Target::Executable:
             exe += m_vars->value("CMAKE_EXECUTABLE_SUFFIX").join(QString());
+            if (m_vars->contains("CMAKE_RUNTIME_OUTPUT_DIRECTORY") && !m_vars->value("CMAKE_RUNTIME_OUTPUT_DIRECTORY").first().isEmpty()) {
+                locationDir = m_vars->value("CMAKE_RUNTIME_OUTPUT_DIRECTORY").join(QString());
+                m_props[TargetProperty][id]["RUNTIME_OUTPUT_DIRECTORY"]=QStringList(locationDir);
+            }
             break;
         case Target::Library:
             exe = QString("%1%2%3").arg(m_vars->value("CMAKE_LIBRARY_PREFIX").join(QString())).arg(id).arg(m_vars->value("CMAKE_LIBRARY_SUFFIX").join(QString()));
+            if (m_vars->contains("CMAKE_LIBRARY_OUTPUT_DIRECTORY") && !m_vars->value("CMAKE_LIBRARY_OUTPUT_DIRECTORY").first().isEmpty()) {
+                locationDir = m_vars->value("CMAKE_LIBRARY_OUTPUT_DIRECTORY").join(QString());
+                m_props[TargetProperty][id]["LIBRARY_OUTPUT_DIRECTORY"]=QStringList(locationDir);
+            }
             break;
         case Target::Custom:
             break;
     }
     
-    m_props[TargetProperty][id]["LOCATION"]=QStringList(m_vars->value("CMAKE_CURRENT_BINARY_DIR").join(QString())+'/'+exe);
+    m_props[TargetProperty][id]["LOCATION"]=QStringList(locationDir+'/'+exe);
 }
 
 int CMakeProjectVisitor::visit(const AddExecutableAst *exec)
