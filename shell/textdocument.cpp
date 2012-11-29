@@ -664,7 +664,9 @@ QString KDevelop::TextView::viewState() const
         } else {
             KTextEditor::Cursor cursor = d->editor->editorView()->cursorPosition();
             return QString("Cursor=%1,%2").arg(cursor.line()).arg(cursor.column());
-        }    }else
+        }
+    }
+    else
     {
         kDebug() << "TextView's internal KTE view disappeared!";
         return QString();
