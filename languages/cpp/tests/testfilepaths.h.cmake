@@ -1,0 +1,1 @@
+#define CPP_TEST_FILES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/cpptestfiles"

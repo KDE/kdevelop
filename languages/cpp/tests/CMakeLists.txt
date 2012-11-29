@@ -49,6 +49,23 @@ target_link_libraries(buddiestest
 
 ########### next target ###############
 
+find_package(QJSON)
+if(QJSON_FOUND)
+  set(cppfilestest_SRCS test_cppfiles.cpp)
+  kde4_add_unit_test(cppfilestest ${cppfilestest_SRCS})
+  configure_file("testfilepaths.h.cmake" "testfilepaths.h" ESCAPE_QUOTES)
+  target_link_libraries(cppfilestest
+      ${QT_QTTEST_LIBRARY}
+      ${QT_QTCORE_LIBRARY}
+      ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
+      ${KDEVPLATFORM_TESTS_LIBRARIES}
+      ${KDEVPLATFORM_JSONTESTS_LIBRARIES}
+      kdev4cppduchain
+  )
+endif(QJSON_FOUND)
+
+########### next target ###############
+
 set(specialcompletiontest_SRCS
   test_specialcompletion.cpp
 
