@@ -182,12 +182,25 @@ void TestURL::testURL()
     QCOMPARE(optUrl.isLocalFile(), url.isLocalFile());
     QCOMPARE(optUrl.pathOrUrl(), url.pathOrUrl());
     QCOMPARE(optUrl.isValid(), url.isValid());
+    QCOMPARE(optUrl.fileName(), url.fileName());
+    QCOMPARE(optUrl.path(), url.path());
 
     QCOMPARE(optUrl, URL(input));
     QCOMPARE(optUrl, URL(optUrl));
     QVERIFY(optUrl != URL(input + "/asdf"));
 
     QCOMPARE(optUrl.toIndexed(), IndexedString(url));
+    QCOMPARE(optUrl, URL(url));
+
+    url.addPath("test/foo/bar");
+    optUrl.addPath("test/foo/bar");
+    QCOMPARE(optUrl.fileName(), url.fileName());
+    QCOMPARE(optUrl.path(), url.path());
+
+    url.setFileName("lalalala_adsf.txt");
+    optUrl.setFileName("lalalala_adsf.txt");
+    QCOMPARE(optUrl.fileName(), url.fileName());
+    QCOMPARE(optUrl.path(), url.path());
 }
 
 void TestURL::testURL_data()

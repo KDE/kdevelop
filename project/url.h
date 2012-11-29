@@ -51,6 +51,11 @@ class KDEVPLATFORMPROJECT_EXPORT URL
 {
 public:
     /**
+     * Construct an empty, invalid URL.
+     */
+    URL();
+
+    /**
      * Create a URL out of a string representation of a path or URL.
      *
      * Not every kind of URL is supported, rather only path-like URLs
@@ -58,13 +63,25 @@ public:
      *
      * @sa isValid()
      */
-    URL(const QString& pathOrUrl = QString());
+    URL(const QString& pathOrUrl);
+
+    /**
+     * Convert a KUrl to a KDevelop::URL.
+     *
+     * Not every kind of URL is supported, rather only path-like URLs
+     * without fragments, queries, sub-URLs and the like are supported.
+     *
+     * @sa isValid()
+     */
+    URL(const KUrl& url);
 
     /**
      * Create a copy of @p other and optionally append a path segment @p child.
      *
      * This implicitly shares the data of @p other and thus is very efficient
      * memory wise compared to creating two URLs from separate strings.
+     *
+     * @sa addPath()
      */
     URL(const URL& other, const QString& child = QString());
 
@@ -145,8 +162,16 @@ public:
      * or a URL including protocol etc. pp. for remote URLs.
      *
      * @return a string representation of this URL.
+     * @sa path()
      */
     QString pathOrUrl() const;
+
+    /**
+     * @return the path segment of this URL.
+     *
+     * @sa pathOrUrl()
+     */
+    QString path() const;
 
     /**
      * @return the URL converted to an IndexedString.
@@ -171,7 +196,27 @@ public:
         return !m_data.isEmpty() && !m_data.first().contains('/');
     }
 
+    /**
+     * @return the file name of this URL, i.e. the last element of the path.
+     */
+    QString fileName() const;
+
+    /**
+     * Set the file name of this URL, i.e. the last element of the path.
+     */
+    void setFileName(const QString& name);
+
+    /**
+     * Append @p path to this URL.
+     */
+    void addPath(const QString& path);
+
 private:
+    /**
+     * Initialize this URL from the data of @p url.
+     */
+    void init(KUrl url);
+
     // for remote urls the first element contains the a URL prefix
     // containing the protocol, user, port etc. pp.
     QVector<QString> m_data;

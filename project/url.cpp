@@ -30,44 +30,53 @@
 
 using namespace KDevelop;
 
+URL::URL()
+{
+
+}
+
 URL::URL(const QString& pathOrUrl)
 {
-    if (pathOrUrl.isEmpty()) {
-        return;
-    }
+    init(KUrl(pathOrUrl));
+}
 
-    KUrl parser(pathOrUrl);
+URL::URL(const KUrl& url)
+{
+    init(url);
+}
 
+void URL::init(KUrl url)
+{
     // we do not support urls with:
     // - fragments
     // - sub urls
     // - query
     // nor do we support relative urls
-    if (parser.hasFragment() || parser.hasQuery() || parser.hasSubUrl()
-        || parser.isRelative())
+    if (url.hasFragment() || url.hasQuery() || url.hasSubUrl()
+        || url.isRelative())
     {
         // invalid
         return;
     }
 
     // remove /../ parts
-    parser.cleanPath();
+    url.cleanPath();
 
     // get the path as segmented list
-    QStringList path = parser.path(KUrl::RemoveTrailingSlash).split('/', QString::SkipEmptyParts);
+    QStringList path = url.path(KUrl::RemoveTrailingSlash).split('/', QString::SkipEmptyParts);
 
-    if (!parser.isLocalFile()) {
+    if (!url.isLocalFile()) {
         // handle remote urls
         QString urlPrefix;
-        urlPrefix += parser.protocol();
+        urlPrefix += url.protocol();
         urlPrefix += "://";
-        if (parser.hasUser()) {
-            urlPrefix += parser.user();
+        if (url.hasUser()) {
+            urlPrefix += url.user();
             urlPrefix += '@';
         }
-        urlPrefix += parser.host();
-        if (parser.port() != -1) {
-            urlPrefix += ':' + QString::number(parser.port());
+        urlPrefix += url.host();
+        if (url.port() != -1) {
+            urlPrefix += ':' + QString::number(url.port());
         }
         path.prepend(urlPrefix);
     }
@@ -78,17 +87,13 @@ URL::URL(const QString& pathOrUrl)
 URL::URL(const URL& other, const QString& child)
 : m_data(other.m_data)
 {
-    if (!child.isEmpty()) {
-        Q_ASSERT(!child.startsWith('/'));
-        Q_ASSERT(!child.contains("../"));
-        m_data += child.split('/', QString::SkipEmptyParts).toVector();
-    }
+    addPath(child);
 }
 
-QString URL::pathOrUrl() const
+QString generatePathOrUrl(bool onlyPath, bool isLocalFile, const QVector<QString> data)
 {
     // more or less a copy of QtPrivate::QStringList_join
-    const int size = m_data.size();
+    const int size = data.size();
 
     if (size == 0) {
         return QString();
@@ -98,24 +103,37 @@ QString URL::pathOrUrl() const
     // separators: '/'
     totalLength += size;
 
+    // skip URL segment if we only want the path
+    const int start = (onlyPath && !isLocalFile) ? 1 : 0;
+
     // path and url prefix
-    for (int i = 0; i < size; ++i) {
-        totalLength += m_data.at(i).size();
+    for (int i = start; i < size; ++i) {
+        totalLength += data.at(i).size();
     }
 
     // build string representation
     QString res;
     res.reserve(totalLength);
 
-    for (int i = 0; i < size; ++i) {
-        if (i || isLocalFile()) {
-        res += '/';
+    for (int i = start; i < size; ++i) {
+        if (i || isLocalFile) {
+            res += '/';
         }
 
-        res += m_data.at(i);
+        res += data.at(i);
     }
 
     return res;
+}
+
+QString URL::pathOrUrl() const
+{
+    return generatePathOrUrl(false, isLocalFile(), m_data);
+}
+
+QString URL::path() const
+{
+    return generatePathOrUrl(true, isLocalFile(), m_data);
 }
 
 bool URL::operator<(const URL& other) const
@@ -148,6 +166,38 @@ IndexedString URL::toIndexed() const
 KUrl URL::toUrl() const
 {
     return KUrl(pathOrUrl());
+}
+
+QString URL::fileName() const
+{
+    // remote URLs are offset by one, thus never return the first item of them as file name
+    if (m_data.isEmpty() || (!isLocalFile() && m_data.size() == 1)) {
+        return QString();
+    }
+    return m_data.last();
+}
+
+void URL::setFileName(const QString& name)
+{
+    // remote URLs are offset by one, thus never return the first item of them as file name
+    if (m_data.isEmpty() || (!isLocalFile() && m_data.size() == 1)) {
+        // append the name to empty URLs or remote URLs only containing the URL prefix
+        m_data.append(name);
+    } else {
+        // overwrite the last data member
+        m_data.last() = name;
+    }
+}
+
+void URL::addPath(const QString& path)
+{
+    if (path.isEmpty()) {
+        return;
+    }
+    ///FIXME: this needs to be implemented
+    Q_ASSERT(!path.startsWith('/'));
+    Q_ASSERT(!path.contains("../"));
+    m_data += path.split('/', QString::SkipEmptyParts).toVector();
 }
 
 QDebug operator<<(QDebug s, const URL& string)
