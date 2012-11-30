@@ -820,4 +820,11 @@ bool KDevelop::TextEditorWidget::isInitialized() const
     return d->view!=0;
 }
 
+void KDevelop::TextEditorWidget::showEvent(QShowEvent* event)
+{
+    if(!d->view)
+        initialize();
+    QWidget::showEvent(event);
+}
+
 #include "textdocument.moc"
