@@ -117,7 +117,7 @@ void TemplatePreviewToolView::documentChanged (KTextEditor::Document* document)
     }
 }
 
-void TemplatePreviewToolView::showEvent(QShowEvent* event)
+void TemplatePreviewToolView::showEvent(QShowEvent*)
 {
     if (m_original)
     {
