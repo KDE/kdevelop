@@ -18,6 +18,7 @@
 */
 
 #include "archivetemplateloader.h"
+#include "templateengine.h"
 
 #include <grantlee/engine.h>
 
@@ -35,13 +36,18 @@ using namespace KDevelop;
 class KDevelop::ArchiveTemplateLoaderPrivate
 {
 public:
-    const KArchiveDirectory* directory;
+    QList<ArchiveTemplateLocation*> locations;
 };
 
-ArchiveTemplateLoader::ArchiveTemplateLoader(const KArchiveDirectory* directory)
+ArchiveTemplateLoader* ArchiveTemplateLoader::self()
+{
+    static ArchiveTemplateLoader* loader = new ArchiveTemplateLoader;
+    return loader;
+}
+
+ArchiveTemplateLoader::ArchiveTemplateLoader()
 : d(new ArchiveTemplateLoaderPrivate)
 {
-    d->directory = directory;
 }
 
 ArchiveTemplateLoader::~ArchiveTemplateLoader()
@@ -49,24 +55,62 @@ ArchiveTemplateLoader::~ArchiveTemplateLoader()
     delete d;
 }
 
+void ArchiveTemplateLoader::addLocation(ArchiveTemplateLocation* location)
+{
+    d->locations.append(location);
+}
+
+void ArchiveTemplateLoader::removeLocation(ArchiveTemplateLocation* location)
+{
+    d->locations.removeOne(location);
+}
+
 bool ArchiveTemplateLoader::canLoadTemplate(const QString& name) const
 {
-    bool can = d->directory->entry(name) && d->directory->entry(name)->isFile();
-    kDebug() << "Can load" << name << "?" << can;
-    return can;
+    foreach(ArchiveTemplateLocation* location, d->locations) {
+        if (location->hasTemplate(name)) {
+            return true;
+        }
+    }
+    return false;
 }
 
 Grantlee::Template ArchiveTemplateLoader::loadByName(const QString& name, const Grantlee::Engine* engine) const
 {
-    const KArchiveFile* file = dynamic_cast<const KArchiveFile*>(d->directory->entry(name));
-    Q_ASSERT(file);
+    foreach(ArchiveTemplateLocation* location, d->locations) {
+        if (location->hasTemplate(name)) {
+            return engine->newTemplate(location->templateContents(name), name);
+        }
+    }
 
-    kDebug() << "Loading file" << name;
-    return engine->newTemplate(file->data(), file->name());
+    return Grantlee::Template();
 }
 
 QPair< QString, QString > ArchiveTemplateLoader::getMediaUri(const QString& fileName) const
 {
     Q_UNUSED(fileName);
     return QPair<QString, QString>();
+}
+
+ArchiveTemplateLocation::ArchiveTemplateLocation(const KArchiveDirectory* directory)
+: m_directory(directory)
+{
+    ArchiveTemplateLoader::self()->addLocation(this);
+}
+
+ArchiveTemplateLocation::~ArchiveTemplateLocation()
+{
+    ArchiveTemplateLoader::self()->removeLocation(this);
+}
+
+bool ArchiveTemplateLocation::hasTemplate(const QString& name) const
+{
+    return m_directory->entry(name) && m_directory->entry(name)->isFile();
+}
+
+QString ArchiveTemplateLocation::templateContents(const QString& name) const
+{
+    const KArchiveFile* file = dynamic_cast<const KArchiveFile*>(m_directory->entry(name));
+    Q_ASSERT(file);
+    return file->data();
 }

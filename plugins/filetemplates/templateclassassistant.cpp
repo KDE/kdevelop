@@ -375,7 +375,6 @@ void TemplateClassAssistant::templateChosen(const QString& templateDescription)
 
         d->renderer = new TemplateRenderer;
         d->renderer->setEmptyLinesPolicy(TemplateRenderer::TrimEmptyLines);
-        TemplateEngine::self()->addArchive(d->fileTemplate.directory());
     }
 
     d->licensePageWidget = new LicensePage(this);

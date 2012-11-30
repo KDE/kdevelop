@@ -24,6 +24,7 @@
 #include "sourcefiletemplate.h"
 #include "templateengine.h"
 #include "templateengine_p.h"
+#include "archivetemplateloader.h"
 
 #include <language/editor/simplecursor.h>
 #include <language/editor/simplerange.h>
@@ -308,6 +309,7 @@ DocumentChangeSet TemplateRenderer::renderFileTemplate(const SourceFileTemplate&
     }
 
     const KArchiveDirectory* directory = fileTemplate.directory();
+    ArchiveTemplateLocation location(directory);
     foreach (const SourceFileTemplate::OutputFile& outputFile, fileTemplate.outputFiles())
     {
         const KArchiveEntry* entry = directory->entry(outputFile.fileName);

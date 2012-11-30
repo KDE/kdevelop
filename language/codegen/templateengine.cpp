@@ -33,7 +33,6 @@
 
 #include <KComponentData>
 #include <KStandardDirs>
-#include <KArchive>
 
 using namespace KDevelop;
 using namespace Grantlee;
@@ -62,17 +61,13 @@ TemplateEngine::TemplateEngine()
     Grantlee::registerMetaType<KDevelop::FunctionDescription>();
     Grantlee::registerMetaType<KDevelop::InheritanceDescription>();
     Grantlee::registerMetaType<KDevelop::ClassDescription>();
+
+    d->engine.addTemplateLoader(AbstractTemplateLoader::Ptr(ArchiveTemplateLoader::self()));
 }
 
 void TemplateEngine::addTemplateDirectories(const QStringList& directories)
 {
     FileSystemTemplateLoader* loader = new FileSystemTemplateLoader;
     loader->setTemplateDirs(directories);
-    d->engine.addTemplateLoader(AbstractTemplateLoader::Ptr(loader));
-}
-
-void TemplateEngine::addArchive(const KArchiveDirectory* directory)
-{
-    ArchiveTemplateLoader* loader = new ArchiveTemplateLoader(directory);
     d->engine.addTemplateLoader(AbstractTemplateLoader::Ptr(loader));
 }

@@ -28,8 +28,6 @@
 
 class QStringList;
 
-class KArchiveDirectory;
-
 namespace KDevelop {
 
 class TemplateRenderer;
@@ -48,11 +46,6 @@ public:
      *
      **/
     void addTemplateDirectories(const QStringList& directories);
-    /**
-     * Adds the archive @p directory to the list of places searched for templates
-     *
-     **/
-    void addArchive(const KArchiveDirectory* directory);
 
 private:
     TemplateEngine();

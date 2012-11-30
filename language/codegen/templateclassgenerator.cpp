@@ -104,7 +104,6 @@ TemplateClassGenerator::~TemplateClassGenerator()
 void TemplateClassGenerator::setTemplateDescription(const SourceFileTemplate& fileTemplate)
 {
     d->fileTemplate = fileTemplate;
-    TemplateEngine::self()->addArchive(d->fileTemplate.directory());
 }
 
 DocumentChangeSet TemplateClassGenerator::generate()
