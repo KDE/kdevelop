@@ -455,7 +455,12 @@ QString ProjectBaseItem::baseName() const
 
 void ProjectBaseItem::setUrl(const KUrl& url)
 {
-    setPath(Path(url));
+    Path path(url);
+    if (parent() && path.up() == parent()->path()) {
+        // leverage implicit sharing
+        path = Path(parent()->path(), path.fileName());
+    }
+    setPath(path);
 }
 
 void ProjectBaseItem::setPath( const Path& path)
