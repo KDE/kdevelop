@@ -361,9 +361,11 @@ struct DocumentControllerPrivate {
         {
             //find a view if there's one already opened in this area
             Sublime::View *partView = 0;
+            Sublime::AreaIndex* activeViewIdx = area->indexOf(uiController->activeSublimeWindow()->activeView());
             foreach (Sublime::View *view, sdoc->views())
             {
-                if (area->views().contains(view) && area->indexOf(view) == area->indexOf(uiController->activeSublimeWindow()->activeView()))
+                Sublime::AreaIndex* areaIdx = area->indexOf(view);
+                if (areaIdx && areaIdx == activeViewIdx)
                 {
                     partView = view;
                     break;
@@ -378,13 +380,8 @@ struct DocumentControllerPrivate {
             }
             
             KDevelop::TextView* textView = dynamic_cast<KDevelop::TextView*>(partView);
-            if(textView && textView->textView()) {
+            if(textView) {
                 applyRange = false;
-                if (range.isEmpty())
-                    doc->setCursorPosition( range.start() );
-                else
-                    doc->setTextSelection( range );
-            }else if(textView) {
                 textView->setInitialRange(range);
             }
             

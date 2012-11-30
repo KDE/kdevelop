@@ -17,6 +17,8 @@ set(KDEVPLATFORM_LIB_SOVERSION 7)
 
 find_package(ZLIB REQUIRED)
 find_package(Grantlee 0.1.7 REQUIRED)
+find_package(QJSON)
+macro_log_feature( QJSON_FOUND "QJson" "QJson support for Uploading Patches to reviewboard" "http://qjson.sourceforge.net/" FALSE "0.7.0" "The qjson library is needed to enable uploading patches to reviewboard" )
 
 include (KDE4Defaults)
 include (MacroWriteBasicCMakeVersionFile)
@@ -59,6 +61,7 @@ set(KDEVPLATFORM_OUTPUTVIEW_LIBRARIES kdevplatformoutputview)
 set(KDEVPLATFORM_VCS_LIBRARIES kdevplatformvcs)
 set(KDEVPLATFORM_SHELL_LIBRARIES kdevplatformshell)
 set(KDEVPLATFORM_TESTS_LIBRARIES kdevplatformtests)
+set(KDEVPLATFORM_JSONTESTS_LIBRARIES kdevplatformjsontests)
 set(KDEVPLATFORM_DEBUGGER_LIBRARIES kdevplatformdebugger)
 set(KDEVPLATFORM_DOCUMENTATION_LIBRARIES kdevplatformdocumentation)
 

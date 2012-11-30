@@ -1,0 +1,76 @@
+/* This file is part of KDevelop
+   Copyright 2012 Olivier de Gaalon <olivier.jg@gmail.com>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License version 2 as published by the Free Software Foundation.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA.
+*/
+
+#ifndef JSONDUCONTEXTTESTS_H
+#define JSONDUCONTEXTTESTS_H
+
+#include "language/duchain/ducontext.h"
+#include "jsontesthelpers.h"
+
+/**
+ * JSON Object Specification:
+ * FindDeclObject: Mapping of (string) search ids to DeclTestObjects
+ *
+ * Quick Reference:
+ *   findDeclarations : FindDeclObject
+ *   childCount : int
+ */
+
+namespace KDevelop
+{
+
+namespace DUContextTests
+{
+
+using namespace JsonTestHelpers;
+
+///JSON type: FindDeclObject
+///@returns whether each declaration can be found and passes its tests
+ContextTest(findDeclarations)
+{
+  VERIFY_TYPE(QVariantMap);
+  QString INVALID_ERROR = "Attempted to test invalid context.";
+  QString NOT_FOUND_ERROR = "Could not find declaration \"%1\".";
+  QString DECL_ERROR = "Declaration found with \"%1\" did not pass tests.";
+  if (!ctxt)
+    return INVALID_ERROR;
+  QVariantMap findDecls = value.toMap();
+  for (QVariantMap::iterator it = findDecls.begin(); it != findDecls.end(); ++it)
+  {
+    QualifiedIdentifier searchId(it.key());
+    QList<Declaration*> ret = ctxt->findDeclarations(searchId, CursorInRevision::invalid());
+    if (!ret.size())
+      return NOT_FOUND_ERROR.arg(it.key());
+
+    if (!runTests(it.value().toMap(), ret.first()))
+      return DECL_ERROR.arg(it.key());
+  }
+  return SUCCESS;
+}
+///JSON type: int
+///@returns whether the number of child contexts matches the given value
+ContextTest(childCount)
+{
+  return compareValues(ctxt->childContexts().size(), value, "Context's child count");
+}
+
+}
+
+}
+
+#endif //JSONDUCONTEXTTESTS_H

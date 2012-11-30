@@ -1,0 +1,43 @@
+/* This file is part of KDevelop
+   Copyright 2012 Olivier de Gaalon <olivier.jg@gmail.com>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License version 2 as published by the Free Software Foundation.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA.
+*/
+
+#ifndef DECLARATIONVALIDATOR_H
+#define DECLARATIONVALIDATOR_H
+
+#include "language/duchain/ducontext.h"
+#include "tests/kdevplatformtestsexport.h"
+
+namespace KDevelop {
+
+class DeclarationValidatorPrivate;
+class KDEVPLATFORMTESTS_EXPORT DeclarationValidator : public DUChainVisitor
+{
+public:
+  DeclarationValidator();
+  virtual ~DeclarationValidator();
+
+  virtual bool testsPassed();
+  virtual void visit(DUContext*);
+  virtual void visit(Declaration *declaration);
+private:
+  Q_DISABLE_COPY(DeclarationValidator)
+  const QScopedPointer<DeclarationValidatorPrivate> d;
+};
+
+}
+#endif //DECLARATIONVALIDATOR_H
