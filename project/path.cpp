@@ -82,6 +82,11 @@ void Path::init(KUrl url)
     }
 
     m_data = path.toVector();
+
+    // support for root paths, they are valid but don't really contain any data
+    if (m_data.isEmpty() || (isRemote() && m_data.size() == 1)) {
+        m_data << QString();
+    }
 }
 
 Path::Path(const Path& other, const QString& child)
@@ -198,7 +203,34 @@ void Path::addPath(const QString& path)
     ///FIXME: this needs to be implemented
     Q_ASSERT(!path.startsWith('/'));
     Q_ASSERT(!path.contains("../"));
-    m_data += path.split('/', QString::SkipEmptyParts).toVector();
+    QStringList newData = path.split('/', QString::SkipEmptyParts);
+    if (newData.isEmpty()) {
+        return;
+    }
+
+    if (!m_data.isEmpty() && m_data.last().isEmpty()) {
+        // the root item is empty, set its contents and continue appending
+        m_data.last() = newData.takeFirst();
+    }
+
+    m_data += newData.toVector();
+}
+
+Path Path::up() const
+{
+    if (m_data.isEmpty()) {
+        return Path();
+    }
+
+    Path ret(*this);
+    if (m_data.size() == (1 + (isRemote() ? 1 : 0))) {
+        // keep the root item, but clear it, otherwise we'd make the path invalid
+        // or a URL a local path
+        ret.m_data.last().clear();
+    } else {
+        ret.m_data.pop_back();
+    }
+    return ret;
 }
 
 QDebug operator<<(QDebug s, const Path& string)

@@ -246,6 +246,13 @@ public:
      */
     void addPath(const QString& path);
 
+    /**
+     * @return the path pointing to the parent folder of this path.
+     *
+     * @sa KUrl::upUrl()
+     */
+    Path up() const;
+
 private:
     /**
      * Initialize this Path from the data of @p url.

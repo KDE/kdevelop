@@ -163,6 +163,16 @@ void TestPath::bench_path()
     runBenchmark<Path>();
 }
 
+KUrl comparableUpUrl(const KUrl& url)
+{
+    KUrl ret = url.upUrl();
+    ret.adjustPath(KUrl::RemoveTrailingSlash);
+    if (ret.hasPass()) {
+        ret.setPass(QString());
+    }
+    return ret;
+}
+
 void TestPath::testPath()
 {
     QFETCH(QString, input);
@@ -170,6 +180,10 @@ void TestPath::testPath()
     KUrl url(input);
     url.cleanPath();
     url.adjustPath(KUrl::RemoveTrailingSlash);
+    if (url.isValid() && url.path(KUrl::AddTrailingSlash) == "/") {
+        // I think this is a bug in KUrl, I'll notify David Faure
+        url.adjustPath(KUrl::AddTrailingSlash);
+    }
 
     Path optUrl(input);
 
@@ -185,6 +199,7 @@ void TestPath::testPath()
     QCOMPARE(optUrl.isValid(), url.isValid());
     QCOMPARE(optUrl.fileName(), url.fileName());
     QCOMPARE(optUrl.path(), url.path());
+    QCOMPARE(optUrl.up().toUrl(), comparableUpUrl(url));
 
     QCOMPARE(optUrl, Path(input));
     QCOMPARE(optUrl, Path(optUrl));
@@ -202,6 +217,8 @@ void TestPath::testPath()
     optUrl.setFileName("lalalala_adsf.txt");
     QCOMPARE(optUrl.fileName(), url.fileName());
     QCOMPARE(optUrl.path(), url.path());
+
+    QCOMPARE(optUrl.up().toUrl(), comparableUpUrl(url));
 }
 
 void TestPath::testPath_data()
@@ -211,7 +228,10 @@ void TestPath::testPath_data()
     QTest::newRow("invalid") << "";
     QTest::newRow("path") << "/tmp/foo/asdf.txt";
     QTest::newRow("path-folder") << "/tmp/foo/asdf/";
+    QTest::newRow("root") << "/";
     QTest::newRow("clean-path") << "/tmp/..///asdf/";
+    QTest::newRow("remote-nopath") << "http://www.test.com";
+    QTest::newRow("remote-nopath-slash") << "http://www.test.com/";
     QTest::newRow("http") << "http://www.test.com/tmp/asdf.txt";
     QTest::newRow("file") << "file:///tmp/foo/asdf.txt";
     QTest::newRow("file-folder") << "file:///tmp/foo/bar/";
