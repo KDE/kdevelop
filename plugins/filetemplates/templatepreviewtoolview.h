@@ -53,7 +53,6 @@ private:
     Ui::TemplatePreviewToolView* ui;
     KTextEditor::Document* m_original;
     FileTemplatesPlugin* m_plugin;
-    TemplatePreview* m_preview;
 
 private slots:
     void sourceTextChanged(const QString& text);
