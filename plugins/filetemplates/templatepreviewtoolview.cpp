@@ -147,7 +147,7 @@ void TemplatePreviewToolView::sourceTextChanged(const QString& text)
     }
     else
     {
-        QString errorString = ui->preview->setText(text, ui->projectRadioButton->isChecked());
+        QString errorString = ui->preview->setText(text, ui->projectRadioButton->isChecked(), m_policy);
         if (!errorString.isEmpty())
         {
             ui->messageWidget->setMessageType(KMessageWidget::Error);
@@ -185,7 +185,7 @@ void TemplatePreviewToolView::selectedRendererChanged()
                 policy = TemplateRenderer::RemoveEmptyLines;
                 break;
         }
-        ui->preview->renderer()->setEmptyLinesPolicy(policy);
+        m_policy = policy;
     }
     documentChanged(m_original);
 }

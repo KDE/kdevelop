@@ -37,9 +37,7 @@
 
 using namespace KDevelop;
 
-TemplatePreview::TemplatePreview(QWidget* parent, Qt::WindowFlags f)
-: QWidget(parent, f)
-, m_renderer(new TemplateRenderer)
+TemplatePreviewRenderer::TemplatePreviewRenderer()
 {
     QVariantHash vars;
     vars["name"] = "Example";
@@ -60,8 +58,17 @@ TemplatePreview::TemplatePreview(QWidget* parent, Qt::WindowFlags f)
     functions << complexFunction;
     vars["functions"] = CodeDescription::toVariantList(functions);
 
-    m_renderer->addVariables(vars);
+    addVariables(vars);
+}
 
+TemplatePreviewRenderer::~TemplatePreviewRenderer()
+{
+
+}
+
+TemplatePreview::TemplatePreview(QWidget* parent, Qt::WindowFlags f)
+: QWidget(parent, f)
+{
     m_variables["APPNAME"] = "Example";
     m_variables["APPNAMELC"] = "example";
     m_variables["APPNAMEUC"] = "EXAMPLE";
@@ -93,7 +100,7 @@ TemplatePreview::~TemplatePreview()
 
 }
 
-QString TemplatePreview::setText(const QString& text, bool isProject)
+QString TemplatePreview::setText(const QString& text, bool isProject, TemplateRenderer::EmptyLinesPolicy policy)
 {
     QString rendered;
     QString errorString;
@@ -102,8 +109,10 @@ QString TemplatePreview::setText(const QString& text, bool isProject)
         if (isProject) {
             rendered = KMacroExpander::expandMacros(text, m_variables);
         } else {
-            rendered = m_renderer->render(text);
-            errorString = m_renderer->errorString();
+            TemplatePreviewRenderer renderer;
+            renderer.setEmptyLinesPolicy(policy);
+            rendered = renderer.render(text);
+            errorString = renderer.errorString();
         }
     }
 
@@ -118,9 +127,4 @@ QString TemplatePreview::setText(const QString& text, bool isProject)
 KTextEditor::Document* TemplatePreview::document() const
 {
     return m_preview.data();
-}
-
-TemplateRenderer* TemplatePreview::renderer() const
-{
-    return m_renderer.data();
 }

@@ -104,7 +104,7 @@ void TemplateSelectionPagePrivate::previewTemplate(const QString& file)
         url.addPath(out.outputName);
         fileUrls.insert(out.identifier, url);
     }
-    TemplateRenderer renderer;
+    TemplatePreviewRenderer renderer;
     renderer.setEmptyLinesPolicy(TemplateRenderer::TrimEmptyLines);
     DocumentChangeSet changes = renderer.renderFileTemplate(fileTemplate, base, fileUrls);
     changes.setActivationPolicy(DocumentChangeSet::DoNotActivate);

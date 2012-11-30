@@ -25,14 +25,22 @@
 #include <QWidget>
 #include <QHash>
 
+#include <language/codegen/templaterenderer.h>
+
 namespace KTextEditor {
 class Document;
 class View;
 }
 
-namespace KDevelop {
-class TemplateRenderer;
-}
+/**
+ * A renderer that adds some common variables for previewing purposes.
+ */
+class TemplatePreviewRenderer : public KDevelop::TemplateRenderer
+{
+public:
+    TemplatePreviewRenderer();
+    virtual ~TemplatePreviewRenderer();
+};
 
 /**
  * A KTextEditor::View wrapper to show a preview of a template.
@@ -51,22 +59,17 @@ public:
      * @p isProject set to true if the contents resemble a project template
      * @return an error message, or an empty string if everything worked
      */
-    QString setText(const QString& text, bool isProject = false);
+    QString setText(const QString& text, bool isProject = false,
+                    KDevelop::TemplateRenderer::EmptyLinesPolicy policy = KDevelop::TemplateRenderer::TrimEmptyLines);
 
     /**
      * @return The read-only document.
      */
     KTextEditor::Document* document() const;
 
-    /**
-     * @return The renderer used for file templates.
-     */
-    KDevelop::TemplateRenderer* renderer() const;
-
 private:
     Q_DISABLE_COPY(TemplatePreview)
 
-    QScopedPointer<KDevelop::TemplateRenderer> m_renderer;
     QHash<QString, QString> m_variables;
     QScopedPointer<KTextEditor::Document> m_preview;
     KTextEditor::View* m_view;
