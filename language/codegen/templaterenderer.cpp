@@ -19,33 +19,24 @@
  */
 
 #include "templaterenderer.h"
-#include "archivetemplateloader.h"
-#include "codedescription.h"
-#include "codedescriptionmetatypes.h"
+
 #include "documentchangeset.h"
 #include "sourcefiletemplate.h"
+#include "templateengine.h"
+#include "templateengine_p.h"
+
 #include <language/editor/simplecursor.h>
 #include <language/editor/simplerange.h>
 #include <language/duchain/indexedstring.h>
-#include <interfaces/icore.h>
 
-#include <grantlee/engine.h>
-#include <grantlee/metatype.h>
+#include <grantlee/context.h>
 
-#include <grantlee/grantlee_version.h>
-#include <kdeversion.h>
-
-#include <KComponentData>
-#include <KStandardDirs>
 #include <KUrl>
 #include <KDebug>
 #include <KArchive>
-#include <KConfigGroup>
+
 #include <QFile>
 
-#define WITH_SMART_TRIM KDE_MAKE_VERSION(GRANTLEE_VERSION_MAJOR, GRANTLEE_VERSION_MINOR, GRANTLEE_VERSION_PATCH) >= 0x000200
-
-using namespace KDevelop;
 using namespace Grantlee;
 
 class NoEscapeStream : public OutputStream
@@ -79,52 +70,31 @@ QSharedPointer<OutputStream> NoEscapeStream::clone(QTextStream* stream) const
     return clonedStream;
 }
 
-class KDevelop::TemplateRendererPrivate
+using namespace KDevelop;
+
+namespace KDevelop {
+
+class TemplateRendererPrivate
 {
 public:
-    Engine engine;
+    Engine* engine;
     Context context;
     TemplateRenderer::EmptyLinesPolicy emptyLinesPolicy;
     QString errorString;
 };
 
+}
+
 TemplateRenderer::TemplateRenderer()
     : d(new TemplateRendererPrivate)
 {
+    d->engine = &TemplateEngine::self()->d->engine;
     d->emptyLinesPolicy = KeepEmptyLines;
-#if WITH_SMART_TRIM
-    d->engine.setSmartTrimEnabled(true);
-#endif
-
-    addTemplateDirectories(ICore::self()->componentData().dirs()->findDirs("data", "kdevcodegen/templates"));
-
-    foreach (const QString& path, ICore::self()->componentData().dirs()->resourceDirs("lib"))
-    {
-        d->engine.addPluginPath(path);
-    }
-
-    Grantlee::registerMetaType<KDevelop::VariableDescription>();
-    Grantlee::registerMetaType<KDevelop::FunctionDescription>();
-    Grantlee::registerMetaType<KDevelop::InheritanceDescription>();
-    Grantlee::registerMetaType<KDevelop::ClassDescription>();
 }
 
 TemplateRenderer::~TemplateRenderer()
 {
     delete d;
-}
-
-void TemplateRenderer::addTemplateDirectories(const QStringList& directories)
-{
-    FileSystemTemplateLoader* loader = new FileSystemTemplateLoader;
-    loader->setTemplateDirs(directories);
-    d->engine.addTemplateLoader(AbstractTemplateLoader::Ptr(loader));
-}
-
-void TemplateRenderer::addArchive(const KArchiveDirectory* directory)
-{
-    ArchiveTemplateLoader* loader = new ArchiveTemplateLoader(directory);
-    d->engine.addTemplateLoader(AbstractTemplateLoader::Ptr(loader));
 }
 
 void TemplateRenderer::addVariables(const QVariantHash& variables)
@@ -149,10 +119,8 @@ QVariantHash TemplateRenderer::variables() const
 
 QString TemplateRenderer::render(const QString& content, const QString& name) const
 {
-    kDebug() << d->context.stackHash(0);
-
 #if WITH_SMART_TRIM
-    Template t = d->engine.newTemplate(content, name);
+    Template t = d->engine->newTemplate(content, name);
 #else
     /*
      * This code re-implements the functionality of Grantlee's smart trim feature, which was added in 0.1.8
@@ -184,7 +152,7 @@ QString TemplateRenderer::render(const QString& content, const QString& name) co
     {
         trimmedLines.removeFirst();
     }
-    Template t = d->engine.newTemplate(trimmedLines.join("\n"), name);
+    Template t = d->engine->newTemplate(trimmedLines.join("\n"), name);
 #endif
     QString output;
 
@@ -300,7 +268,6 @@ QString TemplateRenderer::renderFile(const KUrl& url, const QString& name) const
 
     return render(content, name);
 }
-
 
 QStringList TemplateRenderer::render(const QStringList& contents) const
 {

@@ -27,6 +27,7 @@
 #include "codedescription.h"
 #include "templaterenderer.h"
 #include "sourcefiletemplate.h"
+#include "templateengine.h"
 #include <duchain/duchainlock.h>
 #include <duchain/persistentsymboltable.h>
 #include <duchain/types/structuretype.h>
@@ -36,9 +37,6 @@
 
 #include <KComponentData>
 #include <KStandardDirs>
-
-#include <grantlee/engine.h>
-#include <grantlee/metatype.h>
 
 #include <QFileInfo>
 
@@ -106,7 +104,7 @@ TemplateClassGenerator::~TemplateClassGenerator()
 void TemplateClassGenerator::setTemplateDescription(const SourceFileTemplate& fileTemplate)
 {
     d->fileTemplate = fileTemplate;
-    d->renderer.addArchive(d->fileTemplate.directory());
+    TemplateEngine::self()->addArchive(d->fileTemplate.directory());
 }
 
 DocumentChangeSet TemplateClassGenerator::generate()
