@@ -81,6 +81,11 @@ void TemplatePreviewToolView::documentActivated (KDevelop::IDocument* document)
         disconnect (m_original, SIGNAL(textChanged(KTextEditor::Document*)), this, SLOT(documentChanged(KTextEditor::Document*)));
     }
     m_original = document->textDocument();
+
+    if (!m_original) {
+        return;
+    }
+
     connect (m_original, SIGNAL(textChanged(KTextEditor::Document*)), this, SLOT(documentChanged(KTextEditor::Document*)));
 
     FileTemplatesPlugin::TemplateType type = m_plugin->determineTemplateType(document->url());
