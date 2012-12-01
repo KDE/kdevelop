@@ -61,7 +61,10 @@ void CTestUtils::createTestSuites(const QList< Test >& testSuites, ProjectFolder
                 fileUrl = currentSourceDir;
                 fileUrl.addPath(file);
             }
-            files << fileUrl.toLocalFile();
+
+            QString localFile = fileUrl.toLocalFile();
+            localFile.replace("#[bin_dir]", binDir);
+            files << localFile;
         }
         
         
