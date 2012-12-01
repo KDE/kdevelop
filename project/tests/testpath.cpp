@@ -219,6 +219,10 @@ void TestPath::testPath()
     QCOMPARE(optUrl.path(), url.path());
 
     QCOMPARE(optUrl.up().toUrl(), comparableUpUrl(url));
+
+    optUrl.clear();
+    url.clear();
+    QCOMPARE(optUrl.toUrl(), url);
 }
 
 void TestPath::testPath_data()

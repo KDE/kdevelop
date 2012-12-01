@@ -253,6 +253,11 @@ public:
      */
     Path up() const;
 
+    /**
+     * Clear the path, i.e. make it invalid and empty.
+     */
+    void clear();
+
 private:
     /**
      * Initialize this Path from the data of @p url.

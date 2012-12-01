@@ -233,6 +233,11 @@ Path Path::up() const
     return ret;
 }
 
+void Path::clear()
+{
+    m_data.clear();
+}
+
 namespace KDevelop {
 uint qHash(const Path& path)
 {
