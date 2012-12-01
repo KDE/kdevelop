@@ -1,4 +1,3 @@
-
 set(kdevfiletemplates_PART_SRCS
     templatepreview.cpp
     templatepreviewtoolview.cpp
@@ -60,4 +59,35 @@ licenses/Mozilla\ v1.1
 "licenses/LGPL v2+ (KDE)"
 "licenses/GPL v2+ (KDE)"
 DESTINATION ${DATA_INSTALL_DIR}/kdevcodegen/licenses
+)
+
+
+################
+
+set(test_srcs
+main.cpp
+    templatepreview.cpp
+
+    classidentifierpage.cpp
+    classmemberspage.cpp
+    defaultcreateclasshelper.cpp
+    licensepage.cpp
+    outputpage.cpp
+    overridespage.cpp
+    templateclassassistant.cpp
+    templateoptionspage.cpp
+    templateselectionpage.cpp
+    testcasespage.cpp
+)
+
+kde4_add_executable(testfiletemplates ${test_srcs})
+
+target_link_libraries(testfiletemplates
+    ${KDE4_KDECORE_LIBS}
+    ${KDEVPLATFORM_INTERFACES_LIBRARIES}
+    ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
+    ${KDEVPLATFORM_PROJECT_LIBRARIES}
+    ${KDEVPLATFORM_UTIL_LIBRARIES}
+    ${KDEVPLATFORM_TESTS_LIBRARIES}
+    ${KDE4_KNEWSTUFF3_LIBS}
 )

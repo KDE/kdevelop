@@ -41,7 +41,6 @@ TemplatePreviewToolView::TemplatePreviewToolView(FileTemplatesPlugin* plugin, QW
 , ui(new Ui::TemplatePreviewToolView)
 , m_original(0)
 , m_plugin(plugin)
-, m_preview(new TemplatePreview(this))
 {
     ui->setupUi(this);
     ui->messageWidget->hide();
@@ -81,9 +80,13 @@ void TemplatePreviewToolView::documentActivated (KDevelop::IDocument* document)
         disconnect (m_original, SIGNAL(textChanged(KTextEditor::Document*)), this, SLOT(documentChanged(KTextEditor::Document*)));
     }
     m_original = document->textDocument();
-    connect (m_original, SIGNAL(textChanged(KTextEditor::Document*)), this, SLOT(documentChanged(KTextEditor::Document*)));
 
-    FileTemplatesPlugin::TemplateType type = m_plugin->determineTemplateType(document->url());
+    FileTemplatesPlugin::TemplateType type = FileTemplatesPlugin::NoTemplate;
+    if (m_original) {
+        connect(m_original, SIGNAL(textChanged(KTextEditor::Document*)), this, SLOT(documentChanged(KTextEditor::Document*)));
+        type = m_plugin->determineTemplateType(document->url());
+    }
+
     switch (type)
     {
         case FileTemplatesPlugin::NoTemplate:
@@ -112,7 +115,7 @@ void TemplatePreviewToolView::documentChanged (KTextEditor::Document* document)
     }
 }
 
-void TemplatePreviewToolView::showEvent(QShowEvent* event)
+void TemplatePreviewToolView::showEvent(QShowEvent*)
 {
     if (m_original)
     {
@@ -144,7 +147,7 @@ void TemplatePreviewToolView::sourceTextChanged(const QString& text)
     }
     else
     {
-        QString errorString = m_preview->setText(text, ui->projectRadioButton->isChecked());
+        QString errorString = ui->preview->setText(text, ui->projectRadioButton->isChecked(), m_policy);
         if (!errorString.isEmpty())
         {
             ui->messageWidget->setMessageType(KMessageWidget::Error);
@@ -159,7 +162,7 @@ void TemplatePreviewToolView::sourceTextChanged(const QString& text)
     }
     if (m_original)
     {
-        m_preview->document()->setMode(m_original->mode());
+        ui->preview->document()->setMode(m_original->mode());
     }
 }
 
@@ -182,7 +185,7 @@ void TemplatePreviewToolView::selectedRendererChanged()
                 policy = TemplateRenderer::RemoveEmptyLines;
                 break;
         }
-        m_preview->renderer()->setEmptyLinesPolicy(policy);
+        m_policy = policy;
     }
     documentChanged(m_original);
 }

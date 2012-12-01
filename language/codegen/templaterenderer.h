@@ -22,15 +22,15 @@
 #define KDEVELOP_TEMPLATERENDERER_H
 
 #include <QVariantHash>
-#include <QStringList>
 
 #include "../languageexport.h"
 
 class KUrl;
-class KArchiveDirectory;
 
 namespace KDevelop
 {
+
+class TemplateEngine;
 
 class SourceFileTemplate;
 
@@ -90,17 +90,6 @@ public:
 
     TemplateRenderer();
     virtual ~TemplateRenderer();
-
-    /**
-     * Adds @p directories to the list of directories searched for templates
-     *
-     **/
-    void addTemplateDirectories(const QStringList& directories);
-    /**
-     * Adds the archive @p directory to the list of places searched for templates
-     *
-     **/
-    void addArchive(const KArchiveDirectory* directory);
 
     /**
      * Adds @p variables to the Grantlee::Context passed to each template.

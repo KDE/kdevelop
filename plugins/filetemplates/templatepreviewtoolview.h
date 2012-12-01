@@ -22,6 +22,7 @@
 #define TEMPLATEPREVIEWTOOLVIEW_H
 
 #include <QWidget>
+#include <language/codegen/templaterenderer.h>
 
 namespace KTextEditor
 {
@@ -53,7 +54,7 @@ private:
     Ui::TemplatePreviewToolView* ui;
     KTextEditor::Document* m_original;
     FileTemplatesPlugin* m_plugin;
-    TemplatePreview* m_preview;
+    KDevelop::TemplateRenderer::EmptyLinesPolicy m_policy;
 
 private slots:
     void sourceTextChanged(const QString& text);

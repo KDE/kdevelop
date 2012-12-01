@@ -271,7 +271,6 @@ class TextViewPrivate
 {
 public:
     TextViewPrivate() : editor(0) {}
-    bool isInitialized() const { return editor==0; }
     TextEditorWidget* editor;
     KTextEditor::Range initialRange;
 };
@@ -664,15 +663,25 @@ QString KDevelop::TextView::viewState() const
         } else {
             KTextEditor::Cursor cursor = d->editor->editorView()->cursorPosition();
             return QString("Cursor=%1,%2").arg(cursor.line()).arg(cursor.column());
-        }    }else
+        }
+    }
+    else
     {
         kDebug() << "TextView's internal KTE view disappeared!";
         return QString();
     }
 }
 
-void KDevelop::TextView::setInitialRange(const KTextEditor::Range& range) {
-    d->initialRange = range;
+void KDevelop::TextView::setInitialRange(const KTextEditor::Range& range)
+{
+    if(d->editor && d->editor->isInitialized()) {
+        if (range.isEmpty())
+            d->editor->editorView()->setCursorPosition( range.start() );
+        else
+            d->editor->editorView()->setSelection( range );
+    } else {
+        d->initialRange = range;
+    }
 }
 
 KTextEditor::Range KDevelop::TextView::initialRange() const
@@ -685,17 +694,10 @@ void KDevelop::TextView::setState(const QString & state)
     static QRegExp reCursor("Cursor=([\\d]+),([\\d]+)");
     static QRegExp reSelection("Selection=([\\d]+),([\\d]+),([\\d]+),([\\d]+)");
     if (reCursor.exactMatch(state)) {
-        if (d->editor && d->isInitialized())
-            d->editor->editorView()->setCursorPosition(KTextEditor::Cursor(reCursor.cap(1).toInt(), reCursor.cap(2).toInt()));
-        else
-            setInitialRange(KTextEditor::Range(KTextEditor::Cursor(reCursor.cap(1).toInt(), reCursor.cap(2).toInt()), 0));
+        setInitialRange(KTextEditor::Range(KTextEditor::Cursor(reCursor.cap(1).toInt(), reCursor.cap(2).toInt()), 0));
     } else if (reSelection.exactMatch(state)) {
         KTextEditor::Range range(reSelection.cap(1).toInt(), reSelection.cap(2).toInt(), reSelection.cap(3).toInt(), reSelection.cap(4).toInt());
-        if (d->editor && d->isInitialized()) {
-            d->editor->editorView()->setCursorPosition(range.end());
-            d->editor->editorView()->setSelection(range);
-        } else
-            setInitialRange(range);
+        setInitialRange(range);
     }
 }
 
@@ -811,6 +813,18 @@ KTextEditor::View* KDevelop::TextEditorWidget::editorView()
     if(!d->view)
         initialize();
     return d->view;
+}
+
+bool KDevelop::TextEditorWidget::isInitialized() const
+{
+    return d->view!=0;
+}
+
+void KDevelop::TextEditorWidget::showEvent(QShowEvent* event)
+{
+    if(!d->view)
+        initialize();
+    QWidget::showEvent(event);
 }
 
 #include "textdocument.moc"

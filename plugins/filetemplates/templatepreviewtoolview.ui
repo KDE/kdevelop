@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>TemplatePreviewToolView</class>
- <widget class="QWidget" name="TemplatePreview">
+ <widget class="QWidget" name="TemplatePreviewToolView">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -13,6 +13,9 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="KMessageWidget" name="messageWidget" native="true"/>
+   </item>
+   <item>
+    <widget class="TemplatePreview" name="preview" native="true"/>
    </item>
    <item>
     <widget class="QGroupBox" name="groupBox_2">
@@ -118,6 +121,12 @@
    <class>KMessageWidget</class>
    <extends>QWidget</extends>
    <header>kmessagewidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>TemplatePreview</class>
+   <extends>QWidget</extends>
+   <header>templatepreview.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

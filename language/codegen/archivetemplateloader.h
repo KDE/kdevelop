@@ -23,23 +23,50 @@
 #include <grantlee/templateloader.h>
 
 class KArchiveDirectory;
-
 namespace KDevelop
 {
+
+class ArchiveTemplateLocation;
 
 class ArchiveTemplateLoader : public Grantlee::AbstractTemplateLoader
 {
 public:
-    ArchiveTemplateLoader(const KArchiveDirectory* directory);
+    static ArchiveTemplateLoader* self();
     virtual ~ArchiveTemplateLoader();
-
     virtual bool canLoadTemplate(const QString& name) const;
     virtual Grantlee::Template loadByName(const QString& name, const Grantlee::Engine* engine) const;
 
     virtual QPair<QString, QString> getMediaUri(const QString& fileName) const;
 
+protected:
+    friend class ArchiveTemplateLocation;
+    void addLocation(ArchiveTemplateLocation* location);
+    void removeLocation(ArchiveTemplateLocation* location);
+
 private:
+    Q_DISABLE_COPY(ArchiveTemplateLoader);
+    ArchiveTemplateLoader();
+
     class ArchiveTemplateLoaderPrivate* const d;
+};
+
+/**
+ * RAII class that should be used to add KArchiveDirectory locations to the engine.
+ *
+ * Adds the archive @p directory to the list of places searched for templates
+ * during the lifetime of the created ArchiveTemplateLocation class.
+ */
+class ArchiveTemplateLocation
+{
+public:
+    ArchiveTemplateLocation(const KArchiveDirectory* directory);
+    ~ArchiveTemplateLocation();
+
+    bool hasTemplate(const QString& name) const;
+    QString templateContents(const QString& name) const;
+
+private:
+    const KArchiveDirectory* m_directory;
 };
 
 }

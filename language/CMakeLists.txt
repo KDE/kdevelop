@@ -121,6 +121,7 @@ set(kdevplatformlanguage_LIB_SRCS
     codegen/codedescription.cpp
     codegen/sourcefiletemplate.cpp
     codegen/templaterenderer.cpp
+    codegen/templateengine.cpp
     codegen/archivetemplateloader.cpp
 
     util/setrepository.cpp
@@ -315,6 +316,7 @@ install(FILES
     codegen/utilities.h
     codegen/templatesmodel.h
     codegen/templaterenderer.h
+    codegen/templateengine.h
     codegen/sourcefiletemplate.h
     codegen/templateclassgenerator.h
     codegen/codedescription.h
