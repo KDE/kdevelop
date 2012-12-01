@@ -59,6 +59,20 @@ static Qt::ConnectionType getConnectionTypeForSignalDelivery( KDevelop::ProjectM
 namespace KDevelop
 {
 
+/**
+ * Return true if @p url contains a clean path
+ */
+inline bool isValidPath(const KUrl& url)
+{
+    if (!url.isValid()) {
+        return false;
+    }
+
+    KUrl cleaned = url;
+    cleaned.cleanPath();
+    return url == cleaned;
+}
+
 QStringList removeProjectBasePath( const QStringList& fullpath, KDevelop::ProjectBaseItem* item )
 {
     QStringList result = fullpath;
@@ -689,6 +703,8 @@ QString ProjectBuildFolderItem::iconName() const
 ProjectFileItem::ProjectFileItem( IProject* project, const KUrl & file, ProjectBaseItem * parent )
         : ProjectBaseItem( project, file.fileName(), parent )
 {
+    Q_ASSERT(isValidPath(file));
+
     setFlags(flags() | Qt::ItemIsDragEnabled);
     setUrl( file );
 }
