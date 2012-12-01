@@ -208,6 +208,8 @@ void TestPath::testPath()
     QCOMPARE(optUrl.toIndexed(), IndexedString(url));
     QCOMPARE(optUrl, Path(url));
 
+    QCOMPARE(optUrl.isRemote(), optUrl.isValid() && !optUrl.isLocalFile());
+
     url.addPath("test/foo/bar");
     optUrl.addPath("test/foo/bar");
     QCOMPARE(optUrl.fileName(), url.fileName());

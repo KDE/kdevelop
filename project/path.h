@@ -228,7 +228,7 @@ public:
      */
     inline bool isRemote() const
     {
-        return !isLocalFile();
+        return !m_data.isEmpty() && m_data.first().contains('/');
     }
 
     /**
