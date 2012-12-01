@@ -316,7 +316,7 @@ void ProjectModelTest::testCreateSimpleHierarchy()
     file = 0;
 
     // Check that we also find a folder with the fileName
-    new ProjectFolderItem( 0, fileName, rootFolder );
+    new ProjectFolderItem( fileName, rootFolder );
     QVERIFY( rootFolder->hasFileOrFolder( fileName ) );
 
     delete rootFolder;
@@ -482,6 +482,7 @@ void ProjectModelTest::testWithProject()
     ProjectBaseItem* item = model->itemFromIndex( model->index( 0, 0 ) );
     QCOMPARE( item, rootItem );
     QCOMPARE( item->text(), proj->name() );
+    QCOMPARE( item->path(), proj->path() );
     QCOMPARE( item->url(), proj->folder() );
 }
 
