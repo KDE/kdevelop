@@ -21,6 +21,7 @@
 #include "testproject.h"
 
 #include <KGlobal>
+#include <QDebug>
 
 #include <project/projectmodel.h>
 
@@ -28,22 +29,37 @@
 
 using namespace KDevelop;
 
+TestProject::TestProject(const Path& path, QObject* parent)
+: IProject(parent)
+, m_root(0)
+, m_projectConfiguration(KGlobal::config())
+{
+    m_path = path.isValid() ? path : Path("/tmp/kdev-testproject/");
+    m_root = new ProjectFolderItem(this, m_path);
+    ICore::self()->projectController()->projectModel()->appendRow( m_root );
+}
+
 TestProject::TestProject(const KUrl& url, QObject* parent)
 : IProject(parent)
 , m_root(0)
 , m_projectConfiguration(KGlobal::config())
 {
-    setProjectUrl(url.isValid() ? url : KUrl("file://tmp/kdev-testproject/"));
-    m_root = new ProjectFolderItem(this, m_folder);
+    m_path = url.isValid() ? Path(url) : Path("/tmp/kdev-testproject/");
+    m_root = new ProjectFolderItem(this, m_path);
     ICore::self()->projectController()->projectModel()->appendRow( m_root );
+}
+
+void TestProject::setPath(const Path& path)
+{
+    m_path = path;
+    if (m_root) {
+        m_root->setPath(path);
+    }
 }
 
 void TestProject::setProjectUrl(const KUrl& url)
 {
-    m_folder = url;
-    if (m_root) {
-        m_root->setUrl(url);
-    }
+    setPath(Path(url));
 }
 
 TestProject::~TestProject()
@@ -63,23 +79,35 @@ void TestProject::setProjectItem(ProjectFolderItem* item)
     if (m_root) {
         ICore::self()->projectController()->projectModel()->removeRow( m_root->row() );
         m_root = 0;
-        m_folder.clear();
+        m_path.clear();
     }
     if (item) {
         m_root = item;
-        m_folder = item->url();
+        m_path = item->path();
         ICore::self()->projectController()->projectModel()->appendRow( m_root );
     }
 }
 
 KUrl TestProject::projectFileUrl() const
 {
-    return KUrl(m_folder, m_folder.fileName() + ".kdev4");
+    return projectFile().toUrl();
+}
+
+Path TestProject::projectFile() const
+{
+    return Path(m_path, m_path.fileName() + ".kdev4");
 }
 
 const KUrl TestProject::folder() const
 {
-    return m_folder;
+    KUrl url = m_path.toUrl();
+    url.adjustPath(KUrl::AddTrailingSlash);
+    return url;
+}
+
+Path TestProject::path() const
+{
+    return m_path;
 }
 
 bool TestProject::inProject(const KUrl& url) const
@@ -87,18 +115,23 @@ bool TestProject::inProject(const KUrl& url) const
     return folder().isParentOf(url);
 }
 
-void TestProject::addToFileSet(const IndexedString& file)
+bool TestProject::inProject(const IndexedString& path) const
 {
-    if (!m_fileSet.contains(file)) {
-        m_fileSet.insert(file);
-        emit fileAddedToSet(this, file);
+    return m_path.isParentOf(Path(path.str()));
+}
+
+void TestProject::addToFileSet(ProjectFileItem* file)
+{
+    if (!m_fileSet.contains(file->indexedPath())) {
+        m_fileSet.insert(file->indexedPath());
+        emit fileAddedToSet(file);
     }
 }
 
-void TestProject::removeFromFileSet(const IndexedString& file)
+void TestProject::removeFromFileSet(ProjectFileItem* file)
 {
-    if (m_fileSet.remove(file)) {
-        emit fileRemovedFromSet(this, file);
+    if (m_fileSet.remove(file->indexedPath())) {
+        emit fileRemovedFromSet(file);
     }
 }
 

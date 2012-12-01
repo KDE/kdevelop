@@ -766,7 +766,7 @@ ProjectFileItem::ProjectFileItem( const QString& name, ProjectBaseItem* parent )
 ProjectFileItem::~ProjectFileItem()
 {
     if( project() && d_ptr->m_pathIndex ) {
-        project()->removeFromFileSet( indexedUrl() );
+        project()->removeFromFileSet( this );
     }
 }
 
@@ -898,14 +898,14 @@ void ProjectFileItem::setPath( const Path& path )
 
     if( project() && d_ptr->m_pathIndex ) {
         // remove from fileset if we are in there
-        project()->removeFromFileSet( indexedUrl() );
+        project()->removeFromFileSet( this );
     }
 
     ProjectBaseItem::setPath( path );
 
     if( project() && d_ptr->m_pathIndex ) {
-        // add to fileset with new url index
-        project()->addToFileSet( indexedUrl() );
+        // add to fileset with new path
+        project()->addToFileSet( this );
     }
 
     // invalidate icon name for future lazy-loaded updated

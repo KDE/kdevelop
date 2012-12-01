@@ -70,7 +70,8 @@ TestFile::TestFile(const QString& contents, const QString& fileExtension,
 
     d->project = project;
     if (project) {
-        project->addToFileSet(d->url);
+#warning port this, just create new file and add to project?
+//         project->addToFileSet(d->url);
     }
 }
 
@@ -81,7 +82,8 @@ TestFile::~TestFile()
         DUChain::self()->removeDocumentChain(d->topContext.data());
     }
     if (d->project) {
-        d->project->removeFromFileSet(d->url);
+#warning port this
+//         d->project->removeFromFileSet(d->url);
     }
     delete d;
 }

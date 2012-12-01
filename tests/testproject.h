@@ -29,6 +29,7 @@
 #include <shell/projectcontroller.h>
 
 #include "kdevplatformtestsexport.h"
+#include <project/path.h>
 
 namespace KDevelop {
 
@@ -44,7 +45,8 @@ public:
     /**
      * @p url Path to project directory.
      */
-    TestProject(const KUrl& url = KUrl(), QObject* parent = 0);
+    TestProject(const Path& url = Path(), QObject* parent = 0);
+    KDE_DEPRECATED TestProject(const KUrl& url, QObject* parent = 0);
     virtual ~TestProject();
     IProjectFileManager* projectFileManager() const { return 0; }
     IBuildSystemManager* buildSystemManager() const { return 0; }
@@ -55,27 +57,33 @@ public:
     int fileCount() const { return 0; }
     ProjectFileItem* fileAt( int ) const { return 0; }
     QList<ProjectFileItem*> files() const { return QList<ProjectFileItem*>(); }
-    QList<ProjectFileItem*> filesForUrl( const KUrl& ) const { return QList<ProjectFileItem*>(); }
-    QList<ProjectFolderItem*> foldersForUrl( const KUrl& ) const { return QList<ProjectFolderItem*>(); }
+    virtual QList< ProjectBaseItem* > itemsForPath(const IndexedString& path) const { return QList< ProjectBaseItem* >(); }
+    virtual QList< ProjectBaseItem* > itemsForUrl(const KUrl&) const { return QList< ProjectBaseItem* >(); }
+    virtual QList< ProjectFileItem* > filesForPath(const IndexedString& file) const { return QList<ProjectFileItem*>(); }
+    KDE_DEPRECATED QList<ProjectFileItem*> filesForUrl( const KUrl& ) const { return QList<ProjectFileItem*>(); }
+    virtual QList< ProjectFolderItem* > foldersForPath(const IndexedString& folder) const { return QList<ProjectFolderItem*>(); }
+    KDE_DEPRECATED QList<ProjectFolderItem*> foldersForUrl( const KUrl& ) const { return QList<ProjectFolderItem*>(); }
     void reloadModel() { }
-    KUrl projectFileUrl() const;
+    Path projectFile() const;
+    KDE_DEPRECATED KUrl projectFileUrl() const;
     KSharedConfig::Ptr projectConfiguration() const { return m_projectConfiguration; }
-    void addToFileSet( const IndexedString& file);
-    void removeFromFileSet( const IndexedString& file);
+    void addToFileSet( ProjectFileItem* file);
+    void removeFromFileSet( ProjectFileItem* file);
     QSet<IndexedString> fileSet() const { return m_fileSet; }
     bool isReady() const { return true; }
-    virtual QList< ProjectBaseItem* > itemsForUrl(const KUrl&) const { return QList< ProjectBaseItem* >(); }
 
-    void setProjectUrl(const KUrl& url);
-public Q_SLOTS:
-    const KUrl folder() const;
+    KDE_DEPRECATED void setProjectUrl(const KUrl& url);
+    void setPath(const Path& path);
+
+    KDE_DEPRECATED const KUrl folder() const;
+    Path path() const;
     QString name() const { return "Test Project"; }
-    KUrl relativeUrl(const KUrl& ) const { return KUrl(); }
-    bool inProject(const KUrl &) const;
+    KDE_DEPRECATED KUrl relativeUrl(const KUrl& ) const { return KUrl(); }
+    virtual bool inProject(const IndexedString& path) const;
+    KDE_DEPRECATED bool inProject(const KUrl &) const;
 private:
     QSet<IndexedString> m_fileSet;
-    KUrl m_projectFileUrl;
-    KUrl m_folder;
+    Path m_path;
     ProjectFolderItem* m_root;
     KSharedConfig::Ptr m_projectConfiguration;
 };
