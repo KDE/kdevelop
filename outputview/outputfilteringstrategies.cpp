@@ -55,6 +55,7 @@ struct CompilerFilterStrategyPrivate
 {
     CompilerFilterStrategyPrivate(const KUrl& buildDir);
     KUrl urlForFile( const QString& ) const;
+    bool isMultiLineCase(ErrorFormat curErrFilter) const;
 
     QVector<QString> m_currentDirs;
     KUrl m_buildDir;
@@ -65,7 +66,7 @@ struct CompilerFilterStrategyPrivate
 
 // All the possible string that indicate an error if we via Regex have been able to
 // extract file and linenumber from a given outputline
-const QVector<QString> ERROR_INDICATORS = QVector<QString>()
+static const QVector<QString> ERROR_INDICATORS = QVector<QString>()
     // ld
     << "undefined reference"
     << "undefined symbol"
@@ -88,10 +89,12 @@ const QList<ErrorFormat> ERROR_FILTERS = QList<ErrorFormat>()
     << ErrorFormat( "No rule to make target", 0, 0, 0 )
     // Fortran
     << ErrorFormat( "\"(.*)\", line ([0-9]+):(.*)", 1, 2, 3 )
+    // GFortran
+    << ErrorFormat( "^(.*):([0-9]+)\\.([0-9]+):(.*)", 1, 2, 4, "gfortran", 3 )
     // Jade
     << ErrorFormat( "^[a-zA-Z]+:([^: \t]+):([0-9]+):[0-9]+:[a-zA-Z]:(.*)", 1, 2, 3 )
     // ifort
-    << ErrorFormat( "^fortcom: (Error): (.*), line ([0-9]+):(.*)", 2, 3, 1, "intel" )
+    << ErrorFormat( "^fortcom: (.*): (.*), line ([0-9]+):(.*)", 2, 3, 1, "intel" )
     // PGI
     << ErrorFormat( "PGF9(.*)-(.*)-(.*)-(.*) \\((.*): ([0-9]+)\\)", 5, 6, 4, "pgi" )
     // PGI (2)
@@ -225,6 +228,15 @@ FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
     return item;
 }
 
+bool CompilerFilterStrategyPrivate::isMultiLineCase(KDevelop::ErrorFormat curErrFilter) const
+{
+    if(curErrFilter.compiler == "gfortran") {
+        return true;
+    }
+    return false;
+}
+
+
 FilteredItem CompilerFilterStrategy::errorInLine(const QString& line)
 {
     FilteredItem item(line);
@@ -253,13 +265,21 @@ FilteredItem CompilerFilterStrategy::errorInLine(const QString& line)
                 item.type = FilteredItem::WarningItem;
             }
 
-            if(txt.contains("note", Qt::CaseInsensitive)) {
+            if(txt.contains("note", Qt::CaseInsensitive) || txt.contains("info", Qt::CaseInsensitive)) {
                 item.type = FilteredItem::InformationItem;
             }
 
             // Make the item clickable if it comes with the necessary file & line number information
             if (curErrFilter.fileGroup > 0 && curErrFilter.lineGroup > 0) {
                 item.isActivatable = true;
+                if(item.type != FilteredItem::ErrorItem) {
+                    // If there are no error indicators in the line
+                    // maybe this is a multiline case
+                    if(d->isMultiLineCase(curErrFilter))
+                    {
+                        item.type = FilteredItem::ErrorItem;
+                    }
+                }
             }
             break;
         }

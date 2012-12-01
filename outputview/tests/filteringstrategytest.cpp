@@ -269,12 +269,24 @@ void FilteringStrategyTest::testExtractionOfLineAndCulmn_data()
     QTest::newRow("fortcom")
         << "fortcom: Error: Ogive8.f90, line 123: ..."
         << "./Ogive8.f90" << 122 << 0 << FilteredItem::ErrorItem;
+    QTest::newRow("fortcomError")
+        << "fortcom: Error: ./Ogive8.f90, line 123: ..."
+        << "././Ogive8.f90" << 122 << 0 << FilteredItem::ErrorItem;
+    QTest::newRow("fortcomWarning")
+        << "fortcom: Warning: /path/Ogive8.f90, line 123: ..."
+        << "/path/Ogive8.f90" << 122 << 0 << FilteredItem::WarningItem;
+    QTest::newRow("fortcomInfo")
+        << "fortcom: Info: Ogive8.f90, line 123: ..."
+        << "./Ogive8.f90" << 122 << 0 << FilteredItem::InformationItem;
     QTest::newRow("libtool")
         << "libtool: link: warning: ..."
         << "" << -1 << 0  << FilteredItem::WarningItem;
-//     QTest::newRow("gfortran") This row does not currently hit on any of the errorFormats
-//         << "/path/to/file.f90:123.456:"
-//         << "/path/to/file.f90" << 122 << 455  << FilteredItem::ErrorItem;
+    QTest::newRow("gfortranError1")
+        << "/path/to/file.f90:123.456:Error: ...."
+        << "/path/to/file.f90" << 122 << 455  << FilteredItem::ErrorItem;
+    QTest::newRow("gfortranError2")
+        << "/path/flib.f90:3567.22:"
+        << "/path/flib.f90" << 3566 << 21 << FilteredItem::ErrorItem;
 }
 
 void FilteringStrategyTest::testExtractionOfLineAndCulmn()
