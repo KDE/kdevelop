@@ -24,8 +24,11 @@
 #include <language/interfaces/quickopenfilter.h>
 #include <language/duchain/indexedstring.h>
 
+#include <project/path.h>
+
 namespace KDevelop {
 class IProject;
+class ProjectFileItem;
 }
 
 /**
@@ -33,15 +36,9 @@ class IProject;
  */
 struct ProjectFile
 {
-    // string representation of the url
-    // also stored (and shared) in the ProjectFileDataProvider's map
-    QString pathOrUrl;
+    KDevelop::Path path;
     // project root folder url
-    // NOTE: this is using a QUrl to save memory
-    //       if you want a string representation of
-    //       this url, use the non-broken KUrl api via:
-    //       KUrl(QUrl).pathOrUrl() or similar.
-    QUrl projectUrl;
+    KDevelop::Path projectPath;
     // project name
     QString project;
     // indexed url - only set for project files
@@ -107,14 +104,14 @@ public:
 private slots:
     void projectClosing( KDevelop::IProject* );
     void projectOpened( KDevelop::IProject* );
-    void fileAddedToSet( KDevelop::IProject*, const KDevelop::IndexedString& );
-    void fileRemovedFromSet( KDevelop::IProject*, const KDevelop::IndexedString& );
+    void fileAddedToSet( KDevelop::ProjectFileItem* );
+    void fileRemovedFromSet( KDevelop::ProjectFileItem* );
 
 private:
     // project files sorted by their url
     // this is done so we can limit ourselves to a relatively fast
     // filtering without any expensive sorting in reset().
-    QMap<QString, ProjectFile> m_projectFiles;
+    QMap<KDevelop::Path, ProjectFile> m_projectFiles;
 };
 
 /**

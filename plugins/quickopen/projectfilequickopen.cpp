@@ -43,9 +43,7 @@ ProjectFileData::ProjectFileData( const ProjectFile& file )
 
 QString ProjectFileData::text() const
 {
-    KUrl u(m_file.projectUrl);
-    u.adjustPath(KUrl::AddTrailingSlash);
-    return KUrl::relativeUrl( u, KUrl(m_file.pathOrUrl) );
+    return m_file.projectPath.relativePath(m_file.path);
 }
 
 QString ProjectFileData::htmlDescription() const
@@ -55,7 +53,7 @@ QString ProjectFileData::htmlDescription() const
 
 bool ProjectFileData::execute( QString& filterText )
 {
-    const KUrl url(m_file.pathOrUrl);
+    const KUrl url = m_file.path.toUrl();
     IOpenWith::openFiles(KUrl::List() << url);
     QString path;
     uint lineNumber;
@@ -83,7 +81,7 @@ QList<QVariant> ProjectFileData::highlighting() const
 
     QList<QVariant> ret;
 
-    int fileNameLength = KUrl(m_file.pathOrUrl).fileName().length();
+    int fileNameLength = m_file.path.fileName().length();
 
     ret << 0;
     ret << txt.length() - fileNameLength;
@@ -97,7 +95,7 @@ QList<QVariant> ProjectFileData::highlighting() const
 
 QWidget* ProjectFileData::expandingWidget() const
 {
-    const KUrl url(m_file.pathOrUrl);
+    const KUrl url = m_file.path.toUrl();
     DUChainReadLocker lock;
 
     ///Find a du-chain for the document
@@ -182,7 +180,8 @@ QuickOpenDataPointer BaseFileDataProvider::data(uint row) const
 
 QString BaseFileDataProvider::itemText( const ProjectFile& data ) const
 {
-    return data.pathOrUrl;
+    ///FIXME: optimize
+    return data.path.pathOrUrl();
 }
 
 ProjectFileDataProvider::ProjectFileDataProvider()
@@ -195,8 +194,8 @@ ProjectFileDataProvider::ProjectFileDataProvider()
 
 void ProjectFileDataProvider::projectClosing( IProject* project )
 {
-    foreach(const IndexedString& str, project->fileSet()) {
-        fileRemovedFromSet(project, str);
+    foreach(ProjectFileItem* file, project->files()) {
+        fileRemovedFromSet(file);
     }
 }
 
@@ -204,8 +203,8 @@ void ProjectFileDataProvider::projectOpened( IProject* project )
 {
     const int processAfter = 1000;
     int processed = 0;
-    foreach(const IndexedString& url, project->fileSet()) {
-        fileAddedToSet(project, url);
+    foreach(ProjectFileItem* file, project->files()) {
+        fileAddedToSet(file);
         if (++processed == processAfter) {
             // prevent UI-lockup when a huge project was imported
             QApplication::processEvents();
@@ -213,25 +212,25 @@ void ProjectFileDataProvider::projectOpened( IProject* project )
         }
     }
 
-    connect(project, SIGNAL(fileAddedToSet(KDevelop::IProject*, KDevelop::IndexedString)),
-            this, SLOT(fileAddedToSet(KDevelop::IProject*, KDevelop::IndexedString)));
-    connect(project, SIGNAL(fileRemovedFromSet(KDevelop::IProject*, KDevelop::IndexedString)),
-            this, SLOT(fileRemovedFromSet(KDevelop::IProject*, KDevelop::IndexedString)));
+    connect(project, SIGNAL(fileAddedToSet(KDevelop::ProjectFileItem*)),
+            this, SLOT(fileAddedToSet(KDevelop::ProjectFileItem*)));
+    connect(project, SIGNAL(fileRemovedFromSet(KDevelop::ProjectFileItem*)),
+            this, SLOT(fileRemovedFromSet(KDevelop::ProjectFileItem*)));
 }
 
-void ProjectFileDataProvider::fileAddedToSet( IProject* project, const IndexedString& url )
+void ProjectFileDataProvider::fileAddedToSet( ProjectFileItem* file )
 {
     ProjectFile f;
-    f.project = project->name();
-    f.projectUrl = project->folder();
-    f.pathOrUrl = url.str();
-    f.indexedUrl = url;
-    m_projectFiles.insert(f.pathOrUrl, f);
+    f.project = file->project()->name();
+    f.projectPath = file->project()->path();
+    f.path = file->path();
+    f.indexedUrl = file->indexedPath();
+    m_projectFiles.insert(f.path, f);
 }
 
-void ProjectFileDataProvider::fileRemovedFromSet( IProject*, const IndexedString& url )
+void ProjectFileDataProvider::fileRemovedFromSet( ProjectFileItem* file )
 {
-    m_projectFiles.remove(url.str());
+    m_projectFiles.remove( file->path() );
 }
 
 namespace
@@ -244,11 +243,11 @@ QSet<IndexedString> openFiles()
     }
     return openFiles;
 }
-QSet<QString> openFilesPathsOrUrls()
+QSet<Path> openFilesPaths()
 {
-    QSet<QString> openFiles;
+    QSet<Path> openFiles;
     foreach( IDocument* doc, ICore::self()->documentController()->openDocuments() ) {
-        openFiles << doc->url().pathOrUrl();
+        openFiles << Path(doc->url());
     }
     return openFiles;
 }
@@ -256,22 +255,18 @@ QSet<QString> openFilesPathsOrUrls()
 
 bool sortProjectFiles(const ProjectFile& left, const ProjectFile& right)
 {
-    // arbitrarily sort projects (fast)
-    if ( left.project != right.project ) {
-        return left.project < right.project;
-    }
-    return left.pathOrUrl < right.pathOrUrl;
+    return left.path < right.path;
 }
 
 void ProjectFileDataProvider::reset()
 {
     Base::clearFilter();
 
-    QSet<QString> openFiles = openFilesPathsOrUrls();
+    QSet<Path> openFiles = openFilesPaths();
     QList<ProjectFile> projectFiles;
     projectFiles.reserve(m_projectFiles.size());
 
-    for(QMap<QString, ProjectFile>::const_iterator it = m_projectFiles.constBegin();
+    for(QMap<Path, ProjectFile>::const_iterator it = m_projectFiles.constBegin();
         it != m_projectFiles.constEnd(); ++it)
     {
         if (!openFiles.contains(it.key())) {
@@ -301,10 +296,10 @@ void OpenFilesDataProvider::reset()
 
     foreach( IDocument* doc, docCtrl->openDocuments() ) {
         ProjectFile f;
-        f.pathOrUrl = doc->url().pathOrUrl();
+        f.path = doc->url();
         IProject* project = projCtrl->findProjectForUrl(doc->url());
         if (project) {
-            f.projectUrl = project->folder();
+            f.projectPath = project->path();
             f.project = project->name();
         } else {
             f.project = i18n("none");
