@@ -1162,11 +1162,6 @@ bool ProjectModel::setData(const QModelIndex&, const QVariant&, int)
     return false;
 }
 
-QList< ProjectBaseItem*> ProjectModel::itemsForPath(const Path& path) const
-{
-    return itemsForPath(path.toIndexed());
-}
-
 QList<ProjectBaseItem*> ProjectModel::itemsForPath(const IndexedString& path) const
 {
     return d->pathLookupTable.values(path.index());
@@ -1180,11 +1175,6 @@ QList<ProjectBaseItem*> ProjectModel::itemsForUrl( const KUrl& url ) const
 ProjectBaseItem* ProjectModel::itemForUrl(const IndexedString& url) const
 {
     return itemForPath(url);
-}
-
-ProjectBaseItem* ProjectModel::itemForPath(const Path& path) const
-{
-    return itemForPath(path.toIndexed());
 }
 
 ProjectBaseItem* ProjectModel::itemForPath(const IndexedString& path) const

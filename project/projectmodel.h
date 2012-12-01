@@ -467,26 +467,12 @@ public:
     virtual Qt::DropActions supportedDropActions() const;
 
     /**
-     * @return all items for the given path.
-     *
-     * @note If you already have an indexed path, use the function taking
-     * that instead as it will be faster.
-     */
-    QList<ProjectBaseItem*> itemsForPath(const Path& path) const;
-    /**
      * @return all items for the given indexed path.
      */
     QList<ProjectBaseItem*> itemsForPath(const IndexedString& path) const;
 
     KDE_DEPRECATED QList<ProjectBaseItem*> itemsForUrl(const KUrl& url) const;
 
-    /**
-     * Returns the first item for the given indexed path.
-     *
-     * @note If you already have an indexed path, use the function taking
-     * that instead as it will be faster.
-     */
-    ProjectBaseItem* itemForPath(const Path& path) const;
     /**
      * Returns the first item for the given indexed path.
      */
