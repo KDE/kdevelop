@@ -36,6 +36,10 @@ struct LicensePagePrivate
         QString name;
         QString path;
         QString contents;
+        bool operator< (const LicenseInfo& o) const
+        {
+            return name.localeAwareCompare(o.name) < 0;
+        }
     };
     typedef QList<LicenseInfo> LicenseList;
 
@@ -47,9 +51,9 @@ struct LicensePagePrivate
     }
 
     // methods
-    void        initializeLicenses();
-    QString&    readLicense(int licenseIndex);
-    bool        saveLicense();
+    void initializeLicenses();
+    QString readLicense(int licenseIndex);
+    bool saveLicense();
     // slots
     void licenseComboChanged(int license);
 
@@ -71,25 +75,29 @@ void LicensePagePrivate::initializeLicenses()
         QDirIterator it(currentDir, QDir::Files | QDir::Readable);
         while(it.hasNext())
         {
-            LicensePagePrivate::LicenseInfo newLicense;
+            LicenseInfo newLicense;
             newLicense.path = it.next();
             newLicense.name = it.fileName();
 
             kDebug() << "Found License: " << newLicense.name;
 
             availableLicenses.push_back(newLicense);
-            license->licenseComboBox->addItem(newLicense.name);
         }
     }
 
+    qSort(availableLicenses);
+
+    foreach(const LicenseInfo& info, availableLicenses) {
+        license->licenseComboBox->addItem(info.name);
+    }
     //Finally add the option other for user specified licenses
-    LicensePagePrivate::LicenseInfo otherLicense;
+    LicenseInfo otherLicense;
     availableLicenses.push_back(otherLicense);
-    license->licenseComboBox->addItem("Other");
+    license->licenseComboBox->addItem(i18n("Other"));
 }
 
 // Read a license index, if it is not loaded, open it from the file
-QString& LicensePagePrivate::readLicense(int licenseIndex)
+QString LicensePagePrivate::readLicense(int licenseIndex)
 {
     //If the license is not loaded into memory, read it in
     if(availableLicenses[licenseIndex].contents.isEmpty())
@@ -111,24 +119,6 @@ QString& LicensePagePrivate::readLicense(int licenseIndex)
             else
                 licenseText = "Error, could not open license file.\n Was it deleted?";
         }
-
-        /* Add date, name and email to license text */
-        licenseText.replace("<year>", QDate::currentDate().toString("yyyy"));
-        QString developer("%1 <%2>");
-        KEMailSettings emailSettings;
-        QString name = emailSettings.getSetting(KEMailSettings::RealName);
-        if (name.isEmpty())
-        {
-            name = "<copyright holder>";
-        }
-        developer = developer.arg(name);
-        QString email = emailSettings.getSetting(KEMailSettings::EmailAddress);
-        if (email.isEmpty())
-        {
-            email = "email"; //no < > as they are already through the email field
-        }
-        developer = developer.arg(email);
-        licenseText.replace("<copyright holder>", developer);
 
         availableLicenses[licenseIndex].contents = licenseText;
     }
@@ -184,6 +174,25 @@ bool LicensePagePrivate::saveLicense()
         return false;
     }
 
+    // also add to our data structures, this esp. needed for proper saving
+    // of the license index so it can be restored the next time we show up
+    LicenseInfo info;
+    info.name = license->licenseName->text();
+    info.path = localDataDir;
+    availableLicenses << info;
+    // find index of the new the license, omitting the very last item ('Other')
+    int idx = availableLicenses.count() - 1;
+    for(int i = 0; i < availableLicenses.size() - 1; ++i) {
+        if (info < availableLicenses.at(i)) {
+            idx = i;
+            break;
+        }
+    }
+    availableLicenses.insert(idx, info);
+    license->licenseComboBox->insertItem(idx, info.name);
+    license->licenseComboBox->setCurrentIndex(idx);
+
+
     return true;
 }
 
@@ -212,6 +221,9 @@ LicensePage::LicensePage(QWidget* parent)
 
 LicensePage::~LicensePage()
 {
+    if (d->license->saveLicense->isChecked() && !d->license->licenseName->text().isEmpty()) {
+        d->saveLicense();
+    }
     KConfigGroup config(KGlobal::config()->group("CodeGeneration"));
     //Do not save invalid license numbers'
     int index = d->license->licenseComboBox->currentIndex();
@@ -232,7 +244,26 @@ LicensePage::~LicensePage()
 
 QString LicensePage::license() const
 {
-    return d->license->licenseTextEdit->document()->toPlainText();
+    QString licenseText = d->license->licenseTextEdit->document()->toPlainText();
+    /* Add date, name and email to license text */
+    licenseText.replace("<year>", QDate::currentDate().toString("yyyy"));
+    QString developer("%1 <%2>");
+    KEMailSettings emailSettings;
+    QString name = emailSettings.getSetting(KEMailSettings::RealName);
+    if (name.isEmpty())
+    {
+        name = "<copyright holder>";
+    }
+    developer = developer.arg(name);
+    QString email = emailSettings.getSetting(KEMailSettings::EmailAddress);
+    if (email.isEmpty())
+    {
+        email = "email"; //no < > as they are already through the email field
+    }
+    developer = developer.arg(email);
+    licenseText.replace("<copyright holder>", developer);
+
+    return licenseText;
 }
 
 }

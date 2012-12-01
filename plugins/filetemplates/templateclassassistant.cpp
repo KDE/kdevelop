@@ -33,6 +33,7 @@
 #include <language/codegen/sourcefiletemplate.h>
 #include <language/codegen/documentchangeset.h>
 #include <language/codegen/templaterenderer.h>
+#include <language/codegen/templateengine.h>
 #include <language/interfaces/icreateclasshelper.h>
 #include <language/interfaces/ilanguagesupport.h>
 
@@ -374,7 +375,6 @@ void TemplateClassAssistant::templateChosen(const QString& templateDescription)
 
         d->renderer = new TemplateRenderer;
         d->renderer->setEmptyLinesPolicy(TemplateRenderer::TrimEmptyLines);
-        d->renderer->addArchive(d->fileTemplate.directory());
     }
 
     d->licensePageWidget = new LicensePage(this);

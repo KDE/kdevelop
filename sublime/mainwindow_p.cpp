@@ -27,6 +27,7 @@
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QToolButton>
 #include <QtGui/QCommonStyle>
+#include <QTimer>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -65,8 +66,13 @@ class IdealToolBar : public QToolBar
         void hideWhenEmpty()
         {
             refresh();
-            connect(this, SIGNAL(visibilityChanged(bool)), SLOT(refresh()));
-            connect(m_buttons, SIGNAL(emptyChanged()), SLOT(refresh()));
+            
+            QTimer* t = new QTimer(this);
+            t->setInterval(100);
+            t->setSingleShot(true);
+            connect(t, SIGNAL(timeout()), SLOT(refresh()));
+            connect(this, SIGNAL(visibilityChanged(bool)), t, SLOT(start()));
+            connect(m_buttons, SIGNAL(emptyChanged()), t, SLOT(start()));
         }
 
     public slots:
@@ -133,9 +139,11 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
     idealController = new IdealController(m_mainWindow);
 
     IdealToolBar* leftToolBar = new IdealToolBar(i18n("Left Button Bar"), idealController->leftBarWidget, m_mainWindow);
+    leftToolBar->hideWhenEmpty();
     m_mainWindow->addToolBar(Qt::LeftToolBarArea, leftToolBar);
 
     IdealToolBar* rightToolBar = new IdealToolBar(i18n("Right Button Bar"), idealController->rightBarWidget, m_mainWindow);
+    rightToolBar->hideWhenEmpty();
     m_mainWindow->addToolBar(Qt::RightToolBarArea, rightToolBar);
 
     IdealToolBar* bottomToolBar = new IdealToolBar(i18n("Bottom Button Bar"), idealController->bottomBarWidget, m_mainWindow);

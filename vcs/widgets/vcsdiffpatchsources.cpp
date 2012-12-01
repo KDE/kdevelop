@@ -229,11 +229,11 @@ bool VCSCommitDiffPatchSource::finishReview(QList< KUrl > selection) {
         message = m_commitMessageEdit.data()->toPlainText();
 
     kDebug() << "Finishing with selection" << selection;
-    QString text = i18n("Files will be committed:\n");
+    QString files;
     foreach(const KUrl& url, selection)
-        text += ICore::self()->projectController()->prettyFileName(url, KDevelop::IProjectController::FormatPlain) + '\n';
+        files += "<li>"+ICore::self()->projectController()->prettyFileName(url, KDevelop::IProjectController::FormatPlain) + "</li>";
 
-    text += i18n("\nWith message:\n %1", message);
+    QString text = i18n("<qt>Files will be committed:\n<ul>%1</ul>\nWith message:\n <pre>%2</pre></qt>", files, message);
 
     int res = KMessageBox::warningContinueCancel(0, text, i18n("About to commit to repository"),
                                                  KStandardGuiItem::cont(), KStandardGuiItem::cancel(),

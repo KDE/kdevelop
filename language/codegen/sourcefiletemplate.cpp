@@ -175,15 +175,21 @@ QString SourceFileTemplate::type() const
 {
     KConfig templateConfig(d->descriptionFileName);
     KConfigGroup cg(&templateConfig, "General");
-    return cg.readEntry("Category").split('/').first();
+    return cg.readEntry("Type", QString());
 }
 
 QString SourceFileTemplate::languageName() const
 {
     KConfig templateConfig(d->descriptionFileName);
     KConfigGroup cg(&templateConfig, "General");
-    QStringList categories = cg.readEntry("Category").split('/');
-    return categories.size() > 1 ? categories[1] : QString();
+    return cg.readEntry("Language", QString());
+}
+
+QStringList SourceFileTemplate::category() const
+{
+    KConfig templateConfig(d->descriptionFileName);
+    KConfigGroup cg(&templateConfig, "General");
+    return cg.readEntry("Category", QStringList());
 }
 
 QStringList SourceFileTemplate::defaultBaseClasses() const

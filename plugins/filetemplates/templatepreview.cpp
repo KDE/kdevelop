@@ -1,76 +1,44 @@
 /*
  * This file is part of KDevelop
- * Copyright 2012 Miha Čančula <miha@noughmad.eu>
+ * Copyright 2012 Milian Wolff <mail@milianw.de>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
+ * the License or (at your option) version 3 or any later version
+ * accepted by the membership of KDE e.V. (or its successor approved
+ * by the membership of KDE e.V.), which shall act as a proxy
+ * defined in Section 14 of version 3 of the license.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "templatepreview.h"
-#include "ui_templatepreview.h"
 
 #include <language/codegen/templaterenderer.h>
 #include <language/codegen/codedescription.h>
-#include <interfaces/icore.h>
-#include <interfaces/idocumentcontroller.h>
 
-#include <KTextBrowser>
-
-#include <QLabel>
-#include <QVBoxLayout>
-#include <QFileInfo>
 #include <QDir>
+#include <QVBoxLayout>
 
-#include <KTextEditor/Document>
+#include <KTextEditor/Editor>
 #include <KTextEditor/EditorChooser>
 #include <KTextEditor/View>
-#include <KTemporaryFile>
+#include <KTextEditor/ConfigInterface>
+
+#include <KLocalizedString>
 #include <kmacroexpander.h>
 
 using namespace KDevelop;
 
-TemplatePreview::TemplatePreview(QWidget* parent, Qt::WindowFlags f)
-: QWidget(parent, f)
-, ui(new Ui::TemplatePreview)
-, m_renderer(0)
-, m_original(0)
-, m_preview(0)
+TemplatePreviewRenderer::TemplatePreviewRenderer()
 {
-    ui->setupUi(this);
-    ui->messageWidget->hide();
-
-    m_renderer = new TemplateRenderer;
-
-    IDocumentController* dc = ICore::self()->documentController();
-    if (dc->activeDocument())
-    {
-        m_original = dc->activeDocument()->textDocument();
-    }
-
-    KTextEditor::Editor* editor = KTextEditor::EditorChooser::editor();
-    m_preview = editor->createDocument(this);
-    ui->verticalLayout->insertWidget(1, m_preview->createView(this));
-    if (m_original)
-    {
-        documentActivated(dc->activeDocument());
-    }
-
-    connect (ui->projectRadioButton, SIGNAL(toggled(bool)), SLOT(selectedRendererChanged()));
-    connect (ui->emptyLinesPolicyComboBox, SIGNAL(currentIndexChanged(int)), SLOT(selectedRendererChanged()));
-    selectedRendererChanged();
-
     QVariantHash vars;
     vars["name"] = "Example";
     vars["license"] = "This file is licensed under the ExampleLicense 3.0";
@@ -90,8 +58,17 @@ TemplatePreview::TemplatePreview(QWidget* parent, Qt::WindowFlags f)
     functions << complexFunction;
     vars["functions"] = CodeDescription::toVariantList(functions);
 
-    m_renderer->addVariables(vars);
+    addVariables(vars);
+}
 
+TemplatePreviewRenderer::~TemplatePreviewRenderer()
+{
+
+}
+
+TemplatePreview::TemplatePreview(QWidget* parent, Qt::WindowFlags f)
+: QWidget(parent, f)
+{
     m_variables["APPNAME"] = "Example";
     m_variables["APPNAMELC"] = "example";
     m_variables["APPNAMEUC"] = "EXAMPLE";
@@ -101,144 +78,53 @@ TemplatePreview::TemplatePreview(QWidget* parent, Qt::WindowFlags f)
     m_variables["PROJECTDIRNAME"] = "ExampleProjectDir";
     m_variables["VERSIONCONTROLPLUGIN"] = "kdevgit";
 
-    connect (dc, SIGNAL(documentActivated(KDevelop::IDocument*)), SLOT(documentActivated(KDevelop::IDocument*)));
-    connect (dc, SIGNAL(documentClosed(KDevelop::IDocument*)), SLOT(documentClosed(KDevelop::IDocument*)));
+    KTextEditor::Editor* editor = KTextEditor::EditorChooser::editor();
+    m_preview.reset(editor->createDocument(this));
+    m_preview->setReadWrite(false);
+
+    QVBoxLayout* layout = new QVBoxLayout;
+    layout->setContentsMargins(0, 0, 0, 0);
+    setLayout(layout);
+    m_view = m_preview->createView(this);
+    if (KTextEditor::ConfigInterface* config = qobject_cast<KTextEditor::ConfigInterface*>(m_view)) {
+        config->setConfigValue("icon-bar", false);
+        config->setConfigValue("folding-bar", false);
+        config->setConfigValue("line-numbers", false);
+        config->setConfigValue("dynamic-word-wrap", true);
+    }
+    layout->addWidget(m_view);
 }
 
 TemplatePreview::~TemplatePreview()
 {
-    delete ui;
-    delete m_renderer;
+
 }
 
-void TemplatePreview::documentActivated (KDevelop::IDocument* document)
+QString TemplatePreview::setText(const QString& text, bool isProject, TemplateRenderer::EmptyLinesPolicy policy)
 {
-    Q_ASSERT(document);
-    kDebug() << document->url();
+    QString rendered;
+    QString errorString;
 
-    if (m_original)
-    {
-        disconnect (m_original, SIGNAL(textChanged(KTextEditor::Document*)), this, SLOT(documentChanged(KTextEditor::Document*)));
-    }
-    m_original = document->textDocument();
-    connect (m_original, SIGNAL(textChanged(KTextEditor::Document*)), this, SLOT(documentChanged(KTextEditor::Document*)));
-    documentChanged(m_original);
-}
-
-void TemplatePreview::documentChanged (KTextEditor::Document* document)
-{
-    if (isVisible() && document && document == m_original)
-    {
-        sourceTextChanged(m_original->text());
-    }
-}
-
-void TemplatePreview::showEvent(QShowEvent* event)
-{
-    if (m_original)
-    {
-        sourceTextChanged(m_original->text());
-    }
-}
-
-void TemplatePreview::documentClosed (IDocument* document)
-{
-    if (document && document->textDocument() == m_original)
-    {
-        if (m_original)
-        {
-            disconnect (m_original, SIGNAL(textChanged(KTextEditor::Document*)), this, SLOT(documentChanged(KTextEditor::Document*)));
-        }
-        m_original = 0;
-    }
-    sourceTextChanged(QString());
-}
-
-void TemplatePreview::sourceTextChanged(const QString& text)
-{
-    kDebug();
-    m_preview->setReadWrite(true);
-    if (text.isEmpty())
-    {
-        ui->messageWidget->setMessageType(KMessageWidget::Information);
-        ui->messageWidget->setText(i18n("No active document"));
-        ui->messageWidget->animatedShow();
-    }
-    else
-    {
-        bool project = ui->projectRadioButton->isChecked();
-        QString rendered;
-        QString errorString;
-        bool error = false;
-        if (project)
-        {
+    if (!text.isEmpty()) {
+        if (isProject) {
             rendered = KMacroExpander::expandMacros(text, m_variables);
+        } else {
+            TemplatePreviewRenderer renderer;
+            renderer.setEmptyLinesPolicy(policy);
+            rendered = renderer.render(text);
+            errorString = renderer.errorString();
         }
-        else
-        {
-            rendered = m_renderer->render(text);
-            errorString = m_renderer->errorString();
-            error = !errorString.isEmpty();
-        }
-
-        if (rendered.simplified() == text.simplified())
-        {
-            error = false;
-            // If the difference in only in whitespace, this is probably not a suitable template
-            if (project)
-            {
-                errorString = i18n("The active document is not a <application>KDevelop</application> project template");
-            }
-            else
-            {
-                errorString = i18n("The active document is not a <application>KDevelop</application> class template");
-            }
-            m_preview->clear();
-        }
-        else
-        {
-            m_preview->setText(rendered);
-        }
-
-        if (!errorString.isEmpty())
-        {
-            ui->messageWidget->setMessageType(error ? KMessageWidget::Error : KMessageWidget::Information);
-            ui->messageWidget->setText(errorString);
-            ui->messageWidget->animatedShow();
-        }
-        else
-        {
-            ui->messageWidget->animatedHide();
-        }
-
     }
-    if (m_original)
-    {
-        m_preview->setMode(m_original->mode());
-    }
+
+    m_preview->setReadWrite(true);
+    m_preview->setText(rendered);
+    m_view->setCursorPosition(KTextEditor::Cursor(0, 0));
     m_preview->setReadWrite(false);
+
+    return errorString;
 }
 
-void TemplatePreview::selectedRendererChanged()
+KTextEditor::Document* TemplatePreview::document() const
 {
-    if (ui->classRadioButton->isChecked())
-    {
-        TemplateRenderer::EmptyLinesPolicy policy = TemplateRenderer::KeepEmptyLines;
-        switch (ui->emptyLinesPolicyComboBox->currentIndex())
-        {
-            case 0:
-                policy = TemplateRenderer::KeepEmptyLines;
-                break;
-
-            case 1:
-                policy = TemplateRenderer::TrimEmptyLines;
-                break;
-
-            case 2:
-                policy = TemplateRenderer::RemoveEmptyLines;
-                break;
-        }
-        m_renderer->setEmptyLinesPolicy(policy);
-    }
-    documentChanged(m_original);
+    return m_preview.data();
 }

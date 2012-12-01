@@ -292,6 +292,7 @@ public:
     KStatusBar *statusBar;
     QLabel* statusLabel;
     QString status;
+    const TextView* textView;
 
 };
 
@@ -635,21 +636,9 @@ KDevelop::TextView::~TextView()
 
 QWidget * KDevelop::TextView::createWidget(QWidget * parent)
 {
-    TextDocument* doc = static_cast<TextDocument*>(document());
-    KTextEditor::View* view = static_cast<KTextEditor::View*>(doc->createViewWidget(parent));
-    if(d->initialRange.isValid()) {
-        if(d->initialRange.isEmpty())
-            view->setCursorPosition(d->initialRange.start());
-        else {
-            view->setCursorPosition(d->initialRange.end());
-            view->setSelection(d->initialRange);
-        }
-    }
-    TextEditorWidget* teWidget = new TextEditorWidget(parent);
-    teWidget->setEditorView(view);
-    connect(teWidget, SIGNAL(statusChanged()),
-            this, SLOT(sendStatusChanged()));
-            
+    TextEditorWidget* teWidget = new TextEditorWidget(this, parent);
+    connect(teWidget, SIGNAL(statusChanged()), this, SLOT(sendStatusChanged()));
+
     d->editor = teWidget;
     connect(d->editor, SIGNAL(destroyed(QObject*)), this, SLOT(editorDestroyed(QObject*)));
     
@@ -674,15 +663,30 @@ QString KDevelop::TextView::viewState() const
         } else {
             KTextEditor::Cursor cursor = d->editor->editorView()->cursorPosition();
             return QString("Cursor=%1,%2").arg(cursor.line()).arg(cursor.column());
-        }    }else
+        }
+    }
+    else
     {
         kDebug() << "TextView's internal KTE view disappeared!";
         return QString();
     }
 }
 
-void KDevelop::TextView::setInitialRange(KTextEditor::Range range) {
-    d->initialRange = range;
+void KDevelop::TextView::setInitialRange(const KTextEditor::Range& range)
+{
+    if(d->editor && d->editor->isInitialized()) {
+        if (range.isEmpty())
+            d->editor->editorView()->setCursorPosition( range.start() );
+        else
+            d->editor->editorView()->setSelection( range );
+    } else {
+        d->initialRange = range;
+    }
+}
+
+KTextEditor::Range KDevelop::TextView::initialRange() const
+{
+    return d->initialRange;
 }
 
 void KDevelop::TextView::setState(const QString & state)
@@ -690,17 +694,10 @@ void KDevelop::TextView::setState(const QString & state)
     static QRegExp reCursor("Cursor=([\\d]+),([\\d]+)");
     static QRegExp reSelection("Selection=([\\d]+),([\\d]+),([\\d]+),([\\d]+)");
     if (reCursor.exactMatch(state)) {
-        if (d->editor && d->editor->editorView())
-            d->editor->editorView()->setCursorPosition(KTextEditor::Cursor(reCursor.cap(1).toInt(), reCursor.cap(2).toInt()));
-        else
-            setInitialRange(KTextEditor::Range(KTextEditor::Cursor(reCursor.cap(1).toInt(), reCursor.cap(2).toInt()), 0));
+        setInitialRange(KTextEditor::Range(KTextEditor::Cursor(reCursor.cap(1).toInt(), reCursor.cap(2).toInt()), 0));
     } else if (reSelection.exactMatch(state)) {
         KTextEditor::Range range(reSelection.cap(1).toInt(), reSelection.cap(2).toInt(), reSelection.cap(3).toInt(), reSelection.cap(4).toInt());
-        if (d->editor && d->editor->editorView()) {
-            d->editor->editorView()->setCursorPosition(range.end());
-            d->editor->editorView()->setSelection(range);
-        } else
-            setInitialRange(range);
+        setInitialRange(range);
     }
 }
 
@@ -742,19 +739,40 @@ void KDevelop::TextView::sendStatusChanged()
     emit statusChanged(this);
 }
 
-KDevelop::TextEditorWidget::TextEditorWidget(QWidget* parent)
+KDevelop::TextEditorWidget::TextEditorWidget(const TextView* view, QWidget* parent)
 : QWidget(parent), KXMLGUIClient(), d(new TextEditorWidgetPrivate)
 {
     d->widgetLayout = new QVBoxLayout(this);
     d->widgetLayout->setMargin(0);
     d->widgetLayout->setSpacing(0);
+    d->textView = view;
+    d->view = 0;
 
     setLayout(d->widgetLayout);
+    QMetaObject::invokeMethod(this, "initialize", Qt::QueuedConnection);
 }
 
 KDevelop::TextEditorWidget::~TextEditorWidget()
 {
     delete d;
+}
+
+void KDevelop::TextEditorWidget::initialize()
+{
+    if(d->view)
+        return;
+    TextDocument* doc = static_cast<TextDocument*>(d->textView->document());
+    KTextEditor::View* view = qobject_cast<KTextEditor::View*>(doc->createViewWidget(this));
+    KTextEditor::Range ir = d->textView->initialRange();
+    if(ir.isValid()) {
+        if(ir.isEmpty())
+            view->setCursorPosition(ir.start());
+        else {
+            view->setCursorPosition(ir.end());
+            view->setSelection(ir);
+        }
+    }
+    setEditorView(view);
 }
 
 void KDevelop::TextEditorWidget::viewStatusChanged(KTextEditor::View* view, const KTextEditor::Cursor& )
@@ -790,9 +808,23 @@ QString KDevelop::TextEditorWidget::status() const
     return d->status;
 }
 
-KTextEditor::View* KDevelop::TextEditorWidget::editorView() const
+KTextEditor::View* KDevelop::TextEditorWidget::editorView()
 {
+    if(!d->view)
+        initialize();
     return d->view;
+}
+
+bool KDevelop::TextEditorWidget::isInitialized() const
+{
+    return d->view!=0;
+}
+
+void KDevelop::TextEditorWidget::showEvent(QShowEvent* event)
+{
+    if(!d->view)
+        initialize();
+    QWidget::showEvent(event);
 }
 
 #include "textdocument.moc"

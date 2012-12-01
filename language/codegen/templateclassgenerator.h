@@ -31,6 +31,7 @@ class KUrl;
 namespace KDevelop
 {
 
+class TemplateEngine;
 class SimpleCursor;
 struct ClassDescription;
 class TemplateRenderer;

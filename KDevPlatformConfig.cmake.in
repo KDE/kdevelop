@@ -12,6 +12,7 @@
 # KDEVPLATFORM_SUBLIME_LIBRARIES         - the sublime library
 # KDEVPLATFORM_SHELL_LIBRARIES           - the shell library
 # KDEVPLATFORM_TESTS_LIBRARIES           - the tests library
+# KDEVPLATFORM_JSONTESTS_LIBRARIES       - the jsontests library
 # KDEVPLATFORM_UTIL_LIBRARIES            - the util library
 # KDEVPLATFORM_VCS_LIBRARIES             - the vcs library
 # KDEVPLATFORM_DEBUGGER_LIBRARIES        - debugger module library
@@ -53,6 +54,7 @@ _kdevplatform_set_lib_vars( OUTPUTVIEW kdevplatformoutputview )
 _kdevplatform_set_lib_vars( DEBUGGER kdevplatformdebugger )
 _kdevplatform_set_lib_vars( DOCUMENTATION kdevplatformdocumentation )
 _kdevplatform_set_lib_vars( TESTS kdevplatformtests )
+_kdevplatform_set_lib_vars( JSONTESTS kdevplatformjsontests )
 
 include(${_KDEVPLATFORM_CURRENT_DIR}/KDevPlatformMacros.cmake)
 
@@ -68,4 +70,5 @@ mark_as_advanced(
     KDEVPLATFORM_DEBUGGER_LIBRARIES
     KDEVPLATFORM_DOCUMENTATION_LIBRARIES
     KDEVPLATFORM_TESTS_LIBRARIES
+    KDEVPLATFORM_JSONTESTS_LIBRARIES
 )

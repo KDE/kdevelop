@@ -50,6 +50,8 @@ public:
      **/
     QString selectedTemplate() const;
 
+    virtual QSize minimumSizeHint() const;
+
 public Q_SLOTS:
     /**
      * Saves the selected template setting into the current project's configuration.

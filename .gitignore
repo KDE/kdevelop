@@ -5,3 +5,7 @@ doxygen.log
 build
 *.patch
 *.diff
+*.orig
+*.rej
+massif.out.*
+callgrind.out.*

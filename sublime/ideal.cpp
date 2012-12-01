@@ -289,6 +289,12 @@ void IdealButtonBarWidget::actionEvent(QActionEvent *event)
     case QEvent::ActionAdded: {
         if (! _buttons.contains(action)) {
             IdealToolButton *button = new IdealToolButton(_area);
+            //apol: here we set the usual width of a button for the vertical toolbars as the minimumWidth
+            //this is done because otherwise when we remove all the buttons and re-add new ones we get all
+            //the screen flickering. This is solved by not defaulting to a smaller width when it's empty
+            int w = button->sizeHint().width();
+            if(orientation()==Qt::Vertical && w>minimumWidth())
+                setMinimumWidth(w);
             _buttons.insert(action, button);
 
             button->setText(action->text());
@@ -366,8 +372,7 @@ IdealDockWidget::IdealDockWidget(IdealController *controller, Sublime::MainWindo
       m_area(0),
       m_view(0),
       m_docking_area(Qt::NoDockWidgetArea),
-      m_controller(controller),
-      m_mainWindow(parent)
+      m_controller(controller)
 {
     setAutoFillBackground(true);
     setContextMenuPolicy(Qt::CustomContextMenu);
@@ -423,8 +428,11 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
     KMenu menu;
     menu.addTitle(windowIcon(), windowTitle());
 
-    menu.addActions(m_view->contextMenuActions());
-    menu.addSeparator();
+    QList< QAction* > viewActions = m_view->contextMenuActions();
+    if(!viewActions.isEmpty()) {
+        menu.addActions(viewActions);
+        menu.addSeparator();
+    }
 
     ///TODO: can this be cleaned up?
     if(QToolBar* toolBar = widget()->findChild<QToolBar*>()) {

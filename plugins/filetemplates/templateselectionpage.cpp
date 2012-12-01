@@ -18,9 +18,14 @@
 */
 
 #include "templateselectionpage.h"
+
 #include "templateclassassistant.h"
+#include "templatepreview.h"
 
 #include <language/codegen/templatesmodel.h>
+#include <language/codegen/sourcefiletemplate.h>
+#include <language/codegen/documentchangeset.h>
+#include <language/codegen/templaterenderer.h>
 #include <language/interfaces/icreateclasshelper.h>
 #include <language/interfaces/ilanguagesupport.h>
 #include <interfaces/icore.h>
@@ -37,6 +42,8 @@
 #include <KLocalizedString>
 #include <KComponentData>
 #include <KFileDialog>
+#include <KTempDir>
+#include <KTextEditor/Document>
 
 using namespace KDevelop;
 
@@ -59,18 +66,75 @@ public:
     void currentTemplateChanged(const QModelIndex& index);
     void getMoreClicked();
     void loadFileClicked();
+    void previewTemplate(const QString& templateFile);
 };
 
 void TemplateSelectionPagePrivate::currentTemplateChanged(const QModelIndex& index)
 {
+    // delete preview tabs
     if (!index.isValid() || index.child(0, 0).isValid())
     {
         // invalid or has child
         assistant->setValid(assistant->currentPage(), false);
+        ui->previewLabel->setVisible(false);
+        ui->tabWidget->setVisible(false);
     } else {
         selectedTemplate = model->data(index, TemplatesModel::DescriptionFileRole).toString();
         assistant->setValid(assistant->currentPage(), true);
+        previewTemplate(selectedTemplate);
+        ui->previewLabel->setVisible(true);
+        ui->tabWidget->setVisible(true);
+        ui->previewLabel->setText(i18nc("%1: template comment", "<b>Preview:</b> %1",
+                                        index.data(TemplatesModel::CommentRole).toString()));
     }
+}
+
+void TemplateSelectionPagePrivate::previewTemplate(const QString& file)
+{
+    SourceFileTemplate fileTemplate(file);
+    if (!fileTemplate.isValid() || fileTemplate.outputFiles().isEmpty()) {
+        return;
+    }
+
+    KTempDir dir;
+    KUrl base(dir.name());
+    QHash<QString, KUrl> fileUrls;
+    foreach(const SourceFileTemplate::OutputFile& out, fileTemplate.outputFiles()) {
+        KUrl url(base);
+        url.addPath(out.outputName);
+        fileUrls.insert(out.identifier, url);
+    }
+    TemplatePreviewRenderer renderer;
+    renderer.setEmptyLinesPolicy(TemplateRenderer::TrimEmptyLines);
+    DocumentChangeSet changes = renderer.renderFileTemplate(fileTemplate, base, fileUrls);
+    changes.setActivationPolicy(DocumentChangeSet::DoNotActivate);
+    changes.setUpdateHandling(DocumentChangeSet::NoUpdate);
+    DocumentChangeSet::ChangeResult result = changes.applyAllChanges();
+    if (!result) {
+        return;
+    }
+
+    int idx = 0;
+    foreach(const SourceFileTemplate::OutputFile& out, fileTemplate.outputFiles()) {
+        TemplatePreview* preview = 0;
+        if (ui->tabWidget->count() > idx) {
+            // reuse existing tab
+            preview = qobject_cast<TemplatePreview*>(ui->tabWidget->widget(idx));
+            ui->tabWidget->setTabText(idx, out.label);
+            Q_ASSERT(preview);
+        } else {
+            // create new tabs on demand
+            preview = new TemplatePreview(page);
+            ui->tabWidget->addTab(preview, out.label);
+        }
+        preview->document()->openUrl(fileUrls.value(out.identifier));
+        ++idx;
+    }
+    // remove superflous tabs from last time
+    while (ui->tabWidget->count() > fileUrls.size()) {
+        delete ui->tabWidget->widget(fileUrls.size());
+    }
+    return;
 }
 
 void TemplateSelectionPagePrivate::getMoreClicked()
@@ -127,7 +191,7 @@ TemplateSelectionPage::TemplateSelectionPage(TemplateClassAssistant* parent, Qt:
     d->model->refresh();
 
     d->ui->view->setLevels(3);
-    d->ui->view->setHeaderLabels(QStringList() << i18n("Category") << i18n("Language") << i18n("Template"));
+    d->ui->view->setHeaderLabels(QStringList() << i18n("Language") << i18n("Framework") << i18n("Template"));
     d->ui->view->setModel(d->model);
 
     connect(d->ui->view, SIGNAL(currentIndexChanged(QModelIndex,QModelIndex)),
@@ -162,9 +226,12 @@ TemplateSelectionPage::TemplateSelectionPage(TemplateClassAssistant* parent, Qt:
 
     d->ui->view->setCurrentIndex(templateIndex);
 
+    /*
+    disabled until we get a category on kde-files, or find an alternative way to enable this
     KNS3::Button* getMoreButton = new KNS3::Button(i18n("Get More Templates..."), "kdevclassassistant.knsrc", d->ui->view);
     connect (getMoreButton, SIGNAL(dialogFinished(KNS3::Entry::List)), SLOT(getMoreClicked()));
     d->ui->view->addWidget(0, getMoreButton);
+    */
 
     KPushButton* loadButton = new KPushButton(KIcon("application-x-archive"), i18n("Load Template From File"), d->ui->view);
     connect (loadButton, SIGNAL(clicked(bool)), SLOT(loadFileClicked()));
@@ -177,6 +244,11 @@ TemplateSelectionPage::~TemplateSelectionPage()
 {
     delete d->ui;
     delete d;
+}
+
+QSize TemplateSelectionPage::minimumSizeHint() const
+{
+    return QSize(400, 600);
 }
 
 QString TemplateSelectionPage::selectedTemplate() const
