@@ -95,7 +95,7 @@ Path::Path(const Path& other, const QString& child)
     addPath(child);
 }
 
-QString generatePathOrUrl(bool onlyPath, bool isLocalFile, const QVector<QString> data)
+QString generatePathOrUrl(bool onlyPath, bool isLocalFile, const QVector<QString>& data)
 {
     // more or less a copy of QtPrivate::QStringList_join
     const int size = data.size();
