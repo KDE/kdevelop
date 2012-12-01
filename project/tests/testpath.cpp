@@ -209,6 +209,7 @@ void TestPath::testPath()
     QCOMPARE(optUrl, Path(url));
 
     QCOMPARE(optUrl.isRemote(), optUrl.isValid() && !optUrl.isLocalFile());
+    QCOMPARE(optUrl.isRemote(), optUrl.isValid() && !optUrl.remotePrefix().isEmpty());
 
     url.addPath("test/foo/bar");
     optUrl.addPath("test/foo/bar");

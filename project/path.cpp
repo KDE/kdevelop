@@ -141,6 +141,11 @@ QString Path::path() const
     return generatePathOrUrl(true, isLocalFile(), m_data);
 }
 
+QString Path::remotePrefix() const
+{
+    return isRemote() ? m_data.first() : QString();
+}
+
 bool Path::operator<(const Path& other) const
 {
     const int size = m_data.size();

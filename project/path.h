@@ -202,6 +202,12 @@ public:
     QString path() const;
 
     /**
+     * @return the prefix of a remote URL containing protocol, host, port etc. pp.
+     *         If this path is not remote, this returns an empty string.
+     */
+    QString remotePrefix() const;
+
+    /**
      * @return the Path converted to an IndexedString.
      *
      * @note This is potentially expensive, try to cache this if you
