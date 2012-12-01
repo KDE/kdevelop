@@ -264,6 +264,8 @@ private:
     QVector<QString> m_data;
 };
 
+KDEVPLATFORMPROJECT_EXPORT uint qHash(const KDevelop::Path& path);
+
 }
 
 /**

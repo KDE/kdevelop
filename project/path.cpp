@@ -233,6 +233,14 @@ Path Path::up() const
     return ret;
 }
 
+namespace KDevelop {
+uint qHash(const Path& path)
+{
+    // TODO: optimize using RunningHash
+    return qHash(path.pathOrUrl());
+}
+}
+
 QDebug operator<<(QDebug s, const Path& string)
 {
     s.nospace() << string.pathOrUrl();
