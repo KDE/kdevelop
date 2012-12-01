@@ -42,14 +42,6 @@ static const int TREE_DEPTH = 5;
 
 namespace QTest {
     template<>
-    char *toString(const Path &path)
-    {
-        return qstrdup(qPrintable(path.pathOrUrl()));
-    }
-}
-
-namespace QTest {
-    template<>
     char *toString(const KUrl &url)
     {
         return qstrdup(qPrintable(url.pathOrUrl()));

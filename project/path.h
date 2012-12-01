@@ -305,6 +305,16 @@ KDEVPLATFORMPROJECT_EXPORT uint qHash(const KDevelop::Path& path);
  */
 KDEVPLATFORMPROJECT_EXPORT QDebug operator<<(QDebug s, const KDevelop::Path& string);
 
+namespace QTest {
+
+template<typename T> char* toString(const T&);
+/**
+ * QTestLib integration to have nice output in e.g. QCOMPARE failures.
+ */
+template<>
+KDEVPLATFORMPROJECT_EXPORT char* toString(const KDevelop::Path& path);
+}
+
 Q_DECLARE_TYPEINFO(KDevelop::Path, Q_MOVABLE_TYPE);
 Q_DECLARE_METATYPE(KDevelop::Path)
 

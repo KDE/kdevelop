@@ -330,3 +330,11 @@ QDebug operator<<(QDebug s, const Path& string)
     s.nospace() << string.pathOrUrl();
     return s.space();
 }
+
+namespace QTest {
+template<>
+char *toString(const Path &path)
+{
+    return qstrdup(qPrintable(path.pathOrUrl()));
+}
+}
