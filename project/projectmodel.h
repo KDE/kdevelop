@@ -277,11 +277,13 @@ public:
      * Create a new ProjectFolderItem without a parent.
      */
     ProjectFolderItem( IProject* project, const Path &path );
+
     /**
-     * Create a new ProjectFolderItem with a path pointing to @p name
-     * using the path of @p parent as basis.
+     * Create a child ProjectFolderItem of @p parent with @p name.
+     *
+     * The path is set automatically.
      */
-    ProjectFolderItem( IProject* project, const QString& name, ProjectBaseItem *parent );
+    ProjectFolderItem( const QString& name, ProjectBaseItem *parent );
 
     virtual ~ProjectFolderItem();
 
@@ -321,10 +323,11 @@ public:
      */
     ProjectBuildFolderItem( IProject* project, const Path &path );
     /**
-     * Create a new ProjectBuildFolderItem with a path pointing to @p name
-     * using the path of @p parent as basis.
+     * Create a child ProjectBuildFolderItem of @p parent with @p name.
+     *
+     * The path is set automatically.
      */
-    ProjectBuildFolderItem( IProject* project, const QString &name, ProjectBaseItem *parent );
+    ProjectBuildFolderItem( const QString &name, ProjectBaseItem *parent );
 
     ///Reimplemented from QStandardItem
     virtual int type() const;
@@ -388,14 +391,15 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectFileItem: public ProjectBaseItem
 public:
     KDE_DEPRECATED ProjectFileItem( IProject*, const KUrl& file, ProjectBaseItem *parent = 0 );
     /**
-     * Create a new ProjectFileItem without a parent.
+     * Create a new ProjectFileItem without a parent in the given @p project.
      */
-    ProjectFileItem( IProject*, const Path& path );
+    ProjectFileItem( IProject* project, const Path& path );
     /**
-     * Create a new ProjectFileItem with a path pointing to @p name
-     * using the path of @p parent as basis.
+     * Create a child ProjectFileItem of @p parent with the given @p name.
+     *
+     * The path is set automatically.
      */
-    ProjectFileItem( IProject*, const QString& name, ProjectBaseItem *parent );
+    ProjectFileItem( const QString& name, ProjectBaseItem *parent );
     ~ProjectFileItem();
 
     ///Reimplemented from QStandardItem

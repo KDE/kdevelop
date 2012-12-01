@@ -608,13 +608,13 @@ ProjectFolderItem::ProjectFolderItem(IProject* project, const Path& path)
         setFlags(flags() | Qt::ItemIsDragEnabled);
 }
 
-ProjectFolderItem::ProjectFolderItem( IProject* project, const QString & name, ProjectBaseItem * parent )
-        : ProjectBaseItem( project, name, parent )
+ProjectFolderItem::ProjectFolderItem( const QString & name, ProjectBaseItem * parent )
+        : ProjectBaseItem( parent->project(), name, parent )
 {
     setPath( Path(parent->path(), name) );
 
     setFlags(flags() | Qt::ItemIsDropEnabled);
-    if (project && project->folder() != url())
+    if (project() && project()->folder() != url())
         setFlags(flags() | Qt::ItemIsDragEnabled);
 }
 
@@ -721,8 +721,8 @@ ProjectBuildFolderItem::ProjectBuildFolderItem(IProject* project, const Path& pa
 {
 }
 
-ProjectBuildFolderItem::ProjectBuildFolderItem( IProject* project, const QString& name, ProjectBaseItem* parent )
-    : ProjectFolderItem( project, name, parent )
+ProjectBuildFolderItem::ProjectBuildFolderItem( const QString& name, ProjectBaseItem* parent )
+    : ProjectFolderItem( name, parent )
 {
 
 }
@@ -756,8 +756,8 @@ ProjectFileItem::ProjectFileItem( IProject* project, const Path& path)
     setPath( path );
 }
 
-ProjectFileItem::ProjectFileItem( IProject* project, const QString& name, ProjectBaseItem* parent )
-    : ProjectBaseItem( project, name, parent )
+ProjectFileItem::ProjectFileItem( const QString& name, ProjectBaseItem* parent )
+    : ProjectBaseItem( parent->project(), name, parent )
 {
     setFlags(flags() | Qt::ItemIsDragEnabled);
     setPath( Path(parent->path(), name) );

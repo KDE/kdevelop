@@ -389,17 +389,17 @@ void ProjectModelTest::testRename()
     ProjectFolderItem* rootItem = new ProjectFolderItem( proj, KUrl("file:///dummyprojectfolder"), 0);
     proj->setProjectItem( rootItem );
 
-    new ProjectFileItem(proj, "existing", rootItem);
+    new ProjectFileItem("existing", rootItem);
 
     ProjectBaseItem* item = 0;
     if( itemType == ProjectBaseItem::Target ) {
         item = new ProjectTargetItem( proj, itemText, rootItem );
     } else if( itemType == ProjectBaseItem::File ) {
-        item = new ProjectFileItem( proj, itemText, rootItem );
+        item = new ProjectFileItem( itemText, rootItem );
     } else if( itemType == ProjectBaseItem::Folder ) {
-        item = new ProjectFolderItem( proj, itemText, rootItem );
+        item = new ProjectFolderItem( itemText, rootItem );
     } else if( itemType == ProjectBaseItem::BuildFolder ) {
-        item = new ProjectBuildFolderItem( proj, itemText, rootItem );
+        item = new ProjectBuildFolderItem( itemText, rootItem );
     }
     Q_ASSERT( item );
 
