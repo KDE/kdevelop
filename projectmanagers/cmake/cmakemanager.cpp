@@ -929,17 +929,19 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                 if(sFile.startsWith("#[") || sFile.isEmpty())
                     continue;
 
-                KUrl sourceFile;
-                if(KUrl::isRelativeUrl(sFile)) {
+                KUrl sourceFile(sFile);
+
+                // important: we want the behavior of KUrl::isRelative(), *not* KUrl::isRelativeUrl()
+                if(sourceFile.isRelative()) {
                     sourceFile = folder->url();
                     sourceFile.addPath( sFile );
                     if(!QFile::exists(sourceFile.toLocalFile())) {
                         sourceFile = buildDirectory(folder);
                         sourceFile.addPath( sFile );
                     }
-                } else
-                    sourceFile = sFile;
+                }
                 sourceFile.cleanPath();
+
                 tfiles += sourceFile;
                 kDebug(9042) << "..........Adding:" << sourceFile << sFile << folder->url();
             }
