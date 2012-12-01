@@ -202,6 +202,27 @@ public:
     QString path() const;
 
     /**
+     * @return the relative path from this path to @p path.
+     *
+     * Examples:
+     * @code
+     * Path p1("/foo/bar");
+     * Path p2("/foo/bar/asdf/test.txt");
+     * p1.relativePath(p2); // returns: asdf/test.txt
+     * Path p3("/foo/asdf/lala");
+     * p3.relativePath(p1); // returns: ../../bar
+     * @endcode
+     *
+     * @sa KUrl::relativePath
+     */
+    QString relativePath(const Path& path) const;
+
+    /**
+     * @return True if this path is the parent of @p path.
+     */
+    bool isParentOf(const Path& path) const;
+
+    /**
      * @return the prefix of a remote URL containing protocol, host, port etc. pp.
      *         If this path is not remote, this returns an empty string.
      */

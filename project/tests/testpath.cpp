@@ -208,6 +208,29 @@ void TestPath::testPath()
     QCOMPARE(optUrl.toIndexed(), IndexedString(url));
     QCOMPARE(optUrl, Path(url));
 
+    if (url.isValid()) {
+        QVERIFY(optUrl.relativePath(optUrl).isEmpty());
+
+        Path relativePath(optUrl, "foo/bar");
+        QCOMPARE(optUrl.relativePath(relativePath), QLatin1String("foo/bar"));
+        QCOMPARE(relativePath.relativePath(optUrl), QLatin1String("../../"));
+        QVERIFY(optUrl.isParentOf(relativePath));
+        QVERIFY(!relativePath.isParentOf(optUrl));
+
+        Path unrelatedPath("https://test@blubasdf.com:12345/");
+        QCOMPARE(optUrl.relativePath(unrelatedPath), unrelatedPath.pathOrUrl());
+        QCOMPARE(unrelatedPath.relativePath(optUrl), optUrl.pathOrUrl());
+        QVERIFY(!unrelatedPath.isParentOf(optUrl));
+        QVERIFY(!optUrl.isParentOf(unrelatedPath));
+    }
+
+    QCOMPARE(Path().relativePath(optUrl), optUrl.pathOrUrl());
+    QVERIFY(optUrl.relativePath(Path()).isEmpty());
+    QVERIFY(Path().relativePath(Path()).isEmpty());
+    QVERIFY(!optUrl.isParentOf(Path()));
+    QVERIFY(!Path().isParentOf(optUrl));
+    QVERIFY(!Path().isParentOf(Path()));
+
     QCOMPARE(optUrl.isRemote(), optUrl.isValid() && !optUrl.isLocalFile());
     QCOMPARE(optUrl.isRemote(), optUrl.isValid() && !optUrl.remotePrefix().isEmpty());
 

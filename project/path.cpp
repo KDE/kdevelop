@@ -141,6 +141,80 @@ QString Path::path() const
     return generatePathOrUrl(true, isLocalFile(), m_data);
 }
 
+QString Path::relativePath(const Path& path) const
+{
+    if (!path.isValid()) {
+        return QString();
+    }
+    if (!isValid() || remotePrefix() != path.remotePrefix()) {
+        // different remote destinations or we are invalid, return input as-is
+        return path.pathOrUrl();
+    }
+    // while I'd love to use KUrl::relativePath here, it seems to behave pretty
+    // strangely, and adds unexpected "./" at the start for example
+    // so instead, do it on our own based on _relativePath in kurl.cpp
+    // this should also be more performant I think
+
+    // Find where they meet
+    int level = isRemote() ? 1 : 0;
+    const int maxLevel = qMin(m_data.count(), path.m_data.count());
+    while(level < maxLevel && m_data.at(level) == path.m_data.at(level)) {
+        ++level;
+    }
+
+    // Need to go down out of our path to the common branch.
+    // but keep in mind that e.g. '/' paths have an empty name
+    int backwardSegments = m_data.count() - level;
+    if (backwardSegments && level < maxLevel && m_data.at(level).isEmpty()) {
+        --backwardSegments;
+    }
+
+    // Now up up from the common branch to the second path.
+    int forwardSegmentsLength = 0;
+    for (int i = level; i < path.m_data.count(); ++i) {
+        forwardSegmentsLength += path.m_data.at(i).length();
+        // slashes
+        if (i + 1 != path.m_data.count()) {
+            forwardSegmentsLength += 1;
+        }
+    }
+
+    QString relativePath;
+    relativePath.reserve((backwardSegments * 3) + forwardSegmentsLength);
+    for(int i = 0; i < backwardSegments; ++i) {
+        relativePath.append(QLatin1String("../"));
+    }
+    for (int i = level; i < path.m_data.count(); ++i) {
+        relativePath.append(path.m_data.at(i));
+        if (i + 1 != path.m_data.count()) {
+            relativePath.append(QLatin1Char('/'));
+        }
+    }
+    Q_ASSERT(relativePath.length() == ((backwardSegments * 3) + forwardSegmentsLength));
+
+    return relativePath;
+}
+
+bool Path::isParentOf(const Path& path) const
+{
+    if (path.m_data.size() < m_data.size() || !isValid() || !path.isValid()
+        || remotePrefix() != path.remotePrefix())
+    {
+        return false;
+    }
+    for (int i = 0; i < m_data.size(); ++i) {
+        if (path.m_data.at(i) != m_data.at(i)) {
+            // support for trailing '/'
+            if (i + 1 == m_data.size() && m_data.at(i).isEmpty()) {
+                return true;
+            }
+            // otherwise we take a different branch here
+            return false;
+        }
+    }
+    return true;
+}
+
 QString Path::remotePrefix() const
 {
     return isRemote() ? m_data.first() : QString();
