@@ -1331,7 +1331,8 @@ void CMakeManager::reloadFiles(ProjectFolderItem* item)
     QSet<QString> entries = filterFiles(entriesL);
     
     KUrl folderurl = item->url();
-    
+    folderurl.cleanPath();
+
     kDebug() << "Reloading Directory!" << folderurl;
     
     //We look for removed elements
