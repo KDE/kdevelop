@@ -111,7 +111,7 @@ void GrepJob::slotFindFinished()
         m_fileList.clear();
         emit hideProgress(this);
         emit clearMessage(this);
-        emit showErrorMessage(i18n("Search aborted"), 5000);
+        m_errorMessage = i18n("Search aborted");
         emitResult();
         return;
     }
@@ -120,7 +120,7 @@ void GrepJob::slotFindFinished()
         m_workState = WorkIdle;
         emit hideProgress(this);
         emit clearMessage(this);
-        emit showErrorMessage(i18n("No files found matching the wildcard patterns"), 5000);
+        m_errorMessage = i18n("No files found matching the wildcard patterns");
         //model()->slotFailed();
         emitResult();
         return;
@@ -130,12 +130,16 @@ void GrepJob::slotFindFinished()
     {
         m_patternString = QRegExp::escape(m_patternString);
     }
-    
+
     if(m_regexpFlag && QRegExp(m_patternString).captureCount() > 0)
     {
-        emit showErrorMessage(i18nc("Capture is the text which is \"captured\" with () in regular expressions "
+        m_workState = WorkIdle;
+        emit hideProgress(this);
+        emit clearMessage(this);
+        m_errorMessage = i18nc("Capture is the text which is \"captured\" with () in regular expressions "
                                     "see http://doc.trolltech.com/qregexp.html#capturedTexts",
-                                    "Captures are not allowed in pattern string"), 5000);
+                                    "Captures are not allowed in pattern string");
+        emitResult();
         return;
     }
     
@@ -253,7 +257,12 @@ void GrepJob::testFinishState(KJob *job)
 {
     if(!job->error())
     {
-        if(!m_findSomething) emit showMessage(this, i18n("No results found"));
+        if (!m_errorMessage.isEmpty()) {
+            emit showErrorMessage(i18n("Failed: %1").arg(m_errorMessage));
+        }
+        else if (!m_findSomething) {
+            emit showMessage(this, i18n("No results found"));
+        }
     }
 }
 
