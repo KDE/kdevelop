@@ -23,6 +23,7 @@ Comment[uk]=Клас C++ з закритим (private) D-вказівником
 Comment[x-test]=xxC++ Class with a private D-pointerxx
 Category=C++/Basic
 Language=C++
+Language[el]=C++
 Language[es]=C++
 Language[ga]=C++
 Language[nl]=C++

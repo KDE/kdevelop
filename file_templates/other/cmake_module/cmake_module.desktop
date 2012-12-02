@@ -24,6 +24,7 @@ Comment[x-test]=xxCMake module for finding a library using pkg-configxx
 Category=CMake/Module
 Language=CMake
 Language[cs]=CMake
+Language[el]=CMake
 Language[es]=CMake
 Language[nl]=CMake
 Language[pt]=CMake

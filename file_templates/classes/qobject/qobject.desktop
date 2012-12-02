@@ -23,6 +23,7 @@ Comment[uk]=Підклас QObject з властивостями і закрит
 Comment[x-test]=xxQObject subclass with properties and private memberxx
 Category=C++/Qt
 Language=C++
+Language[el]=C++
 Language[es]=C++
 Language[ga]=C++
 Language[nl]=C++

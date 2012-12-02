@@ -23,6 +23,7 @@ Comment[uk]=Перевірка модулів за допомогою біблі
 Comment[x-test]=xxA unit test using the QTest library with KDevPlatform test helpersxx
 Category=C++/KDevelop
 Language=C++
+Language[el]=C++
 Language[es]=C++
 Language[ga]=C++
 Language[nl]=C++

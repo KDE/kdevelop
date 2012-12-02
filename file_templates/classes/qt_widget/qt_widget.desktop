@@ -23,6 +23,7 @@ Comment[uk]=Підклас QWidget з окремим файлом Qt Designer
 Comment[x-test]=xxQWidget subclass with a separate Qt Designer filexx
 Category=C++/Qt
 Language=C++
+Language[el]=C++
 Language[es]=C++
 Language[ga]=C++
 Language[nl]=C++

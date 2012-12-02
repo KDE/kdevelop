@@ -1,5 +1,6 @@
 [General]
 Name=Test Suite
+Name[el]=Σουίτα δοκιμών
 Name[es]=Suite de pruebas
 Name[nl]=Testsuite
 Name[pt]=Conjunto de Testes
@@ -8,6 +9,7 @@ Name[sv]=Testsvit
 Name[uk]=Комплекс для перевірки
 Name[x-test]=xxTest Suitexx
 Comment=A unit test suite using the QTest library without a graphical user interface
+Comment[el]=Μια unit test σουίτα με χρήση βιβλιοθήκης QTest χωρίς γραφικό περιβάλλον χρήστη
 Comment[es]=Una suite de pruebas unitarias que usa la biblioteca QTest sin una interfaz gráfica de usuario
 Comment[nl]=Een testsuite van een eenheid met gebruik van de QTest-bibliotheek zonder een grafisch gebruikersinterface
 Comment[pt]=Um conjunto de testes unitários, com a biblioteca QTest, sem uma interface gráfica do utilizador
@@ -17,6 +19,7 @@ Comment[uk]=Комплекс для перевірки модулів за до�
 Comment[x-test]=xxA unit test suite using the QTest library without a graphical user interfacexx
 Category=C++/Qt
 Language=C++
+Language[el]=C++
 Language[es]=C++
 Language[ga]=C++
 Language[nl]=C++
