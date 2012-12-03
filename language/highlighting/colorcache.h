@@ -112,6 +112,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT ColorCache : public QObject
     /// and finally triggers a rehighlight of the opened documents
     void updateInternal();
 
+    bool tryActiveDocument();
+
   private:
     ColorCache(QObject *parent = 0);
     static ColorCache* m_self;
