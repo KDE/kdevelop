@@ -102,12 +102,12 @@ EnvironmentGroupList::~EnvironmentGroupList()
 
 const QMap<QString, QString> EnvironmentGroupList::variables( const QString& group ) const
 {
-    return d->m_groups[group];
+    return d->m_groups[group.isEmpty() ? d->m_defaultGroup : group];
 }
 
 QMap<QString, QString>& EnvironmentGroupList::variables( const QString& group )
 {
-    return d->m_groups[group];
+    return d->m_groups[group.isEmpty() ? d->m_defaultGroup : group];
 }
 
 
@@ -118,6 +118,10 @@ QString EnvironmentGroupList::defaultGroup() const
 
 void EnvironmentGroupList::setDefaultGroup( const QString& group )
 {
+    if( group.isEmpty() ) {
+        return;
+    }
+
     if( d->m_groups.contains( group ) )
     {
         d->m_defaultGroup = group;
