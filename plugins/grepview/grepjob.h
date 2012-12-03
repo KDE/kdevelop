@@ -102,6 +102,7 @@ private:
     int m_fileIndex;
     QPointer<GrepFindFilesThread> m_findThread;
 
+    QString m_errorMessage;
     QString m_templateString;
     QString m_replacementTemplateString;
     QString m_filesString;

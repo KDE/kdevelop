@@ -54,12 +54,12 @@ ConfigurableHighlightingColors::ConfigurableHighlightingColors(QString highlight
   setDefaultAttribute(a);
 }
 
-#define ADD_COLOR(type, color) \
+#define ADD_COLOR(type, color_) \
   { \
     KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute); \
-    a->setForeground(QColor(cache->blendGlobalColor(color)));  \
+    a->setForeground(QColor(cache->blendGlobalColor(color_)));  \
     addAttribute(CodeHighlighting::type, a);  \
-    ifDebug(kDebug() << #type << "color: " << (void*) color << "->" << (void*) a->foreground().color().rgb();) \
+    ifDebug(kDebug() << #type << "color: " << ((void*) color_) << "->" << a->foreground().color().name();) \
   }
 
 CodeHighlightingColors::CodeHighlightingColors(ColorCache* cache) : ConfigurableHighlightingColors("KDev Semantic Highlighting")

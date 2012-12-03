@@ -89,23 +89,35 @@ ColorCache::ColorCache(QObject* parent)
   updateColorsFromScheme(); // default / fallback
   updateColorsFromSettings();
 
-  m_defaultColors = new CodeHighlightingColors(this);
-
   connect(ICore::self()->languageController()->completionSettings(), SIGNAL(settingsChanged(ICompletionSettings*)),
            this, SLOT(updateColorsFromSettings()), Qt::QueuedConnection);
 
   connect(ICore::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)),
           this, SLOT(slotDocumentActivated(KDevelop::IDocument*)));
 
-  if ( IDocument* doc = ICore::self()->documentController()->activeDocument() ) {
-    if ( doc->textDocument() ) {
-      updateColorsFromDocument(doc->textDocument());
-    }
-  }
+  bool hadDoc = tryActiveDocument();
 
   updateInternal();
 
   m_self = this;
+
+  if (!hadDoc) {
+    // try to update later on again
+    QMetaObject::invokeMethod(this, "tryActiveDocument", Qt::QueuedConnection);
+  }
+}
+
+bool ColorCache::tryActiveDocument()
+{
+  ifDebug(kDebug() << "active doc" << ICore::self()->documentController()->activeDocument() << ICore::self()->documentController()->openDocuments();)
+  if ( IDocument* doc = ICore::self()->documentController()->activeDocument() ) {
+    ifDebug(kDebug() << "has text doc:" << doc->textDocument();)
+    if ( doc->textDocument() ) {
+      updateColorsFromDocument(doc->textDocument());
+      return true;
+    }
+  }
+  return false;
 }
 
 ColorCache::~ColorCache()
@@ -146,6 +158,7 @@ void ColorCache::generateColors()
 
 void ColorCache::slotDocumentActivated(IDocument* doc)
 {
+  ifDebug(kDebug() << "doc activated:" << doc << doc->textDocument();)
   if ( doc->textDocument() ) {
     updateColorsFromDocument(doc->textDocument());
   }
@@ -156,11 +169,13 @@ void ColorCache::slotViewSettingsChanged()
   KTextEditor::View* view = qobject_cast<KTextEditor::View*>(sender());
   Q_ASSERT(view);
 
+  ifDebug(kDebug() << "settings changed" << view;)
   updateColorsFromDocument(view->document());
 }
 
 void ColorCache::updateColorsFromDocument(KTextEditor::Document* doc)
 {
+  ifDebug(kDebug() << "has view:" << doc->activeView() << doc->views().size();)
   if ( !doc->activeView() ) {
     // yeah, the HighlightInterface methods returning an Attribute
     // require a View... kill me for that mess
@@ -191,15 +206,18 @@ void ColorCache::updateColorsFromDocument(KTextEditor::Document* doc)
       // fallback for Kate < 4.5.2 where the background was never set in styles returned by defaultStyle()
       background = KColorScheme(QPalette::Normal, KColorScheme::View).background(KColorScheme::NormalBackground).color();
     }
+    ifDebug(kDebug() << "has iface" << foreground << background;)
   }
 
   if ( !foreground.isValid() ) {
     // fallback to colorscheme variant
+    ifDebug(kDebug() << "updating from scheme";)
     updateColorsFromScheme();
   } else if ( m_foregroundColor != foreground || m_backgroundColor != background ) {
     m_foregroundColor = foreground;
     m_backgroundColor = background;
 
+    ifDebug(kDebug() << "updating from document";)
     update();
   }
 }
@@ -233,6 +251,7 @@ void ColorCache::updateColorsFromSettings()
 void ColorCache::update()
 {
   if ( !m_self ) {
+    ifDebug(kDebug() << "not updating - still initializating";)
     // don't update on startup, updateInternal is called directly there
     return;
   }
@@ -242,6 +261,7 @@ void ColorCache::update()
 
 void ColorCache::updateInternal()
 {
+  ifDebug(kDebug() << "update internal" << m_self;)
   generateColors();
 
   if ( !m_self ) {
