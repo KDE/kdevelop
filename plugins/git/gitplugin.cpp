@@ -282,9 +282,6 @@ bool GitPlugin::isValidDirectory(const KUrl & dirPath)
 bool GitPlugin::isVersionControlled(const KUrl &path)
 {
     QFileInfo fsObject(path.toLocalFile());
-    if (!fsObject.exists()) {
-        return false;
-    }
     if (fsObject.isDir()) {
         return isValidDirectory(path);
     }

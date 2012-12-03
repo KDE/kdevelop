@@ -64,7 +64,6 @@ struct DVcsJobPrivate
 DVcsJob::DVcsJob(const QDir& workingDir, IPlugin* parent, OutputJob::OutputJobVerbosity verbosity)
     : VcsJob(parent, verbosity), d(new DVcsJobPrivate)
 {
-    Q_ASSERT(workingDir.exists());
     d->status = JobNotStarted;
     d->vcsplugin = parent;
     d->childproc->setWorkingDirectory(workingDir.absolutePath());
