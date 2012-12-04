@@ -522,13 +522,13 @@ void ProjectModelTest::testItemsForUrl_data()
     QTest::addColumn<int>("matches");
 
     {
-        ProjectFolderItem* root = new ProjectFolderItem(0, KUrl("file:////tmp/"));
+        ProjectFolderItem* root = new ProjectFolderItem(0, KUrl("file:///tmp/"));
         ProjectFileItem* file = new ProjectFileItem(0, KUrl(root->url(), "a"), root);
         QTest::newRow("find one") << file->url() << static_cast<ProjectBaseItem*>(root) << 1;
     }
 
     {
-        ProjectFolderItem* root = new ProjectFolderItem(0, KUrl("file:////tmp/"));
+        ProjectFolderItem* root = new ProjectFolderItem(0, KUrl("file:///tmp/"));
         ProjectFolderItem* folder = new ProjectFolderItem(0, KUrl(root->url(), "a"), root);
         ProjectFileItem* file = new ProjectFileItem(0, KUrl(folder->url(), "foo"), folder);
         ProjectTargetItem* target = new ProjectTargetItem(0, "b", root);
