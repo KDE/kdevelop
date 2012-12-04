@@ -661,7 +661,7 @@ void SessionController::initialize( const QString& session )
 {
     QDir sessiondir( SessionController::sessionDirectory() );
     
-    foreach( const QString& s, sessiondir.entryList( QDir::AllDirs ) )
+    foreach( const QString& s, sessiondir.entryList( QDir::AllDirs | QDir::NoDotAndDotDot ) )
     {
         QUuid id( s );
         if( id.isNull() )
