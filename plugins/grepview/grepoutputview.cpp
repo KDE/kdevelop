@@ -328,8 +328,14 @@ void GrepOutputView::rowsRemoved()
 void GrepOutputView::updateApplyState(const QModelIndex& topLeft, const QModelIndex& bottomRight)
 {
     Q_UNUSED(bottomRight);
-    // we only care about root item
-    if(!topLeft.parent().isValid() && model())
+
+    if (!model() || !model()->hasResults()) {
+        applyButton->setEnabled(false);
+        return;
+    }
+
+    // we only care about the root item
+    if(!topLeft.parent().isValid())
     {
         applyButton->setEnabled(topLeft.data(Qt::CheckStateRole) != Qt::Unchecked && model()->itemsCheckable());
     }
