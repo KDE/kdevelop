@@ -631,34 +631,38 @@ void ProjectFolderItem::propagateRename(const KUrl& newBase) const
 
 ProjectBaseItem::RenameStatus ProjectFolderItem::rename(const QString& newname)
 {
+    if (newname.contains('/'))
+        return ProjectBaseItem::InvalidNewName;
+
     //TODO: Same as ProjectFileItem, so should be shared somehow
     KUrl dest = url().upUrl();
     dest.addPath(newname);
-    if( !newname.contains('/') )
+
+    // url() may contain a trailing slash, try to ignore that
+    if (url().equals(dest, KUrl::CompareWithoutTrailingSlash)) {
+        kDebug() << "Source and destination folder equal, no rename needed";
+        return ProjectBaseItem::RenameOk;
+    }
+
+    KIO::UDSEntry entry;
+    //There exists a file with that name?
+    if( !KIO::NetAccess::stat(dest, entry, 0) )
     {
-        KIO::UDSEntry entry;
-        //There exists a file with that name?
-        if( !KIO::NetAccess::stat(dest, entry, 0) )
+        if( !project() || !project()->projectFileManager() )
         {
-            if( !project() || !project()->projectFileManager() )
-            {
-                return ProjectBaseItem::rename(newname);
-            }
-            else if( project()->projectFileManager()->renameFolder(this, dest) )
-            {
-                return ProjectBaseItem::RenameOk;
-            }
-            else
-            {
-                return ProjectBaseItem::ProjectManagerRenameFailed;
-            }
-        } else
+            return ProjectBaseItem::rename(newname);
+        }
+        else if( project()->projectFileManager()->renameFolder(this, dest) )
         {
-            return ProjectBaseItem::ExistingItemSameName;
+            return ProjectBaseItem::RenameOk;
+        }
+        else
+        {
+            return ProjectBaseItem::ProjectManagerRenameFailed;
         }
     } else
     {
-        return ProjectBaseItem::InvalidNewName;
+        return ProjectBaseItem::ExistingItemSameName;
     }
 }
 
@@ -723,33 +727,37 @@ IndexedString ProjectFileItem::indexedUrl() const
 
 ProjectBaseItem::RenameStatus ProjectFileItem::rename(const QString& newname)
 {
+    if (newname.contains('/'))
+        return ProjectBaseItem::InvalidNewName;
+
     KUrl dest = url().upUrl();
     dest.addPath(newname);
-    if( !newname.contains('/') )
+
+    if (url() == dest) {
+        kDebug() << "Source and destination file equal, no rename needed:" << dest;
+        // it's fine to just say the rename succeeded here, std::rename has the same behavior
+        return ProjectBaseItem::RenameOk;
+    }
+
+    KIO::UDSEntry entry;
+    //There exists a file with that name?
+    if( !KIO::NetAccess::stat(dest, entry, 0) )
     {
-        KIO::UDSEntry entry;
-        //There exists a file with that name?
-        if( !KIO::NetAccess::stat(dest, entry, 0) )
+        if( !project() || !project()->projectFileManager() )
         {
-            if( !project() || !project()->projectFileManager() )
-            {
-                return ProjectBaseItem::rename(newname);
-            }
-            else if( project()->projectFileManager()->renameFile(this, dest) )
-            {
-                return ProjectBaseItem::RenameOk;
-            }
-            else
-            {
-                return ProjectBaseItem::ProjectManagerRenameFailed;
-            }
-        } else
+            return ProjectBaseItem::rename(newname);
+        }
+        else if( project()->projectFileManager()->renameFile(this, dest) )
         {
-            return ProjectBaseItem::ExistingItemSameName;
+            return ProjectBaseItem::RenameOk;
+        }
+        else
+        {
+            return ProjectBaseItem::ProjectManagerRenameFailed;
         }
     } else
     {
-        return ProjectBaseItem::InvalidNewName;
+        return ProjectBaseItem::ExistingItemSameName;
     }
 }
 
