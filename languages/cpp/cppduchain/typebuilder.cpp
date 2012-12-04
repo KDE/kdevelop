@@ -467,9 +467,12 @@ void TypeBuilder::createTypeForInitializer(InitializerAST *node) {
         AbstractType::Ptr type = res.type.abstractType();
         if ( m_lastTypeWasAuto )
         {
-          type->setModifiers( integral->modifiers() );
+          // remove references or aliases
+          type = TypeUtils::realType( type, topContext() );
           // Turn "5" into "int"
           type = TypeUtils::removeConstants( type, topContext() );
+          // ensure proper const modifier is set
+          type->setModifiers( integral->modifiers() );
           if (ReferenceType::Ptr ref = lastType().cast<ReferenceType>()) {
             ref->setBaseType( type );
             type = ref.cast<AbstractType>();

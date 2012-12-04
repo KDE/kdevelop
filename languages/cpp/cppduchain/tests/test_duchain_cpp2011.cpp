@@ -842,13 +842,18 @@ void TestDUChain::testAuto()
     "auto a7(1.1d);\n"
     "auto a8(i);\n"
     "auto a9 /** test **/ (i);\n"
+    "auto a10(a2);\n"
+    "auto a11(a3);\n"
+    "auto a12(a4);\n"
+    "auto a13(a5);\n"
+    "auto a14(a6);\n"
   );
   LockedTopDUContext top = parse(code, DumpAll);
   QVERIFY(top);
   DUChainReadLocker lock;
   QVERIFY(top->problems().isEmpty());
 
-  QCOMPARE(top->localDeclarations().count(), 10);
+  QCOMPARE(top->localDeclarations().count(), 15);
 
   Declaration* dec = top->localDeclarations().at(1);
   QVERIFY(dec->type<IntegralType>());
@@ -889,13 +894,13 @@ void TestDUChain::testAuto()
   QVERIFY(dec->type<IntegralType>());
   QCOMPARE(dec->type<IntegralType>()->dataType(), (uint) IntegralType::TypeDouble);
 
-  dec = top->localDeclarations().at(8);
-  QVERIFY(dec->type<IntegralType>());
-  QCOMPARE(dec->type<IntegralType>()->dataType(), (uint) IntegralType::TypeChar);
-
-  dec = top->localDeclarations().at(9);
-  QVERIFY(dec->type<IntegralType>());
-  QCOMPARE(dec->type<IntegralType>()->dataType(), (uint) IntegralType::TypeChar);
+  for (int i = 8; i < 15; ++i) {
+    dec = top->localDeclarations().at(i);
+    qDebug() << dec->toString() << dec->abstractType()->toString();
+    QVERIFY(dec->type<IntegralType>());
+    QCOMPARE(dec->type<IntegralType>()->dataType(), (uint) IntegralType::TypeChar);
+    QCOMPARE(dec->abstractType()->modifiers(), (quint64) AbstractType::NoModifiers);
+  }
 }
 
 void TestDUChain::testNoexcept()
