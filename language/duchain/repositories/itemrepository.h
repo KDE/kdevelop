@@ -78,6 +78,8 @@
 
 namespace KDevelop {
 
+class ISession;
+
   /**
    * This file implements a generic bucket-based indexing repository, that can be used for example to index strings.
    *
@@ -151,7 +153,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepositoryRegistry {
     static ItemRepositoryRegistry* self();
 
     /// @returns item-repository path (e. g. ~/cache/.kdevduchain) for the given session, creating it if needed.
-    static QString repositoryPathForSession(const QUuid& uuid);
+    static QString repositoryPathForSession(ISession* session);
+
+    ///Deletes the item-repository of a specified session; or, if it is currently used, marks it for deletion at exit.
+    static void deleteRepositoryFromDisk(ISession* session);
 
     ///Path is supposed to be a shared directory-name that the item-repositories are to be loaded from
     ///@param clear Whether a fresh start should be done, and all repositories cleared
@@ -193,8 +198,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepositoryRegistry {
     ///Returns the global item-repository mutex. This can be used to protect the initialization.
     QMutex& mutex();
   private:
-    void deleteDataDirectory();
+    void deleteDataDirectory(bool recreate = true);
     static ItemRepositoryRegistry* m_self;
+    bool m_shallDelete;
     QString m_path;
     QMap<AbstractItemRepository*, AbstractRepositoryManager*> m_repositories;
     QMap<QString, QAtomicInt*> m_customCounters;

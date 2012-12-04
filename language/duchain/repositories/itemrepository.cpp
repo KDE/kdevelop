@@ -23,6 +23,8 @@
 #include <QApplication>
 #include <QTextStream>
 #include <QProcessEnvironment>
+#include <QDBusConnection>
+#include <QCoreApplication>
 
 #include <KStandardDirs>
 #include <KComponentData>
@@ -33,6 +35,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/isession.h>
 #include <util/fileutils.h>
+#include <shell/sessioncontroller.h>
 
 #include "../duchain.h"
 
@@ -56,7 +59,7 @@ AbstractItemRepository::~AbstractItemRepository() {
 ItemRepositoryRegistry::ItemRepositoryRegistry() : m_mutex(QMutex::Recursive) {
   Q_ASSERT( ICore::self() );
   Q_ASSERT( ICore::self()->activeSession() );
-  QString repositoryPath = repositoryPathForSession( ICore::self()->activeSession()->id() );
+  QString repositoryPath = repositoryPathForSession( ICore::self()->activeSession() );
   open( repositoryPath, false );
 }
 
@@ -70,12 +73,34 @@ ItemRepositoryRegistry* ItemRepositoryRegistry::self()
   return m_self;
 }
 
-QString ItemRepositoryRegistry::repositoryPathForSession(const QUuid& uuid) {
+QString ItemRepositoryRegistry::repositoryPathForSession(ISession* session) {
   QString xdgCacheDir = QProcessEnvironment::systemEnvironment().value( "XDG_CACHE_HOME", QDir::homePath() + "/.cache" ) + "/kdevduchain";
   QString baseDir = QProcessEnvironment::systemEnvironment().value( "KDEV_DUCHAIN_DIR", xdgCacheDir );
-  baseDir += QString( "/%1-%2" ).arg( qAppName() ).arg( uuid.toString() );
+  baseDir += QString( "/%1-%2" ).arg( qAppName() ).arg( session->id().toString() );
   KStandardDirs::makeDir( baseDir );
   return baseDir;
+}
+
+void ItemRepositoryRegistry::deleteRepositoryFromDisk(ISession* session)
+{
+  QString repositoryPath = repositoryPathForSession( session );
+  // Now, as we have only the global item-repository registry, assume that if and only if
+  // the given session is ours, its cache path is used by the said global item-repository registry.
+  if( m_self && m_self->m_path == repositoryPath ) {
+    m_self->m_shallDelete = true;
+    return;
+  }
+
+  // Otherwise, given session is not ours.
+  // Try to lock it; and, if locking succeeds, remove its item-repository directory directly.
+  SessionController::LockSessionState state = SessionController::tryLockSession( session->id(), true );
+  if( state ) {
+    removeDirectory( repositoryPath );
+
+    // Then unlock the session.
+    QDBusConnection::sessionBus().unregisterService( state.DBusService );
+    state.lockFile->unlock();
+  }
 }
 
 QMutex& ItemRepositoryRegistry::mutex() {
@@ -133,7 +158,7 @@ void ItemRepositoryRegistry::unRegisterRepository(AbstractItemRepository* reposi
 }
 
 //After calling this, the data-directory may be a new one
-void ItemRepositoryRegistry::deleteDataDirectory() {
+void ItemRepositoryRegistry::deleteDataDirectory(bool recreate) {
   QMutexLocker lock(&m_mutex);
 
   //lockForWriting creates a file, that prevents any other KDevelop instance from using the directory as it is.
@@ -144,7 +169,9 @@ void ItemRepositoryRegistry::deleteDataDirectory() {
   Q_ASSERT(result);
   Q_UNUSED(result);
   // Just recreate the directory then; leave old path (as it is dependent on appname and session only).
-  KStandardDirs::makeDir(m_path);
+  if(recreate) {
+    KStandardDirs::makeDir(m_path);
+  }
 }
 
 void setCrashCounter(QFile& crashesFile, int count) {
@@ -339,7 +366,11 @@ ItemRepositoryRegistry::~ItemRepositoryRegistry() {
 }
 
 void ItemRepositoryRegistry::shutdown() {
-  QFile::remove(m_path + QString("/crash_counter"));
+  if(m_shallDelete) {
+    deleteDataDirectory(false);
+  } else {
+    QFile::remove(m_path + QString("/crash_counter"));
+  }
 }
 
 }
