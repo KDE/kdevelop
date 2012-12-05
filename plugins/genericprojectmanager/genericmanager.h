@@ -33,7 +33,7 @@ public:
     virtual bool reload( KDevelop::ProjectFolderItem* item );
 
 protected:
-    virtual bool isValid( const KUrl& url, const bool isFolder, KDevelop::IProject* project ) const;
+    virtual bool isValid( const KDevelop::Path& path, const bool isFolder, KDevelop::IProject* project ) const;
 
 private:
     typedef QPair<QStringList, QStringList> IncludeRules;

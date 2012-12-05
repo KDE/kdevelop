@@ -44,18 +44,18 @@ class DummyBSM : public KDevelop::IPlugin, public KDevelop::IBuildSystemManager
         QList<KDevelop::ProjectTargetItem*> targets() const;
         QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectFolderItem*) const;
 
-        KDevelop::ProjectFolderItem* addFolder( const KUrl& /*folder */, KDevelop::ProjectFolderItem* /*parent*/ ) { return 0; }
+        KDevelop::ProjectFolderItem* addFolder( const KDevelop::Path& /*folder */, KDevelop::ProjectFolderItem* /*parent*/ ) { return 0; }
         KDevelop::ProjectTargetItem* createTarget( const QString&, KDevelop::ProjectFolderItem* ) { return 0; }
-        KDevelop::ProjectFileItem* addFile( const KUrl&, KDevelop::ProjectFolderItem* ) { return 0; }
+        KDevelop::ProjectFileItem* addFile( const KDevelop::Path&, KDevelop::ProjectFolderItem* ) { return 0; }
 
         bool addFilesToTarget( const QList<KDevelop::ProjectFileItem*>&, KDevelop::ProjectTargetItem* ) { return false; }
         bool removeTarget( KDevelop::ProjectTargetItem* ) { return false; }
         bool removeFilesAndFolders( const QList< KDevelop::ProjectBaseItem* >& ) { return false; }
         bool removeFilesFromTargets( const QList<KDevelop::ProjectFileItem*>& ) { return false; }
-        bool renameFile(KDevelop::ProjectFileItem*, const KUrl&) { return false; }
-        bool renameFolder(KDevelop::ProjectFolderItem*, const KUrl&) { return false; }
+        bool renameFile(KDevelop::ProjectFileItem*, const KDevelop::Path&) { return false; }
+        bool renameFolder(KDevelop::ProjectFolderItem*, const KDevelop::Path&) { return false; }
         bool moveFilesAndFolders( const QList< KDevelop::ProjectBaseItem* >&, KDevelop::ProjectFolderItem* ) { return false; };
-        bool copyFilesAndFolders( const KUrl::List &, KDevelop::ProjectFolderItem* ) { return false; };
+        bool copyFilesAndFolders( const KDevelop::Path::List &, KDevelop::ProjectFolderItem* ) { return false; };
         QHash<QString,QString> environment(KDevelop::ProjectBaseItem *) const { return QHash<QString, QString>(); }
         Features features() const { return Targets | Files | Folders; }
         

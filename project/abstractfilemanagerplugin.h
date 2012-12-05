@@ -1,6 +1,6 @@
 /***************************************************************************
  *   This file is part of KDevelop                                         *
- *   Copyright 2010 Milian Wolff <mail@milianw.de>                         *
+ *   Copyright 2010-2012 Milian Wolff <mail@milianw.de>                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -25,6 +25,8 @@
 
 #include "interfaces/iprojectfilemanager.h"
 
+#include <QVariant>
+
 #include <interfaces/iplugin.h>
 
 class KDirWatch;
@@ -45,7 +47,7 @@ class KDEVPLATFORMPROJECT_EXPORT AbstractFileManagerPlugin : public IPlugin, pub
 
 public:
     explicit AbstractFileManagerPlugin( const KComponentData& instance, QObject *parent = 0,
-                                        const QVariantList &args = QVariantList() );
+                                        const QVariantList& args = QVariantList() );
     virtual ~AbstractFileManagerPlugin();
 
 //
@@ -53,13 +55,13 @@ public:
 //
     virtual Features features() const;
 
-    virtual ProjectFolderItem* addFolder( const KUrl& folder, ProjectFolderItem *parent );
-    virtual ProjectFileItem* addFile( const KUrl& file, ProjectFolderItem *parent );
+    virtual ProjectFolderItem* addFolder( const Path& folder, ProjectFolderItem *parent );
+    virtual ProjectFileItem* addFile( const Path& file, ProjectFolderItem *parent );
     virtual bool removeFilesAndFolders( const QList<ProjectBaseItem*> &items );
     virtual bool moveFilesAndFolders(const QList< ProjectBaseItem* >& items, ProjectFolderItem* newParent);
-    virtual bool copyFilesAndFolders(const KUrl::List& items, ProjectFolderItem* newParent);
-    virtual bool renameFolder( ProjectFolderItem *folder, const KUrl& url );
-    virtual bool renameFile( ProjectFileItem *file, const KUrl& url );
+    virtual bool copyFilesAndFolders(const Path::List& items, ProjectFolderItem* newParent);
+    virtual bool renameFolder(ProjectFolderItem* folder, const Path& newPath);
+    virtual bool renameFile(ProjectFileItem* file, const Path& newPath);
 
     virtual QList<ProjectFolderItem*> parse( ProjectFolderItem *item );
     virtual ProjectFolderItem *import( IProject *project );
@@ -75,30 +77,30 @@ protected:
      *
      * The default implementation will show all files.
      *
-     * @return True when @p url should belong to @p project, false otherwise.
+     * @return True when @p path should belong to @p project, false otherwise.
      */
-    virtual bool isValid(const KUrl& url, const bool isFolder, IProject* project) const;
+    virtual bool isValid(const Path& path, const bool isFolder, IProject* project) const;
 
     /**
      * Customization hook enabling you to create custom FolderItems if required.
      *
      * The default implementation will return a simple @c ProjectFolderItem
      */
-    virtual ProjectFolderItem* createFolderItem( KDevelop::IProject* project, const KUrl& url,
-                                                 KDevelop::ProjectBaseItem* parent = 0);
+    virtual ProjectFolderItem* createFolderItem( IProject* project, const Path& path,
+                                                 ProjectBaseItem* parent = 0);
 
     /**
      * Customization hook enabling you to create custom FileItems if required.
      *
      * The default implementation will return a simple @c ProjectFileItem
      */
-    virtual ProjectFileItem* createFileItem( KDevelop::IProject* project, const KUrl& url,
-                                             KDevelop::ProjectBaseItem* parent);
+    virtual ProjectFileItem* createFileItem( IProject* project, const Path& path,
+                                             ProjectBaseItem* parent);
 
     /**
      * @return the @c KDirWatch for the given @p project.
      */
-    KDirWatch* projectWatcher( KDevelop::IProject* project ) const;
+    KDirWatch* projectWatcher( IProject* project ) const;
 
     /**
      * Sets a list of filenames to ignore when importing a project
@@ -111,15 +113,6 @@ protected:
      * plugin might want to hide.
      */
     void setImportFileNameFilter( const QStringList& filterNames );
-
-Q_SIGNALS:
-    void folderAdded(KDevelop::ProjectFolderItem* folder);
-    void folderRemoved(KDevelop::ProjectFolderItem* folder);
-    void folderRenamed(const KUrl& oldFolder, KDevelop::ProjectFolderItem* newFolder);
-
-    void fileAdded(KDevelop::ProjectFileItem* file);
-    void fileRemoved(KDevelop::ProjectFileItem* file);
-    void fileRenamed(const KUrl& oldFile, KDevelop::ProjectFileItem* newFile);
 
 private:
     struct Private;
@@ -138,6 +131,15 @@ private:
 
     Q_PRIVATE_SLOT(d, void projectClosing(KDevelop::IProject* project))
     Q_PRIVATE_SLOT(d, void jobFinished(KJob* job))
+
+Q_SIGNALS:
+    void folderAdded(ProjectFolderItem* folder);
+    void folderRemoved(ProjectFolderItem* folder);
+    void folderRenamed(const Path& oldFolder, ProjectFolderItem* newFolder);
+
+    void fileAdded(ProjectFileItem* file);
+    void fileRemoved(ProjectFileItem* file);
+    void fileRenamed(const Path& oldFile, ProjectFileItem* newFile);
 };
 
 }

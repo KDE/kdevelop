@@ -152,6 +152,46 @@ public:
     Path m_path;
     uint m_pathIndex;
     QString iconName;
+
+    ProjectBaseItem::RenameStatus renameBaseItem(ProjectBaseItem* item, const QString& newName)
+    {
+        if (item->parent()) {
+            foreach(ProjectBaseItem* sibling, item->parent()->children()) {
+                if (sibling->text() == newName) {
+                    return ProjectBaseItem::ExistingItemSameName;
+                }
+            }
+        }
+        item->setText( newName );
+        return ProjectBaseItem::RenameOk;
+    }
+
+    ProjectBaseItem::RenameStatus renameFileOrFolder(ProjectBaseItem* item, const QString& newName)
+    {
+        Q_ASSERT(item->file() || item->folder());
+
+        if( !newName.contains('/') ) {
+            KIO::UDSEntry entry;
+            //There exists a folder with that name?
+            Path newPath = item->path();
+            newPath.setFileName(newName);
+            if( !KIO::NetAccess::stat(newPath.toUrl(), entry, 0) ) {
+                if( !item->project() || !item->project()->projectFileManager() ) {
+                    return renameBaseItem(item, newName);
+                } else if( item->folder() && item->project()->projectFileManager()->renameFolder(item->folder(), newPath) ) {
+                    return ProjectBaseItem::RenameOk;
+                } else if ( item->file() && item->project()->projectFileManager()->renameFile(item->file(), newPath) ) {
+                    return ProjectBaseItem::RenameOk;
+                } else {
+                    return ProjectBaseItem::ProjectManagerRenameFailed;
+                }
+            } else {
+                return ProjectBaseItem::ExistingItemSameName;
+            }
+        } else {
+            return ProjectBaseItem::InvalidNewName;
+        }
+    }
 };
 
 
@@ -360,17 +400,10 @@ void ProjectBaseItem::setText( const QString& text )
     }
 }
 
-ProjectBaseItem::RenameStatus ProjectBaseItem::rename(const QString& newname)
+ProjectBaseItem::RenameStatus ProjectBaseItem::rename(const QString& newName)
 {
-    if (parent()) {
-        foreach(ProjectBaseItem* sibling, parent()->children()) {
-            if (sibling->text() == newname) {
-                return ExistingItemSameName;
-            }
-        }
-    }
-    setText( newname );
-    return RenameOk;
+    Q_D(ProjectBaseItem);
+    return d->renameBaseItem(this, newName);
 }
 
 KDevelop::ProjectBaseItem::ProjectItemType baseType( int type )
@@ -612,8 +645,8 @@ ProjectFolderItem::ProjectFolderItem( IProject* project, const KUrl & dir, Proje
     setUrl( dir );
 }
 
-ProjectFolderItem::ProjectFolderItem(IProject* project, const Path& path)
-    : ProjectBaseItem( project, path.fileName() )
+ProjectFolderItem::ProjectFolderItem(IProject* project, const Path& path, ProjectBaseItem* parent)
+    : ProjectBaseItem( project, path.fileName(), parent )
 {
     setPath( path );
 
@@ -674,37 +707,9 @@ void ProjectFolderItem::propagateRename( const Path& newBase ) const
     }
 }
 
-ProjectBaseItem::RenameStatus ProjectFolderItem::rename(const QString& newname)
+ProjectBaseItem::RenameStatus ProjectFolderItem::rename(const QString& newName)
 {
-    //TODO: Same as ProjectFileItem, so should be shared somehow
-    KUrl dest = path().toUrl().upUrl();
-    dest.addPath(newname);
-    if( !newname.contains('/') )
-    {
-        KIO::UDSEntry entry;
-        //There exists a file with that name?
-        if( !KIO::NetAccess::stat(dest, entry, 0) )
-        {
-            if( !project() || !project()->projectFileManager() )
-            {
-                return ProjectBaseItem::rename(newname);
-            }
-            else if( project()->projectFileManager()->renameFolder(this, dest) )
-            {
-                return ProjectBaseItem::RenameOk;
-            }
-            else
-            {
-                return ProjectBaseItem::ProjectManagerRenameFailed;
-            }
-        } else
-        {
-            return ProjectBaseItem::ExistingItemSameName;
-        }
-    } else
-    {
-        return ProjectBaseItem::InvalidNewName;
-    }
+    return d_ptr->renameFileOrFolder(this, newName);
 }
 
 bool ProjectFolderItem::hasFileOrFolder(const QString& name) const
@@ -730,8 +735,8 @@ ProjectBuildFolderItem::ProjectBuildFolderItem( IProject* project, const KUrl &d
 {
 }
 
-ProjectBuildFolderItem::ProjectBuildFolderItem(IProject* project, const Path& path)
-    : ProjectFolderItem( project, path )
+ProjectBuildFolderItem::ProjectBuildFolderItem(IProject* project, const Path& path, ProjectBaseItem *parent)
+    : ProjectFolderItem( project, path, parent )
 {
 }
 
@@ -765,8 +770,8 @@ ProjectFileItem::ProjectFileItem( IProject* project, const KUrl & file, ProjectB
     setUrl( file );
 }
 
-ProjectFileItem::ProjectFileItem( IProject* project, const Path& path)
-    : ProjectBaseItem( project, path.fileName() )
+ProjectFileItem::ProjectFileItem( IProject* project, const Path& path, ProjectBaseItem* parent )
+    : ProjectBaseItem( project, path.fileName(), parent )
 {
     setFlags(flags() | Qt::ItemIsDragEnabled);
     setPath( path );
@@ -796,36 +801,9 @@ IndexedString ProjectFileItem::indexedUrl() const
     return indexedPath();
 }
 
-ProjectBaseItem::RenameStatus ProjectFileItem::rename(const QString& newname)
+ProjectBaseItem::RenameStatus ProjectFileItem::rename(const QString& newName)
 {
-    KUrl dest = url().upUrl();
-    dest.addPath(newname);
-    if( !newname.contains('/') )
-    {
-        KIO::UDSEntry entry;
-        //There exists a file with that name?
-        if( !KIO::NetAccess::stat(dest, entry, 0) )
-        {
-            if( !project() || !project()->projectFileManager() )
-            {
-                return ProjectBaseItem::rename(newname);
-            }
-            else if( project()->projectFileManager()->renameFile(this, dest) )
-            {
-                return ProjectBaseItem::RenameOk;
-            }
-            else
-            {
-                return ProjectBaseItem::ProjectManagerRenameFailed;
-            }
-        } else
-        {
-            return ProjectBaseItem::ExistingItemSameName;
-        }
-    } else
-    {
-        return ProjectBaseItem::InvalidNewName;
-    }
+    return d_ptr->renameFileOrFolder(this, newName);
 }
 
 QString ProjectFileItem::fileName() const

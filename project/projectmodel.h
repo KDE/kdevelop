@@ -274,9 +274,10 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectFolderItem: public ProjectBaseItem
 public:
     KDE_DEPRECATED ProjectFolderItem( IProject*, const KUrl &dir, ProjectBaseItem *parent = 0 );
     /**
-     * Create a new ProjectFolderItem without a parent.
+     * Create a new ProjectFolderItem with the given @p path and an optional @p parent
+     * in the given @p project.
      */
-    ProjectFolderItem( IProject* project, const Path &path );
+    ProjectFolderItem( IProject* project, const Path& path, ProjectBaseItem* parent = 0 );
 
     /**
      * Create a child ProjectFolderItem of @p parent with @p name.
@@ -319,9 +320,10 @@ public:
     KDE_DEPRECATED ProjectBuildFolderItem( IProject*, const KUrl &dir, ProjectBaseItem *parent = 0 );
 
     /**
-     * Create a new ProjectBuildFolderItem without a parent.
+     * Create a new ProjectBuildFolderItem with the given @p path with the optional
+     * parent @p parent in the given @p project.
      */
-    ProjectBuildFolderItem( IProject* project, const Path &path );
+    ProjectBuildFolderItem( IProject* project, const Path &path, ProjectBaseItem* parent = 0 );
     /**
      * Create a child ProjectBuildFolderItem of @p parent with @p name.
      *
@@ -391,9 +393,11 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectFileItem: public ProjectBaseItem
 public:
     KDE_DEPRECATED ProjectFileItem( IProject*, const KUrl& file, ProjectBaseItem *parent = 0 );
     /**
-     * Create a new ProjectFileItem without a parent in the given @p project.
+     * Create a new ProjectFileItem with the given @p path and an optional @p parent
+     * in the given @p project.
      */
-    ProjectFileItem( IProject* project, const Path& path );
+    ProjectFileItem( IProject* project, const Path& path, ProjectBaseItem* parent = 0 );
+
     /**
      * Create a child ProjectFileItem of @p parent with the given @p name.
      *

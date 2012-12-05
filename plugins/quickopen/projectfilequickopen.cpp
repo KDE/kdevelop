@@ -296,7 +296,7 @@ void OpenFilesDataProvider::reset()
 
     foreach( IDocument* doc, docCtrl->openDocuments() ) {
         ProjectFile f;
-        f.path = doc->url();
+        f.path = Path(doc->url());
         IProject* project = projCtrl->findProjectForUrl(doc->url());
         if (project) {
             f.projectPath = project->path();

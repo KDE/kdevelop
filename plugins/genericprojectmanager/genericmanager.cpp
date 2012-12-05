@@ -60,22 +60,21 @@ bool GenericProjectManager::reload( ProjectFolderItem* item )
     return AbstractFileManagerPlugin::reload( item );
 }
 
-bool GenericProjectManager::isValid( const KUrl &url, const bool isFolder, IProject* project ) const
+bool GenericProjectManager::isValid( const Path &path, const bool isFolder, IProject* project ) const
 {
-    if ( isFolder && url.fileName() == ".kdev4" && url.upUrl() == project->folder() ) {
+    if ( isFolder && path.fileName() == ".kdev4" && path.up() == project->path() ) {
         return false;
-    } else if ( url == project->projectFileUrl() ) {
+    } else if ( path == project->projectFile() ) {
         return false;
     }
 
     bool ok = isFolder;
 
-    // we operate on the path of this url relative to the project base
+    // we operate on the relative pathto the project base
     // by prepending a slash we can filter hidden files with the pattern "*/.*"
     // by appending a slash to folders we can filter them with "*/"
-    const QString relativePath = '/' + project->relativeUrl( url ).path(
-        isFolder ? KUrl::AddTrailingSlash : KUrl::RemoveTrailingSlash
-    );
+    const QString relativePath = '/' + project->path().relativePath(path)
+                                + (isFolder ? "/" : "");
 
     Q_ASSERT( m_includeRules.contains( project ) );
     const IncludeRules& rules = m_includeRules.value( project );

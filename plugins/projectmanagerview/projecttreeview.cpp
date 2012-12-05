@@ -182,13 +182,13 @@ void ProjectTreeView::dropEvent(QDropEvent* event)
 
             QList<ProjectBaseItem*> usefulItems = topLevelItemsWithin(selectionCtxt->items());
             filterDroppedItems(usefulItems, destItem);
-            QList<KUrl> urls;
+            Path::List paths;
             foreach (ProjectBaseItem* i, usefulItems) {
-                urls << i->url();
+                paths << i->path();
             }
             bool success = false;
             if (executedAction == copy) {
-                success =~ destItem->project()->projectFileManager()->copyFilesAndFolders(urls, folder);
+                success =~ destItem->project()->projectFileManager()->copyFilesAndFolders(paths, folder);
             } else if (executedAction == move) {
                 success =~ destItem->project()->projectFileManager()->moveFilesAndFolders(usefulItems, folder);
             }
@@ -201,13 +201,10 @@ void ProjectTreeView::dropEvent(QDropEvent* event)
 
                 //and select new items
                 QItemSelection selection;
-                foreach (const KUrl &url, urls) {
-                    KUrl targetUrl = folder->url();
-                    targetUrl.addPath(url.fileName());
+                foreach (const Path &path, paths) {
+                    const Path targetPath(folder->path(), path.fileName());
                     foreach (ProjectBaseItem *item, folder->children()) {
-                        KUrl itemUrl = item->url();
-                        itemUrl.adjustPath(KUrl::RemoveTrailingSlash); //required to correctly compare urls
-                        if (itemUrl == targetUrl) {
+                        if (item->path() == targetPath) {
                             QModelIndex indx = proxy->mapFromSource( projectModel()->indexFromItem( item ) );
                             selection.append(QItemSelectionRange(indx, indx));
                             setCurrentIndex(indx);
