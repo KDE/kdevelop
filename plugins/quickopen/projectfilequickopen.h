@@ -72,9 +72,7 @@ private:
     ProjectFile m_file;
 };
 
-typedef KDevelop::FilterWithSeparator<ProjectFile> Base;
-
-class BaseFileDataProvider : public KDevelop::QuickOpenDataProviderBase, public Base, public KDevelop::QuickOpenFileSetInterface
+class BaseFileDataProvider : public KDevelop::QuickOpenDataProviderBase, public KDevelop::PathFilter<ProjectFile, BaseFileDataProvider>, public KDevelop::QuickOpenFileSetInterface
 {
     Q_OBJECT
 public:
@@ -84,8 +82,10 @@ public:
     virtual uint unfilteredItemCount() const;
     virtual KDevelop::QuickOpenDataPointer data( uint row ) const;
 
-    //Reimplemented from Base<..>
-    virtual QString itemText( const ProjectFile& data ) const;
+    inline KDevelop::Path itemPath( const ProjectFile& data ) const
+    {
+        return data.path;
+    }
 };
 
 /**

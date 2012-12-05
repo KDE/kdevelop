@@ -236,6 +236,14 @@ public:
     QString remotePrefix() const;
 
     /**
+     * @return an implicitly shared copy of the internal data.
+     */
+    inline QVector<QString> segments() const
+    {
+        return m_data;
+    }
+
+    /**
      * @return the Path converted to an IndexedString.
      *
      * @note This is potentially expensive, try to cache this if you

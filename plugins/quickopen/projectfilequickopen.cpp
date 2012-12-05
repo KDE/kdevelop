@@ -160,28 +160,22 @@ void BaseFileDataProvider::setFilterText( const QString& text )
             path = url.pathOrUrl();
         }
     }
-    Base::setFilter( path.split('/', QString::SkipEmptyParts), QChar('/') );
+    setFilter( path.split('/', QString::SkipEmptyParts) );
 }
 
 uint BaseFileDataProvider::itemCount() const
 {
-    return Base::filteredItems().count();
+    return filteredItems().count();
 }
 
 uint BaseFileDataProvider::unfilteredItemCount() const
 {
-    return Base::items().count();
+    return items().count();
 }
 
 QuickOpenDataPointer BaseFileDataProvider::data(uint row) const
 {
-    return QuickOpenDataPointer(new ProjectFileData( Base::filteredItems().at(row) ));
-}
-
-QString BaseFileDataProvider::itemText( const ProjectFile& data ) const
-{
-    ///FIXME: optimize
-    return data.path.pathOrUrl();
+    return QuickOpenDataPointer(new ProjectFileData( filteredItems().at(row) ));
 }
 
 ProjectFileDataProvider::ProjectFileDataProvider()
@@ -260,16 +254,16 @@ bool sortProjectFiles(const ProjectFile& left, const ProjectFile& right)
 
 void ProjectFileDataProvider::reset()
 {
-    Base::clearFilter();
+    clearFilter();
 
-    QSet<Path> openFiles = openFilesPaths();
+    QSet<IndexedString> openFiles = ::openFiles();
     QList<ProjectFile> projectFiles;
     projectFiles.reserve(m_projectFiles.size());
 
     for(QMap<Path, ProjectFile>::const_iterator it = m_projectFiles.constBegin();
         it != m_projectFiles.constEnd(); ++it)
     {
-        if (!openFiles.contains(it.key())) {
+        if (!openFiles.contains(it.value().indexedUrl)) {
             projectFiles << *it;
         }
     }
@@ -289,7 +283,7 @@ QSet<IndexedString> ProjectFileDataProvider::files() const
 
 void OpenFilesDataProvider::reset()
 {
-    Base::clearFilter();
+    clearFilter();
     QList<ProjectFile> currentFiles;
     IProjectController* projCtrl = ICore::self()->projectController();
     IDocumentController* docCtrl = ICore::self()->documentController();

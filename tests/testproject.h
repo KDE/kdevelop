@@ -56,7 +56,7 @@ public:
     void setProjectItem(ProjectFolderItem* item);
     int fileCount() const { return 0; }
     ProjectFileItem* fileAt( int ) const { return 0; }
-    QList<ProjectFileItem*> files() const { return QList<ProjectFileItem*>(); }
+    QList<ProjectFileItem*> files() const;
     virtual QList< ProjectBaseItem* > itemsForPath(const IndexedString& path) const { return QList< ProjectBaseItem* >(); }
     virtual QList< ProjectBaseItem* > itemsForUrl(const KUrl&) const { return QList< ProjectBaseItem* >(); }
     virtual QList< ProjectFileItem* > filesForPath(const IndexedString& file) const { return QList<ProjectFileItem*>(); }

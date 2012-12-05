@@ -120,6 +120,25 @@ bool TestProject::inProject(const IndexedString& path) const
     return m_path.isParentOf(Path(path.str()));
 }
 
+void findFileItems(ProjectBaseItem* root, QList<ProjectFileItem*>& items)
+{
+    foreach(ProjectBaseItem* item, root->children()) {
+        if (item->file()) {
+            items << item->file();
+        }
+        if (item->rowCount()) {
+            findFileItems(item, items);
+        }
+    }
+}
+
+QList< ProjectFileItem* > TestProject::files() const
+{
+    QList<ProjectFileItem*> ret;
+    findFileItems(m_root, ret);
+    return ret;
+}
+
 void TestProject::addToFileSet(ProjectFileItem* file)
 {
     if (!m_fileSet.contains(file->indexedPath())) {
