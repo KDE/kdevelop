@@ -160,7 +160,6 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
 void OutputWidget::addOutput( int id )
 {
     QTreeView* listview = createListView(id);
-    listview->setSelectionMode(QAbstractItemView::ContiguousSelection);
     setCurrentWidget( listview );
     connect( data->outputdata.value(id), SIGNAL(modelChanged(int)), this, SLOT(changeModel(int)));
     connect( data->outputdata.value(id), SIGNAL(delegateChanged(int)), this, SLOT(changeDelegate(int)));
@@ -392,7 +391,8 @@ QTreeView* OutputWidget::createListView(int id)
             listview->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn); //Always enable the scrollbar, so it doesn't flash around
             listview->setHeaderHidden(true);
             listview->setRootIsDecorated(false);
-            
+            listview->setSelectionMode( QAbstractItemView::ContiguousSelection );
+
             views[id] = listview;
             connect( listview, SIGNAL(activated(QModelIndex)),
                      this, SLOT(activate(QModelIndex)));
@@ -416,6 +416,7 @@ QTreeView* OutputWidget::createListView(int id)
                 listview->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn); //Always enable the scrollbar, so it doesn't flash around
                 listview->setRootIsDecorated(false);
                 listview->setHeaderHidden(true);
+                listview->setSelectionMode( QAbstractItemView::ContiguousSelection );
 
                 layout()->addWidget( listview );
                 connect( listview, SIGNAL(activated(QModelIndex)),
