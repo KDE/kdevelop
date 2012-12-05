@@ -112,16 +112,20 @@ public:
     virtual QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectFolderItem*) const;
 
 protected:
-    virtual bool isValid(const KUrl& url, const bool isFolder, KDevelop::IProject* project) const;
-    virtual KDevelop::ProjectFileItem* createFileItem(KDevelop::IProject* project, const KUrl& url, KDevelop::ProjectBaseItem* parent);
-    virtual KDevelop::ProjectFolderItem* createFolderItem(KDevelop::IProject* project, const KUrl& url, KDevelop::ProjectBaseItem* parent = 0);
+    virtual bool isValid(const KDevelop::Path& path, const bool isFolder, KDevelop::IProject* project) const;
+    virtual KDevelop::ProjectFileItem* createFileItem(KDevelop::IProject* project,
+                                                      const KDevelop::Path& path,
+                                                      KDevelop::ProjectBaseItem* parent);
+    virtual KDevelop::ProjectFolderItem* createFolderItem(KDevelop::IProject* project,
+                                                          const KDevelop::Path& path,
+                                                          KDevelop::ProjectBaseItem* parent = 0);
 
 private:
     /**
      * Initialize targets by reading Makefile in @arg dir
      * @return Target lists in Makefile at @arg dir.
      */
-    QStringList parseCustomMakeFile( const KUrl &makefile );
+    QStringList parseCustomMakeFile( const KDevelop::Path &makefile );
 
 private slots:
     void slotDirty(const QString& path);

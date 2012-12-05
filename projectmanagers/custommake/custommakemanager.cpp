@@ -132,9 +132,9 @@ QList<ProjectTargetItem*> CustomMakeManager::targets(KDevelop::ProjectFolderItem
 }
 
 //TODO: make filtering generic
-bool CustomMakeManager::isValid(const KUrl& url, const bool isFolder, IProject* project) const
+bool CustomMakeManager::isValid(const Path& path, const bool isFolder, IProject* project) const
 {
-    const QString name = url.fileName();
+    const QString name = path.fileName();
     const QStringList invalidFolders = QStringList() << ".kdev4" << ".svn" << ".git" << "CVS"
                                                      << ".bzr" << "_darcs" << ".hg";
     if (isFolder && invalidFolders.contains( name )) {
@@ -146,19 +146,19 @@ bool CustomMakeManager::isValid(const KUrl& url, const bool isFolder, IProject* 
                           || (name.startsWith('.') && name.endsWith(".kate-swp"))))
     {
         return false;
-    } else if (isFolder && QFile::exists(url.toLocalFile() + "/.kdev_ignore")) {
+    } else if (isFolder && QFile::exists(path.toLocalFile() + "/.kdev_ignore")) {
         return false;
     } else {
         return true;
     }
 }
 
-ProjectFileItem* CustomMakeManager::createFileItem(IProject* project, const KUrl& url, ProjectBaseItem* parent)
+ProjectFileItem* CustomMakeManager::createFileItem(IProject* project, const Path& path, ProjectBaseItem* parent)
 {
-    KDevelop::ProjectFileItem *item = new KDevelop::ProjectFileItem( project, url, parent );
-    if( url.fileName() == "Makefile" )
+    KDevelop::ProjectFileItem *item = new KDevelop::ProjectFileItem( project, path, parent );
+    if( path.fileName() == "Makefile" )
     {
-        QStringList targetlist = parseCustomMakeFile( url );
+        QStringList targetlist = parseCustomMakeFile( path );
         foreach( const QString &target, targetlist )
         {
             new CustomMakeTargetItem( project, target, parent );
@@ -168,20 +168,19 @@ ProjectFileItem* CustomMakeManager::createFileItem(IProject* project, const KUrl
     return item;
 }
 
-ProjectFolderItem* CustomMakeManager::createFolderItem(IProject* project, const KUrl& url, ProjectBaseItem* parent)
+ProjectFolderItem* CustomMakeManager::createFolderItem(IProject* project, const Path& path, ProjectBaseItem* parent)
 {
     // TODO more faster algorithm. should determine whether this directory
     // contains makefile or not.
-    return new KDevelop::ProjectBuildFolderItem( project, url, parent );
+    return new KDevelop::ProjectBuildFolderItem( project, path, parent );
 }
 
 KDevelop::ProjectFolderItem* CustomMakeManager::import(KDevelop::IProject *project)
 {
-    KUrl dirName = project->folder();
-    if( !dirName.isLocalFile() )
+    if( project->path().isRemote() )
     {
         //FIXME turn this into a real warning
-        kWarning(9025) << "not a local file. Custom make support doesn't handle remote projects";
+        kWarning(9025) << project->path() << "not a local file. Custom make support doesn't handle remote projects";
         return 0;
     }
 
@@ -197,7 +196,7 @@ KDevelop::ProjectFolderItem* CustomMakeManager::import(KDevelop::IProject *proje
 // private slots
 
 ///TODO: move to background thread, probably best would be to use a proper ParseJob
-QStringList CustomMakeManager::parseCustomMakeFile( const KUrl &makefile )
+QStringList CustomMakeManager::parseCustomMakeFile( const Path &makefile )
 {
     if( !makefile.isValid() )
         return QStringList();

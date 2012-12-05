@@ -45,6 +45,7 @@ using KDevelop::IGenericProjectManager;
 using KDevelop::IProjectFileManager;
 using KDevelop::IProjectBuilder;
 using KDevelop::IProject;
+using KDevelop::Path;
 
 K_PLUGIN_FACTORY(CustomBuildSystemFactory, registerPlugin<CustomBuildSystem>(); )
 K_EXPORT_PLUGIN(CustomBuildSystemFactory(KAboutData("kdevcustombuildsystem","kdevcustombuildsystem", ki18n("Custom Build System"), CUSTOM_BUILDSYSTEM_VERSION, ki18n("Support for building and managing custom build systems"), KAboutData::License_GPL, ki18n("Copyright 2010 Andreas Pakulat <apaku@gmx.de>"), KLocalizedString(), "", "apaku@gmx.de" )))
@@ -146,10 +147,10 @@ IProjectFileManager::Features CustomBuildSystem::features() const
     return IProjectFileManager::Files | IProjectFileManager::Folders;
 }
 
-ProjectFolderItem* CustomBuildSystem::createFolderItem( KDevelop::IProject* project, 
-                    const KUrl& url, KDevelop::ProjectBaseItem* parent )
+ProjectFolderItem* CustomBuildSystem::createFolderItem( IProject* project,
+                    const Path& path, ProjectBaseItem* parent )
 {
-    return new ProjectBuildFolderItem( project, url, parent );
+    return new ProjectBuildFolderItem( project, path, parent );
 }
 
 KUrl::List CustomBuildSystem::includeDirectories( ProjectBaseItem* item ) const

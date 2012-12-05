@@ -88,8 +88,8 @@ public:
     virtual KUrl::List includeDirectories(KDevelop::ProjectBaseItem *) const;
     virtual QHash<QString, QString> defines(KDevelop::ProjectBaseItem *) const;
 
-    virtual KDevelop::ProjectFolderItem* addFolder( const KUrl& folder, KDevelop::ProjectFolderItem* parent );
-    virtual KDevelop::ProjectFileItem* addFile( const KUrl&, KDevelop::ProjectFolderItem* );
+    virtual KDevelop::ProjectFolderItem* addFolder( const KDevelop::Path& folder, KDevelop::ProjectFolderItem* parent );
+    virtual KDevelop::ProjectFileItem* addFile( const KDevelop::Path&, KDevelop::ProjectFolderItem* );
     virtual KDevelop::ProjectTargetItem* createTarget( const QString&, KDevelop::ProjectFolderItem* ) { return 0; }
     virtual bool addFilesToTarget( const QList<KDevelop::ProjectFileItem*> &files, KDevelop::ProjectTargetItem* target);
 
@@ -97,10 +97,10 @@ public:
     virtual bool removeFilesFromTargets( const QList<KDevelop::ProjectFileItem*> &files );
     virtual bool removeFilesAndFolders( const QList<KDevelop::ProjectBaseItem*> &items);
 
-    virtual bool renameFile(KDevelop::ProjectFileItem*, const KUrl&);
-    virtual bool renameFolder(KDevelop::ProjectFolderItem*, const KUrl&);
+    virtual bool renameFile(KDevelop::ProjectFileItem*, const KDevelop::Path&);
+    virtual bool renameFolder(KDevelop::ProjectFolderItem*, const KDevelop::Path&);
     virtual bool moveFilesAndFolders( const QList< KDevelop::ProjectBaseItem* > &items, KDevelop::ProjectFolderItem *newParent );
-    virtual bool copyFilesAndFolders(const KUrl::List &items, KDevelop::ProjectFolderItem* newParent);
+    virtual bool copyFilesAndFolders(const KDevelop::Path::List &items, KDevelop::ProjectFolderItem* newParent);
 
     QList<KDevelop::ProjectTargetItem*> targets() const;
     QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectFolderItem* folder) const;
@@ -127,8 +127,8 @@ public slots:
     void cleanupItems();
     
 signals:
-    void folderRenamed(const KUrl& oldFolder, KDevelop::ProjectFolderItem* newFolder);
-    void fileRenamed(const KUrl& oldFile, KDevelop::ProjectFileItem* newFile);
+    void folderRenamed(const KDevelop::Path& oldFolder, KDevelop::ProjectFolderItem* newFolder);
+    void fileRenamed(const KDevelop::Path& oldFile, KDevelop::ProjectFileItem* newFile);
     
 private slots:
     void dirtyFile(const QString& file);
@@ -149,7 +149,7 @@ private:
     bool isReloading(KDevelop::IProject* p);
     bool isCorrectFolder(const KUrl& url, KDevelop::IProject* p) const;
     void cleanupToDelete(KDevelop::IProject* p);
-    bool renameFileOrFolder(KDevelop::ProjectBaseItem *item, const KUrl &newUrl);
+    bool renameFileOrFolder(KDevelop::ProjectBaseItem *item, const KDevelop::Path &newPath);
     
     QMutex m_reparsingMutex;
     QMutex m_busyProjectsMutex;

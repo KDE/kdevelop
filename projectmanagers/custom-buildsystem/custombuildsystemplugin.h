@@ -64,7 +64,7 @@ signals:
 public:
     Features features() const;
     virtual KDevelop::ProjectFolderItem* createFolderItem( KDevelop::IProject* project, 
-                    const KUrl& url, KDevelop::ProjectBaseItem* parent = 0 );
+                    const KDevelop::Path& path, KDevelop::ProjectBaseItem* parent = 0 );
 
 // BuildSystemManager API
 public:
