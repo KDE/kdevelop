@@ -110,7 +110,7 @@ private:
       if (!control.problems().isEmpty()) {
         qout << endl << "problems encountered during parsing:" << endl;
         foreach(KDevelop::ProblemPointer p, control.problems()) {
-          qout << p->description() << endl;
+          qout << p->toString() << endl;
         }
       } else {
         qout << "no problems encountered during parsing" << endl;
