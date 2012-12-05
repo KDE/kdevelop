@@ -89,7 +89,7 @@ public:
      *
      * @sa isValid()
      */
-    Path(const QString& pathOrUrl);
+    explicit Path(const QString& pathOrUrl);
 
     /**
      * Convert a KUrl to a Path.
@@ -104,7 +104,7 @@ public:
      *
      * @sa isValid()
      */
-    Path(const KUrl& url);
+    explicit Path(const KUrl& url);
 
     /**
      * Create a copy of @p base and optionally append a path segment @p subPath.
