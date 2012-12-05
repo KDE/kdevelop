@@ -192,6 +192,7 @@ void TestPath::testPath()
     QCOMPARE(optUrl.fileName(), url.fileName());
     QCOMPARE(optUrl.path(), url.path());
     QCOMPARE(optUrl.up().toUrl(), comparableUpUrl(url));
+    QCOMPARE(optUrl.toLocalFile(), url.toLocalFile());
 
     QCOMPARE(optUrl, Path(input));
     QCOMPARE(optUrl, Path(optUrl));

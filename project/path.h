@@ -202,6 +202,11 @@ public:
     QString path() const;
 
     /**
+     * Return the path for local path and an empty string for remote paths.
+     */
+    QString toLocalFile() const;
+
+    /**
      * @return the relative path from this path to @p path.
      *
      * Examples:

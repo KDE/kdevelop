@@ -141,6 +141,11 @@ QString Path::path() const
     return generatePathOrUrl(true, isLocalFile(), m_data);
 }
 
+QString Path::toLocalFile() const
+{
+    return isLocalFile() ? path() : QString();
+}
+
 QString Path::relativePath(const Path& path) const
 {
     if (!path.isValid()) {
