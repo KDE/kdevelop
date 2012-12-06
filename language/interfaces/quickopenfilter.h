@@ -215,11 +215,13 @@ public:
 
             int searchIndex = 0;
             int pathIndex = 0;
+            int lastMatchIndex = -1;
             // stop early if more search fragments remain than available after path index
             while (pathIndex < segments.size() && searchIndex < text.size()
-                    && pathIndex + (text.size() - searchIndex - 1) < segments.size() )
+                    && (pathIndex + text.size() - searchIndex - 1) < segments.size() )
             {
-                if (!segments.at(pathIndex).contains(text.at(searchIndex), Qt::CaseInsensitive)) {
+                lastMatchIndex = segments.at(pathIndex).indexOf(text.at(searchIndex), 0, Qt::CaseInsensitive);
+                if (lastMatchIndex == -1) {
                     // no match, try with next path segment
                     ++pathIndex;
                     continue;
@@ -234,7 +236,7 @@ public:
             }
 
             // prefer matches whose last element starts with the filter
-            if (segments.last().startsWith(text.last(), Qt::CaseInsensitive)) {
+            if (pathIndex == segments.size() && lastMatchIndex == 0) {
                 startMatches << data;
             } else {
                 otherMatches << data;
