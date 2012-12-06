@@ -76,6 +76,11 @@ class TestBuddyFinder : public KDevelop::IBuddyDocumentFinder
         const QStringList name1 = url1.fileName().split('.');
         return name1.at(1) == "l";
     }
+
+    virtual QVector<KUrl> getPotentialBuddies(const KUrl& url) const
+    {
+        return QVector<KUrl>();
+    }
 };
 
 void ShellBuddyTest::initTestCase()

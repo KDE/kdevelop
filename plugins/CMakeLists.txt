@@ -24,6 +24,7 @@ add_subdirectory(vcschangesview)
 add_subdirectory(templatemanager)
 add_subdirectory(filetemplates)
 add_subdirectory(testview)
+add_subdirectory(switchtobuddy)
 
 macro_optional_add_subdirectory(dashboard)
 
