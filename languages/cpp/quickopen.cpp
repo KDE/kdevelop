@@ -296,7 +296,7 @@ void IncludeFileDataProvider::setFilterText( const QString& _text )
     }
   }
 
-  setFilter( text.split('/'), QChar('/') );
+  setFilter( text.split('/') );
 }
 
 void IncludeFileDataProvider::reset()
@@ -385,9 +385,9 @@ QuickOpenDataPointer IncludeFileDataProvider::data( uint row ) const
   return QuickOpenDataPointer( new IncludeFileData( items[row], ( isIncluded || items[row].pathNumber == -1 ) ? m_duContext : TopDUContextPointer() ) );
 }
 
-QString IncludeFileDataProvider::itemText( const KDevelop::IncludeItem& data ) const
+Path IncludeFileDataProvider::itemPath( const KDevelop::IncludeItem& data ) const
 {
-  return data.name;
+  return Path(data.name);
 }
 
 QSet<IndexedString> IncludeFileDataProvider::files() const {
