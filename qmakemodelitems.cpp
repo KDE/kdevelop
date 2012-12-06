@@ -28,9 +28,9 @@
 #include "qmakeprojectfile.h"
 
 
-QMakeFolderItem::QMakeFolderItem( KDevelop::IProject* project, const KUrl& url,
+QMakeFolderItem::QMakeFolderItem( KDevelop::IProject* project, const KDevelop::Path& path,
                                   KDevelop::ProjectBaseItem* parent )
-    : KDevelop::ProjectBuildFolderItem( project, url, parent )
+    : KDevelop::ProjectBuildFolderItem( project, path, parent )
 {
 }
 

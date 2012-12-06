@@ -28,7 +28,7 @@ class QMakeProjectFile;
 class QMakeFolderItem : public KDevelop::ProjectBuildFolderItem
 {
 public:
-    QMakeFolderItem( KDevelop::IProject*,const KUrl&, KDevelop::ProjectBaseItem* parent = 0 );
+    QMakeFolderItem( KDevelop::IProject*,const KDevelop::Path&, KDevelop::ProjectBaseItem* parent = 0 );
     virtual ~QMakeFolderItem();
 
     void addProjectFile(QMakeProjectFile* file);

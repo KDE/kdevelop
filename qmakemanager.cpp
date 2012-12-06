@@ -119,11 +119,11 @@ IProjectFileManager::Features QMakeProjectManager::features() const
     return Features(Folders | Targets | Files);
 }
 
-bool QMakeProjectManager::isValid( const KUrl& url, const bool isFolder, IProject* /*project*/ ) const
+bool QMakeProjectManager::isValid( const Path& path, const bool isFolder, IProject* /*project*/ ) const
 {
     // TODO: filter setup
 
-    QString name = url.fileName();
+    QString name = path.fileName();
     const QStringList invalidFolders = QStringList() << ".kdev4" << ".svn" << ".git" << "CVS";
     if (isFolder && invalidFolders.contains( name )) {
         return false;
@@ -135,7 +135,7 @@ bool QMakeProjectManager::isValid( const KUrl& url, const bool isFolder, IProjec
                                 && (name.endsWith(".kate-swp") || name.endsWith(".swp")))))
     {
         return false;
-    } else if (isFolder && QFile::exists(url.toLocalFile() + "/.kdev_ignore")) {
+    } else if (isFolder && QFile::exists(path.toLocalFile() + "/.kdev_ignore")) {
         return false;
     } else {
         return true;
@@ -168,16 +168,16 @@ KUrl QMakeProjectManager::buildDirectory(ProjectBaseItem* item) const
     return dir;
 }
 
-ProjectFolderItem* QMakeProjectManager::createFolderItem( IProject* project, const KUrl& url,
+ProjectFolderItem* QMakeProjectManager::createFolderItem( IProject* project, const Path& path,
                                                           ProjectBaseItem* parent )
 {
     if ( !parent ) {
-        return projectRootItem( project, url );
-    } else if (ProjectFolderItem* buildFolder = buildFolderItem( project, url, parent )) {
+        return projectRootItem( project, path );
+    } else if (ProjectFolderItem* buildFolder = buildFolderItem( project, path, parent )) {
         // child folder in a qmake folder
         return buildFolder;
     } else {
-        return AbstractFileManagerPlugin::createFolderItem( project, url, parent );
+        return AbstractFileManagerPlugin::createFolderItem( project, path, parent );
     }
 }
 
@@ -201,10 +201,10 @@ QString findBasicMkSpec( const QHash<QString,QString>& qmakeVars )
     return fi.absoluteFilePath();
 }
 
-ProjectFolderItem* QMakeProjectManager::projectRootItem( IProject* project, const KUrl& url )
+ProjectFolderItem* QMakeProjectManager::projectRootItem( IProject* project, const Path& path )
 {
-    QFileInfo fi( url.toLocalFile() );
-    QDir dir( url.toLocalFile() );
+    QFileInfo fi( path.toLocalFile() );
+    QDir dir( path.toLocalFile() );
     QStringList l = dir.entryList( QStringList() << "*.pro" );
 
     QString projectfile;
@@ -219,9 +219,6 @@ ProjectFolderItem* QMakeProjectManager::projectRootItem( IProject* project, cons
         projectfile = l.first();
     }
 
-    KUrl projecturl = url;
-    projecturl.adjustPath( KUrl::AddTrailingSlash );
-    projecturl.setFileName( projectfile );
     QHash<QString,QString> qmvars = queryQMake( project );
     QMakeMkSpecs* mkspecs = new QMakeMkSpecs( findBasicMkSpec( qmvars ), qmvars );
     mkspecs->setProject( project );
@@ -231,7 +228,9 @@ ProjectFolderItem* QMakeProjectManager::projectRootItem( IProject* project, cons
         cache->setMkSpecs( mkspecs );
         cache->read();
     }
-    QMakeProjectFile* scope = new QMakeProjectFile( projecturl.toLocalFile() );
+    Path proPath(path, projectfile);
+    /// TODO: use Path in QMakeProjectFile
+    QMakeProjectFile* scope = new QMakeProjectFile( proPath.toLocalFile() );
     scope->setProject( project );
     scope->setMkSpecs( mkspecs );
     if( cache ) {
@@ -239,22 +238,22 @@ ProjectFolderItem* QMakeProjectManager::projectRootItem( IProject* project, cons
     }
     scope->read();
     kDebug(9024) << "top-level scope with variables:" << scope->variables();
-    QMakeFolderItem* item = new QMakeFolderItem( project, project->folder() );
+    QMakeFolderItem* item = new QMakeFolderItem( project, path );
     item->addProjectFile(scope);
     return item;
 }
 
-ProjectFolderItem* QMakeProjectManager::buildFolderItem( IProject* project, const KUrl& url,
+ProjectFolderItem* QMakeProjectManager::buildFolderItem( IProject* project, const Path& path,
                                                          ProjectBaseItem* parent )
 {
     // find .pro or .pri files in dir
-    QDir dir(url.toLocalFile());
+    QDir dir(path.toLocalFile());
     QStringList projectFiles = dir.entryList(QStringList() << "*.pro" << "*.pri", QDir::Files);
     if ( projectFiles.isEmpty() ) {
         return 0;
     }
 
-    QMakeFolderItem* folderItem = new QMakeFolderItem(project, url, parent);
+    QMakeFolderItem* folderItem = new QMakeFolderItem(project, path, parent);
 
     //TODO: included by not-parent file (in a nother file-tree-branch).
     QMakeFolderItem* qmakeParent = findQMakeFolderParent(parent);
@@ -289,6 +288,7 @@ ProjectFolderItem* QMakeProjectManager::buildFolderItem( IProject* project, cons
         ///TODO: cleanup
         if ( parentPro) {
             // subdir
+            ///FIXME: use Path
             if( QMakeCache* cache = findQMakeCache(project, KUrl::fromPath(d.canonicalPath())) ) {
                 cache->setMkSpecs( parentPro->mkSpecs() );
                 cache->read();
@@ -327,12 +327,13 @@ void QMakeProjectManager::slotFolderAdded( ProjectFolderItem* folder )
         return;
     }
 
-    kDebug(9024) << "adding targets for" << folder->url();
+    kDebug(9024) << "adding targets for" << folder->path();
     foreach( QMakeProjectFile* pro, qmakeParent->projectFiles() ) {
         foreach( const QString& s, pro->targets() ) {
             kDebug(9024) << "adding target:" << s;
             Q_ASSERT(!s.isEmpty());
             QMakeTargetItem* target = new QMakeTargetItem( pro, folder->project(), s, folder );
+            ///FIXME: use Path
             foreach( const KUrl& u, pro->filesForTarget(s) ) {
                 new ProjectFileItem( folder->project(), u, target );
                 ///TODO: signal?
@@ -343,8 +344,8 @@ void QMakeProjectManager::slotFolderAdded( ProjectFolderItem* folder )
 
 ProjectFolderItem* QMakeProjectManager::import( IProject* project )
 {
-    KUrl dirName = project->folder();
-    if( !dirName.isLocalFile() )
+    const Path dirName = project->path();
+    if( dirName.isRemote() )
     {
         //FIXME turn this into a real warning
         kWarning(9025) << "not a local file. QMake support doesn't handle remote projects";
@@ -380,8 +381,9 @@ void QMakeProjectManager::slotDirty(const QString& path)
         return;
     }
 
+    ///FIXME: use Path
     const KUrl url(path);
-    if (!isValid(url, false, 0)) {
+    if (!isValid(Path(url), false, 0)) {
         return;
     }
 
@@ -404,7 +406,7 @@ void QMakeProjectManager::slotDirty(const QString& path)
                 }
             }
             finished = true;
-        } else if (ProjectFolderItem* newFolder = buildFolderItem(project, folder->url(), folder->parent())) {
+        } else if (ProjectFolderItem* newFolder = buildFolderItem(project, folder->path(), folder->parent())) {
             kDebug() << "changing from normal folder to qmake project folder:" << folder->url();
             // .pro / .pri file did not exist before
             while(folder->rowCount()) {

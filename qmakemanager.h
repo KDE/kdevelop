@@ -46,10 +46,10 @@ public:
     //BEGIN AbstractFileManager
     virtual KDevelop::ProjectFolderItem* import( KDevelop::IProject* project );
     virtual KDevelop::ProjectFolderItem* createFolderItem( KDevelop::IProject* project,
-                                                           const KUrl& url,
+                                                           const KDevelop::Path& path,
                                                            KDevelop::ProjectBaseItem* parent = 0 );
     virtual Features features() const;
-    virtual bool isValid( const KUrl& url, const bool isFolder, KDevelop::IProject* project ) const;
+    virtual bool isValid( const KDevelop::Path& path, const bool isFolder, KDevelop::IProject* project ) const;
     //END AbstractFileManager
 
     //BEGIN IBuildSystemManager
@@ -82,10 +82,11 @@ private slots:
     void slotDirty(const QString& path);
 
 private:    
-    KDevelop::ProjectFolderItem* projectRootItem( KDevelop::IProject* project, const KUrl& url );
-    KDevelop::ProjectFolderItem* buildFolderItem( KDevelop::IProject* project, const KUrl& url,
+    KDevelop::ProjectFolderItem* projectRootItem( KDevelop::IProject* project, const KDevelop::Path& path );
+    KDevelop::ProjectFolderItem* buildFolderItem( KDevelop::IProject* project, const KDevelop::Path& path,
                                                   KDevelop::ProjectBaseItem* parent );
     QHash<QString,QString> queryQMake( KDevelop::IProject* ) const;
+    ///FIXME: use Path
     QMakeCache* findQMakeCache( KDevelop::IProject* project, const KUrl &path = KUrl() ) const;
     bool projectNeedsConfiguration(KDevelop::IProject* project);
     
