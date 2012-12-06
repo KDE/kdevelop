@@ -226,6 +226,7 @@ public:
                 }
                 // else we matched
                 ++searchIndex;
+                ++pathIndex;
             }
 
             if (searchIndex != text.size()) {
