@@ -113,9 +113,13 @@ public:
  * @warning The du-chain must be locked before calling this.
 * */
   virtual KDevelop::TopDUContext *standardContext(const KUrl& url, bool proxyContext = false);
-  
+
+    /**
+     * IBuddyDocumentFinder overrides.
+     */
     virtual bool areBuddies(const KUrl& url1, const KUrl& url2);
     virtual bool buddyOrder(const KUrl& url1, const KUrl& url2);
+    virtual QVector<KUrl> getPotentialBuddies(const KUrl& url) const;
 
 public slots:
     void findIncludePathsForJob(CPPParseJob* job);
@@ -138,8 +142,6 @@ private:
     virtual QPair<KUrl, KDevelop::SimpleCursor> specialLanguageObjectJumpCursor(const KUrl& url, const KDevelop::SimpleCursor& position);
 
     virtual QWidget* specialLanguageObjectNavigationWidget(const KUrl& url, const KDevelop::SimpleCursor& position);
-
-    static QPair<QString, QChar> basePathAndType(const QString& path);
 
     static CppLanguageSupport* m_self;
 

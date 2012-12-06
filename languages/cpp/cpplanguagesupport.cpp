@@ -476,54 +476,123 @@ TopDUContext* CppLanguageSupport::standardContext(const KUrl& url, bool proxyCon
   return top;
 }
 
+/**
+ * Anonymous namespace for IBuddyDocumentFinder related functions.
+ */
+namespace {
 
-
-// Returns the base path (without extension) and the first character of the
-// file extension in lowercase (or '?' if there is no extension)
-// for path="Folder/File.CPP", returns ("Folder/File", 'c').
-// for path="folder/file", returns ("folder/file", '?')
-QPair<QString, QChar> CppLanguageSupport::basePathAndType(const QString& path)
+/**
+ * @returns all extensions which match the given @p mimeType.
+ */
+QSet<QString> getExtensionsByMimeType(QString mimeType)
 {
+    KMimeType::Ptr ptr = KMimeType::mimeType(mimeType);
+
+    if (!ptr) {
+      return QSet<QString>();
+    }
+
+    QSet<QString> extensions;
+    foreach(const QString& pattern, ptr->patterns()) {
+      if (pattern.startsWith("*.")) {
+        extensions << pattern.mid(2);
+      }
+    }
+
+    return extensions;
+}
+
+QSet<QString> getHeaderFileExtensions()
+{
+    return getExtensionsByMimeType("text/x-c++hdr") | getExtensionsByMimeType("text/x-chdr");
+}
+
+QSet<QString> getSourceFileExtensions()
+{
+  return getExtensionsByMimeType("text/x-c++src") | getExtensionsByMimeType("text/x-csrc");
+}
+
+enum FileType {
+  Unknown, ///< Doesn't belong to C++
+  Header,  ///< Is a header file
+  Source   ///< Is a C(++) file
+};
+
+/**
+ * Generates the base path (without extension) and the file type
+ * for the specified url.
+ *
+ * @returns pair of base path and file type which has been found for @p url.
+ */
+QPair<QString,FileType> basePathAndType(const KUrl& url)
+{
+    QString path = url.toLocalFile();
     int idxSlash = path.lastIndexOf("/");
     int idxDot = path.lastIndexOf(".");
-    QString basepath;
-    QChar filetype('?');
-    if(idxSlash >= 0 && idxDot >= 0 && idxDot > idxSlash)
-    {
-        basepath = path.left(idxDot);
-        //QString ext = path.right(path.length() - idxDot);
-        if(idxDot + 1 < path.length())
-            filetype = path[idxDot + 1].toLower();
+    FileType fileType = Unknown;
+    QString basePath;
+    if (idxSlash >= 0 && idxDot >= 0 && idxDot > idxSlash) {
+        basePath = path.left(idxDot);
+        if (idxDot + 1 < path.length()) {
+            QString extension = path.mid(idxDot + 1);
+            if (getHeaderFileExtensions().contains(extension)) {
+                fileType = Header;
+            } else if (getSourceFileExtensions().contains(extension)) {
+                fileType = Source;
+            }
+        }
+    } else {
+        basePath = path;
     }
-    else
-    {
-        basepath = path;
-    }
-    kDebug() << qMakePair(basepath, filetype);
-    return qMakePair(basepath, filetype);
+
+    return qMakePair(basePath, fileType);
+}
+
 }
 
 
-// Bahavior: Considers the URLs as buddy documents if the base path (=without extension)
-// is the same, and one extension starts with h/H and the other one with c/C.
-// For example, foo.hpp and foo.C are buddies.
+/**
+ * Behavior: Considers the URLs as buddy documents if the base path (=without extension)
+ * is the same, and one extension starts with h/H and the other one with c/C.
+ * For example, foo.hpp and foo.C are buddies.
+ */
 bool CppLanguageSupport::areBuddies(const KUrl& url1, const KUrl& url2)
 {
-    QPair<QString, QChar> split1 = basePathAndType(url1.toLocalFile());
-    QPair<QString, QChar> split2 = basePathAndType(url2.toLocalFile());
-    return(split1.first == split2.first && ((split1.second == 'h' && split2.second == 'c') ||
-                                            (split1.second == 'c' && split2.second == 'h')));
+    QPair<QString, FileType> type1 = basePathAndType(url1);
+    QPair<QString, FileType> type2 = basePathAndType(url2);
+    return(type1.first == type2.first && ((type1.second == Header && type2.second == Source) ||
+                                          (type1.second == Source && type2.second == Header)));
 }
 
-// Behavior: places foo.h* / foo.H* left of foo.c* / foo.C*
+/**
+ * Behavior: places foo.h* / foo.H* left of foo.c* / foo.C*
+ */
 bool CppLanguageSupport::buddyOrder(const KUrl& url1, const KUrl& url2)
 {
-    QPair<QString, QChar> split1 = basePathAndType(url1.toLocalFile());
-    QPair<QString, QChar> split2 = basePathAndType(url2.toLocalFile());
+    QPair<QString, FileType> type1 = basePathAndType(url1);
+    QPair<QString, FileType> type2 = basePathAndType(url2);
     // Precondition is that the two URLs are buddies, so don't check it
-    return(split1.second == 'h' && split2.second == 'c');
+    return(type1.second == Header && type2.second == Source);
 }
 
+QVector< KUrl > CppLanguageSupport::getPotentialBuddies(const KUrl& url) const
+{
+    QPair<QString, FileType> type = basePathAndType(url);
+    // Don't do anything for types we don't know
+    if (type.second == Unknown) {
+      return QVector< KUrl >();
+    }
+
+    // Depending on the buddy's file type we either generate source extensions (for headers)
+    // or header extensions (for sources)
+    const QSet<QString>& extensions = ( type.second == Header ? getSourceFileExtensions() : getHeaderFileExtensions() );
+    QVector< KUrl > buddies;
+    foreach(const QString& extension, extensions) {
+      buddies.append(KUrl(type.first + "." + extension));
+    }
+
+    return buddies;
+}
 
 QPair<QPair<QString, SimpleRange>, QString> CppLanguageSupport::cursorIdentifier(const KUrl& url, const SimpleCursor& position) const {
   KDevelop::IDocument* doc = core()->documentController()->documentForUrl(url);
