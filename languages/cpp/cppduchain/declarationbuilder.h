@@ -162,7 +162,7 @@ private:
   void applyStorageSpecifiers();
   void applyFunctionSpecifiers();
   void popSpecifiers();
-  
+  void copyTemplateDefaultsFromForward(Identifier searchId, const CursorInRevision& pos);
   void createFriendDeclaration(AST* range);
 
   QStack<KDevelop::Declaration::AccessPolicy> m_accessPolicyStack;

@@ -1132,6 +1132,43 @@ void DeclarationBuilder::visitNamespace(NamespaceAST* ast) {
   }
 }
 
+void DeclarationBuilder::copyTemplateDefaultsFromForward(Identifier searchId, const CursorInRevision& pos)
+{
+  KDevelop::DUContext* currentTemplateContext = getTemplateContext(currentDeclaration());
+  if (!currentTemplateContext)
+    return;
+
+  ///We need to clear the template identifiers, or else it may try to instantiate
+  ///Note that template specializations cannot have default parameters
+  searchId.clearTemplateIdentifiers();
+
+  QList<Declaration*> declarations = Cpp::findDeclarationsSameLevel(currentContext(), searchId, pos);
+  foreach( Declaration* decl, declarations ) {
+    ForwardDeclaration* forward =  dynamic_cast<ForwardDeclaration*>(decl);
+    if (!forward || !decl->abstractType())
+      continue;
+    KDevelop::DUContext* forwardTemplateContext = forward->internalContext();
+    if (!forwardTemplateContext || forwardTemplateContext->type() != DUContext::Template)
+      continue;
+
+    const QVector<Declaration*>& forwardList = forwardTemplateContext->localDeclarations();
+    const QVector<Declaration*>& realList = currentTemplateContext->localDeclarations();
+
+    if (forwardList.size() != realList.size())
+      continue;
+
+    QVector<Declaration*>::const_iterator forwardIt = forwardList.begin();
+    QVector<Declaration*>::const_iterator realIt = realList.begin();
+
+    for( ; forwardIt != forwardList.end(); ++forwardIt, ++realIt ) {
+      TemplateParameterDeclaration* forwardParamDecl = dynamic_cast<TemplateParameterDeclaration*>(*forwardIt);
+      TemplateParameterDeclaration* realParamDecl = dynamic_cast<TemplateParameterDeclaration*>(*realIt);
+      if( forwardParamDecl && realParamDecl && !forwardParamDecl->defaultParameter().isEmpty())
+        realParamDecl->setDefaultParameter(forwardParamDecl->defaultParameter());
+    }
+  }
+}
+
 void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 {
   PushValue<bool> setNotInTypedef(m_inTypedef, false);
@@ -1167,50 +1204,8 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
   if( node->name ) {
     ///Copy template default-parameters from the forward-declaration to the real declaration if possible
     DUChainWriteLocker lock(DUChain::lock());
-
-    ///We need to clear the template identifiers, or else it'll try to instantiate
-    Identifier searchId = id.last();
-    searchId.clearTemplateIdentifiers();
-    QList<Declaration*> declarations = Cpp::findDeclarationsSameLevel(currentContext(), searchId, pos);
-
-    foreach( Declaration* decl, declarations ) {
-      if( decl->abstractType()) {
-        ForwardDeclaration* forward =  dynamic_cast<ForwardDeclaration*>(decl);
-        if( forward ) {
-          {
-            KDevelop::DUContext* forwardTemplateContext = forward->internalContext();
-            if( forwardTemplateContext && forwardTemplateContext->type() == DUContext::Template ) {
-
-              KDevelop::DUContext* currentTemplateContext = getTemplateContext(currentDeclaration());
-              if( (bool)forwardTemplateContext != (bool)currentTemplateContext ) {
-                kDebug(9007) << "Template-contexts of forward- and real declaration do not match: " << currentTemplateContext << getTemplateContext(currentDeclaration()) << currentDeclaration()->internalContext() << forwardTemplateContext << currentDeclaration()->internalContext()->importedParentContexts().count();
-              } else if( forwardTemplateContext && currentTemplateContext ) {
-                if( forwardTemplateContext->localDeclarations().count() != currentTemplateContext->localDeclarations().count() ) {
-                } else {
-
-                  const QVector<Declaration*>& forwardList = forwardTemplateContext->localDeclarations();
-                  const QVector<Declaration*>& realList = currentTemplateContext->localDeclarations();
-
-                  QVector<Declaration*>::const_iterator forwardIt = forwardList.begin();
-                  QVector<Declaration*>::const_iterator realIt = realList.begin();
-
-                  for( ; forwardIt != forwardList.end(); ++forwardIt, ++realIt ) {
-                    TemplateParameterDeclaration* forwardParamDecl = dynamic_cast<TemplateParameterDeclaration*>(*forwardIt);
-                    TemplateParameterDeclaration* realParamDecl = dynamic_cast<TemplateParameterDeclaration*>(*realIt);
-                    if( forwardParamDecl && realParamDecl ) {
-                      if( !forwardParamDecl->defaultParameter().isEmpty() )
-                        realParamDecl->setDefaultParameter(forwardParamDecl->defaultParameter());
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }//foreach
-
-  }//node-name
+    copyTemplateDefaultsFromForward(id.last(), pos);
+  }
 
   closeDeclaration();
   
