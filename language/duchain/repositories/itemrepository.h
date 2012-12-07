@@ -152,9 +152,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepositoryRegistry {
     /// @returns the global item-repository registry
     static ItemRepositoryRegistry* self();
 
-    /// @returns item-repository path (e. g. ~/cache/.kdevduchain) for the given session, creating it if needed.
-    static QString repositoryPathForSession(ISession* session);
-
     ///Deletes the item-repository of a specified session; or, if it is currently used, marks it for deletion at exit.
     static void deleteRepositoryFromDisk(ISession* session);
 
@@ -198,6 +195,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepositoryRegistry {
     ///Returns the global item-repository mutex. This can be used to protect the initialization.
     QMutex& mutex();
   private:
+    /// @returns item-repository path (e. g. ~/cache/.kdevduchain) for the given session, creating it if needed.
+    static QString repositoryPathForSession(ISession* session);
     void deleteDataDirectory(bool recreate = true);
     static ItemRepositoryRegistry* m_self;
     bool m_shallDelete;
