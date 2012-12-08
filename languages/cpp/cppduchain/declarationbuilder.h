@@ -38,6 +38,7 @@ namespace KDevelop
 {
 class Declaration;
 class ClassDeclaration;
+class FunctionDefinition;
 }
 
 //Additional flags put into the access-policy member
@@ -166,6 +167,7 @@ private:
   ///Inherit the "virtual" flag from overridden functions if it's not already present
   void inheritVirtualSpecifierFromOverridden(ClassFunctionDeclaration* classFun);
   void createFriendDeclaration(AST* range);
+  void findDeclarationForDefinition(const QualifiedIdentifier &definitionSearchId);
 
   QStack<KDevelop::Declaration::AccessPolicy> m_accessPolicyStack;
 

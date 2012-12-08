@@ -429,6 +429,54 @@ void DeclarationBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
   popSpecifiers();
 }
 
+void DeclarationBuilder::findDeclarationForDefinition(const QualifiedIdentifier &definitionSearchId)
+{
+  //TODO: FunctionDeclarations (as distinct from ClassFunctionDeclarations) should probably do what template forward declarations do.
+  //That is, the function definition should have no idea they exist and any default arguments should just be copied over
+  FunctionDefinition *funDef = dynamic_cast<FunctionDefinition*>(currentDeclaration());
+  if (!funDef || (currentContext()->type() != DUContext::Namespace && currentContext()->type() != DUContext::Global))
+    return;
+  QList<Declaration*> declarations = currentContext()->findDeclarations(definitionSearchId, currentDeclaration()->range().start,
+                                                                        AbstractType::Ptr(), 0, DUContext::OnlyFunctions);
+  if (!declarations.size())
+    return;
+  //First look for an exact match for the function declaration
+  foreach (Declaration* dec, declarations) {
+    if (dec->isForwardDeclaration() || dec->isDefinition())
+      continue;
+    if (dec->abstractType()->indexed() == lastType()->indexed()) {
+      //If this declaration is already assigned to a partial match, unassign it
+      if (FunctionDefinition* oldDef = FunctionDefinition::definition(dec)) {
+        if (oldDef->abstractType()->indexed() != dec->abstractType()->indexed())
+          oldDef->setDeclaration(0);
+      }
+      funDef->setDeclaration(dec);
+      return;
+    }
+  }
+  //Allow claiming of unclaimed declarations with the same arg count. This allows the signature assistant to function.
+  int functionArgumentCount = 0;
+  if(FunctionType::Ptr funDefType = funDef->abstractType().cast<FunctionType>())
+    functionArgumentCount = funDefType->arguments().count();
+  Declaration *anyUnclaimedFunctionDeclaration = 0;
+  foreach (Declaration* dec, declarations) {
+    if (!dec->isFunctionDeclaration() || dec->isDefinition())
+      continue;
+    if(FunctionDefinition::definition(dec) && wasEncountered(FunctionDefinition::definition(dec)))
+      continue;
+    if (FunctionType::Ptr foundType = dec->abstractType().cast<FunctionType>()) {
+      if (foundType->arguments().count() == functionArgumentCount) {
+        funDef->setDeclaration(dec);
+        return;
+      }
+    }
+    anyUnclaimedFunctionDeclaration = dec;
+  }
+  //Allow any unclaimed function-definition with a matching name. This allows the signature assistant to function.
+  if (anyUnclaimedFunctionDeclaration)
+    funDef->setDeclaration(anyUnclaimedFunctionDeclaration);
+}
+
 void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
 {
   if(m_ignoreDeclarators) {
@@ -481,63 +529,8 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
       QualifiedIdentifier id2;
       identifierForNode(node->id, id2);
       id += id2;
-      
       id.setExplicitlyGlobal(true);
-
-      if (id.count() > 1 ||
-           (m_inFunctionDefinition && (currentContext()->type() == DUContext::Namespace || currentContext()->type() == DUContext::Global))) {
-        CursorInRevision pos = currentDeclaration()->range().start;//editor()->findPosition(m_functionDefinedStack.top(), CppEditorIntegrator::FrontEdge);
-        // TODO: potentially excessive locking
-
-        QList<Declaration*> declarations = currentContext()->findDeclarations(id, pos, AbstractType::Ptr(), 0, DUContext::OnlyFunctions);
-
-        FunctionType::Ptr currentFunction = lastType().cast<FunctionType>();
-        int functionArgumentCount = 0;
-        if(currentFunction)
-          functionArgumentCount = currentFunction->arguments().count();
-
-        for( int cycle = 0; cycle < 3; cycle++ ) {
-          bool found = false;
-          ///We do 2 cycles: In the first cycle, we want an exact match. In the second, we accept approximate matches.
-          foreach (Declaration* dec, declarations) {
-            if (dec->isForwardDeclaration())
-              continue;
-            if(dec == currentDeclaration() || dec->isDefinition())
-              continue;
-            //Compare signatures of function-declarations:
-            if(dec->abstractType()->indexed() == lastType()->indexed())
-            {
-              //The declaration-type matches this definition, good.
-            }else{
-              if(cycle == 0) {
-                //First cycle, only accept exact matches
-                continue;
-              }else if(cycle == 1){
-                //Second cycle, match by argument-count
-                FunctionType::Ptr matchFunction = dec->type<FunctionType>();
-                if(currentFunction && matchFunction && currentFunction->arguments().count() == functionArgumentCount ) {
-                  //We have a match
-                }else{
-                  continue;
-                }
-              }else if(cycle == 2){
-                //Accept any match, so just continue
-              }
-              if(FunctionDefinition::definition(dec) && wasEncountered(FunctionDefinition::definition(dec)))
-                continue; //Do not steal declarations
-            }
-
-            if(FunctionDefinition* funDef = dynamic_cast<FunctionDefinition*>(currentDeclaration())) {
-              funDef->setDeclaration(dec);
-            }
-
-            found = true;
-            break;
-          }
-          if(found)
-            break;
-        }
-      }
+      findDeclarationForDefinition(id);
     }
   }
 
