@@ -1892,25 +1892,24 @@ bool Parser::parseTypeParameter(TypeParameterAST *&node)
           }
 
         // parse optional name
-        if(parseName(ast->name, AcceptTemplate))
-          {
-            if (session->token_stream->lookAhead() == '=')
-              {
-                advance();
+        parseName(ast->name, AcceptTemplate);
 
-                if(!parseTypeId(ast->type_id))
-                  {
-                    //syntaxError();
-                    rewind(start);
-                    return false;
-                  }
-              }
-            else if (session->token_stream->lookAhead() != ','
-                     && session->token_stream->lookAhead() != '>') ///TODO: right-shift also OK? see spec 14.2/3
+        if (session->token_stream->lookAhead() == '=')
+          {
+            advance();
+
+            if(!parseTypeId(ast->type_id))
               {
+                //syntaxError();
                 rewind(start);
                 return false;
               }
+          }
+        else if (session->token_stream->lookAhead() != ','
+                  && session->token_stream->lookAhead() != '>') ///TODO: right-shift also OK? see spec 14.2/3
+          {
+            rewind(start);
+            return false;
           }
       }
       break;
