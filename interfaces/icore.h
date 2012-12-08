@@ -134,6 +134,10 @@ Q_SIGNALS:
      * preparations such as saving settings.
      */
     void aboutToShutdown();
+    /**
+     * Emitted when the teardown of the core components has been completed.
+     */
+    void shutdownCompleted();
 
 protected:
     ICore(QObject *parent = 0);
