@@ -25,9 +25,11 @@
 /**
  * JSON Object Specification:
  * FindDeclObject: Mapping of (string) search ids to DeclTestObjects
+ * IndexDeclObject: Mapping of (string) declaration position indexes to DeclTestObjects
  *
  * Quick Reference:
  *   findDeclarations : FindDeclObject
+ *   declarations : IndexDeclObject
  *   childCount : int
  *   localDeclarationCount : int
  *   type : string
@@ -60,6 +62,29 @@ ContextTest(findDeclarations)
       return NOT_FOUND_ERROR.arg(it.key());
 
     if (!runTests(it.value().toMap(), ret.first()))
+      return DECL_ERROR.arg(it.key());
+  }
+  return SUCCESS;
+}
+///JSON type: IndexDeclObject
+///@returns whether a declaration exists at each index and each declaration passes its tests
+ContextTest(declarations)
+{
+  VERIFY_TYPE(QVariantMap);
+  QString INVALID_ERROR = "Attempted to test invalid context.";
+  QString NOT_FOUND_ERROR = "No declaration at index \"%1\".";
+  QString DECL_ERROR = "Declaration at index \"%1\" did not pass tests.";
+  if (!ctxt)
+    return INVALID_ERROR;
+  QVariantMap findDecls = value.toMap();
+  for (QVariantMap::iterator it = findDecls.begin(); it != findDecls.end(); ++it)
+  {
+    int index = it.key().toInt();
+    QVector<Declaration*> decls = ctxt->localDeclarations(0);
+    if (decls.size() <= index)
+        return NOT_FOUND_ERROR;
+
+    if (!runTests(it.value().toMap(), decls.at(index)))
       return DECL_ERROR.arg(it.key());
   }
   return SUCCESS;
