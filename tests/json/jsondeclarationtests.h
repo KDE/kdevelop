@@ -26,6 +26,9 @@
 #include "language/duchain/abstractfunctiondeclaration.h"
 #include "language/duchain/types/typeutils.h"
 #include "language/duchain/types/identifiedtype.h"
+#include "language/duchain/duchain.h"
+#include "language/duchain/functiondefinition.h"
+#include "language/duchain/definitions.h"
 #include "jsontesthelpers.h"
 
 /**
@@ -45,6 +48,9 @@
  *   targetType : TypeTestObject
  *   identifiedTypeQid : string
  *   isVirtual : bool
+ *   declaration : DeclTestObject
+ *   definition : DeclTestObject
+ *   null : bool
  */
 
 namespace KDevelop
@@ -52,6 +58,8 @@ namespace KDevelop
   template<>
   QString TestSuite<Declaration*>::objectInformation(Declaration *decl)
   {
+    if (!decl)
+        return "(null declaration)";
     return QString("(Declaration on line %1 in %2)")
         .arg(decl->range().start.line + 1)
         .arg(decl->topContext()->url().str());
@@ -94,7 +102,7 @@ DeclarationTest(internalFunctionContext)
   AbstractFunctionDeclaration *absFuncDecl = dynamic_cast<AbstractFunctionDeclaration*>(decl);
   if (!absFuncDecl || !absFuncDecl->internalFunctionContext())
     return NO_INTERNAL_CTXT.arg(decl->qualifiedIdentifier().toString());
-  return testObject(decl->internalContext(), value, "Declaration's internal function context");
+  return testObject(absFuncDecl->internalFunctionContext(), value, "Declaration's internal function context");
 }
 /*FIXME: The type functions need some renaming and moving around
  * Some (all?) functions from cpp's TypeUtils should be moved to the kdevplatform type utils
@@ -144,6 +152,30 @@ DeclarationTest(isVirtual)
       return NOT_A_FUNCTION;
 
   return compareValues(absFuncDecl->isVirtual(), value, "Declaration's isVirtual");
+}
+///JSON type: DeclTestObject
+///@returns whether the tests for the function declaration's definition pass
+DeclarationTest(definition)
+{
+  KDevVarLengthArray<IndexedDeclaration> definitions = DUChain::definitions()->definitions(decl->id());
+  Declaration *declDef  = 0;
+  if (definitions.size())
+    declDef = definitions.at(0).declaration();
+  return testObject(declDef, value, "Declaration's definition");
+}
+///JSON type: DeclTestObject
+///@returns whether the tests for the function definition's declaration pass
+DeclarationTest(declaration)
+{
+  FunctionDefinition *def = dynamic_cast<FunctionDefinition*>(decl);
+  Declaration *defDecl = def->declaration(decl->topContext());
+  return testObject(defDecl, value, "Definition's declaration");
+}
+///JSON type: bool
+///@returns whether the declaration's nullity matches the given value
+DeclarationTest(null)
+{
+  return compareValues(decl == 0, value, "Declaration's nullity");
 }
 
 }

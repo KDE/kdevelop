@@ -29,6 +29,7 @@
  * Quick Reference:
  *   findDeclarations : FindDeclObject
  *   childCount : int
+ *   localDeclarationCount : int
  *   type : string
  */
 
@@ -68,6 +69,12 @@ ContextTest(findDeclarations)
 ContextTest(childCount)
 {
   return compareValues(ctxt->childContexts().size(), value, "Context's child count");
+}
+///JSON type: int
+///@returns whether the number of local declarations matches the given value
+ContextTest(localDeclarationCount)
+{
+  return compareValues(ctxt->localDeclarations().size(), value, "Context's local declaration count");
 }
 ///JSON type: string
 ///@returns whether the context's type matches the given value
