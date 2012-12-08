@@ -268,15 +268,10 @@ bool ItemRepositoryRegistry::open(const QString& path, bool clear) {
       stream >> counterName;
       int counterValue;
       stream >> counterValue;
-      if(m_customCounters.contains(counterName))
-        *m_customCounters[counterName] = counterValue;
-      else
-        getCustomCounter(counterName, 0) = counterValue;
+      getCustomCounter(counterName, 0) = counterValue;
     }
-  }else{
-//     kDebug() << "Could not open counter file";
   }
-  
+
   return true;
 }
 
