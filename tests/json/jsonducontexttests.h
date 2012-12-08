@@ -29,6 +29,7 @@
  * Quick Reference:
  *   findDeclarations : FindDeclObject
  *   childCount : int
+ *   type : string
  */
 
 namespace KDevelop
@@ -67,6 +68,24 @@ ContextTest(findDeclarations)
 ContextTest(childCount)
 {
   return compareValues(ctxt->childContexts().size(), value, "Context's child count");
+}
+///JSON type: string
+///@returns whether the context's type matches the given value
+ContextTest(type)
+{
+  QString contextTypeString;
+  switch(ctxt->type())
+  {
+  case DUContext::Class: contextTypeString = "Class"; break;
+  case DUContext::Enum: contextTypeString = "Enum"; break;
+  case DUContext::Namespace: contextTypeString = "Namespace"; break;
+  case DUContext::Function: contextTypeString = "Function"; break;
+  case DUContext::Template: contextTypeString = "Template"; break;
+  case DUContext::Global: contextTypeString = "Global"; break;
+  case DUContext::Helper: contextTypeString = "Helper"; break;
+  case DUContext::Other: contextTypeString = "Other"; break;
+  }
+  return compareValues(contextTypeString, value, "Context's type");
 }
 
 }
