@@ -163,6 +163,8 @@ private:
   void applyFunctionSpecifiers();
   void popSpecifiers();
   void copyTemplateDefaultsFromForward(Identifier searchId, const CursorInRevision& pos);
+  ///Inherit the "virtual" flag from overridden functions if it's not already present
+  void inheritVirtualSpecifierFromOverridden(ClassFunctionDeclaration* classFun);
   void createFriendDeclaration(AST* range);
 
   QStack<KDevelop::Declaration::AccessPolicy> m_accessPolicyStack;

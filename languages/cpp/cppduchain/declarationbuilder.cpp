@@ -1660,6 +1660,36 @@ void DeclarationBuilder::applyStorageSpecifiers()
     }
 }
 
+void DeclarationBuilder::inheritVirtualSpecifierFromOverridden(ClassFunctionDeclaration* classFun)
+{
+  //To be truly correct, this function should:
+  // 1. differentiate between various overloads
+  // 2. differentiate between cast operators, which all have the same identifier
+  // 3. perform a correct search for the destructor (which has a different identifier in each base class)
+  //This correctness is currently ignored as a matter of cost(in speed) vs benefit (TODO: #3 at least)
+  if(!classFun || classFun->isVirtual() || classFun->isConstructor() || classFun->isDestructor())
+    return;
+
+  QList<Declaration*> overridden;
+  Identifier searchId = classFun->identifier();
+  //In correct code this should actually only happen in the case of a specialization destructor
+  //(Which isn't handled). In any case though, we don't need or want to search in instantiations.
+  searchId.clearTemplateIdentifiers();
+
+  foreach(const DUContext::Import &import, currentContext()->importedParentContexts()) {
+    DUContext* iContext = import.context(topContext());
+    if(iContext && iContext->type() == DUContext::Class) {
+      overridden += iContext->findDeclarations(QualifiedIdentifier(searchId), CursorInRevision::invalid(),
+                                               classFun->abstractType(), classFun->topContext(), DUContext::DontSearchInParent);
+    }
+  }
+  foreach(Declaration* decl, overridden) {
+    if(AbstractFunctionDeclaration* fun = dynamic_cast<AbstractFunctionDeclaration*>(decl))
+      if(fun->isVirtual())
+        classFun->setVirtual(true);
+  }
+}
+
 void DeclarationBuilder::applyFunctionSpecifiers()
 {
   DUChainWriteLocker lock(DUChain::lock());
@@ -1673,26 +1703,8 @@ void DeclarationBuilder::applyFunctionSpecifiers()
   }else{
     function->setFunctionSpecifiers((AbstractFunctionDeclaration::FunctionSpecifiers)0);
   }
-  
-  ///Eventually inherit the "virtual" flag from overridden functions
-  ClassFunctionDeclaration* classFunDecl = dynamic_cast<ClassFunctionDeclaration*>(function);
-  if(classFunDecl && !classFunDecl->isVirtual()) {
-    QList<Declaration*> overridden;
-    foreach(const DUContext::Import &import, currentContext()->importedParentContexts()) {
-      DUContext* iContext = import.context(topContext());
-      if(iContext) {
-        overridden += iContext->findDeclarations(QualifiedIdentifier(classFunDecl->identifier()),
-                                            CursorInRevision::invalid(), classFunDecl->abstractType(), classFunDecl->topContext(), DUContext::DontSearchInParent);
-      }
-    }
-    if(!overridden.isEmpty()) {
-      foreach(Declaration* decl, overridden) {
-        if(AbstractFunctionDeclaration* fun = dynamic_cast<AbstractFunctionDeclaration*>(decl))
-          if(fun->isVirtual())
-            classFunDecl->setVirtual(true);
-      }
-    }
-  }
+
+  inheritVirtualSpecifierFromOverridden(dynamic_cast<ClassFunctionDeclaration*>(function));
 }
 
 bool DeclarationBuilder::checkParameterDeclarationClause(ParameterDeclarationClauseAST* clause)
