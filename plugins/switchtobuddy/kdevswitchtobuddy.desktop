@@ -1,8 +1,20 @@
 [Desktop Entry]
 Type=Service
 Comment=Allows switching between buddy documents like implementation and header file.
+Comment[pt]=Permite a mudança de documentos associados, como os ficheiros de implementação e de inclusão.
+Comment[sv]=Tillåter byte mellan samhörande dokument som implementerings- och deklarationsfiler.
+Comment[uk]=Надає змогу перемикатися на споріднені документи, зокрема файли з реалізацією та файли заголовків.
+Comment[x-test]=xxAllows switching between buddy documents like implementation and header file.xx
 Name=Switch to Buddy
+Name[pt]=Mudar para o Ficheiro Associado
+Name[sv]=Byt till samhörande
+Name[uk]=Перемикання на споріднений
+Name[x-test]=xxSwitch to Buddyxx
 GenericName=Switch to Buddy
+GenericName[pt]=Mudar para o Ficheiro Associado
+GenericName[sv]=Byt till samhörande
+GenericName[uk]=Перемикання на споріднений
+GenericName[x-test]=xxSwitch to Buddyxx
 Icon=document-multiple
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevswitchtobuddy
