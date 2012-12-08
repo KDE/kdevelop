@@ -25,6 +25,7 @@ namespace KDevelop {
 class DeclarationValidatorPrivate
 {
 public:
+  DeclarationValidatorPrivate() : testsPassed(true) {}
   bool testsPassed;
 };
 

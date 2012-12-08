@@ -51,6 +51,7 @@
  *   declaration : DeclTestObject
  *   definition : DeclTestObject
  *   null : bool
+ *   defaultParameter : string
  */
 
 namespace KDevelop
@@ -176,6 +177,21 @@ DeclarationTest(declaration)
 DeclarationTest(null)
 {
   return compareValues(decl == 0, value, "Declaration's nullity");
+}
+///JSON type: bool
+///@returns whether the declaration's default parameter matches the given value
+DeclarationTest(defaultParameter)
+{
+  const QString NOT_IN_FUNC_CTXT = "Asked for a default parameter for a declaration outside of a function context.";
+  const QString OWNER_NOT_FUNC = "Function context not owned by function declaration (what on earth did you do?).";
+  DUContext *context = decl->context();
+  if (!context || context->type() != DUContext::Function)
+    return NOT_IN_FUNC_CTXT;
+  AbstractFunctionDeclaration *funcDecl = dynamic_cast<AbstractFunctionDeclaration*>(context->owner());
+  if (!funcDecl)
+    return OWNER_NOT_FUNC;
+  int argIndex = context->localDeclarations().indexOf(decl);
+  return compareValues(funcDecl->defaultParameterForArgument(argIndex).str(), value, "Declaration's default parameter");
 }
 
 }
