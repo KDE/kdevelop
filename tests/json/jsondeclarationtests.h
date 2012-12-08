@@ -44,6 +44,7 @@
  *   unaliasedType : TypeTestObject
  *   targetType : TypeTestObject
  *   identifiedTypeQid : string
+ *   isVirtual : bool
  */
 
 namespace KDevelop
@@ -132,6 +133,17 @@ DeclarationTest(identifiedTypeQid)
     return UN_ID_ERROR.arg(type->toString());
 
   return compareValues(idDecl->qualifiedIdentifier().toString(), value, "Declaration's identified type");
+}
+///JSON type: bool
+///@returns whether the (function) declaration's isVirtual matches the given value
+DeclarationTest(isVirtual)
+{
+  const QString NOT_A_FUNCTION = "Non-function declaration cannot be virtual.";
+  AbstractFunctionDeclaration *absFuncDecl = dynamic_cast<AbstractFunctionDeclaration*>(decl);
+  if (!absFuncDecl)
+      return NOT_A_FUNCTION;
+
+  return compareValues(absFuncDecl->isVirtual(), value, "Declaration's isVirtual");
 }
 
 }
