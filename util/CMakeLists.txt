@@ -16,6 +16,7 @@ set(kdevplatformutil_LIB_SRCS
     activetooltip.cpp
     executecompositejob.cpp
     fileutils.cpp
+    shellutils.cpp
     sequentiallyrunjobs.cpp
     multilevellistview.cpp
     projecttestjob.cpp

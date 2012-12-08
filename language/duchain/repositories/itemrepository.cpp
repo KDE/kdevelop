@@ -35,6 +35,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/isession.h>
 #include <util/fileutils.h>
+#include <util/shellutils.h>
 #include <shell/sessioncontroller.h>
 
 #include "../duchain.h"
@@ -217,35 +218,13 @@ bool ItemRepositoryRegistry::open(const QString& path, bool clear) {
 
     if(count >= crashesBeforeCleanup && !getenv("DONT_CLEAR_DUCHAIN_DIR"))
     {
-      int userAnswer = 0;
-      ///NOTE: we don't want to crash our beloved tools when run in no-gui mode
-      ///NOTE 2: create a better, reusable version of the below for other tools
-      if (QApplication::type() == QApplication::Tty) {
-        // no ui-mode e.g. for duchainify and other tools
-        QTextStream out(stdout);
-        out << i18np("Session crashed %1 time in a row", "Session crashed %1 times in a row", count) << endl;
-        out << endl;
-        QTextStream in(stdin);
-        QString input;
-        while(true) {
-          out << i18n("Clear cache: [Y/n] ") << flush;
-          input = in.readLine().trimmed();
-          if (input.toLower() == "y" || input.isEmpty()) {
-            userAnswer = KMessageBox::Yes;
-            break;
-          } else if (input.toLower() == "n") {
-            userAnswer = KMessageBox::No;
-            break;
-          }
-        }
-      } else {
-        userAnswer = KMessageBox::questionYesNo(0,
-                                                i18np("The Session crashed once.", "The Session crashed %1 times in a row.", count) + "\n\n" + i18n("The crash may be caused by a corruption of cached data.\n\nPress OK if you want KDevelop to clear the cache, otherwise press Cancel if you are sure the crash has another origin."),
-                                                i18n("Session crashed"),
-                                                KStandardGuiItem::ok(),
-                                                KStandardGuiItem::cancel());
-      }
-      if (userAnswer == KMessageBox::Yes) {
+      bool userAnswer = askUser( i18np( "Session crashed %1 time in a row", "Session crashed %1 times in a row", count ),
+                                 i18nc( "@action", "Clear cache" ),
+                                 i18nc( "@title", "Session crashed" ),
+                                 i18n("The crash may be caused by a corruption of cached data.\n\n"
+                                      "Press OK if you want KDevelop to clear the cache, otherwise press Cancel if you are sure the crash has another origin."),
+                                 true );
+      if(userAnswer) {
         clear = true;
         kDebug() << "User chose to clean repository";
       } else {
