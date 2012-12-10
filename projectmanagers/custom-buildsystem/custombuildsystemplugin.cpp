@@ -211,7 +211,10 @@ KConfigGroup CustomBuildSystem::findMatchingPathGroup(const KConfigGroup& cfg, P
 
             QString targetDirectoryRelative = pathGroup.readEntry( ConfigConstants::projectPathKey, "" );
             KUrl targetDirectory = rootDirectory;
-            targetDirectory.addPath( targetDirectoryRelative );
+            // note: a dot represents the project root
+            if (targetDirectoryRelative != ".") {
+                targetDirectory.addPath( targetDirectoryRelative );
+            }
 
             if( targetDirectory.isParentOf(itemUrl) ) {
                 if( candidateTargetDirectory.isEmpty() || candidateTargetDirectory.isParentOf(targetDirectory) ) {
