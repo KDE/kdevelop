@@ -749,7 +749,7 @@ KDevelop::TextEditorWidget::TextEditorWidget(const TextView* view, QWidget* pare
     d->view = 0;
 
     setLayout(d->widgetLayout);
-    QMetaObject::invokeMethod(this, "initialize", Qt::QueuedConnection);
+    initialize();
 }
 
 KDevelop::TextEditorWidget::~TextEditorWidget()
