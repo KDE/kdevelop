@@ -71,7 +71,7 @@ FileTemplatesPlugin::FileTemplatesPlugin(QObject* parent, const QVariantList& ar
 
     setXMLFile("kdevfiletemplates.rc");
     KAction* action = actionCollection()->addAction("new_from_template");
-    action->setText( i18n( "New from Template" ) );
+    action->setText( i18n( "New From Template" ) );
     action->setIcon( KIcon( "code-class" ) );
     action->setWhatsThis( i18n( "<b>Create new files from a template</b><br/>Allows you to create new source code files, such as classes or unit tests, using templates." ) );
     action->setStatusTip( i18n( "Create new files from a template" ) );

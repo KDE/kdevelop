@@ -97,6 +97,7 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent)
 , m_filter(new KRecursiveFilterProxyModel(this))
 {
     setWindowIcon(KIcon("preflight-verifier"));
+    setWindowTitle(i18n("Unit Tests"));
 
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -115,11 +116,11 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent)
     m_filter->setSourceModel(m_model);
     m_tree->setModel(m_filter);
 
-    KAction* showSource = new KAction( KIcon("code-context"), i18n("Show source"), this );
+    KAction* showSource = new KAction( KIcon("code-context"), i18n("Show Source"), this );
     connect (showSource, SIGNAL(triggered(bool)), SLOT(showSource()));
     m_contextMenuActions << showSource;
 
-    KAction* runSelected = new KAction( KIcon("system-run"), i18n("Run selected tests"), this );
+    KAction* runSelected = new KAction( KIcon("system-run"), i18n("Run Selected Tests"), this );
     connect (runSelected, SIGNAL(triggered(bool)), SLOT(runSelectedTests()));
     m_contextMenuActions << runSelected;
 
