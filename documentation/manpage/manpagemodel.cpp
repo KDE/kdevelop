@@ -174,9 +174,8 @@ void ManPageModel::readDataFromMainIndex(KIO::Job * job, const QByteArray &data)
 }
 
 QList<ManSection> ManPageModel::indexParser(){
-
-     QWebPage * page = new QWebPage();
-     QWebFrame * frame = page->mainFrame();
+     QWebPage page;
+     QWebFrame * frame = page.mainFrame();
      frame->setHtml(m_manMainIndexBuffer);
      QWebElement document = frame->documentElement();
      QWebElementCollection links = document.findAll("a");
@@ -186,7 +185,6 @@ QList<ManSection> ManPageModel::indexParser(){
          sectionId = sectionId.mid(5,sectionId.size()-6);
          list.append(qMakePair(sectionId, e.parent().parent().findAll("td").at(2).toPlainText()));
      }
-     delete page;
      return list;
 }
 
