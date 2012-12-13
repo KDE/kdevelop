@@ -385,8 +385,9 @@ void ProjectModelTest::testRename()
     QFETCH( QString, expectedItemText );
     QFETCH( int, expectedRenameCode );
 
+    const KUrl projectFolder = KUrl("file:///dummyprojectfolder");
     TestProject* proj = new TestProject;
-    ProjectFolderItem* rootItem = new ProjectFolderItem( proj, KUrl("file:///dummyprojectfolder"), 0);
+    ProjectFolderItem* rootItem = new ProjectFolderItem( proj, projectFolder, 0);
     proj->setProjectItem( rootItem );
 
     new ProjectFileItem("existing", rootItem);
@@ -440,6 +441,14 @@ void ProjectModelTest::testRename_data()
     << true
     << QString::fromLatin1("otherfile.cpp")
     << (int)ProjectBaseItem::RenameOk;
+
+    QTest::newRow("SourceAndDestinationFileEqual")
+    << (int)ProjectBaseItem::File
+    << QString::fromLatin1("newfile.cpp")
+    << QString::fromLatin1("newfile.cpp")
+    << false
+    << QString::fromLatin1("newfile.cpp")
+    << (int)ProjectBaseItem::RenameOk;
     
     QTest::newRow("RenameableFolder")
     << (int)ProjectBaseItem::Folder
@@ -448,6 +457,14 @@ void ProjectModelTest::testRename_data()
     << true
     << QString::fromLatin1("otherfolder")
     << (int)ProjectBaseItem::RenameOk;
+
+    QTest::newRow("SourceAndDestinationFolderEqual")
+    << (int)ProjectBaseItem::Folder
+    << QString::fromLatin1("newfolder")
+    << QString::fromLatin1("newfolder")
+    << false
+    << QString::fromLatin1("newfolder")
+    << (int)ProjectBaseItem::RenameOk;
     
     QTest::newRow("RenameableBuildFolder")
     << (int)ProjectBaseItem::BuildFolder
@@ -455,6 +472,14 @@ void ProjectModelTest::testRename_data()
     << QString::fromLatin1("otherbfolder")
     << true
     << QString::fromLatin1("otherbfolder")
+    << (int)ProjectBaseItem::RenameOk;
+
+    QTest::newRow("SourceAndDestinationBuildFolderEqual")
+    << (int)ProjectBaseItem::BuildFolder
+    << QString::fromLatin1("newbfolder")
+    << QString::fromLatin1("newbfolder")
+    << false
+    << QString::fromLatin1("newbfolder")
     << (int)ProjectBaseItem::RenameOk;
 
     QTest::newRow("ExistingFileError")
@@ -523,13 +548,13 @@ void ProjectModelTest::testItemsForUrl_data()
     QTest::addColumn<int>("matches");
 
     {
-        ProjectFolderItem* root = new ProjectFolderItem(0, KUrl("file:////tmp/"));
+        ProjectFolderItem* root = new ProjectFolderItem(0, KUrl("file:///tmp/"));
         ProjectFileItem* file = new ProjectFileItem(0, KUrl(root->url(), "a"), root);
         QTest::newRow("find one") << file->url() << static_cast<ProjectBaseItem*>(root) << 1;
     }
 
     {
-        ProjectFolderItem* root = new ProjectFolderItem(0, KUrl("file:////tmp/"));
+        ProjectFolderItem* root = new ProjectFolderItem(0, KUrl("file:///tmp/"));
         ProjectFolderItem* folder = new ProjectFolderItem(0, KUrl(root->url(), "a"), root);
         ProjectFileItem* file = new ProjectFileItem(0, KUrl(folder->url(), "foo"), folder);
         ProjectTargetItem* target = new ProjectTargetItem(0, "b", root);

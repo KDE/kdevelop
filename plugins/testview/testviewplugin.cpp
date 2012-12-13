@@ -73,7 +73,7 @@ TestViewPlugin::TestViewPlugin(QObject* parent, const QVariantList& args): IPlug
 {
     Q_UNUSED(args)
 
-    KAction* runAll = new KAction( KIcon("system-run"), i18n("Run all tests"), this );
+    KAction* runAll = new KAction( KIcon("system-run"), i18n("Run All Tests"), this );
     connect(runAll, SIGNAL(triggered(bool)), SLOT(runAllTests()));
     actionCollection()->addAction("run_all_tests", runAll);
 

@@ -66,21 +66,21 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
 {
     Ui::GrepOutputView::setupUi(this);
 
-    setWindowTitle(i18nc("@title:window", "Replace output view"));
+    setWindowTitle(i18nc("@title:window", "Find/Replace Output View"));
     setWindowIcon(SmallIcon("edit-find"));
     
-    m_prev = new QAction(KIcon("go-previous"), i18n("&Previous item"), this);
+    m_prev = new QAction(KIcon("go-previous"), i18n("&Previous Item"), this);
     m_prev->setEnabled(false);
-    m_next = new QAction(KIcon("go-next"), i18n("&Next item"), this);
+    m_next = new QAction(KIcon("go-next"), i18n("&Next Item"), this);
     m_next->setEnabled(false);
-    m_collapseAll = new QAction(KIcon("arrow-left-double"), i18n("C&ollapse all"), this); // TODO change icon
+    m_collapseAll = new QAction(KIcon("arrow-left-double"), i18n("C&ollapse All"), this); // TODO change icon
     m_collapseAll->setEnabled(false);
-    m_expandAll = new QAction(KIcon("arrow-right-double"), i18n("&Expand all"), this); // TODO change icon
+    m_expandAll = new QAction(KIcon("arrow-right-double"), i18n("&Expand All"), this); // TODO change icon
     m_expandAll->setEnabled(false);
     QAction *separator = new QAction(this);
     separator->setSeparator(true);
-    QAction *change_criteria = new QAction(KIcon("configure"), i18n("&Change criteria"), this);
-    m_clearSearchHistory = new QAction(KIcon("edit-clear-list"), i18n("Clear search history"), this);
+    QAction *change_criteria = new QAction(KIcon("configure"), i18n("&Change Search Settings"), this);
+    m_clearSearchHistory = new QAction(KIcon("edit-clear-list"), i18n("Clear Search History"), this);
     
     addAction(m_prev);
     addAction(m_next);
@@ -328,8 +328,14 @@ void GrepOutputView::rowsRemoved()
 void GrepOutputView::updateApplyState(const QModelIndex& topLeft, const QModelIndex& bottomRight)
 {
     Q_UNUSED(bottomRight);
-    // we only care about root item
-    if(!topLeft.parent().isValid() && model())
+
+    if (!model() || !model()->hasResults()) {
+        applyButton->setEnabled(false);
+        return;
+    }
+
+    // we only care about the root item
+    if(!topLeft.parent().isValid())
     {
         applyButton->setEnabled(topLeft.data(Qt::CheckStateRole) != Qt::Unchecked && model()->itemsCheckable());
     }

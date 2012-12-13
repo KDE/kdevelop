@@ -173,6 +173,9 @@ GrepOutputModel::~GrepOutputModel()
 void GrepOutputModel::clear()
 {
     QStandardItemModel::clear();
+    // the above clear() also destroys the root item, so invalidate the pointer
+    m_rootItem = 0;
+
     m_fileCount = 0;
     m_matchCount = 0;
 }
@@ -419,6 +422,8 @@ void GrepOutputModel::updateCheckState(QStandardItem* item)
 void GrepOutputModel::doReplacements()
 {
     Q_ASSERT(m_rootItem);
+    if (!m_rootItem)
+        return; // nothing to do, abort
 
     DocumentChangeSet changeSet;
     changeSet.setFormatPolicy(DocumentChangeSet::NoAutoFormat);

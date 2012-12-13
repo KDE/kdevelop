@@ -43,6 +43,8 @@ DocumentationView::DocumentationView(QWidget* parent, ProvidersModel* m)
     : QWidget(parent), mProvidersModel(m)
 {
     setWindowIcon(KIcon("documentation"));
+    setWindowTitle(i18n("Documentation"));
+
     setLayout(new QVBoxLayout(this));
     layout()->setMargin(0);
     layout()->setSpacing(0);
@@ -50,6 +52,8 @@ DocumentationView::DocumentationView(QWidget* parent, ProvidersModel* m)
     //TODO: clean this up, simply use addAction as that will create a toolbar automatically
     //      use custom KAction's with createWidget for mProviders and mIdentifiers
     mActions=new KToolBar(this);
+    // set window title so the QAction from QToolBar::toggleViewAction gets a proper name set
+    mActions->setWindowTitle(i18n("Documentation Tool Bar"));
     mActions->setToolButtonStyle(Qt::ToolButtonIconOnly);
     int iconSize=style()->pixelMetric(QStyle::PM_SmallIconSize);
     mActions->setIconSize(QSize(iconSize, iconSize));

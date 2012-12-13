@@ -7,5 +7,7 @@ build
 *.diff
 *.orig
 *.rej
+*.swp
 massif.out.*
 callgrind.out.*
+.*kate-swp

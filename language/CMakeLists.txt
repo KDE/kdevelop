@@ -250,6 +250,7 @@ install(FILES
     duchain/localindexedducontext.h
     duchain/indexeddeclaration.h
     duchain/localindexeddeclaration.h
+    duchain/definitions.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain COMPONENT Devel
 )
 

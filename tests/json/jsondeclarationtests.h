@@ -26,6 +26,9 @@
 #include "language/duchain/abstractfunctiondeclaration.h"
 #include "language/duchain/types/typeutils.h"
 #include "language/duchain/types/identifiedtype.h"
+#include "language/duchain/duchain.h"
+#include "language/duchain/functiondefinition.h"
+#include "language/duchain/definitions.h"
 #include "jsontesthelpers.h"
 
 /**
@@ -44,6 +47,11 @@
  *   unaliasedType : TypeTestObject
  *   targetType : TypeTestObject
  *   identifiedTypeQid : string
+ *   isVirtual : bool
+ *   declaration : DeclTestObject
+ *   definition : DeclTestObject
+ *   null : bool
+ *   defaultParameter : string
  */
 
 namespace KDevelop
@@ -51,6 +59,8 @@ namespace KDevelop
   template<>
   QString TestSuite<Declaration*>::objectInformation(Declaration *decl)
   {
+    if (!decl)
+        return "(null declaration)";
     return QString("(Declaration on line %1 in %2)")
         .arg(decl->range().start.line + 1)
         .arg(decl->topContext()->url().str());
@@ -93,7 +103,7 @@ DeclarationTest(internalFunctionContext)
   AbstractFunctionDeclaration *absFuncDecl = dynamic_cast<AbstractFunctionDeclaration*>(decl);
   if (!absFuncDecl || !absFuncDecl->internalFunctionContext())
     return NO_INTERNAL_CTXT.arg(decl->qualifiedIdentifier().toString());
-  return testObject(decl->internalContext(), value, "Declaration's internal function context");
+  return testObject(absFuncDecl->internalFunctionContext(), value, "Declaration's internal function context");
 }
 /*FIXME: The type functions need some renaming and moving around
  * Some (all?) functions from cpp's TypeUtils should be moved to the kdevplatform type utils
@@ -132,6 +142,56 @@ DeclarationTest(identifiedTypeQid)
     return UN_ID_ERROR.arg(type->toString());
 
   return compareValues(idDecl->qualifiedIdentifier().toString(), value, "Declaration's identified type");
+}
+///JSON type: bool
+///@returns whether the (function) declaration's isVirtual matches the given value
+DeclarationTest(isVirtual)
+{
+  const QString NOT_A_FUNCTION = "Non-function declaration cannot be virtual.";
+  AbstractFunctionDeclaration *absFuncDecl = dynamic_cast<AbstractFunctionDeclaration*>(decl);
+  if (!absFuncDecl)
+      return NOT_A_FUNCTION;
+
+  return compareValues(absFuncDecl->isVirtual(), value, "Declaration's isVirtual");
+}
+///JSON type: DeclTestObject
+///@returns whether the tests for the function declaration's definition pass
+DeclarationTest(definition)
+{
+  KDevVarLengthArray<IndexedDeclaration> definitions = DUChain::definitions()->definitions(decl->id());
+  Declaration *declDef  = 0;
+  if (definitions.size())
+    declDef = definitions.at(0).declaration();
+  return testObject(declDef, value, "Declaration's definition");
+}
+///JSON type: DeclTestObject
+///@returns whether the tests for the function definition's declaration pass
+DeclarationTest(declaration)
+{
+  FunctionDefinition *def = dynamic_cast<FunctionDefinition*>(decl);
+  Declaration *defDecl = def->declaration(decl->topContext());
+  return testObject(defDecl, value, "Definition's declaration");
+}
+///JSON type: bool
+///@returns whether the declaration's nullity matches the given value
+DeclarationTest(null)
+{
+  return compareValues(decl == 0, value, "Declaration's nullity");
+}
+///JSON type: bool
+///@returns whether the declaration's default parameter matches the given value
+DeclarationTest(defaultParameter)
+{
+  const QString NOT_IN_FUNC_CTXT = "Asked for a default parameter for a declaration outside of a function context.";
+  const QString OWNER_NOT_FUNC = "Function context not owned by function declaration (what on earth did you do?).";
+  DUContext *context = decl->context();
+  if (!context || context->type() != DUContext::Function)
+    return NOT_IN_FUNC_CTXT;
+  AbstractFunctionDeclaration *funcDecl = dynamic_cast<AbstractFunctionDeclaration*>(context->owner());
+  if (!funcDecl)
+    return OWNER_NOT_FUNC;
+  int argIndex = context->localDeclarations().indexOf(decl);
+  return compareValues(funcDecl->defaultParameterForArgument(argIndex).str(), value, "Declaration's default parameter");
 }
 
 }

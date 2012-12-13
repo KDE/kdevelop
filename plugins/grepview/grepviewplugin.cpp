@@ -56,7 +56,7 @@ GrepViewPlugin::GrepViewPlugin( QObject *parent, const QVariantList & )
         this, QDBusConnection::ExportScriptableSlots );
 
     KAction *action = actionCollection()->addAction("edit_grep");
-    action->setText(i18n("Find/replace in Fi&les..."));
+    action->setText(i18n("Find/Replace in Fi&les..."));
     action->setShortcut( i18n("Ctrl+Alt+f") );
     connect(action, SIGNAL(triggered(bool)), this, SLOT(showDialogFromMenu()));
     action->setToolTip( i18n("Search for expressions over several files") );

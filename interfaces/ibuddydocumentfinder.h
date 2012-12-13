@@ -21,6 +21,7 @@
 #define IBUDDYDOCUMENTFINDER_H
 
 #include <QObject>
+#include <QVector>
 #include <KUrl>
 #include "interfacesexport.h"
 
@@ -93,6 +94,19 @@ public:
      *         false, for the inverse.
      */
     virtual bool buddyOrder(const KUrl& url1, const KUrl& url2) = 0;
+
+
+    /**
+     * Returns a list of KUrls of potential buddies of the document
+     * provided by @p url.
+     *
+     * The urls are potential buddies and it is not ensured that the files
+     * really exist.
+     *
+     * @returns list of potential buddy documents or an empty list
+     *  if non are available.
+     */
+    virtual QVector<KUrl> getPotentialBuddies(const KUrl& url) const = 0;
 
     /**
      * Registers a IBuddyDocumentFinder object for a mimetype.

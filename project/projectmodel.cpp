@@ -170,26 +170,31 @@ public:
     {
         Q_ASSERT(item->file() || item->folder());
 
-        if( !newName.contains('/') ) {
-            KIO::UDSEntry entry;
-            //There exists a folder with that name?
-            Path newPath = item->path();
-            newPath.setFileName(newName);
-            if( !KIO::NetAccess::stat(newPath.toUrl(), entry, 0) ) {
-                if( !item->project() || !item->project()->projectFileManager() ) {
-                    return renameBaseItem(item, newName);
-                } else if( item->folder() && item->project()->projectFileManager()->renameFolder(item->folder(), newPath) ) {
-                    return ProjectBaseItem::RenameOk;
-                } else if ( item->file() && item->project()->projectFileManager()->renameFile(item->file(), newPath) ) {
-                    return ProjectBaseItem::RenameOk;
-                } else {
-                    return ProjectBaseItem::ProjectManagerRenameFailed;
-                }
-            } else {
-                return ProjectBaseItem::ExistingItemSameName;
-            }
-        } else {
+        if (newName.contains('/')) {
             return ProjectBaseItem::InvalidNewName;
+        }
+
+        if (item->text() == newName) {
+            return ProjectBaseItem::RenameOk;
+        }
+
+        Path newPath = item->path();
+        newPath.setFileName(newName);
+
+        KIO::UDSEntry entry;
+        if( KIO::NetAccess::stat(newPath.toUrl(), entry, 0) ) {
+            // file/folder exists already
+            return ProjectBaseItem::ExistingItemSameName;
+        }
+
+        if( !item->project() || !item->project()->projectFileManager() ) {
+            return renameBaseItem(item, newName);
+        } else if( item->folder() && item->project()->projectFileManager()->renameFolder(item->folder(), newPath) ) {
+            return ProjectBaseItem::RenameOk;
+        } else if ( item->file() && item->project()->projectFileManager()->renameFile(item->file(), newPath) ) {
+            return ProjectBaseItem::RenameOk;
+        } else {
+            return ProjectBaseItem::ProjectManagerRenameFailed;
         }
     }
 };

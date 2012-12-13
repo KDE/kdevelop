@@ -27,6 +27,7 @@
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/iprojectcontroller.h>
+#include <interfaces/iproject.h>
 #include <project/projectmodel.h>
 #include "dashboarddocument.h"
 
@@ -39,10 +40,17 @@ using namespace KDevelop;
 class ProjectDashboardFactory : public KDevelop::IDocumentFactory
 {
     public:
+        /**
+         * Only create a document instance in case we are selecting
+         * the .kdev4 project file of an *open* project
+         */
         virtual IDocument* create(const KUrl& url, ICore*)
         {
             IProject* proj = ICore::self()->projectController()->findProjectForUrl(url);
-            return proj ? new DashboardDocument(proj) : 0;
+            if (!proj || proj->projectFileUrl() != url)
+                return 0;
+
+            return new DashboardDocument(proj);
         }
 };
 
