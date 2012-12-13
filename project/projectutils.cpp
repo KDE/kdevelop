@@ -24,6 +24,8 @@
 #include "path.h"
 
 #include <QMenu>
+#include <KIcon>
+#include <KMenu>
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
@@ -37,24 +39,20 @@ class Populator : public QObject
 {
     Q_OBJECT
 public:
-    Populator(ProjectBaseItem* item, QAction* action, const QPoint& pos, const QString& text)
+    Populator(ProjectBaseItem* item, QAction* action, const QPoint& pos)
     : QObject(action)
+    , m_action(action)
     , m_item(item)
     , m_pos(pos)
-    , m_text(text)
     {
         connect(action, SIGNAL(triggered(bool)), SLOT(populate()));
-    }
-    virtual ~Populator()
-    {
-        qDebug() << "bye bye";
     }
 
 public Q_SLOTS:
     void populate()
     {
-        QMenu menu(m_text);
-        menu.addAction(m_text)->setEnabled(false);;
+        KMenu menu;
+        menu.addTitle(m_action->icon(), m_action->text());
         ProjectItemContext context(QList< ProjectBaseItem* >() << m_item);
         QList<ContextMenuExtension> extensions = ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( &context );
         ContextMenuExtension::populateMenu(&menu, extensions);
@@ -62,9 +60,9 @@ public Q_SLOTS:
     }
 
 private:
+    QAction* m_action;
     ProjectBaseItem* m_item;
     QPoint m_pos;
-    QString m_text;
 };
 
 void populateParentItemsMenu( ProjectBaseItem* item, QMenu* menu )
@@ -92,8 +90,9 @@ void populateParentItemsMenu( ProjectBaseItem* item, QMenu* menu )
                 text = i18n("Project %1", prettyName);
 
             QAction* action = menu->addAction(text);
+            action->setIcon(KIcon(parent->iconName()));
             // The populator will either spawn a menu when the action is triggered, or it will delete itself
-            new Populator(parent, action, QCursor::pos(), text);
+            new Populator(parent, action, QCursor::pos());
         }
 
         parent = parent->parent();
