@@ -62,15 +62,9 @@ void GenericProjectManagerPreferences::save()
     ProjectKCModule<GenericProjectManagerSettings>::save();
     GenericProjectManagerSettings::self()->writeConfig();
 
-    IProject* project = 0;
-    Q_FOREACH (IProject* p, ICore::self()->projectController()->projects()) {
-        if (p->projectFileUrl() == GenericProjectManagerSettings::self()->projectFileUrl()) {
-            project = p;
-            break;
-        }
-    }
-    if (project && project->projectFileManager()) {
-        project->projectFileManager()->reload(project->projectItem());
+    IProject* proj = project();
+    if (proj && proj->projectFileManager()) {
+        proj->projectFileManager()->reload(proj->projectItem());
     }
 }
 

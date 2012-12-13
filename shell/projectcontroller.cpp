@@ -139,8 +139,8 @@ public:
         cfgDlg.setKCMArguments( QStringList()
                                     << proj->developerTempFile()
                                     << proj->projectTempFile()
-                                    << proj->projectFileUrl().url()
-                                    << proj->developerFileUrl().url()
+                                    << proj->projectFile().pathOrUrl()
+                                    << proj->developerFile().pathOrUrl()
                                     << proj->name() );
         m_configuringProject = proj;
         cfgDlg.setWindowTitle( i18n("Configure Project %1", proj->name()) );
