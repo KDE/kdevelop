@@ -189,7 +189,7 @@ QList<ManSection> ManPageModel::indexParser(){
 }
 
 void ManPageModel::sectionParser(const QString &sectionId, const QString &data){
-    // the regex version is much faster than the QWebKit one...
+    // the regex version is much faster than using QWebKit for parsing...
     static QRegExp linkRegex("<a href=\"(man:[^\"#]+)\">([^<]+)</a>", Qt::CaseSensitive, QRegExp::RegExp2);
     int pos = 0;
     QList<ManPage> pageList;
@@ -200,26 +200,6 @@ void ManPageModel::sectionParser(const QString &sectionId, const QString &data){
         pos++;
     }
     m_manMap.insert(sectionId, pageList);
-
-    /* 
-    ///NOTE: this is slow, esp. the .toPlainText()
-    QWebPage * page = new QWebPage();
-    QWebFrame * frame = page->mainFrame();
-    frame->setHtml(data);
-    QWebElement document = frame->documentElement();
-    QWebElementCollection links = document.findAll("a");
-    QList<ManPage> pageList2;
-    foreach(QWebElement e, links){
-        if(e.hasAttribute("href") && !(e.attribute("href").contains(QRegExp( "#." )))){
-            pageList2.append(qMakePair(e.toPlainText(), KUrl(e.attribute("href"))));
-            m_index.append(e.toPlainText());
-        }
-    }
-    m_manMap.insert(sectionId, pageList2);
-    delete page;
-
-    Q_ASSERT(pageList2 == pageList);
-    */
 }
 
 void ManPageModel::showItem(const QModelIndex& idx){
