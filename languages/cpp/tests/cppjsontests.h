@@ -23,6 +23,7 @@
 #include <typeutils.h>
 #include <cppduchain.h>
 #include <templatedeclaration.h>
+#include <templateparameterdeclaration.h>
 
 #include <tests/json/jsontesthelpers.h>
 
@@ -37,6 +38,8 @@
  *   instantiations : InstantiationObject
  *   realType : TypeTestObject
  *   shortenedType : TypeTestObject
+ *   templateContext : CtxtTestObject
+ *   templateParameterDefault : string
  */
 
 namespace Cpp
@@ -116,6 +119,26 @@ DeclarationTest(realType)
 DeclarationTest(shortenedType)
 {
   return testObject(shortenTypeForViewing(decl->abstractType()), value, "Declaration's shortened type");
+}
+///JSON type: CtxtTestObject
+///@returns whether the tests for the declaration's templateContext pass
+DeclarationTest(templateContext)
+{
+  const QString NOT_A_TEMPLATE_DECL = "Requested template context, but declaration is not a template declaration.";
+  TemplateDeclaration *templDecl = dynamic_cast<TemplateDeclaration*>(decl);
+  if (!templDecl)
+    return NOT_A_TEMPLATE_DECL;
+  return testObject(templDecl->templateContext(decl->topContext()), value, "Declaration's template context");
+}
+///JSON type: string
+///@returns whether the template parameter declaration's default argument matches the given value
+DeclarationTest(templateParameterDefault)
+{
+  const QString NOT_A_TEMPLATE_PARAM_DECL = "Requested template parameters's default parameter, but declaration is not a template parameter declaration.";
+  TemplateParameterDeclaration *templDecl = dynamic_cast<TemplateParameterDeclaration*>(decl);
+  if (!templDecl)
+    return NOT_A_TEMPLATE_PARAM_DECL;
+  return compareValues(templDecl->defaultParameter().toString(), value, "Template parameter declaration's default parameter");
 }
 
 }

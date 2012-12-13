@@ -429,6 +429,54 @@ void DeclarationBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
   popSpecifiers();
 }
 
+void DeclarationBuilder::findDeclarationForDefinition(const QualifiedIdentifier &definitionSearchId)
+{
+  //TODO: FunctionDeclarations (as distinct from ClassFunctionDeclarations) should probably do what template forward declarations do.
+  //That is, the function definition should have no idea they exist and any default arguments should just be copied over
+  FunctionDefinition *funDef = dynamic_cast<FunctionDefinition*>(currentDeclaration());
+  if (!funDef || (currentContext()->type() != DUContext::Namespace && currentContext()->type() != DUContext::Global))
+    return;
+  QList<Declaration*> declarations = currentContext()->findDeclarations(definitionSearchId, currentDeclaration()->range().start,
+                                                                        AbstractType::Ptr(), 0, DUContext::OnlyFunctions);
+  if (!declarations.size())
+    return;
+  //First look for an exact match for the function declaration
+  foreach (Declaration* dec, declarations) {
+    if (dec->isForwardDeclaration() || dec->isDefinition())
+      continue;
+    if (dec->abstractType()->indexed() == lastType()->indexed()) {
+      //If this declaration is already assigned to a partial match, unassign it
+      if (FunctionDefinition* oldDef = FunctionDefinition::definition(dec)) {
+        if (oldDef->abstractType()->indexed() != dec->abstractType()->indexed())
+          oldDef->setDeclaration(0);
+      }
+      funDef->setDeclaration(dec);
+      return;
+    }
+  }
+  //Allow claiming of unclaimed declarations with the same arg count. This allows the signature assistant to function.
+  int functionArgumentCount = 0;
+  if(FunctionType::Ptr funDefType = funDef->abstractType().cast<FunctionType>())
+    functionArgumentCount = funDefType->arguments().count();
+  Declaration *anyUnclaimedFunctionDeclaration = 0;
+  foreach (Declaration* dec, declarations) {
+    if (!dec->isFunctionDeclaration() || dec->isDefinition())
+      continue;
+    if(FunctionDefinition::definition(dec) && wasEncountered(FunctionDefinition::definition(dec)))
+      continue;
+    if (FunctionType::Ptr foundType = dec->abstractType().cast<FunctionType>()) {
+      if (foundType->arguments().count() == functionArgumentCount) {
+        funDef->setDeclaration(dec);
+        return;
+      }
+    }
+    anyUnclaimedFunctionDeclaration = dec;
+  }
+  //Allow any unclaimed function-definition with a matching name. This allows the signature assistant to function.
+  if (anyUnclaimedFunctionDeclaration)
+    funDef->setDeclaration(anyUnclaimedFunctionDeclaration);
+}
+
 void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
 {
   if(m_ignoreDeclarators) {
@@ -481,63 +529,8 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
       QualifiedIdentifier id2;
       identifierForNode(node->id, id2);
       id += id2;
-      
       id.setExplicitlyGlobal(true);
-
-      if (id.count() > 1 ||
-           (m_inFunctionDefinition && (currentContext()->type() == DUContext::Namespace || currentContext()->type() == DUContext::Global))) {
-        CursorInRevision pos = currentDeclaration()->range().start;//editor()->findPosition(m_functionDefinedStack.top(), CppEditorIntegrator::FrontEdge);
-        // TODO: potentially excessive locking
-
-        QList<Declaration*> declarations = currentContext()->findDeclarations(id, pos, AbstractType::Ptr(), 0, DUContext::OnlyFunctions);
-
-        FunctionType::Ptr currentFunction = lastType().cast<FunctionType>();
-        int functionArgumentCount = 0;
-        if(currentFunction)
-          functionArgumentCount = currentFunction->arguments().count();
-
-        for( int cycle = 0; cycle < 3; cycle++ ) {
-          bool found = false;
-          ///We do 2 cycles: In the first cycle, we want an exact match. In the second, we accept approximate matches.
-          foreach (Declaration* dec, declarations) {
-            if (dec->isForwardDeclaration())
-              continue;
-            if(dec == currentDeclaration() || dec->isDefinition())
-              continue;
-            //Compare signatures of function-declarations:
-            if(dec->abstractType()->indexed() == lastType()->indexed())
-            {
-              //The declaration-type matches this definition, good.
-            }else{
-              if(cycle == 0) {
-                //First cycle, only accept exact matches
-                continue;
-              }else if(cycle == 1){
-                //Second cycle, match by argument-count
-                FunctionType::Ptr matchFunction = dec->type<FunctionType>();
-                if(currentFunction && matchFunction && currentFunction->arguments().count() == functionArgumentCount ) {
-                  //We have a match
-                }else{
-                  continue;
-                }
-              }else if(cycle == 2){
-                //Accept any match, so just continue
-              }
-              if(FunctionDefinition::definition(dec) && wasEncountered(FunctionDefinition::definition(dec)))
-                continue; //Do not steal declarations
-            }
-
-            if(FunctionDefinition* funDef = dynamic_cast<FunctionDefinition*>(currentDeclaration())) {
-              funDef->setDeclaration(dec);
-            }
-
-            found = true;
-            break;
-          }
-          if(found)
-            break;
-        }
-      }
+      findDeclarationForDefinition(id);
     }
   }
 
@@ -936,9 +929,6 @@ void DeclarationBuilder::closeDeclaration(bool forceInstance)
       eventuallyAssignInternalContext();
   }
 
-  Q_ASSERT(m_onlyComputeSimplified || !currentDeclaration()->isFunctionDeclaration() ||
-           currentDeclaration<AbstractFunctionDeclaration>()->internalFunctionContext());
-
   ifDebugCurrentFile( DUChainReadLocker lock(DUChain::lock()); kDebug() << "closing declaration" << currentDeclaration()->toString() << "type" << (currentDeclaration()->abstractType() ? currentDeclaration()->abstractType()->toString() : QString("notype")) << "last:" << (lastType() ? lastType()->toString() : QString("(notype)")); )
 
   m_lastDeclaration = m_declarationStack.pop();
@@ -1135,6 +1125,43 @@ void DeclarationBuilder::visitNamespace(NamespaceAST* ast) {
   }
 }
 
+void DeclarationBuilder::copyTemplateDefaultsFromForward(Identifier searchId, const CursorInRevision& pos)
+{
+  KDevelop::DUContext* currentTemplateContext = getTemplateContext(currentDeclaration());
+  if (!currentTemplateContext)
+    return;
+
+  ///We need to clear the template identifiers, or else it may try to instantiate
+  ///Note that template specializations cannot have default parameters
+  searchId.clearTemplateIdentifiers();
+
+  QList<Declaration*> declarations = Cpp::findDeclarationsSameLevel(currentContext(), searchId, pos);
+  foreach( Declaration* decl, declarations ) {
+    ForwardDeclaration* forward =  dynamic_cast<ForwardDeclaration*>(decl);
+    if (!forward || !decl->abstractType())
+      continue;
+    KDevelop::DUContext* forwardTemplateContext = forward->internalContext();
+    if (!forwardTemplateContext || forwardTemplateContext->type() != DUContext::Template)
+      continue;
+
+    const QVector<Declaration*>& forwardList = forwardTemplateContext->localDeclarations();
+    const QVector<Declaration*>& realList = currentTemplateContext->localDeclarations();
+
+    if (forwardList.size() != realList.size())
+      continue;
+
+    QVector<Declaration*>::const_iterator forwardIt = forwardList.begin();
+    QVector<Declaration*>::const_iterator realIt = realList.begin();
+
+    for( ; forwardIt != forwardList.end(); ++forwardIt, ++realIt ) {
+      TemplateParameterDeclaration* forwardParamDecl = dynamic_cast<TemplateParameterDeclaration*>(*forwardIt);
+      TemplateParameterDeclaration* realParamDecl = dynamic_cast<TemplateParameterDeclaration*>(*realIt);
+      if( forwardParamDecl && realParamDecl && !forwardParamDecl->defaultParameter().isEmpty())
+        realParamDecl->setDefaultParameter(forwardParamDecl->defaultParameter());
+    }
+  }
+}
+
 void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 {
   PushValue<bool> setNotInTypedef(m_inTypedef, false);
@@ -1170,50 +1197,8 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
   if( node->name ) {
     ///Copy template default-parameters from the forward-declaration to the real declaration if possible
     DUChainWriteLocker lock(DUChain::lock());
-
-    ///We need to clear the template identifiers, or else it'll try to instantiate
-    Identifier searchId = id.last();
-    searchId.clearTemplateIdentifiers();
-    QList<Declaration*> declarations = Cpp::findDeclarationsSameLevel(currentContext(), searchId, pos);
-
-    foreach( Declaration* decl, declarations ) {
-      if( decl->abstractType()) {
-        ForwardDeclaration* forward =  dynamic_cast<ForwardDeclaration*>(decl);
-        if( forward ) {
-          {
-            KDevelop::DUContext* forwardTemplateContext = forward->internalContext();
-            if( forwardTemplateContext && forwardTemplateContext->type() == DUContext::Template ) {
-
-              KDevelop::DUContext* currentTemplateContext = getTemplateContext(currentDeclaration());
-              if( (bool)forwardTemplateContext != (bool)currentTemplateContext ) {
-                kDebug(9007) << "Template-contexts of forward- and real declaration do not match: " << currentTemplateContext << getTemplateContext(currentDeclaration()) << currentDeclaration()->internalContext() << forwardTemplateContext << currentDeclaration()->internalContext()->importedParentContexts().count();
-              } else if( forwardTemplateContext && currentTemplateContext ) {
-                if( forwardTemplateContext->localDeclarations().count() != currentTemplateContext->localDeclarations().count() ) {
-                } else {
-
-                  const QVector<Declaration*>& forwardList = forwardTemplateContext->localDeclarations();
-                  const QVector<Declaration*>& realList = currentTemplateContext->localDeclarations();
-
-                  QVector<Declaration*>::const_iterator forwardIt = forwardList.begin();
-                  QVector<Declaration*>::const_iterator realIt = realList.begin();
-
-                  for( ; forwardIt != forwardList.end(); ++forwardIt, ++realIt ) {
-                    TemplateParameterDeclaration* forwardParamDecl = dynamic_cast<TemplateParameterDeclaration*>(*forwardIt);
-                    TemplateParameterDeclaration* realParamDecl = dynamic_cast<TemplateParameterDeclaration*>(*realIt);
-                    if( forwardParamDecl && realParamDecl ) {
-                      if( !forwardParamDecl->defaultParameter().isEmpty() )
-                        realParamDecl->setDefaultParameter(forwardParamDecl->defaultParameter());
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }//foreach
-
-  }//node-name
+    copyTemplateDefaultsFromForward(id.last(), pos);
+  }
 
   closeDeclaration();
   
@@ -1668,6 +1653,36 @@ void DeclarationBuilder::applyStorageSpecifiers()
     }
 }
 
+void DeclarationBuilder::inheritVirtualSpecifierFromOverridden(ClassFunctionDeclaration* classFun)
+{
+  //To be truly correct, this function should:
+  // 1. differentiate between various overloads
+  // 2. differentiate between cast operators, which all have the same identifier
+  // 3. perform a correct search for the destructor (which has a different identifier in each base class)
+  //This correctness is currently ignored as a matter of cost(in speed) vs benefit (TODO: #3 at least)
+  if(!classFun || classFun->isVirtual() || classFun->isConstructor() || classFun->isDestructor())
+    return;
+
+  QList<Declaration*> overridden;
+  Identifier searchId = classFun->identifier();
+  //In correct code this should actually only happen in the case of a specialization destructor
+  //(Which isn't handled). In any case though, we don't need or want to search in instantiations.
+  searchId.clearTemplateIdentifiers();
+
+  foreach(const DUContext::Import &import, currentContext()->importedParentContexts()) {
+    DUContext* iContext = import.context(topContext());
+    if(iContext && iContext->type() == DUContext::Class) {
+      overridden += iContext->findDeclarations(QualifiedIdentifier(searchId), CursorInRevision::invalid(),
+                                               classFun->abstractType(), classFun->topContext(), DUContext::DontSearchInParent);
+    }
+  }
+  foreach(Declaration* decl, overridden) {
+    if(AbstractFunctionDeclaration* fun = dynamic_cast<AbstractFunctionDeclaration*>(decl))
+      if(fun->isVirtual())
+        classFun->setVirtual(true);
+  }
+}
+
 void DeclarationBuilder::applyFunctionSpecifiers()
 {
   DUChainWriteLocker lock(DUChain::lock());
@@ -1681,26 +1696,8 @@ void DeclarationBuilder::applyFunctionSpecifiers()
   }else{
     function->setFunctionSpecifiers((AbstractFunctionDeclaration::FunctionSpecifiers)0);
   }
-  
-  ///Eventually inherit the "virtual" flag from overridden functions
-  ClassFunctionDeclaration* classFunDecl = dynamic_cast<ClassFunctionDeclaration*>(function);
-  if(classFunDecl && !classFunDecl->isVirtual()) {
-    QList<Declaration*> overridden;
-    foreach(const DUContext::Import &import, currentContext()->importedParentContexts()) {
-      DUContext* iContext = import.context(topContext());
-      if(iContext) {
-        overridden += iContext->findDeclarations(QualifiedIdentifier(classFunDecl->identifier()),
-                                            CursorInRevision::invalid(), classFunDecl->abstractType(), classFunDecl->topContext(), DUContext::DontSearchInParent);
-      }
-    }
-    if(!overridden.isEmpty()) {
-      foreach(Declaration* decl, overridden) {
-        if(AbstractFunctionDeclaration* fun = dynamic_cast<AbstractFunctionDeclaration*>(decl))
-          if(fun->isVirtual())
-            classFunDecl->setVirtual(true);
-      }
-    }
-  }
+
+  inheritVirtualSpecifierFromOverridden(dynamic_cast<ClassFunctionDeclaration*>(function));
 }
 
 bool DeclarationBuilder::checkParameterDeclarationClause(ParameterDeclarationClauseAST* clause)

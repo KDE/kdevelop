@@ -162,6 +162,17 @@ Cpp::ReferenceCountedMacroSet setupStandardMacros()
       insertMacro( macros, m );
     }
 
+    {
+      //Simple handling of va_arg to provide useful declarations (at least for GCC std)
+      //TODO: test other std headers
+      rpp::pp_macro m("__builtin_va_arg");
+      m.function_like = true;
+      m.formalsList().append(IndexedString("list"));
+      m.formalsList().append(IndexedString("type"));
+      m.setDefinitionText("(type)list");
+      insertMacro( macros, m );
+    }
+
 #ifdef _MSC_VER    
     foreach(const rpp::pp_macro* macro, msvcStandardMacros())
 #else

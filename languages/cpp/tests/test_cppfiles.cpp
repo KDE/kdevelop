@@ -71,10 +71,10 @@ void TestCppFiles::cleanupTestCase()
 void TestCppFiles::testFiles_data()
 {
   QTest::addColumn<QString>("fileName");
-  QString testDirPath = CPP_TEST_FILES_DIR;
+  const QString testDirPath = CPP_TEST_FILES_DIR;
   QStringList files = QDir(testDirPath).entryList(QStringList() << "*.cpp", QDir::Files);
   foreach (QString file, files) {
-    QTest::newRow(file.toUtf8()) << testDirPath.append("/" + file);
+    QTest::newRow(file.toUtf8()) << QString(testDirPath + "/" + file);
   }
 }
 void TestCppFiles::testFiles()

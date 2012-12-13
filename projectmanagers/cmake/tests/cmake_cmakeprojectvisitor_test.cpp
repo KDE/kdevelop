@@ -44,11 +44,35 @@ using namespace KDevelop;
 #undef TRUE //krazy:exclude=captruefalse
 #undef FALSE //krazy:exclude=captruefalse
 
+static QSharedPointer<KTemporaryFile> prepareVisitoTestScript(const QString &scriptContent)
+{
+    QSharedPointer<KTemporaryFile> file(new KTemporaryFile);
+    if ( !file->open() )
+        return QSharedPointer<KTemporaryFile>();
+
+    QTextStream out(file.data());
+    out << scriptContent;
+    file->close();
+    return file;
+}
+
 CMakeProjectVisitorTest::CMakeProjectVisitorTest()
  : CMakeProjectVisitor( QString(), 0)
 {
     AutoTestShell::init();
     KDevelop::Core::initialize(0, KDevelop::Core::NoUi);
+}
+
+void CMakeProjectVisitorTest::init()
+{
+    fakeContext = new TopDUContext(IndexedString("test"), RangeInRevision(0,0,0,0));
+    DUChain::self()->addDocumentChain(fakeContext);
+}
+
+void CMakeProjectVisitorTest::cleanup()
+{
+    KDevelop::DUChainWriteLocker lock(DUChain::lock());
+    DUChain::self()->removeDocumentChain(fakeContext);
 }
 
 void CMakeProjectVisitorTest::testVariables_data()
@@ -478,19 +502,10 @@ void CMakeProjectVisitorTest::testRun()
     QFETCH(QString, input);
     QFETCH(QList<StringPair>, cache);
     QFETCH(QList<StringPair>, results);
-    
-    KDevelop::ReferencedTopDUContext fakeContext=
-                    new TopDUContext(IndexedString("test"), RangeInRevision(0,0,0,0));
-    DUChain::self()->addDocumentChain(fakeContext);
-    
-    QFile file("cmake_visitor_test");
-    QVERIFY(file.open(QIODevice::WriteOnly | QIODevice::Text));
-    
-    QTextStream out(&file);
-    out << input;
-    file.close();
-    CMakeFileContent code=CMakeListsParser::readCMakeFile(file.fileName());
-    file.remove();
+
+    QSharedPointer<KTemporaryFile> file = prepareVisitoTestScript(input);
+    QVERIFY(!file.isNull());
+    CMakeFileContent code=CMakeListsParser::readCMakeFile(file->fileName());
     QVERIFY(code.count() != 0);
     
     MacroMap mm;
@@ -501,8 +516,8 @@ void CMakeProjectVisitorTest::testRun()
     
     vm.insert("CMAKE_SOURCE_DIR", QStringList("./"));
     vm.insert("CMAKE_CURRENT_SOURCE_DIR", QStringList("./"));
-    
-    CMakeProjectVisitor v(file.fileName(), fakeContext);
+
+    CMakeProjectVisitor v(file->fileName(), fakeContext);
     v.setVariableMap(&vm);
     v.setMacroMap(&mm);
     v.setCacheValues( &val );
@@ -514,10 +529,6 @@ void CMakeProjectVisitorTest::testRun()
         arg.value=vp.first;
         
         QCOMPARE(v.variableValue(vp.first).join(QString(";")), vp.second);
-    }
-    {
-        KDevelop::DUChainWriteLocker lock(DUChain::lock());
-        DUChain::self()->removeDocumentChain(fakeContext);
     }
 }
 
@@ -555,19 +566,10 @@ void CMakeProjectVisitorTest::testFinder()
     QFETCH(QString, module);
     QFETCH(QString, args);
     testFinder_init();
-    
-    KDevelop::ReferencedTopDUContext fakeContext=
-                    new TopDUContext(IndexedString("test"), RangeInRevision(0,0,0,0));
-    DUChain::self()->addDocumentChain(fakeContext);
-    
-    QFile file("cmake_visitor_test");
-    QVERIFY(file.open(QIODevice::WriteOnly | QIODevice::Text));
-    
-    QTextStream out(&file);
-    out << QString("find_package(%1 REQUIRED %2)\n").arg(module).arg(args);
-    file.close();
-    CMakeFileContent code=CMakeListsParser::readCMakeFile(file.fileName());
-    file.remove();
+
+    QSharedPointer<KTemporaryFile> file = prepareVisitoTestScript(QString("find_package(%1 REQUIRED %2)\n").arg(module).arg(args));
+    QVERIFY(!file.isNull());
+    CMakeFileContent code=CMakeListsParser::readCMakeFile(file->fileName());
     QVERIFY(code.count() != 0);
     
     CMakeProjectData data;
@@ -584,7 +586,7 @@ void CMakeProjectVisitorTest::testFinder()
     }
     
     data.vm.insert("CMAKE_CURRENT_SOURCE_DIR", QStringList("./"));
-    CMakeProjectVisitor v(file.fileName(), fakeContext);
+    CMakeProjectVisitor v(file->fileName(), fakeContext);
     v.setVariableMap(&data.vm);
     v.setMacroMap(&data.mm);
     v.setCacheValues( &data.cache );
@@ -596,11 +598,6 @@ void CMakeProjectVisitorTest::testFinder()
         qDebug() << "result: " << data.vm.value(foundvar);
     
     QVERIFY(found);
-    
-    {
-        KDevelop::DUChainWriteLocker lock(DUChain::lock());
-        DUChain::self()->removeDocumentChain(fakeContext);
-    }
 }
 
 void CMakeProjectVisitorTest::testGlobs_data()
@@ -772,17 +769,9 @@ void CMakeProjectVisitorTest::testGlobs()
             ("Failed to create a link: " + dir.name() + pair.second).toLatin1());
     }
 
-    KDevelop::ReferencedTopDUContext fakeContext=
-        new TopDUContext(IndexedString("test"), RangeInRevision(0,0,0,0));
-    DUChain::self()->addDocumentChain(fakeContext);
-
-    KTemporaryFile file;
-    QVERIFY(file.open());
-
-    QTextStream out(&file);
-    out << input;
-    file.close();
-    CMakeFileContent code = CMakeListsParser::readCMakeFile(file.fileName());
+    QSharedPointer<KTemporaryFile> file = prepareVisitoTestScript(input);
+    QVERIFY(!file.isNull());
+    CMakeFileContent code = CMakeListsParser::readCMakeFile(file->fileName());
     QVERIFY(code.count() != 0);
 
     MacroMap mm;
@@ -791,7 +780,7 @@ void CMakeProjectVisitorTest::testGlobs()
 
     vm.insert("CMAKE_CURRENT_SOURCE_DIR", QStringList(dir.name()));
 
-    CMakeProjectVisitor v(file.fileName(), fakeContext);
+    CMakeProjectVisitor v(file->fileName(), fakeContext);
     v.setVariableMap(&vm);
     v.setMacroMap(&mm);
     v.setCacheValues( &val );
@@ -869,5 +858,91 @@ void CMakeProjectVisitorTest::testForeachLines()
     delete ast;
 }
 
+void CMakeProjectVisitorTest::testTargetProperties_data()
+{
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<QString>("target");
+    QTest::addColumn<QList<StringPair> >("results");
+
+    QList<StringPair> results;
+
+    results.clear();
+    results << StringPair("RUNTIME_OUTPUT_DIRECTORY", "./build/bin");
+    QTest::newRow("custom runtime dir") <<
+            "add_executable(myprog file.cpp)\n"
+            "set_target_properties(myprog PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)"
+            << "myprog" << results;
+
+    results.clear();
+    results << StringPair("LIBRARY_OUTPUT_DIRECTORY", "./build/lib");
+    QTest::newRow("custom lib dir") <<
+            "add_library(mylib file.cpp)\n"
+            "set_target_properties(mylib PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)"
+            << "mylib" << results;
+
+    results.clear();
+    results << StringPair("RUNTIME_OUTPUT_DIRECTORY", "./build/bin");
+    QTest::newRow("custom global runtime dir") <<
+            "set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)\n"
+            "add_executable(myprog file.cpp)\n"
+            << "myprog" << results;
+
+    results.clear();
+    results << StringPair("LIBRARY_OUTPUT_DIRECTORY", "./build/lib");
+    QTest::newRow("custom global lib dir") <<
+            "set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)\n"
+            "add_library(mylib file.cpp)\n"
+            << "mylib" << results;
+
+    results.clear();
+    results << StringPair("RUNTIME_OUTPUT_DIRECTORY", "./build/subdir/bin");
+    QTest::newRow("override global runtime dir") <<
+            "set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)\n"
+            "add_executable(myprog file.cpp)\n"
+            "set_target_properties(myprog PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)"
+            << "myprog" << results;
+
+    results.clear();
+    results << StringPair("LIBRARY_OUTPUT_DIRECTORY", "./build/subdir/lib");
+    QTest::newRow("override global lib dir") <<
+            "set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)\n"
+            "add_library(mylib file.cpp)\n"
+            "set_target_properties(mylib PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)"
+            << "mylib" << results;
+}
+
+void CMakeProjectVisitorTest::testTargetProperties()
+{
+    QFETCH(QString, input);
+    QFETCH(QString, target);
+    QFETCH(QList<StringPair>, results);
+
+    QSharedPointer<KTemporaryFile> file = prepareVisitoTestScript(input);
+    QVERIFY(!file.isNull());
+    CMakeFileContent code=CMakeListsParser::readCMakeFile(file->fileName());
+    QVERIFY(code.count() != 0);
+
+    MacroMap mm;
+    VariableMap vm;
+    CacheValues val;
+
+    vm.insert("CMAKE_SOURCE_DIR", QStringList("./"));
+    vm.insert("CMAKE_CURRENT_SOURCE_DIR", QStringList("./subdir"));
+    vm.insert("CMAKE_BINARY_DIR", QStringList("./build"));
+    vm.insert("CMAKE_CURRENT_BINARY_DIR", QStringList("./build/subdir"));
+    // linux exe and lib prefixes and suffixes by default
+    vm.insert("CMAKE_EXECUTABLE_SUFFIX", QStringList(""));
+    vm.insert("CMAKE_LIBRARY_PREFIX", QStringList("lib"));
+    vm.insert("CMAKE_LIBRARY_SUFFIX", QStringList(".so"));
+
+    CMakeProjectVisitor v(file->fileName(), fakeContext);
+    v.setVariableMap(&vm);
+    v.setMacroMap(&mm);
+    v.setCacheValues(&val);
+    v.walk(code, 0);
+
+    foreach(const StringPair& vp, results)
+        QCOMPARE(v.properties()[TargetProperty][target][vp.first].join(QString(";")), vp.second);
+}
 
 #include "cmake_cmakeprojectvisitor_test.moc"
