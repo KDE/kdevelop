@@ -97,9 +97,17 @@ QString buildCompilerErrorLine()
 {
     KUrl projecturl( PROJECTS_SOURCE_DIR"/onefileproject/" );
     QString outputline;
-    outputline.clear();
     outputline.append(projecturl.path());
     outputline.append("main.cpp:5:5: error: ‘RingBuffer’ was not declared in this scope");
+    return outputline;
+}
+
+QString buildCompilerInformationLine()
+{
+    KUrl projecturl( PROJECTS_SOURCE_DIR"/onefileproject/" );
+    QString outputline;
+    outputline.append(projecturl.path());
+    outputline.append("main.cpp:6:14: instantiated from here");
     return outputline;
 }
 

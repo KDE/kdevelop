@@ -272,12 +272,16 @@ FilteredItem CompilerFilterStrategy::errorInLine(const QString& line)
             // Make the item clickable if it comes with the necessary file & line number information
             if (curErrFilter.fileGroup > 0 && curErrFilter.lineGroup > 0) {
                 item.isActivatable = true;
-                if(item.type != FilteredItem::ErrorItem) {
+                if(item.type == FilteredItem::InvalidItem) {
                     // If there are no error indicators in the line
                     // maybe this is a multiline case
                     if(d->isMultiLineCase(curErrFilter))
                     {
                         item.type = FilteredItem::ErrorItem;
+                    } else {
+                        // Okay so we couldn't find anything to indicate an error, but we have file and lineGroup
+                        // Lets keep this item clickable and indicate this to the user.
+                        item.type = FilteredItem::InformationItem;
                     }
                 }
             }

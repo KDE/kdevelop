@@ -44,6 +44,8 @@ void FilteringStrategyTest::testNoFilterstrategy_data()
     << buildCompilerErrorLine() << FilteredItem::InvalidItem;
     QTest::newRow("compiler-action-line")
     << buildCompilerActionLine() << FilteredItem::InvalidItem;
+    QTest::newRow("compiler-information-line")
+    << buildCompilerInformationLine() << FilteredItem::InvalidItem;
     QTest::newRow("python-error-line")
     << buildPythonErrorLine() << FilteredItem::InvalidItem;
 }
@@ -73,6 +75,8 @@ void FilteringStrategyTest::testCompilerFilterstrategy_data()
     << buildCompilerLine() << FilteredItem::InvalidItem << FilteredItem::InvalidItem;
     QTest::newRow("compiler-error-line")
     << buildCompilerErrorLine() << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
+    QTest::newRow("compiler-information-line")
+    << buildCompilerInformationLine() << FilteredItem::InformationItem << FilteredItem::InvalidItem;
     QTest::newRow("linker-action-line")
     << "linking testCustombuild (g++)" << FilteredItem::InvalidItem << FilteredItem::ActionItem;
     QTest::newRow("linker-error-line")
