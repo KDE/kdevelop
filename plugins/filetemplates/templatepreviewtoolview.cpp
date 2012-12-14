@@ -57,12 +57,16 @@ TemplatePreviewToolView::TemplatePreviewToolView(FileTemplatesPlugin* plugin, QW
         documentActivated(dc->activeDocument());
     }
 
-    connect (ui->projectRadioButton, SIGNAL(toggled(bool)), SLOT(selectedRendererChanged()));
-    connect (ui->emptyLinesPolicyComboBox, SIGNAL(currentIndexChanged(int)), SLOT(selectedRendererChanged()));
+    connect(ui->projectRadioButton, SIGNAL(toggled(bool)),
+            SLOT(selectedRendererChanged()));
+    connect(ui->emptyLinesPolicyComboBox, SIGNAL(currentIndexChanged(int)),
+            SLOT(selectedRendererChanged()));
     selectedRendererChanged();
 
-    connect (dc, SIGNAL(documentActivated(KDevelop::IDocument*)), SLOT(documentActivated(KDevelop::IDocument*)));
-    connect (dc, SIGNAL(documentClosed(KDevelop::IDocument*)), SLOT(documentClosed(KDevelop::IDocument*)));
+    connect(dc, SIGNAL(documentActivated(KDevelop::IDocument*)),
+            SLOT(documentActivated(KDevelop::IDocument*)));
+    connect(dc, SIGNAL(documentClosed(KDevelop::IDocument*)),
+            SLOT(documentClosed(KDevelop::IDocument*)));
 }
 
 TemplatePreviewToolView::~TemplatePreviewToolView()
@@ -70,98 +74,88 @@ TemplatePreviewToolView::~TemplatePreviewToolView()
     delete ui;
 }
 
-void TemplatePreviewToolView::documentActivated (KDevelop::IDocument* document)
+void TemplatePreviewToolView::documentActivated(KDevelop::IDocument* document)
 {
-    Q_ASSERT(document);
-    kDebug() << document->url();
-
-    if (m_original)
-    {
-        disconnect (m_original, SIGNAL(textChanged(KTextEditor::Document*)), this, SLOT(documentChanged(KTextEditor::Document*)));
+    if (!isVisible()) {
+        return;
     }
-    m_original = document->textDocument();
+
+    documentChanged(document->textDocument());
+}
+
+void TemplatePreviewToolView::documentChanged(KTextEditor::Document* document)
+{
+    if (!isVisible()) {
+        return;
+    }
+
+
+    if (m_original) {
+        disconnect(m_original, SIGNAL(textChanged(KTextEditor::Document*)),
+                   this, SLOT(documentChanged(KTextEditor::Document*)));
+    }
+    m_original = document;
 
     FileTemplatesPlugin::TemplateType type = FileTemplatesPlugin::NoTemplate;
     if (m_original) {
-        connect(m_original, SIGNAL(textChanged(KTextEditor::Document*)), this, SLOT(documentChanged(KTextEditor::Document*)));
+        connect(m_original, SIGNAL(textChanged(KTextEditor::Document*)),
+                this, SLOT(documentChanged(KTextEditor::Document*)));
         type = m_plugin->determineTemplateType(document->url());
     }
 
-    switch (type)
-    {
+    switch (type) {
         case FileTemplatesPlugin::NoTemplate:
             ui->messageWidget->setMessageType(KMessageWidget::Information);
-            ui->messageWidget->setText(i18n("The active document is not a <application>KDevelop</application> template"));
+            if (m_original) {
+                ui->messageWidget->setText(i18n("The active text document is not a <application>KDevelop</application> template"));
+            } else {
+                ui->messageWidget->setText(i18n("No active text document."));
+            }
             ui->messageWidget->animatedShow();
+            ui->preview->setText(QString());
             break;
 
         case FileTemplatesPlugin::FileTemplate:
             ui->classRadioButton->setChecked(true);
-            documentChanged(m_original);
+            sourceTextChanged(m_original->text());
             break;
 
         case FileTemplatesPlugin::ProjectTemplate:
             ui->projectRadioButton->setChecked(true);
-            documentChanged(m_original);
+            sourceTextChanged(m_original->text());
             break;
-    }
-}
-
-void TemplatePreviewToolView::documentChanged (KTextEditor::Document* document)
-{
-    if (isVisible() && document && document == m_original)
-    {
-        sourceTextChanged(m_original->text());
     }
 }
 
 void TemplatePreviewToolView::showEvent(QShowEvent*)
 {
-    if (m_original)
-    {
-        sourceTextChanged(m_original->text());
-    }
+    IDocument* doc = ICore::self()->documentController()->activeDocument();
+    documentChanged(doc ? doc->textDocument() : 0);
 }
 
-void TemplatePreviewToolView::documentClosed (IDocument* document)
+void TemplatePreviewToolView::documentClosed(IDocument* document)
 {
-    if (document && document->textDocument() == m_original)
-    {
-        if (m_original)
-        {
-            disconnect (m_original, SIGNAL(textChanged(KTextEditor::Document*)), this, SLOT(documentChanged(KTextEditor::Document*)));
-        }
-        m_original = 0;
+    if (!isVisible()) {
+        return;
     }
-    sourceTextChanged(QString());
+
+    if (document && document->textDocument() == m_original) {
+        documentChanged(0);
+    }
 }
 
 void TemplatePreviewToolView::sourceTextChanged(const QString& text)
 {
-    kDebug();
-    if (text.isEmpty())
-    {
-        ui->messageWidget->setMessageType(KMessageWidget::Information);
-        ui->messageWidget->setText(i18n("No active document"));
+    QString errorString = ui->preview->setText(text, ui->projectRadioButton->isChecked(), m_policy);
+    if (!errorString.isEmpty()) {
+        ui->messageWidget->setMessageType(KMessageWidget::Error);
+        ui->messageWidget->setText(errorString);
         ui->messageWidget->animatedShow();
+    } else {
+        ui->messageWidget->animatedHide();
     }
-    else
-    {
-        QString errorString = ui->preview->setText(text, ui->projectRadioButton->isChecked(), m_policy);
-        if (!errorString.isEmpty())
-        {
-            ui->messageWidget->setMessageType(KMessageWidget::Error);
-            ui->messageWidget->setText(errorString);
-            ui->messageWidget->animatedShow();
-        }
-        else
-        {
-            ui->messageWidget->animatedHide();
-        }
 
-    }
-    if (m_original)
-    {
+    if (m_original) {
         ui->preview->document()->setMode(m_original->mode());
     }
 }

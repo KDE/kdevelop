@@ -67,6 +67,19 @@ namespace KDevelop {
 
 const int MAX_DOC_SETTINGS = 20;
 
+// This sets cursor position and selection on the view to the given
+// range. Selection is set only for non-empty ranges
+// Factored into a function since its needed in 3 places already
+static void selectAndReveal( KTextEditor::View* view, const KTextEditor::Range& range ) {
+    Q_ASSERT(view);
+    if (range.isValid()) {
+        view->setCursorPosition(range.start());
+        if (!range.isEmpty()) {
+            view->setSelection(range);
+        }
+    }
+}
+
 struct TextDocumentPrivate {
     TextDocumentPrivate(TextDocument *textDocument)
         : encoding(""), m_textDocument(textDocument)
@@ -594,8 +607,7 @@ void TextDocument::setTextSelection(const KTextEditor::Range &range)
     KTextEditor::View *view = d->document->activeView();
 
     if (view) {
-        view->setCursorPosition(range.start());
-        view->setSelection( range );
+        selectAndReveal(view, range);
     }
 }
 
@@ -675,10 +687,7 @@ QString KDevelop::TextView::viewState() const
 void KDevelop::TextView::setInitialRange(const KTextEditor::Range& range)
 {
     if(d->editor && d->editor->isInitialized()) {
-        if (range.isEmpty())
-            d->editor->editorView()->setCursorPosition( range.start() );
-        else
-            d->editor->editorView()->setSelection( range );
+        selectAndReveal(d->editor->editorView(), range);
     } else {
         d->initialRange = range;
     }
@@ -764,14 +773,7 @@ void KDevelop::TextEditorWidget::initialize()
     TextDocument* doc = static_cast<TextDocument*>(d->textView->document());
     KTextEditor::View* view = qobject_cast<KTextEditor::View*>(doc->createViewWidget(this));
     KTextEditor::Range ir = d->textView->initialRange();
-    if(ir.isValid()) {
-        if(ir.isEmpty())
-            view->setCursorPosition(ir.start());
-        else {
-            view->setCursorPosition(ir.end());
-            view->setSelection(ir);
-        }
-    }
+    selectAndReveal(view, ir);
     setEditorView(view);
 }
 
