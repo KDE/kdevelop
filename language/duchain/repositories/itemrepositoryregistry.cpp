@@ -16,57 +16,56 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "itemrepository.h"
+#include "itemrepositoryregistry.h"
 
-#include <QDataStream>
-#include <QUuid>
-#include <QApplication>
-#include <QTextStream>
-#include <QProcessEnvironment>
-#include <QDBusConnection>
-#include <QCoreApplication>
+#include <QtCore/QDir>
+#include <QtCore/QProcessEnvironment>
+#include <QtCore/QCoreApplication>
+#include <QtDBus/QDBusConnection>
 
 #include <KStandardDirs>
-#include <KComponentData>
-#include <KLockFile>
-#include <KMessageBox>
-#include <KLocale>
+#include <KDebug>
+#include <KLocalizedString>
 
 #include <interfaces/icore.h>
-#include <interfaces/isession.h>
+#include <shell/sessioncontroller.h>
 #include <util/fileutils.h>
 #include <util/shellutils.h>
-#include <shell/sessioncontroller.h>
 
-#include "../duchain.h"
+#include "abstractitemrepository.h"
 
-namespace KDevelop {
+namespace {
 
 //If KDevelop crashed this many times consicutively, clean up the repository
 const int crashesBeforeCleanup = 2;
 
+void setCrashCounter(QFile& crashesFile, int count)
+{
+  crashesFile.close();
+  crashesFile.open(QIODevice::WriteOnly | QIODevice::Truncate);
+  QDataStream writeStream(&crashesFile);
+  writeStream << count;
+}
+
+}
+
+namespace KDevelop {
+
 //The global item-reposity registry
 ItemRepositoryRegistry* ItemRepositoryRegistry::m_self = 0;
 
-uint staticItemRepositoryVersion() {
-  //Increase this to reset incompatible item-repositories
-  return 72;
-}
-
-AbstractItemRepository::~AbstractItemRepository() {
-}
-
-
-ItemRepositoryRegistry::ItemRepositoryRegistry() : m_mutex(QMutex::Recursive) {
-  Q_ASSERT( ICore::self() );
-  Q_ASSERT( ICore::self()->activeSession() );
-  QString repositoryPath = repositoryPathForSession( ICore::self()->activeSession() );
-  open( repositoryPath, false );
+ItemRepositoryRegistry::ItemRepositoryRegistry() :
+m_mutex(QMutex::Recursive)
+{
+  Q_ASSERT(ICore::self());
+  Q_ASSERT(ICore::self()->activeSession());
+  QString repositoryPath = repositoryPathForSession(ICore::self()->activeSession());
+  open(repositoryPath, false);
 }
 
 ItemRepositoryRegistry* ItemRepositoryRegistry::self()
 {
-  if( !m_self ) {
+  if(!m_self) {
     ///We intentionally leak the registry, to prevent problems in the destruction order, where
     ///the actual repositories might get deleted later than the repository registry.
     m_self = new ItemRepositoryRegistry;
@@ -74,52 +73,57 @@ ItemRepositoryRegistry* ItemRepositoryRegistry::self()
   return m_self;
 }
 
-QString ItemRepositoryRegistry::repositoryPathForSession(ISession* session) {
-  QString xdgCacheDir = QProcessEnvironment::systemEnvironment().value( "XDG_CACHE_HOME", QDir::homePath() + "/.cache" ) + "/kdevduchain";
-  QString baseDir = QProcessEnvironment::systemEnvironment().value( "KDEV_DUCHAIN_DIR", xdgCacheDir );
-  baseDir += QString( "/%1-%2" ).arg( qAppName() ).arg( session->id().toString() );
-  KStandardDirs::makeDir( baseDir );
+QString ItemRepositoryRegistry::repositoryPathForSession(ISession* session)
+{
+  QString xdgCacheDir = QProcessEnvironment::systemEnvironment().value("XDG_CACHE_HOME", QDir::homePath() + "/.cache") + "/kdevduchain";
+  QString baseDir = QProcessEnvironment::systemEnvironment().value("KDEV_DUCHAIN_DIR", xdgCacheDir);
+  baseDir += QString("/%1-%2").arg(qAppName()).arg(session->id().toString());
+  KStandardDirs::makeDir(baseDir);
   return baseDir;
 }
 
 void ItemRepositoryRegistry::deleteRepositoryFromDisk(ISession* session)
 {
-  QString repositoryPath = repositoryPathForSession( session );
+  QString repositoryPath = repositoryPathForSession(session);
   // Now, as we have only the global item-repository registry, assume that if and only if
   // the given session is ours, its cache path is used by the said global item-repository registry.
-  if( m_self && m_self->m_path == repositoryPath ) {
+  if(m_self && m_self->m_path == repositoryPath) {
     m_self->m_shallDelete = true;
     return;
   }
 
   // Otherwise, given session is not ours.
   // Try to lock it; and, if locking succeeds, remove its item-repository directory directly.
-  SessionController::LockSessionState state = SessionController::tryLockSession( session->id(), true );
-  if( state ) {
-    removeDirectory( repositoryPath );
+  SessionController::LockSessionState state = SessionController::tryLockSession(session->id(), true);
+  if(state) {
+    removeDirectory(repositoryPath);
 
     // Then unlock the session.
-    QDBusConnection::sessionBus().unregisterService( state.DBusService );
+    QDBusConnection::sessionBus().unregisterService(state.DBusService);
     state.lockFile->unlock();
   }
 }
 
-QMutex& ItemRepositoryRegistry::mutex() {
+QMutex& ItemRepositoryRegistry::mutex()
+{
   return m_mutex;
 }
 
-QAtomicInt& ItemRepositoryRegistry::getCustomCounter(const QString& identity, int initialValue) {
+QAtomicInt& ItemRepositoryRegistry::getCustomCounter(const QString& identity, int initialValue)
+{
   if(!m_customCounters.contains(identity))
     m_customCounters.insert(identity, new QAtomicInt(initialValue));
   return *m_customCounters[identity];
 }
 
 ///The global item-repository registry that is used by default
-ItemRepositoryRegistry& globalItemRepositoryRegistry() {
+ItemRepositoryRegistry& globalItemRepositoryRegistry()
+{
   return *ItemRepositoryRegistry::self();
 }
 
-void ItemRepositoryRegistry::registerRepository(AbstractItemRepository* repository, AbstractRepositoryManager* manager) {
+void ItemRepositoryRegistry::registerRepository(AbstractItemRepository* repository, AbstractRepositoryManager* manager)
+{
   QMutexLocker lock(&m_mutex);
   m_repositories.insert(repository, manager);
   if(!m_path.isEmpty()) {
@@ -131,13 +135,15 @@ void ItemRepositoryRegistry::registerRepository(AbstractItemRepository* reposito
   }
 }
 
-QString ItemRepositoryRegistry::path() const {
+QString ItemRepositoryRegistry::path() const
+{
   //We cannot lock the mutex here, since this may be called with one of the repositories locked,
   //and that may lead to a deadlock when at the same time a storing is requested
   return m_path;
 }
 
-void ItemRepositoryRegistry::lockForWriting() {
+void ItemRepositoryRegistry::lockForWriting()
+{
   QMutexLocker lock(&m_mutex);
   //Create is_writing
   QFile f(m_path + "/is_writing");
@@ -145,13 +151,15 @@ void ItemRepositoryRegistry::lockForWriting() {
   f.close();
 }
 
-void ItemRepositoryRegistry::unlockForWriting() {
+void ItemRepositoryRegistry::unlockForWriting()
+{
   QMutexLocker lock(&m_mutex);
   //Delete is_writing
   QFile::remove(m_path + "/is_writing");
 }
 
-void ItemRepositoryRegistry::unRegisterRepository(AbstractItemRepository* repository) {
+void ItemRepositoryRegistry::unRegisterRepository(AbstractItemRepository* repository)
+{
   QMutexLocker lock(&m_mutex);
   Q_ASSERT(m_repositories.contains(repository));
   repository->close();
@@ -159,7 +167,8 @@ void ItemRepositoryRegistry::unRegisterRepository(AbstractItemRepository* reposi
 }
 
 //After calling this, the data-directory may be a new one
-void ItemRepositoryRegistry::deleteDataDirectory(bool recreate) {
+void ItemRepositoryRegistry::deleteDataDirectory(bool recreate)
+{
   QMutexLocker lock(&m_mutex);
 
   //lockForWriting creates a file, that prevents any other KDevelop instance from using the directory as it is.
@@ -175,14 +184,8 @@ void ItemRepositoryRegistry::deleteDataDirectory(bool recreate) {
   }
 }
 
-void setCrashCounter(QFile& crashesFile, int count) {
-  crashesFile.close();
-  crashesFile.open(QIODevice::WriteOnly | QIODevice::Truncate);
-  QDataStream writeStream(&crashesFile);
-  writeStream << count;
-}
-
-bool ItemRepositoryRegistry::open(const QString& path, bool clear) {
+bool ItemRepositoryRegistry::open(const QString& path, bool clear)
+{
   QMutexLocker mlock(&m_mutex);
   if(m_path == path && !clear) {
     return true;
@@ -198,7 +201,7 @@ bool ItemRepositoryRegistry::open(const QString& path, bool clear) {
       break;
     }
 
-    if(!QFile::exists( m_path + QString("/version_%1").arg(staticItemRepositoryVersion()) )) {
+    if(!QFile::exists(m_path + QString("/version_%1").arg(staticItemRepositoryVersion()))) {
       kWarning() << "version-hint not found, seems to be an old version";
       clear = true;
       break;
@@ -219,11 +222,11 @@ bool ItemRepositoryRegistry::open(const QString& path, bool clear) {
       kDebug() << "current count of crashes: " << count;
 
       if(count >= crashesBeforeCleanup && !getenv("DONT_CLEAR_DUCHAIN_DIR")) {
-        bool userAnswer = askUser( i18np( "Session crashed %1 time in a row", "Session crashed %1 times in a row", count ),
-                                   i18nc( "@action", "Clear cache" ),
-                                   i18nc( "@title", "Session crashed" ),
-                                   i18n( "The crash may be caused by a corruption of cached data.\n\n"
-                                         "Press OK if you want KDevelop to clear the cache, otherwise press Cancel if you are sure the crash has another origin." ) );
+        bool userAnswer = askUser(i18np("Session crashed %1 time in a row", "Session crashed %1 times in a row", count),
+                                  i18nc("@action", "Clear cache"),
+                                  i18nc("@title", "Session crashed"),
+                                  i18n("The crash may be caused by a corruption of cached data.\n\n"
+                                       "Press OK if you want KDevelop to clear the cache, otherwise press Cancel if you are sure the crash has another origin."));
         if(userAnswer) {
           clear = true;
           kDebug() << "User chose to clean repository";
@@ -258,11 +261,11 @@ bool ItemRepositoryRegistry::open(const QString& path, bool clear) {
       abort();
     }
   }
-  
+
   QFile f(path + "/Counters");
   if(f.open(QIODevice::ReadOnly)) {
     QDataStream stream(&f);
-    
+
     while(!stream.atEnd()) {
       //Read in all custom counter values
       QString counterName;
@@ -276,33 +279,38 @@ bool ItemRepositoryRegistry::open(const QString& path, bool clear) {
   return true;
 }
 
-void ItemRepositoryRegistry::store() {
+void ItemRepositoryRegistry::store()
+{
   QMutexLocker lock(&m_mutex);
-  foreach(AbstractItemRepository* repository, m_repositories.keys())
+  foreach(AbstractItemRepository* repository, m_repositories.keys()) {
     repository->store();
+  }
 
   QFile versionFile(m_path + QString("/version_%1").arg(staticItemRepositoryVersion()));
   if(versionFile.open(QIODevice::WriteOnly)) {
     versionFile.close();
-  }else{
+  } else {
     kWarning() << "Could not open version file for writing";
   }
-  
+
   //Store all custom counter values
   QFile f(m_path + "/Counters");
   if(f.open(QIODevice::WriteOnly)) {
     f.resize(0);
     QDataStream stream(&f);
-    for(QMap<QString, QAtomicInt*>::const_iterator it = m_customCounters.constBegin(); it != m_customCounters.constEnd(); ++it) {
+    for(QMap<QString, QAtomicInt*>::const_iterator it = m_customCounters.constBegin();
+        it != m_customCounters.constEnd();
+        ++it) {
       stream << it.key();
       stream << it.value()->fetchAndAddRelaxed(0);
     }
-  }else{
+  } else {
     kWarning() << "Could not open counter file for writing";
   }
 }
 
-void ItemRepositoryRegistry::printAllStatistics() const {
+void ItemRepositoryRegistry::printAllStatistics() const
+{
   QMutexLocker lock(&m_mutex);
   foreach(AbstractItemRepository* repository, m_repositories.keys()) {
     kDebug() << "statistics in" << repository->repositoryName() << ":";
@@ -310,7 +318,8 @@ void ItemRepositoryRegistry::printAllStatistics() const {
   }
 }
 
-int ItemRepositoryRegistry::finalCleanup() {
+int ItemRepositoryRegistry::finalCleanup()
+{
   QMutexLocker lock(&m_mutex);
   int changed = false;
   foreach(AbstractItemRepository* repository, m_repositories.keys()) {
@@ -318,29 +327,32 @@ int ItemRepositoryRegistry::finalCleanup() {
     changed += added;
     kDebug() << "cleaned in" << repository->repositoryName() << ":" << added;
   }
-  
   return changed;
 }
 
-
-void ItemRepositoryRegistry::close() {
+void ItemRepositoryRegistry::close()
+{
 
   QMutexLocker lock(&m_mutex);
-    
-  foreach(AbstractItemRepository* repository, m_repositories.keys())
+
+  foreach(AbstractItemRepository* repository, m_repositories.keys()) {
     repository->close();
-  
+  }
+
   m_path.clear();
 }
 
-ItemRepositoryRegistry::~ItemRepositoryRegistry() {
+ItemRepositoryRegistry::~ItemRepositoryRegistry()
+{
   close();
   QMutexLocker lock(&m_mutex);
-  foreach(QAtomicInt* counter, m_customCounters)
+  foreach(QAtomicInt * counter, m_customCounters) {
     delete counter;
+  }
 }
 
-void ItemRepositoryRegistry::shutdown() {
+void ItemRepositoryRegistry::shutdown()
+{
   if(m_shallDelete) {
     deleteDataDirectory(false);
   } else {
@@ -349,3 +361,4 @@ void ItemRepositoryRegistry::shutdown() {
 }
 
 }
+
