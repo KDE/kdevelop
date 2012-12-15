@@ -86,7 +86,7 @@ pp_frame::pp_frame(pp_macro* __expandingMacro, const QList<pp_actual>& __actuals
 {
 }
 
-pp_actual pp_macro_expander::resolve_formal(IndexedString name, Stream& input)
+pp_actual pp_macro_expander::resolve_formal(const IndexedString& name, Stream& input)
 {
   if (!m_frame)
     return pp_actual();

@@ -166,7 +166,7 @@ class KDEVCPPRPP_EXPORT Stream
     Stream & operator<< ( const unsigned int& c );
     Stream & operator<< ( const Stream& input );
     Stream& appendString( const Anchor& inputPosition, const PreprocessedContents & string );
-    Stream& appendString( const Anchor& inputPosition, KDevelop::IndexedString index );
+    Stream& appendString( const Anchor& inputPosition, const KDevelop::IndexedString& string );
     const PreprocessedContents* source() const {
       return m_string;
     }

@@ -76,7 +76,7 @@ class pp_macro_expander
 public:
   explicit pp_macro_expander(pp* engine, pp_frame* frame = 0, bool inHeaderSection = false);
 
-  pp_actual resolve_formal(KDevelop::IndexedString name, Stream& input);
+  pp_actual resolve_formal(const KDevelop::IndexedString& name, rpp::Stream& input);
 
   /// Expands text with the known macros. Continues until it finds a new text line
   /// beginning with #, at which point control is returned.

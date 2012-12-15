@@ -308,7 +308,7 @@ Stream& Stream::appendString( const Anchor& inputPosition, const PreprocessedCon
   return *this;
 }
 
-Stream& Stream::appendString( const Anchor& inputPosition, KDevelop::IndexedString string )
+Stream& Stream::appendString( const Anchor& inputPosition, const KDevelop::IndexedString& string )
 {
 
   if (!isNull()) {
