@@ -34,7 +34,8 @@ namespace KDevelop
 OutputDelegatePrivate::OutputDelegatePrivate()
 : errorBrush( KColorScheme::View, KColorScheme::NegativeText )
 , warningBrush( KColorScheme::View, KColorScheme::NeutralText )
-, informationBrush( KColorScheme::View, KColorScheme::NeutralText )
+    //TODO: Maybe ActiveText would be better? Not quite sure...
+, informationBrush( KColorScheme::View, KColorScheme::LinkText )
 , builtBrush( KColorScheme::View, KColorScheme::PositiveText )
 {
 }
