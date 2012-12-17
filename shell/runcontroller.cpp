@@ -447,7 +447,8 @@ void RunController::setupActions()
 
     action = d->stopAction = new KAction( KIcon("process-stop"), i18n("Stop All Jobs"), this);
     action->setIconText(i18nc("Short text for 'Stop All Jobs' used in the toolbar", "Stop All"));
-    action->setShortcut(Qt::Key_Escape);
+    // Ctrl+Escape would be nicer, but thats taken by the ksysguard desktop shortcut
+    action->setShortcut(QKeySequence("Ctrl+Shift+Escape"));
     action->setToolTip(i18nc("@info:tooltip", "Stop all currently running jobs"));
     action->setWhatsThis(i18nc("@info:whatsthis", "<b>Stop All Jobs</b><p>Requests that all running jobs are stopped.</p>"));
     action->setEnabled(false);
