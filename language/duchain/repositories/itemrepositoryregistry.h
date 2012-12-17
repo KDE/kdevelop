@@ -32,6 +32,8 @@ class ISession;
 class AbstractRepositoryManager;
 class AbstractItemRepository;
 
+struct ItemRepositoryRegistryPrivate;
+
 /**
  * Manages a set of item-repositores and allows loading/storing them all at once from/to disk.
  * Does not automatically store contained repositories on destruction.
@@ -105,16 +107,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepositoryRegistry {
     QMutex& mutex();
 
   private:
-    /// @returns default item-repository path (e. g. ~/cache/.kdevduchain)
-    /// for a given session, creating it if needed.
-    static QString repositoryPathForSession(ISession* session);
-    void deleteDataDirectory(bool recreate = true);
+    ItemRepositoryRegistryPrivate* d;
     static ItemRepositoryRegistry* m_self;
-    bool m_shallDelete;
-    QString m_path;
-    QMap<AbstractItemRepository*, AbstractRepositoryManager*> m_repositories;
-    QMap<QString, QAtomicInt*> m_customCounters;
-    mutable QMutex m_mutex;
 };
 
 /// @returns The global item-repository registry (now it is @ref ItemRepositoryRegistry::self()).
