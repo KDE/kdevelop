@@ -167,7 +167,7 @@ void Manager::updateReady(IndexedString url, ReferencedTopDUContext topContext)
     if (m_args->isSet("dump-errors") && topContext) {
         DUChainReadLocker lock;
         if (!topContext->problems().isEmpty()) {
-            std::cout << topContext->problems().size() << " problems encountered in " << topContext->url().c_str() << std::endl;
+            std::cout << topContext->problems().size() << " problems encountered in " << qPrintable(topContext->url().str()) << std::endl;
             foreach(const ProblemPointer& p, topContext->problems()) {
                 std::cout << "  " << qPrintable(p->description()) << "\n    range: "
                         << "[(" << p->finalLocation().start.line << ", " << p->finalLocation().start.column << "),"
