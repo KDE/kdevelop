@@ -737,8 +737,6 @@ void SessionController::deleteSession( const QString& nameOrId )
 {
     Session* s  = session(nameOrId);
     
-    Q_ASSERT( s != d->activeSession ) ;
-    
     QHash<Session*,QAction*>::iterator it = d->sessionActions.find(s);
     Q_ASSERT( it != d->sessionActions.end() );
 
