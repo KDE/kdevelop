@@ -26,6 +26,7 @@ Boston, MA 02110-1301, USA.
 #include <QtCore/QPointer>
 #include <QtCore/QUuid>
 #include <QtCore/QDir>
+#include <QtDBus/QDBusConnection>
 #include <kxmlguiclient.h>
 #include <kconfiggroup.h>
 #include <kglobal.h>
@@ -77,6 +78,15 @@ public:
         {
             if( QFile::exists( lockFilename ) ) {
                 QFile::remove( lockFilename );
+            }
+        }
+
+        /// Unlocks the lock-file and removes the D-Bus service.
+        void unlock()
+        {
+            if( success ) {
+                lockFile->unlock();
+                QDBusConnection::sessionBus().unregisterService( DBusService );
             }
         }
     };

@@ -117,9 +117,8 @@ void ItemRepositoryRegistry::deleteRepositoryFromDisk(ISession* session)
   if(state) {
     removeDirectory(repositoryPath);
 
-    // Then unlock the session.
-    QDBusConnection::sessionBus().unregisterService(state.DBusService);
-    state.lockFile->unlock();
+    // Unlock the session then.
+    state.unlock();
   }
 }
 

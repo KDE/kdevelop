@@ -66,10 +66,7 @@ Boston, MA 02110-1301, USA.
 #include <QLayout>
 #include <QSortFilterProxyModel>
 #include <QKeyEvent>
-#include <QDBusConnection>
 #include <QDBusConnectionInterface>
-#include <QDBusInterface>
-#include <QDBusReply>
 
 
 #include <kdeversion.h>
@@ -648,11 +645,14 @@ void SessionController::cleanup()
 {
     d->recoveryTimer.stop();
 
+    Q_ASSERT(d->activeSession->id() == d->sessionLockState.sessionId);
+
     ISession* active = d->activeSession;
     d->activeSession = 0;
     if (active->isTemporary()) {
         deleteSession(active->name());
     }
+    d->sessionLockState.unlock();
     qDeleteAll(d->sessionActions);
     d->sessionActions.clear();
 }
