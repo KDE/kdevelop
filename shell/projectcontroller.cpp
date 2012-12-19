@@ -110,7 +110,7 @@ public:
     QPointer<ProjectChangesModel> m_changesModel;
 
     ProjectControllerPrivate( ProjectController* p )
-        : m_core(0), model(0), selectionModel(0), dialog(0), m_configuringProject(0), q(p), m_foundProjectFile(false), m_cleaningUp(false)
+        : m_core(0), model(0), selectionModel(0), dialog(0), m_configuringProject(0), q(p), buildset(0), m_foundProjectFile(false), m_cleaningUp(false)
     {
     }
 
