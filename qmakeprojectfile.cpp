@@ -37,7 +37,7 @@
 
 #define ifDebug(x)
 
-QString QMakeProjectFile::m_qtIncludeDir = QString();
+QHash<QString, QString> QMakeProjectFile::m_qtIncludeDirCache = QHash<QString, QString>();
 
 const QStringList QMakeProjectFile::FileVariables = QStringList() << "IDLS"
         << "RESOURCES" << "IMAGES" << "LEXSOURCES" << "DISTFILES"
@@ -94,19 +94,21 @@ bool QMakeProjectFile::read()
     m_variableValues["_PRO_FILE_PWD_"] = QStringList() << proFilePwd();
     m_variableValues["OUT_PWD"] = QStringList() << outPwd();
 
-    if (m_qtIncludeDir.isEmpty()) {
+    const QString binary = QMakeConfig::qmakeBinary(project());
+    if (!m_qtIncludeDirCache.contains(binary)) {
         // Let's cache the Qt include dir
         KProcess qtInc;
-        qtInc << QMakeConfig::qmakeBinary(project()) << "-query" << "QT_INSTALL_HEADERS";
+        qtInc << binary << "-query" << "QT_INSTALL_HEADERS";
         qtInc.setOutputChannelMode( KProcess::OnlyStdoutChannel );
         qtInc.start();
         if ( !qtInc.waitForFinished() ) {
             kWarning() << "Failed to query Qt header path using qmake, is qmake installed?";
         } else {
             QByteArray result = qtInc.readAll();
-            m_qtIncludeDir = QString::fromLocal8Bit( result ).trimmed();
+            m_qtIncludeDirCache[binary] = QString::fromLocal8Bit( result ).trimmed();
         }
     }
+    m_qtIncludeDir = m_qtIncludeDirCache.value(binary);
 
     return QMakeFile::read();
 }
@@ -233,6 +235,10 @@ KUrl::List QMakeProjectFile::includeDirectories() const
                 url.setPath(m_qtIncludeDir + "/QtDBus");
             else if ( module == "declarative" )
                 url.setPath(m_qtIncludeDir + "/QtDeclarative");
+            else if ( module == "widgets" )
+                url.setPath(m_qtIncludeDir + "/QtWidgets");
+            else if ( module == "webkitwidgets" )
+                url.setPath(m_qtIncludeDir + "/QtWebKitWidgets");
             else {
                 kWarning() << "unhandled QT module:" << module;
                 continue;

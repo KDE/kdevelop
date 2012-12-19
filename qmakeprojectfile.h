@@ -77,7 +77,8 @@ private:
 
     QMakeMkSpecs* m_mkspecs;
     QMakeCache* m_cache;
-    static QString m_qtIncludeDir;
+    static QHash<QString, QString> m_qtIncludeDirCache;
+    QString m_qtIncludeDir;
 };
 
 #endif
