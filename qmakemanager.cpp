@@ -187,9 +187,16 @@ QString findBasicMkSpec( const QHash<QString,QString>& qmakeVars )
     if (qmakeVars.contains("QMAKE_MKSPECS")) {
         // qt4
         path = qmakeVars["QMAKE_MKSPECS"] + "/default";
-    } else if (!qmakeVars.contains("QMAKE_MKSPECS") && qmakeVars.contains("QT_INSTALL_PREFIX") && qmakeVars.contains("QMAKE_SPEC")) {
+    } else if (!qmakeVars.contains("QMAKE_MKSPECS") && qmakeVars.contains("QMAKE_SPEC")) {
         // qt5 doesn't have the MKSPECS nor default anymore
-        path = qmakeVars["QT_INSTALL_PREFIX"] + "/mkspecs/" + qmakeVars["QMAKE_SPEC"];
+        if (qmakeVars.contains("QT_HOST_PREFIX")) {
+            // cross compilation
+            path = qmakeVars["QT_HOST_PREFIX"];
+        } else {
+            Q_ASSERT(qmakeVars.contains("QT_INSTALL_PREFIX"));
+            path = qmakeVars["QT_INSTALL_PREFIX"];
+        }
+        path += "/mkspecs/" + qmakeVars["QMAKE_SPEC"];
     }
     path += "/qmake.conf";
 
