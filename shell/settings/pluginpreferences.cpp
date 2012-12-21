@@ -48,15 +48,15 @@ PluginPreferences::PluginPreferences( QWidget *parent, const QVariantList &args 
     lay->addWidget( selector );
     QMap<QString, QList<KPluginInfo> > plugins;
     QMap<QString, QString> categories;
-    categories["Core"] = i18n("Core");
-    categories["Project Management"] = i18n("Project Management");
-    categories["Version Control"] = i18n("Version Control");
-    categories["Utilities"] = i18n("Utilities");
-    categories["Documentation"] = i18n("Documentation");
-    categories["Language Support"] = i18n("Language Support");
-    categories["Debugging"] = i18n("Debugging");
-    categories["Testing"] = i18n("Testing");
-    categories["Other"] = i18n("Other");
+    categories["Core"] = i18nc("@title:group", "Core");
+    categories["Project Management"] = i18nc("@title:group", "Project Management");
+    categories["Version Control"] = i18nc("@title:group", "Version Control");
+    categories["Utilities"] = i18nc("@title:group", "Utilities");
+    categories["Documentation"] = i18nc("@title:group", "Documentation");
+    categories["Language Support"] = i18nc("@title:group", "Language Support");
+    categories["Debugging"] = i18nc("@title:group", "Debugging");
+    categories["Testing"] = i18nc("@title:group", "Testing");
+    categories["Other"] = i18nc("@title:group", "Other");
     foreach( const KPluginInfo& info, Core::self()->pluginControllerInternal()->allPluginInfos() )
     {
         QString loadMode = info.property("X-KDevelop-LoadMode").toString();

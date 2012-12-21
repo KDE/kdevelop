@@ -321,7 +321,9 @@ void LaunchConfigurationDialog::selectionChanged(QItemSelection selected, QItemS
                         tab->setLaunchConfiguration( l );
                         stack->setCurrentWidget( tab );
                     } else {
-                        QLabel* label = new QLabel(i18n("No configuration is needed for '%1'", launcher->name()), stack);
+                        QLabel* label = new QLabel(i18nc("%1 is a launcher name",
+                                                         "No configuration is needed for '%1'",
+                                                         launcher->name()), stack);
                         label->setAlignment(Qt::AlignCenter);
                         QFont font = label->font();
                         font.setItalic(true);

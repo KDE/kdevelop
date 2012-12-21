@@ -445,10 +445,10 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
 
     QActionGroup *g = new QActionGroup(this);
 
-    QAction *left = new QAction(i18n("Left"), g);
-    QAction *bottom = new QAction(i18n("Bottom"), g);
-    QAction *right = new QAction(i18n("Right"), g);
-    QAction *top = new QAction(i18n("Top"), g);
+    QAction *left = new QAction(i18nc("toolview position", "Left"), g);
+    QAction *bottom = new QAction(i18nc("toolview position", "Bottom"), g);
+    QAction *right = new QAction(i18nc("toolview position", "Right"), g);
+    QAction *top = new QAction(i18nc("toolview position", "Top"), g);
 
     QAction* actions[] = {left, bottom, right, top};
     for (int i = 0; i < 4; ++i)
