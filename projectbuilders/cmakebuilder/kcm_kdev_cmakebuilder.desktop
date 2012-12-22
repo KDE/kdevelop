@@ -12,6 +12,7 @@ X-KDE-ParentComponents=kdevplatform
 
 Name=CMake
 Name[be]=CMake
+Name[bs]=CMake
 Name[ca]=CMake
 Name[ca@valencia]=CMake
 Name[cs]=CMake
@@ -64,6 +65,7 @@ Comment[fr]=Configure les paramètres globaux de CMake
 Comment[ga]=Cumraigh socruithe comhcoiteanna CMake
 Comment[hu]=A globális CMake beállítások módosítása
 Comment[it]=Configura le impostazioni globali di CMake
+Comment[nb]=Sett opp globale CMake-innstillinger
 Comment[nl]=Globale CMake-instellingen configureren
 Comment[pt]=Configurar as opções globais do CMake
 Comment[pt_BR]=Configurar as opções gerais do CMake

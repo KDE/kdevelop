@@ -11,6 +11,7 @@ X-KDE-ParentComponents=KDevMakeBuilder
 X-KDE-CfgDlgHierarchy=BUILDTOOL
 
 Name=Make
+Name[bs]=Make
 Name[ca]=Make
 Name[ca@valencia]=Make
 Name[cs]=Make
@@ -52,6 +53,7 @@ Name[x-test]=xxMakexx
 Name[zh_CN]=Make
 Name[zh_TW]=Make
 Comment=Configure Make settings
+Comment[bs]=Konfiguriši "Make" podešavanja
 Comment[ca]=Configura els arranjaments de Make
 Comment[ca@valencia]=Configura els arranjaments de Make
 Comment[da]=Indstil Make

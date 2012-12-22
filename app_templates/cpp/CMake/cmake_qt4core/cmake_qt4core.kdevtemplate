@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=CMake QtCore C++
+Name[bs]=CMake QtCore C++
 Name[ca]=CMake QtCore C++
 Name[cs]=CMake QtCore C++
 Name[da]=CMake QtCore C++
@@ -28,6 +29,7 @@ Name[x-test]=xxCMake QtCore C++xx
 Name[zh_CN]=CMake QtCore C++
 Name[zh_TW]=CMake QtCore C++
 Comment=Qt4 CMake Core application. Generate a CMake/Qt4 based application (crossplatform compatible)
+Comment[bs]=Qt4 CMake osnovna aplikacija. Generiše CMake/Qt4 baziranu aplikaciju (kompatibilna s više platformi)
 Comment[ca]=Aplicació de nucli CMake Qt4. Genera una aplicació basada en CMake/Qt4 (multi plataforma)
 Comment[cs]=Aplikace Qt4 CMake Core. Generuje aplikaci typu CMake/Qt4 (multiplatformní)
 Comment[da]=Qt4 CMake Core-program. Genererer et CMake-/Qt4-baseret program (krydsplatform kompatibelt)
