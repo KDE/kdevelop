@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Comment=This plugin provides integration between the projects and their VCS infrastructure
+Comment[bs]=Ovaj dodatak omogućava integraciju između projekata i njihove VCS infrakstrukture
 Comment[ca]=Aquest connector proporciona la integració entre els projectes i la seva infraestructura de VCS
 Comment[da]=Dette plugin giver integration mellem projekterne og deres VCS-infrastruktur
 Comment[de]=Dieses Modul stellt eine Integration zwischen Projekten und ihrer VCS-Infrastruktur her.
@@ -26,6 +27,7 @@ Comment[x-test]=xxThis plugin provides integration between the projects and thei
 Comment[zh_CN]=此插件提供工程和它们的代码管理系统的集成
 Comment[zh_TW]=此外掛程式提供專案與它們之間版本控制系統基礎間的整合
 Name=VCS Integration
+Name[bs]=VCS Integracija
 Name[ca]=Integració de VCS
 Name[da]=VCS-integration
 Name[de]=VCS-Integration
@@ -50,6 +52,7 @@ Name[uk]=Інтеграція з системами керування верс�
 Name[x-test]=xxVCS Integrationxx
 Name[zh_TW]=版本控制系統整合
 GenericName=VCS Integration
+GenericName[bs]=VCS Integracija
 GenericName[ca]=Integració de VCS
 GenericName[da]=VCS-integration
 GenericName[de]=VCS-Integration

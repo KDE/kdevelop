@@ -12,6 +12,7 @@ X-KDE-CfgDlgHierarchy=CORE
 
 Name=Document View
 Name[bg]=Изглед за документи
+Name[bs]=Pregled Dokumenta
 Name[ca]=Visor de document
 Name[ca@valencia]=Visor de document
 Name[da]=Dokumentvisning
@@ -44,6 +45,7 @@ Name[zh_CN]=文档视图
 Name[zh_TW]=文件檢視
 Comment=Configure Document View settings
 Comment[bg]=Настройки на изгледа за документи
+Comment[bs]=Konfiguriše pregled dokumentnih podešavanja
 Comment[ca]=Configura els arranjaments del visor de document
 Comment[ca@valencia]=Configura els arranjaments del visor de document
 Comment[da]=Indtil dokumentvisning
