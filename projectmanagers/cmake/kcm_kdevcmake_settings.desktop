@@ -12,6 +12,7 @@ X-KDE-CfgDlgHierarchy=BUILDTOOL
 
 Name=CMake
 Name[be]=CMake
+Name[bs]=CMake
 Name[ca]=CMake
 Name[ca@valencia]=CMake
 Name[cs]=CMake
@@ -54,6 +55,7 @@ Name[x-test]=xxCMakexx
 Name[zh_CN]=CMake
 Name[zh_TW]=CMake
 Comment=Configure CMake settings
+Comment[bs]=Konfiguriši CMake podešavanja
 Comment[ca]=Configura els arranjaments de CMake
 Comment[ca@valencia]=Configura els arranjaments de CMake
 Comment[cs]=Zvolit nastavení CMake
