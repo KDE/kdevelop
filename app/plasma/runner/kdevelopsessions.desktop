@@ -1,6 +1,5 @@
 [Desktop Entry]
 Name=KDevelop Sessions
-Name[bs]=KDevelop sesije
 Name[ca]=Sessions del KDevelop
 Name[cs]=relace KDevelop
 Name[da]=KDevelop-sessioner
@@ -29,7 +28,6 @@ Name[x-test]=xxKDevelop Sessionsxx
 Name[zh_CN]=KDevelop 会话
 Name[zh_TW]=KDevelop 工作階段
 Comment=Matches KDevelop Sessions
-Comment[bs]=Usaglašuje KDevelop Sesije
 Comment[ca]=Concorda amb sessions del KDevelop
 Comment[da]=Matcher KDevelop-sessioner
 Comment[de]=Findet KDevelop-Sitzungen

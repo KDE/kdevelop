@@ -10,7 +10,6 @@ X-KDE-ParentComponents=kdevplatform,kdevqthelp
 X-KDE-CfgDlgHierarchy=DOCUMENTATION
 X-KDE-Weight=150
 Name=QtHelp Documentation
-Name[bs]=QtHelp dokumentacija
 Name[ca]=Documentació de QtHelp
 Name[ca@valencia]=Documentació de QtHelp
 Name[cs]=Dokumentace QtHelp

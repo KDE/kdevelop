@@ -2,7 +2,6 @@
 Type=Service
 
 Name=Okteta Integration
-Name[bs]=Okteta integracija
 Name[ca]=Integració d'Okteta
 Name[ca@valencia]=Integració d'Okteta
 Name[cs]=Integrace Oktety
@@ -36,7 +35,6 @@ Name[x-test]=xxOkteta Integrationxx
 Name[zh_CN]=Okteta 集成
 Name[zh_TW]=Okteta 整合
 GenericName=Hex Editor Integration
-GenericName[bs]=Integracija heksadekadnog uređivača
 GenericName[ca]=Integració d'editor hexadecimal
 GenericName[ca@valencia]=Integració d'editor hexadecimal
 GenericName[cs]=Integrace hexa editoru
@@ -67,7 +65,6 @@ GenericName[x-test]=xxHex Editor Integrationxx
 GenericName[zh_CN]=十六进制编辑器集成
 GenericName[zh_TW]=十六進位資料編輯器整合
 Comment=KDevelop Hex Editor based on Okteta
-Comment[bs]=KDevelop heksadekadni uređivač baziran na Okteta
 Comment[ca]=Editor hexadecimal de KDevelop basat en Okteta
 Comment[ca@valencia]=Editor hexadecimal de KDevelop basat en Okteta
 Comment[da]=KDevelop Hex-editor baseret på Okteta

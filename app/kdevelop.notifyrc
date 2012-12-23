@@ -2,7 +2,6 @@
 IconName=kdevelop
 Comment=KDevelop
 Comment[br]=KDevelop
-Comment[bs]=KDevelop
 Comment[ca]=KDevelop
 Comment[ca@valencia]=KDevelop
 Comment[cs]=KDevelop
@@ -50,7 +49,6 @@ Comment[zh_TW]=KDevelop
 
 [Event/ProcessSuccess]
 Name=Process successful
-Name[bs]=Proces uspješan
 Name[ca]=Procés correcte
 Name[ca@valencia]=Procés correcte
 Name[cs]=Proces úspěšný
@@ -94,7 +92,6 @@ Name[x-test]=xxProcess successfulxx
 Name[zh_CN]=处理成功
 Name[zh_TW]=行程成功
 Comment=Process finished successfully
-Comment[bs]=Proces je uspješno završio
 Comment[ca]=El procés ha finalitzat amb èxit
 Comment[ca@valencia]=El procés ha finalitzat amb èxit
 Comment[cs]=Proces úspěšně dokončen
@@ -141,7 +138,6 @@ Action=None
 
 [Event/ProcessError]
 Name=Process error
-Name[bs]=Greška u procesu
 Name[ca]=Error de procés
 Name[ca@valencia]=Error de procés
 Name[cs]=Chyba procesu
@@ -186,7 +182,6 @@ Name[x-test]=xxProcess errorxx
 Name[zh_CN]=处理出错
 Name[zh_TW]=行程錯誤
 Comment=Process finished with errors
-Comment[bs]=Proces je zavrsio sa greškama
 Comment[ca]=El procés ha finalitzat amb errors
 Comment[ca@valencia]=El procés ha finalitzat amb errors
 Comment[cs]=Proces dokončen s chybami
@@ -234,7 +229,6 @@ Action=None
 
 [Event/LoadingProject]
 Name=Loading Project
-Name[bs]=Učitavam projekat
 Name[ca]=S'està carregant el projecte
 Name[ca@valencia]=S'està carregant el projecte
 Name[cs]=Načítám projekt
@@ -269,7 +263,6 @@ Name[x-test]=xxLoading Projectxx
 Name[zh_CN]=正在装入工程
 Name[zh_TW]=載入專案中
 Comment=A project loading process has just started
-Comment[bs]=Proces učitavanja projekta je upravo počeo
 Comment[ca]=Tot just s'acaba de començar a carregar el projecte
 Comment[ca@valencia]=Tot just s'acaba de començar a carregar el projecte
 Comment[cs]=Proces načítání projektu právě započal
@@ -306,7 +299,6 @@ Action=Popup
 
 [Event/ProjectLoadedSuccessfully]
 Name=Project Loaded Successfully
-Name[bs]=Projekat uspješno učitan
 Name[ca]=El projecte s'ha carregat amb èxit
 Name[ca@valencia]=El projecte s'ha carregat amb èxit
 Name[cs]=Projekt úspěšně načten
@@ -342,7 +334,6 @@ Name[x-test]=xxProject Loaded Successfullyxx
 Name[zh_CN]=工程成功装入
 Name[zh_TW]=專案已成功載入
 Comment=A project has been loaded successfully
-Comment[bs]=Projekat je uspješno učitan
 Comment[ca]=S'ha carregat amb èxit un projecte
 Comment[ca@valencia]=S'ha carregat amb èxit un projecte
 Comment[cs]=Projekt byl úspěšně načten
@@ -380,7 +371,6 @@ Action=Popup
 
 [Context/debugger]
 Name=Debugger
-Name[bs]=Ispravljač grešaka
 Name[ca]=Depurador
 Name[ca@valencia]=Depurador
 Name[cs]=Debugger
@@ -419,7 +409,6 @@ Contexts=debugger
 Action=Taskbar
 IconName=script-error
 Name=Breakpoint Hit
-Name[bs]=Dolazak do prijelomne tačke
 Name[ca]=Punt d'interrupció
 Name[ca@valencia]=Punt d'interrupció
 Name[cs]=Dosažen Breakpoint
@@ -452,7 +441,6 @@ Name[x-test]=xxBreakpoint Hitxx
 Name[zh_CN]=断点命中
 Name[zh_TW]=遇到中斷點
 Comment=A Breakpoint has been hit by the debugger
-Comment[bs]=Ispravljač grešaka je dosao do prijelomne tačke
 Comment[ca]=El depurador ha assolit un punt d'interrupció
 Comment[ca@valencia]=El depurador ha assolit un punt d'interrupció
 Comment[cs]=Bod přerušení byl dosažen debuggerem
@@ -488,7 +476,6 @@ Comment[zh_TW]=除錯器進行遇到中斷點
 Contexts=debugger
 Action=Popup
 Name=Watchpoint Hit
-Name[bs]=Dolazak do pregledne tačke
 Name[ca]=Punt d'observació
 Name[ca@valencia]=Punt d'observació
 Name[cs]=Zásah bodu sledování
@@ -521,7 +508,6 @@ Name[x-test]=xxWatchpoint Hitxx
 Name[zh_CN]=观察点命中
 Name[zh_TW]=遇到監看點
 Comment=A Watchpoint has been hit by the debugger
-Comment[bs]=Ispravljač grešaka je došao do pregledne tačke
 Comment[ca]=El depurador ha assolit un punt d'observació
 Comment[ca@valencia]=El depurador ha assolit un punt d'observació
 Comment[cs]=Bod sledování byl dosažen debuggerem

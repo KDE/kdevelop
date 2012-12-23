@@ -1,7 +1,6 @@
 # KDE Config File
 [General]
 Name=CMake C++
-Name[bs]=CMake C++
 Name[ca]=CMake C++
 Name[cs]=CMake C++
 Name[da]=CMake C++
@@ -29,7 +28,6 @@ Name[x-test]=xxCMake C++xx
 Name[zh_CN]=CMake C++
 Name[zh_TW]=CMake C++
 Comment=Simple CMake-based C++ application
-Comment[bs]=Jednostavna na CMake bazirana C++ aplikacija
 Comment[ca]=Senzilla aplicació C++ basada en CMake
 Comment[cs]=Jednoduchá aplikace C++ založená na CMake
 Comment[da]=Simpel CMake-baseret C++-applikation
