@@ -13,7 +13,6 @@ X-KDE-Weight=6
 
 Name=Environment
 Name[bg]=Обкръжение
-Name[bs]=Okruženje
 Name[ca]=Entorn
 Name[ca@valencia]=Entorn
 Name[cs]=Prostředí
@@ -52,7 +51,6 @@ Name[zh_CN]=环境
 Name[zh_TW]=環境
 Comment=Configure Environment Variables
 Comment[bg]=Настройки на променливи на средата
-Comment[bs]=Konfiguriši varijable okruženja
 Comment[ca]=Configura les variables d'entorn
 Comment[ca@valencia]=Configura les variables d'entorn
 Comment[da]=Indstil miljøvariabler

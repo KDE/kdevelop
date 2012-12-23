@@ -13,7 +13,6 @@ X-KDE-Weight=5
 
 Name=Source Formatter
 Name[bg]=Форматиращ модул за програмен текст
-Name[bs]=Formater izvornog koda
 Name[ca]=Formatador de codi font
 Name[ca@valencia]=Formatador de codi font
 Name[da]=Formatering af kildekode
@@ -46,7 +45,6 @@ Name[zh_CN]=源代码格式化器
 Name[zh_TW]=源碼格式器
 Comment=Configure Source Formatter
 Comment[bg]=Настройки за форматиране на програмен текст
-Comment[bs]=Konfiguriši formater izvornog koda
 Comment[ca]=Configura el formatador de codi font
 Comment[ca@valencia]=Configura el formatador de codi font
 Comment[da]=Indstil kildekodeformatering

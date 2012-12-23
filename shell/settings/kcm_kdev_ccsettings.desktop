@@ -13,7 +13,6 @@ X-KDE-Weight=1
 
 Name=Language Support
 Name[bg]=Поддържани езици
-Name[bs]=Jezička podrška
 Name[ca]=Implementació del llenguatge
 Name[ca@valencia]=Implementació del llenguatge
 Name[da]=Sprogunderstøttelse
@@ -47,7 +46,6 @@ Name[zh_CN]=语言支持
 Name[zh_TW]=語言支援
 Comment=Configure code-completion and semantic highlighting
 Comment[bg]=Настройка на довършване на заданието и семантично маркиране
-Comment[bs]=Konfiguracija dovršavanja koda i sematičko isticanje
 Comment[ca]=Configura la compleció de codi i el ressaltat semàntic
 Comment[ca@valencia]=Configura la compleció de codi i el ressaltat semàntic
 Comment[da]=Indstil kodefuldførelse og semantisk fremhævning
