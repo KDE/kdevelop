@@ -66,14 +66,19 @@ struct CompilerFilterStrategyPrivate
 
 // All the possible string that indicate an error if we via Regex have been able to
 // extract file and linenumber from a given outputline
-static const QVector<QString> ERROR_INDICATORS = QVector<QString>()
+typedef QPair<QString, FilteredItem::FilteredOutputItemType> Indicator;
+static const QVector<Indicator> INDICATORS = QVector<Indicator>()
     // ld
-    << "undefined reference"
-    << "undefined symbol"
-    << "ld: cannot find"
-    << "No such file"
-    // Gcc
-    << "error";
+    << Indicator("undefined reference", FilteredItem::ErrorItem)
+    << Indicator("undefined symbol", FilteredItem::ErrorItem)
+    << Indicator("ld: cannot find", FilteredItem::ErrorItem)
+    << Indicator("no such file", FilteredItem::ErrorItem)
+    // gcc
+    << Indicator("error", FilteredItem::ErrorItem)
+    // generic
+    << Indicator("warning", FilteredItem::WarningItem)
+    << Indicator("info", FilteredItem::InformationItem)
+    << Indicator("note", FilteredItem::InformationItem);
 
 // A list of filters for possible compiler, linker, and make errors
 const QList<ErrorFormat> ERROR_FILTERS = QList<ErrorFormat>()
@@ -254,19 +259,15 @@ FilteredItem CompilerFilterStrategy::errorInLine(const QString& line)
             }
 
             QString txt = regEx.cap(curErrFilter.textGroup);
-            foreach( const QString curErrIndicator , ERROR_INDICATORS ) {
-                if(txt.contains(curErrIndicator, Qt::CaseInsensitive)) {
-                    item.type = FilteredItem::ErrorItem;
-                    break;
+
+            // Find the indicator which happens most early.
+            int earliestIndicatorIdx = txt.length();
+            foreach( const Indicator& curIndicator, INDICATORS ) {
+                int curIndicatorIdx = txt.indexOf(curIndicator.first, 0, Qt::CaseInsensitive);
+                if((curIndicatorIdx >= 0) && (earliestIndicatorIdx > curIndicatorIdx)) {
+                    earliestIndicatorIdx = curIndicatorIdx;
+                    item.type = curIndicator.second;
                 }
-            }
-
-            if(txt.contains("warning", Qt::CaseInsensitive)) {
-                item.type = FilteredItem::WarningItem;
-            }
-
-            if(txt.contains("note", Qt::CaseInsensitive) || txt.contains("info", Qt::CaseInsensitive)) {
-                item.type = FilteredItem::InformationItem;
             }
 
             // Make the item clickable if it comes with the necessary file & line number information
