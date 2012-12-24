@@ -12,6 +12,7 @@ X-KDE-ParentComponents=kdevplatform
 
 Name=CMake
 Name[be]=CMake
+Name[bs]=CMake
 Name[ca]=CMake
 Name[ca@valencia]=CMake
 Name[cs]=CMake

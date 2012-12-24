@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=KDevelop Sessions
+Name[bs]=KDevelop sesije
 Name[ca]=Sessions del KDevelop
 Name[cs]=relace KDevelop
 Name[da]=KDevelop-sessioner
@@ -28,6 +29,7 @@ Name[x-test]=xxKDevelop Sessionsxx
 Name[zh_CN]=KDevelop 会话
 Name[zh_TW]=KDevelop 工作階段
 Comment=List and launch KDevelop sessions
+Comment[bs]=Listanje i pokretanje KDevelop sesija
 Comment[ca]=Llista i inicia sessions del KDevelop
 Comment[cs]=Vypsat a spustit sezení KDevelop
 Comment[da]=Oplist og kør KDevelop-sessioner

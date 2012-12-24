@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=CMake Documentation
+Name[bs]=CMake Dokumentacija
 Name[ca]=Documentació del CMake
 Name[ca@valencia]=Documentació del CMake
 Name[cs]=Dokumentace CMake
@@ -35,6 +36,7 @@ Name[x-test]=xxCMake Documentationxx
 Name[zh_CN]=CMake 文档
 Name[zh_TW]=CMake 文件
 GenericName=Documentation Support
+GenericName[bs]=Podrška za dokumentaciju
 GenericName[ca]=Implementació de la documentació
 GenericName[ca@valencia]=Implementació de la documentació
 GenericName[cs]=Podpora dokumentace
@@ -67,6 +69,7 @@ GenericName[x-test]=xxDocumentation Supportxx
 GenericName[zh_CN]=文档支持
 GenericName[zh_TW]=文件支援
 Comment=Allows KDevelop to provide CMake documentation
+Comment[bs]=Dopišta KDevelopu da obezbjedi CMake dokumentaciju
 Comment[ca]=Permet a KDevelop proporcionar informació de CMake
 Comment[ca@valencia]=Permet a KDevelop proporcionar informació de CMake
 Comment[cs]=Umožňuje KDevelop poskytovat dokumentaci CMake

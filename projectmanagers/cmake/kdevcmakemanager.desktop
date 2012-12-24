@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=CMake Project Manager
+Name[bs]=Cmake menadžer projekta
 Name[ca]=Gestor de projectes CMake
 Name[ca@valencia]=Gestor de projectes CMake
 Name[cs]=Správce projektů CMake
@@ -34,6 +35,7 @@ Name[x-test]=xxCMake Project Managerxx
 Name[zh_CN]=CMake 工程管理器
 Name[zh_TW]=CMake 專案管理員
 GenericName=Project Manager
+GenericName[bs]=Rukovodilac projekta
 GenericName[ca]=Gestor de projectes
 GenericName[ca@valencia]=Gestor de projectes
 GenericName[cs]=Správce projektů
@@ -69,6 +71,7 @@ GenericName[x-test]=xxProject Managerxx
 GenericName[zh_CN]=工程管理器
 GenericName[zh_TW]=專案管理員
 Comment=Allows KDevelop to manage CMake-based projects
+Comment[bs]=Dopušta da KDevelop upravlja CMake-baziranim projektima
 Comment[ca]=Permet que el KDevelop gestioni projectes basats en CMake
 Comment[ca@valencia]=Permet que el KDevelop gestione projectes basats en CMake
 Comment[cs]=Umožňuje KDevelop spravovat projekty založené na CMake

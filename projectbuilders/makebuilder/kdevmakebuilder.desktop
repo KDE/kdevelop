@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=Make Project Builder
+Name[bs]=Napravi graditelja projekta
 Name[ca]=Constructor de projecte Make
 Name[ca@valencia]=Constructor de projecte Make
 Name[cs]=Překladač projektů Make
@@ -34,6 +35,7 @@ Name[x-test]=xxMake Project Builderxx
 Name[zh_CN]=Make 工程构建器
 Name[zh_TW]=Make 專案建立器
 GenericName=Project Builder
+GenericName[bs]=Graditelj projekta
 GenericName[ca]=Constructor de projectes
 GenericName[ca@valencia]=Constructor de projectes
 GenericName[cs]=Překladač projektů
@@ -68,6 +70,7 @@ GenericName[x-test]=xxProject Builderxx
 GenericName[zh_CN]=工程构建器
 GenericName[zh_TW]=專案編譯器
 Comment=KDevelop Make Builder
+Comment[bs]=KDevelop Make izgraditelj
 Comment[ca]=Constructor KDevelop Make
 Comment[ca@valencia]=Constructor KDevelop Make
 Comment[da]=Make-bygger til KDevelop
