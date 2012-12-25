@@ -162,7 +162,7 @@ double bar ()
 <para><programlisting>for (typename Triangulation&lt; dim&gt;::active_cell_iterator cell
       = triangulation.begin_active();
    cell != triangulation.end();
-   ++cell)</programlisting> This is an awkward expression but it will look almost exactly like this everytime you need such a loop &mdash; which would make it a good candidate for a snippet.</para>
+   ++cell)</programlisting> This is an awkward expression but it will look almost exactly like this every time you need such a loop &mdash; which would make it a good candidate for a snippet.</para>
 <itemizedlist>
 <listitem><para><guilabel>Konsole</guilabel>: Opens a command line window inside &kdevelop;'s main window, for the occasional command you may want to enter (&eg; to run <varname>./configure</varname>).
 </para></listitem>
