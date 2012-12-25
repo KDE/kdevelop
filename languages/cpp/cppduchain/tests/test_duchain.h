@@ -21,7 +21,6 @@
 #define TESTDUCHAIN_H
 
 #include <QObject>
-#include <QByteArray>
 
 #include <kurl.h>
 

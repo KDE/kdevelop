@@ -20,7 +20,6 @@
 #define TestExpressionParser_H
 
 #include <QObject>
-#include <QByteArray>
 
 #include <kurl.h>
 

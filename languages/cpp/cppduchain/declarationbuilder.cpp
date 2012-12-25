@@ -21,7 +21,6 @@
 
 #include "debugbuilders.h"
 
-#include <QByteArray>
 #include <typeinfo>
 #include <iterator>
 

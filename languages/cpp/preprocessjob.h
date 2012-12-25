@@ -100,7 +100,7 @@ private:
     bool m_success;
     bool m_headerSectionEnded;
     rpp::pp* m_pp;
-    QByteArray m_contents;
+    QString m_contents;
 
     static KDevelop::ParsingEnvironment* m_standardEnvironment;
 };

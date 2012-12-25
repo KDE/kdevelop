@@ -129,7 +129,7 @@ Declaration* TestCppCodeCompletion::findDeclaration(DUContext* context, const Qu
 
 void TestCppCodeCompletion::testCommentClearing()
 {
-  QByteArray method = "struct a { int i; }; int foo() { a inst; }";
+  QString method = "struct a { int i; }; int foo() { a inst; }";
   TopDUContext* top = parse(method, DumpNone);
   int ctxt = 2;
   DUChainWriteLocker lock(DUChain::lock());
@@ -204,7 +204,7 @@ void TestCppCodeCompletion::testExpressionBefore()
 
 void TestCppCodeCompletion::testSpecialItems()
 {
-  QByteArray method = "enum Color { Red = 0, Green = 1, Blue = 2 }; void test(Color c) { }";
+  QString method = "enum Color { Red = 0, Green = 1, Blue = 2 }; void test(Color c) { }";
   TopDUContext* top = parse(method, DumpNone);
   int ctxt = 2;
   DUChainWriteLocker lock(DUChain::lock());
@@ -223,7 +223,7 @@ void TestCppCodeCompletion::testSpecialItems()
 
 void TestCppCodeCompletion::testOnlyShow()
 {
-  QByteArray method = "template<class T1> class T { }; namespace A { struct B {}; } struct C { }; int testMe() { }";
+  QString method = "template<class T1> class T { }; namespace A { struct B {}; } struct C { }; int testMe() { }";
   TopDUContext* top = parse(method, DumpAll);
   int fctxt = 5;
   int sctxt = 3;
@@ -284,7 +284,7 @@ void TestCppCodeCompletion::testOnlyShow()
 
 void TestCppCodeCompletion::testFriends()
 {
-  QByteArray method = "class Friendly{};";
+  QString method = "class Friendly{};";
   TopDUContext* top = parse(method, DumpNone);
   int ctxt = 0;
   DUChainWriteLocker lock(DUChain::lock());
@@ -302,7 +302,7 @@ void TestCppCodeCompletion::testFriends()
 
 void TestCppCodeCompletion::testInvalidContexts()
 {
-  QByteArray method = "namespace A { struct B {}; } int testMe() { }";
+  QString method = "namespace A { struct B {}; } int testMe() { }";
   TopDUContext* top = parse(method, DumpNone);
   int ctxt = 2;
   DUChainWriteLocker lock(DUChain::lock());
@@ -359,7 +359,7 @@ void TestCppCodeCompletion::testInvalidContexts()
 
 void TestCppCodeCompletion::testMemberAccess()
 {
-  QByteArray method = "template<class T1, class T2> class T { public: T1 ta(); class U { public: class V{ };  }; }; class X { public: X(){}; int a(int a, T<int,int> b); int b;}; T<int,int> t; X* getX() { }";
+  QString method = "template<class T1, class T2> class T { public: T1 ta(); class U { public: class V{ };  }; }; class X { public: X(){}; int a(int a, T<int,int> b); int b;}; T<int,int> t; X* getX() { }";
   TopDUContext* top = parse(method, DumpNone);
   int ctxt = 4;
   DUChainWriteLocker lock(DUChain::lock());
@@ -387,7 +387,7 @@ void TestCppCodeCompletion::testMemberAccess()
 void TestCppCodeCompletion::testParentContexts()
 {
   //Binary operators (also parent contexts) are tested in testBinaryOperators
-  QByteArray method = "template<class T1, class T2> class Templ { T1 ta(); T2 tb(); }; class X { X(); int a(int a, Templ<int,int> b); int b;}; X::X() { }";
+  QString method = "template<class T1, class T2> class Templ { T1 ta(); T2 tb(); }; class X { X(); int a(int a, Templ<int,int> b); int b;}; X::X() { }";
   TopDUContext* top = parse(method, DumpAll);
   int ctxt = 4;
   DUChainWriteLocker lock(DUChain::lock());
@@ -441,7 +441,7 @@ void TestCppCodeCompletion::testParentContexts()
 
 void TestCppCodeCompletion::testCaseContext()
 {
-  QByteArray method = "enum testEnum { foo, bar }; void test() { switch( testEnum ) { } }";
+  QString method = "enum testEnum { foo, bar }; void test() { switch( testEnum ) { } }";
   TopDUContext* top = parse(method, DumpNone);
   int ctxt = 2;
   int sctxt = 1;
@@ -459,7 +459,7 @@ void TestCppCodeCompletion::testCaseContext()
 
 void TestCppCodeCompletion::testCaseContextComplexExpression()
 {
-  QByteArray method = "enum testEnum { foo, bar }; struct testStruct { testEnum e; }; void test(testStruct s) { switch (s.e) { } }";
+  QString method = "enum testEnum { foo, bar }; struct testStruct { testEnum e; }; void test(testStruct s) { switch (s.e) { } }";
   TopDUContext* top = parse(method, DumpNone);
   int ctxt = 3;
   int sctxt = 1;
@@ -478,7 +478,7 @@ void TestCppCodeCompletion::testCaseContextComplexExpression()
 
 void TestCppCodeCompletion::testCaseContextDifferentScope()
 {
-  QByteArray method = "struct testStruct { enum testEnum { foo, bar } e; }; void test(testStruct s) { switch (s.e) { } }";
+  QString method = "struct testStruct { enum testEnum { foo, bar } e; }; void test(testStruct s) { switch (s.e) { } }";
   TopDUContext* top = parse(method, DumpNone);
   int ctxt = 2;
   int sctxt = 1;
@@ -492,7 +492,7 @@ void TestCppCodeCompletion::testCaseContextDifferentScope()
 
 void TestCppCodeCompletion::testCaseContextConstants()
 {
-  QByteArray method = "enum testEnum { foo, bar };"
+  QString method = "enum testEnum { foo, bar };"
                       "testEnum enum_nc; const testEnum enum_c; const testEnum enum_cc = foo;"
                       "int int_nc; const int int_c; const int int_cc = 0;"
                       "float float_nc; const float float_c; const float float_cc = 0.0;"
@@ -536,7 +536,7 @@ void TestCppCodeCompletion::testCaseContextConstants()
 
 void TestCppCodeCompletion::testUnaryOperators()
 {
-  QByteArray method = "class X { X(); int a; int b;}; int x,*z; X::X() { }";
+  QString method = "class X { X(); int a; int b;}; int x,*z; X::X() { }";
   TopDUContext* top = parse(method, DumpAll);
   DUChainWriteLocker lock(DUChain::lock());
   int ctxt = 2;
@@ -605,7 +605,7 @@ void TestCppCodeCompletion::testUnaryOperators()
 
 void TestCppCodeCompletion::testBinaryOperators()
 {
-  QByteArray method = "class X { X(); int a; int b;}; X::X() { }";
+  QString method = "class X { X(); int a; int b;}; X::X() { }";
   TopDUContext* top = parse(method, DumpAll);
   DUChainWriteLocker lock(DUChain::lock());
   CompletionItemTester gt(top->childContexts()[2], "if (a > ");
@@ -679,7 +679,7 @@ void TestCppCodeCompletion::testBinaryOperators()
 
 void TestCppCodeCompletion::testDeclarationIsInitialization()
 {
-  QByteArray method = "template<class T1, class T2> class Templ { T1 ta(); T2 tb(); }; class X { X(); int a; int b;}; X::X() { }";
+  QString method = "template<class T1, class T2> class Templ { T1 ta(); T2 tb(); }; class X { X(); int a; int b;}; X::X() { }";
   TopDUContext* top = parse(method, DumpAll);
   DUChainWriteLocker lock(DUChain::lock());
   CompletionItemTester notActuallyADecl(top->childContexts()[4], "int g; if (a > this->");
@@ -707,7 +707,7 @@ void TestCppCodeCompletion::testDeclarationIsInitialization()
 
 
 void TestCppCodeCompletion::testNoMemberAccess() {
-  QByteArray test = "class MyClass{ public:\n int myint; };\n\n";
+  QString test = "class MyClass{ public:\n int myint; };\n\n";
   
   TopDUContext* context = parse(test, DumpNone);
   DUChainWriteLocker lock(DUChain::lock());
@@ -739,7 +739,7 @@ void TestCppCodeCompletion::testNoMemberAccess() {
 void TestCppCodeCompletion::testFunctionImplementation() {
   //__hidden1 and _Hidden2 should not be visible in the code-completion, as their identifiers are reserved to C++ implementations and standard libraries.
   addInclude("myclass.h", "namespace mynamespace { class myclass { void students(); }; }; class __hidden1; int _Hidden2; ");
-  QByteArray test = "#include \"myclass.h\"\nnamespace mynamespace { }";
+  QString test = "#include \"myclass.h\"\nnamespace mynamespace { }";
   
   TopDUContext* context = parse(test, DumpNone);
   DUChainWriteLocker lock(DUChain::lock());
@@ -754,7 +754,7 @@ void TestCppCodeCompletion::testFunctionImplementation() {
 }
 
 void TestCppCodeCompletion::testAliasDeclarationAccessPolicy() {
-  QByteArray test = "namespace Base { int One; int Two; int Three };\
+  QString test = "namespace Base { int One; int Two; int Three };\
   class List { public: using Base::One; protected: using Base::Two; private: using Base::Three; }; int main(List a) {}";
   
   TopDUContext* context = parse(test, DumpNone);
@@ -777,7 +777,7 @@ void TestCppCodeCompletion::testAliasDeclarationAccessPolicy() {
 }
 
 void TestCppCodeCompletion::testKeywords() {
-  QByteArray test = "struct Values { int Value1; int Value2; struct Sub { int SubValue; }; }; Values v; int test(int a) {}";
+  QString test = "struct Values { int Value1; int Value2; struct Sub { int SubValue; }; }; Values v; int test(int a) {}";
 
   TopDUContext* context = parse(test, DumpNone);
   DUChainWriteLocker lock(DUChain::lock());
@@ -892,7 +892,7 @@ void TestCppCodeCompletion::testKeywords() {
 
 void TestCppCodeCompletion::testArgumentMatching() {
   {
-    QByteArray test = "struct A{ int m;}; void test(int q) { A a;  }";
+    QString test = "struct A{ int m;}; void test(int q) { A a;  }";
 
     TopDUContext* context = parse( test, DumpNone /*DumpDUChain | DumpAST */);
     DUChainWriteLocker lock(DUChain::lock());
@@ -906,7 +906,7 @@ void TestCppCodeCompletion::testArgumentMatching() {
     release(context);
   }
   {
-    QByteArray test = "#define A(x) #x\n void test(char* a, char* b, int c) { } ";
+    QString test = "#define A(x) #x\n void test(char* a, char* b, int c) { } ";
 
     TopDUContext* context = parse( test, DumpNone /*DumpDUChain | DumpAST */);
     DUChainWriteLocker lock(DUChain::lock());
@@ -924,7 +924,7 @@ void TestCppCodeCompletion::testArgumentMatching() {
 
 void TestCppCodeCompletion::testSubClassVisibility() {
   {
-    QByteArray test = "typedef struct { int am; } A; void test() { A b; } ";
+    QString test = "typedef struct { int am; } A; void test() { A b; } ";
 
     TopDUContext* context = parse( test, DumpAll /*DumpDUChain | DumpAST */);
     DUChainWriteLocker lock(DUChain::lock());
@@ -936,7 +936,7 @@ void TestCppCodeCompletion::testSubClassVisibility() {
     release(context);
   }
   {
-    QByteArray test = "struct A { int am; struct B { int bm; }; }; void test() { A::B b; } ";
+    QString test = "struct A { int am; struct B { int bm; }; }; void test() { A::B b; } ";
 
     TopDUContext* context = parse( test, DumpNone /*DumpDUChain | DumpAST */);
     DUChainWriteLocker lock(DUChain::lock());
@@ -946,7 +946,7 @@ void TestCppCodeCompletion::testSubClassVisibility() {
     release(context);
   }
   {
-    QByteArray test = "struct A { int am; struct B; }; struct A::B {int bm; }; void test() { A::B b; } ";
+    QString test = "struct A { int am; struct B; }; struct A::B {int bm; }; void test() { A::B b; } ";
 
     TopDUContext* context = parse( test, DumpNone /*DumpDUChain | DumpAST */);
     DUChainWriteLocker lock(DUChain::lock());
@@ -959,7 +959,7 @@ void TestCppCodeCompletion::testSubClassVisibility() {
 
 void TestCppCodeCompletion::testMacrosInCodeCompletion()
 {
-  QByteArray test = "#define test foo\n #define testfunction(X) x\n #define test2 fee\n struct A {int mem;}; void fun() { A foo; A* fee;\n }";
+  QString test = "#define test foo\n #define testfunction(X) x\n #define test2 fee\n struct A {int mem;}; void fun() { A foo; A* fee;\n }";
   TopDUContext* context = parse( test, DumpNone /*DumpDUChain | DumpAST */);
   DUChainWriteLocker lock(DUChain::lock());
   
@@ -978,7 +978,7 @@ void TestCppCodeCompletion::testMacrosInCodeCompletion()
 
 void TestCppCodeCompletion::testConstructorCompletion() {
   {
-    QByteArray test = "class A {}; class Class : public A { Class(); int m_1; float m_2; char m_3; static int m_4; }; ";
+    QString test = "class A {}; class Class : public A { Class(); int m_1; float m_2; char m_3; static int m_4; }; ";
 
     //74
     TopDUContext* context = parse( test, DumpNone /*DumpDUChain | DumpAST */);
@@ -1110,7 +1110,7 @@ void TestCppCodeCompletion::testSignalSlotCompletion() {
   
     addInclude("QObject.h", "#include \"/qobjectdefs.h\"\n class QObject { void connect(QObject* from, const char* signal, QObject* to, const char* slot); void connect(QObject* from, const char* signal, const char* slot); };");
     
-    QByteArray test("#include \"QObject.h\"\n class TE; class A : public QObject { public slots: void slot1(); void slot2(TE*); signals: void signal1(TE*, char);void signal2(); public: void test() { } private: Q_PRIVATE_SLOT(d,void slot3(TE*))  };");
+    QString test("#include \"QObject.h\"\n class TE; class A : public QObject { public slots: void slot1(); void slot2(TE*); signals: void signal1(TE*, char);void signal2(); public: void test() { } private: Q_PRIVATE_SLOT(d,void slot3(TE*))  };");
 
     TopDUContext* context = parse( test, DumpAll );
     DUChainWriteLocker lock(DUChain::lock());
@@ -1141,7 +1141,7 @@ void TestCppCodeCompletion::testSignalSlotExecution()
     addInclude("/qobjectdefs.h", "#define signals\n#define slots\n#define Q_SIGNALS\n#define Q_SLOTS\n#define Q_PRIVATE_SLOT\n#define SIGNAL\n#define SLOT\n int n;\n");
     addInclude("QObject.h", "#include \"/qobjectdefs.h\"\n class QObject { void connect(QObject* from, const char* signal, QObject* to, const char* slot); void connect(QObject* from, const char* signal, const char* slot); };");
 
-    QByteArray test("#include \"QObject.h\""
+    QString test("#include \"QObject.h\""
                     "\nclass A : public QObject { public slots: void slot1(); void slot2(void*);"
                                                         "signals: void signal1(void*, char); void signal2(void*); "
                     "\nvoid test() { connect( this, SIGNAL(signal2(void*)), SLOT() ); } };");
@@ -1236,7 +1236,7 @@ void TestCppCodeCompletion::testSignalSlotExecution()
 
 void TestCppCodeCompletion::testAssistant() {
   {
-    QByteArray test = "#define A hallo(3) = 1\n void test() { A; bla = 5; }";
+    QString test = "#define A hallo(3) = 1\n void test() { A; bla = 5; }";
 
     TopDUContext* context = parse( test, DumpAll );
     DUChainWriteLocker lock(DUChain::lock());
@@ -1244,7 +1244,7 @@ void TestCppCodeCompletion::testAssistant() {
     release(context);
   }
   {
-    QByteArray test = "int n; class C { C() : member(n) {} }; }";
+    QString test = "int n; class C { C() : member(n) {} }; }";
 
     TopDUContext* context = parse( test, DumpAll );
     DUChainWriteLocker lock(DUChain::lock());
@@ -1261,7 +1261,7 @@ void TestCppCodeCompletion::testAssistant() {
     release(context);
   }
   {
-    QByteArray test = "class C {}; void test() {C c; c.value = 5; int i = c.value2; i = c.value3(); }";
+    QString test = "class C {}; void test() {C c; c.value = 5; int i = c.value2; i = c.value3(); }";
 
     TopDUContext* context = parse( test, DumpAll );
     DUChainWriteLocker lock(DUChain::lock());
@@ -1302,7 +1302,7 @@ void TestCppCodeCompletion::testAssistant() {
     release(context);
   }
   {
-    QByteArray test = "class C {}; void test() {C c; int valueName; c.functionName(valueName); }";
+    QString test = "class C {}; void test() {C c; int valueName; c.functionName(valueName); }";
 
     TopDUContext* context = parse( test, DumpAll );
     DUChainWriteLocker lock(DUChain::lock());
@@ -1325,7 +1325,7 @@ void TestCppCodeCompletion::testAssistant() {
 
 void TestCppCodeCompletion::testImportTypedef() {
   {
-    QByteArray test = "class Class { }; typedef Class Klass; class C : public Class { };";
+    QString test = "class Class { }; typedef Class Klass; class C : public Class { };";
 
     TopDUContext* context = parse( test, DumpNone /*DumpDUChain | DumpAST */);
     DUChainWriteLocker lock(DUChain::lock());
@@ -1334,7 +1334,7 @@ void TestCppCodeCompletion::testImportTypedef() {
     QCOMPARE(context->childContexts()[1]->importedParentContexts()[0].context(context->topContext()), context->childContexts()[0]);
   }
   {
-    QByteArray test = "class A { public: int m; }; template<class Base> class C : public Base { };";
+    QString test = "class A { public: int m; }; template<class Base> class C : public Base { };";
 
     TopDUContext* context = parse( test, DumpNone /*DumpDUChain | DumpAST */);
     DUChainWriteLocker lock(DUChain::lock());
@@ -1350,7 +1350,7 @@ void TestCppCodeCompletion::testImportTypedef() {
     QCOMPARE(imports[1].context(context)->scopeIdentifier(true), QualifiedIdentifier("A"));
   }
   {
-    QByteArray test = "class A { public: int m; }; template<class Base> class C : public Base { }; typedef C<A> TheBase; class B : public TheBase { }; class E : public B{ };";
+    QString test = "class A { public: int m; }; template<class Base> class C : public Base { }; typedef C<A> TheBase; class B : public TheBase { }; class E : public B{ };";
 
     TopDUContext* context = parse( test, DumpNone /*DumpDUChain | DumpAST */);
     DUChainWriteLocker lock(DUChain::lock());
@@ -1369,7 +1369,7 @@ void TestCppCodeCompletion::testImportTypedef() {
 
 void TestCppCodeCompletion::testPrivateVariableCompletion() {
   TEST_FILE_PARSE_ONLY
-  QByteArray test = "class C {void test() {}; int i; };";
+  QString test = "class C {void test() {}; int i; };";
 
   DUContext* context = parse( test, DumpAll /*DumpDUChain | DumpAST */);
   DUChainWriteLocker lock(DUChain::lock());
@@ -1397,7 +1397,7 @@ void TestCppCodeCompletion::testPrivateVariableCompletion() {
 void TestCppCodeCompletion::testCompletionPrefix() {
   TEST_FILE_PARSE_ONLY
   {
-    QByteArray method("struct Test {int m;}; Test t;Test* t2;void test() {}");
+    QString method("struct Test {int m;}; Test t;Test* t2;void test() {}");
     TopDUContext* top = parse(method, DumpNone);
 
     DUChainWriteLocker lock(DUChain::lock());
@@ -1431,7 +1431,7 @@ void TestCppCodeCompletion::testCompletionPrefix() {
 void TestCppCodeCompletion::testStringProblem() {
   TEST_FILE_PARSE_ONLY
   {
-    QByteArray method("void test() {int i;};");
+    QString method("void test() {int i;};");
     TopDUContext* top = parse(method, DumpNone);
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->childContexts().count(), 2);
@@ -1441,7 +1441,7 @@ void TestCppCodeCompletion::testStringProblem() {
     release(top);
   }
   {
-    QByteArray method("void test() {int i;};");
+    QString method("void test() {int i;};");
     TopDUContext* top = parse(method, DumpNone);
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->childContexts().count(), 2);
@@ -1454,7 +1454,7 @@ void TestCppCodeCompletion::testStringProblem() {
 
 void TestCppCodeCompletion::testInheritanceVisibility() {
   TEST_FILE_PARSE_ONLY
-  QByteArray method("class A { public: class AMyClass {}; }; class B : protected A { public: class BMyClass {}; }; class C : private B{ public: class CMyClass {}; }; class D : public C { class DMyClass{}; }; ");
+  QString method("class A { public: class AMyClass {}; }; class B : protected A { public: class BMyClass {}; }; class C : private B{ public: class CMyClass {}; }; class D : public C { class DMyClass{}; }; ");
   TopDUContext* top = parse(method, DumpNone);
 
   DUChainWriteLocker lock(DUChain::lock());
@@ -1482,7 +1482,7 @@ void TestCppCodeCompletion::testInheritanceVisibility() {
 
 void TestCppCodeCompletion::testConstVisibility() {
   TEST_FILE_PARSE_ONLY
-  QByteArray method("struct test { void f(); void e() const; }; int main() { const test a; } void test::e() const { }");
+  QString method("struct test { void f(); void e() const; }; int main() { const test a; } void test::e() const { }");
   TopDUContext* top = parse(method, DumpNone);
 
   DUChainWriteLocker lock(DUChain::lock());
@@ -1499,7 +1499,7 @@ void TestCppCodeCompletion::testConstOverloadVisibility()
 {
   // see also: https://bugs.kde.org/show_bug.cgi?id=267877
   TEST_FILE_PARSE_ONLY
-  QByteArray method("struct test { test foo(); const test& foo() const; void bar() const; void asdf(); };\n"
+  QString method("struct test { test foo(); const test& foo() const; void bar() const; void asdf(); };\n"
                     "int main() { const test testConst; test testNonConst; }");
   TopDUContext* top = parse(method, DumpNone);
 
@@ -1549,7 +1549,7 @@ void TestCppCodeCompletion::testConstOverloadVisibility()
 
 void TestCppCodeCompletion::testFriendVisibility() {
   TEST_FILE_PARSE_ONLY
-  QByteArray method("class A { class PrivateClass {}; friend class B; }; class B{};");
+  QString method("class A { class PrivateClass {}; friend class B; }; class B{};");
   TopDUContext* top = parse(method, DumpNone);
 
   DUChainWriteLocker lock(DUChain::lock());
@@ -1563,7 +1563,7 @@ void TestCppCodeCompletion::testFriendVisibility() {
 void TestCppCodeCompletion::testLocalUsingNamespace() {
   TEST_FILE_PARSE_ONLY
   {
-    QByteArray method("namespace Fuu { int test0(); }; namespace Foo { using namespace Fuu; int test() {} } void Bar() { using namespace Foo; int b = test(); }");
+    QString method("namespace Fuu { int test0(); }; namespace Foo { using namespace Fuu; int test() {} } void Bar() { using namespace Foo; int b = test(); }");
     TopDUContext* top = parse(method, DumpAll);
 
     DUChainWriteLocker lock(DUChain::lock());
@@ -1582,7 +1582,7 @@ void TestCppCodeCompletion::testLocalUsingNamespace() {
 }
 
 void TestCppCodeCompletion::testTemplateFunction() {
-    QByteArray method("template<class A> void test(A i); void t() { }");
+    QString method("template<class A> void test(A i); void t() { }");
     TopDUContext* top = parse(method, DumpNone);
 
     DUChainWriteLocker lock(DUChain::lock());
@@ -1615,7 +1615,7 @@ void TestCppCodeCompletion::testTemplateFunction() {
 }
 
 void TestCppCodeCompletion::testTemplateArguments() {
-    QByteArray method("template<class T> struct I; typedef I<int> II; template<class T> struct Test { T t; }; ");
+    QString method("template<class T> struct I; typedef I<int> II; template<class T> struct Test { T t; }; ");
     TopDUContext* top = parse(method, DumpNone);
 
     DUChainWriteLocker lock(DUChain::lock());
@@ -1636,7 +1636,7 @@ void TestCppCodeCompletion::testTemplateArguments() {
 }
 
 void TestCppCodeCompletion::testCompletionBehindTypedeffedConstructor() {
-    QByteArray method("template<class T> struct A { A(T); int m; }; typedef A<int> TInt; void test() {}");
+    QString method("template<class T> struct A { A(T); int m; }; typedef A<int> TInt; void test() {}");
     TopDUContext* top = parse(method, DumpAll);
 
     DUChainWriteLocker lock(DUChain::lock());
@@ -1658,7 +1658,7 @@ void TestCppCodeCompletion::testCompletionBehindTypedeffedConstructor() {
 
 void TestCppCodeCompletion::testCompletionInExternalClassDefinition() {
     {
-      QByteArray method("class A { class Q; class B; }; class A::B {class C;}; class A::B::C{void test(); }; void A::B::test() {}; void A::B::C::test() {}");
+      QString method("class A { class Q; class B; }; class A::B {class C;}; class A::B::C{void test(); }; void A::B::test() {}; void A::B::C::test() {}");
       TopDUContext* top = parse(method, DumpAll);
 
       DUChainWriteLocker lock(DUChain::lock());
@@ -1674,7 +1674,7 @@ void TestCppCodeCompletion::testCompletionInExternalClassDefinition() {
 
 void TestCppCodeCompletion::testTemplateMemberAccess() {
   {
-    QByteArray method("template<class T> struct I; template<class T> class Test { public: typedef I<T> It; }; template<class T> struct I { }; Test<int>::It test;");
+    QString method("template<class T> struct I; template<class T> class Test { public: typedef I<T> It; }; template<class T> struct I { }; Test<int>::It test;");
     TopDUContext* top = parse(method, DumpNone);
 
     DUChainWriteLocker lock(DUChain::lock());
@@ -1701,7 +1701,7 @@ void TestCppCodeCompletion::testTemplateMemberAccess() {
     release(top);
   }
   {
-    QByteArray method("template<class T> class Test { public: T member; typedef T Data; enum { Value = 3 }; }; typedef Test<int> IntTest; void test() { IntTest tv; int i = Test<int>::Value; }");
+    QString method("template<class T> class Test { public: T member; typedef T Data; enum { Value = 3 }; }; typedef Test<int> IntTest; void test() { IntTest tv; int i = Test<int>::Value; }");
     TopDUContext* top = parse(method, DumpNone);
 
     DUChainWriteLocker lock(DUChain::lock());
@@ -1722,7 +1722,7 @@ void TestCppCodeCompletion::testTemplateMemberAccess() {
 
 void TestCppCodeCompletion::testNamespaceCompletion() {
   
-  QByteArray method("namespace A { class m; namespace Q {}; }; namespace A { class n; int q; }");
+  QString method("namespace A { class m; namespace Q {}; }; namespace A { class n; int q; }");
   TopDUContext* top = parse(method, DumpNone);
 
   DUChainWriteLocker lock(DUChain::lock());
@@ -1747,7 +1747,7 @@ void TestCppCodeCompletion::testNamespaceCompletion() {
 
 void TestCppCodeCompletion::testNamespaceAliasCompletion() {
   
-  QByteArray method("namespace A { class C_A1; class C_A2; namespace Q { class C_Q1; class C_Q2; }; }; "
+  QString method("namespace A { class C_A1; class C_A2; namespace Q { class C_Q1; class C_Q2; }; }; "
                     "namespace B = A; " // direct import of a namespace
                     "namespace C = B; " // indirect import through another alias
                     );
@@ -1780,7 +1780,7 @@ void TestCppCodeCompletion::testNamespaceAliasCompletion() {
 
 void TestCppCodeCompletion::testNamespaceAliasCycleCompletion() {
   
-  QByteArray method("namespace A { class C_A1; class C_A2; namespace Q { class C_Q1; class C_Q2; }; }; "
+  QString method("namespace A { class C_A1; class C_A2; namespace Q { class C_Q1; class C_Q2; }; }; "
                     "namespace B = A; namespace A = B; ");
   
   TopDUContext* top = parse(method, DumpNone);
@@ -1814,7 +1814,7 @@ void TestCppCodeCompletion::testIndirectImports()
     addInclude("testIndirectImportsHeader1.h", "class C {};");
     addInclude("testIndirectImportsHeader2.h", "template<class T> class D : public T {};");
     
-    QByteArray method("#include \"testIndirectImportsHeader2.h\"\n#include \"testIndirectImportsHeader1.h\"\n typedef D<C> Base; class MyClass : public C, public Base {}; ");
+    QString method("#include \"testIndirectImportsHeader2.h\"\n#include \"testIndirectImportsHeader1.h\"\n typedef D<C> Base; class MyClass : public C, public Base {}; ");
 
     TopDUContext* top = parse(method, DumpNone);
 
@@ -1845,7 +1845,7 @@ void TestCppCodeCompletion::testSameNamespace() {
   {
     addInclude("testSameNamespaceClassHeader.h", "namespace A {\n class B\n {\n \n};\n \n}");
     
-    QByteArray method("#include \"testSameNamespaceClassHeader.h\"\n namespace A {\n namespace AA {\n};\n };\n");
+    QString method("#include \"testSameNamespaceClassHeader.h\"\n namespace A {\n namespace AA {\n};\n };\n");
 
     TopDUContext* top = parse(method, DumpNone);
 
@@ -1867,7 +1867,7 @@ void TestCppCodeCompletion::testSameNamespace() {
   {
     //                 0         1         2         3         4         5         6         7
     //                 0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012
-    QByteArray method("namespace A { class C { }; void test2() {} } namespace A { void test() { } class C {};}");
+    QString method("namespace A { class C { }; void test2() {} } namespace A { void test() { } class C {};}");
 
     TopDUContext* top = parse(method, DumpNone);
 
@@ -1897,7 +1897,7 @@ void TestCppCodeCompletion::testUnnamedNamespace() {
 
   //                 0         1         2         3         4         5         6         7
   //                 0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012
-  QByteArray method("namespace {int a;} namespace { int b; }; void test() {a = 3;}");
+  QString method("namespace {int a;} namespace { int b; }; void test() {a = 3;}");
 
   TopDUContext* top = parse(method, DumpNone);
 
@@ -1959,7 +1959,7 @@ void TestCppCodeCompletion::testUnnamedNamespace() {
 void TestCppCodeCompletion::testCompletionContext() {
   TEST_FILE_PARSE_ONLY
 
-  QByteArray test = "#include \"testFile1.h\"\n";
+  QString test = "#include \"testFile1.h\"\n";
   test += "#include \"testFile2.h\"\n";
   test += "void test() { }";
 
@@ -2031,7 +2031,7 @@ void TestCppCodeCompletion::testCompletionContext() {
 void TestCppCodeCompletion::testTypeConversion() {
   TEST_FILE_PARSE_ONLY
 
-  QByteArray test = "#include \"testFile1.h\"\n";
+  QString test = "#include \"testFile1.h\"\n";
   test += "#include \"testFile2.h\"\n";
   test += "#include \"testFile3.h\"\n";
   test += "int n;\n";
@@ -2107,7 +2107,7 @@ KDevelop::IndexedType toPointer(IndexedType t) {
 
 void TestCppCodeCompletion::testTypeConversion2() {
   {
-    QByteArray test = "class A {}; class B {public: explicit B(const A&); explicit B(const int&){}; private: operator A() const {}; }; class C : public B{private: C(B) {}; };";
+    QString test = "class A {}; class B {public: explicit B(const A&); explicit B(const int&){}; private: operator A() const {}; }; class C : public B{private: C(B) {}; };";
     TopDUContext* context = parse( test, DumpAll /*DumpDUChain | DumpAST */);
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(context->localDeclarations().size(), 3);
@@ -2143,7 +2143,7 @@ void TestCppCodeCompletion::testTypeConversion2() {
     release(context);
   }
   {
-    QByteArray test = "const char** b; char** c; char** const d; char* const * e; char f; const char q; ";
+    QString test = "const char** b; char** c; char** const d; char* const * e; char f; const char q; ";
     TopDUContext* context = parse( test, DumpNone /*DumpDUChain | DumpAST */);
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(context->localDeclarations().size(), 6);
@@ -2169,7 +2169,7 @@ void TestCppCodeCompletion::testTypeConversion2() {
   }
   
   {
-    QByteArray test = "class A {}; class C {}; enum M { Em }; template<class T> class B{ public:B(T t); }; ";
+    QString test = "class A {}; class C {}; enum M { Em }; template<class T> class B{ public:B(T t); }; ";
     TopDUContext* context = parse( test, DumpNone /*DumpDUChain | DumpAST */);
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(context->localDeclarations().size(), 4);
@@ -2197,7 +2197,7 @@ void TestCppCodeCompletion::testInclude() {
   addInclude("file1.h", "#include \"testFile1.h\"\n#include \"testFile2.h\"\n");
 
 
-  QByteArray test = "#include \"file1.h\"  \n  struct Cont { operator int() {}; }; void test( int c = 5 ) { this->test( Cont(), 1, 5.5, 6); }; HONK undefinedHonk;";
+  QString test = "#include \"file1.h\"  \n  struct Cont { operator int() {}; }; void test( int c = 5 ) { this->test( Cont(), 1, 5.5, 6); }; HONK undefinedHonk;";
   DUContext* c = parse( test, DumpNone /*DumpDUChain | DumpAST */);
   DUChainWriteLocker lock(DUChain::lock());
 
@@ -2312,7 +2312,7 @@ void TestCppCodeCompletion::testUpdateChain() {
   TEST_FILE_PARSE_ONLY
 
 {
-    QByteArray text("#define Q_FOREACH(variable, container) for (QForeachContainer<__typeof__(container)> _container_(container); !_container_.brk && _container_.i != _container_.e; __extension__ ({ ++_container_.brk; ++_container_.i; })) for (variable = *_container_.i;; __extension__ ({--_container_.brk; break;})) \nvoid test() { Q_FOREACH(int a, b) { int i; } }");
+    QString text("#define Q_FOREACH(variable, container) for (QForeachContainer<__typeof__(container)> _container_(container); !_container_.brk && _container_.i != _container_.e; __extension__ ({ ++_container_.brk; ++_container_.i; })) for (variable = *_container_.i;; __extension__ ({--_container_.brk; break;})) \nvoid test() { Q_FOREACH(int a, b) { int i; } }");
     TopDUContext* top = parse( text, DumpAll );
 
     DUChainWriteLocker lock(DUChain::lock());
@@ -2372,7 +2372,7 @@ void TestCppCodeCompletion::testHeaderSections() {
 void TestCppCodeCompletion::testForwardDeclaration()
 {
   addInclude( "testdeclaration.h", "class Test{ };" );
-  QByteArray method("#include \"testdeclaration.h\"\n class Test; ");
+  QString method("#include \"testdeclaration.h\"\n class Test; ");
 
   DUContext* top = parse(method, DumpNone);
 
@@ -2391,7 +2391,7 @@ void TestCppCodeCompletion::testForwardDeclaration()
 
 void TestCppCodeCompletion::testUsesThroughMacros() {
   {
-    QByteArray method("int x;\n#define TEST(X) X\ny = TEST(x);");
+    QString method("int x;\n#define TEST(X) X\ny = TEST(x);");
 
     DUContext* top = parse(method, DumpNone);
 
@@ -2404,7 +2404,7 @@ void TestCppCodeCompletion::testUsesThroughMacros() {
   }
   {
     ///2 uses of x, that go through the macro TEST(..), and effectively are in line 2 column 5.
-    QByteArray method("int x;\n#define TEST(X) void test() { int z = X; int q = X; }\nTEST(x)");
+    QString method("int x;\n#define TEST(X) void test() { int z = X; int q = X; }\nTEST(x)");
 
     kDebug() << method;
     DUContext* top = parse(method, DumpNone);
@@ -2430,7 +2430,7 @@ void TestCppCodeCompletion::testMacroIncludeDirectives()
   addInclude( "macro includedirectivetest2.h", "class Test1{ };" );
 
   {
-    QByteArray method("#define TEST macroincludedirectivetest1.h \n #define TEST_HPP <TEST> \n #include TEST_HPP\n");
+    QString method("#define TEST macroincludedirectivetest1.h \n #define TEST_HPP <TEST> \n #include TEST_HPP\n");
 
     DUContext* top = parse(method, DumpNone);
 
@@ -2442,7 +2442,7 @@ void TestCppCodeCompletion::testMacroIncludeDirectives()
   }
   
   {
-    QByteArray method("#define TEST \"macroincludedirectivetest1.h\" \n #include TEST\n");
+    QString method("#define TEST \"macroincludedirectivetest1.h\" \n #include TEST\n");
 
     DUContext* top = parse(method, DumpNone);
 
@@ -2454,7 +2454,7 @@ void TestCppCodeCompletion::testMacroIncludeDirectives()
   }
 
   {
-    QByteArray method("#define TEST <macroincludedirectivetest1.h> \n #include TEST\n");
+    QString method("#define TEST <macroincludedirectivetest1.h> \n #include TEST\n");
 
     DUContext* top = parse(method, DumpNone);
 
@@ -2466,7 +2466,7 @@ void TestCppCodeCompletion::testMacroIncludeDirectives()
   }
 
   {
-    QByteArray method("#include \"macro includedirectivetest2.h\"\n");
+    QString method("#include \"macro includedirectivetest2.h\"\n");
 
     DUContext* top = parse(method, DumpNone);
 
@@ -2478,7 +2478,7 @@ void TestCppCodeCompletion::testMacroIncludeDirectives()
   }
 
   {
-    QByteArray method("#define TEST \"macro includedirectivetest2.h\" \n #include TEST\n");
+    QString method("#define TEST \"macro includedirectivetest2.h\" \n #include TEST\n");
 
     DUContext* top = parse(method, DumpNone);
 
@@ -2494,7 +2494,7 @@ void TestCppCodeCompletion::testAcrossHeaderReferences()
 {
   addInclude( "acrossheader1.h", "class Test{ };" );
   addInclude( "acrossheader2.h", "Test t;" );
-  QByteArray method("#include \"acrossheader1.h\"\n#include \"acrossheader2.h\"\n");
+  QString method("#include \"acrossheader1.h\"\n#include \"acrossheader2.h\"\n");
 
   DUContext* top = parse(method, DumpNone);
 
@@ -2514,7 +2514,7 @@ void TestCppCodeCompletion::testAcrossHeaderTemplateResolution() {
   addInclude("acrossheaderresolution1.h", "class C {}; namespace std { template<class T> class A {  }; }");
   addInclude("acrossheaderresolution2.h", "namespace std { template<class T> class B { typedef A<T> Type; }; }");
   
-  QByteArray method("#include \"acrossheaderresolution1.h\"\n#include \"acrossheaderresolution2.h\"\n std::B<C>::Type t;");
+  QString method("#include \"acrossheaderresolution1.h\"\n#include \"acrossheaderresolution2.h\"\n std::B<C>::Type t;");
   
   DUContext* top = parse(method, DumpNone);
 
@@ -2531,7 +2531,7 @@ void TestCppCodeCompletion::testAcrossHeaderTemplateReferences()
 {
   addInclude( "acrossheader1.h", "class Dummy { }; template<class Q> class Test{ };" );
   addInclude( "acrossheader2.h", "template<class B, class B2 = Test<B> > class Test2 : public Test<B>{ Test<B> bm; };" );
-  QByteArray method("#include \"acrossheader1.h\"\n#include \"acrossheader2.h\"\n ");
+  QString method("#include \"acrossheader1.h\"\n#include \"acrossheader2.h\"\n ");
 
   DUContext* top = parse(method, DumpNone);
 
@@ -2726,7 +2726,7 @@ void TestCppCodeCompletion::testNaiveMatching() {
       addInclude("recursive_test_1.h", "#include \"recursive_test_2.h\"\nint i1;\n");
       addInclude("recursive_test_2.h", "#include \"recursive_test_1.h\"\nint i2;\n");
       
-      TopDUContext* test1 = parse(QByteArray("#include \"recursive_test_1.h\"\n"), DumpNone);
+      TopDUContext* test1 = parse(QString("#include \"recursive_test_1.h\"\n"), DumpNone);
       DUChainWriteLocker l(DUChain::lock());
       QCOMPARE(test1->recursiveImportIndices().count(), 3u);
       QCOMPARE(test1->importedParentContexts().count(), 1);
@@ -2743,7 +2743,7 @@ void TestCppCodeCompletion::testNaiveMatching() {
 
 void TestCppCodeCompletion::testHeaderGuards() {
     {
-      TopDUContext* test1 = parse(QByteArray("#ifndef GUARD\n#define GUARD\nint x = 5; \n#endif\n#define BLA\n"), DumpNone);
+      TopDUContext* test1 = parse(QString("#ifndef GUARD\n#define GUARD\nint x = 5; \n#endif\n#define BLA\n"), DumpNone);
       DUChainWriteLocker l(DUChain::lock());
       Cpp::EnvironmentFile* envFile1 = dynamic_cast<Cpp::EnvironmentFile*>(test1->parsingEnvironmentFile().data());
       QVERIFY(envFile1);
@@ -2751,7 +2751,7 @@ void TestCppCodeCompletion::testHeaderGuards() {
       release(test1);
     }
     {
-      TopDUContext* test1 = parse(QByteArray("#ifndef GUARD\n#define GUARD\nint x = 5;\n#ifndef GUARD\n#define GUARD\n#endif\n#if defined(TEST)\n int q = 4;#endif\n#endif\n"), DumpNone);
+      TopDUContext* test1 = parse(QString("#ifndef GUARD\n#define GUARD\nint x = 5;\n#ifndef GUARD\n#define GUARD\n#endif\n#if defined(TEST)\n int q = 4;#endif\n#endif\n"), DumpNone);
       DUChainWriteLocker l(DUChain::lock());
       Cpp::EnvironmentFile* envFile1 = dynamic_cast<Cpp::EnvironmentFile*>(test1->parsingEnvironmentFile().data());
       QVERIFY(envFile1);
@@ -2759,7 +2759,7 @@ void TestCppCodeCompletion::testHeaderGuards() {
       release(test1);
     }
     {
-      TopDUContext* test1 = parse(QByteArray("int x;\n#ifndef GUARD\n#define GUARD\nint x = 5; \n#endif\n"), DumpNone);
+      TopDUContext* test1 = parse(QString("int x;\n#ifndef GUARD\n#define GUARD\nint x = 5; \n#endif\n"), DumpNone);
       DUChainWriteLocker l(DUChain::lock());
       Cpp::EnvironmentFile* envFile1 = dynamic_cast<Cpp::EnvironmentFile*>(test1->parsingEnvironmentFile().data());
       QVERIFY(envFile1);
@@ -2767,7 +2767,7 @@ void TestCppCodeCompletion::testHeaderGuards() {
       release(test1);
     }
     {
-      TopDUContext* test1 = parse(QByteArray("#define X\n#ifndef GUARD\n#define GUARD\nint x = 5; \n#endif\n"), DumpNone);
+      TopDUContext* test1 = parse(QString("#define X\n#ifndef GUARD\n#define GUARD\nint x = 5; \n#endif\n"), DumpNone);
       DUChainWriteLocker l(DUChain::lock());
       Cpp::EnvironmentFile* envFile1 = dynamic_cast<Cpp::EnvironmentFile*>(test1->parsingEnvironmentFile().data());
       QVERIFY(envFile1);
@@ -2775,7 +2775,7 @@ void TestCppCodeCompletion::testHeaderGuards() {
       release(test1);
     }
     {
-      TopDUContext* test1 = parse(QByteArray("#ifndef GUARD\n#define GUARD\nint x = 5; \n#endif\nint o;\n"), DumpNone);
+      TopDUContext* test1 = parse(QString("#ifndef GUARD\n#define GUARD\nint x = 5; \n#endif\nint o;\n"), DumpNone);
       DUChainWriteLocker l(DUChain::lock());
       Cpp::EnvironmentFile* envFile1 = dynamic_cast<Cpp::EnvironmentFile*>(test1->parsingEnvironmentFile().data());
       QVERIFY(envFile1);
@@ -2790,7 +2790,7 @@ void TestCppCodeCompletion::testEnvironmentMatching() {
       
       addInclude("deep2.h", "#ifdef WANT_DEEP\nint x;\n#undef WANT_DEEP\n#endif\n");
       addInclude("deep1.h", "#define WANT_DEEP\n#include \"deep2.h\"\n");
-      TopDUContext* test1 = parse(QByteArray("#include \"deep1.h\""), DumpNone);
+      TopDUContext* test1 = parse(QString("#include \"deep1.h\""), DumpNone);
       Cpp::EnvironmentFile* envFile1 = dynamic_cast<Cpp::EnvironmentFile*>(test1->parsingEnvironmentFile().data());
       DUChainWriteLocker lock(DUChain::lock());
       QVERIFY(envFile1);
@@ -2803,10 +2803,10 @@ void TestCppCodeCompletion::testEnvironmentMatching() {
     addInclude("h1_user.h", "#ifndef H1_USER \n#define H1_USER \n#include \"h1.h\" \nclass H1User {}; \n#endif\n");
 
     {
-      TopDUContext* test1 = parse(QByteArray("#include \"h1.h\" \n#include \"h1_user.h\"\n\nclass Honk {};"), DumpNone);
+      TopDUContext* test1 = parse(QString("#include \"h1.h\" \n#include \"h1_user.h\"\n\nclass Honk {};"), DumpNone);
         //We test here, whether the environment-manager re-combines h1_user.h so it actually contains a definition of class H1.
         //In the version parsed in test1, H1_H was already defined, so the h1.h parsed into h1_user.h was parsed to contain H1_Already_Defined.
-        TopDUContext* test2 = parse(QByteArray("#include \"h1_user.h\"\n"), DumpNone);
+        TopDUContext* test2 = parse(QString("#include \"h1_user.h\"\n"), DumpNone);
         DUChainWriteLocker lock(DUChain::lock());
         QVERIFY(test1->parsingEnvironmentFile());
         QVERIFY(test2->parsingEnvironmentFile());
@@ -2827,7 +2827,7 @@ void TestCppCodeCompletion::testEnvironmentMatching() {
       addInclude("stringset_test2.h", "String1 s1;\n#undef String2\n String2 s2;");
 
       {
-        TopDUContext* top = parse(QByteArray("#include \"stringset_test1.h\"\n"), DumpNone);
+        TopDUContext* top = parse(QString("#include \"stringset_test1.h\"\n"), DumpNone);
         DUChainWriteLocker lock(DUChain::lock());
         QVERIFY(top->parsingEnvironmentFile());
         Cpp::EnvironmentFile* envFile = dynamic_cast<Cpp::EnvironmentFile*>(top->parsingEnvironmentFile().data());
@@ -2837,7 +2837,7 @@ void TestCppCodeCompletion::testEnvironmentMatching() {
         QCOMPARE(toStringList(envFile->strings()), splitSorted("String1\ns1\ns2")); //The #undef protects String2, so it cannot be affected from outside
       }
       {
-        TopDUContext* top = parse(QByteArray("#define String1\n#include \"stringset_test1.h\"\nString2 String1;"), DumpNone); //Both String1 and String2 are shadowed. String1 by the macro, and String2 by the #undef in stringset_test1.h
+        TopDUContext* top = parse(QString("#define String1\n#include \"stringset_test1.h\"\nString2 String1;"), DumpNone); //Both String1 and String2 are shadowed. String1 by the macro, and String2 by the #undef in stringset_test1.h
         DUChainWriteLocker lock(DUChain::lock());
         QVERIFY(top->parsingEnvironmentFile());
         Cpp::EnvironmentFile* envFile = dynamic_cast<Cpp::EnvironmentFile*>(top->parsingEnvironmentFile().data());
@@ -2861,7 +2861,7 @@ void TestCppCodeCompletion::testEnvironmentMatching() {
         QCOMPARE(toStringList(envFile2->strings()), splitSorted("String1\ns1\ns2"));
       }
       {
-        TopDUContext* top = parse(QByteArray("#define String1\n#undef String1\n#include \"stringset_test1.h\""), DumpNone);
+        TopDUContext* top = parse(QString("#define String1\n#undef String1\n#include \"stringset_test1.h\""), DumpNone);
         DUChainWriteLocker lock(DUChain::lock());
         QVERIFY(top->parsingEnvironmentFile());
         Cpp::EnvironmentFile* envFile = dynamic_cast<Cpp::EnvironmentFile*>(top->parsingEnvironmentFile().data());
@@ -2887,7 +2887,7 @@ void TestCppCodeCompletion::testEnvironmentMatching() {
       {
         addInclude("usingtest1.h", "#define HONK\nMACRO m\n#undef HONK2\n");
 
-        TopDUContext* top = parse(QByteArray("#define MACRO meh\nint MACRO;\n#include \"usingtest1.h\"\n"), DumpNone);
+        TopDUContext* top = parse(QString("#define MACRO meh\nint MACRO;\n#include \"usingtest1.h\"\n"), DumpNone);
         DUChainWriteLocker lock(DUChain::lock());
         QVERIFY(top->parsingEnvironmentFile());
         Cpp::EnvironmentFile* envFile = dynamic_cast<Cpp::EnvironmentFile*>(top->parsingEnvironmentFile().data());
@@ -2916,9 +2916,9 @@ void TestCppCodeCompletion::testEnvironmentMatching() {
 
 /*    addInclude( "envmatch_header1.h", "#include \"envmatch_header2.h\"\n class SomeName; #define SomeName SomeAlternativeName" );
     addInclude( "envmatch_header2.h", "#ifndef SOMEDEF\n #define SOMEDEF\n#endif\n" );
-    QByteArray method1("#include \"envmatch_header1.h\"");
-    QByteArray method2("#include \"envmatch_header1.h\"");
-    QByteArray method3("#include \"envmatch_header1.h\"\n#include \"envmatch_header1.h\"");
+    QString method1("#include \"envmatch_header1.h\"");
+    QString method2("#include \"envmatch_header1.h\"");
+    QString method3("#include \"envmatch_header1.h\"\n#include \"envmatch_header1.h\"");
 
     DUContext* top1 = parse(method1, DumpNone);
     DUContext* top2 = parse(method1, DumpNone);
@@ -3003,13 +3003,13 @@ void TestCppCodeCompletion::testPreprocessor() {
     QCOMPARE(test.trimmed(), QString("hallo_m1"));
   }
   {//Test replacement of merged preprocessor function calls
-    TopDUContext* top = parse(QByteArray("#define MACRO_1(X) X ## _fromMacro1 \n#define A(pred, n) MACRO_ ## n(pred) \n#define D(X,Y) A(X ## Y, 1) \nint D(a,ba);"), DumpNone);
+    TopDUContext* top = parse(QString("#define MACRO_1(X) X ## _fromMacro1 \n#define A(pred, n) MACRO_ ## n(pred) \n#define D(X,Y) A(X ## Y, 1) \nint D(a,ba);"), DumpNone);
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->localDeclarations().count(), 1);
     QCOMPARE(top->localDeclarations()[0]->identifier(), Identifier("aba_fromMacro1"));
   }
   {//Test merging
-    TopDUContext* top = parse(QByteArray("#define D(X,Y) X ## Y \nint D(a,ba);"), DumpNone);
+    TopDUContext* top = parse(QString("#define D(X,Y) X ## Y \nint D(a,ba);"), DumpNone);
     IncludeFileList includes;
     kDebug() << preprocess(IndexedString("somefile"), "#define D(X,Y) X ## Y \nint D(a,ba);", includes);
     DUChainWriteLocker lock(DUChain::lock());
@@ -3017,19 +3017,19 @@ void TestCppCodeCompletion::testPreprocessor() {
     QCOMPARE(top->localDeclarations()[0]->identifier(), Identifier("aba"));
   }
   {
-    TopDUContext* top = parse(QByteArray("#define MERGE(a, b) a ## b \n#define MERGE_WITH_PARENS(par) MERGE ## par \nint MERGE_WITH_PARENS((int, B));"), DumpNone);
+    TopDUContext* top = parse(QString("#define MERGE(a, b) a ## b \n#define MERGE_WITH_PARENS(par) MERGE ## par \nint MERGE_WITH_PARENS((int, B));"), DumpNone);
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->localDeclarations().count(), 1);
     QCOMPARE(top->localDeclarations()[0]->identifier(), Identifier("intB"));
   }
   {//Test simple #if
-    TopDUContext* top = parse(QByteArray("#define X\n#if defined(X)\nint xDefined;\n#endif\n#if !defined(X)\nint xNotDefined;\n#endif\n#if (!defined(X))\nint xNotDefined2;\n#endif"), DumpNone);
+    TopDUContext* top = parse(QString("#define X\n#if defined(X)\nint xDefined;\n#endif\n#if !defined(X)\nint xNotDefined;\n#endif\n#if (!defined(X))\nint xNotDefined2;\n#endif"), DumpNone);
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->localDeclarations().count(), 1);
     QCOMPARE(top->localDeclarations()[0]->identifier(), Identifier("xDefined"));
   }
   {//Test simple #if
-    TopDUContext* top = parse(QByteArray("#if defined(X)\nint xDefined;\n#endif\n#if !defined(X)\nint xNotDefined;\n#endif\n#if (!defined(X))\nint xNotDefined2;\n#endif"), DumpNone);
+    TopDUContext* top = parse(QString("#if defined(X)\nint xDefined;\n#endif\n#if !defined(X)\nint xNotDefined;\n#endif\n#if (!defined(X))\nint xNotDefined2;\n#endif"), DumpNone);
     DUChainWriteLocker lock(DUChain::lock());
     QVERIFY(top->localDeclarations().count() >= 1);
     QCOMPARE(top->localDeclarations()[0]->identifier(), Identifier("xNotDefined"));
@@ -3037,13 +3037,13 @@ void TestCppCodeCompletion::testPreprocessor() {
     QCOMPARE(top->localDeclarations()[1]->identifier(), Identifier("xNotDefined2"));
   }
   {//Test multi-line definitions
-    TopDUContext* top = parse(QByteArray("#define X \\\nint i;\\\nint o;\nX;\n"), DumpNone);
+    TopDUContext* top = parse(QString("#define X \\\nint i;\\\nint o;\nX;\n"), DumpNone);
     IncludeFileList includes;
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->localDeclarations().count(), 2);
   }
   {//Test multi-line definitions
-    TopDUContext* top = parse(QByteArray("#define THROUGH_DEFINE(X) X\nclass B {\nclass C{\n};\nC* cPcPcPcPcPcPcPcPcP;\n};\nB* bP;\nvoid test() {\nTHROUGH_DEFINE(bP->cPcPcPcPcPcPcPcPcP);\n}\n"), DumpNone);
+    TopDUContext* top = parse(QString("#define THROUGH_DEFINE(X) X\nclass B {\nclass C{\n};\nC* cPcPcPcPcPcPcPcPcP;\n};\nB* bP;\nvoid test() {\nTHROUGH_DEFINE(bP->cPcPcPcPcPcPcPcPcP);\n}\n"), DumpNone);
     IncludeFileList includes;
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->childContexts().count(), 3);
@@ -3054,7 +3054,7 @@ void TestCppCodeCompletion::testPreprocessor() {
     QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->at(0).end.column, 37);
   }
   {//Test merging
-    TopDUContext* top = parse(QByteArray("#define D(X,Y) X ## Y \nint D(a,ba);"), DumpNone);
+    TopDUContext* top = parse(QString("#define D(X,Y) X ## Y \nint D(a,ba);"), DumpNone);
     IncludeFileList includes;
     kDebug() << preprocess(IndexedString("somefile"), "#define D(X,Y) X ## Y \nint D(a,ba);", includes);
     DUChainWriteLocker lock(DUChain::lock());
@@ -3062,19 +3062,19 @@ void TestCppCodeCompletion::testPreprocessor() {
     QCOMPARE(top->localDeclarations()[0]->identifier(), Identifier("aba"));
   }
   {//Test merging
-    TopDUContext* top = parse(QByteArray("#define A(x) int x;\n#define B(name) A(bo ## name)\nB(Hallo)"), DumpNone);
+    TopDUContext* top = parse(QString("#define A(x) int x;\n#define B(name) A(bo ## name)\nB(Hallo)"), DumpNone);
     IncludeFileList includes;
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->localDeclarations().count(), 1);
     QCOMPARE(top->localDeclarations()[0]->identifier(), Identifier("boHallo"));
   }
   {//Test __builtin_offsetof
-    TopDUContext* top = parse(QByteArray("typedef struct a { int i; } t_a; int o = __builtin_offsetof(t_a, i);"), DumpNone);
+    TopDUContext* top = parse(QString("typedef struct a { int i; } t_a; int o = __builtin_offsetof(t_a, i);"), DumpNone);
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->localDeclarations().count(), 3);
   }
   {//Test __builtin_offsetof with a struct type (make sure spaces are handled correctly by the macro)
-    TopDUContext* top = parse(QByteArray("struct a { int i; }; int o = __builtin_offsetof(struct a, i);"), DumpNone);
+    TopDUContext* top = parse(QString("struct a { int i; }; int o = __builtin_offsetof(struct a, i);"), DumpNone);
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->localDeclarations().count(), 2);
   }
@@ -3082,13 +3082,13 @@ void TestCppCodeCompletion::testPreprocessor() {
 
 void TestCppCodeCompletion::testArgumentList()
 {
-  QMap<QByteArray, QString> codeToArgList;
+  QMap<QString, QString> codeToArgList;
   codeToArgList.insert("void foo(int arg[]){}", "(int arg[])");
   codeToArgList.insert("void foo(int arg[1]){}", "(int arg[1])");
   codeToArgList.insert("void foo(int arg[][1]){}", "(int arg[][1])");
   codeToArgList.insert("void foo(int arg[1][1]){}", "(int arg[1][1])");
   codeToArgList.insert("void foo(int arg[][1][1]){}", "(int arg[][1][1])");
-  QMap< QByteArray, QString >::const_iterator it = codeToArgList.constBegin();
+  QMap< QString, QString >::const_iterator it = codeToArgList.constBegin();
   while (it != codeToArgList.constEnd()){
     qDebug() << "input function is:" << it.key();
     TopDUContext* top = parse(it.key(), DumpNone);
@@ -3109,7 +3109,7 @@ void TestCppCodeCompletion::testArgumentList()
 
 void TestCppCodeCompletion::testStaticMethods()
 {
-  QByteArray code("struct A {\n"
+  QString code("struct A {\n"
                   "  public: static void myPublicStatic() {}\n"
                   "  protected: static void myProtectedStatic() {}\n"
                   "  private: static void myPrivateStatic() {}\n"
@@ -3165,7 +3165,7 @@ void TestCppCodeCompletion::testStringInComment_data()
 
 void TestCppCodeCompletion::testStringInComment()
 {
-  QByteArray code("");
+  QString code("");
   TopDUContext* top = parse(code, DumpNone);
   DUChainWriteLocker lock(DUChain::lock());
   QVERIFY(top->problems().isEmpty());
@@ -3178,7 +3178,7 @@ void TestCppCodeCompletion::testStringInComment()
 
 void TestCppCodeCompletion::testProperties()
 {
-  QByteArray code(
+  QString code(
     "class A{\n"
     "  __qt_property__(int myProp READ myProp WRITE setMyProp);\n"
     "public:\n"
@@ -3225,7 +3225,7 @@ void TestCppCodeCompletion::testProperties()
 
 void TestCppCodeCompletion::testAnonStruct()
 {
-  QByteArray code("void foo() { struct { int a; } myStruct; }");
+  QString code("void foo() { struct { int a; } myStruct; }");
   TopDUContext* top = parse(code, DumpNone);
   DUChainWriteLocker lock;
   QVERIFY(top->problems().isEmpty());
@@ -3238,7 +3238,7 @@ void TestCppCodeCompletion::testAnonStruct()
 
 void TestCppCodeCompletion::testOverrideCtor()
 {
-  QByteArray code("class A { A(int) {} }; class B : public A { B(float) {} }; class C : public B { C(float) {} };");
+  QString code("class A { A(int) {} }; class B : public A { B(float) {} }; class C : public B { C(float) {} };");
   TopDUContext* top = parse(code, DumpNone);
   DUChainWriteLocker lock;
   QVERIFY(top->problems().isEmpty());
@@ -3264,7 +3264,7 @@ void TestCppCodeCompletion::testOverrideCtor()
 
 void TestCppCodeCompletion::testFilterVoid()
 {
-  QByteArray code("struct S{}; void foo() {}");
+  QString code("struct S{}; void foo() {}");
   TopDUContext* top = parse(code, DumpNone);
   DUChainWriteLocker lock;
   QVERIFY(top->problems().isEmpty());
@@ -3440,7 +3440,7 @@ QString TestCppCodeCompletion::preprocess( const IndexedString& url, const QStri
     return result;
 }
 
-TopDUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dump, rpp::pp* parent, KUrl _identity, TopDUContext* update)
+TopDUContext* TestCppCodeCompletion::parse(const QString& unit, DumpAreas dump, rpp::pp* parent, KUrl _identity, TopDUContext* update)
 {
   if (dump)
     kDebug(9007) << "==== Beginning new test case...:" << endl << unit;
@@ -3462,7 +3462,7 @@ TopDUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dum
 
   PreprocessedContents contents;
 
-  preprocess( url, QString::fromUtf8(unit), included, parent, false, &file, &locationTable, &contents ).toUtf8();
+  preprocess( url, unit, included, parent, false, &file, &locationTable, &contents ).toUtf8();
 
   session->setContents( contents, locationTable );
 
@@ -3578,7 +3578,7 @@ void TestCppCodeCompletion::testAfterVisibility_data()
 
 void TestCppCodeCompletion::testAfterVisibility()
 {
-  QByteArray code("struct b { virtual void foo(); }; struct c : public b {};");
+  QString code("struct b { virtual void foo(); }; struct c : public b {};");
   TopDUContext* top = parse(code, DumpNone);
   DUChainWriteLocker lock;
   QVERIFY(top->problems().isEmpty());
@@ -3593,7 +3593,7 @@ void TestCppCodeCompletion::testAfterVisibility()
 
 void TestCppCodeCompletion::testNoQuadrupleColon()
 {
-  QByteArray code("namespace Foobar { static int var; }\n main() { Foobar::var; }");
+  QString code("namespace Foobar { static int var; }\n main() { Foobar::var; }");
   TopDUContext* top = parse(code, DumpNone);
   DUChainWriteLocker lock;
   QVERIFY(top->problems().isEmpty());
@@ -3664,7 +3664,7 @@ void TestCppCodeCompletion::testLookaheadMatches_data()
 
 void TestCppCodeCompletion::testLookaheadMatches()
 {
-  QByteArray test = "struct One { enum NoLookahead { NO, CAN, SEE, }; int alsoRan; typedef int myInt; };"
+  QString test = "struct One { enum NoLookahead { NO, CAN, SEE, }; int alsoRan; typedef int myInt; };"
                     "struct Two { One hat; One *hatPointer; int meToo(); };"
                     "struct OneSmartPointer { OneSmartPointer(One*) {}; void setOne(One*); One* operator->() const {} };"
                     "struct OneTwoThree { One m_one; Two m_two; OneSmartPointer m_smartOne; int ThreeTwoOne() { } };";

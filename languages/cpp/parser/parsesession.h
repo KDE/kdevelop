@@ -22,7 +22,6 @@
 #include <cstdlib>
 
 #include <QtCore/QString>
-#include <QtCore/QByteArray>
 
 #include <cppparserexport.h>
 #include <ksharedptr.h>

@@ -12,7 +12,6 @@
 
 #include "testconfig.h"
 
-#include <QByteArray>
 #include <QDataStream>
 #include <QFile>
 
@@ -77,7 +76,7 @@ public:
   };
   Q_DECLARE_FLAGS(ParseFlags, ParseFlag)
 
-  void parse(const QByteArray& unit, ParseFlags flags = static_cast<ParseFlags>(FlagNone))
+  void parse(const QString& unit, ParseFlags flags = static_cast<ParseFlags>(FlagNone))
   {
     TranslationUnitAST* ast = parseOriginal(unit);
     if (flags & DumpAST)
@@ -110,141 +109,141 @@ private slots:
 
   void testIf()
   {
-    parse(QByteArray("void test() { if (i == 0) { foo(); } else { foo2(); } }"));
+    parse(QString("void test() { if (i == 0) { foo(); } else { foo2(); } }"));
   }
 
   void testFor()
   {
-    QByteArray method("void test() { for (int i = 0; i < 4; ++i) { break; } for (j; j < 4; ) {return;} }");
+    QString method("void test() { for (int i = 0; i < 4; ++i) { break; } for (j; j < 4; ) {return;} }");
     parse(method);
   }
 
   void testDo()
   {
-    QByteArray method("void test() { do { foo(); } while (i < 0); }");
+    QString method("void test() { do { foo(); } while (i < 0); }");
     parse(method);
   }
 
   void testWhile()
   {
-    QByteArray method("void test() { while (i & 3) { foo(); } }");
+    QString method("void test() { while (i & 3) { foo(); } }");
     parse(method);
   }
 
   void testSwitch()
   {
-    QByteArray method("void test() { switch (i) { case 1: break; case 2: return; default: goto foo; } foo: return; }");
+    QString method("void test() { switch (i) { case 1: break; case 2: return; default: goto foo; } foo: return; }");
     parse(method);
   }
 
   void testClass()
   {
-    QByteArray method("struct A : public B, virtual private C { int i; A() : i(5) { } virtual void test() = 0; };");
+    QString method("struct A : public B, virtual private C { int i; A() : i(5) { } virtual void test() = 0; };");
     parse(method);
   }
 
   void testTemplateClass()
   {
-    QByteArray method("template <typename B> struct A : private C { B i; A() : i(5) { } virtual void test() = 0; };");
+    QString method("template <typename B> struct A : private C { B i; A() : i(5) { } virtual void test() = 0; };");
     parse(method);
   }
 
   void testMethod()
   {
-    QByteArray method("int A::test(int primitive, B* pointer) { return primitive; }");
+    QString method("int A::test(int primitive, B* pointer) { return primitive; }");
     parse(method);
   }
 
   void testIntegralTypes()
   {
-    parse(QByteArray("const unsigned int i, k; volatile long double j; int* l; double * const * m; const int& n = l;"));
+    parse(QString("const unsigned int i, k; volatile long double j; int* l; double * const * m; const int& n = l;"));
   }
 
   void testArrayType()
   {
-    parse(QByteArray("const unsigned int ArraySize = 3; int i[ArraySize];"));
+    parse(QString("const unsigned int ArraySize = 3; int i[ArraySize];"));
   }
 
   void testEnum()
   {
-    parse(QByteArray("enum Enum { Value1 = 5, value2 }; enum Enum2 { Value21, value22 = 2 }; union { int u1; float u2; };"));
+    parse(QString("enum Enum { Value1 = 5, value2 }; enum Enum2 { Value21, value22 = 2 }; union { int u1; float u2; };"));
   }
 
   void testPublicFlags()
   {
-    parse(QByteArray("class Foo { public: virtual void bar(); private: void baz(); protected: };"));
+    parse(QString("class Foo { public: virtual void bar(); private: void baz(); protected: };"));
   }
 
   void testDeclareStruct()
   {
-    parse(QByteArray("struct { short i; } instance;"));
+    parse(QString("struct { short i; } instance;"));
   }
 
   void testVariableDeclaration()
   {
-    parse(QByteArray("int c; A instance(c); A instance(2, 3); A instance(q); bla() {int* i = new A(c); delete i; }"));
+    parse(QString("int c; A instance(c); A instance(2, 3); A instance(q); bla() {int* i = new A(c); delete i; }"));
   }
 
   void testFriendDeclaration()
   {
-    parse(QByteArray("class A { friend class F; }; "));
+    parse(QString("class A { friend class F; }; "));
   }
 
   void testUsingDeclarationInTemplate()
   {
-    parse(QByteArray("template<class T> class A { T i; }; template<class Q> struct B: private A<Q> { using A<Q>::i; };"));
+    parse(QString("template<class T> class A { T i; }; template<class Q> struct B: private A<Q> { using A<Q>::i; };"));
   }
 
   void testDeclareUsingNamespace2()
   {
-    parse(QByteArray("namespace foo2 {int bar2; namespace SubFoo { int subBar2; } } namespace foo { int bar; using namespace foo2; } namespace GFoo{ namespace renamedFoo2 = foo2; using namespace renamedFoo2; using namespace SubFoo; int gf; } using namespace GFoo; int test() { return bar; }"));
+    parse(QString("namespace foo2 {int bar2; namespace SubFoo { int subBar2; } } namespace foo { int bar; using namespace foo2; } namespace GFoo{ namespace renamedFoo2 = foo2; using namespace renamedFoo2; using namespace SubFoo; int gf; } using namespace GFoo; int test() { return bar; }"));
   }
 
   void testFunctionDefinition3()
   {
-    parse(QByteArray("class B{template<class T> void test(T t); B(int i); int test(int a); int test(char a); template<class T2, class T3> void test(T2 t, T3 t3); int test(Unknown k); int test(Unknown2 k); }; template<class T> void B::test(T t) {} B::B(int) {} int B::test(int a){} int B::test(char a){} template<class T2, class T3> void B::test(T2 t, T3 t3) {} int B::test(Unknown k){} int B::test( Unknown2 k) {} "));
+    parse(QString("class B{template<class T> void test(T t); B(int i); int test(int a); int test(char a); template<class T2, class T3> void test(T2 t, T3 t3); int test(Unknown k); int test(Unknown2 k); }; template<class T> void B::test(T t) {} B::B(int) {} int B::test(int a){} int B::test(char a){} template<class T2, class T3> void B::test(T2 t, T3 t3) {} int B::test(Unknown k){} int B::test( Unknown2 k) {} "));
   }
 
   void testTemplateEnums()
   {
-    parse(QByteArray("template<bool num> struct No {};  No<true> n;"));
-    parse(QByteArray("template<int num=5> struct No {};  No n;"));
-    parse(QByteArray("template<int num> struct No {};  No<9> n;"));
+    parse(QString("template<bool num> struct No {};  No<true> n;"));
+    parse(QString("template<int num=5> struct No {};  No n;"));
+    parse(QString("template<int num> struct No {};  No<9> n;"));
   }
 
   void testDynamicArray()
   {
-    parse(QByteArray("struct Bla { int val; } blaArray[] = { {5} };"));
+    parse(QString("struct Bla { int val; } blaArray[] = { {5} };"));
   }
 
   void testSmartPointer()
   {
-    parse(QByteArray("template<class T> struct SmartPointer { T* operator ->() const {} template<class Target> SmartPointer<Target> cast() {} T& operator*() {}  } ; class B{int i;}; class C{}; SmartPointer<B> bPointer;"));
+    parse(QString("template<class T> struct SmartPointer { T* operator ->() const {} template<class Target> SmartPointer<Target> cast() {} T& operator*() {}  } ; class B{int i;}; class C{}; SmartPointer<B> bPointer;"));
   }
 
   void testSimpleExpression()
   {
-    parse(QByteArray("struct Cont { int& a; Cont* operator -> () {} double operator*(); }; Cont c; Cont* d = &c; void test() { c.a = 5; d->a = 5; (*d).a = 5; c.a(5, 1, c); c.b<Fulli>(); }"));
+    parse(QString("struct Cont { int& a; Cont* operator -> () {} double operator*(); }; Cont c; Cont* d = &c; void test() { c.a = 5; d->a = 5; (*d).a = 5; c.a(5, 1, c); c.b<Fulli>(); }"));
   }
 
   void testThis()
   {
-    parse(QByteArray("struct Cont { operator int() {} }; void test( int c = 5 ) { this->test( Cont(), 1, 5.5, 6); }"));
+    parse(QString("struct Cont { operator int() {} }; void test( int c = 5 ) { this->test( Cont(), 1, 5.5, 6); }"));
   }
 
   void testCasts()
   {
-    parse(QByteArray("struct Cont2 {}; struct Cont { int& a; Cont* operator -> () {} double operator*(); }; Cont c; Cont* d = &c; void test() { c.a = 5; d->a = 5; (*d).a = 5; c.a(5, 1, c); c(); c.a = dynamic_cast<const Cont2*>(d); }"));
+    parse(QString("struct Cont2 {}; struct Cont { int& a; Cont* operator -> () {} double operator*(); }; Cont c; Cont* d = &c; void test() { c.a = 5; d->a = 5; (*d).a = 5; c.a(5, 1, c); c(); c.a = dynamic_cast<const Cont2*>(d); }"));
   }
 
   void testOperators()
   {
-    parse(QByteArray("struct Cont2 {int operator[]() {} operator()() {}}; struct Cont3{}; struct Cont { Cont3 operator[](int i) {} Cont3 operator()() {} Cont3 operator+(const Cont3& c3 ) {} }; Cont c; Cont2 operator+( const Cont& c, const Cont& c2){} Cont3 c3;"));
+    parse(QString("struct Cont2 {int operator[]() {} operator()() {}}; struct Cont3{}; struct Cont { Cont3 operator[](int i) {} Cont3 operator()() {} Cont3 operator+(const Cont3& c3 ) {} }; Cont c; Cont2 operator+( const Cont& c, const Cont& c2){} Cont3 c3;"));
   }
 
   void testEmptyFor()
   {
-    parse(QByteArray("void test() { for (;;) {} }"));
+    parse(QString("void test() { for (;;) {} }"));
   }
 
 private:

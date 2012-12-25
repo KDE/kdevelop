@@ -329,7 +329,7 @@ void TestDUChain::testEnum2011()
 
 void TestDUChain::testDecltypeUses()
 {
-  QByteArray method("int c; decltype(c) c2 = decltype(c2)(c+5) + Test(q+5);");
+  QString method("int c; decltype(c) c2 = decltype(c2)(c+5) + Test(q+5);");
 
   LockedTopDUContext top = parse(method, DumpAll);
 
@@ -344,7 +344,7 @@ void TestDUChain::testDecltypeUses()
 void TestDUChain::testDecltype()
 {
   // see also: spec 7.1.6/4
-  QByteArray code = "const int&& foo();\n"
+  QString code = "const int&& foo();\n"
                     "int i;\n"
                     "struct A { double x; };\n"
                     "const A* a = new A();\n"
@@ -432,7 +432,7 @@ void TestDUChain::testDecltype()
 void TestDUChain::testTrailingReturnType()
 {
   {
-    QByteArray code = "auto foo() -> int;\n";
+    QString code = "auto foo() -> int;\n";
     LockedTopDUContext top = parse(code, DumpAll);
     QVERIFY(top);
     DUChainReadLocker lock;
@@ -449,7 +449,7 @@ void TestDUChain::testTrailingReturnType()
   }
 
   {
-    QByteArray code = "class A { int x; }; auto foo(A* arg) -> decltype(arg->x);\n";
+    QString code = "class A { int x; }; auto foo(A* arg) -> decltype(arg->x);\n";
     LockedTopDUContext top = parse(code, DumpAll);
     QVERIFY(top);
     DUChainReadLocker lock;
@@ -468,7 +468,7 @@ void TestDUChain::testTrailingReturnType()
 
   {
     // example from the spec, 8.0/5
-    QByteArray code = "auto f() -> int(*)[4];\n";
+    QString code = "auto f() -> int(*)[4];\n";
     LockedTopDUContext top = parse(code, DumpAll);
     QVERIFY(top);
     DUChainReadLocker lock;
@@ -495,10 +495,10 @@ void TestDUChain::testTrailingReturnType()
 
   {
     // make sure we don't crash due to assertion on m_context in TypeASTVisitor ctor
-    QByteArray code = "void func() { auto f = []() { return 1; }; }\n";
+    QString code = "void func() { auto f = []() { return 1; }; }\n";
     LockedTopDUContext top = parse(code, DumpAll);
     QVERIFY(top);
-    QByteArray code2 = "void func() { auto f = []() -> int { return 1; }; }\n";
+    QString code2 = "void func() { auto f = []() -> int { return 1; }; }\n";
     TopDUContext* top2 = parse(code2, DumpAll, top);
     QVERIFY(top2);
     QCOMPARE(top2, top.m_top);
@@ -507,7 +507,7 @@ void TestDUChain::testTrailingReturnType()
 
 void TestDUChain::testConstexpr()
 {
-  const QByteArray code = "constexpr int square(int x) { return x * x; }\n"
+  const QString code = "constexpr int square(int x) { return x * x; }\n"
                           "constexpr double a = 4.2 * square(2);\n"
                           "class A {\n"
                           "  constexpr A();\n"
@@ -538,7 +538,7 @@ void TestDUChain::testConstexpr()
 void TestDUChain::testBug284536()
 {
   // see also: https://bugs.kde.org/show_bug.cgi?id=284536
-  const QByteArray code = "template<typename T> struct A { typedef T type; };\n"
+  const QString code = "template<typename T> struct A { typedef T type; };\n"
                           "template<typename T, typename... Args>\n"
                           "A<typename T<_Functor>::type(Args...)> func() {}\n";
   // baby don't crash me, oh no
@@ -553,7 +553,7 @@ void TestDUChain::testBug285004()
   // see also: https://bugs.kde.org/show_bug.cgi?id=285004
   // NOTE: I couldn't come up with something shorter - what a strange bug -.-'
   // source is gcc 4.5's tr1_impl/type_traits
-  const QByteArray code = "namespace std {\n"
+  const QString code = "namespace std {\n"
                           "  template<typename T> struct is_f;\n"
                           "  template<typename _Res, typename... Args> struct is_f<_Res(Args...)> { };\n"
                           "  template<typename _Res, typename... Args> struct is_f<_Res(Args......)> { };\n"
@@ -569,7 +569,7 @@ void TestDUChain::testBug285004()
 void TestDUChain::testLambda()
 {
   // see also: https://bugs.kde.org/show_bug.cgi?id=279699
-  const QByteArray code = "int main() {\n"
+  const QString code = "int main() {\n"
                           "  int i;\n"
                           "  auto f = [] (int i) { i = 0; };\n"
                           "}\n";
@@ -614,7 +614,7 @@ void TestDUChain::testLambda()
 void TestDUChain::testLambdaReturn()
 {
   // see also: https://bugs.kde.org/show_bug.cgi?id=279699
-  const QByteArray code = "int main() {\n"
+  const QString code = "int main() {\n"
                           "  auto f = [] () -> int { return 1 };\n"
                           "}\n";
   LockedTopDUContext top = parse(code, DumpAll);
@@ -635,7 +635,7 @@ void TestDUChain::testLambdaReturn()
 void TestDUChain::testLambdaCapture()
 {
   // see also: https://bugs.kde.org/show_bug.cgi?id=279699
-  const QByteArray code = "int main() {\n"
+  const QString code = "int main() {\n"
                           "  int i;\n"
                           "  auto f = [&i] { i = 0; };\n"
                           "}\n";
@@ -671,7 +671,7 @@ void TestDUChain::testLambdaCapture()
 void TestDUChain::testTemplateSpecializeArray()
 {
   // see also: https://bugs.kde.org/show_bug.cgi?id=294306
-  const QByteArray code(
+  const QString code(
     "template <typename T>\n"
     "class test\n"
     "{\n"
@@ -732,7 +732,7 @@ void TestDUChain::testTemplateSpecializeArray()
 
 void TestDUChain::testTemplateSpecializeRValue()
 {
-  const QByteArray code(
+  const QString code(
     "template <typename T>\n"
     "class test\n"
     "{\n"
@@ -796,7 +796,7 @@ void TestDUChain::testTemplateSpecializeRValue()
 
 void TestDUChain::testAliasDeclaration()
 {
-  const QByteArray code(
+  const QString code(
     "struct foo { static void asdf(); };\n"
     "using bar = foo;\n"
     "void t() { bar::asdf(); }"
@@ -831,7 +831,7 @@ void TestDUChain::testAliasDeclaration()
 
 void TestDUChain::testAuto()
 {
-  const QByteArray code(
+  const QString code(
     "char i = 1;\n"
     "auto a1 = i;\n"
     "auto& a2 = i;\n"
@@ -905,7 +905,7 @@ void TestDUChain::testAuto()
 
 void TestDUChain::testNoexcept()
 {
-    const QByteArray code(
+    const QString code(
     "void f1() noexcept;\n"
     "void f2() noexcept(false);\n"
     "class a { void m1() noexcept; void m2() noexcept(true); };\n"
