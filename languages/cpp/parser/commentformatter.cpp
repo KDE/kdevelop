@@ -54,9 +54,9 @@ bool CommentFormatter::containsToDo(const uint* start, const uint* end) const
   return false;
 }
 
-bool CommentFormatter::containsToDo(const QByteArray& text) const
+bool CommentFormatter::containsToDo(const QString& text) const
 {
-  foreach(const QByteArray& marker, m_commentMarkers)
+  foreach(const QString& marker, m_commentMarkers)
     if(text.contains(marker))
       return true;
   return false;
@@ -72,12 +72,12 @@ void CommentFormatter::extractToDos( uint token, const ParseSession* session, Co
   if( !containsToDo(session->contents() + commentToken.position, session->contents() + commentToken.position + commentToken.size) )
     return; // Most common code path: No todos
   
-  QByteArray comment = stringFromContents(session->contentsVector(), commentToken.position, commentToken.size);
-  QList<QByteArray> lines = comment.split( '\n' );
+  QString comment = stringFromContents(session->contentsVector(), commentToken.position, commentToken.size);
+  QList<QString> lines = comment.split( '\n' );
   if ( !lines.isEmpty() ) {
-    QList<QByteArray>::iterator bit = lines.begin();
-    QList<QByteArray>::iterator it = bit;
-    QList<QByteArray>::iterator eit = lines.end();
+    QList<QString>::iterator bit = lines.begin();
+    QList<QString>::iterator it = bit;
+    QList<QString>::iterator eit = lines.end();
 
     KDevelop::IndexedString document = session->url();
     KDevelop::SimpleCursor comment_start = session->positionAt(commentToken.position).castToSimpleCursor();
@@ -124,22 +124,22 @@ void CommentFormatter::extractToDos( uint token, const ParseSession* session, Co
   }
 }
 
-QByteArray CommentFormatter::formatComment( uint token, const ParseSession* session ) {
+QString CommentFormatter::formatComment( uint token, const ParseSession* session ) {
   if( !token )
-    return QByteArray();
-  ///@todo Work directly on lists of IndexedString tokens, rather than QBytearray (faster), and only convert to QByteArray in the end.
+    return QString();
+  ///@todo Work directly on lists of IndexedString tokens, rather than QString (faster), and only convert to QString in the end.
   const Token& commentToken( (*session->token_stream)[token] );
   return KDevelop::formatComment( stringFromContents(session->contentsVector(), commentToken.position, commentToken.size ) );
 }
 
-QByteArray CommentFormatter::formatComment( const ListNode<uint>* comments, const ParseSession* session ) {
-  QByteArray ret;
-  ///@todo Work directly on lists of IndexedString tokens, rather than QBytearray (faster), and only convert to QByteArray in the end.
+QString CommentFormatter::formatComment( const ListNode<uint>* comments, const ParseSession* session ) {
+  QString ret;
+  ///@todo Work directly on lists of IndexedString tokens, rather than QString (faster), and only convert to QString in the end.
   if( comments )
   {
     const ListNode<uint> *it = comments->toFront(), *end = it;
     do {
-      QByteArray c = CommentFormatter::formatComment(it->element, session);
+      QString c = CommentFormatter::formatComment(it->element, session);
 
       if( ret.isEmpty() )
         ret = c;

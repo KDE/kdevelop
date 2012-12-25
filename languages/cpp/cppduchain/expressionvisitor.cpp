@@ -672,10 +672,11 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
       // char literal e.g. 'x'
       LOCKDUCHAIN;
       ConstantIntegralType* charType = new ConstantIntegralType(IntegralType::TypeChar);
+      ///TODO: ensure the encoding is handled properly
       if ( token.size == 3 ) {
-        charType->setValue<char>( m_session->token_stream->symbolByteArray(token).at(1) );
+        charType->setValue<char>( m_session->token_stream->symbolString(token).at(1).toAscii() );
       } else {
-        QByteArray symbol = m_session->token_stream->symbolByteArray(token);
+        QString symbol = m_session->token_stream->symbolString(token);
         if (symbol.startsWith('L')) {
           charType->setDataType(IntegralType::TypeWchar_t);
           symbol.right(symbol.size() - 1);
@@ -2100,11 +2101,11 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
 
     CppEditorIntegrator editor(session());
-    QByteArray tokenByteArray = editor.tokensToByteArray(node->name->id, node->name->end_token);
+    QString tokenByteArray = editor.tokensToString(node->name->id, node->name->end_token);
 
-    QByteArray sig;
+    QString sig;
     if(node->name->end_token-1 >= node->name->id+2) {
-      sig = QMetaObject::normalizedSignature( editor.tokensToByteArray(node->name->id+1, node->name->end_token) );
+      sig = QMetaObject::normalizedSignature( editor.tokensToString(node->name->id+1, node->name->end_token).toUtf8() );
       sig = sig.mid(1, sig.length()-2);
     }
 
@@ -2117,12 +2118,14 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
             ///Allow incomplete matching between the specified signature and the real signature, as Qt allows it.
             ///@todo: For signals, we should only allow it when at least as many arguments are specified as in the slot declaration.
             ///@todo: For slots, we should only allow it if the parameter has a default argument.
-            int functionSigLength = qtFunction->normalizedSignature().length();
-            const char* functionSig = qtFunction->normalizedSignature().c_str();
+            bool match = sig.isEmpty();
+            if (!match) {
+              const QString functionSig = qtFunction->normalizedSignature().toString();
+              match = functionSig.startsWith(sig)
+                  && (functionSig.length() == sig.length() || functionSig[sig.length()] == ' ' || functionSig[sig.length()] == ',');
+            }
 
-            if(functionSigLength >= sig.length() &&
-               strncmp(functionSig, sig.data(), sig.length()) == 0 &&
-               (sig.isEmpty() || functionSigLength == sig.length() || functionSig[sig.length()] == ' ' || functionSig[sig.length()] == ','))
+            if(match)
             {
               //Match
               lock.unlock();

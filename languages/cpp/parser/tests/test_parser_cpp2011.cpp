@@ -26,7 +26,7 @@
 
 void TestParser::testRangeBasedFor()
 {
-  QByteArray code("int main() {\n"
+  QString code("int main() {\n"
                   "  int array[5] = { 1, 2, 3, 4, 5 };\n"
                   "  for (int& x : array) {\n"
                   "    x *= 2;\n"
@@ -41,7 +41,7 @@ void TestParser::testRangeBasedFor()
 
 void TestParser::testRValueReference()
 {
-  QByteArray code("int&& a = 1;");
+  QString code("int&& a = 1;");
 
   TranslationUnitAST* ast = parse(code);
   QVERIFY(control.problems().isEmpty());

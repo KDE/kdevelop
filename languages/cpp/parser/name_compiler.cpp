@@ -133,7 +133,7 @@ void NameCompiler::visitUnqualifiedName(UnqualifiedNameAST *node)
     tmp_name = IndexedString("...");
   
   if (node->tilde)
-    tmp_name = IndexedString('~' + tmp_name.byteArray());
+    tmp_name = IndexedString('~' + tmp_name.toString());
 
   if (OperatorFunctionIdAST *op_id = node->operator_id)
     {

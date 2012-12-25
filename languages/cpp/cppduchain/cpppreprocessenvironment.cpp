@@ -133,11 +133,10 @@ void CppPreprocessEnvironment::setMacro(rpp::pp_macro* macro) {
     rpp::pp_macro* hadMacro = retrieveStoredMacro(macro->name);
 
     if(hadMacro && hadMacro->fixed) {
+      ///TODO: WTF is this check supposed to do? clean this up and/or document it
       if(hadMacro->defineOnOverride && (hadMacro->file.isEmpty() ||
           (macro->file.length() >= hadMacro->file.length() &&
-           memcmp(macro->file.c_str() + (macro->file.length() - hadMacro->file.length()), 
-                         hadMacro->file.c_str(),
-                         hadMacro->file.length()) == 0)))
+           macro->file.toString().endsWith(hadMacro->file.toString()))))
       {
         // We have to define the macro now, as it is being overridden
         rpp::pp_macro* definedMacro = new rpp::pp_macro(*hadMacro);

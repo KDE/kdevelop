@@ -72,7 +72,7 @@ MacroNavigationContext::MacroNavigationContext(const pp_macro& macro, QString pr
 , m_widget(0)
 {
   KTextEditor::View* preprocessedView = createDocAndView(preprocessedBody.trimmed(), &m_preprocessed);
-  QString definition = QString::fromUtf8(stringFromContents((uint*)m_macro->definition(), m_macro->definitionSize()).trimmed());
+  QString definition = stringFromContents((uint*)m_macro->definition(), m_macro->definitionSize()).trimmed();
   KTextEditor::View* definitionView = createDocAndView(definition, &m_definition);
 
   m_widget = new QWidget;

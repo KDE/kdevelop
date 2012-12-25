@@ -88,7 +88,7 @@ pp_macro::pp_macro(const pp_macro& rhs, bool dynamic) :
   copyListsFrom(rhs);
 }
 
-pp_macro::pp_macro(const char* nm) : name(KDevelop::IndexedString(nm, strlen(nm)))
+pp_macro::pp_macro(const char* nm) : name(KDevelop::IndexedString(nm))
   , sourceLine(-1)
   , defined(true)
   , hidden(false)
@@ -118,19 +118,19 @@ QString pp_macro::toString() const {
     }
     ret += ')';
   }
-  ret += ' ' + QString::fromUtf8(stringFromContents((uint*)definition(), definitionSize()));
+  ret += ' ' + stringFromContents((uint*)definition(), definitionSize());
   
   return ret;
 }
 
-void pp_macro::setDefinitionText(QString definition) {
-  setDefinitionText(definition.toUtf8());
-}
-
-void pp_macro::setDefinitionText(QByteArray definition) {
-  definitionList().clear();
-  foreach(uint i, convertFromByteArray(definition))
-    definitionList().append(KDevelop::IndexedString::fromIndex(i));
+void pp_macro::setDefinitionText(const QString& definition)
+{
+  const PreprocessedContents tokenized = convertFromString(definition);
+  definitionList().resize(tokenized.size());
+  int idx = 0;
+  foreach(uint i, tokenized) {
+    definitionList()[idx++] = KDevelop::IndexedString::fromIndex(i);
+  }
 }
 
 void pp_macro::computeHash() const {

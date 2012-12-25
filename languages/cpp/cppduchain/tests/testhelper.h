@@ -20,8 +20,6 @@
 #ifndef TESTHELPER_H
 #define TESTHELPER_H
 
-#include <QByteArray>
-
 #include "dumpchain.h"
 #include "control.h"
 #include <language/duchain/duchainlock.h>
@@ -64,7 +62,7 @@ public:
 
   void initShell();
 
-  KDevelop::TopDUContext* parse(const QByteArray& unit,
+  KDevelop::TopDUContext* parse(const QString& unit,
                                 DumpAreas dump = static_cast<DumpAreas>(DumpAST | DumpDUChain | DumpType),
                                 KDevelop::TopDUContext* update = 0, bool keepAst = false);
 protected:

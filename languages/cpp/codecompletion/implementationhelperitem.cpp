@@ -428,7 +428,7 @@ void ImplementationHelperItem::execute(KTextEditor::Document* document, const KT
     if(slotName.isEmpty())
       slotName = completionContext()->m_connectedSignalIdentifier.toString();
 
-    QString slotSignature = QString::fromUtf8(completionContext()->m_connectedSignalNormalizedSignature);
+    QString slotSignature = completionContext()->m_connectedSignalNormalizedSignature;
     insertion.insertSlot(slotName, slotSignature);
 
     QString name = completionContext()->followingText();

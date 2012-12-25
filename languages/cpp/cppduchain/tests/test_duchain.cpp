@@ -5669,7 +5669,7 @@ void TestDUChain::testFileParse()
   rpp::Preprocessor preprocessor;
   rpp::pp pp(&preprocessor);
 
-  QByteArray preprocessed = stringFromContents(pp.processFile("anonymous", fileData));
+  QString preprocessed = stringFromContents(pp.processFile("anonymous", fileData));
 
   LockedTopDUContext top = parse(preprocessed, DumpNone);
 

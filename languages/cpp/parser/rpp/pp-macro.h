@@ -151,15 +151,7 @@ public:
   typedef KDevelop::IndexedString IndexedString;
   
   ///Convenient way of setting the definition, it is tokenized automatically
-  ///@param definition utf-8 representation of the definition text
-  void setDefinitionText(QByteArray definition);
-  
-  ///More convenient overload
-  void setDefinitionText(QString definition);
-  
-  void setDefinitionText(const char* definition) {
-    setDefinitionText(QByteArray(definition));
-  }
+  void setDefinitionText(const QString& definition);
   
   START_APPENDED_LISTS(pp_macro)
   APPENDED_LIST_FIRST(pp_macro, IndexedString, definition)

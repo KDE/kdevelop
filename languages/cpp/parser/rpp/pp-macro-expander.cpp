@@ -365,13 +365,13 @@ void pp_macro_expander::operator()(Stream& input, Stream& output, bool substitut
         static const IndexedString dateIndex = IndexedString("__DATE__");
         static const IndexedString timeIndex = IndexedString("__TIME__");
           if (name == lineIndex)
-            output.appendString(inputPosition, convertFromByteArray(QString::number(input.inputPosition().line).toUtf8()));
+            output.appendString(inputPosition, convertFromString(QString::number(input.inputPosition().line)));
           else if (name == fileIndex)
-            output.appendString(inputPosition, convertFromByteArray(QString("\"%1\"").arg(m_engine->currentFileNameString()).toUtf8()));
+            output.appendString(inputPosition, convertFromString(QString("\"%1\"").arg(m_engine->currentFileNameString())));
           else if (name == dateIndex)
-            output.appendString(inputPosition, convertFromByteArray(QDate::currentDate().toString("\"MMM dd yyyy\"").toUtf8()));
+            output.appendString(inputPosition, convertFromString(QDate::currentDate().toString("\"MMM dd yyyy\"")));
           else if (name == timeIndex)
-            output.appendString(inputPosition, convertFromByteArray(QTime::currentTime().toString("\"hh:mm:ss\"").toUtf8()));
+            output.appendString(inputPosition, convertFromString(QTime::currentTime().toString("\"hh:mm:ss\"")));
           else {
             if (table) {
               // In case of a merged token, find some borders for it inside a macro invocation

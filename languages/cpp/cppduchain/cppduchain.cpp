@@ -444,23 +444,22 @@ QString preprocess( const QString& text, Cpp::EnvironmentFile* file, int line, Q
     }
   }
 
-  QString ret = QString::fromUtf8(stringFromContents(pp.processFile("anonymous", text.toUtf8())));
-  
-  return ret;
+  return stringFromContents(pp.processFile("anonymous", text));
 }
 
-QPair<KDevelop::Identifier, QByteArray> qtFunctionSignature(QByteArray fullFunction) {
-  
+QPair<KDevelop::Identifier, QString> qtFunctionSignature(QString fullFunction)
+{
+  ///TODO: port to string ref
   if(fullFunction.startsWith('"') && fullFunction.endsWith('"'))
     fullFunction = fullFunction.mid(1, fullFunction.length()-2);
-  
+
   int parenBegin = fullFunction.indexOf('(');
   int parenEnd = fullFunction.lastIndexOf(')');
   Identifier id;
-  QByteArray signature;
+  QString signature;
   if(parenBegin < parenEnd && parenBegin != -1) {
     id = Identifier(IndexedString(fullFunction.left(parenBegin).trimmed()));
-    signature = QMetaObject::normalizedSignature(fullFunction.mid(parenBegin, parenEnd-parenBegin+1).data());
+    signature = QMetaObject::normalizedSignature(fullFunction.mid(parenBegin, parenEnd-parenBegin+1).toUtf8());
     signature = signature.mid(1, signature.length()-2);
   }
   

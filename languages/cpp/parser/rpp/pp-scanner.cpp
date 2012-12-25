@@ -22,6 +22,7 @@
 #include "pp-scanner.h"
 #include "chartools.h"
 #include <language/duchain/indexedstring.h>
+#include <language/duchain/repositories/runninghash.h>
 #include <util/kdevvarlengtharray.h>
 
 using namespace rpp;
@@ -128,16 +129,14 @@ void pp_skip_comment_or_divop::operator()(Stream& input, Stream& output, bool ou
 
 uint pp_skip_identifier::operator()(Stream& input)
 {
-  KDevVarLengthArray<char, 100> identifier;
-  
-  KDevelop::IndexedString::RunningHash hash;
-
+  QString identifier;
+  identifier.reserve(100);
   while (!input.atEnd()) {
     if(!isCharacter(input.current())) {
       //Do a more complex merge, where also tokenized identifiers can be merged
       KDevelop::IndexedString ret;
       if(!identifier.isEmpty())
-        ret = KDevelop::IndexedString(identifier.constData(), identifier.size(), hash.hash);
+        ret = KDevelop::IndexedString(identifier);
       
       while (!input.atEnd()) {
         uint current = input.current();
@@ -148,7 +147,7 @@ uint pp_skip_identifier::operator()(Stream& input)
         if(ret.isEmpty())
           ret = KDevelop::IndexedString::fromIndex(current); //The most common fast path
         else ///@todo Be better to build up a complete buffer and then append it all, so we don't get he intermediate strings into the repository
-          ret = KDevelop::IndexedString(ret.byteArray() + KDevelop::IndexedString::fromIndex(input.current()).byteArray());
+          ret = KDevelop::IndexedString(ret.toString() + KDevelop::IndexedString::fromIndex(input.current()).toString());
         
         ++input;
       }
@@ -159,13 +158,11 @@ uint pp_skip_identifier::operator()(Stream& input)
     if (!isLetterOrNumber(input.current()) && input != '_')
         break;
 
-    char c = characterFromIndex(input);
-    hash.append(c);
-    identifier.append(c);
+    identifier.append(characterFromIndex(input));
     ++input;
   }
 
-  return KDevelop::IndexedString(identifier.constData(), identifier.size(), hash.hash).index();
+  return KDevelop::IndexedString(identifier).index();
 }
 
 void pp_skip_number::operator()(Stream& input, Stream& output)

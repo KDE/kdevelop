@@ -732,7 +732,7 @@ bool CodeCompletionContext::doSignalSlotCompletion() {
           connectedSignal = connectedSignal.mid( skipSignal );
           connectedSignal = connectedSignal.left( connectedSignal.length() - 1 );
           //Now connectedSignal is something like myFunction(...), and we want the "...".
-          QPair<Identifier, QByteArray> signature = Cpp::qtFunctionSignature( connectedSignal.toUtf8() );
+          QPair<Identifier, QString> signature = Cpp::qtFunctionSignature( connectedSignal );
           m_connectedSignalIdentifier = signature.first;
           m_connectedSignalNormalizedSignature = signature.second;
         }
@@ -1623,7 +1623,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::signalSlotAccessCompleti
                   NormalDeclarationCompletionItem* item = new NormalDeclarationCompletionItem( DeclarationPointer(decl.first), KDevelop::CodeCompletionContext::Ptr(parentContext()), decl.second + 50);
                   item->useAlternativeText = true;
                   m_connectedSignal = IndexedDeclaration(decl.first);
-                  item->alternativeText = i18n("Connect to %1 (%2)", decl.first->qualifiedIdentifier().toString(), QString::fromUtf8(m_connectedSignalNormalizedSignature) );
+                  item->alternativeText = i18n("Connect to %1 (%2)", decl.first->qualifiedIdentifier().toString(), m_connectedSignalNormalizedSignature );
                   item->m_isQtSignalSlotCompletion = true;
                   items << CompletionTreeItemPointer(item);
                   connectedSignal = IndexedDeclaration(decl.first);
@@ -1656,9 +1656,9 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::signalSlotAccessCompleti
               if(!m_connectedSignalIdentifier.isEmpty()) {
                 item->m_fixedMatchQuality = 0;
                 //Compute a match-quality, by comparing the strings
-                QByteArray thisSignature = classFun->normalizedSignature().byteArray();
+                QString thisSignature = classFun->normalizedSignature().toString();
                 if(m_connectedSignalNormalizedSignature.startsWith(thisSignature) || (m_connectedSignalNormalizedSignature.isEmpty() && thisSignature.isEmpty())) {
-                  QByteArray remaining = m_connectedSignalNormalizedSignature.mid(thisSignature.length());
+                  QString remaining = m_connectedSignalNormalizedSignature.mid(thisSignature.length());
                   int remainingElements = remaining.split(',').count();
                   if(remaining.isEmpty())
                     item->m_fixedMatchQuality = 10;
@@ -2162,9 +2162,8 @@ bool  CodeCompletionContext::filterDeclaration(Declaration* decl, DUContext* dec
   if(excludeReservedIdentifiers)
   {
     //Exclude identifiers starting with "__" or "_Uppercase"
-    IndexedString str = decl->indexedIdentifier().identifier().identifier();
-    const char* cstr = str.c_str();
-    if(str.length() > 2 && cstr[0] == '_' && (cstr[1] == '_' || QChar(cstr[1]).isUpper()) && decl->url() != m_duContext->url())
+    const QString str = decl->indexedIdentifier().identifier().identifier().toString();
+    if(str.length() > 2 && str[0] == '_' && (str[1] == '_' || str[1].isUpper()) && decl->url() != m_duContext->url())
       return false;
   }
 

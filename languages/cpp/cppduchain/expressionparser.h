@@ -75,7 +75,7 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionParser {
      *
      *
     */
-    ExpressionEvaluationResult evaluateType( const QByteArray& expression, DUContextPointer context, const KDevelop::TopDUContext* source = 0, bool forceExpression = false );
+    ExpressionEvaluationResult evaluateType( const QString& expression, DUContextPointer context, const KDevelop::TopDUContext* source = 0, bool forceExpression = false );
 
     /**
      * Same as evaluateType, except that it does not consider type-ids, only expressions.
@@ -85,7 +85,7 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionParser {
      *
      * Equivalent with calling evaluateType(.., .., true), but should be preferred for better overview.
      * */
-    ExpressionEvaluationResult evaluateExpression( const QByteArray& expression, DUContextPointer context, const KDevelop::TopDUContext* source = 0 );
+    ExpressionEvaluationResult evaluateExpression( const QString& expression, DUContextPointer context, const KDevelop::TopDUContext* source = 0 );
     /**
      * Evaluates the type of an expression given as an AST.
      *

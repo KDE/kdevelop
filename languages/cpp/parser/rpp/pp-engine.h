@@ -185,7 +185,7 @@ public:
 
   /** Preprocess @p fileName with content @p data. Do not actually open file @p fileName
    *  Currently the file is expected to be utf8-encoded. */
-  PreprocessedContents processFile(const QString& fileName, const QByteArray& data);
+  PreprocessedContents processFile(const QString& fileName, const QString& data);
 
   void operator () (Stream& input, Stream& output);
 
@@ -205,7 +205,7 @@ public:
   uint branchingHash() const;
   
 private:
-  void processFileInternal(const QString& fileName, const QByteArray& fileContent, PreprocessedContents& result);
+  void processFileInternal(const QString& fileName, const QString& fileContent, PreprocessedContents& result);
 
   int skipping() const;
   bool test_if_level();

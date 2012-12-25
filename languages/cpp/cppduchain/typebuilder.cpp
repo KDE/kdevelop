@@ -48,7 +48,7 @@ using namespace Cpp;
 QString stringFromSessionTokens( ParseSession* session, int start_token, int end_token ) {
     int startPosition = session->token_stream->position(start_token);
     int endPosition = session->token_stream->position(end_token);
-    return QString::fromUtf8( stringFromContents(session->contentsVector(), startPosition, endPosition - startPosition) );
+    return stringFromContents(session->contentsVector(), startPosition, endPosition - startPosition);
 }
 
 bool isConstexpr(ParseSession* session, const ListNode<uint> *storageSpec)

@@ -111,7 +111,7 @@ void CTestSuite::loadDeclarations(const IndexedString& document, const KDevelop:
 
     foreach (Declaration* decl, testClass->internalContext()->localDeclarations(topContext))
     {
-        kDebug() << "Found declaration" << decl->toString() << decl->identifier().identifier().byteArray();
+        kDebug() << "Found declaration" << decl->toString() << decl->identifier().identifier();
         if (ClassFunctionDeclaration* function = dynamic_cast<ClassFunctionDeclaration*>(decl))
         {
             if (function->accessPolicy() == Declaration::Private && function->isSlot())

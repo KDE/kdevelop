@@ -39,17 +39,17 @@ class KDEVCPPPARSER_EXPORT CommentFormatter {
     CommentFormatter();
     
     ///Processes the comment represented by the given token-number within the parse-session's token-stream
-    QByteArray formatComment( uint token, const ParseSession* session );
+    QString formatComment( uint token, const ParseSession* session );
 
     void extractToDos( uint token, const ParseSession* session, Control* control );
 
     ///Processes the list of comments represented by the given token-number within the parse-session's token-stream
-    QByteArray formatComment( const ListNode<uint>* node, const ParseSession* session );
+    QString formatComment( const ListNode<uint>* node, const ParseSession* session );
   private:
     bool containsToDo(const uint* start, const uint* end) const;
-    bool containsToDo(const QByteArray& text) const;
+    bool containsToDo(const QString& text) const;
     QVector<uint> m_commentMarkerIndices; // IndexedString indices
-    QVector<QByteArray> m_commentMarkers;
+    QVector<QString> m_commentMarkers;
 };
 
 #endif

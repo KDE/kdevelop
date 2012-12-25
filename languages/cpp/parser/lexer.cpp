@@ -59,17 +59,12 @@ uint TokenStream::symbolIndex(const Token& t) const
   return session->contents()[t.position];
 }
 
-QByteArray TokenStream::symbolByteArray(const Token& t) const
-{
-  if (t.size == 0) // esp. for EOF
-    return QByteArray();
-
-  return stringFromContents(session->contentsVector(), t.position, t.size);
-}
-
 QString TokenStream::symbolString(const Token& t) const
 {
-  return QString::fromUtf8(symbolByteArray(t));
+  if (t.size == 0) // esp. for EOF
+    return QString();
+
+  return stringFromContents(session->contentsVector(), t.position, t.size);
 }
 
 uint TokenStream::symbolLength(const Token& t) const
@@ -636,9 +631,12 @@ void Lexer::scan_identifier_or_keyword()
   SpecialCursor nextCursor(cursor);
   ++nextCursor;
   
+  /// TODO: first get all strings that need to be merged, then build one large
+  ///       concatenated string and index that instead of indexing the interim
+  ///       strings aslo
   while(nextCursor < endCursor && (!isCharacter(*(nextCursor.current)) || isLetterOrNumber(*nextCursor.current) || characterFromIndex(*nextCursor.current) == '_')) {
     //Fortunately this shouldn't happen too often, only when ## is used within the preprocessor
-    KDevelop::IndexedString mergedSymbol(KDevelop::IndexedString::fromIndex(*(cursor.current)).byteArray() + KDevelop::IndexedString::fromIndex(*(nextCursor.current)).byteArray());
+    KDevelop::IndexedString mergedSymbol(KDevelop::IndexedString::fromIndex(*(cursor.current)).toString() + KDevelop::IndexedString::fromIndex(*(nextCursor.current)).toString());
     
     (*cursor.current) = mergedSymbol.index();
     (*nextCursor.current) = 0;

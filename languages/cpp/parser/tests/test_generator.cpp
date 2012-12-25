@@ -248,19 +248,19 @@ private slots:
   }
 
 private:
-  TranslationUnitAST* parseOriginal(const QByteArray& unit)
+  TranslationUnitAST* parseOriginal(const QString& unit)
   {
     Parser parser(&control);
     lastSession = new ParseSession();
-    lastSession->setContentsAndGenerateLocationTable(tokenizeFromByteArray(unit));
+    lastSession->setContentsAndGenerateLocationTable(tokenizeFromString(unit));
     return  parser.parse(lastSession);
   }
 
-  TranslationUnitAST* parseGenerated(const QByteArray& unit)
+  TranslationUnitAST* parseGenerated(const QString& unit)
   {
     Parser parser(&control);
     lastGeneratedSession = new ParseSession();
-    lastGeneratedSession->setContentsAndGenerateLocationTable(tokenizeFromByteArray(unit));
+    lastGeneratedSession->setContentsAndGenerateLocationTable(tokenizeFromString(unit));
     return  parser.parse(lastGeneratedSession);
   }
 

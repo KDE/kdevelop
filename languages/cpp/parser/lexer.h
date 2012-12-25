@@ -141,15 +141,6 @@ public:
   { return symbolString(token(i)); }
 
   /**
-   * @return The bytearray representation of the token.
-   *
-   * @note This always works but is expensive
-   */
-  QByteArray symbolByteArray(const Token& t) const;
-  inline QByteArray symbolByteArray(uint i) const
-  { return symbolByteArray(token(i)); }
-
-  /**
    * @return The length of this tokens text representation
    */
   uint symbolLength(const Token& t) const;

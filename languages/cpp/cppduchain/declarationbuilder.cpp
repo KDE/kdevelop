@@ -485,7 +485,7 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
   }
 
   m_collectQtFunctionSignature = !m_accessPolicyStack.isEmpty() && ((m_accessPolicyStack.top() & FunctionIsSlot) || (m_accessPolicyStack.top() & FunctionIsSignal));
-  m_qtFunctionSignature = QByteArray();
+  m_qtFunctionSignature.clear();
   
   if (node->parameter_declaration_clause) {
 
@@ -837,8 +837,9 @@ Declaration* DeclarationBuilder::openFunctionDeclaration(NameAST* name, AST* ran
       fun = qtFun;
       qtFun->setIsSlot(m_accessPolicyStack.top() & FunctionIsSlot);
       qtFun->setIsSignal(m_accessPolicyStack.top() & FunctionIsSignal);
-      QByteArray temp(QMetaObject::normalizedSignature("(" + m_qtFunctionSignature + ")"));
-      IndexedString signature(temp.mid(1, temp.length()-2));
+      ///TODO: optimize case of empty signature
+      QByteArray temp(QMetaObject::normalizedSignature("(" + m_qtFunctionSignature.toUtf8() + ")"));
+      IndexedString signature(QString::fromUtf8(temp.mid(1, temp.length()-2)));
 //       kDebug() << "normalized signature:" << signature.str() << "from:" << QString::fromUtf8(m_qtFunctionSignature);
       qtFun->setNormalizedSignature(signature);
     }
@@ -1097,7 +1098,7 @@ void DeclarationBuilder::visitNamespace(NamespaceAST* ast) {
     
     if(ast->namespace_name)
     {
-      id = Identifier(editor()->tokensToStrings(ast->namespace_name, ast->namespace_name+1));
+      id = Identifier(editor()->tokensToString(ast->namespace_name, ast->namespace_name+1));
       range = editor()->findRange(ast->namespace_name, ast->namespace_name+1);
     }else
     {
@@ -1741,7 +1742,7 @@ bool DeclarationBuilder::checkParameterDeclarationClause(ParameterDeclarationCla
           if(!m_qtFunctionSignature.isEmpty())
             m_qtFunctionSignature += ", ";
           
-          m_qtFunctionSignature += editor()->tokensToByteArray(ast->start_token, endToken);
+          m_qtFunctionSignature += editor()->tokensToString(ast->start_token, endToken);
           ret = true;
         }else{
         if(ast->expression || ast->declarator) {

@@ -21,52 +21,50 @@
 #include "chartools.h"
 #include <QString>
 #include <QVector>
-#include <util/kdevvarlengtharray.h>
 #include <language/duchain/indexedstring.h>
 #include <kdebug.h>
 
-QByteArray stringFromContents(const PreprocessedContents& contents, int offset, int count) {
-  QByteArray ret;
+QString stringFromContents(const PreprocessedContents& contents, int offset, int count) {
+  QString ret;
   for(int a = offset; a < (count ? offset+count : contents.size()); ++a) {
     if(isCharacter(contents[a]))
       ret.append(characterFromIndex(contents[a]));
     else
-      ret += KDevelop::IndexedString::fromIndex(contents[a]).byteArray();
+      ret += KDevelop::IndexedString::fromIndex(contents[a]).toString();
   }
   return ret;
 }
 
-QByteArray stringFromContents(const uint* contents, int count) {
-  QByteArray ret;
+QString stringFromContents(const uint* contents, int count) {
+  QString ret;
   for(int a = 0; a < count; ++a) {
     if(isCharacter(contents[a]))
       ret.append(characterFromIndex(contents[a]));
     else
-      ret += KDevelop::IndexedString::fromIndex(contents[a]).byteArray();
+      ret += KDevelop::IndexedString::fromIndex(contents[a]).toString();
   }
   return ret;
 }
 
-QByteArray stringFromContentsWithGaps(const PreprocessedContents& contents, int offset, int count) {
-  QByteArray ret;
+QString stringFromContentsWithGaps(const PreprocessedContents& contents, int offset, int count) {
+  QString ret;
   for(int a = offset; a < (count ? offset+count : contents.size()); ++a) {
     if(isCharacter(contents[a]))
       ret.append(characterFromIndex(contents[a]));
     else
-      ret += KDevelop::IndexedString::fromIndex(contents[a]).byteArray();
+      ret += KDevelop::IndexedString::fromIndex(contents[a]).toString();
     ret.append(" ");
   }
   return ret;
 }
 
-PreprocessedContents convertFromByteArray(const QByteArray& array) {
+PreprocessedContents convertFromString(const QString& string) {
   PreprocessedContents to;
-  to.resize(array.size());
-  const char* data = array.constData();
-  const char* dataEnd = data + array.size();
+  to.resize(string.size());
+  const QChar* data = string.constData();
+  const QChar* const dataEnd = data + string.size();
   unsigned int* target = to.data();
-  
-  
+
   while(data < dataEnd) {
     *target = indexFromCharacter(*data);
     ++data;
@@ -75,20 +73,19 @@ PreprocessedContents convertFromByteArray(const QByteArray& array) {
   return to;
 }
 
-PreprocessedContents tokenizeFromByteArray(const QByteArray& array) {
+PreprocessedContents tokenizeFromString(const QString& string) {
   PreprocessedContents to;
   ///testing indicates that 9/10 is about the optimal value
-  to.reserve(array.size()/10);//assuming that about every 10 chars is a token.
-  const char* data = array.constData();
-  const char* dataEnd = data + array.size();
+  to.reserve(string.size()/10);//assuming that about every 10 chars is a token.
+  const QChar* data = string.constData();
+  const QChar* dataEnd = data + string.size();
   //unsigned int* target = to.data();
-  
-  KDevVarLengthArray<char, 100> identifier;
-  
-  KDevelop::IndexedString::RunningHash hash;
+
+  ///TODO: optimize by using .midRef()
+  QString identifier;
 
   bool tokenizing = false;
-  
+
   while(data < dataEnd) {
     
     if(!tokenizing) {
@@ -98,13 +95,11 @@ PreprocessedContents tokenizeFromByteArray(const QByteArray& array) {
     
     if(tokenizing) {
       if(isLetterOrNumber(*data) || *data == '_') {
-        hash.append(*data);
         identifier.append(*data);
       }else{
         //End of token
-        to.append( KDevelop::IndexedString::indexForString(identifier.constData(), identifier.size(), hash.hash) );
+        to.append( KDevelop::IndexedString(identifier).index() );
         //kDebug() << "word" << "\"" + KDevelop::IndexedString(to.back()).str() + "\"";
-        hash.clear();
         identifier.clear();
         tokenizing = false;
       }
@@ -116,12 +111,12 @@ PreprocessedContents tokenizeFromByteArray(const QByteArray& array) {
   }
   
   if(tokenizing)
-    to.append( KDevelop::IndexedString::indexForString(identifier.constData(), identifier.size(), hash.hash) );
+    to.append( KDevelop::IndexedString(identifier).index() );
   
   
-/*  kDebug() << QString::fromUtf8(stringFromContents(to));
-  kDebug() << QString::fromUtf8(array);
-  Q_ASSERT(stringFromContents(to) == array);*/
+/*  kDebug() << stringFromContents(to);
+  kDebug() << string;
+  Q_ASSERT(stringFromContents(to) == string);*/
   to.squeeze(); 
   return to;
 }

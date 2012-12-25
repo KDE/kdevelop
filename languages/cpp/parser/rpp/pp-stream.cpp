@@ -399,11 +399,11 @@ void Stream::reset( )
   m_inputPositionLocked = false;
 }
 
-QByteArray rpp::Stream::stringFrom(int offset) const
+QString rpp::Stream::stringFrom(int offset) const
 {
-  QByteArray ret;
+  QString ret;
   for(int a = offset; a < m_pos; ++a)
-    ret += KDevelop::IndexedString::fromIndex((*m_string)[a]).byteArray();
+    ret += KDevelop::IndexedString::fromIndex((*m_string)[a]).toString();
   
   return ret;
 }

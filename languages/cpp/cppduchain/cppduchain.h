@@ -126,7 +126,7 @@ KDEVCPPDUCHAIN_EXPORT KDevelop::DUContext* logicalParentContext(KDevelop::DUCont
 KDEVCPPDUCHAIN_EXPORT QString preprocess( const QString& text, EnvironmentFile* file, int line, QSet<KDevelop::IndexedString> disableMacros = QSet<KDevelop::IndexedString>() );
 
 ///Extracts a normalized signature and identifier from a specifier like "mySignal(int)"
-KDEVCPPDUCHAIN_EXPORT QPair<KDevelop::Identifier, QByteArray> qtFunctionSignature(QByteArray fullFunction);
+KDEVCPPDUCHAIN_EXPORT QPair<KDevelop::Identifier, QString> qtFunctionSignature(QString fullFunction);
 
 ///Exchanges all occurences of @param replace in @param id with @param replaceWith
 KDEVCPPDUCHAIN_EXPORT KDevelop::Identifier exchangeQualifiedIdentifier(KDevelop::Identifier id, KDevelop::QualifiedIdentifier replace, KDevelop::QualifiedIdentifier replaceWith);

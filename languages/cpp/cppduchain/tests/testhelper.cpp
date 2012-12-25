@@ -89,7 +89,7 @@ void TestHelper::initShell()
   KDevelop::CodeRepresentation::setDiskChangesForbidden(true);
 }
 
-TopDUContext* TestHelper::parse(const QByteArray& unit, DumpAreas dump, TopDUContext* update, bool keepAst)
+TopDUContext* TestHelper::parse(const QString& unit, DumpAreas dump, TopDUContext* update, bool keepAst)
 {
   m_modifications.clear();
   m_ctlflowGraph.clear();

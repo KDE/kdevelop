@@ -47,7 +47,9 @@ ExpressionParser::ExpressionParser( bool strict, bool debug, bool propagateConst
 {
 }
 
-ExpressionEvaluationResult ExpressionParser::evaluateType( const QByteArray& unit, DUContextPointer context, const TopDUContext* source, bool forceExpression ) {
+ExpressionEvaluationResult ExpressionParser::evaluateType( const QString& unit, DUContextPointer context,
+                                                           const TopDUContext* source, bool forceExpression )
+{
 
   if( m_debug )
     kDebug(9007) << "==== .Evaluating ..:" << endl << unit;
@@ -61,7 +63,7 @@ ExpressionEvaluationResult ExpressionParser::evaluateType( const QByteArray& uni
 
   AST* ast = 0;
 
-  session.setContentsAndGenerateLocationTable(tokenizeFromByteArray(unit));
+  session.setContentsAndGenerateLocationTable(tokenizeFromString(unit));
 
   ast = parser.parseTypeOrExpression(&session, forceExpression);
 
@@ -88,7 +90,8 @@ ExpressionEvaluationResult ExpressionParser::evaluateType( const QByteArray& uni
   return ret;
 }
 
-ExpressionEvaluationResult ExpressionParser::evaluateExpression( const QByteArray& expression, DUContextPointer context, const TopDUContext* source )
+ExpressionEvaluationResult ExpressionParser::evaluateExpression( const QString& expression, DUContextPointer context,
+                                                                 const TopDUContext* source )
 {
   return evaluateType( expression, context, source, true );
 }

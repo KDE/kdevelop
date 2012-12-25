@@ -317,7 +317,7 @@ namespace Cpp {
 
       //If a signal/slot access is performed, and a slot is being connected to a signal, this contains the identifier and the signature
       Identifier m_connectedSignalIdentifier;
-      QByteArray m_connectedSignalNormalizedSignature;
+      QString m_connectedSignalNormalizedSignature;
       IndexedDeclaration m_connectedSignal;
 
       //true if constructor completion is performed

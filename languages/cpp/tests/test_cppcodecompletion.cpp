@@ -3425,7 +3425,7 @@ QString TestCppCodeCompletion::preprocess( const IndexedString& url, const QStri
     if(targetContents)
       *targetContents = contents;
 
-    QString result = QString::fromUtf8(stringFromContents(contents));
+    QString result = stringFromContents(contents);
 
     if (returnLocationTable)
       *returnLocationTable = preprocessor.environment()->takeLocationTable();

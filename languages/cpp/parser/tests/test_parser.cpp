@@ -34,7 +34,7 @@
 
 #include "testconfig.h"
 
-#include <QByteArray>
+#include <QString>
 #include <QDataStream>
 #include <QFile>
 
@@ -48,9 +48,9 @@
 QString preprocess(const QString& contents) {
   rpp::Preprocessor preprocessor;
   rpp::pp pp(&preprocessor);
-  QByteArray qba = stringFromContents(pp.processFile("anonymous", contents.toUtf8()));
+  QString preprocessed = stringFromContents(pp.processFile("anonymous", contents));
   if(pp.problems().empty())
-    return QString::fromUtf8(qba);
+    return preprocessed;
   else
     return "*ERROR*";
 }
@@ -110,7 +110,7 @@ void TestParser::testTokenTable()
 ///@todo reenable
 //   void TestParser::testLexer()
 //   {
-//     QByteArray code("#include <foo.h>");
+//     QString code("#include <foo.h>");
 //     TokenStream token_stream;
 //     LocationTable location_table;
 //     LocationTable line_table;
@@ -120,14 +120,14 @@ void TestParser::testTokenTable()
 //     lexer.tokenize(code, code.size()+1);
 //     QCOMPARE(control.problem(0).message(), QString("expected end of line"));
 //
-//     QByteArray code2("class Foo { int foo() {} }; ");
+//     QString code2("class Foo { int foo() {} }; ");
 //     lexer.tokenize(code2, code2.size()+1);
 //     QCOMPARE(control.problemCount(), 1);    //we still have the old problem in the list
 //   }
 
 void TestParser::testParser()
 {
-  QByteArray clazz("struct A { int i; A() : i(5) { } virtual void test() = 0; };");
+  QString clazz("struct A { int i; A() : i(5) { } virtual void test() = 0; };");
   TranslationUnitAST* ast = parse(clazz);
   dump(ast);
   QVERIFY(control.problems().isEmpty());
@@ -137,7 +137,7 @@ void TestParser::testParser()
 
 void TestParser::testTemplateArguments()
 {
-  QByteArray templatetest("template <int N, int M> struct SeriesAdder{ enum { value = N + SeriesAdder< 0 >::value }; };");
+  QString templatetest("template <int N, int M> struct SeriesAdder{ enum { value = N + SeriesAdder< 0 >::value }; };");
   TranslationUnitAST* ast = parse(templatetest);
     QVERIFY(control.problems().isEmpty());
   QVERIFY(ast != 0);
@@ -148,7 +148,7 @@ void TestParser::testTemplateArguments()
 void TestParser::testTemplatedDTor()
 {
   // see also: https://bugs.kde.org/show_bug.cgi?id=253618
-  QByteArray templatetest("template <typename T> struct A{ ~A<T>(); };");
+  QString templatetest("template <typename T> struct A{ ~A<T>(); };");
   TranslationUnitAST* ast = parse(templatetest);
   QVERIFY(ast != 0);
   QVERIFY(ast->declarations != 0);
@@ -159,7 +159,7 @@ void TestParser::testManyComparisons()
 {
   //Should not crash
   {
-    QByteArray clazz("void TestParser::test() { if(val < f && val < val1 && val < val2 && val < val3 ){ } }");
+    QString clazz("void TestParser::test() { if(val < f && val < val1 && val < val2 && val < val3 ){ } }");
     TranslationUnitAST* ast = parse(clazz);
     dump(ast);
     QVERIFY(control.problems().isEmpty());
@@ -167,7 +167,7 @@ void TestParser::testManyComparisons()
     QVERIFY(ast->declarations != 0);
   }
   {
-    QByteArray clazz("void TestParser::test() { if(val < f && val < val1 && val < val2 && val < val3 && val < val4 && val < val5 && val < val6 && val < val7 && val < val8 && val < val9 && val < val10 && val < val11 && val < val12 && val < val13 && val < val14 && val < val15 && val < val16 && val < val17 && val < val18 && val < val19 && val < val20 && val < val21 && val < val22 && val < val23 && val < val24 && val < val25 && val < val26){ } }");
+    QString clazz("void TestParser::test() { if(val < f && val < val1 && val < val2 && val < val3 && val < val4 && val < val5 && val < val6 && val < val7 && val < val8 && val < val9 && val < val10 && val < val11 && val < val12 && val < val13 && val < val14 && val < val15 && val < val16 && val < val17 && val < val18 && val < val19 && val < val20 && val < val21 && val < val22 && val < val23 && val < val24 && val < val25 && val < val26){ } }");
     TranslationUnitAST* ast = parse(clazz);
     dump(ast);
     QVERIFY(control.problems().isEmpty());
@@ -178,7 +178,7 @@ void TestParser::testManyComparisons()
 
 void TestParser::testParserFail()
 {
-  QByteArray stuff("foo bar !!! nothing that really looks like valid c++ code");
+  QString stuff("foo bar !!! nothing that really looks like valid c++ code");
   TranslationUnitAST *ast = parse(stuff);
   QVERIFY(ast->declarations == 0);
   QVERIFY(control.problems().count() > 3);
@@ -186,26 +186,26 @@ void TestParser::testParserFail()
 
 void TestParser::testPartialParseFail() {
   {
-  QByteArray method("struct C { Something invalid is here };");
+  QString method("struct C { Something invalid is here };");
   TranslationUnitAST* ast = parse(method);
   QVERIFY(ast != 0);
   QVERIFY(hasKind(ast, AST::Kind_ClassSpecifier));
   }
   {
-  QByteArray method("void TestParser::test() { Something invalid is here };");
+  QString method("void TestParser::test() { Something invalid is here };");
   TranslationUnitAST* ast = parse(method);
   QVERIFY(ast != 0);
   QVERIFY(hasKind(ast, AST::Kind_FunctionDefinition));
   }
   {
-  QByteArray method("void TestParser::test() { {Something invalid is here };");
+  QString method("void TestParser::test() { {Something invalid is here };");
   TranslationUnitAST* ast = parse(method);
   QVERIFY(ast != 0);
   QVERIFY(hasKind(ast, AST::Kind_FunctionDefinition));
   QVERIFY(ast->hadMissingCompoundTokens);
   }
   {
-  QByteArray method("void TestParser::test() { case:{};");
+  QString method("void TestParser::test() { case:{};");
   TranslationUnitAST* ast = parse(method);
   QVERIFY(ast != 0);
   QVERIFY(hasKind(ast, AST::Kind_FunctionDefinition));
@@ -215,7 +215,7 @@ void TestParser::testPartialParseFail() {
 
 void TestParser::testParseMethod()
 {
-  QByteArray method("void TestParser::A::test() {  }");
+  QString method("void TestParser::A::test() {  }");
   TranslationUnitAST* ast = parse(method);
   dump(ast);
   QVERIFY(control.problems().isEmpty());
@@ -226,7 +226,7 @@ void TestParser::testParseMethod()
 ///@todo reenable
 //   void TestParser::testMethodArgs()
 //   {
-//     QByteArray method("int A::test(int primitive, B* pointer) { return primitive; }");
+//     QString method("int A::test(int primitive, B* pointer) { return primitive; }");
 //     Parser parser(&control);
 //     TranslationUnitAST* ast = parser.parse(method.constData(),
 // 					   method.size() + 1);
@@ -268,7 +268,7 @@ void TestParser::testParseMethod()
 
 void TestParser::testForStatements()
 {
-  QByteArray method("void TestParser::A::t() { for (int i = 0; i < 10; i++) { ; }}");
+  QString method("void TestParser::A::t() { for (int i = 0; i < 10; i++) { ; }}");
   TranslationUnitAST* ast = parse(method);
 
   QVERIFY(control.problems().isEmpty());
@@ -279,7 +279,7 @@ void TestParser::testForStatements()
   QVERIFY(hasKind(ast, AST::Kind_IncrDecrExpression));
   QVERIFY(hasKind(ast, AST::Kind_SimpleDeclaration));
 
-  QByteArray emptyFor("void TestParser::A::t() { for (;;) { } }");
+  QString emptyFor("void TestParser::A::t() { for (;;) { } }");
   ast = parse(emptyFor);
   QVERIFY(ast != 0);
   QVERIFY(hasKind(ast, AST::Kind_ForStatement));
@@ -289,7 +289,7 @@ void TestParser::testForStatements()
 
 void TestParser::testIfStatements()
 {
-  QByteArray method("void TestParser::A::t() { if (1 < 2) { } }");
+  QString method("void TestParser::A::t() { if (1 < 2) { } }");
   TranslationUnitAST* ast = parse(method);
 
   QVERIFY(control.problems().isEmpty());
@@ -299,7 +299,7 @@ void TestParser::testIfStatements()
 
 void TestParser::testComments()
 {
-  QByteArray method("//TranslationUnitComment\n"
+  QString method("//TranslationUnitComment\n"
                     "//Hello\n"
                     "int A; //behind\n"
                     " /*between*/\n"
@@ -313,7 +313,7 @@ void TestParser::testComments()
 
   CommentFormatter formatter;
   
-  QCOMPARE(formatter.formatComment(ast->comments, lastSession), QByteArray("TranslationUnitComment")); //The comments were merged
+  QCOMPARE(formatter.formatComment(ast->comments, lastSession), QString("TranslationUnitComment")); //The comments were merged
 
   const ListNode<DeclarationAST*>* it = ast->declarations;
   QVERIFY(it);
@@ -321,23 +321,23 @@ void TestParser::testComments()
   it = it->next;
   QVERIFY(it);
   QVERIFY(it->element);
-  QCOMPARE(formatter.formatComment(it->element->comments, lastSession), QByteArray("Hello\n(behind)"));
+  QCOMPARE(formatter.formatComment(it->element->comments, lastSession), QString("Hello\n(behind)"));
 
   it = it->next;
   QVERIFY(it);
   QVERIFY(it->element);
-  QCOMPARE(formatter.formatComment(it->element->comments, lastSession), QByteArray("between\nHello2\n(behind)"));
+  QCOMPARE(formatter.formatComment(it->element->comments, lastSession), QString("between\nHello2\n(behind)"));
 
   it = it->next;
   QVERIFY(it);
   QVERIFY(it->element);
-  QCOMPARE(formatter.formatComment(it->element->comments, lastSession), QByteArray("Hello3\nbeforeTest\n(testBehind)"));
+  QCOMPARE(formatter.formatComment(it->element->comments, lastSession), QString("Hello3\nbeforeTest\n(testBehind)"));
 }
 
 void TestParser::testComments2()
 {
   CommentFormatter formatter;
-  QByteArray method("enum Enum\n {//enumerator1Comment\nenumerator1, //enumerator1BehindComment\n /*enumerator2Comment*/ enumerator2 /*enumerator2BehindComment*/};");
+  QString method("enum Enum\n {//enumerator1Comment\nenumerator1, //enumerator1BehindComment\n /*enumerator2Comment*/ enumerator2 /*enumerator2BehindComment*/};");
   TranslationUnitAST* ast = parse(method);
   QVERIFY(control.problems().isEmpty());
 
@@ -356,18 +356,18 @@ void TestParser::testComments2()
   enumerator = enumerator->next;
   QVERIFY(enumerator);
 
-  QCOMPARE(formatter.formatComment(enumerator->element->comments, lastSession), QByteArray("enumerator1Comment\n(enumerator1BehindComment)"));
+  QCOMPARE(formatter.formatComment(enumerator->element->comments, lastSession), QString("enumerator1Comment\n(enumerator1BehindComment)"));
 
   enumerator = enumerator->next;
   QVERIFY(enumerator);
 
-  QCOMPARE(formatter.formatComment(enumerator->element->comments, lastSession), QByteArray("enumerator2Comment\n(enumerator2BehindComment)"));
+  QCOMPARE(formatter.formatComment(enumerator->element->comments, lastSession), QString("enumerator2Comment\n(enumerator2BehindComment)"));
 }
 
 void TestParser::testComments3()
 {
   CommentFormatter formatter;
-  QByteArray method("class Class{\n//Comment\n int val;};");
+  QString method("class Class{\n//Comment\n int val;};");
   TranslationUnitAST* ast = parse(method);
   QVERIFY(control.problems().isEmpty());
 
@@ -386,13 +386,13 @@ void TestParser::testComments3()
   members = members->next;
   QVERIFY(members);
 
-  QCOMPARE(formatter.formatComment(members->element->comments, lastSession), QByteArray("Comment"));
+  QCOMPARE(formatter.formatComment(members->element->comments, lastSession), QString("Comment"));
 }
 
 void TestParser::testComments4()
 {
   CommentFormatter formatter;
-  QByteArray method("//TranslationUnitComment\n//Comment\ntemplate<class C> class Class{};");
+  QString method("//TranslationUnitComment\n//Comment\ntemplate<class C> class Class{};");
   TranslationUnitAST* ast = parse(method);
 
   const ListNode<DeclarationAST*>* it = ast->declarations;
@@ -409,7 +409,7 @@ void TestParser::testComments4()
 void TestParser::testComments5()
 {
   CommentFormatter formatter;
-  QByteArray method("//TranslationUnitComment\n  //FIXME comment\n //this is TODO\n /* TODO: comment */\n  int i;  // another TODO \n // Just a simple comment\nint j;\n int main(void) {\n // TODO COMMENT\n}\n");
+  QString method("//TranslationUnitComment\n  //FIXME comment\n //this is TODO\n /* TODO: comment */\n  int i;  // another TODO \n // Just a simple comment\nint j;\n int main(void) {\n // TODO COMMENT\n}\n");
   int initial_size = control.problems().size();  // Remember existing number of problems
   TranslationUnitAST* ast = parse(method);
 
@@ -417,10 +417,10 @@ void TestParser::testComments5()
   QVERIFY(it);
   it = it->next;
   QVERIFY(it);
-  QCOMPARE(formatter.formatComment(it->element->comments, lastSession), QByteArray("FIXME comment\nthis is TODO\n TODO: comment\n(another TODO)"));
+  QCOMPARE(formatter.formatComment(it->element->comments, lastSession), QString("FIXME comment\nthis is TODO\n TODO: comment\n(another TODO)"));
   it = it->next;
   QVERIFY(it);
-  QCOMPARE(formatter.formatComment(it->element->comments, lastSession), QByteArray("Just a simple comment"));
+  QCOMPARE(formatter.formatComment(it->element->comments, lastSession), QString("Just a simple comment"));
 
   QList<KDevelop::ProblemPointer> problem_list = control.problems();
   QCOMPARE(problem_list.size(), initial_size + 5); // 5 to-dos
@@ -456,13 +456,13 @@ void TestParser::testComments5()
 }
 
 void TestParser::testComments6() {
-  QByteArray module("//TranslationUnitComment\n/**\n * foo\n **/\nint i;\n");
+  QString module("//TranslationUnitComment\n/**\n * foo\n **/\nint i;\n");
   TranslationUnitAST* ast = parse(module);
   const ListNode<DeclarationAST*>* it = ast->declarations;
   QVERIFY(it);
   it = it->next;
   QVERIFY(it);
-  QCOMPARE(CommentFormatter().formatComment(it->element->comments, lastSession), QByteArray("foo"));
+  QCOMPARE(CommentFormatter().formatComment(it->element->comments, lastSession), QString("foo"));
 }
 
 void TestParser::testPreprocessor() {
@@ -566,7 +566,7 @@ void TestParser::testEmptyInclude()
   // testcase for https://bugs.kde.org/show_bug.cgi?id=258972
   rpp::Preprocessor preprocessor;
   rpp::pp pp(&preprocessor);
-  pp.processFile("anonymous", QByteArray("#include\n\nint main(){\n    ;\n}\n"));
+  pp.processFile("anonymous", QString("#include\n\nint main(){\n    ;\n}\n"));
   QCOMPARE(pp.problems().size(), 1);
   qDebug() << pp.problems().first()->description();
   QCOMPARE(pp.problems().first()->finalLocation().start, KDevelop::SimpleCursor(0, 8));
@@ -575,7 +575,7 @@ void TestParser::testEmptyInclude()
 
 void TestParser::testCondition()
 {
-  QByteArray method("bool i = (small < big || big > small);");
+  QString method("bool i = (small < big || big > small);");
   TranslationUnitAST* ast = parse(method);
   dumper.dump(ast, lastSession->token_stream);
   ///@todo make this work, it should yield something like TranslationUnit -> SimpleDeclaration -> InitDeclarator -> BinaryExpression
@@ -584,13 +584,13 @@ void TestParser::testCondition()
 void TestParser::testNonTemplateDeclaration()
 {
   /*{
-    QByteArray templateMethod("template <int> class a {}; int main() { const int b = 1; const int c = 2; a<b|c> d; }");
+    QString templateMethod("template <int> class a {}; int main() { const int b = 1; const int c = 2; a<b|c> d; }");
     TranslationUnitAST* ast = parse(templateMethod);
     dumper.dump(ast, lastSession->token_stream);
   }*/
 
   //int a, b, c, d; bool e;
-  QByteArray declaration("void TestParser::expression() { if (a < b || c > d) {} }");
+  QString declaration("void TestParser::expression() { if (a < b || c > d) {} }");
   TranslationUnitAST* ast = parse(declaration);
   dumper.dump(ast, lastSession->token_stream);
 }
@@ -599,7 +599,7 @@ void TestParser::testInitListTrailingComma()
 {
   //see bug https://bugs.kde.org/show_bug.cgi?id=233328
 
-  QByteArray code("const int foo [] = {1,};");
+  QString code("const int foo [] = {1,};");
   TranslationUnitAST* ast = parse(code);
   dump(ast);
   QVERIFY(control.problems().isEmpty());
@@ -614,7 +614,7 @@ void TestParser::testInitListTrailingComma()
 void TestParser::testAsmVolatile()
 {
   //see bug https://bugs.kde.org/show_bug.cgi?id=238772
-  QByteArray code("__asm__ __volatile__ (\"cld; rep; \" \"stosq\" : \"=c\""
+  QString code("__asm__ __volatile__ (\"cld; rep; \" \"stosq\" : \"=c\""
                   "  (__d0), \"=D\" (__d1) : \"a\" (0), \"0\" (sizeof (fd_set) / sizeof (__fd_mask)),"
                   "  \"1\""
                   "  (&((&rfds)->__fds_bits)[0]) : \"memory\");");
@@ -632,7 +632,7 @@ void TestParser::testAsmVolatile()
 void TestParser::testIncrIdentifier()
 {
   //see bug https://bugs.kde.org/show_bug.cgi?id=238772
-  QByteArray code("void TestParser::incr();");
+  QString code("void TestParser::incr();");
   TranslationUnitAST* ast = parse(code);
   dumper.dump(ast, lastSession->token_stream);
 
@@ -645,7 +645,7 @@ void TestParser::testParseFile()
 {
   QFile file(TEST_FILE);
   QVERIFY(file.open(QFile::ReadOnly));
-  QByteArray contents = file.readAll();
+  QString contents = file.readAll();
   file.close();
   TranslationUnitAST* ast =parse(contents);
   QVERIFY(ast != 0);
@@ -654,7 +654,7 @@ void TestParser::testParseFile()
 
 void TestParser::testQProperty_data()
 {
-  QTest::addColumn<QByteArray>("code");
+  QTest::addColumn<QString>("code");
   QTest::addColumn<bool>("hasGetterMethod");
   QTest::addColumn<bool>("hasSetterMethod");
   QTest::addColumn<bool>("hasResetterMethod");
@@ -668,47 +668,47 @@ void TestParser::testQProperty_data()
   QTest::addColumn<bool>("isConstant");
   QTest::addColumn<bool>("isFinal");
 
-  QTest::newRow("read") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop)\n};")
+  QTest::newRow("read") << QString("class Class{\n__qt_property__(bool myProp READ prop)\n};")
                         << true << false << false << false << false << false
                         << true << true << true << false << false << false;
-  QTest::newRow("write") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop WRITE prop)\n};")
+  QTest::newRow("write") << QString("class Class{\n__qt_property__(bool myProp READ prop WRITE prop)\n};")
                           << true << true << false << false << false << false
                           << true << true << true << false << false << false;
-  QTest::newRow("reset") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop RESET prop)\n};")
+  QTest::newRow("reset") << QString("class Class{\n__qt_property__(bool myProp READ prop RESET prop)\n};")
                           << true << false << true << false << false << false
                           << true << true << true << false << false << false;
-  QTest::newRow("notify") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop NOTIFY prop)\n};")
+  QTest::newRow("notify") << QString("class Class{\n__qt_property__(bool myProp READ prop NOTIFY prop)\n};")
                           << true << false << false << true << false << false
                           << true << true << true << false << false << false;
-  QTest::newRow("desable") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop DESIGNABLE prop)\n};")
+  QTest::newRow("desable") << QString("class Class{\n__qt_property__(bool myProp READ prop DESIGNABLE prop)\n};")
                             << true << false << false << false << true << false
                             << true << true << true << false << false << false;
-  QTest::newRow("scpable") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop SCRIPTABLE prop)\n};")
+  QTest::newRow("scpable") << QString("class Class{\n__qt_property__(bool myProp READ prop SCRIPTABLE prop)\n};")
                             << true << false << false << false << false << true
                             << true << true << true << false << false << false;
-  QTest::newRow("desvalue") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop DESIGNABLE false)\n};")
+  QTest::newRow("desvalue") << QString("class Class{\n__qt_property__(bool myProp READ prop DESIGNABLE false)\n};")
                             << true << false << false << false << false << false
                             << false << true << true << false << false << false;
-  QTest::newRow("scpvalue") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop SCRIPTABLE false)\n};")
+  QTest::newRow("scpvalue") << QString("class Class{\n__qt_property__(bool myProp READ prop SCRIPTABLE false)\n};")
                             << true << false << false << false << false << false
                             << true << false << true << false << false << false;
-  QTest::newRow("stored") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop STORED false)\n};")
+  QTest::newRow("stored") << QString("class Class{\n__qt_property__(bool myProp READ prop STORED false)\n};")
                           << true << false << false << false << false << false
                           << true << true << false << false << false << false;
-  QTest::newRow("user") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop USER true)\n};")
+  QTest::newRow("user") << QString("class Class{\n__qt_property__(bool myProp READ prop USER true)\n};")
                         << true << false << false << false << false << false
                         << true << true << true << true << false << false;
-  QTest::newRow("constant") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop CONSTANT)\n};")
+  QTest::newRow("constant") << QString("class Class{\n__qt_property__(bool myProp READ prop CONSTANT)\n};")
                             << true << false << false << false << false << false
                             << true << true << true << false << true << false;
-  QTest::newRow("final") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop FINAL)\n};")
+  QTest::newRow("final") << QString("class Class{\n__qt_property__(bool myProp READ prop FINAL)\n};")
                           << true << false << false << false << false << false
                           << true << true << true << false << false << true;
 }
 
 void TestParser::testQProperty()
 {
-  QFETCH(QByteArray, code);
+  QFETCH(QString, code);
   QFETCH(bool, hasGetterMethod);
   QFETCH(bool, hasSetterMethod);
   QFETCH(bool, hasResetterMethod);
@@ -827,19 +827,19 @@ void TestParser::testSwitchStatement()
 {
   int problemCount = control.problems().count();
 
-  QByteArray switchTest("int main() { switch(0); }");
+  QString switchTest("int main() { switch(0); }");
   parse(switchTest);
   QCOMPARE(control.problems().count(), problemCount);
-  QByteArray switchTest2("int main() { switch (0) case 0: if (true) ; else return 1; }");
+  QString switchTest2("int main() { switch (0) case 0: if (true) ; else return 1; }");
   parse(switchTest2);
   QCOMPARE(control.problems().count(), problemCount);
-  QByteArray switchTest3("int main() { switch (0) { case 0: if (true) ; else return 1; } }");
+  QString switchTest3("int main() { switch (0) { case 0: if (true) ; else return 1; } }");
   parse(switchTest3);
   QCOMPARE(control.problems().count(), problemCount);
-  QByteArray switchTest4("int main() { switch (0) while(true) return false; }");
+  QString switchTest4("int main() { switch (0) while(true) return false; }");
   parse(switchTest4);
   QCOMPARE(control.problems().count(), problemCount);
-  QByteArray switchTest5("int main() { switch (0) { case 0: return 0; } }");
+  QString switchTest5("int main() { switch (0) { case 0: return 0; } }");
   parse(switchTest5);
   QCOMPARE(control.problems().count(), problemCount);
 }
@@ -923,7 +923,7 @@ void TestParser::testRegister()
 
 void TestParser::inlineTemplate()
 {
-  QByteArray code = "template <typename T> inline void a() {}\n";
+  QString code = "template <typename T> inline void a() {}\n";
   TranslationUnitAST* ast = parse(code);
   dumper.dump(ast, lastSession->token_stream);
   QVERIFY(control.problems().isEmpty());
@@ -933,7 +933,7 @@ void TestParser::testMultiByteCStrings()
 {
   //                 0         1         2          3          4
   //                 01234567890123456789012345678 90 1234567890123456789
-  QByteArray code = "int main() { const char* a = \"ä\"; a = 0; }\n";
+  QString code = QString::fromUtf8("int main() { const char* a = \"ä\"; a = 0; }\n");
   TranslationUnitAST* ast = parse(code);
   dumper.dump(ast, lastSession->token_stream);
   QVERIFY(control.problems().isEmpty());
@@ -941,7 +941,6 @@ void TestParser::testMultiByteCStrings()
   QVERIFY(str);
   QCOMPARE(lastSession->stringForNode(str, true), QString::fromUtf8("\"ä\""));
   Token token = lastSession->token_stream->token(str->start_token);
-  QEXPECT_FAIL("", "the wide ä-char takes two indizes in a QByteArray, which breaks our lexer", Abort);
   QCOMPARE(token.size, 3u);
   QCOMPARE(lastSession->token_stream->symbolLength(token), 3u);
   Token endToken = lastSession->token_stream->token(str->end_token);
@@ -954,7 +953,7 @@ void TestParser::testMultiByteComments()
 {
   //                 0         1         2         3          4
   //                 01234567890123456789012345678901234567890123456789
-  QByteArray code = "int a = 1;/* ä */int b = 0;";
+  QString code = QString::fromUtf8("int a = 1;/* ä */int b = 0;");
   TranslationUnitAST* ast = parse(code);
   dumper.dump(ast, lastSession->token_stream);
   QVERIFY(control.problems().isEmpty());
@@ -962,7 +961,6 @@ void TestParser::testMultiByteComments()
   Token token = lastSession->token_stream->token(b->start_token);
   rpp::Anchor pos = lastSession->positionAt(token.position);
   // should start just after the comment
-  QEXPECT_FAIL("", "the wide ä-char takes two indizes in a QByteArray, which breaks our lexer", Abort);
   QVERIFY(pos == KDevelop::CursorInRevision(0, 17));
 }
 
@@ -972,7 +970,7 @@ void TestParser::testTernaryEmptyExpression()
   // mostly GCC compatibility
   //                 0         1         2         3          4
   //                 01234567890123456789012345678901234567890123456789
-  QByteArray code = "int a = false ?: 0;";
+  QString code = "int a = false ?: 0;";
   TranslationUnitAST* ast = parse(code);
   dumper.dump(ast, lastSession->token_stream);
   QCOMPARE(control.problems().count(), 1);
@@ -980,12 +978,12 @@ void TestParser::testTernaryEmptyExpression()
   QVERIFY(ast);
 }
 
-TranslationUnitAST* TestParser::parse(const QByteArray& unit)
+TranslationUnitAST* TestParser::parse(const QString& unit)
 {
   control = Control(); // Clear the problems
   Parser parser(&control);
   lastSession = new ParseSession();
-  lastSession->setContentsAndGenerateLocationTable(tokenizeFromByteArray(unit));
+  lastSession->setContentsAndGenerateLocationTable(tokenizeFromString(unit));
   return  parser.parse(lastSession);
 }
 

@@ -73,13 +73,6 @@ class MyExpressionVisitor : public Cpp::ExpressionVisitor {
 
 QTEST_MAIN(TestExpressionParser)
 
-char* debugString( const QString& str ) {
-  char* ret = new char[str.length()+1];
-  QByteArray b = str.toAscii();
-  strcpy( ret, b.data() );
-  return ret;
-}
-
 #define TEST_FILE_PARSE_ONLY if (testFileParseOnly) QSKIP("Skip", SkipSingle);
 TestExpressionParser::TestExpressionParser()
 {
@@ -119,7 +112,7 @@ Declaration* TestExpressionParser::findDeclaration(DUContext* context, const Qua
 
 void TestExpressionParser::testTemplateSpecialization()
 {
-  QByteArray method(//Boring class Foo has a function (myFoo) with a template argument
+  QString method(//Boring class Foo has a function (myFoo) with a template argument
                     "class Foo { template<class T> Foo& myFoo ( T& value ) { } };\n"
                     //Boring class Foo defines a specialization of myFoo for use with ints
                     "template<> Foo& Foo::myFoo <int> ( int& value ) { }\n"
@@ -231,7 +224,7 @@ void TestExpressionParser::testIntegralType() {
 }
 
 void TestExpressionParser::testTemplatesSimple() {
-  QByteArray method("template<class T> T test(const T& t) {}; template<class T, class T2> class A { }; class B{}; class C{}; typedef A<B,C> B;");
+  QString method("template<class T> T test(const T& t) {}; template<class T, class T2> class A { }; class B{}; class C{}; typedef A<B,C> B;");
 
   DUContext* top = parse(method, DumpNone);
 
@@ -268,7 +261,7 @@ void TestExpressionParser::testTemplatesSimple() {
 }
 
 void TestExpressionParser::testTemplates() {
-  QByteArray method("class A{}; template<class T, int val> struct Container {typedef Container<T> SelfType; enum{ Value = val }; T member; T operator*() const {}; }; Container<A> c;");
+  QString method("class A{}; template<class T, int val> struct Container {typedef Container<T> SelfType; enum{ Value = val }; T member; T operator*() const {}; }; Container<A> c;");
 
   DUContext* top = parse(method, DumpNone);
 
@@ -316,7 +309,7 @@ void TestExpressionParser::testTemplates() {
 }
 
 void TestExpressionParser::testArray() {
-  QByteArray method("struct Bla { int val; } blaArray[5+3];");
+  QString method("struct Bla { int val; } blaArray[5+3];");
 
   DUContext* top = parse(method, DumpNone);
 
@@ -355,7 +348,7 @@ void TestExpressionParser::testArray() {
 }
 
 void TestExpressionParser::testDynamicArray() {
-  QByteArray method("struct Bla { int val; } blaArray[] = { {5} };");
+  QString method("struct Bla { int val; } blaArray[] = { {5} };");
 
   DUContext* top = parse(method, DumpNone);
 
@@ -393,7 +386,7 @@ void TestExpressionParser::testDynamicArray() {
 
 void TestExpressionParser::testTemplates2()
 {
-  QByteArray method("class C { class A; template<class T> T test() {} }; class B { class A; void test() {C c; } }; ");
+  QString method("class C { class A; template<class T> T test() {} }; class B { class A; void test() {C c; } }; ");
 
   DUContext* top = parse(method, DumpAll);
 
@@ -414,8 +407,8 @@ void TestExpressionParser::testTemplates2()
 }
 
 void TestExpressionParser::testSmartPointer() {
-  QByteArray method("template<class T> struct SmartPointer { T* operator ->() const {}; template<class Target> SmartPointer<Target> cast() {}; T& operator*() {};  } ; class B{int i;}; class C{}; SmartPointer<B> bPointer;");
-  //QByteArray method("template<class T> struct SmartPointer { template<class Target> void cast() {}; } ; ");
+  QString method("template<class T> struct SmartPointer { T* operator ->() const {}; template<class Target> SmartPointer<Target> cast() {}; T& operator*() {};  } ; class B{int i;}; class C{}; SmartPointer<B> bPointer;");
+  //QString method("template<class T> struct SmartPointer { template<class Target> void cast() {}; } ; ");
 
   DUContext* top = parse(method, DumpNone);
 
@@ -480,7 +473,7 @@ void TestExpressionParser::testSmartPointer() {
 
 void TestExpressionParser::testAutoTemplate()
 {
-  QByteArray code = "struct C { float m(); }; C c; template<class T> auto foo(T n) -> decltype(n.m()); template<class T> auto foo2(T n) -> decltype(n);";
+  QString code = "struct C { float m(); }; C c; template<class T> auto foo(T n) -> decltype(n.m()); template<class T> auto foo2(T n) -> decltype(n);";
   LockedTopDUContext top = parse(code);
   QVERIFY(top);
   DUChainReadLocker lock;
@@ -508,7 +501,7 @@ void TestExpressionParser::testAutoTemplate()
 void TestExpressionParser::testSimpleExpression() {
   TEST_FILE_PARSE_ONLY
 
-  QByteArray test = "struct Cont { int& a; Cont* operator -> () {}; double operator*(); }; Cont c; Cont* d = &c; void test() { c.a = 5; d->a = 5; (*d).a = 5; c.a(5, 1, c); c.b<Fulli>(); }";
+  QString test = "struct Cont { int& a; Cont* operator -> () {}; double operator*(); }; Cont c; Cont* d = &c; void test() { c.a = 5; d->a = 5; (*d).a = 5; c.a(5, 1, c); c.b<Fulli>(); }";
   DUContext* c = parse( test, DumpNone /*DumpDUChain | DumpAST */);
   DUChainWriteLocker lock(DUChain::lock());
 
@@ -726,7 +719,7 @@ void TestExpressionParser::testSimpleExpression() {
 void TestExpressionParser::testThis() {
   TEST_FILE_PARSE_ONLY
 
-  QByteArray text("class A{ void test() { } void test2() const { }; void extTest(); }; void A::extTest() {}");
+  QString text("class A{ void test() { } void test2() const { }; void extTest(); }; void A::extTest() {}");
   DUContext* top = parse( text, DumpNone);//DumpNone /*DumpDUChain | DumpAST */);
   DUChainWriteLocker lock(DUChain::lock());
 
@@ -775,7 +768,7 @@ void TestExpressionParser::testBaseClasses() {
 void TestExpressionParser::testTypeConversion2() {
   TEST_FILE_PARSE_ONLY
 
-  QByteArray test = "const int& i; int q; unsigned int qq; int* ii; int* const iii;";
+  QString test = "const int& i; int q; unsigned int qq; int* ii; int* const iii;";
   DUContext* c = parse( test, DumpNone /*DumpDUChain | DumpAST */);
   DUChainWriteLocker lock(DUChain::lock());
 
@@ -798,7 +791,7 @@ void TestExpressionParser::testTypeConversion2() {
 void TestExpressionParser::testTypeConversionWithTypedefs() {
   TEST_FILE_PARSE_ONLY
 
-  QByteArray test = "const int i; typedef int q; typedef unsigned int qq; int* ii; int* const iii;";
+  QString test = "const int i; typedef int q; typedef unsigned int qq; int* ii; int* const iii;";
   DUContext* c = parse( test, DumpNone /*DumpDUChain | DumpAST */);
   DUChainWriteLocker lock(DUChain::lock());
 
@@ -823,7 +816,7 @@ void TestExpressionParser::testTypeConversionWithTypedefs() {
 void TestExpressionParser::testTypeConversion() {
   TEST_FILE_PARSE_ONLY
 
-  QByteArray test = "struct Cont { operator int() {}; }; void test( int c = 5 ) { this->test( Cont(), 1, 5.5, 6); }";
+  QString test = "struct Cont { operator int() {}; }; void test( int c = 5 ) { this->test( Cont(), 1, 5.5, 6); }";
   DUContext* c = parse( test, DumpNone /*DumpDUChain | DumpAST */);
   DUChainWriteLocker lock(DUChain::lock());
 
@@ -852,7 +845,7 @@ void TestExpressionParser::testTypeConversion() {
 void TestExpressionParser::testEnum() {
   TEST_FILE_PARSE_ONLY
 
-  QByteArray test = "enum Honk { Hank, Hunk }; void test() {}";
+  QString test = "enum Honk { Hank, Hunk }; void test() {}";
   DUContext* c = parse( test, DumpNone /*DumpDUChain | DumpAST */);
   DUChainWriteLocker lock(DUChain::lock());
 
@@ -879,7 +872,7 @@ void TestExpressionParser::testEnum() {
 void TestExpressionParser::testCasts() {
   TEST_FILE_PARSE_ONLY
 
-  QByteArray test = "struct Cont2 {}; struct Cont { int& a; Cont* operator -> () {}; double operator*(); }; Cont c; Cont* d = &c; void test() { c.a = 5; d->a = 5; (*d).a = 5; c.a(5, 1, c); c(); c.a = dynamic_cast<const Cont2*>(d); }";
+  QString test = "struct Cont2 {}; struct Cont { int& a; Cont* operator -> () {}; double operator*(); }; Cont c; Cont* d = &c; void test() { c.a = 5; d->a = 5; (*d).a = 5; c.a(5, 1, c); c(); c.a = dynamic_cast<const Cont2*>(d); }";
   DUContext* c = parse( test, DumpNone );
   DUChainWriteLocker lock(DUChain::lock());
 
@@ -970,7 +963,7 @@ void TestExpressionParser::testCasts() {
 void TestExpressionParser::testOperators() {
   TEST_FILE_PARSE_ONLY
 
-  QByteArray test = "struct Cont2 {int operator[] {}; operator()() {};}; struct Cont3{}; struct Cont { Cont3 operator[](int i) {} Cont3 operator()() {} Cont3 operator+(const Cont3& c3 ) {} }; Cont c; Cont2 operator+( const Cont& c, const Cont& c2){} Cont3 c3;";
+  QString test = "struct Cont2 {int operator[] {}; operator()() {};}; struct Cont3{}; struct Cont { Cont3 operator[](int i) {} Cont3 operator()() {} Cont3 operator+(const Cont3& c3 ) {} }; Cont c; Cont2 operator+( const Cont& c, const Cont& c2){} Cont3 c3;";
   DUContext* ctx = parse( test, DumpNone );
   DUChainWriteLocker lock(DUChain::lock());
 
@@ -1052,7 +1045,7 @@ void TestExpressionParser::testOperators() {
 
 void TestExpressionParser::testTemplateFunctions() {
   {
-    QByteArray method("template<class T> T test(T t) {}");
+    QString method("template<class T> T test(T t) {}");
 
     DUContext* top = parse(method, DumpAll);
 
@@ -1078,7 +1071,7 @@ void TestExpressionParser::testTemplateFunctions() {
     release(top);
   }
   {
-    QByteArray method("template<class T> class A { template<class T> T a(const T& q) {}; }; class C{}; template<class T> T a(T& q) {}; template<class T> T b(A<T> q) {}; template<class T> T c(const A<T*&>& q) {}; A<int>* aClass;");
+    QString method("template<class T> class A { template<class T> T a(const T& q) {}; }; class C{}; template<class T> T a(T& q) {}; template<class T> T b(A<T> q) {}; template<class T> T c(const A<T*&>& q) {}; A<int>* aClass;");
 
     DUContext* top = parse(method, DumpNone);
 
@@ -1144,7 +1137,7 @@ void TestExpressionParser::testTemplateFunctions() {
 
 void TestExpressionParser::testTypeID()
 {
-  QByteArray method("namespace std { struct type_info{ const char* name(); }; }\nvoid f() {float f;}");
+  QString method("namespace std { struct type_info{ const char* name(); }; }\nvoid f() {float f;}");
 
   DUContext* top = parse(method, DumpNone);
 
@@ -1183,7 +1176,7 @@ void TestExpressionParser::testTypeID()
 
 void TestExpressionParser::testConstness()
 {
-  QByteArray method("struct A { int x; }; const A* a = new A;");
+  QString method("struct A { int x; }; const A* a = new A;");
 
   DUContext* top = parse(method, DumpNone);
 
@@ -1207,7 +1200,7 @@ void TestExpressionParser::testConstness()
 
 void TestExpressionParser::testConstnessOverload()
 {
-  QByteArray method("struct A { const A& foo() const; A foo(); };\n"
+  QString method("struct A { const A& foo() const; A foo(); };\n"
                     "const A constA; A nonConstA;");
 
   DUContext* top = parse(method, DumpNone);
@@ -1246,7 +1239,7 @@ void TestExpressionParser::testConstnessOverload()
 
 void TestExpressionParser::testConstnessOverloadSubscript()
 {
-  QByteArray method("struct A { const A& operator[](int i) const; A operator[](int i); };\n"
+  QString method("struct A { const A& operator[](int i) const; A operator[](int i); };\n"
                     "const A constA; A nonConstA;");
 
   DUContext* top = parse(method, DumpNone);
@@ -1285,7 +1278,7 @@ void TestExpressionParser::testConstnessOverloadSubscript()
 
 void TestExpressionParser::testReference()
 {
-  QByteArray method("");
+  QString method("");
 
   KDevelop::DUContextPointer testContext(parse(method, DumpNone));
   DUChainWriteLocker lock;
@@ -1368,13 +1361,13 @@ void TestExpressionParser::release(DUContext* top)
   //delete top;
 }
 
-TopDUContext* TestExpressionParser::parse(const QByteArray& unit, DumpAreas dump)
+TopDUContext* TestExpressionParser::parse(const QString& unit, DumpAreas dump)
 {
   if (dump)
     kDebug(9007) << "==== Beginning new test case...:" << endl << unit;
 
   ParseSession* session = new ParseSession();
-  session->setContentsAndGenerateLocationTable(tokenizeFromByteArray(unit));
+  session->setContentsAndGenerateLocationTable(tokenizeFromString(unit));
 
   Parser parser(&control);
   TranslationUnitAST* ast = parser.parse(session);

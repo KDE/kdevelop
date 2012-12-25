@@ -79,19 +79,19 @@ PreprocessedContents pp::processFile(const QString& fileName)
     return result;
 }
 
-PreprocessedContents pp::processFile(const QString& fileName, const QByteArray& data)
+PreprocessedContents pp::processFile(const QString& fileName, const QString& data)
 {
     PreprocessedContents result;
     processFileInternal(fileName, data, result);
     return result;
 }
 
-void pp::processFileInternal(const QString& fileName, const QByteArray& fileContents, PreprocessedContents& result)
+void pp::processFileInternal(const QString& fileName, const QString& fileContents, PreprocessedContents& result)
 {
     m_files.push(KDevelop::IndexedString(fileName));
     // Guestimate as to how much expansion will occur
     result.reserve(int(fileContents.length() * 1.2));
-    PreprocessedContents contents = tokenizeFromByteArray(fileContents);
+    PreprocessedContents contents = tokenizeFromString(fileContents);
     {
       Stream is(&contents);
       Stream rs(&result, m_environment->locationTable());
@@ -165,8 +165,8 @@ void pp::handle_include(bool skip_current_path, Stream& input, Stream& output)
     createProblem(input, i18n("invalid include directive"));
     return;
   }
-  QByteArray bytes = KDevelop::IndexedString::fromIndex(input.current()).byteArray();
-  if (bytes.size() > 0 && (isLetter(bytes.at(0)) || bytes.at(0) == '_')) {
+  const QString bytes = KDevelop::IndexedString::fromIndex(input.current()).toString();
+  if (bytes.size() > 0 && (bytes.at(0).isLetter() || bytes.at(0) == '_')) {
     pp_macro_expander expand_include(this);
 
     Anchor inputPosition = input.inputPosition();
@@ -214,7 +214,7 @@ void pp::handle_include(bool skip_current_path, Stream& input, Stream& output)
     ++input;
   }
 
-  QString includeName(QString::fromUtf8(stringFromContents(includeNameB)));
+  QString includeName(stringFromContents(includeNameB));
 
   Stream* include = m_preprocessor->sourceNeeded(includeName, quote == '"' ? Preprocessor::IncludeLocal : Preprocessor::IncludeGlobal, input.inputPosition().line, skip_current_path);
   Q_ASSERT(!include);
@@ -499,7 +499,7 @@ Value pp::eval_primary(Stream& input)
         problem->setFinalLocation(KDevelop::DocumentRange(currentFileName(), KDevelop::SimpleRange(input.originalInputPosition().castToSimpleCursor(), 1)));
         QChar tk(token);
         problem->setDescription(i18n("Expected \"identifier\", found: %1", (tk < TOKENS_END && tk > TOKENS_START) ? QString(tk) : i18n("character %1", token)));
-        problem->setExplanation(i18n("<h5>Token text</h5><pre>%1</pre><h5>Input</h5><pre>%2</pre>", token_text.str(), QString::fromUtf8(input.stringFrom(start))));
+        problem->setExplanation(i18n("<h5>Token text</h5><pre>%1</pre><h5>Input</h5><pre>%2</pre>", token_text.str(), input.stringFrom(start)));
         problemEncountered(problem);
         break;
       }
@@ -517,7 +517,7 @@ Value pp::eval_primary(Stream& input)
           problem->setFinalLocation(KDevelop::DocumentRange(currentFileName(), KDevelop::SimpleRange(input.originalInputPosition().castToSimpleCursor(), 0)));
           QChar tk(token);
           problem->setDescription(i18n("Expected \")\", found %1", tk.isLetterOrNumber() ? QString(tk) : i18n("character %1", token)));
-          problem->setExplanation(i18n("<h5>Token text</h5><pre>%1</pre><h5>Input</h5><pre>%2</pre>", token_text.str(), QString::fromUtf8(input.stringFrom(start))));
+          problem->setExplanation(i18n("<h5>Token text</h5><pre>%1</pre><h5>Input</h5><pre>%2</pre>", token_text.str(), input.stringFrom(start)));
           problemEncountered(problem);
         } else {
           accept_token();
@@ -553,7 +553,7 @@ Value pp::eval_primary(Stream& input)
         problem->setFinalLocation(KDevelop::DocumentRange(currentFileName(), KDevelop::SimpleRange(input.originalInputPosition().castToSimpleCursor(), 1)));
         QChar tk(token);
         problem->setDescription(i18n("Expected \")\", found %1", tk.isLetterOrNumber() ? QString(tk) : i18n("character %1", token)));
-        problem->setExplanation(i18n("<h5>Token text</h5><pre>%1</pre><h5>Input</h5><pre>%2</pre>", token_text.str(), QString::fromUtf8(input.stringFrom(start))));
+        problem->setExplanation(i18n("<h5>Token text</h5><pre>%1</pre><h5>Input</h5><pre>%2</pre>", token_text.str(), input.stringFrom(start)));
         problemEncountered(problem);
       } else {
         accept_token();
@@ -589,7 +589,7 @@ Value pp::eval_multiplicative(Stream& input)
         KDevelop::ProblemPointer problem(new KDevelop::Problem);
         problem->setFinalLocation(KDevelop::DocumentRange(currentFileName(), KDevelop::SimpleRange(input.originalInputPosition().castToSimpleCursor(), 0)));
         problem->setDescription(i18n("Division by zero"));
-        problem->setDescription(i18n("Input text: %1", QString::fromUtf8(input.stringFrom(start))));
+        problem->setDescription(i18n("Input text: %1", input.stringFrom(start)));
         problemEncountered(problem);
         result.set_long(0);
 
@@ -602,7 +602,7 @@ Value pp::eval_multiplicative(Stream& input)
         KDevelop::ProblemPointer problem(new KDevelop::Problem);
         problem->setFinalLocation(KDevelop::DocumentRange(currentFileName(), KDevelop::SimpleRange(input.originalInputPosition().castToSimpleCursor(), 0)));
         problem->setDescription(i18n("Division by zero"));
-        problem->setDescription(i18n("Input text: %1", QString::fromUtf8(input.stringFrom(start))));
+        problem->setDescription(i18n("Input text: %1", input.stringFrom(start)));
         problemEncountered(problem);
         result.set_long(0);
 
@@ -1052,14 +1052,12 @@ int pp::next_token (Stream& input)
     return 0;
   }
 
-  char ch = 0;
-  if(isCharacter(input.current()))
-    ch = characterFromIndex(input.current());
-  char ch2 = input.peekNextCharacter();
+  const QChar ch = isCharacter(input.current()) ? characterFromIndex(input.current()) : QChar();
+  const QChar ch2 = input.peekNextCharacter();
 
   nextToken = 0;
 
-  switch (ch) {
+  switch (ch.unicode()) {
     case '/':
       if (ch2 == '/' || ch2 == '*')
       {
@@ -1174,7 +1172,7 @@ int pp::next_token (Stream& input)
 
         KDevelop::SimpleCursor numericEndPosition = input.inputPosition().castToSimpleCursor();
 
-        QString number(QString::fromUtf8(stringFromContents(byteNumber)));
+        QString number(stringFromContents(byteNumber));
         int base = 10;
         if (number.startsWith("0x")) {
           base = 16;
@@ -1224,7 +1222,7 @@ int pp::next_token (Stream& input)
       else
       {
         if(isCharacter(input.current()))
-          nextToken = characterFromIndex(input.current());
+          nextToken = characterFromIndex(input.current()).unicode();
         else
           nextToken = TOKEN_IDENTIFIER;
         ++input;

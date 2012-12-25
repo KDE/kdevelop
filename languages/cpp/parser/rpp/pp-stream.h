@@ -75,16 +75,16 @@ class KDEVCPPRPP_EXPORT Stream
 
     const uint& peek(uint offset = 1) const;
     
-    char peekNextCharacter() const {
+    QChar peekNextCharacter() const {
       const unsigned int* next = c+1;
       if (next >= end || !isCharacter(*next))
-        return (char)0;
+        return QChar();
 
       return characterFromIndex(*next);
     }
 
     //Slow, just for debugging
-    QByteArray stringFrom(int offset) const;
+    QString stringFrom(int offset) const;
 
     /// \warning the input and output lines are not updated when calling this function.
     ///          if you're seek()ing over a line boundary, you'll need to fix the line and column
