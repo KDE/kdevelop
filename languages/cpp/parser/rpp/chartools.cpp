@@ -77,43 +77,31 @@ PreprocessedContents tokenizeFromString(const QString& string) {
   PreprocessedContents to;
   ///testing indicates that 9/10 is about the optimal value
   to.reserve(string.size()/10);//assuming that about every 10 chars is a token.
+
+  int identifierStart = -1;
+
   const QChar* data = string.constData();
-  const QChar* dataEnd = data + string.size();
-  //unsigned int* target = to.data();
-
-  ///TODO: optimize by using .midRef()
-  QString identifier;
-
-  bool tokenizing = false;
-
-  while(data < dataEnd) {
-    
-    if(!tokenizing) {
-      if(isLetter(*data) || *data == '_')
-        tokenizing = true;
-    }
-    
-    if(tokenizing) {
-      if(isLetterOrNumber(*data) || *data == '_') {
-        identifier.append(*data);
-      }else{
-        //End of token
-        to.append( KDevelop::IndexedString(identifier).index() );
-        //kDebug() << "word" << "\"" + KDevelop::IndexedString(to.back()).str() + "\"";
-        identifier.clear();
-        tokenizing = false;
+  for(int i = 0; i < string.length(); ++i, ++data) {
+    if (identifierStart == -1) {
+      if(isLetter(*data) || *data == '_') {
+        identifierStart = i;
       }
+    } else if (!(*data).isLetterOrNumber() && *data != QLatin1Char('_')) {
+      //End of token
+      to.append( KDevelop::IndexedString(string.midRef(identifierStart, i - identifierStart)).index() );
+      identifierStart = -1;
     }
-    
-    if(!tokenizing)
-      to.append( indexFromCharacter(*data) );
-    ++data;
+
+    if (identifierStart == -1) {
+      ///TODO: merge whitespace
+      to.append( KDevelop::IndexedString::charToIndex(*data) );
+    }
   }
-  
-  if(tokenizing)
-    to.append( KDevelop::IndexedString(identifier).index() );
-  
-  
+
+  if (identifierStart != -1) {
+    to.append( KDevelop::IndexedString(string.midRef(identifierStart, string.length() - identifierStart)).index() );
+  }
+
 /*  kDebug() << stringFromContents(to);
   kDebug() << string;
   Q_ASSERT(stringFromContents(to) == string);*/
