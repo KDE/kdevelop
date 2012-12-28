@@ -2981,7 +2981,7 @@ bool Parser::parseUnqualifiedName(UnqualifiedNameAST *&node,
 {
   uint start = session->token_stream->cursor();
 
-  uint tilde = 0;
+  bool tilde = false;
   uint id = 0;
   bool ellipsis = false;
   OperatorFunctionIdAST *operator_id = 0;
@@ -2997,7 +2997,7 @@ bool Parser::parseUnqualifiedName(UnqualifiedNameAST *&node,
   else if (session->token_stream->lookAhead() == '~'
            && session->token_stream->lookAhead(1) == Token_identifier)
     {
-      tilde = session->token_stream->cursor();
+      tilde = true;
       advance(); // skip ~
 
       id = session->token_stream->cursor();

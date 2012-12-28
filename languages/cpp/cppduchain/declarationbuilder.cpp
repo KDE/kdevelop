@@ -659,8 +659,10 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
     uint end = name->unqualified_name->end_token;
 
     //We must exclude the tilde. Else we may get totally messed up ranges when the name of a destructor is renamed in a macro
-    if(name->unqualified_name->tilde)
-      start = name->unqualified_name->tilde+1;
+    if(name->unqualified_name->tilde) {
+      Q_ASSERT(name->unqualified_name->id);
+      start = name->unqualified_name->id;
+    }
 
     newRange = editor()->findRange(start, end);
   }else if(rangeNode) {

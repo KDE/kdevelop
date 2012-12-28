@@ -1252,9 +1252,9 @@ public:
 
   DECLARE_AST_NODE(UnqualifiedName)
 
-  uint tilde;
+  bool tilde : 1;
+  bool ellipsis : 1;
   uint id;
-  bool ellipsis;
   OperatorFunctionIdAST *operator_id;
   const ListNode<TemplateArgumentAST*> *template_arguments;
 };
