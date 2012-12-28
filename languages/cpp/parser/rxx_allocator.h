@@ -105,6 +105,15 @@ public:
     typedef rxx_allocator<_Tp1> other;
   };
 
+  size_type size() const
+  {
+    if (_M_current_block == 0) {
+      return 0;
+    } else {
+      return _M_block_index * _S_block_size + _M_current_index;
+    }
+  }
+
 private:
 
   void init()

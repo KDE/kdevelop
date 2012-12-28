@@ -40,6 +40,7 @@
 #include "cpppreprocessenvironment.h"
 #include "cpputils.h"
 #include "control.h"
+#include <memorypool.h>
 
 using namespace Cpp;
 using namespace KDevelopUtils;
@@ -115,6 +116,9 @@ private:
       } else {
         qout << "no problems encountered during parsing" << endl;
       }
+
+      qout << "contents vector size: " << m_session.contentsVector().size() << endl;
+      qout << "mempool size: " << m_session.mempool->size() << endl;
 
       if (!ast) {
         exit(255);

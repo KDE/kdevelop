@@ -30,6 +30,13 @@ class pool
 public:
   /**Allocates the @p size bytes in the pool.*/
   inline void *allocate(std::size_t __size);
+  /**
+   * @return The number of bytes allocated.
+   */
+  std::size_t size() const
+  {
+    return __alloc.size();
+  }
 };
 
 inline void *pool::allocate(std::size_t __size)
