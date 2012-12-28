@@ -144,13 +144,13 @@ void Manager::init()
     {
         addToBackgroundParser(m_args->arg(i), (TopDUContext::Features)features);
     }
-
     m_allFilesAdded = 1;
 
     if ( m_total ) {
         std::cout << "Added " << m_total << " files to the background parser" << std::endl;
         const int threads = ICore::self()->languageController()->backgroundParser()->threadCount();
         std::cout << "parsing with " << threads << " threads" << std::endl;
+        ICore::self()->languageController()->backgroundParser()->parseDocuments();
     } else {
         std::cout << "no files added to the background parser" << std::endl;
         QCoreApplication::exit(0);
