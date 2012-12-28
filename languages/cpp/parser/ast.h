@@ -819,8 +819,8 @@ public:
 
   DECLARE_AST_NODE(Namespace)
 
-  uint namespace_name;
   LinkageBodyAST *linkage_body;
+  uint namespace_name;
   bool inlined : 1;
 };
 
@@ -1218,11 +1218,11 @@ public:
 
   DECLARE_AST_NODE(TypeParameter)
 
-  uint type;
   NameAST *name;
   TypeIdAST *type_id;
   const ListNode<TemplateParameterAST*> *template_parameters;
   NameAST *template_name;
+  uint type;
   bool isVariadic;
 };
 
