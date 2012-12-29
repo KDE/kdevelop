@@ -145,14 +145,7 @@ DisassembleWidget::DisassembleWidget(CppDebuggerPlugin* plugin, QWidget *parent)
     
     {   // initialize disasm view
         m_treeWidget = new QTreeWidget(this);
-    
-        m_treeWidget->setToolTip(i18n("<b>Machine code display</b><p>"
-                        "A machine code view into your running "
-                        "executable with the current instruction "
-                        "highlighted. You can step instruction by "
-                        "instruction using the debuggers toolbar "
-                        "buttons of \"step over\" instruction and "
-                        "\"step into\" instruction."));
+
         m_treeWidget->setFont(KGlobalSettings::fixedFont());
         m_treeWidget->setSelectionMode(QTreeWidget::SingleSelection);
         m_treeWidget->setColumnCount(ColumnCount);
