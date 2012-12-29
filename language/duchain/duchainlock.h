@@ -171,7 +171,10 @@ public:
   bool locked() const;
 
 private:
-  class DUChainWriteLockerPrivate* const d;
+  ///This class does not use a d-pointer for performance reasons (allocation+deletion in every high frequency is expensive)
+  DUChainLock* m_lock;
+  bool m_locked;
+  uint m_timeout;
 };
 
 /**
