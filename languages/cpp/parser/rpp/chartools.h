@@ -47,13 +47,19 @@ inline bool isNumber(char c) {
 
 //Takes an index as delt with during preprocessing, and determines whether it is a fake-index that represents
 //a character. If the 0xffff0000 bits are set, it is a custom character.
-#define isCharacter(index) ((index & 0xffff0000) == 0xffff0000)
+inline bool isCharacter(uint index) {
+  return (index & 0xffff0000) == 0xffff0000;
+}
 
 //Creates an index that represents the given character
-#define indexFromCharacter(character) ((unsigned int)character | 0xffff0000)
+inline uint indexFromCharacter(char character) {
+  return (uint)character | 0xffff0000;
+}
 
 //Extracts the character that is represented by the index
-#define characterFromIndex(index) ((char)(index & 0xffff))
+inline char characterFromIndex(uint index) {
+  return (char)(index & 0xffff);
+}
 
 inline bool isSpace(unsigned int c) {
   return isCharacter(c) && QChar(characterFromIndex(c)).isSpace();
