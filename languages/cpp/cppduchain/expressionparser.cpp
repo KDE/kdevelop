@@ -47,10 +47,70 @@ ExpressionParser::ExpressionParser( bool strict, bool debug, bool propagateConst
 {
 }
 
+QHash<QByteArray, ExpressionEvaluationResult> buildStaticLookupTable()
+{
+  QHash<QByteArray, ExpressionEvaluationResult> ret;
+  ExpressionEvaluationResult res;
+  IntegralType::Ptr type(new IntegralType());
+
+  type->setDataType(IntegralType::TypeBoolean);
+  res.type = type->indexed();
+  ret.insert("bool", res);
+
+  type->setDataType(IntegralType::TypeChar);
+  res.type = type->indexed();
+  ret.insert("char", res);
+
+  type->setDataType(IntegralType::TypeFloat);
+  res.type = type->indexed();
+  ret.insert("float", res);
+
+  type->setDataType(IntegralType::TypeDouble);
+  res.type = type->indexed();
+  ret.insert("double", res);
+
+  type->setDataType(IntegralType::TypeInt);
+  res.type = type->indexed();
+  ret.insert("int", res);
+
+  type->setDataType(IntegralType::TypeVoid);
+  res.type = type->indexed();
+  ret.insert("void", res);
+
+  type->setDataType(IntegralType::TypeWchar_t);
+  res.type = type->indexed();
+  ret.insert("wchar_t", res);
+
+  ConstantIntegralType::Ptr constType(new ConstantIntegralType);
+  constType->setDataType(IntegralType::TypeBoolean);
+  constType->setValue<bool>(true);
+  res.type = constType->indexed();
+  ret.insert("true", res);
+  ///NOTE: the trailing space is by intention, apparently thats what gets queried
+  ret.insert("true ", res);
+
+  constType->setValue<bool>(false);
+  res.type = constType->indexed();
+  ret.insert("false", res);
+  ///NOTE: the trailing space is by intention, apparently thats what gets queried
+  ret.insert("false ", res);
+
+  ///TODO: extend at will
+
+  return ret;
+}
+
 ExpressionEvaluationResult ExpressionParser::evaluateType( const QByteArray& unit, DUContextPointer context, const TopDUContext* source, bool forceExpression ) {
 
   if( m_debug )
     kDebug(9007) << "==== .Evaluating ..:" << endl << unit;
+
+  // fast path for common built-in types
+  static const QHash<QByteArray, ExpressionEvaluationResult> staticLookupTable = buildStaticLookupTable();
+  QHash< QByteArray, ExpressionEvaluationResult >::const_iterator it = staticLookupTable.constFind(unit);
+  if (it != staticLookupTable.constEnd()) {
+    return it.value();
+  }
 
   ParseSession session;
 
