@@ -1357,6 +1357,54 @@ void TestExpressionParser::testCharacterTypes()
   QCOMPARE(integralType->dataType(), type);
 }
 
+void TestExpressionParser::benchEvaluateType()
+{
+  DUChainWriteLocker lock;
+  QFETCH(DUContextPointer, context);
+  QFETCH(QByteArray, type);
+
+  QVERIFY(context);
+
+  Cpp::ExpressionParser parser;
+  QBENCHMARK {
+    parser.evaluateType(type, context);
+  }
+}
+
+void TestExpressionParser::benchEvaluateType_data()
+{
+  QTest::addColumn<DUContextPointer>("context");
+  QTest::addColumn<QByteArray>("type");
+
+  DUChainWriteLocker lock;
+  DUContextPointer top(parse("namespace ns { struct A { int b; }; } template<class T> struct B { }; int main(int argc) {ns::A a;}"));
+  QVERIFY(top->childContexts().size() == 5);
+
+  QTest::newRow("global-char") << top << QByteArray("char");
+  QTest::newRow("global-bool") << top << QByteArray("bool");
+  QTest::newRow("global-false") << top << QByteArray("false ");
+  QTest::newRow("global-true") << top << QByteArray("true ");
+  QTest::newRow("global-void") << top << QByteArray("void");
+  QTest::newRow("global-float") << top << QByteArray("float");
+  QTest::newRow("global-double") << top << QByteArray("double");
+  QTest::newRow("global-int") << top << QByteArray("int");
+  QTest::newRow("global-int-number") << top << QByteArray("1234");
+  QTest::newRow("global-long-number") << top << QByteArray("1234l");
+  QTest::newRow("global-long-long-number") << top << QByteArray("1234ll");
+  QTest::newRow("global-ns::A") << top << QByteArray("ns::A");
+  QTest::newRow("global-B") << top << QByteArray("B");
+
+  DUContextPointer tplCtx(top->childContexts().at(2));
+  QTest::newRow("tpl-T") << tplCtx << QByteArray("T");
+  QTest::newRow("tpl-ns::A") << tplCtx << QByteArray("ns::A");
+  QTest::newRow("tpl-B") << tplCtx << QByteArray("B");
+
+  DUContextPointer mainCtx(top->childContexts().last());
+  QTest::newRow("main-ns::A") << mainCtx << QByteArray("ns::A");
+  QTest::newRow("main-a.b") << mainCtx << QByteArray("a.b");
+  QTest::newRow("main-B") << mainCtx << QByteArray("B");
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
