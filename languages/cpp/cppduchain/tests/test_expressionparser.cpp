@@ -1377,7 +1377,7 @@ void TestExpressionParser::benchEvaluateType_data()
   QTest::addColumn<QByteArray>("type");
 
   DUChainWriteLocker lock;
-  DUContextPointer top(parse("namespace ns { struct A { int b; }; } template<class T> struct B { }; int main(int argc) {ns::A a;}"));
+  DUContextPointer top(parse("namespace ns { struct A { int b; }; } template<class T, typename _T2> struct B { }; int main(int argc) {ns::A a;}"));
   QVERIFY(top->childContexts().size() == 5);
 
   QTest::newRow("global-char") << top << QByteArray("char");
@@ -1396,6 +1396,7 @@ void TestExpressionParser::benchEvaluateType_data()
 
   DUContextPointer tplCtx(top->childContexts().at(2));
   QTest::newRow("tpl-T") << tplCtx << QByteArray("T");
+  QTest::newRow("tpl-_T2") << tplCtx << QByteArray("_T2");
   QTest::newRow("tpl-ns::A") << tplCtx << QByteArray("ns::A");
   QTest::newRow("tpl-B") << tplCtx << QByteArray("B");
 

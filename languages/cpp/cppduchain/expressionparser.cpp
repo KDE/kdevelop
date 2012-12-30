@@ -100,6 +100,22 @@ QHash<QByteArray, ExpressionEvaluationResult> buildStaticLookupTable()
   return ret;
 }
 
+bool tryDirectLookup(const QByteArray& unit)
+{
+  if (unit.isEmpty()) {
+    return false;
+  }
+  if (!std::isalpha(unit.at(0)) && unit.at(0) != '_') {
+    return false;
+  }
+  for (QByteArray::const_iterator it = unit.constBegin() + 1; it != unit.constEnd(); ++it) {
+    if (!std::isalnum(*it) && *it != ':' && *it != '_') {
+      return false;
+    }
+  }
+  return true;
+}
+
 ExpressionEvaluationResult ExpressionParser::evaluateType( const QByteArray& unit, DUContextPointer context, const TopDUContext* source, bool forceExpression ) {
 
   if( m_debug )
@@ -110,6 +126,23 @@ ExpressionEvaluationResult ExpressionParser::evaluateType( const QByteArray& uni
   QHash< QByteArray, ExpressionEvaluationResult >::const_iterator it = staticLookupTable.constFind(unit);
   if (it != staticLookupTable.constEnd()) {
     return it.value();
+  }
+
+  // fast path for direct lookup of identifiers
+  if (!forceExpression && tryDirectLookup(unit)) {
+    DUChainReadLocker lock;
+    QList< Declaration* > decls = context->findDeclarations(QualifiedIdentifier(QString::fromUtf8(unit)),
+                                                            CursorInRevision::invalid(),
+                                                            AbstractType::Ptr(),
+                                                            source);
+    if (!decls.isEmpty()) {
+      ExpressionEvaluationResult res;
+      foreach(Declaration* decl, decls) {
+        res.allDeclarations.append(decl->id());
+      }
+      res.type = decls.first()->indexedType();
+      return res;
+    }
   }
 
   ParseSession session;
@@ -141,10 +174,8 @@ ExpressionEvaluationResult ExpressionParser::evaluateType( const QByteArray& uni
     kDebug() << "context disappeared";
     return ExpressionEvaluationResult();
   }
-  
+
   ExpressionEvaluationResult ret = evaluateType( ast, &session, source );
-
-
   return ret;
 }
 
