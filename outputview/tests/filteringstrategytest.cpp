@@ -77,6 +77,14 @@ void FilteringStrategyTest::testCompilerFilterstrategy_data()
     << buildCompilerErrorLine() << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
     QTest::newRow("compiler-information-line")
     << buildCompilerInformationLine() << FilteredItem::InformationItem << FilteredItem::InvalidItem;
+    QTest::newRow("cmake-error-line1")
+    << "CMake Error at CMakeLists.txt:2 (cmake_minimum_required):" << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
+    QTest::newRow("cmake-error-multiline1")
+    << "CMake Error: Error in cmake code at" << FilteredItem::InvalidItem << FilteredItem::InvalidItem;
+    QTest::newRow("cmake-error-multiline2")
+    << buildCmakeConfigureMultiLine() << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
+    QTest::newRow("cmake-warning-line")
+    << "CMake Warning (dev) in CMakeLists.txt:" << FilteredItem::WarningItem << FilteredItem::InvalidItem;
     QTest::newRow("linker-action-line")
     << "linking testCustombuild (g++)" << FilteredItem::InvalidItem << FilteredItem::ActionItem;
     QTest::newRow("linker-error-line")

@@ -56,6 +56,7 @@ struct CompilerFilterStrategyPrivate
     CompilerFilterStrategyPrivate(const KUrl& buildDir);
     KUrl urlForFile( const QString& ) const;
     bool isMultiLineCase(ErrorFormat curErrFilter) const;
+    void putDirAtEnd(const QString& );
 
     QVector<QString> m_currentDirs;
     KUrl m_buildDir;
@@ -92,6 +93,10 @@ const QList<ErrorFormat> ERROR_FILTERS = QList<ErrorFormat>()
     << ErrorFormat( "^(libtool):( link):( warning): ", 0, 0, 0 )
     // make
     << ErrorFormat( "No rule to make target", 0, 0, 0 )
+    // cmake
+    << ErrorFormat( "^([^: \\t]+):([0-9]+):", 1, 2, 0, "cmake" )
+    // cmake
+    << ErrorFormat( "CMake (Error|Warning) (|\\([a-zA-Z]+\\) )(in|at) ([^:]+):($|[0-9]+)", 4, 5, 1, "cmake" )
     // Fortran
     << ErrorFormat( "\"(.*)\", line ([0-9]+):(.*)", 1, 2, 3 )
     // GFortran
@@ -128,6 +133,7 @@ QList<ActionFormat> ACTION_FILTERS = QList<ActionFormat>()
     << ActionFormat( i18n("generating"), -1, 1, "\\[.+%\\] Generating (.*)" )
     << ActionFormat( i18nc("Linking object files into a library or executable",
                      "linking"), -1, 1, "^Linking (.*)" )
+    << ActionFormat( i18n("configuring"), "cmake", "(-- Configuring (done|incomplete)|-- Found|-- Adding|-- Enabling)", -1 )
     << ActionFormat( i18n("installing"), -1, 1, "-- Installing (.*)" )
     //libtool install
     << ActionFormat( i18n("creating"), "", "/(?:bin/sh\\s.*mkinstalldirs).*\\s([^\\s;]+)", 1 )
@@ -169,6 +175,30 @@ KUrl CompilerFilterStrategyPrivate::urlForFile(const QString& filename) const
     return currentUrl;
 }
 
+bool CompilerFilterStrategyPrivate::isMultiLineCase(KDevelop::ErrorFormat curErrFilter) const
+{
+    if(curErrFilter.compiler == "gfortran" || curErrFilter.compiler == "cmake") {
+        return true;
+    }
+    return false;
+}
+
+void CompilerFilterStrategyPrivate::putDirAtEnd(const QString& dirNameToInsert)
+{
+    CompilerFilterStrategyPrivate::PositionMap::iterator it = m_positionInCurrentDirs.find( dirNameToInsert );
+    // Encountered new build directory?
+    if (it == m_positionInCurrentDirs.end()) {
+        m_currentDirs.push_back( dirNameToInsert );
+        m_positionInCurrentDirs.insert( dirNameToInsert, m_currentDirs.size() - 1 );
+    } else {
+        // Build dir already in currentDirs, but move it to back of currentDirs list
+        // (this gives us most-recently-used semantics in urlForFile)
+        std::rotate(m_currentDirs.begin() + it.value(), m_currentDirs.begin() + it.value() + 1, m_currentDirs.end() );
+        it.value() = m_currentDirs.size() - 1;
+    }
+}
+
+
 CompilerFilterStrategy::CompilerFilterStrategy(const KUrl& buildDir)
 : d(new CompilerFilterStrategyPrivate( buildDir ))
 {
@@ -206,41 +236,16 @@ FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
             // and use it to find out about the build paths encountered during a build.
             // They are later searched by urlForFile to find source files corresponding to
             // compiler errors.
-            if ( curActFilter.action == i18n("compiling") && curActFilter.tool == "cmake")
-            {
+            if ( curActFilter.action == i18n("compiling") && curActFilter.tool == "cmake") {
                 KUrl url = d->m_buildDir;
                 url.addPath(regEx.cap( curActFilter.fileGroup ));
-                QString dirName = url.toLocalFile();
-                // Use map to check for duplicates, to avoid O(n^2) behaviour
-                CompilerFilterStrategyPrivate::PositionMap::iterator it = d->m_positionInCurrentDirs.find(dirName);
-                // Encountered new build directory?
-                if (it == d->m_positionInCurrentDirs.end())
-                {
-                    d->m_currentDirs.push_back( dirName );
-                    d->m_positionInCurrentDirs.insert( dirName, d->m_currentDirs.size() - 1 );
-                }
-                else
-                {
-                    // Build dir already in currentDirs, but move it to back of currentDirs list
-                    // (this gives us most-recently-used semantics in urlForFile)
-                    std::rotate(d->m_currentDirs.begin() + it.value(), d->m_currentDirs.begin() + it.value() + 1, d->m_currentDirs.end() );
-                    it.value() = d->m_currentDirs.size() - 1;
-                }
+                d->putDirAtEnd(url.toLocalFile());
             }
             break;
         }
     }
     return item;
 }
-
-bool CompilerFilterStrategyPrivate::isMultiLineCase(KDevelop::ErrorFormat curErrFilter) const
-{
-    if(curErrFilter.compiler == "gfortran") {
-        return true;
-    }
-    return false;
-}
-
 
 FilteredItem CompilerFilterStrategy::errorInLine(const QString& line)
 {
@@ -249,6 +254,11 @@ FilteredItem CompilerFilterStrategy::errorInLine(const QString& line)
         QRegExp regEx = curErrFilter.expression;
         if( regEx.indexIn( line ) != -1 && !( line.contains( "Each undeclared identifier is reported only once" ) || line.contains( "for each function it appears in." ) ) ) {
             if(curErrFilter.fileGroup > 0) {
+                if( curErrFilter.compiler == "cmake" ) { // Unfortunately we cannot know if an error or an action comes first in cmake, and therefore we need to do this
+                    if( d->m_currentDirs.empty() ) {
+                        d->putDirAtEnd( d->m_buildDir.upUrl().toLocalFile() );
+                    }
+                }
                 item.url = d->urlForFile( regEx.cap( curErrFilter.fileGroup ) );
             }
             item.lineNo = regEx.cap( curErrFilter.lineGroup ).toInt() - 1;
@@ -276,8 +286,7 @@ FilteredItem CompilerFilterStrategy::errorInLine(const QString& line)
                 if(item.type == FilteredItem::InvalidItem) {
                     // If there are no error indicators in the line
                     // maybe this is a multiline case
-                    if(d->isMultiLineCase(curErrFilter))
-                    {
+                    if(d->isMultiLineCase(curErrFilter)) {
                         item.type = FilteredItem::ErrorItem;
                     } else {
                         // Okay so we couldn't find anything to indicate an error, but we have file and lineGroup

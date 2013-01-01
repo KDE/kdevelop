@@ -116,6 +116,16 @@ QString buildCompilerActionLine()
     return QString("linking testCustombuild (g++)");
 }
 
+QString buildCmakeConfigureMultiLine()
+{
+    KUrl projecturl( PROJECTS_SOURCE_DIR"/onefileproject/" );
+    QString outputline;
+    outputline.append(projecturl.path());
+    outputline.append("CMakeLists.txt:10:");
+    return outputline;
+}
+
+
 QString buildLinkerErrorLine()
 {
     return QString("/path/to/file/Buffer.cpp:66: undefined reference to `Buffer::does_not_exist()'");
