@@ -12,6 +12,7 @@ set(kdevplatformutil_LIB_SRCS
     commandexecutor.cpp
     environmentconfigurebutton.cpp
     environmentselectionwidget.cpp
+    environmentselectionmodel.cpp
     environmentgrouplist.cpp
     activetooltip.cpp
     executecompositejob.cpp

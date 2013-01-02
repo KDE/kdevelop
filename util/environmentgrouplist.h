@@ -69,6 +69,9 @@ namespace KDevelop
 class KDEVPLATFORMUTIL_EXPORT EnvironmentGroupList
 {
 public:
+    EnvironmentGroupList( const EnvironmentGroupList& rhs );
+    EnvironmentGroupList& operator=( const EnvironmentGroupList& rhs );
+
     /**
      * Creates an a list of EnvironmentGroups from a KConfig object
      * @param config the KConfig object to read the environment groups from

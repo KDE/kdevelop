@@ -72,7 +72,7 @@ void ScriptAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelo
     }
     arguments->setText( cfg.readEntry( ExecuteScriptPlugin::argumentsEntry, "" ) );
     workingDirectory->setUrl( cfg.readEntry( ExecuteScriptPlugin::workingDirEntry, KUrl() ) );
-    environment->setCurrentProfile( cfg.readEntry( ExecuteScriptPlugin::environmentGroupEntry, "default" ) );
+    environment->setCurrentProfile( cfg.readEntry( ExecuteScriptPlugin::environmentGroupEntry, QString() ) );
     outputFilteringMode->setCurrentIndex( cfg.readEntry( ExecuteScriptPlugin::outputFilteringEntry, 0u ));
     //runInTerminal->setChecked( cfg.readEntry( ExecuteScriptPlugin::useTerminalEntry, false ) );
     blockSignals( b );
@@ -86,10 +86,6 @@ ScriptAppConfigPage::ScriptAppConfigPage( QWidget* parent )
 
     //Set workingdirectory widget to ask for directories rather than files
     workingDirectory->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
-
-    KDevelop::EnvironmentGroupList env( KGlobal::config() );
-    environment->addItems( env.groups() );
-
 
     //connect signals to changed signal
     connect( interpreter->lineEdit(), SIGNAL(textEdited(QString)), SIGNAL(changed()) );

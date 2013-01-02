@@ -80,20 +80,30 @@ void encode( KConfigGroup cfg, EnvironmentGroupListPrivate* d )
     cfg.sync();
 }
 
+EnvironmentGroupList::EnvironmentGroupList( const EnvironmentGroupList& rhs )
+    : d( new EnvironmentGroupListPrivate( *rhs.d ) )
+{
+}
+
+EnvironmentGroupList& EnvironmentGroupList::operator=( const EnvironmentGroupList& rhs )
+{
+    *d = *rhs.d;
+    return *this;
+}
+
 EnvironmentGroupList::EnvironmentGroupList( KSharedConfigPtr config )
-    : d(new EnvironmentGroupListPrivate)
+    : d( new EnvironmentGroupListPrivate )
 {
     KConfigGroup cfg( config, envGroup );
     decode( cfg, d );
 }
 
 EnvironmentGroupList::EnvironmentGroupList( KConfig* config )
-    : d(new EnvironmentGroupListPrivate)
+    : d( new EnvironmentGroupListPrivate )
 {
     KConfigGroup cfg( config, envGroup );
     decode( cfg, d );
 }
-
 
 EnvironmentGroupList::~EnvironmentGroupList()
 {
@@ -153,7 +163,7 @@ void EnvironmentGroupList::removeGroup( const QString& group )
 }
 
 EnvironmentGroupList::EnvironmentGroupList()
-    : d( new EnvironmentGroupListPrivate)
+    : d( new EnvironmentGroupListPrivate )
 {
 }
 

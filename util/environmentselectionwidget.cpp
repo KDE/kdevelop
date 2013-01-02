@@ -18,20 +18,37 @@ Boston, MA 02110-1301, USA.
 */
 #include "environmentselectionwidget.h"
 #include "environmentgrouplist.h"
+#include "environmentselectionmodel.h"
 #include <ksettings/dispatcher.h>
 #include <kglobal.h>
 #include <interfaces/icore.h>
 #include <kcomponentdata.h>
+#include <QtGui/QBoxLayout>
+#include <QtGui/QLayout>
+#include <KLocalizedString>
+#include <KDebug>
 
 namespace KDevelop
 {
 
-class EnvironmentSelectionWidgetPrivate
+struct EnvironmentSelectionWidgetPrivate
 {
+    KComboBox* comboBox;
+    EnvironmentSelectionModel* model;
+    EnvironmentSelectionWidget* owner;
+
+    EnvironmentSelectionWidgetPrivate( EnvironmentSelectionWidget* _owner )
+        : comboBox( new KComboBox( _owner ) )
+        , model( new EnvironmentSelectionModel( _owner ) )
+        , owner( _owner )
+    {
+        comboBox->setModel( model );
+        comboBox->setEditable( false );
+    }
 };
 
 EnvironmentSelectionWidget::EnvironmentSelectionWidget( QWidget *parent )
-    : KComboBox( parent ), d( new EnvironmentSelectionWidgetPrivate )
+    : QWidget( parent ), d( new EnvironmentSelectionWidgetPrivate( this ) )
 {
     // Taken from kdelibs/kdeui/dialogs/kconfigdialogmanager.cpp (no idea whether this is documented)
     // Commits d44186bce4670d2985fb6aba8dba59bbd2c4c77a and 8edc1932ecc62370d9a31836dfa9b2bd0175a293
@@ -42,6 +59,12 @@ EnvironmentSelectionWidget::EnvironmentSelectionWidget( QWidget *parent )
     // ignored. Setting this special kcfg_property to the name of our user-property again overrides
     // the hardcoded combobox-behaviour - until the next one breaks things in kdelibs :|
     setProperty("kcfg_property", QByteArray("currentProfile"));
+
+    setLayout( new QHBoxLayout( this ) );
+    layout()->addWidget( d->comboBox );
+    layout()->setMargin( 0 );
+
+    setCurrentProfile( QString() ); // select the default profile
 }
 
 EnvironmentSelectionWidget::~EnvironmentSelectionWidget()
@@ -51,14 +74,30 @@ EnvironmentSelectionWidget::~EnvironmentSelectionWidget()
 
 QString EnvironmentSelectionWidget::currentProfile() const
 {
-    return currentText();
+    return d->model->index( d->comboBox->currentIndex(), 0 ).data( Qt::EditRole ).toString();
 }
 
 void EnvironmentSelectionWidget::setCurrentProfile( const QString& profile )
 {
-    setCurrentItem( profile );
+    d->comboBox->setCurrentIndex( d->comboBox->findData( profile, Qt::EditRole ) );
 }
 
+void EnvironmentSelectionWidget::reconfigure()
+{
+    QString selectedProfile = currentProfile();
+    d->model->reload();
+    setCurrentProfile( d->model->reloadSelectedItem( selectedProfile ) );
+}
+
+QString EnvironmentSelectionWidget::effectiveProfileName() const
+{
+    return d->model->index( d->comboBox->currentIndex(), 0 ).data( EnvironmentSelectionModel::EffectiveNameRole ).toString();
+}
+
+EnvironmentGroupList EnvironmentSelectionWidget::environment() const
+{
+    return d->model->environment();
+}
 
 }
 

@@ -91,7 +91,7 @@ void NativeAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelo
     arguments->setClearButtonShown( true );
     arguments->setText( cfg.readEntry( ExecutePlugin::argumentsEntry, "" ) );
     workingDirectory->setUrl( cfg.readEntry( ExecutePlugin::workingDirEntry, KUrl() ) );
-    environment->setCurrentProfile( cfg.readEntry( ExecutePlugin::environmentGroupEntry, "default" ) );
+    environment->setCurrentProfile( cfg.readEntry( ExecutePlugin::environmentGroupEntry, QString() ) );
     runInTerminal->setChecked( cfg.readEntry( ExecutePlugin::useTerminalEntry, false ) );
     terminal->setEditText( cfg.readEntry( ExecutePlugin::terminalEntry, terminal->itemText(0) ) );
     QVariantList deps = KDevelop::stringToQVariant( cfg.readEntry( ExecutePlugin::dependencyEntry, QString() ) ).toList();
@@ -129,9 +129,6 @@ NativeAppConfigPage::NativeAppConfigPage( QWidget* parent )
     
     //Set workingdirectory widget to ask for directories rather than files
     workingDirectory->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
-
-    KDevelop::EnvironmentGroupList env( KGlobal::config() );
-    environment->addItems( env.groups() );
 
     configureEnvironment->setSelectionWidget(environment);
 

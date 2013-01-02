@@ -20,36 +20,24 @@ Boston, MA 02110-1301, USA.
 #define KDEVPLATFORM_ENVIRONMENTSELECTIONWIDGET_H
 
 #include <kcombobox.h>
+
 #include "utilexport.h"
+#include "environmentgrouplist.h"
 
 namespace KDevelop
 {
 
 /**
- * Simple compobox which allows each plugin to decide which environment
+ * Simple combobox which allows each plugin to decide which environment
  * variable group to use.
  *
  * Can be used just like a KComboBox in Configuration dialogs including usage
  * with KConfigXT.
  *
- * Example code to populate the list:
- * \code
- * EnvironmentGroupList envlist( PluginSettings::self()->config() );
- * ui->kcfg_environmentGroup->addItems( envlist.groups()) );
- * \endcode
- *
- * The .kcfg file for that would include an entry like this:
- * \code
- * <entry name="environmentGroup" key="Make Environment Group" type="string">
- *   <default>default</default>
- * </entry>
- * \endcode
- *
- * It is important to list "default" as the default value, because that is currently
- * the only way to avoid an empty entry in the combo box.
+ * @note    The widget is populated and defaulted automatically.
  *
  */
-class KDEVPLATFORMUTIL_EXPORT EnvironmentSelectionWidget : public KComboBox
+class KDEVPLATFORMUTIL_EXPORT EnvironmentSelectionWidget : public QWidget
 {
     Q_OBJECT
     Q_PROPERTY( QString currentProfile READ currentProfile WRITE setCurrentProfile USER true )
@@ -59,22 +47,38 @@ public:
     ~EnvironmentSelectionWidget();
 
     /**
-     * Return the currently selected text as special property so this widget
-     * works with KConfigXT
-     * @returns the currently selected items text
+     * @returns The currently selected environment profile name, as written to KConfigXT
      */
     QString currentProfile() const;
 
     /**
-     * Setter for the KConfigXT property
-     * @param text the item text which should be set as current.
+     * Sets the environment profile to be written to KConfigXT and updates the combo-box.
+     *
+     * @param text The environment profile name to select
      */
     void setCurrentProfile( const QString& text );
 
-private:
-    class EnvironmentSelectionWidgetPrivate* const d;
-    friend class EnvironmentSelectionWidgetPrivate;
+    /**
+     * @returns The currently effective environment profile name (like @ref currentProfile(),
+     *          but with empty value resolved to the default profile).
+     */
+    QString effectiveProfileName() const;
 
+    /**
+     * @returns The @ref EnvironmentGroupList which has been used to populate this
+     *          widget.
+     */
+    EnvironmentGroupList environment() const;
+
+public slots:
+    /**
+     * Makes the widget re-read its environment group list.
+     */
+    void reconfigure();
+
+private:
+    struct EnvironmentSelectionWidgetPrivate* const d;
+    friend struct EnvironmentSelectionWidgetPrivate;
 };
 
 }
