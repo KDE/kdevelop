@@ -111,6 +111,24 @@ QString buildCompilerInformationLine()
     return outputline;
 }
 
+QString buildInfileIncludedFromFirstLine()
+{
+    KUrl projecturl( PROJECTS_SOURCE_DIR"/onefileproject/" );
+    QString outputline("In file included from ");
+    outputline.append(projecturl.path());
+    outputline.append("PriorityFactory.h:52:0,");
+    return outputline;
+}
+
+QString buildInfileIncludedFromSecondLine()
+{
+    KUrl projecturl( PROJECTS_SOURCE_DIR"/onefileproject/" );
+    QString outputline("    from ");
+    outputline.append(projecturl.path());
+    outputline.append("PatchBasedInpainting.hxx:29,");
+    return outputline;
+}
+
 QString buildCompilerActionLine()
 {
     return QString("linking testCustombuild (g++)");

@@ -77,6 +77,10 @@ void FilteringStrategyTest::testCompilerFilterstrategy_data()
     << buildCompilerErrorLine() << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
     QTest::newRow("compiler-information-line")
     << buildCompilerInformationLine() << FilteredItem::InformationItem << FilteredItem::InvalidItem;
+    QTest::newRow("compiler-information-line2")
+    << buildInfileIncludedFromFirstLine() << FilteredItem::InformationItem << FilteredItem::InvalidItem;
+    QTest::newRow("compiler-information-line3")
+    << buildInfileIncludedFromSecondLine() << FilteredItem::InformationItem << FilteredItem::InvalidItem;
     QTest::newRow("cmake-error-line1")
     << "CMake Error at CMakeLists.txt:2 (cmake_minimum_required):" << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
     QTest::newRow("cmake-error-multiline1")

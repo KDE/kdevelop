@@ -87,6 +87,8 @@ const QList<ErrorFormat> ERROR_FILTERS = QList<ErrorFormat>()
     << ErrorFormat( "^([^:\t]+):([0-9]+):([0-9]+):([^0-9]+)", 1, 2, 4, 3 )
     // GCC
     << ErrorFormat( "^([^:\t]+):([0-9]+):([^0-9]+)", 1, 2, 3 )
+    // GCC
+    << ErrorFormat( "^(In file included from |[ ]+from )([^: \\t]+):([0-9]+)(:|,)(|[0-9]+)", 2, 3, 5 )
     // ICC
     << ErrorFormat( "^([^: \\t]+)\\(([0-9]+)\\):([^0-9]+)", 1, 2, 3, "intel" )
     //libtool link
