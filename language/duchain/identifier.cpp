@@ -77,7 +77,7 @@ public:
       //The thread-safety is given because all threads will have the same result, and it will only be written once at the end.
       uint hash = m_identifier.hash();
       FOREACH_FUNCTION_STATIC(const IndexedTypeIdentifier& templateIdentifier, templateIdentifiers)
-        hash = hash * 13 + IndexedTypeIdentifier(templateIdentifier).hash();
+        hash = hash * 13 + templateIdentifier.hash();
       hash += m_unique;
       m_hash = hash;
     }
