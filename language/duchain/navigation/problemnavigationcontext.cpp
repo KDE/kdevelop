@@ -39,9 +39,10 @@ ProblemNavigationContext::ProblemNavigationContext(ProblemPointer problem): m_pr
     QHBoxLayout* layout = new QHBoxLayout(m_widget);
     RichTextPushButton* button = new RichTextPushButton;
 //     button->setPopupMode(QToolButton::InstantPopup);
-    button->setHtml(i18n("<i>Solve</i>"));
     if(!solution->title().isEmpty())
       button->setHtml(i18n("<i>Solve:</i> %1", solution->title()));
+    else
+      button->setHtml(i18n("<i>Solve</i>"));
 
     QMenu* menu = new QMenu;
     menu->setFocusPolicy(Qt::NoFocus);
