@@ -1,25 +1,8 @@
 {% extends "cpp_implementation.cpp" %}
 {% load kdev_filters %}
 
-{% block extra_declarations %}
-
-class {{ name }}Private
-{
-public:
-    {% for property in members %}
-    {{ property.type }} {{ property.name }};
-    {% endfor %}
-
-    {% for method in private_functions %}
-    {% include "method_declaration.txt" %}
-    {% endfor %}
-};
-
-{% endblock extra_declarations %}
-
 {% block extra_definitons %}
 
-{% with name|add:"Private" as name %}
 {% for method in private_functions %}
 {% with method.arguments as arguments %}
 
@@ -34,7 +17,6 @@ public:
 
 {% endwith %}
 {% endfor %}
-{% endwith %}
 
 {% endblock extra_definitons %}
 
@@ -44,13 +26,9 @@ public:
 {% with method.arguments as arguments %}
 
 {% include "method_definition_cpp.txt" %}
-{% if method.isConstructor %}: d_ptr(new {{ name }}Private){% endif %}
 {
-    {% if method.isDestructor %}
-    delete d_ptr;{% endif %}{% if method.type %}return {{ method.default_return_value }};
+    {% if method.type %}return {{ method.default_return_value }};
     {% endif %}
-
-
 }
 
 {% endwith %}
@@ -60,13 +38,9 @@ public:
 {% with method.arguments as arguments %}
 
 {% include "method_definition_cpp.txt" %}
-{% if method.isConstructor %}: d_ptr(new {{ name }}Private){% endif %}
 {
-    {% if method.isDestructor %}
-    delete d_ptr;{% endif %}{% if method.type %}return {{ method.default_return_value }};
+    {% if method.type %}return {{ method.default_return_value }};
     {% endif %}
-
-
 }
 
 {% endwith %}
@@ -76,15 +50,13 @@ public:
 
 {{ property.type }} {{ name }}::{{ property.name }}() const
 {
-    Q_D(const {{ name }});
-    return d->{{ property.name }};
+    return m_{{ property.name }};
 }
 
 
 void {{ name }}::set{{ property.name|upper_first }}({{ property.type|arg_type }} {{ property.name }})
 {
-    Q_D({{ name }});
-    d->{{ property.name }} = {{ property.name }};
+    m_{{ property.name }} = {{ property.name }};
 }
 
 {% endfor %}
