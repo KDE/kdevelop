@@ -33,6 +33,7 @@ Comment[x-test]=xxA GObject subclass with a private pointer and propertiesxx
 Comment[zh_TW]=GObject 子類別，含私密指標與屬性
 Category=C/GLib
 Language=C
+Language[de]=C
 Language[el]=C
 Language[es]=C
 Language[et]=C
@@ -78,6 +79,7 @@ OutputFile={% for ns in namespaces %}{{ ns }}_{% endfor %}{{ name }}.h
 [Implementation]
 Name=Implementation
 Name[cs]=Implementace
+Name[de]=Implementation
 Name[el]=Υλοποίηση
 Name[es]=Implementación
 Name[et]=Teostus

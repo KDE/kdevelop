@@ -35,6 +35,7 @@ Comment[x-test]=xxBasic C++ Classxx
 Comment[zh_TW]=基本 C++ 類別
 Category=C++/Basic
 Language=C++
+Language[de]=C++
 Language[el]=C++
 Language[es]=C++
 Language[et]=C++
@@ -80,6 +81,7 @@ OutputFile={{ name }}.h
 [Implementation]
 Name=Implementation
 Name[cs]=Implementace
+Name[de]=Implementation
 Name[el]=Υλοποίηση
 Name[es]=Implementación
 Name[et]=Teostus

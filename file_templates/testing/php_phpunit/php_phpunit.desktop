@@ -1,5 +1,6 @@
 [General]
 Name=PHPUnit
+Name[de]=PHPUnit
 Name[el]=PHPUnit
 Name[es]=PHPUnit
 Name[et]=PHPUnit
@@ -35,6 +36,7 @@ Comment[x-test]=xxA unit test using the PHPUnit frameworkxx
 Comment[zh_TW]=使用 PHPUnit 框架的單元測試套件
 Category=PHP/Basic
 Language=Php
+Language[de]=Php
 Language[el]=Php
 Language[es]=Php
 Language[et]=PHP
@@ -56,6 +58,7 @@ Files=Implementation
 [Implementation]
 Name=Implementation
 Name[cs]=Implementace
+Name[de]=Implementation
 Name[el]=Υλοποίηση
 Name[es]=Implementación
 Name[et]=Teostus

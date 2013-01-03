@@ -1,5 +1,6 @@
 [General]
 Name=PyUnit
+Name[de]=PyUnit
 Name[el]=PyUnit
 Name[es]=PyUnit
 Name[et]=PyUnit
@@ -35,6 +36,7 @@ Comment[x-test]=xxA unit test using the PyUnit frameworkxx
 Comment[zh_TW]=使用 PyUnit 框架的單元測試套件
 Category=Python/Basic
 Language=Python
+Language[de]=Python
 Language[el]=Python
 Language[es]=Python
 Language[et]=Python
@@ -59,6 +61,7 @@ Files=Implementation
 [Implementation]
 Name=Implementation
 Name[cs]=Implementace
+Name[de]=Implementation
 Name[el]=Υλοποίηση
 Name[es]=Implementación
 Name[et]=Teostus

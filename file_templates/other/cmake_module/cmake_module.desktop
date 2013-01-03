@@ -34,6 +34,7 @@ Comment[zh_TW]=CMake 模組，可用 pkg-config 尋找函式庫
 Category=CMake/Module
 Language=CMake
 Language[cs]=CMake
+Language[de]=CMake
 Language[el]=CMake
 Language[es]=CMake
 Language[et]=CMake

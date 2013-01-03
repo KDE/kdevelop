@@ -33,6 +33,7 @@ Comment[x-test]=xxA unit test using the QTest library with KDevPlatform test hel
 Comment[zh_TW]=單元測試套件，用 QTest 函式庫，含 KDevPlatform 測試器
 Category=C++/KDevelop
 Language=C++
+Language[de]=C++
 Language[el]=C++
 Language[es]=C++
 Language[et]=C++
@@ -78,6 +79,7 @@ OutputFile={{ name }}.h
 [Implementation]
 Name=Implementation
 Name[cs]=Implementace
+Name[de]=Implementation
 Name[el]=Υλοποίηση
 Name[es]=Implementación
 Name[et]=Teostus

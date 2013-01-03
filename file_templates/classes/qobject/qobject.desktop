@@ -1,5 +1,6 @@
 [General]
 Name=Qt Object
+Name[de]=Qt-Objekt
 Name[el]=Qt Object
 Name[es]=Objeto Qt
 Name[et]=Qt objekt
@@ -33,6 +34,7 @@ Comment[x-test]=xxQObject subclass with properties and private memberxx
 Comment[zh_TW]=QObject 子類別，含屬性與私密成員
 Category=C++/Qt
 Language=C++
+Language[de]=C++
 Language[el]=C++
 Language[es]=C++
 Language[et]=C++
@@ -78,6 +80,7 @@ OutputFile={{ name }}.h
 [Implementation]
 Name=Implementation
 Name[cs]=Implementace
+Name[de]=Implementation
 Name[el]=Υλοποίηση
 Name[es]=Implementación
 Name[et]=Teostus

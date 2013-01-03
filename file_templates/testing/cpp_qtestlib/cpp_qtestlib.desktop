@@ -31,6 +31,7 @@ Comment[x-test]=xxA unit test suite using the QTest library without a graphical 
 Comment[zh_TW]=單元測試套件，用 QTest 函式庫，但不含使用者介面
 Category=C++/Qt
 Language=C++
+Language[de]=C++
 Language[el]=C++
 Language[es]=C++
 Language[et]=C++
@@ -76,6 +77,7 @@ OutputFile={{ name }}.h
 [Implementation]
 Name=Implementation
 Name[cs]=Implementace
+Name[de]=Implementation
 Name[el]=Υλοποίηση
 Name[es]=Implementación
 Name[et]=Teostus

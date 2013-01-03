@@ -33,6 +33,7 @@ Comment[x-test]=xxC++ Class with a private D-pointerxx
 Comment[zh_TW]=C++ 類別，含私密指標
 Category=C++/Basic
 Language=C++
+Language[de]=C++
 Language[el]=C++
 Language[es]=C++
 Language[et]=C++
@@ -98,6 +99,7 @@ OutputFile={{ name }}_p.h
 [Implementation]
 Name=Implementation
 Name[cs]=Implementace
+Name[de]=Implementation
 Name[el]=Υλοποίηση
 Name[es]=Implementación
 Name[et]=Teostus

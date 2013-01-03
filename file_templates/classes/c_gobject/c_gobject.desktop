@@ -1,5 +1,6 @@
 [General]
 Name=GObject
+Name[de]=GObject
 Name[el]=GObject
 Name[es]=GObject
 Name[et]=GObject
@@ -18,6 +19,7 @@ Name[uk]=GObject
 Name[x-test]=xxGObjectxx
 Name[zh_TW]=GObject
 Comment=A simple GObject subclass
+Comment[de]=Eine einfache GObject-Unterklasse
 Comment[el]=Μια απλή GObject subclass
 Comment[es]=Una sencilla subclase de GObject
 Comment[et]=Lihtne GObjecti alamklass
@@ -36,6 +38,7 @@ Comment[x-test]=xxA simple GObject subclassxx
 Comment[zh_TW]=簡單的 GObject 子類別
 Category=C/GLib
 Language=C
+Language[de]=C
 Language[el]=C
 Language[es]=C
 Language[et]=C
@@ -81,6 +84,7 @@ OutputFile={% for ns in namespaces %}{{ ns }}_{% endfor %}{{ name }}.h
 [Implementation]
 Name=Implementation
 Name[cs]=Implementace
+Name[de]=Implementation
 Name[el]=Υλοποίηση
 Name[es]=Implementación
 Name[et]=Teostus
