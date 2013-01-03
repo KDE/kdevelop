@@ -133,6 +133,7 @@ OutputPage::OutputPage(QWidget* parent)
 {
     d->output = new Ui::OutputLocationDialog;
     d->output->setupUi(this);
+    d->output->messageWidget->setVisible(false);
 
     connect(&d->urlChangedMapper, SIGNAL(mapped(QString)),
             SLOT(updateFileRange(QString)));
