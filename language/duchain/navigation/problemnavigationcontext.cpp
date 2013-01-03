@@ -83,13 +83,13 @@ QString ProblemNavigationContext::html(bool shorten)
 {
   clear();
   m_shorten = shorten;
-  modifyHtml()  += "<html><body><p><small><small>";
+  modifyHtml() += "<html><body><p><small><small>";
 
   modifyHtml() += i18n("Problem in <b>%1</b>:<br/>", m_problem->sourceString());
   modifyHtml() += Qt::escape(m_problem->description());
   modifyHtml() += "<br/>";
-  modifyHtml() += "<i>" + m_problem->explanation() + "</i>";
-  
+  modifyHtml() += "<i style=\"white-space:pre-wrap\">" + Qt::escape(m_problem->explanation()) + "</i>";
+
   modifyHtml() += "</small></small></p></body></html>";
 
   return currentHtml();
