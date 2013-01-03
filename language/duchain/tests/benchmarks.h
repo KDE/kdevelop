@@ -33,6 +33,9 @@ private slots:
 
   void duchainWriteLocker();
   void duchainReadLocker();
+  void identifierCopyConstant();
+  void identifierCopyDynamic();
+  void qidCopyPush();
 };
 
 

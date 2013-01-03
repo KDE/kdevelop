@@ -21,6 +21,7 @@
 #include "benchmarks.h"
 
 #include <language/duchain/duchainlock.h>
+#include <language/duchain/identifier.h>
 
 #include <qtest_kde.h>
 
@@ -53,5 +54,32 @@ void Benchmarks::duchainWriteLocker()
 {
   QBENCHMARK {
     DUChainWriteLocker lock;
+  }
+}
+
+void Benchmarks::identifierCopyConstant()
+{
+  QBENCHMARK {
+    Identifier identifier("Asdf");
+    identifier.index();
+    Identifier copy(identifier);
+  }
+}
+
+void Benchmarks::identifierCopyDynamic()
+{
+  QBENCHMARK {
+    Identifier identifier("Asdf");
+    Identifier copy(identifier);
+  }
+}
+
+void Benchmarks::qidCopyPush()
+{
+  QBENCHMARK {
+    Identifier id("foo");
+    QualifiedIdentifier base(id);
+    QualifiedIdentifier copy(base);
+    copy.push(id);
   }
 }
