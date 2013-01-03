@@ -239,5 +239,5 @@ QString MakeJob::environmentProfile() const
         return QString();
     KSharedConfig::Ptr configPtr = it->project()->projectConfiguration();
     KConfigGroup builderGroup( configPtr, "MakeBuilder" );
-    return builderGroup.readEntry( "Default Make Environment Profile", "default" );
+    return builderGroup.readEntry( "Default Make Environment Profile", QString() );
 }

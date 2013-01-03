@@ -26,7 +26,6 @@
     <entry name="additionalOptions" key="Additional Options" type="String">
     </entry>
     <entry name="environmentProfile" key="Default Ninja Environment Profile" type="String">
-        <default>default</default>
     </entry>
   </group>
 </kcfg>

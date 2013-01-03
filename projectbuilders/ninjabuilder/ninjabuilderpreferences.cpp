@@ -42,8 +42,6 @@ NinjaBuilderPreferences::NinjaBuilderPreferences(QWidget* parent, const QVariant
     m_prefsUi->setupUi( w );
     l->addWidget( w );
 
-    KDevelop::EnvironmentGroupList env( KGlobal::config() );
-    m_prefsUi->kcfg_environmentProfile->addItems( env.groups() );
     m_prefsUi->configureEnvironment->setSelectionWidget( m_prefsUi->kcfg_environmentProfile );
 
     addConfig( NinjaBuilderSettings::self(), w );

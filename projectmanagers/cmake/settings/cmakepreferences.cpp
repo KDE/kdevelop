@@ -93,8 +93,6 @@ CMakePreferences::CMakePreferences(QWidget* parent, const QVariantList& args)
 //         kDebug(9042) << "arg: " << v.toString();
 //     }
     
-    KDevelop::EnvironmentGroupList env( KGlobal::config() );
-    m_prefsUi->environment->addItems( env.groups() );
     m_prefsUi->configureEnvironment->setSelectionWidget(m_prefsUi->environment);
 
     m_prefsUi->showAdvanced->setChecked(false);
