@@ -435,7 +435,7 @@ void TemplateClassAssistant::next()
     else if (currentPage() == d->membersPage)
     {
         ClassDescription desc = d->generator->description();
-        desc.members << d->membersPageWidget->members();
+        desc.members = d->membersPageWidget->members();
         d->generator->setDescription(desc);
     }
     else if (currentPage() == d->licensePage)
@@ -474,7 +474,7 @@ void TemplateClassAssistant::next()
     }
     else if (currentPage() == d->membersPage)
     {
-        d->membersPage->widget()->setProperty("members", QVariant::fromValue(d->generator->description().members));
+        d->membersPageWidget->setMembers(d->generator->description().members);
     }
     else if (currentPage() == d->overridesPage)
     {
