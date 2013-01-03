@@ -222,6 +222,9 @@ bool OutputPage::isComplete() const
         {
             return false;
         }
+        if (requester->url().isLocalFile() && !QFileInfo(requester->url().upUrl().toLocalFile()).isWritable()) {
+            return false;
+        }
     }
     return true;
 }
