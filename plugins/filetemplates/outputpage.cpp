@@ -104,8 +104,9 @@ void OutputPagePrivate::updateFileNames()
 void OutputPagePrivate::validate()
 {
     QStringList invalidFiles;
-    QHash< QString, KUrlRequester* >::const_iterator it = outputFiles.constBegin();
-    for(it; it != outputFiles.constEnd(); ++it) {
+    for(QHash< QString, KUrlRequester* >::const_iterator it = outputFiles.constBegin();
+        it != outputFiles.constEnd(); ++it)
+    {
         if (!it.value()->url().isValid()) {
             invalidFiles << it.key();
         } else if (it.value()->url().isLocalFile() && !QFileInfo(it.value()->url().upUrl().toLocalFile()).isWritable()) {
