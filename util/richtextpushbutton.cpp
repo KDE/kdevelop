@@ -120,7 +120,8 @@ QStyleOptionButton RichTextPushButton::getStyleOption() const
         opt.state |= QStyle::State_On;
     if (!isFlat() && !isDown())
         opt.state |= QStyle::State_Raised;
-    opt.text = text();
+    if (!isRichText)
+        opt.text = QPushButton::text();
     opt.icon = icon();
     opt.iconSize = iconSize();
     return opt;
