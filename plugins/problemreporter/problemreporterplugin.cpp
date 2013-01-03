@@ -37,6 +37,8 @@
 #include <interfaces/iuicontroller.h>
 #include <interfaces/idocumentcontroller.h>
 
+#include <util/formattinghelpers.h>
+
 #include <language/backgroundparser/parsejob.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <language/backgroundparser/backgroundparser.h>
@@ -171,7 +173,7 @@ KDevelop::ContextMenuExtension ProblemReporterPlugin::contextMenuExtension(KDeve
         if(problem->range().contains(top->transformToLocalRevision(KDevelop::SimpleCursor(editorContext->position())))) {
           KDevelop::IAssistant::Ptr solution = problem ->solutionAssistant();
           if(solution) {
-            title = solution->title();
+            title = removeHtmlFromString(solution->title());
             foreach(KDevelop::IAssistantAction::Ptr action, solution->actions())
               actions << action->toKAction();
           }

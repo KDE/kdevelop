@@ -42,6 +42,17 @@ namespace KDevelop {
  * @return The re-formatted version of @p text
  * */
 KDEVPLATFORMUTIL_EXPORT QString extractFormattedTextFromContext(const QString& formattedMergedText, const QString& text, const QString& leftContext, const QString& rightContext, int tabWidth = 4, const QString& fuzzyCharacters = "{}()/*/");
+
+/**
+ *
+ * Helps to convert HTML-encoded string into plain text
+ * (strips tags, unescapes sequences like "&apos").
+ *
+ * @param htmlString A rich-text/HTML-encoded string
+ * @returns          The plain text representation of the argument.
+ */
+KDEVPLATFORMUTIL_EXPORT QString removeHtmlFromString(const QString& htmlString);
+
 }
 
 #endif // FORMATTINGHELPERS_H
