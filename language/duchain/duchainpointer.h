@@ -184,6 +184,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT  DUChainPointerData : public KShared {
 
 Q_DECLARE_METATYPE( KDevelop::DUChainBasePointer )
 Q_DECLARE_METATYPE( KDevelop::DeclarationPointer )
+Q_DECLARE_METATYPE( KDevelop::DUContextPointer )
+Q_DECLARE_METATYPE( KDevelop::TopDUContextPointer )
 Q_DECLARE_METATYPE( QList<KDevelop::DeclarationPointer> )
 
 #endif
