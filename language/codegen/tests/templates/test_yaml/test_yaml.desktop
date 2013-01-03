@@ -36,6 +36,7 @@ OptionsFile=options.kcfg
 
 [Description]
 Name=Description
+Name[de]=Beschreibung
 Name[el]=Περιγραφή
 Name[es]=Descripción
 Name[et]=Kirjeldus
