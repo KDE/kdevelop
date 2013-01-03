@@ -425,6 +425,7 @@ void TemplateClassAssistant::next()
     else if (currentPage() == d->overridesPage)
     {
         ClassDescription desc = d->generator->description();
+        desc.methods.clear();
         foreach (const DeclarationPointer& declaration, d->overridesPageWidget->selectedOverrides())
         {
             desc.methods << FunctionDescription(declaration);
