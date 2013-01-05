@@ -110,7 +110,7 @@ public:
     QPointer<ProjectChangesModel> m_changesModel;
 
     ProjectControllerPrivate( ProjectController* p )
-        : m_core(0), model(0), selectionModel(0), dialog(0), m_configuringProject(0), q(p), m_foundProjectFile(false), m_cleaningUp(false)
+        : m_core(0), model(0), selectionModel(0), dialog(0), m_configuringProject(0), q(p), buildset(0), m_foundProjectFile(false), m_cleaningUp(false)
     {
     }
 
@@ -544,9 +544,9 @@ ProjectController::~ProjectController()
 void ProjectController::cleanup()
 {
     d->m_cleaningUp = true;
-    
-    KSharedConfig::Ptr config = Core::self()->activeSession()->config();
-    KConfigGroup group = config->group( "General Options" );
+    if( buildSetModel() ) {
+        buildSetModel()->storeToSession( Core::self()->activeSession() );
+    }
 
     foreach( IProject* project, d->m_projects ) {
         closeProject( project );
@@ -556,6 +556,7 @@ void ProjectController::cleanup()
 void ProjectController::initialize()
 {
     d->buildset = new ProjectBuildSetModel( this );
+    buildSetModel()->loadFromSession( Core::self()->activeSession() );
     connect( this, SIGNAL(projectOpened(KDevelop::IProject*)),
              d->buildset, SLOT(loadFromProject(KDevelop::IProject*)) );
     connect( this, SIGNAL(projectClosing(KDevelop::IProject*)),

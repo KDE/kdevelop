@@ -12,6 +12,7 @@ X-KDE-CfgDlgHierarchy=GENERAL
 
 Name=Project Settings
 Name[bg]=Настройки на проекта
+Name[bs]=Postavke projekta
 Name[ca]=Arranjaments del projecte
 Name[ca@valencia]=Arranjaments del projecte
 Name[cs]=Nastavení projektu
@@ -49,6 +50,7 @@ Name[zh_CN]=工程设置
 Name[zh_TW]=專案設定
 Comment=Configure Project
 Comment[bg]=Конфигуриране на проект
+Comment[bs]=Konfiguriši projekt
 Comment[ca]=Configura el projecte
 Comment[ca@valencia]=Configura el projecte
 Comment[cs]=Nastavit projekt

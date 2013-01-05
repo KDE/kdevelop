@@ -72,8 +72,6 @@ public:
      */
     QHash<QString, SimpleCursor> filePositions() const;
 
-    bool isComplete() const;
-
 Q_SIGNALS:
     /**
      * @copydoc ClassIdentifierPage::isValid

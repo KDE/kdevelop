@@ -19,6 +19,7 @@
 
 #include "testview.h"
 #include "testviewplugin.h"
+#include "testviewdebug.h"
 
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>
@@ -41,7 +42,6 @@
 #include <KAction>
 #include <KLocalizedString>
 #include <KJob>
-#include <KDebug>
 #include <krecursivefilterproxymodel.h>
 #include <KLineEdit>
 #include <KConfigGroup>
@@ -168,13 +168,13 @@ void TestView::updateTestSuite(ITestSuite* suite, const TestResult& result)
         return;
     }
 
-    kDebug() << "Updating test suite" << suite->name();
+    debug() << "Updating test suite" << suite->name();
 
     item->setIcon(iconForTestResult(result.suiteResult));
 
     for (int i = 0; i < item->rowCount(); ++i)
     {
-        kDebug() << "Found a test case" << item->child(i)->text();
+        debug() << "Found a test case" << item->child(i)->text();
         QStandardItem* caseItem = item->child(i);
         if (result.testCaseResults.contains(caseItem->text()))
         {
@@ -186,7 +186,7 @@ void TestView::updateTestSuite(ITestSuite* suite, const TestResult& result)
 
 KIcon TestView::iconForTestResult(TestResult::TestCaseResult result)
 {
-    kDebug() << result;
+    debug() << result;
     switch (result)
     {
         case TestResult::NotRun:
@@ -344,7 +344,7 @@ void TestView::showSource()
     locker.unlock();
 
     IDocumentController* dc = ICore::self()->documentController();
-    kDebug() << "Activating declaration in" << url;
+    debug() << "Activating declaration in" << url;
     dc->openDocument(url, cursor);
 }
 

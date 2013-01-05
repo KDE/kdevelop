@@ -83,17 +83,6 @@ public:
   QThreadStorage<int*> m_readerRecursion;
 };
 
-class DUChainWriteLockerPrivate
-{
-public:
-  DUChainWriteLockerPrivate() : m_locked(false) {
-  }
-  DUChainLock* m_lock;
-  bool m_locked;
-  int m_timeout;
-};
-
-
 DUChainLock::DUChainLock()
   : d(new DUChainLockPrivate)
 {
@@ -273,47 +262,43 @@ void DUChainReadLocker::unlock()
 
 
 DUChainWriteLocker::DUChainWriteLocker(DUChainLock* duChainLock, uint timeout)
-  : d(new DUChainWriteLockerPrivate)
+  : m_lock(duChainLock ? duChainLock : DUChain::lock())
+  , m_locked(false)
+  , m_timeout(timeout)
 {
-  d->m_timeout = timeout;
-  d->m_lock = duChainLock;
-  
-  if(!d->m_lock)
-    d->m_lock =  DUChain::lock();
-  
   lock();
 }
+
 DUChainWriteLocker::~DUChainWriteLocker()
 {
   unlock();
-  delete d;
 }
 
 bool DUChainWriteLocker::lock()
 {
-  if( d->m_locked )
+  if( m_locked )
     return true;
   
   bool l = false;
-  if (d->m_lock) {
-    l = d->m_lock->lockForWrite(d->m_timeout);
-    Q_ASSERT(d->m_timeout || l);
+  if (m_lock) {
+    l = m_lock->lockForWrite(m_timeout);
+    Q_ASSERT(m_timeout || l);
   };
 
-  d->m_locked = l;
+  m_locked = l;
   
   return l;
 }
 
 bool DUChainWriteLocker::locked() const {
-  return d->m_locked;
+  return m_locked;
 }
 
 void DUChainWriteLocker::unlock()
 {
-  if (d->m_locked && d->m_lock) {
-    d->m_lock->releaseWriteLock();
-    d->m_locked = false;
+  if (m_locked && m_lock) {
+    m_lock->releaseWriteLock();
+    m_locked = false;
   }
 }
 }

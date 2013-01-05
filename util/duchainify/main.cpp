@@ -144,13 +144,13 @@ void Manager::init()
     {
         addToBackgroundParser(m_args->arg(i), (TopDUContext::Features)features);
     }
-
     m_allFilesAdded = 1;
 
     if ( m_total ) {
         std::cout << "Added " << m_total << " files to the background parser" << std::endl;
         const int threads = ICore::self()->languageController()->backgroundParser()->threadCount();
         std::cout << "parsing with " << threads << " threads" << std::endl;
+        ICore::self()->languageController()->backgroundParser()->parseDocuments();
     } else {
         std::cout << "no files added to the background parser" << std::endl;
         QCoreApplication::exit(0);
@@ -167,7 +167,7 @@ void Manager::updateReady(IndexedString url, ReferencedTopDUContext topContext)
     if (m_args->isSet("dump-errors") && topContext) {
         DUChainReadLocker lock;
         if (!topContext->problems().isEmpty()) {
-            std::cout << topContext->problems().size() << " problems encountered in " << topContext->url().c_str() << std::endl;
+            std::cout << topContext->problems().size() << " problems encountered in " << qPrintable(topContext->url().str()) << std::endl;
             foreach(const ProblemPointer& p, topContext->problems()) {
                 std::cout << "  " << qPrintable(p->description()) << "\n    range: "
                         << "[(" << p->finalLocation().start.line << ", " << p->finalLocation().start.column << "),"

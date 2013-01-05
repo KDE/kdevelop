@@ -97,9 +97,35 @@ QString buildCompilerErrorLine()
 {
     KUrl projecturl( PROJECTS_SOURCE_DIR"/onefileproject/" );
     QString outputline;
-    outputline.clear();
     outputline.append(projecturl.path());
     outputline.append("main.cpp:5:5: error: ‘RingBuffer’ was not declared in this scope");
+    return outputline;
+}
+
+QString buildCompilerInformationLine()
+{
+    KUrl projecturl( PROJECTS_SOURCE_DIR"/onefileproject/" );
+    QString outputline;
+    outputline.append(projecturl.path());
+    outputline.append("main.cpp:6:14: instantiated from here");
+    return outputline;
+}
+
+QString buildInfileIncludedFromFirstLine()
+{
+    KUrl projecturl( PROJECTS_SOURCE_DIR"/onefileproject/" );
+    QString outputline("In file included from ");
+    outputline.append(projecturl.path());
+    outputline.append("PriorityFactory.h:52:0,");
+    return outputline;
+}
+
+QString buildInfileIncludedFromSecondLine()
+{
+    KUrl projecturl( PROJECTS_SOURCE_DIR"/onefileproject/" );
+    QString outputline("    from ");
+    outputline.append(projecturl.path());
+    outputline.append("PatchBasedInpainting.hxx:29,");
     return outputline;
 }
 
@@ -107,6 +133,16 @@ QString buildCompilerActionLine()
 {
     return QString("linking testCustombuild (g++)");
 }
+
+QString buildCmakeConfigureMultiLine()
+{
+    KUrl projecturl( PROJECTS_SOURCE_DIR"/onefileproject/" );
+    QString outputline;
+    outputline.append(projecturl.path());
+    outputline.append("CMakeLists.txt:10:");
+    return outputline;
+}
+
 
 QString buildLinkerErrorLine()
 {

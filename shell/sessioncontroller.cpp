@@ -1168,7 +1168,7 @@ QString SessionController::handleLockedSession( const QString& sessionName, cons
 
     QString problemResolution;
     if( state.success ) {
-        problemResolution = i18nc("@info",
+        problemResolution = i18nc("@info %1 is program name",
                                   "<p>Do you want to remove the lock file and force a new %1 instance?<br/>"
                                   "<strong>Beware:</strong> Only do this if you are sure there is no running"
                                   " process using this session.</p>"

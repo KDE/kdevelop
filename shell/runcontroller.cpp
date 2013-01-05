@@ -107,7 +107,8 @@ public:
     RunController* q;
 
     QHash<KJob*, KAction*> jobs;
-    KActionMenu* stopAction;
+    KAction* stopAction;
+    KActionMenu* stopJobsMenu;
     KAction* profileAction;
     KAction* runAction;
     KAction* dbgAction;
@@ -444,14 +445,22 @@ void RunController::setupActions()
     ac->addAction("run_profile", d->profileAction);
     connect(d->profileAction, SIGNAL(triggered(bool)), this, SLOT(slotProfile()));
 
-    action = d->stopAction = new KActionMenu( KIcon("process-stop"), i18n("Stop Jobs"), this);
-    action->setIconText(i18nc("Short text for 'Stop Jobs' used in the toolbar", "Stop"));
-    action->setShortcut(Qt::Key_Escape);
+    action = d->stopAction = new KAction( KIcon("process-stop"), i18n("Stop All Jobs"), this);
+    action->setIconText(i18nc("Short text for 'Stop All Jobs' used in the toolbar", "Stop All"));
+    // Ctrl+Escape would be nicer, but thats taken by the ksysguard desktop shortcut
+    action->setShortcut(QKeySequence("Ctrl+Shift+Escape"));
     action->setToolTip(i18nc("@info:tooltip", "Stop all currently running jobs"));
-    action->setWhatsThis(i18nc("@info:whatsthis", "<b>Stop Jobs</b><p>Requests that all running jobs are stopped.</p>"));
+    action->setWhatsThis(i18nc("@info:whatsthis", "<b>Stop All Jobs</b><p>Requests that all running jobs are stopped.</p>"));
     action->setEnabled(false);
-    ac->addAction("run_stop", action);
+    ac->addAction("run_stop_all", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(stopAllProcesses()));
+
+    action = d->stopJobsMenu = new KActionMenu( KIcon("process-stop"), i18n("Stop"), this);
+    action->setIconText(i18nc("Short text for 'Stop' used in the toolbar", "Stop"));
+    action->setToolTip(i18nc("@info:tooltip", "Menu allowing to stop individual jobs"));
+    action->setWhatsThis(i18nc("@info:whatsthis", "<b>Stop</b><p>List of Jobs that can be stopped individually.</p>"));
+    action->setEnabled(false);
+    ac->addAction("run_stop_menu", action);
 
     d->currentTargetAction = new KSelectAction( i18n("Current Launch Configuration"), this);
     d->currentTargetAction->setToolTip(i18nc("@info:tooltip", "Current Launch Configuration"));
@@ -547,7 +556,7 @@ void KDevelop::RunController::registerJob(KJob * job)
         if (Core::self()->setupFlags() != Core::NoUi) {
             stopJobAction = new KAction(job->objectName().isEmpty() ? i18n("<%1> Unnamed job", job->staticMetaObject.className()) : job->objectName(), this);
             stopJobAction->setData(QVariant::fromValue(static_cast<void*>(job)));
-            d->stopAction->addAction(stopJobAction);
+            d->stopJobsMenu->addAction(stopJobAction);
             connect (stopJobAction, SIGNAL(triggered(bool)), SLOT(slotKillJob()));
 
             job->setUiDelegate( new KDialogJobUiDelegate() );
@@ -600,8 +609,10 @@ void KDevelop::RunController::checkState()
         emit runStateChanged(d->state);
     }
 
-    if (Core::self()->setupFlags() != Core::NoUi)
+    if (Core::self()->setupFlags() != Core::NoUi) {
         d->stopAction->setEnabled(running);
+        d->stopJobsMenu->setEnabled(running);
+    }
 }
 
 void KDevelop::RunController::stopAllProcesses()

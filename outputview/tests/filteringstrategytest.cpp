@@ -44,6 +44,8 @@ void FilteringStrategyTest::testNoFilterstrategy_data()
     << buildCompilerErrorLine() << FilteredItem::InvalidItem;
     QTest::newRow("compiler-action-line")
     << buildCompilerActionLine() << FilteredItem::InvalidItem;
+    QTest::newRow("compiler-information-line")
+    << buildCompilerInformationLine() << FilteredItem::InvalidItem;
     QTest::newRow("python-error-line")
     << buildPythonErrorLine() << FilteredItem::InvalidItem;
 }
@@ -73,6 +75,20 @@ void FilteringStrategyTest::testCompilerFilterstrategy_data()
     << buildCompilerLine() << FilteredItem::InvalidItem << FilteredItem::InvalidItem;
     QTest::newRow("compiler-error-line")
     << buildCompilerErrorLine() << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
+    QTest::newRow("compiler-information-line")
+    << buildCompilerInformationLine() << FilteredItem::InformationItem << FilteredItem::InvalidItem;
+    QTest::newRow("compiler-information-line2")
+    << buildInfileIncludedFromFirstLine() << FilteredItem::InformationItem << FilteredItem::InvalidItem;
+    QTest::newRow("compiler-information-line3")
+    << buildInfileIncludedFromSecondLine() << FilteredItem::InformationItem << FilteredItem::InvalidItem;
+    QTest::newRow("cmake-error-line1")
+    << "CMake Error at CMakeLists.txt:2 (cmake_minimum_required):" << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
+    QTest::newRow("cmake-error-multiline1")
+    << "CMake Error: Error in cmake code at" << FilteredItem::InvalidItem << FilteredItem::InvalidItem;
+    QTest::newRow("cmake-error-multiline2")
+    << buildCmakeConfigureMultiLine() << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
+    QTest::newRow("cmake-warning-line")
+    << "CMake Warning (dev) in CMakeLists.txt:" << FilteredItem::WarningItem << FilteredItem::InvalidItem;
     QTest::newRow("linker-action-line")
     << "linking testCustombuild (g++)" << FilteredItem::InvalidItem << FilteredItem::ActionItem;
     QTest::newRow("linker-error-line")
@@ -93,6 +109,40 @@ void FilteringStrategyTest::testCompilerFilterstrategy()
     item1 = testee.actionInLine(line);
     QVERIFY(item1.type == expectedAction);
 }
+
+void FilteringStrategyTest::testCompilerFilterstrategyMultipleKeywords_data()
+{
+    QTest::addColumn<QString>("line");
+    QTest::addColumn<FilteredItem::FilteredOutputItemType>("expectedError");
+    QTest::addColumn<FilteredItem::FilteredOutputItemType>("expectedAction");
+
+    QTest::newRow("warning-containing-error-word")
+    << "RingBuffer.cpp:64:6: warning: unused parameter ‘errorItem’ [-Wunused-parameter]"
+    << FilteredItem::WarningItem << FilteredItem::InvalidItem;
+    QTest::newRow("error-containing-info-word")
+    << "NodeSet.hpp:89:27: error: ‘Info’ was not declared in this scope"
+    << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
+    QTest::newRow("warning-in-filename-containing-error-word")
+    << "ErrorHandling.cpp:100:56: warning: unused parameter ‘item’ [-Wunused-parameter]"
+    << FilteredItem::WarningItem << FilteredItem::InvalidItem;
+    QTest::newRow("error-in-filename-containing-warning-word")
+    << "WarningHandling.cpp:100:56: error: ‘Item’ was not declared in this scope"
+    << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
+}
+
+void FilteringStrategyTest::testCompilerFilterstrategyMultipleKeywords()
+{
+    QFETCH(QString, line);
+    QFETCH(FilteredItem::FilteredOutputItemType, expectedError);
+    QFETCH(FilteredItem::FilteredOutputItemType, expectedAction);
+    KUrl projecturl( PROJECTS_SOURCE_DIR"/onefileproject/" );
+    CompilerFilterStrategy testee(projecturl);
+    FilteredItem item1 = testee.errorInLine(line);
+    QVERIFY(item1.type == expectedError);
+    item1 = testee.actionInLine(line);
+    QVERIFY(item1.type == expectedAction);
+}
+
 
 void FilteringStrategyTest::testScriptErrorFilterstrategy_data()
 {

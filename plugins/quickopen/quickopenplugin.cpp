@@ -1495,6 +1495,7 @@ void QuickOpenLineEdit::hideEvent(QHideEvent* ev)
 bool QuickOpenLineEdit::eventFilter(QObject* obj, QEvent* e) {
     if (!m_widget)
         return false;
+
     switch (e->type()) {
     case QEvent::KeyPress:
     case QEvent::ShortcutOverride:
@@ -1508,7 +1509,18 @@ bool QuickOpenLineEdit::eventFilter(QObject* obj, QEvent* e) {
     case QEvent::WindowDeactivate:
         kDebug() << "closing because of window activation";
         deactivate();
-    break;
+        break;
+    // handle bug 260657 - "Outline menu doesn't follow main window on its move"
+    case QEvent::Move: {
+            QWidget* widget = qobject_cast<QWidget*>(obj);
+            Q_ASSERT(widget);
+            // close the outline menu in case a parent widget moved
+            if (widget->isAncestorOf(this)) {
+              kDebug() << "closing because of parent widget move";
+              deactivate();
+            }
+            break;
+        }
     case QEvent::FocusIn:
         if (dynamic_cast<QWidget*>(obj)) {
             QFocusEvent* focusEvent = dynamic_cast<QFocusEvent*>(e);

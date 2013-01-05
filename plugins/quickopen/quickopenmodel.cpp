@@ -358,7 +358,6 @@ QuickOpenDataPointer QuickOpenModel::getItem( int row, bool noReset ) const {
     if( (uint)row < itemCount )
     {
       QuickOpenDataPointer item = provider.provider->data( row );
-      Q_ASSERT(item);
 
       if(!noReset && provider.provider->itemCount() != itemCount) {
           kDebug() << "item-count in provider has changed, resetting model";

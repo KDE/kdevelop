@@ -32,15 +32,18 @@ using namespace KDevelop;
 ProblemNavigationContext::ProblemNavigationContext(ProblemPointer problem): m_problem(problem)
 {
   m_widget = 0;
+
   KSharedPtr< IAssistant > solution = problem->solutionAssistant();
-  if(solution) {
+  if(solution && !solution->actions().isEmpty()) {
     m_widget = new QWidget;
     QHBoxLayout* layout = new QHBoxLayout(m_widget);
     RichTextPushButton* button = new RichTextPushButton;
 //     button->setPopupMode(QToolButton::InstantPopup);
-    button->setHtml(i18n("<i>Solve</i>"));
     if(!solution->title().isEmpty())
       button->setHtml(i18n("<i>Solve:</i> %1", solution->title()));
+    else
+      button->setHtml(i18n("<i>Solve</i>"));
+
     QMenu* menu = new QMenu;
     menu->setFocusPolicy(Qt::NoFocus);
     foreach(IAssistantAction::Ptr action, solution->actions()) {
@@ -48,6 +51,7 @@ ProblemNavigationContext::ProblemNavigationContext(ProblemPointer problem): m_pr
       kDebug() << "adding action" << action->description();
     }
     button->setMenu(menu);
+
     layout->addWidget(button);
     layout->setAlignment(button, Qt::AlignLeft);
     m_widget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);

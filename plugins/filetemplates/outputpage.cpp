@@ -54,6 +54,7 @@ struct OutputPagePrivate
     void updateRanges(KIntNumInput* line, KIntNumInput* column, bool enable);
     void updateFileRange(const QString& field);
     void updateFileNames();
+    void validate();
 };
 
 void OutputPagePrivate::updateRanges(KIntNumInput* line, KIntNumInput* column, bool enable)
@@ -75,7 +76,7 @@ void OutputPagePrivate::updateFileRange(const QString& field)
 
     updateRanges(outputLines[field], outputColumns[field], info.exists() && !info.isDir());
 
-    emit page->isValid(page->isComplete());
+    validate();
 }
 
 void OutputPagePrivate::updateFileNames()
@@ -97,7 +98,33 @@ void OutputPagePrivate::updateFileNames()
     KConfigGroup codegenGroup( config, "CodeGeneration" );
     codegenGroup.writeEntry( "LowerCaseFilenames", output->lowerFilenameCheckBox->isChecked() );
 
-    emit page->isValid(page->isComplete());
+    validate();
+}
+
+void OutputPagePrivate::validate()
+{
+    QStringList invalidFiles;
+    for(QHash< QString, KUrlRequester* >::const_iterator it = outputFiles.constBegin();
+        it != outputFiles.constEnd(); ++it)
+    {
+        if (!it.value()->url().isValid()) {
+            invalidFiles << it.key();
+        } else if (it.value()->url().isLocalFile() && !QFileInfo(it.value()->url().upUrl().toLocalFile()).isWritable()) {
+            invalidFiles << it.key();
+        }
+    }
+
+    bool valid = invalidFiles.isEmpty();
+    if (valid) {
+        output->messageWidget->animatedHide();
+    } else {
+        qSort(invalidFiles);
+        output->messageWidget->setMessageType(KMessageWidget::Error);
+        output->messageWidget->setCloseButtonVisible(false);
+        output->messageWidget->setText(i18np("Invalid output files: %2", "Invalid output files: %2", invalidFiles.count(), invalidFiles.join(", ")));
+        output->messageWidget->animatedShow();
+    }
+    emit page->isValid(valid);
 }
 
 OutputPage::OutputPage(QWidget* parent)
@@ -106,6 +133,7 @@ OutputPage::OutputPage(QWidget* parent)
 {
     d->output = new Ui::OutputLocationDialog;
     d->output->setupUi(this);
+    d->output->messageWidget->setVisible(false);
 
     connect(&d->urlChangedMapper, SIGNAL(mapped(QString)),
             SLOT(updateFileRange(QString)));
@@ -212,18 +240,6 @@ void OutputPage::loadFileTemplate(const SourceFileTemplate& fileTemplate,
     }
 
     d->updateFileNames();
-}
-
-bool OutputPage::isComplete() const
-{
-    foreach (KUrlRequester* requester, d->outputFiles)
-    {
-        if (!requester->url().isValid())
-        {
-            return false;
-        }
-    }
-    return true;
 }
 
 QHash< QString, KUrl > OutputPage::fileUrls() const

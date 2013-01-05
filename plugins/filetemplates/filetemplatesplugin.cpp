@@ -198,6 +198,13 @@ void FileTemplatesPlugin::createFromTemplate()
     {
         baseUrl = action->data().value<KUrl>();
     }
+    if (!baseUrl.isValid()) {
+        // fall-back to currently active document's parent directory
+        IDocument* doc = ICore::self()->documentController()->activeDocument();
+        if (doc && doc->url().isValid()) {
+            baseUrl = doc->url().upUrl();
+        }
+    }
     TemplateClassAssistant* assistant = new TemplateClassAssistant(QApplication::activeWindow(), baseUrl);
     assistant->setAttribute(Qt::WA_DeleteOnClose);
     assistant->show();

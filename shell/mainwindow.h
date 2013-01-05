@@ -72,7 +72,6 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void finishedLoading();
-    void contextMenu( KMenu *menu, const Context *context );
 
 protected:
     //FIXME DOCUMENT!!!  queryClose() must call all of the Core cleanup() methods!

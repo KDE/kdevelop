@@ -1,9 +1,9 @@
 /*
  * This file is part of KDevelop
- * Copyright 2012 Miha Čančula <miha@noughmad.eu>
+ * Copyright 2012 Milian Wolff <mail@milianw.de>
  *
  * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
+ * it under the terms of the GNU Library General Public License as
  * published by the Free Software Foundation; either version 2 of the
  * License, or (at your option) any later version.
  *
@@ -18,25 +18,25 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef TEMPLATECONFIG_H
-#define TEMPLATECONFIG_H
+#ifndef BENCHMARKS_H
+#define BENCHMARKS_H
 
-#include <kcmodule.h>
+#include <QObject>
 
-namespace Ui
+class Benchmarks : public QObject
 {
-    class TemplateConfig;
-}
+  Q_OBJECT
 
-class TemplateConfig : public KCModule
-{
-    Q_OBJECT
-public:
-    explicit TemplateConfig (QWidget* parent = 0, const QVariantList& args = QVariantList());
-    virtual ~TemplateConfig();
+private slots:
+  void initTestCase();
+  void cleanupTestCase();
 
-private:
-    Ui::TemplateConfig* ui;
+  void duchainWriteLocker();
+  void duchainReadLocker();
+  void identifierCopyConstant();
+  void identifierCopyDynamic();
+  void qidCopyPush();
 };
 
-#endif // TEMPLATECONFIG_H
+
+#endif // BENCHMARKS_H

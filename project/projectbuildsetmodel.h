@@ -24,7 +24,6 @@
 #include "projectexport.h"
 
 #include <QAbstractTableModel>
-#include <QSet>
 #include <QStringList>
 
 class KConfigGroup;
@@ -34,6 +33,7 @@ namespace KDevelop
 class ProjectBaseItem;
 class ICore;
 class IProject;
+class ISession;
 
 class KDEVPLATFORMPROJECT_EXPORT BuildItem
 {
@@ -64,6 +64,9 @@ public:
     int rowCount( const QModelIndex& = QModelIndex() ) const;
     int columnCount( const QModelIndex&  = QModelIndex() ) const;
 
+    void loadFromSession( ISession* session );
+    void storeToSession( ISession* session );
+
     void addProjectItem( KDevelop::ProjectBaseItem* );
     bool removeRows( int row, int count, const QModelIndex& parent = QModelIndex() );
     void moveRowsUp( int row, int count );
@@ -77,6 +80,12 @@ public slots:
     void projectClosed( KDevelop::IProject* );
 private:
     QList<BuildItem> m_items;
+    QList< QStringList > m_orderingCache;
+
+    int findInsertionPlace( const QStringList& itemPath );
+    void removeItemsWithCache( const QList<int>& itemIndices );
+    void insertItemWithCache( const KDevelop::BuildItem& item );
+    void insertItemsOverrideCache( int index, const QList<KDevelop::BuildItem>& items );
 };
 
 }

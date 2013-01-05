@@ -353,7 +353,8 @@ void VcsPluginHelper::history(const VcsRevision& rev)
 
     KDialog* dlg = new KDialog();
     dlg->setButtons(KDialog::Close);
-    dlg->setCaption(i18n("%2 History (%1)", url.pathOrUrl(), iface->name()));
+    dlg->setCaption(i18nc("%1: path or URL, %2: name of a version control system",
+                          "%2 History (%1)", url.pathOrUrl(), iface->name()));
     KDevelop::VcsEventWidget* logWidget = new KDevelop::VcsEventWidget(url, job, dlg);
     dlg->setMainWidget(logWidget);
     dlg->show();
