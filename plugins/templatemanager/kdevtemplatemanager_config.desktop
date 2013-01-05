@@ -10,6 +10,7 @@ X-KDE-ParentComponents=kdevplatform
 X-KDE-CfgDlgHierarchy=CODEGEN
 X-KDE-Weight=150
 Name=Templates
+Name[bs]=Predlošci
 Name[el]=Templates
 Name[es]=Plantillas
 Name[et]=Mallid
