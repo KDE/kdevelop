@@ -33,6 +33,7 @@ Comment[x-test]=xxA GObject subclass with a private pointerxx
 Comment[zh_TW]=GObject 子類別，含私密指標
 Category=C/GLib
 Language=C
+Language[bs]=C
 Language[de]=C
 Language[el]=C
 Language[es]=C

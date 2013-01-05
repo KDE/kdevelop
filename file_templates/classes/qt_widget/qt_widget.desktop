@@ -33,6 +33,7 @@ Comment[x-test]=xxQWidget subclass with a separate Qt Designer filexx
 Comment[zh_TW]=QWidget 子類別，含個別的 Qt 設計師檔
 Category=C++/Qt
 Language=C++
+Language[bs]=C++
 Language[de]=C++
 Language[el]=C++
 Language[es]=C++
@@ -102,6 +103,7 @@ OutputFile={{ name }}.cpp
 
 [UI]
 Name=User Interface
+Name[bs]=Korisnički interfejs
 Name[el]=Περιβάλλον χρήστη
 Name[es]=Interfaz de usuario
 Name[et]=Kasutajaliides

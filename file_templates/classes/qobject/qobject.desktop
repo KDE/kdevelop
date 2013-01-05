@@ -1,8 +1,21 @@
 [General]
 Name=QObject subclass
+Name[nl]=Subklasse van QObject
+Name[pt]=Sub-classe de QObject
+Name[pt_BR]=Subclasse de QObject
+Name[sv]=QObject-delklass
+Name[uk]=Підклас QObject
+Name[x-test]=xxQObject subclassxx
 Comment=QObject subclass with properties
+Comment[nl]=Subklasse van QObject met eigenschappen
+Comment[pt]=Sub-classe de QObject com propriedades
+Comment[pt_BR]=Subclasse de QObject com propriedades
+Comment[sv]=QObject-delklass med egenskaper
+Comment[uk]=Підклас QObject з властивостями
+Comment[x-test]=xxQObject subclass with propertiesxx
 Category=C++/Qt
 Language=C++
+Language[bs]=C++
 Language[de]=C++
 Language[el]=C++
 Language[es]=C++

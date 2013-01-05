@@ -36,6 +36,7 @@ Comment[x-test]=xxA unit test using the PyUnit frameworkxx
 Comment[zh_TW]=使用 PyUnit 框架的單元測試套件
 Category=Python/Basic
 Language=Python
+Language[bs]=Python
 Language[de]=Python
 Language[el]=Python
 Language[es]=Python

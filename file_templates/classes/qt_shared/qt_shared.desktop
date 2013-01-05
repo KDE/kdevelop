@@ -33,6 +33,7 @@ Comment[x-test]=xxClass with a private QSharedData memberxx
 Comment[zh_TW]=含私密的 QSharedData 成員的類別
 Category=C++/Qt
 Language=C++
+Language[bs]=C++
 Language[de]=C++
 Language[el]=C++
 Language[es]=C++

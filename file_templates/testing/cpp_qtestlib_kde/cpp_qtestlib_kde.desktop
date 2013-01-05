@@ -33,6 +33,7 @@ Comment[x-test]=xxA unit test using the QTest library with KDE extensionsxx
 Comment[zh_TW]=單元測試套件，用 QTest 函式庫，含 KDE 延伸
 Category=C++/KDE
 Language=C++
+Language[bs]=C++
 Language[de]=C++
 Language[el]=C++
 Language[es]=C++

@@ -33,6 +33,7 @@ Comment[x-test]=xxC++ Class with a private D-pointerxx
 Comment[zh_TW]=C++ 類別，含私密指標
 Category=C++/Basic
 Language=C++
+Language[bs]=C++
 Language[de]=C++
 Language[el]=C++
 Language[es]=C++

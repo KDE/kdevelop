@@ -1,5 +1,6 @@
 [General]
 Name=Basic
+Name[bs]=Osnovno
 Name[el]=Βασική
 Name[es]=Básica
 Name[et]=Basic
@@ -35,6 +36,7 @@ Comment[x-test]=xxBasic Python Classxx
 Comment[zh_TW]=基本 Python 類別
 Category=Python/Basic
 Language=Python
+Language[bs]=Python
 Language[de]=Python
 Language[el]=Python
 Language[es]=Python

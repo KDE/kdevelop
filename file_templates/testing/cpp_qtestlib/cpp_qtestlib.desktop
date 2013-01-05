@@ -31,6 +31,7 @@ Comment[x-test]=xxA unit test suite using the QTest library without a graphical 
 Comment[zh_TW]=單元測試套件，用 QTest 函式庫，但不含使用者介面
 Category=C++/Qt
 Language=C++
+Language[bs]=C++
 Language[de]=C++
 Language[el]=C++
 Language[es]=C++
