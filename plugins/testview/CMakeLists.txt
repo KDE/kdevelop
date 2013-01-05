@@ -6,6 +6,7 @@
 set(kdevtestview_PLUGIN_SRCS
     testview.cpp
     testviewplugin.cpp
+    testviewdebug.cpp
 )
 
 kde4_add_plugin(kdevtestview ${kdevtestview_PLUGIN_SRCS})
