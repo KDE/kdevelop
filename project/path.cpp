@@ -200,17 +200,17 @@ QString Path::relativePath(const Path& path) const
     return relativePath;
 }
 
-bool Path::isParentOf(const Path& path) const
+bool isParentPath(const QVector<QString>& parent, const QVector<QString>& child, bool direct)
 {
-    if (path.m_data.size() < m_data.size() || !isValid() || !path.isValid()
-        || remotePrefix() != path.remotePrefix())
-    {
+    if (direct && child.size() != parent.size() + 1) {
+        return false;
+    } else if (!direct && child.size() <= parent.size()) {
         return false;
     }
-    for (int i = 0; i < m_data.size(); ++i) {
-        if (path.m_data.at(i) != m_data.at(i)) {
+    for (int i = 0; i < parent.size(); ++i) {
+        if (child.at(i) != parent.at(i)) {
             // support for trailing '/'
-            if (i + 1 == m_data.size() && m_data.at(i).isEmpty()) {
+            if (i + 1 == parent.size() && parent.at(i).isEmpty()) {
                 return true;
             }
             // otherwise we take a different branch here
@@ -218,6 +218,22 @@ bool Path::isParentOf(const Path& path) const
         }
     }
     return true;
+}
+
+bool Path::isParentOf(const Path& path) const
+{
+    if (!isValid() || !path.isValid() || remotePrefix() != path.remotePrefix()) {
+        return false;
+    }
+    return isParentPath(m_data, path.m_data, false);
+}
+
+bool Path::isDirectParentOf(const Path& path) const
+{
+    if (!isValid() || !path.isValid() || remotePrefix() != path.remotePrefix()) {
+        return false;
+    }
+    return isParentPath(m_data, path.m_data, true);
 }
 
 QString Path::remotePrefix() const

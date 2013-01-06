@@ -239,6 +239,14 @@ void TestPath::testPath()
 
     QCOMPARE(optUrl.parent().toUrl(), comparableUpUrl(url));
 
+    QVERIFY(optUrl.parent().isDirectParentOf(optUrl));
+    QVERIFY(!optUrl.parent().parent().isDirectParentOf(optUrl));
+    Path a("/foo/bar/asdf/");
+    Path b("/foo/bar/");
+    QVERIFY(b.isDirectParentOf(a));
+    Path c("/foo/bar");
+    QVERIFY(c.isDirectParentOf(a));
+
     optUrl.clear();
     url.clear();
     QCOMPARE(optUrl.toUrl(), url);

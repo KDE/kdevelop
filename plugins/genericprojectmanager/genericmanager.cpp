@@ -62,7 +62,7 @@ bool GenericProjectManager::reload( ProjectFolderItem* item )
 
 bool GenericProjectManager::isValid( const Path &path, const bool isFolder, IProject* project ) const
 {
-    if ( isFolder && path.fileName() == ".kdev4" && path.parent() == project->path() ) {
+    if ( isFolder && path.fileName() == ".kdev4" && project->path().isDirectParentOf(path) ) {
         return false;
     } else if ( path == project->projectFile() ) {
         return false;

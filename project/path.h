@@ -226,8 +226,22 @@ public:
 
     /**
      * @return True if this path is the parent of @p path.
+     *
+     * For instance, ftp://host/dir/ is a parent of ftp://host/dir/subdir/blub,
+     * or /foo is a parent of /foo/bar.
      */
     bool isParentOf(const Path& path) const;
+
+    /**
+     * @return True if this path is the direct parent of @p path.
+     *
+     * For instance, ftp://host/dir/ is the direct parent of ftp://host/dir/subdir,
+     * but ftp.//host/ is a parent but not the direct parent.
+     *
+     * This is more efficient than @code path.parent() == *this @endcode since
+     * it does not require any temporary allocations as for the parent() call.
+     */
+    bool isDirectParentOf(const Path& path) const;
 
     /**
      * @return the prefix of a remote URL containing protocol, host, port etc. pp.
