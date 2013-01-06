@@ -81,7 +81,7 @@ QList<QVariant> ProjectFileData::highlighting() const
 
     QList<QVariant> ret;
 
-    int fileNameLength = m_file.path.fileName().length();
+    int fileNameLength = m_file.path.lastPathSegment().length();
 
     ret << 0;
     ret << txt.length() - fileNameLength;

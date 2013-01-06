@@ -95,7 +95,7 @@ KUrl TestProject::projectFileUrl() const
 
 Path TestProject::projectFile() const
 {
-    return Path(m_path, m_path.fileName() + ".kdev4");
+    return Path(m_path, m_path.lastPathSegment() + ".kdev4");
 }
 
 const KUrl TestProject::folder() const

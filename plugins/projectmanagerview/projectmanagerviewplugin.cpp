@@ -696,7 +696,7 @@ void ProjectManagerViewPlugin::pasteFromContextMenu()
             //and select new items
             QList<ProjectBaseItem*> newItems;
             foreach (const Path &path, paths) {
-                const Path targetPath(destItem->path(), path.fileName());
+                const Path targetPath(destItem->path(), path.lastPathSegment());
                 foreach (ProjectBaseItem *item, destItem->children()) {
                     if (item->path() == targetPath) {
                         newItems << item;

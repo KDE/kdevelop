@@ -258,8 +258,8 @@ public:
 
         // developerfile == dirname(projectFileUrl) ."/.kdev4/". basename(projectfileUrl)
         developerFile = projectFile;
-        developerFile.setFileName( ".kdev4" );
-        developerFile.addPath( projectFile.fileName() );
+        developerFile.setLastPathSegment( ".kdev4" );
+        developerFile.addPath( projectFile.lastPathSegment() );
 
         statJob = KIO::stat( developerFile.toUrl(), KIO::HideProgressInfo );
         if( !statJob->exec() )
@@ -316,7 +316,7 @@ public:
     bool projectNameUsed(const KConfigGroup& projectGroup)
     {
         // helper method for open()
-        name = projectGroup.readEntry( "Name", projectFile.fileName() );
+        name = projectGroup.readEntry( "Name", projectFile.lastPathSegment() );
         progress->projectName = name;
         if( Core::self()->projectController()->isProjectNameUsed( name ) )
         {

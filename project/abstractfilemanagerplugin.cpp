@@ -343,7 +343,7 @@ bool AbstractFileManagerPlugin::Private::rename(ProjectBaseItem* item, const Pat
     if ( !q->isValid(newPath, true, item->project()) ) {
         int cancel = KMessageBox::warningContinueCancel( qApp->activeWindow(),
             i18n("You tried to rename '%1' to '%2', but the latter is filtered and will be hidden.\n"
-                 "Do you want to continue?", item->text(), newPath.fileName()),
+                 "Do you want to continue?", item->text(), newPath.lastPathSegment()),
             QString(), KStandardGuiItem::cont(), KStandardGuiItem::cancel(), "GenericManagerRenameToFiltered"
         );
         if ( cancel == KMessageBox::Cancel ) {

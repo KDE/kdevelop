@@ -202,7 +202,7 @@ void ProjectTreeView::dropEvent(QDropEvent* event)
                 //and select new items
                 QItemSelection selection;
                 foreach (const Path &path, paths) {
-                    const Path targetPath(folder->path(), path.fileName());
+                    const Path targetPath(folder->path(), path.lastPathSegment());
                     foreach (ProjectBaseItem *item, folder->children()) {
                         if (item->path() == targetPath) {
                             QModelIndex indx = proxy->mapFromSource( projectModel()->indexFromItem( item ) );

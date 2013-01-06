@@ -288,14 +288,18 @@ public:
     }
 
     /**
-     * @return the file name of this Path, i.e. the last element of the path.
+     * @return the last element of the path.
+     *
+     * This will never return the remote URL prefix.
      */
-    QString fileName() const;
+    QString lastPathSegment() const;
 
     /**
      * Set the file name of this Path, i.e. the last element of the path.
+     *
+     * This will never overwrite the remote URL prefix.
      */
-    void setFileName(const QString& name);
+    void setLastPathSegment(const QString& name);
 
     /**
      * Append @p path to this Path.

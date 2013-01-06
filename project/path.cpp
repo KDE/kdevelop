@@ -274,7 +274,7 @@ KUrl Path::toUrl() const
     return KUrl(pathOrUrl());
 }
 
-QString Path::fileName() const
+QString Path::lastPathSegment() const
 {
     // remote Paths are offset by one, thus never return the first item of them as file name
     if (m_data.isEmpty() || (!isLocalFile() && m_data.size() == 1)) {
@@ -283,7 +283,7 @@ QString Path::fileName() const
     return m_data.last();
 }
 
-void Path::setFileName(const QString& name)
+void Path::setLastPathSegment(const QString& name)
 {
     // remote Paths are offset by one, thus never return the first item of them as file name
     if (m_data.isEmpty() || (!isLocalFile() && m_data.size() == 1)) {

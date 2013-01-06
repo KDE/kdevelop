@@ -179,7 +179,7 @@ public:
         }
 
         Path newPath = item->path();
-        newPath.setFileName(newName);
+        newPath.setLastPathSegment(newName);
 
         KIO::UDSEntry entry;
         if( KIO::NetAccess::stat(newPath.toUrl(), entry, 0) ) {
@@ -510,7 +510,7 @@ void ProjectBaseItem::setUrl(const KUrl& url)
     Path path(url);
     if (parent() && parent()->path().isDirectParentOf(path)) {
         // leverage implicit sharing
-        path = Path(parent()->path(), path.fileName());
+        path = Path(parent()->path(), path.lastPathSegment());
     }
     setPath(path);
 }
@@ -525,8 +525,7 @@ void ProjectBaseItem::setPath( const Path& path)
 
     d->m_path = path;
     d->m_pathIndex = indexForPath(path);
-    const QString baseName = path.fileName();
-    setText( baseName );
+    setText( path.lastPathSegment() );
 
     if (model() && d->m_pathIndex) {
         model()->d->pathLookupTable.insert(d->m_pathIndex, this);
@@ -651,7 +650,7 @@ ProjectFolderItem::ProjectFolderItem( IProject* project, const KUrl & dir, Proje
 }
 
 ProjectFolderItem::ProjectFolderItem(IProject* project, const Path& path, ProjectBaseItem* parent)
-    : ProjectBaseItem( project, path.fileName(), parent )
+    : ProjectBaseItem( project, path.lastPathSegment(), parent )
 {
     setPath( path );
 
@@ -702,7 +701,7 @@ void ProjectFolderItem::propagateRename( const Path& newBase ) const
     path.addPath("dummy");
     foreach( KDevelop::ProjectBaseItem* child, children() )
     {
-        path.setFileName( child->text() );
+        path.setLastPathSegment( child->text() );
         child->setPath( path );
 
         const ProjectFolderItem* folder = child->folder();
@@ -776,7 +775,7 @@ ProjectFileItem::ProjectFileItem( IProject* project, const KUrl & file, ProjectB
 }
 
 ProjectFileItem::ProjectFileItem( IProject* project, const Path& path, ProjectBaseItem* parent )
-    : ProjectBaseItem( project, path.fileName(), parent )
+    : ProjectBaseItem( project, path.lastPathSegment(), parent )
 {
     setFlags(flags() | Qt::ItemIsDragEnabled);
     setPath( path );
@@ -855,7 +854,7 @@ public:
             }
         }
 
-        KMimeType::Ptr mime = KMimeType::findByUrl( KUrl::fromPath(url.fileName()), 0, false, true );
+        KMimeType::Ptr mime = KMimeType::findByUrl( KUrl::fromPath(url.lastPathSegment()), 0, false, true );
         QMutexLocker lock(&mutex);
         QHash< QString, QString >::const_iterator it = mimeToIcon.constFind( mime->name() );
         QString iconName;

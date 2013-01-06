@@ -189,7 +189,7 @@ void TestPath::testPath()
     QCOMPARE(optUrl.isLocalFile(), url.isLocalFile());
     QCOMPARE(optUrl.pathOrUrl(), url.pathOrUrl());
     QCOMPARE(optUrl.isValid(), url.isValid());
-    QCOMPARE(optUrl.fileName(), url.fileName());
+    QCOMPARE(optUrl.lastPathSegment(), url.fileName());
     QCOMPARE(optUrl.path(), url.path());
     QCOMPARE(optUrl.parent().toUrl(), comparableUpUrl(url));
     QCOMPARE(optUrl.toLocalFile(), url.toLocalFile());
@@ -229,12 +229,12 @@ void TestPath::testPath()
 
     url.addPath("test/foo/bar");
     optUrl.addPath("test/foo/bar");
-    QCOMPARE(optUrl.fileName(), url.fileName());
+    QCOMPARE(optUrl.lastPathSegment(), url.fileName());
     QCOMPARE(optUrl.path(), url.path());
 
     url.setFileName("lalalala_adsf.txt");
-    optUrl.setFileName("lalalala_adsf.txt");
-    QCOMPARE(optUrl.fileName(), url.fileName());
+    optUrl.setLastPathSegment("lalalala_adsf.txt");
+    QCOMPARE(optUrl.lastPathSegment(), url.fileName());
     QCOMPARE(optUrl.path(), url.path());
 
     QCOMPARE(optUrl.parent().toUrl(), comparableUpUrl(url));
