@@ -293,7 +293,7 @@ public:
      *
      * @sa KUrl::upUrl()
      */
-    Path up() const;
+    Path parent() const;
 
     /**
      * Clear the path, i.e. make it invalid and empty.

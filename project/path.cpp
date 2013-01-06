@@ -301,7 +301,7 @@ void Path::addPath(const QString& path)
     m_data += newData.toVector();
 }
 
-Path Path::up() const
+Path Path::parent() const
 {
     if (m_data.isEmpty()) {
         return Path();

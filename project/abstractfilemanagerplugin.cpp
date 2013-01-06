@@ -252,7 +252,7 @@ void AbstractFileManagerPlugin::Private::created(const QString &path_)
     ///FIXME: share memory with parent
     const Path path(KUrl::fromPath(path_));
     const IndexedString indexedPath = path.toIndexed();
-    const IndexedString indexedParent = path.up().toIndexed();
+    const IndexedString indexedParent = path.parent().toIndexed();
 
     foreach ( IProject* p, m_watchers.keys() ) {
         if ( !p->projectItem()->model() ) {
@@ -350,7 +350,7 @@ bool AbstractFileManagerPlugin::Private::rename(ProjectBaseItem* item, const Pat
             return false;
         }
     }
-    foreach ( ProjectFolderItem* parent, item->project()->foldersForPath(newPath.up().toIndexed()) ) {
+    foreach ( ProjectFolderItem* parent, item->project()->foldersForPath(newPath.parent().toIndexed()) ) {
         if ( parent->folder() ) {
             stopWatcher(parent);
             const Path source = item->path();

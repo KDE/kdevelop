@@ -191,7 +191,7 @@ void TestPath::testPath()
     QCOMPARE(optUrl.isValid(), url.isValid());
     QCOMPARE(optUrl.fileName(), url.fileName());
     QCOMPARE(optUrl.path(), url.path());
-    QCOMPARE(optUrl.up().toUrl(), comparableUpUrl(url));
+    QCOMPARE(optUrl.parent().toUrl(), comparableUpUrl(url));
     QCOMPARE(optUrl.toLocalFile(), url.toLocalFile());
 
     QCOMPARE(optUrl, Path(input));
@@ -237,7 +237,7 @@ void TestPath::testPath()
     QCOMPARE(optUrl.fileName(), url.fileName());
     QCOMPARE(optUrl.path(), url.path());
 
-    QCOMPARE(optUrl.up().toUrl(), comparableUpUrl(url));
+    QCOMPARE(optUrl.parent().toUrl(), comparableUpUrl(url));
 
     optUrl.clear();
     url.clear();

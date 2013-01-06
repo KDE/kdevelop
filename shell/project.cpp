@@ -266,7 +266,7 @@ public:
         {
             // the developerfile does not exist yet, check if its folder exists
             // the developerfile itself will get created below
-            KUrl dir = developerFile.up().toUrl();
+            KUrl dir = developerFile.parent().toUrl();
             statJob = KIO::stat( dir, KIO::HideProgressInfo );
             if( !statJob->exec() )
             {
@@ -506,7 +506,7 @@ bool Project::open( const Path& projectFile )
     if (d->projectNameUsed(projectGroup))
         return false;
 
-    d->projectPath = d->projectFile.up();
+    d->projectPath = d->projectFile.parent();
 
     IProjectFileManager* iface = d->fetchFileManager(projectGroup);
     if (!iface)
