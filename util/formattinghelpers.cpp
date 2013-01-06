@@ -19,7 +19,6 @@
 
 #include "formattinghelpers.h"
 #include <QString>
-#include <QTextDocument>
 #include <vector>
 #include <kdebug.h>
 
@@ -186,13 +185,6 @@ QString extractFormattedTextFromContext( const QString& _formattedMergedText, co
     }
 
     return formattedMergedText;
-}
-
-QString removeHtmlFromString( const QString& htmlString )
-{
-    QTextDocument doc;
-    doc.setHtml( htmlString );
-    return doc.toPlainText();
 }
 
 }
