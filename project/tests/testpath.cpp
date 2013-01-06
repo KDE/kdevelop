@@ -317,6 +317,8 @@ void TestPath::testPathOperators_data()
     Path b("/tmp/b");
     Path c("/tmp/ac");
     Path d("/d");
+    Path e("/tmp");
+    Path f("/tmp/");
     Path invalid;
 
     QTest::newRow("a-b") << a << b << false << true;
@@ -324,6 +326,7 @@ void TestPath::testPathOperators_data()
     QTest::newRow("c-a") << c << a << false << false;
     QTest::newRow("c-invalid") << c << invalid << false << false;
     QTest::newRow("c-d") << c << d << false << false;
+    QTest::newRow("e-f") << e << f << true << false;
 }
 
 #include "testpath.moc"
