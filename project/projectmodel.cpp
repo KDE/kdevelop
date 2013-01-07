@@ -61,20 +61,6 @@ static Qt::ConnectionType getConnectionTypeForSignalDelivery( KDevelop::ProjectM
 namespace KDevelop
 {
 
-/**
- * Return true if @p url contains a clean path
- */
-inline bool isValidPath(const KUrl& url)
-{
-    if (!url.isValid()) {
-        return false;
-    }
-
-    KUrl cleaned = url;
-    cleaned.cleanPath();
-    return url == cleaned;
-}
-
 QStringList removeProjectBasePath( const QStringList& fullpath, KDevelop::ProjectBaseItem* item )
 {
     QStringList result = fullpath;
@@ -108,11 +94,6 @@ QStringList joinProjectBasePath( const QStringList& partialpath, KDevelop::Proje
 inline uint indexForPath( const Path& path )
 {
     return IndexedString::indexForString(path.pathOrUrl());
-}
-
-inline uint indexForUrl( const KUrl& url )
-{
-    return IndexedString::indexForString(url.pathOrUrl());
 }
 
 class ProjectModelPrivate
@@ -640,15 +621,6 @@ void ProjectModel::clear()
 }
 
 
-ProjectFolderItem::ProjectFolderItem( IProject* project, const KUrl & dir, ProjectBaseItem * parent )
-        : ProjectBaseItem( project, dir.fileName(), parent )
-{
-    setFlags(flags() | Qt::ItemIsDropEnabled);
-    if (project && project->folder() != dir)
-        setFlags(flags() | Qt::ItemIsDragEnabled);
-    setUrl( dir );
-}
-
 ProjectFolderItem::ProjectFolderItem(IProject* project, const Path& path, ProjectBaseItem* parent)
     : ProjectBaseItem( project, path.lastPathSegment(), parent )
 {
@@ -734,11 +706,6 @@ bool ProjectBaseItem::isProjectRoot() const
     return parent()==0;
 }
 
-ProjectBuildFolderItem::ProjectBuildFolderItem( IProject* project, const KUrl &dir, ProjectBaseItem *parent)
-    : ProjectFolderItem( project, dir, parent )
-{
-}
-
 ProjectBuildFolderItem::ProjectBuildFolderItem(IProject* project, const Path& path, ProjectBaseItem *parent)
     : ProjectFolderItem( project, path, parent )
 {
@@ -763,15 +730,6 @@ int ProjectBuildFolderItem::type() const
 QString ProjectBuildFolderItem::iconName() const
 {
     return "folder-development";
-}
-
-ProjectFileItem::ProjectFileItem( IProject* project, const KUrl & file, ProjectBaseItem * parent )
-        : ProjectBaseItem( project, file.fileName(), parent )
-{
-    Q_ASSERT(isValidPath(file));
-
-    setFlags(flags() | Qt::ItemIsDragEnabled);
-    setUrl( file );
 }
 
 ProjectFileItem::ProjectFileItem( IProject* project, const Path& path, ProjectBaseItem* parent )
@@ -1163,16 +1121,6 @@ bool ProjectModel::setData(const QModelIndex&, const QVariant&, int)
 QList<ProjectBaseItem*> ProjectModel::itemsForPath(const IndexedString& path) const
 {
     return d->pathLookupTable.values(path.index());
-}
-
-QList<ProjectBaseItem*> ProjectModel::itemsForUrl( const KUrl& url ) const
-{
-    return itemsForPath(IndexedString(url));
-}
-
-ProjectBaseItem* ProjectModel::itemForUrl(const IndexedString& url) const
-{
-    return itemForPath(url);
 }
 
 ProjectBaseItem* ProjectModel::itemForPath(const IndexedString& path) const

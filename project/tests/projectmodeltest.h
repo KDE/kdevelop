@@ -50,8 +50,8 @@ private slots:
     void testWithProject();
     void testTakeRow();
     void testAddItemInThread();
-    void testItemsForUrl();
-    void testItemsForUrl_data();
+    void testItemsForPath();
+    void testItemsForPath_data();
     void testProjectProxyModel();
     void testProjectFileSet();
     void testProjectFileIcon();

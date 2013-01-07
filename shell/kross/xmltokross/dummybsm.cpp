@@ -34,15 +34,17 @@ KDevelop::ProjectFolderItem* DummyBSM::import(KDevelop::IProject *project )
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBuildSystemManager )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
-    m_folder=new KDevelop::ProjectFolderItem(project, KUrl("/"), 0);
+    m_folder=new KDevelop::ProjectFolderItem(project, KDevelop::Path("/"), 0);
     m_target=new KDevelop::ProjectTargetItem(project, "standard", m_folder);
     qDebug() << "importing" << m_controlledFiles;
     foreach(const KUrl& url, m_controlledFiles)
     {
-        QString cpp=url.toLocalFile().replace(".h", ".cpp");
-        new KDevelop::ProjectFileItem(project, url, m_target);
-        new KDevelop::ProjectFileItem(project, KUrl(cpp), m_target);
-        qDebug() << "adding file to dummy" << url << cpp;
+        ///TODO: use Path directly
+        KDevelop::Path header(url);
+        KDevelop::Path cpp(header.parent(), header.lastPathSegment().replace(".h", ".cpp"));
+        new KDevelop::ProjectFileItem(project, header, m_target);
+        new KDevelop::ProjectFileItem(project, cpp, m_target);
+        qDebug() << "adding file to dummy" << header << cpp;
     }
     return m_folder;
 }

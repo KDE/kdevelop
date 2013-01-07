@@ -239,6 +239,10 @@ void TestPath::testPath()
     QCOMPARE(optUrl, Path(optUrl));
     QVERIFY(optUrl != Path(input + "/asdf"));
 
+    if (url.isLocalFile() && !input.startsWith("file://")) {
+        QCOMPARE(optUrl, Path(KUrl::fromPath(input)));
+    }
+
     QCOMPARE(optUrl.toIndexed(), IndexedString(url));
     QCOMPARE(optUrl, Path(url));
 

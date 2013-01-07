@@ -272,7 +272,6 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem
 class KDEVPLATFORMPROJECT_EXPORT ProjectFolderItem: public ProjectBaseItem
 {
 public:
-    KDE_DEPRECATED ProjectFolderItem( IProject*, const KUrl &dir, ProjectBaseItem *parent = 0 );
     /**
      * Create a new ProjectFolderItem with the given @p path and an optional @p parent
      * in the given @p project.
@@ -317,8 +316,6 @@ private:
 class KDEVPLATFORMPROJECT_EXPORT ProjectBuildFolderItem: public ProjectFolderItem
 {
 public:
-    KDE_DEPRECATED ProjectBuildFolderItem( IProject*, const KUrl &dir, ProjectBaseItem *parent = 0 );
-
     /**
      * Create a new ProjectBuildFolderItem with the given @p path with the optional
      * parent @p parent in the given @p project.
@@ -391,7 +388,6 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectLibraryTargetItem: public ProjectTargetI
 class KDEVPLATFORMPROJECT_EXPORT ProjectFileItem: public ProjectBaseItem
 {
 public:
-    KDE_DEPRECATED ProjectFileItem( IProject*, const KUrl& file, ProjectBaseItem *parent = 0 );
     /**
      * Create a new ProjectFileItem with the given @p path and an optional @p parent
      * in the given @p project.
@@ -475,14 +471,10 @@ public:
      */
     QList<ProjectBaseItem*> itemsForPath(const IndexedString& path) const;
 
-    KDE_DEPRECATED QList<ProjectBaseItem*> itemsForUrl(const KUrl& url) const;
-
     /**
      * Returns the first item for the given indexed path.
      */
     ProjectBaseItem* itemForPath(const IndexedString& path) const;
-
-    KDE_DEPRECATED ProjectBaseItem* itemForUrl(const IndexedString& url) const;
 
 private:
     class ProjectModelPrivate* const d;

@@ -64,7 +64,7 @@ void BuildItem::initializeFromItem( KDevelop::ProjectBaseItem* item )
 {
     Q_ASSERT(item);
     KDevelop::ProjectModel* model=KDevelop::ICore::self()->projectController()->projectModel();
-        
+
     m_itemPath = model->pathFromIndex(item->index());
 }
 
@@ -83,7 +83,7 @@ KDevelop::ProjectBaseItem* BuildItem::findItem() const
     KDevelop::ProjectModel* model=KDevelop::ICore::self()->projectController()->projectModel();
     QModelIndex idx = model->pathToIndex(m_itemPath);
     KDevelop::ProjectBaseItem* item = dynamic_cast<KDevelop::ProjectBaseItem*>(model->itemFromIndex(idx));
-    
+
     return item;
 }
 

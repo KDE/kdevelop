@@ -132,7 +132,7 @@ QIcon ProjectFileData::icon() const
     if (m_file.indexedUrl.isEmpty()) {
         return KIcon("tab-duplicate");
     } else {
-        ProjectBaseItem* item = ICore::self()->projectController()->projectModel()->itemForUrl(m_file.indexedUrl);
+        ProjectBaseItem* item = ICore::self()->projectController()->projectModel()->itemForPath(m_file.indexedUrl);
         if (item) {
             return KIcon(item->iconName());
         }

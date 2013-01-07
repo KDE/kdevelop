@@ -25,6 +25,7 @@
 #include <project/interfaces/iprojectfilemanager.h>
 #include <project/projectmodel.h>
 
+///FIXME: port to Path
 class DummyBSM : public KDevelop::IPlugin, public KDevelop::IBuildSystemManager
 {
     Q_OBJECT
