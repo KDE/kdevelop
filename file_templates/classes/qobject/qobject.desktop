@@ -16,6 +16,7 @@ Comment[x-test]=xxQObject subclass with propertiesxx
 Category=C++/Qt
 Language=C++
 Language[bs]=C++
+Language[da]=C++
 Language[de]=C++
 Language[el]=C++
 Language[es]=C++
@@ -41,6 +42,7 @@ Files=Header,Implementation
 
 [Header]
 Name=Public Header
+Name[da]=Offentlig header
 Name[el]=Public Header
 Name[es]=Cabecera pública
 Name[et]=Avalik päis
@@ -62,6 +64,7 @@ OutputFile={{ name }}.h
 [Implementation]
 Name=Implementation
 Name[cs]=Implementace
+Name[da]=Implementering
 Name[de]=Implementation
 Name[el]=Υλοποίηση
 Name[es]=Implementación

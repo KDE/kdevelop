@@ -2,6 +2,7 @@
 Type=Service
 Name=Custom BuildSystem
 Name[cs]=Vlastní systém pro sestavení
+Name[da]=Tilpasset byggesystem
 Name[de]=Eigenes Build-System
 Name[el]=Προσαρμοσμένο σύστημα κατασκευής
 Name[es]=Sistema de construcción personalizado
@@ -23,6 +24,7 @@ Name[uk]=Нетипова система збирання
 Name[x-test]=xxCustom BuildSystemxx
 Name[zh_TW]=自訂編譯系統
 Comment=Allows to use custom buildsystems for KDevelop projects
+Comment[da]=Lader dig bruge tilpassede byggesystemer til KDevelop-projekter
 Comment[el]=Επιτρέπει τη χρήση προσαρμοσμένων συστημάτων κατασκευής για έργα KDevelop
 Comment[es]=Permite usar un sistema de construcción personalizado en los proyectos de KDevelop
 Comment[et]=Võimaldab kasutada KDevelopi projektide puhul kohandatud ehitamissüsteemi

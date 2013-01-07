@@ -11,6 +11,7 @@ X-KDE-CfgDlgHierarchy=BUILDTOOL
 
 Name=Custom BuildSystem
 Name[cs]=Vlastní systém pro sestavení
+Name[da]=Tilpasset byggesystem
 Name[de]=Eigenes Build-System
 Name[el]=Προσαρμοσμένο σύστημα κατασκευής
 Name[es]=Sistema de construcción personalizado
@@ -32,6 +33,7 @@ Name[uk]=Нетипова система збирання
 Name[x-test]=xxCustom BuildSystemxx
 Name[zh_TW]=自訂編譯系統
 Comment=Configure a projects custom build tool and includes/defines for the language support.
+Comment[da]=Konfigurér et projekts tilpassede byggeværktøj og include-filer og definitioner for sprogunderstøttelse.
 Comment[el]=Διαμορφώνει ένα εργαλείο προσαρμοσμένης κατασκευής για έργα και τα includes/defines για τη γλωσσική υποστήριξη.
 Comment[es]=Configurar una herramienta de construcción personalizada de proyectos e includes y defines para el lenguaje.
 Comment[et]=Projektide kohandatud ehitamistööriista ning keeletoetuseks vajalike päiste ja definitsioonide seadistamine.

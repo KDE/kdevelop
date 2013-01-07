@@ -1,5 +1,6 @@
 [General]
 Name=CMake Module with pkg-config
+Name[da]=CMake-modul med pkg-config
 Name[el]=CMake άρθρωμα με pkg-config
 Name[es]=Módulo de CMake con pkg-config
 Name[et]=CMake'i moodul pkg-config'iga
@@ -16,6 +17,7 @@ Name[uk]=Модуль CMake з pkg-config
 Name[x-test]=xxCMake Module with pkg-configxx
 Name[zh_TW]=CMake 模組，含 pkg-config
 Comment=CMake module for finding a library using pkg-config
+Comment[da]=CMake-modul til at finde et bibliotek ved hjælp af pkg-config
 Comment[el]=CMake άρθρωμα για εύρεση βιβλιοθήκης με χρήση pkg-config
 Comment[es]=Módulo de CMake para encontrar una biblioteca usando pkg-config
 Comment[et]=CMake'i moodul teegi leidmiseks pkg-config'i abil
@@ -34,6 +36,7 @@ Comment[zh_TW]=CMake 模組，可用 pkg-config 尋找函式庫
 Category=CMake/Module
 Language=CMake
 Language[cs]=CMake
+Language[da]=CMake
 Language[de]=CMake
 Language[el]=CMake
 Language[es]=CMake
@@ -59,6 +62,7 @@ OptionsFile=options.kcfg
 
 [Module]
 Name=Module
+Name[da]=Modul
 Name[el]=Άρθρωμα
 Name[es]=Módulo
 Name[et]=Moodul

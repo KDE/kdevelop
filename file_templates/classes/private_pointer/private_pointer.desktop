@@ -1,5 +1,6 @@
 [General]
 Name=Private Pointer
+Name[da]=Privat pointer
 Name[el]=Private Pointer
 Name[es]=Puntero privado
 Name[et]=Privaatviit
@@ -16,6 +17,7 @@ Name[uk]=Закритий (private) вказівник
 Name[x-test]=xxPrivate Pointerxx
 Name[zh_TW]=私密指標
 Comment=C++ Class with a private D-pointer
+Comment[da]=C++-klasse med en privat D-pointer
 Comment[el]=C++ Class με private D-pointer
 Comment[es]=Clase de C++ con un puntero D privado
 Comment[et]=C++ klass privaatse D-viidaga
@@ -34,6 +36,7 @@ Comment[zh_TW]=C++ 類別，含私密指標
 Category=C++/Basic
 Language=C++
 Language[bs]=C++
+Language[da]=C++
 Language[de]=C++
 Language[el]=C++
 Language[es]=C++
@@ -59,6 +62,7 @@ OptionsFile=options.kcfg
 
 [Header]
 Name=Public Header
+Name[da]=Offentlig header
 Name[el]=Public Header
 Name[es]=Cabecera pública
 Name[et]=Avalik päis
@@ -79,6 +83,7 @@ OutputFile={{ name }}.h
 
 [PrivateHeader]
 Name=Private Header
+Name[da]=Privat header
 Name[el]=Private Header
 Name[es]=Cabecera privada
 Name[et]=Privaatpäis
@@ -100,6 +105,7 @@ OutputFile={{ name }}_p.h
 [Implementation]
 Name=Implementation
 Name[cs]=Implementace
+Name[da]=Implementering
 Name[de]=Implementation
 Name[el]=Υλοποίηση
 Name[es]=Implementación
