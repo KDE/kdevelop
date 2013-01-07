@@ -155,6 +155,47 @@ void TestPath::bench_path()
     runBenchmark<Path>();
 }
 
+void TestPath::bench_fromLocalPath()
+{
+    QFETCH(int, variant);
+
+    const QString input("/foo/bar/asdf/bla/blub.h");
+    const int repeat = 1000;
+    if (variant == 1) {
+        QBENCHMARK {
+            for(int i = 0; i < repeat; ++i) {
+                Path path = Path(KUrl(input));
+                Q_UNUSED(path);
+            }
+        }
+    } else if (variant == 2) {
+        QBENCHMARK {
+            for(int i = 0; i < repeat; ++i) {
+                Path path = Path(KUrl::fromPath(input));
+                Q_UNUSED(path);
+            }
+        }
+    } else if (variant == 3) {
+        QBENCHMARK {
+            for(int i = 0; i < repeat; ++i) {
+                Path path = Path(QUrl::fromLocalFile(input));
+                Q_UNUSED(path);
+            }
+        }
+    } else {
+        QFAIL("unexpected variant");
+    }
+}
+
+void TestPath::bench_fromLocalPath_data()
+{
+    QTest::addColumn<int>("variant");
+
+    QTest::newRow("KUrl::KUrl") << 1;
+    QTest::newRow("KUrl::fromPath") << 2;
+    QTest::newRow("QUrl::fromLocalFile") << 3;
+}
+
 KUrl comparableUpUrl(const KUrl& url)
 {
     KUrl ret = url.upUrl();

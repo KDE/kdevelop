@@ -35,6 +35,8 @@ private slots:
     void bench_qurl();
     void bench_qstringlist();
     void bench_path();
+    void bench_fromLocalPath();
+    void bench_fromLocalPath_data();
 
     void testPath();
     void testPath_data();
