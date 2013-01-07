@@ -63,11 +63,6 @@ CustomBuildSystem::~CustomBuildSystem()
 {
 }
 
-bool CustomBuildSystem::moveFilesAndFolders( const QList<ProjectBaseItem*> &, ProjectFolderItem* )
-{
-    return false;
-}
-
 bool CustomBuildSystem::addFilesToTarget( const QList<ProjectFileItem*>&, ProjectTargetItem* )
 {
     return false;

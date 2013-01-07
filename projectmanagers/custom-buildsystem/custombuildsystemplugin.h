@@ -75,7 +75,6 @@ public:
     QHash<QString, QString> defines( KDevelop::ProjectBaseItem* ) const;
     KUrl::List includeDirectories( KDevelop::ProjectBaseItem* ) const;
     bool removeFilesFromTargets( const QList<KDevelop::ProjectFileItem*>& );
-    bool moveFilesAndFolders( const QList<KDevelop::ProjectBaseItem*>&, KDevelop::ProjectFolderItem* );
     bool removeTarget( KDevelop::ProjectTargetItem* target );
     QList<KDevelop::ProjectTargetItem*> targets( KDevelop::ProjectFolderItem* ) const;
     KConfigGroup configuration( KDevelop::IProject* ) const;
