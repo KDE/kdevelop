@@ -13,7 +13,6 @@ set(kdevcppparser_LIB_SRCS
     ast.cpp
     default_visitor.cpp
     parentvisitor.cpp
-    memorypool.cpp
     name_compiler.cpp
     visitor.cpp
     class_compiler.cpp
@@ -28,6 +27,7 @@ set(kdevcppparser_LIB_SRCS
     commentparser.cpp
     commentformatter.cpp
     codegenerator.cpp
+    memorypool.cpp
 )
 
 # Note: This library doesn't follow API/ABI/BC rules and shouldn't have a SOVERSION

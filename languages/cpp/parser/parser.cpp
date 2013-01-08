@@ -65,9 +65,9 @@
   } while (0)
 
 template <class _Tp>
-inline _Tp *CreateNode(pool *memory_pool)
+inline _Tp *CreateNode(MemoryPool *memory_pool)
 {
-  _Tp *node = reinterpret_cast<_Tp*>(memory_pool->allocate(sizeof(_Tp)));
+  _Tp *node = memory_pool->allocate<_Tp>();
   node->kind = _Tp::__node_kind;
   return node;
 }

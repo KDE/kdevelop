@@ -21,6 +21,8 @@
 
 #include <kdebug.h>
 
+#include <memorypool.h>
+
 /**
  * @brief An intrusive list of AST nodes.
  * @note ListNodes inside AST nodes are NOT guaranteed to start from the beginning, call toFront.
@@ -34,10 +36,9 @@ public:
   int index;
   mutable const ListNode<Tp> *next;
 
-  template<class pool>
-  static ListNode *create(const Tp &element, pool *p)
+  static ListNode *create(const Tp &element, MemoryPool *p)
   {
-    ListNode<Tp> *node = new (p->allocate(sizeof(ListNode))) ListNode();
+    ListNode<Tp> *node = p->allocate< ListNode<Tp> >();
     node->element = element;
     node->index = 0;
     node->next = node;
@@ -45,8 +46,7 @@ public:
     return node;
   }
 
-  template<class pool>
-  static ListNode *create(const ListNode *n1, const Tp &element, pool *p)
+  static ListNode *create(const ListNode *n1, const Tp &element, MemoryPool *p)
   {
     ListNode<Tp> *n2 = ListNode::create(element, p);
 

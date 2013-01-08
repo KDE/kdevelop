@@ -33,7 +33,7 @@
 #include "parentvisitor.h"
 
 ParseSession::ParseSession()
-  : mempool(new pool)
+  : mempool(new MemoryPool)
   , token_stream(0)
   , m_locationTable(0)
   , m_topAstNode(0)

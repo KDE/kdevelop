@@ -40,7 +40,7 @@ namespace Cpp {
   class EnvironmentFile;
 }
 
-class pool;
+class MemoryPool;
 class TokenStream;
 class Token;
 class TranslationUnitAST;
@@ -127,7 +127,7 @@ public:
   const uint *contents() const;
   const PreprocessedContents& contentsVector() const;
   std::size_t size() const;
-  pool* mempool;
+  MemoryPool* mempool;
   TokenStream* token_stream;
 
   KDevelop::IndexedString m_url; //Should contain the url from which the content was extracted, can also be empty.
