@@ -29,6 +29,8 @@ private slots:
 
     void testStdlibCompliance();
 
+    void benchManyPools();
+    void benchManyAllocations();
 };
 
 #endif

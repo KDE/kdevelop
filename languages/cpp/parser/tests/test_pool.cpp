@@ -107,5 +107,23 @@ void TestPool::testStdlibCompliance()
 #endif
 }
 
+void TestPool::benchManyAllocations()
+{
+  rxx_allocator<char> pool;
+  QBENCHMARK {
+    pool.allocate(64);
+  }
+}
+
+void TestPool::benchManyPools()
+{
+  QBENCHMARK {
+    rxx_allocator<char> pool;
+    for(int i = 0; i < 1000; ++i) {
+      pool.allocate(64);
+    }
+  }
+}
+
 #include "test_pool.moc"
 
