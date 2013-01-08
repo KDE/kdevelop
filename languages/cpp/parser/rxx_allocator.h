@@ -24,15 +24,59 @@
 #include <string.h>
 #include <memory>
 
-/**The allocator which uses fixed size blocks for allocation of its elements.
-Block size is currently 64k, allocated space is not reclaimed,
-if the size of the element being allocated extends the amount of free
-memory in the block then a new block is allocated.
+#include <QVector>
+#include <QThreadStorage>
 
-The allocator supports standard c++ library interface but does not
-make use of allocation hints.
+/**
+ * A continous block of memory.
+ */
+struct rxx_allocator_block
+{
+  enum {
+    BLOCK_SIZE = 1 << 16 // 64K
+  };
+  char data[BLOCK_SIZE];
+};
+Q_DECLARE_TYPEINFO(rxx_allocator_block, Q_MOVABLE_TYPE);
+
+/**
+ * This class handles the thread local cache of rxx_allocator_block's.
+ *
+ * The cache optimizes the repeated allocations required when we construct
+ * many pools for small operations. This is done e.g. in the ExpressionParser.
+ */
+struct ThreadCache
+{
+  ThreadCache()
+  {
+    freeBlocks.reserve(MAX_CACHE_SIZE);
+  }
+  ~ThreadCache()
+  {
+    qDeleteAll(freeBlocks);
+  }
+  enum {
+    // roughly 2MB
+    MAX_CACHE_SIZE = 32
+  };
+  QVector<rxx_allocator_block*> freeBlocks;
+};
+static QThreadStorage< ThreadCache* > LocalThreadCache;
+
+/**
+ * The allocator which uses fixed size blocks for allocation of its elements.
+ * Block size is currently 64k, allocated space is not reclaimed,
+ * if the size of the element being allocated extends the amount of free
+ * memory in the block then a new block is allocated.
+ *
+ * Free blocks are kept around until the current thread exits.
+ *
+ * The allocator supports standard c++ library interface but does not
+ * make use of allocation hints.
 */
-template <class _Tp> class rxx_allocator {
+template <class _Tp>
+class rxx_allocator
+{
 public:
   typedef _Tp value_type;
   typedef _Tp* pointer;
@@ -42,22 +86,30 @@ public:
   typedef std::size_t size_type;
   typedef std::ptrdiff_t difference_type;
 
-  static const size_type max_block_count = size_type(-1);
-  static const size_type _S_block_size = 1 << 16; // 64K
-
-  rxx_allocator() {
+  rxx_allocator()
+  {
     init();
   }
 
-  rxx_allocator(const rxx_allocator &/*__o*/) {
+  rxx_allocator(const rxx_allocator &/*__o*/)
+  {
     init();
   }
 
-  ~rxx_allocator() {
-    for (size_type index = 0; index < _M_block_index + 1; ++index)
-      delete[] _M_storage[index];
-
-    ::free(_M_storage);
+  ~rxx_allocator()
+  {
+    for(int i = 0; i <= m_currentBlock; ++i) {
+      rxx_allocator_block* block = m_blocks.at(i);
+      if (m_freeBlocks->size() < ThreadCache::MAX_CACHE_SIZE) {
+        // cache block for reuse by another thread local allocator
+        // this requires a 'prestine' state, i.e. memset to zero
+        memset(block->data, 0, i == m_currentBlock ? m_currentIndex : static_cast<size_type>(rxx_allocator_block::BLOCK_SIZE));
+        m_freeBlocks->append(block);
+      } else {
+        // otherwise we can discard this block
+        delete block;
+      }
+    }
   }
 
   pointer address(reference __val) { return &__val; }
@@ -67,28 +119,24 @@ public:
   check is done to check if the size of those @p __n elements
   fit into the block. You should assure you do not allocate more
   than the size of a block.*/
-  pointer allocate(size_type __n, const void* = 0) {
+  pointer allocate(size_type __n, const void* = 0)
+  {
     const size_type bytes = __n * sizeof(_Tp);
 
-    if (_M_current_block == 0
-	|| _S_block_size < _M_current_index + bytes)
-      {
-	++_M_block_index;
-
-	_M_storage = reinterpret_cast<char**>
-	  (::realloc(_M_storage, sizeof(char*) * (1 + _M_block_index)));
-
-	_M_current_block = _M_storage[_M_block_index] = reinterpret_cast<char*>
-	  (new char[_S_block_size]);
-
-	::memset(_M_current_block, 0, _S_block_size);
-	_M_current_index = 0;
-      }
+    if (rxx_allocator_block::BLOCK_SIZE < m_currentIndex + bytes) {
+      // current block is full, use next one
+      ++m_currentBlock;
+      m_currentIndex = 0;
+      Q_ASSERT(m_currentBlock == m_blocks.size());
+      if (m_currentBlock == m_blocks.size()) {
+        allocateBlock();
+      } // else reuse existing storage
+    }
 
     pointer p = reinterpret_cast<pointer>
-      (_M_current_block + _M_current_index);
+      (m_blocks.at(m_currentBlock)->data + m_currentIndex);
 
-    _M_current_index += bytes;
+    m_currentIndex += bytes;
 
     return p;
   }
@@ -107,30 +155,42 @@ public:
 
   size_type size() const
   {
-    if (_M_current_block == 0) {
-      return 0;
-    } else {
-      return _M_block_index * _S_block_size + _M_current_index;
-    }
+    return m_currentBlock * rxx_allocator_block::BLOCK_SIZE + m_currentIndex;
   }
 
 private:
+  void allocateBlock()
+  {
+    if (!m_freeBlocks->isEmpty()) {
+      m_blocks.append(m_freeBlocks->last());
+      m_freeBlocks->pop_back();
+    } else {
+      // allocate new memory block
+      rxx_allocator_block* block = new rxx_allocator_block;
+      memset(block->data, 0, rxx_allocator_block::BLOCK_SIZE);
+      m_blocks.append(block);
+    }
+  }
 
   void init()
   {
-    _M_block_index = max_block_count;
-    _M_current_index = 0;
-    _M_storage = 0;
-    _M_current_block = 0;
+    m_currentBlock = 0;
+    m_currentIndex = 0;
+    m_blocks.reserve(ThreadCache::MAX_CACHE_SIZE);
+    if (!LocalThreadCache.hasLocalData()) {
+      LocalThreadCache.setLocalData(new ThreadCache);
+    }
+    m_freeBlocks = &LocalThreadCache.localData()->freeBlocks;
+    allocateBlock();
   }
 
   template <class _Tp1> rxx_allocator(const rxx_allocator<_Tp1> &__o) {}
 
 private:
-  size_type _M_block_index;
-  size_type _M_current_index;
-  char *_M_current_block;
-  char **_M_storage;
+  QVector<rxx_allocator_block*> m_blocks;
+  QVector<rxx_allocator_block*>* m_freeBlocks;
+  int m_currentBlock;
+  size_type m_currentIndex;
 };
 
 #endif // RXX_ALLOCATOR_H

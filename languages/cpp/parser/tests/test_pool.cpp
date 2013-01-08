@@ -55,9 +55,9 @@ void TestPool::testObjectAllocation()
 void TestPool::testNewBlockAllocation()
 {
     rxx_allocator<int> alloc;
-    int *p = alloc.allocate(alloc._S_block_size / sizeof(int));
+    int *p = alloc.allocate(rxx_allocator_block::BLOCK_SIZE / sizeof(int));
     //the last one in a block
-    int lastOne = alloc._S_block_size / sizeof(int) - 1;
+    int lastOne = rxx_allocator_block::BLOCK_SIZE / sizeof(int) - 1;
     p[lastOne] = 10;
     //the first one in another block
     int *p2 = alloc.allocate(1);
@@ -70,9 +70,9 @@ void TestPool::testWastedMemoryDueToBlockAllocation()
 {
     rxx_allocator<int> alloc;
     //allocate a block and leave 2 last elements unallocated
-    int *p = alloc.allocate(alloc._S_block_size / sizeof(int) - 2);
+    int *p = alloc.allocate(rxx_allocator_block::BLOCK_SIZE / sizeof(int) - 2);
     //the last one in a block
-    int lastOne = alloc._S_block_size / sizeof(int) - 3;
+    int lastOne = rxx_allocator_block::BLOCK_SIZE / sizeof(int) - 3;
     p[lastOne] = 10;
     //allocate 5 elements and watch that 2 elements in the previous block
     //are forgotten and a new block is created to allocate 5 elements continuously
