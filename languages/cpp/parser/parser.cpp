@@ -1273,7 +1273,7 @@ bool Parser::parseCvQualify(const ListNode<uint> *&node)
 {
   uint start = session->token_stream->cursor();
 
-  int tk;
+  quint16 tk;
   while (0 != (tk = session->token_stream->lookAhead())
          && (tk == Token_const || tk == Token_volatile))
     {
@@ -1282,6 +1282,17 @@ bool Parser::parseCvQualify(const ListNode<uint> *&node)
     }
 
   return start != session->token_stream->cursor();
+}
+
+bool Parser::parseRefQualifier(uint& ref_qualifier)
+{
+  const quint16 tk = session->token_stream->lookAhead();
+  if (tk == '&' || tk == Token_bitand || tk == Token_and) {
+    advance();
+    ref_qualifier = session->token_stream->cursor();
+    return true;
+  }
+  return false;
 }
 
 bool Parser::parseSimpleTypeSpecifier(TypeSpecifierAST *&node,
@@ -1615,6 +1626,7 @@ bool Parser::parseDeclarator(DeclaratorAST*& node, bool allowBitfield)
         advance();  // skip ')'
 
         parseCvQualify(ast->fun_cv);
+        parseRefQualifier(ast->ref_qualifier);
         parseExceptionSpecification(ast->exception_spec);
 
         // trailing return type support

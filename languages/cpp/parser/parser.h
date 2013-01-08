@@ -124,6 +124,7 @@ public:
   bool parseConstantExpression(ExpressionAST *&node);
   bool parseCtorInitializer(CtorInitializerAST *&node);
   bool parseCvQualify(const ListNode<uint> *&node);
+  bool parseRefQualifier(uint& ref_qualifier);
   bool parseDeclaration(DeclarationAST *&node);
   bool parseDeclarationInternal(DeclarationAST *&node);
   bool parseFunctionDefinitionInternal(DeclarationAST *&node, uint start, WinDeclSpecAST* winDeclSpec,

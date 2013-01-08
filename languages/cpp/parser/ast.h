@@ -469,6 +469,8 @@ public:
   ExceptionSpecificationAST *exception_spec;
   TrailingReturnTypeAST* trailing_return_type;
   const ListNode<uint> *virt_specifiers;
+  // either & or && token or null
+  uint ref_qualifier;
   bool isVariadic;
 };
 

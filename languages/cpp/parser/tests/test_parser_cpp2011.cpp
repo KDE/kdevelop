@@ -561,3 +561,14 @@ void TestParser::testNoexcept()
   dump(ast);
   QVERIFY(control.problems().isEmpty());
 }
+
+void TestParser::testReferenceBindings()
+{
+  TranslationUnitAST* ast = parse( "class foo {\n"
+                                   "  void bar() &;\n"
+                                   "  void bar() &&;\n"
+                                   "};" );
+  QVERIFY(ast);
+  dump(ast);
+  QVERIFY(control.problems().isEmpty());
+}

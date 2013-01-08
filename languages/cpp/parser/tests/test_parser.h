@@ -131,6 +131,7 @@ private slots:
   void classVirtSpec_data();
   void testUsingAlias();
   void testNoexcept();
+  void testReferenceBindings();
   //END C++2011 Support
 
 protected:
