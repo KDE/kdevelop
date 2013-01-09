@@ -139,7 +139,7 @@ void SessionModel::deleteSessions( const QList<QModelIndex>& indexes )
     {
         Core::self()->sessionController()->deleteSession( sname );
     }
-    endInsertRows();
+    endRemoveRows();
 }
 
 void SessionModel::activateSession( const QModelIndex& idx )

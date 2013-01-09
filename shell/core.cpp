@@ -414,6 +414,7 @@ void Core::cleanup()
     }
 
     d->m_cleanedUp = true;
+    emit shutdownCompleted();
 }
 
 KComponentData Core::componentData() const
