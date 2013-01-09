@@ -22,6 +22,7 @@
 #include "testcontexts.h"
 
 #include "../parsesession.h"
+#include "../contextbuilder.h"
 
 #include <qtest_kde.h>
 
@@ -45,10 +46,17 @@ void TestContexts::cleanupTestCase()
 
 void TestContexts::testFunctionContext()
 {
-    ParseSession session(IndexedString("functionContext.js"), "function foo() {}");
+    const IndexedString file("functionContext.js");
+    ParseSession session(file, "function foo() {}");
     QVERIFY(session.ast());
     qDebug() << session.language();
     QCOMPARE(session.language(), QmlJS::Document::JavaScriptLanguage);
+
+    ContextBuilder builder;
+    builder.setParseSession(&session);
+    ReferencedTopDUContext top = builder.build(file, session.ast());
+    QVERIFY(top);
+
 }
 
 #include "testcontexts.moc"

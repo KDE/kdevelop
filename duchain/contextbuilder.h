@@ -44,6 +44,8 @@ public:
 
     virtual KDevelop::TopDUContext* newTopContext(const KDevelop::RangeInRevision& range,
                                                   KDevelop::ParsingEnvironmentFile* file = 0);
+
+    void setParseSession(ParseSession* session);
 protected:
     ParseSession* m_session;
     QHash<QmlJS::AST::Node*, KDevelop::DUContext*> m_astToContext;

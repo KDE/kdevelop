@@ -25,7 +25,7 @@ using namespace KDevelop;
 
 ContextBuilder::ContextBuilder()
 : ContextBuilderBase()
-, m_session(0)
+, m_session()
 {
 }
 
@@ -62,4 +62,9 @@ TopDUContext* ContextBuilder::newTopContext(const RangeInRevision& range, Parsin
         file->setLanguage(m_session->languageString());
     }
     return ContextBuilderBase::newTopContext(range, file);
+}
+
+void ContextBuilder::setParseSession(ParseSession* session)
+{
+    m_session = session;
 }
