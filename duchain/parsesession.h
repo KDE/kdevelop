@@ -88,6 +88,11 @@ public:
      */
     QString symbolAt(const QmlJS::AST::SourceLocation& location) const;
 
+    /**
+     * @return the language of the parsed document.
+     */
+    QmlJS::Document::Language language() const;
+
 private:
     KDevelop::IndexedString m_url;
     QmlJS::Document::MutablePtr m_doc;

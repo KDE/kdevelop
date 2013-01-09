@@ -86,3 +86,8 @@ QString ParseSession::symbolAt(const QmlJS::AST::SourceLocation& location) const
 {
     return m_doc->source().mid(location.offset, location.length);
 }
+
+QmlJS::Document::Language ParseSession::language() const
+{
+    return m_doc->language();
+}

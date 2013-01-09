@@ -19,3 +19,5 @@ target_link_libraries(kdevqmljsduchain LINK_INTERFACE_LIBRARIES
 )
 
 install(TARGETS kdevqmljsduchain ${INSTALL_TARGETS_DEFAULT_ARGS})
+
+add_subdirectory(tests)
