@@ -3,6 +3,9 @@ project(kdev-qml)
 find_package(KDE4 REQUIRED)
 find_package(KDevPlatform REQUIRED)
 
+enable_testing()
+set(KDE4_BUILD_TESTS "ON" CACHE "BOOL" "Enable building of tests" FORCE )
+
 include_directories(
     ${KDE4_INCLUDES}
     ${KDEVPLATFORM_INCLUDE_DIR}
