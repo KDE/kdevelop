@@ -38,6 +38,9 @@ private slots:
     void testSymbolTableValid();
     void testIndexedStrings();
     void testImportStructure();
+    void testLockForWrite();
+    void testLockForRead();
+    void testLockForReadWrite();
     ///NOTE: these are not "automated"!
 //     void testImportCache();
 
