@@ -47,6 +47,8 @@ void TestContexts::cleanupTestCase()
 void TestContexts::testFunctionContext()
 {
     const IndexedString file("functionContext.js");
+    //                          0         1
+    //                          012345678901234567890
     ParseSession session(file, "function foo() {}");
     QVERIFY(session.ast());
     qDebug() << session.language();
@@ -57,6 +59,20 @@ void TestContexts::testFunctionContext()
     ReferencedTopDUContext top = builder.build(file, session.ast());
     QVERIFY(top);
 
+    DUChainReadLocker lock;
+
+    QCOMPARE(top->type(), DUContext::Global);
+
+    // one context for (), one for {}
+    QCOMPARE(top->childContexts().count(), 2);
+
+    DUContext* argCtx = top->childContexts().first();
+    QCOMPARE(argCtx->type(), DUContext::Function);
+    QCOMPARE(argCtx->range(), RangeInRevision(0, 12, 0, 13));
+
+    DUContext* bodyCtx = top->childContexts().last();
+    QCOMPARE(argCtx->type(), DUContext::Other);
+    QCOMPARE(argCtx->range(), RangeInRevision(0, 15, 0, 16));
 }
 
 #include "testcontexts.moc"
