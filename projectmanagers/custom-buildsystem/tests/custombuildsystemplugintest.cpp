@@ -57,22 +57,12 @@ void deleteDir( QDir dir )
 
 void CustomBuildSystemPluginTest::cleanupTestCase()
 {
-    QDir sessiondir( KDevelop::SessionController::sessionDirectory() );
-    QString sessionid = m_core->activeSession()->id().toString();
-    m_core->cleanup();
-    delete m_core;
-
-    // Delete the session dir and remove the default session entry from the config.
-    deleteDir( sessiondir.absoluteFilePath( sessionid ) );
-    sessiondir.rmdir( sessionid );
-    KGlobal::config()->group( KDevelop::SessionController::cfgSessionGroup() ).deleteEntry( KDevelop::SessionController::cfgActiveSessionEntry() );
-    KGlobal::config()->sync();
+    TestCore::shutdown();
 }
 void CustomBuildSystemPluginTest::initTestCase()
 {
     AutoTestShell::init();
-    m_core = new KDevelop::TestCore();
-    m_core->initialize( Core::Default );
+    TestCore::initialize();
 }
 
 void CustomBuildSystemPluginTest::loadSimpleProject()
