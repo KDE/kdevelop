@@ -111,6 +111,9 @@ public:
     /** @copydoc ICore::activeSession() */
     virtual ISession *activeSession();
 
+    /** @copydoc ICore::activeSessionLock() */
+    virtual ISessionLock::Ptr activeSessionLock();
+
     virtual KComponentData componentData() const;
 
     /// The following methods may only be used within the shell.

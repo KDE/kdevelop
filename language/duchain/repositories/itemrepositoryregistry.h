@@ -26,6 +26,8 @@
 
 #include <language/languageexport.h>
 
+#include <interfaces/isessionlock.h>
+
 namespace KDevelop {
 
 class ISession;
@@ -40,28 +42,19 @@ struct ItemRepositoryRegistryPrivate;
  * For the global registry, the storing is triggered from within duchain, so you don't need to care about it.
  */
 class KDEVPLATFORMLANGUAGE_EXPORT ItemRepositoryRegistry {
-    ItemRepositoryRegistry();
-
   public:
     ~ItemRepositoryRegistry();
+
+    /**
+     * Initialize the global item-repository registry for the given @p session.
+     */
+    static void initialize(const ISessionLock::Ptr& session);
 
     /// @returns The global item-repository registry.
     static ItemRepositoryRegistry* self();
 
     /// Deletes the item-repository of a specified session; or, if it is currently used, marks it for deletion at exit.
-    static void deleteRepositoryFromDisk(ISession* session);
-
-    /// @param path  A shared directory-path that the item-repositories are to be loaded from.
-    /// @param clear Whether a fresh start should be done with all repositories cleared.
-    /// @returns     Whether the repository registry has been opened successfully.
-    ///              If @c false, then all registered repositories should have been deleted.
-    /// @note        Currently the given path must reference a hidden directory, just to make sure we're
-    ///              not accidentally deleting something important.
-    bool open(const QString& path, bool clear = false);
-
-    /// Close all contained repositories.
-    /// @warning The current state is not stored to disk.
-    void close();
+    static void deleteRepositoryFromDisk(const QSharedPointer<ISessionLock>& sessionLock);
 
     /// Add a new repository.
     /// It will automatically be opened with the current path, if one is set.
@@ -107,6 +100,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepositoryRegistry {
     QMutex& mutex();
 
   private:
+    ItemRepositoryRegistry(const ISessionLock::Ptr& session);
+
     ItemRepositoryRegistryPrivate* d;
     static ItemRepositoryRegistry* m_self;
 };

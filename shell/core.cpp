@@ -223,7 +223,7 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
     kDebug() << "initializing ui controller";
 
     sessionController.data()->initialize( session );
-    if( !sessionController.data()->activeSession() ) {
+    if( !sessionController.data()->activeSessionLock() ) {
         return false;
     }
 
@@ -430,6 +430,11 @@ IUiController *Core::uiController()
 ISession* Core::activeSession()
 {
     return sessionController()->activeSession();
+}
+
+ISessionLock::Ptr Core::activeSessionLock()
+{
+    return sessionController()->activeSessionLock();
 }
 
 SessionController *Core::sessionController()
