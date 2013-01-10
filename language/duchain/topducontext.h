@@ -104,16 +104,13 @@ class KDEVPLATFORMLANGUAGE_EXPORT ReferencedTopDUContext {
  *
  * \todo move the registration with DUChain here
  *
- * @warning When you delete a top-context, delete it using TopDUContext::deleteSelf(), else you will leak memory
+ * @warning When you delete a top-context, delete it using DUChain::removeDocumentChain(), else you will leak memory
  */
 class KDEVPLATFORMLANGUAGE_EXPORT TopDUContext : public DUContext
 {
 public:
   explicit TopDUContext(const IndexedString& url, const RangeInRevision& range, ParsingEnvironmentFile* file = 0);
   explicit TopDUContext(TopDUContextData& data);
-  
-  ///Call this to destroy a top-context.
-  void deleteSelf();
   
   /**This creates a top-context that shares most of its data with @param sharedDataFrom. The given context must be the owner of the data
    * (it must not have been created with this constructor).
@@ -382,6 +379,9 @@ protected:
   bool importsPrivate(const DUContext * origin, const CursorInRevision& position) const;
   DUCHAIN_DECLARE_DATA(TopDUContext)
   
+  ///Called by DUChain::removeDocumentChain to destroy this top-context.
+  void deleteSelf();
+
   //Most of these classes need access to m_dynamicData
   friend class DUChain;
   friend class DUChainPrivate;
