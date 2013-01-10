@@ -200,7 +200,7 @@ void SessionChooserDialog::deleteButtonPressed()
         QModelIndex index = m_model->index(m_deleteCandidateRow, 0);
         const QString uuid = m_model->data(index, Qt::DisplayRole).toString();
 
-        Core::self()->sessionController()->deleteSessionFromDisk(result.lock);
+        SessionController::deleteSessionFromDisk(result.lock);
 
         m_model->removeRows( m_deleteCandidateRow, 1 );
         m_deleteCandidateRow = -1;

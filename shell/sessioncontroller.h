@@ -124,7 +124,7 @@ public:
     
     void loadSession( const QString& nameOrId );
     void deleteSession( const QString& nameOrId );
-    void deleteSessionFromDisk( const ISessionLock::Ptr& lock );
+    static void deleteSessionFromDisk( const ISessionLock::Ptr& lock );
     QString cloneSession( const QString& nameOrid );
     /**
      * Path to session directory for the session with the given @p sessionId.

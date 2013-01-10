@@ -732,9 +732,7 @@ void SessionController::deleteSession( const QString& nameOrId )
 
 void SessionController::deleteSessionFromDisk(const ISessionLock::Ptr& lock)
 {
-    KDevelop::Session* session = d->findSessionForId(lock->id());
-    Q_ASSERT(session);
-    removeDirectory( session->path() );
+    removeDirectory( sessionDirectory(lock->id()) );
     ItemRepositoryRegistry::deleteRepositoryFromDisk( lock );
 }
 
