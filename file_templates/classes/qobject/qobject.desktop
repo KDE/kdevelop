@@ -1,5 +1,6 @@
 [General]
 Name=QObject subclass
+Name[el]=QObject subclass
 Name[es]=Subclase de QObject
 Name[nl]=Subklasse van QObject
 Name[pt]=Sub-classe de QObject
@@ -8,6 +9,7 @@ Name[sv]=QObject-delklass
 Name[uk]=Підклас QObject
 Name[x-test]=xxQObject subclassxx
 Comment=QObject subclass with properties
+Comment[el]=QObject subclass με ιδιότητες
 Comment[es]=Subclase de QObject con propiedades
 Comment[nl]=Subklasse van QObject met eigenschappen
 Comment[pt]=Sub-classe de QObject com propriedades
