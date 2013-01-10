@@ -127,8 +127,7 @@ void TestDUChain::cleanupTestCase()
   {
   DUChainWriteLocker lock(DUChain::lock());
 
-  //EditorIntegrator::releaseTopRange(topContext->textRangePtr());
-  topContext->deleteSelf();
+  KDevelop::DUChain::self()->removeDocumentChain(topContext);
   }
 
   TestCore::shutdown();
