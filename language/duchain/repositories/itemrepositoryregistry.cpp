@@ -67,9 +67,10 @@ struct ItemRepositoryRegistryPrivate {
   QMap<QString, QAtomicInt*> m_customCounters;
   mutable QMutex m_mutex;
 
-  ItemRepositoryRegistryPrivate(ItemRepositoryRegistry* owner) :
-  m_owner(owner),
-  m_mutex(QMutex::Recursive)
+  ItemRepositoryRegistryPrivate(ItemRepositoryRegistry* owner)
+  : m_owner(owner)
+  , m_mutex(QMutex::Recursive)
+  , m_shallDelete(false)
   {
   }
 
