@@ -242,7 +242,7 @@ int main(int argc, char** argv)
     KApplication app(false);
 
     AutoTestShell::init();
-    TestCore::initialize(Core::NoUi);
+    TestCore::initialize(Core::NoUi, "duchainify");
     Manager manager(args);
 
     QTimer::singleShot(0, &manager, SLOT(init()));
