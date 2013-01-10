@@ -51,13 +51,13 @@ CMakeBuildDirChooser::CMakeBuildDirChooser(QWidget* parent)
     m_chooserUi->extraArguments->addItems(lastExtraArguments);
     m_chooserUi->extraArguments->setInsertPolicy(QComboBox::InsertAtTop);
     KCompletion *comp = m_chooserUi->extraArguments->completionObject();
-    connect(m_chooserUi->extraArguments, SIGNAL(returnPressed(const QString&)), comp, SLOT(addItem(QString&)));
+    connect(m_chooserUi->extraArguments, SIGNAL(returnPressed(const QString&)), comp, SLOT(addItem(QString)));
     comp->insertItems(lastExtraArguments);
 
     connect(m_chooserUi->cmakeBin, SIGNAL(textChanged(QString)), this, SLOT(updated()));
     connect(m_chooserUi->buildFolder, SIGNAL(textChanged(QString)), this, SLOT(updated()));
     connect(m_chooserUi->buildType, SIGNAL(currentIndexChanged(QString)), this, SLOT(updated()));
-    connect(m_chooserUi->extraArguments, SIGNAL(textEdited(QString)), this, SLOT(updated()));
+    connect(m_chooserUi->extraArguments, SIGNAL(editTextChanged(QString)), this, SLOT(updated()));
     updated();
 }
 
