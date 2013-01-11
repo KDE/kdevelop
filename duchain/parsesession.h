@@ -40,9 +40,16 @@ class KDEVQMLJSDUCHAIN_EXPORT ParseSession
 {
 public:
     /**
-     * Convert @p location to a KDevelop::SimpleRange and return that.
+     * Convert @p location to a KDevelop::RangeInRevision and return that.
      */
-    static KDevelop::SimpleRange locationToSimpleRange(const QmlJS::AST::SourceLocation& location);
+    static KDevelop::RangeInRevision locationToRange(const QmlJS::AST::SourceLocation& location);
+
+    /**
+     * Convert @p locationFrom and @p locationTo to a KDevelop::RangeInRevision and return that.
+     */
+    static KDevelop::RangeInRevision locationsToRange(const QmlJS::AST::SourceLocation& locationFrom,
+                                                      const QmlJS::AST::SourceLocation& locationTo);
+
 
     /**
      * @return a range that spans @p fromNode and @p toNode.

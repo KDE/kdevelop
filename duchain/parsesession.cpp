@@ -24,18 +24,22 @@
 
 using namespace KDevelop;
 
-SimpleRange ParseSession::locationToSimpleRange(const QmlJS::AST::SourceLocation& location)
+RangeInRevision ParseSession::locationToRange(const QmlJS::AST::SourceLocation& location)
 {
-    return SimpleRange(location.startLine - 1, location.startColumn - 1,
-                       location.startLine - 1, location.startColumn - 1 + location.length);
+    return RangeInRevision(location.startLine - 1, location.startColumn - 1,
+                           location.startLine - 1, location.startColumn - 1 + location.length);
+}
+
+RangeInRevision ParseSession::locationsToRange(const QmlJS::AST::SourceLocation& locationFrom,
+                                              const QmlJS::AST::SourceLocation& locationTo)
+{
+    return RangeInRevision(locationToRange(locationFrom).start,
+                           locationToRange(locationTo).end);
 }
 
 RangeInRevision ParseSession::editorFindRange(QmlJS::AST::Node* fromNode, QmlJS::AST::Node* toNode)
 {
-    return RangeInRevision::castFromSimpleRange(SimpleRange(
-        locationToSimpleRange(fromNode->firstSourceLocation()).start,
-        locationToSimpleRange(toNode->lastSourceLocation()).end
-    ));
+    return locationsToRange(fromNode->firstSourceLocation(), toNode->lastSourceLocation());
 }
 
 IndexedString ParseSession::languageString()
@@ -76,7 +80,7 @@ QList<ProblemPointer> ParseSession::problems() const
         p->setDescription(msg.message);
         p->setSeverity(ProblemData::Error);
         p->setSource(ProblemData::Parser);
-        p->setFinalLocation(DocumentRange(m_url, locationToSimpleRange(msg.loc)));
+        p->setFinalLocation(DocumentRange(m_url, locationToRange(msg.loc).castToSimpleRange()));
         problems << p;
     }
     return problems;
