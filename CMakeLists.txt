@@ -1,7 +1,17 @@
 project(kdev-qml)
 
 find_package(KDE4 REQUIRED)
-find_package(KDevPlatform REQUIRED)
+find_package(KDevPlatform 1.4.60 REQUIRED)
+
+set(VERSION_MAJOR 1)
+set(VERSION_MINOR 4)
+set(VERSION_PATCH 60)
+
+configure_file(
+  "${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake"
+  "${CMAKE_CURRENT_BINARY_DIR}/version.h"
+  @ONLY
+)
 
 enable_testing()
 set(KDE4_BUILD_TESTS "ON" CACHE "BOOL" "Enable building of tests" FORCE )
