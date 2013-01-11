@@ -46,6 +46,9 @@ public:
                                                   KDevelop::ParsingEnvironmentFile* file = 0);
 
     void setParseSession(ParseSession* session);
+
+    using Visitor::visit;
+    virtual bool visit(QmlJS::AST::FunctionDeclaration* node);
 protected:
     ParseSession* m_session;
     QHash<QmlJS::AST::Node*, KDevelop::DUContext*> m_astToContext;

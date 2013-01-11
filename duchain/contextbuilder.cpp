@@ -68,3 +68,24 @@ void ContextBuilder::setParseSession(ParseSession* session)
 {
     m_session = session;
 }
+
+bool ContextBuilder::visit(QmlJS::AST::FunctionDeclaration* node)
+{
+    const QualifiedIdentifier functionName(node->name.toString());
+
+    const RangeInRevision pRange = ParseSession::locationsToRange(node->lparenToken, node->rparenToken);
+    DUContext* parameters = openContextInternal(pRange, DUContext::Function, functionName);
+    visit(node->formals);
+    closeContext();
+
+    const RangeInRevision bRange = ParseSession::locationsToRange(node->lbraceToken, node->rbraceToken);
+    DUContext* body = openContextInternal(bRange, DUContext::Other, functionName);
+    if (compilingContexts()) {
+        DUChainWriteLocker lock;
+        body->addImportedParentContext(parameters);
+    }
+    visit(node->body);
+    closeContext();
+
+    return true;
+}

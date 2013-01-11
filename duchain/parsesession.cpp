@@ -27,7 +27,7 @@ using namespace KDevelop;
 RangeInRevision ParseSession::locationToRange(const QmlJS::AST::SourceLocation& location)
 {
     return RangeInRevision(location.startLine - 1, location.startColumn - 1,
-                           location.startLine - 1, location.startColumn - 1 + location.length);
+                           location.startLine - 1, location.startColumn - 1 + location.length - 1);
 }
 
 RangeInRevision ParseSession::locationsToRange(const QmlJS::AST::SourceLocation& locationFrom,

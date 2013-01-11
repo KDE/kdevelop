@@ -71,8 +71,10 @@ void TestContexts::testFunctionContext()
     QCOMPARE(argCtx->range(), RangeInRevision(0, 12, 0, 13));
 
     DUContext* bodyCtx = top->childContexts().last();
-    QCOMPARE(argCtx->type(), DUContext::Other);
-    QCOMPARE(argCtx->range(), RangeInRevision(0, 15, 0, 16));
+    QCOMPARE(bodyCtx->type(), DUContext::Other);
+    QCOMPARE(bodyCtx->range(), RangeInRevision(0, 15, 0, 16));
+
+    QVERIFY(bodyCtx->imports(argCtx));
 }
 
 #include "testcontexts.moc"
