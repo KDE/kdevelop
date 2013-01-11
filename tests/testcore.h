@@ -89,8 +89,9 @@ public:
      * @p session By default a temporary session will be created called "test-%appname".
      *            If @p session is not empty, a non-temporary session with the given name
      *            will be opened.
+     * @return the initialized test core
      */
-    static void initialize( Core::Setup mode = Core::Default, const QString& session = "" );
+    static TestCore* initialize( Core::Setup mode = Core::Default, const QString& session = "" );
 
     /**
      * Calls @c cleanup() on the current TestCore instance,

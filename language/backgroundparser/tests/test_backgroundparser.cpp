@@ -155,8 +155,7 @@ void JobPlan::updateReady(const IndexedString& url, const ReferencedTopDUContext
 void TestBackgroundparser::initTestCase()
 {
   AutoTestShell::init();
-  TestCore::initialize(Core::NoUi);
-  TestCore* core = dynamic_cast<TestCore*>(TestCore::self());
+  TestCore* core = TestCore::initialize(Core::NoUi);
 
   DUChain::self()->disablePersistentStorage();
 
