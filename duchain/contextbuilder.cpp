@@ -58,7 +58,7 @@ TopDUContext* ContextBuilder::newTopContext(const RangeInRevision& range, Parsin
 {
     if (!file) {
         file = new ParsingEnvironmentFile(m_session->url());
-        /// Indexed string for 'Php', identifies environment files from this language plugin
+        /// identify environment files from this language plugin
         file->setLanguage(m_session->languageString());
     }
     return ContextBuilderBase::newTopContext(range, file);
