@@ -21,6 +21,7 @@
 #include "projectutils.h"
 #include <project/projectmodel.h>
 #include <QMenu>
+#include <KIcon>
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/context.h>
@@ -78,6 +79,7 @@ void populateParentItemsMenu( ProjectBaseItem* item, QMenu* menu )
                 text = i18n("Project %1", prettyName);
             
             QAction* action = menu->addAction(text);
+            action->setIcon(KIcon(parent->iconName()));
             // The populator will either spawn a menu when the action is triggered, or it will delete itself
             new Populator(parent, action, QCursor::pos(), text);
         }
