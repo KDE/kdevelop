@@ -42,7 +42,7 @@ namespace Sublime {
  * to make sure old source (or binary) incompatible plugins are not loaded.
  * Increase this if it is necessary that old plugins stop working.
  */
-#define KDEVELOP_PLUGIN_VERSION 15
+#define KDEVELOP_PLUGIN_VERSION 16
 
 /**
  * This macro adds an extension interface to register with the extension manager
