@@ -5,9 +5,9 @@ find_package(KDE4 REQUIRED)
 find_package(KDevPlatform 1.4.60 REQUIRED)
 find_package(KDevelop REQUIRED)
 
-set(KDEVUPLOAD_VERSION_MAJOR 1)
-set(KDEVUPLOAD_VERSION_MINOR 4)
-set(KDEVUPLOAD_VERSION_PATCH 60)
+set(VERSION_MAJOR 1)
+set(VERSION_MINOR 4)
+set(VERSION_PATCH 60)
 
 configure_file(
   "${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake"
