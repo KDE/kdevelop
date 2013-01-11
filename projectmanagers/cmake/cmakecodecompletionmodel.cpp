@@ -152,9 +152,13 @@ CMakeCodeCompletionModel::Type CMakeCodeCompletionModel::indexType(int row) cons
 {
     if(m_inside)
     {
-        if(row<m_declarations.count()) {
+        if(row < m_declarations.count()) {
             KDevelop::DUChainReadLocker lock;
-            return m_declarations[row].declaration()->type<TargetType>().isNull() ? Variable : Target;
+            Declaration* dec = m_declarations.at(row).declaration();
+            if (dec && dec->type<TargetType>())
+                return Target;
+            else
+                return Variable;
         } else
             return Path;
     }
