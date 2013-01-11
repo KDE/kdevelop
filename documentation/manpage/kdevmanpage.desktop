@@ -99,7 +99,7 @@ GenericName[zh_TW]=文件支援
 ServiceTypes=KDevelop/Plugin
 
 X-KDE-Library=kdevmanpage
-X-KDevelop-Version=15
+X-KDevelop-Version=16
 X-KDevelop-Category=Global
 X-KDE-PluginInfo-Name=KDevManPage
 X-KDE-PluginInfo-License=GPL
