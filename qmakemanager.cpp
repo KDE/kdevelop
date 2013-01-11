@@ -59,6 +59,8 @@
 #include <KDirWatch>
 #include <interfaces/iprojectcontroller.h>
 
+#include "version.h"
+
 using namespace KDevelop;
 
 //BEGIN Helpers
@@ -76,7 +78,7 @@ QMakeFolderItem* findQMakeFolderParent(ProjectBaseItem* item) {
 
 K_PLUGIN_FACTORY(QMakeSupportFactory, registerPlugin<QMakeProjectManager>(); )
 K_EXPORT_PLUGIN(QMakeSupportFactory(KAboutData(
-    "kdevqmakemanager","kdevqmake", ki18n("QMake Manager"), "1.3.60",
+    "kdevqmakemanager","kdevqmake", ki18n("QMake Manager"), KDEVQMAKE_VERSION_STR,
     ki18n("Support for managing QMake projects"), KAboutData::License_GPL)))
 
 QMakeProjectManager* QMakeProjectManager::m_self = 0;
