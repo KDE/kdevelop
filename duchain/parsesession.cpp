@@ -48,6 +48,19 @@ IndexedString ParseSession::languageString()
     return langString;
 }
 
+bool isSorted(const QList<QmlJS::AST::SourceLocation>& locations)
+{
+    if (locations.size() <= 1) {
+        return true;
+    }
+    for(int i = 1; i < locations.size(); ++i) {
+        if (locations.at(i).begin() <= locations.at(i-1).begin()) {
+            return false;
+        }
+    }
+    return true;
+}
+
 ParseSession::ParseSession(const IndexedString& url, const QString& contents)
 : m_url(url)
 {
@@ -55,6 +68,7 @@ ParseSession::ParseSession(const IndexedString& url, const QString& contents)
     m_doc = QmlJS::Document::create(path, QmlJS::Document::guessLanguageFromSuffix(path));
     m_doc->setSource(contents);
     m_doc->parse();
+    Q_ASSERT(isSorted(m_doc->engine()->comments()));
 }
 
 bool ParseSession::isParsedCorrectly() const
@@ -94,4 +108,35 @@ QString ParseSession::symbolAt(const QmlJS::AST::SourceLocation& location) const
 QmlJS::Document::Language ParseSession::language() const
 {
     return m_doc->language();
+}
+
+bool compareSourceLocation(const QmlJS::AST::SourceLocation& l,
+                           const QmlJS::AST::SourceLocation& r)
+{
+    return l.begin() < r.begin();
+}
+
+QString ParseSession::commentForLocation(const QmlJS::AST::SourceLocation& location) const
+{
+    // find most recent comment in sorted list of comments
+    const QList< QmlJS::AST::SourceLocation >& comments = m_doc->engine()->comments();
+    QList< QmlJS::AST::SourceLocation >::const_iterator it = qLowerBound(
+        comments.constBegin(),
+        comments.constEnd(),
+        location, compareSourceLocation
+    );
+
+    if (it == comments.constBegin()) {
+        return QString();
+    }
+
+    // lower bound returns the place of insertion,
+    // we want the comment before that
+    it--;
+    if (it->startLine != location.startLine && it->startLine != location.startLine - 1) {
+        return QString();
+    }
+
+    ///TODO: merge consecutive //-style comments?
+    return symbolAt(*it);
 }

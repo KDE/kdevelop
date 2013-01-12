@@ -42,6 +42,8 @@ ReferencedTopDUContext DeclarationBuilder::build(const IndexedString& url,
 
 bool DeclarationBuilder::visit(QmlJS::AST::FunctionDeclaration* node)
 {
+    setComment(m_session->commentForLocation(node->firstSourceLocation()).toUtf8());
+
     const QualifiedIdentifier name(node->name.toString());
     const RangeInRevision range = ParseSession::locationToRange(node->identifierToken);
     {

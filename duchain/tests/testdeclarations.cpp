@@ -66,6 +66,7 @@ void TestDeclarations::testFunction()
     FunctionDeclaration* fooDec = dynamic_cast<FunctionDeclaration*>(top->localDeclarations().at(0));
     QVERIFY(fooDec);
     QCOMPARE(fooDec->range(), RangeInRevision(1, 9, 1, 12));
+    QCOMPARE(fooDec->comment(), QByteArray(" some comment"));
 
     QVERIFY(fooDec->internalContext());
     QVERIFY(fooDec->internalFunctionContext());

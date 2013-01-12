@@ -100,6 +100,11 @@ public:
      */
     QmlJS::Document::Language language() const;
 
+    /**
+     * @return the comment related to the given source location or an empty string
+     */
+    QString commentForLocation(const QmlJS::AST::SourceLocation& location) const;
+
 private:
     KDevelop::IndexedString m_url;
     QmlJS::Document::MutablePtr m_doc;
