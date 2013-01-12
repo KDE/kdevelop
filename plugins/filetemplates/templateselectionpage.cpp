@@ -96,16 +96,17 @@ void TemplateSelectionPagePrivate::previewTemplate(const QString& file)
         return;
     }
 
+    TemplatePreviewRenderer renderer;
+    renderer.setEmptyLinesPolicy(TemplateRenderer::TrimEmptyLines);
+
     KTempDir dir;
     KUrl base(dir.name());
     QHash<QString, KUrl> fileUrls;
     foreach(const SourceFileTemplate::OutputFile& out, fileTemplate.outputFiles()) {
         KUrl url(base);
-        url.addPath(out.outputName);
+        url.addPath(renderer.render(out.outputName));
         fileUrls.insert(out.identifier, url);
     }
-    TemplatePreviewRenderer renderer;
-    renderer.setEmptyLinesPolicy(TemplateRenderer::TrimEmptyLines);
     DocumentChangeSet changes = renderer.renderFileTemplate(fileTemplate, base, fileUrls);
     changes.setActivationPolicy(DocumentChangeSet::DoNotActivate);
     changes.setUpdateHandling(DocumentChangeSet::NoUpdate);
