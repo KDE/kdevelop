@@ -89,5 +89,6 @@ bool ContextBuilder::visit(QmlJS::AST::FunctionDeclaration* node)
     visit(node->body);
     closeContext();
 
-    return true;
+    // return false, we visited the children manually
+    return false;
 }

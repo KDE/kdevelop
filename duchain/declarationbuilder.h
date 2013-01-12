@@ -35,6 +35,13 @@ public:
     virtual KDevelop::ReferencedTopDUContext build(const KDevelop::IndexedString& url,
                                                    QmlJS::AST::Node* node,
                                                    KDevelop::ReferencedTopDUContext updateContext = KDevelop::ReferencedTopDUContext());
+
+protected:
+    using Visitor::visit;
+    virtual bool visit(QmlJS::AST::FunctionDeclaration* node);
+    virtual bool visit(QmlJS::AST::FormalParameterList* node);
+
+    virtual void closeContext();
 };
 
 #endif // DECLARATIONBUILDER_H

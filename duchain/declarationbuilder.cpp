@@ -18,19 +18,68 @@
  *************************************************************************************/
 
 #include "declarationbuilder.h"
+
+#include <language/duchain/declaration.h>
+#include <language/duchain/duchainlock.h>
+
 #include "parsesession.h"
+
+using namespace KDevelop;
 
 DeclarationBuilder::DeclarationBuilder(ParseSession* session)
 {
     m_session = session;
 }
 
-KDevelop::ReferencedTopDUContext DeclarationBuilder::build(const KDevelop::IndexedString& url,
-                                                           QmlJS::AST::Node* node,
-                                                           KDevelop::ReferencedTopDUContext updateContext)
+ReferencedTopDUContext DeclarationBuilder::build(const IndexedString& url,
+                                                 QmlJS::AST::Node* node,
+                                                 ReferencedTopDUContext updateContext)
 {
     ///TODO: cleanup
     Q_ASSERT(m_session->url() == url);
     return DeclarationBuilderBase::build(url, node, updateContext);
 }
 
+bool DeclarationBuilder::visit(QmlJS::AST::FunctionDeclaration* node)
+{
+    const QualifiedIdentifier name(node->name.toString());
+    const RangeInRevision range = ParseSession::locationToRange(node->identifierToken);
+    {
+        DUChainWriteLocker lock;
+        openDeclaration<FunctionDeclaration>(name, range);
+    }
+
+    const bool ret = DeclarationBuilderBase::visit(node);
+
+    closeDeclaration();
+
+    return ret;
+}
+
+bool DeclarationBuilder::visit(QmlJS::AST::FormalParameterList* node)
+{
+    for (QmlJS::AST::FormalParameterList *plist = node; plist; plist = plist->next) {
+        const QualifiedIdentifier name(plist->name.toString());
+        const RangeInRevision range = ParseSession::locationToRange(plist->identifierToken);
+        DUChainWriteLocker lock;
+        openDeclaration<Declaration>(name, range);
+        closeDeclaration();
+    }
+
+    return true;
+}
+
+void DeclarationBuilder::closeContext()
+{
+    DUChainWriteLocker lock;
+    if (FunctionDeclaration* function = dynamic_cast<FunctionDeclaration*>(currentDeclaration())) {
+        DUContext* ctx = currentContext();
+        if (ctx->type() == DUContext::Function) {
+            function->setInternalFunctionContext(ctx);
+        } else {
+            Q_ASSERT(ctx->type() == DUContext::Other);
+            function->setInternalContext(ctx);
+        }
+    }
+    DeclarationBuilderBase::closeContext();
+}
