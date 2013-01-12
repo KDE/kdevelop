@@ -69,7 +69,23 @@ void TestDeclarations::testFunction()
     QCOMPARE(fooDec->comment(), QByteArray(" some comment"));
 
     QVERIFY(fooDec->internalContext());
+    QVERIFY(fooDec->internalContext()->localDeclarations().isEmpty());
+
     QVERIFY(fooDec->internalFunctionContext());
+    DUContext* argCtx = fooDec->internalFunctionContext();
+    QCOMPARE(argCtx->localDeclarations().size(), 3);
+
+    Declaration* arg1 = argCtx->localDeclarations().at(0);
+    QCOMPARE(arg1->identifier().toString(), QString("arg1"));
+    QCOMPARE(arg1->range(), RangeInRevision(1, 13, 1, 17));
+
+    Declaration* arg2 = argCtx->localDeclarations().at(1);
+    QCOMPARE(arg2->identifier().toString(), QString("arg2"));
+    QCOMPARE(arg2->range(), RangeInRevision(1, 19, 1, 23));
+
+    Declaration* arg3 = argCtx->localDeclarations().at(2);
+    QCOMPARE(arg3->identifier().toString(), QString("arg3"));
+    QCOMPARE(arg3->range(), RangeInRevision(1, 25, 1, 29));
 }
 
 #include "testdeclarations.moc"
