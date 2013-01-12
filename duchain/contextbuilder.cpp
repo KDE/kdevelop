@@ -73,12 +73,14 @@ bool ContextBuilder::visit(QmlJS::AST::FunctionDeclaration* node)
 {
     const QualifiedIdentifier functionName(node->name.toString());
 
-    const RangeInRevision pRange = ParseSession::locationsToRange(node->lparenToken, node->rparenToken);
+    const RangeInRevision pRange(ParseSession::locationToRange(node->lparenToken).end,
+                                 ParseSession::locationToRange(node->rparenToken).start);
     DUContext* parameters = openContextInternal(pRange, DUContext::Function, functionName);
     visit(node->formals);
     closeContext();
 
-    const RangeInRevision bRange = ParseSession::locationsToRange(node->lbraceToken, node->rbraceToken);
+    const RangeInRevision bRange(ParseSession::locationToRange(node->lbraceToken).end,
+                                 ParseSession::locationToRange(node->rbraceToken).start);
     DUContext* body = openContextInternal(bRange, DUContext::Other, functionName);
     if (compilingContexts()) {
         DUChainWriteLocker lock;

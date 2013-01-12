@@ -28,6 +28,7 @@
 
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
+#include <tests/testhelpers.h>
 
 QTEST_KDEMAIN(TestContexts, NoGUI);
 
@@ -46,12 +47,13 @@ void TestContexts::cleanupTestCase()
 
 void TestContexts::testFunctionContext()
 {
-    const IndexedString file("functionContext.js");
-    //                          0         1
-    //                          012345678901234567890
-    ParseSession session(file, "function foo() {}");
+    QFETCH(QString, code);
+    QFETCH(RangeInRevision, argCtxRange);
+    QFETCH(RangeInRevision, bodyCtxRange);
+
+    const IndexedString file(QString("%1-functionContext.js").arg(qrand()));
+    ParseSession session(file, code);
     QVERIFY(session.ast());
-    qDebug() << session.language();
     QCOMPARE(session.language(), QmlJS::Document::JavaScriptLanguage);
 
     ContextBuilder builder;
@@ -68,13 +70,37 @@ void TestContexts::testFunctionContext()
 
     DUContext* argCtx = top->childContexts().first();
     QCOMPARE(argCtx->type(), DUContext::Function);
-    QCOMPARE(argCtx->range(), RangeInRevision(0, 12, 0, 13));
+    QCOMPARE(argCtx->range(), argCtxRange);
 
     DUContext* bodyCtx = top->childContexts().last();
     QCOMPARE(bodyCtx->type(), DUContext::Other);
-    QCOMPARE(bodyCtx->range(), RangeInRevision(0, 15, 0, 16));
+    QCOMPARE(bodyCtx->range(), bodyCtxRange);
 
     QVERIFY(bodyCtx->imports(argCtx));
+}
+
+void TestContexts::testFunctionContext_data()
+{
+    QTest::addColumn<QString>("code");
+    QTest::addColumn<RangeInRevision>("argCtxRange");
+    QTest::addColumn<RangeInRevision>("bodyCtxRange");
+    //                         0         1
+    //                         012345678901234567890
+    QTest::newRow("empty") << "function foo() {}"
+                           << RangeInRevision(0, 13, 0, 13)
+                           << RangeInRevision(0, 16, 0, 16);
+
+    //                        0         1         2         3
+    //                        01234567890123456789012345678901234567890
+    QTest::newRow("args") << "function foo(arg1, arg2, arg3) {}"
+                           << RangeInRevision(0, 13, 0, 29)
+                           << RangeInRevision(0, 32, 0, 32);
+
+    //                           0         1         2
+    //                           0123456789012345678901234567890
+    QTest::newRow("newline") << "function foo() {\n}"
+                           << RangeInRevision(0, 13, 0, 13)
+                           << RangeInRevision(0, 16, 1, 0);
 }
 
 #include "testcontexts.moc"

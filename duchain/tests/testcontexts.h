@@ -32,6 +32,7 @@ private slots:
     void cleanupTestCase();
 
     void testFunctionContext();
+    void testFunctionContext_data();
 };
 
 #endif // TESTCONTEXTS_H
