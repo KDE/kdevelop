@@ -21,26 +21,9 @@
 
 #include <language/editor/simplerange.h>
 #include <language/interfaces/iproblem.h>
+#include <language/duchain/stringhelpers.h>
 
 using namespace KDevelop;
-
-RangeInRevision ParseSession::locationToRange(const QmlJS::AST::SourceLocation& location)
-{
-    return RangeInRevision(location.startLine - 1, location.startColumn - 1,
-                           location.startLine - 1, location.startColumn - 1 + location.length);
-}
-
-RangeInRevision ParseSession::locationsToRange(const QmlJS::AST::SourceLocation& locationFrom,
-                                              const QmlJS::AST::SourceLocation& locationTo)
-{
-    return RangeInRevision(locationToRange(locationFrom).start,
-                           locationToRange(locationTo).end);
-}
-
-RangeInRevision ParseSession::editorFindRange(QmlJS::AST::Node* fromNode, QmlJS::AST::Node* toNode)
-{
-    return locationsToRange(fromNode->firstSourceLocation(), toNode->lastSourceLocation());
-}
 
 IndexedString ParseSession::languageString()
 {
@@ -126,17 +109,41 @@ QString ParseSession::commentForLocation(const QmlJS::AST::SourceLocation& locat
         location, compareSourceLocation
     );
 
+    qDebug() << (it == comments.constBegin()) << locationToRange(location);
     if (it == comments.constBegin()) {
+        qDebug() << locationToRange(*it);
         return QString();
     }
 
     // lower bound returns the place of insertion,
     // we want the comment before that
     it--;
-    if (it->startLine != location.startLine && it->startLine != location.startLine - 1) {
+    RangeInRevision input = locationToRange(location);
+    RangeInRevision match = locationToRange(*it);
+    if (match.end.line != input.start.line - 1 && match.end.line != input.start.line) {
+        qDebug() << "BAD LINE" << locationToRange(*it);
         return QString();
     }
 
     ///TODO: merge consecutive //-style comments?
-    return symbolAt(*it);
+    return formatComment(symbolAt(*it));
+}
+
+RangeInRevision ParseSession::locationToRange(const QmlJS::AST::SourceLocation& location) const
+{
+    const int linesInLocation = m_doc->source().midRef(location.offset, location.length).count('\n');
+    return RangeInRevision(location.startLine - 1, location.startColumn - 1,
+                           location.startLine - 1 + linesInLocation, location.startColumn - 1 + location.length);
+}
+
+RangeInRevision ParseSession::locationsToRange(const QmlJS::AST::SourceLocation& locationFrom,
+                                               const QmlJS::AST::SourceLocation& locationTo) const
+{
+    return RangeInRevision(locationToRange(locationFrom).start,
+                           locationToRange(locationTo).end);
+}
+
+RangeInRevision ParseSession::editorFindRange(QmlJS::AST::Node* fromNode, QmlJS::AST::Node* toNode) const
+{
+    return locationsToRange(fromNode->firstSourceLocation(), toNode->lastSourceLocation());
 }

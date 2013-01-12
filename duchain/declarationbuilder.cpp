@@ -45,7 +45,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::FunctionDeclaration* node)
     setComment(m_session->commentForLocation(node->firstSourceLocation()).toUtf8());
 
     const QualifiedIdentifier name(node->name.toString());
-    const RangeInRevision range = ParseSession::locationToRange(node->identifierToken);
+    const RangeInRevision range = m_session->locationToRange(node->identifierToken);
     {
         DUChainWriteLocker lock;
         openDeclaration<FunctionDeclaration>(name, range);
@@ -62,7 +62,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::FormalParameterList* node)
 {
     for (QmlJS::AST::FormalParameterList *plist = node; plist; plist = plist->next) {
         const QualifiedIdentifier name(plist->name.toString());
-        const RangeInRevision range = ParseSession::locationToRange(plist->identifierToken);
+        const RangeInRevision range = m_session->locationToRange(plist->identifierToken);
         DUChainWriteLocker lock;
         openDeclaration<Declaration>(name, range);
         closeDeclaration();

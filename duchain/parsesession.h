@@ -40,24 +40,6 @@ class KDEVQMLJSDUCHAIN_EXPORT ParseSession
 {
 public:
     /**
-     * Convert @p location to a KDevelop::RangeInRevision and return that.
-     */
-    static KDevelop::RangeInRevision locationToRange(const QmlJS::AST::SourceLocation& location);
-
-    /**
-     * Convert @p locationFrom and @p locationTo to a KDevelop::RangeInRevision and return that.
-     */
-    static KDevelop::RangeInRevision locationsToRange(const QmlJS::AST::SourceLocation& locationFrom,
-                                                      const QmlJS::AST::SourceLocation& locationTo);
-
-
-    /**
-     * @return a range that spans @p fromNode and @p toNode.
-     */
-    static KDevelop::RangeInRevision editorFindRange(QmlJS::AST::Node* fromNode,
-                                                     QmlJS::AST::Node* toNode);
-
-    /**
      * @return a unique identifier for QML/JS documents.
      */
     static KDevelop::IndexedString languageString();
@@ -104,6 +86,22 @@ public:
      * @return the comment related to the given source location or an empty string
      */
     QString commentForLocation(const QmlJS::AST::SourceLocation& location) const;
+
+    /**
+     * Convert @p location to a KDevelop::RangeInRevision and return that.
+     */
+    KDevelop::RangeInRevision locationToRange(const QmlJS::AST::SourceLocation& location) const;
+
+    /**
+     * Convert @p locationFrom and @p locationTo to a KDevelop::RangeInRevision and return that.
+     */
+    KDevelop::RangeInRevision locationsToRange(const QmlJS::AST::SourceLocation& locationFrom,
+                                               const QmlJS::AST::SourceLocation& locationTo) const;
+
+    /**
+     * @return a range that spans @p fromNode and @p toNode.
+     */
+    KDevelop::RangeInRevision editorFindRange(QmlJS::AST::Node* fromNode, QmlJS::AST::Node* toNode) const;
 
 private:
     KDevelop::IndexedString m_url;

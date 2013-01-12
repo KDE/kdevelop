@@ -50,7 +50,7 @@ void TestDeclarations::testFunction()
     const IndexedString file("functionArgs.js");
     //                          0         1         2         3
     //                          01234567890123456789012345678901234567890
-    ParseSession session(file, "// some comment\n"
+    ParseSession session(file, "/**\n * some comment\n */\n"
                                "function foo(arg1, arg2, arg3) {}");
     QVERIFY(session.ast());
     QCOMPARE(session.language(), QmlJS::Document::JavaScriptLanguage);
@@ -65,8 +65,8 @@ void TestDeclarations::testFunction()
 
     FunctionDeclaration* fooDec = dynamic_cast<FunctionDeclaration*>(top->localDeclarations().at(0));
     QVERIFY(fooDec);
-    QCOMPARE(fooDec->range(), RangeInRevision(1, 9, 1, 12));
-    QCOMPARE(fooDec->comment(), QByteArray(" some comment"));
+    QCOMPARE(fooDec->range(), RangeInRevision(3, 9, 3, 12));
+    QCOMPARE(QString::fromUtf8(fooDec->comment()), QString("some comment"));
 
     QVERIFY(fooDec->internalContext());
     QVERIFY(fooDec->internalContext()->localDeclarations().isEmpty());
@@ -77,15 +77,15 @@ void TestDeclarations::testFunction()
 
     Declaration* arg1 = argCtx->localDeclarations().at(0);
     QCOMPARE(arg1->identifier().toString(), QString("arg1"));
-    QCOMPARE(arg1->range(), RangeInRevision(1, 13, 1, 17));
+    QCOMPARE(arg1->range(), RangeInRevision(3, 13, 3, 17));
 
     Declaration* arg2 = argCtx->localDeclarations().at(1);
     QCOMPARE(arg2->identifier().toString(), QString("arg2"));
-    QCOMPARE(arg2->range(), RangeInRevision(1, 19, 1, 23));
+    QCOMPARE(arg2->range(), RangeInRevision(3, 19, 3, 23));
 
     Declaration* arg3 = argCtx->localDeclarations().at(2);
     QCOMPARE(arg3->identifier().toString(), QString("arg3"));
-    QCOMPARE(arg3->range(), RangeInRevision(1, 25, 1, 29));
+    QCOMPARE(arg3->range(), RangeInRevision(3, 25, 3, 29));
 }
 
 #include "testdeclarations.moc"
