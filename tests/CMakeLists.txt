@@ -1,3 +1,9 @@
+include_directories(
+    ${CMAKE_CURRENT_BINARY_DIR}
+)
+
+########### next target ###############
+
 kde4_add_executable(qml-parser
     qml-parser.cpp
 )
@@ -5,3 +11,20 @@ target_link_libraries(qml-parser
     ${KDEVPLATFORM_TESTS_LIBRARIES}
     kdevqmljsduchain
 )
+
+########### next target ###############
+
+find_package(QJSON)
+if(QJSON_FOUND)
+  set(filestest_SRCS test_files.cpp)
+  kde4_add_unit_test(filestest ${filestest_SRCS})
+  configure_file("testfilepaths.h.cmake" "testfilepaths.h" ESCAPE_QUOTES)
+  target_link_libraries(filestest
+      ${QT_QTTEST_LIBRARY}
+      ${QT_QTCORE_LIBRARY}
+      ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
+      ${KDEVPLATFORM_TESTS_LIBRARIES}
+      ${KDEVPLATFORM_JSONTESTS_LIBRARIES}
+      kdevqmljsduchain
+  )
+endif(QJSON_FOUND)
