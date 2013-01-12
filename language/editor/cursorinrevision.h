@@ -109,5 +109,6 @@ inline uint qHash(const KDevelop::CursorInRevision& cursor) {
 } // namespace KDevelop
 
 Q_DECLARE_TYPEINFO(KDevelop::CursorInRevision, Q_MOVABLE_TYPE);
+Q_DECLARE_METATYPE(KDevelop::CursorInRevision)
 
 #endif
