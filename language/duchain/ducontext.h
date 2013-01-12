@@ -638,7 +638,7 @@ public:
    * @param htmlPrefix Html-formatted text that should be prepended before any information shown by this widget
    * @param htmlSuffix Html-formatted text that should be appended to any information shown by this widget
    *
-   * Can return zero, which the default-implementation currently always does.
+   * Can return zero which disables the navigation widget.
    */
   virtual QWidget* createNavigationWidget(Declaration* decl = 0, TopDUContext* topContext = 0,
                                           const QString& htmlPrefix = QString(),
