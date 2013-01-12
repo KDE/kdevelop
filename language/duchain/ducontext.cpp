@@ -42,6 +42,8 @@
 #include "topducontextdynamicdata.h"
 #include "importers.h"
 #include "uses.h"
+#include "navigation/abstractdeclarationnavigationcontext.h"
+#include "navigation/abstractnavigationwidget.h"
 #include "abstractfunctiondeclaration.h"
 
 ///It is fine to use one global static mutex here
@@ -1526,10 +1528,19 @@ TopDUContext* DUContext::topContext() const
   return m_dynamicData->m_topContext;
 }
 
-QWidget* DUContext::createNavigationWidget(Declaration* /*decl*/, TopDUContext* /*topContext*/,
-                                           const QString& /*htmlPrefix*/, const QString& /*htmlSuffix*/) const
+QWidget* DUContext::createNavigationWidget(Declaration* decl, TopDUContext* topContext,
+                                           const QString& htmlPrefix, const QString& htmlSuffix) const
 {
-  return 0;
+  if (decl) {
+    AbstractNavigationWidget* widget = new AbstractNavigationWidget;
+    AbstractDeclarationNavigationContext* context = new AbstractDeclarationNavigationContext(DeclarationPointer(decl),
+                                                                                            TopDUContextPointer(topContext));
+    context->setPrefixSuffix(htmlPrefix, htmlSuffix);
+    widget->setContext(NavigationContextPointer(context));
+    return widget;
+  } else {
+    return 0;
+  }
 }
 
 void DUContext::squeeze()
