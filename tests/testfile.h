@@ -71,6 +71,22 @@ public:
              const QString& dir = QString());
 
     /**
+     * Create a temporary file from @p contents with the same file basename as
+     * @p other but with the given @p fileExtension.
+     *
+     * @param fileExtension the new file extension without the dot.
+     * @param other a different TestFile which is used for this file's basename
+     *
+     * This can be used to create e.g. .cpp/.h file pairs:
+     *
+     * @code
+     * TestFile header("...", "h");
+     * TestFile impl("...", "cpp", &header);
+     * @endcode
+     */
+    TestFile(const QString& contents, const QString& fileExtension, const TestFile* base);
+
+    /**
      * Removes temporary file and cleans up.
      */
     ~TestFile();
