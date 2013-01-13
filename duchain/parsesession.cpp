@@ -109,9 +109,7 @@ QString ParseSession::commentForLocation(const QmlJS::AST::SourceLocation& locat
         location, compareSourceLocation
     );
 
-    qDebug() << (it == comments.constBegin()) << locationToRange(location);
     if (it == comments.constBegin()) {
-        qDebug() << locationToRange(*it);
         return QString();
     }
 
@@ -121,7 +119,6 @@ QString ParseSession::commentForLocation(const QmlJS::AST::SourceLocation& locat
     RangeInRevision input = locationToRange(location);
     RangeInRevision match = locationToRange(*it);
     if (match.end.line != input.start.line - 1 && match.end.line != input.start.line) {
-        qDebug() << "BAD LINE" << locationToRange(*it);
         return QString();
     }
 
