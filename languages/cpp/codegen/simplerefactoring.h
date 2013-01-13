@@ -58,6 +58,13 @@ public:
 
   static QString newFileName(const KUrl& current, const QString& newName);
 
+  /**
+   * Move the given inline declaration to the .cpp implementation file.
+   *
+   * @return empty string on success, error message otherwise.
+   */
+  static QString moveIntoSource(const KDevelop::IndexedDeclaration& decl);
+
 public slots:
   void executeRenameAction();
   void executeMoveIntoSourceAction();
