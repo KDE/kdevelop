@@ -729,12 +729,7 @@ DocumentChangeTracker* BackgroundParser::trackerForUrl(const KDevelop::IndexedSt
     Q_ASSERT(isValidURL(url));
 
     QMutexLocker l(&d->m_mutex);
-
-    QHash< IndexedString, DocumentChangeTracker* >::iterator it = d->m_managed.find(url);
-    if(it != d->m_managed.end())
-        return *it;
-    else
-        return 0;
+    return d->m_managed.value(url, 0);
 }
 
 void BackgroundParser::documentClosed(IDocument* document)
