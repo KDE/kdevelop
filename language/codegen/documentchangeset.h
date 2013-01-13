@@ -89,7 +89,6 @@ public:
     };
 
     /// Add an individual local change to this change-set.
-    ///@note Multi-line changes are not (yet) supported.
     ChangeResult addChange(const DocumentChange& change);
     ChangeResult addChange(const DocumentChangePointer& change);
 
