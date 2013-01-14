@@ -1,6 +1,14 @@
 [General]
 Name=Testing YAML template
+Name[pt]=Modelo de YAML de testes
+Name[pt_BR]=Testando o modelo em YAML
+Name[uk]=Тестовий шаблон YAML
+Name[x-test]=xxTesting YAML templatexx
 Comment=Describes a class using YAML syntax
+Comment[pt]=Descreve uma classe com uma sintaxe em YAML
+Comment[pt_BR]=Descreve uma classe que usa a sintaxe em YAML
+Comment[uk]=Описує клас з використанням синтаксису YAML
+Comment[x-test]=xxDescribes a class using YAML syntaxxx
 Category=Testing/YAML
 Type=Class
 Files=Description
@@ -8,5 +16,10 @@ OptionsFile=options.kcfg
 
 [Description]
 Name=Description
+Name[de]=Beschreibung
+Name[pt]=Descrição
+Name[pt_BR]=Descrição
+Name[uk]=Опис
+Name[x-test]=xxDescriptionxx
 File=class.yaml
 OutputFile={{ name }}.yaml

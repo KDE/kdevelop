@@ -1,16 +1,33 @@
 [General]
 Name=Testing C++ Template
+Name[pt]=Modelo de C++ de Testes
+Name[pt_BR]=Testando o modelo em C++
+Name[uk]=Тестовий шаблон C++
+Name[x-test]=xxTesting C++ Templatexx
 Comment=A unit test using the QTest library without a graphical user interface
+Comment[pt]=Um teste unitário que usa a biblioteca QTest sem qualquer interface gráfica.
+Comment[pt_BR]=Teste unitário que usa a biblioteca QTest sem uma interface gráfica do usuário
+Comment[uk]=Перевірка модулів за допомогою бібліотеки QTest без графічного інтерфейсу користувача
+Comment[x-test]=xxA unit test using the QTest library without a graphical user interfacexx
 Category=Test/Test/C++
 Files=Header,Implementation
 
 [Header]
 Name=Header
+Name[pt]=Inclusão
+Name[pt_BR]=Inclusão
+Name[uk]=Заголовок
+Name[x-test]=xxHeaderxx
 File=class.h
 OutputFile={{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[de]=Implementation
+Name[pt]=Implementação
+Name[pt_BR]=Implementação
+Name[uk]=Реалізація
+Name[x-test]=xxImplementationxx
 File=class.cpp
 OutputFile={{ name }}.cpp
 
