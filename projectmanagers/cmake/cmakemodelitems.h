@@ -96,7 +96,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeFolderItem
     , public DescriptorAttatched, public DefinesAttached, public IncludesAttached
 {
     public:
-        CMakeFolderItem( KDevelop::IProject* project, const KUrl& folder, const QString& build, CMakeFolderItem* item);
+        CMakeFolderItem( KDevelop::IProject* project, const KDevelop::Path& path, const QString& build, CMakeFolderItem* item);
         // Required, and must be non-inline, for dynamic_cast to work
         virtual ~CMakeFolderItem();
         

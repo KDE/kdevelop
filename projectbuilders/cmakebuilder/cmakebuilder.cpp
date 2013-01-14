@@ -112,7 +112,7 @@ KJob* CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
             int lastDot = file->text().lastIndexOf('.');
             QString target = file->text().mid(0, lastDot)+".o";
              
-            CMakeFolderItem *fldr = new CMakeFolderItem(p, dom->url().upUrl(), KUrl::relativeUrl(p->folder(), file->url().upUrl()), 0);
+            CMakeFolderItem *fldr = new CMakeFolderItem(p, dom->path().parent(), p->path().relativePath(file->path().parent()), 0);
             KDevelop::ProjectTargetItem *it = new KDevelop::ProjectTargetItem(p, target);
             fldr->appendRow(it);
              

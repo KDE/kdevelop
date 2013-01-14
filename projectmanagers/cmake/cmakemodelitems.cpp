@@ -26,13 +26,13 @@
 
 #include <language/duchain/duchain.h>
 #include <language/duchain/parsingenvironment.h>
+
 #include <project/interfaces/ibuildsystemmanager.h>
 
-CMakeFolderItem::CMakeFolderItem( KDevelop::IProject *project, const KUrl &folder, const QString& build,
+CMakeFolderItem::CMakeFolderItem( KDevelop::IProject *project, const KDevelop::Path &path, const QString& build,
                                   CMakeFolderItem* item)
-    : KDevelop::ProjectBuildFolderItem( project, folder, item ), m_formerParent(item), m_buildDir(build)
+    : KDevelop::ProjectBuildFolderItem( project, path, item ), m_formerParent(item), m_buildDir(build)
 {
-    Q_ASSERT(folder.path().endsWith("/"));
 }
 
 static KDevelop::ProjectBaseItem* getRealCMakeParent(KDevelop::ProjectBaseItem* baseItem)

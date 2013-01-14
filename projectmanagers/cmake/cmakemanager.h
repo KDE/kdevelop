@@ -147,7 +147,7 @@ private:
     void reimport(CMakeFolderItem* fi);
     CacheValues readCache(const KUrl &path) const;
     bool isReloading(KDevelop::IProject* p);
-    bool isCorrectFolder(const KUrl& url, KDevelop::IProject* p) const;
+    bool isCorrectFolder(const KDevelop::Path& path, KDevelop::IProject* p) const;
     void cleanupToDelete(KDevelop::IProject* p);
     bool renameFileOrFolder(KDevelop::ProjectBaseItem *item, const KDevelop::Path &newPath);
     
@@ -164,7 +164,7 @@ private:
 
     QMap<KDevelop::IProject*, CMakeProjectData> m_projectsData;
     QMap<KDevelop::IProject*, QFileSystemWatcher*> m_watchers;
-    QMap<KUrl, CMakeFolderItem*> m_pending;
+    QHash<KDevelop::Path, CMakeFolderItem*> m_pending;
     
     QSet<KDevelop::IProject*> m_busyProjects;
     

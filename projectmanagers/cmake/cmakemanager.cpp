@@ -665,7 +665,7 @@ KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
             }
         }
 
-        m_rootItem = new CMakeFolderItem(project, project->folder(), QString(), 0 );
+        m_rootItem = new CMakeFolderItem(project, project->path(), QString(), 0 );
 
         KUrl cachefile=buildDirectory(m_rootItem);
         if( cachefile.isEmpty() ) {
@@ -789,19 +789,20 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
             if(subf.name.isEmpty() || alreadyAdded.contains(subf.name)) //empty case would not be necessary if we didn't process the wrong lines
                 continue;
             
-            KUrl path(subf.name);
-            if(path.isRelative())
+            Path path;
+            ///TODO: push that into our Path API
+            if(QUrl(subf.name).isRelative())
             {
-                path=folder->url();
-                path.addPath(subf.name);
+                path = Path(folder->path(), subf.name);
+            } else {
+                path = Path(subf.name);
             }
-            path.adjustPath(KUrl::AddTrailingSlash);
             
             if(QDir(path.toLocalFile()).exists())
             {
                 alreadyAdded.append(subf.name);
                 CMakeFolderItem* parent=folder;
-                if(path.upUrl()!=folder->url())
+                if(!folder->path().isDirectParentOf(path))
                     parent=0;
 
                 CMakeFolderItem* a = 0;
@@ -819,7 +820,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                 if(!a)
                     a = new CMakeFolderItem( folder->project(), path, subf.build_dir, parent );
                 else
-                    a->setUrl(path);
+                    a->setPath(path);
                 
 //                 kDebug() << "folder: " << a << a->index();
                 a->setDefinitions(data.definitions);
@@ -981,6 +982,7 @@ ProjectFileItem* containsFile(const KUrl& file, const QList<ProjectFileItem*>& t
     return 0;
 }
 
+///TODO: use Path::List
 void CMakeManager::setTargetFiles(ProjectTargetItem* target, const KUrl::List& files)
 {
     QList<ProjectFileItem*> tfiles = target->fileList();
@@ -995,7 +997,7 @@ void CMakeManager::setTargetFiles(ProjectTargetItem* target, const KUrl::List& f
         if(f)
             m_cleanupItems.removeAll(f);
         else
-            new KDevelop::ProjectFileItem( target->project(), file, target );
+            new KDevelop::ProjectFileItem( target->project(), Path(file), target );
     }
 }
 
@@ -1324,7 +1326,7 @@ void CMakeManager::reloadFiles(ProjectFolderItem* item)
 {
     Q_ASSERT(isReloading(item->project()));
     
-    QDir d(item->url().toLocalFile());
+    QDir d(item->path().toLocalFile());
     if(!d.exists()) {
         kDebug() << "Trying to return a directory that doesn't exist:" << item->url();
         return;
@@ -1333,10 +1335,9 @@ void CMakeManager::reloadFiles(ProjectFolderItem* item)
     QStringList entriesL = d.entryList( QDir::AllEntries | QDir::NoDotAndDotDot);
     QSet<QString> entries = filterFiles(entriesL);
     
-    KUrl folderurl = item->url();
-    folderurl.cleanPath();
+    Path folderPath = item->path();
 
-    kDebug() << "Reloading Directory!" << folderurl;
+    kDebug() << "Reloading Directory!" << folderPath;
     
     //We look for removed elements
     for(int i=0; i<item->rowCount(); i++)
@@ -1345,60 +1346,57 @@ void CMakeManager::reloadFiles(ProjectFolderItem* item)
         if(it->type()==ProjectBaseItem::Target || it->type()==ProjectBaseItem::ExecutableTarget || it->type()==ProjectBaseItem::LibraryTarget)
             continue;
         
-        QString current=it->text();
-        KUrl fileurl = folderurl;
-        fileurl.addPath(current);
+        const QString& current=it->text();
+        const Path filePath(folderPath, current);
         
         if(!entries.contains(current))
-            m_toDelete.insert(fileurl.toLocalFile());
-        else if(!it->url().equals(fileurl, KUrl::CompareWithoutTrailingSlash))
-            it->setUrl(fileurl);
+            m_toDelete.insert(filePath.toLocalFile());
+        else if(it->path() != filePath)
+            it->setPath(filePath);
     }
     
     //We look for new elements
     QList<ProjectBaseItem*> newItems;
     foreach( const QString& entry, entries )
     {
-        KUrl fileurl = folderurl;
-        fileurl.addPath( entry );
+        const Path filePath(folderPath, entry);
 
         if(m_cleanupItems.contains(item) || item->hasFileOrFolder( entry ))
             continue;
 
-        m_toDelete.remove(fileurl.toLocalFile());
-        if( QFileInfo( fileurl.toLocalFile() ).isDir() )
+        const QString localPath = filePath.toLocalFile();
+        m_toDelete.remove(localPath);
+        if( QFileInfo( localPath ).isDir() )
         {
-            fileurl.adjustPath(KUrl::AddTrailingSlash);
-            ProjectFolderItem* pendingfolder = m_pending.take(fileurl);
+            ProjectFolderItem* pendingfolder = m_pending.take(filePath);
             
             if(pendingfolder) {
                 newItems += pendingfolder;
-            } else if(isCorrectFolder(fileurl, item->project())) {
-                fileurl.adjustPath(KUrl::AddTrailingSlash);
-                ProjectFolderItem* it = new ProjectFolderItem( item->project(), fileurl, 0 );
+            } else if(isCorrectFolder(filePath, item->project())) {
+                ProjectFolderItem* it = new ProjectFolderItem( item->project(), filePath );
                 reloadFiles(it);
                 {
                     QMutexLocker locker(&m_dirWatchersMutex);
-                    m_watchers[item->project()]->addPath(fileurl.toLocalFile());
+                    m_watchers[item->project()]->addPath(localPath);
                 }
                 newItems += it;
             }
         }
         else
         {
-            newItems += new KDevelop::ProjectFileItem( item->project(), fileurl, 0 );
+            newItems += new KDevelop::ProjectFileItem( item->project(), filePath );
         }
     }
     foreach(ProjectBaseItem* it, newItems)
         item->appendRow(it);
 }
 
-bool CMakeManager::isCorrectFolder(const KUrl& url, IProject* p) const
+bool CMakeManager::isCorrectFolder(const Path& path, IProject* p) const
 {
-    KUrl cache(url,"CMakeCache.txt"), missing(url, ".kdev_ignore");
+    Path cache(path, "CMakeCache.txt"), missing(path, ".kdev_ignore");
     
     bool ret = !QFile::exists(cache.toLocalFile()) && !QFile::exists(missing.toLocalFile());
-    ret &= !CMake::allBuildDirs(p).contains(url.toLocalFile(KUrl::RemoveTrailingSlash));
+    ret &= !CMake::allBuildDirs(p).contains(path.toLocalFile());
     
     return ret;
 }
@@ -1632,7 +1630,7 @@ ProjectFolderItem* CMakeManager::addFolder(const Path& folder, ProjectFolderItem
 
     ApplyChangesWidget changesWidget;
     changesWidget.setCaption(DIALOG_CAPTION);
-    changesWidget.setInformation(i18n("Create folder '%1':", folder.fileName()));
+    changesWidget.setInformation(i18n("Create folder '%1':", folder.lastPathSegment()));
 
     ///FIXME: use path in changes widget
     changesWidgetAddFolder(folder.toUrl(), cmakeParent, &changesWidget);
@@ -1706,7 +1704,7 @@ bool CMakeManager::renameFileOrFolder(ProjectBaseItem *item, const Path &newPath
     ApplyChangesWidget changesWidget;
     changesWidget.setCaption(DIALOG_CAPTION);
     changesWidget.setInformation(i18n("Rename '%1' to '%2':", item->text(),
-                                      newPath.fileName()));
+                                      newPath.lastPathSegment()));
     
     bool cmakeSuccessful = true, changedCMakeLists=false;
     IProject* project=item->project();

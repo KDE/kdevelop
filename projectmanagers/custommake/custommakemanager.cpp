@@ -134,7 +134,7 @@ QList<ProjectTargetItem*> CustomMakeManager::targets(KDevelop::ProjectFolderItem
 //TODO: make filtering generic
 bool CustomMakeManager::isValid(const Path& path, const bool isFolder, IProject* project) const
 {
-    const QString name = path.fileName();
+    const QString name = path.lastPathSegment();
     const QStringList invalidFolders = QStringList() << ".kdev4" << ".svn" << ".git" << "CVS"
                                                      << ".bzr" << "_darcs" << ".hg";
     if (isFolder && invalidFolders.contains( name )) {
@@ -156,7 +156,7 @@ bool CustomMakeManager::isValid(const Path& path, const bool isFolder, IProject*
 ProjectFileItem* CustomMakeManager::createFileItem(IProject* project, const Path& path, ProjectBaseItem* parent)
 {
     KDevelop::ProjectFileItem *item = new KDevelop::ProjectFileItem( project, path, parent );
-    if( path.fileName() == "Makefile" )
+    if( path.lastPathSegment() == "Makefile" )
     {
         QStringList targetlist = parseCustomMakeFile( path );
         foreach( const QString &target, targetlist )
