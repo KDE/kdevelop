@@ -190,7 +190,8 @@ static inline bool runBuildProcessI(QProcess &proc,
     QByteArray stdErr;
     if (!SynchronousProcess::readDataFromProcess(proc, timeoutMS, &stdOut, &stdErr, false)) {
         *errorMessage = QCoreApplication::translate("ProjectExplorer::BuildableHelperLibrary",
-                                                    "Timeout after %1s.").
+						    // xgettext: no-c-format
+						    "Timeout after %1s.").
                                                     arg(timeoutMS / 1000);
         SynchronousProcess::stopProcess(proc);
         return false;
