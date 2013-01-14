@@ -1,17 +1,44 @@
 [General]
 Name=GObject
+Name[de]=GObject
+Name[fi]=GObject
+Name[pt]=GObject
+Name[pt_BR]=GObject
+Name[uk]=GObject
+Name[x-test]=xxGObjectxx
 Comment=A simple GObject subclass
+Comment[de]=Eine einfache GObject-Unterklasse
+Comment[fi]=Yksinkertainen GObject-aliluokka
+Comment[pt]=Uma sub-classe simples do GObject
+Comment[pt_BR]=Uma subclasse simples de GObject
+Comment[uk]=Простий підклас GObject
+Comment[x-test]=xxA simple GObject subclassxx
 Category=C/GLib
 Language=C
+Language[de]=C
+Language[pt]=C
+Language[pt_BR]=C
+Language[uk]=C
+Language[x-test]=xxCxx
 Type=Class
 Files=Header,Implementation
 
 [Header]
 Name=Header
+Name[pt]=Inclusão
+Name[pt_BR]=Inclusão
+Name[uk]=Заголовок
+Name[x-test]=xxHeaderxx
 File=class.h
 OutputFile={% for ns in namespaces %}{{ ns }}_{% endfor %}{{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[de]=Implementation
+Name[fi]=Toteutus
+Name[pt]=Implementação
+Name[pt_BR]=Implementação
+Name[uk]=Реалізація
+Name[x-test]=xxImplementationxx
 File=class.c
 OutputFile={% for ns in namespaces %}{{ ns }}_{% endfor %}{{ name }}.c

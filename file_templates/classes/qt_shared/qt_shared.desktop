@@ -1,17 +1,40 @@
 [General]
 Name=Implicitly shared class
+Name[pt]=Classe partilhada implicitamente
+Name[pt_BR]=Classe compartilhada implicitamente
+Name[uk]=Клас з неявним спільним використанням
+Name[x-test]=xxImplicitly shared classxx
 Comment=Class with a private QSharedData member
+Comment[pt]=Classe com um membro privado de QSharedData
+Comment[pt_BR]=Classe com um membro QSharedData privado
+Comment[uk]=Клас з закритим елементом QSharedData
+Comment[x-test]=xxClass with a private QSharedData memberxx
 Category=C++/Qt
 Language=C++
+Language[de]=C++
+Language[pt]=C++
+Language[pt_BR]=C++
+Language[uk]=C++
+Language[x-test]=xxC++xx
 Type=Class
 Files=Header,Implementation
 
 [Header]
 Name=Public Header
+Name[pt]=Inclusão Pública
+Name[pt_BR]=Inclusão pública
+Name[uk]=Відкрийти (public) заголовок
+Name[x-test]=xxPublic Headerxx
 File=class.h
 OutputFile={{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[de]=Implementation
+Name[fi]=Toteutus
+Name[pt]=Implementação
+Name[pt_BR]=Implementação
+Name[uk]=Реалізація
+Name[x-test]=xxImplementationxx
 File=class.cpp
 OutputFile={{ name }}.cpp

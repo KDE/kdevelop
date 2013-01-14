@@ -1,17 +1,40 @@
 [General]
 Name=GObject with private pointer
+Name[pt]=GObject com ponteiro privado
+Name[pt_BR]=GObject com ponteiro privado
+Name[uk]=GObject із закритим (private) вказівником
+Name[x-test]=xxGObject with private pointerxx
 Comment=A GObject subclass with a private pointer
+Comment[pt]=Uma sub-classe de GObject com um ponteiro privado
+Comment[pt_BR]=Subclasse de GObject com um ponteiro privado
+Comment[uk]=Підклас GObject з закритим (private) вказівником
+Comment[x-test]=xxA GObject subclass with a private pointerxx
 Category=C/GLib
 Language=C
+Language[de]=C
+Language[pt]=C
+Language[pt_BR]=C
+Language[uk]=C
+Language[x-test]=xxCxx
 Type=Class
 Files=Header,Implementation
 
 [Header]
 Name=Header
+Name[pt]=Inclusão
+Name[pt_BR]=Inclusão
+Name[uk]=Заголовок
+Name[x-test]=xxHeaderxx
 File=class.h
 OutputFile={% for ns in namespaces %}{{ ns }}_{% endfor %}{{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[de]=Implementation
+Name[fi]=Toteutus
+Name[pt]=Implementação
+Name[pt_BR]=Implementação
+Name[uk]=Реалізація
+Name[x-test]=xxImplementationxx
 File=class.c
 OutputFile={% for ns in namespaces %}{{ ns }}_{% endfor %}{{ name }}.c

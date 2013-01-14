@@ -1,18 +1,41 @@
 [General]
 Name=QTestLib with KDE
+Name[pt]=QTestLib com o KDE
+Name[pt_BR]=QTestLib com o KDE
+Name[uk]=QTestLib з KDE
+Name[x-test]=xxQTestLib with KDExx
 Comment=A unit test using the QTest library with KDE extensions
+Comment[pt]=Um teste unitário, que usa a biblioteca QTest, com as extensões do KDE
+Comment[pt_BR]=Teste unitário que usa a biblioteca QTest com as extensões do KDE
+Comment[uk]=Перевірка модулів за допомогою бібліотеки QTest з розширеннями KDE
+Comment[x-test]=xxA unit test using the QTest library with KDE extensionsxx
 Category=C++/KDE
 Language=C++
+Language[de]=C++
+Language[pt]=C++
+Language[pt_BR]=C++
+Language[uk]=C++
+Language[x-test]=xxC++xx
 Type=Test
 Files=Header,Implementation
 
 [Header]
 Name=Header
+Name[pt]=Inclusão
+Name[pt_BR]=Inclusão
+Name[uk]=Заголовок
+Name[x-test]=xxHeaderxx
 File=class.h
 OutputFile={{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[de]=Implementation
+Name[fi]=Toteutus
+Name[pt]=Implementação
+Name[pt_BR]=Implementação
+Name[uk]=Реалізація
+Name[x-test]=xxImplementationxx
 File=class.cpp
 OutputFile={{ name }}.cpp
 

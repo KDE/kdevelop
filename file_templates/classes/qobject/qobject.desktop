@@ -1,19 +1,43 @@
 [General]
 Name=QObject subclass
+Name[de]=GObject-Unterklasse
+Name[pt]=Sub-classe de QObject
+Name[pt_BR]=Subclasse de QObject
+Name[uk]=Підклас QObject
+Name[x-test]=xxQObject subclassxx
 Comment=QObject subclass with properties
+Comment[pt]=Sub-classe de QOBject com propriedades
+Comment[pt_BR]=Subclasse de QObject com propriedades
+Comment[uk]=Підклас QObject з властивостями
+Comment[x-test]=xxQObject subclass with propertiesxx
 Category=C++/Qt
 Language=C++
+Language[de]=C++
+Language[pt]=C++
+Language[pt_BR]=C++
+Language[uk]=C++
+Language[x-test]=xxC++xx
 Type=Class
 BaseClasses=public QObject
 Files=Header,Implementation
 
 [Header]
 Name=Public Header
+Name[pt]=Inclusão Pública
+Name[pt_BR]=Inclusão pública
+Name[uk]=Відкрийти (public) заголовок
+Name[x-test]=xxPublic Headerxx
 File=class.h
 OutputFile={{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[de]=Implementation
+Name[fi]=Toteutus
+Name[pt]=Implementação
+Name[pt_BR]=Implementação
+Name[uk]=Реалізація
+Name[x-test]=xxImplementationxx
 File=class.cpp
 OutputFile={{ name }}.cpp
 

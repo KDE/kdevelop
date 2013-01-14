@@ -1,18 +1,42 @@
 [General]
 Name=A test for KDevPlatform
+Name[de]=Ein Test für KDevPlatform
+Name[pt]=Um teste para o KDevPlatform
+Name[pt_BR]=Teste do KDevPlatform
+Name[uk]=Перевірка для KDevPlatform
+Name[x-test]=xxA test for KDevPlatformxx
 Comment=A unit test using the QTest library with KDevPlatform test helpers
+Comment[pt]=Um teste unitário, que usa a biblioteca QTest, com os utilitários de testes do KDevPlatform
+Comment[pt_BR]=Teste unitário que usa a biblioteca QTest com os auxiliares de testes do KDevPlatform
+Comment[uk]=Перевірка модулів за допомогою бібліотеки QTest з допоміжними програмами перевірки KDevPlatform
+Comment[x-test]=xxA unit test using the QTest library with KDevPlatform test helpersxx
 Category=C++/KDevelop
 Language=C++
+Language[de]=C++
+Language[pt]=C++
+Language[pt_BR]=C++
+Language[uk]=C++
+Language[x-test]=xxC++xx
 Type=Test
 Files=Header,Implementation
 
 [Header]
 Name=Header
+Name[pt]=Inclusão
+Name[pt_BR]=Inclusão
+Name[uk]=Заголовок
+Name[x-test]=xxHeaderxx
 File=class.h
 OutputFile={{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[de]=Implementation
+Name[fi]=Toteutus
+Name[pt]=Implementação
+Name[pt_BR]=Implementação
+Name[uk]=Реалізація
+Name[x-test]=xxImplementationxx
 File=class.cpp
 OutputFile={{ name }}.cpp
 

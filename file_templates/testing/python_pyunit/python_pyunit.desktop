@@ -1,13 +1,33 @@
 [General]
 Name=PyUnit
+Name[de]=PyUnit
+Name[pt]=PyUnit
+Name[pt_BR]=PyUnit
+Name[uk]=PyUnit
+Name[x-test]=xxPyUnitxx
 Comment=A unit test using the PyUnit framework
+Comment[pt]=Um teste unitário que usa a plataforma do PyUnit
+Comment[pt_BR]=Teste unitário que usa a plataforma PyUnit
+Comment[uk]=Перевірка модулів за допомогою комплексу PyUnit
+Comment[x-test]=xxA unit test using the PyUnit frameworkxx
 Category=Python/Basic
 Language=Python
+Language[de]=Python
+Language[pt]=Python
+Language[pt_BR]=Python
+Language[uk]=Python
+Language[x-test]=xxPythonxx
 Type=Test
 Files=Implementation
 
 [Implementation]
 Name=Implementation
+Name[de]=Implementation
+Name[fi]=Toteutus
+Name[pt]=Implementação
+Name[pt_BR]=Implementação
+Name[uk]=Реалізація
+Name[x-test]=xxImplementationxx
 File=class.py
 OutputFile={{ name }}.py
 

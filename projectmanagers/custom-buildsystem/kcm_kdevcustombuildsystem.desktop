@@ -10,4 +10,15 @@ X-KDE-ParentComponents=KDevCustomBuildSystem,KDevGenericManager
 X-KDE-CfgDlgHierarchy=BUILDTOOL
 
 Name=Custom BuildSystem
+Name[de]=Eigenes Build-System
+Name[fi]=Oma käännösjärjestelmä
+Name[pt]=Sistema de Compilação Personalizado
+Name[pt_BR]=Sistema de compilação personalizado
+Name[uk]=Нетипова система збирання
+Name[x-test]=xxCustom BuildSystemxx
 Comment=Configure a projects custom build tool and includes/defines for the language support.
+Comment[fi]=Projektin oman käännöstyökalun asetukset sekä kielituen include/define-hakupolut.
+Comment[pt]=Configura uma ferramenta de compilação de projectos personalizada e as inclusões/definições de suporte à linguagem.
+Comment[pt_BR]=Configura uma ferramenta de compilação de projetos personalizados e inclusões/definições para suporte de linguagens.
+Comment[uk]=Налаштування типового інструмента збирання проектів та включень або визначень щодо підтримки мов.
+Comment[x-test]=xxConfigure a projects custom build tool and includes/defines for the language support.xx

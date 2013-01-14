@@ -1,13 +1,33 @@
 [General]
 Name=PHPUnit
+Name[de]=PHPUnit
+Name[pt]=PHPUnit
+Name[pt_BR]=PHPUnit
+Name[uk]=PHPUnit
+Name[x-test]=xxPHPUnitxx
 Comment=A unit test using the PHPUnit framework
+Comment[pt]=Um teste unitário que usa a plataforma do PHPUnit
+Comment[pt_BR]=Teste unitário que usa a plataforma PHPUnit
+Comment[uk]=Перевірка модулів за допомогою комплексу PHPUnit
+Comment[x-test]=xxA unit test using the PHPUnit frameworkxx
 Category=PHP/Basic
 Language=Php
+Language[de]=Php
+Language[pt]=PHP
+Language[pt_BR]=PHP
+Language[uk]=PHP
+Language[x-test]=xxPhpxx
 Type=Test
 Files=Implementation
 
 [Implementation]
 Name=Implementation
+Name[de]=Implementation
+Name[fi]=Toteutus
+Name[pt]=Implementação
+Name[pt_BR]=Implementação
+Name[uk]=Реалізація
+Name[x-test]=xxImplementationxx
 File=class.php
 OutputFile={{ name }}.php
 

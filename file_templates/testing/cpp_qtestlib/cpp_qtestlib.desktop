@@ -1,18 +1,41 @@
 [General]
 Name=Test Suite
+Name[pt]=Conjunto de Testes
+Name[pt_BR]=Conjunto de testes
+Name[uk]=Комплекс для перевірки
+Name[x-test]=xxTest Suitexx
 Comment=A unit test suite using the QTest library without a graphical user interface
+Comment[pt]=Um conjunto de testes unitários, que usa a biblioteca QTest, sem qualquer interface gráfica
+Comment[pt_BR]=Conjunto de testes unitário que usa a biblioteca QTest sem uma interface gráfica do usuário
+Comment[uk]=Комплекс для перевірки модулів за допомогою бібліотеки QTest без графічного інтерфейсу користувача
+Comment[x-test]=xxA unit test suite using the QTest library without a graphical user interfacexx
 Category=C++/Qt
 Language=C++
+Language[de]=C++
+Language[pt]=C++
+Language[pt_BR]=C++
+Language[uk]=C++
+Language[x-test]=xxC++xx
 Type=Test
 Files=Header,Implementation
 
 [Header]
 Name=Header
+Name[pt]=Inclusão
+Name[pt_BR]=Inclusão
+Name[uk]=Заголовок
+Name[x-test]=xxHeaderxx
 File=class.h
 OutputFile={{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[de]=Implementation
+Name[fi]=Toteutus
+Name[pt]=Implementação
+Name[pt_BR]=Implementação
+Name[uk]=Реалізація
+Name[x-test]=xxImplementationxx
 File=class.cpp
 OutputFile={{ name }}.cpp
 

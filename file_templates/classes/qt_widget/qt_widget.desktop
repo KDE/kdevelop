@@ -1,23 +1,51 @@
 [General]
 Name=Widget with a UI File
+Name[pt]=Item Gráfico com Ficheiro UI
+Name[pt_BR]=Widget com um arquivo UI
+Name[uk]=Віджет з файлом інтерфейсу користувача
+Name[x-test]=xxWidget with a UI Filexx
 Comment=QWidget subclass with a separate Qt Designer file
+Comment[pt]=Uma sub-classe de QWidget com um ficheiro do Qt Designer separado
+Comment[pt_BR]=Subclasse de QWidget com um arquivo Qt Designer separado
+Comment[uk]=Підклас QWidget з окремим файлом Qt Designer
+Comment[x-test]=xxQWidget subclass with a separate Qt Designer filexx
 Category=C++/Qt
 Language=C++
+Language[de]=C++
+Language[pt]=C++
+Language[pt_BR]=C++
+Language[uk]=C++
+Language[x-test]=xxC++xx
 Type=Class
 BaseClasses=public QWidget
 Files=Header,Implementation,UI
 
 [Header]
 Name=Public Header
+Name[pt]=Inclusão Pública
+Name[pt_BR]=Inclusão pública
+Name[uk]=Відкрийти (public) заголовок
+Name[x-test]=xxPublic Headerxx
 File=class.h
 OutputFile={{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[de]=Implementation
+Name[fi]=Toteutus
+Name[pt]=Implementação
+Name[pt_BR]=Implementação
+Name[uk]=Реалізація
+Name[x-test]=xxImplementationxx
 File=class.cpp
 OutputFile={{ name }}.cpp
 
 [UI]
 Name=User Interface
+Name[de]=Benutzerschnittstelle
+Name[pt]=Interface do Utilizador
+Name[pt_BR]=Interface do usuário
+Name[uk]=Інтерфейс користувача
+Name[x-test]=xxUser Interfacexx
 File=class.ui
 OutputFile={{ name }}.ui
