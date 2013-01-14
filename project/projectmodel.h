@@ -348,7 +348,7 @@ public:
 
     virtual ProjectTargetItem *target() const;
     virtual QString iconName() const;
-    virtual void setPath(const Path& url );
+    virtual void setPath(const Path& path );
 };
 
 /**

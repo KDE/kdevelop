@@ -22,6 +22,8 @@
 #include <interfaces/iproject.h>
 #include <project/projectmodel.h>
 
+#include "path.h"
+
 #include <KDebug>
 
 using namespace KDevelop;
@@ -49,7 +51,7 @@ ProjectFolderItem* FileManagerListJob::item() const
 
 void FileManagerListJob::addSubDir( ProjectFolderItem* item )
 {
-    Q_ASSERT(!m_item || item->url().upUrl() == m_item->url());
+    Q_ASSERT(!m_item || m_item->path().isDirectParentOf(item->path()));
 
     m_listQueue.enqueue(item);
 }
@@ -72,7 +74,7 @@ void FileManagerListJob::startNextJob()
     }
 
     m_item = m_listQueue.dequeue();
-    KIO::ListJob* job = KIO::listDir( m_item->url(), KIO::HideProgressInfo );
+    KIO::ListJob* job = KIO::listDir( m_item->path().toUrl(), KIO::HideProgressInfo );
     job->setParentJob( this );
     connect( job, SIGNAL(entries(KIO::Job*,KIO::UDSEntryList)),
              this, SLOT(slotEntries(KIO::Job*,KIO::UDSEntryList)) );

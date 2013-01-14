@@ -35,14 +35,3 @@ void DashboardDataEngine::addConnection(const QString& containmentId, IProject* 
     setData(containmentId, "projectName", project->projectItem()->text());
     setData(containmentId, "projectFiles", qVariantFromValue<QObject*>(new ProjectFiles(project, this)));
 }
-
-QString ProjectFiles::fileContents(const QString& fileName)
-{
-    Q_ASSERT(false && ":DDDD");
-    
-    KUrl url=m_project->projectItem()->url();
-    url.addPath(fileName);
-    QFile f(url.toLocalFile());
-
-    return f.readAll();
-}

@@ -627,7 +627,7 @@ ProjectFolderItem::ProjectFolderItem(IProject* project, const Path& path, Projec
     setPath( path );
 
     setFlags(flags() | Qt::ItemIsDropEnabled);
-    if (project && project->folder() != url())
+    if (project && project->path() != path)
         setFlags(flags() | Qt::ItemIsDragEnabled);
 }
 
@@ -637,7 +637,7 @@ ProjectFolderItem::ProjectFolderItem( const QString & name, ProjectBaseItem * pa
     setPath( Path(parent->path(), name) );
 
     setFlags(flags() | Qt::ItemIsDropEnabled);
-    if (project() && project()->folder() != url())
+    if (project() && project()->path() != path())
         setFlags(flags() | Qt::ItemIsDragEnabled);
 }
 
@@ -645,11 +645,11 @@ ProjectFolderItem::~ProjectFolderItem()
 {
 }
 
-void ProjectFolderItem::setPath( const Path& url )
+void ProjectFolderItem::setPath( const Path& path )
 {
-    ProjectBaseItem::setPath(url);
+    ProjectBaseItem::setPath(path);
 
-    propagateRename(url);
+    propagateRename(path);
 }
 
 ProjectFolderItem *ProjectFolderItem::folder() const
@@ -791,7 +791,7 @@ bool isNumeric(const QStringRef& str)
 class IconNameCache
 {
 public:
-    QString iconNameForUrl(const Path& url, const QString& fileName)
+    QString iconNameForPath(const Path& path, const QString& fileName)
     {
         // find icon name based on file extension, if possible
         QString extension;
@@ -812,7 +812,7 @@ public:
             }
         }
 
-        KMimeType::Ptr mime = KMimeType::findByUrl( KUrl::fromPath(url.lastPathSegment()), 0, false, true );
+        KMimeType::Ptr mime = KMimeType::findByUrl( KUrl::fromPath(path.lastPathSegment()), 0, false, true );
         QMutexLocker lock(&mutex);
         QHash< QString, QString >::const_iterator it = mimeToIcon.constFind( mime->name() );
         QString iconName;
@@ -839,7 +839,7 @@ QString ProjectFileItem::iconName() const
     // think of d_ptr->iconName as mutable, possible since d_ptr is not const
     if (d_ptr->iconName.isEmpty()) {
         // lazy load implementation of icon lookup
-        d_ptr->iconName = s_cache->iconNameForUrl( d_ptr->m_path, d_ptr->text );
+        d_ptr->iconName = s_cache->iconNameForPath( d_ptr->m_path, d_ptr->text );
         // we should always get *some* icon name back
         Q_ASSERT(!d_ptr->iconName.isEmpty());
     }
@@ -1032,7 +1032,7 @@ QVariant ProjectModel::data( const QModelIndex& index, int role ) const
                 case Qt::DecorationRole:
                     return item->iconName();
                 case Qt::ToolTipRole:
-                    return item->url().prettyUrl();
+                    return item->path().pathOrUrl();
                 default:
                     return item->text();
             }
