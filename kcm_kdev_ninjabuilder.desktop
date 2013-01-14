@@ -11,6 +11,7 @@ X-KDE-ParentComponents=KDevNinjaBuilder
 X-KDE-CfgDlgHierarchy=BUILDTOOL
 
 Name=Ninja
+Name[de]=Ninja
 Name[es]=Ninja
 Name[et]=Ninja
 Name[ga]=Ninja
@@ -24,6 +25,7 @@ Name[sv]=Ninja
 Name[uk]=Ninja
 Name[x-test]=xxNinjaxx
 Comment=Configure Ninja settings
+Comment[de]=Ninja-Einstellungen festlegen
 Comment[es]=Configurar las preferencias de Ninja
 Comment[et]=Ninja seadistamine
 Comment[ga]=Cumraigh socruithe Ninja
