@@ -133,13 +133,13 @@ private:
     Q_PRIVATE_SLOT(d, void jobFinished(KJob* job))
 
 Q_SIGNALS:
-    void folderAdded(ProjectFolderItem* folder);
-    void folderRemoved(ProjectFolderItem* folder);
-    void folderRenamed(const Path& oldFolder, ProjectFolderItem* newFolder);
+    void folderAdded(KDevelop::ProjectFolderItem* folder);
+    void folderRemoved(KDevelop::ProjectFolderItem* folder);
+    void folderRenamed(const KDevelop::Path& oldFolder, KDevelop::ProjectFolderItem* newFolder);
 
-    void fileAdded(ProjectFileItem* file);
-    void fileRemoved(ProjectFileItem* file);
-    void fileRenamed(const Path& oldFile, ProjectFileItem* newFile);
+    void fileAdded(KDevelop::ProjectFileItem* file);
+    void fileRemoved(KDevelop::ProjectFileItem* file);
+    void fileRenamed(const KDevelop::Path& oldFile, KDevelop::ProjectFileItem* newFile);
 };
 
 }
