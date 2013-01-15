@@ -1,15 +1,24 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Project Branches
+Name[cs]=Větve projektu
+Name[es]=Ramas del proyecto
 Name[fi]=Projektin haarat
+Name[gl]=Xestor de gallas
+Name[nl]=Projectbranches
 Name[pt]=Ramificações do Projecto
 Name[pt_BR]=Ramificações do projeto
+Name[sv]=Projektgrenar
 Name[uk]=Гілки проекту
 Name[x-test]=xxProject Branchesxx
 Comment=Displays the branches in the current project
+Comment[es]=Muestra las ramas del proyecto actual
 Comment[fi]=Näyttää nykyisen projektin haarat
+Comment[gl]=Mostra as gallas do proxecto actual
+Comment[nl]=Toont de branches in het huidige project
 Comment[pt]=Mostra as ramificações no projecto actual
 Comment[pt_BR]=Mostra as ramificações do projeto atual
+Comment[sv]=Visar grenarna i det aktuella projektet
 Comment[uk]=Показ гілок поточного проекту
 Comment[x-test]=xxDisplays the branches in the current projectxx
 Type=Service
