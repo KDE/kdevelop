@@ -1,19 +1,31 @@
 [General]
 Name=Widget with a UI File
+Name[es]=Widget con un archivo de interfaz gráfica
+Name[gl]=Widget cun ficheiro para UI
+Name[nl]=Widget met een UI-bestand
 Name[pt]=Item Gráfico com Ficheiro UI
 Name[pt_BR]=Widget com um arquivo UI
+Name[sv]=Grafisk komponent med en UI-fil
 Name[uk]=Віджет з файлом інтерфейсу користувача
 Name[x-test]=xxWidget with a UI Filexx
 Comment=QWidget subclass with a separate Qt Designer file
+Comment[es]=Subclase de QWidget con un archivo separado del Diseñador de Qt
+Comment[gl]=Subclase de QWidget cun ficheiro separado para Qt Designer
+Comment[nl]=Subklasse QWidget met een aparte Qt-designer bestand
 Comment[pt]=Uma sub-classe de QWidget com um ficheiro do Qt Designer separado
 Comment[pt_BR]=Subclasse de QWidget com um arquivo Qt Designer separado
+Comment[sv]=QWidget-delklass med en separat Qt Designer-fil
 Comment[uk]=Підклас QWidget з окремим файлом Qt Designer
 Comment[x-test]=xxQWidget subclass with a separate Qt Designer filexx
 Category=C++/Qt
 Language=C++
 Language[de]=C++
+Language[es]=C++
+Language[gl]=C++
+Language[nl]=C++
 Language[pt]=C++
 Language[pt_BR]=C++
+Language[sv]=C++
 Language[uk]=C++
 Language[x-test]=xxC++xx
 Type=Class
@@ -22,8 +34,12 @@ Files=Header,Implementation,UI
 
 [Header]
 Name=Public Header
+Name[es]=Cabecera pública
+Name[gl]=Cabeceira pública
+Name[nl]=Publieke kop
 Name[pt]=Inclusão Pública
 Name[pt_BR]=Inclusão pública
+Name[sv]=Public-deklaration
 Name[uk]=Відкрийти (public) заголовок
 Name[x-test]=xxPublic Headerxx
 File=class.h
@@ -31,10 +47,15 @@ OutputFile={{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[cs]=Implementace
 Name[de]=Implementation
+Name[es]=Implementación
 Name[fi]=Toteutus
+Name[gl]=Implementación
+Name[nl]=Implementatie
 Name[pt]=Implementação
 Name[pt_BR]=Implementação
+Name[sv]=Implementering
 Name[uk]=Реалізація
 Name[x-test]=xxImplementationxx
 File=class.cpp
@@ -43,8 +64,12 @@ OutputFile={{ name }}.cpp
 [UI]
 Name=User Interface
 Name[de]=Benutzerschnittstelle
+Name[es]=Interfaz de usuario
+Name[gl]=Interface de usuario
+Name[nl]=Gebruikersinterface
 Name[pt]=Interface do Utilizador
 Name[pt_BR]=Interface do usuário
+Name[sv]=Användargränssnitt
 Name[uk]=Інтерфейс користувача
 Name[x-test]=xxUser Interfacexx
 File=class.ui

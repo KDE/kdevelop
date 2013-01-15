@@ -1,20 +1,32 @@
 [General]
 Name=A test for KDevPlatform
 Name[de]=Ein Test für KDevPlatform
+Name[es]=Una prueba para KDevPlatform
+Name[gl]=Unha proba para KDevPlatform
+Name[nl]=Een test voor KDevPlatform
 Name[pt]=Um teste para o KDevPlatform
 Name[pt_BR]=Teste do KDevPlatform
+Name[sv]=En test för KDevPlatform
 Name[uk]=Перевірка для KDevPlatform
 Name[x-test]=xxA test for KDevPlatformxx
 Comment=A unit test using the QTest library with KDevPlatform test helpers
+Comment[es]=Una prueba unitaria que usa la biblioteca QTest con pruebas auxiliares de KDevPlatform
+Comment[gl]=Unha probas de unidades que emprega a biblioteca QTest con axudantes de probas para KDevPlatform
+Comment[nl]=Een test van een eenheid met gebruik van de QTest-bibliotheek met testhelpers van KDevPlatform
 Comment[pt]=Um teste unitário, que usa a biblioteca QTest, com os utilitários de testes do KDevPlatform
 Comment[pt_BR]=Teste unitário que usa a biblioteca QTest com os auxiliares de testes do KDevPlatform
+Comment[sv]=En enhetstest som använder biblioteket QTest med testhjälp från KDevPlatform
 Comment[uk]=Перевірка модулів за допомогою бібліотеки QTest з допоміжними програмами перевірки KDevPlatform
 Comment[x-test]=xxA unit test using the QTest library with KDevPlatform test helpersxx
 Category=C++/KDevelop
 Language=C++
 Language[de]=C++
+Language[es]=C++
+Language[gl]=C++
+Language[nl]=C++
 Language[pt]=C++
 Language[pt_BR]=C++
+Language[sv]=C++
 Language[uk]=C++
 Language[x-test]=xxC++xx
 Type=Test
@@ -22,8 +34,12 @@ Files=Header,Implementation
 
 [Header]
 Name=Header
+Name[es]=Cabecera
+Name[gl]=Cabeceira
+Name[nl]=Kop
 Name[pt]=Inclusão
 Name[pt_BR]=Inclusão
+Name[sv]=Deklaration
 Name[uk]=Заголовок
 Name[x-test]=xxHeaderxx
 File=class.h
@@ -31,10 +47,15 @@ OutputFile={{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[cs]=Implementace
 Name[de]=Implementation
+Name[es]=Implementación
 Name[fi]=Toteutus
+Name[gl]=Implementación
+Name[nl]=Implementatie
 Name[pt]=Implementação
 Name[pt_BR]=Implementação
+Name[sv]=Implementering
 Name[uk]=Реалізація
 Name[x-test]=xxImplementationxx
 File=class.cpp

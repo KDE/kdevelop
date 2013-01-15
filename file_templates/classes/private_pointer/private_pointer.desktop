@@ -1,19 +1,31 @@
 [General]
 Name=Private Pointer
+Name[es]=Puntero privado
+Name[gl]=Punteiro privado
+Name[nl]=Private pointer
 Name[pt]=Ponteiro Privado
 Name[pt_BR]=Ponteiro privado
+Name[sv]=Privat pekare
 Name[uk]=Закритий (private) вказівник
 Name[x-test]=xxPrivate Pointerxx
 Comment=C++ Class with a private D-pointer
+Comment[es]=Clase de C++ con un puntero D privado
+Comment[gl]=Clase para C++ cun punteiro D privado
+Comment[nl]=C++ klasse met een private D-pointer
 Comment[pt]=Uma classe de C++ com um ponteiro-D privado
 Comment[pt_BR]=Classe em C++ com um ponteiro-D privado
+Comment[sv]=C++ klass med en privat D-pekare
 Comment[uk]=Клас C++ з закритим (private) D-вказівником
 Comment[x-test]=xxC++ Class with a private D-pointerxx
 Category=C++/Basic
 Language=C++
 Language[de]=C++
+Language[es]=C++
+Language[gl]=C++
+Language[nl]=C++
 Language[pt]=C++
 Language[pt_BR]=C++
+Language[sv]=C++
 Language[uk]=C++
 Language[x-test]=xxC++xx
 Type=Class
@@ -22,8 +34,12 @@ OptionsFile=options.kcfg
 
 [Header]
 Name=Public Header
+Name[es]=Cabecera pública
+Name[gl]=Cabeceira pública
+Name[nl]=Publieke kop
 Name[pt]=Inclusão Pública
 Name[pt_BR]=Inclusão pública
+Name[sv]=Public-deklaration
 Name[uk]=Відкрийти (public) заголовок
 Name[x-test]=xxPublic Headerxx
 File=class.h
@@ -31,8 +47,12 @@ OutputFile={{ name }}.h
 
 [PrivateHeader]
 Name=Private Header
+Name[es]=Cabecera privada
+Name[gl]=Cabeceira privada
+Name[nl]=Private kop
 Name[pt]=Inclusão Privada
 Name[pt_BR]=Inclusão privada
+Name[sv]=Privat deklaration
 Name[uk]=Закритий (private) заголовок
 Name[x-test]=xxPrivate Headerxx
 File=class_p.h
@@ -40,10 +60,15 @@ OutputFile={{ name }}_p.h
 
 [Implementation]
 Name=Implementation
+Name[cs]=Implementace
 Name[de]=Implementation
+Name[es]=Implementación
 Name[fi]=Toteutus
+Name[gl]=Implementación
+Name[nl]=Implementatie
 Name[pt]=Implementação
 Name[pt_BR]=Implementação
+Name[sv]=Implementering
 Name[uk]=Реалізація
 Name[x-test]=xxImplementationxx
 File=class.cpp

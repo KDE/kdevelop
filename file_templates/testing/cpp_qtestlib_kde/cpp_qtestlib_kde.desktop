@@ -1,19 +1,31 @@
 [General]
 Name=QTestLib with KDE
+Name[es]=QTestLib con KDE
+Name[gl]=QTestLib con KDE
+Name[nl]=QTestLib met KDE
 Name[pt]=QTestLib com o KDE
 Name[pt_BR]=QTestLib com o KDE
+Name[sv]=QTest-bibliotek med KDE
 Name[uk]=QTestLib з KDE
 Name[x-test]=xxQTestLib with KDExx
 Comment=A unit test using the QTest library with KDE extensions
+Comment[es]=Una prueba unitaria que usa la biblioteca QTest con extensiones de KDE
+Comment[gl]=Unha probas de unidades que emprega a biblioteca QTest con extensións para KDE
+Comment[nl]=Een test van een eenheid met gebruik van de QTest-bibliotheek met KDE-extensies
 Comment[pt]=Um teste unitário, que usa a biblioteca QTest, com as extensões do KDE
 Comment[pt_BR]=Teste unitário que usa a biblioteca QTest com as extensões do KDE
+Comment[sv]=En enhetstest som använder QTest-biblioteket med KDE-utökningar
 Comment[uk]=Перевірка модулів за допомогою бібліотеки QTest з розширеннями KDE
 Comment[x-test]=xxA unit test using the QTest library with KDE extensionsxx
 Category=C++/KDE
 Language=C++
 Language[de]=C++
+Language[es]=C++
+Language[gl]=C++
+Language[nl]=C++
 Language[pt]=C++
 Language[pt_BR]=C++
+Language[sv]=C++
 Language[uk]=C++
 Language[x-test]=xxC++xx
 Type=Test
@@ -21,8 +33,12 @@ Files=Header,Implementation
 
 [Header]
 Name=Header
+Name[es]=Cabecera
+Name[gl]=Cabeceira
+Name[nl]=Kop
 Name[pt]=Inclusão
 Name[pt_BR]=Inclusão
+Name[sv]=Deklaration
 Name[uk]=Заголовок
 Name[x-test]=xxHeaderxx
 File=class.h
@@ -30,10 +46,15 @@ OutputFile={{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[cs]=Implementace
 Name[de]=Implementation
+Name[es]=Implementación
 Name[fi]=Toteutus
+Name[gl]=Implementación
+Name[nl]=Implementatie
 Name[pt]=Implementação
 Name[pt_BR]=Implementação
+Name[sv]=Implementering
 Name[uk]=Реалізація
 Name[x-test]=xxImplementationxx
 File=class.cpp

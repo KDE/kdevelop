@@ -1,19 +1,31 @@
 [General]
 Name=GObject with properties
+Name[es]=GObject con propiedades
+Name[gl]=GObject con propiedades
+Name[nl]=GObject met eigenschappen
 Name[pt]=GObject com propriedades
 Name[pt_BR]=GObject com propriedades
+Name[sv]=GObject med egenskaper
 Name[uk]=GObject із властивостями
 Name[x-test]=xxGObject with propertiesxx
 Comment=A GObject subclass with a private pointer and properties
+Comment[es]=Una subclase de GObject con un puntero privado y propiedades
+Comment[gl]=Unha subclase de GObject cun punteiro privado e propiedades
+Comment[nl]=Een subklasse GObject met een private pointer en eigenschappen
 Comment[pt]=Uma sub-classe de GObject com um ponteiro privado e propriedades
 Comment[pt_BR]=Subclasse de GObject com um ponteiro privado e com propriedades
+Comment[sv]=En GObject-delklass med en privat pekare och egenskaper
 Comment[uk]=Підклас GObject з закритим (private) вказівником і властивостями
 Comment[x-test]=xxA GObject subclass with a private pointer and propertiesxx
 Category=C/GLib
 Language=C
 Language[de]=C
+Language[es]=C
+Language[gl]=C
+Language[nl]=C
 Language[pt]=C
 Language[pt_BR]=C
+Language[sv]=C
 Language[uk]=C
 Language[x-test]=xxCxx
 Type=Class
@@ -21,8 +33,12 @@ Files=Header,Implementation
 
 [Header]
 Name=Header
+Name[es]=Cabecera
+Name[gl]=Cabeceira
+Name[nl]=Kop
 Name[pt]=Inclusão
 Name[pt_BR]=Inclusão
+Name[sv]=Deklaration
 Name[uk]=Заголовок
 Name[x-test]=xxHeaderxx
 File=class.h
@@ -30,10 +46,15 @@ OutputFile={% for ns in namespaces %}{{ ns }}_{% endfor %}{{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[cs]=Implementace
 Name[de]=Implementation
+Name[es]=Implementación
 Name[fi]=Toteutus
+Name[gl]=Implementación
+Name[nl]=Implementatie
 Name[pt]=Implementação
 Name[pt_BR]=Implementação
+Name[sv]=Implementering
 Name[uk]=Реалізація
 Name[x-test]=xxImplementationxx
 File=class.c

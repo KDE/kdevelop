@@ -1,19 +1,31 @@
 [General]
 Name=Test Suite
+Name[es]=Suite de pruebas
+Name[gl]=Suite de probas
+Name[nl]=Testsuite
 Name[pt]=Conjunto de Testes
 Name[pt_BR]=Conjunto de testes
+Name[sv]=Testsvit
 Name[uk]=Комплекс для перевірки
 Name[x-test]=xxTest Suitexx
 Comment=A unit test suite using the QTest library without a graphical user interface
+Comment[es]=Una suite de pruebas unitarias que usa la biblioteca QTest sin una interfaz gráfica de usuario
+Comment[gl]=Unha suite de probas de unidades que emprega a biblioteca QTest sen interface gráfica de usuario
+Comment[nl]=Een testsuite van een eenheid met gebruik van de QTest-bibliotheek zonder een grafisch gebruikersinterface
 Comment[pt]=Um conjunto de testes unitários, que usa a biblioteca QTest, sem qualquer interface gráfica
 Comment[pt_BR]=Conjunto de testes unitário que usa a biblioteca QTest sem uma interface gráfica do usuário
+Comment[sv]=En enhetstestsvit som använder QTest-biblioteket utan grafiskt gränssnitt
 Comment[uk]=Комплекс для перевірки модулів за допомогою бібліотеки QTest без графічного інтерфейсу користувача
 Comment[x-test]=xxA unit test suite using the QTest library without a graphical user interfacexx
 Category=C++/Qt
 Language=C++
 Language[de]=C++
+Language[es]=C++
+Language[gl]=C++
+Language[nl]=C++
 Language[pt]=C++
 Language[pt_BR]=C++
+Language[sv]=C++
 Language[uk]=C++
 Language[x-test]=xxC++xx
 Type=Test
@@ -21,8 +33,12 @@ Files=Header,Implementation
 
 [Header]
 Name=Header
+Name[es]=Cabecera
+Name[gl]=Cabeceira
+Name[nl]=Kop
 Name[pt]=Inclusão
 Name[pt_BR]=Inclusão
+Name[sv]=Deklaration
 Name[uk]=Заголовок
 Name[x-test]=xxHeaderxx
 File=class.h
@@ -30,10 +46,15 @@ OutputFile={{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[cs]=Implementace
 Name[de]=Implementation
+Name[es]=Implementación
 Name[fi]=Toteutus
+Name[gl]=Implementación
+Name[nl]=Implementatie
 Name[pt]=Implementação
 Name[pt_BR]=Implementação
+Name[sv]=Implementering
 Name[uk]=Реалізація
 Name[x-test]=xxImplementationxx
 File=class.cpp

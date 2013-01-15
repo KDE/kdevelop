@@ -1,19 +1,31 @@
 [General]
 Name=Basic
+Name[es]=Básica
+Name[gl]=Básico
+Name[nl]=Basis
 Name[pt]=Básico
 Name[pt_BR]=Básico
+Name[sv]=Enkel
 Name[uk]=Базовий
 Name[x-test]=xxBasicxx
 Comment=Basic C++ Class
+Comment[es]=Clase de C++ básica
+Comment[gl]=Clase básica para C++
+Comment[nl]=Basis C++ klasse
 Comment[pt]=Classe Básica de C++
 Comment[pt_BR]=Classe básica em C++
+Comment[sv]=Enkel C++ klass
 Comment[uk]=Базовий клас C++
 Comment[x-test]=xxBasic C++ Classxx
 Category=C++/Basic
 Language=C++
 Language[de]=C++
+Language[es]=C++
+Language[gl]=C++
+Language[nl]=C++
 Language[pt]=C++
 Language[pt_BR]=C++
+Language[sv]=C++
 Language[uk]=C++
 Language[x-test]=xxC++xx
 Type=Class
@@ -21,8 +33,12 @@ Files=Header,Implementation
 
 [Header]
 Name=Header
+Name[es]=Cabecera
+Name[gl]=Cabeceira
+Name[nl]=Kop
 Name[pt]=Inclusão
 Name[pt_BR]=Inclusão
+Name[sv]=Deklaration
 Name[uk]=Заголовок
 Name[x-test]=xxHeaderxx
 File=class.h
@@ -30,10 +46,15 @@ OutputFile={{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[cs]=Implementace
 Name[de]=Implementation
+Name[es]=Implementación
 Name[fi]=Toteutus
+Name[gl]=Implementación
+Name[nl]=Implementatie
 Name[pt]=Implementação
 Name[pt_BR]=Implementação
+Name[sv]=Implementering
 Name[uk]=Реалізація
 Name[x-test]=xxImplementationxx
 File=class.cpp
