@@ -307,6 +307,15 @@ void TestCppAssistants::testSignatureAssistant_data()
        )
     << "class Foo {\nint bar(char* b, int a, int c = 10); \n};"
     << "int Foo::bar(char* b, int a, int c)\n{ a = c; b = new char; return a + *b; }";
+
+  // see https://bugs.kde.org/show_bug.cgi?id=299393
+  // actually related to the whitespaces in the header...
+  QTest::newRow("Change Function Constness")
+    << "class Foo {\nvoid bar( const Foo& ) const;\n};"
+    << "void Foo::bar(const Foo&) const\n{}"
+    << (QList<StateChange>() << StateChange(Testbed::CppDoc, Range(0,25,0,31), "", SHOULD_ASSIST))
+    << "class Foo {\nvoid bar( const Foo& );\n};"
+    << "void Foo::bar(const Foo&)\n{}";
 }
 
 void TestCppAssistants::testSignatureAssistant()
