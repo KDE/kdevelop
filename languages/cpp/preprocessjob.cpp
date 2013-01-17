@@ -126,7 +126,7 @@ void PreprocessJob::run()
 
     //kDebug(9007) << "Started pp job" << this << "parse" << parentJob()->parseJob() << "parent" << parentJob();
 
-    kDebug(9007) << "PreprocessJob: preprocessing" << parentJob()->document().str();
+    kDebug(9007) << "PreprocessJob: preprocessing" << parentJob()->document();
     if( parentJob()->parentPreprocessor() )
       kDebug(9007) << "PARENT:" << parentJob()->parentPreprocessor()->parentJob()->document().toUrl();
 
@@ -179,7 +179,7 @@ void PreprocessJob::run()
           bool fileFeaturesSatisfied = updatingEnvironmentFile->featuresSatisfied(parentJob()->minimumFeatures());
           bool slaveFeaturesSatisfied = updatingEnvironmentFile->featuresSatisfied(parentJob()->slaveMinimumFeatures());
           if(fileFeaturesSatisfied && slaveFeaturesSatisfied) {
-            KUrl localPath(parentJob()->document().toUrl());
+            KUrl localPath = parentJob()->document().toUrl();
             localPath.setFileName(QString());
             Cpp::EnvironmentFile* cppEnv = dynamic_cast<Cpp::EnvironmentFile*>(updatingEnvironmentFile.data());
             Q_ASSERT(cppEnv);
@@ -187,7 +187,7 @@ void PreprocessJob::run()
             bool needsUpdate = cppEnv->needsUpdate();
               if(!cppEnv->missingIncludeFiles().isEmpty() && !needsUpdate) {
                 for(Cpp::ReferenceCountedStringSet::Iterator it = cppEnv->missingIncludeFiles().iterator(); it; ++it)
-                  kDebug(9007) << updatingEnvironmentFile->url().str() << "has missing include:" << (*it).str();
+                  kDebug(9007) << updatingEnvironmentFile->url() << "has missing include:" << (*it);
                 
                 readLock.unlock();
                 KUrl::List includePaths = parentJob()->includePathUrls();
@@ -241,7 +241,7 @@ void PreprocessJob::run()
     
     preprocessor.setEnvironment( m_currentEnvironment );
 
-    PreprocessedContents result = preprocessor.processFile(parentJob()->document().str(), m_contents);
+    PreprocessedContents result = preprocessor.processFile(parentJob()->document().toString(), m_contents);
 
     if(Cpp::EnvironmentManager::self()->matchingLevel() <= Cpp::EnvironmentManager::Naive && !m_headerSectionEnded && !m_firstEnvironmentFile->headerGuard().isEmpty()) {
       if(macroNamesAtBeginning.contains(m_firstEnvironmentFile->headerGuard())) {
@@ -250,12 +250,12 @@ void PreprocessJob::run()
         kDebug() << "Re-processing header with the header-guard disabled";
         delete m_currentEnvironment->takeLocationTable();
         m_currentEnvironment->removeMacro(m_firstEnvironmentFile->headerGuard());
-        result = preprocessor.processFile(parentJob()->document().str(), m_contents);
+        result = preprocessor.processFile(parentJob()->document().toString(), m_contents);
       }
     }
     
     if(!m_headerSectionEnded) {
-      ifDebug( kDebug(9007) << parentJob()->document().str() << ": header-section was not ended"; )
+      ifDebug( kDebug(9007) << parentJob()->document() << ": header-section was not ended"; )
       headerSectionEndedInternal(0);
     }
     
@@ -286,7 +286,7 @@ void PreprocessJob::run()
     }
     
     if( m_secondEnvironmentFile ) {
-        //kDebug(9008) << parentJob()->document().str() << "Merging content-environment file into header environment-file";
+        //kDebug(9008) << parentJob()->document() << "Merging content-environment file into header environment-file";
         KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
         m_firstEnvironmentFile->merge(*m_secondEnvironmentFile);
         parentJob()->setContentEnvironmentFile(m_secondEnvironmentFile.data());
@@ -301,10 +301,10 @@ void PreprocessJob::run()
     }else{
 /*        kDebug(9007) << "Macros:";
         for( rpp::Environment::EnvironmentMap::const_iterator it = m_currentEnvironment->environment().begin(); it != m_currentEnvironment->environment().end(); ++it ) {
-            kDebug(9007) << (*it)->name.str() << "                  from: " << (*it)->file << ":" << (*it)->sourceLine;
+            kDebug(9007) << (*it)->name << "                  from: " << (*it)->file << ":" << (*it)->sourceLine;
         }*/
     }
-    ifDebug( kDebug(9007) << "PreprocessJob: finished" << parentJob()->document().str(); )
+    ifDebug( kDebug(9007) << "PreprocessJob: finished" << parentJob()->document(); )
 
     m_pp = 0;
     m_currentEnvironment = 0; //Was given to the pp-engine, and will be destroyed by that
@@ -320,7 +320,7 @@ void PreprocessJob::headerSectionEndedInternal(rpp::Stream* stream)
     bool closeStream = false;
     m_headerSectionEnded = true;
 
-    ifDebug( kDebug(9007) << parentJob()->document().str() << "PreprocessJob::headerSectionEnded, " << parentJob()->includedFiles().count() << " included in header-section" << "upcoming identity-offset:" << m_pp->branchingHash()*19; )
+    ifDebug( kDebug(9007) << parentJob()->document() << "PreprocessJob::headerSectionEnded, " << parentJob()->includedFiles().count() << " included in header-section" << "upcoming identity-offset:" << m_pp->branchingHash()*19; )
     
     if( m_secondEnvironmentFile ) {
         m_secondEnvironmentFile->setIdentityOffset(m_pp->branchingHash()*19);
@@ -352,7 +352,7 @@ void PreprocessJob::headerSectionEndedInternal(rpp::Stream* stream)
 
         if(content && content->parsingEnvironmentFile()->isProxyContext())
         {
-          kWarning() << "Got proxy-context as content-context for file" << content->url().str() << ", not updating";
+          kWarning() << "Got proxy-context as content-context for file" << content->url() << ", not updating";
           content = KDevelop::ReferencedTopDUContext();
         }
         
@@ -366,7 +366,7 @@ void PreprocessJob::headerSectionEndedInternal(rpp::Stream* stream)
             Q_ASSERT(m_updatingEnvironmentFile || contentEnvironment->identityOffset() == m_secondEnvironmentFile->identityOffset());            
 
             ///@todo think whether localPath is needed
-            KUrl localPath(parentJob()->document().str());
+            KUrl localPath = parentJob()->document().toUrl();
             localPath.setFileName(QString());
             
             if(contentEnvironment->matchEnvironment(m_currentEnvironment) && !CppUtils::needsUpdate(contentEnvironment, localPath, parentJob()->includePathUrls()) && (!parentJob()->masterJob()->needUpdateEverything() || parentJob()->masterJob()->wasUpdated(content)) && (content->parsingEnvironmentFile()->featuresSatisfied(parentJob()->minimumFeatures()) && content->parsingEnvironmentFile()->featuresSatisfied(parentJob()->slaveMinimumFeatures())) 
@@ -418,7 +418,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
         job = job->parentPreprocessor()->parentJob();
       }
       if(currentDepth > maxIncludeDepth) {
-        kDebug(9007) << "maximum depth reached while including" << _fileName << "into" << parentJob()->document().str();
+        kDebug(9007) << "maximum depth reached while including" << _fileName << "into" << parentJob()->document();
         return 0;
       }
     }
@@ -431,9 +431,9 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
     if (checkAbort())
         return 0;
 
-    ifDebug( kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << ": searching for include" << fileName; )
+    ifDebug( kDebug(9007) << "PreprocessJob" << parentJob()->document() << ": searching for include" << fileName; )
 
-    KUrl localPath(parentJob()->document().str());
+    KUrl localPath = parentJob()->document().toUrl();
     localPath.setFileName(QString());
     QStack<DocumentCursor> includeStack = parentJob()->includeStack();
 
@@ -466,7 +466,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
           }
         }
       
-        ifDebug( kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << "(" << m_currentEnvironment->environment().size() << "macros)" << ": found include-file" << fileName << ":" << includedFile; )
+        ifDebug( kDebug(9007) << "PreprocessJob" << parentJob()->document() << "(" << m_currentEnvironment->environment().size() << "macros)" << ": found include-file" << fileName << ":" << includedFile; )
 
         KDevelop::ReferencedTopDUContext includedContext;
         bool updateNeeded = false;
@@ -533,7 +533,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
         }
 
         if( includedContext && (updateForbidden || (!updateNeeded && (!parentJob()->masterJob()->needUpdateEverything() || parentJob()->masterJob()->wasUpdated(includedContext)))) ) {
-            ifDebug( kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << ": took included file from the du-chain" << fileName; )
+            ifDebug( kDebug(9007) << "PreprocessJob" << parentJob()->document() << ": took included file from the du-chain" << fileName; )
 
             KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
             parentJob()->addIncludedFile(includedContext, sourceLine);
@@ -541,17 +541,17 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
             Cpp::EnvironmentFile* environmentFile = dynamic_cast<Cpp::EnvironmentFile*> (file.data());
             if( environmentFile ) {
                 m_currentEnvironment->merge( environmentFile, true );
-                ifDebug( kDebug() << "PreprocessJob" << parentJob()->document().str() << "Merging included file into environment-file"; )
+                ifDebug( kDebug() << "PreprocessJob" << parentJob()->document() << "Merging included file into environment-file"; )
             } else {
                 ifDebug( kDebug(9007) << "preprocessjob: included file" << includedFile << "found in du-chain, but it has no parse-environment information, or it was not parsed by c++ support"; )
             }
         } else {
             if(updateNeeded)
-              kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << ": need to update" << includedFile;
+              kDebug(9007) << "PreprocessJob" << parentJob()->document() << ": need to update" << includedFile;
             else if(parentJob()->masterJob()->needUpdateEverything() && includedContext)
-              kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << ": needUpateEverything, updating" << includedFile;
+              kDebug(9007) << "PreprocessJob" << parentJob()->document() << ": needUpateEverything, updating" << includedFile;
             else
-              kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << ": no fitting entry for" << includedFile << "in du-chain, parsing";
+              kDebug(9007) << "PreprocessJob" << parentJob()->document() << ": no fitting entry for" << includedFile << "in du-chain, parsing";
 
 /*            if( updateNeeded && !parentJob()->masterJob()->needUpdateEverything() ) {
               //When a new include-file was found, that can influence not found declarations in all following encountered contexts, so they all need updating.
@@ -586,7 +586,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
               kDebug(9007) << "parse-job for" << includedFile << "did not return a top-context";
             delete slaveJob;
         }
-        ifDebug( kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << "(" << m_currentEnvironment->environment().size() << "macros)" << ": file included"; )
+        ifDebug( kDebug(9007) << "PreprocessJob" << parentJob()->document() << "(" << m_currentEnvironment->environment().size() << "macros)" << ": file included"; )
     
         {
           DUChainReadLocker lock(DUChain::lock());
@@ -599,7 +599,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
         }
     
     } else {
-        kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << ": include not found:" << fileName;
+        kDebug(9007) << "PreprocessJob" << parentJob()->document() << ": include not found:" << fileName;
         KDevelop::ProblemPointer p(new Problem()); ///@todo create special include-problem
         p->setSource(KDevelop::ProblemData::Preprocessor);
         p->setDescription(i18n("Included file was not found: %1", fileName ));
@@ -663,7 +663,7 @@ bool PreprocessJob::readContents()
   m_contents = parentJob()->contents().contents;
     
     ifDebug( kDebug( 9007 ) << "===-- PREPROCESSING --===> "
-    << parentJob()->document().str()
+    << parentJob()->document()
     << endl; )
     
     return true;

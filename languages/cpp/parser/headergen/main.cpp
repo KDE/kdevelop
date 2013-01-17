@@ -205,7 +205,7 @@ void visitBlock(rpp::MacroBlock* block, int indent = 0, bool elseBlock = false)
     kDebug(9007) << QString(indent * 2, QChar(' ')) << "Block, condition" << (elseBlock ? " else" : "") << "[" << block->condition << "]";
 
   foreach (rpp::pp_macro* macro, block->macros)
-    kDebug(9007) << QString((indent + 1) * 2, QChar(' ')) << "Macro" << macro->name.str() << ", defined" << macro->defined;
+    kDebug(9007) << QString((indent + 1) * 2, QChar(' ')) << "Macro" << macro->name << ", defined" << macro->defined;
 
   foreach (rpp::MacroBlock* child, block->childBlocks)
     visitBlock(child, indent);
@@ -226,7 +226,7 @@ public:
 
   virtual void setMacro(rpp::pp_macro* macro)
   {
-//     if (macro->name.str() == "KDE_EXPORT" || macro->name.str() == "KJS_EXPORT") {
+//     if (macro->name.toString() == "KDE_EXPORT" || macro->name.toString() == "KJS_EXPORT") {
 //       // Exploit that the parser understands the windows declaration spec stuff
 //       macro->definition = tokenizeFromByteArray("__declspec(dllexport)");
 //     }
@@ -433,7 +433,7 @@ void printMacros(rpp::Environment* environment)
 {
   kDebug(9007) << "Macros for environment:";
   foreach (rpp::pp_macro* macro, environment->allMacros())
-    kDebug(9007) << "Macro [" << macro->name.str() << "]" << (macro->defined ? " [" : "undefined") << QString::fromUtf8(stringFromContents(macro->definition(), macro->definitionSize())) << (macro->defined ? "]" : "");
+    kDebug(9007) << "Macro [" << macro->name << "]" << (macro->defined ? " [" : "undefined") << QString::fromUtf8(stringFromContents(macro->definition(), macro->definitionSize())) << (macro->defined ? "]" : "");
 }
 
 void HeaderGenerator::run()

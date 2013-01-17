@@ -53,7 +53,7 @@ void CodeGenerator::outputToken(uint tokenPosition)
     m_output << m_session->token_stream->symbolString(t);
 
     /* if (t.kind == Token_identifier || t.kind == Token_string_literal || t.kind == Token_number_literal || t.kind == Token_char_literal)
-      m_output << t.symbolString().str();
+      m_output << t.symbolString().toString();
     else
       m_output << token_text( t.kind );*/
   }

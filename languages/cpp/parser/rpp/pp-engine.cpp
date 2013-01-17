@@ -499,7 +499,7 @@ Value pp::eval_primary(Stream& input)
         problem->setFinalLocation(KDevelop::DocumentRange(currentFileName(), KDevelop::SimpleRange(input.originalInputPosition().castToSimpleCursor(), 1)));
         QChar tk(token);
         problem->setDescription(i18n("Expected \"identifier\", found: %1", (tk < TOKENS_END && tk > TOKENS_START) ? QString(tk) : i18n("character %1", token)));
-        problem->setExplanation(i18n("<h5>Token text</h5><pre>%1</pre><h5>Input</h5><pre>%2</pre>", token_text.str(), input.stringFrom(start)));
+        problem->setExplanation(i18n("<h5>Token text</h5><pre>%1</pre><h5>Input</h5><pre>%2</pre>", token_text.toString(), input.stringFrom(start)));
         problemEncountered(problem);
         break;
       }
@@ -517,7 +517,7 @@ Value pp::eval_primary(Stream& input)
           problem->setFinalLocation(KDevelop::DocumentRange(currentFileName(), KDevelop::SimpleRange(input.originalInputPosition().castToSimpleCursor(), 0)));
           QChar tk(token);
           problem->setDescription(i18n("Expected \")\", found %1", tk.isLetterOrNumber() ? QString(tk) : i18n("character %1", token)));
-          problem->setExplanation(i18n("<h5>Token text</h5><pre>%1</pre><h5>Input</h5><pre>%2</pre>", token_text.str(), input.stringFrom(start)));
+          problem->setExplanation(i18n("<h5>Token text</h5><pre>%1</pre><h5>Input</h5><pre>%2</pre>", token_text.toString(), input.stringFrom(start)));
           problemEncountered(problem);
         } else {
           accept_token();
@@ -553,7 +553,7 @@ Value pp::eval_primary(Stream& input)
         problem->setFinalLocation(KDevelop::DocumentRange(currentFileName(), KDevelop::SimpleRange(input.originalInputPosition().castToSimpleCursor(), 1)));
         QChar tk(token);
         problem->setDescription(i18n("Expected \")\", found %1", tk.isLetterOrNumber() ? QString(tk) : i18n("character %1", token)));
-        problem->setExplanation(i18n("<h5>Token text</h5><pre>%1</pre><h5>Input</h5><pre>%2</pre>", token_text.str(), input.stringFrom(start)));
+        problem->setExplanation(i18n("<h5>Token text</h5><pre>%1</pre><h5>Input</h5><pre>%2</pre>", token_text.toString(), input.stringFrom(start)));
         problemEncountered(problem);
       } else {
         accept_token();

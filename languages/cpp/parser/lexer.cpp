@@ -78,7 +78,7 @@ uint TokenStream::symbolLength(const Token& t) const
 
 QString Lexer::SpecialCursor::toString() const
 {
-  return KDevelop::IndexedString::fromIndex(*current).str();
+  return KDevelop::IndexedString::fromIndex(*current).toString();
 }
 
 /**
@@ -1103,7 +1103,7 @@ void Lexer::scan_EOF()
 void Lexer::scan_invalid_input()
 {
   KDevelop::ProblemPointer p = createProblem();
-  p->setDescription(i18n("invalid input: %1", KDevelop::IndexedString::fromIndex(*cursor.current).str()));
+  p->setDescription(i18n("invalid input: %1", KDevelop::IndexedString::fromIndex(*cursor.current).toString()));
   control->reportProblem(p);
 
   ++cursor;
