@@ -4025,7 +4025,8 @@ bool Parser::parseDeclarationInternal(DeclarationAST *&node)
       if (!hasFunSpec)
         parseFunctionSpecifier(funSpec);         // e.g. "void inline"
 
-      spec->cv = cv;
+      if (cv)
+        spec->cv = cv;
 
       int startDeclarator = session->token_stream->cursor();
       if (parseFunctionDefinitionInternal(node, start, winDeclSpec, storageSpec, funSpec, spec))
