@@ -26,6 +26,7 @@
 #include "language/duchain/abstractfunctiondeclaration.h"
 #include "language/duchain/types/typeutils.h"
 #include "language/duchain/types/identifiedtype.h"
+#include <language/duchain/types/functiontype.h>
 #include "language/duchain/duchain.h"
 #include "language/duchain/functiondefinition.h"
 #include "language/duchain/definitions.h"
@@ -128,6 +129,17 @@ DeclarationTest(unaliasedType)
 DeclarationTest(targetType)
 {
   return testObject(TypeUtils::targetType(decl->abstractType(), decl->topContext()), value, "Declaration's target type");
+}
+///JSON type: TestTypeObject
+///@returns the
+DeclarationTest(returnType)
+{
+  FunctionType::Ptr functionType = decl->abstractType().cast<FunctionType>();
+  AbstractType::Ptr returnType;
+  if (functionType) {
+    returnType = functionType->returnType();
+  }
+  return testObject(returnType, value, "Declaration's return type");
 }
 ///JSON type: string
 ///@returns whether the declaration's type's declaration can be identified and if it's qualified identifier matches the given value
