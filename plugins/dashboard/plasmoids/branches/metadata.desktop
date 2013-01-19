@@ -1,7 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Project Branches
+Name[ca]=Branques de projecte
 Name[cs]=Větve projektu
+Name[el]=Κλάδοι έργου
 Name[es]=Ramas del proyecto
 Name[fi]=Projektin haarat
 Name[gl]=Xestor de gallas
@@ -12,6 +14,8 @@ Name[sv]=Projektgrenar
 Name[uk]=Гілки проекту
 Name[x-test]=xxProject Branchesxx
 Comment=Displays the branches in the current project
+Comment[ca]=Mostra les branques en el projecte actual
+Comment[el]=Εμφανίζει τους κλάδους στο τρέχον έργο
 Comment[es]=Muestra las ramas del proyecto actual
 Comment[fi]=Näyttää nykyisen projektin haarat
 Comment[gl]=Mostra as gallas do proxecto actual
