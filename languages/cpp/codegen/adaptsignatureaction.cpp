@@ -137,28 +137,36 @@ void AdaptSignatureAction::execute() {
   DocumentChange changeParameters(functionContext->url(), functionContext->rangeInCurrentRevision(), QString(), makeSignatureString(m_newSignature, m_otherSideTopContext.data()));
   changeParameters.m_ignoreOldText = true;
   changes.addChange( changeParameters );
+  CodeRepresentation::Ptr document = createCodeRepresentation(functionContext->url());
+  const int l = functionContext->range().start.line;
+  const QString line = document->line(l);
   if (m_oldSignature.isConst != m_newSignature.isConst) {
     ///TODO: also use code representation here
+    QRegExp pattern( QLatin1String("\\)\\s*") );
     RangeInRevision range = functionContext->range();
     // go after closing paren
-    range.end.column++;
-    // start == end (default when not const before)
-    range.start = range.end;
-    QString oldText;
-    QString newText;
-    if (m_oldSignature.isConst) {
-      range.end.column += 6;
-      oldText = " const";
-    } else {
-      newText = " const";
+    int i = line.indexOf(pattern, range.end.column);
+    if (i != -1) {
+      range.start.column = i;
+      // we replace the full regexp match
+      QString oldText = pattern.cap();
+      range.end.column = i + oldText.length();
+      // by the trimmed version (whitespaces are added below as neede)
+      QString newText = pattern.cap().trimmed();
+
+      if (m_oldSignature.isConst) {
+        // remove const token
+        oldText += "const";
+        range.end.column += 5;
+      } else {
+        // add it
+        newText += " const";
+      }
+      DocumentChange changeConstness(functionContext->url(), range.castToSimpleRange(), oldText, newText);
+      changes.addChange(changeConstness);
     }
-    DocumentChange changeConstness(functionContext->url(), range.castToSimpleRange(), oldText, newText);
-    changes.addChange(changeConstness);
   }
   if (m_oldSignature.returnType != m_newSignature.returnType) {
-    CodeRepresentation::Ptr document = createCodeRepresentation(functionContext->url());
-    int l = functionContext->range().start.line;
-    QString line = document->line(l);
     QRegExp exe( QString("^(\\s*)(.+)\\s+(?:\\w+::)*\\b%1\\s*\\(").arg(otherSide->identifier().toString()), Qt::CaseSensitive, QRegExp::RegExp2 );
     int pos = exe.indexIn(line);
     if (pos != -1) {

@@ -372,6 +372,9 @@ bool changesWidgetAddFolder(const KUrl &folderUrl, const CMakeFolderItem *toFold
 bool changesWidgetMoveTargetFile(const ProjectBaseItem *file, const KUrl &newUrl, ApplyChangesWidget *widget)
 {
     const DescriptorAttatched *desc = dynamic_cast<const DescriptorAttatched*>(file->parent());
+    if (!desc || desc->descriptor().arguments.isEmpty()) {
+        return false;
+    }
     RangeInRevision targetRange(desc->descriptor().arguments.first().range().end, desc->descriptor().argRange().end);
     QString listsPath = desc->descriptor().filePath;
     QString newRelative = relativeToLists(listsPath, newUrl);
@@ -383,6 +386,9 @@ bool changesWidgetMoveTargetFile(const ProjectBaseItem *file, const KUrl &newUrl
 bool changesWidgetAddFileToTarget(const ProjectFileItem *item, const ProjectTargetItem *target, ApplyChangesWidget *widget)
 {
     const DescriptorAttatched *desc = dynamic_cast<const DescriptorAttatched*>(target);
+    if (!desc || desc->descriptor().arguments.isEmpty()) {
+        return false;
+    }
     RangeInRevision targetRange(desc->descriptor().arguments.first().range().end, desc->descriptor().range().end);
     QString lists = desc->descriptor().filePath;
     QString relative = relativeToLists(lists, item->url());
@@ -393,6 +399,9 @@ bool changesWidgetAddFileToTarget(const ProjectFileItem *item, const ProjectTarg
 bool changesWidgetRemoveFileFromTarget(const ProjectBaseItem *item, ApplyChangesWidget *widget)
 {
     const DescriptorAttatched *desc = dynamic_cast<const DescriptorAttatched*>(item->parent());
+    if (!desc || desc->descriptor().arguments.isEmpty()) {
+        return false;
+    }
     RangeInRevision targetRange(desc->descriptor().arguments.first().range().end, desc->descriptor().range().end);
     QString lists = desc->descriptor().filePath;
     QString relative = relativeToLists(lists, item->url());
