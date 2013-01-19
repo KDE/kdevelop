@@ -246,9 +246,11 @@ void VcsPluginHelper::revert()
     foreach(const KUrl& url, d->ctxUrls) {
         IDocument* doc=ICore::self()->documentController()->documentForUrl(url);
         
-        if(doc) {
-            KTextEditor::ModificationInterface* modif=dynamic_cast<KTextEditor::ModificationInterface*>(doc->textDocument());
-            modif->setModifiedOnDiskWarning(false);
+        if(doc && doc->textDocument()) {
+            KTextEditor::ModificationInterface* modif = dynamic_cast<KTextEditor::ModificationInterface*>(doc->textDocument());
+            if (modif) {
+                modif->setModifiedOnDiskWarning(false);
+            }
             doc->textDocument()->setModified(false);
         }
     }
