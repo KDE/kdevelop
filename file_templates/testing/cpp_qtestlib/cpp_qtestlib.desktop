@@ -1,5 +1,7 @@
 [General]
 Name=Test Suite
+Name[ca]=Conjunt de proves
+Name[el]=Test Suite
 Name[es]=Suite de pruebas
 Name[gl]=Suite de probas
 Name[nl]=Testsuite
@@ -9,6 +11,8 @@ Name[sv]=Testsvit
 Name[uk]=Комплекс для перевірки
 Name[x-test]=xxTest Suitexx
 Comment=A unit test suite using the QTest library without a graphical user interface
+Comment[ca]=Un conjunt de proves unitàries utilitzant la biblioteca QTest sense interfície gràfica d'usuari
+Comment[el]=Μια unit test σουίτα με χρήση QTest βιβλιοθήκης χωρίς γραφικό περιβάλλον χρήστη
 Comment[es]=Una suite de pruebas unitarias que usa la biblioteca QTest sin una interfaz gráfica de usuario
 Comment[gl]=Unha suite de probas de unidades que emprega a biblioteca QTest sen interface gráfica de usuario
 Comment[nl]=Een testsuite van een eenheid met gebruik van de QTest-bibliotheek zonder een grafisch gebruikersinterface
@@ -19,7 +23,9 @@ Comment[uk]=Комплекс для перевірки модулів за до�
 Comment[x-test]=xxA unit test suite using the QTest library without a graphical user interfacexx
 Category=C++/Qt
 Language=C++
+Language[ca]=C++
 Language[de]=C++
+Language[el]=C++
 Language[es]=C++
 Language[gl]=C++
 Language[nl]=C++
@@ -33,6 +39,8 @@ Files=Header,Implementation
 
 [Header]
 Name=Header
+Name[ca]=Capçalera
+Name[el]=Header
 Name[es]=Cabecera
 Name[gl]=Cabeceira
 Name[nl]=Kop
@@ -46,8 +54,10 @@ OutputFile={{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[ca]=Implementació
 Name[cs]=Implementace
 Name[de]=Implementation
+Name[el]=Implementation
 Name[es]=Implementación
 Name[fi]=Toteutus
 Name[gl]=Implementación

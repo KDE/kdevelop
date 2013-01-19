@@ -1,5 +1,8 @@
 [General]
 Name=QTestLib with KDE
+Name[ca]=QTestLib amb KDE
+Name[de]=QTestLib mit KDE
+Name[el]=QTestLib με KDE
 Name[es]=QTestLib con KDE
 Name[gl]=QTestLib con KDE
 Name[nl]=QTestLib met KDE
@@ -9,6 +12,8 @@ Name[sv]=QTest-bibliotek med KDE
 Name[uk]=QTestLib з KDE
 Name[x-test]=xxQTestLib with KDExx
 Comment=A unit test using the QTest library with KDE extensions
+Comment[ca]=Una prova unitària utilitzant la biblioteca QTest amb extensions del KDE
+Comment[el]=Ένα unti test με χρήση της QTest βιβλιοθήκης με KDE επεκτάσεις
 Comment[es]=Una prueba unitaria que usa la biblioteca QTest con extensiones de KDE
 Comment[gl]=Unha probas de unidades que emprega a biblioteca QTest con extensións para KDE
 Comment[nl]=Een test van een eenheid met gebruik van de QTest-bibliotheek met KDE-extensies
@@ -19,7 +24,9 @@ Comment[uk]=Перевірка модулів за допомогою біблі
 Comment[x-test]=xxA unit test using the QTest library with KDE extensionsxx
 Category=C++/KDE
 Language=C++
+Language[ca]=C++
 Language[de]=C++
+Language[el]=C++
 Language[es]=C++
 Language[gl]=C++
 Language[nl]=C++
@@ -33,6 +40,8 @@ Files=Header,Implementation
 
 [Header]
 Name=Header
+Name[ca]=Capçalera
+Name[el]=Header
 Name[es]=Cabecera
 Name[gl]=Cabeceira
 Name[nl]=Kop
@@ -46,8 +55,10 @@ OutputFile={{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[ca]=Implementació
 Name[cs]=Implementace
 Name[de]=Implementation
+Name[el]=Implementation
 Name[es]=Implementación
 Name[fi]=Toteutus
 Name[gl]=Implementación

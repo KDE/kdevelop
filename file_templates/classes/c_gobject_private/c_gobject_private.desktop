@@ -1,5 +1,7 @@
 [General]
 Name=GObject with private pointer
+Name[ca]=GObject amb apuntador privat
+Name[el]=GObject με private pointer
 Name[es]=GObject con puntero privado
 Name[gl]=GObject con punteiro privado
 Name[nl]=GObject met private pointer
@@ -9,6 +11,8 @@ Name[sv]=GObject med privat pekare
 Name[uk]=GObject із закритим (private) вказівником
 Name[x-test]=xxGObject with private pointerxx
 Comment=A GObject subclass with a private pointer
+Comment[ca]=Una subclasse GObject amb un apuntador privat
+Comment[el]=Μια GObject subclass με private pointer
 Comment[es]=Una subclase de GObject con un puntero privado
 Comment[gl]=Unha subclase de GObject cun punteiro privado
 Comment[nl]=Een subklasse GObject met een private pointer
@@ -19,7 +23,9 @@ Comment[uk]=Підклас GObject з закритим (private) вказівн�
 Comment[x-test]=xxA GObject subclass with a private pointerxx
 Category=C/GLib
 Language=C
+Language[ca]=C
 Language[de]=C
+Language[el]=C
 Language[es]=C
 Language[gl]=C
 Language[nl]=C
@@ -33,6 +39,8 @@ Files=Header,Implementation
 
 [Header]
 Name=Header
+Name[ca]=Capçalera
+Name[el]=Header
 Name[es]=Cabecera
 Name[gl]=Cabeceira
 Name[nl]=Kop
@@ -46,8 +54,10 @@ OutputFile={% for ns in namespaces %}{{ ns }}_{% endfor %}{{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[ca]=Implementació
 Name[cs]=Implementace
 Name[de]=Implementation
+Name[el]=Implementation
 Name[es]=Implementación
 Name[fi]=Toteutus
 Name[gl]=Implementación
