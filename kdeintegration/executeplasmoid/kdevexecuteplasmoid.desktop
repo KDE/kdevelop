@@ -2,6 +2,7 @@
 Type=Service
 Exec=blubb
 Comment=Lets you view a plasmoid
+Comment[ca]=Us permet veure un plasmoide
 Comment[da]=Lader dig se en plasmoid
 Comment[de]=Zeigt ein Plasmoid an
 Comment[el]=Σας επιτρέπει να δείτε ένα πλασμοειδές
@@ -21,6 +22,7 @@ Comment[x-test]=xxLets you view a plasmoidxx
 Comment[zh_CN]=让您查看一个 plasmoid
 Comment[zh_TW]=讓您檢視一個 plasmoid 元件
 Name=Plasmoid Launcher
+Name[ca]=Llançador de plasmoide
 Name[da]=Plasmoidstarter
 Name[de]=Plasmoid-Starter
 Name[el]=Εκτελεστής πλασμοειδών

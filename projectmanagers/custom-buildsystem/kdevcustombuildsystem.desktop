@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=Custom BuildSystem
+Name[ca]=BuildSystem personalitzat
 Name[cs]=Vlastní systém pro sestavení
 Name[da]=Tilpasset byggesystem
 Name[de]=Eigenes Build-System
@@ -25,6 +26,7 @@ Name[x-test]=xxCustom BuildSystemxx
 Name[zh_CN]=自定义构建系统
 Name[zh_TW]=自訂編譯系統
 Comment=Allows to use custom buildsystems for KDevelop projects
+Comment[ca]=Permet utilitzar sistemes de construcció personalitzats per projectes del KDevelop
 Comment[da]=Lader dig bruge tilpassede byggesystemer til KDevelop-projekter
 Comment[el]=Επιτρέπει τη χρήση προσαρμοσμένων συστημάτων κατασκευής για έργα KDevelop
 Comment[es]=Permite usar un sistema de construcción personalizado en los proyectos de KDevelop

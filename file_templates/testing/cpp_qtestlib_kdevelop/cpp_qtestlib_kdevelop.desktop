@@ -1,5 +1,6 @@
 [General]
 Name=A test for KDevPlatform
+Name[ca]=Una prova per a KDevPlatform
 Name[da]=En test til KDevPlatform
 Name[de]=Ein Test für KDevPlatform
 Name[el]=ένα τεστ για το KDevPlatform
@@ -19,6 +20,7 @@ Name[x-test]=xxA test for KDevPlatformxx
 Name[zh_CN]=一个 KDevPlatform 的测试
 Name[zh_TW]=KDevPlatform 的測試
 Comment=A unit test using the QTest library with KDevPlatform test helpers
+Comment[ca]=Una prova unitària utilitzant la biblioteca QTest amb els auxiliars de proves del KDevPlatform
 Comment[da]=En unittest som bruger biblioteket QTest med testhjælperne fra KDevPlatform
 Comment[el]=Ένα unit test με χρήση βιβλιοθήκης QTest και βοηθητικά για KDevPlatform test
 Comment[es]=Una prueba unitaria que usa la biblioteca QTest con pruebas auxiliares de KDevPlatform
@@ -39,6 +41,7 @@ Comment[zh_TW]=單元測試套件，用 QTest 函式庫，含 KDevPlatform 測�
 Category=C++/KDevelop
 Language=C++
 Language[bs]=C++
+Language[ca]=C++
 Language[da]=C++
 Language[de]=C++
 Language[el]=C++
@@ -66,6 +69,7 @@ Files=Header,Implementation
 
 [Header]
 Name=Header
+Name[ca]=Capçalera
 Name[da]=Header
 Name[el]=Header
 Name[es]=Cabecera
@@ -89,6 +93,7 @@ OutputFile={{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[ca]=Implementació
 Name[cs]=Implementace
 Name[da]=Implementering
 Name[de]=Implementation

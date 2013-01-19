@@ -1,5 +1,6 @@
 [General]
 Name=GObject with private pointer
+Name[ca]=GObject amb apuntador privat
 Name[da]=GObject med privat pointer
 Name[el]=GObject με private pointer
 Name[es]=GObject con puntero privado
@@ -18,6 +19,7 @@ Name[x-test]=xxGObject with private pointerxx
 Name[zh_CN]=带有私有指针的 GObject
 Name[zh_TW]=GObject 含私密指標
 Comment=A GObject subclass with a private pointer
+Comment[ca]=Una subclasse GObject amb un apuntador privat
 Comment[da]=En underklasse af GObject med en privat pointer
 Comment[el]=Μια GObject subclass με private pointer
 Comment[es]=Una subclase de GObject con un puntero privado
@@ -38,6 +40,7 @@ Comment[zh_TW]=GObject 子類別，含私密指標
 Category=C/GLib
 Language=C
 Language[bs]=C
+Language[ca]=C
 Language[da]=C
 Language[de]=C
 Language[el]=C
@@ -65,6 +68,7 @@ Files=Header,Implementation
 
 [Header]
 Name=Header
+Name[ca]=Capçalera
 Name[da]=Header
 Name[el]=Header
 Name[es]=Cabecera
@@ -88,6 +92,7 @@ OutputFile={% for ns in namespaces %}{{ ns }}_{% endfor %}{{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[ca]=Implementació
 Name[cs]=Implementace
 Name[da]=Implementering
 Name[de]=Implementation

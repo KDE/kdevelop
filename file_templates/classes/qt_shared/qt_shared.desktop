@@ -1,5 +1,6 @@
 [General]
 Name=Implicitly shared class
+Name[ca]=Classe compartida implícita
 Name[da]=Implicit delt klasse
 Name[el]=Σιωπηρά διαμοιραζόμενη class
 Name[es]=Clase compartida implícitamente
@@ -18,6 +19,7 @@ Name[x-test]=xxImplicitly shared classxx
 Name[zh_CN]=隐式共享类
 Name[zh_TW]=隱性分享類別
 Comment=Class with a private QSharedData member
+Comment[ca]=Classe amb un membre QSharedData privat
 Comment[da]=Klasse med et privat QSharedData-medlem
 Comment[el]=Class με private QSharedData member
 Comment[es]=Clase con un miembro QSharedData privado
@@ -38,6 +40,7 @@ Comment[zh_TW]=含私密的 QSharedData 成員的類別
 Category=C++/Qt
 Language=C++
 Language[bs]=C++
+Language[ca]=C++
 Language[da]=C++
 Language[de]=C++
 Language[el]=C++
@@ -65,6 +68,7 @@ Files=Header,Implementation
 
 [Header]
 Name=Public Header
+Name[ca]=Capçalera pública
 Name[da]=Offentlig header
 Name[el]=Public Header
 Name[es]=Cabecera pública
@@ -87,6 +91,7 @@ OutputFile={{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[ca]=Implementació
 Name[cs]=Implementace
 Name[da]=Implementering
 Name[de]=Implementation

@@ -1,5 +1,6 @@
 [General]
 Name=Test Suite
+Name[ca]=Conjunt de proves
 Name[da]=Testsuite
 Name[el]=Σουίτα δοκιμών
 Name[es]=Suite de pruebas
@@ -17,6 +18,7 @@ Name[x-test]=xxTest Suitexx
 Name[zh_CN]=测试套件
 Name[zh_TW]=測試套件
 Comment=A unit test suite using the QTest library without a graphical user interface
+Comment[ca]=Un conjunt de proves unitàries utilitzant la biblioteca QTest sense interfície gràfica d'usuari
 Comment[da]=En unittest-suite som bruger biblioteket QTest uden en grafisk brugerflade
 Comment[el]=Μια unit test σουίτα με χρήση βιβλιοθήκης QTest χωρίς γραφικό περιβάλλον χρήστη
 Comment[es]=Una suite de pruebas unitarias que usa la biblioteca QTest sin una interfaz gráfica de usuario
@@ -36,6 +38,7 @@ Comment[zh_TW]=單元測試套件，用 QTest 函式庫，但不含使用者介�
 Category=C++/Qt
 Language=C++
 Language[bs]=C++
+Language[ca]=C++
 Language[da]=C++
 Language[de]=C++
 Language[el]=C++
@@ -63,6 +66,7 @@ Files=Header,Implementation
 
 [Header]
 Name=Header
+Name[ca]=Capçalera
 Name[da]=Header
 Name[el]=Header
 Name[es]=Cabecera
@@ -86,6 +90,7 @@ OutputFile={{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[ca]=Implementació
 Name[cs]=Implementace
 Name[da]=Implementering
 Name[de]=Implementation

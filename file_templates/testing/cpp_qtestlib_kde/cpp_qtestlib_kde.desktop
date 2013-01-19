@@ -1,6 +1,8 @@
 [General]
 Name=QTestLib with KDE
+Name[ca]=QTestLib amb KDE
 Name[da]=QTestLib med KDE
+Name[de]=QTestLib mit KDE
 Name[el]=QTestLib με KDE
 Name[es]=QTestLib con KDE
 Name[et]=QTestLib KDE-ga
@@ -18,6 +20,7 @@ Name[x-test]=xxQTestLib with KDExx
 Name[zh_CN]=带有 KDE 的 QTestLib
 Name[zh_TW]=QTestLib 含 KDE 延伸
 Comment=A unit test using the QTest library with KDE extensions
+Comment[ca]=Una prova unitària utilitzant la biblioteca QTest amb extensions del KDE
 Comment[da]=En unittest-suite som bruger biblioteket QTest med udvidelser til KDE
 Comment[el]=Ένα unit test με χρήση βιβλιοθήκης QTest και επεκτάσεις KDE
 Comment[es]=Una prueba unitaria que usa la biblioteca QTest con extensiones de KDE
@@ -38,6 +41,7 @@ Comment[zh_TW]=單元測試套件，用 QTest 函式庫，含 KDE 延伸
 Category=C++/KDE
 Language=C++
 Language[bs]=C++
+Language[ca]=C++
 Language[da]=C++
 Language[de]=C++
 Language[el]=C++
@@ -65,6 +69,7 @@ Files=Header,Implementation
 
 [Header]
 Name=Header
+Name[ca]=Capçalera
 Name[da]=Header
 Name[el]=Header
 Name[es]=Cabecera
@@ -88,6 +93,7 @@ OutputFile={{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[ca]=Implementació
 Name[cs]=Implementace
 Name[da]=Implementering
 Name[de]=Implementation

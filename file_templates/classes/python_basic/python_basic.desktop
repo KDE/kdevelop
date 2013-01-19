@@ -1,6 +1,7 @@
 [General]
 Name=Basic
 Name[bs]=Osnovno
+Name[ca]=Bàsica
 Name[da]=Simpel
 Name[el]=Βασική
 Name[es]=Básica
@@ -21,6 +22,7 @@ Name[x-test]=xxBasicxx
 Name[zh_CN]=基本
 Name[zh_TW]=基本
 Comment=Basic Python Class
+Comment[ca]=Classe Python bàsica
 Comment[da]=Simpel Python-klasse
 Comment[el]=Βασική Python Class
 Comment[es]=Clase de Python básica
@@ -41,6 +43,7 @@ Comment[zh_TW]=基本 Python 類別
 Category=Python/Basic
 Language=Python
 Language[bs]=Python
+Language[ca]=Python
 Language[da]=Python
 Language[de]=Python
 Language[el]=Python
@@ -68,6 +71,7 @@ Files=Definition
 
 [Definition]
 Name=Definition
+Name[ca]=Definició
 Name[da]=Definition
 Name[de]=Definition
 Name[el]=Ορισμός
