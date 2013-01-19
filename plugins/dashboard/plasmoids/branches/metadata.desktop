@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Project Branches
+Name[ca]=Branques de projecte
 Name[cs]=Větve projektu
 Name[da]=Projektforgreninger
 Name[el]=Κλάδοι έργου
@@ -21,6 +22,7 @@ Name[uk]=Гілки проекту
 Name[x-test]=xxProject Branchesxx
 Name[zh_CN]=项目分支
 Comment=Displays the branches in the current project
+Comment[ca]=Mostra les branques en el projecte actual
 Comment[da]=Viser grenene i det aktuelle projekt
 Comment[el]=Εμφανίζει τους κλάδους στο τρέχον έργο
 Comment[es]=Muestra las ramas del proyecto actual

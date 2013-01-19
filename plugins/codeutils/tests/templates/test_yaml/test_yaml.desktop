@@ -1,5 +1,6 @@
 [General]
 Name=Testing YAML Template
+Name[ca]=Plantilla YAML de prova
 Name[da]=Tester YAML-skabelon
 Name[el]=Δοκιμή προτύπου YAML
 Name[es]=Prueba de plantilla YAML
@@ -17,6 +18,7 @@ Name[uk]=Тестовий шаблон YAML
 Name[x-test]=xxTesting YAML Templatexx
 Name[zh_CN]=YAML 测试模板
 Comment=A test description in YAML
+Comment[ca]=Una descripció de prova en YAML
 Comment[da]=En testbeskrivelse i YAML
 Comment[el]=Μια περιγραφή δοκιμής σε YAML
 Comment[es]=Una descripción de prueba en YAML
@@ -38,6 +40,7 @@ Files=Implementation
 
 [Implementation]
 Name=Implementation
+Name[ca]=Implementació
 Name[da]=Implementering
 Name[de]=Implementation
 Name[el]=Υλοποίηση
