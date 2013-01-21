@@ -87,7 +87,7 @@ void ParseProjectJob::start() {
     const int processAfter = 1000;
     int processed = 0;
     foreach(const IndexedString& url, files) {
-        ICore::self()->languageController()->backgroundParser()->addDocument( url, processingLevel, BackgroundParser::WorstPriority, this );
+        ICore::self()->languageController()->backgroundParser()->addDocument( url, processingLevel, BackgroundParser::InitialParsePriority, this );
         ++processed;
         if (processed == processAfter) {
             QApplication::processEvents();
