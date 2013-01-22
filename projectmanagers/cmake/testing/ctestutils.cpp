@@ -44,6 +44,24 @@ void CTestUtils::createTestSuites(const QList< Test >& testSuites, ProjectFolder
     foreach (const Test& test, testSuites)
     {
         QString exe = test.executable;
+        if (test.isTarget)
+        {
+            QList<ProjectTargetItem*> items = folder->project()->buildSystemManager()->targets(folder);
+            foreach (ProjectTargetItem* item, items)
+            {
+                ProjectExecutableTargetItem * exeTgt = item->executable();
+                if (exeTgt == 0)
+                {
+                    continue;
+                }
+                if (exeTgt->text() == test.executable)
+                {
+                    exe = exeTgt->builtUrl().toLocalFile();
+                    kDebug(9042) << "Find proper test target path" << test.executable << "->" << exe;
+                    break;
+                }
+            }
+        }
         exe.replace("#[bin_dir]", binDir);
         KUrl exeUrl = KUrl(exe);
         if (exeUrl.isRelative())

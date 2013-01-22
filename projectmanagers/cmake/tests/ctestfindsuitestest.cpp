@@ -29,6 +29,7 @@
 #include <interfaces/itestsuite.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
+#include <testing/ctestsuite.h>
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 
@@ -68,6 +69,9 @@ void CTestFindSuitesTest::testCTestSuite()
     {
         QCOMPARE(suite->cases(), QStringList());
         QVERIFY(!suite->declaration().isValid());
+        CTestSuite* ctest = (CTestSuite*)(suite);
+        QString exeSubdir = KUrl::relativeUrl(project->folder(), ctest->executable().directory());
+        QCOMPARE(exeSubdir, ctest->name() == "fail" ? QString("build/bin") : QString("build") );
     }
 }
 
@@ -75,16 +79,23 @@ void CTestFindSuitesTest::testQtTestSuite()
 {
     IProject* project = parseProject( "unit_tests_kde" );
     QVERIFY2(project, "Project was not opened");
-    WAIT_FOR_SUITES(1, 10)
+    WAIT_FOR_SUITES(2, 10)
     QList<ITestSuite*> suites = ICore::self()->testController()->testSuitesForProject(project);
     
-    QCOMPARE(suites.size(), 1);
+    QCOMPARE(suites.size(), 2);
     ITestSuite* suite = suites.first();
     QCOMPARE(suite->cases().size(), 5);
 
     DUChainReadLocker locker(DUChain::lock());
     QVERIFY(suite->declaration().isValid());
-    
+
+    foreach (ITestSuite* suite, suites)
+    {
+        CTestSuite* ctest = (CTestSuite*)(suite);
+        QString exeSubdir = KUrl::relativeUrl(project->folder(), ctest->executable().directory());
+        QCOMPARE(exeSubdir, ctest->name() == "unittestskde-nonstd-location" ? QString("build/bin") : QString("build") );
+    }
+
     foreach (const QString& testCase, suite->cases())
     {
         QVERIFY(suite->caseDeclaration(testCase).isValid());

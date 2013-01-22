@@ -60,10 +60,12 @@ struct Subdirectory
 
 struct Test
 {
+    Test() : isTarget(false) {}
     QString name;
     QString executable;
     QStringList arguments;
     QStringList files;
+    bool isTarget;
 };
 
 enum PropertyType { GlobalProperty, DirectoryProperty, TargetProperty, SourceProperty, TestProperty, VariableProperty };
