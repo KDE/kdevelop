@@ -143,6 +143,9 @@ KJob* CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
             build = builderJob;
         }
         return build;
+    } else {
+        KMessageBox::error(KDevelop::ICore::self()->uiController()->activeMainWindow(),
+                               i18n("Builder not found for '%1'", dom->url().pathOrUrl()), i18n("Aborting build") );
     }
     return 0;
 }
@@ -177,6 +180,9 @@ KJob* CMakeBuilder::clean(KDevelop::ProjectBaseItem *dom)
             clean = builderJob;
         }
         return clean;
+    } else {
+        KMessageBox::error(KDevelop::ICore::self()->uiController()->activeMainWindow(),
+                           i18n("Builder not found for '%1'", dom->url().pathOrUrl()), i18n("Aborting build") );
     }
     return 0;
 }
@@ -213,6 +219,9 @@ KJob* CMakeBuilder::install(KDevelop::ProjectBaseItem *dom)
         }
         return install;
 
+    } else {
+        KMessageBox::error(KDevelop::ICore::self()->uiController()->activeMainWindow(),
+                           i18n("Builder not found for '%1'", dom->url().pathOrUrl()), i18n("Aborting build") );
     }
     return 0;
 }
@@ -266,7 +275,7 @@ KDevelop::IProjectBuilder* CMakeBuilder::builderForProject(KDevelop::IProject* p
     }
     //It means that it still has to be generated, so use the builder for
     //the generator we use
-    return m_buildersForGenerator[CMakeBuilderSettings::self()->generator()];
+    return m_buildersForGenerator.value(CMakeBuilderSettings::self()->generator());
 }
 
 QList< KDevelop::IProjectBuilder* > CMakeBuilder::additionalBuilderPlugins( KDevelop::IProject* project  ) const
