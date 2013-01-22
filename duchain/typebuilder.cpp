@@ -17,6 +17,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA   *
  *************************************************************************************/
 
+#include "language/duchain/types/functiontype.h"
+#include "language/duchain/types/integraltype.h"
+
 #include "typebuilder.h"
 
 using namespace KDevelop;
@@ -25,4 +28,19 @@ TypeBuilder::TypeBuilder()
 : TypeBuilderBase()
 {
 
+}
+
+bool TypeBuilder::visit(QmlJS::AST::FunctionDeclaration* node)
+{
+    openType(FunctionType::Ptr(new FunctionType));
+
+    Q_ASSERT(hasCurrentType());
+    FunctionType::Ptr type = currentType<FunctionType>();
+    Q_ASSERT(type);
+
+    type->setReturnType(AbstractType::Ptr(new IntegralType(IntegralType::TypeVoid)));
+
+    closeType();
+
+    return false;
 }

@@ -19,6 +19,7 @@
 
 #include "declarationbuilder.h"
 
+#include <language/duchain/types/functiontype.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/duchainlock.h>
 
@@ -49,6 +50,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::FunctionDeclaration* node)
     {
         DUChainWriteLocker lock;
         openDeclaration<FunctionDeclaration>(name, range);
+        TypeBuilder::visit(node);
     }
 
     const bool ret = DeclarationBuilderBase::visit(node);

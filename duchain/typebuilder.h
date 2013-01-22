@@ -31,6 +31,11 @@ class KDEVQMLJSDUCHAIN_EXPORT TypeBuilder : public TypeBuilderBase
 {
 public:
     TypeBuilder();
+
+protected:
+    using Visitor::visit;
+    virtual bool visit(QmlJS::AST::FunctionDeclaration* node);
+
 };
 
 #endif // TYPEBUILDER_H
