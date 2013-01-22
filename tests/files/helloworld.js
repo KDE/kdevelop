@@ -1,5 +1,5 @@
 /**
- * "type" : { "toString"  : "void ()" },
+ * "type" : { "toString"  : "void" },
  * "useCount" : 0
  */
 function helloWorld()
