@@ -42,6 +42,8 @@ private slots:
   void constFind_data();
   void remove();
   void remove_data();
+  void typeRepo();
+  void typeRepo_data();
 };
 
 #endif // BENCHHASHES_H
