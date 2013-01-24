@@ -53,9 +53,10 @@ bool DeclarationBuilder::visit(QmlJS::AST::FunctionDeclaration* node)
     }
 
     const bool ret = DeclarationBuilderBase::visit(node);
-    if (ret) {
-        FunctionDeclaration *fun = currentDeclaration<FunctionDeclaration>();
+
+    {
         DUChainWriteLocker lock;
+        FunctionDeclaration *fun = currentDeclaration<FunctionDeclaration>();
         fun->setAbstractType(lastType());
     }
 
