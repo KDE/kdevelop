@@ -32,11 +32,8 @@ TypeBuilder::TypeBuilder()
 
 bool TypeBuilder::visit(QmlJS::AST::FunctionDeclaration* node)
 {
-    openType(FunctionType::Ptr(new FunctionType));
-
-    Q_ASSERT(hasCurrentType());
-    FunctionType::Ptr type = currentType<FunctionType>();
-    Q_ASSERT(type);
+    FunctionType::Ptr type(new FunctionType);
+    openType(type);
 
     type->setReturnType(AbstractType::Ptr(new IntegralType(IntegralType::TypeVoid)));
 
