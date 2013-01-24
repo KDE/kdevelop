@@ -42,9 +42,6 @@ using namespace JsonTestHelpers;
 ///@returns whether the type toString matches the given value
 TypeTest(toString)
 {
-  if (FunctionType::Ptr funcType = type.cast<FunctionType>())
-    type = funcType->returnType();
-
   QString typeStr = type ? type->toString() : "<no type>";
   return compareValues(typeStr, value, "Type's toString");
 }
