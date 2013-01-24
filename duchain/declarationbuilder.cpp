@@ -82,13 +82,13 @@ bool DeclarationBuilder::visit(QmlJS::AST::VariableDeclaration* node)
 {
     setComment(m_session->commentForLocation(node->firstSourceLocation()).toUtf8());
 
-   const QualifiedIdentifier name(node->name.toString());
-   const RangeInRevision range = m_session->locationToRange(node->identifierToken);
-   DUChainWriteLocker lock;
-   openDeclaration<Declaration>(name, range);
-   closeDeclaration();
+    const QualifiedIdentifier name(node->name.toString());
+    const RangeInRevision range = m_session->locationToRange(node->identifierToken);
+    DUChainWriteLocker lock;
+    openDeclaration<Declaration>(name, range);
+    closeDeclaration();
 
-   return true;
+    return true;
 }
 
 void DeclarationBuilder::closeContext()
