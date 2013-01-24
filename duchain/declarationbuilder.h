@@ -21,10 +21,12 @@
 #define DECLARATIONBUILDER_H
 
 #include <language/duchain/builders/abstractdeclarationbuilder.h>
+#include <language/duchain/builders/abstracttypebuilder.h>
 
-#include "typebuilder.h"
+#include "contextbuilder.h"
 #include "duchainexport.h"
 
+typedef KDevelop::AbstractTypeBuilder<QmlJS::AST::Node, QmlJS::AST::IdentifierPropertyName, ContextBuilder> TypeBuilder;
 typedef KDevelop::AbstractDeclarationBuilder<QmlJS::AST::Node, QmlJS::AST::IdentifierPropertyName, TypeBuilder> DeclarationBuilderBase;
 
 class KDEVQMLJSDUCHAIN_EXPORT DeclarationBuilder : public DeclarationBuilderBase

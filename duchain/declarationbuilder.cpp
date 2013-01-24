@@ -20,6 +20,7 @@
 #include "declarationbuilder.h"
 
 #include <language/duchain/types/functiontype.h>
+#include <language/duchain/types/integraltype.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/duchainlock.h>
 
@@ -47,9 +48,15 @@ bool DeclarationBuilder::visit(QmlJS::AST::FunctionDeclaration* node)
 
     const QualifiedIdentifier name(node->name.toString());
     const RangeInRevision range = m_session->locationToRange(node->identifierToken);
+
+    FunctionType::Ptr type(new FunctionType);
+    type->setReturnType(AbstractType::Ptr(new IntegralType(IntegralType::TypeVoid)));
+
     {
         DUChainWriteLocker lock;
-        openDeclaration<FunctionDeclaration>(name, range);
+        FunctionDeclaration* fun = openDeclaration<FunctionDeclaration>(name, range);
+        fun->setType(type);
+        openType(type);
     }
 
     return DeclarationBuilderBase::visit(node);
@@ -59,9 +66,7 @@ void DeclarationBuilder::endVisit(QmlJS::AST::FunctionDeclaration* node)
 {
     DeclarationBuilderBase::endVisit(node);
 
-    DUChainWriteLocker lock;
-    FunctionDeclaration *fun = currentDeclaration<FunctionDeclaration>();
-    fun->setAbstractType(lastType());
+    closeType();
     closeDeclaration();
 }
 
