@@ -33,6 +33,7 @@ add_subdirectory(tests)
 
 kde4_add_plugin(kdevqmljslanguagesupport
     qmljsparsejob.cpp
+    qmljshighlighting.cpp
     kdevqmljsplugin.cpp
 )
 target_link_libraries(kdevqmljslanguagesupport

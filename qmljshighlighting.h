@@ -1,6 +1,5 @@
 /*************************************************************************************
- *  Copyright (C) 2012 by Aleix Pol <aleixpol@kde.org>                               *
- *  Copyright (C) 2012 by Milian Wolff <mail@milianw.de>                             *
+ *  Copyright (C) 2013 by Milian Wolff <mail@milianw.de>                             *
  *                                                                                   *
  *  This program is free software; you can redistribute it and/or                    *
  *  modify it under the terms of the GNU General Public License                      *
@@ -17,42 +16,18 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA   *
  *************************************************************************************/
 
-#include "kdevqmljsplugin.h"
+#ifndef QMLJSHIGHLIGHTING_H
+#define QMLJSHIGHLIGHTING_H
 
-#include "qmljsparsejob.h"
-#include "qmljshighlighting.h"
+#include <language/highlighting/codehighlighting.h>
 
-#include <KPluginFactory>
-#include <KAboutData>
-
-#include "version.h"
-
-K_PLUGIN_FACTORY(KDevQmlJsSupportFactory, registerPlugin<KDevQmlJsPlugin>(); )
-K_EXPORT_PLUGIN(KDevQmlJsSupportFactory(
-    KAboutData("kdevqmljssupport", 0, ki18n("QML/JS Support"), VERSION_STR,
-    ki18n("Support for QML and JS Languages"), KAboutData::License_GPL)))
-
-using namespace KDevelop;
-
-KDevQmlJsPlugin::KDevQmlJsPlugin(QObject* parent, const QVariantList& )
-: IPlugin( KDevQmlJsSupportFactory::componentData(), parent )
-, ILanguageSupport()
-, m_highlighting(new QmlJsHighlighting(this))
+class QmlJsHighlighting : public KDevelop::CodeHighlighting
 {
-    KDEV_USE_EXTENSION_INTERFACE(ILanguageSupport)
-}
+    Q_OBJECT
 
-ParseJob* KDevQmlJsPlugin::createParseJob(const IndexedString& url)
-{
-    return new QmlJsParseJob(url, this);
-}
+public:
+    QmlJsHighlighting(QObject* parent);
+    virtual KDevelop::CodeHighlightingInstance* createInstance() const;
+};
 
-QString KDevQmlJsPlugin::name() const
-{
-    return "qml/js";
-}
-
-ICodeHighlighting* KDevQmlJsPlugin::codeHighlighting() const
-{
-    return m_highlighting;
-}
+#endif // QMLJSHIGHLIGHTING_H

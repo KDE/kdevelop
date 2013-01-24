@@ -1,6 +1,5 @@
 /*************************************************************************************
- *  Copyright (C) 2012 by Aleix Pol <aleixpol@kde.org>                               *
- *  Copyright (C) 2012 by Milian Wolff <mail@milianw.de>                             *
+ *  Copyright (C) 2013 by Milian Wolff <mail@milianw.de>                             *
  *                                                                                   *
  *  This program is free software; you can redistribute it and/or                    *
  *  modify it under the terms of the GNU General Public License                      *
@@ -17,42 +16,38 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA   *
  *************************************************************************************/
 
-#include "kdevqmljsplugin.h"
-
-#include "qmljsparsejob.h"
 #include "qmljshighlighting.h"
 
-#include <KPluginFactory>
-#include <KAboutData>
-
-#include "version.h"
-
-K_PLUGIN_FACTORY(KDevQmlJsSupportFactory, registerPlugin<KDevQmlJsPlugin>(); )
-K_EXPORT_PLUGIN(KDevQmlJsSupportFactory(
-    KAboutData("kdevqmljssupport", 0, ki18n("QML/JS Support"), VERSION_STR,
-    ki18n("Support for QML and JS Languages"), KAboutData::License_GPL)))
+#include <language/duchain/declaration.h>
 
 using namespace KDevelop;
 
-KDevQmlJsPlugin::KDevQmlJsPlugin(QObject* parent, const QVariantList& )
-: IPlugin( KDevQmlJsSupportFactory::componentData(), parent )
-, ILanguageSupport()
-, m_highlighting(new QmlJsHighlighting(this))
+class HighlightingInstance : public KDevelop::CodeHighlightingInstance
 {
-    KDEV_USE_EXTENSION_INTERFACE(ILanguageSupport)
+public:
+    HighlightingInstance(const CodeHighlighting* highlighting)
+    : CodeHighlightingInstance(highlighting)
+    {}
+
+    virtual bool useRainbowColor(Declaration* dec) const
+    {
+        // JS has a function-based prototype OO system, so for now rainbow-color
+        // everything that is not a function declaration.
+        // In the future we will have to investigate how to handle properties
+        // of a function/object
+        return !dec->isFunctionDeclaration();
+    }
+};
+
+QmlJsHighlighting::QmlJsHighlighting(QObject* parent)
+: CodeHighlighting(parent)
+{
+
 }
 
-ParseJob* KDevQmlJsPlugin::createParseJob(const IndexedString& url)
+CodeHighlightingInstance* QmlJsHighlighting::createInstance() const
 {
-    return new QmlJsParseJob(url, this);
+    return new HighlightingInstance(this);
 }
 
-QString KDevQmlJsPlugin::name() const
-{
-    return "qml/js";
-}
-
-ICodeHighlighting* KDevQmlJsPlugin::codeHighlighting() const
-{
-    return m_highlighting;
-}
+#include "qmljshighlighting.moc"
