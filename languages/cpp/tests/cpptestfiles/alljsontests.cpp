@@ -32,22 +32,24 @@ public:
      * }
      */
     T member;
-    /* "type" : { "toString" : "T" },
+    /* "type" : { "toString" : "function T ()" },
+     * "returnType" : { "toString" : "T" },
      * "useCount" : 0,
      * "instantiations" : {
      *     "<int>::<>" : {
-     *         "type" : { "toString" : "int" },
+     *         "returnType" : { "toString" : "int" },
      *         "instantiatedFrom" : { "qualifiedIdentifier" : "TestEverything::memberFunc" },
      *         "useCount" : 1
      *     }
      * }
      */
     T memberFunc();
-    /* "type" : { "toString" : "T" },
+    /* "type" : { "toString" : "function T (X)" },
+     * "returnType" : { "toString" : "T" },
      * "useCount" : 0,
      * "instantiations" : {
      *     "<int>::<>" : {
-     *         "type" : { "toString" : "int" },
+     *         "returnType" : { "toString" : "int" },
      *         "instantiatedFrom" : { "qualifiedIdentifier" : "TestEverything::templateMemberFunc" },
      *         "useCount" : 0
      *     },
@@ -57,7 +59,8 @@ public:
     template<class X> T templateMemberFunc(X foo);
 };
 
-/* "type" : { "toString"  : "int" },
+/* "type" : { "toString"  : "function int (TestEverything< int >)" },
+ * "returnType" : { "toString"  : "int" },
  * "internalFunctionContext" : { "findDeclarations" : { "foo" : { "type" : { "toString" : "TestEverything< int >" } } } },
  * "specializedFrom" : { "qualifiedIdentifier" : "TestEverything::templateMemberFunc" },
  * "instantiatedFrom" : { "qualifiedIdentifier" : "TestEverything::templateMemberFunc" },
