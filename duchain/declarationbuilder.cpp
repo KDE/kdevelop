@@ -80,7 +80,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::FormalParameterList* node)
         closeDeclaration();
     }
 
-    return true;
+    return DeclarationBuilderBase::visit(node);
 }
 
 bool DeclarationBuilder::visit(QmlJS::AST::VariableDeclaration* node)
@@ -93,7 +93,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::VariableDeclaration* node)
     openDeclaration<Declaration>(name, range);
     closeDeclaration();
 
-    return true;
+    return DeclarationBuilderBase::visit(node);
 }
 
 void DeclarationBuilder::closeContext()
