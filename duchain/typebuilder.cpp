@@ -40,7 +40,9 @@ bool TypeBuilder::visit(QmlJS::AST::FunctionDeclaration* node)
 
     type->setReturnType(AbstractType::Ptr(new IntegralType(IntegralType::TypeVoid)));
 
+    bool ret = TypeBuilderBase::visit(node);
+
     closeType();
 
-    return true;
+    return ret;
 }
