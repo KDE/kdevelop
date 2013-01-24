@@ -25,3 +25,14 @@ function testVariables()
   */
   var b = "some text";
 }
+
+/**
+ * "EXPECT_FAIL" : {
+ *   "type" : { "toString" : "function mixed (mixed)" },
+ *   "returnType" : { "toString" : "mixed" }
+ * }
+ */
+function testReturnMixedArg(arg)
+{
+    return arg;
+}
