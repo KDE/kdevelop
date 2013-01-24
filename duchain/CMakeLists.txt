@@ -3,6 +3,7 @@ kde4_add_library(kdevqmljsduchain SHARED
     debugvisitor.cpp
     contextbuilder.cpp
     declarationbuilder.cpp
+    usebuilder.cpp
     debugvisitor.cpp
 )
 
