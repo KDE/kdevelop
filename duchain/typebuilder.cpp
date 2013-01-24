@@ -42,5 +42,5 @@ bool TypeBuilder::visit(QmlJS::AST::FunctionDeclaration* node)
 
     closeType();
 
-    return false;
+    return true;
 }

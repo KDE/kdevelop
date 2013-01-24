@@ -49,12 +49,15 @@ bool DeclarationBuilder::visit(QmlJS::AST::FunctionDeclaration* node)
     const RangeInRevision range = m_session->locationToRange(node->identifierToken);
     {
         DUChainWriteLocker lock;
-        FunctionDeclaration *fun = openDeclaration<FunctionDeclaration>(name, range);
-        TypeBuilder::visit(node);
-        fun->setAbstractType(lastType());
+        openDeclaration<FunctionDeclaration>(name, range);
     }
 
     const bool ret = DeclarationBuilderBase::visit(node);
+    if (ret) {
+        FunctionDeclaration *fun = currentDeclaration<FunctionDeclaration>();
+        DUChainWriteLocker lock;
+        fun->setAbstractType(lastType());
+    }
 
     closeDeclaration();
 
