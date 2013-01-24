@@ -80,6 +80,8 @@ bool DeclarationBuilder::visit(QmlJS::AST::FormalParameterList* node)
 
 bool DeclarationBuilder::visit(QmlJS::AST::VariableDeclaration* node)
 {
+    setComment(m_session->commentForLocation(node->firstSourceLocation()).toUtf8());
+
    const QualifiedIdentifier name(node->name.toString());
    const RangeInRevision range = m_session->locationToRange(node->identifierToken);
    DUChainWriteLocker lock;
