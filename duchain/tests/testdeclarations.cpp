@@ -30,6 +30,9 @@
 #include <tests/autotestshell.h>
 #include <tests/testhelpers.h>
 
+#include <language/duchain/types/functiontype.h>
+#include <language/duchain/types/integraltype.h>
+
 QTEST_KDEMAIN(TestDeclarations, NoGUI);
 
 using namespace KDevelop;
@@ -86,6 +89,11 @@ void TestDeclarations::testFunction()
     Declaration* arg3 = argCtx->localDeclarations().at(2);
     QCOMPARE(arg3->identifier().toString(), QString("arg3"));
     QCOMPARE(arg3->range(), RangeInRevision(3, 25, 3, 29));
+
+    FunctionType::Ptr funType = fooDec->type<FunctionType>();
+    QVERIFY(funType);
+    QVERIFY(funType->returnType().cast<IntegralType>());
+    QCOMPARE(funType->returnType().cast<IntegralType>()->dataType(), (uint) IntegralType::TypeVoid);
 }
 
 #include "testdeclarations.moc"
