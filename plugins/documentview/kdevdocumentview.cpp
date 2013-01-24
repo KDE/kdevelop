@@ -66,7 +66,6 @@ KDevDocumentView::KDevDocumentView( KDevDocumentViewPlugin *plugin, QWidget *par
 
     setWindowIcon( SmallIcon( "document-multiple" ) );
     setWindowTitle( i18n( "Documents" ) );
-    setWhatsThis( i18n( "Document View" ) );
 
     setFocusPolicy( Qt::NoFocus );
 

@@ -60,12 +60,11 @@ GrepViewPlugin::GrepViewPlugin( QObject *parent, const QVariantList & )
     action->setShortcut( i18n("Ctrl+Alt+f") );
     connect(action, SIGNAL(triggered(bool)), this, SLOT(showDialogFromMenu()));
     action->setToolTip( i18n("Search for expressions over several files") );
-    action->setWhatsThis( i18n("<b>Find/Replace in files</b><p>"
-            "Opens the 'Find/Replace in files' dialog. There you "
-            "can enter a regular expression which is then "
-            "searched for within all files in the directories "
-            "you specify. Matches will be displayed, you "
-            "can switch to a match directly. You can also do replacement.</p>") );
+    action->setWhatsThis( i18n("Opens the 'Find/Replace in files' dialog. There you "
+                               "can enter a regular expression which is then "
+                               "searched for within all files in the directories "
+                               "you specify. Matches will be displayed, you "
+                               "can switch to a match directly. You can also do replacement.") );
     action->setIcon(KIcon("edit-find"));
 
     // instantiate delegate, it's supposed to be deleted via QObject inheritance

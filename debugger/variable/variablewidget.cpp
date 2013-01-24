@@ -105,22 +105,22 @@ VariableWidget::VariableWidget(IDebugController* controller, QWidget *parent)
     // Setup help items.
 
     setWhatsThis( i18n(
-        "<b>Variable tree</b><p>"
+        "<b>Variable tree</b>"
         "The variable tree allows you to see the values of local "
-        "variables and arbitrary expressions.</p>"
-        "<p>Local variables are displayed automatically and are updated "
+        "variables and arbitrary expressions.<br />"
+        "Local variables are displayed automatically and are updated "
         "as you step through your program. "
         "For each expression you enter, you can either evaluate it once, "
         "or \"watch\" it (make it auto-updated). Expressions that are not "
         "auto-updated can be updated manually from the context menu. "
         "Expressions can be renamed to more descriptive names by clicking "
-        "on the name column.</p>"
-        "<p>To change the value of a variable or an expression, "
-        "click on the value.</p>"));
+        "on the name column.<br />"
+        "To change the value of a variable or an expression, "
+        "click on the value.<br />"));
 
     watchVarEditor_->setWhatsThis(
                     i18n("<b>Expression entry</b>"
-                         "<p>Type in expression to watch.</p>"));
+                         "Type in expression to watch."));
 
 }
 

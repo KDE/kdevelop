@@ -477,15 +477,22 @@ void ProjectController::setupActions()
 
     d->m_openProject = action = ac->addAction( "project_open" );
     action->setText(i18nc( "@action", "Open / Import Project..." ) );
-    action->setToolTip( i18nc( "@info:tooltip", "Open / Import Project" ) );
-    action->setWhatsThis( i18nc( "@info:whatsthis", "<b>Open / Import project</b><p>Open an existing KDevelop 4 project or import an existing Project into KDevelop 4. This entry allows to select a KDevelop4 project file or an existing directory to open it in KDevelop. When opening an existing directory that does not yet have a KDevelop4 project file, the file will be created.</p>" ) );
+    action->setToolTip( i18nc( "@info:tooltip", "Open or import project" ) );
+    action->setWhatsThis( i18nc( "@info:whatsthis", "Open an existing KDevelop 4 project or import "
+                                                    "an existing Project into KDevelop 4. This entry "
+                                                    "allows to select a KDevelop4 project file or an "
+                                                    "existing directory to open it in KDevelop. "
+                                                    "When opening an existing directory that does "
+                                                    "not yet have a KDevelop4 project file, the file "
+                                                    "will be created." ) );
     action->setIcon(KIcon("project-open"));
     connect( action, SIGNAL(triggered(bool)), SLOT(openProject()) );
     
     d->m_fetchProject = action = ac->addAction( "project_fetch" );
     action->setText(i18nc( "@action", "Fetch Project..." ) );
-    action->setToolTip( i18nc( "@info:tooltip", "Fetch Project" ) );
-    action->setWhatsThis( i18nc( "@info:whatsthis", "<b>Fetch project</b><p>Guides the user through the project fetch and then imports it into KDevelop 4.</p>" ) );
+    action->setToolTip( i18nc( "@info:tooltip", "Fetch project" ) );
+    action->setWhatsThis( i18nc( "@info:whatsthis", "Guides the user through the project fetch "
+                                                    "and then imports it into KDevelop 4." ) );
 //     action->setIcon(KIcon("project-open"));
     connect( action, SIGNAL(triggered(bool)), SLOT(fetchProject()) );
 
@@ -493,7 +500,7 @@ void ProjectController::setupActions()
 //    action->setText( i18n( "C&lose Project" ) );
 //    connect( action, SIGNAL(triggered(bool)), SLOT(closeProject()) );
 //    action->setToolTip( i18n( "Close project" ) );
-//    action->setWhatsThis( i18n( "<b>Close project</b><p>Closes the current project." ) );
+//    action->setWhatsThis( i18n( "Closes the current project." ) );
 //    action->setEnabled( false );
 
     d->m_closeProject = action = ac->addAction( "project_close" );
@@ -524,8 +531,7 @@ void ProjectController::setupActions()
     ac->addAction( "project_open_recent", d->m_recentAction );
     d->m_recentAction->setText( i18n( "Open Recent" ) );
     d->m_recentAction->setToolTip( i18nc( "@info:tooltip", "Open recent project" ) );
-    d->m_recentAction->setWhatsThis(
-        i18nc( "@info:whatsthis", "<b>Open recent project</b><p>Opens recently opened project.</p>" ) );
+    d->m_recentAction->setWhatsThis( i18nc( "@info:whatsthis", "Opens recently opened project." ) );
     d->m_recentAction->loadEntries( KConfigGroup(config, "RecentProjects") );
     
     KAction* openProjectForFileAction = new KAction( this );

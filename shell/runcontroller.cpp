@@ -417,31 +417,31 @@ void RunController::setupActions()
     ac->addAction("configure_launches", action);
     action->setStatusTip(i18n("Open Launch Configuration Dialog"));
     action->setToolTip(i18nc("@info:tooltip", "Open Launch Configuration Dialog"));
-    action->setWhatsThis(i18nc("@info:whatsthis", "<p>Opens a dialog to setup new launch configurations, or to change the existing ones.</p>"));
+    action->setWhatsThis(i18nc("@info:whatsthis", "Opens a dialog to setup new launch configurations, or to change the existing ones."));
     connect(action, SIGNAL(triggered(bool)), SLOT(configureLaunches()));
 
     d->runAction = new KAction( KIcon("system-run"), i18n("Execute Launch"), this);
-    d->runAction->setIconText( i18nc("Short text for 'Execute Launch' used in the toolbar", "Execute") );
+    d->runAction->setIconText( i18nc("Short text for 'Execute launch' used in the toolbar", "Execute") );
     d->runAction->setShortcut(Qt::SHIFT + Qt::Key_F9);
-    d->runAction->setToolTip(i18nc("@info:tooltip", "Execute current Launch"));
-    d->runAction->setStatusTip(i18n("Execute current Launch"));
-    d->runAction->setWhatsThis(i18nc("@info:whatsthis", "<b>Execute Launch</b><p>Executes the target or the program specified in currently active launch configuration.</p>"));
+    d->runAction->setToolTip(i18nc("@info:tooltip", "Execute current launch"));
+    d->runAction->setStatusTip(i18n("Execute current launch"));
+    d->runAction->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in currently active launch configuration."));
     ac->addAction("run_execute", d->runAction);
     connect(d->runAction, SIGNAL(triggered(bool)), this, SLOT(slotExecute()));
 
     d->dbgAction = new KAction( KIcon("debug-run"), i18n("Debug Launch"), this);
     d->dbgAction->setShortcut(Qt::Key_F9);
-    d->dbgAction->setIconText( i18nc("Short text for 'Debug Launch' used in the toolbar", "Debug") );
-    d->dbgAction->setToolTip(i18nc("@info:tooltip", "Debug current Launch"));
-    d->dbgAction->setStatusTip(i18n("Debug current Launch"));
-    d->dbgAction->setWhatsThis(i18nc("@info:whatsthis", "<b>Debug Launch</b><p>Executes the target or the program specified in currently active launch configuration inside a Debugger.</p>"));
+    d->dbgAction->setIconText( i18nc("Short text for 'Debug launch' used in the toolbar", "Debug") );
+    d->dbgAction->setToolTip(i18nc("@info:tooltip", "Debug current launch"));
+    d->dbgAction->setStatusTip(i18n("Debug current launch"));
+    d->dbgAction->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in currently active launch configuration inside a Debugger."));
     ac->addAction("run_debug", d->dbgAction);
     connect(d->dbgAction, SIGNAL(triggered(bool)), this, SLOT(slotDebug()));
 
     d->profileAction = new KAction( KIcon(""), i18n("Profile Launch"), this);
-    d->profileAction->setToolTip(i18nc("@info:tooltip", "Profile current Launch"));
-    d->profileAction->setStatusTip(i18n("Profile current Launch"));
-    d->profileAction->setWhatsThis(i18nc("@info:whatsthis", "<b>Profile Launch</b><p>Executes the target or the program specified in currently active launch configuration inside a Profiler.</p>"));
+    d->profileAction->setToolTip(i18nc("@info:tooltip", "Profile current launch"));
+    d->profileAction->setStatusTip(i18n("Profile current launch"));
+    d->profileAction->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in currently active launch configuration inside a Profiler."));
     ac->addAction("run_profile", d->profileAction);
     connect(d->profileAction, SIGNAL(triggered(bool)), this, SLOT(slotProfile()));
 
@@ -450,7 +450,7 @@ void RunController::setupActions()
     // Ctrl+Escape would be nicer, but thats taken by the ksysguard desktop shortcut
     action->setShortcut(QKeySequence("Ctrl+Shift+Escape"));
     action->setToolTip(i18nc("@info:tooltip", "Stop all currently running jobs"));
-    action->setWhatsThis(i18nc("@info:whatsthis", "<b>Stop All Jobs</b><p>Requests that all running jobs are stopped.</p>"));
+    action->setWhatsThis(i18nc("@info:whatsthis", "Requests that all running jobs are stopped."));
     action->setEnabled(false);
     ac->addAction("run_stop_all", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(stopAllProcesses()));
@@ -458,14 +458,14 @@ void RunController::setupActions()
     action = d->stopJobsMenu = new KActionMenu( KIcon("process-stop"), i18n("Stop"), this);
     action->setIconText(i18nc("Short text for 'Stop' used in the toolbar", "Stop"));
     action->setToolTip(i18nc("@info:tooltip", "Menu allowing to stop individual jobs"));
-    action->setWhatsThis(i18nc("@info:whatsthis", "<b>Stop</b><p>List of Jobs that can be stopped individually.</p>"));
+    action->setWhatsThis(i18nc("@info:whatsthis", "List of jobs that can be stopped individually."));
     action->setEnabled(false);
     ac->addAction("run_stop_menu", action);
 
     d->currentTargetAction = new KSelectAction( i18n("Current Launch Configuration"), this);
-    d->currentTargetAction->setToolTip(i18nc("@info:tooltip", "Current Launch Configuration"));
-    d->currentTargetAction->setStatusTip(i18n("Current Launch Configuration"));
-    d->currentTargetAction->setWhatsThis(i18nc("@info:whatsthis", "<p>Select which launch configuration to run when run is invoked.</p>"));
+    d->currentTargetAction->setToolTip(i18nc("@info:tooltip", "Current launch configuration"));
+    d->currentTargetAction->setStatusTip(i18n("Current launch Configuration"));
+    d->currentTargetAction->setWhatsThis(i18nc("@info:whatsthis", "Select which launch configuration to run when run is invoked."));
     ac->addAction("run_default_target", d->currentTargetAction);
 }
 

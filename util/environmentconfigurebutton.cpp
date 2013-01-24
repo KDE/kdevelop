@@ -80,7 +80,7 @@ EnvironmentConfigureButton::EnvironmentConfigureButton(QWidget* parent)
     setText(QString());
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     setIcon(KIcon("configure"));
-    setToolTip(i18n("configure environment variables"));
+    setToolTip(i18n("Configure environment variables"));
 
     connect(this, SIGNAL(clicked(bool)),
             this, SLOT(showDialog()));

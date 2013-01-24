@@ -87,10 +87,9 @@ AppWizardPlugin::AppWizardPlugin(QObject *parent, const QVariantList &)
     m_newFromTemplate->setText(i18n("New From Template..."));
     connect(m_newFromTemplate, SIGNAL(triggered(bool)), this, SLOT(slotNewProject()));
     m_newFromTemplate->setToolTip( i18n("Generate a new project from a template") );
-    m_newFromTemplate->setWhatsThis( i18n("<b>New project</b><p>"
-                               "This starts KDevelop's application wizard. "
-                               "It helps you to generate a skeleton for your "
-                               "application from a set of templates.</p>") );
+    m_newFromTemplate->setWhatsThis( i18n("This starts KDevelop's application wizard. "
+                                          "It helps you to generate a skeleton for your "
+                                          "application from a set of templates.") );
 
     m_templatesModel = new ProjectTemplatesModel(this);
 }

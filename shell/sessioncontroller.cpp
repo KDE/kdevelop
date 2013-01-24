@@ -627,7 +627,7 @@ SessionController::SessionController( QObject *parent )
     action = actionCollection()->addAction( "configure_sessions", this, SLOT(configureSessions()) );
     action->setText( i18n("Configure Sessions...") );
     action->setToolTip( i18n("Create/Delete/Activate Sessions") );
-    action->setWhatsThis( i18n( "<b>Configure Sessions</b><p>Shows a dialog to Create/Delete Sessions and set a new active session.</p>" ) );
+    action->setWhatsThis( i18n( "Shows a dialog to Create/Delete Sessions and set a new active session." ) );
     #endif
 
     d->grp = new QActionGroup( this );

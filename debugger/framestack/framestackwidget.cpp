@@ -56,14 +56,14 @@ FramestackWidget::FramestackWidget(IDebugController* controller, QWidget* parent
             SLOT(currentSessionChanged(KDevelop::IDebugSession*)));
     connect(controller, SIGNAL(raiseFramestackViews()), SIGNAL(requestRaise()));
 
-    setWhatsThis(i18n("<b>Frame stack</b><p>"
-                    "Often referred to as the \"call stack\", "
-                    "this is a list showing which function is "
-                    "currently active, and what called each "
-                    "function to get to this point in your "
-                    "program. By clicking on an item you "
-                    "can see the values in any of the "
-                    "previous calling functions.</p>"));
+    setWhatsThis(i18n("<b>Frame stack</b>"
+                      "Often referred to as the \"call stack\", "
+                      "this is a list showing which function is "
+                      "currently active, and what called each "
+                      "function to get to this point in your "
+                      "program. By clicking on an item you "
+                      "can see the values in any of the "
+                      "previous calling functions."));
     setWindowIcon(KIcon("view-list-text"));
     m_threadsWidget = new QWidget(this);
     m_threads = new QListView(m_threadsWidget);

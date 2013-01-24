@@ -603,7 +603,7 @@ void DocumentController::setupActions()
     action->setText(i18n( "&Open..." ) );
     connect( action, SIGNAL(triggered(bool)), SLOT(chooseDocument()) );
     action->setToolTip( i18n( "Open file" ) );
-    action->setWhatsThis( i18n( "<b>Open file</b><p>Opens a file for editing.</p>" ) );
+    action->setWhatsThis( i18n( "Opens a file for editing." ) );
 
     d->fileOpenRecent = KStandardAction::openRecent(this,
                     SLOT(slotOpenDocument(KUrl)), ac);
@@ -615,7 +615,7 @@ void DocumentController::setupActions()
     action->setText(i18n( "Save Al&l" ) );
     connect( action, SIGNAL(triggered(bool)), SLOT(slotSaveAllDocuments()) );
     action->setToolTip( i18n( "Save all open documents" ) );
-    action->setWhatsThis( i18n( "<b>Save all documents</b><p>Save all open documents, prompting for additional information when necessary.</p>" ) );
+    action->setWhatsThis( i18n( "Save all open documents, prompting for additional information when necessary." ) );
     action->setShortcut( QKeySequence(Qt::CTRL + Qt::Key_L) );
     action->setEnabled(false);
 
@@ -624,7 +624,7 @@ void DocumentController::setupActions()
     action->setText(i18n( "Reload All" ) );
     connect( action, SIGNAL(triggered(bool)), SLOT(reloadAllDocuments()) );
     action->setToolTip( i18n( "Revert all open documents" ) );
-    action->setWhatsThis( i18n( "<b>Revert all documents</b><p>Revert all open documents, returning to the previously saved state.</p>" ) );
+    action->setWhatsThis( i18n( "Revert all open documents, returning to the previously saved state." ) );
     action->setEnabled(false);
 
     action = d->close = ac->addAction( "file_close" );
@@ -632,8 +632,8 @@ void DocumentController::setupActions()
     action->setShortcut( Qt::CTRL + Qt::Key_W );
     action->setText( i18n( "&Close" ) );
     connect( action, SIGNAL(triggered(bool)), SLOT(fileClose()) );
-    action->setToolTip( i18n( "Close File" ) );
-    action->setWhatsThis( i18n( "<b>Close File</b><p>Closes current file.</p>" ) );
+    action->setToolTip( i18n( "Close file" ) );
+    action->setWhatsThis( i18n( "Closes current file." ) );
     action->setEnabled(false);
 
     action = d->closeAll = ac->addAction( "file_close_all" );
@@ -641,7 +641,7 @@ void DocumentController::setupActions()
     action->setText(i18n( "Clos&e All" ) );
     connect( action, SIGNAL(triggered(bool)), SLOT(closeAllDocuments()) );
     action->setToolTip( i18n( "Close all open documents" ) );
-    action->setWhatsThis( i18n( "<b>Close all documents</b><p>Close all open documents, prompting for additional information when necessary.</p>" ) );
+    action->setWhatsThis( i18n( "Close all open documents, prompting for additional information when necessary." ) );
     action->setEnabled(false);
 
     action = d->closeAllOthers = ac->addAction( "file_closeother" );
@@ -650,7 +650,7 @@ void DocumentController::setupActions()
     action->setText(i18n( "Close All Ot&hers" ) );
     connect( action, SIGNAL(triggered(bool)), SLOT(closeAllOtherDocuments()) );
     action->setToolTip( i18n( "Close all other documents" ) );
-    action->setWhatsThis( i18n( "<b>Close all other documents</b><p>Close all open documents, with the exception of the currently active document.</p>" ) );
+    action->setWhatsThis( i18n( "Close all open documents, with the exception of the currently active document." ) );
     action->setEnabled(false);
 }
 

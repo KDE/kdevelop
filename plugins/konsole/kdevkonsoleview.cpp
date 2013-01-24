@@ -94,8 +94,6 @@ KDevKonsoleView::KDevKonsoleView( KDevKonsoleViewPlugin *plugin, QWidget* parent
     d->konsolepart = 0;
     setObjectName( i18n( "Konsole" ) );
 
-    setWhatsThis( i18n( "<b>Konsole</b><p>"
-            "This window contains an embedded console.</p>" ) );
     setWindowIcon( KIcon( "utilities-terminal" ) );
     setWindowTitle( i18n( "Konsole" ) );
 

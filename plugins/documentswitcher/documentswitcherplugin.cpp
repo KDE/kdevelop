@@ -60,7 +60,7 @@ DocumentSwitcherPlugin::DocumentSwitcherPlugin(QObject *parent, const QVariantLi
     forwardAction->setText( i18n( "Last Used Views" ) );
     forwardAction->setIcon( KIcon("go-next-view-page") );
     forwardAction->setShortcut( Qt::CTRL | Qt::Key_Tab );
-    forwardAction->setWhatsThis( i18n( "<b>Walk through last used Views</b><br/>Opens a list to walk through the list of last used views." ) );
+    forwardAction->setWhatsThis( i18n( "Opens a list to walk through the list of last used views." ) );
     forwardAction->setStatusTip( i18n( "Walk through the list of last used views" ) );
     connect( forwardAction, SIGNAL(triggered()), SLOT(walkForward()) );
     
@@ -68,7 +68,7 @@ DocumentSwitcherPlugin::DocumentSwitcherPlugin(QObject *parent, const QVariantLi
     backwardAction->setText( i18n( "Last Used Views (Reverse)" ) );
     backwardAction->setIcon( KIcon("go-previous-view-page") );
     backwardAction->setShortcut( Qt::CTRL | Qt::SHIFT | Qt::Key_Tab );
-    backwardAction->setWhatsThis( i18n( "<b>Walk through last used Views (Reverse)</b><br/>Opens a list to walk through the list of last used views in reverse." ) );
+    backwardAction->setWhatsThis( i18n( "Opens a list to walk through the list of last used views in reverse." ) );
     backwardAction->setStatusTip( i18n( "Walk through the list of last used views" ) );
     connect( backwardAction, SIGNAL(triggered()), SLOT(walkBackward()) );
     

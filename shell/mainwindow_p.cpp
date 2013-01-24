@@ -236,8 +236,7 @@ void MainWindowPrivate::setupActions()
     action = KStandardAction::preferences( this, SLOT(settingsDialog()),
                                       actionCollection());
     action->setToolTip( text );
-    action->setWhatsThis( QString( "<b>%1</b><p>%2</p>" ).arg( text ).arg(
-                              i18n( "Lets you customize %1.", app ) ) );
+    action->setWhatsThis( QString( "%1" ).arg( i18n( "Lets you customize %1.", app ) ) );
 
     action = actionCollection()->addAction( "show_editorconfig", this, SLOT(showEditorConfig()) );
     action->setIcon( KIcon("preferences-other") );
@@ -246,18 +245,18 @@ void MainWindowPrivate::setupActions()
 
     action =  KStandardAction::configureNotifications(this, SLOT(configureNotifications()), actionCollection());
     action->setText( i18n("Configure Notifications...") );
-    action->setToolTip( i18nc("@info:tooltip", "Configure Notifications") );
-    action->setWhatsThis( i18nc( "@info:whatsthis", "<b>Configure Notifications</b><p>Shows a dialog that lets you configure notifications.</p>" ) );
+    action->setToolTip( i18nc("@info:tooltip", "Configure notifications") );
+    action->setWhatsThis( i18nc( "@info:whatsthis", "Shows a dialog that lets you configure notifications." ) );
 
     action = actionCollection()->addAction( "about_platform", this, SLOT(showAboutPlatform()) );
     action->setText( i18n("About KDevelop Platform") );
     action->setStatusTip( i18n("Show Information about KDevelop Platform") );
-    action->setWhatsThis( i18nc( "@info:whatsthis", "<b>About KDevelop Platform</b><p>Shows a dialog with information about KDevelop Platform.</p>" ) );
+    action->setWhatsThis( i18nc( "@info:whatsthis", "Shows a dialog with information about KDevelop Platform." ) );
 
     action = actionCollection()->addAction( "loaded_plugins", this, SLOT(showLoadedPlugins()) );
     action->setText( i18n("Loaded Plugins") );
     action->setStatusTip( i18n("Show a list of all loaded plugins") );
-    action->setWhatsThis( i18nc( "@info:whatsthis", "<b>Loaded Plugins</b><p>Shows a dialog with information about all loaded plugins.</p>" ) );
+    action->setWhatsThis( i18nc( "@info:whatsthis", "Shows a dialog with information about all loaded plugins." ) );
     
 //     KToolBarPopupAction *popupAction;
 //     popupAction = new KToolBarPopupAction( KIcon( "process-stop" ),
@@ -268,7 +267,7 @@ void MainWindowPrivate::setupActions()
 
 //     popupAction->setShortcut( Qt::Key_Escape );
 //     popupAction->setToolTip( i18n( "Stop" ) );
-//     popupAction->setWhatsThis( i18n( "<b>Stop</b><p>Stops all running processes.</p>" ) );
+//     popupAction->setWhatsThis( i18n( "Stops all running processes." ) );
 //     popupAction->setEnabled( false );
 //     connect( popupAction, SIGNAL(triggered()),
 //              this, SLOT(stopButtonPressed()) );
@@ -282,7 +281,7 @@ void MainWindowPrivate::setupActions()
      connect( action, SIGNAL(triggered(bool)), SLOT(gotoNextWindow()) );
      action->setShortcut( Qt::ALT + Qt::SHIFT + Qt::Key_Right );
      action->setToolTip( i18nc( "@info:tooltip", "Next window" ) );
-     action->setWhatsThis( i18nc( "@info:whatsthis", "<b>Next window</b><p>Switches to the next window.</p>" ) );
+     action->setWhatsThis( i18nc( "@info:whatsthis", "Switches to the next window." ) );
      action->setIcon(KIcon("go-next"));
 
      action = actionCollection()->addAction( "view_previous_window" );
@@ -290,7 +289,7 @@ void MainWindowPrivate::setupActions()
      connect( action, SIGNAL(triggered(bool)), SLOT(gotoPreviousWindow()) );
      action->setShortcut( Qt::ALT + Qt::SHIFT + Qt::Key_Left );
      action->setToolTip( i18nc( "@info:tooltip", "Previous window" ) );
-     action->setWhatsThis( i18nc( "@info:whatsthis", "<b>Previous window</b><p>Switches to the previous window.</p>" ) );
+     action->setWhatsThis( i18nc( "@info:whatsthis", "Switches to the previous window." ) );
      action->setIcon(KIcon("go-previous"));
 
     /*action = actionCollection()->addAction( "new_window" );
@@ -298,24 +297,24 @@ void MainWindowPrivate::setupActions()
     action->setText( i18n( "&New Window" ) );
     action->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_N );
     connect( action, SIGNAL(triggered(bool)), SLOT(newWindow()) );
-    action->setToolTip( i18n( "New Window" ) );
-    action->setWhatsThis( i18n( "<b>New Window</b><p>Creates a new window with a duplicate of the current area.</p>" ) );*/
+    action->setToolTip( i18n( "New window" ) );
+    action->setWhatsThis( i18n( "Creates a new window with a duplicate of the current area." ) );*/
 
     action = actionCollection()->addAction( "split_horizontal" );
     action->setIcon(KIcon( "view-split-top-bottom" ));
     action->setText( i18n( "Split View &Top/Bottom" ) );
     action->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_T );
     connect( action, SIGNAL(triggered(bool)), SLOT(splitHorizontal()) );
-    action->setToolTip( i18nc( "@info:tooltip", "Split Horizontal" ) );
-    action->setWhatsThis( i18nc( "@info:whatsthis", "<b>Split Horizontal</b><p>Splits the current view horizontally.</p>" ) );
+    action->setToolTip( i18nc( "@info:tooltip", "Split horizontal" ) );
+    action->setWhatsThis( i18nc( "@info:whatsthis", "Splits the current view horizontally." ) );
 
     action = actionCollection()->addAction( "split_vertical" );
     action->setIcon(KIcon( "view-split-left-right" ));
     action->setText( i18n( "Split View &Left/Right" ) );
     action->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_L );
     connect( action, SIGNAL(triggered(bool)), SLOT(splitVertical()) );
-    action->setToolTip( i18nc( "@info:tooltip", "Split Vertical" ) );
-    action->setWhatsThis( i18nc( "@info:whatsthis", "<b>Split Vertical</b><p>Splits the current view vertically.</p>" ) );
+    action->setToolTip( i18nc( "@info:tooltip", "Split vertical" ) );
+    action->setWhatsThis( i18nc( "@info:whatsthis", "Splits the current view vertically." ) );
 
     action = KStandardAction::fullScreen( this, SLOT(toggleFullScreen(bool)), m_mainWindow, actionCollection() );
 
@@ -325,16 +324,16 @@ void MainWindowPrivate::setupActions()
     action->setText( i18n( "&New" ) );
     action->setIconText( i18nc( "Shorter Text for 'New File' shown in the toolbar", "New") );
     connect( action, SIGNAL(triggered(bool)), SLOT(fileNew()) );
-    action->setToolTip( i18nc( "@info:tooltip", "New File" ) );
-    action->setWhatsThis( i18nc( "@info:whatsthis", "<b>New File</b><p>Creates an empty file.</p>" ) );
+    action->setToolTip( i18nc( "@info:tooltip", "New file" ) );
+    action->setWhatsThis( i18nc( "@info:whatsthis", "Creates an empty file." ) );
 
     action = actionCollection()->addAction( "add_toolview" );
     action->setIcon(KIcon("window-new"));
     action->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_V );
     action->setText( i18n( "&Add Tool View..." ) );
     connect( action, SIGNAL(triggered(bool)),  SLOT(viewAddNewToolView()) );
-    action->setToolTip( i18nc( "@info:tooltip", "Add Tool View" ) );
-    action->setWhatsThis( i18nc( "@info:whatsthis", "<b>Add Tool View</b><p>Adds a new tool view to this window.</p>" ) );
+    action->setToolTip( i18nc( "@info:tooltip", "Add tool view" ) );
+    action->setWhatsThis( i18nc( "@info:whatsthis", "Adds a new tool view to this window." ) );
 }
 
 void MainWindowPrivate::toggleArea(bool b)
