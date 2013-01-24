@@ -278,7 +278,8 @@ void TestBackgroundparser::benchmarkDocumentChanges()
     DocumentChangeTracker tracker(doc);
     
     doc->setText("hello world");
-    KTextEditor::View* v = doc->createView(0);
+    // required for proper benchmark results
+    doc->createView(0);
     QBENCHMARK {
         for ( int i = 0; i < 5000; i++ ) {
             doc->startEditing();
