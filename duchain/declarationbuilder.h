@@ -38,7 +38,11 @@ public:
 
 protected:
     using Visitor::visit;
+    using Visitor::endVisit;
+
     virtual bool visit(QmlJS::AST::FunctionDeclaration* node);
+    virtual void endVisit(QmlJS::AST::FunctionDeclaration* node);
+
     virtual bool visit(QmlJS::AST::FormalParameterList* node);
     virtual bool visit(QmlJS::AST::VariableDeclaration* node);
 

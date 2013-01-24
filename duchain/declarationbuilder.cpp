@@ -52,17 +52,17 @@ bool DeclarationBuilder::visit(QmlJS::AST::FunctionDeclaration* node)
         openDeclaration<FunctionDeclaration>(name, range);
     }
 
-    const bool ret = DeclarationBuilderBase::visit(node);
+    return DeclarationBuilderBase::visit(node);
+}
 
-    {
-        DUChainWriteLocker lock;
-        FunctionDeclaration *fun = currentDeclaration<FunctionDeclaration>();
-        fun->setAbstractType(lastType());
-    }
+void DeclarationBuilder::endVisit(QmlJS::AST::FunctionDeclaration* node)
+{
+    DeclarationBuilderBase::endVisit(node);
 
+    DUChainWriteLocker lock;
+    FunctionDeclaration *fun = currentDeclaration<FunctionDeclaration>();
+    fun->setAbstractType(lastType());
     closeDeclaration();
-
-    return ret;
 }
 
 bool DeclarationBuilder::visit(QmlJS::AST::FormalParameterList* node)
