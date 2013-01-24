@@ -77,6 +77,17 @@ bool DeclarationBuilder::visit(QmlJS::AST::FormalParameterList* node)
     return true;
 }
 
+bool DeclarationBuilder::visit(QmlJS::AST::VariableDeclaration* node)
+{
+   const QualifiedIdentifier name(node->name.toString());
+   const RangeInRevision range = m_session->locationToRange(node->identifierToken);
+   DUChainWriteLocker lock;
+   openDeclaration<Declaration>(name, range);
+   closeDeclaration();
+
+   return true;
+}
+
 void DeclarationBuilder::closeContext()
 {
     DUChainWriteLocker lock;

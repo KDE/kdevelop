@@ -40,6 +40,7 @@ protected:
     using Visitor::visit;
     virtual bool visit(QmlJS::AST::FunctionDeclaration* node);
     virtual bool visit(QmlJS::AST::FormalParameterList* node);
+    virtual bool visit(QmlJS::AST::VariableDeclaration* node);
 
     virtual void closeContext();
 };

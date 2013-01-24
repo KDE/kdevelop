@@ -6,3 +6,9 @@ function helloWorld()
 {
   alert("Hello World!");
 }
+
+var a = 5;
+function testVariables()
+{
+  var b = "some text";
+}
