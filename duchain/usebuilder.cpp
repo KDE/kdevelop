@@ -28,6 +28,12 @@ UseBuilder::UseBuilder()
 
 bool UseBuilder::visit(QmlJS::AST::FunctionDeclaration* node)
 {
+      const RangeInRevision pRange(m_session->locationToRange(node->lparenToken).end,
+                                   m_session->locationToRange(node->rparenToken).start);
+//    const QualifiedIdentifier id(node->name);
+//    const DeclarationPointer declaration_p = id;
+//    newUse(node, pRange, declaration_p);
+
     const bool ret = UseBuilderBase::visit(node);
 
     return ret;

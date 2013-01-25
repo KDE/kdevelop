@@ -1,4 +1,5 @@
 kde4_add_library(kdevqmljsduchain SHARED
+    helper.cpp
     parsesession.cpp
     debugvisitor.cpp
     contextbuilder.cpp

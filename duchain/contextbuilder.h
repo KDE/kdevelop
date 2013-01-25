@@ -25,6 +25,7 @@
 #include <qmljs/qmljsdocument.h>
 
 #include "duchainexport.h"
+#include "parsesession.h"
 
 class ParseSession;
 
