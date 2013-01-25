@@ -290,6 +290,26 @@ void BenchHashes::typeRepo()
         v.at(i)->size++;
       }
     }
+  } else if (type == 6) {
+    // for the idea, look at c++'s lexer.cpp
+    const int vectors = 5;
+    typedef QPair<int, TypeRepoTestData*> Pair;
+    typedef QVarLengthArray<Pair, vectors> InnerVector;
+    QVarLengthArray <InnerVector, 10> v;
+    v.resize(vectors);
+    for(int i = 0; i < 100; ++i) {
+      v[i % vectors] << qMakePair(i, new TypeRepoTestData);
+    }
+    QBENCHMARK {
+      for(int i = 0; i < 100; ++i) {
+        foreach(const Pair& p, v.at(i % vectors)) {
+          if (p.first == i) {
+            p.second->size++;
+            break;
+          }
+        }
+      }
+    }
   } else if (type == 0) {
     QBENCHMARK {}
   }
@@ -305,6 +325,7 @@ void BenchHashes::typeRepo_data()
   QTest::newRow("qhash") << 3;
   QTest::newRow("qmap") << 4;
   QTest::newRow("unordered_map") << 5;
+  QTest::newRow("nested-vector") << 6;
 }
 
 #include "benchhashes.moc"
