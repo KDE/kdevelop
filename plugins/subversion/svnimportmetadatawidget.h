@@ -34,8 +34,8 @@ public:
     virtual void setUseSourceDirForDestination( bool );
     virtual bool hasValidData() const;
 private:
-    bool useSourceDirForDestination;
     Ui::SvnImportMetadataWidget *m_ui;
+    bool useSourceDirForDestination;
 };
 
 #endif

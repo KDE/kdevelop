@@ -15,6 +15,7 @@
 
 SvnImportMetadataWidget::SvnImportMetadataWidget( QWidget *parent )
     : VcsImportMetadataWidget( parent ), m_ui(new Ui::SvnImportMetadataWidget)
+    , useSourceDirForDestination( false )
 {
     m_ui->setupUi( this );
     m_ui->srcEdit->setUrl( KUrl() );

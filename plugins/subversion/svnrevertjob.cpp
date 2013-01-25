@@ -34,6 +34,7 @@
 
 SvnInternalRevertJob::SvnInternalRevertJob( SvnJobBase* parent )
     : SvnInternalJobBase( parent )
+    , m_recursive( false )
 {
 }
 
