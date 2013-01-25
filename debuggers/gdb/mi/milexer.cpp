@@ -146,9 +146,6 @@ int MILexer::nextToken(int &pos, int &len)
                 len = m_ptr - start;
                 return kind;
         }
-
-        if (kind == 0)
-            break;
     }
 
     return 0;
