@@ -32,6 +32,8 @@ class SimpleRange;
 class RangeInRevision;
 }
 
+typedef QPair<KDevelop::DUContextPointer, KDevelop::RangeInRevision> SimpleUse;
+
 /**
  * This class wraps the qmljs parser and offers some helper functions
  * that make it simpler to use the parser in KDevelop.
@@ -102,6 +104,15 @@ public:
      * @return a range that spans @p fromNode and @p toNode.
      */
     KDevelop::RangeInRevision editorFindRange(QmlJS::AST::Node* fromNode, QmlJS::AST::Node* toNode) const;
+
+    /**
+     * Implemented to make the AbstractUseBuilder happy.
+     */
+    void mapAstUse(QmlJS::AST::Node* node, const SimpleUse& use)
+    {
+        Q_UNUSED(node);
+        Q_UNUSED(use);
+    }
 
 private:
     KDevelop::IndexedString m_url;
