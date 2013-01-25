@@ -38,7 +38,7 @@ REGISTER_DUCHAIN_ITEM_WITH_DATA(CppNormalDUContext, DUContextData);
 template<>
 QWidget* CppDUContext<TopDUContext>::createNavigationWidget( Declaration* decl, TopDUContext* topContext, const QString& htmlPrefix, const QString& htmlSuffix ) const {
   if( decl == 0 ) {
-    KUrl u( url().str() );
+    KUrl u( url().toUrl() );
     IncludeItem i;
     i.pathNumber = -1;
     i.name = u.fileName();

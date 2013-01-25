@@ -76,9 +76,9 @@ void CTestFindJob::updateReady(const KDevelop::IndexedString& document, const KD
         return;
     }
 
-    kDebug() << m_pendingFiles << document.str();
+    kDebug() << m_pendingFiles << document;
     m_suite->loadDeclarations(document, context);
-    m_pendingFiles.removeAll(document.str());
+    m_pendingFiles.removeAll(document.toString());
 
     if (m_pendingFiles.isEmpty())
     {

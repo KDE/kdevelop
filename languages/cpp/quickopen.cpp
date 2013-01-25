@@ -207,7 +207,7 @@ void allIncludedRecursion( QSet<const DUContext*>& used, QMap<IndexedString, Inc
 
   IncludeItem i;
 
-  i.name = ctx->url().str();
+  i.name = ctx->url().toString();
 
   if( !prefixPath.isEmpty() && !i.name.contains(prefixPath) )
     return;
@@ -337,7 +337,7 @@ void IncludeFileDataProvider::reset()
   foreach( const IndexedString &u, m_importers ) {
     IncludeItem i;
     i.isDirectory = false;
-    i.name = u.str();
+    i.name = u.toString();
     i.pathNumber = -1; //We mark this as an importer by putting pathNumber to -1
     allIncludeItems << i;
   }

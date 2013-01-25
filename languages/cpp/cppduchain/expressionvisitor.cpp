@@ -2033,7 +2033,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     if(chosenFunction)
       if(m_mapAst) session()->mapCallAstToType(node, chosenFunction->type<FunctionType>());
 
-    static IndexedString functionCallOperatorIdentifier("operator()");
+    static IndexedString functionCallOperatorIdentifier(QLatin1String("operator()"));
 
     bool createUseOnParen = (bool)chosenFunction && (constructedType || chosenFunction->identifier().identifier() == functionCallOperatorIdentifier);
     //Re-create the use we have discarded earlier, this time with the correct overloaded function chosen.

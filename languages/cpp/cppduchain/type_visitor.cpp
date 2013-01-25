@@ -257,7 +257,7 @@ void TypeASTVisitor::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
          bool isDecltypeInParen = false;
         if (node->isDecltype && node->expression->kind == AST::Kind_PrimaryExpression) {
           int startPosition = m_session->token_stream->position(node->expression->start_token);
-          static IndexedString paren("(");
+          static IndexedString paren(QLatin1Char('('));
           isDecltypeInParen = m_session->contentsVector()[startPosition] == paren.index();
         }
 

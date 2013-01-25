@@ -143,7 +143,7 @@ uint Cpp::MacroIndexConversion::toIndex(const rpp::pp_macro& macro) const {
 
 //For debugging
 QString id(const EnvironmentFile* file) {
-  return file->url().str() + QString(" %1").arg((size_t)file) ;
+  return file->url().toString() + QString(" %1").arg((size_t)file) ;
 }
 
 QString print(const Cpp::ReferenceCountedStringSet& set) {
@@ -155,7 +155,7 @@ QString print(const Cpp::ReferenceCountedStringSet& set) {
       ret += ", ";
     first = false;
     
-    ret += (*it).str();
+    ret += (*it).toString();
     ++it;
   }
   return ret;
@@ -209,7 +209,7 @@ bool EnvironmentFile::matchEnvironment(const ParsingEnvironment* _environment) c
 
   if( cppEnvironment->identityOffsetRestrictionEnabled() && cppEnvironment->identityOffsetRestriction() != identityOffset() ) {
 #ifdef DEBUG_LEXERCACHE
-    kDebug( 9007 ) << "file" << url().str() << "does not match branching hash. Restriction:" << cppEnvironment->identityOffsetRestriction() << "Actual:" << identityOffset();
+    kDebug( 9007 ) << "file" << url() << "does not match branching hash. Restriction:" << cppEnvironment->identityOffsetRestriction() << "Actual:" << identityOffset();
 #endif
     return false;
   }
@@ -222,7 +222,7 @@ bool EnvironmentFile::matchEnvironment(const ParsingEnvironment* _environment) c
   if(EnvironmentManager::self()->matchingLevel() == EnvironmentManager::Naive)
     if(cppEnvironment->macroNameSet().contains(headerGuard())) {
 #ifdef DEBUG_LEXERCACHE
-      kDebug( 9007 ) << "file" << url().str() << "environment contains the header-guard, returning true";
+      kDebug( 9007 ) << "file" << url() << "environment contains the header-guard, returning true";
 #endif
       return true;
     }
@@ -237,7 +237,7 @@ bool EnvironmentFile::matchEnvironment(const ParsingEnvironment* _environment) c
       
 #ifdef DEBUG_LEXERCACHE
       if(debugging()) {
-        kDebug(9007) << "The environment contains a macro that can affect the cached file, but that should not exist:" << m->name.str();
+        kDebug(9007) << "The environment contains a macro that can affect the cached file, but that should not exist:" << m->name;
       }
 #endif
       return false;
@@ -254,20 +254,20 @@ bool EnvironmentFile::matchEnvironment(const ParsingEnvironment* _environment) c
     rpp::pp_macro* m = cppEnvironment->retrieveStoredMacro( it.ref().name );
     if ( !m || !(*m == it.ref()) ) {
       if( !m && it.ref().isUndef() ) {
-        ifDebug( kDebug( 9007 ) << "Undef-macro" << it.ref().name.str() << "is ok" << m );
+        ifDebug( kDebug( 9007 ) << "Undef-macro" << it.ref().name << "is ok" << m );
         //It is okay, we did not find a macro, but the used macro is an undef macro
         //Q_ASSERT(0); //Undef-macros should not be marked as used
       } else {
-        ifDebug( kDebug( 9007 ) << "The cached file " << url().str() << " used a macro called \"" << it.ref().name.str() << "\"(from" << it.ref().file.str() << "), but the environment" << (m ? "contains differing macro of that name" : "does not contain that macro") << ", the cached file is not used"  );
-        ifDebug( if(m) { kDebug() << "Used macro: " << it.ref().toString()  << "from" << it.ref().file.str() << "found:" << m->toString() << "from" << m->file.str(); } );
+        ifDebug( kDebug( 9007 ) << "The cached file " << url() << " used a macro called \"" << it.ref().name << "\"(from" << it.ref().file << "), but the environment" << (m ? "contains differing macro of that name" : "does not contain that macro") << ", the cached file is not used"  );
+        ifDebug( if(m) { kDebug() << "Used macro: " << it.ref().toString()  << "from" << it.ref().file << "found:" << m->toString() << "from" << m->file; } );
         return false;
       }
     }else{
-      ifDebug( kDebug( 9007 ) << it.ref().name.str() << "match" );
+      ifDebug( kDebug( 9007 ) << it.ref().name << "match" );
     }
   }
 
-  ifDebug( kDebug( 9007 ) << "Using cached file " << url().str() );  
+  ifDebug( kDebug( 9007 ) << "Using cached file " << url() );
   return true;
 }
 
@@ -298,13 +298,13 @@ bool EnvironmentFile::needsUpdate(const ParsingEnvironment* environment) const {
 EnvironmentFile::EnvironmentFile( const IndexedString& url, TopDUContext* topContext ) : ParsingEnvironmentFile(*new EnvironmentFileData(), url) {
 
   d_func_dynamic()->setClassId(this);
-  setLanguage(IndexedString("C++"));
+  setLanguage(IndexedString(QLatin1String("C++")));
   
   d_func_dynamic()->m_topContext = IndexedTopDUContext(topContext);
   
   d_func_dynamic()->m_url = url;
 
-//   ifDebug( kDebug(9007) << "created for" << url.str() << "modification-time:" << d_func_dynamic()->m_modificationTime );
+//   ifDebug( kDebug(9007) << "created for" << url << "modification-time:" << d_func_dynamic()->m_modificationTime );
   
   clearModificationRevisions();
 }
@@ -330,7 +330,7 @@ void EnvironmentFile::addDefinedMacro( const rpp::pp_macro& macro, const rpp::pp
   ENSURE_WRITE_LOCKED
 #ifdef DEBUG_LEXERCACHE
   if(debugging()) {
-  kDebug( 9007 )  << id(this) << "defined macro" << macro.name.str();
+  kDebug( 9007 )  << id(this) << "defined macro" << macro.name;
   }
 #endif
   if( previousOfSameName && d_func()->m_definedMacros.contains(*previousOfSameName) )
@@ -364,7 +364,7 @@ void EnvironmentFile::usingMacro( const rpp::pp_macro& macro ) {
   if ( !d_func()->m_definedMacroNames.contains( macro.name ) && !d_func()->m_unDefinedMacroNames.contains( macro.name ) && !macro.isUndef() ) {
 #ifdef DEBUG_LEXERCACHE
   if(debugging()) {
-    kDebug( 9007 ) << id(this) << "used macro" << macro.name.str() << "from" << macro.file.str();
+    kDebug( 9007 ) << id(this) << "used macro" << macro.name << "from" << macro.file;
   }
 #endif
     d_func_dynamic()->m_usedMacros.insert( macro );

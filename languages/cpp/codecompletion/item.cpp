@@ -183,7 +183,7 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
       return;
     }
     executeSignalSlotCompletionItem( document, _word, classFun->isSignal(),
-                                     classFun->identifier().toString(), classFun->normalizedSignature().str() );
+                                     classFun->identifier().toString(), classFun->normalizedSignature().toString() );
     return;
   }
 

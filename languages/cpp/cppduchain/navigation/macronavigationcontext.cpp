@@ -102,7 +102,7 @@ MacroNavigationContext::~MacroNavigationContext()
 
 QString MacroNavigationContext::name() const
 {
-  return m_macro->name.str();
+  return m_macro->name.toString();
 }
 
 QWidget* MacroNavigationContext::widget() const
@@ -126,7 +126,7 @@ QString MacroNavigationContext::html(bool shorten)
       if(!first)
         args += ", ";
       first = false;
-      args += b.str();
+      args += b.toString();
     }
 
     args += ')';
@@ -140,7 +140,7 @@ QString MacroNavigationContext::html(bool shorten)
                         "%3 the link to the definition",
                         "%1: %2, defined in %3",
                         (m_macro->function_like ? i18n("Function macro") : i18n("Macro")),
-                        importantHighlight(m_macro->name.str()) + args,
+                        importantHighlight(m_macro->name.toString()) + args,
                         createLink(path, path, action) );
 
   modifyHtml() += fontSizeSuffix(shorten) + "</p></body></html>";

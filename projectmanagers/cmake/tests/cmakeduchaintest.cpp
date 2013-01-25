@@ -86,7 +86,7 @@ void CMakeDUChainTest::testDUChainWalk()
     KDevelop::ReferencedTopDUContext m_fakeContext;
     {
         DUChainWriteLocker lock(DUChain::lock());
-        m_fakeContext = new TopDUContext(IndexedString("test"), RangeInRevision(0,0,0,0));
+        m_fakeContext = new TopDUContext(IndexedString(QLatin1String("test")), RangeInRevision(0,0,0,0));
         DUChain::self()->addDocumentChain(m_fakeContext);
     }
     
@@ -118,7 +118,7 @@ void CMakeDUChainTest::testDUChainWalk()
     DUChainWriteLocker lock(DUChain::lock());
     QVector<Declaration*> declarations=ctx->localDeclarations();
     foreach(Declaration* d, declarations) {
-        QCOMPARE(d->topContext()->parsingEnvironmentFile()->language(), IndexedString("cmake"));
+        QCOMPARE(d->topContext()->parsingEnvironmentFile()->language(), IndexedString(QLatin1String("cmake")));
     }
     /*for(int i=0; i<declarations.count(); i++)
     {

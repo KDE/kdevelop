@@ -87,7 +87,7 @@ int findIncludeLineFromDUChain(KTextEditor::Document* document, int maxLine, con
     if (import.position.line > maxLine) {
       continue;
     }
-    const int matchQuality = sharedPathLevel(import.context(top)->url().str(), includeFile);
+    const int matchQuality = sharedPathLevel(import.context(top)->url().toString(), includeFile);
     if (matchQuality >= currentMatchQuality) {
       line = import.position.line + 1;
       currentMatchQuality = matchQuality;
@@ -287,8 +287,8 @@ QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(const Q
     return ret;
   }
   
-  KUrl currentUrl(context->topContext()->url().str());
-  KUrl currentPath(context->topContext()->url().str());
+  KUrl currentUrl(context->topContext()->url().toUrl());
+  KUrl currentPath(context->topContext()->url().toUrl());
   currentPath.setFileName(QString());
   
   Cpp::EnvironmentFilePointer env(dynamic_cast<Cpp::EnvironmentFile*>(context->topContext()->parsingEnvironmentFile().data()));
@@ -331,7 +331,7 @@ QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(const Q
       if(dynamic_cast<KDevelop::AliasDeclaration*>(decl))
         continue;
       
-      if(!isSource(context->url().str())) {
+      if(!isSource(context->url().toString())) {
         if(decl && (decl->context()->type() == DUContext::Namespace || decl->context()->type() == DUContext::Global) && !needInstance && (decl->type<CppClassType>() || decl->type<KDevelop::EnumerationType>()) ) {
           if(!haveForwardDeclarationItems.contains(decl->id()))
             ret += KDevelop::CompletionTreeItemPointer( new ForwardDeclarationItem(DeclarationPointer(decl)) );

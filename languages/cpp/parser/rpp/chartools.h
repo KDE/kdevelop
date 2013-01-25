@@ -42,41 +42,41 @@ class QVector;
 class QString;
 typedef QVector<unsigned int> PreprocessedContents;
 
-KDE_DEPRECATED inline bool isSpace(const QChar c)
+inline bool isSpace(const QChar c)
 {
   return c.isSpace();
 }
 
-KDE_DEPRECATED inline bool isLetter(const QChar c)
+inline bool isLetter(const QChar c)
 {
   return c.isLetter();
 }
 
-KDE_DEPRECATED inline bool isLetterOrNumber(const QChar c)
+inline bool isLetterOrNumber(const QChar c)
 {
   return c.isLetterOrNumber();
 }
 
-KDE_DEPRECATED inline bool isNumber(const QChar c)
+inline bool isNumber(const QChar c)
 {
   return c.isNumber();
 }
 
 //Takes an index as delt with during preprocessing, and determines whether it is a fake-index that represents
 //a character. If the 0xffff0000 bits are set, it is a custom character.
-KDE_DEPRECATED inline bool isCharacter(uint index)
+inline bool isCharacter(uint index)
 {
   return KDevelop::IndexedString::indexIsChar(index);
 }
 
 //Creates an index that represents the given character
-KDE_DEPRECATED inline uint indexFromCharacter(const QChar c)
+inline uint indexFromCharacter(const QChar c)
 {
   return KDevelop::IndexedString::charToIndex(c);
 }
 
 //Extracts the character that is represented by the index
-KDE_DEPRECATED inline QChar characterFromIndex(uint index)
+inline QChar characterFromIndex(uint index)
 {
   return KDevelop::IndexedString::indexToChar(index);
 }

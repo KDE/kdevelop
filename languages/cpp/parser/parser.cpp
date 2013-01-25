@@ -307,7 +307,7 @@ bool Parser::parseWinDeclSpec(WinDeclSpecAST *&node)
   uint start = session->token_stream->cursor();
 
   const uint tokenIndex = session->token_stream->symbolIndex(session->token_stream->cursor());
-  static const KDevelop::IndexedString declSpecString("__declspec");
+  static const KDevelop::IndexedString declSpecString(QLatin1String("__declspec"));
   if (declSpecString.index() != tokenIndex)
     return false;
 
@@ -5338,16 +5338,16 @@ bool Parser::parseQProperty(DeclarationAST *&node)
     if(!parseName(ast->name))
       return false;
 
-    static KDevelop::IndexedString readStr("READ");
-    static KDevelop::IndexedString writeStr("WRITE");
-    static KDevelop::IndexedString resetStr("RESET");
-    static KDevelop::IndexedString notifyStr("NOTIFY");
-    static KDevelop::IndexedString designableStr("DESIGNABLE");
-    static KDevelop::IndexedString scriptableStr("SCRIPTABLE");
-    static KDevelop::IndexedString storedStr("STORED");
-    static KDevelop::IndexedString userStr("USER");
-    static KDevelop::IndexedString constantStr("CONSTANT");
-    static KDevelop::IndexedString finalStr("FINAL");
+    static KDevelop::IndexedString readStr(QLatin1String("READ"));
+    static KDevelop::IndexedString writeStr(QLatin1String("WRITE"));
+    static KDevelop::IndexedString resetStr(QLatin1String("RESET"));
+    static KDevelop::IndexedString notifyStr(QLatin1String("NOTIFY"));
+    static KDevelop::IndexedString designableStr(QLatin1String("DESIGNABLE"));
+    static KDevelop::IndexedString scriptableStr(QLatin1String("SCRIPTABLE"));
+    static KDevelop::IndexedString storedStr(QLatin1String("STORED"));
+    static KDevelop::IndexedString userStr(QLatin1String("USER"));
+    static KDevelop::IndexedString constantStr(QLatin1String("CONSTANT"));
+    static KDevelop::IndexedString finalStr(QLatin1String("FINAL"));
 
     while(session->token_stream->lookAhead() != ')') {
       const KDevelop::IndexedString propertyField = session->token_stream->symbol(session->token_stream->cursor());

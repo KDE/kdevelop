@@ -172,9 +172,6 @@ public:
 
   enum StringType { File, Data };
 
-  ///@todo Remove
-  inline QString currentFileNameString () const { return m_files.top().str(); }
-  
   inline KDevelop::IndexedString currentFileName () const { return m_files.top(); }
 
   Value eval_expression (Stream& input);

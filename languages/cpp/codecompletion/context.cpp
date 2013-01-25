@@ -1121,7 +1121,7 @@ bool CodeCompletionContext::doIncludeCompletion()
 
 #ifndef TEST_COMPLETION
   bool local = line.startsWith('"');
-  m_includeItems = CppUtils::allFilesInIncludePath(KUrl(m_duContext->url().str()), local, prefixPath);
+  m_includeItems = CppUtils::allFilesInIncludePath(m_duContext->url().toUrl(), local, prefixPath);
 #endif
 
   return true;
@@ -1192,7 +1192,7 @@ QSet<DUContext*> CodeCompletionContext::memberAccessContainers() const {
   }
   
 //   foreach(DUContext* context, ret) {
-//     kDebug() << "member-access container:" << context->url().str() << context->range().textRange() << context->scopeIdentifier(true).toString();
+//     kDebug() << "member-access container:" << context->url() << context->range().textRange() << context->scopeIdentifier(true).toString();
 //   }
 
   return ret;
@@ -1277,13 +1277,14 @@ static TopDUContext* proxyContextForUrl(KUrl url)
 }
 
 void CodeCompletionContext::preprocessText( int line ) {
+  ///TODO: make static
   QSet<IndexedString> disableMacros;
-  disableMacros.insert(IndexedString("SIGNAL"));
-  disableMacros.insert(IndexedString("SLOT"));
-  disableMacros.insert(IndexedString("emit"));
-  disableMacros.insert(IndexedString("Q_EMIT"));
-  disableMacros.insert(IndexedString("Q_SIGNAL"));
-  disableMacros.insert(IndexedString("Q_SLOT"));
+  disableMacros.insert(IndexedString(QLatin1String("SIGNAL")));
+  disableMacros.insert(IndexedString(QLatin1String("SLOT")));
+  disableMacros.insert(IndexedString(QLatin1String("emit")));
+  disableMacros.insert(IndexedString(QLatin1String("Q_EMIT")));
+  disableMacros.insert(IndexedString(QLatin1String("Q_SIGNAL")));
+  disableMacros.insert(IndexedString(QLatin1String("Q_SLOT")));
 
   // Use the proxy-context if possible, because that one contains most of the macros if existent
   TopDUContext* useTopContext = proxyContextForUrl(m_duContext->url().toUrl());
@@ -1316,7 +1317,7 @@ void getOverridable(DUContext* base, DUContext* current, QMap< QPair<IndexedType
         if(classFun->isConstructor() || classFun->isDestructor())
           key.second = base->owner()->identifier().identifier();
         if(classFun->isDestructor())
-          key.second = IndexedString("~" + key.second.str());
+          key.second = IndexedString("~" + key.second.toString());
       }
       if(!overridable.contains(key) && base->findLocalDeclarations(KDevelop::Identifier(key.second), CursorInRevision::invalid(), 0, key.first.abstractType(), KDevelop::DUContext::OnlyFunctions).isEmpty())
         overridable.insert(key, KDevelop::CompletionTreeItemPointer(new ImplementationHelperItem(ImplementationHelperItem::Override, DeclarationPointer(decl), completionContext, (classFun && classFun->isAbstract()) ? 1 : 2)));

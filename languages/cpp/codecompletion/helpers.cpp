@@ -187,7 +187,7 @@ void createArgumentList(const NormalDeclarationCompletionItem& item, QString& re
       if( num >= firstDefaultParam && includeDefaultParams ) {
         ret += " = ";
         
-        QString defaultParam = decl->defaultParameters()[defaultParamNum].str();
+        QString defaultParam = decl->defaultParameters()[defaultParamNum].toString();
         if(defaultParam.length() <= maxDefaultParameterLength)
           ret += defaultParam;
         else

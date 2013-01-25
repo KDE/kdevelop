@@ -119,9 +119,12 @@ extern QMutex cppDuContextInstantiationsMutex;
         ///For debugging. Describes the last search context.
         QString describeLastContext() const {
           if( m_lastScopeContext ) {
-            return "Context " + m_lastScopeContext->scopeIdentifier(true).toString() + QString(" from %1:%2").arg(m_lastScopeContext->url().str()).arg(m_lastScopeContext->range().start.line);
+            return QString("Context %1 from %2:%3")
+              .arg(m_lastScopeContext->scopeIdentifier(true).toString())
+              .arg(m_lastScopeContext->url().toString())
+              .arg(m_lastScopeContext->range().start.line);
           } else {
-            return QString("Global search with top-context %2").arg(topContext()->url().str());
+            return QString("Global search with top-context of %1").arg(topContext()->url().toString());
           }
         }
 

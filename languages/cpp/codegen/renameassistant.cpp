@@ -116,6 +116,7 @@ void RenameAssistant::textChanged(const KTextEditor::Range& invocationRange, con
       return;
     }
     if (shouldRenameUses(declAtCursor)) {
+      const QString identifier = declAtCursor->identifier().identifier().toString();
       QMap< IndexedString, QList<RangeInRevision> > declUses = declAtCursor->uses();
       if (declUses.size() > 0) {
         for(QMap< IndexedString, QList< RangeInRevision > >::iterator it = declUses.begin(); it != declUses.end(); ++it)
@@ -123,7 +124,7 @@ void RenameAssistant::textChanged(const KTextEditor::Range& invocationRange, con
           foreach(RangeInRevision range, it.value())
           {
             SimpleRange currentRange = declAtCursor->transformFromLocalRevision(range);
-            if(currentRange.isEmpty() || m_view->document()->text(currentRange.textRange()) != declAtCursor->identifier().identifier().str())
+            if(currentRange.isEmpty() || m_view->document()->text(currentRange.textRange()) != identifier)
               return; // One of the uses is invalid. Maybe the replacement has already been performed.
           }
         }

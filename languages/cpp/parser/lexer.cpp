@@ -149,12 +149,21 @@ void Lexer::skipComment()
 }
 
 const uint index_size = 200;
+typedef KDevVarLengthArray<KDevVarLengthArray<QPair<uint, TOKEN_KIND>, 10 >, index_size > TokenIndices;
 
-KDevVarLengthArray<KDevVarLengthArray<QPair<uint, TOKEN_KIND>, 10 >, index_size > createIndicesForTokens() {
-  KDevVarLengthArray<KDevVarLengthArray<QPair<uint, TOKEN_KIND>, 10 >, index_size > ret;
+TokenIndices createIndicesForTokens() {
+  TokenIndices ret;
   ret.resize(index_size);
-  #define ADD_TOKEN(string) ret[KDevelop::IndexedString(#string).index() % index_size].append(qMakePair(KDevelop::IndexedString(#string).index(), Token_ ## string));
-  #define ADD_TOKEN2(string, tok) ret[KDevelop::IndexedString(#string).index() % index_size].append(qMakePair(KDevelop::IndexedString(#string).index(), Token_ ## tok));
+  #define ADD_TOKEN(string) \
+  { \
+    const uint index = KDevelop::IndexedString(QLatin1String(#string)).index(); \
+    ret[index % index_size].append(qMakePair(index, Token_ ## string)); \
+  }
+  #define ADD_TOKEN2(string, tok) \
+  { \
+    const uint index = KDevelop::IndexedString(QLatin1String(#string)).index(); \
+    ret[index % index_size].append(qMakePair(index, Token_ ## tok)); \
+  }
   ADD_TOKEN(K_DCOP);
   ADD_TOKEN(Q_OBJECT);
   ADD_TOKEN(__typeof);
@@ -319,12 +328,12 @@ void Lexer::tokenize(ParseSession* _session)
       (this->*s_scan_table[((uchar)*cursor)])();
     }else{
       //check for utf8 strings
-      static const uint u8Index = KDevelop::IndexedString("u8").index();
+      static const uint u8Index = KDevelop::IndexedString(QLatin1String("u8")).index();
       //check for raw strings
-      static const uint u8RIndex = KDevelop::IndexedString("u8R").index();
-      static const uint uRIndex = KDevelop::IndexedString("uR").index();
-      static const uint URIndex = KDevelop::IndexedString("UR").index();
-      static const uint LRIndex = KDevelop::IndexedString("LR").index();
+      static const uint u8RIndex = KDevelop::IndexedString(QLatin1String("u8R")).index();
+      static const uint uRIndex = KDevelop::IndexedString(QLatin1String("uR")).index();
+      static const uint URIndex = KDevelop::IndexedString(QLatin1String("UR")).index();
+      static const uint LRIndex = KDevelop::IndexedString(QLatin1String("LR")).index();
 
       if (*cursor.current == u8Index) {
         // check for utf8 string
@@ -646,7 +655,7 @@ void Lexer::scan_identifier_or_keyword()
   uint bucket = (*cursor.current) % index_size;
 
   //A very simple lookup table: First level contains all pairs grouped by with (index % index_size), then there is a simple list
-  static const KDevVarLengthArray<KDevVarLengthArray<QPair<uint, TOKEN_KIND>, 10 >, index_size > indicesForTokens = createIndicesForTokens();
+  static const TokenIndices indicesForTokens = createIndicesForTokens();
   for(int a = 0; a < indicesForTokens[bucket].size(); ++a) {
     if(indicesForTokens[bucket][a].first == *cursor.current) {
       (*session->token_stream)[index++].kind = indicesForTokens[bucket][a].second;

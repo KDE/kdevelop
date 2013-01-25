@@ -409,7 +409,7 @@ void ImplementationHelperItem::execute(KTextEditor::Document* document, const KT
     KDevelop::ReferencedTopDUContext updated( DUChain::self()->waitForUpdate(doc, TopDUContext::AllDeclarationsAndContexts) );
 
     if(!updated) {
-      kDebug() << "not creating slot because failed to update" << doc.str();
+      kDebug() << "not creating slot because failed to update" << doc;
       return;
     }
     lock.lock();

@@ -835,7 +835,7 @@ void TestExpressionParser::testTypeConversion() {
   QVERIFY(functionDecl);
 
   QVERIFY(functionDecl->defaultParametersSize() == 1);
-  QCOMPARE(functionDecl->defaultParameters()[0].str(), QString("5"));
+  QCOMPARE(functionDecl->defaultParameters()[0].toString(), QString("5"));
 
   //QVERIFY(0);
   //lock.lock();

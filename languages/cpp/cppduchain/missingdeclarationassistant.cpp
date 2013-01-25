@@ -161,7 +161,7 @@ public:
           if(arg.declaration.data())
           {
             // Find a unique name
-            QString baseName = arg.declaration.data()->identifier().identifier().str();
+            QString baseName = arg.declaration.data()->identifier().identifier().toString();
             for(int a = 1; a < 1000; ++a)
             {
               if(!hadNames.contains(baseName))

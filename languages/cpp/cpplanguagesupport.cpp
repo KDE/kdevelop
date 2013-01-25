@@ -319,7 +319,7 @@ void CppLanguageSupport::switchDefinitionDeclaration()
     if(def && def->declaration()) {
       Declaration* declaration = def->declaration();
       KTextEditor::Range targetRange = declaration->rangeInCurrentRevision().textRange();
-      KUrl url(declaration->url().str());
+      KUrl url(declaration->url().toUrl());
       kDebug() << "found definition that has declaration: " << definition->toString() << "range" << targetRange << "url" << url;
       lock.unlock();
 
@@ -347,7 +347,7 @@ void CppLanguageSupport::switchDefinitionDeclaration()
   }
 
   if(def) {
-    KUrl url(def->url().str());
+    KUrl url(def->url().toUrl());
     KTextEditor::Range targetRange = def->rangeInCurrentRevision().textRange();
 
     if(def->internalContext()) {
@@ -431,7 +431,7 @@ ICreateClassHelper* CppLanguageSupport::createClassHelper() const
 
 void CppLanguageSupport::findIncludePathsForJob(CPPParseJob* job)
 {
-  IncludePathComputer* comp = new IncludePathComputer(KUrl(job->document().str()), job->preprocessorProblemsPointer());
+  IncludePathComputer* comp = new IncludePathComputer(job->document().toUrl(), job->preprocessorProblemsPointer());
   comp->computeForeground();
   job->gotIncludePaths(comp);
 }
@@ -667,7 +667,7 @@ QPair<TopDUContextPointer, SimpleRange> CppLanguageSupport::importedContextForPo
     return qMakePair(TopDUContextPointer(), SimpleRange::invalid());
 
   if((ctx->parsingEnvironmentFile() && ctx->parsingEnvironmentFile()->isProxyContext())) {
-    kDebug() << "Strange: standard-context for" << ctx->url().str() << "is a proxy-context";
+    kDebug() << "Strange: standard-context for" << ctx->url() << "is a proxy-context";
     return qMakePair(TopDUContextPointer(), SimpleRange::invalid());
   }
 
@@ -707,7 +707,7 @@ QPair<SimpleRange, const rpp::pp_macro*> CppLanguageSupport::usedMacroForPositio
   }
 
   TopDUContext* ctx = standardContext(url, true);
-  if(word.str().isEmpty() || !ctx || !ctx->parsingEnvironmentFile())
+  if(word.isEmpty() || !ctx || !ctx->parsingEnvironmentFile())
     return qMakePair(SimpleRange::invalid(), (const rpp::pp_macro*)0);
 
   Cpp::EnvironmentFilePointer p(dynamic_cast<Cpp::EnvironmentFile*>(ctx->parsingEnvironmentFile().data()));
@@ -752,7 +752,7 @@ QPair<KUrl, KDevelop::SimpleCursor> CppLanguageSupport::specialLanguageObjectJum
     if(import.first) {
       DUChainReadLocker lock(DUChain::lock());
       if(import.first)
-        return qMakePair(KUrl(import.first->url().str()), SimpleCursor(0,0));
+        return qMakePair(import.first->url().toUrl(), SimpleCursor(0,0));
     }
 
     QPair<SimpleRange, const rpp::pp_macro*> m = usedMacroForPosition(url, position);
@@ -760,7 +760,7 @@ QPair<KUrl, KDevelop::SimpleCursor> CppLanguageSupport::specialLanguageObjectJum
     if(!m.first.isValid())
       return qMakePair(KUrl(), SimpleCursor::invalid());
 
-    return qMakePair(KUrl(m.second->file.str()), SimpleCursor(m.second->sourceLine, 0));
+    return qMakePair(m.second->file.toUrl(), SimpleCursor(m.second->sourceLine, 0));
 }
 
 QWidget* CppLanguageSupport::specialLanguageObjectNavigationWidget(const KUrl& url, const SimpleCursor& position) {
@@ -772,7 +772,7 @@ QWidget* CppLanguageSupport::specialLanguageObjectNavigationWidget(const KUrl& u
         //Prefer a standardContext, because the included one may have become empty due to
         if(import.first->localDeclarations().count() == 0 && import.first->childContexts().count() == 0) {
 
-          KDevelop::TopDUContext* betterCtx = standardContext(KUrl(import.first->url().str()));
+          KDevelop::TopDUContext* betterCtx = standardContext(import.first->url().toUrl());
 
           if(betterCtx && (betterCtx->localDeclarations().count() != 0 || betterCtx->childContexts().count() != 0))
             return betterCtx->createNavigationWidget(0, 0, i18n("Emptied by preprocessor<br />"));

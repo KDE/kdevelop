@@ -57,7 +57,7 @@ void RenameAction::execute() {
     TopDUContext* topContext = DUChainUtils::standardContextForUrl(it.key().toUrl());
     if (!topContext) {
       //This would be abnormal
-      kDebug() << "while renaming" << it.key().str() << "didn't produce a context";
+      kDebug() << "while renaming" << it.key() << "didn't produce a context";
       continue;
     }
 

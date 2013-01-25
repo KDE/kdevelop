@@ -70,7 +70,7 @@ void CTestSuite::loadDeclarations(const IndexedString& document, const KDevelop:
     TopDUContext* topContext = DUChainUtils::contentContextFromProxyContext(ref.data());
     if (!topContext)
     {
-        kDebug() << "No top context in" << document.str();
+        kDebug() << "No top context in" << document;
         return;
     }
 
@@ -100,7 +100,7 @@ void CTestSuite::loadDeclarations(const IndexedString& document, const KDevelop:
 
     if (!testClass)
     {
-        kDebug() << "No test class found in " << document.str();
+        kDebug() << "No test class found in " << document;
         return;
     }
 

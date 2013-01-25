@@ -88,7 +88,7 @@ pp_macro::pp_macro(const pp_macro& rhs, bool dynamic) :
   copyListsFrom(rhs);
 }
 
-pp_macro::pp_macro(const char* nm) : name(KDevelop::IndexedString(nm))
+pp_macro::pp_macro(const QString& nm) : name(nm)
   , sourceLine(-1)
   , defined(true)
   , hidden(false)
@@ -103,7 +103,7 @@ pp_macro::pp_macro(const char* nm) : name(KDevelop::IndexedString(nm))
 }
 
 QString pp_macro::toString() const {
-  QString ret = name.str();
+  QString ret = name.toString();
   if(!defined)
     ret = "undef " + ret;
   if(function_like) {
@@ -114,7 +114,7 @@ QString pp_macro::toString() const {
         ret += ", ";
       first = false;
       
-      ret += formals()[a].str();
+      ret += formals()[a].toString();
     }
     ret += ')';
   }

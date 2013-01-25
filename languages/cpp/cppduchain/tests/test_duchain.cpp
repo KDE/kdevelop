@@ -190,9 +190,9 @@ kDebug() << aj.index() << aj2.index();
   QCOMPARE(t.at(0).templateIdentifiersCount(), 2u);
   QCOMPARE(t.at(1).templateIdentifiersCount(), 1u);
   QCOMPARE(t.at(2).templateIdentifiersCount(), 1u);
-  QCOMPARE(t.at(0).identifier().str(), QString("Area"));
-  QCOMPARE(t.at(1).identifier().str(), QString("jump"));
-  QCOMPARE(t.at(2).identifier().str(), QString("tes"));
+  QCOMPARE(t.at(0).identifier().toString(), QString("Area"));
+  QCOMPARE(t.at(1).identifier().toString(), QString("jump"));
+  QCOMPARE(t.at(2).identifier().toString(), QString("tes"));
 
   QualifiedIdentifier op1("operator<");
   QualifiedIdentifier op2("operator<=");
@@ -2732,7 +2732,7 @@ void TestDUChain::testSignalSlotDeclaration() {
     QCOMPARE(top->childContexts()[1]->localDeclarations().count(), 1);
     QtFunctionDeclaration* qtDecl = dynamic_cast<QtFunctionDeclaration*>(top->childContexts()[1]->localDeclarations()[0]);
     QVERIFY(qtDecl);
-    QCOMPARE(qtDecl->normalizedSignature().str(), QString("A::B,const Q*"));
+    QCOMPARE(qtDecl->normalizedSignature().toString(), QString("A::B,const Q*"));
 
   }
   {

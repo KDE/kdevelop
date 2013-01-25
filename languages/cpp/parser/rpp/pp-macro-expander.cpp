@@ -47,7 +47,7 @@ QString joinIndexVector(const uint* arrays, uint size, QString between) {
   FOREACH_CUSTOM(uint item, arrays, size) {
     if(!ret.isEmpty())
       ret += between;
-    ret += IndexedString::fromIndex(item).str();
+    ret += IndexedString::fromIndex(item).toString();
   }
   return ret;
 }
@@ -57,7 +57,7 @@ QString joinIndexVector(const IndexedString* arrays, uint size, QString between)
   FOREACH_CUSTOM(const IndexedString& item, arrays, size) {
     if(!ret.isEmpty())
       ret += between;
-    ret += item.str();
+    ret += item.toString();
   }
   return ret;
 }
@@ -98,7 +98,8 @@ pp_actual pp_macro_expander::resolve_formal(const IndexedString& name, Stream& i
 
   if(name.isEmpty()) {
     KDevelop::ProblemPointer problem(new KDevelop::Problem);
-    problem->setFinalLocation(KDevelop::DocumentRange(IndexedString(m_engine->currentFileNameString()), RangeInRevision(input.originalInputPosition(), 0).castToSimpleRange()));
+    problem->setFinalLocation(KDevelop::DocumentRange(m_engine->currentFileName(),
+                                                      RangeInRevision(input.originalInputPosition(), 0).castToSimpleRange()));
     problem->setDescription(i18n("Macro error"));
     m_engine->problemEncountered(problem);
     return pp_actual();
@@ -111,8 +112,9 @@ pp_actual pp_macro_expander::resolve_formal(const IndexedString& name, Stream& i
       }
       else {
         KDevelop::ProblemPointer problem(new KDevelop::Problem);
-        problem->setFinalLocation(KDevelop::DocumentRange(IndexedString(m_engine->currentFileNameString()), RangeInRevision(input.originalInputPosition(), 0).castToSimpleRange()));
-        problem->setDescription(i18n("Call to macro %1 missing argument number %2", name.str(), index));
+        problem->setFinalLocation(KDevelop::DocumentRange(m_engine->currentFileName(),
+                                                          RangeInRevision(input.originalInputPosition(), 0).castToSimpleRange()));
+        problem->setDescription(i18n("Call to macro %1 missing argument number %2", name.toString(), index));
         problem->setExplanation(i18n("Formals: %1", joinIndexVector(formals, formalsSize, ", ")));
         m_engine->problemEncountered(problem);
       }
@@ -122,7 +124,7 @@ pp_actual pp_macro_expander::resolve_formal(const IndexedString& name, Stream& i
   return pp_actual();
 }
 
-#define RETURN_IF_INPUT_BROKEN    if(input.atEnd()) { kDebug() << "too early end while expanding" << macro->name.str(); return; }
+#define RETURN_IF_INPUT_BROKEN    if(input.atEnd()) { kDebug() << "too early end while expanding" << macro->name; return; }
 
 
 pp_macro_expander::pp_macro_expander(pp* engine, pp_frame* frame, bool inHeaderSection)
@@ -205,7 +207,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output, bool substitut
       else if (input == '#')
       {
         Q_ASSERT(isCharacter(input.current()));
-        Q_ASSERT(IndexedString::fromIndex(input.current()).str() == "#");
+        Q_ASSERT(IndexedString::indexToChar(input.current()) == QLatin1Char('#'));
         
         ++input;
         
@@ -356,18 +358,18 @@ void pp_macro_expander::operator()(Stream& input, Stream& output, bool substitut
         
         if (!macro || !macro->defined || macro->hidden || macro->function_like || m_engine->hideNextMacro())
         {
-          static const IndexedString definedIndex = IndexedString("defined");
+          static const IndexedString definedIndex = IndexedString(QLatin1String("defined"));
           m_engine->setHideNextMacro(name == definedIndex);
 
 
-        static const IndexedString lineIndex = IndexedString("__LINE__");
-        static const IndexedString fileIndex = IndexedString("__FILE__");
-        static const IndexedString dateIndex = IndexedString("__DATE__");
-        static const IndexedString timeIndex = IndexedString("__TIME__");
+        static const IndexedString lineIndex = IndexedString(QLatin1String("__LINE__"));
+        static const IndexedString fileIndex = IndexedString(QLatin1String("__FILE__"));
+        static const IndexedString dateIndex = IndexedString(QLatin1String("__DATE__"));
+        static const IndexedString timeIndex = IndexedString(QLatin1String("__TIME__"));
           if (name == lineIndex)
             output.appendString(inputPosition, convertFromString(QString::number(input.inputPosition().line)));
           else if (name == fileIndex)
-            output.appendString(inputPosition, convertFromString(QString("\"%1\"").arg(m_engine->currentFileNameString())));
+            output.appendString(inputPosition, convertFromString(QString("\"%1\"").arg(m_engine->currentFileName().toString())));
           else if (name == dateIndex)
             output.appendString(inputPosition, convertFromString(QDate::currentDate().toString("\"MMM dd yyyy\"")));
           else if (name == timeIndex)
@@ -454,7 +456,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output, bool substitut
             ++input;
           }
           
-          kDebug() << "too early end while expanding" << macro->name.str();
+          kDebug() << "too early end while expanding" << macro->name;
           return;
         }
 
@@ -476,7 +478,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output, bool substitut
               ++input;
             }
             
-            kDebug() << "too early end while expanding" << macro->name.str();
+            kDebug() << "too early end while expanding" << macro->name;
             return;
           }
           
@@ -518,7 +520,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output, bool substitut
         
         if(frame.depth >= maxMacroExpansionDepth) 
         {
-          kDebug() << "reached maximum macro-expansion depth while expanding" << macro->name.str();
+          kDebug() << "reached maximum macro-expansion depth while expanding" << macro->name;
           RETURN_IF_INPUT_BROKEN
           
           output << input;

@@ -67,7 +67,7 @@ using namespace KDevelop;
 // #define WARN_BEFORE_REFACTORING
 
 // static Identifier destructorForName(Identifier name) {
-//   QString str = name.identifier().str();
+//   QString str = name.identifier().toString();
 //   if(str.startsWith("~"))
 //     return Identifier(str);
 //   return Identifier("~"+str);
@@ -117,7 +117,7 @@ void SimpleRefactoring::doContextMenu(KDevelop::ContextMenuExtension& extension,
     Declaration* declaration = declContext->declaration().data();
 
     if(declaration) {
-      QFileInfo finfo(declaration->topContext()->url().str());
+      QFileInfo finfo(declaration->topContext()->url().toString());
       if (finfo.isWritable()) {
         QAction* action = new QAction(i18n("Rename %1", declaration->qualifiedIdentifier().toString()), this);
         action->setData(QVariant::fromValue(IndexedDeclaration(declaration)));
@@ -396,10 +396,10 @@ void SimpleRefactoring::startInteractiveRename(KDevelop::IndexedDeclaration decl
     KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("No declaration under cursor"));
     return;
   }
-  QFileInfo info(declaration->topContext()->url().str());
+  QFileInfo info(declaration->topContext()->url().toString());
   if (!info.isWritable()) {
     KMessageBox::error(ICore::self()->uiController()->activeMainWindow(),
-                       i18n("Declaration is located in non-writeable file %1.", declaration->topContext()->url().str()));
+                       i18n("Declaration is located in non-writeable file %1.", declaration->topContext()->url().toString()));
     return;
   }
 
@@ -424,7 +424,7 @@ void SimpleRefactoring::startInteractiveRename(KDevelop::IndexedDeclaration decl
 
   ///Step 1: Allow the user to specify a replacement name, and allow him to see all uses
 
-  QString originalName = declaration->identifier().identifier().str();
+  QString originalName = declaration->identifier().identifier().toString();
   QString replacementName;
 
   //Since we don't yet know what the text should be replaced with, we just collect the top-contexts to process

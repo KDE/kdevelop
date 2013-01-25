@@ -36,7 +36,7 @@ const bool enableIncludePathResolution = true;
 QList<KUrl> convertToUrls(const QList<IndexedString>& stringList) {
   QList<KUrl> ret;
   foreach(const IndexedString& str, stringList)
-    ret << KUrl(str.str());
+    ret << str.toUrl();
   return ret;
 }
 
@@ -140,9 +140,9 @@ void IncludePathComputer::computeBackground() {
           if(file != fileInfo.fileName() && file.endsWith(ext)) {
             DUChainReadLocker lock(DUChain::lock(), 300);
             if(lock.locked()) {
-              
+              static const KDevelop::IndexedString cppLang(QLatin1String("C++"));
               TopDUContext* context = KDevelop::DUChainUtils::standardContextForUrl(KUrl(fileInfo.dir().absoluteFilePath(file)), true);
-              if(context && context->parsingEnvironmentFile() && context->parsingEnvironmentFile()->language() == KDevelop::IndexedString("C++") && !context->parsingEnvironmentFile()->needsUpdate()) {
+              if(context && context->parsingEnvironmentFile() && context->parsingEnvironmentFile()->language() == cppLang && !context->parsingEnvironmentFile()->needsUpdate()) {
                 Cpp::EnvironmentFile* envFile = dynamic_cast<Cpp::EnvironmentFile*>(context->parsingEnvironmentFile().data());
                 Q_ASSERT(envFile);
                 if(!envFile->missingIncludeFiles().isEmpty() || envFile->includePathDependencies() != m_includePathDependency)

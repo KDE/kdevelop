@@ -76,7 +76,7 @@ Cpp::ReferenceCountedMacroSet setupStandardMacros()
       rpp::pp_macro m("__null");
       m.setDefinitionText( "0" );
       insertMacro( macros, m );
-      m.name = IndexedString("NULL");
+      m.name = IndexedString(QLatin1String("NULL"));
       insertMacro( macros, m );
     }
 
@@ -85,7 +85,7 @@ Cpp::ReferenceCountedMacroSet setupStandardMacros()
       rpp::pp_macro m("__inline");
       m.setDefinitionText( "inline" );
       insertMacro( macros, m );
-      m.name = IndexedString("__always_inline");
+      m.name = IndexedString(QLatin1String("__always_inline"));
       insertMacro( macros, m );
     }
 
@@ -95,7 +95,7 @@ Cpp::ReferenceCountedMacroSet setupStandardMacros()
       rpp::pp_macro m("__attribute__");
       m.function_like = true;
       m.fixed = true;
-      m.formalsList().append(IndexedString("param"));
+      m.formalsList().append(IndexedString(QLatin1String("param")));
       insertMacro( macros, m );
     }
     
@@ -108,45 +108,45 @@ Cpp::ReferenceCountedMacroSet setupStandardMacros()
       
       m.defined = false;
       m.defineOnOverride = true;
-      m.file = IndexedString("/qobjectdefs.h"); // Only define the macro if it is overriden in this file
+      m.file = IndexedString(QLatin1String("/qobjectdefs.h")); // Only define the macro if it is overriden in this file
       m.fixed = true;
       
       insertMacro( macros, m );
 
-      m.name = IndexedString("Q_PRIVATE_SLOT");
-      m.formalsList().append(IndexedString("d"));
-      m.formalsList().append(IndexedString("sig"));
+      m.name = IndexedString(QLatin1String("Q_PRIVATE_SLOT"));
+      m.formalsList().append(IndexedString(QLatin1String("d")));
+      m.formalsList().append(IndexedString(QLatin1String("sig")));
       m.function_like = true;
       m.setDefinitionText( "private slots: sig{ d; }; private:" );
       insertMacro( macros, m );
       
-      m.name = IndexedString("slots");
+      m.name = IndexedString(QLatin1String("slots"));
       m.setDefinitionText("__qt_slots__");
       m.formalsList().clear();
       m.function_like = false;
       insertMacro( macros, m );
 
-      m.name = IndexedString("Q_SIGNALS");
+      m.name = IndexedString(QLatin1String("Q_SIGNALS"));
       m.setDefinitionText( "__qt_signals__" );
       m.formalsList().clear();
       insertMacro( macros, m );
 
-      m.name = IndexedString("signals");
+      m.name = IndexedString(QLatin1String("signals"));
       m.setDefinitionText("__qt_signals__");
       m.formalsList().clear();
       insertMacro( macros, m );
 
-      m.name = IndexedString("SIGNAL");
+      m.name = IndexedString(QLatin1String("SIGNAL"));
       m.setDefinitionText("__qt_signal__");
       m.formalsList().clear();
       insertMacro( macros, m );
       
-      m.name = IndexedString("SLOT");
+      m.name = IndexedString(QLatin1String("SLOT"));
       m.setDefinitionText("__qt_slot__");
       m.formalsList().clear();
       insertMacro( macros, m );
 
-      m.name = IndexedString("Q_PROPERTY");
+      m.name = IndexedString(QLatin1String("Q_PROPERTY"));
       m.setDefinitionText("__qt_property__");
       m.formalsList().clear();
       insertMacro( macros, m );
@@ -156,8 +156,8 @@ Cpp::ReferenceCountedMacroSet setupStandardMacros()
       // We don't provide a real implementation of offsetof, but at least provide a stub that allows correct use-building for the member.
       rpp::pp_macro m("__builtin_offsetof");
       m.function_like = true;
-      m.formalsList().append(IndexedString("TYPE"));
-      m.formalsList().append(IndexedString("MEMBER"));
+      m.formalsList().append(IndexedString(QLatin1String("TYPE")));
+      m.formalsList().append(IndexedString(QLatin1String("MEMBER")));
       m.setDefinitionText("(size_t)((void)(TYPE)::MEMBER)");
       insertMacro( macros, m );
     }
@@ -167,8 +167,8 @@ Cpp::ReferenceCountedMacroSet setupStandardMacros()
       //TODO: test other std headers
       rpp::pp_macro m("__builtin_va_arg");
       m.function_like = true;
-      m.formalsList().append(IndexedString("list"));
-      m.formalsList().append(IndexedString("type"));
+      m.formalsList().append(IndexedString(QLatin1String("list")));
+      m.formalsList().append(IndexedString(QLatin1String("type")));
       m.setDefinitionText("(type)list");
       insertMacro( macros, m );
     }

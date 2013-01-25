@@ -130,7 +130,7 @@ void NameCompiler::visitUnqualifiedName(UnqualifiedNameAST *node)
     tmp_name = m_session->token_stream->symbol(node->id);
 
   if (node->ellipsis)
-    tmp_name = IndexedString("...");
+    tmp_name = IndexedString(QLatin1String("..."));
   
   if (node->tilde)
     tmp_name = IndexedString('~' + tmp_name.toString());

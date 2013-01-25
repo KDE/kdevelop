@@ -65,7 +65,7 @@ CMakeProjectVisitorTest::CMakeProjectVisitorTest()
 
 void CMakeProjectVisitorTest::init()
 {
-    fakeContext = new TopDUContext(IndexedString("test"), RangeInRevision(0,0,0,0));
+    fakeContext = new TopDUContext(IndexedString(QLatin1String("test")), RangeInRevision(0,0,0,0));
     DUChain::self()->addDocumentChain(fakeContext);
 }
 

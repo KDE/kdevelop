@@ -50,10 +50,13 @@ KSharedPtr< KDevelop::IDocumentation > QtHelpProviderAbstract::documentationForD
     if(dec) {
         QStringList idList;
         {
-        KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
-        KDevelop::QualifiedIdentifier qid = dec->qualifiedIdentifier();
+        KDevelop::QualifiedIdentifier qid;
+        {
+            KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
+            qid = dec->qualifiedIdentifier();
+        }
         for(int a = 0; a < qid.count(); ++a)
-            idList << qid.at(a).identifier().str(); //Copy over the identifier components, without the template-parameters
+            idList << qid.at(a).identifier().toString(); //Copy over the identifier components, without the template-parameters
         }
 
         QString id = idList.join("::");
@@ -62,7 +65,7 @@ KSharedPtr< KDevelop::IDocumentation > QtHelpProviderAbstract::documentationForD
 
             kDebug() << "doc_found" << id << links;
             if(!links.isEmpty())
-                return KSharedPtr<KDevelop::IDocumentation>(new QtHelpDocumentation(id, m_engine.linksForIdentifier(id)));
+                return KSharedPtr<KDevelop::IDocumentation>(new QtHelpDocumentation(id, links));
         }
     }
 

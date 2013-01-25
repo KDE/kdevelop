@@ -37,7 +37,7 @@ IncludeNavigationContext::IncludeNavigationContext(const IncludeItem& item, KDev
 
 bool IncludeNavigationContext::filterDeclaration(Declaration* decl)
 {
-    QString declId = decl->identifier().identifier().str();
+    QString declId = decl->identifier().identifier().toString();
       //filter out forward-declarations and macro-expansions without a range
       //And filter out declarations with reserved identifiers
       return !decl->qualifiedIdentifier().toString().isEmpty() && !decl->range().isEmpty() && !decl->isForwardDeclaration()

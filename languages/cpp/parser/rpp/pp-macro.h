@@ -44,7 +44,7 @@ public:
 
    ///@todo enable structure packing
   pp_macro(const KDevelop::IndexedString& name = KDevelop::IndexedString());
-  pp_macro(const char* name);
+  pp_macro(const QString& name);
   pp_macro(const pp_macro& rhs, bool dynamic = true);
   ~pp_macro();
   

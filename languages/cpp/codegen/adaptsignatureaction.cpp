@@ -110,7 +110,7 @@ void AdaptSignatureAction::execute() {
   lock.unlock();
   m_otherSideTopContext = DUChain::self()->waitForUpdate(url, TopDUContext::AllDeclarationsContextsAndUses);
   if(!m_otherSideTopContext) {
-    kDebug() << "failed to update" << url.str();
+    kDebug() << "failed to update" << url;
     return;
   }
 

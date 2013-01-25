@@ -80,7 +80,8 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
       topContext = TopDUContextPointer(context->topContext());
     if(!topContext)
       return;
-    if(!topContext->parsingEnvironmentFile() || topContext->parsingEnvironmentFile()->language() != IndexedString("C++")) {
+    static const IndexedString cppLang(QLatin1String("C++"));
+    if(!topContext->parsingEnvironmentFile() || topContext->parsingEnvironmentFile()->language() != cppLang) {
       kDebug() << "top-context has wrong language:";
       return;
     }

@@ -102,16 +102,16 @@ void pp::processFileInternal(const QString& fileName, const QString& fileContent
 
 void pp::handle_directive(uint directive, Stream& input, Stream& output)
 {
-  static const uint ifDirective = KDevelop::IndexedString("if").index();
-  static const uint elseDirective = KDevelop::IndexedString("else").index();
-  static const uint elifDirective = KDevelop::IndexedString("elif").index();
-  static const uint ifdefDirective = KDevelop::IndexedString("ifdef").index();
-  static const uint undefDirective = KDevelop::IndexedString("undef").index();
-  static const uint endifDirective = KDevelop::IndexedString("endif").index();
-  static const uint ifndefDirective = KDevelop::IndexedString("ifndef").index();
-  static const uint defineDirective = KDevelop::IndexedString("define").index();
-  static const uint includeDirective = KDevelop::IndexedString("include").index();
-  static const uint includeNextDirective = KDevelop::IndexedString("include_next").index();
+  static const uint ifDirective = KDevelop::IndexedString(QLatin1String("if")).index();
+  static const uint elseDirective = KDevelop::IndexedString(QLatin1String("else")).index();
+  static const uint elifDirective = KDevelop::IndexedString(QLatin1String("elif")).index();
+  static const uint ifdefDirective = KDevelop::IndexedString(QLatin1String("ifdef")).index();
+  static const uint undefDirective = KDevelop::IndexedString(QLatin1String("undef")).index();
+  static const uint endifDirective = KDevelop::IndexedString(QLatin1String("endif")).index();
+  static const uint ifndefDirective = KDevelop::IndexedString(QLatin1String("ifndef")).index();
+  static const uint defineDirective = KDevelop::IndexedString(QLatin1String("define")).index();
+  static const uint includeDirective = KDevelop::IndexedString(QLatin1String("include")).index();
+  static const uint includeNextDirective = KDevelop::IndexedString(QLatin1String("include_next")).index();
 
   skip_blanks (input, output);
   while (!input.atEnd() && input != '\n' && input == '/' && input.peekNextCharacter() == '*')
@@ -1154,7 +1154,7 @@ int pp::next_token (Stream& input)
       if (isLetter(ch) || ch == '_' || !isCharacter(input.current()))
       {
         token_text = KDevelop::IndexedString::fromIndex( skip_identifier (input) );
-        static const KDevelop::IndexedString definedText("defined");
+        static const KDevelop::IndexedString definedText(QLatin1String("defined"));
         if (token_text == definedText)
           nextToken = TOKEN_DEFINED;
         else

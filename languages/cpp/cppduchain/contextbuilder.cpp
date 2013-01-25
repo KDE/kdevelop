@@ -127,7 +127,7 @@ void ContextBuilder::createUserProblem(AST* node, QString text) {
     KDevelop::ProblemPointer problem(new KDevelop::Problem);
     problem->setDescription(text);
     problem->setSource(KDevelop::ProblemData::DUChainBuilder);
-    problem->setFinalLocation(DocumentRange(IndexedString(currentContext()->url().str()), editor()->findRange(node).castToSimpleRange()));
+    problem->setFinalLocation(DocumentRange(currentContext()->url(), editor()->findRange(node).castToSimpleRange()));
     currentContext()->topContext()->addProblem(problem);
 }
 
@@ -348,7 +348,7 @@ ReferencedTopDUContext ContextBuilder::buildContexts(Cpp::EnvironmentFilePointer
   {
     DUChainWriteLocker lock(DUChain::lock());
     if(updateContext && (updateContext->parsingEnvironmentFile() && updateContext->parsingEnvironmentFile()->isProxyContext())) {
-      kDebug(9007) << "updating a context " << file->url().str() << " from a proxy-context to a content-context";
+      kDebug(9007) << "updating a context " << file->url() << " from a proxy-context to a content-context";
       updateContext->parsingEnvironmentFile()->setIsProxyContext(false);
     }
   }
@@ -438,7 +438,7 @@ ReferencedTopDUContext ContextBuilder::buildContexts(Cpp::EnvironmentFilePointer
 
   if (!m_importedParentContexts.isEmpty()) {
     DUChainReadLocker lock(DUChain::lock());
-    kWarning() << file->url().str() << "Previous parameter declaration context didn't get used??" ;
+    kWarning() << file->url() << "Previous parameter declaration context didn't get used??" ;
 //    KDevelop::DumpChain dump;
 //    dump.dump(topLevelContext);
     m_importedParentContexts.clear();

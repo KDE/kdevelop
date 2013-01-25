@@ -92,7 +92,7 @@ KSharedPtr< IDocumentation > ManPagePlugin::documentationForDeclaration( Declara
     Q_ASSERT(dec);
     Q_ASSERT(dec->topContext());
     Q_ASSERT(dec->topContext()->parsingEnvironmentFile());
-    static const KDevelop::IndexedString cppLanguage("C++");
+    static const KDevelop::IndexedString cppLanguage(QLatin1String("C++"));
     if (dec->topContext()->parsingEnvironmentFile()->language() != cppLanguage) {
         return KSharedPtr<IDocumentation>();
     }
@@ -103,7 +103,7 @@ KSharedPtr< IDocumentation > ManPagePlugin::documentationForDeclaration( Declara
 
     // Don't show man-page documentation for files that are not in /usr/include, because then we
     // most probably will be confusing the global function-name with a local one
-    if(!dec->topContext()->url().str().startsWith("/usr/"))
+    if(!dec->topContext()->url().toString().startsWith("/usr/"))
         return KSharedPtr<IDocumentation>();
     
     ///@todo Do more verification to make sure that we're showing the correct documentation for the declaration

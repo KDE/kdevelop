@@ -103,7 +103,7 @@ CMakeProjectVisitor CMakeCompliance::parseFile( const QString& sourcefile )
     QString sourcedir=sourcefile.left(sourcefile.lastIndexOf('/'));
     data.vm.insert("CMAKE_SOURCE_DIR", QStringList(sourcedir));
     
-    KDevelop::ReferencedTopDUContext buildstrapContext=new TopDUContext(IndexedString("buildstrap"), RangeInRevision(0,0, 0,0));
+    KDevelop::ReferencedTopDUContext buildstrapContext=new TopDUContext(IndexedString(QLatin1String("buildstrap")), RangeInRevision(0,0, 0,0));
     DUChain::self()->addDocumentChain(buildstrapContext);
     ReferencedTopDUContext ref=buildstrapContext;
     QStringList modulesPath = data.vm["CMAKE_MODULE_PATH"];

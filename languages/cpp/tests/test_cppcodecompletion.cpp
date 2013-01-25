@@ -2605,7 +2605,7 @@ QString print(const Cpp::ReferenceCountedStringSet& set) {
       ret += ", ";
     first = false;
 
-    ret += (*it).str();
+    ret += (*it).toString();
     ++it;
   }
   return ret;
@@ -2616,7 +2616,7 @@ QStringList toStringList( const Cpp::ReferenceCountedStringSet& set ) {
   QStringList ret;
   Cpp::ReferenceCountedStringSet::Iterator it(set.iterator());
   while(it) {
-    ret << (*it).str();
+    ret << (*it).toString();
     ++it;
   }
   ret.sort();
@@ -2755,7 +2755,7 @@ void TestCppCodeCompletion::testHeaderGuards() {
       DUChainWriteLocker l(DUChain::lock());
       Cpp::EnvironmentFile* envFile1 = dynamic_cast<Cpp::EnvironmentFile*>(test1->parsingEnvironmentFile().data());
       QVERIFY(envFile1);
-      QCOMPARE(envFile1->headerGuard().str(), QString("GUARD"));
+      QCOMPARE(envFile1->headerGuard().toString(), QString("GUARD"));
       release(test1);
     }
     {
@@ -2832,7 +2832,7 @@ void TestCppCodeCompletion::testEnvironmentMatching() {
         QVERIFY(top->parsingEnvironmentFile());
         Cpp::EnvironmentFile* envFile = dynamic_cast<Cpp::EnvironmentFile*>(top->parsingEnvironmentFile().data());
         QVERIFY(envFile);
-        kDebug() << "url" << envFile->url().str();
+        kDebug() << "url" << envFile->url();
         QCOMPARE(envFile->usedMacros().set().count(), 0u);
         QCOMPARE(toStringList(envFile->strings()), splitSorted("String1\ns1\ns2")); //The #undef protects String2, so it cannot be affected from outside
       }
@@ -3405,7 +3405,7 @@ QString TestCppCodeCompletion::preprocess( const IndexedString& url, const QStri
     if( paramEnvironmentFile && *paramEnvironmentFile )
       environmentFile = *paramEnvironmentFile;
     else
-      environmentFile = Cpp::EnvironmentFilePointer( new Cpp::EnvironmentFile( IndexedString(url.str()), 0 ) );
+      environmentFile = Cpp::EnvironmentFilePointer( new Cpp::EnvironmentFile( url, 0 ) );
 
   ppc.environmentFile = environmentFile;
 
@@ -3421,7 +3421,7 @@ QString TestCppCodeCompletion::preprocess( const IndexedString& url, const QStri
     else
       currentEnvironment->merge(CppUtils::standardMacros());
 
-    PreprocessedContents contents = preprocessor.processFile(url.str(), text.toUtf8());
+    PreprocessedContents contents = preprocessor.processFile(url.toString(), text.toUtf8());
     if(targetContents)
       *targetContents = contents;
 

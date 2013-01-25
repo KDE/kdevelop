@@ -53,7 +53,7 @@ void NameASTVisitor::visitUnqualifiedName(UnqualifiedNameAST *node)
   if (node->id)
     tmp_name = m_session->token_stream->symbol(node->id);
   if (node->tilde)
-    tmp_name = IndexedString(QLatin1String("~") + tmp_name.str());
+    tmp_name = IndexedString(QLatin1String("~") + tmp_name.toString());
   if (OperatorFunctionIdAST *op_id = node->operator_id) {
 #if defined(__GNUC__)
 #warning "NameASTVisitor::visitUnqualifiedName() -- implement me"

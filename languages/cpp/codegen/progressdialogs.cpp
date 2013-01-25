@@ -30,7 +30,7 @@
 using namespace KDevelop;
 
 QString StringProgressBar::text() const {
-  return m_text.str();
+  return m_text.toString();
 }
 
 void StringProgressBar::setText(IndexedString text) {

@@ -379,7 +379,7 @@ LineContextPair contentFromProxy(LineContextPair ctx) {
           ReferencedTopDUContext ref(ctx.context);
         }
         if(ctx.context->importedParentContexts().isEmpty()) {
-          kWarning() << "proxy-context for" << ctx.context->url().str() << "has no imports!" << ctx.context->ownIndex();
+          kWarning() << "proxy-context for" << ctx.context->url() << "has no imports!" << ctx.context->ownIndex();
           ///@todo Find out how this can happen
 //           Q_ASSERT(0);
           return LineContextPair(0, 0);
@@ -417,7 +417,7 @@ void CPPInternalParseJob::highlightIfNeeded()
     DUChainReadLocker l(DUChain::lock());
     ReferencedTopDUContext standardContext = DUChainUtils::standardContextForUrl(parentJob()->document().toUrl());
 
-    kDebug( 9007 ) << "Highlighting" << parentJob()->document().str();
+    kDebug( 9007 ) << "Highlighting" << parentJob()->document();
     //If the document has a smart-range, at least re-do the highlighting
     l.unlock();
     if ( parentJob()->cpp() && parentJob()->cpp()->codeHighlighting() )
@@ -447,17 +447,17 @@ void CPPInternalParseJob::run()
 
     if(!parentJob()->needsUpdate()) {
       parentJob()->processDelayedImports();
-      kDebug( 9007 ) << "===-- ALREADY UP TO DATE --===> " << parentJob()->document().str();
+      kDebug( 9007 ) << "===-- ALREADY UP TO DATE --===> " << parentJob()->document();
       highlightIfNeeded();
       return;
     }
     if(!parentJob()->contentEnvironmentFile()) {
       //May happen when the file could not be opened or similar
-      kDebug( 9007 ) << "===-- Problem: Preprocessor did not create environment-file, skipping --===> " << parentJob()->document().str();
+      kDebug( 9007 ) << "===-- Problem: Preprocessor did not create environment-file, skipping --===> " << parentJob()->document();
       return;
     }
     kDebug( 9007 ) << "===-- PARSING --===> "
-    << parentJob()->document().str();
+    << parentJob()->document();
 
 
     if (parentJob()->abortRequested())
@@ -574,7 +574,7 @@ void CPPInternalParseJob::run()
           if((updatingContentContext->features() & parentJob()->minimumFeatures()) ==  parentJob()->minimumFeatures() &&
             isOpenInEditor &&
               updatingContentContext->parsingEnvironmentFile()->modificationRevision().modificationTime == ModificationRevision::revisionForFile(updatingContentContext->url()).modificationTime && CppLanguageSupport::self()->codeHighlighting()->hasHighlighting(parentJob()->document())) {
-            kDebug() << "not processing" << updatingContentContext->url().str() << "because of missing compound tokens";
+            kDebug() << "not processing" << updatingContentContext->url() << "because of missing compound tokens";
             ICore::self()->uiController()->showErrorMessage(i18n("Not updating duchain for %1", parentJob()->document().toUrl().fileName()), 1);
             l.unlock();
             doNotChangeDUChain = true;
@@ -605,7 +605,7 @@ void CPPInternalParseJob::run()
         isStandardContext = (parentJob()->masterJob() == parentJob() || knownStandardContext == updatingContentContext || !knownStandardContext);
       }
 
-      kDebug( 9007 ) << (contentContext ? "updating" : "building") << "duchain for" << parentJob()->document().str();
+      kDebug( 9007 ) << (contentContext ? "updating" : "building") << "duchain for" << parentJob()->document();
 
       uint oldItemCount = 0;
       if(contentContext) {
@@ -661,7 +661,7 @@ void CPPInternalParseJob::run()
           if(contentContext->childContexts().size() + contentContext->localDeclarations().size() == 0) {
             if(oldItemCount != 0) {
               //To catch some problems
-              kDebug(9007) << "All items in" << parentJob()->document().str() << "have been extincted, previous count:" << oldItemCount << "current identity offset:" << contentEnvironmentFile->identityOffset();
+              kDebug(9007) << "All items in" << parentJob()->document() << "have been extincted, previous count:" << oldItemCount << "current identity offset:" << contentEnvironmentFile->identityOffset();
             }
           }
         }
@@ -701,7 +701,7 @@ void CPPInternalParseJob::run()
             foreach(const DUContext::Import &ctx, imports) {
                 if(ctx.context(0) && !encounteredIncludeUrls.contains(ctx.context(0)->url()) && contentEnvironmentFile->missingIncludeFiles().set().count() == 0 && (!proxyEnvironmentFile || proxyEnvironmentFile->missingIncludeFiles().set().count() == 0)) {
                     contentContext->removeImportedParentContext(ctx.context(0));
-                    kDebug( 9007 ) << "removing not encountered import " << ctx.context(0)->url().str();
+                    kDebug( 9007 ) << "removing not encountered import " << ctx.context(0)->url();
                 }
             }
         }
@@ -791,7 +791,7 @@ void CPPInternalParseJob::run()
           continue;
         Q_ASSERT(context.context);
         if(!contentContext->imports(context.context.data(), CursorInRevision::invalid())) {
-          kWarning() << "Context should be imported, but is not:" << contentContext->url().str() << " <- " << context.context->url().str();
+          kWarning() << "Context should be imported, but is not:" << contentContext->url() << " <- " << context.context->url();
         }
       }
     }
@@ -879,7 +879,7 @@ void CPPInternalParseJob::run()
         //kDebug(9007) << "Dot-graph:\n" << dumpGraph.dotGraph(topContext, true);
     }
 
-    kDebug( 9007 ) << "===-- Parsing finished --===>" << parentJob()->document().str();
+    kDebug( 9007 ) << "===-- Parsing finished --===>" << parentJob()->document();
 
     parentJob()->processDelayedImports();
 }

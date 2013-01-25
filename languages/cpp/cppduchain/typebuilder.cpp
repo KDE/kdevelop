@@ -307,7 +307,7 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
     bool isDecltypeInParen = false;
         if (node->isDecltype && node->expression->kind == AST::Kind_PrimaryExpression) {
           int startPosition = editor()->parseSession()->token_stream->position(node->expression->start_token);
-          static IndexedString paren("(");
+          static IndexedString paren(QLatin1String("("));
           isDecltypeInParen = editor()->parseSession()->contentsVector()[startPosition] == paren.index();
         }
 
