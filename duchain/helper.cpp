@@ -18,9 +18,35 @@
 
 #include "helper.h"
 
+#include <language/duchain/duchain.h>
+#include <language/duchain/duchainlock.h>
+
 namespace QmlJS
 {
 using namespace KDevelop;
 
+Declaration* getDeclaration(const QualifiedIdentifier& id, const RangeInRevision& range, DUContextPointer context)
+{
+    QList<Declaration *> decls;
+
+    /*
+     * Find the declarations at the topContext(). If no declaration was
+     * found, we have to look for local declarations. If this fails, we
+     * should find for global declarations.
+     */
+    DUChainReadLocker lock(DUChain::lock());
+    if (context.data() == context->topContext())
+        decls = context->topContext()->findDeclarations(id, range.end);
+    else
+        decls = context->topContext()->findDeclarations(id, CursorInRevision::invalid());
+
+    if (decls.isEmpty()) {
+        decls = context->findLocalDeclarations(id.last(), range.end);
+        if (decls.isEmpty())
+            decls = context->findDeclarations(id.last(), range.end);
+    }
+
+    return (decls.length()) ? decls.last() : NULL;
+}
 
 } // End of namespace QmlJS
