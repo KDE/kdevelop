@@ -28,6 +28,11 @@ scan_fun_ptr MILexer::s_scan_table[];
 
 
 MILexer::MILexer()
+: m_ptr(0)
+, m_length(0)
+, m_line(0)
+, m_tokensCount(0)
+, m_cursor(0)
 {
     if (!s_initialized)
         setupScanTable();
