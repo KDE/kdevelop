@@ -22,7 +22,6 @@
 #include <language/duchain/builders/abstractusebuilder.h>
 
 #include "contextbuilder.h"
-#include "duchainexport.h"
 
 typedef KDevelop::AbstractUseBuilder<QmlJS::AST::Node, QmlJS::AST::IdentifierPropertyName, ContextBuilder> UseBuilderBase;
 
