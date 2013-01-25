@@ -24,10 +24,10 @@
 #include <qmljs/parser/qmljsast_p.h>
 #include <qmljs/qmljsdocument.h>
 
-#include "duchainexport.h"
-#include "parsesession.h"
+#include "editorintegrator.h"
 
 class ParseSession;
+class EditorIntegrator;
 
 typedef KDevelop::AbstractContextBuilder<QmlJS::AST::Node, QmlJS::AST::IdentifierPropertyName> ContextBuilderBase;
 
@@ -48,11 +48,18 @@ public:
 
     void setParseSession(ParseSession* session);
 
+    void setEditor(EditorIntegrator *editor);
+    EditorIntegrator* editor() const;
+
     using Visitor::visit;
     virtual bool visit(QmlJS::AST::FunctionDeclaration* node);
+
 protected:
     ParseSession* m_session;
+    EditorIntegrator* m_editor;
     QHash<QmlJS::AST::Node*, KDevelop::DUContext*> m_astToContext;
+    bool m_mapAst; // make KDevelop::AbstractContextBuilder happy
+
 };
 
 #endif // CONTEXTBUILDER_H

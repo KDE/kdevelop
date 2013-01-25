@@ -19,19 +19,29 @@
 
 #include "contextbuilder.h"
 
-#include "parsesession.h"
-
 using namespace KDevelop;
 
 ContextBuilder::ContextBuilder()
 : ContextBuilderBase()
 , m_session()
+, m_editor(0)
+, m_mapAst(false)
 {
 }
 
 RangeInRevision ContextBuilder::editorFindRange(QmlJS::AST::Node* fromNode, QmlJS::AST::Node* toNode)
 {
     return m_session->editorFindRange(fromNode, toNode);
+}
+
+void ContextBuilder::setEditor(EditorIntegrator *editor)
+{
+    m_editor = editor;
+}
+
+EditorIntegrator* ContextBuilder::editor() const
+{
+    return m_editor;
 }
 
 QualifiedIdentifier ContextBuilder::identifierForNode(QmlJS::AST::IdentifierPropertyName* node)
