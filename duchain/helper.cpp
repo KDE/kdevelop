@@ -25,7 +25,7 @@ namespace QmlJS
 {
 using namespace KDevelop;
 
-Declaration* getDeclaration(const QualifiedIdentifier& id, const RangeInRevision& range, DUContextPointer context)
+DeclarationPointer getDeclaration(const QualifiedIdentifier& id, const RangeInRevision& range, DUContextPointer context)
 {
     QList<Declaration *> decls;
 
@@ -46,7 +46,11 @@ Declaration* getDeclaration(const QualifiedIdentifier& id, const RangeInRevision
             decls = context->findDeclarations(id.last(), range.end);
     }
 
-    return (decls.length()) ? decls.last() : NULL;
+    if (decls.length()) {
+        return DeclarationPointer(decls.last());
+    } else {
+        return DeclarationPointer();
+    }
 }
 
 } // End of namespace QmlJS

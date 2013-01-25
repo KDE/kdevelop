@@ -28,38 +28,13 @@ UseBuilder::UseBuilder()
 
 }
 
-bool UseBuilder::visit(QmlJS::AST::FunctionDeclaration* node)
-{
-    const RangeInRevision pRange(m_session->locationToRange(node->lparenToken).end,
-                                 m_session->locationToRange(node->rparenToken).start);
-    const QualifiedIdentifier id(node->name.toString());
-    Declaration *decl = QmlJS::getDeclaration(id, pRange, DUContextPointer(topContext()));
-
-    newUse(node, pRange, DeclarationPointer(decl));
-    const bool ret = UseBuilderBase::visit(node);
-
-    return ret;
-}
-
-bool UseBuilder::visit(QmlJS::AST::FormalParameterList* node)
+bool UseBuilder::visit(QmlJS::AST::IdentifierExpression* node)
 {
     const RangeInRevision range(m_session->locationToRange(node->identifierToken));
     const QualifiedIdentifier id(node->name.toString());
-    Declaration *decl = QmlJS::getDeclaration(id, range, DUContextPointer(currentContext()));
+    const DeclarationPointer decl(QmlJS::getDeclaration(id, range, DUContextPointer(topContext())));
 
-    newUse(node, range, DeclarationPointer(decl));
-    const bool ret = UseBuilderBase::visit(node);
-
-    return ret;
-}
-
-bool UseBuilder::visit(QmlJS::AST::VariableDeclaration* node)
-{
-    const RangeInRevision range(m_session->locationToRange(node->identifierToken));
-    const QualifiedIdentifier id(node->name.toString());
-    Declaration *decl = QmlJS::getDeclaration(id, range, DUContextPointer(topContext()));
-
-    newUse(node, range, DeclarationPointer(decl));
+    newUse(node, range, decl);
     const bool ret = UseBuilderBase::visit(node);
 
     return ret;
