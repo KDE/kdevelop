@@ -27,12 +27,14 @@ using namespace ClassModelNodes;
 //////////////////////////////////////////////////////////////////////////////
 
 ProjectFolder::ProjectFolder( NodesModelInterface* a_model, IProject* project )
-  : DocumentClassesFolder( i18n("Classes in project %1", project->name()), a_model ), m_project(project)
+  : DocumentClassesFolder( i18n("Classes in project %1", project->name()), a_model )
+  , m_project(project)
 {
 }
 
 ProjectFolder::ProjectFolder( NodesModelInterface* a_model )
   : DocumentClassesFolder( "", a_model )
+  , m_project( 0 )
 {
 }
 
