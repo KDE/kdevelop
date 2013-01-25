@@ -28,17 +28,17 @@ namespace QmlJS
 using namespace KDevelop;
 
     /**
-     * Find the declaration for a specified node. If no declaration was found,
-     * it will return NULL.
+     * Find the declaration for the specified identifier.
+     *
+     * If no declaration was found, it will return a null pointer.
      *
      * @param id The qualified identifier that identifies our node.
-     * @param range The range for this node.
      * @param context A pointer to the DUContext of this node.
+     *
      * @note This method already acquires a read lock for the DUChain.
      */
-    KDEVQMLJSDUCHAIN_EXPORT DeclarationPointer getDeclaration(const QualifiedIdentifier &id,
-                                                              const RangeInRevision &range,
-                                                              DUContextPointer context);
+    KDEVQMLJSDUCHAIN_EXPORT DeclarationPointer getDeclaration(const QualifiedIdentifier& id,
+                                                              const DUContextPointer& context);
 
 } // End of namespace QmlJS
 

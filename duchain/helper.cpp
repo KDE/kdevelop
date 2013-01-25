@@ -25,32 +25,12 @@ namespace QmlJS
 {
 using namespace KDevelop;
 
-DeclarationPointer getDeclaration(const QualifiedIdentifier& id, const RangeInRevision& range, DUContextPointer context)
+DeclarationPointer getDeclaration(const QualifiedIdentifier& id, const DUContextPointer& context)
 {
-    QList<Declaration *> decls;
-
-    /*
-     * Find the declarations at the topContext(). If no declaration was
-     * found, we have to look for local declarations. If this fails, we
-     * should find for global declarations.
-     */
-    DUChainReadLocker lock(DUChain::lock());
-    if (context.data() == context->topContext())
-        decls = context->topContext()->findDeclarations(id, range.end);
-    else
-        decls = context->topContext()->findDeclarations(id, CursorInRevision::invalid());
-
-    if (decls.isEmpty()) {
-        decls = context->findLocalDeclarations(id.last(), range.end);
-        if (decls.isEmpty())
-            decls = context->findDeclarations(id.last(), range.end);
+    foreach(Declaration* dec, context->findDeclarations(id)) {
+        return DeclarationPointer(dec);
     }
-
-    if (decls.length()) {
-        return DeclarationPointer(decls.last());
-    } else {
-        return DeclarationPointer();
-    }
+    return DeclarationPointer();
 }
 
 } // End of namespace QmlJS
