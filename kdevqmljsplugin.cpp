@@ -26,6 +26,8 @@
 #include <KAboutData>
 
 #include "version.h"
+#include "codecompletion/model.h"
+#include <language/codecompletion/codecompletion.h>
 
 K_PLUGIN_FACTORY(KDevQmlJsSupportFactory, registerPlugin<KDevQmlJsPlugin>(); )
 K_EXPORT_PLUGIN(KDevQmlJsSupportFactory(
@@ -40,6 +42,9 @@ KDevQmlJsPlugin::KDevQmlJsPlugin(QObject* parent, const QVariantList& )
 , m_highlighting(new QmlJsHighlighting(this))
 {
     KDEV_USE_EXTENSION_INTERFACE(ILanguageSupport)
+
+    CodeCompletionModel* codeCompletion = new QmlJS::CodeCompletionModel(this);
+    new KDevelop::CodeCompletion(this, codeCompletion, "qml/js");
 }
 
 ParseJob* KDevQmlJsPlugin::createParseJob(const IndexedString& url)

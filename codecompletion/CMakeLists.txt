@@ -1,0 +1,21 @@
+include_directories(
+    ${CMAKE_CURRENT_BINARY_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+set(completion_SRCS
+    context.cpp
+    model.cpp
+    worker.cpp
+)
+
+kde4_add_library(kdevqmljscompletion SHARED ${completion_SRCS})
+
+target_link_libraries(kdevqmljscompletion
+    ${KDE4_KDECORE_LIBS}
+    ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
+    ${KDEVPLATFORM_INTERFACES_LIBRARIES}
+    ${KDEVPLATFORM_PROJECT_LIBRARIES}
+)
+
+install(TARGETS kdevqmljscompletion DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS})

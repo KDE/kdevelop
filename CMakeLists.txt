@@ -30,6 +30,7 @@ add_definitions(-DQML_BUILD_STATIC_LIB=0 -DQMLJS_BUILD_DIR)
 add_subdirectory(libs)
 add_subdirectory(duchain)
 add_subdirectory(tests)
+add_subdirectory(codecompletion)
 
 kde4_add_plugin(kdevqmljslanguagesupport
     qmljsparsejob.cpp
@@ -38,6 +39,7 @@ kde4_add_plugin(kdevqmljslanguagesupport
 )
 target_link_libraries(kdevqmljslanguagesupport
     kdevqmljsduchain
+    kdevqmljscompletion
     ${KDE4_THREADWEAVER_LIBS}
 )
 
