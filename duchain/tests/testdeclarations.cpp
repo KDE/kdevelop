@@ -94,6 +94,12 @@ void TestDeclarations::testFunction()
     QVERIFY(funType);
     QVERIFY(funType->returnType().cast<IntegralType>());
     QCOMPARE(funType->returnType().cast<IntegralType>()->dataType(), (uint) IntegralType::TypeVoid);
+
+    DUContext* bodyCtx = fooDec->internalContext();
+    QVERIFY(bodyCtx);
+    QVERIFY(bodyCtx->findDeclarations(arg1->identifier()).contains(arg1));
+    QVERIFY(bodyCtx->findDeclarations(arg2->identifier()).contains(arg2));
+    QVERIFY(bodyCtx->findDeclarations(arg3->identifier()).contains(arg3));
 }
 
 #include "testdeclarations.moc"
