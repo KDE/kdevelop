@@ -76,7 +76,9 @@ bool DeclarationBuilder::visit(QmlJS::AST::FormalParameterList* node)
         const QualifiedIdentifier name(plist->name.toString());
         const RangeInRevision range = m_session->locationToRange(plist->identifierToken);
         DUChainWriteLocker lock;
-        openDeclaration<Declaration>(name, range);
+        Declaration* dec = openDeclaration<Declaration>(name, range);
+        IntegralType* type = new IntegralType(IntegralType::TypeMixed);
+        dec->setType(IntegralType::Ptr(type));
         closeDeclaration();
     }
 
@@ -90,7 +92,9 @@ bool DeclarationBuilder::visit(QmlJS::AST::VariableDeclaration* node)
     const QualifiedIdentifier name(node->name.toString());
     const RangeInRevision range = m_session->locationToRange(node->identifierToken);
     DUChainWriteLocker lock;
-    openDeclaration<Declaration>(name, range);
+    Declaration* dec = openDeclaration<Declaration>(name, range);
+    IntegralType* type = new IntegralType(IntegralType::TypeMixed);
+    dec->setType(IntegralType::Ptr(type));
     closeDeclaration();
 
     return DeclarationBuilderBase::visit(node);
