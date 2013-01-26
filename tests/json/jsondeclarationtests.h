@@ -76,7 +76,11 @@ using namespace JsonTestHelpers;
 ///@returns whether the declaration's number of uses matches the given value
 DeclarationTest(useCount)
 {
-  return compareValues(decl->uses().size(), value, "Declaration's use count ");
+  int uses = 0;
+  foreach(const QList<RangeInRevision>& useRanges, decl->uses()) {
+    uses += useRanges.size();
+  }
+  return compareValues(uses, value, "Declaration's use count ");
 }
 ///JSON type: string
 ///@returns whether the declaration's identifier matches the given value
