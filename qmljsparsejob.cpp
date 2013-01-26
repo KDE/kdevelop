@@ -77,6 +77,16 @@ void QmlJsParseJob::run()
 
         DeclarationBuilder builder(&session);
         context = builder.build(document(), session.ast(), context);
+
+        if (abortRequested()) {
+            abortJob();
+            return;
+        }
+
+        if ( context && minimumFeatures() & TopDUContext::AllDeclarationsContextsAndUses ) {
+            UseBuilder useBuilder(&session);
+            useBuilder.buildUses(session.ast());
+        }
     }
 
     if (abortRequested()) {
@@ -89,10 +99,6 @@ void QmlJsParseJob::run()
         file->setLanguage(ParseSession::languageString());
         context = new TopDUContext(document(), RangeInRevision(0, 0, INT_MAX, INT_MAX), file);
         DUChain::self()->addDocumentChain(context);
-    } else if ( minimumFeatures() & TopDUContext::AllDeclarationsContextsAndUses ) {
-        // build uses
-        UseBuilder useBuilder(&session);
-        useBuilder.buildUses(session.ast());
     }
 
     setDuChain(context);
