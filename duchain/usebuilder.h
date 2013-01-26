@@ -28,8 +28,7 @@ typedef KDevelop::AbstractUseBuilder<QmlJS::AST::Node, QmlJS::AST::IdentifierPro
 class KDEVQMLJSDUCHAIN_EXPORT UseBuilder : public UseBuilderBase
 {
 public:
-    ///TODO: cleanup manual passing of mapping, push into parse session
-    UseBuilder(ParseSession* session, const ContextBuilder::NodeToContextHash& mapping);
+    UseBuilder(ParseSession* session);
 
 protected:
     using Visitor::visit;

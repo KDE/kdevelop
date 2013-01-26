@@ -114,9 +114,14 @@ public:
         Q_UNUSED(use);
     }
 
+    void setContextOnNode(QmlJS::AST::Node* node, KDevelop::DUContext* context);
+    KDevelop::DUContext* contextFromNode(QmlJS::AST::Node* node) const;
+
 private:
     KDevelop::IndexedString m_url;
     QmlJS::Document::MutablePtr m_doc;
+    typedef QHash<QmlJS::AST::Node*, KDevelop::DUContext*> NodeToContextHash;
+    NodeToContextHash m_astToContext;
 };
 
 #endif // PARSESESSION_H

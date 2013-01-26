@@ -23,11 +23,10 @@
 
 using namespace KDevelop;
 
-UseBuilder::UseBuilder(ParseSession* session, const ContextBuilder::NodeToContextHash& mapping)
+UseBuilder::UseBuilder(ParseSession* session)
 : UseBuilderBase()
 {
     m_session = session;
-    m_astToContext = mapping;
 }
 
 bool UseBuilder::visit(QmlJS::AST::IdentifierExpression* node)

@@ -68,7 +68,6 @@ void QmlJsParseJob::run()
         context = DUChainUtils::standardContextForUrl(document().toUrl());
     }
 
-    ContextBuilder::NodeToContextHash mapping;
     if (session.ast()) {
         QReadLocker parseLock(languageSupport()->language()->parseLock());
 
@@ -78,7 +77,6 @@ void QmlJsParseJob::run()
 
         DeclarationBuilder builder(&session);
         context = builder.build(document(), session.ast(), context);
-        mapping = builder.nodeToAstMapping();
     }
 
     if (abortRequested()) {
@@ -93,7 +91,7 @@ void QmlJsParseJob::run()
         DUChain::self()->addDocumentChain(context);
     } else if ( minimumFeatures() & TopDUContext::AllDeclarationsContextsAndUses ) {
         // build uses
-        UseBuilder useBuilder(&session, mapping);
+        UseBuilder useBuilder(&session);
         useBuilder.buildUses(session.ast());
     }
 

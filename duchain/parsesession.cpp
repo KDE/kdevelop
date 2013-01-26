@@ -144,3 +144,13 @@ RangeInRevision ParseSession::editorFindRange(QmlJS::AST::Node* fromNode, QmlJS:
 {
     return locationsToRange(fromNode->firstSourceLocation(), toNode->lastSourceLocation());
 }
+
+void ParseSession::setContextOnNode(QmlJS::AST::Node* node, DUContext* context)
+{
+    m_astToContext.insert(node, context);
+}
+
+DUContext* ParseSession::contextFromNode(QmlJS::AST::Node* node) const
+{
+    return m_astToContext.value(node);
+}

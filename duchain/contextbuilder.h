@@ -69,12 +69,8 @@ public:
 
     Editor* editor() const;
 
-    typedef QHash<QmlJS::AST::Node*, KDevelop::DUContext*> NodeToContextHash;
-    NodeToContextHash nodeToAstMapping() const;
-
 protected:
     ParseSession* m_session;
-    NodeToContextHash m_astToContext;
     bool m_mapAst; // make KDevelop::AbstractContextBuilder happy
     QScopedPointer<Editor> m_editor; // make KDevelop::AbstractUseBuilder happy
 

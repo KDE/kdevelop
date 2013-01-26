@@ -43,12 +43,12 @@ QualifiedIdentifier ContextBuilder::identifierForNode(QmlJS::AST::IdentifierProp
 
 void ContextBuilder::setContextOnNode(QmlJS::AST::Node* node, DUContext* context)
 {
-    m_astToContext.insert(node, context);
+    m_session->setContextOnNode(node, context);
 }
 
 DUContext* ContextBuilder::contextFromNode(QmlJS::AST::Node* node)
 {
-    return m_astToContext.value(node, 0);
+    return m_session->contextFromNode(node);
 }
 
 void ContextBuilder::startVisiting(QmlJS::AST::Node* node)
@@ -98,9 +98,4 @@ bool ContextBuilder::visit(QmlJS::AST::FunctionDeclaration* node)
 Editor* ContextBuilder::editor() const
 {
     return m_editor.data();
-}
-
-ContextBuilder::NodeToContextHash ContextBuilder::nodeToAstMapping() const
-{
-    return m_astToContext;
 }
