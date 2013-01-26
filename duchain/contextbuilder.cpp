@@ -78,7 +78,7 @@ bool ContextBuilder::visit(QmlJS::AST::FunctionDeclaration* node)
     const RangeInRevision pRange(m_session->locationToRange(node->lparenToken).end,
                                  m_session->locationToRange(node->rparenToken).start);
     DUContext* parameters = openContext(node, pRange, DUContext::Function, functionName);
-    visit(node->formals);
+    QmlJS::AST::Node::accept(node->formals, this);
     closeContext();
 
     const RangeInRevision bRange(m_session->locationToRange(node->lbraceToken).end,
@@ -88,7 +88,7 @@ bool ContextBuilder::visit(QmlJS::AST::FunctionDeclaration* node)
         DUChainWriteLocker lock;
         body->addImportedParentContext(parameters);
     }
-    visit(node->body);
+    QmlJS::AST::Node::accept(node->body, this);
     closeContext();
 
     // return false, we visited the children manually

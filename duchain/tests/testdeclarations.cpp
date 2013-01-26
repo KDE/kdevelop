@@ -54,7 +54,7 @@ void TestDeclarations::testFunction()
     //                          0         1         2         3
     //                          01234567890123456789012345678901234567890
     ParseSession session(file, "/**\n * some comment\n */\n"
-                               "function foo(arg1, arg2, arg3) {}");
+                               "function foo(arg1, arg2, arg3) { var i = 0; }");
     QVERIFY(session.ast());
     QCOMPARE(session.language(), QmlJS::Document::JavaScriptLanguage);
 
@@ -70,9 +70,6 @@ void TestDeclarations::testFunction()
     QVERIFY(fooDec);
     QCOMPARE(fooDec->range(), RangeInRevision(3, 9, 3, 12));
     QCOMPARE(QString::fromUtf8(fooDec->comment()), QString("some comment"));
-
-    QVERIFY(fooDec->internalContext());
-    QVERIFY(fooDec->internalContext()->localDeclarations().isEmpty());
 
     QVERIFY(fooDec->internalFunctionContext());
     DUContext* argCtx = fooDec->internalFunctionContext();
@@ -95,11 +92,14 @@ void TestDeclarations::testFunction()
     QVERIFY(funType->returnType().cast<IntegralType>());
     QCOMPARE(funType->returnType().cast<IntegralType>()->dataType(), (uint) IntegralType::TypeVoid);
 
+    QVERIFY(fooDec->internalContext());
     DUContext* bodyCtx = fooDec->internalContext();
     QVERIFY(bodyCtx);
     QVERIFY(bodyCtx->findDeclarations(arg1->identifier()).contains(arg1));
     QVERIFY(bodyCtx->findDeclarations(arg2->identifier()).contains(arg2));
     QVERIFY(bodyCtx->findDeclarations(arg3->identifier()).contains(arg3));
+
+    QCOMPARE(bodyCtx->localDeclarations().count(), 1);
 }
 
 #include "testdeclarations.moc"
