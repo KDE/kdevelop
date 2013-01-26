@@ -27,8 +27,11 @@ using namespace KDevelop;
 
 DeclarationPointer getDeclaration(const QualifiedIdentifier& id, const DUContextPointer& context)
 {
-    foreach(Declaration* dec, context->findDeclarations(id)) {
-        return DeclarationPointer(dec);
+    DUChainReadLocker lock;
+    if (context) {
+        foreach(Declaration* dec, context->findDeclarations(id)) {
+            return DeclarationPointer(dec);
+        }
     }
     return DeclarationPointer();
 }

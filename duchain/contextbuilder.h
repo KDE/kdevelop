@@ -21,15 +21,31 @@
 #define CONTEXTBUILDER_H
 
 #include <language/duchain/builders/abstractcontextbuilder.h>
+
 #include <qmljs/parser/qmljsast_p.h>
 #include <qmljs/qmljsdocument.h>
 
-#include "editorintegrator.h"
+#include "duchainexport.h"
 
 class ParseSession;
-class EditorIntegrator;
 
 typedef KDevelop::AbstractContextBuilder<QmlJS::AST::Node, QmlJS::AST::IdentifierPropertyName> ContextBuilderBase;
+
+///TODO: cleanup KDevplatform API, remove need for editor integrator
+class Editor
+{
+public:
+    Editor(ParseSession** session)
+    : m_session(session)
+    {}
+
+    ParseSession* parseSession() const
+    {
+        return *m_session;
+    }
+private:
+    ParseSession** m_session;
+};
 
 class KDEVQMLJSDUCHAIN_EXPORT ContextBuilder : public ContextBuilderBase, public QmlJS::AST::Visitor
 {
@@ -48,17 +64,19 @@ public:
 
     void setParseSession(ParseSession* session);
 
-    void setEditor(EditorIntegrator *editor);
-    EditorIntegrator* editor() const;
-
     using Visitor::visit;
     virtual bool visit(QmlJS::AST::FunctionDeclaration* node);
 
+    Editor* editor() const;
+
+    typedef QHash<QmlJS::AST::Node*, KDevelop::DUContext*> NodeToContextHash;
+    NodeToContextHash nodeToAstMapping() const;
+
 protected:
     ParseSession* m_session;
-    EditorIntegrator* m_editor;
-    QHash<QmlJS::AST::Node*, KDevelop::DUContext*> m_astToContext;
+    NodeToContextHash m_astToContext;
     bool m_mapAst; // make KDevelop::AbstractContextBuilder happy
+    QScopedPointer<Editor> m_editor; // make KDevelop::AbstractUseBuilder happy
 
 };
 

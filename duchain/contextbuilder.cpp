@@ -19,29 +19,21 @@
 
 #include "contextbuilder.h"
 
+#include "parsesession.h"
+
 using namespace KDevelop;
 
 ContextBuilder::ContextBuilder()
 : ContextBuilderBase()
-, m_session()
-, m_editor(0)
+, m_session(0)
 , m_mapAst(false)
+, m_editor(new Editor(&m_session))
 {
 }
 
 RangeInRevision ContextBuilder::editorFindRange(QmlJS::AST::Node* fromNode, QmlJS::AST::Node* toNode)
 {
     return m_session->editorFindRange(fromNode, toNode);
-}
-
-void ContextBuilder::setEditor(EditorIntegrator *editor)
-{
-    m_editor = editor;
-}
-
-EditorIntegrator* ContextBuilder::editor() const
-{
-    return m_editor;
 }
 
 QualifiedIdentifier ContextBuilder::identifierForNode(QmlJS::AST::IdentifierPropertyName* node)
@@ -85,13 +77,13 @@ bool ContextBuilder::visit(QmlJS::AST::FunctionDeclaration* node)
 
     const RangeInRevision pRange(m_session->locationToRange(node->lparenToken).end,
                                  m_session->locationToRange(node->rparenToken).start);
-    DUContext* parameters = openContextInternal(pRange, DUContext::Function, functionName);
+    DUContext* parameters = openContext(node, pRange, DUContext::Function, functionName);
     visit(node->formals);
     closeContext();
 
     const RangeInRevision bRange(m_session->locationToRange(node->lbraceToken).end,
                                  m_session->locationToRange(node->rbraceToken).start);
-    DUContext* body = openContextInternal(bRange, DUContext::Other, functionName);
+    DUContext* body = openContext(node, bRange, DUContext::Other, functionName);
     if (compilingContexts()) {
         DUChainWriteLocker lock;
         body->addImportedParentContext(parameters);
@@ -101,4 +93,14 @@ bool ContextBuilder::visit(QmlJS::AST::FunctionDeclaration* node)
 
     // return false, we visited the children manually
     return false;
+}
+
+Editor* ContextBuilder::editor() const
+{
+    return m_editor.data();
+}
+
+ContextBuilder::NodeToContextHash ContextBuilder::nodeToAstMapping() const
+{
+    return m_astToContext;
 }

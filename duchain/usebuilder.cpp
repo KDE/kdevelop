@@ -19,20 +19,22 @@
 #include "usebuilder.h"
 
 #include "helper.h"
+#include "parsesession.h"
 
 using namespace KDevelop;
 
-UseBuilder::UseBuilder()
+UseBuilder::UseBuilder(ParseSession* session, const ContextBuilder::NodeToContextHash& mapping)
 : UseBuilderBase()
 {
-
+    m_session = session;
+    m_astToContext = mapping;
 }
 
 bool UseBuilder::visit(QmlJS::AST::IdentifierExpression* node)
 {
     const RangeInRevision range(m_session->locationToRange(node->identifierToken));
     const QualifiedIdentifier id(node->name.toString());
-    const DeclarationPointer decl(QmlJS::getDeclaration(id, range, DUContextPointer(topContext())));
+    const DeclarationPointer decl(QmlJS::getDeclaration(id, DUContextPointer(topContext())));
 
     newUse(node, range, decl);
     const bool ret = UseBuilderBase::visit(node);

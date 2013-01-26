@@ -28,12 +28,12 @@ typedef KDevelop::AbstractUseBuilder<QmlJS::AST::Node, QmlJS::AST::IdentifierPro
 class KDEVQMLJSDUCHAIN_EXPORT UseBuilder : public UseBuilderBase
 {
 public:
-    UseBuilder();
+    ///TODO: cleanup manual passing of mapping, push into parse session
+    UseBuilder(ParseSession* session, const ContextBuilder::NodeToContextHash& mapping);
 
 protected:
     using Visitor::visit;
     virtual bool visit(QmlJS::AST::IdentifierExpression* node);
-
 };
 
 #endif // USEBUILDER_H

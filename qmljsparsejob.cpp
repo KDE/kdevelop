@@ -29,6 +29,7 @@
 
 #include "duchain/declarationbuilder.h"
 #include "duchain/parsesession.h"
+#include "duchain/usebuilder.h"
 
 #include "debug.h"
 
@@ -67,6 +68,7 @@ void QmlJsParseJob::run()
         context = DUChainUtils::standardContextForUrl(document().toUrl());
     }
 
+    ContextBuilder::NodeToContextHash mapping;
     if (session.ast()) {
         QReadLocker parseLock(languageSupport()->language()->parseLock());
 
@@ -76,6 +78,7 @@ void QmlJsParseJob::run()
 
         DeclarationBuilder builder(&session);
         context = builder.build(document(), session.ast(), context);
+        mapping = builder.nodeToAstMapping();
     }
 
     if (abortRequested()) {
@@ -88,6 +91,10 @@ void QmlJsParseJob::run()
         file->setLanguage(ParseSession::languageString());
         context = new TopDUContext(document(), RangeInRevision(0, 0, INT_MAX, INT_MAX), file);
         DUChain::self()->addDocumentChain(context);
+    } else if ( minimumFeatures() & TopDUContext::AllDeclarationsContextsAndUses ) {
+        // build uses
+        UseBuilder useBuilder(&session, mapping);
+        useBuilder.buildUses(session.ast());
     }
 
     setDuChain(context);
