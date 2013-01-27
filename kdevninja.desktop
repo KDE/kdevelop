@@ -33,6 +33,7 @@ GenericName[sv]=Projektbyggare
 GenericName[uk]=Збирання проектів
 GenericName[x-test]=xxProject Builderxx
 Comment=KDevelop Ninja Builder
+Comment[de]=KDevelop-Ninja-Erstellung
 Comment[es]=Constructor Ninja para KDevelop
 Comment[et]=KDevelopi Ninja ehitaja
 Comment[fr]=Compilateur de projets pour KDevelop
