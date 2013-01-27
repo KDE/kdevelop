@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Comment=Allows switching between buddy documents like implementation and header file.
+Comment[bs]=Dopušta prebacivanje između prijatelj-dokumenata, poput datoteke zaglavlja i implementacije
 Comment[ca]=Permet commutar entre document associats com fitxers d'implementacions i de capçaleres.
 Comment[el]=Επιτρέπει εναλλαγή μεταξύ συμπληρωματικών εγγράφων όπως implementation και header αρχείου.
 Comment[es]=Permite cambiar entre documentos relacionados, como la implementación y el archivo de cabecera.
@@ -15,6 +16,7 @@ Comment[sv]=Tillåter byte mellan samhörande dokument som implementerings- och 
 Comment[uk]=Надає змогу перемикатися на споріднені документи, зокрема файли з реалізацією та файли заголовків.
 Comment[x-test]=xxAllows switching between buddy documents like implementation and header file.xx
 Name=Switch to Buddy
+Name[bs]=Pređi na prijatelja
 Name[ca]=Commuta a associat
 Name[el]=Εναλλαγή στο συμπληρωματικό
 Name[es]=Cambiar a relacionado
@@ -29,6 +31,7 @@ Name[sv]=Byt till samhörande
 Name[uk]=Перемикання на споріднений
 Name[x-test]=xxSwitch to Buddyxx
 GenericName=Switch to Buddy
+GenericName[bs]=Pređi na prijatelja
 GenericName[ca]=Commuta a associat
 GenericName[el]=Εναλλαγή στο συμπληρωματικό
 GenericName[es]=Cambiar a relacionado
