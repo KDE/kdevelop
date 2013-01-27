@@ -1,5 +1,6 @@
 [General]
 Name=GObject with properties
+Name[bs]=GObject s svojstvima
 Name[ca]=GObject amb propietats
 Name[el]=GObject με ιδιότητες
 Name[es]=GObject con propiedades
@@ -15,6 +16,7 @@ Name[sv]=GObject med egenskaper
 Name[uk]=GObject із властивостями
 Name[x-test]=xxGObject with propertiesxx
 Comment=A GObject subclass with a private pointer and properties
+Comment[bs]=Podklasa GObject s privatnim pokazivačem i svojstvima
 Comment[ca]=Una subclasse GObject amb un apuntador privat i propietats
 Comment[el]=Μια GObject subclass με private pointer και ιδιότητες
 Comment[es]=Una subclase de GObject con un puntero privado y propiedades
@@ -31,6 +33,7 @@ Comment[uk]=Підклас GObject з закритим (private) вказівн�
 Comment[x-test]=xxA GObject subclass with a private pointer and propertiesxx
 Category=C/GLib
 Language=C
+Language[bs]=C
 Language[ca]=C
 Language[de]=C
 Language[el]=C
@@ -51,6 +54,7 @@ Files=Header,Implementation
 
 [Header]
 Name=Header
+Name[bs]=Zaglavlje
 Name[ca]=Capçalera
 Name[el]=Header
 Name[es]=Cabecera
@@ -70,6 +74,7 @@ OutputFile={% for ns in namespaces %}{{ ns }}_{% endfor %}{{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[bs]=Implementacija
 Name[ca]=Implementació
 Name[cs]=Implementace
 Name[de]=Implementation

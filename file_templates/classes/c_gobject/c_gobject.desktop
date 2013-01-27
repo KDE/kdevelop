@@ -1,5 +1,6 @@
 [General]
 Name=GObject
+Name[bs]=GObject
 Name[ca]=GObject
 Name[de]=GObject
 Name[el]=GObject
@@ -16,6 +17,7 @@ Name[sv]=GObject
 Name[uk]=GObject
 Name[x-test]=xxGObjectxx
 Comment=A simple GObject subclass
+Comment[bs]=Prosta GObject podklasa
 Comment[ca]=Una subclasse GObject senzilla
 Comment[de]=Eine einfache GObject-Unterklasse
 Comment[el]=Μια απλή GObject subclass
@@ -33,6 +35,7 @@ Comment[uk]=Простий підклас GObject
 Comment[x-test]=xxA simple GObject subclassxx
 Category=C/GLib
 Language=C
+Language[bs]=C
 Language[ca]=C
 Language[de]=C
 Language[el]=C
@@ -53,6 +56,7 @@ Files=Header,Implementation
 
 [Header]
 Name=Header
+Name[bs]=Zaglavlje
 Name[ca]=Capçalera
 Name[el]=Header
 Name[es]=Cabecera
@@ -72,6 +76,7 @@ OutputFile={% for ns in namespaces %}{{ ns }}_{% endfor %}{{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[bs]=Implementacija
 Name[ca]=Implementació
 Name[cs]=Implementace
 Name[de]=Implementation

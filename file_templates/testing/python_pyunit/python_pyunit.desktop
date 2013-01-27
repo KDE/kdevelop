@@ -1,5 +1,6 @@
 [General]
 Name=PyUnit
+Name[bs]=PyUnit
 Name[ca]=PyUnit
 Name[de]=PyUnit
 Name[el]=PyUnit
@@ -16,6 +17,7 @@ Name[sv]=PyUnit
 Name[uk]=PyUnit
 Name[x-test]=xxPyUnitxx
 Comment=A unit test using the PyUnit framework
+Comment[bs]=Test jedinica koristeći PyUnit okruženje
 Comment[ca]=Una prova unitària utilitzant l'entorn de treball PyUnit
 Comment[el]=Ένα unit test με χρήση του PyUnit framework
 Comment[es]=Una prueba unitaria que usa la infraestructura PyUnit
@@ -32,6 +34,7 @@ Comment[uk]=Перевірка модулів за допомогою компл
 Comment[x-test]=xxA unit test using the PyUnit frameworkxx
 Category=Python/Basic
 Language=Python
+Language[bs]=Python
 Language[ca]=Python
 Language[de]=Python
 Language[el]=Python
@@ -52,6 +55,7 @@ Files=Implementation
 
 [Implementation]
 Name=Implementation
+Name[bs]=Implementacija
 Name[ca]=Implementació
 Name[cs]=Implementace
 Name[de]=Implementation

@@ -1,5 +1,6 @@
 [General]
 Name=Implicitly shared class
+Name[bs]=Implicitno dijeljena klasa
 Name[ca]=Classe compartida implícita
 Name[el]=Σιωπηρά διαμοιρασμένη class
 Name[es]=Clase compartida implícitamente
@@ -15,6 +16,7 @@ Name[sv]=Implicit delad klass
 Name[uk]=Клас з неявним спільним використанням
 Name[x-test]=xxImplicitly shared classxx
 Comment=Class with a private QSharedData member
+Comment[bs]=Klasa s privatnim QSharedData članom
 Comment[ca]=Classe amb un membre QSharedData privat
 Comment[el]=Class με private QSharedData member
 Comment[es]=Clase con un miembro QSharedData privado
@@ -31,6 +33,7 @@ Comment[uk]=Клас з закритим елементом QSharedData
 Comment[x-test]=xxClass with a private QSharedData memberxx
 Category=C++/Qt
 Language=C++
+Language[bs]=C++
 Language[ca]=C++
 Language[de]=C++
 Language[el]=C++
@@ -51,6 +54,7 @@ Files=Header,Implementation
 
 [Header]
 Name=Public Header
+Name[bs]=Javno zaglavlje
 Name[ca]=Capçalera pública
 Name[el]=Public Header
 Name[es]=Cabecera pública
@@ -70,6 +74,7 @@ OutputFile={{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[bs]=Implementacija
 Name[ca]=Implementació
 Name[cs]=Implementace
 Name[de]=Implementation

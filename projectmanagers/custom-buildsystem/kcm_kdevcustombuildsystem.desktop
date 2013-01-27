@@ -10,6 +10,7 @@ X-KDE-ParentComponents=KDevCustomBuildSystem,KDevGenericManager
 X-KDE-CfgDlgHierarchy=BUILDTOOL
 
 Name=Custom BuildSystem
+Name[bs]=Vlasititi sistem gradnje
 Name[ca]=BuildSystem personalitzat
 Name[cs]=Vlastní systém pro sestavení
 Name[de]=Eigenes Build-System
@@ -27,6 +28,7 @@ Name[sv]=Eget byggsystem
 Name[uk]=Нетипова система збирання
 Name[x-test]=xxCustom BuildSystemxx
 Comment=Configure a projects custom build tool and includes/defines for the language support.
+Comment[bs]=Konfiguriši vlastite alate za gradnju i uključivanja/definicije za jezičku podršku
 Comment[ca]=Configura una eina de construcció personalitzada de projectes i les inclusions/definicions per la implementació del llenguatge.
 Comment[el]=Διαμόρφωση ενός εργαλείου προσαρμοσμένης κατασκευής και των include/define για τη γλωσσική υποστήριξη.
 Comment[es]=Configurar una herramienta de construcción personalizada de proyectos e includes y defines para el lenguaje.

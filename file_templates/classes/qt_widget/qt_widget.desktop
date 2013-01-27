@@ -1,5 +1,6 @@
 [General]
 Name=Widget with a UI File
+Name[bs]=Grafička kontrola s UI datotekom
 Name[ca]=Estri amb un fitxer IU
 Name[el]=Συστατικό με UI αρχείο
 Name[es]=Widget con un archivo de interfaz gráfica
@@ -15,6 +16,7 @@ Name[sv]=Grafisk komponent med en UI-fil
 Name[uk]=Віджет з файлом інтерфейсу користувача
 Name[x-test]=xxWidget with a UI Filexx
 Comment=QWidget subclass with a separate Qt Designer file
+Comment[bs]=QWidget podklasa s odvojenom Qt Designer datotekom
 Comment[ca]=Subclasse QWidget amb un fitxer separat del Qt Designer
 Comment[el]=QWidget subclass με ξεχωριστό Qt Designer αρχείο
 Comment[es]=Subclase de QWidget con un archivo separado del Diseñador de Qt
@@ -31,6 +33,7 @@ Comment[uk]=Підклас QWidget з окремим файлом Qt Designer
 Comment[x-test]=xxQWidget subclass with a separate Qt Designer filexx
 Category=C++/Qt
 Language=C++
+Language[bs]=C++
 Language[ca]=C++
 Language[de]=C++
 Language[el]=C++
@@ -52,6 +55,7 @@ Files=Header,Implementation,UI
 
 [Header]
 Name=Public Header
+Name[bs]=Javno zaglavlje
 Name[ca]=Capçalera pública
 Name[el]=Public Header
 Name[es]=Cabecera pública
@@ -71,6 +75,7 @@ OutputFile={{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[bs]=Implementacija
 Name[ca]=Implementació
 Name[cs]=Implementace
 Name[de]=Implementation
@@ -92,6 +97,7 @@ OutputFile={{ name }}.cpp
 
 [UI]
 Name=User Interface
+Name[bs]=Korisnički interfejs
 Name[ca]=Interfície d'usuari
 Name[de]=Benutzerschnittstelle
 Name[el]=Περιβάλλον χρήστη

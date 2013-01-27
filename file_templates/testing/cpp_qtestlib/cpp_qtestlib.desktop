@@ -1,5 +1,6 @@
 [General]
 Name=Test Suite
+Name[bs]=Testno okruženje
 Name[ca]=Conjunt de proves
 Name[el]=Test Suite
 Name[es]=Suite de pruebas
@@ -15,6 +16,7 @@ Name[sv]=Testsvit
 Name[uk]=Комплекс для перевірки
 Name[x-test]=xxTest Suitexx
 Comment=A unit test suite using the QTest library without a graphical user interface
+Comment[bs]=Testno okruženje jedinica koje koristi QTest biblioteku bez grafičkog interfejsa
 Comment[ca]=Un conjunt de proves unitàries utilitzant la biblioteca QTest sense interfície gràfica d'usuari
 Comment[el]=Μια unit test σουίτα με χρήση QTest βιβλιοθήκης χωρίς γραφικό περιβάλλον χρήστη
 Comment[es]=Una suite de pruebas unitarias que usa la biblioteca QTest sin una interfaz gráfica de usuario
@@ -31,6 +33,7 @@ Comment[uk]=Комплекс для перевірки модулів за до�
 Comment[x-test]=xxA unit test suite using the QTest library without a graphical user interfacexx
 Category=C++/Qt
 Language=C++
+Language[bs]=C++
 Language[ca]=C++
 Language[de]=C++
 Language[el]=C++
@@ -51,6 +54,7 @@ Files=Header,Implementation
 
 [Header]
 Name=Header
+Name[bs]=Zaglavlje
 Name[ca]=Capçalera
 Name[el]=Header
 Name[es]=Cabecera
@@ -70,6 +74,7 @@ OutputFile={{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[bs]=Implementacija
 Name[ca]=Implementació
 Name[cs]=Implementace
 Name[de]=Implementation
