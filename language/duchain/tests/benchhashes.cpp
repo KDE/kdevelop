@@ -228,18 +228,18 @@ void BenchHashes::remove_data()
   feedData();
 }
 
+struct TypeRepoTestData
+{
+  size_t size;
+  void* ptr;
+};
+
 /**
  * somewhat artificial benchmark to test speed impact if we'd ever change
  * the underlying data type of the TypeSystem / TypeRegister.
  */
 void BenchHashes::typeRepo()
 {
-  struct TypeRepoTestData
-  {
-    size_t size;
-    void* ptr;
-  };
-
   QFETCH(int, type);
   if (type == 1 || type == 2) {
     QVector<TypeRepoTestData*> v;
