@@ -41,35 +41,42 @@ struct MemoryPoolCache
   QVector<MemoryPool::Block*> freeBlocks;
 };
 
+/**
+ * The thread local cache is only initialized after the first memory pool of
+ * a given thread is destroyed. The reason is that before we cannot have any
+ * cached values anyways.
+ *
+ * Furthermore this makes it safe to construct a MemoryPool but only use it
+ * later in a different thread which is actually the common case for the
+ * usage as the ParseSession's memory pool inside the CPPParseJob.
+ */
+static QThreadStorage< MemoryPoolCache* > threadLocalCache;
+
 MemoryPool::MemoryPool()
-: m_currentBlock(0)
-, m_currentIndex(0)
+: m_currentBlock(-1)
+, m_currentIndex(BLOCK_SIZE)
 {
   // preallocate some space for the potentially used blocks
   m_blocks.reserve(MAX_CACHE_SIZE);
-
-  // setup thread local storage
-  ///TODO: Once we can depend on Qt 4.8+ directly store a MemoryPoolCache
-  ///      and not a pointer to it. This obsoletes the manual construction.
-  static QThreadStorage< MemoryPoolCache* > threadLocalCache;
-  if (!threadLocalCache.hasLocalData()) {
-    threadLocalCache.setLocalData(new MemoryPoolCache);
-  }
-  m_freeBlocks = &threadLocalCache.localData()->freeBlocks;
-
-  // ensure there is a block which we can use
-  allocateBlock();
 }
 
 MemoryPool::~MemoryPool()
 {
+  ///TODO: Once we can depend on Qt 4.8+ directly store a MemoryPoolCache
+  ///      and not a pointer to it. This obsoletes the manual construction.
+  MemoryPoolCache* cache = threadLocalCache.localData();
+  if (!cache) {
+    // setup thread local storage
+    cache = new MemoryPoolCache;
+    threadLocalCache.setLocalData(cache);
+  }
   for(int i = 0; i <= m_currentBlock; ++i) {
     Block* block = m_blocks.at(i);
-    if (m_freeBlocks->size() < MAX_CACHE_SIZE) {
+    if (cache->freeBlocks.size() < MAX_CACHE_SIZE) {
       // cache block for reuse by another thread local allocator
       // this requires a 'prestine' state, i.e. memset to zero
       memset(block->data, 0, i == m_currentBlock ? m_currentIndex : static_cast<size_t>(BLOCK_SIZE));
-      m_freeBlocks->append(block);
+      cache->freeBlocks.append(block);
     } else {
       // otherwise we can discard this block
       delete block;
@@ -79,10 +86,12 @@ MemoryPool::~MemoryPool()
 
 void MemoryPool::allocateBlock()
 {
-  if (!m_freeBlocks->isEmpty()) {
+  // NOTE: thread local cache data might not be set, esp. if this is the first mem pool of a thread.
+  MemoryPoolCache* cache = threadLocalCache.localData();
+  if (cache && !cache->freeBlocks.isEmpty()) {
     // reuse cached memory block
-    m_blocks.append(m_freeBlocks->last());
-    m_freeBlocks->pop_back();
+    m_blocks.append(cache->freeBlocks.last());
+    cache->freeBlocks.pop_back();
   } else {
     // allocate new memory block
     Block* block = new Block;

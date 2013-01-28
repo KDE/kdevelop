@@ -43,3 +43,9 @@ target_link_libraries(sourcemanipulationtest ${KDE4_KDECORE_LIBS} ${KDE4_KTEXTED
 kde4_add_unit_test(codeanalysistest codeanalysistest.cpp testhelper.cpp)
 target_link_libraries(codeanalysistest ${KDE4_KDECORE_LIBS} ${KDE4_KTEXTEDITOR_LIBRARY} ${QT_QTTEST_LIBRARY}
     kdev4cppparser kdev4cpprpp kdev4cppduchain ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES})
+
+########## next target ################
+
+kde4_add_unit_test(environmenttest testenvironment.cpp testhelper.cpp)
+target_link_libraries(environmenttest ${KDE4_KDECORE_LIBS} ${KDE4_KTEXTEDITOR_LIBRARY} ${QT_QTTEST_LIBRARY}
+    kdev4cppparser kdev4cpprpp kdev4cppduchain ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES})
