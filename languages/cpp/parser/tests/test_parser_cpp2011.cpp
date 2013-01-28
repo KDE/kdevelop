@@ -95,6 +95,13 @@ void TestParser::testVariadicTemplates_data()
   QTest::newRow("pack-expansion-funcptr") << "template<typename ... Args> void foo(Args... args) { typedef int (*t5)(Args...); }\n";
   QTest::newRow("sizeof...") << "template<typename ... Arg> void A(Arg ... params) { int i = sizeof...(params); }\n";
   QTest::newRow("template-template-param") << "template<template <typename> class... Magic> struct foo{};\n";
+  // see: https://bugs.kde.org/show_bug.cgi?id=288439
+  QTest::newRow("functionptr") << "template<typename signature> class Function;\n"
+                                  "template<typename ret, typename... Args> class Function<ret (*)(Args...)> { };";
+  QTest::newRow("ptrtomember-functionptr") << "template<typename... Ts, typename Obj> void foo(Obj* obj, void (Obj::*method)(Ts...));";
+  QTest::newRow("unnamed-funcargs") << "template<typename T> struct Foo{};\n"
+                                       "template<typename... Ts> void bar(Foo<Ts>...);";
+  QTest::newRow("expand-intargs") << "template<typename, int...> struct Blah;";
   ///TODO: attribute-list?
   ///TODO: alignment-specifier?
   ///TODO: capture-list?
@@ -105,7 +112,6 @@ void TestParser::testVariadicTemplates()
   QFETCH(QString, code);
   TranslationUnitAST* ast = parse(code.toUtf8());
   dump(ast);
-  QEXPECT_FAIL("pack-expansion-is_function", "function pointer is improperly parsed", Abort);
   QVERIFY(control.problems().isEmpty());
 
   QVERIFY(ast);

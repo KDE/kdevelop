@@ -1699,6 +1699,12 @@ bool Parser::parseAbstractDeclarator(DeclaratorAST *&node)
         }
       goto update_pos;
     }
+  else if (session->token_stream->lookAhead() == Token_ellipsis)
+    {
+      advance();
+      ast->isVariadic = true;
+      goto update_pos;
+    }
 
  label1:
   {

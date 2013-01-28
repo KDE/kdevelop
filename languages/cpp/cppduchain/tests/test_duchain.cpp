@@ -3440,18 +3440,26 @@ void TestDUChain::testTypedef() {
 
 void TestDUChain::testTypedefFuncptr()
 {
-  QByteArray method("typedef int (*func)(); func f;");
+  QByteArray method("typedef int (*func)(char c); func f('c');");
 
   LockedTopDUContext top = parse(method, DumpAll);
 
-  QEXPECT_FAIL("", "three instead of two declarations are created, since the AST contains two DeclaratorASTs for the func ptr in the typedef", Abort);
   QCOMPARE(top->localDeclarations().count(), 2);
   QVERIFY(top->localDeclarations()[0]->abstractType());
   QVERIFY(top->localDeclarations()[1]->abstractType());
   QCOMPARE(top->localDeclarations()[0]->abstractType()->toString(), QString("func"));
   QCOMPARE(top->localDeclarations()[1]->abstractType()->toString(), QString("func"));
-  QCOMPARE(unAliasedType(top->localDeclarations()[0]->abstractType())->toString(), QString("function int* ()"));
-  QCOMPARE(unAliasedType(top->localDeclarations()[1]->abstractType())->toString(), QString("function int* ()"));
+  QCOMPARE(unAliasedType(top->localDeclarations()[0]->abstractType())->toString(), QString("function int (char)"));
+  QCOMPARE(unAliasedType(top->localDeclarations()[1]->abstractType())->toString(), QString("function int (char)"));
+
+  AbstractType::Ptr target = TypeUtils::targetTypeKeepAliases( top->localDeclarations()[1]->abstractType(), top);
+  const IdentifiedType* idType = dynamic_cast<const IdentifiedType*>( target.unsafeData() );
+  QVERIFY(idType);
+  QVERIFY(idType->declaration(top));
+
+  QCOMPARE(top->childContexts().at(0)->localDeclarations().count(), 1);
+  Declaration* dec = top->childContexts().at(0)->localDeclarations().first();
+  QCOMPARE(dec->toString(), QString("char c"));
 }
 
 void TestDUChain::testContextAssignment() {
