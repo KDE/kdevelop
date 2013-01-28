@@ -935,7 +935,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
             KUrl::List tfiles;
             foreach( const QString & sFile, t.files)
             {
-                if(sFile.startsWith("#[") || sFile.isEmpty())
+                if(sFile.startsWith("#[") || sFile.isEmpty() || sFile.endsWith('/'))
                     continue;
 
                 KUrl sourceFile(sFile);
