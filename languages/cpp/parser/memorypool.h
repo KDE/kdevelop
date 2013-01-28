@@ -141,9 +141,9 @@ private:
 
 private:
   QVector<Block*> m_blocks;
-  QVector<Block*>* m_freeBlocks;
   int m_currentBlock;
   size_t m_currentIndex;
+
   friend class MemoryPoolCache;
 };
 
