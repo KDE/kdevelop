@@ -475,8 +475,8 @@ void collectReachableNodes(QSet<uint>& reachableNodes, uint currentNode) {
   reachableNodes.insert(currentNode);
   const Utils::SetNodeData* node = KDevelop::RecursiveImportRepository::repository()->nodeFromIndex(currentNode);
   Q_ASSERT(node);
-  collectReachableNodes(reachableNodes, node->leftNode);
-  collectReachableNodes(reachableNodes, node->rightNode);
+  collectReachableNodes(reachableNodes, node->leftNode());
+  collectReachableNodes(reachableNodes, node->rightNode());
 }
 
 uint collectNaiveNodeCount(uint currentNode) {
@@ -485,8 +485,8 @@ uint collectNaiveNodeCount(uint currentNode) {
   uint ret = 1;
   const Utils::SetNodeData* node = KDevelop::RecursiveImportRepository::repository()->nodeFromIndex(currentNode);
   Q_ASSERT(node);
-  ret += collectNaiveNodeCount(node->leftNode);
-  ret += collectNaiveNodeCount(node->rightNode);
+  ret += collectNaiveNodeCount(node->leftNode());
+  ret += collectNaiveNodeCount(node->rightNode());
   return ret;
 }
 
