@@ -1808,6 +1808,19 @@ void TestCppCodeCompletion::testNamespaceAliasCycleCompletion() {
   release(top);
 }
 
+void TestCppCodeCompletion::testAfterNamespace()
+{
+  QByteArray method("void foo(); namespace asdf { namespace foobar {} }");
+
+  TopDUContext* top = parse(method, DumpNone);
+
+  DUChainWriteLocker lock;
+
+  CompletionItemTester tester(top, "namespace");
+  QCOMPARE(tester.names, QStringList() << "asdf");
+  release(top);
+}
+
 void TestCppCodeCompletion::testIndirectImports()
 {
   {

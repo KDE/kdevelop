@@ -101,7 +101,7 @@ const QSet<QString> BINARY_OPERATORS =
       BINARY_ARITHMETIC_OPERATORS + ARITHMETIC_COMPARISON_OPERATORS;
 //These will be skipped over to find parent contexts
 const QSet<QString> UNARY_OPERATORS = QString("++ -- ! ~ + - & *").split(' ').toSet();
-const QSet<QString> KEYWORD_ACCESS_STRINGS = QString("const_cast< static_cast< dynamic_cast< reinterpret_cast< const typedef public public: protected protected: private private: virtual return else throw emit Q_EMIT case delete delete[] new friend class").split(' ').toSet();
+const QSet<QString> KEYWORD_ACCESS_STRINGS = QString("const_cast< static_cast< dynamic_cast< reinterpret_cast< const typedef public public: protected protected: private private: virtual return else throw emit Q_EMIT case delete delete[] new friend class namespace").split(' ').toSet();
 //When these appear as access strings, only show types
 const QSet<QString> SHOW_TYPES_ACCESS_STRINGS = QString("const_cast< static_cast< dynamic_cast< reinterpret_cast< const typedef public protected private virtual new friend class").split(' ').toSet();
 //A parent context is created for these access strings
@@ -891,6 +891,9 @@ CodeCompletionContext::AccessType CodeCompletionContext::findAccessType( const Q
   //TODO: add support for MemberChoose
   if( accessStr == "::" )
     return StaticMemberChoose;
+
+  if ( accessStr == "namespace" )
+    return NamespaceAccess;
 
   if ( m_depth > 0 )
   {
@@ -2175,6 +2178,9 @@ bool  CodeCompletionContext::filterDeclaration(Declaration* decl, DUContext* dec
       return false;
     }
   }
+
+  if (m_accessType == NamespaceAccess)
+    return decl->kind() == Declaration::Namespace || decl->kind() == Declaration::NamespaceAlias;
 
   if(m_onlyShow == ShowIntegralConstants && !isIntegralConstant(decl, true))
     return false;

@@ -226,7 +226,7 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
   
   KTextEditor::Range nextToken = KTextEditor::Range(_word.end(), KTextEditor::Cursor(_word.end().line(), _word.end().column() + 2));
   bool followingColon = document->text(nextToken) == "::";
-  
+  bool followingBrace = document->text(nextToken).contains('{');
   document->replaceText(word, newText);
   
   KTextEditor::Cursor end = word.start();
@@ -248,12 +248,20 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
     }
     
     if(m_declaration.data()->kind() == Declaration::Namespace) {
-      lock.unlock();
-      if ( ! followingColon ) {
+      CodeCompletionContext* ctx = static_cast<CodeCompletionContext*>(m_completionContext.data());
+      if (ctx->accessType() != CodeCompletionContext::NamespaceAccess && !followingColon) {
+        // completing a namespace identifier usage
+        lock.unlock();
         document->insertText(end, "::");
         end.setColumn(end.column() + 2);
+        lock.lock();
+      } else if (ctx->accessType() == CodeCompletionContext::NamespaceAccess && !followingBrace) {
+        // we complete a namespace declaration, thus add braces
+        lock.unlock();
+        document->insertText(end, " {}");
+        end.setColumn(end.column() + 3);
+        lock.lock();
       }
-      lock.lock();
     }
       
     if( !useAlternativeText && m_declaration && (dynamic_cast<AbstractFunctionDeclaration*>(m_declaration.data()) || completionContext()->isConstructorInitialization()) ) {

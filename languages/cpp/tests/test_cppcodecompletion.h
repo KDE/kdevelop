@@ -120,6 +120,7 @@ private slots:
   void testNamespaceCompletion();
   void testNamespaceAliasCompletion();
   void testNamespaceAliasCycleCompletion();
+  void testAfterNamespace();
   void testTemplateMemberAccess();
   void testTemplateArguments();
   void testTemplateFunction();

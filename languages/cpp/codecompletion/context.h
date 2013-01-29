@@ -88,6 +88,7 @@ namespace Cpp {
         TemplateAccess,       /// "bla<."
         ReturnAccess,         /// "return " -- Takes into account return type
         CaseAccess,           /// "case " -- Takes into account switch expression type
+        NamespaceAccess
       };
 
       /**
