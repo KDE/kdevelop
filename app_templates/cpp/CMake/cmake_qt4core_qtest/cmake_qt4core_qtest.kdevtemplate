@@ -49,6 +49,7 @@ Comment[sk]=Ústredná aplikácia Qt4 CMake QTest. Generuje aplikáciu založen�
 Comment[sv]=Qt4 CMake QTest-kärnprogram. Skapa ett CMake/Qt4-baserat program (som fungerar på flera plattformar)
 Comment[uk]=Створити програму QTest, засновану на CMake/Qt4 (сумісну з декількома платформами)
 Comment[x-test]=xxQt4 CMake QTest Core application. Generate a CMake/Qt4 based application (cross-platform)xx
+Comment[zh_CN]=生成基于 CMake/Qt4 的应用程序(跨平台)
 Comment[zh_TW]=Qt4 CMake QTest Core 應用程式。產生一個 CMake/Qt4 為基礎的使用者介面應用程式（跨平台相容）
 ShowFilesAfterGeneration=%{PROJECTDIR}/src/%{APPNAMELC}.cpp
 Category=Qt/Test

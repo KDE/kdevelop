@@ -51,6 +51,7 @@ Comment[sk]=Ústredná aplikácia Qt4 CMake Gui. Generuje GUI aplikáciu založe
 Comment[sv]=Qt4 CMake-program med grafiskt användargränssnitt. Skapa ett CMake/Qt4-baserat program med grafiskt användargränssnitt (som fungerar på flera plattformar)
 Comment[uk]=Програма Qt4 з графічним інтерфейсом і системою збирання CMake. Створити графічну програму, засновану на CMake/Qt4 (сумісну з декількома платформами)
 Comment[x-test]=xxQt4 CMake Gui application. Generate a CMake/Qt4 based GUI application (crossplatform compatible)xx
+Comment[zh_CN]=生成基于 CMake/Qt4 的图形应用程序(跨平台兼容)
 Comment[zh_TW]=Qt4 CMake 使用者介面應用程式。產生一個 CMake/Qt4 為基礎的使用者介面應用程式（跨平台相容）
 ShowFilesAfterGeneration=%{PROJECTDIR}/src/%{APPNAMELC}.cpp
 Category=Qt/Graphical
