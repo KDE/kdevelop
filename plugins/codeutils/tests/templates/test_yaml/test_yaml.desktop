@@ -16,6 +16,7 @@ Name[sk]=Testovanie YAML šablóny
 Name[sv]=YAML-mall för test
 Name[uk]=Тестовий шаблон YAML
 Name[x-test]=xxTesting YAML Templatexx
+Name[zh_CN]=YAML 测试模板
 Comment=A test description in YAML
 Comment[bs]=Opis testa u  YAML
 Comment[ca]=Una descripció de prova en YAML
@@ -34,6 +35,7 @@ Comment[sk]=Popis testu v YAML
 Comment[sv]=En testbeskrivning i YAML
 Comment[uk]=Опис перевірки у форматі YAML
 Comment[x-test]=xxA test description in YAMLxx
+Comment[zh_CN]=一个 YAML 写的测试描述
 Category=Test/Test/YAML
 Files=Implementation
 
@@ -56,6 +58,7 @@ Name[sk]=Implementácia
 Name[sv]=Implementering
 Name[uk]=Реалізація
 Name[x-test]=xxImplementationxx
+Name[zh_CN]=实现
 File=class.yaml
 OutputFile={{ name }}.yaml
 

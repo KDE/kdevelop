@@ -16,6 +16,7 @@ Name[sk]=Testovanie C++ šablóny
 Name[sv]=C++ mall för test
 Name[uk]=Тестовий шаблон C++
 Name[x-test]=xxTesting C++ Templatexx
+Name[zh_CN]=C++ 测试模板
 Comment=A unit test using the QTest library without a graphical user interface
 Comment[bs]=Test jedinice koristeći QTest biblioteku bez grafičkog korisničkog interfejsa
 Comment[ca]=Una prova unitària utilitzant la biblioteca QTest sense interfície gràfica d'usuari
@@ -33,6 +34,7 @@ Comment[sk]=Unit test pomocou knižnice QTest bez grafického rozhrania
 Comment[sv]=En enhetstest som använder QTest-biblioteket utan grafiskt gränssnitt
 Comment[uk]=Перевірка модулів за допомогою бібліотеки QTest без графічного інтерфейсу користувача
 Comment[x-test]=xxA unit test using the QTest library without a graphical user interfacexx
+Comment[zh_CN]=一个使用 QTest 库且不含图形界面的单元测试
 Category=Test/Test/C++
 Files=Header,Implementation
 
@@ -54,6 +56,7 @@ Name[sk]=Hlavička
 Name[sv]=Deklaration
 Name[uk]=Заголовок
 Name[x-test]=xxHeaderxx
+Name[zh_CN]=头文件
 File=class.h
 OutputFile={{ name }}.h
 
@@ -76,6 +79,7 @@ Name[sk]=Implementácia
 Name[sv]=Implementering
 Name[uk]=Реалізація
 Name[x-test]=xxImplementationxx
+Name[zh_CN]=实现
 File=class.cpp
 OutputFile={{ name }}.cpp
 
