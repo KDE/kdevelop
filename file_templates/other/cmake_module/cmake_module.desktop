@@ -2,6 +2,7 @@
 Name=CMake Module with pkg-config
 Name[ca]=Mòdul CMake amb pkg-config
 Name[da]=CMake-modul med pkg-config
+Name[de]=CMake-Modul mit pkg-config
 Name[el]=CMake άρθρωμα με pkg-config
 Name[es]=Módulo de CMake con pkg-config
 Name[et]=CMake'i moodul pkg-config'iga
@@ -24,6 +25,7 @@ Name[zh_TW]=CMake 模組，含 pkg-config
 Comment=CMake module for finding a library using pkg-config
 Comment[ca]=Mòdul CMake per cercar una biblioteca utilitzant pkg-config
 Comment[da]=CMake-modul til at finde et bibliotek ved hjælp af pkg-config
+Comment[de]=CMake-Modul für die Suche nach einer Bibliothek mithilfe von pkg-config
 Comment[el]=CMake άρθρωμα για εύρεση βιβλιοθήκης με χρήση pkg-config
 Comment[es]=Módulo de CMake para encontrar una biblioteca usando pkg-config
 Comment[et]=CMake'i moodul teegi leidmiseks pkg-config'i abil
