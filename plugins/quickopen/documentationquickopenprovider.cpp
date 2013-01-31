@@ -33,27 +33,38 @@ using namespace KDevelop;
 
 class DocumentationQuickOpenItem : public QuickOpenDataBase
 {
-    public:
-        DocumentationQuickOpenItem(const QModelIndex& data, IDocumentationProvider* p)
-            : QuickOpenDataBase()
-            , m_data(data)
-            , m_provider(p) {}
+public:
+    DocumentationQuickOpenItem(const QModelIndex& data, IDocumentationProvider* p)
+    : QuickOpenDataBase()
+    , m_data(data)
+    , m_provider(p)
+    {}
 
-        virtual QString text() const { return m_data.data().toString(); }
-        virtual QString htmlDescription() const { return i18n("Documentation in the %1", m_provider->name()); }
-        virtual bool execute(QString&) {
-            IDocumentation::Ptr docu = m_provider->documentationForIndex(m_data);
-            if(docu) {
-                ICore::self()->documentationController()->showDocumentation(docu);
-            }
-            return docu;
+    virtual QString text() const
+    {
+        return m_data.data().toString();
+    }
+    virtual QString htmlDescription() const
+    {
+        return i18n("Documentation in the %1", m_provider->name());
+    }
+    virtual bool execute(QString&)
+    {
+        IDocumentation::Ptr docu = m_provider->documentationForIndex(m_data);
+        if(docu) {
+            ICore::self()->documentationController()->showDocumentation(docu);
         }
-        virtual QIcon icon() const { return m_provider->icon(); }
+        return docu;
+    }
+    virtual QIcon icon() const
+    {
+        return m_provider->icon();
+    }
 
-    private:
-        QModelIndex m_data;
-        IDocumentation::Ptr m_ptr;
-        IDocumentationProvider* m_provider;
+private:
+    QModelIndex m_data;
+    IDocumentation::Ptr m_ptr;
+    IDocumentationProvider* m_provider;
 };
 
 namespace {
@@ -62,7 +73,7 @@ namespace {
         uint rows = m->rowCount(idx);
         uint ret = rows;
 
-        for(uint i=0; i<rows; i++) {
+        for(uint i = 0; i < rows; i++) {
             ret += recursiveRowCount(m, m->index(i, 0, idx));
         }
         return ret;
@@ -71,14 +82,14 @@ namespace {
     void matchingIndexes(const QAbstractItemModel* m, const QString& match, const QModelIndex& idx, QList<QModelIndex>& ret, int& preferred)
     {
         if(m->hasChildren(idx)) {
-            for(int i=0, rows=m->rowCount(); i<rows; i++) {
+            for(int i = 0, rows = m->rowCount(); i < rows; i++) {
                 matchingIndexes(m, match, m->index(i, 0, idx), ret, preferred);
             }
         } else {
             int index = idx.data().toString().indexOf(match, 0, Qt::CaseInsensitive);
-            if(index==0) {
+            if(index == 0) {
                 ret.insert(preferred++, idx);
-            } else if(index>0) {
+            } else if(index > 0) {
                 ret.append(idx);
             }
         }
@@ -86,18 +97,21 @@ namespace {
 }
 
 DocumentationQuickOpenProvider::DocumentationQuickOpenProvider()
-{}
+{
+}
 
 void DocumentationQuickOpenProvider::setFilterText(const QString& text)
 {
-    if(text.size()<2)
+    if(text.size() < 2) {
         return;
+    }
     m_results.clear();
     int split = 0;
     QList<IDocumentationProvider*> providers = ICore::self()->documentationController()->documentationProviders();
     foreach(IDocumentationProvider* p, providers) {
         QList<QModelIndex> idxs;
-        int internalSplit = 0, i=0;
+        int internalSplit = 0;
+        int i = 0;
         matchingIndexes(p->indexModel(), text, QModelIndex(), idxs, internalSplit);
         foreach(const QModelIndex& idx, idxs) {
             m_results.insert(split+i, QuickOpenDataPointer(new DocumentationQuickOpenItem(idx, p)));
