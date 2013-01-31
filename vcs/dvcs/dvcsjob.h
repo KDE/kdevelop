@@ -212,8 +212,10 @@ private Q_SLOTS:
     void slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus);
     void slotReceivedStdout();
 
+protected:
+    virtual bool doKill();
+
 private:
-    
     void jobIsReady();
     DVcsJobPrivate* const d;
 };
