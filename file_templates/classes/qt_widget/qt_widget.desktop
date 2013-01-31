@@ -1,6 +1,7 @@
 [General]
 Name=Widget with a UI File
 Name[ca]=Estri amb un fitxer IU
+Name[ca@valencia]=Estri amb un fitxer IU
 Name[da]=Widget med en UI-fil
 Name[el]=Γραφικό συστατικό με UI αρχείο
 Name[es]=Widget con un archivo de interfaz gráfica
@@ -23,6 +24,7 @@ Name[zh_CN]=带有一个 UI 文件的部件
 Name[zh_TW]=有 UI 檔的元件
 Comment=QWidget subclass with a separate Qt Designer file
 Comment[ca]=Subclasse QWidget amb un fitxer separat del Qt Designer
+Comment[ca@valencia]=Subclasse QWidget amb un fitxer separat del Qt Designer
 Comment[da]=Underklasse af QWidget med en separat Qt Designer-fil
 Comment[el]=QWidget subclass με χωριστό Qt Designer αρχείο
 Comment[es]=Subclase de QWidget con un archivo separado del Diseñador de Qt
@@ -47,6 +49,7 @@ Category=C++/Qt
 Language=C++
 Language[bs]=C++
 Language[ca]=C++
+Language[ca@valencia]=C++
 Language[da]=C++
 Language[de]=C++
 Language[el]=C++
@@ -78,6 +81,7 @@ Files=Header,Implementation,UI
 [Header]
 Name=Public Header
 Name[ca]=Capçalera pública
+Name[ca@valencia]=Capçalera pública
 Name[da]=Offentlig header
 Name[el]=Public Header
 Name[es]=Cabecera pública
@@ -104,6 +108,7 @@ OutputFile={{ name }}.h
 [Implementation]
 Name=Implementation
 Name[ca]=Implementació
+Name[ca@valencia]=Implementació
 Name[cs]=Implementace
 Name[da]=Implementering
 Name[de]=Implementation
@@ -133,6 +138,7 @@ OutputFile={{ name }}.cpp
 Name=User Interface
 Name[bs]=Korisnički interfejs
 Name[ca]=Interfície d'usuari
+Name[ca@valencia]=Interfície d'usuari
 Name[da]=Brugerflade
 Name[de]=Benutzerschnittstelle
 Name[el]=Περιβάλλον χρήστη
