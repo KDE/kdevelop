@@ -281,6 +281,9 @@ void OutputModel::addLineBatch()
 
 void OutputModel::flushLineBuffer()
 {
+    if (d->m_lineBuffer.isEmpty())
+        return;
+
     beginInsertRows( QModelIndex(), rowCount(), rowCount() + d->m_lineBuffer.size() -  1);
 
     for(; !d->m_lineBuffer.isEmpty();) {
