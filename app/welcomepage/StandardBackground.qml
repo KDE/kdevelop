@@ -26,7 +26,8 @@ Rectangle
 {
     property Component tools: null
     property alias pageIcon: theIcon.icon
-    property alias marginLeft: toolbar.width
+    property real marginLeft: toolbar.x+toolbar.width
+    property real margins: 5
     
     PlasmaCore.FrameSvgItem {
         imagePath: "widgets/tooltip"
@@ -35,6 +36,7 @@ Rectangle
         anchors {
             top: parent.top
             left: parent.left
+            margins: parent.margins
         }
         width: 256
         height: 100
