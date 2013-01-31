@@ -70,6 +70,7 @@ DVcsJob::DVcsJob(const QDir& workingDir, IPlugin* parent, OutputJob::OutputJobVe
     d->childproc->setWorkingDirectory(workingDir.absolutePath());
     d->model = new OutputModel;
     setModel(d->model);
+    setCapabilities(Killable);
     
     connect(d->childproc, SIGNAL(finished(int,QProcess::ExitStatus)),
             SLOT(slotProcessExited(int,QProcess::ExitStatus)));
@@ -287,6 +288,22 @@ DVcsJob& DVcsJob::operator<<(const QList< KUrl >& urls)
     foreach(const KUrl &url, urls)
         operator<<(url);
     return *this;
+}
+
+bool DVcsJob::doKill()
+{
+    if (d->childproc->state() == QProcess::NotRunning) {
+        return true;
+    }
+
+    static const int terminateKillTimeout = 1000; // ms
+    d->childproc->terminate();
+    bool terminated = d->childproc->waitForFinished( terminateKillTimeout );
+    if( !terminated ) {
+        d->childproc->kill();
+        terminated = d->childproc->waitForFinished( terminateKillTimeout );
+    }
+    return terminated;
 }
 
 void DVcsJob::jobIsReady()
