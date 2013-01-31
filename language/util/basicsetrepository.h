@@ -80,8 +80,8 @@ public:
   , m_end(end)
   , m_leftNode(leftNode)
   , m_rightNode(rightNode)
-  , m_refCount(0)
   , m_hash(calculateHash())
+  , m_refCount(0)
   {
   }
 
