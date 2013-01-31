@@ -97,6 +97,7 @@ public slots:
     void quickOpenDefinition();
     void quickOpenNavigate();
     void quickOpenNavigateFunctions();
+    void quickOpenDocumentation();
 
     void previousFunction();
     void nextFunction();
@@ -122,6 +123,7 @@ private:
     class ProjectFileDataProvider* m_projectFileData;
     class ProjectItemDataProvider* m_projectItemData;
     class OpenFilesDataProvider* m_openFilesData;
+    class DocumentationQuickOpenProvider* m_documentationItemData;
     QStringList lastUsedScopes;
     QStringList lastUsedItems;
   

@@ -66,6 +66,7 @@
 #include "projectitemquickopen.h"
 #include "declarationlistquickopen.h"
 #include "customlistquickopen.h"
+#include "documentationquickopenprovider.h"
 #include <language/duchain/functiondefinition.h>
 #include <qmenu.h>
 #include <qdesktopwidget.h>
@@ -774,6 +775,12 @@ void QuickOpenPlugin::createActionsForMainWindow(Sublime::MainWindow* /*window*/
     quickOpenFunction->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_M );
     connect(quickOpenFunction, SIGNAL(triggered(bool)), this, SLOT(quickOpenFunction()));
 
+    KAction* quickOpenDocumentation = actions.addAction("quick_open_documentation");
+    quickOpenDocumentation->setText( i18n("Quick Open &Documentation") );
+    quickOpenDocumentation->setIcon( KIcon("quickopen-documentation") );
+    quickOpenDocumentation->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_D );
+    connect(quickOpenDocumentation, SIGNAL(triggered(bool)), this, SLOT(quickOpenDocumentation()));
+
     m_quickOpenDeclaration = actions.addAction("quick_open_jump_declaration");
     m_quickOpenDeclaration->setText( i18n("Jump to Declaration") );
     m_quickOpenDeclaration->setIcon( KIcon("go-jump-declaration" ) );
@@ -844,6 +851,13 @@ QuickOpenPlugin::QuickOpenPlugin(QObject *parent,
       scopes << i18n("Project");
       items << ProjectItemDataProvider::supportedItemTypes();
       m_model->registerProvider( scopes, items, m_projectItemData );
+    }
+    {
+      m_documentationItemData = new DocumentationQuickOpenProvider;
+      QStringList scopes, items;
+      scopes << i18n("Includes");
+      items << i18n("Documentation");
+      m_model->registerProvider( scopes, items, m_documentationItemData );
     }
 }
 
@@ -988,6 +1002,11 @@ void QuickOpenPlugin::quickOpenFunction()
 void QuickOpenPlugin::quickOpenClass()
 {
   showQuickOpen( Classes );
+}
+
+void QuickOpenPlugin::quickOpenDocumentation()
+{
+  showQuickOpenWidget(QStringList(i18n("Documentation")), QStringList(i18n("Includes")), true);
 }
 
 QSet<KDevelop::IndexedString> QuickOpenPlugin::fileSet() const {
