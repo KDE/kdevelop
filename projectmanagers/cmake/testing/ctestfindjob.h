@@ -43,6 +43,8 @@ private slots:
     void findTestCases();
     void updateReady(const KDevelop::IndexedString& document, const KDevelop::ReferencedTopDUContext& context);
 
+protected:
+    virtual bool doKill();
 private:
     CTestSuite* m_suite;
     QStringList m_pendingFiles;

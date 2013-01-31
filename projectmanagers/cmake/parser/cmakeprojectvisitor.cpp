@@ -284,6 +284,7 @@ int CMakeProjectVisitor::visit( const AddTestAst * test)
     if (m_targetForId.contains(t.executable))
     {
         t.files = m_targetForId[t.executable].files;
+        t.isTarget = true;
     }
     else 
     {
@@ -297,11 +298,12 @@ int CMakeProjectVisitor::visit( const AddTestAst * test)
         {
             exe.chop(4);
         }
-        t.executable = exe;
         exe = exe.split('/').last();
         if (m_targetForId.contains(exe))
         {
+            t.executable = exe;
             t.files = m_targetForId[exe].files;
+            t.isTarget = true;
         }
     }
     t.files.removeAll("TEST"); // Added by kde4_add_unit_test
