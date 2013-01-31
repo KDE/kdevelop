@@ -1152,9 +1152,9 @@ DVcsJob* GitPlugin::gitRevParse(const QString &repository, const QStringList &ar
     return job;
 }
 
-DVcsJob* GitPlugin::gitRevList(const QString &repository, const QStringList &args)
+DVcsJob* GitPlugin::gitRevList(const QString& directory, const QStringList& args)
 {
-    DVcsJob* job = new DVcsJob(QDir(repository), this, KDevelop::OutputJob::Silent);
+    DVcsJob* job = new DVcsJob(urlDir(directory), this, KDevelop::OutputJob::Silent);
     {
         *job << "git" << "rev-list" << args;
         return job;
