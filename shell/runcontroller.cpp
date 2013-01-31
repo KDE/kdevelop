@@ -551,6 +551,11 @@ void KDevelop::RunController::registerJob(KJob * job)
     if (!job)
         return;
 
+    if (!(job->capabilities() & KJob::Killable)) {
+        // see e.g. https://bugs.kde.org/show_bug.cgi?id=314187
+        kWarning() << "non-killable job" << job << "registered - this might lead to crashes on shutdown.";
+    }
+
     if (!d->jobs.contains(job)) {
         KAction* stopJobAction = 0;
         if (Core::self()->setupFlags() != Core::NoUi) {
@@ -624,8 +629,11 @@ void KDevelop::RunController::stopAllProcesses()
         // now we check the real list whether it was deleted
         if (!d->jobs.contains(job))
             continue;
-        if (job->capabilities() & KJob::Killable)
+        if (job->capabilities() & KJob::Killable) {
             job->kill(KJob::EmitResult);
+        } else {
+            kWarning() << "cannot stop non-killable job: " << job;
+        }
     }
 }
 
