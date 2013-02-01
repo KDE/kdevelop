@@ -156,6 +156,8 @@ void DVcsJob::start()
         d->model->appendLine(error);
         setError( 255 );
         setErrorText(error);
+        d->status = JobFailed;
+        emitResult();
         return;
     }
     if( !workingdir.isAbsolute() ) {
@@ -163,6 +165,8 @@ void DVcsJob::start()
         d->model->appendLine(error);
         setError( 255 );
         setErrorText(error);
+        d->status = JobFailed;
+        emitResult();
         return;
     }
 

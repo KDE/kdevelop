@@ -59,6 +59,8 @@ public:
      */
     BuilderJob();
 
+    virtual ~BuilderJob();
+
     /**
      * Allows to easily schedule building a couple of @p items using the
      * method identified by @p type

@@ -148,7 +148,7 @@ protected:
     KDevelop::DVcsJob* lsFiles(const QDir &repository,
                      const QStringList &args,
                      KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
-    KDevelop::DVcsJob* gitRevList(const QString &repository,
+    KDevelop::DVcsJob* gitRevList(const QString &directory,
                         const QStringList &args);
     KDevelop::DVcsJob* gitRevParse(const QString &repository,
                          const QStringList &args,
