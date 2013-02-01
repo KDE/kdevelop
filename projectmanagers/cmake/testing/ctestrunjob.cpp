@@ -53,6 +53,8 @@ CTestRunJob::CTestRunJob(CTestSuite* suite, const QStringList& cases, OutputJob:
     {
         m_caseResults[testCase] = TestResult::NotRun;
     }
+
+    setCapabilities(Killable);
 }
 
 
@@ -148,6 +150,12 @@ void CTestRunJob::processFinished(KJob* job)
         result.suiteResult = TestResult::Passed;
     } else {
         result.suiteResult = TestResult::Error;
+    }
+
+    // in case the job was killed, mark this job as killed as well
+    if (job->error() == KJob::KilledJobError) {
+        setError(KJob::KilledJobError);
+        setErrorText("Child job was killed.");
     }
 
     kDebug() << result.suiteResult << result.testCaseResults;
