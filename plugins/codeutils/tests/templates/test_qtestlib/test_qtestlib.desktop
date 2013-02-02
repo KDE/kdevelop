@@ -79,6 +79,7 @@ OutputFile={{ name }}.h
 Name=Implementation
 Name[ca]=Implementació
 Name[ca@valencia]=Implementació
+Name[cs]=Implementace
 Name[da]=Implementering
 Name[de]=Implementation
 Name[el]=Υλοποίηση
