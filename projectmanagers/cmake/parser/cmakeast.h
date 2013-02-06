@@ -113,6 +113,7 @@ CMAKE_ADD_AST_MEMBER( QStringList, dependencies )
 CMAKE_ADD_AST_MEMBER( QString, workingDir )
 CMAKE_ADD_AST_MEMBER( QString, comment )
 CMAKE_ADD_AST_MEMBER( bool, isVerbatim )
+CMAKE_ADD_AST_MEMBER( QStringList, sourceLists )
 CMAKE_END_AST_CLASS( CustomTargetAst )
 
 CMAKE_BEGIN_AST_CLASS( AddDefinitionsAst )

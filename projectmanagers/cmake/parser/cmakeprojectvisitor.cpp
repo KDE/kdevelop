@@ -2011,7 +2011,7 @@ int CMakeProjectVisitor::visit(const CustomTargetAst *ctar)
     kDebug(9042) << "custom_target " << ctar->target() << ctar->dependencies() << ", " << ctar->commandArgs();
     kDebug(9042) << ctar->content()[ctar->line()].writeBack();
 
-    defineTarget(ctar->target(), ctar->dependencies(), Target::Custom);
+    defineTarget(ctar->target(), ctar->dependencies() + ctar->sourceLists(), Target::Custom);
     return 1;
 }
 

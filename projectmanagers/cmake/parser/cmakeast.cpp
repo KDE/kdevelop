@@ -310,7 +310,8 @@ bool CustomTargetAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         ParsingDep,
         ParsingWorkingDir,
         ParsingComment,
-        ParsingVerbatim
+        ParsingVerbatim,
+        ParsingSources
     };
 
     //command should be first
@@ -342,6 +343,8 @@ bool CustomTargetAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             currCmd.clear();
             act = ParsingCommand;
         }
+        else if ( arg == "SOURCES" )
+            act = ParsingSources;
         else
         {
             switch( act )
@@ -363,6 +366,9 @@ bool CustomTargetAst::parseFunctionInfo( const CMakeFunctionDesc& func )
                 break;
             case ParsingComment:
                 m_comment += arg;
+                break;
+            case ParsingSources:
+                m_sourceLists.append( arg );
                 break;
             default:
                 return false;
