@@ -209,7 +209,8 @@ void PatchReviewToolView::slotAppliedChanged( int newState ) {
 void PatchReviewToolView::showEditDialog() {
     m_editPatch.setupUi( this );
 
-    m_fileModel = new PatchFilesModel( this, m_plugin->patch()->canSelectFiles() );
+    bool allowSelection = m_plugin->patch() && m_plugin->patch()->canSelectFiles();
+    m_fileModel = new PatchFilesModel( this, allowSelection );
     m_editPatch.filesList->setModel( m_fileModel );
     m_editPatch.filesList->header()->hide();
     m_editPatch.filesList->setRootIsDecorated( false );
