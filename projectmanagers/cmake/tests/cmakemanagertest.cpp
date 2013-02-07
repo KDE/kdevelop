@@ -202,6 +202,26 @@ void CMakeManagerTest::testTargetIncludePaths()
     QVERIFY(foundInTarget);
 }
 
+void CMakeManagerTest::testCustomTargetSources()
+{
+    const TestProjectPaths paths = projectPaths("custom_target_sources");
+    defaultConfigure(paths);
+
+    ICore::self()->projectController()->openProject(paths.projectFile);
+
+    WAIT_FOR_OPEN_SIGNAL;
+
+    IProject* project = ICore::self()->projectController()->findProjectByName("custom_target_sources");
+    QVERIFY(project->buildSystemManager());
+
+    QList<ProjectTargetItem*> targets = project->buildSystemManager()->targets(project->projectItem());
+    QVERIFY(targets.size() == 1);
+
+    ProjectTargetItem *target = targets.first();
+    QCOMPARE(target->fileList().size(), 1);
+    QCOMPARE(target->fileList().first()->baseName(), QString("foo.cpp"));
+}
+
 void CMakeManagerTest::testConditionsInSubdirectoryBasedOnRootVariables()
 {
     const TestProjectPaths paths = projectPaths("conditions_in_subdirectory_based_on_root_variables");
