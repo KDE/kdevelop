@@ -123,7 +123,7 @@ CMakeFileContent CMakeListsParser::readCMakeFile(const QString & fileName)
             {
                 haveNewline = false;
                 CMakeFunctionDesc function;
-                function.name = QString(token->text).toLower();
+                function.name = QString::fromLocal8Bit(token->text).toLower();
                 function.filePath = fileName;
                 function.line = token->line;
                 function.column = token->column;
@@ -171,18 +171,18 @@ bool CMakeListsParser::readCMakeFunction(cmListFileLexer *lexer, CMakeFunctionDe
                 } else if(parenthesis<0)
                     return false;
                 else
-                    func.arguments << CMakeFunctionArgument( token->text, false, fileName, token->line, token->column );
+                    func.arguments << CMakeFunctionArgument( QString::fromLocal8Bit(token->text), false, fileName, token->line, token->column );
                 break;
             case cmListFileLexer_Token_ParenLeft:
                 parenthesis++;
-                func.arguments << CMakeFunctionArgument( token->text, false, fileName, token->line, token->column );
+                func.arguments << CMakeFunctionArgument( QString::fromLocal8Bit(token->text), false, fileName, token->line, token->column );
                 break;
             case cmListFileLexer_Token_Identifier:
             case cmListFileLexer_Token_ArgumentUnquoted:
-                func.arguments << CMakeFunctionArgument( token->text, false, fileName, token->line, token->column );
+                func.arguments << CMakeFunctionArgument( QString::fromLocal8Bit(token->text), false, fileName, token->line, token->column );
                 break;
             case cmListFileLexer_Token_ArgumentQuoted:
-                func.arguments << CMakeFunctionArgument( token->text, true, fileName, token->line, token->column+1 );
+                func.arguments << CMakeFunctionArgument( QString::fromLocal8Bit(token->text), true, fileName, token->line, token->column+1 );
                 break;
             case cmListFileLexer_Token_Newline:
                 break;
