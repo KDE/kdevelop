@@ -39,7 +39,7 @@ set(kdevgdb_PART_SRCS
     gdbparser.cpp
     stty.cpp
     disassemblewidget.cpp
-#    memviewdlg.cpp
+    memviewdlg.cpp
     gdboutputwidget.cpp
 #    debuggertracingdialog.cpp
     breakpointcontroller.cpp

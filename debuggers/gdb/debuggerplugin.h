@@ -56,7 +56,7 @@ class FramestackWidget;
 class DisassembleWidget;
 class Breakpoint;
 class GDBOutputWidget;
-class ViewerWidget;
+class MemoryViewerWidget;
 class DebugSession;
 template<typename T> class DebuggerToolFactory;
 
@@ -95,8 +95,6 @@ Q_SIGNALS:
     void raiseGdbConsoleViews();
 
     void reset();
-
-    //void addMemoryView();
 
 private Q_SLOTS:
     void setupDBus();
@@ -152,7 +150,7 @@ private:
     DebugSession* m_session;
     DebuggerToolFactory< DisassembleWidget >* disassemblefactory;
     DebuggerToolFactory< GDBOutputWidget >* gdbfactory;
-    //DebuggerToolFactory< ViewerWidget >* viewerfactory;
+    DebuggerToolFactory< MemoryViewerWidget >* memoryviewerfactory;
 };
 
 }

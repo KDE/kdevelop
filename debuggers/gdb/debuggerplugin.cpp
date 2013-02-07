@@ -159,13 +159,11 @@ CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
         i18n("GDB"),
         gdbfactory);
 
-    /*
-    viewerfactory = new DebuggerToolFactory<ViewerWidget>(
-    this, "org.kdevelop.debugger.VariousViews", Qt::BottomDockWidgetArea);
+    memoryviewerfactory = new DebuggerToolFactory<MemoryViewerWidget>(
+    this, "org.kdevelop.debugger.MemoryView", Qt::BottomDockWidgetArea);
     core()->uiController()->addToolView(
-        i18n("Debug views"),
-        viewerfactory);
-    */
+        i18n("Memory"),
+        memoryviewerfactory);
 
     setupActions();
 
@@ -190,25 +188,12 @@ void CppDebuggerPlugin::unload()
 {
     core()->uiController()->removeToolView(disassemblefactory);
     core()->uiController()->removeToolView(gdbfactory);
-    //core()->uiController()->removeToolView(viewerfactory);
+    core()->uiController()->removeToolView(memoryviewerfactory);
 }
 
 void CppDebuggerPlugin::setupActions()
 {
     KActionCollection* ac = actionCollection();
-
-    /*
-    KAction* action = new KAction(KIcon("dbgmemview"), i18n("Viewers"), this);
-    action->setToolTip( i18n("Debugger viewers") );
-    action->setWhatsThis(i18n("<b>Debugger viewers</b><p>Various information about application being executed. There are 4 views available:<br>"
-        "<b>Memory</b><br>"
-        "<b>Disassemble</b><br>"
-        "<b>Registers</b><br>"
-        "<b>Libraries</b>"));
-    connect(action, SIGNAL(triggered(bool)), this, SIGNAL(addMemoryView()));
-    ac->addAction("debug_memview", action);
-    */
-
 
     KAction* action = new KAction(KIcon("core"), i18n("Examine Core File..."), this);
     action->setToolTip( i18n("Examine core file") );
