@@ -74,17 +74,17 @@ public:
     QVariant headerData( int, Qt::Orientation, int = Qt::DisplayRole ) const;
 
     void setFilteringStrategy(const OutputFilterStrategy& currentStrategy);
-    void removeLastLines(int l);
-
-    void flushLineBuffer();
 
 public Q_SLOTS:
     void appendLine( const QString& );
     void appendLines( const QStringList& );
 
+    //TODO: Move these into the d-pointer, would need to make that one a qobject then...
 private slots:
-    /// add batches of lines to prevent UI-lockup
-    void addLineBatch();
+    void linesParsed( const QList<KDevelop::FilteredItem>& items);
+signals:
+    void linesAdded(const QStringList&);
+    void filterStrategyChanged(IFilterStrategy*);
 
 private:
     OutputModelPrivate* const d;
