@@ -60,6 +60,7 @@ ProjectBuildSetWidget::ProjectBuildSetWidget( QWidget* parent )
              this, SLOT(addItems()) );
 
     m_ui->removeItemButton->setIcon( KIcon( "list-remove" ) );
+    m_ui->removeItemButton->setShortcut( Qt::Key_Delete );
     connect( m_ui->removeItemButton, SIGNAL(clicked()),
              this, SLOT(removeItems()) );
 
