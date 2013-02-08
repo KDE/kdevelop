@@ -126,6 +126,10 @@ public:
      * Starts this job
      */
     void start();
+
+protected:
+    virtual bool addSubjob(KJob* job);
+
 protected Q_SLOTS:
     /**
      * @internal slot to handle the result from subjobs
