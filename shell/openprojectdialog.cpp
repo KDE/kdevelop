@@ -56,7 +56,8 @@ OpenProjectDialog::OpenProjectDialog( bool fetch, const KUrl& startUrl, QWidget*
     openPageWidget = new OpenProjectPage( start, this );
     connect( openPageWidget, SIGNAL(urlSelected(KUrl)), this, SLOT(validateOpenUrl(KUrl)) );
     connect( openPageWidget, SIGNAL(accepted()), this, SLOT(openPageAccepted()) );
-    openPage = addPage( openPageWidget, i18n("Select the project") );
+    openPage = addPage( openPageWidget, i18n("Select a build system setup file, existing KDevelop project,"
+                                             "or any folder to open as a project") );
     
     if( !fetch ) {
         currentPage = openPage;
