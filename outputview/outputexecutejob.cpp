@@ -28,6 +28,7 @@ Boston, MA 02110-1301, USA.
 #include <KShell>
 #include <QFileInfo>
 #include <QDir>
+#include <KUrl>
 
 namespace KDevelop
 {

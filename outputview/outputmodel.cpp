@@ -36,10 +36,17 @@
 
 #include <QFont>
 
-Q_DECLARE_METATYPE(QList<KDevelop::FilteredItem>)
+#include <set>
+
+Q_DECLARE_METATYPE(QVector<KDevelop::FilteredItem>)
+Q_DECLARE_METATYPE(KDevelop::IFilterStrategy*)
 
 namespace KDevelop
 {
+
+enum {
+    BATCH_SIZE = 50
+};
 
 class ParseWorker : public QObject
 {
@@ -52,67 +59,85 @@ public:
     }
 
 public slots:
-    void changeFilterStrategy( IFilterStrategy* newFilterStrategy ) {
+    void changeFilterStrategy( KDevelop::IFilterStrategy* newFilterStrategy )
+    {
         m_filter = QSharedPointer<IFilterStrategy>( newFilterStrategy );
     }
-    void addLines( const QStringList& lines ) {
-        QList<KDevelop::FilteredItem> filteredItems;
-        for(int i = 0; i < lines.size(); ++i) {
-            const QString line = lines.at(0);
+
+    void addLines( const QStringList& lines )
+    {
+        QVector<KDevelop::FilteredItem> filteredItems;
+        filteredItems.reserve(BATCH_SIZE);
+        foreach(const QString& line, lines) {
             FilteredItem item = m_filter->errorInLine(line);
             if( item.type == FilteredItem::InvalidItem ) {
                 item = m_filter->actionInLine(line);
             }
 
             filteredItems << item;
-            if( filteredItems.size() == 50 ) {
+            if( filteredItems.size() == BATCH_SIZE ) {
                 emit parsedBatch(filteredItems);
                 filteredItems.clear();
+                filteredItems.reserve(BATCH_SIZE);
             }
         }
         // Make sure to emit the rest as well
-        if( filteredItems.size() > 0 ) {
+        if( !filteredItems.isEmpty() ) {
+            filteredItems.squeeze();
             emit parsedBatch(filteredItems);
         }
     }
 
 signals:
-    void parsedBatch(const QList<KDevelop::FilteredItem>& filteredItems);
+    void parsedBatch(const QVector<KDevelop::FilteredItem>& filteredItems);
+
 private:
     QSharedPointer<IFilterStrategy> m_filter;
 };
 
 struct OutputModelPrivate
 {
-    OutputModelPrivate();
-    OutputModelPrivate( const KUrl& builddir );
+    OutputModelPrivate( OutputModel* model, const KUrl& builddir = KUrl() );
     ~OutputModelPrivate();
     bool isValidIndex( const QModelIndex&, int currentRowCount ) const;
-    QList<FilteredItem> m_filteredItems;
+
+    OutputModel* model;
+    QThread* parsingThread;
+    ParseWorker* worker;
+
+    QVector<FilteredItem> m_filteredItems;
     // We use std::set because that is ordered
     std::set<int> m_errorItems; // Indices of all items that we want to move to using previous and next
     KUrl m_buildDir;
 
-    QSharedPointer<QThread> parsingThread;
-    QSharedPointer<ParseWorker> worker;
-    void setupParser( OutputModel* model ) {
-        parsingThread = QSharedPointer<QThread>( new QThread( model ) );
-        worker = QSharedPointer<ParseWorker>( new ParseWorker() );
-        worker->moveToThread(parsingThread.data());
-        model->connect(worker.data(), SIGNAL(parsedBatch(QList<KDevelop::FilteredItem>)), model, SLOT(linesParsed(QList<KDevelop::FilteredItem>)));
-        model->connect(model, SIGNAL(linesAdded(QStringList)), worker.data(), SLOT(addLines(QStringList)));
-        model->connect(model, SIGNAL(filterStrategyChanged(IFilterStrategy*)), worker.data(), SLOT(changeFilterStrategy(IFilterStrategy*)));
-        parsingThread->start();
+    void linesParsed(const QVector<KDevelop::FilteredItem>& items)
+    {
+        model->beginInsertRows( QModelIndex(), model->rowCount(), model->rowCount() + items.size() -  1);
+
+        foreach( const FilteredItem& item, items ) {
+            if( item.type == FilteredItem::ErrorItem ) {
+                m_errorItems.insert(m_filteredItems.size());
+            }
+            m_filteredItems << item;
+        }
+
+        model->endInsertRows();
     }
 };
 
-OutputModelPrivate::OutputModelPrivate()
+OutputModelPrivate::OutputModelPrivate( OutputModel* model_, const KUrl& builddir)
+: model(model_)
+, parsingThread( new QThread(model) )
+, worker(new ParseWorker )
+, m_buildDir( builddir )
 {
-}
-
-OutputModelPrivate::OutputModelPrivate(const KUrl& builddir)
-: m_buildDir( builddir )
-{
+    qRegisterMetaType<QVector<KDevelop::FilteredItem> >();
+    qRegisterMetaType<KDevelop::IFilterStrategy*>();
+    worker->moveToThread(parsingThread);
+    QObject::connect(parsingThread, SIGNAL(finished()), worker, SLOT(deleteLater()));
+    model->connect(worker, SIGNAL(parsedBatch(QVector<KDevelop::FilteredItem>)),
+                   model, SLOT(linesParsed(QVector<KDevelop::FilteredItem>)));
+    parsingThread->start();
 }
 
 bool OutputModelPrivate::isValidIndex( const QModelIndex& idx, int currentRowCount ) const
@@ -123,21 +148,20 @@ bool OutputModelPrivate::isValidIndex( const QModelIndex& idx, int currentRowCou
 
 OutputModelPrivate::~OutputModelPrivate()
 {
+    parsingThread->quit();
+    parsingThread->wait();
 }
 
 OutputModel::OutputModel( const KUrl& builddir, QObject* parent )
 : QAbstractListModel(parent)
-, d( new OutputModelPrivate( builddir ) )
+, d( new OutputModelPrivate( this, builddir ) )
 {
-    d->setupParser( this );
 }
 
 OutputModel::OutputModel( QObject* parent )
     : QAbstractListModel(parent)
-, d( new OutputModelPrivate )
+, d( new OutputModelPrivate( this ) )
 {
-    qRegisterMetaType<QList<KDevelop::FilteredItem> >();
-    d->setupParser( this );
 }
 
 OutputModel::~OutputModel()
@@ -285,33 +309,23 @@ void OutputModel::setFilteringStrategy(const OutputFilterStrategy& currentStrate
             break;
     }
     Q_ASSERT(filter);
-    emit filterStrategyChanged( filter );
+
+    QMetaObject::invokeMethod(d->worker, "changeFilterStrategy",
+                              Q_ARG(KDevelop::IFilterStrategy*, filter));
 }
 
 void OutputModel::appendLines( const QStringList& lines )
 {
     if( lines.isEmpty() )
         return;
-    emit linesAdded( lines );
+
+    QMetaObject::invokeMethod(d->worker, "addLines",
+                              Q_ARG(QStringList, lines));
 }
 
 void OutputModel::appendLine( const QString& l )
 {
     appendLines( QStringList() << l );
-}
-
-void OutputModel::linesParsed(const QList<KDevelop::FilteredItem>& items)
-{
-    beginInsertRows( QModelIndex(), rowCount(), rowCount() + items.size() -  1);
-
-    Q_FOREACH( FilteredItem item, items ) {
-        if( item.type == FilteredItem::ErrorItem ) {
-            d->m_errorItems.insert(d->m_filteredItems.size());
-        }
-        d->m_filteredItems << item;
-    }
-
-    endInsertRows();
 }
 
 }

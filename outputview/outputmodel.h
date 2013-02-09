@@ -24,17 +24,10 @@
 
 #include "outputviewexport.h"
 #include "ioutputviewmodel.h"
-#include "filtereditem.h"
-#include "ifilterstrategy.h"
 
 #include <QtCore/QAbstractListModel>
-#include <QString>
-#include <KUrl>
-#include <QLinkedList>
-#include <QQueue>
-#include <QSharedPointer>
 
-#include <set>
+class KUrl;
 
 namespace KDevelop
 {
@@ -79,15 +72,10 @@ public Q_SLOTS:
     void appendLine( const QString& );
     void appendLines( const QStringList& );
 
-    //TODO: Move these into the d-pointer, would need to make that one a qobject then...
-private slots:
-    void linesParsed( const QList<KDevelop::FilteredItem>& items);
-signals:
-    void linesAdded(const QStringList&);
-    void filterStrategyChanged(IFilterStrategy*);
-
 private:
     OutputModelPrivate* const d;
+    friend class OutputModelPrivate;
+    Q_PRIVATE_SLOT(d, void linesParsed(const QVector<KDevelop::FilteredItem>& lines));
 };
 
 //Q_DECLARE_METATYPE( OutputModel::OutputItemType )
