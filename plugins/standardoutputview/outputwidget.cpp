@@ -390,6 +390,7 @@ QTreeView* OutputWidget::createListView(int id)
             listview->setEditTriggers( QAbstractItemView::NoEditTriggers );
             listview->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn); //Always enable the scrollbar, so it doesn't flash around
             listview->setHeaderHidden(true);
+            listview->setUniformRowHeights(true);
             listview->setRootIsDecorated(false);
             listview->setSelectionMode( QAbstractItemView::ContiguousSelection );
 
@@ -416,6 +417,7 @@ QTreeView* OutputWidget::createListView(int id)
                 listview->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn); //Always enable the scrollbar, so it doesn't flash around
                 listview->setRootIsDecorated(false);
                 listview->setHeaderHidden(true);
+                listview->setUniformRowHeights(true);
                 listview->setSelectionMode( QAbstractItemView::ContiguousSelection );
 
                 layout()->addWidget( listview );
