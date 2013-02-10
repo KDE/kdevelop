@@ -57,7 +57,15 @@ ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfigu
     QString envgrp = iface->environmentGroup(cfg);
     
     QString err;
-    QString interpreter = iface->interpreter( cfg, err );
+    QString interpreterString = iface->interpreter( cfg, err );
+    // check for errors happens in the executescript plugin already
+    KShell::Errors err_;
+    QStringList interpreter = KShell::splitArgs( interpreterString, KShell::TildeExpand | KShell::AbortOnMeta, &err_ );
+    if ( interpreter.isEmpty() ) {
+        // This should not happen, because of the checks done in the executescript plugin
+        kWarning() << "no interpreter specified";
+        return;
+    }
     
     if( !err.isEmpty() ) 
     {
@@ -130,7 +138,7 @@ ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfigu
         wc = KUrl( QFileInfo( script.toLocalFile() ).absolutePath() );
     }
     proc->setWorkingDirectory( wc.toLocalFile() );
-    proc->setProperty( "executable", interpreter );
+    proc->setProperty( "executable", interpreter.first() );
 
     QStringList program;
     if (!remoteHost.isEmpty()) {
