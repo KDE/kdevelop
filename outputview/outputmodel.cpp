@@ -44,10 +44,6 @@ Q_DECLARE_METATYPE(KDevelop::IFilterStrategy*)
 namespace KDevelop
 {
 
-enum {
-    BATCH_SIZE = 50
-};
-
 class ParseWorker : public QObject
 {
     Q_OBJECT
@@ -55,7 +51,13 @@ public:
     ParseWorker()
         : QObject(0)
         , m_filter( new NoFilterStrategy )
+        , m_batchSize(50)
+        , m_maxProcessDelay(100)
+        , m_timer(new QTimer(this))
     {
+        m_timer->setInterval(m_maxProcessDelay);
+        m_timer->setSingleShot(true);
+        connect(m_timer, SIGNAL(timeout()), SLOT(process()));
     }
 
 public slots:
@@ -66,33 +68,61 @@ public slots:
 
     void addLines( const QStringList& lines )
     {
-        QVector<KDevelop::FilteredItem> filteredItems;
-        filteredItems.reserve(BATCH_SIZE);
-        foreach(const QString& line, lines) {
-            FilteredItem item = m_filter->errorInLine(line);
-            if( item.type == FilteredItem::InvalidItem ) {
-                item = m_filter->actionInLine(line);
-            }
+        m_cachedLines << lines;
 
-            filteredItems << item;
-            if( filteredItems.size() == BATCH_SIZE ) {
-                emit parsedBatch(filteredItems);
-                filteredItems.clear();
-                filteredItems.reserve(BATCH_SIZE);
-            }
-        }
-        // Make sure to emit the rest as well
-        if( !filteredItems.isEmpty() ) {
-            filteredItems.squeeze();
-            emit parsedBatch(filteredItems);
+        if (m_cachedLines.size() >= m_batchSize) {
+            // if enough lines were added, process immediately
+            m_timer->stop();
+            process();
+        } else if (!m_timer->isActive()) {
+            m_timer->start();
         }
     }
 
 signals:
     void parsedBatch(const QVector<KDevelop::FilteredItem>& filteredItems);
 
+private slots:
+    /**
+     * Process *all* cached lines, emit parsedBatch for each batch
+     */
+    void process()
+    {
+        kDebug() << "Lines in cache:" << m_cachedLines.size();
+
+        QVector<KDevelop::FilteredItem> filteredItems;
+        filteredItems.reserve(qMin(m_batchSize, m_cachedLines.size()));
+
+        foreach(const QString& line, m_cachedLines) {
+            FilteredItem item = m_filter->errorInLine(line);
+            if( item.type == FilteredItem::InvalidItem ) {
+                item = m_filter->actionInLine(line);
+            }
+
+            filteredItems << item;
+
+            if( filteredItems.size() == m_batchSize ) {
+                emit parsedBatch(filteredItems);
+                filteredItems.clear();
+                filteredItems.reserve(qMin(m_batchSize, m_cachedLines.size()));
+            }
+        }
+
+        // Make sure to emit the rest as well
+        if( !filteredItems.isEmpty() ) {
+            emit parsedBatch(filteredItems);
+        }
+        m_cachedLines.clear();
+    }
+
 private:
     QSharedPointer<IFilterStrategy> m_filter;
+    QStringList m_cachedLines;
+
+    int m_batchSize;
+    /// maximum time in ms process() will be delayed
+    int m_maxProcessDelay;
+    QTimer* m_timer;
 };
 
 struct OutputModelPrivate
@@ -112,6 +142,9 @@ struct OutputModelPrivate
 
     void linesParsed(const QVector<KDevelop::FilteredItem>& items)
     {
+        QElapsedTimer timer;
+        timer.start();
+
         model->beginInsertRows( QModelIndex(), model->rowCount(), model->rowCount() + items.size() -  1);
 
         foreach( const FilteredItem& item, items ) {
@@ -122,6 +155,8 @@ struct OutputModelPrivate
         }
 
         model->endInsertRows();
+
+        kDebug() << "Took:" << timer.elapsed() << "ms";
     }
 };
 
