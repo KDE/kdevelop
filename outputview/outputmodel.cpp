@@ -88,7 +88,10 @@ private slots:
      */
     void process()
     {
-        kDebug() << "Lines in cache:" << m_cachedLines.size();
+        QElapsedTimer timer;
+        timer.start();
+
+        const int cachedLinesCount = m_cachedLines.size();
 
         QVector<KDevelop::FilteredItem> filteredItems;
         filteredItems.reserve(qMin(m_batchSize, m_cachedLines.size()));
@@ -113,6 +116,8 @@ private slots:
             emit parsedBatch(filteredItems);
         }
         m_cachedLines.clear();
+
+        kDebug() << "Processed" << cachedLinesCount << "lines in" << timer.elapsed() << "ms";
     }
 
 private:
