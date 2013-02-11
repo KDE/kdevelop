@@ -139,6 +139,7 @@ struct OutputModelPrivate
     OutputModel* model;
     QThread* parsingThread;
     ParseWorker* worker;
+    QTimer m_sleepTimer;
 
     QVector<FilteredItem> m_filteredItems;
     // We use std::set because that is ordered
@@ -163,6 +164,18 @@ struct OutputModelPrivate
 
         kDebug() << "Took:" << timer.elapsed() << "ms";
     }
+
+    void startThread()
+    {
+        parsingThread->start();
+        m_sleepTimer.start();
+    }
+
+    void endThread()
+    {
+        parsingThread->quit();
+        parsingThread->wait();
+    }
 };
 
 OutputModelPrivate::OutputModelPrivate( OutputModel* model_, const KUrl& builddir)
@@ -177,7 +190,11 @@ OutputModelPrivate::OutputModelPrivate( OutputModel* model_, const KUrl& builddi
     QObject::connect(parsingThread, SIGNAL(finished()), worker, SLOT(deleteLater()));
     model->connect(worker, SIGNAL(parsedBatch(QVector<KDevelop::FilteredItem>)),
                    model, SLOT(linesParsed(QVector<KDevelop::FilteredItem>)));
-    parsingThread->start();
+
+    // setup timer that quits the thread after certain amount of time
+    m_sleepTimer.setSingleShot(true);
+    m_sleepTimer.setInterval(10000);
+    QObject::connect(&m_sleepTimer, SIGNAL(timeout()), model, SLOT(endThread()));
 }
 
 bool OutputModelPrivate::isValidIndex( const QModelIndex& idx, int currentRowCount ) const
@@ -359,6 +376,7 @@ void OutputModel::appendLines( const QStringList& lines )
     if( lines.isEmpty() )
         return;
 
+    d->startThread();
     QMetaObject::invokeMethod(d->worker, "addLines",
                               Q_ARG(QStringList, lines));
 }
