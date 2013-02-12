@@ -146,7 +146,7 @@ void HttpPostCall::finished()
     QJson::Parser parser;
     QByteArray receivedData = m_reply->readAll();
 
-    qDebug() << "parsing..." << receivedData;
+//     qDebug() << "parsing..." << receivedData;
     bool ok;
     m_result = parser.parse(receivedData, &ok);
     if (!ok) {
@@ -240,7 +240,7 @@ void ProjectsListRequest::requestRepositoryList(int startIndex)
     HttpPostCall* repositoriesCall = new HttpPostCall(m_server, "/api/repositories/", repositoriesParameteres, "", false, this);
     connect(repositoriesCall, SIGNAL(finished(KJob*)), SLOT(done(KJob*)));
 
-    KDevelop::ICore::self()->runController()->registerJob(repositoriesCall);
+    repositoriesCall->start();
 }
 
 void ProjectsListRequest::done(KJob* job)

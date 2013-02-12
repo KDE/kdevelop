@@ -47,6 +47,7 @@ int main(int argc, char *argv[])
     qDebug() << "patch:" << patch << ", basedir:" << basedir;
     d.setServer(KUrl("https://git.reviewboard.kde.org"));
     d.setBaseDir(basedir);
+    d.setRepository("kdevplatform");
     int ret=d.exec();
     if(ret==QDialog::Accepted) {
         KUrl url=d.server();
