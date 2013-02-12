@@ -94,14 +94,21 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
-       <widget class="KListWidgetSearchLine" name="repositoriesFilter">
+       <widget class="KLineEdit" name="repositoriesFilter">
         <property name="clickMessage">
-         <string>Filter repositories</string>
+         <string>Filter repositories...</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QListWidget" name="repositories"/>
+       <widget class="QListView" name="repositories">
+        <property name="editTriggers">
+         <set>QAbstractItemView::NoEditTriggers</set>
+        </property>
+        <property name="selectionBehavior">
+         <enum>QAbstractItemView::SelectRows</enum>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -109,11 +116,6 @@
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>KListWidgetSearchLine</class>
-   <extends>QLineEdit</extends>
-   <header>klistwidgetsearchline.h</header>
-  </customwidget>
   <customwidget>
    <class>KLineEdit</class>
    <extends>QLineEdit</extends>
