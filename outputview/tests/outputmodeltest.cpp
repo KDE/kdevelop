@@ -59,11 +59,9 @@ void OutputModelTest::do_currentBench(OutputModel& testee)
     QElapsedTimer totalTime;
     totalTime.start();
 
-    QBENCHMARK {
-        testee.appendLines(outputlines);
-        while(testee.rowCount() != outputlines.count()) {
-            QCoreApplication::instance()->processEvents();
-        }
+    testee.appendLines(outputlines);
+    while(testee.rowCount() != outputlines.count()) {
+        QCoreApplication::instance()->processEvents();
     }
 
     QVERIFY(testee.rowCount() == outputlines.count());
@@ -72,8 +70,7 @@ void OutputModelTest::do_currentBench(OutputModel& testee)
     qDebug() << "ms elapsed to add lines: " << elapsed;
     qDebug() << "total number of added lines: " << outputlines.count();
     // see also: https://bugs.kde.org/show_bug.cgi?id=295361
-    if( !spy.empty() )
-    {
+    if( !spy.empty() ) {
         const double avgUiLockup = double(elapsed) / spy.count();
         qDebug() << "average UI lockup in ms: " << avgUiLockup;
         QVERIFY(avgUiLockup < 200);

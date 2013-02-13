@@ -88,11 +88,6 @@ private slots:
      */
     void process()
     {
-        QElapsedTimer timer;
-        timer.start();
-
-        const int cachedLinesCount = m_cachedLines.size();
-
         QVector<KDevelop::FilteredItem> filteredItems;
         filteredItems.reserve(qMin(m_batchSize, m_cachedLines.size()));
 
@@ -116,8 +111,6 @@ private slots:
             emit parsedBatch(filteredItems);
         }
         m_cachedLines.clear();
-
-        kDebug() << "Processed" << cachedLinesCount << "lines in" << timer.elapsed() << "ms";
     }
 
 private:
@@ -148,9 +141,6 @@ struct OutputModelPrivate
 
     void linesParsed(const QVector<KDevelop::FilteredItem>& items)
     {
-        QElapsedTimer timer;
-        timer.start();
-
         model->beginInsertRows( QModelIndex(), model->rowCount(), model->rowCount() + items.size() -  1);
 
         foreach( const FilteredItem& item, items ) {
@@ -161,8 +151,6 @@ struct OutputModelPrivate
         }
 
         model->endInsertRows();
-
-        kDebug() << "Took:" << timer.elapsed() << "ms";
     }
 
     void startThread()
