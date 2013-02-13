@@ -122,7 +122,7 @@ ContextMenuExtension FileTemplatesPlugin::contextMenuExtension (Context* context
         }
         if (url.isValid())
         {
-            KAction* action = new KAction(i18n("Create from Template"), this);
+            KAction* action = new KAction(i18n("Create From Template"), this);
             action->setIcon(KIcon("code-class"));
             action->setData(url);
             connect(action, SIGNAL(triggered(bool)), SLOT(createFromTemplate()));
