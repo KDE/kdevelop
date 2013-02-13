@@ -260,7 +260,8 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
         action->setIcon(KIcon("run-clean"));
         connect( action, SIGNAL(triggered()), this, SLOT(cleanItemsFromContextMenu()) );
         menuExt.addAction( ContextMenuExtension::BuildGroup, action );
-        action = new KAction( i18n( "Add to Buildset" ), this );
+        action = new KAction( i18n( "Add to Build Set" ), this );
+        action->setIcon(KIcon("list-add"));
         connect( action, SIGNAL(triggered()), this, SLOT(addItemsFromContextMenuToBuildset()) );
         menuExt.addAction( ContextMenuExtension::BuildGroup, action );
     }
