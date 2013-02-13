@@ -120,6 +120,7 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
         filterInput->setMaximumWidth(150);
         filterInput->setMinimumWidth(100);
         filterInput->setClickMessage(i18n("Search..."));
+        filterInput->setClearButtonShown(true);
         filterInput->setToolTip(i18n("Enter a wild card string to filter the output view"));
         filterAction = new QWidgetAction(this);
         filterAction->setDefaultWidget(filterInput);
