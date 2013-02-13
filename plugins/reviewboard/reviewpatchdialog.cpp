@@ -36,7 +36,7 @@ ReviewPatchDialog::ReviewPatchDialog(QWidget* parent)
     setMainWidget(w);
 
     connect(m_ui->server, SIGNAL(textChanged(QString)), SLOT(serverChanged()));
-    repositoryChanged(QModelIndex());
+    enableButtonOk(false);
 }
 
 ReviewPatchDialog::~ReviewPatchDialog()
@@ -102,21 +102,20 @@ void ReviewPatchDialog::receivedProjects(KJob* job)
     QSortFilterProxyModel* proxy = new QSortFilterProxyModel(this);
     proxy->setSourceModel(model);
     m_ui->repositories->setModel(proxy);
+    connect(m_ui->repositories->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+            SLOT(repositoryChanged(QItemSelection)));
     
     if(!m_preferredRepository.isEmpty()) {
         QList<QStandardItem*> items = model->findItems(m_preferredRepository, Qt::MatchExactly);
         if(!items.isEmpty()) {
             QStandardItem* it = items.first();
             QModelIndex idx = proxy->mapFromSource(it->index());
-            m_ui->repositories->setCurrentIndex(idx);
+            m_ui->repositories->selectionModel()->select(idx, QItemSelectionModel::ClearAndSelect);
             m_ui->repositories->scrollTo(idx, QAbstractItemView::PositionAtCenter);
-            enableButtonOk(true);
         } else
             kDebug() << "no repository called" << m_preferredRepository;
     }
     m_ui->repositoriesBox->setEnabled(job->error()==0);
-    connect(m_ui->repositories->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-            SLOT(repositoryChanged(QModelIndex)));
 }
 
 QString ReviewPatchDialog::repository() const
@@ -125,9 +124,9 @@ QString ReviewPatchDialog::repository() const
     return m_ui->repositories->currentIndex().data(Qt::UserRole).toString();
 }
 
-void ReviewPatchDialog::repositoryChanged(const QModelIndex& idx)
+void ReviewPatchDialog::repositoryChanged(const QItemSelection& idx)
 {
-    enableButtonOk(idx.isValid());
+    enableButtonOk(!idx.isEmpty());
 }
 
 QString ReviewPatchDialog::repositoryName() const
