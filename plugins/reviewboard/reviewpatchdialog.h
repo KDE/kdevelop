@@ -22,6 +22,7 @@
 #define REVIEWPATCHDIALOG_H
 #include <KDialog>
 
+class QItemSelection;
 class QModelIndex;
 
 class KJob;
@@ -60,7 +61,7 @@ class ReviewPatchDialog : public KDialog
         QString m_preferredRepository;
 
     private slots:
-        void repositoryChanged(const QModelIndex& idx);
+        void repositoryChanged(const QItemSelection& idx);
         void filterChanged(const QString& text);
 };
 
