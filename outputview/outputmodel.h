@@ -78,7 +78,9 @@ private:
     Q_PRIVATE_SLOT(d, void linesParsed(const QVector<KDevelop::FilteredItem>& lines));
 };
 
-//Q_DECLARE_METATYPE( OutputModel::OutputItemType )
 }
+
+Q_DECLARE_METATYPE( KDevelop::OutputModel::OutputFilterStrategy )
+
 #endif
 

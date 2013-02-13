@@ -34,10 +34,6 @@ OutputModelTest::OutputModelTest(QObject* parent): QObject(parent)
 {
 }
 
-void OutputModelTest::testSetFilteringStrategy()
-{
-}
-
 QStringList generateLines()
 {
     const int numLines = 10000;
@@ -54,9 +50,33 @@ QStringList generateLines()
     return outputlines;
 }
 
-void OutputModelTest::bench(OutputModel& testee, const QStringList& lines)
+QStringList generateLongLine()
 {
-    uint processEventsCounter = 1;
+    const int objects = 100; // *.o files
+    const int libs = 20; // -l...
+    const int libPaths = 20; // -L...
+    QString line = "g++ -m64 -Wl,-rpath,/home/gabo/md/qt/lib -o bin/flap_ui";
+    for(int i = 0; i < objects; ++i) {
+        line += QString(" .obj/file%1.o").arg(i);
+    }
+    for(int i = 0; i < libPaths; ++i) {
+        line += QString(" -Lsome/path/to/lib%1").arg(i);
+    }
+    for(int i = 0; i < libs; ++i) {
+        line += QString(" -lsomelib%1").arg(i);
+    }
+    return QStringList() << line;
+}
+
+void OutputModelTest::bench()
+{
+    QFETCH(KDevelop::OutputModel::OutputFilterStrategy, strategy);
+    QFETCH(QStringList, lines);
+
+    OutputModel testee(KUrl("/tmp/build-foo"));
+    testee.setFilteringStrategy(strategy);
+
+    quint64 processEventsCounter = 1;
     QElapsedTimer totalTime;
     totalTime.start();
 
@@ -76,54 +96,25 @@ void OutputModelTest::bench(OutputModel& testee, const QStringList& lines)
     QVERIFY(avgUiLockup < 200);
 }
 
-void OutputModelTest::benchmarkAddlinesNofilter()
+void OutputModelTest::bench_data()
 {
-    OutputModel testee(this);
-    testee.setFilteringStrategy(KDevelop::OutputModel::NoFilter);
-    bench(testee, generateLines());
-}
+    QTest::addColumn<KDevelop::OutputModel::OutputFilterStrategy>("strategy");
+    QTest::addColumn<QStringList>("lines");
 
-void OutputModelTest::benchmarkAddlinesCompilerfilter()
-{
-    OutputModel testee(this);
-    testee.setFilteringStrategy(KDevelop::OutputModel::CompilerFilter);
-    bench(testee, generateLines());
-}
+    const QStringList lines = generateLines();
+    const QStringList longLine = generateLongLine();
 
-void OutputModelTest::benchmarkAddlinesScriptErrorfilter()
-{
-    OutputModel testee(this);
-    testee.setFilteringStrategy(KDevelop::OutputModel::ScriptErrorFilter);
-    bench(testee, generateLines());
-}
+    QTest::newRow("no-filter") << OutputModel::NoFilter << lines;
+    QTest::newRow("no-filter-longline") << OutputModel::NoFilter << longLine;
 
-void OutputModelTest::benchmarkAddlinesStaticAnalysisfilter()
-{
-    OutputModel testee(this);
-    testee.setFilteringStrategy(KDevelop::OutputModel::StaticAnalysisFilter);
-    bench(testee, generateLines());
-}
+    QTest::newRow("compiler-filter") << OutputModel::CompilerFilter << lines;
+    QTest::newRow("compiler-filter-longline") << OutputModel::CompilerFilter << longLine;
 
-void OutputModelTest::benchAddLongLine()
-{
-    // see also: https://bugs.kde.org/show_bug.cgi?id=295361
-    const int objects = 100; // *.o files
-    const int libs = 20; // -l...
-    const int libPaths = 20; // -L...
-    QString line = "g++ -m64 -Wl,-rpath,/home/gabo/md/qt/lib -o bin/flap_ui";
-    for(int i = 0; i < objects; ++i) {
-        line += QString(" .obj/file%1.o").arg(i);
-    }
-    for(int i = 0; i < libPaths; ++i) {
-        line += QString(" -Lsome/path/to/lib%1").arg(i);
-    }
-    for(int i = 0; i < libs; ++i) {
-        line += QString(" -lsomelib%1").arg(i);
-    }
+    QTest::newRow("script-error-filter") << OutputModel::ScriptErrorFilter << lines;
+    QTest::newRow("script-error-filter-longline") << OutputModel::ScriptErrorFilter << longLine;
 
-    KDevelop::OutputModel model(KUrl("/tmp/build-foo"));
-
-    bench(model, QStringList() << line);
+    QTest::newRow("static-analysis-filter") << OutputModel::StaticAnalysisFilter << lines;
+    QTest::newRow("static-analysis-filter-longline") << OutputModel::StaticAnalysisFilter << longLine;
 }
 
 }
