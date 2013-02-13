@@ -30,11 +30,12 @@
 #include <QtCore/QStringList>
 #include <QtCore/QTimer>
 #include <QThread>
+#include <QFont>
+#include <QApplication>
 
 #include <KDebug>
-#include <kglobalsettings.h>
+#include <KGlobalSettings>
 
-#include <QFont>
 
 #include <set>
 
@@ -123,6 +124,29 @@ private:
     QTimer* m_timer;
 };
 
+class ParsingThread
+{
+public:
+    virtual ~ParsingThread()
+    {
+        if (m_thread.isRunning()) {
+            m_thread.quit();
+            m_thread.wait();
+        }
+    }
+    void addWorker(ParseWorker* worker)
+    {
+        if (!m_thread.isRunning()) {
+            m_thread.start();
+        }
+        worker->moveToThread(&m_thread);
+    }
+private:
+    QThread m_thread;
+};
+
+K_GLOBAL_STATIC(ParsingThread, s_parsingThread);
+
 struct OutputModelPrivate
 {
     OutputModelPrivate( OutputModel* model, const KUrl& builddir = KUrl() );
@@ -130,9 +154,7 @@ struct OutputModelPrivate
     bool isValidIndex( const QModelIndex&, int currentRowCount ) const;
 
     OutputModel* model;
-    QThread* parsingThread;
     ParseWorker* worker;
-    QTimer m_sleepTimer;
 
     QVector<FilteredItem> m_filteredItems;
     // We use std::set because that is ordered
@@ -152,37 +174,18 @@ struct OutputModelPrivate
 
         model->endInsertRows();
     }
-
-    void startThread()
-    {
-        parsingThread->start();
-        m_sleepTimer.start();
-    }
-
-    void endThread()
-    {
-        parsingThread->quit();
-        parsingThread->wait();
-    }
 };
 
 OutputModelPrivate::OutputModelPrivate( OutputModel* model_, const KUrl& builddir)
 : model(model_)
-, parsingThread( new QThread(model) )
 , worker(new ParseWorker )
 , m_buildDir( builddir )
 {
     qRegisterMetaType<QVector<KDevelop::FilteredItem> >();
     qRegisterMetaType<KDevelop::IFilterStrategy*>();
-    worker->moveToThread(parsingThread);
-    QObject::connect(parsingThread, SIGNAL(finished()), worker, SLOT(deleteLater()));
+    s_parsingThread->addWorker(worker);
     model->connect(worker, SIGNAL(parsedBatch(QVector<KDevelop::FilteredItem>)),
                    model, SLOT(linesParsed(QVector<KDevelop::FilteredItem>)));
-
-    // setup timer that quits the thread after certain amount of time
-    m_sleepTimer.setSingleShot(true);
-    m_sleepTimer.setInterval(10000);
-    QObject::connect(&m_sleepTimer, SIGNAL(timeout()), model, SLOT(endThread()));
 }
 
 bool OutputModelPrivate::isValidIndex( const QModelIndex& idx, int currentRowCount ) const
@@ -190,11 +193,9 @@ bool OutputModelPrivate::isValidIndex( const QModelIndex& idx, int currentRowCou
     return ( idx.isValid() && idx.row() >= 0 && idx.row() < currentRowCount && idx.column() == 0 );
 }
 
-
 OutputModelPrivate::~OutputModelPrivate()
 {
-    parsingThread->quit();
-    parsingThread->wait();
+    worker->deleteLater();
 }
 
 OutputModel::OutputModel( const KUrl& builddir, QObject* parent )
@@ -211,7 +212,6 @@ OutputModel::OutputModel( QObject* parent )
 
 OutputModel::~OutputModel()
 {
-    d->parsingThread->quit();
     delete d;
 }
 
@@ -364,7 +364,6 @@ void OutputModel::appendLines( const QStringList& lines )
     if( lines.isEmpty() )
         return;
 
-    d->startThread();
     QMetaObject::invokeMethod(d->worker, "addLines",
                               Q_ARG(QStringList, lines));
 }

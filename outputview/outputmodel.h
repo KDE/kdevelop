@@ -76,7 +76,6 @@ private:
     OutputModelPrivate* const d;
     friend class OutputModelPrivate;
     Q_PRIVATE_SLOT(d, void linesParsed(const QVector<KDevelop::FilteredItem>& lines));
-    Q_PRIVATE_SLOT(d, void endThread());
 };
 
 //Q_DECLARE_METATYPE( OutputModel::OutputItemType )
