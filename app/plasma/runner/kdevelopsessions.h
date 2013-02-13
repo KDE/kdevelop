@@ -24,6 +24,14 @@
 
 #include <KIcon>
 
+struct Session
+{
+    QString id;
+    QString name;
+};
+
+Q_DECLARE_TYPEINFO(Session, Q_MOVABLE_TYPE);
+
 class KDevelopSessions : public Plasma::AbstractRunner {
     Q_OBJECT
 
@@ -39,7 +47,7 @@ class KDevelopSessions : public Plasma::AbstractRunner {
 
     private:
         KIcon m_icon;
-        QStringList m_sessions;
+        QVector<Session> m_sessions;
 };
 
 K_EXPORT_PLASMA_RUNNER(kdevelopsessions, KDevelopSessions)
