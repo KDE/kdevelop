@@ -38,11 +38,10 @@ void OutputModelTest::testSetFilteringStrategy()
 {
 }
 
-// see also: https://bugs.kde.org/show_bug.cgi?id=295361
-void OutputModelTest::do_currentBench(OutputModel& testee)
+QStringList generateLines()
 {
+    const int numLines = 10000;
     QStringList outputlines;
-    const int numLines(10000);
     do {
         outputlines << buildCompilerErrorLine();
         outputlines << buildCompilerLine();
@@ -52,22 +51,26 @@ void OutputModelTest::do_currentBench(OutputModel& testee)
         outputlines << buildPythonErrorLine();
     }
     while(outputlines.size() < numLines ); // gives us numLines (-ish)
+    return outputlines;
+}
 
+void OutputModelTest::bench(OutputModel& testee, const QStringList& lines)
+{
     uint processEventsCounter = 1;
     QElapsedTimer totalTime;
     totalTime.start();
 
-    testee.appendLines(outputlines);
-    while(testee.rowCount() != outputlines.count()) {
+    testee.appendLines(lines);
+    while(testee.rowCount() != lines.count()) {
         QCoreApplication::instance()->processEvents();
         processEventsCounter++;
     }
 
-    QVERIFY(testee.rowCount() == outputlines.count());
+    QVERIFY(testee.rowCount() == lines.count());
     const qint64 elapsed = totalTime.elapsed();
 
     qDebug() << "ms elapsed to add lines: " << elapsed;
-    qDebug() << "total number of added lines: " << outputlines.count();
+    qDebug() << "total number of added lines: " << lines.count();
     const double avgUiLockup = double(elapsed) / processEventsCounter;
     qDebug() << "average UI lockup in ms: " << avgUiLockup;
     QVERIFY(avgUiLockup < 200);
@@ -77,28 +80,28 @@ void OutputModelTest::benchmarkAddlinesNofilter()
 {
     OutputModel testee(this);
     testee.setFilteringStrategy(KDevelop::OutputModel::NoFilter);
-    do_currentBench(testee);
+    bench(testee, generateLines());
 }
 
 void OutputModelTest::benchmarkAddlinesCompilerfilter()
 {
     OutputModel testee(this);
     testee.setFilteringStrategy(KDevelop::OutputModel::CompilerFilter);
-    do_currentBench(testee);
+    bench(testee, generateLines());
 }
 
 void OutputModelTest::benchmarkAddlinesScriptErrorfilter()
 {
     OutputModel testee(this);
     testee.setFilteringStrategy(KDevelop::OutputModel::ScriptErrorFilter);
-    do_currentBench(testee);
+    bench(testee, generateLines());
 }
 
 void OutputModelTest::benchmarkAddlinesStaticAnalysisfilter()
 {
     OutputModel testee(this);
     testee.setFilteringStrategy(KDevelop::OutputModel::StaticAnalysisFilter);
-    do_currentBench(testee);
+    bench(testee, generateLines());
 }
 
 void OutputModelTest::benchAddLongLine()
@@ -120,32 +123,8 @@ void OutputModelTest::benchAddLongLine()
 
     KDevelop::OutputModel model(KUrl("/tmp/build-foo"));
 
-    qRegisterMetaType<QModelIndex>("QModelIndex");
-    QSignalSpy spy(&model, SIGNAL(rowsAboutToBeInserted(QModelIndex, int, int)));
-
-    QElapsedTimer totalTime;
-    totalTime.start();
-
-    QStringList lines;
-    lines << line;
-    QBENCHMARK {
-        model.appendLines(lines);
-        while(model.rowCount() != lines.count()) {
-            QCoreApplication::instance()->processEvents();
-        }
-    }
-
-    QVERIFY(model.rowCount() == lines.count());
-    const qint64 elapsed = totalTime.elapsed();
-
-    qDebug() << "ms elapsed to add lines: " << elapsed;
-    qDebug() << "total number of added lines: " << lines.count();
-    const double avgUiLockup = double(elapsed) / spy.count();
-    qDebug() << "average UI lockup in ms: " << avgUiLockup;
-    QVERIFY(avgUiLockup < 200);
+    bench(model, QStringList() << line);
 }
-
-
 
 }
 #include "outputmodeltest.moc"

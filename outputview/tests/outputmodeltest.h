@@ -40,7 +40,7 @@ private slots:
     void benchAddLongLine();
 
 private:
-    void do_currentBench(KDevelop::OutputModel& testee);
+    void bench(KDevelop::OutputModel& testee, const QStringList& lines);
 };
 
 }
