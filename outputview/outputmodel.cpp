@@ -45,6 +45,20 @@ Q_DECLARE_METATYPE(KDevelop::IFilterStrategy*)
 namespace KDevelop
 {
 
+/**
+ * Number of lines that are processed in one go before we notify the GUI thread
+ * about the result. It is generally faster to add multiple items to a model
+ * in one go compared to adding each item independently.
+ */
+static const int BATCH_SIZE = 50;
+
+/**
+ * Time in ms that we wait in the parse worker for new incoming lines before
+ * actually processing them. If we already have enough for one batch though
+ * we process immediately.
+ */
+static const int BATCH_AGGREGATE_TIME_DELAY = 100;
+
 class ParseWorker : public QObject
 {
     Q_OBJECT
@@ -52,11 +66,9 @@ public:
     ParseWorker()
         : QObject(0)
         , m_filter( new NoFilterStrategy )
-        , m_batchSize(50)
-        , m_maxProcessDelay(100)
         , m_timer(new QTimer(this))
     {
-        m_timer->setInterval(m_maxProcessDelay);
+        m_timer->setInterval(BATCH_AGGREGATE_TIME_DELAY);
         m_timer->setSingleShot(true);
         connect(m_timer, SIGNAL(timeout()), SLOT(process()));
     }
@@ -71,7 +83,7 @@ public slots:
     {
         m_cachedLines << lines;
 
-        if (m_cachedLines.size() >= m_batchSize) {
+        if (m_cachedLines.size() >= BATCH_SIZE) {
             // if enough lines were added, process immediately
             m_timer->stop();
             process();
@@ -90,7 +102,7 @@ private slots:
     void process()
     {
         QVector<KDevelop::FilteredItem> filteredItems;
-        filteredItems.reserve(qMin(m_batchSize, m_cachedLines.size()));
+        filteredItems.reserve(qMin(BATCH_SIZE, m_cachedLines.size()));
 
         foreach(const QString& line, m_cachedLines) {
             FilteredItem item = m_filter->errorInLine(line);
@@ -100,10 +112,10 @@ private slots:
 
             filteredItems << item;
 
-            if( filteredItems.size() == m_batchSize ) {
+            if( filteredItems.size() == BATCH_SIZE ) {
                 emit parsedBatch(filteredItems);
                 filteredItems.clear();
-                filteredItems.reserve(qMin(m_batchSize, m_cachedLines.size()));
+                filteredItems.reserve(qMin(BATCH_SIZE, m_cachedLines.size()));
             }
         }
 
@@ -118,9 +130,6 @@ private:
     QSharedPointer<IFilterStrategy> m_filter;
     QStringList m_cachedLines;
 
-    int m_batchSize;
-    /// maximum time in ms process() will be delayed
-    int m_maxProcessDelay;
     QTimer* m_timer;
 };
 
