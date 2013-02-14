@@ -59,7 +59,7 @@ KDevelopSessions::KDevelopSessions(QObject *parent, const QVariantList& args)
     s.addExampleQuery(QLatin1String("kdevelop :q:"));
     addSyntax(s);
 
-    addSyntax(Plasma::RunnerSyntax(QLatin1String("kdevelop"), i18n("Lists all the KDevelop editor sessions in your account.")));
+    setDefaultSyntax(Plasma::RunnerSyntax(QLatin1String("kdevelop"), i18n("Lists all the KDevelop editor sessions in your account.")));
 }
 
 KDevelopSessions::~KDevelopSessions()
