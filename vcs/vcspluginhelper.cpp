@@ -98,7 +98,7 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
     KAction * diffForRevGlobalAction;
     QPointer<QTimer> modificationTimer;
     
-    void createActions(QObject * parent) {
+    void createActions(VcsPluginHelper* parent) {
         commitAction = new KAction(KIcon("svn-commit"), i18n("Commit..."), parent);
         updateAction = new KAction(KIcon("svn-update"), i18n("Update"), parent);
         addAction = new KAction(KIcon("list-add"), i18n("Add"), parent);
