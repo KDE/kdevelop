@@ -500,7 +500,7 @@ void PatchReviewToolView::kompareModelChanged() {
 
             VcsStatusInfo status;
             status.setUrl( file );
-            status.setState( VcsStatusInfo::ItemModified );
+            status.setState( cnt>0 ? VcsStatusInfo::ItemModified : VcsStatusInfo::ItemUpToDate );
 
             m_fileModel->updateState( status, cnt );
         }
