@@ -137,33 +137,30 @@ void DistributedVersionControlPlugin::additionalMenuEntries(QMenu* /*menu*/, con
 
 void DistributedVersionControlPlugin::slotInit()
 {
-    KUrl::List const & ctxUrlList = d->m_common->contextUrlList();
-    Q_ASSERT(!ctxUrlList.isEmpty());
+    KUrl::List ctxUrlList = d->m_common->contextUrlList();
+    foreach(KUrl url, ctxUrlList) {
+        QFileInfo repoInfo(url.toLocalFile());
+        if (repoInfo.isFile())
+            url = repoInfo.path();
 
-    KUrl url = ctxUrlList.front();
-    QFileInfo repoInfo = QFileInfo(url.toLocalFile());
-    if (repoInfo.isFile())
-        url = repoInfo.path();
-
-    ImportDialog dlg(this, url);
-    dlg.exec();
+        ImportDialog dlg(this, url);
+        dlg.exec();
+    }
 }
 
 void DistributedVersionControlPlugin::ctxPush()
 {
-    KUrl::List const & ctxUrlList = d->m_common->contextUrlList();
-    Q_ASSERT(!ctxUrlList.isEmpty());
-
-    VcsJob* job = push(ctxUrlList.front().toLocalFile(), VcsLocation());
-    connect(job, SIGNAL(result(KJob*)), this, SIGNAL(jobFinished(KJob*)));
-    ICore::self()->runController()->registerJob(job);
+    KUrl::List ctxUrlList = d->m_common->contextUrlList();
+    foreach(const KUrl& url, ctxUrlList) {
+        VcsJob* job = push(url, VcsLocation());
+        connect(job, SIGNAL(result(KJob*)), this, SIGNAL(jobFinished(KJob*)));
+        ICore::self()->runController()->registerJob(job);
+    }
 }
 
 void DistributedVersionControlPlugin::ctxPull()
 {
     KUrl::List ctxUrlList = d->m_common->contextUrlList();
-    Q_ASSERT(!ctxUrlList.isEmpty());
-
     foreach(const KUrl& url, ctxUrlList) {
         VcsJob* job = pull(VcsLocation(), url);
         connect(job, SIGNAL(result(KJob*)), this, SIGNAL(jobFinished(KJob*)));
