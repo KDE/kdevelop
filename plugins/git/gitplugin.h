@@ -73,8 +73,6 @@ public:
     GitPlugin(QObject *parent, const QVariantList & args = QVariantList() );
     ~GitPlugin();
    
-    virtual void unload();
-
     QString name() const;
 
     bool isVersionControlled(const KUrl &path);

@@ -188,7 +188,6 @@ GitPlugin::GitPlugin( QObject *parent, const QVariantList & )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBranchingVersionControl )
 
     m_hasError = false;
-    core()->uiController()->addToolView(i18n("Git"), dvcsViewFactory());
     setObjectName("Git");
     
     DVcsJob* versionJob = new DVcsJob(QDir::tempPath(), this, KDevelop::OutputJob::Silent);
@@ -261,12 +260,6 @@ DVcsJob* GitPlugin::errorsFound(const QString& error, KDevelop::OutputJob::Outpu
     *j << "echo" << i18n("error: %1", error) << "-n";
     return j;
 }
-
-void GitPlugin::unload()
-{
-    core()->uiController()->removeToolView( dvcsViewFactory() );
-}
-
 
 QString GitPlugin::name() const
 {

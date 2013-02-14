@@ -38,15 +38,11 @@
 #include <vcs/interfaces/ibranchingversioncontrol.h>
 
 class QMenu;
-class QString;
-class KDevDVCSViewFactory;
 
 namespace KDevelop
 {
-class DVcsJob;
-class VcsJob;
-class ContextMenuExtension;
 struct DistributedVersionControlPluginPrivate;
+class DVcsJob;
 
 /**
  * DistributedVersionControlPlugin is a base class for git/hg/bzr plugins. This class implements
@@ -128,23 +124,10 @@ protected:
     /** Checks if dirPath is located in DVCS repository */
     virtual bool isValidDirectory(const KUrl &dirPath) = 0;
 
-    KDevDVCSViewFactory * dvcsViewFactory() const;
-
 private:
     DistributedVersionControlPluginPrivate * const d;
 };
 
 }
-
-class KDevDVCSViewFactory: public KDevelop::IToolViewFactory
-{
-public:
-    KDevDVCSViewFactory(KDevelop::DistributedVersionControlPlugin *plugin): m_plugin(plugin) {}
-    virtual QWidget* create(QWidget *parent = 0);
-    virtual Qt::DockWidgetArea defaultPosition();
-    virtual QString id() const;
-private:
-    KDevelop::DistributedVersionControlPlugin *m_plugin;
-};
 
 #endif

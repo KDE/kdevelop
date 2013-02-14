@@ -40,7 +40,6 @@ set(kdevplatformvcs_LIB_SRCS
     models/brancheslistmodel.cpp
     dvcs/dvcsjob.cpp
     dvcs/dvcsplugin.cpp
-    dvcs/ui/dvcsmainview.cpp
     dvcs/ui/dvcsgenericoutputview.cpp
     dvcs/ui/importdialog.cpp
     dvcs/ui/importmetadatawidget.cpp

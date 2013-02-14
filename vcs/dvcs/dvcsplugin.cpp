@@ -50,7 +50,6 @@
 #include <interfaces/contextmenuextension.h>
 
 #include "dvcsjob.h"
-#include "ui/dvcsmainview.h"
 #include "ui/dvcsgenericoutputview.h"
 #include "ui/importdialog.h"
 #include "ui/importmetadatawidget.h"
@@ -70,9 +69,7 @@ namespace KDevelop
 
 struct DistributedVersionControlPluginPrivate {
     explicit DistributedVersionControlPluginPrivate(DistributedVersionControlPlugin * pThis)
-            : m_factory(new KDevDVCSViewFactory(pThis))
-            , m_common(new VcsPluginHelper(pThis, pThis)) {}
-    KDevDVCSViewFactory* m_factory;
+            : m_common(new VcsPluginHelper(pThis, pThis)) {}
     VcsPluginHelper* m_common;
 };
 
@@ -209,30 +206,6 @@ void DistributedVersionControlPlugin::ctxRevHistory()
     d.exec();
 }
 
-KDevDVCSViewFactory * DistributedVersionControlPlugin::dvcsViewFactory() const
-{
-    return d->m_factory;
-}
-
-}
-
-//-----------------------------------------------------------------------------------
-
-
-//class KDevDVCSViewFactory
-QWidget* KDevDVCSViewFactory::create(QWidget *parent)
-{
-    return new DVCSmainView(m_plugin, parent);
-}
-
-Qt::DockWidgetArea KDevDVCSViewFactory::defaultPosition()
-{
-    return Qt::BottomDockWidgetArea;
-}
-
-QString KDevDVCSViewFactory::id() const
-{
-    return "org.kdevelop.DVCSview";
 }
 
 #endif
