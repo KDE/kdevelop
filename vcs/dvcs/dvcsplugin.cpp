@@ -73,7 +73,7 @@ struct DistributedVersionControlPluginPrivate {
             : m_factory(new KDevDVCSViewFactory(pThis))
             , m_common(new VcsPluginHelper(pThis, pThis)) {}
     KDevDVCSViewFactory* m_factory;
-    std::auto_ptr<VcsPluginHelper> m_common;
+    VcsPluginHelper* m_common;
 };
 
 //class DistributedVersionControlPlugin
@@ -212,13 +212,6 @@ void DistributedVersionControlPlugin::ctxRevHistory()
 KDevDVCSViewFactory * DistributedVersionControlPlugin::dvcsViewFactory() const
 {
     return d->m_factory;
-}
-
-KDevelop::DVcsJob* DistributedVersionControlPlugin::empty_cmd(KDevelop::OutputJob::OutputJobVerbosity verbosity)
-{
-    DVcsJob* j = new DVcsJob(QDir(), this, verbosity);
-    *j << "echo" << "command not implemented" << "-n";
-    return j;
 }
 
 }

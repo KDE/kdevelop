@@ -128,9 +128,6 @@ protected:
     /** Checks if dirPath is located in DVCS repository */
     virtual bool isValidDirectory(const KUrl &dirPath) = 0;
 
-    /** empty_cmd is used when something is not implemented, but has to return any job */
-    virtual DVcsJob* empty_cmd(KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
-
     KDevDVCSViewFactory * dvcsViewFactory() const;
 
 private:
