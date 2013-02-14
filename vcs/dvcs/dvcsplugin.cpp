@@ -164,12 +164,14 @@ void DistributedVersionControlPlugin::ctxPush()
 
 void DistributedVersionControlPlugin::ctxPull()
 {
-    KUrl::List const & ctxUrlList = d->m_common->contextUrlList();
+    KUrl::List ctxUrlList = d->m_common->contextUrlList();
     Q_ASSERT(!ctxUrlList.isEmpty());
 
-    VcsJob* job = pull(VcsLocation(), ctxUrlList.front().toLocalFile());
-    connect(job, SIGNAL(result(KJob*)), this, SIGNAL(jobFinished(KJob*)));
-    ICore::self()->runController()->registerJob(job);
+    foreach(const KUrl& url, ctxUrlList) {
+        VcsJob* job = pull(VcsLocation(), url);
+        connect(job, SIGNAL(result(KJob*)), this, SIGNAL(jobFinished(KJob*)));
+        ICore::self()->runController()->registerJob(job);
+    }
 }
 
 static QString stripPathToDir(const QString &path)
