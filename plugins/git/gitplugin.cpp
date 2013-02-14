@@ -30,6 +30,7 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QDateTime>
+#include <QFileSystemWatcher>
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
@@ -51,6 +52,7 @@
 #include <KMessageBox>
 #include <KStandardDirs>
 #include <KTextEdit>
+#include <KDirWatch>
 #include "gitjob.h"
 #include "gitmessagehighlighter.h"
 
@@ -193,6 +195,10 @@ GitPlugin::GitPlugin( QObject *parent, const QVariantList & )
     *versionJob << "git" << "--version";
     connect(versionJob, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), SLOT(parseGitVersionOutput(KDevelop::DVcsJob*)));
     ICore::self()->runController()->registerJob(versionJob);
+    
+    m_watcher = new KDirWatch(this);
+    connect(m_watcher, SIGNAL(dirty(QString)), SLOT(fileChanged(QString)));
+    connect(m_watcher, SIGNAL(created(QString)), SLOT(fileChanged(QString)));
 }
 
 GitPlugin::~GitPlugin()
@@ -1326,4 +1332,20 @@ bool GitPlugin::hasError() const
 QString GitPlugin::errorDescription() const
 {
     return m_errorDescription;
+}
+
+void GitPlugin::registerRepositoryForCurrentBranchChanges(const KUrl& repository)
+{
+    QDir dir = urlDir(repository);
+    QString headFile = dir.absoluteFilePath(".git/HEAD");
+    m_watcher->addFile(headFile);
+}
+
+void GitPlugin::fileChanged(const QString& file)
+{
+    Q_ASSERT(file.endsWith("HEAD"));
+    KUrl fileUrl(KUrl::fromPath(file));
+    fileUrl = fileUrl.upUrl(); //SMTH/.git/HEAD -> SMTH/.git/
+    fileUrl = fileUrl.upUrl(); //SMTH/.git/ -> SMTH/
+    emit repositoryBranchChanged(fileUrl);
 }

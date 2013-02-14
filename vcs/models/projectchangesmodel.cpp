@@ -21,6 +21,7 @@
 #include <KPluginInfo>
 #include <KLocalizedString>
 #include <vcs/interfaces/ibasicversioncontrol.h>
+#include <interfaces/ibranchingversioncontrol.h>
 #include <interfaces/iplugin.h>
 #include <interfaces/iproject.h>
 #include <interfaces/icore.h>
@@ -59,6 +60,7 @@ ProjectChangesModel::~ProjectChangesModel()
 void ProjectChangesModel::addProject(IProject* p)
 {
     QStandardItem* it = new QStandardItem(p->name());
+    it->setData(p->name(), Qt::UserRole);
     QStandardItem* itStatus = new QStandardItem;
     if(p->versionControlPlugin()) {
         IPlugin* plugin = p->versionControlPlugin();
@@ -70,6 +72,13 @@ void ProjectChangesModel::addProject(IProject* p)
         itStatus->setIcon(KIcon(info.icon()));
         itStatus->setText(vcs->name());
         reload(QList<IProject*>() << p);
+        
+        IBranchingVersionControl* branchingExtension = plugin->extension<KDevelop::IBranchingVersionControl>();
+        if(branchingExtension) {
+            branchingExtension->registerRepositoryForCurrentBranchChanges(p->folder());
+            connect(plugin, SIGNAL(repositoryBranchChanged(KUrl)), this, SLOT(repositoryBranchChanged(KUrl)));
+            repositoryBranchChanged(p->folder());
+        }
     } else {
         it->setEnabled(false);
         itStatus->setEnabled(false);
@@ -99,7 +108,7 @@ QStandardItem* findItemChild(QStandardItem* parent, const QVariant& value, int r
 
 QStandardItem* ProjectChangesModel::projectItem(IProject* p) const
 {
-    return findItemChild(invisibleRootItem(), p->name());
+    return findItemChild(invisibleRootItem(), p->name(), Qt::UserRole);
 }
 
 void ProjectChangesModel::addStates(const QVariantList& states)
@@ -214,4 +223,28 @@ void ProjectChangesModel::jobUnregistered(KJob* job)
     if(vcsjob && readOnly.contains(vcsjob->type())) {
         reloadAll();
     }
+}
+
+void ProjectChangesModel::repositoryBranchChanged(const KUrl& url)
+{
+    IProject* project = ICore::self()->projectController()->findProjectForUrl(url);
+    if(project) {
+        IPlugin* v = project->versionControlPlugin();
+        Q_ASSERT(v);
+        IBranchingVersionControl* branching = v->extension<IBranchingVersionControl>();
+        Q_ASSERT(branching);
+        VcsJob* job = branching->currentBranch(url);
+        connect(job, SIGNAL(resultsReady(KDevelop::VcsJob*)), SLOT(branchNameReady(KDevelop::VcsJob*)));
+        job->setProperty("project", QVariant::fromValue<QObject*>(project));
+        ICore::self()->runController()->registerJob(job);
+    }
+}
+
+void ProjectChangesModel::branchNameReady(VcsJob* job)
+{
+    IProject* project = qobject_cast<IProject*>(job->property("project").value<QObject*>());
+    if(job->status()==VcsJob::JobSucceeded)
+        projectItem(project)->setText(i18nc("project name (branch name)", "%1 (%2)", project->name(), job->fetchResults().toString()));
+    else
+        projectItem(project)->setText(project->name());
 }

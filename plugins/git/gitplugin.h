@@ -29,6 +29,7 @@
 #include <outputview/outputjob.h>
 #include <vcs/vcsjob.h>
 
+class KDirWatch;
 class QDir;
 
 namespace KDevelop
@@ -139,6 +140,7 @@ public:
 
     virtual bool hasError() const;
     virtual QString errorDescription() const;
+    virtual void registerRepositoryForCurrentBranchChanges(const KUrl& repository);
 protected:
   
     KUrl repositoryRoot(const KUrl& path);
@@ -169,6 +171,11 @@ private slots:
     void ctxPopStash();
     void ctxStashManager();
 
+    void fileChanged(const QString& file);
+
+signals:
+    void repositoryBranchChanged(const KUrl& repository);
+
 private:
     void addNotVersionedFiles(const QDir& dir, const KUrl::List& files);
     
@@ -189,6 +196,7 @@ private:
 
     bool m_hasError;
     QString m_errorDescription;
+    KDirWatch* m_watcher;
 };
 
 QVariant runSynchronously(KDevelop::VcsJob* job);

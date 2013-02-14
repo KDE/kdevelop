@@ -101,6 +101,14 @@ public:
     */
    virtual VcsJob* renameBranch(const KUrl &repository, const QString &oldBranchName, const QString &newBranchName) = 0;
 
+   /**
+    * Tells the implementation to report about changes in the current branch of a
+    * given @p repository.
+    */
+   virtual void registerRepositoryForCurrentBranchChanges(const KUrl& repository) = 0;
+
+Q_SIGNALS:
+    void repositoryBranchChanged(const KUrl& repository);
 };
 
 }

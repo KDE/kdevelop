@@ -56,7 +56,8 @@ class KDEVPLATFORMVCS_EXPORT ProjectChangesModel : public VcsFileChangesModel
         void documentSaved(KDevelop::IDocument*);
         void itemsAdded(const QModelIndex& idx, int start, int end);
         void jobUnregistered(KJob*);
-        
+        void repositoryBranchChanged(const KUrl& url);
+        void branchNameReady(KDevelop::VcsJob* job);
 };
 
 }
