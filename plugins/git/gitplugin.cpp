@@ -968,6 +968,7 @@ void GitPlugin::parseGitLogOutput(DVcsJob * job)
             if (pushCommit) {
                 item.setMessage(message.trimmed());
                 commits.append(QVariant::fromValue(item));
+                item.setItems(QList<VcsItemEvent>());
             } else {
                 pushCommit = true;
             }
