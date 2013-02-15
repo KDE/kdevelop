@@ -63,14 +63,14 @@ VcsEventModel::~VcsEventModel()
     delete d;
 }
 
-int VcsEventModel::rowCount( const QModelIndex& ) const
+int VcsEventModel::rowCount( const QModelIndex& parent) const
 {
-    return d->m_events.count();
+    return parent.isValid() ? 0 : d->m_events.count();
 }
 
-int VcsEventModel::columnCount( const QModelIndex& ) const
+int VcsEventModel::columnCount( const QModelIndex& parent) const
 {
-    return 4;
+    return parent.isValid() ? 0 : 4;
 }
 
 QVariant VcsEventModel::data( const QModelIndex& idx, int role ) const
