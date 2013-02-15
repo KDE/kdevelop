@@ -8,7 +8,6 @@ set(kdevplatformvcs_UIS
     widgets/vcscommitdialog.ui
     widgets/vcseventwidget.ui
     widgets/vcsdiffwidget.ui
-    dvcs/ui/cvsmainview.ui
     dvcs/ui/importmetadatawidget.ui
     dvcs/ui/branchmanager.ui
 )
