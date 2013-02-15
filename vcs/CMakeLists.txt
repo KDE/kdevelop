@@ -8,7 +8,6 @@ set(kdevplatformvcs_UIS
     widgets/vcscommitdialog.ui
     widgets/vcseventwidget.ui
     widgets/vcsdiffwidget.ui
-    dvcs/ui/cvsgenericoutputview.ui
     dvcs/ui/cvsmainview.ui
     dvcs/ui/importmetadatawidget.ui
     dvcs/ui/branchmanager.ui
@@ -39,7 +38,6 @@ set(kdevplatformvcs_LIB_SRCS
     models/brancheslistmodel.cpp
     dvcs/dvcsjob.cpp
     dvcs/dvcsplugin.cpp
-    dvcs/ui/dvcsgenericoutputview.cpp
     dvcs/ui/importmetadatawidget.cpp
     dvcs/ui/branchmanager.cpp
     dvcs/ui/revhistory/commitView.cpp
