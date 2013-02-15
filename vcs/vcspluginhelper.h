@@ -61,6 +61,8 @@ public Q_SLOTS:
     void diffForRev();
     void diffForRevGlobal();
     void update();
+    void pull();
+    void push();
     void diffJobFinished(KJob* job);
     
     void revertDone(KJob* job);

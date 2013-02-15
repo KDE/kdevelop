@@ -46,6 +46,7 @@
 #include <project/projectmodel.h>
 #include <language/interfaces/codecontext.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>
+#include "interfaces/idistributedversioncontrol.h"
 #include <vcs/widgets/vcscommitdialog.h>
 #include <vcs/models/vcsannotationmodel.h>
 #include <vcs/vcsjob.h>
@@ -96,6 +97,8 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
     KAction * revertAction;
     KAction * diffForRevAction;
     KAction * diffForRevGlobalAction;
+    KAction * pushAction;
+    KAction * pullAction;
     QPointer<QTimer> modificationTimer;
     
     void createActions(VcsPluginHelper* parent) {
@@ -108,6 +111,8 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
         annotationAction = new KAction(KIcon("user-properties"), i18n("Annotation..."), parent);
         diffForRevAction = new KAction(KIcon("vcs_diff"), i18n("Show Diff..."), parent);
         diffForRevGlobalAction = new KAction(KIcon("vcs_diff"), i18n("Show Diff (all files)..."), parent);
+        pushAction = new KAction(KIcon("arrow-up-double"), i18n("Push"), parent);
+        pullAction = new KAction(KIcon("arrow-down-double"), i18n("Pull"), parent);
         
         connect(commitAction, SIGNAL(triggered()), parent, SLOT(commit()));
         connect(addAction, SIGNAL(triggered()), parent, SLOT(add()));
@@ -118,6 +123,8 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
         connect(annotationAction, SIGNAL(triggered()), parent, SLOT(annotation()));
         connect(diffForRevAction, SIGNAL(triggered()), parent, SLOT(diffForRev()));
         connect(diffForRevGlobalAction, SIGNAL(triggered()), parent, SLOT(diffForRevGlobal()));
+        connect(pullAction, SIGNAL(triggered()), parent, SLOT(pull()));
+        connect(pushAction, SIGNAL(triggered()), parent, SLOT(push()));
     }
     
     bool allLocalFiles(const KUrl::List& urls)
@@ -144,7 +151,12 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
         menu->setIcon(KIcon(ICore::self()->pluginController()->pluginInfo(plugin).icon()));
         
         menu->addAction(commitAction);
-        menu->addAction(updateAction);
+        if(plugin->extension<IDistributedVersionControl>()) {
+            menu->addAction(pushAction);
+            menu->addAction(pullAction);
+        } else {
+            menu->addAction(updateAction);
+        }
         menu->addSeparator();
         menu->addAction(addAction);
         menu->addAction(revertAction);
@@ -481,6 +493,23 @@ void VcsPluginHelper::commit()
         commitDialog->exec();
     }
 }
+
+void VcsPluginHelper::push()
+{
+    foreach(const KUrl& url, d->ctxUrls) {
+        VcsJob* job = d->plugin->extension<IDistributedVersionControl>()->push(url, VcsLocation());
+        ICore::self()->runController()->registerJob(job);
+    }
+}
+
+void VcsPluginHelper::pull()
+{
+    foreach(const KUrl& url, d->ctxUrls) {
+        VcsJob* job = d->plugin->extension<IDistributedVersionControl>()->pull(VcsLocation(), url);
+        ICore::self()->runController()->registerJob(job);
+    }
+}
+
 }
 
 

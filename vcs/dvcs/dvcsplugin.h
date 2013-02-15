@@ -93,8 +93,6 @@ public:
     virtual void additionalMenuEntries(QMenu* menu, const KUrl::List& urls);
 public Q_SLOTS:
     //slots for context menu
-    void ctxPush();
-    void ctxPull();
     void ctxBranchManager();
     void ctxRevHistory();
 

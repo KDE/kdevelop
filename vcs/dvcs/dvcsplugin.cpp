@@ -119,8 +119,6 @@ DistributedVersionControlPlugin::contextMenuExtension(Context* context)
 
     QMenu * menu = d->m_common->commonActions();
     menu->addSeparator();    
-    menu->addAction(KIcon("arrow-up-double"), i18n("Push"), this, SLOT(ctxPush()));
-    menu->addAction(KIcon("arrow-down-double"), i18n("Pull"), this, SLOT(ctxPull()));
     menu->addAction(i18n("Branches..."), this, SLOT(ctxBranchManager()))->setEnabled(ctxUrlList.count()==1);
     menu->addAction(i18n("Revision Graph..."), this, SLOT(ctxRevHistory()))->setEnabled(ctxUrlList.count()==1);
     additionalMenuEntries(menu, ctxUrlList);
@@ -134,27 +132,6 @@ DistributedVersionControlPlugin::contextMenuExtension(Context* context)
 
 void DistributedVersionControlPlugin::additionalMenuEntries(QMenu* /*menu*/, const KUrl::List& /*urls*/)
 {}
-
-
-void DistributedVersionControlPlugin::ctxPush()
-{
-    KUrl::List ctxUrlList = d->m_common->contextUrlList();
-    foreach(const KUrl& url, ctxUrlList) {
-        VcsJob* job = push(url, VcsLocation());
-        connect(job, SIGNAL(result(KJob*)), this, SIGNAL(jobFinished(KJob*)));
-        ICore::self()->runController()->registerJob(job);
-    }
-}
-
-void DistributedVersionControlPlugin::ctxPull()
-{
-    KUrl::List ctxUrlList = d->m_common->contextUrlList();
-    foreach(const KUrl& url, ctxUrlList) {
-        VcsJob* job = pull(VcsLocation(), url);
-        connect(job, SIGNAL(result(KJob*)), this, SIGNAL(jobFinished(KJob*)));
-        ICore::self()->runController()->registerJob(job);
-    }
-}
 
 static QString stripPathToDir(const QString &path)
 {
