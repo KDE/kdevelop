@@ -23,9 +23,11 @@
 
 #include <QHeaderView>
 #include <QAction>
+#include <QClipboard>
 
 #include <kdebug.h>
 #include <kmenu.h>
+#include <KAction>
 
 
 #include <interfaces/iplugin.h>
@@ -53,7 +55,11 @@ class VcsEventWidgetPrivate
 public:
     VcsEventWidgetPrivate( VcsEventWidget* w )
         : q( w )
-    {}
+    {
+        m_copyAction = new KAction(KIcon("edit-copy"), i18n("Copy revision number"), q);
+        m_copyAction->setShortcut(Qt::ControlModifier+Qt::Key_C);
+        QObject::connect(m_copyAction, SIGNAL(triggered(bool)), q, SLOT(copyRevision()));
+    }
 
     Ui::VcsEventWidget* m_ui;
     VcsItemEventModel* m_detailModel;
@@ -63,9 +69,11 @@ public:
     QModelIndex m_contextIndex;
     VcsEventWidget* q;
     KDevelop::IBasicVersionControl* m_iface;
+    KAction* m_copyAction;
     void eventViewCustomContextMenuRequested( const QPoint &point );
     void eventViewClicked( const QModelIndex &index );
     void jobReceivedResults( KDevelop::VcsJob* job );
+    void copyRevision();
     void diffToPrevious();
     void diffRevisions();
     void currentRowChanged(const QModelIndex& start, const QModelIndex& end);
@@ -80,12 +88,9 @@ void VcsEventWidgetPrivate::eventViewCustomContextMenuRequested( const QPoint &p
     }
 
     KMenu menu( m_ui->eventView );
-
-    QAction* action = menu.addAction(i18n("Diff to previous revision"));
-    QObject::connect( action, SIGNAL(triggered(bool)), q, SLOT(diffToPrevious()) );
-
-    action = menu.addAction(i18n("Diff between revisions"));
-    QObject::connect( action, SIGNAL(triggered(bool)), q, SLOT(diffRevisions()) );
+    menu.addAction(m_copyAction);
+    menu.addAction(i18n("Diff to previous revision"), q, SLOT(diffToPrevious()));
+    QAction* action = menu.addAction(i18n("Diff between revisions"), q, SLOT(diffRevisions()));
     action->setEnabled(m_ui->eventView->selectionModel()->selectedRows().size()>=2);
 
     menu.exec( m_ui->eventView->viewport()->mapToGlobal(point) );
@@ -130,6 +135,10 @@ void VcsEventWidgetPrivate::jobReceivedResults( KDevelop::VcsJob* job )
     }
 }
 
+void VcsEventWidgetPrivate::copyRevision()
+{
+    qApp->clipboard()->setText(m_contextIndex.sibling(m_contextIndex.row(), 0).data().toString());
+}
 
 void VcsEventWidgetPrivate::diffToPrevious()
 {
