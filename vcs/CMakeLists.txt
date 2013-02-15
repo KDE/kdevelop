@@ -11,7 +11,6 @@ set(kdevplatformvcs_UIS
     dvcs/ui/cvsgenericoutputview.ui
     dvcs/ui/cvsmainview.ui
     dvcs/ui/importmetadatawidget.ui
-    dvcs/ui/logview.ui
     dvcs/ui/branchmanager.ui
 )
 
@@ -42,7 +41,6 @@ set(kdevplatformvcs_LIB_SRCS
     dvcs/dvcsplugin.cpp
     dvcs/ui/dvcsgenericoutputview.cpp
     dvcs/ui/importmetadatawidget.cpp
-    dvcs/ui/logview.cpp
     dvcs/ui/branchmanager.cpp
     dvcs/ui/revhistory/commitView.cpp
     dvcs/ui/revhistory/commitlogmodel.cpp

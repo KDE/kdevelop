@@ -52,7 +52,6 @@
 #include "dvcsjob.h"
 #include "ui/dvcsgenericoutputview.h"
 #include "ui/importmetadatawidget.h"
-#include "ui/logview.h"
 #include "ui/branchmanager.h"
 // #include "ui/commitmanager.h"
 #include "ui/revhistory/commitlogmodel.h"
