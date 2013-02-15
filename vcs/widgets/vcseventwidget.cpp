@@ -106,7 +106,7 @@ void VcsEventWidgetPrivate::currentRowChanged(const QModelIndex& start, const QM
 void VcsEventWidgetPrivate::eventViewClicked( const QModelIndex &index )
 {
     KDevelop::VcsEvent ev = m_logModel->eventForIndex( index );
-    m_detailModel->removeRows(0, m_detailModel->rowCount()-1);
+    m_detailModel->removeRows(0, m_detailModel->rowCount());
     
     if( ev.revision().revisionType() != KDevelop::VcsRevision::Invalid )
     {
