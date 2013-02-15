@@ -61,7 +61,6 @@ void ProjectChangesModel::addProject(IProject* p)
 {
     QStandardItem* it = new QStandardItem(p->name());
     it->setData(p->name(), Qt::UserRole);
-    QStandardItem* itStatus = new QStandardItem;
     if(p->versionControlPlugin()) {
         IPlugin* plugin = p->versionControlPlugin();
         
@@ -69,8 +68,8 @@ void ProjectChangesModel::addProject(IProject* p)
 
         KPluginInfo info = ICore::self()->pluginController()->pluginInfo(plugin);
         
-        itStatus->setIcon(KIcon(info.icon()));
-        itStatus->setText(vcs->name());
+        it->setIcon(KIcon(info.icon()));
+        it->setToolTip(vcs->name());
         reload(QList<IProject*>() << p);
         
         IBranchingVersionControl* branchingExtension = plugin->extension<KDevelop::IBranchingVersionControl>();
@@ -81,11 +80,9 @@ void ProjectChangesModel::addProject(IProject* p)
         }
     } else {
         it->setEnabled(false);
-        itStatus->setEnabled(false);
-        itStatus->setText(i18n("No Version Control support for this project."));
     }
     
-    appendRow(QList<QStandardItem*>() << it << itStatus);
+    appendRow(it);
 }
 
 void ProjectChangesModel::removeProject(IProject* p)
