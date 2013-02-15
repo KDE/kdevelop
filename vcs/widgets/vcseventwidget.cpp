@@ -176,7 +176,7 @@ VcsEventWidget::VcsEventWidget( const KUrl& url, const VcsRevision& rev, KDevelo
 
     d->m_detailModel = new VcsItemEventModel(this);
     d->m_ui->itemEventView->setModel( d->m_detailModel );
-    header = d->m_ui->itemEventView->horizontalHeader();
+    header = d->m_ui->itemEventView->header();
     header->setResizeMode( 0, QHeaderView::ResizeToContents );
     header->setResizeMode( 1, QHeaderView::ResizeToContents );
     header->setResizeMode( 2, QHeaderView::ResizeToContents );
