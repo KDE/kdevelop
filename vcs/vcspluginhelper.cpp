@@ -358,14 +358,14 @@ void VcsPluginHelper::diffForRevGlobal()
 void VcsPluginHelper::history(const VcsRevision& rev)
 {
     SINGLEURL_SETUP_VARS
-    KDialog* dlg = new KDialog();
+    KDialog* dlg = new KDialog(ICore::self()->uiController()->activeMainWindow());
+    dlg->setAttribute(Qt::WA_DeleteOnClose);
     dlg->setButtons(KDialog::Close);
     dlg->setCaption(i18nc("%1: path or URL, %2: name of a version control system",
                           "%2 History (%1)", url.pathOrUrl(), iface->name()));
     KDevelop::VcsEventWidget* logWidget = new KDevelop::VcsEventWidget(url, rev, iface, dlg);
     dlg->setMainWidget(logWidget);
     dlg->show();
-    connect( dlg, SIGNAL(closeClicked()), dlg, SLOT(deleteLater()) );
 }
 
 void VcsPluginHelper::annotation()
