@@ -165,8 +165,6 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
         menu->addAction(annotationAction);
         menu->addAction(diffToBaseAction);
         
-        addAction->setEnabled(!allVersioned);
-        
         const bool singleVersionedFile = ctxUrls.count() == 1 && allVersioned;
         historyAction->setEnabled(singleVersionedFile);
         annotationAction->setEnabled(singleVersionedFile && allLocalFiles(ctxUrls));
