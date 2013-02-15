@@ -98,27 +98,6 @@ public Q_SLOTS:
     void ctxBranchManager();
     void ctxRevHistory();
 
-    // slots for menu
-    void slotInit();
-
-Q_SIGNALS:
-    /**
-     * Some actions like commit, add, remove... will connect the job's
-     * result() signal to this signal. Anybody, like for instance the
-     * DVCSMainView class, that is interested in getting notified about
-     * jobs that finished can connect to this signal.
-     * @see class GitMainView
-     */
-    void jobFinished(KJob* job);
-
-    /**
-     * Gets emmited when a job like log, editors... was created.
-     * GitPlugin will connect the newly created view to the result() signal
-     * of a job. So the new view will show the output of that job as
-     * soon as it has finished.
-     */
-    void addNewTabToMainView(QWidget* tab, QString label);
-    
 protected:
     ///////////////////
     /** Checks if dirPath is located in DVCS repository */

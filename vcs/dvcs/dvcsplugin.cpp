@@ -135,18 +135,6 @@ DistributedVersionControlPlugin::contextMenuExtension(Context* context)
 void DistributedVersionControlPlugin::additionalMenuEntries(QMenu* /*menu*/, const KUrl::List& /*urls*/)
 {}
 
-void DistributedVersionControlPlugin::slotInit()
-{
-    KUrl::List ctxUrlList = d->m_common->contextUrlList();
-    foreach(KUrl url, ctxUrlList) {
-        QFileInfo repoInfo(url.toLocalFile());
-        if (repoInfo.isFile())
-            url = repoInfo.path();
-
-        ImportDialog dlg(this, url);
-        dlg.exec();
-    }
-}
 
 void DistributedVersionControlPlugin::ctxPush()
 {
