@@ -27,39 +27,28 @@
 
 #include "dvcsplugin.h"
 
-#include <QtGui/QAction>
 #include <QtGui/QMenu>
 #include <QtCore/QFileInfo>
-#include <QtCore/QDir>
 #include <QtCore/QString>
 
-#include <KDE/KParts/PartManager>
-#include <KDE/KParts/Part>
+#include <KMessageBox>
+#include <KLocalizedString>
+#include <KParts/MainWindow>
 
-#include <KDE/KActionCollection>
-#include <KDE/KMessageBox>
-#include <KDE/KAction>
-
-#include <interfaces/iproject.h>
-#include <project/projectmodel.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/iruncontroller.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/icore.h>
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
+#include <interfaces/idocumentcontroller.h>
 
 #include "dvcsjob.h"
 #include "ui/importmetadatawidget.h"
 #include "ui/branchmanager.h"
-// #include "ui/commitmanager.h"
 #include "ui/revhistory/commitlogmodel.h"
 #include "ui/revhistory/commitView.h"
-#include <language/interfaces/editorcontext.h>
 #include <vcs/vcspluginhelper.h>
-#include <KMenu>
-#include <kparts/mainwindow.h>
-#include <interfaces/idocumentcontroller.h>
 
 namespace KDevelop
 {
