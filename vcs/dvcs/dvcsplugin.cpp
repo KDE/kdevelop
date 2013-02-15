@@ -51,7 +51,6 @@
 
 #include "dvcsjob.h"
 #include "ui/dvcsgenericoutputview.h"
-#include "ui/importdialog.h"
 #include "ui/importmetadatawidget.h"
 #include "ui/logview.h"
 #include "ui/branchmanager.h"
@@ -118,7 +117,7 @@ DistributedVersionControlPlugin::contextMenuExtension(Context* context)
     }
 
     QMenu * menu = d->m_common->commonActions();
-    menu->addSeparator();    
+    menu->addSeparator();
     menu->addAction(i18n("Branches..."), this, SLOT(ctxBranchManager()))->setEnabled(ctxUrlList.count()==1);
     menu->addAction(i18n("Revision Graph..."), this, SLOT(ctxRevHistory()))->setEnabled(ctxUrlList.count()==1);
     additionalMenuEntries(menu, ctxUrlList);

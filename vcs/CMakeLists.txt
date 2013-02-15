@@ -41,7 +41,6 @@ set(kdevplatformvcs_LIB_SRCS
     dvcs/dvcsjob.cpp
     dvcs/dvcsplugin.cpp
     dvcs/ui/dvcsgenericoutputview.cpp
-    dvcs/ui/importdialog.cpp
     dvcs/ui/importmetadatawidget.cpp
     dvcs/ui/logview.cpp
     dvcs/ui/branchmanager.cpp
