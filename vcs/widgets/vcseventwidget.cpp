@@ -64,12 +64,11 @@ public:
     Ui::VcsEventWidget* m_ui;
     VcsItemEventModel* m_detailModel;
     VcsEventModel *m_logModel;
-    KDevelop::VcsJob* m_job;
     KUrl m_url;
     QModelIndex m_contextIndex;
     VcsEventWidget* q;
-    KDevelop::IBasicVersionControl* m_iface;
     KAction* m_copyAction;
+    IBasicVersionControl* m_iface;
     void eventViewCustomContextMenuRequested( const QPoint &point );
     void eventViewClicked( const QModelIndex &index );
     void jobReceivedResults( KDevelop::VcsJob* job );
@@ -118,23 +117,6 @@ void VcsEventWidgetPrivate::eventViewClicked( const QModelIndex &index )
     }
 }
 
-void VcsEventWidgetPrivate::jobReceivedResults( KDevelop::VcsJob* job )
-{
-    if( job == m_job )
-    {
-        QList<QVariant> l = job->fetchResults().toList();
-        QList<KDevelop::VcsEvent> newevents;
-        foreach( const QVariant &v, l )
-        {
-            if( qVariantCanConvert<KDevelop::VcsEvent>( v ) )
-            {
-                newevents << qVariantValue<KDevelop::VcsEvent>( v );
-            }
-        }
-        m_logModel->addEvents( newevents );
-    }
-}
-
 void VcsEventWidgetPrivate::copyRevision()
 {
     qApp->clipboard()->setText(m_contextIndex.sibling(m_contextIndex.row(), 0).data().toString());
@@ -174,22 +156,15 @@ void VcsEventWidgetPrivate::diffRevisions()
     dlg->show();
 }
 
-VcsEventWidget::VcsEventWidget( const KUrl& url, KDevelop::VcsJob *job, QWidget *parent )
+VcsEventWidget::VcsEventWidget( const KUrl& url, const VcsRevision& rev, KDevelop::IBasicVersionControl* iface, QWidget* parent )
     : QWidget(parent), d(new VcsEventWidgetPrivate(this) )
 {
-
-    d->m_job = job;
-    //Don't autodelete this job, its metadata will be used later on
-    d->m_job->setAutoDelete( false );
-    
-    d->m_iface = job->vcsPlugin()->extension<KDevelop::IBasicVersionControl>();
-    Q_ASSERT(d->m_iface);
-
+    d->m_iface = iface;
     d->m_url = url;
     d->m_ui = new Ui::VcsEventWidget();
     d->m_ui->setupUi(this);
 
-    d->m_logModel= new VcsEventModel(this);
+    d->m_logModel= new VcsEventModel(iface, rev, url, this);
     d->m_ui->eventView->setModel( d->m_logModel );
     d->m_ui->eventView->sortByColumn(0, Qt::DescendingOrder);
     d->m_ui->eventView->setContextMenuPolicy( Qt::CustomContextMenu );
@@ -213,10 +188,6 @@ VcsEventWidget::VcsEventWidget( const KUrl& url, KDevelop::VcsJob *job, QWidget 
              this, SLOT(currentRowChanged(QModelIndex,QModelIndex)));
     connect( d->m_ui->eventView, SIGNAL(customContextMenuRequested(QPoint)),
              this, SLOT(eventViewCustomContextMenuRequested(QPoint)) );
-
-    connect( d->m_job, SIGNAL(resultsReady(KDevelop::VcsJob*)),
-             this, SLOT(jobReceivedResults(KDevelop::VcsJob*)) );
-    ICore::self()->runController()->registerJob( d->m_job );
 }
 
 VcsEventWidget::~VcsEventWidget()

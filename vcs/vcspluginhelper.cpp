@@ -360,19 +360,13 @@ void VcsPluginHelper::diffForRevGlobal()
 void VcsPluginHelper::history(const VcsRevision& rev)
 {
     SINGLEURL_SETUP_VARS
-    KDevelop::VcsJob *job = iface->log(url, rev, VcsRevision::createSpecialRevision( VcsRevision::Start ));
-    if (!job) {
-        return;
-    }
-
     KDialog* dlg = new KDialog();
     dlg->setButtons(KDialog::Close);
     dlg->setCaption(i18nc("%1: path or URL, %2: name of a version control system",
                           "%2 History (%1)", url.pathOrUrl(), iface->name()));
-    KDevelop::VcsEventWidget* logWidget = new KDevelop::VcsEventWidget(url, job, dlg);
+    KDevelop::VcsEventWidget* logWidget = new KDevelop::VcsEventWidget(url, rev, iface, dlg);
     dlg->setMainWidget(logWidget);
     dlg->show();
-    connect( dlg, SIGNAL(closeClicked()), job, SLOT(kill()) );
     connect( dlg, SIGNAL(closeClicked()), dlg, SLOT(deleteLater()) );
 }
 

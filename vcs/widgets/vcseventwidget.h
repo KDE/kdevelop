@@ -31,20 +31,20 @@ class KUrl;
 
 namespace KDevelop
 {
-class VcsJob;
+class VcsRevision;
+class IBasicVersionControl;
 
 
 class KDEVPLATFORMVCS_EXPORT VcsEventWidget : public QWidget
 {
     Q_OBJECT
 public:
-    VcsEventWidget( const KUrl&, KDevelop::VcsJob*, QWidget *parent = 0 );
+    VcsEventWidget( const KUrl& url, const VcsRevision& rev, KDevelop::IBasicVersionControl* iface, QWidget* parent = 0 );
     virtual ~VcsEventWidget();
 
 private:
     Q_PRIVATE_SLOT(d, void diffToPrevious())
     Q_PRIVATE_SLOT(d, void diffRevisions())
-    Q_PRIVATE_SLOT(d, void jobReceivedResults( KDevelop::VcsJob* ))
     Q_PRIVATE_SLOT(d, void eventViewCustomContextMenuRequested( const QPoint &point ))
     Q_PRIVATE_SLOT(d, void eventViewClicked( const QModelIndex &index ))
     Q_PRIVATE_SLOT(d, void currentRowChanged(const QModelIndex&, const QModelIndex& ))
