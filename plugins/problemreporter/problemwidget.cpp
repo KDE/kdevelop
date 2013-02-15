@@ -88,7 +88,7 @@ ProblemWidget::ProblemWidget(QWidget* parent, ProblemReporterPlugin* plugin)
     currentDocumentAction->setToolTip(i18nc("@info:tooltip", "Display problems in current document"));
 
     KAction* openDocumentsAction = new KAction(this);
-    openDocumentsAction->setText(i18n("Open documents"));
+    openDocumentsAction->setText(i18n("Open Documents"));
     openDocumentsAction->setToolTip(i18nc("@info:tooltip", "Display problems in all open documents"));
 
     KAction* currentProjectAction = new KAction(this);
