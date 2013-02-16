@@ -48,10 +48,12 @@ public:
         if (selectionWidget) {
             selected << selectionWidget->currentProfile();
         }
+
         KCModuleProxy proxy("kcm_kdev_envsettings", 0, selected);
         dlg.setMainWidget(&proxy);
         dlg.setWindowTitle(proxy.moduleInfo().moduleName());
         dlg.setWindowIcon(KIcon(proxy.moduleInfo().icon()));
+        dlg.resize(480, 320);
         if (dlg.exec() == KDialog::Accepted) {
             proxy.save();
             if (selectionWidget) {
