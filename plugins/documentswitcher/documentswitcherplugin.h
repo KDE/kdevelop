@@ -60,9 +60,11 @@ private slots:
 protected:
     bool eventFilter( QObject*, QEvent* );
 private:
+    void setViewGeometry(Sublime::MainWindow* window);
     void storeAreaViewList( Sublime::MainWindow* mainwindow, Sublime::Area* area );
     void enableActions( Sublime::MainWindow* mw );
     void fillModel( Sublime::MainWindow* window );
+    void walk(const int from, const int to);
     // Need to use QObject here as we only have a QObject* in
     // the removeMainWindow method and cannot cast it to the mainwindow anymore
     QMap<QObject*, QMap<Sublime::Area*, QList<Sublime::View*> > > documentLists;
