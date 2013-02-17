@@ -1,5 +1,6 @@
 /***************************************************************************
- *   Copyright 2009 Andreas Pakulat <apaku@gmx.de>                         *
+ *   Copyright 2009,2013 Andreas Pakulat <apaku@gmx.de>                    *
+ *   Copyright 2013 Jarosław Sierant <jaroslaw.sierant@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -84,7 +85,7 @@ DocumentSwitcherPlugin::DocumentSwitcherPlugin(QObject *parent, const QVariantLi
     view->setModel( model );    
 }
 
-void DocumentSwitcherPlugin::walkForward()
+void DocumentSwitcherPlugin::walk(const int from, const int to)
 {
     Sublime::MainWindow* window = qobject_cast<Sublime::MainWindow*>( KDevelop::ICore::self()->uiController()->activeMainWindow() );
     if( !window || !documentLists.contains( window ) || !documentLists[window].contains( window->area() ) )
@@ -93,30 +94,27 @@ void DocumentSwitcherPlugin::walkForward()
         return;
     }
     QModelIndex idx;
-    if( !view->isVisible() )
+    const int step = from < to ? 1 : -1;
+    if(!view->isVisible())
     {
-        fillModel( window );
-        // center on main window
-        view->move( window->pos().x() + (window->width() - view->width()) / 2,
-                    window->pos().y() + (window->height() - view->height()) / 2 );
-        idx = model->index( 1, 0 );
-        if( !idx.isValid() )
-        {
-            idx = model->index( 0, 0 );
-        }
+        fillModel(window);
+        setViewGeometry(window);
+        idx = model->index(from + step, 0);
+        if(!idx.isValid()) { idx = model->index(0, 0); }
         view->show();
-    } else 
-    {
-        int newrow = view->selectionModel()->currentIndex().row() + 1;
-        if( newrow == model->rowCount() ) 
-        {
-            newrow = 0;
-        }
-        idx = model->index( newrow, 0 );
+    } else {
+        int newRow = view->selectionModel()->currentIndex().row() + step;
+        if(newRow == to + step) { newRow = from; }
+        idx = model->index(newRow, 0);
     }
-    view->selectionModel()->select( idx, QItemSelectionModel::Rows | QItemSelectionModel::ClearAndSelect );
-    view->selectionModel()->setCurrentIndex( idx, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows );
+    view->selectionModel()->select(idx, QItemSelectionModel::Rows | QItemSelectionModel::ClearAndSelect);
+    view->selectionModel()->setCurrentIndex(idx, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
 }
+
+
+void DocumentSwitcherPlugin::walkForward() { walk(0, model->rowCount()-1); }
+
+void DocumentSwitcherPlugin::walkBackward() { walk(model->rowCount()-1, 0); }
 
 void DocumentSwitcherPlugin::fillModel( Sublime::MainWindow* window )
 {
@@ -144,36 +142,6 @@ void DocumentSwitcherPlugin::fillModel( Sublime::MainWindow* window )
         }
         model->appendRow( new QStandardItem( v->document()->icon(), txt ) );
     }
-}
-
-void DocumentSwitcherPlugin::walkBackward()
-{
-    Sublime::MainWindow* window = qobject_cast<Sublime::MainWindow*>( KDevelop::ICore::self()->uiController()->activeMainWindow() );
-    if( !window || !documentLists.contains( window ) || !documentLists[window].contains( window->area() ) )
-    {
-        kWarning() << "This should not happen, tried to walk through document list of an unknown mainwindow!";
-        return;
-    }
-    QModelIndex idx;
-    if( !view->isVisible() )
-    {
-        fillModel( window );
-        // center on mainwindow
-        view->move( window->pos().x() + (window->width() - view->width()) / 2,
-                    window->pos().y() + (window->height() - view->height()) / 2 );
-        idx = model->index( model->rowCount()-1, 0 );
-        view->show();
-    } else 
-    {
-        int newrow = view->selectionModel()->currentIndex().row() - 1;
-        if( newrow == -1 ) 
-        {
-            newrow = model->rowCount()-1;
-        }
-        idx = model->index( newrow, 0 );
-    }
-    view->selectionModel()->select( idx, QItemSelectionModel::Rows | QItemSelectionModel::ClearAndSelect );
-    view->selectionModel()->setCurrentIndex( idx, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows );
 }
 
 DocumentSwitcherPlugin::~DocumentSwitcherPlugin()
