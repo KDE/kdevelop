@@ -60,6 +60,7 @@ private slots:
 protected:
     bool eventFilter( QObject*, QEvent* );
 private:
+    void setViewGeometry(Sublime::MainWindow* window);
     void storeAreaViewList( Sublime::MainWindow* mainwindow, Sublime::Area* area );
     void enableActions( Sublime::MainWindow* mw );
     void fillModel( Sublime::MainWindow* window );
