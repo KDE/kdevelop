@@ -1082,6 +1082,10 @@ void GitPlugin::parseGitStatusOutput(DVcsJob* job)
         if(arrow>=0)
             curr = curr.right(curr.size()-arrow-3);
         
+        if(curr.startsWith('\"') && curr.endsWith('\"')) { //if the path is quoted, unquote
+            curr = curr.mid(1, curr.size()-2);
+        }
+        
         KUrl fileUrl = dotGit;
         fileUrl.addPath(curr);
         processedFiles.append(fileUrl);
