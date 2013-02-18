@@ -152,25 +152,16 @@ void GitInitTest::addFiles()
     VERIFYJOB(j);
 
     //Now let's create several files and try "git add file1 file2 file3"
-    f.setFileName(gitTest_BaseDir + "file1");
-
-    if (f.open(QIODevice::WriteOnly)) {
-        QTextStream input(&f);
-        input << "file1";
-    }
-
-    f.close();
-    f.setFileName(gitTest_BaseDir + "file2");
-
-    if (f.open(QIODevice::WriteOnly)) {
-        QTextStream input(&f);
-        input << "file2";
-    }
-    f.close();
-    
+    QStringList files = QStringList() << "file1" << "file2" << "la la";
     KUrl::List multipleFiles;
-    multipleFiles << QString(gitTest_BaseDir + "file1");
-    multipleFiles << QString(gitTest_BaseDir + "file2");
+    foreach(const QString& file, files) {
+        QFile f(gitTest_BaseDir + file);
+        QVERIFY(f.open(QIODevice::WriteOnly));
+        QTextStream input(&f);
+        input << file;
+        f.close();
+        multipleFiles << KUrl::fromPath(gitTest_BaseDir + file);
+    }
     j = m_plugin->add(multipleFiles);
     VERIFYJOB(j);
 }
