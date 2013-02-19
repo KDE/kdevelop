@@ -276,9 +276,9 @@ void PatchReviewToolView::showEditDialog() {
 
     connect( m_editPatch.testsButton, SIGNAL( clicked( bool ) ), this, SLOT( runTests() ) );
     
-    m_selectAllAction = new QAction( KIcon("ok"), i18n("Select All"), this );
+    m_selectAllAction = new QAction(KIcon("edit-select-all"), i18n("Select All"), this );
     connect( m_selectAllAction, SIGNAL(triggered(bool)), SLOT(selectAll()) );
-    m_deselectAllAction = new QAction( KIcon("cancel"), i18n("Deselect All"), this );
+    m_deselectAllAction = new QAction( i18n("Deselect All"), this );
     connect( m_deselectAllAction, SIGNAL(triggered(bool)), SLOT(deselectAll()) );
 }
 
@@ -286,13 +286,8 @@ void PatchReviewToolView::customContextMenuRequested(const QPoint& )
 {
     KUrl::List urls;
     QModelIndexList selectionIdxs = m_editPatch.filesList->selectionModel()->selectedIndexes();
-    if(selectionIdxs.isEmpty())
-        return;
-    
     foreach(const QModelIndex& idx, selectionIdxs) {
-        if(idx.column()==0) {
-            urls += idx.data(KDevelop::VcsFileChangesModel::VcsStatusInfoRole).value<VcsStatusInfo>().url();
-        }
+        urls += idx.sibling(idx.row(), 0).data(KDevelop::VcsFileChangesModel::VcsStatusInfoRole).value<VcsStatusInfo>().url();
     }
     
     QPointer<QMenu> menu = new QMenu(m_editPatch.filesList);
