@@ -149,7 +149,7 @@ NativeAppConfigPage::NativeAppConfigPage( QWidget* parent )
     connect( terminal, SIGNAL(currentIndexChanged(int)), SIGNAL(changed()) );
     connect( dependencyAction, SIGNAL(currentIndexChanged(int)), SLOT(activateDeps(int)) );
     connect( targetDependency, SIGNAL(textChanged(QString)), SLOT(depEdited(QString)));
-    connect( browseProject, SIGNAL(clicked(bool)), targetDependency, SLOT(selectItemDialog()));
+    connect( browseProject, SIGNAL(clicked(bool)), SLOT(selectItemDialog()));
 }
 
 
@@ -233,6 +233,12 @@ void NativeAppConfigPage::addDep()
     dependencies->selectionModel()->clearSelection();
     item->setSelected(true);
 //     dependencies->selectionModel()->select( dependencies->model()->index( dependencies->model()->rowCount() - 1, 0, QModelIndex() ), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::SelectCurrent );
+}
+
+void NativeAppConfigPage::selectItemDialog()
+{
+    targetDependency->selectItemDialog();
+    addDep();
 }
 
 void NativeAppConfigPage::removeDep()
