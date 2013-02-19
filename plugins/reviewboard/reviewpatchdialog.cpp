@@ -120,18 +120,18 @@ void ReviewPatchDialog::receivedProjects(KJob* job)
 
 QString ReviewPatchDialog::repository() const
 {
-    Q_ASSERT(m_ui->repositories->currentIndex().isValid());
-    return m_ui->repositories->currentIndex().data(Qt::UserRole).toString();
+    QModelIndexList selected = m_ui->repositories->selectionModel()->selectedIndexes();
+    if(!selected.isEmpty()) {
+        QModelIndex idx = selected.first();
+        Q_ASSERT(idx.isValid());
+        return idx.data(Qt::UserRole).toString();
+    }
+    return QString();
 }
 
 void ReviewPatchDialog::repositoryChanged(const QItemSelection& idx)
 {
     enableButtonOk(!idx.isEmpty());
-}
-
-QString ReviewPatchDialog::repositoryName() const
-{
-    return m_ui->repositories->currentIndex().data(Qt::DisplayRole).toString();
 }
 
 void ReviewPatchDialog::filterChanged(const QString& text)
