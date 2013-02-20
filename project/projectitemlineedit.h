@@ -66,7 +66,7 @@ public:
     KDevelop::ProjectBaseItem* currentItem() const;
     
 public slots:
-    void selectItemDialog();
+    bool selectItemDialog();
     
 private slots:
     void showCtxMenu(const QPoint& p);

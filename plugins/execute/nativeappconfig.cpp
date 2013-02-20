@@ -237,8 +237,9 @@ void NativeAppConfigPage::addDep()
 
 void NativeAppConfigPage::selectItemDialog()
 {
-    targetDependency->selectItemDialog();
-    addDep();
+    if(targetDependency->selectItemDialog()) {
+        addDep();
+    }
 }
 
 void NativeAppConfigPage::removeDep()
