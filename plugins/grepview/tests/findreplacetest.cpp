@@ -163,7 +163,7 @@ void FindReplaceTest::testReplace()
     job->setFilesString("*");
     job->setExcludeString("");
     job->setDirectoryChoice(QList<KUrl>() << KUrl(dir.path()));
-    job->setRecursive(true);
+    job->setDepth(-1); // fully recursive
     job->setRegexpFlag(true);
     job->setCaseSensitive(true);
     job->setProjectFilesFlag(false);

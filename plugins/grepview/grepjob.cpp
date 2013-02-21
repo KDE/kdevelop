@@ -178,7 +178,7 @@ void GrepJob::slotWork()
             QMetaObject::invokeMethod(this, "slotWork", Qt::QueuedConnection);
             break;
         case WorkCollectFiles:
-            m_findThread = new GrepFindFilesThread(this, m_directoryChoice, m_recursiveFlag, m_filesString, m_excludeString, m_useProjectFilesFlag);
+            m_findThread = new GrepFindFilesThread(this, m_directoryChoice, m_depthValue, m_filesString, m_excludeString, m_useProjectFilesFlag);
             emit showMessage(this, i18n("Collecting files..."));
             connect(m_findThread, SIGNAL(finished()), this, SLOT(slotFindFinished()));
             m_findThread->start();
@@ -301,9 +301,9 @@ void GrepJob::setCaseSensitive(bool caseSensitive)
     m_caseSensitiveFlag = caseSensitive;
 }
 
-void GrepJob::setRecursive(bool recursive)
+void GrepJob::setDepth(int depth)
 {
-    m_recursiveFlag = recursive;
+    m_depthValue = depth;
 }
 
 void GrepJob::setRegexpFlag(bool regexpFlag)

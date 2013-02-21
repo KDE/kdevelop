@@ -45,8 +45,9 @@ public:
 
     bool useProjectFilesFlag() const;
     bool regexpFlag() const;
-    bool recursiveFlag() const;
     bool caseSensitiveFlag() const;
+
+    int depthValue() const;
 
     void start();
     

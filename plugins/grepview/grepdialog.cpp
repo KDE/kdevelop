@@ -157,7 +157,7 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent, bool setLastUs
     syncButton->setIcon(KIcon("dirsync"));
     syncButton->setMenu(createSyncButtonMenu());
 
-    recursiveCheck->setChecked(cg.readEntry("recursive", true));
+    depthSpin->setValue(cg.readEntry("depth", -1));
     limitToProjectCheck->setChecked(cg.readEntry("search_project_files", true));
 
     filesCombo->addItems(cg.readEntry("file_patterns", filepatterns));
@@ -267,7 +267,7 @@ GrepDialog::~GrepDialog()
     // memorize the last patterns and paths
     cg.writeEntry("LastSearchItems", qCombo2StringList(patternCombo));
     cg.writeEntry("regexp", regexCheck->isChecked());
-    cg.writeEntry("recursive", recursiveCheck->isChecked());
+    cg.writeEntry("depth", depthSpin->value());
     cg.writeEntry("search_project_files", limitToProjectCheck->isChecked());
     cg.writeEntry("case_sens", caseSensitiveCheck->isChecked());
     cg.writeEntry("exclude_patterns", qCombo2StringList(excludeCombo));
@@ -341,9 +341,9 @@ bool GrepDialog::regexpFlag() const
     return regexCheck->isChecked();
 }
 
-bool GrepDialog::recursiveFlag() const
+int GrepDialog::depthValue() const
 {
-    return recursiveCheck->isChecked();
+    return depthSpin->value();
 }
 
 bool GrepDialog::caseSensitiveFlag() const
@@ -459,7 +459,7 @@ void GrepDialog::performAction(KDialog::ButtonCode button)
 
     job->setProjectFilesFlag( useProjectFilesFlag() );
     job->setRegexpFlag( regexpFlag() );
-    job->setRecursive( recursiveFlag() );
+    job->setDepth( depthValue() );
     job->setCaseSensitive( caseSensitiveFlag() );
 
     ICore::self()->runController()->registerJob(job);
