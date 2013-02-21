@@ -41,7 +41,6 @@ QVERIFY(variables.contains(#name));                         \
 QCOMPARE(variables.value(#name).value<type>(), val)
 
 #define COMPARE_FILES(one, two)                             \
-QCOMPARE(one.size(), two.size());                          \
 QCOMPARE(QString(one.readAll()), QString(two.readAll()))    \
 
 using namespace KDevelop;
