@@ -118,7 +118,10 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Project Selection</string>
+        <string>Build Sequence</string>
+       </property>
+       <property name="toolTip">
+        <string>These items will be built in the order they are listed.</string>
        </property>
       </widget>
      </item>
