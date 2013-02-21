@@ -22,6 +22,8 @@
 #ifndef IBRANCHINGVERSIONCONTROL_H
 #define IBRANCHINGVERSIONCONTROL_H
 
+#include <QObject>
+
 class KUrl;
 class QString;
 

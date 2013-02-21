@@ -22,12 +22,15 @@
 #ifndef IBROWSABLEVERSIONCONTROL_H
 #define IBROWSABLEVERSIONCONTROL_H
 
+#include <QObject>
 #include "../vcsrevision.h"
 
 class QString;
 
 namespace KDevelop
 {
+
+class VcsJob;
 
 class IBrowsableVersionControl
 {
