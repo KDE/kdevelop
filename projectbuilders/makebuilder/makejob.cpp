@@ -40,11 +40,10 @@
 
 using namespace KDevelop;
 
-MakeJob::MakeJob(MakeBuilder* builder, KDevelop::ProjectBaseItem* item,
+MakeJob::MakeJob(QObject* parent, KDevelop::ProjectBaseItem* item,
                  CommandType c,  const QStringList& overrideTargets,
                  const MakeVariables& variables )
-    : OutputExecuteJob(builder)
-    , m_builder(builder)
+    : OutputExecuteJob(parent)
     , m_item(item)
     , m_command(c)
     , m_overrideTargets(overrideTargets)

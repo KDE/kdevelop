@@ -38,8 +38,6 @@ class ProcessLineMaker;
 }
 
 class KUrl;
-class KProcess;
-class MakeBuilder;
 
 class MakeJob: public KDevelop::OutputExecuteJob
 {
@@ -62,7 +60,7 @@ public:
         FailedError = FailedShownError
     };
 
-    MakeJob( MakeBuilder* builder, KDevelop::ProjectBaseItem* item,
+    MakeJob( QObject* parent, KDevelop::ProjectBaseItem* item,
              CommandType command, const QStringList& overrideTargets = QStringList(),
              const MakeVariables& variables = MakeVariables() );
     virtual ~MakeJob();
@@ -88,7 +86,6 @@ public:
     virtual QString environmentProfile() const;
 
 private:
-    MakeBuilder* m_builder;
     KDevelop::ProjectBaseItem* m_item;
     CommandType m_command;
     QStringList m_overrideTargets;
