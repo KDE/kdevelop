@@ -47,8 +47,6 @@ void CMakeAstTest::testAddDefinitionsBadParse_data()
 
 }
 
-
-
 void CMakeAstTest::testAddDependenciesGoodParse()
 {
     QFETCH( CMakeFunctionDesc, function );
@@ -101,7 +99,6 @@ void CMakeAstTest::testAddDependenciesBadParse_data()
     QTest::newRow( "one arg" ) << func2;
     QTest::newRow( "two args. wrong name" ) << func3;
 }
-
 
 void CMakeAstTest::testAddExecutableGoodParse()
 {
@@ -199,15 +196,6 @@ void CMakeAstTest::testAddExecutableBadParse_data()
 
 }
 
-
-
-
-
-
-
-
-
-
 void CMakeAstTest::testAddLibraryGoodParse()
 {
     QFETCH( CMakeFunctionDesc, function );
@@ -272,14 +260,6 @@ void CMakeAstTest::testAddLibraryBadParse_data()
     QTest::newRow( "no args" ) << func2;
     QTest::newRow( "no sources" ) << func3;
 }
-
-
-
-
-
-
-
-
 
 void CMakeAstTest::testAddSubdirectoryGoodParse()
 {
@@ -408,15 +388,6 @@ void CMakeAstTest::testAddTestBadParse_data()
     QTest::newRow( "no command" ) << func4;
 
 }
-
-
-
-
-
-
-
-
-
 
 void CMakeAstTest::testAuxSourceDirectoryGoodParse()
 {
@@ -549,15 +520,6 @@ void CMakeAstTest::testBuildCommandBadParse_data()
     QTest::newRow( "bad wrong name" ) << func2;
     QTest::newRow( "bad not enough args" ) << func3;
 }
-
-
-
-
-
-
-
-
-
 
 void CMakeAstTest::testBuildNameGoodParse()
 {
@@ -813,7 +775,6 @@ void CMakeAstTest::testConfigureFileBadParse_data()
     QTest::newRow( "bad no args" ) << func3;
 }
 
-
 void CMakeAstTest::testCustomCommandGoodParse()
 {
     QFETCH( CMakeFunctionDesc, function );
@@ -1061,15 +1022,6 @@ void CMakeAstTest::testCreateTestSourcelistBadParse_data()
     QTest::newRow( "bad upper need at least 3 args" ) << func4;
 }
 
-
-
-
-
-
-
-
-
-
 void CMakeAstTest::testEnableLanguageGoodParse()
 {
     QFETCH( CMakeFunctionDesc, function );
@@ -1124,15 +1076,6 @@ void CMakeAstTest::testEnableLanguageBadParse_data()
     QTest::newRow( "too many arguments" ) << func3;
 }
 
-
-
-
-
-
-
-
-
-
 void CMakeAstTest::testEnableTestingGoodParse()
 {
     QFETCH( CMakeFunctionDesc, function );
@@ -1177,15 +1120,6 @@ void CMakeAstTest::testEnableTestingBadParse_data()
     QTest::newRow( "bad has args" ) << func2;
 
 }
-
-
-
-
-
-
-
-
-
 
 void CMakeAstTest::testExecProgramGoodParse()
 {
@@ -1247,13 +1181,6 @@ void CMakeAstTest::testExecProgramBadParse_data()
     QTest::newRow( "bad 1" ) << func1;
     QTest::newRow( "bad 2" ) << func2;
 }
-
-
-
-
-
-
-
 
 #define TDD_TODO QSKIP("No data available yet", SkipSingle)
 #define TDD_TOIMPL QSKIP("Command not implemented yet", SkipSingle)
@@ -1359,15 +1286,6 @@ void CMakeAstTest::testExportBadParse_data()
     QTest::newRow("no args") << funcs[4];
 }
 
-
-
-
-
-
-
-
-
-
 void CMakeAstTest::testExportLibraryDepsGoodParse()
 {
     QFETCH( CMakeFunctionDesc, function );
@@ -1419,15 +1337,6 @@ void CMakeAstTest::testExportLibraryDepsBadParse_data()
     QTest::newRow( "bad 1" ) << func1;
     QTest::newRow( "bad 2" ) << func2;
 }
-
-
-
-
-
-
-
-
-
 
 void CMakeAstTest::testFileGoodParse()
 {
@@ -1483,7 +1392,6 @@ void CMakeAstTest::testFileGoodParse_data()
 
     //get the platform native path
     args[12] << "TO_NATIVE_PATH" << "/path/to/file.cpp" << "MY_NATIVE_PATH";
-
 
     QTest::addColumn<CMakeFunctionDesc>( "function" );
 
@@ -1572,7 +1480,7 @@ void CMakeAstTest::testFileBadParse_data()
     args[32] << "to_native_path" << "/path/to/file.cpp" << "MY_VAR"; //uppercase required
     
     args[34] << "TO_NATIVE_PATH" << "/path/to/file.cpp" << "MY_VAR"; //correct args. wrong name
-    
+
     QTest::addColumn<CMakeFunctionDesc>( "function" );
 
     for ( int i = 0; i < NUM_TESTDATA; i++)
@@ -1582,15 +1490,6 @@ void CMakeAstTest::testFileBadParse_data()
     }
 
 }
-
-
-
-
-
-
-
-
-
 
 void CMakeAstTest::testFindFileGoodParse()
 {
@@ -1623,15 +1522,6 @@ void CMakeAstTest::testFindFileBadParse()
 void CMakeAstTest::testFindFileBadParse_data()
 {
 }
-
-
-
-
-
-
-
-
-
 
 void CMakeAstTest::testFindLibraryGoodParse()
 {
@@ -1673,15 +1563,6 @@ void CMakeAstTest::testFindLibraryBadParse_data()
     QTest::newRow("findlib with name") << l;
 }
 
-
-
-
-
-
-
-
-
-
 void CMakeAstTest::testFindPackageGoodParse()
 {
     QFETCH( CMakeFunctionDesc, function );
@@ -1713,15 +1594,6 @@ void CMakeAstTest::testFindPackageBadParse_data()
 {
 }
 
-
-
-
-
-
-
-
-
-
 void CMakeAstTest::testFindPathGoodParse()
 {
     TDD_TODO;
@@ -1747,15 +1619,6 @@ void CMakeAstTest::testFindPathBadParse()
 void CMakeAstTest::testFindPathBadParse_data()
 {
 }
-
-
-
-
-
-
-
-
-
 
 void CMakeAstTest::testFindProgramGoodParse()
 {
@@ -1809,15 +1672,6 @@ void CMakeAstTest::testFindProgramBadParse_data()
     QTest::newRow("no names") << l;
 }
 
-
-
-
-
-
-
-
-
-
 void CMakeAstTest::testFltkWrapUiGoodParse()
 {
     TDD_TODO;
@@ -1843,15 +1697,6 @@ void CMakeAstTest::testFltkWrapUiBadParse()
 void CMakeAstTest::testFltkWrapUiBadParse_data()
 {
 }
-
-
-
-
-
-
-
-
-
 
 void CMakeAstTest::testForeachGoodParse()
 {
@@ -1879,16 +1724,6 @@ void CMakeAstTest::testForeachBadParse_data()
 {
 }
 
-
-
-
-
-
-
-
-
-
-
 void CMakeAstTest::testGetCMakePropertyGoodParse()
 {
     TDD_TODO;
@@ -1914,15 +1749,6 @@ void CMakeAstTest::testGetCMakePropertyBadParse()
 void CMakeAstTest::testGetCMakePropertyBadParse_data()
 {
 }
-
-
-
-
-
-
-
-
-
 
 void CMakeAstTest::testGetDirPropertyGoodParse()
 {
@@ -1950,15 +1776,6 @@ void CMakeAstTest::testGetDirPropertyBadParse_data()
 {
 }
 
-
-
-
-
-
-
-
-
-
 void CMakeAstTest::testGetFilenameComponentGoodParse()
 {
     TDD_TODO;
@@ -1984,15 +1801,6 @@ void CMakeAstTest::testGetFilenameComponentBadParse()
 void CMakeAstTest::testGetFilenameComponentBadParse_data()
 {
 }
-
-
-
-
-
-
-
-
-
 
 void CMakeAstTest::testGetSourceFilePropGoodParse()
 {
@@ -2020,15 +1828,6 @@ void CMakeAstTest::testGetSourceFilePropBadParse_data()
 {
 }
 
-
-
-
-
-
-
-
-
-
 void CMakeAstTest::testGetTargetPropGoodParse()
 {
     TDD_TODO;
@@ -2055,15 +1854,6 @@ void CMakeAstTest::testGetTargetPropBadParse_data()
 {
 }
 
-
-
-
-
-
-
-
-
-
 void CMakeAstTest::testGetTestPropGoodParse()
 {
     TDD_TODO;
@@ -2089,15 +1879,6 @@ void CMakeAstTest::testGetTestPropBadParse()
 void CMakeAstTest::testGetTestPropBadParse_data()
 {
 }
-
-
-
-
-
-
-
-
-
 
 void CMakeAstTest::testIfGoodParse()
 {
@@ -2175,15 +1956,6 @@ void CMakeAstTest::testIfBadParse_data()
     QTest::newRow("else with arguments") << elseWithArgs;
 }
 
-
-
-
-
-
-
-
-
-
 void CMakeAstTest::testIncludeGoodParse()
 {
     QFETCH( CMakeFunctionDesc, function );
@@ -2243,15 +2015,6 @@ void CMakeAstTest::testIncludeBadParse_data()
 
 }
 
-
-
-
-
-
-
-
-
-
 void CMakeAstTest::testIncludeDirectoriesGoodParse()
 {
     QFETCH( CMakeFunctionDesc, function );
@@ -2294,15 +2057,6 @@ void CMakeAstTest::testIncludeDirectoriesBadParse_data()
     
 }
 
-
-
-
-
-
-
-
-
-
 void CMakeAstTest::testIncludeExternalMsProjectGoodParse()
 {
     TDD_TODO;
@@ -2328,15 +2082,6 @@ void CMakeAstTest::testIncludeExternalMsProjectBadParse()
 void CMakeAstTest::testIncludeExternalMsProjectBadParse_data()
 {
 }
-
-
-
-
-
-
-
-
-
 
 void CMakeAstTest::testIncludeRegularExpressionGoodParse()
 {
@@ -2364,15 +2109,6 @@ void CMakeAstTest::testIncludeRegularExpressionBadParse_data()
 {
 }
 
-
-
-
-
-
-
-
-
-
 void CMakeAstTest::testInstallGoodParse()
 {
     TDD_TODO;
@@ -2398,15 +2134,6 @@ void CMakeAstTest::testInstallBadParse()
 void CMakeAstTest::testInstallBadParse_data()
 {
 }
-
-
-
-
-
-
-
-
-
 
 void CMakeAstTest::testInstallFilesGoodParse()
 {
@@ -2434,15 +2161,6 @@ void CMakeAstTest::testInstallFilesBadParse_data()
 {
 }
 
-
-
-
-
-
-
-
-
-
 void CMakeAstTest::testInstallProgramsGoodParse()
 {
     TDD_TODO;
@@ -2468,15 +2186,6 @@ void CMakeAstTest::testInstallProgramsBadParse()
 void CMakeAstTest::testInstallProgramsBadParse_data()
 {
 }
-
-
-
-
-
-
-
-
-
 
 void CMakeAstTest::testInstallTargetsGoodParse()
 {
@@ -2504,15 +2213,6 @@ void CMakeAstTest::testInstallTargetsBadParse_data()
 {
 }
 
-
-
-
-
-
-
-
-
-
 void CMakeAstTest::testLinkDirectoriesGoodParse()
 {
     TDD_TODO;
@@ -2538,15 +2238,6 @@ void CMakeAstTest::testLinkDirectoriesBadParse()
 void CMakeAstTest::testLinkDirectoriesBadParse_data()
 {
 }
-
-
-
-
-
-
-
-
-
 
 void CMakeAstTest::testLinkLibrariesGoodParse()
 {
@@ -2574,15 +2265,6 @@ void CMakeAstTest::testLinkLibrariesBadParse_data()
 {
 }
 
-
-
-
-
-
-
-
-
-
 void CMakeAstTest::testListGoodParse()
 {
     TDD_TODO;
@@ -2608,15 +2290,6 @@ void CMakeAstTest::testListBadParse()
 void CMakeAstTest::testListBadParse_data()
 {
 }
-
-
-
-
-
-
-
-
-
 
 void CMakeAstTest::testLoadCacheGoodParse()
 {
@@ -2644,15 +2317,6 @@ void CMakeAstTest::testLoadCacheBadParse_data()
 {
 }
 
-
-
-
-
-
-
-
-
-
 void CMakeAstTest::testLoadCommandGoodParse()
 {
     TDD_TODO;
@@ -2678,15 +2342,6 @@ void CMakeAstTest::testLoadCommandBadParse()
 void CMakeAstTest::testLoadCommandBadParse_data()
 {
 }
-
-
-
-
-
-
-
-
-
 
 void CMakeAstTest::testMacroGoodParse()
 {
@@ -2792,15 +2447,6 @@ void CMakeAstTest::testFunctionBadParse_data()
     QTest::newRow( "bad wrong name" ) << func2;
 }
 
-
-
-
-
-
-
-
-
-
 void CMakeAstTest::testMakeDirectoryGoodParse()
 {
     TDD_TODO;
@@ -2826,15 +2472,6 @@ void CMakeAstTest::testMakeDirectoryBadParse()
 void CMakeAstTest::testMakeDirectoryBadParse_data()
 {
 }
-
-
-
-
-
-
-
-
-
 
 void CMakeAstTest::testMarkAsAdvancedGoodParse()
 {
@@ -2882,15 +2519,6 @@ void CMakeAstTest::testMarkAsAdvancedBadParse_data()
     l.addArguments(QStringList() << "CLEAR");
     QTest::newRow("a clear mark_as_advanced without parameters") << l;
 }
-
-
-
-
-
-
-
-
-
 
 void CMakeAstTest::testMathGoodParse()
 {
@@ -2963,16 +2591,6 @@ void CMakeAstTest::testMathBadParse_data()
     QTest::newRow("multiarg expression") << f1;
 }
 
-
-
-
-
-
-
-
-
-
-
 void CMakeAstTest::testMessageGoodParse()
 {
     TDD_TODO;
@@ -2998,15 +2616,6 @@ void CMakeAstTest::testMessageBadParse()
 void CMakeAstTest::testMessageBadParse_data()
 {
 }
-
-
-
-
-
-
-
-
-
 
 void CMakeAstTest::testOptionGoodParse()
 {
@@ -3034,15 +2643,6 @@ void CMakeAstTest::testOptionBadParse_data()
 {
 }
 
-
-
-
-
-
-
-
-
-
 void CMakeAstTest::testOutputRequiredFilesGoodParse()
 {
     TDD_TODO;
@@ -3068,15 +2668,6 @@ void CMakeAstTest::testOutputRequiredFilesBadParse()
 void CMakeAstTest::testOutputRequiredFilesBadParse_data()
 {
 }
-
-
-
-
-
-
-
-
-
 
 void CMakeAstTest::testProjectGoodParse()
 {
@@ -3142,15 +2733,6 @@ void CMakeAstTest::testProjectBadParse_data()
     QTest::newRow("wrong lang args") << func3;
 }
 
-
-
-
-
-
-
-
-
-
 void CMakeAstTest::testQtWrapCppGoodParse()
 {
     TDD_TODO;
@@ -3176,15 +2758,6 @@ void CMakeAstTest::testQtWrapCppBadParse()
 void CMakeAstTest::testQtWrapCppBadParse_data()
 {
 }
-
-
-
-
-
-
-
-
-
 
 void CMakeAstTest::testQtWrapUiGoodParse()
 {
@@ -3212,15 +2785,6 @@ void CMakeAstTest::testQtWrapUiBadParse_data()
 {
 }
 
-
-
-
-
-
-
-
-
-
 void CMakeAstTest::testRemoveGoodParse()
 {
     TDD_TODO;
@@ -3246,15 +2810,6 @@ void CMakeAstTest::testRemoveBadParse()
 void CMakeAstTest::testRemoveBadParse_data()
 {
 }
-
-
-
-
-
-
-
-
-
 
 void CMakeAstTest::testRemoveDefinitionsGoodParse()
 {
@@ -3282,15 +2837,6 @@ void CMakeAstTest::testRemoveDefinitionsBadParse_data()
 {
 }
 
-
-
-
-
-
-
-
-
-
 void CMakeAstTest::testReturnGoodParse()
 {
     TDD_TODO;
@@ -3317,15 +2863,6 @@ void CMakeAstTest::testReturnBadParse_data()
 {
 }
 
-
-
-
-
-
-
-
-
-
 void CMakeAstTest::testSeparateArgumentsGoodParse()
 {
     TDD_TODO;
@@ -3351,15 +2888,6 @@ void CMakeAstTest::testSeparateArgumentsBadParse()
 void CMakeAstTest::testSeparateArgumentsBadParse_data()
 {
 }
-
-
-
-
-
-
-
-
-
 
 void CMakeAstTest::testSetGoodParse()
 {
@@ -3436,10 +2964,6 @@ void CMakeAstTest::testSetBadParse_data()
 
 }
 
-
-
-
-
 void CMakeAstTest::testSetPropertyGoodParse()
 {
     TDD_TODO;
@@ -3465,12 +2989,6 @@ void CMakeAstTest::testSetPropertyBadParse()
 void CMakeAstTest::testSetPropertyBadParse_data()
 {
 }
-
-
-
-
-
-
 
 void CMakeAstTest::testGetPropertyGoodParse()
 {
@@ -3507,12 +3025,6 @@ void CMakeAstTest::testGetPropertyBadParse_data()
 {
 }
 
-
-
-
-
-
-
 void CMakeAstTest::testSetDirectoryPropsGoodParse()
 {
     TDD_TODO;
@@ -3538,15 +3050,6 @@ void CMakeAstTest::testSetDirectoryPropsBadParse()
 void CMakeAstTest::testSetDirectoryPropsBadParse_data()
 {
 }
-
-
-
-
-
-
-
-
-
 
 void CMakeAstTest::testSetSourceFilesPropsGoodParse()
 {
@@ -3574,15 +3077,6 @@ void CMakeAstTest::testSetSourceFilesPropsBadParse_data()
 {
 }
 
-
-
-
-
-
-
-
-
-
 void CMakeAstTest::testSetTargetPropsGoodParse()
 {
     TDD_TODO;
@@ -3608,15 +3102,6 @@ void CMakeAstTest::testSetTargetPropsBadParse()
 void CMakeAstTest::testSetTargetPropsBadParse_data()
 {
 }
-
-
-
-
-
-
-
-
-
 
 void CMakeAstTest::testSetTestsPropsGoodParse()
 {
@@ -3644,15 +3129,6 @@ void CMakeAstTest::testSetTestsPropsBadParse_data()
 {
 }
 
-
-
-
-
-
-
-
-
-
 void CMakeAstTest::testSiteNameGoodParse()
 {
     TDD_TODO;
@@ -3679,15 +3155,6 @@ void CMakeAstTest::testSiteNameBadParse_data()
 {
 }
 
-
-
-
-
-
-
-
-
-
 void CMakeAstTest::testSourceGroupGoodParse()
 {
     TDD_TODO;
@@ -3713,15 +3180,6 @@ void CMakeAstTest::testSourceGroupBadParse()
 void CMakeAstTest::testSourceGroupBadParse_data()
 {
 }
-
-
-
-
-
-
-
-
-
 
 void CMakeAstTest::testStringGoodParse()
 {
@@ -3763,7 +3221,6 @@ void CMakeAstTest::testStringBadParse_data()
     QTest::newRow( "few arguments" ) << CMakeFunctionDesc("string", QString("TOLOWER PROJECT_PRODUCT_DIR").split(" "));
 }
 
-
 void CMakeAstTest::testSubdirDependsGoodParse()
 {
     TDD_TODO;
@@ -3790,15 +3247,6 @@ void CMakeAstTest::testSubdirDependsBadParse_data()
 {
 }
 
-
-
-
-
-
-
-
-
-
 void CMakeAstTest::testSubdirsGoodParse()
 {
     TDD_TODO;
@@ -3824,15 +3272,6 @@ void CMakeAstTest::testSubdirsBadParse()
 void CMakeAstTest::testSubdirsBadParse_data()
 {
 }
-
-
-
-
-
-
-
-
-
 
 void CMakeAstTest::testTargetLinkLibrariesGoodParse()
 {
@@ -3915,8 +3354,6 @@ void CMakeAstTest::testTargetLinkLibrariesMembers()
     delete ast;
 }
 
-
-
 void CMakeAstTest::testTryCompileGoodParse()
 {
     QFETCH( CMakeFunctionDesc, function );
@@ -3961,15 +3398,6 @@ void CMakeAstTest::testTryCompileBadParse_data()
 
 }
 
-
-
-
-
-
-
-
-
-
 void CMakeAstTest::testTryRunGoodParse()
 {
     TDD_TODO;
@@ -3995,15 +3423,6 @@ void CMakeAstTest::testTryRunBadParse()
 void CMakeAstTest::testTryRunBadParse_data()
 {
 }
-
-
-
-
-
-
-
-
-
 
 void CMakeAstTest::testUnsetGoodParse()
 {
@@ -4045,15 +3464,6 @@ void CMakeAstTest::testUnsetBadParse_data()
 {
 }
 
-
-
-
-
-
-
-
-
-
 void CMakeAstTest::testUseMangledMesaGoodParse()
 {
     TDD_TODO;
@@ -4079,15 +3489,6 @@ void CMakeAstTest::testUseMangledMesaBadParse()
 void CMakeAstTest::testUseMangledMesaBadParse_data()
 {
 }
-
-
-
-
-
-
-
-
-
 
 void CMakeAstTest::testUtilitySourceGoodParse()
 {
@@ -4115,15 +3516,6 @@ void CMakeAstTest::testUtilitySourceBadParse_data()
 {
 }
 
-
-
-
-
-
-
-
-
-
 void CMakeAstTest::testVariableRequiresGoodParse()
 {
     TDD_TODO;
@@ -4150,15 +3542,6 @@ void CMakeAstTest::testVariableRequiresBadParse_data()
 {
 }
 
-
-
-
-
-
-
-
-
-
 void CMakeAstTest::testVtkMakeInstantiatorGoodParse()
 {
     TDD_TODO;
@@ -4184,15 +3567,6 @@ void CMakeAstTest::testVtkMakeInstantiatorBadParse()
 void CMakeAstTest::testVtkMakeInstantiatorBadParse_data()
 {
 }
-
-
-
-
-
-
-
-
-
 
 void CMakeAstTest::testVtkWrapJavaGoodParse()
 {
@@ -4264,15 +3638,6 @@ void CMakeAstTest::testVtkWrapJavaBadParse_data()
     }
 }
 
-
-
-
-
-
-
-
-
-
 void CMakeAstTest::testVtkWrapPythonGoodParse()
 {
     TDD_TOIMPL;
@@ -4342,15 +3707,6 @@ void CMakeAstTest::testVtkWrapPythonBadParse_data()
         QTest::newRow( qPrintable(QString::number(i)) ) << funcs[i];
     }
 }
-
-
-
-
-
-
-
-
-
 
 void CMakeAstTest::testVtkWrapTclGoodParse()
 {
@@ -4445,15 +3801,6 @@ void CMakeAstTest::testVtkWrapTclBadParse_data()
     }
 }
 
-
-
-
-
-
-
-
-
-
 void CMakeAstTest::testWhileGoodParse()
 {
     TDD_TODO;
@@ -4479,7 +3826,6 @@ void CMakeAstTest::testWhileBadParse()
 void CMakeAstTest::testWhileBadParse_data()
 {
 }
-
 
 void CMakeAstTest::testWriteFileGoodParse()
 {
@@ -4549,5 +3895,3 @@ void CMakeAstTest::testWriteFileBadParse_data()
         QTest::newRow( qPrintable(QString("%1. %2").arg(i).arg(args[i].join(" "))) ) << funcs[i];
     }
 }
-
-
