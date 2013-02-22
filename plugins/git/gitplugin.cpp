@@ -31,6 +31,7 @@
 #include <QDir>
 #include <QDateTime>
 #include <QFileSystemWatcher>
+#include <QTimer>
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
@@ -1348,5 +1349,14 @@ void GitPlugin::fileChanged(const QString& file)
     KUrl fileUrl(KUrl::fromPath(file));
     fileUrl = fileUrl.upUrl(); //SMTH/.git/HEAD -> SMTH/.git/
     fileUrl = fileUrl.upUrl(); //SMTH/.git/ -> SMTH/
-    emit repositoryBranchChanged(fileUrl);
+    
+    //We need to delay the emitted signal, otherwise the branch hasn't change yet
+    //and the repository is not functional
+    m_branchesChange.append(fileUrl);
+    QTimer::singleShot(1000, this, SLOT(delayedBranchChanged()));
+}
+
+void GitPlugin::delayedBranchChanged()
+{
+    emit repositoryBranchChanged(m_branchesChange.takeFirst());
 }

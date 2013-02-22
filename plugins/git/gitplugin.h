@@ -170,6 +170,7 @@ private slots:
     void ctxStashManager();
 
     void fileChanged(const QString& file);
+    void delayedBranchChanged();
 
 signals:
     void repositoryBranchChanged(const KUrl& repository);
@@ -195,6 +196,7 @@ private:
     bool m_hasError;
     QString m_errorDescription;
     KDirWatch* m_watcher;
+    KUrl::List m_branchesChange;
 };
 
 QVariant runSynchronously(KDevelop::VcsJob* job);
