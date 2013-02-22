@@ -11,10 +11,7 @@ Name[es]=Básica
 Name[et]=Lihtne
 Name[fi]=Yksinkertainen
 Name[fr]=De base
-<<<<<<< HEAD
 Name[ga]=Bunúsach
-=======
->>>>>>> 1.5
 Name[gl]=Básico
 Name[hu]=Alap
 Name[it]=Base
@@ -30,6 +27,9 @@ Name[uk]=Базовий
 Name[x-test]=xxBasicxx
 Name[zh_CN]=基本
 Name[zh_TW]=基本
+<<<<<<< HEAD
+=======
+>>>>>>> 1.5
 Comment=Basic C++ Class
 Comment[ca]=Classe C++ bàsica
 Comment[ca@valencia]=Classe C++ bàsica
@@ -64,6 +64,7 @@ Name=Header
 Name[ca]=Capçalera
 Name[ca@valencia]=Capçalera
 Name[da]=Header
+Name[de]=Header
 Name[el]=Header
 Name[es]=Cabecera
 Name[et]=Päis
