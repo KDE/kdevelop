@@ -77,9 +77,10 @@ void KDEProjectsReader::downloadFinished(QNetworkReply* reply)
                 m_current.push(Source());
 
                 if (name == "project")
-		  m_current.top().type = Source::Project;
+                    m_current.top().type = Source::Project;
                 else if (name == "module")
-		  m_current.top().type = Source::Module;
+                    m_current.top().type = Source::Module;
+                m_current.top().identifier = xml.attributes().value("identifier").toString();
             }
             else if(!m_current.isEmpty())
             {

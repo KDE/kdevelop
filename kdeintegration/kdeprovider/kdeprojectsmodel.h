@@ -39,6 +39,7 @@ struct Source
     SourceType type;
     QString name;
     QString icon;
+    QString identifier;
     
     /** urls for protocol */
     QVariantMap m_urls;
@@ -59,7 +60,7 @@ class KDEProjectsModel : public QStandardItemModel
     Q_OBJECT
     public:
         
-        enum Role { VcsLocationRole = Qt::UserRole+1 };
+        enum Role { VcsLocationRole = Qt::UserRole+1, IdentifierRole };
         
         explicit KDEProjectsModel(QObject* parent = 0);
 };

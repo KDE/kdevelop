@@ -83,10 +83,15 @@ KDEProviderWidget::KDEProviderWidget(QWidget* parent)
     filterLine->setProxy(proxyModel);
 }
 
-VcsLocation extractLocation(const QVariantMap& urls)
+VcsLocation extractLocation(const QModelIndex& pos)
 {
     QString gitUrl=KDEProviderSettings::self()->gitProtocol();
-    return VcsLocation(urls[gitUrl].toUrl());
+    if(gitUrl=="kde:") {
+        return VcsLocation(KUrl("kde:"+pos.data(KDEProjectsModel::IdentifierRole).toString()));
+    } else {
+        QMap<QString, QVariant> urls = pos.data(KDEProjectsModel::VcsLocationRole).toMap();
+        return VcsLocation(urls[gitUrl].toUrl());
+    }
 }
 
 VcsJob* KDEProviderWidget::createWorkingCopy(const KUrl& destinationDirectory)
@@ -101,7 +106,7 @@ VcsJob* KDEProviderWidget::createWorkingCopy(const KUrl& destinationDirectory)
         return 0;
     }
     IBasicVersionControl* vcIface = plugin->extension<IBasicVersionControl>();
-    VcsJob* ret = vcIface->createWorkingCopy(extractLocation(pos.data(KDEProjectsModel::VcsLocationRole).toMap()), destinationDirectory);
+    VcsJob* ret = vcIface->createWorkingCopy(extractLocation(pos), destinationDirectory);
     
     return ret;
 }
