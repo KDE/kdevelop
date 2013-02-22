@@ -62,17 +62,6 @@ KDEProviderWidget::KDEProviderWidget(QWidget* parent)
     layout()->addItem(topLayout);
     layout()->addWidget(m_projects);
     
-    m_dialog = new KConfigDialog(this, "settings", KDEProviderSettings::self());
-    m_dialog->setFaceType(KPageDialog::Auto);
-    QWidget* page = new QWidget(m_dialog);
-
-    Ui::KDEConfig configUi;
-    configUi.setupUi(page);
-    configUi.kcfg_gitProtocol->setProperty("kcfg_property", QByteArray("currentText"));
-    
-    m_dialog->addPage(page, i18n("General") );
-    connect(m_dialog, SIGNAL(settingsChanged(QString)), this, SLOT(loadSettings()));
-    
     QSortFilterProxyModel* proxyModel = new QSortFilterProxyModel(this);
     proxyModel->setSourceModel(model);
     proxyModel->setDynamicSortFilter(true);
@@ -113,10 +102,21 @@ bool KDEProviderWidget::isCorrect() const
 
 void KDEProviderWidget::showSettings()
 {
-    if(KConfigDialog::showDialog("kdesettings"))
-        return;
+    KConfigDialog* dialog = new KConfigDialog(this, "settings", KDEProviderSettings::self());
+    dialog->setFaceType(KPageDialog::Auto);
+    QWidget* page = new QWidget(dialog);
+
+    Ui::KDEConfig configUi;
+    configUi.setupUi(page);
+    configUi.kcfg_gitProtocol->setProperty("kcfg_property", QByteArray("currentText"));
+    int idx = configUi.kcfg_gitProtocol->findText(KDEProviderSettings::self()->gitProtocol());
+    if(idx>=0) {
+        configUi.kcfg_gitProtocol->setCurrentIndex(idx);
+    }
     
-    m_dialog->show();
+    dialog->button(KDialog::Default)->setVisible(false);
+    dialog->addPage(page, i18n("General") );
+    dialog->show();
 }
 
 void KDEProviderWidget::projectIndexChanged(const QModelIndex& currentIndex)
