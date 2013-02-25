@@ -49,10 +49,9 @@ add_subdirectory(app_templates)
 add_subdirectory(documentation)
 add_subdirectory(kdeintegration)
 add_subdirectory(utils)
-add_subdirectory(doc)
 add_subdirectory(file_templates)
 
-#macro_optional_add_subdirectory(doc)
+macro_optional_add_subdirectory(doc)
 
 macro_display_feature_log()
 
