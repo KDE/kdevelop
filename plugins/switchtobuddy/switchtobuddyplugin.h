@@ -1,6 +1,6 @@
 /*
  * This file is part of KDevelop
- * Copyright 2012 AndrÃ© Stein <andre.stein@rwth-aachen.de>
+ * Copyright 2012 André Stein <andre.stein@rwth-aachen.de>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as

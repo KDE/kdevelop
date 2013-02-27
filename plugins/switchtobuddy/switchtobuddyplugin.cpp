@@ -1,6 +1,6 @@
 /*
  * This file is part of KDevelop
- * Copyright 2012 AndrÃ© Stein <andre.stein@rwth-aachen.de>
+ * Copyright 2012 André Stein <andre.stein@rwth-aachen.de>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -42,7 +42,7 @@ K_EXPORT_PLUGIN(SwitchToBuddyPluginFactory(KAboutData(
                                            , "0.1"
                                            , ki18n("Switch to buddy document in code editor.")
                                            , KAboutData::License_GPL)
-                                           .addAuthor(ki18n("AndrÃ© Stein")
+                                           .addAuthor(ki18n("André Stein")
                                            , ki18n("Author")
                                            , "andre.stein@rwth-aachen.de"
                                            , "http://steinsoft.net")
