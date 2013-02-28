@@ -86,7 +86,7 @@ ContextMenuExtension SwitchToBuddyPlugin::contextMenuExtension(Context* context)
             continue;
         }
 
-        QAction* action = new QAction(i18n("Switch to '%1'").arg(url.fileName()), this);
+        QAction* action = new QAction(i18n("Switch to '%1'", url.fileName()), this);
         connect(action, SIGNAL(triggered()), m_signalMapper, SLOT(map()), Qt::QueuedConnection);
         m_signalMapper->setMapping(action, url.toLocalFile());
         connect(m_signalMapper, SIGNAL(mapped(const QString&)),
