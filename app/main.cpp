@@ -453,7 +453,7 @@ int main( int argc, char *argv[] )
             }
             if (launcher.second.isEmpty()) {
                 QTextStream qerr(stderr);
-                qerr << endl << i18n("Cannot find launcher %1").arg(args->getOption("debug")) << endl;
+                qerr << endl << i18n("Cannot find launcher %1", args->getOption("debug")) << endl;
                 return 1;
             }
             KDevelop::ILaunchConfiguration* ilaunch = core->runController()->createLaunchConfiguration(type, launcher, 0, launchName);
@@ -492,7 +492,7 @@ int main( int argc, char *argv[] )
             }
 
             if(!core->documentController()->openDocument(f, line))
-                kWarning() << i18n("Could not open %1") << args->arg(i);
+                kWarning() << i18n("Could not open %1", args->arg(i));
         }
         args->clear();
     }
