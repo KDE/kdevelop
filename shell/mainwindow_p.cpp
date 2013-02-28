@@ -236,7 +236,7 @@ void MainWindowPrivate::setupActions()
     action = KStandardAction::preferences( this, SLOT(settingsDialog()),
                                       actionCollection());
     action->setToolTip( text );
-    action->setWhatsThis( QString( "%1" ).arg( i18n( "Lets you customize %1.", app ) ) );
+    action->setWhatsThis( i18n( "Lets you customize %1.", app ) );
 
     action = actionCollection()->addAction( "show_editorconfig", this, SLOT(showEditorConfig()) );
     action->setIcon( KIcon("preferences-other") );
