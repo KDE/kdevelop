@@ -205,7 +205,7 @@ void ProjectSourcePage::reevaluateCorrection()
     if(!correct)
         setStatus(i18n("You need to specify a valid or nonexistent directory to check out a project"));
     else if(!m_ui->get->isEnabled() && m_ui->workingDir->isEnabled())
-        setStatus(i18n("You need to specify a valid location for the project"));
+        setStatus(i18n("You need to specify a valid project location"));
     else
         validStatus();
 }

@@ -180,9 +180,13 @@ KDevelop::ContextMenuExtension ProblemReporterPlugin::contextMenuExtension(KDeve
     }
     
     if(!actions.isEmpty()) {
-      QString text = i18n("Solve Problem");
-      if(!title.isEmpty())
+      QString text;
+      if(title.isEmpty())
+        text = i18n("Solve Problem");
+      else {
+        title.remove(QRegExp("<[^>]+>"));
         text = i18n("Solve: %1", title);
+      }
       
       QAction* menuAction = new QAction(text, 0);
       QMenu* menu(new QMenu(text, 0));
