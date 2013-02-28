@@ -258,7 +258,7 @@ void GrepJob::testFinishState(KJob *job)
     if(!job->error())
     {
         if (!m_errorMessage.isEmpty()) {
-            emit showErrorMessage(i18n("Failed: %1").arg(m_errorMessage));
+            emit showErrorMessage(i18n("Failed: %1", m_errorMessage));
         }
         else if (!m_findSomething) {
             emit showMessage(this, i18n("No results found"));
