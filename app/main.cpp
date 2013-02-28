@@ -316,6 +316,9 @@ int main( int argc, char *argv[] )
         // session doesn't exist, we can create it
     } else if ( args->isSet("open-session") ) {
         session = args->getOption("open-session");
+        //If there is a session and a project with the same name, always open the session
+        //regardless of the order encountered
+        QString projectAsSession;
         bool found = false;
         foreach(const KDevelop::SessionInfo& si, KDevelop::SessionController::availableSessionInfo())
         {
@@ -323,11 +326,24 @@ int main( int argc, char *argv[] )
                 found = true;
                 break;
             }
+            else if (projectAsSession.isEmpty()) {
+                foreach(const KUrl& k, si.projects)
+                {
+                    QString fn(k.fileName());
+                    fn = fn.left(fn.indexOf('.'));
+                    if ( session == fn )
+                        projectAsSession = si.uuid;
+                }
+            }
         }
         if ( !found ) {
-            QTextStream qerr(stderr);
-            qerr << endl << i18n("Cannot open unknown session %1. See --sessions switch for available sessions or use -cs to create a new one.", session) << endl;
-            return 1;
+            if ( projectAsSession.isEmpty() ) {
+                QTextStream qerr(stderr);
+                qerr << endl << i18n("Cannot open unknown session %1. See --sessions switch for available sessions or use -cs to create a new one.", session) << endl;
+                return 1;
+            }
+            else
+                session = projectAsSession;
         }
     }
 
