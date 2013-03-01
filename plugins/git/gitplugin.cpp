@@ -1064,32 +1064,38 @@ void GitPlugin::parseGitStatusOutput_old(DVcsJob* job)
 void GitPlugin::parseGitStatusOutput(DVcsJob* job)
 {
     QStringList outputLines = job->output().split('\n', QString::SkipEmptyParts);
-    const KUrl workingDir = job->directory().absolutePath();
-    const KUrl dotGit = dotGitDirectory(workingDir).absolutePath();
+    KUrl workingDir = job->directory().absolutePath();
+    KUrl dotGit = dotGitDirectory(workingDir).absolutePath();;
+    dotGit.adjustPath(KUrl::AddTrailingSlash);
+    workingDir.adjustPath(KUrl::AddTrailingSlash);
     
     QVariantList statuses;
-    QList<KUrl> processedFiles;
+    KUrl::List processedFiles;
     
     foreach(const QString& line, outputLines) {
         //every line is 2 chars for the status, 1 space then the file desc
         QString curr=line.right(line.size()-3);
         QString state = line.left(2);
         
-        int arrow = curr.indexOf("-> ");
-        if(arrow>=0)
-            curr = curr.right(curr.size()-arrow-3);
+        int arrow = curr.indexOf(" -> ");
+        if(arrow>=0) {
+            VcsStatusInfo status;
+            status.setUrl(KUrl(dotGit, curr.left(arrow)));
+            status.setState(VcsStatusInfo::ItemDeleted);
+            statuses.append(qVariantFromValue<VcsStatusInfo>(status));
+            processedFiles += status.url();
+            
+            curr = curr.mid(arrow+4);
+        }
         
         if(curr.startsWith('\"') && curr.endsWith('\"')) { //if the path is quoted, unquote
             curr = curr.mid(1, curr.size()-2);
         }
         
-        KUrl fileUrl = dotGit;
-        fileUrl.addPath(curr);
-        processedFiles.append(fileUrl);
-        
         VcsStatusInfo status;
-        status.setUrl(fileUrl);
+        status.setUrl(KUrl(dotGit, curr));
         status.setState(messageToState(state));
+        processedFiles.append(status.url());
         
         kDebug() << "Checking git status for " << line << curr << messageToState(state);
         
@@ -1104,8 +1110,7 @@ void GitPlugin::parseGitStatusOutput(DVcsJob* job)
     //here we add the already up to date files
     QStringList files = getLsFiles(job->directory(), QStringList() << "-c" << "--" << paths, OutputJob::Silent);
     foreach(const QString& file, files) {
-        KUrl fileUrl = workingDir;
-        fileUrl.addPath(file);
+        KUrl fileUrl(workingDir, file);
         
         if(!processedFiles.contains(fileUrl)) {
             VcsStatusInfo status;
