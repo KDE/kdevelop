@@ -160,6 +160,8 @@ void VcsChangesView::setModel(QAbstractItemModel* model)
 
 void VcsChangesView::openSelected(const QModelIndex& index)
 {
+    if(!index.parent().isValid()) //then it's a project
+        return;
     QModelIndex idx = index.sibling(index.row(), 0);
     VcsStatusInfo info = idx.data(ProjectChangesModel::VcsStatusInfoRole).value<VcsStatusInfo>();
     KUrl url = info.url();
