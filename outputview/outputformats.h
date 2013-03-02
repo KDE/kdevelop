@@ -21,9 +21,10 @@ namespace KDevelop
 class ActionFormat
 {
     public:
-        ActionFormat( const QString& _action, const QString& _tool, const QString& regExp, int file );
-        ActionFormat( const QString& _action, int tool, int file, const QString& regExp );
-        QString action;
+        ActionFormat( const char* context, const char* _action, const QString& _tool, const QString& regExp, int file );
+        ActionFormat( const char* context, const char* _action, int tool, int file, const QString& regExp );
+        const char* context; // translation context for action
+        const char* action;  // translated string
         QRegExp expression;
         QString tool;
         int toolGroup;
