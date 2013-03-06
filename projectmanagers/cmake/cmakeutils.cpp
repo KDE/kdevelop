@@ -46,32 +46,32 @@ namespace Config
 {
 namespace Old
 {
-static QString currentBuildDirKey = "CurrentBuildDir";
-static QString currentCMakeBinaryKey = "Current CMake Binary";
-static QString currentBuildTypeKey = "CurrentBuildType";
-static QString currentInstallDirKey = "CurrentInstallDir";
-static QString currentEnvironmentKey = "CurrentEnvironment";
-static QString currentExtraArgumentsKey = "Extra Arguments";
-static QString projectRootRelativeKey = "ProjectRootRelative";
-static QString projectBuildDirs = "BuildDirs";
+static const QString currentBuildDirKey = "CurrentBuildDir";
+static const QString currentCMakeBinaryKey = "Current CMake Binary";
+static const QString currentBuildTypeKey = "CurrentBuildType";
+static const QString currentInstallDirKey = "CurrentInstallDir";
+static const QString currentEnvironmentKey = "CurrentEnvironment";
+static const QString currentExtraArgumentsKey = "Extra Arguments";
+static const QString projectRootRelativeKey = "ProjectRootRelative";
+static const QString projectBuildDirs = "BuildDirs";
 }
 
-static QString buildDirIndexKey = "Current Build Directory Index";
-static QString buildDirOverrideIndexKey = "Temporary Build Directory Index";
-static QString buildDirCountKey = "Build Directory Count";
+static const QString buildDirIndexKey = "Current Build Directory Index";
+static const QString buildDirOverrideIndexKey = "Temporary Build Directory Index";
+static const QString buildDirCountKey = "Build Directory Count";
 
 namespace Specific
 {
-static QString buildDirPathKey = "Build Directory Path";
-static QString cmakeBinKey = "CMake Binary";
-static QString cmakeBuildTypeKey = "Build Type";
-static QString cmakeInstallDirKey = "Install Directory";
-static QString cmakeEnvironmentKey = "Environment Profile";
-static QString cmakeArgumentsKey = "Extra Arguments";
+static const QString buildDirPathKey = "Build Directory Path";
+static const QString cmakeBinKey = "CMake Binary";
+static const QString cmakeBuildTypeKey = "Build Type";
+static const QString cmakeInstallDirKey = "Install Directory";
+static const QString cmakeEnvironmentKey = "Environment Profile";
+static const QString cmakeArgumentsKey = "Extra Arguments";
 }
 
-static QString groupNameBuildDir = "CMake Build Directory %1";
-static QString groupName = "CMake";
+static const QString groupNameBuildDir = "CMake Build Directory %1";
+static const QString groupName = "CMake";
 
 } // namespace Config
 
