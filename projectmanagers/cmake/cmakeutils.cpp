@@ -54,7 +54,6 @@ static QString currentEnvironmentKey = "CurrentEnvironment";
 static QString currentExtraArgumentsKey = "Extra Arguments";
 static QString projectRootRelativeKey = "ProjectRootRelative";
 static QString projectBuildDirs = "BuildDirs";
-static QString cmakeDirectory = "CMakeDir";
 }
 
 static QString buildDirIndexKey = "Current Build Directory Index";
@@ -285,16 +284,6 @@ int currentBuildDirIndex( KDevelop::IProject* project )
 void setCurrentBuildDirIndex( KDevelop::IProject* project, int buildDirIndex )
 {
     writeProjectBaseParameter( project, Config::buildDirIndexKey, QString::number (buildDirIndex) );
-}
-
-KUrl cmakeDirectory( KDevelop::IProject* project )
-{
-    return baseGroup(project).readEntry( Config::Old::cmakeDirectory, QString() );
-}
-
-void setCmakeDirectory( KDevelop::IProject* project, const KUrl& url )
-{
-    writeProjectBaseParameter( project, Config::Old::cmakeDirectory, url.url() );
 }
 
 void setCurrentEnvironment( KDevelop::IProject* project, const QString& environment )

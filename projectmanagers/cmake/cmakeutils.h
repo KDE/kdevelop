@@ -128,16 +128,6 @@ namespace CMake
     KDEVCMAKECOMMON_EXPORT QStringList allBuildDirs(KDevelop::IProject* project);
 
     /**
-     * Returns current CMake modules directory for @p project.
-     */
-    KDEVCMAKECOMMON_EXPORT KUrl cmakeDirectory( KDevelop::IProject* project );
-
-    /**
-     * Sets current CMake modules directory for @p project.
-     */
-    KDEVCMAKECOMMON_EXPORT void setCmakeDirectory( KDevelop::IProject* project, const KUrl& url );
-
-    /**
      * Attempts to migrate the CMake configuration to per-builddir format.
      * Silently returns if the migration has already been performed.
      */

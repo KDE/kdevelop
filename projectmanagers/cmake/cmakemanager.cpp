@@ -533,28 +533,6 @@ KDevelop::ReferencedTopDUContext CMakeManager::initializeProject(CMakeFolderItem
     cachefile.addPath("CMakeCache.txt");
     data->cache=readCache(cachefile);
 
-    KSharedConfig::Ptr cfg = project->projectConfiguration();
-    KConfigGroup group(cfg.data(), "CMake");
-    if(group.hasKey("CMakeDir"))
-    {
-        QStringList l;
-        foreach(const QString &path, group.readEntry("CMakeDir", QStringList()) )
-        {
-            if( QFileInfo(path).exists() )
-            {
-                data->modulePath << path;
-                l << path;
-            }
-        }
-        if( !l.isEmpty() )
-            group.writeEntry("CMakeDir", l);
-        else
-            group.writeEntry("CMakeDir", data->modulePath);
-    }
-    else
-        group.writeEntry("CMakeDir", data->modulePath);
-
-    
     KDevelop::ReferencedTopDUContext buildstrapContext;
     {
         KUrl buildStrapUrl = baseUrl;

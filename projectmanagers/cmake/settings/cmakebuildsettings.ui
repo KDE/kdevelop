@@ -111,23 +111,13 @@
        <enum>QFormLayout::ExpandingFieldsGrow</enum>
       </property>
       <item row="1" column="0">
-       <widget class="QLabel" name="label">
+       <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>CMake Directory</string>
+         <string>Configure Environment</string>
         </property>
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="KUrlRequester" name="cmakeDirectory"/>
-      </item>
-      <item row="3" column="1">
-       <widget class="QCheckBox" name="showInternal">
-        <property name="text">
-         <string>Show Advanced Values</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
          <widget class="KDevelop::EnvironmentSelectionWidget" name="environment">
@@ -147,10 +137,10 @@
         </item>
        </layout>
       </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label_2">
+      <item row="2" column="1">
+       <widget class="QCheckBox" name="showInternal">
         <property name="text">
-         <string>Configure Environment</string>
+         <string>Show Advanced Values</string>
         </property>
        </widget>
       </item>
@@ -164,11 +154,6 @@
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KUrlRequester</class>
-   <extends>QFrame</extends>
-   <header>kurlrequester.h</header>
   </customwidget>
   <customwidget>
    <class>KDevelop::EnvironmentSelectionWidget</class>
