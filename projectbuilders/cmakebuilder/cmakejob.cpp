@@ -48,6 +48,8 @@ CMakeJob::CMakeJob(QObject* parent)
     setFilteringStrategy( OutputModel::CompilerFilter );
     setProperties( NeedWorkingDirectory | PortableMessages | DisplayStderr | IsBuilderHint );
     setToolTitle( i18n("CMake") );
+    setStandardToolView( KDevelop::IOutputView::BuildView );
+    setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
 }
 
 void CMakeJob::start()
@@ -62,9 +64,6 @@ void CMakeJob::start()
     }
 
     CMake::updateConfig( m_project, CMake::currentBuildDirIndex(m_project) );
-
-    setStandardToolView( KDevelop::IOutputView::BuildView );
-    setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
 
     OutputExecuteJob::start();
 }
