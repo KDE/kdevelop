@@ -43,7 +43,7 @@ namespace CMake
      *
      * @returns true if configure should be run, false otherwise
      */
-    KDEVCMAKECOMMON_EXPORT bool checkForNeedingConfigure( KDevelop::ProjectBaseItem* item );
+    KDEVCMAKECOMMON_EXPORT bool checkForNeedingConfigure( KDevelop::IProject* project );
 
     /**
      * @returns the current builddir for the given project or an empty url if none

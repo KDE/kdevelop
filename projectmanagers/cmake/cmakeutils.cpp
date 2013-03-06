@@ -143,16 +143,15 @@ namespace CMake
 {
 
 ///NOTE: when you change this, update @c defaultConfigure in cmakemanagertest.cpp
-bool checkForNeedingConfigure( KDevelop::ProjectBaseItem* item )
+bool checkForNeedingConfigure( KDevelop::IProject* project )
 {
-    KDevelop::IProject* project = item->project();
     KUrl builddir = currentBuildDir(project);
     if( !builddir.isValid() )
     {
         CMakeBuildDirChooser bd;
         
-        KUrl folderUrl=item->project()->folder();
-        QString relative=CMake::projectRootRelative(item->project());
+        KUrl folderUrl=project->folder();
+        QString relative=CMake::projectRootRelative(project);
         folderUrl.cd(relative);
         
         bd.setSourceFolder( folderUrl );

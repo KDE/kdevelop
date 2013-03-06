@@ -653,7 +653,7 @@ KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
 
         KUrl cachefile=buildDirectory(m_rootItem);
         if( cachefile.isEmpty() ) {
-            CMake::checkForNeedingConfigure(m_rootItem);
+            CMake::checkForNeedingConfigure(project);
         }
         cachefile.addPath("CMakeCache.txt");
         

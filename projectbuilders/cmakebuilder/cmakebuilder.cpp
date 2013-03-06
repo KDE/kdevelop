@@ -121,7 +121,7 @@ KJob* CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
             m_deleteWhenDone << it;
         }
         KJob* configure = 0;
-        if( CMake::checkForNeedingConfigure(dom) )
+        if( CMake::checkForNeedingConfigure(dom->project()) )
         {
             kDebug() << "Needing configure, adding item and setting job";
             configure = this->configure(p);
@@ -158,7 +158,7 @@ KJob* CMakeBuilder::clean(KDevelop::ProjectBaseItem *dom)
             item=(KDevelop::ProjectBaseItem*) dom->parent();
         
         KJob* configure = 0;
-        if( CMake::checkForNeedingConfigure(item) )
+        if( CMake::checkForNeedingConfigure(item->project()) )
         {
             configure = this->configure(item->project());
         } else if( CMake::currentBuildDir( item->project() ).isEmpty() ) 
@@ -193,7 +193,7 @@ KJob* CMakeBuilder::install(KDevelop::ProjectBaseItem *dom)
         
 
         KJob* configure = 0;
-        if( CMake::checkForNeedingConfigure(item) )
+        if( CMake::checkForNeedingConfigure(item->project()) )
         {
             configure = this->configure(item->project());
         } else if( CMake::currentBuildDir( item->project() ).isEmpty() ) 
