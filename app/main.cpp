@@ -276,11 +276,11 @@ int main( int argc, char *argv[] )
             
             int chosen;
             std::cin >> chosen;
-            if(chosen >= 0 && chosen < candidates.size())
+            if(std::cin.good() && (chosen >= 0 && chosen < candidates.size()))
             {
                 session = candidates[chosen].uuid.toString();
             }else{
-                qerr << "bad pick" << endl;
+                qerr << "invalid selection" << endl;
                 return 1;
             }
         }
