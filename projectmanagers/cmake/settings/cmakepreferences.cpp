@@ -32,6 +32,7 @@
 #include <KDebug>
 
 #include <QFile>
+#include <QDir>
 #include <QHeaderView>
 
 #include "ui_cmakebuildsettings.h"
