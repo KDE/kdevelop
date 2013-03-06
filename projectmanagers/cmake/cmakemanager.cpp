@@ -615,10 +615,7 @@ KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
     }
     else
     {
-        KSharedConfig::Ptr cfg = project->projectConfiguration();
-        KConfigGroup group(cfg.data(), "CMake");
-
-        if(group.hasKey("ProjectRootRelative"))
+        if(CMake::hasProjectRootRelative(project))
         {
             QString relative=CMake::projectRootRelative(project);
             folderUrl.cd(relative);
@@ -667,7 +664,6 @@ KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
         connect(w, SIGNAL(directoryChanged(QString)), SLOT(directoryChanged(QString)));
         m_watchers[project] = w;
         Q_ASSERT(m_rootItem->rowCount()==0);
-        cfg->sync();
     }
     return m_rootItem;
 }

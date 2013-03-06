@@ -229,6 +229,11 @@ QString projectRootRelative( KDevelop::IProject* project )
     return baseGroup(project).readEntry( Config::Old::projectRootRelativeKey, "." );
 }
 
+bool hasProjectRootRelative(KDevelop::IProject* project)
+{
+    return baseGroup(project).hasKey( Config::Old::projectRootRelativeKey );
+}
+
 QString currentExtraArguments( KDevelop::IProject* project )
 {
     return readProjectParameter( project, Config::Specific::cmakeArgumentsKey, QString() );

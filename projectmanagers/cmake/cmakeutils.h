@@ -78,6 +78,11 @@ namespace CMake
     KDEVCMAKECOMMON_EXPORT QString projectRootRelative( KDevelop::IProject* project );
     
     /**
+     * @returns whether there's projectRootRelative defined
+     */
+    KDEVCMAKECOMMON_EXPORT bool hasProjectRootRelative( KDevelop::IProject* project );
+    
+    /**
      * Convenience function to get the project root.
      */
     KDEVCMAKECOMMON_EXPORT KUrl projectRoot( KDevelop::IProject* project );
