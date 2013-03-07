@@ -20,6 +20,7 @@ install(TARGETS kdevdocumentview DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 ########### install files ###############
 
-install( FILES kdevdocumentview.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+configure_file(kdevdocumentview.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevdocumentview.desktop)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevdocumentview.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install( FILES kdevdocumentview.rc DESTINATION ${DATA_INSTALL_DIR}/kdevdocumentview )
 

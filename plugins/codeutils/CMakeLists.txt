@@ -29,5 +29,6 @@ install(TARGETS kdevcodeutils DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 ########### install files ###############
 
-install( FILES kdevcodeutils.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+configure_file(kdevcodeutils.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevcodeutils.desktop)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevcodeutils.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install( FILES kdevcodeutils.rc DESTINATION ${DATA_INSTALL_DIR}/kdevcodeutils )

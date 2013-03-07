@@ -28,5 +28,6 @@ target_link_libraries(kdevexternalscript
 install( TARGETS kdevexternalscript DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 ########### install files ###############
-install( FILES kdevexternalscript.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+configure_file(kdevexternalscript.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevexternalscript.desktop)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevexternalscript.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install( FILES kdevexternalscript.rc DESTINATION ${DATA_INSTALL_DIR}/kdevexternalscript )

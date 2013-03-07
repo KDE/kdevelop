@@ -39,7 +39,8 @@ install(TARGETS kdevgrepview DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 ########### install files ###############
 
-install( FILES kdevgrepview.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+configure_file(kdevgrepview.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevgrepview.desktop)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevgrepview.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install( FILES kdevgrepview.rc DESTINATION ${DATA_INSTALL_DIR}/kdevgrepview )
 
 add_subdirectory(tests)

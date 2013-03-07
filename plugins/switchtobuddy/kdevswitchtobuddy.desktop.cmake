@@ -71,6 +71,6 @@ ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevswitchtobuddy
 X-KDE-PluginInfo-Name=kdevcodeutils
 X-KDE-PluginInfo-Category=Utilities
-X-KDevelop-Version=16
+X-KDevelop-Version=@KDEV_PLUGIN_VERSION@
 X-KDevelop-Category=Global
 X-KDevelop-Mode=GUI

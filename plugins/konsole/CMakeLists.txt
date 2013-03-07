@@ -16,5 +16,6 @@ install(TARGETS kdevkonsoleview DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 ########### install files ###############
 
-install( FILES kdevkonsoleview.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+configure_file(kdevkonsoleview.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevkonsoleview.desktop)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevkonsoleview.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 

@@ -30,4 +30,5 @@ install(TARGETS kdevgit DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 
 ########### install files ###############
-install( FILES kdevgit.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+configure_file(kdevgit.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevgit.desktop)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevgit.desktop DESTINATION ${SERVICES_INSTALL_DIR} )

@@ -43,7 +43,8 @@ install(TARGETS kdevfiletemplates DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 ########### install files ###############
 
-install( FILES kdevfiletemplates.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+configure_file(kdevfiletemplates.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevfiletemplates.desktop)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevfiletemplates.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install( FILES kdevfiletemplates.rc DESTINATION ${DATA_INSTALL_DIR}/kdevfiletemplates )
 install( FILES kdevfiletemplates.knsrc DESTINATION ${CONFIG_INSTALL_DIR} )
 

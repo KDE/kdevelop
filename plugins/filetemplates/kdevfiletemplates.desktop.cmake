@@ -86,5 +86,5 @@ X-KDE-PluginInfo-License=GPL
 X-KDE-PluginInfo-Category=Core
 X-KDevelop-Interfaces=org.kdevelop.ITemplateProvider
 X-KDevelop-Category=Global
-X-KDevelop-Version=16
+X-KDevelop-Version=@KDEV_PLUGIN_VERSION@
 X-KDevelop-Mode=GUI

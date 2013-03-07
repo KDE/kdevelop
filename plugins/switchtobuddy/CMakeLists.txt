@@ -20,4 +20,5 @@ install(TARGETS kdevswitchtobuddy DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 ########### install files ###############
 
-install( FILES kdevswitchtobuddy.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+configure_file(kdevswitchtobuddy.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevswitchtobuddy.desktop)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevswitchtobuddy.desktop DESTINATION ${SERVICES_INSTALL_DIR} )

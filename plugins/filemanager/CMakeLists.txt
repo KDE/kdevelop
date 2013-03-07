@@ -16,7 +16,8 @@ install(TARGETS kdevfilemanager DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 ########### install files ###############
 
-install( FILES kdevfilemanager.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+configure_file(kdevfilemanager.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevfilemanager.desktop)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevfilemanager.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install( FILES kdevfilemanager.rc DESTINATION ${DATA_INSTALL_DIR}/kdevfilemanager )
 
 

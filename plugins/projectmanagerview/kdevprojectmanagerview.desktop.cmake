@@ -103,6 +103,6 @@ X-KDE-PluginInfo-Name=KDevProjectManagerView
 X-KDE-PluginInfo-Author=Roberto Raggi
 X-KDE-PluginInfo-License=LGPL
 X-KDE-PluginInfo-Category=Core
-X-KDevelop-Version=16
+X-KDevelop-Version=@KDEV_PLUGIN_VERSION@
 X-KDevelop-Category=Global
 X-KDevelop-Mode=GUI

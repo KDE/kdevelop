@@ -49,6 +49,7 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/isession.h>
 #include <interfaces/idebugcontroller.h>
 #include <interfaces/idocumentationcontroller.h>
+#include <interfaces/ipluginversion.h>
 
 //#include <kross/krossplugin.h>
 

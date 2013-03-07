@@ -80,6 +80,6 @@ X-KDE-PluginInfo-Email=aleixpol@gmail.com
 X-KDE-PluginInfo-Name=KDevKrossManager
 X-KDE-PluginInfo-License=GPL
 X-KDevelop-FileManager=Kross
-X-KDevelop-Version=16
+X-KDevelop-Version=@KDEV_PLUGIN_VERSION@
 X-KDevelop-Category=Project
 X-KDevelop-Interfaces=org.kdevelop.IBuildSystemManager,org.kdevelop.IProjectFileManager,org.kdevelop.ILanguageSupport

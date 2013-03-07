@@ -14,4 +14,5 @@ kde4_add_plugin(kdevreviewboard ${kdevreviewboard_PART_SRCS})
 target_link_libraries(kdevreviewboard ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${QJSON_LIBRARIES} ${qjson_LIBRARIES})
 
 install(TARGETS kdevreviewboard DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES kdevreviewboard.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+configure_file(kdevreviewboard.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevreviewboard.desktop)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevreviewboard.desktop DESTINATION ${SERVICES_INSTALL_DIR})

@@ -42,7 +42,8 @@ install(TARGETS kdevpatchreview DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install(FILES kdevpatchreview.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+configure_file(kdevpatchreview.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevpatchreview.desktop)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevpatchreview.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 install(FILES kdevpatchreview.rc DESTINATION ${DATA_INSTALL_DIR}/kdevpatchreview)
 
 add_subdirectory(libdiff2)

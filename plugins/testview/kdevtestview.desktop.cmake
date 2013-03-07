@@ -82,6 +82,6 @@ X-KDE-PluginInfo-Name=kdevtestview
 X-KDE-PluginInfo-Author=Miha Čančula
 X-KDE-PluginInfo-License=GPL
 X-KDE-PluginInfo-Category=Testing
-X-KDevelop-Version=16
+X-KDevelop-Version=@KDEV_PLUGIN_VERSION@
 X-KDevelop-Category=Global
 X-KDevelop-Mode=GUI

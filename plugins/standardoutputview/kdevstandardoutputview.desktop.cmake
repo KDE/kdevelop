@@ -103,6 +103,6 @@ ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevstandardoutputview
 X-KDE-PluginInfo-Name=KDevStandardOutputView
 X-KDE-PluginInfo-Category=Core
-X-KDevelop-Version=16
+X-KDevelop-Version=@KDEV_PLUGIN_VERSION@
 X-KDevelop-Interfaces=org.kdevelop.IOutputView
 X-KDevelop-Mode=GUI

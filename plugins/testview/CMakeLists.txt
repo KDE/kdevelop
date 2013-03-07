@@ -17,7 +17,8 @@ install(TARGETS kdevtestview DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 ########### install files ###############
 
-install( FILES kdevtestview.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+configure_file(kdevtestview.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevtestview.desktop)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevtestview.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install( FILES kdevtestview.rc DESTINATION ${DATA_INSTALL_DIR}/kdevtestview )
 
 

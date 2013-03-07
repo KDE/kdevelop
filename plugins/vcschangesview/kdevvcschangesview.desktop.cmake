@@ -95,6 +95,6 @@ X-KDE-PluginInfo-Author=Aleix Pol
 X-KDE-PluginInfo-Email=aleixpol@kde.org
 X-KDE-PluginInfo-License=GPL
 X-KDE-PluginInfo-Category=Version Control
-X-KDevelop-Version=16
+X-KDevelop-Version=@KDEV_PLUGIN_VERSION@
 X-KDevelop-Category=Global
 X-KDevelop-Mode=GUI

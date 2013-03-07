@@ -32,6 +32,7 @@ install(TARGETS kdevappwizard DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 ########### install files ###############
 
-install( FILES kdevappwizard.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+configure_file(kdevappwizard.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevappwizard.desktop)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevappwizard.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install( FILES kdevappwizard.rc DESTINATION ${DATA_INSTALL_DIR}/kdevappwizard )
 install( FILES kdevappwizard.knsrc DESTINATION ${CONFIG_INSTALL_DIR} )

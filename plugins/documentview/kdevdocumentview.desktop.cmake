@@ -104,6 +104,6 @@ X-KDE-PluginInfo-Author=Adam Treat
 X-KDE-PluginInfo-Version=0.1
 X-KDE-PluginInfo-License=LGPL
 X-KDE-PluginInfo-Category=Utilities
-X-KDevelop-Version=16
+X-KDevelop-Version=@KDEV_PLUGIN_VERSION@
 X-KDevelop-Category=Global
 X-KDevelop-Mode=GUI

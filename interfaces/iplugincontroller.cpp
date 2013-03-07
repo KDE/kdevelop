@@ -24,7 +24,7 @@ Boston, MA 02110-1301, USA.
 #include "iplugincontroller.h"
 
 #include <kservicetypetrader.h>
-#include "iplugin.h"
+#include "ipluginversion.h"
 
 namespace KDevelop
 {
