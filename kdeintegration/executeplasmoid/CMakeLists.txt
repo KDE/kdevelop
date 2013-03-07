@@ -35,4 +35,5 @@ install(TARGETS kdevexecuteplasmoid DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
-install(FILES kdevexecuteplasmoid.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+configure_file(kdevexecuteplasmoid.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevexecuteplasmoid.desktop)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevexecuteplasmoid.desktop DESTINATION ${SERVICES_INSTALL_DIR})

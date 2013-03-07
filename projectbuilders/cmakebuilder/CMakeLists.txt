@@ -28,7 +28,8 @@ target_link_libraries(
 )
 
 install(TARGETS kdevcmakebuilder DESTINATION ${PLUGIN_INSTALL_DIR} )
-install( FILES kdevcmakebuilder.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+configure_file(kdevcmakebuilder.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevcmakebuilder.desktop)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevcmakebuilder.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 ########### next target ###############
 
 set( cmakebuilder_cfg_SRCS

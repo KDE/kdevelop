@@ -106,6 +106,6 @@ X-KDE-PluginInfo-Email=kossebau@kde.org
 X-KDE-PluginInfo-Version=0.1.0
 X-KDE-PluginInfo-License=GPL
 X-KDE-PluginInfo-Category=Utilities
-X-KDevelop-Version=16
+X-KDevelop-Version=@KDEV_PLUGIN_VERSION@
 X-KDevelop-Category=Global
 X-KDevelop-Mode=GUI

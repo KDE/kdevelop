@@ -43,5 +43,6 @@ install( TARGETS kcm_kdev_makebuilder DESTINATION ${PLUGIN_INSTALL_DIR} )
 ########### install files ###############
 install( FILES imakebuilder.h DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/make COMPONENT Devel)
 install( FILES kcm_kdev_makebuilder.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-install( FILES kdevmakebuilder.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+configure_file(kdevmakebuilder.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevmakebuilder.desktop)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevmakebuilder.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 # install( FILES kdevmakebuilder.rc DESTINATION ${DATA_INSTALL_DIR}/kdevmakebuilder )

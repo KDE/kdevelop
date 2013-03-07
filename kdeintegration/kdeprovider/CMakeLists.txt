@@ -13,4 +13,5 @@ kde4_add_plugin(kdevkdeprovider ${kdevkdeprovider_PART_SRCS})
 target_link_libraries(kdevkdeprovider ${KDE4_KDEUI_LIBS} ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${KDEVPLATFORM_VCS_LIBRARIES})
 
 install(TARGETS kdevkdeprovider DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES kdevkdeprovider.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+configure_file(kdevkdeprovider.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevkdeprovider.desktop)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevkdeprovider.desktop DESTINATION ${SERVICES_INSTALL_DIR})

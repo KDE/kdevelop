@@ -14,4 +14,5 @@ install(TARGETS kdevcustomscript DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 ########### install files ###############
 
-install( FILES kdevcustomscript.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+configure_file(kdevcustomscript.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevcustomscript.desktop)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevcustomscript.desktop DESTINATION ${SERVICES_INSTALL_DIR} )

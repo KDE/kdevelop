@@ -93,7 +93,7 @@ GenericName[zh_TW]=格式器後端介面
 
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevcustomscript
-X-KDevelop-Version=16
+X-KDevelop-Version=@KDEV_PLUGIN_VERSION@
 X-KDE-PluginInfo-Name=kdevcustomscript
 X-KDE-PluginInfo-Author=David Nolden
 X-KDE-PluginInfo-License=LGPL

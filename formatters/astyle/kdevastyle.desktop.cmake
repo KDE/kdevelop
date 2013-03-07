@@ -105,7 +105,7 @@ GenericName[zh_TW]=格式器後端介面
 
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevastyle
-X-KDevelop-Version=16
+X-KDevelop-Version=@KDEV_PLUGIN_VERSION@
 X-KDE-PluginInfo-Name=kdevastyle
 X-KDE-PluginInfo-Author=Cedric Pasteur, Matthias Hölzer-Klüpfel
 X-KDE-PluginInfo-License=LGPL

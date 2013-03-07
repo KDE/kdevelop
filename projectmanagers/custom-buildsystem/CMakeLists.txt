@@ -51,6 +51,7 @@ install( TARGETS kcm_kdevcustombuildsystem
                  kdevcustombuildsystem
          DESTINATION ${PLUGIN_INSTALL_DIR} )
 
-install( FILES kdevcustombuildsystem.desktop
+configure_file(kdevcustombuildsystem.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevcustombuildsystem.desktop)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevcustombuildsystem.desktop
                kcm_kdevcustombuildsystem.desktop
          DESTINATION ${SERVICES_INSTALL_DIR} )
