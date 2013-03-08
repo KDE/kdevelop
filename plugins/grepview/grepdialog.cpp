@@ -430,7 +430,7 @@ void GrepDialog::performAction(KDialog::ButtonCode button)
     QString description = descriptionOrUrl;
     // Shorten the description
     if(descriptionOrUrl != allOpenFilesString && descriptionOrUrl != allOpenProjectsString && choice.size() > 1)
-        description = i18n("%1, and %2 more items", choice[0].pathOrUrl(), choice.size()-1);
+        description = i18np("%2, and %1 more item", "%2, and %1 more items", choice.size() - 1, choice[0].pathOrUrl());
     
     GrepOutputView *toolView = (GrepOutputView*)ICore::self()->uiController()->
                                findToolView(i18n("Find/Replace in Files"), m_plugin->toolViewFactory(), IUiController::CreateAndRaise);
