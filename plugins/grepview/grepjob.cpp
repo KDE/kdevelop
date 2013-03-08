@@ -53,7 +53,8 @@ GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re)
     // reads file with detected encoding
     file.seek(0);
     QTextStream stream(&file);
-    stream.setCodec(prober.encoding());
+    if(prober.confidence()>0.7)
+        stream.setCodec(prober.encoding());
     while( !stream.atEnd() )
     {
         QString data = stream.readLine();
