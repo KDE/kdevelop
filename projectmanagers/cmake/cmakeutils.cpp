@@ -121,7 +121,6 @@ void writeProjectParameter( KDevelop::IProject* project, const QString& key, con
     {
         KConfigGroup buildDirGrp = buildDirGroup( project, buildDirIndex );
         buildDirGrp.writeEntry( key, value );
-        buildDirGrp.sync();
     }
 
     else
@@ -134,7 +133,6 @@ void writeProjectBaseParameter( KDevelop::IProject* project, const QString& key,
 {
     KConfigGroup baseGrp = baseGroup(project);
     baseGrp.writeEntry( key, value );
-    baseGrp.sync();
 }
 
 } // namespace
@@ -339,8 +337,6 @@ void removeBuildDirConfig( KDevelop::IProject* project )
         src.copyTo(&dest);
         src.deleteGroup();
     }
-
-    project->projectConfiguration()->sync();
 }
 
 void updateConfig( KDevelop::IProject* project, int buildDirIndex, CMakeCacheModel* model )
@@ -367,7 +363,6 @@ void updateConfig( KDevelop::IProject* project, int buildDirIndex, CMakeCacheMod
     buildDirGrp.writeEntry( Config::Specific::cmakeBinKey, KUrl( model->value("CMAKE_COMMAND") ).url() );
     buildDirGrp.writeEntry( Config::Specific::cmakeInstallDirKey, KUrl( model->value("CMAKE_INSTALL_PREFIX") ).url() );
     buildDirGrp.writeEntry( Config::Specific::cmakeBuildTypeKey, model->value("CMAKE_BUILD_TYPE") );
-    buildDirGrp.sync();
     if (deleteModel)
         delete model;
 }
@@ -426,7 +421,6 @@ void attemptMigrate( KDevelop::IProject* project )
     baseGrp.deleteEntry( Config::Old::currentEnvironmentKey );
     baseGrp.deleteEntry( Config::Old::currentExtraArgumentsKey );
     baseGrp.deleteEntry( Config::Old::projectBuildDirs );
-    baseGrp.sync();
 }
 
 void setOverrideBuildDirIndex( KDevelop::IProject* project, int overrideBuildDirIndex )
@@ -444,7 +438,6 @@ void removeOverrideBuildDirIndex( KDevelop::IProject* project, bool writeToMainI
         baseGrp.writeEntry( Config::buildDirIndexKey, baseGrp.readEntry(Config::buildDirOverrideIndexKey) );
 
     baseGrp.deleteEntry(Config::buildDirOverrideIndexKey);
-    baseGrp.sync();
 }
 
 ICMakeDocumentation* cmakeDocumentation()

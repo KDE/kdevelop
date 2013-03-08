@@ -154,7 +154,7 @@ void CMakePreferences::save()
     }
     
     CMake::setCurrentEnvironment( m_project, m_prefsUi->environment->currentProfile() );
-    KCModule::save(); // TODO: is this needed? all the CMake::set* functions do their own ->sync()...
+    KCModule::save();
     
     kDebug(9042) << "writing to cmake config: using builddir " << CMake::currentBuildDirIndex(m_project);
     kDebug(9042) << "writing to cmake config: builddir path " << CMake::currentBuildDir(m_project);
