@@ -64,6 +64,7 @@ Name[fr]=En-tête
 Name[gl]=Cabeceira
 Name[hu]=Fejléc
 Name[it]=Intestazione
+Name[mr]=हेडर
 Name[nb]=Hode
 Name[nl]=Kop
 Name[pl]=Nagłówek
