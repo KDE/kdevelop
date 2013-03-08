@@ -319,13 +319,19 @@ public:
             return false;
         }
 
-        statJob = KIO::stat( developerFileUrl, KIO::HideProgressInfo );
-        if( !statJob->exec() || !KIO::NetAccess::download( developerFileUrl, developerTempFile,
-            Core::self()->uiController()->activeMainWindow() ) )
+        if(developerFileUrl.isLocalFile())
         {
-            KTemporaryFile tmp;
-            tmp.open();
-            developerTempFile = tmp.fileName();
+            developerTempFile = developerFileUrl.toLocalFile();
+        }
+        else {
+            statJob = KIO::stat( developerFileUrl, KIO::HideProgressInfo );
+            if( !statJob->exec() || !KIO::NetAccess::download( developerFileUrl, developerTempFile,
+                Core::self()->uiController()->activeMainWindow() ) )
+            {
+                KTemporaryFile tmp;
+                tmp.open();
+                developerTempFile = tmp.fileName();
+            }
         }
         return true;
     }
@@ -554,7 +560,7 @@ void Project::close()
 
     Core::self()->projectController()->projectModel()->removeRow( d->topItem->row() );
 
-    if( !KIO::NetAccess::upload( d->developerTempFile, d->developerFileUrl,
+    if( !d->developerFileUrl.isLocalFile() && !KIO::NetAccess::upload( d->developerTempFile, d->developerFileUrl,
                 Core::self()->uiController()->activeMainWindow() ) )
     {
         KMessageBox::sorry( Core::self()->uiController()->activeMainWindow(),
