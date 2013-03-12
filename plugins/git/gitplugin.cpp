@@ -491,7 +491,7 @@ VcsJob* GitPlugin::log(const KUrl& localLocation,
 {
     DVcsJob* job = new GitJob(dotGitDirectory(localLocation), this, KDevelop::OutputJob::Silent);
     job->setType(VcsJob::Log);
-    *job << "git" << "log" << "--date=raw" << "--numstat";
+    *job << "git" << "log" << "--date=raw" << "--name-status" << "-M80%";
     QString rev = revisionInterval(dst, src);
     if(!rev.isEmpty())
         *job << rev;
@@ -505,7 +505,7 @@ VcsJob* GitPlugin::log(const KUrl& localLocation, const KDevelop::VcsRevision& r
 {
     DVcsJob* job = new GitJob(dotGitDirectory(localLocation), this, KDevelop::OutputJob::Silent);
     job->setType(VcsJob::Log);
-    *job << "git" << "log" << "--date=raw" << "--numstat";
+    *job << "git" << "log" << "--date=raw" << "--name-status" << "-M80%";
     QString revStr = toRevisionName(rev, QString());
     if(!revStr.isEmpty())
         *job << revStr;
@@ -951,12 +951,26 @@ void GitPlugin::parseLogOutput(const DVcsJob * job, QList<DVcsEvent>& commits) c
     }
 }
 
+VcsItemEvent::Actions actionsFromString(char c)
+{
+    switch(c) {
+        case 'A': return VcsItemEvent::Added;
+        case 'D': return VcsItemEvent::Deleted;
+        case 'R': return VcsItemEvent::Replaced;
+        case 'M': return VcsItemEvent::Modified;
+    }
+    return VcsItemEvent::Modified;
+}
+
 void GitPlugin::parseGitLogOutput(DVcsJob * job)
 {
+    qDebug() << "lalala" << job->error() << job->errorOutput();
     QList<QVariant> commits;
     static QRegExp commitRegex( "^commit (\\w{8})\\w{32}" );
     static QRegExp infoRegex( "^(\\w+):(.*)" );
-    static QRegExp modificationsRegex("(\\d+)\\s+(\\d+)\\s+(.+)"); //18      2       shell/workingsets/workingsetwidget.cpp
+    static QRegExp modificationsRegex("^([A-Z])[0-9]*\t([^\t]+)\t?(.*)", Qt::CaseSensitive, QRegExp::RegExp2);
+    //R099    plugins/git/kdevgit.desktop     plugins/git/kdevgit.desktop.cmake
+    //M       plugins/grepview/CMakeLists.txt
 
     QString contents = job->output();
     QTextStream s(&contents);
@@ -988,17 +1002,16 @@ void GitPlugin::parseGitLogOutput(DVcsJob * job)
                 item.setDate(QDateTime::fromTime_t(infoRegex.cap(2).trimmed().split(' ')[0].toUInt()));
             }
         } else if (modificationsRegex.exactMatch(line)) {
-            int additions = modificationsRegex.cap(1).toUInt();
-            int removals = modificationsRegex.cap(2).toUInt();
-            QString filename = modificationsRegex.cap(3);
-            
-            VcsItemEvent::Actions a;
-            if(additions>0 || removals>0)
-                a=VcsItemEvent::Modified;
+            VcsItemEvent::Actions a = actionsFromString(modificationsRegex.cap(1)[0].toAscii());
+            QString filenameA = modificationsRegex.cap(2);
             
             VcsItemEvent itemEvent;
             itemEvent.setActions(a);
-            itemEvent.setRepositoryLocation(filename);
+            itemEvent.setRepositoryLocation(filenameA);
+            if(a==VcsItemEvent::Replaced) {
+                QString filenameB = modificationsRegex.cap(3);
+                itemEvent.setRepositoryCopySourceLocation(filenameB);
+            }
             
             item.addItem(itemEvent);
         } else if (line.startsWith("    ")) {
@@ -1190,8 +1203,10 @@ VcsStatusInfo::State GitPlugin::messageToState(const QString& msg)
             ret = VcsStatusInfo::ItemAdded;
             break;
         case 'R':
-        case 'C':
             ret = VcsStatusInfo::ItemModified;
+            break;
+        case 'C':
+            ret = VcsStatusInfo::ItemHasConflicts;
             break;
         case ' ':
             ret = msg[1] == 'M' ? VcsStatusInfo::ItemModified : VcsStatusInfo::ItemDeleted;
