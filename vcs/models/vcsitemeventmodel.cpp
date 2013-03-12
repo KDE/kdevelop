@@ -48,6 +48,9 @@ VcsItemEventModel::~VcsItemEventModel()
 
 void VcsItemEventModel::addItemEvents( const QList<KDevelop::VcsItemEvent>& list )
 {
+    if(rowCount()==0)
+        setColumnCount(2);
+    
     bool copySource = false;
     foreach(const KDevelop::VcsItemEvent& ev, list) {
         
@@ -61,6 +64,8 @@ void VcsItemEventModel::addItemEvents( const QList<KDevelop::VcsItemEvent>& list
             actionStrings << i18n("Modified");
         else if( act & KDevelop::VcsItemEvent::Copied )
             actionStrings << i18n("Copied");
+        else if( act & KDevelop::VcsItemEvent::Replaced )
+            actionStrings << i18n("Replaced");
         KMimeType::Ptr mime = KMimeType::findByUrl( ev.repositoryLocation(), 0, false, true );
         QList<QStandardItem*> rowItems = QList<QStandardItem*>()
             << new QStandardItem(KIcon(mime->iconName()), ev.repositoryLocation())
