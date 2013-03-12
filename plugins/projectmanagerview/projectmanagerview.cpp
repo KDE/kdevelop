@@ -239,8 +239,7 @@ QList<KDevelop::ProjectBaseItem*> ProjectManagerView::selectedItems() const
     QList<KDevelop::ProjectBaseItem*> items;
     foreach( const QModelIndex &idx, m_ui->projectTreeView->selectionModel()->selectedIndexes() )
     {
-        KDevelop::ProjectBaseItem* item =
-                ICore::self()->projectController()->projectModel()->itemFromIndex( m_modelFilter->mapToSource(idx) );
+        KDevelop::ProjectBaseItem* item = m_modelFilter->itemFromProxyIndex(idx);
         if( item )
             items << item;
         else
@@ -253,7 +252,7 @@ void ProjectManagerView::selectItems(const QList< ProjectBaseItem* >& items)
 {
     QItemSelection selection;
     foreach (ProjectBaseItem *item, items) {
-        QModelIndex indx = m_modelFilter->mapFromSource(item->model()->indexFromItem(item));
+        QModelIndex indx = m_modelFilter->mapFromSource(item->index());
         selection.append(QItemSelectionRange(indx, indx));
         m_ui->projectTreeView->setCurrentIndex(indx);
     }
@@ -262,7 +261,7 @@ void ProjectManagerView::selectItems(const QList< ProjectBaseItem* >& items)
 
 void ProjectManagerView::expandItem(ProjectBaseItem* item)
 {
-    m_ui->projectTreeView->expand( m_modelFilter->mapFromSource(item->model()->indexFromItem(item)));
+    m_ui->projectTreeView->expand( m_modelFilter->mapFromSource(item->index()));
 }
 
 void ProjectManagerView::locateCurrentDocument()
