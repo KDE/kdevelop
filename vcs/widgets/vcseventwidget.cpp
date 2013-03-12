@@ -115,6 +115,11 @@ void VcsEventWidgetPrivate::eventViewClicked( const QModelIndex &index )
     {
         m_ui->message->clear();
     }
+
+    QHeaderView* header = m_ui->itemEventView->header();
+    for(int i=0, count=m_detailModel->columnCount(); i<count; i++) {
+        header->setResizeMode( i, (i==m_detailModel->columnCount()-1) ? QHeaderView::Stretch : QHeaderView::ResizeToContents);
+    }
 }
 
 void VcsEventWidgetPrivate::copyRevision()
@@ -176,11 +181,6 @@ VcsEventWidget::VcsEventWidget( const KUrl& url, const VcsRevision& rev, KDevelo
 
     d->m_detailModel = new VcsItemEventModel(this);
     d->m_ui->itemEventView->setModel( d->m_detailModel );
-    header = d->m_ui->itemEventView->header();
-    header->setResizeMode( 0, QHeaderView::ResizeToContents );
-    header->setResizeMode( 1, QHeaderView::ResizeToContents );
-    header->setResizeMode( 2, QHeaderView::ResizeToContents );
-    header->setResizeMode( 3, QHeaderView::Stretch );
 
     connect( d->m_ui->eventView, SIGNAL(clicked(QModelIndex)),
              this, SLOT(eventViewClicked(QModelIndex)) );
