@@ -165,7 +165,7 @@ void VcsEventModel::fetchMore(const QModelIndex& parent)
 void VcsEventModel::jobReceivedResults(VcsJob* job)
 {
     QList<QVariant> l = job->fetchResults().toList();
-    if(l.isEmpty()) {
+    if(l.isEmpty() || job->error()!=0) {
         d->done = true;
         return;
     }
