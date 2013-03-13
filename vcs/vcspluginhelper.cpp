@@ -393,9 +393,6 @@ void VcsPluginHelper::annotation()
             connect(doc->textDocument()->activeView(),
                     SIGNAL(annotationContextMenuAboutToShow(KTextEditor::View*,QMenu*,int)),
                     this, SLOT(annotationContextMenuAboutToShow(KTextEditor::View*,QMenu*,int)));
-            connect(doc->textDocument()->activeView(),
-                    SIGNAL(annotationBorderVisibilityChanged(KTextEditor::View*, bool)),
-                    SLOT(annotationVisibilityChange(KTextEditor::View*,QMenu*,int)));
         } else {
             KMessageBox::error(0, i18n("Cannot display annotations, missing interface KTextEditor::AnnotationInterface for the editor."));
             delete job;
@@ -448,13 +445,6 @@ void VcsPluginHelper::annotationContextMenuAboutToShow( KTextEditor::View* view,
         menu->addAction(new FlexibleAction(KIcon("edit-copy"), i18n("Copy Revision"), new CopyFunction(rev.revisionValue().toString()), menu));
         menu->addAction(new FlexibleAction(KIcon("view-history"), i18n("History..."), new HistoryFunction(this, rev), menu));
     }
-}
-
-void VcsPluginHelper::annotationVisibilityChange(KTextEditor::View* view, QMenu* menu, int visible)
-{
-    Q_UNUSED(view);
-    Q_UNUSED(menu);
-    Q_UNUSED(visible);
 }
 
 void VcsPluginHelper::update()
