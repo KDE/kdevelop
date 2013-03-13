@@ -199,11 +199,9 @@ void DVcsJob::slotProcessError( QProcess::ProcessError err )
 {
     d->status = JobFailed;
 
-    //Do not use d->childproc->exitCode() to set an error! If we have FailedToStart exitCode will return 0,
-    //and if exec is used, exec will return true and that is wrong!
-    setError(verbosity()==Verbose ? OutputJob::FailedShownError : UserDefinedError);
-    setErrorText( i18n("Process exited with status %1", d->childproc->exitCode() ) );
-
+    setError(OutputJob::FailedShownError); //we don't want to trigger a message box
+    setErrorText( i18n("Process '%1' exited with status %2", d->childproc->program().join(" "), d->childproc->exitCode() ) );
+    
     QString errorValue;
     //if trolls add Q_ENUMS for QProcess, then we can use better solution than switch:
     //QMetaObject::indexOfEnumerator(char*), QLatin1String(QMetaEnum::valueToKey())...
@@ -230,15 +228,16 @@ void DVcsJob::slotProcessError( QProcess::ProcessError err )
     }
     kDebug() << "oops, found an error while running" << dvcsCommand() << ":" << errorValue 
                                                      << "Exit code is:" << d->childproc->exitCode();
-    
     d->errorOutput = d->childproc->readAllStandardError();
     displayOutput(d->errorOutput);
     d->model->appendLine(i18n("Command finished with error %1.", errorValue));
     
     //Even if it was a silent process we want to provide some feedback to the user about what went wrong
     //so we show the output then.
-    if(verbosity()==Silent)
+    if(verbosity()==Silent) {
+        setVerbosity(Verbose);
         startOutput();
+    }
     emitResult();
 }
 
