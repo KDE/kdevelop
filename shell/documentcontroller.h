@@ -154,6 +154,7 @@ public Q_SLOTS:
 
     // Returns all open documents in the current area
     Q_SCRIPTABLE QStringList activeDocumentPaths() const;
+    void vcsAnnotateCurrentDocument();
     
 private Q_SLOTS:
     virtual void slotOpenDocument(const KUrl &url);

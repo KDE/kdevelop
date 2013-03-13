@@ -39,6 +39,7 @@ Boston, MA 02110-1301, USA.
 #include <kplugininfo.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
+#include <ktexteditor/annotationinterface.h>
 
 #include <sublime/area.h>
 #include <sublime/view.h>
@@ -59,6 +60,9 @@ Boston, MA 02110-1301, USA.
 #include <kmessagebox.h>
 #include <KIO/Job>
 #include "workingsetcontroller.h"
+#include <vcs/interfaces/ibasicversioncontrol.h>
+#include <vcs/models/vcsannotationmodel.h>
+#include <vcs/vcsjob.h>
 
 #include <config-kdevplatform.h>
 
@@ -652,6 +656,12 @@ void DocumentController::setupActions()
     action->setToolTip( i18n( "Close all other documents" ) );
     action->setWhatsThis( i18n( "Close all open documents, with the exception of the currently active document." ) );
     action->setEnabled(false);
+
+    action = ac->addAction( "vcsannotate_current_document" );
+    connect( action, SIGNAL(triggered(bool)), SLOT(vcsAnnotateCurrentDocument()) );
+    action->setText( i18n( "Show Annotate on current document") );
+    action->setIconText( i18n( "Annotate" ) );
+    action->setIcon( KIcon("user-properties") );
 }
 
 void DocumentController::setEncoding( const QString &encoding )
@@ -1187,6 +1197,43 @@ bool DocumentController::openDocumentsWithSplitSeparators( Sublime::AreaIndex* i
     return ret;
 }
 
+void DocumentController::vcsAnnotateCurrentDocument()
+{
+    IDocument* doc = activeDocument();
+    KUrl url = doc->url();
+    IProject* project = KDevelop::ICore::self()->projectController()->findProjectForUrl(url);
+    IBasicVersionControl* iface = 0;
+    if(project) {
+        iface = project->versionControlPlugin()->extension<IBasicVersionControl>();
+    }
+
+    if (iface && doc && doc->textDocument() && iface->isVersionControlled(url)) {
+        KTextEditor::AnnotationViewInterface* viewiface = qobject_cast<KTextEditor::AnnotationViewInterface*>(doc->textDocument()->activeView());
+        if(viewiface && viewiface->isAnnotationBorderVisible()) {
+            viewiface->setAnnotationBorderVisible(false);
+            return;
+        }
+        KDevelop::VcsJob* job = iface->annotate(url);
+        if( !job )
+        {
+            kWarning() << "Couldn't create annotate job for:" << url << "with iface:" << iface << dynamic_cast<KDevelop::IPlugin*>( iface );
+            return;
+        }
+        KTextEditor::AnnotationInterface* annotateiface = qobject_cast<KTextEditor::AnnotationInterface*>(doc->textDocument());
+
+        if (annotateiface && viewiface) {
+            KDevelop::VcsAnnotationModel* model = new KDevelop::VcsAnnotationModel(job, url, doc->textDocument());
+            annotateiface->setAnnotationModel(model);
+            viewiface->setAnnotationBorderVisible(true);
+        } else {
+            KMessageBox::error(0, i18n("Cannot display annotations, missing interface KTextEditor::AnnotationInterface for the editor."));
+            delete job;
+        }
+    } else {
+        KMessageBox::error(0, i18n("Cannot execute annotate action because the "
+                                   "document was not found, it was not versioned or it was not a text document:\n%1", url.pathOrUrl()));
+    }
+}
 
 }
 
