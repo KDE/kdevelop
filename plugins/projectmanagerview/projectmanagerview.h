@@ -35,6 +35,7 @@ class ProjectManagerView;
 }
 
 class ProjectProxyModel;
+class VcsOverlayProxyModel;
 
 namespace KDevelop
 {
@@ -92,10 +93,14 @@ private slots:
     void filterChanged(const QString&);
 
 private:
+    QModelIndex indexFromView(const QModelIndex& index) const;
+    QModelIndex indexToView(const QModelIndex& index) const;
+
     QAction* m_syncAction;
     Ui::ProjectManagerView* m_ui;
     QStringList m_cachedFileList;
     ProjectProxyModel* m_modelFilter;
+    VcsOverlayProxyModel* m_overlayProxy;
     ProjectManagerViewPlugin* m_plugin;
     QString m_filterString;
 };

@@ -61,6 +61,7 @@
 #include "tests/modeltest.h"
 #include <project/projectproxymodel.h>
 #include "projectmanagerviewplugin.h"
+#include "vcsoverlayproxymodel.h"
 #include "ui_projectmanagerview.h"
 
 using namespace KDevelop;
@@ -154,8 +155,10 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
     m_modelFilter = new ProjectProxyModel( this );
     m_modelFilter->setDynamicSortFilter( true );
     m_modelFilter->setSourceModel(ICore::self()->projectController()->projectModel());
+    m_overlayProxy = new VcsOverlayProxyModel( this );
+    m_overlayProxy->setSourceModel(m_modelFilter);
 
-    m_ui->projectTreeView->setModel( m_modelFilter );
+    m_ui->projectTreeView->setModel( m_overlayProxy );
 
     QString filterText;
 
@@ -215,7 +218,7 @@ void ProjectManagerView::selectionChanged()
     QList<ProjectBaseItem*> selected;
     foreach( const QModelIndex& idx, m_ui->projectTreeView->selectionModel()->selectedRows() )
     {
-        selected << m_modelFilter->itemFromProxyIndex( idx );
+        selected << ICore::self()->projectController()->projectModel()->itemFromIndex(indexFromView( idx ));
     }
     selected.removeAll(0);
     KDevelop::ICore::self()->selectionController()->updateSelection( new ProjectManagerViewItemContext( selected, this ) );
@@ -239,7 +242,7 @@ QList<KDevelop::ProjectBaseItem*> ProjectManagerView::selectedItems() const
     QList<KDevelop::ProjectBaseItem*> items;
     foreach( const QModelIndex &idx, m_ui->projectTreeView->selectionModel()->selectedIndexes() )
     {
-        KDevelop::ProjectBaseItem* item = m_modelFilter->itemFromProxyIndex(idx);
+        KDevelop::ProjectBaseItem* item = ICore::self()->projectController()->projectModel()->itemFromIndex(indexFromView(idx));
         if( item )
             items << item;
         else
@@ -252,7 +255,7 @@ void ProjectManagerView::selectItems(const QList< ProjectBaseItem* >& items)
 {
     QItemSelection selection;
     foreach (ProjectBaseItem *item, items) {
-        QModelIndex indx = m_modelFilter->mapFromSource(item->index());
+        QModelIndex indx = indexToView(item->index());
         selection.append(QItemSelectionRange(indx, indx));
         m_ui->projectTreeView->setCurrentIndex(indx);
     }
@@ -261,7 +264,7 @@ void ProjectManagerView::selectItems(const QList< ProjectBaseItem* >& items)
 
 void ProjectManagerView::expandItem(ProjectBaseItem* item)
 {
-    m_ui->projectTreeView->expand( m_modelFilter->mapFromSource(item->index()));
+    m_ui->projectTreeView->expand( indexToView(item->index()));
 }
 
 void ProjectManagerView::locateCurrentDocument()
@@ -281,7 +284,7 @@ void ProjectManagerView::locateCurrentDocument()
     QModelIndex bestMatch;
     foreach (IProject* proj, ICore::self()->projectController()->projects()) {
         foreach (KDevelop::ProjectFileItem* item, proj->filesForUrl(doc->url())) {
-            QModelIndex index = m_modelFilter->proxyIndexFromItem(item);
+            QModelIndex index = indexToView(item->index());
             if (index.isValid()) {
                 if (!bestMatch.isValid()) {
                     bestMatch = index;
@@ -312,6 +315,16 @@ void ProjectManagerView::filterChanged(const QString &text)
 {
     m_filterString = text;
     m_modelFilter->setFilterString(text);
+}
+
+QModelIndex ProjectManagerView::indexFromView(const QModelIndex& index) const
+{
+    return m_modelFilter->mapToSource( m_overlayProxy->mapToSource(index) );
+}
+
+QModelIndex ProjectManagerView::indexToView(const QModelIndex& index) const
+{
+    return m_overlayProxy->mapFromSource( m_modelFilter->mapFromSource(index) );
 }
 
 #include "projectmanagerview.moc"
