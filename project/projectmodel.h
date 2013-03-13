@@ -378,6 +378,11 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectModel: public QAbstractItemModel
 {
     Q_OBJECT
 public:
+    enum Roles {
+          ProjectRole = Qt::UserRole+1
+        , ProjectItemRole
+    };
+
     ProjectModel( QObject *parent = 0 );
     virtual ~ProjectModel();
 

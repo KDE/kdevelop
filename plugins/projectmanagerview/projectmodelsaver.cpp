@@ -18,11 +18,14 @@
 */
 
 #include "projectmodelsaver.h"
+#include "projecttreeview.h"
 
 #include "project/projectmodel.h"
+#include <interfaces/icore.h>
+#include <interfaces/iprojectcontroller.h>
 
 #include <QtCore/QStringList>
-#include <QtGui/QAbstractProxyModel>
+#include <QAbstractProxyModel>
 
 namespace KDevelop
 {
@@ -37,50 +40,33 @@ void ProjectModelSaver::setProject(IProject* project)
     m_project = project;
 }
 
-QModelIndex ProjectModelSaver::indexFromConfigString(const QAbstractItemModel *model, const QString &key) const
+QModelIndex ProjectModelSaver::indexFromConfigString(const QAbstractItemModel *viewModel, const QString &key) const
 {
-    const QAbstractProxyModel *proxy = qobject_cast<const QAbstractProxyModel*>(model);
-    if( !proxy ) {
-        return QModelIndex();
-    }
-
-    const KDevelop::ProjectModel *projectModel = qobject_cast<const KDevelop::ProjectModel*>(proxy->sourceModel());
+    const KDevelop::ProjectModel *projectModel = KDevelop::ICore::self()->projectController()->projectModel();
 
     const QModelIndex sourceIndex = projectModel->pathToIndex(key.split('/'));
 
     if ( m_project && sourceIndex.isValid() ) {
         ProjectBaseItem* item = projectModel->itemFromIndex(sourceIndex);
-        if ( !item || item->project() != m_project ) {
-            return QModelIndex();
+        if ( item && item->project() == m_project ) {
+            return ProjectTreeView::mapFromSource(qobject_cast<const QAbstractProxyModel*>(viewModel), sourceIndex);
         }
     }
-
-    return proxy->mapFromSource(sourceIndex);
+    return QModelIndex();
 }
 
 QString ProjectModelSaver::indexToConfigString(const QModelIndex& index) const
 {
-    if( !index.isValid() ) {
+    if( !index.isValid() || !m_project ) {
         return QString();
     }
 
-    const QAbstractProxyModel *proxy = qobject_cast<const QAbstractProxyModel*>(index.model());
-    if( !proxy ) {
+    ProjectBaseItem* item = index.data(ProjectModel::ProjectItemRole).value<ProjectBaseItem*>();
+    if ( !item || item->project() != m_project ) {
         return QString();
     }
 
-    const QModelIndex sourceIndex = proxy->mapToSource(index);
-
-    const KDevelop::ProjectModel *projectModel = qobject_cast<const KDevelop::ProjectModel*>(proxy->sourceModel());
-
-    if ( m_project ) {
-        ProjectBaseItem* item = projectModel->itemFromIndex( sourceIndex );
-        if ( !item || item->project() != m_project ) {
-            return QString();
-        }
-    }
-
-    return projectModel->pathFromIndex( sourceIndex ).join("/");
+    return ICore::self()->projectController()->projectModel()->pathFromIndex( item->index() ).join("/");
 }
 
 }

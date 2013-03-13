@@ -23,10 +23,10 @@
 
 
 #include <QtGui/QHeaderView>
-#include <QtGui/QAbstractProxyModel>
 #include <QtCore/QDebug>
 #include <QtGui/QMouseEvent>
 #include <QApplication>
+#include <QAbstractProxyModel>
 
 #include <kxmlguiwindow.h>
 #include <kglobalsettings.h>
@@ -90,6 +90,10 @@ ProjectTreeView::ProjectTreeView( QWidget *parent )
     restoreState();
 }
 
+ProjectTreeView::~ProjectTreeView()
+{
+}
+
 QList<ProjectFileItem*> fileItemsWithin(const QList<ProjectBaseItem*> items)
 {
    QList<ProjectFileItem*> fileItems;
@@ -133,9 +137,7 @@ void filterDroppedItems(QList<T*> &items, ProjectBaseItem* dest)
 
 ProjectBaseItem* ProjectTreeView::itemAtPos(QPoint pos)
 {
-    QAbstractProxyModel *proxy = qobject_cast<QAbstractProxyModel*>(model());
-    QModelIndex index = proxy->mapToSource(indexAt(pos));
-    return projectModel()->itemFromIndex(index);
+    return indexAt(pos).data(ProjectModel::ProjectItemRole).value<ProjectBaseItem*>();
 }
 
 void ProjectTreeView::dropEvent(QDropEvent* event)
@@ -194,10 +196,8 @@ void ProjectTreeView::dropEvent(QDropEvent* event)
             }
 
             if (success) {
-                QAbstractProxyModel *proxy = qobject_cast<QAbstractProxyModel*>(model());
-
                 //expand target folder
-                expand( proxy->mapFromSource(projectModel()->indexFromItem(folder)));
+                expand( mapFromItem(folder));
 
                 //and select new items
                 QItemSelection selection;
@@ -205,10 +205,8 @@ void ProjectTreeView::dropEvent(QDropEvent* event)
                     KUrl targetUrl = folder->url();
                     targetUrl.addPath(url.fileName());
                     foreach (ProjectBaseItem *item, folder->children()) {
-                        KUrl itemUrl = item->url();
-                        itemUrl.adjustPath(KUrl::RemoveTrailingSlash); //required to correctly compare urls
-                        if (itemUrl == targetUrl) {
-                            QModelIndex indx = proxy->mapFromSource( projectModel()->indexFromItem( item ) );
+                        if (item->url().equals(targetUrl, KUrl::CompareWithoutTrailingSlash)) {
+                            QModelIndex indx = mapFromItem( item );
                             selection.append(QItemSelectionRange(indx, indx));
                             setCurrentIndex(indx);
                         }
@@ -251,81 +249,30 @@ void ProjectTreeView::dropEvent(QDropEvent* event)
     event->accept();
 }
 
-ProjectTreeView::~ProjectTreeView()
+QModelIndex ProjectTreeView::mapFromSource(const QAbstractProxyModel* proxy, const QModelIndex& sourceIdx)
 {
-}
-
-ProjectFolderItem *ProjectTreeView::currentFolderItem() const
-{
-    Q_ASSERT( projectModel() != 0 );
-
-    QAbstractProxyModel *proxy = qobject_cast<QAbstractProxyModel*>(model());
-    QItemSelectionModel *selection = selectionModel();
-    QModelIndex current = proxy->mapToSource(selection->currentIndex());
-
-    while ( current.isValid() )
-    {
-        if ( ProjectFolderItem *folderItem = dynamic_cast<ProjectFolderItem*>( projectModel()->itemFromIndex( current ) ) )
-            return folderItem;
-
-        current = proxy->mapFromSource(projectModel()->parent( current ));
+    const QAbstractItemModel* next = proxy->sourceModel();
+    Q_ASSERT(next == sourceIdx.model() || qobject_cast<const QAbstractProxyModel*>(next));
+    if(next == sourceIdx.model())
+        return sourceIdx;
+    else {
+        const QAbstractProxyModel* nextProxy = qobject_cast<const QAbstractProxyModel*>(next);
+        QModelIndex idx = mapFromSource(nextProxy, sourceIdx);
+        Q_ASSERT(idx.model() == nextProxy);
+        return nextProxy->mapFromSource(idx);
     }
-
-    return 0;
 }
 
-ProjectFileItem *ProjectTreeView::currentFileItem() const
-
+QModelIndex ProjectTreeView::mapFromItem(const ProjectBaseItem* item)
 {
-    Q_ASSERT( projectModel() != 0 );
-
-    QAbstractProxyModel *proxy = qobject_cast<QAbstractProxyModel*>(model());
-    QItemSelectionModel *selection = selectionModel();
-    QModelIndex current = proxy->mapToSource(selection->currentIndex());
-
-    while ( current.isValid() )
-    {
-        if ( ProjectFileItem *fileItem = dynamic_cast<ProjectFileItem*>( projectModel()->itemFromIndex( current ) ) )
-            return fileItem;
-
-        current = proxy->mapFromSource(projectModel()->parent( current ));
-    }
-
-    return 0;
-}
-
-ProjectTargetItem *ProjectTreeView::currentTargetItem() const
-
-{
-    Q_ASSERT( projectModel() != 0 );
-
-    QItemSelectionModel *selection = selectionModel();
-    QModelIndex current = selection->currentIndex();
-
-    while ( current.isValid() )
-    {
-        if ( ProjectTargetItem *targetItem = dynamic_cast<ProjectTargetItem*>( projectModel()->itemFromIndex( current ) ) )
-            return targetItem;
-
-        current = projectModel()->parent( current );
-    }
-
-    return 0;
-}
-
-KDevelop::ProjectModel *ProjectTreeView::projectModel() const
-{
-    KDevelop::ProjectModel *ret;
-    QAbstractProxyModel *proxy = qobject_cast<QAbstractProxyModel*>(model());
-    ret=qobject_cast<KDevelop::ProjectModel*>( proxy->sourceModel() );
-    Q_ASSERT(ret);
+    QModelIndex ret = mapFromSource(qobject_cast<const QAbstractProxyModel*>(model()), item->index());
+    Q_ASSERT(ret.model() == model());
     return ret;
 }
 
 void ProjectTreeView::slotActivated( const QModelIndex &index )
 {
-    QAbstractProxyModel *proxy = qobject_cast<QAbstractProxyModel*>(model());
-    KDevelop::ProjectBaseItem *item = projectModel()->itemFromIndex( proxy->mapToSource(index) );
+    KDevelop::ProjectBaseItem *item = index.data(ProjectModel::ProjectItemRole).value<ProjectBaseItem*>();
     if ( item && item->file() )
     {
         emit activateUrl( item->file()->url() );
@@ -344,12 +291,10 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
 
     if ( indexAt(pos).isValid() )
     {
-        QAbstractProxyModel *proxy = qobject_cast<QAbstractProxyModel*>(model());
         QModelIndexList indexes = selectionModel()->selectedRows();
-
         foreach( const QModelIndex& index, indexes )
         {
-            if ( KDevelop::ProjectBaseItem *item = projectModel()->itemFromIndex( proxy->mapToSource(index) ) )
+            if ( KDevelop::ProjectBaseItem *item = index.data(ProjectModel::ProjectItemRole).value<ProjectBaseItem*>() )
                 itemlist << item;
         }
     }
@@ -447,13 +392,14 @@ bool ProjectTreeView::event(QEvent* event)
 {
     if(event->type()==QEvent::ToolTip)
     {
-        QPoint p=mapFromGlobal(QCursor::pos());
+        QPoint p = mapFromGlobal(QCursor::pos());
         QModelIndex idxView = indexAt(p);
         
-        QAbstractProxyModel *proxy = qobject_cast<QAbstractProxyModel*>(model());
-        QModelIndex idx = proxy->mapToSource(idxView);
+        ProjectBaseItem* it = idxView.data(ProjectModel::ProjectItemRole).value<ProjectBaseItem*>();
+        QModelIndex idx;
+        if(it)
+            idx = it->index();
         
-        ProjectBaseItem* it=projectModel()->itemFromIndex(idx);
         if((m_idx!=idx || !m_tooltip) && it && it->file())
         {
             m_idx=idx;

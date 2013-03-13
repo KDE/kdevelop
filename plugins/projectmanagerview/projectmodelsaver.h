@@ -22,8 +22,6 @@
 
 #include <kviewstatesaver.h>
 
-class ProjectModel;
-
 namespace KDevelop
 {
 
