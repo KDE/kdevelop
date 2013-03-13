@@ -32,7 +32,7 @@ const QString FAIL =           "\"%1\" FAILED: %2 %3";
 const QString TEST_NOT_FOUND = "Test not found";
 
 template<class T>
-class KDEVPLATFORMTESTS_EXPORT TestSuite
+class KDEVPLATFORMJSONTESTS_EXPORT TestSuite
 {
 public:
   typedef QString (*TestFunction)(const QVariant&, T);
