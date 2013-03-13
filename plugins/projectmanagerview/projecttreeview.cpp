@@ -254,12 +254,12 @@ QModelIndex ProjectTreeView::mapFromSource(const QAbstractProxyModel* proxy, con
     const QAbstractItemModel* next = proxy->sourceModel();
     Q_ASSERT(next == sourceIdx.model() || qobject_cast<const QAbstractProxyModel*>(next));
     if(next == sourceIdx.model())
-        return sourceIdx;
+        return proxy->mapFromSource(sourceIdx);
     else {
         const QAbstractProxyModel* nextProxy = qobject_cast<const QAbstractProxyModel*>(next);
         QModelIndex idx = mapFromSource(nextProxy, sourceIdx);
         Q_ASSERT(idx.model() == nextProxy);
-        return nextProxy->mapFromSource(idx);
+        return proxy->mapFromSource(idx);
     }
 }
 
