@@ -91,6 +91,7 @@ GenericName[it]=Gestore di file
 GenericName[ja]=ファイルマネージャ
 GenericName[lt]=Failų tvarkyklė
 GenericName[lv]=Failu pārvaldnieks
+GenericName[mr]=फाईल व्यवस्थापक
 GenericName[ms]=Pengurus Fail
 GenericName[nb]=Filbehandler
 GenericName[nds]=Dateipleger
