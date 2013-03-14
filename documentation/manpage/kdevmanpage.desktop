@@ -47,6 +47,7 @@ Name[fr]=Pages de manuel
 Name[gl]=Páxinas de manuais
 Name[hu]=Man oldalak
 Name[it]=Pagine man
+Name[mr]=Man पाने
 Name[nb]=Man-sider
 Name[nds]=Handbooksieden
 Name[nl]=Man-pagina's
