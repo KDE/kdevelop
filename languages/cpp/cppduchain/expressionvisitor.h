@@ -341,6 +341,7 @@ private:
   virtual void visitSignalSlotExpression (SignalSlotExpressionAST*);
   virtual void visitTypeIDOperator(TypeIDOperatorAST *);
   virtual void visitLambdaExpression(LambdaExpressionAST *);
+  virtual void visitBracedInitList(BracedInitListAST *);
   virtual void visit(AST* node);
 
   void visitExpressionToken(uint tokenIndex, AST* node);
@@ -351,6 +352,10 @@ private:
   ///Visits all nodes, and resets m_lastType and m_lastDeclaration to the previous values before each visit so they cannot influence each other
   template <class _Tp>
   void visitIndependentNodes(const ListNode<_Tp> *nodes);
+
+private:
+  void handleFunctionCallOrInit(AST* node, ExpressionAST* arguments);
+  bool m_handlingFunctionCallOrInit;
 };
 }
 

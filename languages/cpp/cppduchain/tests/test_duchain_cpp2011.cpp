@@ -850,13 +850,17 @@ void TestDUChain::testAuto()
     "void f() {\n"
     "  if (auto c1 = 0.0) {}\n"
     "}\n"
+    "struct FOO {};\n"
+    "auto a15 = FOO{};\n"
+    "auto a16 = FOO{1};\n"
+
   );
   LockedTopDUContext top = parse(code, DumpAll);
   QVERIFY(top);
   DUChainReadLocker lock;
   QVERIFY(top->problems().isEmpty());
 
-  QCOMPARE(top->localDeclarations().count(), 16);
+  QCOMPARE(top->localDeclarations().count(), 19);
 
   Declaration* dec = top->localDeclarations().at(1);
   QVERIFY(dec->type<IntegralType>());
@@ -904,9 +908,18 @@ void TestDUChain::testAuto()
     QCOMPARE(dec->abstractType()->modifiers(), (quint64) AbstractType::NoModifiers);
   }
 
-  dec = top->childContexts().last()->childContexts().at(0)->findDeclarations(Identifier("c1")).first();
+  dec = top->localDeclarations().at(15)->internalContext()->childContexts().first()->findDeclarations(Identifier("c1")).first();
   QVERIFY(dec->type<IntegralType>());
   QCOMPARE(dec->type<IntegralType>()->dataType(), (uint) IntegralType::TypeDouble);
+
+  StructureType::Ptr foo = top->localDeclarations().at(16)->type<StructureType>();
+  QVERIFY(foo);
+
+  dec = top->localDeclarations().at(17);
+  QVERIFY(dec->abstractType()->equals(foo.constData()));
+
+  dec = top->localDeclarations().at(18);
+  QVERIFY(dec->abstractType()->equals(foo.constData()));
 }
 
 void TestDUChain::testNoexcept()
