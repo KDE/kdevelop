@@ -653,7 +653,7 @@ void ProjectManagerViewPlugin::createFileFromContextMenu( )
 void ProjectManagerViewPlugin::copyFromContextMenu()
 {
     KDevelop::ProjectItemContext* ctx = dynamic_cast<KDevelop::ProjectItemContext*>(ICore::self()->selectionController()->currentSelection());
-    QList<QUrl> urls;
+    KUrl::List urls;
     foreach (ProjectBaseItem* item, ctx->items()) {
         if (item->folder() || item->file()) {
             urls << item->url();
@@ -662,7 +662,7 @@ void ProjectManagerViewPlugin::copyFromContextMenu()
     kDebug() << urls;
     if (!urls.isEmpty()) {
         QMimeData *data = new QMimeData;
-        data->setUrls(urls);
+        urls.populateMimeData(data);
         qApp->clipboard()->setMimeData(data);
     }
 }

@@ -27,7 +27,6 @@ Boston, MA 02110-1301, USA.
 #include <QtGui/QDragEnterEvent>
 #include <QtGui/QDropEvent>
 #include <QtGui/QMenuBar>
-#include <QtCore/QMimeData>
 #include <QtDBus/QDBusConnection>
 
 #include <KDE/KApplication>
