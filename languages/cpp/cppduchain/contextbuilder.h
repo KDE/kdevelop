@@ -196,11 +196,12 @@ protected:
   virtual void visitTryBlockStatement(TryBlockStatementAST*);
   virtual void visitCatchStatement(CatchStatementAST*);
   virtual void createTypeForDeclarator(DeclaratorAST *node);
-  virtual void createTypeForInitializer(InitializerAST *node);
-  virtual void closeTypeForInitializer(InitializerAST *node);
   virtual void closeTypeForDeclarator(DeclaratorAST *node);
+  virtual void createTypeForInitializer(InitializerAST *node);
+  virtual void createTypeForCondition(ConditionAST *node);
   virtual void visitParameterDeclarationClause(ParameterDeclarationClauseAST* node);
   virtual void visitLambdaDeclarator(LambdaDeclaratorAST* node);
+  virtual void visitCondition(ConditionAST *node);
 
   void queueImportedContext(DUContext* context) {
     DUChainReadLocker lock(DUChain::lock());
@@ -253,6 +254,7 @@ protected:
   QVector<KDevelop::DUContext::Import> m_importedParentContexts;
   QStack< QVector<KDevelop::DUContext::Import> > m_tryParentContexts;
   InitializerAST* m_currentInitializer;
+  ConditionAST* m_currentCondition;
   
   /// AST - DUChain/Uses mapping variables
   bool m_mapAst;

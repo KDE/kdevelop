@@ -411,6 +411,9 @@ void TestParser::testInitList_data()
   QTest::newRow("map") << "std::map<std::string,int> anim = { {\"bear\",4}, {\"cassowary\",2}, {\"tiger\",7} };";
   QTest::newRow("operator[]") << "void foo() { x[{1,2,3}] = 7; }"; // 5.2.1
   QTest::newRow("member") << "class a { a() : b{1,2,3} {} int b[3]; };";
+  QTest::newRow("condition") << "void f() { if (std::complex<double> foo{1, 2}) {} }";
+  QTest::newRow("temporary") << "auto s = std::string{};";
+  QTest::newRow("temporary-template") << "auto c = std::complex<double>{1, 2};";
 }
 
 void TestParser::testInitList()

@@ -179,6 +179,7 @@ public:
     DontAcceptTemplate = 0,
     AcceptTemplate = 1,
     //If this is given, template-parameters are only accepted if the name is followed by a function call
+    //or by a braced init list
     EventuallyAcceptTemplate = 2
   };
   bool parseName(NameAST *&node, ParseNameAcceptTemplate acceptTemplateId = DontAcceptTemplate);

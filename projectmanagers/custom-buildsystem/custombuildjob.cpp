@@ -91,13 +91,21 @@ void CustomBuildJob::start()
         setErrorText( i18n( "This command is disabled" ) );
         emitResult();
     } else {
+        // prepend the command name to the argument string
+        // so that splitArgs works correctly
+        const QString allargv = KShell::quoteArg(cmd) + " " + arguments;
+
         KShell::Errors err;
-        QStringList strargs = KShell::splitArgs( arguments, KShell::AbortOnMeta, &err );
+        QStringList strargs = KShell::splitArgs( allargv, KShell::AbortOnMeta, &err );
         if( err != KShell::NoError ) {
             setError( WrongArgs );
             setErrorText( i18n( "The given arguments would need a real shell, this is not supported currently." ) );
             emitResult();
         }
+        // and remove the command name back out of the split argument list
+        Q_ASSERT(!strargs.isEmpty());
+        strargs.removeFirst();
+
         setStandardToolView( KDevelop::IOutputView::BuildView );
         setBehaviours( KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
         KDevelop::OutputModel* model = new KDevelop::OutputModel( builddir );

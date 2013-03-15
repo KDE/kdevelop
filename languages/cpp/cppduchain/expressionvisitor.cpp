@@ -207,6 +207,7 @@ ExpressionVisitor::ExpressionVisitor(ParseSession* session, const KDevelop::TopD
 , m_topContext(0)
 , m_reportRealProblems(false)
 , m_propagateConstness(propagateConstness)
+, m_handlingFunctionCallOrInit(false)
 {
 }
 
@@ -1871,7 +1872,8 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     return !fail;
   }
 
-  void ExpressionVisitor::visitFunctionCall(FunctionCallAST* node) {
+  void ExpressionVisitor::handleFunctionCallOrInit(AST* node, ExpressionAST* arguments) {
+    PushValue<bool> handler(m_handlingFunctionCallOrInit, true);
     /**
      * If a class name was found, get its constructors.
      * */
@@ -1908,7 +1910,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
     clearLast();
 
-    bool fail = !buildParametersFromExpression(node->arguments);
+    bool fail = !buildParametersFromExpression(arguments);
 
     LOCKDUCHAIN;
 
@@ -2054,6 +2056,24 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
     if( m_lastType )
       expressionType( node, m_lastType, m_lastInstance );
+  }
+
+  void ExpressionVisitor::visitFunctionCall(FunctionCallAST* node)
+  {
+    if (m_handlingFunctionCallOrInit) {
+      DefaultVisitor::visitFunctionCall(node);
+      return;
+    }
+    handleFunctionCallOrInit(node, node->arguments);
+  }
+
+  void ExpressionVisitor::visitBracedInitList(BracedInitListAST* node)
+  {
+    if (m_handlingFunctionCallOrInit) {
+      DefaultVisitor::visitBracedInitList(node);
+      return;
+    }
+    handleFunctionCallOrInit(node, node);
   }
 
   void ExpressionVisitor::visitSignalSlotExpression(SignalSlotExpressionAST* node) {
