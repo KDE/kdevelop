@@ -847,13 +847,16 @@ void TestDUChain::testAuto()
     "auto a12(a4);\n"
     "auto a13(a5);\n"
     "auto a14(a6);\n"
+    "void f() {\n"
+    "  if (auto c1 = 0.0) {}\n"
+    "}\n"
   );
   LockedTopDUContext top = parse(code, DumpAll);
   QVERIFY(top);
   DUChainReadLocker lock;
   QVERIFY(top->problems().isEmpty());
 
-  QCOMPARE(top->localDeclarations().count(), 15);
+  QCOMPARE(top->localDeclarations().count(), 16);
 
   Declaration* dec = top->localDeclarations().at(1);
   QVERIFY(dec->type<IntegralType>());
@@ -896,11 +899,14 @@ void TestDUChain::testAuto()
 
   for (int i = 8; i < 15; ++i) {
     dec = top->localDeclarations().at(i);
-    qDebug() << dec->toString() << dec->abstractType()->toString();
     QVERIFY(dec->type<IntegralType>());
     QCOMPARE(dec->type<IntegralType>()->dataType(), (uint) IntegralType::TypeChar);
     QCOMPARE(dec->abstractType()->modifiers(), (quint64) AbstractType::NoModifiers);
   }
+
+  dec = top->childContexts().last()->childContexts().at(0)->findDeclarations(Identifier("c1")).first();
+  QVERIFY(dec->type<IntegralType>());
+  QCOMPARE(dec->type<IntegralType>()->dataType(), (uint) IntegralType::TypeDouble);
 }
 
 void TestDUChain::testNoexcept()
