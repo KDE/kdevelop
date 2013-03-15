@@ -52,7 +52,7 @@ void KDevDocumentViewDelegate::paint( QPainter *painter, const QStyleOptionViewI
         buttonOption.rect = option.rect;
         buttonOption.palette = option.palette;
         buttonOption.features = QStyleOptionButton::None;
-        m_view->style() ->drawControl( QStyle::CE_PushButton, &buttonOption, painter, m_view );
+        //m_view->style() ->drawControl( QStyle::CE_PushButton, &buttonOption, painter, m_view );
 
         QStyleOption branchOption;
         static const int i = 9; // ### hardcoded in qcommonstyle.cpp
@@ -67,11 +67,13 @@ void KDevDocumentViewDelegate::paint( QPainter *painter, const QStyleOptionViewI
         m_view->style() ->drawPrimitive( QStyle::PE_IndicatorBranch, &branchOption, painter, m_view );
 
         // draw text
+        
         QRect textrect = QRect( r.left() + i * 2, r.top(), r.width() - ( ( 5 * i ) / 2 ), r.height() );
         QString text = elidedText( option.fontMetrics, textrect.width(), Qt::ElideMiddle,
                                    model->data( index, Qt::DisplayRole ).toString() );
-        m_view->style() ->drawItemText( painter, textrect, Qt::AlignCenter,
+        m_view->style() ->drawItemText( painter, textrect, Qt::AlignLeft | Qt::AlignVCenter,
                                         option.palette, m_view->isEnabled(), text );
+        kDebug() << "Textrect:: " << textrect << text;
     }
     else
     {
@@ -82,7 +84,7 @@ void KDevDocumentViewDelegate::paint( QPainter *painter, const QStyleOptionViewI
 QSize KDevDocumentViewDelegate::sizeHint( const QStyleOptionViewItem &opt, const QModelIndex &index ) const
 {
     QStyleOptionViewItem option = opt;
-    QSize sz = QItemDelegate::sizeHint( opt, index ) + QSize( 2, 2 );
+    QSize sz = QItemDelegate::sizeHint( opt, index ) + QSize( 2, 8 );
     return sz;
 }
 

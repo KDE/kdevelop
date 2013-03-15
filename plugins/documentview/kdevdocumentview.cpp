@@ -257,6 +257,14 @@ void KDevDocumentView::saved( KDevelop::IDocument* )
 void KDevDocumentView::opened( KDevelop::IDocument* document )
 {
     QString mimeType = document->mimeType()->comment();
+    kDebug() << "Mimetype is: "  << mimeType;
+
+    QStringList ps = document->url().path().split('/');
+    kDebug() << "split: " << ps << ps.count();
+    if (ps.count() > 4) {
+        mimeType = ps[ps.count()-4] + "/" + ps[ps.count()-3] + "/" + ps[ps.count()-2];
+    }
+    
     KDevMimeTypeItem *mimeItem = m_documentModel->mimeType( mimeType );
     if ( !mimeItem )
     {
