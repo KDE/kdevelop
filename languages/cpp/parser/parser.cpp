@@ -630,7 +630,11 @@ bool Parser::parseName(NameAST*& node, ParseNameAcceptTemplate acceptTemplateId)
       
           if (acceptTemplateId == DontAcceptTemplate ||
             //Eventually only accept template parameters as primary expression if the expression is followed by a function call
-            (acceptTemplateId == EventuallyAcceptTemplate && n->template_arguments && session->token_stream->lookAhead() != '(' && m_primaryExpressionWithTemplateParamsNeedsFunctionCall))
+            //or by a braced init list
+            (acceptTemplateId == EventuallyAcceptTemplate && n->template_arguments
+              && session->token_stream->lookAhead() != '('
+              && session->token_stream->lookAhead() != '{'
+              && m_primaryExpressionWithTemplateParamsNeedsFunctionCall))
             {
               rewind(n->start_token);
               parseUnqualifiedName(n, false);
@@ -4352,6 +4356,17 @@ bool Parser::parsePostfixExpressionInternal(ExpressionAST *&node)
       }
       return true;
 
+    case '{':
+      {
+        ExpressionAST *expr = 0;
+        if (parseBracedInitList(expr))
+          {
+            UPDATE_POS(expr, start, _M_last_valid_token+1);
+            node = expr;
+            return true;
+          }
+        return false;
+      }
     case '.':
     case Token_arrow:
       {
@@ -4492,38 +4507,11 @@ bool Parser::parsePostfixExpression(ExpressionAST *&node)
       break;
     }
 
-  uint saved_pos = session->token_stream->cursor();
-
   TypeSpecifierAST *typeSpec = 0;
   ExpressionAST *expr = 0;
 
-  // let's try to parse a type
-  NameAST *name = 0;
-  if (parseName(name, AcceptTemplate))
-    {
-      Q_ASSERT(name->unqualified_name != 0);
-
-      bool has_template_args
-        = name->unqualified_name->template_arguments != 0;
-
-      if (has_template_args && session->token_stream->lookAhead() == '(')
-        {
-          ExpressionAST *cast_expr = 0;
-          if (parseCastExpression(cast_expr)
-              && cast_expr->kind == AST::Kind_CastExpression)
-            {
-              rewind(saved_pos);
-              parsePrimaryExpression(expr);
-              goto L_no_rewind;
-            }
-        }
-    }
-
-  rewind(saved_pos);
-
- L_no_rewind:
   bool expectPrimary = true;
-  if (!expr && parseSimpleTypeSpecifier(typeSpec,true))
+  if (parseSimpleTypeSpecifier(typeSpec,true))
     {
       if (session->token_stream->lookAhead() == '(')
         {
@@ -4537,19 +4525,15 @@ bool Parser::parsePostfixExpression(ExpressionAST *&node)
           expectPrimary = false;
         }
     }
-  else if (expr)
-    {
-      typeSpec = 0;
-      expectPrimary = false;
-    }
 
   if (expectPrimary)
     {
       typeSpec = 0;
       rewind(start);
 
-      if (!parsePrimaryExpression(expr))
+      if (!parsePrimaryExpression(expr)) {
         return false;
+      }
     }
 
   const ListNode<ExpressionAST*> *sub_expressions = 0;
