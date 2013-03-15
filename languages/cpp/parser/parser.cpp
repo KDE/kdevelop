@@ -3297,25 +3297,34 @@ bool Parser::parseCondition(ConditionAST *&node, bool initRequired)
             decl = 0;
         }
 
-      if (decl && (!initRequired || session->token_stream->lookAhead() == '='))
+      if (decl)
         {
-          ast->declarator = decl;
-
+          ExpressionAST* expression = 0;
           if (session->token_stream->lookAhead() == '=')
             {
               advance();
 
-              parseExpression(ast->expression);
+              parseExpression(expression);
+            }
+          else
+            {
+              parseBracedInitList(expression);
             }
 
-          UPDATE_POS(ast, start, _M_last_valid_token+1);
-          node = ast;
-          return true;
+          if (expression || !initRequired)
+            {
+              ast->declarator = decl;
+              ast->expression = expression;
+
+              UPDATE_POS(ast, start, _M_last_valid_token+1);
+              node = ast;
+              return true;
+            }
         }
     }
-    
+
   ast->type_specifier = 0;
-  
+
   rewind(start);
 
   if (!parseCommaExpression(ast->expression)) {
