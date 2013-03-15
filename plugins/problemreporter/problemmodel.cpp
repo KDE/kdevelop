@@ -266,7 +266,7 @@ void ProblemModel::timerExpired()
     rebuildProblemList();
 }
 
-QList<ProblemPointer> ProblemModel::getProblems(IndexedString url, bool showImports)
+QList<ProblemPointer> ProblemModel::getProblems(IndexedString url, bool showImports) const
 {
     QList<ProblemPointer> result;
     QSet<TopDUContext*> visitedContexts;
@@ -275,7 +275,7 @@ QList<ProblemPointer> ProblemModel::getProblems(IndexedString url, bool showImpo
     return result;
 }
 
-QList< ProblemPointer > ProblemModel::getProblems(QSet< IndexedString > urls, bool showImports)
+QList< ProblemPointer > ProblemModel::getProblems(QSet< IndexedString > urls, bool showImports) const
 {
     QList<ProblemPointer> result;
     QSet<TopDUContext*> visitedContexts;
@@ -286,7 +286,7 @@ QList< ProblemPointer > ProblemModel::getProblems(QSet< IndexedString > urls, bo
     return result;
 }
 
-void ProblemModel::getProblemsInternal(TopDUContext* context, bool showImports, QSet<TopDUContext*>& visitedContexts, QList<KDevelop::ProblemPointer>& result)
+void ProblemModel::getProblemsInternal(TopDUContext* context, bool showImports, QSet<TopDUContext*>& visitedContexts, QList<ProblemPointer>& result) const
 {
     if (!context || visitedContexts.contains(context)) {
         return;
@@ -316,8 +316,9 @@ void ProblemModel::getProblemsInternal(TopDUContext* context, bool showImports, 
 void ProblemModel::rebuildProblemList()
 {
     // No locking here, because it may be called from an already locked context
+    beginResetModel();
     m_problems = getProblems(m_documentSet->get(), m_showImports);
-    reset();
+    endResetModel();
 }
 
 void ProblemModel::setCurrentDocument(KDevelop::IDocument* document)
@@ -325,7 +326,6 @@ void ProblemModel::setCurrentDocument(KDevelop::IDocument* document)
     QWriteLocker locker(&m_lock);
     m_currentDocument = document->url();
     m_documentSet->setCurrentDocument(IndexedString(m_currentDocument));
-    reset();
 }
 
 void ProblemModel::setShowImports(bool showImports)

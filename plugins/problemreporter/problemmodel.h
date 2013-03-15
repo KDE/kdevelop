@@ -76,11 +76,11 @@ public:
     /**
      * Get problems for @ref url.
      */
-    QList<KDevelop::ProblemPointer> getProblems(KDevelop::IndexedString url, bool showImports);
+    QList<KDevelop::ProblemPointer> getProblems(KDevelop::IndexedString url, bool showImports) const;
     /**
      * Get merged list of problems for all @ref urls.
      */
-    QList<KDevelop::ProblemPointer> getProblems(QSet<KDevelop::IndexedString> urls, bool showImports);
+    QList<KDevelop::ProblemPointer> getProblems(QSet< KDevelop::IndexedString > urls, bool showImports) const;
     ProblemReporterPlugin* plugin();
 
 public slots:
@@ -99,7 +99,7 @@ private slots:
     void timerExpired();
 
 private:
-    void getProblemsInternal(KDevelop::TopDUContext* context, bool showImports, QSet<KDevelop::TopDUContext*>& visitedContexts, QList<KDevelop::ProblemPointer>& result);
+    void getProblemsInternal(KDevelop::TopDUContext* context, bool showImports, QSet<KDevelop::TopDUContext*>& visitedContexts, QList<KDevelop::ProblemPointer>& result) const;
     void rebuildProblemList();
 
     ProblemReporterPlugin* m_plugin;
