@@ -123,9 +123,6 @@ private:
      */
     QStringList parseCustomMakeFile( const KUrl &makefile );
 
-private slots:
-    void slotDirty(const QString& path);
-
 private:
     class Private;
     Private *d;

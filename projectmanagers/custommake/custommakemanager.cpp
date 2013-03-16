@@ -189,12 +189,7 @@ KDevelop::ProjectFolderItem* CustomMakeManager::import(KDevelop::IProject *proje
         return 0;
     }
 
-    ProjectFolderItem* ret = AbstractFileManagerPlugin::import( project );
-
-    connect(projectWatcher(project), SIGNAL(dirty(QString)),
-            this, SLOT(slotDirty(QString)));
-
-    return ret;
+    return AbstractFileManagerPlugin::import( project );
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -207,9 +202,6 @@ QStringList CustomMakeManager::parseCustomMakeFile( const KUrl &makefile )
         return QStringList();
 
     QStringList ret; // the list of targets
-//     KUrl absFileUrl = dir;
-    // TODO support Makefile, Makefile.xxx, makefile
-//     absFileUrl.addPath( "Makefile" );
     QFile f( makefile.toLocalFile() );
     if ( !f.open( QIODevice::ReadOnly | QIODevice::Text ) )
     {
@@ -248,14 +240,6 @@ QStringList CustomMakeManager::parseCustomMakeFile( const KUrl &makefile )
     }
     f.close();
     return ret;
-}
-
-void CustomMakeManager::slotDirty(const QString& path)
-{
-    if (!path.endsWith("Makefile")) {
-        return;
-    }
-
 }
 
 #include "custommakemanager.moc"
