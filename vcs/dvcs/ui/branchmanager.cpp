@@ -56,11 +56,13 @@ BranchManager::BranchManager(const QString &repo, KDevelop::DistributedVersionCo
     
     QString branchname = m_model->currentBranch();
     m_valid = !branchname.isEmpty();
-    if(m_valid) {
-        QList< QStandardItem* > items = m_model->findItems(branchname);
+
+    // apply initial selection
+    QList< QStandardItem* > items = m_model->findItems(branchname);
+    if (!items.isEmpty()) {
         m_ui->branchView->setCurrentIndex(items.first()->index());
     }
-    
+
     connect(m_ui->newButton, SIGNAL(clicked()), this, SLOT(createBranch()));
     connect(m_ui->deleteButton, SIGNAL(clicked()), this, SLOT(delBranch()));
     connect(m_ui->checkoutButton, SIGNAL(clicked()), this, SLOT(checkoutBranch()));
