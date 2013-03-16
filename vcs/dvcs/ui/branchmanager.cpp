@@ -44,7 +44,8 @@ BranchManager::BranchManager(const QString &repo, KDevelop::DistributedVersionCo
     , repo(repo), d(executor)
 {
     setButtons(KDialog::Close);
-    
+    setWindowTitle(i18n("Branch Manager"));
+
     m_ui = new Ui::BranchDialogBase;
     QWidget* w = new QWidget(this);
     m_ui->setupUi(w);
@@ -63,9 +64,17 @@ BranchManager::BranchManager(const QString &repo, KDevelop::DistributedVersionCo
         m_ui->branchView->setCurrentIndex(items.first()->index());
     }
 
+    m_ui->newButton->setIcon(KIcon("list-add"));
     connect(m_ui->newButton, SIGNAL(clicked()), this, SLOT(createBranch()));
+    m_ui->deleteButton->setIcon(KIcon("list-remove"));
     connect(m_ui->deleteButton, SIGNAL(clicked()), this, SLOT(delBranch()));
+    m_ui->renameButton->setIcon(KIcon("edit-rename"));
+    connect(m_ui->renameButton, SIGNAL(clicked()), this, SLOT(renameBranch()));
+    m_ui->checkoutButton->setIcon(KIcon("dialog-ok-apply"));
     connect(m_ui->checkoutButton, SIGNAL(clicked()), this, SLOT(checkoutBranch()));
+
+    // checkout branch on double-click
+    connect(m_ui->branchView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(checkoutBranch()));
 }
 
 BranchManager::~BranchManager()
@@ -116,6 +125,15 @@ void BranchManager::delBranch()
                                       i18n("Are you sure you want to irreversibly remove the branch '%1'?", baseBranch));
     if (ret == KMessageBox::Yes)
         m_model->removeBranch(baseBranch);
+}
+
+void BranchManager::renameBranch()
+{
+    QModelIndex currentIndex = m_ui->branchView->currentIndex();
+    if (!currentIndex.isValid())
+        return;
+
+    m_ui->branchView->edit(currentIndex);
 }
 
 void BranchManager::checkoutBranch()

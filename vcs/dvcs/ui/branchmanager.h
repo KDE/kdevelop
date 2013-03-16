@@ -50,6 +50,7 @@ signals:
 private slots:
     void createBranch();
     void delBranch();
+    void renameBranch();
     void checkoutBranch();
 
 private:
