@@ -65,18 +65,19 @@ class BranchItem : public QStandardItem
 
                 int ret = KMessageBox::messageBox(0, KMessageBox::WarningYesNo, 
                                                 i18n("Are you sure you want to rename \"%1\" to \"%2\"?", text(), newBranch));
+                if (ret == KMessageBox::No) {
+                    return; // ignore event
+                }
 
-                if (ret == KMessageBox::Yes ) {
-                    KDevelop::VcsJob *branchJob = bmodel->interface()->renameBranch(bmodel->repository(), newBranch, text());
-
-                    bool ret = branchJob->exec();
-                    kDebug() << "Renaming " << text() << " to " << newBranch << ':' << ret;
-                    if(ret) {
-                        setText(newBranch);
-                        QStandardItem::setData(value, Qt::DisplayRole);
-                    }
+                KDevelop::VcsJob *branchJob = bmodel->interface()->renameBranch(bmodel->repository(), newBranch, text());
+                ret = branchJob->exec();
+                kDebug() << "Renaming " << text() << " to " << newBranch << ':' << ret;
+                if (!ret) {
+                    return; // ignore event
                 }
             }
+
+            QStandardItem::setData(value, role);
         }
 };
 
