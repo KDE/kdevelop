@@ -30,7 +30,14 @@ using namespace KDevelop;
 
 QString getSafeString(const QVariant& variant)
 {
-    return variant.value<Grantlee::SafeString>().get();
+    if (variant.canConvert<Grantlee::SafeString>())
+    {
+        return variant.value<Grantlee::SafeString>().get();
+    }
+    else
+    {
+        return variant.toString();
+    }
 }
 
 QStringList words(const QVariant& input)
