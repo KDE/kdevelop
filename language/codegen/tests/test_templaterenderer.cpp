@@ -20,6 +20,7 @@
 
 #include "test_templaterenderer.h"
 #include "language/codegen/templaterenderer.h"
+#include "language/codegen/codedescription.h"
 
 #include "tests/autotestshell.h"
 #include "tests/testcore.h"
@@ -81,6 +82,19 @@ void TestTemplateRenderer::kdevFilters()
     QString result = renderer->render("{% load kdev_filters %}I am {{ activity }} software. {{ activity|upper_first }} is a very rewarding task. ", QString());
     QString expected = "I am testing software. Testing is a very rewarding task. ";
 
+    QCOMPARE(result, expected);
+}
+
+void TestTemplateRenderer::kdevFiltersWithLookup()
+{
+    VariableDescription description;
+    description.type = "int";
+    description.name = "number";
+    
+    renderer->addVariable("var", QVariant::fromValue(description));
+    QString result = renderer->render("{% load kdev_filters %}void set{{ var.name|upper_first }}({{ var.type }} {{ var.name }});", QString());
+    QString expected = "void setNumber(int number);";
+    
     QCOMPARE(result, expected);
 }
 

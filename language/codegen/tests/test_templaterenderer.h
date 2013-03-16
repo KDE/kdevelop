@@ -42,6 +42,7 @@ private slots:
 
     void includeTemplates();
     void kdevFilters();
+    void kdevFiltersWithLookup();
 
 private:
     KDevelop::TemplateRenderer* renderer;
