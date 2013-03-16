@@ -656,7 +656,7 @@ VcsJob* GitPlugin::renameBranch(const KUrl& repository, const QString& oldBranch
 VcsJob* GitPlugin::currentBranch(const KUrl& repository)
 {
     DVcsJob* job = new DVcsJob(urlDir(repository), this, OutputJob::Silent);
-    *job << "git" << "symbolic-ref" << "HEAD";
+    *job << "git" << "rev-parse" << "--abbrev-ref" << "HEAD";
     connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), SLOT(parseGitCurrentBranch(KDevelop::DVcsJob*)));
     return job;
 }
@@ -664,6 +664,12 @@ VcsJob* GitPlugin::currentBranch(const KUrl& repository)
 void GitPlugin::parseGitCurrentBranch(DVcsJob* job)
 {
     QString out = job->output().trimmed();
+
+    // in detached state, we'd like to return an empty string
+    if (out == "HEAD") {
+        out.clear();
+    }
+
     job->setResults(out.right(out.size()-11));
 }
 

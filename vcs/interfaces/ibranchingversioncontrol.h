@@ -80,7 +80,9 @@ public:
    virtual VcsJob* branches(const KUrl &repository) = 0;
 
    /**
-    * Returns the current branch name inside the specified repository
+    * Returns the current branch name inside the specified repository in a QString
+    *
+    * @note If we are not on a branch currently, the string will be empty
     *
     * @param repository The repository path where the current branch will be returned from
     */

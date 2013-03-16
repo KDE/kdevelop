@@ -26,6 +26,9 @@
 #include <vcs/interfaces/ibranchingversioncontrol.h>
 #include <vcs/vcsjob.h>
 #include <project/projectmodel.h>
+
+#include <KLocale>
+
 #include <QDebug>
 
 using namespace KDevelop;
@@ -44,10 +47,12 @@ QVariant VcsOverlayProxyModel::data(const QModelIndex& proxyIndex, int role) con
     if(role == Qt::DisplayRole && !proxyIndex.parent().isValid()) {
         IProject* p = qobject_cast<IProject*>(proxyIndex.data(ProjectModel::ProjectRole).value<QObject*>());
         QHash<IProject*, QString>::const_iterator it = m_branchName.constFind(p);
-        if(it!=m_branchName.constEnd())
-            return QVariant::fromValue<QString>(ret.toString()+" ("+*it+")");
-        else
+        if (it != m_branchName.constEnd()) {
+            QString branchName = ((*it).isEmpty() ? i18n("no branch") : *it);
+            return QVariant::fromValue<QString>(i18nc("project name (branch name)", ("%1 (%2)"), ret.toString(), branchName));
+        } else {
             return ret;
+        }
     } else
         return ret;
 }

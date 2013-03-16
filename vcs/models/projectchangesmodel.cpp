@@ -240,8 +240,10 @@ void ProjectChangesModel::repositoryBranchChanged(const KUrl& url)
 void ProjectChangesModel::branchNameReady(VcsJob* job)
 {
     IProject* project = qobject_cast<IProject*>(job->property("project").value<QObject*>());
-    if(job->status()==VcsJob::JobSucceeded)
-        projectItem(project)->setText(i18nc("project name (branch name)", "%1 (%2)", project->name(), job->fetchResults().toString()));
-    else
+    if(job->status()==VcsJob::JobSucceeded) {
+        QString branchName = job->fetchResults().toString().isEmpty() ? i18n("no branch") : job->fetchResults().toString();
+        projectItem(project)->setText(i18nc("project name (branch name)", "%1 (%2)", project->name(), branchName));
+    } else {
         projectItem(project)->setText(project->name());
+    }
 }

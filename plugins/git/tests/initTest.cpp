@@ -287,6 +287,17 @@ void GitInitTest::testBranching()
     VERIFYJOB(j);
     QVERIFY(runSynchronously(m_plugin->branches(KUrl(gitTest_BaseDir))).toStringList().contains(newBranch));
 
+    // switch branch
+    j = m_plugin->switchBranch(KUrl(gitTest_BaseDir), newBranch);
+    VERIFYJOB(j);
+    QCOMPARE(runSynchronously(m_plugin->currentBranch(gitTest_BaseDir)).toString(), newBranch);
+
+    // get into detached head state
+    j = m_plugin->switchBranch(KUrl(gitTest_BaseDir), "HEAD~1");
+    VERIFYJOB(j);
+    QCOMPARE(runSynchronously(m_plugin->currentBranch(gitTest_BaseDir)).toString(), QString(""));
+
+    // switch back
     j = m_plugin->switchBranch(KUrl(gitTest_BaseDir), newBranch);
     VERIFYJOB(j);
     QCOMPARE(runSynchronously(m_plugin->currentBranch(gitTest_BaseDir)).toString(), newBranch);
