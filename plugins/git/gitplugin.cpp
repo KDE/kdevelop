@@ -686,7 +686,11 @@ void GitPlugin::parseGitBranchOutput(DVcsJob* job)
         // "git rev-list" chokes on these entries and we do not need duplicate branches altogether.
         if (branch.contains("->"))
             continue;
-        
+
+        // Skip entries such as '(no branch)'
+        if (branch.contains("(no branch)"))
+            continue;
+
         if (branch.startsWith('*'))
             branch = branch.right(branch.size()-2);
         
