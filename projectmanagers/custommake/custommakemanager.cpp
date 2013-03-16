@@ -156,7 +156,11 @@ bool CustomMakeManager::isValid(const KUrl& url, const bool isFolder, IProject* 
 ProjectFileItem* CustomMakeManager::createFileItem(IProject* project, const KUrl& url, ProjectBaseItem* parent)
 {
     KDevelop::ProjectFileItem *item = new KDevelop::ProjectFileItem( project, url, parent );
-    if( url.fileName() == "Makefile" )
+    const QString fileName = url.fileName();
+    if( fileName == QLatin1String("Makefile")
+        || fileName == QLatin1String("makefile")
+        || fileName == QLatin1String("GNUmakefile")
+        || fileName == QLatin1String("BSDmakefile") )
     {
         QStringList targetlist = parseCustomMakeFile( url );
         foreach( const QString &target, targetlist )
