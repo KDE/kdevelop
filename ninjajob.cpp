@@ -142,9 +142,11 @@ void NinjaJob::appendLines(const QStringList& lines)
             it = ret.erase(it);
         prev = curr;
     }
-    
+    ///NOTE: Find a better way to achieve this without API changes in KDevplatform.
+    /*
     if(m_lastLine && ret.first().startsWith('['))
         model()->removeLastLines(1);
     m_lastLine = ret.last().startsWith('[');
+    */
     model()->appendLines(ret);
 }
