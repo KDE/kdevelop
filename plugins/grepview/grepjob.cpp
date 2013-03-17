@@ -87,7 +87,14 @@ GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re)
 }
 
 GrepJob::GrepJob( QObject* parent )
-    : KJob( parent ), m_workState(WorkIdle)
+    : KJob( parent )
+    , m_workState(WorkIdle)
+    , m_fileIndex(0)
+    , m_useProjectFilesFlag(false)
+    , m_regexpFlag(true)
+    , m_caseSensitiveFlag(true)
+    , m_depthValue(-1)
+    , m_findSomething(false)
 {
     setCapabilities(Killable);
     KDevelop::ICore::self()->uiController()->registerStatus(this);
