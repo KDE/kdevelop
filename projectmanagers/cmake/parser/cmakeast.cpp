@@ -3331,7 +3331,7 @@ bool TryRunAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         return false;
     
     enum Actions { None, CMakeFlags, CompileDefs, OutputVariable, Args };
-    Actions act;
+    Actions act = None;
     unsigned int i=0;
     foreach(const CMakeFunctionArgument& arg, func.arguments) {
         QString val=arg.value.toLower();
