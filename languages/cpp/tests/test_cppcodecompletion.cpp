@@ -3653,26 +3653,29 @@ void TestCppCodeCompletion::testLookaheadMatches_data()
   QTest::addColumn<QStringList>("completions"); // completions offered
 
   QTest::newRow("Function Arg") << "m_smartOne.setOne(" << (
-    QStringList() << "setOne" << "m_one" << "m_two" << "m_smartOne" << "ThreeTwoOne" << "One" << "Two" << "OneSmartPointer"
-                  << "OneTwoThree" << "m_two.hatPointer" << "m_smartOne.operator->" << "this");
+    QStringList() << "setOne" << "m_one" << "m_two" << "m_smartOne" << "m_access" << "ThreeTwoOne" << "One" << "Two"
+                  << "OneSmartPointer" << "Access" << "OneTwoThree" << "m_two.hatPointer" << "m_smartOne.operator->" << "this");
   QTest::newRow("Smart Pointer") << "int foo = " << (
-    QStringList() << "int =" << "m_one" << "m_two" << "m_smartOne" << "ThreeTwoOne" << "One" << "Two" << "OneSmartPointer"
-                  << "OneTwoThree" << "m_one.alsoRan" << "m_two.meToo" << "m_smartOne->alsoRan" << "this");
+    QStringList() << "int =" << "m_one" << "m_two" << "m_smartOne" << "m_access" << "ThreeTwoOne" << "One" << "Two"
+                  << "OneSmartPointer" << "Access" << "OneTwoThree" << "m_one.alsoRan" << "m_two.meToo" << "m_smartOne->alsoRan"
+                  << "m_access.publicMember" << "this");
   QTest::newRow("Type Converstions") << "m_smartOne = " << (
-    QStringList() << "OneSmartPointer m_smartOne =" << "m_one" << "m_two" << "m_smartOne" << "ThreeTwoOne" << "One" << "Two"
-                  << "OneSmartPointer" << "OneTwoThree" << "m_two.hatPointer" << "m_smartOne.operator->" << "this" );
+    QStringList() << "OneSmartPointer m_smartOne =" << "m_one" << "m_two" << "m_smartOne" << "m_access" << "ThreeTwoOne"
+                  << "One" << "Two" << "OneSmartPointer" << "Access" << "OneTwoThree" << "m_two.hatPointer"
+                  << "m_smartOne.operator->" << "this" );
   QTest::newRow("Assignment") << "m_one =  " << (
-    QStringList() << "One m_one =" << "m_one" << "m_two" << "m_smartOne" << "ThreeTwoOne" << "One" << "Two" << "OneSmartPointer"
-                  << "OneTwoThree" << "m_two.hat" << "this" );
+    QStringList() << "One m_one =" << "m_one" << "m_two" << "m_smartOne" << "m_access" << "ThreeTwoOne" << "One" << "Two"
+                  << "OneSmartPointer" << "Access" << "OneTwoThree" << "m_two.hat" << "this" );
   QTest::newRow("Equality") << "m_one == " << (
-    QStringList() << "m_one" << "m_two" << "m_smartOne" << "ThreeTwoOne" << "One" << "Two" << "OneSmartPointer" << "OneTwoThree"
-                  << "m_two.hat" << "this" );
+    QStringList() << "m_one" << "m_two" << "m_smartOne" << "m_access" << "ThreeTwoOne" << "One" << "Two" << "OneSmartPointer"
+                  << "Access" << "OneTwoThree" << "m_two.hat" << "this" );
   QTest::newRow("ReturnAccess") << "return" << (
-    QStringList() << "return int" << "m_one" << "m_two" << "m_smartOne" << "ThreeTwoOne" << "One" << "Two" << "OneSmartPointer"
-                  << "OneTwoThree" << "m_one.alsoRan" << "m_two.meToo" << "m_smartOne->alsoRan" << "this" );
+    QStringList() << "return int" << "m_one" << "m_two" << "m_smartOne" << "m_access" << "ThreeTwoOne" << "One" << "Two"
+                  << "OneSmartPointer" << "Access" << "OneTwoThree" << "m_one.alsoRan" << "m_two.meToo" << "m_smartOne->alsoRan"
+                  << "m_access.publicMember" << "this" );
   QTest::newRow("No Lookahead") << "One::NoLookahead test = " << (
-    QStringList() << "One::NoLookahead NoLookahead =" << "m_one" << "m_two" << "m_smartOne" << "ThreeTwoOne" << "One" << "Two"
-                  << "OneSmartPointer" << "OneTwoThree" << "NO" << "CAN" << "SEE" << "this" );
+    QStringList() << "One::NoLookahead NoLookahead =" << "m_one" << "m_two" << "m_smartOne" << "m_access" << "ThreeTwoOne"
+                  << "One" << "Two" << "OneSmartPointer" << "Access" << "OneTwoThree" << "NO" << "CAN" << "SEE" << "this" );
 }
 
 void TestCppCodeCompletion::testLookaheadMatches()
@@ -3680,12 +3683,13 @@ void TestCppCodeCompletion::testLookaheadMatches()
   QByteArray test = "struct One { enum NoLookahead { NO, CAN, SEE, }; int alsoRan; typedef int myInt; };"
                     "struct Two { One hat; One *hatPointer; int meToo(); };"
                     "struct OneSmartPointer { OneSmartPointer(One*) {}; void setOne(One*); One* operator->() const {} };"
-                    "struct OneTwoThree { One m_one; Two m_two; OneSmartPointer m_smartOne; int ThreeTwoOne() { } };";
+                    "class Access{ int privateMember; public: int publicMember; };"
+                    "struct OneTwoThree { One m_one; Two m_two; OneSmartPointer m_smartOne; Access m_access; int ThreeTwoOne() { } };";
   QFETCH(QString, insert);
   QFETCH(QStringList, completions);
   TopDUContext* top = parse(test, DumpNone);
   DUChainWriteLocker lock(DUChain::lock());
-  DUContext *testContext = top->childContexts()[3]->childContexts()[1];
+  DUContext *testContext = top->childContexts()[4]->childContexts()[1];
   CompletionItemTester tester(testContext, insert);
   QCOMPARE(tester.names, completions);
   release(top);
