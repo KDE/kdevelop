@@ -1425,7 +1425,7 @@ ContextMenuExtension CMakeManager::contextMenuExtension( KDevelop::Context* cont
     ContextMenuExtension menuExt;
     if(items.count()==1 && dynamic_cast<DUChainAttatched*>(items.first()))
     {
-        KAction* action = new KAction( i18n( "Jump to target definition" ), this );
+        KAction* action = new KAction( i18n( "Jump to Target Definition" ), this );
         connect( action, SIGNAL(triggered()), this, SLOT(jumpToDeclaration()) );
         menuExt.addAction( ContextMenuExtension::ProjectGroup, action );
     }
