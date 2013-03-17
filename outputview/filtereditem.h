@@ -49,7 +49,7 @@ struct KDEVPLATFORMOUTPUTVIEW_EXPORT FilteredItem
         InformationItem = 6
     };
 
-    explicit FilteredItem( const QString& line );
+    explicit FilteredItem( const QString& line = QString() );
 
     FilteredItem( const QString& line, FilteredOutputItemType type );
 
@@ -68,5 +68,6 @@ struct KDEVPLATFORMOUTPUTVIEW_EXPORT FilteredItem
 } // namespace KDevelop
 
 Q_DECLARE_METATYPE( KDevelop::FilteredItem::FilteredOutputItemType )
+Q_DECLARE_TYPEINFO( KDevelop::FilteredItem, Q_MOVABLE_TYPE );
 
 #endif // FILTEREDITEM_H

@@ -29,39 +29,172 @@
 
 #include <QtCore/QStringList>
 #include <QtCore/QTimer>
+#include <QThread>
+#include <QFont>
+#include <QApplication>
 
 #include <KDebug>
-#include <kglobalsettings.h>
+#include <KGlobalSettings>
 
-#include <QFont>
+
+#include <set>
+
+Q_DECLARE_METATYPE(QVector<KDevelop::FilteredItem>)
+Q_DECLARE_METATYPE(KDevelop::IFilterStrategy*)
 
 namespace KDevelop
 {
 
+/**
+ * Number of lines that are processed in one go before we notify the GUI thread
+ * about the result. It is generally faster to add multiple items to a model
+ * in one go compared to adding each item independently.
+ */
+static const int BATCH_SIZE = 50;
+
+/**
+ * Time in ms that we wait in the parse worker for new incoming lines before
+ * actually processing them. If we already have enough for one batch though
+ * we process immediately.
+ */
+static const int BATCH_AGGREGATE_TIME_DELAY = 100;
+
+class ParseWorker : public QObject
+{
+    Q_OBJECT
+public:
+    ParseWorker()
+        : QObject(0)
+        , m_filter( new NoFilterStrategy )
+        , m_timer(new QTimer(this))
+    {
+        m_timer->setInterval(BATCH_AGGREGATE_TIME_DELAY);
+        m_timer->setSingleShot(true);
+        connect(m_timer, SIGNAL(timeout()), SLOT(process()));
+    }
+
+public slots:
+    void changeFilterStrategy( KDevelop::IFilterStrategy* newFilterStrategy )
+    {
+        m_filter = QSharedPointer<IFilterStrategy>( newFilterStrategy );
+    }
+
+    void addLines( const QStringList& lines )
+    {
+        m_cachedLines << lines;
+
+        if (m_cachedLines.size() >= BATCH_SIZE) {
+            // if enough lines were added, process immediately
+            m_timer->stop();
+            process();
+        } else if (!m_timer->isActive()) {
+            m_timer->start();
+        }
+    }
+
+signals:
+    void parsedBatch(const QVector<KDevelop::FilteredItem>& filteredItems);
+
+private slots:
+    /**
+     * Process *all* cached lines, emit parsedBatch for each batch
+     */
+    void process()
+    {
+        QVector<KDevelop::FilteredItem> filteredItems;
+        filteredItems.reserve(qMin(BATCH_SIZE, m_cachedLines.size()));
+
+        foreach(const QString& line, m_cachedLines) {
+            FilteredItem item = m_filter->errorInLine(line);
+            if( item.type == FilteredItem::InvalidItem ) {
+                item = m_filter->actionInLine(line);
+            }
+
+            filteredItems << item;
+
+            if( filteredItems.size() == BATCH_SIZE ) {
+                emit parsedBatch(filteredItems);
+                filteredItems.clear();
+                filteredItems.reserve(qMin(BATCH_SIZE, m_cachedLines.size()));
+            }
+        }
+
+        // Make sure to emit the rest as well
+        if( !filteredItems.isEmpty() ) {
+            emit parsedBatch(filteredItems);
+        }
+        m_cachedLines.clear();
+    }
+
+private:
+    QSharedPointer<IFilterStrategy> m_filter;
+    QStringList m_cachedLines;
+
+    QTimer* m_timer;
+};
+
+class ParsingThread
+{
+public:
+    virtual ~ParsingThread()
+    {
+        if (m_thread.isRunning()) {
+            m_thread.quit();
+            m_thread.wait();
+        }
+    }
+    void addWorker(ParseWorker* worker)
+    {
+        if (!m_thread.isRunning()) {
+            m_thread.start();
+        }
+        worker->moveToThread(&m_thread);
+    }
+private:
+    QThread m_thread;
+};
+
+K_GLOBAL_STATIC(ParsingThread, s_parsingThread);
+
 struct OutputModelPrivate
 {
-    OutputModelPrivate();
-    OutputModelPrivate( const KUrl& builddir );
+    OutputModelPrivate( OutputModel* model, const KUrl& builddir = KUrl() );
     ~OutputModelPrivate();
     bool isValidIndex( const QModelIndex&, int currentRowCount ) const;
-    QList<FilteredItem> m_filteredItems;
+
+    OutputModel* model;
+    ParseWorker* worker;
+
+    QVector<FilteredItem> m_filteredItems;
     // We use std::set because that is ordered
     std::set<int> m_errorItems; // Indices of all items that we want to move to using previous and next
     KUrl m_buildDir;
 
-    QQueue<QString> m_lineBuffer;
-    QSharedPointer<IFilterStrategy> m_filter;
+    void linesParsed(const QVector<KDevelop::FilteredItem>& items)
+    {
+        model->beginInsertRows( QModelIndex(), model->rowCount(), model->rowCount() + items.size() -  1);
+
+        foreach( const FilteredItem& item, items ) {
+            if( item.type == FilteredItem::ErrorItem ) {
+                m_errorItems.insert(m_filteredItems.size());
+            }
+            m_filteredItems << item;
+        }
+
+        model->endInsertRows();
+    }
 };
 
-OutputModelPrivate::OutputModelPrivate()
-: m_filter( new NoFilterStrategy )
+OutputModelPrivate::OutputModelPrivate( OutputModel* model_, const KUrl& builddir)
+: model(model_)
+, worker(new ParseWorker )
+, m_buildDir( builddir )
 {
-}
-
-OutputModelPrivate::OutputModelPrivate(const KUrl& builddir)
-: m_buildDir( builddir )
-, m_filter( new NoFilterStrategy )
-{
+    qRegisterMetaType<QVector<KDevelop::FilteredItem> >();
+    qRegisterMetaType<KDevelop::IFilterStrategy*>();
+    s_parsingThread->addWorker(worker);
+    model->connect(worker, SIGNAL(parsedBatch(QVector<KDevelop::FilteredItem>)),
+                   model, SLOT(linesParsed(QVector<KDevelop::FilteredItem>)));
 }
 
 bool OutputModelPrivate::isValidIndex( const QModelIndex& idx, int currentRowCount ) const
@@ -69,20 +202,20 @@ bool OutputModelPrivate::isValidIndex( const QModelIndex& idx, int currentRowCou
     return ( idx.isValid() && idx.row() >= 0 && idx.row() < currentRowCount && idx.column() == 0 );
 }
 
-
 OutputModelPrivate::~OutputModelPrivate()
 {
+    worker->deleteLater();
 }
 
 OutputModel::OutputModel( const KUrl& builddir, QObject* parent )
 : QAbstractListModel(parent)
-, d( new OutputModelPrivate( builddir ) )
+, d( new OutputModelPrivate( this, builddir ) )
 {
 }
 
 OutputModel::OutputModel( QObject* parent )
     : QAbstractListModel(parent)
-, d( new OutputModelPrivate )
+, d( new OutputModelPrivate( this ) )
 {
 }
 
@@ -209,26 +342,30 @@ QModelIndex OutputModel::previousHighlightIndex( const QModelIndex &currentIdx )
 
 void OutputModel::setFilteringStrategy(const OutputFilterStrategy& currentStrategy)
 {
-    //kDebug() << "set filtering strategy was called";
+    IFilterStrategy* filter = 0;
     switch( currentStrategy )
     {
         case NoFilter:
-            d->m_filter = QSharedPointer<IFilterStrategy>( new NoFilterStrategy );
+            filter = new NoFilterStrategy;
             break;
         case CompilerFilter:
-            d->m_filter = QSharedPointer<IFilterStrategy>( new CompilerFilterStrategy( d->m_buildDir ) );
+            filter = new CompilerFilterStrategy( d->m_buildDir );
             break;
         case ScriptErrorFilter:
-            d->m_filter = QSharedPointer<IFilterStrategy>( new ScriptErrorFilterStrategy );
+            filter = new ScriptErrorFilterStrategy;
             break;
         case StaticAnalysisFilter:
-            d->m_filter = QSharedPointer<IFilterStrategy>( new StaticAnalysisFilterStrategy );
+            filter = new StaticAnalysisFilterStrategy;
             break;
         default:
             // assert(false);
-            d->m_filter = QSharedPointer<IFilterStrategy>( new NoFilterStrategy );
+            filter = new NoFilterStrategy;
             break;
     }
+    Q_ASSERT(filter);
+
+    QMetaObject::invokeMethod(d->worker, "changeFilterStrategy",
+                              Q_ARG(KDevelop::IFilterStrategy*, filter));
 }
 
 void OutputModel::appendLines( const QStringList& lines )
@@ -236,8 +373,8 @@ void OutputModel::appendLines( const QStringList& lines )
     if( lines.isEmpty() )
         return;
 
-    d->m_lineBuffer << lines;
-    QMetaObject::invokeMethod(this, "addLineBatch", Qt::QueuedConnection);
+    QMetaObject::invokeMethod(d->worker, "addLines",
+                              Q_ARG(QStringList, lines));
 }
 
 void OutputModel::appendLine( const QString& l )
@@ -245,79 +382,7 @@ void OutputModel::appendLine( const QString& l )
     appendLines( QStringList() << l );
 }
 
-
-void OutputModel::addLineBatch()
-{
-     // only add this many lines in one batch, then return to the event loop
-    // this prevents overly long UI lockup and is simple enough to implement
-    const int maxLines = 50;
-    const int linesInBatch = qMin(d->m_lineBuffer.count(), maxLines);
-
-    // If there is nothing to insert we are done.
-    if ( linesInBatch == 0 )
-            return;
-
-    beginInsertRows( QModelIndex(), rowCount(), rowCount() + linesInBatch -  1);
-
-    for(int i = 0; i < linesInBatch; ++i) {
-        const QString line = d->m_lineBuffer.dequeue();
-        FilteredItem item = d->m_filter->errorInLine(line);
-        if( item.type == FilteredItem::InvalidItem ) {
-            item = d->m_filter->actionInLine(line);
-        }
-        if( item.type == FilteredItem::ErrorItem ) {
-            d->m_errorItems.insert(d->m_filteredItems.size());
-        }
-
-        d->m_filteredItems << item;
-    }
-
-    endInsertRows();
-
-    if (!d->m_lineBuffer.isEmpty()) {
-        QMetaObject::invokeMethod(this, "addLineBatch", Qt::QueuedConnection);
-    }
-}
-
-void OutputModel::flushLineBuffer()
-{
-    if (d->m_lineBuffer.isEmpty())
-        return;
-
-    beginInsertRows( QModelIndex(), rowCount(), rowCount() + d->m_lineBuffer.size() -  1);
-
-    for(; !d->m_lineBuffer.isEmpty();) {
-        const QString line = d->m_lineBuffer.dequeue();
-        FilteredItem item = d->m_filter->errorInLine(line);
-        if( item.type == FilteredItem::InvalidItem ) {
-            item = d->m_filter->actionInLine(line);
-        }
-        if( item.type == FilteredItem::ErrorItem ) {
-            d->m_errorItems.insert(d->m_filteredItems.size());
-        }
-
-        d->m_filteredItems << item;
-    }
-
-    endInsertRows();
-}
-
-void OutputModel::removeLastLines(int l)
-{
-    for(; l>0 && !d->m_lineBuffer.isEmpty(); --l) {
-        d->m_lineBuffer.removeLast();
-    }
-    
-    if(l<=0)
-        return;
-    
-    beginRemoveRows(QModelIndex(), d->m_lineBuffer.size()-l, d->m_lineBuffer.size()-1);
-    for(; l>0 && !d->m_filteredItems.isEmpty(); --l) {
-        d->m_filteredItems.removeLast();
-    }
-    endRemoveColumns();
-}
-
 }
 
 #include "outputmodel.moc"
+#include "moc_outputmodel.cpp"

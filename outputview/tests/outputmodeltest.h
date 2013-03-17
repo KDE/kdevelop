@@ -32,15 +32,8 @@ public:
     explicit OutputModelTest(QObject* parent = 0);
 
 private slots:
-    void testSetFilteringStrategy();
-    void benchmarkAddlinesNofilter();
-    void benchmarkAddlinesCompilerfilter();
-    void benchmarkAddlinesScriptErrorfilter();
-    void benchmarkAddlinesStaticAnalysisfilter();
-    void benchAddLongLine();
-
-private:
-    void do_currentBench(KDevelop::OutputModel& testee);
+    void bench();
+    void bench_data();
 };
 
 }

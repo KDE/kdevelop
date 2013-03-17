@@ -24,17 +24,10 @@
 
 #include "outputviewexport.h"
 #include "ioutputviewmodel.h"
-#include "filtereditem.h"
-#include "ifilterstrategy.h"
 
 #include <QtCore/QAbstractListModel>
-#include <QString>
-#include <KUrl>
-#include <QLinkedList>
-#include <QQueue>
-#include <QSharedPointer>
 
-#include <set>
+class KUrl;
 
 namespace KDevelop
 {
@@ -74,23 +67,20 @@ public:
     QVariant headerData( int, Qt::Orientation, int = Qt::DisplayRole ) const;
 
     void setFilteringStrategy(const OutputFilterStrategy& currentStrategy);
-    void removeLastLines(int l);
-
-    void flushLineBuffer();
 
 public Q_SLOTS:
     void appendLine( const QString& );
     void appendLines( const QStringList& );
 
-private slots:
-    /// add batches of lines to prevent UI-lockup
-    void addLineBatch();
-
 private:
     OutputModelPrivate* const d;
+    friend class OutputModelPrivate;
+    Q_PRIVATE_SLOT(d, void linesParsed(const QVector<KDevelop::FilteredItem>& lines));
 };
 
-//Q_DECLARE_METATYPE( OutputModel::OutputItemType )
 }
+
+Q_DECLARE_METATYPE( KDevelop::OutputModel::OutputFilterStrategy )
+
 #endif
 
