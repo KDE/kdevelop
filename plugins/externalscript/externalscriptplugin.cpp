@@ -121,18 +121,18 @@ ExternalScriptPlugin::ExternalScriptPlugin( QObject* parent, const QVariantList&
   if ( firstUse ) {
     // some example scripts
     ExternalScriptItem* item = new ExternalScriptItem;
-    item->setText( i18n("quick compile") );
+    item->setText( i18n("Quick Compile") );
     item->setCommand( "g++ -o %b %f && ./%b" );
     m_model->appendRow( item );
 
     item = new ExternalScriptItem;
-    item->setText( i18n("google selection") );
+    item->setText( i18n("Google Selection") );
     item->setCommand( "xdg-open \"http://www.google.de/search?q=%s\"" );
     item->setShowOutput( false );
     m_model->appendRow( item );
 
     item = new ExternalScriptItem;
-    item->setText( i18n("sort selection") );
+    item->setText( i18n("Sort Selection") );
     item->setCommand( "sort" );
     item->setInputMode( ExternalScriptItem::InputSelectionOrDocument );
     item->setOutputMode( ExternalScriptItem::OutputReplaceSelectionOrDocument );
