@@ -21,25 +21,25 @@
 #ifndef BRANCH_MANAGER_H
 #define BRANCH_MANAGER_H
 
-#include <QtGui/QStringListModel>
 #include <KDE/KDialog>
-#include <QStandardItemModel>
+
+#include <QStringListModel>
 
 class BranchesListModel;
 class KJob;
+
 namespace Ui { class BranchDialogBase; }
 
 namespace KDevelop
 {
-    class DistributedVersionControlPlugin;
-class IBranchingVersionControl;
+class DistributedVersionControlPlugin;
 }
 
 class BranchManager : public KDialog
 {
     Q_OBJECT
 public:
-    BranchManager(const QString &_repo, KDevelop::DistributedVersionControlPlugin* executor, QWidget *parent = 0);
+    BranchManager(const QString& repository, KDevelop::DistributedVersionControlPlugin* executor, QWidget *parent = 0);
     ~BranchManager();
     
     bool isValid() const { return m_valid; }
@@ -49,13 +49,13 @@ signals:
 
 private slots:
     void createBranch();
-    void delBranch();
+    void deleteBranch();
     void renameBranch();
     void checkoutBranch();
 
 private:
-    QString repo;
-    KDevelop::DistributedVersionControlPlugin* d;
+    QString m_repository;
+    KDevelop::DistributedVersionControlPlugin* m_dvcPlugin;
 
     Ui::BranchDialogBase* m_ui;
     BranchesListModel* m_model;

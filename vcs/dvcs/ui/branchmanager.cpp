@@ -39,9 +39,10 @@
 
 using namespace KDevelop;
 
-BranchManager::BranchManager(const QString &repo, KDevelop::DistributedVersionControlPlugin* executor, QWidget *parent)
+BranchManager::BranchManager(const QString& repository, KDevelop::DistributedVersionControlPlugin* executor, QWidget *parent)
     : KDialog(parent)
-    , repo(repo), d(executor)
+    , m_repository(repository)
+    , m_dvcPlugin(executor)
 {
     setButtons(KDialog::Close);
     setWindowTitle(i18n("Branch Manager"));
@@ -52,14 +53,14 @@ BranchManager::BranchManager(const QString &repo, KDevelop::DistributedVersionCo
     setMainWidget(w);
 
     m_model = new BranchesListModel(this);
-    m_model->initialize(d, repo);
+    m_model->initialize(m_dvcPlugin, repository);
     m_ui->branchView->setModel(m_model);
     
-    QString branchname = m_model->currentBranch();
-    m_valid = !branchname.isEmpty();
+    QString branchName = m_model->currentBranch();
+    m_valid = !branchName.isEmpty();
 
     // apply initial selection
-    QList< QStandardItem* > items = m_model->findItems(branchname);
+    QList< QStandardItem* > items = m_model->findItems(branchName);
     if (!items.isEmpty()) {
         m_ui->branchView->setCurrentIndex(items.first()->index());
     }
@@ -67,7 +68,7 @@ BranchManager::BranchManager(const QString &repo, KDevelop::DistributedVersionCo
     m_ui->newButton->setIcon(KIcon("list-add"));
     connect(m_ui->newButton, SIGNAL(clicked()), this, SLOT(createBranch()));
     m_ui->deleteButton->setIcon(KIcon("list-remove"));
-    connect(m_ui->deleteButton, SIGNAL(clicked()), this, SLOT(delBranch()));
+    connect(m_ui->deleteButton, SIGNAL(clicked()), this, SLOT(deleteBranch()));
     m_ui->renameButton->setIcon(KIcon("edit-rename"));
     connect(m_ui->renameButton, SIGNAL(clicked()), this, SLOT(renameBranch()));
     m_ui->checkoutButton->setIcon(KIcon("dialog-ok-apply"));
@@ -108,7 +109,7 @@ void BranchManager::createBranch()
         m_model->createBranch(baseBranch, newBranch);
 }
 
-void BranchManager::delBranch()
+void BranchManager::deleteBranch()
 {
     QString baseBranch = m_ui->branchView->selectionModel()->selection().indexes().first().data().toString();
 
@@ -147,8 +148,8 @@ void BranchManager::checkoutBranch()
         return;
     }
 
-    kDebug() << "Switching to" << branch << "in" << repo;
-    KDevelop::VcsJob *branchJob = d->switchBranch(repo, branch);
+    kDebug() << "Switching to" << branch << "in" << m_repository;
+    KDevelop::VcsJob *branchJob = m_dvcPlugin->switchBranch(m_repository, branch);
 //     connect(branchJob, SIGNAL(finished(KJob*)), m_model, SIGNAL(resetCurrent()));
     
     ICore::self()->runController()->registerJob(branchJob);
