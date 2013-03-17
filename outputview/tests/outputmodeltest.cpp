@@ -32,6 +32,11 @@ namespace KDevelop
 
 OutputModelTest::OutputModelTest(QObject* parent): QObject(parent)
 {
+    // fix error:
+    // KGlobal::locale() must be called from the main thread before using i18n()
+    // in threads. KApplication takes care of this. If not using KApplication,
+    // call KGlobal::locale() during initialization.
+    KGlobal::locale();
 }
 
 QStringList generateLines()
