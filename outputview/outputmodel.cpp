@@ -136,6 +136,10 @@ private:
 class ParsingThread
 {
 public:
+    ParsingThread()
+    {
+        m_thread.setObjectName("ParsingThread");
+    }
     virtual ~ParsingThread()
     {
         if (m_thread.isRunning()) {
