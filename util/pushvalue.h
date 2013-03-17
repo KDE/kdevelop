@@ -26,36 +26,49 @@
  * restore the backed up value back on destruction.
  * */
 template<class Value>
-class PushValue {
-  public:
-    PushValue( Value& ptr, const Value& push = Value()  ) : m_ptr(ptr)  {
-      m_oldPtr = m_ptr;
-      m_ptr = push;
+class PushValue
+{
+public:
+    PushValue( Value& ref, const Value& newValue = Value() )
+    : m_ref(ref)
+    {
+        m_oldValue = m_ref;
+        m_ref = newValue;
     }
-    ~PushValue() {
-      m_ptr = m_oldPtr;
+
+    ~PushValue()
+    {
+        m_ref = m_oldValue;
     }
-  private:
-    Value& m_ptr;
-    Value m_oldPtr;
+
+private:
+    Value& m_ref;
+    Value m_oldValue;
 };
 
 ///Only difference to PushValue: The value is only replaced if the new value is positive
 template<class Value>
-class PushPositiveValue {
-  public:
-    PushPositiveValue( Value& ptr, const Value& push = Value()  ) : m_ptr(ptr)  {
-      m_oldPtr = m_ptr;
-      if( push ) {
-        m_ptr = push;
-      }
+class PushPositiveValue
+{
+public:
+    PushPositiveValue( Value& ref, const Value& newValue = Value()  )
+    : m_ref(ref)
+    {
+        m_oldValue = m_ref;
+
+        if( newValue ) {
+            m_ref = newValue;
+        }
     }
-    ~PushPositiveValue() {
-      m_ptr = m_oldPtr;
+
+    ~PushPositiveValue()
+    {
+        m_ref = m_oldValue;
     }
-  private:
-    Value& m_ptr;
-    Value m_oldPtr;
+
+private:
+    Value& m_ref;
+    Value m_oldValue;
 };
 
 #endif
