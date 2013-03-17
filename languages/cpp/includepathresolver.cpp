@@ -57,6 +57,7 @@
 #include <klocale.h>
 
 #include <language/duchain/indexedstring.h>
+#include <util/pushvalue.h>
 
 //#define VERBOSE
 
@@ -468,17 +469,6 @@ void CppTools::IncludePathResolver::clearCache() {
 }
 
 PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& file, const QString& _workingDirectory, int maxStepsUp ) {
-
-  struct Enabler {
-    bool& b;
-    Enabler( bool& bb ) : b(bb) {
-      b = true;
-    }
-    ~Enabler() {
-      b = false;
-    }
-  };
-  
   //Prefer this result when returning a "fail". The include-paths of this result will always be added.
   PathResolutionResult resultOnFail;
 
@@ -582,7 +572,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
       return PathResolutionResult(false, i18n("Makefile is missing in folder \"%1\"", dir.absolutePath()), i18n("Problem while trying to resolve include paths for %1", file ) );
   }
 
-  Enabler e( m_isResolving );
+  PushValue<bool> e( m_isResolving, true );
 
   QStringList cachedPaths; //If the call doesn't succeed, use the cached not up-to-date version
   KDevelop::ModificationRevisionSet dependency;
