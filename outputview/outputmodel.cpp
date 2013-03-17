@@ -57,7 +57,7 @@ static const int BATCH_SIZE = 50;
  * actually processing them. If we already have enough for one batch though
  * we process immediately.
  */
-static const int BATCH_AGGREGATE_TIME_DELAY = 100;
+static const int BATCH_AGGREGATE_TIME_DELAY = 50;
 
 class ParseWorker : public QObject
 {
