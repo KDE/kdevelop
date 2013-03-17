@@ -138,10 +138,6 @@ bool CTestRunJob::doKill()
 
 void CTestRunJob::processFinished(KJob* job)
 {
-    if(OutputModel* model = qobject_cast<OutputModel*>(m_outputJob->model())) {
-        model->flushLineBuffer();
-    }
-    
     TestResult result;
     result.testCaseResults = m_caseResults;
     if (job->error() == OutputJob::FailedShownError) {
