@@ -1720,9 +1720,6 @@ QList<IndexedType> CodeCompletionContext::matchTypes()
 QList<DeclAccessPair> CodeCompletionContext::getLookaheadMatches(Declaration* forDecl, const QList<IndexedType>& matchTypes) const
 {
   QList<DeclAccessPair> ret;
-  // feature disabled for KDevelop 4.5
-  return ret;
-
   if (forDecl->isFunctionDeclaration() || forDecl->kind() != Declaration::Instance || !forDecl->abstractType())
     return ret; //We can only use instances, for now no sub decls of functions either TODO: be nice to get no-arg functions at least
   bool typeIsPointer = false;
