@@ -22,7 +22,6 @@
 #define DVCS_PLUGIN_H
 
 #include <KDE/KUrl>
-#include <KDE/KJob>
 #include <KDE/KComponentData>
 
 #include <QtCore/QObject>
@@ -32,9 +31,7 @@
 
 #include "dvcsevent.h"
 #include <vcs/vcsexport.h>
-#include <vcs/vcsstatusinfo.h>
 #include <vcs/interfaces/idistributedversioncontrol.h>
-#include <outputview/outputjob.h>
 #include <vcs/interfaces/ibranchingversioncontrol.h>
 
 class QMenu;
@@ -97,7 +94,6 @@ public Q_SLOTS:
     void ctxRevHistory();
 
 protected:
-    ///////////////////
     /** Checks if dirPath is located in DVCS repository */
     virtual bool isValidDirectory(const KUrl &dirPath) = 0;
 
