@@ -129,16 +129,6 @@ KAboutData aboutData()
 CorePrivate::CorePrivate(Core *core):
     m_componentData( aboutData() ), m_core(core), m_cleanedUp(false), m_shuttingDown(false)
 {
-    /*
-     * WARNING: This is probably not the best place for registering resource locations
-     * However, I think it's better if these directories are stored in the core componentData
-     * rather than every user having to provide its own
-     */
-    
-    KStandardDirs *dirs = m_componentData.dirs();
-    dirs->addResourceType("filetemplates", "data", "kdevfiletemplates/templates/");
-    dirs->addResourceType("filetemplate_descriptions","data", "kdevfiletemplates/template_descriptions/");
-    dirs->addResourceType("filetemplate_previews","data", "kdevfiletemplates/template_previews/");
 }
 
 bool CorePrivate::initialize(Core::Setup mode, QString session )

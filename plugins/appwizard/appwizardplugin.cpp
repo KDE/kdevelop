@@ -64,16 +64,9 @@ using KDevelop::IDistributedVersionControl;
 using KDevelop::IPlugin;
 using KDevelop::VcsJob;
 using KDevelop::VcsLocation;
+using KDevelop::ICore;
 
-K_PLUGIN_FACTORY(AppWizardFactory,
-    registerPlugin<AppWizardPlugin>();
-    KComponentData compData = componentData();
-    KStandardDirs *dirs = compData.dirs();
-    dirs->addResourceType("apptemplates", "data", "kdevappwizard/templates/");
-    dirs->addResourceType("apptemplate_descriptions","data", "kdevappwizard/template_descriptions/");
-    dirs->addResourceType("apptemplate_previews","data", "kdevappwizard/template_previews/");
-    setComponentData(compData);
-)
+K_PLUGIN_FACTORY(AppWizardFactory, registerPlugin<AppWizardPlugin>();)
 K_EXPORT_PLUGIN(AppWizardFactory(KAboutData("kdevappwizard","kdevappwizard", ki18n("Project Wizard"), "0.1", ki18n("Support for creating and importing projects"), KAboutData::License_GPL)))
 
 AppWizardPlugin::AppWizardPlugin(QObject *parent, const QVariantList &)
@@ -120,7 +113,7 @@ void AppWizardPlugin::slotNewProject()
                 core()->documentController()->openDocument(file);
             }
         } else {
-            KMessageBox::error( KDevelop::ICore::self()->uiController()->activeMainWindow(), i18n("Could not create project from template\n"), i18n("Failed to create project") );
+            KMessageBox::error( ICore::self()->uiController()->activeMainWindow(), i18n("Could not create project from template\n"), i18n("Failed to create project") );
         }
     }
 }
@@ -218,26 +211,20 @@ QString generateIdentifier( const QString& appname )
 QString AppWizardPlugin::createProject(const ApplicationInfo& info)
 {
     QFileInfo templateInfo(info.appTemplate);
-    if (!templateInfo.exists())
+    if (!templateInfo.exists()) {
+        kWarning() << "Project app template does not exist:" << info.appTemplate;
         return QString();
+    }
 
     QString templateName = templateInfo.baseName();
     kDebug() << "creating project for template:" << templateName << " with VCS:" << info.vcsPluginName;
 
-    QString templateArchive;
-    foreach (const QString& archive, componentData().dirs()->findAllResources("apptemplates"))
-    {
-        if (QFileInfo(archive).baseName() == templateName)
-        {
-            templateArchive = archive;
-        }
+    QStringList matches = ICore::self()->componentData().dirs()->findAllResources("data", QString("kdevappwizard/templates/%1*").arg(templateName));
+    if (matches.isEmpty()) {
+        kWarning() << "Could not find project template" << templateName;
+        return QString();;
     }
-
-    kDebug() << "Using archive:" << templateArchive;
-
-    if (templateArchive.isEmpty())
-        return QString();
-
+    QString templateArchive = matches.first();
 
     KUrl dest = info.location;
 

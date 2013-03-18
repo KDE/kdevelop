@@ -14,4 +14,4 @@ kde4_add_unit_test(templatesmodeltest ${templatesmodeltest_SRCS})
 target_link_libraries(templatesmodeltest ${QT_QTTEST_LIBRARY} kdevplatformtests kdevplatformlanguage)
 
 configure_file(codegen_tests_config.h.cmake codegen_tests_config.h)
-add_subdirectory(templates)
+add_subdirectory(data)

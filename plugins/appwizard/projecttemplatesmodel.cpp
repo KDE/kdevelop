@@ -22,10 +22,7 @@
 #include "appwizardplugin.h"
 
 ProjectTemplatesModel::ProjectTemplatesModel(AppWizardPlugin *parent)
-    :KDevelop::TemplatesModel(parent->componentData(), parent)
+: KDevelop::TemplatesModel("kdevappwizard", parent)
 {
-    setDescriptionResourceType("apptemplate_descriptions");
-    setPreviewResourceType("apptemplate_previews");
-    setTemplateResourceType("apptemplates");
     refresh();
 }

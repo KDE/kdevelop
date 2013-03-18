@@ -77,9 +77,7 @@ FileTemplatesPlugin::FileTemplatesPlugin(QObject* parent, const QVariantList& ar
     action->setStatusTip( i18n( "Create new files from a template" ) );
     connect (action, SIGNAL(triggered(bool)), SLOT(createFromTemplate()));
 
-    m_model = new TemplatesModel(core()->self()->componentData(), this);
-    m_model->setDescriptionResourceType("filetemplate_descriptions");
-    m_model->setTemplateResourceType("filetemplates");
+    m_model = new TemplatesModel("kdevfiletemplates", this);
     m_model->refresh();
 
     m_toolView = new TemplatePreviewFactory(this);

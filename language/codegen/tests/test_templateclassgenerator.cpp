@@ -22,10 +22,10 @@
 #include "codegen_tests_config.h"
 
 #include "language/codegen/templateclassgenerator.h"
-#include "language/codegen/templatesmodel.h"
 #include "language/codegen/documentchangeset.h"
 #include "language/codegen/sourcefiletemplate.h"
 #include "language/codegen/templaterenderer.h"
+#include "language/codegen/templatesmodel.h"
 
 #include "tests/autotestshell.h"
 #include "tests/testcore.h"
@@ -55,13 +55,11 @@ void TestTemplateClassGenerator::initTestCase()
     baseUrl.setDirectory(KStandardDirs::locateLocal("tmp", "test_templateclassgenerator/", data));
 
     KStandardDirs *dirs = data.dirs();
-    bool addedDir = dirs->addResourceDir("filetemplates", CODEGEN_TESTS_TEMPLATES_DIR, true);
+    bool addedDir = dirs->addResourceDir("data", CODEGEN_TESTS_DATA_DIR, true);
     QVERIFY(addedDir);
 
     // Needed for extracting description out of template archives
-    TemplatesModel model(data, this);
-    model.setDescriptionResourceType("filetemplate_descriptions");
-    model.setTemplateResourceType("filetemplates");
+    TemplatesModel model("kdevcodegentest");
     model.refresh();
 
     description.members << VariableDescription("QString", "name")
@@ -270,16 +268,12 @@ TemplateClassGenerator* TestTemplateClassGenerator::loadTemplate (const QString&
 
     TemplateClassGenerator* generator = new TemplateClassGenerator(baseUrl);
 
-    foreach (const QString& description, ICore::self()->componentData().dirs()->findAllResources("filetemplate_descriptions"))
-    {
-        kDebug() << "Found template description" << description;
-        if (QFileInfo(description).baseName() == name)
-        {
-            generator->setTemplateDescription(description);
-            break;
-        }
-    }
-
+    QString tplDescription = ICore::self()->componentData().dirs()->findResource("data", "kdevcodegentest/template_descriptions/" + name + ".desktop");
+    Q_ASSERT(!tplDescription.isEmpty());
+    SourceFileTemplate tpl;
+    tpl.setTemplateDescription(tplDescription, "kdevcodegentest");
+    Q_ASSERT(tpl.isValid());
+    generator->setTemplateDescription(tpl);
     generator->setDescription(description);
     generator->setIdentifier("ClassName");
     generator->addBaseClass("public QObject");

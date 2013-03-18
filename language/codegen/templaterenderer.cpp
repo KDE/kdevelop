@@ -315,14 +315,14 @@ DocumentChangeSet TemplateRenderer::renderFileTemplate(const SourceFileTemplate&
         const KArchiveEntry* entry = directory->entry(outputFile.fileName);
         if (!entry)
         {
-            kDebug() << "Entry" << outputFile.fileName << "is mentioned in group" << outputFile.identifier << "but is not present in the archive";
+            kWarning() << "Entry" << outputFile.fileName << "is mentioned in group" << outputFile.identifier << "but is not present in the archive";
             continue;
         }
 
         const KArchiveFile* file = dynamic_cast<const KArchiveFile*>(entry);
         if (!file)
         {
-            kDebug() << "Entry" << entry->name() << "is not a file";
+            kWarning() << "Entry" << entry->name() << "is not a file";
             continue;
         }
 

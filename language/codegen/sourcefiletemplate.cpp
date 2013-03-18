@@ -106,7 +106,7 @@ SourceFileTemplate::SourceFileTemplate (const SourceFileTemplate& other)
 : d(new KDevelop::SourceFileTemplatePrivate)
 {
     d->archive = 0;
-    setTemplateDescription(other.d->descriptionFileName);
+    *this = other;
 }
 
 SourceFileTemplate::~SourceFileTemplate()
@@ -117,21 +117,37 @@ SourceFileTemplate::~SourceFileTemplate()
 
 SourceFileTemplate& SourceFileTemplate::operator=(const SourceFileTemplate& other)
 {
-    setTemplateDescription(other.d->descriptionFileName);
+    if (other.d == d) {
+        return *this;
+    }
+
+    delete d->archive;
+    if (other.d->archive) {
+        if (other.d->archive->fileName().endsWith(".zip")) {
+            d->archive = new KZip(other.d->archive->fileName());
+        } else {
+            d->archive = new KTar(other.d->archive->fileName());
+        }
+        d->archive->open(QIODevice::ReadOnly);
+    } else {
+        d->archive = 0;
+    }
+    d->descriptionFileName = other.d->descriptionFileName;
     return *this;
 }
 
-void SourceFileTemplate::setTemplateDescription (const QString& templateDescription)
+void SourceFileTemplate::setTemplateDescription(const QString& templateDescription, const QString& resourcePrefix)
 {
     delete d->archive;
 
     d->descriptionFileName = templateDescription;
     QString archiveFileName;
 
-    foreach (const QString& file, ICore::self()->componentData().dirs()->findAllResources("filetemplates"))
+    const QString templateBaseName = QFileInfo(templateDescription).baseName();
+    foreach (const QString& file, ICore::self()->componentData().dirs()->findAllResources("data", resourcePrefix + "/templates/"))
     {
         kDebug() << "Found template archive" << file;
-        if (QFileInfo(file).baseName() == QFileInfo(templateDescription).baseName())
+        if (QFileInfo(file).baseName() == templateBaseName)
         {
             archiveFileName = file;
             break;
@@ -140,7 +156,7 @@ void SourceFileTemplate::setTemplateDescription (const QString& templateDescript
 
     if (archiveFileName.isEmpty() || !QFileInfo(archiveFileName).exists())
     {
-        kDebug() << "Could not find a template archive for description" << templateDescription;
+        kWarning() << "Could not find a template archive for description" << templateDescription;
         d->archive = 0;
     }
     else
