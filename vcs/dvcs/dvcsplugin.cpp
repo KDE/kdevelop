@@ -130,11 +130,10 @@ void DistributedVersionControlPlugin::ctxBranchManager()
     Q_ASSERT(!ctxUrlList.isEmpty());    
     
     ICore::self()->documentController()->saveAllDocuments();
-    BranchManager branchManager(stripPathToDir(ctxUrlList.front().toLocalFile()), this, core()->uiController()->activeMainWindow());
-    if(branchManager.isValid())
-        branchManager.exec();
-    else
-        KMessageBox::error(0, i18n("Could not show the Branch Manager, current branch is unavailable."));
+
+    BranchManager branchManager(stripPathToDir(ctxUrlList.front().toLocalFile()),
+                                this, core()->uiController()->activeMainWindow());
+    branchManager.exec();
 }
 
 // This is redundant with the normal VCS "history" action

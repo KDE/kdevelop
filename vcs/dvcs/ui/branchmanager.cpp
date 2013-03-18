@@ -55,10 +55,8 @@ BranchManager::BranchManager(const QString& repository, KDevelop::DistributedVer
     m_model = new BranchesListModel(this);
     m_model->initialize(m_dvcPlugin, repository);
     m_ui->branchView->setModel(m_model);
-    
-    QString branchName = m_model->currentBranch();
-    m_valid = !branchName.isEmpty();
 
+    QString branchName = m_model->currentBranch();
     // apply initial selection
     QList< QStandardItem* > items = m_model->findItems(branchName);
     if (!items.isEmpty()) {
