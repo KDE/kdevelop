@@ -32,6 +32,7 @@ class IBranchingVersionControl;
 class IProject;
 }
 
+// TODO: Move to KDevelop namespace at some point
 class KDEVPLATFORMVCS_EXPORT BranchesListModel : public QStandardItemModel
 {
     Q_OBJECT
