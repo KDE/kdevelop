@@ -23,13 +23,13 @@
 
 #include <KDE/KDialog>
 
-class BranchesListModel;
 class KJob;
 
 namespace Ui { class BranchDialogBase; }
 
 namespace KDevelop
 {
+class BranchesListModel;
 class DistributedVersionControlPlugin;
 }
 
@@ -54,7 +54,7 @@ private:
     KDevelop::DistributedVersionControlPlugin* m_dvcPlugin;
 
     Ui::BranchDialogBase* m_ui;
-    BranchesListModel* m_model;
+    KDevelop::BranchesListModel* m_model;
 };
 
 #endif

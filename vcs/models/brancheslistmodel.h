@@ -30,9 +30,7 @@
 namespace KDevelop {
 class IBranchingVersionControl;
 class IProject;
-}
 
-// TODO: Move to KDevelop namespace at some point
 class KDEVPLATFORMVCS_EXPORT BranchesListModel : public QStandardItemModel
 {
     Q_OBJECT
@@ -66,5 +64,7 @@ class KDEVPLATFORMVCS_EXPORT BranchesListModel : public QStandardItemModel
         KDevelop::IBranchingVersionControl* dvcsplugin;
         KUrl repo;
 };
+
+}
 
 #endif // BRANCHESLISTMODEL_H

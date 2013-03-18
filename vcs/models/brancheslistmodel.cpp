@@ -34,6 +34,7 @@
 #include <KDebug>
 
 using namespace std;
+using namespace KDevelop;
 
 class BranchItem : public QStandardItem
 {
