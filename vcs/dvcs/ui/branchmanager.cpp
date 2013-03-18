@@ -22,8 +22,6 @@
 
 #include <QListWidget>
 #include <QInputDialog>
-#include <QStringList>
-#include <QFileInfo>
 
 #include <KJob>
 #include <KMessageBox>
@@ -33,7 +31,7 @@
 #include "../dvcsplugin.h"
 #include <vcs/models/brancheslistmodel.h>
 #include "ui_branchmanager.h"
-#include <QStandardItemModel>
+
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
 

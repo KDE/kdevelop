@@ -23,8 +23,6 @@
 
 #include <KDE/KDialog>
 
-#include <QStringListModel>
-
 class BranchesListModel;
 class KJob;
 
