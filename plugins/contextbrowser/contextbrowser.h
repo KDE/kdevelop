@@ -62,9 +62,6 @@ namespace KTextEditor {
   class View;
 }
 
-//TODO: move into kdevelop namespace
-using namespace KDevelop;
-
 class ContextBrowserViewFactory;
 class ContextBrowserView;
 class BrowseManager;
@@ -78,9 +75,9 @@ struct ViewHighlights
   // Whether the same highlighting should be kept highlighted (usually during typing)
   bool keep;
   // The declaration that is highlighted for this view
-  IndexedDeclaration declaration;
+  KDevelop::IndexedDeclaration declaration;
   // Highlighted ranges. Those may also be contained by different views.
-  QList<PersistentMovingRange::Ptr> highlights;
+  QList<KDevelop::PersistentMovingRange::Ptr> highlights;
 };
 
 class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContextBrowser
@@ -108,7 +105,7 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContext
     void updateDeclarationListBox(KDevelop::DUContext* context);
     void setAllowBrowsing(bool allow);
 
-    virtual void showUses(const DeclarationPointer& declaration);
+    virtual void showUses(const KDevelop::DeclarationPointer& declaration);
 
   public Q_SLOTS:
     void showUsesDelayed(const KDevelop::DeclarationPointer& declaration);
@@ -121,7 +118,7 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContext
     void previousUseShortcut();
     void nextUseShortcut();
 
-    void declarationSelectedInUI(DeclarationPointer decl);
+    void declarationSelectedInUI(KDevelop::DeclarationPointer decl);
 
     void parseJobFinished(KDevelop::ParseJob* job);
     void textDocumentCreated( KDevelop::IDocument* document );
@@ -208,15 +205,15 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContext
     QList<ContextBrowserView*> m_views;
 
     //Used to override the next declaration that will be highlighted
-    IndexedDeclaration m_useDeclaration;
-    IndexedDeclaration m_lastHighlightedDeclaration;
+    KDevelop::IndexedDeclaration m_useDeclaration;
+    KDevelop::IndexedDeclaration m_lastHighlightedDeclaration;
 
     KUrl m_mouseHoverDocument;
-    SimpleCursor m_mouseHoverCursor;
+    KDevelop::SimpleCursor m_mouseHoverCursor;
     ContextBrowserViewFactory* m_viewFactory;
     QPointer<QWidget> m_currentToolTip;
     QPointer<QWidget> m_currentNavigationWidget;
-    IndexedDeclaration m_currentToolTipDeclaration;
+    KDevelop::IndexedDeclaration m_currentToolTipDeclaration;
     QAction* m_findUses;
     
     QPointer<KTextEditor::Document> m_lastInsertionDocument;
