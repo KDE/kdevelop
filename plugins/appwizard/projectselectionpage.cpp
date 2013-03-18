@@ -201,8 +201,11 @@ void ProjectSelectionPage::validateData()
     }
 
     QDir tDir(url.toLocalFile( KUrl::RemoveTrailingSlash ));
-    while (!tDir.exists() && !tDir.isRoot())
-        tDir.setPath( pathUp( tDir.absolutePath() ));
+    while (!tDir.exists() && !tDir.isRoot()) {
+        if (!tDir.cdUp()) {
+            break;
+        }
+    }
 
     if (tDir.exists())
     {
@@ -259,14 +262,6 @@ QByteArray ProjectSelectionPage::encodedAppName()
         i =  i + tReplace.size() - 1;
     }
     return tEncodedName;
-}
-
-QString ProjectSelectionPage::pathUp(const QString& aPath)
-{
-    QString tPath = aPath;
-    int tIndex = tPath.lastIndexOf( QDir::separator() );
-    tPath = tPath.remove(tIndex, tPath.length() - tIndex);
-    return tPath;
 }
 
 QStandardItem* ProjectSelectionPage::getCurrentItem() const
