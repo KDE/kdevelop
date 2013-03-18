@@ -24,20 +24,16 @@
 #include "contextbrowserview.h"
 #include "browsemanager.h"
 
-///TODO: remove unneeded includes
-#include <memory>
 #include <cstdlib>
 
 #include <QTimer>
-#include <QApplication>
 #include <QToolButton>
 #include <QLayout>
+#include <QMenu>
 #include <qalgorithms.h>
 
 #include <KLocale>
 #include <KAction>
-#include <KPluginFactory>
-#include <KPluginLoader>
 #include <KActionCollection>
 #include <KAboutData>
 #include <KDebug>
@@ -59,20 +55,17 @@
 #include <language/interfaces/ilanguagesupport.h>
 #include <language/interfaces/iquickopen.h>
 
-#include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/ducontext.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/use.h>
 #include <language/duchain/duchainutils.h>
-#include <language/duchain/dumpchain.h>
 #include <language/duchain/functiondefinition.h>
 #include <language/duchain/parsingenvironment.h>
 #include <language/duchain/uses.h>
 #include <language/duchain/specializationstore.h>
 #include <language/duchain/aliasdeclaration.h>
 #include <language/duchain/types/functiontype.h>
-
 #include <language/duchain/navigation/abstractnavigationwidget.h>
 
 #include <language/backgroundparser/backgroundparser.h>

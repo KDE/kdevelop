@@ -23,11 +23,11 @@
 #ifndef CONTEXTBROWSERPLUGIN_H
 #define CONTEXTBROWSERPLUGIN_H
 
-#include <QtCore/QVariant>
+#include <QVariant>
 #include <QSet>
 #include <QMap>
 #include <QList>
-#include <ktexteditor/rangefeedback.h>
+
 #include <interfaces/iplugin.h>
 #include <language/duchain/duchainpointer.h>
 #include <language/editor/simplecursor.h>
@@ -35,13 +35,13 @@
 #include <KUrl>
 #include <language/editor/persistentmovingrange.h>
 #include <language/interfaces/iquickopen.h>
-#include <QToolButton>
-#include <QMenu>
-#include <QHBoxLayout>
 #include <language/editor/documentcursor.h>
-#include <KTextEditor/Document>
 
 #include <language/interfaces/icontextbrowser.h>
+
+class QHBoxLayout;
+class QMenu;
+class QToolButton;
 
 namespace Sublime {
   class MainWindow;
@@ -58,6 +58,7 @@ namespace KDevelop {
 }
 
 namespace KTextEditor {
+  class Document;
   class View;
 }
 
