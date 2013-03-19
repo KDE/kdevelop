@@ -92,7 +92,7 @@ CMakeDefinitions DefinesAttached::definitions(CMakeFolderItem* parentFolder) con
 void DefinesAttached::defineVariables(const QStringList& vars)
 {
     foreach(const QString& v, vars)
-        m_defines.insert(v, QString());
+        m_defines.insert(v.section('=', 0, 0), v.section('=', 1, -1));
 }
 
 

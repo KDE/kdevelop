@@ -39,6 +39,7 @@ private slots:
     void testIncludePaths();
     void testRelativePaths();
     void testTargetIncludePaths();
+    void testTargetDefines();
     void testCustomTargetSources();
     void testConditionsInSubdirectoryBasedOnRootVariables();
 };

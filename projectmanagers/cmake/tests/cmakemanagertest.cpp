@@ -202,6 +202,42 @@ void CMakeManagerTest::testTargetIncludePaths()
     QVERIFY(foundInTarget);
 }
 
+void CMakeManagerTest::testTargetDefines()
+{
+    const TestProjectPaths paths = projectPaths("target_defines");
+    defaultConfigure(paths);
+
+    ICore::self()->projectController()->openProject(paths.projectFile);
+
+    WAIT_FOR_OPEN_SIGNAL;
+
+    IProject* project = ICore::self()->projectController()->findProjectByName("target_defines");
+    QVERIFY(project->buildSystemManager());
+
+    QCOMPARE(paths.projectFile, project->projectFileUrl());
+    QCOMPARE(paths.sourceDir, project->folder());
+
+    KUrl mainCpp(paths.sourceDir, "main.cpp");
+    QVERIFY(QFile::exists(mainCpp.toLocalFile()));
+    QList< ProjectBaseItem* > items = project->itemsForUrl(mainCpp);
+    QCOMPARE(items.size(), 2); // once the plain file, once the target
+
+    bool foundInTarget = false;
+    foreach(ProjectBaseItem* mainCppItem, items) {
+        ProjectBaseItem* mainContainer = mainCppItem->parent();
+
+        QHash<QString, QString> defines = project->buildSystemManager()->defines(mainCppItem);
+
+        if (dynamic_cast<CMakeExecutableTargetItem*>( mainContainer )) {
+            QCOMPARE(defines.size(), 1);
+            QVERIFY(defines.contains(QString("VALUE")));
+            QCOMPARE(defines.value("VALUE"), QString("1"));
+            foundInTarget = true;
+        }
+    }
+    QVERIFY(foundInTarget);
+}
+
 void CMakeManagerTest::testCustomTargetSources()
 {
     const TestProjectPaths paths = projectPaths("custom_target_sources");
