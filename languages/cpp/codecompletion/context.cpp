@@ -1720,8 +1720,13 @@ QList<DeclAccessPair> CodeCompletionContext::getLookaheadMatches(Declaration* fo
     return ret; //We can only use instances, for now no sub decls of functions either TODO: be nice to get no-arg functions at least
   bool typeIsPointer = false;
   Declaration *containerDecl = containerDeclForType(Cpp::effectiveType(forDecl), m_duContext->topContext(), typeIsPointer);
-  foreach(const IndexedType &matchType, matchTypes)
+  foreach(const IndexedType &matchType, matchTypes) {
+    //Don't lookahead if the current type is a (precise) match
+    //Cheaper than checking if it converts, and probably good enough
+    if (matchType == forDecl->indexedType())
+      continue;
     ret += containedItemsMatchingType(containerDecl, matchType, m_duContext->topContext(), typeIsPointer);
+  }
   //Could use hideOverloadedDeclarations theoretically here, but it would do very little since we don't have the real declaration depth
   return ret;
 }

@@ -3659,10 +3659,9 @@ void TestCppCodeCompletion::testLookaheadMatches_data()
     QStringList() << "int =" << "m_one" << "m_two" << "m_smartOne" << "m_access" << "ThreeTwoOne" << "One" << "Two"
                   << "OneSmartPointer" << "Access" << "OneTwoThree" << "m_one.alsoRan" << "m_two.meToo" << "m_smartOne->alsoRan"
                   << "m_access.publicMember" << "this");
-  QTest::newRow("Type Converstions") << "m_smartOne = " << (
+  QTest::newRow("Type Conversions") << "m_smartOne = " << (
     QStringList() << "OneSmartPointer m_smartOne =" << "m_one" << "m_two" << "m_smartOne" << "m_access" << "ThreeTwoOne"
-                  << "One" << "Two" << "OneSmartPointer" << "Access" << "OneTwoThree" << "m_two.hatPointer"
-                  << "m_smartOne.operator->" << "this" );
+                  << "One" << "Two" << "OneSmartPointer" << "Access" << "OneTwoThree" << "m_two.hatPointer" << "this" );
   QTest::newRow("Assignment") << "m_one =  " << (
     QStringList() << "One m_one =" << "m_one" << "m_two" << "m_smartOne" << "m_access" << "ThreeTwoOne" << "One" << "Two"
                   << "OneSmartPointer" << "Access" << "OneTwoThree" << "m_two.hat" << "this" );
