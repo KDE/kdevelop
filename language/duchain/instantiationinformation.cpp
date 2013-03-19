@@ -105,12 +105,11 @@ bool InstantiationInformation::operator==(const InstantiationInformation& rhs) c
 }
 
 uint InstantiationInformation::hash() const {
-  uint ret = 0;
+  KDevHash kdevhash;
   FOREACH_FUNCTION(const IndexedType& param, templateParameters) {
-    ret = (ret + param.hash()) * 117;
+    kdevhash << param.hash();
   }
-
-  return (ret + previousInstantiationInformation.index()) * 31;
+  return kdevhash << previousInstantiationInformation.index();
 }
 
 AbstractRepositoryManager* returnTypeRepository() {

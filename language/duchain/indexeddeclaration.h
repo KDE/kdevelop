@@ -22,6 +22,7 @@
 #include "../languageexport.h"
 
 #include "indexedtopducontext.h"
+#include <language/util/kdevhash.h>
 
 namespace KDevelop {
 
@@ -54,7 +55,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclaration {
     inline uint hash() const {
       if(isDummy())
         return 0;
-      return (m_topContext * 53 + m_declarationIndex) * 23;
+      return KDevHash() << m_topContext << m_declarationIndex;
     }
 
     ///@warning The duchain needs to be locked when this is called

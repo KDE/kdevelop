@@ -117,7 +117,7 @@ AbstractType::WhichType ReferenceType::whichType() const
 
 uint ReferenceType::hash() const
 {
-  return AbstractType::hash() + (d_func()->m_baseType.hash()+1) * 29 + (d_func()->m_isRValue ? 43768 : 0);
+  return KDevHash(AbstractType::hash()) << d_func()->m_baseType.hash() << d_func()->m_isRValue;
 }
 
 }

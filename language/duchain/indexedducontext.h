@@ -21,6 +21,7 @@
 #define INDEXEDDUCONTEXT_H
 
 #include "../languageexport.h"
+#include <language/util/kdevhash.h>
 
 #include <QPair>
 
@@ -50,7 +51,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDUContext
       return m_topContext == rhs.m_topContext && m_contextIndex == rhs.m_contextIndex;
     }
     uint hash() const {
-      return (m_topContext * 57 + m_contextIndex) * 29;
+      return KDevHash() << m_topContext << m_contextIndex;
     }
 
     bool isValid() const {

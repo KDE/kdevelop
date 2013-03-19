@@ -24,6 +24,7 @@
 #include "indexeddeclaration.h"
 #include "identifier.h"
 #include "instantiationinformation.h"
+#include <language/util/kdevhash.h>
 
 //krazy:excludeall=dpointer
 
@@ -117,9 +118,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
      */
     uint hash() const {
       if(m_direct)
-        return direct.hash() + m_specialization.index() * 101;
+        return KDevHash() << direct.hash() << m_specialization.index();
       else
-        return indirect.m_identifier.getIndex() * 13 + indirect.m_additionalIdentity + m_specialization.index() * 101;
+        return KDevHash() << indirect.m_identifier.getIndex() << indirect.m_additionalIdentity << m_specialization.index();
     }
 
     /**

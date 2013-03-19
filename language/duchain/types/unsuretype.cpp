@@ -78,11 +78,10 @@ bool UnsureType::equals(const KDevelop::AbstractType* rhs) const {
 }
 
 uint UnsureType::hash() const {
-  uint ret = AbstractType::hash();
+  KDevHash kdevhash(AbstractType::hash());
   FOREACH_FUNCTION(const IndexedType& type, d_func()->m_types)
-    ret = 17 * ret + type.hash();
-  
-  return ret;
+    kdevhash << type.hash();
+  return kdevhash << d_func()->m_typesSize();
 }
 
 KDevelop::AbstractType::WhichType UnsureType::whichType() const {
