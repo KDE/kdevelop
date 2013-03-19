@@ -1709,10 +1709,7 @@ QList<DeclAccessPair> CodeCompletionContext::containedItemsMatchingType(Declarat
   }
   //If we found an "->", try to treat it as a smart pointer
   if (arrowOperator)
-  {
-    //containerDeclForType will likely change isPointer... good thing we don't use it again
     ret += containedItemsMatchingType(containerDeclForType(Cpp::effectiveType(arrowOperator), top, isPointer), type, top, true);
-  }
   return ret;
 }
 
