@@ -104,6 +104,7 @@ TemplateClassGenerator::~TemplateClassGenerator()
 void TemplateClassGenerator::setTemplateDescription(const SourceFileTemplate& fileTemplate)
 {
     d->fileTemplate = fileTemplate;
+    Q_ASSERT(fileTemplate.isValid());
 }
 
 DocumentChangeSet TemplateClassGenerator::generate()

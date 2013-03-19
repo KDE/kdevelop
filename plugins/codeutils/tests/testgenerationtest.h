@@ -7,6 +7,7 @@
 
 #include <QtTest/QtTest>
 #include <KUrl>
+#include <KTempDir>
 
 namespace KDevelop
 {
@@ -28,7 +29,8 @@ private slots:
 
 private:
     KDevelop::TemplateRenderer* renderer;
-    KUrl baseUrl;
+    QScopedPointer<KTempDir> dir;
+    QUrl baseUrl;
 
     QHash<QString,KUrl> urls(const KDevelop::SourceFileTemplate& file);
 };

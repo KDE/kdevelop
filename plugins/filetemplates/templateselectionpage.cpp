@@ -186,9 +186,7 @@ TemplateSelectionPage::TemplateSelectionPage(TemplateClassAssistant* parent, Qt:
     d->ui = new Ui::TemplateSelection;
     d->ui->setupUi(this);
 
-    d->model = new TemplatesModel(ICore::self()->componentData(), this);
-    d->model->setTemplateResourceType("filetemplates");
-    d->model->setDescriptionResourceType("filetemplate_descriptions");
+    d->model = new TemplatesModel("kdevfiletemplates", this);
     d->model->refresh();
 
     d->ui->view->setLevels(3);
