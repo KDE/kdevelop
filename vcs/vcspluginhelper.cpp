@@ -386,10 +386,17 @@ void VcsPluginHelper::annotation()
         KTextEditor::AnnotationInterface* annotateiface = qobject_cast<KTextEditor::AnnotationInterface*>(doc->textDocument());
         KTextEditor::AnnotationViewInterface* viewiface = qobject_cast<KTextEditor::AnnotationViewInterface*>(doc->textDocument()->activeView());
 
+        if (viewiface->isAnnotationBorderVisible()) {
+            viewiface->setAnnotationBorderVisible(false);
+            d->annotationAction->setText(i18n("Annotation..."));
+            return;
+        }
+
         if (annotateiface && viewiface) {
             KDevelop::VcsAnnotationModel* model = new KDevelop::VcsAnnotationModel(job, url, doc->textDocument());
             annotateiface->setAnnotationModel(model);
             viewiface->setAnnotationBorderVisible(true);
+            d->annotationAction->setText(i18n("Hide annotation"));
             connect(doc->textDocument()->activeView(),
                     SIGNAL(annotationContextMenuAboutToShow(KTextEditor::View*,QMenu*,int)),
                     this, SLOT(annotationContextMenuAboutToShow(KTextEditor::View*,QMenu*,int)));
