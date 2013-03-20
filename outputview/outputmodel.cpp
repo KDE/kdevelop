@@ -368,8 +368,7 @@ void OutputModel::setFilteringStrategy(const OutputFilterStrategy& currentStrate
     }
     Q_ASSERT(filter);
 
-    QMetaObject::invokeMethod(d->worker, "changeFilterStrategy",
-                              Q_ARG(KDevelop::IFilterStrategy*, filter));
+    d->worker->changeFilterStrategy(filter);
 }
 
 void OutputModel::appendLines( const QStringList& lines )
@@ -377,8 +376,7 @@ void OutputModel::appendLines( const QStringList& lines )
     if( lines.isEmpty() )
         return;
 
-    QMetaObject::invokeMethod(d->worker, "addLines",
-                              Q_ARG(QStringList, lines));
+    d->worker->addLines(lines);
 }
 
 void OutputModel::appendLine( const QString& l )
