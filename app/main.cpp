@@ -68,6 +68,7 @@
 #include <iostream>
 
 #include "welcomepage/welcomepageview.h"
+#include "splash.h"
 
 using KDevelop::Core;
 
@@ -387,15 +388,17 @@ int main( int argc, char *argv[] )
 
     KDevIDEExtension::init();
 
-    KSplashScreen* splash = 0;
+    KDevSplashScreen* splash = 0;
     QString splashFile = KStandardDirs::locate( "appdata", "pics/kdevelop-splash.png" );
     if( !splashFile.isEmpty() )
     {
         QPixmap pm;
         pm.load( splashFile );
-        splash = new KSplashScreen( pm );
+        splash = new KDevSplashScreen(pm);
         splash->show();
+        splash->showMessage("0");
         splash->repaint();
+        app.processEvents();
     }
 
     if(!Core::initialize(splash, Core::Default, session))
