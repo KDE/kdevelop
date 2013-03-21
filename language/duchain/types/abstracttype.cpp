@@ -94,12 +94,9 @@ AbstractType::WhichType AbstractType::whichType() const
 void AbstractType::exchangeTypes( TypeExchanger* /*exchanger */) {
 }
 
-IndexedType AbstractType::indexed() const {
-  if(this == 0)
-    return IndexedType();
-  else {
-    return IndexedType(TypeRepository::indexForType(AbstractType::Ptr(const_cast<AbstractType*>(this))));
-  }
+IndexedType AbstractType::indexed() const
+{
+  return IndexedType(TypeRepository::indexForType(AbstractType::Ptr(const_cast<AbstractType*>(this))));
 }
 
 bool AbstractType::equals(const AbstractType* rhs) const

@@ -451,14 +451,7 @@ void Identifier::setTemplateIdentifiers(const QList<IndexedTypeIdentifier>& temp
 
 QString Identifier::toString() const
 {
-  if (!this) {
-    return "(null identifier)";
-  }
-
   QString ret = identifier().str();
-
-/*  if(isUnique())
-    ret += "unique";*/
 
   if (templateIdentifiersCount()) {
     ret.append("< ");
