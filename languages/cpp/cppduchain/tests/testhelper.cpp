@@ -160,3 +160,14 @@ TopDUContext* TestHelper::parse(const QByteArray& unit, DumpAreas dump, TopDUCon
 
   return top;
 }
+
+namespace Cpp {
+void dump(const TemplateDeclaration::InstantiationsHash& instantiations)
+{
+  TemplateDeclaration::InstantiationsHash::const_iterator it = instantiations.constBegin();
+  while(it != instantiations.constEnd()) {
+    qDebug() << it.key().information().toString();
+    ++it;
+  }
+}
+}
