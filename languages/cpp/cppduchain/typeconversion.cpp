@@ -34,8 +34,8 @@ using namespace Cpp;
 using namespace KDevelop;
 using namespace TypeUtils;
 
-// #define ifDebug(x)
-#define ifDebug(x) x
+#define ifDebug(x)
+// #define ifDebug(x) x
 
 struct ImplicitConversionParams {
   IndexedType from, to;
