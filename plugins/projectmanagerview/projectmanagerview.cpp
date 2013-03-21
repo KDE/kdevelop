@@ -144,11 +144,6 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
 
     connect(m_ui->projectTreeView, SIGNAL(activateUrl(KUrl)), this, SLOT(openUrl(KUrl)));
 
-//     m_filters = new KLineEdit(this);
-//     m_filters->setClearButtonShown(true);
-//     connect(d->m_filters, SIGNAL(returnPressed()), this, SLOT(filtersChanged()));
-//     vbox->addWidget( m_filters );
-
     m_ui->buildSetView->setProjectView( this );
 
     m_modelFilter = new ProjectProxyModel( this );
