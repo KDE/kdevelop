@@ -28,6 +28,8 @@ QWidget* PropertyPreviewWidget::constructIfPossible(KTextEditor::Document* doc, 
         supportedProperties["Anchors.margins"] = SupportedProperty(QUrl(base + "Distance.qml"));
         supportedProperties["opacity"] = SupportedProperty(QUrl(base + "Opacity.qml"));
         supportedProperties["duration"] = SupportedProperty(QUrl(base + "Duration.qml"));
+        supportedProperties["font.family"] = SupportedProperty(QUrl(base + "FontFamily.qml"));
+        supportedProperties["font.pointSize"] = SupportedProperty(QUrl(base + "FontSize.qml"));
     }
     QHash<QString, SupportedProperty>::iterator item = supportedProperties.find(key);
     if ( item != supportedProperties.end() ) {
