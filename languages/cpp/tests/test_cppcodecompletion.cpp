@@ -311,16 +311,15 @@ void TestCppCodeCompletion::testInvalidContexts()
   // the ExpressionParser doesn't seem to think that "asdf" is an invalid exp.
   // Either the expressionParser should be fixed, or testContextValidity() in
   // context.cpp should be updated
-  
+
   CompletionItemTester invalidExp(top->childContexts()[ctxt], "asdf->");
   //Should be invalid (and is, but not as soon as it should be)
   QVERIFY(!invalidExp.completionContext->isValid());
-  
+
   CompletionItemTester invalidExp2(top->childContexts()[ctxt], "asdf.");
-  //Should be invalid, but isn't, because asdf evals to true
-  QEXPECT_FAIL("", "Should be invalid, but ExpressionParser needs to be fixed", Continue);
+  //Should be invalid (and is, but not as soon as it should be)
   QVERIFY(!invalidExp2.completionContext->isValid());
-  
+
   CompletionItemTester invalidExp3(top->childContexts()[ctxt], "asdf::");
   //Should be valid in case it's a namespace, but asdf should eval to false
   QVERIFY(invalidExp3.completionContext->isValid());
@@ -3691,6 +3690,16 @@ void TestCppCodeCompletion::testLookaheadMatches()
   DUContext *testContext = top->childContexts()[4]->childContexts()[1];
   CompletionItemTester tester(testContext, insert);
   QCOMPARE(tester.names, completions);
+  release(top);
+}
+
+void TestCppCodeCompletion::testMemberAccessInstance()
+{
+  QByteArray test = "struct foo{}; int main() {}";
+  TopDUContext* top = parse(test, DumpNone);
+  DUChainWriteLocker lock(DUChain::lock());
+  CompletionItemTester tester(top->childContexts()[2], "foo.");
+  QCOMPARE(tester.names, QStringList());
   release(top);
 }
 

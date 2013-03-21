@@ -580,6 +580,10 @@ bool CodeCompletionContext::testContextValidity(const QString &expressionPrefix,
     case BinaryOpFunctionCallAccess:
       return m_expressionResult.isInstance;
     case MemberAccess:
+    case ArrowMemberAccess:
+      if (!m_expressionResult.isInstance)
+        return false;
+      //Fall-through
     case MemberChoose:
     case StaticMemberChoose:
       return !m_expression.isEmpty();

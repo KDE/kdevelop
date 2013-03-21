@@ -154,6 +154,7 @@ private slots:
   void testNoQuadrupleColon();
   void testLookaheadMatches_data();
   void testLookaheadMatches();
+  void testMemberAccessInstance();
 public:
   enum DumpArea {
     DumpNone = 0,
