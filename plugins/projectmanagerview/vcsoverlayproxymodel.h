@@ -21,6 +21,7 @@
 #define VCSOVERLAYPROXYMODEL_H
 
 #include <qidentityproxymodel.h>
+#include <project/projectmodel.h>
 
 class KUrl;
 namespace KDevelop {
@@ -32,6 +33,7 @@ class VcsOverlayProxyModel : public QIdentityProxyModel
 {
     Q_OBJECT
     public:
+        enum Roles { BranchNameRole = KDevelop::ProjectModel::LastRole };
         explicit VcsOverlayProxyModel(QObject* parent = 0);
 
         virtual QVariant data(const QModelIndex& proxyIndex, int role = Qt::DisplayRole) const;

@@ -10,6 +10,7 @@ set(kdevprojectmanagerview_PLUGIN_SRCS
     projecttreeview.cpp
     projectbuildsetwidget.cpp
     vcsoverlayproxymodel.cpp
+    projectmodelitemdelegate.cpp
 )
 
 kde4_add_ui_files( kdevprojectmanagerview_PLUGIN_SRCS projectbuildsetwidget.ui projectmanagerview.ui )

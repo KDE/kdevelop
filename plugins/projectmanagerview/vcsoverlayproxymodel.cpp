@@ -43,18 +43,11 @@ VcsOverlayProxyModel::VcsOverlayProxyModel(QObject* parent): QIdentityProxyModel
 
 QVariant VcsOverlayProxyModel::data(const QModelIndex& proxyIndex, int role) const
 {
-    QVariant ret = QAbstractProxyModel::data(proxyIndex, role);
-    if(role == Qt::DisplayRole && !proxyIndex.parent().isValid()) {
+    if(role == BranchNameRole && !proxyIndex.parent().isValid()) {
         IProject* p = qobject_cast<IProject*>(proxyIndex.data(ProjectModel::ProjectRole).value<QObject*>());
-        QHash<IProject*, QString>::const_iterator it = m_branchName.constFind(p);
-        if (it != m_branchName.constEnd()) {
-            QString branchName = ((*it).isEmpty() ? i18n("no branch") : *it);
-            return QVariant::fromValue<QString>(i18nc("project name (branch name)", ("%1 (%2)"), ret.toString(), branchName));
-        } else {
-            return ret;
-        }
+        return m_branchName.value(p);
     } else
-        return ret;
+        return QAbstractProxyModel::data(proxyIndex, role);;
 }
 
 void VcsOverlayProxyModel::addProject(IProject* p)

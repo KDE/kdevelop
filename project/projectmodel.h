@@ -381,6 +381,7 @@ public:
     enum Roles {
           ProjectRole = Qt::UserRole+1
         , ProjectItemRole
+        , LastRole
     };
 
     ProjectModel( QObject *parent = 0 );

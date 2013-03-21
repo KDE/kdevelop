@@ -27,6 +27,7 @@
 #include <QtGui/QMouseEvent>
 #include <QApplication>
 #include <QAbstractProxyModel>
+#include <QItemDelegate>
 
 #include <kxmlguiwindow.h>
 #include <kglobalsettings.h>
@@ -51,6 +52,7 @@
 
 #include "projectmanagerviewplugin.h"
 #include "projectmodelsaver.h"
+#include "projectmodelitemdelegate.h"
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
 #include <language/util/navigationtooltip.h>
@@ -76,6 +78,7 @@ ProjectTreeView::ProjectTreeView( QWidget *parent )
     setDragDropMode(QAbstractItemView::InternalMove);
     setAutoScroll(true);
     setAutoExpandDelay(300);
+    setItemDelegate(new ProjectModelItemDelegate(this));
 
     connect( this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(popupContextMenu(QPoint)) );
     connect( this, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(slotActivated(QModelIndex)) );
