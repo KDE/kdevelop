@@ -134,6 +134,7 @@ CorePrivate::CorePrivate(Core *core):
 bool CorePrivate::initialize(Core::Setup mode, QString session )
 {
     m_mode=mode;
+    emit m_core->startupProgress(0);
     if( !sessionController )
     {
         sessionController = new SessionController(m_core);
@@ -147,6 +148,7 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
     {
         uiController = new UiController(m_core);
     }
+    emit m_core->startupProgress(10);
     kDebug() << "Creating plugin controller";
 
     if( !pluginController )
@@ -157,6 +159,7 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
     {
         partController = new PartController(m_core, uiController.data()->defaultMainWindow());
     }
+    emit m_core->startupProgress(20);
 
     if( !projectController )
     {
@@ -174,6 +177,7 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
         // on the document controller.
         languageController = new LanguageController(m_core);
     }
+    emit m_core->startupProgress(25);
 
     if( !runController )
     {
@@ -184,6 +188,7 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
     {
         sourceFormatterController = new SourceFormatterController(m_core);
     }
+    emit m_core->startupProgress(30);
 
     if ( !progressController) 
     {
@@ -194,6 +199,7 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
     {
         selectionController = new SelectionController(m_core);
     }
+    emit m_core->startupProgress(35);
 
     if( !documentationController && !(mode & Core::NoUi) )
     {
@@ -204,11 +210,13 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
     {
         debugController = new DebugController(m_core);
     }
+    emit m_core->startupProgress(40);
 
     if( !testController )
     {
         testController = new TestController(m_core);
     }
+    emit m_core->startupProgress(47);
 
     kDebug() << "initializing ui controller";
 
@@ -216,6 +224,8 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
     if( !sessionController.data()->activeSession() ) {
         return false;
     }
+
+    emit m_core->startupProgress(55);
 
     // TODO: Is this early enough, or should we put the loading of the session into
     // the controller construct
@@ -225,6 +235,8 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
     languageController.data()->initialize();
     projectController.data()->initialize();
     documentController.data()->initialize();
+
+    emit m_core->startupProgress(63);
 
     /* This is somewhat messy.  We want to load the areas before
         loading the plugins, so that when each plugin is loaded we
@@ -237,6 +249,7 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
 
     kDebug() << "loading session plugins";
     pluginController.data()->initialize();
+    emit m_core->startupProgress(78);
 
     if(!(mode & Core::NoUi))
     {
@@ -247,12 +260,14 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
         uiController.data()->loadAllAreas(KGlobal::config());
         uiController.data()->defaultMainWindow()->show();
     }
+    emit m_core->startupProgress(90);
     runController.data()->initialize();
     sourceFormatterController.data()->initialize();
     selectionController.data()->initialize();
     if (documentationController) {
         documentationController.data()->initialize();
     }
+    emit m_core->startupProgress(95);
     debugController.data()->initialize();
     testController.data()->initialize();
 
@@ -275,6 +290,7 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
         delete doc;
     }
 
+    emit m_core->startupProgress(100);
     return true;
 }
 CorePrivate::~CorePrivate()
@@ -310,13 +326,13 @@ CorePrivate::~CorePrivate()
     testController.clear();
 }
 
-
 bool Core::initialize(KSplashScreen* splash, Setup mode, const QString& session )
 {
     if (m_self)
         return true;
 
     m_self = new Core();
+    connect(m_self, SIGNAL(startupProgress(int)), splash, SLOT(progress(int)));
     bool ret = m_self->d->initialize(mode, session);
     if( splash ) {
         QTimer::singleShot( 200, splash, SLOT(deleteLater()) );

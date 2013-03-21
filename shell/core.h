@@ -171,7 +171,11 @@ public:
 public slots:
     void shutdown();
 
+signals:
+    void startupProgress(int percent);
+
 protected:
+    friend class CorePrivate;
     Core( KDevelop::CorePrivate* dd, QObject* parent = 0 );
     KDevelop::CorePrivate *d;
     static Core *m_self;
