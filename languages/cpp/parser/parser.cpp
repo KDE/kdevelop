@@ -2103,7 +2103,6 @@ bool Parser::parseParameterDeclarationClause(ParameterDeclarationClauseAST *&nod
       advance();
     }
 
-  /// @todo add ellipsis
   UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
 
