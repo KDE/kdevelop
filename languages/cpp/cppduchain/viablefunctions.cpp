@@ -26,6 +26,9 @@
 #include "templatedeclaration.h"
 #include "missingdeclarationtype.h"
 
+#define ifDebug(x)
+// #define ifDebug(x) x
+
 using namespace Cpp;
 
 ///@todo prefer more specialized template-functions above less specialized ones
@@ -67,11 +70,21 @@ void ViableFunction::matchParameters( const OverloadResolver::ParameterList& par
   Q_ASSERT(m_funDecl);
   
   uint functionArgumentCount = m_type->indexedArgumentsSize();
-  
-  if( params.parameters.size() + m_funDecl->defaultParametersSize() < functionArgumentCount && !partial )
-    return; //Not enough parameters + default-parameters
-  if( static_cast<uint>(params.parameters.size()) > functionArgumentCount )
-    return; //Too many parameters
+  bool hasVarArgs = false;
+  if (functionArgumentCount) {
+    hasVarArgs = TypeUtils::isVarArgs(m_type->indexedArguments()[functionArgumentCount-1].abstractType());
+  }
+
+  ifDebug(qDebug() << "matchParameters" << params << " to " << m_type->toString() << "partial:" << partial << "varargs" << hasVarArgs;)
+
+  if (!hasVarArgs) {
+    if( params.parameters.size() + m_funDecl->defaultParametersSize() < functionArgumentCount && !partial ) {
+      return; //Not enough parameters + default-parameters
+    }
+    if( static_cast<uint>(params.parameters.size()) > functionArgumentCount ) {
+      return; //Too many parameters
+    }
+  }
 
   m_parameterCountMismatch = false;
   //Match all parameters against the argument-type
@@ -82,15 +95,13 @@ void ViableFunction::matchParameters( const OverloadResolver::ParameterList& par
   
   for( QList<OverloadResolver::Parameter>::const_iterator it = params.parameters.begin(); it != params.parameters.end(); ++it )  {
     ParameterConversion c;
-/*    MissingDeclarationType::Ptr missing = (*argumentIt).type<MissingDeclarationType>();
-    if(missing) {
-      missing->convertedTo.type = (*it).type->indexed();
-    }else{*/
-      c.rank = conv.implicitConversion( (*it).type->indexed(), *argumentIt, (*it).lValue, m_noUserDefinedConversion );
-      c.baseConversionLevels = conv.baseConversionLevels();
-//     }
+    c.rank = conv.implicitConversion( (*it).type->indexed(), *argumentIt, (*it).lValue, m_noUserDefinedConversion );
+    c.baseConversionLevels = conv.baseConversionLevels();
     m_parameterConversions << c;
-    ++argumentIt;
+
+    if (!hasVarArgs || argumentIt < arguments + functionArgumentCount - 1) {
+      ++argumentIt;
+    } // else keep argumentIt at last argument, i.e. vararg
   }
 }
 

@@ -141,6 +141,9 @@ namespace TypeUtils {
   
   ///Transforms from constants like '5' to their underlying types like 'int' (Or from enumerators to their enumeration-types)
   KDEVCPPDUCHAIN_EXPORT AbstractType::Ptr removeConstants(KDevelop::AbstractType::Ptr type, const KDevelop::TopDUContext* source);
+
+  ///Check whether the given type resembles a varargs ellipsis.
+  KDEVCPPDUCHAIN_EXPORT bool isVarArgs(const KDevelop::AbstractType::Ptr &type);
 }
 
 #endif

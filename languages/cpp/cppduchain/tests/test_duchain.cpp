@@ -2403,6 +2403,19 @@ void TestDUChain::testADLTemplateTemplateArguments() {
     QCOMPARE(d->uses().size(), 0);
   }
 }
+
+void TestDUChain::testADLEllipsis()
+{
+  LockedTopDUContext top( parse(readCodeFile("testADLEllipsis.cpp"), DumpNone) );
+  QCOMPARE(top->localDeclarations().size(), 5);
+  QCOMPARE(top->localDeclarations().at(0)->uses().size(), 1);
+  QCOMPARE(top->localDeclarations().at(0)->uses().begin().value().size(), 1);
+  QCOMPARE(top->localDeclarations().at(1)->uses().size(), 1);
+  QCOMPARE(top->localDeclarations().at(1)->uses().begin().value().size(), 3);
+  QCOMPARE(top->localDeclarations().at(2)->uses().size(), 1);
+  QCOMPARE(top->localDeclarations().at(2)->uses().begin().value().size(), 1);
+}
+
 #define V_CHILD_COUNT(context, cnt) QCOMPARE(context->childContexts().count(), cnt)
 #define V_DECLARATION_COUNT(context, cnt) QCOMPARE(context->localDeclarations().count(), cnt)
 

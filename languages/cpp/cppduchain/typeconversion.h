@@ -58,12 +58,6 @@ using namespace KDevelop;
      ConversionRankOffset ///ConversionRankOffset is used to model the ranking of implicit conversion sequences(iso c++ 13.3.3.2), it is added once to the result of user-defined conversions, and twice to the result of standard-conversions.
    };
 
-   enum ConversionType {
-     UserDefinedConversion,
-     EllipsisConversion,
-     StandardConversion
-   };
-
    enum {
      MaximumConversionResult = 2*ConversionRankOffset + ExactMatch
    };
@@ -127,7 +121,7 @@ class KDEVCPPDUCHAIN_EXPORT TypeConversion {
     ConversionRank userDefinedConversion( AbstractType::Ptr from, AbstractType::Ptr to, bool fromLValue, bool secondConversionIsIdentity = false );
 
     ConversionRank pointerConversion( PointerType::Ptr from, PointerType::Ptr to );
-    
+
     ///iso c++ draft 13.3.3.1.3
     ConversionRank ellipsisConversion( AbstractType::Ptr from, AbstractType::Ptr to );
 

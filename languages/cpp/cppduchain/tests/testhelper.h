@@ -81,6 +81,11 @@ private:
 
 void dump(const TemplateDeclaration::InstantiationsHash& instantiations);
 
+/**
+ * Read contents of file @p file in cppduchain/tests/data directory.
+ */
+QByteArray readCodeFile(const QString& file);
+
 }
 
 #endif // TESTHELPER_H

@@ -34,6 +34,9 @@ using namespace Cpp;
 using namespace KDevelop;
 using namespace TypeUtils;
 
+// #define ifDebug(x)
+#define ifDebug(x) x
+
 struct ImplicitConversionParams {
   IndexedType from, to;
   bool fromLValue, noUserDefinedConversion;
@@ -148,12 +151,12 @@ uint TypeConversion::implicitConversion( IndexedType _from, IndexedType _to, boo
     from->setModifiers(from->modifiers() | AbstractType::ConstModifier);
   }
 
+  ifDebug(qDebug() << "Checking conversion from " << (from ? from->toString() : "<notype>") << " to " << (to ? to->toString() : "<notype>"););
+
   if( !from || !to ) {
     problem( from, to, "one type is invalid" );
     goto ready;
   }else{
-    
-    //kDebug(9007) << "Checking conversion from " << from->toString() << " to " << to->toString();
     ReferenceType::Ptr fromReference = from.cast<ReferenceType>();
     if( fromReference )
       fromLValue = true;
@@ -221,7 +224,7 @@ uint TypeConversion::implicitConversion( IndexedType _from, IndexedType _to, boo
             conv = tempConv;
         }
       }
-      
+
       if( (tempConv = ellipsisConversion(from, to)) && tempConv > conv )
         conv = tempConv;
     }
@@ -603,9 +606,11 @@ bool TypeConversion::isAccessible(const ClassMemberDeclaration* decl) {
   return decl->accessPolicy() == Declaration::Public;
 }
 
-ConversionRank TypeConversion::ellipsisConversion( AbstractType::Ptr from, AbstractType::Ptr to ) {
-  Q_UNUSED(from)
-  Q_UNUSED(to)
+ConversionRank TypeConversion::ellipsisConversion( AbstractType::Ptr from, AbstractType::Ptr to )
+{
+  if (TypeUtils::isVarArgs(to)) {
+    return ExactMatch;
+  }
   return NoMatch;
 }
 

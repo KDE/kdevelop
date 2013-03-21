@@ -96,6 +96,7 @@ private slots:
   void testADLNameAlias();
   void testADLTemplateArguments();
   void testADLTemplateTemplateArguments();
+  void testADLEllipsis();
   void testTemplateEnums();
   void testIntegralTemplates();
   void testTypedef();

@@ -37,7 +37,10 @@ using namespace KDevelop;
 const bool allowADL = true;
 
 // uncomment to get debugging info on ADL - very expensive on parsing
-// #define DEBUG_ADL
+#define DEBUG_ADL
+
+#define ifDebugOverloadResolution(x)
+// #define ifDebugOverloadResolution(x) x
 
 OverloadResolver::OverloadResolver( DUContextPointer context, TopDUContextPointer topContext, Constness constness, bool forceIsInstance )
 : m_context( context )
@@ -198,12 +201,14 @@ Declaration* OverloadResolver::resolveList( const ParameterList& params, const Q
   for ( QSet<Declaration*>::const_iterator it = newDeclarations.constBegin(); it != newDeclarations.constEnd(); ++it )
   {
     Declaration* decl = applyImplicitTemplateParameters( params, *it );
+    ifDebugOverloadResolution(qDebug() << (*it)->toString() << decl; )
     if ( !decl )
       continue;
 
     ViableFunction viable( m_topContext.data(), decl, m_constness, noUserDefinedConversion );
     viable.matchParameters( params );
 
+    ifDebugOverloadResolution(qDebug() << decl->toString() << viable.isBetter(bestViableFunction); )
     if ( viable.isBetter( bestViableFunction ) )
     {
       bestViableFunction = viable;
@@ -239,9 +244,11 @@ QList< ViableFunction > OverloadResolver::resolveListOffsetted( const ParameterL
     mergedParams.parameters += params.parameters;
     
     Declaration* decl = applyImplicitTemplateParameters( mergedParams, it.key() );
+    ifDebugOverloadResolution(qDebug() << it.key()->toString() << decl; )
     if ( !decl )
       continue;
     
+    ifDebugOverloadResolution(qDebug() << decl->toString(); )
     ViableFunction viable( m_topContext.data(), decl, m_constness );
     viable.matchParameters( mergedParams, partial );
 
@@ -258,6 +265,7 @@ ViableFunction OverloadResolver::resolveListViable( const ParameterList& params,
   if ( !m_context || !m_topContext )
     return ViableFunction();
 
+  ifDebugOverloadResolution(qDebug() << "resolveListViable" << params; )
   ///Iso c++ draft 13.3.3
   m_worstConversionRank = ExactMatch;
 
@@ -274,12 +282,14 @@ ViableFunction OverloadResolver::resolveListViable( const ParameterList& params,
     mergedParams.parameters += params.parameters;
     
     Declaration* decl = applyImplicitTemplateParameters( mergedParams, it.key() );
+    ifDebugOverloadResolution(qDebug() << it.key()->toString() << decl; )
     if ( !decl )
       continue;
     
     ViableFunction viable( m_topContext.data(), decl, m_constness );
     viable.matchParameters( mergedParams, partial );
 
+    ifDebugOverloadResolution(qDebug() << decl->toString() << viable.isBetter(bestViableFunction); )
     if ( viable.isBetter( bestViableFunction ) )
     {
       bestViableFunction = viable;
@@ -372,9 +382,6 @@ inline uint incrementIfSuccessful( uint val )
     return 1 + val;
   return 0;
 }
-
-#define ifDebugOverloadResolution(x)
-// #define ifDebugOverloadResolution(x) x
 
 uint OverloadResolver::matchParameterTypes( const AbstractType::Ptr& argumentType, const AbstractType::Ptr& parameterType, QMap<IndexedString, AbstractType::Ptr>& instantiatedTypes, bool keepValue ) const
 {
@@ -490,9 +497,12 @@ QList<Declaration *> OverloadResolver::computeADLCandidates( const ParameterList
 
   // Don't try to do ADL if there are delayed/unresolved types involved,
   // because then we cannot get a proper match as to ViableFunction anyway
-  foreach( const Parameter & param, params.parameters )
-      if( fastCast<DelayedType*>(param.type.unsafeData()) )
+  foreach( const Parameter & param, params.parameters ) {
+      if( fastCast<DelayedType*>(param.type.unsafeData()) ) {
+          ifDebugOverloadResolution(qDebug() << "Skipping ADL due to delayed types" << identifier << params; )
           return QList<Declaration *>();
+      }
+  }
   
   ADLHelper adlHelper( m_context, m_topContext );
   
@@ -511,7 +521,7 @@ QList<Declaration *> OverloadResolver::computeADLCandidates( const ParameterList
   QList<Declaration*> adlDecls;
 
 #ifdef DEBUG_ADL
-    kDebug() << "  ADL candidates for: " << identifier.toString();
+    kDebug() << "  ADL candidates for: " << identifier << params << params.parameters.size();
 #endif
 
   foreach( QualifiedIdentifier adlFunctionName, adlNamespaces )
@@ -733,3 +743,13 @@ uint OverloadResolver::matchParameterTypes( AbstractType::Ptr argumentType, cons
 //
 //   return true;
 // }
+
+QDebug operator<<(QDebug s, const Cpp::OverloadResolver::Parameter& param)
+{
+  return s << param.toString();
+}
+
+QDebug operator<<(QDebug s, const Cpp::OverloadResolver::ParameterList& params)
+{
+  return s << params.parameters;
+}
