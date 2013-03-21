@@ -2021,7 +2021,7 @@ void CodeCompletionContext::addLookaheadMatches(const QList<CompletionTreeItemPo
       lookaheadMatches << CompletionTreeItemPointer(lookaheadItem);
     }
   }
-  eventuallyAddGroup(i18n("Lookahead Matches"), 100, lookaheadMatches);
+  eventuallyAddGroup(i18n("Lookahead Matches"), 800, lookaheadMatches);
 }
 
 QList<CompletionTreeItemPointer> CodeCompletionContext::getImplementationHelpers() {
