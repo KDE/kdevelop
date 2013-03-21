@@ -159,7 +159,7 @@ uint TypeConversion::implicitConversion( IndexedType _from, IndexedType _to, boo
   }else{
     ReferenceType::Ptr fromReference = from.cast<ReferenceType>();
     if( fromReference )
-      fromLValue = true;
+      fromLValue = !fromReference->isRValue();
 
     ///iso c++ draft 13.3.3.1.4 reference-binding, modeled roughly
     ReferenceType::Ptr toReference = to.cast<ReferenceType>();
