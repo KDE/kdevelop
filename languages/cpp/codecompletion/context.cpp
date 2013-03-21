@@ -1809,10 +1809,6 @@ QList< CompletionTreeItemPointer > CodeCompletionContext::standardAccessCompleti
     
   decls = Cpp::hideOverloadedDeclarations(decls, typeIsConst);
 
-  QList<IndexedType> matchTypes;
-  if (m_parentContext)
-    matchTypes = parentContext()->matchTypes();
-  QList<CompletionTreeItemPointer> lookaheadMatches;
   foreach( const DeclarationDepthPair& decl, decls ) {
     NormalDeclarationCompletionItem* item = new NormalDeclarationCompletionItem(DeclarationPointer(decl.first), KDevelop::CodeCompletionContext::Ptr(this), decl.second );
 
@@ -1820,23 +1816,7 @@ QList< CompletionTreeItemPointer > CodeCompletionContext::standardAccessCompleti
       item->m_fixedMatchQuality = 0;
 
     items << CompletionTreeItemPointer(item);
-
-    if (!matchTypes.size())
-      continue;
-
-    QList<DeclAccessPair> lookaheadDecls = getLookaheadMatches(decl.first, matchTypes);
-    foreach(const DeclAccessPair &lookaheadDecl, lookaheadDecls)
-    {
-      NormalDeclarationCompletionItem* lookaheadItem =
-          new NormalDeclarationCompletionItem(DeclarationPointer(lookaheadDecl.first), KDevelop::CodeCompletionContext::Ptr(this));
-      lookaheadItem->prefixText = decl.first->identifier().toString() + (lookaheadDecl.second ? "->" : ".");
-      //Perhaps it'd be nice to have these stand out more without polluting the "Best Matches"
-      //NormalDeclarationCompletionItem should be refactored in order to make subclassing simpler
-      lookaheadItem->m_fixedMatchQuality = 0;
-      lookaheadMatches << CompletionTreeItemPointer(lookaheadItem);
-    }
   }
-  eventuallyAddGroup(i18n("Lookahead Matches"), 100, lookaheadMatches);
 
   ///Eventually show additional specificly known items for the matched argument-type, like for example enumerators for enum types
   CodeCompletionContext* parent = parentContext();
@@ -1986,6 +1966,15 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& sh
         break;
     }
 
+    if (m_accessType == MemberAccess ||
+        m_accessType == ArrowMemberAccess ||
+        m_accessType == MemberChoose ||
+        m_accessType == NoMemberAccess)
+    {
+      LOCKDUCHAIN; if (!m_duContext) return items;
+      addLookaheadMatches(items);
+    }
+
     if(depth() == 0)
     {
       LOCKDUCHAIN; if (!m_duContext) return items;
@@ -2003,6 +1992,36 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& sh
     }
 
     return items;
+}
+
+void CodeCompletionContext::addLookaheadMatches(const QList<CompletionTreeItemPointer> items)
+{
+  QList<IndexedType> matchTypes;
+  if (m_parentContext)
+    matchTypes = parentContext()->matchTypes();
+
+  if (!matchTypes.size())
+    return;
+
+  QList<CompletionTreeItemPointer> lookaheadMatches;
+  foreach( const CompletionTreeItemPointer &item, items ) {
+    Declaration* decl = item->declaration().data();
+    if (!decl)
+      continue;
+
+    QList<DeclAccessPair> lookaheadDecls = getLookaheadMatches(decl, matchTypes);
+    foreach(const DeclAccessPair &lookaheadDecl, lookaheadDecls)
+    {
+      NormalDeclarationCompletionItem* lookaheadItem =
+          new NormalDeclarationCompletionItem(DeclarationPointer(lookaheadDecl.first), KDevelop::CodeCompletionContext::Ptr(this));
+      lookaheadItem->prefixText = decl->identifier().toString() + (lookaheadDecl.second ? "->" : ".");
+      //Perhaps it'd be nice to have these stand out more without polluting the "Best Matches"
+      //NormalDeclarationCompletionItem should be refactored in order to make subclassing simpler
+      lookaheadItem->m_fixedMatchQuality = 0;
+      lookaheadMatches << CompletionTreeItemPointer(lookaheadItem);
+    }
+  }
+  eventuallyAddGroup(i18n("Lookahead Matches"), 100, lookaheadMatches);
 }
 
 QList<CompletionTreeItemPointer> CodeCompletionContext::getImplementationHelpers() {

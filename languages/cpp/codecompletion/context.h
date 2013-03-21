@@ -263,6 +263,7 @@ namespace Cpp {
       ///If @param forDecl is an instance of a class, find declarations in that class which match @param matchTypes
       ///@returns the list of matching declarations and whether or not you need the arrow operator (->) to access them
       QList<DeclAccessPair> getLookaheadMatches(Declaration* forDecl, const QList<IndexedType>& matchTypes) const;
+      void addLookaheadMatches(const QList<CompletionTreeItemPointer> items);
 
       ///*DUChain must be locked*
       bool  filterDeclaration(Declaration* decl, DUContext* declarationContext = 0, bool dynamic = true) const;
