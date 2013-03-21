@@ -209,6 +209,7 @@ private slots:
   void testEnum2011_data();
   void testEnum2011();
   void testDecltype();
+  void testDecltypeTypedef();
   void testDecltypeUses();
   void testTrailingReturnType();
   void testConstexpr();

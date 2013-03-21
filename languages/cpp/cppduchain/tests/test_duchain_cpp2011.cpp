@@ -429,6 +429,22 @@ void TestDUChain::testDecltype()
   QVERIFY(x7Dec->abstractType()->equals(x6Dec->abstractType().constData()));
 }
 
+void TestDUChain::testDecltypeTypedef()
+{
+  QByteArray code = "template<typename T> T foo();\n"
+                    "template<typename T> struct bar { typedef decltype(foo<T>()) type;};\n"
+                    "bar<int>::type v2 = 0; \n";
+
+  LockedTopDUContext top = parse(code, DumpAll);
+  QVERIFY(top);
+
+  QCOMPARE(top->localDeclarations().size(), 3);
+  TemplateDeclaration* foo = dynamic_cast<TemplateDeclaration*>(top->localDeclarations().first());
+  QVERIFY(foo);
+  dump(foo->instantiations());
+  QCOMPARE(TypeUtils::unAliasedType(top->localDeclarations().at(2)->abstractType())->toString(), QString("int"));
+}
+
 void TestDUChain::testTrailingReturnType()
 {
   {

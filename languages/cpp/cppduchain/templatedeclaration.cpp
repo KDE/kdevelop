@@ -257,7 +257,15 @@ struct DelayedTypeResolver : public KDevelop::TypeExchanger
       else
         res = p.evaluateType( delayedType->identifier().toString().toUtf8(), DUContextPointer(const_cast<DUContext*>(searchContext)), source );
 
-      return res.type.abstractType();
+      // NOTE: This looks hacky, but see e.g. TestDUChain::testDecltypeTypedef - we really _never_
+      //       want to replace a delayed type with a template parameter type. Why? Because the
+      //       former will get replaced with a concrete type later on. The CppTemplateParameterType
+      //       won't though...
+      AbstractType::Ptr ret = res.type.abstractType();
+      if (ret.cast<CppTemplateParameterType>()) {
+        return type;
+      }
+      return ret;
     }else{
       if( containsDelayedType(type) )
       {
