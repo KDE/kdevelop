@@ -31,17 +31,20 @@ add_subdirectory(libs)
 add_subdirectory(duchain)
 add_subdirectory(tests)
 add_subdirectory(codecompletion)
+add_subdirectory(navigation)
 
 kde4_add_plugin(kdevqmljslanguagesupport
     qmljsparsejob.cpp
     qmljshighlighting.cpp
     kdevqmljsplugin.cpp
-    colorchooser.cpp
+    navigation/colorchooser.cpp
+    navigation/propertypreviewwidget.cpp
 )
 target_link_libraries(kdevqmljslanguagesupport
     kdevqmljsduchain
     kdevqmljscompletion
     ${KDE4_THREADWEAVER_LIBS}
+    ${QT_QTDECLARATIVE_LIBRARIES}
 )
 
 install(FILES kdevqmljssupport.desktop DESTINATION ${SERVICES_INSTALL_DIR})

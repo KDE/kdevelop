@@ -24,7 +24,8 @@
 #include "version.h"
 #include "codecompletion/model.h"
 
-#include "colorchooser.h"
+#include "navigation/colorchooser.h"
+#include "navigation/propertypreviewwidget.h"
 
 #include <KPluginFactory>
 #include <KAboutData>
@@ -84,6 +85,43 @@ const QString textFromDoc(const IDocument* doc, const SimpleRange& range) {
     return doc->textDocument()->line(range.start.line).mid(range.start.column, range.end.column-range.start.column);
 };
 
+int spacesAtCorner(const QString& string, int direction = +1) {
+    int spaces = 0;
+    QString::const_iterator it;
+    for ( it = direction == 1 ? string.begin() : string.end()-1 ; it != string.end(); it += direction ) {
+        if ( ! it->isSpace() ) break;
+        spaces += 1;
+    }
+    return spaces;
+}
+
+const QPair<SimpleRange, SimpleRange> parseProperty(const QString& line, const SimpleCursor& position) {
+    SimpleRange keyRange = SimpleRange(position, position);
+    SimpleRange valueRange = SimpleRange(position, position);
+    QStringList items = line.split(';');
+    QString matchingItem;
+    int col_offset = 0;
+    foreach ( const QString& item, items ) {
+        col_offset += item.size();
+        if ( position.column < col_offset ) {
+            matchingItem = item;
+            break;
+        }
+    }
+    QStringList split = matchingItem.split(':');
+    if ( split.size() != 2 ) {
+        return QPair<SimpleRange, SimpleRange>();
+    }
+    QString key = split.at(0);
+    QString value = split.at(1);
+
+    keyRange.start.column = col_offset - value.size() - key.size() + spacesAtCorner(key, +1) - 1;
+    keyRange.end.column = col_offset - value.size() - 1 + spacesAtCorner(key, -1);
+    valueRange.start.column = col_offset - value.size() + spacesAtCorner(value, +1);
+    valueRange.end.column = col_offset + spacesAtCorner(value, -1);
+    return QPair<SimpleRange, SimpleRange>(keyRange, valueRange);
+};
+
 SimpleRange KDevQmlJsPlugin::specialLanguageObjectRange(const KUrl& url, const SimpleCursor& position)
 {
     IDocument* doc = ICore::self()->documentController()->documentForUrl(url);
@@ -115,6 +153,12 @@ QWidget* KDevQmlJsPlugin::specialLanguageObjectNavigationWidget(const KUrl& url,
         QColor color = stringToColor(text);
         if ( color.isValid() ) {
             return new ColorChooser(color, doc->textDocument(), range);
+        }
+
+        QPair<SimpleRange, SimpleRange> property = parseProperty(doc->textDocument()->line(position.line), position);
+        if ( property.first.isValid() && property.second.isValid() ) {
+            return PropertyPreviewWidget::constructIfPossible(doc->textDocument(), property.first, property.second,
+                                                              textFromDoc(doc, property.first), textFromDoc(doc, property.second));
         }
     }
     return KDevelop::ILanguageSupport::specialLanguageObjectNavigationWidget(url, position);
