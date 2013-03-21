@@ -100,9 +100,9 @@ const QPair<SimpleRange, SimpleRange> parseProperty(const QString& line, const S
     SimpleRange valueRange = SimpleRange(position, position);
     QStringList items = line.split(';');
     QString matchingItem;
-    int col_offset = 0;
+    int col_offset = -1;
     foreach ( const QString& item, items ) {
-        col_offset += item.size();
+        col_offset += item.size() + 1;
         if ( position.column < col_offset ) {
             matchingItem = item;
             break;
@@ -114,6 +114,11 @@ const QPair<SimpleRange, SimpleRange> parseProperty(const QString& line, const S
     }
     QString key = split.at(0);
     QString value = split.at(1);
+
+    if ( value.trimmed().endsWith('}') ) {
+        col_offset -= value.size() - value.lastIndexOf('}') + 1;
+        value = value.left(value.lastIndexOf('}')-1);
+    }
 
     keyRange.start.column = col_offset - value.size() - key.size() + spacesAtCorner(key, +1) - 1;
     keyRange.end.column = col_offset - value.size() - 1 + spacesAtCorner(key, -1);
