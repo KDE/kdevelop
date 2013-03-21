@@ -37,7 +37,7 @@ using namespace KDevelop;
 const bool allowADL = true;
 
 // uncomment to get debugging info on ADL - very expensive on parsing
-#define DEBUG_ADL
+// #define DEBUG_ADL
 
 #define ifDebugOverloadResolution(x)
 // #define ifDebugOverloadResolution(x) x
