@@ -179,6 +179,7 @@ private slots:
   void testContextSearch();
 
   void testEllipsis();
+  void testEllipsisVexing();
 
   void testMultiByteCStrings();
 

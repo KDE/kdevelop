@@ -1775,7 +1775,11 @@ bool DeclarationBuilder::checkParameterDeclarationClause(ParameterDeclarationCla
             break;
           }else if(lastType().cast<DelayedType>() && lastType().cast<DelayedType>()->kind() == DelayedType::Unresolved) {
             //When the searched item was not found, expect it to be a non-type
-            ret = false;
+            //except for varargs
+            DelayedType::Ptr delayed = lastType().cast<DelayedType>();
+            static const IndexedQualifiedIdentifier ellipsis(QualifiedIdentifier("..."));
+            ret = delayed->identifier().identifier() == ellipsis;
+            break;
           }else{
             ret = true;
             break;

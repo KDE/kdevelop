@@ -287,6 +287,15 @@ void TestDUChain::testEllipsis()
   QCOMPARE(defInfinity->type<FunctionType>()->arguments()[1]->toString(), QString("..."));
 }
 
+void TestDUChain::testEllipsisVexing()
+{
+  QByteArray method("void infinity(...);");
+  LockedTopDUContext top = parse(method, DumpNone);
+  Declaration* defInfinity = top->localDeclarations().first();
+  QCOMPARE(defInfinity->type<FunctionType>()->arguments().count(), 1);
+  QCOMPARE(defInfinity->type<FunctionType>()->arguments()[0]->toString(), QString("..."));
+}
+
 void TestDUChain::testContextSearch() {
   {
     QByteArray method("int t; struct C { }; void test() { C c; c.t = 3;}");
