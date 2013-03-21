@@ -36,6 +36,7 @@ kde4_add_plugin(kdevqmljslanguagesupport
     qmljsparsejob.cpp
     qmljshighlighting.cpp
     kdevqmljsplugin.cpp
+    colorchooser.cpp
 )
 target_link_libraries(kdevqmljslanguagesupport
     kdevqmljsduchain
