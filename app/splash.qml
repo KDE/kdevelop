@@ -94,7 +94,7 @@ Rectangle {
         anchors.left: parent.left
         anchors.top: parent.top
         color: "white"
-        opacity: 0.4
+        opacity: 0.65
         text: "KDevelop Integrated Development Environment - http://kdevelop.org"
         font.pointSize: 7
     }
