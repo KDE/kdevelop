@@ -10,38 +10,14 @@
 using namespace KDevelop;
 
 struct SupportedProperty {
-    enum PossibleValues {
-        IntegerValues,
-        FloatingPointValues,
-        FixedStringValues
-    };
-    enum Easing {
-        Linear,
-        Squared
-    };
-    enum OrientationHint {
-        Horizontal,
-        Vertical
-    };
     SupportedProperty() { };
-    SupportedProperty(const QUrl& qmlfile, PossibleValues values = IntegerValues, const QPointF& dataRange = QPointF(0, 100),
-                      const QStringList& possibleFixedValues = QStringList(), Easing easing = Linear,
-                      OrientationHint orientation = Horizontal)
+    SupportedProperty(const QUrl& qmlfile, const QStringList fixedValues = QStringList())
         : qmlfile(qmlfile)
-        , possibleFixedValues(possibleFixedValues)
-        , dataRange(dataRange)
-        , possibleValues(values)
-        , easing(easing)
-        , orientationHint(orientation)
+        , possibleFixedValues(fixedValues)
     { };
 
     QUrl qmlfile;
-
     QStringList possibleFixedValues;
-    QPointF dataRange;
-    PossibleValues possibleValues;
-    Easing easing;
-    OrientationHint orientationHint;
 };
 
 class PropertyPreviewWidget : public QWidget {
@@ -63,6 +39,7 @@ private:
     SimpleRange const keyRange;
     SimpleRange valueRange;
     SupportedProperty const property;
+    bool wasChanged;
 
 private slots:
     void updateValue(const QString&);

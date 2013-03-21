@@ -13,13 +13,21 @@ QWidget* PropertyPreviewWidget::constructIfPossible(KTextEditor::Document* doc, 
                                                     SimpleRange valueRange, const QString& key, const QString& value)
 {
     if ( supportedProperties.isEmpty() ) {
-#warning fix: kstandarddirs
         KStandardDirs d;
-        supportedProperties["width"] = SupportedProperty(
-            QUrl("/home/sven/Projekte/kde/kdev-qmljs/navigation/propertywidgets/width.qml"),
-            SupportedProperty::IntegerValues, QPointF(0, 25), QStringList(),
-            SupportedProperty::Squared, SupportedProperty::Horizontal
-        );
+        QStringList bases = d.findDirs("data", "propertywidgets");
+        if ( bases.isEmpty() ) {
+            return 0;
+        }
+        QString base = bases.first();
+        supportedProperties["width"] = SupportedProperty(QUrl(base + "Width.qml"));
+        supportedProperties["height"] = SupportedProperty(QUrl(base + "Height.qml"));
+        supportedProperties["spacing"] = SupportedProperty(QUrl(base + "Spacing.qml"));
+        supportedProperties["x"] = SupportedProperty(QUrl(base + "Distance.qml"));
+        supportedProperties["y"] = SupportedProperty(QUrl(base + "Distance.qml"));
+        // TODO support the other margins
+        supportedProperties["Anchors.margins"] = SupportedProperty(QUrl(base + "Distance.qml"));
+        supportedProperties["opacity"] = SupportedProperty(QUrl(base + "Opacity.qml"));
+        supportedProperties["duration"] = SupportedProperty(QUrl(base + "Duration.qml"));
     }
     QHash<QString, SupportedProperty>::iterator item = supportedProperties.find(key);
     if ( item != supportedProperties.end() ) {
@@ -30,6 +38,10 @@ QWidget* PropertyPreviewWidget::constructIfPossible(KTextEditor::Document* doc, 
 
 void PropertyPreviewWidget::updateValue(const QString& newValue)
 {
+    if ( ! wasChanged ) {
+        document->startEditing();
+        wasChanged = true;
+    }
     view->rootObject()->setProperty("value", newValue);
     document->activeView()->setCursorPosition(KTextEditor::Cursor(valueRange.start.line, valueRange.start.column));
     if ( valueRange.end.column - valueRange.start.column == newValue.size() ) {
@@ -46,7 +58,9 @@ void PropertyPreviewWidget::updateValue(const QString& newValue)
 
 PropertyPreviewWidget::~PropertyPreviewWidget()
 {
-    document->endEditing();
+    if ( wasChanged ) {
+        document->endEditing();
+    }
 }
 
 PropertyPreviewWidget::PropertyPreviewWidget(KTextEditor::Document* doc, SimpleRange keyRange, SimpleRange valueRange,
@@ -58,16 +72,13 @@ PropertyPreviewWidget::PropertyPreviewWidget(KTextEditor::Document* doc, SimpleR
     , valueRange(valueRange)
     , property(property)
     , slider(0)
+    , wasChanged(false)
 {
     setProperty("DoNotCloseOnCursorMove", true);
     view->setSource(property.qmlfile);
-    setFixedSize(220, 100);
-    view->rootObject()->setProperty("width", 220);
-    view->rootObject()->setProperty("height", 100);
-    view->rootObject()->setProperty("initialValue", value);
+    view->rootObject()->setProperty("value", value);
     QObject::connect(view->rootObject(), SIGNAL(valueChanged(QString)),
                      this, SLOT(updateValue(QString)));
     setLayout(new QHBoxLayout);
     layout()->addWidget(view);
-    doc->startEditing();
 }
