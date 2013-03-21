@@ -402,7 +402,7 @@ void ContextBrowserPlugin::startDelayedBrowsing(KTextEditor::View* view) {
   }
 }
 
-void ContextBrowserPlugin::hideTooTip() {
+void ContextBrowserPlugin::hideToolTip() {
   if(m_currentToolTip) {
     m_currentToolTip->deleteLater();
     m_currentToolTip = 0;
@@ -488,11 +488,11 @@ void ContextBrowserPlugin::showToolTip(KTextEditor::View* view, KTextEditor::Cur
     m_currentNavigationWidget = navigationWidget;
     ActiveToolTip::showToolTip(tooltip);
 
-    //First disconnect to prevent multiple connections
-    disconnect(view, SIGNAL(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)), this, SLOT(hideTooTip()));
-    disconnect(view, SIGNAL(focusOut(KTextEditor::View*)), this, SLOT(hideTooTip()));
-    connect(view, SIGNAL(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)), this, SLOT(hideTooTip()));
-    connect(view, SIGNAL(focusOut(KTextEditor::View*)), this, SLOT(hideTooTip()));
+    if ( ! navigationWidget->property("DoNotCloseOnCursorMove").toBool() ) {
+      connect(view, SIGNAL(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)),
+              this, SLOT(hideToolTip()), Qt::UniqueConnection);
+    }
+    connect(view, SIGNAL(focusOut(KTextEditor::View*)), this, SLOT(hideToolTip()), Qt::UniqueConnection);
     
   }else{
     kDebug() << "not showing tooltip, no navigation-widget";

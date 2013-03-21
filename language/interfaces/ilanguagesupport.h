@@ -96,7 +96,10 @@ public:
     virtual QPair<KUrl, SimpleCursor> specialLanguageObjectJumpCursor(const KUrl& url, const SimpleCursor& position);
     
     /**Should return a navigation-widget for the
-      *special language-object that contains @param position refers, or 0. */
+      *special language-object that contains @param position refers, or 0.
+      *If you setProperty("DoNotCloseOnCursorMove", true) on the widget returned,
+      *then the widget will not close when the cursor moves in the document, which
+      *enables you to change the document contents from the widget without immediately closing the widget.*/
     virtual QWidget* specialLanguageObjectNavigationWidget(const KUrl& url, const SimpleCursor& position);
     
     /**Should return a tiny piece of code which makes it possible for KDevelop to derive the indentation

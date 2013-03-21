@@ -639,6 +639,10 @@ public:
    * @param htmlSuffix Html-formatted text that should be appended to any information shown by this widget
    *
    * Can return zero which disables the navigation widget.
+   *
+   * If you setProperty("DoNotCloseOnCursorMove", true) on the widget returned,
+   * then the widget will not close when the cursor moves in the document, which
+   * enables you to change the document contents from the widget without immediately closing the widget.
    */
   virtual QWidget* createNavigationWidget(Declaration* decl = 0, TopDUContext* topContext = 0,
                                           const QString& htmlPrefix = QString(),

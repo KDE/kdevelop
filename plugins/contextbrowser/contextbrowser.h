@@ -130,7 +130,7 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContext
 
     void textHintRequested(const KTextEditor::Cursor&, QString&);
 
-    void hideTooTip();
+    void hideToolTip();
     void findUses();
     
     void textInserted(KTextEditor::Document*, KTextEditor::Range);
