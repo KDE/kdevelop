@@ -199,6 +199,15 @@ void TestExpressionParser::testIntegralType() {
     QCOMPARE(ciType->value<char>(), 'x');
   }
   {
+    Cpp::ExpressionEvaluationResult result = parser.evaluateType("char(1)", KDevelop::DUContextPointer(top));
+    QVERIFY(result.isValid());
+
+    AbstractType::Ptr aType(result.type.abstractType());
+    IntegralType::Ptr iType = aType.cast<IntegralType>();
+    QVERIFY(iType);
+    QCOMPARE(iType->dataType(), (uint)IntegralType::TypeChar);
+  }
+  {
       Cpp::ExpressionEvaluationResult result = parser.evaluateType("5", KDevelop::DUContextPointer(top));
       QVERIFY(result.isValid());
       
