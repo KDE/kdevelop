@@ -30,6 +30,7 @@ QWidget* PropertyPreviewWidget::constructIfPossible(KTextEditor::Document* doc, 
         supportedProperties["duration"] = SupportedProperty(QUrl(base + "Duration.qml"));
         supportedProperties["font.family"] = SupportedProperty(QUrl(base + "FontFamily.qml"));
         supportedProperties["font.pointSize"] = SupportedProperty(QUrl(base + "FontSize.qml"));
+        supportedProperties["model"] = SupportedProperty(QUrl(base + "Repeat.qml"));
     }
     QHash<QString, SupportedProperty>::iterator item = supportedProperties.find(key);
     if ( item != supportedProperties.end() ) {
