@@ -3,10 +3,14 @@
 #include <QDeclarativeView>
 #include <QLayout>
 #include <qgraphicsitem.h>
+#include <QLabel>
 #include <KStandardDirs>
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
+#include <KLocalizedString>
 
+// List of supported properties. The string must be the name of the property,
+// which can contain dots if necessary
 QHash<QString, SupportedProperty> PropertyPreviewWidget::supportedProperties;
 
 QWidget* PropertyPreviewWidget::constructIfPossible(KTextEditor::Document* doc, SimpleRange keyRange,
@@ -45,12 +49,16 @@ void PropertyPreviewWidget::updateValue(const QString& newValue)
         document->startEditing();
         wasChanged = true;
     }
+    // communicate the changed value to the QML view
     view->rootObject()->setProperty("value", newValue);
+    // set the cursor to the edited range, otherwise the view will jump if we call doc->endEditing()
     document->activeView()->setCursorPosition(KTextEditor::Cursor(valueRange.start.line, valueRange.start.column));
     if ( valueRange.end.column - valueRange.start.column == newValue.size() ) {
         document->replaceText(valueRange.textRange(), newValue);
     }
     else {
+        // the length of the text changed so don't replace it but remove the old
+        // and insert the new text.
         document->removeText(valueRange.textRange());
         document->insertText(valueRange.textRange().start(), newValue);
         valueRange.end.column = valueRange.start.column + newValue.size();
@@ -74,12 +82,18 @@ PropertyPreviewWidget::PropertyPreviewWidget(KTextEditor::Document* doc, SimpleR
     , keyRange(keyRange)
     , valueRange(valueRange)
     , property(property)
-    , slider(0)
     , wasChanged(false)
 {
+    // see docstring for ILanguageSupport::specialLanguageObjectNavigationWidget
     setProperty("DoNotCloseOnCursorMove", true);
     view->setSource(property.qmlfile);
+    // don't crash because of a syntax error or missing QML file
+    if ( ! view->rootObject() ) {
+        return new QLabel(i18n("Error loading QML file:") + property.qmlfile.path());
+    }
+    // set the initial value read from the document
     view->rootObject()->setProperty("value", value);
+    // connect to the slot which has to be emitted from QML when the value changes
     QObject::connect(view->rootObject(), SIGNAL(valueChanged(QString)),
                      this, SLOT(updateValue(QString)));
     setLayout(new QHBoxLayout);

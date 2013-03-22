@@ -18,13 +18,18 @@ ColorChooser::ColorChooser(const QColor& startColor, KTextEditor::Document* docu
     , selectedColorLabel(new QLabel)
     , selectedColorPixmap(size, size)
 {
+    // ChooserValue is is the default mode which is used in kcolorchooser,
+    // so use it here too
     hueSaturationSelector->setChooserMode(ChooserValue);
     selectedColorLabel->setFixedSize(size/2, size/4);
     setFocusPolicy(Qt::NoFocus);
+    // see docstring for ILanguageSupport::specialLanguageObjectNavigationWidget
     setProperty("DoNotCloseOnCursorMove", true);
     setLayout(new QHBoxLayout);
 
     hueSaturationSelector->setFixedSize(size, size);
+    // both widgets are given all color values, because their display style
+    // also depends on the color components they are not responsible to select
     hueSaturationSelector->setHue(startColor.hsvHue());
     hueSaturationSelector->setSaturation(startColor.hsvSaturation());
     hueSaturationSelector->setColorValue(startColor.value());
@@ -38,6 +43,10 @@ ColorChooser::ColorChooser(const QColor& startColor, KTextEditor::Document* docu
     layout()->addWidget(hueSaturationSelector);
     layout()->addWidget(valueSelector);
     layout()->addWidget(selectedColorLabel);
+    // whenever any value changes,
+    //  * update the preview color
+    //  * synchronize the changes with the other widget
+    //  * update the color in the text document
     connect(hueSaturationSelector, SIGNAL(valueChanged(int,int)), this, SLOT(updatePreview()));
     connect(valueSelector, SIGNAL(valueChanged(int)), this, SLOT(updatePreview()));
     connect(hueSaturationSelector, SIGNAL(valueChanged(int,int)), this, SLOT(hueValueChanged(int,int)));
@@ -50,6 +59,14 @@ ColorChooser::ColorChooser(const QColor& startColor, KTextEditor::Document* docu
 void ColorChooser::hueValueChanged(int hue, int saturation)
 {
     if ( ! wasModified ) {
+        // all modifications are done in *one* editing step, because
+        // the user can then undo selecting a different color in the widget
+        // by using "Undo" once. Without this, you'd need one "undo" operation
+        // per pixel your mouse moved, which is annoying.
+        // TODO: which kind of bad things can happen when the document
+        // is in editing mode for several seconds?
+        // One thing that happens for sure is that if the user types stuff while
+        // the widget is open, highlighting doesn't update.
         document->startEditing();
         wasModified = true;
     }
@@ -62,6 +79,7 @@ void ColorChooser::hueValueChanged(int hue, int saturation)
 void ColorChooser::valueChanged(int value)
 {
     if ( ! wasModified ) {
+        // see above
         document->startEditing();
         wasModified = true;
     }
@@ -93,9 +111,9 @@ void ColorChooser::updateText()
     }
     document->activeView()->setCursorPosition(range.textRange().start());
     QColor newColor = getSelectedColor();
-    // could translate back to readable name,  but it's not worth it.
+    // could translate back to readable name,  but it's not worth it
+    // (would need to be done manually with a lookup table)
     const QString name = newColor.toRgb().name();
-    qDebug() << range.end.column - range.start.column << name.size();
     if ( range.end.column - range.start.column == name.size() ) {
         document->replaceText(range.textRange(), name);
     }
@@ -112,6 +130,7 @@ void ColorChooser::updateText()
 bool ColorChooser::event(QEvent* event)
 {
     if ( event->type() == QEvent::Hide && wasModified ) {
+        // when the widget is hidden, update the text for one last time, then commit and close.
         updateText();
         document->endEditing();
     }
