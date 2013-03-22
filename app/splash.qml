@@ -95,7 +95,7 @@ Rectangle {
         anchors.top: parent.top
         color: "white"
         opacity: 0.65
-        text: "KDevelop Integrated Development Environment - http://kdevelop.org"
+        text: "KDevelop Integrated Development Environment – http://kdevelop.org<br>" + root.progress+"%"
         font.pointSize: 7
     }
 }
