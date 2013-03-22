@@ -28,6 +28,10 @@ Boston, MA 02110-1301, USA.
 #include <QtCore/QList>
 #include <QtCore/QMap>
 #include <QtGui/QItemSelectionModel>
+#include <QtGui/QGroupBox>
+#include <QtGui/QRadioButton>
+#include <QtGui/QBoxLayout>
+#include <QtGui/QLabel>
 
 #include <kaction.h>
 #include <kconfig.h>
@@ -77,8 +81,8 @@ Boston, MA 02110-1301, USA.
 #include <kio/job.h>
 #include "sessioncontroller.h"
 #include "session.h"
-#include <QApplication>
 #include <QDBusConnection>
+#include <QApplication>
 #include <vcs/models/projectchangesmodel.h>
 #include <vcs/widgets/vcsdiffpatchsources.h>
 #include <vcs/widgets/vcscommitdialog.h>
@@ -693,6 +697,7 @@ void ProjectController::openProjectForUrl(const KUrl& sourceUrl) {
 void ProjectController::openProject( const KUrl &projectFile )
 {
     KUrl url = projectFile;
+    QList<const Session*> existingSessions;
 
     if(!Core::self()->sessionController()->activeSession()->containedProjects().contains(url))
     {
@@ -700,12 +705,7 @@ void ProjectController::openProject( const KUrl &projectFile )
         {
             if(session->containedProjects().contains(url))
             {
-                int res = KMessageBox::questionYesNo(Core::self()->uiControllerInternal()->activeMainWindow(),
-                                i18n("The project you are opening is part of the session %1, do you want to open the session instead?", session->description()));
-                if(res == KMessageBox::Yes)
-                {
-                    Core::self()->sessionController()->loadSession(session->id().toString());
-                    
+                existingSessions << session;
 #if 0
                     ///@todo Think about this! Problem: The session might already contain files, the debugger might be active, etc.
                     //If this session is empty, close it
@@ -716,19 +716,48 @@ void ProjectController::openProject( const KUrl &projectFile )
                             window->close();
                     }
 #endif
-                    
+            }
+        }
+    }
+
+    if ( ! existingSessions.isEmpty() ) {
+        KDialog dialog(Core::self()->uiControllerInternal()->activeMainWindow());
+        dialog.setButtons(KDialog::Ok);
+        QWidget contents;
+        contents.setLayout(new QVBoxLayout);
+        contents.layout()->addWidget(new QLabel(i18n("The project you're trying to open is already open in at least one "
+                                                     "other session.<br>What do you want to do?")));
+        QGroupBox sessions;
+        sessions.setLayout(new QVBoxLayout);
+        QRadioButton* newSession = new QRadioButton(i18n("Add project to current session"));
+        sessions.layout()->addWidget(newSession);
+        newSession->setChecked(true);
+        foreach ( const Session* session, existingSessions ) {
+            QRadioButton* button = new QRadioButton(i18n("Open session %1", session->description()));
+            button->setProperty("sessionid", session->id().toString());
+            sessions.layout()->addWidget(button);
+        }
+        sessions.layout()->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding));
+        contents.layout()->addWidget(&sessions);
+        dialog.setMainWidget(&contents);
+        dialog.exec();
+        foreach ( const QObject* obj, sessions.children() ) {
+            if ( const QRadioButton* button = qobject_cast<const QRadioButton*>(obj) ) {
+                QString sessionid = button->property("sessionid").toString();
+                if ( button->isChecked() && ! sessionid.isEmpty() ) {
+                    Core::self()->sessionController()->loadSession(sessionid);
                     return;
                 }
             }
         }
     }
-    
+
     if ( url.isEmpty() )
     {
         url = d->dialog->askProjectConfigLocation(false);
     }
 
-    if ( !url.isEmpty() )    
+    if ( !url.isEmpty() )
     {
         d->importProject(url);
     }
