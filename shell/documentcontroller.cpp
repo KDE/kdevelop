@@ -49,6 +49,7 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/iproject.h>
 #include <interfaces/iselectioncontroller.h>
 #include <interfaces/context.h>
+#include <interfaces/ilanguagecontroller.h>
 #include <project/projectmodel.h>
 
 #include "core.h"
@@ -65,6 +66,7 @@ Boston, MA 02110-1301, USA.
 #include <vcs/vcsjob.h>
 
 #include <config-kdevplatform.h>
+#include <language/backgroundparser/backgroundparser.h>
 
 #ifdef HAVE_KOMPARE
     #include "patchdocument.h"
@@ -534,7 +536,10 @@ struct DocumentControllerPrivate {
             if (doc != previousActiveDocument || activePosition != previousActivePosition)
                 emit controller->documentJumpPerformed(doc, activePosition, previousActiveDocument, previousActivePosition);
         }
-        
+
+        QObject::connect(doc->textDocument(), SIGNAL(reloaded(KTextEditor::Document*)), controller,
+                         SLOT(reloaded(KTextEditor::Document*)));
+
         return true;
     }
 
@@ -551,11 +556,14 @@ struct DocumentControllerPrivate {
     QPointer<KAction> closeAllOthers;
     KRecentFilesAction* fileOpenRecent;
     KTextEditor::Document* globalTextEditorInstance;
-
-/*    HistoryEntry createHistoryEntry();
-    void addHistoryEntry();
-    void jumpTo( const HistoryEntry & );*/
 };
+
+void DocumentController::reloaded(KTextEditor::Document* doc)
+{
+    ICore::self()->languageController()->backgroundParser()->addDocument(IndexedString(doc->url()),
+            (TopDUContext::Features) ( TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdate ),
+            BackgroundParser::BestPriority, 0);
+}
 
 DocumentController::DocumentController( QObject *parent )
         : IDocumentController( parent )
@@ -1129,7 +1137,8 @@ bool DocumentController::openDocumentsWithSplitSeparators( Sublime::AreaIndex* i
                 index = index->first();
             // Simply open the document into the area index
             IDocument* doc = Core::self()->documentControllerInternal()->openDocument(KUrl(urlsWithSeparators.front()),
-                        KTextEditor::Cursor::invalid(), IDocumentController::DoNotActivate | IDocumentController::DoNotCreateView);
+                        KTextEditor::Cursor::invalid(),
+                        (IDocumentController::DocumentActivation) ( IDocumentController::DoNotActivate | IDocumentController::DoNotCreateView) );
             Sublime::Document *sublimeDoc = dynamic_cast<Sublime::Document*>(doc);
             if (sublimeDoc) {
                 Sublime::View* view = sublimeDoc->createView();
