@@ -67,9 +67,9 @@ using namespace KDevelop;
 
 //BEGIN ProjectManagerFilterAction
 
-ProjectManagerFilterAction::ProjectManagerFilterAction(  const QString &initialFilter, QObject* parent )
+ProjectManagerFilterAction::ProjectManagerFilterAction(ProjectManagerView* parent)
     : KAction( parent )
-    , m_intialFilter(initialFilter)
+    , m_projectManagerView(parent)
 {
     setIcon(KIcon("view-filter"));
     setText(i18n("Filter..."));
@@ -83,9 +83,9 @@ QWidget* ProjectManagerFilterAction::createWidget( QWidget* parent )
     edit->setClickMessage(i18n("Filter..."));
     edit->setClearButtonShown(true);
     connect(edit, SIGNAL(textChanged(QString)), this, SIGNAL(filterChanged(QString)));
-    if (!m_intialFilter.isEmpty()) {
-        edit->setText(m_intialFilter);
-    }
+
+    const QString filterString = m_projectManagerView->filterString();
+    edit->setText(filterString);
 
     return edit;
 }
@@ -153,14 +153,14 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
     m_ui->projectTreeView->setModel( m_modelFilter );
 
     QString filterText;
-
     if (pmviewConfig.hasKey(filterConfigKey)) {
         filterText = pmviewConfig.readEntry(filterConfigKey, QString());
     }
+    setFilterString(filterText);
 
-    ProjectManagerFilterAction* filterAction = new ProjectManagerFilterAction(filterText, this);
+    ProjectManagerFilterAction* filterAction = new ProjectManagerFilterAction(this);
     connect(filterAction, SIGNAL(filterChanged(QString)),
-            this, SLOT(filterChanged(QString)));
+            this, SLOT(setFilterString(QString)));
     addAction(filterAction);
 
     connect( m_ui->projectTreeView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
@@ -304,7 +304,12 @@ void ProjectManagerView::openUrl( const KUrl& url )
     IOpenWith::openFiles(KUrl::List() << url);
 }
 
-void ProjectManagerView::filterChanged(const QString &text)
+QString ProjectManagerView::filterString() const
+{
+    return m_filterString;
+}
+
+void ProjectManagerView::setFilterString(const QString &text)
 {
     m_filterString = text;
     m_modelFilter->setFilterString(text);
