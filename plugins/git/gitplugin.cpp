@@ -670,7 +670,7 @@ void GitPlugin::parseGitCurrentBranch(DVcsJob* job)
         out.clear();
     }
 
-    job->setResults(out.right(out.size()-11));
+    job->setResults(out);
 }
 
 VcsJob* GitPlugin::branches(const KUrl &repository)
