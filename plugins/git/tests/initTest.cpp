@@ -268,22 +268,14 @@ void GitInitTest::testCommit()
     commitFiles();
 }
 
-void GitInitTest::testBranching()
+void GitInitTest::testBranch(const QString& newBranch)
 {
-    repoInit();
-    addFiles();
-    commitFiles();
+    //Already tested, so I assume that it works
+    QString oldBranch = runSynchronously(m_plugin->currentBranch(gitTest_BaseDir)).toString();
 
-    VcsJob* j = m_plugin->branches(KUrl(gitTest_BaseDir));
-    VERIFYJOB(j);
-
-    QString curBranch = runSynchronously(m_plugin->currentBranch(gitTest_BaseDir)).toString();
-    QCOMPARE(curBranch, QString("master"));
-
-    QString newBranch("new");
     VcsRevision rev;
-    rev.setRevisionValue("master", KDevelop::VcsRevision::GlobalNumber);
-    j = m_plugin->branch(KUrl(gitTest_BaseDir), rev, newBranch);
+    rev.setRevisionValue(oldBranch, KDevelop::VcsRevision::GlobalNumber);
+    VcsJob* j = m_plugin->branch(KUrl(gitTest_BaseDir), rev, newBranch);
     VERIFYJOB(j);
     QVERIFY(runSynchronously(m_plugin->branches(KUrl(gitTest_BaseDir))).toStringList().contains(newBranch));
 
@@ -302,9 +294,26 @@ void GitInitTest::testBranching()
     VERIFYJOB(j);
     QCOMPARE(runSynchronously(m_plugin->currentBranch(gitTest_BaseDir)).toString(), newBranch);
 
-    j = m_plugin->deleteBranch(KUrl(gitTest_BaseDir), "master");
+    j = m_plugin->deleteBranch(KUrl(gitTest_BaseDir), oldBranch);
     VERIFYJOB(j);
-    QVERIFY(!runSynchronously(m_plugin->branches(KUrl(gitTest_BaseDir))).toStringList().contains("master"));
+    QVERIFY(!runSynchronously(m_plugin->branches(KUrl(gitTest_BaseDir))).toStringList().contains(oldBranch));
+}
+
+void GitInitTest::testBranching()
+{
+    repoInit();
+    addFiles();
+    commitFiles();
+
+    VcsJob* j = m_plugin->branches(KUrl(gitTest_BaseDir));
+    VERIFYJOB(j);
+
+    QString curBranch = runSynchronously(m_plugin->currentBranch(gitTest_BaseDir)).toString();
+    QCOMPARE(curBranch, QString("master"));
+
+    testBranch("new");
+    testBranch("averylongbranchnamejusttotestlongnames");
+    testBranch("KDE/4.10");
 }
 
 void GitInitTest::revHistory()

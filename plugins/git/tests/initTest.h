@@ -26,6 +26,7 @@
 #define GIT_INIT_H
 
 #include <QtCore/QObject>
+#include <QtCore/QString>
 
 class GitPlugin;
 
@@ -53,6 +54,7 @@ private slots:
     void testAdd();
     void testCommit();
     void testBranching();
+    void testBranch(const QString &branchName);
     void revHistory();
     void testAnnotation();
     void testRemoveEmptyFolder();
