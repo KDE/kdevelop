@@ -109,7 +109,7 @@ PropertyPreviewWidget::PropertyPreviewWidget(KTextEditor::Document* doc, SimpleR
     setLayout(new QHBoxLayout);
     // don't crash because of a syntax error or missing QML file
     if ( ! view->rootObject() ) {
-        layout()->addWidget(new QLabel(i18n("Error loading QML file:") + property.qmlfile.path()));
+        layout()->addWidget(new QLabel(i18n("Error loading QML file: %1", property.qmlfile.path())));
         delete view;
         return;
     }
