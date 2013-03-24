@@ -117,10 +117,12 @@ void ProjectPathsWidget::projectPathSelected( int index )
 
 void ProjectPathsWidget::clear()  
 {
+    bool sigDisabled = ui->projectPaths->blockSignals( true );
     pathsModel->setPaths( QList<CustomBuildSystemProjectPathConfig>() );
     ui->includesWidget->clear();
     ui->definesWidget->clear();
     updateEnablements();
+    ui->projectPaths->blockSignals( sigDisabled );
 }
 
 void ProjectPathsWidget::addProjectPath()
