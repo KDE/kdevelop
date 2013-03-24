@@ -157,8 +157,7 @@ namespace Cpp {
       * */
       QList<KDevelop::IncludeItem> includeItems() const;
 
-      ///*DUChain must be locked*
-      KDevelop::IndexedType applyPointerConversionForMatching(KDevelop::IndexedType type, bool fromLValue) const;
+      int pointerConversions() const;
       
       QString followingText() const;
       
@@ -278,7 +277,7 @@ namespace Cpp {
       
       ///@param type The type of the argument the items are matched to.
       ///*DUChain must be locked*
-      QList<CompletionTreeItemPointer> specialItemsForArgumentType(AbstractType::Ptr type);
+      void addSpecialItemsForArgumentType(AbstractType::Ptr type);
       
       ///Returns whether the declaration is directly visible from within the current context
       bool visibleFromWithin(Declaration* decl, DUContext* currentContext) const;

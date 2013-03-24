@@ -59,8 +59,6 @@ class CodeCompletionModel : public KDevelop::CodeCompletionModel
     virtual ~CodeCompletionModel();
 
   protected:
-    virtual void foundDeclarations(QList<KSharedPtr<KDevelop::CompletionTreeElement> > item, KSharedPtr<KDevelop::CodeCompletionContext> completionContext);
-    
     virtual KTextEditor::Range completionRange(KTextEditor::View* view, const KTextEditor::Cursor& position);
     virtual KTextEditor::Range updateCompletionRange(KTextEditor::View* view, const KTextEditor::Range& range);
     virtual void aborted(KTextEditor::View* view);

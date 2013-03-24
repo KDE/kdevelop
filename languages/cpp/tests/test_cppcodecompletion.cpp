@@ -207,17 +207,21 @@ void TestCppCodeCompletion::testSpecialItems()
   QByteArray method = "enum Color { Red = 0, Green = 1, Blue = 2 }; void test(Color c) { }";
   TopDUContext* top = parse(method, DumpNone);
   int ctxt = 2;
+  //There is duplication here, but in this case we want all the enum values added in their own group here
+  //It's probably not worth it to go through the list and remove the previously added enums when in scope
+  const QStringList enumGroupCompletions(QStringList() << "Red" << "Green" << "Blue");
   DUChainWriteLocker lock(DUChain::lock());
   CompletionItemTester test(top->childContexts()[ctxt], "c = ");
-  QCOMPARE(test.names, QStringList() << "Color c =" << "c" << "Color" << "test" << "Red" << "Green" << "Blue");
+  qDebug() << "actual names:::" << test.names;
+  QCOMPARE(test.names, QStringList() << "Color c =" << "c" << "Color" << "test" << "Red" << "Green" << "Blue" << enumGroupCompletions);
   CompletionItemTester test2(top->childContexts()[ctxt], "test(");
-  QCOMPARE(test2.names, QStringList() << "test" << "c" << "Color" << "test" << "Red" << "Green" << "Blue");
+  QCOMPARE(test2.names, QStringList() << "test" << "c" << "Color" << "test" << "Red" << "Green" << "Blue" << enumGroupCompletions);
   CompletionItemTester test3(top->childContexts()[ctxt], "if (c == ");
-  QCOMPARE(test3.names, QStringList() << "Color c ==" << "c" << "Color" << "test" << "Red" << "Green" << "Blue");
+  QCOMPARE(test3.names, QStringList() << "Color c ==" << "c" << "Color" << "test" << "Red" << "Green" << "Blue" << enumGroupCompletions);
   CompletionItemTester test4(top->childContexts()[ctxt], "if (c > ");
-  QCOMPARE(test4.names, QStringList() << "Color c >" << "c" << "Color" << "test" << "Red" << "Green" << "Blue");
+  QCOMPARE(test4.names, QStringList() << "Color c >" << "c" << "Color" << "test" << "Red" << "Green" << "Blue" << enumGroupCompletions);
   CompletionItemTester test5(top->childContexts()[ctxt], "c -= ");
-  QCOMPARE(test5.names, QStringList() << "Color c -=" << "c" << "Color" << "test" << "Red" << "Green" << "Blue");
+  QCOMPARE(test5.names, QStringList() << "Color c -=" << "c" << "Color" << "test" << "Red" << "Green" << "Blue" << enumGroupCompletions);
   release(top);
 }
 
@@ -1419,10 +1423,6 @@ void TestCppCodeCompletion::testCompletionPrefix() {
     bool abort = false;
     QVERIFY(CompletionItemTester(top->childContexts()[2], ";int i = ").completionContext->parentContext()->completionItems(abort).size());
     QVERIFY(CompletionItemTester(top->childContexts()[2], ";int i ( ").completionContext->parentContext()->completionItems(abort).size());
-    QVERIFY(CompletionItemTester(top->childContexts()[2], ";int i = ").completionContext->parentContext()->completionItems(abort)[0]->typeForArgumentMatching().size());
-    QVERIFY(CompletionItemTester(top->childContexts()[2], ";int i ( ").completionContext->parentContext()->completionItems(abort)[0]->typeForArgumentMatching().size());
-    
-    
     release(top);
   }
 }
@@ -1606,8 +1606,8 @@ void TestCppCodeCompletion::testTemplateFunction() {
       Cpp::NormalDeclarationCompletionItem* item = dynamic_cast<Cpp::NormalDeclarationCompletionItem*>(tester2.items[0].data());
       QVERIFY(item);
       QVERIFY(!item->completingTemplateParameters());
-      QVERIFY(item->typeForArgumentMatching().size() == 1);
-      QVERIFY(item->typeForArgumentMatching()[0].type<IntegralType>());
+      QVERIFY(tester2.completionContext->matchTypes().size() == 1);
+      QVERIFY(tester2.completionContext->matchTypes()[0].type<IntegralType>());
     }
     
     release(top);

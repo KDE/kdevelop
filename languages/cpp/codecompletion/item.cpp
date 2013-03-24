@@ -85,6 +85,56 @@ bool declarationNeedsTemplateParameters(const Declaration* decl) {
 
 namespace Cpp {
 
+AbstractType::Ptr applyPointerConversions(AbstractType::Ptr type, int pointerConversions, TopDUContext *top)
+{
+  if(pointerConversions == 0 || type.isNull())
+    return type;
+
+  if(pointerConversions > 0) {
+    for(int a = 0; a < pointerConversions && type; ++a) {
+      type = TypeUtils::increasePointerDepth(type);
+    }
+  }else{
+    for(int a = pointerConversions; a < 0 && type; ++a) {
+      type = TypeUtils::decreasePointerDepth(type, top, true);
+    }
+  }
+
+  return type;
+}
+
+int getMatchQuality(CodeCompletionContext *context, const Declaration* decl, TopDUContext* top)
+{
+  if (!context->parentContext())
+    return 0;
+  QList<IndexedType> matchTypes = context->parentContext()->matchTypes();
+  if (matchTypes.isEmpty())
+    return 0;
+
+  int pointerConversions = context->pointerConversions();
+  if (pointerConversions > 1)
+    return 0; //Can't do "&&foo"
+
+  int bestQuality = 0;
+  foreach(const IndexedType& type, matchTypes) {
+    Cpp::TypeConversion conv(top);
+
+    bool fromLValue = (bool)decl->type<ReferenceType>() ||
+                      (!dynamic_cast<const AbstractFunctionDeclaration*>(decl) &&
+                        decl->kind() == Declaration::Instance);
+    if(pointerConversions > 0 && !fromLValue)
+      continue;
+
+    AbstractType::Ptr effectiveDeclType = applyPointerConversions(effectiveType(decl), pointerConversions, top);
+
+    int quality = conv.implicitConversion( effectiveDeclType->indexed(), type, fromLValue )  * 10 / Cpp::MaximumConversionResult;
+    if(quality > bestQuality)
+      bestQuality = quality;
+  }
+
+  return bestQuality;
+}
+
 void executeSignalSlotCompletionItem( KTextEditor::Document* document, const KTextEditor::Range& enteredWord,
                                       bool isSignal, const QString& name, const QString& signature )
 {
@@ -459,19 +509,6 @@ KDevelop::QualifiedIdentifier NormalDeclarationCompletionItem::stripPrefix() con
   return QualifiedIdentifier();
 }
 
-QList<KDevelop::IndexedType> NormalDeclarationCompletionItem::typeForArgumentMatching() const {
-  QList<KDevelop::IndexedType> ret;
-  if (m_declaration && completionContext())
-    ret = completionContext()->matchTypes();
-  return ret;
-}
-
-QList<IndexedType> currentMatchContext;
-
-void setStaticMatchContext(QList< KDevelop::IndexedType > types) {
-  currentMatchContext = types;
-}
-
 QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const {
 
   DUChainReadLocker lock(DUChain::lock(), 500);
@@ -484,13 +521,6 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
     kDebug(9007) << "Missing completion-context";
     return QVariant();
   }
-
-  //Stuff that does not require a declaration:
-  switch (role) {
-    case CodeCompletionModel::SetMatchContext:
-      currentMatchContext = typeForArgumentMatching();
-      return QVariant(1);
-  };
 
   if(!m_declaration) {
     if(role == Qt::DisplayRole && index.column() == CodeCompletionModel::Name)
@@ -509,30 +539,10 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
 
   switch (role) {
     case CodeCompletionModel::MatchQuality:
-    {
       if(m_fixedMatchQuality != -1)
-        return QVariant(m_fixedMatchQuality);
-      
-      if( currentMatchContext.size()) {
-        
-        int bestQuality = 0;
-        foreach(const IndexedType& type, currentMatchContext) {
-          Cpp::TypeConversion conv(model->currentTopContext().data());
-  
-          AbstractType::Ptr ownType = effectiveType(dec);
-          
-          bool fromLValue = (bool)ownType.cast<ReferenceType>() || (!dynamic_cast<AbstractFunctionDeclaration*>(dec) && dec->kind() == Declaration::Instance);
-          
-          ///@todo fill the lvalue-ness correctly
-          int q = ( conv.implicitConversion( completionContext()->applyPointerConversionForMatching(ownType->indexed(), fromLValue), type, fromLValue )  * 10 ) / Cpp::MaximumConversionResult;
-          if(q > bestQuality)
-            bestQuality = q;
-        }
-        
-        return QVariant(bestQuality);
-      }
-    }
-    return QVariant();
+        return m_fixedMatchQuality;
+      return getMatchQuality(completionContext().data(), dec, model->currentTopContext().data());
+
     case CodeCompletionModel::ItemSelected:
        return QVariant(Cpp::NavigationWidget::shortDescription(dec));
     case Qt::DisplayRole:
@@ -791,10 +801,6 @@ void TypeConversionCompletionItem::setPrefix(QString s) {
   m_prefix = s;
 }
 
-QList<KDevelop::IndexedType> TypeConversionCompletionItem::typeForArgumentMatching() const {
-  return QList<KDevelop::IndexedType>() << m_type;
-}
-
 QList<KDevelop::IndexedType> TypeConversionCompletionItem::type() const {
   return QList<KDevelop::IndexedType>() << m_type;
 }
@@ -807,9 +813,6 @@ void TypeConversionCompletionItem::execute(KTextEditor::Document* document, cons
 QVariant TypeConversionCompletionItem::data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const {
 
   switch (role) {
-    case CodeCompletionModel::SetMatchContext:
-      currentMatchContext = typeForArgumentMatching();
-      return QVariant(1);
     case Qt::DisplayRole:
       switch (index.column()) {
         case CodeCompletionModel::Prefix:
@@ -821,32 +824,6 @@ QVariant TypeConversionCompletionItem::data(const QModelIndex& index, int role, 
       break;
     case CodeCompletionModel::ItemSelected:
       return QVariant();
-    case CodeCompletionModel::MatchQuality:
-    {
-      DUChainReadLocker lock(DUChain::lock(), 500);
-      if(!lock.locked()) {
-        kDebug(9007) << "Failed to lock the du-chain in time";
-        return QVariant();
-      }
-      
-      if( currentMatchContext.size() ) {
-        int bestQuality = 0;
-        
-        foreach(const IndexedType& type, currentMatchContext) {
-          Cpp::TypeConversion conv(model->currentTopContext().data());
-
-          ///@todo Think about lvalue-ness
-          foreach(const IndexedType& ownType, typeForArgumentMatching()) {
-            int quality = ( conv.implicitConversion( completionContext->applyPointerConversionForMatching(ownType, false), type, false )  * 10 ) / Cpp::MaximumConversionResult;
-            if(quality > bestQuality)
-              bestQuality = quality;
-          }
-        }
-        
-        return QVariant(bestQuality);
-      }
-    }
-    return QVariant();
   }
 
   return QVariant();
