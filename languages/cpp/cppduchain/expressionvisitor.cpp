@@ -2060,10 +2060,6 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
   void ExpressionVisitor::visitFunctionCall(FunctionCallAST* node)
   {
-    if (m_handlingFunctionCallOrInit) {
-      DefaultVisitor::visitFunctionCall(node);
-      return;
-    }
     handleFunctionCallOrInit(node, node->arguments);
   }
 
