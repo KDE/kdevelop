@@ -553,7 +553,6 @@ void TestDUChain::testProblematicUses()
   }
 
   {
-    QEXPECT_FAIL("", "I have a fix for this but it needs further testing", Abort);
     QByteArray method("struct c { void foo(int x); }; struct f { void func(); }; struct e { f getF(); }; void test() { c* c_; e* e_; c_->foo(e_->getF().func());");
     LockedTopDUContext top = parse(method, DumpNone);
     QCOMPARE(top->childContexts().size(), 5);
