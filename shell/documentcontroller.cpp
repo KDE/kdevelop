@@ -537,8 +537,10 @@ struct DocumentControllerPrivate {
                 emit controller->documentJumpPerformed(doc, activePosition, previousActiveDocument, previousActivePosition);
         }
 
-        QObject::connect(doc->textDocument(), SIGNAL(reloaded(KTextEditor::Document*)), controller,
-                         SLOT(reloaded(KTextEditor::Document*)));
+        if ( doc->textDocument() ) {
+            QObject::connect(doc->textDocument(), SIGNAL(reloaded(KTextEditor::Document*)), controller,
+                             SLOT(reloaded(KTextEditor::Document*)));
+        }
 
         return true;
     }
