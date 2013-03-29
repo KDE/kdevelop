@@ -34,6 +34,7 @@ Name[pt_BR]=Modelos
 Name[sk]=Šablóny
 Name[sl]=Predloge
 Name[sv]=Mallar
+Name[tr]=Şablonlar
 Name[uk]=Шаблони
 Name[x-test]=xxTemplatesxx
 Name[zh_CN]=模板
