@@ -63,18 +63,9 @@ void ProjectPreferences::save()
     Core::self()->projectControllerInternal()->loadSettings(false);
 }
 
-void ProjectPreferences::load()
-{
-    KCModule::load();
-}
-
 void ProjectPreferences::slotSettingsChanged()
 {
     emit changed( true );
-}
-
-void ProjectPreferences::defaults()
-{
 }
 
 }

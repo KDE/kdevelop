@@ -42,8 +42,6 @@ public:
     virtual ~ProjectPreferences();
 
     virtual void save();
-    virtual void load();
-    virtual void defaults();
 
 private slots:
     void slotSettingsChanged();
