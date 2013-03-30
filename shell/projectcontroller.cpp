@@ -972,7 +972,7 @@ bool ProjectController::isProjectNameUsed( const QString& name ) const
 
 KUrl ProjectController::projectsBaseDirectory() const
 {
-    KConfigGroup group = Core::self()->activeSession()->config()->group( "Project Manager" );
+    KConfigGroup group = KGlobal::config()->group( "Project Manager" );
     return group.readEntry( "Projects Base Directory",
                                      KUrl( QDir::homePath()+"/projects" ) );
 }
