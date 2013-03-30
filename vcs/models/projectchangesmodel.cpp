@@ -60,7 +60,7 @@ ProjectChangesModel::~ProjectChangesModel()
 void ProjectChangesModel::addProject(IProject* p)
 {
     QStandardItem* it = new QStandardItem(p->name());
-    it->setData(p->name(), Qt::UserRole);
+    it->setData(p->name(), ProjectChangesModel::ProjectNameRole);
     if(p->versionControlPlugin()) {
         IPlugin* plugin = p->versionControlPlugin();
         
@@ -105,7 +105,7 @@ QStandardItem* findItemChild(QStandardItem* parent, const QVariant& value, int r
 
 QStandardItem* ProjectChangesModel::projectItem(IProject* p) const
 {
-    return findItemChild(invisibleRootItem(), p->name(), Qt::UserRole);
+    return findItemChild(invisibleRootItem(), p->name(), ProjectChangesModel::ProjectNameRole);
 }
 
 void ProjectChangesModel::addStates(const QVariantList& states)

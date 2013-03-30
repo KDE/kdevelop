@@ -74,8 +74,9 @@ void VcsChangesView::popupContextMenu( const QPoint &pos )
         if(idx.column()==0) {
             if(idx.parent().isValid())
                 urls += idx.data(KDevelop::VcsFileChangesModel::VcsStatusInfoRole).value<VcsStatusInfo>().url();
-            else
-                projects += ICore::self()->projectController()->findProjectByName(idx.data().toString());
+            else {
+                projects += ICore::self()->projectController()->findProjectByName(idx.data(ProjectChangesModel::ProjectNameRole).toString());
+            }
         }
     }
 

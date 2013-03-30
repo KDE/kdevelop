@@ -33,6 +33,7 @@ class KDEVPLATFORMVCS_EXPORT ProjectChangesModel : public VcsFileChangesModel
 {
     Q_OBJECT
     public:
+        enum Role { ProjectNameRole = Qt::UserRole };
         ProjectChangesModel(QObject* parent);
         virtual ~ProjectChangesModel();
         
