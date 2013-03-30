@@ -42,12 +42,6 @@ public:
     virtual void load();
     virtual void defaults();
 
-    virtual KUrl localNonShareableFile() const
-    {
-        return KUrl::fromPath(
-                   KStandardDirs::locate( "data", "kdevdocumentview/data.kdev4" ) );
-    }
-
 private slots:
     void slotSettingsChanged();
 

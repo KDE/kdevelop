@@ -45,12 +45,6 @@ public:
     virtual void save();
     virtual void load();
 
-    virtual KUrl localNonShareableFile() const
-    {
-        return KUrl::fromPath(
-                   KStandardDirs::locate( "data", "kdevelop/data.kdev4" ) );
-    }
-
 private:
     Ui::BGSettings *preferencesDialog;
 

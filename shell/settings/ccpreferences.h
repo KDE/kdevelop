@@ -46,12 +46,6 @@ public:
 
     virtual void load();
     
-    virtual KUrl localNonShareableFile() const
-    {
-        return KUrl::fromPath(
-                   KStandardDirs::locate( "data", "kdevelop/data.kdev4" ) );
-    }
-    
     void writeToSettings();
 
 private:
