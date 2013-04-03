@@ -85,7 +85,11 @@ void AbstractNavigationWidget::initBrowser(int height) {
   m_browser = new KTextBrowser;
   
   // since we can embed arbitrary HTML we have to make sure it stays readable by forcing a black-white palette
-  m_browser->setPalette( QPalette( Qt::black, Qt::white ) );
+  QPalette p;
+  p.setColor(QPalette::AlternateBase, Qt::white);
+  p.setColor(QPalette::Base, Qt::white);
+  p.setColor(QPalette::Text, Qt::black);
+  m_browser->setPalette( p );
 
   m_browser->setOpenLinks(false);
   m_browser->setOpenExternalLinks(false);
