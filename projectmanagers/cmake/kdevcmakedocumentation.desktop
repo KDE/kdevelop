@@ -52,6 +52,7 @@ GenericName[ga]=Tacaíocht Doiciméadaithe
 GenericName[gl]=Soporte de documentación
 GenericName[hu]=Dokumentáció támogatás
 GenericName[it]=Supporto documentazione
+GenericName[kk]=Құжатаманы біріктіру
 GenericName[km]=គាំទ្រ​ឯកសារ
 GenericName[nb]=Dokumentasjonsstøtte
 GenericName[nds]=Dokmentatschoon-Ünnerstütten

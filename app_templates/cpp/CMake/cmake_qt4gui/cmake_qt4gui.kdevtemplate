@@ -44,6 +44,7 @@ Comment[ga]=Feidhmchlár grafach CMake Qt4. Cruthaigh feidhmchlár grafach bunai
 Comment[gl]=Programa gráfico con CMake para Qt4. Xera un programa con GUI baseado en CMake/Qt4 (compatíbel con multiplataforma)
 Comment[hu]=Qt4 CMake grafikus felületű alkalmazás. Előállít egy CMake/Qt4 alapú grafikus felületű alkalmazást (keresztplatform kompatibilis)
 Comment[it]=Applicazione GUI CMake in Qt4. Genera un'applicazione con GUI basata su CMake/Qt4 (multipiattaforma)
+Comment[kk]=Qt4 CMake GUI бағдарламасы. CMake/Qt4 негіздеген графикалық интерфейсті бағдарламаны жасап береді (кроссплатформалық үлесімді)
 Comment[nb]=Qt4 Cmake Gui-program. Lag et program med grafisk brukerflate basert på CMake/Qt4 (kryssplattform-kompatibelt)
 Comment[nds]=Qt4-CMake-Böversietprogramm. En op CMake un Qt4 opbuut Böversiet-Programm opstellen (över Bedriefümgeven weg kompatibel)
 Comment[nl]=Gui-toepassing van Qt4 CMake. Genereert een ope CMake/Qt4 gebaseerd GUI-programma (crossplatform compatibel)
