@@ -90,7 +90,6 @@ KAction *IdealButtonBarWidget::addWidget(const QString& title, IdealDockWidget *
     dock->setDockWidgetArea(_area);
 
     _widgets[action] = dock;
-    connect(action, SIGNAL(toggled(bool)), this, SLOT(showWidget(bool)));
 
     bool wasEmpty = actions().isEmpty();
     addAction(action);
@@ -140,14 +139,14 @@ void IdealButtonBarWidget::showWidget(bool checked)
     showWidget(action, checked);
 }
 
-void IdealButtonBarWidget::showWidget(QAction *widgetAction, bool checked)
+void IdealButtonBarWidget::showWidget(QAction *widgetAction, bool checked, bool forceGrouping)
 {
     IdealDockWidget *widget = _widgets.value(widgetAction);
     Q_ASSERT(widget);
 
     if (checked) {
         IdealController::RaiseMode mode = IdealController::RaiseMode(widgetAction->property("raise").toInt());
-        if ( QApplication::keyboardModifiers().testFlag(Qt::ControlModifier) ) {
+        if ( forceGrouping ) {
             mode = IdealController::GroupWithOtherViews;
         }
         if ( mode == IdealController::GroupWithOtherViews ) {
@@ -202,7 +201,8 @@ void IdealButtonBarWidget::actionEvent(QActionEvent *event)
 
             layout()->addWidget(button);
             connect(action, SIGNAL(toggled(bool)), SLOT(actionToggled(bool)));
-            connect(button, SIGNAL(toggled(bool)), action, SLOT(setChecked(bool)));
+            connect(action, SIGNAL(toggled(bool)), SLOT(showWidget(bool)));
+            connect(button, SIGNAL(clicked(bool)), SLOT(buttonPressed(bool)));
             connect(button, SIGNAL(customContextMenuRequested(QPoint)),
                     _widgets[action], SLOT(contextMenuRequested(QPoint)));
         }
@@ -261,3 +261,9 @@ MainWindow* IdealButtonBarWidget::parentWidget() const
 
 IdealDockWidget * IdealButtonBarWidget::widgetForAction(QAction *action) const
 { return _widgets.value(action); }
+
+void IdealButtonBarWidget::buttonPressed(bool state)
+{
+    bool forceGrouping = QApplication::keyboardModifiers().testFlag(Qt::ControlModifier);
+    showWidget(_buttons.key(qobject_cast<IdealToolButton*>(sender())), state, forceGrouping);
+}
