@@ -29,7 +29,7 @@
 #include <KLocalizedString>
 #include <KSharedConfig>
 #include <KConfigGroup>
-#include <sublime/view.h>
+#include <kdevplatform/sublime/view.h>
 #include <QBoxLayout>
 #include <QApplication>
 
