@@ -56,7 +56,7 @@ public:
 
     QWidget* corner();
 
-    void showWidget(QAction *widgetAction, bool checked);
+    void showWidget(QAction* widgetAction, bool checked, bool forceGrouping = false);
     bool isEmpty();
 
 private Q_SLOTS:
@@ -77,6 +77,8 @@ private:
     QHash<QAction *, IdealToolButton*> _buttons;
     QHash<QAction *, IdealDockWidget*> _widgets;
     QWidget *_corner;
+    public slots:
+    void buttonPressed(bool);
 };
 
 }
