@@ -137,17 +137,17 @@ void IdealButtonBarWidget::showWidget(bool checked)
     QAction *action = qobject_cast<QAction *>(sender());
     Q_ASSERT(action);
 
-    showWidget(action, checked, false);
+    showWidget(action, checked);
 }
 
-void IdealButtonBarWidget::showWidget(QAction *widgetAction, bool checked, bool forceGrouping)
+void IdealButtonBarWidget::showWidget(QAction *widgetAction, bool checked)
 {
     IdealDockWidget *widget = _widgets.value(widgetAction);
     Q_ASSERT(widget);
 
     if (checked) {
         IdealController::RaiseMode mode = IdealController::RaiseMode(widgetAction->property("raise").toInt());
-        if ( forceGrouping ) {
+        if ( QApplication::keyboardModifiers().testFlag(Qt::ControlModifier) ) {
             mode = IdealController::GroupWithOtherViews;
         }
         if ( mode == IdealController::GroupWithOtherViews ) {
@@ -196,14 +196,13 @@ void IdealButtonBarWidget::actionEvent(QActionEvent *event)
             button->setIcon(action->icon());
             button->setShortcut(QKeySequence());
             button->setChecked(action->isChecked());
-            button->setProperty("buttonAction", QVariant::fromValue<QObject*>(action));
 
             Q_ASSERT(_widgets.contains(action));
             _widgets[action]->setWindowTitle(action->text());
 
             layout()->addWidget(button);
             connect(action, SIGNAL(toggled(bool)), SLOT(actionToggled(bool)));
-            connect(button, SIGNAL(toggled(bool)), SLOT(buttonPressed(bool)));
+            connect(button, SIGNAL(toggled(bool)), action, SLOT(setChecked(bool)));
             connect(button, SIGNAL(customContextMenuRequested(QPoint)),
                     _widgets[action], SLOT(contextMenuRequested(QPoint)));
         }
@@ -239,13 +238,6 @@ void IdealButtonBarWidget::actionEvent(QActionEvent *event)
     default:
         break;
     }
-}
-
-void IdealButtonBarWidget::buttonPressed(bool checked)
-{
-    QAction* a = qobject_cast<QAction*>(sender()->property("buttonAction").value<QObject*>());
-    bool group = QApplication::keyboardModifiers().testFlag(Qt::ControlModifier);
-    showWidget(a, checked, group);
 }
 
 void IdealButtonBarWidget::actionToggled(bool state)
