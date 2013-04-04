@@ -32,6 +32,7 @@
 #include <kdevplatform/sublime/view.h>
 #include <QBoxLayout>
 #include <QApplication>
+#include <QDebug>
 
 using namespace Sublime;
 
@@ -90,7 +91,6 @@ KAction *IdealButtonBarWidget::addWidget(const QString& title, IdealDockWidget *
     dock->setDockWidgetArea(_area);
 
     _widgets[action] = dock;
-    connect(action, SIGNAL(toggled(bool)), this, SLOT(showWidget(bool)));
 
     bool wasEmpty = actions().isEmpty();
     addAction(action);
@@ -130,7 +130,7 @@ Qt::DockWidgetArea IdealButtonBarWidget::area() const
     return _area;
 }
 
-void IdealButtonBarWidget::showWidget(bool checked)
+void IdealButtonBarWidget::actionTriggered(bool checked)
 {
     Q_ASSERT(parentWidget() != 0);
 
@@ -163,7 +163,7 @@ void IdealButtonBarWidget::showWidget(QAction *widgetAction, bool checked, bool 
             // be un-checked by the user, e.g. in the View -> Tool Views menu.
             foreach(QAction *otherAction, actions()) {
                 if ( otherAction != widgetAction && otherAction->isChecked() )
-                    otherAction->setChecked(false);
+                    otherAction->trigger();
             }
         }
     }
@@ -202,8 +202,8 @@ void IdealButtonBarWidget::actionEvent(QActionEvent *event)
             _widgets[action]->setWindowTitle(action->text());
 
             layout()->addWidget(button);
-            connect(action, SIGNAL(toggled(bool)), SLOT(actionToggled(bool)));
-            connect(button, SIGNAL(toggled(bool)), SLOT(buttonPressed(bool)));
+            connect(action, SIGNAL(triggered(bool)), SLOT(actionToggled(bool)));
+            connect(button, SIGNAL(clicked(bool)), SLOT(buttonPressed(bool)));
             connect(button, SIGNAL(customContextMenuRequested(QPoint)),
                     _widgets[action], SLOT(contextMenuRequested(QPoint)));
         }
@@ -241,11 +241,11 @@ void IdealButtonBarWidget::actionEvent(QActionEvent *event)
     }
 }
 
-void IdealButtonBarWidget::buttonPressed(bool checked)
+void IdealButtonBarWidget::buttonPressed(bool state)
 {
     QAction* a = qobject_cast<QAction*>(sender()->property("buttonAction").value<QObject*>());
     bool group = QApplication::keyboardModifiers().testFlag(Qt::ControlModifier);
-    showWidget(a, checked, group);
+    showWidget(a, state, group);
 }
 
 void IdealButtonBarWidget::actionToggled(bool state)
@@ -257,6 +257,7 @@ void IdealButtonBarWidget::actionToggled(bool state)
     Q_ASSERT(button);
 
     button->setChecked(state);
+    showWidget(action, state);
 
     if (state)
         _controller->lastDockWidget[_area] = widgetForAction(action);

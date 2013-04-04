@@ -60,8 +60,9 @@ public:
     bool isEmpty();
 
 private Q_SLOTS:
-    void showWidget(bool checked);
+    void actionTriggered(bool checked);
     void actionToggled(bool state);
+    void buttonPressed(bool state);
 
 signals:
     void emptyChanged();
@@ -77,8 +78,6 @@ private:
     QHash<QAction *, IdealToolButton*> _buttons;
     QHash<QAction *, IdealDockWidget*> _widgets;
     QWidget *_corner;
-    public slots:
-    void buttonPressed(bool);
 };
 
 }
