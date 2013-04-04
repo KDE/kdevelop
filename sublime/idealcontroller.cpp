@@ -166,6 +166,8 @@ void IdealController::dockLocationChanged(Qt::DockWidgetArea area)
     if (IdealButtonBarWidget* bar = barForDockArea(docks.value(dock)))
         bar->removeAction(action);
 
+    docks[dock] = area;
+
     if (IdealButtonBarWidget* bar = barForDockArea(area)) {
         KAction* action = bar->addWidget(
             view->document()->title(), dock,
@@ -193,9 +195,6 @@ void IdealController::dockLocationChanged(Qt::DockWidgetArea area)
         dock->setFeatures( QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable | IdealDockWidget::DockWidgetVerticalTitleBar );
     else
         dock->setFeatures( QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable );
-
-    docks[dock] = area;
-
 }
 
 IdealButtonBarWidget* IdealController::barForDockArea(Qt::DockWidgetArea area) const
