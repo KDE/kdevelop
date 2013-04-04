@@ -26,10 +26,10 @@
 #include "ideallayout.h"
 #include "idealtoolbutton.h"
 #include "document.h"
+#include "view.h"
 #include <KLocalizedString>
 #include <KSharedConfig>
 #include <KConfigGroup>
-#include <kdevplatform/sublime/view.h>
 #include <QBoxLayout>
 #include <QApplication>
 #include <QDebug>
