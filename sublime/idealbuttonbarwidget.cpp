@@ -145,25 +145,26 @@ void IdealButtonBarWidget::showWidget(QAction *widgetAction, bool checked)
     IdealDockWidget *widget = _widgets.value(widgetAction);
     Q_ASSERT(widget);
 
-    IdealController::RaiseMode mode = IdealController::HideOtherViews;
     if (checked) {
-        if (QApplication::keyboardModifiers().testFlag(Qt::ControlModifier)
-                || widgetAction->property("raise").toInt() == IdealController::GroupWithOtherViews) {
+        IdealController::RaiseMode mode = IdealController::RaiseMode(widgetAction->property("raise").toInt());
+        if ( QApplication::keyboardModifiers().testFlag(Qt::ControlModifier) ) {
             mode = IdealController::GroupWithOtherViews;
+        }
+        if ( mode == IdealController::GroupWithOtherViews ) {
             // need to reset the raise property so that subsequent
             // showWidget()'s will not do grouping unless explicitly asked
             widgetAction->setProperty("raise", IdealController::HideOtherViews);
         }
-    }
 
-    if ( checked && mode == IdealController::HideOtherViews ) {
-        // Make sure only one widget is visible at any time.
-        // The alternative to use a QActionCollection and setting that to "exclusive"
-        // has a big drawback: QActions in a collection that is exclusive cannot
-        // be un-checked by the user, e.g. in the View -> Tool Views menu.
-        foreach(QAction *otherAction, actions()) {
-            if ( otherAction != widgetAction && otherAction->isChecked() )
-                otherAction->setChecked(false);
+        if ( mode == IdealController::HideOtherViews ) {
+            // Make sure only one widget is visible at any time.
+            // The alternative to use a QActionCollection and setting that to "exclusive"
+            // has a big drawback: QActions in a collection that is exclusive cannot
+            // be un-checked by the user, e.g. in the View -> Tool Views menu.
+            foreach(QAction *otherAction, actions()) {
+                if ( otherAction != widgetAction && otherAction->isChecked() )
+                    otherAction->setChecked(false);
+            }
         }
     }
 
