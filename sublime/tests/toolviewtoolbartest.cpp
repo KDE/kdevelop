@@ -28,7 +28,7 @@
 #include <QDockWidget>
 #include <QToolBar>
 
-#include <sublime/ideal.h>
+#include <sublime/idealcontroller.h>
 #include <sublime/view.h>
 #include <sublime/area.h>
 #include <sublime/controller.h>
