@@ -33,19 +33,14 @@
 
 class KAction;
 class KActionMenu;
-class KActionCollection;
-class KMenu;
 
 namespace Sublime {
 
 class Area;
 class View;
 class MainWindow;
-
 class IdealButtonBarWidget;
-class IdealController;
 class IdealDockWidget;
-
 class View;
 
 class IdealController: public QObject
