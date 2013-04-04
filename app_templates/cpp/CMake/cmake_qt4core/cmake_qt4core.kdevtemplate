@@ -46,6 +46,7 @@ Comment[ga]=Feidhmchlár bunúsach CMake Qt4. Cruthaigh feidhmchlár bunaithe ar
 Comment[gl]=Programa principal con CMake para Qt4. Xera un programa baseado en QMake/Qt4 (compatíbel con multiplataforma)
 Comment[hu]=Qt4 CMake mag alkalmazás. Előállít egy CMake/Qt4 alapú alkalmazást (keresztplatform kompatibilis)
 Comment[it]=Applicazione base CMake in Qt4. Genera un'applicazione basata su CMake/Qt4 (multipiattaforma)
+Comment[kk]=Qt4 CMake Core бағдарламасы. CMake/Qt4 негіздеген бағдарламаны жасап береді (кроссплатформалық үлесімді)
 Comment[nb]=Qt4 CMake kjerneprogram.  Lag et program basert på CMake/Qt4 (kryssplattform-kompatibelt)
 Comment[nds]=Qt4-CMake-Karnprogramm. Stellt en op CMake un Qt4 opbuut Programm op (över Bedriefümgeven weg kompatibel)
 Comment[nl]=Kerntoepassing van Qt4 CMake. Genereert een op CMake/Qt4 gebaseerd programma (crossplatform compatibel)
