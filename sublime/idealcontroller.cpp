@@ -398,9 +398,8 @@ void IdealController::showDock(Qt::DockWidgetArea area, bool show)
         foreach (QAction *action, bar->actions()) {
             if (action->isChecked())
                 action->setChecked(false);
-
-            focusEditor();
         }
+        focusEditor();
     } else {
         // open the last opened toolview (or the first one) and focus it
         if (lastDock) {
