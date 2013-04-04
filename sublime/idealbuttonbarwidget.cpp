@@ -25,7 +25,11 @@
 #include "idealdockwidget.h"
 #include "ideallayout.h"
 #include "idealtoolbutton.h"
+#include "document.h"
 #include <KLocalizedString>
+#include <KSharedConfig>
+#include <KConfigGroup>
+#include <sublime/view.h>
 #include <QBoxLayout>
 #include <QApplication>
 
