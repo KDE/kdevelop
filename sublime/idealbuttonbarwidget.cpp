@@ -168,6 +168,7 @@ void IdealButtonBarWidget::showWidget(QAction *widgetAction, bool checked)
     }
 
     _controller->showDockWidget(widget, checked);
+    widgetAction->setChecked(checked);
 }
 
 
