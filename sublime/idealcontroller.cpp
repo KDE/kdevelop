@@ -174,22 +174,7 @@ void IdealController::dockLocationChanged(Qt::DockWidgetArea area)
 
         // at this point the dockwidget is visible (user dragged it)
         // properly set up UI state
-        action->blockSignals(true);
-
-        // set checked state for the menu action
-        action->setChecked(true);
-        // check the buttonbar button
-        bar->toggleAction(action, true);
-        // hide all other docks
-        // TODO: adymo: will redo this once we allow to show several docks at the same time
-        foreach(QAction *otherAction, bar->actions()) {
-            if ( otherAction != action && otherAction->isChecked() ) {
-                otherAction->setChecked(false);
-                break;
-            }
-        }
-
-        action->blockSignals(false);
+        bar->showWidget(action, true);
 
         // the dock should now be the "last" opened in a new area, not in the old area
         for (QMap<Qt::DockWidgetArea, QWeakPointer<IdealDockWidget> >::iterator it = lastDockWidget.begin(); it != lastDockWidget.end(); ++it) {

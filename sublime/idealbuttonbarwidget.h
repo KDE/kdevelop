@@ -46,10 +46,7 @@ public:
 
     KAction *addWidget(const QString& title, IdealDockWidget *widget,
                        Area* area, View *view);
-    void showWidget(QAction *widgetAction, bool checked);
     void removeAction(QAction* action);
-
-    Sublime::MainWindow* parentWidget() const;
 
     Qt::Orientation orientation() const;
 
@@ -59,7 +56,7 @@ public:
 
     QWidget* corner();
 
-    void toggleAction(QAction *action, bool state);
+    void showWidget(QAction *widgetAction, bool checked);
     bool isEmpty();
 
 private Q_SLOTS:
@@ -73,6 +70,8 @@ protected:
     virtual void actionEvent(QActionEvent *event);
 
 private:
+    Sublime::MainWindow* parentWidget() const;
+
     Qt::DockWidgetArea _area;
     IdealController *_controller;
     QHash<QAction *, IdealToolButton*> _buttons;

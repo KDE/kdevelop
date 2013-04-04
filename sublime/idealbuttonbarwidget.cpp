@@ -238,22 +238,15 @@ void IdealButtonBarWidget::actionToggled(bool state)
 {
     QAction* action = qobject_cast<QAction*>(sender());
     Q_ASSERT(action);
-    toggleAction(action, state);
-}
-
-void IdealButtonBarWidget::toggleAction(QAction* action, bool state)
-{
+    
     IdealToolButton* button = _buttons.value(action);
     Q_ASSERT(button);
 
-    bool blocked = button->blockSignals(true);
     button->setChecked(state);
-    button->blockSignals(blocked);
 
     if (state)
         _controller->lastDockWidget[_area] = widgetForAction(action);
 }
-
 
 MainWindow* IdealButtonBarWidget::parentWidget() const
 {
