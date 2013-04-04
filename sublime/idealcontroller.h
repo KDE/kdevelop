@@ -110,7 +110,7 @@ private:
 
     Sublime::MainWindow *m_mainWindow;
 
-    QMap<IdealDockWidget*, Qt::DockWidgetArea> docks;
+    QSet<IdealDockWidget*> docks;
 
     /** Map from View to an action that shows/hides
         the IdealDockWidget containing that view.  */

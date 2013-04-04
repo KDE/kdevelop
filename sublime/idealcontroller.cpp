@@ -138,7 +138,7 @@ void IdealController::addView(Qt::DockWidgetArea area, View* view)
 
     dock->hide();
 
-    docks[dock] = area;
+    docks.insert(dock);
 }
 
 void IdealController::dockLocationChanged(Qt::DockWidgetArea area)
@@ -163,10 +163,10 @@ void IdealController::dockLocationChanged(Qt::DockWidgetArea area)
         return; 
     }
 
-    if (IdealButtonBarWidget* bar = barForDockArea(docks.value(dock)))
+    if (IdealButtonBarWidget* bar = barForDockArea(dock->dockWidgetArea()))
         bar->removeAction(action);
 
-    docks[dock] = area;
+    docks.insert(dock);
 
     if (IdealButtonBarWidget* bar = barForDockArea(area)) {
         KAction* action = bar->addWidget(
@@ -252,14 +252,14 @@ void IdealController::raiseView(View* view, RaiseMode mode)
 
 QList< IdealDockWidget* > IdealController::allDockWidgets()
 {
-    return docks.keys();
+    return docks.toList();
 }
 
 void IdealController::showDockWidget(IdealDockWidget* dock, bool show)
 {
     Q_ASSERT(docks.contains(dock));
 
-    Qt::DockWidgetArea area = docks.value(dock);
+    Qt::DockWidgetArea area = dock->dockWidgetArea();
 
     if (show) {
         m_mainWindow->addDockWidget(area, dock);
@@ -342,7 +342,7 @@ void IdealController::removeView(View* view, bool nondestructive)
        method asserts immediately.  */
     action->setChecked(false);
 
-    if (IdealButtonBarWidget* bar = barForDockArea(docks.value(dock)))
+    if (IdealButtonBarWidget* bar = barForDockArea(dock->dockWidgetArea()))
         bar->removeAction(action);
 
     m_view_to_action.remove(view);
