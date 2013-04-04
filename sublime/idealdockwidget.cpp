@@ -24,6 +24,7 @@
 #include "mainwindow.h"
 #include "area.h"
 #include "document.h"
+#include "view.h"
 #include <KMenu>
 #include <KLocalizedString>
 #include <KDialog>
@@ -32,8 +33,6 @@
 
 #include <QAbstractButton>
 #include <QToolBar>
-
-#include <kdevplatform/sublime/view.h>
 
 using namespace Sublime;
 
