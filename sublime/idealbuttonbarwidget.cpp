@@ -69,6 +69,14 @@ KAction *IdealButtonBarWidget::addWidget(const QString& title, IdealDockWidget *
     action->setCheckable(true);
     action->setText(title);
     action->setIcon(dock->windowIcon());
+    
+    //restore toolview shortcut config
+    KConfigGroup config = KGlobal::config()->group("UI");
+    QStringList shortcuts = config.readEntry(QString("Shortcut for %1").arg(view->document()->title()), QStringList());
+    KShortcut shortcut;
+    shortcut.setPrimary(shortcuts.value(0));
+    shortcut.setAlternate(shortcuts.value(1));
+    action->setShortcut(shortcut);
 
     if (_area == Qt::BottomDockWidgetArea || _area == Qt::TopDockWidgetArea)
         dock->setFeatures( dock->features() | IdealDockWidget::DockWidgetVerticalTitleBar );

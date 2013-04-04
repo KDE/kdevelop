@@ -130,14 +130,6 @@ void IdealController::addView(Qt::DockWidgetArea area, View* view)
             static_cast<MainWindow*>(parent())->area(), view);
         m_dockwidget_to_action[dock] = m_view_to_action[view] = action;
 
-        //restore toolview shortcut config
-        KConfigGroup config = KGlobal::config()->group("UI");
-        QStringList shortcuts = config.readEntry(QString("Shortcut for %1").arg(view->document()->title()), QStringList());
-        KShortcut shortcut;
-        shortcut.setPrimary(shortcuts.value(0));
-        shortcut.setAlternate(shortcuts.value(1));
-        action->setShortcut(shortcut);
-
         m_docks->addAction(action);
         connect(dock, SIGNAL(close()), action, SLOT(toggle()));
     }
@@ -208,14 +200,6 @@ void IdealController::dockLocationChanged(Qt::DockWidgetArea area)
 
         // after drag, the toolview loses focus, so focus it again
         dock->setFocus(Qt::ShortcutFocusReason);
-
-        //restore toolview shortcut config
-        KConfigGroup config = KGlobal::config()->group("UI");
-        QStringList shortcuts = config.readEntry(QString("Shortcut for %1").arg(view->document()->title()), QStringList());
-        KShortcut shortcut;
-        shortcut.setPrimary(shortcuts.value(0));
-        shortcut.setAlternate(shortcuts.value(1));
-        action->setShortcut(shortcut);
 
         m_docks->addAction(action);
     }
