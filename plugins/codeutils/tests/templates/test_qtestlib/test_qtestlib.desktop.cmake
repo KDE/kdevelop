@@ -11,6 +11,7 @@ Name[fr]=Modèle C++ pour tester
 Name[gl]=Modelo de C++ de probas
 Name[hu]=C++ sablon tesztelése
 Name[it]=Modello di test C++
+Name[kk]=Сынақ C++ үлгісі
 Name[nb]=Mal for C++-testing
 Name[nl]=C++-sjabloon testen
 Name[pl]=Szablon testowy C++
