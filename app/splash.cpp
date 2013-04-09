@@ -20,10 +20,9 @@
 #include "splash.h"
 
 KDevSplashScreen::KDevSplashScreen(const QPixmap& pixmap, Qt::WindowFlags f)
-    : KSplashScreen(pixmap, f)
+    : KSplashScreen(pixmap, f | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint)
     , m_view(new QDeclarativeView)
 {
-    setWindowFlags(f | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
     QString splashScript = KStandardDirs::locate("data", "kdevelop/splash.qml");
     setFixedSize(pixmap.size());
     m_view->setSource(QUrl(splashScript));
