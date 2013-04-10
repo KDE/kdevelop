@@ -1740,7 +1740,6 @@ QWidget* CMakeManager::specialLanguageObjectNavigationWidget(const KUrl& url, co
 {
     KDevelop::TopDUContextPointer top= TopDUContextPointer(KDevelop::DUChain::self()->chainForDocument(url));
     Declaration *decl=0;
-    QString htmlDoc;
     if(top)
     {
         int useAt=top->findUseAt(top->transformToLocalRevision(position));
