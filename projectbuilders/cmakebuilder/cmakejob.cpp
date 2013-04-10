@@ -52,7 +52,7 @@ CMakeJob::CMakeJob(QObject* parent)
 
 void CMakeJob::start()
 {
-    kDebug(9037) << "Configuring cmake";
+    kDebug(9037) << "Configuring cmake" << workingDirectory();
 
     if( !m_project ) {
         setError(NoProjectError);
@@ -61,6 +61,7 @@ void CMakeJob::start()
         return;
     }
 
+    QDir::temp().mkpath(workingDirectory().toLocalFile());
     CMake::updateConfig( m_project, CMake::currentBuildDirIndex(m_project) );
 
     setStandardToolView( KDevelop::IOutputView::BuildView );
