@@ -69,11 +69,11 @@ void KDevDocumentViewDelegate::paint( QPainter *painter, const QStyleOptionViewI
         // draw text
         
         QRect textrect = QRect( r.left() + i * 2, r.top(), r.width() - ( ( 5 * i ) / 2 ), r.height() );
-        QString text = elidedText( option.fontMetrics, textrect.width(), Qt::ElideMiddle,
+        QString text = elidedText( option.fontMetrics, textrect.width(), Qt::ElideRight,
                                    model->data( index, Qt::DisplayRole ).toString() );
         m_view->style() ->drawItemText( painter, textrect, Qt::AlignLeft | Qt::AlignVCenter,
                                         option.palette, m_view->isEnabled(), text );
-        kDebug() << "Textrect:: " << textrect << text;
+        //kDebug() << "Textrect:: " << textrect << text;
     }
     else
     {
@@ -84,7 +84,7 @@ void KDevDocumentViewDelegate::paint( QPainter *painter, const QStyleOptionViewI
 QSize KDevDocumentViewDelegate::sizeHint( const QStyleOptionViewItem &opt, const QModelIndex &index ) const
 {
     QStyleOptionViewItem option = opt;
-    QSize sz = QItemDelegate::sizeHint( opt, index ) + QSize( 2, 8 );
+    QSize sz = QItemDelegate::sizeHint( opt, index ) + QSize( 2, 4 );
     return sz;
 }
 

@@ -23,7 +23,9 @@
 KDevDocumentItem::KDevDocumentItem( const QString &name )
     : QStandardItem( name ),
         m_documentState( KDevelop::IDocument::Clean )
-{}
+{
+    setIcon(icon());
+}
 
 KDevDocumentItem::~KDevDocumentItem()
 {}
@@ -35,7 +37,9 @@ KDevDocumentItem::~KDevDocumentItem()
 
 KDevMimeTypeItem::KDevMimeTypeItem( const QString &name )
         : KDevDocumentItem( name )
-{}
+{
+    //setIcon(KIcon("inode-directory"));
+}
 
 KDevMimeTypeItem::~KDevMimeTypeItem()
 {}

@@ -54,7 +54,8 @@ public:
         switch ( m_documentState )
         {
         case KDevelop::IDocument::Clean:
-            return QIcon();
+            return KIcon ("text-x-qml");
+            return  KIcon ("text-x-c++src");
         case KDevelop::IDocument::Modified:
             return KIcon( "document-save" );
         case KDevelop::IDocument::Dirty:
@@ -62,7 +63,7 @@ public:
         case KDevelop::IDocument::DirtyAndModified:
             return KIcon( "edit-delete" );
         default:
-            return QIcon();
+            return KIcon("inode-directory");
         }
     }
 
