@@ -284,12 +284,17 @@ public Q_SLOTS:
   ///Emits the declarationSelected signal, so other parties can notice it.
   void emitDeclarationSelected(DeclarationPointer decl);
 
+  /**
+   * Shutdown and cleanup the DUChain.
+   */
+  void shutdown();
+
 private Q_SLOTS:
   void documentActivated(KDevelop::IDocument* doc);
   void documentLoadedPrepare(KDevelop::IDocument* document);
   void documentRenamed(KDevelop::IDocument* document);
   void documentClosed(KDevelop::IDocument*);
-  void aboutToQuit();
+
 private:
   TopDUContext* loadChain(uint index);
   //These two are exported here so that the extremely frequently called chainForIndex(..) can be inlined

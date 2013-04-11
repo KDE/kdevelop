@@ -417,6 +417,8 @@ void Core::cleanup()
 
         //Disable the functionality of the language controller
         d->languageController.data()->cleanup();
+
+        DUChain::self()->shutdown();
     }
 
     d->m_cleanedUp = true;

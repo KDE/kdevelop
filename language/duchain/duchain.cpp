@@ -1103,8 +1103,6 @@ K_GLOBAL_STATIC(DUChainPrivate, sdDUChainPrivate)
 
 DUChain::DUChain()
 {
-  connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()), this, SLOT(aboutToQuit()));
-
   if(ICore::self()) {
     Q_ASSERT(ICore::self()->documentController());
     connect(ICore::self()->documentController(), SIGNAL(documentLoadedPrepare(KDevelop::IDocument*)), this, SLOT(documentLoadedPrepare(KDevelop::IDocument*)));
@@ -1587,7 +1585,7 @@ Definitions* DUChain::definitions()
   return &sdDUChainPrivate->m_definitions;
 }
 
-void DUChain::aboutToQuit()
+void DUChain::shutdown()
 {
   // if core is not shutting down, we can end up in deadlocks or crashes
   // since language plugins might still try to access static duchain stuff
