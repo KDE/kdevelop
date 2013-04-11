@@ -51,6 +51,4 @@ void KDevSplashScreen::progress(int progress)
     // notify the QML script of the progress change
     m_view->rootObject()->setProperty("progress", m_progress);
     repaint();
-    raise();
-    QApplication::processEvents();
 }
