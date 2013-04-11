@@ -22,13 +22,11 @@ Boston, MA 02110-1301, USA.
 
 #include <QtCore/QHash>
 #include <QtCore/QDir>
-#include <QtCore/QSignalMapper>
 #include <QtCore/QStringList>
 #include <QtCore/QTimer>
 
 #include <kglobal.h>
 #include <kcmdlineargs.h>
-#include <kcomponentdata.h>
 #include <kconfiggroup.h>
 #include <kstandarddirs.h>
 #include <klocale.h>
@@ -54,14 +52,11 @@ Boston, MA 02110-1301, USA.
 #include <KLineEdit>
 #include <QGroupBox>
 #include <QBoxLayout>
-#include <QTimer>
 #include <QStandardItemModel>
 #include <QListView>
 #include <QHeaderView>
-#include <klockfile.h>
 #include <interfaces/idocumentcontroller.h>
 #include <ktexteditor/document.h>
-#include <sublime/area.h>
 #include <QLabel>
 #include <QLayout>
 #include <QSortFilterProxyModel>
@@ -427,16 +422,6 @@ private slots:
 
                     if(choice == KMessageBox::Continue)
                     {
-                        #if 0
-                        {
-                            //Put the recovered documents into the "Review" area, and clear the working set
-                            ICore::self()->uiController()->switchToArea("review", KDevelop::IUiController::ThisWindow);
-                            Sublime::MainWindow* window = static_cast<Sublime::MainWindow*>(ICore::self()->uiController()->activeMainWindow());
-                            window->area()->setWorkingSet("recover");
-                            window->area()->clearViews();
-                        }
-                        #endif
-                        
                         //Recover the files
                         
                         for(uint num = 0; ; ++num)

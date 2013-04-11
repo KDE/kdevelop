@@ -23,15 +23,8 @@ Boston, MA 02110-1301, USA.
 #include "shellexport.h"
 #include "session.h"
 #include <QtCore/QObject>
-#include <QtCore/QPointer>
-#include <QtCore/QUuid>
-#include <QtCore/QDir>
+#include <QtCore/QFile>
 #include <kxmlguiclient.h>
-#include <kconfiggroup.h>
-#include <kglobal.h>
-#include <ksharedconfig.h>
-#include <kstandarddirs.h>
-#include <kcomponentdata.h>
 #include <klockfile.h>
 
 namespace KDevelop
