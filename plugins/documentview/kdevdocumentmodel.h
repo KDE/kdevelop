@@ -54,8 +54,7 @@ public:
         switch ( m_documentState )
         {
         case KDevelop::IDocument::Clean:
-            return KIcon ("text-x-qml");
-            return  KIcon ("text-x-c++src");
+            return  KIcon ( m_fileIcon );
         case KDevelop::IDocument::Modified:
             return KIcon( "document-save" );
         case KDevelop::IDocument::Dirty:
@@ -77,6 +76,9 @@ public:
         m_documentState = state;
         setIcon(icon());
     }
+
+protected:
+    QString m_fileIcon;
 
 private:
     KDevelop::IDocument::DocumentState m_documentState;

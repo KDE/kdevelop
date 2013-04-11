@@ -18,6 +18,7 @@
 */
 
 #include "kdevdocumentmodel.h"
+#include <KFileItem>
 #include <QtCore/qdebug.h>
 
 KDevDocumentItem::KDevDocumentItem( const QString &name )
@@ -38,7 +39,7 @@ KDevDocumentItem::~KDevDocumentItem()
 KDevMimeTypeItem::KDevMimeTypeItem( const QString &name )
         : KDevDocumentItem( name )
 {
-    //setIcon(KIcon("inode-directory"));
+    setToolTip(name);
 }
 
 KDevMimeTypeItem::~KDevMimeTypeItem()
@@ -71,7 +72,11 @@ KDevFileItem* KDevMimeTypeItem::file( const KUrl &url ) const
 KDevFileItem::KDevFileItem( const KUrl &url )
         : KDevDocumentItem( url.fileName() ),
         m_url( url )
-{}
+{
+    KFileItem fi = KFileItem( url, QString(), 0 );
+    m_fileIcon = fi.iconName();
+    setIcon( KIcon( m_fileIcon ) );
+}
 
 KDevFileItem::~KDevFileItem()
 {}

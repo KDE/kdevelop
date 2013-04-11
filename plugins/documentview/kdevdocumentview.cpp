@@ -256,31 +256,20 @@ void KDevDocumentView::saved( KDevelop::IDocument* )
 
 void KDevDocumentView::opened( KDevelop::IDocument* document )
 {
-    QString mimeType = document->mimeType()->comment();
-    kDebug() << "Mimetype is: "  << mimeType;
-
     const QString projectPath = "/home/sebas/kf5/src/plasma-framework/src/";
     const QString homePath = "/home/sebas/";
-    QString label = document->url().path().replace(projectPath, "");
-    label.replace(homePath, "~/");
-    QStringList ps = label.split('/');
 
-    //const int offset = ps.count() - 4;
-    //const int offset = 6;
-    ps = ps.mid(0, ps.count()-1);
-    //ps.removeLast();
-    kDebug() << "split: " << ps << ps.count();
-    //if (ps.count() > 4) {
-        //mimeType = ps[ps.count()-4] + "/" + ps[ps.count()-3] + "/" + ps[ps.count()-2];
-    mimeType = ps.join("/") + "/";
-    //}
-    //*/
-    //mimeType = document->url().path().replace(projectPath, "");
-    
-    KDevMimeTypeItem *mimeItem = m_documentModel->mimeType( mimeType );
+    QString label = document->url().path().replace( projectPath, "" );
+    label.replace( homePath, "~/" );
+
+    QStringList ps = label.split( '/' );
+    ps.removeLast();
+    label = ps.join( "/" ) + '/';
+
+    KDevMimeTypeItem *mimeItem = m_documentModel->mimeType( label );
     if ( !mimeItem )
     {
-        mimeItem = new KDevMimeTypeItem( mimeType );
+        mimeItem = new KDevMimeTypeItem( label );
         m_documentModel->insertRow( m_documentModel->rowCount(), mimeItem );
         setExpanded( m_proxy->mapFromSource( m_documentModel->indexFromItem( mimeItem ) ), false);
     }
