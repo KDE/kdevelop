@@ -34,6 +34,12 @@ void TestGenerationTest::initTestCase()
     AutoTestShell::init();
     TestCore::initialize (Core::NoUi);
 
+    bool addedDir = ICore::self()->componentData().dirs()->addResourceDir("data", CODEUTILS_TESTS_DATA_DIR, true);
+    QVERIFY(addedDir);
+
+    TemplatesModel model("testgenerationtest");
+    model.refresh();
+
     renderer = new TemplateRenderer;
     renderer->setEmptyLinesPolicy(TemplateRenderer::TrimEmptyLines);
     renderer->addVariable("name", "TestName");
@@ -62,9 +68,10 @@ void TestGenerationTest::init()
 
 void TestGenerationTest::yamlTemplate()
 {
-    QString description = ICore::self()->componentData().dirs()->findResource("data", "test_yaml.desktop");
+    QString description = ICore::self()->componentData().dirs()->findResource("data", "testgenerationtest/template_descriptions/test_yaml.desktop");
     QVERIFY(!description.isEmpty());
-    SourceFileTemplate file(description);
+    SourceFileTemplate file;
+    file.setTemplateDescription(description, "testgenerationtest");
     QCOMPARE(file.name(), QString("Testing YAML Template"));
 
     DocumentChangeSet changes = renderer->renderFileTemplate(file, baseUrl, urls(file));
@@ -75,9 +82,10 @@ void TestGenerationTest::yamlTemplate()
 
 void TestGenerationTest::cppTemplate()
 {
-    QString description = ICore::self()->componentData().dirs()->findResource("filetemplate_descriptions", "test_qtestlib.desktop");
+    QString description = ICore::self()->componentData().dirs()->findResource("data", "testgenerationtest/template_descriptions/test_qtestlib.desktop");
     QVERIFY(!description.isEmpty());
-    SourceFileTemplate file(description);
+    SourceFileTemplate file;
+    file.setTemplateDescription(description, "testgenerationtest");
 
     QCOMPARE(file.name(), QString("Testing C++ Template"));
 
