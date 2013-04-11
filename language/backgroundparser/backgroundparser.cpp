@@ -469,7 +469,7 @@ BackgroundParser::BackgroundParser(ILanguageController *languageController)
     connect(ICore::self()->documentController(), SIGNAL(documentLoaded(KDevelop::IDocument*)), this, SLOT(documentLoaded(KDevelop::IDocument*)));
     connect(ICore::self()->documentController(), SIGNAL(documentUrlChanged(KDevelop::IDocument*)), this, SLOT(documentUrlChanged(KDevelop::IDocument*)));
     connect(ICore::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*)), this, SLOT(documentClosed(KDevelop::IDocument*)));
-    connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()), this, SLOT(aboutToQuit()));
+    connect(ICore::self(), SIGNAL(aboutToShutdown()), this, SLOT(aboutToQuit()));
 
     bool connected = QObject::connect(ICore::self()->projectController(),
                                       SIGNAL(projectAboutToBeOpened(KDevelop::IProject*)),
