@@ -112,7 +112,7 @@ KDevCategoryItem* KDevDocumentModel::category( const QString& category ) const
 {
     foreach( KDevCategoryItem * item, categoryList() )
     {
-        if ( item->text() == category )
+        if ( item->toolTip() == category )
             return item;
     }
 

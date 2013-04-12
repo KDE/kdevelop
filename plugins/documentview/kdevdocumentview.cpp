@@ -21,6 +21,7 @@ Boston, MA 02110-1301, USA.
 #include "kdevdocumentviewplugin.h"
 #include "kdevdocumentmodel.h"
 
+#include <QDir>
 #include <QHeaderView>
 #include <QContextMenuEvent>
 #include <QSortFilterProxyModel>
@@ -49,7 +50,8 @@ KDevDocumentView::KDevDocumentView( KDevDocumentViewPlugin *plugin, QWidget *par
         m_plugin( plugin )
 {
     QList<KDevelop::IProject*> projects = KDevelop::ICore::self()->projectController()->projects();
-    connect(KDevelop::ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), SLOT(projectOpened(KDevelop::IProject*)));
+    connect(KDevelop::ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), SLOT(updateProjectPaths()));
+    connect(KDevelop::ICore::self()->projectController(), SIGNAL(projectClosed(KDevelop::IProject*)), SLOT(updateProjectPaths()));
 
     kDebug() << "XXXXX KONNECTED: " << projects.count();
 
@@ -91,14 +93,14 @@ KDevDocumentViewPlugin *KDevDocumentView::plugin() const
     return m_plugin;
 }
 
-void KDevDocumentView::projectOpened(KDevelop::IProject *project)
-{
-    //foreach ( const KDevelop::IProject *p, projects) {
-        kDebug() << "XXXXX FOLDER: " << project->folder();
-    m_projectFolders << project->folder().path();
-        //m_projectFolders = p->folder().pathOrUrl();
-    //}
-}
+// void KDevDocumentView::projectOpened(KDevelop::IProject *project)
+// {
+//     //foreach ( const KDevelop::IProject *p, projects) {
+//         kDebug() << "XXXXX FOLDER: " << project->folder();
+//     m_projectFolders << project->folder().path();
+//         //m_projectFolders = p->folder().pathOrUrl();
+//     //}
+// }
 
 void KDevDocumentView::mousePressEvent( QMouseEvent * event )
 {
@@ -272,15 +274,7 @@ void KDevDocumentView::saved( KDevelop::IDocument* )
 
 void KDevDocumentView::opened( KDevelop::IDocument* document )
 {
-    //const QString projectPath = "/home/sebas/kf5/src/plasma-framework/src/";
-    const QString homePath = "/home/sebas/";
-
     QString label = document->url().path();
-    foreach (const QString &projectPath, m_projectFolders) {
-        label.replace( projectPath, "" );
-    }
-    label.replace( homePath, "~/" );
-
     QStringList ps = label.split( '/' );
     ps.removeLast();
     label = ps.join( "/" ) + '/';
@@ -291,6 +285,7 @@ void KDevDocumentView::opened( KDevelop::IDocument* document )
         mimeItem = new KDevCategoryItem( label );
         m_documentModel->insertRow( m_documentModel->rowCount(), mimeItem );
         setExpanded( m_proxy->mapFromSource( m_documentModel->indexFromItem( mimeItem ) ), false);
+        updateCategoryItem(mimeItem);
     }
 
     if ( !mimeItem->file( document->url() ) )
@@ -321,6 +316,41 @@ void KDevDocumentView::closed( KDevelop::IDocument* document )
 
     doItemsLayout();
 }
+
+void KDevDocumentView::updateCategoryItem(KDevCategoryItem *item)
+{
+    const QString homePath = QDir::homePath();
+    QString label = item->toolTip();
+    foreach (const QString &projectPath, m_projectFolders) {
+        label.replace( projectPath, "" );
+    }
+    label.replace( homePath, "~" );
+
+    QStringList ps = label.split( '/' );
+    ps.removeLast();
+    label = ps.join( "/" ) + '/';
+    item->setText(label);
+    kDebug() << "XXX updated label to : " << label << item->toolTip();
+}
+
+void KDevDocumentView::updateProjectPaths()
+{
+
+    QList<KDevelop::IProject*> projects = KDevelop::ICore::self()->projectController()->projects();
+    kDebug() << "XXX Projects: " << projects.count();
+    m_projectFolders.clear();
+    foreach (KDevelop::IProject *p, projects) {
+        m_projectFolders << p->folder().pathOrUrl();
+
+    }
+    kDebug() << " XXX updated project paths: " << m_projectFolders;
+    foreach (KDevCategoryItem *it, m_documentModel->categoryList()) {
+        kDebug() << "XXX updateing cat: " << it->toolTip();
+        updateCategoryItem(it);
+    }
+
+}
+
 
 void KDevDocumentView::contentChanged( KDevelop::IDocument* )
 {

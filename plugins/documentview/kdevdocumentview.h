@@ -37,6 +37,7 @@ namespace KDevelop
     class IProject;
 }
 
+class KDevCategoryItem;
 class KDevDocumentModel;
 class KDevDocumentItem;
 
@@ -62,7 +63,8 @@ private slots:
     void contentChanged( KDevelop::IDocument* document );
     void stateChanged( KDevelop::IDocument* document );
     void documentUrlChanged( KDevelop::IDocument* document );
-    void projectOpened( KDevelop::IProject* project );
+    void updateCategoryItem(KDevCategoryItem *item);
+    void updateProjectPaths();
 
     void saveSelected();
     void reloadSelected();
