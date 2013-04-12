@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
 Copyright 2005 Adam Treat <treat@kde.org>
+Copyright 2013 Sebastian Kügler <sebas@kde.org>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public
@@ -49,7 +50,6 @@ KDevDocumentView::KDevDocumentView( KDevDocumentViewPlugin *plugin, QWidget *par
     : QTreeView( parent ),
         m_plugin( plugin )
 {
-    QList<KDevelop::IProject*> projects = KDevelop::ICore::self()->projectController()->projects();
     connect(KDevelop::ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), SLOT(updateProjectPaths()));
     connect(KDevelop::ICore::self()->projectController(), SIGNAL(projectClosed(KDevelop::IProject*)), SLOT(updateProjectPaths()));
 
@@ -90,15 +90,6 @@ KDevDocumentViewPlugin *KDevDocumentView::plugin() const
 {
     return m_plugin;
 }
-
-// void KDevDocumentView::projectOpened(KDevelop::IProject *project)
-// {
-//     //foreach ( const KDevelop::IProject *p, projects) {
-//         kDebug() << "XXXXX FOLDER: " << project->folder();
-//     m_projectFolders << project->folder().path();
-//         //m_projectFolders = p->folder().pathOrUrl();
-//     //}
-// }
 
 void KDevDocumentView::mousePressEvent( QMouseEvent * event )
 {
@@ -273,9 +264,9 @@ void KDevDocumentView::saved( KDevelop::IDocument* )
 void KDevDocumentView::opened( KDevelop::IDocument* document )
 {
     QString label = document->url().path();
-    QStringList ps = label.split( '/' );
+    QStringList ps = label.split( QDir::separator() );
     ps.removeLast();
-    label = ps.join( "/" ) + '/';
+    label = ps.join( QDir::separator() ) + QDir::separator();
 
     KDevCategoryItem *mimeItem = m_documentModel->category( label );
     if ( !mimeItem )
@@ -317,23 +308,24 @@ void KDevDocumentView::closed( KDevelop::IDocument* document )
 
 void KDevDocumentView::updateCategoryItem( KDevCategoryItem *item )
 {
-    const QString homePath = QDir::homePath();
     QString label = item->toolTip();
-    foreach (const QString &projectPath, m_projectFolders) {
-        label.replace( projectPath, "" );
-    }
-    label.replace( homePath, "~" );
 
-    QStringList ps = label.split( '/' );
+    foreach ( const QString &projectPath, m_projectFolders )
+        label.replace( projectPath, QString() );
+
+    label.replace( QDir::homePath(), "~" );
+
+    QStringList ps = label.split( QDir::separator() );
     ps.removeLast();
-    label = ps.join( "/" ) + '/';
-    item->setText(label);
+    label = ps.join( QDir::separator() ) + QDir::separator();
+
+    item->setText( label );
 }
 
 bool longerThan( const QString &s1, const QString &s2 )
 {
     // compare path depth of two directories
-    return s1.split('/').count() > s2.split('/').count();
+    return s1.split( QDir::separator() ).count() > s2.split( QDir::separator() ).count();
 }
 
 void KDevDocumentView::updateProjectPaths()
@@ -341,15 +333,15 @@ void KDevDocumentView::updateProjectPaths()
 
     QList<KDevelop::IProject*> projects = KDevelop::ICore::self()->projectController()->projects();
     m_projectFolders.clear();
-    foreach ( KDevelop::IProject *p, projects ) {
-        m_projectFolders << p->folder().pathOrUrl();
-    }
-    // sort folders, longest first, so replacing them one by one is save
-    qSort(m_projectFolders.begin(), m_projectFolders.end(), longerThan);
 
-    foreach ( KDevCategoryItem *it, m_documentModel->categoryList() ) {
+    foreach ( KDevelop::IProject *p, projects )
+        m_projectFolders << p->folder().pathOrUrl();
+
+    // sort folders, longest first, so replacing them one by one is save
+    qSort( m_projectFolders.begin(), m_projectFolders.end(), longerThan );
+
+    foreach ( KDevCategoryItem *it, m_documentModel->categoryList() )
         updateCategoryItem( it );
-    }
 }
 
 void KDevDocumentView::contentChanged( KDevelop::IDocument* )

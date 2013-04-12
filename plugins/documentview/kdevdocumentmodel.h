@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
   Copyright 2005 Adam Treat <treat@kde.org>
+  Copyright 2013 Sebastian Kügler <sebas@kde.org>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -39,7 +40,6 @@ public:
     explicit KDevDocumentItem( const QString &name );
     virtual ~KDevDocumentItem();
 
-//     virtual KDevDocumentItem *itemAt( int index ) const;
     virtual KDevCategoryItem *categoryItem() const
     {
         return 0;
@@ -62,7 +62,7 @@ public:
         case KDevelop::IDocument::DirtyAndModified:
             return KIcon( "edit-delete" );
         default:
-            return KIcon("inode-directory");
+            return KIcon( "inode-directory" );
         }
     }
 
@@ -132,7 +132,7 @@ public:
     virtual ~KDevDocumentModel();
 
     QList<KDevCategoryItem*> categoryList() const;
-    KDevCategoryItem* category( const QString& mimeType ) const;
+    KDevCategoryItem* category( const QString& category ) const;
 };
 
 #endif // KDEVDOCUMENTMODEL_H

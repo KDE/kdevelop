@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
 Copyright 2005 Adam Treat <treat@kde.org>
+Copyright 2013 Sebastian Kügler <sebas@kde.org>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public
@@ -37,7 +38,7 @@ void KDevDocumentViewDelegate::paint( QPainter *painter, const QStyleOptionViewI
     Q_ASSERT( model );
 
     // easy way to disable custom painting for top level items
-    const bool useExpandIndicator = true; 
+    const bool useExpandIndicator = true;
 
     if ( !model->parent( index ).isValid() && useExpandIndicator)
     {

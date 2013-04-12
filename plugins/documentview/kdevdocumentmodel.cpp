@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
   Copyright 2005 Adam Treat <treat@kde.org>
+  Copyright 2013 Sebastian Kügler <sebas@kde.org>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -25,22 +26,17 @@ KDevDocumentItem::KDevDocumentItem( const QString &name )
     : QStandardItem( name ),
         m_documentState( KDevelop::IDocument::Clean )
 {
-    setIcon(icon());
+    setIcon( icon() );
 }
 
 KDevDocumentItem::~KDevDocumentItem()
 {}
 
-// KDevDocumentItem *KDevDocumentItem::itemAt( int index ) const
-// {
-//     return static_cast<KDevDocumentItem*>( QStandardItem::itemFromIndex( index ) );
-// }
-
 KDevCategoryItem::KDevCategoryItem( const QString &name )
         : KDevDocumentItem( name )
 {
-    setIcon(KIcon("inode-directory"));
-    setToolTip(name);
+    setIcon( KIcon( "inode-directory" ) );
+    setToolTip( name );
 }
 
 KDevCategoryItem::~KDevCategoryItem()
