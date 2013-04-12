@@ -333,24 +333,27 @@ void KDevDocumentView::updateCategoryItem(KDevCategoryItem *item)
     kDebug() << "XXX updated label to : " << label << item->toolTip();
 }
 
+bool longerThan(const QString &s1, const QString &s2)
+{
+    // compare path depth of two directories
+    return s1.split('/').count() > s2.split('/').count();
+}
+
 void KDevDocumentView::updateProjectPaths()
 {
 
     QList<KDevelop::IProject*> projects = KDevelop::ICore::self()->projectController()->projects();
-    kDebug() << "XXX Projects: " << projects.count();
     m_projectFolders.clear();
     foreach (KDevelop::IProject *p, projects) {
         m_projectFolders << p->folder().pathOrUrl();
-
     }
-    kDebug() << " XXX updated project paths: " << m_projectFolders;
+    // sort folders, longest first, so replacing them one by one is save
+    qSort(m_projectFolders.begin(), m_projectFolders.end(), longerThan);
+
     foreach (KDevCategoryItem *it, m_documentModel->categoryList()) {
-        kDebug() << "XXX updateing cat: " << it->toolTip();
         updateCategoryItem(it);
     }
-
 }
-
 
 void KDevDocumentView::contentChanged( KDevelop::IDocument* )
 {
