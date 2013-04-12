@@ -30,7 +30,7 @@
 
 class KUrl;
 class KDevDocumentItem;
-class KDevMimeTypeItem;
+class KDevCategoryItem;
 class KDevFileItem;
 
 class KDevDocumentItem: public QStandardItem
@@ -40,7 +40,7 @@ public:
     virtual ~KDevDocumentItem();
 
 //     virtual KDevDocumentItem *itemAt( int index ) const;
-    virtual KDevMimeTypeItem *mimeTypeItem() const
+    virtual KDevCategoryItem *mimeTypeItem() const
     {
         return 0;
     }
@@ -84,15 +84,15 @@ private:
     KDevelop::IDocument::DocumentState m_documentState;
 };
 
-class KDevMimeTypeItem: public KDevDocumentItem
+class KDevCategoryItem: public KDevDocumentItem
 {
 public:
-    explicit KDevMimeTypeItem( const QString &name );
-    virtual ~KDevMimeTypeItem();
+    explicit KDevCategoryItem( const QString &name );
+    virtual ~KDevCategoryItem();
 
-    virtual KDevMimeTypeItem *mimeTypeItem() const
+    virtual KDevCategoryItem *mimeTypeItem() const
     {
-        return const_cast<KDevMimeTypeItem*>( this );
+        return const_cast<KDevCategoryItem*>( this );
     }
 
     QList<KDevFileItem*> fileList() const;
@@ -131,8 +131,8 @@ public:
     KDevDocumentModel( QObject *parent = 0 );
     virtual ~KDevDocumentModel();
 
-    QList<KDevMimeTypeItem*> mimeTypeList() const;
-    KDevMimeTypeItem* mimeType( const QString& mimeType ) const;
+    QList<KDevCategoryItem*> mimeTypeList() const;
+    KDevCategoryItem* mimeType( const QString& mimeType ) const;
 };
 
 #endif // KDEVDOCUMENTMODEL_H

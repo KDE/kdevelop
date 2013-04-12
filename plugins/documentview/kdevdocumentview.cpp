@@ -266,10 +266,10 @@ void KDevDocumentView::opened( KDevelop::IDocument* document )
     ps.removeLast();
     label = ps.join( "/" ) + '/';
 
-    KDevMimeTypeItem *mimeItem = m_documentModel->mimeType( label );
+    KDevCategoryItem *mimeItem = m_documentModel->mimeType( label );
     if ( !mimeItem )
     {
-        mimeItem = new KDevMimeTypeItem( label );
+        mimeItem = new KDevCategoryItem( label );
         m_documentModel->insertRow( m_documentModel->rowCount(), mimeItem );
         setExpanded( m_proxy->mapFromSource( m_documentModel->indexFromItem( mimeItem ) ), false);
     }

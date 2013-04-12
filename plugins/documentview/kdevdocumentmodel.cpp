@@ -36,16 +36,17 @@ KDevDocumentItem::~KDevDocumentItem()
 //     return static_cast<KDevDocumentItem*>( QStandardItem::itemFromIndex( index ) );
 // }
 
-KDevMimeTypeItem::KDevMimeTypeItem( const QString &name )
+KDevCategoryItem::KDevCategoryItem( const QString &name )
         : KDevDocumentItem( name )
 {
+    setIcon(KIcon("inode-directory"));
     setToolTip(name);
 }
 
-KDevMimeTypeItem::~KDevMimeTypeItem()
+KDevCategoryItem::~KDevCategoryItem()
 {}
 
-QList<KDevFileItem*> KDevMimeTypeItem::fileList() const
+QList<KDevFileItem*> KDevCategoryItem::fileList() const
 {
     QList<KDevFileItem*> lst;
 
@@ -58,7 +59,7 @@ QList<KDevFileItem*> KDevMimeTypeItem::fileList() const
     return lst;
 }
 
-KDevFileItem* KDevMimeTypeItem::file( const KUrl &url ) const
+KDevFileItem* KDevCategoryItem::file( const KUrl &url ) const
 {
     foreach( KDevFileItem * item, fileList() )
     {
@@ -91,13 +92,13 @@ KDevDocumentModel::KDevDocumentModel( QObject *parent )
 KDevDocumentModel::~KDevDocumentModel()
 {}
 
-QList<KDevMimeTypeItem*> KDevDocumentModel::mimeTypeList() const
+QList<KDevCategoryItem*> KDevDocumentModel::mimeTypeList() const
 {
 
-    QList<KDevMimeTypeItem*> lst;
+    QList<KDevCategoryItem*> lst;
     for ( int i = 0; i < rowCount() ; ++i )
     {
-        if ( KDevMimeTypeItem * mimeitem = dynamic_cast<KDevDocumentItem*>( item( i ) ) ->mimeTypeItem() )
+        if ( KDevCategoryItem * mimeitem = dynamic_cast<KDevDocumentItem*>( item( i ) ) ->mimeTypeItem() )
         {
 
             lst.append( mimeitem );
@@ -107,9 +108,9 @@ QList<KDevMimeTypeItem*> KDevDocumentModel::mimeTypeList() const
     return lst;
 }
 
-KDevMimeTypeItem* KDevDocumentModel::mimeType( const QString& mimeType ) const
+KDevCategoryItem* KDevDocumentModel::mimeType( const QString& mimeType ) const
 {
-    foreach( KDevMimeTypeItem * item, mimeTypeList() )
+    foreach( KDevCategoryItem * item, mimeTypeList() )
     {
         if ( item->text() == mimeType )
             return item;

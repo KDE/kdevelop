@@ -36,7 +36,10 @@ void KDevDocumentViewDelegate::paint( QPainter *painter, const QStyleOptionViewI
     const QAbstractItemModel * model = index.model();
     Q_ASSERT( model );
 
-    if ( !model->parent( index ).isValid() )
+    // easy way to disable custom painting for top level items
+    const bool useExpandIndicator = true; 
+
+    if ( !model->parent( index ).isValid() && useExpandIndicator)
     {
         // this is a top-level item.
         QStyleOptionButton buttonOption;
@@ -52,7 +55,6 @@ void KDevDocumentViewDelegate::paint( QPainter *painter, const QStyleOptionViewI
         buttonOption.rect = option.rect;
         buttonOption.palette = option.palette;
         buttonOption.features = QStyleOptionButton::None;
-        //m_view->style() ->drawControl( QStyle::CE_PushButton, &buttonOption, painter, m_view );
 
         QStyleOption branchOption;
         static const int i = 9; // ### hardcoded in qcommonstyle.cpp
@@ -67,13 +69,11 @@ void KDevDocumentViewDelegate::paint( QPainter *painter, const QStyleOptionViewI
         m_view->style() ->drawPrimitive( QStyle::PE_IndicatorBranch, &branchOption, painter, m_view );
 
         // draw text
-        
         QRect textrect = QRect( r.left() + i * 2, r.top(), r.width() - ( ( 5 * i ) / 2 ), r.height() );
         QString text = elidedText( option.fontMetrics, textrect.width(), Qt::ElideRight,
                                    model->data( index, Qt::DisplayRole ).toString() );
         m_view->style() ->drawItemText( painter, textrect, Qt::AlignLeft | Qt::AlignVCenter,
                                         option.palette, m_view->isEnabled(), text );
-        //kDebug() << "Textrect:: " << textrect << text;
     }
     else
     {
