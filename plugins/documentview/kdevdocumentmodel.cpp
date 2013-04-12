@@ -98,10 +98,10 @@ QList<KDevCategoryItem*> KDevDocumentModel::categoryList() const
     QList<KDevCategoryItem*> lst;
     for ( int i = 0; i < rowCount() ; ++i )
     {
-        if ( KDevCategoryItem * mimeitem = dynamic_cast<KDevDocumentItem*>( item( i ) ) ->mimeTypeItem() )
+        if ( KDevCategoryItem * categoryitem = dynamic_cast<KDevDocumentItem*>( item( i ) ) ->categoryItem() )
         {
 
-            lst.append( mimeitem );
+            lst.append( categoryitem );
         }
     }
 

@@ -40,7 +40,7 @@ public:
     virtual ~KDevDocumentItem();
 
 //     virtual KDevDocumentItem *itemAt( int index ) const;
-    virtual KDevCategoryItem *mimeTypeItem() const
+    virtual KDevCategoryItem *categoryItem() const
     {
         return 0;
     }
@@ -90,7 +90,7 @@ public:
     explicit KDevCategoryItem( const QString &name );
     virtual ~KDevCategoryItem();
 
-    virtual KDevCategoryItem *mimeTypeItem() const
+    virtual KDevCategoryItem *categoryItem() const
     {
         return const_cast<KDevCategoryItem*>( this );
     }
