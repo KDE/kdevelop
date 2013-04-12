@@ -131,8 +131,8 @@ public:
     KDevDocumentModel( QObject *parent = 0 );
     virtual ~KDevDocumentModel();
 
-    QList<KDevCategoryItem*> mimeTypeList() const;
-    KDevCategoryItem* mimeType( const QString& mimeType ) const;
+    QList<KDevCategoryItem*> categoryList() const;
+    KDevCategoryItem* category( const QString& mimeType ) const;
 };
 
 #endif // KDEVDOCUMENTMODEL_H

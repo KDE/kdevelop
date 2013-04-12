@@ -92,7 +92,7 @@ KDevDocumentModel::KDevDocumentModel( QObject *parent )
 KDevDocumentModel::~KDevDocumentModel()
 {}
 
-QList<KDevCategoryItem*> KDevDocumentModel::mimeTypeList() const
+QList<KDevCategoryItem*> KDevDocumentModel::categoryList() const
 {
 
     QList<KDevCategoryItem*> lst;
@@ -108,11 +108,11 @@ QList<KDevCategoryItem*> KDevDocumentModel::mimeTypeList() const
     return lst;
 }
 
-KDevCategoryItem* KDevDocumentModel::mimeType( const QString& mimeType ) const
+KDevCategoryItem* KDevDocumentModel::category( const QString& category ) const
 {
-    foreach( KDevCategoryItem * item, mimeTypeList() )
+    foreach( KDevCategoryItem * item, categoryList() )
     {
-        if ( item->text() == mimeType )
+        if ( item->text() == category )
             return item;
     }
 

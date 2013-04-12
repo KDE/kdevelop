@@ -34,6 +34,7 @@ class KMenu;
 namespace KDevelop
 {
     class IDocument;
+    class IProject;
 }
 
 class KDevDocumentModel;
@@ -61,6 +62,7 @@ private slots:
     void contentChanged( KDevelop::IDocument* document );
     void stateChanged( KDevelop::IDocument* document );
     void documentUrlChanged( KDevelop::IDocument* document );
+    void projectOpened( KDevelop::IProject* project );
 
     void saveSelected();
     void reloadSelected();
@@ -86,6 +88,7 @@ private:
     QHash< KDevelop::IDocument*, KDevFileItem* > m_doc2index;
     QList<KUrl> m_selectedDocs; // used for ctx menu
     QList<KUrl> m_unselectedDocs; // used for ctx menu
+    QStringList m_projectFolders;
 };
 
 #endif // KDEVDOCUMENTVIEW_H

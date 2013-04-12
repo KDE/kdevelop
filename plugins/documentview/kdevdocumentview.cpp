@@ -39,6 +39,8 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/iplugincontroller.h>
+#include <interfaces/iproject.h>
+#include <interfaces/iprojectcontroller.h>
 #include <interfaces/context.h>
 #include <interfaces/idocument.h>
 
@@ -46,6 +48,11 @@ KDevDocumentView::KDevDocumentView( KDevDocumentViewPlugin *plugin, QWidget *par
     : QTreeView( parent ),
         m_plugin( plugin )
 {
+    QList<KDevelop::IProject*> projects = KDevelop::ICore::self()->projectController()->projects();
+    connect(KDevelop::ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), SLOT(projectOpened(KDevelop::IProject*)));
+
+    kDebug() << "XXXXX KONNECTED: " << projects.count();
+
     m_documentModel = new KDevDocumentModel();
 
     m_delegate = new KDevDocumentViewDelegate( this, this );
@@ -82,6 +89,15 @@ KDevDocumentView::~KDevDocumentView()
 KDevDocumentViewPlugin *KDevDocumentView::plugin() const
 {
     return m_plugin;
+}
+
+void KDevDocumentView::projectOpened(KDevelop::IProject *project)
+{
+    //foreach ( const KDevelop::IProject *p, projects) {
+        kDebug() << "XXXXX FOLDER: " << project->folder();
+    m_projectFolders << project->folder().path();
+        //m_projectFolders = p->folder().pathOrUrl();
+    //}
 }
 
 void KDevDocumentView::mousePressEvent( QMouseEvent * event )
@@ -256,17 +272,20 @@ void KDevDocumentView::saved( KDevelop::IDocument* )
 
 void KDevDocumentView::opened( KDevelop::IDocument* document )
 {
-    const QString projectPath = "/home/sebas/kf5/src/plasma-framework/src/";
+    //const QString projectPath = "/home/sebas/kf5/src/plasma-framework/src/";
     const QString homePath = "/home/sebas/";
 
-    QString label = document->url().path().replace( projectPath, "" );
+    QString label = document->url().path();
+    foreach (const QString &projectPath, m_projectFolders) {
+        label.replace( projectPath, "" );
+    }
     label.replace( homePath, "~/" );
 
     QStringList ps = label.split( '/' );
     ps.removeLast();
     label = ps.join( "/" ) + '/';
 
-    KDevCategoryItem *mimeItem = m_documentModel->mimeType( label );
+    KDevCategoryItem *mimeItem = m_documentModel->category( label );
     if ( !mimeItem )
     {
         mimeItem = new KDevCategoryItem( label );
