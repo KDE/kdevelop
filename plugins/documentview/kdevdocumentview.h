@@ -63,7 +63,7 @@ private slots:
     void contentChanged( KDevelop::IDocument* document );
     void stateChanged( KDevelop::IDocument* document );
     void documentUrlChanged( KDevelop::IDocument* document );
-    void updateCategoryItem(KDevCategoryItem *item);
+    void updateCategoryItem( KDevCategoryItem *item );
     void updateProjectPaths();
 
     void saveSelected();

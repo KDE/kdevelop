@@ -53,8 +53,6 @@ KDevDocumentView::KDevDocumentView( KDevDocumentViewPlugin *plugin, QWidget *par
     connect(KDevelop::ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), SLOT(updateProjectPaths()));
     connect(KDevelop::ICore::self()->projectController(), SIGNAL(projectClosed(KDevelop::IProject*)), SLOT(updateProjectPaths()));
 
-    kDebug() << "XXXXX KONNECTED: " << projects.count();
-
     m_documentModel = new KDevDocumentModel();
 
     m_delegate = new KDevDocumentViewDelegate( this, this );
@@ -317,7 +315,7 @@ void KDevDocumentView::closed( KDevelop::IDocument* document )
     doItemsLayout();
 }
 
-void KDevDocumentView::updateCategoryItem(KDevCategoryItem *item)
+void KDevDocumentView::updateCategoryItem( KDevCategoryItem *item )
 {
     const QString homePath = QDir::homePath();
     QString label = item->toolTip();
@@ -330,10 +328,9 @@ void KDevDocumentView::updateCategoryItem(KDevCategoryItem *item)
     ps.removeLast();
     label = ps.join( "/" ) + '/';
     item->setText(label);
-    kDebug() << "XXX updated label to : " << label << item->toolTip();
 }
 
-bool longerThan(const QString &s1, const QString &s2)
+bool longerThan( const QString &s1, const QString &s2 )
 {
     // compare path depth of two directories
     return s1.split('/').count() > s2.split('/').count();
@@ -344,14 +341,14 @@ void KDevDocumentView::updateProjectPaths()
 
     QList<KDevelop::IProject*> projects = KDevelop::ICore::self()->projectController()->projects();
     m_projectFolders.clear();
-    foreach (KDevelop::IProject *p, projects) {
+    foreach ( KDevelop::IProject *p, projects ) {
         m_projectFolders << p->folder().pathOrUrl();
     }
     // sort folders, longest first, so replacing them one by one is save
     qSort(m_projectFolders.begin(), m_projectFolders.end(), longerThan);
 
-    foreach (KDevCategoryItem *it, m_documentModel->categoryList()) {
-        updateCategoryItem(it);
+    foreach ( KDevCategoryItem *it, m_documentModel->categoryList() ) {
+        updateCategoryItem( it );
     }
 }
 
