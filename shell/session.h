@@ -85,6 +85,8 @@ public:
 
 Q_SIGNALS:
     void nameChanged( const QString& newname, const QString& oldname );
+public slots:
+    void updateContainedProjects();
 private:
     class SessionPrivate* const d;
 

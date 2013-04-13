@@ -255,6 +255,8 @@ public:
                 (*it)->setCheckable(false);
         }
         
+        connect(Core::self()->projectController(), SIGNAL(projectClosed(KDevelop::IProject*)), activeSession, SLOT(updateContainedProjects()));
+        connect(Core::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), activeSession, SLOT(updateContainedProjects()));
     }
 
     void loadSessionFromAction( QAction* a )

@@ -86,6 +86,11 @@ KUrl::List Session::containedProjects() const
     return d->info.projects;
 }
 
+void Session::updateContainedProjects()
+{
+    d->info.projects = d->info.config->group("General Options").readEntry("Open Projects", QStringList());
+}
+
 void Session::updateDescription()
 {
     QString prettyContents = generatePrettyContents( d->info );
