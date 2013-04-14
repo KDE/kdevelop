@@ -37,10 +37,7 @@ void KDevDocumentViewDelegate::paint( QPainter *painter, const QStyleOptionViewI
     const QAbstractItemModel * model = index.model();
     Q_ASSERT( model );
 
-    // easy way to disable custom painting for top level items
-    const bool useExpandIndicator = true;
-
-    if ( !model->parent( index ).isValid() && useExpandIndicator)
+    if ( !model->parent( index ).isValid() )
     {
         // this is a top-level item.
         QStyleOptionButton buttonOption;

@@ -62,7 +62,7 @@ public:
         case KDevelop::IDocument::DirtyAndModified:
             return KIcon( "edit-delete" );
         default:
-            return KIcon( "inode-directory" );
+            return QIcon();
         }
     }
 

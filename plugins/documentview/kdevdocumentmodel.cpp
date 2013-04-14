@@ -35,7 +35,6 @@ KDevDocumentItem::~KDevDocumentItem()
 KDevCategoryItem::KDevCategoryItem( const QString &name )
         : KDevDocumentItem( name )
 {
-    setIcon( KIcon( "inode-directory" ) );
     setToolTip( name );
 }
 
