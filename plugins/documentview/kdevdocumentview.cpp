@@ -309,10 +309,16 @@ void KDevDocumentView::updateCategoryItem( KDevCategoryItem *item )
 {
     QString label = item->toolTip();
 
-    foreach ( const KDevelop::IProject* prj, m_projects )
-        label.replace( prj->folder().pathOrUrl(), QString() );
+    foreach ( const KDevelop::IProject* prj, m_projects ) {
+        const QString possibleLabel = prj->relativeUrl( KUrl(label) ).pathOrUrl();
+        if ( !possibleLabel.startsWith( "../" ) )
+            label = possibleLabel;
+        else
+            label.replace( QDir::homePath(), "~" );
+    }
 
-    label.replace( QDir::homePath(), "~" );
+    //         label.replace( prj->folder().pathOrUrl(), QString() );
+
 
     item->setText( label );
 }
