@@ -21,7 +21,6 @@
 #include "externalscriptjob.h"
 
 #include "externalscriptitem.h"
-#include "externalscriptoutputmodel.h"
 #include "externalscriptdebug.h"
 #include "externalscriptplugin.h"
 
@@ -62,7 +61,7 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, ExternalScriptPl
   setStandardToolView( KDevelop::IOutputView::RunView );
   setBehaviours( KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
 
-  ExternalScriptOutputModel* model = new ExternalScriptOutputModel;
+  KDevelop::OutputModel* model = new KDevelop::OutputModel;
   model->setFilteringStrategy(static_cast<KDevelop::OutputModel::OutputFilterStrategy>(m_filterMode));
   setModel( model );
 
@@ -160,9 +159,13 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, ExternalScriptPl
   }
   m_lineMaker = new KDevelop::ProcessLineMaker( m_proc, this );
   connect( m_lineMaker, SIGNAL(receivedStdoutLines(QStringList)),
-           model, SLOT(appendStdoutLines(QStringList)) );
+           model, SLOT(appendLines(QStringList)) );
+  connect( m_lineMaker, SIGNAL(receivedStdoutLines(QStringList)),
+           this, SLOT(receivedStdoutLines(QStringList)) );
   connect( m_lineMaker, SIGNAL(receivedStderrLines(QStringList)),
-           model, SLOT(appendStderrLines(QStringList)) );
+           model, SLOT(appendLines(QStringList)) );
+  connect( m_lineMaker, SIGNAL(receivedStderrLines(QStringList)),
+           this, SLOT(receivedStderrLines(QStringList)) );
   connect( m_proc, SIGNAL(error(QProcess::ProcessError)),
            SLOT(processError(QProcess::ProcessError)) );
   connect( m_proc, SIGNAL(finished(int,QProcess::ExitStatus)),
@@ -244,15 +247,9 @@ void ExternalScriptJob::processFinished( int exitCode , QProcess::ExitStatus sta
   m_lineMaker->flushBuffers();
 
   if ( exitCode == 0 && status == QProcess::NormalExit ) {
-
-    ExternalScriptOutputModel* model = dynamic_cast<ExternalScriptOutputModel*>(OutputJob::model());
-    Q_ASSERT(model);
-
     if ( m_outputMode != ExternalScriptItem::OutputNone ) {
-      QStringList lines = model->stdOut();
-
-      if ( !lines.isEmpty() ) {
-        QString output = lines.join( "\n" );
+      if ( !m_stdout.isEmpty() ) {
+        QString output = m_stdout.join( "\n" );
         switch ( m_outputMode ) {
           case ExternalScriptItem::OutputNone:
             // do nothing;
@@ -284,7 +281,7 @@ void ExternalScriptJob::processFinished( int exitCode , QProcess::ExitStatus sta
       }
     }
     if ( m_errorMode != ExternalScriptItem::ErrorNone && m_errorMode != ExternalScriptItem::ErrorMergeOutput ) {
-      QString output = model->stdErr().join( "\n" );
+      QString output = m_stderr.join( "\n" );
 
       if ( !output.isEmpty() ) {
         switch ( m_errorMode ) {
@@ -361,6 +358,15 @@ KDevelop::OutputModel* ExternalScriptJob::model()
   return dynamic_cast<KDevelop::OutputModel*>( OutputJob::model() );
 }
 
+void ExternalScriptJob::receivedStderrLines(const QStringList& lines)
+{
+  m_stderr += lines;
+}
+
+void ExternalScriptJob::receivedStdoutLines(const QStringList& lines)
+{
+  m_stdout += lines;
+}
 
 #include "externalscriptjob.moc"
 

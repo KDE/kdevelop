@@ -59,6 +59,8 @@ private slots:
   void processError( QProcess::ProcessError );
   void processFinished( int, QProcess::ExitStatus );
 
+  void receivedStdoutLines(const QStringList& lines);
+  void receivedStderrLines(const QStringList& lines);
 private:
   void appendLine( const QString &l );
 
@@ -74,6 +76,9 @@ private:
   KTextEditor::Range m_selectionRange;
   KTextEditor::Cursor m_cursorPosition;
   bool m_showOutput;
+
+  QStringList m_stdout;
+  QStringList m_stderr;
 };
 
 #endif // EXTERNALSCRIPTJOB_H
