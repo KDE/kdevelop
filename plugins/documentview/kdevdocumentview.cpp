@@ -265,19 +265,19 @@ void KDevDocumentView::opened( KDevelop::IDocument* document )
 {
     const QString path = QFileInfo( document->url().path() ).path();
 
-    KDevCategoryItem *mimeItem = m_documentModel->category( path );
-    if ( !mimeItem )
+    KDevCategoryItem *categoryItem = m_documentModel->category( path );
+    if ( !categoryItem )
     {
-        mimeItem = new KDevCategoryItem( path );
-        m_documentModel->insertRow( m_documentModel->rowCount(), mimeItem );
-        setExpanded( m_proxy->mapFromSource( m_documentModel->indexFromItem( mimeItem ) ), false);
-        updateCategoryItem(mimeItem);
+        categoryItem = new KDevCategoryItem( path );
+        m_documentModel->insertRow( m_documentModel->rowCount(), categoryItem );
+        setExpanded( m_proxy->mapFromSource( m_documentModel->indexFromItem( categoryItem ) ), false);
+        updateCategoryItem( categoryItem );
     }
 
-    if ( !mimeItem->file( document->url() ) )
+    if ( !categoryItem->file( document->url() ) )
     {
         KDevFileItem * fileItem = new KDevFileItem( document->url() );
-        mimeItem->setChild( mimeItem->rowCount(), fileItem );
+        categoryItem->setChild( categoryItem->rowCount(), fileItem );
         setCurrentIndex( m_proxy->mapFromSource( m_documentModel->indexFromItem( fileItem ) ) );
         m_doc2index[ document ] = fileItem;
     }
@@ -289,16 +289,16 @@ void KDevDocumentView::closed( KDevelop::IDocument* document )
     if ( !file )
         return;
 
-    QStandardItem* mimeItem = file->parent();
+    QStandardItem* categoryItem = file->parent();
 
-    qDeleteAll(mimeItem->takeRow(m_documentModel->indexFromItem(file).row()));
+    qDeleteAll(categoryItem->takeRow(m_documentModel->indexFromItem(file).row()));
 
     m_doc2index.remove(document);
 
-    if ( mimeItem->hasChildren() )
+    if ( categoryItem->hasChildren() )
         return;
 
-    qDeleteAll(m_documentModel->takeRow(m_documentModel->indexFromItem(mimeItem).row()));
+    qDeleteAll(m_documentModel->takeRow(m_documentModel->indexFromItem(categoryItem).row()));
 
     doItemsLayout();
 }
