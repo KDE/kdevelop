@@ -118,7 +118,7 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContext
     void previousUseShortcut();
     void nextUseShortcut();
 
-    void declarationSelectedInUI(KDevelop::DeclarationPointer decl);
+    void declarationSelectedInUI(const KDevelop::DeclarationPointer& decl);
 
     void parseJobFinished(KDevelop::ParseJob* job);
     void textDocumentCreated( KDevelop::IDocument* document );

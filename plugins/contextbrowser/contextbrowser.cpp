@@ -278,8 +278,8 @@ ContextBrowserPlugin::ContextBrowserPlugin(QObject *parent, const QVariantList&)
   connect( core()->documentController(), SIGNAL(textDocumentCreated(KDevelop::IDocument*)), this, SLOT(textDocumentCreated(KDevelop::IDocument*)) );
   connect( core()->languageController()->backgroundParser(), SIGNAL(parseJobFinished(KDevelop::ParseJob*)), this, SLOT(parseJobFinished(KDevelop::ParseJob*)));
 
-  connect( DUChain::self(), SIGNAL(declarationSelected(DeclarationPointer)), this, SLOT(declarationSelectedInUI(DeclarationPointer)) );
-
+  connect( DUChain::self(), SIGNAL(declarationSelected(KDevelop::DeclarationPointer)),
+           this, SLOT(declarationSelectedInUI(KDevelop::DeclarationPointer)) );
 
   m_updateTimer = new QTimer(this);
   m_updateTimer->setSingleShot(true);
@@ -707,7 +707,7 @@ void ContextBrowserPlugin::updateViews()
   m_useDeclaration = IndexedDeclaration();
 }
 
-void ContextBrowserPlugin::declarationSelectedInUI(DeclarationPointer decl)
+void ContextBrowserPlugin::declarationSelectedInUI(const DeclarationPointer& decl)
 {
   m_useDeclaration = IndexedDeclaration(decl.data());
   if(core()->documentController()->activeDocument() && core()->documentController()->activeDocument()->textDocument() && core()->documentController()->activeDocument()->textDocument()->activeView())

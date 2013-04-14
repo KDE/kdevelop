@@ -1661,7 +1661,8 @@ void DUChain::refCountDown(TopDUContext* top) {
     sdDUChainPrivate->m_referenceCounts.remove(top);
 }
 
-void DUChain::emitDeclarationSelected(DeclarationPointer decl) {
+void DUChain::emitDeclarationSelected(const DeclarationPointer& decl)
+{
   emit declarationSelected(decl);
 }
 

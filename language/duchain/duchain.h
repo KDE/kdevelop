@@ -277,12 +277,13 @@ public:
   
 Q_SIGNALS:
   ///Is emitted when the declaration has been selected somewhere in the user-interface, for example in the completion-list
-  void declarationSelected(DeclarationPointer decl);
+  void declarationSelected(const KDevelop::DeclarationPointer& decl);
+
 public Q_SLOTS:
   ///Removes the given top-context from the duchain, and deletes it.
-  void removeDocumentChain(TopDUContext* document);
+  void removeDocumentChain(KDevelop::TopDUContext* document);
   ///Emits the declarationSelected signal, so other parties can notice it.
-  void emitDeclarationSelected(DeclarationPointer decl);
+  void emitDeclarationSelected(const KDevelop::DeclarationPointer& decl);
 
   /**
    * Shutdown and cleanup the DUChain.
