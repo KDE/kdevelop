@@ -318,9 +318,6 @@ void KDevDocumentView::updateCategoryItem( KDevCategoryItem *item )
             label.replace( QDir::homePath(), "~" );
     }
 
-    //         label.replace( prj->folder().pathOrUrl(), QString() );
-
-
     item->setText( label );
 }
 
