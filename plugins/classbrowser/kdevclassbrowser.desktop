@@ -18,6 +18,7 @@ Comment[fr]=Ce module externe fournit un modèle navigable des classes et autres
 Comment[gl]=Este engadido fornece un modelo navegábel das clases e outros elementos que estean procesados.
 Comment[hu]=Ez a bővítmény biztosítja a jelenleg feldolgozott osztályok és egyéb elemek böngészhető modelljét.
 Comment[it]=Questa estensione fornisce un modello sfogliabile delle classi attualmente analizzate e altri elementi.
+Comment[kk]=Бұл плагині талдау астындағы клас не басқа нысандарыңын шолуға ыңғайлы үлгісін құрып береді.
 Comment[nb]=Dette programtillegget gir en modell som det går an å bla i, av de klassene som er tolket og ande elementer.
 Comment[nds]=Dit Moduul stellt en dörkiekbor Modell vun de opstunns inleesten Klassen un anner Objekten praat.
 Comment[nl]=Deze plugin levert een model om door te bladeren van de nu ontlede klasse's en andere items.
