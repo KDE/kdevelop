@@ -263,15 +263,12 @@ void KDevDocumentView::saved( KDevelop::IDocument* )
 
 void KDevDocumentView::opened( KDevelop::IDocument* document )
 {
-    QString label = document->url().path();
-    QStringList ps = label.split( QDir::separator() );
-    ps.removeLast();
-    label = ps.join( QDir::separator() ) + QDir::separator();
+    const QString path = QFileInfo( document->url().path() ).path();
 
-    KDevCategoryItem *mimeItem = m_documentModel->category( label );
+    KDevCategoryItem *mimeItem = m_documentModel->category( path );
     if ( !mimeItem )
     {
-        mimeItem = new KDevCategoryItem( label );
+        mimeItem = new KDevCategoryItem( path );
         m_documentModel->insertRow( m_documentModel->rowCount(), mimeItem );
         setExpanded( m_proxy->mapFromSource( m_documentModel->indexFromItem( mimeItem ) ), false);
         updateCategoryItem(mimeItem);
@@ -314,10 +311,6 @@ void KDevDocumentView::updateCategoryItem( KDevCategoryItem *item )
         label.replace( projectPath, QString() );
 
     label.replace( QDir::homePath(), "~" );
-
-    QStringList ps = label.split( QDir::separator() );
-    ps.removeLast();
-    label = ps.join( QDir::separator() ) + QDir::separator();
 
     item->setText( label );
 }
