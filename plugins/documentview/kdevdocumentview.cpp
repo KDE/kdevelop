@@ -271,6 +271,7 @@ void KDevDocumentView::opened( KDevelop::IDocument* document )
     if ( !categoryItem )
     {
         categoryItem = new KDevCategoryItem( path );
+        categoryItem->setUrl( document->url() );
         m_documentModel->insertRow( m_documentModel->rowCount(), categoryItem );
         setExpanded( m_proxy->mapFromSource( m_documentModel->indexFromItem( categoryItem ) ), false);
         updateCategoryItem( categoryItem );
@@ -307,7 +308,7 @@ void KDevDocumentView::closed( KDevelop::IDocument* document )
 
 void KDevDocumentView::updateCategoryItem( KDevCategoryItem *item )
 {
-    QString label = item->toolTip();
+    QString label = item->url().pathOrUrl();
 
     foreach ( const KDevelop::IProject* prj, m_projects ) {
         const QString possibleLabel = prj->relativeUrl( KUrl(label) ).pathOrUrl();

@@ -77,8 +77,21 @@ public:
         setIcon(icon());
     }
 
+    const KUrl &url() const
+    {
+        return m_url;
+    }
+
+    void setUrl( const KUrl &url )
+    {
+        m_url = url;
+    }
+
 protected:
     QString m_fileIcon;
+
+private:
+    KUrl m_url;
 
 private:
     KDevelop::IDocument::DocumentState m_documentState;
@@ -109,19 +122,6 @@ public:
     {
         return const_cast<KDevFileItem*>( this );
     }
-
-    const KUrl &url() const
-    {
-        return m_url;
-    }
-
-    void setUrl( const KUrl &url )
-    {
-        m_url = url;
-    }
-
-private:
-    KUrl m_url;
 };
 
 class KDevDocumentModel: public QStandardItemModel

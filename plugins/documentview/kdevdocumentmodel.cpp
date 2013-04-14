@@ -66,9 +66,9 @@ KDevFileItem* KDevCategoryItem::file( const KUrl &url ) const
 }
 
 KDevFileItem::KDevFileItem( const KUrl &url )
-        : KDevDocumentItem( url.fileName() ),
-        m_url( url )
+        : KDevDocumentItem( url.fileName() )
 {
+    setUrl( url );
     KFileItem fi = KFileItem( url, QString(), 0 );
     m_fileIcon = fi.iconName();
     setIcon( KIcon( m_fileIcon ) );
