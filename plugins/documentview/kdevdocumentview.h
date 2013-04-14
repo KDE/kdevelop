@@ -91,7 +91,7 @@ private:
     QHash< KDevelop::IDocument*, KDevFileItem* > m_doc2index;
     QList<KUrl> m_selectedDocs; // used for ctx menu
     QList<KUrl> m_unselectedDocs; // used for ctx menu
-    QStringList m_projectFolders;
+    QList<KDevelop::IProject*> m_projects;
 };
 
 #endif // KDEVDOCUMENTVIEW_H

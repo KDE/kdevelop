@@ -50,8 +50,10 @@ KDevDocumentView::KDevDocumentView( KDevDocumentViewPlugin *plugin, QWidget *par
     : QTreeView( parent ),
         m_plugin( plugin )
 {
-    connect(KDevelop::ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), SLOT(updateProjectPaths()));
-    connect(KDevelop::ICore::self()->projectController(), SIGNAL(projectClosed(KDevelop::IProject*)), SLOT(updateProjectPaths()));
+    connect(KDevelop::ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)),
+            SLOT(updateProjectPaths()));
+    connect(KDevelop::ICore::self()->projectController(), SIGNAL(projectClosed(KDevelop::IProject*)),
+            SLOT(updateProjectPaths()));
 
     m_documentModel = new KDevDocumentModel();
 
@@ -307,31 +309,29 @@ void KDevDocumentView::updateCategoryItem( KDevCategoryItem *item )
 {
     QString label = item->toolTip();
 
-    foreach ( const QString &projectPath, m_projectFolders )
-        label.replace( projectPath, QString() );
+    foreach ( const KDevelop::IProject* prj, m_projects )
+        label.replace( prj->folder().pathOrUrl(), QString() );
 
     label.replace( QDir::homePath(), "~" );
 
     item->setText( label );
 }
 
-bool longerThan( const QString &s1, const QString &s2 )
+bool projectPathlongerThan( const KDevelop::IProject* prj1, const KDevelop::IProject* prj2 )
 {
-    // compare path depth of two directories
-    return s1.split( QDir::separator() ).count() > s2.split( QDir::separator() ).count();
+    // compare path depth of two project folders
+    const int c1 = prj1->folder().pathOrUrl().split( QDir::separator() ).count();
+    const int c2 = prj2->folder().pathOrUrl().split( QDir::separator() ).count();
+    return c1 > c2;
 }
 
 void KDevDocumentView::updateProjectPaths()
 {
 
-    QList<KDevelop::IProject*> projects = KDevelop::ICore::self()->projectController()->projects();
-    m_projectFolders.clear();
-
-    foreach ( KDevelop::IProject *p, projects )
-        m_projectFolders << p->folder().pathOrUrl();
+    m_projects = KDevelop::ICore::self()->projectController()->projects();
 
     // sort folders, longest first, so replacing them one by one is save
-    qSort( m_projectFolders.begin(), m_projectFolders.end(), longerThan );
+    qSort( m_projects.begin(), m_projects.end(), projectPathlongerThan );
 
     foreach ( KDevCategoryItem *it, m_documentModel->categoryList() )
         updateCategoryItem( it );
