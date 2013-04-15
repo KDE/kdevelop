@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
 Copyright 2005 Adam Treat <treat@kde.org>
+Copyright 2013 Sebastian Kügler <sebas@kde.org>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public
@@ -21,6 +22,7 @@ Boston, MA 02110-1301, USA.
 #include "kdevdocumentviewplugin.h"
 #include "kdevdocumentmodel.h"
 
+#include <QDir>
 #include <QHeaderView>
 #include <QContextMenuEvent>
 #include <QSortFilterProxyModel>
@@ -39,6 +41,8 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/iplugincontroller.h>
+#include <interfaces/iproject.h>
+#include <interfaces/iprojectcontroller.h>
 #include <interfaces/context.h>
 #include <interfaces/idocument.h>
 
@@ -46,6 +50,11 @@ KDevDocumentView::KDevDocumentView( KDevDocumentViewPlugin *plugin, QWidget *par
     : QTreeView( parent ),
         m_plugin( plugin )
 {
+    connect(KDevelop::ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)),
+            SLOT(updateProjectPaths()));
+    connect(KDevelop::ICore::self()->projectController(), SIGNAL(projectClosed(KDevelop::IProject*)),
+            SLOT(updateProjectPaths()));
+
     m_documentModel = new KDevDocumentModel();
 
     m_delegate = new KDevDocumentViewDelegate( this, this );
@@ -256,19 +265,22 @@ void KDevDocumentView::saved( KDevelop::IDocument* )
 
 void KDevDocumentView::opened( KDevelop::IDocument* document )
 {
-    QString mimeType = document->mimeType()->comment();
-    KDevMimeTypeItem *mimeItem = m_documentModel->mimeType( mimeType );
-    if ( !mimeItem )
+    const QString path = QFileInfo( document->url().path() ).path();
+
+    KDevCategoryItem *categoryItem = m_documentModel->category( path );
+    if ( !categoryItem )
     {
-        mimeItem = new KDevMimeTypeItem( mimeType );
-        m_documentModel->insertRow( m_documentModel->rowCount(), mimeItem );
-        setExpanded( m_proxy->mapFromSource( m_documentModel->indexFromItem( mimeItem ) ), false);
+        categoryItem = new KDevCategoryItem( path );
+        categoryItem->setUrl( document->url() );
+        m_documentModel->insertRow( m_documentModel->rowCount(), categoryItem );
+        setExpanded( m_proxy->mapFromSource( m_documentModel->indexFromItem( categoryItem ) ), false);
+        updateCategoryItem( categoryItem );
     }
 
-    if ( !mimeItem->file( document->url() ) )
+    if ( !categoryItem->file( document->url() ) )
     {
         KDevFileItem * fileItem = new KDevFileItem( document->url() );
-        mimeItem->setChild( mimeItem->rowCount(), fileItem );
+        categoryItem->setChild( categoryItem->rowCount(), fileItem );
         setCurrentIndex( m_proxy->mapFromSource( m_documentModel->indexFromItem( fileItem ) ) );
         m_doc2index[ document ] = fileItem;
     }
@@ -280,18 +292,53 @@ void KDevDocumentView::closed( KDevelop::IDocument* document )
     if ( !file )
         return;
 
-    QStandardItem* mimeItem = file->parent();
+    QStandardItem* categoryItem = file->parent();
 
-    qDeleteAll(mimeItem->takeRow(m_documentModel->indexFromItem(file).row()));
+    qDeleteAll(categoryItem->takeRow(m_documentModel->indexFromItem(file).row()));
 
     m_doc2index.remove(document);
 
-    if ( mimeItem->hasChildren() )
+    if ( categoryItem->hasChildren() )
         return;
 
-    qDeleteAll(m_documentModel->takeRow(m_documentModel->indexFromItem(mimeItem).row()));
+    qDeleteAll(m_documentModel->takeRow(m_documentModel->indexFromItem(categoryItem).row()));
 
     doItemsLayout();
+}
+
+void KDevDocumentView::updateCategoryItem( KDevCategoryItem *item )
+{
+    QString label = item->url().pathOrUrl();
+
+    foreach ( const KDevelop::IProject* prj, m_projects ) {
+        const QString possibleLabel = prj->relativeUrl( KUrl(label) ).pathOrUrl();
+        if ( !possibleLabel.startsWith( "../" ) )
+            label = possibleLabel;
+        else
+            label.replace( QDir::homePath(), "~" );
+    }
+
+    item->setText( label );
+}
+
+bool projectPathlongerThan( const KDevelop::IProject* prj1, const KDevelop::IProject* prj2 )
+{
+    // compare path depth of two project folders
+    const int c1 = prj1->folder().pathOrUrl().split( QDir::separator() ).count();
+    const int c2 = prj2->folder().pathOrUrl().split( QDir::separator() ).count();
+    return c1 > c2;
+}
+
+void KDevDocumentView::updateProjectPaths()
+{
+
+    m_projects = KDevelop::ICore::self()->projectController()->projects();
+
+    // sort folders, longest first, so replacing them one by one is save
+    qSort( m_projects.begin(), m_projects.end(), projectPathlongerThan );
+
+    foreach ( KDevCategoryItem *it, m_documentModel->categoryList() )
+        updateCategoryItem( it );
 }
 
 void KDevDocumentView::contentChanged( KDevelop::IDocument* )
