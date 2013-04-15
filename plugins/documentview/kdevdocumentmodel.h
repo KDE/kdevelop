@@ -92,8 +92,6 @@ protected:
 
 private:
     KUrl m_url;
-
-private:
     KDevelop::IDocument::DocumentState m_documentState;
 };
 
