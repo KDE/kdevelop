@@ -279,7 +279,8 @@ bool canLaunchMetadataFile(const KUrl& url)
 {
     KConfig cfg(url.toLocalFile(), KConfig::SimpleConfig);
     KConfigGroup group(&cfg, "Desktop Entry");
-    return group.readEntry("ServiceTypes", QString()) == "Plasma/Applet";
+    QStringList services = group.readEntry("ServiceTypes", group.readEntry("X-KDE-ServiceTypes", QStringList()));
+    return services.contains("Plasma/Applet");
 }
 
 //don't bother, nobody uses this interface
