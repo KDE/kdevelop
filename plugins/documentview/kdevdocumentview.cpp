@@ -308,7 +308,7 @@ void KDevDocumentView::closed( KDevelop::IDocument* document )
 
 void KDevDocumentView::updateCategoryItem( KDevCategoryItem *item )
 {
-    QString label = item->url().pathOrUrl();
+    QString label = QFileInfo(item->url().pathOrUrl()).path();
 
     foreach ( const KDevelop::IProject* prj, m_projects ) {
         const QString possibleLabel = prj->relativeUrl( KUrl(label) ).pathOrUrl();
