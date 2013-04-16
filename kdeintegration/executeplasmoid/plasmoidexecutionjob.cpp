@@ -60,12 +60,17 @@ PlasmoidExecutionJob::PlasmoidExecutionJob(ExecutePlasmoidPlugin* iface, KDevelo
     setDelegate(new KDevelop::OutputDelegate);
  
     QString workingDirectory;
-    
-    QString possiblePath = KUrl(cfg->project()->folder(), identifier).toLocalFile();
-    if(QFileInfo(possiblePath).isDir()) {
-        workingDirectory = possiblePath;
+    KDevelop::IProject* p = cfg->project();
+    if(p) {
+        QString possiblePath = KUrl(p->folder(), identifier).toLocalFile();
+        if(QFileInfo(possiblePath).isDir()) {
+            workingDirectory = possiblePath;
+        } else {
+            workingDirectory = p->folder().toLocalFile();
+            arguments += identifier;
+        }
     } else {
-        workingDirectory = cfg->project()->folder().toLocalFile();
+        workingDirectory = QDir::tempPath();
         arguments += identifier;
     }
     
