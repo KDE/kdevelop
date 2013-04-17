@@ -169,12 +169,14 @@ CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
 
     setupDBus();
 
-    IExecutePlugin* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IExecutePlugin")->extension<IExecutePlugin>();
-    Q_ASSERT(iface);
-    KDevelop::LaunchConfigurationType* type = core()->runController()->launchConfigurationTypeForId( iface->nativeAppConfigTypeId() );
-    Q_ASSERT(type);
-    type->addLauncher( new GdbLauncher( this ) );
-    
+    QList<IPlugin*> plugins = KDevelop::ICore::self()->pluginController()->allPluginsForExtension("org.kdevelop.IExecutePlugin");
+    foreach(IPlugin* plugin, plugins) {
+        IExecutePlugin* iface = plugin->extension<IExecutePlugin>();
+        Q_ASSERT(iface);
+        KDevelop::LaunchConfigurationType* type = core()->runController()->launchConfigurationTypeForId( iface->nativeAppConfigTypeId() );
+        Q_ASSERT(type);
+        type->addLauncher( new GdbLauncher( this, iface ) );
+    }
     // The output from tracepoints goes to "application" window, because
     // we don't have any better alternative, and using yet another window
     // is undesirable. Besides, this makes tracepoint look even more similar

@@ -27,6 +27,7 @@
 #include <interfaces/launchconfigurationpage.h>
 #include <outputview/outputjob.h>
 
+class IExecutePlugin;
 namespace Ui
 {
 class DebuggerConfigWidget;
@@ -67,7 +68,7 @@ private:
 class GdbLauncher : public KDevelop::ILauncher
 {
 public:
-    GdbLauncher( GDBDebugger::CppDebuggerPlugin* plugin );
+    GdbLauncher( GDBDebugger::CppDebuggerPlugin* plugin, IExecutePlugin* execute );
     virtual QList< KDevelop::LaunchConfigurationPageFactory* > configPages() const;
     virtual QString description() const;
     virtual QString id();
@@ -77,6 +78,7 @@ public:
 private:
     QList<KDevelop::LaunchConfigurationPageFactory*> factoryList;
     GDBDebugger::CppDebuggerPlugin* m_plugin;
+    IExecutePlugin* m_execute;
 };
 
 #endif

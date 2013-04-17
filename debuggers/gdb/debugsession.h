@@ -35,6 +35,7 @@
 #include "gdbglobal.h"
 #include "mi/gdbmi.h"
 
+class IExecutePlugin;
 class KToolBar;
 
 namespace KTextEditor {
@@ -87,7 +88,7 @@ public Q_SLOTS:
     /**
      * Start the debugger, and execute the program specified by \a run.
      */
-    bool startProgram(KDevelop::ILaunchConfiguration* run);
+    bool startProgram(KDevelop::ILaunchConfiguration* run, IExecutePlugin* execute);
     virtual void restartDebugger();
     virtual void stopDebugger();
     virtual void interruptDebugger();

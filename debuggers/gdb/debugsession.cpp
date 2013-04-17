@@ -945,7 +945,7 @@ bool DebugSession::startDebugger(KDevelop::ILaunchConfiguration* cfg)
     return true;
 }
 
-bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg)
+bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg, IExecutePlugin* iface)
 {
     if (stateIsOn( s_appNotStarted ) )
     {
@@ -980,8 +980,6 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg)
         }
     }
 
-    IExecutePlugin* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IExecutePlugin")->extension<IExecutePlugin>();
-    Q_ASSERT(iface);
 
     // Configuration values
     bool    config_forceBPSet_ = grp.readEntry( GDBDebugger::allowForcedBPEntry, true );
@@ -993,6 +991,7 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg)
     KUrl config_runGdbScript_ = grp.readEntry( GDBDebugger::remoteGdbRunEntry, KUrl() );
     int config_outputRadix_ = 10;
     
+    Q_ASSERT(iface);
     bool config_useExternalTerminal = iface->useTerminal( cfg );
     QString config_externalTerminal = iface->terminal( cfg );
     if (!config_externalTerminal.isEmpty()) {
