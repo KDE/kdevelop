@@ -203,7 +203,7 @@ KJob* PlasmoidLauncher::start(const QString& launchMode, KDevelop::ILaunchConfig
     return 0;
 }
 
-KJob* PlasmoidLauncher::dependencies(KDevelop::ILaunchConfiguration* cfg)
+KJob* PlasmoidLauncher::calculateDependencies(KDevelop::ILaunchConfiguration* cfg)
 {
     QVariantList deps = KDevelop::stringToQVariant( cfg->config().readEntry( "Dependencies", QString() ) ).toList();
     if( !deps.isEmpty() ) 
@@ -230,6 +230,12 @@ KJob* PlasmoidLauncher::dependencies(KDevelop::ILaunchConfiguration* cfg)
     }
     return 0;
 }
+
+KJob* PlasmoidLauncher::dependencies(KDevelop::ILaunchConfiguration* cfg)
+{
+    return calculateDependencies(cfg);
+}
+
 
 QStringList PlasmoidLauncher::supportedModes() const
 {
@@ -265,9 +271,9 @@ QList<KDevelop::LaunchConfigurationPageFactory*> PlasmoidExecutionConfigType::co
     return factoryList;
 }
 
-QString PlasmoidExecutionConfigType::id() const
+QString PlasmoidExecutionConfigType::typeId()
 {
-    return "PlasmoudLauncherType";
+    return "PlasmoidLauncherType";
 }
 
 KIcon PlasmoidExecutionConfigType::icon() const

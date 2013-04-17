@@ -44,42 +44,29 @@
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iproject.h>
 #include <project/projectmodel.h>
+#include <KStandardDirs>
 
-PlasmoidExecutionJob::PlasmoidExecutionJob(ExecutePlasmoidPlugin* iface, KDevelop::ILaunchConfiguration* cfg)
-    : KDevelop::OutputJob( iface )
+using namespace KDevelop;
+
+PlasmoidExecutionJob::PlasmoidExecutionJob(ExecutePlasmoidPlugin* iface, ILaunchConfiguration* cfg)
+    : OutputJob( iface )
 {
     QString identifier = cfg->config().readEntry("PlasmoidIdentifier", "");
-    QStringList arguments = cfg->config().readEntry("Arguments", QStringList());
     
     Q_ASSERT(!identifier.isEmpty());
     setToolTitle(i18n("Plasmoid Viewer"));
     setCapabilities(Killable);
-    setStandardToolView( KDevelop::IOutputView::RunView );
-    setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
+    setStandardToolView( IOutputView::RunView );
+    setBehaviours(IOutputView::AllowUserClose | IOutputView::AutoScroll );
     setObjectName("plasmoidviewer "+identifier);
-    setDelegate(new KDevelop::OutputDelegate);
- 
-    QString workingDirectory;
-    KDevelop::IProject* p = cfg->project();
-    if(p) {
-        QString possiblePath = KUrl(p->folder(), identifier).toLocalFile();
-        if(QFileInfo(possiblePath).isDir()) {
-            workingDirectory = possiblePath;
-        } else {
-            workingDirectory = p->folder().toLocalFile();
-            arguments += identifier;
-        }
-    } else {
-        workingDirectory = QDir::tempPath();
-        arguments += identifier;
-    }
+    setDelegate(new OutputDelegate);
+
+    m_process = new CommandExecutor(executable(cfg), this);
+    m_process->setArguments( arguments(cfg) );
+    m_process->setWorkingDirectory(workingDirectory(cfg));
     
-    m_process = new KDevelop::CommandExecutor("plasmoidviewer", this);
-    m_process->setArguments( arguments );
-    m_process->setWorkingDirectory(workingDirectory);
-    
-    KDevelop::OutputModel* model = new KDevelop::OutputModel(m_process->workingDirectory(), this);
-    model->setFilteringStrategy(KDevelop::OutputModel::CompilerFilter);
+    OutputModel* model = new OutputModel(m_process->workingDirectory(), this);
+    model->setFilteringStrategy(OutputModel::CompilerFilter);
     setModel( model );
 
     connect(m_process, SIGNAL(receivedStandardError(QStringList)), model,
@@ -106,9 +93,9 @@ bool PlasmoidExecutionJob::doKill()
     return true;
 }
 
-KDevelop::OutputModel* PlasmoidExecutionJob::model()
+OutputModel* PlasmoidExecutionJob::model()
 {
-    return qobject_cast<KDevelop::OutputModel*>( OutputJob::model() );
+    return qobject_cast<OutputModel*>( OutputJob::model() );
 }
 
 void PlasmoidExecutionJob::slotCompleted(int code)
@@ -130,3 +117,38 @@ void PlasmoidExecutionJob::slotFailed(QProcess::ProcessError error)
     model()->appendLine( i18n("*** Failed ***") );
     emitResult();
 }
+
+QString PlasmoidExecutionJob::executable(ILaunchConfiguration*)
+{
+    return KStandardDirs::findExe("plasmoidviewer");
+}
+
+QStringList PlasmoidExecutionJob::arguments(ILaunchConfiguration* cfg)
+{
+    QStringList arguments = cfg->config().readEntry("Arguments", QStringList());
+    if(workingDirectory(cfg) == QDir::tempPath()) {
+        QString identifier = cfg->config().readEntry("PlasmoidIdentifier", "");
+        arguments += identifier;
+    }
+    return arguments;
+}
+
+QString PlasmoidExecutionJob::workingDirectory(ILaunchConfiguration* cfg)
+{
+    QString workingDirectory;
+    IProject* p = cfg->project();
+    if(p) {
+        QString identifier = cfg->config().readEntry("PlasmoidIdentifier", "");
+        QString possiblePath = KUrl(p->folder(), identifier).toLocalFile();
+        if(QFileInfo(possiblePath).isDir()) {
+            workingDirectory = possiblePath;
+        }
+    }
+
+    if(workingDirectory.isEmpty())
+    {
+        workingDirectory = QDir::tempPath();
+    }
+    return workingDirectory;
+}
+

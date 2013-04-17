@@ -24,6 +24,7 @@
 #include <QtCore/QProcess>
 #include <outputview/outputjob.h>
 
+class KUrl;
 class ExecutePlasmoidPlugin;
 
 namespace KDevelop
@@ -44,10 +45,15 @@ public:
     virtual void start();
     virtual bool doKill();
     KDevelop::OutputModel* model();
-    
+
+    static QString executable(KDevelop::ILaunchConfiguration* cfg);
+    static QStringList arguments(KDevelop::ILaunchConfiguration* cfg);
+    static QString workingDirectory(KDevelop::ILaunchConfiguration* cfg);
+
 public slots:
     void slotCompleted(int);
     void slotFailed(QProcess::ProcessError);
+
 private:
     KDevelop::CommandExecutor* m_process;
 };

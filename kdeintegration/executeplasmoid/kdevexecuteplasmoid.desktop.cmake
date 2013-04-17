@@ -84,4 +84,5 @@ X-KDevelop-Category=Global
 X-KDE-PluginInfo-Name=kdevexecuteplasmoid
 X-KDE-PluginInfo-Author=Aleix Pol Gonzalez
 X-KDE-PluginInfo-License=GPL
+X-KDevelop-Interfaces=org.kdevelop.IExecutePlugin
 X-KDevelop-Mode=NoGUI
