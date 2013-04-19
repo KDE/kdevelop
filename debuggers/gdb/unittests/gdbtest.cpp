@@ -838,9 +838,8 @@ void GdbTest::testCoreFile()
     debugeeProcess.start();
     debugeeProcess.waitForFinished();
     kDebug() << debugeeProcess.readAll();
-    QFile f2("core");
-    if (!f2.exists()) {
-        QFAIL("no core dump found");
+    if (!QFile::exists("core")) {
+        QSKIP("no core dump found, check your system configuration (see /proc/sys/kernel/core_pattern).", SkipSingle);
     }
 
     TestDebugSession *session = new TestDebugSession;
