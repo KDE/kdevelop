@@ -57,7 +57,7 @@ void CTestUtils::createTestSuites(const QList< Test >& testSuites, ProjectFolder
                 if (exeTgt->text() == test.executable)
                 {
                     exe = exeTgt->builtUrl().toLocalFile();
-                    kDebug(9042) << "Find proper test target path" << test.executable << "->" << exe;
+                    kDebug(9042) << "Found proper test target path" << test.executable << "->" << exe;
                     break;
                 }
             }
