@@ -277,6 +277,7 @@ public:
                                     m_core->uiController()->activeMainWindow() );
             return;
         }
+        m_currentlyOpening += url;
 
         foreach( IProject* project, m_projects )
         {
@@ -297,12 +298,10 @@ public:
         emit q->projectAboutToBeOpened( project );
         if ( !project->open( url ) )
         {
+            m_currentlyOpening.removeAll(url);
             q->abortOpeningProject(project);
             project->deleteLater();
-            return;
         }
-
-        m_currentlyOpening << url;
     }
 
 };
