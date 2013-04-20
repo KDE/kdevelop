@@ -20,7 +20,7 @@
 #include "splash.h"
 
 KDevSplashScreen::KDevSplashScreen(const QPixmap& pixmap, Qt::WindowFlags f)
-    : KSplashScreen(pixmap, f | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint)
+    : KSplashScreen(pixmap, f | Qt::FramelessWindowHint)
     , m_view(new QDeclarativeView)
 {
     QString splashScript = KStandardDirs::locate("data", "kdevelop/splash.qml");
