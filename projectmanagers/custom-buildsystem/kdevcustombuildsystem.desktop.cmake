@@ -31,6 +31,7 @@ Comment=Allows to use custom buildsystems for KDevelop projects
 Comment[ca]=Permet utilitzar sistemes de construcció personalitzats per projectes del KDevelop
 Comment[ca@valencia]=Permet utilitzar sistemes de construcció personalitzats per projectes del KDevelop
 Comment[da]=Lader dig bruge tilpassede byggesystemer til KDevelop-projekter
+Comment[de]=Ermöglicht ein benutzerdefiniertes Erstellungssystem für KDevelop-Projekte
 Comment[el]=Επιτρέπει τη χρήση προσαρμοσμένων συστημάτων κατασκευής για έργα KDevelop
 Comment[es]=Permite usar un sistema de construcción personalizado en los proyectos de KDevelop
 Comment[et]=Võimaldab kasutada KDevelopi projektide puhul kohandatud ehitamissüsteemi
