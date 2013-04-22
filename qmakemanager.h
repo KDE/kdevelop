@@ -72,10 +72,6 @@ public:
     virtual QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectFolderItem*) const;
     //END IBuildSystemManager
 
-    //FIXME: properly implement in abstractfilemanagerplugin
-    virtual bool moveFilesAndFolders( const QList<KDevelop::ProjectBaseItem*>&,
-                                      KDevelop::ProjectFolderItem* ) { return false; }
-
 private slots:
     void slotFolderAdded( KDevelop::ProjectFolderItem* folder );
     void slotRunQMake();
