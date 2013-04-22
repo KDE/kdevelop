@@ -232,7 +232,12 @@ ProjectFolderItem* QMakeProjectManager::projectRootItem( IProject* project, cons
     projecturl.adjustPath( KUrl::AddTrailingSlash );
     projecturl.setFileName( projectfile );
     QHash<QString,QString> qmvars = queryQMake( project );
-    QMakeMkSpecs* mkspecs = new QMakeMkSpecs( findBasicMkSpec( qmvars ), qmvars );
+    const QString mkSpecFile = findBasicMkSpec( qmvars );
+    if (mkSpecFile.isEmpty()) {
+        kWarning() << "disabling QMake support";
+        return new ProjectFolderItem( project, url, 0 );
+    }
+    QMakeMkSpecs* mkspecs = new QMakeMkSpecs( mkSpecFile, qmvars );
     mkspecs->setProject( project );
     mkspecs->read();
     QMakeCache* cache = findQMakeCache( project );
@@ -267,7 +272,10 @@ ProjectFolderItem* QMakeProjectManager::buildFolderItem( IProject* project, cons
 
     //TODO: included by not-parent file (in a nother file-tree-branch).
     QMakeFolderItem* qmakeParent = findQMakeFolderParent(parent);
-    Q_ASSERT(qmakeParent);
+    if (!qmakeParent) {
+        // happens for bad qmake configurations
+        return 0;
+    }
 
     foreach( const QString& file, projectFiles ) {
         const QString absFile = dir.absoluteFilePath(file);
@@ -488,7 +496,10 @@ QHash< QString, QString > QMakeProjectManager::defines(ProjectBaseItem* item) co
 {
     QHash<QString,QString> d;
     QMakeFolderItem *folder = findQMakeFolderParent(item);
-    Q_ASSERT(folder);
+    if (!folder) {
+        // happens for bad qmake configurations
+        return d;
+    }
     foreach(QMakeProjectFile *pro, folder->projectFiles()) {
         foreach(QMakeProjectFile::DefinePair def, pro->defines()) {
             d.insert(def.first, def.second);
@@ -508,8 +519,10 @@ QHash<QString,QString> QMakeProjectManager::queryQMake( IProject* project ) cons
     p.setWorkingDirectory( project->folder().toLocalFile() );
     p << QMakeConfig::qmakeBinary( project ) << "-query";
     int execed = p.execute();
-    Q_ASSERT_X(!execed, Q_FUNC_INFO, qPrintable(p.program().join(" ")));
-    Q_UNUSED(execed);
+    if (execed != 0) {
+        kWarning() << "failed to execute qmake query for project" << project->name() << p.program().join(" ") << "return code was:" << execed;
+        return QHash<QString,QString>();
+    }
 
     foreach( const QByteArray& line, p.readAllStandardOutput().split('\n')) {
         const int colon = line.indexOf(':');
@@ -585,9 +598,17 @@ bool QMakeProjectManager::projectNeedsConfiguration(IProject* project)
 {
     KConfigGroup cg(project->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
     bool qmakeValid = cg.readEntry<KUrl>(QMakeConfig::QMAKE_BINARY, KUrl("")).isValid();
+    if (!qmakeValid) {
+        return true;
+    }
+    if (queryQMake(project).isEmpty()) {
+        return true;
+    }
     bool buildDirValid = cg.readEntry<KUrl>(QMakeConfig::BUILD_FOLDER, KUrl("")).isValid();
-    kDebug() << "qmakeValid=" << qmakeValid << "  buildDirValid=" << buildDirValid;
-    return( !(qmakeValid && buildDirValid) );
+    if (!buildDirValid) {
+        return true;
+    }
+    return false;
 }
 
 #include "qmakemanager.moc"
