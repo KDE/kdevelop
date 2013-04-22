@@ -82,30 +82,7 @@ void WorkingSetToolButton::setWorkingSet(WorkingSet* set)
 
 void WorkingSetToolButton::contextMenuEvent(QContextMenuEvent* ev)
 {
-    Q_ASSERT(m_set);
-
-    QToolButton::contextMenuEvent(ev);
-
-    QMenu menu;
-    Sublime::MainWindow* mainWindow = dynamic_cast<Sublime::MainWindow*>(Core::self()->uiController()->activeMainWindow());
-    Q_ASSERT(mainWindow);
-    if(m_set->id() == mainWindow->area()->workingSet()) {
-        menu.addAction(i18n("Close Working Set"), this, SLOT(closeSet()));
-        menu.addAction(i18n("Duplicate Working Set"), this, SLOT(duplicateSet()));
-    }else{
-        menu.addAction(i18n("Load Working Set (Left Click)"), this, SLOT(loadSet()));
-//         menu.addAction(i18n("Merge Working Set"), this, SLOT(mergeSet()));
-//         menu.addSeparator();
-//         menu.addAction(i18n("Intersect Working Set"), this, SLOT(intersectSet()));
-//         menu.addAction(i18n("Subtract Working Set"), this, SLOT(subtractSet()));
-    }
-    menu.actions()[0]->setIcon(m_set->activeIcon());
-
-    if(!m_set->hasConnectedAreas()) {
-        menu.addSeparator();
-        menu.addAction(i18n("Delete Working Set"), m_set, SLOT(deleteSet()));
-    }
-    menu.exec(ev->globalPos());
+    showTooltip();
 
     ev->accept();
 }
