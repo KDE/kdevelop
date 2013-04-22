@@ -73,19 +73,11 @@ void WorkingSetToolButton::setWorkingSet(WorkingSet* set)
         return;
     }
 
-    QColor activeBgColor = palette().color(QPalette::Active, QPalette::Highlight);
-    QColor normalBgColor = palette().color(QPalette::Active, QPalette::Base);
-    QColor useColor;
     if(m_mainWindow && m_mainWindow->area() && m_mainWindow->area()->workingSet() == set->id()) {
-        useColor = KColorUtils::mix(normalBgColor, activeBgColor, 0.6);
         setIcon(set->activeIcon());
     }else{
-        useColor = KColorUtils::mix(normalBgColor, activeBgColor, 0.2);
         setIcon(set->inactiveIcon());
     }
-
-    QString sheet = QString("QToolButton { background : %1}").arg(htmlColor(useColor));
-    setStyleSheet(sheet);
 }
 
 void WorkingSetToolButton::contextMenuEvent(QContextMenuEvent* ev)
@@ -107,7 +99,7 @@ void WorkingSetToolButton::contextMenuEvent(QContextMenuEvent* ev)
 //         menu.addAction(i18n("Intersect Working Set"), this, SLOT(intersectSet()));
 //         menu.addAction(i18n("Subtract Working Set"), this, SLOT(subtractSet()));
     }
-    menu.actions()[0]->setIcon(KIcon(m_set->iconName()));
+    menu.actions()[0]->setIcon(m_set->activeIcon());
 
     if(!m_set->hasConnectedAreas()) {
         menu.addSeparator();
