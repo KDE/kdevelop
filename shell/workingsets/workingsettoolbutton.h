@@ -50,6 +50,7 @@ public slots:
     void subtractSet();
     void intersectSet();
     void buttonTriggered();
+    void showTooltip();
 
 private:
     virtual void contextMenuEvent(QContextMenuEvent* ev);

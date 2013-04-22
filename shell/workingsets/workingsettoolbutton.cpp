@@ -90,7 +90,7 @@ void WorkingSetToolButton::contextMenuEvent(QContextMenuEvent* ev)
     Sublime::MainWindow* mainWindow = dynamic_cast<Sublime::MainWindow*>(Core::self()->uiController()->activeMainWindow());
     Q_ASSERT(mainWindow);
     if(m_set->id() == mainWindow->area()->workingSet()) {
-        menu.addAction(i18n("Close Working Set (Left Click)"), this, SLOT(closeSet()));
+        menu.addAction(i18n("Close Working Set"), this, SLOT(closeSet()));
         menu.addAction(i18n("Duplicate Working Set"), this, SLOT(duplicateSet()));
     }else{
         menu.addAction(i18n("Load Working Set (Left Click)"), this, SLOT(loadSet()));
@@ -175,40 +175,43 @@ void WorkingSetToolButton::closeSet(bool ask)
 bool WorkingSetToolButton::event(QEvent* e)
 {
     if(m_toolTipEnabled && e->type() == QEvent::ToolTip) {
-        Q_ASSERT(m_set);
-
+        showTooltip();
         e->accept();
-        static WorkingSetToolButton* oldTooltipButton;
-
-        WorkingSetController* controller = Core::self()->workingSetControllerInternal();
-
-        if(controller->tooltip() && oldTooltipButton == this)
-            return true;
-
-        oldTooltipButton = this;
-
-        controller->showToolTip(m_set, QCursor::pos() + QPoint(10, 20));
-
-        QRect extended(parentWidget()->mapToGlobal(geometry().topLeft()),
-                       parentWidget()->mapToGlobal(geometry().bottomRight()));
-        controller->tooltip()->addExtendRect(extended);
-
         return true;
     }
+    
     return QToolButton::event(e);
+}
+
+void WorkingSetToolButton::showTooltip()
+{
+    Q_ASSERT(m_set);
+    static WorkingSetToolButton* oldTooltipButton;
+
+    WorkingSetController* controller = Core::self()->workingSetControllerInternal();
+
+    if(controller->tooltip() && oldTooltipButton == this)
+        return;
+
+    oldTooltipButton = this;
+
+    controller->showToolTip(m_set, QCursor::pos() + QPoint(10, 20));
+
+    QRect extended(parentWidget()->mapToGlobal(geometry().topLeft()),
+                    parentWidget()->mapToGlobal(geometry().bottomRight()));
+    controller->tooltip()->addExtendRect(extended);
 }
 
 void WorkingSetToolButton::buttonTriggered()
 {
     Q_ASSERT(m_set);
 
-    //Only close the working-set if the file was saved before
-    if(!Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(mainWindow(), KDevelop::IDocument::Default, true))
-        return;
-
     if(mainWindow()->area()->workingSet() == m_set->id()) {
-        closeSet(false);
+        showTooltip();
     }else{
+        //Only close the working-set if the file was saved before
+        if(!Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(mainWindow(), KDevelop::IDocument::Default, true))
+            return;
         m_set->setPersistent(true);
         mainWindow()->area()->setWorkingSet(m_set->id());
     }
