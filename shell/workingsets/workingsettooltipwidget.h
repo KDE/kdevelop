@@ -22,6 +22,7 @@
 #include <QWidget>
 #include <QMap>
 
+class QLabel;
 class QToolButton;
 class QPushButton;
 
@@ -49,6 +50,8 @@ public slots:
     void previousDocument();
 
 private:
+    bool isActiveSet() const;
+
     class FileWidget : public QWidget {
         public:
         QToolButton* m_button;
@@ -62,6 +65,7 @@ private:
     QPushButton* m_mergeButton;
     QPushButton* m_subtractButton;
     QPushButton* m_openButton;
+    QLabel* m_documentsLabel;
     WorkingSetToolButton* m_setButton;
 
     QPushButton* m_deleteButton;
