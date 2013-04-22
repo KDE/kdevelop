@@ -42,6 +42,9 @@ using namespace KDevelop;
 
 const int toolTipTimeout = 2000;
 
+//Random set of icons that are well distinguishable from each other. If the user doesn't have them, they won't be used.
+QStringList setIcons = QStringList() << "chronometer" << "games-config-tiles" << "im-user" << "irc-voice" << "irc-operator" << "office-chart-pie" << "office-chart-ring" << "speaker" << "view-pim-notes" << "esd" << "akonadi" << "kleopatra" << "nepomuk" << "package_edutainment_art" << "package_games_amusement" << "package_games_sports" << "package_network" << "package_office_database" << "package_system_applet" << "package_system_emulator" << "preferences-desktop-notification-bell" << "wine" << "utilities-desktop-extra" << "step" << "preferences-web-browser-cookies" << "preferences-plugin" << "preferences-kcalc-constants" << "preferences-desktop-icons" << "tagua" << "inkscape" << "java" << "kblogger" << "preferences-desktop-personal" << "emblem-favorite" << "face-smile-big" << "face-embarrassed" << "user-identity" << "mail-tagged" << "media-playlist-suffle" << "weather-clouds";
+
 WorkingSetController::WorkingSetController(Core* core)
     : m_emptyWorkingSet(0), m_core(core), m_changingWorkingSet(false)
 {
@@ -54,20 +57,17 @@ void WorkingSetController::initialize()
 {
     //Load all working-sets
     KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
-    foreach(const QString& set, setConfig.groupList()) {
-        // do not load working set if the id contains an '|', because it then belongs to an area.
-        // this is functionally equivalent to the if ( ! config->icon ) stuff which was there before.
-        if ( set.contains('|') ) {
-            continue;
-        }
-        getWorkingSet(set);
+    foreach(const QString& set, setConfig.groupList())
+    {
+        if(setConfig.group(set).hasKey("iconName"))
+            getWorkingSet(set, setConfig.group(set).readEntry<QString>("iconName", QString()));
+        else
+            kDebug() << "have garbage working set with id " << set;
     }
-
-    m_emptyWorkingSet = new WorkingSet("empty");
-
-    if(!(Core::self()->setupFlags() & Core::NoUi)) {
-        setupActions();
-    }
+    
+    m_emptyWorkingSet = new WorkingSet("empty", "invalid");
+    
+    if(!(Core::self()->setupFlags() & Core::NoUi)) setupActions();
 }
 
 void WorkingSetController::cleanup()
@@ -96,19 +96,49 @@ void WorkingSetController::cleanup()
     m_emptyWorkingSet = 0;
 }
 
+bool WorkingSetController::usingIcon(const QString& icon)
+{
+    foreach(WorkingSet* set, m_workingSets)
+        if(set->iconName() == icon)
+            return true;
+    return false;
+}
+
+bool WorkingSetController::iconValid(const QString& icon)
+{
+    return !KIconLoader::global()->iconPath(icon, KIconLoader::Small, true).isNull();
+}
+
 WorkingSet* WorkingSetController::newWorkingSet(const QString& prefix)
 {
     QString newId = QString("%1_%2").arg(prefix).arg(qrand() % 10000000);
     return getWorkingSet(newId);
 }
 
-WorkingSet* WorkingSetController::getWorkingSet(const QString& id)
+WorkingSet* WorkingSetController::getWorkingSet(const QString& id, const QString& _icon)
 {
     if(id.isEmpty())
         return m_emptyWorkingSet;
     
     if(!m_workingSets.contains(id)) {
-        WorkingSet* set = new WorkingSet(id);
+        QString icon = _icon;
+        if(icon.isEmpty())
+        {
+            for(int a = 0; a < 100; ++a) {
+                int pick = (qHash(id) + a) % setIcons.size(); ///@todo Pick icons semantically, by content, and store them in the config
+                if(!usingIcon(setIcons[pick])) {
+                    if(iconValid(setIcons[pick])) {
+                        icon = setIcons[pick];
+                    break;
+                    }
+                }
+            }
+        }
+        if(icon.isEmpty()) {
+            kDebug() << "found no icon for working-set" << id;
+            icon = "invalid";
+        }
+        WorkingSet* set = new WorkingSet(id, icon);
         connect(set, SIGNAL(aboutToRemove(WorkingSet*)),
                 this, SIGNAL(aboutToRemoveWorkingSet(WorkingSet*)));
         m_workingSets[id] = set;

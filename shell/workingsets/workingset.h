@@ -36,9 +36,11 @@ class WorkingSet : public QObject {
     Q_OBJECT
 
 public:
-    WorkingSet(QString id);
+    WorkingSet(QString id, QString icon);
 
     bool isConnected(Sublime::Area* area);
+
+    QString iconName() const;
 
     QIcon activeIcon() const;
 
@@ -89,12 +91,10 @@ private:
     void saveFromArea(Sublime::Area* area, Sublime::AreaIndex *areaIndex, KConfigGroup setGroup, KConfigGroup areaGroup);
     void loadToArea(Sublime::Area* area, Sublime::AreaIndex *areaIndex, KConfigGroup setGroup, KConfigGroup areaGroup, QMultiMap<QString, Sublime::View*>& recycle);
 
-    // Draws an icon based on this WorkingSet's ID.
-    QIcon generateIcon(bool active) const;
-
     WorkingSet(const WorkingSet& rhs);
 
     QString m_id;
+    QString m_iconName;
     QIcon m_activeIcon, m_inactiveIcon, m_inactiveNonPersistentIcon;
     QList<QPointer<Sublime::Area> > m_areas;
     static bool m_loading;
