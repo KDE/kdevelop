@@ -74,7 +74,7 @@ QIcon WorkingSet::generateIcon(bool active) const
 
     QPainter painter(&pixmap);
     // color for non-colored squares, paint them brighter if the working set is the active one
-    const int inact = active ? 120 : 40;
+    const int inact = 40;
     QColor darkColor = QColor::fromRgb(inact, inact, inact);
     // color for colored squares
     // this code is not fragile, you can just tune the magic formulas at random and see what looks good.
