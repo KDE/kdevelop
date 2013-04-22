@@ -37,7 +37,7 @@
 
 #define ifDebug(x)
 
-QHash<QString, QString> QMakeProjectFile::m_qtIncludeDirCache = QHash<QString, QString>();
+QHash<QString, QPair<QString, QString> > QMakeProjectFile::m_qmakeQueryCache = QHash<QString, QPair<QString, QString> >();
 
 const QStringList QMakeProjectFile::FileVariables = QStringList() << "IDLS"
         << "RESOURCES" << "IMAGES" << "LEXSOURCES" << "DISTFILES"
@@ -95,20 +95,26 @@ bool QMakeProjectFile::read()
     m_variableValues["OUT_PWD"] = QStringList() << outPwd();
 
     const QString binary = QMakeConfig::qmakeBinary(project());
-    if (!m_qtIncludeDirCache.contains(binary)) {
+    if (!m_qmakeQueryCache.contains(binary)) {
         // Let's cache the Qt include dir
         KProcess qtInc;
-        qtInc << binary << "-query" << "QT_INSTALL_HEADERS";
+        qtInc << binary << "-query" << "QT_INSTALL_HEADERS" << "QT_VERSION";
         qtInc.setOutputChannelMode( KProcess::OnlyStdoutChannel );
         qtInc.start();
         if ( !qtInc.waitForFinished() ) {
             kWarning() << "Failed to query Qt header path using qmake, is qmake installed?";
         } else {
-            QByteArray result = qtInc.readAll();
-            m_qtIncludeDirCache[binary] = QString::fromLocal8Bit( result ).trimmed();
+            const QStringList result = QString::fromLocal8Bit(qtInc.readAll()).split(QRegExp("[:\n]"), QString::SkipEmptyParts);
+            if (!result.size() == 4) {
+                kWarning() << "Failed to query qmake - bad qmake binary configured?" << binary;
+                m_qmakeQueryCache[binary] = qMakePair(QString(), QString());
+            } else {
+                m_qmakeQueryCache[binary] = qMakePair(result.at(1).trimmed(), result.at(3).trimmed());
+            }
         }
     }
-    m_qtIncludeDir = m_qtIncludeDirCache.value(binary);
+    m_qtIncludeDir = m_qmakeQueryCache.value(binary).first;
+    m_qtVersion = m_qmakeQueryCache.value(binary).second;
 
     return QMakeFile::read();
 }
@@ -239,6 +245,18 @@ KUrl::List QMakeProjectFile::includeDirectories() const
                 url.setPath(m_qtIncludeDir + "/QtWidgets");
             else if ( module == "webkitwidgets" )
                 url.setPath(m_qtIncludeDir + "/QtWebKitWidgets");
+            else if ( module == "quick" )
+                url.setPath(m_qtIncludeDir + "/QtQuick");
+            else if ( module == "concurrent" )
+                url.setPath(m_qtIncludeDir + "/QtConcurrent");
+            else if ( module == "location" )
+                url.setPath(m_qtIncludeDir + "/QtLocation");
+            else if ( module == "qml" )
+                url.setPath(m_qtIncludeDir + "/QtQml");
+            else if ( module == "bluetooth" )
+                url.setPath(m_qtIncludeDir + "/QtBluetooth");
+            else if ( module == "core-private" )
+                url.setPath(m_qtIncludeDir + "/QtCore/" + m_qtVersion + "/QtCore/private/");
             else {
                 kWarning() << "unhandled QT module:" << module;
                 continue;
