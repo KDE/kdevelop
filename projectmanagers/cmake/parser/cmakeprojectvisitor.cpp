@@ -2456,11 +2456,11 @@ QStringList CMakeProjectVisitor::traverseGlob(const QString& startPath, const QS
         else
             dirsToSearch << startPath;
         QStringList filePaths;
-        foreach (QString dirToSearch, dirsToSearch)
+        foreach (const QString& dirToSearch, dirsToSearch)
         {
             QDir dir(dirToSearch);
             QStringList fileNames = dir.entryList(nameFilters, QDir::Files);
-            foreach (QString fileName, fileNames)
+            foreach (const QString& fileName, fileNames)
             {
                 filePaths << dir.filePath(fileName);
             }
