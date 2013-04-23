@@ -36,7 +36,7 @@ Rectangle {
     // "active" colors for the rectangles
     // only half as many colors, use each color twice.
     // TODO could try if it looks nicer with one color each
-    property variant activeColors: ["#B70F0F", "#FF1616", "#FF2727", "#FF3300", "#FF7B00", "#FFCC00", "#CCFF00", "#99FF00", "#1DB300", "#076813",
+    property variant activeColors: ["#960A0A", "#B40F0F", "#FF4000", "#FF8400", "#FFDD00", "#CDEC00", "#99FF00", "#4CB700", "#1DB300", "#076813",
                                     "#08BA5B", "#00DA99", "#00B5E7", "#085BBB", "#2A5CFF", "#7044FF", "#9625FF", "#F013FF", "#FF2CC0", "#FF1A1D"]
     // this size is a fallback, it's scaled in the c++ code actually,
     // but this is the real splash size, so it's useful for testing in qmlviewer

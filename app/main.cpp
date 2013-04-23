@@ -394,9 +394,8 @@ int main( int argc, char *argv[] )
     {
         QPixmap pm;
         pm.load( splashFile );
-        splash = new KDevSplashScreen(pm);
+        splash = new KDevSplashScreen( pm );
         splash->show();
-        splash->showMessage("0");
         splash->repaint();
         app.processEvents();
     }
