@@ -23,7 +23,7 @@
 class KDevHash
 {
 public:
-  KDevHash() : m_hash(2166136261) {}
+  KDevHash() : m_hash(2166136261u) {}
   KDevHash(uint hash) : m_hash(hash) {}
   operator unsigned int()
   {
