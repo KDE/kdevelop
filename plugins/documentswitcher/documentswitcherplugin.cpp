@@ -104,7 +104,7 @@ void DocumentSwitcherPlugin::setViewGeometry(Sublime::MainWindow* window)
     // the view will get quite high with many open files but I think thats ok. Otherwise one can easily tweak the 
     // max size to be only 1/2th of the central widget size
     const QSize viewSize( std::min( view->sizeHintForColumn(0) + view->verticalScrollBar()->width(), viewMaxSize.width() ), 
-                          std::min( view->sizeHintForRow(0) * view->model()->rowCount(), viewMaxSize.height() ) );
+                          std::min( std::max( view->sizeHintForRow(0) * view->model()->rowCount(), view->sizeHintForRow(0) * 6 ), viewMaxSize.height() ) );
 
     // Position should be central over the editor area, so map to global from parent of central widget since 
     // the view is positioned in global coords
