@@ -92,7 +92,7 @@ void CTestUtils::createTestSuites(const QList< Test >& testSuites, ProjectFolder
             (*it).replace("#[bin_dir]", binDir);
         }
         
-        CTestSuite* suite = new CTestSuite(test.name, exeUrl, files, folder->project(), args);
+        CTestSuite* suite = new CTestSuite(test.name, exeUrl, files, folder->project(), args, test.properties.value("WILL_FAIL", "FALSE") == "TRUE");
         ICore::self()->runController()->registerJob(new CTestFindJob(suite));
     }
 }

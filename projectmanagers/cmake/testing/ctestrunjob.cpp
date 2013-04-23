@@ -41,13 +41,14 @@
 
 using namespace KDevelop;
 
-CTestRunJob::CTestRunJob(CTestSuite* suite, const QStringList& cases, OutputJob::OutputJobVerbosity verbosity, QObject* parent)
+CTestRunJob::CTestRunJob(CTestSuite* suite, const QStringList& cases, OutputJob::OutputJobVerbosity verbosity, bool expectFail, QObject* parent)
 : KJob(parent)
 , m_suite(suite)
 , m_cases(cases)
 , m_job(0)
 , m_outputJob(0)
 , m_verbosity(verbosity)
+, m_expectFail(expectFail)
 {
     foreach (const QString& testCase, cases)
     {
@@ -186,11 +187,11 @@ void CTestRunJob::rowsInserted(const QModelIndex &parent, int startRow, int endR
             TestResult::TestCaseResult result = TestResult::NotRun;
             if (line.startsWith("PASS   :"))
             {
-                result = TestResult::Passed;
+                result = m_expectFail ? TestResult::UnexpectedPass : TestResult::Passed;
             }
             else if (line.startsWith("FAIL!  :"))
             {
-                result = TestResult::Failed;
+                result = m_expectFail ? TestResult::ExpectedFail : TestResult::Failed;
             }
             else if (line.startsWith("XFAIL  :"))
             {

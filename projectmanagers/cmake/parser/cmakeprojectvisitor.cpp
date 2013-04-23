@@ -2147,6 +2147,19 @@ int CMakeProjectVisitor::visit(const GetDirPropertyAst* getdp)
     return 1;
 }
 
+int CMakeProjectVisitor::visit(const SetTestsPropsAst* stp)
+{
+    QMap<QString,QString> props;
+    foreach(const SetTestsPropsAst::PropPair& property, stp->properties()) {
+        props.insert(property.first, property.second);
+    }
+
+    for(QList<Test>::iterator it=m_testSuites.begin(), itEnd=m_testSuites.end(); it!=itEnd; ++it) {
+        it->properties = props;
+    }
+    return 1;
+}
+
 int CMakeProjectVisitor::visit( const WhileAst * whileast)
 {
     CMakeCondition cond(this);

@@ -66,6 +66,7 @@ struct Test
     QStringList arguments;
     QStringList files;
     bool isTarget;
+    QMap<QString, QString> properties;
 };
 
 enum PropertyType { GlobalProperty, DirectoryProperty, TargetProperty, SourceProperty, TestProperty, VariableProperty };
