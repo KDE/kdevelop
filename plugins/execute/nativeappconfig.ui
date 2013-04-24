@@ -113,7 +113,7 @@
       <item row="0" column="1">
        <widget class="KLineEdit" name="arguments">
         <property name="toolTip">
-         <string>Enter arguments to give to the executable</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enter arguments to give to the executable.&lt;br/&gt;You can pass arguments containing space characters by putting them in double-quotes.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="clickMessage">
          <string>Enter arguments to give to the executable</string>
