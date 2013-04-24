@@ -27,6 +27,7 @@ Comment=QWidget subclass with a separate Qt Designer file
 Comment[bs]=QWidget podklasa s odvojenom Qt Designer datotekom
 Comment[ca]=Subclasse QWidget amb un fitxer separat del Qt Designer
 Comment[ca@valencia]=Subclasse QWidget amb un fitxer separat del Qt Designer
+Comment[de]=QWidget-Subklasse mit einer separaten Qt-Designer-Datei
 Comment[el]=QWidget subclass με ξεχωριστό Qt Designer αρχείο
 Comment[es]=Subclase de QWidget con un archivo separado del Diseñador de Qt
 Comment[et]=QWidgeti alamklass eraldi Qt Designeri failiga

@@ -27,6 +27,7 @@ Comment=A unit test suite using the QTest library without a graphical user inter
 Comment[bs]=Testno okruženje jedinica koje koristi QTest biblioteku bez grafičkog interfejsa
 Comment[ca]=Un conjunt de proves unitàries utilitzant la biblioteca QTest sense interfície gràfica d'usuari
 Comment[ca@valencia]=Un conjunt de proves unitàries utilitzant la biblioteca QTest sense interfície gràfica d'usuari
+Comment[de]=Eine Unit-Test-Suite, die die QTest-Bibliothek ohne grafische Oberfläche verwendet
 Comment[el]=Μια unit test σουίτα με χρήση QTest βιβλιοθήκης χωρίς γραφικό περιβάλλον χρήστη
 Comment[es]=Una suite de pruebas unitarias que usa la biblioteca QTest sin una interfaz gráfica de usuario
 Comment[et]=Ühiktest komplekt QTesti teegi abil ilma graafilise kasutajaliideseta

@@ -27,6 +27,7 @@ Comment=A unit test using the PHPUnit framework
 Comment[bs]=Test jedinica koristeći PHPUnit okruženje
 Comment[ca]=Una prova unitària utilitzant l'entorn de treball PHPUnit
 Comment[ca@valencia]=Una prova unitària utilitzant l'entorn de treball PHPUnit
+Comment[de]=Eine Unit-Test-Suite, die das PHPUnit-Framework verwendet
 Comment[el]=Ένα unit test με χρήση του PHPUnit framework
 Comment[es]=Una prueba unitaria que usa la infraestructura PhpUnit
 Comment[et]=Ühiktest PHPUniti raamistiku abil
