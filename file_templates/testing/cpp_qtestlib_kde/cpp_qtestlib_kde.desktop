@@ -29,6 +29,7 @@ Comment=A unit test using the QTest library with KDE extensions
 Comment[ca]=Una prova unitària utilitzant la biblioteca QTest amb extensions del KDE
 Comment[ca@valencia]=Una prova unitària utilitzant la biblioteca QTest amb extensions del KDE
 Comment[da]=En unittest-suite som bruger biblioteket QTest med udvidelser til KDE
+Comment[de]=Eine Unit-Test-Suite, die die QTest-Bibliothek mit KDE-Erweiterungen verwendet
 Comment[el]=Ένα unit test με χρήση βιβλιοθήκης QTest και επεκτάσεις KDE
 Comment[es]=Una prueba unitaria que usa la biblioteca QTest con extensiones de KDE
 Comment[et]=Ühiktest QTesti teegi abil KDE laiendustega

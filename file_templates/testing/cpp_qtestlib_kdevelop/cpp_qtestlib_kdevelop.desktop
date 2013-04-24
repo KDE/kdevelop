@@ -29,6 +29,7 @@ Comment=A unit test using the QTest library with KDevPlatform test helpers
 Comment[ca]=Una prova unitària utilitzant la biblioteca QTest amb els auxiliars de proves del KDevPlatform
 Comment[ca@valencia]=Una prova unitària utilitzant la biblioteca QTest amb els auxiliars de proves del KDevPlatform
 Comment[da]=En unittest som bruger biblioteket QTest med testhjælperne fra KDevPlatform
+Comment[de]=Eine Unit-Test-Suite, die die QTest-Bibliothek mit KDevPlatform-Testhelfern verwendet
 Comment[el]=Ένα unit test με χρήση βιβλιοθήκης QTest και βοηθητικά για KDevPlatform test
 Comment[es]=Una prueba unitaria que usa la biblioteca QTest con pruebas auxiliares de KDevPlatform
 Comment[et]=Ühiktest QTesti teegi abil KDevPlatformi testimise abiprogrammidega
