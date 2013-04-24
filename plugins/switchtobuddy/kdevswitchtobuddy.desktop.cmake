@@ -4,6 +4,7 @@ Comment=Allows switching between buddy documents like implementation and header 
 Comment[ca]=Permet commutar entre document associats com fitxers d'implementacions i de capçaleres.
 Comment[ca@valencia]=Permet commutar entre document associats com fitxers d'implementacions i de capçaleres.
 Comment[da]=Gør det muligt at skifte imellem vennedokumenter som implementerings- og headerfil.
+Comment[de]=Ermöglicht das Umschalten zwischen verwandten Dokumenten wie Implementations- und Header-Dateien.
 Comment[el]=Επιτρέπει την εναλλαγή ανάμεσα σε συμπληρωματικά έγγραφα όπως αρχεία implementation και header
 Comment[es]=Permite cambiar entre documentos relacionados, como la implementación y el archivo de cabecera.
 Comment[et]=Võimaldab lülituda sõltlasdokumentide, näiteks teostus- ja päisefaili vahel.

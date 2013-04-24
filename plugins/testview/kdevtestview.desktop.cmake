@@ -5,6 +5,7 @@ Comment=Lets you see and run unit tests.
 Comment[ca]=Us permet veure i executar proves unitàries.
 Comment[ca@valencia]=Vos permet veure i executar proves unitàries.
 Comment[da]=Lader dig se og køre unittest.
+Comment[de]=Unit-Tests anzeigen und ausführen.
 Comment[el]=Σας επιτρέπει να δείτε και να εκτελείτε unit tests.
 Comment[es]=Le permite ver y ejecutar pruebas unitarias.
 Comment[et]=Ühiktestide näitamine ja käivitamine.
