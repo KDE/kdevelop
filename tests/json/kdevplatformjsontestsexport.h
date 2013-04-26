@@ -20,8 +20,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef KDEVPLATFORMJSONTESTS_H
-#define KDEVPLATFORMJSONTESTS_H
+#ifndef KDEVPLATFORM_KDEVPLATFORMJSONTESTS_H
+#define KDEVPLATFORM_KDEVPLATFORMJSONTESTS_H
 
 /* needed for KDE_EXPORT macros */
 #include <kdemacros.h>

@@ -19,8 +19,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef QUICKOPENPLUGIN_H
-#define QUICKOPENPLUGIN_H
+#ifndef KDEVPLATFORM_PLUGIN_QUICKOPENPLUGIN_H
+#define KDEVPLATFORM_PLUGIN_QUICKOPENPLUGIN_H
 
 #include <QtCore/QVariant>
 #include <QtCore/QTimer>
@@ -240,6 +240,6 @@ class QuickOpenLineEdit : public KDevelop::IQuickOpenLine {
     QuickOpenWidgetCreator* m_widgetCreator;
 };
 
-#endif // QUICKOPENPLUGIN_H
+#endif // KDEVPLATFORM_PLUGIN_QUICKOPENPLUGIN_H
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

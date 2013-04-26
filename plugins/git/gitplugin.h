@@ -19,8 +19,8 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#ifndef GIT_PLUGIN_H
-#define GIT_PLUGIN_H
+#ifndef KDEVPLATFORM_PLUGIN_GIT_PLUGIN_H
+#define KDEVPLATFORM_PLUGIN_GIT_PLUGIN_H
 
 #include <vcs/interfaces/idistributedversioncontrol.h>
 #include <vcs/dvcs/dvcsplugin.h>

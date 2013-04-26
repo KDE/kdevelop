@@ -18,8 +18,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef PREFERENCES_H
-#define PREFERENCES_H
+#ifndef KDEVPLATFORM_PLUGIN_PREFERENCES_H
+#define KDEVPLATFORM_PLUGIN_PREFERENCES_H
 
 #include <kdevcmodule.h>
 

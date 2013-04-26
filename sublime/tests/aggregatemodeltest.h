@@ -16,8 +16,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef AGGREGATEMODELTEST_H
-#define AGGREGATEMODELTEST_H
+#ifndef KDEVPLATFORM_AGGREGATEMODELTEST_H
+#define KDEVPLATFORM_AGGREGATEMODELTEST_H
 
 #include <QObject>
 

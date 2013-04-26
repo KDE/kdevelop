@@ -17,8 +17,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef PROJECTMODELITEMDELEGATE_H
-#define PROJECTMODELITEMDELEGATE_H
+#ifndef KDEVPLATFORM_PLUGIN_PROJECTMODELITEMDELEGATE_H
+#define KDEVPLATFORM_PLUGIN_PROJECTMODELITEMDELEGATE_H
 
 #include <QItemDelegate>
 
@@ -32,4 +32,4 @@ class ProjectModelItemDelegate : public QItemDelegate
         void drawStyledBackground(QPainter* painter, const QStyleOptionViewItem& option) const;
 };
 
-#endif // PROJECTMODELITEMDELEGATE_H
+#endif // KDEVPLATFORM_PLUGIN_PROJECTMODELITEMDELEGATE_H

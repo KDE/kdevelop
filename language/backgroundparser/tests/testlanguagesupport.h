@@ -19,8 +19,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef TESTLANGUAGESUPPORT_H
-#define TESTLANGUAGESUPPORT_H
+#ifndef KDEVPLATFORM_TESTLANGUAGESUPPORT_H
+#define KDEVPLATFORM_TESTLANGUAGESUPPORT_H
 
 #include "language/interfaces/ilanguagesupport.h"
 

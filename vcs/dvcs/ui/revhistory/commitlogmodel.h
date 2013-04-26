@@ -18,8 +18,8 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#ifndef COMMITLOGMODEL_H
-#define COMMITLOGMODEL_H
+#ifndef KDEVPLATFORM_COMMITLOGMODEL_H
+#define KDEVPLATFORM_COMMITLOGMODEL_H
 
 #include <QtCore/QAbstractItemModel>
 #include <QtCore/QList>

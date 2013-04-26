@@ -17,8 +17,8 @@
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
 */
-#ifndef KDEVIMPORTPROJECTJOB_H
-#define KDEVIMPORTPROJECTJOB_H
+#ifndef KDEVPLATFORM_IMPORTPROJECTJOB_H
+#define KDEVPLATFORM_IMPORTPROJECTJOB_H
 
 #include <kjob.h>
 // #include "projectmodel.h"
@@ -58,6 +58,6 @@ private:
 };
 
 }
-#endif // IMPORTPROJECTJOB_H
+#endif // KDEVPLATFORM_IMPORTPROJECTJOB_H
 
 

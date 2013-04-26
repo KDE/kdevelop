@@ -11,8 +11,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef INDEXED_STRING_H
-#define INDEXED_STRING_H
+#ifndef KDEVPLATFORM_INDEXED_STRING_H
+#define KDEVPLATFORM_INDEXED_STRING_H
 
 //krazy:excludeall=dpointer,inline
 

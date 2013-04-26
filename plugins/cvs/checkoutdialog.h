@@ -8,8 +8,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef CHECKOUTDIALOG_H
-#define CHECKOUTDIALOG_H
+#ifndef KDEVPLATFORM_PLUGIN_CHECKOUTDIALOG_H
+#define KDEVPLATFORM_PLUGIN_CHECKOUTDIALOG_H
 
 #include <QDialog>
 

@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef DUCHAINREGISTER_H
-#define DUCHAINREGISTER_H
+#ifndef KDEVPLATFORM_DUCHAINREGISTER_H
+#define KDEVPLATFORM_DUCHAINREGISTER_H
 
 #include "duchainbase.h"
 

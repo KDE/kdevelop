@@ -8,8 +8,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef CVSGENERICOUTPUTVIEW_H
-#define CVSGENERICOUTPUTVIEW_H
+#ifndef KDEVPLATFORM_PLUGIN_CVSGENERICOUTPUTVIEW_H
+#define KDEVPLATFORM_PLUGIN_CVSGENERICOUTPUTVIEW_H
 
 #include <QWidget>
 #include <KJob>

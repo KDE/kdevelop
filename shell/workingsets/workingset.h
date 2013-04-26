@@ -16,8 +16,8 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#ifndef WORKINGSET_H
-#define WORKINGSET_H
+#ifndef KDEVPLATFORM_WORKINGSET_H
+#define KDEVPLATFORM_WORKINGSET_H
 
 #include <QObject>
 #include <QIcon>
@@ -102,4 +102,4 @@ private:
 
 }
 
-#endif // WORKINGSET_H
+#endif // KDEVPLATFORM_WORKINGSET_H

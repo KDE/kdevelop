@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef INDEXEDTYPE_H
-#define INDEXEDTYPE_H
+#ifndef KDEVPLATFORM_INDEXEDTYPE_H
+#define KDEVPLATFORM_INDEXEDTYPE_H
 
 #include "abstracttype.h"
 #include <language/duchain/referencecounting.h>

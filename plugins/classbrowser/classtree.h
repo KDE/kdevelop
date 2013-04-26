@@ -20,8 +20,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef CLASSTREE_H
-#define CLASSTREE_H
+#ifndef KDEVPLATFORM_PLUGIN_CLASSTREE_H
+#define KDEVPLATFORM_PLUGIN_CLASSTREE_H
 
 #include <QtGui/QTreeView>
 #include <QtCore/QPointer>

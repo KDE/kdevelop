@@ -20,8 +20,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef SUBLIMEEXPORT_H
-#define SUBLIMEEXPORT_H
+#ifndef KDEVPLATFORM_SUBLIMEEXPORT_H
+#define KDEVPLATFORM_SUBLIMEEXPORT_H
 
 /* needed for KDE_EXPORT macros */
 #include <kdemacros.h>

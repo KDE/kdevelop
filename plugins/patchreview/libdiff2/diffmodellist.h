@@ -15,8 +15,8 @@
 **
 *******************************************************************************/
 
-#ifndef DIFFMODELLIST_H
-#define DIFFMODELLIST_H
+#ifndef KDEVPLATFORM_PLUGIN_DIFFMODELLIST_H
+#define KDEVPLATFORM_PLUGIN_DIFFMODELLIST_H
 
 #include <QtCore/QList> // include for the base class
 
@@ -48,4 +48,4 @@ public:
 
 } // End of Namespace Diff2
 
-#endif // DIFFMODELLIST_H
+#endif // KDEVPLATFORM_PLUGIN_DIFFMODELLIST_H

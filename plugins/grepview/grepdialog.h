@@ -11,8 +11,8 @@
 *                                                                         *
 ***************************************************************************/
 
-#ifndef GREPDIALOG_H
-#define GREPDIALOG_H
+#ifndef KDEVPLATFORM_PLUGIN_GREPDIALOG_H
+#define KDEVPLATFORM_PLUGIN_GREPDIALOG_H
 
 #include <kdialog.h>
 #include "ui_grepwidget.h"

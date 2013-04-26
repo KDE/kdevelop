@@ -19,8 +19,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef PROBLEMMODEL_H
-#define PROBLEMMODEL_H
+#ifndef KDEVPLATFORM_PLUGIN_PROBLEMMODEL_H
+#define KDEVPLATFORM_PLUGIN_PROBLEMMODEL_H
 
 #include <QtCore/QAbstractItemModel>
 #include <QReadWriteLock>
@@ -118,4 +118,4 @@ private:
     const static int MaxTimeout;
 };
 
-#endif // PROBLEMMODEL_H
+#endif // KDEVPLATFORM_PLUGIN_PROBLEMMODEL_H

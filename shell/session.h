@@ -17,8 +17,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#ifndef SESSION_H
-#define SESSION_H
+#ifndef KDEVPLATFORM_SESSION_H
+#define KDEVPLATFORM_SESSION_H
 
 #include "shellexport.h"
 #include <QtCore/QObject>

@@ -19,8 +19,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef WATCHEDDOCUMENTSET_H
-#define WATCHEDDOCUMENTSET_H
+#ifndef KDEVPLATFORM_PLUGIN_WATCHEDDOCUMENTSET_H
+#define KDEVPLATFORM_PLUGIN_WATCHEDDOCUMENTSET_H
 
 #include <QObject>
 #include <QSet>
@@ -129,4 +129,4 @@ public:
     virtual ProblemModel::Scope getScope() const;
 };
 
-#endif // WATCHEDDOCUMENTSET_H
+#endif // KDEVPLATFORM_PLUGIN_WATCHEDDOCUMENTSET_H

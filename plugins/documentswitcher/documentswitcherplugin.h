@@ -16,8 +16,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef DOCUMENTSWITCHERPLUGIN_H
-#define DOCUMENTSWITCHERPLUGIN_H
+#ifndef KDEVPLATFORM_PLUGIN_DOCUMENTSWITCHERPLUGIN_H
+#define KDEVPLATFORM_PLUGIN_DOCUMENTSWITCHERPLUGIN_H
 
 #include <interfaces/iplugin.h>
 #include <QtCore/QVariant>

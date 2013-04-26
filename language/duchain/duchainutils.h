@@ -20,8 +20,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef DUCHAINUTILS_H
-#define DUCHAINUTILS_H
+#ifndef KDEVPLATFORM_DUCHAINUTILS_H
+#define KDEVPLATFORM_DUCHAINUTILS_H
 
 #include <KDE/KIcon>
 
@@ -121,4 +121,4 @@ namespace DUChainUtils {
 }
 }
 
-#endif // DUCHAINUTILS_H
+#endif // KDEVPLATFORM_DUCHAINUTILS_H

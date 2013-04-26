@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef TYPEREGISTER_H
-#define TYPEREGISTER_H
+#ifndef KDEVPLATFORM_TYPEREGISTER_H
+#define KDEVPLATFORM_TYPEREGISTER_H
 
 #include "abstracttype.h"
 #include "typesystemdata.h"

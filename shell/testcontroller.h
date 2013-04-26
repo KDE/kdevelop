@@ -17,8 +17,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVELOP_TESTCONTROLLER_H
-#define KDEVELOP_TESTCONTROLLER_H
+#ifndef KDEVPLATFORM_TESTCONTROLLER_H
+#define KDEVPLATFORM_TESTCONTROLLER_H
 
 #include "interfaces/itestcontroller.h"
 
@@ -53,4 +53,4 @@ private:
 
 }
 
-#endif // KDEVELOP_TESTCONTROLLER_H
+#endif // KDEVPLATFORM_TESTCONTROLLER_H

@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef SVNIMPORTJOB_H
-#define SVNIMPORTJOB_H
+#ifndef KDEVPLATFORM_PLUGIN_SVNIMPORTJOB_H
+#define KDEVPLATFORM_PLUGIN_SVNIMPORTJOB_H
 
 #include "svnjobbase.h"
 #include <vcs/interfaces/ibasicversioncontrol.h>

@@ -16,8 +16,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
 ***************************************************************************/
-#ifndef SUBLIMEMAINWINDOWOPERATOR_H
-#define SUBLIMEMAINWINDOWOPERATOR_H
+#ifndef KDEVPLATFORM_SUBLIMEMAINWINDOWOPERATOR_H
+#define KDEVPLATFORM_SUBLIMEMAINWINDOWOPERATOR_H
 
 //krazy:excludeall=dpointer
 

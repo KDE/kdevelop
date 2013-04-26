@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef KDEVPLATFORM_CORE_P_H
-#define KDEVPLATFORM_CORE_P_H
+#ifndef KDEVPLATFORM_PLATFORM_CORE_P_H
+#define KDEVPLATFORM_PLATFORM_CORE_P_H
 
 #include <kcomponentdata.h>
 #include <core.h>

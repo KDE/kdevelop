@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef TESTSUITE_H
-#define TESTSUITE_H
+#ifndef KDEVPLATFORM_TESTSUITE_H
+#define KDEVPLATFORM_TESTSUITE_H
 
 #include <QVariantMap>
 #include "delayedoutput.h"
@@ -102,4 +102,4 @@ inline bool runTests(const QVariantMap &data, T object)
 
 }
 
-#endif //TESTSUITE_H
+#endif //KDEVPLATFORM_TESTSUITE_H

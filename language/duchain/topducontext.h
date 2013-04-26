@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef TOPDUCONTEXT_H
-#define TOPDUCONTEXT_H
+#ifndef KDEVPLATFORM_TOPDUCONTEXT_H
+#define KDEVPLATFORM_TOPDUCONTEXT_H
 
 #include <QtCore/QMutex>
 
@@ -418,6 +418,6 @@ inline uint qHash(const IndexedTopDUContext& ctx) {
 }
 Q_DECLARE_METATYPE(KDevelop::ReferencedTopDUContext);
 
-#endif // TOPDUCONTEXT_H
+#endif // KDEVPLATFORM_TOPDUCONTEXT_H
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

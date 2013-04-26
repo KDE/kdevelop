@@ -20,8 +20,8 @@
  * This is an internal header
 */
 
-#ifndef VCSDIFFPATCHSOURCES_H
-#define VCSDIFFPATCHSOURCES_H
+#ifndef KDEVPLATFORM_VCSDIFFPATCHSOURCES_H
+#define KDEVPLATFORM_VCSDIFFPATCHSOURCES_H
 
 #include <ktemporaryfile.h>
 #include <qtextstream.h>
@@ -129,4 +129,4 @@ public slots:
 ///Returns whether the diff was shown successfully.
 bool KDEVPLATFORMVCS_EXPORT showVcsDiff(KDevelop::IPatchSource* vcsDiff);
 
-#endif // VCSDIFFPATCHSOURCES_H
+#endif // KDEVPLATFORM_VCSDIFFPATCHSOURCES_H

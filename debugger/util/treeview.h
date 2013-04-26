@@ -19,8 +19,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef TREEVIEW_H
-#define TREEVIEW_H
+#ifndef KDEVPLATFORM_TREEVIEW_H
+#define KDEVPLATFORM_TREEVIEW_H
 
 #include <QtGui/QTreeView>
 

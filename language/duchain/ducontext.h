@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef DUCONTEXT_H
-#define DUCONTEXT_H
+#ifndef KDEVPLATFORM_DUCONTEXT_H
+#define KDEVPLATFORM_DUCONTEXT_H
 
 #include <QtCore/QHash>
 #include <QtCore/QList>
@@ -905,6 +905,6 @@ KDEVPLATFORMLANGUAGE_EXPORT QList<RangeInRevision> allUses(DUContext* context,
 
 Q_DECLARE_TYPEINFO(KDevelop::DUContext::Import, Q_MOVABLE_TYPE);
 
-#endif // DUCONTEXT_H
+#endif // KDEVPLATFORM_DUCONTEXT_H
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

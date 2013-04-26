@@ -8,8 +8,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef CVSMAINVIEW_H
-#define CVSMAINVIEW_H
+#ifndef KDEVPLATFORM_PLUGIN_CVSMAINVIEW_H
+#define KDEVPLATFORM_PLUGIN_CVSMAINVIEW_H
 
 #include <QWidget>
 #include <KJob>

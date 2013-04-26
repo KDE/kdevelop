@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef KDEVPLATFORMTESTCORE_H
-#define KDEVPLATFORMTESTCORE_H
+#ifndef KDEVPLATFORM_KDEVPLATFORMTESTCORE_H
+#define KDEVPLATFORM_KDEVPLATFORMTESTCORE_H
 
 #include "kdevplatformtestsexport.h"
 #include <shell/core.h>

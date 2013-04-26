@@ -17,8 +17,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef KOMPARESUPPORT_H
-#define KOMPARESUPPORT_H
+#ifndef KDEVPLATFORM_KOMPARESUPPORT_H
+#define KDEVPLATFORM_KOMPARESUPPORT_H
 
 #include <config-kdevplatform.h>
 
@@ -60,4 +60,4 @@ class KompareWidgets
 
 }
 
-#endif //KOMPARESUPPORT_H
+#endif //KDEVPLATFORM_KOMPARESUPPORT_H

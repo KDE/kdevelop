@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CODEMODEL_H
-#define CODEMODEL_H
+#ifndef KDEVPLATFORM_CODEMODEL_H
+#define KDEVPLATFORM_CODEMODEL_H
 
 #include "identifier.h"
 

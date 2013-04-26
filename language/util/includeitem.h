@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEV_INCLUDEITEM_H
-#define KDEV_INCLUDEITEM_H
+#ifndef KDEVPLATFORM_INCLUDEITEM_H
+#define KDEVPLATFORM_INCLUDEITEM_H
 
 #include <kurl.h>
 
@@ -44,4 +44,4 @@ public:
 
 }
 
-#endif // KDEV_INCLUDEITEM_H
+#endif // KDEVPLATFORM_INCLUDEITEM_H

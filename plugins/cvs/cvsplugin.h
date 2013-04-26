@@ -8,8 +8,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef CVSPLUGIN_H
-#define CVSPLUGIN_H
+#ifndef KDEVPLATFORM_PLUGIN_CVSPLUGIN_H
+#define KDEVPLATFORM_PLUGIN_CVSPLUGIN_H
 
 #include <KUrl>
 #include <KJob>

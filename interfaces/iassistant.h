@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVELOP_IASSISTANT_H
-#define KDEVELOP_IASSISTANT_H
+#ifndef KDEVPLATFORM_IASSISTANT_H
+#define KDEVPLATFORM_IASSISTANT_H
 
 #include <QtCore/QPointer>
 #include <QtGui/QIcon>
@@ -142,4 +142,4 @@ private:
 
 }
 
-#endif // KDEVELOP_IASSISTANT_H
+#endif // KDEVPLATFORM_IASSISTANT_H

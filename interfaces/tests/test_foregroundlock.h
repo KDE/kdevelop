@@ -16,8 +16,8 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#ifndef TEST_FOREGROUNDLOCK_H
-#define TEST_FOREGROUNDLOCK_H
+#ifndef KDEVPLATFORM_TEST_FOREGROUNDLOCK_H
+#define KDEVPLATFORM_TEST_FOREGROUNDLOCK_H
 
 #include <QObject>
 
@@ -32,4 +32,4 @@ private slots:
 }
 
 
-#endif // TEST_FOREGROUNDLOCK_H
+#endif // KDEVPLATFORM_TEST_FOREGROUNDLOCK_H

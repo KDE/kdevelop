@@ -20,8 +20,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef CONTEXTBROWSERPLUGIN_H
-#define CONTEXTBROWSERPLUGIN_H
+#ifndef KDEVPLATFORM_PLUGIN_CONTEXTBROWSERPLUGIN_H
+#define KDEVPLATFORM_PLUGIN_CONTEXTBROWSERPLUGIN_H
 
 #include <QVariant>
 #include <QSet>
@@ -254,6 +254,6 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContext
     int m_nextHistoryIndex;
 };
 
-#endif // CONTEXTBROWSERPLUGIN_H
+#endif // KDEVPLATFORM_PLUGIN_CONTEXTBROWSERPLUGIN_H
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

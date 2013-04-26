@@ -20,8 +20,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef TEST_BACKGROUNDPARSER_H
-#define TEST_BACKGROUNDPARSER_H
+#ifndef KDEVPLATFORM_TEST_BACKGROUNDPARSER_H
+#define KDEVPLATFORM_TEST_BACKGROUNDPARSER_H
 
 #include <QObject>
 
@@ -106,4 +106,4 @@ private:
     JobPlan m_jobPlan;
 };
 
-#endif // TEST_BACKGROUNDPARSER_H
+#endif // KDEVPLATFORM_TEST_BACKGROUNDPARSER_H

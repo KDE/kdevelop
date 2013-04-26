@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef TESTTEMPLATESMODEL_H
-#define TESTTEMPLATESMODEL_H
+#ifndef KDEVPLATFORM_TESTTEMPLATESMODEL_H
+#define KDEVPLATFORM_TESTTEMPLATESMODEL_H
 
 #include <QtTest>
 
@@ -43,4 +43,4 @@ private:
     KDevelop::TemplatesModel* model;
 };
 
-#endif // TESTTEMPLATESMODEL_H
+#endif // KDEVPLATFORM_TESTTEMPLATESMODEL_H

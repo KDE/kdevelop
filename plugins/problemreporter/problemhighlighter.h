@@ -20,8 +20,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef PROBLEM_HIGHLIGHT_H
-#define PROBLEM_HIGHLIGHT_H
+#ifndef KDEVPLATFORM_PLUGIN_PROBLEM_HIGHLIGHT_H
+#define KDEVPLATFORM_PLUGIN_PROBLEM_HIGHLIGHT_H
 
 
 #include <language/interfaces/iproblem.h>
@@ -54,4 +54,4 @@ public slots:
     void settingsChanged();
 };
 
-#endif // PROBLEM_HIGHLIGHT_H
+#endif // KDEVPLATFORM_PLUGIN_PROBLEM_HIGHLIGHT_H

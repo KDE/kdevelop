@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef CONTEXTMENUEXTENSION_H
-#define CONTEXTMENUEXTENSION_H
+#ifndef KDEVPLATFORM_CONTEXTMENUEXTENSION_H
+#define KDEVPLATFORM_CONTEXTMENUEXTENSION_H
 
 #include <QtCore/QString>
 #include <QtCore/QList>

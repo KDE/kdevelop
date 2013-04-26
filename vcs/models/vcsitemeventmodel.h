@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef VCSITEMEVENTMODEL_H
-#define VCSITEMEVENTMODEL_H
+#ifndef KDEVPLATFORM_VCSITEMEVENTMODEL_H
+#define KDEVPLATFORM_VCSITEMEVENTMODEL_H
 
 
 #include <QtGui/QStandardItemModel>

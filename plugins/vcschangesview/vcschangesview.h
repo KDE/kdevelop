@@ -18,8 +18,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef VCSCHANGESVIEW_H
-#define VCSCHANGESVIEW_H
+#ifndef KDEVPLATFORM_PLUGIN_VCSCHANGESVIEW_H
+#define KDEVPLATFORM_PLUGIN_VCSCHANGESVIEW_H
 
 #include <QTreeView>
 
@@ -45,4 +45,4 @@ class VcsChangesView : public QTreeView
         void reload(const QList<KUrl>& p);
 };
 
-#endif // VCSCHANGESVIEW_H
+#endif // KDEVPLATFORM_PLUGIN_VCSCHANGESVIEW_H

@@ -9,8 +9,8 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-#ifndef OUTPUTFORMATS_H
-#define OUTPUTFORMATS_H
+#ifndef KDEVPLATFORM_OUTPUTFORMATS_H
+#define KDEVPLATFORM_OUTPUTFORMATS_H
 
 #include <QString>
 #include <QRegExp>

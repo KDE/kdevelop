@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef KDEV_IDEBUGSESSION_H
-#define KDEV_IDEBUGSESSION_H
+#ifndef KDEVPLATFORM_IDEBUGSESSION_H
+#define KDEVPLATFORM_IDEBUGSESSION_H
 
 #include <QtCore/QObject>
 #include <QtCore/QAbstractItemModel>

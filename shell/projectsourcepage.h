@@ -8,8 +8,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef PROJECTSOURCEPAGE_H
-#define PROJECTSOURCEPAGE_H
+#ifndef KDEVPLATFORM_PROJECTSOURCEPAGE_H
+#define KDEVPLATFORM_PROJECTSOURCEPAGE_H
 
 #include <QWidget>
 
@@ -62,4 +62,4 @@ class ProjectSourcePage : public QWidget
 };
 
 }
-#endif // PROJECTSOURCEPAGE_H
+#endif // KDEVPLATFORM_PROJECTSOURCEPAGE_H

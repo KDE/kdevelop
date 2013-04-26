@@ -18,8 +18,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef PROJECTKCMODULE_H
-#define PROJECTKCMODULE_H
+#ifndef KDEVPLATFORM_PROJECTKCMODULE_H
+#define KDEVPLATFORM_PROJECTKCMODULE_H
 
 #include <kcmodule.h>
 #include <QtCore/QVariant>

@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef KDEVELOP_IFRAMESTACKMODEL_H
-#define KDEVELOP_IFRAMESTACKMODEL_H
+#ifndef KDEVPLATFORM_IFRAMESTACKMODEL_H
+#define KDEVPLATFORM_IFRAMESTACKMODEL_H
 
 #include "idebugsession.h"
 

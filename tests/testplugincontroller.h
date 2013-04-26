@@ -19,8 +19,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef TESTPLUGINCONTROLLER_H
-#define TESTPLUGINCONTROLLER_H
+#ifndef KDEVPLATFORM_TESTPLUGINCONTROLLER_H
+#define KDEVPLATFORM_TESTPLUGINCONTROLLER_H
 
 #include "kdevplatformtestsexport.h"
 
@@ -51,4 +51,4 @@ public:
 
 }
 
-#endif // TESTPLUGINCONTROLLER_H
+#endif // KDEVPLATFORM_TESTPLUGINCONTROLLER_H

@@ -19,8 +19,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef IPLUGIN_H
-#define IPLUGIN_H
+#ifndef KDEVPLATFORM_IPLUGIN_H
+#define KDEVPLATFORM_IPLUGIN_H
 
 #include <QtCore/QObject>
 #include <kxmlguiclient.h>

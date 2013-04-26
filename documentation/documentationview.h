@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef DOCUMENTATIONVIEW_H
-#define DOCUMENTATIONVIEW_H
+#ifndef KDEVPLATFORM_DOCUMENTATIONVIEW_H
+#define KDEVPLATFORM_DOCUMENTATIONVIEW_H
 
 #include <QWidget>
 #include <QAbstractListModel>
@@ -96,4 +96,4 @@ signals:
         void providersChanged();
 };
 
-#endif // DOCUMENTATIONVIEW_H
+#endif // KDEVPLATFORM_DOCUMENTATIONVIEW_H

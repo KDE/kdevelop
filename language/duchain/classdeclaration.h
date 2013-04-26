@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CLASSDECLARATION_H
-#define CLASSDECLARATION_H
+#ifndef KDEVPLATFORM_CLASSDECLARATION_H
+#define KDEVPLATFORM_CLASSDECLARATION_H
 
 #include <language/duchain/declaration.h>
 #include <language/duchain/declarationdata.h>
@@ -136,5 +136,5 @@ private:
 
 Q_DECLARE_TYPEINFO(KDevelop::BaseClassInstance, Q_MOVABLE_TYPE);
 
-#endif // CLASSDECLARATION_H
+#endif // KDEVPLATFORM_CLASSDECLARATION_H
 

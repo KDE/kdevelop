@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef DECLARATIONVALIDATOR_H
-#define DECLARATIONVALIDATOR_H
+#ifndef KDEVPLATFORM_DECLARATIONVALIDATOR_H
+#define KDEVPLATFORM_DECLARATIONVALIDATOR_H
 
 #include "language/duchain/ducontext.h"
 #include "kdevplatformjsontestsexport.h"
@@ -40,4 +40,4 @@ private:
 };
 
 }
-#endif //DECLARATIONVALIDATOR_H
+#endif //KDEVPLATFORM_DECLARATIONVALIDATOR_H

@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef TOPDUCONTEXTDATA_H
-#define TOPDUCONTEXTDATA_H
+#ifndef KDEVPLATFORM_TOPDUCONTEXTDATA_H
+#define KDEVPLATFORM_TOPDUCONTEXTDATA_H
 
 #include "ducontextdata.h"
 #include "topducontext.h"

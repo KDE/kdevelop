@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef DUMMYBSM_H
-#define DUMMYBSM_H
+#ifndef KDEVPLATFORM_DUMMYBSM_H
+#define KDEVPLATFORM_DUMMYBSM_H
 
 #include <interfaces/iplugin.h>
 #include <project/interfaces/ibuildsystemmanager.h>

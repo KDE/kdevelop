@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVELOP_TYPEALIASTYPE_H
-#define KDEVELOP_TYPEALIASTYPE_H
+#ifndef KDEVPLATFORM_TYPEALIASTYPE_H
+#define KDEVPLATFORM_TYPEALIASTYPE_H
 
 #include "abstracttype.h"
 #include "identifiedtype.h"
@@ -84,4 +84,4 @@ inline TypeAliasType* fastCast<TypeAliasType*>(AbstractType* from) {
 
 }
 
-#endif // KDEVELOP_TYPEALIASTYPE_H
+#endif // KDEVPLATFORM_TYPEALIASTYPE_H

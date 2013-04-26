@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef ABSTRACTTYPE_H
-#define ABSTRACTTYPE_H
+#ifndef KDEVPLATFORM_ABSTRACTTYPE_H
+#define KDEVPLATFORM_ABSTRACTTYPE_H
 
 #include <QtCore/QString>
 #include "typepointer.h"

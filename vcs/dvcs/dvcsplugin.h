@@ -18,8 +18,8 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#ifndef DVCS_PLUGIN_H
-#define DVCS_PLUGIN_H
+#ifndef KDEVPLATFORM_DVCS_PLUGIN_H
+#define KDEVPLATFORM_DVCS_PLUGIN_H
 
 #include <KDE/KUrl>
 #include <KDE/KComponentData>

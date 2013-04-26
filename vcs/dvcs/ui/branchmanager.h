@@ -18,8 +18,8 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#ifndef BRANCH_MANAGER_H
-#define BRANCH_MANAGER_H
+#ifndef KDEVPLATFORM_BRANCH_MANAGER_H
+#define KDEVPLATFORM_BRANCH_MANAGER_H
 
 #include <KDE/KDialog>
 

@@ -16,8 +16,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef KDEV_TEXTDOCUMENT_H
-#define KDEV_TEXTDOCUMENT_H
+#ifndef KDEVPLATFORM_TEXTDOCUMENT_H
+#define KDEVPLATFORM_TEXTDOCUMENT_H
 
 #include <QtGui/QWidget>
 #include <KDE/KXMLGUIClient>

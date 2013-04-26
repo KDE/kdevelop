@@ -12,8 +12,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef CVSJOB_H
-#define CVSJOB_H
+#ifndef KDEVPLATFORM_PLUGIN_CVSJOB_H
+#define KDEVPLATFORM_PLUGIN_CVSJOB_H
 
 
 #include <QStringList>

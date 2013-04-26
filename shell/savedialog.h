@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef SAVEDIALOG_H
-#define SAVEDIALOG_H
+#ifndef KDEVPLATFORM_SAVEDIALOG_H
+#define KDEVPLATFORM_SAVEDIALOG_H
 
 #include <KDialog>
 

@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef FORWARDDECLARATION_H
-#define FORWARDDECLARATION_H
+#ifndef KDEVPLATFORM_FORWARDDECLARATION_H
+#define KDEVPLATFORM_FORWARDDECLARATION_H
 
 #include "declaration.h"
 #include "declarationdata.h"
@@ -89,6 +89,6 @@ private:
 
 }
 
-#endif // DECLARATION_H
+#endif // KDEVPLATFORM_DECLARATION_H
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef DECLARATION_H
-#define DECLARATION_H
+#ifndef KDEVPLATFORM_DECLARATION_H
+#define KDEVPLATFORM_DECLARATION_H
 
 #include <QtCore/QList>
 #include <QtCore/QMap>
@@ -581,6 +581,6 @@ inline uint qHash(const IndexedDeclaration& decl) {
 }
 }
 
-#endif // DECLARATION_H
+#endif // KDEVPLATFORM_DECLARATION_H
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

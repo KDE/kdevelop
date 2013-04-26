@@ -17,8 +17,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVSTRINGHANDLER_H
-#define KDEVSTRINGHANDLER_H
+#ifndef KDEVPLATFORM_KDEVSTRINGHANDLER_H
+#define KDEVPLATFORM_KDEVSTRINGHANDLER_H
 
 #include "utilexport.h"
 
@@ -49,4 +49,4 @@ namespace KDevelop
     KDEVPLATFORMUTIL_EXPORT QVariant stringToQVariant( const QString& s );
 }
 
-#endif // KDEVSTRINGHANDLER_H
+#endif // KDEVPLATFORM_KDEVSTRINGHANDLER_H

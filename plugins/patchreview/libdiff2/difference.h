@@ -15,8 +15,8 @@
 **
 ***************************************************************************/
 
-#ifndef DIFFERENCE_H
-#define DIFFERENCE_H
+#ifndef KDEVPLATFORM_PLUGIN_DIFFERENCE_H
+#define KDEVPLATFORM_PLUGIN_DIFFERENCE_H
 
 #include <qvector.h>
 

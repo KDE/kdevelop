@@ -17,8 +17,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#ifndef SESSIONDIALOG_H
-#define SESSIONDIALOG_H
+#ifndef KDEVPLATFORM_SESSIONDIALOG_H
+#define KDEVPLATFORM_SESSIONDIALOG_H
 
 #include <kdialog.h>
 #include <QtCore/QAbstractListModel>

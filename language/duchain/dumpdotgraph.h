@@ -11,8 +11,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef DUMPDOTGRAPH_H
-#define DUMPDOTGRAPH_H
+#ifndef KDEVPLATFORM_DUMPDOTGRAPH_H
+#define KDEVPLATFORM_DUMPDOTGRAPH_H
 
 #include <QtCore/QMap>
 #include <QtCore/QString>
@@ -44,4 +44,4 @@ namespace KDevelop {
   };
 }
 
-#endif // DUMPDOTGRAPH_H
+#endif // KDEVPLATFORM_DUMPDOTGRAPH_H

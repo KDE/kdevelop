@@ -8,8 +8,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef CVSPROXY_H
-#define CVSPROXY_H
+#ifndef KDEVPLATFORM_PLUGIN_CVSPROXY_H
+#define KDEVPLATFORM_PLUGIN_CVSPROXY_H
 
 
 #include <KUrl>

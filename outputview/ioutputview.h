@@ -18,8 +18,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef KDEVIOUTPUTVIEW_H
-#define KDEVIOUTPUTVIEW_H
+#ifndef KDEVPLATFORM_IOUTPUTVIEW_H
+#define KDEVPLATFORM_IOUTPUTVIEW_H
 
 #include <QtCore/QMetaType>
 #include <QtCore/QFlags>

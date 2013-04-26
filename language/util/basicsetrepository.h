@@ -11,8 +11,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef BASICSETREPOSITORY_H
-#define BASICSETREPOSITORY_H
+#ifndef KDEVPLATFORM_BASICSETREPOSITORY_H
+#define KDEVPLATFORM_BASICSETREPOSITORY_H
 
 #include <set>
 #include <vector>

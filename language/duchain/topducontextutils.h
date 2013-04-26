@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef TOPDUCONTEXTUTILS_H
-#define TOPDUCONTEXTUTILS_H
+#ifndef KDEVPLATFORM_TOPDUCONTEXTUTILS_H
+#define KDEVPLATFORM_TOPDUCONTEXTUTILS_H
 
 #include "topducontext.h"
 
@@ -40,6 +40,6 @@ struct KDEVPLATFORMLANGUAGE_EXPORT TopDUContext::DeclarationChecker
 
 }
 
-#endif // TOPDUCONTEXTUTILS_H
+#endif // KDEVPLATFORM_TOPDUCONTEXTUTILS_H
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

@@ -8,8 +8,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef COPYACTION_H
-#define COPYACTION_H
+#ifndef KDEVPLATFORM_COPYACTION_H
+#define KDEVPLATFORM_COPYACTION_H
 
 #include <QAction>
 

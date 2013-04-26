@@ -8,8 +8,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef IMPORTDIALOG_H
-#define IMPORTDIALOG_H
+#ifndef KDEVPLATFORM_PLUGIN_IMPORTDIALOG_H
+#define KDEVPLATFORM_PLUGIN_IMPORTDIALOG_H
 
 #include <KDialog>
 #include <KUrl>

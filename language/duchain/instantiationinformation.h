@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef INSTANTIATIONINFORMATION_H
-#define INSTANTIATIONINFORMATION_H
+#ifndef KDEVPLATFORM_INSTANTIATIONINFORMATION_H
+#define KDEVPLATFORM_INSTANTIATIONINFORMATION_H
 
 #include "../languageexport.h"
 #include "types/abstracttype.h"
@@ -149,4 +149,4 @@ namespace KDevelop {
 Q_DECLARE_TYPEINFO(KDevelop::IndexedInstantiationInformation, Q_MOVABLE_TYPE);
 Q_DECLARE_TYPEINFO(KDevelop::InstantiationInformation, Q_MOVABLE_TYPE);
 
-#endif // INSTANTIATIONINFORMATION_H
+#endif // KDEVPLATFORM_INSTANTIATIONINFORMATION_H

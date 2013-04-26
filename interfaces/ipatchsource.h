@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVELOP_IPATCHSOURCE_H
-#define KDEVELOP_IPATCHSOURCE_H
+#ifndef KDEVPLATFORM_IPATCHSOURCE_H
+#define KDEVPLATFORM_IPATCHSOURCE_H
 
 #include <ksharedptr.h>
 #include <kurl.h>
@@ -107,4 +107,4 @@ class KDEVPLATFORMINTERFACES_EXPORT IPatchReview {
 
 Q_DECLARE_INTERFACE(KDevelop::IPatchReview, "org.kdevelop.IPatchReview")
 
-#endif // KDEVELOP_IPATCHSOURCE_H
+#endif // KDEVPLATFORM_IPATCHSOURCE_H

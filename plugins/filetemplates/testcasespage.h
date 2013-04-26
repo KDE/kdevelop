@@ -18,8 +18,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef TESTCASESWIDGET_H
-#define TESTCASESWIDGET_H
+#ifndef KDEVPLATFORM_PLUGIN_TESTCASESWIDGET_H
+#define KDEVPLATFORM_PLUGIN_TESTCASESWIDGET_H
 
 #include <QtGui/QWidget>
 
@@ -69,4 +69,4 @@ private Q_SLOTS:
 
 }
 
-#endif // TESTCASESWIDGET_H
+#endif // KDEVPLATFORM_PLUGIN_TESTCASESWIDGET_H

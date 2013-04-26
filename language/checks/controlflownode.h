@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CONTROLFLOWNODE_H
-#define CONTROLFLOWNODE_H
+#ifndef KDEVPLATFORM_CONTROLFLOWNODE_H
+#define KDEVPLATFORM_CONTROLFLOWNODE_H
 #include <language/editor/rangeinrevision.h>
 #include <language/languageexport.h>
 
@@ -81,4 +81,4 @@ private:
 };
 
 }
-#endif // FLUXNODE_H
+#endif // KDEVPLATFORM_FLUXNODE_H

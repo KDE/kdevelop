@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CODEREPRESENTATION_H
-#define CODEREPRESENTATION_H
+#ifndef KDEVPLATFORM_CODEREPRESENTATION_H
+#define KDEVPLATFORM_CODEREPRESENTATION_H
 
 #include "../languageexport.h"
 #include <language/duchain/indexedstring.h>

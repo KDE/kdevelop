@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVDOCUMENTCURSOR_H
-#define KDEVDOCUMENTCURSOR_H
+#ifndef KDEVPLATFORM_DOCUMENTCURSOR_H
+#define KDEVPLATFORM_DOCUMENTCURSOR_H
 
 #include "../languageexport.h"
 #include "simplecursor.h"
@@ -47,5 +47,5 @@ public:
 };
 
 }
-#endif // DOCUMENTRANGE_H
+#endif // KDEVPLATFORM_DOCUMENTCURSOR_H
 

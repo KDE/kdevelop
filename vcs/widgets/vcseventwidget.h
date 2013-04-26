@@ -19,8 +19,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef VCSEVENTWIDGET_H
-#define VCSEVENTWIDGET_H
+#ifndef KDEVPLATFORM_VCSEVENTWIDGET_H
+#define KDEVPLATFORM_VCSEVENTWIDGET_H
 
 #include <QtGui/QWidget>
 #include "../vcsexport.h"

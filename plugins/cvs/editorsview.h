@@ -8,8 +8,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef EDITORSVIEW_H
-#define EDITORSVIEW_H
+#ifndef KDEVPLATFORM_PLUGIN_EDITORSVIEW_H
+#define KDEVPLATFORM_PLUGIN_EDITORSVIEW_H
 
 #include <QDialog>
 #include <QMultiMap>

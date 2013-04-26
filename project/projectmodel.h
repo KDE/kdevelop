@@ -19,8 +19,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVPROJECTMODEL_H
-#define KDEVPROJECTMODEL_H
+#ifndef KDEVPLATFORM_PROJECTMODEL_H
+#define KDEVPLATFORM_PROJECTMODEL_H
 
 #include <QtCore/QAbstractItemModel>
 #include "projectexport.h"
@@ -444,4 +444,4 @@ Q_DECLARE_METATYPE(KDevelop::ProjectExecutableTargetItem*)
 Q_DECLARE_METATYPE(KDevelop::ProjectTargetItem*)
 Q_DECLARE_METATYPE(KDevelop::ProjectBuildFolderItem*)
 
-#endif // KDEVPROJECTMODEL_H
+#endif // KDEVPLATFORM_PROJECTMODEL_H

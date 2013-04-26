@@ -16,8 +16,8 @@
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
 */
-#ifndef ISOURCEFORMATTER_H
-#define ISOURCEFORMATTER_H
+#ifndef KDEVPLATFORM_ISOURCEFORMATTER_H
+#define KDEVPLATFORM_ISOURCEFORMATTER_H
 
 #include <QtGui/QWidget>
 #include <QtCore/QStringList>
@@ -189,5 +189,5 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatter
 
 Q_DECLARE_INTERFACE(KDevelop::ISourceFormatter, "org.kdevelop.ISourceFormatter")
 
-#endif // ISOURCEFORMATTER_H
+#endif // KDEVPLATFORM_ISOURCEFORMATTER_H
 // kate: indent-mode cstyle; space-indent off; tab-width 4;

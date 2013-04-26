@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef PROJECTVCSPAGE_H
-#define PROJECTVCSPAGE_H
+#ifndef KDEVPLATFORM_PLUGIN_PROJECTVCSPAGE_H
+#define KDEVPLATFORM_PLUGIN_PROJECTVCSPAGE_H
 
 #include "appwizardpagewidget.h"
 #include <QMap>

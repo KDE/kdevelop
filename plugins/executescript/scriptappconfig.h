@@ -18,8 +18,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef SCRIPTAPPCONFIGTYPE_H
-#define SCRIPTAPPCONFIGTYPE_H
+#ifndef KDEVPLATFORM_PLUGIN_SCRIPTAPPCONFIGTYPE_H
+#define KDEVPLATFORM_PLUGIN_SCRIPTAPPCONFIGTYPE_H
 
 #include <interfaces/launchconfigurationtype.h>
 #include <interfaces/launchconfigurationpage.h>

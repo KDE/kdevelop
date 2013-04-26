@@ -18,8 +18,8 @@
 
 */
 
-#ifndef SPINLOCK_H
-#define SPINLOCK_H
+#ifndef KDEVPLATFORM_SPINLOCK_H
+#define KDEVPLATFORM_SPINLOCK_H
 
 #include <QAtomicInt>
 #include <QMutex>
@@ -123,4 +123,4 @@ class SpinLock
 
 }
 
-#endif // SPINLOCK_H
+#endif // KDEVPLATFORM_SPINLOCK_H

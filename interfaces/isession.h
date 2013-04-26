@@ -17,8 +17,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#ifndef ISESSION_H
-#define ISESSION_H
+#ifndef KDEVPLATFORM_ISESSION_H
+#define KDEVPLATFORM_ISESSION_H
 
 #include "interfacesexport.h"
 #include <QtCore/QObject>

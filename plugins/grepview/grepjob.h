@@ -13,8 +13,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef GREPJOB_H
-#define GREPJOB_H
+#ifndef KDEVPLATFORM_PLUGIN_GREPJOB_H
+#define KDEVPLATFORM_PLUGIN_GREPJOB_H
 
 #include <QDir>
 #include <QPointer>

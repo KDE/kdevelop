@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef KROSSIMPL_H
-#define KROSSIMPL_H
+#ifndef KDEVPLATFORM_KROSSIMPL_H
+#define KDEVPLATFORM_KROSSIMPL_H
 
 #include "duchainreader.h"
 #include <qset.h>

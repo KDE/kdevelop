@@ -16,8 +16,8 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef OUTPUTVIEWTEST_H
-#define OUTPUTVIEWTEST_H
+#ifndef KDEVPLATFORM_OUTPUTMODELTEST_H
+#define KDEVPLATFORM_OUTPUTMODELTEST_H
 
 #include <QObject>
 
@@ -37,4 +37,4 @@ private slots:
 };
 
 }
-#endif // OUTPUTVIEWTEST_H
+#endif // KDEVPLATFORM_OUTPUTMODELTEST_H

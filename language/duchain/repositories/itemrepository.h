@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef ITEMREPOSITORY_H
-#define ITEMREPOSITORY_H
+#ifndef KDEVPLATFORM_ITEMREPOSITORY_H
+#define KDEVPLATFORM_ITEMREPOSITORY_H
 
 #include <QtCore/QString>
 #include <QtCore/QVector>

@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef POINTERTYPE_H
-#define POINTERTYPE_H
+#ifndef KDEVPLATFORM_POINTERTYPE_H
+#define KDEVPLATFORM_POINTERTYPE_H
 
 #include "abstracttype.h"
 

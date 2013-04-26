@@ -18,8 +18,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef SCRIPTAPPJOB_H
-#define SCRIPTAPPJOB_H
+#ifndef KDEVPLATFORM_PLUGIN_SCRIPTAPPJOB_H
+#define KDEVPLATFORM_PLUGIN_SCRIPTAPPJOB_H
 
 #include <QtCore/QProcess>
 #include <outputview/outputjob.h>

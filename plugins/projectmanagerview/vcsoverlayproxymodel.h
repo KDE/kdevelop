@@ -17,8 +17,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef VCSOVERLAYPROXYMODEL_H
-#define VCSOVERLAYPROXYMODEL_H
+#ifndef KDEVPLATFORM_PLUGIN_VCSOVERLAYPROXYMODEL_H
+#define KDEVPLATFORM_PLUGIN_VCSOVERLAYPROXYMODEL_H
 
 #include <qidentityproxymodel.h>
 #include <project/projectmodel.h>
@@ -49,4 +49,4 @@ class VcsOverlayProxyModel : public QIdentityProxyModel
         QHash<KDevelop::IProject*, QString> m_branchName;
 };
 
-#endif // VCSOVERLAYPROXYMODEL_H
+#endif // KDEVPLATFORM_PLUGIN_VCSOVERLAYPROXYMODEL_H

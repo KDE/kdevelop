@@ -15,8 +15,8 @@
 **
 ***************************************************************************/
 
-#ifndef KOMPARE_H
-#define KOMPARE_H
+#ifndef KDEVPLATFORM_PLUGIN_KOMPARE_H
+#define KDEVPLATFORM_PLUGIN_KOMPARE_H
 
 #include <kurl.h>
 

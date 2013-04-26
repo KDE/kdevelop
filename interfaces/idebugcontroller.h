@@ -19,8 +19,8 @@
  ***************************************************************************/
 
 
-#ifndef IDEBUGCONTROLLER_H
-#define IDEBUGCONTROLLER_H
+#ifndef KDEVPLATFORM_IDEBUGCONTROLLER_H
+#define KDEVPLATFORM_IDEBUGCONTROLLER_H
 
 #include <QtCore/QObject>
 #include "interfacesexport.h"

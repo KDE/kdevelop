@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef SVNSTATUSJOB_H
-#define SVNSTATUSJOB_H
+#ifndef KDEVPLATFORM_PLUGIN_SVNSTATUSJOB_H
+#define KDEVPLATFORM_PLUGIN_SVNSTATUSJOB_H
 
 #include "svnjobbase.h"
 

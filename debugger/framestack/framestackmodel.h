@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef KDEV_FRAMESTACKMODEL_H
-#define KDEV_FRAMESTACKMODEL_H
+#ifndef KDEVPLATFORM_FRAMESTACKMODEL_H
+#define KDEVPLATFORM_FRAMESTACKMODEL_H
 
 #include <QtCore/QModelIndex>
 #include <QtCore/QHash>

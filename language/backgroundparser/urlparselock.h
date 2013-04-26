@@ -18,8 +18,8 @@
 * Free Software Foundation, Inc.,
 * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
-#ifndef URLPARSELOCK_H
-#define URLPARSELOCK_H
+#ifndef KDEVPLATFORM_URLPARSELOCK_H
+#define KDEVPLATFORM_URLPARSELOCK_H
 
 #include "../duchain/indexedstring.h"
 

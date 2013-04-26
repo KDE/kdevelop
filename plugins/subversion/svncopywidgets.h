@@ -8,8 +8,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SVN_COPYWIDGETS_H
-#define SVN_COPYWIDGETS_H
+#ifndef KDEVPLATFORM_PLUGIN_SVN_COPYWIDGETS_H
+#define KDEVPLATFORM_PLUGIN_SVN_COPYWIDGETS_H
 
 #include <kdialog.h>
 #include "svnmodels.h"

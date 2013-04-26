@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef ABSTRACTTYPEBUILDER_H
-#define ABSTRACTTYPEBUILDER_H
+#ifndef KDEVPLATFORM_ABSTRACTTYPEBUILDER_H
+#define KDEVPLATFORM_ABSTRACTTYPEBUILDER_H
 
 #include "../types/structuretype.h"
 #include "../declaration.h"
@@ -262,5 +262,5 @@ private:
 
 }
 
-#endif // ABSTRACTTYPEBUILDER_H
+#endif // KDEVPLATFORM_ABSTRACTTYPEBUILDER_H
 

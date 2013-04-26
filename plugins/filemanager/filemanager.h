@@ -17,8 +17,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef FILEMANAGER_H
-#define FILEMANAGER_H
+#ifndef KDEVPLATFORM_PLUGIN_FILEMANAGER_H
+#define KDEVPLATFORM_PLUGIN_FILEMANAGER_H
 
 #include <QtGui/QWidget>
 

@@ -1,5 +1,5 @@
-#ifndef BLUR_H
-#define BLUR_H
+#ifndef KDEVPLATFORM_BLUR_H
+#define KDEVPLATFORM_BLUR_H
 
 /*
  *   Copyright 2007 Jani Huhtanen <jani.huhtanen@tut.fi>

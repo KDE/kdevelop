@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef PATCHDOCUMENT_H
-#define PATCHDOCUMENT_H
+#ifndef KDEVPLATFORM_PATCHDOCUMENT_H
+#define KDEVPLATFORM_PATCHDOCUMENT_H
 
 #include <sublime/urldocument.h>
 #include <interfaces/idocument.h>
@@ -66,4 +66,4 @@ class PatchDocument : public KDevelop::PartDocument, public KDevelop::IPatchDocu
         void setDiff(const QString& from, const KUrl& to);
 };
 
-#endif // PATCHDOCUMENT_H
+#endif // KDEVPLATFORM_PATCHDOCUMENT_H

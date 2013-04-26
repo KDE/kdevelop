@@ -11,8 +11,8 @@
 *                                                                         *
 ***************************************************************************/
 
-#ifndef LOCALPATCHSOURCE_H
-#define LOCALPATCHSOURCE_H
+#ifndef KDEVPLATFORM_PLUGIN_LOCALPATCHSOURCE_H
+#define KDEVPLATFORM_PLUGIN_LOCALPATCHSOURCE_H
 
 #include <ksharedptr.h>
 #include <QString>
@@ -66,4 +66,4 @@ private:
     uint m_depth;
 };
 
-#endif // LOCALPATCHSOURCE_H
+#endif // KDEVPLATFORM_PLUGIN_LOCALPATCHSOURCE_H

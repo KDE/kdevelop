@@ -15,8 +15,8 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef FILTERINGSTRATEGYTEST_H
-#define FILTERINGSTRATEGYTEST_H
+#ifndef KDEVPLATFORM_FILTERINGSTRATEGYTEST_H
+#define KDEVPLATFORM_FILTERINGSTRATEGYTEST_H
 
 #include <QtTest/QtTest>
 
@@ -47,4 +47,4 @@ private slots:
 
 }
 
-#endif // FILTERINGSTRATEGYTEST_H
+#endif // KDEVPLATFORM_FILTERINGSTRATEGYTEST_H

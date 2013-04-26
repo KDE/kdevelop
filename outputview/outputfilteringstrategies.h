@@ -15,8 +15,8 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef OUTPUTFILTERINGSTRATEGIES_H
-#define OUTPUTFILTERINGSTRATEGIES_H
+#ifndef KDEVPLATFORM_OUTPUTFILTERINGSTRATEGIES_H
+#define KDEVPLATFORM_OUTPUTFILTERINGSTRATEGIES_H
 
 /**
  * @file This file contains Concrete strategies for filtering output
@@ -106,5 +106,5 @@ public:
 };
 
 } // namespace KDevelop
-#endif // OUTPUTFILTERINGSTRATEGIES_H
+#endif // KDEVPLATFORM_OUTPUTFILTERINGSTRATEGIES_H
 

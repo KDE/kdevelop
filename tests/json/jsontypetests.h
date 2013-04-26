@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef JSONTYPETESTS_H
-#define JSONTYPETESTS_H
+#ifndef KDEVPLATFORM_JSONTYPETESTS_H
+#define KDEVPLATFORM_JSONTYPETESTS_H
 
 #include "language/duchain/types/abstracttype.h"
 #include "language/duchain/types/delayedtype.h"
@@ -67,4 +67,4 @@ TypeTest(isConst)
 
 }
 
-#endif //JSONTYPETESTS_H
+#endif //KDEVPLATFORM_JSONTYPETESTS_H

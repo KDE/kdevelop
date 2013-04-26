@@ -17,8 +17,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef ILAUNCHMODE_H
-#define ILAUNCHMODE_H
+#ifndef KDEVPLATFORM_ILAUNCHMODE_H
+#define KDEVPLATFORM_ILAUNCHMODE_H
 
 #include "interfacesexport.h"
 

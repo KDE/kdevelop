@@ -19,8 +19,8 @@
 * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
-#ifndef DOCUMENTCHANGETRACKER_H
-#define DOCUMENTCHANGETRACKER_H
+#ifndef KDEVPLATFORM_DOCUMENTCHANGETRACKER_H
+#define KDEVPLATFORM_DOCUMENTCHANGETRACKER_H
 
 #include "../languageexport.h"
 #include <QPair>

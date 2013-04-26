@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef NAVIGATIONTOOLTIP_H
-#define NAVIGATIONTOOLTIP_H
+#ifndef KDEVPLATFORM_NAVIGATIONTOOLTIP_H
+#define KDEVPLATFORM_NAVIGATIONTOOLTIP_H
 
 #include "../../util/activetooltip.h"
 #include "../languageexport.h"
@@ -47,4 +47,4 @@ public:
 
 }
 
-#endif // NAVIGATIONTOOLTIP_H
+#endif // KDEVPLATFORM_NAVIGATIONTOOLTIP_H

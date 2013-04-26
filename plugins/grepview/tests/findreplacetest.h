@@ -11,8 +11,8 @@
 ***************************************************************************/
 
 
-#ifndef REPLACETEST_H
-#define REPLACETEST_H
+#ifndef KDEVPLATFORM_PLUGIN_REPLACETEST_H
+#define KDEVPLATFORM_PLUGIN_REPLACETEST_H
 
 #include <QtCore/QObject>
 #include <QList>
@@ -58,4 +58,4 @@ private slots:
 Q_DECLARE_METATYPE(FindReplaceTest::MatchList)
 Q_DECLARE_METATYPE(FindReplaceTest::FileList);
 
-#endif // REPLACETEST_H
+#endif // KDEVPLATFORM_PLUGIN_REPLACETEST_H

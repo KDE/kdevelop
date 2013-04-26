@@ -22,8 +22,8 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#ifndef GIT_INIT_H
-#define GIT_INIT_H
+#ifndef KDEVPLATFORM_PLUGIN_GIT_INIT_H
+#define KDEVPLATFORM_PLUGIN_GIT_INIT_H
 
 #include <QtCore/QObject>
 #include <QtCore/QString>

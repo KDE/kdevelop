@@ -18,8 +18,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef REVIEWPATCHDIALOG_H
-#define REVIEWPATCHDIALOG_H
+#ifndef KDEVPLATFORM_PLUGIN_REVIEWPATCHDIALOG_H
+#define KDEVPLATFORM_PLUGIN_REVIEWPATCHDIALOG_H
 #include <KDialog>
 
 class QItemSelection;

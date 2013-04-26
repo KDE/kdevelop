@@ -20,8 +20,8 @@ along with this library; see the file COPYING.LIB.  If not, write to
 the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
-#ifndef KDEV_MAINWINDOW_H
-#define KDEV_MAINWINDOW_H
+#ifndef KDEVPLATFORM_MAINWINDOW_H
+#define KDEVPLATFORM_MAINWINDOW_H
 
 #include <KDE/KXmlGuiWindow>
 

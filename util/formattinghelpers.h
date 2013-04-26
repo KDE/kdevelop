@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
  */
 
-#ifndef FORMATTINGHELPERS_H
-#define FORMATTINGHELPERS_H
+#ifndef KDEVPLATFORM_FORMATTINGHELPERS_H
+#define KDEVPLATFORM_FORMATTINGHELPERS_H
 
 #include "utilexport.h"
 #include <QString>
@@ -44,4 +44,4 @@ namespace KDevelop {
 KDEVPLATFORMUTIL_EXPORT QString extractFormattedTextFromContext(const QString& formattedMergedText, const QString& text, const QString& leftContext, const QString& rightContext, int tabWidth = 4, const QString& fuzzyCharacters = "{}()/*/");
 }
 
-#endif // FORMATTINGHELPERS_H
+#endif // KDEVPLATFORM_FORMATTINGHELPERS_H

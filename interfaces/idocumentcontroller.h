@@ -16,8 +16,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef IDOCUMENTCONTROLLER_H
-#define IDOCUMENTCONTROLLER_H
+#ifndef KDEVPLATFORM_IDOCUMENTCONTROLLER_H
+#define KDEVPLATFORM_IDOCUMENTCONTROLLER_H
 
 #include <QtCore/QObject>
 #include <QtCore/QList>

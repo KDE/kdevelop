@@ -17,8 +17,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef ACTIVE_TOOLTIP_H
-#define ACTIVE_TOOLTIP_H
+#ifndef KDEVPLATFORM_ACTIVE_TOOLTIP_H
+#define KDEVPLATFORM_ACTIVE_TOOLTIP_H
 
 #include <QtGui/QWidget>
 #include "utilexport.h"

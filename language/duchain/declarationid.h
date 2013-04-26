@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef DECLARATION_ID_H
-#define DECLARATION_ID_H
+#ifndef KDEVPLATFORM_DECLARATION_ID_H
+#define KDEVPLATFORM_DECLARATION_ID_H
 
 #include "../editor/cursorinrevision.h"
 

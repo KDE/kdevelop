@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef KDEVVCSEXPORT_H
-#define KDEVVCSEXPORT_H
+#ifndef KDEVPLATFORM_VCSEXPORT_H
+#define KDEVPLATFORM_VCSEXPORT_H
 
 /* needed for KDE_EXPORT macros */
 #include <kdemacros.h>
@@ -32,5 +32,5 @@
 # endif
 #endif
 
-#endif
+#endif // KDEVPLATFORM_VCSEXPORT_H
 

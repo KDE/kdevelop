@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef VCSEVENTMODEL_H
-#define VCSEVENTMODEL_H
+#ifndef KDEVPLATFORM_VCSEVENTMODEL_H
+#define KDEVPLATFORM_VCSEVENTMODEL_H
 
 #include <QtCore/QAbstractTableModel>
 

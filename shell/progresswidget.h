@@ -20,8 +20,8 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef KDEVELOP_PROGRESSWIDGET_H
-#define KDEVELOP_PROGRESSWIDGET_H 
+#ifndef KDEVPLATFORM_PROGRESSWIDGET_H
+#define KDEVPLATFORM_PROGRESSWIDGET_H
 
 #include <QFrame>
 

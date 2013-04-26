@@ -19,8 +19,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KDEV_TEMPLATEENGINE_H
-#define KDEV_TEMPLATEENGINE_H
+#ifndef KDEVPLATFORM_TEMPLATEENGINE_H
+#define KDEVPLATFORM_TEMPLATEENGINE_H
 
 #include "../languageexport.h"
 
@@ -58,4 +58,4 @@ private:
 
 }
 
-#endif // KDEV_TEMPLATEENGINE_H
+#endif // KDEVPLATFORM_TEMPLATEENGINE_H

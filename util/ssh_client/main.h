@@ -18,8 +18,8 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#ifndef MAIN_H
-#define MAIN_H
+#ifndef KDEVPLATFORM_MAIN_H
+#define KDEVPLATFORM_MAIN_H
 
 #include <KDE/KDialog>
 #include <KDE/KDebug>

@@ -15,8 +15,8 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef TESTLINEBUILDERFUNCTIONS_H
-#define TESTLINEBUILDERFUNCTIONS_H
+#ifndef KDEVPLATFORM_TESTLINEBUILDERFUNCTIONS_H
+#define KDEVPLATFORM_TESTLINEBUILDERFUNCTIONS_H
 
 #include <KUrl>
 

@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef BUILDERJOB_H
-#define BUILDERJOB_H
+#ifndef KDEVPLATFORM_BUILDERJOB_H
+#define KDEVPLATFORM_BUILDERJOB_H
 
 #include <QtCore/QVector>
 

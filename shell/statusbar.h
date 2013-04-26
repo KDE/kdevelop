@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVSTATUSBAR_H
-#define KDEVSTATUSBAR_H
+#ifndef KDEVPLATFORM_STATUSBAR_H
+#define KDEVPLATFORM_STATUSBAR_H
 
 #include <QtCore/QTime>
 #include <QtCore/QMap>
@@ -99,4 +99,4 @@ private:
 
 }
 
-#endif // KDEVSTATUSBAR_H
+#endif // KDEVPLATFORM_STATUSBAR_H

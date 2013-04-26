@@ -15,8 +15,8 @@
 **
 ***************************************************************************/
 
-#ifndef DIFFSETTINGS_H
-#define DIFFSETTINGS_H
+#ifndef KDEVPLATFORM_PLUGIN_DIFFSETTINGS_H
+#define KDEVPLATFORM_PLUGIN_DIFFSETTINGS_H
 
 #include <QtCore/QStringList>
 #include <QtGui/QWidget>

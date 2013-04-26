@@ -17,8 +17,8 @@
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
 */
-#ifndef IPROJECTBUILDER_H
-#define IPROJECTBUILDER_H
+#ifndef KDEVPLATFORM_IPROJECTBUILDER_H
+#define KDEVPLATFORM_IPROJECTBUILDER_H
 
 #include "../projectexport.h"
 #include <QtCore/QObject>

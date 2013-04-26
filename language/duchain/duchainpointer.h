@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef DUCHAINPOINTER_H
-#define DUCHAINPOINTER_H
+#ifndef KDEVPLATFORM_DUCHAINPOINTER_H
+#define KDEVPLATFORM_DUCHAINPOINTER_H
 
 #include <QtCore/QMetaType>
 #include <ksharedptr.h>

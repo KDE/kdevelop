@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef JSONDECLARATIONTESTS_H
-#define JSONDECLARATIONTESTS_H
+#ifndef KDEVPLATFORM_JSONDECLARATIONTESTS_H
+#define KDEVPLATFORM_JSONDECLARATIONTESTS_H
 
 #include "language/duchain/ducontext.h"
 #include "language/duchain/declaration.h"
@@ -214,4 +214,4 @@ DeclarationTest(defaultParameter)
 
 }
 
-#endif //JSONDECLARATIONTESTS_H
+#endif //KDEVPLATFORM_JSONDECLARATIONTESTS_H

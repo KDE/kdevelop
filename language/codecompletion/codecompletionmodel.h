@@ -20,8 +20,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KDEV_CODECOMPLETIONMODEL_H
-#define KDEV_CODECOMPLETIONMODEL_H
+#ifndef KDEVPLATFORM_CODECOMPLETIONMODEL_H
+#define KDEVPLATFORM_CODECOMPLETIONMODEL_H
 
 #include <QtCore/QPair>
 #include <QtCore/QMap>

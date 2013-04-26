@@ -18,8 +18,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef DVCSADAPTORS_H
-#define DVCSADAPTORS_H
+#ifndef KDEVPLATFORM_DVCSADAPTORS_H
+#define KDEVPLATFORM_DVCSADAPTORS_H
 
 #include <QObject>
 #include <vcs/vcsrevision.h>

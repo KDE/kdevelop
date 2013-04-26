@@ -11,8 +11,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SETREPOSITORY_H
-#define SETREPOSITORY_H
+#ifndef KDEVPLATFORM_SETREPOSITORY_H
+#define KDEVPLATFORM_SETREPOSITORY_H
 
 #include "basicsetrepository.h"
 #include <QtCore/QMutex>

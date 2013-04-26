@@ -21,8 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef TEST_DUCHAIN_H
-#define TEST_DUCHAIN_H
+#ifndef KDEVPLATFORM_TEST_DUCHAIN_H
+#define KDEVPLATFORM_TEST_DUCHAIN_H
 
 #include <QObject>
 
@@ -47,4 +47,4 @@ private slots:
     void benchCodeModel();
 };
 
-#endif // TEST_DUCHAIN_H
+#endif // KDEVPLATFORM_TEST_DUCHAIN_H

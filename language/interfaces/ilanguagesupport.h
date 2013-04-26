@@ -16,8 +16,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef ILANGUAGESUPPORT_H
-#define ILANGUAGESUPPORT_H
+#ifndef KDEVPLATFORM_ILANGUAGESUPPORT_H
+#define KDEVPLATFORM_ILANGUAGESUPPORT_H
 
 #include <kurl.h>
 

@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef PROJECTBUILDSETMODEL_H
-#define PROJECTBUILDSETMODEL_H
+#ifndef KDEVPLATFORM_PROJECTBUILDSETMODEL_H
+#define KDEVPLATFORM_PROJECTBUILDSETMODEL_H
 
 #include "projectexport.h"
 

@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef DUCHAINREADER_H
-#define DUCHAINREADER_H
+#ifndef KDEVPLATFORM_DUCHAINREADER_H
+#define KDEVPLATFORM_DUCHAINREADER_H
 
 #include "interfacecreator.h"
 #include <QXmlStreamReader>

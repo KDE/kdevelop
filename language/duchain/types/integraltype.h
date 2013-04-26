@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef INTEGRALTYPE_H
-#define INTEGRALTYPE_H
+#ifndef KDEVPLATFORM_INTEGRALTYPE_H
+#define KDEVPLATFORM_INTEGRALTYPE_H
 
 #include "abstracttype.h"
 #include "typesystemdata.h"

@@ -19,8 +19,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef OUTPUTMODEL_H
-#define OUTPUTMODEL_H
+#ifndef KDEVPLATFORM_OUTPUTMODEL_H
+#define KDEVPLATFORM_OUTPUTMODEL_H
 
 #include "outputviewexport.h"
 #include "ioutputviewmodel.h"

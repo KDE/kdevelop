@@ -11,8 +11,8 @@
 *                                                                         *
 ***************************************************************************/
 
-#ifndef PATCHREVIEW_H
-#define PATCHREVIEW_H
+#ifndef KDEVPLATFORM_PLUGIN_PATCHREVIEW_H
+#define KDEVPLATFORM_PLUGIN_PATCHREVIEW_H
 
 #include <QObject>
 #include <QPointer>

@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef REFERENCETYPE_H
-#define REFERENCETYPE_H
+#ifndef KDEVPLATFORM_REFERENCETYPE_H
+#define KDEVPLATFORM_REFERENCETYPE_H
 
 #include "abstracttype.h"
 
@@ -109,6 +109,6 @@ inline ReferenceType* fastCast<ReferenceType*>(AbstractType* from) {
 
 }
 
-#endif // TYPESYSTEM_H
+#endif // KDEVPLATFORM_TYPESYSTEM_H
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

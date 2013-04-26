@@ -18,8 +18,8 @@
   Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVDOCUMENTMODEL_H
-#define KDEVDOCUMENTMODEL_H
+#ifndef KDEVPLATFORM_PLUGIN_KDEVDOCUMENTMODEL_H
+#define KDEVPLATFORM_PLUGIN_KDEVDOCUMENTMODEL_H
 
 #include <QStandardItem>
 #include <QStandardItemModel>
@@ -133,5 +133,5 @@ public:
     KDevCategoryItem* category( const QString& category ) const;
 };
 
-#endif // KDEVDOCUMENTMODEL_H
+#endif // KDEVPLATFORM_PLUGIN_KDEVDOCUMENTMODEL_H
 

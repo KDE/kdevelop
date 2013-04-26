@@ -19,8 +19,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef IDENTIFIEDTYPE_H
-#define IDENTIFIEDTYPE_H
+#ifndef KDEVPLATFORM_IDENTIFIEDTYPE_H
+#define KDEVPLATFORM_IDENTIFIEDTYPE_H
 
 #include "../identifier.h"
 #include "../declarationid.h"

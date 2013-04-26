@@ -8,8 +8,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef CVSTEST_H
-#define CVSTEST_H
+#ifndef KDEVPLATFORM_PLUGIN_CVSTEST_H
+#define KDEVPLATFORM_PLUGIN_CVSTEST_H
 
 #include <QtCore/QObject>
 

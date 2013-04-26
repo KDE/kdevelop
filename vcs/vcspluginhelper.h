@@ -8,8 +8,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef VCSPLUGINHELPER_H
-#define VCSPLUGINHELPER_H
+#ifndef KDEVPLATFORM_VCSPLUGINHELPER_H
+#define KDEVPLATFORM_VCSPLUGINHELPER_H
 
 #include "vcsexport.h"
 

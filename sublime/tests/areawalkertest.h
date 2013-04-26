@@ -16,8 +16,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef SUBLIMEAREAWALKERTEST_H
-#define SUBLIMEAREAWALKERTEST_H
+#ifndef KDEVPLATFORM_SUBLIMEAREAWALKERTEST_H
+#define KDEVPLATFORM_SUBLIMEAREAWALKERTEST_H
 #include <QObject>
 
 class AreaWalkerTest: public QObject {

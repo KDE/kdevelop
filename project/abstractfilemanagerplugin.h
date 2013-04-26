@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef ABSTRACTGENERICMANAGER_H
-#define ABSTRACTGENERICMANAGER_H
+#ifndef KDEVPLATFORM_ABSTRACTGENERICMANAGER_H
+#define KDEVPLATFORM_ABSTRACTGENERICMANAGER_H
 
 #include "projectexport.h"
 
@@ -142,4 +142,4 @@ private:
 
 }
 
-#endif // ABSTRACTGENERICMANAGER_H
+#endif // KDEVPLATFORM_ABSTRACTGENERICMANAGER_H

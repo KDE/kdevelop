@@ -21,8 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef BACKGROUNDPARSER_H
-#define BACKGROUNDPARSER_H
+#ifndef KDEVPLATFORM_BACKGROUNDPARSER_H
+#define KDEVPLATFORM_BACKGROUNDPARSER_H
 
 #include <QtCore/QMap>
 #include <QtCore/QPair>

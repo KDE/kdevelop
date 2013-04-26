@@ -19,8 +19,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef LIBDIFF2EXPORT_H
-#define LIBDIFF2EXPORT_H
+#ifndef KDEVPLATFORM_PLUGIN_LIBDIFF2EXPORT_H
+#define KDEVPLATFORM_PLUGIN_LIBDIFF2EXPORT_H
 
 #  define DIFF2_EXPORT 
 

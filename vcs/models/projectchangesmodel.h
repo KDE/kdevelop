@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef PROJECTCHANGESMODEL_H
-#define PROJECTCHANGESMODEL_H
+#ifndef KDEVPLATFORM_PROJECTCHANGESMODEL_H
+#define KDEVPLATFORM_PROJECTCHANGESMODEL_H
 
 #include <vcs/models/vcsfilechangesmodel.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>
@@ -63,4 +63,4 @@ class KDEVPLATFORMVCS_EXPORT ProjectChangesModel : public VcsFileChangesModel
 
 }
 
-#endif // PROJECTCHANGESMODEL_H
+#endif // KDEVPLATFORM_PROJECTCHANGESMODEL_H

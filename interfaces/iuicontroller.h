@@ -16,8 +16,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef IUICONTROLLER_H
-#define IUICONTROLLER_H
+#ifndef KDEVPLATFORM_IUICONTROLLER_H
+#define KDEVPLATFORM_IUICONTROLLER_H
 
 #include "interfacesexport.h"
 

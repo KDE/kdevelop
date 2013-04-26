@@ -13,8 +13,8 @@
 **
 ***************************************************************************/
 
-#ifndef DIFF2_PARSER_H
-#define DIFF2_PARSER_H
+#ifndef KDEVPLATFORM_PLUGIN_DIFF2_PARSER_H
+#define KDEVPLATFORM_PLUGIN_DIFF2_PARSER_H
 
 #include "diffmodellist.h"
 #include "kompare.h"

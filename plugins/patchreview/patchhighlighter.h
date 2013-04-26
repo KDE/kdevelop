@@ -11,8 +11,8 @@
 *                                                                         *
 ***************************************************************************/
 
-#ifndef PATCHHIGHLIGHTER_H
-#define PATCHHIGHLIGHTER_H
+#ifndef KDEVPLATFORM_PLUGIN_PATCHHIGHLIGHTER_H
+#define KDEVPLATFORM_PLUGIN_PATCHHIGHLIGHTER_H
 
 #include <QObject>
 #include <QPoint>

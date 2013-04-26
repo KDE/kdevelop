@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef DELAYEDOUTPUT_H
-#define DELAYEDOUTPUT_H
+#ifndef KDEVPLATFORM_DELAYEDOUTPUT_H
+#define KDEVPLATFORM_DELAYEDOUTPUT_H
 
 #include <QStack>
 #include <QPair>
@@ -51,4 +51,4 @@ private:
 
 }
 
-#endif //DELAYEDOUTPUT_H
+#endif //KDEVPLATFORM_DELAYEDOUTPUT_H

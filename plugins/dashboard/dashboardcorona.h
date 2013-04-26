@@ -17,8 +17,8 @@
   Boston, MA 02110-1301, USA.
 */
 
-#ifndef DASHBOARDCORONA_H
-#define DASHBOARDCORONA_H
+#ifndef KDEVPLATFORM_PLUGIN_DASHBOARDCORONA_H
+#define KDEVPLATFORM_PLUGIN_DASHBOARDCORONA_H
 
 #include <plasma/corona.h>
 
@@ -41,4 +41,4 @@ class DashboardCorona : public Plasma::Corona
         KDevelop::IProject* m_project;
 };
 
-#endif // DASHBOARDCORONA_H
+#endif // KDEVPLATFORM_PLUGIN_DASHBOARDCORONA_H

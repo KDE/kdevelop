@@ -17,8 +17,8 @@
  Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVDOCUMENTSELECTION_H
-#define KDEVDOCUMENTSELECTION_H
+#ifndef KDEVPLATFORM_PLUGIN_KDEVDOCUMENTSELECTION_H
+#define KDEVPLATFORM_PLUGIN_KDEVDOCUMENTSELECTION_H
 
 #include <QtGui/QItemSelectionModel>
 
@@ -36,5 +36,5 @@ public slots:
                          QItemSelectionModel::SelectionFlags command );
 };
 
-#endif // KDEVDOCUMENTSELECTION_H
+#endif // KDEVPLATFORM_PLUGIN_KDEVDOCUMENTSELECTION_H
 

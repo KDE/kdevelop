@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEV_CODECOMPLETIONCONTEXT_H
-#define KDEV_CODECOMPLETIONCONTEXT_H
+#ifndef KDEVPLATFORM_CODECOMPLETIONCONTEXT_H
+#define KDEVPLATFORM_CODECOMPLETIONCONTEXT_H
 
 #include <ktexteditor/cursor.h>
 #include <ksharedptr.h>

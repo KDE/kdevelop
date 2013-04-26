@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef DOCUMENTCHANGESET_H
-#define DOCUMENTCHANGESET_H
+#ifndef KDEVPLATFORM_DOCUMENTCHANGESET_H
+#define KDEVPLATFORM_DOCUMENTCHANGESET_H
 
 #include <language/editor/simplerange.h>
 #include <language/duchain/indexedstring.h>

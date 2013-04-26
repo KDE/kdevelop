@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVHASH_H
-#define KDEVHASH_H
+#ifndef KDEVPLATFORM_KDEVHASH_H
+#define KDEVPLATFORM_KDEVHASH_H
 
 //Partial one at a time hash, starting with fnv prime
 class KDevHash
@@ -47,4 +47,4 @@ private:
   unsigned int m_hash;
 };
 
-#endif //KDEVHASH_H
+#endif //KDEVPLATFORM_KDEVHASH_H

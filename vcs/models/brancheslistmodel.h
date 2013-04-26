@@ -19,8 +19,8 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#ifndef BRANCHESLISTMODEL_H
-#define BRANCHESLISTMODEL_H
+#ifndef KDEVPLATFORM_BRANCHESLISTMODEL_H
+#define KDEVPLATFORM_BRANCHESLISTMODEL_H
 
 #include <QStandardItemModel>
 #include <KUrl>
@@ -67,4 +67,4 @@ class KDEVPLATFORMVCS_EXPORT BranchesListModel : public QStandardItemModel
 
 }
 
-#endif // BRANCHESLISTMODEL_H
+#endif // KDEVPLATFORM_BRANCHESLISTMODEL_H

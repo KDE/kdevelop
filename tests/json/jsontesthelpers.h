@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef JSONTESTHELPERS_H
-#define JSONTESTHELPERS_H
+#ifndef KDEVPLATFORM_JSONTESTHELPERS_H
+#define KDEVPLATFORM_JSONTESTHELPERS_H
 
 #include "testsuite.h"
 
@@ -67,4 +67,4 @@ inline QString testObject(Object obj, const QVariant &value, const QString &erro
 
 }
 
-#endif //JSONTESTHELPERS_H
+#endif //KDEVPLATFORM_JSONTESTHELPERS_H

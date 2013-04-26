@@ -16,8 +16,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef IQUICKOPEN_H
-#define IQUICKOPEN_H
+#ifndef KDEVPLATFORM_IQUICKOPEN_H
+#define KDEVPLATFORM_IQUICKOPEN_H
 
 #include <QtCore/QSet>
 #include <KDE/KUrl>
@@ -105,4 +105,4 @@ public:
 
 Q_DECLARE_INTERFACE(KDevelop::IQuickOpen, "org.kdevelop.IQuickOpen")
 
-#endif // IQuickOpen_H
+#endif // KDEVPLATFORM_IQUICKOPEN_H

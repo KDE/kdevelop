@@ -18,8 +18,8 @@
    If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef KDEV_BREAKPOINT_H
-#define KDEV_BREAKPOINT_H
+#ifndef KDEVPLATFORM_BREAKPOINT_H
+#define KDEVPLATFORM_BREAKPOINT_H
 
 #include <QtCore/QSet>
 #include <KDE/KUrl>

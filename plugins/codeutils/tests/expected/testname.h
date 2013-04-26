@@ -3,8 +3,8 @@
  * In two lines
  */
 
-#ifndef TESTNAME_H
-#define TESTNAME_H
+#ifndef KDEVPLATFORM_PLUGIN_TESTNAME_H
+#define KDEVPLATFORM_PLUGIN_TESTNAME_H
 
 #include <QtTest/QtTest>
 
@@ -23,4 +23,4 @@ private slots:
     void thirdTestCase();
 };
 
-#endif // TESTNAME_H
+#endif // KDEVPLATFORM_PLUGIN_TESTNAME_H

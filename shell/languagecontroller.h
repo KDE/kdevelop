@@ -17,8 +17,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef LANGUAGECONTROLLER_H
-#define LANGUAGECONTROLLER_H
+#ifndef KDEVPLATFORM_LANGUAGECONTROLLER_H
+#define KDEVPLATFORM_LANGUAGECONTROLLER_H
 
 #include <interfaces/ilanguagecontroller.h>
 

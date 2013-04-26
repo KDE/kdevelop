@@ -16,8 +16,8 @@ along with this library; see the file COPYING.LIB.  If not, write to
 the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
-#ifndef ENVIRONMENTSELECTIONWIDGET_H
-#define ENVIRONMENTSELECTIONWIDGET_H
+#ifndef KDEVPLATFORM_ENVIRONMENTSELECTIONWIDGET_H
+#define KDEVPLATFORM_ENVIRONMENTSELECTIONWIDGET_H
 
 #include <kcombobox.h>
 #include "utilexport.h"

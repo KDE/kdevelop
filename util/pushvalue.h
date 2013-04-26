@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef PUSHVALUE_H
-#define PUSHVALUE_H
+#ifndef KDEVPLATFORM_PUSHVALUE_H
+#define KDEVPLATFORM_PUSHVALUE_H
 
 /**
  * A simple helper-class that does the following:

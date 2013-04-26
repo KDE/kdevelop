@@ -19,8 +19,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef ICONTEXTBROWSER_H
-#define ICONTEXTBROWSER_H
+#ifndef KDEVPLATFORM_ICONTEXTBROWSER_H
+#define KDEVPLATFORM_ICONTEXTBROWSER_H
 
 #include "../languageexport.h"
 
@@ -48,4 +48,4 @@ public:
 
 Q_DECLARE_INTERFACE( KDevelop::IContextBrowser, "org.kdevelop.IContextBrowser" )
 
-#endif // ICONTEXTBROWSER_H
+#endif // KDEVPLATFORM_ICONTEXTBROWSER_H

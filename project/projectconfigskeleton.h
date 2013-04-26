@@ -18,8 +18,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVPROJECTCONFIGSKELETON_H
-#define KDEVPROJECTCONFIGSKELETON_H
+#ifndef KDEVPLATFORM_PROJECTCONFIGSKELETON_H
+#define KDEVPLATFORM_PROJECTCONFIGSKELETON_H
 
 #include "projectexport.h"
 #include <kconfigskeleton.h>

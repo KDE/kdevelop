@@ -24,8 +24,8 @@ along with this library; see the document COPYING.LIB.  If not, write to
 the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
-#ifndef KDEV_DOCUMENTCONTROLLER_H
-#define KDEV_DOCUMENTCONTROLLER_H
+#ifndef KDEVPLATFORM_DOCUMENTCONTROLLER_H
+#define KDEVPLATFORM_DOCUMENTCONTROLLER_H
 
 #include <QtCore/QList>
 

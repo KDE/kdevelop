@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef SIMPLERANGE_H
-#define SIMPLERANGE_H
+#ifndef KDEVPLATFORM_SIMPLERANGE_H
+#define KDEVPLATFORM_SIMPLERANGE_H
 
 #include <ktexteditor/range.h>
 

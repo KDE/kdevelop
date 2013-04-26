@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef TYPEREPOSITORY_H
-#define TYPEREPOSITORY_H
+#ifndef KDEVPLATFORM_TYPEREPOSITORY_H
+#define KDEVPLATFORM_TYPEREPOSITORY_H
 
 #include <language/duchain/types/abstracttype.h>
 #include <language/duchain/referencecounting.h>

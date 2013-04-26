@@ -18,8 +18,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef PROJECTITEMADAPTORS_H
-#define PROJECTITEMADAPTORS_H
+#ifndef KDEVPLATFORM_PROJECTITEMADAPTORS_H
+#define KDEVPLATFORM_PROJECTITEMADAPTORS_H
 
 #include <KUrl>
 #include <project/projectmodel.h>

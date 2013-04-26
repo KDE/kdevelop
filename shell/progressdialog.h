@@ -32,8 +32,8 @@
  *  your version.
  */
 
-#ifndef KDEVELOP_PROGRESSDIALOG_H
-#define KDEVELOP_PROGRESSDIALOG_H
+#ifndef KDEVPLATFORM_PROGRESSDIALOG_H
+#define KDEVPLATFORM_PROGRESSDIALOG_H
 
 #include "overlaywidget.h"
 

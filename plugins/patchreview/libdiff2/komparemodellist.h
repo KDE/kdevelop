@@ -16,8 +16,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef KOMPAREMODELLIST_H
-#define KOMPAREMODELLIST_H
+#ifndef KDEVPLATFORM_PLUGIN_KOMPAREMODELLIST_H
+#define KDEVPLATFORM_PLUGIN_KOMPAREMODELLIST_H
 
 #include <QtCore/QObject>
 

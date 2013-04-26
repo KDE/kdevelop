@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef MAIN_H
-#define MAIN_H
+#ifndef KDEVPLATFORM_MAIN_H
+#define KDEVPLATFORM_MAIN_H
 
 #include <QObject>
 #include <QAtomicInt>

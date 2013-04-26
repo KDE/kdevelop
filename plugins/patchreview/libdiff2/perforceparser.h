@@ -13,8 +13,8 @@
 **
 ***************************************************************************/
 
-#ifndef PERFORCE_PARSER_H
-#define PERFORCE_PARSER_H
+#ifndef KDEVPLATFORM_PLUGIN_PERFORCE_PARSER_H
+#define KDEVPLATFORM_PLUGIN_PERFORCE_PARSER_H
 
 #include "parserbase.h"
 

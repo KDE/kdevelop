@@ -17,8 +17,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVELOP_KDEVFILTERS_H
-#define KDEVELOP_KDEVFILTERS_H
+#ifndef KDEVPLATFORM_KDEVFILTERS_H
+#define KDEVPLATFORM_KDEVFILTERS_H
 
 #include <grantlee/taglibraryinterface.h>
 #include <grantlee/filter.h>
@@ -90,4 +90,4 @@ public:
 
 }
 
-#endif // KDEVELOP_KDEVFILTERS_H
+#endif // KDEVPLATFORM_KDEVFILTERS_H

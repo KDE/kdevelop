@@ -19,8 +19,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef SEQUENTIALLYRUNJOBS_H
-#define SEQUENTIALLYRUNJOBS_H
+#ifndef KDEVPLATFORM_SEQUENTIALLYRUNJOBS_H
+#define KDEVPLATFORM_SEQUENTIALLYRUNJOBS_H
 
 #include <kcompositejob.h>
 #include "utilexport.h"

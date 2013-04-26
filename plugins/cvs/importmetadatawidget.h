@@ -9,8 +9,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef IMPORTMETADATAWIDGET_H
-#define IMPORTMETADATAWIDGET_H
+#ifndef KDEVPLATFORM_PLUGIN_IMPORTMETADATAWIDGET_H
+#define KDEVPLATFORM_PLUGIN_IMPORTMETADATAWIDGET_H
 
 #include <vcs/widgets/vcsimportmetadatawidget.h>
 

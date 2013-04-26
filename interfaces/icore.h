@@ -18,8 +18,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#ifndef ICORE_H
-#define ICORE_H
+#ifndef KDEVPLATFORM_ICORE_H
+#define KDEVPLATFORM_ICORE_H
 
 #include <QtCore/QObject>
 #include "interfacesexport.h"

@@ -17,8 +17,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#ifndef SESSIONCONTROLLER_H
-#define SESSIONCONTROLLER_H
+#ifndef KDEVPLATFORM_SESSIONCONTROLLER_H
+#define KDEVPLATFORM_SESSIONCONTROLLER_H
 
 #include "shellexport.h"
 #include "session.h"

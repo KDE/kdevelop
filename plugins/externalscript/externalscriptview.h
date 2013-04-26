@@ -18,8 +18,8 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef EXTERNALSCRIPTVIEW_H
-#define EXTERNALSCRIPTVIEW_H
+#ifndef KDEVPLATFORM_PLUGIN_EXTERNALSCRIPTVIEW_H
+#define KDEVPLATFORM_PLUGIN_EXTERNALSCRIPTVIEW_H
 
 #include <QWidget>
 
@@ -67,6 +67,6 @@ private:
   KAction* m_removeScriptAction;
 };
 
-#endif // EXTERNALSCRIPTVIEW_H
+#endif // KDEVPLATFORM_PLUGIN_EXTERNALSCRIPTVIEW_H
 
 // kate: indent-mode cstyle; space-indent on; indent-width 2; replace-tabs on; 

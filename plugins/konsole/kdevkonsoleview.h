@@ -9,8 +9,8 @@
 *                                                                         *
 ***************************************************************************/
 
-#ifndef KDEVKONSOLEVIEW_H
-#define KDEVKONSOLEVIEW_H
+#ifndef KDEVPLATFORM_PLUGIN_KDEVKONSOLEVIEW_H
+#define KDEVPLATFORM_PLUGIN_KDEVKONSOLEVIEW_H
 
 #include <QWidget>
 

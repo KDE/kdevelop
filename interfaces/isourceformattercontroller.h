@@ -18,8 +18,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#ifndef ISOURCEFORMATTERCONTROLLER_H
-#define ISOURCEFORMATTERCONTROLLER_H
+#ifndef KDEVPLATFORM_ISOURCEFORMATTERCONTROLLER_H
+#define KDEVPLATFORM_ISOURCEFORMATTERCONTROLLER_H
 
 #include <KDE/KMimeType>
 
@@ -63,6 +63,6 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatterController : public QObject
 
 }
 
-#endif // ISOURCEFORMATTERCONTROLLER_H
+#endif // KDEVPLATFORM_ISOURCEFORMATTERCONTROLLER_H
 
 // kate: indent-mode cstyle; space-indent off; tab-width 4 = 0;

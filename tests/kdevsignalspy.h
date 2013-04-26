@@ -18,8 +18,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef KDEVSIGNALSPY_H
-#define KDEVSIGNALSPY_H
+#ifndef KDEVPLATFORM_KDEVSIGNALSPY_H
+#define KDEVPLATFORM_KDEVSIGNALSPY_H
 
 #include <QtCore/QObject>
 #include "kdevplatformtestsexport.h"

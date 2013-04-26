@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef AUTOTESTSHELL_H
-#define AUTOTESTSHELL_H
+#ifndef KDEVPLATFORM_AUTOTESTSHELL_H
+#define KDEVPLATFORM_AUTOTESTSHELL_H
 
 #include <QtCore/QStringList>
 

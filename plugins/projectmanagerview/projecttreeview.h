@@ -18,8 +18,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVPROJECTTREEVIEW_H
-#define KDEVPROJECTTREEVIEW_H
+#ifndef KDEVPLATFORM_PLUGIN_PROJECTTREEVIEW_H
+#define KDEVPLATFORM_PLUGIN_PROJECTTREEVIEW_H
 
 #include <QtGui/QTreeView>
 #include <QtCore/QPointer>
@@ -77,5 +77,5 @@ class ProjectTreeView: public QTreeView
         QPersistentModelIndex m_idx;
 };
 
-#endif // KDEVPROJECTMANAGER_H
+#endif // KDEVPLATFORM_PLUGIN_PROJECTTREEVIEW_H
 

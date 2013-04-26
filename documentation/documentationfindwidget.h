@@ -18,8 +18,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef DOCUMENTATIONFINDWIDGET_H
-#define DOCUMENTATIONFINDWIDGET_H
+#ifndef KDEVPLATFORM_DOCUMENTATIONFINDWIDGET_H
+#define KDEVPLATFORM_DOCUMENTATIONFINDWIDGET_H
 
 #include <QWidget>
 #include "documentationexport.h"
@@ -57,4 +57,4 @@ class KDEVPLATFORMDOCUMENTATION_EXPORT DocumentationFindWidget : public QWidget
 
 }
 
-#endif // DOCUMENTATIONFINDWIDGET_H
+#endif // KDEVPLATFORM_DOCUMENTATIONFINDWIDGET_H

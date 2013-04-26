@@ -17,8 +17,8 @@
  Boston, MA 02110-1301, USA.
  */
 
-#ifndef OUTPUTEXECUTEJOB_H
-#define OUTPUTEXECUTEJOB_H
+#ifndef KDEVPLATFORM_OUTPUTEXECUTEJOB_H
+#define KDEVPLATFORM_OUTPUTEXECUTEJOB_H
 
 #include "outputjob.h"
 #include "outputmodel.h"
@@ -249,4 +249,4 @@ private:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::OutputExecuteJob::JobProperties);
 
-#endif // OUTPUTEXECUTEJOB_H
+#endif // KDEVPLATFORM_OUTPUTEXECUTEJOB_H

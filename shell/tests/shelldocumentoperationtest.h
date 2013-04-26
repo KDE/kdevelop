@@ -16,8 +16,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef SHELLDOCUMENTOPERATIONTEST_H
-#define SHELLDOCUMENTOPERATIONTEST_H
+#ifndef KDEVPLATFORM_SHELLDOCUMENTOPERATIONTEST_H
+#define KDEVPLATFORM_SHELLDOCUMENTOPERATIONTEST_H
 
 #include <QObject>
 

@@ -16,8 +16,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef SUBLIMEDOCUMENTTEST_H
-#define SUBLIMEDOCUMENTTEST_H
+#ifndef KDEVPLATFORM_SUBLIMEDOCUMENTTEST_H
+#define KDEVPLATFORM_SUBLIMEDOCUMENTTEST_H
 
 #include <QObject>
 

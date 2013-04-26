@@ -18,8 +18,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef EXTERNALSCRIPTJOB_H
-#define EXTERNALSCRIPTJOB_H
+#ifndef KDEVPLATFORM_PLUGIN_EXTERNALSCRIPTJOB_H
+#define KDEVPLATFORM_PLUGIN_EXTERNALSCRIPTJOB_H
 
 #include <QtCore/QProcess>
 #include <outputview/outputjob.h>
@@ -81,6 +81,6 @@ private:
   QStringList m_stderr;
 };
 
-#endif // EXTERNALSCRIPTJOB_H
+#endif // KDEVPLATFORM_PLUGIN_EXTERNALSCRIPTJOB_H
 
 // kate: indent-mode cstyle; space-indent on; indent-width 2; replace-tabs on;

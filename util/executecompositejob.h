@@ -16,8 +16,8 @@ along with this library; see the file COPYING.LIB.  If not, write to
 the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
-#ifndef EXECUTECOMPOSITEJOB_H
-#define EXECUTECOMPOSITEJOB_H
+#ifndef KDEVPLATFORM_EXECUTECOMPOSITEJOB_H
+#define KDEVPLATFORM_EXECUTECOMPOSITEJOB_H
 
 #include <kcompositejob.h>
 #include "utilexport.h"

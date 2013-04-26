@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef RANGEINREVISION_H
-#define RANGEINREVISION_H
+#ifndef KDEVPLATFORM_RANGEINREVISION_H
+#define KDEVPLATFORM_RANGEINREVISION_H
 
 #include "../languageexport.h"
 #include "cursorinrevision.h"

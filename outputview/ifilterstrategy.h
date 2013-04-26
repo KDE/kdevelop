@@ -17,8 +17,8 @@
 */
 
 
-#ifndef IFILTERSTRATEGY_H
-#define IFILTERSTRATEGY_H
+#ifndef KDEVPLATFORM_IFILTERSTRATEGY_H
+#define KDEVPLATFORM_IFILTERSTRATEGY_H
 
 #include "outputviewexport.h"
 
@@ -64,4 +64,4 @@ public:
 
 } // namespace KDevelop
 
-#endif // IFILTERSTRATEGY_H
+#endif // KDEVPLATFORM_IFILTERSTRATEGY_H

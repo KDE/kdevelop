@@ -17,8 +17,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef ILANGUAGECHECK_H
-#define ILANGUAGECHECK_H
+#ifndef KDEVPLATFORM_ILANGUAGECHECK_H
+#define KDEVPLATFORM_ILANGUAGECHECK_H
 
 #include "interfacesexport.h"
 #include <KUrl>

@@ -19,8 +19,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef VCSSTATUSINFO_H
-#define VCSSTATUSINFO_H
+#ifndef KDEVPLATFORM_VCSSTATUSINFO_H
+#define KDEVPLATFORM_VCSSTATUSINFO_H
 
 #include <QtCore/QVariant>
 

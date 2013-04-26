@@ -18,8 +18,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef QUICKOPENTEST_H
-#define QUICKOPENTEST_H
+#ifndef KDEVPLATFORM_PLUGIN_QUICKOPENBENCH_H
+#define KDEVPLATFORM_PLUGIN_QUICKOPENBENCH_H
 
 #include "quickopentestbase.h"
 
@@ -43,4 +43,4 @@ private slots:
     void benchProjectFileFilter_providerDataIcon_data();
 };
 
-#endif // QUICKOPENTEST_H
+#endif // KDEVPLATFORM_PLUGIN_QUICKOPENBENCH_H

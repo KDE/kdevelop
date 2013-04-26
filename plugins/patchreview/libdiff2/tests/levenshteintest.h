@@ -18,8 +18,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef LEVENSHTEINTEST_H
-#define LEVENSHTEINTEST_H
+#ifndef KDEVPLATFORM_PLUGIN_LEVENSHTEINTEST_H
+#define KDEVPLATFORM_PLUGIN_LEVENSHTEINTEST_H
 
 #include <QtCore/QObject>
 
@@ -34,4 +34,4 @@ private slots:
     void testSmth();
 };
 
-#endif //  LEVENSHTEINTEST_H
+#endif //  KDEVPLATFORM_PLUGIN_LEVENSHTEINTEST_H

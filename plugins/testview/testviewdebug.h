@@ -19,12 +19,12 @@
 
 */
 
-#ifndef TESTVIEWDEBUG_H
-#define TESTVIEWDEBUG_H
+#ifndef KDEVPLATFORM_PLUGIN_TESTVIEWDEBUG_H
+#define KDEVPLATFORM_PLUGIN_TESTVIEWDEBUG_H
 
 #include <KDebug>
 
 int debugArea();
 #define debug() kDebug(debugArea())
 
-#endif // TESTVIEWDEBUG_H
+#endif // KDEVPLATFORM_PLUGIN_TESTVIEWDEBUG_H

@@ -18,8 +18,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef CORE_H
-#define CORE_H
+#ifndef KDEVPLATFORM_CORE_H
+#define KDEVPLATFORM_CORE_H
 
 #include "shellexport.h"
 #include <interfaces/icore.h>

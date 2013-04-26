@@ -19,8 +19,8 @@
  ***************************************************************************/
 
 
-#ifndef CLOSEDWORKINGSETSWIDGET_H
-#define CLOSEDWORKINGSETSWIDGET_H
+#ifndef KDEVPLATFORM_CLOSEDWORKINGSETSWIDGET_H
+#define KDEVPLATFORM_CLOSEDWORKINGSETSWIDGET_H
 
 #include <QWidget>
 #include <QHBoxLayout>
@@ -66,4 +66,4 @@ private:
 
 }
 
-#endif // CLOSEDWORKINGSETSWIDGET_H
+#endif // KDEVPLATFORM_CLOSEDWORKINGSETSWIDGET_H
