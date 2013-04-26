@@ -19,16 +19,23 @@
 #include "iassistant.h"
 #include <kaction.h>
 #include <QMetaType>
+#include <QXmlStreamReader>
 #include <QTextEdit>
 
 using namespace KDevelop;
 
 Q_DECLARE_METATYPE(KSharedPtr<IAssistantAction>)
 
-// Very slow and ugly, but very secure
 static QString removeHtmlFromString(QString string)
 {
-    return QTextEdit(string).toPlainText();
+    QXmlStreamReader xml(string);
+    QString textString;
+    while (!xml.atEnd()) {
+        if ( xml.readNext() == QXmlStreamReader::Characters ) {
+            textString += xml.text();
+        }
+    }
+    return textString;
 }
 
 //BEGIN IAssistant
