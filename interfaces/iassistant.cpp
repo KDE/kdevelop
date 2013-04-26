@@ -28,9 +28,9 @@ Q_DECLARE_METATYPE(KSharedPtr<IAssistantAction>)
 
 static QString removeHtmlFromString(QString string)
 {
-    QXmlStreamReader xml(string);
+    QXmlStreamReader xml("<root>" + string + "</root>");
     QString textString;
-    while (!xml.atEnd()) {
+    while ( !xml.atEnd() ) {
         if ( xml.readNext() == QXmlStreamReader::Characters ) {
             textString += xml.text();
         }
