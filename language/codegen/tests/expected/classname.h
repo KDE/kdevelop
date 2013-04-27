@@ -3,8 +3,8 @@
  * You may do with it as you please.
  */
 
-#ifndef KDEVPLATFORM_CLASSNAME_H
-#define KDEVPLATFORM_CLASSNAME_H
+#ifndef CLASSNAME_H
+#define CLASSNAME_H
 
 class ClassName : public QObject
 {
@@ -17,4 +17,4 @@ public:
     SomeCustomType data;
 };
 
-#endif // KDEVPLATFORM_CLASSNAME_H
+#endif // CLASSNAME_H
