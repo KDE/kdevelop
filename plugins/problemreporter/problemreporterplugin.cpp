@@ -129,7 +129,7 @@ void ProblemReporterPlugin::textDocumentCreated(KDevelop::IDocument* document)
   DUChain::self()->updateContextForUrl(IndexedString(document->url()), KDevelop::TopDUContext::AllDeclarationsContextsAndUses, this);
 }
 
-void ProblemReporterPlugin::updateReady(const KDevelop::IndexedString& url) {
+void ProblemReporterPlugin::updateReady(const IndexedString &url, const ReferencedTopDUContext &ctx) {
   m_model->problemsUpdated(url);
   ProblemHighlighter* ph = m_highlighters.value(url);
   if (ph) {
@@ -141,7 +141,7 @@ void ProblemReporterPlugin::updateReady(const KDevelop::IndexedString& url) {
 void ProblemReporterPlugin::parseJobFinished(KDevelop::ParseJob* parseJob)
 {
   if(parseJob->duChain())
-    updateReady(parseJob->document());
+    updateReady(parseJob->document(), ReferencedTopDUContext());
 }
 
 KDevelop::ContextMenuExtension ProblemReporterPlugin::contextMenuExtension(KDevelop::Context* context) {
