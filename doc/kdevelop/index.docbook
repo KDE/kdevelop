@@ -299,6 +299,21 @@ double bar ()
   </mediaobject>
 </screenshot></para>
 </sect2>
+<sect2 id="rainbow-color-highlighting-explained"><title>Rainbow color highlighting explained</title> 
+<para><application>KDevelop</application> uses a variety of colors to highlight different objects in source code. If you know what the different colors mean, you can very quickly extract a lot of information from source code just by looking at the colors, without reading a single character. The highlighting rules are as follows:
+</para>
+<itemizedlist>
+<listitem><para>Objects of type Class / Struct, Enum (the values and the type), (global) functions, and class members each have their own color assigned (classes are green, enums are dark red, and members are dark yellow or violet, (global) functions are always violet).</para></listitem>
+<listitem><para>All global variables are colored in dark green.</para></listitem>
+<listitem><para>Identifiers which are typedefs for another type are colored in teal.</para></listitem>
+<listitem><para>All declarations and definitions of objects are in bold.</para></listitem>
+<listitem><para>If a member is accessed from within the context where it is defined (base or derived class) it appears in yellow, otherwise it appears in violet.</para></listitem>
+<listitem><para>If a member is private or protected, it gets colored in a slightly darker color when used.</para></listitem>
+<listitem><para>For variables local to a function body scope, rainbow colors are picked based on a hash of the identifier. This includes the parameters to the function. An identifier always will have the same color within its scope (but the same identifier will get a different color if it represents a different object, &ie; if it is redefined in a more nested scope), and you will usually get the same color for the same identifier name in different scopes. Thus, if you have multiple functions taking parameters with the same names, the arguments will all look the same color-wise. These rainbow colors can be turned off separately from the global coloring in the settings dialog.</para></listitem>
+<listitem><para>Identifiers for which &kdevelop; could not determine the corresponding declaration are colored in white. This can sometimes be caused by missing <varname>#include</varname> directives.</para></listitem>
+<listitem><para>In addition to that coloring, the normal editor syntax highlighting will be applied, as known from &kate;. &kdevelop;'s semantic highlighting will always override the editor highlighting if there is a conflict.</para></listitem>
+</itemizedlist>
+</sect2>
 </sect1>
 <sect1 id="navigating-in-source-code"><title>Navigating in source code</title>
 <para>In the previous section, we have discussed exploring source code, &ie; getting information about symbols, files and projects. The next step is then to jump around your source base, &ie; to navigate in it. There are again various levels at which this is possible: local, within a file, and within a project.</para>
