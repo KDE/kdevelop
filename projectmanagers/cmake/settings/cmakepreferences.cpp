@@ -361,6 +361,7 @@ void CMakePreferences::configure()
         connect(job, SIGNAL(finished(KJob*)), SLOT(cacheUpdated()));
     }
 
+    connect(job, SIGNAL(finished(KJob*)), m_project, SLOT(reloadModel()));
     KDevelop::ICore::self()->runController()->registerJob(job);
 }
 
