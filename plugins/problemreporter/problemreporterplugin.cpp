@@ -117,12 +117,8 @@ void ProblemReporterPlugin::documentClosed(IDocument* doc)
   if(!doc->textDocument())
     return;
   
-  QMutableHashIterator<IndexedString, ProblemHighlighter*> it = m_highlighters;
-  
   IndexedString url(doc->url().pathOrUrl());
-  
-  if (m_highlighters.contains(url))
-    delete m_highlighters.take(url);
+  delete m_highlighters.take(url);
 }
 
 void ProblemReporterPlugin::textDocumentCreated(KDevelop::IDocument* document)
@@ -133,13 +129,10 @@ void ProblemReporterPlugin::textDocumentCreated(KDevelop::IDocument* document)
   DUChain::self()->updateContextForUrl(IndexedString(document->url()), KDevelop::TopDUContext::AllDeclarationsContextsAndUses, this);
 }
 
-void ProblemReporterPlugin::updateReady(KDevelop::IndexedString url, KDevelop::ReferencedTopDUContext) {
+void ProblemReporterPlugin::updateReady(const IndexedString &url, const ReferencedTopDUContext &ctx) {
   m_model->problemsUpdated(url);
-  if (m_highlighters.contains(url)) {
-    ProblemHighlighter* ph = m_highlighters[url];
-    if (!ph)
-      return;
-
+  ProblemHighlighter* ph = m_highlighters.value(url);
+  if (ph) {
     QList<ProblemPointer> allProblems = m_model->getProblems(url, false);
     ph->setProblems(allProblems);
   }
@@ -148,7 +141,7 @@ void ProblemReporterPlugin::updateReady(KDevelop::IndexedString url, KDevelop::R
 void ProblemReporterPlugin::parseJobFinished(KDevelop::ParseJob* parseJob)
 {
   if(parseJob->duChain())
-    updateReady(parseJob->document(), parseJob->duChain());
+    updateReady(parseJob->document(), ReferencedTopDUContext());
 }
 
 KDevelop::ContextMenuExtension ProblemReporterPlugin::contextMenuExtension(KDevelop::Context* context) {

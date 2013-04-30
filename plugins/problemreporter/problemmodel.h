@@ -19,8 +19,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KDEVPLATFORM_PLUGIN_PROBLEMMODEL_H
-#define KDEVPLATFORM_PLUGIN_PROBLEMMODEL_H
+#ifndef PROBLEMMODEL_H
+#define PROBLEMMODEL_H
 
 #include <QtCore/QAbstractItemModel>
 #include <QReadWriteLock>
@@ -76,11 +76,11 @@ public:
     /**
      * Get problems for @ref url.
      */
-    QList<KDevelop::ProblemPointer> getProblems(KDevelop::IndexedString url, bool showImports) const;
+    QList<KDevelop::ProblemPointer> getProblems(const KDevelop::IndexedString &url, bool showImports);
     /**
      * Get merged list of problems for all @ref urls.
      */
-    QList<KDevelop::ProblemPointer> getProblems(QSet< KDevelop::IndexedString > urls, bool showImports) const;
+    QList<KDevelop::ProblemPointer> getProblems(QSet<KDevelop::IndexedString> urls, bool showImports);
     ProblemReporterPlugin* plugin();
 
 public slots:
@@ -99,7 +99,7 @@ private slots:
     void timerExpired();
 
 private:
-    void getProblemsInternal(KDevelop::TopDUContext* context, bool showImports, QSet<KDevelop::TopDUContext*>& visitedContexts, QList<KDevelop::ProblemPointer>& result) const;
+    void getProblemsInternal(KDevelop::TopDUContext* context, bool showImports, QSet<KDevelop::TopDUContext*>& visitedContexts, QList<KDevelop::ProblemPointer>& result);
     void rebuildProblemList();
 
     ProblemReporterPlugin* m_plugin;
@@ -118,4 +118,4 @@ private:
     const static int MaxTimeout;
 };
 
-#endif // KDEVPLATFORM_PLUGIN_PROBLEMMODEL_H
+#endif // PROBLEMMODEL_H

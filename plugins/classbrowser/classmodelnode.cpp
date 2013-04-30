@@ -297,6 +297,9 @@ FunctionNode::FunctionNode(Declaration* a_decl, NodesModelInterface* a_model)
     else
       m_sortableString = '1' + m_displayName;
   }
+  else {
+    m_sortableString = m_displayName;
+  }
 }
 
 //////////////////////////////////////////////////////////////////////////////
