@@ -36,7 +36,9 @@
 #include <qtest_kde.h>
 
 #define WAIT_FOR_SUITES(n, max)    \
-int i = 0; while(ICore::self()->testController()->testSuitesForProject(project).size() < n && i < max*10) { QTest::qWait(100); ++i; }
+for(int i = 0; ICore::self()->testController()->testSuitesForProject(project).size() < n && i < max*10; ++i) {\
+    QTest::kWaitForSignal(ICore::self()->testController(), SIGNAL(testSuiteAdded(KDevelop::ITestSuite*)), 1000);\
+}
 
 QTEST_KDEMAIN( CTestFindSuitesTest, GUI )
 

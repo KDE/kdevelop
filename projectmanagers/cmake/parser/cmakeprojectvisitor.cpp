@@ -1507,7 +1507,7 @@ int CMakeProjectVisitor::visit(const FileAst *file)
         case FileAst::Glob:
         case FileAst::GlobRecurse: {
             QStringList matches;
-            foreach(QString expr, file->globbingExpressions())
+            foreach(const QString& expr, file->globbingExpressions())
             {
                 if (expr.isEmpty())
                     continue;
@@ -2460,7 +2460,7 @@ QStringList CMakeProjectVisitor::traverseGlob(const QString& startPath, const QS
                 dirsToSearch << dir;
                 QDir d(dir);
                 QStringList dirNames = d.entryList(dirFilters);
-                foreach(QString dirName, dirNames)
+                foreach(const QString& dirName, dirNames)
                 {
                     dirsToExpand << d.filePath(dirName);
                 }
@@ -2469,11 +2469,11 @@ QStringList CMakeProjectVisitor::traverseGlob(const QString& startPath, const QS
         else
             dirsToSearch << startPath;
         QStringList filePaths;
-        foreach (QString dirToSearch, dirsToSearch)
+        foreach (const QString& dirToSearch, dirsToSearch)
         {
             QDir dir(dirToSearch);
             QStringList fileNames = dir.entryList(nameFilters, QDir::Files);
-            foreach (QString fileName, fileNames)
+            foreach (const QString& fileName, fileNames)
             {
                 filePaths << dir.filePath(fileName);
             }
@@ -2505,7 +2505,7 @@ QStringList CMakeProjectVisitor::traverseGlob(const QString& startPath, const QS
     QString path = startPath;
     if (!path.endsWith('/'))
         path += '/';
-    foreach(QString dirName, matchedDirs)
+    foreach(const QString& dirName, matchedDirs)
     {
         kDebug(9042) << "Going resursive into " << path + dirName << " and glob " << rightExpression;
         matches.append(traverseGlob(path + dirName, rightExpression, recursive, followSymlinks));

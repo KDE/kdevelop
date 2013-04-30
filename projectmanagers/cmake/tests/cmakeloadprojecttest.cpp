@@ -105,13 +105,13 @@ void CMakeLoadProjectTest::testSmallProjectWithTests()
 void CMakeLoadProjectTest::testKDE4ProjectWithTests()
 {
     CMakeProjectData v = parseProject(CMAKE_TESTS_PROJECTS_DIR "/unit_tests_kde");
-    QCOMPARE(v.testSuites.count(), 1);
+    QCOMPARE(v.testSuites.count(), 2); //cmake-test-unittestskde,unittestskde-nonstd-location
     QCOMPARE(v.projectName, QString("unittestskde"));
     
     QCOMPARE(v.testSuites.at(0).files, QStringList() << "test.cpp");
     QCOMPARE(v.testSuites.at(0).name, QString("cmake-test-unittestskde"));
     QCOMPARE(v.testSuites.at(0).arguments.count(), 0);
-    QVERIFY(!KUrl(v.testSuites.at(0).executable).isRelative());
+    QVERIFY(KUrl(v.testSuites.at(0).executable).isRelative());
 }
 
 CMakeProjectData CMakeLoadProjectTest::parseProject( const QString& sourcedir )
