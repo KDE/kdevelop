@@ -43,6 +43,8 @@ target_link_libraries(kcm_kdev_ninjabuilder
 install(TARGETS kcm_kdev_ninjabuilder DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install(FILES kcm_kdev_ninjabuilder.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-install(FILES kdevninja.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+
+configure_file(kdevninja.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevninja.desktop)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevninja.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 
 
