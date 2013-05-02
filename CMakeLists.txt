@@ -47,6 +47,8 @@ target_link_libraries(kdevqmljslanguagesupport
     ${QT_QTDECLARATIVE_LIBRARIES}
 )
 
-install(FILES kdevqmljssupport.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 install(TARGETS kdevqmljslanguagesupport DESTINATION ${PLUGIN_INSTALL_DIR})
 install(DIRECTORY navigation/propertywidgets DESTINATION ${DATA_INSTALL_DIR})
+
+configure_file(kdevqmljssupport.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevqmljssupport.desktop)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevqmljssupport.desktop DESTINATION ${SERVICES_INSTALL_DIR})
