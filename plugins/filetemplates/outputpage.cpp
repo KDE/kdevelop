@@ -121,7 +121,7 @@ void OutputPagePrivate::validate()
         qSort(invalidFiles);
         output->messageWidget->setMessageType(KMessageWidget::Error);
         output->messageWidget->setCloseButtonVisible(false);
-        output->messageWidget->setText(i18np("Invalid output files: %2", "Invalid output files: %2", invalidFiles.count(), invalidFiles.join(", ")));
+        output->messageWidget->setText(i18np("Invalid output file: %2", "Invalid output files: %2", invalidFiles.count(), invalidFiles.join(", ")));
         output->messageWidget->animatedShow();
     }
     emit page->isValid(valid);
