@@ -133,16 +133,15 @@ Cpp::MissingIncludePathAssistant::MissingIncludePathAssistant(KDevelop::IndexedS
   m_directive = directive;
 }
 
-QList< KDevelop::IAssistantAction::Ptr > Cpp::MissingIncludePathAssistant::actions() const {
-  if(KDevelop::IAssistant::actions().isEmpty()) {
-    MissingIncludePathAssistant* nonConst = const_cast<MissingIncludePathAssistant*>(this);
-    
-    KDevelop::IProject* project = KDevelop::ICore::self()->projectController()->findProjectForUrl(m_url.toUrl());
-    
-    if(!project)
-      nonConst->addAction(KDevelop::IAssistantAction::Ptr(new OpenProjectForFileAssistant(m_url.toUrl())));
+void MissingIncludePathAssistant::createActions()
+{
+  MissingIncludePathAssistant* nonConst = const_cast<MissingIncludePathAssistant*>(this);
 
-    nonConst->addAction(KDevelop::IAssistantAction::Ptr(new AddCustomIncludePathAction(m_url, m_directive)));
-  }
-  return KDevelop::IAssistant::actions();
+  KDevelop::IProject* project = KDevelop::ICore::self()->projectController()->findProjectForUrl(m_url.toUrl());
+
+  if(!project)
+    nonConst->addAction(KDevelop::IAssistantAction::Ptr(new OpenProjectForFileAssistant(m_url.toUrl())));
+
+  nonConst->addAction(KDevelop::IAssistantAction::Ptr(new AddCustomIncludePathAction(m_url, m_directive)));
 }
+
