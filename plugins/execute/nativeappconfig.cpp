@@ -313,7 +313,7 @@ KJob* NativeAppLauncher::start(const QString& launchMode, KDevelop::ILaunchConfi
     }
     if( launchMode == "execute" )
     {
-        IExecutePlugin* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IExecutePlugin")->extension<IExecutePlugin>();
+        IExecutePlugin* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IExecutePlugin", "kdevexecute")->extension<IExecutePlugin>();
         Q_ASSERT(iface);
         KJob* depjob = iface->dependecyJob( cfg );
         QList<KJob*> l;
