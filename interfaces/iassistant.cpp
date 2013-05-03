@@ -17,8 +17,9 @@
 */
 
 #include "iassistant.h"
-#include <kaction.h>
-#include <QMetaType>
+#include "icore.h"
+
+#include <KAction>
 #include <QXmlStreamReader>
 #include <QTextEdit>
 
@@ -40,16 +41,22 @@ static QString removeHtmlFromString(QString string)
 
 //BEGIN IAssistant
 
+void IAssistant::createActions()
+{
+}
+
 KAction* IAssistantAction::toKAction() const
 {
+    Q_ASSERT(thread() == ICore::self()->thread() && "Actions must be created in the application main thread"
+                                                    "(implement createActions() to create your actions)");
+
     KAction* ret = new KAction(KIcon(icon()), removeHtmlFromString(description()), 0);
     ret->setToolTip(toolTip());
-    qRegisterMetaType<KSharedPtr<IAssistantAction> >("KSharedPtr<IAssistantAction>()");
 
     //Add the data as a KSharedPtr to the action, so this assistant stays alive at least as long as the KAction
     ret->setData(QVariant::fromValue(KSharedPtr<IAssistantAction>(const_cast<IAssistantAction*>(this))));
 
-    connect(ret, SIGNAL(triggered(bool)), SLOT(execute()), Qt::QueuedConnection);
+    connect(ret, SIGNAL(triggered(bool)), SLOT(execute()));
     return ret;
 }
 
@@ -58,7 +65,8 @@ IAssistant::~IAssistant()
 }
 
 IAssistantAction::IAssistantAction()
-: KSharedObject(*(QObject*)this)
+    : QObject()
+    , KSharedObject(*(QObject*)this)
 {
 }
 
@@ -127,6 +135,9 @@ void IAssistant::doHide()
 
 QList< IAssistantAction::Ptr > IAssistant::actions() const
 {
+    if ( m_actions.isEmpty() ) {
+        const_cast<IAssistant*>(this)->createActions();
+    }
     return m_actions;
 }
 

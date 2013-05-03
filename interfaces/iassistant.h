@@ -110,8 +110,14 @@ public:
 
     typedef KSharedPtr<IAssistant> Ptr;
 
-    ///Returns the stored list of actions, or can be overridden to return an own set.
-    virtual QList<IAssistantAction::Ptr> actions() const;
+    ///Returns the stored list of actions
+    QList<IAssistantAction::Ptr> actions() const;
+
+    ///Implement this and have it create the actions for your assistant.
+    ///It will only be called if the assistant is displayed, which saves
+    ///memory compared to creating the actions right away.
+    ///Default implementation does nothing.
+    virtual void createActions();
 
     ///Adds the given action to the list of actions.
     ///Does not emit actionsChanged(), you have to do that when you're ready.
