@@ -267,7 +267,7 @@ bool CppTools::CustomIncludePathsSettings::delete_() {
 KDevelop::ModificationRevisionSet IncludePathResolver::findIncludePathDependency(QString file)
 {
   KDevelop::ModificationRevisionSet rev;
-  CppTools::CustomIncludePathsSettings settings = CustomIncludePathsSettings::findAndRead(file);
+  CppTools::CustomIncludePathsSettings settings = CustomIncludePathsSettings::findAndReadAbsolute(file);
   KDevelop::IndexedString storageFile(settings.storageFile());
   if(!storageFile.isEmpty())
     rev.addModificationRevision(storageFile, KDevelop::ModificationRevision::revisionForFile(storageFile));
@@ -342,6 +342,21 @@ QString CppTools::CustomIncludePathsSettings::storageFile() const
   return ret;
 }
 
+CppTools::CustomIncludePathsSettings CppTools::CustomIncludePathsSettings::findAndReadAbsolute(const QString& startPath)
+{
+  CppTools::CustomIncludePathsSettings settings(findAndRead(startPath));
+  QDir sourceDir( settings.storagePath );
+
+  // Turn relative paths into absolute paths from the storage path
+  for (int i = 0; i < settings.paths.size(); i++) {
+    QString& path = settings.paths[i];
+    if (!path.startsWith("/"))
+      settings.paths[i] = sourceDir.absoluteFilePath(path);
+  }
+
+  return settings;
+}
+
 CustomIncludePathsSettings CustomIncludePathsSettings::read(QString storagePath) {
   QDir sourceDir( storagePath );
   CustomIncludePathsSettings ret;
@@ -382,9 +397,6 @@ CustomIncludePathsSettings CustomIncludePathsSettings::read(QString storagePath)
               }
             }
           }else{
-            // Turn relative paths into absolute paths from the storage path
-            if (!textLine.startsWith("/"))
-              textLine = sourceDir.absoluteFilePath(textLine);
             ret.paths << textLine;
           }
         }
@@ -494,7 +506,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
 
   ifTest( cout << "working-directory: " <<  workingDirectory.toLocal8Bit().data() << "  file: " << file.toLocal8Bit().data() << std::endl; )
   
-  CppTools::CustomIncludePathsSettings customPaths = CustomIncludePathsSettings::findAndRead(workingDirectory);
+  CppTools::CustomIncludePathsSettings customPaths = CustomIncludePathsSettings::findAndReadAbsolute(workingDirectory);
   
   if(customPaths.isValid()) {
     PathResolutionResult result(true);
