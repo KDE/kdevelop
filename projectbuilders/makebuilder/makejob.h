@@ -73,7 +73,6 @@ public:
     CommandType commandType();
     QStringList customTargets() const;
 
-    void setItem( KDevelop::ProjectBaseItem* item );
 
     // This returns the build directory for registered item.
     virtual KUrl workingDirectory() const;
@@ -88,8 +87,7 @@ public:
     virtual QString environmentProfile() const;
 
 private:
-    MakeBuilder* m_builder;
-    KDevelop::ProjectBaseItem* m_item;
+    QPersistentModelIndex m_idx;
     CommandType m_command;
     QStringList m_overrideTargets;
     MakeVariables m_variables;
