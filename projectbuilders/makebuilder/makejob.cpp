@@ -33,6 +33,8 @@
 #include <KLocalizedString>
 
 #include <interfaces/iproject.h>
+#include <interfaces/icore.h>
+#include <interfaces/iprojectcontroller.h>
 #include <project/projectmodel.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 
@@ -44,7 +46,7 @@ MakeJob::MakeJob(QObject* parent, KDevelop::ProjectBaseItem* item,
                  CommandType c,  const QStringList& overrideTargets,
                  const MakeVariables& variables )
     : OutputExecuteJob(parent)
-    , m_item(item)
+    , m_idx(item->index())
     , m_command(c)
     , m_overrideTargets(overrideTargets)
     , m_variables(variables)
@@ -55,9 +57,9 @@ MakeJob::MakeJob(QObject* parent, KDevelop::ProjectBaseItem* item,
 
     QString title;
     if( !m_overrideTargets.isEmpty() )
-        title = i18n("Make (%1): %2", m_item->text(), m_overrideTargets.join(" "));
+        title = i18n("Make (%1): %2", item->text(), m_overrideTargets.join(" "));
     else
-        title = i18n("Make (%1)", m_item->text());
+        title = i18n("Make (%1)", item->text());
     setJobName( title );
     setToolTitle( i18n("Make") );
 }
@@ -68,15 +70,16 @@ MakeJob::~MakeJob()
 
 void MakeJob::start()
 {
+    ProjectBaseItem* it = item();
     kDebug(9037) << "Building with make" << m_command << m_overrideTargets.join(" ");
-    if (!m_item)
+    if (!it)
     {
         setError(ItemNoLongerValidError);
         setErrorText(i18n("Build item no longer available"));
         return emitResult();
     }
 
-    if( m_item->type() == KDevelop::ProjectBaseItem::File ) {
+    if( it->type() == KDevelop::ProjectBaseItem::File ) {
         setError(IncorrectItemError);
         setErrorText(i18n("Internal error: cannot build a file item"));
         return emitResult();
@@ -90,7 +93,7 @@ void MakeJob::start()
 
 KDevelop::ProjectBaseItem * MakeJob::item() const
 {
-    return m_item;
+    return ICore::self()->projectController()->projectModel()->itemFromIndex(m_idx);
 }
 
 MakeJob::CommandType MakeJob::commandType()
@@ -105,13 +108,17 @@ QStringList MakeJob::customTargets() const
 
 KUrl MakeJob::workingDirectory() const
 {
-    KDevelop::IBuildSystemManager *bldMan = m_item->project()->buildSystemManager();
+    ProjectBaseItem* it = item();
+    if(!it)
+        return KUrl();
+
+    KDevelop::IBuildSystemManager *bldMan = it->project()->buildSystemManager();
     if( bldMan )
-        return bldMan->buildDirectory( m_item ); // the correct build dir
+        return bldMan->buildDirectory( it ); // the correct build dir
     else
     {
         // Just build in-source, where the build directory equals the one with particular target/source.
-        for( ProjectBaseItem* item = m_item; item; item = item->parent() ) {
+        for( ProjectBaseItem* item = it; item; item = item->parent() ) {
             switch( item->type() ) {
             case KDevelop::ProjectBaseItem::Folder:
             case KDevelop::ProjectBaseItem::BuildFolder:
@@ -128,7 +135,10 @@ KUrl MakeJob::workingDirectory() const
 
 QStringList MakeJob::privilegedExecutionCommand() const
 {
-    KSharedConfig::Ptr configPtr = m_item->project()->projectConfiguration();
+    ProjectBaseItem* it = item();
+    if(!it)
+        return QStringList();
+    KSharedConfig::Ptr configPtr = it->project()->projectConfiguration();
     KConfigGroup builderGroup( configPtr, "MakeBuilder" );
 
     bool runAsRoot = builderGroup.readEntry( "Install As Root", false );
@@ -153,9 +163,12 @@ QStringList MakeJob::privilegedExecutionCommand() const
 
 QStringList MakeJob::commandLine() const
 {
+    ProjectBaseItem* it = item();
+    if(!it)
+        return QStringList();
     QStringList cmdline;
 
-    KSharedConfig::Ptr configPtr = m_item->project()->projectConfiguration();
+    KSharedConfig::Ptr configPtr = it->project()->projectConfiguration();
     KConfigGroup builderGroup( configPtr, "MakeBuilder" );
 
 #ifdef _MSC_VER
@@ -188,22 +201,20 @@ QStringList MakeJob::commandLine() const
             cmdline << option;
     }
 
-    MakeVariables::const_iterator it = m_variables.constBegin();
-    while ( it != m_variables.constEnd() )
+    for (MakeVariables::const_iterator it = m_variables.constBegin(); it != m_variables.constEnd(); ++it)
     {
         cmdline += QString("%1=%2").arg(it->first).arg(it->second);
-        ++it;
     }
 
     if( m_overrideTargets.isEmpty() )
     {
         QString target;
-        switch (m_item->type()) {
+        switch (it->type()) {
             case KDevelop::ProjectBaseItem::Target:
             case KDevelop::ProjectBaseItem::ExecutableTarget:
             case KDevelop::ProjectBaseItem::LibraryTarget:
-                Q_ASSERT(m_item->target());
-                cmdline << m_item->target()->text();
+                Q_ASSERT(it->target());
+                cmdline << it->target()->text();
                 break;
             case KDevelop::ProjectBaseItem::BuildFolder:
                 target = builderGroup.readEntry("Default Target", QString());
@@ -222,14 +233,10 @@ QStringList MakeJob::commandLine() const
 
 QString MakeJob::environmentProfile() const
 {
-    KSharedConfig::Ptr configPtr = m_item->project()->projectConfiguration();
+    ProjectBaseItem* it = item();
+    if(!it)
+        return QString();
+    KSharedConfig::Ptr configPtr = it->project()->projectConfiguration();
     KConfigGroup builderGroup( configPtr, "MakeBuilder" );
     return builderGroup.readEntry( "Default Make Environment Profile", "default" );
 }
-
-void MakeJob::setItem( ProjectBaseItem* item )
-{
-    m_item = item;
-}
-
-#include "makejob.moc"
