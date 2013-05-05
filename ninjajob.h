@@ -38,7 +38,6 @@ class NinjaJob : public KDevelop::OutputExecuteJob
     };
     public:
         NinjaJob( KDevelop::ProjectBaseItem* item, const QStringList& arguments, const QByteArray& signal, QObject* parent );
-        void signalWhenFinished(const QByteArray& signal);
         void setIsInstalling( bool isInstalling );
 
         virtual KUrl workingDirectory() const;
