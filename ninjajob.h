@@ -37,8 +37,8 @@ class NinjaJob : public KDevelop::OutputExecuteJob
         Failed
     };
     public:
-        NinjaJob( KDevelop::ProjectBaseItem* item, const QStringList& arguments, QObject* parent );
-        void signalWhenFinished(const QByteArray& signal, KDevelop::ProjectBaseItem* item);
+        NinjaJob( KDevelop::ProjectBaseItem* item, const QStringList& arguments, const QByteArray& signal, QObject* parent );
+        void signalWhenFinished(const QByteArray& signal);
         void setIsInstalling( bool isInstalling );
 
         virtual KUrl workingDirectory() const;
@@ -52,9 +52,10 @@ class NinjaJob : public KDevelop::OutputExecuteJob
         void emitProjectBuilderSignal(KJob* job);
 
     private:
+        KDevelop::ProjectBaseItem* item() const;
         bool m_lastLine;
         bool m_isInstalling;
-        KDevelop::ProjectBaseItem* m_item;
+        QPersistentModelIndex m_idx;
         QByteArray m_signal;
 
         void appendLines( const QStringList& lines );

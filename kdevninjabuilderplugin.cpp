@@ -109,9 +109,7 @@ NinjaJob* KDevNinjaBuilderPlugin::runNinja(KDevelop::ProjectBaseItem* item, cons
     }
     jobArguments << args;
 
-    NinjaJob* job = new NinjaJob(item, jobArguments, this);
-    job->signalWhenFinished(signal, item);
-    return job;
+    return new NinjaJob(item, jobArguments, signal, this);
 }
 
 KJob* KDevNinjaBuilderPlugin::build(KDevelop::ProjectBaseItem* item)

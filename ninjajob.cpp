@@ -27,13 +27,16 @@
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/projectmodel.h>
 #include <interfaces/iproject.h>
+#include <interfaces/icore.h>
+#include <interfaces/iprojectcontroller.h>
 #include <QFile>
 
-NinjaJob::NinjaJob(KDevelop::ProjectBaseItem* item, const QStringList& arguments, QObject* parent)
+NinjaJob::NinjaJob(KDevelop::ProjectBaseItem* item, const QStringList& arguments, const QByteArray& signal, QObject* parent)
     : OutputExecuteJob(parent)
     , m_lastLine(false)
     , m_isInstalling(false)
-    , m_item(item)
+    , m_idx(item->index())
+    , m_signal(signal)
 {
     setToolTitle(i18n("Ninja"));
     setCapabilities(Killable);
@@ -53,10 +56,12 @@ NinjaJob::NinjaJob(KDevelop::ProjectBaseItem* item, const QStringList& arguments
     }
     QString title;
     if( !targets.isEmpty() )
-        title = i18n("Ninja (%1): %2", m_item->text(), targets.join(" "));
+        title = i18n("Ninja (%1): %2", item->text(), targets.join(" "));
     else
-        title = i18n("Ninja (%1)", m_item->text());
+        title = i18n("Ninja (%1)", item->text());
     setJobName( title );
+
+    connect(this, SIGNAL(finished(KJob*)), SLOT(emitProjectBuilderSignal(KJob*)));
 }
 
 void NinjaJob::setIsInstalling( bool isInstalling )
@@ -66,11 +71,15 @@ void NinjaJob::setIsInstalling( bool isInstalling )
 
 KUrl NinjaJob::workingDirectory() const
 {
-    KUrl workingDir = m_item->project()->buildSystemManager()->buildDirectory( m_item );
+    KDevelop::ProjectBaseItem* it = item();
+    if(!it)
+        return KUrl();
+    KDevelop::IBuildSystemManager* bsm = it->project()->buildSystemManager();
+    KUrl workingDir = bsm->buildDirectory( it );
     while( !QFile::exists( workingDir.toLocalFile( KUrl::AddTrailingSlash ) + "build.ninja" ) ) {
         KUrl upWorkingDir = workingDir.upUrl();
         if( upWorkingDir.isEmpty() || upWorkingDir == workingDir ) {
-            return m_item->project()->buildSystemManager()->buildDirectory( m_item->project()->projectItem() );
+            return bsm->buildDirectory( it->project()->projectItem() );
         }
         workingDir = upWorkingDir;
     }
@@ -79,7 +88,10 @@ KUrl NinjaJob::workingDirectory() const
 
 QStringList NinjaJob::privilegedExecutionCommand() const
 {
-    KSharedConfig::Ptr configPtr = m_item->project()->projectConfiguration();
+    KDevelop::ProjectBaseItem* it = item();
+    if(!it)
+        return QStringList();
+    KSharedConfig::Ptr configPtr = it->project()->projectConfiguration();
     KConfigGroup builderGroup( configPtr, "NinjaBuilder" );
 
     bool runAsRoot = builderGroup.readEntry( "Install As Root", false );
@@ -102,20 +114,17 @@ QStringList NinjaJob::privilegedExecutionCommand() const
     return QStringList();
 }
 
-void NinjaJob::signalWhenFinished(const QByteArray& signal, KDevelop::ProjectBaseItem* item)
-{
-    m_signal = signal;
-    m_item = item;
-    connect(this, SIGNAL(finished(KJob*)), SLOT(emitProjectBuilderSignal(KJob*)));
-}
-
 void NinjaJob::emitProjectBuilderSignal(KJob* job)
 {
     Q_ASSERT(!m_signal.isEmpty());
+    
+    KDevelop::ProjectBaseItem* it = item();
+    if(!it)
+        return;
     if(job->error()==0)
-        QMetaObject::invokeMethod(parent(), m_signal, Q_ARG(KDevelop::ProjectBaseItem*, m_item));
+        QMetaObject::invokeMethod(parent(), m_signal, Q_ARG(KDevelop::ProjectBaseItem*, it));
     else
-        QMetaObject::invokeMethod(parent(), "failed", Q_ARG(KDevelop::ProjectBaseItem*, m_item));
+        QMetaObject::invokeMethod(parent(), "failed", Q_ARG(KDevelop::ProjectBaseItem*, it));
 }
 
 void NinjaJob::postProcessStderr( const QStringList& lines )
@@ -149,4 +158,9 @@ void NinjaJob::appendLines(const QStringList& lines)
     m_lastLine = ret.last().startsWith('[');
     */
     model()->appendLines(ret);
+}
+
+KDevelop::ProjectBaseItem* NinjaJob::item() const
+{
+    return KDevelop::ICore::self()->projectController()->projectModel()->itemFromIndex(m_idx);
 }
