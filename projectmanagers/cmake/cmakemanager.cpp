@@ -1043,40 +1043,6 @@ KDevelop::IProjectBuilder * CMakeManager::builder() const
     return _builder ;
 }
 
-/*void CMakeProjectManager::parseOnly(KDevelop::IProject* project, const KUrl &url)
-{
-    kDebug(9042) << "Looking for" << url << " to regenerate";
-
-    KUrl cmakeListsPath(url);
-    cmakeListsPath.addPath("CMakeLists.txt");
-
-    VariableMap *vm=&m_varsPerProject[project];
-    MacroMap *mm=&m_macrosPerProject[project];
-
-    CMakeFileContent f = CMakeListsParser::readCMakeFile(cmakeListsPath.toLocalFile());
-    if(f.isEmpty())
-    {
-        kDebug() << "There is no" << cmakeListsPath;
-        return;
-    }
-
-    QString currentBinDir=KUrl::relativeUrl(project->projectItem()->url(), url);
-    vm->insert("CMAKE_CURRENT_BINARY_DIR", QStringList(vm->value("CMAKE_BINARY_DIR")[0]+currentBinDir));
-    vm->insert("CMAKE_CURRENT_LIST_FILE", QStringList(cmakeListsPath.toLocalFile(KUrl::RemoveTrailingSlash)));
-    vm->insert("CMAKE_CURRENT_LIST_DIR", QStringList(url.toLocalFile(KUrl::RemoveTrailingSlash)));
-    vm->insert("CMAKE_CURRENT_SOURCE_DIR", QStringList(url.toLocalFile(KUrl::RemoveTrailingSlash)));
-    CMakeProjectVisitor v(url.toLocalFile(), missingtopcontext);
-    v.setCacheValues(m_projectCache[project]);
-    v.setVariableMap(vm);
-    v.setMacroMap(mm);
-    v.setModulePath(m_modulePathPerProject[project]);
-    v.walk(f, 0);
-    vm->remove("CMAKE_CURRENT_LIST_FILE");
-    vm->remove("CMAKE_CURRENT_LIST_DIR");
-    vm->remove("CMAKE_CURRENT_SOURCE_DIR");
-    vm->remove("CMAKE_CURRENT_BINARY_DIR");
-}*/
-
 bool CMakeManager::reload(KDevelop::ProjectFolderItem* folder)
 {
     if(isReloading(folder->project()))
