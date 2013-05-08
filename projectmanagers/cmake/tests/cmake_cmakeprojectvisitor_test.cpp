@@ -409,7 +409,12 @@ void CMakeProjectVisitorTest::testRun_data()
     QTest::newRow("get_filename_component") <<
                             "get_filename_component(output /usr/lib/libdl.so PATH)\n"
                             << cacheValues << results;
-                            
+    results.clear();
+    results << StringPair("output", "usr/lib");
+    QTest::newRow("get_filename_component2") <<
+                            "get_filename_component(output usr/lib/libdl.so PATH)\n"
+                            << cacheValues << results;
+
     results.clear();
     QTest::newRow("unfinished function") <<
                             "function(test)\n"

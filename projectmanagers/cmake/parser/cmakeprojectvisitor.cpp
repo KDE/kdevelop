@@ -1622,9 +1622,11 @@ int CMakeProjectVisitor::visit(const GetFilenameComponentAst *filecomp)
     QString val;
     switch(filecomp->type())
     {
-        case GetFilenameComponentAst::Path:
-            val=fi.path();
-            break;
+        case GetFilenameComponentAst::Path: {
+            int idx = filecomp->fileName().lastIndexOf(QDir::separator());
+            if(idx>=0)
+                val=filecomp->fileName().left(idx);
+        }   break;
         case GetFilenameComponentAst::Absolute:
             val=fi.absoluteFilePath();
             break;
