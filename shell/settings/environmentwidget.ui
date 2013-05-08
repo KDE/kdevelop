@@ -12,47 +12,51 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Environment group:</string>
-     </property>
-    </widget>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Environment group:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KComboBox" name="activeCombo">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>1</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="editable">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="addgrpBtn">
+       <property name="text">
+        <string>Add Group</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="removegrpBtn">
+       <property name="text">
+        <string>Remove Group</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KPushButton" name="setAsDefaultBtn">
+       <property name="text">
+        <string>Set As Default Group</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
-   <item row="0" column="1">
-    <widget class="KComboBox" name="activeCombo">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>1</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="editable">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="2">
-    <widget class="QPushButton" name="addgrpBtn">
-     <property name="text">
-      <string>Add Group</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="3">
-    <widget class="QPushButton" name="removegrpBtn">
-     <property name="text">
-      <string>Remove Group</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="4" colspan="2">
-    <widget class="KPushButton" name="setAsDefaultBtn">
-     <property name="text">
-      <string>Set As Default Group</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0" colspan="5">
+   <item row="1" column="0">
     <widget class="QTableView" name="variableTable">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -74,7 +78,7 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="5">
+   <item row="1" column="1">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
       <widget class="KPushButton" name="newButton">
@@ -83,6 +87,9 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>Add new variable</string>
        </property>
       </widget>
      </item>
@@ -93,6 +100,9 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>Remove variable</string>
        </property>
       </widget>
      </item>
