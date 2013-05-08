@@ -946,12 +946,20 @@ void GitPlugin::parseLogOutput(const DVcsJob * job, QList<DVcsEvent>& commits) c
 
 void GitPlugin::parseGitLogOutput(DVcsJob * job)
 {
-    QList<QVariant> commits;
     static QRegExp commitRegex( "^commit (\\w{8})\\w{32}" );
     static QRegExp infoRegex( "^(\\w+):(.*)" );
     static QRegExp modificationsRegex("(\\d+)\\s+(\\d+)\\s+(.+)"); //18      2       shell/workingsets/workingsetwidget.cpp
 
+    QList<QVariant> commits;
+
     QString contents = job->output();
+    // check if git-log returned anything
+    if (contents.isEmpty()) {
+        job->setResults(commits); // empty list
+        return;
+    }
+
+    // start parsing the output
     QTextStream s(&contents);
 
     VcsEvent item;
