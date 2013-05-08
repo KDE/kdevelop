@@ -158,13 +158,14 @@ namespace CMakeParserUtils
         data->vm.insert("CMAKE_CURRENT_LIST_DIR", QStringList(QFileInfo(file).dir().absolutePath()));
 
         const QString projectSourceDir = data->vm.value("CMAKE_SOURCE_DIR").first();
-        const QString projectBinDir = data->vm.value("CMAKE_BINARY_DIR").first();
+        const QString projectBinDir = data->vm.value("CMAKE_BINARY_DIR").join(QString());
         QString binDir = projectBinDir;
         // CURRENT_BINARY_DIR must point to the subfolder if any"
         if (sourcedir.startsWith(projectSourceDir)) {
             Q_ASSERT(projectSourceDir.size()==sourcedir.size() || sourcedir.at(projectSourceDir.size()) == '/');
             binDir += sourcedir.mid(projectSourceDir.size());
         }
+        data->vm.insert("CMAKE_BINARY_DIR", QStringList(projectBinDir));
         data->vm.insert("CMAKE_CURRENT_BINARY_DIR", QStringList(binDir));
         data->vm.insert("CMAKE_CURRENT_SOURCE_DIR", QStringList(sourcedir));
         
