@@ -970,14 +970,22 @@ VcsItemEvent::Actions actionsFromString(char c)
 
 void GitPlugin::parseGitLogOutput(DVcsJob * job)
 {
-    QList<QVariant> commits;
     static QRegExp commitRegex( "^commit (\\w{8})\\w{32}" );
     static QRegExp infoRegex( "^(\\w+):(.*)" );
     static QRegExp modificationsRegex("^([A-Z])[0-9]*\t([^\t]+)\t?(.*)", Qt::CaseSensitive, QRegExp::RegExp2);
     //R099    plugins/git/kdevgit.desktop     plugins/git/kdevgit.desktop.cmake
     //M       plugins/grepview/CMakeLists.txt
 
+    QList<QVariant> commits;
+
     QString contents = job->output();
+    // check if git-log returned anything
+    if (contents.isEmpty()) {
+        job->setResults(commits); // empty list
+        return;
+    }
+
+    // start parsing the output
     QTextStream s(&contents);
 
     VcsEvent item;
