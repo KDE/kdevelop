@@ -493,6 +493,7 @@ void ProjectController::setupActions()
     
     d->m_fetchProject = action = ac->addAction( "project_fetch" );
     action->setText(i18nc( "@action", "Fetch Project..." ) );
+    action->setIcon( KIcon( "download" ) );
     action->setToolTip( i18nc( "@info:tooltip", "Fetch project" ) );
     action->setWhatsThis( i18nc( "@info:whatsthis", "Guides the user through the project fetch "
                                                     "and then imports it into KDevelop 4." ) );
@@ -528,11 +529,8 @@ void ProjectController::setupActions()
     KSharedConfig * config = KGlobal::config().data();
 //     KConfigGroup group = config->group( "General Options" );
 
-    d->m_recentAction = new KRecentFilesAction( this );
-    connect( d->m_recentAction, SIGNAL(urlSelected(KUrl)), SLOT(
-                            openProject( const KUrl& ) ));
+    d->m_recentAction = KStandardAction::openRecent(this, SLOT(openProject(KUrl)), this);
     ac->addAction( "project_open_recent", d->m_recentAction );
-    d->m_recentAction->setText( i18n( "Open Recent" ) );
     d->m_recentAction->setToolTip( i18nc( "@info:tooltip", "Open recent project" ) );
     d->m_recentAction->setWhatsThis( i18nc( "@info:whatsthis", "Opens recently opened project." ) );
     d->m_recentAction->loadEntries( KConfigGroup(config, "RecentProjects") );
