@@ -531,7 +531,7 @@ void ProjectController::setupActions()
 
     d->m_recentAction = KStandardAction::openRecent(this, SLOT(openProject(KUrl)), this);
     ac->addAction( "project_open_recent", d->m_recentAction );
-    d->m_recentAction->setToolTip( i18nc( "@info:tooltip", "Open recent project" ) );
+    d->m_recentAction->setText( i18n( "Open Recent Project" ) );
     d->m_recentAction->setWhatsThis( i18nc( "@info:whatsthis", "Opens recently opened project." ) );
     d->m_recentAction->loadEntries( KConfigGroup(config, "RecentProjects") );
     
