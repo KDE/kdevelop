@@ -1351,7 +1351,11 @@ class GitVcsLocationWidget : public KDevelop::StandardVcsLocationWidget
     public:
         GitVcsLocationWidget(QWidget* parent = 0, Qt::WindowFlags f = 0)
             : StandardVcsLocationWidget(parent, f) {}
-        virtual bool isCorrect() const { return true; }
+
+        virtual bool isCorrect() const
+        {
+            return !url().isEmpty();
+        }
 };
 
 KDevelop::VcsLocationWidget* GitPlugin::vcsLocation(QWidget* parent) const
