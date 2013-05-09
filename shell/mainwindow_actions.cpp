@@ -83,24 +83,10 @@ void MainWindowPrivate::gotoPreviousWindow()
     gotoPrevNextWindow(false);
 }
 
-void MainWindowPrivate::configureToolbars()
-{}
-
 void MainWindowPrivate::newToolbarConfig()
 {
     m_mainWindow->applyMainWindowSettings( KConfigGroup(KGlobal::config(), "MainWindow") );
 }
-
-void MainWindowPrivate::stopButtonPressed()
-{}
-
-void MainWindowPrivate::stopPopupActivated( int id )
-{
-    Q_UNUSED( id );
-}
-
-void MainWindowPrivate::stopMenuAboutToShow()
-{}
 
 void MainWindowPrivate::settingsDialog()
 {

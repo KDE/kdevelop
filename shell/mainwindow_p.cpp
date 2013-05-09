@@ -25,25 +25,18 @@ Boston, MA 02110-1301, USA.
 #include <QBoxLayout>
 #include <QLabel>
 
-#include <KMenuBar>
 #include <kmenu.h>
 #include <kdebug.h>
-#include <klocale.h>
-#include <kstatusbar.h>
 #include <kxmlguiclient.h>
 #include <kxmlguifactory.h>
+#include <kstandardaction.h>
+#include <ktogglefullscreenaction.h>
+#include <kactioncollection.h>
 
 #include <kparts/part.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/editor.h>
-
-#include <kstandardaction.h>
-#include <kselectaction.h>
-#include <ktogglefullscreenaction.h>
-#include <kactioncollection.h>
-#include <ktoolbarpopupaction.h>
-#include <kxmlguiclient.h>
 
 #include <sublime/area.h>
 #include <sublime/view.h>
@@ -60,7 +53,6 @@ Boston, MA 02110-1301, USA.
 #include "uicontroller.h"
 #include "statusbar.h"
 #include "mainwindow.h"
-#include "workingsetcontroller.h"
 #include "textdocument.h"
 #include "sessioncontroller.h"
 
@@ -256,24 +248,6 @@ void MainWindowPrivate::setupActions()
     action->setText( i18n("Loaded Plugins") );
     action->setStatusTip( i18n("Show a list of all loaded plugins") );
     action->setWhatsThis( i18nc( "@info:whatsthis", "Shows a dialog with information about all loaded plugins." ) );
-    
-//     KToolBarPopupAction *popupAction;
-//     popupAction = new KToolBarPopupAction( KIcon( "process-stop" ),
-//                                            i18n( "&Stop" ),
-//                                            actionCollection()
-//                                            );
-//     actionCollection()->addAction( "stop_processes",popupAction );
-
-//     popupAction->setShortcut( Qt::Key_Escape );
-//     popupAction->setToolTip( i18n( "Stop" ) );
-//     popupAction->setWhatsThis( i18n( "Stops all running processes." ) );
-//     popupAction->setEnabled( false );
-//     connect( popupAction, SIGNAL(triggered()),
-//              this, SLOT(stopButtonPressed()) );
-//     connect( popupAction->menu(), SIGNAL(aboutToShow()),
-//              this, SLOT(stopMenuAboutToShow()) );
-//     connect( popupAction->menu(), SIGNAL(triggered(Action*)),
-//              this, SLOT(stopPopupActivated(QAction*)) );
 
      action = actionCollection()->addAction( "view_next_window" );
      action->setText( i18n( "&Next Window" ) );
@@ -290,14 +264,6 @@ void MainWindowPrivate::setupActions()
      action->setToolTip( i18nc( "@info:tooltip", "Previous window" ) );
      action->setWhatsThis( i18nc( "@info:whatsthis", "Switches to the previous window." ) );
      action->setIcon(KIcon("go-previous"));
-
-    /*action = actionCollection()->addAction( "new_window" );
-    action->setIcon(KIcon( "window-new" ));
-    action->setText( i18n( "&New Window" ) );
-    action->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_N );
-    connect( action, SIGNAL(triggered(bool)), SLOT(newWindow()) );
-    action->setToolTip( i18n( "New window" ) );
-    action->setWhatsThis( i18n( "Creates a new window with a duplicate of the current area." ) );*/
 
     action = actionCollection()->addAction( "split_horizontal" );
     action->setIcon(KIcon( "view-split-top-bottom" ));
@@ -347,26 +313,6 @@ KActionCollection * MainWindowPrivate::actionCollection()
 {
     return m_mainWindow->actionCollection();
 }
-
-/* Make sure that the main toolbar has only items from our actionCollection
-   and not from anywhere else.  Presently, when new XMLGUI client is added,
-   it's actions are always merged, and there's no clear way to stop this.
-   So, we execute the below code whenever a new client is added.  */
-/*
- * Only re-enable if you manage to also remove the relevant actions from the 
- * configure toolbar dialog. If not, we stay with the actions, as anything else
- * confuses users.
- * void MainWindowPrivate::fixToolbar()
-{
-    QWidget* w = m_mainWindow->guiFactory()->container(
-        "mainToolBar", m_mainWindow);
-    if (w)
-        foreach (QAction *a, w->actions())
-        {
-            if ( !a->isSeparator() && (a != m_mainWindow->actionCollection()->action(a->objectName())) )
-                w->removeAction(a);
-        }
-}*/
 
 bool MainWindowPrivate::applicationQuitRequested() const
 {

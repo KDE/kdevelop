@@ -90,13 +90,9 @@ public Q_SLOTS:
     void split(Qt::Orientation orientation);
     void toggleFullScreen(bool fullScreen);
 
-    void configureToolbars();
     void newToolbarConfig();
 
     void settingsDialog();
-    void stopPopupActivated( int );
-    void stopMenuAboutToShow();
-    void stopButtonPressed();
 
     void quitAll();
 
