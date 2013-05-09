@@ -175,10 +175,14 @@ void ProjectSourcePage::infoMessage(KJob* , const QString& text, const QString& 
                                             "%1 : %p%", text));
 }
 
-void ProjectSourcePage::projectReceived(KJob* /*job*/)
+void ProjectSourcePage::projectReceived(KJob* job)
 {
-    m_ui->creationProgress->setValue(m_ui->creationProgress->maximum());
-    
+    if (job->error()) {
+        m_ui->creationProgress->setValue(0);
+    } else {
+        m_ui->creationProgress->setValue(m_ui->creationProgress->maximum());
+    }
+
     reevaluateCorrection();
     m_ui->creationProgress->setFormat("%p%");
 }
@@ -195,7 +199,7 @@ void ProjectSourcePage::reevaluateCorrection()
     bool validWidget = ((m_locationWidget && m_locationWidget->isCorrect()) ||
                        (m_providerWidget && m_providerWidget->isCorrect()));
     bool validToCheckout = correct && validWidget; //To checkout, if it exists, it should be an empty dir
-    if(correct && cwd.isLocalFile() && d.exists()) {
+    if(validToCheckout && cwd.isLocalFile() && d.exists()) {
         validToCheckout = d.entryList(QDir::AllEntries | QDir::NoDotAndDotDot).isEmpty();
     }
     
