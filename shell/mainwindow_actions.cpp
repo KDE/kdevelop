@@ -23,13 +23,19 @@ Boston, MA 02110-1301, USA.
 #include <kconfiggroup.h>
 #include <kapplication.h>
 #include <kaboutapplicationdialog.h>
+#include <knotifyconfigwidget.h>
+#include <ktogglefullscreenaction.h>
 
 #include <ktexteditor/editor.h>
+
+#include <sublime/area.h>
+#include <sublime/view.h>
 
 #include "core.h"
 #include "documentcontroller.h"
 #include "mainwindow_p.h"
 #include "sessiondialog.h"
+#include "uicontroller.h"
 
 #include "mainwindow.h"
 #include "loadedpluginsdialog.h"

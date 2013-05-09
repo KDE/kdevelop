@@ -43,7 +43,6 @@ Boston, MA 02110-1301, USA.
 #include <ktogglefullscreenaction.h>
 #include <kactioncollection.h>
 #include <ktoolbarpopupaction.h>
-#include <knotifyconfigwidget.h>
 #include <kxmlguiclient.h>
 
 #include <sublime/area.h>
