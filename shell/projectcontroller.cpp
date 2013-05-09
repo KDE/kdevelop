@@ -721,7 +721,9 @@ void ProjectController::openProject( const KUrl &projectFile )
 
     if ( ! existingSessions.isEmpty() ) {
         KDialog dialog(Core::self()->uiControllerInternal()->activeMainWindow());
-        dialog.setButtons(KDialog::Ok);
+        dialog.setButtons(KDialog::Ok | KDialog::Cancel);
+        dialog.setWindowTitle(i18n("Project Already Open"));
+
         QWidget contents;
         contents.setLayout(new QVBoxLayout);
         contents.layout()->addWidget(new QLabel(i18n("The project you're trying to open is already open in at least one "
@@ -738,8 +740,12 @@ void ProjectController::openProject( const KUrl &projectFile )
         }
         sessions.layout()->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding));
         contents.layout()->addWidget(&sessions);
+
         dialog.setMainWidget(&contents);
-        dialog.exec();
+        bool success = dialog.exec();
+        if (!success)
+            return;
+
         foreach ( const QObject* obj, sessions.children() ) {
             if ( const QRadioButton* button = qobject_cast<const QRadioButton*>(obj) ) {
                 QString sessionid = button->property("sessionid").toString();
