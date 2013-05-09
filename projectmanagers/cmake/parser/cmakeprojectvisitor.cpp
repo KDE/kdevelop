@@ -1702,8 +1702,12 @@ int CMakeProjectVisitor::visit(const ListAst *list)
             m_vars->insert(list->list(), theList);
             break;
         case ListAst::Find: {
-            int idx=theList.indexOf(list->elements().first());
-            
+            QString element;
+            int idx=-1;
+            if(!list->elements().isEmpty()) {
+                element = list->elements().first();
+                idx=theList.indexOf(element);
+            }
             m_vars->insert(list->output(), QStringList(QString::number(idx)));
             kDebug(9042) << "List: Find" << theList << list->output() << list->elements() << idx;
         }   break;
