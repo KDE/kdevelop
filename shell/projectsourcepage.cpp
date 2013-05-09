@@ -105,7 +105,7 @@ void ProjectSourcePage::sourceChanged(int index)
 
 IBasicVersionControl* ProjectSourcePage::vcsPerIndex(int index)
 {
-    IPlugin* p=m_plugins[index];
+    IPlugin* p = m_plugins.value(index);
     if(!p)
         return 0;
     else
@@ -114,7 +114,7 @@ IBasicVersionControl* ProjectSourcePage::vcsPerIndex(int index)
 
 IProjectProvider* ProjectSourcePage::providerPerIndex(int index)
 {
-    IPlugin* p=m_plugins[index];
+    IPlugin* p = m_plugins.value(index);
     if(!p)
         return 0;
     else
