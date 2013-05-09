@@ -75,6 +75,7 @@ OpenProjectDialog::OpenProjectDialog( bool fetch, const KUrl& startUrl, QWidget*
     showButton( KDialog::Help, false );
     
     setCurrentPage( currentPage );
+    setWindowTitle(i18n("Open Project"));
 }
 
 void OpenProjectDialog::validateSourcePage(bool valid)
