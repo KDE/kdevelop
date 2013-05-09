@@ -249,21 +249,21 @@ void MainWindowPrivate::setupActions()
     action->setStatusTip( i18n("Show a list of all loaded plugins") );
     action->setWhatsThis( i18nc( "@info:whatsthis", "Shows a dialog with information about all loaded plugins." ) );
 
-     action = actionCollection()->addAction( "view_next_window" );
-     action->setText( i18n( "&Next Window" ) );
-     connect( action, SIGNAL(triggered(bool)), SLOT(gotoNextWindow()) );
-     action->setShortcut( Qt::ALT + Qt::SHIFT + Qt::Key_Right );
-     action->setToolTip( i18nc( "@info:tooltip", "Next window" ) );
-     action->setWhatsThis( i18nc( "@info:whatsthis", "Switches to the next window." ) );
-     action->setIcon(KIcon("go-next"));
+    action = actionCollection()->addAction( "view_next_window" );
+    action->setText( i18n( "&Next Window" ) );
+    connect( action, SIGNAL(triggered(bool)), SLOT(gotoNextWindow()) );
+    action->setShortcut( Qt::ALT + Qt::SHIFT + Qt::Key_Right );
+    action->setToolTip( i18nc( "@info:tooltip", "Next window" ) );
+    action->setWhatsThis( i18nc( "@info:whatsthis", "Switches to the next window." ) );
+    action->setIcon(KIcon("go-next"));
 
-     action = actionCollection()->addAction( "view_previous_window" );
-     action->setText( i18n( "&Previous Window" ) );
-     connect( action, SIGNAL(triggered(bool)), SLOT(gotoPreviousWindow()) );
-     action->setShortcut( Qt::ALT + Qt::SHIFT + Qt::Key_Left );
-     action->setToolTip( i18nc( "@info:tooltip", "Previous window" ) );
-     action->setWhatsThis( i18nc( "@info:whatsthis", "Switches to the previous window." ) );
-     action->setIcon(KIcon("go-previous"));
+    action = actionCollection()->addAction( "view_previous_window" );
+    action->setText( i18n( "&Previous Window" ) );
+    connect( action, SIGNAL(triggered(bool)), SLOT(gotoPreviousWindow()) );
+    action->setShortcut( Qt::ALT + Qt::SHIFT + Qt::Key_Left );
+    action->setToolTip( i18nc( "@info:tooltip", "Previous window" ) );
+    action->setWhatsThis( i18nc( "@info:whatsthis", "Switches to the previous window." ) );
+    action->setIcon(KIcon("go-previous"));
 
     action = actionCollection()->addAction( "split_horizontal" );
     action->setIcon(KIcon( "view-split-top-bottom" ));
