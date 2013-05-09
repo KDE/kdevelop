@@ -232,7 +232,7 @@ void DVcsJob::slotProcessError( QProcess::ProcessError err )
                                                      << "Exit code is:" << d->childproc->exitCode();
     
     d->errorOutput = d->childproc->readAllStandardError();
-    displayOutput(d->errorOutput);
+    displayOutput(QString::fromLocal8Bit(d->errorOutput));
     d->model->appendLine(i18n("Command finished with error %1.", errorValue));
     
     //Even if it was a silent process we want to provide some feedback to the user about what went wrong
@@ -268,7 +268,7 @@ void DVcsJob::slotReceivedStdout()
     // accumulate output
     d->output.append(output);
     
-    displayOutput(output);
+    displayOutput(QString::fromLocal8Bit(output));
 }
 
 VcsJob::JobStatus DVcsJob::status() const
