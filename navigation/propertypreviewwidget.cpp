@@ -48,7 +48,7 @@ QWidget* PropertyPreviewWidget::constructIfPossible(KTextEditor::Document* doc, 
         supportedProperties["x"] = SupportedProperty(QUrl(base + "Distance.qml"));
         supportedProperties["y"] = SupportedProperty(QUrl(base + "Distance.qml"));
         // TODO support the other margins
-        supportedProperties["Anchors.margins"] = SupportedProperty(QUrl(base + "Distance.qml"));
+        supportedProperties["anchors.margins"] = SupportedProperty(QUrl(base + "Distance.qml"));
         supportedProperties["opacity"] = SupportedProperty(QUrl(base + "Opacity.qml"));
         supportedProperties["duration"] = SupportedProperty(QUrl(base + "Duration.qml"));
         supportedProperties["font.family"] = SupportedProperty(QUrl(base + "FontFamily.qml"));
