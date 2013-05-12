@@ -18,13 +18,11 @@
 
 import QtQuick 1.1
 
-Rectangle {
+PropertyWidget {
     id: root
     width: 150
     height: 120
-    property string value: "1"
-    signal valueChanged(string newValue)
-    color: "#00FFFFFF"
+    value: "1"
     function sliderToValue(slider) {
         return slider*8;
     }

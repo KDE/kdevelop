@@ -20,11 +20,10 @@ import QtQuick 1.1
 
 // TODO support other size types than PointSize
 
-Rectangle {
+PropertyWidget {
     width: 220
     height: 120
-    property string value: "10"
-    signal valueChanged(string newValue)
+    value: "10"
     color: "#00FFFFFF"
     function sliderToValue(slider) {
         return Math.round(slider/7*20)/20.0;

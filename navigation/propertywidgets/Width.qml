@@ -18,12 +18,10 @@
 
 import QtQuick 1.1
 
-Rectangle {
+PropertyWidget {
     width: 220
     height: 110
-    property string value: "10"
-    signal valueChanged(string newValue)
-    color: "#00FFFFFF"
+    value: "10"
     function sliderToValue(slider) {
         return Math.round(slider*slider/30);
     }

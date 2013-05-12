@@ -18,7 +18,7 @@
 
 import QtQuick 1.1
 
-Rectangle {
+PropertyWidget {
     id: root
     property int initialValue: 0
     property int maxValue: 100
@@ -41,9 +41,8 @@ Rectangle {
     radius: 2
     anchors.margins: 6
     border.color: "#999999"
-    color: "#00FFFFFF"
     Rectangle {
-        id: "blob"
+        id: blob
         color: "#52b7ff"
         width: 5
         y: 1

@@ -1,5 +1,6 @@
 /*************************************************************************************
  *  Copyright (C) 2013 by Sven Brauch <svenbrauch@gmail.com>                         *
+ *  Copyright (C) 2013 by Aleix Pol Gonzalez <aleixpol@kde.org>                      *
  *                                                                                   *
  *  This program is free software; you can redistribute it and/or                    *
  *  modify it under the terms of the GNU General Public License                      *
@@ -18,24 +19,8 @@
 
 import QtQuick 1.1
 
-PropertyWidget {
-    width: 220
-    height: 70
-    property string value: "monospace"
-    Text {
-        color: "white"
-        anchors.horizontalCenter: parent.horizontalCenter
-        font.pointSize: 9
-        font.family: parent.value.replace('"', '').replace('"', '')
-        text: "The lazy dog jumps over<br>the quick brown fox."
-        horizontalAlignment: TextInput.AlignHCenter
-    }
-    Text {
-        z: 20
-        anchors.bottom: parent.bottom
-        anchors.horizontalCenter: parent.horizontalCenter
-        text: "Font family"
-        color: "white"
-        opacity: 0.8
-    }
+Rectangle {
+    property string value
+    signal valueChanged(string newValue)
+    color: "#00FFFFFF"
 }
