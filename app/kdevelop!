@@ -49,4 +49,4 @@ fi
 
 export KDEV_DBUS_ID="org.kdevelop.kdevelop-$KDEV_ATTACHED_PID"
 
-bash --init-file $KDEV_BASEDIR/kdevplatform_shell_environment.sh -i
+bash --init-file $KDEV_BASEDIR/kdevplatform_shell_environment -i
