@@ -34,6 +34,8 @@ CodeCompletionWorker::CodeCompletionWorker(KDevelop::CodeCompletionModel* model)
 KDevelop::CodeCompletionContext* CodeCompletionWorker::createCompletionContext(KDevelop::DUContextPointer context,
           const QString& contextText, const QString& followingText, const KDevelop::CursorInRevision& position) const
 {
+    Q_UNUSED(followingText);
+
     return new QmlJS::CodeCompletionContext(context, contextText, position);
 }
 

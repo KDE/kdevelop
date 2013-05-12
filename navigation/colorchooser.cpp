@@ -34,8 +34,8 @@ ColorChooser::ColorChooser(const QColor& startColor, KTextEditor::Document* docu
     , valueSelector(new KColorValueSelector)
     , hueSaturationSelector(new KHueSaturationSelector)
     , wasModified(false)
-    , selectedColorLabel(new QLabel)
     , selectedColorPixmap(size, size)
+    , selectedColorLabel(new QLabel)
 {
     // ChooserValue is is the default mode which is used in kcolorchooser,
     // so use it here too

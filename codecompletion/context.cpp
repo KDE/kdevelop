@@ -43,6 +43,8 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
 
 QList< CompletionTreeItemPointer > CodeCompletionContext::completionItems(bool& abort, bool fullCompletion)
 {
+    Q_UNUSED (fullCompletion);
+
     // Compute the completion items, based on the surrounding text and the
     // type of completion to offer in the constructor
 
