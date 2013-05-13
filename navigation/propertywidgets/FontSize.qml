@@ -39,13 +39,11 @@ PropertyWidget {
         opacity: 0.8
     }
     Slider {
-        id: "slider"
         initialValue: valueToSlider(parent.value)
         anchors.top: parent.top
         anchors.left: parent.left
         width: 100
         height: 12
-        color: "#929292"
     }
     Text {
         color: "white"

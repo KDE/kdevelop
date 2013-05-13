@@ -38,12 +38,10 @@ PropertyWidget {
     }
     Slider {
         z: 20
-        id: "slider"
         initialValue: valueToSlider(parent.value)
-        anchors.verticalCenter: parent.horizontalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
         width: 100
         height: 12
-        color: "#929292"
     }
     Rectangle {
         anchors.centerIn: parent

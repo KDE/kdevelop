@@ -18,11 +18,12 @@
 
 import QtQuick 1.1
 
-PropertyWidget {
+Rectangle {
     id: root
     property int initialValue: 0
     property int maxValue: 100
     property int initialized: 0
+    color: "#929292"
     onInitialValueChanged: {
         if ( initialized == 2 ) return;
         initialized += 1
