@@ -44,7 +44,7 @@ PropertyWidget {
         height: 12
     }
     Rectangle {
-        id: "sample"
+        id: sample
         anchors.centerIn: parent
         color: "#1f61a8"
         width: 50
