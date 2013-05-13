@@ -32,7 +32,7 @@ PropertyWidget {
         z: 20
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
-        text: "Location in pixels"
+        text: i18n("Location in pixels")
         color: "white"
         opacity: 0.8
     }

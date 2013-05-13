@@ -39,7 +39,7 @@ PropertyWidget {
         z: 20
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
-        text: "Spacing between items"
+        text: i18n("Spacing between items")
         color: "white"
         opacity: 0.8
     }

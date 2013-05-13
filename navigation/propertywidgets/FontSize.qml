@@ -34,7 +34,7 @@ PropertyWidget {
     Text {
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
-        text: "Font size"
+        text: i18n("Font size")
         color: "white"
         opacity: 0.8
     }
@@ -50,7 +50,7 @@ PropertyWidget {
         anchors.centerIn: parent
         font.pointSize: parent.value
         font.family: "sans" // TODO
-        text: "The lazy dog jumps over<br>the quick brown fox."
+        text: i18nc("example text to test a font", "The lazy dog jumps over<br>the quick brown fox.")
         horizontalAlignment: TextInput.AlignHCenter
     }
 }

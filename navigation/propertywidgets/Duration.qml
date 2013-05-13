@@ -33,7 +33,7 @@ PropertyWidget {
         z: 20
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
-        text: "Duration in milliseconds"
+        text: i18n("Duration in milliseconds")
         color: "white"
         opacity: 0.8
     }

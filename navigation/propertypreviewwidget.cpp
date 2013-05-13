@@ -27,6 +27,7 @@
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
 #include <KLocalizedString>
+#include <kdeclarative.h>
 
 // List of supported properties. The string must be the name of the property,
 // which can contain dots if necessary
@@ -103,6 +104,13 @@ PropertyPreviewWidget::PropertyPreviewWidget(KTextEditor::Document* doc, SimpleR
     , property(property)
     , wasChanged(false)
 {
+    //setup kdeclarative library
+    KDeclarative kdeclarative;
+    kdeclarative.setDeclarativeEngine(view->engine());
+    kdeclarative.initialize();
+    //binds things like kconfig and icons
+    kdeclarative.setupBindings();
+
     // see docstring for ILanguageSupport::specialLanguageObjectNavigationWidget
     setProperty("DoNotCloseOnCursorMove", true);
     view->setSource(property.qmlfile);

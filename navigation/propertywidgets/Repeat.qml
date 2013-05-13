@@ -34,7 +34,7 @@ PropertyWidget {
     Text {
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
-        text: "Item count"
+        text: i18n("Item count")
         color: "white"
         opacity: 0.8
     }

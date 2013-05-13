@@ -32,7 +32,7 @@ PropertyWidget {
         z: 20
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
-        text: "Height of an item in pixels"
+        text: i18n("Height of an item in pixels")
         color: "white"
         opacity: 0.8
     }

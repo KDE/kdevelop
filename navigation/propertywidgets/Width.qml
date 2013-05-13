@@ -31,7 +31,7 @@ PropertyWidget {
     Text {
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
-        text: "Width of an item in pixels"
+        text: i18n("Width of an item in pixels")
         color: "white"
         opacity: 0.8
     }

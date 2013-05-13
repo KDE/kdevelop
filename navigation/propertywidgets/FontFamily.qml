@@ -27,14 +27,14 @@ PropertyWidget {
         anchors.horizontalCenter: parent.horizontalCenter
         font.pointSize: 9
         font.family: parent.value.replace('"', '').replace('"', '')
-        text: "The lazy dog jumps over<br>the quick brown fox."
+        text: i18nc("example text to test a font", "The lazy dog jumps over<br>the quick brown fox.")
         horizontalAlignment: TextInput.AlignHCenter
     }
     Text {
         z: 20
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
-        text: "Font family"
+        text: i18n("Font family")
         color: "white"
         opacity: 0.8
     }

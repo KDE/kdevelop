@@ -32,7 +32,7 @@ PropertyWidget {
         z: 20
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
-        text: "Opacity of an item"
+        text: i18n("Opacity of an item")
         color: "white"
         opacity: 0.8
     }

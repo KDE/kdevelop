@@ -2,6 +2,7 @@ project(kdev-qml)
 
 find_package(KDE4 REQUIRED)
 find_package(KDevPlatform 1.5.60 REQUIRED)
+find_package(KDeclarative REQUIRED)
 
 set(VERSION_MAJOR 1)
 set(VERSION_MINOR 5)
@@ -45,6 +46,7 @@ target_link_libraries(kdevqmljslanguagesupport
     kdevqmljscompletion
     ${KDE4_THREADWEAVER_LIBS}
     ${QT_QTDECLARATIVE_LIBRARIES}
+    ${KDECLARATIVE_LIBRARIES}
 )
 
 install(TARGETS kdevqmljslanguagesupport DESTINATION ${PLUGIN_INSTALL_DIR})
