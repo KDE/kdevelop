@@ -143,6 +143,37 @@ void FilteringStrategyTest::testCompilerFilterstrategyMultipleKeywords()
     QVERIFY(item1.type == expectedAction);
 }
 
+void FilteringStrategyTest::testCompilerFilterStrategyShortenedText_data()
+{
+    QTest::addColumn<QString>("line");
+    QTest::addColumn<QString>("expectedShortenedText");
+
+    QTest::newRow("c++-compile")
+    << "g++ -c main.cpp -o main.o" << "compiling main.cpp (g++)";
+    QTest::newRow("clang++-link")
+    << "clang++ -c main.cpp -o main.o" << "compiling main.cpp (clang++)";
+    // see bug: https://bugs.kde.org/show_bug.cgi?id=240017
+    QTest::newRow("mpicc-link")
+    << "/usr/bin/mpicc -c main.cpp -o main.o" << "compiling main.cpp (mpicc)";
+
+    QTest::newRow("c++-link")
+    << "/usr/bin/g++ main.cpp -o main" << "linking main (g++)";
+    QTest::newRow("clang++-link")
+    << "/usr/bin/clang++ main.cpp -o a.out" << "linking a.out (clang++)";
+    QTest::newRow("mpicc-link")
+    << "mpicc main.cpp -o main" << "linking main (mpicc)";
+}
+
+void FilteringStrategyTest::testCompilerFilterStrategyShortenedText()
+{
+    QFETCH(QString, line);
+    QFETCH(QString, expectedShortenedText);
+
+    KUrl projecturl( PROJECTS_SOURCE_DIR"/onefileproject/" );
+    CompilerFilterStrategy testee(projecturl);
+    FilteredItem item = testee.actionInLine(line);
+    QCOMPARE(item.shortenedText, expectedShortenedText);
+}
 
 void FilteringStrategyTest::testScriptErrorFilterstrategy_data()
 {

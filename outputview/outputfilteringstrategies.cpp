@@ -115,7 +115,7 @@ const QList<ErrorFormat> ERROR_FILTERS = QList<ErrorFormat>()
 // A list of filters for possible compiler, linker, and make actions
 QList<ActionFormat> ACTION_FILTERS = QList<ActionFormat>()
     << ActionFormat( I18N_NOOP2_NOSTRIP("", "compiling"), 1, 2, "(?:^|[^=])\\b(gcc|CC|cc|distcc|c\\+\\+|"
-                     "g\\+\\+|clang|clang\\+\\+|icc|icpc)\\s+.*-c.*[/ '\\\\]+(\\w+\\.(?:cpp|CPP|c|C|cxx|CXX|cs|"
+                     "g\\+\\+|clang|clang\\+\\+|mpicc|icc|icpc)\\s+.*-c.*[/ '\\\\]+(\\w+\\.(?:cpp|CPP|c|C|cxx|CXX|cs|"
                      "java|hpf|f|F|f90|F90|f95|F95))")
     //moc and uic
     << ActionFormat( I18N_NOOP2_NOSTRIP("", "generating"), 1, 2, "/(moc|uic)\\b.*\\s-o\\s([^\\s;]+)")
@@ -126,7 +126,7 @@ QList<ActionFormat> ACTION_FILTERS = QList<ActionFormat>()
     << ActionFormat( I18N_NOOP2_NOSTRIP("", "compiling"), 1, 1, "^compiling (.*)" )
     << ActionFormat( I18N_NOOP2_NOSTRIP("", "generating"), 1, 2, "^generating (.*)" )
     << ActionFormat( I18N_NOOP2_NOSTRIP("Linking object files into a library or executable",
-                     "linking"), 1, 2, "(gcc|cc|c\\+\\+|g\\+\\+|clang|clang\\+\\+|icc|icpc)\\S* (?:\\S* )*-o ([^\\s;]+)")
+                     "linking"), 1, 2, "(gcc|cc|c\\+\\+|g\\+\\+|clang|clang\\+\\+|mpicc|icc|icpc)\\S* (?:\\S* )*-o ([^\\s;]+)")
     << ActionFormat( I18N_NOOP2_NOSTRIP("Linking object files into a library or executable",
                      "linking"), 1, 2, "^linking (.*)" )
     //cmake
