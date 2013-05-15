@@ -662,7 +662,7 @@ void KDevelop::RunController::finished(KJob * job)
             ///WARNING: do *not* use a nested event loop here, it might cause
             ///         random crashes later on, see e.g.:
             ///         https://bugs.kde.org/show_bug.cgi?id=309811
-            KDialog* dialog = new KDialog;
+            KDialog* dialog = new KDialog(qApp->activeWindow());
             dialog->setAttribute(Qt::WA_DeleteOnClose);
             dialog->setWindowTitle(i18n("Process Error"));
             dialog->setButtons(KDialog::Close);

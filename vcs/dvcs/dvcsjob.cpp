@@ -229,7 +229,7 @@ void DVcsJob::slotProcessError( QProcess::ProcessError err )
     kDebug() << "oops, found an error while running" << dvcsCommand() << ":" << errorValue 
                                                      << "Exit code is:" << d->childproc->exitCode();
     d->errorOutput = d->childproc->readAllStandardError();
-    displayOutput(d->errorOutput);
+    displayOutput(QString::fromLocal8Bit(d->errorOutput));
     d->model->appendLine(i18n("Command finished with error %1.", errorValue));
     
     if(verbosity()==Silent) {
@@ -265,7 +265,7 @@ void DVcsJob::slotReceivedStdout()
     // accumulate output
     d->output.append(output);
     
-    displayOutput(output);
+    displayOutput(QString::fromLocal8Bit(output));
 }
 
 VcsJob::JobStatus DVcsJob::status() const
