@@ -1375,7 +1375,7 @@ QString GitPlugin::errorDescription() const
 
 void GitPlugin::registerRepositoryForCurrentBranchChanges(const KUrl& repository)
 {
-    QDir dir = urlDir(repository);
+    QDir dir = dotGitDirectory(repository);
     QString headFile = dir.absoluteFilePath(".git/HEAD");
     m_watcher->addFile(headFile);
 }

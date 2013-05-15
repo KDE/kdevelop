@@ -66,16 +66,18 @@ void VcsOverlayProxyModel::addProject(IProject* p)
 
 void VcsOverlayProxyModel::repositoryBranchChanged(const KUrl& url)
 {
-    IProject* project = ICore::self()->projectController()->findProjectForUrl(url);
-    if(project) {
-        IPlugin* v = project->versionControlPlugin();
-        Q_ASSERT(v);
-        IBranchingVersionControl* branching = v->extension<IBranchingVersionControl>();
-        Q_ASSERT(branching);
-        VcsJob* job = branching->currentBranch(url);
-        connect(job, SIGNAL(resultsReady(KDevelop::VcsJob*)), SLOT(branchNameReady(KDevelop::VcsJob*)));
-        job->setProperty("project", QVariant::fromValue<QObject*>(project));
-        ICore::self()->runController()->registerJob(job);
+    QList<IProject*> allProjects = ICore::self()->projectController()->projects();
+    foreach(IProject* project, allProjects) {
+        if( url.isParentOf(project->folder())) {
+            IPlugin* v = project->versionControlPlugin();
+            Q_ASSERT(v);
+            IBranchingVersionControl* branching = v->extension<IBranchingVersionControl>();
+            Q_ASSERT(branching);
+            VcsJob* job = branching->currentBranch(url);
+            connect(job, SIGNAL(resultsReady(KDevelop::VcsJob*)), SLOT(branchNameReady(KDevelop::VcsJob*)));
+            job->setProperty("project", QVariant::fromValue<QObject*>(project));
+            ICore::self()->runController()->registerJob(job);
+        }
     }
 }
 
