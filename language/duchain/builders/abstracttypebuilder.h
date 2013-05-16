@@ -212,7 +212,7 @@ protected:
     bool delay = false;
 
     if(!delay) {
-      CursorInRevision pos(editorFindRange(typeNode, typeNode).start);
+      CursorInRevision pos(this->editorFindRange(typeNode, typeNode).start);
       DUChainReadLocker lock(DUChain::lock());
 
       QList<Declaration*> dec = searchContext()->findDeclarations(id, pos);
