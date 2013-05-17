@@ -230,6 +230,8 @@ ProjectManagerView::~ProjectManagerView()
     pmviewConfig.writeEntry(splitterStateConfigKey, m_ui->splitter->saveState());
     pmviewConfig.writeEntry(filterConfigKey, m_filterString);
     pmviewConfig.sync();
+
+    delete m_ui;
 }
 
 QList<KDevelop::ProjectBaseItem*> ProjectManagerView::selectedItems() const

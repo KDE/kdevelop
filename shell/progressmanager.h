@@ -245,7 +245,7 @@ class ProgressManager : public QObject
 Q_OBJECT
 
   public:
-    ProgressManager();
+    ProgressManager(QObject* parent = 0);
     virtual ~ProgressManager();
 
     /**

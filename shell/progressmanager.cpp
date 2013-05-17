@@ -126,8 +126,8 @@ void ProgressItem::setBusy(bool busy)
 
 // ======================================
 
-ProgressManager::ProgressManager()
-  : QObject()
+ProgressManager::ProgressManager(QObject *parent)
+  : QObject(parent)
 {}
 
 ProgressManager::~ProgressManager() {} 

@@ -1055,6 +1055,7 @@ ProjectModel::ProjectModel( QObject *parent )
 
 ProjectModel::~ProjectModel()
 {
+    delete d;
 }
 
 

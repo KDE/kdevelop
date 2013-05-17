@@ -869,6 +869,7 @@ QuickOpenPlugin::~QuickOpenPlugin()
   delete m_projectFileData;
   delete m_projectItemData;
   delete m_openFilesData;
+  delete m_documentationItemData;
 }
 
 void QuickOpenPlugin::unload()

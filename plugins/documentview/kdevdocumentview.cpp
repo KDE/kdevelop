@@ -55,7 +55,7 @@ KDevDocumentView::KDevDocumentView( KDevDocumentViewPlugin *plugin, QWidget *par
     connect(KDevelop::ICore::self()->projectController(), SIGNAL(projectClosed(KDevelop::IProject*)),
             SLOT(updateProjectPaths()));
 
-    m_documentModel = new KDevDocumentModel();
+    m_documentModel = new KDevDocumentModel(this);
 
     m_delegate = new KDevDocumentViewDelegate( this, this );
 
