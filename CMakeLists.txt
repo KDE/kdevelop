@@ -8,8 +8,8 @@ set( KDEVELOP_VERSION_MAJOR 4 )
 set( KDEVELOP_VERSION_MINOR 5 )
 set( KDEVELOP_VERSION_PATCH 0 )
 
-set(KDE_MIN_VERSION "4.5.0")
-find_package(KDE4 4.5.0 REQUIRED)
+set(KDE_MIN_VERSION "4.7.0")
+find_package(KDE4 4.7.0 REQUIRED)
 
 include (KDE4Defaults)
 include (MacroLibrary)
