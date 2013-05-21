@@ -74,16 +74,16 @@ namespace CMakeParserUtils
         
         QString systeminfo=executeProcess(cmakeCmd, QStringList("--system-information"));
         
-        VariableMap m_varsDef;
+        VariableMap varsDef;
         QStringList modulePathDef=QStringList(CMakeParserUtils::valueFromSystemInfo( "CMAKE_ROOT", systeminfo ) + "/Modules");
         kDebug(9042) << "found module path is" << modulePathDef;
-        m_varsDef.insertGlobal("CMAKE_BINARY_DIR", QStringList("#[bin_dir]"));
-        m_varsDef.insertGlobal("CMAKE_INSTALL_PREFIX", QStringList("#[install_dir]"));
-        m_varsDef.insertGlobal("CMAKE_COMMAND", QStringList(cmakeCmd));
-        m_varsDef.insertGlobal("CMAKE_MAJOR_VERSION", QStringList(CMakeParserUtils::valueFromSystemInfo("CMAKE_MAJOR_VERSION", systeminfo)));
-        m_varsDef.insertGlobal("CMAKE_MINOR_VERSION", QStringList(CMakeParserUtils::valueFromSystemInfo("CMAKE_MINOR_VERSION", systeminfo))); 
-        m_varsDef.insertGlobal("CMAKE_PATCH_VERSION", QStringList(CMakeParserUtils::valueFromSystemInfo("CMAKE_PATCH_VERSION", systeminfo)));
-        m_varsDef.insertGlobal("CMAKE_INCLUDE_CURRENT_DIR", QStringList("OFF"));
+        varsDef.insertGlobal("CMAKE_BINARY_DIR", QStringList("#[bin_dir]"));
+        varsDef.insertGlobal("CMAKE_INSTALL_PREFIX", QStringList("#[install_dir]"));
+        varsDef.insertGlobal("CMAKE_COMMAND", QStringList(cmakeCmd));
+        varsDef.insertGlobal("CMAKE_MAJOR_VERSION", QStringList(CMakeParserUtils::valueFromSystemInfo("CMAKE_MAJOR_VERSION", systeminfo)));
+        varsDef.insertGlobal("CMAKE_MINOR_VERSION", QStringList(CMakeParserUtils::valueFromSystemInfo("CMAKE_MINOR_VERSION", systeminfo)));
+        varsDef.insertGlobal("CMAKE_PATCH_VERSION", QStringList(CMakeParserUtils::valueFromSystemInfo("CMAKE_PATCH_VERSION", systeminfo)));
+        varsDef.insertGlobal("CMAKE_INCLUDE_CURRENT_DIR", QStringList("OFF"));
         
         QStringList cmakeInitScripts;
         #ifdef Q_OS_WIN
@@ -99,22 +99,22 @@ namespace CMakeParserUtils
         cmakeInitScripts << "CMakeDetermineCCompiler.cmake";
         cmakeInitScripts << "CMakeDetermineCXXCompiler.cmake";
         
-        m_varsDef.insertGlobal("CMAKE_MODULE_PATH", modulePathDef);
-        m_varsDef.insertGlobal("CMAKE_ROOT", QStringList(CMakeParserUtils::valueFromSystemInfo("CMAKE_ROOT", systeminfo)));
+        varsDef.insertGlobal("CMAKE_MODULE_PATH", modulePathDef);
+        varsDef.insertGlobal("CMAKE_ROOT", QStringList(CMakeParserUtils::valueFromSystemInfo("CMAKE_ROOT", systeminfo)));
         
         //Defines the behaviour that can't be identified on initialization scripts
         #ifdef Q_OS_WIN32
-            m_varsDef.insertGlobal("WIN32", QStringList("1"));
-            m_varsDef.insertGlobal("CMAKE_HOST_WIN32", QStringList("1"));
+            varsDef.insertGlobal("WIN32", QStringList("1"));
+            varsDef.insertGlobal("CMAKE_HOST_WIN32", QStringList("1"));
         #else
-            m_varsDef.insertGlobal("UNIX", QStringList("1"));
-            m_varsDef.insertGlobal("CMAKE_HOST_UNIX", QStringList("1"));
+            varsDef.insertGlobal("UNIX", QStringList("1"));
+            varsDef.insertGlobal("CMAKE_HOST_UNIX", QStringList("1"));
         #endif
         #ifdef Q_OS_MAC
-            m_varsDef.insertGlobal("APPLE", QStringList("1"));
-            m_varsDef.insertGlobal("CMAKE_HOST_APPLE", QStringList("1"));
+            varsDef.insertGlobal("APPLE", QStringList("1"));
+            varsDef.insertGlobal("CMAKE_HOST_APPLE", QStringList("1"));
         #endif
-        return QPair<VariableMap,QStringList>( m_varsDef, cmakeInitScripts );
+        return QPair<VariableMap,QStringList>( varsDef, cmakeInitScripts );
     }
 
     QString executeProcess(const QString& execName, const QStringList& args)
