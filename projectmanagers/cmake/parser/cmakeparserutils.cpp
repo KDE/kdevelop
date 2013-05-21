@@ -70,6 +70,10 @@ namespace CMakeParserUtils
 
     QPair<VariableMap,QStringList> initialVariables()
     {
+        static QPair<VariableMap, QStringList> ret;
+        if (!ret.first.isEmpty()) {
+            return ret;
+        }
         QString cmakeCmd=KStandardDirs::findExe("cmake");
         
         QString systeminfo=executeProcess(cmakeCmd, QStringList("--system-information"));
@@ -114,7 +118,9 @@ namespace CMakeParserUtils
             varsDef.insertGlobal("APPLE", QStringList("1"));
             varsDef.insertGlobal("CMAKE_HOST_APPLE", QStringList("1"));
         #endif
-        return QPair<VariableMap,QStringList>( varsDef, cmakeInitScripts );
+
+        ret = qMakePair(varsDef, cmakeInitScripts);
+        return ret;
     }
 
     QString executeProcess(const QString& execName, const QStringList& args)
