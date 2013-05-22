@@ -52,12 +52,12 @@ ProjectSourcePage::ProjectSourcePage(const KUrl& initial, QWidget* parent)
     }
     
     connect(m_ui->workingDir, SIGNAL(textChanged(QString)), SLOT(reevaluateCorrection()));
-    connect(m_ui->sources, SIGNAL(currentIndexChanged(int)), SLOT(sourceChanged(int)));
-    connect(m_ui->get, SIGNAL(clicked()), SLOT(getVcsProject()));
+    connect(m_ui->sources, SIGNAL(currentIndexChanged(int)), SLOT(setSourceIndex(int)));
+    connect(m_ui->get, SIGNAL(clicked()), SLOT(checkoutVcsProject()));
     
     emit isCorrect(false);
 
-    sourceChanged(0);
+    setSourceIndex(0);
     
     if(!m_plugins.isEmpty())
         m_ui->sources->setCurrentIndex(1);
@@ -68,7 +68,7 @@ ProjectSourcePage::~ProjectSourcePage()
     delete m_ui;
 }
 
-void ProjectSourcePage::sourceChanged(int index)
+void ProjectSourcePage::setSourceIndex(int index)
 {
     m_locationWidget = 0;
     m_providerWidget = 0;
@@ -136,7 +136,7 @@ VcsJob* ProjectSourcePage::jobPerCurrent()
     return job;
 }
 
-void ProjectSourcePage::getVcsProject()
+void ProjectSourcePage::checkoutVcsProject()
 {
     KUrl url=m_ui->workingDir->url();
     QDir d(url.toLocalFile());
@@ -211,7 +211,7 @@ void ProjectSourcePage::reevaluateCorrection()
     else if(!m_ui->get->isEnabled() && m_ui->workingDir->isEnabled())
         setStatus(i18n("You need to specify a valid project location"));
     else
-        validStatus();
+        clearStatus();
 }
 
 void ProjectSourcePage::locationChanged()
@@ -248,7 +248,7 @@ void ProjectSourcePage::setStatus(const QString& message)
     m_ui->status->setText(QString("<font color='%1'>%2</font>").arg(scheme.foreground(KColorScheme::NegativeText).color().name()).arg(message));
 }
 
-void ProjectSourcePage::validStatus()
+void ProjectSourcePage::clearStatus()
 {
     m_ui->status->clear();
 }
