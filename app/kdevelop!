@@ -37,7 +37,8 @@ if ! [ "$KDEV_ATTACHED_PID" ]; then
 fi
 
 # Make sure we didn't capture garbage instead of the pid (must be 1 word only)
-if [ "$(echo $KDEV_ATTACHED_PID | wc -w)" != 1 ]; then
+# note: keep compatible on FreeBSD: https://bugs.kde.org/show_bug.cgi?id=311186
+if [ "$(echo $KDEV_ATTACHED_PID | wc -w | sed 's/ //g')" != 1 ]; then
     echo "Error: Got no valid pid."
     exit 6
 fi
