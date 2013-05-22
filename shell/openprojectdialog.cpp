@@ -49,7 +49,7 @@ OpenProjectDialog::OpenProjectDialog( bool fetch, const KUrl& startUrl, QWidget*
     if( fetch ) {
         sourcePageWidget = new ProjectSourcePage( start, this );
         connect( sourcePageWidget, SIGNAL(isCorrect(bool)), this, SLOT(validateSourcePage(bool)) );
-        sourcePage = addPage( sourcePageWidget, i18n("Select the source") );
+        sourcePage = addPage( sourcePageWidget, i18n("Select Source") );
         currentPage = sourcePage;
     }
     
@@ -66,7 +66,7 @@ OpenProjectDialog::OpenProjectDialog( bool fetch, const KUrl& startUrl, QWidget*
     QWidget* page = new ProjectInfoPage( this );
     connect( page, SIGNAL(projectNameChanged(QString)), this, SLOT(validateProjectName(QString)) );
     connect( page, SIGNAL(projectManagerChanged(QString)), this, SLOT(validateProjectManager(QString)) );
-    projectInfoPage = addPage( page, i18n("Project information") );
+    projectInfoPage = addPage( page, i18n("Project Information") );
     
     setValid( sourcePage, false );
     setValid( openPage, false );
