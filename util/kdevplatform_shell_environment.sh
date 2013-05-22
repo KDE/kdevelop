@@ -761,7 +761,8 @@ function setenv! {
     fi
         
     # Execute the contents of the shell-environment
-    local TEMP=$(mktemp)
+    # note: keep compatible with FreeBSD: https://bugs.kde.org/show_bug.cgi?id=311186
+    local TEMP=$(mktemp /tmp/$USER-XXXXXXXX)
     RESULT=$(executeInAppSync "cat \"$(getCurrentShellEnvPath)\"" "")
     echo "$RESULT" > $TEMP
     if ! [ "$RESULT" ]; then
