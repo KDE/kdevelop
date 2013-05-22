@@ -44,19 +44,34 @@ TemplatePreviewRenderer::TemplatePreviewRenderer()
     vars["license"] = "This file is licensed under the ExampleLicense 3.0";
     // TODO: More variables, preferably the ones from TemplateClassGenerator
 
-    VariableDescriptionList members;
-    members << VariableDescription("int", "number");
-    members << VariableDescription("string", "name");
-    vars["members"] = CodeDescription::toVariantList(members);
+    VariableDescriptionList publicMembers;
+    VariableDescriptionList protectedMembers;
+    VariableDescriptionList privateMembers;
+    publicMembers    << VariableDescription("int",    "number");
+    protectedMembers << VariableDescription("string", "name");
+    privateMembers   << VariableDescription("float",  "variable");
+    vars["members"] = CodeDescription::toVariantList(publicMembers + protectedMembers + privateMembers);
+    vars["public_members"]    = CodeDescription::toVariantList(publicMembers);
+    vars["protected_members"] = CodeDescription::toVariantList(protectedMembers);
+    vars["private_members"]   = CodeDescription::toVariantList(privateMembers);
 
-    FunctionDescriptionList functions;
-    functions << FunctionDescription("doSomething", VariableDescriptionList(), VariableDescriptionList());
-    FunctionDescription complexFunction("doSomethingElse", VariableDescriptionList(), VariableDescriptionList());
+    FunctionDescriptionList publicFunctions;
+    FunctionDescriptionList protectedFunctions;
+    FunctionDescriptionList privateFunctions;
+
+    FunctionDescription complexFunction("doBar", VariableDescriptionList(), VariableDescriptionList());
     complexFunction.arguments << VariableDescription("bool", "really");
     complexFunction.arguments << VariableDescription("int", "howMuch");
     complexFunction.returnArguments << VariableDescription("double", QString());
-    functions << complexFunction;
-    vars["functions"] = CodeDescription::toVariantList(functions);
+
+    publicFunctions << FunctionDescription("doFoo", VariableDescriptionList(), VariableDescriptionList());
+    publicFunctions << complexFunction;
+    protectedFunctions << FunctionDescription("onUpdate", VariableDescriptionList(), VariableDescriptionList());
+
+    vars["functions"] = CodeDescription::toVariantList(publicFunctions + protectedFunctions + privateFunctions);
+    vars["public_functions"]    = CodeDescription::toVariantList(publicFunctions);
+    vars["protected_functions"] = CodeDescription::toVariantList(protectedFunctions);
+    vars["private_functions"]   = CodeDescription::toVariantList(privateFunctions);
 
     addVariables(vars);
 }
