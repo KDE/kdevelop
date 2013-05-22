@@ -1,3 +1,8 @@
+set(documentchangesettest_SRCS test_documentchangeset.cpp)
+
+kde4_add_unit_test(documentchangesettest ${documentchangesettest_SRCS})
+target_link_libraries(documentchangesettest ${QT_QTTEST_LIBRARY} kdevplatformtests kdevplatformlanguage)
+
 set(templaterenderertest_SRCS test_templaterenderer.cpp)
 
 kde4_add_unit_test(templaterenderertest ${templaterenderertest_SRCS})
