@@ -2,17 +2,17 @@
 
 # This file is part of KDevelop
 # Copyright 2011 David Nolden <david.nolden.kdevelop@art-master.de>
-# 
+#
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Library General Public
 # License as published by the Free Software Foundation; either
 # version 2 of the License, or (at your option) any later version.
-# 
+#
 # This library is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # Library General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU Library General Public License
 # along with this library; see the file COPYING.LIB.  If not, write to
 # the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
@@ -77,7 +77,7 @@ function getCurrentShellEnvPath {
     if [ "$1" ]; then
         ENV_ID=$1
     fi
-    
+
     echo "$(getSessionDir)/${ENV_ID}.sh"
 }
 
@@ -151,7 +151,7 @@ function help! {
     echo ""
     echo "Short forms: e! = exec!, ce! = cexec!, cth! = copytohost!, ctc! = copytoclient!"
     fi
-    
+
     if [ "$1" == "env" ]; then
       echo "Environment management:"
       echo "The environment can be used to store session-specific macros and generally manipulate the shell environment"
@@ -233,7 +233,7 @@ function h! {
 }
 
 function cth! {
-    copytohost! $@  
+    copytohost! $@
 }
 
 function ctc! {
@@ -338,7 +338,7 @@ function raise! {
 function sync! {
     local P=$(getActiveDocument $@)
     if [ "$P" ]; then
-        
+
         if [[ "$P" == fish://* ]]; then
             # This regular expression filters the user@host:port out of fish:///user@host:port/path/...
             LOGIN=$(echo $P | sed "s/fish\:\/\/*\([^\/]*\)\(\/.*\)/\1/")
@@ -358,7 +358,7 @@ function sync! {
                         PORT=$(echo $LOGIN | cut --delimiter=':' -f 2)
                         CMD="$CMD -p $PORT"
                     fi
-                    
+
                     CMD="$CMD $HOST"
                     # Execute the ssh command
                     echo "Executing $CMD"
@@ -370,7 +370,7 @@ function sync! {
                     return
                 fi
             fi
-            
+
         elif [ "$KDEV_SSH_FORWARD_CHAIN" ]; then
             # This session is being forwarded to another machine, but the current document is not
             # However, we won't complain, because it's possible that the machines share the same file-system
@@ -413,7 +413,7 @@ function mapFileToClient {
         FILE=$RELATIVE_FILE
     else
         # We are referencing an absolute file, available on the file-system.
-        
+
         if [ "$KDEV_SSH_FORWARD_CHAIN" ]; then
             # If we are forwarding, map it to the client somehow.
             if [ "$(isEqualFileOnHostAndClient "$FILE")" != "yes" ]; then
@@ -491,16 +491,16 @@ function cexec! {
             ARGS=$RELATIVE_FILE
         else
             FILE=$(mapFileToClient $RELATIVE_FILE)
-            
+
             if [[ "$FILE" == fish://* ]]; then
                 # Add a prefix to copy the file into a temporary file
                 # Keep the baseline as suffix, so that applications can easily recognize the mimetype
                 PREFIX+="FILE$TMP=\$(mktemp).$(basename $FILE); kioclient copy $FILE \$FILE$TMP;"
-                # Use the temporary variable instead of the name 
+                # Use the temporary variable instead of the name
                 FILE="\$FILE$TMP"
                 TMP=$(($TMP+1))
             fi
-            
+
             ARGS=$ARGS" "$FILE
         fi
     done
@@ -519,13 +519,13 @@ function create! {
         return 2
     fi
     echo $2 > $FILE
-    
+
     openDocument $(mapFileToClient $FILE)
 }
 
 function search! {
     PATTERN=$1
-    
+
 #     if ! [ "$PATTERN" ]; then
 #         echo "Error: No pattern given."
 #         return 1
@@ -536,9 +536,9 @@ function search! {
     if ! [ "$LOCATION" ]; then
         LOCATION="."
     fi
-    
+
     LOCATION=$(mapFileToClient $LOCATION)
-    
+
     for LOC in $*; do
         if [ "$LOC" == "$1" ]; then
             continue;
@@ -548,13 +548,13 @@ function search! {
         fi
         LOCATION="$LOCATION;$(mapFileToClient $LOC)"
     done
-    
+
     qdbus $KDEV_DBUS_ID /org/kdevelop/GrepViewPlugin org.kdevelop.kdevelop.GrepViewPlugin.startSearch "$PATTERN" "$LOCATION" true
 }
 
 function dsearch! {
     PATTERN=$1
-    
+
     if ! [ "$PATTERN" ]; then
         echo "Error: No pattern given."
         return 1
@@ -565,9 +565,9 @@ function dsearch! {
     if ! [ "$LOCATION" ]; then
         LOCATION="."
     fi
-    
+
     LOCATION=$(mapFileToClient $LOCATION)
-    
+
     for LOC in $*; do
         if [ "$LOC" == "$1" ]; then
             continue;
@@ -577,7 +577,7 @@ function dsearch! {
         fi
         LOCATION="$LOCATION;$(mapFileToClient $LOC)"
     done
-    
+
     qdbus $KDEV_DBUS_ID /org/kdevelop/GrepViewPlugin org.kdevelop.kdevelop.GrepViewPlugin.startSearch "$PATTERN" "$LOCATION" false
 }
 
@@ -625,7 +625,7 @@ function getLoginFromSSHCommand {
 function getHostFromSSHCommand {
     # This regular expression extracts the "bla2" from "echo "ssh -q bla1 -p 4821 bla2"
     # Specifically, it finds the first argument which is not preceded by a "-x" parameter kind specification.
-    
+
     local CLEANED=""
     local NEWCLEANED="$@"
 
@@ -641,9 +641,9 @@ function getHostFromSSHCommand {
 }
 
 function getSSHForwardOptionsFromCommand {
-    
+
     HOST="$(getLoginFromSSHCommand "$@")$(getHostFromSSHCommand "$@")$(getPortFromSSHCommand "$@")"
-    
+
     if [ "$KDEV_SSH_FORWARD_CHAIN" ]; then
         # We are already forwarding, so we deal with a chain of multiple ssh commands.
         # We still record it, although it's not sure if we can use it somehow.
@@ -669,7 +669,7 @@ function keepForwardingDBusToTCPSocket {
             return 1;
         fi
     done
-        
+
     $KDEV_BASEDIR/kdev_dbus_socket_transformer $DBUS_FORWARDING_TCP_LOCAL_PORT&
     return 0;
 }
@@ -684,7 +684,7 @@ function keepForwardingDBusFromTCPSocket {
             return 1;
         fi
     done
-    
+
     local PATH=${DBUS_ABSTRACT_SOCKET_TARGET_BASE_PATH}-${DBUS_ABSTRACT_SOCKET_TARGET_INDEX}
     export DBUS_SESSION_BUS_ADDRESS=unix:abstract=$PATH${DBUS_SOCKET_SUFFIX}
     $KDEV_BASEDIR/kdev_dbus_socket_transformer $FORWARD_DBUS_FROM_PORT $PATH&
@@ -759,9 +759,10 @@ function setenv! {
     if [ "$1" ]; then
         KDEV_SHELL_ENVIRONMENT_ID=$1
     fi
-        
+
     # Execute the contents of the shell-environment
-    local TEMP=$(mktemp)
+    # note: keep compatible with FreeBSD: https://bugs.kde.org/show_bug.cgi?id=311186
+    local TEMP=$(mktemp /tmp/$USER-XXXXXXXX)
     RESULT=$(executeInAppSync "cat \"$(getCurrentShellEnvPath)\"" "")
     echo "$RESULT" > $TEMP
     if ! [ "$RESULT" ]; then
