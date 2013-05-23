@@ -25,6 +25,8 @@
 
 using namespace KDevelop;
 
+static const int FROM_FILESYSTEM_SOURCE_INDEX = 0;
+
 ProjectSourcePage::ProjectSourcePage(const KUrl& initial, QWidget* parent)
     : QWidget(parent)
 {
@@ -57,7 +59,7 @@ ProjectSourcePage::ProjectSourcePage(const KUrl& initial, QWidget* parent)
     
     emit isCorrect(false);
 
-    setSourceIndex(0);
+    setSourceIndex(FROM_FILESYSTEM_SOURCE_INDEX);
     
     if(!m_plugins.isEmpty())
         m_ui->sources->setCurrentIndex(1);
@@ -191,16 +193,24 @@ void ProjectSourcePage::reevaluateCorrection()
 {
     //TODO: Probably we should just ignore remote URL's, I don't think we're ever going
     //to support checking out to remote directories
-    KUrl cwd=m_ui->workingDir->url();
+    const KUrl cwd = m_ui->workingDir->url();
+    const QDir dir = cwd.toLocalFile();
+
+    // case where we import a project from local file system
+    if (m_ui->sources->currentIndex() == FROM_FILESYSTEM_SOURCE_INDEX) {
+        emit isCorrect(dir.exists());
+        return;
+    }
+
+    // all other cases where remote locations need to be specified
     bool correct=!cwd.isRelative() && (!cwd.isLocalFile() || QDir(cwd.upUrl().toLocalFile()).exists());
     emit isCorrect(correct && m_ui->creationProgress->value() == m_ui->creationProgress->maximum());
-    
-    QDir d(cwd.toLocalFile());
+
     bool validWidget = ((m_locationWidget && m_locationWidget->isCorrect()) ||
                        (m_providerWidget && m_providerWidget->isCorrect()));
     bool validToCheckout = correct && validWidget; //To checkout, if it exists, it should be an empty dir
-    if(validToCheckout && cwd.isLocalFile() && d.exists()) {
-        validToCheckout = d.entryList(QDir::AllEntries | QDir::NoDotAndDotDot).isEmpty();
+    if (validToCheckout && cwd.isLocalFile() && dir.exists()) {
+        validToCheckout = dir.entryList(QDir::AllEntries | QDir::NoDotAndDotDot).isEmpty();
     }
     
     m_ui->get->setEnabled(validToCheckout);
