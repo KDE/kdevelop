@@ -15,7 +15,6 @@ find_package(KDE4 4.7.0 REQUIRED)
 set(KDEVPLATFORM_LIB_VERSION 7.0.0)
 set(KDEVPLATFORM_LIB_SOVERSION 7)
 
-find_package(ZLIB REQUIRED)
 find_package(Grantlee 0.1.7 REQUIRED)
 find_package(QJSON)
 macro_log_feature( QJSON_FOUND "QJson" "QJson support for Uploading Patches to reviewboard" "http://qjson.sourceforge.net/" FALSE "0.7.0" "The qjson library is needed to enable uploading patches to reviewboard" )
