@@ -35,8 +35,8 @@ class ProjectSourcePage : public QWidget
         KUrl workingDir() const;
         
     private slots:
-        void sourceChanged(int index);
-        void getVcsProject();
+        void setSourceIndex(int index);
+        void checkoutVcsProject();
         void projectReceived(KJob* job);
         void reevaluateCorrection();
         void progressChanged(KJob*, unsigned long);
@@ -49,7 +49,7 @@ class ProjectSourcePage : public QWidget
         
     private:
         void setStatus(const QString& message);
-        void validStatus();
+        void clearStatus();
         
         KDevelop::IBasicVersionControl* vcsPerIndex(int index);
         KDevelop::IProjectProvider* providerPerIndex(int index);
