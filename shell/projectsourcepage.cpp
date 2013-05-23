@@ -37,7 +37,7 @@ ProjectSourcePage::ProjectSourcePage(const KUrl& initial, QWidget* parent)
     m_ui->workingDir->setMode(KFile::Directory);
     m_ui->remoteWidget->setLayout(new QVBoxLayout(m_ui->remoteWidget));
     
-    m_ui->sources->addItem(KIcon("folder"), i18n("Do not obtain"));
+    m_ui->sources->addItem(KIcon("folder"), i18n("From File System"));
     m_plugins.append(0);
     
     IPluginController* pluginManager = ICore::self()->pluginController();
