@@ -94,45 +94,9 @@ namespace Cpp {
 using namespace KDevelop;
 using namespace TypeUtils;
 
-QHash<quint16, QString> initOperatorNames() {
-  QHash<quint16, QString> ret;
-  ret['+'] = "+";
-  ret['-'] = "-";
-  ret['*'] = "*";
-  ret['/'] = "/";
-  ret['%'] = "%";
-  ret['^'] = "^";
-  ret['&'] = "&";
-  ret['|'] = "|";
-  ret['~'] = "~";
-  ret['!'] = "!";
-  ret['='] = "=";
-  ret['<'] = "<";
-  ret['>'] = ">";
-  ret[','] = ",";
-  ret[Token_assign] = "+=";
-  ret[Token_leftshift] = "<<";
-  ret[Token_rightshift] = ">>";
-  ret[Token_eq] = "==";
-  ret[Token_not_eq] = "!=";
-  ret[Token_leq] = "<=";
-  ret[Token_geq] = ">=";
-  ret[Token_not_eq] = "!=";
-  ret[Token_and] = "&&";
-  ret[Token_or] = "||";
-
-  return ret;
-}
-
-QHash<quint16, QString> operatorNames = initOperatorNames();
-//BUG use the much more complete list from tokens.cpp
 QString operatorNameFromTokenKind( quint16 tokenKind )
 {
-  QHash<quint16, QString>::const_iterator it = operatorNames.constFind(tokenKind);
-  if( it == operatorNames.constEnd() )
-    return QString();
-  else
-    return *it;
+  return token_text(tokenKind);
 }
 
 QList<DeclarationPointer> convert( const QList<Declaration*>& list ) {

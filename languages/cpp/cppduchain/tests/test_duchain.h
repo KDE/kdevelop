@@ -97,6 +97,7 @@ private slots:
   void testADLTemplateArguments();
   void testADLTemplateTemplateArguments();
   void testADLEllipsis();
+  void testAssignmentOperators();
   void testTemplateEnums();
   void testIntegralTemplates();
   void testTypedef();

@@ -715,7 +715,7 @@ void Lexer::scan_remainder()
   if (*cursor == '=')
     {
       ++cursor;
-      (*session->token_stream)[index++].kind = Token_assign;
+      (*session->token_stream)[index++].kind = Token_remainder_eq;
     }
   else
     {
@@ -735,7 +735,7 @@ void Lexer::scan_and()
   if (*cursor == '=')
     {
       ++cursor;
-      (*session->token_stream)[index++].kind = Token_assign;
+      (*session->token_stream)[index++].kind = Token_and_eq;
     }
   else if (*cursor == '&')
     {
@@ -772,7 +772,7 @@ void Lexer::scan_star()
   if (*cursor == '=')
     {
       ++cursor;
-      (*session->token_stream)[index++].kind = Token_assign;
+      (*session->token_stream)[index++].kind = Token_star_eq;
     }
   else
     {
@@ -792,7 +792,7 @@ void Lexer::scan_plus()
   if (*cursor == '=')
     {
       ++cursor;
-      (*session->token_stream)[index++].kind = Token_assign;
+      (*session->token_stream)[index++].kind = Token_plus_eq;
     }
   else if (*cursor == '+')
     {
@@ -824,7 +824,7 @@ void Lexer::scan_minus()
   if (*cursor == '=')
     {
       ++cursor;
-      (*session->token_stream)[index++].kind = Token_assign;
+      (*session->token_stream)[index++].kind = Token_minus_eq;
     }
   else if (*cursor == '-')
     {
@@ -876,7 +876,7 @@ void Lexer::scan_divide()
   if (*cursor == '=')
     {
       ++cursor;
-      (*session->token_stream)[index++].kind = Token_assign;
+      (*session->token_stream)[index++].kind = Token_div_eq;
     }
   else if( *cursor == '*' || *cursor == '/' )
     {
@@ -949,14 +949,14 @@ void Lexer::scan_less()
     {
       ++cursor;
       if (*cursor == '=')
-	{
-	  ++cursor;
-	  (*session->token_stream)[index++].kind = Token_assign;
-	}
+      {
+        ++cursor;
+        (*session->token_stream)[index++].kind = Token_leftshift_eq;
+      }
       else
-	{
-	  (*session->token_stream)[index++].kind = Token_leftshift;
-	}
+      {
+        (*session->token_stream)[index++].kind = Token_leftshift;
+      }
     }
   else
     {
@@ -1004,7 +1004,7 @@ void Lexer::scan_greater()
       if (*cursor == '=')
 	{
 	  ++cursor;
-	  (*session->token_stream)[index++].kind = Token_assign;
+	  (*session->token_stream)[index++].kind = Token_rightshift_eq;
 	}
       else
 	{
@@ -1046,7 +1046,7 @@ void Lexer::scan_xor()
   if (*cursor == '=')
     {
       ++cursor;
-      (*session->token_stream)[index++].kind = Token_assign;
+      (*session->token_stream)[index++].kind = Token_xor_eq;
     }
   else
     {
@@ -1071,7 +1071,7 @@ void Lexer::scan_or()
   if (*cursor == '=')
     {
       ++cursor;
-      (*session->token_stream)[index++].kind = Token_assign;
+      (*session->token_stream)[index++].kind = Token_or_eq;
     }
   else if (*cursor == '|')
     {

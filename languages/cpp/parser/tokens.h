@@ -35,7 +35,6 @@ enum TOKEN_KIND
     Token_and_eq,
     Token_arrow,
     Token_asm,
-    Token_assign,
     Token_auto,
     Token_bitand,
     Token_bitor,
@@ -140,6 +139,13 @@ enum TOKEN_KIND
     Token_whitespaces,
     Token_xor,
     Token_xor_eq,
+    Token_star_eq,
+    Token_plus_eq,
+    Token_minus_eq,
+    Token_div_eq,
+    Token_leftshift_eq,
+    Token_rightshift_eq,
+    Token_remainder_eq,
     Token___qt_signal__,
     Token___qt_slot__,
     Token___qt_property__,
@@ -152,6 +158,9 @@ KDEVCPPPARSER_EXPORT char const *token_name(int token);
 
 /**@return text corresponding to the token.*/
 KDEVCPPPARSER_EXPORT char const *token_text(int token);
+
+/**@return if the token is an assignment, such as &=, |=, etc*/
+KDEVCPPPARSER_EXPORT bool token_is_assignment(int token);
 
 #endif
 

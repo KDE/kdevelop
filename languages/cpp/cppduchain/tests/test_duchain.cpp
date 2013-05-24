@@ -2424,6 +2424,33 @@ void TestDUChain::testADLEllipsis()
   QCOMPARE(top->localDeclarations().at(2)->uses().begin().value().size(), 1);
 }
 
+
+void TestDUChain::testAssignmentOperators()
+{
+  QString operators("class foo {\n");
+  QStringList operatorPrefixes;
+  operatorPrefixes << "*" << "+" << "-" << "/" << "&" << "|" << "<<" << ">>" << "^" << "";
+  foreach ( const QString& op, operatorPrefixes ) {
+    operators.append("  foo& operator" + op + "=(const foo& other) { };\n");
+  }
+
+  operators.append("};\n\nvoid main(int, char**) {\n");
+  operators.append("  foo a, b;");
+  foreach ( const QString& op, operatorPrefixes ) {
+    operators.append("  a " + op + "= b;\n");
+  }
+  operators.append("}\n");
+
+  LockedTopDUContext top( parse(operators.toAscii(), DumpAll) );
+
+  QCOMPARE(top->childContexts().count(), 3);
+
+  QCOMPARE(top->childContexts()[0]->localDeclarations().size(), operatorPrefixes.size());
+  for ( int i = 0; i < operatorPrefixes.size(); i ++ ) {
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[i]->uses().size(), 1);
+  }
+}
+
 #define V_CHILD_COUNT(context, cnt) QCOMPARE(context->childContexts().count(), cnt)
 #define V_DECLARATION_COUNT(context, cnt) QCOMPARE(context->localDeclarations().count(), cnt)
 

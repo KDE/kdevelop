@@ -1226,12 +1226,21 @@ bool Parser::parseOperator(OperatorAST *&node)
     case '<':
     case '>':
     case ',':
-    case Token_assign:
     case Token_leftshift:
     case Token_rightshift:
     case Token_eq:
     case Token_not:
     case Token_not_eq:
+    case Token_and_eq:
+    case Token_or_eq:
+    case Token_xor_eq:
+    case Token_leftshift_eq:
+    case Token_rightshift_eq:
+    case Token_div_eq:
+    case Token_star_eq:
+    case Token_plus_eq:
+    case Token_minus_eq:
+    case Token_remainder_eq:
     case Token_leq:
     case Token_geq:
     case Token_and:
@@ -5239,8 +5248,7 @@ bool Parser::parseAssignmentExpression(ExpressionAST *&node)
   else if (!parseConditionalExpression(node))
     return false;
 
-  while (session->token_stream->lookAhead() == Token_assign
-         || session->token_stream->lookAhead() == '=')
+  while ( token_is_assignment(session->token_stream->lookAhead()) )
     {
       uint op = session->token_stream->cursor();
       advance();
