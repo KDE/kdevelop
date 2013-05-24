@@ -117,20 +117,21 @@ void RenameAssistant::textChanged(const KTextEditor::Range& invocationRange, con
     }
     if (shouldRenameUses(declAtCursor)) {
       QMap< IndexedString, QList<RangeInRevision> > declUses = declAtCursor->uses();
-      if (declUses.size() > 0) {
-        for(QMap< IndexedString, QList< RangeInRevision > >::iterator it = declUses.begin(); it != declUses.end(); ++it)
-        {
-          foreach(RangeInRevision range, it.value())
-          {
-            SimpleRange currentRange = declAtCursor->transformFromLocalRevision(range);
-            if(currentRange.isEmpty() || m_view->document()->text(currentRange.textRange()) != declAtCursor->identifier().identifier().str())
-              return; // One of the uses is invalid. Maybe the replacement has already been performed.
-          }
-        }
-        
-        m_oldDeclarationUses = declUses;
+      if (declUses.isEmpty()) {
+        // new declaration is use-less
+        return;
       }
-      else  return; //new declaration is use-less
+      for(QMap< IndexedString, QList< RangeInRevision > >::const_iterator it = declUses.constBegin();
+          it != declUses.constEnd(); ++it)
+      {
+        foreach(const RangeInRevision& range, it.value())
+        {
+          SimpleRange currentRange = declAtCursor->transformFromLocalRevision(range);
+          if(currentRange.isEmpty() || m_view->document()->text(currentRange.textRange()) != declAtCursor->identifier().identifier().str())
+            return; // One of the uses is invalid. Maybe the replacement has already been performed.
+        }
+      }
+      m_oldDeclarationUses = RevisionedFileRanges::convert(declUses);
     } else if (SimpleRefactoring::shouldRenameFile(declAtCursor)) {
       m_renameFile = true;
     } else {
@@ -172,7 +173,7 @@ void RenameAssistant::textChanged(const KTextEditor::Range& invocationRange, con
     action.attach(new RenameFileAction(url, m_newDeclarationName));
   } else {
     action.attach(new RenameAction(m_oldDeclarationName, m_newDeclarationName,
-                                                     m_oldDeclarationUses));
+                                   m_oldDeclarationUses));
   }
   connect(action.data(), SIGNAL(executed(IAssistantAction*)), SLOT(reset()));
   addAction(action);

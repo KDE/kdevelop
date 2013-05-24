@@ -190,8 +190,13 @@ QList< RenameAction* > AdaptDefinitionSignatureAssistant::getRenameActions(const
       continue; //new parameter
 
     Declaration *renamedDecl = m_otherSideContext->localDeclarations()[oldPositions[i]];
-    if (newSignature.parameters[i].second != m_oldSignature.parameters[oldPositions[i]].second && renamedDecl->uses().size())
-      renameActions << new RenameAction(renamedDecl->identifier(), newSignature.parameters[i].second, renamedDecl->uses());
+    if (newSignature.parameters[i].second != m_oldSignature.parameters[oldPositions[i]].second) {
+      QMap< IndexedString, QList< RangeInRevision > > uses = renamedDecl->uses();
+      if (!uses.isEmpty()) {
+        renameActions << new RenameAction(renamedDecl->identifier(), newSignature.parameters[i].second,
+                                          RevisionedFileRanges::convert(uses));
+      }
+    }
   }
   return renameActions;
 }

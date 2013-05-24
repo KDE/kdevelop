@@ -22,16 +22,34 @@
 #include <interfaces/iassistant.h>
 #include <language/duchain/identifier.h>
 #include <language/editor/rangeinrevision.h>
-#include <ktexteditor/view.h>
+#include <language/backgroundparser/documentchangetracker.h>
 
 using namespace KDevelop;
 namespace Cpp {
 
-typedef QMap<IndexedString, QList <RangeInRevision> > UsesList;
+/**
+ * A HACK to circumvent the bad RangeInRevision API without rewriting everything.
+ *
+ * The RangeInRevision is actually just blindly assuming that it belongs to
+ * the revision the file was parsed in the last time. But if the file is
+ * reparsed in between (due to changes) the ranges might be wrong. Due to that
+ * we must store the ranges and their actual revision... Stupid!
+ *
+ * See also: https://bugs.kde.org/show_bug.cgi?id=295707
+ */
+struct RevisionedFileRanges
+{
+  IndexedString file;
+  RevisionReference revision;
+  QList<RangeInRevision> ranges;
+  static QVector<RevisionedFileRanges> convert(const QMap<IndexedString, QList<RangeInRevision> >& uses);
+};
 
-class RenameAction : public IAssistantAction {
+class RenameAction : public IAssistantAction
+{
 public:
-  RenameAction(const Identifier &oldDeclarationName, const QString &newDeclarationName, const UsesList &oldDeclarationUses);
+  RenameAction(const Identifier &oldDeclarationName, const QString &newDeclarationName,
+               const QVector<RevisionedFileRanges> &oldDeclarationUses);
   virtual QString description() const;
   virtual QString newDeclarationName() const;
   virtual QString oldDeclarationName() const;
@@ -39,9 +57,11 @@ public:
 private:
   Identifier m_oldDeclarationName;
   QString m_newDeclarationName;
-  UsesList m_oldDeclarationUses;
+  QVector<RevisionedFileRanges> m_oldDeclarationUses;
 };
 
 }
+
+Q_DECLARE_TYPEINFO(Cpp::RevisionedFileRanges, Q_MOVABLE_TYPE);
 
 #endif

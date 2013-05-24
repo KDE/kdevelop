@@ -20,6 +20,9 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
 #include <language/codegen/documentchangeset.h>
+#include <language/backgroundparser/backgroundparser.h>
+#include <interfaces/icore.h>
+#include <interfaces/ilanguagecontroller.h>
 #include <KMessageBox>
 #include <KLocalizedString>
 
@@ -28,7 +31,25 @@
 using namespace KDevelop;
 using namespace Cpp;
 
-RenameAction::RenameAction(const Identifier &oldDeclarationName, const QString &newDeclarationName, const UsesList &oldDeclarationUses)
+QVector<RevisionedFileRanges> RevisionedFileRanges::convert(const QMap<IndexedString, QList<RangeInRevision> >& uses)
+{
+  QVector<RevisionedFileRanges> ret(uses.size());
+  RevisionedFileRanges* insertIt = ret.begin();
+  for(QMap< IndexedString, QList< RangeInRevision > >::const_iterator it = uses.constBegin();
+      it != uses.constEnd(); ++it, ++insertIt)
+  {
+    insertIt->file = it.key();
+    insertIt->ranges = it.value();
+    DocumentChangeTracker* tracker = ICore::self()->languageController()->backgroundParser()->trackerForUrl(it.key());
+    if (tracker) {
+      insertIt->revision = tracker->revisionAtLastReset();
+    }
+  }
+  return ret;
+}
+
+RenameAction::RenameAction(const Identifier &oldDeclarationName, const QString &newDeclarationName,
+                           const QVector<RevisionedFileRanges> &oldDeclarationUses)
   : m_oldDeclarationName(oldDeclarationName),
     m_newDeclarationName(newDeclarationName),
     m_oldDeclarationUses(oldDeclarationUses)
@@ -49,26 +70,22 @@ QString RenameAction::oldDeclarationName() const
 }
 
 void RenameAction::execute() {
-  UsesList::iterator it;
   DocumentChangeSet changes;
 
-  DUChainReadLocker lock;
-  for (it = m_oldDeclarationUses.begin(); it != m_oldDeclarationUses.end(); ++it) {
-    TopDUContext* topContext = DUChainUtils::standardContextForUrl(it.key().toUrl());
-    if (!topContext) {
-      //This would be abnormal
-      kDebug() << "while renaming" << it.key().str() << "didn't produce a context";
-      continue;
-    }
-
-    foreach (const RangeInRevision &range, it.value()) {
-      DocumentChange useRename
-          (it.key(), topContext->transformFromLocalRevision(range), m_oldDeclarationName.toString(), m_newDeclarationName);
+  foreach(const RevisionedFileRanges& ranges, m_oldDeclarationUses) {
+    foreach (const RangeInRevision &range, ranges.ranges) {
+      SimpleRange currentRange;
+      if (ranges.revision && ranges.revision->valid()) {
+        currentRange = ranges.revision->transformToCurrentRevision(range);
+      } else {
+        currentRange = range.castToSimpleRange();
+      }
+      DocumentChange useRename(ranges.file, currentRange,
+                               m_oldDeclarationName.toString(), m_newDeclarationName);
       changes.addChange( useRename );
       changes.setReplacementPolicy(DocumentChangeSet::WarnOnFailedChange);
     }
   }
-  lock.unlock();
 
   DocumentChangeSet::ChangeResult result = changes.applyAllChanges();
   if(!result)
