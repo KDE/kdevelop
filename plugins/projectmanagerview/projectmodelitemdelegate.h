@@ -30,6 +30,8 @@ class ProjectModelItemDelegate : public QItemDelegate
         virtual void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
         void drawBranchName(QPainter* painter, const QStyleOptionViewItem& option, const QRect& rect, const QString& branchName) const;
         void drawStyledBackground(QPainter* painter, const QStyleOptionViewItem& option) const;
+        virtual void drawDisplay(QPainter *painter, const QStyleOptionViewItem &option,
+                             const QRect &rect, const QString &text) const;
 };
 
 #endif // KDEVPLATFORM_PLUGIN_PROJECTMODELITEMDELEGATE_H

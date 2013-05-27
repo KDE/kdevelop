@@ -76,3 +76,29 @@ void ProjectModelItemDelegate::drawStyledBackground(QPainter* painter, const QSt
     QStyle *style = opt.widget->style();
     style->drawPrimitive(QStyle::PE_PanelItemViewItem, &option, painter, opt.widget);
 }
+
+void ProjectModelItemDelegate::drawDisplay(QPainter* painter, const QStyleOptionViewItem& option, const QRect& rect, const QString& text) const
+{
+    QPalette::ColorGroup cg = option.state & QStyle::State_Enabled
+                            ? QPalette::Normal : QPalette::Disabled;
+    if (option.state & QStyle::State_Editing) {
+        painter->save();
+        painter->setPen(option.palette.color(cg, QPalette::Text));
+        painter->drawRect(rect.adjusted(0, 0, -1, -1));
+        painter->restore();
+    }
+
+    if(text.isEmpty())
+        return;
+
+    if (cg == QPalette::Normal && !(option.state & QStyle::State_Active))
+        cg = QPalette::Inactive;
+    if (option.state & QStyle::State_Selected) {
+        painter->setPen(option.palette.color(cg, QPalette::HighlightedText));
+    } else {
+        painter->setPen(option.palette.color(cg, QPalette::Text));
+    }
+
+    QFontMetrics fm(painter->fontMetrics());
+    painter->drawText(rect, fm.elidedText(text, Qt::ElideRight, rect.width()));
+}
