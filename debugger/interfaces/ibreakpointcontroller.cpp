@@ -65,9 +65,13 @@ BreakpointModel* IBreakpointController::breakpointModel() const
 
 void IBreakpointController::debuggerStateChanged(IDebugSession::DebuggerState state)
 {
+    BreakpointModel* model = breakpointModel();
+    if (!model)
+        return;
+
     if (state == IDebugSession::StartingState || state == IDebugSession::EndedState) {
         //breakpoint state changes when session started or stopped
-        foreach (Breakpoint *breakpoint, breakpointModel()->breakpoints()) {
+        foreach (Breakpoint *breakpoint, model->breakpoints()) {
             if (state == IDebugSession::StartingState) {
                 //when starting everything is dirty
                 m_dirty[breakpoint].insert(Breakpoint::LocationColumn);
@@ -82,7 +86,11 @@ void IBreakpointController::debuggerStateChanged(IDebugSession::DebuggerState st
 
 void IBreakpointController::sendMaybeAll()
 {
-    foreach (Breakpoint *breakpoint, breakpointModel()->breakpoints()) {
+    BreakpointModel* model = breakpointModel();
+    if (!model)
+        return;
+
+    foreach (Breakpoint *breakpoint, model->breakpoints()) {
         sendMaybe(breakpoint);
     }
 }
