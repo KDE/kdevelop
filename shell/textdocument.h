@@ -23,14 +23,11 @@
 #include <KDE/KXMLGUIClient>
 
 #include <sublime/view.h>
+#include <ktexteditor/view.h>
 
 #include "partdocument.h"
 
 #include "shellexport.h"
-
-namespace KTextEditor {
-    class View;
-}
 
 namespace KDevelop {
 
@@ -139,6 +136,8 @@ public Q_SLOTS:
 private:
     void setEditorView(KTextEditor::View* view);
     class TextEditorWidgetPrivate* const d;
+
+    Q_PRIVATE_SLOT(d, void viewEditModeChanged(KTextEditor::View*, KTextEditor::View::EditMode));
 
 };
 
