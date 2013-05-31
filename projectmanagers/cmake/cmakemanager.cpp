@@ -898,6 +898,10 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
             if(descAtt)
                 descAtt->setDescriptor(t.desc);
 
+            IncludesAttached* incAtt = dynamic_cast<IncludesAttached*>(targetItem);
+            if(incAtt)
+                incAtt->setIncludeDirectories(t.includes);
+            
             if(targetProps.contains("INCLUDE_DIRECTORIES")) {
                 IncludesAttached* incAtt = dynamic_cast<IncludesAttached*>(targetItem);
                 if(incAtt) {

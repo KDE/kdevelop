@@ -22,8 +22,6 @@
 #ifndef CMAKEASTVISITOR_H
 #define CMAKEASTVISITOR_H
 
-class SetTestsPropsAst;
-class SetDirectoryPropsAst;
 class AddDefinitionsAst;
 class AddDependenciesAst;
 class AddExecutableAst;
@@ -72,8 +70,11 @@ class SeparateArgumentsAst;
 class SetPropertyAst;
 class StringAst;
 class SubdirsAst;
-class TryCompileAst;
+class SetTestsPropsAst;
+class SetDirectoryPropsAst;
+class TargetIncludeDirectoriesAst;
 class TargetLinkLibrariesAst;
+class TryCompileAst;
 class UnsetAst;
 class WhileAst;
 
@@ -125,6 +126,7 @@ class CMakeAstVisitor {
         virtual int visit( const SubdirsAst * ) = 0;
         virtual int visit( const TryCompileAst * ) = 0;
         virtual int visit( const TargetLinkLibrariesAst * ) = 0;
+        virtual int visit( const TargetIncludeDirectoriesAst* ) = 0;
         virtual int visit( const SeparateArgumentsAst * ) = 0;
         virtual int visit( const UnsetAst * ) = 0;
         virtual int visit( const WhileAst * ) = 0;

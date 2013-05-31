@@ -88,8 +88,9 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         virtual int visit( const StringAst * );
         virtual int visit( const SubdirsAst * );
         virtual int visit( const SetTestsPropsAst* );
-        virtual int visit( const TryCompileAst * );
         virtual int visit( const TargetLinkLibrariesAst * );
+        virtual int visit( const TargetIncludeDirectoriesAst* );
+        virtual int visit( const TryCompileAst * );
         virtual int visit( const GetCMakePropertyAst * );
         virtual int visit( const GetPropertyAst* );
         virtual int visit( const RemoveDefinitionsAst * );

@@ -1092,6 +1092,18 @@ int CMakeProjectVisitor::visit(const TargetLinkLibrariesAst *)
     return 1;
 }
 
+int CMakeProjectVisitor::visit(const TargetIncludeDirectoriesAst* tid)
+{
+    QMap<QString, Target>::iterator target = m_targetForId.find(tid->target());
+    //TODO: we can add a problem if the target is not found
+    if(target != m_targetForId.end()) {
+        foreach(const TargetIncludeDirectoriesAst::Item& item, tid->items()) {
+            target->includes += item.item;
+        }
+    }
+    return 1;
+}
+
 void CMakeProjectVisitor::macroDeclaration(const CMakeFunctionDesc& def, const CMakeFunctionDesc& end, const QStringList& args)
 {
     if(def.arguments.isEmpty() || end.arguments.isEmpty())

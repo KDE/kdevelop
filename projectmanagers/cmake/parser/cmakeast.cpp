@@ -122,6 +122,7 @@ CMAKE_REGISTER_AST( SiteNameAst, site_name )
 CMAKE_REGISTER_AST( StringAst, string )
 CMAKE_REGISTER_AST( SubdirsAst, subdirs )
 CMAKE_REGISTER_AST( SubdirDependsAst, subdir_depends )
+CMAKE_REGISTER_AST( TargetIncludeDirectoriesAst, target_include_directories)
 CMAKE_REGISTER_AST( TargetLinkLibrariesAst, target_link_libraries)
 CMAKE_REGISTER_AST( TryCompileAst, try_compile )
 CMAKE_REGISTER_AST( TryRunAst, try_run )
@@ -3202,6 +3203,56 @@ bool SubdirsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         }
     }
     return true;
+}
+
+TargetIncludeDirectoriesAst::TargetIncludeDirectoriesAst()
+    : m_before(false)
+{}
+
+TargetIncludeDirectoriesAst::~TargetIncludeDirectoriesAst()
+{}
+
+bool TargetIncludeDirectoriesAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    if ( func.name != "target_include_directories" )
+        return false;
+
+    //we don't do variable expansion when parsing like CMake does, so we
+    //need to have at least two arguments for target_link_libraries
+    if ( func.arguments.size() < 2 )
+        return false;
+
+    m_target = func.arguments[0].value;
+
+    QList<CMakeFunctionArgument>::const_iterator it = func.arguments.constBegin() + 1;
+    QList<CMakeFunctionArgument>::const_iterator itEnd = func.arguments.constEnd();
+
+    m_before = func.arguments[1].value == "BEFORE";
+    if(m_before) {
+        ++it;
+    }
+
+    Item currentItem;
+    for ( ; it != itEnd; ++it )
+    {
+        QString visibility = it->value;
+        if(visibility == "INTERFACE") 
+            currentItem.visibility = Interface;
+        else if(visibility == "PUBLIC") 
+            currentItem.visibility = Public;
+        else if(visibility == "PRIVATE") 
+            currentItem.visibility = Private;
+        else 
+            return false;
+        ++it;
+        if(it==itEnd)
+            return false;
+
+        currentItem.item = it->value;
+        m_items.append(currentItem);
+    }
+
+    return !m_items.isEmpty();
 }
 
 TargetLinkLibrariesAst::TargetLinkLibrariesAst()
