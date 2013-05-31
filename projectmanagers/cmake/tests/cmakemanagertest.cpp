@@ -38,10 +38,26 @@ QTEST_KDEMAIN(CMakeManagerTest, GUI )
 #define WAIT_FOR_OPEN_SIGNAL \
 {\
     bool gotSignal = QTest::kWaitForSignal(ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), 30000);\
-    QVERIFY2(gotSignal, "Timeout while waiting for opened signal");\
+    Q_ASSERT(gotSignal && "Timeout while waiting for opened signal");\
 } void(0)
 
 using namespace KDevelop;
+
+IProject* CMakeManagerTest::loadProject(const QString& name, const QString& relative)
+{
+    const TestProjectPaths paths = projectPaths(name+relative, name);
+    defaultConfigure(paths);
+
+    ICore::self()->projectController()->openProject(paths.projectFile);
+    WAIT_FOR_OPEN_SIGNAL;
+
+    IProject* project = ICore::self()->projectController()->findProjectByName(name);
+    Q_ASSERT(project);
+    Q_ASSERT(project->buildSystemManager());
+    Q_ASSERT(paths.projectFile == project->projectFileUrl());
+    Q_ASSERT(project->folder() == project->folder());
+    return project;
+}
 
 void CMakeManagerTest::initTestCase()
 {
@@ -66,36 +82,15 @@ void CMakeManagerTest::cleanup()
 
 void CMakeManagerTest::testWithBuildDirProject()
 {
-    const TestProjectPaths paths = projectPaths("with_build_dir");
-
-    defaultConfigure(paths);
-
-    // Import project
-    ICore::self()->projectController()->openProject(paths.projectFile);
-
-    WAIT_FOR_OPEN_SIGNAL;
-
-    IProject* project = ICore::self()->projectController()->findProjectByName("with_build_dir");
-    QCOMPARE(paths.projectFile, project->projectFileUrl());
-    QCOMPARE(paths.sourceDir, project->folder());
+    loadProject("with_build_dir");
 }
 
 void CMakeManagerTest::testIncludePaths()
 {
-    const TestProjectPaths paths = projectPaths("single_subdirectory");
-    defaultConfigure(paths);
+    IProject* project = loadProject("single_subdirectory");
+    KUrl sourceDir = project->folder();
 
-    ICore::self()->projectController()->openProject(paths.projectFile);
-
-    WAIT_FOR_OPEN_SIGNAL;
-
-    IProject* project = ICore::self()->projectController()->findProjectByName("single_subdirectory");
-    QVERIFY(project->buildSystemManager());
-
-    QCOMPARE(paths.projectFile, project->projectFileUrl());
-    QCOMPARE(paths.sourceDir, project->folder());
-
-    KUrl fooCpp(paths.sourceDir, "subdir/foo.cpp");
+    KUrl fooCpp(sourceDir, "subdir/foo.cpp");
     QVERIFY(QFile::exists(fooCpp.toLocalFile()));
     QList< ProjectBaseItem* > items = project->itemsForUrl(fooCpp);
     QCOMPARE(items.size(), 2); // once the target, once the plain file
@@ -111,33 +106,21 @@ void CMakeManagerTest::testIncludePaths()
 
     QCOMPARE(includeDirs.size(), _includeDirs.size());
 
-    KUrl buildDir(paths.sourceDir, "build/");
+    KUrl buildDir(sourceDir, "build/");
     QVERIFY(includeDirs.contains(buildDir));
 
-    KUrl subBuildDir(paths.sourceDir, "build/subdir/");
+    KUrl subBuildDir(sourceDir, "build/subdir/");
     QVERIFY(includeDirs.contains(subBuildDir));
 
-    KUrl subDir(paths.sourceDir, "subdir/");
+    KUrl subDir(sourceDir, "subdir/");
     QVERIFY(includeDirs.contains(subDir));
 }
 
 void CMakeManagerTest::testRelativePaths()
 {
-    const TestProjectPaths paths = projectPaths("relative_paths/out", "relative_paths");
-    defaultConfigure(paths);
+    IProject* project = loadProject("relative_paths", "/out");
 
-    ICore::self()->projectController()->openProject(paths.projectFile);
-
-    WAIT_FOR_OPEN_SIGNAL;
-
-    IProject* project = ICore::self()->projectController()->findProjectByName("relative_paths");
-    QVERIFY(project);
-    QVERIFY(project->buildSystemManager());
-
-    QCOMPARE(paths.projectFile, project->projectFileUrl());
-    QCOMPARE(paths.sourceDir, project->folder());
-
-    KUrl codeCpp(paths.sourceDir, "../src/code.cpp");
+    KUrl codeCpp(project->folder(), "../src/code.cpp");
     codeCpp.cleanPath();
     QVERIFY(QFile::exists( codeCpp.toLocalFile()));
     QList< ProjectBaseItem* > items = project->itemsForUrl( codeCpp );
@@ -154,27 +137,16 @@ void CMakeManagerTest::testRelativePaths()
 
     QCOMPARE(includeDirs.size(), _includeDirs.size());
 
-    KUrl incDir(paths.sourceDir, "../inc/");
+    KUrl incDir(project->folder(), "../inc/");
     incDir.cleanPath();
     QVERIFY(includeDirs.contains( incDir ));
 }
 
 void CMakeManagerTest::testTargetIncludePaths()
 {
-    const TestProjectPaths paths = projectPaths("target_includes");
-    defaultConfigure(paths);
+    IProject* project = loadProject("target_includes");
 
-    ICore::self()->projectController()->openProject(paths.projectFile);
-
-    WAIT_FOR_OPEN_SIGNAL;
-
-    IProject* project = ICore::self()->projectController()->findProjectByName("target_includes");
-    QVERIFY(project->buildSystemManager());
-
-    QCOMPARE(paths.projectFile, project->projectFileUrl());
-    QCOMPARE(paths.sourceDir, project->folder());
-
-    KUrl mainCpp(paths.sourceDir, "main.cpp");
+    KUrl mainCpp(project->folder(), "main.cpp");
     QVERIFY(QFile::exists(mainCpp.toLocalFile()));
     QList< ProjectBaseItem* > items = project->itemsForUrl(mainCpp);
     QCOMPARE(items.size(), 2); // once the plain file, once the target
@@ -195,7 +167,7 @@ void CMakeManagerTest::testTargetIncludePaths()
 
         if (dynamic_cast<CMakeExecutableTargetItem*>( mainContainer )) {
             foundInTarget = true;
-            KUrl targetIncludesDir(paths.sourceDir, "includes/");
+            KUrl targetIncludesDir(project->folder(), "includes/");
             QVERIFY(includeDirs.contains(targetIncludesDir));
         }
     }
@@ -204,20 +176,9 @@ void CMakeManagerTest::testTargetIncludePaths()
 
 void CMakeManagerTest::testTargetIncludeDirectories()
 {
-    const TestProjectPaths paths = projectPaths("target_include_directories");
-    defaultConfigure(paths);
+    IProject* project = loadProject("target_include_directories");
 
-    ICore::self()->projectController()->openProject(paths.projectFile);
-
-    WAIT_FOR_OPEN_SIGNAL;
-
-    IProject* project = ICore::self()->projectController()->findProjectByName("target_include_directories");
-    QVERIFY(project->buildSystemManager());
-
-    QCOMPARE(paths.projectFile, project->projectFileUrl());
-    QCOMPARE(paths.sourceDir, project->folder());
-
-    KUrl mainCpp(paths.sourceDir, "main.cpp");
+    KUrl mainCpp(project->folder(), "main.cpp");
     QVERIFY(QFile::exists(mainCpp.toLocalFile()));
     QList< ProjectBaseItem* > items = project->itemsForUrl(mainCpp);
     QCOMPARE(items.size(), 2); // once the plain file, once the target
@@ -238,7 +199,7 @@ void CMakeManagerTest::testTargetIncludeDirectories()
 
         if (dynamic_cast<CMakeExecutableTargetItem*>( mainContainer )) {
             foundInTarget = true;
-            KUrl targetIncludesDir(paths.sourceDir, "includes/");
+            KUrl targetIncludesDir(project->folder(), "includes/");
             QVERIFY(includeDirs.contains(targetIncludesDir));
         }
     }
@@ -247,20 +208,9 @@ void CMakeManagerTest::testTargetIncludeDirectories()
 
 void CMakeManagerTest::testTargetDefines()
 {
-    const TestProjectPaths paths = projectPaths("target_defines");
-    defaultConfigure(paths);
+    IProject* project = loadProject("target_defines");
 
-    ICore::self()->projectController()->openProject(paths.projectFile);
-
-    WAIT_FOR_OPEN_SIGNAL;
-
-    IProject* project = ICore::self()->projectController()->findProjectByName("target_defines");
-    QVERIFY(project->buildSystemManager());
-
-    QCOMPARE(paths.projectFile, project->projectFileUrl());
-    QCOMPARE(paths.sourceDir, project->folder());
-
-    KUrl mainCpp(paths.sourceDir, "main.cpp");
+    KUrl mainCpp(project->folder(), "main.cpp");
     QVERIFY(QFile::exists(mainCpp.toLocalFile()));
     QList< ProjectBaseItem* > items = project->itemsForUrl(mainCpp);
     QCOMPARE(items.size(), 2); // once the plain file, once the target
@@ -283,15 +233,7 @@ void CMakeManagerTest::testTargetDefines()
 
 void CMakeManagerTest::testCustomTargetSources()
 {
-    const TestProjectPaths paths = projectPaths("custom_target_sources");
-    defaultConfigure(paths);
-
-    ICore::self()->projectController()->openProject(paths.projectFile);
-
-    WAIT_FOR_OPEN_SIGNAL;
-
-    IProject* project = ICore::self()->projectController()->findProjectByName("custom_target_sources");
-    QVERIFY(project->buildSystemManager());
+    IProject* project = loadProject("custom_target_sources");
 
     QList<ProjectTargetItem*> targets = project->buildSystemManager()->targets(project->projectItem());
     QVERIFY(targets.size() == 1);
@@ -303,26 +245,14 @@ void CMakeManagerTest::testCustomTargetSources()
 
 void CMakeManagerTest::testConditionsInSubdirectoryBasedOnRootVariables()
 {
-    const TestProjectPaths paths = projectPaths("conditions_in_subdirectory_based_on_root_variables");
-    defaultConfigure(paths);
+    IProject* project = loadProject("conditions_in_subdirectory_based_on_root_variables");
 
-    ICore::self()->projectController()->openProject(paths.projectFile);
-
-    WAIT_FOR_OPEN_SIGNAL;
-
-    IProject* project = ICore::self()->projectController()->findProjectByName("conditions_in_subdirectory_based_on_root_variables");
-    QVERIFY(project);
-    QVERIFY(project->buildSystemManager());
-
-    QCOMPARE(paths.projectFile, project->projectFileUrl());
-    QCOMPARE(paths.sourceDir, project->folder());
-
-    KUrl rootFooCpp(paths.sourceDir, "foo.cpp");
+    KUrl rootFooCpp(project->folder(), "foo.cpp");
     QVERIFY(QFile::exists(rootFooCpp.toLocalFile()));
     QList< ProjectBaseItem* > rootFooItems = project->itemsForUrl(rootFooCpp);
     QCOMPARE(rootFooItems.size(), 4); // three items for the targets, one item for the plain file
 
-    KUrl subdirectoryFooCpp(paths.sourceDir, "subdirectory/foo.cpp");
+    KUrl subdirectoryFooCpp(project->folder(), "subdirectory/foo.cpp");
     QVERIFY(QFile::exists(subdirectoryFooCpp.toLocalFile()));
     QList< ProjectBaseItem* > subdirectoryFooItems = project->itemsForUrl(subdirectoryFooCpp);
     QCOMPARE(subdirectoryFooItems.size(), 4); // three items for the targets, one item for the plain file

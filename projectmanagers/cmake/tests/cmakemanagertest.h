@@ -22,6 +22,10 @@
 
 #include <QtTest/QtTest>
 
+namespace KDevelop {
+class IProject;
+}
+
 /**
  *  Test of the cmake manager.
  *   + Test that CMakeCache.txt is found, loaded and parsed
@@ -29,6 +33,8 @@
  **/
 class CMakeManagerTest : public QObject {
     Q_OBJECT
+private:
+    KDevelop::IProject* loadProject(const QString& name, const QString& relative = QString());
 
 private slots:
     void initTestCase();
