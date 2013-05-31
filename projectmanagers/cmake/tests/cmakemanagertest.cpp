@@ -202,6 +202,49 @@ void CMakeManagerTest::testTargetIncludePaths()
     QVERIFY(foundInTarget);
 }
 
+void CMakeManagerTest::testTargetIncludeDirectories()
+{
+    const TestProjectPaths paths = projectPaths("target_include_directories");
+    defaultConfigure(paths);
+
+    ICore::self()->projectController()->openProject(paths.projectFile);
+
+    WAIT_FOR_OPEN_SIGNAL;
+
+    IProject* project = ICore::self()->projectController()->findProjectByName("target_include_directories");
+    QVERIFY(project->buildSystemManager());
+
+    QCOMPARE(paths.projectFile, project->projectFileUrl());
+    QCOMPARE(paths.sourceDir, project->folder());
+
+    KUrl mainCpp(paths.sourceDir, "main.cpp");
+    QVERIFY(QFile::exists(mainCpp.toLocalFile()));
+    QList< ProjectBaseItem* > items = project->itemsForUrl(mainCpp);
+    QCOMPARE(items.size(), 2); // once the plain file, once the target
+
+    bool foundInTarget = false;
+    foreach(ProjectBaseItem* mainCppItem, items) {
+        ProjectBaseItem* mainContainer = mainCppItem->parent();
+
+        KUrl::List _includeDirs = project->buildSystemManager()->includeDirectories(mainCppItem);
+        QSet<KUrl> includeDirs;
+        foreach(KUrl url, _includeDirs) {
+            url.cleanPath(KUrl::SimplifyDirSeparators);
+            url.adjustPath(KUrl::AddTrailingSlash);
+            includeDirs << url;
+        }
+
+        QCOMPARE(includeDirs.size(), _includeDirs.size());
+
+        if (dynamic_cast<CMakeExecutableTargetItem*>( mainContainer )) {
+            foundInTarget = true;
+            KUrl targetIncludesDir(paths.sourceDir, "includes/");
+            QVERIFY(includeDirs.contains(targetIncludesDir));
+        }
+    }
+    QVERIFY(foundInTarget);
+}
+
 void CMakeManagerTest::testTargetDefines()
 {
     const TestProjectPaths paths = projectPaths("target_defines");
