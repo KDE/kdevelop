@@ -83,11 +83,14 @@ void VcsOverlayProxyModel::repositoryBranchChanged(const KUrl& url)
 
 void VcsOverlayProxyModel::branchNameReady(KDevelop::VcsJob* job)
 {
-    IProject* project = qobject_cast<IProject*>(job->property("project").value<QObject*>());
     if(job->status()==VcsJob::JobSucceeded) {
-        m_branchName[project] = job->fetchResults().toString();
-        QModelIndex index = indexFromProject(project);
-        emit dataChanged(index, index);
+        QObject* p = job->property("project").value<QObject*>();
+        QModelIndex index = indexFromProject(p);
+        if(index.isValid()) {
+            IProject* project = qobject_cast<IProject*>(p);
+            m_branchName[project] = job->fetchResults().toString();
+            emit dataChanged(index, index);
+        }
     }
 }
 
@@ -96,7 +99,7 @@ void VcsOverlayProxyModel::removeProject(IProject* p)
     m_branchName.remove(p);
 }
 
-QModelIndex VcsOverlayProxyModel::indexFromProject(IProject* project)
+QModelIndex VcsOverlayProxyModel::indexFromProject(QObject* project)
 {
     for(int i=0; i<rowCount(); i++) {
         QModelIndex idx = index(i,0);

@@ -45,7 +45,7 @@ class VcsOverlayProxyModel : public QIdentityProxyModel
         void branchNameReady(KDevelop::VcsJob* job);
 
     private:
-        QModelIndex indexFromProject(KDevelop::IProject* project);
+        QModelIndex indexFromProject(QObject* project);
         QHash<KDevelop::IProject*, QString> m_branchName;
 };
 
