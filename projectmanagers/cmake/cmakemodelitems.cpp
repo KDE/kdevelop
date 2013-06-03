@@ -44,7 +44,7 @@ static KDevelop::ProjectBaseItem* getRealCMakeParent(KDevelop::ProjectBaseItem* 
     return baseItem->parent();
 }
 
-QStringList IncludesAttached::includeDirectories(KDevelop::ProjectBaseItem* placeInHierarchy) const
+QStringList CompilationDataAttached::includeDirectories(KDevelop::ProjectBaseItem* placeInHierarchy) const
 {
     QStringList ret(m_includeList);
     if (!placeInHierarchy)
@@ -53,7 +53,7 @@ QStringList IncludesAttached::includeDirectories(KDevelop::ProjectBaseItem* plac
     placeInHierarchy = getRealCMakeParent(placeInHierarchy);
     while(placeInHierarchy)
     {
-        IncludesAttached* includer = dynamic_cast<IncludesAttached*>( placeInHierarchy );
+        CompilationDataAttached* includer = dynamic_cast<CompilationDataAttached*>( placeInHierarchy );
         if(includer) {
             ret += includer->includeDirectories(placeInHierarchy);
             return ret;
@@ -64,7 +64,7 @@ QStringList IncludesAttached::includeDirectories(KDevelop::ProjectBaseItem* plac
     return ret;
 }
 
-CMakeDefinitions DefinesAttached::definitions(CMakeFolderItem* parentFolder) const
+CMakeDefinitions CompilationDataAttached::definitions(CMakeFolderItem* parentFolder) const
 {
     CMakeDefinitions result = m_defines;
 
@@ -89,7 +89,7 @@ CMakeDefinitions DefinesAttached::definitions(CMakeFolderItem* parentFolder) con
     return result;
 }
 
-void DefinesAttached::defineVariables(const QStringList& vars)
+void CompilationDataAttached::defineVariables(const QStringList& vars)
 {
     foreach(const QString& v, vars)
         m_defines.insert(v.section('=', 0, 0), v.section('=', 1, -1));
@@ -191,11 +191,7 @@ DescriptorAttatched::~DescriptorAttatched() {
 DUChainAttatched::~DUChainAttatched() {
 }
 
-DefinesAttached::~DefinesAttached() {
-}
-
-IncludesAttached::~IncludesAttached() {
-}
+CompilationDataAttached::~CompilationDataAttached() {}
 
 KUrl CMakeExecutableTargetItem::installedUrl() const {
     return KUrl();

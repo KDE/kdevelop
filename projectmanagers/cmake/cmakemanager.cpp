@@ -892,10 +892,6 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
             } else
                 m_cleanupItems.removeAll(targetItem);
             
-            DefinesAttached* defAtt = dynamic_cast<DefinesAttached*>(targetItem);
-            if(defAtt)
-                defAtt->defineVariables(targetProps["COMPILE_DEFINITIONS"]);
-
             DescriptorAttatched* descAtt=dynamic_cast<DescriptorAttatched*>(targetItem);
             if(descAtt)
                 descAtt->setDescriptor(t.desc);
@@ -903,10 +899,11 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
             QStringList targetIncludes = t.includes;
             targetIncludes += resolvePaths(folder->url(), targetProps["INCLUDE_DIRECTORIES"]);
             
-            IncludesAttached* incAtt = dynamic_cast<IncludesAttached*>(targetItem);
+            CompilationDataAttached* incAtt = dynamic_cast<CompilationDataAttached*>(targetItem);
             if(incAtt) {
                 targetIncludes.removeDuplicates();
                 incAtt->setIncludeDirectories(targetIncludes);
+                incAtt->defineVariables(targetProps["COMPILE_DEFINITIONS"]);
             }
             
             KUrl::List tfiles;
@@ -998,11 +995,11 @@ QList<KDevelop::ProjectTargetItem*> CMakeManager::targets() const
 
 KUrl::List CMakeManager::includeDirectories(KDevelop::ProjectBaseItem *item) const
 {
-    IncludesAttached* includer=0;
+    CompilationDataAttached* includer=0;
 //     kDebug(9042) << "Querying inc dirs for " << item;
     while(item)
     {
-        includer = dynamic_cast<IncludesAttached*>( item );
+        includer = dynamic_cast<CompilationDataAttached*>( item );
         if(includer) {
             QStringList dirs = includer->includeDirectories(item);
             return resolveSystemDirs(item->project(), dirs);
@@ -1016,12 +1013,12 @@ KUrl::List CMakeManager::includeDirectories(KDevelop::ProjectBaseItem *item) con
 
 QHash< QString, QString > CMakeManager::defines(KDevelop::ProjectBaseItem *item ) const
 {
-    DefinesAttached* att=0;
+    CompilationDataAttached* att=0;
     ProjectBaseItem* it=item;
 //     kDebug(9042) << "Querying defines for " << item << dynamic_cast<ProjectTargetItem*>(item);
     while(!att && item)
     {
-        att = dynamic_cast<DefinesAttached*>( item );
+        att = dynamic_cast<CompilationDataAttached*>( item );
         it = item;
         item = item->parent();
 //         kDebug(9042) << "Looking for a folder: " << folder << item;
