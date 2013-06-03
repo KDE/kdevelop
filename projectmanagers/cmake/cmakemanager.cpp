@@ -837,14 +837,16 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
         deleteAllLater(castToBase(folder->cleanupTargets(data.targets)));
         foreach ( const Target& t, data.targets)
         {
-            QStringList files=t.files;
             QString outputName=t.name;
-            QMap< QString, QStringList > targetProps = data.properties[TargetProperty][t.name];
+            const QMap<QString, QStringList> targetProps = data.properties[TargetProperty][t.name];
             if(!targetProps.isEmpty()) {
                 if(targetProps.contains("OUTPUT_NAME"))
                     outputName=targetProps["OUTPUT_NAME"].first();
-                else if(targetProps.contains("FOLDER") && targetProps["FOLDER"].first()=="CTestDashboardTargets")
-                    continue; //filter some annoying targets
+                else {
+                    QStringList folderProp = targetProps["FOLDER"];
+                    if(!folderProp.isEmpty() && folderProp.first()=="CTestDashboardTargets")
+                        continue; //filter some annoying targets
+                }
             }
             
             QString path;
@@ -898,17 +900,13 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
             if(descAtt)
                 descAtt->setDescriptor(t.desc);
 
-            IncludesAttached* incAtt = dynamic_cast<IncludesAttached*>(targetItem);
-            if(incAtt)
-                incAtt->setIncludeDirectories(t.includes);
+            QStringList targetIncludes = t.includes;
+            targetIncludes += resolvePaths(folder->url(), targetProps["INCLUDE_DIRECTORIES"]);
             
-            if(targetProps.contains("INCLUDE_DIRECTORIES")) {
-                IncludesAttached* incAtt = dynamic_cast<IncludesAttached*>(targetItem);
-                if(incAtt) {
-                    QStringList targetIncludeDirectories = resolvePaths(folder->url(), targetProps["INCLUDE_DIRECTORIES"]);
-                    targetIncludeDirectories.removeDuplicates();
-                    incAtt->setIncludeDirectories(targetIncludeDirectories);
-                }
+            IncludesAttached* incAtt = dynamic_cast<IncludesAttached*>(targetItem);
+            if(incAtt) {
+                targetIncludes.removeDuplicates();
+                incAtt->setIncludeDirectories(targetIncludes);
             }
             
             KUrl::List tfiles;
