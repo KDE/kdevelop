@@ -49,6 +49,7 @@ private slots:
     void testTargetDefines();
     void testCustomTargetSources();
     void testConditionsInSubdirectoryBasedOnRootVariables();
+    void testQt5App();
 };
 
 #endif // CMAKEMANAGERTEST_H

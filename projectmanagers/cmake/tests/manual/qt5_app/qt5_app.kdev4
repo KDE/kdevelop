@@ -1,0 +1,3 @@
+[Project]
+Manager=KDevCMakeManager
+Name=qt5_app

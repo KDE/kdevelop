@@ -199,11 +199,35 @@ void CMakeManagerTest::testTargetIncludeDirectories()
 
         if (dynamic_cast<CMakeExecutableTargetItem*>( mainContainer )) {
             foundInTarget = true;
-            KUrl targetIncludesDir(project->folder(), "includes/");
-            QVERIFY(includeDirs.contains(targetIncludesDir));
+            QVERIFY(includeDirs.contains(KUrl(project->folder(), "includes/")));
+            QVERIFY(includeDirs.contains(KUrl(project->folder(), "libincludes/")));
         }
     }
     QVERIFY(foundInTarget);
+}
+
+void CMakeManagerTest::testQt5App()
+{
+    IProject* project = loadProject("qt5_app");
+
+    KUrl mainCpp(project->folder(), "main.cpp");
+    QVERIFY(QFile::exists(mainCpp.toLocalFile()));
+    QList< ProjectBaseItem* > items = project->itemsForUrl(mainCpp);
+    QCOMPARE(items.size(), 2); // once the plain file, once the target
+
+    bool foundCore = false;
+    foreach(ProjectBaseItem* mainCppItem, items) {
+        ProjectBaseItem* mainContainer = mainCppItem->parent();
+
+        KUrl::List includeDirs = project->buildSystemManager()->includeDirectories(mainCppItem);
+        qDebug() << "!!!!!!!!" << includeDirs;
+        foreach(const KUrl& include, includeDirs) {
+            foundCore = include.fileName(KUrl::IgnoreTrailingSlash) == "QtCore";
+            if(foundCore)
+                break;
+        }
+    }
+    QVERIFY(foundCore);
 }
 
 void CMakeManagerTest::testTargetDefines()
