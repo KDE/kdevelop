@@ -181,6 +181,7 @@ namespace CMakeParserUtils
         v.setMacroMap(&data->mm);
         v.setModulePath(data->modulePath);
         v.setEnvironmentProfile(env);
+        v.setProperties(data->properties);
         v.walk(f, 0, true);
         
         data->projectName=v.projectName();

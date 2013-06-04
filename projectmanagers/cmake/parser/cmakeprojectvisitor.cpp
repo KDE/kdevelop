@@ -1086,9 +1086,14 @@ int CMakeProjectVisitor::visit(const TryCompileAst *tca)
 }
 
 
-int CMakeProjectVisitor::visit(const TargetLinkLibrariesAst *)
+int CMakeProjectVisitor::visit(const TargetLinkLibrariesAst *tll)
 {
     kDebug(9042) << "target_link_libraries";
+    QMap<QString, Target>::iterator target = m_targetForId.find(tll->target());
+    //TODO: we can add a problem if the target is not found
+    if(target != m_targetForId.end()) {
+        target->libraries << tll->debugLibs() << tll->optimizedLibs() << tll->otherLibs();
+    }
     return 1;
 }
 

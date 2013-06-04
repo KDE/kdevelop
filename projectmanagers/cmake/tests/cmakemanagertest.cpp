@@ -220,7 +220,6 @@ void CMakeManagerTest::testQt5App()
         ProjectBaseItem* mainContainer = mainCppItem->parent();
 
         KUrl::List includeDirs = project->buildSystemManager()->includeDirectories(mainCppItem);
-        qDebug() << "!!!!!!!!" << includeDirs;
         foreach(const KUrl& include, includeDirs) {
             foundCore = include.fileName(KUrl::IgnoreTrailingSlash) == "QtCore";
             if(foundCore)

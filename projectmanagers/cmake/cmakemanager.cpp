@@ -896,14 +896,26 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
             if(descAtt)
                 descAtt->setDescriptor(t.desc);
 
+            QStringList targetDefines = targetProps["COMPILE_DEFINITIONS"];
             QStringList targetIncludes = t.includes;
-            targetIncludes += resolvePaths(folder->url(), targetProps["INCLUDE_DIRECTORIES"]);
+            targetIncludes += targetProps["INCLUDE_DIRECTORIES"];
+            
+            foreach(const QString& dep, t.libraries) {
+                const QMap<QString, QStringList>& depData = data.properties.value(TargetProperty).value(dep);
+                if(!depData.isEmpty()) {
+                    targetIncludes += depData["INTERFACE_INCLUDE_DIRECTORIES"];
+                    targetDefines += depData["INTERFACE_COMPILE_DEFINITIONS"];
+                } else {
+                    qWarning() << "error: couldn't find dependency " << dep << data.properties.value(TargetProperty).keys();
+                }
+            }
             
             CompilationDataAttached* incAtt = dynamic_cast<CompilationDataAttached*>(targetItem);
             if(incAtt) {
+                targetIncludes = resolvePaths(folder->url(), targetIncludes);
                 targetIncludes.removeDuplicates();
                 incAtt->setIncludeDirectories(targetIncludes);
-                incAtt->defineVariables(targetProps["COMPILE_DEFINITIONS"]);
+                incAtt->defineVariables(targetDefines);
             }
             
             KUrl::List tfiles;

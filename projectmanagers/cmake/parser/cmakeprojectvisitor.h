@@ -145,6 +145,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         static void setMessageCallback(message_callback f) { s_msgcallback=f; }
         
         QStringList variableValue(const QString& var) const;
+        void setProperties(const CMakeProperties& properties) { m_props = properties; }
         
     protected:
         struct IntPair
