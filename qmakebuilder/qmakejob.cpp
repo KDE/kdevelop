@@ -78,7 +78,8 @@ void QMakeJob::start()
     connect(m_cmd, SIGNAL(receivedStandardOutput(const QStringList&)),
             model(), SLOT(appendLines(const QStringList&) ) );
     m_cmd->setWorkingDirectory( m_project->folder().toLocalFile() );
-    connect( m_cmd, SIGNAL( failed() ), this, SLOT( slotFailed() ) );
+    connect( m_cmd, SIGNAL( failed(QProcess::ProcessError) ),
+             this, SLOT( slotFailed(QProcess::ProcessError) ) );
     connect( m_cmd, SIGNAL( completed(int) ), this, SLOT( slotCompleted(int) ) );
     m_cmd->start();
 }
@@ -91,8 +92,10 @@ void QMakeJob::setProject(KDevelop::IProject* project)
         setObjectName(i18n("QMake: %1", m_project->name()));
 }
 
-void QMakeJob::slotFailed()
+void QMakeJob::slotFailed(QProcess::ProcessError error)
 {
+    kDebug() << error;
+
     if (!m_killed) {
         setError(ConfigureError);
         // FIXME need more detail i guess
