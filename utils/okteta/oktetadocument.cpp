@@ -27,16 +27,16 @@
 #include "oktetaview.h"
 // Okteta
 #if KASTEN_VERSION == 2
-#include <kasten2/okteta1/bytearrayviewprofilemanager.h>
-#include <kasten2/okteta1/bytearrayviewprofilesynchronizer.h>
-#include <kasten2/okteta1/bytearrayrawfilesynchronizerfactory.h>
-#include <kasten2/okteta1/bytearraydocument.h>
+#include <bytearrayviewprofilemanager.h>
+#include <bytearrayviewprofilesynchronizer.h>
+#include <bytearrayrawfilesynchronizerfactory.h>
+#include <bytearraydocument.h>
 #elif KASTEN_VERSION == 1
-#include <kasten1/okteta1/bytearrayrawfilesynchronizerfactory.h>
-#include <kasten1/okteta1/bytearraydocument.h>
+#include <bytearrayrawfilesynchronizerfactory.h>
+#include <bytearraydocument.h>
 #else
-#include <kasten/bytearrayrawfilesynchronizerfactory.h>
-#include <kasten/bytearraydocument.h>
+#include <bytearrayrawfilesynchronizerfactory.h>
+#include <bytearraydocument.h>
 #endif
 // Kasten
 #if KASTEN_VERSION == 2
