@@ -25,30 +25,14 @@
 
 #include "make/imakebuilder.h"
 
-//#include <config.h>
-
-#include <QtCore/QStringList>
-#include <QtCore/QSignalMapper>
-
-
-#include <project/projectmodel.h>
-
 #include <interfaces/iproject.h>
-#include <interfaces/icore.h>
-#include <interfaces/iplugincontroller.h>
 #include <outputview/ioutputview.h>
 #include <outputview/outputmodel.h>
+#include <project/projectmodel.h>
 #include <util/commandexecutor.h>
-#include <QtDesigner/QExtensionFactory>
 
-#include <kpluginfactory.h>
-#include <kpluginloader.h>
-#include <kconfig.h>
-#include <kconfiggroup.h>
-#include <kdialog.h>
-#include <kglobal.h>
-#include <klocale.h>
 #include <kdebug.h>
+#include <klocale.h>
 
 QMakeJob::QMakeJob(QObject *parent)
     : OutputJob(parent)
