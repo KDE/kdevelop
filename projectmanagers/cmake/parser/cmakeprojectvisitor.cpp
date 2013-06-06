@@ -1099,12 +1099,16 @@ int CMakeProjectVisitor::visit(const TargetLinkLibrariesAst *tll)
 
 int CMakeProjectVisitor::visit(const TargetIncludeDirectoriesAst* tid)
 {
-    QMap<QString, Target>::iterator target = m_targetForId.find(tid->target());
+    CategoryType& targetProps = m_props[TargetProperty];
+    CategoryType::iterator it = targetProps.find(tid->target());
     //TODO: we can add a problem if the target is not found
-    if(target != m_targetForId.end()) {
+    if(it != targetProps.end()) {
+        QStringList includes;
         foreach(const TargetIncludeDirectoriesAst::Item& item, tid->items()) {
-            target->includes += item.item;
+            includes += item.item;
         }
+        //TODO implement visibility
+        (*it)["INCLUDE_DIRECTORIES"] += includes;
     }
     return 1;
 }

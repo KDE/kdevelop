@@ -897,9 +897,8 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                 descAtt->setDescriptor(t.desc);
 
             QStringList targetDefines = targetProps["COMPILE_DEFINITIONS"];
-            QStringList targetIncludes = t.includes;
-            targetIncludes += targetProps["INCLUDE_DIRECTORIES"];
-            
+            QStringList targetIncludes = targetProps["INCLUDE_DIRECTORIES"];
+
             foreach(const QString& dep, t.libraries) {
                 const QMap<QString, QStringList>& depData = data.properties.value(TargetProperty).value(dep);
                 if(!depData.isEmpty()) {
