@@ -549,17 +549,20 @@ int CMakeProjectVisitor::visit(const IncludeDirectoriesAst * dirs)
 
     if(t==IncludeDirectoriesAst::Default)
     {
-        if(m_vars->contains("CMAKE_INCLUDE_DIRECTORIES_BEFORE") && m_vars->value("CMAKE_INCLUDE_DIRECTORIES_BEFORE")[0]=="ON")
+        if(m_vars->value("CMAKE_INCLUDE_DIRECTORIES_BEFORE")==QStringList("ON"))
             t = IncludeDirectoriesAst::Before;
         else
             t = IncludeDirectoriesAst::After;
     }
 
+    QString dir = m_vars->value("CMAKE_CURRENT_SOURCE_DIR").join(QString());
+    QStringList& v = m_props[DirectoryProperty][dir]["INCLUDE_DIRECTORIES"];
     if(t==IncludeDirectoriesAst::After)
-        m_includeDirectories += toInclude;
-    else
-        m_includeDirectories = toInclude + m_includeDirectories;
-    kDebug(9042) << "done." << m_includeDirectories;
+        v += toInclude;
+    else {
+        v = toInclude + v;
+    }
+    kDebug(9042) << "done." << v;
     return 1;
 }
 

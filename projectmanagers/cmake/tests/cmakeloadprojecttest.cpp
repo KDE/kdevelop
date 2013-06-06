@@ -147,8 +147,6 @@ CMakeProjectData CMakeLoadProjectTest::parseProject( const QString& sourcedir )
     
     data.projectName=v.projectName();
     data.subdirectories=v.subdirectories();
-    data.definitions=v.definitions();
-    data.includeDirectories=v.includeDirectories();
     data.targets=v.targets();
     data.properties=v.properties();
     data.testSuites=v.testSuites();

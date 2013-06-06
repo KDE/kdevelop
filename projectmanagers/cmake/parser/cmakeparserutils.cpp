@@ -186,8 +186,6 @@ namespace CMakeParserUtils
         
         data->projectName=v.projectName();
         data->subdirectories=v.subdirectories();
-        data->definitions=v.definitions();
-        data->includeDirectories=v.includeDirectories();
         data->targets=v.targets();
         data->properties=v.properties();
         data->testSuites=v.testSuites();

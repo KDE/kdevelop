@@ -565,15 +565,16 @@ KDevelop::ReferencedTopDUContext CMakeManager::initializeProject(CMakeFolderItem
     {
         QList<KUrl> toimport;
         toimport += baseUrl;
+        QStringList includes;
         while(!toimport.isEmpty()) {
             KUrl script = toimport.takeFirst(), currentDir=script;
             script.addPath("CMakeLists.txt");
             
-            ref = includeScript(script.toLocalFile(), project, currentDir.toLocalFile(), ref);
+            QString dir = currentDir.toLocalFile();
+            ref = includeScript(script.toLocalFile(), project, dir, ref);
             Q_ASSERT(ref);
-            rootFolder->addIncludeDirectories(data->includeDirectories);
-//             kDebug(9042) << "setting include directories: " << rootFolder->url() << data->includeDirectories << "result: " << includeDirectories(rootFolder);
-            rootFolder->addDefinitions(data->definitions);
+            includes << data->properties[DirectoryProperty][dir]["INCLUDE_DIRECTORIES"];
+            rootFolder->defineVariables(data->properties[DirectoryProperty][dir]["COMPILE_DEFINITIONS"]);
             
             foreach(const Subdirectory& s, data->subdirectories) {
                 KUrl candidate = currentDir;
@@ -583,8 +584,8 @@ KDevelop::ReferencedTopDUContext CMakeManager::initializeProject(CMakeFolderItem
                     toimport += candidate;
             }
         }
-        
-        dynamic_cast<CMakeFolderItem*>(project->projectItem())->setBuildDir(KUrl::relativeUrl(baseUrl, project->folder()));
+        rootFolder->setIncludeDirectories(includes);
+        rootFolder->setBuildDir(KUrl::relativeUrl(baseUrl, project->folder()));
     }
     return ref;
 }
@@ -806,7 +807,6 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                     a->setUrl(path);
                 
 //                 kDebug() << "folder: " << a << a->index();
-                a->setDefinitions(data.definitions);
                 folderList.append( a );
                 
                 if(!parent) {
@@ -823,31 +823,26 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
 //             kDebug() << "poor guess";
 
         QStringList directories;
+        QString dir = folder->url().toLocalFile(KUrl::RemoveTrailingSlash);
         if(data.vm.value("CMAKE_INCLUDE_CURRENT_DIR").join(QString())=="ON") {
-            directories += folder->url().toLocalFile(KUrl::RemoveTrailingSlash);
+            directories += dir;
             directories += buildDirectory(folder).toLocalFile();
         }
-        directories += resolvePaths(folder->url(), data.includeDirectories);
+        directories += resolvePaths(folder->url(), data.properties[DirectoryProperty][dir]["INCLUDE_DIRECTORIES"]);
         directories.removeDuplicates();
         directories.removeAll(QString());
-        folder->addIncludeDirectories(directories);
+        folder->setIncludeDirectories(directories);
 //             kDebug(9042) << "setting include directories: " << folder->url() << directories << "result: " << includeDirectories(folder);
-        folder->addDefinitions(data.definitions);
+        folder->defineVariables(data.properties[DirectoryProperty][dir]["COMPILE_DEFINITIONS"]);
 
         deleteAllLater(castToBase(folder->cleanupTargets(data.targets)));
         foreach ( const Target& t, data.targets)
         {
-            QString outputName=t.name;
             const QMap<QString, QStringList> targetProps = data.properties[TargetProperty][t.name];
-            if(!targetProps.isEmpty()) {
-                if(targetProps.contains("OUTPUT_NAME"))
-                    outputName=targetProps["OUTPUT_NAME"].first();
-                else {
-                    QStringList folderProp = targetProps["FOLDER"];
-                    if(!folderProp.isEmpty() && folderProp.first()=="CTestDashboardTargets")
-                        continue; //filter some annoying targets
-                }
-            }
+            if(targetProps["FOLDER"]==QStringList("CTestDashboardTargets"))
+                continue; //filter some annoying targets
+            
+            QString outputName = targetProps.value("OUTPUT_NAME", QStringList(t.name)).first();
             
             QString path;
             switch(t.type)
