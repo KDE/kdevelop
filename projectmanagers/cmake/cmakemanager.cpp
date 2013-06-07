@@ -899,7 +899,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                     targetIncludes += depData["INTERFACE_INCLUDE_DIRECTORIES"];
                     targetDefines += depData["INTERFACE_COMPILE_DEFINITIONS"];
                 } else {
-                    qWarning() << "error: couldn't find dependency " << dep << data.properties.value(TargetProperty).keys();
+                    kDebug() << "error: couldn't find dependency " << dep << data.properties.value(TargetProperty).keys();
                 }
             }
             
