@@ -3804,6 +3804,7 @@ bool SetPropertyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     if(propName=="GLOBAL") m_type=GlobalProperty;
     else if(propName=="DIRECTORY") m_type=DirectoryProperty;
     else if(propName=="TARGET") m_type=TargetProperty;
+    else if(propName=="CACHE") m_type=CacheProperty;
     else if(propName=="SOURCE") m_type=SourceProperty;
     else if(propName=="TEST") m_type=TestProperty;
     else
@@ -3845,7 +3846,6 @@ bool GetPropertyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
     if(func.name.toLower()!="get_property" || func.arguments.count() < 4 || func.arguments.count() > 6)
         return false;
-    
     QList<CMakeFunctionArgument>::const_iterator it=func.arguments.constBegin(), itEnd=func.arguments.constEnd();
     m_outputVariable=it->value;
     addOutputArgument(*it);
@@ -3857,12 +3857,12 @@ bool GetPropertyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     else if(propName=="DIRECTORY") t=DirectoryProperty;
     else if(propName=="TARGET") t=TargetProperty;
     else if(propName=="SOURCE") t=SourceProperty;
+    else if(propName=="CACHE") t=CacheProperty;
     else if(propName=="TEST") t=TestProperty;
     else if(propName=="VARIABLE") t=VariableProperty;
     else
         return false;
     m_type=t;
-    
     ++it;
     if(it->value!="PROPERTY") {
         m_typeName=it->value;
@@ -3870,7 +3870,6 @@ bool GetPropertyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     }
     if(it->value!="PROPERTY") return false;
     ++it;
-    
     m_name=it->value;
     ++it;
     m_behaviour=None;

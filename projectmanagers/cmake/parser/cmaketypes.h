@@ -70,7 +70,7 @@ struct Test
     QMap<QString, QString> properties;
 };
 
-enum PropertyType { GlobalProperty, DirectoryProperty, TargetProperty, SourceProperty, TestProperty, VariableProperty };
+enum PropertyType { GlobalProperty, DirectoryProperty, TargetProperty, SourceProperty, TestProperty, CacheProperty, VariableProperty };
 typedef QMap<QString, QMap<QString, QStringList> > CategoryType;
 typedef QMap<PropertyType, CategoryType > CMakeProperties;
 

@@ -3002,14 +3002,15 @@ void CMakeAstTest::testGetPropertyGoodParse_data()
 {
     CMakeFunctionDesc func1;
     func1.name = "get_property";
+    func1.addArguments( QString("_CTEST_TARGETS_ADDED GLOBAL PROPERTY CTEST_TARGETS_ADDED").split(" ") );
 
-    QStringList argList1;
-    argList1=QString("_CTEST_TARGETS_ADDED GLOBAL PROPERTY CTEST_TARGETS_ADDED").split(" ");
-
-    func1.addArguments( argList1 );
+    CMakeFunctionDesc funcCache;
+    funcCache.name = "get_property";
+    funcCache.addArguments(QString("_type CACHE BOOSTROOT PROPERTY TYPE").split(" "));
 
     QTest::addColumn<CMakeFunctionDesc>( "function" );
     QTest::newRow( "good get" ) << func1;
+    QTest::newRow( "CACHE" ) << funcCache;
 }
 
 void CMakeAstTest::testGetPropertyBadParse()

@@ -2141,22 +2141,27 @@ int CMakeProjectVisitor::visit(const SetPropertyAst* setp)
 
 int CMakeProjectVisitor::visit(const GetPropertyAst* getp)
 {
-    QString catn;
-    switch(getp->type()) {
-        case GlobalProperty:
-            break;
-        case DirectoryProperty:
-            catn = getp->typeName();
-            if(catn.isEmpty())
-                catn = m_vars->value("CMAKE_CURRENT_SOURCE_DIR").join(QString());
-            break;
-        default:
-            catn = getp->typeName();
-            break;
+    QStringList retv;
+    if(getp->type() == CacheProperty) {
+        retv = m_cache->value(getp->typeName()).value.split(':');
+    } else {
+        QString catn;
+        switch(getp->type()) {
+            case GlobalProperty:
+                break;
+            case DirectoryProperty:
+                catn = getp->typeName();
+                if(catn.isEmpty())
+                    catn = m_vars->value("CMAKE_CURRENT_SOURCE_DIR").join(QString());
+                break;
+            default:
+                catn = getp->typeName();
+                break;
+        }
+        retv = m_props[getp->type()][catn][getp->name()];
     }
-    QStringList retv=m_props[getp->type()][catn][getp->name()];
     m_vars->insert(getp->outputVariable(), retv);
-    kDebug() << "getprops" << getp->type() << catn << getp->name() << getp->outputVariable() << "=" << retv;
+    kDebug() << "getprops" << getp->type() << getp->name() << getp->outputVariable() << "=" << retv;
     return 1;
 }
 
