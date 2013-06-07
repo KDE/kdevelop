@@ -196,3 +196,8 @@ CompilationDataAttached::~CompilationDataAttached() {}
 KUrl CMakeExecutableTargetItem::installedUrl() const {
     return KUrl();
 }
+void CompilationDataAttached::setIncludeDirectories(const QStringList& l)
+{
+    m_includeList = l;
+    m_includeList.removeDuplicates();
+}

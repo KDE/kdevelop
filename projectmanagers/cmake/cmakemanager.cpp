@@ -829,7 +829,6 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
             directories += buildDirectory(folder).toLocalFile();
         }
         directories += resolvePaths(folder->url(), data.properties[DirectoryProperty][dir]["INCLUDE_DIRECTORIES"]);
-        directories.removeDuplicates();
         directories.removeAll(QString());
         folder->setIncludeDirectories(directories);
 //             kDebug(9042) << "setting include directories: " << folder->url() << directories << "result: " << includeDirectories(folder);
@@ -907,7 +906,6 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
             CompilationDataAttached* incAtt = dynamic_cast<CompilationDataAttached*>(targetItem);
             if(incAtt) {
                 targetIncludes = resolvePaths(folder->url(), targetIncludes);
-                targetIncludes.removeDuplicates();
                 incAtt->setIncludeDirectories(targetIncludes);
                 incAtt->defineVariables(targetDefines);
             }

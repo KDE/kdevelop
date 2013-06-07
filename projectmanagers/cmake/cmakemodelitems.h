@@ -64,12 +64,13 @@ class KDEVCMAKECOMMON_EXPORT CompilationDataAttached
     public:
         // Required, and must be non-inline, for dynamic_cast to work
         virtual ~CompilationDataAttached();
-        void setIncludeDirectories(const QStringList &l) { m_includeList = process(l); }
+        void setIncludeDirectories(const QStringList &l);
         QStringList includeDirectories(KDevelop::ProjectBaseItem* placeInHierarchy) const;
 
         CMakeDefinitions definitions(CMakeFolderItem* parent) const;
         void setDefinitions(const CMakeDefinitions& defs) { m_defines=defs; }
         void defineVariables(const QStringList& vars);
+
     private:
         CMakeDefinitions m_defines;
         QStringList m_includeList;
