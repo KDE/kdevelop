@@ -2267,7 +2267,6 @@ void CMakeAstTest::testLinkLibrariesBadParse_data()
 
 void CMakeAstTest::testListGoodParse()
 {
-    TDD_TODO;
     QFETCH( CMakeFunctionDesc, function );
     CMakeAst* ast = AstFactory::self()->createAst("list");
     QVERIFY( ast->parseFunctionInfo( function ) == true );
@@ -2276,6 +2275,12 @@ void CMakeAstTest::testListGoodParse()
 
 void CMakeAstTest::testListGoodParse_data()
 {
+    CMakeFunctionDesc func1;
+    func1.name = "list";
+    func1.addArguments(QString("APPEND _boost_TEST_VERSIONS 1.39").split(' '));
+
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow( "append" ) << func1;
 }
 
 void CMakeAstTest::testListBadParse()

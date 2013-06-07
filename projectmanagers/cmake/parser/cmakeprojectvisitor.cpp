@@ -522,7 +522,9 @@ int CMakeProjectVisitor::visit(const SetAst *set)
     } else
         m_vars->insert(set->variableName(), set->values(), set->parentScope());
     
-    kDebug(9042) << "setting variable:" << set->variableName() << set->parentScope() /*<< "to" << values*/;
+    kDebug(9042) << "setting variable:" << set->variableName() << set->parentScope()
+        << "to" << m_vars->value(set->variableName())
+        ;
     return 1;
 }
 
@@ -1368,6 +1370,11 @@ int CMakeProjectVisitor::visit(const IfAst *ifast)  //Highly crappy code
                     condition=myIf.condition();
                 }
                 result=cond.condition(condition);
+                int i=0;
+                foreach(const QString& match, cond.matches()) {
+                    m_vars->insert(QString("CMAKE_MATCH_%1").arg(i), QStringList(match));
+                    i++;
+                }
                 if(funcName=="if")
                     ini=cond.variableArguments();
 
@@ -2161,7 +2168,7 @@ int CMakeProjectVisitor::visit(const GetPropertyAst* getp)
         retv = m_props[getp->type()][catn][getp->name()];
     }
     m_vars->insert(getp->outputVariable(), retv);
-    kDebug() << "getprops" << getp->type() << getp->name() << getp->outputVariable() << "=" << retv;
+    kDebug() << "getprops" << getp->type() << getp->name() << getp->typeName() << getp->outputVariable() << "=" << retv;
     return 1;
 }
 

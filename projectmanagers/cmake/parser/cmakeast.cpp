@@ -2213,7 +2213,7 @@ bool ListAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             }
         } break;
         case Append: {
-            if(func.arguments.count()<3)
+            if(func.arguments.count()<2)
                 return false;
             
             addOutputArgument(func.arguments[1]);
