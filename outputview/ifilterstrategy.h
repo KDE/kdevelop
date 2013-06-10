@@ -45,16 +45,14 @@ public:
     /**
      * Examine if a given line contains output that is defined as an error (E.g. from a script or from a compiler, or other).
      * @param line the line to examine
-     * @param item Where all the metadata about the current line is put after the given filter is applied
-     * @return true if an error is found, false otherwise
+     * @return FilteredItem with associated metadata if an error is found, an item of type InvalidItem otherwise
      **/
     virtual FilteredItem errorInLine(QString const& line) = 0;
 
     /**
      * Examine if a given line contains output that is defined as an action (E.g. from a script or from a compiler, or other).
      * @param line the line to examine
-     * @param item Where all the metadata about the current line is put after the given filter is applied
-     * @return true if an action is found, false otherwise
+     * @return Filtered of type ActionItem with associated metadata if an action is found, an item of type InvalidItem otherwise
      **/
     virtual FilteredItem actionInLine(QString const& line) = 0;
 
