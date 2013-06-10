@@ -72,6 +72,7 @@
 #include "cmakeutils.h"
 #include "cmaketypes.h"
 #include "parser/cmakeparserutils.h"
+#include <generationexpressionsolver.h>
 #include "icmakedocumentation.h"
 #include "testing/ctestutils.h"
 
@@ -1006,7 +1007,8 @@ KUrl::List CMakeManager::includeDirectories(KDevelop::ProjectBaseItem *item) con
         includer = dynamic_cast<CompilationDataAttached*>( item );
         if(includer) {
             QStringList dirs = includer->includeDirectories(item);
-            return resolveSystemDirs(item->project(), dirs);
+            //Here there's the possibility that it might not be a target. We should make sure that's not the case
+            return resolveSystemDirs(item->project(), processGeneratorExpression(dirs, item->project(), dynamic_cast<ProjectTargetItem*>(item)));
         }
         item = item->parent();
 //         kDebug(9042) << "Looking for an includer: " << item;
@@ -1817,5 +1819,21 @@ void CMakeManager::createTestSuites(const QList< Test >& testSuites, ProjectFold
     kDebug();
     CTestUtils::createTestSuites(testSuites, folder);
 }
+
+QStringList CMakeManager::processGeneratorExpression(const QStringList& expr, IProject* project, ProjectTargetItem* target) const
+{
+    QStringList ret;
+    GenerationExpressionSolver exec(m_projectsData[project].properties);
+    if(target)
+        exec.setTargetName(target->text());
+
+    for(QStringList::const_iterator it = expr.constBegin(), itEnd = expr.constEnd(); it!=itEnd; ++it) {
+        QStringList val = exec.run(*it).split(';');
+        qDebug() << "wop wop" << *it << val;
+        ret += val;
+    }
+    return ret;
+}
+
 
 #include "cmakemanager.moc"

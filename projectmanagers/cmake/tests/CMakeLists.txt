@@ -48,3 +48,6 @@ target_link_libraries( cmakemanagertest ${CMAKE_TEST_LIBRARIES} ${KDEVPLATFORM_L
 
 kde4_add_unit_test( ctestfindsuitestest ctestfindsuitestest.cpp )
 target_link_libraries( ctestfindsuitestest ${CMAKE_TEST_LIBRARIES} ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES})
+
+kde4_add_unit_test(generationexpressionsolvertest generationexpressionsolvertest.cpp)
+target_link_libraries(generationexpressionsolvertest ${CMAKE_TEST_LIBRARIES})

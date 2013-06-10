@@ -26,6 +26,7 @@ set( cmakecommon_SRCS
   parser/cmakecachereader.cpp
   parser/cmakeparserutils.cpp
   parser/cmakeduchaintypes.cpp
+  parser/generationexpressionsolver.cpp
   settings/cmakecachemodel.cpp
   cmakeutils.cpp
   cmakebuilddirchooser.cpp

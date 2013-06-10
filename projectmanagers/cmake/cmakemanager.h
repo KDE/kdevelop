@@ -123,6 +123,8 @@ public:
     
     void deleteItemLater(KDevelop::ProjectBaseItem* item);
     void deleteAllLater(const QList< KDevelop::ProjectBaseItem* >& items);
+    QStringList processGeneratorExpression(const QStringList& expr, KDevelop::IProject* project, KDevelop::ProjectTargetItem* target) const;
+
 public slots:
     void cleanupItems();
     
