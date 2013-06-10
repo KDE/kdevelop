@@ -1,4 +1,4 @@
-#include "cmakeast_test.h"
+#include "cmakeasttest.h"
 
 #include "cmakeast.h"
 #include "cmakelistsparser.h"

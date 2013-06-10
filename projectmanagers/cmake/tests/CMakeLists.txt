@@ -6,48 +6,20 @@ include_directories(
 
 configure_file("paths.h.cmake" "cmake-test-paths.h" ESCAPE_QUOTES)
 
-set(CMAKE_TEST_LIBRARIES 
-    ${QT_QTTEST_LIBRARY}
-    ${QT_QTCORE_LIBRARY}
-    ${KDE4_KDECORE_LIBS}
-    kdev4cmakecommon
-)
+macro(kdevcmake_add_test testname)
+    kde4_add_unit_test(${testname} ${testname}.cpp)
+    target_link_libraries(${testname} ${QT_QTTEST_LIBRARY} ${QT_QTCORE_LIBRARY} ${KDE4_KDECORE_LIBS} kdev4cmakecommon ${ARGN})
+endmacro(kdevcmake_add_test)
 
-kde4_add_unit_test(cmake-parsertest cmakeparsertest.cpp)
-target_link_libraries( cmake-parsertest ${CMAKE_TEST_LIBRARIES})
-
-kde4_add_unit_test(cmakecompliance cmakecompliance.cpp)
-target_link_libraries( cmakecompliance ${CMAKE_TEST_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES} ${KDEVPLATFORM_LANGUAGE_LIBRARIES})
-
-kde4_add_unit_test(cmake-astfactorytest astfactorytest.cpp)
-target_link_libraries( cmake-astfactorytest ${CMAKE_TEST_LIBRARIES})
-
-kde4_add_unit_test(cmakeast-test cmakeast_test.cpp)
-target_link_libraries( cmakeast-test ${CMAKE_TEST_LIBRARIES})
-
-kde4_add_unit_test(cmake-cmakecondition cmake_cmakecondition_test.cpp)
-target_link_libraries( cmake-cmakecondition ${CMAKE_TEST_LIBRARIES}
-    ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDE4_KTEXTEDITOR_LIBS})
-  
-kde4_add_unit_test( cmakeduchaintest cmakeduchaintest.cpp)
-target_link_libraries( cmakeduchaintest ${CMAKE_TEST_LIBRARIES}
-${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDE4_KTEXTEDITOR_LIBS} ${KDEVPLATFORM_TESTS_LIBRARIES})
-
-kde4_add_unit_test( cmakeprojectvisitortest cmake_cmakeprojectvisitor_test.cpp)
-target_link_libraries( cmakeprojectvisitortest ${CMAKE_TEST_LIBRARIES}
-${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDE4_KTEXTEDITOR_LIBS}  ${KDEVPLATFORM_TESTS_LIBRARIES})
-
-kde4_add_unit_test( cmakeparserutilstest cmakeparserutilstest.cpp)
-target_link_libraries( cmakeparserutilstest ${CMAKE_TEST_LIBRARIES} ${KDE4_KTEXTEDITOR_LIBS})
-
-kde4_add_unit_test( cmakeloadprojecttest cmakeloadprojecttest.cpp )
-target_link_libraries( cmakeloadprojecttest ${CMAKE_TEST_LIBRARIES} ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES})
-
-kde4_add_unit_test( cmakemanagertest cmakemanagertest.cpp )
-target_link_libraries( cmakemanagertest ${CMAKE_TEST_LIBRARIES} ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES})
-
-kde4_add_unit_test( ctestfindsuitestest ctestfindsuitestest.cpp )
-target_link_libraries( ctestfindsuitestest ${CMAKE_TEST_LIBRARIES} ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES})
-
-kde4_add_unit_test(generationexpressionsolvertest generationexpressionsolvertest.cpp)
-target_link_libraries(generationexpressionsolvertest ${CMAKE_TEST_LIBRARIES})
+kdevcmake_add_test(cmakeparsertest)
+kdevcmake_add_test(cmakecompliance ${KDEVPLATFORM_TESTS_LIBRARIES} ${KDEVPLATFORM_LANGUAGE_LIBRARIES})
+kdevcmake_add_test(cmakeastfactorytest)
+kdevcmake_add_test(cmakeasttest)
+kdevcmake_add_test(cmakeconditiontest ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDE4_KTEXTEDITOR_LIBS})
+kdevcmake_add_test(cmakeduchaintest ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDE4_KTEXTEDITOR_LIBS} ${KDEVPLATFORM_TESTS_LIBRARIES})
+kdevcmake_add_test(cmakeprojectvisitortest ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDE4_KTEXTEDITOR_LIBS}  ${KDEVPLATFORM_TESTS_LIBRARIES})
+kdevcmake_add_test(cmakeparserutilstest ${KDE4_KTEXTEDITOR_LIBS})
+kdevcmake_add_test(cmakeloadprojecttest ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES})
+kdevcmake_add_test(cmakemanagertest ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES})
+kdevcmake_add_test(ctestfindsuitestest ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES})
+kdevcmake_add_test(generationexpressionsolvertest)

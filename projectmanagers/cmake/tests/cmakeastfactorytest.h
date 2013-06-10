@@ -17,17 +17,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
-#ifndef ASTFACTORYTEST_H
-#define ASTFACTORYTEST_H
+#ifndef CMAKEASTFACTORYTEST_H
+#define CMAKEASTFACTORYTEST_H
 
 #include <QtTest/QtTest>
 
-class AstFactoryTest : public QObject
+class CMakeAstFactoryTest : public QObject
 {
 Q_OBJECT
 public:
-    AstFactoryTest();
-    ~AstFactoryTest();
+    CMakeAstFactoryTest();
+    ~CMakeAstFactoryTest();
 
 private slots:
     void testNonRegisteredObject();

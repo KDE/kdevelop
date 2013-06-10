@@ -18,7 +18,7 @@
  * 02110-1301, USA.
  */
 
-#include "cmake_cmakecondition_test.h"
+#include "cmakeconditiontest.h"
 #include "cmakecondition.h"
 #include <QStringList>
 
@@ -166,5 +166,3 @@ void CMakeConditionTest::testBadParse_data()
     QTest::newRow( "missing operator" ) << QString("MATCHES STUFF").split(" ");
     QTest::newRow( "OR NOT" ) << QString("OR NOT").split(" ");
 }
-
-#include "cmake_cmakecondition_test.moc"

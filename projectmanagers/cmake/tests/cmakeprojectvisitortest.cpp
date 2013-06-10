@@ -18,7 +18,7 @@
  * 02110-1301, USA.
  */
 
-#include "cmake_cmakeprojectvisitor_test.h"
+#include "cmakeprojectvisitortest.h"
 #include "cmake-test-paths.h"
 
 #include "cmakeast.h"
@@ -949,5 +949,3 @@ void CMakeProjectVisitorTest::testTargetProperties()
     foreach(const StringPair& vp, results)
         QCOMPARE(v.properties()[TargetProperty][target][vp.first].join(QString(";")), vp.second);
 }
-
-#include "cmake_cmakeprojectvisitor_test.moc"

@@ -18,14 +18,14 @@
  * 02110-1301, USA.
  */
 
-#include "astfactorytest.h"
+#include "cmakeastfactorytest.h"
 #include <QtCore/QString>
 
 #include "astfactory.h"
 #include "cmakeast.h"
 
 
-QTEST_MAIN( AstFactoryTest )
+QTEST_MAIN( CMakeAstFactoryTest )
 
 class FooAst : public CMakeAst
 {
@@ -37,22 +37,22 @@ public:
 };
 
 
-AstFactoryTest::AstFactoryTest()
+CMakeAstFactoryTest::CMakeAstFactoryTest()
 {
 }
 
-AstFactoryTest::~AstFactoryTest()
+CMakeAstFactoryTest::~CMakeAstFactoryTest()
 {
 }
 
 
-void AstFactoryTest::testNonRegisteredObject()
+void CMakeAstFactoryTest::testNonRegisteredObject()
 {
     CMakeAst* a = AstFactory::self()->createAst( "foo" );
     QVERIFY( a == 0 );
 }
 
-void AstFactoryTest::testRegisteredObject()
+void CMakeAstFactoryTest::testRegisteredObject()
 {
     const QString fooType = "foo";
     bool registered = AstFactory::self()->registerAst( fooType,
@@ -61,7 +61,7 @@ void AstFactoryTest::testRegisteredObject()
     QVERIFY( registered );
 }
 
-void AstFactoryTest::testCaseSensitivity()
+void CMakeAstFactoryTest::testCaseSensitivity()
 {
     const QString fooType = "Foo";
     bool registered = AstFactory::self()->registerAst( "Foo", &FooAst::createFooAst );
@@ -71,7 +71,7 @@ void AstFactoryTest::testCaseSensitivity()
     QVERIFY( notRegistered == false );
 }
 
-void AstFactoryTest::testUnregisterObject()
+void CMakeAstFactoryTest::testUnregisterObject()
 {
     bool registered = AstFactory::self()->registerAst( "Foo", &FooAst::createFooAst );
     bool unregistered = AstFactory::self()->unregisterAst( "Foo" );
@@ -80,7 +80,7 @@ void AstFactoryTest::testUnregisterObject()
     QVERIFY( unregistered );
 }
 
-void AstFactoryTest::testCreateObject()
+void CMakeAstFactoryTest::testCreateObject()
 {
     bool registered = AstFactory::self()->registerAst( "Foo",  &FooAst::createFooAst );
     QVERIFY( registered );
@@ -89,5 +89,3 @@ void AstFactoryTest::testCreateObject()
     QVERIFY( ast != 0 );
     delete ast;
 }
-
-#include "astfactorytest.moc"
