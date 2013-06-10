@@ -558,7 +558,7 @@ KDevelop::ReferencedTopDUContext CMakeManager::initializeProject(CMakeFolderItem
     ReferencedTopDUContext ref=buildstrapContext;
     foreach(const QString& script, initials.second)
     {
-        ref = includeScript(CMakeProjectVisitor::findFile(script, m_projectsData[project].modulePath, QStringList()), project, baseUrl.toLocalFile(), ref);
+        ref = includeScript(CMakeProjectVisitor::findFile(script, data->modulePath, QStringList()), project, baseUrl.toLocalFile(), ref);
     }
     
     //Initialize parent parts of the project that don't belong to the tree (because it's a partial import)
