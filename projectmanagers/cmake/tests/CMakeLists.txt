@@ -23,3 +23,7 @@ kdevcmake_add_test(cmakeloadprojecttest ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDE
 kdevcmake_add_test(cmakemanagertest ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES})
 kdevcmake_add_test(ctestfindsuitestest ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES})
 kdevcmake_add_test(generationexpressionsolvertest)
+
+# this is not a unit test but a testing tool, kept here for convenience
+kde4_add_executable(kdevprojectopen kdevprojectopen.cpp)
+target_link_libraries(kdevprojectopen ${KDE4_KDECORE_LIBS} ${KDEVPLATFORM_PROJECT_LIBRARIES} kdev4cmakecommon ${KDEVPLATFORM_TESTS_LIBRARIES})

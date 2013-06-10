@@ -23,6 +23,9 @@
 #include "cmake-test-paths.h"
 #include <cmakebuilddirchooser.h>
 #include <kconfig.h>
+#include <QFileInfo>
+#include <QDir>
+#include <QDebug>
 
 static QString currentBuildDirKey = "CurrentBuildDir";
 static QString currentCMakeBinaryKey = "Current CMake Binary";
@@ -43,23 +46,29 @@ struct TestProjectPaths {
 
 TestProjectPaths projectPaths(const QString& project, QString name = QString())
 {
-    if (name.isEmpty()) {
-        name = project;
-    }
-
     TestProjectPaths paths;
-    QFileInfo info(CMAKE_TESTS_PROJECTS_DIR "/" + project);
-    Q_ASSERT(info.exists());
-
-    paths.sourceDir = info.canonicalFilePath();
+    if(QDir::isRelativePath(project)) {
+        QFileInfo info(QString(CMAKE_TESTS_PROJECTS_DIR)+"/"+project);
+        Q_ASSERT(info.exists());
+        paths.sourceDir = info.canonicalFilePath();
+    } else {
+        paths.sourceDir = project;
+    }
     paths.sourceDir.adjustPath(KUrl::AddTrailingSlash);
 
+    QString kdev4Name;
+    if (name.isEmpty()) {
+        QDir d(paths.sourceDir.toLocalFile());
+        kdev4Name = d.entryList(QStringList("*.kdev4"), QDir::Files).takeFirst();
+    } else
+        kdev4Name = name+".kdev4";
+
     paths.projectFile = paths.sourceDir;
-    paths.projectFile.addPath(name + ".kdev4");
+    paths.projectFile.addPath(kdev4Name);
     Q_ASSERT(QFile::exists(paths.projectFile.toLocalFile()));
 
     paths.configFile = paths.sourceDir;
-    paths.configFile.addPath(".kdev4/" + name + ".kdev4");
+    paths.configFile.addPath(".kdev4/" + kdev4Name);
 
     return paths;
 }
@@ -86,7 +95,7 @@ void defaultConfigure(const TestProjectPaths& paths)
         QDir buildFolder( bd.buildFolder().toLocalFile() );
         if ( !buildFolder.exists() ) {
             if ( !buildFolder.mkpath( buildFolder.absolutePath() ) ) {
-                QFAIL("The build directory did not exist and could not be created.");
+                Q_ASSERT(false && "The build directory did not exist and could not be created.");
             }
         }
     }
