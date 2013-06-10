@@ -696,12 +696,13 @@ QSet<QString> filterFiles(const QStringList& orig)
     return ret;
 }
 
-QStringList resolvePaths(const KUrl& baseUrl, const QStringList& pathsToResolve) {
+QStringList resolvePaths(const KUrl& baseUrl, const QStringList& pathsToResolve)
+{
     QStringList resolvedPaths;
     foreach(const QString& pathToResolve, pathsToResolve)
     {
         QString dir(pathToResolve);
-        if(!pathToResolve.startsWith("#["))
+        if(!pathToResolve.startsWith("#[") && !pathToResolve.startsWith("$<"))
         {
             if(KUrl( pathToResolve ).isRelative())
             {
