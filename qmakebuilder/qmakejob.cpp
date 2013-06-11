@@ -54,7 +54,6 @@ void QMakeJob::start()
     setModel(new KDevelop::OutputModel);
     startOutput();
 
-    m_item = m_project->projectItem();
     QString cmd = QMakeConfig::qmakeBinary( m_project );
     m_cmd = new KDevelop::CommandExecutor(cmd, this);
     connect(m_cmd, SIGNAL(receivedStandardError(const QStringList&)),

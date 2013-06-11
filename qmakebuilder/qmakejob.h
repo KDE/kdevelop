@@ -27,7 +27,6 @@
 #include <QProcess>
 
 namespace KDevelop{
-    class ProjectBaseItem;
     class CommandExecutor;
     class OutputModel;
     class IProject;
@@ -63,7 +62,6 @@ private Q_SLOTS:
 private:
     KDevelop::IProject* m_project;
     KDevelop::CommandExecutor* m_cmd;
-    KDevelop::ProjectBaseItem* m_item;
     bool m_killed;
 };
 
