@@ -34,7 +34,7 @@ using namespace Cpp;
 QVector<RevisionedFileRanges> RevisionedFileRanges::convert(const QMap<IndexedString, QList<RangeInRevision> >& uses)
 {
   QVector<RevisionedFileRanges> ret(uses.size());
-  RevisionedFileRanges* insertIt = ret.begin();
+  QVector<RevisionedFileRanges>::iterator insertIt = ret.begin();
   for(QMap< IndexedString, QList< RangeInRevision > >::const_iterator it = uses.constBegin();
       it != uses.constEnd(); ++it, ++insertIt)
   {
