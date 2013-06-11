@@ -106,10 +106,9 @@ void ReviewPatchDialog::receivedProjects(KJob* job)
             SLOT(repositoryChanged(QItemSelection)));
     
     if(!m_preferredRepository.isEmpty()) {
-        QList<QStandardItem*> items = model->findItems(m_preferredRepository, Qt::MatchExactly);
-        if(!items.isEmpty()) {
-            QStandardItem* it = items.first();
-            QModelIndex idx = proxy->mapFromSource(it->index());
+        QModelIndexList idxs = model->match(model->index(0,0), Qt::UserRole, m_preferredRepository, 1, Qt::MatchExactly);
+        if(!idxs.isEmpty()) {
+            QModelIndex idx = proxy->mapFromSource(idxs.first());
             m_ui->repositories->selectionModel()->select(idx, QItemSelectionModel::ClearAndSelect);
             m_ui->repositories->scrollTo(idx, QAbstractItemView::PositionAtCenter);
         } else
