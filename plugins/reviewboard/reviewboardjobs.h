@@ -68,7 +68,8 @@ namespace ReviewBoard
             
             virtual void start();
             QString requestId() const;
-            
+            KUrl server() const { return m_server; }
+
         private slots:
             void submitPatch();
             void done();

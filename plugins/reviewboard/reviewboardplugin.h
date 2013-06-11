@@ -24,6 +24,7 @@
 #include <interfaces/iplugin.h>
 #include <interfaces/ipatchexporter.h>
 
+class KJob;
 namespace KIO {
 class Job;
 }
@@ -37,6 +38,9 @@ class ReviewBoardPlugin : public KDevelop::IPlugin, KDevelop::IPatchExporter
         virtual ~ReviewBoardPlugin();
         
         virtual void exportPatch(KDevelop::IPatchSource::Ptr source);
+
+    public slots:
+        void reviewDone(KJob*);
 };
 
 #endif
