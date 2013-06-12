@@ -245,7 +245,7 @@ QVariant CMakeCodeCompletionModel::data (const QModelIndex & index, int role) co
                 foreach(const AbstractType::Ptr& t, func->arguments())
                 {
                     DelayedType::Ptr delay = t.cast<DelayedType>();
-                    args.append(delay->identifier().toString());
+                    args.append(delay ? delay->identifier().toString() : i18n("wrong"));
                 }
                 return QString('('+args.join(", ")+')');
             }
