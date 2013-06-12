@@ -472,14 +472,14 @@ void CMakeProjectVisitor::defineTarget(const QString& id, const QStringList& sou
                 m_props[TargetProperty][id]["RUNTIME_OUTPUT_DIRECTORY"]=QStringList(locationDir);
             }
             break;
-        case Target::Library:
+        case Target::Library: {
             exe = QString("%1%2%3").arg(m_vars->value("CMAKE_LIBRARY_PREFIX").join(QString())).arg(id).arg(m_vars->value("CMAKE_LIBRARY_SUFFIX").join(QString()));
             QString l = m_vars->value("CMAKE_LIBRARY_OUTPUT_DIRECTORY").join(QString());
             if (!l.isEmpty()) {
                 locationDir = l;
                 m_props[TargetProperty][id]["LIBRARY_OUTPUT_DIRECTORY"]=QStringList(locationDir);
             }
-            break;
+            } break;
         case Target::Custom:
             break;
     }
