@@ -24,6 +24,8 @@
 
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
+#include <interfaces/icore.h>
+#include <interfaces/iplugincontroller.h>
 #include "ui_cmakebuildersettings.h"
 #include "cmakebuilderconfig.h"
 
@@ -45,7 +47,10 @@ CMakeBuilderPreferences::CMakeBuilderPreferences(QWidget* parent, const QVariant
 #else
     m_prefsUi->generator->addItem("Unix Makefiles");
 #endif
-    m_prefsUi->generator->addItem("Ninja");
+    bool hasNinja = !KDevelop::ICore::self()->pluginController()->queryExtensionPlugins("org.kdevelop.IProjectBuilder",
+                                                                                       QStringList("[X-KDE-PluginInfo-Name]=='KDevNinjaBuilder'")).isEmpty();
+    if(hasNinja)
+        m_prefsUi->generator->addItem("Ninja");
     
     connect(m_prefsUi->generator, SIGNAL(currentIndexChanged(QString)), SLOT(generatorChanged(QString)));
 }
