@@ -102,9 +102,6 @@ FramestackWidget::FramestackWidget(IDebugController* controller, QWidget* parent
     connect(m_threads, SIGNAL(clicked(QModelIndex)), this, SLOT(setThreadShown(QModelIndex)));
     connect(m_frames, SIGNAL(clicked(QModelIndex)),
             SLOT(frameClicked(QModelIndex)));
-
-    connect(m_frames->model(), SIGNAL(dataChanged(QModelIndex,QModelIndex)),
-            this, SLOT(checkFetchMoreFrames()));
 }
 
 FramestackWidget::~FramestackWidget() {}
@@ -153,13 +150,9 @@ void KDevelop::FramestackWidget::checkFetchMoreFrames()
 {
     int val = m_frames->verticalScrollBar()->value();
     int max = m_frames->verticalScrollBar()->maximum();
-    int min = m_frames->verticalScrollBar()->minimum();
-    bool canScroll = min != max;
-    const int offset = 50;
+    const int offset = 20;
 
-    // Fetch more frames if the user scrolls down far enough,
-    // or if there's more frames available and the widget is not yet filled.
-    if ((val + offset > max || ! canScroll) && m_session) {
+    if (val + offset > max && m_session) {
         m_session->frameStackModel()->fetchMoreFrames();
     }
 }
