@@ -158,13 +158,13 @@ void VcsEventModel::fetchMore(const QModelIndex& parent)
     Q_ASSERT(!parent.isValid());
     VcsJob* job = d->m_iface->log(d->m_url, d->m_rev, qMax(rowCount(), 100));
     connect( this, SIGNAL(destroyed(QObject*)), job, SLOT(kill()) );
-    connect( job, SIGNAL(resultsReady(KDevelop::VcsJob*)), SLOT(jobReceivedResults(KDevelop::VcsJob*)) );
+    connect( job, SIGNAL(finished(KJob*)), SLOT(jobReceivedResults(KJob*)) );
     ICore::self()->runController()->registerJob( job );
 }
 
-void VcsEventModel::jobReceivedResults(VcsJob* job)
+void VcsEventModel::jobReceivedResults(KJob* job)
 {
-    QList<QVariant> l = job->fetchResults().toList();
+    QList<QVariant> l = qobject_cast<KDevelop::VcsJob *>(job)->fetchResults().toList();
     if(l.isEmpty() || job->error()!=0) {
         d->done = true;
         return;

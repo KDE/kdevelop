@@ -26,11 +26,12 @@
 #include "../vcsexport.h"
 
 class KUrl;
+class KJob;
+
 namespace KDevelop
 {
 class VcsRevision;
 class IBasicVersionControl;
-class VcsJob;
 class VcsEvent;
 
 class KDEVPLATFORMVCS_EXPORT VcsEventModel : public QAbstractTableModel
@@ -49,7 +50,7 @@ public:
     virtual bool canFetchMore(const QModelIndex& parent) const;
 
 private slots:
-    void jobReceivedResults( KDevelop::VcsJob* job );
+    void jobReceivedResults( KJob* job );
 
 private:
     void addEvents( const QList<KDevelop::VcsEvent>& );
