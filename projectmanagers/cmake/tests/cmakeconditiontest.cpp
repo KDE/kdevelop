@@ -82,9 +82,9 @@ void CMakeConditionTest::testGoodParse_data()
     QTest::newRow( "not+and+command" ) << QString("NOT;ZERO;AND;COMMAND;testmacro").split(";") << true;
     QTest::newRow( "not+and+command" ) << QString("COMMAND;add_library").split(";") << true;
 #ifdef Q_OS_WIN
-    QTest::newRow( "not+and+exists" ) << QString("NOT;ZERO;AND;EXISTS;" + qApp->applicationDirPath() + "/cmake-cmakecondition.exe").split(";") << true;
+    QTest::newRow( "not+and+exists" ) << QString("NOT;ZERO;AND;EXISTS;" + qApp->applicationDirPath() + "/cmakeconditiontest.exe").split(";") << true;
 #else
-    QTest::newRow( "not+and+exists" ) << QString("NOT;ZERO;AND;EXISTS;" + qApp->applicationDirPath() + "/cmake-cmakecondition").split(";") << true;
+    QTest::newRow( "not+and+exists" ) << QString("NOT;ZERO;AND;EXISTS;" + qApp->applicationDirPath() + "/cmakeconditiontest").split(";") << true;
 #endif
     QTest::newRow( "or" ) << QString("ONE;OR;ONE").split(";") << true;
     QTest::newRow( "false+or" ) << QString("ZERO;OR;ONE").split(";") << true;
