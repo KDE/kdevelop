@@ -70,7 +70,8 @@ K_PLUGIN_FACTORY(AppWizardFactory, registerPlugin<AppWizardPlugin>();)
 K_EXPORT_PLUGIN(AppWizardFactory(KAboutData("kdevappwizard","kdevappwizard", ki18n("Project Wizard"), "0.1", ki18n("Support for creating and importing projects"), KAboutData::License_GPL)))
 
 AppWizardPlugin::AppWizardPlugin(QObject *parent, const QVariantList &)
-    :KDevelop::IPlugin(AppWizardFactory::componentData(), parent)
+    : KDevelop::IPlugin(AppWizardFactory::componentData(), parent)
+    , m_templatesModel(0)
 {
     KDEV_USE_EXTENSION_INTERFACE(KDevelop::ITemplateProvider);
     setXMLFile("kdevappwizard.rc");
@@ -83,8 +84,6 @@ AppWizardPlugin::AppWizardPlugin(QObject *parent, const QVariantList &)
     m_newFromTemplate->setWhatsThis( i18n("This starts KDevelop's application wizard. "
                                           "It helps you to generate a skeleton for your "
                                           "application from a set of templates.") );
-
-    m_templatesModel = new ProjectTemplatesModel(this);
 }
 
 AppWizardPlugin::~AppWizardPlugin()
@@ -93,7 +92,7 @@ AppWizardPlugin::~AppWizardPlugin()
 
 void AppWizardPlugin::slotNewProject()
 {
-    m_templatesModel->refresh();
+    model()->refresh();
     AppWizardDialog dlg(core()->pluginController(), m_templatesModel);
 
     if (dlg.exec() == QDialog::Accepted)
@@ -458,9 +457,16 @@ KDevelop::ContextMenuExtension AppWizardPlugin::contextMenuExtension(KDevelop::C
     return ext;
 }
 
-QAbstractItemModel* AppWizardPlugin::templatesModel() const
+ProjectTemplatesModel* AppWizardPlugin::model()
 {
+    if(!m_templatesModel)
+        m_templatesModel = new ProjectTemplatesModel(this);
     return m_templatesModel;
+}
+
+QAbstractItemModel* AppWizardPlugin::templatesModel()
+{
+    return model();
 }
 
 QString AppWizardPlugin::knsConfigurationFile() const
@@ -489,12 +495,12 @@ QString AppWizardPlugin::name() const
 
 void AppWizardPlugin::loadTemplate(const QString& fileName)
 {
-    m_templatesModel->loadTemplateFile(fileName);
+    model()->loadTemplateFile(fileName);
 }
 
 void AppWizardPlugin::reload()
 {
-    m_templatesModel->refresh();
+    model()->refresh();
 }
 
 

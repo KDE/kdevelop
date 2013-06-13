@@ -34,7 +34,7 @@ public:
     ~AppWizardPlugin();
     virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
 
-    virtual QAbstractItemModel* templatesModel() const;
+    virtual QAbstractItemModel* templatesModel();
     virtual QString knsConfigurationFile() const;
     virtual QStringList supportedMimeTypes() const;
     virtual QString name() const;
@@ -46,6 +46,8 @@ private slots:
     void slotNewProject();
 
 private:
+    ProjectTemplatesModel* model();
+
     QString createProject(const ApplicationInfo& );
     bool unpackArchive(const KArchiveDirectory *dir, const QString &dest);
     bool copyFileAndExpandMacros(const QString &source, const QString &dest);

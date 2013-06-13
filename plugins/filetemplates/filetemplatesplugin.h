@@ -34,7 +34,7 @@ public:
 
     virtual QString name() const;
     virtual QIcon icon() const;
-    virtual QAbstractItemModel* templatesModel() const;
+    virtual QAbstractItemModel* templatesModel();
     virtual QString knsConfigurationFile() const;
     virtual QStringList supportedMimeTypes() const;
 
