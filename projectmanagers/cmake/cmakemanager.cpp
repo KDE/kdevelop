@@ -722,12 +722,13 @@ QStringList resolvePaths(const KUrl& baseUrl, const QStringList& pathsToResolve)
 
 QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolderItem* item )
 {
-    Q_ASSERT(isReloading(item->project()));
+    IProject* project = item->project();
+    Q_ASSERT(isReloading(project));
     CMakeFolderItem* folder = dynamic_cast<CMakeFolderItem*>( item );
 
     {
         QMutexLocker locker(&m_dirWatchersMutex);
-        m_watchers[item->project()]->addPath(item->url().toLocalFile());
+        m_watchers[project]->addPath(item->url().toLocalFile());
     }
     
     KUrl cmakeListsPath(item->url());
@@ -738,7 +739,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
         kDebug(9042) << "parse:" << folder->url();
         
         KDevelop::ReferencedTopDUContext curr;
-        if(item==item->project()->projectItem())
+        if(item==project->projectItem())
             curr=initializeProject(folder);
         else
             curr=folder->formerParent()->topDUContext();
@@ -749,7 +750,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
         if(binDir.startsWith("./"))
             binDir=binDir.remove(0, 2);
         
-        CMakeProjectData& data=m_projectsData[item->project()];
+        CMakeProjectData& data=m_projectsData[project];
 
 //         kDebug(9042) << "currentBinDir" << KUrl(data.vm.value("CMAKE_BINARY_DIR")[0]) << data.vm.value("CMAKE_CURRENT_BINARY_DIR");
 
@@ -875,15 +876,15 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                 switch(t.type)
                 {
                     case Target::Library:
-                        targetItem = new CMakeLibraryTargetItem( item->project(), t.name,
+                        targetItem = new CMakeLibraryTargetItem( project, t.name,
                                                                 folder, t.declaration, outputName, resolvedPath);
                         break;
                     case Target::Executable:
-                        targetItem = new CMakeExecutableTargetItem( item->project(), t.name,
+                        targetItem = new CMakeExecutableTargetItem( project, t.name,
                                                                     folder, t.declaration, outputName, resolvedPath);
                         break;
                     case Target::Custom:
-                        targetItem = new CMakeCustomTargetItem( item->project(), t.name,
+                        targetItem = new CMakeCustomTargetItem( project, t.name,
                                                                 folder, t.declaration, outputName );
                         break;
                 }
@@ -1003,6 +1004,7 @@ QList<KDevelop::ProjectTargetItem*> CMakeManager::targets() const
 
 KUrl::List CMakeManager::includeDirectories(KDevelop::ProjectBaseItem *item) const
 {
+    IProject* project = item->project();
     CompilationDataAttached* includer=0;
 //     kDebug(9042) << "Querying inc dirs for " << item;
     while(item)
@@ -1011,7 +1013,7 @@ KUrl::List CMakeManager::includeDirectories(KDevelop::ProjectBaseItem *item) con
         if(includer) {
             QStringList dirs = includer->includeDirectories(item);
             //Here there's the possibility that it might not be a target. We should make sure that's not the case
-            return resolveSystemDirs(item->project(), processGeneratorExpression(dirs, item->project(), dynamic_cast<ProjectTargetItem*>(item)));
+            return resolveSystemDirs(project, processGeneratorExpression(dirs, project, dynamic_cast<ProjectTargetItem*>(item)));
         }
         item = item->parent();
 //         kDebug(9042) << "Looking for an includer: " << item;
