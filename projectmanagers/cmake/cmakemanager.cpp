@@ -581,7 +581,7 @@ KDevelop::ReferencedTopDUContext CMakeManager::initializeProject(CMakeFolderItem
                 KUrl candidate = currentDir;
                 candidate.addPath(s.name);
                 
-                if(candidate.isParentOf(project->folder()))
+                if(candidate.isParentOf(project->folder()) && candidate!=project->folder())
                     toimport += candidate;
             }
         }
