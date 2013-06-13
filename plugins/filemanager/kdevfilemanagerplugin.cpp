@@ -78,7 +78,7 @@ KDevFileManagerPlugin::KDevFileManagerPlugin(QObject *parent, const QVariantList
 {
     setXMLFile("kdevfilemanager.rc");
 
-    init();
+    QMetaObject::invokeMethod(this, "init", Qt::QueuedConnection);
 }
 
 void KDevFileManagerPlugin::init()
