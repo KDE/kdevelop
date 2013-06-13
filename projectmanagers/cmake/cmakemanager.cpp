@@ -1830,7 +1830,6 @@ QStringList CMakeManager::processGeneratorExpression(const QStringList& expr, IP
 
     for(QStringList::const_iterator it = expr.constBegin(), itEnd = expr.constEnd(); it!=itEnd; ++it) {
         QStringList val = exec.run(*it).split(';');
-        qDebug() << "wop wop" << *it << val;
         ret += val;
     }
     return ret;
