@@ -222,7 +222,8 @@ public:
      * Description of the last encountered error, of an empty string if none.
      */
     virtual QString errorDescription() const;
-public Q_SLOTS:
+
+private Q_SLOTS:
     /**
      * Re-initialize the global icon loader
      */
