@@ -32,15 +32,13 @@ class CTestFindSuitesTest : public QObject
     Q_OBJECT
 
 private slots:
+    void cleanup();
     
     void initTestCase();
     void cleanupTestCase();
     
     void testCTestSuite();
     void testQtTestSuite();
-    
-private:
-    KDevelop::IProject* parseProject(const QString& name);
 };
 
 #endif
