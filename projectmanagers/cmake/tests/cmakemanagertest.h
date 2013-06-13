@@ -33,9 +33,6 @@ class IProject;
  **/
 class CMakeManagerTest : public QObject {
     Q_OBJECT
-private:
-    KDevelop::IProject* loadProject(const QString& name, const QString& relative = QString());
-
 private slots:
     void initTestCase();
     void cleanupTestCase();

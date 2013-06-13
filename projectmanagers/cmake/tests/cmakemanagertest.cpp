@@ -35,29 +35,7 @@
 
 QTEST_KDEMAIN(CMakeManagerTest, GUI )
 
-#define WAIT_FOR_OPEN_SIGNAL \
-{\
-    bool gotSignal = QTest::kWaitForSignal(ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), 30000);\
-    Q_ASSERT(gotSignal && "Timeout while waiting for opened signal");\
-} void(0)
-
 using namespace KDevelop;
-
-IProject* CMakeManagerTest::loadProject(const QString& name, const QString& relative)
-{
-    const TestProjectPaths paths = projectPaths(name+relative, name);
-    defaultConfigure(paths);
-
-    ICore::self()->projectController()->openProject(paths.projectFile);
-    WAIT_FOR_OPEN_SIGNAL;
-
-    IProject* project = ICore::self()->projectController()->findProjectByName(name);
-    Q_ASSERT(project);
-    Q_ASSERT(project->buildSystemManager());
-    Q_ASSERT(paths.projectFile == project->projectFileUrl());
-    Q_ASSERT(project->folder() == project->folder());
-    return project;
-}
 
 void CMakeManagerTest::initTestCase()
 {

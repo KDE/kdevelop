@@ -58,7 +58,7 @@ void CTestFindSuitesTest::cleanupTestCase()
 
 void CTestFindSuitesTest::testCTestSuite()
 {
-    IProject* project = parseProject( "unit_tests" );
+    IProject* project = loadProject( "unit_tests" );
     QVERIFY2(project, "Project was not opened");
     WAIT_FOR_SUITES(5, 10)
     QList<ITestSuite*> suites = ICore::self()->testController()->testSuitesForProject(project);
@@ -79,7 +79,7 @@ void CTestFindSuitesTest::testCTestSuite()
 
 void CTestFindSuitesTest::testQtTestSuite()
 {
-    IProject* project = parseProject( "unit_tests_kde" );
+    IProject* project = loadProject( "unit_tests_kde" );
     QVERIFY2(project, "Project was not opened");
     WAIT_FOR_SUITES(2, 10)
     QList<ITestSuite*> suites = ICore::self()->testController()->testSuitesForProject(project);
@@ -103,26 +103,3 @@ void CTestFindSuitesTest::testQtTestSuite()
         QVERIFY(suite->caseDeclaration(testCase).isValid());
     }
 }
-
-IProject* CTestFindSuitesTest::parseProject( const QString& name)
-{
-    const TestProjectPaths paths = projectPaths(name);
-    defaultConfigure(paths);
-    
-    ICore::self()->projectController()->openProject(paths.projectFile);
-    
-    IProject* project = ICore::self()->projectController()->findProjectByName(name);
-    int t = 0;
-    const int timeout = 100;
-    while (!project && t < 30000)
-    {
-        t += timeout;
-        QTest::kWaitForSignal(ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), timeout);
-        project = ICore::self()->projectController()->findProjectByName(name);
-    }
-        
-    return project;
-}
-
-#include "ctestfindsuitestest.moc"
-
