@@ -19,23 +19,23 @@
  */
 
 #include "reviewpatchdialog.h"
-#include <QDebug>
+#include <Qt>
 #include <QStandardItemModel>
 #include <QSortFilterProxyModel>
+#include <KDebug>
 #include "ui_reviewpatch.h"
 #include "reviewboardjobs.h"
-#include <KDebug>
 
 ReviewPatchDialog::ReviewPatchDialog(QWidget* parent)
     : KDialog(parent)
 {
-    m_ui=new Ui::ReviewPatch;
-    QWidget* w= new QWidget(this);
+    m_ui = new Ui::ReviewPatch;
+    QWidget* w = new QWidget(this);
     m_ui->setupUi(w);
-    connect(m_ui->repositoriesFilter, SIGNAL(textChanged(QString)), SLOT(filterChanged(QString)));
     setMainWidget(w);
 
     connect(m_ui->server, SIGNAL(textChanged(QString)), SLOT(serverChanged()));
+    connect(m_ui->reviewCheckbox, SIGNAL(stateChanged(int)), SLOT(reviewCheckboxChanged(int)));
     enableButtonOk(false);
 }
 
@@ -77,8 +77,15 @@ KUrl ReviewPatchDialog::server() const
     return server;
 }
 
+QString ReviewPatchDialog::username() const
+{
+    return m_ui->username->text();
+}
+
 void ReviewPatchDialog::serverChanged()
 {
+    m_ui->repositories->clear();
+    //TODO reviewboards with private repositories don't work. Use user/pass if set.
     ReviewBoard::ProjectsListRequest* repo = new ReviewBoard::ProjectsListRequest(m_ui->server->url(), this);
     connect(repo, SIGNAL(finished(KJob*)), SLOT(receivedProjects(KJob*)));
     repo->start();
@@ -86,58 +93,119 @@ void ReviewPatchDialog::serverChanged()
 
 void ReviewPatchDialog::receivedProjects(KJob* job)
 {
-    QStandardItemModel* model = new QStandardItemModel(this);
+    // TODO:  check error
     ReviewBoard::ProjectsListRequest* pl=dynamic_cast<ReviewBoard::ProjectsListRequest*>(job);
     QVariantList repos = pl->repositories();
+    // Add default value with no repo selected.
+    m_ui->repositories->addItem(i18n("Repository not selected"), 0);
+
     foreach(const QVariant& repo, repos) {
         QVariantMap repoMap=repo.toMap();
-        QStandardItem *repoItem = new QStandardItem;
-
-        repoItem->setText(repoMap["name"].toString());
-        repoItem->setData(repoMap["path"], Qt::UserRole);
-        model->appendRow(repoItem);
+        m_ui->repositories->addItem(repoMap["name"].toString(), repoMap["path"]);
     }
-    
-    model->sort(0, Qt::AscendingOrder);
-    QSortFilterProxyModel* proxy = new QSortFilterProxyModel(this);
-    proxy->setSourceModel(model);
-    m_ui->repositories->setModel(proxy);
-    connect(m_ui->repositories->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-            SLOT(repositoryChanged(QItemSelection)));
-    
+
+    connect(m_ui->repositories, SIGNAL(currentIndexChanged(int)), SLOT(repositoryChanged(int)));
+
+    QAbstractItemModel* model = m_ui->repositories->model();
     if(!m_preferredRepository.isEmpty()) {
         QModelIndexList idxs = model->match(model->index(0,0), Qt::UserRole, m_preferredRepository, 1, Qt::MatchExactly);
         if(!idxs.isEmpty()) {
-            QModelIndex idx = proxy->mapFromSource(idxs.first());
-            m_ui->repositories->selectionModel()->select(idx, QItemSelectionModel::ClearAndSelect);
-            m_ui->repositories->scrollTo(idx, QAbstractItemView::PositionAtCenter);
-        } else
-            kDebug() << "no repository called" << m_preferredRepository;
+          m_ui->repositories->setCurrentIndex(idxs.first().row());
+        }
     }
     m_ui->repositoriesBox->setEnabled(job->error()==0);
 }
 
 QString ReviewPatchDialog::repository() const
 {
-    QModelIndexList selected = m_ui->repositories->selectionModel()->selectedIndexes();
-    if(!selected.isEmpty()) {
-        QModelIndex idx = selected.first();
-        Q_ASSERT(idx.isValid());
-        return idx.data(Qt::UserRole).toString();
+    QComboBox* repositories = m_ui->repositories;
+    if(repositories->currentIndex() != -1) {
+        return repositories->itemData(repositories->currentIndex(), Qt::UserRole).toString();
     }
     return QString();
 }
 
-void ReviewPatchDialog::repositoryChanged(const QItemSelection& idx)
+void ReviewPatchDialog::repositoryChanged(int index)
 {
-    enableButtonOk(!idx.isEmpty());
+    enableButtonOk((!isUpdateReview() && index > 0) || m_ui->reviews->currentIndex() != -1);
 }
 
-void ReviewPatchDialog::filterChanged(const QString& text)
+void ReviewPatchDialog::reviewCheckboxChanged(int status)
 {
-    QSortFilterProxyModel* proxy = qobject_cast<QSortFilterProxyModel*>(m_ui->repositories->model());
-    proxy->setFilterFixedString(text);
-    if(proxy->rowCount()==1) {
-        m_ui->repositories->selectionModel()->select(proxy->index(0,0), QItemSelectionModel::ClearAndSelect);
+    if (status == Qt::Checked) {
+        m_ui->reviews->setEnabled(true);
+        connect(m_ui->username, SIGNAL(editingFinished()), SLOT(updateReviews()));
+        connect(m_ui->password, SIGNAL(editingFinished()), SLOT(updateReviews()));
+        connect(m_ui->server, SIGNAL(returnPressed()), SLOT(updateReviews()));
+        connect(m_ui->repositories, SIGNAL(currentIndexChanged(int)), SLOT(updateReviewsList()));
+    } else {
+        m_ui->reviews->setEnabled(false);
+        disconnect(m_ui->username, SIGNAL(editingFinished()), this, SLOT(updateReviews()));
+        disconnect(m_ui->password, SIGNAL(editingFinished()), this, SLOT(updateReviews()));
+        disconnect(m_ui->server, SIGNAL(returnPressed()), this, SLOT(updateReviews()));
+        disconnect(m_ui->repositories, SIGNAL(currentIndexChanged(int)), this, SLOT(updateReviewsList()));
     }
+    updateReviews();
+}
+
+void ReviewPatchDialog::receivedReviews(KJob* job)
+{
+    m_reviews.clear();
+    // TODO: check errors
+    QVariantList reviews = dynamic_cast<ReviewBoard::ReviewListRequest*>(job)->reviews();
+    foreach(const QVariant& review, reviews) {
+        QVariantMap reviewMap = review.toMap();
+        QVariantMap repoMap = reviewMap["links"].toMap()["repository"].toMap();
+        m_reviews.insert(repoMap["title"].toString(), qMakePair<QString, QVariant>(reviewMap["summary"].toString(), reviewMap["id"]));
+    }
+
+    updateReviewsList();
+}
+
+int ReviewPatchDialog::review() const
+{
+    return m_ui->reviews->itemData(m_ui->reviews->currentIndex(), Qt::UserRole).toInt();
+}
+
+void ReviewPatchDialog::updateReviews()
+{
+    if (isUpdateReview()) {
+        //TODO: reviewboards with private reviews don't work. Use user/pass if set.
+        if (!m_ui->server->text().isEmpty() && !m_ui->username->text().isEmpty()) {
+            ReviewBoard::ReviewListRequest* repo = new ReviewBoard::ReviewListRequest(m_ui->server->url(), username(), "pending", this);
+            connect(repo, SIGNAL(finished(KJob*)), SLOT(receivedReviews(KJob*)));
+            repo->start();
+        }
+    } else {
+        // Clear reviews combobox and enable OK Button if a repository is selected.
+        enableButtonOk(m_ui->repositories->currentIndex() != -1);
+    }
+}
+
+bool ReviewPatchDialog::isUpdateReview()
+{
+    return m_ui->reviewCheckbox->checkState() == Qt::Checked;
+}
+
+void ReviewPatchDialog::updateReviewsList()
+{
+    QString repo = m_ui->repositories->currentText();
+    QPair<QString, QVariant> kv;
+    m_ui->reviews->clear();
+
+    if (m_ui->repositories->currentIndex() < 1) {
+        // Show all Review
+        foreach (const QString& key, m_reviews.uniqueKeys()) {
+            foreach (kv, m_reviews.values(key)) {
+                 m_ui->reviews->addItem(kv.first, kv.second);
+            }
+        }
+    } else {
+        // Filter using actual repository.
+        foreach (kv, m_reviews.values(repo)) {
+            m_ui->reviews->addItem(kv.first, kv.second);
+        }
+    }
+
+    enableButtonOk(m_ui->reviews->currentIndex() != -1);
 }

@@ -37,31 +37,40 @@ class ReviewPatchDialog : public KDialog
     public:
         ReviewPatchDialog(QWidget* parent = 0);
         virtual ~ReviewPatchDialog();
-        
+
         void setBaseDir(const QString& dir);
         void setServer(const KUrl& server);
         void setUsername(const QString& user);
-        
+
         /** @returns the server url with the username and password */
         KUrl server() const;
-        
+
         /** @returns the selected base directory for the patch */
         QString baseDir() const;
         QString repository() const;
-        
+        QString username() const;
+
         void setRepository(const QString& repo);
-        
+
+        int review() const;
+
+        bool isUpdateReview();
+
     private slots:
         void serverChanged();
         void receivedProjects(KJob* job);
-        
+
     private:
         Ui::ReviewPatch* m_ui;
         QString m_preferredRepository;
+        QMultiHash<QString, QPair<QString, QVariant> > m_reviews;
 
     private slots:
-        void repositoryChanged(const QItemSelection& idx);
-        void filterChanged(const QString& text);
+        void repositoryChanged(int index);
+        void receivedReviews(KJob* job);
+        void reviewCheckboxChanged(int status);
+        void updateReviews();
+        void updateReviewsList();
 };
 
 #endif

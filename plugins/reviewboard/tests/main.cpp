@@ -29,21 +29,21 @@ int main(int argc, char *argv[])
     KAboutData about("reviewboardtest", 0, ki18n(("ReviewBoard Test")), "0.10", ki18n("Test ReviewBoard support"),
             KAboutData::License_GPL, ki18n("(C) 2010 Aleix Pol Gonzalez"));
     about.addAuthor( ki18n("Aleix Pol Gonzalez"), KLocalizedString(), "aleixpol@kde.org" );
-    
+
     KCmdLineArgs::init( argc, argv, &about );
     KCmdLineOptions options;
     options.add("+patch", ki18n( "Patch" ));
     options.add("basedir <dir>", ki18n( "Base Directory" ));
     KCmdLineArgs::addCmdLineOptions( options );
     KApplication app;
-    
+
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
-    
+
     ReviewPatchDialog d;
-    
+
     KUrl patch(args->arg(0));
     QString basedir=args->getOption("basedir");
-    
+
     qDebug() << "patch:" << patch << ", basedir:" << basedir;
     d.setServer(KUrl("https://git.reviewboard.kde.org"));
     d.setBaseDir(basedir);
@@ -51,17 +51,17 @@ int main(int argc, char *argv[])
     int ret=d.exec();
     if(ret==QDialog::Accepted) {
         KUrl url=d.server();
-        ReviewBoard::NewRequest* job=new ReviewBoard::NewRequest(d.server(), patch, d.repository(), d.baseDir());
+        ReviewBoard::NewRequest* job=new ReviewBoard::NewRequest(d.server(), d.repository());
         bool corr = job->exec();
         if(corr) {
             url.setUserInfo(QString());
             QString requrl = QString("%1/r/%2/").arg(url.prettyUrl()).arg(job->requestId());
-            
+
             KMessageBox::information(0, i18n("<qt>You can find the new request at:<br /><a href='%1'>%1</a> </qt>", requrl));
         } else {
             KMessageBox::error(0, job->errorText());
         }
     }
-    
+
     return ret!=QDialog::Accepted;
 }

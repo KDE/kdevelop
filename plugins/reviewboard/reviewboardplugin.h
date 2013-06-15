@@ -34,13 +34,18 @@ class ReviewBoardPlugin : public KDevelop::IPlugin, KDevelop::IPatchExporter
     Q_OBJECT
     Q_INTERFACES( KDevelop::IPatchExporter )
     public:
-        ReviewBoardPlugin ( QObject* parent, const QList<QVariant>& args  );
+        ReviewBoardPlugin(QObject* parent, const QList<QVariant>& args);
         virtual ~ReviewBoardPlugin();
-        
+
         virtual void exportPatch(KDevelop::IPatchSource::Ptr source);
 
     public slots:
-        void reviewDone(KJob*);
+        void reviewDone(KJob* j);
+        void reviewCreated(KJob* j);
+
+    private:
+        KDevelop::IPatchSource::Ptr m_source;
+        QString m_baseDir;
 };
 
 #endif
