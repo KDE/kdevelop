@@ -37,28 +37,28 @@ class {{ name }}{% if base_classes %} :{% for base in base_classes %} {{ base.in
 {% block class_body %}
 {% if public_functions %}
 public:
-{% endif %}
     {% for method in public_functions %}
     {% include "method_declaration_cpp.txt" %}
     {% endfor %}
 
 
+{% endif %}
 {% if protected_functions %}
 protected:
-{% endif %}
     {% for method in protected_functions %}
     {% include "method_declaration_cpp.txt" %}
     {% endfor %}
 
 
+{% endif %}
 {% if private_functions %}
 private:
-{% endif %}
     {% for method in private_functions %}
     {% include "method_declaration_cpp.txt" %}
     {% endfor %}
 
 
+{% endif %}
 {% endblock class_body %}
 
 {% block class_bottom %}
