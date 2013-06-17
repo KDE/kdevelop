@@ -26,6 +26,19 @@ VariableMap::VariableMap()
     m_scopes.push(QSet<QString>());
 }
 
+QStringList splitVariable(const QStringList& input)
+{
+    QStringList ret;
+    foreach(const QString& v, input)
+    {
+        if(v.isEmpty())
+            continue;
+        
+        ret += v.split(';');
+    }
+    return ret;
+}
+
 void VariableMap::insert(const QString& varName, const QStringList& value, bool parentScope)
 {
     QSet< QString >* current;
@@ -36,47 +49,22 @@ void VariableMap::insert(const QString& varName, const QStringList& value, bool 
     } else
         current = &m_scopes.top();
     
-    bool inscope=current->contains(varName);
-    if(!inscope)
-        current->insert(varName);
+    QStringList ret = splitVariable(value);
     
-    QStringList ret;
-    foreach(const QString& v, value)
-    {
-        if(v.isEmpty())
-            continue;
-        
-        ret += v.split(';');
+    if(current->contains(varName))
+        (*this)[varName]=ret;
+    else {
+        current->insert(varName);
+        QHash<QString, QStringList>::insertMulti(varName, ret);
     }
     
-    if(inscope)
-        (*this)[varName]=ret;
-    else
-        QHash<QString, QStringList>::insertMulti(varName, ret);
-    
 //     QHash<QString, QStringList>::insert(varName, ret);
-//     qDebug() << "++++++++" << varName << QHash<QString, QStringList>::value(varName)/* << *current*/;
-}
-
-QStringList VariableMap::value(const QString& varName) const
-{
-    QStringList ret = QHash<QString, QStringList>::value(varName);
-//     qDebug() << "--------" << varName << ret;
-    return ret;
+//     qDebug() << "++++++++" << varName << QHash<QString, QStringList>::value(varName);
 }
 
 QHash<QString, QStringList>::iterator VariableMap::insertMulti(const QString & varName, const QStringList & value)
 {
-    QStringList ret;
-    foreach(const QString& v, value)
-    {
-        if(v.isEmpty())
-            continue;
-        
-        ret += v.split(';');
-    }
-    
-    return QHash<QString, QStringList>::insertMulti(varName, ret);
+    return QHash<QString, QStringList>::insertMulti(varName, splitVariable(value));
 }
 
 void VariableMap::insertGlobal(const QString& varName, const QStringList& value)
@@ -93,7 +81,7 @@ void VariableMap::popScope()
 {
     QSet<QString> t=m_scopes.pop();
     foreach(const QString& var, t) {
-//         qDebug() << "removing........" << var/* << QHash<QString, QStringList>::value(var)*/;
+//         qDebug() << "removing........" << var << QHash<QString, QStringList>::value(var);
         remove(var);
     }
 }
