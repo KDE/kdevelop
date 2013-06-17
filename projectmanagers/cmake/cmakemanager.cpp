@@ -528,7 +528,7 @@ KDevelop::ReferencedTopDUContext CMakeManager::initializeProject(CMakeFolderItem
     data->clear();
     data->modulePath=initials.first["CMAKE_MODULE_PATH"];
     data->vm=initials.first;
-    data->vm.insert("CMAKE_SOURCE_DIR", QStringList(baseUrl.toLocalFile(KUrl::RemoveTrailingSlash)));
+    data->vm.insertGlobal("CMAKE_SOURCE_DIR", QStringList(baseUrl.toLocalFile(KUrl::RemoveTrailingSlash)));
     
     KUrl cachefile=buildDirectory(project->projectItem());
     cachefile.addPath("CMakeCache.txt");

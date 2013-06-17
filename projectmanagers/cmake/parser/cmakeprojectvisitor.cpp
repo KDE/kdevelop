@@ -316,14 +316,13 @@ int CMakeProjectVisitor::visit( const AddTestAst * test)
 int CMakeProjectVisitor::visit(const ProjectAst *project)
 {
     m_projectName = project->projectName();
-    if(!m_vars->contains("CMAKE_PROJECT_NAME"))
-        m_vars->insert("CMAKE_PROJECT_NAME", QStringList(project->projectName()));
-    
+    m_vars->insertGlobal("CMAKE_PROJECT_NAME", QStringList(project->projectName()));
+
     m_vars->insert("PROJECT_NAME", QStringList(project->projectName()));
-    m_vars->insert("PROJECT_SOURCE_DIR", m_vars->value("CMAKE_CURRENT_SOURCE_DIR"));
-    m_vars->insert("PROJECT_BINARY_DIR", m_vars->value("CMAKE_CURRENT_BINARY_DIR"));
-    m_vars->insert(QString("%1_SOURCE_DIR").arg(m_projectName), m_vars->value("CMAKE_CURRENT_SOURCE_DIR"));
-    m_vars->insert(QString("%1_BINARY_DIR").arg(m_projectName), m_vars->value("CMAKE_CURRENT_BINARY_DIR"));
+    m_vars->insertGlobal("PROJECT_SOURCE_DIR", m_vars->value("CMAKE_CURRENT_SOURCE_DIR"));
+    m_vars->insertGlobal("PROJECT_BINARY_DIR", m_vars->value("CMAKE_CURRENT_BINARY_DIR"));
+    m_vars->insertGlobal(QString("%1_SOURCE_DIR").arg(m_projectName), m_vars->value("CMAKE_CURRENT_SOURCE_DIR"));
+    m_vars->insertGlobal(QString("%1_BINARY_DIR").arg(m_projectName), m_vars->value("CMAKE_CURRENT_BINARY_DIR"));
     return 1;
 }
 

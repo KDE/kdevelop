@@ -160,8 +160,8 @@ namespace CMakeParserUtils
     {
         kDebug(9042) << "Running cmake script: " << file;
         CMakeFileContent f = CMakeListsParser::readCMakeFile(file);
-        data->vm.insert("CMAKE_CURRENT_LIST_FILE", QStringList(file));
-        data->vm.insert("CMAKE_CURRENT_LIST_DIR", QStringList(QFileInfo(file).dir().absolutePath()));
+        data->vm.insertGlobal("CMAKE_CURRENT_LIST_FILE", QStringList(file));
+        data->vm.insertGlobal("CMAKE_CURRENT_LIST_DIR", QStringList(QFileInfo(file).dir().absolutePath()));
 
         const QString projectSourceDir = data->vm.value("CMAKE_SOURCE_DIR").first();
         const QString projectBinDir = data->vm.value("CMAKE_BINARY_DIR").join(QString());
@@ -171,9 +171,9 @@ namespace CMakeParserUtils
             Q_ASSERT(projectSourceDir.size()==sourcedir.size() || sourcedir.at(projectSourceDir.size()) == '/');
             binDir += sourcedir.mid(projectSourceDir.size());
         }
-        data->vm.insert("CMAKE_BINARY_DIR", QStringList(projectBinDir));
-        data->vm.insert("CMAKE_CURRENT_BINARY_DIR", QStringList(binDir));
-        data->vm.insert("CMAKE_CURRENT_SOURCE_DIR", QStringList(sourcedir));
+        data->vm.insertGlobal("CMAKE_BINARY_DIR", QStringList(projectBinDir));
+        data->vm.insertGlobal("CMAKE_CURRENT_BINARY_DIR", QStringList(binDir));
+        data->vm.insertGlobal("CMAKE_CURRENT_SOURCE_DIR", QStringList(sourcedir));
         
         CMakeProjectVisitor v(file, parent);
         v.setCacheValues(&data->cache);
