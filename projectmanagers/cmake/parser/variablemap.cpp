@@ -82,7 +82,7 @@ void VariableMap::popScope()
     QSet<QString> t=m_scopes.pop();
     foreach(const QString& var, t) {
 //         qDebug() << "removing........" << var << QHash<QString, QStringList>::value(var);
-        remove(var);
+        take(var);
     }
 }
 
