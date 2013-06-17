@@ -522,9 +522,9 @@ int CMakeProjectVisitor::visit(const SetAst *set)
     } else
         m_vars->insert(set->variableName(), set->values(), set->parentScope());
     
-    kDebug(9042) << "setting variable:" << set->variableName() << set->parentScope()
-        << "to" << m_vars->value(set->variableName())
-        ;
+//     kDebug(9042) << "setting variable:" << set->variableName() << set->parentScope()
+//         << "to" << m_vars->value(set->variableName()) << set->storeInCache()
+//         ;
     return 1;
 }
 
