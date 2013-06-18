@@ -189,14 +189,7 @@ QList<ProjectTargetItem*> CustomBuildSystem::targets( ProjectFolderItem* ) const
 KConfigGroup CustomBuildSystem::configuration( IProject* project ) const
 {
     KConfigGroup grp = project->projectConfiguration()->group( ConfigConstants::customBuildSystemGroup );
-    KConfigGroup currentConfig = grp.group( grp.readEntry( ConfigConstants::currentConfigKey ) );
-    // This is ugly and actually not necessary as far as support from KConfig* goes, but when using a debug-compiled
-    // kdelibs KConfig* has various (IMO) incorrect assert()'s when trying to read entries from a KConfigGroup
-    // that does not exist in the config files. There does not seem to be any problem doing so with a non-debug
-    // kdelibs, i.e. KConfig* can handle this case just fine. So someone (who can patch kdelibs) should probably remove
-    // those useless assert()'s.
-    currentConfig.sync();
-    return currentConfig;
+    return grp.group( grp.readEntry( ConfigConstants::currentConfigKey ) );
 }
 
 KConfigGroup CustomBuildSystem::findMatchingPathGroup(const KConfigGroup& cfg, ProjectBaseItem* item) const
