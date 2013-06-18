@@ -459,22 +459,23 @@ void TypeBuilder::createIntegralTypeForExpression(ExpressionAST* expression)
 
     if ( !delay && res.isValid() && res.isInstance ) {
       AbstractType::Ptr type = res.type.abstractType();
-      if ( m_lastTypeWasAuto )
-      {
-        // remove references or aliases
-        type = TypeUtils::realType( type, topContext() );
-        // Turn "5" into "int"
-        type = TypeUtils::removeConstants( type, topContext() );
-        // ensure proper const modifier is set
-        type->setModifiers( integral->modifiers() );
-        if (ReferenceType::Ptr ref = lastType().cast<ReferenceType>()) {
-          ref->setBaseType( type );
-          type = ref.cast<AbstractType>();
+      if (type) {
+        if ( m_lastTypeWasAuto ) {
+          // remove references or aliases
+          type = TypeUtils::realType( type, topContext() );
+          // Turn "5" into "int"
+          type = TypeUtils::removeConstants( type, topContext() );
+          // ensure proper const modifier is set
+          type->setModifiers( integral->modifiers() );
+          if (ReferenceType::Ptr ref = lastType().cast<ReferenceType>()) {
+            ref->setBaseType( type );
+            type = ref.cast<AbstractType>();
+          }
         }
-      }
 
-      openType( type );
-      openedType = true;
+        openType( type );
+        openedType = true;
+      }
     }
   }
   if( delay || !openedType ) {
