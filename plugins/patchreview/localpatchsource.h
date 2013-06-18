@@ -54,7 +54,7 @@ public:
 
     void setAlreadyApplied( bool applied ) { m_applied = applied; }
 
-    LocalPatchSource()  : m_depth( 0 ) { }
+    LocalPatchSource()  : m_applied(false), m_depth( 0 ) { }
 
     virtual ~LocalPatchSource();
 
