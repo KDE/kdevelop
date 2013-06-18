@@ -22,22 +22,13 @@
 #include "projectmanagerview.h"
 
 #include <QtGui/QHeaderView>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QStandardItem>
-#include <QtGui/QToolButton>
 #include <QtGui/QKeyEvent>
 
-#include <kxmlguiwindow.h>
 #include <kiconloader.h>
-#include <kmenu.h>
 #include <kdebug.h>
 #include <kurl.h>
 #include <klocale.h>
 #include <kactioncollection.h>
-#include <kfadewidgeteffect.h>
-#include <kcombobox.h>
-#include <kjob.h>
 #include <KLineEdit>
 
 #include <interfaces/iselectioncontroller.h>
@@ -46,20 +37,16 @@
 #include <interfaces/isession.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iuicontroller.h>
-#include <interfaces/iruncontroller.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/iproject.h>
-#include <project/interfaces/ibuildsystemmanager.h>
-#include <project/interfaces/iprojectbuilder.h>
+#include <project/projectproxymodel.h>
 #include <project/projectmodel.h>
 
 #include "../openwith/iopenwith.h"
 
-#include <KParts/MainWindow>
 #include <sublime/mainwindow.h>
 
 #include "tests/modeltest.h"
-#include <project/projectproxymodel.h>
 #include "projectmanagerviewplugin.h"
 #include "vcsoverlayproxymodel.h"
 #include "ui_projectmanagerview.h"
