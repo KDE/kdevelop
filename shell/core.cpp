@@ -332,7 +332,9 @@ bool Core::initialize(KSplashScreen* splash, Setup mode, const QString& session 
         return true;
 
     m_self = new Core();
-    connect(m_self, SIGNAL(startupProgress(int)), splash, SLOT(progress(int)));
+    if (splash) {
+        connect(m_self, SIGNAL(startupProgress(int)), splash, SLOT(progress(int)));
+    }
     bool ret = m_self->d->initialize(mode, session);
     if( splash ) {
         QTimer::singleShot( 200, splash, SLOT(deleteLater()) );
