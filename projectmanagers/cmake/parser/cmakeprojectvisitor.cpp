@@ -512,7 +512,7 @@ int CMakeProjectVisitor::visit(const SetAst *set)
     if(set->storeInCache()) {
         QStringList values;
         CacheValues::const_iterator itCache= m_cache->constFind(set->variableName());
-        if(itCache!=m_cache->constEnd())
+        if(!set->forceStoring() && itCache!=m_cache->constEnd())
             values = itCache->value.split(';');
         else
             values = set->values();
