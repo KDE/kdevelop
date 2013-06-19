@@ -59,7 +59,7 @@ bool isGenerated(const QString& name)
 CMakeProjectVisitor::message_callback CMakeProjectVisitor::s_msgcallback=debugMsgs;
 
 CMakeProjectVisitor::CMakeProjectVisitor(const QString& root, ReferencedTopDUContext parent)
-    : m_root(root), m_vars(0), m_macros(0), m_topctx(0), m_parentCtx(parent), m_hitBreak(false)
+    : m_root(root), m_vars(0), m_macros(0), m_topctx(0), m_parentCtx(parent), m_hitBreak(false), m_hitReturn(false)
 {
 }
 
@@ -1267,6 +1267,7 @@ int CMakeProjectVisitor::visit(const MacroCallAst *call)
             kDebug(9042) << "visited!" << call->name()  <<
                 m_vars->value("ARGV") << "_" << m_vars->value("ARGN") << "..." << len;
 
+            m_hitReturn = false;
             if(isfunc)
                 m_vars->popScope();
             //Restoring
@@ -2249,7 +2250,7 @@ CMakeFunctionDesc CMakeProjectVisitor::resolveVariables(const CMakeFunctionDesc 
     return ret;
 }
 
-enum RecursivityType { No, Yes, End, Break };
+enum RecursivityType { No, Yes, End, Break, Return };
 
 RecursivityType recursivity(const QString& functionName)
 {
@@ -2261,6 +2262,8 @@ RecursivityType recursivity(const QString& functionName)
         return End;
     else if(upperFunctioName=="break")
         return Break;
+    else if(upperFunctioName=="return")
+        return Return;
     return No;
 }
 
@@ -2298,7 +2301,7 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line, bool isClea
 //         kDebug(9042) << "At line" << line << "/" << fc.count();
 
         RecursivityType r = recursivity(it->name);
-        if(r==End || r==Break || m_hitBreak)
+        if(r==End || r==Break || r==Return || m_hitBreak || m_hitReturn)
         {
 //             kDebug(9042) << "Found an end." << func.writeBack();
             m_backtrace.pop();
@@ -2306,6 +2309,8 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line, bool isClea
             
             if(r==Break)
                 m_hitBreak=true;
+            if(r==Return)
+                m_hitReturn=true;
             return line;
         }
         

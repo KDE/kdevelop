@@ -202,6 +202,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         KDevelop::ReferencedTopDUContext m_topctx;
         KDevelop::ReferencedTopDUContext m_parentCtx;
         bool m_hitBreak;
+        bool m_hitReturn;
         QMap<QString, QString> m_environmentProfile;
 
         QList<Test> m_testSuites;
