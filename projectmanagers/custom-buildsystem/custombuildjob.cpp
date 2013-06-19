@@ -68,11 +68,14 @@ CustomBuildJob::CustomBuildJob( CustomBuildSystem* plugin, KDevelop::ProjectBase
     setTitle( QString("%1 %2").arg( cmd ).arg( item->text() ) );
     setObjectName( QString("%1 %2").arg( cmd ).arg( item->text() ) );
     builddir = plugin->buildDirectory( item ).toLocalFile();
-    KConfigGroup grp = plugin->configuration( item->project() ).group( subgrpname );
-    enabled = grp.readEntry( ConfigConstants::toolEnabled, false );
-    cmd = grp.readEntry( ConfigConstants::toolExecutable, KUrl() ).toLocalFile();
-    environment = grp.readEntry( ConfigConstants::toolEnvironment, "" );
-    arguments = grp.readEntry( ConfigConstants::toolArguments, "" );
+    KConfigGroup g = plugin->configuration( item->project() );
+    if(g.isValid()) {
+        KConfigGroup grp = g.group( subgrpname );
+        enabled = grp.readEntry( ConfigConstants::toolEnabled, false );
+        cmd = grp.readEntry( ConfigConstants::toolExecutable, KUrl() ).toLocalFile();
+        environment = grp.readEntry( ConfigConstants::toolEnvironment, "" );
+        arguments = grp.readEntry( ConfigConstants::toolArguments, "" );
+    }
     setDelegate( new KDevelop::OutputDelegate );
 }
 

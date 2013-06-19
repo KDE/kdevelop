@@ -87,13 +87,17 @@ KUrl CustomBuildSystem::buildDirectory( ProjectBaseItem*  item ) const
     }
     KUrl projecturl = item->project()->projectItem()->url();
     QString relative = KUrl::relativeUrl( projecturl, u );
-    KUrl builddir = configuration( item->project() ).readEntry( ConfigConstants::buildDirKey, projecturl );
-    if(!builddir.isValid() )  // set builddir to default if project contains a buildDirKey that does not have a value 
-    {
-        builddir = projecturl;
+    KUrl builddir;
+    KConfigGroup grp = configuration( item->project() );
+    if(grp.isValid()) {
+        builddir = grp.readEntry( ConfigConstants::buildDirKey, projecturl );
+        if(!builddir.isValid() )  // set builddir to default if project contains a buildDirKey that does not have a value 
+        {
+            builddir = projecturl;
+        }
+        builddir.addPath( relative );
+        builddir.cleanPath();
     }
-    builddir.addPath( relative );
-    builddir.cleanPath();
     return builddir;
 }
 
@@ -121,6 +125,9 @@ QHash< QString, QString > CustomBuildSystem::defines( ProjectBaseItem* item ) co
 {
     QHash<QString,QVariant> hash;
     KConfigGroup cfg = configuration( item->project() );
+    if(!cfg.isValid())
+        return QHash<QString, QString>();
+
     KConfigGroup groupForItem = findMatchingPathGroup( cfg, item );
     if( groupForItem.isValid() ) {
         QByteArray data = groupForItem.readEntry( ConfigConstants::definesKey, QByteArray() );
@@ -151,6 +158,9 @@ KUrl::List CustomBuildSystem::includeDirectories( ProjectBaseItem* item ) const
 {
     QStringList includes;
     KConfigGroup cfg = configuration( item->project() );
+    if(!cfg.isValid())
+        return KUrl::List();
+
     KConfigGroup groupForItem = findMatchingPathGroup( cfg, item );
     if( groupForItem.isValid() ) {
         QByteArray data = groupForItem.readEntry( ConfigConstants::includesKey, QByteArray() );
@@ -189,7 +199,10 @@ QList<ProjectTargetItem*> CustomBuildSystem::targets( ProjectFolderItem* ) const
 KConfigGroup CustomBuildSystem::configuration( IProject* project ) const
 {
     KConfigGroup grp = project->projectConfiguration()->group( ConfigConstants::customBuildSystemGroup );
-    return grp.group( grp.readEntry( ConfigConstants::currentConfigKey ) );
+    if(grp.isValid() && grp.hasKey(ConfigConstants::currentConfigKey))
+        return grp.group( grp.readEntry( ConfigConstants::currentConfigKey ) );
+    else
+        return KConfigGroup();
 }
 
 KConfigGroup CustomBuildSystem::findMatchingPathGroup(const KConfigGroup& cfg, ProjectBaseItem* item) const
