@@ -627,6 +627,7 @@ int CMakeProjectVisitor::visit(const IncludeAst *inc)
         {
             kDebug(9042) << "including:" << path;
             walk(include, 0, true);
+            m_hitReturn = false;
         }
         else
         {
@@ -743,6 +744,7 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
             path=KUrl(path).pathOrUrl();
             kDebug(9042) << "================== Found" << path << "===============";
             walk(package, 0, true);
+            m_hitReturn = false;
         }
         else
         {
@@ -756,8 +758,10 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
         m_vars->removeMulti("CMAKE_CURRENT_LIST_FILE");
         m_vars->removeMulti("CMAKE_CURRENT_LIST_DIR");
         
-        if(isConfig)
+        if(isConfig) {
             m_vars->insert(pack->name()+"_FOUND", QStringList("TRUE"));
+            m_vars->insert(pack->name().toUpper()+"_FOUND", QStringList("TRUE"));
+        }
     }
     else
     {
