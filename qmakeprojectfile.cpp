@@ -105,7 +105,7 @@ bool QMakeProjectFile::read()
             kWarning() << "Failed to query Qt header path using qmake, is qmake installed?";
         } else {
             const QStringList result = QString::fromLocal8Bit(qtInc.readAll()).split(QRegExp("[:\n]"), QString::SkipEmptyParts);
-            if (!result.size() == 4) {
+            if (result.size() != 4) {
                 kWarning() << "Failed to query qmake - bad qmake binary configured?" << binary;
                 m_qmakeQueryCache[binary] = qMakePair(QString(), QString());
             } else {
