@@ -40,7 +40,8 @@ void QtHelpQtDoc::registerDocumentations()
 {
     QStringList qmakes;
     qmakes << KStandardDirs::findExe("qmake")
-           << KStandardDirs::findExe("qmake-qt4");
+           << KStandardDirs::findExe("qmake-qt4")
+           << KStandardDirs::findExe("qmake-qt5");
     if(!qmakes.isEmpty()) {
         KProcess *p = new KProcess;
         p->setOutputChannelMode(KProcess::MergedChannels);
@@ -55,7 +56,8 @@ void QtHelpQtDoc::lookupDone(int code)
     if(code==0) {
         KProcess* p = qobject_cast<KProcess*>(sender());
         
-        QString path = QDir::fromNativeSeparators(QString::fromLatin1(p->readAllStandardOutput()));
+        QString path = QDir::fromNativeSeparators(QString::fromLatin1(p->readAllStandardOutput().trimmed()));
+        loadDirectory(path);
         loadDirectory(path+"/qch/");
     }
     sender()->deleteLater();
@@ -63,12 +65,12 @@ void QtHelpQtDoc::lookupDone(int code)
 
 void QtHelpQtDoc::loadDirectory(const QString& path)
 {
-    if(path.isEmpty()) {
+    QDir d(path);
+    if(path.isEmpty() || !d.exists()) {
         kDebug() << "no QtHelp found at all";
         return;
     }
     
-    QDir d(path);
     foreach(const QString& file, d.entryList(QDir::Files)) {
         QString fileName=path+'/'+file;
         QString fileNamespace = QHelpEngineCore::namespaceName(fileName);
