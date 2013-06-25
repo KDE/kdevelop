@@ -269,5 +269,3 @@ void StatusbarProgressWidget::slotProgressDialogVisible( bool b )
     m_pButton->setToolTip( i18n("Show detailed progress window") );
   }
 }
-
-#include "progresswidget.moc"

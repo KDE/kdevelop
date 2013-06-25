@@ -18,9 +18,9 @@
 */
 
 #include "statusbar.h"
-#include "progresswidget.h"
-#include "progressmanager.h"
-#include "progressdialog.h"
+#include "progresswidget/progresswidget.h"
+#include "progresswidget/progressmanager.h"
+#include "progresswidget/progressdialog.h"
 
 #include <QtCore/QTimer>
 #include <QtGui/QProgressBar>

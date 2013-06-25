@@ -46,12 +46,12 @@ set(kdevplatformshell_LIB_SRCS
     launchconfigurationdialog.cpp
     loadedpluginsdialog.cpp
     testcontroller.cpp
-
-    progressmanager.cpp
-    progresswidget.cpp
-    overlaywidget.cpp
-    progressdialog.cpp
     projectsourcepage.cpp
+
+    progresswidget/progressmanager.cpp
+    progresswidget/progresswidget.cpp
+    progresswidget/overlaywidget.cpp
+    progresswidget/progressdialog.cpp
 
 # TODO: Re-Enable after generating new kross bindings for project model
 #     kross/krossplugin.cpp

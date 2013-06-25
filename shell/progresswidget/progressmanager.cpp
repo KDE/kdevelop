@@ -223,5 +223,3 @@ void ProgressManager::slotAbortAll()
 }
 
 } // namespace KDevelop
-
-#include "progressmanager.moc"

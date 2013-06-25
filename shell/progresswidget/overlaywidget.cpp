@@ -92,5 +92,3 @@ void OverlayWidget::resizeEvent( QResizeEvent* ev )
   reposition();
   QFrame::resizeEvent( ev );
 }
-
-#include "overlaywidget.moc"

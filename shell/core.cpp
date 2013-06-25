@@ -49,7 +49,7 @@
 #include "session.h"
 #include "documentationcontroller.h"
 #include "sourceformattercontroller.h"
-#include "progressmanager.h"
+#include "progresswidget/progressmanager.h"
 #include "selectioncontroller.h"
 #include "debugcontroller.h"
 #include "kdevplatformversion.h"
