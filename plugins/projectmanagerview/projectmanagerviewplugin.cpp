@@ -502,18 +502,14 @@ void ProjectManagerViewPlugin::removeItems(const QList< ProjectBaseItem* >& item
     }
 
     //copy the list of selected items and sort it to guarantee parents will come before children
-    QMap< IProjectFileManager*, QList<KDevelop::ProjectBaseItem*> > filteredItems;
-    filteredItems[0] = items;
-    qSort(filteredItems[0].begin(), filteredItems[0].end(), ProjectBaseItem::urlLessThan);
+    QList<KDevelop::ProjectBaseItem*> sortedItems = items;
+    qSort(sortedItems.begin(), sortedItems.end(), ProjectBaseItem::urlLessThan);
 
     KUrl lastFolder;
-
+    QMap< IProjectFileManager*, QList<KDevelop::ProjectBaseItem*> > filteredItems;
     QStringList itemPaths;
-    foreach( KDevelop::ProjectBaseItem* item, filteredItems[0] )
+    foreach( KDevelop::ProjectBaseItem* item, sortedItems )
     {
-        Q_ASSERT(item->folder() || item->file());
-        Q_ASSERT(!item->file() || !item->file()->parent()->target());
-
         if (item->isProjectRoot()) {
             continue;
         } else if (item->folder() || item->file()) {
@@ -524,8 +520,11 @@ void ProjectManagerViewPlugin::removeItems(const QList< ProjectBaseItem* >& item
                 lastFolder = item->url();
             }
 
-            filteredItems[item->project()->projectFileManager()] << item;
-            itemPaths << item->url().path();
+            IProjectFileManager* manager = item->project()->projectFileManager();
+            if (manager) {
+                filteredItems[manager] << item;
+                itemPaths << item->url().path();
+            }
         }
     }
 
@@ -548,8 +547,8 @@ void ProjectManagerViewPlugin::removeItems(const QList< ProjectBaseItem* >& item
     QMap< IProjectFileManager*, QList<KDevelop::ProjectBaseItem*> >::iterator it;
     for (it = filteredItems.begin(); it != filteredItems.end(); ++it)
     {
-        if (it.key())
-            it.key()->removeFilesAndFolders(it.value());
+        Q_ASSERT(it.key());
+        it.key()->removeFilesAndFolders(it.value());
     }
 }
 
