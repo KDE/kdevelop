@@ -162,9 +162,9 @@ void ReviewPatchDialog::receivedReviews(KJob* job)
     updateReviewsList();
 }
 
-int ReviewPatchDialog::review() const
+QString ReviewPatchDialog::review() const
 {
-    return m_ui->reviews->itemData(m_ui->reviews->currentIndex(), Qt::UserRole).toInt();
+    return m_ui->reviews->itemData(m_ui->reviews->currentIndex(), Qt::UserRole).toString();
 }
 
 void ReviewPatchDialog::updateReviews()

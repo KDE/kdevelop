@@ -52,7 +52,7 @@ class ReviewPatchDialog : public KDialog
 
         void setRepository(const QString& repo);
 
-        int review() const;
+        QString review() const;
 
         bool isUpdateReview();
 

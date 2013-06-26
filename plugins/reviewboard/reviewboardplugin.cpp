@@ -74,7 +74,7 @@ void ReviewBoardPlugin::exportPatch(IPatchSource::Ptr source)
     if(ret==KDialog::Accepted) {
         KJob* job;
         if (d.isUpdateReview()) {
-            job=new ReviewBoard::SubmitPatchRequest(d.server(), source->file(), d.baseDir(), QString(d.review()));
+            job=new ReviewBoard::SubmitPatchRequest(d.server(), source->file(), d.baseDir(), d.review());
             connect(job, SIGNAL(finished(KJob*)), SLOT(reviewDone(KJob*)));
         } else {
             m_baseDir = d.baseDir();
