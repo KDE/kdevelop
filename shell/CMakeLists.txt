@@ -49,7 +49,7 @@ set(kdevplatformshell_LIB_SRCS
     projectsourcepage.cpp
 
     progresswidget/progressmanager.cpp
-    progresswidget/progresswidget.cpp
+    progresswidget/statusbarprogresswidget.cpp
     progresswidget/overlaywidget.cpp
     progresswidget/progressdialog.cpp
 

@@ -1,10 +1,9 @@
 /*
-  This file is part of KDevelop
+  progressmanager.h
+
+  This file is part of libkdepim.
 
   Copyright (C) 2004 Till Adam <adam@kde.org>
-  Copyright (c) 2009 Manuel Breugelmans <mbr.nxi@gmail.com>
-       copied from pimlibs
-
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -26,24 +25,29 @@
 #define KDEVPLATFORM_PROGRESSMANAGER_H
 
 
+
 #include <QObject>
 #include <QString>
 #include <QMap>
 #include <QHash>
+#include <QWeakPointer>
+#include <QPointer>
+namespace Akonadi {
+class AgentInstance;
+}
 
-namespace KDevelop
-{
+namespace KDevelop {
+
 class ProgressItem;
 class ProgressManager;
 typedef QMap<ProgressItem *, bool> ProgressItemMap;
 
 class ProgressItem : public QObject
 {
-  Q_OBJECT
-  friend class ProgressManager;
-  friend class QHash< QString, ProgressItem* >; // so it can be deleted from dicts
+    Q_OBJECT
+    friend class ProgressManager;
 
-  public:
+public:
 
     /**
      * @return The id string which uniquely identifies the operation
@@ -54,7 +58,7 @@ class ProgressItem : public QObject
     /**
      * @return The parent item of this one, if there is one.
      */
-    ProgressItem *parent() const { return mParent; }
+    ProgressItem *parent() const { return mParent.data(); }
 
     /**
      * @return The user visible string to be used to represent this item.
@@ -82,22 +86,35 @@ class ProgressItem : public QObject
     bool canBeCanceled() const { return mCanBeCanceled; }
 
     /**
+     * @return Whether this item uses secure communication
+     * (Account uses ssl, for example.).
+     */
+    bool usesCrypto() const { return mUsesCrypto; }
+
+    /**
+     * Set whether this item uses crypted communication, so listeners
+     * can display a nice crypto icon.
+     * @param v The value.
+     */
+    void setUsesCrypto( bool v );
+
+    /**
+     * @return whether this item uses a busy indicator instead of real progress display
+     */
+    bool usesBusyIndicator() const { return mUsesBusyIndicator; }
+
+    /**
+     * Sets whether this item uses a busy indicator instead of real progress for its progress bar.
+     * If it uses a busy indicator, you are still responsible for calling setProgress() from time to
+     * time to update the busy indicator.
+     */
+    void setUsesBusyIndicator( bool useBusyIndicator );
+
+    /**
      * @return The current progress value of this item in percent.
      */
     unsigned int progress() const { return mProgress; }
 
-    /**
-     * Adjust whether this item has progress information or not.
-     * @param busy indicates whether this item can show progress information or not
-     */
-    void setBusy( bool busy = true );
-
-    /**
-     * @returns true if this item has no progress information
-     * and hence a busy indicator show be used
-     */
-    bool busy() { return mBusy; }
-public Q_SLOTS:
     /**
      * Set the progress (percentage of completion) value of this item.
      * @param v The percentage value.
@@ -113,20 +130,18 @@ public Q_SLOTS:
      */
     void setComplete();
 
-    void cancel();
-
-public:
     /**
      * Reset the progress value of this item to 0 and the status string to
      * the empty string.
      */
     void reset()
     {
-      setProgress( 0 );
-      setStatus( QString() );
-      mCompleted = 0;
-      mBusy = false;
+        setProgress( 0 );
+        setStatus( QString() );
+        mCompleted = 0;
     }
+
+    void cancel();
 
     // Often needed values for calculating progress.
     void setTotalItems( unsigned int v ) { mTotal = v; }
@@ -140,15 +155,16 @@ public:
      */
     void updateProgress()
     {
-      setProgress( mTotal? mCompleted * 100 / mTotal : 0 );
+        setProgress( mTotal? mCompleted * 100 / mTotal : 0 );
     }
 
     void addChild( ProgressItem *kiddo );
     void removeChild( ProgressItem *kiddo );
 
     bool canceled() const { return mCanceled; }
+    void setBusy( bool busy );
 
-  Q_SIGNALS:
+Q_SIGNALS:
     /**
      * Emitted when a new ProgressItem is added.
      * @param The ProgressItem that was added.
@@ -198,17 +214,34 @@ public:
      */
     void progressItemLabel( KDevelop::ProgressItem *, const QString & );
 
-  protected:
+    /**
+     * Emitted when the crypto status of an item changed. Should be used by
+     * progress dialogs to update the crypto indicator of an item.
+     * @param  The updated item.
+     * @param  The new state.
+     */
+    void progressItemUsesCrypto( KDevelop::ProgressItem *, bool );
+
+    /**
+     * Emitted when the busy indicator state of an item changes. Should be used
+     * by progress dialogs so that they can adjust the display of the progress bar
+     * to the new mode.
+     * @param item The updated item
+     * @param value True if the item uses a busy indicator now, false otherwise
+     */
+    void progressItemUsesBusyIndicator( KDevelop::ProgressItem *item, bool value );
+
+protected:
     /* Only to be used by our good friend the ProgressManager */
     ProgressItem( ProgressItem *parent, const QString &id, const QString &label,
-                  const QString &status, bool isCancellable);
+                  const QString &status, bool isCancellable, bool usesCrypto );
     virtual ~ProgressItem();
 
-  private:
+private:
     QString mId;
     QString mLabel;
     QString mStatus;
-    ProgressItem *mParent;
+    QWeakPointer<ProgressItem>mParent;
     bool mCanBeCanceled;
     unsigned int mProgress;
     ProgressItemMap mChildren;
@@ -216,8 +249,12 @@ public:
     unsigned int mCompleted;
     bool mWaitingForKids;
     bool mCanceled;
-    bool mBusy;
+    bool mUsesCrypto;
+    bool mUsesBusyIndicator;
+    bool mCompletedCalled;
 };
+
+struct ProgressManagerPrivate;
 
 /**
  * The ProgressManager singleton keeps track of all ongoing transactions
@@ -239,14 +276,20 @@ public:
  * needed regularly without the to store a pointer to them or to add child
  * items to parents by id.
  */
-
 class ProgressManager : public QObject
 {
-Q_OBJECT
 
-  public:
-    ProgressManager(QObject* parent = 0);
+    Q_OBJECT
+
+    friend struct ProgressManagerPrivate;
+
+public:
     virtual ~ProgressManager();
+
+    /**
+     * @return The singleton instance of this class.
+     */
+    static ProgressManager *instance();
 
     /**
      * Use this to acquire a unique id number which can be used to discern
@@ -256,18 +299,18 @@ Q_OBJECT
      */
     static QString getUniqueID()
     {
-      return QString::number( ++uID );
+        return QString::number( ++uID );
     }
 
-     /**
+    /**
       * Creates a ProgressItem with a unique id and the given label.
       * This is the simplest way to acquire a progress item. It will not
-      * have a parent and will be set to be cancellable.
+      * have a parent and will be set to be cancellable and not using crypto.
       */
-    ProgressItem *createProgressItem( const QString &label )
+    static ProgressItem *createProgressItem( const QString &label )
     {
-      return createProgressItemImpl( 0, getUniqueID(), label,
-                                                 QString(), true);
+        return instance()->createProgressItemImpl( 0, getUniqueID(), label,
+                                                   QString(), true, false );
     }
 
     /**
@@ -279,56 +322,81 @@ Q_OBJECT
      * @param label The text to be displayed by progress handlers
      * @param status Additional text to be displayed for the item.
      * @param canBeCanceled can the user cancel this operation?
+     * @param usesCrypto does the operation use secure transports (SSL)
      * Cancelling the parent will cancel the children as well (if they can be
      * canceled) and ongoing children prevent parents from finishing.
      * @return The ProgressItem representing the operation.
      */
-    ProgressItem *createProgressItem( ProgressItem *parent,
+    static ProgressItem *createProgressItem( ProgressItem *parent,
                                              const QString &id,
                                              const QString &label,
                                              const QString &status = QString(),
-                                             bool canBeCanceled = true)
+                                             bool canBeCanceled = true,
+                                             bool usesCrypto = false )
     {
-      return createProgressItemImpl( parent, id, label, status,
-                                                 canBeCanceled);
+        return instance()->createProgressItemImpl( parent, id, label, status,
+                                                   canBeCanceled, usesCrypto );
     }
 
     /**
      * Use this version if you have the id string of the parent and want to
      * add a subjob to it.
      */
-    ProgressItem *createProgressItem( const QString &parent,
+    static ProgressItem *createProgressItem( const QString &parent,
                                              const QString &id,
                                              const QString &label,
                                              const QString &status = QString(),
-                                             bool canBeCanceled = true)
+                                             bool canBeCanceled = true,
+                                             bool usesCrypto = false )
     {
-      return createProgressItemImpl( parent, id, label,
-                                                 status, canBeCanceled);
+        return instance()->createProgressItemImpl( parent, id, label,
+                                                   status, canBeCanceled, usesCrypto );
     }
 
     /**
      * Version without a parent.
      */
-    ProgressItem *createProgressItem( const QString &id,
+    static ProgressItem *createProgressItem( const QString &id,
                                              const QString &label,
                                              const QString &status = QString(),
-                                             bool canBeCanceled = true)
+                                             bool canBeCanceled = true,
+                                             bool usesCrypto = false )
     {
-      return createProgressItemImpl( 0, id, label, status, canBeCanceled);
+        return instance()->createProgressItemImpl( 0, id, label, status,
+                                                   canBeCanceled, usesCrypto );
     }
 
     /**
-     * @return true when there is no more progress item
+     * Version for Akonadi agents.
+     * This connects all the proper signals so that you do not have to
+     * worry about updating the progress or reacting to progressItemCanceled().
+     */
+    static ProgressItem *createProgressItem( ProgressItem *parent,
+                                             const Akonadi::AgentInstance &agent,
+                                             const QString &id,
+                                             const QString &label,
+                                             const QString &status = QString(),
+                                             bool canBeCanceled = true,
+                                             bool usesCrypto = false )
+    {
+        return instance()->createProgressItemForAgent( parent, agent, id, label,
+                                                       status, canBeCanceled, usesCrypto );
+    }
+
+    /**
+     * @return true when there are no more progress items.
      */
     bool isEmpty() const
     {
-      return mTransactions.isEmpty();
+        return mTransactions.isEmpty();
     }
 
     /**
      * @return the only top level progressitem when there's only one.
      * Returns 0 if there is no item, or more than one top level item.
+     * Since this is used to calculate the overall progress, it will also return
+     * 0 if there is an item which uses a busy indicator, since that will invalidate
+     * the overall progress.
      */
     ProgressItem *singleItem() const;
 
@@ -336,12 +404,12 @@ Q_OBJECT
      * Ask all listeners to show the progress dialog, because there is
      * something that wants to be shown.
      */
-    void emitShowProgressDialog()
+    static void emitShowProgressDialog()
     {
-       emitShowProgressDialogImpl();
+        instance()->emitShowProgressDialogImpl();
     }
 
-  Q_SIGNALS:
+Q_SIGNALS:
     /** @see ProgressItem::progressItemAdded() */
     void progressItemAdded( KDevelop::ProgressItem * );
     /** @see ProgressItem::progressItemProgress() */
@@ -354,6 +422,10 @@ Q_OBJECT
     void progressItemStatus( KDevelop::ProgressItem *, const QString & );
     /** @see ProgressItem::progressItemLabel() */
     void progressItemLabel( KDevelop::ProgressItem *, const QString & );
+    /** @see ProgressItem::progressItemUsesCrypto() */
+    void progressItemUsesCrypto( KDevelop::ProgressItem *, bool );
+    /** @see ProgressItem::progressItemUsesBusyIndicator */
+    void progressItemUsesBusyIndicator( KDevelop::ProgressItem*, bool );
 
     /**
      * Emitted when an operation requests the listeners to be shown.
@@ -361,7 +433,7 @@ Q_OBJECT
      */
     void showProgressDialog();
 
-  public Q_SLOTS:
+public Q_SLOTS:
 
     /**
      * Calls setCompleted() on the item, to make sure it goes away.
@@ -375,23 +447,33 @@ Q_OBJECT
      */
     void slotAbortAll();
 
-  private Q_SLOTS:
+private Q_SLOTS:
     void slotTransactionCompleted( KDevelop::ProgressItem *item );
 
-  private:
-     // prevent unsolicited copies
+private:
+    ProgressManager();
+    // prevent unsolicited copies
     ProgressManager( const ProgressManager & );
 
     virtual ProgressItem *createProgressItemImpl( ProgressItem *parent,
                                                   const QString &id,
                                                   const QString &label,
                                                   const QString &status,
-                                                  bool cancellable);
+                                                  bool cancellable,
+                                                  bool usesCrypto );
     virtual ProgressItem *createProgressItemImpl( const QString &parent,
                                                   const QString &id,
                                                   const QString &label,
                                                   const QString &status,
-                                                  bool cancellable);
+                                                  bool cancellable,
+                                                  bool usesCrypto );
+    ProgressItem *createProgressItemForAgent( ProgressItem *parent,
+                                              const Akonadi::AgentInstance &instance,
+                                              const QString &id,
+                                              const QString &label,
+                                              const QString &status,
+                                              bool cancellable,
+                                              bool usesCrypto );
     void emitShowProgressDialogImpl();
 
     QHash< QString, ProgressItem* > mTransactions;
@@ -400,4 +482,4 @@ Q_OBJECT
 
 }
 
-#endif
+#endif // __KDevelop_PROGRESSMANAGER_H__

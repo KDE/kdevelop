@@ -192,7 +192,7 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
 
     if ( !progressController) 
     {
-        progressController = new ProgressManager(m_core);
+        progressController = ProgressManager::instance();
     }
 
     if( !selectionController )

@@ -4,8 +4,6 @@
  *  Copyright (c) 2004 Till Adam <adam@kde.org>
  *  based on imapprogressdialog.cpp ,which is
  *  Copyright (c) 2002-2003 Klar�vdalens Datakonsult AB
- *  Copyright (c) 2009 Manuel Breugelmans <mbr.nxi@gmail.com>
- *      copied from pimlibs
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -37,6 +35,7 @@
 
 #include "overlaywidget.h"
 
+
 #include <QScrollArea>
 #include <QMap>
 #include <KVBox>
@@ -46,110 +45,107 @@ class QFrame;
 class QLabel;
 class QPushButton;
 
-namespace KDevelop
-{
-
+namespace KDevelop {
 class ProgressItem;
 class TransactionItem;
-class ProgressManager;
+class SSLLabel;
 
 class TransactionItemView : public QScrollArea
 {
-Q_OBJECT
+    Q_OBJECT
 public:
-  explicit TransactionItemView( QWidget * parent = 0, const char * name = 0 );
-  virtual ~TransactionItemView();
+    explicit TransactionItemView( QWidget * parent = 0, const char * name = 0 );
 
-  TransactionItem* addTransactionItem( ProgressItem *item, bool first );
-  QSize sizeHint() const;
-  QSize minimumSizeHint() const;
+    virtual ~TransactionItemView() {}
+    TransactionItem *addTransactionItem( ProgressItem *item, bool first );
+
+    QSize sizeHint() const;
+    QSize minimumSizeHint() const;
 
 public Q_SLOTS:
-  void slotLayoutFirstItem();
+    void slotLayoutFirstItem();
 
 protected:
-  virtual void resizeEvent ( QResizeEvent *event );
+    virtual void resizeEvent ( QResizeEvent *event );
 
 private:
-  KVBox *mBigBox;
+    KVBox *mBigBox;
 };
 
-/**
- * A single progress & status message widget shown in a ProgressDialog 
- */
 class TransactionItem : public KVBox
 {
-Q_OBJECT
+    Q_OBJECT
 public:
-  TransactionItem( QWidget * parent,
-                   ProgressItem* item, bool first );
-  ~TransactionItem();
+    TransactionItem( QWidget *parent, ProgressItem *item, bool first );
 
-  void hideHLine();
-  void setProgress( int progress );
-  void setLabel( const QString& );
-  void setStatus( const QString& );
-  ProgressItem* item() const { return mItem; }
-  void addSubTransaction( ProgressItem *item);
+    ~TransactionItem();
 
-  // The progressitem is deleted immediately, we take 5s to go out,
-  // so better not use mItem during this time.
-  void setItemComplete() { mItem = 0; }
+    void hideHLine();
+
+    void setProgress( int progress );
+    void setLabel( const QString & );
+
+    // the given text is interpreted as RichText, so you might need to
+    // Qt::escape() it before passing
+    void setStatus( const QString & );
+
+    void setTotalSteps( int totalSteps );
+
+    ProgressItem *item() const { return mItem; }
+
+    void addSubTransaction( ProgressItem *item );
+
+    // The progressitem is deleted immediately, we take 5s to go out,
+    // so better not use mItem during this time.
+    void setItemComplete() { mItem = 0; }
 
 public Q_SLOTS:
-  void slotItemCanceled();
+    void slotItemCanceled();
 
 protected:
-  QProgressBar* mProgress;
-  QPushButton*  mCancelButton;
-  QLabel*       mItemLabel;
-  QLabel*       mItemStatus;
-  QFrame*       mFrame;
-  ProgressItem* mItem;
+    QProgressBar *mProgress;
+    QPushButton  *mCancelButton;
+    QLabel       *mItemLabel;
+    QLabel       *mItemStatus;
+    QFrame       *mFrame;
+    ProgressItem *mItem;
 };
 
-
-/**
- * Aggregates progressbars & status information for multiple items.
- * The widget is shown on top of an existing widget.
- */
 class ProgressDialog : public OverlayWidget
 {
-Q_OBJECT
-
+    Q_OBJECT
 public:
-  ProgressDialog( ProgressManager* progressManager, QWidget* alignWidget, QWidget* parent, const char* name = 0 );
-  ~ProgressDialog();
-  void setVisible( bool b );
+    ProgressDialog( QWidget *alignWidget, QWidget *parent, const char *name = 0 );
+    ~ProgressDialog();
+    void setVisible( bool b );
 
 public Q_SLOTS:
-  void slotToggleVisibility();
+    void slotToggleVisibility();
 
 protected Q_SLOTS:
-  void slotTransactionAdded( KDevelop::ProgressItem *item );
-  void slotTransactionCompleted( KDevelop::ProgressItem *item );
-  void slotTransactionCanceled( KDevelop::ProgressItem *item );
-  void slotTransactionProgress( KDevelop::ProgressItem *item, unsigned int progress );
-  void slotTransactionStatus( KDevelop::ProgressItem *item, const QString& );
-  void slotTransactionLabel( KDevelop::ProgressItem *item, const QString& );
+    void slotTransactionAdded( KDevelop::ProgressItem *item );
+    void slotTransactionCompleted( KDevelop::ProgressItem *item );
+    void slotTransactionCanceled( KDevelop::ProgressItem *item );
+    void slotTransactionProgress( KDevelop::ProgressItem *item, unsigned int progress );
+    void slotTransactionStatus( KDevelop::ProgressItem *item, const QString & );
+    void slotTransactionLabel( KDevelop::ProgressItem *item, const QString & );
+    void slotTransactionUsesBusyIndicator( KDevelop::ProgressItem *, bool );
 
-  void slotClose();
-  void slotShow();
-  void slotHide();
+    void slotClose();
+    void slotShow();
+    void slotHide();
 
 Q_SIGNALS:
-  void visibilityChanged( bool );
+    void visibilityChanged( bool );
 
 protected:
-  virtual void closeEvent( QCloseEvent* );
+    virtual void closeEvent( QCloseEvent * );
 
-protected:
-  TransactionItemView* mScrollView;
-  TransactionItem* mPreviousItem;
-  QMap< const ProgressItem*, TransactionItem* > mTransactionsToListviewItems;
-  bool mWasLastShown;
+    TransactionItemView *mScrollView;
+    QMap<const ProgressItem *, TransactionItem *> mTransactionsToListviewItems;
+    bool mWasLastShown;
 };
 
 } // namespace KDevelop
 
-#endif
+#endif // __KDevelop_PROGRESSDIALOG_H__
