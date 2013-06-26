@@ -234,32 +234,49 @@ void GdbTest::testBreakpoint()
 
 void GdbTest::testDisableBreakpoint()
 {
+    //Description: We must stop only on the third breakpoint
+
+    int firstBreakLine=28;
+    int secondBreakLine=23;
+    int thirdBreakLine=24;
+    int fourthBreakLine=31;
+
     TestDebugSession *session = new TestDebugSession;
 
     TestLaunchConfiguration cfg;
 
     KDevelop::Breakpoint *b;
 
-    //add disabled breakpoint before startProgram
-    b = breakpoints()->addCodeBreakpoint(debugeeFileName, 29);
+    b = breakpoints()->addCodeBreakpoint(debugeeFileName, firstBreakLine);
     b->setData(KDevelop::Breakpoint::EnableColumn, false);
 
-    b = breakpoints()->addCodeBreakpoint(debugeeFileName, 21);
+
+    //this is needed to emulate debug from GUI. If we are in edit mode, the debugSession doesn't exist.
+    KDevelop::ICore::self()->debugController()->breakpointModel()->blockSignals(true);
+    b = breakpoints()->addCodeBreakpoint(debugeeFileName, secondBreakLine);
+    b->setData(KDevelop::Breakpoint::EnableColumn, false);
+    //all disabled breakpoints were added
+
+    KDevelop::Breakpoint * thirdBreak = breakpoints()->addCodeBreakpoint(debugeeFileName, thirdBreakLine);
+    KDevelop::ICore::self()->debugController()->breakpointModel()->blockSignals(false);
+
+
     session->startProgram(&cfg, m_iface);
     WAIT_FOR_STATE(session, DebugSession::PausedState);
 
+    QCOMPARE(session->currentLine(), thirdBreak->line());
+
     //disable existing breakpoint
-    b->setData(KDevelop::Breakpoint::EnableColumn, false);
+    thirdBreak->setData(KDevelop::Breakpoint::EnableColumn, false);
 
     //add another disabled breakpoint
-    b = breakpoints()->addCodeBreakpoint(debugeeFileName, 31);
+    b = breakpoints()->addCodeBreakpoint(debugeeFileName, fourthBreakLine);
     QTest::qWait(300);
     b->setData(KDevelop::Breakpoint::EnableColumn, false);
 
     QTest::qWait(300);
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
-
 }
 
 void GdbTest::testChangeLocationBreakpoint()
