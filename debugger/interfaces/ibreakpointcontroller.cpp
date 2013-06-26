@@ -78,6 +78,9 @@ void IBreakpointController::debuggerStateChanged(IDebugSession::DebuggerState st
                 if (!breakpoint->condition().isEmpty()) {
                     m_dirty[breakpoint].insert(Breakpoint::ConditionColumn);
                 }
+                if (!breakpoint->enabled()) {
+                	m_dirty[breakpoint].insert(KDevelop::Breakpoint::EnableColumn);
+                }
             }
             breakpointStateChanged(breakpoint);
         }
