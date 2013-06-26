@@ -75,7 +75,8 @@ void GdbTest::initTestCase()
     AutoTestShell::init();
     KDevelop::TestCore::initialize(KDevelop::Core::NoUi);
 
-    m_iface = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IExecutePlugin")->extension<IExecutePlugin>();
+    m_iface = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IExecutePlugin", "kdevexecute")->extension<IExecutePlugin>();
+    Q_ASSERT(m_iface);
 }
 
 void GdbTest::cleanupTestCase()
