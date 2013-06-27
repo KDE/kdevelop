@@ -108,6 +108,9 @@ DisassembleWidget::DisassembleWidget(CppDebuggerPlugin* plugin, QWidget *parent)
     
     {   // initialize controls
         QHBoxLayout* controlsLayout = new QHBoxLayout;
+        QVBoxLayout* startLayout = new QVBoxLayout;
+        QVBoxLayout* endLayout = new QVBoxLayout;
+
         QLabel* startAddr = new QLabel(i18n("Start address:"), this);
         QLabel* endAddr   = new QLabel(i18n("End Address:"), this);
         
@@ -124,13 +127,19 @@ DisassembleWidget::DisassembleWidget(CppDebuggerPlugin* plugin, QWidget *parent)
         m_endAddress->setInsertPolicy(QComboBox::InsertAtTop);
         
         m_evalButton = new QPushButton(i18nc("@action:button", "Display"), this);
-        controlsLayout->addWidget(startAddr);
-        controlsLayout->addWidget(m_startAddress);
-        controlsLayout->addWidget(endAddr);
-        controlsLayout->addWidget(m_endAddress);
+
+        startLayout->addWidget(startAddr);
+        startLayout->addWidget(m_startAddress);
+        endLayout->addWidget(endAddr);
+        endLayout->addWidget(m_endAddress);
+
+        controlsLayout->addLayout(startLayout);
+        controlsLayout->addLayout(endLayout);
+
         controlsLayout->addWidget(m_evalButton);
         controlsLayout->addStretch(0);
 
+        topLayout->addSpacing(5);
         topLayout->addLayout(controlsLayout);
 
         connect(m_startAddress, SIGNAL(editTextChanged(QString)), 
