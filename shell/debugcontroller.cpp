@@ -231,7 +231,7 @@ void DebugController::setupActions()
 
     m_jumpToCursor = action = new KAction(KIcon("debug-execute-to-cursor"), i18n("Set E&xecution Position to Cursor"), this);
     action->setToolTip( i18n("Jump to cursor") );
-    action->setWhatsThis(i18n("Sets the execution pointer to the current cursor position."));
+    action->setWhatsThis(i18n("Continue execution from the current cursor position."));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(jumpToCursor()));
     ac->addAction("debug_jumptocursor", action);
 
