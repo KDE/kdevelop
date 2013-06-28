@@ -37,7 +37,6 @@
 #include <QBoxLayout>
 #include <QComboBox>
 #include <QPushButton>
-#include <QIcon>
 
 #include <stdlib.h>
 #include <klocale.h>
@@ -102,7 +101,7 @@ DisassembleWindow::DisassembleWindow(QWidget *parent)
     m_selectAddrAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     connect(m_selectAddrAction, SIGNAL(triggered()), this->parent(), SLOT(slotChangeAddress()));
 
-    m_jumpToLocation = new QAction(QIcon("debug-execute-to-cursor"), i18n("&Jump to Cursor"), this);
+    m_jumpToLocation = new QAction(KIcon("debug-execute-to-cursor"), i18n("&Jump to Cursor"), this);
     m_jumpToLocation->setWhatsThis(i18n("Sets the execution pointer to the current cursor position."));
     connect(m_jumpToLocation,SIGNAL(triggered()), this->parent(), SLOT(jumpToCursor()));
     }
@@ -228,7 +227,7 @@ DisassembleWidget::DisassembleWidget(CppDebuggerPlugin* plugin, QWidget *parent)
 void DisassembleWidget::jumpToCursor() {
     DebugSession *s = qobject_cast<DebugSession*>(KDevelop::ICore::
             self()->debugController()->currentSession());
-    if (s) {
+    if (s && s->isRunning()) {
         kDebug() <<  m_disassembleWindow->selectedItems().size();
         QString address = m_disassembleWindow->selectedItems().at(0)->text(1);
         s->jumpToMemoryAddress(address);
@@ -288,10 +287,10 @@ void DisassembleWidget::slotActivate(bool activate)
     if (active_ != activate)
     {
         active_ = activate;
-        if (active_ && address_)
+        if (active_)
         {
             if (address_ < lower_ || address_ > upper_ || !displayCurrent())
-                getAsmToDisplay();
+                disassembleMemoryRegion();
         }
     }
 }
@@ -301,18 +300,25 @@ void DisassembleWidget::slotActivate(bool activate)
 void DisassembleWidget::slotShowStepInSource(   const KUrl &, int,
                                                 const QString &currentAddress)
 {
-    kDebug();
-
-    m_currentAddress = currentAddress;
     address_ = strtoul(currentAddress.toLatin1(), 0, 0);
     if (!active_)
         return;
 
     if (address_ < lower_ || address_ > upper_ || !displayCurrent())
-        getAsmToDisplay();
+        disassembleMemoryRegion();
 }
 
-/***************************************************************************/
+void DisassembleWidget::updateExecutionAddressHandler(const GDBMI::ResultRecord& r)
+{
+    const GDBMI::Value& content = r["asm_insns"];
+    const GDBMI::Value& pc = content[0];
+    if( pc.hasField("address") ){
+        QString addr = pc["address"].literal();
+        address_ = strtoul(addr.toLatin1(), 0, 0);
+
+        disassembleMemoryRegion(addr);
+    }
+}
 
 void DisassembleWidget::slotShowAddrRange()
 {
@@ -324,31 +330,36 @@ void DisassembleWidget::slotShowAddrRange()
     if ( m_startAddress->findText(addr1) < 0 ) m_startAddress->addItem(addr1);
     if ( m_endAddress->findText(addr2) < 0 ) m_endAddress->addItem(addr2);
     
-    getAsmToDisplay(addr1, addr2);
+    disassembleMemoryRegion(addr1, addr2);
 }
 
 
 /***************************************************************************/
 
-void DisassembleWidget::getAsmToDisplay(const QString& addr1, const QString& addr2)
+void DisassembleWidget::disassembleMemoryRegion(const QString& from, const QString& to)
 {
-    Q_ASSERT(!m_currentAddress.isNull());
-
-    QString cmd = (addr2.isEmpty())?
-        QString("-s %1 -e \"%1 + 128\" -- 0").arg( addr1.isEmpty() ? "$pc" : addr1 ):
-        QString("-s %1 -e %2+1 -- 0").arg(addr1).arg(addr2); // if both addr set
-        
     DebugSession *s = qobject_cast<DebugSession*>(KDevelop::ICore::
             self()->debugController()->currentSession());
-    if (s) {
+    if(!s || !s->isRunning()) return;
+
+    if (from.isEmpty()){
         s->addCommandToFront(
-            new GDBCommand(DataDisassemble, cmd, this, &DisassembleWidget::memoryRead ) );
-    }
+                    new GDBCommand(DataDisassemble, "-s \"$pc\" -e \"$pc+1\" -- 0", this, &DisassembleWidget::updateExecutionAddressHandler ) );
+    }else{
+
+        QString cmd = (to.isEmpty())?
+        QString("-s %1 -e \"%1 + 256\" -- 0").arg(from ):
+        QString("-s %1 -e %2+1 -- 0").arg(from).arg(to); // if both addr set
+        
+        s->addCommandToFront(
+        new GDBCommand(DataDisassemble, cmd, this, &DisassembleWidget::disassembleMemoryHandler ) );
+
+   }
 }
 
 /***************************************************************************/
 
-void DisassembleWidget::memoryRead(const GDBMI::ResultRecord& r)
+void DisassembleWidget::disassembleMemoryHandler(const GDBMI::ResultRecord& r)
 {
   const GDBMI::Value& content = r["asm_insns"];
   QString rawdata;
@@ -454,7 +465,7 @@ void DisassembleWidget::slotChangeAddress()
     unsigned long addr = strtoul(m_dlg->getAddr().toLatin1(), 0, 0);
 
     if (addr < lower_ || addr > upper_ || !displayCurrent())
-        getAsmToDisplay(m_dlg->getAddr());
+        disassembleMemoryRegion(m_dlg->getAddr());
 }
     
 /***************************************************************************/

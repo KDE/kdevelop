@@ -126,20 +126,20 @@ protected:
 private:
     bool displayCurrent();
     
-    // Disassemble memory region addr1..addr2
-    // if addr2 is empty, 128 bytes range taken
-    // if addr1 is empty, $pc is used
-    void getAsmToDisplay(const QString& addr1=QString(),
-        const QString& addr2=QString() );
+    /// Disassembles memory region from..to
+    /// if from is empty current execution position is used
+    /// if to is empty, 256 bytes range is taken
+    void disassembleMemoryRegion(const QString& from=QString(),
+        const QString& to=QString() );
 
-    /// callback for GDBCommand
-    void memoryRead(const GDBMI::ResultRecord& r);
+    /// callbacks for GDBCommands
+    void disassembleMemoryHandler(const GDBMI::ResultRecord& r);
+    void updateExecutionAddressHandler(const GDBMI::ResultRecord& r);
 
     bool    active_;
     unsigned long    lower_;
     unsigned long    upper_;
     unsigned long    address_;
-    QString m_currentAddress;
     
     DisassembleWindow * m_disassembleWindow;
     QComboBox* m_startAddress;
