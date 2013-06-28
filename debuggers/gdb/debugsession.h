@@ -145,6 +145,11 @@ public:
      */
     void jumpTo(const KUrl& url, int line);
 
+    /**
+     * Move the execution point of the currently executing program to the given \a address.
+     *Note: It can be really very dangerous, so use jumpTo instead.
+     */
+    void jumpToMemoryAddress(QString& address);
 
     /** Adds a command to the end of queue of commands to be executed
         by gdb. The command will be actually sent to gdb only when

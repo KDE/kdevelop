@@ -65,6 +65,19 @@ private:
     Ui::SelectAddress m_ui;
 };
 
+class DisassembleWindow : public QTreeWidget
+{
+public:
+    DisassembleWindow(QWidget *parent = 0);
+
+protected:
+   virtual void contextMenuEvent(QContextMenuEvent *e);
+
+private:
+    QAction* m_selectAddrAction;
+    QAction* m_jumpToLocation;
+};
+
 
 class Breakpoint;
 class DebugSession;
@@ -101,13 +114,14 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void currentSessionChanged(KDevelop::IDebugSession* session);
+    void jumpToCursor();
 
 protected:
     virtual void showEvent(QShowEvent*);
     virtual void hideEvent(QHideEvent*);
-    virtual void contextMenuEvent(QContextMenuEvent*);
     bool hasValidAddrRange();
     void enableControls(bool enabled);
+
 
 private:
     bool displayCurrent();
@@ -127,8 +141,7 @@ private:
     unsigned long    address_;
     QString m_currentAddress;
     
-    QTreeWidget* m_treeWidget;
-    QAction* m_selectAddrAction;
+    DisassembleWindow * m_disassembleWindow;
     QComboBox* m_startAddress;
     QComboBox* m_endAddress;
     QPushButton* m_evalButton;

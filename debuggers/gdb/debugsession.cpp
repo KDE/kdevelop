@@ -1178,6 +1178,16 @@ void DebugSession::runUntil(const KUrl& url, int line)
 
 // **************************************************************************
 
+void DebugSession::jumpToMemoryAddress(QString& address){
+    if (stateIsOn(s_dbgNotStarted|s_shuttingDown))
+        return;
+
+    if (!address.isEmpty()) {
+        queueCmd(new GDBCommand(GDBMI::NonMI, QString("tbreak *%1").arg(address)));
+        queueCmd(new GDBCommand(GDBMI::NonMI, QString("jump *%1").arg(address)));
+    }
+}
+
 void DebugSession::jumpTo(const KUrl& url, int line)
 {
     if (stateIsOn(s_dbgNotStarted|s_shuttingDown))
