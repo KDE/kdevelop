@@ -22,6 +22,7 @@
 #include <KAction>
 #include <QXmlStreamReader>
 #include <QTextEdit>
+#include <QThread>
 
 using namespace KDevelop;
 
@@ -47,7 +48,7 @@ void IAssistant::createActions()
 
 KAction* IAssistantAction::toKAction() const
 {
-    Q_ASSERT(thread() == ICore::self()->thread() && "Actions must be created in the application main thread"
+    Q_ASSERT(QThread::currentThread() == ICore::self()->thread() && "Actions must be created in the application main thread"
                                                     "(implement createActions() to create your actions)");
 
     KAction* ret = new KAction(KIcon(icon()), removeHtmlFromString(description()), 0);
