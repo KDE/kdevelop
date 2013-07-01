@@ -208,9 +208,9 @@ void MissingIncludeCompletionWorker::doSpecialProcessing(unsigned int data) {
     emit foundDeclarations(QList<KSharedPtr<KDevelop::CompletionTreeElement> >(), KDevelop::CodeCompletionContext::Ptr());  
 }
 
-void MissingIncludeCompletionWorker::computeCompletions(KDevelop::DUContextPointer _context, const KTextEditor::Cursor& position, KTextEditor::View* view, const KTextEditor::Range& contextRange, const QString& contextText) {
+void MissingIncludeCompletionWorker::computeCompletions(KDevelop::DUContextPointer _context, const KTextEditor::Cursor& position, QString followingText, const KTextEditor::Range& contextRange, const QString& contextText) {
   Q_UNUSED(position);
-  Q_UNUSED(view);
+  Q_UNUSED(followingText);
   Q_UNUSED(contextRange);
   Q_UNUSED(contextText);
   QMutexLocker mLock(&mutex);
