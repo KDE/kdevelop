@@ -458,21 +458,8 @@ void TypeBuilder::createIntegralTypeForExpression(ExpressionAST* expression)
     }
 
     if ( !delay && res.isValid() && res.isInstance ) {
-      AbstractType::Ptr type = res.type.abstractType();
+      const AbstractType::Ptr& type = prepareTypeForExpression(res.type.abstractType(), integral->modifiers());
       if (type) {
-        if ( m_lastTypeWasAuto ) {
-          // remove references or aliases
-          type = TypeUtils::realType( type, topContext() );
-          // Turn "5" into "int"
-          type = TypeUtils::removeConstants( type, topContext() );
-          // ensure proper const modifier is set
-          type->setModifiers( integral->modifiers() );
-          if (ReferenceType::Ptr ref = lastType().cast<ReferenceType>()) {
-            ref->setBaseType( type );
-            type = ref.cast<AbstractType>();
-          }
-        }
-
         openType( type );
         openedType = true;
       }
@@ -490,6 +477,33 @@ void TypeBuilder::createIntegralTypeForExpression(ExpressionAST* expression)
 
   if(openedType)
     closeType();
+}
+
+AbstractType::Ptr TypeBuilder::prepareTypeForExpression(AbstractType::Ptr type, quint64 modifiers)
+{
+  if (!m_lastTypeWasAuto) {
+    return type;
+  }
+
+  // remove references or aliases
+  type = TypeUtils::realType( type, topContext() );
+  // Turn "5" into "int"
+  type = TypeUtils::removeConstants( type, topContext() );
+
+  if (!type) {
+    // NOTE: the type might not be valid anymore, see https://bugs.kde.org/show_bug.cgi?id=318972
+    return type;
+  }
+
+  // ensure proper const modifier is set
+  type->setModifiers( modifiers );
+
+  if (ReferenceType::Ptr ref = lastType().cast<ReferenceType>()) {
+    ref->setBaseType( type );
+    type = ref.cast<AbstractType>();
+  }
+
+  return type;
 }
 
 void TypeBuilder::createTypeForInitializer(InitializerAST *node) {
