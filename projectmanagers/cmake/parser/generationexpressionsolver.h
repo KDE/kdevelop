@@ -30,6 +30,7 @@ class KDEVCMAKECOMMON_EXPORT GenerationExpressionSolver
         GenerationExpressionSolver(const CMakeProperties& properties);
         void setTargetName(const QString& name) { m_name = name; }
 
+        void defineVariable(const QString& key, const QString& value);
         QString run(const QString& op);
 
     private:

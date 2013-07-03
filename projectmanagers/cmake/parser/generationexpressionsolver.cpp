@@ -35,12 +35,17 @@ GenerationExpressionSolver::GenerationExpressionSolver(const CMakeProperties& pr
         s_vars["SEMICOLON"] = QChar(';');
 
         s_neededValues.insert("BUILD_INTERFACE");
+        s_neededValues.insert("INSTALL_INTERFACE");
     }
+}
+
+void GenerationExpressionSolver::defineVariable(const QString& key, const QString& value)
+{
+    m_values.insert(key, value);
 }
 
 QString GenerationExpressionSolver::run(const QString& op)
 {
-    m_values.clear();
     if(!op.startsWith("$<"))
         return op;
 
@@ -58,6 +63,9 @@ QString GenerationExpressionSolver::process(const QString& op)
         for(int j=i; i<op.size(); ++i) {
             if(op[i] == '>') {
                 if(depth==0) {
+                    if(split<0)
+                        split = i;
+
                     ret += calculate(op.mid(j, split-j), op.mid(split+1, i-split-1));
                     last = i+1;
                     break;
@@ -125,7 +133,9 @@ QString GenerationExpressionSolver::calculate(const QString& pre, const QString&
         }
         return m_props[TargetProperty][targetName][propName].join(":");
     } else if(s_neededValues.contains(pre)) {
-        return post;
+        return process(post);
+    } else if(m_values.contains(pre)) {
+        return m_values.value(pre);
     } else {
         QString ret = s_vars.value(pre);
         if(ret.isEmpty()) {

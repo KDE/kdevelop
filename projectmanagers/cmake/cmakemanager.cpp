@@ -1837,10 +1837,12 @@ void CMakeManager::createTestSuites(const QList< Test >& testSuites, ProjectFold
 QStringList CMakeManager::processGeneratorExpression(const QStringList& expr, IProject* project, ProjectTargetItem* target) const
 {
     QStringList ret;
-    GenerationExpressionSolver exec(m_projectsData[project].properties);
+    const CMakeProjectData& data = m_projectsData[project];
+    GenerationExpressionSolver exec(data.properties);
     if(target)
         exec.setTargetName(target->text());
 
+    exec.defineVariable("INSTALL_PREFIX", data.vm.value("CMAKE_INSTALL_PREFIX").join(QString()));
     for(QStringList::const_iterator it = expr.constBegin(), itEnd = expr.constEnd(); it!=itEnd; ++it) {
         QStringList val = exec.run(*it).split(';');
         ret += val;

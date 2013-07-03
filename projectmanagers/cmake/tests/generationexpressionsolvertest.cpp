@@ -45,6 +45,10 @@ void GenerationExpressionSolverTest::testRun_data()
     QTest::newRow("target_property1") << "$<TARGET_PROPERTY:TEST_PROPERTY>" << "hola";
     QTest::newRow("target_property2") << "$<TARGET_PROPERTY:tgt,TEST_PROPERTY>" << "hola";
     QTest::newRow("build_interface") << "$<BUILD_INTERFACE:hola>" << "hola";
+    QTest::newRow("install_interface") << "$<INSTALL_INTERFACE:hola>" << "hola";
+    QTest::newRow("install_interface2") << "$<INSTALL_INTERFACE:$<WOP>/falala>" << "bonjour/falala";
+    QTest::newRow("variable") << "$<1:$<WOP>>" << "bonjour";
+    QTest::newRow("variable2") << "$<1:$<WOP>/falala>" << "bonjour/falala";
 }
 
 void GenerationExpressionSolverTest::testRun()
@@ -55,6 +59,7 @@ void GenerationExpressionSolverTest::testRun()
     CMakeProperties props;
     props[TargetProperty]["tgt"]["TEST_PROPERTY"] = QStringList("hola");
     GenerationExpressionSolver solver(props);
+    solver.defineVariable("WOP", "bonjour");
     solver.setTargetName("tgt");
     QString ret = solver.run(input);
     QCOMPARE(ret, result);
