@@ -1537,6 +1537,18 @@ bool CMakeManager::copyFilesAndFolders(const KUrl::List &items, KDevelop::Projec
 
 bool CMakeManager::removeFilesAndFolders(const QList<KDevelop::ProjectBaseItem*> &items)
 {
+    IProject* p = 0;
+    QList<QUrl> urls;
+    foreach(ProjectBaseItem* item, items)
+    {
+        Q_ASSERT(item->folder() || item->file());
+        Q_ASSERT(!item->file() || !item->file()->parent()->target());
+
+        urls += item->url();
+        if(!p)
+            p = item->project();
+    }
+
     //First do CMakeLists changes
     ApplyChangesWidget changesWidget;
     changesWidget.setCaption(DIALOG_CAPTION);
@@ -1555,17 +1567,14 @@ bool CMakeManager::removeFilesAndFolders(const QList<KDevelop::ProjectBaseItem*>
             return false;
     }
 
+    bool ret = true;
     //Then delete the files/folders
-    foreach(ProjectBaseItem* item, items)
+    foreach(const QUrl& file, urls)
     {
-        Q_ASSERT(item->folder() || item->file());
-        Q_ASSERT(!item->file() || !item->file()->parent()->target());
-
-        if (!KDevelop::removeUrl(item->project(), item->url(), (bool)item->folder()))
-            return false;
+        ret &= KDevelop::removeUrl(p, file, QDir(file.toLocalFile()).exists());
     }
 
-    return true;
+    return ret;
 }
 
 bool CMakeManager::removeFilesFromTargets(const QList<ProjectFileItem*> &files)
