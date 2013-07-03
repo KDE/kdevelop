@@ -119,6 +119,7 @@ ProjectManagerViewPlugin::ProjectManagerViewPlugin( QObject *parent, const QVari
     d->m_install = new KAction( i18n("Install Selection"), this );
     d->m_install->setIconText( i18n("Install") );
     d->m_install->setIcon(KIcon("run-build-install"));
+    d->m_install->setShortcut( Qt::Key_Shift + Qt::Key_F8 );
     d->m_install->setEnabled( false );
     connect( d->m_install, SIGNAL(triggered()), this, SLOT(installProjectItems()) );
     actionCollection()->addAction( "project_install", d->m_install );
