@@ -1249,14 +1249,14 @@ void CMakeManager::dirtyFile(const QString & dirty)
         }
         
         if(p && !isReloading(p)) {
-            p->reloadModel();
+            reload(p->projectItem());
         }
     } else if(dirty.endsWith(".cmake"))
     {
         foreach(KDevelop::IProject* project, m_watchers.uniqueKeys())
         {
             if(m_watchers[project]->files().contains(dirty))
-                project->reloadModel();
+                reload(project->projectItem());
         }
     }
     else if(p && QFileInfo(dirty).isDir())
