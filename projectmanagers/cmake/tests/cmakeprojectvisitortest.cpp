@@ -105,7 +105,6 @@ void CMakeProjectVisitorTest::testVariables()
     if(!variables.isEmpty())
         QCOMPARE(1, variables.last().level);
     
-    typedef QPair<int,int> IntPair;
     foreach(const CMakeProjectVisitor::IntPair& v, variables)
     {
         QString name=input.mid(v.first+1, v.second-v.first-1);
@@ -547,6 +546,7 @@ void CMakeProjectVisitorTest::testFinder_data()
     QTest::newRow("Qt4") << "Qt4" << QString();
     QTest::newRow("Qt4comp") << "Qt4" << QString("COMPONENTS QtCore QtGui");
     QTest::newRow("KDE4") << "KDE4" << QString();
+    QTest::newRow("Phonon") << "Phonon" << QString();
     QTest::newRow("Automoc4") << "Automoc4" << QString();
     QTest::newRow("Boost") << "Boost" << QString("1.39");
 //     QTest::newRow("Eigen2") << "Eigen2" << QString();

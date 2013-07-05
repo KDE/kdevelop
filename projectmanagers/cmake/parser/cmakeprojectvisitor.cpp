@@ -694,9 +694,13 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
             foreach(const QString& post, postfix)
             {
                 configPath.prepend(lookup+"/share/"+name.toLower()+post);
-                configPath.prepend(lookup+"/lib/"+name.toLower()+post);
                 configPath.prepend(lookup+"/share/"+name+post);
+                configPath.prepend(lookup+"/share/cmake/"+name.toLower()+post);
+                configPath.prepend(lookup+"/share/cmake/"+name+post);
+                configPath.prepend(lookup+"/lib/"+name.toLower()+post);
                 configPath.prepend(lookup+"/lib/"+name+post);
+                configPath.prepend(lookup+"/lib/cmake/"+name.toLower()+post);
+                configPath.prepend(lookup+"/lib/cmake/"+name+post);
             }
     }
 
