@@ -321,7 +321,6 @@ install(FILES
     codegen/sourcefiletemplate.h
     codegen/templateclassgenerator.h
     codegen/codedescription.h
-    codegen/sourcefiletemplate.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/codegen COMPONENT Devel
 )
 
