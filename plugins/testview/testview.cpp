@@ -104,6 +104,7 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent)
     setLayout(layout);
     layout->addWidget(m_tree);
 
+    m_tree->setSortingEnabled(true);
     m_tree->header()->hide();
     m_tree->setIndentation(10);
     m_tree->setEditTriggers(QTreeView::NoEditTriggers);
