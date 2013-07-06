@@ -22,11 +22,11 @@ export KDEV_BASEDIR=$(dirname $0)
 export APPLICATION=KDevelop
 
 if ! [ "$KDEV_ATTACHED_PID" ]; then
-    ARGS=
-    if [[ "$@" ]]; then
-        ARGS="$@"
-    else
+    ARGS=""
+    if ! [ "$@" ]; then
         ARGS="-pss"
+    else
+        ARGS="$@"
     fi
     export KDEV_ATTACHED_PID=$($KDEV_BASEDIR/kdevelop $ARGS --pid)
 fi
@@ -50,4 +50,4 @@ fi
 
 export KDEV_DBUS_ID="org.kdevelop.kdevelop-$KDEV_ATTACHED_PID"
 
-bash --init-file $KDEV_BASEDIR/kdevplatform_shell_environment -i
+bash --init-file $KDEV_BASEDIR/kdevplatform_shell_environment.sh -i
