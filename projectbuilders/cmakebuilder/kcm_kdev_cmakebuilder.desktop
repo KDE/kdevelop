@@ -67,6 +67,7 @@ Comment[et]=CMake'i globaalsete valikute seadistamine
 Comment[fi]=Yleiset CMake-asetukset
 Comment[fr]=Configure les paramètres globaux de CMake
 Comment[gl]=Configurar a configuración global de CMake
+Comment[hu]=A globális CMake beállítások módosítása
 Comment[it]=Configura le impostazioni globali di CMake
 Comment[kk]=Жалпы жүйелік CMake параметрлерін баптау
 Comment[nb]=Sett opp globale CMake-innstillinger
