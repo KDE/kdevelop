@@ -151,7 +151,9 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent, bool setLastUs
 
     caseSensitiveCheck->setChecked(cg.readEntry("case_sens", true));
 
-    setDirectory( QDir::homePath() );
+    QList<IProject*> projects = m_plugin->core()->projectController()->projects();
+        setDirectory( !projects.isEmpty() ? allOpenProjectsString : QDir::homePath() );
+
     directoryRequester->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
 
     syncButton->setIcon(KIcon("dirsync"));
