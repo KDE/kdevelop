@@ -36,10 +36,10 @@ if ! [ "$KDEV_DBUS_ID" ]; then
     exit 5
 fi
 
-# Eventually, if we are forwarding to another host, and kdevplatform_shell_environment
-# has been located through "which kdevplatform_shell_environment", then we need to update KDEV_BASEDIR.
-if ! [ -e "$KDEV_BASEDIR/kdevplatform_shell_environment" ]; then
-    KDEV_BASEDIR=$(dirname $(which kdevplatform_shell_environment))
+# Eventually, if we are forwarding to another host, and kdevplatform_shell_environment.sh
+# has been located through "which kdevplatform_shell_environment.sh", then we need to update KDEV_BASEDIR.
+if ! [ -e "$KDEV_BASEDIR/kdevplatform_shell_environment.sh" ]; then
+    KDEV_BASEDIR=$(dirname $(which kdevplatform_shell_environment.sh))
 fi
 
 if ! [ -e "$KDEV_BASEDIR/kdev_dbus_socket_transformer" ]; then
@@ -705,12 +705,12 @@ function ssh! {
            DBUS_SOCKET_SUFFIX=$(getDBusAbstractSocketSuffix) \
            $(getSSHForwardOptionsFromCommand "$@") \
               bash --init-file \
-                        \$(if [ -e \"$KDEV_BASEDIR/kdevplatform_shell_environment\" ]; \
-                                then echo \"$KDEV_BASEDIR/kdevplatform_shell_environment\"; \
-                           elif [ -e \"$(which kdevplatform_shell_environment)\" ]; then
-                                echo \"$(which kdevplatform_shell_environment)\"; \
+                        \$(if [ -e \"$KDEV_BASEDIR/kdevplatform_shell_environment.sh\" ]; \
+                                then echo \"$KDEV_BASEDIR/kdevplatform_shell_environment.sh\"; \
+                           elif [ -e \"$(which kdevplatform_shell_environment.sh)\" ]; then
+                                echo \"$(which kdevplatform_shell_environment.sh)\"; \
                            else \
-                                echo \"~/.kdevplatform_shell_environment\"; \
+                                echo \"~/.kdevplatform_shell_environment.sh\"; \
                            fi) \
                    -i"
 
