@@ -31,6 +31,8 @@
 #include <execute/iexecuteplugin.h>
 #include "debugsession.h"
 
+#include <QFileInfo>
+
 using namespace GDBDebugger;
 using namespace KDevelop;
 
@@ -66,6 +68,13 @@ void DebugJob::start()
         return;
     }
     
+    if(!QFileInfo(executable).isExecutable()){
+        setError( -1 );
+        setErrorText( QString("It doesn't seem like %1 is an executable at all").arg(executable));
+        emitResult();
+        return;
+    }
+
     if( envgrp.isEmpty() )
     {
         kWarning() << i18n("No environment group specified, looks like a broken "
