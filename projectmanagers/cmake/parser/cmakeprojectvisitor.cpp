@@ -1333,7 +1333,7 @@ int CMakeProjectVisitor::visit(const IfAst *ifast)  //Highly crappy code
     if( ifast->condition().isEmpty() )
     {
         const CMakeFunctionDesc d = ifast->content().at( ifast->line() );
-        kWarning() << "Parser couldn't parse condition of an IF in file:" << ifast->condition() << d.filePath << d.line;
+        kDebug() << "error: couldn't parse condition of an IF in file:" << ifast->condition() << d.filePath << d.line;
     }
 
     int inside=0;
