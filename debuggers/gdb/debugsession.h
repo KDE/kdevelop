@@ -315,8 +315,6 @@ private:
 
     // Some state variables
     DBGStateFlags     state_;
-    bool              programHasExited_;
-
 
     bool state_reload_needed;
 
