@@ -579,9 +579,7 @@ QString CMakeProjectVisitor::findFile(const QString &file, const QStringList &fo
     {
         foreach(const QString& suffix, useSuffixes)
         {
-            QString dir = apath+'/'+suffix;
-            if(QFile::exists(dir))
-                suffixFolders.append(dir);
+            suffixFolders.append(apath+'/'+suffix);
         }
     }
     suffixFolders.removeDuplicates();
