@@ -496,7 +496,8 @@ struct DocumentControllerPrivate {
             
             if (!activationParams.testFlag(IDocumentController::DoNotActivate))
             {
-                uiController->activeSublimeWindow()->activateView(partView);
+                uiController->activeSublimeWindow()->activateView(
+                    partView, !activationParams.testFlag(IDocumentController::DoNotFocus));
             }
             if (!controller->isEmptyDocumentUrl(url))
             {

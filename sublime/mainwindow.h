@@ -106,8 +106,8 @@ public:
     void setBackgroundCentralWidget(QWidget* w);
     
 public Q_SLOTS:
-    /**Shows the @p view and makes it active.*/
-    void activateView(Sublime::View *view);
+    /**Shows the @p view and makes it active, focusing it by default).*/
+    void activateView(Sublime::View *view, bool focus = true);
     /**Loads size/toolbar/menu/statusbar settings to the global configuration file.
     Reimplement in subclasses to load more and don't forget to call inherited method.*/
     virtual void loadSettings();
@@ -169,8 +169,8 @@ private:
     //Inherit MainWindowOperator to access four methods below
     /**Unsets the area clearing main window.*/
     void clearArea();
-    /**Sets the active view and focuses it.*/
-    void setActiveView(Sublime::View *view);
+    /**Sets the active view.*/
+    void setActiveView(Sublime::View* view, bool focus = true);
     /**Sets the active toolview and focuses it.*/
     void setActiveToolView(View *view);
 

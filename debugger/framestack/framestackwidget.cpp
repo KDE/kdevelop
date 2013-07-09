@@ -99,9 +99,9 @@ FramestackWidget::FramestackWidget(IDebugController* controller, QWidget* parent
 
     setStretchFactor(1, 3);
     connect(m_frames->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(checkFetchMoreFrames()));
-    connect(m_threads, SIGNAL(clicked(QModelIndex)), this, SLOT(setThreadShown(QModelIndex)));
-    connect(m_frames, SIGNAL(clicked(QModelIndex)),
-            SLOT(frameClicked(QModelIndex)));
+
+    // Show the selected frame when clicked, even if it has previously been selected
+    connect(m_frames, SIGNAL(clicked(QModelIndex)), SLOT(frameSelectionChanged(QModelIndex)));
 }
 
 FramestackWidget::~FramestackWidget() {}
@@ -116,6 +116,8 @@ void FramestackWidget::currentSessionChanged(KDevelop::IDebugSession* session)
     m_frames->setModel(session ? session->frameStackModel() : 0);
 
     if (session) {
+        connect(session->frameStackModel(), SIGNAL(dataChanged(QModelIndex,QModelIndex)),
+                this, SLOT(checkFetchMoreFrames()));
         connect(session->frameStackModel(), SIGNAL(currentThreadChanged(int)),
                 SLOT(currentThreadChanged(int)));
         currentThreadChanged(session->frameStackModel()->currentThread());
@@ -124,6 +126,13 @@ void FramestackWidget::currentSessionChanged(KDevelop::IDebugSession* session)
         currentFrameChanged(session->frameStackModel()->currentFrame());
         connect(session, SIGNAL(stateChanged(KDevelop::IDebugSession::DebuggerState)),
                 SLOT(sessionStateChanged(KDevelop::IDebugSession::DebuggerState)));
+
+        connect(m_threads->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+                this, SLOT(setThreadShown(QModelIndex)));
+
+        // Show the selected frame, independent of the means by which it has been selected
+        connect(m_frames->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+                this, SLOT(frameSelectionChanged(QModelIndex)));
     }
 
     if (isVisible()) {
@@ -141,9 +150,11 @@ void KDevelop::FramestackWidget::showEvent(QShowEvent* e)
     QWidget::showEvent(e);
 }
 
-void KDevelop::FramestackWidget::setThreadShown(const QModelIndex& idx)
+void KDevelop::FramestackWidget::setThreadShown(const QModelIndex& current)
 {
-    m_session->frameStackModel()->setCurrentThread(idx);
+    if (!current.isValid())
+        return;
+    m_session->frameStackModel()->setCurrentThread(current);
 }
 
 void KDevelop::FramestackWidget::checkFetchMoreFrames()
@@ -164,13 +175,12 @@ void KDevelop::FramestackWidget::currentThreadChanged(int thread)
         QModelIndex idx = model->currentThreadIndex();
         m_threads->selectionModel()->select(idx, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
         m_threadsWidget->setVisible(model->rowCount() > 1);
-        m_frames->setModel(m_session->frameStackModel());
         m_frames->setRootIndex(idx);
         m_frames->header()->setResizeMode(0, QHeaderView::ResizeToContents);
     } else {
         m_threadsWidget->hide();
         m_threads->selectionModel()->clear();
-        m_frames->setModel(0);
+        m_frames->setRootIndex(QModelIndex());
     }
 }
 
@@ -186,13 +196,15 @@ void KDevelop::FramestackWidget::currentFrameChanged(int frame)
     }
 }
 
-void FramestackWidget::frameClicked(const QModelIndex& idx)
+void FramestackWidget::frameSelectionChanged(const QModelIndex& current /* previous */)
 {
-    IFrameStackModel::FrameItem f = m_session->frameStackModel()->frame(idx);
+    if (!current.isValid())
+        return;
+    IFrameStackModel::FrameItem f = m_session->frameStackModel()->frame(current);
     /* If line is -1, then it's not a source file at all.  */
     if (f.line != -1) {
         QPair<KUrl, int> file = m_session->convertToLocalUrl(qMakePair(f.file, f.line));
-        ICore::self()->documentController()->openDocument(file.first, KTextEditor::Cursor(file.second, 0));
+        ICore::self()->documentController()->openDocument(file.first, KTextEditor::Cursor(file.second, 0), IDocumentController::DoNotFocus);
     }
 
     m_session->frameStackModel()->setCurrentFrame(f.nr);

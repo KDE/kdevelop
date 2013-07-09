@@ -51,11 +51,11 @@ class KDEVPLATFORMDEBUGGER_EXPORT FramestackWidget : public QSplitter
     private Q_SLOTS:
         void currentSessionChanged(KDevelop::IDebugSession* session);
 
-        void setThreadShown(const QModelIndex& idx);
+        void setThreadShown(const QModelIndex& current);
         void checkFetchMoreFrames();
         void currentThreadChanged(int);
         void currentFrameChanged(int);
-        void frameClicked(const QModelIndex& idx);
+        void frameSelectionChanged(const QModelIndex& current);
         void frameContextMenuRequested(const QPoint &pos);
         void copySelection();
         void selectAll();

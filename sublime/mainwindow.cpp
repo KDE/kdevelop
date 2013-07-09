@@ -241,26 +241,26 @@ View *MainWindow::activeToolView()
     return d->activeToolView;
 }
 
-void MainWindow::activateView(View *view)
+void MainWindow::activateView(Sublime::View* view, bool focus)
 {
     if (!d->viewContainers.contains(view))
         return;
-    
+
     d->viewContainers[view]->setCurrentWidget(view->widget());
 
-    setActiveView(view);
+    setActiveView(view, focus);
     d->area->setActiveView(view);
 }
 
-void MainWindow::setActiveView(View *view)
+void MainWindow::setActiveView(View *view, bool focus)
 {
     View* oldActiveView = d->activeView;
     
     d->activeView = view;
     
-    if (view && !view->widget()->hasFocus())
+    if (focus && view && !view->widget()->hasFocus())
         view->widget()->setFocus();
-    
+
     if(d->activeView != oldActiveView)
         emit activeViewChanged(view);
 }
