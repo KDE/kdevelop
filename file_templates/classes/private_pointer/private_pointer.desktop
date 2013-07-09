@@ -103,6 +103,7 @@ Name[fi]=Julkinen otsikkotiedosto
 Name[fr]=En-tête public
 Name[gl]=Cabeceira pública
 Name[hu]=Publikus fejléc
+Name[it]=Intestazione pubblica
 Name[kk]=Ашық (public) айдар
 Name[nb]=Public hode
 Name[nl]=Publieke kop
@@ -133,11 +134,7 @@ Name[fi]=Yksityinen otsikkotiedosto
 Name[fr]=En-tête privé
 Name[gl]=Cabeceira privada
 Name[hu]=Privát fejléc
-<<<<<<< HEAD
 Name[it]=Intestazione privata
-=======
-Name[it]=Header privato
->>>>>>> 4.5
 Name[kk]=Сырлы (private) айдар
 Name[nb]=Private hode
 Name[nl]=Private kop
@@ -151,6 +148,9 @@ Name[uk]=Закритий (private) заголовок
 Name[x-test]=xxPrivate Headerxx
 Name[zh_CN]=私有头文件
 Name[zh_TW]=私密標頭
+<<<<<<< HEAD
+=======
+>>>>>>> 4.5
 File=class_p.h
 OutputFile={{ name }}_p.h
 
