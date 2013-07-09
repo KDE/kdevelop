@@ -800,7 +800,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                         deleteItemLater(ff);
                     else {
                         a = static_cast<CMakeFolderItem*>(ff);
-                        m_cleanupItems.removeAll(ff);
+                        m_cleanupItems.remove(ff);
                     }
                     
                 }
@@ -889,7 +889,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                         break;
                 }
             } else
-                m_cleanupItems.removeAll(targetItem);
+                m_cleanupItems.remove(targetItem);
             
             DescriptorAttatched* descAtt=dynamic_cast<DescriptorAttatched*>(targetItem);
             if(descAtt)
@@ -985,7 +985,7 @@ void CMakeManager::setTargetFiles(ProjectTargetItem* target, const KUrl::List& f
     foreach(const KUrl& file, files) {
         ProjectFileItem* f = containsFile(file, tfiles);
         if(f)
-            m_cleanupItems.removeAll(f);
+            m_cleanupItems.remove(f);
         else
             new KDevelop::ProjectFileItem( target->project(), file, target );
     }
