@@ -1431,7 +1431,7 @@ int CMakeProjectVisitor::visit(const ExecuteProcessAst *exec)
     QList<KProcess*> procs;
     foreach(const QStringList& _args, exec->commands())
     {
-        if (_args.isEmpty())
+        if (_args.isEmpty() || !QFile::exists(exec->workingDirectory()))
         {
             kDebug(9032) << "Error: trying to execute empty command";
             break;
