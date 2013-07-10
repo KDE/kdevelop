@@ -141,6 +141,10 @@ public:
     void runUntil(const KUrl& url, int line);
 
     /**
+     * Run currently executing program to the given \a address
+     */
+    void runUntil(QString& address);
+    /**
      * Move the execution point of the currently executing program to the given \a url and \a line.
      */
     void jumpTo(const KUrl& url, int line);

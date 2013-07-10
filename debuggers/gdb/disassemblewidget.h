@@ -3,6 +3,7 @@
  *
  * Copyright 1999 John Birch <jbb@kdevelop.org>
  * Copyright 2007 Hamish Rodda <rodda@kde.org>
+ * Copyright 2013 Vlas Puhov <vlas.puhov@mail.ru>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -76,6 +77,7 @@ protected:
 private:
     QAction* m_selectAddrAction;
     QAction* m_jumpToLocation;
+    QAction* m_runUntilCursor;
 };
 
 
@@ -93,7 +95,6 @@ public:
         Icon,
         Address,
         Function,
-        Offset,
         Instruction,
         ColumnCount
     };
@@ -115,6 +116,7 @@ public Q_SLOTS:
 private Q_SLOTS:
     void currentSessionChanged(KDevelop::IDebugSession* session);
     void jumpToCursor();
+    void runToCursor();
 
 protected:
     virtual void showEvent(QShowEvent*);
@@ -136,6 +138,8 @@ private:
     void disassembleMemoryHandler(const GDBMI::ResultRecord& r);
     void updateExecutionAddressHandler(const GDBMI::ResultRecord& r);
 
+    //for str to uint conversion.
+    bool ok;
     bool    active_;
     unsigned long    lower_;
     unsigned long    upper_;

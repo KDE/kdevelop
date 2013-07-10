@@ -4,6 +4,7 @@
  * Copyright 2000 John Birch <jbb@kdevelop.org>
  * Copyright 2006 Vladimir Prus  <ghost@cs.msu.su>
  * Copyright 2007 Hamish Rodda <rodda@kde.org>
+ * Copyright 2013 Vlas Puhov <vlas.puhov@mail.ru>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -38,7 +39,6 @@
 #include <QComboBox>
 #include <QPushButton>
 
-#include <stdlib.h>
 #include <klocale.h>
 
 #include <interfaces/icore.h>
@@ -104,6 +104,11 @@ DisassembleWindow::DisassembleWindow(QWidget *parent)
     m_jumpToLocation = new QAction(KIcon("debug-execute-to-cursor"), i18n("&Jump to Cursor"), this);
     m_jumpToLocation->setWhatsThis(i18n("Sets the execution pointer to the current cursor position."));
     connect(m_jumpToLocation,SIGNAL(triggered()), this->parent(), SLOT(jumpToCursor()));
+
+    m_runUntilCursor = new QAction(KIcon("debug-run-cursor"), i18n("&Run to Cursor"), this);
+    m_runUntilCursor->setWhatsThis(i18n("Continues execution until the cursor position is reached."));
+    connect(m_runUntilCursor,SIGNAL(triggered()), this->parent(), SLOT(runToCursor()));
+
     }
 }
 
@@ -112,6 +117,7 @@ void DisassembleWindow::contextMenuEvent(QContextMenuEvent *e)
         QMenu popup(this);
         popup.addAction(m_selectAddrAction);
         popup.addAction(m_jumpToLocation);
+        popup.addAction(m_runUntilCursor);
         popup.exec(e->globalPos());
 }
 /***************************************************************************/
@@ -191,8 +197,7 @@ DisassembleWidget::DisassembleWidget(CppDebuggerPlugin* plugin, QWidget *parent)
         m_disassembleWindow->setUniformRowHeights(true);
         m_disassembleWindow->setRootIsDecorated(false);
 
-        m_disassembleWindow->setHeaderLabels(QStringList() << "" << i18n("Address") << i18n("Function")
-            << i18n("Offset") << i18n("Instruction"));
+        m_disassembleWindow->setHeaderLabels(QStringList() << "" << i18n("Address") << i18n("Function") << i18n("Instruction"));
 
         topLayout->addWidget(m_disassembleWindow);
         topLayout->setStretchFactor(m_disassembleWindow, 1);
@@ -228,12 +233,19 @@ void DisassembleWidget::jumpToCursor() {
     DebugSession *s = qobject_cast<DebugSession*>(KDevelop::ICore::
             self()->debugController()->currentSession());
     if (s && s->isRunning()) {
-        kDebug() <<  m_disassembleWindow->selectedItems().size();
-        QString address = m_disassembleWindow->selectedItems().at(0)->text(1);
+        QString address = m_disassembleWindow->selectedItems().at(0)->text(Address);
         s->jumpToMemoryAddress(address);
     }
 }
 
+void DisassembleWidget::runToCursor(){
+    DebugSession *s = qobject_cast<DebugSession*>(KDevelop::ICore::
+            self()->debugController()->currentSession());
+    if (s && s->isRunning()) {
+        QString address = m_disassembleWindow->selectedItems().at(0)->text(Address);
+        s->runUntil(address);
+    }
+}
 
 void DisassembleWidget::currentSessionChanged(KDevelop::IDebugSession* s)
 {
@@ -263,7 +275,7 @@ bool DisassembleWidget::displayCurrent()
     for (int line=0; line < m_disassembleWindow->topLevelItemCount(); line++)
     {
         QTreeWidgetItem* item = m_disassembleWindow->topLevelItem(line);
-        unsigned long address = strtoul(item->text(Address).toLatin1(), 0, 0);
+        unsigned long address = item->text(Address).toULong(&ok,16);
 
         if (address == address_)
         {
@@ -289,7 +301,7 @@ void DisassembleWidget::slotActivate(bool activate)
         active_ = activate;
         if (active_)
         {
-            if (address_ < lower_ || address_ > upper_ || !displayCurrent())
+            if (!displayCurrent())
                 disassembleMemoryRegion();
         }
     }
@@ -300,11 +312,11 @@ void DisassembleWidget::slotActivate(bool activate)
 void DisassembleWidget::slotShowStepInSource(   const KUrl &, int,
                                                 const QString &currentAddress)
 {
-    address_ = strtoul(currentAddress.toLatin1(), 0, 0);
+    address_ = currentAddress.toULong(&ok,16);
     if (!active_)
         return;
 
-    if (address_ < lower_ || address_ > upper_ || !displayCurrent())
+    if (!displayCurrent())
         disassembleMemoryRegion();
 }
 
@@ -314,7 +326,7 @@ void DisassembleWidget::updateExecutionAddressHandler(const GDBMI::ResultRecord&
     const GDBMI::Value& pc = content[0];
     if( pc.hasField("address") ){
         QString addr = pc["address"].literal();
-        address_ = strtoul(addr.toLatin1(), 0, 0);
+        address_ = addr.toULong(&ok,16);
 
         disassembleMemoryRegion(addr);
     }
@@ -342,6 +354,7 @@ void DisassembleWidget::disassembleMemoryRegion(const QString& from, const QStri
             self()->debugController()->currentSession());
     if(!s || !s->isRunning()) return;
 
+    //only get $pc
     if (from.isEmpty()){
         s->addCommandToFront(
                     new GDBCommand(DataDisassemble, "-s \"$pc\" -e \"$pc+1\" -- 0", this, &DisassembleWidget::updateExecutionAddressHandler ) );
@@ -361,46 +374,40 @@ void DisassembleWidget::disassembleMemoryRegion(const QString& from, const QStri
 
 void DisassembleWidget::disassembleMemoryHandler(const GDBMI::ResultRecord& r)
 {
-  const GDBMI::Value& content = r["asm_insns"];
-  QString rawdata;
+    const GDBMI::Value& content = r["asm_insns"];
+    QString currentFunction;
 
-  m_disassembleWindow->clear();
+    m_disassembleWindow->clear();
 
-  for(int i = 0; i < content.size(); ++i)
-  {
-    const GDBMI::Value& line = content[i];
+    for(int i = 0; i < content.size(); ++i)
+    {
+        const GDBMI::Value& line = content[i];
 
-    QString addr, fct, offs, inst;
-    
-    if( line.hasField("address") )   addr = line["address"].literal();
-    if( line.hasField("func-name") ) fct  = line["func-name"].literal();
-    if( line.hasField("offset") )    offs = line["offset"].literal();
-    if( line.hasField("inst") )      inst = line["inst"].literal();
+        QString addr, fct, offs, inst;
 
-    m_disassembleWindow->addTopLevelItem(new QTreeWidgetItem(m_disassembleWindow,
-                    QStringList() << QString() << addr << fct << offs << inst));
+        if( line.hasField("address") )   addr = line["address"].literal();
+        if( line.hasField("func-name") ) fct  = line["func-name"].literal();
+        if( line.hasField("offset") )    offs = line["offset"].literal();
+        if( line.hasField("inst") )      inst = line["inst"].literal();
 
-    if (i == 0) {
-      lower_ = strtoul(addr.toLatin1(), 0, 0);
-    } else  if (i == content.size()-1) {
-      upper_ = strtoul(addr.toLatin1(), 0, 0);
+        //We use offset at the same column where function is.
+        if(currentFunction == fct){
+            if(!fct.isEmpty()){
+                fct = QString("+") + offs;
+            }
+        }else { currentFunction = fct; }
+
+        m_disassembleWindow->addTopLevelItem(new QTreeWidgetItem(m_disassembleWindow,
+                                                                 QStringList() << QString() << addr << fct << inst));
+
+        if (i == 0) {
+            lower_ = addr.toULong(&ok,16);
+            m_startAddress->setEditText(addr);
+        } else  if (i == content.size()-1) {
+            upper_ = addr.toULong(&ok,16);
+            m_endAddress->setEditText(addr);
+        }
     }
-  }
-  
-  // show addresses
-  int i = 0;
-  
-  while ( i < content.size() && !content[i].hasField("address") )
-      ++i; // find first with address set
-  
-  if ( i < content.size() ) m_startAddress->setEditText(content[i]["address"].literal());  
-  
-  i = content.size() - 1;
-  
-  while ( i > 0 && !content[i].hasField("address") )
-      --i; // find last with address set
-      
-  if ( i > 0 ) m_endAddress->setEditText(content[i]["address"].literal());
 
   displayCurrent();
 
@@ -413,8 +420,9 @@ void DisassembleWidget::showEvent(QShowEvent*)
 {
     slotActivate(true);
 
-    for (int i = 0; i < m_disassembleWindow->model()->columnCount(); ++i)
-        m_disassembleWindow->resizeColumnToContents(i);
+    //it doesn't work for large names of functions
+//    for (int i = 0; i < m_disassembleWindow->model()->columnCount(); ++i)
+//        m_disassembleWindow->resizeColumnToContents(i);
 }
 
 void DisassembleWidget::hideEvent(QHideEvent*)
@@ -462,7 +470,7 @@ void DisassembleWidget::slotChangeAddress()
     
     if( m_dlg->exec() == KDialog::Rejected) return;
 
-    unsigned long addr = strtoul(m_dlg->getAddr().toLatin1(), 0, 0);
+    unsigned long addr = m_dlg->getAddr().toULong(&ok,16);
 
     if (addr < lower_ || addr > upper_ || !displayCurrent())
         disassembleMemoryRegion(m_dlg->getAddr());

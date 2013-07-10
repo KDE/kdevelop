@@ -1172,6 +1172,14 @@ void DebugSession::runUntil(const KUrl& url, int line)
                 QString("%1:%2").arg(url.toLocalFile()).arg(line)));
 }
 
+void DebugSession::runUntil(QString& address){
+    if (stateIsOn(s_dbgNotStarted|s_shuttingDown))
+        return;
+
+    if (!address.isEmpty()) {
+        queueCmd(new GDBCommand(GDBMI::ExecUntil, QString("*%1").arg(address)));
+    }
+}
 // **************************************************************************
 
 void DebugSession::jumpToMemoryAddress(QString& address){
