@@ -477,7 +477,9 @@ VcsJob* GitPlugin::remove(const KUrl::List& files)
 
     DVcsJob* job = new GitJob(dotGitDir, this);
     job->setType(VcsJob::Remove);
-    *job << "git" << "rm" << "-r";
+    // git refuses to delete files with local modifications
+    // use --force to overcome this
+    *job << "git" << "rm" << "-r" << "--force";
     *job << "--" << files_;
     return job;
 }
