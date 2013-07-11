@@ -50,6 +50,7 @@ add_subdirectory(documentation)
 add_subdirectory(kdeintegration)
 add_subdirectory(utils)
 add_subdirectory(file_templates)
+add_subdirectory(providers)
 
 macro_optional_add_subdirectory(doc)
 

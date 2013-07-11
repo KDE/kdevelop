@@ -1,0 +1,17 @@
+[Desktop Entry]
+Type=Service
+Icon=kdevgh
+Exec=blubb
+Comment=This plugin helps to obtain projects from Github
+Name=Github Provider
+GenericName=Github Provider
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=kdevghprovider
+X-KDevelop-Version=16
+X-KDevelop-Category=Global
+X-KDE-PluginInfo-Name=kdevghprovider
+X-KDE-PluginInfo-Author=Miquel Sabaté
+X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-Category=Utilities
+X-KDevelop-Mode=GUI
+X-KDevelop-Interfaces=org.kdevelop.IProjectProvider
