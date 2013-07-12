@@ -17,8 +17,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef LAUNCHCONFIGURATION_H
-#define LAUNCHCONFIGURATION_H
+#ifndef KDEVPLATFORM_LAUNCHCONFIGURATION_H
+#define KDEVPLATFORM_LAUNCHCONFIGURATION_H
 
 #include <interfaces/ilaunchconfiguration.h>
 #include <kconfiggroup.h>

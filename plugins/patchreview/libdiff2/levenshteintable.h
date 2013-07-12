@@ -16,8 +16,8 @@
 **
 *******************************************************************************/
 
-#ifndef LEVENSHTEIN_H
-#define LEVENSHTEIN_H
+#ifndef KDEVPLATFORM_PLUGIN_LEVENSHTEIN_H
+#define KDEVPLATFORM_PLUGIN_LEVENSHTEIN_H
 
 #include <iostream>
 #include <QtCore/QString>
@@ -400,4 +400,4 @@ template<class SequencePair> void LevenshteinTable<SequencePair>::createListsOfM
 
 } // namespace Diff2
 
-#endif // LEVENSHTEIN_H
+#endif // KDEVPLATFORM_PLUGIN_LEVENSHTEIN_H

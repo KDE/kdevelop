@@ -1012,10 +1012,20 @@ ProjectBaseItem* ProjectModel::itemFromIndex( const QModelIndex& index ) const
     return 0;
 }
 
+QSet<int> supportedRoles() {
+    QSet<int> ret;
+    ret << Qt::DisplayRole;
+    ret << Qt::ToolTipRole;
+    ret << Qt::DecorationRole;
+    ret << KDevelop::ProjectModel::ProjectItemRole;
+    ret << KDevelop::ProjectModel::ProjectRole;
+    return ret;
+}
 
 QVariant ProjectModel::data( const QModelIndex& index, int role ) const
 {
-    if( ( role == Qt::DisplayRole || role == Qt::ToolTipRole || role == Qt::DecorationRole ) && index.isValid() ) {
+    static QSet<int> allowedRoles = supportedRoles();
+    if( allowedRoles.contains(role) && index.isValid() ) {
         ProjectBaseItem* item = itemFromIndex( index );
         
         if( item ) {
@@ -1024,8 +1034,12 @@ QVariant ProjectModel::data( const QModelIndex& index, int role ) const
                     return item->iconName();
                 case Qt::ToolTipRole:
                     return item->url().prettyUrl();
-                default:
+                case Qt::DisplayRole:
                     return item->text();
+                case ProjectItemRole:
+                    return QVariant::fromValue<ProjectBaseItem*>(item);
+                case ProjectRole:
+                    return QVariant::fromValue<QObject*>(item->project());
             }
         }
     }
@@ -1041,6 +1055,7 @@ ProjectModel::ProjectModel( QObject *parent )
 
 ProjectModel::~ProjectModel()
 {
+    delete d;
 }
 
 

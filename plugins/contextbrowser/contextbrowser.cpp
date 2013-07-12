@@ -24,20 +24,16 @@
 #include "contextbrowserview.h"
 #include "browsemanager.h"
 
-///TODO: remove unneeded includes
-#include <memory>
 #include <cstdlib>
 
 #include <QTimer>
-#include <QApplication>
 #include <QToolButton>
 #include <QLayout>
+#include <QMenu>
 #include <qalgorithms.h>
 
 #include <KLocale>
 #include <KAction>
-#include <KPluginFactory>
-#include <KPluginLoader>
 #include <KActionCollection>
 #include <KAboutData>
 #include <KDebug>
@@ -59,20 +55,17 @@
 #include <language/interfaces/ilanguagesupport.h>
 #include <language/interfaces/iquickopen.h>
 
-#include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/ducontext.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/use.h>
 #include <language/duchain/duchainutils.h>
-#include <language/duchain/dumpchain.h>
 #include <language/duchain/functiondefinition.h>
 #include <language/duchain/parsingenvironment.h>
 #include <language/duchain/uses.h>
 #include <language/duchain/specializationstore.h>
 #include <language/duchain/aliasdeclaration.h>
 #include <language/duchain/types/functiontype.h>
-
 #include <language/duchain/navigation/abstractnavigationwidget.h>
 
 #include <language/backgroundparser/backgroundparser.h>
@@ -285,8 +278,8 @@ ContextBrowserPlugin::ContextBrowserPlugin(QObject *parent, const QVariantList&)
   connect( core()->documentController(), SIGNAL(textDocumentCreated(KDevelop::IDocument*)), this, SLOT(textDocumentCreated(KDevelop::IDocument*)) );
   connect( core()->languageController()->backgroundParser(), SIGNAL(parseJobFinished(KDevelop::ParseJob*)), this, SLOT(parseJobFinished(KDevelop::ParseJob*)));
 
-  connect( DUChain::self(), SIGNAL(declarationSelected(DeclarationPointer)), this, SLOT(declarationSelectedInUI(DeclarationPointer)) );
-
+  connect( DUChain::self(), SIGNAL(declarationSelected(KDevelop::DeclarationPointer)),
+           this, SLOT(declarationSelectedInUI(KDevelop::DeclarationPointer)) );
 
   m_updateTimer = new QTimer(this);
   m_updateTimer->setSingleShot(true);
@@ -409,7 +402,7 @@ void ContextBrowserPlugin::startDelayedBrowsing(KTextEditor::View* view) {
   }
 }
 
-void ContextBrowserPlugin::hideTooTip() {
+void ContextBrowserPlugin::hideToolTip() {
   if(m_currentToolTip) {
     m_currentToolTip->deleteLater();
     m_currentToolTip = 0;
@@ -495,11 +488,11 @@ void ContextBrowserPlugin::showToolTip(KTextEditor::View* view, KTextEditor::Cur
     m_currentNavigationWidget = navigationWidget;
     ActiveToolTip::showToolTip(tooltip);
 
-    //First disconnect to prevent multiple connections
-    disconnect(view, SIGNAL(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)), this, SLOT(hideTooTip()));
-    disconnect(view, SIGNAL(focusOut(KTextEditor::View*)), this, SLOT(hideTooTip()));
-    connect(view, SIGNAL(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)), this, SLOT(hideTooTip()));
-    connect(view, SIGNAL(focusOut(KTextEditor::View*)), this, SLOT(hideTooTip()));
+    if ( ! navigationWidget->property("DoNotCloseOnCursorMove").toBool() ) {
+      connect(view, SIGNAL(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)),
+              this, SLOT(hideToolTip()), Qt::UniqueConnection);
+    }
+    connect(view, SIGNAL(focusOut(KTextEditor::View*)), this, SLOT(hideToolTip()), Qt::UniqueConnection);
     
   }else{
     kDebug() << "not showing tooltip, no navigation-widget";
@@ -714,7 +707,7 @@ void ContextBrowserPlugin::updateViews()
   m_useDeclaration = IndexedDeclaration();
 }
 
-void ContextBrowserPlugin::declarationSelectedInUI(DeclarationPointer decl)
+void ContextBrowserPlugin::declarationSelectedInUI(const DeclarationPointer& decl)
 {
   m_useDeclaration = IndexedDeclaration(decl.data());
   if(core()->documentController()->activeDocument() && core()->documentController()->activeDocument()->textDocument() && core()->documentController()->activeDocument()->textDocument()->activeView())

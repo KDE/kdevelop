@@ -8,8 +8,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SVN_CATWIDGETS_H
-#define SVN_CATWIDGETS_H
+#ifndef KDEVPLATFORM_PLUGIN_SVN_CATWIDGETS_H
+#define KDEVPLATFORM_PLUGIN_SVN_CATWIDGETS_H
 
 #include <kdialog.h>
 #include "ui_catoptiondlg.h"

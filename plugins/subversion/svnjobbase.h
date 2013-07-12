@@ -8,8 +8,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SVNJOBBASE_H
-#define SVNJOBBASE_H
+#ifndef KDEVPLATFORM_PLUGIN_SVNJOBBASE_H
+#define KDEVPLATFORM_PLUGIN_SVNJOBBASE_H
 
 #include <vcs/vcsjob.h>
 

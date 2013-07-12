@@ -17,8 +17,8 @@
   Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVPROJECTDASHBOARD_H
-#define KDEVPROJECTDASHBOARD_H
+#ifndef KDEVPLATFORM_PLUGIN_KDEVPROJECTDASHBOARD_H
+#define KDEVPLATFORM_PLUGIN_KDEVPROJECTDASHBOARD_H
 
 #include <interfaces/iplugin.h>
 
@@ -40,4 +40,4 @@ class KDevProjectDashboard : public KDevelop::IPlugin
         QList<KDevelop::IProject*> m_selectedProjects;
 };
 
-#endif // KDEVPROJECTDASHBOARD_H
+#endif // KDEVPLATFORM_PLUGIN_KDEVPROJECTDASHBOARD_H

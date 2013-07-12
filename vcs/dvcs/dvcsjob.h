@@ -25,8 +25,8 @@
  ***************************************************************************/
 
 
-#ifndef DVCS_JOB_H
-#define DVCS_JOB_H
+#ifndef KDEVPLATFORM_DVCS_JOB_H
+#define KDEVPLATFORM_DVCS_JOB_H
 
 #include <QtCore/QStringList>
 #include <QtCore/QVariant>
@@ -212,8 +212,10 @@ private Q_SLOTS:
     void slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus);
     void slotReceivedStdout();
 
+protected:
+    virtual bool doKill();
+
 private:
-    
     void jobIsReady();
     DVcsJobPrivate* const d;
 };

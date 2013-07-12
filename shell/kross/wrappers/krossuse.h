@@ -1,5 +1,5 @@
-#ifndef KROSSUSE_H
-#define KROSSUSE_H
+#ifndef KDEVPLATFORM_KROSSUSE_H
+#define KDEVPLATFORM_KROSSUSE_H
 
 #include<QtCore/QVariant>
 

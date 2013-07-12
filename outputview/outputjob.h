@@ -17,8 +17,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#ifndef OUTPUTJOB_H
-#define OUTPUTJOB_H
+#ifndef KDEVPLATFORM_OUTPUTJOB_H
+#define KDEVPLATFORM_OUTPUTJOB_H
 
 #include <QtCore/QPointer>
 

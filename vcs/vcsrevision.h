@@ -19,8 +19,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef VCSREVISION_H
-#define VCSREVISION_H
+#ifndef KDEVPLATFORM_VCSREVISION_H
+#define KDEVPLATFORM_VCSREVISION_H
 
 #include "vcsexport.h"
 #include <QtCore/QVariant>

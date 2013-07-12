@@ -72,21 +72,19 @@ SourceFormatterController::SourceFormatterController(QObject *parent)
 	m_formatTextAction = actionCollection()->addAction("edit_reformat_source");
 	m_formatTextAction->setText(i18n("&Reformat Source"));
 	m_formatTextAction->setToolTip(i18n("Reformat source using AStyle"));
-	m_formatTextAction->setWhatsThis(i18n("<b>Reformat source</b><p>Source reformatting "
-	        "functionality using <b>astyle</b> library.</p>"));
+	m_formatTextAction->setWhatsThis(i18n("Source reformatting functionality using <b>astyle</b> library."));
 	connect(m_formatTextAction, SIGNAL(triggered()), this, SLOT(beautifySource()));
 
 	m_formatLine = actionCollection()->addAction("edit_reformat_line");
 	m_formatLine->setText(i18n("Reformat Line"));
 	m_formatLine->setToolTip(i18n("Reformat current line using AStyle"));
-	m_formatLine->setWhatsThis(i18n("<b>Reformat line</b>"
-	                                "<p>Source reformatting of line under cursor using <b>astyle</b> library.</p>"));
+	m_formatLine->setWhatsThis(i18n("Source reformatting of line under cursor using <b>astyle</b> library."));
 	connect(m_formatLine, SIGNAL(triggered()), this, SLOT(beautifyLine()));
 
 	m_formatFilesAction = actionCollection()->addAction("tools_astyle");
 	m_formatFilesAction->setText(i18n("Format Files"));
 	m_formatFilesAction->setToolTip(i18n("Format file(s) using the current theme"));
-	m_formatFilesAction->setWhatsThis(i18n("<b>Format Files</b><p>Formatting functionality using <b>astyle</b> library.</p>"));
+	m_formatFilesAction->setWhatsThis(i18n("Formatting functionality using <b>astyle</b> library."));
 	connect(m_formatFilesAction, SIGNAL(triggered()), this, SLOT(formatFiles()));
 
 	m_formatTextAction->setEnabled(false);

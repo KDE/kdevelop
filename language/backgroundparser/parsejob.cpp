@@ -500,6 +500,9 @@ void ParseJob::highlightDUChain()
         // language doesn't support highlighting
         return;
     }
+    if (!d->hasReadContents && !d->tracker) {
+        d->tracker = ICore::self()->languageController()->backgroundParser()->trackerForUrl(document());
+    }
     if (d->tracker) {
         d->languageSupport->codeHighlighting()->highlightDUChain(duChain());
     }

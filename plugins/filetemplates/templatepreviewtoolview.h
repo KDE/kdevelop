@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef TEMPLATEPREVIEWTOOLVIEW_H
-#define TEMPLATEPREVIEWTOOLVIEW_H
+#ifndef KDEVPLATFORM_PLUGIN_TEMPLATEPREVIEWTOOLVIEW_H
+#define KDEVPLATFORM_PLUGIN_TEMPLATEPREVIEWTOOLVIEW_H
 
 #include <QWidget>
 #include <language/codegen/templaterenderer.h>
@@ -69,4 +69,4 @@ public slots:
     void selectedRendererChanged();
 };
 
-#endif // TEMPLATEPREVIEWTOOLVIEW_H
+#endif // KDEVPLATFORM_PLUGIN_TEMPLATEPREVIEWTOOLVIEW_H

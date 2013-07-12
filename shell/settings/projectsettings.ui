@@ -19,7 +19,7 @@
         <string>Select the base directory where new projects are to be created.</string>
        </property>
        <property name="text">
-        <string>Projects Base Directory:</string>
+        <string>Projects base directory:</string>
        </property>
        <property name="buddy">
         <cstring>kcfg_projectsBaseDirectory</cstring>

@@ -11,8 +11,8 @@
 *                                                                         *
 ***************************************************************************/
 
-#ifndef PATCHREVIEWTOOLVIEW_H
-#define PATCHREVIEWTOOLVIEW_H
+#ifndef KDEVPLATFORM_PLUGIN_PATCHREVIEWTOOLVIEW_H
+#define KDEVPLATFORM_PLUGIN_PATCHREVIEWTOOLVIEW_H
 
 #include <QWidget>
 #include <QPointer>
@@ -104,4 +104,4 @@ public slots:
     void testJobPercent(KJob* job, ulong percent);
 };
 
-#endif // PATCHREVIEWTOOLVIEW_H
+#endif // KDEVPLATFORM_PLUGIN_PATCHREVIEWTOOLVIEW_H

@@ -3,7 +3,8 @@
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
-   License version 2 as published by the Free Software Foundation.
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -21,6 +22,7 @@
 #include <KPluginInfo>
 #include <KLocalizedString>
 #include <vcs/interfaces/ibasicversioncontrol.h>
+#include <interfaces/ibranchingversioncontrol.h>
 #include <interfaces/iplugin.h>
 #include <interfaces/iproject.h>
 #include <interfaces/icore.h>
@@ -59,7 +61,7 @@ ProjectChangesModel::~ProjectChangesModel()
 void ProjectChangesModel::addProject(IProject* p)
 {
     QStandardItem* it = new QStandardItem(p->name());
-    QStandardItem* itStatus = new QStandardItem;
+    it->setData(p->name(), ProjectChangesModel::ProjectNameRole);
     if(p->versionControlPlugin()) {
         IPlugin* plugin = p->versionControlPlugin();
         
@@ -67,16 +69,21 @@ void ProjectChangesModel::addProject(IProject* p)
 
         KPluginInfo info = ICore::self()->pluginController()->pluginInfo(plugin);
         
-        itStatus->setIcon(KIcon(info.icon()));
-        itStatus->setText(vcs->name());
+        it->setIcon(KIcon(info.icon()));
+        it->setToolTip(vcs->name());
         reload(QList<IProject*>() << p);
+        
+        IBranchingVersionControl* branchingExtension = plugin->extension<KDevelop::IBranchingVersionControl>();
+        if(branchingExtension) {
+            branchingExtension->registerRepositoryForCurrentBranchChanges(p->folder());
+            connect(plugin, SIGNAL(repositoryBranchChanged(KUrl)), this, SLOT(repositoryBranchChanged(KUrl)));
+            repositoryBranchChanged(p->folder());
+        }
     } else {
         it->setEnabled(false);
-        itStatus->setEnabled(false);
-        itStatus->setText(i18n("No Version Control support for this project."));
     }
     
-    appendRow(QList<QStandardItem*>() << it << itStatus);
+    appendRow(it);
 }
 
 void ProjectChangesModel::removeProject(IProject* p)
@@ -99,7 +106,7 @@ QStandardItem* findItemChild(QStandardItem* parent, const QVariant& value, int r
 
 QStandardItem* ProjectChangesModel::projectItem(IProject* p) const
 {
-    return findItemChild(invisibleRootItem(), p->name());
+    return findItemChild(invisibleRootItem(), p->name(), ProjectChangesModel::ProjectNameRole);
 }
 
 void ProjectChangesModel::addStates(const QVariantList& states)
@@ -213,5 +220,31 @@ void ProjectChangesModel::jobUnregistered(KJob* job)
     VcsJob* vcsjob=dynamic_cast<VcsJob*>(job);
     if(vcsjob && readOnly.contains(vcsjob->type())) {
         reloadAll();
+    }
+}
+
+void ProjectChangesModel::repositoryBranchChanged(const KUrl& url)
+{
+    IProject* project = ICore::self()->projectController()->findProjectForUrl(url);
+    if(project) {
+        IPlugin* v = project->versionControlPlugin();
+        Q_ASSERT(v);
+        IBranchingVersionControl* branching = v->extension<IBranchingVersionControl>();
+        Q_ASSERT(branching);
+        VcsJob* job = branching->currentBranch(url);
+        connect(job, SIGNAL(resultsReady(KDevelop::VcsJob*)), SLOT(branchNameReady(KDevelop::VcsJob*)));
+        job->setProperty("project", QVariant::fromValue<QObject*>(project));
+        ICore::self()->runController()->registerJob(job);
+    }
+}
+
+void ProjectChangesModel::branchNameReady(VcsJob* job)
+{
+    IProject* project = qobject_cast<IProject*>(job->property("project").value<QObject*>());
+    if(job->status()==VcsJob::JobSucceeded) {
+        QString branchName = job->fetchResults().toString().isEmpty() ? i18n("no branch") : job->fetchResults().toString();
+        projectItem(project)->setText(i18nc("project name (branch name)", "%1 (%2)", project->name(), branchName));
+    } else {
+        projectItem(project)->setText(project->name());
     }
 }

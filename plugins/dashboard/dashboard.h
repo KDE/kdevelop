@@ -17,8 +17,8 @@
   Boston, MA 02110-1301, USA.
 */
 
-#ifndef DASHBOARD_H
-#define DASHBOARD_H
+#ifndef KDEVPLATFORM_PLUGIN_DASHBOARD_H
+#define KDEVPLATFORM_PLUGIN_DASHBOARD_H
 
 #include <QtCore/QObject>
 #include <plasma/view.h>

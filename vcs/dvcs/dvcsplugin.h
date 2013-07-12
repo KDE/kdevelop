@@ -18,11 +18,10 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#ifndef DVCS_PLUGIN_H
-#define DVCS_PLUGIN_H
+#ifndef KDEVPLATFORM_DVCS_PLUGIN_H
+#define KDEVPLATFORM_DVCS_PLUGIN_H
 
 #include <KDE/KUrl>
-#include <KDE/KJob>
 #include <KDE/KComponentData>
 
 #include <QtCore/QObject>
@@ -32,21 +31,15 @@
 
 #include "dvcsevent.h"
 #include <vcs/vcsexport.h>
-#include <vcs/vcsstatusinfo.h>
 #include <vcs/interfaces/idistributedversioncontrol.h>
-#include <outputview/outputjob.h>
 #include <vcs/interfaces/ibranchingversioncontrol.h>
 
 class QMenu;
-class QString;
-class KDevDVCSViewFactory;
 
 namespace KDevelop
 {
-class DVcsJob;
-class VcsJob;
-class ContextMenuExtension;
 struct DistributedVersionControlPluginPrivate;
+class DVcsJob;
 
 /**
  * DistributedVersionControlPlugin is a base class for git/hg/bzr plugins. This class implements
@@ -97,57 +90,17 @@ public:
     virtual void additionalMenuEntries(QMenu* menu, const KUrl::List& urls);
 public Q_SLOTS:
     //slots for context menu
-    void ctxPush();
-    void ctxPull();
     void ctxBranchManager();
     void ctxRevHistory();
 
-    // slots for menu
-    void slotInit();
-
-Q_SIGNALS:
-    /**
-     * Some actions like commit, add, remove... will connect the job's
-     * result() signal to this signal. Anybody, like for instance the
-     * DVCSMainView class, that is interested in getting notified about
-     * jobs that finished can connect to this signal.
-     * @see class GitMainView
-     */
-    void jobFinished(KJob* job);
-
-    /**
-     * Gets emmited when a job like log, editors... was created.
-     * GitPlugin will connect the newly created view to the result() signal
-     * of a job. So the new view will show the output of that job as
-     * soon as it has finished.
-     */
-    void addNewTabToMainView(QWidget* tab, QString label);
-    
 protected:
-    ///////////////////
     /** Checks if dirPath is located in DVCS repository */
     virtual bool isValidDirectory(const KUrl &dirPath) = 0;
-
-    /** empty_cmd is used when something is not implemented, but has to return any job */
-    virtual DVcsJob* empty_cmd(KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
-
-    KDevDVCSViewFactory * dvcsViewFactory() const;
 
 private:
     DistributedVersionControlPluginPrivate * const d;
 };
 
 }
-
-class KDevDVCSViewFactory: public KDevelop::IToolViewFactory
-{
-public:
-    KDevDVCSViewFactory(KDevelop::DistributedVersionControlPlugin *plugin): m_plugin(plugin) {}
-    virtual QWidget* create(QWidget *parent = 0);
-    virtual Qt::DockWidgetArea defaultPosition();
-    virtual QString id() const;
-private:
-    KDevelop::DistributedVersionControlPlugin *m_plugin;
-};
 
 #endif

@@ -22,13 +22,11 @@ Boston, MA 02110-1301, USA.
 
 #include <QtCore/QHash>
 #include <QtCore/QDir>
-#include <QtCore/QSignalMapper>
 #include <QtCore/QStringList>
 #include <QtCore/QTimer>
 
 #include <kglobal.h>
 #include <kcmdlineargs.h>
-#include <kcomponentdata.h>
 #include <kconfiggroup.h>
 #include <kstandarddirs.h>
 #include <klocale.h>
@@ -56,15 +54,11 @@ Boston, MA 02110-1301, USA.
 #include <KLineEdit>
 #include <QGroupBox>
 #include <QBoxLayout>
-#include <QTimer>
 #include <QStandardItemModel>
 #include <QListView>
 #include <QHeaderView>
-#include <klockfile.h>
 #include <interfaces/idocumentcontroller.h>
 #include <ktexteditor/document.h>
-#include <sublime/area.h>
-#include <language/duchain/repositories/itemrepositoryregistry.h>
 #include <QLabel>
 #include <QSortFilterProxyModel>
 #include <QDBusConnectionInterface>
@@ -249,12 +243,18 @@ public:
         Q_ASSERT( it != sessionActions.end() );
         (*it)->setCheckable(true);
         (*it)->setChecked(true);
-        
+
         for(it = sessionActions.begin(); it != sessionActions.end(); ++it)
         {
             if(it.key() != s)
                 (*it)->setCheckable(false);
         }
+
+        connect(Core::self()->projectController(), SIGNAL(projectClosed(KDevelop::IProject*)),
+                activeSession, SLOT(updateContainedProjects()));
+        connect(Core::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)),
+                activeSession, SLOT(updateContainedProjects()));
+
         return result;
     }
 
@@ -390,16 +390,6 @@ private slots:
 
                     if(choice == KMessageBox::Continue)
                     {
-                        #if 0
-                        {
-                            //Put the recovered documents into the "Review" area, and clear the working set
-                            ICore::self()->uiController()->switchToArea("review", KDevelop::IUiController::ThisWindow);
-                            Sublime::MainWindow* window = static_cast<Sublime::MainWindow*>(ICore::self()->uiController()->activeMainWindow());
-                            window->area()->setWorkingSet("recover");
-                            window->area()->clearViews();
-                        }
-                        #endif
-                        
                         //Recover the files
                         
                         for(uint num = 0; ; ++num)
@@ -592,7 +582,7 @@ SessionController::SessionController( QObject *parent )
     action = actionCollection()->addAction( "configure_sessions", this, SLOT(configureSessions()) );
     action->setText( i18n("Configure Sessions...") );
     action->setToolTip( i18n("Create/Delete/Activate Sessions") );
-    action->setWhatsThis( i18n( "<b>Configure Sessions</b><p>Shows a dialog to Create/Delete Sessions and set a new active session.</p>" ) );
+    action->setWhatsThis( i18n( "Shows a dialog to Create/Delete Sessions and set a new active session." ) );
     #endif
 
     d->grp = new QActionGroup( this );

@@ -45,6 +45,7 @@
 #include "types/typealiastype.h"
 #include "classdeclaration.h"
 #include "repositories/stringrepository.h"
+#include "ducontextdynamicdata.h"
 
 namespace KDevelop
 {

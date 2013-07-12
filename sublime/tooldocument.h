@@ -16,8 +16,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef SUBLIMETOOLDOCUMENT_H
-#define SUBLIMETOOLDOCUMENT_H
+#ifndef KDEVPLATFORM_SUBLIMETOOLDOCUMENT_H
+#define KDEVPLATFORM_SUBLIMETOOLDOCUMENT_H
 
 #include "document.h"
 

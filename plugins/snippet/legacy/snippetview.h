@@ -9,8 +9,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SNIPPETVIEW_H
-#define SNIPPETVIEW_H
+#ifndef KDEVPLATFORM_PLUGIN_SNIPPETVIEW_H
+#define KDEVPLATFORM_PLUGIN_SNIPPETVIEW_H
 
 #include "ui_snippetview.h"
 

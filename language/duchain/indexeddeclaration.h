@@ -16,12 +16,13 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef INDEXEDDECLARATION_H
-#define INDEXEDDECLARATION_H
+#ifndef KDEVPLATFORM_INDEXEDDECLARATION_H
+#define KDEVPLATFORM_INDEXEDDECLARATION_H
 
 #include "../languageexport.h"
 
 #include "indexedtopducontext.h"
+#include <language/util/kdevhash.h>
 
 namespace KDevelop {
 
@@ -54,7 +55,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclaration {
     inline uint hash() const {
       if(isDummy())
         return 0;
-      return (m_topContext * 53 + m_declarationIndex) * 23;
+      return KDevHash() << m_topContext << m_declarationIndex;
     }
 
     ///@warning The duchain needs to be locked when this is called
@@ -145,4 +146,4 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclaration {
 Q_DECLARE_METATYPE(KDevelop::IndexedDeclaration)
 Q_DECLARE_TYPEINFO(KDevelop::IndexedDeclaration, Q_MOVABLE_TYPE);
 
-#endif // INDEXEDDECLARATION_H
+#endif // KDEVPLATFORM_INDEXEDDECLARATION_H

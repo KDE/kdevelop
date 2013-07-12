@@ -17,8 +17,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef NATIVEAPPJOB_H
-#define NATIVEAPPJOB_H
+#ifndef KDEVPLATFORM_PLUGIN_NATIVEAPPJOB_H
+#define KDEVPLATFORM_PLUGIN_NATIVEAPPJOB_H
 
 #include <QtCore/QProcess>
 #include <outputview/outputjob.h>

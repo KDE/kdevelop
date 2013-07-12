@@ -18,8 +18,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef UIPREFERENCES_H
-#define UIPREFERENCES_H
+#ifndef KDEVPLATFORM_UIPREFERENCES_H
+#define KDEVPLATFORM_UIPREFERENCES_H
 
 #include <kcmodule.h>
 

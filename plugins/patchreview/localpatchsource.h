@@ -11,23 +11,21 @@
 *                                                                         *
 ***************************************************************************/
 
-#ifndef LOCALPATCHSOURCE_H
-#define LOCALPATCHSOURCE_H
+#ifndef KDEVPLATFORM_PLUGIN_LOCALPATCHSOURCE_H
+#define KDEVPLATFORM_PLUGIN_LOCALPATCHSOURCE_H
 
-#include <ksharedptr.h>
 #include <QString>
 #include <KUrl>
 #include <interfaces/ipatchsource.h>
-#include <klocalizedstring.h>
 
 class LocalPatchSource : public KDevelop::IPatchSource
 {
     Q_OBJECT
 public:
+    LocalPatchSource();
+    virtual ~LocalPatchSource();
 
-    virtual QString name() const {
-        return i18n( "Custom Patch" );
-    }
+    virtual QString name() const;
 
     virtual KUrl baseDir() const {
         return m_baseDir;
@@ -54,10 +52,6 @@ public:
 
     void setAlreadyApplied( bool applied ) { m_applied = applied; }
 
-    LocalPatchSource()  : m_depth( 0 ) { }
-
-    virtual ~LocalPatchSource();
-
 private:
     KUrl m_filename;
     KUrl m_baseDir;
@@ -66,4 +60,4 @@ private:
     uint m_depth;
 };
 
-#endif // LOCALPATCHSOURCE_H
+#endif // KDEVPLATFORM_PLUGIN_LOCALPATCHSOURCE_H

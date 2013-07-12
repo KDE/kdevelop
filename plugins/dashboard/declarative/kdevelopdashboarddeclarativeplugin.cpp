@@ -24,7 +24,9 @@
 
 void KDevplatformDeclarativePlugin::registerTypes(const char* uri)
 {
-    qmlRegisterType<BranchesListModel>("org.kde.kdevplatform", 1, 0, "BranchesListModel");
+    Q_UNUSED(uri);
+
+    qmlRegisterType<KDevelop::BranchesListModel>("org.kde.kdevplatform", 1, 0, "BranchesListModel");
     qmlRegisterType<ICoreObject>("org.kde.kdevplatform", 1, 0, "ICore");
     qmlRegisterType<KDevelop::IProject>();
 }

@@ -17,8 +17,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#ifndef ISELECTIONCONTROLLER_H
-#define ISELECTIONCONTROLLER_H
+#ifndef KDEVPLATFORM_ISELECTIONCONTROLLER_H
+#define KDEVPLATFORM_ISELECTIONCONTROLLER_H
 
 #include <QtCore/QObject>
 
@@ -80,4 +80,4 @@ Q_SIGNALS:
 
 }
 
-#endif // ISELECTIONCONTROLLER_H
+#endif // KDEVPLATFORM_ISELECTIONCONTROLLER_H

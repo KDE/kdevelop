@@ -17,8 +17,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#ifndef ISESSION_H
-#define ISESSION_H
+#ifndef KDEVPLATFORM_ISESSION_H
+#define KDEVPLATFORM_ISESSION_H
 
 #include "interfacesexport.h"
 #include <QtCore/QObject>
@@ -53,6 +53,7 @@ public:
     virtual QString description() const = 0;
     virtual QString name() const = 0;
     virtual KUrl::List containedProjects() const = 0;
+    virtual void updateContainedProjects() = 0;
     virtual KUrl pluginDataArea( const IPlugin* ) = 0;
     virtual KSharedConfig::Ptr config() = 0;
     virtual QUuid id() const = 0;

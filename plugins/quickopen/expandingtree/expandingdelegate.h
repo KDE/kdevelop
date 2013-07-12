@@ -19,8 +19,8 @@
  *  Boston, MA 02110-1301, USA.
  */
 
-#ifndef ExpandingDelegate_H
-#define ExpandingDelegate_H
+#ifndef KDEVPLATFORM_PLUGIN_EXPANDINGDELEGATE_H
+#define KDEVPLATFORM_PLUGIN_EXPANDINGDELEGATE_H
 
 #include <QtGui/QItemDelegate>
 #include <QItemDelegate>
@@ -91,4 +91,4 @@ class ExpandingDelegate : public QItemDelegate
     ExpandingWidgetModel* m_model;
 };
 
-#endif
+#endif // KDEVPLATFORM_PLUGIN_EXPANDINGDELEGATE_H

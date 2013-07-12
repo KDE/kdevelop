@@ -29,5 +29,6 @@ kdevplatformlanguage kdevplatforminterfaces)
 install( TARGETS kdevsnippet DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 ########### install files ###############
-install( FILES kdevsnippet.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+configure_file(kdevsnippet.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevsnippet.desktop)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevsnippet.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install( FILES legacy/kdevsnippet.rc DESTINATION ${DATA_INSTALL_DIR}/kdevsnippet )

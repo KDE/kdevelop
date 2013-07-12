@@ -40,9 +40,9 @@ ProblemNavigationContext::ProblemNavigationContext(ProblemPointer problem): m_pr
     RichTextPushButton* button = new RichTextPushButton;
 //     button->setPopupMode(QToolButton::InstantPopup);
     if(!solution->title().isEmpty())
-      button->setHtml(i18n("<i>Solve:</i> %1", solution->title()));
+      button->setHtml(i18n("Solve: %1", solution->title()));
     else
-      button->setHtml(i18n("<i>Solve</i>"));
+      button->setHtml(i18n("Solve"));
 
     QMenu* menu = new QMenu;
     menu->setFocusPolicy(Qt::NoFocus);
@@ -83,13 +83,13 @@ QString ProblemNavigationContext::html(bool shorten)
 {
   clear();
   m_shorten = shorten;
-  modifyHtml()  += "<html><body><p><small><small>";
+  modifyHtml() += "<html><body><p><small><small>";
 
   modifyHtml() += i18n("Problem in <b>%1</b>:<br/>", m_problem->sourceString());
   modifyHtml() += Qt::escape(m_problem->description());
   modifyHtml() += "<br/>";
-  modifyHtml() += "<i>" + m_problem->explanation() + "</i>";
-  
+  modifyHtml() += "<i style=\"white-space:pre-wrap\">" + Qt::escape(m_problem->explanation()) + "</i>";
+
   modifyHtml() += "</small></small></p></body></html>";
 
   return currentHtml();

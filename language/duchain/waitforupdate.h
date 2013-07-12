@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVELOP_WAITFORUPDATE_H
-#define KDEVELOP_WAITFORUPDATE_H
+#ifndef KDEVPLATFORM_WAITFORUPDATE_H
+#define KDEVPLATFORM_WAITFORUPDATE_H
 
 #include <QtCore/QObject>
 #include <QMutex>
@@ -47,4 +47,4 @@ struct WaitForUpdate : public QObject {
 
 }
 
-#endif // KDEVELOP_WAITFORUPDATE_H
+#endif // KDEVPLATFORM_WAITFORUPDATE_H

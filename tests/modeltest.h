@@ -21,8 +21,8 @@
 **
 ****************************************************************************/
 
-#ifndef MODELTEST_H
-#define MODELTEST_H
+#ifndef KDEVPLATFORM_MODELTEST_H
+#define KDEVPLATFORM_MODELTEST_H
 
 #include <QtCore/QObject>
 #include <QtCore/QAbstractItemModel>

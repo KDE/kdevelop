@@ -117,7 +117,8 @@ AbstractType::WhichType ArrayType::whichType() const
 
 uint ArrayType::hash() const
 {
-  return AbstractType::hash() + (elementType() ? elementType()->hash() : 0) * 47 + 117* dimension();
+  return KDevHash(AbstractType::hash())
+             << (elementType() ? elementType()->hash() : 0) << dimension();
 }
 
 }

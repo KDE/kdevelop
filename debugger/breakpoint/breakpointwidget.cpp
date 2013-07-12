@@ -49,12 +49,11 @@ BreakpointWidget::BreakpointWidget(IDebugController *controller, QWidget *parent
   breakpointDisableAll_(0), breakpointEnableAll_(0), breakpointRemoveAll_(0)
 {
     setWindowTitle(i18nc("@title:window", "Debugger Breakpoints"));
-    setWhatsThis(i18nc("@info:whatsthis", "<b>Breakpoint list</b><p>"
-                        "Displays a list of breakpoints with "
-                        "their current status. Clicking on a "
-                        "breakpoint item allows you to change "
-                        "the breakpoint and will take you "
-                        "to the source in the editor window.</p>"));
+    setWhatsThis(i18nc("@info:whatsthis", "Displays a list of breakpoints with "
+                                          "their current status. Clicking on a "
+                                          "breakpoint item allows you to change "
+                                          "the breakpoint and will take you "
+                                          "to the source in the editor window."));
     setWindowIcon( KIcon("process-stop") );
 
     QHBoxLayout *layout = new QHBoxLayout(this);

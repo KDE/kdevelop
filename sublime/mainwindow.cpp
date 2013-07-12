@@ -36,7 +36,7 @@
 #include "view.h"
 #include "controller.h"
 #include "container.h"
-#include "ideal.h"
+#include "idealcontroller.h"
 #include "holdupdates.h"
 
 namespace Sublime {
@@ -241,26 +241,26 @@ View *MainWindow::activeToolView()
     return d->activeToolView;
 }
 
-void MainWindow::activateView(View *view)
+void MainWindow::activateView(Sublime::View* view, bool focus)
 {
     if (!d->viewContainers.contains(view))
         return;
-    
+
     d->viewContainers[view]->setCurrentWidget(view->widget());
 
-    setActiveView(view);
+    setActiveView(view, focus);
     d->area->setActiveView(view);
 }
 
-void MainWindow::setActiveView(View *view)
+void MainWindow::setActiveView(View *view, bool focus)
 {
     View* oldActiveView = d->activeView;
     
     d->activeView = view;
     
-    if (view && !view->widget()->hasFocus())
+    if (focus && view && !view->widget()->hasFocus())
         view->widget()->setFocus();
-    
+
     if(d->activeView != oldActiveView)
         emit activeViewChanged(view);
 }
@@ -340,7 +340,7 @@ void MainWindow::loadSettings()
         state = cg.readEntry("State", state);
         state = QByteArray::fromBase64(state);
         // One day will need to load the version number, but for now, assume 0
-        restoreState(state);
+//         restoreState(state);
     } else {
         // If there's no state we use a default size of 870x650
         // Resize only when showing "code" area. If we do that for other areas,

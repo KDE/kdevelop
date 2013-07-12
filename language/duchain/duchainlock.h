@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef DUCHAINLOCK_H
-#define DUCHAINLOCK_H
+#ifndef KDEVPLATFORM_DUCHAINLOCK_H
+#define KDEVPLATFORM_DUCHAINLOCK_H
 
 #include "../languageexport.h"
 
@@ -192,6 +192,6 @@ private:
 
 }
 
-#endif // DUCHAINLOCK_H
+#endif // KDEVPLATFORM_DUCHAINLOCK_H
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

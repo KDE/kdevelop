@@ -28,6 +28,7 @@ Boston, MA 02110-1301, USA.
 #include <KShell>
 #include <QFileInfo>
 #include <QDir>
+#include <KUrl>
 
 namespace KDevelop
 {
@@ -307,11 +308,11 @@ void OutputExecuteJob::childProcessError( QProcess::ProcessError processError )
     QString errorValue;
     switch( processError ) {
         case QProcess::FailedToStart:
-            errorValue = i18n("%1 has failed to start", d->m_arguments.first());
+            errorValue = i18n("%1 has failed to start", commandLine().first());
             break;
 
         case QProcess::Crashed:
-            errorValue = i18n("%1 has crashed", d->m_arguments.first());
+            errorValue = i18n("%1 has crashed", commandLine().first());
             break;
 
         case QProcess::ReadError:

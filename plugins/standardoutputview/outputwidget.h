@@ -19,8 +19,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef OUTPUTWIDGET_H
-#define OUTPUTWIDGET_H
+#ifndef KDEVPLATFORM_PLUGIN_OUTPUTWIDGET_H
+#define KDEVPLATFORM_PLUGIN_OUTPUTWIDGET_H
 
 #include <QtGui/QWidget>
 #include <QtCore/QMap>

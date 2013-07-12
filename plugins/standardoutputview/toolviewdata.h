@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef TOOLVIEWDATA_H
-#define TOOLVIEWDATA_H
+#ifndef KDEVPLATFORM_PLUGIN_TOOLVIEWDATA_H
+#define KDEVPLATFORM_PLUGIN_TOOLVIEWDATA_H
 
 #include <outputview/ioutputview.h>
 #include <QObject>

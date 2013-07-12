@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef VCSANNOTATIONMODEL_H
-#define VCSANNOTATIONMODEL_H
+#ifndef KDEVPLATFORM_VCSANNOTATIONMODEL_H
+#define KDEVPLATFORM_VCSANNOTATIONMODEL_H
 
 #include <ktexteditor/annotationinterface.h>
 #include "../vcsexport.h"

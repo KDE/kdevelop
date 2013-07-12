@@ -1590,7 +1590,7 @@ Definitions* DUChain::definitions()
   return &sdDUChainPrivate->m_definitions;
 }
 
-void DUChain::aboutToQuit()
+void DUChain::shutdown()
 {
   // if core is not shutting down, we can end up in deadlocks or crashes
   // since language plugins might still try to access static duchain stuff
@@ -1666,7 +1666,8 @@ void DUChain::refCountDown(TopDUContext* top) {
     sdDUChainPrivate->m_referenceCounts.remove(top);
 }
 
-void DUChain::emitDeclarationSelected(DeclarationPointer decl) {
+void DUChain::emitDeclarationSelected(const DeclarationPointer& decl)
+{
   emit declarationSelected(decl);
 }
 

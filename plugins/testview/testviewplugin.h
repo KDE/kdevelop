@@ -17,8 +17,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef TESTVIEWPLUGIN_H
-#define TESTVIEWPLUGIN_H
+#ifndef KDEVPLATFORM_PLUGIN_TESTVIEWPLUGIN_H
+#define KDEVPLATFORM_PLUGIN_TESTVIEWPLUGIN_H
 
 #include "interfaces/iplugin.h"
 #include <QtCore/QVariantList>
@@ -41,4 +41,4 @@ public slots:
     void runAllTests();
 };
 
-#endif // TESTVIEWPLUGIN_H
+#endif // KDEVPLATFORM_PLUGIN_TESTVIEWPLUGIN_H

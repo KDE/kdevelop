@@ -19,8 +19,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef STANDARDOUTPUTVIEW_H
-#define STANDARDOUTPUTVIEW_H
+#ifndef KDEVPLATFORM_PLUGIN_STANDARDOUTPUTVIEW_H
+#define KDEVPLATFORM_PLUGIN_STANDARDOUTPUTVIEW_H
 
 #include <outputview/ioutputview.h>
 #include <interfaces/iplugin.h>
@@ -91,5 +91,5 @@ private:
     QMap<KDevelop::IOutputView::StandardToolView,int> standardViews;
 };
 
-#endif // STANDARDOUTPUTVIEW_H
+#endif // KDEVPLATFORM_PLUGIN_STANDARDOUTPUTVIEW_H
 

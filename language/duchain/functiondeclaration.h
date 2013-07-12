@@ -19,8 +19,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef FUNCTIONDECLARATION_H
-#define FUNCTIONDECLARATION_H
+#ifndef KDEVPLATFORM_FUNCTIONDECLARATION_H
+#define KDEVPLATFORM_FUNCTIONDECLARATION_H
 
 #include "declaration.h"
 #include "abstractfunctiondeclaration.h"
@@ -90,6 +90,6 @@ private:
 };
 }
 
-#endif // FUNCTIONDECLARATION_H
+#endif // KDEVPLATFORM_FUNCTIONDECLARATION_H
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

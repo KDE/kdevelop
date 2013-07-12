@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef USES_H
-#define USES_H
+#ifndef KDEVPLATFORM_USES_H
+#define KDEVPLATFORM_USES_H
 
 #include "../languageexport.h"
 #include "declarationid.h"

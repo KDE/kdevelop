@@ -18,8 +18,8 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#ifndef GITCLONEJOB_H
-#define GITCLONEJOB_H
+#ifndef KDEVPLATFORM_PLUGIN_GITCLONEJOB_H
+#define KDEVPLATFORM_PLUGIN_GITCLONEJOB_H
 
 #include <vcs/dvcs/dvcsjob.h>
 
@@ -36,4 +36,4 @@ class GitCloneJob : public KDevelop::DVcsJob
         uint m_steps;
 };
 
-#endif // GITCLONEJOB_H
+#endif // KDEVPLATFORM_PLUGIN_GITCLONEJOB_H

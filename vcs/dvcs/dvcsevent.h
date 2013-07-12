@@ -19,8 +19,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef DVCSEVENT_H
-#define DVCSEVENT_H
+#ifndef KDEVPLATFORM_DVCSEVENT_H
+#define KDEVPLATFORM_DVCSEVENT_H
 
 #include <QtCore/QStringList>
 

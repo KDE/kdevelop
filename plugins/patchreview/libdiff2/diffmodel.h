@@ -15,8 +15,8 @@
 **
 ***************************************************************************/
 
-#ifndef DIFFMODEL_H
-#define DIFFMODEL_H
+#ifndef KDEVPLATFORM_PLUGIN_DIFFMODEL_H
+#define KDEVPLATFORM_PLUGIN_DIFFMODEL_H
 
 #include <QtCore/QObject>
 #include <QtCore/QStringList>

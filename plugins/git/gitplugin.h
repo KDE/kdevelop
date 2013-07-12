@@ -19,8 +19,8 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#ifndef GIT_PLUGIN_H
-#define GIT_PLUGIN_H
+#ifndef KDEVPLATFORM_PLUGIN_GIT_PLUGIN_H
+#define KDEVPLATFORM_PLUGIN_GIT_PLUGIN_H
 
 #include <vcs/interfaces/idistributedversioncontrol.h>
 #include <vcs/dvcs/dvcsplugin.h>
@@ -29,6 +29,7 @@
 #include <outputview/outputjob.h>
 #include <vcs/vcsjob.h>
 
+class KDirWatch;
 class QDir;
 
 namespace KDevelop
@@ -72,8 +73,6 @@ public:
     GitPlugin(QObject *parent, const QVariantList & args = QVariantList() );
     ~GitPlugin();
    
-    virtual void unload();
-
     QString name() const;
 
     bool isVersionControlled(const KUrl &path);
@@ -139,6 +138,7 @@ public:
 
     virtual bool hasError() const;
     virtual QString errorDescription() const;
+    virtual void registerRepositoryForCurrentBranchChanges(const KUrl& repository);
 protected:
   
     KUrl repositoryRoot(const KUrl& path);
@@ -148,7 +148,7 @@ protected:
     KDevelop::DVcsJob* lsFiles(const QDir &repository,
                      const QStringList &args,
                      KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
-    KDevelop::DVcsJob* gitRevList(const QString &repository,
+    KDevelop::DVcsJob* gitRevList(const QString &directory,
                         const QStringList &args);
     KDevelop::DVcsJob* gitRevParse(const QString &repository,
                          const QStringList &args,
@@ -168,6 +168,12 @@ private slots:
     void ctxPushStash();
     void ctxPopStash();
     void ctxStashManager();
+
+    void fileChanged(const QString& file);
+    void delayedBranchChanged();
+
+signals:
+    void repositoryBranchChanged(const KUrl& repository);
 
 private:
     void addNotVersionedFiles(const QDir& dir, const KUrl::List& files);
@@ -189,6 +195,8 @@ private:
 
     bool m_hasError;
     QString m_errorDescription;
+    KDirWatch* m_watcher;
+    KUrl::List m_branchesChange;
 };
 
 QVariant runSynchronously(KDevelop::VcsJob* job);

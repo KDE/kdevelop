@@ -48,11 +48,14 @@ namespace KDevelop
 class BuilderJobPrivate
 {
 public:
-    BuilderJobPrivate( BuilderJob* job ) {
-        q = job;
-        failOnFirstError = true;
+    BuilderJobPrivate( BuilderJob* job )
+        : q(job)
+        , failOnFirstError(true)
+    {
     }
+
     BuilderJob* q;
+
     void addJob( BuilderJob::BuildType, ProjectBaseItem* );
     bool failOnFirstError;
 
@@ -143,9 +146,15 @@ void BuilderJobPrivate::addJob( BuilderJob::BuildType t, ProjectBaseItem* item )
         q->addCustomJob( t, j, item );
     }
 }
+
 BuilderJob::BuilderJob() 
     : d( new BuilderJobPrivate( this ) )
 {
+}
+
+BuilderJob::~BuilderJob()
+{
+    delete d;
 }
 
 void BuilderJob::addItems( BuildType t, const QList<ProjectBaseItem*>& items )
@@ -309,6 +318,22 @@ void BuilderJob::slotResult( KJob* job )
         emitResult();
     }
 }
+
+bool BuilderJob::addSubjob(KJob* job)
+{
+    // work-around for kdelibs bug: https://bugs.kde.org/show_bug.cgi?id=230692
+    // (fixed in 4.11)
+    // TODO: remove this method overwrite as soon as we depend on kdelibs 4.11
+    bool success = KCompositeJob::addSubjob(job);
+    // if job's parent != this => we're using kdelibs <= 4.10
+    if (job->parent() != this) {
+        // set the parent to 0, so the original parent won't delete this job
+        // KCompositeJob takes care of deletion
+        job->setParent(0);
+    }
+    return success;
+}
+
 
 void BuilderJob::setStopOnFail( bool stopOnFail )
 {

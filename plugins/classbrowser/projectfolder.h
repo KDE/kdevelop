@@ -18,8 +18,8 @@
  * Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef PROJECTFOLDER_H
-#define PROJECTFOLDER_H
+#ifndef KDEVPLATFORM_PLUGIN_PROJECTFOLDER_H
+#define KDEVPLATFORM_PLUGIN_PROJECTFOLDER_H
 
 #include "documentclassesfolder.h"
 
@@ -68,4 +68,4 @@ private:
 
 }
 
-#endif // PROJECTFOLDER_H
+#endif // KDEVPLATFORM_PLUGIN_PROJECTFOLDER_H

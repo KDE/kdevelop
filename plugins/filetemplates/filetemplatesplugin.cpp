@@ -64,7 +64,8 @@ private:
 };
 
 FileTemplatesPlugin::FileTemplatesPlugin(QObject* parent, const QVariantList& args)
-: IPlugin(FileTemplatesFactory::componentData(), parent)
+    : IPlugin(FileTemplatesFactory::componentData(), parent)
+    , m_model(0)
 {
     Q_UNUSED(args);
     KDEV_USE_EXTENSION_INTERFACE(ITemplateProvider)
@@ -73,14 +74,9 @@ FileTemplatesPlugin::FileTemplatesPlugin(QObject* parent, const QVariantList& ar
     KAction* action = actionCollection()->addAction("new_from_template");
     action->setText( i18n( "New From Template" ) );
     action->setIcon( KIcon( "code-class" ) );
-    action->setWhatsThis( i18n( "<b>Create new files from a template</b><br/>Allows you to create new source code files, such as classes or unit tests, using templates." ) );
+    action->setWhatsThis( i18n( "Allows you to create new source code files, such as classes or unit tests, using templates." ) );
     action->setStatusTip( i18n( "Create new files from a template" ) );
     connect (action, SIGNAL(triggered(bool)), SLOT(createFromTemplate()));
-
-    m_model = new TemplatesModel(core()->self()->componentData(), this);
-    m_model->setDescriptionResourceType("filetemplate_descriptions");
-    m_model->setTemplateResourceType("filetemplates");
-    m_model->refresh();
 
     m_toolView = new TemplatePreviewFactory(this);
     core()->uiController()->addToolView(i18n("Template Preview"), m_toolView);
@@ -122,7 +118,7 @@ ContextMenuExtension FileTemplatesPlugin::contextMenuExtension (Context* context
         }
         if (url.isValid())
         {
-            KAction* action = new KAction(i18n("Create from Template"), this);
+            KAction* action = new KAction(i18n("Create From Template"), this);
             action->setIcon(KIcon("code-class"));
             action->setData(url);
             connect(action, SIGNAL(triggered(bool)), SLOT(createFromTemplate()));
@@ -162,8 +158,11 @@ QIcon FileTemplatesPlugin::icon() const
     return KIcon("code-class");
 }
 
-QAbstractItemModel* FileTemplatesPlugin::templatesModel() const
+QAbstractItemModel* FileTemplatesPlugin::templatesModel()
 {
+    if(!m_model) {
+        m_model = new TemplatesModel("kdevfiletemplates", this);
+    }
     return m_model;
 }
 
@@ -183,11 +182,13 @@ QStringList FileTemplatesPlugin::supportedMimeTypes() const
 
 void FileTemplatesPlugin::reload()
 {
+    templatesModel();
     m_model->refresh();
 }
 
 void FileTemplatesPlugin::loadTemplate(const QString& fileName)
 {
+    templatesModel();
     m_model->loadTemplateFile(fileName);
 }
 

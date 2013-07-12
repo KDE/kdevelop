@@ -18,8 +18,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef BENCHMARKS_H
-#define BENCHMARKS_H
+#ifndef KDEVPLATFORM_BENCHMARKS_H
+#define KDEVPLATFORM_BENCHMARKS_H
 
 #include <QObject>
 
@@ -39,4 +39,4 @@ private slots:
 };
 
 
-#endif // BENCHMARKS_H
+#endif // KDEVPLATFORM_BENCHMARKS_H

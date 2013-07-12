@@ -49,6 +49,7 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/isession.h>
 #include <interfaces/idebugcontroller.h>
 #include <interfaces/idocumentationcontroller.h>
+#include <interfaces/ipluginversion.h>
 
 //#include <kross/krossplugin.h>
 
@@ -175,13 +176,7 @@ PluginController::~PluginController()
 
 KPluginInfo PluginController::pluginInfo( const IPlugin* plugin ) const
 {
-    for ( PluginControllerPrivate::InfoToPluginMap::ConstIterator it = d->loadedPlugins.constBegin();
-          it != d->loadedPlugins.constEnd(); ++it )
-    {
-        if ( it.value() == plugin )
-            return it.key();
-    }
-    return KPluginInfo();
+    return d->loadedPlugins.key(const_cast<IPlugin*>(plugin));
 }
 
 void PluginController::cleanup()

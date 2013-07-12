@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef KDEV_FRAMESTACKMODEL_H
-#define KDEV_FRAMESTACKMODEL_H
+#ifndef KDEVPLATFORM_FRAMESTACKMODEL_H
+#define KDEVPLATFORM_FRAMESTACKMODEL_H
 
 #include <QtCore/QModelIndex>
 #include <QtCore/QHash>
@@ -91,6 +91,10 @@ private:
 
     int m_currentThread;
     int m_currentFrame;
+    // used to count how often a user has scrolled down and more frames needed to be fetched;
+    // this way, the number of frames fetched in each chunk can be increased if the user wants
+    // to scroll far
+    int m_subsequentFrameFetchOperations;
     bool m_updateCurrentFrameOnNextFetch;
 
     QList<ThreadItem> m_threads;

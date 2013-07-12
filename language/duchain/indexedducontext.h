@@ -17,10 +17,11 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef INDEXEDDUCONTEXT_H
-#define INDEXEDDUCONTEXT_H
+#ifndef KDEVPLATFORM_INDEXEDDUCONTEXT_H
+#define KDEVPLATFORM_INDEXEDDUCONTEXT_H
 
 #include "../languageexport.h"
+#include <language/util/kdevhash.h>
 
 #include <QPair>
 
@@ -50,7 +51,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDUContext
       return m_topContext == rhs.m_topContext && m_contextIndex == rhs.m_contextIndex;
     }
     uint hash() const {
-      return (m_topContext * 57 + m_contextIndex) * 29;
+      return KDevHash() << m_topContext << m_contextIndex;
     }
 
     bool isValid() const {
@@ -124,4 +125,4 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDUContext
 
 Q_DECLARE_TYPEINFO(KDevelop::IndexedDUContext, Q_MOVABLE_TYPE);
 
-#endif // INDEXEDDUCONTEXT_H
+#endif // KDEVPLATFORM_INDEXEDDUCONTEXT_H

@@ -20,7 +20,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="label_7">
         <property name="text">
-         <string>Interpreter command:</string>
+         <string>Interpreter Command:</string>
         </property>
        </widget>
       </item>
@@ -65,7 +65,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>Script file:</string>
+         <string>Script File:</string>
         </property>
        </widget>
       </item>
@@ -154,7 +154,7 @@
       <item row="3" column="0">
        <widget class="QLabel" name="label_6">
         <property name="text">
-         <string>Output filter:</string>
+         <string>Output Filter:</string>
         </property>
        </widget>
       </item>
@@ -165,22 +165,22 @@
         </property>
         <item>
          <property name="text">
-          <string>no filter</string>
+          <string>No Filter</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>compiler filter</string>
+          <string>Compiler Filter</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>script error filter</string>
+          <string>Script Error Filter</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>static analysis filter</string>
+          <string>Static Analysis Filter</string>
          </property>
         </item>
        </widget>

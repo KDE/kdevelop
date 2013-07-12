@@ -29,6 +29,7 @@
 #include "topducontext.h"
 #include "topducontextdata.h"
 #include "ducontextdata.h"
+#include "ducontextdynamicdata.h"
 #include "duchainregister.h"
 #include "repositories/itemrepository.h"
 

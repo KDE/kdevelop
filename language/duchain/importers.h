@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef IMPORTERS_H
-#define IMPORTERS_H
+#ifndef KDEVPLATFORM_IMPORTERS_H
+#define KDEVPLATFORM_IMPORTERS_H
 
 #include "../languageexport.h"
 #include "declarationid.h"

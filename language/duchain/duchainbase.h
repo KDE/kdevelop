@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef DUCHAINBASE_H
-#define DUCHAINBASE_H
+#ifndef KDEVPLATFORM_DUCHAINBASE_H
+#define KDEVPLATFORM_DUCHAINBASE_H
 
 #include <language/editor/simplerange.h>
 #include <language/editor/rangeinrevision.h>
@@ -216,6 +216,6 @@ public:
 };
 }
 
-#endif // DUCHAINBASE_H
+#endif // KDEVPLATFORM_DUCHAINBASE_H
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

@@ -20,14 +20,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef CONTEXTBROWSERPLUGIN_H
-#define CONTEXTBROWSERPLUGIN_H
+#ifndef KDEVPLATFORM_PLUGIN_CONTEXTBROWSERPLUGIN_H
+#define KDEVPLATFORM_PLUGIN_CONTEXTBROWSERPLUGIN_H
 
-#include <QtCore/QVariant>
+#include <QVariant>
 #include <QSet>
 #include <QMap>
 #include <QList>
-#include <ktexteditor/rangefeedback.h>
+
 #include <interfaces/iplugin.h>
 #include <language/duchain/duchainpointer.h>
 #include <language/editor/simplecursor.h>
@@ -35,13 +35,13 @@
 #include <KUrl>
 #include <language/editor/persistentmovingrange.h>
 #include <language/interfaces/iquickopen.h>
-#include <QToolButton>
-#include <QMenu>
-#include <QHBoxLayout>
 #include <language/editor/documentcursor.h>
-#include <KTextEditor/Document>
 
 #include <language/interfaces/icontextbrowser.h>
+
+class QHBoxLayout;
+class QMenu;
+class QToolButton;
 
 namespace Sublime {
   class MainWindow;
@@ -58,11 +58,9 @@ namespace KDevelop {
 }
 
 namespace KTextEditor {
+  class Document;
   class View;
 }
-
-//TODO: move into kdevelop namespace
-using namespace KDevelop;
 
 class ContextBrowserViewFactory;
 class ContextBrowserView;
@@ -77,9 +75,9 @@ struct ViewHighlights
   // Whether the same highlighting should be kept highlighted (usually during typing)
   bool keep;
   // The declaration that is highlighted for this view
-  IndexedDeclaration declaration;
+  KDevelop::IndexedDeclaration declaration;
   // Highlighted ranges. Those may also be contained by different views.
-  QList<PersistentMovingRange::Ptr> highlights;
+  QList<KDevelop::PersistentMovingRange::Ptr> highlights;
 };
 
 class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContextBrowser
@@ -107,7 +105,7 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContext
     void updateDeclarationListBox(KDevelop::DUContext* context);
     void setAllowBrowsing(bool allow);
 
-    virtual void showUses(const DeclarationPointer& declaration);
+    virtual void showUses(const KDevelop::DeclarationPointer& declaration);
 
   public Q_SLOTS:
     void showUsesDelayed(const KDevelop::DeclarationPointer& declaration);
@@ -120,7 +118,7 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContext
     void previousUseShortcut();
     void nextUseShortcut();
 
-    void declarationSelectedInUI(DeclarationPointer decl);
+    void declarationSelectedInUI(const KDevelop::DeclarationPointer& decl);
 
     void parseJobFinished(KDevelop::ParseJob* job);
     void textDocumentCreated( KDevelop::IDocument* document );
@@ -132,7 +130,7 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContext
 
     void textHintRequested(const KTextEditor::Cursor&, QString&);
 
-    void hideTooTip();
+    void hideToolTip();
     void findUses();
     
     void textInserted(KTextEditor::Document*, KTextEditor::Range);
@@ -207,15 +205,15 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContext
     QList<ContextBrowserView*> m_views;
 
     //Used to override the next declaration that will be highlighted
-    IndexedDeclaration m_useDeclaration;
-    IndexedDeclaration m_lastHighlightedDeclaration;
+    KDevelop::IndexedDeclaration m_useDeclaration;
+    KDevelop::IndexedDeclaration m_lastHighlightedDeclaration;
 
     KUrl m_mouseHoverDocument;
-    SimpleCursor m_mouseHoverCursor;
+    KDevelop::SimpleCursor m_mouseHoverCursor;
     ContextBrowserViewFactory* m_viewFactory;
     QPointer<QWidget> m_currentToolTip;
     QPointer<QWidget> m_currentNavigationWidget;
-    IndexedDeclaration m_currentToolTipDeclaration;
+    KDevelop::IndexedDeclaration m_currentToolTipDeclaration;
     QAction* m_findUses;
     
     QPointer<KTextEditor::Document> m_lastInsertionDocument;
@@ -256,6 +254,6 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContext
     int m_nextHistoryIndex;
 };
 
-#endif // CONTEXTBROWSERPLUGIN_H
+#endif // KDEVPLATFORM_PLUGIN_CONTEXTBROWSERPLUGIN_H
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

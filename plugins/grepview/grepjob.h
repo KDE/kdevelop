@@ -13,8 +13,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef GREPJOB_H
-#define GREPJOB_H
+#ifndef KDEVPLATFORM_PLUGIN_GREPJOB_H
+#define KDEVPLATFORM_PLUGIN_GREPJOB_H
 
 #include <QDir>
 #include <QPointer>
@@ -58,7 +58,7 @@ public:
     void setFilesString(const QString &filesString);
     void setExcludeString(const QString &excludeString);
     void setDirectoryChoice(const QList<KUrl> &choice);
-    void setRecursive(bool recursive);
+    void setDepth(int depth);
     void setRegexpFlag(bool regexpFlag);
     void setCaseSensitive(bool caseSensitive);
     void setProjectFilesFlag(bool projectFilesFlag);
@@ -111,9 +111,9 @@ private:
 
     bool m_useProjectFilesFlag;
     bool m_regexpFlag;
-    bool m_recursiveFlag;
     bool m_caseSensitiveFlag;
-    
+    int m_depthValue;
+
     bool m_findSomething;
 };
 

@@ -19,8 +19,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KDEV_COLORCACHE_H
-#define KDEV_COLORCACHE_H
+#ifndef KDEVPLATFORM_COLORCACHE_H
+#define KDEVPLATFORM_COLORCACHE_H
 
 #include <QtCore/QObject>
 #include <QtCore/QList>
@@ -161,6 +161,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT ColorCache : public QObject
 
 }
 
-#endif // KDEV_COLORCACHE_H
+#endif // KDEVPLATFORM_COLORCACHE_H
 
 // kate: space-indent on; indent-width 2; replace-trailing-space-save on; show-tabs on; tab-indents on; tab-width 2;

@@ -17,8 +17,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVELOP_ICREATECLASSHELPER_H
-#define KDEVELOP_ICREATECLASSHELPER_H
+#ifndef KDEVPLATFORM_ICREATECLASSHELPER_H
+#define KDEVPLATFORM_ICREATECLASSHELPER_H
 
 #include "../languageexport.h"
 #include <language/duchain/duchainpointer.h>
@@ -61,4 +61,4 @@ public:
 
 }
 
-#endif // KDEVELOP_ICREATECLASSHELPER_H
+#endif // KDEVPLATFORM_ICREATECLASSHELPER_H

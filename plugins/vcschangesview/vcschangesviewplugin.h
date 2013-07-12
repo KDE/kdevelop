@@ -17,8 +17,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef VCSPROJECTINTEGRATIONPLUGIN_H
-#define VCSPROJECTINTEGRATIONPLUGIN_H
+#ifndef KDEVPLATFORM_PLUGIN_VCSPROJECTINTEGRATIONPLUGIN_H
+#define KDEVPLATFORM_PLUGIN_VCSPROJECTINTEGRATIONPLUGIN_H
 
 #include <interfaces/iplugin.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>

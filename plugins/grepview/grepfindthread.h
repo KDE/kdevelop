@@ -1,5 +1,5 @@
-#ifndef GREPFINDTHREAD_H
-#define GREPFINDTHREAD_H
+#ifndef KDEVPLATFORM_PLUGIN_GREPFINDTHREAD_H
+#define KDEVPLATFORM_PLUGIN_GREPFINDTHREAD_H
 
 #include <QThread>
 #include <KUrl>
@@ -12,12 +12,13 @@ public:
      * @brief Constructor
      * @param[in] parent Parent
      * @param[in] startDirs Root directories or files of the search
-     * @param[in] recursive Whether the search should be recursive
+     * @param[in] depth Depth for the search. Possible values are -1 (recursive), 0 (no recursion), or integers
+     *                  from 1 on indicating the level of subfolders allowed in the recursion.
      * @param[in] patterns Space-separated list of wildcard patterns to search for
      * @param[in] exclusions Space-separated list of wildcard patterns to exclude. Matches the whole path.
      * @param[in] onlyProject Whether the search should only consider project files.
      */
-    GrepFindFilesThread(QObject *parent, const QList<KUrl> &startDirs, bool recursive,
+    GrepFindFilesThread(QObject *parent, const QList<KUrl> &startDirs, int depth,
                     const QString &patterns, const QString &exclusions,
                     bool onlyProject);
     /**
@@ -53,7 +54,7 @@ private:
     QList<KUrl> m_startDirs;
     QString m_patString;
     QString m_exclString;
-    bool m_recursive;
+    int m_depth;
     bool m_project;
     KUrl::List m_files;
     volatile bool m_tryAbort;

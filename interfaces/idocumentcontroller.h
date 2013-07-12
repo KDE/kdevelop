@@ -16,8 +16,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef IDOCUMENTCONTROLLER_H
-#define IDOCUMENTCONTROLLER_H
+#ifndef KDEVPLATFORM_IDOCUMENTCONTROLLER_H
+#define KDEVPLATFORM_IDOCUMENTCONTROLLER_H
 
 #include <QtCore/QObject>
 #include <QtCore/QList>
@@ -53,7 +53,8 @@ public:
     {
         DefaultMode = 0,            /**Activate document and create a view if no other flags passed.*/
         DoNotActivate = 1,          /**Don't activate the Document.*/
-        DoNotCreateView = 2         /**Don't create and show the view for the Document.*/
+        DoNotCreateView = 2,        /**Don't create and show the view for the Document.*/
+        DoNotFocus = 4              /**Don't change the keyboard focus.*/
     };
     Q_DECLARE_FLAGS(DocumentActivationParams, DocumentActivation)
 

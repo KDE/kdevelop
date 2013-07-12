@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef DOCUMENTATIONCONTROLLER_H
-#define DOCUMENTATIONCONTROLLER_H
+#ifndef KDEVPLATFORM_DOCUMENTATIONCONTROLLER_H
+#define KDEVPLATFORM_DOCUMENTATIONCONTROLLER_H
 
 #include <interfaces/idocumentationcontroller.h>
 #include <QObject>
@@ -60,4 +60,4 @@ class DocumentationController : public KDevelop::IDocumentationController
 
 }
 
-#endif // DOCUMENTATIONCONTROLLER_H
+#endif // KDEVPLATFORM_DOCUMENTATIONCONTROLLER_H

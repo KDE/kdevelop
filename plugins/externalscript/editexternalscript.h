@@ -19,8 +19,8 @@
 
 */
 
-#ifndef EDITEXTERNALSCRIPT_H
-#define EDITEXTERNALSCRIPT_H
+#ifndef KDEVPLATFORM_PLUGIN_EDITEXTERNALSCRIPT_H
+#define KDEVPLATFORM_PLUGIN_EDITEXTERNALSCRIPT_H
 
 #include <KDialog>
 
@@ -44,6 +44,6 @@ private:
   ExternalScriptItem* m_item;
 };
 
-#endif // EDITEXTERNALSCRIPT_H
+#endif // KDEVPLATFORM_PLUGIN_EDITEXTERNALSCRIPT_H
 
 // kate: indent-mode cstyle; space-indent on; indent-width 2; replace-tabs on; 

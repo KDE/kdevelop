@@ -119,6 +119,7 @@ ProjectManagerViewPlugin::ProjectManagerViewPlugin( QObject *parent, const QVari
     d->m_install = new KAction( i18n("Install Selection"), this );
     d->m_install->setIconText( i18n("Install") );
     d->m_install->setIcon(KIcon("run-build-install"));
+    d->m_install->setShortcut( Qt::SHIFT + Qt::Key_F8 );
     d->m_install->setEnabled( false );
     connect( d->m_install, SIGNAL(triggered()), this, SLOT(installProjectItems()) );
     actionCollection()->addAction( "project_install", d->m_install );
@@ -260,7 +261,8 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
         action->setIcon(KIcon("run-clean"));
         connect( action, SIGNAL(triggered()), this, SLOT(cleanItemsFromContextMenu()) );
         menuExt.addAction( ContextMenuExtension::BuildGroup, action );
-        action = new KAction( i18n( "Add to Buildset" ), this );
+        action = new KAction( i18n( "Add to Build Set" ), this );
+        action->setIcon(KIcon("list-add"));
         connect( action, SIGNAL(triggered()), this, SLOT(addItemsFromContextMenuToBuildset()) );
         menuExt.addAction( ContextMenuExtension::BuildGroup, action );
     }
@@ -501,18 +503,14 @@ void ProjectManagerViewPlugin::removeItems(const QList< ProjectBaseItem* >& item
     }
 
     //copy the list of selected items and sort it to guarantee parents will come before children
-    QMap< IProjectFileManager*, QList<KDevelop::ProjectBaseItem*> > filteredItems;
-    filteredItems[0] = items;
-    qSort(filteredItems[0].begin(), filteredItems[0].end(), ProjectBaseItem::urlLessThan);
+    QList<KDevelop::ProjectBaseItem*> sortedItems = items;
+    qSort(sortedItems.begin(), sortedItems.end(), ProjectBaseItem::urlLessThan);
 
     KUrl lastFolder;
-
+    QMap< IProjectFileManager*, QList<KDevelop::ProjectBaseItem*> > filteredItems;
     QStringList itemPaths;
-    foreach( KDevelop::ProjectBaseItem* item, filteredItems[0] )
+    foreach( KDevelop::ProjectBaseItem* item, sortedItems )
     {
-        Q_ASSERT(item->folder() || item->file());
-        Q_ASSERT(!item->file() || !item->file()->parent()->target());
-
         if (item->isProjectRoot()) {
             continue;
         } else if (item->folder() || item->file()) {
@@ -523,8 +521,11 @@ void ProjectManagerViewPlugin::removeItems(const QList< ProjectBaseItem* >& item
                 lastFolder = item->url();
             }
 
-            filteredItems[item->project()->projectFileManager()] << item;
-            itemPaths << item->url().path();
+            IProjectFileManager* manager = item->project()->projectFileManager();
+            if (manager) {
+                filteredItems[manager] << item;
+                itemPaths << item->url().path();
+            }
         }
     }
 
@@ -547,8 +548,8 @@ void ProjectManagerViewPlugin::removeItems(const QList< ProjectBaseItem* >& item
     QMap< IProjectFileManager*, QList<KDevelop::ProjectBaseItem*> >::iterator it;
     for (it = filteredItems.begin(); it != filteredItems.end(); ++it)
     {
-        if (it.key())
-            it.key()->removeFilesAndFolders(it.value());
+        Q_ASSERT(it.key());
+        it.key()->removeFilesAndFolders(it.value());
     }
 }
 
@@ -652,7 +653,7 @@ void ProjectManagerViewPlugin::createFileFromContextMenu( )
 void ProjectManagerViewPlugin::copyFromContextMenu()
 {
     KDevelop::ProjectItemContext* ctx = dynamic_cast<KDevelop::ProjectItemContext*>(ICore::self()->selectionController()->currentSelection());
-    QList<QUrl> urls;
+    KUrl::List urls;
     foreach (ProjectBaseItem* item, ctx->items()) {
         if (item->folder() || item->file()) {
             urls << item->url();
@@ -661,7 +662,7 @@ void ProjectManagerViewPlugin::copyFromContextMenu()
     kDebug() << urls;
     if (!urls.isEmpty()) {
         QMimeData *data = new QMimeData;
-        data->setUrls(urls);
+        urls.populateMimeData(data);
         qApp->clipboard()->setMimeData(data);
     }
 }

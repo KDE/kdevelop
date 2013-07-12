@@ -15,8 +15,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.*/
 
-#ifndef KDEVELOP_IASTCONTAINER_H
-#define KDEVELOP_IASTCONTAINER_H
+#ifndef KDEVPLATFORM_IASTCONTAINER_H
+#define KDEVPLATFORM_IASTCONTAINER_H
 
 #include <ksharedptr.h>
 
@@ -47,4 +47,4 @@ class KDEVPLATFORMLANGUAGE_EXPORT IAstContainer : public QSharedData
 }
 
 
-#endif // KDEVELOP_IASTCONTAINER_H
+#endif // KDEVPLATFORM_IASTCONTAINER_H

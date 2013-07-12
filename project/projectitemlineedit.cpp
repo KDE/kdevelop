@@ -167,7 +167,7 @@ void ProjectItemLineEdit::showCtxMenu(const QPoint& p)
     menu->exec(mapToGlobal(p));
 }
 
-void ProjectItemLineEdit::selectItemDialog()
+bool ProjectItemLineEdit::selectItemDialog()
 {
     KDevelop::ProjectModel* model=KDevelop::ICore::self()->projectController()->projectModel();
     
@@ -193,7 +193,9 @@ void ProjectItemLineEdit::selectItemDialog()
         
         setText(KDevelop::joinWithEscaping(model->pathFromIndex(idx), sep, escape));
         selectAll();
+        return true;
     }
+    return false;
 }
 
 void ProjectItemLineEdit::setItemPath(const QStringList& list)

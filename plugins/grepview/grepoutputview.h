@@ -9,8 +9,8 @@
 *                                                                         *
 ***************************************************************************/
 
-#ifndef GREPOUTPUTVIEW_H
-#define GREPOUTPUTVIEW_H
+#ifndef KDEVPLATFORM_PLUGIN_GREPOUTPUTVIEW_H
+#define KDEVPLATFORM_PLUGIN_GREPOUTPUTVIEW_H
 
 #include <interfaces/iuicontroller.h>
 
@@ -91,4 +91,4 @@ private slots:
     void updateCheckable();
 };
 
-#endif // GREPOUTPUTVIEW_H
+#endif // KDEVPLATFORM_PLUGIN_GREPOUTPUTVIEW_H

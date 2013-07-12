@@ -11,8 +11,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SETREPOSITORY_H
-#define SETREPOSITORY_H
+#ifndef KDEVPLATFORM_SETREPOSITORY_H
+#define KDEVPLATFORM_SETREPOSITORY_H
 
 #include "basicsetrepository.h"
 #include <QtCore/QMutex>
@@ -93,7 +93,7 @@ class VirtualSetNode {
         ///If this returns false, a left and a right node are available.
         ///If this returns true, this node represents a single item, that can be retrieved by calling item() or operator*.
         inline bool isFinalNode() const {
-            return m_data->leftNode == 0;
+            return m_data->leftNode() == 0;
         }
 
         inline T firstItem() const {
@@ -109,27 +109,27 @@ class VirtualSetNode {
         }
 
         inline VirtualSetNode<T, Conversion, StaticRepository> leftChild() const {
-            if(m_data->leftNode)
-                return StaticRepository::repository()->nodeFromIndex(m_data->leftNode);
+            if(m_data->leftNode())
+                return StaticRepository::repository()->nodeFromIndex(m_data->leftNode());
             else
                 return 0;
         }
 
         inline VirtualSetNode<T, Conversion, StaticRepository> rightChild() const {
-            if(m_data->rightNode)
-                return StaticRepository::repository()->nodeFromIndex(m_data->rightNode);
+            if(m_data->rightNode())
+                return StaticRepository::repository()->nodeFromIndex(m_data->rightNode());
             else
                 return 0;
         }
 
         ///Returns the start of this node's range. If this is a final node, the length of the range is 1.
         inline uint start() const {
-            return m_data->start;
+            return m_data->start();
         }
 
         ///Returns the end of this node's range.
         inline uint end() const {
-            return m_data->end;
+            return m_data->end();
         }
 
     private:

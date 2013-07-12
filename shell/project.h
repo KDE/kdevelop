@@ -24,8 +24,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef KDEVPROJECT_H
-#define KDEVPROJECT_H
+#ifndef KDEVPLATFORM_SHELLPROJECT_H
+#define KDEVPLATFORM_SHELLPROJECT_H
 
 #include <kurl.h>
 
@@ -167,7 +167,7 @@ public Q_SLOTS:
 
 private:
     Q_PRIVATE_SLOT(d, void importDone(KJob*))
-    Q_PRIVATE_SLOT(d, void reloadDone())
+    Q_PRIVATE_SLOT(d, void reloadDone(KJob*))
 
     class ProjectPrivate* const d;
 };

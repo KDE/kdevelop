@@ -17,32 +17,47 @@
 */
 
 #include "iassistant.h"
-#include <kaction.h>
-#include <QMetaType>
+#include "icore.h"
+
+#include <KAction>
+#include <QXmlStreamReader>
 #include <QTextEdit>
+#include <QThread>
 
 using namespace KDevelop;
 
 Q_DECLARE_METATYPE(KSharedPtr<IAssistantAction>)
 
-// Very slow and ugly, but very secure
 static QString removeHtmlFromString(QString string)
 {
-    return QTextEdit(string).toPlainText();
+    QXmlStreamReader xml("<root>" + string + "</root>");
+    QString textString;
+    while ( !xml.atEnd() ) {
+        if ( xml.readNext() == QXmlStreamReader::Characters ) {
+            textString += xml.text();
+        }
+    }
+    return textString;
 }
 
 //BEGIN IAssistant
 
+void IAssistant::createActions()
+{
+}
+
 KAction* IAssistantAction::toKAction() const
 {
+    Q_ASSERT(QThread::currentThread() == ICore::self()->thread() && "Actions must be created in the application main thread"
+                                                    "(implement createActions() to create your actions)");
+
     KAction* ret = new KAction(KIcon(icon()), removeHtmlFromString(description()), 0);
     ret->setToolTip(toolTip());
-    qRegisterMetaType<KSharedPtr<IAssistantAction> >("KSharedPtr<IAssistantAction>()");
 
     //Add the data as a KSharedPtr to the action, so this assistant stays alive at least as long as the KAction
     ret->setData(QVariant::fromValue(KSharedPtr<IAssistantAction>(const_cast<IAssistantAction*>(this))));
 
-    connect(ret, SIGNAL(triggered(bool)), SLOT(execute()), Qt::QueuedConnection);
+    connect(ret, SIGNAL(triggered(bool)), SLOT(execute()));
     return ret;
 }
 
@@ -51,7 +66,8 @@ IAssistant::~IAssistant()
 }
 
 IAssistantAction::IAssistantAction()
-: KSharedObject(*(QObject*)this)
+    : QObject()
+    , KSharedObject(*(QObject*)this)
 {
 }
 
@@ -120,6 +136,9 @@ void IAssistant::doHide()
 
 QList< IAssistantAction::Ptr > IAssistant::actions() const
 {
+    if ( m_actions.isEmpty() ) {
+        const_cast<IAssistant*>(this)->createActions();
+    }
     return m_actions;
 }
 

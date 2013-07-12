@@ -24,8 +24,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef IPROJECT_H
-#define IPROJECT_H
+#ifndef KDEVPLATFORM_IPROJECT_H
+#define KDEVPLATFORM_IPROJECT_H
 
 #include <QtCore/QObject>
 
@@ -122,8 +122,6 @@ public:
     /** Get all folder items corresponding to the @p folder url */
     Q_SCRIPTABLE virtual QList<ProjectFolderItem*> foldersForUrl( const KUrl& folder ) const = 0;
 
-    /** Make the model to reload */
-    Q_SCRIPTABLE virtual void reloadModel() = 0;
 //     virtual KUrl projectConfigFile() const = 0;
 //     virtual KUrl projectDefaultsConfigFile() const = 0;
 
@@ -176,6 +174,8 @@ public Q_SLOTS:
      */
     virtual bool inProject(const KUrl &url) const = 0;
 
+    /** Make the model to reload */
+    virtual void reloadModel() = 0;
 };
 
 }

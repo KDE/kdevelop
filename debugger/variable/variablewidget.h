@@ -13,8 +13,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef KDEV_VARIABLEWIDGET_H
-#define KDEV_VARIABLEWIDGET_H
+#ifndef KDEVPLATFORM_VARIABLEWIDGET_H
+#define KDEVPLATFORM_VARIABLEWIDGET_H
 
 #include <QTreeView>
 #include <QAction>

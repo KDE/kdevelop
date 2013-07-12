@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef DUCHAIN_H
-#define DUCHAIN_H
+#ifndef KDEVPLATFORM_DUCHAIN_H
+#define KDEVPLATFORM_DUCHAIN_H
 
 #include <QtCore/QObject>
 
@@ -277,19 +277,25 @@ public:
   
 Q_SIGNALS:
   ///Is emitted when the declaration has been selected somewhere in the user-interface, for example in the completion-list
-  void declarationSelected(DeclarationPointer decl);
+  void declarationSelected(const KDevelop::DeclarationPointer& decl);
+
 public Q_SLOTS:
   ///Removes the given top-context from the duchain, and deletes it.
-  void removeDocumentChain(TopDUContext* document);
+  void removeDocumentChain(KDevelop::TopDUContext* document);
   ///Emits the declarationSelected signal, so other parties can notice it.
-  void emitDeclarationSelected(DeclarationPointer decl);
+  void emitDeclarationSelected(const KDevelop::DeclarationPointer& decl);
+
+  /**
+   * Shutdown and cleanup the DUChain.
+   */
+  void shutdown();
 
 private Q_SLOTS:
   void documentActivated(KDevelop::IDocument* doc);
   void documentLoadedPrepare(KDevelop::IDocument* document);
   void documentRenamed(KDevelop::IDocument* document);
   void documentClosed(KDevelop::IDocument*);
-  void aboutToQuit();
+
 private:
   TopDUContext* loadChain(uint index);
   //These two are exported here so that the extremely frequently called chainForIndex(..) can be inlined
@@ -317,6 +323,6 @@ private:
 
 }
 
-#endif // DUCHAIN_H
+#endif // KDEVPLATFORM_DUCHAIN_H
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

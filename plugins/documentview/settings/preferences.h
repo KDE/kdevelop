@@ -18,8 +18,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef PREFERENCES_H
-#define PREFERENCES_H
+#ifndef KDEVPLATFORM_PLUGIN_PREFERENCES_H
+#define KDEVPLATFORM_PLUGIN_PREFERENCES_H
 
 #include <kdevcmodule.h>
 
@@ -41,12 +41,6 @@ public:
     virtual void save();
     virtual void load();
     virtual void defaults();
-
-    virtual KUrl localNonShareableFile() const
-    {
-        return KUrl::fromPath(
-                   KStandardDirs::locate( "data", "kdevdocumentview/data.kdev4" ) );
-    }
 
 private slots:
     void slotSettingsChanged();

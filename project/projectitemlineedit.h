@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef KDEVPROJECTITEMLINEEDIT_H
-#define KDEVPROJECTITEMLINEEDIT_H
+#ifndef KDEVPLATFORM_PROJECTITEMLINEEDIT_H
+#define KDEVPLATFORM_PROJECTITEMLINEEDIT_H
 
 #include <KLineEdit>
 #include "projectexport.h"
@@ -66,7 +66,7 @@ public:
     KDevelop::ProjectBaseItem* currentItem() const;
     
 public slots:
-    void selectItemDialog();
+    bool selectItemDialog();
     
 private slots:
     void showCtxMenu(const QPoint& p);

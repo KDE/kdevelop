@@ -34,6 +34,7 @@
 
 SvnInternalRemoveJob::SvnInternalRemoveJob( SvnJobBase* parent )
     : SvnInternalJobBase( parent )
+    , m_force( false )
 {
 }
 

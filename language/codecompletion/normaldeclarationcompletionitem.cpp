@@ -191,7 +191,7 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
       return v;
     }
     case CodeCompletionModel::ScopeIndex:
-      return static_cast<int>(reinterpret_cast<long>(m_declaration->context()));
+      return static_cast<int>(reinterpret_cast<quintptr>(m_declaration->context()));
 
     case CodeCompletionModel::CompletionRole:
       return (int)completionProperties();

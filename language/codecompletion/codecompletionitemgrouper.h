@@ -20,8 +20,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KDEV_CODECOMPLETIONITEMGROUPER_H
-#define KDEV_CODECOMPLETIONITEMGROUPER_H
+#ifndef KDEVPLATFORM_CODECOMPLETIONITEMGROUPER_H
+#define KDEVPLATFORM_CODECOMPLETIONITEMGROUPER_H
 
 #include "codecompletionmodel.h"
 #include "codecompletionitem.h"
@@ -109,4 +109,4 @@ struct SimplifiedAttributesExtractor {
 
 }
 
-#endif // KDEV_CODECOMPLETIONITEMGROUPER_H
+#endif // KDEVPLATFORM_CODECOMPLETIONITEMGROUPER_H

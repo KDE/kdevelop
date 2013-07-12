@@ -20,8 +20,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEV_BOOKMARK_HANDLER_H
-#define KDEV_BOOKMARK_HANDLER_H
+#ifndef KDEVPLATFORM_PLUGIN_BOOKMARKHANDLER_H
+#define KDEVPLATFORM_PLUGIN_BOOKMARKHANDLER_H
 
 #include <kbookmarkmanager.h>
 #include <kbookmarkmenu.h>
@@ -55,5 +55,5 @@ private:
     KBookmarkMenu *m_bookmarkMenu;
 };
 
-#endif // KDEV_BOOKMARK_HANDLER_H
+#endif // KDEVPLATFORM_PLUGIN_BOOKMARKHANDLER_H
 

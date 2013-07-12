@@ -19,8 +19,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CONSTANTINTEGRALTYPE_H
-#define CONSTANTINTEGRALTYPE_H
+#ifndef KDEVPLATFORM_CONSTANTINTEGRALTYPE_H
+#define KDEVPLATFORM_CONSTANTINTEGRALTYPE_H
 
 #include "integraltype.h"
 #include "typesystemdata.h"
@@ -116,5 +116,5 @@ inline ConstantIntegralType* fastCast<ConstantIntegralType*>(AbstractType* from)
 }
 
 
-#endif // CPPTYPES_H
+#endif // KDEVPLATFORM_CONSTANTINTEGRALTYPE_H
 

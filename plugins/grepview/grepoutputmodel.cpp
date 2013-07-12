@@ -202,9 +202,7 @@ QString GrepOutputModel::replacementFor(const QString &text)
 {
     if(!m_finalUpToDate)
     {
-        QString r = (m_regExp.patternSyntax() == QRegExp::Wildcard) ?
-                     m_replacement : QString(m_replacement).replace("\\", "\\\\");
-        m_finalReplacement = substitudePattern(m_replacementTemplate, r);
+        m_finalReplacement = substitudePattern(m_replacementTemplate, m_replacement);
         m_finalUpToDate = true;
     }
     return QString(text).replace(m_regExp, m_finalReplacement);

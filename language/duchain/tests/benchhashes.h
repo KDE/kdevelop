@@ -18,8 +18,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef BENCHHASHES_H
-#define BENCHHASHES_H
+#ifndef KDEVPLATFORM_BENCHHASHES_H
+#define KDEVPLATFORM_BENCHHASHES_H
 
 #include <QObject>
 
@@ -42,6 +42,8 @@ private slots:
   void constFind_data();
   void remove();
   void remove_data();
+  void typeRepo();
+  void typeRepo_data();
 };
 
-#endif // BENCHHASHES_H
+#endif // KDEVPLATFORM_BENCHHASHES_H

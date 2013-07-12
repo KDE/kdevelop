@@ -16,8 +16,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef EXAMPLE1MAIN_H
-#define EXAMPLE1MAIN_H
+#ifndef KDEVPLATFORM_EXAMPLE1MAIN_H
+#define KDEVPLATFORM_EXAMPLE1MAIN_H
 
 #include <kxmlguiwindow.h>
 

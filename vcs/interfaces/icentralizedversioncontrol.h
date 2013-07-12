@@ -20,8 +20,8 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#ifndef ICENTRALIZEDVERSIONCONTROL_H
-#define ICENTRALIZEDVERSIONCONTROL_H
+#ifndef KDEVPLATFORM_ICENTRALIZEDVERSIONCONTROL_H
+#define KDEVPLATFORM_ICENTRALIZEDVERSIONCONTROL_H
 
 #include "ibasicversioncontrol.h"
 

@@ -1,3 +1,8 @@
+set(documentchangesettest_SRCS test_documentchangeset.cpp)
+
+kde4_add_unit_test(documentchangesettest ${documentchangesettest_SRCS})
+target_link_libraries(documentchangesettest ${QT_QTTEST_LIBRARY} kdevplatformtests kdevplatformlanguage)
+
 set(templaterenderertest_SRCS test_templaterenderer.cpp)
 
 kde4_add_unit_test(templaterenderertest ${templaterenderertest_SRCS})
@@ -14,4 +19,4 @@ kde4_add_unit_test(templatesmodeltest ${templatesmodeltest_SRCS})
 target_link_libraries(templatesmodeltest ${QT_QTTEST_LIBRARY} kdevplatformtests kdevplatformlanguage)
 
 configure_file(codegen_tests_config.h.cmake codegen_tests_config.h)
-add_subdirectory(templates)
+add_subdirectory(data)

@@ -19,8 +19,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TEMPLATEPREVIEW_H
-#define TEMPLATEPREVIEW_H
+#ifndef KDEVPLATFORM_PLUGIN_TEMPLATEPREVIEW_H
+#define KDEVPLATFORM_PLUGIN_TEMPLATEPREVIEW_H
 
 #include <QWidget>
 #include <QHash>
@@ -76,4 +76,4 @@ private:
 
 };
 
-#endif // TEMPLATEPREVIEW_H
+#endif // KDEVPLATFORM_PLUGIN_TEMPLATEPREVIEW_H

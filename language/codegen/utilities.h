@@ -20,8 +20,8 @@
 
 #include <QtGui/QValidator>
 
-#ifndef CODEGEN_UTILITIES_H
-#define CODEGEN_UTILITIES_H
+#ifndef KDEVPLATFORM_CODEGEN_UTILITIES_H
+#define KDEVPLATFORM_CODEGEN_UTILITIES_H
 
 namespace KDevelop
 {
@@ -70,4 +70,4 @@ fetchImplementationFileForClass(const Declaration & targetClass);
 
 }
 
-#endif  //CODEGEN_UTILITIES_H
+#endif  //KDEVPLATFORM_CODEGEN_UTILITIES_H

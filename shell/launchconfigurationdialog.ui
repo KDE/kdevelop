@@ -37,7 +37,7 @@
        <item row="0" column="0">
         <widget class="QToolButton" name="addConfig">
          <property name="text">
-          <string>Add new...</string>
+          <string>Add New...</string>
          </property>
          <property name="popupMode">
           <enum>QToolButton::InstantPopup</enum>
@@ -50,7 +50,7 @@
        <item row="0" column="1">
         <widget class="QToolButton" name="deleteConfig">
          <property name="text">
-          <string>Remove selected</string>
+          <string>Remove Selected</string>
          </property>
          <property name="toolButtonStyle">
           <enum>Qt::ToolButtonTextBesideIcon</enum>

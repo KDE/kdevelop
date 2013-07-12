@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef JSONTESTHELPERS_H
-#define JSONTESTHELPERS_H
+#ifndef KDEVPLATFORM_JSONTESTHELPERS_H
+#define KDEVPLATFORM_JSONTESTHELPERS_H
 
 #include "testsuite.h"
 
@@ -50,21 +50,21 @@ template <class Type>
 inline QString compareValues(Type realValue, const QVariant &value, const QString &errorDesc)
 {
   VERIFY_TYPE(Type);
-  const QString ERROR = "%1 (\"%2\") doesn't match test data (\"%3\").";
+  const QString ERROR_MESSAGE = "%1 (\"%2\") doesn't match test data (\"%3\").";
   return realValue == value.value<Type>() ?
-      SUCCESS : ERROR.arg(errorDesc).arg(realValue).arg(value.value<Type>());
+      SUCCESS : ERROR_MESSAGE.arg(errorDesc).arg(realValue).arg(value.value<Type>());
 }
 
 template <class Object>
 inline QString testObject(Object obj, const QVariant &value, const QString &errorDesc)
 {
   VERIFY_TYPE(QVariantMap);
-  const QString ERROR = "%1 did not pass tests.";
-  return KDevelop::TestSuite<Object>::get().runTests(value.toMap(), obj) ? SUCCESS : ERROR.arg(errorDesc);
+  const QString ERROR_MESSAGE = "%1 did not pass tests.";
+  return KDevelop::TestSuite<Object>::get().runTests(value.toMap(), obj) ? SUCCESS : ERROR_MESSAGE.arg(errorDesc);
 }
 
 }
 
 }
 
-#endif //JSONTESTHELPERS_H
+#endif //KDEVPLATFORM_JSONTESTHELPERS_H

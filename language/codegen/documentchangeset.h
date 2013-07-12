@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef DOCUMENTCHANGESET_H
-#define DOCUMENTCHANGESET_H
+#ifndef KDEVPLATFORM_DOCUMENTCHANGESET_H
+#define KDEVPLATFORM_DOCUMENTCHANGESET_H
 
 #include <language/editor/simplerange.h>
 #include <language/duchain/indexedstring.h>
@@ -89,7 +89,6 @@ public:
     };
 
     /// Add an individual local change to this change-set.
-    ///@note Multi-line changes are not (yet) supported.
     ChangeResult addChange(const DocumentChange& change);
     ChangeResult addChange(const DocumentChangePointer& change);
 

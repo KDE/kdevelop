@@ -202,6 +202,7 @@ install(FILES
     util/basicsetrepository.h
     util/includeitem.h
     util/debuglanguageparserhelper.h
+    util/kdevhash.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/util COMPONENT Devel
 )
 
@@ -285,7 +286,6 @@ install(FILES
     duchain/builders/abstractdeclarationbuilder.h
     duchain/builders/abstracttypebuilder.h
     duchain/builders/abstractusebuilder.h
-    duchain/builders/abstractexpressionvisitor.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain/builders COMPONENT Devel
 )
 
@@ -326,7 +326,6 @@ install(FILES
     codegen/sourcefiletemplate.h
     codegen/templateclassgenerator.h
     codegen/codedescription.h
-    codegen/sourcefiletemplate.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/codegen COMPONENT Devel
 )
 

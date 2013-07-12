@@ -18,8 +18,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef TEMPLATEPAGE_H
-#define TEMPLATEPAGE_H
+#ifndef KDEVPLATFORM_PLUGIN_TEMPLATEPAGE_H
+#define KDEVPLATFORM_PLUGIN_TEMPLATEPAGE_H
 
 #include <QWidget>
 
@@ -53,4 +53,4 @@ private:
     Ui::TemplatePage* ui;
 };
 
-#endif // TEMPLATEPAGE_H
+#endif // KDEVPLATFORM_PLUGIN_TEMPLATEPAGE_H

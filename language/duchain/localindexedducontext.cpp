@@ -22,6 +22,7 @@
 #include "ducontextdata.h"
 #include "ducontext.h"
 #include "topducontextdynamicdata.h"
+#include "ducontextdynamicdata.h"
 
 using namespace KDevelop;
 

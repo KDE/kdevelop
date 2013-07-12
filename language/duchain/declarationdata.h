@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef DECLARATION_DATA_H
-#define DECLARATION_DATA_H
+#ifndef KDEVPLATFORM_DECLARATION_DATA_H
+#define KDEVPLATFORM_DECLARATION_DATA_H
 
 #include "duchainbase.h"
 

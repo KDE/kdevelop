@@ -18,8 +18,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#ifndef ENVIRONMENTWIDGET_H
-#define ENVIRONMENTWIDGET_H
+#ifndef KDEVPLATFORM_ENVIRONMENTWIDGET_H
+#define KDEVPLATFORM_ENVIRONMENTWIDGET_H
 
 #include <QtGui/QWidget>
 #include "ui_environmentwidget.h"

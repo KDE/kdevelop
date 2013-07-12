@@ -13,8 +13,8 @@
 **
 ***************************************************************************/
 
-#ifndef DIFF2_PARSERBASE_H
-#define DIFF2_PARSERBASE_H
+#ifndef KDEVPLATFORM_PLUGIN_DIFF2_PARSERBASE_H
+#define KDEVPLATFORM_PLUGIN_DIFF2_PARSERBASE_H
 
 #include <QtCore/QRegExp>
 

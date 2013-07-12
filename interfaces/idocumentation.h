@@ -17,8 +17,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef IDOCUMENTATION_H
-#define IDOCUMENTATION_H
+#ifndef KDEVPLATFORM_IDOCUMENTATION_H
+#define KDEVPLATFORM_IDOCUMENTATION_H
 
 #include <QtCore/QString>
 #include <KDE/KSharedPtr>

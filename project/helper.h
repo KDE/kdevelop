@@ -17,8 +17,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVPROJECTHELPER_H
-#define KDEVPROJECTHELPER_H
+#ifndef KDEVPLATFORM_PROJECTHELPER_H
+#define KDEVPLATFORM_PROJECTHELPER_H
 
 #include "projectexport.h"
 
@@ -59,4 +59,4 @@ bool KDEVPLATFORMPROJECT_EXPORT renameUrl(const KDevelop::IProject* project, con
 bool KDEVPLATFORMPROJECT_EXPORT copyUrl(const KDevelop::IProject* project, const KUrl& source, const KUrl& target);
 }
 
-#endif // KDEVPROJECTHELPER_H
+#endif // KDEVPLATFORM_PROJECTHELPER_H

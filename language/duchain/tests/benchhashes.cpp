@@ -228,4 +228,104 @@ void BenchHashes::remove_data()
   feedData();
 }
 
+struct TypeRepoTestData
+{
+  size_t size;
+  void* ptr;
+};
+
+/**
+ * somewhat artificial benchmark to test speed impact if we'd ever change
+ * the underlying data type of the TypeSystem / TypeRegister.
+ */
+void BenchHashes::typeRepo()
+{
+  QFETCH(int, type);
+  if (type == 1 || type == 2) {
+    QVector<TypeRepoTestData*> v;
+    for(int i = 0; i < 100; ++i) {
+      v.append(new TypeRepoTestData);
+    }
+    if (type == 1) {
+      QBENCHMARK {
+        for(int i = 0; i < 100; ++i) {
+          v.at(i)->size++;
+        }
+      }
+    } else if (type == 2) {
+      TypeRepoTestData** a = v.data();
+      QBENCHMARK {
+        for(int i = 0; i < 100; ++i) {
+          a[i]->size++;
+        }
+      }
+    }
+  } else if (type == 3) {
+    QHash<int, TypeRepoTestData*> v;
+    for(int i = 0; i < 100; ++i) {
+      v[i] = new TypeRepoTestData;
+    }
+    QBENCHMARK {
+      for(int i = 0; i < 100; ++i) {
+        v.value(i)->size++;
+      }
+    }
+  } else if (type == 4) {
+    QMap<int, TypeRepoTestData*> v;
+    for(int i = 0; i < 100; ++i) {
+      v[i] = new TypeRepoTestData;
+    }
+    QBENCHMARK {
+      for(int i = 0; i < 100; ++i) {
+        v.value(i)->size++;
+      }
+    }
+  } else if (type == 5) {
+    std::unordered_map<int, TypeRepoTestData*> v;
+    for(int i = 0; i < 100; ++i) {
+      v[i] = new TypeRepoTestData;
+    }
+    QBENCHMARK {
+      for(int i = 0; i < 100; ++i) {
+        v.at(i)->size++;
+      }
+    }
+  } else if (type == 6) {
+    // for the idea, look at c++'s lexer.cpp
+    const int vectors = 5;
+    typedef QPair<int, TypeRepoTestData*> Pair;
+    typedef QVarLengthArray<Pair, vectors> InnerVector;
+    QVarLengthArray <InnerVector, 10> v;
+    v.resize(vectors);
+    for(int i = 0; i < 100; ++i) {
+      v[i % vectors] << qMakePair(i, new TypeRepoTestData);
+    }
+    QBENCHMARK {
+      for(int i = 0; i < 100; ++i) {
+        foreach(const Pair& p, v.at(i % vectors)) {
+          if (p.first == i) {
+            p.second->size++;
+            break;
+          }
+        }
+      }
+    }
+  } else if (type == 0) {
+    QBENCHMARK {}
+  }
+}
+
+void BenchHashes::typeRepo_data()
+{
+  QTest::addColumn<int>("type");
+
+  QTest::newRow("noop") << 0;
+  QTest::newRow("vector") << 1;
+  QTest::newRow("vector-raw") << 2;
+  QTest::newRow("qhash") << 3;
+  QTest::newRow("qmap") << 4;
+  QTest::newRow("unordered_map") << 5;
+  QTest::newRow("nested-vector") << 6;
+}
+
 #include "benchhashes.moc"

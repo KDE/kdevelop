@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef ASSISTANTPOPUP_H
-#define ASSISTANTPOPUP_H
+#ifndef KDEVPLATFORM_ASSISTANTPOPUP_H
+#define KDEVPLATFORM_ASSISTANTPOPUP_H
 
 #include <QToolBar>
 #include <interfaces/iassistant.h>
@@ -55,4 +55,4 @@ private:
     QWidget* m_contextWidget;
 };
 
-#endif // ASSISTANTPOPUP_H
+#endif // KDEVPLATFORM_ASSISTANTPOPUP_H

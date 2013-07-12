@@ -44,3 +44,4 @@ target_link_libraries(quickopenbench
     ${KDEVPLATFORM_PROJECT_LIBRARIES}
     kdevplatformlanguage
 )
+set_tests_properties(quickopenbench PROPERTIES TIMEOUT 240)

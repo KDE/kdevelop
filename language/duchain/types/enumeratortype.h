@@ -19,8 +19,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef ENUMERATORTYPE_H
-#define ENUMERATORTYPE_H
+#ifndef KDEVPLATFORM_ENUMERATORTYPE_H
+#define KDEVPLATFORM_ENUMERATORTYPE_H
 
 #include "identifiedtype.h"
 #include "constantintegraltype.h"
@@ -75,5 +75,5 @@ inline EnumeratorType* fastCast<EnumeratorType*>(AbstractType* from) {
 }
 
 
-#endif // CPPTYPES_H
+#endif // KDEVPLATFORM_ENUMERATORTYPE_H
 

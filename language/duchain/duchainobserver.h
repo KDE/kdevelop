@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef DUCHAINOBSERVER_H
-#define DUCHAINOBSERVER_H
+#ifndef KDEVPLATFORM_DUCHAINOBSERVER_H
+#define KDEVPLATFORM_DUCHAINOBSERVER_H
 
 #include <QtCore/QObject>
 
@@ -60,6 +60,6 @@ Q_SIGNALS:
 
 }
 
-#endif // DUCHAINOBSERVER_H
+#endif // KDEVPLATFORM_DUCHAINOBSERVER_H
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

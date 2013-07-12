@@ -17,8 +17,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#ifndef I_PROBLEM_H
-#define I_PROBLEM_H
+#ifndef KDEVPLATFORM_I_PROBLEM_H
+#define KDEVPLATFORM_I_PROBLEM_H
 
 
 #include <QtCore/QStack>
@@ -169,4 +169,4 @@ typedef KSharedPtr<Problem> ProblemPointer;
 KDEVPLATFORMLANGUAGE_EXPORT QDebug operator<<(QDebug s, const KDevelop::Problem& problem);
 KDEVPLATFORMLANGUAGE_EXPORT QDebug operator<<(QDebug s, const KDevelop::ProblemPointer& problem);
 
-#endif // I_PROBLEM_H
+#endif // KDEVPLATFORM_I_PROBLEM_H

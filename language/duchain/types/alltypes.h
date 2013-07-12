@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef ALLTYPES_H
-#define ALLTYPES_H
+#ifndef KDEVPLATFORM_ALLTYPES_H
+#define KDEVPLATFORM_ALLTYPES_H
 
 #include "integraltype.h"
 #include "functiontype.h"

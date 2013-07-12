@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef TESTSUITE_H
-#define TESTSUITE_H
+#ifndef KDEVPLATFORM_TESTSUITE_H
+#define KDEVPLATFORM_TESTSUITE_H
 
 #include <QVariantMap>
 #include "delayedoutput.h"
@@ -32,7 +32,7 @@ const QString FAIL =           "\"%1\" FAILED: %2 %3";
 const QString TEST_NOT_FOUND = "Test not found";
 
 template<class T>
-class KDEVPLATFORMTESTS_EXPORT TestSuite
+class KDEVPLATFORMJSONTESTS_EXPORT TestSuite
 {
 public:
   typedef QString (*TestFunction)(const QVariant&, T);
@@ -102,4 +102,4 @@ inline bool runTests(const QVariantMap &data, T object)
 
 }
 
-#endif //TESTSUITE_H
+#endif //KDEVPLATFORM_TESTSUITE_H

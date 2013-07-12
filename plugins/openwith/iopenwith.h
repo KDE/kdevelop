@@ -18,8 +18,8 @@
 * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
-#ifndef IOPENWITH_H
-#define IOPENWITH_H
+#ifndef KDEVPLATFORM_PLUGIN_IOPENWITH_H
+#define KDEVPLATFORM_PLUGIN_IOPENWITH_H
 
 #include <KUrl>
 
@@ -65,4 +65,4 @@ protected:
 
 Q_DECLARE_INTERFACE( KDevelop::IOpenWith, "org.kdevelop.IOpenWith" )
 
-#endif // IOPENWITH_H
+#endif // KDEVPLATFORM_PLUGIN_IOPENWITH_H

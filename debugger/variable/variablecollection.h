@@ -21,8 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KDEV_VARIABLECOLLECTION_H
-#define KDEV_VARIABLECOLLECTION_H
+#ifndef KDEVPLATFORM_VARIABLECOLLECTION_H
+#define KDEVPLATFORM_VARIABLECOLLECTION_H
 
 #include <QtCore/QAbstractItemModel>
 #include <QtCore/QMap>

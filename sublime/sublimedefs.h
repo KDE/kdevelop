@@ -16,8 +16,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef SUBLIMESUBLIMEDEFS_H
-#define SUBLIMESUBLIMEDEFS_H
+#ifndef KDEVPLATFORM_SUBLIMESUBLIMEDEFS_H
+#define KDEVPLATFORM_SUBLIMESUBLIMEDEFS_H
 
 #include <QtCore/Qt>
 #include <QtCore/QFlags>

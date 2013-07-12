@@ -19,8 +19,8 @@
 
 */
 
-#ifndef EXTERNALSCRIPTPLUGIN_H
-#define EXTERNALSCRIPTPLUGIN_H
+#ifndef KDEVPLATFORM_PLUGIN_EXTERNALSCRIPTPLUGIN_H
+#define KDEVPLATFORM_PLUGIN_EXTERNALSCRIPTPLUGIN_H
 
 #include <interfaces/iplugin.h>
 #include <QVariantList>
@@ -93,6 +93,6 @@ private:
   class ExternalScriptViewFactory *m_factory;
 };
 
-#endif // EXTERNALSCRIPTPLUGIN_H
+#endif // KDEVPLATFORM_PLUGIN_EXTERNALSCRIPTPLUGIN_H
 
 // kate: indent-mode cstyle; space-indent on; indent-width 2; replace-tabs on; 

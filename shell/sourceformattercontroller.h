@@ -18,8 +18,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#ifndef SOURCEFORMATTERCONTROLLER_H
-#define SOURCEFORMATTERCONTROLLER_H
+#ifndef KDEVPLATFORM_SOURCEFORMATTERCONTROLLER_H
+#define KDEVPLATFORM_SOURCEFORMATTERCONTROLLER_H
 
 #include <interfaces/isourceformattercontroller.h>
 #include <interfaces/isourceformatter.h>
@@ -118,6 +118,6 @@ class KDEVPLATFORMSHELL_EXPORT SourceFormatterController : public ISourceFormatt
 
 }
 
-#endif // SOURCEFORMATTERMANAGER_H
+#endif // KDEVPLATFORM_SOURCEFORMATTERMANAGER_H
 
 // kate: indent-mode cstyle; space-indent off; tab-width 4;

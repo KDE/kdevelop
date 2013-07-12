@@ -17,8 +17,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 
 */
-#ifndef SOURCEFORMATTERSETTINGS_H
-#define SOURCEFORMATTERSETTINGS_H
+#ifndef KDEVPLATFORM_SOURCEFORMATTERSETTINGS_H
+#define KDEVPLATFORM_SOURCEFORMATTERSETTINGS_H
 
 #include <QHash>
 #include <KCModule>
@@ -95,4 +95,4 @@ private:
     KTextEditor::Document* m_document;
 };
 
-#endif // SOURCEFORMATTERSETTINGS_H
+#endif // KDEVPLATFORM_SOURCEFORMATTERSETTINGS_H

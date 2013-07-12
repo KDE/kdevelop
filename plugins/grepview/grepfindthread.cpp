@@ -14,10 +14,28 @@
 
 using KDevelop::IndexedString;
 
+/**
+ * @return Return true in case @p url is in @p dir within a maximum depth of @p maxDepth
+ */
+static bool isInDirectory(const KUrl& url, const KUrl& dir, int maxDepth)
+{
+    KUrl folderUrl = url.upUrl();
+
+    int currentLevel = maxDepth;
+    while(currentLevel > 0) {
+        folderUrl = folderUrl.upUrl();
+        if ( folderUrl.equals(dir, KUrl::CompareWithoutTrailingSlash) ) {
+            return true;
+        }
+        currentLevel--;
+    }
+    return false;
+}
+
 // the abort parameter must be volatile so that it
 // is evaluated every time - optimization might prevent that
 
-static KUrl::List thread_getProjectFiles(const KUrl dir, bool recursive, const QStringList include,
+static KUrl::List thread_getProjectFiles(const KUrl dir, int depth, const QStringList include,
                                          const QStringList exlude, volatile bool &abort)
 {
     ///@todo This is not thread-safe!
@@ -34,10 +52,20 @@ static KUrl::List thread_getProjectFiles(const KUrl dir, bool recursive, const Q
         KUrl url = item.toUrl();
         if( !url.equals(dir) )
         {
-            if( recursive && !dir.isParentOf(url) )
+            if ( depth == 0 ) {
+                if ( !url.upUrl().equals(dir, KUrl::CompareWithoutTrailingSlash) ) {
+                    continue;
+                }
+            } else if ( !dir.isParentOf(url) ) {
                 continue;
-            if( !recursive && !url.upUrl().equals(dir, KUrl::CompareWithoutTrailingSlash))
-                continue;
+            } else if ( depth > 0 ) {
+                // To ensure the current file is within the defined depth limit, navigate up the tree for as many levels
+                // as the depth value, trying to find "dir", which is the project folder. If after all the loops there
+                // is no match, it means the current file is deeper down the project tree than the limit depth, and so
+                // it must be skipped.
+                if(!isInDirectory(url, dir, depth))
+                    continue;
+            }
         }
         if( QDir::match(include, url.fileName()) && !QDir::match(exlude, url.toLocalFile()) )
             res << url;
@@ -46,8 +74,8 @@ static KUrl::List thread_getProjectFiles(const KUrl dir, bool recursive, const Q
     return res;
 }
 
-static KUrl::List thread_findFiles(const QDir& dir, bool recursive, const QStringList& include,
-                                           const QStringList& exclude, volatile bool &abort)
+static KUrl::List thread_findFiles(const QDir& dir, int depth, const QStringList& include,
+                                   const QStringList& exclude, volatile bool &abort)
 {
     QFileInfoList infos = dir.entryInfoList(include, QDir::NoDotAndDotDot|QDir::Files|QDir::Readable);
     
@@ -61,7 +89,7 @@ static KUrl::List thread_findFiles(const QDir& dir, bool recursive, const QStrin
         if(!QDir::match(exclude, currName))
             dirFiles << currName;
     }
-    if(recursive)
+    if(depth != 0)
     {
         static const QDir::Filters dirFilter = QDir::NoDotAndDotDot|QDir::AllDirs|QDir::Readable|QDir::NoSymLinks;
         foreach(const QFileInfo &currDir, dir.entryInfoList(QStringList(), dirFilter))
@@ -71,14 +99,29 @@ static KUrl::List thread_findFiles(const QDir& dir, bool recursive, const QStrin
             QString canonical = currDir.canonicalFilePath();
             if(!KUrl(dir.canonicalPath()).isParentOf(canonical))
                 continue;
-            dirFiles << thread_findFiles(canonical, true, include, exclude, abort);
+
+            if ( depth > 0 ) {
+                depth--;
+            }
+
+            dirFiles << thread_findFiles(canonical, depth, include, exclude, abort);
         }
     }
     return dirFiles;
 }
 
-GrepFindFilesThread::GrepFindFilesThread(QObject* parent, const QList<KUrl>& startDirs, bool recursive, const QString& pats, const QString& excl, bool onlyProject)
-    : QThread(parent), m_startDirs(startDirs), m_patString(pats), m_exclString(excl), m_recursive(recursive), m_project(onlyProject), m_tryAbort(false)
+GrepFindFilesThread::GrepFindFilesThread(QObject* parent,
+                                         const QList<KUrl>& startDirs,
+                                         int depth, const QString& pats,
+                                         const QString& excl,
+                                         bool onlyProject)
+: QThread(parent)
+, m_startDirs(startDirs)
+, m_patString(pats)
+, m_exclString(excl)
+, m_depth(depth)
+, m_project(onlyProject)
+, m_tryAbort(false)
 {
     setTerminationEnabled(false);
 }
@@ -103,10 +146,10 @@ void GrepFindFilesThread::run()
     foreach(KUrl directory, m_startDirs)
     {
         if(m_project)
-            m_files += thread_getProjectFiles(directory, m_recursive, include, exclude, m_tryAbort);
+            m_files += thread_getProjectFiles(directory, m_depth, include, exclude, m_tryAbort);
         else
         {
-            m_files += thread_findFiles(directory.toLocalFile(), m_recursive, include, exclude, m_tryAbort);
+            m_files += thread_findFiles(directory.toLocalFile(), m_depth, include, exclude, m_tryAbort);
         }
     }
 

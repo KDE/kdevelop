@@ -8,8 +8,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef CVSDIFFJOB_H
-#define CVSDIFFJOB_H
+#ifndef KDEVPLATFORM_PLUGIN_CVSDIFFJOB_H
+#define KDEVPLATFORM_PLUGIN_CVSDIFFJOB_H
 
 #include "cvsjob.h"
 

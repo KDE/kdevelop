@@ -17,8 +17,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#ifndef RUNCONTROLLER_H
-#define RUNCONTROLLER_H
+#ifndef KDEVPLATFORM_RUNCONTROLLER_H
+#define KDEVPLATFORM_RUNCONTROLLER_H
 
 #include <QtCore/QPointer>
 #include <QtGui/QItemDelegate>

@@ -152,25 +152,16 @@ void GitInitTest::addFiles()
     VERIFYJOB(j);
 
     //Now let's create several files and try "git add file1 file2 file3"
-    f.setFileName(gitTest_BaseDir + "file1");
-
-    if (f.open(QIODevice::WriteOnly)) {
-        QTextStream input(&f);
-        input << "file1";
-    }
-
-    f.close();
-    f.setFileName(gitTest_BaseDir + "file2");
-
-    if (f.open(QIODevice::WriteOnly)) {
-        QTextStream input(&f);
-        input << "file2";
-    }
-    f.close();
-    
+    QStringList files = QStringList() << "file1" << "file2" << "la la";
     KUrl::List multipleFiles;
-    multipleFiles << QString(gitTest_BaseDir + "file1");
-    multipleFiles << QString(gitTest_BaseDir + "file2");
+    foreach(const QString& file, files) {
+        QFile f(gitTest_BaseDir + file);
+        QVERIFY(f.open(QIODevice::WriteOnly));
+        QTextStream input(&f);
+        input << file;
+        f.close();
+        multipleFiles << KUrl::fromPath(gitTest_BaseDir + file);
+    }
     j = m_plugin->add(multipleFiles);
     VERIFYJOB(j);
 }
@@ -277,6 +268,37 @@ void GitInitTest::testCommit()
     commitFiles();
 }
 
+void GitInitTest::testBranch(const QString& newBranch)
+{
+    //Already tested, so I assume that it works
+    QString oldBranch = runSynchronously(m_plugin->currentBranch(gitTest_BaseDir)).toString();
+
+    VcsRevision rev;
+    rev.setRevisionValue(oldBranch, KDevelop::VcsRevision::GlobalNumber);
+    VcsJob* j = m_plugin->branch(KUrl(gitTest_BaseDir), rev, newBranch);
+    VERIFYJOB(j);
+    QVERIFY(runSynchronously(m_plugin->branches(KUrl(gitTest_BaseDir))).toStringList().contains(newBranch));
+
+    // switch branch
+    j = m_plugin->switchBranch(KUrl(gitTest_BaseDir), newBranch);
+    VERIFYJOB(j);
+    QCOMPARE(runSynchronously(m_plugin->currentBranch(gitTest_BaseDir)).toString(), newBranch);
+
+    // get into detached head state
+    j = m_plugin->switchBranch(KUrl(gitTest_BaseDir), "HEAD~1");
+    VERIFYJOB(j);
+    QCOMPARE(runSynchronously(m_plugin->currentBranch(gitTest_BaseDir)).toString(), QString(""));
+
+    // switch back
+    j = m_plugin->switchBranch(KUrl(gitTest_BaseDir), newBranch);
+    VERIFYJOB(j);
+    QCOMPARE(runSynchronously(m_plugin->currentBranch(gitTest_BaseDir)).toString(), newBranch);
+
+    j = m_plugin->deleteBranch(KUrl(gitTest_BaseDir), oldBranch);
+    VERIFYJOB(j);
+    QVERIFY(!runSynchronously(m_plugin->branches(KUrl(gitTest_BaseDir))).toStringList().contains(oldBranch));
+}
+
 void GitInitTest::testBranching()
 {
     repoInit();
@@ -289,20 +311,9 @@ void GitInitTest::testBranching()
     QString curBranch = runSynchronously(m_plugin->currentBranch(gitTest_BaseDir)).toString();
     QCOMPARE(curBranch, QString("master"));
 
-    QString newBranch("new");
-    VcsRevision rev;
-    rev.setRevisionValue("master", KDevelop::VcsRevision::GlobalNumber);
-    j = m_plugin->branch(KUrl(gitTest_BaseDir), rev, newBranch);
-    VERIFYJOB(j);
-    QVERIFY(runSynchronously(m_plugin->branches(KUrl(gitTest_BaseDir))).toStringList().contains(newBranch));
-
-    j = m_plugin->switchBranch(KUrl(gitTest_BaseDir), newBranch);
-    VERIFYJOB(j);
-    QCOMPARE(runSynchronously(m_plugin->currentBranch(gitTest_BaseDir)).toString(), newBranch);
-
-    j = m_plugin->deleteBranch(KUrl(gitTest_BaseDir), "master");
-    VERIFYJOB(j);
-    QVERIFY(!runSynchronously(m_plugin->branches(KUrl(gitTest_BaseDir))).toStringList().contains("master"));
+    testBranch("new");
+    testBranch("averylongbranchnamejusttotestlongnames");
+    testBranch("KDE/4.10");
 }
 
 void GitInitTest::revHistory()

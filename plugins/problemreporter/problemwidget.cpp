@@ -32,6 +32,7 @@
 #include <kactionmenu.h>
 #include <klocale.h>
 #include <kicon.h>
+#include <KMenu>
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
@@ -88,7 +89,7 @@ ProblemWidget::ProblemWidget(QWidget* parent, ProblemReporterPlugin* plugin)
     currentDocumentAction->setToolTip(i18nc("@info:tooltip", "Display problems in current document"));
 
     KAction* openDocumentsAction = new KAction(this);
-    openDocumentsAction->setText(i18n("Open documents"));
+    openDocumentsAction->setText(i18n("Open Documents"));
     openDocumentsAction->setToolTip(i18nc("@info:tooltip", "Display problems in all open documents"));
 
     KAction* currentProjectAction = new KAction(this);
@@ -234,17 +235,23 @@ void ProblemWidget::contextMenuEvent(QContextMenuEvent* event) {
         KDevelop::ProblemPointer problem = model()->problemForIndex(index);
         if(problem) {
             KSharedPtr<KDevelop::IAssistant> solution = problem->solutionAssistant();
-            QList<QAction*> actions;
             if(solution) {
-                foreach(KDevelop::IAssistantAction::Ptr action, solution->actions())
-                {
+                QList<QAction*> actions;
+                foreach(KDevelop::IAssistantAction::Ptr action, solution->actions()) {
                     actions << action->toKAction();
-                    if(!solution->title().isEmpty())
-                        actions.back()->setText(solution->title() + ' ' + actions.back()->text());
+                }
+                if(!actions.isEmpty()) {
+                    QString title = solution->title();
+                    title.remove(QRegExp("<[^>]+>"));
+                    title.replace("&apos;", "\'");
+
+                    QPointer<KMenu> m = new KMenu(this);
+                    m->addTitle(title);
+                    m->addActions(actions);
+                    m->exec(event->globalPos());
+                    delete m;
                 }
             }
-            if(!actions.isEmpty())
-                QMenu::exec(actions, event->globalPos());
         }
     }
 }

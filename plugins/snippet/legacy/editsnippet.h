@@ -8,8 +8,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef EDITSNIPPET_H
-#define EDITSNIPPET_H
+#ifndef KDEVPLATFORM_PLUGIN_EDITSNIPPET_H
+#define KDEVPLATFORM_PLUGIN_EDITSNIPPET_H
 
 #include <KDialog>
 

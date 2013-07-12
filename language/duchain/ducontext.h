@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef DUCONTEXT_H
-#define DUCONTEXT_H
+#ifndef KDEVPLATFORM_DUCONTEXT_H
+#define KDEVPLATFORM_DUCONTEXT_H
 
 #include <QtCore/QHash>
 #include <QtCore/QList>
@@ -638,7 +638,11 @@ public:
    * @param htmlPrefix Html-formatted text that should be prepended before any information shown by this widget
    * @param htmlSuffix Html-formatted text that should be appended to any information shown by this widget
    *
-   * Can return zero, which the default-implementation currently always does.
+   * Can return zero which disables the navigation widget.
+   *
+   * If you setProperty("DoNotCloseOnCursorMove", true) on the widget returned,
+   * then the widget will not close when the cursor moves in the document, which
+   * enables you to change the document contents from the widget without immediately closing the widget.
    */
   virtual QWidget* createNavigationWidget(Declaration* decl = 0, TopDUContext* topContext = 0,
                                           const QString& htmlPrefix = QString(),
@@ -901,6 +905,6 @@ KDEVPLATFORMLANGUAGE_EXPORT QList<RangeInRevision> allUses(DUContext* context,
 
 Q_DECLARE_TYPEINFO(KDevelop::DUContext::Import, Q_MOVABLE_TYPE);
 
-#endif // DUCONTEXT_H
+#endif // KDEVPLATFORM_DUCONTEXT_H
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

@@ -16,8 +16,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef SUBLIMEAGGREGATEMODEL_H
-#define SUBLIMEAGGREGATEMODEL_H
+#ifndef KDEVPLATFORM_SUBLIMEAGGREGATEMODEL_H
+#define KDEVPLATFORM_SUBLIMEAGGREGATEMODEL_H
 
 #include <QtCore/QMap>
 #include <QtCore/QList>

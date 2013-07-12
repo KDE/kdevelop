@@ -19,8 +19,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef KDEVBGPREFERENCES_H
-#define KDEVBGPREFERENCES_H
+#ifndef KDEVPLATFORM_BGPREFERENCES_H
+#define KDEVPLATFORM_BGPREFERENCES_H
 
 #include <kcmodule.h>
 
@@ -44,12 +44,6 @@ public:
 
     virtual void save();
     virtual void load();
-
-    virtual KUrl localNonShareableFile() const
-    {
-        return KUrl::fromPath(
-                   KStandardDirs::locate( "data", "kdevelop/data.kdev4" ) );
-    }
 
 private:
     Ui::BGSettings *preferencesDialog;

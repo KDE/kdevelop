@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef TYPESYSTEMDATA_H
-#define TYPESYSTEMDATA_H
+#ifndef KDEVPLATFORM_TYPESYSTEMDATA_H
+#define KDEVPLATFORM_TYPESYSTEMDATA_H
 
 #include "../appendedlist.h"
 #include "../indexedstring.h"

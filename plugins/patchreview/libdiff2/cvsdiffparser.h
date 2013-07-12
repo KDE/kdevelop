@@ -13,8 +13,8 @@
 **
 ***************************************************************************/
 
-#ifndef CVSDIFF_PARSER_H
-#define CVSDIFF_PARSER_H
+#ifndef KDEVPLATFORM_PLUGIN_CVSDIFF_PARSER_H
+#define KDEVPLATFORM_PLUGIN_CVSDIFF_PARSER_H
 
 #include <QtCore/QRegExp>
 

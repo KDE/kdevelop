@@ -48,12 +48,12 @@ set(kdevplatformshell_LIB_SRCS
     launchconfigurationdialog.cpp
     loadedpluginsdialog.cpp
     testcontroller.cpp
-
-    progressmanager.cpp
-    progresswidget.cpp
-    overlaywidget.cpp
-    progressdialog.cpp
     projectsourcepage.cpp
+
+    progresswidget/progressmanager.cpp
+    progresswidget/statusbarprogresswidget.cpp
+    progresswidget/overlaywidget.cpp
+    progresswidget/progressdialog.cpp
 
 # TODO: Re-Enable after generating new kross bindings for project model
 #     kross/krossplugin.cpp
@@ -86,6 +86,14 @@ set(kdevplatformshell_LIB_SRCS
 if(HAVE_KOMPARE)
 	set(kdevplatformshell_LIB_SRCS ${kdevplatformshell_LIB_SRCS} patchdocument.cpp)
 endif(HAVE_KOMPARE)
+
+# Check if KTE is new enough to have the EditVIMode view mode flag
+try_compile( HAVE_EDITVIMODE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/testeditvimode.cpp
+             CMAKE_FLAGS "-DINCLUDE_DIRECTORIES=${KDE4_INCLUDES}"
+             LINK_LIBRARIES ${KDE4_KTEXTEDITOR_LIBS} )
+if(HAVE_EDITVIMODE)
+    add_definitions("-DKTEXTEDITOR_HAS_VIMODE=1")
+endif(HAVE_EDITVIMODE)
 
 set(kdevplatformshell_UI
     sessiondialog.ui

@@ -164,7 +164,7 @@ struct ReferenceCountItem {
   //Every item has to implement this function, and return a valid hash.
   //Must be exactly the same hash value as ReferenceCountItemRequest::hash() has returned while creating the item.
   unsigned int hash() const {
-    return m_id * 17 + m_targetId * 18921;
+    return KDevHash() << m_id << m_targetId;
   }
 
   //Every item has to implement this function, and return the complete size this item takes in memory.

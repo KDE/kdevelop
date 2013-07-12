@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA   *
  *************************************************************************************/
 
-#ifndef CURRENTPROJECT_H
-#define CURRENTPROJECT_H
+#ifndef KDEVPLATFORM_PLUGIN_CURRENTPROJECT_H
+#define KDEVPLATFORM_PLUGIN_CURRENTPROJECT_H
 
 #include <QObject>
 
@@ -35,4 +35,4 @@ class ICoreObject : public QObject
         QObject* self() const;
 };
 
-#endif // CURRENTPROJECT_H
+#endif // KDEVPLATFORM_PLUGIN_CURRENTPROJECT_H

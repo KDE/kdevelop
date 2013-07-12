@@ -18,4 +18,5 @@ install(FILES kdevcontextbrowser.rc DESTINATION ${DATA_INSTALL_DIR}/kdevcontextb
 
 ########### install files ###############
 
-install(FILES kdevcontextbrowser.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+configure_file(kdevcontextbrowser.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevcontextbrowser.desktop)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevcontextbrowser.desktop DESTINATION ${SERVICES_INSTALL_DIR})

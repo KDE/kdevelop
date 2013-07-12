@@ -17,8 +17,8 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
 ***************************************************************************/
 
-#ifndef LOADEDPLUGINSDIALOG_H
-#define LOADEDPLUGINSDIALOG_H
+#ifndef KDEVPLATFORM_LOADEDPLUGINSDIALOG_H
+#define KDEVPLATFORM_LOADEDPLUGINSDIALOG_H
 
 #include <kdialog.h>
 
@@ -29,4 +29,4 @@ public:
     LoadedPluginsDialog( QWidget* parent = 0 );
 };
 
-#endif // LOADEDPLUGINSDIALOG_H
+#endif // KDEVPLATFORM_LOADEDPLUGINSDIALOG_H

@@ -17,8 +17,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 
 */
-#ifndef EDITSTYLEDIALOG_H
-#define EDITSTYLEDIALOG_H
+#ifndef KDEVPLATFORM_EDITSTYLEDIALOG_H
+#define KDEVPLATFORM_EDITSTYLEDIALOG_H
 
 #include <KDialog>
 #include <KMimeType>
@@ -69,5 +69,5 @@ class EditStyleDialog : public KDialog
 		KDevelop::SourceFormatterStyle m_style;
 };
 
-#endif // EDITSTYLEDIALOG_H
+#endif // KDEVPLATFORM_EDITSTYLEDIALOG_H
 // kate: indent-mode cstyle; space-indent off; tab-width 4;

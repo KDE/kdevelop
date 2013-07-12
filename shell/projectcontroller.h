@@ -18,8 +18,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVPROJECTCONTROLLER_H
-#define KDEVPROJECTCONTROLLER_H
+#ifndef KDEVPLATFORM_PROJECTCONTROLLER_H
+#define KDEVPLATFORM_PROJECTCONTROLLER_H
 
 #include <interfaces/iprojectcontroller.h>
 #include <kio/udsentry.h>

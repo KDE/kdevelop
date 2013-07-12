@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef JSONDECLARATIONTESTS_H
-#define JSONDECLARATIONTESTS_H
+#ifndef KDEVPLATFORM_JSONDECLARATIONTESTS_H
+#define KDEVPLATFORM_JSONDECLARATIONTESTS_H
 
 #include "language/duchain/ducontext.h"
 #include "language/duchain/declaration.h"
@@ -26,6 +26,7 @@
 #include "language/duchain/abstractfunctiondeclaration.h"
 #include "language/duchain/types/typeutils.h"
 #include "language/duchain/types/identifiedtype.h"
+#include <language/duchain/types/functiontype.h>
 #include "language/duchain/duchain.h"
 #include "language/duchain/functiondefinition.h"
 #include "language/duchain/definitions.h"
@@ -75,7 +76,11 @@ using namespace JsonTestHelpers;
 ///@returns whether the declaration's number of uses matches the given value
 DeclarationTest(useCount)
 {
-  return compareValues(decl->uses().size(), value, "Declaration's use count ");
+  int uses = 0;
+  foreach(const QList<RangeInRevision>& useRanges, decl->uses()) {
+    uses += useRanges.size();
+  }
+  return compareValues(uses, value, "Declaration's use count ");
 }
 ///JSON type: string
 ///@returns whether the declaration's identifier matches the given value
@@ -128,6 +133,17 @@ DeclarationTest(unaliasedType)
 DeclarationTest(targetType)
 {
   return testObject(TypeUtils::targetType(decl->abstractType(), decl->topContext()), value, "Declaration's target type");
+}
+///JSON type: TestTypeObject
+///@returns the
+DeclarationTest(returnType)
+{
+  FunctionType::Ptr functionType = decl->abstractType().cast<FunctionType>();
+  AbstractType::Ptr returnType;
+  if (functionType) {
+    returnType = functionType->returnType();
+  }
+  return testObject(returnType, value, "Declaration's return type");
 }
 ///JSON type: string
 ///@returns whether the declaration's type's declaration can be identified and if it's qualified identifier matches the given value
@@ -198,4 +214,4 @@ DeclarationTest(defaultParameter)
 
 }
 
-#endif //JSONDECLARATIONTESTS_H
+#endif //KDEVPLATFORM_JSONDECLARATIONTESTS_H

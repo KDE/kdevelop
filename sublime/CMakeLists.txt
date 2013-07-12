@@ -18,9 +18,13 @@ set(sublime_LIB_SRCS
     view.cpp
     sublimedefs.cpp
     aggregatemodel.cpp
-    ideal.cpp
-    ideallayout.cpp
     holdupdates.cpp
+
+    idealcontroller.cpp
+    ideallayout.cpp
+    idealtoolbutton.cpp
+    idealdockwidget.cpp
+    idealbuttonbarwidget.cpp
 )
 
 kde4_add_library(sublime SHARED ${sublime_LIB_SRCS})

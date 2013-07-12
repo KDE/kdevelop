@@ -8,8 +8,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SVNREVISIONWIDGET_H
-#define SVNREVISIONWIDGET_H
+#ifndef KDEVPLATFORM_PLUGIN_SVNREVISIONWIDGET_H
+#define KDEVPLATFORM_PLUGIN_SVNREVISIONWIDGET_H
 
 #include <QWidget>
 #include "svnrevision.h"

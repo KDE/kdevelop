@@ -14,8 +14,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVELOP_CODEGENERATOR_H
-#define KDEVELOP_CODEGENERATOR_H
+#ifndef KDEVPLATFORM_CODEGENERATOR_H
+#define KDEVPLATFORM_CODEGENERATOR_H
 
 #include "language/editor/documentrange.h"
 #include "../duchain/indexedstring.h"
@@ -248,4 +248,4 @@ private:
 
 }
 
-#endif // KDEVELOP_CODEGENERATOR_H
+#endif // KDEVPLATFORM_CODEGENERATOR_H

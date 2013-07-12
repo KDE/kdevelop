@@ -19,8 +19,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef QUICKOPEN_FILTER_H
-#define QUICKOPEN_FILTER_H
+#ifndef KDEVPLATFORM_QUICKOPEN_FILTER_H
+#define KDEVPLATFORM_QUICKOPEN_FILTER_H
 
 #include <QtCore/QRegExp>
 #include <QtCore/QStringList>

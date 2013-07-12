@@ -18,8 +18,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef KROSSVCSJOB_H
-#define KROSSVCSJOB_H
+#ifndef KDEVPLATFORM_KROSSVCSJOB_H
+#define KDEVPLATFORM_KROSSVCSJOB_H
 
 #include <QObject>
 #include <QList>

@@ -70,6 +70,7 @@ DVcsJob::DVcsJob(const QDir& workingDir, IPlugin* parent, OutputJob::OutputJobVe
     d->childproc->setWorkingDirectory(workingDir.absolutePath());
     d->model = new OutputModel;
     setModel(d->model);
+    setCapabilities(Killable);
     
     connect(d->childproc, SIGNAL(finished(int,QProcess::ExitStatus)),
             SLOT(slotProcessExited(int,QProcess::ExitStatus)));
@@ -155,6 +156,8 @@ void DVcsJob::start()
         d->model->appendLine(error);
         setError( 255 );
         setErrorText(error);
+        d->status = JobFailed;
+        emitResult();
         return;
     }
     if( !workingdir.isAbsolute() ) {
@@ -162,6 +165,8 @@ void DVcsJob::start()
         d->model->appendLine(error);
         setError( 255 );
         setErrorText(error);
+        d->status = JobFailed;
+        emitResult();
         return;
     }
 
@@ -194,11 +199,9 @@ void DVcsJob::slotProcessError( QProcess::ProcessError err )
 {
     d->status = JobFailed;
 
-    //Do not use d->childproc->exitCode() to set an error! If we have FailedToStart exitCode will return 0,
-    //and if exec is used, exec will return true and that is wrong!
-    setError(verbosity()==Verbose ? OutputJob::FailedShownError : UserDefinedError);
-    setErrorText( i18n("Process exited with status %1", d->childproc->exitCode() ) );
-
+    setError(OutputJob::FailedShownError); //we don't want to trigger a message box
+    setErrorText( i18n("Process '%1' exited with status %2", d->childproc->program().join(" "), d->childproc->exitCode() ) );
+    
     QString errorValue;
     //if trolls add Q_ENUMS for QProcess, then we can use better solution than switch:
     //QMetaObject::indexOfEnumerator(char*), QLatin1String(QMetaEnum::valueToKey())...
@@ -225,15 +228,14 @@ void DVcsJob::slotProcessError( QProcess::ProcessError err )
     }
     kDebug() << "oops, found an error while running" << dvcsCommand() << ":" << errorValue 
                                                      << "Exit code is:" << d->childproc->exitCode();
-    
     d->errorOutput = d->childproc->readAllStandardError();
-    displayOutput(d->errorOutput);
+    displayOutput(QString::fromLocal8Bit(d->errorOutput));
     d->model->appendLine(i18n("Command finished with error %1.", errorValue));
     
-    //Even if it was a silent process we want to provide some feedback to the user about what went wrong
-    //so we show the output then.
-    if(verbosity()==Silent)
+    if(verbosity()==Silent) {
+        setVerbosity(Verbose);
         startOutput();
+    }
     emitResult();
 }
 
@@ -263,7 +265,7 @@ void DVcsJob::slotReceivedStdout()
     // accumulate output
     d->output.append(output);
     
-    displayOutput(output);
+    displayOutput(QString::fromLocal8Bit(output));
 }
 
 VcsJob::JobStatus DVcsJob::status() const
@@ -287,6 +289,22 @@ DVcsJob& DVcsJob::operator<<(const QList< KUrl >& urls)
     foreach(const KUrl &url, urls)
         operator<<(url);
     return *this;
+}
+
+bool DVcsJob::doKill()
+{
+    if (d->childproc->state() == QProcess::NotRunning) {
+        return true;
+    }
+
+    static const int terminateKillTimeout = 1000; // ms
+    d->childproc->terminate();
+    bool terminated = d->childproc->waitForFinished( terminateKillTimeout );
+    if( !terminated ) {
+        d->childproc->kill();
+        terminated = d->childproc->waitForFinished( terminateKillTimeout );
+    }
+    return terminated;
 }
 
 void DVcsJob::jobIsReady()

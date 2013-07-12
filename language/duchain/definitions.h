@@ -19,8 +19,8 @@
 #include "../languageexport.h"
 #include <util/kdevvarlengtharray.h>
 
-#ifndef DEFINITIONS_H
-#define DEFINITIONS_H
+#ifndef KDEVPLATFORM_DEFINITIONS_H
+#define KDEVPLATFORM_DEFINITIONS_H
 
 namespace KDevelop {
 

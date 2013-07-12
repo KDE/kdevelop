@@ -1,6 +1,6 @@
 /*
  * This file is part of KDevelop
- * Copyright 2012 AndrÃ© Stein <andre.stein@rwth-aachen.de>
+ * Copyright 2012 André Stein <andre.stein@rwth-aachen.de>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -17,8 +17,8 @@
  * Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef SWITCHTOBUDDY_H
-#define SWITCHTOBUDDY_H
+#ifndef KDEVPLATFORM_PLUGIN_SWITCHTOBUDDY_H
+#define KDEVPLATFORM_PLUGIN_SWITCHTOBUDDY_H
 
 #include <interfaces/iplugin.h>
 #include <interfaces/contextmenuextension.h>
@@ -61,4 +61,4 @@ private:
 };
 
 
-#endif // SWITCHTOBUDDY_H
+#endif // KDEVPLATFORM_PLUGIN_SWITCHTOBUDDY_H

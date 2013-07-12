@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVELOP_UNSURETYPE_H
-#define KDEVELOP_UNSURETYPE_H
+#ifndef KDEVPLATFORM_UNSURETYPE_H
+#define KDEVPLATFORM_UNSURETYPE_H
 
 #include "abstracttype.h"
 #include "typesystemdata.h"
@@ -87,4 +87,4 @@ protected:
 
 }
 
-#endif // KDEVELOP_UNSURETYPE_H
+#endif // KDEVPLATFORM_UNSURETYPE_H

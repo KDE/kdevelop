@@ -8,8 +8,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef OPENPROJECTDIALOG_H
-#define OPENPROJECTDIALOG_H
+#ifndef KDEVPLATFORM_OPENPROJECTDIALOG_H
+#define KDEVPLATFORM_OPENPROJECTDIALOG_H
 
 #include <kassistantdialog.h>
 #include <kio/udsentry.h>

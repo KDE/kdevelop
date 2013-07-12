@@ -12,8 +12,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef GREPOUTPUTMODEL_H
-#define GREPOUTPUTMODEL_H
+#ifndef KDEVPLATFORM_PLUGIN_GREPOUTPUTMODEL_H
+#define KDEVPLATFORM_PLUGIN_GREPOUTPUTMODEL_H
 
 #include <QStandardItemModel>
 #include <QList>

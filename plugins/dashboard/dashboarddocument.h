@@ -17,8 +17,8 @@
   Boston, MA 02110-1301, USA.
 */
 
-#ifndef DASHBOARDDOCUMENT_H
-#define DASHBOARDDOCUMENT_H
+#ifndef KDEVPLATFORM_PLUGIN_DASHBOARDDOCUMENT_H
+#define KDEVPLATFORM_PLUGIN_DASHBOARDDOCUMENT_H
 
 #include <interfaces/idocument.h>
 #include <sublime/urldocument.h>
@@ -54,4 +54,4 @@ class DashboardDocument : public Sublime::UrlDocument, public KDevelop::IDocumen
         KDevelop::IProject* m_project;
 };
 
-#endif // DASHBOARDDOCUMENT_H
+#endif // KDEVPLATFORM_PLUGIN_DASHBOARDDOCUMENT_H

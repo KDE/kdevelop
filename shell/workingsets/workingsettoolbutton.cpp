@@ -73,47 +73,16 @@ void WorkingSetToolButton::setWorkingSet(WorkingSet* set)
         return;
     }
 
-    QColor activeBgColor = palette().color(QPalette::Active, QPalette::Highlight);
-    QColor normalBgColor = palette().color(QPalette::Active, QPalette::Base);
-    QColor useColor;
     if(m_mainWindow && m_mainWindow->area() && m_mainWindow->area()->workingSet() == set->id()) {
-        useColor = KColorUtils::mix(normalBgColor, activeBgColor, 0.6);
         setIcon(set->activeIcon());
     }else{
-        useColor = KColorUtils::mix(normalBgColor, activeBgColor, 0.2);
         setIcon(set->inactiveIcon());
     }
-
-    QString sheet = QString("QToolButton { background : %1}").arg(htmlColor(useColor));
-    setStyleSheet(sheet);
 }
 
 void WorkingSetToolButton::contextMenuEvent(QContextMenuEvent* ev)
 {
-    Q_ASSERT(m_set);
-
-    QToolButton::contextMenuEvent(ev);
-
-    QMenu menu;
-    Sublime::MainWindow* mainWindow = dynamic_cast<Sublime::MainWindow*>(Core::self()->uiController()->activeMainWindow());
-    Q_ASSERT(mainWindow);
-    if(m_set->id() == mainWindow->area()->workingSet()) {
-        menu.addAction(i18n("Close Working Set (Left Click)"), this, SLOT(closeSet()));
-        menu.addAction(i18n("Duplicate Working Set"), this, SLOT(duplicateSet()));
-    }else{
-        menu.addAction(i18n("Load Working Set (Left Click)"), this, SLOT(loadSet()));
-//         menu.addAction(i18n("Merge Working Set"), this, SLOT(mergeSet()));
-//         menu.addSeparator();
-//         menu.addAction(i18n("Intersect Working Set"), this, SLOT(intersectSet()));
-//         menu.addAction(i18n("Subtract Working Set"), this, SLOT(subtractSet()));
-    }
-    menu.actions()[0]->setIcon(KIcon(m_set->iconName()));
-
-    if(!m_set->hasConnectedAreas()) {
-        menu.addSeparator();
-        menu.addAction(i18n("Delete Working Set"), m_set, SLOT(deleteSet()));
-    }
-    menu.exec(ev->globalPos());
+    showTooltip();
 
     ev->accept();
 }
@@ -183,40 +152,43 @@ void WorkingSetToolButton::closeSet(bool ask)
 bool WorkingSetToolButton::event(QEvent* e)
 {
     if(m_toolTipEnabled && e->type() == QEvent::ToolTip) {
-        Q_ASSERT(m_set);
-
+        showTooltip();
         e->accept();
-        static WorkingSetToolButton* oldTooltipButton;
-
-        WorkingSetController* controller = Core::self()->workingSetControllerInternal();
-
-        if(controller->tooltip() && oldTooltipButton == this)
-            return true;
-
-        oldTooltipButton = this;
-
-        controller->showToolTip(m_set, QCursor::pos() + QPoint(10, 20));
-
-        QRect extended(parentWidget()->mapToGlobal(geometry().topLeft()),
-                       parentWidget()->mapToGlobal(geometry().bottomRight()));
-        controller->tooltip()->addExtendRect(extended);
-
         return true;
     }
+    
     return QToolButton::event(e);
+}
+
+void WorkingSetToolButton::showTooltip()
+{
+    Q_ASSERT(m_set);
+    static WorkingSetToolButton* oldTooltipButton;
+
+    WorkingSetController* controller = Core::self()->workingSetControllerInternal();
+
+    if(controller->tooltip() && oldTooltipButton == this)
+        return;
+
+    oldTooltipButton = this;
+
+    controller->showToolTip(m_set, QCursor::pos() + QPoint(10, 20));
+
+    QRect extended(parentWidget()->mapToGlobal(geometry().topLeft()),
+                    parentWidget()->mapToGlobal(geometry().bottomRight()));
+    controller->tooltip()->addExtendRect(extended);
 }
 
 void WorkingSetToolButton::buttonTriggered()
 {
     Q_ASSERT(m_set);
 
-    //Only close the working-set if the file was saved before
-    if(!Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(mainWindow(), KDevelop::IDocument::Default, true))
-        return;
-
     if(mainWindow()->area()->workingSet() == m_set->id()) {
-        closeSet(false);
+        showTooltip();
     }else{
+        //Only close the working-set if the file was saved before
+        if(!Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(mainWindow(), KDevelop::IDocument::Default, true))
+            return;
         m_set->setPersistent(true);
         mainWindow()->area()->setWorkingSet(m_set->id());
     }

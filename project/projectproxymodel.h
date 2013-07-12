@@ -17,8 +17,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef PROJECTPROXYMODEL_H
-#define PROJECTPROXYMODEL_H
+#ifndef KDEVPLATFORM_PROJECTPROXYMODEL_H
+#define KDEVPLATFORM_PROJECTPROXYMODEL_H
 
 #include <QtGui/QSortFilterProxyModel>
 #include "projectexport.h"

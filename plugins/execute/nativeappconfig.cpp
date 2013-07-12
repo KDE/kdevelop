@@ -70,14 +70,24 @@ void NativeAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelo
     bool b = blockSignals( true );
     projectTarget->setBaseItem( project ? project->projectItem() : 0, true);
     projectTarget->setCurrentItemPath( cfg.readEntry( ExecutePlugin::projectTargetEntry, QStringList() ) );
-    executablePath->setUrl( cfg.readEntry( ExecutePlugin::executableEntry, KUrl() ) );
-    if( cfg.readEntry( ExecutePlugin::isExecutableEntry, false ) ) 
-    {
-        executableRadio->setChecked( true );
-    } else 
-    {
+
+    KUrl exe = cfg.readEntry( ExecutePlugin::executableEntry, KUrl());
+    if( !exe.isEmpty() || project ){
+        executablePath->setUrl( !exe.isEmpty() ? exe : project->folder() );
+    }else{
+        KDevelop::IProjectController* pc = KDevelop::ICore::self()->projectController();
+        if( pc ){
+            executablePath->setUrl( pc->projects().count() ? pc->projects().first()->folder() : KUrl() );
+        }
+    }
+
+    //executablePath->setFilter("application/x-executable");
+
+    executableRadio->setChecked( true );
+    if ( !cfg.readEntry( ExecutePlugin::isExecutableEntry, false ) && projectTarget->count() ){
         projectTargetRadio->setChecked( true );
     }
+
     arguments->setText( cfg.readEntry( ExecutePlugin::argumentsEntry, "" ) );
     workingDirectory->setUrl( cfg.readEntry( ExecutePlugin::workingDirEntry, KUrl() ) );
     environment->setCurrentProfile( cfg.readEntry( ExecutePlugin::environmentGroupEntry, "default" ) );
@@ -149,7 +159,7 @@ NativeAppConfigPage::NativeAppConfigPage( QWidget* parent )
     connect( terminal, SIGNAL(currentIndexChanged(int)), SIGNAL(changed()) );
     connect( dependencyAction, SIGNAL(currentIndexChanged(int)), SLOT(activateDeps(int)) );
     connect( targetDependency, SIGNAL(textChanged(QString)), SLOT(depEdited(QString)));
-    connect( browseProject, SIGNAL(clicked(bool)), targetDependency, SLOT(selectItemDialog()));
+    connect( browseProject, SIGNAL(clicked(bool)), SLOT(selectItemDialog()));
 }
 
 
@@ -235,6 +245,13 @@ void NativeAppConfigPage::addDep()
 //     dependencies->selectionModel()->select( dependencies->model()->index( dependencies->model()->rowCount() - 1, 0, QModelIndex() ), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::SelectCurrent );
 }
 
+void NativeAppConfigPage::selectItemDialog()
+{
+    if(targetDependency->selectItemDialog()) {
+        addDep();
+    }
+}
+
 void NativeAppConfigPage::removeDep()
 {
     QList<QListWidgetItem*> list = dependencies->selectedItems();
@@ -306,7 +323,7 @@ KJob* NativeAppLauncher::start(const QString& launchMode, KDevelop::ILaunchConfi
     }
     if( launchMode == "execute" )
     {
-        IExecutePlugin* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IExecutePlugin")->extension<IExecutePlugin>();
+        IExecutePlugin* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IExecutePlugin", "kdevexecute")->extension<IExecutePlugin>();
         Q_ASSERT(iface);
         KJob* depjob = iface->dependecyJob( cfg );
         QList<KJob*> l;

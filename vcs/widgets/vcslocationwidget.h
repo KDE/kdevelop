@@ -18,8 +18,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef VCSLOCATIONWIDGET_H
-#define VCSLOCATIONWIDGET_H
+#ifndef KDEVPLATFORM_VCSLOCATIONWIDGET_H
+#define KDEVPLATFORM_VCSLOCATIONWIDGET_H
 
 #include <QWidget>
 #include "../vcsexport.h"

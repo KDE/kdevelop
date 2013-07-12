@@ -49,14 +49,15 @@ OpenProjectDialog::OpenProjectDialog( bool fetch, const KUrl& startUrl, QWidget*
     if( fetch ) {
         sourcePageWidget = new ProjectSourcePage( start, this );
         connect( sourcePageWidget, SIGNAL(isCorrect(bool)), this, SLOT(validateSourcePage(bool)) );
-        sourcePage = addPage( sourcePageWidget, i18n("Select the source") );
+        sourcePage = addPage( sourcePageWidget, i18n("Select Source") );
         currentPage = sourcePage;
     }
     
     openPageWidget = new OpenProjectPage( start, this );
     connect( openPageWidget, SIGNAL(urlSelected(KUrl)), this, SLOT(validateOpenUrl(KUrl)) );
     connect( openPageWidget, SIGNAL(accepted()), this, SLOT(openPageAccepted()) );
-    openPage = addPage( openPageWidget, i18n("Select the project") );
+    openPage = addPage( openPageWidget, i18n("Select a build system setup file, existing KDevelop project, "
+                                             "or any folder to open as a project") );
     
     if( !fetch ) {
         currentPage = openPage;
@@ -65,7 +66,7 @@ OpenProjectDialog::OpenProjectDialog( bool fetch, const KUrl& startUrl, QWidget*
     QWidget* page = new ProjectInfoPage( this );
     connect( page, SIGNAL(projectNameChanged(QString)), this, SLOT(validateProjectName(QString)) );
     connect( page, SIGNAL(projectManagerChanged(QString)), this, SLOT(validateProjectManager(QString)) );
-    projectInfoPage = addPage( page, i18n("Project information") );
+    projectInfoPage = addPage( page, i18n("Project Information") );
     
     setValid( sourcePage, false );
     setValid( openPage, false );
@@ -74,6 +75,7 @@ OpenProjectDialog::OpenProjectDialog( bool fetch, const KUrl& startUrl, QWidget*
     showButton( KDialog::Help, false );
     
     setCurrentPage( currentPage );
+    setWindowTitle(i18n("Open Project"));
 }
 
 void OpenProjectDialog::validateSourcePage(bool valid)

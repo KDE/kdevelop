@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA   *
  *************************************************************************************/
 
-#ifndef KDEVPLATFORMDECLARATIVEPLUGIN_H
-#define KDEVPLATFORMDECLARATIVEPLUGIN_H
+#ifndef KDEVPLATFORM_PLUGIN_KDEVELOPDASBOARDDECLARATIVE_H
+#define KDEVPLATFORM_PLUGIN_KDEVELOPDASBOARDDECLARATIVE_H
 
 #include <QDeclarativeExtensionPlugin>
 
@@ -28,4 +28,4 @@ class KDevplatformDeclarativePlugin : public QDeclarativeExtensionPlugin
 
 Q_EXPORT_PLUGIN2(kdevelopdashboarddeclarativeplugin, KDevplatformDeclarativePlugin);
 
-#endif // KDEVPLATFORMDECLARATIVEPLUGIN_H
+#endif // KDEVPLATFORM_PLUGIN_PLUGIN_KDEVELOPDASBOARDDECLARATIVE_H

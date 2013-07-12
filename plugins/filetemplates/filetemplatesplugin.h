@@ -1,5 +1,5 @@
-#ifndef FILETEMPLATESPLUGIN_H
-#define FILETEMPLATESPLUGIN_H
+#ifndef KDEVPLATFORM_PLUGIN_FILETEMPLATESPLUGIN_H
+#define KDEVPLATFORM_PLUGIN_FILETEMPLATESPLUGIN_H
 
 #include <interfaces/iplugin.h>
 #include <interfaces/itemplateprovider.h>
@@ -34,7 +34,7 @@ public:
 
     virtual QString name() const;
     virtual QIcon icon() const;
-    virtual QAbstractItemModel* templatesModel() const;
+    virtual QAbstractItemModel* templatesModel();
     virtual QString knsConfigurationFile() const;
     virtual QStringList supportedMimeTypes() const;
 
@@ -52,4 +52,4 @@ public slots:
     void previewTemplate();
 };
 
-#endif // FILETEMPLATESPLUGIN_H
+#endif // KDEVPLATFORM_PLUGIN_FILETEMPLATESPLUGIN_H

@@ -17,8 +17,8 @@
   Boston, MA 02110-1301, USA.
 */
 
-#ifndef DASHBOARDVIEW_H
-#define DASHBOARDVIEW_H
+#ifndef KDEVPLATFORM_PLUGIN_DASHBOARDVIEW_H
+#define KDEVPLATFORM_PLUGIN_DASHBOARDVIEW_H
 
 #include <sublime/view.h>
 #include <qsharedpointer.h>
@@ -39,4 +39,4 @@ class DashboardView : public Sublime::View
         QWeakPointer<Dashboard> m_dashboard;
 };
 
-#endif // DASHBOARDVIEW_H
+#endif // KDEVPLATFORM_PLUGIN_DASHBOARDVIEW_H

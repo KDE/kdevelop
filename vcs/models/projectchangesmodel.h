@@ -3,7 +3,8 @@
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
-   License version 2 as published by the Free Software Foundation.
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef PROJECTCHANGESMODEL_H
-#define PROJECTCHANGESMODEL_H
+#ifndef KDEVPLATFORM_PROJECTCHANGESMODEL_H
+#define KDEVPLATFORM_PROJECTCHANGESMODEL_H
 
 #include <vcs/models/vcsfilechangesmodel.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>
@@ -33,6 +34,7 @@ class KDEVPLATFORMVCS_EXPORT ProjectChangesModel : public VcsFileChangesModel
 {
     Q_OBJECT
     public:
+        enum Role { ProjectNameRole = Qt::UserRole };
         ProjectChangesModel(QObject* parent);
         virtual ~ProjectChangesModel();
         
@@ -56,9 +58,10 @@ class KDEVPLATFORMVCS_EXPORT ProjectChangesModel : public VcsFileChangesModel
         void documentSaved(KDevelop::IDocument*);
         void itemsAdded(const QModelIndex& idx, int start, int end);
         void jobUnregistered(KJob*);
-        
+        void repositoryBranchChanged(const KUrl& url);
+        void branchNameReady(KDevelop::VcsJob* job);
 };
 
 }
 
-#endif // PROJECTCHANGESMODEL_H
+#endif // KDEVPLATFORM_PROJECTCHANGESMODEL_H

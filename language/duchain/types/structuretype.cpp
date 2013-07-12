@@ -96,7 +96,7 @@ AbstractType::WhichType StructureType::whichType() const
 
 uint StructureType::hash() const
 {
-  return 19 * (AbstractType::hash() + IdentifiedType::hash() + 101);
+  return KDevHash(AbstractType::hash()) << IdentifiedType::hash();
 }
 
 }

@@ -17,8 +17,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef COMMANDEXECUTOR_H
-#define COMMANDEXECUTOR_H
+#ifndef KDEVPLATFORM_COMMANDEXECUTOR_H
+#define KDEVPLATFORM_COMMANDEXECUTOR_H
 
 #include <QtCore/QObject>
 #include <QtCore/QProcess>

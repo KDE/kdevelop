@@ -48,10 +48,12 @@ public:
         if (selectionWidget) {
             selected << selectionWidget->currentProfile();
         }
+
         KCModuleProxy proxy("kcm_kdev_envsettings", 0, selected);
         dlg.setMainWidget(&proxy);
         dlg.setWindowTitle(proxy.moduleInfo().moduleName());
         dlg.setWindowIcon(KIcon(proxy.moduleInfo().icon()));
+        dlg.resize(480, 320);
         if (dlg.exec() == KDialog::Accepted) {
             proxy.save();
             if (selectionWidget) {
@@ -80,7 +82,7 @@ EnvironmentConfigureButton::EnvironmentConfigureButton(QWidget* parent)
     setText(QString());
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     setIcon(KIcon("configure"));
-    setToolTip(i18n("configure environment variables"));
+    setToolTip(i18n("Configure environment variables"));
 
     connect(this, SIGNAL(clicked(bool)),
             this, SLOT(showDialog()));

@@ -266,7 +266,7 @@ void ProblemModel::timerExpired()
     rebuildProblemList();
 }
 
-QList<ProblemPointer> ProblemModel::getProblems(IndexedString url, bool showImports)
+QList<ProblemPointer> ProblemModel::getProblems(const IndexedString& url, bool showImports)
 {
     QList<ProblemPointer> result;
     QSet<TopDUContext*> visitedContexts;

@@ -25,6 +25,8 @@
 
 using namespace KDevelop;
 
+static const int FROM_FILESYSTEM_SOURCE_INDEX = 0;
+
 ProjectSourcePage::ProjectSourcePage(const KUrl& initial, QWidget* parent)
     : QWidget(parent)
 {
@@ -35,7 +37,7 @@ ProjectSourcePage::ProjectSourcePage(const KUrl& initial, QWidget* parent)
     m_ui->workingDir->setMode(KFile::Directory);
     m_ui->remoteWidget->setLayout(new QVBoxLayout(m_ui->remoteWidget));
     
-    m_ui->sources->addItem(KIcon("folder"), i18n("Do not obtain"));
+    m_ui->sources->addItem(KIcon("folder"), i18n("From File System"));
     m_plugins.append(0);
     
     IPluginController* pluginManager = ICore::self()->pluginController();
@@ -52,12 +54,12 @@ ProjectSourcePage::ProjectSourcePage(const KUrl& initial, QWidget* parent)
     }
     
     connect(m_ui->workingDir, SIGNAL(textChanged(QString)), SLOT(reevaluateCorrection()));
-    connect(m_ui->sources, SIGNAL(currentIndexChanged(int)), SLOT(sourceChanged(int)));
-    connect(m_ui->get, SIGNAL(clicked()), SLOT(getVcsProject()));
+    connect(m_ui->sources, SIGNAL(currentIndexChanged(int)), SLOT(setSourceIndex(int)));
+    connect(m_ui->get, SIGNAL(clicked()), SLOT(checkoutVcsProject()));
     
     emit isCorrect(false);
 
-    sourceChanged(0);
+    setSourceIndex(FROM_FILESYSTEM_SOURCE_INDEX);
     
     if(!m_plugins.isEmpty())
         m_ui->sources->setCurrentIndex(1);
@@ -68,7 +70,7 @@ ProjectSourcePage::~ProjectSourcePage()
     delete m_ui;
 }
 
-void ProjectSourcePage::sourceChanged(int index)
+void ProjectSourcePage::setSourceIndex(int index)
 {
     m_locationWidget = 0;
     m_providerWidget = 0;
@@ -105,7 +107,7 @@ void ProjectSourcePage::sourceChanged(int index)
 
 IBasicVersionControl* ProjectSourcePage::vcsPerIndex(int index)
 {
-    IPlugin* p=m_plugins[index];
+    IPlugin* p = m_plugins.value(index);
     if(!p)
         return 0;
     else
@@ -114,7 +116,7 @@ IBasicVersionControl* ProjectSourcePage::vcsPerIndex(int index)
 
 IProjectProvider* ProjectSourcePage::providerPerIndex(int index)
 {
-    IPlugin* p=m_plugins[index];
+    IPlugin* p = m_plugins.value(index);
     if(!p)
         return 0;
     else
@@ -136,7 +138,7 @@ VcsJob* ProjectSourcePage::jobPerCurrent()
     return job;
 }
 
-void ProjectSourcePage::getVcsProject()
+void ProjectSourcePage::checkoutVcsProject()
 {
     KUrl url=m_ui->workingDir->url();
     QDir d(url.toLocalFile());
@@ -175,10 +177,14 @@ void ProjectSourcePage::infoMessage(KJob* , const QString& text, const QString& 
                                             "%1 : %p%", text));
 }
 
-void ProjectSourcePage::projectReceived(KJob* /*job*/)
+void ProjectSourcePage::projectReceived(KJob* job)
 {
-    m_ui->creationProgress->setValue(m_ui->creationProgress->maximum());
-    
+    if (job->error()) {
+        m_ui->creationProgress->setValue(0);
+    } else {
+        m_ui->creationProgress->setValue(m_ui->creationProgress->maximum());
+    }
+
     reevaluateCorrection();
     m_ui->creationProgress->setFormat("%p%");
 }
@@ -187,16 +193,24 @@ void ProjectSourcePage::reevaluateCorrection()
 {
     //TODO: Probably we should just ignore remote URL's, I don't think we're ever going
     //to support checking out to remote directories
-    KUrl cwd=m_ui->workingDir->url();
+    const KUrl cwd = m_ui->workingDir->url();
+    const QDir dir = cwd.toLocalFile();
+
+    // case where we import a project from local file system
+    if (m_ui->sources->currentIndex() == FROM_FILESYSTEM_SOURCE_INDEX) {
+        emit isCorrect(dir.exists());
+        return;
+    }
+
+    // all other cases where remote locations need to be specified
     bool correct=!cwd.isRelative() && (!cwd.isLocalFile() || QDir(cwd.upUrl().toLocalFile()).exists());
     emit isCorrect(correct && m_ui->creationProgress->value() == m_ui->creationProgress->maximum());
-    
-    QDir d(cwd.toLocalFile());
+
     bool validWidget = ((m_locationWidget && m_locationWidget->isCorrect()) ||
                        (m_providerWidget && m_providerWidget->isCorrect()));
     bool validToCheckout = correct && validWidget; //To checkout, if it exists, it should be an empty dir
-    if(correct && cwd.isLocalFile() && d.exists()) {
-        validToCheckout = d.entryList(QDir::AllEntries | QDir::NoDotAndDotDot).isEmpty();
+    if (validToCheckout && cwd.isLocalFile() && dir.exists()) {
+        validToCheckout = dir.entryList(QDir::AllEntries | QDir::NoDotAndDotDot).isEmpty();
     }
     
     m_ui->get->setEnabled(validToCheckout);
@@ -205,9 +219,9 @@ void ProjectSourcePage::reevaluateCorrection()
     if(!correct)
         setStatus(i18n("You need to specify a valid or nonexistent directory to check out a project"));
     else if(!m_ui->get->isEnabled() && m_ui->workingDir->isEnabled())
-        setStatus(i18n("You need to specify a valid location for the project"));
+        setStatus(i18n("You need to specify a valid project location"));
     else
-        validStatus();
+        clearStatus();
 }
 
 void ProjectSourcePage::locationChanged()
@@ -244,7 +258,7 @@ void ProjectSourcePage::setStatus(const QString& message)
     m_ui->status->setText(QString("<font color='%1'>%2</font>").arg(scheme.foreground(KColorScheme::NegativeText).color().name()).arg(message));
 }
 
-void ProjectSourcePage::validStatus()
+void ProjectSourcePage::clearStatus()
 {
     m_ui->status->clear();
 }

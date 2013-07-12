@@ -18,8 +18,8 @@
 */
 
 
-#ifndef PROJECTUTILS_H
-#define PROJECTUTILS_H
+#ifndef KDEVPLATFORM_PROJECTUTILS_H
+#define KDEVPLATFORM_PROJECTUTILS_H
 #include "projectexport.h"
 
 class QMenu;
@@ -33,4 +33,4 @@ class ProjectBaseItem;
 KDEVPLATFORMPROJECT_EXPORT void populateParentItemsMenu( ProjectBaseItem* item, QMenu* menu );
 }
 
-#endif // PROJECTUTILS_H
+#endif // KDEVPLATFORM_PROJECTUTILS_H

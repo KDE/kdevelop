@@ -4,7 +4,7 @@
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
+    the Free Software Foundation, either version 2 of the License, or
     (at your option) any later version.
 
     This program is distributed in the hope that it will be useful,
@@ -17,8 +17,8 @@
 */
 
 
-#ifndef IFILTERSTRATEGY_H
-#define IFILTERSTRATEGY_H
+#ifndef KDEVPLATFORM_IFILTERSTRATEGY_H
+#define KDEVPLATFORM_IFILTERSTRATEGY_H
 
 #include "outputviewexport.h"
 
@@ -45,16 +45,14 @@ public:
     /**
      * Examine if a given line contains output that is defined as an error (E.g. from a script or from a compiler, or other).
      * @param line the line to examine
-     * @param item Where all the metadata about the current line is put after the given filter is applied
-     * @return true if an error is found, false otherwise
+     * @return FilteredItem with associated metadata if an error is found, an item of type InvalidItem otherwise
      **/
     virtual FilteredItem errorInLine(QString const& line) = 0;
 
     /**
      * Examine if a given line contains output that is defined as an action (E.g. from a script or from a compiler, or other).
      * @param line the line to examine
-     * @param item Where all the metadata about the current line is put after the given filter is applied
-     * @return true if an action is found, false otherwise
+     * @return Filtered of type ActionItem with associated metadata if an action is found, an item of type InvalidItem otherwise
      **/
     virtual FilteredItem actionInLine(QString const& line) = 0;
 
@@ -64,4 +62,4 @@ public:
 
 } // namespace KDevelop
 
-#endif // IFILTERSTRATEGY_H
+#endif // KDEVPLATFORM_IFILTERSTRATEGY_H

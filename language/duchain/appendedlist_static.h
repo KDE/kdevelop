@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef APPENDEDLIST_STATIC_H
-#define APPENDEDLIST_STATIC_H
+#ifndef KDEVPLATFORM_APPENDEDLIST_STATIC_H
+#define KDEVPLATFORM_APPENDEDLIST_STATIC_H
 
 #include <util/kdevvarlengtharray.h>
 #include "referencecounting.h"

@@ -17,8 +17,8 @@
 
 */
 
-#ifndef KDEVELOP_FOREGROUNDLOCK_H
-#define KDEVELOP_FOREGROUNDLOCK_H
+#ifndef KDEVPLATFORM_FOREGROUNDLOCK_H
+#define KDEVPLATFORM_FOREGROUNDLOCK_H
 
 #include "interfacesexport.h"
 #include <QObject>

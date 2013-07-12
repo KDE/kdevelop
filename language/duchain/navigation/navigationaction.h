@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef NAVIGATIONACTION_H
-#define NAVIGATIONACTION_H
+#ifndef KDEVPLATFORM_NAVIGATIONACTION_H
+#define KDEVPLATFORM_NAVIGATIONACTION_H
 
 #include <kurl.h>
 #include <ktexteditor/cursor.h>

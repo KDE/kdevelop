@@ -19,8 +19,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef GREPOUTPUTDELEGATE_H
-#define GREPOUTPUTDELEGATE_H
+#ifndef KDEVPLATFORM_PLUGIN_GREPOUTPUTDELEGATE_H
+#define KDEVPLATFORM_PLUGIN_GREPOUTPUTDELEGATE_H
 
 #include <QtGui/QStyledItemDelegate>
 

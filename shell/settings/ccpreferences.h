@@ -19,8 +19,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef KDEVCCPREFERENCES_H
-#define KDEVCCPREFERENCES_H
+#ifndef KDEVPLATFORM_CCPREFERENCES_H
+#define KDEVPLATFORM_CCPREFERENCES_H
 
 #include <kcmodule.h>
 
@@ -45,12 +45,6 @@ public:
     virtual void save();
 
     virtual void load();
-    
-    virtual KUrl localNonShareableFile() const
-    {
-        return KUrl::fromPath(
-                   KStandardDirs::locate( "data", "kdevelop/data.kdev4" ) );
-    }
     
     void writeToSettings();
 

@@ -16,8 +16,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef SHELLBUDDYTEST_H
-#define SHELLBUDDYTEST_H
+#ifndef KDEVPLATFORM_SHELLBUDDYTEST_H
+#define KDEVPLATFORM_SHELLBUDDYTEST_H
 
 #include <QObject>
 #include <KTempDir>

@@ -18,8 +18,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef STANDARDPATCHEXPORT_H
-#define STANDARDPATCHEXPORT_H
+#ifndef KDEVPLATFORM_PLUGIN_STANDARDPATCHEXPORT_H
+#define KDEVPLATFORM_PLUGIN_STANDARDPATCHEXPORT_H
 
 #include <QObject>
 
@@ -50,4 +50,4 @@ private:
     QList<StandardExporter*> m_exporters;
 };
 
-#endif // STANDARDPATCHEXPORT_H
+#endif // KDEVPLATFORM_PLUGIN_STANDARDPATCHEXPORT_H

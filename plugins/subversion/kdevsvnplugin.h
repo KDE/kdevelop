@@ -9,8 +9,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef KDEVSVNPLUGIN_H
-#define KDEVSVNPLUGIN_H
+#ifndef KDEVPLATFORM_PLUGIN_KDEVSVNPLUGIN_H
+#define KDEVPLATFORM_PLUGIN_KDEVSVNPLUGIN_H
 
 #include <vcs/interfaces/icentralizedversioncontrol.h>
 #include <vcs/vcsdiff.h>

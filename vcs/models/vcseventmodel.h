@@ -18,32 +18,42 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef VCSEVENTMODEL_H
-#define VCSEVENTMODEL_H
+#ifndef KDEVPLATFORM_VCSEVENTMODEL_H
+#define KDEVPLATFORM_VCSEVENTMODEL_H
 
 #include <QtCore/QAbstractTableModel>
 
 #include "../vcsexport.h"
 
+class KUrl;
+class KJob;
+
 namespace KDevelop
 {
-
+class VcsRevision;
+class IBasicVersionControl;
 class VcsEvent;
 
 class KDEVPLATFORMVCS_EXPORT VcsEventModel : public QAbstractTableModel
 {
 Q_OBJECT
 public:
-    VcsEventModel( QObject* parent );
+    VcsEventModel( KDevelop::IBasicVersionControl* iface, const KDevelop::VcsRevision& rev, const KUrl& url, QObject* parent );
     ~VcsEventModel();
     int rowCount( const QModelIndex& = QModelIndex() ) const;
     int columnCount( const QModelIndex& parent = QModelIndex() ) const;
     QVariant data( const QModelIndex&, int role = Qt::DisplayRole ) const;
     QVariant headerData( int, Qt::Orientation, int role = Qt::DisplayRole ) const;
-    void addEvents( const QList<KDevelop::VcsEvent>& );
     KDevelop::VcsEvent eventForIndex( const QModelIndex& ) const;
-    void clear();
+
+    virtual void fetchMore(const QModelIndex& parent);
+    virtual bool canFetchMore(const QModelIndex& parent) const;
+
+private slots:
+    void jobReceivedResults( KJob* job );
+
 private:
+    void addEvents( const QList<KDevelop::VcsEvent>& );
     class VcsEventModelPrivate* const d;
 };
 

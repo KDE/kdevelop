@@ -24,8 +24,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef DUMBPROJECT_H
-#define DUMBPROJECT_H
+#ifndef KDEVPLATFORM_DUMBPROJECT_H
+#define KDEVPLATFORM_DUMBPROJECT_H
 
 #include <shell/project.h>
 

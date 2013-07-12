@@ -21,8 +21,8 @@
  */
 
 
-#ifndef CLASSWIDGET_H
-#define CLASSWIDGET_H
+#ifndef KDEVPLATFORM_PLUGIN_CLASSWIDGET_H
+#define KDEVPLATFORM_PLUGIN_CLASSWIDGET_H
 
 #include <QtGui/QWidget>
 
@@ -47,6 +47,6 @@ private:
   KLineEdit* m_searchLine;
 };
 
-#endif // CLASSWIDGET_H
+#endif // KDEVPLATFORM_PLUGIN_CLASSWIDGET_H
 
 // kate: space-indent on; indent-width 2; tab-width: 4; replace-tabs on; auto-insert-doxygen on

@@ -18,8 +18,8 @@
 
 */
 
-#ifndef KDEVVARLENGTHARRAY_H
-#define KDEVVARLENGTHARRAY_H
+#ifndef KDEVPLATFORM_KDEVVARLENGTHARRAY_H
+#define KDEVPLATFORM_KDEVVARLENGTHARRAY_H
 
 #include <QtCore/QVarLengthArray>
 
@@ -167,4 +167,4 @@ Q_OUTOFLINE_TEMPLATE QVector< T > KDevVarLengthArray<T, Prealloc>::toVector() co
     return ret;
 }
 
-#endif // KDEVVARLENGTHARRAY_H
+#endif // KDEVPLATFORM_KDEVVARLENGTHARRAY_H

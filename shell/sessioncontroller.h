@@ -18,8 +18,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#ifndef SESSIONCONTROLLER_H
-#define SESSIONCONTROLLER_H
+#ifndef KDEVPLATFORM_SESSIONCONTROLLER_H
+#define KDEVPLATFORM_SESSIONCONTROLLER_H
 
 #include "shellexport.h"
 
@@ -27,17 +27,8 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/isessionlock.h>
 
 #include <QtCore/QObject>
-#include <QtCore/QPointer>
-#include <QtCore/QUuid>
-#include <QtCore/QDir>
-#include <QtDBus/QDBusConnection>
 
 #include <kxmlguiclient.h>
-#include <kconfiggroup.h>
-#include <kglobal.h>
-#include <ksharedconfig.h>
-#include <kstandarddirs.h>
-#include <kcomponentdata.h>
 
 namespace KDevelop
 {

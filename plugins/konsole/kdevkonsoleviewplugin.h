@@ -9,8 +9,8 @@
 *                                                                         *
 ***************************************************************************/
 
-#ifndef KDEVKONSOLEVIEWPLUGIN_H
-#define KDEVKONSOLEVIEWPLUGIN_H
+#ifndef KDEVPLATFORM_PLUGIN_KDEVKONSOLEVIEWPLUGIN_H
+#define KDEVPLATFORM_PLUGIN_KDEVKONSOLEVIEWPLUGIN_H
 
 #include <interfaces/iplugin.h>
 #include <QtCore/QVariant>

@@ -19,8 +19,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef SNIPPETCOMPLETIONITEM_H
-#define SNIPPETCOMPLETIONITEM_H
+#ifndef KDEVPLATFORM_PLUGIN_SNIPPETCOMPLETIONITEM_H
+#define KDEVPLATFORM_PLUGIN_SNIPPETCOMPLETIONITEM_H
 
 /// TODO: push this into kdevplatform/language/codecompletion so language plugins can reuse it's functionality
 
@@ -48,4 +48,4 @@ private:
     SnippetRepository* m_repo;
 };
 
-#endif // SNIPPETCOMPLETIONITEM_H
+#endif // KDEVPLATFORM_PLUGIN_SNIPPETCOMPLETIONITEM_H

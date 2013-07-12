@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef FUNCTIONTYPE_H
-#define FUNCTIONTYPE_H
+#ifndef KDEVPLATFORM_FUNCTIONTYPE_H
+#define KDEVPLATFORM_FUNCTIONTYPE_H
 
 #include "abstracttype.h"
 

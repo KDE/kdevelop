@@ -19,8 +19,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef VCSDIFF_H
-#define VCSDIFF_H
+#ifndef KDEVPLATFORM_VCSDIFF_H
+#define KDEVPLATFORM_VCSDIFF_H
 
 //Needed first as it provides a hash-function for QHash
 #include "vcslocation.h"

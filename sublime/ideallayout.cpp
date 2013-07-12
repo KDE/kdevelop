@@ -21,7 +21,7 @@
 */
 
 #include "ideallayout.h"
-#include "ideal.h"
+#include "idealcontroller.h"
 
 #include "kdebug.h"
 #include <KConfigGroup>

@@ -19,8 +19,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef TESTHELPERS_H
-#define TESTHELPERS_H
+#ifndef KDEVPLATFORM_TESTHELPERS_H
+#define KDEVPLATFORM_TESTHELPERS_H
 
 #include "kdevplatformtestsexport.h"
 
@@ -100,4 +100,4 @@ inline char* toString(const TypePtr<KDevelop::AbstractType>& type)
 
 }
 
-#endif // TESTHELPERS_H
+#endif // KDEVPLATFORM_TESTHELPERS_H

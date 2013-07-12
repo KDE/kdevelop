@@ -18,8 +18,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef STASHMANAGERDIALOG_H
-#define STASHMANAGERDIALOG_H
+#ifndef KDEVPLATFORM_PLUGIN_STASHMANAGERDIALOG_H
+#define KDEVPLATFORM_PLUGIN_STASHMANAGERDIALOG_H
 
 #include <KDialog>
 #include <QStandardItemModel>
@@ -63,4 +63,4 @@ class StashModel : public QStandardItemModel
         void stashListReady(KJob*);
 };
 
-#endif // STASHMANAGERDIALOG_H
+#endif // KDEVPLATFORM_PLUGIN_STASHMANAGERDIALOG_H

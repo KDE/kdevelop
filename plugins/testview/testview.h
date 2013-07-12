@@ -17,8 +17,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef TESTVIEW_H
-#define TESTVIEW_H
+#ifndef KDEVPLATFORM_PLUGIN_TESTVIEW_H
+#define KDEVPLATFORM_PLUGIN_TESTVIEW_H
 
 #include <QtGui/QTreeView>
 #include <interfaces/itestcontroller.h>
@@ -81,4 +81,4 @@ private:
     QStandardItem* itemForProject(KDevelop::IProject* project);
 };
 
-#endif // TESTVIEW_H
+#endif // KDEVPLATFORM_PLUGIN_TESTVIEW_H

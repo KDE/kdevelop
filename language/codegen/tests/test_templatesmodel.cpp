@@ -34,21 +34,12 @@ using namespace KDevelop;
 void TestTemplatesModel::initTestCase()
 {
     AutoTestShell::init();
-    TestCore::initialize(Core::NoUi);
-    KStandardDirs* dirs = ICore::self()->componentData().dirs();
+    TestCore* core = TestCore::initialize(Core::NoUi);
 
-    QList<QByteArray> types;
-    types << "templates" << "template_descriptions" << "template_previews";
-    foreach (const QByteArray& type, types)
-    {
-        dirs->addResourceType("test_" + type, "tmp", QLatin1String("kdev_test_templates/" + type));
-    }
-    dirs->addResourceDir("test_templates", CODEGEN_TESTS_TEMPLATES_DIR);
+    bool addedDir = core->componentData().dirs()->addResourceDir("data", CODEGEN_TESTS_DATA_DIR, true);
+    QVERIFY(addedDir);
 
-    model = new TemplatesModel(ICore::self()->componentData(), this);
-    model->setDescriptionResourceType("test_template_descriptions");
-    model->setTemplateResourceType("test_templates");
-
+    model = new TemplatesModel("kdevcodegentest", this);
     model->refresh();
 }
 
@@ -82,13 +73,14 @@ void TestTemplatesModel::descriptionParsing()
     QCOMPARE(item->data(TemplatesModel::CommentRole).toString(), QString("Describes a class using YAML syntax"));
     QVERIFY(item->data(TemplatesModel::IconNameRole).toString().isEmpty());
 
-    QString descriptionFile = ICore::self()->componentData().dirs()->findResource("test_template_descriptions", "test_yaml.desktop");
+    QString descriptionFile = ICore::self()->componentData().dirs()->findResource("data", "kdevcodegentest/template_descriptions/test_yaml.desktop");
+    QVERIFY(QFile::exists(descriptionFile));
     QCOMPARE(item->data(TemplatesModel::DescriptionFileRole).toString(), descriptionFile);
 }
 
 void TestTemplatesModel::templateIndexes()
 {
-    QModelIndexList indexes = model->templateIndexes(CODEGEN_TESTS_TEMPLATES_DIR "/test_yaml.tar.bz2");
+    QModelIndexList indexes = model->templateIndexes("test_yaml.tar.bz2");
     QCOMPARE(indexes.size(), 3);
 
     QCOMPARE(model->data(indexes[0]).toString(), QString("Testing"));

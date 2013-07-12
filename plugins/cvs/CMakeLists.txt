@@ -49,5 +49,6 @@ install(TARGETS kdevcvs DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 
 ########### install files ###############
-install( FILES kdevcvs.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+configure_file(kdevcvs.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevcvs.desktop)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevcvs.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install( FILES kdevcvs.rc DESTINATION ${DATA_INSTALL_DIR}/kdevcvs )

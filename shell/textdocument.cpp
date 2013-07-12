@@ -24,6 +24,7 @@
 #include <QVBoxLayout>
 #include <QWidget>
 #include <QLabel>
+#include <QLayout>
 
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -294,15 +295,30 @@ public:
     TextEditorWidgetPrivate()
     {
         widget = 0;
-        statusBar = 0;
         widgetLayout = 0;
         view = 0;
         statusLabel = 0;
     }
+
+    void viewEditModeChanged(KTextEditor::View* view, KTextEditor::View::EditMode mode)
+    {
+#ifdef KTEXTEDITOR_HAS_VIMODE
+        if ( ! statusLabel ) {
+            statusLabel = new QLabel();
+            view->layout()->addWidget(statusLabel);
+        }
+        if ( mode == KTextEditor::View::EditViMode ) {
+            statusLabel->setText(view->viewMode() + "    <i>" + view->document()->url().fileName() + "</i>");
+            statusLabel->setHidden(false);
+        }
+        else {
+            statusLabel->setHidden(true);
+        }
+#endif
+    }
     QWidget* widget;
     QVBoxLayout* widgetLayout;
     QPointer<KTextEditor::View> view;
-    KStatusBar *statusBar;
     QLabel* statusLabel;
     QString status;
     const TextView* textView;
@@ -800,6 +816,9 @@ void KDevelop::TextEditorWidget::setEditorView(KTextEditor::View* view)
             this, SLOT(viewStatusChanged(KTextEditor::View*,KTextEditor::Cursor)));
     
     viewStatusChanged(view, view->cursorPosition());
+
+    connect(view, SIGNAL(viewEditModeChanged(KTextEditor::View*,KTextEditor::View::EditMode)),
+            this, SLOT(viewEditModeChanged(KTextEditor::View*,KTextEditor::View::EditMode)));
 
     d->widgetLayout->insertWidget(0, d->view);
     setFocusProxy(view);

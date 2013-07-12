@@ -19,8 +19,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef FILTEREDITEM_H
-#define FILTEREDITEM_H
+#ifndef KDEVPLATFORM_FILTEREDITEM_H
+#define KDEVPLATFORM_FILTEREDITEM_H
 
 #include <QString>
 #include <KUrl>
@@ -49,7 +49,7 @@ struct KDEVPLATFORMOUTPUTVIEW_EXPORT FilteredItem
         InformationItem = 6
     };
 
-    explicit FilteredItem( const QString& line );
+    explicit FilteredItem( const QString& line = QString() );
 
     FilteredItem( const QString& line, FilteredOutputItemType type );
 
@@ -68,5 +68,6 @@ struct KDEVPLATFORMOUTPUTVIEW_EXPORT FilteredItem
 } // namespace KDevelop
 
 Q_DECLARE_METATYPE( KDevelop::FilteredItem::FilteredOutputItemType )
+Q_DECLARE_TYPEINFO( KDevelop::FilteredItem, Q_MOVABLE_TYPE );
 
-#endif // FILTEREDITEM_H
+#endif // KDEVPLATFORM_FILTEREDITEM_H

@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef PARSEPROJECTJOB_H
-#define PARSEPROJECTJOB_H
+#ifndef KDEVPLATFORM_PARSEPROJECTJOB_H
+#define KDEVPLATFORM_PARSEPROJECTJOB_H
 
 #include <kjob.h>
 #include <kurl.h>
@@ -52,4 +52,4 @@ private:
 
 }
 
-#endif // PARSEPROJECTJOB_H
+#endif // KDEVPLATFORM_PARSEPROJECTJOB_H

@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef IOUTPUTVIEWMODEL_H
-#define IOUTPUTVIEWMODEL_H
+#ifndef KDEVPLATFORM_IOUTPUTVIEWMODEL_H
+#define KDEVPLATFORM_IOUTPUTVIEWMODEL_H
 
 #include "outputviewexport.h"
 class QModelIndex;

@@ -45,7 +45,7 @@ using namespace KDevelop;
 K_PLUGIN_FACTORY(KDevReviewBoardFactory, registerPlugin<ReviewBoardPlugin>(); )
 K_EXPORT_PLUGIN(KDevReviewBoardFactory(KAboutData("kdevreviewboard","kdevreviewboard", ki18n("ReviewBoard Support"), "0.1", ki18n("Deal with the ReviewBoard Patches"), KAboutData::License_GPL)))
 
-ReviewBoardPlugin::ReviewBoardPlugin ( QObject* parent, const QVariantList& ) 
+ReviewBoardPlugin::ReviewBoardPlugin ( QObject* parent, const QVariantList& )
     : IPlugin ( KDevReviewBoardFactory::componentData(), parent )
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IPatchExporter )
@@ -56,40 +56,74 @@ ReviewBoardPlugin::~ReviewBoardPlugin()
 
 void ReviewBoardPlugin::exportPatch(IPatchSource::Ptr source)
 {
+    m_source = source;
     ReviewPatchDialog d;
-   
+
     IProject* p = ICore::self()->projectController()->findProjectForUrl(source->baseDir());
-    
+
     if(p) {
         KConfigGroup versionedConfig = p->projectConfiguration()->group("ReviewBoard");
-    
+
         d.setServer(versionedConfig.readEntry<KUrl>("server", KUrl("https://git.reviewboard.kde.org")));
         d.setUsername(versionedConfig.readEntry("username", QString()));
         d.setBaseDir(versionedConfig.readEntry("baseDir", "/"));
         d.setRepository(versionedConfig.readEntry("repository", QString()));
     }
-    
+
     int ret = d.exec();
     if(ret==KDialog::Accepted) {
-        ReviewBoard::NewRequest* job=new ReviewBoard::NewRequest(d.server(), source->file(), d.repository(), d.baseDir());
-        bool corr = job->exec();
-        if(corr) {
-            KUrl url=d.server();
-            url.setUserInfo(QString());
-            QString requrl = QString("%1/r/%2/").arg(url.prettyUrl()).arg(job->requestId());
-            
-            KMessageBox::information(0, i18n("<qt>You can find the new request at:<br /><a href='%1'>%1</a> </qt>", requrl),
-                                     QString(), QString(), KMessageBox::AllowLink);
-            if(p) {
-                KConfigGroup versionedConfig = p->projectConfiguration()->group("ReviewBoard");
-            
-                versionedConfig.writeEntry("server", url);
-                versionedConfig.writeEntry("username", d.server().userName());
-                versionedConfig.writeEntry("baseDir", d.baseDir());
-                versionedConfig.writeEntry("repository", d.repositoryName());
-            }
+        KJob* job;
+        if (d.isUpdateReview()) {
+            job=new ReviewBoard::SubmitPatchRequest(d.server(), source->file(), d.baseDir(), d.review());
+            connect(job, SIGNAL(finished(KJob*)), SLOT(reviewDone(KJob*)));
         } else {
-            KMessageBox::error(0, job->errorText());
+            m_baseDir = d.baseDir();
+            job=new ReviewBoard::NewRequest(d.server(), d.repository());
+            connect(job, SIGNAL(finished(KJob*)), SLOT(reviewCreated(KJob*)));
         }
+
+        job->start();
+
+        if(p) {
+            KConfigGroup versionedConfig = p->projectConfiguration()->group("ReviewBoard");
+
+            // We store username in a diferent field. Unset it from server.
+            KUrl storeServer(d.server());
+            storeServer.setUserName(QString());
+            // Don't store password in plaintext inside .kdev4
+            storeServer.setPassword(QString());
+
+            versionedConfig.writeEntry("server", storeServer);
+            versionedConfig.writeEntry("username", d.username());
+            versionedConfig.writeEntry("baseDir", d.baseDir());
+            versionedConfig.writeEntry("repository", d.repository());
+        }
+    }
+}
+
+void ReviewBoardPlugin::reviewDone(KJob* j)
+{
+    if(j->error()==0) {
+        ReviewBoard::SubmitPatchRequest const * job = qobject_cast<ReviewBoard::SubmitPatchRequest*>(j);
+        KUrl url = job->server();
+        url.setUserInfo(QString());
+        QString requrl = QString("%1/r/%2/").arg(url.prettyUrl()).arg(job->requestId());
+
+        KMessageBox::information(0, i18n("<qt>You can find the new request at:<br /><a href='%1'>%1</a> </qt>", requrl),
+                                    QString(), QString(), KMessageBox::AllowLink);
+    } else {
+        KMessageBox::error(0, j->errorText());
+    }
+}
+
+void ReviewBoardPlugin::reviewCreated(KJob* j)
+{
+    if (j->error()==0) {
+        ReviewBoard::NewRequest const * job = qobject_cast<ReviewBoard::NewRequest*>(j);
+        ReviewBoard::SubmitPatchRequest* submitPatchJob=new ReviewBoard::SubmitPatchRequest(job->server(), m_source->file(), m_baseDir, job->requestId());
+        connect(submitPatchJob, SIGNAL(finished(KJob*)), SLOT(reviewDone(KJob*)));
+        submitPatchJob->start();
+    } else {
+        KMessageBox::error(0, j->errorText());
     }
 }

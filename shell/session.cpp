@@ -26,6 +26,7 @@ Boston, MA 02110-1301, USA.
 #include <kstandarddirs.h>
 #include <kparts/mainwindow.h>
 #include <kdebug.h>
+#include <kstringhandler.h>
 
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iuicontroller.h>
@@ -85,6 +86,11 @@ QString Session::name() const
 KUrl::List Session::containedProjects() const
 {
     return d->info.projects;
+}
+
+void Session::updateContainedProjects()
+{
+    d->info.projects = d->info.config->group("General Options").readEntry("Open Projects", QStringList());
 }
 
 void Session::updateDescription()
@@ -166,7 +172,7 @@ QString Session::generateDescription( const SessionInfo& info, const QString& pr
     if( prettyContents.isEmpty() ) {
         prettyContentsFormatted = i18n("(no projects)");
     } else {
-        prettyContentsFormatted = prettyContents;
+        prettyContentsFormatted = KStringHandler::rsqueeze(prettyContents);
     }
 
     QString description;

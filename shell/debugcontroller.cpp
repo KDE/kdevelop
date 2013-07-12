@@ -199,21 +199,18 @@ void DebugController::setupActions()
     KActionCollection* ac = actionCollection();
 
     KAction* action = m_continueDebugger = new KAction(KIcon("media-playback-start"), i18n("&Continue"), this);
-    action->setToolTip( i18n("Continues the application execution") );
-    action->setWhatsThis( i18n("<b>Continue application execution</b><p>"
-        "Continues the execution of your application in the "
-        "debugger. This only takes effect when the application "
-        "has been halted by the debugger (i.e. a breakpoint has "
-        "been activated or the interrupt was pressed).</p>") );
+    action->setToolTip( i18n("Continue application execution") );
+    action->setWhatsThis( i18n("Continues the execution of your application in the "
+                               "debugger. This only takes effect when the application "
+                               "has been halted by the debugger (i.e. a breakpoint has "
+                               "been activated or the interrupt was pressed).") );
     ac->addAction("debug_continue", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(run()));
 
     #if 0
     m_restartDebugger = action = new KAction(KIcon("media-seek-backward"), i18n("&Restart"), this);
     action->setToolTip( i18n("Restart program") );
-    action->setWhatsThis( i18n("<b>Restarts application</b><p>"
-                               "Restarts applications from the beginning.</p>"
-                              ) );
+    action->setWhatsThis( i18n("Restarts applications from the beginning.") );
     action->setEnabled(false);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(restartDebugger()));
     ac->addAction("debug_restart", action);
@@ -221,38 +218,37 @@ void DebugController::setupActions()
 
     m_interruptDebugger = action = new KAction(KIcon("media-playback-pause"), i18n("Interrupt"), this);
     action->setToolTip( i18n("Interrupt application") );
-    action->setWhatsThis(i18n("<b>Interrupt application</b><p>Interrupts the debugged process or current debugger command.</p>"));
+    action->setWhatsThis(i18n("Interrupts the debugged process or current debugger command."));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(interruptDebugger()));
     ac->addAction("debug_pause", action);
 
     m_runToCursor = action = new KAction(KIcon("debug-run-cursor"), i18n("Run to &Cursor"), this);
     action->setToolTip( i18n("Run to cursor") );
-    action->setWhatsThis(i18n("<b>Run to cursor</b><p>Continues execution until the cursor position is reached.</p>"));
+    action->setWhatsThis(i18n("Continues execution until the cursor position is reached."));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(runToCursor()));
     ac->addAction("debug_runtocursor", action);
 
 
     m_jumpToCursor = action = new KAction(KIcon("debug-execute-to-cursor"), i18n("Set E&xecution Position to Cursor"), this);
     action->setToolTip( i18n("Jump to cursor") );
-    action->setWhatsThis(i18n("<b>Set Execution Position </b><p>Set the execution pointer to the current cursor position.</p>"));
+    action->setWhatsThis(i18n("Continue execution from the current cursor position."));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(jumpToCursor()));
     ac->addAction("debug_jumptocursor", action);
 
     m_stepOver = action = new KAction(KIcon("debug-step-over"), i18n("Step &Over"), this);
     action->setShortcut(Qt::Key_F10);
     action->setToolTip( i18n("Step over the next line") );
-    action->setWhatsThis( i18n("<b>Step over</b><p>"
-                               "Executes one line of source in the current source file. "
+    action->setWhatsThis( i18n("Executes one line of source in the current source file. "
                                "If the source line is a call to a function the whole "
                                "function is executed and the app will stop at the line "
-                               "following the function call.</p>") );
+                               "following the function call.") );
     connect(action, SIGNAL(triggered(bool)), this, SLOT(stepOver()));
     ac->addAction("debug_stepover", action);
 
 
     m_stepOverInstruction = action = new KAction(KIcon("debug-step-instruction"), i18n("Step over Ins&truction"), this);
     action->setToolTip( i18n("Step over instruction") );
-    action->setWhatsThis(i18n("<b>Step over instruction</b><p>Steps over the next assembly instruction.</p>"));
+    action->setWhatsThis(i18n("Steps over the next assembly instruction."));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(stepOverInstruction()));
     ac->addAction("debug_stepoverinst", action);
 
@@ -260,36 +256,34 @@ void DebugController::setupActions()
     m_stepInto = action = new KAction(KIcon("debug-step-into"), i18n("Step &Into"), this);
     action->setShortcut(Qt::Key_F11);
     action->setToolTip( i18n("Step into the next statement") );
-    action->setWhatsThis( i18n("<b>Step into</b><p>"
-                               "Executes exactly one line of source. If the source line "
+    action->setWhatsThis( i18n("Executes exactly one line of source. If the source line "
                                "is a call to a function then execution will stop after "
-                               "the function has been entered.</p>") );
+                               "the function has been entered.") );
     connect(action, SIGNAL(triggered(bool)), this, SLOT(stepInto()));
     ac->addAction("debug_stepinto", action);
 
 
     m_stepIntoInstruction = action = new KAction(KIcon("debug-step-into-instruction"), i18n("Step into I&nstruction"), this);
     action->setToolTip( i18n("Step into instruction") );
-    action->setWhatsThis(i18n("<b>Step into instruction</b><p>Steps into the next assembly instruction.</p>"));
+    action->setWhatsThis(i18n("Steps into the next assembly instruction."));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(stepIntoInstruction()));
     ac->addAction("debug_stepintoinst", action);
 
     m_stepOut = action = new KAction(KIcon("debug-step-out"), i18n("Step O&ut"), this);
     action->setShortcut(Qt::Key_F12);
-    action->setToolTip( i18n("Steps out of the current function") );
-    action->setWhatsThis( i18n("<b>Step out</b><p>"
-                               "Executes the application until the currently executing "
+    action->setToolTip( i18n("Step out of the current function") );
+    action->setWhatsThis( i18n("Executes the application until the currently executing "
                                "function is completed. The debugger will then display "
                                "the line after the original call to that function. If "
                                "program execution is in the outermost frame (i.e. in "
-                               "main()) then this operation has no effect.</p>") );
+                               "main()) then this operation has no effect.") );
     connect(action, SIGNAL(triggered(bool)), this, SLOT(stepOut()));
     ac->addAction("debug_stepout", action);
 
     m_toggleBreakpoint = action = new KAction(KIcon("script-error"), i18n("Toggle Breakpoint"), this);
     action->setShortcut( i18n("Ctrl+Alt+B") );
     action->setToolTip(i18n("Toggle breakpoint"));
-    action->setWhatsThis(i18n("<b>Toggle breakpoint</b><p>Toggles the breakpoint at the current line in editor.</p>"));
+    action->setWhatsThis(i18n("Toggles the breakpoint at the current line in editor."));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(toggleBreakpoint()));
     ac->addAction("debug_toggle_breakpoint", action);
 }
@@ -356,7 +350,7 @@ void DebugController::showStepInSource(const KUrl &url, int lineNum)
     QPair<KUrl,int> openUrl = static_cast<IDebugSession*>(sender())->convertToLocalUrl(qMakePair<KUrl,int>( url, lineNum ));
     KDevelop::IDocument* document = KDevelop::ICore::self()
         ->documentController()
-        ->openDocument(openUrl.first, KTextEditor::Cursor(openUrl.second, 0));
+        ->openDocument(openUrl.first, KTextEditor::Cursor(openUrl.second, 0), IDocumentController::DoNotFocus);
 
     if( !document )
         return;

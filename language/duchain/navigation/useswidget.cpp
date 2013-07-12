@@ -376,11 +376,14 @@ ContextUsesWidget::ContextUsesWidget(const CodeRepresentation& code, QList<Index
 void ContextUsesWidget::linkWasActivated(QString link) {
   if ( link == "navigateToFunction" ) {
     DUChainReadLocker lock(DUChain::lock());
-    if(m_context.context()) {
-      CursorInRevision contextStart = m_context.context()->range().start;
+    DUContext* context = m_context.context();
+    if(context) {
+      CursorInRevision contextStart = context->range().start;
       KTextEditor::Cursor cursor(contextStart.line, contextStart.column);
-      ForegroundLock lock;
-      ICore::self()->documentController()->openDocument(m_context.context()->url().toUrl(), cursor);
+      KUrl url = context->url().toUrl();
+      lock.unlock();
+      ForegroundLock fgLock;
+      ICore::self()->documentController()->openDocument(url, cursor);
     }
   }
 }

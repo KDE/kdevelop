@@ -7,10 +7,10 @@
 
 void ClassName::doSomething(double howMuch, bool doSomethingElse)
 {
-
+    
 }
 
 int ClassName::getSomeOtherNumber()
 {
-
+    
 }

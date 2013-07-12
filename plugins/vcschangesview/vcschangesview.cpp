@@ -74,8 +74,9 @@ void VcsChangesView::popupContextMenu( const QPoint &pos )
         if(idx.column()==0) {
             if(idx.parent().isValid())
                 urls += idx.data(KDevelop::VcsFileChangesModel::VcsStatusInfoRole).value<VcsStatusInfo>().url();
-            else
-                projects += ICore::self()->projectController()->findProjectByName(idx.data().toString());
+            else {
+                projects += ICore::self()->projectController()->findProjectByName(idx.data(ProjectChangesModel::ProjectNameRole).toString());
+            }
         }
     }
 
@@ -160,6 +161,8 @@ void VcsChangesView::setModel(QAbstractItemModel* model)
 
 void VcsChangesView::openSelected(const QModelIndex& index)
 {
+    if(!index.parent().isValid()) //then it's a project
+        return;
     QModelIndex idx = index.sibling(index.row(), 0);
     VcsStatusInfo info = idx.data(ProjectChangesModel::VcsStatusInfoRole).value<VcsStatusInfo>();
     KUrl url = info.url();

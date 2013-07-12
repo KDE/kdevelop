@@ -16,16 +16,16 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef DECLARATIONVALIDATOR_H
-#define DECLARATIONVALIDATOR_H
+#ifndef KDEVPLATFORM_DECLARATIONVALIDATOR_H
+#define KDEVPLATFORM_DECLARATIONVALIDATOR_H
 
 #include "language/duchain/ducontext.h"
-#include "tests/kdevplatformtestsexport.h"
+#include "kdevplatformjsontestsexport.h"
 
 namespace KDevelop {
 
 class DeclarationValidatorPrivate;
-class KDEVPLATFORMTESTS_EXPORT DeclarationValidator : public DUChainVisitor
+class KDEVPLATFORMJSONTESTS_EXPORT DeclarationValidator : public DUChainVisitor
 {
 public:
   DeclarationValidator();
@@ -40,4 +40,4 @@ private:
 };
 
 }
-#endif //DECLARATIONVALIDATOR_H
+#endif //KDEVPLATFORM_DECLARATIONVALIDATOR_H

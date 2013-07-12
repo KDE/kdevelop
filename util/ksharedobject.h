@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSHAREDOBJECT_H
-#define KSHAREDOBJECT_H
+#ifndef KDEVPLATFORM_KSHAREDOBJECT_H
+#define KDEVPLATFORM_KSHAREDOBJECT_H
 
 #include <KDE/KSharedPtr>
 #include <QtCore/QObject>

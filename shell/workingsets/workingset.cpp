@@ -41,33 +41,88 @@ using namespace KDevelop;
 
 bool WorkingSet::m_loading = false;
 
-WorkingSet::WorkingSet(QString id, QString icon)
-    : m_id(id), m_iconName(icon)
+WorkingSet::WorkingSet(QString id)
+    : m_id(id)
 {
-    //Give the working-set icons one color, so they are less disruptive
-    QImage imgActive(KIconLoader::global()->loadIcon(icon, KIconLoader::NoGroup, 16).toImage());
-    QImage imgInactive = imgActive;
-
-    QColor activeIconColor = QApplication::palette().color(QPalette::Active, QPalette::Highlight);
-    QColor inActiveIconColor = QApplication::palette().color(QPalette::Active, QPalette::Base);
-
-    KIconEffect::colorize(imgActive, KColorUtils::mix(inActiveIconColor, activeIconColor, 0.7), 0.5);
-    KIconEffect::colorize(imgInactive, KColorUtils::mix(inActiveIconColor, activeIconColor, 0.3), 0.5);
-
-    m_activeIcon = QIcon(QPixmap::fromImage(imgActive));
-    m_inactiveIcon = QIcon(QPixmap::fromImage(imgActive));
-
-    QImage imgNonPersistent = imgInactive;
-
-    KIconEffect::deSaturate(imgNonPersistent, 1.0);
-
-    m_inactiveNonPersistentIcon = QIcon(QPixmap::fromImage(imgNonPersistent));
-    //effect.apply(KIconLoader::global()->loadIcon(icon, KIconLoader::NoGroup, 16), KIconLoader::NoGroup, );
+    m_activeIcon = generateIcon(true);
+    m_inactiveIcon = generateIcon(false);
+    m_inactiveNonPersistentIcon = m_inactiveIcon;
 }
 
 WorkingSet::WorkingSet( const KDevelop::WorkingSet& rhs ) : QObject()
 {
     m_id =  rhs.m_id + "_copy_";
+}
+
+QIcon WorkingSet::generateIcon(bool active) const
+{
+    QImage pixmap(16, 16, QImage::Format_ARGB32);
+    // fill the background with a transparent color
+    pixmap.fill(QColor::fromRgba(qRgba(0, 0, 0, 0)));
+    // calculate layout and colors depending on the working set ID
+    // modulo it so it's around 2^28, leaving some space before uint overflows
+    const uint setId = qHash(m_id) % 268435459;
+    // amount of colored squares in this icon (the rest is grey or whatever you set as default color)
+    // use 4-6-4-1 weighting for 1, 2, 3, 4 squares, because that's the number of arrangements for each
+    const uint coloredCount = (setId % 15 < 4) ? 1 : (setId % 15 < 10) ? 2 : (setId % 15 == 14) ? 4 : 3;
+    // coordinates of the rectangles to draw, for 16x16 icons specifically
+    QList<QRect> rects;
+    rects << QRect(1, 1, 5, 5) << QRect(1, 9, 5, 5) << QRect(9, 1, 5, 5) << QRect(9, 9, 5, 5);
+    if ( setId % 31 < 16 ) {
+        rects.swap(1, 2);
+    }
+
+    QPainter painter(&pixmap);
+    // color for non-colored squares, paint them brighter if the working set is the active one
+    const int inact = 40;
+    QColor darkColor = QColor::fromRgb(inact, inact, inact);
+    // color for colored squares
+    // this code is not fragile, you can just tune the magic formulas at random and see what looks good.
+    // just make sure to keep it within the 0-360 / 0-255 / 0-255 space of the HSV model
+    QColor brightColor = QColor::fromHsv((setId % 273 * 81) % 360, qMin<uint>(255, 215 + (setId*5) % 150),
+                                         205 + (setId*11) % 50);
+    // Y'UV "Y" value, the approximate "lightness" of the color
+    // If it is above 0.6, then making the color darker a bit is okay,
+    // if it is below 0.35, then the color should be a bit brighter.
+    float brightY = 0.299 * brightColor.redF() + 0.587 * brightColor.greenF() + 0.114 * brightColor.blueF();
+    if ( brightY > 0.6 ) {
+        if ( setId % 7 < 2 ) {
+            // 2/7 chance to make the color significantly darker
+            brightColor = brightColor.darker(120 + (setId*7) % 35);
+        }
+        else if ( setId % 5 == 0 ) {
+            // 1/5 chance to make it a bit darker
+            brightColor = brightColor.darker(110 + (setId*3) % 10);
+        }
+    }
+    if ( brightY < 0.35 ) {
+        // always make the color brighter to avoid very dark colors (like rgb(0, 0, 255))
+        brightColor = brightColor.lighter(120 + (setId*13) % 55);
+    }
+    int at = 0;
+    foreach ( const QRect& rect, rects ) {
+        QColor currentColor;
+        // pick the colored squares; you can get different patterns by re-ordering the "rects" list
+        if ( (at + setId*7) % 4 < coloredCount ) {
+            currentColor = brightColor;
+        }
+        else {
+            currentColor = darkColor;
+        }
+        // draw the filling of the square
+        painter.setPen(QColor(currentColor));
+        painter.setBrush(QBrush(currentColor));
+        painter.drawRect(rect);
+        // draw a slight set-in shadow for the square -- it's barely recognizeable,
+        // but it looks way better than without
+        painter.setBrush(Qt::NoBrush);
+        painter.setPen(QColor(0, 0, 0, 50));
+        painter.drawRect(rect);
+        painter.setPen(QColor(0, 0, 0, 25));
+        painter.drawRect(rect.x() + 1, rect.y() + 1, rect.width() - 2, rect.height() - 2);
+        at += 1;
+    }
+    return QIcon(QPixmap::fromImage(pixmap));
 }
 
 void WorkingSet::saveFromArea( Sublime::Area* a, Sublime::AreaIndex * area, KConfigGroup setGroup, KConfigGroup areaGroup )
@@ -340,7 +395,6 @@ void WorkingSet::saveFromArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex
 
     KConfigGroup setGroup = setConfig.group(m_id);
     deleteGroupRecursive(setGroup);
-    setGroup.writeEntry("iconName", m_iconName);
 
     KConfigGroup areaGroup = setConfig.group(m_id + '|' + area->title());
     QString lastActiveView = areaGroup.readEntry("Active View", "");
@@ -530,11 +584,6 @@ void WorkingSet::changed( Sublime::Area* area )
 QIcon WorkingSet::activeIcon() const
 {
   return m_activeIcon;
-}
-
-QString WorkingSet::iconName() const
-{
-  return m_iconName;
 }
 
 #include "workingset.moc"

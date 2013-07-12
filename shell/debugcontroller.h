@@ -21,8 +21,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef KDEV_DEBUGCONTROLLER_H
-#define KDEV_DEBUGCONTROLLER_H
+#ifndef KDEVPLATFORM_DEBUGCONTROLLER_H
+#define KDEVPLATFORM_DEBUGCONTROLLER_H
 
 #include <QtCore/QVariantList>
 #include <QWeakPointer>

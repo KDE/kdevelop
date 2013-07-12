@@ -66,9 +66,6 @@ OpenProjectPage::OpenProjectPage( const KUrl& startUrl, QWidget* parent )
 
     fileWidget->setMode( KFile::Modes( KFile::File | KFile::Directory | KFile::ExistingOnly ) );
 
-    KConfigGroup projectdialogsettings = KGlobal::config()->group( "Open Project Dialog Settings" );
-    fileWidget->readConfig( projectdialogsettings );
-
     layout->addWidget( fileWidget );
 
     QWidget* ops= fileWidget->findChild<QWidget*>( "KFileWidget::ops" );

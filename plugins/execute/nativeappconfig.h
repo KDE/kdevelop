@@ -17,8 +17,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef NATIVEAPPCONFIGTYPE_H
-#define NATIVEAPPCONFIGTYPE_H
+#ifndef KDEVPLATFORM_PLUGIN_NATIVEAPPCONFIGTYPE_H
+#define KDEVPLATFORM_PLUGIN_NATIVEAPPCONFIGTYPE_H
 
 #include <interfaces/launchconfigurationtype.h>
 #include <interfaces/launchconfigurationpage.h>
@@ -46,6 +46,7 @@ private slots:
     void activateDeps( int );
     void checkActions( const QItemSelection& , const QItemSelection& );
     void depEdited( const QString& );
+    void selectItemDialog();
 };
 
 class NativeAppLauncher : public KDevelop::ILauncher

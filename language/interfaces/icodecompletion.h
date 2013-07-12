@@ -17,8 +17,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef ICODECOMPLETION_H
-#define ICODECOMPLETION_H
+#ifndef KDEVPLATFORM_ICODECOMPLETION_H
+#define KDEVPLATFORM_ICODECOMPLETION_H
 
 #include <kurl.h>
 

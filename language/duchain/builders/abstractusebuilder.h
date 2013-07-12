@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef ABSTRACTUSEBUILDER_H
-#define ABSTRACTUSEBUILDER_H
+#ifndef KDEVPLATFORM_ABSTRACTUSEBUILDER_H
+#define KDEVPLATFORM_ABSTRACTUSEBUILDER_H
 
 #include "../declaration.h"
 #include "../use.h"
@@ -215,5 +215,5 @@ private:
 
 }
 
-#endif // ABSTRACTUSEBUILDER_H
+#endif // KDEVPLATFORM_ABSTRACTUSEBUILDER_H
 

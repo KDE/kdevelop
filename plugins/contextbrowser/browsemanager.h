@@ -19,8 +19,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef BROWSEMANAGER_H
-#define BROWSEMANAGER_H
+#ifndef KDEVPLATFORM_PLUGIN_BROWSEMANAGER_H
+#define KDEVPLATFORM_PLUGIN_BROWSEMANAGER_H
 
 #include <QObject>
 #include <QCursor>

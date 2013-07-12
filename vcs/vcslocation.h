@@ -19,8 +19,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef KDEVVCSLOCATION_H
-#define KDEVVCSLOCATION_H
+#ifndef KDEVPLATFORM_VCSLOCATION_H
+#define KDEVPLATFORM_VCSLOCATION_H
 
 #include "vcsexport.h"
 #include <QtCore/QList>

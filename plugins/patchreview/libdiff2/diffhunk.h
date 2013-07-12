@@ -15,8 +15,8 @@
 **
 ***************************************************************************/
 
-#ifndef DIFFHUNK_H
-#define DIFFHUNK_H
+#ifndef KDEVPLATFORM_PLUGIN_DIFFHUNK_H
+#define KDEVPLATFORM_PLUGIN_DIFFHUNK_H
 
 #include "difference.h"
 

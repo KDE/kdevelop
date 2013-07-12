@@ -19,8 +19,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KDEVELOP_PROJECTTESTJOB_H
-#define KDEVELOP_PROJECTTESTJOB_H
+#ifndef KDEVPLATFORM_PROJECTTESTJOB_H
+#define KDEVPLATFORM_PROJECTTESTJOB_H
 
 #include <KJob>
 #include <QList>
@@ -117,4 +117,4 @@ private:
 
 }
 
-#endif // KDEVELOP_PROJECTTESTJOB_H
+#endif // KDEVPLATFORM_PROJECTTESTJOB_H

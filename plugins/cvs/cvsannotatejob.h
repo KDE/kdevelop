@@ -8,8 +8,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef CVSANNOTATEJOB_H
-#define CVSANNOTATEJOB_H
+#ifndef KDEVPLATFORM_PLUGIN_CVSANNOTATEJOB_H
+#define KDEVPLATFORM_PLUGIN_CVSANNOTATEJOB_H
 
 #include <vcs/vcsannotation.h>
 

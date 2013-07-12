@@ -8,8 +8,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef CVSLOGJOB_H
-#define CVSLOGJOB_H
+#ifndef KDEVPLATFORM_PLUGIN_CVSLOGJOB_H
+#define KDEVPLATFORM_PLUGIN_CVSLOGJOB_H
 
 #include "cvsjob.h"
 

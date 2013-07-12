@@ -99,8 +99,8 @@ QByteArray multipartFormData(const QList<QPair<QString, QVariant> >& values)
 
 }
 
-HttpPostCall::HttpPostCall(const KUrl& s, const QString& apiPath, const QList<QPair<QString,QString> >& queryParameters, const QByteArray& post, bool multipart, QObject* parent)
-        : KJob(parent), m_post(post), m_multipart(multipart)
+HttpCall::HttpCall(const KUrl& s, const QString& apiPath, const QList<QPair<QString,QString> >& queryParameters, const QByteArray& post, bool multipart, QObject* parent)
+    : KJob(parent), m_post(post), m_multipart(multipart)
 {
     m_requrl=s;
     m_requrl.addPath(apiPath);
@@ -110,7 +110,7 @@ HttpPostCall::HttpPostCall(const KUrl& s, const QString& apiPath, const QList<QP
     }
 }
 
-void HttpPostCall::start()
+void HttpCall::start()
 {
     QNetworkRequest r(m_requrl);
 
@@ -118,7 +118,7 @@ void HttpPostCall::start()
         QByteArray head = "Basic " + m_requrl.userInfo().toAscii().toBase64();
         r.setRawHeader("Authorization", head);
     }
-    
+
     if(m_multipart) {
         r.setHeader(QNetworkRequest::ContentTypeHeader, "multipart/form-data");
         r.setHeader(QNetworkRequest::ContentLengthHeader, QString::number(m_post.size()));
@@ -135,18 +135,18 @@ void HttpPostCall::start()
     qDebug() << "starting..." << m_requrl << m_post;
 }
 
-QVariant HttpPostCall::result() const
+QVariant HttpCall::result() const
 {
     Q_ASSERT(m_reply->isFinished());
     return m_result;
 }
 
-void HttpPostCall::finished()
+void HttpCall::finished()
 {
     QJson::Parser parser;
     QByteArray receivedData = m_reply->readAll();
 
-    qDebug() << "parsing..." << receivedData;
+//     qDebug() << "parsing..." << receivedData;
     bool ok;
     m_result = parser.parse(receivedData, &ok);
     if (!ok) {
@@ -162,39 +162,16 @@ void HttpPostCall::finished()
     emitResult();
 }
 
-NewRequest::NewRequest(const KUrl& server, const KUrl& patch, const QString& projectPath, const QString& basedir, QObject* parent)
-        : KJob(parent), m_server(server), m_patch(patch), m_basedir(basedir), m_project(projectPath)
+NewRequest::NewRequest(const KUrl& server, const QString& projectPath, QObject* parent)
+    : KJob(parent), m_server(server), m_project(projectPath)
 {
-    m_newreq = new HttpPostCall(m_server, "/api/review-requests/", QList<QPair<QString,QString> >(), "repository="+projectPath.toLatin1(), false, this);
-    connect(m_newreq, SIGNAL(finished(KJob*)), SLOT(submitPatch()));
+    m_newreq = new HttpCall(m_server, "/api/review-requests/", QList<QPair<QString,QString> >(), "repository="+projectPath.toLatin1(), false, this);
+    connect(m_newreq, SIGNAL(finished(KJob*)), SLOT(done()));
 }
 
 void NewRequest::start()
 {
     m_newreq->start();
-}
-
-void NewRequest::submitPatch()
-{
-    if (m_newreq->error()) {
-        qDebug() << "Could not create the new request" << m_newreq->errorString();
-        setError(2);
-        setErrorText(i18n("Could not create the new request:\n%1", m_newreq->errorString()));
-        emitResult();
-        return;
-    }
-    QVariant res = m_newreq->result();
-
-    m_id = res.toMap()["review_request"].toMap()["id"].toString();
-    Q_ASSERT(!m_id.isEmpty());
-
-    QList<QPair<QString, QVariant> > vals;
-    vals += QPair<QString, QVariant>("basedir", m_basedir);
-    vals += QPair<QString, QVariant>("path", qVariantFromValue<QUrl>(m_patch));
-
-    m_uploadpatch = new HttpPostCall(m_server, "/api/review-requests/"+m_id+"/diffs/", QList<QPair<QString,QString> >(), multipartFormData(vals), true, this);
-    connect(m_uploadpatch, SIGNAL(finished(KJob*)), SLOT(done()));
-    m_uploadpatch->start();
 }
 
 QString NewRequest::requestId() const
@@ -203,6 +180,44 @@ QString NewRequest::requestId() const
 }
 
 void NewRequest::done()
+{
+    if (m_newreq->error()) {
+        qDebug() << "Could not create the new request" << m_newreq->errorString();
+        setError(2);
+        setErrorText(i18n("Could not create the new request:\n%1", m_newreq->errorString()));
+    } else {
+        QVariant res = m_newreq->result();
+
+        m_id = res.toMap()["review_request"].toMap()["id"].toString();
+        Q_ASSERT(!m_id.isEmpty());
+    }
+
+    emitResult();
+}
+
+
+SubmitPatchRequest::SubmitPatchRequest(const KUrl& server, const KUrl& patch, const QString& basedir, const QString& id, QObject* parent)
+    : KJob(parent), m_server(server), m_patch(patch), m_basedir(basedir), m_id(id)
+{
+    QList<QPair<QString, QVariant> > vals;
+    vals += QPair<QString, QVariant>("basedir", m_basedir);
+    vals += QPair<QString, QVariant>("path", qVariantFromValue<QUrl>(m_patch));
+
+    m_uploadpatch = new HttpCall(m_server, "/api/review-requests/"+m_id+"/diffs/", QList<QPair<QString,QString> >(), multipartFormData(vals), true, this);
+    connect(m_uploadpatch, SIGNAL(finished(KJob*)), SLOT(done()));
+}
+
+void SubmitPatchRequest::start()
+{
+    m_uploadpatch->start();
+}
+
+QString SubmitPatchRequest::requestId() const
+{
+    return m_id;
+}
+
+void SubmitPatchRequest::done()
 {
     if (m_uploadpatch->error()) {
         qDebug() << "Could not upload the patch" << m_uploadpatch->errorString();
@@ -214,8 +229,7 @@ void NewRequest::done()
 }
 
 ProjectsListRequest::ProjectsListRequest(const KUrl& server, QObject* parent)
-    : KJob(parent)
-    , m_server(server)
+    : KJob(parent), m_server(server)
 {
 }
 
@@ -231,30 +245,85 @@ QVariantList ProjectsListRequest::repositories() const
 
 void ProjectsListRequest::requestRepositoryList(int startIndex)
 {
-    QList<QPair<QString,QString> > repositoriesParameteres;
+    QList<QPair<QString,QString> > repositoriesParameters;
 
     // In practice, the web API will return at most 200 repos per call, so just hardcode that value here
-    repositoriesParameteres << qMakePair<QString,QString>("max-results", QLatin1String("200"));
-    repositoriesParameteres << qMakePair<QString,QString>("start", QString("%1").arg(startIndex));
+    repositoriesParameters << qMakePair<QString,QString>("max-results", QLatin1String("200"));
+    repositoriesParameters << qMakePair<QString,QString>("start", QString("%1").arg(startIndex));
 
-    HttpPostCall* repositoriesCall = new HttpPostCall(m_server, "/api/repositories/", repositoriesParameteres, "", false, this);
+    HttpCall* repositoriesCall = new HttpCall(m_server, "/api/repositories/", repositoriesParameters, "", false, this);
     connect(repositoriesCall, SIGNAL(finished(KJob*)), SLOT(done(KJob*)));
 
-    KDevelop::ICore::self()->runController()->registerJob(repositoriesCall);
+    repositoriesCall->start();
 }
 
 void ProjectsListRequest::done(KJob* job)
 {
-    HttpPostCall* repositoriesCall = qobject_cast<HttpPostCall*>(job);
+    // TODO error
+    // TODO max iterations
+    HttpCall* repositoriesCall = qobject_cast<HttpCall*>(job);
+    QMap<QString, QVariant> resultMap = repositoriesCall->result().toMap();
     const int totalResults = repositoriesCall->result().toMap()["total_results"].toInt();
     m_repositories << repositoriesCall->result().toMap()["repositories"].toList();
 
-    if (m_repositories.count() < totalResults)
-    {
+    if (m_repositories.count() < totalResults) {
         requestRepositoryList(m_repositories.count());
+    } else {
+        emitResult();
     }
-    else
-    {
+}
+
+ReviewListRequest::ReviewListRequest(const KUrl& server, const QString& user, const QString& reviewStatus, QObject* parent)
+    : KJob(parent), m_server(server), m_user(user), m_reviewStatus(reviewStatus)
+{
+}
+
+void ReviewListRequest::start()
+{
+    requestReviewList(0);
+}
+
+QVariantList ReviewListRequest::reviews() const
+{
+    return m_reviews;
+}
+
+void ReviewListRequest::requestReviewList(int startIndex)
+{
+    QList<QPair<QString,QString> > reviewParameters;
+
+    // In practice, the web API will return at most 200 repos per call, so just hardcode that value here
+    reviewParameters << qMakePair<QString,QString>("max-results", QLatin1String("200"));
+    reviewParameters << qMakePair<QString,QString>("start", QString("%1").arg(startIndex));
+    reviewParameters << qMakePair<QString,QString>("from-user", m_user);
+    reviewParameters << qMakePair<QString,QString>("status", m_reviewStatus);
+
+    HttpCall* reviewsCall = new HttpCall(m_server, "/api/review-requests/", reviewParameters, "", false, this);
+    connect(reviewsCall, SIGNAL(finished(KJob*)), SLOT(done(KJob*)));
+
+    reviewsCall->start();
+}
+
+void ReviewListRequest::done(KJob* job)
+{
+    // TODO error
+    // TODO max iterations
+    if (job->error()) {
+        qDebug() << "Could not get reviews list" << job->errorString();
+        setError(3);
+        setErrorText(i18n("Could not get reviews list"));
+        emitResult();
+    }
+
+    HttpCall* reviewsCall = qobject_cast<HttpCall*>(job);
+    QMap<QString, QVariant> resultMap = reviewsCall->result().toMap();
+    const int totalResults = resultMap["total_results"].toInt();
+
+    m_reviews << resultMap["review_requests"].toList();
+
+    if (m_reviews.count() < totalResults) {
+        requestReviewList(m_reviews.count());
+    } else {
         emitResult();
     }
 }

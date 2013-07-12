@@ -18,8 +18,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef KDEVPROJECTPREFERENCES_H
-#define KDEVPROJECTPREFERENCES_H
+#ifndef KDEVPLATFORM_PROJECTPREFERENCES_H
+#define KDEVPLATFORM_PROJECTPREFERENCES_H
 
 #include <kcmodule.h>
 
@@ -42,14 +42,6 @@ public:
     virtual ~ProjectPreferences();
 
     virtual void save();
-    virtual void load();
-    virtual void defaults();
-
-    virtual KUrl localNonShareableFile() const
-    {
-        return KUrl::fromPath(
-                   KStandardDirs::locate( "data", "kdevelop/data.kdev4" ) );
-    }
 
 private slots:
     void slotSettingsChanged();

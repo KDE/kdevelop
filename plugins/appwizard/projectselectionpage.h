@@ -56,7 +56,6 @@ private slots:
 
 private:
     inline QByteArray encodedAppName();
-    inline QString pathUp(const QString& aPath);
     inline QStandardItem* getCurrentItem() const;
     void setCurrentTemplate(const QString& fileName);
 

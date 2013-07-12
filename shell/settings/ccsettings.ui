@@ -49,7 +49,7 @@
         </item>
         <item>
          <property name="text">
-          <string>When invoked manually</string>
+          <string>When Invoked Manually</string>
          </property>
         </item>
         <item>
@@ -65,7 +65,7 @@
          <string>&lt;p&gt;The code completion UI has a minimal mode and a detailed mode.&lt;br&gt;Choose in what cases full code completion will be displayed.&lt;/p&gt;</string>
         </property>
         <property name="text">
-         <string>Detailed Completion:</string>
+         <string>Detailed completion:</string>
         </property>
        </widget>
       </item>
@@ -75,7 +75,7 @@
          <string>If disabled, the code completion widget will never show automatically.</string>
         </property>
         <property name="text">
-         <string>Enable Automatic Invocation</string>
+         <string>Enable automatic invocation:</string>
         </property>
        </widget>
       </item>
@@ -85,7 +85,7 @@
          <string>Choose whether to display additional information for the currently selected codecompletion item.</string>
         </property>
         <property name="text">
-         <string>Additional Information For Current Item</string>
+         <string>Additional information for current item:</string>
         </property>
        </widget>
       </item>
@@ -107,7 +107,7 @@
          <string>&lt;p&gt;This setting decides about the intensity of colors for local variables, for example function arguments, variables and the like.&lt;/p&gt;</string>
         </property>
         <property name="text">
-         <string>Local Colorization Intensity</string>
+         <string>Local colorization intensity:</string>
         </property>
         <property name="buddy">
          <cstring>kcfg_localColorization</cstring>
@@ -142,7 +142,7 @@
          <string>&lt;p&gt;Highlight semantic problems, such as non-existent or inaccessible declarations.&lt;/p&gt;</string>
         </property>
         <property name="text">
-         <string>Highlight Semantic Problems</string>
+         <string>Highlight semantic problems:</string>
         </property>
        </widget>
       </item>
@@ -162,7 +162,7 @@
          <string>&lt;p&gt;When enabled, lines with errors will get additionally highlighted and their positions get marked in the scrollbar.&lt;/p&gt;</string>
         </property>
         <property name="text">
-         <string>Highlight Problematic Lines</string>
+         <string>Highlight problematic lines:</string>
         </property>
        </widget>
       </item>
@@ -182,7 +182,7 @@
          <string>Space-separated list of words that make a comment represent a TODO item</string>
         </property>
         <property name="text">
-         <string>TODO Marker Words:</string>
+         <string>TODO marker words:</string>
         </property>
        </widget>
       </item>
@@ -224,7 +224,7 @@
          <string>&lt;p&gt;This settings lets you change the intensity of globally accessible types, for example classes, methods, functions etc.&lt;/p&gt;</string>
         </property>
         <property name="text">
-         <string>Global Colorization Intensity</string>
+         <string>Global colorization intensity:</string>
         </property>
         <property name="buddy">
          <cstring>kcfg_localColorization</cstring>
@@ -260,7 +260,7 @@
 parsed in simplified mode, increasing the efficiency by gathering less information. Global code navigation and quickopen capabilities will be reduced.&lt;/p&gt;</string>
         </property>
         <property name="text">
-         <string>Minimum project size for simplified parsing</string>
+         <string>Minimum project size for simplified parsing:</string>
         </property>
        </widget>
       </item>

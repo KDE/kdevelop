@@ -22,8 +22,8 @@
 #include "declaration.h"
 #include "ducontext.h"
 
-#ifndef PERSISTENTSYMBOLTABLE_H
-#define PERSISTENTSYMBOLTABLE_H
+#ifndef KDEVPLATFORM_PERSISTENTSYMBOLTABLE_H
+#define KDEVPLATFORM_PERSISTENTSYMBOLTABLE_H
 
 namespace KDevelop {
 

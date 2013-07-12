@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef BUILDERJOB_H
-#define BUILDERJOB_H
+#ifndef KDEVPLATFORM_BUILDERJOB_H
+#define KDEVPLATFORM_BUILDERJOB_H
 
 #include <QtCore/QVector>
 
@@ -58,6 +58,8 @@ public:
      * Creates a Builder job
      */
     BuilderJob();
+
+    virtual ~BuilderJob();
 
     /**
      * Allows to easily schedule building a couple of @p items using the
@@ -124,6 +126,10 @@ public:
      * Starts this job
      */
     void start();
+
+protected:
+    virtual bool addSubjob(KJob* job);
+
 protected Q_SLOTS:
     /**
      * @internal slot to handle the result from subjobs
