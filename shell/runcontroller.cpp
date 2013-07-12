@@ -406,6 +406,12 @@ KJob* RunController::execute(const QString& runMode, ILaunchConfiguration* launc
     return launchJob;
 }
 
+void RunController::changeActionsState(bool enable){
+    d->dbgAction->setEnabled(enable);
+    d->profileAction->setEnabled(enable);
+    d->runAction->setEnabled(enable);
+}
+
 void RunController::setupActions()
 {
     KAction *action;
@@ -426,6 +432,7 @@ void RunController::setupActions()
     d->runAction->setToolTip(i18nc("@info:tooltip", "Execute current launch"));
     d->runAction->setStatusTip(i18n("Execute current launch"));
     d->runAction->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in currently active launch configuration."));
+    d->runAction->setEnabled(false);
     ac->addAction("run_execute", d->runAction);
     connect(d->runAction, SIGNAL(triggered(bool)), this, SLOT(slotExecute()));
 
@@ -435,6 +442,7 @@ void RunController::setupActions()
     d->dbgAction->setToolTip(i18nc("@info:tooltip", "Debug current launch"));
     d->dbgAction->setStatusTip(i18n("Debug current launch"));
     d->dbgAction->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in currently active launch configuration inside a Debugger."));
+    d->dbgAction->setEnabled(false);
     ac->addAction("run_debug", d->dbgAction);
     connect(d->dbgAction, SIGNAL(triggered(bool)), this, SLOT(slotDebug()));
 
@@ -442,6 +450,7 @@ void RunController::setupActions()
     d->profileAction->setToolTip(i18nc("@info:tooltip", "Profile current launch"));
     d->profileAction->setStatusTip(i18n("Profile current launch"));
     d->profileAction->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in currently active launch configuration inside a Profiler."));
+    d->profileAction->setEnabled(false);
     ac->addAction("run_profile", d->profileAction);
     connect(d->profileAction, SIGNAL(triggered(bool)), this, SLOT(slotProfile()));
 
@@ -476,12 +485,19 @@ LaunchConfigurationType* RunController::launchConfigurationTypeForId( const QStr
 
 void KDevelop::RunController::slotProjectOpened(KDevelop::IProject * project)
 {
+    changeActionsState(true);
+
     d->readLaunchConfigs( project->projectConfiguration(), project );
     d->updateCurrentLaunchAction();
 }
 
 void KDevelop::RunController::slotProjectClosing(KDevelop::IProject * project)
 {
+
+    if(!Core::self()->projectController()->projects().count()){
+       changeActionsState(false);
+    }
+
     if (!d->currentTargetAction) return;
 
     foreach (QAction* action, d->currentTargetAction->actions()) {
