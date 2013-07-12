@@ -137,11 +137,13 @@ void ProviderWidget::searchRepo()
 {
     QString uri;
     QString text = m_edit->text();
+    bool enabled = true;
     int idx = m_combo->itemData(m_combo->currentIndex()).toInt();
 
     switch (idx) {
     case 0: /* Looking for this user's repo */
         uri = "/user/repos";
+        enabled = false;
         break;
     case 1: /* Looking for some user's repo */
         if (text == m_account->name())
@@ -151,10 +153,12 @@ void ProviderWidget::searchRepo()
         break;
     case 2: /* Known organization */
         text = m_combo->currentText();
+        enabled = false;
     default:/* Looking for some organization's repo. */
         uri = QString("/orgs/%1/repos").arg(text);
         break;
     }
+    m_edit->setEnabled(enabled);
     m_waiting->show();
     m_resource->searchRepos(uri, m_account->token());
 }
