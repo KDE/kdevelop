@@ -22,8 +22,8 @@
 #include <KDebug>
 
 QtTestDelegate::QtTestDelegate(QObject* parent) : QItemDelegate(parent),
-failBrush(KColorScheme::View, KColorScheme::NegativeText),
 passBrush(KColorScheme::View, KColorScheme::PositiveText),
+failBrush(KColorScheme::View, KColorScheme::NegativeText),
 xFailBrush(KColorScheme::View, KColorScheme::InactiveText),
 xPassBrush(KColorScheme::View, KColorScheme::NeutralText),
 debugBrush(KColorScheme::View, KColorScheme::NormalText)

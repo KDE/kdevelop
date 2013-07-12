@@ -34,6 +34,8 @@ QVariant SourceItem::data(int role) const
 {
     switch(role)
     {
+        case KDEProjectsModel::IdentifierRole:
+            return m_s.identifier;
         case KDEProjectsModel::VcsLocationRole:
             return QVariantMap(m_s.m_urls);
         default:

@@ -487,13 +487,14 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
   m_collectQtFunctionSignature = !m_accessPolicyStack.isEmpty() && ((m_accessPolicyStack.top() & FunctionIsSlot) || (m_accessPolicyStack.top() & FunctionIsSignal));
   m_qtFunctionSignature = QByteArray();
   
-  if (node->parameter_declaration_clause) {
+  // pretty ugly but seems to work for now...
+  bool isFuncPtr = node->parameter_declaration_clause && !node->id && node->sub_declarator && node->sub_declarator->ptr_ops;
+  if (node->parameter_declaration_clause && !isFuncPtr) {
 
     if(m_collectQtFunctionSignature) //We need to do this just to collect the signature
       checkParameterDeclarationClause(node->parameter_declaration_clause);
     
     Declaration* decl = openFunctionDeclaration(node->id, node);
-    
     ///Create mappings iff the AST feature is specified
     if(m_mapAst && !m_mappedNodes.empty())
       editor()->parseSession()->mapAstDuChain(m_mappedNodes.top(), KDevelop::DeclarationPointer(decl));
@@ -510,6 +511,11 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
     }
 
     applyFunctionSpecifiers();
+  } else if (isFuncPtr) {
+    Declaration* decl = openDeclaration<Declaration>(node->sub_declarator->id, node);
+    ///TODO: I don't know why this is required but without it the function is
+    ///not found by its declaration id...
+//     decl->setAlwaysForceDirect(true);
   } else {
     openDefinition(node->id, node, node->id == 0);
   }
@@ -518,9 +524,17 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
 
   applyStorageSpecifiers();
 
+  // don't visit nested declarators for function pointers
+  DeclaratorAST* sub = node->sub_declarator;
+  if (isFuncPtr) {
+    node->sub_declarator = 0;
+  }
   DeclarationBuilderBase::visitDeclarator(node);
+  if (isFuncPtr) {
+    node->sub_declarator = sub;
+  }
 
-  if (node->parameter_declaration_clause) {
+  if (node->parameter_declaration_clause && !isFuncPtr) {
     if (!m_functionDefinedStack.isEmpty() && m_functionDefinedStack.top() && node->id) {
 
       DUChainWriteLocker lock(DUChain::lock());
@@ -886,7 +900,7 @@ void DeclarationBuilder::closeDeclaration(bool forceInstance)
       //If the type is a delayed type, it is a searched type, and not a declared one, so don't set the declaration then.
       if( !forceInstance && idType && !idType->declarationId().isValid() && !delayed ) {
           idType->setDeclaration( currentDeclaration() );
-          //Q_ASSERT(idType->declaration() == currentDeclaration());
+          //Q_ASSERT(idType->declaration(topContext()) == currentDeclaration());
       }
 
       if(currentDeclaration()->kind() != Declaration::NamespaceAlias && currentDeclaration()->kind() != Declaration::Alias) {
@@ -1615,6 +1629,8 @@ void DeclarationBuilder::visitParameterDeclaration(ParameterDeclarationAST* node
   if(m_mapAst)
     m_mappedNodes.push(node);
   
+  // arguments of a function pointer typedef are not typedefs themselves
+  PushValue<bool> setNotInTypedef(m_inTypedef, false);
   DeclarationBuilderBase::visitParameterDeclaration(node);
   
   AbstractFunctionDeclaration* function = currentDeclaration<AbstractFunctionDeclaration>();
@@ -1759,7 +1775,9 @@ bool DeclarationBuilder::checkParameterDeclarationClause(ParameterDeclarationCla
             break;
           }else if(lastType().cast<DelayedType>() && lastType().cast<DelayedType>()->kind() == DelayedType::Unresolved) {
             //When the searched item was not found, expect it to be a non-type
-            ret = false;
+            //except for varargs
+            ret = TypeUtils::isVarArgs(lastType());
+            break;
           }else{
             ret = true;
             break;

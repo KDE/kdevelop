@@ -96,9 +96,13 @@ bool TemplateResolver::templateHandleDelayedType ( const AbstractType::Ptr& argu
       res.valid = false;
     }
   }
+  ///TODO: the code only uses the last identifier and used to verify that
+  ///      only one Identifier is actually contained in the QualifiedIdentifier
+  ///      in the paramDelayedId
+  ///      This caused issues for __gnu_cxx::_S_mutex, _S_single, _S_atomic etc.
+  ///      it's not clear whether this is actually a bug or not - someone should
+  ///      investigate. But rather don't assert for now!
   IndexedString identifier = paramDelayedId.identifier().identifier().last().identifier();
-  //AFAIK it's not possible to have a delayed template parameter with a qualified identifier
-  Q_ASSERT(paramDelayedId.identifier().identifier().count() == 1);
   if ( instantiatedTypes.contains( identifier ) )
     instantiatedTypes[identifier] = argumentType;
   else

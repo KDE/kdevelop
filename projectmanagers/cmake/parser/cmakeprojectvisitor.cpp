@@ -59,7 +59,7 @@ bool isGenerated(const QString& name)
 CMakeProjectVisitor::message_callback CMakeProjectVisitor::s_msgcallback=debugMsgs;
 
 CMakeProjectVisitor::CMakeProjectVisitor(const QString& root, ReferencedTopDUContext parent)
-    : m_root(root), m_vars(0), m_macros(0), m_topctx(0), m_parentCtx(parent), m_hitBreak(false)
+    : m_root(root), m_vars(0), m_macros(0), m_topctx(0), m_parentCtx(parent), m_hitBreak(false), m_hitReturn(false)
 {
 }
 
@@ -284,6 +284,7 @@ int CMakeProjectVisitor::visit( const AddTestAst * test)
     if (m_targetForId.contains(t.executable))
     {
         t.files = m_targetForId[t.executable].files;
+        t.isTarget = true;
     }
     else 
     {
@@ -297,11 +298,12 @@ int CMakeProjectVisitor::visit( const AddTestAst * test)
         {
             exe.chop(4);
         }
-        t.executable = exe;
         exe = exe.split('/').last();
         if (m_targetForId.contains(exe))
         {
+            t.executable = exe;
             t.files = m_targetForId[exe].files;
+            t.isTarget = true;
         }
     }
     t.files.removeAll("TEST"); // Added by kde4_add_unit_test
@@ -314,14 +316,13 @@ int CMakeProjectVisitor::visit( const AddTestAst * test)
 int CMakeProjectVisitor::visit(const ProjectAst *project)
 {
     m_projectName = project->projectName();
-    if(!m_vars->contains("CMAKE_PROJECT_NAME"))
-        m_vars->insert("CMAKE_PROJECT_NAME", QStringList(project->projectName()));
-    
+    m_vars->insertGlobal("CMAKE_PROJECT_NAME", QStringList(project->projectName()));
+
     m_vars->insert("PROJECT_NAME", QStringList(project->projectName()));
-    m_vars->insert("PROJECT_SOURCE_DIR", m_vars->value("CMAKE_CURRENT_SOURCE_DIR"));
-    m_vars->insert("PROJECT_BINARY_DIR", m_vars->value("CMAKE_CURRENT_BINARY_DIR"));
-    m_vars->insert(QString("%1_SOURCE_DIR").arg(m_projectName), m_vars->value("CMAKE_CURRENT_SOURCE_DIR"));
-    m_vars->insert(QString("%1_BINARY_DIR").arg(m_projectName), m_vars->value("CMAKE_CURRENT_BINARY_DIR"));
+    m_vars->insertGlobal("PROJECT_SOURCE_DIR", m_vars->value("CMAKE_CURRENT_SOURCE_DIR"));
+    m_vars->insertGlobal("PROJECT_BINARY_DIR", m_vars->value("CMAKE_CURRENT_BINARY_DIR"));
+    m_vars->insertGlobal(QString("%1_SOURCE_DIR").arg(m_projectName), m_vars->value("CMAKE_CURRENT_SOURCE_DIR"));
+    m_vars->insertGlobal(QString("%1_BINARY_DIR").arg(m_projectName), m_vars->value("CMAKE_CURRENT_BINARY_DIR"));
     return 1;
 }
 
@@ -463,20 +464,22 @@ void CMakeProjectVisitor::defineTarget(const QString& id, const QStringList& sou
     QString exe=id;
     QString locationDir = m_vars->value("CMAKE_CURRENT_BINARY_DIR").join(QString());
     switch(t) {
-        case Target::Executable:
+        case Target::Executable: {
             exe += m_vars->value("CMAKE_EXECUTABLE_SUFFIX").join(QString());
-            if (m_vars->contains("CMAKE_RUNTIME_OUTPUT_DIRECTORY") && !m_vars->value("CMAKE_RUNTIME_OUTPUT_DIRECTORY").first().isEmpty()) {
-                locationDir = m_vars->value("CMAKE_RUNTIME_OUTPUT_DIRECTORY").join(QString());
+            locationDir = m_vars->value("CMAKE_RUNTIME_OUTPUT_DIRECTORY").join(QString());
+            if (!locationDir.isEmpty()) {
                 m_props[TargetProperty][id]["RUNTIME_OUTPUT_DIRECTORY"]=QStringList(locationDir);
             }
-            break;
-        case Target::Library:
-            exe = QString("%1%2%3").arg(m_vars->value("CMAKE_LIBRARY_PREFIX").join(QString())).arg(id).arg(m_vars->value("CMAKE_LIBRARY_SUFFIX").join(QString()));
-            if (m_vars->contains("CMAKE_LIBRARY_OUTPUT_DIRECTORY") && !m_vars->value("CMAKE_LIBRARY_OUTPUT_DIRECTORY").first().isEmpty()) {
-                locationDir = m_vars->value("CMAKE_LIBRARY_OUTPUT_DIRECTORY").join(QString());
+        }   break;
+        case Target::Library: {
+            exe = QString("%1%2%3").arg(m_vars->value("CMAKE_LIBRARY_PREFIX").join(QString()))
+                                   .arg(id)
+                                   .arg(m_vars->value("CMAKE_LIBRARY_SUFFIX").join(QString()));
+            locationDir = m_vars->value("CMAKE_LIBRARY_OUTPUT_DIRECTORY").join(QString());
+            if (!locationDir.isEmpty()) {
                 m_props[TargetProperty][id]["LIBRARY_OUTPUT_DIRECTORY"]=QStringList(locationDir);
             }
-            break;
+        }   break;
         case Target::Custom:
             break;
     }
@@ -518,18 +521,20 @@ int CMakeProjectVisitor::visit(const SetAst *set)
     } else
         m_vars->insert(set->variableName(), set->values(), set->parentScope());
     
-    kDebug(9042) << "setting variable:" << set->variableName() << set->parentScope() /*<< "to" << values*/;
+//     kDebug(9042) << "setting variable:" << set->variableName() << set->parentScope()
+//         << "to" << m_vars->value(set->variableName()) << set->storeInCache()
+//         ;
     return 1;
 }
 
 int CMakeProjectVisitor::visit(const UnsetAst* unset)
 {
     if(unset->env()) {
-        qDebug() << "error! can't unset the env var: " << unset->variableName();
+        kDebug(9032) << "error! can't unset the env var: " << unset->variableName();
     } else {
         m_vars->remove(unset->variableName());
         if(unset->cache()) {
-            qDebug() << "error! can't unset the cached var: " << unset->variableName();
+            kDebug(9032) << "error! can't unset the cached var: " << unset->variableName();
         }
     }
     kDebug(9042) << "unset variable:" << unset->variableName();
@@ -545,17 +550,20 @@ int CMakeProjectVisitor::visit(const IncludeDirectoriesAst * dirs)
 
     if(t==IncludeDirectoriesAst::Default)
     {
-        if(m_vars->contains("CMAKE_INCLUDE_DIRECTORIES_BEFORE") && m_vars->value("CMAKE_INCLUDE_DIRECTORIES_BEFORE")[0]=="ON")
+        if(m_vars->value("CMAKE_INCLUDE_DIRECTORIES_BEFORE")==QStringList("ON"))
             t = IncludeDirectoriesAst::Before;
         else
             t = IncludeDirectoriesAst::After;
     }
 
+    QString dir = m_vars->value("CMAKE_CURRENT_SOURCE_DIR").join(QString());
+    QStringList& v = m_props[DirectoryProperty][dir]["INCLUDE_DIRECTORIES"];
     if(t==IncludeDirectoriesAst::After)
-        m_includeDirectories += toInclude;
-    else
-        m_includeDirectories = toInclude + m_includeDirectories;
-    kDebug(9042) << "done." << m_includeDirectories;
+        v += toInclude;
+    else {
+        v = toInclude + v;
+    }
+    kDebug(9042) << "done." << v;
     return 1;
 }
 
@@ -574,6 +582,7 @@ QString CMakeProjectVisitor::findFile(const QString &file, const QStringList &fo
             suffixFolders.append(apath+'/'+suffix);
         }
     }
+    suffixFolders.removeDuplicates();
 
     KUrl path;
     foreach(const QString& mpath, suffixFolders)
@@ -624,6 +633,7 @@ int CMakeProjectVisitor::visit(const IncludeAst *inc)
         {
             kDebug(9042) << "including:" << path;
             walk(include, 0, true);
+            m_hitReturn = false;
         }
         else
         {
@@ -682,9 +692,13 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
             foreach(const QString& post, postfix)
             {
                 configPath.prepend(lookup+"/share/"+name.toLower()+post);
-                configPath.prepend(lookup+"/lib/"+name.toLower()+post);
                 configPath.prepend(lookup+"/share/"+name+post);
+                configPath.prepend(lookup+"/share/cmake/"+name.toLower()+post);
+                configPath.prepend(lookup+"/share/cmake/"+name+post);
+                configPath.prepend(lookup+"/lib/"+name.toLower()+post);
                 configPath.prepend(lookup+"/lib/"+name+post);
+                configPath.prepend(lookup+"/lib/cmake/"+name.toLower()+post);
+                configPath.prepend(lookup+"/lib/cmake/"+name+post);
             }
     }
 
@@ -740,6 +754,7 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
             path=KUrl(path).pathOrUrl();
             kDebug(9042) << "================== Found" << path << "===============";
             walk(package, 0, true);
+            m_hitReturn = false;
         }
         else
         {
@@ -753,8 +768,10 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
         m_vars->removeMulti("CMAKE_CURRENT_LIST_FILE");
         m_vars->removeMulti("CMAKE_CURRENT_LIST_DIR");
         
-        if(isConfig)
+        if(isConfig) {
             m_vars->insert(pack->name()+"_FOUND", QStringList("TRUE"));
+            m_vars->insert(pack->name().toUpper()+"_FOUND", QStringList("TRUE"));
+        }
     }
     else
     {
@@ -1082,9 +1099,30 @@ int CMakeProjectVisitor::visit(const TryCompileAst *tca)
 }
 
 
-int CMakeProjectVisitor::visit(const TargetLinkLibrariesAst *)
+int CMakeProjectVisitor::visit(const TargetLinkLibrariesAst *tll)
 {
     kDebug(9042) << "target_link_libraries";
+    QMap<QString, Target>::iterator target = m_targetForId.find(tll->target());
+    //TODO: we can add a problem if the target is not found
+    if(target != m_targetForId.end()) {
+        target->libraries << tll->debugLibs() << tll->optimizedLibs() << tll->otherLibs();
+    }
+    return 1;
+}
+
+int CMakeProjectVisitor::visit(const TargetIncludeDirectoriesAst* tid)
+{
+    CategoryType& targetProps = m_props[TargetProperty];
+    CategoryType::iterator it = targetProps.find(tid->target());
+    //TODO: we can add a problem if the target is not found
+    if(it != targetProps.end()) {
+        QStringList includes;
+        foreach(const TargetIncludeDirectoriesAst::Item& item, tid->items()) {
+            includes += item.item;
+        }
+        //TODO implement visibility
+        (*it)["INCLUDE_DIRECTORIES"] += includes;
+    }
     return 1;
 }
 
@@ -1238,6 +1276,7 @@ int CMakeProjectVisitor::visit(const MacroCallAst *call)
             kDebug(9042) << "visited!" << call->name()  <<
                 m_vars->value("ARGV") << "_" << m_vars->value("ARGN") << "..." << len;
 
+            m_hitReturn = false;
             if(isfunc)
                 m_vars->popScope();
             //Restoring
@@ -1292,7 +1331,7 @@ int CMakeProjectVisitor::visit(const IfAst *ifast)  //Highly crappy code
     if( ifast->condition().isEmpty() )
     {
         const CMakeFunctionDesc d = ifast->content().at( ifast->line() );
-        kWarning() << "Parser couldn't parse condition of an IF in file:" << ifast->condition() << d.filePath << d.line;
+        kDebug() << "error: couldn't parse condition of an IF in file:" << ifast->condition() << d.filePath << d.line;
     }
 
     int inside=0;
@@ -1340,6 +1379,11 @@ int CMakeProjectVisitor::visit(const IfAst *ifast)  //Highly crappy code
                     condition=myIf.condition();
                 }
                 result=cond.condition(condition);
+                int i=0;
+                foreach(const QString& match, cond.matches()) {
+                    m_vars->insert(QString("CMAKE_MATCH_%1").arg(i), QStringList(match));
+                    i++;
+                }
                 if(funcName=="if")
                     ini=cond.variableArguments();
 
@@ -1423,7 +1467,7 @@ int CMakeProjectVisitor::visit(const ExecuteProcessAst *exec)
     QList<KProcess*> procs;
     foreach(const QStringList& _args, exec->commands())
     {
-        if (_args.isEmpty())
+        if (_args.isEmpty() || !QFile::exists(exec->workingDirectory()))
         {
             kDebug(9032) << "Error: trying to execute empty command";
             break;
@@ -1505,7 +1549,7 @@ int CMakeProjectVisitor::visit(const FileAst *file)
         case FileAst::Glob:
         case FileAst::GlobRecurse: {
             QStringList matches;
-            foreach(QString expr, file->globbingExpressions())
+            foreach(const QString& expr, file->globbingExpressions())
             {
                 if (expr.isEmpty())
                     continue;
@@ -1620,9 +1664,11 @@ int CMakeProjectVisitor::visit(const GetFilenameComponentAst *filecomp)
     QString val;
     switch(filecomp->type())
     {
-        case GetFilenameComponentAst::Path:
-            val=fi.path();
-            break;
+        case GetFilenameComponentAst::Path: {
+            int idx = filecomp->fileName().lastIndexOf(QDir::separator());
+            if(idx>=0)
+                val=filecomp->fileName().left(idx);
+        }   break;
         case GetFilenameComponentAst::Absolute:
             val=fi.absoluteFilePath();
             break;
@@ -1696,8 +1742,12 @@ int CMakeProjectVisitor::visit(const ListAst *list)
             m_vars->insert(list->list(), theList);
             break;
         case ListAst::Find: {
-            int idx=theList.indexOf(list->elements().first());
-            
+            QString element;
+            int idx=-1;
+            if(!list->elements().isEmpty()) {
+                element = list->elements().first();
+                idx=theList.indexOf(element);
+            }
             m_vars->insert(list->output(), QStringList(QString::number(idx)));
             kDebug(9042) << "List: Find" << theList << list->output() << list->elements() << idx;
         }   break;
@@ -2009,7 +2059,7 @@ int CMakeProjectVisitor::visit(const CustomTargetAst *ctar)
     kDebug(9042) << "custom_target " << ctar->target() << ctar->dependencies() << ", " << ctar->commandArgs();
     kDebug(9042) << ctar->content()[ctar->line()].writeBack();
 
-    defineTarget(ctar->target(), ctar->dependencies(), Target::Custom);
+    defineTarget(ctar->target(), ctar->dependencies() + ctar->sourceLists(), Target::Custom);
     return 1;
 }
 
@@ -2107,22 +2157,27 @@ int CMakeProjectVisitor::visit(const SetPropertyAst* setp)
 
 int CMakeProjectVisitor::visit(const GetPropertyAst* getp)
 {
-    QString catn;
-    switch(getp->type()) {
-        case GlobalProperty:
-            break;
-        case DirectoryProperty:
-            catn = getp->typeName();
-            if(catn.isEmpty())
-                catn = m_vars->value("CMAKE_CURRENT_SOURCE_DIR").join(QString());
-            break;
-        default:
-            catn = getp->typeName();
-            break;
+    QStringList retv;
+    if(getp->type() == CacheProperty) {
+        retv = m_cache->value(getp->typeName()).value.split(':');
+    } else {
+        QString catn;
+        switch(getp->type()) {
+            case GlobalProperty:
+                break;
+            case DirectoryProperty:
+                catn = getp->typeName();
+                if(catn.isEmpty())
+                    catn = m_vars->value("CMAKE_CURRENT_SOURCE_DIR").join(QString());
+                break;
+            default:
+                catn = getp->typeName();
+                break;
+        }
+        retv = m_props[getp->type()][catn][getp->name()];
     }
-    QStringList retv=m_props[getp->type()][catn][getp->name()];
     m_vars->insert(getp->outputVariable(), retv);
-    kDebug() << "getprops" << getp->type() << catn << getp->name() << getp->outputVariable() << "=" << retv;
+    kDebug() << "getprops" << getp->type() << getp->name() << getp->typeName() << getp->outputVariable() << "=" << retv;
     return 1;
 }
 
@@ -2142,6 +2197,19 @@ int CMakeProjectVisitor::visit(const GetDirPropertyAst* getdp)
     retv=m_props[DirectoryProperty][dir][getdp->propName()];
     m_vars->insert(getdp->outputVariable(), retv);
     
+    return 1;
+}
+
+int CMakeProjectVisitor::visit(const SetTestsPropsAst* stp)
+{
+    QMap<QString,QString> props;
+    foreach(const SetTestsPropsAst::PropPair& property, stp->properties()) {
+        props.insert(property.first, property.second);
+    }
+
+    for(QList<Test>::iterator it=m_testSuites.begin(), itEnd=m_testSuites.end(); it!=itEnd; ++it) {
+        it->properties = props;
+    }
     return 1;
 }
 
@@ -2191,7 +2259,7 @@ CMakeFunctionDesc CMakeProjectVisitor::resolveVariables(const CMakeFunctionDesc 
     return ret;
 }
 
-enum RecursivityType { No, Yes, End, Break };
+enum RecursivityType { No, Yes, End, Break, Return };
 
 RecursivityType recursivity(const QString& functionName)
 {
@@ -2203,6 +2271,8 @@ RecursivityType recursivity(const QString& functionName)
         return End;
     else if(upperFunctioName=="break")
         return Break;
+    else if(upperFunctioName=="return")
+        return Return;
     return No;
 }
 
@@ -2240,7 +2310,7 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line, bool isClea
 //         kDebug(9042) << "At line" << line << "/" << fc.count();
 
         RecursivityType r = recursivity(it->name);
-        if(r==End || r==Break || m_hitBreak)
+        if(r==End || r==Break || r==Return || m_hitBreak || m_hitReturn)
         {
 //             kDebug(9042) << "Found an end." << func.writeBack();
             m_backtrace.pop();
@@ -2248,6 +2318,8 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line, bool isClea
             
             if(r==Break)
                 m_hitBreak=true;
+            if(r==Return)
+                m_hitReturn=true;
             return line;
         }
         
@@ -2445,7 +2517,7 @@ QStringList CMakeProjectVisitor::traverseGlob(const QString& startPath, const QS
                 dirsToSearch << dir;
                 QDir d(dir);
                 QStringList dirNames = d.entryList(dirFilters);
-                foreach(QString dirName, dirNames)
+                foreach(const QString& dirName, dirNames)
                 {
                     dirsToExpand << d.filePath(dirName);
                 }
@@ -2454,11 +2526,11 @@ QStringList CMakeProjectVisitor::traverseGlob(const QString& startPath, const QS
         else
             dirsToSearch << startPath;
         QStringList filePaths;
-        foreach (QString dirToSearch, dirsToSearch)
+        foreach (const QString& dirToSearch, dirsToSearch)
         {
             QDir dir(dirToSearch);
             QStringList fileNames = dir.entryList(nameFilters, QDir::Files);
-            foreach (QString fileName, fileNames)
+            foreach (const QString& fileName, fileNames)
             {
                 filePaths << dir.filePath(fileName);
             }
@@ -2490,7 +2562,7 @@ QStringList CMakeProjectVisitor::traverseGlob(const QString& startPath, const QS
     QString path = startPath;
     if (!path.endsWith('/'))
         path += '/';
-    foreach(QString dirName, matchedDirs)
+    foreach(const QString& dirName, matchedDirs)
     {
         kDebug(9042) << "Going resursive into " << path + dirName << " and glob " << rightExpression;
         matches.append(traverseGlob(path + dirName, rightExpression, recursive, followSymlinks));

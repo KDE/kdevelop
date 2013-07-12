@@ -48,11 +48,13 @@ CMakeJob::CMakeJob(QObject* parent)
     setFilteringStrategy( OutputModel::CompilerFilter );
     setProperties( NeedWorkingDirectory | PortableMessages | DisplayStderr | IsBuilderHint );
     setToolTitle( i18n("CMake") );
+    setStandardToolView( KDevelop::IOutputView::BuildView );
+    setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
 }
 
 void CMakeJob::start()
 {
-    kDebug(9037) << "Configuring cmake";
+    kDebug(9037) << "Configuring cmake" << workingDirectory();
 
     if( !m_project ) {
         setError(NoProjectError);
@@ -61,10 +63,8 @@ void CMakeJob::start()
         return;
     }
 
+    QDir::temp().mkpath(workingDirectory().toLocalFile());
     CMake::updateConfig( m_project, CMake::currentBuildDirIndex(m_project) );
-
-    setStandardToolView( KDevelop::IOutputView::BuildView );
-    setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
 
     OutputExecuteJob::start();
 }

@@ -16,7 +16,8 @@ target_link_libraries(kdevqthelp
 
 install(TARGETS kdevqthelp DESTINATION ${PLUGIN_INSTALL_DIR})
 
-install(FILES kdevqthelp.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+configure_file(kdevqthelp.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevqthelp.desktop)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevqthelp.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 
 ### Configuration module for QtHelp plugin
 

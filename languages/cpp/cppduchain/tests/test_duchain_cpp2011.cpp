@@ -429,6 +429,16 @@ void TestDUChain::testDecltype()
   QVERIFY(x7Dec->abstractType()->equals(x6Dec->abstractType().constData()));
 }
 
+void TestDUChain::testDecltypeTypedef()
+{
+  LockedTopDUContext top = parse(readCodeFile("testDecltypeTypedef.cpp"), DumpNone);
+  QVERIFY(top);
+
+  QCOMPARE(top->localDeclarations().size(), 4);
+  QCOMPARE(TypeUtils::unAliasedType(top->localDeclarations().at(2)->abstractType())->toString(), QString("int"));
+  QCOMPARE(TypeUtils::unAliasedType(top->localDeclarations().at(3)->abstractType())->toString(), QString("int"));
+}
+
 void TestDUChain::testTrailingReturnType()
 {
   {
@@ -847,13 +857,20 @@ void TestDUChain::testAuto()
     "auto a12(a4);\n"
     "auto a13(a5);\n"
     "auto a14(a6);\n"
+    "void f() {\n"
+    "  if (auto c1 = 0.0) {}\n"
+    "}\n"
+    "struct FOO {};\n"
+    "auto a15 = FOO{};\n"
+    "auto a16 = FOO{1};\n"
+
   );
   LockedTopDUContext top = parse(code, DumpAll);
   QVERIFY(top);
   DUChainReadLocker lock;
   QVERIFY(top->problems().isEmpty());
 
-  QCOMPARE(top->localDeclarations().count(), 15);
+  QCOMPARE(top->localDeclarations().count(), 19);
 
   Declaration* dec = top->localDeclarations().at(1);
   QVERIFY(dec->type<IntegralType>());
@@ -896,11 +913,23 @@ void TestDUChain::testAuto()
 
   for (int i = 8; i < 15; ++i) {
     dec = top->localDeclarations().at(i);
-    qDebug() << dec->toString() << dec->abstractType()->toString();
     QVERIFY(dec->type<IntegralType>());
     QCOMPARE(dec->type<IntegralType>()->dataType(), (uint) IntegralType::TypeChar);
     QCOMPARE(dec->abstractType()->modifiers(), (quint64) AbstractType::NoModifiers);
   }
+
+  dec = top->localDeclarations().at(15)->internalContext()->childContexts().first()->findDeclarations(Identifier("c1")).first();
+  QVERIFY(dec->type<IntegralType>());
+  QCOMPARE(dec->type<IntegralType>()->dataType(), (uint) IntegralType::TypeDouble);
+
+  StructureType::Ptr foo = top->localDeclarations().at(16)->type<StructureType>();
+  QVERIFY(foo);
+
+  dec = top->localDeclarations().at(17);
+  QVERIFY(dec->abstractType()->equals(foo.constData()));
+
+  dec = top->localDeclarations().at(18);
+  QVERIFY(dec->abstractType()->equals(foo.constData()));
 }
 
 void TestDUChain::testNoexcept()

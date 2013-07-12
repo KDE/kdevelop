@@ -199,6 +199,15 @@ void TestExpressionParser::testIntegralType() {
     QCOMPARE(ciType->value<char>(), 'x');
   }
   {
+    Cpp::ExpressionEvaluationResult result = parser.evaluateType("char(1)", KDevelop::DUContextPointer(top));
+    QVERIFY(result.isValid());
+
+    AbstractType::Ptr aType(result.type.abstractType());
+    IntegralType::Ptr iType = aType.cast<IntegralType>();
+    QVERIFY(iType);
+    QCOMPARE(iType->dataType(), (uint)IntegralType::TypeChar);
+  }
+  {
       Cpp::ExpressionEvaluationResult result = parser.evaluateType("5", KDevelop::DUContextPointer(top));
       QVERIFY(result.isValid());
       
@@ -665,6 +674,13 @@ void TestExpressionParser::testSimpleExpression() {
   QVERIFY(result.isInstance);
   lock.unlock();
 
+  result = parser.evaluateExpression( "new Cont{}", KDevelop::DUContextPointer(testContext));
+  lock.lock();
+  QVERIFY(result.isValid());
+  QCOMPARE(result.type.abstractType()->toString(), QString("Cont*"));
+  QVERIFY(result.isInstance);
+  lock.unlock();
+
   result = parser.evaluateExpression( "5", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
@@ -1039,6 +1055,15 @@ void TestExpressionParser::testOperators() {
 
   //A simple test: Constructing a type should always result in the type, no matter whether there is a constructor.
   result = parser.evaluateExpression( "Cont(5)", KDevelop::DUContextPointer(ctx));
+  lock.lock();
+  QVERIFY(result.isValid());
+  QVERIFY(result.isInstance);
+  QVERIFY(result.type.abstractType());
+  QCOMPARE(result.type.abstractType()->toString(), QString("Cont"));
+  lock.unlock();
+
+  //A simple test: Constructing a type should always result in the type, no matter whether there is a constructor.
+  result = parser.evaluateExpression( "Cont{5}", KDevelop::DUContextPointer(ctx));
   lock.lock();
   QVERIFY(result.isValid());
   QVERIFY(result.isInstance);

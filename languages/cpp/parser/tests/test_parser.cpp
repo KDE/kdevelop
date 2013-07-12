@@ -409,7 +409,7 @@ void TestParser::testComments4()
 void TestParser::testComments5()
 {
   CommentFormatter formatter;
-  QByteArray method("//TranslationUnitComment\n  //FIXME comment\n //this is TODO\n /* TODO: comment */\n  int i;  // another TODO \n // Just a simple comment\nint j;\n int main(void) {\n // TODO COMMENT\n}\n");
+  QByteArray method("//TranslationUnitComment\n  //FIXME comment\n //this is TODO\n /* TODO: comment */\n  int i;  // another TODO \n // Just a simple comment\nint j;\n int main(void) {\n // TODO COMMENT\n}\n// Non-ascii TODO 例えば\n");
   int initial_size = control.problems().size();  // Remember existing number of problems
   TranslationUnitAST* ast = parse(method);
 
@@ -423,7 +423,7 @@ void TestParser::testComments5()
   QCOMPARE(formatter.formatComment(it->element->comments, lastSession), QByteArray("Just a simple comment"));
 
   QList<KDevelop::ProblemPointer> problem_list = control.problems();
-  QCOMPARE(problem_list.size(), initial_size + 5); // 5 to-dos
+  QCOMPARE(problem_list.size(), initial_size + 6); // 6 to-dos
   KDevelop::ProblemPointer problem = problem_list[initial_size];
   QCOMPARE(problem->description(), QString("FIXME comment"));
   QCOMPARE(problem->source(), KDevelop::ProblemData::ToDo);
@@ -453,6 +453,12 @@ void TestParser::testComments5()
   QCOMPARE(problem->source(), KDevelop::ProblemData::ToDo);
   QCOMPARE(problem->finalLocation().start, KDevelop::SimpleCursor(8, 4));
   QCOMPARE(problem->finalLocation().end, KDevelop::SimpleCursor(8, 16));
+
+  problem = problem_list[initial_size + 5];
+  QCOMPARE(problem->description(), QString::fromUtf8("Non-ascii TODO 例えば"));
+  QCOMPARE(problem->source(), KDevelop::ProblemData::ToDo);
+  QCOMPARE(problem->finalLocation().start, KDevelop::SimpleCursor(10, 3));
+  QCOMPARE(problem->finalLocation().end, KDevelop::SimpleCursor(10, 27));
 }
 
 void TestParser::testComments6() {

@@ -41,7 +41,8 @@ StandardBackground
         id: startingPage
         anchors {
             fill: parent
-            leftMargin: root.marginLeft
+            leftMargin: root.marginLeft+root.margins
+            margins: root.margins
         }
 
         Column {

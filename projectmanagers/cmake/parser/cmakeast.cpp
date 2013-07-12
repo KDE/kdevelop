@@ -122,6 +122,7 @@ CMAKE_REGISTER_AST( SiteNameAst, site_name )
 CMAKE_REGISTER_AST( StringAst, string )
 CMAKE_REGISTER_AST( SubdirsAst, subdirs )
 CMAKE_REGISTER_AST( SubdirDependsAst, subdir_depends )
+CMAKE_REGISTER_AST( TargetIncludeDirectoriesAst, target_include_directories)
 CMAKE_REGISTER_AST( TargetLinkLibrariesAst, target_link_libraries)
 CMAKE_REGISTER_AST( TryCompileAst, try_compile )
 CMAKE_REGISTER_AST( TryRunAst, try_run )
@@ -310,7 +311,8 @@ bool CustomTargetAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         ParsingDep,
         ParsingWorkingDir,
         ParsingComment,
-        ParsingVerbatim
+        ParsingVerbatim,
+        ParsingSources
     };
 
     //command should be first
@@ -342,6 +344,8 @@ bool CustomTargetAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             currCmd.clear();
             act = ParsingCommand;
         }
+        else if ( arg == "SOURCES" )
+            act = ParsingSources;
         else
         {
             switch( act )
@@ -363,6 +367,9 @@ bool CustomTargetAst::parseFunctionInfo( const CMakeFunctionDesc& func )
                 break;
             case ParsingComment:
                 m_comment += arg;
+                break;
+            case ParsingSources:
+                m_sourceLists.append( arg );
                 break;
             default:
                 return false;
@@ -2206,7 +2213,7 @@ bool ListAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             }
         } break;
         case Append: {
-            if(func.arguments.count()<3)
+            if(func.arguments.count()<2)
                 return false;
             
             addOutputArgument(func.arguments[1]);
@@ -3198,6 +3205,56 @@ bool SubdirsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     return true;
 }
 
+TargetIncludeDirectoriesAst::TargetIncludeDirectoriesAst()
+    : m_before(false)
+{}
+
+TargetIncludeDirectoriesAst::~TargetIncludeDirectoriesAst()
+{}
+
+bool TargetIncludeDirectoriesAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    if ( func.name != "target_include_directories" )
+        return false;
+
+    //we don't do variable expansion when parsing like CMake does, so we
+    //need to have at least two arguments for target_link_libraries
+    if ( func.arguments.size() < 2 )
+        return false;
+
+    m_target = func.arguments[0].value;
+
+    QList<CMakeFunctionArgument>::const_iterator it = func.arguments.constBegin() + 1;
+    QList<CMakeFunctionArgument>::const_iterator itEnd = func.arguments.constEnd();
+
+    m_before = func.arguments[1].value == "BEFORE";
+    if(m_before) {
+        ++it;
+    }
+
+    Item currentItem;
+    for ( ; it != itEnd; ++it )
+    {
+        QString visibility = it->value;
+        if(visibility == "INTERFACE") 
+            currentItem.visibility = Interface;
+        else if(visibility == "PUBLIC") 
+            currentItem.visibility = Public;
+        else if(visibility == "PRIVATE") 
+            currentItem.visibility = Private;
+        else 
+            return false;
+        ++it;
+        if(it==itEnd)
+            return false;
+
+        currentItem.item = it->value;
+        m_items.append(currentItem);
+    }
+
+    return !m_items.isEmpty();
+}
+
 TargetLinkLibrariesAst::TargetLinkLibrariesAst()
 {
 }
@@ -3325,7 +3382,7 @@ bool TryRunAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         return false;
     
     enum Actions { None, CMakeFlags, CompileDefs, OutputVariable, Args };
-    Actions act;
+    Actions act = None;
     unsigned int i=0;
     foreach(const CMakeFunctionArgument& arg, func.arguments) {
         QString val=arg.value.toLower();
@@ -3747,6 +3804,7 @@ bool SetPropertyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     if(propName=="GLOBAL") m_type=GlobalProperty;
     else if(propName=="DIRECTORY") m_type=DirectoryProperty;
     else if(propName=="TARGET") m_type=TargetProperty;
+    else if(propName=="CACHE") m_type=CacheProperty;
     else if(propName=="SOURCE") m_type=SourceProperty;
     else if(propName=="TEST") m_type=TestProperty;
     else
@@ -3788,7 +3846,6 @@ bool GetPropertyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
     if(func.name.toLower()!="get_property" || func.arguments.count() < 4 || func.arguments.count() > 6)
         return false;
-    
     QList<CMakeFunctionArgument>::const_iterator it=func.arguments.constBegin(), itEnd=func.arguments.constEnd();
     m_outputVariable=it->value;
     addOutputArgument(*it);
@@ -3800,12 +3857,12 @@ bool GetPropertyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     else if(propName=="DIRECTORY") t=DirectoryProperty;
     else if(propName=="TARGET") t=TargetProperty;
     else if(propName=="SOURCE") t=SourceProperty;
+    else if(propName=="CACHE") t=CacheProperty;
     else if(propName=="TEST") t=TestProperty;
     else if(propName=="VARIABLE") t=VariableProperty;
     else
         return false;
     m_type=t;
-    
     ++it;
     if(it->value!="PROPERTY") {
         m_typeName=it->value;
@@ -3813,7 +3870,6 @@ bool GetPropertyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     }
     if(it->value!="PROPERTY") return false;
     ++it;
-    
     m_name=it->value;
     ++it;
     m_behaviour=None;

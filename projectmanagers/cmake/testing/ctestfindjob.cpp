@@ -22,7 +22,9 @@
 
 #include <interfaces/icore.h>
 #include <interfaces/itestcontroller.h>
+#include <interfaces/ilanguagecontroller.h>
 #include <language/duchain/duchain.h>
+#include <language/backgroundparser/backgroundparser.h>
 
 #include <QFileInfo>
 #include <KProcess>
@@ -34,6 +36,7 @@ CTestFindJob::CTestFindJob(CTestSuite* suite, QObject* parent)
 {
     kDebug() << "Created a CTestFindJob";
     setObjectName(i18n("Parse test suite %1", suite->name()));
+    setCapabilities(Killable);
 }
 
 void CTestFindJob::start()
@@ -45,7 +48,7 @@ void CTestFindJob::start()
 void CTestFindJob::findTestCases()
 {
     kDebug();
-    
+
     if (!m_suite->arguments().isEmpty())
     {
         KDevelop::ICore::self()->testController()->addTestSuite(m_suite);
@@ -71,11 +74,6 @@ void CTestFindJob::findTestCases()
 
 void CTestFindJob::updateReady(const KDevelop::IndexedString& document, const KDevelop::ReferencedTopDUContext& context)
 {
-    // try not to crash, see: https://bugs.kde.org/show_bug.cgi?id=309715
-    if (KDevelop::ICore::self()->shuttingDown()) {
-        return;
-    }
-
     kDebug() << m_pendingFiles << document.str();
     m_suite->loadDeclarations(document, context);
     m_pendingFiles.removeAll(document.str());
@@ -87,4 +85,8 @@ void CTestFindJob::updateReady(const KDevelop::IndexedString& document, const KD
     }
 }
 
-
+bool CTestFindJob::doKill()
+{
+    KDevelop::ICore::self()->languageController()->backgroundParser()->revertAllRequests(this);
+    return true;
+}

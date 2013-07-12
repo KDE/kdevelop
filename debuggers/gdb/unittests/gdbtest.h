@@ -92,6 +92,7 @@ private:
                       KDevelop::IDebugSession::DebuggerState state,
                       const char *file, int line,
                       bool expectFail = false);
+    IExecutePlugin* m_iface;
 };
 
 }

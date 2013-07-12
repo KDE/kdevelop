@@ -286,6 +286,15 @@ void TestDUChain::testEllipsis()
   QCOMPARE(defInfinity->type<FunctionType>()->arguments()[1]->toString(), QString("..."));
 }
 
+void TestDUChain::testEllipsisVexing()
+{
+  QByteArray method("void infinity(...);");
+  LockedTopDUContext top = parse(method, DumpNone);
+  Declaration* defInfinity = top->localDeclarations().first();
+  QCOMPARE(defInfinity->type<FunctionType>()->arguments().count(), 1);
+  QCOMPARE(defInfinity->type<FunctionType>()->arguments()[0]->toString(), QString("..."));
+}
+
 void TestDUChain::testContextSearch() {
   {
     QByteArray method("int t; struct C { }; void test() { C c; c.t = 3;}");
@@ -549,6 +558,14 @@ void TestDUChain::testProblematicUses()
     QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 1);
     QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().begin()->size(), 4); //b uses
 
+  }
+
+  {
+    QByteArray method("struct c { void foo(int x); }; struct f { void func(); }; struct e { f getF(); }; void test() { c* c_; e* e_; c_->foo(e_->getF().func());");
+    LockedTopDUContext top = parse(method, DumpNone);
+    QCOMPARE(top->childContexts().size(), 5);
+    QCOMPARE(top->childContexts()[1]->localDeclarations().size(), 1);
+    QCOMPARE(top->childContexts()[1]->localDeclarations()[0]->uses().size(), 1);
   }
 }
 
@@ -2393,6 +2410,46 @@ void TestDUChain::testADLTemplateTemplateArguments() {
     QCOMPARE(d->uses().size(), 0);
   }
 }
+
+void TestDUChain::testADLEllipsis()
+{
+  LockedTopDUContext top( parse(readCodeFile("testADLEllipsis.cpp"), DumpNone) );
+  QCOMPARE(top->localDeclarations().size(), 5);
+  QCOMPARE(top->localDeclarations().at(0)->uses().size(), 1);
+  QCOMPARE(top->localDeclarations().at(0)->uses().begin().value().size(), 1);
+  QCOMPARE(top->localDeclarations().at(1)->uses().size(), 1);
+  QCOMPARE(top->localDeclarations().at(1)->uses().begin().value().size(), 3);
+  QCOMPARE(top->localDeclarations().at(2)->uses().size(), 1);
+  QCOMPARE(top->localDeclarations().at(2)->uses().begin().value().size(), 1);
+}
+
+
+void TestDUChain::testAssignmentOperators()
+{
+  QString operators("class foo {\n");
+  QStringList operatorPrefixes;
+  operatorPrefixes << "*" << "+" << "-" << "/" << "&" << "|" << "<<" << ">>" << "^" << "";
+  foreach ( const QString& op, operatorPrefixes ) {
+    operators.append("  foo& operator" + op + "=(const foo& other) { };\n");
+  }
+
+  operators.append("};\n\nvoid main(int, char**) {\n");
+  operators.append("  foo a, b;");
+  foreach ( const QString& op, operatorPrefixes ) {
+    operators.append("  a " + op + "= b;\n");
+  }
+  operators.append("}\n");
+
+  LockedTopDUContext top( parse(operators.toAscii(), DumpAll) );
+
+  QCOMPARE(top->childContexts().count(), 3);
+
+  QCOMPARE(top->childContexts()[0]->localDeclarations().size(), operatorPrefixes.size());
+  for ( int i = 0; i < operatorPrefixes.size(); i ++ ) {
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[i]->uses().size(), 1);
+  }
+}
+
 #define V_CHILD_COUNT(context, cnt) QCOMPARE(context->childContexts().count(), cnt)
 #define V_DECLARATION_COUNT(context, cnt) QCOMPARE(context->localDeclarations().count(), cnt)
 
@@ -3439,18 +3496,26 @@ void TestDUChain::testTypedef() {
 
 void TestDUChain::testTypedefFuncptr()
 {
-  QByteArray method("typedef int (*func)(); func f;");
+  QByteArray method("typedef int (*func)(char c); func f('c');");
 
   LockedTopDUContext top = parse(method, DumpAll);
 
-  QEXPECT_FAIL("", "three instead of two declarations are created, since the AST contains two DeclaratorASTs for the func ptr in the typedef", Abort);
   QCOMPARE(top->localDeclarations().count(), 2);
   QVERIFY(top->localDeclarations()[0]->abstractType());
   QVERIFY(top->localDeclarations()[1]->abstractType());
   QCOMPARE(top->localDeclarations()[0]->abstractType()->toString(), QString("func"));
   QCOMPARE(top->localDeclarations()[1]->abstractType()->toString(), QString("func"));
-  QCOMPARE(unAliasedType(top->localDeclarations()[0]->abstractType())->toString(), QString("function int* ()"));
-  QCOMPARE(unAliasedType(top->localDeclarations()[1]->abstractType())->toString(), QString("function int* ()"));
+  QCOMPARE(unAliasedType(top->localDeclarations()[0]->abstractType())->toString(), QString("function int (char)"));
+  QCOMPARE(unAliasedType(top->localDeclarations()[1]->abstractType())->toString(), QString("function int (char)"));
+
+  AbstractType::Ptr target = TypeUtils::targetTypeKeepAliases( top->localDeclarations()[1]->abstractType(), top);
+  const IdentifiedType* idType = dynamic_cast<const IdentifiedType*>( target.unsafeData() );
+  QVERIFY(idType);
+  QVERIFY(idType->declaration(top));
+
+  QCOMPARE(top->childContexts().at(0)->localDeclarations().count(), 1);
+  Declaration* dec = top->childContexts().at(0)->localDeclarations().first();
+  QCOMPARE(dec->toString(), QString("char c"));
 }
 
 void TestDUChain::testContextAssignment() {

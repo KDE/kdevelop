@@ -42,7 +42,6 @@ class KDEProviderWidget : public KDevelop::IProjectProviderWidget
         
     private:
         QListView* m_projects;
-        KConfigDialog* m_dialog;
 };
 
 #endif // KDEPROVIDERWIDGET_H

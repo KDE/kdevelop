@@ -32,7 +32,7 @@ class ReferencedTopDUContext;
 class CTestSuite : public KDevelop::ITestSuite
 {
 public:
-    CTestSuite(const QString& name, const KUrl& executable, const QStringList& files, KDevelop::IProject* project, const QStringList& args = QStringList());
+    CTestSuite(const QString& name, const KUrl& executable, const QStringList& files, KDevelop::IProject* project, const QStringList& args, bool expectFail);
     virtual ~CTestSuite();
     
     virtual KJob* launchCase(const QString& testCase, TestJobVerbosity verbosity);
@@ -48,7 +48,7 @@ public:
     virtual KDevelop::IndexedDeclaration caseDeclaration(const QString& testCase) const;
     
     QStringList arguments() const;
-    void setTestCases(QStringList cases);
+    void setTestCases(const QStringList& cases);
     QStringList sourceFiles() const;
     void loadDeclarations(const KDevelop::IndexedString& document, const KDevelop::ReferencedTopDUContext& context);
     
@@ -62,6 +62,8 @@ private:
     
     QHash<QString, KDevelop::IndexedDeclaration> m_declarations;
     KDevelop::IndexedDeclaration m_suiteDeclaration;
+
+    bool m_expectFail;
 };
 
 #endif // CTESTSUITE_H

@@ -25,6 +25,7 @@
 
 #include <outputview/outputjob.h>
 
+class IExecutePlugin;
 namespace KDevelop
 {
 class OutputModel;
@@ -41,7 +42,8 @@ class DebugJob : public KDevelop::OutputJob
 {
 Q_OBJECT
 public:
-    DebugJob( CppDebuggerPlugin*, KDevelop::ILaunchConfiguration*, QObject* parent = 0 );
+    DebugJob( GDBDebugger::CppDebuggerPlugin* p, KDevelop::ILaunchConfiguration* launchcfg,
+              IExecutePlugin* plugin, QObject* parent = 0 );
     virtual void start();
 protected:
     virtual bool doKill();
@@ -53,6 +55,7 @@ private:
     KDevelop::OutputModel* model();
     DebugSession* m_session;
     KDevelop::ILaunchConfiguration* m_launchcfg;
+    IExecutePlugin* m_execute;
 };
 
 //this job is just here to be able to kill the debug session

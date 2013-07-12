@@ -35,6 +35,7 @@
 #include "gdbglobal.h"
 #include "mi/gdbmi.h"
 
+class IExecutePlugin;
 class KToolBar;
 
 namespace KTextEditor {
@@ -87,7 +88,7 @@ public Q_SLOTS:
     /**
      * Start the debugger, and execute the program specified by \a run.
      */
-    bool startProgram(KDevelop::ILaunchConfiguration* run);
+    bool startProgram(KDevelop::ILaunchConfiguration* run, IExecutePlugin* execute);
     virtual void restartDebugger();
     virtual void stopDebugger();
     virtual void interruptDebugger();
@@ -140,10 +141,19 @@ public:
     void runUntil(const KUrl& url, int line);
 
     /**
+     * Run currently executing program to the given \a address
+     */
+    void runUntil(QString& address);
+    /**
      * Move the execution point of the currently executing program to the given \a url and \a line.
      */
     void jumpTo(const KUrl& url, int line);
 
+    /**
+     * Move the execution point of the currently executing program to the given \a address.
+     *Note: It can be really very dangerous, so use jumpTo instead.
+     */
+    void jumpToMemoryAddress(QString& address);
 
     /** Adds a command to the end of queue of commands to be executed
         by gdb. The command will be actually sent to gdb only when
@@ -309,8 +319,6 @@ private:
 
     // Some state variables
     DBGStateFlags     state_;
-    bool              programHasExited_;
-
 
     bool state_reload_needed;
 

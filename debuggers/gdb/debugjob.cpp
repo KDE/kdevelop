@@ -31,11 +31,15 @@
 #include <execute/iexecuteplugin.h>
 #include "debugsession.h"
 
+#include <QFileInfo>
+
 using namespace GDBDebugger;
 using namespace KDevelop;
 
-DebugJob::DebugJob( GDBDebugger::CppDebuggerPlugin* p, KDevelop::ILaunchConfiguration* launchcfg, QObject* parent) 
-    : KDevelop::OutputJob(parent), m_launchcfg( launchcfg )
+DebugJob::DebugJob( GDBDebugger::CppDebuggerPlugin* p, KDevelop::ILaunchConfiguration* launchcfg, IExecutePlugin* execute, QObject* parent) 
+    : KDevelop::OutputJob(parent)
+    , m_launchcfg( launchcfg )
+    , m_execute( execute )
 {
     setCapabilities(Killable);
 
@@ -51,11 +55,10 @@ void DebugJob::start()
 {
     KConfigGroup grp = m_launchcfg->config();
     KDevelop::EnvironmentGroupList l(KGlobal::config());
-    IExecutePlugin* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IExecutePlugin")->extension<IExecutePlugin>();
-    Q_ASSERT(iface);
+    Q_ASSERT(m_execute);
     QString err;
-    QString executable = iface->executable( m_launchcfg, err ).toLocalFile();
-    QString envgrp = iface->environmentGroup( m_launchcfg );
+    QString executable = m_execute->executable( m_launchcfg, err ).toLocalFile();
+    QString envgrp = m_execute->environmentGroup( m_launchcfg );
     
     if( !err.isEmpty() )
     {
@@ -65,6 +68,13 @@ void DebugJob::start()
         return;
     }
     
+    if(!QFileInfo(executable).isExecutable()){
+        setError( -1 );
+        setErrorText( QString("It doesn't seem like %1 is an executable at all").arg(executable));
+        emitResult();
+        return;
+    }
+
     if( envgrp.isEmpty() )
     {
         kWarning() << i18n("No environment group specified, looks like a broken "
@@ -73,7 +83,7 @@ void DebugJob::start()
         envgrp = l.defaultGroup();
     }
     
-    QStringList arguments = iface->arguments( m_launchcfg, err );
+    QStringList arguments = m_execute->arguments( m_launchcfg, err );
     if( !err.isEmpty() )
     {
         setError( -1 );
@@ -101,7 +111,7 @@ void DebugJob::start()
 
     startOutput();
 
-    m_session->startProgram( m_launchcfg );
+    m_session->startProgram( m_launchcfg, m_execute );
 }
 
 bool DebugJob::doKill()

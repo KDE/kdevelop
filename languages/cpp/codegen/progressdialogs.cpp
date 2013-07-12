@@ -58,6 +58,8 @@ RefactoringProgressDialog::RefactoringProgressDialog(QString action) {
   
   resize(380, 90);//layoutV->sizeHint().height());
   setLayout(layoutV);
+
+  setWindowTitle(i18n("Refactoring"));
   
   connect(m_cancelButton, SIGNAL(clicked(bool)), this, SLOT(reject()));
 }

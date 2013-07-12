@@ -48,6 +48,7 @@ struct Target
     Type type;
     CMakeFunctionDesc desc;
     QString name;
+    QStringList libraries;
 };
 typedef Target CMakeTarget; //Workaround for namespacing. fix me!
 
@@ -60,13 +61,16 @@ struct Subdirectory
 
 struct Test
 {
+    Test() : isTarget(false) {}
     QString name;
     QString executable;
     QStringList arguments;
     QStringList files;
+    bool isTarget;
+    QMap<QString, QString> properties;
 };
 
-enum PropertyType { GlobalProperty, DirectoryProperty, TargetProperty, SourceProperty, TestProperty, VariableProperty };
+enum PropertyType { GlobalProperty, DirectoryProperty, TargetProperty, SourceProperty, TestProperty, CacheProperty, VariableProperty };
 typedef QMap<QString, QMap<QString, QStringList> > CategoryType;
 typedef QMap<PropertyType, CategoryType > CMakeProperties;
 

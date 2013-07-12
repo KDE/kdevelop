@@ -207,17 +207,21 @@ void TestCppCodeCompletion::testSpecialItems()
   QByteArray method = "enum Color { Red = 0, Green = 1, Blue = 2 }; void test(Color c) { }";
   TopDUContext* top = parse(method, DumpNone);
   int ctxt = 2;
+  //There is duplication here, but in this case we want all the enum values added in their own group here
+  //It's probably not worth it to go through the list and remove the previously added enums when in scope
+  const QStringList enumGroupCompletions(QStringList() << "Red" << "Green" << "Blue");
   DUChainWriteLocker lock(DUChain::lock());
   CompletionItemTester test(top->childContexts()[ctxt], "c = ");
-  QCOMPARE(test.names, QStringList() << "Color c =" << "c" << "Color" << "test" << "Red" << "Green" << "Blue");
+  qDebug() << "actual names:::" << test.names;
+  QCOMPARE(test.names, QStringList() << "Color c =" << "c" << "Color" << "test" << "Red" << "Green" << "Blue" << enumGroupCompletions);
   CompletionItemTester test2(top->childContexts()[ctxt], "test(");
-  QCOMPARE(test2.names, QStringList() << "test" << "c" << "Color" << "test" << "Red" << "Green" << "Blue");
+  QCOMPARE(test2.names, QStringList() << "test" << "c" << "Color" << "test" << "Red" << "Green" << "Blue" << enumGroupCompletions);
   CompletionItemTester test3(top->childContexts()[ctxt], "if (c == ");
-  QCOMPARE(test3.names, QStringList() << "Color c ==" << "c" << "Color" << "test" << "Red" << "Green" << "Blue");
+  QCOMPARE(test3.names, QStringList() << "Color c ==" << "c" << "Color" << "test" << "Red" << "Green" << "Blue" << enumGroupCompletions);
   CompletionItemTester test4(top->childContexts()[ctxt], "if (c > ");
-  QCOMPARE(test4.names, QStringList() << "Color c >" << "c" << "Color" << "test" << "Red" << "Green" << "Blue");
+  QCOMPARE(test4.names, QStringList() << "Color c >" << "c" << "Color" << "test" << "Red" << "Green" << "Blue" << enumGroupCompletions);
   CompletionItemTester test5(top->childContexts()[ctxt], "c -= ");
-  QCOMPARE(test5.names, QStringList() << "Color c -=" << "c" << "Color" << "test" << "Red" << "Green" << "Blue");
+  QCOMPARE(test5.names, QStringList() << "Color c -=" << "c" << "Color" << "test" << "Red" << "Green" << "Blue" << enumGroupCompletions);
   release(top);
 }
 
@@ -311,16 +315,15 @@ void TestCppCodeCompletion::testInvalidContexts()
   // the ExpressionParser doesn't seem to think that "asdf" is an invalid exp.
   // Either the expressionParser should be fixed, or testContextValidity() in
   // context.cpp should be updated
-  
+
   CompletionItemTester invalidExp(top->childContexts()[ctxt], "asdf->");
   //Should be invalid (and is, but not as soon as it should be)
   QVERIFY(!invalidExp.completionContext->isValid());
-  
+
   CompletionItemTester invalidExp2(top->childContexts()[ctxt], "asdf.");
-  //Should be invalid, but isn't, because asdf evals to true
-  QEXPECT_FAIL("", "Should be invalid, but ExpressionParser needs to be fixed", Continue);
+  //Should be invalid (and is, but not as soon as it should be)
   QVERIFY(!invalidExp2.completionContext->isValid());
-  
+
   CompletionItemTester invalidExp3(top->childContexts()[ctxt], "asdf::");
   //Should be valid in case it's a namespace, but asdf should eval to false
   QVERIFY(invalidExp3.completionContext->isValid());
@@ -1420,10 +1423,6 @@ void TestCppCodeCompletion::testCompletionPrefix() {
     bool abort = false;
     QVERIFY(CompletionItemTester(top->childContexts()[2], ";int i = ").completionContext->parentContext()->completionItems(abort).size());
     QVERIFY(CompletionItemTester(top->childContexts()[2], ";int i ( ").completionContext->parentContext()->completionItems(abort).size());
-    QVERIFY(CompletionItemTester(top->childContexts()[2], ";int i = ").completionContext->parentContext()->completionItems(abort)[0]->typeForArgumentMatching().size());
-    QVERIFY(CompletionItemTester(top->childContexts()[2], ";int i ( ").completionContext->parentContext()->completionItems(abort)[0]->typeForArgumentMatching().size());
-    
-    
     release(top);
   }
 }
@@ -1607,8 +1606,8 @@ void TestCppCodeCompletion::testTemplateFunction() {
       Cpp::NormalDeclarationCompletionItem* item = dynamic_cast<Cpp::NormalDeclarationCompletionItem*>(tester2.items[0].data());
       QVERIFY(item);
       QVERIFY(!item->completingTemplateParameters());
-      QVERIFY(item->typeForArgumentMatching().size() == 1);
-      QVERIFY(item->typeForArgumentMatching()[0].type<IntegralType>());
+      QVERIFY(tester2.completionContext->matchTypes().size() == 1);
+      QVERIFY(tester2.completionContext->matchTypes()[0].type<IntegralType>());
     }
     
     release(top);
@@ -1805,6 +1804,19 @@ void TestCppCodeCompletion::testNamespaceAliasCycleCompletion() {
   QCOMPARE(CompletionItemTester(top->childContexts()[0], "A::").names.toSet(), QSet<QString>() << "C_A1" << "C_A2" << "Q");
   QCOMPARE(CompletionItemTester(top->childContexts()[0], "B::").names.toSet(), QSet<QString>() << "C_A1" << "C_A2" << "Q");
   QCOMPARE(CompletionItemTester(top).itemData("A", KTextEditor::CodeCompletionModel::Prefix).toString(), QString("namespace"));
+  release(top);
+}
+
+void TestCppCodeCompletion::testAfterNamespace()
+{
+  QByteArray method("void foo(); namespace asdf { namespace foobar {} }");
+
+  TopDUContext* top = parse(method, DumpNone);
+
+  DUChainWriteLocker lock;
+
+  CompletionItemTester tester(top, "namespace");
+  QCOMPARE(tester.names, QStringList() << "asdf");
   release(top);
 }
 
@@ -3638,28 +3650,24 @@ void TestCppCodeCompletion::testLookaheadMatches_data()
 {
   QTest::addColumn<QString>("insert");          // inserted code
   QTest::addColumn<QStringList>("completions"); // completions offered
+  QStringList all;
+  all << "m_one" << "m_two" << "m_smartOne" << "m_access" << "ThreeTwoOne" << "One"
+      << "Two" << "OneSmartPointer" << "Access" << "OneTwoThree" << "this";
 
-  QTest::newRow("Function Arg") << "m_smartOne.setOne(" << (
-    QStringList() << "setOne" << "m_one" << "m_two" << "m_smartOne" << "ThreeTwoOne" << "One" << "Two" << "OneSmartPointer"
-                  << "OneTwoThree" << "m_two.hatPointer" << "m_smartOne.operator->" << "this");
-  QTest::newRow("Smart Pointer") << "int foo = " << (
-    QStringList() << "int =" << "m_one" << "m_two" << "m_smartOne" << "ThreeTwoOne" << "One" << "Two" << "OneSmartPointer"
-                  << "OneTwoThree" << "m_one.alsoRan" << "m_two.meToo" << "m_smartOne->alsoRan" << "this");
-  QTest::newRow("Type Converstions") << "m_smartOne = " << (
-    QStringList() << "OneSmartPointer m_smartOne =" << "m_one" << "m_two" << "m_smartOne" << "ThreeTwoOne" << "One" << "Two"
-                  << "OneSmartPointer" << "OneTwoThree" << "m_two.hatPointer" << "m_smartOne.operator->" << "this" );
-  QTest::newRow("Assignment") << "m_one =  " << (
-    QStringList() << "One m_one =" << "m_one" << "m_two" << "m_smartOne" << "ThreeTwoOne" << "One" << "Two" << "OneSmartPointer"
-                  << "OneTwoThree" << "m_two.hat" << "this" );
-  QTest::newRow("Equality") << "m_one == " << (
-    QStringList() << "m_one" << "m_two" << "m_smartOne" << "ThreeTwoOne" << "One" << "Two" << "OneSmartPointer" << "OneTwoThree"
-                  << "m_two.hat" << "this" );
-  QTest::newRow("ReturnAccess") << "return" << (
-    QStringList() << "return int" << "m_one" << "m_two" << "m_smartOne" << "ThreeTwoOne" << "One" << "Two" << "OneSmartPointer"
-                  << "OneTwoThree" << "m_one.alsoRan" << "m_two.meToo" << "m_smartOne->alsoRan" << "this" );
-  QTest::newRow("No Lookahead") << "One::NoLookahead test = " << (
-    QStringList() << "One::NoLookahead NoLookahead =" << "m_one" << "m_two" << "m_smartOne" << "ThreeTwoOne" << "One" << "Two"
-                  << "OneSmartPointer" << "OneTwoThree" << "NO" << "CAN" << "SEE" << "this" );
+  QTest::newRow("Function Arg") << "m_smartOne.setOne("
+    << (QStringList() << "m_two.hatPointer" << "m_smartOne.operator->" << "setOne" << all);
+  QTest::newRow("Smart Pointer") << "int foo = "
+    << (QStringList() << "int =" << "m_one.alsoRan" << "m_two.meToo" << "m_smartOne->alsoRan" << "m_access.publicMember" << all);
+  QTest::newRow("Type Conversions") << "m_smartOne = "
+    << (QStringList() << "OneSmartPointer m_smartOne =" << "m_two.hatPointer" << all );
+  QTest::newRow("Assignment") << "m_one =  "
+    << (QStringList() << "One m_one =" << "m_two.hat" << all );
+  QTest::newRow("Equality") << "m_one == "
+    << (QStringList() << "m_two.hat" << all );
+  QTest::newRow("ReturnAccess") << "return"
+    << (QStringList() << "return int" << "m_one.alsoRan" << "m_two.meToo" << "m_smartOne->alsoRan" << "m_access.publicMember" << all );
+  QTest::newRow("No Lookahead") << "One::NoLookahead test = "
+    << (QStringList() << "One::NoLookahead NoLookahead =" << "NO" << "CAN" << "SEE" << all );
 }
 
 void TestCppCodeCompletion::testLookaheadMatches()
@@ -3667,14 +3675,25 @@ void TestCppCodeCompletion::testLookaheadMatches()
   QByteArray test = "struct One { enum NoLookahead { NO, CAN, SEE, }; int alsoRan; typedef int myInt; };"
                     "struct Two { One hat; One *hatPointer; int meToo(); };"
                     "struct OneSmartPointer { OneSmartPointer(One*) {}; void setOne(One*); One* operator->() const {} };"
-                    "struct OneTwoThree { One m_one; Two m_two; OneSmartPointer m_smartOne; int ThreeTwoOne() { } };";
+                    "class Access{ int privateMember; public: int publicMember; };"
+                    "struct OneTwoThree { One m_one; Two m_two; OneSmartPointer m_smartOne; Access m_access; int ThreeTwoOne() { } };";
   QFETCH(QString, insert);
   QFETCH(QStringList, completions);
   TopDUContext* top = parse(test, DumpNone);
   DUChainWriteLocker lock(DUChain::lock());
-  DUContext *testContext = top->childContexts()[3]->childContexts()[1];
+  DUContext *testContext = top->childContexts()[4]->childContexts()[1];
   CompletionItemTester tester(testContext, insert);
-  QCOMPARE(tester.names, completions);
+  QCOMPARE(tester.names.toSet(), completions.toSet());
+  release(top);
+}
+
+void TestCppCodeCompletion::testMemberAccessInstance()
+{
+  QByteArray test = "struct foo{}; int main() {}";
+  TopDUContext* top = parse(test, DumpNone);
+  DUChainWriteLocker lock(DUChain::lock());
+  CompletionItemTester tester(top->childContexts()[2], "foo.");
+  QCOMPARE(tester.names, QStringList());
   release(top);
 }
 

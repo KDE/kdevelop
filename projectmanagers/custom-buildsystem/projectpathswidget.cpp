@@ -108,6 +108,9 @@ void ProjectPathsWidget::updatePathsModel(const QVariant& newData, int role)
 
 void ProjectPathsWidget::projectPathSelected( int index )
 {
+    if( index < 0 && pathsModel->rowCount() > 0 ) {
+        index = 0;
+    }
     assert(index >= 0);
     const QModelIndex midx = pathsModel->index( index, 0 );
     ui->includesWidget->setIncludes( pathsModel->data( midx, ProjectPathsModel::IncludesDataRole ).toStringList() );
@@ -117,10 +120,12 @@ void ProjectPathsWidget::projectPathSelected( int index )
 
 void ProjectPathsWidget::clear()  
 {
+    bool sigDisabled = ui->projectPaths->blockSignals( true );
     pathsModel->setPaths( QList<CustomBuildSystemProjectPathConfig>() );
     ui->includesWidget->clear();
     ui->definesWidget->clear();
     updateEnablements();
+    ui->projectPaths->blockSignals( sigDisabled );
 }
 
 void ProjectPathsWidget::addProjectPath()

@@ -156,7 +156,11 @@ bool CustomMakeManager::isValid(const KUrl& url, const bool isFolder, IProject* 
 ProjectFileItem* CustomMakeManager::createFileItem(IProject* project, const KUrl& url, ProjectBaseItem* parent)
 {
     KDevelop::ProjectFileItem *item = new KDevelop::ProjectFileItem( project, url, parent );
-    if( url.fileName() == "Makefile" )
+    const QString fileName = url.fileName();
+    if( fileName == QLatin1String("Makefile")
+        || fileName == QLatin1String("makefile")
+        || fileName == QLatin1String("GNUmakefile")
+        || fileName == QLatin1String("BSDmakefile") )
     {
         QStringList targetlist = parseCustomMakeFile( url );
         foreach( const QString &target, targetlist )
@@ -185,12 +189,7 @@ KDevelop::ProjectFolderItem* CustomMakeManager::import(KDevelop::IProject *proje
         return 0;
     }
 
-    ProjectFolderItem* ret = AbstractFileManagerPlugin::import( project );
-
-    connect(projectWatcher(project), SIGNAL(dirty(QString)),
-            this, SLOT(slotDirty(QString)));
-
-    return ret;
+    return AbstractFileManagerPlugin::import( project );
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -203,9 +202,6 @@ QStringList CustomMakeManager::parseCustomMakeFile( const KUrl &makefile )
         return QStringList();
 
     QStringList ret; // the list of targets
-//     KUrl absFileUrl = dir;
-    // TODO support Makefile, Makefile.xxx, makefile
-//     absFileUrl.addPath( "Makefile" );
     QFile f( makefile.toLocalFile() );
     if ( !f.open( QIODevice::ReadOnly | QIODevice::Text ) )
     {
@@ -244,14 +240,6 @@ QStringList CustomMakeManager::parseCustomMakeFile( const KUrl &makefile )
     }
     f.close();
     return ret;
-}
-
-void CustomMakeManager::slotDirty(const QString& path)
-{
-    if (!path.endsWith("Makefile")) {
-        return;
-    }
-
 }
 
 #include "custommakemanager.moc"

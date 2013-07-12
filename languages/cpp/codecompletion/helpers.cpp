@@ -324,7 +324,7 @@ void createTemplateArgumentList(const NormalDeclarationCompletionItem& item, QSt
 }
 
 //Returns the type as which a declaration in the completion-list should be interpreted, which especially means that it returns the return-type of a function.
-AbstractType::Ptr effectiveType( Declaration* decl )
+AbstractType::Ptr effectiveType( const Declaration* decl )
 {
   if( !decl || !decl->abstractType() )
     return AbstractType::Ptr();

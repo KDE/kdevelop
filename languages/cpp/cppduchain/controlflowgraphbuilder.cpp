@@ -293,7 +293,7 @@ void ControlFlowGraphBuilder::visitLabeledStatement(LabeledStatementAST* node)
   if(token==Token_default || token==Token_case) {
     ControlFlowNode* condNode = new ControlFlowNode;
     condNode->setStartCursor(cursorForToken(node->start_token));
-    condNode->setEndCursor(cursorForToken(node->statement->start_token));
+    condNode->setEndCursor(cursorForToken(node->end_token));
     
     condNode->setNext(createCompoundStatement(node->statement, 0));
     

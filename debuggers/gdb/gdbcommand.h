@@ -287,6 +287,7 @@ GDBCommand::GDBCommand(
   handler_method(static_cast<handler_t>(handler_method)),
   commandHandler_(0),
   run(false),
+  stateReloading_(false),
   handlesError_(handlesError),
   m_thread(-1),
   m_frame(-1)
@@ -306,6 +307,7 @@ GDBCommand::GDBCommand(
   handler_method(static_cast<handler_t>(handler_method)),
   commandHandler_(0),
   run(false),
+  stateReloading_(false),
   handlesError_(handlesError),
   m_thread(-1),
   m_frame(-1)

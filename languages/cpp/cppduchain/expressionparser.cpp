@@ -95,6 +95,12 @@ QHash<QByteArray, ExpressionEvaluationResult> buildStaticLookupTable()
   ///NOTE: the trailing space is by intention, apparently thats what gets queried
   ret.insert("false ", res);
 
+  DelayedType::Ptr ellipsis(new DelayedType);
+  ellipsis->setKind(DelayedType::Unresolved);
+  ellipsis->setIdentifier(IndexedTypeIdentifier("..."));
+  res.type = ellipsis->indexed();
+  ret.insert("...", res);
+
   ///TODO: extend at will
 
   return ret;

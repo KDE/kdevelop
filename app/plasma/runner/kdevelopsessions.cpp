@@ -31,8 +31,8 @@
 #include <KStringHandler>
 #include <QFile>
 
-bool kdevelopsessions_runner_compare_sessions(const QString &s1, const QString &s2) {
-    return KStringHandler::naturalCompare(s1,s2)==-1;
+bool kdevelopsessions_runner_compare_sessions(const Session &s1, const Session &s2) {
+    return KStringHandler::naturalCompare(s1.name, s2.name) == -1;
 }
 
 KDevelopSessions::KDevelopSessions(QObject *parent, const QVariantList& args)
@@ -59,7 +59,7 @@ KDevelopSessions::KDevelopSessions(QObject *parent, const QVariantList& args)
     s.addExampleQuery(QLatin1String("kdevelop :q:"));
     addSyntax(s);
 
-    addSyntax(Plasma::RunnerSyntax(QLatin1String("kdevelop"), i18n("Lists all the KDevelop editor sessions in your account.")));
+    setDefaultSyntax(Plasma::RunnerSyntax(QLatin1String("kdevelop"), i18n("Lists all the KDevelop editor sessions in your account.")));
 }
 
 KDevelopSessions::~KDevelopSessions()
@@ -68,33 +68,28 @@ KDevelopSessions::~KDevelopSessions()
 
 void KDevelopSessions::loadSessions()
 {
-    kWarning() << "LOADSESSION!.>>>";
+    m_sessions.clear();
     // Switch kdevelop session: -u
     // Should we add a match for this option or would that clutter the matches too much?
-    QStringList sessions = QStringList();
     const QStringList list = KGlobal::dirs()->findAllResources( "data", QLatin1String("kdevelop/sessions/*/sessionrc"), KStandardDirs::Recursive );
-    KUrl url;
     foreach (const QString &sessionfile, list)
-    //for (QStringList::ConstIterator it = list.constBegin(); it != list.constEnd(); ++it)
     {
         kWarning() << "NEW SESSION:" << sessionfile;
-        KConfig cfg(sessionfile);
-        //QString sessionName;
-        QString sessionName = cfg.entryMap()["SessionName"];
-        kWarning() << "session:" << sessionName << cfg.entryMap()["SessionName"];
-/*        KConfig _config( *it, KConfig::SimpleConfig );
-        KConfigGroup config(&_config, "General" );
-        QString name =  config.readEntry( "Name" );*/
-        //url.setPath(*it);
-        //QString name=url.fileName();
-        //name = QUrl::fromPercentEncoding(QFile::encodeName(url.fileName()));
-        //name.chop(12);///.kdevelopsession==12
-        if (!sessionName.isEmpty()) {
-            sessions.append( sessionName);
+        Session session;
+        session.id = sessionfile.section('/', -2, -2);
+        KConfig cfg(sessionfile, KConfig::SimpleConfig);
+        KConfigGroup group = cfg.group(QString());
+        QString name = group.readEntry("SessionName");
+        QString content = group.readEntry("SessionPrettyContents");
+        if (name.isEmpty()) {
+            name = content;
+        } else {
+            name = i18nc("name: content", "%1: %2", name, content);
         }
+        session.name = name;
+        m_sessions << session;
     }
-    qSort(sessions.begin(),sessions.end(),kdevelopsessions_runner_compare_sessions);
-    m_sessions = sessions;
+    qSort(m_sessions.begin(), m_sessions.end(), kdevelopsessions_runner_compare_sessions);
 }
 
 void KDevelopSessions::match(Plasma::RunnerContext &context)
@@ -114,7 +109,7 @@ void KDevelopSessions::match(Plasma::RunnerContext &context)
         if (term.trimmed().compare(QLatin1String("kdevelop"), Qt::CaseInsensitive) == 0) {
             listAll = true;
             term.clear();
-        } else if (term.at(4) == QLatin1Char(' ') ) {
+        } else if (term.at(8) == QLatin1Char(' ') ) {
             term.remove(QLatin1String("kdevelop"), Qt::CaseInsensitive);
             term = term.trimmed();
         } else {
@@ -126,19 +121,19 @@ void KDevelopSessions::match(Plasma::RunnerContext &context)
         return;
     }
 
-    foreach (const QString &session, m_sessions) {
+    foreach (const Session &session, m_sessions) {
         if (!context.isValid()) {
             return;
         }
 
-        if (listAll || (!term.isEmpty() && session.contains(term, Qt::CaseInsensitive))) {
+        if (listAll || (!term.isEmpty() && session.name.contains(term, Qt::CaseInsensitive))) {
             Plasma::QueryMatch match(this);
             if (listAll) {
                 // All sessions listed, but with a low priority
                 match.setType(Plasma::QueryMatch::ExactMatch);
                 match.setRelevance(0.8);
             } else {
-                if (session.compare(term, Qt::CaseInsensitive) == 0) {
+                if (session.name.compare(term, Qt::CaseInsensitive) == 0) {
                     // parameter to kdevelop matches session exactly, bump it up!
                     match.setType(Plasma::QueryMatch::ExactMatch);
                     match.setRelevance(1.0);
@@ -149,8 +144,8 @@ void KDevelopSessions::match(Plasma::RunnerContext &context)
                 }
             }
             match.setIcon(m_icon);
-            match.setData(session);
-            match.setText(session);
+            match.setData(session.id);
+            match.setText(session.name);
             match.setSubtext(i18n("Open KDevelop Session"));
             context.addMatch(term, match);
         }
@@ -160,14 +155,15 @@ void KDevelopSessions::match(Plasma::RunnerContext &context)
 void KDevelopSessions::run(const Plasma::RunnerContext &context, const Plasma::QueryMatch &match)
 {
     Q_UNUSED(context)
-    QString session = match.data().toString();
-    kDebug() << "Open KDevelop Session " << session;
-
-    if (!session.isEmpty()) {
-        QStringList args;
-       	args << QLatin1String("--open-session") << session;
-        KToolInvocation::kdeinitExec(QLatin1String("kdevelop"), args);
+    QString sessionId = match.data().toString();
+    if (sessionId.isEmpty()) {
+        kWarning() << "No KDevelop session id in match!";
+        return;
     }
+    kDebug() << "Open KDevelop session" << sessionId;
+    QStringList args;
+    args << QLatin1String("--open-session") << sessionId;
+    KToolInvocation::kdeinitExec(QLatin1String("kdevelop"), args);
 }
 
 #include "kdevelopsessions.moc"

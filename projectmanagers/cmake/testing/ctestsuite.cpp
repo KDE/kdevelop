@@ -41,11 +41,12 @@
 
 using namespace KDevelop;
 
-CTestSuite::CTestSuite(const QString& name, const KUrl& executable, const QStringList& files, IProject* project, const QStringList& args): 
+CTestSuite::CTestSuite(const QString& name, const KUrl& executable, const QStringList& files, IProject* project, const QStringList& args, bool expectFail):
 m_executable(executable),
 m_name(name),
 m_args(args),
-m_project(project)
+m_project(project),
+m_expectFail(expectFail)
 {
     m_executable.cleanPath();
     Q_ASSERT(project);
@@ -148,7 +149,7 @@ KJob* CTestSuite::launchCases(const QStringList& testCases, ITestSuite::TestJobV
     kDebug() << "Launching test run" << m_name << "with cases" << testCases;
     
     OutputJob::OutputJobVerbosity outputVerbosity = (verbosity == Verbose) ? OutputJob::Verbose : OutputJob::Silent;
-    return new CTestRunJob(this, testCases, outputVerbosity);
+    return new CTestRunJob(this, testCases, outputVerbosity, m_expectFail);
 }
 
 KJob* CTestSuite::launchAllCases(TestJobVerbosity verbosity)
@@ -191,7 +192,7 @@ IndexedDeclaration CTestSuite::caseDeclaration(const QString& testCase) const
     return m_declarations.value(testCase, IndexedDeclaration(0));
 }
 
-void CTestSuite::setTestCases(QStringList cases)
+void CTestSuite::setTestCases(const QStringList& cases)
 {
     m_cases = cases;
 }

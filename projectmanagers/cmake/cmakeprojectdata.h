@@ -8,8 +8,6 @@ struct CMakeProjectData
 {
     QString projectName;
     QList<Subdirectory> subdirectories;
-    QStringList includeDirectories;
-    CMakeDefinitions definitions;
     QList<Target> targets;
     QList<Test> testSuites;
     

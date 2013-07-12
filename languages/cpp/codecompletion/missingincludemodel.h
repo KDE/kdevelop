@@ -82,7 +82,7 @@ class MissingIncludeCompletionWorker : public KDevelop::CodeCompletionWorker {
   virtual void abortCurrentCompletion();
   virtual void doSpecialProcessing(unsigned int data);
   protected:
-  virtual void computeCompletions(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, KTextEditor::View* view, const KTextEditor::Range& contextRange, const QString& contextText);
+  virtual void computeCompletions(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, QString followingText, const KTextEditor::Range& contextRange, const QString& contextText);
 };
 
 }

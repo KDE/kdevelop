@@ -290,8 +290,12 @@ bool KDevelop::SourceCodeInsertion::insertFunctionDeclaration(KDevelop::Identifi
   
   if(body.isEmpty())
     decl += ";";
-  else
-    decl += " " + zeroIndentation(body, 1);
+  else {
+    if (!body.startsWith(' ')) {
+      decl += " ";
+    }
+    decl += zeroIndentation(body);
+  }
   
   InsertionPoint insertion = findInsertionPoint(m_access, Function);
   

@@ -42,7 +42,7 @@ void createArgumentList(const NormalDeclarationCompletionItem& item, QString& re
 void createTemplateArgumentList(const NormalDeclarationCompletionItem& item, QString& ret, QList<QVariant>* highlighting, bool includeDefaultParams = true );
 
 ///Returns the type as which a declaration in the completion-list should be interpreted, which especially means that it returns the return-type of a function.
-KDevelop::AbstractType::Ptr effectiveType( KDevelop::Declaration* decl );
+KDevelop::AbstractType::Ptr effectiveType( const KDevelop::Declaration* decl );
 
 ///Returns true if the given file has the extension of a C++ source file, not of a header.
 bool isSource(QString fileName);

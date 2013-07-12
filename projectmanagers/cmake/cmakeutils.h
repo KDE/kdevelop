@@ -43,7 +43,7 @@ namespace CMake
      *
      * @returns true if configure should be run, false otherwise
      */
-    KDEVCMAKECOMMON_EXPORT bool checkForNeedingConfigure( KDevelop::ProjectBaseItem* item );
+    KDEVCMAKECOMMON_EXPORT bool checkForNeedingConfigure( KDevelop::IProject* project );
 
     /**
      * @returns the current builddir for the given project or an empty url if none
@@ -76,6 +76,11 @@ namespace CMake
      * @returns the current build dir for the given project.
      */
     KDEVCMAKECOMMON_EXPORT QString projectRootRelative( KDevelop::IProject* project );
+    
+    /**
+     * @returns whether there's projectRootRelative defined
+     */
+    KDEVCMAKECOMMON_EXPORT bool hasProjectRootRelative( KDevelop::IProject* project );
     
     /**
      * Convenience function to get the project root.
@@ -126,16 +131,6 @@ namespace CMake
      * Retrieves the configured build directories for @p project.
      */
     KDEVCMAKECOMMON_EXPORT QStringList allBuildDirs(KDevelop::IProject* project);
-
-    /**
-     * Returns current CMake modules directory for @p project.
-     */
-    KDEVCMAKECOMMON_EXPORT KUrl cmakeDirectory( KDevelop::IProject* project );
-
-    /**
-     * Sets current CMake modules directory for @p project.
-     */
-    KDEVCMAKECOMMON_EXPORT void setCmakeDirectory( KDevelop::IProject* project, const KUrl& url );
 
     /**
      * Attempts to migrate the CMake configuration to per-builddir format.

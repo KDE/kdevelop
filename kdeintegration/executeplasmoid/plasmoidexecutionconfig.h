@@ -60,6 +60,8 @@ public:
     virtual KJob* start(const QString& launchMode, KDevelop::ILaunchConfiguration* cfg);
     virtual KJob* dependencies(KDevelop::ILaunchConfiguration* cfg);
     virtual QStringList supportedModes() const;
+    
+    static KJob* calculateDependencies(KDevelop::ILaunchConfiguration* cfg);
 private:
     ExecutePlasmoidPlugin* m_plugin;
 };
@@ -83,7 +85,8 @@ public:
     PlasmoidExecutionConfigType();
     virtual ~PlasmoidExecutionConfigType();
 
-    QString id() const;
+    static QString typeId();
+    QString id() const { return typeId(); }
     QString name() const;
     QList<KDevelop::LaunchConfigurationPageFactory*> configPages() const;  
     KIcon icon() const;

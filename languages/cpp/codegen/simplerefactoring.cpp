@@ -143,104 +143,130 @@ void SimpleRefactoring::doContextMenu(KDevelop::ContextMenuExtension& extension,
   }
 }
 
+QString SimpleRefactoring::moveIntoSource(const IndexedDeclaration& iDecl)
+{
+  DUChainReadLocker lock;
+  Declaration* decl = iDecl.data();
+  if(!decl) {
+    return i18n("No declaration under cursor");
+  }
+
+  KDevelop::IndexedString url = decl->url();
+  KUrl targetUrl = decl->url().toUrl();
+  if(headerExtensions.contains(QFileInfo(targetUrl.toLocalFile()).suffix())) {
+    targetUrl = CppUtils::sourceOrHeaderCandidate(targetUrl);
+  }
+  if(!targetUrl.isValid()) {
+    ///@todo Create source file if it doesn't exist yet
+    return i18n("No source file available for %1.", targetUrl.prettyUrl());
+  }
+
+  const IndexedString indexedTargetUrl(targetUrl);
+
+  lock.unlock();
+  KDevelop::ReferencedTopDUContext top = DUChain::self()->waitForUpdate(url, KDevelop::TopDUContext::AllDeclarationsAndContexts);
+  KDevelop::ReferencedTopDUContext targetTopContext = DUChain::self()->waitForUpdate(indexedTargetUrl, KDevelop::TopDUContext::AllDeclarationsAndContexts);
+  lock.lock();
+
+  if(!targetTopContext) {
+    ///@todo Eventually create source file if it doesn't exist yet
+    return i18n("Failed to update DUChain for %1.", targetUrl.prettyUrl());
+  }
+
+  if(!top || !iDecl.data() || iDecl.data() != decl) {
+    return i18n("Declaration lost while updating.");
+  }
+
+  kDebug() << "moving" << decl->qualifiedIdentifier();
+  AbstractFunctionDeclaration* funDecl = dynamic_cast<AbstractFunctionDeclaration*>(decl);
+  FunctionType::Ptr funType = decl->type<FunctionType>();
+
+  if( !(decl->internalContext() && decl->internalContext()->type() == DUContext::Other
+      && funDecl && funDecl->internalFunctionContext() && funType) )
+  {
+    return i18n("Cannot create definition for this declaration.");
+  }
+
+  CodeRepresentation::Ptr code = createCodeRepresentation(decl->url());
+  if(!code) {
+    return i18n("No document for %1", decl->url().toUrl().prettyUrl());
+  }
+
+  SimpleRange headerRange = decl->internalContext()->rangeInCurrentRevision();
+  // remove whitespace in front of the header range
+  KTextEditor::Range prefixRange(funDecl->internalFunctionContext()->range().end.castToSimpleCursor().textCursor()
+                                  + KTextEditor::Cursor(0, 1) /* skip ) of function context */,
+                                 headerRange.start.textCursor());
+  const QString prefixText = code->rangeText(prefixRange);
+  for (int i = prefixText.length() - 1; i >= 0 && prefixText.at(i).isSpace(); --i) {
+    if (headerRange.start.column == 0) {
+      headerRange.start.line--;
+      if (headerRange.start.line == prefixRange.start().line()) {
+        headerRange.start.column = prefixRange.start().column() + i;
+      } else {
+        int lastNewline = prefixText.lastIndexOf('\n', i - 1);
+        headerRange.start.column = i - lastNewline - 1;
+        kWarning() << "UNSUPPORTED" << headerRange.start.column << lastNewline << i << prefixText;
+      }
+    } else {
+      headerRange.start.column--;
+    }
+  }
+  qDebug() << prefixText << prefixRange;
+  const QString body = code->rangeText(headerRange.textRange());
+  SourceCodeInsertion ins(targetTopContext);
+  QualifiedIdentifier namespaceIdentifier = decl->internalContext()->parentContext()->scopeIdentifier(false);
+
+  ins.setSubScope(namespaceIdentifier);
+
+  QList<SourceCodeInsertion::SignatureItem> signature;
+
+  foreach(Declaration* argument,  funDecl->internalFunctionContext()->localDeclarations()) {
+    SourceCodeInsertion::SignatureItem item;
+    item.name = argument->identifier().toString();
+    item.type = argument->abstractType();
+    signature.append(item);
+  }
+
+  kDebug() << "qualified id:" << decl->qualifiedIdentifier() << "from mid:" << decl->qualifiedIdentifier().mid(namespaceIdentifier.count()) << namespaceIdentifier.count();
+
+  Identifier id(IndexedString(decl->qualifiedIdentifier().mid(namespaceIdentifier.count()).toString()));
+  kDebug() << "id:" << id;
+
+  if(!ins.insertFunctionDeclaration(id, funType->returnType(), signature, funType->modifiers() & AbstractType::ConstModifier, body)) {
+    return i18n("Insertion failed");
+  }
+  lock.unlock();
+  DocumentChangeSet::ChangeResult applied = ins.changes().applyAllChanges();
+  if(!applied) {
+    return i18n("Applying changes failed: %1", applied.m_failureReason);
+  }
+
+  // replace header function body with a semicolon
+  DocumentChangeSet changeHeader;
+  changeHeader.addChange(DocumentChange(decl->url(), headerRange, body, ";"));
+  applied = changeHeader.applyAllChanges();
+  if(!applied) {
+    return i18n("Applying changes failed: %1", applied.m_failureReason);
+  }
+
+  ICore::self()->languageController()->backgroundParser()->addDocument(url);
+  ICore::self()->languageController()->backgroundParser()->addDocument(indexedTargetUrl);
+
+  return QString();
+}
+
 void SimpleRefactoring::executeMoveIntoSourceAction() {
   QAction* action = qobject_cast<QAction*>(sender());
   if(action) {
     IndexedDeclaration iDecl = action->data().value<IndexedDeclaration>();
     if(!iDecl.isValid())
       iDecl = declarationUnderCursor(false);
-    
-    DUChainReadLocker lock(DUChain::lock());
-    Declaration* decl = iDecl.data();
-    if(!decl) {
-      KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("No declaration under cursor"));
-      return;
-    }
-    
-    KDevelop::IndexedString url = decl->url();
-    KUrl targetUrl = decl->url().toUrl();
-    if(headerExtensions.contains(QFileInfo(targetUrl.toLocalFile()).suffix())) {
-      targetUrl = CppUtils::sourceOrHeaderCandidate(targetUrl);
-    }
-    if(!targetUrl.isValid()) {
-      ///@todo Create source file if it doesn't exist yet
-      KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("No source file available for %1.", targetUrl.prettyUrl()));
-      return;
-    }
 
-    const IndexedString indexedTargetUrl = IndexedString(targetUrl);
-    
-    lock.unlock();
-    KDevelop::ReferencedTopDUContext top = DUChain::self()->waitForUpdate(url, KDevelop::TopDUContext::AllDeclarationsAndContexts);
-    KDevelop::ReferencedTopDUContext targetTopContext = DUChain::self()->waitForUpdate(indexedTargetUrl, KDevelop::TopDUContext::AllDeclarationsAndContexts);
-    lock.lock();
-    
-    if(!targetTopContext) {
-      ///@todo Eventually create source file if it doesn't exist yet
-      lock.unlock();
-      KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("Failed to update DU chain for %1.", targetUrl.prettyUrl()));
-      return;
+    const QString error = moveIntoSource(iDecl);
+    if (!error.isEmpty()) {
+      KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), error);
     }
-    kDebug() << "moving" << decl->qualifiedIdentifier();
-    AbstractFunctionDeclaration* funDecl = dynamic_cast<AbstractFunctionDeclaration*>(decl);
-    FunctionType::Ptr funType = decl->type<FunctionType>();
-
-    if(top && iDecl.data() && iDecl.data() == decl)
-    {
-      if( !(decl->internalContext() && decl->internalContext()->type() == DUContext::Other && funDecl && funDecl->internalFunctionContext() && funType) ) {
-        lock.unlock();
-        KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("Cannot create definition for this declaration."));
-        return;
-      }
-      
-      KDevelop::IDocument* doc = ICore::self()->documentController()->documentForUrl(decl->url().toUrl());
-      if(doc && doc->textDocument()) {
-        QString body = doc->textDocument()->text(decl->internalContext()->rangeInCurrentRevision().textRange());
-        SourceCodeInsertion ins(targetTopContext);
-        QualifiedIdentifier namespaceIdentifier = decl->internalContext()->parentContext()->scopeIdentifier(false);
-
-        ins.setSubScope(namespaceIdentifier);
-        
-        QList<SourceCodeInsertion::SignatureItem> signature;
-        
-        foreach(Declaration* argument,  funDecl->internalFunctionContext()->localDeclarations()) {
-          SourceCodeInsertion::SignatureItem item;
-          item.name = argument->identifier().toString();
-          item.type = argument->abstractType();
-          signature.append(item);
-        }
-        
-        kDebug() << "qualified id:" << decl->qualifiedIdentifier() << "from mid:" << decl->qualifiedIdentifier().mid(namespaceIdentifier.count()) << namespaceIdentifier.count();
-        
-        Identifier id(IndexedString(decl->qualifiedIdentifier().mid(namespaceIdentifier.count()).toString()));
-        kDebug() << "id:" << id;
-        
-        if(!ins.insertFunctionDeclaration(id, funType->returnType(), signature, funType->modifiers() & AbstractType::ConstModifier, body)) {
-          lock.unlock();
-          KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("Insertion failed"));
-          return;
-        }
-        KTextEditor::Cursor start = funDecl->internalFunctionContext()->rangeInCurrentRevision().textRange().end();
-        start.setColumn(start.column() +  1); // skip )
-        KTextEditor::Cursor end = decl->internalContext()->rangeInCurrentRevision().textRange().end();
-        lock.unlock();
-        if(!ins.changes().applyAllChanges()) {
-          KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("Applying changes failed"));
-          return;
-        }
-
-        doc->textDocument()->replaceText(KTextEditor::Range(start, end), QString(";"));
-        ICore::self()->languageController()->backgroundParser()->addDocument(url);
-        ICore::self()->languageController()->backgroundParser()->addDocument(indexedTargetUrl);
-      }else{
-        lock.unlock();
-        KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("No document for %1", decl->url().toUrl().prettyUrl()));
-      }
-    }else{
-      lock.unlock();
-      KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("Declaration lost while updating"));
-    }
-    
   }else{
     kWarning() << "strange problem";
   }

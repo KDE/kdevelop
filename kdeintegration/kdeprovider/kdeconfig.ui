@@ -10,14 +10,17 @@
     <height>300</height>
    </rect>
   </property>
-  <layout class="QFormLayout" name="formLayout">
-   <property name="fieldGrowthPolicy">
-    <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-   </property>
+  <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
     <widget class="QLabel" name="label">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="text">
-      <string>git.kde.org protocol</string>
+      <string>git.kde.org protocol:</string>
      </property>
     </widget>
    </item>
@@ -38,12 +41,23 @@
        <string>ssh</string>
       </property>
      </item>
+     <item>
+      <property name="text">
+       <string>kde:</string>
+      </property>
+     </item>
     </widget>
    </item>
    <item row="1" column="1">
     <widget class="QLabel" name="label_2">
      <property name="text">
-      <string>URL clone protocol ex: git://anongit.kde.org/kdevelop/</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;URL to clone the protocol from, like:&lt;br/&gt;git clone git://anongit.kde.org/kdevelop&lt;br/&gt;git clone kde:kdevelop&lt;/p&gt;&lt;p&gt;For more information go &lt;a href=&quot;http://community.kde.org/Sysadmin/GitKdeOrgManual#Overview_of_repository_URL_schemes&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0057ae;&quot;&gt;here&lt;/span&gt;&lt;/a&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::RichText</enum>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
      </property>
     </widget>
    </item>

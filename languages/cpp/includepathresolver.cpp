@@ -57,6 +57,7 @@
 #include <klocale.h>
 
 #include <language/duchain/indexedstring.h>
+#include <util/pushvalue.h>
 
 //#define VERBOSE
 
@@ -266,7 +267,7 @@ bool CppTools::CustomIncludePathsSettings::delete_() {
 KDevelop::ModificationRevisionSet IncludePathResolver::findIncludePathDependency(QString file)
 {
   KDevelop::ModificationRevisionSet rev;
-  CppTools::CustomIncludePathsSettings settings = CustomIncludePathsSettings::findAndRead(file);
+  CppTools::CustomIncludePathsSettings settings = CustomIncludePathsSettings::findAndReadAbsolute(file);
   KDevelop::IndexedString storageFile(settings.storageFile());
   if(!storageFile.isEmpty())
     rev.addModificationRevision(storageFile, KDevelop::ModificationRevision::revisionForFile(storageFile));
@@ -341,6 +342,21 @@ QString CppTools::CustomIncludePathsSettings::storageFile() const
   return ret;
 }
 
+CppTools::CustomIncludePathsSettings CppTools::CustomIncludePathsSettings::findAndReadAbsolute(const QString& startPath)
+{
+  CppTools::CustomIncludePathsSettings settings(findAndRead(startPath));
+  QDir sourceDir( settings.storagePath );
+
+  // Turn relative paths into absolute paths from the storage path
+  for (int i = 0; i < settings.paths.size(); i++) {
+    QString& path = settings.paths[i];
+    if (!path.startsWith("/"))
+      settings.paths[i] = sourceDir.absoluteFilePath(path);
+  }
+
+  return settings;
+}
+
 CustomIncludePathsSettings CustomIncludePathsSettings::read(QString storagePath) {
   QDir sourceDir( storagePath );
   CustomIncludePathsSettings ret;
@@ -381,9 +397,6 @@ CustomIncludePathsSettings CustomIncludePathsSettings::read(QString storagePath)
               }
             }
           }else{
-            // Turn relative paths into absolute paths from the storage path
-            if (!textLine.startsWith("/"))
-              textLine = sourceDir.absoluteFilePath(textLine);
             ret.paths << textLine;
           }
         }
@@ -468,17 +481,6 @@ void CppTools::IncludePathResolver::clearCache() {
 }
 
 PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& file, const QString& _workingDirectory, int maxStepsUp ) {
-
-  struct Enabler {
-    bool& b;
-    Enabler( bool& bb ) : b(bb) {
-      b = true;
-    }
-    ~Enabler() {
-      b = false;
-    }
-  };
-  
   //Prefer this result when returning a "fail". The include-paths of this result will always be added.
   PathResolutionResult resultOnFail;
 
@@ -504,7 +506,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
 
   ifTest( cout << "working-directory: " <<  workingDirectory.toLocal8Bit().data() << "  file: " << file.toLocal8Bit().data() << std::endl; )
   
-  CppTools::CustomIncludePathsSettings customPaths = CustomIncludePathsSettings::findAndRead(workingDirectory);
+  CppTools::CustomIncludePathsSettings customPaths = CustomIncludePathsSettings::findAndReadAbsolute(workingDirectory);
   
   if(customPaths.isValid()) {
     PathResolutionResult result(true);
@@ -582,7 +584,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
       return PathResolutionResult(false, i18n("Makefile is missing in folder \"%1\"", dir.absolutePath()), i18n("Problem while trying to resolve include paths for %1", file ) );
   }
 
-  Enabler e( m_isResolving );
+  PushValue<bool> e( m_isResolving, true );
 
   QStringList cachedPaths; //If the call doesn't succeed, use the cached not up-to-date version
   KDevelop::ModificationRevisionSet dependency;

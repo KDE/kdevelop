@@ -46,33 +46,32 @@ namespace Config
 {
 namespace Old
 {
-static QString currentBuildDirKey = "CurrentBuildDir";
-static QString currentCMakeBinaryKey = "Current CMake Binary";
-static QString currentBuildTypeKey = "CurrentBuildType";
-static QString currentInstallDirKey = "CurrentInstallDir";
-static QString currentEnvironmentKey = "CurrentEnvironment";
-static QString currentExtraArgumentsKey = "Extra Arguments";
-static QString projectRootRelativeKey = "ProjectRootRelative";
-static QString projectBuildDirs = "BuildDirs";
-static QString cmakeDirectory = "CMakeDir";
+static const QString currentBuildDirKey = "CurrentBuildDir";
+static const QString currentCMakeBinaryKey = "Current CMake Binary";
+static const QString currentBuildTypeKey = "CurrentBuildType";
+static const QString currentInstallDirKey = "CurrentInstallDir";
+static const QString currentEnvironmentKey = "CurrentEnvironment";
+static const QString currentExtraArgumentsKey = "Extra Arguments";
+static const QString projectRootRelativeKey = "ProjectRootRelative";
+static const QString projectBuildDirs = "BuildDirs";
 }
 
-static QString buildDirIndexKey = "Current Build Directory Index";
-static QString buildDirOverrideIndexKey = "Temporary Build Directory Index";
-static QString buildDirCountKey = "Build Directory Count";
+static const QString buildDirIndexKey = "Current Build Directory Index";
+static const QString buildDirOverrideIndexKey = "Temporary Build Directory Index";
+static const QString buildDirCountKey = "Build Directory Count";
 
 namespace Specific
 {
-static QString buildDirPathKey = "Build Directory Path";
-static QString cmakeBinKey = "CMake Binary";
-static QString cmakeBuildTypeKey = "Build Type";
-static QString cmakeInstallDirKey = "Install Directory";
-static QString cmakeEnvironmentKey = "Environment Profile";
-static QString cmakeArgumentsKey = "Extra Arguments";
+static const QString buildDirPathKey = "Build Directory Path";
+static const QString cmakeBinKey = "CMake Binary";
+static const QString cmakeBuildTypeKey = "Build Type";
+static const QString cmakeInstallDirKey = "Install Directory";
+static const QString cmakeEnvironmentKey = "Environment Profile";
+static const QString cmakeArgumentsKey = "Extra Arguments";
 }
 
-static QString groupNameBuildDir = "CMake Build Directory %1";
-static QString groupName = "CMake";
+static const QString groupNameBuildDir = "CMake Build Directory %1";
+static const QString groupName = "CMake";
 
 } // namespace Config
 
@@ -122,7 +121,6 @@ void writeProjectParameter( KDevelop::IProject* project, const QString& key, con
     {
         KConfigGroup buildDirGrp = buildDirGroup( project, buildDirIndex );
         buildDirGrp.writeEntry( key, value );
-        buildDirGrp.sync();
     }
 
     else
@@ -135,7 +133,6 @@ void writeProjectBaseParameter( KDevelop::IProject* project, const QString& key,
 {
     KConfigGroup baseGrp = baseGroup(project);
     baseGrp.writeEntry( key, value );
-    baseGrp.sync();
 }
 
 } // namespace
@@ -144,16 +141,15 @@ namespace CMake
 {
 
 ///NOTE: when you change this, update @c defaultConfigure in cmakemanagertest.cpp
-bool checkForNeedingConfigure( KDevelop::ProjectBaseItem* item )
+bool checkForNeedingConfigure( KDevelop::IProject* project )
 {
-    KDevelop::IProject* project = item->project();
     KUrl builddir = currentBuildDir(project);
     if( !builddir.isValid() )
     {
         CMakeBuildDirChooser bd;
         
-        KUrl folderUrl=item->project()->folder();
-        QString relative=CMake::projectRootRelative(item->project());
+        KUrl folderUrl=project->folder();
+        QString relative=CMake::projectRootRelative(project);
         folderUrl.cd(relative);
         
         bd.setSourceFolder( folderUrl );
@@ -230,6 +226,11 @@ QString projectRootRelative( KDevelop::IProject* project )
     return baseGroup(project).readEntry( Config::Old::projectRootRelativeKey, "." );
 }
 
+bool hasProjectRootRelative(KDevelop::IProject* project)
+{
+    return baseGroup(project).hasKey( Config::Old::projectRootRelativeKey );
+}
+
 QString currentExtraArguments( KDevelop::IProject* project )
 {
     return readProjectParameter( project, Config::Specific::cmakeArgumentsKey, QString() );
@@ -287,16 +288,6 @@ void setCurrentBuildDirIndex( KDevelop::IProject* project, int buildDirIndex )
     writeProjectBaseParameter( project, Config::buildDirIndexKey, QString::number (buildDirIndex) );
 }
 
-KUrl cmakeDirectory( KDevelop::IProject* project )
-{
-    return baseGroup(project).readEntry( Config::Old::cmakeDirectory, QString() );
-}
-
-void setCmakeDirectory( KDevelop::IProject* project, const KUrl& url )
-{
-    writeProjectBaseParameter( project, Config::Old::cmakeDirectory, url.url() );
-}
-
 void setCurrentEnvironment( KDevelop::IProject* project, const QString& environment )
 {
     writeProjectParameter( project, Config::Specific::cmakeEnvironmentKey, environment );
@@ -346,8 +337,6 @@ void removeBuildDirConfig( KDevelop::IProject* project )
         src.copyTo(&dest);
         src.deleteGroup();
     }
-
-    project->projectConfiguration()->sync();
 }
 
 void updateConfig( KDevelop::IProject* project, int buildDirIndex, CMakeCacheModel* model )
@@ -374,7 +363,6 @@ void updateConfig( KDevelop::IProject* project, int buildDirIndex, CMakeCacheMod
     buildDirGrp.writeEntry( Config::Specific::cmakeBinKey, KUrl( model->value("CMAKE_COMMAND") ).url() );
     buildDirGrp.writeEntry( Config::Specific::cmakeInstallDirKey, KUrl( model->value("CMAKE_INSTALL_PREFIX") ).url() );
     buildDirGrp.writeEntry( Config::Specific::cmakeBuildTypeKey, model->value("CMAKE_BUILD_TYPE") );
-    buildDirGrp.sync();
     if (deleteModel)
         delete model;
 }
@@ -433,7 +421,6 @@ void attemptMigrate( KDevelop::IProject* project )
     baseGrp.deleteEntry( Config::Old::currentEnvironmentKey );
     baseGrp.deleteEntry( Config::Old::currentExtraArgumentsKey );
     baseGrp.deleteEntry( Config::Old::projectBuildDirs );
-    baseGrp.sync();
 }
 
 void setOverrideBuildDirIndex( KDevelop::IProject* project, int overrideBuildDirIndex )
@@ -451,7 +438,6 @@ void removeOverrideBuildDirIndex( KDevelop::IProject* project, bool writeToMainI
         baseGrp.writeEntry( Config::buildDirIndexKey, baseGrp.readEntry(Config::buildDirOverrideIndexKey) );
 
     baseGrp.deleteEntry(Config::buildDirOverrideIndexKey);
-    baseGrp.sync();
 }
 
 ICMakeDocumentation* cmakeDocumentation()

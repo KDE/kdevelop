@@ -26,6 +26,7 @@ set( cmakecommon_SRCS
   parser/cmakecachereader.cpp
   parser/cmakeparserutils.cpp
   parser/cmakeduchaintypes.cpp
+  parser/generationexpressionsolver.cpp
   settings/cmakecachemodel.cpp
   cmakeutils.cpp
   cmakebuilddirchooser.cpp
@@ -104,7 +105,9 @@ install(TARGETS kdevcmakemanager DESTINATION ${PLUGIN_INSTALL_DIR} )
 install(TARGETS kdevcmakedocumentation DESTINATION ${PLUGIN_INSTALL_DIR} )
 install(TARGETS kcm_kdevcmake_settings DESTINATION ${PLUGIN_INSTALL_DIR} )
 install(TARGETS kdev4cmakecommon ${INSTALL_TARGETS_DEFAULT_ARGS} )
-install(FILES kdevcmakemanager.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-install(FILES kdevcmakedocumentation.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+configure_file(kdevcmakemanager.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevcmakemanager.desktop)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevcmakemanager.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+configure_file(kdevcmakedocumentation.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevcmakedocumentation.desktop)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevcmakedocumentation.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install(FILES kcm_kdevcmake_settings.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install(FILES data.kdev4 DESTINATION ${DATA_INSTALL_DIR}/kdevcmakemanager )
