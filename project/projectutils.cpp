@@ -30,34 +30,44 @@
 
 namespace KDevelop {
 
-class Populator : public QObject {
+class Populator : public QObject
+{
     Q_OBJECT
-    KDevelop::ProjectBaseItem* m_item;
-    QPoint m_pos;
-    QString m_text;
 public:
-    Populator(KDevelop::ProjectBaseItem* item, QAction* action, QPoint pos, QString text) : m_item(item), m_pos(pos), m_text(text) {
+    Populator(KDevelop::ProjectBaseItem* item, QAction* action, const QPoint& pos, const QString& text, QMenu* parentMenu)
+    : QObject(parentMenu)
+    , m_item(item)
+    , m_pos(pos)
+    , m_text(text)
+    , m_parentMenu(parentMenu)
+    {
         connect(action, SIGNAL(destroyed(QObject*)), SLOT(deleteLater()));
         connect(action, SIGNAL(triggered(bool)), SLOT(populate()));
     }
+
 public Q_SLOTS:
-    void populate() {
-        QMenu menu(m_text);
-        menu.addAction(m_text)->setEnabled(false);;
-        ProjectItemContext* context = new ProjectItemContext(QList< ProjectBaseItem* >() << m_item);
-        QList<ContextMenuExtension> extensions = ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( context );
-        ContextMenuExtension::populateMenu(&menu, extensions);
-        menu.exec(m_pos);
-        delete context;
-        
+    void populate()
+    {
+        QMenu* menu = new QMenu(m_text, m_parentMenu);
+        menu->addAction(m_text)->setEnabled(false);;
+        ProjectItemContext context(QList< ProjectBaseItem* >() << m_item);
+        QList<ContextMenuExtension> extensions = ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( &context );
+        ContextMenuExtension::populateMenu(menu, extensions);
+        menu->popup(m_pos);
     }
+
+private:
+    KDevelop::ProjectBaseItem* m_item;
+    QPoint m_pos;
+    QString m_text;
+    QMenu* m_parentMenu;
 };
 
 void populateParentItemsMenu( ProjectBaseItem* item, QMenu* menu )
 {
     if(!item)
         return;
-    
+
     ProjectBaseItem* parent = item->parent();
     bool hasSeparator = false;
     while(parent)
@@ -77,16 +87,17 @@ void populateParentItemsMenu( ProjectBaseItem* item, QMenu* menu )
                 text = i18n("Folder %1", prettyName);
             else
                 text = i18n("Project %1", prettyName);
-            
+
             QAction* action = menu->addAction(text);
             action->setIcon(KIcon(parent->iconName()));
             // The populator will either spawn a menu when the action is triggered, or it will delete itself
-            new Populator(parent, action, QCursor::pos(), text);
+            new Populator(parent, action, QCursor::pos(), text, menu);
         }
-        
+
         parent = parent->parent();
-    }        
+    }
 }
+
 }
 
 #include "projectutils.moc"
