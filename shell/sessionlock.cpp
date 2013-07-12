@@ -25,10 +25,11 @@
 
 #include <KLockFile>
 #include <KDebug>
-
 #include <KLocalizedString>
 #include <KMessageBox>
+
 #include <QDBusConnectionInterface>
+#include <QFile>
 
 namespace KDevelop
 {

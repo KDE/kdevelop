@@ -58,6 +58,7 @@ Boston, MA 02110-1301, USA.
 #include <QListView>
 #include <QHeaderView>
 #include <interfaces/idocumentcontroller.h>
+#include <language/duchain/repositories/itemrepositoryregistry.h>
 #include <ktexteditor/document.h>
 #include <QLabel>
 #include <QSortFilterProxyModel>
