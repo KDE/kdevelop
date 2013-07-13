@@ -54,7 +54,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepositoryRegistry {
     static ItemRepositoryRegistry* self();
 
     /// Deletes the item-repository of a specified session; or, if it is currently used, marks it for deletion at exit.
-    static void deleteRepositoryFromDisk(const QSharedPointer<ISessionLock>& sessionLock);
+    static void deleteRepositoryFromDisk(const ISessionLock::Ptr& sessionLock);
 
     /// Add a new repository.
     /// It will automatically be opened with the current path, if one is set.

@@ -20,21 +20,25 @@
 #define KDEVPLATFORM_TYPEREPOSITORY_H
 
 #include <language/duchain/types/abstracttype.h>
-#include <language/duchain/referencecounting.h>
-#include "itemrepository.h"
 
 namespace KDevelop {
-  class TypeRepository {
-    public:
-      static uint indexForType(AbstractType::Ptr input);
-      static AbstractType::Ptr typeForIndex(uint index);
-      static void increaseReferenceCount(uint index);
-      static void decreaseReferenceCount(uint index);
-      static void increaseReferenceCount(uint index, ReferenceCountManager* manager);
-      static void decreaseReferenceCount(uint index, ReferenceCountManager* manager);
-  };
-  
-  AbstractRepositoryManager* typeRepositoryManager();
+
+class ReferenceCountManager;
+class AbstractRepositoryManager;
+
+class TypeRepository
+{
+public:
+    static uint indexForType(AbstractType::Ptr input);
+    static AbstractType::Ptr typeForIndex(uint index);
+    static void increaseReferenceCount(uint index);
+    static void decreaseReferenceCount(uint index);
+    static void increaseReferenceCount(uint index, ReferenceCountManager* manager);
+    static void decreaseReferenceCount(uint index, ReferenceCountManager* manager);
+};
+
+AbstractRepositoryManager* typeRepositoryManager();
+
 }
 
 #endif
