@@ -401,7 +401,12 @@ void BreakpointController::handleBreakpointList(const GDBMI::ResultRecord &r)
             } else if (type == "acc watchpoint") {
                 b = breakpointModel()->addAccessWatchpoint();
             } else {
-                b = breakpointModel()->addCodeBreakpoint();
+                //for multiple breakpoints(constructor/destructor... ) show only the parent breakpoint(1, 1.1, 1.2, ... only 1), because all other can be usefull only in dissasembleWidget.
+                if(mi_b.hasField("number") && !mi_b["number"].literal().contains(".")){
+                    b = breakpointModel()->addCodeBreakpoint();
+                }else{
+                    continue;
+                }
             }
             previousType = type;
         }

@@ -1,5 +1,6 @@
 /*
    Copyright 2009 Niko Sams <niko.sams@gmail.com>
+   Copyright 2013 Vlas Puhov <vlas.puhov@mail.ru>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -1701,6 +1702,22 @@ void GdbTest::testBug301287()
 
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
+}
+
+void GdbTest::testMultipleBreakpoint()
+{
+        TestDebugSession *session = new TestDebugSession;
+
+        //there'll be about 3-4 breakpoints, but we treat it like one.
+        TestLaunchConfiguration c(findExecutable("debugeemultiplebreakpoint"));
+        KDevelop::Breakpoint *b = breakpoints()->addCodeBreakpoint("debugeemultiplebreakpoint.cpp:52");
+        session->startProgram(&c, m_iface);
+        WAIT_FOR_STATE(session, DebugSession::PausedState);
+        QCOMPARE(breakpoints()->breakpoints().count(), 1);
+
+        b->setData(KDevelop::Breakpoint::EnableColumn, false);
+        session->run();
+        WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
 void GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::DebuggerState state,
