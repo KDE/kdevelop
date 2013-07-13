@@ -735,29 +735,28 @@ void GdbTest::testStackFetchMore()
     stackModel->fetchMoreFrames();
     QTest::qWait(200);
     QCOMPARE(stackModel->fetchFramesCalled, 3);
-    QCOMPARE(stackModel->rowCount(tIdx), 61);
+    QCOMPARE(stackModel->rowCount(tIdx), 121);
     COMPARE_DATA(tIdx.child(40, 0), "40");
     COMPARE_DATA(tIdx.child(41, 0), "41");
     COMPARE_DATA(tIdx.child(42, 0), "42");
-    COMPARE_DATA(tIdx.child(60, 0), "60");
+    COMPARE_DATA(tIdx.child(119, 0), "119");
+    COMPARE_DATA(tIdx.child(120, 0), "120");
 
     stackModel->fetchMoreFrames();
     QTest::qWait(200);
     QCOMPARE(stackModel->fetchFramesCalled, 4);
-    QCOMPARE(stackModel->rowCount(tIdx), 81);
-
-    stackModel->fetchMoreFrames();
-    QTest::qWait(200);
-    QCOMPARE(stackModel->fetchFramesCalled, 5);
-    QCOMPARE(stackModel->rowCount(tIdx), 101);
-    COMPARE_DATA(tIdx.child(100, 0), "100");
-    COMPARE_DATA(tIdx.child(100, 1), "main");
-    COMPARE_DATA(tIdx.child(100, 2), fileName+":30");
+    QCOMPARE(stackModel->rowCount(tIdx), 301);
+    COMPARE_DATA(tIdx.child(120, 0), "120");
+    COMPARE_DATA(tIdx.child(121, 0), "121");
+    COMPARE_DATA(tIdx.child(122, 0), "122");
+    COMPARE_DATA(tIdx.child(300, 0), "300");
+    COMPARE_DATA(tIdx.child(300, 1), "main");
+    COMPARE_DATA(tIdx.child(300, 2), fileName+":30");
 
     stackModel->fetchMoreFrames(); //nothing to fetch, we are at the end
     QTest::qWait(200);
-    QCOMPARE(stackModel->fetchFramesCalled, 5);
-    QCOMPARE(stackModel->rowCount(tIdx), 101);
+    QCOMPARE(stackModel->fetchFramesCalled, 4);
+    QCOMPARE(stackModel->rowCount(tIdx), 301);
 
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
