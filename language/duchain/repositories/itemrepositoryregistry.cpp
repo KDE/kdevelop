@@ -21,7 +21,6 @@
 #include <QtCore/QDir>
 #include <QtCore/QProcessEnvironment>
 #include <QtCore/QCoreApplication>
-#include <QUuid>
 #include <QtDBus/QDBusConnection>
 
 #include <KStandardDirs>
@@ -50,7 +49,7 @@ QString repositoryPathForSession(const KDevelop::ISessionLock::Ptr& session)
 {
   QString xdgCacheDir = QProcessEnvironment::systemEnvironment().value("XDG_CACHE_HOME", QDir::homePath() + "/.cache") + "/kdevduchain";
   QString baseDir = QProcessEnvironment::systemEnvironment().value("KDEV_DUCHAIN_DIR", xdgCacheDir);
-  baseDir += QString("/%1-%2").arg(qAppName()).arg(session->id().toString());
+  baseDir += QString("/%1-%2").arg(qAppName()).arg(session->id());
   KStandardDirs::makeDir(baseDir);
   return baseDir;
 }

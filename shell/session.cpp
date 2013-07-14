@@ -60,16 +60,16 @@ public:
         return url;
     }
 
-    SessionPrivate( const QUuid& id )
+    SessionPrivate( const QString& id )
         : info( Session::parse( id, true ) )
         , isTemporary( false )
     {
     }
 };
 
-Session::Session( const QUuid& id, QObject* parent )
-    : ISession(parent)
-    , d( new SessionPrivate( id ) )
+Session::Session( const QString& id, QObject* parent )
+        : ISession(parent)
+        , d( new SessionPrivate( id ) )
 {
 }
 
@@ -184,7 +184,7 @@ QString Session::generateDescription( const SessionInfo& info, const QString& pr
     return description;
 }
 
-SessionInfo Session::parse( const QUuid& id, bool mkdir )
+SessionInfo Session::parse( const QString& id, bool mkdir )
 {
     SessionInfo ret;
     QString sessionPath = SessionController::sessionDirectory(id);

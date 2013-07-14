@@ -34,17 +34,16 @@ using namespace KDevelop;
 
 namespace {
 
-QString lockFileForSession( const QUuid& id )
+QString lockFileForSession( const QString& id )
 {
     return SessionController::sessionDirectory( id ) + "/lock";
 }
 
-QString dBusServiceNameForSession( const QUuid& id )
+QString dBusServiceNameForSession( const QString& id )
 {
     // We remove starting "{" and ending "}" from the string UUID representation
     // as D-Bus apparently doesn't allow them in service names
-    QString idString = id.toString();
-    return QString( "org.kdevelop.kdevplatform-lock-" ) + idString.mid( 1, idString.size() - 2 );
+    return QString( "org.kdevelop.kdevplatform-lock-" ) + QString( id ).mid( 1, id.size() - 2 );
 }
 
 /// Tries to own the lock-file and returns result
@@ -63,9 +62,11 @@ void forceRemoveLockfile(const QString& lockFilename)
 
 }
 
-TryLockSessionResult SessionLock::tryLockSession(const QUuid& sessionId, bool doLocking)
+TryLockSessionResult SessionLock::tryLockSession(const QString& sessionId, bool doLocking)
 {
-    ///NOTE: if this is hit, someone tried to lock a non-existing session
+    ///FIXME: if this is hit, someone tried to lock a non-existing session
+    ///       this should be fixed by using a proper data type distinct from
+    ///       QString for id's, i.e. QUuid or similar.
     Q_ASSERT(QFile::exists(SessionController::sessionDirectory( sessionId )));
 
     /*
@@ -122,12 +123,12 @@ TryLockSessionResult SessionLock::tryLockSession(const QUuid& sessionId, bool do
     }
 }
 
-QUuid SessionLock::id()
+QString SessionLock::id()
 {
     return m_sessionId;
 }
 
-SessionLock::SessionLock(const QUuid& sessionId, const KLockFile::Ptr& lockFile)
+SessionLock::SessionLock(const QString& sessionId, const KLockFile::Ptr& lockFile)
 : m_sessionId(sessionId)
 , m_lockFile(lockFile)
 {
@@ -142,7 +143,7 @@ SessionLock::~SessionLock()
     Q_UNUSED(unregistered);
 }
 
-QString SessionLock::handleLockedSession(const QString& sessionName, const QUuid& sessionId,
+QString SessionLock::handleLockedSession(const QString& sessionName, const QString& sessionId,
                                          const SessionRunInfo& runInfo)
 {
     if( !runInfo.isRunning ) {

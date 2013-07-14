@@ -230,9 +230,9 @@ void SessionControllerTest::temporary()
 
 void SessionControllerTest::tryLockSession()
 {
-    const QUuid id1 = QUuid::createUuid();
+    const QString id1 = QUuid::createUuid().toString();
     m_sessionCtrl->createSession( id1 )->setTemporary(true);
-    const QUuid id2 = QUuid::createUuid();
+    const QString id2 = QUuid::createUuid().toString();
     m_sessionCtrl->createSession( id2 )->setTemporary(true);
     {
         // acquired scoped lock

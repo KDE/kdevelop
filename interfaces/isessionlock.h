@@ -25,8 +25,6 @@
 #include "interfacesexport.h"
 #include <QSharedPointer>
 
-class QUuid;
-
 namespace KDevelop {
 
 /**
@@ -46,7 +44,7 @@ public:
     /**
      * @return the unique session ID.
      */
-    virtual QUuid id() = 0;
+    virtual QString id() = 0;
 };
 
 }
