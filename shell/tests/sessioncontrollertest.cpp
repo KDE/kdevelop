@@ -84,10 +84,11 @@ void SessionControllerTest::init()
 
 void SessionControllerTest::cleanupTestCase()
 {
-    foreach( const QString& name, m_sessionCtrl->sessionNames() )
+    foreach( const Session* session, m_sessionCtrl->sessions() )
     {
-        if (m_sessionCtrl->activeSession()->name() != name)
-            m_sessionCtrl->deleteSession( name );
+        TryLockSessionResult lock = m_sessionCtrl->tryLockSession(session->id());
+        if (lock.lock)
+            m_sessionCtrl->deleteSession( lock.lock );
     }
 
     TestCore::shutdown();
@@ -160,8 +161,13 @@ void SessionControllerTest::deleteSession()
     QCOMPARE( sessionCount+1, m_sessionCtrl->sessionNames().count() );
     verifySessionDir( s );
     QSignalSpy spy(m_sessionCtrl, SIGNAL(sessionDeleted(QString)));
-    m_sessionCtrl->deleteSession( sessionName );
+    {
+        TryLockSessionResult lock = m_sessionCtrl->tryLockSession(sessionId);
+        QVERIFY(lock.lock);
+        m_sessionCtrl->deleteSession( lock.lock );
+    }
     QCOMPARE( sessionCount, m_sessionCtrl->sessionNames().count() );
+    QVERIFY( !m_sessionCtrl->sessionNames().contains(sessionId) );
 
     QCOMPARE(spy.size(), 1);
     QList<QVariant> arguments = spy.takeFirst();

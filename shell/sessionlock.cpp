@@ -82,6 +82,11 @@ void forceRemoveLockfile(const QString& lockFilename)
 
 TryLockSessionResult SessionLock::tryLockSession(const QString& sessionId, bool doLocking)
 {
+    ///FIXME: if this is hit, someone tried to lock a non-existing session
+    ///       this should be fixed by using a proper data type distinct from
+    ///       QString for id's, i.e. QUuid or similar.
+    Q_ASSERT(QFile::exists(SessionController::sessionDirectory( sessionId )));
+
     /*
      * We've got two locking mechanisms here: D-Bus unique service name (based on the session id)
      * and a plain lockfile (KLockFile).

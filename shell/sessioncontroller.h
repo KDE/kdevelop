@@ -114,7 +114,7 @@ public:
     void startNewSession();
     
     void loadSession( const QString& nameOrId );
-    void deleteSession( const QString& nameOrId );
+    void deleteSession( const ISessionLock::Ptr& lock );
     static void deleteSessionFromDisk( const ISessionLock::Ptr& lock );
     QString cloneSession( const QString& nameOrid );
     /**
@@ -165,7 +165,7 @@ private slots:
 private:
     Q_PRIVATE_SLOT( d, void newSession() )
     Q_PRIVATE_SLOT( d, void configureSessions() )
-    Q_PRIVATE_SLOT( d, void deleteSession() )
+    Q_PRIVATE_SLOT( d, void deleteCurrentSession() )
     Q_PRIVATE_SLOT( d, void renameSession() )
     Q_PRIVATE_SLOT( d, void loadSessionFromAction( QAction* ) )
     class SessionControllerPrivate* const d;

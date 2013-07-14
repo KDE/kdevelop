@@ -40,7 +40,7 @@ class TestItemRepositoryRegistryDeferredDeletion : public QObject {
         QVERIFY(QFile::exists(repositoryPath));
 
         // The repository shall survive session deletion request
-        KDevelop::Core::self()->sessionController()->deleteSession(KDevelop::Core::self()->activeSession()->id());
+        KDevelop::Core::self()->sessionController()->deleteSession(KDevelop::Core::self()->sessionController()->activeSessionLock());
         QVERIFY(QFile::exists(repositoryPath));
 
         // The repository shall die together with the core shutdown

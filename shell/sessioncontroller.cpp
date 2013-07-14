@@ -182,7 +182,7 @@ public:
         dlg.exec();
     }
 
-    void deleteSession()
+    void deleteCurrentSession()
     {
         int choice = KMessageBox::warningContinueCancel(Core::self()->uiController()->activeMainWindow(), i18n("The current session and all contained settings will be deleted. The projects will stay unaffected. Do you really want to continue?"));
         
@@ -570,7 +570,7 @@ SessionController::SessionController( QObject *parent )
     action->setText( i18n("Rename Current Session...") );
     action->setIcon(KIcon("edit-rename"));
 
-    action = actionCollection()->addAction( "delete_session", this, SLOT(deleteSession()) );
+    action = actionCollection()->addAction( "delete_session", this, SLOT(deleteCurrentSession()) );
     action->setText( i18n("Delete Current Session...") );
     action->setIcon(KIcon("edit-delete"));
 
@@ -699,10 +699,10 @@ Session* SessionController::createSession( const QString& name )
     return s;
 }
 
-void SessionController::deleteSession( const QString& nameOrId )
+void SessionController::deleteSession( const ISessionLock::Ptr& lock )
 {
-    Session* s  = session(nameOrId);
-    
+    Session* s  = session(lock->id());
+
     QHash<Session*,QAction*>::iterator it = d->sessionActions.find(s);
     Q_ASSERT( it != d->sessionActions.end() );
 
@@ -712,16 +712,15 @@ void SessionController::deleteSession( const QString& nameOrId )
         d->grp->removeAction(*it);
         plugActionList( "available_sessions", d->grp->actions() );
     }
-    TryLockSessionResult result = tryLockSession(s->id().toString());
-    if (result.lock) {
-        deleteSessionFromDisk(result.lock);
-    }
+
+    deleteSessionFromDisk(lock);
+
     emit sessionDeleted( s->id().toString() );
     d->sessionActions.remove(s);
     s->deleteLater();
 }
 
-void SessionController::deleteSessionFromDisk(const ISessionLock::Ptr& lock)
+void SessionController::deleteSessionFromDisk( const ISessionLock::Ptr& lock )
 {
     removeDirectory( sessionDirectory(lock->id()) );
     ItemRepositoryRegistry::deleteRepositoryFromDisk( lock );
