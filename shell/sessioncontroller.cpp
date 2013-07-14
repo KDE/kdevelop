@@ -797,22 +797,22 @@ QList< SessionInfo > SessionController::availableSessionInfo()
     return available;
 }
 
-QString SessionController::sessionDirectory(const QString& sessionId)
+QString SessionController::sessionDirectory(const QUuid& sessionId)
 {
-    return SessionControllerPrivate::sessionBaseDirectory() + sessionId;
+    return SessionControllerPrivate::sessionBaseDirectory() + sessionId.toString();
 }
 
-TryLockSessionResult SessionController::tryLockSession(const QString& id)
+TryLockSessionResult SessionController::tryLockSession(const QUuid& id)
 {
     return SessionLock::tryLockSession(id, true);
 }
 
-bool SessionController::isSessionRunning(const QString& id)
+bool SessionController::isSessionRunning(const QUuid& id)
 {
     return sessionRunInfo(id).isRunning;
 }
 
-SessionRunInfo SessionController::sessionRunInfo(const QString& id)
+SessionRunInfo SessionController::sessionRunInfo(const QUuid& id)
 {
     return SessionLock::tryLockSession(id, false).runInfo;
 }
@@ -875,7 +875,7 @@ QString SessionController::showSessionChooserDialog(QString headerText, bool onl
             continue;
         }
 
-        bool running = KDevelop::SessionController::isSessionRunning(si.uuid.toString());
+        bool running = KDevelop::SessionController::isSessionRunning(si.uuid);
 
         if(onlyRunning && !running)
             continue;
@@ -930,7 +930,7 @@ QString SessionController::showSessionChooserDialog(QString headerText, bool onl
     return QString();
 }
 
-QString SessionController::handleLockedSession( const QString& sessionName, const QString& sessionId,
+QString SessionController::handleLockedSession( const QString& sessionName, const QUuid& sessionId,
                                                 const SessionRunInfo& runInfo )
 {
     return SessionLock::handleLockedSession(sessionName, sessionId, runInfo);

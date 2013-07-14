@@ -83,17 +83,17 @@ public:
 
     /// Returns whether the given session can be locked (i. e., is not locked currently).
     /// @param doLocking whether to really lock the session or just "dry-run" the locking process
-    static TryLockSessionResult tryLockSession(const QString& id);
+    static TryLockSessionResult tryLockSession(const QUuid& id);
 
     /**
      * @return true when the given session is currently running, false otherwise
      */
-    static bool isSessionRunning(const QString& id);
+    static bool isSessionRunning(const QUuid& id);
 
     /**
      * @return information about whether the session @p id is running
      */
-    static SessionRunInfo sessionRunInfo(const QString& id);
+    static SessionRunInfo sessionRunInfo(const QUuid& id);
 
     /// The application should call this on startup to tell the
     /// session-controller about the received arguments.
@@ -106,13 +106,13 @@ public:
     ISessionLock::Ptr activeSessionLock() const;
     QList<QString> sessionNames() const;
     Session* createSession( const QString& name );
-    
+
     QList<const Session*> sessions() const;
-    
+
     void loadDefaultSession( const QString& session );
 
     void startNewSession();
-    
+
     void loadSession( const QString& nameOrId );
     void deleteSession( const ISessionLock::Ptr& lock );
     static void deleteSessionFromDisk( const ISessionLock::Ptr& lock );
@@ -120,12 +120,12 @@ public:
     /**
      * Path to session directory for the session with the given @p sessionId.
      */
-    static QString sessionDirectory( const QString& sessionId );
+    static QString sessionDirectory( const QUuid& sessionId );
     static QString cfgSessionGroup();
     static QString cfgActiveSessionEntry();
 
     static QList< SessionInfo > availableSessionInfo();
-    
+
     /// Shows a dialog where the user can choose the session
     /// @param headerText an additional text that will be shown at the top in a label
     /// @param onlyRunning whether only currently running sessions should be shown
@@ -141,15 +141,15 @@ public:
     /// @param sessionId current session GUID (to return if user chooses force-removal)
     /// @param runInfo the run information about the session
     /// @return new session GUID to try or an empty string if application startup shall be aborted
-    static QString handleLockedSession( const QString& sessionName, const QString& currentSessionId, const SessionRunInfo& runInfo );
+    static QString handleLockedSession( const QString& sessionName, const QUuid& currentSessionId, const SessionRunInfo& runInfo );
 
     void plugActions();
-    
+
     void emitQuitSession()
     {
         emit quitSession();
     }
-    
+
 public Q_SLOTS:
     // Returns the pretty name of the currently active session (used in the shell integration)
     virtual Q_SCRIPTABLE QString sessionName();
@@ -158,7 +158,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void sessionLoaded( ISession* );
-    void sessionDeleted( const QString& id);
+    void sessionDeleted( const QUuid& id);
     void quitSession();
 private slots:
     void updateSessionDescriptions();

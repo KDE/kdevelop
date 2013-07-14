@@ -34,16 +34,17 @@ using namespace KDevelop;
 
 namespace {
 
-QString lockFileForSession( const QString& id )
+QString lockFileForSession( const QUuid& id )
 {
     return SessionController::sessionDirectory( id ) + "/lock";
 }
 
-QString dBusServiceNameForSession( const QString& id )
+QString dBusServiceNameForSession( const QUuid& id )
 {
     // We remove starting "{" and ending "}" from the string UUID representation
     // as D-Bus apparently doesn't allow them in service names
-    return QString( "org.kdevelop.kdevplatform-lock-" ) + QString( id ).mid( 1, id.size() - 2 );
+    QString idString = id.toString();
+    return QString( "org.kdevelop.kdevplatform-lock-" ) + idString.mid( 1, idString.size() - 2 );
 }
 
 /// Tries to own the lock-file and returns result
@@ -62,11 +63,9 @@ void forceRemoveLockfile(const QString& lockFilename)
 
 }
 
-TryLockSessionResult SessionLock::tryLockSession(const QString& sessionId, bool doLocking)
+TryLockSessionResult SessionLock::tryLockSession(const QUuid& sessionId, bool doLocking)
 {
-    ///FIXME: if this is hit, someone tried to lock a non-existing session
-    ///       this should be fixed by using a proper data type distinct from
-    ///       QString for id's, i.e. QUuid or similar.
+    ///NOTE: if this is hit, someone tried to lock a non-existing session
     Q_ASSERT(QFile::exists(SessionController::sessionDirectory( sessionId )));
 
     /*
@@ -123,12 +122,12 @@ TryLockSessionResult SessionLock::tryLockSession(const QString& sessionId, bool 
     }
 }
 
-QString SessionLock::id()
+QUuid SessionLock::id()
 {
     return m_sessionId;
 }
 
-SessionLock::SessionLock(const QString& sessionId, const KLockFile::Ptr& lockFile)
+SessionLock::SessionLock(const QUuid& sessionId, const KLockFile::Ptr& lockFile)
 : m_sessionId(sessionId)
 , m_lockFile(lockFile)
 {
@@ -143,7 +142,7 @@ SessionLock::~SessionLock()
     Q_UNUSED(unregistered);
 }
 
-QString SessionLock::handleLockedSession(const QString& sessionName, const QString& sessionId,
+QString SessionLock::handleLockedSession(const QString& sessionName, const QUuid& sessionId,
                                          const SessionRunInfo& runInfo)
 {
     if( !runInfo.isRunning ) {

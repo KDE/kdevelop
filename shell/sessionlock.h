@@ -23,7 +23,10 @@
 #define SESSIONLOCK_H
 
 #include <interfaces/isessionlock.h>
+
 #include <KLockFile>
+
+#include <QUuid>
 
 namespace KDevelop {
 
@@ -39,22 +42,22 @@ public:
      * @param doLocking whether to actually try to lock or whether to only get
      *                  information about whether the session could be locked
      */
-    static TryLockSessionResult tryLockSession(const QString& sessionId, bool doLocking);
+    static TryLockSessionResult tryLockSession(const QUuid& sessionId, bool doLocking);
 
     /**
      * \copydoc SessionController::handleLockedSession
      */
     static QString handleLockedSession( const QString& sessionName,
-                                        const QString& sessionId,
+                                        const QUuid& sessionId,
                                         const SessionRunInfo& runInfo );
 
-    virtual QString id();
+    virtual QUuid id();
 
     virtual ~SessionLock();
 
 private:
-    SessionLock(const QString& sessionId, const KLockFile::Ptr& lockFile);
-    QString m_sessionId;
+    SessionLock(const QUuid& sessionId, const KLockFile::Ptr& lockFile);
+    QUuid m_sessionId;
     KLockFile::Ptr m_lockFile;
 };
 
