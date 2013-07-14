@@ -242,7 +242,7 @@ int main( int argc, char *argv[] )
             }
             qout << si.uuid.toString() << '\t' << si.description;
 
-            if(KDevelop::SessionController::isSessionRunning(si.uuid))
+            if(KDevelop::SessionController::isSessionRunning(si.uuid.toString()))
                 qout << "     " << i18n("[running]");
 
             qout << endl;
@@ -259,7 +259,7 @@ int main( int argc, char *argv[] )
         QList<KDevelop::SessionInfo> candidates;
         foreach(const KDevelop::SessionInfo& si, KDevelop::SessionController::availableSessionInfo())
             if( (!si.name.isEmpty() || !si.projects.isEmpty() || args->isSet("pid")) &&
-                (!args->isSet("pid") || KDevelop::SessionController::isSessionRunning(si.uuid)))
+                (!args->isSet("pid") || KDevelop::SessionController::isSessionRunning(si.uuid.toString())))
                 candidates << si;
         
         if(candidates.size() == 0)
@@ -357,7 +357,7 @@ int main( int argc, char *argv[] )
             return 5;
         }
 
-        KDevelop::SessionRunInfo sessionInfo = KDevelop::SessionController::sessionRunInfo( sessionData->uuid );
+        KDevelop::SessionRunInfo sessionInfo = KDevelop::SessionController::sessionRunInfo( sessionData->uuid.toString() );
         if (!sessionInfo.isRunning) {
             kError() << session << sessionData->name << "is not running";
             return 5;
