@@ -1,5 +1,6 @@
 [General]
 Name=Test Suite
+Name[bs]=Testno okruženje
 Name[ca]=Conjunt de proves
 Name[ca@valencia]=Conjunt de proves
 Name[da]=Testsuite
@@ -26,6 +27,7 @@ Name[x-test]=xxTest Suitexx
 Name[zh_CN]=测试套件
 Name[zh_TW]=測試套件
 Comment=A unit test suite using the QTest library without a graphical user interface
+Comment[bs]=Testno okruženje jedinica koje koristi QTest biblioteku bez grafičkog interfejsa
 Comment[ca]=Un conjunt de proves unitàries utilitzant la biblioteca QTest sense interfície gràfica d'usuari
 Comment[ca@valencia]=Un conjunt de proves unitàries utilitzant la biblioteca QTest sense interfície gràfica d'usuari
 Comment[da]=En unittest-suite som bruger biblioteket QTest uden en grafisk brugerflade
@@ -90,6 +92,7 @@ Files=Header,Implementation
 
 [Header]
 Name=Header
+Name[bs]=Zaglavlje
 Name[ca]=Capçalera
 Name[ca@valencia]=Capçalera
 Name[da]=Header
@@ -122,6 +125,7 @@ OutputFile={{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[bs]=Implementacija
 Name[ca]=Implementació
 Name[ca@valencia]=Implementació
 Name[cs]=Implementace

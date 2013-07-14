@@ -1,5 +1,6 @@
 [General]
 Name=PHPUnit
+Name[bs]=PHPUnit
 Name[ca]=PHPUnit
 Name[ca@valencia]=PHPUnit
 Name[da]=PHPUnit
@@ -27,6 +28,7 @@ Name[x-test]=xxPHPUnitxx
 Name[zh_CN]=PHPUnit
 Name[zh_TW]=PHPUnit
 Comment=A unit test using the PHPUnit framework
+Comment[bs]=Test jedinica koristeći PHPUnit okruženje
 Comment[ca]=Una prova unitària utilitzant l'entorn de treball PHPUnit
 Comment[ca@valencia]=Una prova unitària utilitzant l'entorn de treball PHPUnit
 Comment[da]=En unittest som bruger PHPUnit
@@ -54,6 +56,7 @@ Comment[zh_CN]=一个使用 PHPUnit 框架的单元测试
 Comment[zh_TW]=使用 PHPUnit 框架的單元測試套件
 Category=PHP/Basic
 Language=Php
+Language[bs]=Php
 Language[ca]=PHP
 Language[ca@valencia]=PHP
 Language[da]=Php
@@ -86,6 +89,7 @@ Files=Implementation
 
 [Implementation]
 Name=Implementation
+Name[bs]=Implementacija
 Name[ca]=Implementació
 Name[ca@valencia]=Implementació
 Name[cs]=Implementace

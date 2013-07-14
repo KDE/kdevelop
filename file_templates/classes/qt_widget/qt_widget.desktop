@@ -1,5 +1,6 @@
 [General]
 Name=Widget with a UI File
+Name[bs]=Grafička kontrola s UI datotekom
 Name[ca]=Estri amb un fitxer IU
 Name[ca@valencia]=Estri amb un fitxer IU
 Name[da]=Widget med en UI-fil
@@ -26,6 +27,7 @@ Name[x-test]=xxWidget with a UI Filexx
 Name[zh_CN]=带有一个 UI 文件的部件
 Name[zh_TW]=有 UI 檔的元件
 Comment=QWidget subclass with a separate Qt Designer file
+Comment[bs]=QWidget podklasa s odvojenom Qt Designer datotekom
 Comment[ca]=Subclasse QWidget amb un fitxer separat del Qt Designer
 Comment[ca@valencia]=Subclasse QWidget amb un fitxer separat del Qt Designer
 Comment[da]=Underklasse af QWidget med en separat Qt Designer-fil
@@ -91,6 +93,7 @@ Files=Header,Implementation,UI
 
 [Header]
 Name=Public Header
+Name[bs]=Javno zaglavlje
 Name[ca]=Capçalera pública
 Name[ca@valencia]=Capçalera pública
 Name[da]=Offentlig header
@@ -122,6 +125,7 @@ OutputFile={{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[bs]=Implementacija
 Name[ca]=Implementació
 Name[ca@valencia]=Implementació
 Name[cs]=Implementace

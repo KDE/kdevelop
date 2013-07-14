@@ -1,5 +1,6 @@
 [General]
 Name=PyUnit
+Name[bs]=PyUnit
 Name[ca]=PyUnit
 Name[ca@valencia]=PyUnit
 Name[da]=PyUnit
@@ -28,6 +29,7 @@ Name[x-test]=xxPyUnitxx
 Name[zh_CN]=PyUnit
 Name[zh_TW]=PyUnit
 Comment=A unit test using the PyUnit framework
+Comment[bs]=Test jedinica koristeći PyUnit okruženje
 Comment[ca]=Una prova unitària utilitzant l'entorn de treball PyUnit
 Comment[ca@valencia]=Una prova unitària utilitzant l'entorn de treball PyUnit
 Comment[da]=En unittest som bruger PyUnit
@@ -91,6 +93,7 @@ Files=Implementation
 
 [Implementation]
 Name=Implementation
+Name[bs]=Implementacija
 Name[ca]=Implementació
 Name[ca@valencia]=Implementació
 Name[cs]=Implementace

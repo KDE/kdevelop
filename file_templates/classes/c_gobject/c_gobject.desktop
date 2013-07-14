@@ -1,5 +1,6 @@
 [General]
 Name=GObject
+Name[bs]=GObject
 Name[ca]=GObject
 Name[ca@valencia]=GObject
 Name[da]=GObject
@@ -27,6 +28,7 @@ Name[x-test]=xxGObjectxx
 Name[zh_CN]=GObject
 Name[zh_TW]=GObject
 Comment=A simple GObject subclass
+Comment[bs]=Prosta GObject podklasa
 Comment[ca]=Una subclasse GObject senzilla
 Comment[ca@valencia]=Una subclasse GObject senzilla
 Comment[da]=En simpel underklasse af GObject
@@ -91,6 +93,7 @@ Files=Header,Implementation
 
 [Header]
 Name=Header
+Name[bs]=Zaglavlje
 Name[ca]=Capçalera
 Name[ca@valencia]=Capçalera
 Name[da]=Header
@@ -123,6 +126,7 @@ OutputFile={% for ns in namespaces %}{{ ns }}_{% endfor %}{{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[bs]=Implementacija
 Name[ca]=Implementació
 Name[ca@valencia]=Implementació
 Name[cs]=Implementace

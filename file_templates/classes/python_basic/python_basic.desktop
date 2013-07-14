@@ -1,6 +1,6 @@
 [General]
 Name=Basic
-Name[bs]=Osnovno
+Name[bs]=Basic
 Name[ca]=Bàsica
 Name[ca@valencia]=Bàsica
 Name[cs]=Basic
@@ -31,6 +31,7 @@ Name[x-test]=xxBasicxx
 Name[zh_CN]=基本
 Name[zh_TW]=基本
 Comment=Basic Python Class
+Comment[bs]=Osnovna Python klasa
 Comment[ca]=Classe Python bàsica
 Comment[ca@valencia]=Classe Python bàsica
 Comment[cs]=Základní třída Pythonu
@@ -95,6 +96,7 @@ Files=Definition
 
 [Definition]
 Name=Definition
+Name[bs]=Definicija
 Name[ca]=Definició
 Name[ca@valencia]=Definició
 Name[cs]=Definice

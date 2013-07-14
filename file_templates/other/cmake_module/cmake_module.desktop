@@ -1,5 +1,6 @@
 [General]
 Name=CMake Module with pkg-config
+Name[bs]=CMake Modul s pkg-config
 Name[ca]=Mòdul CMake amb pkg-config
 Name[ca@valencia]=Mòdul CMake amb pkg-config
 Name[da]=CMake-modul med pkg-config
@@ -26,6 +27,7 @@ Name[x-test]=xxCMake Module with pkg-configxx
 Name[zh_CN]=带有 pkg-config 的 CMake 模块
 Name[zh_TW]=CMake 模組，含 pkg-config
 Comment=CMake module for finding a library using pkg-config
+Comment[bs]=CMake modul za traženje biblioteke koristeći pkg-config
 Comment[ca]=Mòdul CMake per cercar una biblioteca utilitzant pkg-config
 Comment[ca@valencia]=Mòdul CMake per cercar una biblioteca utilitzant pkg-config
 Comment[da]=CMake-modul til at finde et bibliotek ved hjælp af pkg-config
@@ -53,6 +55,7 @@ Comment[zh_CN]=使用 pkg-config 查找库的 CMake 模块
 Comment[zh_TW]=CMake 模組，可用 pkg-config 尋找函式庫
 Category=CMake/Module
 Language=CMake
+Language[bs]=CMake
 Language[ca]=CMake
 Language[ca@valencia]=CMake
 Language[cs]=CMake
@@ -88,6 +91,7 @@ OptionsFile=options.kcfg
 
 [Module]
 Name=Module
+Name[bs]=Modul
 Name[ca]=Mòdul
 Name[ca@valencia]=Mòdul
 Name[da]=Modul

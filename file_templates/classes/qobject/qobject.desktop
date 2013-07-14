@@ -1,5 +1,6 @@
 [General]
 Name=QObject subclass
+Name[bs]=QObject podklasa
 Name[ca]=Subclasse QObject
 Name[ca@valencia]=Subclasse QObject
 Name[de]=GObject-Unterklasse
@@ -25,6 +26,7 @@ Name[x-test]=xxQObject subclassxx
 Name[zh_CN]=QObject 子类
 Name[zh_TW]=QObject 子類別
 Comment=QObject subclass with properties
+Comment[bs]=QObject podklasa s svojstvima
 Comment[ca]=Subclasse QObject amb propietats
 Comment[ca@valencia]=Subclasse QObject amb propietats
 Comment[el]=QObject subclass με ιδιότητες
@@ -88,6 +90,7 @@ Files=Header,Implementation
 
 [Header]
 Name=Public Header
+Name[bs]=Javno zaglavlje
 Name[ca]=Capçalera pública
 Name[ca@valencia]=Capçalera pública
 Name[da]=Offentlig header
@@ -119,6 +122,7 @@ OutputFile={{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[bs]=Implementacija
 Name[ca]=Implementació
 Name[ca@valencia]=Implementació
 Name[cs]=Implementace

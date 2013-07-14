@@ -1,5 +1,6 @@
 [General]
 Name=Private Pointer
+Name[bs]=Privatni pokazivač
 Name[ca]=Apuntador privat
 Name[ca@valencia]=Apuntador privat
 Name[da]=Privat pointer
@@ -27,6 +28,7 @@ Name[x-test]=xxPrivate Pointerxx
 Name[zh_CN]=私有指针
 Name[zh_TW]=私密指標
 Comment=C++ Class with a private D-pointer
+Comment[bs]=C++ klasa s privatnim D-pokazivačem
 Comment[ca]=Classe C++ amb un apuntador-D privat
 Comment[ca@valencia]=Classe C++ amb un apuntador-D privat
 Comment[da]=C++-klasse med en privat D-pointer
@@ -92,6 +94,7 @@ OptionsFile=options.kcfg
 
 [Header]
 Name=Public Header
+Name[bs]=Javno zaglavlje
 Name[ca]=Capçalera pública
 Name[ca@valencia]=Capçalera pública
 Name[da]=Offentlig header
@@ -123,6 +126,7 @@ OutputFile={{ name }}.h
 
 [PrivateHeader]
 Name=Private Header
+Name[bs]=Privatno zaglavlje
 Name[ca]=Capçalera privada
 Name[ca@valencia]=Capçalera privada
 Name[da]=Privat header
@@ -156,6 +160,7 @@ OutputFile={{ name }}_p.h
 
 [Implementation]
 Name=Implementation
+Name[bs]=Implementacija
 Name[ca]=Implementació
 Name[ca@valencia]=Implementació
 Name[cs]=Implementace

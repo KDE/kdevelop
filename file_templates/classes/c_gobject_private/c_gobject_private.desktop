@@ -1,5 +1,6 @@
 [General]
 Name=GObject with private pointer
+Name[bs]=GObject s privatnim pokazivačem
 Name[ca]=GObject amb apuntador privat
 Name[ca@valencia]=GObject amb apuntador privat
 Name[da]=GObject med privat pointer
@@ -27,6 +28,7 @@ Name[x-test]=xxGObject with private pointerxx
 Name[zh_CN]=带有私有指针的 GObject
 Name[zh_TW]=GObject 含私密指標
 Comment=A GObject subclass with a private pointer
+Comment[bs]=Podklasa GObject s privatnim pokazivačem
 Comment[ca]=Una subclasse GObject amb un apuntador privat
 Comment[ca@valencia]=Una subclasse GObject amb un apuntador privat
 Comment[da]=En underklasse af GObject med en privat pointer
@@ -91,6 +93,7 @@ Files=Header,Implementation
 
 [Header]
 Name=Header
+Name[bs]=Zaglavlje
 Name[ca]=Capçalera
 Name[ca@valencia]=Capçalera
 Name[da]=Header
@@ -123,6 +126,7 @@ OutputFile={% for ns in namespaces %}{{ ns }}_{% endfor %}{{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[bs]=Implementacija
 Name[ca]=Implementació
 Name[ca@valencia]=Implementació
 Name[cs]=Implementace
