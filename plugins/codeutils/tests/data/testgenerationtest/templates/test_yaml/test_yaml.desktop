@@ -1,5 +1,6 @@
 [General]
 Name=Testing YAML Template
+Name[bs]=Testiranje YAML predloška
 Name[ca]=Plantilla YAML de prova
 Name[ca@valencia]=Plantilla YAML de prova
 Name[da]=Tester YAML-skabelon
@@ -26,6 +27,7 @@ Name[x-test]=xxTesting YAML Templatexx
 Name[zh_CN]=YAML 测试模板
 Name[zh_TW]=測試 YAML 樣本
 Comment=A test description in YAML
+Comment[bs]=Opis testa u  YAML
 Comment[ca]=Una descripció de prova en YAML
 Comment[ca@valencia]=Una descripció de prova en YAML
 Comment[da]=En testbeskrivelse i YAML
@@ -57,6 +59,7 @@ Files=Implementation
 
 [Implementation]
 Name=Implementation
+Name[bs]=Implementacija
 Name[ca]=Implementació
 Name[ca@valencia]=Implementació
 Name[cs]=Implementace

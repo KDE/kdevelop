@@ -1,5 +1,6 @@
 [General]
 Name=Testing C++ Template
+Name[bs]=Testiranje C++ Temp predloška
 Name[ca]=Plantilla C++ de prova
 Name[ca@valencia]=Plantilla C++ de prova
 Name[da]=Tester C++-skabelon
@@ -26,6 +27,7 @@ Name[x-test]=xxTesting C++ Templatexx
 Name[zh_CN]=C++ 测试模板
 Name[zh_TW]=測試 C++ 樣本
 Comment=A unit test using the QTest library without a graphical user interface
+Comment[bs]=Test jedinice koristeći QTest biblioteku bez grafičkog korisničkog interfejsa
 Comment[ca]=Una prova unitària utilitzant la biblioteca QTest sense interfície gràfica d'usuari
 Comment[ca@valencia]=Una prova unitària utilitzant la biblioteca QTest sense interfície gràfica d'usuari
 Comment[da]=En unittest som bruger biblioteket QTest uden en grafisk brugerflade
@@ -57,6 +59,7 @@ Files=Header,Implementation
 
 [Header]
 Name=Header
+Name[bs]=Zaglavlje
 Name[ca]=Capçalera
 Name[ca@valencia]=Capçalera
 Name[da]=Header
@@ -89,6 +92,7 @@ OutputFile={{ name }}.h
 
 [Implementation]
 Name=Implementation
+Name[bs]=Implementacija
 Name[ca]=Implementació
 Name[ca@valencia]=Implementació
 Name[cs]=Implementace

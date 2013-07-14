@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Comment=Allows switching between buddy documents like implementation and header file.
+Comment[bs]=Dopušta prebacivanje između prijatelj-dokumenata, poput datoteke zaglavlja i implementacije
 Comment[ca]=Permet commutar entre document associats com fitxers d'implementacions i de capçaleres.
 Comment[ca@valencia]=Permet commutar entre document associats com fitxers d'implementacions i de capçaleres.
 Comment[da]=Gør det muligt at skifte imellem vennedokumenter som implementerings- og headerfil.
@@ -27,6 +28,7 @@ Comment[x-test]=xxAllows switching between buddy documents like implementation a
 Comment[zh_CN]=允许在伙伴文件中切换，如实现与头文件
 Comment[zh_TW]=允許在相關文件，如實作與標頭檔間切換。
 Name=Switch to Buddy
+Name[bs]=Pređi na prijatelja
 Name[ca]=Commuta a associat
 Name[ca@valencia]=Commuta a associat
 Name[da]=Skift til vennefil
@@ -52,6 +54,7 @@ Name[x-test]=xxSwitch to Buddyxx
 Name[zh_CN]=切换至伙伴文件
 Name[zh_TW]=切換到相關文件
 GenericName=Switch to Buddy
+GenericName[bs]=Pređi na prijatelja
 GenericName[ca]=Commuta a associat
 GenericName[ca@valencia]=Commuta a associat
 GenericName[da]=Skift til vennefil

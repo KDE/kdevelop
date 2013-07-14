@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Project Branches
+Name[bs]=Grane projekta
 Name[ca]=Branques de projecte
 Name[ca@valencia]=Branques de projecte
 Name[cs]=Větve projektu
@@ -28,6 +29,7 @@ Name[x-test]=xxProject Branchesxx
 Name[zh_CN]=项目分支
 Name[zh_TW]=專案分支
 Comment=Displays the branches in the current project
+Comment[bs]=Prikazuje grane u trenutnom projektu
 Comment[ca]=Mostra les branques en el projecte actual
 Comment[ca@valencia]=Mostra les branques en el projecte actual
 Comment[da]=Viser grenene i det aktuelle projekt
