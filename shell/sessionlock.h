@@ -23,13 +23,13 @@
 #define SESSIONLOCK_H
 
 #include <interfaces/isessionlock.h>
+#include <KLockFile>
 
 namespace KDevelop {
 
 struct SessionRunInfo;
 class TryLockSessionResult;
 
-class SessionLockPrivate;
 class SessionLock : public ISessionLock
 {
 public:
@@ -53,8 +53,9 @@ public:
     virtual ~SessionLock();
 
 private:
-    SessionLock(SessionLockPrivate* data);
-    QScopedPointer<SessionLockPrivate> d;
+    SessionLock(const QString& sessionId, const KLockFile::Ptr& lockFile);
+    QString m_sessionId;
+    KLockFile::Ptr m_lockFile;
 };
 
 }

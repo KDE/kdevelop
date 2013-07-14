@@ -23,30 +23,12 @@
 
 #include "sessioncontroller.h"
 
-#include <KLockFile>
 #include <KDebug>
 #include <KLocalizedString>
 #include <KMessageBox>
 
 #include <QDBusConnectionInterface>
 #include <QFile>
-
-namespace KDevelop
-{
-
-struct SessionLockPrivate
-{
-    SessionLockPrivate(const QString& sessionId, const KLockFile::Ptr& _lockFile)
-    : id(sessionId)
-    , lockFile(_lockFile)
-    {
-        Q_ASSERT(lockFile->isLocked());
-    }
-    QString id;
-    KLockFile::Ptr lockFile;
-};
-
-}
 
 using namespace KDevelop;
 
@@ -134,8 +116,7 @@ TryLockSessionResult SessionLock::tryLockSession(const QString& sessionId, bool 
 
     // Set the result by D-Bus status
     if (doLocking && lockedDBus) {
-        SessionLockPrivate* lockData = new SessionLockPrivate(sessionId, lockFile);
-        return TryLockSessionResult(QSharedPointer<ISessionLock>(new SessionLock(lockData)));
+        return TryLockSessionResult(QSharedPointer<ISessionLock>(new SessionLock(sessionId, lockFile)));
     } else {
         runInfo.isRunning = !canLockDBus;
         return TryLockSessionResult(runInfo);
@@ -144,18 +125,20 @@ TryLockSessionResult SessionLock::tryLockSession(const QString& sessionId, bool 
 
 QString SessionLock::id()
 {
-    return d->id;
+    return m_sessionId;
 }
 
-SessionLock::SessionLock(SessionLockPrivate* data)
-: d(data)
+SessionLock::SessionLock(const QString& sessionId, const KLockFile::Ptr& lockFile)
+: m_sessionId(sessionId)
+, m_lockFile(lockFile)
 {
+    Q_ASSERT(lockFile->isLocked());
 }
 
 SessionLock::~SessionLock()
 {
-    d->lockFile->unlock();
-    bool unregistered = QDBusConnection::sessionBus().unregisterService( dBusServiceNameForSession(d->id) );
+    m_lockFile->unlock();
+    bool unregistered = QDBusConnection::sessionBus().unregisterService( dBusServiceNameForSession(m_sessionId) );
     Q_ASSERT(unregistered);
     Q_UNUSED(unregistered);
 }
