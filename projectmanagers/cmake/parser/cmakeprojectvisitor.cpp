@@ -1467,10 +1467,16 @@ int CMakeProjectVisitor::visit(const ExecuteProcessAst *exec)
     QList<KProcess*> procs;
     foreach(const QStringList& _args, exec->commands())
     {
-        if (_args.isEmpty() || !QFile::exists(exec->workingDirectory()))
+        if(_args.isEmpty())
         {
             kDebug(9032) << "Error: trying to execute empty command";
             break;
+        }
+        
+        QString workingDir = exec->workingDirectory();
+        if(!QFile::exists(workingDir))
+        {
+            workingDir = m_vars->value("CMAKE_CURRENT_BINARY_DIR").join(QString());
         }
         QStringList args(_args);
         KProcess *p=new KProcess(), *prev=0;
@@ -1478,7 +1484,7 @@ int CMakeProjectVisitor::visit(const ExecuteProcessAst *exec)
         {
             prev=procs.last();
         }
-        p->setWorkingDirectory(exec->workingDirectory());
+        p->setWorkingDirectory(workingDir);
         p->setOutputChannelMode(KProcess::MergedChannels);
         QString execName=args.takeFirst();
         p->setProgram(execName, args);
