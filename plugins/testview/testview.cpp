@@ -49,7 +49,6 @@
 #include <QStandardItemModel>
 #include <QStandardItem>
 #include <QHeaderView>
-#include <QSortFilterProxyModel>
 #include <QVBoxLayout>
 
 using namespace KDevelop;
@@ -111,6 +110,7 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent)
     m_tree->setSelectionBehavior(QTreeView::SelectRows);
     m_tree->setSelectionMode(QTreeView::SingleSelection);
     m_tree->setExpandsOnDoubleClick(false);
+    m_tree->sortByColumn(0, Qt::AscendingOrder);
     connect(m_tree, SIGNAL(activated(QModelIndex)), SLOT(doubleClicked(QModelIndex)));
 
     m_model = new QStandardItemModel(this);
