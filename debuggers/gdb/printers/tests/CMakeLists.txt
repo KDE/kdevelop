@@ -1,5 +1,5 @@
 # force debug symbols for our debugees
-set(CMAKE_BUILD_TYPE debugfull)
+set(CMAKE_BUILD_TYPE Debug)
 
 add_definitions(-DPRINTER_BIN_DIR="\\"${CMAKE_CURRENT_BINARY_DIR}\\"")
 
