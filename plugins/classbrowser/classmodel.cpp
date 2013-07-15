@@ -257,7 +257,9 @@ void ClassModel::nodesAdded(ClassModelNodes::Node*)
 void ClassModel::addProjectNode( IProject* project )
 {
   m_projectNodes[project] = new ClassModelNodes::FilteredProjectFolder(this, project);
+  nodesLayoutAboutToBeChanged(m_projectNodes[project]);
   m_topNode->addNode(m_projectNodes[project]);
+  nodesLayoutChanged(m_projectNodes[project]);
 }
 
 void ClassModel::removeProjectNode( IProject* project )
