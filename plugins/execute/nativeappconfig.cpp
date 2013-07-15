@@ -443,11 +443,13 @@ QMenu* NativeAppConfigType::launcherSuggestions()
             foreach(KDevelop::ProjectTargetItem* target, targets) {
                 if(target->executable()) {
                     QStringList path = model->pathFromIndex(target->index());
-                    QAction* act = projectMenu->addAction(QString());
-                    act->setData(KDevelop::joinWithEscaping(path, '/','\\'));
-                    path.removeFirst();
-                    act->setText(path.join("/"));
-                    connect(act, SIGNAL(triggered(bool)), SLOT(suggestionTriggered()));
+                    if(!path.isEmpty()){
+                        QAction* act = projectMenu->addAction(QString());
+                        act->setData(KDevelop::joinWithEscaping(path, '/','\\'));
+                        path.removeFirst();
+                        act->setText(path.join("/"));
+                        connect(act, SIGNAL(triggered(bool)), SLOT(suggestionTriggered()));
+                    }
                 }
             }
             projectMenu->setEnabled(!projectMenu->isEmpty());
