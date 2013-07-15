@@ -299,7 +299,7 @@ void GrepDialog::setPattern(const QString &pattern)
 
 void GrepDialog::setDirectory(const QString &dir)
 {
-    if(dir.startsWith('/'))
+    if(QDir::isAbsolutePath(dir))
     {
         directoryRequester->fileDialog()->setUrl( KUrl( dir ) );
         directoryRequester->completionObject()->setDir( dir );
