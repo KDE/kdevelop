@@ -148,11 +148,10 @@ void TestCppCodegen::testAssistants_data()
     "   val = Hank;\n"
     "  }\n"
     "};\n";
-  QTest::newRow("local_class") << inClass << 5 << 0 << "Honk val = Hank;";
-  // 1 is the label
-  QTest::newRow("private_class") << inClass << 5 << 2 << "private:\n    Honk val;";
-  QTest::newRow("protected_class") << inClass << 5 << 3 << "protected:\n    Honk val;";
-  QTest::newRow("public_class") << inClass << 5 << 4 << "}\n    Honk val;";
+  QTest::newRow("local_class") << inClass << 4 << 0 << "Honk val = Hank;";
+  QTest::newRow("private_class") << inClass << 4 << 1 << "private:\n    Honk val;";
+  QTest::newRow("protected_class") << inClass << 4 << 2 << "protected:\n    Honk val;";
+  QTest::newRow("public_class") << inClass << 4 << 3 << "}\n    Honk val;";
 
   QString inOtherClass =
     "class other {\n"
