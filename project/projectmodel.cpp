@@ -348,8 +348,9 @@ void ProjectBaseItem::setText( const QString& text )
     Q_ASSERT(!text.isEmpty() || !parent());
     Q_D(ProjectBaseItem);
     d->text = text;
-    if( model() ) {
-        QMetaObject::invokeMethod( model(), "dataChanged", getConnectionTypeForSignalDelivery( model() ), Q_ARG(QModelIndex, index()), Q_ARG(QModelIndex, index()) );
+    if( d->model ) {
+        QModelIndex idx = index();
+        QMetaObject::invokeMethod( d->model, "dataChanged", getConnectionTypeForSignalDelivery( d->model ), Q_ARG(QModelIndex, idx), Q_ARG(QModelIndex, idx) );
     }
 }
 
