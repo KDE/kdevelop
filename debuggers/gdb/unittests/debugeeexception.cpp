@@ -23,7 +23,7 @@ void foo()
     throw i;
 }
 
-int main (int argc, char **argv)
+int main ()
 {
     try
     {
