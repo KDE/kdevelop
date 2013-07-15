@@ -220,7 +220,9 @@ void TestTemplateClassGenerator::cppOutput()
 {
     TemplateClassGenerator* generator = loadTemplate("test_cpp");
     setLowercaseFileNames(generator);
-    generator->generate().applyAllChanges();
+    DocumentChangeSet changes = generator->generate();
+    changes.setFormatPolicy(DocumentChangeSet::NoAutoFormat);
+    changes.applyAllChanges();
 
     KUrl headerUrl = baseUrl;
     headerUrl.addPath("classname.h");
