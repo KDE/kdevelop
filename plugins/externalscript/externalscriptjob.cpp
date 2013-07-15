@@ -336,9 +336,9 @@ void ExternalScriptJob::processError( QProcess::ProcessError error )
 {
   if ( error == QProcess::FailedToStart ) {
     setError( -1 );
-    QString errmsg =  i18n( "Could not start program '%1'. Make sure that the "
-                            "path is specified correctly.", m_proc->program().join( " " ) );
-    KMessageBox::error( QApplication::activeWindow(), errmsg, i18n( "Could not start application" ) );
+    QString errmsg =  i18n("*** Could not start program '%1'. Make sure that the "
+                           "path is specified correctly ***", m_proc->program().join(" ") );
+    appendLine( errmsg );
     setErrorText( errmsg );
     emitResult();
   }
