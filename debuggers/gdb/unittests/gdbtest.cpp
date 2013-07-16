@@ -1570,7 +1570,8 @@ void GdbTest::testCatchpoint()
 
     QModelIndex i = variableCollection()->index(1, 0);
     COMPARE_DATA(i, "Locals");
-    QCOMPARE(variableCollection()->rowCount(i), 1);
+   // Don't check it, because it depends on compiler version/type, and not so important for current test.
+   // QCOMPARE(variableCollection()->rowCount(i), 1);
 
     session->addCommand(new GDBCommand(GDBMI::NonMI, "catch throw"));
     session->run();
