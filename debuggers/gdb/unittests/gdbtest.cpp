@@ -1568,11 +1568,6 @@ void GdbTest::testCatchpoint()
     QCOMPARE(fsModel->currentFrame(), 0);
     QCOMPARE(session->line(), 29);
 
-    QModelIndex i = variableCollection()->index(1, 0);
-    COMPARE_DATA(i, "Locals");
-   // Don't check it, because it depends on compiler version/type, and not so important for current test.
-   // QCOMPARE(variableCollection()->rowCount(i), 1);
-
     session->addCommand(new GDBCommand(GDBMI::NonMI, "catch throw"));
     session->run();
     WAIT_FOR_STATE(session, DebugSession::PausedState);
@@ -1580,6 +1575,7 @@ void GdbTest::testCatchpoint()
     QCOMPARE(fsModel->currentFrame(), 1); //first frame skiped because somewhere inside stdlib
     QCOMPARE(session->line(), 22);
 
+    QModelIndex i = variableCollection()->index(1, 0);
     QCOMPARE(variableCollection()->rowCount(i), 1);
     COMPARE_DATA(variableCollection()->index(0, 0, i), "i");
     COMPARE_DATA(variableCollection()->index(0, 1, i), "20");
