@@ -360,9 +360,6 @@ protected:
   void applyAliases( const SearchItem::PtrList& identifiers, Acceptor& accept, const CursorInRevision& position, bool canBeNamespace ) const;
 
 protected:
-  ///Call this to destroy a top-context.
-  void deleteSelf();
-
   virtual ~TopDUContext();
   
   void clearFeaturesSatisfied();
