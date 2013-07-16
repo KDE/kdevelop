@@ -242,7 +242,7 @@ int main( int argc, char *argv[] )
             }
             qout << si.uuid.toString() << '\t' << si.description;
 
-            if(!KDevelop::SessionController::tryLockSession(si.uuid.toString()))
+            if(KDevelop::SessionController::isSessionRunning(si.uuid.toString()))
                 qout << "     " << i18n("[running]");
 
             qout << endl;
@@ -259,7 +259,7 @@ int main( int argc, char *argv[] )
         QList<KDevelop::SessionInfo> candidates;
         foreach(const KDevelop::SessionInfo& si, KDevelop::SessionController::availableSessionInfo())
             if( (!si.name.isEmpty() || !si.projects.isEmpty() || args->isSet("pid")) &&
-                (!args->isSet("pid") || !KDevelop::SessionController::tryLockSession(si.uuid.toString())))
+                (!args->isSet("pid") || KDevelop::SessionController::isSessionRunning(si.uuid.toString())))
                 candidates << si;
         
         if(candidates.size() == 0)
@@ -357,32 +357,14 @@ int main( int argc, char *argv[] )
             return 5;
         }
 
-        KDevelop::SessionController::LockSessionState state = KDevelop::SessionController::tryLockSession( sessionData->uuid.toString() );
-        if(state.success) {
+        KDevelop::SessionRunInfo sessionInfo = KDevelop::SessionController::sessionRunInfo( sessionData->uuid.toString() );
+        if (!sessionInfo.isRunning) {
             kError() << session << sessionData->name << "is not running";
             return 5;
         } else {
             // Print the PID and we're ready
-            std::cout << state.holderPid << std::endl;
+            std::cout << sessionInfo.holderPid << std::endl;
             return 0;
-        }
-    }
-
-    // If the session to load is known by this point,
-    // try to do the same iterative lock-check as in SessionController::loadDefaultSession().
-    KDevelop::SessionController::LockSessionState state;
-    if( sessionData ) {
-        do {
-            state = KDevelop::SessionController::tryLockSession( sessionData->uuid.toString() );
-            if( state ) {
-                break;
-            } else {
-                session = KDevelop::SessionController::handleLockedSession( sessionData->name, sessionData->uuid.toString(), state );
-                sessionData = findSessionInList( sessions, session );
-            }
-        } while( sessionData );
-        if( !state ) {
-            return 1;
         }
     }
 
