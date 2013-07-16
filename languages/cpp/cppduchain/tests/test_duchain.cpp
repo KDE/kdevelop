@@ -120,15 +120,10 @@ void TestDUChain::cleanupTestCase()
   IndexedType indexed = delayed->indexed();
   DUChain::self()->finalCleanup();
 
-  /*delete type1;
-  delete type2;
-  delete type3;*/
-
   {
   DUChainWriteLocker lock(DUChain::lock());
 
-  //EditorIntegrator::releaseTopRange(topContext->textRangePtr());
-  topContext->deleteSelf();
+  DUChain::self()->removeDocumentChain(topContext);
   }
 
   TestCore::shutdown();
