@@ -40,6 +40,7 @@
 #include <interfaces/ilanguage.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/foregroundlock.h>
+#include <interfaces/isession.h>
 
 #include <util/google/dense_hash_map>
 
@@ -1103,14 +1104,12 @@ K_GLOBAL_STATIC(DUChainPrivate, sdDUChainPrivate)
 
 DUChain::DUChain()
 {
-  if(ICore::self()) {
-    Q_ASSERT(ICore::self()->documentController());
-    connect(ICore::self()->documentController(), SIGNAL(documentLoadedPrepare(KDevelop::IDocument*)), this, SLOT(documentLoadedPrepare(KDevelop::IDocument*)));
-    connect(ICore::self()->documentController(), SIGNAL(documentUrlChanged(KDevelop::IDocument*)), this, SLOT(documentRenamed(KDevelop::IDocument*)));
-    connect(ICore::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), this, SLOT(documentActivated(KDevelop::IDocument*)));
-    connect(ICore::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*)), this, SLOT(documentClosed(KDevelop::IDocument*)));
-    
-  }
+  Q_ASSERT(ICore::self());
+
+  connect(ICore::self()->documentController(), SIGNAL(documentLoadedPrepare(KDevelop::IDocument*)), this, SLOT(documentLoadedPrepare(KDevelop::IDocument*)));
+  connect(ICore::self()->documentController(), SIGNAL(documentUrlChanged(KDevelop::IDocument*)), this, SLOT(documentRenamed(KDevelop::IDocument*)));
+  connect(ICore::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), this, SLOT(documentActivated(KDevelop::IDocument*)));
+  connect(ICore::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*)), this, SLOT(documentClosed(KDevelop::IDocument*)));
 }
 
 DUChain::~DUChain()
@@ -1133,7 +1132,9 @@ extern void initReferenceCounting();
 void DUChain::initialize()
 {
   // Initialize the global item repository as first thing after loading the session
-  globalItemRepositoryRegistry();
+  Q_ASSERT(ICore::self());
+  Q_ASSERT(ICore::self()->activeSession());
+  ItemRepositoryRegistry::initialize(ICore::self()->activeSessionLock());
 
   initReferenceCounting();
 

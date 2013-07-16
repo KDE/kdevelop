@@ -24,6 +24,7 @@ set(kdevplatforminterfaces_LIB_SRCS
     istatus.cpp
     iruncontroller.cpp
     isession.cpp
+    isessionlock.cpp
     isourceformatter.cpp
     isourceformattercontroller.cpp
     contextmenuextension.cpp
@@ -97,6 +98,7 @@ install(FILES
     interfacesexport.h
     istatus.h
     isession.h
+    isessionlock.h
     iruncontroller.h
     ilaunchconfiguration.h
     ilauncher.h

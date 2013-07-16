@@ -24,6 +24,8 @@ Boston, MA 02110-1301, USA.
 #include <QtCore/QObject>
 #include "interfacesexport.h"
 
+#include "isessionlock.h"
+
 class KComponentData;
 
 namespace KParts
@@ -105,6 +107,9 @@ public:
     /** @return the active session */
     Q_SCRIPTABLE virtual KDevelop::ISession *activeSession() = 0;
 
+    /** @return the session lock for the active session */
+    Q_SCRIPTABLE virtual KDevelop::ISessionLock::Ptr activeSessionLock() = 0;
+
     /** @return the sourceformatter controller */
     Q_SCRIPTABLE virtual KDevelop::ISourceFormatterController *sourceFormatterController() = 0;
 
@@ -134,6 +139,10 @@ Q_SIGNALS:
      * preparations such as saving settings.
      */
     void aboutToShutdown();
+    /**
+     * Emitted when the teardown of the core components has been completed.
+     */
+    void shutdownCompleted();
 
 protected:
     ICore(QObject *parent = 0);

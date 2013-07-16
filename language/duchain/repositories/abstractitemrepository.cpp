@@ -16,29 +16,38 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVPLATFORM_TYPEREPOSITORY_H
-#define KDEVPLATFORM_TYPEREPOSITORY_H
-
-#include <language/duchain/types/abstracttype.h>
+#include "abstractitemrepository.h"
 
 namespace KDevelop {
 
-class ReferenceCountManager;
-class AbstractRepositoryManager;
-
-class TypeRepository
+uint staticItemRepositoryVersion()
 {
-public:
-    static uint indexForType(AbstractType::Ptr input);
-    static AbstractType::Ptr typeForIndex(uint index);
-    static void increaseReferenceCount(uint index);
-    static void decreaseReferenceCount(uint index);
-    static void increaseReferenceCount(uint index, ReferenceCountManager* manager);
-    static void decreaseReferenceCount(uint index, ReferenceCountManager* manager);
-};
-
-AbstractRepositoryManager* typeRepositoryManager();
-
+  //Increase this to reset incompatible item-repositories
+  return 74;
 }
 
-#endif
+AbstractItemRepository::~AbstractItemRepository()
+{
+}
+
+AbstractRepositoryManager::AbstractRepositoryManager() : m_repository(0)
+{
+}
+
+AbstractRepositoryManager::~AbstractRepositoryManager()
+{
+}
+
+void AbstractRepositoryManager::deleteRepository()
+{
+  delete m_repository;
+  m_repository = 0;
+
+  repositoryDeleted();
+}
+
+void AbstractRepositoryManager::repositoryDeleted()
+{
+}
+
+}

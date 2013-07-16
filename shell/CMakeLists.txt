@@ -32,6 +32,8 @@ set(kdevplatformshell_LIB_SRCS
     runcontroller.cpp
     sessioncontroller.cpp
     session.cpp
+    sessionlock.cpp
+    sessionchooserdialog.cpp
     savedialog.cpp
     sessiondialog.cpp
     sourceformattercontroller.cpp
@@ -142,6 +144,7 @@ install(FILES
     languagecontroller.h
     session.h
     sessioncontroller.h
+    sessionlock.h
     sourceformattercontroller.h
     language.h
     shellexport.h

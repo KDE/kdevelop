@@ -381,6 +381,9 @@ protected:
   bool importsPrivate(const DUContext * origin, const CursorInRevision& position) const;
   DUCHAIN_DECLARE_DATA(TopDUContext)
   
+  ///Called by DUChain::removeDocumentChain to destroy this top-context.
+  void deleteSelf();
+
   //Most of these classes need access to m_dynamicData
   friend class DUChain;
   friend class DUChainPrivate;

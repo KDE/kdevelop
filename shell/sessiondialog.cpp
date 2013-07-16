@@ -118,28 +118,31 @@ void SessionModel::deleteSessions( const QList<QModelIndex>& indexes )
     {
         return;
     }
-    QStringList deleteSessions;
+    QVector<ISessionLock::Ptr> deleteSessions;
     int startRow = rowCount(), endRow = -1;
     foreach( const QModelIndex& idx, indexes )
     {
-        QString sname = Core::self()->sessionController()->sessionNames().at( idx.row() );
-        if( !idx.isValid() || idx.row() < 0 || idx.row() >= rowCount()
-            || Core::self()->sessionController()->session( sname ) == Core::self()->activeSession() )
+        if( !idx.isValid() || idx.row() < 0 || idx.row() >= rowCount() )
         {
+            continue;
+        }
+        QString sname = Core::self()->sessionController()->sessionNames().at( idx.row() );
+        TryLockSessionResult locked = SessionController::tryLockSession( sname );
+        if (!locked.lock) {
             continue;
         }
         if( idx.row() < startRow )
             startRow = idx.row();
         if( idx.row() > endRow )
             endRow = idx.row();
-        deleteSessions << sname;
+        deleteSessions << locked.lock;
     }
     beginRemoveRows( QModelIndex(), startRow, endRow );
-    foreach( const QString& sname, deleteSessions )
+    foreach( const ISessionLock::Ptr& session, deleteSessions )
     {
-        Core::self()->sessionController()->deleteSession( sname );
+        Core::self()->sessionController()->deleteSessionFromDisk( session );
     }
-    endInsertRows();
+    endRemoveRows();
 }
 
 void SessionModel::activateSession( const QModelIndex& idx )

@@ -79,7 +79,8 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/types/typealiastype.cpp
     duchain/types/unsuretype.cpp
 
-    duchain/repositories/itemrepository.cpp
+    duchain/repositories/abstractitemrepository.cpp
+    duchain/repositories/itemrepositoryregistry.cpp
     duchain/repositories/typerepository.cpp
 
     duchain/navigation/problemnavigationcontext.cpp
@@ -289,6 +290,10 @@ install(FILES
 )
 
 install(FILES
+    duchain/repositories/itemrepositoryexampleitem.h
+    duchain/repositories/abstractitemrepository.h
+    duchain/repositories/itemrepositoryregistry.h
+    duchain/repositories/repositorymanager.h
     duchain/repositories/itemrepository.h
     duchain/repositories/typerepository.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain/repositories COMPONENT Devel
