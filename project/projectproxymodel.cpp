@@ -66,57 +66,73 @@ QVariant ProjectProxyModel::data(const QModelIndex& index, int role) const
         case Qt::DisplayRole:
             if(index.isValid() && hasChildren(index) && (!mFilenameFilters.isEmpty() || !mFilenameExcludeFilters.isEmpty())) {
                 QString text = QSortFilterProxyModel::data(index, role).toString();
-                return i18n("%1 (%2 Filtered)", text, rowCount(index));
+                int hiddenElements = sourceModel()->rowCount(mapToSource(index)) - rowCount(index);
+                return i18n("%1 (%2 hidden)", text, hiddenElements);
             }
             break;
     }
     return QSortFilterProxyModel::data(index, role);
 }
 
-bool ProjectProxyModel::filterAcceptsRow ( int source_row, const QModelIndex & source_parent ) const
-{
-    if (mFilenameFilters.isEmpty() && mFilenameExcludeFilters.empty()) {
+bool ProjectProxyModel::recursiveFilterAcceptsRow(KDevelop::ProjectBaseItem *item) const {
+
+    if (!item) {
         return true;
     }
 
-    bool retval = true; // Show all items by default
-    QModelIndex index = sourceModel()->index(source_row, 0, source_parent);
+    if (mFilenameFilters.isEmpty() && mFilenameExcludeFilters.isEmpty()) {
+        return true;
+    }
 
-    KDevelop::ProjectBaseItem *item = projectModel()->itemFromIndex(index);
+    bool retval; // Show all items by default
 
-    if (item) {
-        if (item->type() != KDevelop::ProjectBaseItem::Folder &&
-            item->type() != KDevelop::ProjectBaseItem::BuildFolder)
-        {
+    if (mFilenameFilters.isEmpty() && !mFilenameExcludeFilters.isEmpty()) {
+        // Exclude filter is specified only -> show all by default
+        retval = true;
+    } else {
+        // Do not show until it is matched to filter
+        retval = false;
+    }
 
-            if (mFilenameFilters.isEmpty() && !mFilenameExcludeFilters.isEmpty()) {
-                // Exclude filter is specified only -> show all by default
+    QSharedPointer<QRegExp> filter;
+
+    foreach(filter, mFilenameFilters) {
+        if (filter->exactMatch(item->text())) {
+            retval = true;
+            break;
+        }
+    }
+
+    if (retval) {
+        foreach(filter, mFilenameExcludeFilters) {
+            if (filter->exactMatch(item->text())) {
+                retval = false;
+                break;
+            }
+        }
+    }
+
+    if (!retval &&
+        (item->type() == KDevelop::ProjectBaseItem::Folder ||
+         item->type() == KDevelop::ProjectBaseItem::BuildFolder))
+    {
+
+        foreach(KDevelop::ProjectBaseItem* child, item->children()) {
+            bool visible = recursiveFilterAcceptsRow(child);
+            if (visible) {
                 retval = true;
-            } else {
-                retval = false; // Do not show until it is matched to filter
+                break;
             }
-
-            QSharedPointer<QRegExp> filter;
-
-            foreach(filter, mFilenameFilters)
-            {
-                if (filter->exactMatch(item->text())) {
-                    retval = true;
-                    break;
-                }
-            }
-            if (retval) {
-                foreach(filter, mFilenameExcludeFilters) {
-                    if (filter->exactMatch(item->text())) {
-                        retval = false;
-                        break;
-                    }
-                }
-            }
-
         }
     }
     return retval;
+}
+
+bool ProjectProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
+{
+    const QModelIndex& index = sourceModel()->index(sourceRow, 0, sourceParent);
+    KDevelop::ProjectBaseItem *item = projectModel()->itemFromIndex(index);
+    return recursiveFilterAcceptsRow(item);
 }
 
 void ProjectProxyModel::setFilterString(const QString &filters)
@@ -135,7 +151,7 @@ void ProjectProxyModel::setFilterString(const QString &filters)
             !pattern.contains('[') &&
             !pattern.contains(']'))
         {
-            // Filter has no specia symbols (?, *) so adjust it for prefixed search
+            // Filter has no special symbols (?, *) so adjust it for prefixed search
             pattern += '*';
         }
 
@@ -150,14 +166,14 @@ void ProjectProxyModel::setFilterString(const QString &filters)
 
     invalidateFilter();
     recursivelyEmitParentsChanged(QModelIndex());
-};
+}
 
 void ProjectProxyModel::recursivelyEmitParentsChanged(const QModelIndex& idx)
 {
     if(!hasChildren(idx))
         return;
-    
-    for(int i=0; i<rowCount(idx); i++) {
+
+    for(int i = 0, count = rowCount(idx); i < count; i++) {
         recursivelyEmitParentsChanged(index(i, 0, idx));
     }
     emit dataChanged(idx, idx);

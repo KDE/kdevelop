@@ -37,20 +37,21 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectProxyModel : public QSortFilterProxyMode
     Q_OBJECT
     public:
         ProjectProxyModel(QObject *parent);
-        bool lessThan ( const QModelIndex & left, const QModelIndex & right ) const;
+        bool lessThan (const QModelIndex & left, const QModelIndex & right) const;
 
         QModelIndex proxyIndexFromItem(KDevelop::ProjectBaseItem* item) const;
-        KDevelop::ProjectBaseItem* itemFromProxyIndex( const QModelIndex& ) const;
-        
+        KDevelop::ProjectBaseItem* itemFromProxyIndex(const QModelIndex&) const;
+
         void setFilterString(const QString &filters);
 
         virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
 
     private:
         KDevelop::ProjectModel* projectModel() const;
-        bool filterAcceptsRow ( int source_row, const QModelIndex & source_parent ) const;
+        bool filterAcceptsRow(int sourceRow, const QModelIndex & sourceParent) const;
+        bool recursiveFilterAcceptsRow(KDevelop::ProjectBaseItem *item) const;
         void recursivelyEmitParentsChanged(const QModelIndex& index);
-        QList<QSharedPointer<QRegExp> > mFilenameFilters; 
+        QList<QSharedPointer<QRegExp> > mFilenameFilters;
         QList<QSharedPointer<QRegExp> > mFilenameExcludeFilters;
 };
 
