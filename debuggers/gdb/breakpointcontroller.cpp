@@ -440,7 +440,12 @@ void BreakpointController::update(KDevelop::Breakpoint *breakpoint, const GDBMI:
                 if (rx.indexIn(location) != -1) {
                     breakpoint->setLocation(KUrl(unquoteExpression(rx.cap(1))), rx.cap(2).toInt()-1);
                 } else {
-                    kWarning() << "can't parse location" << location;
+                    //for regular expression breakpoints and not only...
+                    if(b.hasField("fullname") && b.hasField("line")){
+                        breakpoint->setLocation(KUrl(unquoteExpression(b["fullname"].literal())), b["line"].toInt()-1);
+                    }else{
+                        kWarning() << "can't parse location" << location;
+                    }
                 }
             } else {
                 breakpoint->setData(KDevelop::Breakpoint::LocationColumn, unquoteExpression(location));

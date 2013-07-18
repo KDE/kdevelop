@@ -87,6 +87,7 @@ private Q_SLOTS:
     void testMultipleLocationsBreakpoint();
     void testBug301287();
     void testMultipleBreakpoint();
+    void testRegularExpressionBreakpoint();
 
 private:
     void waitForState(GDBDebugger::DebugSession *session,

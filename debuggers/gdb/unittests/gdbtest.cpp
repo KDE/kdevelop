@@ -1716,6 +1716,25 @@ void GdbTest::testMultipleBreakpoint()
         WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
+void GdbTest::testRegularExpressionBreakpoint()
+{
+        TestDebugSession *session = new TestDebugSession;
+
+        TestLaunchConfiguration c(findExecutable("debugeemultilocbreakpoint"));
+        breakpoints()->addCodeBreakpoint("main");
+        session->startProgram(&c, m_iface);
+        WAIT_FOR_STATE(session, DebugSession::PausedState);
+        session->addCommandToFront(new GDBCommand(GDBMI::NonMI, "rbreak .*aPl.*B"));
+        session->run();
+        WAIT_FOR_STATE(session, DebugSession::PausedState);
+        QCOMPARE(breakpoints()->breakpoints().count(), 3);
+
+        session->addCommandToFront(new GDBCommand(GDBMI::BreakDelete, ""));
+        session->run();
+        WAIT_FOR_STATE(session, DebugSession::EndedState);
+}
+
+
 void GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::DebuggerState state,
                             const char *file, int line, bool expectFail)
 {
