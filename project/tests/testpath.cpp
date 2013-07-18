@@ -213,10 +213,6 @@ void TestPath::testPath()
     KUrl url(input);
     url.cleanPath();
     url.adjustPath(KUrl::RemoveTrailingSlash);
-    if (url.isValid() && url.path(KUrl::AddTrailingSlash) == "/") {
-        // I think this is a bug in KUrl, I'll notify David Faure
-        url.adjustPath(KUrl::AddTrailingSlash);
-    }
 
     Path optUrl(input);
 
