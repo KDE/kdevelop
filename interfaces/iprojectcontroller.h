@@ -18,8 +18,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#ifndef IPROJECTCONTROLLER_H
-#define IPROJECTCONTROLLER_H
+#ifndef KDEVPLATFORM_IPROJECTCONTROLLER_H
+#define KDEVPLATFORM_IPROJECTCONTROLLER_H
 
 #include <QtCore/QObject>
 #include <QtCore/QList>

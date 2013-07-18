@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef COMPLETIONSETTINGS_H
-#define COMPLETIONSETTINGS_H
+#ifndef KDEVPLATFORM_COMPLETIONSETTINGS_H
+#define KDEVPLATFORM_COMPLETIONSETTINGS_H
 
 #include <interfaces/icompletionsettings.h>
 #include <kconfiggroup.h>

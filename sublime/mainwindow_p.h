@@ -16,8 +16,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef SUBLIMEMAINWINDOW_P_H
-#define SUBLIMEMAINWINDOW_P_H
+#ifndef KDEVPLATFORM_SUBLIMEMAINWINDOW_P_H
+#define KDEVPLATFORM_SUBLIMEMAINWINDOW_P_H
 
 #include <QMap>
 #include <QObject>

@@ -16,8 +16,8 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#ifndef WORKINGSETCONTROLLER_H
-#define WORKINGSETCONTROLLER_H
+#ifndef KDEVPLATFORM_WORKINGSETCONTROLLER_H
+#define KDEVPLATFORM_WORKINGSETCONTROLLER_H
 
 #include <QObject>
 #include <QSet>
@@ -63,7 +63,7 @@ public:
      * NOTE: Never pass an empty @p id, this means there is no working set
      *       for the given area you got that @p id from.
      */
-    WorkingSet* getWorkingSet(const QString& id, const QString& icon = QString());
+    WorkingSet* getWorkingSet(const QString& id);
 
     QList<WorkingSet*> allWorkingSets() const;
 
@@ -83,10 +83,6 @@ Q_SIGNALS:
 
 private slots:
     void areaCreated(Sublime::Area* area);
-
-    bool usingIcon(const QString& icon);
-
-    bool iconValid(const QString& icon);
 
     void nextDocument();
     void previousDocument();
@@ -121,4 +117,4 @@ private:
 
 }
 
-#endif // WORKINGSETMANAGER_H
+#endif // KDEVPLATFORM_WORKINGSETMANAGER_H

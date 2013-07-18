@@ -19,8 +19,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef TESTPARSEJOB_H
-#define TESTPARSEJOB_H
+#ifndef KDEVPLATFORM_TESTPARSEJOB_H
+#define KDEVPLATFORM_TESTPARSEJOB_H
 
 #include "language/backgroundparser/parsejob.h"
 

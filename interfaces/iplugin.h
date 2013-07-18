@@ -19,8 +19,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef IPLUGIN_H
-#define IPLUGIN_H
+#ifndef KDEVPLATFORM_IPLUGIN_H
+#define KDEVPLATFORM_IPLUGIN_H
 
 #include <QtCore/QObject>
 #include <kxmlguiclient.h>
@@ -36,13 +36,6 @@ class QAction;
 namespace Sublime {
     class MainWindow;
 }
-
-/**
- * Current KDevelop plugin interface version. Interfaces declare plugin version
- * to make sure old source (or binary) incompatible plugins are not loaded.
- * Increase this if it is necessary that old plugins stop working.
- */
-#define KDEVELOP_PLUGIN_VERSION 15
 
 /**
  * This macro adds an extension interface to register with the extension manager
@@ -229,7 +222,8 @@ public:
      * Description of the last encountered error, of an empty string if none.
      */
     virtual QString errorDescription() const;
-public Q_SLOTS:
+
+private Q_SLOTS:
     /**
      * Re-initialize the global icon loader
      */

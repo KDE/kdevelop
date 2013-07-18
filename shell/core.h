@@ -18,8 +18,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef CORE_H
-#define CORE_H
+#ifndef KDEVPLATFORM_CORE_H
+#define KDEVPLATFORM_CORE_H
 
 #include "shellexport.h"
 #include <interfaces/icore.h>
@@ -58,7 +58,7 @@ public:
       * returns false if the initialization fails, which may happen
       * if the same session is already active in another instance
       *
-      * @param splash the splashscreen instance that should be hidden once the GUI is ready
+      * @param splash the splashscreen instance that shows the startup progress (may be 0)
       * @param mode the mode in which to run
       * @param session the name or uuid of the session to be loaded
       *
@@ -110,6 +110,9 @@ public:
 
     /** @copydoc ICore::activeSession() */
     virtual ISession *activeSession();
+
+    /** @copydoc ICore::activeSessionLock() */
+    virtual ISessionLock::Ptr activeSessionLock();
 
     virtual KComponentData componentData() const;
 
@@ -171,7 +174,11 @@ public:
 public slots:
     void shutdown();
 
+signals:
+    void startupProgress(int percent);
+
 protected:
+    friend class CorePrivate;
     Core( KDevelop::CorePrivate* dd, QObject* parent = 0 );
     KDevelop::CorePrivate *d;
     static Core *m_self;

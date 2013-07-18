@@ -17,12 +17,10 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef PROJECTMODELSAVER_H
-#define PROJECTMODELSAVER_H
+#ifndef KDEVPLATFORM_PLUGIN_PROJECTMODELSAVER_H
+#define KDEVPLATFORM_PLUGIN_PROJECTMODELSAVER_H
 
 #include <kviewstatesaver.h>
-
-class ProjectModel;
 
 namespace KDevelop
 {
@@ -53,4 +51,4 @@ private:
 
 }
 
-#endif // PROJECTMODELSAVER_H
+#endif // KDEVPLATFORM_PLUGIN_PROJECTMODELSAVER_H

@@ -63,7 +63,7 @@ void TypeAliasType::setType(AbstractType::Ptr type)
 
 uint TypeAliasType::hash() const
 {
-  return 31 * IdentifiedType::hash() + (type() ? type()->hash() + 83 : 0);
+  return KDevHash(AbstractType::hash()) << IdentifiedType::hash() << (type() ? type()->hash() : 0);
 }
 
 QString TypeAliasType::toString() const

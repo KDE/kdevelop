@@ -17,8 +17,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#ifndef ENVIRONMENTGROUPMODEL_H
-#define ENVIRONMENTGROUPMODEL_H
+#ifndef KDEVPLATFORM_ENVIRONMENTGROUPMODEL_H
+#define KDEVPLATFORM_ENVIRONMENTGROUPMODEL_H
 
 #include <QtCore/QAbstractTableModel>
 #include <QtCore/QStringList>

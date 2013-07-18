@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef ASTCHANGESET_H
-#define ASTCHANGESET_H
+#ifndef KDEVPLATFORM_ASTCHANGESET_H
+#define KDEVPLATFORM_ASTCHANGESET_H
 
 #include <QtCore/QVariant>
 
@@ -246,4 +246,4 @@ private:
 
 }
 
-#endif // ASTCHANGESET_H
+#endif // KDEVPLATFORM_ASTCHANGESET_H

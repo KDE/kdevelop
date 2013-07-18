@@ -16,8 +16,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef KDEV_PARTDOCUMENT_H
-#define KDEV_PARTDOCUMENT_H
+#ifndef KDEVPLATFORM_PARTDOCUMENT_H
+#define KDEVPLATFORM_PARTDOCUMENT_H
 
 #include <interfaces/idocument.h>
 #include <sublime/urldocument.h>

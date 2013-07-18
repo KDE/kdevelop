@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef USESCOLLECTOR_H
-#define USESCOLLECTOR_H
+#ifndef KDEVPLATFORM_USESCOLLECTOR_H
+#define KDEVPLATFORM_USESCOLLECTOR_H
 
 #include <QtCore/QObject>
 #include <QtCore/QSet>

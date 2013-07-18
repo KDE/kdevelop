@@ -17,12 +17,13 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef IDENTIFIER_H
-#define IDENTIFIER_H
+#ifndef KDEVPLATFORM_IDENTIFIER_H
+#define KDEVPLATFORM_IDENTIFIER_H
 
 #include <QtCore/QList>
 #include <QtCore/QStack>
 #include <QtCore/QStringList>
+#include <QtCore/QMetaType>
 #include <util/kdevvarlengtharray.h>
 
 #include <ksharedptr.h>
@@ -359,7 +360,13 @@ KDEVPLATFORMLANGUAGE_EXPORT uint qHash(const Identifier& id);
 
 Q_DECLARE_TYPEINFO(KDevelop::IndexedQualifiedIdentifier, Q_MOVABLE_TYPE);
 Q_DECLARE_TYPEINFO(KDevelop::IndexedIdentifier, Q_MOVABLE_TYPE);
+Q_DECLARE_METATYPE(KDevelop::IndexedQualifiedIdentifier);
+Q_DECLARE_METATYPE(KDevelop::IndexedIdentifier);
 
+Q_DECLARE_TYPEINFO(KDevelop::QualifiedIdentifier, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(KDevelop::Identifier, Q_MOVABLE_TYPE);
+Q_DECLARE_METATYPE(KDevelop::QualifiedIdentifier)
+Q_DECLARE_METATYPE(KDevelop::Identifier)
 
 /**
  * {q,k}Debug() stream operator: Writes the Identifier to the debug output.
@@ -371,6 +378,6 @@ KDEVPLATFORMLANGUAGE_EXPORT QDebug operator<<(QDebug s, const KDevelop::Identifi
  */
 KDEVPLATFORMLANGUAGE_EXPORT QDebug operator<<(QDebug s, const KDevelop::QualifiedIdentifier& identifier);
 
-#endif // IDENTIFIER_H
+#endif // KDEVPLATFORM_IDENTIFIER_H
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

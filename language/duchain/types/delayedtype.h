@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef DELAYEDTYPE_H
-#define DELAYEDTYPE_H
+#ifndef KDEVPLATFORM_DELAYEDTYPE_H
+#define KDEVPLATFORM_DELAYEDTYPE_H
 
 #include "abstracttype.h"
 #include "../identifier.h"

@@ -18,18 +18,18 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVPROJECTTREEVIEW_H
-#define KDEVPROJECTTREEVIEW_H
+#ifndef KDEVPLATFORM_PLUGIN_PROJECTTREEVIEW_H
+#define KDEVPLATFORM_PLUGIN_PROJECTTREEVIEW_H
 
 #include <QtGui/QTreeView>
 #include <QtCore/QPointer>
 
+class QAbstractProxyModel;
 class KUrl;
 class QAction;
 class QItemSelectionModel;
 class QMouseEvent;
 
-class ProjectManagerViewPlugin;
 namespace KDevelop
 {
 class IProject;
@@ -49,15 +49,9 @@ class ProjectTreeView: public QTreeView
         ProjectTreeView( QWidget *parent = 0 );
         virtual ~ProjectTreeView();
 
-        ProjectManagerViewPlugin *plugin() const;
-        KDevelop::ProjectModel *projectModel() const;
-
-        KDevelop::ProjectFolderItem *currentFolderItem() const;
-        KDevelop::ProjectFileItem *currentFileItem() const;
-        KDevelop::ProjectTargetItem *currentTargetItem() const;
+        static QModelIndex mapFromSource(const QAbstractProxyModel* proxy, const QModelIndex& sourceIdx);
 
         virtual bool event(QEvent* event);
-
 
     Q_SIGNALS:
         void activateUrl( const KUrl &url );
@@ -75,6 +69,7 @@ class ProjectTreeView: public QTreeView
         virtual void dropEvent(QDropEvent* event);
 
     private:
+        QModelIndex mapFromItem(const KDevelop::ProjectBaseItem* item);
         KDevelop::ProjectBaseItem* itemAtPos(QPoint pos);
 
         KDevelop::IProject* m_ctxProject;
@@ -82,5 +77,5 @@ class ProjectTreeView: public QTreeView
         QPersistentModelIndex m_idx;
 };
 
-#endif // KDEVPROJECTMANAGER_H
+#endif // KDEVPLATFORM_PLUGIN_PROJECTTREEVIEW_H
 

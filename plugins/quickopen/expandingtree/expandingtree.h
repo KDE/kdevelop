@@ -18,8 +18,8 @@
  *  Boston, MA 02110-1301, USA.
  */
 
-#ifndef ExpandingTree_H
-#define ExpandingTree_H
+#ifndef KDEVPLATFORM_PLUGIN_EXPANDINGTREE_H
+#define KDEVPLATFORM_PLUGIN_EXPANDINGTREE_H
 
 #include <QTreeView>
 #include <QTextDocument>
@@ -35,4 +35,4 @@ class ExpandingTree : public QTreeView {
     mutable QTextDocument m_drawText;
 };
 
-#endif
+#endif // KDEVPLATFORM_PLUGIN_EXPANDINGTREE_H

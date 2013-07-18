@@ -4,7 +4,7 @@
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
+    the Free Software Foundation, either version 2 of the License, or
     (at your option) any later version.
 
     This program is distributed in the hope that it will be useful,
@@ -114,38 +114,38 @@ const QList<ErrorFormat> ERROR_FILTERS = QList<ErrorFormat>()
 
 // A list of filters for possible compiler, linker, and make actions
 QList<ActionFormat> ACTION_FILTERS = QList<ActionFormat>()
-    << ActionFormat( i18n("compiling"), 1, 2, "(?:^|[^=])\\b(gcc|CC|cc|distcc|c\\+\\+|"
-                     "g\\+\\+|icc|icpc)\\s+.*-c.*[/ '\\\\]+(\\w+\\.(?:cpp|CPP|c|C|cxx|CXX|cs|"
+    << ActionFormat( I18N_NOOP2_NOSTRIP("", "compiling"), 1, 2, "(?:^|[^=])\\b(gcc|CC|cc|distcc|c\\+\\+|"
+                     "g\\+\\+|clang|clang\\+\\+|mpicc|icc|icpc)\\s+.*-c.*[/ '\\\\]+(\\w+\\.(?:cpp|CPP|c|C|cxx|CXX|cs|"
                      "java|hpf|f|F|f90|F90|f95|F95))")
     //moc and uic
-    << ActionFormat( i18n("generating"), 1, 2, "/(moc|uic)\\b.*\\s-o\\s([^\\s;]+)")
+    << ActionFormat( I18N_NOOP2_NOSTRIP("", "generating"), 1, 2, "/(moc|uic)\\b.*\\s-o\\s([^\\s;]+)")
     //libtool linking
-    << ActionFormat( i18nc("Linking object files into a library or executable", "linking"),
+    << ActionFormat( I18N_NOOP2_NOSTRIP("Linking object files into a library or executable", "linking"),
                      "libtool", "/bin/sh\\s.*libtool.*--mode=link\\s.*\\s-o\\s([^\\s;]+)", 1 )
     //unsermake
-    << ActionFormat( i18n("compiling"), 1, 1, "^compiling (.*)" )
-    << ActionFormat( i18n("generating"), 1, 2, "^generating (.*)" )
-    << ActionFormat( i18nc("Linking object files into a library or executable",
-                     "linking"), 1, 2, "(gcc|cc|c\\+\\+|g\\+\\+|icc|icpc)\\S* (?:\\S* )*-o ([^\\s;]+)")
-    << ActionFormat( i18nc("Linking object files into a library or executable",
+    << ActionFormat( I18N_NOOP2_NOSTRIP("", "compiling"), 1, 1, "^compiling (.*)" )
+    << ActionFormat( I18N_NOOP2_NOSTRIP("", "generating"), 1, 2, "^generating (.*)" )
+    << ActionFormat( I18N_NOOP2_NOSTRIP("Linking object files into a library or executable",
+                     "linking"), 1, 2, "(gcc|cc|c\\+\\+|g\\+\\+|clang|clang\\+\\+|mpicc|icc|icpc)\\S* (?:\\S* )*-o ([^\\s;]+)")
+    << ActionFormat( I18N_NOOP2_NOSTRIP("Linking object files into a library or executable",
                      "linking"), 1, 2, "^linking (.*)" )
     //cmake
-    << ActionFormat( i18n("built"), -1, 1, "\\[.+%\\] Built target (.*)" )
-    << ActionFormat( i18n("compiling"), "cmake", "\\[.+%\\] Building .* object (.*)CMakeFiles/", 1 )
-    << ActionFormat( i18n("generating"), -1, 1, "\\[.+%\\] Generating (.*)" )
-    << ActionFormat( i18nc("Linking object files into a library or executable",
+    << ActionFormat( I18N_NOOP2_NOSTRIP("", "built"), -1, 1, "\\[.+%\\] Built target (.*)" )
+    << ActionFormat( I18N_NOOP2_NOSTRIP("", "compiling"), "cmake", "\\[.+%\\] Building .* object (.*)CMakeFiles/", 1 )
+    << ActionFormat( I18N_NOOP2_NOSTRIP("", "generating"), -1, 1, "\\[.+%\\] Generating (.*)" )
+    << ActionFormat( I18N_NOOP2_NOSTRIP("Linking object files into a library or executable",
                      "linking"), -1, 1, "^Linking (.*)" )
-    << ActionFormat( i18n("configuring"), "cmake", "(-- Configuring (done|incomplete)|-- Found|-- Adding|-- Enabling)", -1 )
-    << ActionFormat( i18n("installing"), -1, 1, "-- Installing (.*)" )
+    << ActionFormat( I18N_NOOP2_NOSTRIP("", "configuring"), "cmake", "(-- Configuring (done|incomplete)|-- Found|-- Adding|-- Enabling)", -1 )
+    << ActionFormat( I18N_NOOP2_NOSTRIP("", "installing"), -1, 1, "-- Installing (.*)" )
     //libtool install
-    << ActionFormat( i18n("creating"), "", "/(?:bin/sh\\s.*mkinstalldirs).*\\s([^\\s;]+)", 1 )
-    << ActionFormat( i18n("installing"), "", "/(?:usr/bin/install|bin/sh\\s.*mkinstalldirs"
+    << ActionFormat( I18N_NOOP2_NOSTRIP("", "creating"), "", "/(?:bin/sh\\s.*mkinstalldirs).*\\s([^\\s;]+)", 1 )
+    << ActionFormat( I18N_NOOP2_NOSTRIP("", "installing"), "", "/(?:usr/bin/install|bin/sh\\s.*mkinstalldirs"
                      "|bin/sh\\s.*libtool.*--mode=install).*\\s([^\\s;]+)", 1 )
     //dcop
-    << ActionFormat( i18n("generating"), "dcopidl", "dcopidl .* > ([^\\s;]+)", 1 )
-    << ActionFormat( i18n("compiling"), "dcopidl2cpp", "dcopidl2cpp (?:\\S* )*([^\\s;]+)", 1 )
+    << ActionFormat( I18N_NOOP2_NOSTRIP("", "generating"), "dcopidl", "dcopidl .* > ([^\\s;]+)", 1 )
+    << ActionFormat( I18N_NOOP2_NOSTRIP("", "compiling"), "dcopidl2cpp", "dcopidl2cpp (?:\\S* )*([^\\s;]+)", 1 )
     // match against Entering directory to update current build dir
-    << ActionFormat( "cd", "", "make\\[\\d+\\]: Entering directory (\\`|\\')(.+)'", 2);
+    << ActionFormat( "", "cd", "", "make\\[\\d+\\]: Entering directory (\\`|\\')(.+)'", 2);
 
 
 CompilerFilterStrategyPrivate::CompilerFilterStrategyPrivate(const KUrl& buildDir)
@@ -218,6 +218,8 @@ QVector< QString > CompilerFilterStrategy::getCurrentDirs()
 
 FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
 {
+    const QByteArray cd = "cd";
+    const QByteArray compiling = "compiling";
     FilteredItem item(line);
     foreach( const ActionFormat& curActFilter, ACTION_FILTERS ) {
         QRegExp regEx = curActFilter.expression;
@@ -226,9 +228,9 @@ FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
             item.type = FilteredItem::ActionItem;
             if( curActFilter.fileGroup != -1 && curActFilter.toolGroup != -1 )
             {
-                item.shortenedText = QString( "%1 %2 (%3)").arg( curActFilter.action ).arg( regEx.cap( curActFilter.fileGroup ) ).arg( regEx.cap( curActFilter.toolGroup ) );
+                item.shortenedText = QString( "%1 %2 (%3)").arg(i18nc(curActFilter.context, curActFilter.action)).arg( regEx.cap( curActFilter.fileGroup ) ).arg( regEx.cap( curActFilter.toolGroup ) );
             }
-            if( curActFilter.action == "cd" )
+            if( curActFilter.action == cd )
             {
                 d->m_currentDirs.push_back( regEx.cap( curActFilter.fileGroup ) );
                 d->m_positionInCurrentDirs.insert( regEx.cap( curActFilter.fileGroup ) , d->m_currentDirs.size() - 1 );
@@ -238,7 +240,7 @@ FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
             // and use it to find out about the build paths encountered during a build.
             // They are later searched by urlForFile to find source files corresponding to
             // compiler errors.
-            if ( curActFilter.action == i18n("compiling") && curActFilter.tool == "cmake") {
+            if ( curActFilter.action == compiling && curActFilter.tool == "cmake") {
                 KUrl url = d->m_buildDir;
                 url.addPath(regEx.cap( curActFilter.fileGroup ));
                 d->putDirAtEnd(url.toLocalFile());

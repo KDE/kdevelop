@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef JSONTYPETESTS_H
-#define JSONTYPETESTS_H
+#ifndef KDEVPLATFORM_JSONTYPETESTS_H
+#define KDEVPLATFORM_JSONTYPETESTS_H
 
 #include "language/duchain/types/abstracttype.h"
 #include "language/duchain/types/delayedtype.h"
@@ -42,9 +42,6 @@ using namespace JsonTestHelpers;
 ///@returns whether the type toString matches the given value
 TypeTest(toString)
 {
-  if (FunctionType::Ptr funcType = type.cast<FunctionType>())
-    type = funcType->returnType();
-
   QString typeStr = type ? type->toString() : "<no type>";
   return compareValues(typeStr, value, "Type's toString");
 }
@@ -70,4 +67,4 @@ TypeTest(isConst)
 
 }
 
-#endif //JSONTYPETESTS_H
+#endif //KDEVPLATFORM_JSONTYPETESTS_H

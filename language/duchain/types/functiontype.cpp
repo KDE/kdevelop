@@ -185,14 +185,14 @@ AbstractType::WhichType FunctionType::whichType() const
 
 uint FunctionType::hash() const
 {
-  uint hash_value = AbstractType::hash();
-  hash_value += d_func()->m_returnType.hash() * 859321;
+  KDevHash kdevhash(AbstractType::hash());
+  kdevhash << d_func()->m_returnType.hash();
 
   FOREACH_FUNCTION(const IndexedType& t, d_func()->m_arguments) {
-    hash_value = (hash_value << 5) - hash_value + t.hash();
+    kdevhash << t.hash();
   }
 
-  return hash_value;
+  return kdevhash;
 }
 
 }

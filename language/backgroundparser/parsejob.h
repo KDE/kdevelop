@@ -20,8 +20,8 @@
 * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
-#ifndef PARSEJOB_H
-#define PARSEJOB_H
+#ifndef KDEVPLATFORM_PARSEJOB_H
+#define KDEVPLATFORM_PARSEJOB_H
 
 #include <QtCore/QWeakPointer>
 #include <KDE/KUrl>

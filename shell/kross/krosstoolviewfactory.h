@@ -18,8 +18,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef KROSSTOOLVIEWFACTORY_H
-#define KROSSTOOLVIEWFACTORY_H
+#ifndef KDEVPLATFORM_KROSSTOOLVIEWFACTORY_H
+#define KDEVPLATFORM_KROSSTOOLVIEWFACTORY_H
 
 #include <kross/core/action.h>
 #include <interfaces/iuicontroller.h>

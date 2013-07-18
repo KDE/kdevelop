@@ -16,8 +16,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef DOCUMENTSWITCHERTREEVIEW_H
-#define DOCUMENTSWITCHERTREEVIEW_H
+#ifndef KDEVPLATFORM_PLUGIN_DOCUMENTSWITCHERTREEVIEW_H
+#define KDEVPLATFORM_PLUGIN_DOCUMENTSWITCHERTREEVIEW_H
 
 #include <QListView>
 
@@ -35,4 +35,4 @@ private:
     DocumentSwitcherPlugin* plugin;
 };
 
-#endif // DOCUMENTSWITCHERTREEVIEW_H
+#endif // KDEVPLATFORM_PLUGIN_DOCUMENTSWITCHERTREEVIEW_H

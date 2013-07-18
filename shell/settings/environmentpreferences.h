@@ -17,8 +17,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#ifndef ENVIRONMENTPREFERENCES_H
-#define ENVIRONMENTPREFERENCES_H
+#ifndef KDEVPLATFORM_ENVIRONMENTPREFERENCES_H
+#define KDEVPLATFORM_ENVIRONMENTPREFERENCES_H
 
 #include <kurl.h>
 #include <kstandarddirs.h>

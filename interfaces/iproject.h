@@ -24,8 +24,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef IPROJECT_H
-#define IPROJECT_H
+#ifndef KDEVPLATFORM_IPROJECT_H
+#define KDEVPLATFORM_IPROJECT_H
 
 #include <QtCore/QObject>
 
@@ -132,9 +132,6 @@ public:
     Q_SCRIPTABLE virtual QList<ProjectFolderItem*> foldersForPath( const IndexedString& folder ) const = 0;
     KDE_DEPRECATED Q_SCRIPTABLE virtual QList<ProjectFolderItem*> foldersForUrl( const KUrl& folder ) const = 0;
 
-    /** Make the model to reload */
-    Q_SCRIPTABLE virtual void reloadModel() = 0;
-
     /**
      * @return the path to the project file
      */
@@ -197,6 +194,10 @@ Q_SIGNALS:
      * Gets emitted whenever a file was removed from the project.
      */
     void fileRemovedFromSet( KDevelop::ProjectFileItem* item );
+
+public Q_SLOTS:
+    /** Make the model to reload */
+    virtual void reloadModel() = 0;
 };
 
 }

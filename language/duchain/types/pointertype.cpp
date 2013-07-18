@@ -100,7 +100,7 @@ AbstractType::WhichType PointerType::whichType() const
 
 uint PointerType::hash() const
 {
-  return AbstractType::hash() + d_func()->m_baseType.hash() * 13;
+  return KDevHash(AbstractType::hash()) << d_func()->m_baseType.hash();
 }
 
 }

@@ -18,8 +18,8 @@
 * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
-#ifndef OPENWITHPLUGIN_H
-#define OPENWITHPLUGIN_H
+#ifndef KDEVPLATFORM_PLUGIN_OPENWITHPLUGIN_H
+#define KDEVPLATFORM_PLUGIN_OPENWITHPLUGIN_H
 
 #include <interfaces/iplugin.h>
 #include <QVariantList>
@@ -59,4 +59,4 @@ private:
     KService::List m_services;
 };
 
-#endif // OPENWITHPLUGIN_H
+#endif // KDEVPLATFORM_PLUGIN_OPENWITHPLUGIN_H

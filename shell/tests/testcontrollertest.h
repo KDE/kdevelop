@@ -17,8 +17,8 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#ifndef KDEVELOP_TESTCONTROLLERTEST_H
-#define KDEVELOP_TESTCONTROLLERTEST_H
+#ifndef KDEVPLATFORM_TESTCONTROLLERTEST_H
+#define KDEVPLATFORM_TESTCONTROLLERTEST_H
 
 #include <QObject>
 #include <itestcontroller.h>
@@ -54,4 +54,4 @@ private:
 
 }
 
-#endif // KDEVELOP_TESTCONTROLLERTEST_H
+#endif // KDEVPLATFORM_TESTCONTROLLERTEST_H

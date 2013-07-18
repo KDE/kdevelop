@@ -8,8 +8,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef OPENPROJECTPAGE_H
-#define OPENPROJECTPAGE_H
+#ifndef KDEVPLATFORM_OPENPROJECTPAGE_H
+#define KDEVPLATFORM_OPENPROJECTPAGE_H
 
 #include <QtGui/QWidget>
 #include <QtCore/QMap>

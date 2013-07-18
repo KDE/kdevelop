@@ -8,8 +8,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef COMMITDIALOG_H
-#define COMMITDIALOG_H
+#ifndef KDEVPLATFORM_PLUGIN_COMMITDIALOG_H
+#define KDEVPLATFORM_PLUGIN_COMMITDIALOG_H
 
 #include <QDialog>
 #include <KTextEdit>

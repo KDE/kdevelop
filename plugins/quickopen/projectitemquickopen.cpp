@@ -122,7 +122,7 @@ void ProjectItemDataProvider::setFilterText( const QString& text )
         }
     }
     if(!search.isEmpty() && search.back().endsWith('(')) {
-        search.back() = search.back().left(search.back().length()-1);
+        search.back().chop(1);
     }
 
     if(text.isEmpty() || search.isEmpty()) {

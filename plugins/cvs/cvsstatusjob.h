@@ -8,8 +8,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef CVSSTATUSJOB_H
-#define CVSSTATUSJOB_H
+#ifndef KDEVPLATFORM_PLUGIN_CVSSTATUSJOB_H
+#define KDEVPLATFORM_PLUGIN_CVSSTATUSJOB_H
 
 #include "cvsjob.h"
 #include <vcs/vcsstatusinfo.h>

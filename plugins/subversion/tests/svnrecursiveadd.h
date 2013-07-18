@@ -17,8 +17,8 @@
 *   Free Software Foundation, Inc.,                                       *
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
 ***************************************************************************/
-#ifndef SVNRECURSIVEADD_H
-#define SVNRECURSIVEADD_H
+#ifndef KDEVPLATFORM_PLUGIN_SVNRECURSIVEADD_H
+#define KDEVPLATFORM_PLUGIN_SVNRECURSIVEADD_H
 #include <QtCore/QObject>
 
 class SvnRecursiveAdd
@@ -32,4 +32,4 @@ private slots:
     void test();
 };
 
-#endif // SVNRECURSIVEADD_H
+#endif // KDEVPLATFORM_PLUGIN_SVNRECURSIVEADD_H

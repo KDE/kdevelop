@@ -25,6 +25,7 @@
 #include <KTextEditor/View>
 #include <KToolInvocation>
 #include <KMessageBox>
+#include <KMessageWidget>
 
 #include "snippetstore.h"
 #include "snippet.h"
@@ -145,8 +146,14 @@ void EditSnippet::validate()
         for ( int i = 0; i < name.length(); ++i ) {
             if ( name.at(i).isSpace() ) {
                 valid = false;
+                m_ui->messageWidget->setText(i18n("Snippet name cannot contain spaces"));
+                m_ui->messageWidget->animatedShow();
                 break;
             }
+        }
+        if (valid) {
+            // hide message widget if snippet does not include spaces
+            m_ui->messageWidget->animatedHide();
         }
     }
     button(Ok)->setEnabled(valid);

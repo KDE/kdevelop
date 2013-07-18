@@ -18,8 +18,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef DASHBOARDPLUGINLOADER_H
-#define DASHBOARDPLUGINLOADER_H
+#ifndef KDEVPLATFORM_PLUGIN_DASHBOARDPLUGINLOADER_H
+#define KDEVPLATFORM_PLUGIN_DASHBOARDPLUGINLOADER_H
 
 #include <plasma/pluginloader.h>
 #include <plasma/dataengine.h>
@@ -45,4 +45,4 @@ class DashboardPluginLoader : public Plasma::PluginLoader
         QWeakPointer<DashboardDataEngine> m_engine;
 };
 
-#endif // DASHBOARDPLUGINLOADER_H
+#endif // KDEVPLATFORM_PLUGIN_DASHBOARDPLUGINLOADER_H

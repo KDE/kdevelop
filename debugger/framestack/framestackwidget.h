@@ -21,8 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KDEVELOP_FRAMESTACKWIDGET_H
-#define KDEVELOP_FRAMESTACKWIDGET_H
+#ifndef KDEVPLATFORM_FRAMESTACKWIDGET_H
+#define KDEVPLATFORM_FRAMESTACKWIDGET_H
 
 #include <QSplitter>
 
@@ -51,11 +51,11 @@ class KDEVPLATFORMDEBUGGER_EXPORT FramestackWidget : public QSplitter
     private Q_SLOTS:
         void currentSessionChanged(KDevelop::IDebugSession* session);
 
-        void setThreadShown(const QModelIndex& idx);
+        void setThreadShown(const QModelIndex& current);
         void checkFetchMoreFrames();
         void currentThreadChanged(int);
         void currentFrameChanged(int);
-        void frameClicked(const QModelIndex& idx);
+        void frameSelectionChanged(const QModelIndex& current);
         void frameContextMenuRequested(const QPoint &pos);
         void copySelection();
         void selectAll();
@@ -71,4 +71,4 @@ class KDEVPLATFORMDEBUGGER_EXPORT FramestackWidget : public QSplitter
 
 }
 
-#endif // KDEVELOP_FRAMESTACKWIDGET_H
+#endif // KDEVPLATFORM_FRAMESTACKWIDGET_H

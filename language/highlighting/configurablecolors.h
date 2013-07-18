@@ -21,8 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KDEV_CONFIGURABLECOLORS_H
-#define KDEV_CONFIGURABLECOLORS_H
+#ifndef KDEVPLATFORM_CONFIGURABLECOLORS_H
+#define KDEVPLATFORM_CONFIGURABLECOLORS_H
 
 #include "codehighlighting.h"
 #include "colorcache.h"
@@ -56,6 +56,6 @@ class CodeHighlightingColors : public ConfigurableHighlightingColors {
 };
 }
 
-#endif // KDEV_CONFIGURABLECOLORS_H
+#endif // KDEVPLATFORM_CONFIGURABLECOLORS_H
 
 // kate: space-indent on; indent-width 2; replace-trailing-space-save on; show-tabs on; tab-indents on; tab-width 2;

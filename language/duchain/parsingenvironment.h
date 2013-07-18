@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef PARSINGENVIRONMENT_H
-#define PARSINGENVIRONMENT_H
+#ifndef KDEVPLATFORM_PARSINGENVIRONMENT_H
+#define KDEVPLATFORM_PARSINGENVIRONMENT_H
 
 #include <QtCore/QDateTime>
 #include <QtCore/QString>

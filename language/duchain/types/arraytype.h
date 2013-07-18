@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef ARRAYTYPE_H
-#define ARRAYTYPE_H
+#ifndef KDEVPLATFORM_ARRAYTYPE_H
+#define KDEVPLATFORM_ARRAYTYPE_H
 
 #include "abstracttype.h"
 
@@ -105,6 +105,6 @@ inline ArrayType* fastCast<ArrayType*>(AbstractType* from) {
 
 }
 
-#endif // TYPESYSTEM_H
+#endif // KDEVPLATFORM_TYPESYSTEM_H
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

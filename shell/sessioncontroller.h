@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
 Copyright 2008 Andreas Pakulat <apaku@gmx.de>
+Copyright 2013 Milian Wolff <mail@milianw.de>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public
@@ -17,25 +18,59 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#ifndef SESSIONCONTROLLER_H
-#define SESSIONCONTROLLER_H
+#ifndef KDEVPLATFORM_SESSIONCONTROLLER_H
+#define KDEVPLATFORM_SESSIONCONTROLLER_H
 
 #include "shellexport.h"
+
 #include "session.h"
+#include <interfaces/isessionlock.h>
+
 #include <QtCore/QObject>
-#include <QtCore/QPointer>
-#include <QtCore/QUuid>
-#include <QtCore/QDir>
+
 #include <kxmlguiclient.h>
-#include <kconfiggroup.h>
-#include <kglobal.h>
-#include <ksharedconfig.h>
-#include <kstandarddirs.h>
-#include <kcomponentdata.h>
-#include <klockfile.h>
 
 namespace KDevelop
 {
+
+struct SessionRunInfo
+{
+    SessionRunInfo()
+    : isRunning(false)
+    , holderPid(-1)
+    {}
+    bool operator==(const SessionRunInfo& o) const
+    {
+        return isRunning == o.isRunning && holderPid == o.holderPid
+                && holderApp == o.holderApp && holderHostname == o.holderHostname;
+    }
+    bool operator!=(const SessionRunInfo& o) const
+    {
+        return !(operator==(o));
+    }
+    // if this is true, this session is currently running in an external process
+    bool isRunning;
+    // if the session is running, this contains the PID of its process
+    int holderPid;
+    // if the session is running, this contains the name of its process
+    QString holderApp;
+    // if the session is running, this contains the host name where the process runs
+    QString holderHostname;
+};
+
+struct TryLockSessionResult
+{
+    TryLockSessionResult(const ISessionLock::Ptr& _lock)
+    : lock(_lock)
+    {}
+    TryLockSessionResult(const SessionRunInfo& _runInfo)
+    : runInfo(_runInfo)
+    {}
+    // if this is non-null then the session was locked
+    ISessionLock::Ptr lock;
+    // otherwise this contains information about who is locking the session
+    SessionRunInfo runInfo;
+};
 
 class KDEVPLATFORMSHELL_EXPORT SessionController : public QObject, public KXMLGUIClient
 {
@@ -46,44 +81,19 @@ public:
     void initialize( const QString& session );
     void cleanup();
 
-    struct LockSessionState {
-        LockSessionState()
-         : success(true),
-           holderPid(-1),
-           lockResult( KLockFile::LockOK )
-        {
-        }
-        operator bool() const {
-            return success;
-        }
-        bool success;
-        QString holderApp;
-        QString holderHostname;
-        int holderPid;
-        QString lockFilename;
-        KLockFile::Ptr lockFile;
-        KLockFile::LockResult lockResult;
-        QString sessionId;
-        QString DBusService;
-
-        /// Tries to own the lock-file; stores its status in @ref lockResult
-        void attemptRelock()
-        {
-            lockResult = lockFile->lock( KLockFile::ForceFlag | KLockFile::NoBlockFlag );
-        }
-
-        /// Force-removes the lock-file.
-        void forceRemoveLockfile() const
-        {
-            if( QFile::exists( lockFilename ) ) {
-                QFile::remove( lockFilename );
-            }
-        }
-    };
-
     /// Returns whether the given session can be locked (i. e., is not locked currently).
     /// @param doLocking whether to really lock the session or just "dry-run" the locking process
-    static LockSessionState tryLockSession(QString id, bool doLocking = false);
+    static TryLockSessionResult tryLockSession(const QString& id);
+
+    /**
+     * @return true when the given session is currently running, false otherwise
+     */
+    static bool isSessionRunning(const QString& id);
+
+    /**
+     * @return information about whether the session @p id is running
+     */
+    static SessionRunInfo sessionRunInfo(const QString& id);
 
     /// The application should call this on startup to tell the
     /// session-controller about the received arguments.
@@ -93,6 +103,7 @@ public:
     ///Finds a session by its name or by its UUID
     Session* session( const QString& nameOrId ) const;
     virtual ISession* activeSession() const;
+    ISessionLock::Ptr activeSessionLock() const;
     QList<QString> sessionNames() const;
     Session* createSession( const QString& name );
     
@@ -103,9 +114,13 @@ public:
     void startNewSession();
     
     void loadSession( const QString& nameOrId );
-    void deleteSession( const QString& nameOrId );
+    void deleteSession( const ISessionLock::Ptr& lock );
+    static void deleteSessionFromDisk( const ISessionLock::Ptr& lock );
     QString cloneSession( const QString& nameOrid );
-    static QString sessionDirectory();
+    /**
+     * Path to session directory for the session with the given @p sessionId.
+     */
+    static QString sessionDirectory( const QString& sessionId );
     static QString cfgSessionGroup();
     static QString cfgActiveSessionEntry();
 
@@ -124,10 +139,9 @@ public:
     /// 3) to quit the current (starting-up) instance.
     /// @param sessionName session name (for the message)
     /// @param sessionId current session GUID (to return if user chooses force-removal)
-    /// @param state session lock state
+    /// @param runInfo the run information about the session
     /// @return new session GUID to try or an empty string if application startup shall be aborted
-    static QString handleLockedSession( const QString& sessionName, const QString& sessionId,
-                                        const SessionController::LockSessionState& state );
+    static QString handleLockedSession( const QString& sessionName, const QString& currentSessionId, const SessionRunInfo& runInfo );
 
     void plugActions();
     
@@ -151,7 +165,7 @@ private slots:
 private:
     Q_PRIVATE_SLOT( d, void newSession() )
     Q_PRIVATE_SLOT( d, void configureSessions() )
-    Q_PRIVATE_SLOT( d, void deleteSession() )
+    Q_PRIVATE_SLOT( d, void deleteCurrentSession() )
     Q_PRIVATE_SLOT( d, void renameSession() )
     Q_PRIVATE_SLOT( d, void loadSessionFromAction( QAction* ) )
     class SessionControllerPrivate* const d;

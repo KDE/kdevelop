@@ -28,8 +28,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#ifndef CODECONTEXT_H
-#define CODECONTEXT_H
+#ifndef KDEVPLATFORM_CODECONTEXT_H
+#define KDEVPLATFORM_CODECONTEXT_H
 
 #include <interfaces/context.h>
 

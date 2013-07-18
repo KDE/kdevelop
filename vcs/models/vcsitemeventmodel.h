@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef VCSITEMEVENTMODEL_H
-#define VCSITEMEVENTMODEL_H
+#ifndef KDEVPLATFORM_VCSITEMEVENTMODEL_H
+#define KDEVPLATFORM_VCSITEMEVENTMODEL_H
 
 
 #include <QtGui/QStandardItemModel>
@@ -39,6 +39,7 @@ public:
     VcsItemEventModel( QObject* parent );
     ~VcsItemEventModel();
     
+    virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
     void addItemEvents( const QList<KDevelop::VcsItemEvent>& );
     KDevelop::VcsItemEvent itemEventForIndex( const QModelIndex& ) const;
 };

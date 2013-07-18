@@ -39,6 +39,7 @@ Boston, MA 02110-1301, USA.
 #include <kplugininfo.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
+#include <ktexteditor/annotationinterface.h>
 
 #include <sublime/area.h>
 #include <sublime/view.h>
@@ -48,6 +49,7 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/iproject.h>
 #include <interfaces/iselectioncontroller.h>
 #include <interfaces/context.h>
+#include <interfaces/ilanguagecontroller.h>
 #include <project/projectmodel.h>
 
 #include "core.h"
@@ -59,8 +61,12 @@ Boston, MA 02110-1301, USA.
 #include <kmessagebox.h>
 #include <KIO/Job>
 #include "workingsetcontroller.h"
+#include <vcs/interfaces/ibasicversioncontrol.h>
+#include <vcs/models/vcsannotationmodel.h>
+#include <vcs/vcsjob.h>
 
 #include <config-kdevplatform.h>
+#include <language/backgroundparser/backgroundparser.h>
 
 #ifdef HAVE_KOMPARE
     #include "patchdocument.h"
@@ -304,7 +310,7 @@ struct DocumentControllerPrivate {
                 } else
                 {
                     int openAsText = KMessageBox::questionYesNo(0, i18n("KDevelop could not find the editor for file '%1' of type %2.\nDo you want to open it as plain text?", url.fileName(), mimeType->name()), i18nc("@title:window", "Could Not Find Editor"),
-                                                                KStandardGuiItem::no(), KStandardGuiItem::yes(), "AskOpenWithTextEditor");
+                                                                KStandardGuiItem::yes(), KStandardGuiItem::no(), "AskOpenWithTextEditor");
                     if (openAsText == KMessageBox::Yes)
                         doc = new TextDocument(url, Core::self(), _encoding);
                     else
@@ -490,7 +496,8 @@ struct DocumentControllerPrivate {
             
             if (!activationParams.testFlag(IDocumentController::DoNotActivate))
             {
-                uiController->activeSublimeWindow()->activateView(partView);
+                uiController->activeSublimeWindow()->activateView(
+                    partView, !activationParams.testFlag(IDocumentController::DoNotFocus));
             }
             if (!controller->isEmptyDocumentUrl(url))
             {
@@ -530,7 +537,12 @@ struct DocumentControllerPrivate {
             if (doc != previousActiveDocument || activePosition != previousActivePosition)
                 emit controller->documentJumpPerformed(doc, activePosition, previousActiveDocument, previousActivePosition);
         }
-        
+
+        if ( doc->textDocument() ) {
+            QObject::connect(doc->textDocument(), SIGNAL(reloaded(KTextEditor::Document*)), controller,
+                             SLOT(reloaded(KTextEditor::Document*)));
+        }
+
         return true;
     }
 
@@ -547,11 +559,14 @@ struct DocumentControllerPrivate {
     QPointer<KAction> closeAllOthers;
     KRecentFilesAction* fileOpenRecent;
     KTextEditor::Document* globalTextEditorInstance;
-
-/*    HistoryEntry createHistoryEntry();
-    void addHistoryEntry();
-    void jumpTo( const HistoryEntry & );*/
 };
+
+void DocumentController::reloaded(KTextEditor::Document* doc)
+{
+    ICore::self()->languageController()->backgroundParser()->addDocument(IndexedString(doc->url()),
+            (TopDUContext::Features) ( TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdate ),
+            BackgroundParser::BestPriority, 0);
+}
 
 DocumentController::DocumentController( QObject *parent )
         : IDocumentController( parent )
@@ -603,7 +618,7 @@ void DocumentController::setupActions()
     action->setText(i18n( "&Open..." ) );
     connect( action, SIGNAL(triggered(bool)), SLOT(chooseDocument()) );
     action->setToolTip( i18n( "Open file" ) );
-    action->setWhatsThis( i18n( "<b>Open file</b><p>Opens a file for editing.</p>" ) );
+    action->setWhatsThis( i18n( "Opens a file for editing." ) );
 
     d->fileOpenRecent = KStandardAction::openRecent(this,
                     SLOT(slotOpenDocument(KUrl)), ac);
@@ -615,7 +630,7 @@ void DocumentController::setupActions()
     action->setText(i18n( "Save Al&l" ) );
     connect( action, SIGNAL(triggered(bool)), SLOT(slotSaveAllDocuments()) );
     action->setToolTip( i18n( "Save all open documents" ) );
-    action->setWhatsThis( i18n( "<b>Save all documents</b><p>Save all open documents, prompting for additional information when necessary.</p>" ) );
+    action->setWhatsThis( i18n( "Save all open documents, prompting for additional information when necessary." ) );
     action->setShortcut( QKeySequence(Qt::CTRL + Qt::Key_L) );
     action->setEnabled(false);
 
@@ -624,7 +639,7 @@ void DocumentController::setupActions()
     action->setText(i18n( "Reload All" ) );
     connect( action, SIGNAL(triggered(bool)), SLOT(reloadAllDocuments()) );
     action->setToolTip( i18n( "Revert all open documents" ) );
-    action->setWhatsThis( i18n( "<b>Revert all documents</b><p>Revert all open documents, returning to the previously saved state.</p>" ) );
+    action->setWhatsThis( i18n( "Revert all open documents, returning to the previously saved state." ) );
     action->setEnabled(false);
 
     action = d->close = ac->addAction( "file_close" );
@@ -632,8 +647,8 @@ void DocumentController::setupActions()
     action->setShortcut( Qt::CTRL + Qt::Key_W );
     action->setText( i18n( "&Close" ) );
     connect( action, SIGNAL(triggered(bool)), SLOT(fileClose()) );
-    action->setToolTip( i18n( "Close File" ) );
-    action->setWhatsThis( i18n( "<b>Close File</b><p>Closes current file.</p>" ) );
+    action->setToolTip( i18n( "Close file" ) );
+    action->setWhatsThis( i18n( "Closes current file." ) );
     action->setEnabled(false);
 
     action = d->closeAll = ac->addAction( "file_close_all" );
@@ -641,7 +656,7 @@ void DocumentController::setupActions()
     action->setText(i18n( "Clos&e All" ) );
     connect( action, SIGNAL(triggered(bool)), SLOT(closeAllDocuments()) );
     action->setToolTip( i18n( "Close all open documents" ) );
-    action->setWhatsThis( i18n( "<b>Close all documents</b><p>Close all open documents, prompting for additional information when necessary.</p>" ) );
+    action->setWhatsThis( i18n( "Close all open documents, prompting for additional information when necessary." ) );
     action->setEnabled(false);
 
     action = d->closeAllOthers = ac->addAction( "file_closeother" );
@@ -650,8 +665,14 @@ void DocumentController::setupActions()
     action->setText(i18n( "Close All Ot&hers" ) );
     connect( action, SIGNAL(triggered(bool)), SLOT(closeAllOtherDocuments()) );
     action->setToolTip( i18n( "Close all other documents" ) );
-    action->setWhatsThis( i18n( "<b>Close all other documents</b><p>Close all open documents, with the exception of the currently active document.</p>" ) );
+    action->setWhatsThis( i18n( "Close all open documents, with the exception of the currently active document." ) );
     action->setEnabled(false);
+
+    action = ac->addAction( "vcsannotate_current_document" );
+    connect( action, SIGNAL(triggered(bool)), SLOT(vcsAnnotateCurrentDocument()) );
+    action->setText( i18n( "Show Annotate on current document") );
+    action->setIconText( i18n( "Annotate" ) );
+    action->setIcon( KIcon("user-properties") );
 }
 
 void DocumentController::setEncoding( const QString &encoding )
@@ -1119,7 +1140,8 @@ bool DocumentController::openDocumentsWithSplitSeparators( Sublime::AreaIndex* i
                 index = index->first();
             // Simply open the document into the area index
             IDocument* doc = Core::self()->documentControllerInternal()->openDocument(KUrl(urlsWithSeparators.front()),
-                        KTextEditor::Cursor::invalid(), IDocumentController::DoNotActivate | IDocumentController::DoNotCreateView);
+                        KTextEditor::Cursor::invalid(),
+                        (IDocumentController::DocumentActivation) ( IDocumentController::DoNotActivate | IDocumentController::DoNotCreateView) );
             Sublime::Document *sublimeDoc = dynamic_cast<Sublime::Document*>(doc);
             if (sublimeDoc) {
                 Sublime::View* view = sublimeDoc->createView();
@@ -1187,6 +1209,43 @@ bool DocumentController::openDocumentsWithSplitSeparators( Sublime::AreaIndex* i
     return ret;
 }
 
+void DocumentController::vcsAnnotateCurrentDocument()
+{
+    IDocument* doc = activeDocument();
+    KUrl url = doc->url();
+    IProject* project = KDevelop::ICore::self()->projectController()->findProjectForUrl(url);
+    IBasicVersionControl* iface = 0;
+    if(project) {
+        iface = project->versionControlPlugin()->extension<IBasicVersionControl>();
+    }
+
+    if (iface && doc && doc->textDocument() && iface->isVersionControlled(url)) {
+        KTextEditor::AnnotationViewInterface* viewiface = qobject_cast<KTextEditor::AnnotationViewInterface*>(doc->textDocument()->activeView());
+        if(viewiface && viewiface->isAnnotationBorderVisible()) {
+            viewiface->setAnnotationBorderVisible(false);
+            return;
+        }
+        KDevelop::VcsJob* job = iface->annotate(url);
+        if( !job )
+        {
+            kWarning() << "Couldn't create annotate job for:" << url << "with iface:" << iface << dynamic_cast<KDevelop::IPlugin*>( iface );
+            return;
+        }
+        KTextEditor::AnnotationInterface* annotateiface = qobject_cast<KTextEditor::AnnotationInterface*>(doc->textDocument());
+
+        if (annotateiface && viewiface) {
+            KDevelop::VcsAnnotationModel* model = new KDevelop::VcsAnnotationModel(job, url, doc->textDocument());
+            annotateiface->setAnnotationModel(model);
+            viewiface->setAnnotationBorderVisible(true);
+        } else {
+            KMessageBox::error(0, i18n("Cannot display annotations, missing interface KTextEditor::AnnotationInterface for the editor."));
+            delete job;
+        }
+    } else {
+        KMessageBox::error(0, i18n("Cannot execute annotate action because the "
+                                   "document was not found, it was not versioned or it was not a text document:\n%1", url.pathOrUrl()));
+    }
+}
 
 }
 

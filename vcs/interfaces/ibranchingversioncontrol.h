@@ -19,8 +19,10 @@
  * 02110-1301, USA.
  */
 
-#ifndef IBRANCHINGVERSIONCONTROL_H
-#define IBRANCHINGVERSIONCONTROL_H
+#ifndef KDEVPLATFORM_IBRANCHINGVERSIONCONTROL_H
+#define KDEVPLATFORM_IBRANCHINGVERSIONCONTROL_H
+
+#include <QObject>
 
 class KUrl;
 class QString;
@@ -78,7 +80,9 @@ public:
    virtual VcsJob* branches(const KUrl &repository) = 0;
 
    /**
-    * Returns the current branch name inside the specified repository
+    * Returns the current branch name inside the specified repository in a QString
+    *
+    * @note If we are not on a branch currently, the string will be empty
     *
     * @param repository The repository path where the current branch will be returned from
     */
@@ -101,6 +105,14 @@ public:
     */
    virtual VcsJob* renameBranch(const KUrl &repository, const QString &oldBranchName, const QString &newBranchName) = 0;
 
+   /**
+    * Tells the implementation to report about changes in the current branch of a
+    * given @p repository.
+    */
+   virtual void registerRepositoryForCurrentBranchChanges(const KUrl& repository) = 0;
+
+Q_SIGNALS:
+    void repositoryBranchChanged(const KUrl& repository);
 };
 
 }

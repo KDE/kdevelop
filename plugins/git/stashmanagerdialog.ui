@@ -11,6 +11,16 @@
     </widget>
    </item>
    <item row="0" column="1">
+    <widget class="QPushButton" name="show">
+     <property name="whatsThis">
+      <string>Show the contents of the stash</string>
+     </property>
+     <property name="text">
+      <string>Show</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
     <widget class="QPushButton" name="apply">
      <property name="whatsThis">
       <string>Applies stash's patch</string>
@@ -20,7 +30,7 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="1">
+   <item row="2" column="1">
     <widget class="QPushButton" name="pop">
      <property name="whatsThis">
       <string>Applies stash's patch and drops the stash</string>
@@ -30,7 +40,7 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="1">
+   <item row="3" column="1">
     <widget class="QPushButton" name="branch">
      <property name="whatsThis">
       <string>Creates a new branch and applies the stash there, then it drops the stash.</string>
@@ -40,7 +50,7 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="1">
+   <item row="4" column="1">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -53,7 +63,7 @@
      </property>
     </spacer>
    </item>
-   <item row="4" column="1">
+   <item row="5" column="1">
     <widget class="QPushButton" name="drop">
      <property name="whatsThis">
       <string>Removes the selected branch</string>

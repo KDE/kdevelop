@@ -114,7 +114,7 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent, bool setLastUs
     setButtons( SearchButton | KDialog::Cancel );
     setButtonText( SearchButton, i18n("Search...") );
     setButtonIcon( SearchButton, KIcon("edit-find") );
-    setCaption( i18n("Find/Replace In Files") );
+    setCaption( i18n("Find/Replace in Files") );
     setDefaultButton( SearchButton );
 
     setupUi(mainWidget());
@@ -151,13 +151,15 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent, bool setLastUs
 
     caseSensitiveCheck->setChecked(cg.readEntry("case_sens", true));
 
-    setDirectory( QDir::homePath() );
+    QList<IProject*> projects = m_plugin->core()->projectController()->projects();
+        setDirectory( !projects.isEmpty() ? allOpenProjectsString : QDir::homePath() );
+
     directoryRequester->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
 
     syncButton->setIcon(KIcon("dirsync"));
     syncButton->setMenu(createSyncButtonMenu());
 
-    recursiveCheck->setChecked(cg.readEntry("recursive", true));
+    depthSpin->setValue(cg.readEntry("depth", -1));
     limitToProjectCheck->setChecked(cg.readEntry("search_project_files", true));
 
     filesCombo->addItems(cg.readEntry("file_patterns", filepatterns));
@@ -267,7 +269,7 @@ GrepDialog::~GrepDialog()
     // memorize the last patterns and paths
     cg.writeEntry("LastSearchItems", qCombo2StringList(patternCombo));
     cg.writeEntry("regexp", regexCheck->isChecked());
-    cg.writeEntry("recursive", recursiveCheck->isChecked());
+    cg.writeEntry("depth", depthSpin->value());
     cg.writeEntry("search_project_files", limitToProjectCheck->isChecked());
     cg.writeEntry("case_sens", caseSensitiveCheck->isChecked());
     cg.writeEntry("exclude_patterns", qCombo2StringList(excludeCombo));
@@ -297,7 +299,7 @@ void GrepDialog::setPattern(const QString &pattern)
 
 void GrepDialog::setDirectory(const QString &dir)
 {
-    if(dir.startsWith('/'))
+    if(QDir::isAbsolutePath(dir))
     {
         directoryRequester->fileDialog()->setUrl( KUrl( dir ) );
         directoryRequester->completionObject()->setDir( dir );
@@ -341,9 +343,9 @@ bool GrepDialog::regexpFlag() const
     return regexCheck->isChecked();
 }
 
-bool GrepDialog::recursiveFlag() const
+int GrepDialog::depthValue() const
 {
-    return recursiveCheck->isChecked();
+    return depthSpin->value();
 }
 
 bool GrepDialog::caseSensitiveFlag() const
@@ -430,7 +432,7 @@ void GrepDialog::performAction(KDialog::ButtonCode button)
     QString description = descriptionOrUrl;
     // Shorten the description
     if(descriptionOrUrl != allOpenFilesString && descriptionOrUrl != allOpenProjectsString && choice.size() > 1)
-        description = i18n("%1, and %2 more items", choice[0].pathOrUrl(), choice.size()-1);
+        description = i18np("%2, and %1 more item", "%2, and %1 more items", choice.size() - 1, choice[0].pathOrUrl());
     
     GrepOutputView *toolView = (GrepOutputView*)ICore::self()->uiController()->
                                findToolView(i18n("Find/Replace in Files"), m_plugin->toolViewFactory(), IUiController::CreateAndRaise);
@@ -459,7 +461,7 @@ void GrepDialog::performAction(KDialog::ButtonCode button)
 
     job->setProjectFilesFlag( useProjectFilesFlag() );
     job->setRegexpFlag( regexpFlag() );
-    job->setRecursive( recursiveFlag() );
+    job->setDepth( depthValue() );
     job->setCaseSensitive( caseSensitiveFlag() );
 
     ICore::self()->runController()->registerJob(job);

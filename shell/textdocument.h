@@ -16,21 +16,18 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef KDEV_TEXTDOCUMENT_H
-#define KDEV_TEXTDOCUMENT_H
+#ifndef KDEVPLATFORM_TEXTDOCUMENT_H
+#define KDEVPLATFORM_TEXTDOCUMENT_H
 
 #include <QtGui/QWidget>
 #include <KDE/KXMLGUIClient>
 
 #include <sublime/view.h>
+#include <ktexteditor/view.h>
 
 #include "partdocument.h"
 
 #include "shellexport.h"
-
-namespace KTextEditor {
-    class View;
-}
 
 namespace KDevelop {
 
@@ -139,6 +136,8 @@ public Q_SLOTS:
 private:
     void setEditorView(KTextEditor::View* view);
     class TextEditorWidgetPrivate* const d;
+
+    Q_PRIVATE_SLOT(d, void viewEditModeChanged(KTextEditor::View*, KTextEditor::View::EditMode));
 
 };
 

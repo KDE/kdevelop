@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEV_OUTPUTPAGE_H
-#define KDEV_OUTPUTPAGE_H
+#ifndef KDEVPLATFORM_PLUGIN_OUTPUTPAGE_H
+#define KDEVPLATFORM_PLUGIN_OUTPUTPAGE_H
 
 #include <QWidget>
 #include <KUrl>
@@ -95,4 +95,4 @@ private:
 
 }
 
-#endif // KDEV_OUTPUTPAGE_H
+#endif // KDEVPLATFORM_PLUGIN_OUTPUTPAGE_H

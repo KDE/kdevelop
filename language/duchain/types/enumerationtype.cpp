@@ -71,7 +71,7 @@ QString EnumerationType::toString() const
 
 uint EnumerationType::hash() const
 {
-  return IdentifiedType::hash() + 57*IntegralType::hash();
+  return KDevHash(IntegralType::hash()) << IdentifiedType::hash();
 }
 
 AbstractType::WhichType EnumerationType::whichType() const

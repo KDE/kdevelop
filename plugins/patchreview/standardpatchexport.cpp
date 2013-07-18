@@ -63,29 +63,45 @@ class EMailExport : public StandardExporter
     virtual QString name() const { return i18n( "Send..." ); }
 };
 
+class TelepathyExport : public StandardExporter
+{
+public:
+    virtual void exportPatch( KDevelop::IPatchSource::Ptr source ) {
+        KProcess::startDetached( QStringList() << "ktp-send-file" << source->file().prettyUrl() );
+    }
+
+    static bool isAvailable() { return !KStandardDirs::findExe( "ktp-send-file" ).isEmpty(); }
+    virtual KIcon icon() const { return KIcon( "telepathy-kde" ); }
+    virtual QString name() const { return i18n( "Send to contact..." ); }
+};
+
 class KompareExport : public StandardExporter
 {
 public:
-    KompareExport( const QString& exe ) : m_exe( exe ) {}
+    KompareExport() {}
 
     virtual void exportPatch( KDevelop::IPatchSource::Ptr source ) {
-        KProcess::startDetached( QStringList() << "kompare" << source->baseDir().prettyUrl() << source->file().prettyUrl() );
+        KProcess::startDetached( QStringList("kompare") << source->baseDir().prettyUrl() << source->file().prettyUrl() );
     }
 
+    static bool isAvailable() { return !KStandardDirs::findExe( "kompare" ).isEmpty(); }
     virtual KIcon icon() const { return KIcon( "kompare" ); }
     virtual QString name() const { return i18n( "Side view (Kompare)..." ); }
 
-    QString m_exe;
 };
 
 StandardPatchExport::StandardPatchExport( PatchReviewPlugin* plugin, QObject* parent )
-    : QObject( parent ), m_plugin( plugin ) {
+    : QObject( parent )
+    , m_plugin( plugin )
+{
     m_exporters.append( new KIOExport );
     m_exporters.append( new EMailExport );
 
-    QString kompare = KStandardDirs::findExe( "kompare" );
-    if( !kompare.isEmpty() ) {
-        m_exporters.append( new KompareExport( kompare ) );
+    if( KompareExport::isAvailable() ) {
+        m_exporters.append( new KompareExport );
+    }
+    if( TelepathyExport::isAvailable() ) {
+        m_exporters.append( new TelepathyExport );
     }
 }
 

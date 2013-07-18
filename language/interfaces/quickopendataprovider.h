@@ -18,8 +18,8 @@
  * Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef QUICKOPENDATAPROVIDER_H
-#define QUICKOPENDATAPROVIDER_H
+#ifndef KDEVPLATFORM_QUICKOPENDATAPROVIDER_H
+#define KDEVPLATFORM_QUICKOPENDATAPROVIDER_H
 
 #include <QtCore/QList>
 #include <QtCore/QObject>

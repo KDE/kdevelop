@@ -17,8 +17,8 @@
   Boston, MA 02110-1301, USA.
 */
 
-#ifndef APPLETSELECTOR_H
-#define APPLETSELECTOR_H
+#ifndef KDEVPLATFORM_PLUGIN_APPLETSELECTOR_H
+#define KDEVPLATFORM_PLUGIN_APPLETSELECTOR_H
 
 #include <KDE/KDialog>
 #include <KPluginInfo>
@@ -48,4 +48,4 @@ class AppletSelector : public KDialog
         Ui::AppletSelector* m_ui;
 };
 
-#endif // APPLETSELECTOR_H
+#endif // KDEVPLATFORM_PLUGIN_APPLETSELECTOR_H

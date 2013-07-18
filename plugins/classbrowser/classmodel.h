@@ -20,8 +20,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef CLASSMODEL_H
-#define CLASSMODEL_H
+#ifndef KDEVPLATFORM_PLUGIN_CLASSMODEL_H
+#define KDEVPLATFORM_PLUGIN_CLASSMODEL_H
 
 #include <QtCore/QAbstractItemModel>
 #include "classmodelnode.h"

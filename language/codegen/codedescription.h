@@ -17,8 +17,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVELOP_CODEDESCRIPTION_H
-#define KDEVELOP_CODEDESCRIPTION_H
+#ifndef KDEVPLATFORM_CODEDESCRIPTION_H
+#define KDEVPLATFORM_CODEDESCRIPTION_H
 
 #include "../languageexport.h"
 #include <language/duchain/duchainpointer.h>
@@ -269,4 +269,4 @@ Q_DECLARE_METATYPE(KDevelop::InheritanceDescription)
 Q_DECLARE_METATYPE(KDevelop::InheritanceDescriptionList)
 Q_DECLARE_METATYPE(KDevelop::ClassDescription)
 
-#endif // KDEVELOP_CODEDESCRIPTION_H
+#endif // KDEVPLATFORM_CODEDESCRIPTION_H

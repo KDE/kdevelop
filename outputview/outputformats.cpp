@@ -34,8 +34,9 @@ ErrorFormat::ErrorFormat( const QString& regExp, int file, int line, int text, c
     , compiler( comp )
 {}
 
-ActionFormat::ActionFormat( const QString& _action, const QString& _tool, const QString& regExp, int file )
-    : action( _action )
+ActionFormat::ActionFormat( const char* _context, const char* _action, const QString& _tool, const QString& regExp, int file )
+    : context( _context )
+    , action( _action )
     , expression( regExp )
     , tool( _tool )
     , toolGroup(-1)
@@ -43,8 +44,9 @@ ActionFormat::ActionFormat( const QString& _action, const QString& _tool, const 
 {
 }
 
-ActionFormat::ActionFormat( const QString& _action, int tool, int file, const QString& regExp)
-    : action( _action )
+ActionFormat::ActionFormat( const char* _context, const char* _action, int tool, int file, const QString& regExp)
+    : context( _context )
+    , action( _action )
     , expression( regExp )
     , toolGroup( tool )
     , fileGroup( file )

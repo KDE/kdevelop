@@ -19,15 +19,19 @@
  * 02110-1301, USA.
  */
 
-#ifndef IREPOSITORYVERSIONCONTROL_H
-#define IREPOSITORYVERSIONCONTROL_H
+#ifndef KDEVPLATFORM_IREPOSITORYVERSIONCONTROL_H
+#define KDEVPLATFORM_IREPOSITORYVERSIONCONTROL_H
+
+#include <QObject>
 
 class QString;
-class VcsRevision;
 class QStringList;
 
 namespace KDevelop
 {
+
+class VcsRevision;
+class VcsJob;
 
 class IRepositoryVersionControl
 {
@@ -59,5 +63,6 @@ public:
 }
 
 Q_DECLARE_INTERFACE( KDevelop::IRepositoryVersionControl, "org.kdevelop.IRepositoryVersionControl" )
+
 #endif
 

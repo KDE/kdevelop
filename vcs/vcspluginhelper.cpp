@@ -46,6 +46,7 @@
 #include <project/projectmodel.h>
 #include <language/interfaces/codecontext.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>
+#include "interfaces/idistributedversioncontrol.h"
 #include <vcs/widgets/vcscommitdialog.h>
 #include <vcs/models/vcsannotationmodel.h>
 #include <vcs/vcsjob.h>
@@ -96,9 +97,11 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
     KAction * revertAction;
     KAction * diffForRevAction;
     KAction * diffForRevGlobalAction;
+    KAction * pushAction;
+    KAction * pullAction;
     QPointer<QTimer> modificationTimer;
     
-    void createActions(QObject * parent) {
+    void createActions(VcsPluginHelper* parent) {
         commitAction = new KAction(KIcon("svn-commit"), i18n("Commit..."), parent);
         updateAction = new KAction(KIcon("svn-update"), i18n("Update"), parent);
         addAction = new KAction(KIcon("list-add"), i18n("Add"), parent);
@@ -108,6 +111,8 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
         annotationAction = new KAction(KIcon("user-properties"), i18n("Annotation..."), parent);
         diffForRevAction = new KAction(KIcon("vcs_diff"), i18n("Show Diff..."), parent);
         diffForRevGlobalAction = new KAction(KIcon("vcs_diff"), i18n("Show Diff (all files)..."), parent);
+        pushAction = new KAction(KIcon("arrow-up-double"), i18n("Push"), parent);
+        pullAction = new KAction(KIcon("arrow-down-double"), i18n("Pull"), parent);
         
         connect(commitAction, SIGNAL(triggered()), parent, SLOT(commit()));
         connect(addAction, SIGNAL(triggered()), parent, SLOT(add()));
@@ -118,6 +123,8 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
         connect(annotationAction, SIGNAL(triggered()), parent, SLOT(annotation()));
         connect(diffForRevAction, SIGNAL(triggered()), parent, SLOT(diffForRev()));
         connect(diffForRevGlobalAction, SIGNAL(triggered()), parent, SLOT(diffForRevGlobal()));
+        connect(pullAction, SIGNAL(triggered()), parent, SLOT(pull()));
+        connect(pushAction, SIGNAL(triggered()), parent, SLOT(push()));
     }
     
     bool allLocalFiles(const KUrl::List& urls)
@@ -144,7 +151,12 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
         menu->setIcon(KIcon(ICore::self()->pluginController()->pluginInfo(plugin).icon()));
         
         menu->addAction(commitAction);
-        menu->addAction(updateAction);
+        if(plugin->extension<IDistributedVersionControl>()) {
+            menu->addAction(pushAction);
+            menu->addAction(pullAction);
+        } else {
+            menu->addAction(updateAction);
+        }
         menu->addSeparator();
         menu->addAction(addAction);
         menu->addAction(revertAction);
@@ -152,8 +164,6 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
         menu->addAction(historyAction);
         menu->addAction(annotationAction);
         menu->addAction(diffToBaseAction);
-        
-        addAction->setEnabled(!allVersioned);
         
         const bool singleVersionedFile = ctxUrls.count() == 1 && allVersioned;
         historyAction->setEnabled(singleVersionedFile);
@@ -246,9 +256,11 @@ void VcsPluginHelper::revert()
     foreach(const KUrl& url, d->ctxUrls) {
         IDocument* doc=ICore::self()->documentController()->documentForUrl(url);
         
-        if(doc) {
-            KTextEditor::ModificationInterface* modif=dynamic_cast<KTextEditor::ModificationInterface*>(doc->textDocument());
-            modif->setModifiedOnDiskWarning(false);
+        if(doc && doc->textDocument()) {
+            KTextEditor::ModificationInterface* modif = dynamic_cast<KTextEditor::ModificationInterface*>(doc->textDocument());
+            if (modif) {
+                modif->setModifiedOnDiskWarning(false);
+            }
             doc->textDocument()->setModified(false);
         }
     }
@@ -346,20 +358,14 @@ void VcsPluginHelper::diffForRevGlobal()
 void VcsPluginHelper::history(const VcsRevision& rev)
 {
     SINGLEURL_SETUP_VARS
-    KDevelop::VcsJob *job = iface->log(url, rev, VcsRevision::createSpecialRevision( VcsRevision::Start ));
-    if (!job) {
-        return;
-    }
-
-    KDialog* dlg = new KDialog();
+    KDialog* dlg = new KDialog(ICore::self()->uiController()->activeMainWindow());
+    dlg->setAttribute(Qt::WA_DeleteOnClose);
     dlg->setButtons(KDialog::Close);
     dlg->setCaption(i18nc("%1: path or URL, %2: name of a version control system",
                           "%2 History (%1)", url.pathOrUrl(), iface->name()));
-    KDevelop::VcsEventWidget* logWidget = new KDevelop::VcsEventWidget(url, job, dlg);
+    KDevelop::VcsEventWidget* logWidget = new KDevelop::VcsEventWidget(url, rev, iface, dlg);
     dlg->setMainWidget(logWidget);
     dlg->show();
-    connect( dlg, SIGNAL(closeClicked()), job, SLOT(kill()) );
-    connect( dlg, SIGNAL(closeClicked()), dlg, SLOT(deleteLater()) );
 }
 
 void VcsPluginHelper::annotation()
@@ -387,9 +393,6 @@ void VcsPluginHelper::annotation()
             connect(doc->textDocument()->activeView(),
                     SIGNAL(annotationContextMenuAboutToShow(KTextEditor::View*,QMenu*,int)),
                     this, SLOT(annotationContextMenuAboutToShow(KTextEditor::View*,QMenu*,int)));
-            connect(doc->textDocument()->activeView(),
-                    SIGNAL(annotationBorderVisibilityChanged(KTextEditor::View*, bool)),
-                    SLOT(annotationVisibilityChange(KTextEditor::View*,QMenu*,int)));
         } else {
             KMessageBox::error(0, i18n("Cannot display annotations, missing interface KTextEditor::AnnotationInterface for the editor."));
             delete job;
@@ -432,23 +435,20 @@ void VcsPluginHelper::annotationContextMenuAboutToShow( KTextEditor::View* view,
     VcsAnnotationModel* model = qobject_cast<VcsAnnotationModel*>( annotateiface->annotationModel() );
     Q_ASSERT(model);
 
-    if(menu->actions().count()<3) {
-        VcsRevision rev = model->revisionForLine(line);
-        d->diffForRevAction->setData(QVariant::fromValue(rev));
-        d->diffForRevGlobalAction->setData(QVariant::fromValue(rev));
-        menu->addSeparator();
-        menu->addAction(d->diffForRevAction);
-        menu->addAction(d->diffForRevGlobalAction);
-        menu->addAction(new FlexibleAction(KIcon("edit-copy"), i18n("Copy Revision"), new CopyFunction(rev.revisionValue().toString()), menu));
-        menu->addAction(new FlexibleAction(KIcon("view-history"), i18n("History..."), new HistoryFunction(this, rev), menu));
+    VcsRevision rev = model->revisionForLine(line);
+    // check if the user clicked on a row without revision information
+    if (rev.revisionType() == VcsRevision::Invalid) {
+        // in this case, do not action depending on revision informations
+        return;
     }
-}
 
-void VcsPluginHelper::annotationVisibilityChange(KTextEditor::View* view, QMenu* menu, int visible)
-{
-    Q_UNUSED(view);
-    Q_UNUSED(menu);
-    Q_UNUSED(visible);
+    d->diffForRevAction->setData(QVariant::fromValue(rev));
+    d->diffForRevGlobalAction->setData(QVariant::fromValue(rev));
+    menu->addSeparator();
+    menu->addAction(d->diffForRevAction);
+    menu->addAction(d->diffForRevGlobalAction);
+    menu->addAction(new FlexibleAction(KIcon("edit-copy"), i18n("Copy Revision"), new CopyFunction(rev.revisionValue().toString()), menu));
+    menu->addAction(new FlexibleAction(KIcon("view-history"), i18n("History..."), new HistoryFunction(this, rev), menu));
 }
 
 void VcsPluginHelper::update()
@@ -479,6 +479,23 @@ void VcsPluginHelper::commit()
         commitDialog->exec();
     }
 }
+
+void VcsPluginHelper::push()
+{
+    foreach(const KUrl& url, d->ctxUrls) {
+        VcsJob* job = d->plugin->extension<IDistributedVersionControl>()->push(url, VcsLocation());
+        ICore::self()->runController()->registerJob(job);
+    }
+}
+
+void VcsPluginHelper::pull()
+{
+    foreach(const KUrl& url, d->ctxUrls) {
+        VcsJob* job = d->plugin->extension<IDistributedVersionControl>()->pull(VcsLocation(), url);
+        ICore::self()->runController()->registerJob(job);
+    }
+}
+
 }
 
 

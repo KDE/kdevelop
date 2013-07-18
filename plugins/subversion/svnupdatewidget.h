@@ -8,8 +8,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SVNUPDATEWIDGET_H
-#define SVNUPDATEWIDGET_H
+#ifndef KDEVPLATFORM_PLUGIN_SVNUPDATEWIDGET_H
+#define KDEVPLATFORM_PLUGIN_SVNUPDATEWIDGET_H
 
 #include <kdialog.h>
 class SvnRevision;

@@ -16,12 +16,13 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#ifndef WORKINGSETTOOLTIPWIDGET_H
-#define WORKINGSETTOOLTIPWIDGET_H
+#ifndef KDEVPLATFORM_WORKINGSETTOOLTIPWIDGET_H
+#define KDEVPLATFORM_WORKINGSETTOOLTIPWIDGET_H
 
 #include <QWidget>
 #include <QMap>
 
+class QLabel;
 class QToolButton;
 class QPushButton;
 
@@ -49,6 +50,8 @@ public slots:
     void previousDocument();
 
 private:
+    bool isActiveSet() const;
+
     class FileWidget : public QWidget {
         public:
         QToolButton* m_button;
@@ -62,6 +65,7 @@ private:
     QPushButton* m_mergeButton;
     QPushButton* m_subtractButton;
     QPushButton* m_openButton;
+    QLabel* m_documentsLabel;
     WorkingSetToolButton* m_setButton;
 
     QPushButton* m_deleteButton;
@@ -69,4 +73,4 @@ private:
 
 }
 
-#endif // WORKINGSETTOOLTIPWIDGET_H
+#endif // KDEVPLATFORM_WORKINGSETTOOLTIPWIDGET_H

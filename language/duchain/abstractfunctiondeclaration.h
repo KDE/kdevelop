@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef ABSTRACTFUNCTIONDECLARATION_H
-#define ABSTRACTFUNCTIONDECLARATION_H
+#ifndef KDEVPLATFORM_ABSTRACTFUNCTIONDECLARATION_H
+#define KDEVPLATFORM_ABSTRACTFUNCTIONDECLARATION_H
 
 #include <QtCore/QString>
 #include "../languageexport.h"
@@ -124,6 +124,6 @@ class MergeAbstractFunctionDeclaration : public Base, public AbstractFunctionDec
 
 }
 
-#endif // ABSTRACTFUNCTIONDECLARATION_H
+#endif // KDEVPLATFORM_ABSTRACTFUNCTIONDECLARATION_H
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

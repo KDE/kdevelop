@@ -25,6 +25,8 @@
 #include <QList>
 
 #include <klocale.h>
+#include <KMimeType>
+#include <KIcon>
 
 #include <tests/modeltest.h>
 #include <QDebug>
@@ -38,12 +40,7 @@ namespace KDevelop
 VcsItemEventModel::VcsItemEventModel( QObject* parent )
     : QStandardItemModel( parent )
 {
-    setHorizontalHeaderLabels(QStringList()
-        << i18n("Location")
-        << i18n("Actions")
-        << i18n("Source Location")
-        << i18n("Source Revision")
-    );
+    setColumnCount(2);
 }
 
 VcsItemEventModel::~VcsItemEventModel()
@@ -51,6 +48,10 @@ VcsItemEventModel::~VcsItemEventModel()
 
 void VcsItemEventModel::addItemEvents( const QList<KDevelop::VcsItemEvent>& list )
 {
+    if(rowCount()==0)
+        setColumnCount(2);
+    
+    bool copySource = false;
     foreach(const KDevelop::VcsItemEvent& ev, list) {
         
         KDevelop::VcsItemEvent::Actions act = ev.actions();
@@ -63,17 +64,43 @@ void VcsItemEventModel::addItemEvents( const QList<KDevelop::VcsItemEvent>& list
             actionStrings << i18n("Modified");
         else if( act & KDevelop::VcsItemEvent::Copied )
             actionStrings << i18n("Copied");
-        
+        else if( act & KDevelop::VcsItemEvent::Replaced )
+            actionStrings << i18n("Replaced");
+        KMimeType::Ptr mime = KMimeType::findByUrl( ev.repositoryLocation(), 0, false, true );
         QList<QStandardItem*> rowItems = QList<QStandardItem*>()
-            << new QStandardItem(ev.repositoryLocation())
-            << new QStandardItem(actionStrings.join(i18nc("separes an action list", ", ")))
-            << new QStandardItem(ev.repositoryCopySourceLocation())
-            << new QStandardItem(ev.repositoryCopySourceRevision().revisionValue().toString());
+            << new QStandardItem(KIcon(mime->iconName()), ev.repositoryLocation())
+            << new QStandardItem(actionStrings.join(i18nc("separes an action list", ", ")));
+        QString loc = ev.repositoryCopySourceLocation();
+        if(!loc.isEmpty()) { //according to the documentation, those are optional. don't force them on the UI
+            rowItems << new QStandardItem(ev.repositoryCopySourceLocation());
+            VcsRevision rev = ev.repositoryCopySourceRevision();
+            if(rev.revisionType()!=VcsRevision::Invalid) {
+                rowItems << new QStandardItem(ev.repositoryCopySourceRevision().revisionValue().toString());
+            }
+            copySource = true;
+        }
         
         rowItems.first()->setData(qVariantFromValue(ev));
         appendRow(rowItems);
     }
+    if(copySource)
+        setColumnCount(4);
 }
+
+QVariant VcsItemEventModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+    if(orientation == Qt::Horizontal && role==Qt::DisplayRole) {
+        switch(section)
+        {
+            case 0: return i18n("Location");
+            case 1: return i18n("Actions");
+            case 2: return i18n("Source Location");
+            case 3: return i18n("Source Revision");
+        }
+    }
+    return QStandardItemModel::headerData(section, orientation, role);
+}
+
 
 KDevelop::VcsItemEvent VcsItemEventModel::itemEventForIndex( const QModelIndex& idx ) const
 {

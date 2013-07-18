@@ -280,9 +280,14 @@ void SourceFormatterSettings::enableStyleButtons()
                      && styleList->currentItem()->data( STYLE_ROLE ).toString().startsWith( userStylePrefix );
 
     QString languageName = cbLanguages->currentText();
-    LanguageSettings& l = languages[languageName];
-    ISourceFormatter* fmt = l.selectedFormatter->formatter;
-    bool hasEditWidget = ( fmt && fmt->editStyleWidget( l.mimetypes.first() ) );
+    QMap< QString, LanguageSettings >::const_iterator it = languages.constFind(languageName);
+    bool hasEditWidget = false;
+    if (it != languages.constEnd()) {
+        const LanguageSettings& l = it.value();
+        Q_ASSERT(l.selectedFormatter);
+        ISourceFormatter* fmt = l.selectedFormatter->formatter;
+        hasEditWidget = ( fmt && fmt->editStyleWidget( l.mimetypes.first() ) );
+    }
     btnDelStyle->setEnabled( userEntry );
     btnEditStyle->setEnabled( userEntry && hasEditWidget );
     btnNewStyle->setEnabled( cbFormatters->currentIndex() >= 0 && hasEditWidget );

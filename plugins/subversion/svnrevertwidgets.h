@@ -8,8 +8,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SVN_REVERTWIDGETS_H
-#define SVN_REVERTWIDGETS_H
+#ifndef KDEVPLATFORM_PLUGIN_SVN_REVERTWIDGETS_H
+#define KDEVPLATFORM_PLUGIN_SVN_REVERTWIDGETS_H
 
 #include <kdialog.h>
 #include "ui_revertoptiondlg.h"

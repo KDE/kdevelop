@@ -9,6 +9,7 @@ add_subdirectory(icons)
 
 set(kdevgit_PART_SRCS
     stashmanagerdialog.cpp
+    stashpatchsource.cpp
     gitmessagehighlighter.cpp
     gitclonejob.cpp
     gitplugin.cpp
@@ -30,4 +31,5 @@ install(TARGETS kdevgit DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 
 ########### install files ###############
-install( FILES kdevgit.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+configure_file(kdevgit.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevgit.desktop)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevgit.desktop DESTINATION ${SERVICES_INSTALL_DIR} )

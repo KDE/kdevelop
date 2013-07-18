@@ -16,8 +16,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef IPARTCONTROLLER_H
-#define IPARTCONTROLLER_H
+#ifndef KDEVPLATFORM_IPARTCONTROLLER_H
+#define KDEVPLATFORM_IPARTCONTROLLER_H
 
 #include <kparts/partmanager.h>
 

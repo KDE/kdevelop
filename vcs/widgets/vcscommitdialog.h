@@ -9,8 +9,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef VCS_COMMITDIALOG_H
-#define VCS_COMMITDIALOG_H
+#ifndef KDEVPLATFORM_VCS_COMMITDIALOG_H
+#define KDEVPLATFORM_VCS_COMMITDIALOG_H
 
 #include <KDE/KDialog>
 #include <KDE/KUrl>

@@ -19,8 +19,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
  
-#ifndef TREEITEM_H
-#define TREEITEM_H
+#ifndef KDEVPLATFORM_TREEITEM_H
+#define KDEVPLATFORM_TREEITEM_H
 
 #include <QtCore/QList>
 #include <QtCore/QVariant>

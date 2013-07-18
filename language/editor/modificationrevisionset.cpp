@@ -231,7 +231,7 @@ static bool nodeNeedsUpdate(uint index) {
   const Utils::SetNodeData* nodeData = FileModificationSetRepositoryRepresenter::repository().nodeFromIndex(index);
   if(nodeData->contiguous()) {
     //Do  the actual checking
-    for(unsigned int a = nodeData->start; a < nodeData->end; ++a) {
+    for(unsigned int a = nodeData->start(); a < nodeData->end(); ++a) {
       const FileModificationPair* data = fileModificationPairRepository().itemFromIndex(a);
       ModificationRevision revision = KDevelop::ModificationRevision::revisionForFile( data->file );
       if( revision != data->revision ) {
@@ -240,7 +240,7 @@ static bool nodeNeedsUpdate(uint index) {
       }
     }
   }else{
-    result = nodeNeedsUpdate(nodeData->leftNode) || nodeNeedsUpdate(nodeData->rightNode);
+    result = nodeNeedsUpdate(nodeData->leftNode()) || nodeNeedsUpdate(nodeData->rightNode());
   }
   
   needsUpdateCache.insert(index, std::make_pair(currentTime, result));

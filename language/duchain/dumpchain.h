@@ -19,8 +19,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef DUMPCHAIN_H
-#define DUMPCHAIN_H
+#ifndef KDEVPLATFORM_DUMPCHAIN_H
+#define KDEVPLATFORM_DUMPCHAIN_H
 
 #include "../languageexport.h"
 
@@ -39,4 +39,4 @@ class DUContext;
 KDEVPLATFORMLANGUAGE_EXPORT void dumpDUContext(DUContext* context, int allowedDepth = 0);
 
 }
-#endif // DUMPCHAIN_H
+#endif // KDEVPLATFORM_DUMPCHAIN_H

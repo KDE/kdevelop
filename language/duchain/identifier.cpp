@@ -24,6 +24,7 @@
 #include "indexedstring.h"
 #include "appendedlist_static.h"
 #include "repositories/itemrepository.h"
+#include "util/kdevhash.h"
 
 #define ifDebug(x)
 
@@ -75,11 +76,11 @@ public:
       Q_ASSERT(dynamic);
       //this must stay thread-safe(may be called by multiple threads at a time)
       //The thread-safety is given because all threads will have the same result, and it will only be written once at the end.
-      uint hash = m_identifier.hash();
+      KDevHash kdevhash;
+      kdevhash << m_identifier.hash() << m_unique;
       FOREACH_FUNCTION_STATIC(const IndexedTypeIdentifier& templateIdentifier, templateIdentifiers)
-        hash = hash * 13 + templateIdentifier.hash();
-      hash += m_unique;
-      m_hash = hash;
+        kdevhash << IndexedTypeIdentifier(templateIdentifier).hash();
+      m_hash = kdevhash;
     }
 
     mutable uint m_hash;
@@ -450,14 +451,7 @@ void Identifier::setTemplateIdentifiers(const QList<IndexedTypeIdentifier>& temp
 
 QString Identifier::toString() const
 {
-  if (!this) {
-    return "(null identifier)";
-  }
-
   QString ret = identifier().str();
-
-/*  if(isUnique())
-    ret += "unique";*/
 
   if (templateIdentifiersCount()) {
     ret.append("< ");
@@ -971,7 +965,8 @@ void QualifiedIdentifier::prepareWrite() {
 }
 
 uint IndexedTypeIdentifier::hash() const {
-    return m_identifier.getIndex() * 13 + (m_isConstant ? 17 : 0) + (m_isReference ? 12371 : 0) + (m_isRValue ? 4543 : 0) + m_pointerConstMask * 89321 + m_pointerDepth * 1023;
+    uint bitfields = m_isConstant | (m_isReference << 1) | (m_isRValue << 2) | (m_pointerDepth << 3) | (m_pointerConstMask << 8);
+    return KDevHash() << m_identifier.getIndex() << bitfields;
 }
 
 bool IndexedTypeIdentifier::operator==(const IndexedTypeIdentifier& rhs) const {

@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
   Copyright 2005 Adam Treat <treat@kde.org>
+  Copyright 2013 Sebastian Kügler <sebas@kde.org>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -18,29 +19,29 @@
 */
 
 #include "kdevdocumentmodel.h"
+#include <KFileItem>
 #include <QtCore/qdebug.h>
 
 KDevDocumentItem::KDevDocumentItem( const QString &name )
     : QStandardItem( name ),
         m_documentState( KDevelop::IDocument::Clean )
-{}
+{
+    setIcon( icon() );
+}
 
 KDevDocumentItem::~KDevDocumentItem()
 {}
 
-// KDevDocumentItem *KDevDocumentItem::itemAt( int index ) const
-// {
-//     return static_cast<KDevDocumentItem*>( QStandardItem::itemFromIndex( index ) );
-// }
-
-KDevMimeTypeItem::KDevMimeTypeItem( const QString &name )
+KDevCategoryItem::KDevCategoryItem( const QString &name )
         : KDevDocumentItem( name )
+{
+    setToolTip( name );
+}
+
+KDevCategoryItem::~KDevCategoryItem()
 {}
 
-KDevMimeTypeItem::~KDevMimeTypeItem()
-{}
-
-QList<KDevFileItem*> KDevMimeTypeItem::fileList() const
+QList<KDevFileItem*> KDevCategoryItem::fileList() const
 {
     QList<KDevFileItem*> lst;
 
@@ -53,7 +54,7 @@ QList<KDevFileItem*> KDevMimeTypeItem::fileList() const
     return lst;
 }
 
-KDevFileItem* KDevMimeTypeItem::file( const KUrl &url ) const
+KDevFileItem* KDevCategoryItem::file( const KUrl &url ) const
 {
     foreach( KDevFileItem * item, fileList() )
     {
@@ -65,9 +66,13 @@ KDevFileItem* KDevMimeTypeItem::file( const KUrl &url ) const
 }
 
 KDevFileItem::KDevFileItem( const KUrl &url )
-        : KDevDocumentItem( url.fileName() ),
-        m_url( url )
-{}
+        : KDevDocumentItem( url.fileName() )
+{
+    setUrl( url );
+    KFileItem fi = KFileItem( url, QString(), 0 );
+    m_fileIcon = fi.iconName();
+    setIcon( KIcon( m_fileIcon ) );
+}
 
 KDevFileItem::~KDevFileItem()
 {}
@@ -82,27 +87,27 @@ KDevDocumentModel::KDevDocumentModel( QObject *parent )
 KDevDocumentModel::~KDevDocumentModel()
 {}
 
-QList<KDevMimeTypeItem*> KDevDocumentModel::mimeTypeList() const
+QList<KDevCategoryItem*> KDevDocumentModel::categoryList() const
 {
 
-    QList<KDevMimeTypeItem*> lst;
+    QList<KDevCategoryItem*> lst;
     for ( int i = 0; i < rowCount() ; ++i )
     {
-        if ( KDevMimeTypeItem * mimeitem = dynamic_cast<KDevDocumentItem*>( item( i ) ) ->mimeTypeItem() )
+        if ( KDevCategoryItem * categoryitem = dynamic_cast<KDevDocumentItem*>( item( i ) ) ->categoryItem() )
         {
 
-            lst.append( mimeitem );
+            lst.append( categoryitem );
         }
     }
 
     return lst;
 }
 
-KDevMimeTypeItem* KDevDocumentModel::mimeType( const QString& mimeType ) const
+KDevCategoryItem* KDevDocumentModel::category( const QString& category ) const
 {
-    foreach( KDevMimeTypeItem * item, mimeTypeList() )
+    foreach( KDevCategoryItem * item, categoryList() )
     {
-        if ( item->text() == mimeType )
+        if ( item->toolTip() == category )
             return item;
     }
 

@@ -42,8 +42,9 @@
 #include "container.h"
 #include "controller.h"
 #include "mainwindow.h"
-#include "ideal.h"
+#include "idealcontroller.h"
 #include "holdupdates.h"
+#include "idealbuttonbarwidget.h"
 #include <KToolBar>
 #include <KSelectAction>
 #include <ktoggleaction.h>

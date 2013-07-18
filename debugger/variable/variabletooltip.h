@@ -20,8 +20,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KDEV_VARIABLETOOLTIP_H
-#define KDEV_VARIABLETOOLTIP_H
+#ifndef KDEVPLATFORM_VARIABLETOOLTIP_H
+#define KDEVPLATFORM_VARIABLETOOLTIP_H
 
 #include "../../util/activetooltip.h"
 #include "../util/treeview.h"

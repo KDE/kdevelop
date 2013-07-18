@@ -154,14 +154,21 @@ public:
     bool scheduleReload;
     ProjectProgress* progress;
 
-    void reloadDone()
+    void reloadDone(KJob* job)
     {
         progress->setDone();
         loading = false;
-        Core::self()->projectController()->projectModel()->appendRow(topItem);
-        if (scheduleReload) {
-            scheduleReload = false;
-            project->reloadModel();
+
+        ProjectController* projCtrl = Core::self()->projectControllerInternal();
+        if (job->errorText().isEmpty() && !Core::self()->shuttingDown()) {
+            projCtrl->projectModel()->appendRow(topItem);
+
+            if (scheduleReload) {
+                scheduleReload = false;
+                project->reloadModel();
+            }
+        } else {
+            projCtrl->abortOpeningProject(project);
         }
     }
 
@@ -292,13 +299,19 @@ public:
             return false;
         }
 
-        statJob = KIO::stat( developerFile.toUrl(), KIO::HideProgressInfo );
-        if( !statJob->exec() || !KIO::NetAccess::download( developerFile.toUrl(), developerTempFile,
-            Core::self()->uiController()->activeMainWindow() ) )
+        if(developerFile.isLocalFile())
         {
-            KTemporaryFile tmp;
-            tmp.open();
-            developerTempFile = tmp.fileName();
+            developerTempFile = developerFile.toLocalFile();
+        }
+        else {
+            statJob = KIO::stat( developerFile.toUrl(), KIO::HideProgressInfo );
+            if( !statJob->exec() || !KIO::NetAccess::download( developerFile.toUrl(), developerTempFile,
+                Core::self()->uiController()->activeMainWindow() ) )
+            {
+                KTemporaryFile tmp;
+                tmp.open();
+                developerTempFile = tmp.fileName();
+            }
         }
         return true;
     }
@@ -474,8 +487,10 @@ void Project::reloadModel()
     d->loading = true;
     d->fileSet.clear();
 
+    // delete topItem and remove it from model
     ProjectModel* model = Core::self()->projectController()->projectModel();
     model->removeRow( d->topItem->row() );
+    d->topItem = 0;
 
     IProjectFileManager* iface = d->manager->extension<IProjectFileManager>();
     if (!d->importTopItem(iface))
@@ -487,7 +502,7 @@ void Project::reloadModel()
 
     d->progress->setBuzzy();
     KJob* importJob = iface->createImportJob(d->topItem );
-    connect(importJob, SIGNAL(finished(KJob*)), SLOT(reloadDone()));
+    connect(importJob, SIGNAL(finished(KJob*)), SLOT(reloadDone(KJob*)));
     Core::self()->runController()->registerJob( importJob );
 }
 
@@ -529,9 +544,15 @@ bool Project::open( const Path& projectFile )
 
 void Project::close()
 {
+    Q_ASSERT(d->topItem);
+    if (d->topItem->row() == -1) {
+        kWarning() << "Something went wrong. ProjectFolderItem detached. Project closed during reload?";
+        return;
+    }
+
     Core::self()->projectController()->projectModel()->removeRow( d->topItem->row() );
 
-    if( !KIO::NetAccess::upload( d->developerTempFile, d->developerFile.toUrl(),
+    if( !d->developerFile.isLocalFile() && !KIO::NetAccess::upload( d->developerTempFile, d->developerFile.toUrl(),
                 Core::self()->uiController()->activeMainWindow() ) )
     {
         KMessageBox::sorry( Core::self()->uiController()->activeMainWindow(),

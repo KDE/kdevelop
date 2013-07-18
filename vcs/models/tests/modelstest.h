@@ -18,8 +18,8 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#ifndef MODELSTEST_H
-#define MODELSTEST_H
+#ifndef KDEVPLATFORM_MODELSTEST_H
+#define KDEVPLATFORM_MODELSTEST_H
 
 #include <QObject>
 
@@ -34,4 +34,4 @@ private slots:
     void testVcsFileChangesModel();
 };
 
-#endif // MODELSTEST_H
+#endif // KDEVPLATFORM_MODELSTEST_H

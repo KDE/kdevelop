@@ -45,7 +45,7 @@
 #include <QDBusConnection>
 
 K_PLUGIN_FACTORY(GrepViewFactory, registerPlugin<GrepViewPlugin>(); )
-K_EXPORT_PLUGIN(GrepViewFactory(KAboutData("kdevgrepview","kdevgrepview", ki18n("Find/Replace In Files"), "0.1", ki18n("Support for running grep over a list of files"), KAboutData::License_GPL)))
+K_EXPORT_PLUGIN(GrepViewFactory(KAboutData("kdevgrepview","kdevgrepview", ki18n("Find/Replace in Files"), "0.1", ki18n("Support for running grep over a list of files"), KAboutData::License_GPL)))
 
 GrepViewPlugin::GrepViewPlugin( QObject *parent, const QVariantList & )
     : KDevelop::IPlugin( GrepViewFactory::componentData(), parent ), m_currentJob(0)
@@ -60,12 +60,11 @@ GrepViewPlugin::GrepViewPlugin( QObject *parent, const QVariantList & )
     action->setShortcut( i18n("Ctrl+Alt+f") );
     connect(action, SIGNAL(triggered(bool)), this, SLOT(showDialogFromMenu()));
     action->setToolTip( i18n("Search for expressions over several files") );
-    action->setWhatsThis( i18n("<b>Find/Replace in files</b><p>"
-            "Opens the 'Find/Replace in files' dialog. There you "
-            "can enter a regular expression which is then "
-            "searched for within all files in the directories "
-            "you specify. Matches will be displayed, you "
-            "can switch to a match directly. You can also do replacement.</p>") );
+    action->setWhatsThis( i18n("Opens the 'Find/Replace in files' dialog. There you "
+                               "can enter a regular expression which is then "
+                               "searched for within all files in the directories "
+                               "you specify. Matches will be displayed, you "
+                               "can switch to a match directly. You can also do replacement.") );
     action->setIcon(KIcon("edit-find"));
 
     // instantiate delegate, it's supposed to be deleted via QObject inheritance
@@ -101,7 +100,7 @@ KDevelop::ContextMenuExtension GrepViewPlugin::contextMenuExtension(KDevelop::Co
         QList<KDevelop::ProjectBaseItem*> items = ctx->items();
         // verify if there is only one folder selected
         if ((items.count() == 1) && (items.first()->folder())) {
-            KAction* action = new KAction( i18n( "Find and replace in this folder" ), this );
+            KAction* action = new KAction( i18n( "Find/Replace in This Folder" ), this );
             action->setIcon(KIcon("edit-find"));
             m_contextMenuDirectory = items.at(0)->folder()->url().toLocalFile();
             connect( action, SIGNAL(triggered()), this, SLOT(showDialogFromProject()));
@@ -122,7 +121,7 @@ KDevelop::ContextMenuExtension GrepViewPlugin::contextMenuExtension(KDevelop::Co
         KDevelop::FileContext *fcontext = dynamic_cast<KDevelop::FileContext*>(context);
         KMimeType::Ptr mimetype = KMimeType::findByUrl( fcontext->urls().first() );
         if(mimetype->is("inode/directory")) {
-            KAction* action = new KAction( i18n( "Find and replace in this folder" ), this );
+            KAction* action = new KAction( i18n( "Find/Replace in This Folder" ), this );
             action->setIcon(KIcon("edit-find"));
             m_contextMenuDirectory = fcontext->urls().first().toLocalFile();
             connect( action, SIGNAL(triggered()), this, SLOT(showDialogFromProject()));

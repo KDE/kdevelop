@@ -1,5 +1,5 @@
-#ifndef KROSSCONTEXT_H
-#define KROSSCONTEXT_H
+#ifndef KDEVPLATFORM_KROSSCONTEXT_H
+#define KDEVPLATFORM_KROSSCONTEXT_H
 
 #include<QtCore/QVariant>
 

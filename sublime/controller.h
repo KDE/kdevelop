@@ -16,8 +16,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef SUBLIMECONTROLLER_H
-#define SUBLIMECONTROLLER_H
+#ifndef KDEVPLATFORM_SUBLIMECONTROLLER_H
+#define KDEVPLATFORM_SUBLIMECONTROLLER_H
 
 #include <QtCore/QObject>
 

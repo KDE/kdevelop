@@ -16,8 +16,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef ICODEHIGHLIGHTING_H
-#define ICODEHIGHLIGHTING_H
+#ifndef KDEVPLATFORM_ICODEHIGHLIGHTING_H
+#define KDEVPLATFORM_ICODEHIGHLIGHTING_H
 
 #include "../languageexport.h"
 
@@ -49,4 +49,4 @@ public:
 
 Q_DECLARE_INTERFACE(KDevelop::ICodeHighlighting, "org.kdevelop.ICodeHighlighting")
 
-#endif // ICODEHIGHLIGHTING_H
+#endif // KDEVPLATFORM_ICODEHIGHLIGHTING_H

@@ -120,6 +120,7 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
         filterInput->setMaximumWidth(150);
         filterInput->setMinimumWidth(100);
         filterInput->setClickMessage(i18n("Search..."));
+        filterInput->setClearButtonShown(true);
         filterInput->setToolTip(i18n("Enter a wild card string to filter the output view"));
         filterAction = new QWidgetAction(this);
         filterAction->setDefaultWidget(filterInput);
@@ -378,6 +379,19 @@ void OutputWidget::activate(const QModelIndex& index)
     }
 }
 
+static QTreeView* createFocusedTreeView( QWidget* parent )
+{
+    QTreeView* listview = new KDevelop::FocusedTreeView(parent);
+    listview->setEditTriggers( QAbstractItemView::NoEditTriggers );
+    listview->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn); //Always enable the scrollbar, so it doesn't flash around
+    listview->setHeaderHidden(true);
+    listview->setUniformRowHeights(true);
+    listview->setRootIsDecorated(false);
+    listview->setSelectionMode( QAbstractItemView::ContiguousSelection );
+
+    return listview;
+}
+
 QTreeView* OutputWidget::createListView(int id)
 {
     QTreeView* listview = 0;
@@ -386,12 +400,7 @@ QTreeView* OutputWidget::createListView(int id)
         if( data->type & KDevelop::IOutputView::MultipleView || data->type & KDevelop::IOutputView::HistoryView )
         {
             kDebug() << "creating listview";
-            listview = new KDevelop::FocusedTreeView(this);
-            listview->setEditTriggers( QAbstractItemView::NoEditTriggers );
-            listview->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn); //Always enable the scrollbar, so it doesn't flash around
-            listview->setHeaderHidden(true);
-            listview->setRootIsDecorated(false);
-            listview->setSelectionMode( QAbstractItemView::ContiguousSelection );
+            listview = createFocusedTreeView(this);
 
             views[id] = listview;
             connect( listview, SIGNAL(activated(QModelIndex)),
@@ -411,12 +420,7 @@ QTreeView* OutputWidget::createListView(int id)
         {
             if( views.isEmpty() )
             {
-                listview = new KDevelop::FocusedTreeView(this);
-                listview->setEditTriggers( QAbstractItemView::NoEditTriggers );
-                listview->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn); //Always enable the scrollbar, so it doesn't flash around
-                listview->setRootIsDecorated(false);
-                listview->setHeaderHidden(true);
-                listview->setSelectionMode( QAbstractItemView::ContiguousSelection );
+                listview = createFocusedTreeView(this);
 
                 layout()->addWidget( listview );
                 connect( listview, SIGNAL(activated(QModelIndex)),

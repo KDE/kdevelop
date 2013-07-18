@@ -111,6 +111,13 @@ void FindReplaceTest::testReplace_data()
         << (FileList() << File("myfile.txt", "some text\ndummy\nsome other test\n")
                        << File("otherfile.txt", "some dummy text\n\n"));
 
+    // see bug: https://bugs.kde.org/show_bug.cgi?id=301362
+    QTest::newRow("LF character replace")
+        << (FileList() << File("somefile.txt", "hello world\\n"))
+        << "\\\\n" << "%s"
+        << "\\n\\n" << "%s"
+        << (FileList() << File("somefile.txt", "hello world\\n\\n"));
+
     QTest::newRow("Template replace")
         << (FileList() << File("somefile.h",   "struct Foo {\n  void setFoo(int foo);\n};")
                        << File("somefile.cpp", "instance->setFoo(0);\n setFoo(0); /*not replaced*/"))
@@ -163,12 +170,13 @@ void FindReplaceTest::testReplace()
     job->setFilesString("*");
     job->setExcludeString("");
     job->setDirectoryChoice(QList<KUrl>() << KUrl(dir.path()));
-    job->setRecursive(true);
+    job->setDepth(-1); // fully recursive
     job->setRegexpFlag(true);
     job->setCaseSensitive(true);
     job->setProjectFilesFlag(false);
-    
     QVERIFY(job->exec());
+
+    QVERIFY(model->hasResults());
     model->setReplacement(replace);
     model->makeItemsCheckable(true);
     model->doReplacements();

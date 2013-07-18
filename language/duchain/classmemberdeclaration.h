@@ -19,8 +19,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CLASSMEMBERDECLARATION_H
-#define CLASSMEMBERDECLARATION_H
+#ifndef KDEVPLATFORM_CLASSMEMBERDECLARATION_H
+#define KDEVPLATFORM_CLASSMEMBERDECLARATION_H
 
 #include "declaration.h"
 
@@ -104,6 +104,6 @@ private:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::ClassMemberDeclaration::StorageSpecifiers)
 
-#endif // CLASSMEMBERDECLARATION_H
+#endif // KDEVPLATFORM_CLASSMEMBERDECLARATION_H
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

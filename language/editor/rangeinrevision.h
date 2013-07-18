@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef RANGEINREVISION_H
-#define RANGEINREVISION_H
+#ifndef KDEVPLATFORM_RANGEINREVISION_H
+#define KDEVPLATFORM_RANGEINREVISION_H
 
 #include "../languageexport.h"
 #include "cursorinrevision.h"
@@ -111,5 +111,6 @@ inline uint qHash(const KDevelop::RangeInRevision& range) {
 } // namespace KDevelop
 
 Q_DECLARE_TYPEINFO(KDevelop::RangeInRevision, Q_MOVABLE_TYPE);
+Q_DECLARE_METATYPE(KDevelop::RangeInRevision)
 
 #endif

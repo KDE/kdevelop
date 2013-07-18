@@ -28,6 +28,10 @@ Boston, MA 02110-1301, USA.
 #include <QtCore/QList>
 #include <QtCore/QMap>
 #include <QtGui/QItemSelectionModel>
+#include <QtGui/QGroupBox>
+#include <QtGui/QRadioButton>
+#include <QtGui/QBoxLayout>
+#include <QtGui/QLabel>
 
 #include <kaction.h>
 #include <kconfig.h>
@@ -77,8 +81,8 @@ Boston, MA 02110-1301, USA.
 #include <kio/job.h>
 #include "sessioncontroller.h"
 #include "session.h"
-#include <QApplication>
 #include <QDBusConnection>
+#include <QApplication>
 #include <vcs/models/projectchangesmodel.h>
 #include <vcs/widgets/vcsdiffpatchsources.h>
 #include <vcs/widgets/vcscommitdialog.h>
@@ -277,6 +281,7 @@ public:
                                     m_core->uiController()->activeMainWindow() );
             return;
         }
+        m_currentlyOpening += url;
 
         foreach( IProject* project, m_projects )
         {
@@ -297,12 +302,10 @@ public:
         emit q->projectAboutToBeOpened( project );
         if ( !project->open( url ) )
         {
+            m_currentlyOpening.removeAll(url);
             q->abortOpeningProject(project);
             project->deleteLater();
-            return;
         }
-
-        m_currentlyOpening << url;
     }
 
 };
@@ -477,15 +480,23 @@ void ProjectController::setupActions()
 
     d->m_openProject = action = ac->addAction( "project_open" );
     action->setText(i18nc( "@action", "Open / Import Project..." ) );
-    action->setToolTip( i18nc( "@info:tooltip", "Open / Import Project" ) );
-    action->setWhatsThis( i18nc( "@info:whatsthis", "<b>Open / Import project</b><p>Open an existing KDevelop 4 project or import an existing Project into KDevelop 4. This entry allows to select a KDevelop4 project file or an existing directory to open it in KDevelop. When opening an existing directory that does not yet have a KDevelop4 project file, the file will be created.</p>" ) );
+    action->setToolTip( i18nc( "@info:tooltip", "Open or import project" ) );
+    action->setWhatsThis( i18nc( "@info:whatsthis", "Open an existing KDevelop 4 project or import "
+                                                    "an existing Project into KDevelop 4. This entry "
+                                                    "allows to select a KDevelop4 project file or an "
+                                                    "existing directory to open it in KDevelop. "
+                                                    "When opening an existing directory that does "
+                                                    "not yet have a KDevelop4 project file, the file "
+                                                    "will be created." ) );
     action->setIcon(KIcon("project-open"));
     connect( action, SIGNAL(triggered(bool)), SLOT(openProject()) );
     
     d->m_fetchProject = action = ac->addAction( "project_fetch" );
     action->setText(i18nc( "@action", "Fetch Project..." ) );
-    action->setToolTip( i18nc( "@info:tooltip", "Fetch Project" ) );
-    action->setWhatsThis( i18nc( "@info:whatsthis", "<b>Fetch project</b><p>Guides the user through the project fetch and then imports it into KDevelop 4.</p>" ) );
+    action->setIcon( KIcon( "download" ) );
+    action->setToolTip( i18nc( "@info:tooltip", "Fetch project" ) );
+    action->setWhatsThis( i18nc( "@info:whatsthis", "Guides the user through the project fetch "
+                                                    "and then imports it into KDevelop 4." ) );
 //     action->setIcon(KIcon("project-open"));
     connect( action, SIGNAL(triggered(bool)), SLOT(fetchProject()) );
 
@@ -493,7 +504,7 @@ void ProjectController::setupActions()
 //    action->setText( i18n( "C&lose Project" ) );
 //    connect( action, SIGNAL(triggered(bool)), SLOT(closeProject()) );
 //    action->setToolTip( i18n( "Close project" ) );
-//    action->setWhatsThis( i18n( "<b>Close project</b><p>Closes the current project." ) );
+//    action->setWhatsThis( i18n( "Closes the current project." ) );
 //    action->setEnabled( false );
 
     d->m_closeProject = action = ac->addAction( "project_close" );
@@ -518,14 +529,10 @@ void ProjectController::setupActions()
     KSharedConfig * config = KGlobal::config().data();
 //     KConfigGroup group = config->group( "General Options" );
 
-    d->m_recentAction = new KRecentFilesAction( this );
-    connect( d->m_recentAction, SIGNAL(urlSelected(KUrl)), SLOT(
-                            openProject( const KUrl& ) ));
+    d->m_recentAction = KStandardAction::openRecent(this, SLOT(openProject(KUrl)), this);
     ac->addAction( "project_open_recent", d->m_recentAction );
-    d->m_recentAction->setText( i18n( "Open Recent" ) );
-    d->m_recentAction->setToolTip( i18nc( "@info:tooltip", "Open recent project" ) );
-    d->m_recentAction->setWhatsThis(
-        i18nc( "@info:whatsthis", "<b>Open recent project</b><p>Opens recently opened project.</p>" ) );
+    d->m_recentAction->setText( i18n( "Open Recent Project" ) );
+    d->m_recentAction->setWhatsThis( i18nc( "@info:whatsthis", "Opens recently opened project." ) );
     d->m_recentAction->loadEntries( KConfigGroup(config, "RecentProjects") );
     
     KAction* openProjectForFileAction = new KAction( this );
@@ -687,6 +694,7 @@ void ProjectController::openProjectForUrl(const KUrl& sourceUrl) {
 void ProjectController::openProject( const KUrl &projectFile )
 {
     KUrl url = projectFile;
+    QList<const Session*> existingSessions;
 
     if(!Core::self()->sessionController()->activeSession()->containedProjects().contains(url))
     {
@@ -694,12 +702,7 @@ void ProjectController::openProject( const KUrl &projectFile )
         {
             if(session->containedProjects().contains(url))
             {
-                int res = KMessageBox::questionYesNo(Core::self()->uiControllerInternal()->activeMainWindow(),
-                                i18n("The project you are opening is part of the session %1, do you want to open the session instead?", session->description()));
-                if(res == KMessageBox::Yes)
-                {
-                    Core::self()->sessionController()->loadSession(session->id().toString());
-                    
+                existingSessions << session;
 #if 0
                     ///@todo Think about this! Problem: The session might already contain files, the debugger might be active, etc.
                     //If this session is empty, close it
@@ -710,19 +713,54 @@ void ProjectController::openProject( const KUrl &projectFile )
                             window->close();
                     }
 #endif
-                    
+            }
+        }
+    }
+
+    if ( ! existingSessions.isEmpty() ) {
+        KDialog dialog(Core::self()->uiControllerInternal()->activeMainWindow());
+        dialog.setButtons(KDialog::Ok | KDialog::Cancel);
+        dialog.setWindowTitle(i18n("Project Already Open"));
+
+        QWidget contents;
+        contents.setLayout(new QVBoxLayout);
+        contents.layout()->addWidget(new QLabel(i18n("The project you're trying to open is already open in at least one "
+                                                     "other session.<br>What do you want to do?")));
+        QGroupBox sessions;
+        sessions.setLayout(new QVBoxLayout);
+        QRadioButton* newSession = new QRadioButton(i18n("Add project to current session"));
+        sessions.layout()->addWidget(newSession);
+        newSession->setChecked(true);
+        foreach ( const Session* session, existingSessions ) {
+            QRadioButton* button = new QRadioButton(i18n("Open session %1", session->description()));
+            button->setProperty("sessionid", session->id().toString());
+            sessions.layout()->addWidget(button);
+        }
+        sessions.layout()->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding));
+        contents.layout()->addWidget(&sessions);
+
+        dialog.setMainWidget(&contents);
+        bool success = dialog.exec();
+        if (!success)
+            return;
+
+        foreach ( const QObject* obj, sessions.children() ) {
+            if ( const QRadioButton* button = qobject_cast<const QRadioButton*>(obj) ) {
+                QString sessionid = button->property("sessionid").toString();
+                if ( button->isChecked() && ! sessionid.isEmpty() ) {
+                    Core::self()->sessionController()->loadSession(sessionid);
                     return;
                 }
             }
         }
     }
-    
+
     if ( url.isEmpty() )
     {
         url = d->dialog->askProjectConfigLocation(false);
     }
 
-    if ( !url.isEmpty() )    
+    if ( !url.isEmpty() )
     {
         d->importProject(url);
     }
@@ -937,7 +975,7 @@ bool ProjectController::isProjectNameUsed( const QString& name ) const
 
 KUrl ProjectController::projectsBaseDirectory() const
 {
-    KConfigGroup group = Core::self()->activeSession()->config()->group( "Project Manager" );
+    KConfigGroup group = KGlobal::config()->group( "Project Manager" );
     return group.readEntry( "Projects Base Directory",
                                      KUrl( QDir::homePath()+"/projects" ) );
 }

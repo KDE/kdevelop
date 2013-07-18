@@ -21,6 +21,7 @@
 
 #include "ducontext.h"
 #include "ducontextdata.h"
+#include "ducontextdynamicdata.h"
 #include "topducontext.h"
 #include "duchain.h"
 #include "topducontextdynamicdata.h"

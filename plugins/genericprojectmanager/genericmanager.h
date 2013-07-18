@@ -17,8 +17,8 @@
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
 */
-#ifndef KDEVGENERICMANAGER_H
-#define KDEVGENERICMANAGER_H
+#ifndef KDEVPLATFORM_PLUGIN_GENERICMANAGER_H
+#define KDEVPLATFORM_PLUGIN_GENERICMANAGER_H
 
 #include <project/abstractfilemanagerplugin.h>
 
@@ -41,4 +41,4 @@ private:
     QMap< KDevelop::IProject*, IncludeRules > m_includeRules;
 };
 
-#endif // KDEVGENERICIMPORTER_H
+#endif // KDEVPLATFORM_PLUGIN_GENERICIMPORTER_H

@@ -15,8 +15,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef CURSORINREVISION_H
-#define CURSORINREVISION_H
+#ifndef KDEVPLATFORM_CURSORINREVISION_H
+#define KDEVPLATFORM_CURSORINREVISION_H
 
 #include "../languageexport.h"
 #include "simplecursor.h"
@@ -109,5 +109,6 @@ inline uint qHash(const KDevelop::CursorInRevision& cursor) {
 } // namespace KDevelop
 
 Q_DECLARE_TYPEINFO(KDevelop::CursorInRevision, Q_MOVABLE_TYPE);
+Q_DECLARE_METATYPE(KDevelop::CursorInRevision)
 
 #endif

@@ -184,7 +184,7 @@
         </property>
         <widget class="QWidget" name="fileTab">
          <attribute name="title">
-          <string>From file</string>
+          <string>From File</string>
          </attribute>
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
@@ -198,7 +198,7 @@
         </widget>
         <widget class="QWidget" name="commandTab">
          <attribute name="title">
-          <string>From command</string>
+          <string>From Command</string>
          </attribute>
          <layout class="QHBoxLayout" name="horizontalLayout">
           <item>

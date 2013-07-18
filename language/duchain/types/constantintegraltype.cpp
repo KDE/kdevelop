@@ -117,9 +117,7 @@ QString ConstantIntegralType::toString() const
 
 uint ConstantIntegralType::hash() const
 {
-  uint ret = IntegralType::hash();
-  ret += 47 * (uint)d_func()->m_value;
-  return ret;
+  return KDevHash(IntegralType::hash()) << d_func()->m_value;
 }
 
 template<>

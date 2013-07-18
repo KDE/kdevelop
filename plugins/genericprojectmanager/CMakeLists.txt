@@ -17,7 +17,8 @@ install(TARGETS kdevgenericmanager DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 ########### install files ###############
 
-install( FILES kdevgenericmanager.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+configure_file(kdevgenericmanager.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevgenericmanager.desktop)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevgenericmanager.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 
 
 ########### Generic Manager Options

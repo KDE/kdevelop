@@ -76,7 +76,7 @@ public:
     /**
      * Get problems for @ref url.
      */
-    QList<KDevelop::ProblemPointer> getProblems(KDevelop::IndexedString url, bool showImports);
+    QList<KDevelop::ProblemPointer> getProblems(const KDevelop::IndexedString &url, bool showImports);
     /**
      * Get merged list of problems for all @ref urls.
      */

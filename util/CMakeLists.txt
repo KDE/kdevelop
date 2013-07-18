@@ -16,6 +16,7 @@ set(kdevplatformutil_LIB_SRCS
     activetooltip.cpp
     executecompositejob.cpp
     fileutils.cpp
+    shellutils.cpp
     sequentiallyrunjobs.cpp
     multilevellistview.cpp
     projecttestjob.cpp
@@ -47,7 +48,7 @@ set_target_properties(kdevplatformutil PROPERTIES VERSION ${KDEVPLATFORM_LIB_VER
 install(TARGETS kdevplatformutil EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 install( FILES kdevplatform_shell_environment.sh DESTINATION bin PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ)
-install( FILES kdev_format_source.sh DESTINATION bin PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ)
+install( FILES kdev_format_source DESTINATION bin PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ)
 
 
 ########### install files ###############
@@ -77,20 +78,3 @@ install( FILES
     multilevellistview.h
     projecttestjob.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/util COMPONENT Devel)
-
-install( FILES
-    google/dense_hash_map
-    google/dense_hash_set
-    google/sparse_hash_map
-    google/sparse_hash_set
-    google/sparsetable
-    google/type_traits.h
-    google/hash_fun.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/util/google COMPONENT Devel)
-
-install( FILES
-    google/sparsehash/densehashtable.h
-    google/sparsehash/sparseconfig.h
-    google/sparsehash/sparseconfig_windows.h
-    google/sparsehash/sparsehashtable.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/util/google/sparsehash COMPONENT Devel)

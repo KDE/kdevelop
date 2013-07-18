@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef ISTATUS_H
-#define ISTATUS_H
+#ifndef KDEVPLATFORM_ISTATUS_H
+#define KDEVPLATFORM_ISTATUS_H
 
 #include "interfacesexport.h"
 #include <QtCore/QObject>

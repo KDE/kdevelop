@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>518</height>
+    <width>356</width>
+    <height>309</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -53,6 +53,9 @@
       <string>Authentication</string>
      </property>
      <layout class="QFormLayout" name="formLayout_2">
+      <property name="fieldGrowthPolicy">
+       <enum>QFormLayout::ExpandingFieldsGrow</enum>
+      </property>
       <item row="0" column="0">
        <widget class="QLabel" name="label_3">
         <property name="text">
@@ -87,21 +90,52 @@
    <item>
     <widget class="QGroupBox" name="repositoriesBox">
      <property name="enabled">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <property name="title">
       <string>Repository</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
-       <widget class="KListWidgetSearchLine" name="repositoriesFilter">
-        <property name="clickMessage">
-         <string>Filter repositories</string>
+       <widget class="QComboBox" name="repositories"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="reviewsBox">
+     <property name="title">
+      <string>Update review</string>
+     </property>
+     <layout class="QFormLayout" name="formLayout_3">
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="reviewCheckbox">
+        <property name="text">
+         <string/>
         </property>
        </widget>
       </item>
-      <item>
-       <widget class="QListWidget" name="repositories"/>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="reviews">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>23</height>
+         </size>
+        </property>
+        <property name="insertPolicy">
+         <enum>QComboBox::InsertAlphabetically</enum>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -109,11 +143,6 @@
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>KListWidgetSearchLine</class>
-   <extends>QLineEdit</extends>
-   <header>klistwidgetsearchline.h</header>
-  </customwidget>
   <customwidget>
    <class>KLineEdit</class>
    <extends>QLineEdit</extends>

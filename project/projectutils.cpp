@@ -19,14 +19,9 @@
 
 
 #include "projectutils.h"
-
-#include "projectmodel.h"
-#include "path.h"
-
+#include <project/projectmodel.h>
 #include <QMenu>
 #include <KIcon>
-#include <KMenu>
-
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/context.h>
@@ -39,49 +34,53 @@ class Populator : public QObject
 {
     Q_OBJECT
 public:
-    Populator(ProjectBaseItem* item, QAction* action, const QPoint& pos)
-    : QObject(action)
-    , m_action(action)
+    Populator(KDevelop::ProjectBaseItem* item, QAction* action, const QPoint& pos, const QString& text, QMenu* parentMenu)
+    : QObject(parentMenu)
     , m_item(item)
     , m_pos(pos)
+    , m_text(text)
+    , m_parentMenu(parentMenu)
     {
+        connect(action, SIGNAL(destroyed(QObject*)), SLOT(deleteLater()));
         connect(action, SIGNAL(triggered(bool)), SLOT(populate()));
     }
 
 public Q_SLOTS:
     void populate()
     {
-        KMenu menu;
-        menu.addTitle(m_action->icon(), m_action->text());
+        QMenu* menu = new QMenu(m_text, m_parentMenu);
+        menu->addAction(m_text)->setEnabled(false);;
         ProjectItemContext context(QList< ProjectBaseItem* >() << m_item);
         QList<ContextMenuExtension> extensions = ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( &context );
-        ContextMenuExtension::populateMenu(&menu, extensions);
-        menu.exec(m_pos);
+        ContextMenuExtension::populateMenu(menu, extensions);
+        menu->popup(m_pos);
     }
 
 private:
-    QAction* m_action;
-    ProjectBaseItem* m_item;
+    KDevelop::ProjectBaseItem* m_item;
     QPoint m_pos;
+    QString m_text;
+    QMenu* m_parentMenu;
 };
 
 void populateParentItemsMenu( ProjectBaseItem* item, QMenu* menu )
 {
-    if(!item) {
+    if(!item)
         return;
-    }
 
     ProjectBaseItem* parent = item->parent();
     bool hasSeparator = false;
-    while(parent) {
-        if(parent->path().isValid()) {
-            if(!hasSeparator) {
+    while(parent)
+    {
+        if(!parent->url().isEmpty())
+        {
+            if(!hasSeparator)
+            {
                 hasSeparator = true;
                 menu->addSeparator();
             }
 
-            ///FIXME: use path, refactor prettyFileName
-            QString prettyName = ICore::self()->projectController()->prettyFileName(parent->path().toUrl(), IProjectController::FormatPlain);
+            QString prettyName = ICore::self()->projectController()->prettyFileName(parent->url(), IProjectController::FormatPlain);
 
             QString text;
             if(parent->parent())
@@ -92,12 +91,13 @@ void populateParentItemsMenu( ProjectBaseItem* item, QMenu* menu )
             QAction* action = menu->addAction(text);
             action->setIcon(KIcon(parent->iconName()));
             // The populator will either spawn a menu when the action is triggered, or it will delete itself
-            new Populator(parent, action, QCursor::pos());
+            new Populator(parent, action, QCursor::pos(), text, menu);
         }
 
         parent = parent->parent();
     }
 }
+
 }
 
 #include "projectutils.moc"

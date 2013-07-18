@@ -18,11 +18,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef REVIEWPATCHDIALOG_H
-#define REVIEWPATCHDIALOG_H
+#ifndef KDEVPLATFORM_PLUGIN_REVIEWPATCHDIALOG_H
+#define KDEVPLATFORM_PLUGIN_REVIEWPATCHDIALOG_H
 #include <KDialog>
 
-class QListWidgetItem;
+class QItemSelection;
+class QModelIndex;
 
 class KJob;
 
@@ -36,31 +37,40 @@ class ReviewPatchDialog : public KDialog
     public:
         ReviewPatchDialog(QWidget* parent = 0);
         virtual ~ReviewPatchDialog();
-        
+
         void setBaseDir(const QString& dir);
         void setServer(const KUrl& server);
         void setUsername(const QString& user);
-        
+
         /** @returns the server url with the username and password */
         KUrl server() const;
-        
+
         /** @returns the selected base directory for the patch */
         QString baseDir() const;
         QString repository() const;
-        QString repositoryName() const;
-        
+        QString username() const;
+
         void setRepository(const QString& repo);
-        
+
+        QString review() const;
+
+        bool isUpdateReview();
+
     private slots:
         void serverChanged();
         void receivedProjects(KJob* job);
-        
+
     private:
         Ui::ReviewPatch* m_ui;
         QString m_preferredRepository;
+        QMultiHash<QString, QPair<QString, QVariant> > m_reviews;
 
     private slots:
-        void repositoryChanged(QListWidgetItem* newItem);
+        void repositoryChanged(int index);
+        void receivedReviews(KJob* job);
+        void reviewCheckboxChanged(int status);
+        void updateReviews();
+        void updateReviewsList();
 };
 
 #endif

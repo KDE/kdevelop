@@ -75,7 +75,6 @@ DocumentationController::DocumentationController(Core* core)
 {
     m_showDocumentation = core->uiController()->activeMainWindow()->actionCollection()->addAction("showDocumentation");
     m_showDocumentation->setText(i18n("Show Documentation"));
-    m_showDocumentation->setShortcut(Qt::CTRL | Qt::ALT | Qt::Key_D);
     m_showDocumentation->setIcon(KIcon("documentation"));
     connect(m_showDocumentation, SIGNAL(triggered(bool)), SLOT(doShowDocumentation()));
 }

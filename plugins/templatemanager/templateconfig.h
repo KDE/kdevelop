@@ -18,8 +18,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef TEMPLATECONFIG_H
-#define TEMPLATECONFIG_H
+#ifndef KDEVPLATFORM_PLUGIN_TEMPLATECONFIG_H
+#define KDEVPLATFORM_PLUGIN_TEMPLATECONFIG_H
 
 #include <kcmodule.h>
 
@@ -39,4 +39,4 @@ private:
     Ui::TemplateConfig* ui;
 };
 
-#endif // TEMPLATECONFIG_H
+#endif // KDEVPLATFORM_PLUGIN_TEMPLATECONFIG_H

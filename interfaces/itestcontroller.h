@@ -17,8 +17,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVELOP_ITESTCONTROLLER_H
-#define KDEVELOP_ITESTCONTROLLER_H
+#ifndef KDEVPLATFORM_ITESTCONTROLLER_H
+#define KDEVPLATFORM_ITESTCONTROLLER_H
 
 #include "interfacesexport.h"
 
@@ -128,4 +128,4 @@ Q_SIGNALS:
 
 Q_DECLARE_INTERFACE( KDevelop::ITestController, "org.kdevelop.ITestController")
 
-#endif // KDEVELOP_ITESTCONTROLLER_H
+#endif // KDEVPLATFORM_ITESTCONTROLLER_H

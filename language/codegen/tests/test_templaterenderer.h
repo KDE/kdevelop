@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef TEST_TEMPLATERENDERER_H
-#define TEST_TEMPLATERENDERER_H
+#ifndef KDEVPLATFORM_TEST_TEMPLATERENDERER_H
+#define KDEVPLATFORM_TEST_TEMPLATERENDERER_H
 
 #include <QtTest>
 #include <QObject>
@@ -42,10 +42,11 @@ private slots:
 
     void includeTemplates();
     void kdevFilters();
+    void kdevFiltersWithLookup();
 
 private:
     KDevelop::TemplateRenderer* renderer;
 
 };
 
-#endif // TEST_TEMPLATERENDERER_H
+#endif // KDEVPLATFORM_TEST_TEMPLATERENDERER_H

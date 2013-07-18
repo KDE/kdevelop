@@ -17,8 +17,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVELOP_DEFAULTCREATECLASSHELPER_H
-#define KDEVELOP_DEFAULTCREATECLASSHELPER_H
+#ifndef KDEVPLATFORM_PLUGIN_DEFAULTCREATECLASSHELPER_H
+#define KDEVPLATFORM_PLUGIN_DEFAULTCREATECLASSHELPER_H
 
 #include <language/interfaces/icreateclasshelper.h>
 
@@ -43,4 +43,4 @@ public:
     virtual QList< KDevelop::DeclarationPointer > defaultMethods(const QString& name) const;
 };
 
-#endif // KDEVELOP_DEFAULTCREATECLASSHELPER_H
+#endif // KDEVPLATFORM_PLUGIN_DEFAULTCREATECLASSHELPER_H

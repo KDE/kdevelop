@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
    Copyright 2005 Adam Treat <treat@kde.org>
+   Copyright 2013 Sebastian Kügler <sebas@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVDOCUMENTVIEW_H
-#define KDEVDOCUMENTVIEW_H
+#ifndef KDEVPLATFORM_PLUGIN_KDEVDOCUMENTVIEW_H
+#define KDEVPLATFORM_PLUGIN_KDEVDOCUMENTVIEW_H
 
 #include <QTreeView>
 
@@ -34,8 +35,10 @@ class KMenu;
 namespace KDevelop
 {
     class IDocument;
+    class IProject;
 }
 
+class KDevCategoryItem;
 class KDevDocumentModel;
 class KDevDocumentItem;
 
@@ -61,6 +64,8 @@ private slots:
     void contentChanged( KDevelop::IDocument* document );
     void stateChanged( KDevelop::IDocument* document );
     void documentUrlChanged( KDevelop::IDocument* document );
+    void updateCategoryItem( KDevCategoryItem *item );
+    void updateProjectPaths();
 
     void saveSelected();
     void reloadSelected();
@@ -86,7 +91,8 @@ private:
     QHash< KDevelop::IDocument*, KDevFileItem* > m_doc2index;
     QList<KUrl> m_selectedDocs; // used for ctx menu
     QList<KUrl> m_unselectedDocs; // used for ctx menu
+    QList<KDevelop::IProject*> m_projects;
 };
 
-#endif // KDEVDOCUMENTVIEW_H
+#endif // KDEVPLATFORM_PLUGIN_KDEVDOCUMENTVIEW_H
 

@@ -17,8 +17,8 @@
 *   Free Software Foundation, Inc.,                                       *
 *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
 ***************************************************************************/
-#ifndef APPWIZARDPAGEWIDGET_H
-#define APPWIZARDPAGEWIDGET_H
+#ifndef KDEVPLATFORM_PLUGIN_APPWIZARDPAGEWIDGET_H
+#define KDEVPLATFORM_PLUGIN_APPWIZARDPAGEWIDGET_H
 
 #include <QWidget>
 
@@ -32,7 +32,7 @@ public:
     virtual bool shouldContinue();
 };
 
-#endif // APPWIZARDPAGEWIDGET_H
+#endif // KDEVPLATFORM_PLUGIN_APPWIZARDPAGEWIDGET_H
 
 //kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;
 

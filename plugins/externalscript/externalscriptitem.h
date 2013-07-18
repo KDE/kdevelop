@@ -18,8 +18,8 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef EXTERNALSCRIPTITEM_H
-#define EXTERNALSCRIPTITEM_H
+#ifndef KDEVPLATFORM_PLUGIN_EXTERNALSCRIPTITEM_H
+#define KDEVPLATFORM_PLUGIN_EXTERNALSCRIPTITEM_H
 
 #include <QStandardItemModel>
 
@@ -212,6 +212,6 @@ private:
 
 Q_DECLARE_METATYPE(ExternalScriptItem*)
 
-#endif // EXTERNALSCRIPTITEM_H
+#endif // KDEVPLATFORM_PLUGIN_EXTERNALSCRIPTITEM_H
 
 // kate: indent-mode cstyle; space-indent on; indent-width 2; replace-tabs on; 

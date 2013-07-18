@@ -16,8 +16,8 @@
 **
 ***************************************************************************/
 
-#ifndef KOMPAREPROCESS_H
-#define KOMPAREPROCESS_H
+#ifndef KDEVPLATFORM_PLUGIN_KOMPAREPROCESS_H
+#define KDEVPLATFORM_PLUGIN_KOMPAREPROCESS_H
 
 #include <kprocess.h>
 

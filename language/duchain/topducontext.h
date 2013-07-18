@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef TOPDUCONTEXT_H
-#define TOPDUCONTEXT_H
+#ifndef KDEVPLATFORM_TOPDUCONTEXT_H
+#define KDEVPLATFORM_TOPDUCONTEXT_H
 
 #include <QtCore/QMutex>
 
@@ -104,16 +104,13 @@ class KDEVPLATFORMLANGUAGE_EXPORT ReferencedTopDUContext {
  *
  * \todo move the registration with DUChain here
  *
- * @warning When you delete a top-context, delete it using TopDUContext::deleteSelf(), else you will leak memory
+ * @warning Do not delete top-contexts directly, use DUChain::removeDocumentChain instead.
  */
 class KDEVPLATFORMLANGUAGE_EXPORT TopDUContext : public DUContext
 {
 public:
   explicit TopDUContext(const IndexedString& url, const RangeInRevision& range, ParsingEnvironmentFile* file = 0);
   explicit TopDUContext(TopDUContextData& data);
-  
-  ///Call this to destroy a top-context.
-  void deleteSelf();
   
   /**This creates a top-context that shares most of its data with @param sharedDataFrom. The given context must be the owner of the data
    * (it must not have been created with this constructor).
@@ -363,7 +360,6 @@ protected:
   void applyAliases( const SearchItem::PtrList& identifiers, Acceptor& accept, const CursorInRevision& position, bool canBeNamespace ) const;
 
 protected:
-
   virtual ~TopDUContext();
   
   void clearFeaturesSatisfied();
@@ -382,6 +378,9 @@ protected:
   bool importsPrivate(const DUContext * origin, const CursorInRevision& position) const;
   DUCHAIN_DECLARE_DATA(TopDUContext)
   
+  ///Called by DUChain::removeDocumentChain to destroy this top-context.
+  void deleteSelf();
+
   //Most of these classes need access to m_dynamicData
   friend class DUChain;
   friend class DUChainPrivate;
@@ -418,6 +417,6 @@ inline uint qHash(const IndexedTopDUContext& ctx) {
 }
 Q_DECLARE_METATYPE(KDevelop::ReferencedTopDUContext);
 
-#endif // TOPDUCONTEXT_H
+#endif // KDEVPLATFORM_TOPDUCONTEXT_H
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

@@ -61,6 +61,38 @@
 
 const bool separateThreadForHighPriority = true;
 
+/**
+ * Elides string in @p path, e.g. "VEEERY/LONG/PATH" -> ".../LONG/PATH"
+ * - probably much faster than QFontMetrics::elidedText()
+ * - we dont need a widget context
+ * - takes path separators into account
+ *
+ * @p width Maximum number of characters
+ *
+ * TODO: Move to kdevutil?
+ */
+static QString elidedPathLeft(const QString& path, int width)
+{
+    static const QChar separator = QDir::separator();
+    static const QString placeholder = "...";
+
+    if (path.size() <= width) {
+        return path;
+    }
+
+    int start = (path.size() - width) + placeholder.size();
+    int pos = path.indexOf(separator, start);
+    if (pos == -1) {
+        pos = start; // no separator => just cut off the path at the beginning
+    }
+    Q_ASSERT(path.size() - pos >= 0 && path.size() - pos <= width);
+
+    QStringRef elidedText = path.rightRef(path.size() - pos);
+    QString result = placeholder;
+    result.append(elidedText);
+    return result;
+}
+
 namespace {
 /**
  * @return true if @p url is non-empty, valid and has a clean path, false otherwise.
@@ -176,6 +208,9 @@ public:
                 }
 
                 kDebug(9505) << "creating parse-job" << it->toUrl() << "new count of active parse-jobs:" << m_parseJobs.count() + 1;
+                const QString elidedPathString = elidedPathLeft(it->toUrl().toLocalFile(), 70);
+                emit m_parser->showMessage(m_parser, i18n("Parsing: %1", elidedPathString));
+
                 ParseJob* job = createParseJob(*it, parsePlan.features(), parsePlan.notifyWhenReady(), parsePlan.priority());
 
                 if(m_parseJobs.count() == m_threads+1 && !specialParseJob)
@@ -434,7 +469,7 @@ BackgroundParser::BackgroundParser(ILanguageController *languageController)
     connect(ICore::self()->documentController(), SIGNAL(documentLoaded(KDevelop::IDocument*)), this, SLOT(documentLoaded(KDevelop::IDocument*)));
     connect(ICore::self()->documentController(), SIGNAL(documentUrlChanged(KDevelop::IDocument*)), this, SLOT(documentUrlChanged(KDevelop::IDocument*)));
     connect(ICore::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*)), this, SLOT(documentClosed(KDevelop::IDocument*)));
-    connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()), this, SLOT(aboutToQuit()));
+    connect(ICore::self(), SIGNAL(aboutToShutdown()), this, SLOT(aboutToQuit()));
 
     bool connected = QObject::connect(ICore::self()->projectController(),
                                       SIGNAL(projectAboutToBeOpened(KDevelop::IProject*)),
@@ -729,12 +764,7 @@ DocumentChangeTracker* BackgroundParser::trackerForUrl(const KDevelop::IndexedSt
     Q_ASSERT(isValidURL(url));
 
     QMutexLocker l(&d->m_mutex);
-
-    QHash< IndexedString, DocumentChangeTracker* >::iterator it = d->m_managed.find(url);
-    if(it != d->m_managed.end())
-        return *it;
-    else
-        return 0;
+    return d->m_managed.value(url, 0);
 }
 
 void BackgroundParser::documentClosed(IDocument* document)

@@ -15,8 +15,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef CLASSFUNCTIONDEFINITION_H
-#define CLASSFUNCTIONDEFINITION_H
+#ifndef KDEVPLATFORM_CLASSFUNCTIONDEFINITION_H
+#define KDEVPLATFORM_CLASSFUNCTIONDEFINITION_H
 
 #include "functiondeclaration.h"
 #include "../languageexport.h"

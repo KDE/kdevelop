@@ -17,11 +17,14 @@
 */
 
 #include "typerepository.h"
+
 #include <QHash>
 #include <QMutex>
 #include <QMutexLocker>
+
 #include "../types/typesystemdata.h"
 #include "../types/typeregister.h"
+#include "../referencecounting.h"
 #include "itemrepository.h"
 
 #define DEBUG_TYPE_REPOSITORY

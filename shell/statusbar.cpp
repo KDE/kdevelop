@@ -18,9 +18,9 @@
 */
 
 #include "statusbar.h"
-#include "progresswidget.h"
-#include "progressmanager.h"
-#include "progressdialog.h"
+#include "progresswidget/statusbarprogresswidget.h"
+#include "progresswidget/progressmanager.h"
+#include "progresswidget/progressdialog.h"
 
 #include <QtCore/QTimer>
 #include <QtGui/QProgressBar>
@@ -61,9 +61,9 @@ StatusBar::StatusBar(QWidget* parent)
     connect(m_errorRemovalMapper, SIGNAL(mapped(QWidget*)), SLOT(removeError(QWidget*)));
 
     m_progressController = Core::self()->progressController();
-    m_progressDialog = new ProgressDialog(m_progressController, this, parent); // construct this first, then progressWidget
+    m_progressDialog = new ProgressDialog(this, parent); // construct this first, then progressWidget
     m_progressDialog->setVisible(false);
-    m_progressWidget = new StatusbarProgressWidget(m_progressController, m_progressDialog, this);
+    m_progressWidget = new StatusbarProgressWidget(m_progressDialog, this);
 
     addPermanentWidget(m_progressWidget, 0);
 }
@@ -246,9 +246,9 @@ void StatusBar::showProgress( IStatus* status, int minimum, int maximum, int val
     m_progressWidget->raise();
     m_progressDialog->raise();
     if( minimum == 0 && maximum == 0 ) {
-        i->setBusy();
+        i->setUsesBusyIndicator( true );
     } else {
-        i->setBusy( false );
+        i->setUsesBusyIndicator( false );
         i->setProgress( 100*value/maximum );
     }
 }

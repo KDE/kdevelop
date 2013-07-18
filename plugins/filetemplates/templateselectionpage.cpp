@@ -96,16 +96,17 @@ void TemplateSelectionPagePrivate::previewTemplate(const QString& file)
         return;
     }
 
+    TemplatePreviewRenderer renderer;
+    renderer.setEmptyLinesPolicy(TemplateRenderer::TrimEmptyLines);
+
     KTempDir dir;
     KUrl base(dir.name());
     QHash<QString, KUrl> fileUrls;
     foreach(const SourceFileTemplate::OutputFile& out, fileTemplate.outputFiles()) {
         KUrl url(base);
-        url.addPath(out.outputName);
+        url.addPath(renderer.render(out.outputName));
         fileUrls.insert(out.identifier, url);
     }
-    TemplatePreviewRenderer renderer;
-    renderer.setEmptyLinesPolicy(TemplateRenderer::TrimEmptyLines);
     DocumentChangeSet changes = renderer.renderFileTemplate(fileTemplate, base, fileUrls);
     changes.setActivationPolicy(DocumentChangeSet::DoNotActivate);
     changes.setUpdateHandling(DocumentChangeSet::NoUpdate);
@@ -185,9 +186,7 @@ TemplateSelectionPage::TemplateSelectionPage(TemplateClassAssistant* parent, Qt:
     d->ui = new Ui::TemplateSelection;
     d->ui->setupUi(this);
 
-    d->model = new TemplatesModel(ICore::self()->componentData(), this);
-    d->model->setTemplateResourceType("filetemplates");
-    d->model->setDescriptionResourceType("filetemplate_descriptions");
+    d->model = new TemplatesModel("kdevfiletemplates", this);
     d->model->refresh();
 
     d->ui->view->setLevels(3);
@@ -226,12 +225,9 @@ TemplateSelectionPage::TemplateSelectionPage(TemplateClassAssistant* parent, Qt:
 
     d->ui->view->setCurrentIndex(templateIndex);
 
-    /*
-    disabled until we get a category on kde-files, or find an alternative way to enable this
-    KNS3::Button* getMoreButton = new KNS3::Button(i18n("Get More Templates..."), "kdevclassassistant.knsrc", d->ui->view);
+    KNS3::Button* getMoreButton = new KNS3::Button(i18n("Get More Templates..."), "kdevfiletemplates.knsrc", d->ui->view);
     connect (getMoreButton, SIGNAL(dialogFinished(KNS3::Entry::List)), SLOT(getMoreClicked()));
     d->ui->view->addWidget(0, getMoreButton);
-    */
 
     KPushButton* loadButton = new KPushButton(KIcon("application-x-archive"), i18n("Load Template From File"), d->ui->view);
     connect (loadButton, SIGNAL(clicked(bool)), SLOT(loadFileClicked()));

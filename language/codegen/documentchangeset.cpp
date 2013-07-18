@@ -83,8 +83,7 @@ inline bool changeIsValid(const DocumentChange& change, const QStringList& textL
            change.m_range.start.column >= 0 &&
            change.m_range.start.column <= textLines[change.m_range.start.line].length() &&
            change.m_range.end.column >= 0 &&
-           change.m_range.end.column <= textLines[change.m_range.end.line].length() &&
-           change.m_range.start.line == change.m_range.end.line;
+           change.m_range.end.column <= textLines[change.m_range.end.line].length();
 }
 
 inline bool duplicateChanges(const DocumentChangePointer& previous, const DocumentChangePointer& current)
@@ -96,6 +95,26 @@ inline bool duplicateChanges(const DocumentChangePointer& previous, const Docume
            (previous->m_oldText == current->m_oldText ||
            (previous->m_ignoreOldText && current->m_ignoreOldText));
 }
+
+inline QString rangeText(const SimpleRange& range, const QStringList& textLines)
+{
+    QStringList ret;
+    ret.reserve(range.end.line - range.start.line + 1);
+    for(int line = range.start.line; line <= range.end.line; ++line) {
+        const QString lineText = textLines.at(line);
+        int startColumn = 0;
+        int endColumn = lineText.length();
+        if (line == range.start.line) {
+            startColumn = range.start.column;
+        }
+        if (line == range.end.line) {
+            endColumn = range.end.column;
+        }
+        ret << lineText.mid(startColumn, endColumn - startColumn);
+    }
+    return ret.join("\n");
+}
+
 }
 
 DocumentChangeSet::DocumentChangeSet()
@@ -143,11 +162,6 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::addDocumentRenameChange(const
 
 DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::addChange(const DocumentChangePointer& change)
 {
-    if(change->m_range.start.line != change->m_range.end.line) {
-        kWarning() << "Multi-line changes are not supported in DocumentChangeSet";
-        return DocumentChangeSet::ChangeResult("Multi-line ranges are not supported");
-    }
-
     changes[change->m_document].append(change);
     return true;
 }
@@ -387,12 +401,13 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
     KUrl url = file.toUrl();
 
     KMimeType::Ptr mime = KMimeType::findByUrl(url);
+    QVector<int> removedLines;
 
     for(int pos = sortedChanges.size()-1; pos >= 0; --pos) {
         DocumentChange& change(*sortedChanges[pos]);
         QString encountered;
         if(changeIsValid(change, textLines)  && //We demand this, although it should be fixed
-            ((encountered = textLines[change.m_range.start.line].mid(change.m_range.start.column, change.m_range.end.column-change.m_range.start.column)) == change.m_oldText || change.m_ignoreOldText))
+            ((encountered = rangeText(change.m_range, textLines)) == change.m_oldText || change.m_ignoreOldText))
         {
             ///Problem: This does not work if the other changes significantly alter the context @todo Use the changed context
             QString leftContext = QStringList(textLines.mid(0, change.m_range.start.line+1)).join("\n");
@@ -442,9 +457,22 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
                 }
             }
 
-            textLines[change.m_range.start.line].replace(change.m_range.start.column,
-                                                         change.m_range.end.column-change.m_range.start.column,
-                                                         change.m_newText);
+            QString& line = textLines[change.m_range.start.line];
+            if (change.m_range.start.line == change.m_range.end.line) {
+                // simply replace existing line content
+                line.replace(change.m_range.start.column,
+                             change.m_range.end.column-change.m_range.start.column,
+                             change.m_newText);
+            } else {
+                // replace first line contents
+                line.replace(change.m_range.start.column, line.length() - change.m_range.start.column,
+                             change.m_newText);
+                // null other lines and remember for deletion
+                for(int i = change.m_range.start.line + 1; i <= change.m_range.end.line; ++i) {
+                    textLines[i].clear();
+                    removedLines << i;
+                }
+            }
         }else{
             QString warningString = QString("Inconsistent change in %1 at %2:%3 -> %4:%5"
                                             " = \"%6\"(encountered \"%7\") -> \"%8\"")
@@ -467,6 +495,14 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
         }
     }
 
+    if (!removedLines.isEmpty()) {
+        int offset = 0;
+        qSort(removedLines);
+        foreach(int l, removedLines) {
+            textLines.removeAt(l - offset);
+            ++offset;
+        }
+    }
     output = textLines.join("\n");
     return true;
 }

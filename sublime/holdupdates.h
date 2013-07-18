@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef HOLDUPDATES_H
-#define HOLDUPDATES_H
+#ifndef KDEVPLATFORM_HOLDUPDATES_H
+#define KDEVPLATFORM_HOLDUPDATES_H
 
 #include "sublimeexport.h"
 
@@ -69,5 +69,5 @@ class SUBLIME_EXPORT HoldUpdates {
 
 }
 
-#endif // HOLDUPDATES_H
+#endif // KDEVPLATFORM_HOLDUPDATES_H
 

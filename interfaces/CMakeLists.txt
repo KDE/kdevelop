@@ -24,6 +24,7 @@ set(kdevplatforminterfaces_LIB_SRCS
     istatus.cpp
     iruncontroller.cpp
     isession.cpp
+    isessionlock.cpp
     isourceformatter.cpp
     isourceformattercontroller.cpp
     contextmenuextension.cpp
@@ -48,6 +49,7 @@ set(kdevplatforminterfaces_LIB_SRCS
     ilanguagecheck.cpp
     ilanguagecheckprovider.cpp
 )
+configure_file(ipluginversion.h.in ${CMAKE_CURRENT_BINARY_DIR}/ipluginversion.h)
 
 kde4_add_library(kdevplatforminterfaces SHARED ${kdevplatforminterfaces_LIB_SRCS})
 target_link_libraries(kdevplatforminterfaces 
@@ -96,6 +98,7 @@ install(FILES
     interfacesexport.h
     istatus.h
     isession.h
+    isessionlock.h
     iruncontroller.h
     ilaunchconfiguration.h
     ilauncher.h
@@ -117,6 +120,7 @@ install(FILES
     itemplateprovider.h
     itestsuite.h
     itestcontroller.h
+    ${CMAKE_CURRENT_BINARY_DIR}/ipluginversion.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/interfaces COMPONENT Devel
 )
 

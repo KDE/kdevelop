@@ -17,8 +17,8 @@
  * Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef CODEUTILSPLUGIN_H
-#define CODEUTILSPLUGIN_H
+#ifndef KDEVPLATFORM_PLUGIN_CODEUTILSPLUGIN_H
+#define KDEVPLATFORM_PLUGIN_CODEUTILSPLUGIN_H
 
 #include <interfaces/iplugin.h>
 #include <interfaces/contextmenuextension.h>
@@ -38,4 +38,4 @@ private slots:
 };
 
 
-#endif // CODEUTILSPLUGIN_H
+#endif // KDEVPLATFORM_PLUGIN_CODEUTILSPLUGIN_H

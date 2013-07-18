@@ -17,8 +17,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#ifndef IRUNCONTROLLER_H
-#define IRUNCONTROLLER_H
+#ifndef KDEVPLATFORM_IRUNCONTROLLER_H
+#define KDEVPLATFORM_IRUNCONTROLLER_H
 
 #include <QtCore/QObject>
 
@@ -164,4 +164,4 @@ Q_SIGNALS:
 
 }
 
-#endif // IRUNCONTROLLER_H
+#endif // KDEVPLATFORM_IRUNCONTROLLER_H

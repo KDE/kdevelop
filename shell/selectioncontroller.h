@@ -17,8 +17,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#ifndef SELECTIONCONTROLLER_H
-#define SELECTIONCONTROLLER_H
+#ifndef KDEVPLATFORM_SELECTIONCONTROLLER_H
+#define KDEVPLATFORM_SELECTIONCONTROLLER_H
 
 #include <interfaces/iselectioncontroller.h>
 #include "shellexport.h"
@@ -61,4 +61,4 @@ private:
 
 }
 
-#endif // SELECTIONCONTROLLER_H
+#endif // KDEVPLATFORM_SELECTIONCONTROLLER_H

@@ -82,5 +82,5 @@ QStringList ProjectTargetsComboBox::currentItemPath() const
 
 void ProjectTargetsComboBox::setCurrentItemPath(const QStringList& str)
 {
-    setCurrentIndex(findText(KDevelop::joinWithEscaping(str, '/', '\\')));
+    setCurrentIndex(str.isEmpty() && count() ? 0 : findText(KDevelop::joinWithEscaping(str, '/', '\\')));
 }

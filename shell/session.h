@@ -17,13 +17,14 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#ifndef SESSION_H
-#define SESSION_H
+#ifndef KDEVPLATFORM_SESSION_H
+#define KDEVPLATFORM_SESSION_H
 
 #include "shellexport.h"
 #include <QtCore/QObject>
 #include <QtCore/QUuid>
 #include <interfaces/isession.h>
+#include <interfaces/isessionlock.h>
 #include <kurl.h>
 
 namespace KDevelop
@@ -35,7 +36,7 @@ struct SessionInfo
     QUuid uuid;
     QString description;
     KUrl::List projects;
-    KUrl path;
+    QString path;
     KSharedConfig::Ptr config;
 };
 
@@ -51,8 +52,6 @@ public:
     virtual KUrl pluginDataArea( const IPlugin* );
     virtual KSharedConfig::Ptr config();
 
-    void deleteFromDisk();
-
     KUrl::List containedProjects() const;
     
     void updateDescription();
@@ -64,6 +63,8 @@ public:
 
     virtual void setTemporary(bool temp);
     virtual bool isTemporary() const;
+
+    QString path() const;
 
     /**
      * Generates session's pretty contents from project list in @p info.
@@ -85,6 +86,8 @@ public:
 
 Q_SIGNALS:
     void nameChanged( const QString& newname, const QString& oldname );
+public slots:
+    virtual void updateContainedProjects();
 private:
     class SessionPrivate* const d;
 

@@ -44,6 +44,7 @@ private slots:
     void canRenameActiveSession();
     void readFromConfig();
     void temporary();
+    void tryLockSession();
 private:
 
     KDevelop::Core* m_core;

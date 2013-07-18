@@ -17,6 +17,7 @@ target_link_libraries(kdevstandardoutputview ${KDE4_KDEUI_LIBS}
 
 install(TARGETS kdevstandardoutputview DESTINATION ${PLUGIN_INSTALL_DIR} )
 
-install( FILES kdevstandardoutputview.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+configure_file(kdevstandardoutputview.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevstandardoutputview.desktop)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevstandardoutputview.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install( FILES kdevstandardoutputview.rc DESTINATION ${DATA_INSTALL_DIR}/kdevstandardoutputview )
 

@@ -12,18 +12,39 @@
 ***************************************************************************/
 
 #include "localpatchsource.h"
+
 #include <ktemporaryfile.h>
 #include <kdebug.h>
+#include <klocale.h>
 #include <kprocess.h>
 #include <KIcon>
 #include <kshell.h>
+
+LocalPatchSource::LocalPatchSource()
+    : m_applied(false)
+    , m_depth(0)
+{
+}
+
+LocalPatchSource::~LocalPatchSource()
+{
+    if ( !m_command.isEmpty() && !m_filename.isEmpty() ) {
+        QFile::remove( m_filename.toLocalFile() );
+    }
+}
+
+QString LocalPatchSource::name() const
+{
+    return i18n( "Custom Patch" );
+}
 
 QIcon LocalPatchSource::icon() const
 {
     return KIcon("text-x-patch");
 }
 
-void LocalPatchSource::update() {
+void LocalPatchSource::update()
+{
     if( !m_command.isEmpty() ) {
         KTemporaryFile temp;
         temp.setSuffix( ".diff" );
@@ -54,12 +75,6 @@ void LocalPatchSource::update() {
             kWarning() << "PROBLEM";
         }
         emit patchChanged();
-    }
-}
-
-LocalPatchSource::~LocalPatchSource() {
-    if ( !m_command.isEmpty() && !m_filename.isEmpty() ) {
-        QFile::remove( m_filename.toLocalFile() );
     }
 }
 

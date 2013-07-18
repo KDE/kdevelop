@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KDEVELOP_SOURCEFILETEMPLATE_H
-#define KDEVELOP_SOURCEFILETEMPLATE_H
+#ifndef KDEVPLATFORM_SOURCEFILETEMPLATE_H
+#define KDEVPLATFORM_SOURCEFILETEMPLATE_H
 
 #include <QString>
 #include <QList>
@@ -238,7 +238,10 @@ public:
 
     SourceFileTemplate& operator=(const SourceFileTemplate& other);
 
-    void setTemplateDescription(const QString& templateDescription);
+    /**
+     * @param resourcePrefix ugly ugly parameter required for testing :-/
+     */
+    void setTemplateDescription(const QString& templateDescription, const QString& resourcePrefix = QString("kdevfiletemplates"));
 
     /**
      * Returns true if this SourceFileTemplate represents an actual template archive, and false otherwise
@@ -306,4 +309,4 @@ private:
 Q_DECLARE_TYPEINFO(KDevelop::SourceFileTemplate::OutputFile, Q_MOVABLE_TYPE);
 Q_DECLARE_TYPEINFO(KDevelop::SourceFileTemplate::ConfigOption, Q_MOVABLE_TYPE);
 
-#endif // KDEVELOP_SOURCEFILETEMPLATE_H
+#endif // KDEVPLATFORM_SOURCEFILETEMPLATE_H

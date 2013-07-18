@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef STRUCTURETYPE_H
-#define STRUCTURETYPE_H
+#ifndef KDEVPLATFORM_STRUCTURETYPE_H
+#define KDEVPLATFORM_STRUCTURETYPE_H
 
 #include "abstracttype.h"
 #include "identifiedtype.h"

@@ -16,8 +16,8 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#ifndef WORKINGSETTOOLBUTTON_H
-#define WORKINGSETTOOLBUTTON_H
+#ifndef KDEVPLATFORM_WORKINGSETTOOLBUTTON_H
+#define KDEVPLATFORM_WORKINGSETTOOLBUTTON_H
 
 #include <QToolButton>
 
@@ -50,6 +50,7 @@ public slots:
     void subtractSet();
     void intersectSet();
     void buttonTriggered();
+    void showTooltip();
 
 private:
     virtual void contextMenuEvent(QContextMenuEvent* ev);
@@ -61,4 +62,4 @@ private:
 
 }
 
-#endif // WORKINGSETTOOLBUTTON_H
+#endif // KDEVPLATFORM_WORKINGSETTOOLBUTTON_H

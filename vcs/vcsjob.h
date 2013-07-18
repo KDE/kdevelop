@@ -19,8 +19,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef VCSJOB_H
-#define VCSJOB_H
+#ifndef KDEVPLATFORM_VCSJOB_H
+#define KDEVPLATFORM_VCSJOB_H
 
 #include <outputview/outputjob.h>
 

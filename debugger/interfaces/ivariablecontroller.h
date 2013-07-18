@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef KDEVELOP_IVARIABLECONTROLLER_H
-#define KDEVELOP_IVARIABLECONTROLLER_H
+#ifndef KDEVPLATFORM_IVARIABLECONTROLLER_H
+#define KDEVPLATFORM_IVARIABLECONTROLLER_H
 
 #include <QtCore/QObject>
 class QString;

@@ -9,8 +9,8 @@
  ***************************************************************************/
 
 // some utility functions used at various places
-#ifndef GREPUTIL_H
-#define GREPUTIL_H
+#ifndef KDEVPLATFORM_PLUGIN_GREPUTIL_H
+#define KDEVPLATFORM_PLUGIN_GREPUTIL_H
 
 #include <QStringList>
 #include <QString>

@@ -16,8 +16,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef SUBLIMEAREAINDEX_H
-#define SUBLIMEAREAINDEX_H
+#ifndef KDEVPLATFORM_SUBLIMEAREAINDEX_H
+#define KDEVPLATFORM_SUBLIMEAREAINDEX_H
 
 #include <QtCore/Qt>
 #include <QtCore/QList>

@@ -18,12 +18,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef REVIEWBOARDPLUGIN_H
-#define REVIEWBOARDPLUGIN_H
+#ifndef KDEVPLATFORM_PLUGIN_REVIEWBOARDPLUGIN_H
+#define KDEVPLATFORM_PLUGIN_REVIEWBOARDPLUGIN_H
 
 #include <interfaces/iplugin.h>
 #include <interfaces/ipatchexporter.h>
 
+class KJob;
 namespace KIO {
 class Job;
 }
@@ -33,10 +34,18 @@ class ReviewBoardPlugin : public KDevelop::IPlugin, KDevelop::IPatchExporter
     Q_OBJECT
     Q_INTERFACES( KDevelop::IPatchExporter )
     public:
-        ReviewBoardPlugin ( QObject* parent, const QList<QVariant>& args  );
+        ReviewBoardPlugin(QObject* parent, const QList<QVariant>& args);
         virtual ~ReviewBoardPlugin();
-        
+
         virtual void exportPatch(KDevelop::IPatchSource::Ptr source);
+
+    public slots:
+        void reviewDone(KJob* j);
+        void reviewCreated(KJob* j);
+
+    private:
+        KDevelop::IPatchSource::Ptr m_source;
+        QString m_baseDir;
 };
 
 #endif

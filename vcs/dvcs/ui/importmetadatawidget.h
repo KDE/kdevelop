@@ -22,8 +22,8 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#ifndef IMPORTMETADATAWIDGET_H
-#define IMPORTMETADATAWIDGET_H
+#ifndef KDEVPLATFORM_IMPORTMETADATAWIDGET_H
+#define KDEVPLATFORM_IMPORTMETADATAWIDGET_H
 
 #include <vcs/widgets/vcsimportmetadatawidget.h>
 

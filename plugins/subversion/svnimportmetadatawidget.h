@@ -9,8 +9,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SVNIMPORTMETADATAWIDGET_H
-#define SVNIMPORTMETADATAWIDGET_H
+#ifndef KDEVPLATFORM_PLUGIN_SVNIMPORTMETADATAWIDGET_H
+#define KDEVPLATFORM_PLUGIN_SVNIMPORTMETADATAWIDGET_H
 
 #include <vcs/widgets/vcsimportmetadatawidget.h>
 
@@ -34,8 +34,8 @@ public:
     virtual void setUseSourceDirForDestination( bool );
     virtual bool hasValidData() const;
 private:
-    bool useSourceDirForDestination;
     Ui::SvnImportMetadataWidget *m_ui;
+    bool useSourceDirForDestination;
 };
 
 #endif

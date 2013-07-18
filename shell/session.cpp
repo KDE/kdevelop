@@ -26,6 +26,7 @@ Boston, MA 02110-1301, USA.
 #include <kstandarddirs.h>
 #include <kparts/mainwindow.h>
 #include <kdebug.h>
+#include <kstringhandler.h>
 
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iuicontroller.h>
@@ -35,6 +36,7 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
 #include <util/fileutils.h>
+#include <language/duchain/repositories/itemrepository.h>
 
 namespace KDevelop
 {
@@ -53,7 +55,7 @@ public:
         KUrl url( info.path );
         url.addPath( name );
         if( !QFile::exists( url.toLocalFile() ) ) {
-            QDir( info.path.toLocalFile() ).mkdir( name );
+            QDir( info.path ).mkdir( name );
         }
         return url;
     }
@@ -86,6 +88,11 @@ KUrl::List Session::containedProjects() const
     return d->info.projects;
 }
 
+void Session::updateContainedProjects()
+{
+    d->info.projects = d->info.config->group("General Options").readEntry("Open Projects", QStringList());
+}
+
 void Session::updateDescription()
 {
     QString prettyContents = generatePrettyContents( d->info );
@@ -115,11 +122,6 @@ QUuid Session::id() const
     return d->info.uuid;
 }
 
-void Session::deleteFromDisk()
-{
-    removeDirectory( d->info.path.toLocalFile() );
-}
-
 void Session::setName( const QString& newname )
 {
     QString oldname = d->info.name;
@@ -138,6 +140,11 @@ void Session::setTemporary(bool temp)
 bool Session::isTemporary() const
 {
     return d->isTemporary;
+}
+
+QString Session::path() const
+{
+    return d->info.path;
 }
 
 QString Session::generatePrettyContents( const SessionInfo& info )
@@ -165,7 +172,7 @@ QString Session::generateDescription( const SessionInfo& info, const QString& pr
     if( prettyContents.isEmpty() ) {
         prettyContentsFormatted = i18n("(no projects)");
     } else {
-        prettyContentsFormatted = prettyContents;
+        prettyContentsFormatted = KStringHandler::rsqueeze(prettyContents);
     }
 
     QString description;
@@ -180,13 +187,12 @@ QString Session::generateDescription( const SessionInfo& info, const QString& pr
 SessionInfo Session::parse( const QString& id, bool mkdir )
 {
     SessionInfo ret;
-    KUrl sessionPath = SessionController::sessionDirectory();
-    sessionPath.addPath( id );
+    QString sessionPath = SessionController::sessionDirectory(id);
 
-    QDir sessionDir( sessionPath.toLocalFile( KUrl::AddTrailingSlash ) );
+    QDir sessionDir( sessionPath );
     if( !sessionDir.exists() ) {
         if( mkdir ) {
-            QDir( SessionController::sessionDirectory() ).mkdir( id );
+            sessionDir.mkpath(sessionPath);
             Q_ASSERT( sessionDir.exists() );
         } else {
             return ret;
@@ -195,9 +201,8 @@ SessionInfo Session::parse( const QString& id, bool mkdir )
 
     ret.uuid = id;
     ret.path = sessionPath;
-    sessionPath.addPath( "sessionrc" );
 
-    ret.config = KSharedConfig::openConfig( sessionPath.toLocalFile() );
+    ret.config = KSharedConfig::openConfig( sessionPath + "/sessionrc" );
     ret.name = ret.config->group( QString() ).readEntry( cfgSessionNameEntry, QString() );
     ret.projects = ret.config->group( "General Options" ).readEntry( "Open Projects", QStringList() );
     ret.description = generateDescription( ret, ret.config->group( QString() ).readEntry( "SessionPrettyContents", QString() ) );

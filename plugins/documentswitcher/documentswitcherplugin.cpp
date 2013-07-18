@@ -1,5 +1,6 @@
 /***************************************************************************
- *   Copyright 2009 Andreas Pakulat <apaku@gmx.de>                         *
+ *   Copyright 2009,2013 Andreas Pakulat <apaku@gmx.de>                    *
+ *   Copyright 2013 Jarosław Sierant <jaroslaw.sierant@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -40,7 +41,11 @@
 #include <QStandardItemModel>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/idocument.h>
+
+#include <QScrollBar>
 #include <QDir>
+
+#include <algorithm>
 
 K_PLUGIN_FACTORY(DocumentSwitcherFactory, registerPlugin<DocumentSwitcherPlugin>(); )
 K_EXPORT_PLUGIN(DocumentSwitcherFactory(KAboutData("kdevdocumentswitcher","kdevdocumentswitcher",ki18n("Document Switcher"), "0.1", ki18n("Switch between open documents using most-recently-used list"), KAboutData::License_GPL)))
@@ -60,7 +65,7 @@ DocumentSwitcherPlugin::DocumentSwitcherPlugin(QObject *parent, const QVariantLi
     forwardAction->setText( i18n( "Last Used Views" ) );
     forwardAction->setIcon( KIcon("go-next-view-page") );
     forwardAction->setShortcut( Qt::CTRL | Qt::Key_Tab );
-    forwardAction->setWhatsThis( i18n( "<b>Walk through last used Views</b><br/>Opens a list to walk through the list of last used views." ) );
+    forwardAction->setWhatsThis( i18n( "Opens a list to walk through the list of last used views." ) );
     forwardAction->setStatusTip( i18n( "Walk through the list of last used views" ) );
     connect( forwardAction, SIGNAL(triggered()), SLOT(walkForward()) );
     
@@ -68,13 +73,16 @@ DocumentSwitcherPlugin::DocumentSwitcherPlugin(QObject *parent, const QVariantLi
     backwardAction->setText( i18n( "Last Used Views (Reverse)" ) );
     backwardAction->setIcon( KIcon("go-previous-view-page") );
     backwardAction->setShortcut( Qt::CTRL | Qt::SHIFT | Qt::Key_Tab );
-    backwardAction->setWhatsThis( i18n( "<b>Walk through last used Views (Reverse)</b><br/>Opens a list to walk through the list of last used views in reverse." ) );
+    backwardAction->setWhatsThis( i18n( "Opens a list to walk through the list of last used views in reverse." ) );
     backwardAction->setStatusTip( i18n( "Walk through the list of last used views" ) );
     connect( backwardAction, SIGNAL(triggered()), SLOT(walkBackward()) );
     
     view = new DocumentSwitcherTreeView( this );
     view->setSelectionBehavior( QAbstractItemView::SelectRows );
     view->setSelectionMode( QAbstractItemView::SingleSelection );
+    view->setUniformItemSizes( true );
+    view->setTextElideMode( Qt::ElideMiddle );
+    view->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     view->addAction( forwardAction );
     view->addAction( backwardAction );
     connect( view, SIGNAL(clicked(QModelIndex)), SLOT(switchToView(QModelIndex)) );
@@ -84,7 +92,31 @@ DocumentSwitcherPlugin::DocumentSwitcherPlugin(QObject *parent, const QVariantLi
     view->setModel( model );    
 }
 
-void DocumentSwitcherPlugin::walkForward()
+void DocumentSwitcherPlugin::setViewGeometry(Sublime::MainWindow* window)
+{
+    const QSize centralSize = window->centralWidget()->size();
+
+    // Maximum size of the view is 3/4th of the central widget (the editor area) so the view does not overlap the
+    // mainwindow since that looks awkward.
+    const QSize viewMaxSize( centralSize.width() * 3/4, centralSize.height() * 3/4 );
+
+    // The actual view size should be as big as the columns/rows need it, but smaller than the max-size. This means
+    // the view will get quite high with many open files but I think thats ok. Otherwise one can easily tweak the 
+    // max size to be only 1/2th of the central widget size
+    const QSize viewSize( std::min( view->sizeHintForColumn(0) + view->verticalScrollBar()->width(), viewMaxSize.width() ), 
+                          std::min( std::max( view->sizeHintForRow(0) * view->model()->rowCount(), view->sizeHintForRow(0) * 6 ), viewMaxSize.height() ) );
+
+    // Position should be central over the editor area, so map to global from parent of central widget since 
+    // the view is positioned in global coords
+    QPoint centralWidgetPos = window->mapToGlobal( window->centralWidget()->pos() );
+    const int xPos = std::max(0, centralWidgetPos.x() + (centralSize.width()  - viewSize.width()  ) / 2);
+    const int yPos = std::max(0, centralWidgetPos.y() + (centralSize.height() - viewSize.height() ) / 2);
+
+    view->setFixedSize(viewSize);
+    view->move(xPos, yPos);
+}
+
+void DocumentSwitcherPlugin::walk(const int from, const int to)
 {
     Sublime::MainWindow* window = qobject_cast<Sublime::MainWindow*>( KDevelop::ICore::self()->uiController()->activeMainWindow() );
     if( !window || !documentLists.contains( window ) || !documentLists[window].contains( window->area() ) )
@@ -93,87 +125,68 @@ void DocumentSwitcherPlugin::walkForward()
         return;
     }
     QModelIndex idx;
-    if( !view->isVisible() )
+    const int step = from < to ? 1 : -1;
+    if(!view->isVisible())
     {
-        fillModel( window );
-        // center on main window
-        view->move( window->pos().x() + (window->width() - view->width()) / 2,
-                    window->pos().y() + (window->height() - view->height()) / 2 );
-        idx = model->index( 1, 0 );
-        if( !idx.isValid() )
-        {
-            idx = model->index( 0, 0 );
-        }
+        fillModel(window);
+        setViewGeometry(window);
+        idx = model->index(from + step, 0);
+        if(!idx.isValid()) { idx = model->index(0, 0); }
         view->show();
-    } else 
-    {
-        int newrow = view->selectionModel()->currentIndex().row() + 1;
-        if( newrow == model->rowCount() ) 
-        {
-            newrow = 0;
-        }
-        idx = model->index( newrow, 0 );
+    } else {
+        int newRow = view->selectionModel()->currentIndex().row() + step;
+        if(newRow == to + step) { newRow = from; }
+        idx = model->index(newRow, 0);
     }
-    view->selectionModel()->select( idx, QItemSelectionModel::Rows | QItemSelectionModel::ClearAndSelect );
-    view->selectionModel()->setCurrentIndex( idx, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows );
+    view->selectionModel()->select(idx, QItemSelectionModel::Rows | QItemSelectionModel::ClearAndSelect);
+    view->selectionModel()->setCurrentIndex(idx, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
 }
+
+
+void DocumentSwitcherPlugin::walkForward() { walk(0, model->rowCount()-1); }
+
+void DocumentSwitcherPlugin::walkBackward() { walk(model->rowCount()-1, 0); }
 
 void DocumentSwitcherPlugin::fillModel( Sublime::MainWindow* window )
 {
     model->clear();
     foreach( Sublime::View* v, documentLists[window][window->area()] )
     {
-        QString txt = v->document()->title();
-        KDevelop::IDocument* doc = dynamic_cast<KDevelop::IDocument*>( v->document() );
-        if( doc ) {
-            QString path = KDevelop::ICore::self()->projectController()->prettyFilePath( doc->url(), KDevelop::IProjectController::FormatPlain );
-            // Remove trailing '/' as that looks ugly and creates empty string with lastIndexOf
-            if( path.endsWith( '/' ) ) {
-                path = path.left( path.length() - 1 );
-            }
-            // Relative path means we've got a project in front, so remove the 'inner' parts of the path to make it short
-            // and display in a useful way
-            if( QFileInfo( path ).isRelative() ) {
-                path = path.left( path.indexOf( "/" ) + 1 ) + "..." + path.mid( path.lastIndexOf( '/' ) );
-            } else {
-                // Absolute, so try a very simple approach of using the first 6 and last 20 characters and elide the rest
-                // On absolute paths the first letters won't be that useful, so make use of more of the suffix
-                path = path.left( 6 ) + "..." + path.mid( path.length() - 20 );
-            }
-            txt = txt + " (" + path + ')';
-        }
-        model->appendRow( new QStandardItem( v->document()->icon(), txt ) );
-    }
-}
-
-void DocumentSwitcherPlugin::walkBackward()
-{
-    Sublime::MainWindow* window = qobject_cast<Sublime::MainWindow*>( KDevelop::ICore::self()->uiController()->activeMainWindow() );
-    if( !window || !documentLists.contains( window ) || !documentLists[window].contains( window->area() ) )
-    {
-        kWarning() << "This should not happen, tried to walk through document list of an unknown mainwindow!";
-        return;
-    }
-    QModelIndex idx;
-    if( !view->isVisible() )
-    {
-        fillModel( window );
-        // center on mainwindow
-        view->move( window->pos().x() + (window->width() - view->width()) / 2,
-                    window->pos().y() + (window->height() - view->height()) / 2 );
-        idx = model->index( model->rowCount()-1, 0 );
-        view->show();
-    } else 
-    {
-        int newrow = view->selectionModel()->currentIndex().row() - 1;
-        if( newrow == -1 ) 
+        using namespace KDevelop;
+        Sublime::Document const* const slDoc = v->document();
+        if( !slDoc )
         {
-            newrow = model->rowCount()-1;
+            continue;
         }
-        idx = model->index( newrow, 0 );
+        QString itemText = slDoc->title();// file name
+        IDocument const* const doc = dynamic_cast<IDocument*>(v->document());
+        if( doc )
+        {
+            QString path = ICore::self()->projectController()->prettyFilePath(doc->url(),
+                                                                              IProjectController::FormatPlain);
+            const bool isPartOfOpenProject = QDir::isRelativePath(path);
+            if( path.endsWith('/') )
+            {
+                path.remove(path.length() - 1, 1);
+            }
+            if( isPartOfOpenProject )
+            {
+                const int projectNameSize = path.indexOf("/");
+
+                // first: project name, second: path to file in project (might be just '/' when the file is in the project root dir)
+                const QPair<QString, QString> fileInProjectInfo = (projectNameSize < 0) 
+                    ? qMakePair(path, QString("/"))
+                    : qMakePair(path.left(projectNameSize), path.mid(projectNameSize));
+
+                itemText = QString("%1 (%2:%3)").arg(itemText).arg(fileInProjectInfo.first)
+                                .arg(fileInProjectInfo.second);
+            } else
+            {
+                itemText = itemText + " (" + path + ')';
+            }
+        }
+        model->appendRow( new QStandardItem( slDoc->icon(), itemText ) );
     }
-    view->selectionModel()->select( idx, QItemSelectionModel::Rows | QItemSelectionModel::ClearAndSelect );
-    view->selectionModel()->setCurrentIndex( idx, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows );
 }
 
 DocumentSwitcherPlugin::~DocumentSwitcherPlugin()

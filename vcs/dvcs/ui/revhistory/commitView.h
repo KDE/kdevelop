@@ -18,8 +18,8 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#ifndef COMMIT_VIEW_H
-#define COMMIT_VIEW_H
+#ifndef KDEVPLATFORM_COMMIT_VIEW_H
+#define KDEVPLATFORM_COMMIT_VIEW_H
 
 #include <QtGui/QTreeView>
 #include <QtGui/QItemDelegate>

@@ -18,8 +18,8 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
-#ifndef GITMESSAGEHIGHLIGHTER_H
-#define GITMESSAGEHIGHLIGHTER_H
+#ifndef KDEVPLATFORM_PLUGIN_GITMESSAGEHIGHLIGHTER_H
+#define KDEVPLATFORM_PLUGIN_GITMESSAGEHIGHLIGHTER_H
 
 #include <sonnet/highlighter.h>
 
@@ -44,4 +44,4 @@ private:
     };
 };
 
-#endif // GITMESSAGEHIGHLIGHTER_H
+#endif // KDEVPLATFORM_PLUGIN_GITMESSAGEHIGHLIGHTER_H

@@ -34,6 +34,29 @@
       </widget>
      </item>
      <item>
+      <spacer name="verticalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Fixed</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>15</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="renameButton">
+       <property name="text">
+        <string>Rename</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="checkoutButton">
        <property name="toolTip">
         <string>Checkout to the selected branch</string>
@@ -59,7 +82,11 @@
     </layout>
    </item>
    <item row="0" column="0">
-    <widget class="QListView" name="branchView"/>
+    <widget class="QListView" name="branchView">
+     <property name="editTriggers">
+      <set>QAbstractItemView::EditKeyPressed</set>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

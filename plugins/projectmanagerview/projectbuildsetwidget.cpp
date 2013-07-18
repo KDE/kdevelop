@@ -79,8 +79,6 @@ ProjectBuildSetWidget::ProjectBuildSetWidget( QWidget* parent )
     connect( m_ui->bottomButton, SIGNAL(clicked()),
              SLOT(moveToBottom()) );
     
-    m_ui->itemView->horizontalHeader()->setStretchLastSection(true);
-    m_ui->itemView->verticalHeader()->setVisible(false);
     m_ui->itemView->setContextMenuPolicy( Qt::CustomContextMenu );
     connect( m_ui->itemView, SIGNAL(customContextMenuRequested(QPoint)),
              SLOT(showContextMenu(QPoint)) );
@@ -147,8 +145,8 @@ void ProjectBuildSetWidget::showContextMenu( const QPoint& p )
     
 
     KMenu m;
-    m.setTitle( i18n("Buildset") );
-    m.addAction( i18n( "Remove from buildset" ), this, SLOT(removeItems()) );
+    m.setTitle( i18n("Build Set") );
+    m.addAction( KIcon("list-remove"), i18n( "Remove From Build Set" ), this, SLOT(removeItems()) );
     
     if( !itemlist.isEmpty() )
     {

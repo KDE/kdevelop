@@ -17,8 +17,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef APPLYCHANGESWIDGET_H
-#define APPLYCHANGESWIDGET_H
+#ifndef KDEVPLATFORM_APPLYCHANGESWIDGET_H
+#define KDEVPLATFORM_APPLYCHANGESWIDGET_H
 
 #include <KDE/KDialog>
 #include "../languageexport.h"

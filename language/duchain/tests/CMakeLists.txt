@@ -28,6 +28,19 @@ target_link_libraries(benchmarks ${KDE4_KDECORE_LIBS} ${KDE4_KTEXTEDITOR_LIBRARY
 
 ########### next target ###############
 
+set(itemrepositoryregistry_automatic_test_SRCS test_itemrepositoryregistry_automatic.cpp)
+kde4_add_unit_test(itemrepositoryregistry_automatic_test ${itemrepositoryregistry_automatic_test_SRCS})
+target_link_libraries(itemrepositoryregistry_automatic_test ${QT_QTTEST_LIBRARY}
+    kdevplatformlanguage ${KDEVPLATFORM_TESTS_LIBRARIES})
+
+########### next target ###############
+
+set(itemrepositoryregistry_deferred_test_SRCS test_itemrepositoryregistry_deferred.cpp)
+kde4_add_unit_test(itemrepositoryregistry_deferred_test ${itemrepositoryregistry_deferred_test_SRCS})
+target_link_libraries(itemrepositoryregistry_deferred_test ${QT_QTTEST_LIBRARY}
+    kdevplatformlanguage ${KDEVPLATFORM_TESTS_LIBRARIES})
+
+########### next target ###############
 
 # TODO: Remove when LTS for g++ < 4.3 has ended.
 #       See also: languages/cpp/parser/parser.h in KDevelop

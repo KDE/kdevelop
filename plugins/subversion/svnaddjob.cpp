@@ -32,6 +32,7 @@
 
 SvnInternalAddJob::SvnInternalAddJob( SvnJobBase* parent )
     : SvnInternalJobBase( parent )
+    , m_recursive( false )
 {
 }
 

@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVELOP_PROBLEMNAVIGATIONCONTEXT_H
-#define KDEVELOP_PROBLEMNAVIGATIONCONTEXT_H
+#ifndef KDEVPLATFORM_PROBLEMNAVIGATIONCONTEXT_H
+#define KDEVPLATFORM_PROBLEMNAVIGATIONCONTEXT_H
 
 #include <language/duchain/navigation/abstractnavigationcontext.h>
 #include <language/duchain/topducontext.h>
@@ -42,4 +42,4 @@ class KDEVPLATFORMLANGUAGE_EXPORT ProblemNavigationContext : public AbstractNavi
 
 }
 
-#endif // KDEVELOP_PROBLEMNAVIGATIONCONTEXT_H
+#endif // KDEVPLATFORM_PROBLEMNAVIGATIONCONTEXT_H

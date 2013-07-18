@@ -18,8 +18,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef EXTERNALSCRIPTJOB_H
-#define EXTERNALSCRIPTJOB_H
+#ifndef KDEVPLATFORM_PLUGIN_EXTERNALSCRIPTJOB_H
+#define KDEVPLATFORM_PLUGIN_EXTERNALSCRIPTJOB_H
 
 #include <QtCore/QProcess>
 #include <outputview/outputjob.h>
@@ -59,6 +59,8 @@ private slots:
   void processError( QProcess::ProcessError );
   void processFinished( int, QProcess::ExitStatus );
 
+  void receivedStdoutLines(const QStringList& lines);
+  void receivedStderrLines(const QStringList& lines);
 private:
   void appendLine( const QString &l );
 
@@ -74,8 +76,11 @@ private:
   KTextEditor::Range m_selectionRange;
   KTextEditor::Cursor m_cursorPosition;
   bool m_showOutput;
+
+  QStringList m_stdout;
+  QStringList m_stderr;
 };
 
-#endif // EXTERNALSCRIPTJOB_H
+#endif // KDEVPLATFORM_PLUGIN_EXTERNALSCRIPTJOB_H
 
 // kate: indent-mode cstyle; space-indent on; indent-width 2; replace-tabs on;

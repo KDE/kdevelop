@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef QUICKOPENMODEL_H
-#define QUICKOPENMODEL_H
+#ifndef KDEVPLATFORM_PLUGIN_QUICKOPENMODEL_H
+#define KDEVPLATFORM_PLUGIN_QUICKOPENMODEL_H
 
 #include <QMultiMap>
 #include <QString>

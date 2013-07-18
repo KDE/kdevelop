@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef INDEXEDTOPDUCONTEXT_H
-#define INDEXEDTOPDUCONTEXT_H
+#ifndef KDEVPLATFORM_INDEXEDTOPDUCONTEXT_H
+#define KDEVPLATFORM_INDEXEDTOPDUCONTEXT_H
 
 #include <QMetaType>
 #include <QPair>
@@ -138,4 +138,4 @@ struct IndexedTopDUContextIndexConversion {
 
 Q_DECLARE_METATYPE(KDevelop::IndexedTopDUContext);
 
-#endif // INDEXEDTOPDUCONTEXT_H
+#endif // KDEVPLATFORM_INDEXEDTOPDUCONTEXT_H

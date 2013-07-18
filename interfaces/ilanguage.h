@@ -16,8 +16,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef ILANGUAGE_H
-#define ILANGUAGE_H
+#ifndef KDEVPLATFORM_ILANGUAGE_H
+#define KDEVPLATFORM_ILANGUAGE_H
 
 #include <QtCore/QObject>
 

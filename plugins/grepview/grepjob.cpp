@@ -53,7 +53,8 @@ GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re)
     // reads file with detected encoding
     file.seek(0);
     QTextStream stream(&file);
-    stream.setCodec(prober.encoding());
+    if(prober.confidence()>0.7)
+        stream.setCodec(prober.encoding());
     while( !stream.atEnd() )
     {
         QString data = stream.readLine();
@@ -86,7 +87,14 @@ GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re)
 }
 
 GrepJob::GrepJob( QObject* parent )
-    : KJob( parent ), m_workState(WorkIdle)
+    : KJob( parent )
+    , m_workState(WorkIdle)
+    , m_fileIndex(0)
+    , m_useProjectFilesFlag(false)
+    , m_regexpFlag(true)
+    , m_caseSensitiveFlag(true)
+    , m_depthValue(-1)
+    , m_findSomething(false)
 {
     setCapabilities(Killable);
     KDevelop::ICore::self()->uiController()->registerStatus(this);
@@ -178,7 +186,7 @@ void GrepJob::slotWork()
             QMetaObject::invokeMethod(this, "slotWork", Qt::QueuedConnection);
             break;
         case WorkCollectFiles:
-            m_findThread = new GrepFindFilesThread(this, m_directoryChoice, m_recursiveFlag, m_filesString, m_excludeString, m_useProjectFilesFlag);
+            m_findThread = new GrepFindFilesThread(this, m_directoryChoice, m_depthValue, m_filesString, m_excludeString, m_useProjectFilesFlag);
             emit showMessage(this, i18n("Collecting files..."));
             connect(m_findThread, SIGNAL(finished()), this, SLOT(slotFindFinished()));
             m_findThread->start();
@@ -258,7 +266,7 @@ void GrepJob::testFinishState(KJob *job)
     if(!job->error())
     {
         if (!m_errorMessage.isEmpty()) {
-            emit showErrorMessage(i18n("Failed: %1").arg(m_errorMessage));
+            emit showErrorMessage(i18n("Failed: %1", m_errorMessage));
         }
         else if (!m_findSomething) {
             emit showMessage(this, i18n("No results found"));
@@ -301,9 +309,9 @@ void GrepJob::setCaseSensitive(bool caseSensitive)
     m_caseSensitiveFlag = caseSensitive;
 }
 
-void GrepJob::setRecursive(bool recursive)
+void GrepJob::setDepth(int depth)
 {
-    m_recursiveFlag = recursive;
+    m_depthValue = depth;
 }
 
 void GrepJob::setRegexpFlag(bool regexpFlag)

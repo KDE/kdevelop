@@ -19,8 +19,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KDEVELOP_BREAKPOINTWIDGET_H
-#define KDEVELOP_BREAKPOINTWIDGET_H
+#ifndef KDEVPLATFORM_BREAKPOINTWIDGET_H
+#define KDEVPLATFORM_BREAKPOINTWIDGET_H
 
 #include <QtGui/QWidget>
 #include "../debuggerexport.h"
@@ -81,4 +81,4 @@ private:
 
 }
 
-#endif // KDEVELOP_BREAKPOINTWIDGET_H
+#endif // KDEVPLATFORM_BREAKPOINTWIDGET_H

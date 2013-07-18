@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef JSONDUCONTEXTTESTS_H
-#define JSONDUCONTEXTTESTS_H
+#ifndef KDEVPLATFORM_JSONDUCONTEXTTESTS_H
+#define KDEVPLATFORM_JSONDUCONTEXTTESTS_H
 
 #include "language/duchain/ducontext.h"
 #include "jsontesthelpers.h"
@@ -124,4 +124,4 @@ ContextTest(type)
 
 }
 
-#endif //JSONDUCONTEXTTESTS_H
+#endif //KDEVPLATFORM_JSONDUCONTEXTTESTS_H

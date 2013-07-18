@@ -8,8 +8,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef PROJECTINFOPAGE_H
-#define PROJECTINFOPAGE_H
+#ifndef KDEVPLATFORM_PROJECTINFOPAGE_H
+#define KDEVPLATFORM_PROJECTINFOPAGE_H
 
 #include <QtGui/QWidget>
 

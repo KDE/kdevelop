@@ -94,12 +94,9 @@ AbstractType::WhichType AbstractType::whichType() const
 void AbstractType::exchangeTypes( TypeExchanger* /*exchanger */) {
 }
 
-IndexedType AbstractType::indexed() const {
-  if(this == 0)
-    return IndexedType();
-  else {
-    return IndexedType(TypeRepository::indexForType(AbstractType::Ptr(const_cast<AbstractType*>(this))));
-  }
+IndexedType AbstractType::indexed() const
+{
+  return IndexedType(TypeRepository::indexForType(AbstractType::Ptr(const_cast<AbstractType*>(this))));
 }
 
 bool AbstractType::equals(const AbstractType* rhs) const
@@ -110,25 +107,7 @@ bool AbstractType::equals(const AbstractType* rhs) const
 
 uint AbstractType::hash() const
 {
-  // TODO include other items in the hash
-
-  uint hash = d_func()->typeClassId;
-  hash = hash *  301 + hash / 3;
-
-  uint mod = d_func()->m_modifiers;
-  
-  if (mod & ShortModifier)
-    hash += 0x1;
-  if (mod & LongModifier)
-    hash += 0x2;
-  if (mod & LongLongModifier)
-    hash += 0x4;
-  if (mod & SignedModifier)
-    hash += 0x8;
-  if (mod & UnsignedModifier)
-    hash += 0x10;
-
-  return (mod & ConstModifier ? 7 : 0) + (mod & VolatileModifier ? 3 : 0) + 83 * hash;
+  return KDevHash() << d_func()->typeClassId << d_func()->m_modifiers;
 }
 
 QString AbstractType::toString() const

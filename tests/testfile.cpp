@@ -34,7 +34,8 @@
 
 using namespace KDevelop;
 
-struct TestFile::TestFilePrivate {
+struct TestFile::TestFilePrivate
+{
     TestFilePrivate()
     : ready(false)
     {
@@ -48,7 +49,36 @@ struct TestFile::TestFilePrivate {
         ready = true;
     }
 
-    KTemporaryFile file;
+    void init(const QString& fileName, const QString& contents, TestProject* _project)
+    {
+        file = fileName;
+
+        setFileContents(contents);
+
+        QFileInfo info(file);
+        Q_ASSERT(info.exists());
+        Q_ASSERT(info.isFile());
+        url = IndexedString(info.absoluteFilePath());
+
+        project = _project;
+        if (project) {
+            #warning port this, just create new file and add to project?
+//             project->addToFileSet(d->url);
+        }
+    }
+
+    void setFileContents(const QString& contents)
+    {
+        QFile file(this->file);
+        file.open(QIODevice::WriteOnly | QIODevice::Truncate);
+        Q_ASSERT(file.isOpen());
+        Q_ASSERT(file.isWritable());
+        file.write(contents.toUtf8());
+        ready = false;
+    }
+
+    QString file;
+    QString suffix;
     bool ready;
     ReferencedTopDUContext topContext;
     IndexedString url;
@@ -59,20 +89,24 @@ TestFile::TestFile(const QString& contents, const QString& fileExtension,
                    TestProject* project, const QString& dir)
 : d(new TestFilePrivate())
 {
-    d->file.setSuffix('.' + fileExtension);
-    d->file.setPrefix(dir);
-    setFileContents(contents);
+    KTemporaryFile file;
+    d->suffix = '.' + fileExtension;
+    file.setSuffix(d->suffix);
+    file.setPrefix(dir);
+    file.setAutoRemove(false);
+    file.open();
+    Q_ASSERT(file.isOpen());
 
-    QFileInfo info(d->file.fileName());
-    Q_ASSERT(info.exists());
-    Q_ASSERT(info.isFile());
-    d->url = IndexedString(info.absoluteFilePath());
+    d->init(file.fileName(), contents, project);
+}
 
-    d->project = project;
-    if (project) {
-#warning port this, just create new file and add to project?
-//         project->addToFileSet(d->url);
-    }
+TestFile::TestFile(const QString& contents, const QString& fileExtension, const TestFile* base)
+: d(new TestFilePrivate)
+{
+    QString fileName = base->d->file.mid(0, base->d->file.length() - base->d->suffix.length());
+    d->suffix = '.' + fileExtension;
+    fileName += d->suffix;
+    d->init(fileName, contents, base->d->project);
 }
 
 TestFile::~TestFile()
@@ -85,6 +119,7 @@ TestFile::~TestFile()
 #warning port this
 //         d->project->removeFromFileSet(d->url);
     }
+    QFile::remove(d->file);
     delete d;
 }
 
@@ -126,25 +161,16 @@ ReferencedTopDUContext TestFile::topContext()
 
 void TestFile::setFileContents(const QString& contents)
 {
-    d->file.open();
-    Q_ASSERT(d->file.isOpen());
-    Q_ASSERT(d->file.isWritable());
-    // manually truncate since we cannot give .open()
-    // any arguments in QTemporaryFile...)
-    d->file.resize(0);
-    d->file.write(contents.toLocal8Bit());
-    d->file.close();
-    d->ready = false;
+    d->setFileContents(contents);
 }
 
 QString TestFile::fileContents() const
 {
-    d->file.open();
-    Q_ASSERT(d->file.isOpen());
-    Q_ASSERT(d->file.isReadable());
-    QString ret = QString::fromLocal8Bit(d->file.readAll());
-    d->file.close();
-    return ret;
+    QFile file(d->file);
+    file.open(QIODevice::ReadOnly);
+    Q_ASSERT(file.isOpen());
+    Q_ASSERT(file.isReadable());
+    return QString::fromUtf8(file.readAll());
 }
 
 #include "testfile.moc"

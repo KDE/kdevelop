@@ -21,8 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef PROBLEMREPORTERPLUGIN_H
-#define PROBLEMREPORTERPLUGIN_H
+#ifndef KDEVPLATFORM_PLUGIN_PROBLEMREPORTERPLUGIN_H
+#define KDEVPLATFORM_PLUGIN_PROBLEMREPORTERPLUGIN_H
 
 #include <interfaces/iplugin.h>
 #include <QtCore/QVariant>
@@ -52,7 +52,7 @@ class ProblemReporterPlugin : public KDevelop::IPlugin
     ProblemModel* getModel() const;
 
   private Q_SLOTS:
-    void updateReady(KDevelop::IndexedString url, KDevelop::ReferencedTopDUContext topContext);
+    void updateReady(const KDevelop::IndexedString &url, const KDevelop::ReferencedTopDUContext& ctx);
     void textDocumentCreated(KDevelop::IDocument* document);
     void parseJobFinished(KDevelop::ParseJob* parseJob);
 
@@ -65,6 +65,6 @@ public slots:
     void documentClosed(KDevelop::IDocument*);
 };
 
-#endif // PROBLEMREPORTERPLUGIN_H
+#endif // KDEVPLATFORM_PLUGIN_PROBLEMREPORTERPLUGIN_H
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

@@ -33,7 +33,11 @@
 namespace KDevelop {
 
 FrameStackModel::FrameStackModel(IDebugSession *session)
-: IFrameStackModel(session), m_currentThread(-1), m_currentFrame(-1), m_updateCurrentFrameOnNextFetch(false)
+    : IFrameStackModel(session)
+    , m_currentThread(-1)
+    , m_currentFrame(-1)
+    , m_subsequentFrameFetchOperations(0)
+    , m_updateCurrentFrameOnNextFetch(false)
 {
     connect(session, SIGNAL(stateChanged(KDevelop::IDebugSession::DebuggerState)), SLOT(stateChanged(KDevelop::IDebugSession::DebuggerState)));
 }
@@ -305,6 +309,7 @@ void FrameStackModel::setCurrentFrame(int frame)
 
 void FrameStackModel::update()
 {
+    m_subsequentFrameFetchOperations = 0;
     fetchThreads();
     if (m_currentThread != -1) {
         fetchFrames(m_currentThread, 0, 20);
@@ -337,12 +342,14 @@ void FrameStackModel::stateChanged(IDebugSession::DebuggerState state)
 // FIXME: it should be possible to fetch more frames for
 // an arbitrary thread, without making it current.
 void FrameStackModel::fetchMoreFrames()
-{    
+{
+    m_subsequentFrameFetchOperations += 1;
+    const int fetch = 20 * m_subsequentFrameFetchOperations * m_subsequentFrameFetchOperations;
     if (m_currentThread != -1 && m_hasMoreFrames[m_currentThread]) {
         setHasMoreFrames(m_currentThread, false);
         fetchFrames(m_currentThread,
                     m_frames[m_currentThread].count(),
-                    m_frames[m_currentThread].count()-1+20);
+                    m_frames[m_currentThread].count()-1+fetch);
     }
 }
 

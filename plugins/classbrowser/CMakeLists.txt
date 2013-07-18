@@ -35,5 +35,6 @@ install(TARGETS kdevclassbrowser DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install(FILES kdevclassbrowser.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+configure_file(kdevclassbrowser.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevclassbrowser.desktop)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevclassbrowser.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 install(FILES kdevclassbrowser.rc DESTINATION ${DATA_INSTALL_DIR}/kdevclassbrowser)

@@ -19,8 +19,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef FILEUTILS_H
-#define FILEUTILS_H
+#ifndef KDEVPLATFORM_FILEUTILS_H
+#define KDEVPLATFORM_FILEUTILS_H
 
 #include "utilexport.h"
 
@@ -47,4 +47,4 @@ bool KDEVPLATFORMUTIL_EXPORT removeDirectory(const QString& dir);
 
 }
 
-#endif // FILEUTILS_H
+#endif // KDEVPLATFORM_FILEUTILS_H

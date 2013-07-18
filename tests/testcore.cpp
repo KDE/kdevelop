@@ -43,7 +43,7 @@ TestCore::TestCore()
     Core::m_self = this;
 }
 
-void TestCore::initialize( Core::Setup mode, const QString& session )
+TestCore* TestCore::initialize( Core::Setup mode, const QString& session )
 {
     qRegisterMetaType<KUrl::List>("KUrl::List");
 
@@ -60,6 +60,7 @@ void TestCore::initialize( Core::Setup mode, const QString& session )
         // the unit tests should work anyways
         core->uiController()->activeMainWindow()->hide();
     }
+    return core;
 }
 
 void TestCore::initializeNonStatic(Core::Setup mode, const QString& _session)

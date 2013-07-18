@@ -19,8 +19,8 @@ along with this library; see the file COPYING.LIB.  If not, write to
 the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
-#ifndef KDEVMAINWINDOW_PRIVATE_H
-#define KDEVMAINWINDOW_PRIVATE_H
+#ifndef KDEVPLATFORM_MAINWINDOW_PRIVATE_H
+#define KDEVPLATFORM_MAINWINDOW_PRIVATE_H
 
 #include <QObject>
 #include <QPointer>
@@ -90,13 +90,9 @@ public Q_SLOTS:
     void split(Qt::Orientation orientation);
     void toggleFullScreen(bool fullScreen);
 
-    void configureToolbars();
     void newToolbarConfig();
 
     void settingsDialog();
-    void stopPopupActivated( int );
-    void stopMenuAboutToShow();
-    void stopButtonPressed();
 
     void quitAll();
 

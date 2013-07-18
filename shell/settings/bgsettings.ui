@@ -47,7 +47,7 @@
          <string>The time to wait before the document is re-analyzed when you edit it.</string>
         </property>
         <property name="text">
-         <string>Delay</string>
+         <string>Delay:</string>
         </property>
        </widget>
       </item>
@@ -79,7 +79,7 @@
          <string>The maximum number of parallel instances the background parser uses. If unsure, select 1 or 2.</string>
         </property>
         <property name="text">
-         <string>Maximum Number of Threads</string>
+         <string>Maximum number of threads:</string>
         </property>
        </widget>
       </item>

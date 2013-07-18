@@ -34,16 +34,10 @@ void TestGenerationTest::initTestCase()
     AutoTestShell::init();
     TestCore::initialize (Core::NoUi);
 
-    KComponentData data = ICore::self()->componentData();
-    baseUrl.setDirectory(KStandardDirs::locateLocal("tmp", "test_templatetestgenerator/", data));
-
-    KStandardDirs *dirs = data.dirs();
-    bool addedDir = dirs->addResourceDir("filetemplates", CODEUTILS_TESTS_TEMPLATES_DIR, true);
+    bool addedDir = ICore::self()->componentData().dirs()->addResourceDir("data", CODEUTILS_TESTS_DATA_DIR, true);
     QVERIFY(addedDir);
 
-    TemplatesModel model(data, this);
-    model.setTemplateResourceType("filetemplates");
-    model.setDescriptionResourceType("filetemplate_descriptions");
+    TemplatesModel model("testgenerationtest");
     model.refresh();
 
     renderer = new TemplateRenderer;
@@ -68,18 +62,16 @@ void TestGenerationTest::cleanupTestCase()
 
 void TestGenerationTest::init()
 {
-    QDir dir(baseUrl.toLocalFile());
-    foreach (const QString& fileName, dir.entryList(QDir::Files | QDir::NoDotAndDotDot))
-    {
-        dir.remove(fileName);
-    }
+    dir.reset(new KTempDir);
+    baseUrl = KUrl(dir->name());
 }
 
 void TestGenerationTest::yamlTemplate()
 {
-    QString description = ICore::self()->componentData().dirs()->findResource("filetemplate_descriptions", "test_yaml.desktop");
+    QString description = ICore::self()->componentData().dirs()->findResource("data", "testgenerationtest/template_descriptions/test_yaml.desktop");
     QVERIFY(!description.isEmpty());
-    SourceFileTemplate file(description);
+    SourceFileTemplate file;
+    file.setTemplateDescription(description, "testgenerationtest");
     QCOMPARE(file.name(), QString("Testing YAML Template"));
 
     DocumentChangeSet changes = renderer->renderFileTemplate(file, baseUrl, urls(file));
@@ -90,9 +82,10 @@ void TestGenerationTest::yamlTemplate()
 
 void TestGenerationTest::cppTemplate()
 {
-    QString description = ICore::self()->componentData().dirs()->findResource("filetemplate_descriptions", "test_qtestlib.desktop");
+    QString description = ICore::self()->componentData().dirs()->findResource("data", "testgenerationtest/template_descriptions/test_qtestlib.desktop");
     QVERIFY(!description.isEmpty());
-    SourceFileTemplate file(description);
+    SourceFileTemplate file;
+    file.setTemplateDescription(description, "testgenerationtest");
 
     QCOMPARE(file.name(), QString("Testing C++ Template"));
 

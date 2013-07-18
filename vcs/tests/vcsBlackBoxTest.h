@@ -22,8 +22,8 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#ifndef VCSBLACKBOXTEST_H
-#define VCSBLACKBOXTEST_H
+#ifndef KDEVPLATFORM_VCSBLACKBOXTEST_H
+#define KDEVPLATFORM_VCSBLACKBOXTEST_H
 
 #include <QtCore/QObject>
 #include <QtCore/QSet>

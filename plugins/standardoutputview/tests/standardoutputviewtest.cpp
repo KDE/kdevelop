@@ -155,12 +155,12 @@ void StandardOutputViewTest::testRegisterAndRemoveOutput()
 
     for(int i = 0; i < 5; i++)
     {
-        outputId[i] = m_stdOutputView->registerOutputInToolView(toolviewId, "output" + i);
+        outputId[i] = m_stdOutputView->registerOutputInToolView(toolviewId, QString("output%1").arg(i));
     }
     for(int i = 0; i < 5; i++)
     {
-        QCOMPARE(outputWidget->data->outputdata.value(outputId[i])->title, QString("output" + i));
-        QCOMPARE(outputWidget->tabwidget->tabText(i), QString("output" + i));
+        QCOMPARE(outputWidget->data->outputdata.value(outputId[i])->title, QString("output%1").arg(i));
+        QCOMPARE(outputWidget->tabwidget->tabText(i), QString("output%1").arg(i));
     }
     for(int i = 0; i < 5; i++)
     {
@@ -179,11 +179,11 @@ void StandardOutputViewTest::testRegisterAndRemoveOutput()
 
     for(int i = 0; i < 5; i++)
     {
-        outputId[i] = m_stdOutputView->registerOutputInToolView(toolviewId, "output" + i);
+        outputId[i] = m_stdOutputView->registerOutputInToolView(toolviewId, QString("output%1").arg(i));
     }
     for(int i = 0; i < 5; i++)
     {
-        QCOMPARE(outputWidget->data->outputdata.value(outputId[i])->title, QString("output" + i));
+        QCOMPARE(outputWidget->data->outputdata.value(outputId[i])->title, QString("output%1").arg(i));
     }
     for(int i = 0; i < 5; i++)
     {

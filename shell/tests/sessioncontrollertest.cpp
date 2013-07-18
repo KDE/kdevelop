@@ -43,7 +43,7 @@ using QTest::kWaitForSignal;
 
 QString sessionDir( ISession* s )
 {
-    return SessionController::sessionDirectory() + '/' + s->id().toString();
+    return SessionController::sessionDirectory(s->id().toString());
 }
 
 void verifySessionDir( const QString& sessiondir, const QString& name, bool exists )
@@ -84,10 +84,11 @@ void SessionControllerTest::init()
 
 void SessionControllerTest::cleanupTestCase()
 {
-    foreach( const QString& name, m_sessionCtrl->sessionNames() )
+    foreach( const Session* session, m_sessionCtrl->sessions() )
     {
-        if (m_sessionCtrl->activeSession()->name() != name)
-            m_sessionCtrl->deleteSession( name );
+        TryLockSessionResult lock = m_sessionCtrl->tryLockSession(session->id());
+        if (lock.lock)
+            m_sessionCtrl->deleteSession( lock.lock );
     }
 
     TestCore::shutdown();
@@ -160,8 +161,13 @@ void SessionControllerTest::deleteSession()
     QCOMPARE( sessionCount+1, m_sessionCtrl->sessionNames().count() );
     verifySessionDir( s );
     QSignalSpy spy(m_sessionCtrl, SIGNAL(sessionDeleted(QString)));
-    m_sessionCtrl->deleteSession( sessionName );
+    {
+        TryLockSessionResult lock = m_sessionCtrl->tryLockSession(sessionId);
+        QVERIFY(lock.lock);
+        m_sessionCtrl->deleteSession( lock.lock );
+    }
     QCOMPARE( sessionCount, m_sessionCtrl->sessionNames().count() );
+    QVERIFY( !m_sessionCtrl->sessionNames().contains(sessionId) );
 
     QCOMPARE(spy.size(), 1);
     QList<QVariant> arguments = spy.takeFirst();
@@ -220,6 +226,56 @@ void SessionControllerTest::temporary()
     Core::self()->sessionController()->initialize(oldName);
     QCOMPARE(Core::self()->activeSession()->name(), oldName);
     // dir / UID can be different, hence don't verifySessionDir
+}
+
+void SessionControllerTest::tryLockSession()
+{
+    const QString id1 = QUuid::createUuid().toString();
+    m_sessionCtrl->createSession( id1 )->setTemporary(true);
+    const QString id2 = QUuid::createUuid().toString();
+    m_sessionCtrl->createSession( id2 )->setTemporary(true);
+    {
+        // acquired scoped lock
+        QVERIFY(!SessionController::isSessionRunning(id1));
+        QCOMPARE(SessionController::sessionRunInfo(id1), SessionRunInfo());
+        TryLockSessionResult initial = SessionController::tryLockSession(id1);
+        QVERIFY(initial.lock);
+        QCOMPARE(initial.lock->id(), id1);
+        QCOMPARE(initial.runInfo, SessionRunInfo());
+        QVERIFY(SessionController::isSessionRunning(id1));
+
+        SessionRunInfo info = SessionController::sessionRunInfo(id1);
+        QVERIFY(info != initial.runInfo);
+        QVERIFY(info.isRunning);
+        QCOMPARE(info.holderApp, QCoreApplication::applicationName());
+        QCOMPARE(info.holderPid, static_cast<int>(QCoreApplication::applicationPid()));
+
+        // this should fail
+        TryLockSessionResult repeated = SessionController::tryLockSession(id1);
+        QVERIFY(!repeated.lock);
+        QCOMPARE(repeated.runInfo, info);
+
+        // this should pass (different id)
+        QVERIFY(!SessionController::isSessionRunning(id2));
+        TryLockSessionResult other = SessionController::tryLockSession(id2);
+        QVERIFY(other.lock);
+        QCOMPARE(other.lock->id(), id2);
+        QCOMPARE(other.runInfo, SessionRunInfo());
+        QVERIFY(SessionController::isSessionRunning(id2));
+    }
+
+    // scope left, sessions are now unlocked again
+    QVERIFY(!SessionController::isSessionRunning(id1));
+    QCOMPARE(SessionController::sessionRunInfo(id1), SessionRunInfo());
+    QVERIFY(!SessionController::isSessionRunning(id2));
+    QCOMPARE(SessionController::sessionRunInfo(id2), SessionRunInfo());
+
+    // can re-lock it here
+    TryLockSessionResult final = SessionController::tryLockSession(id1);
+    QVERIFY(SessionController::isSessionRunning(id1));
+    QVERIFY(final.lock);
+    QCOMPARE(final.lock->id(), id1);
+    QCOMPARE(final.runInfo, SessionRunInfo());
 }
 
 QTEST_KDEMAIN( SessionControllerTest, GUI)

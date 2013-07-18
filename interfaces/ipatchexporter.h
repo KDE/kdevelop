@@ -18,8 +18,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef IPATCHEXPORTER_H
-#define IPATCHEXPORTER_H
+#ifndef KDEVPLATFORM_IPATCHEXPORTER_H
+#define KDEVPLATFORM_IPATCHEXPORTER_H
 #include "interfacesexport.h"
 #include "ipatchsource.h"
 

@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef PERSISTENTSETMAP_H
-#define PERSISTENTSETMAP_H
+#ifndef KDEVPLATFORM_PERSISTENTSETMAP_H
+#define KDEVPLATFORM_PERSISTENTSETMAP_H
 
 #include "appendedlist.h"
 #include "../../util/embeddedfreetree.h"

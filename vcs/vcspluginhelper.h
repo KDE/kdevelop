@@ -8,8 +8,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef VCSPLUGINHELPER_H
-#define VCSPLUGINHELPER_H
+#ifndef KDEVPLATFORM_VCSPLUGINHELPER_H
+#define KDEVPLATFORM_VCSPLUGINHELPER_H
 
 #include "vcsexport.h"
 
@@ -56,11 +56,12 @@ public Q_SLOTS:
     void history(const VcsRevision& rev = VcsRevision::createSpecialRevision( VcsRevision::Base ));
     void annotation();
     void annotationContextMenuAboutToShow( KTextEditor::View* view, QMenu* menu, int line);
-    void annotationVisibilityChange(KTextEditor::View* view, QMenu* menu, int visible);
     void diffToBase();
     void diffForRev();
     void diffForRevGlobal();
     void update();
+    void pull();
+    void push();
     void diffJobFinished(KJob* job);
     
     void revertDone(KJob* job);

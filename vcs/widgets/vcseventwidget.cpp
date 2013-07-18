@@ -23,9 +23,11 @@
 
 #include <QHeaderView>
 #include <QAction>
+#include <QClipboard>
 
 #include <kdebug.h>
 #include <kmenu.h>
+#include <KAction>
 
 
 #include <interfaces/iplugin.h>
@@ -53,19 +55,24 @@ class VcsEventWidgetPrivate
 public:
     VcsEventWidgetPrivate( VcsEventWidget* w )
         : q( w )
-    {}
+    {
+        m_copyAction = new KAction(KIcon("edit-copy"), i18n("Copy revision number"), q);
+        m_copyAction->setShortcut(Qt::ControlModifier+Qt::Key_C);
+        QObject::connect(m_copyAction, SIGNAL(triggered(bool)), q, SLOT(copyRevision()));
+    }
 
     Ui::VcsEventWidget* m_ui;
     VcsItemEventModel* m_detailModel;
     VcsEventModel *m_logModel;
-    KDevelop::VcsJob* m_job;
     KUrl m_url;
     QModelIndex m_contextIndex;
     VcsEventWidget* q;
-    KDevelop::IBasicVersionControl* m_iface;
+    KAction* m_copyAction;
+    IBasicVersionControl* m_iface;
     void eventViewCustomContextMenuRequested( const QPoint &point );
     void eventViewClicked( const QModelIndex &index );
     void jobReceivedResults( KDevelop::VcsJob* job );
+    void copyRevision();
     void diffToPrevious();
     void diffRevisions();
     void currentRowChanged(const QModelIndex& start, const QModelIndex& end);
@@ -80,12 +87,9 @@ void VcsEventWidgetPrivate::eventViewCustomContextMenuRequested( const QPoint &p
     }
 
     KMenu menu( m_ui->eventView );
-
-    QAction* action = menu.addAction(i18n("Diff to previous revision"));
-    QObject::connect( action, SIGNAL(triggered(bool)), q, SLOT(diffToPrevious()) );
-
-    action = menu.addAction(i18n("Diff between revisions"));
-    QObject::connect( action, SIGNAL(triggered(bool)), q, SLOT(diffRevisions()) );
+    menu.addAction(m_copyAction);
+    menu.addAction(i18n("Diff to previous revision"), q, SLOT(diffToPrevious()));
+    QAction* action = menu.addAction(i18n("Diff between revisions"), q, SLOT(diffRevisions()));
     action->setEnabled(m_ui->eventView->selectionModel()->selectedRows().size()>=2);
 
     menu.exec( m_ui->eventView->viewport()->mapToGlobal(point) );
@@ -101,7 +105,7 @@ void VcsEventWidgetPrivate::currentRowChanged(const QModelIndex& start, const QM
 void VcsEventWidgetPrivate::eventViewClicked( const QModelIndex &index )
 {
     KDevelop::VcsEvent ev = m_logModel->eventForIndex( index );
-    m_detailModel->removeRows(0, m_detailModel->rowCount()-1);
+    m_detailModel->removeRows(0, m_detailModel->rowCount());
     
     if( ev.revision().revisionType() != KDevelop::VcsRevision::Invalid )
     {
@@ -111,25 +115,17 @@ void VcsEventWidgetPrivate::eventViewClicked( const QModelIndex &index )
     {
         m_ui->message->clear();
     }
-}
 
-void VcsEventWidgetPrivate::jobReceivedResults( KDevelop::VcsJob* job )
-{
-    if( job == m_job )
-    {
-        QList<QVariant> l = job->fetchResults().toList();
-        QList<KDevelop::VcsEvent> newevents;
-        foreach( const QVariant &v, l )
-        {
-            if( qVariantCanConvert<KDevelop::VcsEvent>( v ) )
-            {
-                newevents << qVariantValue<KDevelop::VcsEvent>( v );
-            }
-        }
-        m_logModel->addEvents( newevents );
+    QHeaderView* header = m_ui->itemEventView->header();
+    for(int i=0, count=m_detailModel->columnCount(); i<count; i++) {
+        header->setResizeMode( i, (i==m_detailModel->columnCount()-1) ? QHeaderView::Stretch : QHeaderView::ResizeToContents);
     }
 }
 
+void VcsEventWidgetPrivate::copyRevision()
+{
+    qApp->clipboard()->setText(m_contextIndex.sibling(m_contextIndex.row(), 0).data().toString());
+}
 
 void VcsEventWidgetPrivate::diffToPrevious()
 {
@@ -165,22 +161,15 @@ void VcsEventWidgetPrivate::diffRevisions()
     dlg->show();
 }
 
-VcsEventWidget::VcsEventWidget( const KUrl& url, KDevelop::VcsJob *job, QWidget *parent )
+VcsEventWidget::VcsEventWidget( const KUrl& url, const VcsRevision& rev, KDevelop::IBasicVersionControl* iface, QWidget* parent )
     : QWidget(parent), d(new VcsEventWidgetPrivate(this) )
 {
-
-    d->m_job = job;
-    //Don't autodelete this job, its metadata will be used later on
-    d->m_job->setAutoDelete( false );
-    
-    d->m_iface = job->vcsPlugin()->extension<KDevelop::IBasicVersionControl>();
-    Q_ASSERT(d->m_iface);
-
+    d->m_iface = iface;
     d->m_url = url;
     d->m_ui = new Ui::VcsEventWidget();
     d->m_ui->setupUi(this);
 
-    d->m_logModel= new VcsEventModel(this);
+    d->m_logModel= new VcsEventModel(iface, rev, url, this);
     d->m_ui->eventView->setModel( d->m_logModel );
     d->m_ui->eventView->sortByColumn(0, Qt::DescendingOrder);
     d->m_ui->eventView->setContextMenuPolicy( Qt::CustomContextMenu );
@@ -192,11 +181,6 @@ VcsEventWidget::VcsEventWidget( const KUrl& url, KDevelop::VcsJob *job, QWidget 
 
     d->m_detailModel = new VcsItemEventModel(this);
     d->m_ui->itemEventView->setModel( d->m_detailModel );
-    header = d->m_ui->itemEventView->horizontalHeader();
-    header->setResizeMode( 0, QHeaderView::ResizeToContents );
-    header->setResizeMode( 1, QHeaderView::ResizeToContents );
-    header->setResizeMode( 2, QHeaderView::ResizeToContents );
-    header->setResizeMode( 3, QHeaderView::Stretch );
 
     connect( d->m_ui->eventView, SIGNAL(clicked(QModelIndex)),
              this, SLOT(eventViewClicked(QModelIndex)) );
@@ -204,10 +188,6 @@ VcsEventWidget::VcsEventWidget( const KUrl& url, KDevelop::VcsJob *job, QWidget 
              this, SLOT(currentRowChanged(QModelIndex,QModelIndex)));
     connect( d->m_ui->eventView, SIGNAL(customContextMenuRequested(QPoint)),
              this, SLOT(eventViewCustomContextMenuRequested(QPoint)) );
-
-    connect( d->m_job, SIGNAL(resultsReady(KDevelop::VcsJob*)),
-             this, SLOT(jobReceivedResults(KDevelop::VcsJob*)) );
-    ICore::self()->runController()->registerJob( d->m_job );
 }
 
 VcsEventWidget::~VcsEventWidget()

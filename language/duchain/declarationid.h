@@ -16,14 +16,15 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef DECLARATION_ID_H
-#define DECLARATION_ID_H
+#ifndef KDEVPLATFORM_DECLARATION_ID_H
+#define KDEVPLATFORM_DECLARATION_ID_H
 
 #include "../editor/cursorinrevision.h"
 
 #include "indexeddeclaration.h"
 #include "identifier.h"
 #include "instantiationinformation.h"
+#include <language/util/kdevhash.h>
 
 //krazy:excludeall=dpointer
 
@@ -117,9 +118,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
      */
     uint hash() const {
       if(m_direct)
-        return direct.hash() + m_specialization.index() * 101;
+        return KDevHash() << direct.hash() << m_specialization.index();
       else
-        return indirect.m_identifier.getIndex() * 13 + indirect.m_additionalIdentity + m_specialization.index() * 101;
+        return KDevHash() << indirect.m_identifier.getIndex() << indirect.m_additionalIdentity << m_specialization.index();
     }
 
     /**

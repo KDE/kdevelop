@@ -15,8 +15,8 @@
 **
 ***************************************************************************/
 
-#ifndef SETTINGSBASE_H
-#define SETTINGSBASE_H
+#ifndef KDEVPLATFORM_PLUGIN_SETTINGSBASE_H
+#define KDEVPLATFORM_PLUGIN_SETTINGSBASE_H
 
 #include <QtCore/QObject>
 

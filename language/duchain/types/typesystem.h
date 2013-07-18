@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef TYPESYSTEM_H
-#define TYPESYSTEM_H
+#ifndef KDEVPLATFORM_TYPESYSTEM_H
+#define KDEVPLATFORM_TYPESYSTEM_H
 
 #include <QtCore/QSet>
 #include <QtCore/QList>
@@ -126,6 +126,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT SimpleTypeExchanger : public TypeExchanger {
 
 }
 
-#endif // TYPESYSTEM_H
+#endif // KDEVPLATFORM_TYPESYSTEM_H
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

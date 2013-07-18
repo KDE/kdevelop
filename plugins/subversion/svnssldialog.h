@@ -8,8 +8,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SVN_SSLDIALOG_H
-#define SVN_SSLDIALOG_H
+#ifndef KDEVPLATFORM_PLUGIN_SVN_SSLDIALOG_H
+#define KDEVPLATFORM_PLUGIN_SVN_SSLDIALOG_H
 
 #include <kdialog.h>
 

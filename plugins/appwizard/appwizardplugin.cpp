@@ -64,20 +64,14 @@ using KDevelop::IDistributedVersionControl;
 using KDevelop::IPlugin;
 using KDevelop::VcsJob;
 using KDevelop::VcsLocation;
+using KDevelop::ICore;
 
-K_PLUGIN_FACTORY(AppWizardFactory,
-    registerPlugin<AppWizardPlugin>();
-    KComponentData compData = componentData();
-    KStandardDirs *dirs = compData.dirs();
-    dirs->addResourceType("apptemplates", "data", "kdevappwizard/templates/");
-    dirs->addResourceType("apptemplate_descriptions","data", "kdevappwizard/template_descriptions/");
-    dirs->addResourceType("apptemplate_previews","data", "kdevappwizard/template_previews/");
-    setComponentData(compData);
-)
+K_PLUGIN_FACTORY(AppWizardFactory, registerPlugin<AppWizardPlugin>();)
 K_EXPORT_PLUGIN(AppWizardFactory(KAboutData("kdevappwizard","kdevappwizard", ki18n("Project Wizard"), "0.1", ki18n("Support for creating and importing projects"), KAboutData::License_GPL)))
 
 AppWizardPlugin::AppWizardPlugin(QObject *parent, const QVariantList &)
-    :KDevelop::IPlugin(AppWizardFactory::componentData(), parent)
+    : KDevelop::IPlugin(AppWizardFactory::componentData(), parent)
+    , m_templatesModel(0)
 {
     KDEV_USE_EXTENSION_INTERFACE(KDevelop::ITemplateProvider);
     setXMLFile("kdevappwizard.rc");
@@ -87,12 +81,9 @@ AppWizardPlugin::AppWizardPlugin(QObject *parent, const QVariantList &)
     m_newFromTemplate->setText(i18n("New From Template..."));
     connect(m_newFromTemplate, SIGNAL(triggered(bool)), this, SLOT(slotNewProject()));
     m_newFromTemplate->setToolTip( i18n("Generate a new project from a template") );
-    m_newFromTemplate->setWhatsThis( i18n("<b>New project</b><p>"
-                               "This starts KDevelop's application wizard. "
-                               "It helps you to generate a skeleton for your "
-                               "application from a set of templates.</p>") );
-
-    m_templatesModel = new ProjectTemplatesModel(this);
+    m_newFromTemplate->setWhatsThis( i18n("This starts KDevelop's application wizard. "
+                                          "It helps you to generate a skeleton for your "
+                                          "application from a set of templates.") );
 }
 
 AppWizardPlugin::~AppWizardPlugin()
@@ -101,7 +92,7 @@ AppWizardPlugin::~AppWizardPlugin()
 
 void AppWizardPlugin::slotNewProject()
 {
-    m_templatesModel->refresh();
+    model()->refresh();
     AppWizardDialog dlg(core()->pluginController(), m_templatesModel);
 
     if (dlg.exec() == QDialog::Accepted)
@@ -120,7 +111,7 @@ void AppWizardPlugin::slotNewProject()
                 core()->documentController()->openDocument(file);
             }
         } else {
-            KMessageBox::error( KDevelop::ICore::self()->uiController()->activeMainWindow(), i18n("Could not create project from template\n"), i18n("Failed to create project") );
+            KMessageBox::error( ICore::self()->uiController()->activeMainWindow(), i18n("Could not create project from template\n"), i18n("Failed to create project") );
         }
     }
 }
@@ -218,26 +209,20 @@ QString generateIdentifier( const QString& appname )
 QString AppWizardPlugin::createProject(const ApplicationInfo& info)
 {
     QFileInfo templateInfo(info.appTemplate);
-    if (!templateInfo.exists())
+    if (!templateInfo.exists()) {
+        kWarning() << "Project app template does not exist:" << info.appTemplate;
         return QString();
+    }
 
     QString templateName = templateInfo.baseName();
     kDebug() << "creating project for template:" << templateName << " with VCS:" << info.vcsPluginName;
 
-    QString templateArchive;
-    foreach (const QString& archive, componentData().dirs()->findAllResources("apptemplates"))
-    {
-        if (QFileInfo(archive).baseName() == templateName)
-        {
-            templateArchive = archive;
-        }
+    QStringList matches = ICore::self()->componentData().dirs()->findAllResources("data", QString("kdevappwizard/templates/%1*").arg(templateName));
+    if (matches.isEmpty()) {
+        kWarning() << "Could not find project template" << templateName;
+        return QString();;
     }
-
-    kDebug() << "Using archive:" << templateArchive;
-
-    if (templateArchive.isEmpty())
-        return QString();
-
+    QString templateArchive = matches.first();
 
     KUrl dest = info.location;
 
@@ -472,9 +457,16 @@ KDevelop::ContextMenuExtension AppWizardPlugin::contextMenuExtension(KDevelop::C
     return ext;
 }
 
-QAbstractItemModel* AppWizardPlugin::templatesModel() const
+ProjectTemplatesModel* AppWizardPlugin::model()
 {
+    if(!m_templatesModel)
+        m_templatesModel = new ProjectTemplatesModel(this);
     return m_templatesModel;
+}
+
+QAbstractItemModel* AppWizardPlugin::templatesModel()
+{
+    return model();
 }
 
 QString AppWizardPlugin::knsConfigurationFile() const
@@ -503,12 +495,12 @@ QString AppWizardPlugin::name() const
 
 void AppWizardPlugin::loadTemplate(const QString& fileName)
 {
-    m_templatesModel->loadTemplateFile(fileName);
+    model()->loadTemplateFile(fileName);
 }
 
 void AppWizardPlugin::reload()
 {
-    m_templatesModel->refresh();
+    model()->refresh();
 }
 
 

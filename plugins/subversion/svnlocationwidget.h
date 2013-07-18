@@ -8,8 +8,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SVNLOCATIONWIDGET_H
-#define SVNLOCATIONWIDGET_H
+#ifndef KDEVPLATFORM_PLUGIN_SVNLOCATIONWIDGET_H
+#define KDEVPLATFORM_PLUGIN_SVNLOCATIONWIDGET_H
 
 #include <vcs/widgets/standardvcslocationwidget.h>
 
@@ -22,4 +22,4 @@ class SvnLocationWidget : public KDevelop::StandardVcsLocationWidget
         virtual bool isCorrect() const;
 };
 
-#endif // SVNLOCATIONWIDGET_H
+#endif // KDEVPLATFORM_PLUGIN_SVNLOCATIONWIDGET_H

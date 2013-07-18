@@ -18,8 +18,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef STANDARDVCSLOCATIONWIDGET_H
-#define STANDARDVCSLOCATIONWIDGET_H
+#ifndef KDEVPLATFORM_STANDARDVCSLOCATIONWIDGET_H
+#define KDEVPLATFORM_STANDARDVCSLOCATIONWIDGET_H
 
 #include <vcs/widgets/vcslocationwidget.h>
 #include "../vcsexport.h"
@@ -47,4 +47,4 @@ class KDEVPLATFORMVCS_EXPORT StandardVcsLocationWidget : public VcsLocationWidge
 };
 
 }
-#endif // STANDARDVCSLOCATIONWIDGET_H
+#endif // KDEVPLATFORM_STANDARDVCSLOCATIONWIDGET_H

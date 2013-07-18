@@ -19,8 +19,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef UICONTROLLERTEST_H
-#define UICONTROLLERTEST_H
+#ifndef KDEVPLATFORM_UICONTROLLERTEST_H
+#define KDEVPLATFORM_UICONTROLLERTEST_H
 
 #include <QObject>
 
@@ -35,4 +35,4 @@ private slots:
 };
 
 
-#endif // UICONTROLLERTEST_H
+#endif // KDEVPLATFORM_UICONTROLLERTEST_H

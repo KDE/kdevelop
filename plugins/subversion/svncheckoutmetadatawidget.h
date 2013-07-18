@@ -8,8 +8,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SVN_CHECKOUTMETADATAWIDGET_H
-#define SVN_CHECKOUTMETADATAWIDGET_H
+#ifndef KDEVPLATFORM_PLUGIN_SVN_CHECKOUTMETADATAWIDGET_H
+#define KDEVPLATFORM_PLUGIN_SVN_CHECKOUTMETADATAWIDGET_H
 
 #include <QWidget>
 #include <vcs/interfaces/ibasicversioncontrol.h>

@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef DATAACCESS_H
-#define DATAACCESS_H
+#ifndef KDEVPLATFORM_DATAACCESS_H
+#define KDEVPLATFORM_DATAACCESS_H
 
 #include <language/languageexport.h>
 #include <language/editor/rangeinrevision.h>

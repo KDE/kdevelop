@@ -19,8 +19,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef TEST_HIGHLIGHTING_H
-#define TEST_HIGHLIGHTING_H
+#ifndef KDEVPLATFORM_TEST_HIGHLIGHTING_H
+#define KDEVPLATFORM_TEST_HIGHLIGHTING_H
 
 #include <QObject>
 
@@ -36,4 +36,4 @@ private slots:
     void testInitialization();
 };
 
-#endif // TEST_HIGHLIGHTING_H
+#endif // KDEVPLATFORM_TEST_HIGHLIGHTING_H

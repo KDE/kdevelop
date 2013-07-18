@@ -113,9 +113,9 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
     {
         QHBoxLayout* actionsLayout = new QHBoxLayout;
 
-        QLabel* label = new QLabel(i18n("Documents:"));
-        label->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-        actionsLayout->addWidget(label);
+        m_documentsLabel = new QLabel(i18n("Documents:"));
+        m_documentsLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+        actionsLayout->addWidget(m_documentsLabel);
 
         actionsLayout->addStretch();
 
@@ -298,10 +298,11 @@ void WorkingSetToolTipWidget::updateFileButtons()
     // if we want to enable mergeButton, we have to fix it's behavior since it operates directly on the
     // set contents and not on the m_fileWidgets
     m_mergeButton->setHidden(allOpen || currentWorkingSet == m_set);
-    m_subtractButton->setHidden(noneOpen || mainWindow->area()->workingSet() == m_set->id());
+    m_subtractButton->setHidden(noneOpen || currentWorkingSet == m_set);
     m_deleteButton->setHidden(m_set->hasConnectedAreas());
+    m_documentsLabel->setHidden(m_mergeButton->isHidden() && m_subtractButton->isHidden() && m_deleteButton->isHidden());
 
-    if(m_set->id() == mainWindow->area()->workingSet()) {
+    if(currentWorkingSet == m_set) {
         disconnect(m_openButton, SIGNAL(clicked(bool)), m_setButton, SLOT(loadSet()));
         connect(m_openButton, SIGNAL(clicked(bool)), m_setButton, SLOT(closeSet()));
         connect(m_openButton, SIGNAL(clicked(bool)), this, SIGNAL(shouldClose()));

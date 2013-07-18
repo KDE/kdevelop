@@ -18,8 +18,8 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#ifndef DVCS_JOB_TEST_H
-#define DVCS_JOB_TEST_H
+#ifndef KDEVPLATFORM_DVCS_JOB_TEST_H
+#define KDEVPLATFORM_DVCS_JOB_TEST_H
 
 #include <QtCore/QObject>
 

@@ -17,8 +17,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVELOP_ITESTSUITE_H
-#define KDEVELOP_ITESTSUITE_H
+#ifndef KDEVPLATFORM_ITESTSUITE_H
+#define KDEVPLATFORM_ITESTSUITE_H
 
 #include "interfacesexport.h"
 
@@ -117,4 +117,4 @@ public:
 
 }
 
-#endif // KDEVELOP_ITESTSUITE_H
+#endif // KDEVPLATFORM_ITESTSUITE_H

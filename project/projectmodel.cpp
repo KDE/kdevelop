@@ -381,8 +381,9 @@ void ProjectBaseItem::setText( const QString& text )
     Q_ASSERT(!text.isEmpty() || !parent());
     Q_D(ProjectBaseItem);
     d->text = text;
-    if( model() ) {
-        QMetaObject::invokeMethod( model(), "dataChanged", getConnectionTypeForSignalDelivery( model() ), Q_ARG(QModelIndex, index()), Q_ARG(QModelIndex, index()) );
+    if( d->model ) {
+        QModelIndex idx = index();
+        QMetaObject::invokeMethod( d->model, "dataChanged", getConnectionTypeForSignalDelivery( d->model ), Q_ARG(QModelIndex, idx), Q_ARG(QModelIndex, idx) );
     }
 }
 
@@ -1021,20 +1022,33 @@ ProjectBaseItem* ProjectModel::itemFromIndex( const QModelIndex& index ) const
     return 0;
 }
 
+QSet<int> supportedRoles() {
+    QSet<int> ret;
+    ret << Qt::DisplayRole;
+    ret << Qt::ToolTipRole;
+    ret << Qt::DecorationRole;
+    ret << KDevelop::ProjectModel::ProjectItemRole;
+    ret << KDevelop::ProjectModel::ProjectRole;
+    return ret;
+}
 
 QVariant ProjectModel::data( const QModelIndex& index, int role ) const
 {
-    if( ( role == Qt::DisplayRole || role == Qt::ToolTipRole || role == Qt::DecorationRole ) && index.isValid() ) {
+    static QSet<int> allowedRoles = supportedRoles();
+    if( allowedRoles.contains(role) && index.isValid() ) {
         ProjectBaseItem* item = itemFromIndex( index );
-        
         if( item ) {
             switch(role) {
                 case Qt::DecorationRole:
                     return item->iconName();
                 case Qt::ToolTipRole:
                     return item->path().pathOrUrl();
-                default:
+                case Qt::DisplayRole:
                     return item->text();
+                case ProjectItemRole:
+                    return QVariant::fromValue<ProjectBaseItem*>(item);
+                case ProjectRole:
+                    return QVariant::fromValue<QObject*>(item->project());
             }
         }
     }
@@ -1050,6 +1064,7 @@ ProjectModel::ProjectModel( QObject *parent )
 
 ProjectModel::~ProjectModel()
 {
+    delete d;
 }
 
 

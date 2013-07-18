@@ -16,23 +16,20 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef ITEMREPOSITORY_H
-#define ITEMREPOSITORY_H
+#ifndef KDEVPLATFORM_ITEMREPOSITORY_H
+#define KDEVPLATFORM_ITEMREPOSITORY_H
 
-#include <QtCore/QString>
-#include <QtCore/QVector>
-#include <QtCore/QByteArray>
-#include <QtCore/QMutex>
-#include <QtCore/QList>
 #include <QtCore/QDir>
 #include <QtCore/QFile>
-#include <QtCore/QAtomicInt>
-#include <kmessagebox.h>
-#include <klocalizedstring.h>
-#include <klockfile.h>
-#include <kdebug.h>
-#include "../../languageexport.h"
-#include "../referencecounting.h"
+#include <KMessageBox>
+#include <KLocalizedString>
+#include <KDebug>
+
+#include <language/duchain/referencecounting.h>
+
+#include "abstractitemrepository.h"
+#include "repositorymanager.h"
+#include "itemrepositoryregistry.h"
 
 //#define DEBUG_MONSTERBUCKETS
 
@@ -78,235 +75,28 @@
 
 namespace KDevelop {
 
-  /**
-   * This file implements a generic bucket-based indexing repository, that can be used for example to index strings.
-   *
-   * All you need to do is define your item type that you want to store into the repository, and create a request item
-   * similar to ExampleItemRequest that compares and fills the defined item type.
-   *
-   * For example the string repository uses "unsigned short" as item-type, uses that actual value to store the length of the string,
-   * and uses the space behind to store the actual string content.
-   *
-   * @see ItemRepository
-   * @see stringrepository.h
-   * @see indexedstring.h
-   *
-   * */
-
-///Returns a version-number that is used to reset the item-repository after incompatible layout changes
-KDEVPLATFORMLANGUAGE_EXPORT uint staticItemRepositoryVersion();
-
-class KDEVPLATFORMLANGUAGE_EXPORT AbstractItemRepository {
-  public:
-    virtual ~AbstractItemRepository();
-    ///@param path is supposed to be a shared directory-name that the item-repository is to be loaded from
-    ///@param clear will be true if the old repository should be discarded and a new one started
-    ///If this returns false, that indicates that opening failed.
-    virtual bool open(const QString& path) = 0;
-    virtual void close(bool doStore = false) = 0;
-    virtual void store() = 0;
-    ///Returns whether something was removed(Count of removed content bytes)
-    virtual int finalCleanup() = 0;
-    virtual QString repositoryName() const = 0;
-    virtual QString printStatistics() const = 0;
-};
-
-///Internal helper class that wraps around a repository object and manages its lifetime
-class KDEVPLATFORMLANGUAGE_EXPORT AbstractRepositoryManager {
-  public:
-    AbstractRepositoryManager() : m_repository(0) {
-    }
-
-    virtual ~AbstractRepositoryManager() {
-    }
-
-    void deleteRepository() {
-      delete m_repository;
-      m_repository = 0;
-
-      repositoryDeleted();
-    }
-    
-    virtual QMutex* repositoryMutex() const = 0;
-
-    virtual void repositoryDeleted() {
-    }
-
-  protected:
-    mutable AbstractItemRepository* m_repository;
-};
-
 /**
- * Manages a set of item-repositores and allows loading/storing them all at once from/to disk.
- * Does not automatically store contained repositories on destruction.
- * For the global standard registry, the storing is triggered from within duchain, so you don't need to care about it.
+ * This file implements a generic bucket-based indexing repository, that can be used for example to index strings.
+ *
+ * All you need to do is define your item type that you want to store into the repository, and create a request item
+ * similar to ExampleItemRequest that compares and fills the defined item type.
+ *
+ * For example the string repository uses "unsigned short" as item-type, uses that actual value to store the length of the string,
+ * and uses the space behind to store the actual string content.
+ *
+ * @see AbstractItemRepository
+ * @see ItemRepository
+ *
+ * @see ExampleItem
+ * @see ExampleItemRequest
+ *
+ * @see typerepository.h
+ * @see stringrepository.h
+ * @see indexedstring.h
  */
-class KDEVPLATFORMLANGUAGE_EXPORT ItemRepositoryRegistry {
-  public:
-    ItemRepositoryRegistry(QString openPath = QString(), KLockFile::Ptr lock = KLockFile::Ptr());
-    ~ItemRepositoryRegistry();
-
-    ///Path is supposed to be a shared directory-name that the item-repositories are to be loaded from
-    ///@param clear Whether a fresh start should be done, and all repositories cleared
-    ///If this returns false, loading has failed, and all repositories have been discarded.
-    ///@note Currently the given path must reference a hidden directory, just to make sure we're
-    ///      not accidentally deleting something important
-    bool open(const QString& path, bool clear = false, KLockFile::Ptr lock = KLockFile::Ptr());
-    ///@warning The current state is not stored to disk.
-    void close();
-    ///The registered repository will automatically be opened with the current path, if one is set.
-    void registerRepository(AbstractItemRepository* repository, AbstractRepositoryManager* manager);
-    ///The registered repository will automatically be closed if it was open.
-    void unRegisterRepository(AbstractItemRepository* repository);
-    ///Returns the path currently set
-    QString path() const;
-    ///Should be called on a regular basis: Stores all repositories to disk, and eventually unloads unneeded data to save memory
-    void store();
-
-    ///Must be called somewhere at the end of the shutdown sequence, to indicate that the application has been closed gracefully
-    void shutdown();
-    
-    ///Does a big cleanup, removing all non-persistent items in the repositories
-    ///Returns whether something was removed(Count of removed bytes)
-    int finalCleanup();
-    
-    ///Prints the statistics ofall registered item-repositories to the command line using kDebug()
-    void printAllStatistics() const;
-    
-    ///Call this to lock the directory for writing. When KDevelop crashes while the directory is locked for writing,
-    ///it will know that the directory content is inconsistent, and discard it while next startup.
-    void lockForWriting();
-    ///Call this when you're ready writing, after lockForWriting has been called
-    void unlockForWriting();
-
-    ///Returns a custom counter, identified by the given identity, that is persistently stored in the repository directory.
-    ///If the counter didn't exist before, it will be initialized with initialValue
-    QAtomicInt& getCustomCounter(const QString& identity, int initialValue);
-
-    ///Returns the global item-repository mutex. This can be used to protect the initialization.
-    QMutex& mutex();
-  private:
-    void deleteDataDirectory();
-    QString m_path;
-    QMap<AbstractItemRepository*, AbstractRepositoryManager*> m_repositories;
-    QMap<QString, QAtomicInt*> m_customCounters;
-    KLockFile::Ptr m_lock;
-    mutable QMutex m_mutex;
-};
-
-///The global item-repository registry that is used by default
-KDEVPLATFORMLANGUAGE_EXPORT ItemRepositoryRegistry& globalItemRepositoryRegistry();
-
-///This class helps managing the lifetime of a global item repository, and protecting the consistency.
-///Especially it helps doing thread-safe lazy repository-creation
-template<class ItemRepositoryType, bool unloadingEnabled = true, bool lazy = true>
-struct RepositoryManager : public AbstractRepositoryManager{
-  public:
-    ///@param shareMutex Option repository from where this repository should take the thread-safety mutex
-    RepositoryManager(QString name, int version = 1, AbstractRepositoryManager* (*shareMutex)() = 0, ItemRepositoryRegistry& registry = globalItemRepositoryRegistry()) : m_name(name), m_version(version), m_registry(registry), m_shareMutex(shareMutex) {
-      if(!lazy)
-        createRepository();
-    }
-
-    ~RepositoryManager() {
-      //Don't do this, we don't need it, and it may lead to crashes
-//       deleteRepository();
-    }
-
-    inline ItemRepositoryType* operator->() const {
-      if(!m_repository)
-        createRepository();
-
-      return static_cast<ItemRepositoryType*>(m_repository);
-    }
-    
-    QMutex* repositoryMutex() const {
-      return (*this)->mutex();
-    }
-
-  private:
-
-    void createRepository() const {
-      if(!m_repository) {
-        QMutexLocker lock(&m_registry.mutex());
-        if(!m_repository) {
-          m_repository = new ItemRepositoryType(m_name, &m_registry, m_version, const_cast<RepositoryManager*>(this));
-          if(m_shareMutex)
-            (*this)->setMutex(m_shareMutex()->repositoryMutex());
-          (*this)->setUnloadingEnabled(unloadingEnabled);
-        }
-      }
-    }
-
-    QString m_name;
-    int m_version;
-    ItemRepositoryRegistry& m_registry;
-    AbstractRepositoryManager* (*m_shareMutex)();
-};
-
-  ///This is the actual data that is stored in the repository. All the data that is not directly in the class-body,
-  ///like the text of a string, can be stored behind the item in the same memory region. The only important thing is
-  ///that the Request item(@see ExampleItemRequest) correctly advertises the space needed by this item.
-class ExampleItem {
-  //Every item has to implement this function, and return a valid hash.
-  //Must be exactly the same hash value as ExampleItemRequest::hash() has returned while creating the item.
-  unsigned int hash() const {
-    return 0;
-  }
-
-  //Every item has to implement this function, and return the complete size this item takes in memory.
-  //Must be exactly the same value as ExampleItemRequest::itemSize() has returned while creating the item.
-  unsigned short int itemSize() const {
-    return 0;
-  }
-};
-
-/**
- * A request represents the information that is searched in the repository.
- * It must be able to compare itself to items stored in the repository, and it must be able to
- * create items in the. The item-types can also be basic data-types, with additional information stored behind.
- * It must have a static destroy() member, that does any action that needs to be done before the item is removed from
- * the repository again.
- * */
 
 enum {
   ItemRepositoryBucketSize = 1<<16
-};
-
-class ExampleItemRequest {
-
-  enum {
-    AverageSize = 10 //This should be the approximate average size of an Item
-  };
-
-  typedef unsigned int HashType;
-
-  ///Should return the hash-value associated with this request(For example the hash of a string)
-  HashType hash() const {
-    return 0;
-  }
-
-  ///Should return the size of an item created with createItem
-  uint itemSize() const {
-      return 0;
-  }
-  ///Should create an item where the information of the requested item is permanently stored. The pointer
-  ///@param item equals an allocated range with the size of itemSize().
-  ///@warning Never call non-constant functions on the repository from within this function!
-  void createItem(ExampleItem* /*item*/) const {
-  }
-  static void destroy(ExampleItem* /*item*/, AbstractItemRepository&) {
-  }
-  
-  ///Has to return whether this item is needed for disk-persistency
-  static bool persistent(ExampleItem*) {
-    return true; //If this item should be kept, return true, else false
-  }
-
-  ///Should return whether the here requested item equals the given item
-  bool equals(const ExampleItem* /*item*/) const {
-    return false;
-  }
 };
 
 /**

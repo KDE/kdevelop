@@ -19,8 +19,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef VCSEVENT_H
-#define VCSEVENT_H
+#ifndef KDEVPLATFORM_VCSEVENT_H
+#define KDEVPLATFORM_VCSEVENT_H
 
 #include <QtCore/QVariant>
 

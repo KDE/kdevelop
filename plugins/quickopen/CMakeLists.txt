@@ -13,6 +13,7 @@ set(kdevquickopen_PART_SRCS
     declarationlistquickopen.cpp
     projectitemquickopen.cpp
     customlistquickopen.cpp
+    documentationquickopenprovider.cpp
     expandingtree/expandingdelegate.cpp
     expandingtree/expandingtree.cpp
     expandingtree/expandingwidgetmodel.cpp
@@ -32,5 +33,6 @@ install(TARGETS kdevquickopen DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install(FILES kdevquickopen.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+configure_file(kdevquickopen.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevquickopen.desktop)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevquickopen.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 install(FILES kdevquickopen.rc DESTINATION ${DATA_INSTALL_DIR}/kdevquickopen)

@@ -19,8 +19,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVPROJECTMODEL_H
-#define KDEVPROJECTMODEL_H
+#ifndef KDEVPLATFORM_PROJECTMODEL_H
+#define KDEVPLATFORM_PROJECTMODEL_H
 
 #include <QtCore/QAbstractItemModel>
 #include "projectexport.h"
@@ -433,6 +433,12 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectModel: public QAbstractItemModel
 {
     Q_OBJECT
 public:
+    enum Roles {
+          ProjectRole = Qt::UserRole+1
+        , ProjectItemRole
+        , LastRole
+    };
+
     ProjectModel( QObject *parent = 0 );
     virtual ~ProjectModel();
 
@@ -494,4 +500,4 @@ Q_DECLARE_METATYPE(KDevelop::ProjectExecutableTargetItem*)
 Q_DECLARE_METATYPE(KDevelop::ProjectTargetItem*)
 Q_DECLARE_METATYPE(KDevelop::ProjectBuildFolderItem*)
 
-#endif // KDEVPROJECTMODEL_H
+#endif // KDEVPLATFORM_PROJECTMODEL_H

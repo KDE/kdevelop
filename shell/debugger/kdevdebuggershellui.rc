@@ -42,6 +42,7 @@
             <Action name="debug_stepinto"/>
             <Action name="debug_stepintoinst"/>
             <Action name="debug_stepout"/>
+            <Action name="debug_jumptocursor"/>
         </disable>
     </State>
     <State name="paused">
@@ -53,6 +54,7 @@
             <Action name="debug_stepinto"/>
             <Action name="debug_stepintoinst"/>
             <Action name="debug_stepout"/>
+            <Action name="debug_jumptocursor"/>
         </enable>
     </State>
     <State name="active">
@@ -67,6 +69,7 @@
             <Action name="debug_stepinto"/>
             <Action name="debug_stepintoinst"/>
             <Action name="debug_stepout"/>
+            <Action name="debug_jumptocursor"/>
         </disable>
     </State>
     <State name="stopped">
@@ -81,6 +84,7 @@
             <Action name="debug_stepinto"/>
             <Action name="debug_stepintoinst"/>
             <Action name="debug_stepout"/>
+            <Action name="debug_jumptocursor"/>
         </disable>
     </State>
 </kpartgui>

@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
   Copyright 2005 Adam Treat <treat@kde.org>
+  Copyright 2013 Sebastian Kügler <sebas@kde.org>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -17,8 +18,8 @@
   Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVDOCUMENTMODEL_H
-#define KDEVDOCUMENTMODEL_H
+#ifndef KDEVPLATFORM_PLUGIN_KDEVDOCUMENTMODEL_H
+#define KDEVPLATFORM_PLUGIN_KDEVDOCUMENTMODEL_H
 
 #include <QStandardItem>
 #include <QStandardItemModel>
@@ -30,7 +31,7 @@
 
 class KUrl;
 class KDevDocumentItem;
-class KDevMimeTypeItem;
+class KDevCategoryItem;
 class KDevFileItem;
 
 class KDevDocumentItem: public QStandardItem
@@ -39,8 +40,7 @@ public:
     explicit KDevDocumentItem( const QString &name );
     virtual ~KDevDocumentItem();
 
-//     virtual KDevDocumentItem *itemAt( int index ) const;
-    virtual KDevMimeTypeItem *mimeTypeItem() const
+    virtual KDevCategoryItem *categoryItem() const
     {
         return 0;
     }
@@ -54,7 +54,7 @@ public:
         switch ( m_documentState )
         {
         case KDevelop::IDocument::Clean:
-            return QIcon();
+            return  KIcon ( m_fileIcon );
         case KDevelop::IDocument::Modified:
             return KIcon( "document-save" );
         case KDevelop::IDocument::Dirty:
@@ -77,19 +77,33 @@ public:
         setIcon(icon());
     }
 
+    const KUrl &url() const
+    {
+        return m_url;
+    }
+
+    void setUrl( const KUrl &url )
+    {
+        m_url = url;
+    }
+
+protected:
+    QString m_fileIcon;
+
 private:
+    KUrl m_url;
     KDevelop::IDocument::DocumentState m_documentState;
 };
 
-class KDevMimeTypeItem: public KDevDocumentItem
+class KDevCategoryItem: public KDevDocumentItem
 {
 public:
-    explicit KDevMimeTypeItem( const QString &name );
-    virtual ~KDevMimeTypeItem();
+    explicit KDevCategoryItem( const QString &name );
+    virtual ~KDevCategoryItem();
 
-    virtual KDevMimeTypeItem *mimeTypeItem() const
+    virtual KDevCategoryItem *categoryItem() const
     {
-        return const_cast<KDevMimeTypeItem*>( this );
+        return const_cast<KDevCategoryItem*>( this );
     }
 
     QList<KDevFileItem*> fileList() const;
@@ -106,19 +120,6 @@ public:
     {
         return const_cast<KDevFileItem*>( this );
     }
-
-    const KUrl &url() const
-    {
-        return m_url;
-    }
-
-    void setUrl( const KUrl &url )
-    {
-        m_url = url;
-    }
-
-private:
-    KUrl m_url;
 };
 
 class KDevDocumentModel: public QStandardItemModel
@@ -128,9 +129,9 @@ public:
     KDevDocumentModel( QObject *parent = 0 );
     virtual ~KDevDocumentModel();
 
-    QList<KDevMimeTypeItem*> mimeTypeList() const;
-    KDevMimeTypeItem* mimeType( const QString& mimeType ) const;
+    QList<KDevCategoryItem*> categoryList() const;
+    KDevCategoryItem* category( const QString& category ) const;
 };
 
-#endif // KDEVDOCUMENTMODEL_H
+#endif // KDEVPLATFORM_PLUGIN_KDEVDOCUMENTMODEL_H
 

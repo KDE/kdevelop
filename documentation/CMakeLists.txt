@@ -1,3 +1,6 @@
+macro_log_feature(QT_QTWEBKIT_FOUND "QtWebKit" "QtWebKit, for integrated documentation" "http://qt-project.org/" TRUE)
+
+
 set(kdevplatformdocumentation_LIB_SRCS
     standarddocumentationview.cpp
     documentationfindwidget.cpp

@@ -22,22 +22,13 @@
 #include "projectmanagerview.h"
 
 #include <QtGui/QHeaderView>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QStandardItem>
-#include <QtGui/QToolButton>
 #include <QtGui/QKeyEvent>
 
-#include <kxmlguiwindow.h>
 #include <kiconloader.h>
-#include <kmenu.h>
 #include <kdebug.h>
 #include <kurl.h>
 #include <klocale.h>
 #include <kactioncollection.h>
-#include <kfadewidgeteffect.h>
-#include <kcombobox.h>
-#include <kjob.h>
 #include <KLineEdit>
 
 #include <interfaces/iselectioncontroller.h>
@@ -46,30 +37,27 @@
 #include <interfaces/isession.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iuicontroller.h>
-#include <interfaces/iruncontroller.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/iproject.h>
-#include <project/interfaces/ibuildsystemmanager.h>
-#include <project/interfaces/iprojectbuilder.h>
+#include <project/projectproxymodel.h>
 #include <project/projectmodel.h>
 
 #include "../openwith/iopenwith.h"
 
-#include <KParts/MainWindow>
 #include <sublime/mainwindow.h>
 
 #include "tests/modeltest.h"
-#include <project/projectproxymodel.h>
 #include "projectmanagerviewplugin.h"
+#include "vcsoverlayproxymodel.h"
 #include "ui_projectmanagerview.h"
 
 using namespace KDevelop;
 
 //BEGIN ProjectManagerFilterAction
 
-ProjectManagerFilterAction::ProjectManagerFilterAction(  const QString &initialFilter, QObject* parent )
+ProjectManagerFilterAction::ProjectManagerFilterAction(ProjectManagerView* parent)
     : KAction( parent )
-    , m_intialFilter(initialFilter)
+    , m_projectManagerView(parent)
 {
     setIcon(KIcon("view-filter"));
     setText(i18n("Filter..."));
@@ -83,9 +71,9 @@ QWidget* ProjectManagerFilterAction::createWidget( QWidget* parent )
     edit->setClickMessage(i18n("Filter..."));
     edit->setClearButtonShown(true);
     connect(edit, SIGNAL(textChanged(QString)), this, SIGNAL(filterChanged(QString)));
-    if (!m_intialFilter.isEmpty()) {
-        edit->setText(m_intialFilter);
-    }
+
+    const QString filterString = m_projectManagerView->filterString();
+    edit->setText(filterString);
 
     return edit;
 }
@@ -144,28 +132,25 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
 
     connect(m_ui->projectTreeView, SIGNAL(activateUrl(KUrl)), this, SLOT(openUrl(KUrl)));
 
-//     m_filters = new KLineEdit(this);
-//     m_filters->setClearButtonShown(true);
-//     connect(d->m_filters, SIGNAL(returnPressed()), this, SLOT(filtersChanged()));
-//     vbox->addWidget( m_filters );
-
     m_ui->buildSetView->setProjectView( this );
 
     m_modelFilter = new ProjectProxyModel( this );
     m_modelFilter->setDynamicSortFilter( true );
     m_modelFilter->setSourceModel(ICore::self()->projectController()->projectModel());
+    m_overlayProxy = new VcsOverlayProxyModel( this );
+    m_overlayProxy->setSourceModel(m_modelFilter);
 
-    m_ui->projectTreeView->setModel( m_modelFilter );
+    m_ui->projectTreeView->setModel( m_overlayProxy );
 
     QString filterText;
-
     if (pmviewConfig.hasKey(filterConfigKey)) {
         filterText = pmviewConfig.readEntry(filterConfigKey, QString());
     }
+    setFilterString(filterText);
 
-    ProjectManagerFilterAction* filterAction = new ProjectManagerFilterAction(filterText, this);
+    ProjectManagerFilterAction* filterAction = new ProjectManagerFilterAction(this);
     connect(filterAction, SIGNAL(filterChanged(QString)),
-            this, SLOT(filterChanged(QString)));
+            this, SLOT(setFilterString(QString)));
     addAction(filterAction);
 
     connect( m_ui->projectTreeView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
@@ -215,7 +200,7 @@ void ProjectManagerView::selectionChanged()
     QList<ProjectBaseItem*> selected;
     foreach( const QModelIndex& idx, m_ui->projectTreeView->selectionModel()->selectedRows() )
     {
-        selected << m_modelFilter->itemFromProxyIndex( idx );
+        selected << ICore::self()->projectController()->projectModel()->itemFromIndex(indexFromView( idx ));
     }
     selected.removeAll(0);
     KDevelop::ICore::self()->selectionController()->updateSelection( new ProjectManagerViewItemContext( selected, this ) );
@@ -232,6 +217,8 @@ ProjectManagerView::~ProjectManagerView()
     pmviewConfig.writeEntry(splitterStateConfigKey, m_ui->splitter->saveState());
     pmviewConfig.writeEntry(filterConfigKey, m_filterString);
     pmviewConfig.sync();
+
+    delete m_ui;
 }
 
 QList<KDevelop::ProjectBaseItem*> ProjectManagerView::selectedItems() const
@@ -239,8 +226,7 @@ QList<KDevelop::ProjectBaseItem*> ProjectManagerView::selectedItems() const
     QList<KDevelop::ProjectBaseItem*> items;
     foreach( const QModelIndex &idx, m_ui->projectTreeView->selectionModel()->selectedIndexes() )
     {
-        KDevelop::ProjectBaseItem* item =
-                ICore::self()->projectController()->projectModel()->itemFromIndex( m_modelFilter->mapToSource(idx) );
+        KDevelop::ProjectBaseItem* item = ICore::self()->projectController()->projectModel()->itemFromIndex(indexFromView(idx));
         if( item )
             items << item;
         else
@@ -253,7 +239,7 @@ void ProjectManagerView::selectItems(const QList< ProjectBaseItem* >& items)
 {
     QItemSelection selection;
     foreach (ProjectBaseItem *item, items) {
-        QModelIndex indx = m_modelFilter->mapFromSource(item->model()->indexFromItem(item));
+        QModelIndex indx = indexToView(item->index());
         selection.append(QItemSelectionRange(indx, indx));
         m_ui->projectTreeView->setCurrentIndex(indx);
     }
@@ -262,7 +248,7 @@ void ProjectManagerView::selectItems(const QList< ProjectBaseItem* >& items)
 
 void ProjectManagerView::expandItem(ProjectBaseItem* item)
 {
-    m_ui->projectTreeView->expand( m_modelFilter->mapFromSource(item->model()->indexFromItem(item)));
+    m_ui->projectTreeView->expand( indexToView(item->index()));
 }
 
 void ProjectManagerView::locateCurrentDocument()
@@ -282,7 +268,7 @@ void ProjectManagerView::locateCurrentDocument()
     QModelIndex bestMatch;
     foreach (IProject* proj, ICore::self()->projectController()->projects()) {
         foreach (KDevelop::ProjectFileItem* item, proj->filesForUrl(doc->url())) {
-            QModelIndex index = m_modelFilter->proxyIndexFromItem(item);
+            QModelIndex index = indexToView(item->index());
             if (index.isValid()) {
                 if (!bestMatch.isValid()) {
                     bestMatch = index;
@@ -309,10 +295,25 @@ void ProjectManagerView::openUrl( const KUrl& url )
     IOpenWith::openFiles(KUrl::List() << url);
 }
 
-void ProjectManagerView::filterChanged(const QString &text)
+QString ProjectManagerView::filterString() const
+{
+    return m_filterString;
+}
+
+void ProjectManagerView::setFilterString(const QString &text)
 {
     m_filterString = text;
     m_modelFilter->setFilterString(text);
+}
+
+QModelIndex ProjectManagerView::indexFromView(const QModelIndex& index) const
+{
+    return m_modelFilter->mapToSource( m_overlayProxy->mapToSource(index) );
+}
+
+QModelIndex ProjectManagerView::indexToView(const QModelIndex& index) const
+{
+    return m_overlayProxy->mapFromSource( m_modelFilter->mapFromSource(index) );
 }
 
 #include "projectmanagerview.moc"

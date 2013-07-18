@@ -2,11 +2,12 @@
  *
  */
 
-#ifndef TESTGENERATIONTEST_H
-#define TESTGENERATIONTEST_H
+#ifndef KDEVPLATFORM_PLUGIN_TESTGENERATIONTEST_H
+#define KDEVPLATFORM_PLUGIN_TESTGENERATIONTEST_H
 
 #include <QtTest/QtTest>
 #include <KUrl>
+#include <KTempDir>
 
 namespace KDevelop
 {
@@ -28,9 +29,10 @@ private slots:
 
 private:
     KDevelop::TemplateRenderer* renderer;
-    KUrl baseUrl;
+    QScopedPointer<KTempDir> dir;
+    QUrl baseUrl;
 
     QHash<QString,KUrl> urls(const KDevelop::SourceFileTemplate& file);
 };
 
-#endif // TESTGENERATIONTEST_H
+#endif // KDEVPLATFORM_PLUGIN_TESTGENERATIONTEST_H

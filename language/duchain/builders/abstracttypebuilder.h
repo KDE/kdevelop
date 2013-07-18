@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef ABSTRACTTYPEBUILDER_H
-#define ABSTRACTTYPEBUILDER_H
+#ifndef KDEVPLATFORM_ABSTRACTTYPEBUILDER_H
+#define KDEVPLATFORM_ABSTRACTTYPEBUILDER_H
 
 #include "../types/structuretype.h"
 #include "../declaration.h"
@@ -212,7 +212,7 @@ protected:
     bool delay = false;
 
     if(!delay) {
-      CursorInRevision pos(editorFindRange(typeNode, typeNode).start);
+      CursorInRevision pos(this->editorFindRange(typeNode, typeNode).start);
       DUChainReadLocker lock(DUChain::lock());
 
       QList<Declaration*> dec = searchContext()->findDeclarations(id, pos);
@@ -262,5 +262,5 @@ private:
 
 }
 
-#endif // ABSTRACTTYPEBUILDER_H
+#endif // KDEVPLATFORM_ABSTRACTTYPEBUILDER_H
 

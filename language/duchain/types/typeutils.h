@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef TYPEUTILS_H
-#define TYPEUTILS_H
+#ifndef KDEVPLATFORM_TYPEUTILS_H
+#define KDEVPLATFORM_TYPEUTILS_H
 
 #include "../../languageexport.h"
 #include "abstracttype.h"

@@ -8,8 +8,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SVN_MOVEWIDGETS_H
-#define SVN_MOVEWIDGETS_H
+#ifndef KDEVPLATFORM_PLUGIN_SVN_MOVEWIDGETS_H
+#define KDEVPLATFORM_PLUGIN_SVN_MOVEWIDGETS_H
 
 #include <kdialog.h>
 #include "svnmodels.h"

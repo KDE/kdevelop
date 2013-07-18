@@ -16,8 +16,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef URLDOCUMENT_H
-#define URLDOCUMENT_H
+#ifndef KDEVPLATFORM_URLDOCUMENT_H
+#define KDEVPLATFORM_URLDOCUMENT_H
 
 #include <kurl.h>
 

@@ -154,7 +154,7 @@ AbstractType::WhichType IntegralType::whichType() const
 
 uint IntegralType::hash() const
 {
-  return AbstractType::hash() + d_func()->m_dataType * 11;
+  return KDevHash(AbstractType::hash()) << d_func()->m_dataType;
 }
 
 }

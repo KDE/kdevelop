@@ -13,8 +13,8 @@
 **
 ***************************************************************************/
 
-#ifndef DIFFPARSER_H
-#define DIFFPARSER_H
+#ifndef KDEVPLATFORM_PLUGIN_DIFFPARSER_H
+#define KDEVPLATFORM_PLUGIN_DIFFPARSER_H
 
 #include "parserbase.h"
 

@@ -42,6 +42,7 @@
 #include <set>
 #include <algorithm>
 #include <iterator> // needed for std::insert_iterator on windows
+#include <QThread>
 
 //Extremely slow
 // #define TEST_NORMAL_IMPORTS
@@ -474,8 +475,8 @@ void collectReachableNodes(QSet<uint>& reachableNodes, uint currentNode) {
   reachableNodes.insert(currentNode);
   const Utils::SetNodeData* node = KDevelop::RecursiveImportRepository::repository()->nodeFromIndex(currentNode);
   Q_ASSERT(node);
-  collectReachableNodes(reachableNodes, node->leftNode);
-  collectReachableNodes(reachableNodes, node->rightNode);
+  collectReachableNodes(reachableNodes, node->leftNode());
+  collectReachableNodes(reachableNodes, node->rightNode());
 }
 
 uint collectNaiveNodeCount(uint currentNode) {
@@ -484,8 +485,8 @@ uint collectNaiveNodeCount(uint currentNode) {
   uint ret = 1;
   const Utils::SetNodeData* node = KDevelop::RecursiveImportRepository::repository()->nodeFromIndex(currentNode);
   Q_ASSERT(node);
-  ret += collectNaiveNodeCount(node->leftNode);
-  ret += collectNaiveNodeCount(node->rightNode);
+  ret += collectNaiveNodeCount(node->leftNode());
+  ret += collectNaiveNodeCount(node->rightNode());
   return ret;
 }
 
@@ -560,6 +561,103 @@ void TestDUChain::testImportStructure()
   kDebug() << "total clock cycles needed for import-structure test:" << endClock - startClock;
 }
 
+class TestWorker : public QObject
+{
+  Q_OBJECT
+public slots:
+  void lockForWrite()
+  {
+    for(int i = 0; i < 10000; ++i) {
+      DUChainWriteLocker lock;
+    }
+    qDebug() << "FINISHED lockForWrite";
+  }
+  void lockForRead()
+  {
+    for(int i = 0; i < 10000; ++i) {
+      DUChainReadLocker lock;
+    }
+    qDebug() << "FINISHED lockForRead";
+  }
+  void lockForReadWrite()
+  {
+    for(int i = 0; i < 10000; ++i) {
+      {
+        DUChainReadLocker lock;
+      }
+      {
+        DUChainWriteLocker lock;
+      }
+    }
+    qDebug() << "FINISHED lockForReadWrite";
+  }
+  static QSharedPointer<QThread> createWorkerThread(const char* workerSlot)
+  {
+    QThread* thread = new QThread;
+    TestWorker* worker = new TestWorker;
+    connect(thread, SIGNAL(started()), worker, workerSlot);
+    connect(thread, SIGNAL(finished()), worker, SLOT(deleteLater()));
+    worker->moveToThread(thread);
+    return QSharedPointer<QThread>(thread);
+  }
+};
+
+class ThreadList : public QVector< QSharedPointer<QThread> >
+{
+public:
+  bool join(int timeout)
+  {
+    qDebug() << "joining" << size() << "threads" << timeout;
+    foreach(const QSharedPointer<QThread>& thread, *this) {
+      // quit event loop
+      Q_ASSERT(thread->isRunning());
+      thread->quit();
+      // wait for finish
+      if (!thread->wait(timeout)) {
+        return false;
+      }
+      Q_ASSERT(thread->isFinished());
+    }
+    return true;
+  }
+  void start()
+  {
+    foreach(const QSharedPointer<QThread>& thread, *this) {
+      thread->start();
+    }
+  }
+};
+
+void TestDUChain::testLockForWrite()
+{
+  ThreadList threads;
+  for(int i = 0; i < 10; ++i) {
+    threads << TestWorker::createWorkerThread(SLOT(lockForWrite()));
+  }
+  threads.start();
+  QVERIFY(threads.join(1000));
+}
+
+void TestDUChain::testLockForRead()
+{
+  ThreadList threads;
+  for(int i = 0; i < 10; ++i) {
+    threads << TestWorker::createWorkerThread(SLOT(lockForRead()));
+  }
+  threads.start();
+  QVERIFY(threads.join(1000));
+}
+
+void TestDUChain::testLockForReadWrite()
+{
+  ThreadList threads;
+  for(int i = 0; i < 10; ++i) {
+    threads << TestWorker::createWorkerThread(SLOT(lockForReadWrite()));
+  }
+  threads.start();
+  QVERIFY(threads.join(1000));
+}
+
 #if 0
 
 ///NOTE: the "unit tests" below are not automated, they - so far - require
@@ -620,3 +718,4 @@ void TestDUChain::benchCodeModel()
 }
 
 #include "test_duchain.moc"
+#include "moc_test_duchain.cpp"

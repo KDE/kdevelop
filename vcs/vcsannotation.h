@@ -19,8 +19,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef VCSANNOTATION_H
-#define VCSANNOTATION_H
+#ifndef KDEVPLATFORM_VCSANNOTATION_H
+#define KDEVPLATFORM_VCSANNOTATION_H
 
 #include "vcsexport.h"
 #include <QtCore/QVariant>

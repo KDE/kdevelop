@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef APPENDEDLIST_H
-#define APPENDEDLIST_H
+#ifndef KDEVPLATFORM_APPENDEDLIST_H
+#define KDEVPLATFORM_APPENDEDLIST_H
 
 #include <QtCore/QMutex>
 #include <QtCore/QVector>

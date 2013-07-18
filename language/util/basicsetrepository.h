@@ -11,8 +11,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef BASICSETREPOSITORY_H
-#define BASICSETREPOSITORY_H
+#ifndef KDEVPLATFORM_BASICSETREPOSITORY_H
+#define KDEVPLATFORM_BASICSETREPOSITORY_H
 
 #include <set>
 #include <vector>
@@ -58,30 +58,67 @@ class SetNodeDataRequest;
 
 ///Internal node representation, exported here for performance reason.
 struct KDEVPLATFORMLANGUAGE_EXPORT SetNodeData {
+private:
   //Rule: start < end
-  uint start, end; //This set-node bounds all indices starting at start until end, not including end.
+  uint m_start, m_end; //This set-node bounds all indices starting at start until end, not including end.
 
   //Child nodes
   //Rule: left->start == start, right->end == end
   //Rule: (left != 0 && right != 0) || (left == 0 && right == 0)
-  uint leftNode, rightNode;
+  uint m_leftNode, m_rightNode;
+
+  ///NOTE: keep the first four uints together and at the start - see calculateHash
+
+  // cached hash of this node data - it only includes the first four data members,
+  // i.e. m_start, m_end, m_leftNode and m_rightNode
+  uint m_hash;
+public:
   uint m_refCount;
-  
-  inline SetNodeData() : start(1), end(1), leftNode(0), rightNode(0), m_refCount(0) {
+
+  inline SetNodeData(uint start = 1, uint end = 1, uint leftNode = 0, uint rightNode = 0)
+  : m_start(start)
+  , m_end(end)
+  , m_leftNode(leftNode)
+  , m_rightNode(rightNode)
+  , m_hash(calculateHash())
+  , m_refCount(0)
+  {
   }
-  
-  uint hash() const;
-  
+
+  inline uint hash() const
+  {
+    return m_hash;
+  }
+
+  uint calculateHash() const;
+
   inline short unsigned int itemSize() const {
     return sizeof(SetNodeData);
   }
-  
+
   inline bool contiguous() const {
-    return !leftNode;
+    return !m_leftNode;
   }
-  
+
   inline bool hasSlaves() const {
-    return (bool)leftNode;
+    return (bool)m_leftNode;
+  }
+
+  inline uint start() const
+  {
+    return m_start;
+  }
+  inline uint end() const
+  {
+    return m_end;
+  }
+  inline uint leftNode() const
+  {
+    return m_leftNode;
+  }
+  inline uint rightNode() const
+  {
+    return m_rightNode;
   }
 };
 

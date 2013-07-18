@@ -79,6 +79,7 @@ class TestBuddyFinder : public KDevelop::IBuddyDocumentFinder
 
     virtual QVector<KUrl> getPotentialBuddies(const KUrl& url) const
     {
+        Q_UNUSED(url);
         return QVector<KUrl>();
     }
 };

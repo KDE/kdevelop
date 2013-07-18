@@ -8,8 +8,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef EDITREPOSITORY_H
-#define EDITREPOSITORY_H
+#ifndef KDEVPLATFORM_PLUGIN_EDITREPOSITORY_H
+#define KDEVPLATFORM_PLUGIN_EDITREPOSITORY_H
 
 #include "ui_editrepository.h"
 

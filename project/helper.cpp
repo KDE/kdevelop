@@ -73,7 +73,7 @@ bool KDevelop::createFile(const KUrl& file)
 {
     if (KIO::NetAccess::exists( file, KIO::NetAccess::DestinationSide, QApplication::activeWindow() )) {
         KMessageBox::error( QApplication::activeWindow(),
-                            i18n( "The file <i>%1</i> exists already.", file.pathOrUrl() ) );
+                            i18n( "The file <i>%1</i> already exists.", file.pathOrUrl() ) );
         return false;
     }
 

@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef USESNAVIGATIONCONTEXT_H
-#define USESNAVIGATIONCONTEXT_H
+#ifndef KDEVPLATFORM_USESNAVIGATIONCONTEXT_H
+#define KDEVPLATFORM_USESNAVIGATIONCONTEXT_H
 
 #include "abstractnavigationwidget.h"
 #include "../../languageexport.h"

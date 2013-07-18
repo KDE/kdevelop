@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef PROJECTBUILDSETWIDGET_H
-#define PROJECTBUILDSETWIDGET_H
+#ifndef KDEVPLATFORM_PLUGIN_PROJECTBUILDSETWIDGET_H
+#define KDEVPLATFORM_PLUGIN_PROJECTBUILDSETWIDGET_H
 
 #include <QWidget>
 #include <QMap>

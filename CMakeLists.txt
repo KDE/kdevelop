@@ -7,17 +7,18 @@ set(KDE4_BUILD_TESTS "ON" CACHE "BOOL" "Enable building of tests" FORCE )
 set(CMAKE_MODULE_PATH ${KDevPlatform_SOURCE_DIR}/cmake/modules)
 
 set(KDEVPLATFORM_VERSION_MAJOR 1)
-set(KDEVPLATFORM_VERSION_MINOR 4)
+set(KDEVPLATFORM_VERSION_MINOR 5)
 set(KDEVPLATFORM_VERSION_PATCH 60)
+set(KDEV_PLUGIN_VERSION 16)
 
-set(KDE_MIN_VERSION "4.5.0")
-find_package(KDE4 4.5.0 REQUIRED)
+set(KDE_MIN_VERSION "4.7.0")
+find_package(KDE4 4.7.0 REQUIRED)
 set(KDEVPLATFORM_LIB_VERSION 7.0.0)
 set(KDEVPLATFORM_LIB_SOVERSION 7)
 
-find_package(ZLIB REQUIRED)
-find_package(Grantlee 0.1.7 REQUIRED)
+find_package(Grantlee 0.1.7)
 find_package(QJSON)
+macro_log_feature( Grantlee_FOUND "Grantlee" "Grantlee templating library, needed for file templates" "http://www.grantlee.org/" TRUE "0.1.7")
 macro_log_feature( QJSON_FOUND "QJson" "QJson support for Uploading Patches to reviewboard" "http://qjson.sourceforge.net/" FALSE "0.7.0" "The qjson library is needed to enable uploading patches to reviewboard" )
 
 include (KDE4Defaults)
@@ -50,6 +51,7 @@ configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/config-kdevplatform.h.cmake
 
 include_directories(${KDevPlatform_SOURCE_DIR} ${KDevPlatform_BINARY_DIR} ${KDE4_INCLUDES})
 include_directories(${Grantlee_INCLUDE_DIRS})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/util/)
 
 # Now set the usual KDEVPLATFORM_XXX_LIBRARIES variable so we can more easily move plugins around
 set(KDEVPLATFORM_SUBLIME_LIBRARIES sublime)
@@ -77,7 +79,9 @@ add_subdirectory(pics)
 #macro_optional_add_subdirectory(doc)
 add_subdirectory(debugger)
 add_subdirectory(documentation)
+if (Grantlee_FOUND)
 add_subdirectory(template)
+endif()
 add_subdirectory(tests)
 
 add_subdirectory(plugins)

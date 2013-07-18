@@ -27,53 +27,36 @@
 
 #include "dvcsplugin.h"
 
-#include <QtGui/QAction>
 #include <QtGui/QMenu>
 #include <QtCore/QFileInfo>
-#include <QtCore/QDir>
 #include <QtCore/QString>
 
-#include <KDE/KParts/PartManager>
-#include <KDE/KParts/Part>
+#include <KMessageBox>
+#include <KLocalizedString>
+#include <KParts/MainWindow>
 
-#include <KDE/KActionCollection>
-#include <KDE/KMessageBox>
-#include <KDE/KAction>
-
-#include <interfaces/iproject.h>
-#include <project/projectmodel.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/iruncontroller.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/icore.h>
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
+#include <interfaces/idocumentcontroller.h>
 
 #include "dvcsjob.h"
-#include "ui/dvcsmainview.h"
-#include "ui/dvcsgenericoutputview.h"
-#include "ui/importdialog.h"
 #include "ui/importmetadatawidget.h"
-#include "ui/logview.h"
 #include "ui/branchmanager.h"
-// #include "ui/commitmanager.h"
 #include "ui/revhistory/commitlogmodel.h"
 #include "ui/revhistory/commitView.h"
-#include <language/interfaces/editorcontext.h>
 #include <vcs/vcspluginhelper.h>
-#include <KMenu>
-#include <kparts/mainwindow.h>
-#include <interfaces/idocumentcontroller.h>
 
 namespace KDevelop
 {
 
 struct DistributedVersionControlPluginPrivate {
     explicit DistributedVersionControlPluginPrivate(DistributedVersionControlPlugin * pThis)
-            : m_factory(new KDevDVCSViewFactory(pThis))
-            , m_common(new VcsPluginHelper(pThis, pThis)) {}
-    KDevDVCSViewFactory* m_factory;
-    std::auto_ptr<VcsPluginHelper> m_common;
+            : m_common(new VcsPluginHelper(pThis, pThis)) {}
+    VcsPluginHelper* m_common;
 };
 
 //class DistributedVersionControlPlugin
@@ -121,9 +104,7 @@ DistributedVersionControlPlugin::contextMenuExtension(Context* context)
     }
 
     QMenu * menu = d->m_common->commonActions();
-    menu->addSeparator();    
-    menu->addAction(KIcon("arrow-up-double"), i18n("Push"), this, SLOT(ctxPush()));
-    menu->addAction(KIcon("arrow-down-double"), i18n("Pull"), this, SLOT(ctxPull()));
+    menu->addSeparator();
     menu->addAction(i18n("Branches..."), this, SLOT(ctxBranchManager()))->setEnabled(ctxUrlList.count()==1);
     menu->addAction(i18n("Revision Graph..."), this, SLOT(ctxRevHistory()))->setEnabled(ctxUrlList.count()==1);
     additionalMenuEntries(menu, ctxUrlList);
@@ -138,40 +119,6 @@ DistributedVersionControlPlugin::contextMenuExtension(Context* context)
 void DistributedVersionControlPlugin::additionalMenuEntries(QMenu* /*menu*/, const KUrl::List& /*urls*/)
 {}
 
-void DistributedVersionControlPlugin::slotInit()
-{
-    KUrl::List const & ctxUrlList = d->m_common->contextUrlList();
-    Q_ASSERT(!ctxUrlList.isEmpty());
-
-    KUrl url = ctxUrlList.front();
-    QFileInfo repoInfo = QFileInfo(url.toLocalFile());
-    if (repoInfo.isFile())
-        url = repoInfo.path();
-
-    ImportDialog dlg(this, url);
-    dlg.exec();
-}
-
-void DistributedVersionControlPlugin::ctxPush()
-{
-    KUrl::List const & ctxUrlList = d->m_common->contextUrlList();
-    Q_ASSERT(!ctxUrlList.isEmpty());
-
-    VcsJob* job = push(ctxUrlList.front().toLocalFile(), VcsLocation());
-    connect(job, SIGNAL(result(KJob*)), this, SIGNAL(jobFinished(KJob*)));
-    ICore::self()->runController()->registerJob(job);
-}
-
-void DistributedVersionControlPlugin::ctxPull()
-{
-    KUrl::List const & ctxUrlList = d->m_common->contextUrlList();
-    Q_ASSERT(!ctxUrlList.isEmpty());
-
-    VcsJob* job = pull(VcsLocation(), ctxUrlList.front().toLocalFile());
-    connect(job, SIGNAL(result(KJob*)), this, SIGNAL(jobFinished(KJob*)));
-    ICore::self()->runController()->registerJob(job);
-}
-
 static QString stripPathToDir(const QString &path)
 {
     return QFileInfo(path).absolutePath();
@@ -183,11 +130,10 @@ void DistributedVersionControlPlugin::ctxBranchManager()
     Q_ASSERT(!ctxUrlList.isEmpty());    
     
     ICore::self()->documentController()->saveAllDocuments();
-    BranchManager branchManager(stripPathToDir(ctxUrlList.front().toLocalFile()), this, core()->uiController()->activeMainWindow());
-    if(branchManager.isValid())
-        branchManager.exec();
-    else
-        KMessageBox::error(0, i18n("Could not show the Branch Manager, current branch is unavailable."));
+
+    BranchManager branchManager(stripPathToDir(ctxUrlList.front().toLocalFile()),
+                                this, core()->uiController()->activeMainWindow());
+    branchManager.exec();
 }
 
 // This is redundant with the normal VCS "history" action
@@ -207,37 +153,6 @@ void DistributedVersionControlPlugin::ctxRevHistory()
     d.exec();
 }
 
-KDevDVCSViewFactory * DistributedVersionControlPlugin::dvcsViewFactory() const
-{
-    return d->m_factory;
-}
-
-KDevelop::DVcsJob* DistributedVersionControlPlugin::empty_cmd(KDevelop::OutputJob::OutputJobVerbosity verbosity)
-{
-    DVcsJob* j = new DVcsJob(QDir(), this, verbosity);
-    *j << "echo" << "command not implemented" << "-n";
-    return j;
-}
-
-}
-
-//-----------------------------------------------------------------------------------
-
-
-//class KDevDVCSViewFactory
-QWidget* KDevDVCSViewFactory::create(QWidget *parent)
-{
-    return new DVCSmainView(m_plugin, parent);
-}
-
-Qt::DockWidgetArea KDevDVCSViewFactory::defaultPosition()
-{
-    return Qt::BottomDockWidgetArea;
-}
-
-QString KDevDVCSViewFactory::id() const
-{
-    return "org.kdevelop.DVCSview";
 }
 
 #endif

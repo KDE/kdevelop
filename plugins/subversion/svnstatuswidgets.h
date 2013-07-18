@@ -8,8 +8,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SVN_STATUSWIDGETS_H
-#define SVN_STATUSWIDGETS_H
+#ifndef KDEVPLATFORM_PLUGIN_SVN_STATUSWIDGETS_H
+#define KDEVPLATFORM_PLUGIN_SVN_STATUSWIDGETS_H
 
 #include <kdialog.h>
 #include <QTreeWidget>

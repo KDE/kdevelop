@@ -12,7 +12,24 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QComboBox" name="sources"/>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QLabel" name="label_2">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Source:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="sources"/>
+     </item>
+    </layout>
    </item>
    <item>
     <widget class="QGroupBox" name="groupBox_2">
@@ -23,7 +40,7 @@
       <item>
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>Working Directory:</string>
+         <string>Directory:</string>
         </property>
        </widget>
       </item>

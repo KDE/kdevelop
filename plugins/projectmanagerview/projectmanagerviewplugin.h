@@ -17,8 +17,8 @@
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
 */
-#ifndef KDEVPROJECTMANAGERVIEWPLUGIN_H
-#define KDEVPROJECTMANAGERVIEWPLUGIN_H
+#ifndef KDEVPLATFORM_PLUGIN_PROJECTMANAGERVIEWPLUGIN_H
+#define KDEVPLATFORM_PLUGIN_PROJECTMANAGERVIEWPLUGIN_H
 
 #include <QtCore/QPointer>
 #include <interfaces/iplugin.h>

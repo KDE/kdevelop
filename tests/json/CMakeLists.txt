@@ -22,6 +22,7 @@ install(TARGETS kdevplatformjsontests EXPORT KDevPlatformTargets ${INSTALL_TARGE
 install(FILES
     declarationvalidator.h
     delayedoutput.h
+    kdevplatformjsontestsexport.h
     jsontesthelpers.h
     testsuite.h
     jsondeclarationtests.h

@@ -46,7 +46,7 @@
       <item row="1" column="1">
        <widget class="KUrlRequester" name="locationUrl"/>
       </item>
-      <item row="2" column="0">
+      <item row="2" column="0" colspan="2">
        <widget class="KSqueezedTextLabel" name="locationValidLabel">
         <property name="text">
          <string>KSqueezedTextLabel</string>

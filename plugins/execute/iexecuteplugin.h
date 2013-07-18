@@ -18,8 +18,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef IEXECUTEPLUGIN_H
-#define IEXECUTEPLUGIN_H
+#ifndef KDEVPLATFORM_PLUGIN_IEXECUTEPLUGIN_H
+#define KDEVPLATFORM_PLUGIN_IEXECUTEPLUGIN_H
 
 #include <QtCore/QString>
 
@@ -41,13 +41,13 @@ class IExecutePlugin
 public:
     virtual ~IExecutePlugin() {}
 
-    virtual KUrl executable( KDevelop::ILaunchConfiguration*, QString& ) const = 0;
-    virtual QStringList arguments( KDevelop::ILaunchConfiguration*, QString& ) const = 0;
-    virtual KUrl workingDirectory( KDevelop::ILaunchConfiguration* ) const = 0;
-    virtual KJob* dependecyJob( KDevelop::ILaunchConfiguration* ) const = 0;
-    virtual QString environmentGroup( KDevelop::ILaunchConfiguration* ) const = 0;
-    virtual bool useTerminal( KDevelop::ILaunchConfiguration* ) const = 0;
-    virtual QString terminal( KDevelop::ILaunchConfiguration* ) const = 0;
+    virtual KUrl executable( KDevelop::ILaunchConfiguration* config, QString& error) const = 0;
+    virtual QStringList arguments( KDevelop::ILaunchConfiguration* config, QString& error) const = 0;
+    virtual KUrl workingDirectory( KDevelop::ILaunchConfiguration* config) const = 0;
+    virtual KJob* dependecyJob( KDevelop::ILaunchConfiguration* config) const = 0;
+    virtual QString environmentGroup( KDevelop::ILaunchConfiguration* config) const = 0;
+    virtual bool useTerminal( KDevelop::ILaunchConfiguration* config) const = 0;
+    virtual QString terminal( KDevelop::ILaunchConfiguration* config) const = 0;
     virtual QString nativeAppConfigTypeId() const = 0;
 };
 

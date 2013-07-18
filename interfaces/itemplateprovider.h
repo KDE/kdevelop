@@ -17,8 +17,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVELOP_ITEMPLATEPROVIDER_H
-#define KDEVELOP_ITEMPLATEPROVIDER_H
+#ifndef KDEVPLATFORM_ITEMPLATEPROVIDER_H
+#define KDEVPLATFORM_ITEMPLATEPROVIDER_H
 
 #include <QtCore/QObject>
 #include "interfacesexport.h"
@@ -71,7 +71,7 @@ public:
      *
      * The called does not take ownership of the model.
      **/
-    virtual QAbstractItemModel* templatesModel() const = 0;
+    virtual QAbstractItemModel* templatesModel() = 0;
 
     /**
      * @return The configuration file for Get Hot New Stuff.
@@ -109,4 +109,4 @@ public:
 
 Q_DECLARE_INTERFACE( KDevelop::ITemplateProvider, "org.kdevelop.ITemplateProvider")
 
-#endif // KDEVELOP_ITEMPLATEPROVIDER_H
+#endif // KDEVPLATFORM_ITEMPLATEPROVIDER_H
