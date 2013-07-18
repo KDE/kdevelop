@@ -34,6 +34,7 @@ public:
   MacroNavigationContext(const rpp::pp_macro& macro, QString preprocessedBody);
   ~MacroNavigationContext();
 
+  QString body() const;
   virtual QWidget* widget() const;
   virtual QString html(bool shorten);
   virtual QString name() const;
