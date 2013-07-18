@@ -9,11 +9,6 @@
 {% endblock includes %}
 
 
-{% block forward_declarations %}
-class {{ name }}Private;
-{% endblock forward_declarations %}
-
-
 {% block class_declaration_open %}
 {% if base_classes %}
 {{ block.super }}
@@ -59,5 +54,11 @@ protected:
 
 
 private:
-    Q_DECLARE_PRIVATE({{ name }})
+    {% for method in private_functions %}
+    {% include "method_declaration.txt" %}
+    {% endfor %}
+
+    {% for property in members %}
+    {{property.type}} m_{{property.name}};
+    {% endfor %}
 {% endblock class_body %}

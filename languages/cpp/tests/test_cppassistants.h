@@ -31,6 +31,8 @@ private slots:
   void testRenameAssistant();
   void testSignatureAssistant_data();
   void testSignatureAssistant();
+  void testMacroExpansion();
+  void testMacroExpansion_data();
 };
 
 #endif

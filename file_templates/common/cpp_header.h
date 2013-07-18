@@ -1,9 +1,11 @@
 {% load kdev_filters %}
 {% block license_header %}
+{% if license %}
 /*
 
  {{ license|lines_prepend:" * " }}
  */
+{% endif %}
 {% endblock license_header %}
 
 
@@ -38,46 +40,43 @@ class {{ name }}{% if base_classes %} :{% for base in base_classes %} {{ base.in
 {% if public_members or public_functions %}
 public:
 {% endif %}
+    {% if public_functions %}
     {% for method in public_functions %}
     {% include "method_declaration_cpp.txt" %}
     {% endfor %}
-
-
+    {% endif %}
+    {% if public_members %}
     {% for member in public_members %}
     {{ member.type }} {{ member.name }};
     {% endfor %}
-
-
+    {% endif %}
 {% if protected_members or protected_functions %}
 protected:
 {% endif %}
+    {% if protected_functions %}
     {% for method in protected_functions %}
     {% include "method_declaration_cpp.txt" %}
     {% endfor %}
-
-
+    {% endif %}
+    {% if protected_members %}
     {% for member in protected_members %}
     {{ member.type }} {{ member.name }};
     {% endfor %}
-
-
+    {% endif %}
 {% if private_members or private_functions %}
 private:
 {% endif %}
+    {% if private_functions %}
     {% for method in private_functions %}
     {% include "method_declaration_cpp.txt" %}
     {% endfor %}
-
-
+    {% endif %}
     {% for member in private_members %}
     {{ member.type }} {{ member.name }};
     {% endfor %}
-
 {% endblock class_body %}
-
 {% block class_bottom %}
 {% endblock %}
-
 {% block class_declaration_close %}
 };
 {% endblock %}

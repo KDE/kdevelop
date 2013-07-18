@@ -87,8 +87,10 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         virtual int visit( const SetDirectoryPropsAst * );
         virtual int visit( const StringAst * );
         virtual int visit( const SubdirsAst * );
-        virtual int visit( const TryCompileAst * );
+        virtual int visit( const SetTestsPropsAst* );
         virtual int visit( const TargetLinkLibrariesAst * );
+        virtual int visit( const TargetIncludeDirectoriesAst* );
+        virtual int visit( const TryCompileAst * );
         virtual int visit( const GetCMakePropertyAst * );
         virtual int visit( const GetPropertyAst* );
         virtual int visit( const RemoveDefinitionsAst * );
@@ -102,20 +104,17 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         void setVariableMap( VariableMap* vars );
         void setMacroMap( MacroMap* macros ) { m_macros=macros; }
         void setModulePath(const QStringList& mp) { m_modulePath=mp; }
-        void setDefinitions(const CMakeDefinitions& defs) { m_defs=defs; }
         
         /** sets the @p profile env variables that will be used to override those in the current system */
         void setEnvironmentProfile(const QMap<QString, QString>& profile) { m_environmentProfile = profile; }
 
         const VariableMap* variables() const { return m_vars; }
         const CacheValues* cache() const { return m_cache; }
-        const CMakeDefinitions& definitions() const { return m_defs; }
         
         QString projectName() const { return m_projectName; }
         QList<Subdirectory> subdirectories() const { return m_subdirectories; }
         QList<Target> targets() const { return m_targetForId.values(); }
         QStringList resolveDependencies(const QStringList& target) const;
-        QStringList includeDirectories() const { return m_includeDirectories; }
         QList<Test> testSuites() const { return m_testSuites; }
             
         int walk(const CMakeFileContent& fc, int line, bool isClean=false);
@@ -143,6 +142,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         static void setMessageCallback(message_callback f) { s_msgcallback=f; }
         
         QStringList variableValue(const QString& var) const;
+        void setProperties(const CMakeProperties& properties) { m_props = properties; }
         
     protected:
         struct IntPair
@@ -190,7 +190,6 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         QStringList m_modulePath;
         QString m_projectName;
         QList<Subdirectory> m_subdirectories;
-        QStringList m_includeDirectories;
         QMap<QString, QStringList> m_generatedFiles;
         QMap<QString, Target> m_targetForId;
         
@@ -203,6 +202,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         KDevelop::ReferencedTopDUContext m_topctx;
         KDevelop::ReferencedTopDUContext m_parentCtx;
         bool m_hitBreak;
+        bool m_hitReturn;
         QMap<QString, QString> m_environmentProfile;
 
         QList<Test> m_testSuites;

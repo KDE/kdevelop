@@ -19,7 +19,11 @@
 #include <QtCore/QString>
 #include <QtCore/qpointer.h>
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
+    Q_UNUSED(argc);
+    Q_UNUSED(argv);
+
     qDebug();
     for(int i=0; i<10; ++i) {
         QString x("foobar");

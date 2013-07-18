@@ -37,24 +37,18 @@ namespace GDBDebugger
     class GDBController;
     class CppDebuggerPlugin;
 
-    class ViewerWidget : public QWidget
+    class MemoryViewerWidget : public QWidget
     {
         Q_OBJECT
     public:
-        ViewerWidget(CppDebuggerPlugin* plugin, QWidget* parent);
+        MemoryViewerWidget(CppDebuggerPlugin* plugin, QWidget* parent = 0);
 
     public Q_SLOTS:
-        /** Adds a new memory view to *this, initially showing
-            no data. */
+        /** Adds a new memory view. */
         void slotAddMemoryView();
-        /** Informs *this about change in debugger state. Should always
-            be connected to, so that *this can disable itself when
-            debugger is not running. */
-        void slotStateChanged(DBGStateFlags oldState, DBGStateFlags newState);
 
     Q_SIGNALS:
         void requestRaise();
-        void setViewShown(bool shown);
 
 
     private Q_SLOTS:
@@ -72,8 +66,7 @@ namespace GDBDebugger
     {
         Q_OBJECT
     public:
-        MemoryView(CppDebuggerPlugin* plugin, GDBController* controller,
-                   QWidget* parent);
+        MemoryView(GDBController* controller, QWidget* parent);
 
         void debuggerStateChanged(DBGStateFlags state);
 
@@ -87,6 +80,9 @@ namespace GDBDebugger
 
     private Q_SLOTS:
         void memoryEdited(int start, int end);
+        /** Informs the view about changes in debugger state.
+         *  Allows view to disable itself when debugger is not running. */
+        void slotStateChanged(DBGStateFlags oldState, DBGStateFlags newState);
 
     private:
         // Returns true is we successfully created the hexeditor, and so
@@ -112,9 +108,9 @@ namespace GDBDebugger
         GDBController* controller_;
         class MemoryRangeSelector* rangeSelector_;
         QWidget* khexedit2_widget;
-        QWidget* khexedit2_real_widget;
 
-        uint start_, amount_;
+        uint amount_;
+        quintptr start_;
         QString startAsString_, amountAsString_;
         char* data_;
 

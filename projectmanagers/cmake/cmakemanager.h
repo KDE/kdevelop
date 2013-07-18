@@ -123,6 +123,8 @@ public:
     
     void deleteItemLater(KDevelop::ProjectBaseItem* item);
     void deleteAllLater(const QList< KDevelop::ProjectBaseItem* >& items);
+    QStringList processGeneratorExpression(const QStringList& expr, KDevelop::IProject* project, KDevelop::ProjectTargetItem* target) const;
+
 public slots:
     void cleanupItems();
     
@@ -173,7 +175,7 @@ private:
     QList<KDevelop::ProjectBaseItem*> m_clickedItems;
     QSet<QString> m_toDelete;
     QHash<KUrl, KUrl> m_renamed;
-    QList<KDevelop::ProjectBaseItem*> m_cleanupItems;
+    QSet<KDevelop::ProjectBaseItem*> m_cleanupItems;
 
     QTimer* m_fileSystemChangeTimer;
     QSet<QString> m_fileSystemChangedBuffer;

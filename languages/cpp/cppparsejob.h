@@ -186,9 +186,6 @@ public:
     virtual ControlFlowGraph* controlFlowGraph();
     virtual DataAccessRepository* dataAccessInformation();
 private:
-  
-    KDevelop::TopDUContext::Features standardMinimumFeatures() const;
-  
 
     QList<LineJobPair> m_delayedImports;
     QList<LineContextPair> m_delayedImporters;

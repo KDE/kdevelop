@@ -43,6 +43,9 @@ class TestCppCodegen : public QObject
     void testPrivateImplementation();
 
     void testMacroDeclarationOrder();
+
+    void testMoveIntoSource();
+    void testMoveIntoSource_data();
 };
 
 #endif // TEST_CPPCODEGEN_H

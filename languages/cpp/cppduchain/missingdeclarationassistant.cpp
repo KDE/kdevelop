@@ -311,6 +311,7 @@ MissingDeclarationAssistant::MissingDeclarationAssistant(const MissingDeclaratio
 : problem(p)
 , type(p->type)
 {
+  bool actionAdded = false;
   DUChainReadLocker lock;
   if(p->type->identifier().identifier().identifier().isEmpty())
     return;
@@ -340,7 +341,7 @@ MissingDeclarationAssistant::MissingDeclarationAssistant(const MissingDeclaratio
     // public is always possible
     CreateMemberDeclarationAction* publicAction = new CreateMemberDeclarationAction(problem, Declaration::Public);
 
-    if (actions().size()) {
+    if (actionAdded) {
       // place label between first action and the following actions
       const QString label = i18nc("assistant, declare member in class identified by %1",
                                   "member of <code>%1</code>:",

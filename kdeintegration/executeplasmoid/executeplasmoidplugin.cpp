@@ -22,6 +22,7 @@
 
 #include "executeplasmoidplugin.h"
 #include "plasmoidexecutionconfig.h"
+#include "plasmoidexecutionjob.h"
 #include <kpluginfactory.h>
 #include <KDebug>
 #include <KAboutData>
@@ -38,6 +39,7 @@ K_EXPORT_PLUGIN(KDevExecutePlasmoidFactory(KAboutData("kdevexecuteplasmoid", "kd
 ExecutePlasmoidPlugin::ExecutePlasmoidPlugin(QObject *parent, const QVariantList&)
     : KDevelop::IPlugin(KDevExecutePlasmoidFactory::componentData(), parent)
 {
+    KDEV_USE_EXTENSION_INTERFACE( IExecutePlugin )
     m_configType = new PlasmoidExecutionConfigType();
     m_configType->addLauncher( new PlasmoidLauncher( this ) );
     kDebug() << "adding plasmoid launch config";
@@ -54,3 +56,42 @@ void ExecutePlasmoidPlugin::unload()
     m_configType = 0;
 }
 
+KUrl ExecutePlasmoidPlugin::executable(ILaunchConfiguration* config, QString& /*error*/) const
+{
+    return PlasmoidExecutionJob::executable(config);
+}
+
+QStringList ExecutePlasmoidPlugin::arguments(ILaunchConfiguration* config, QString& /*error*/) const
+{
+    return PlasmoidExecutionJob::arguments(config);
+}
+
+KJob* ExecutePlasmoidPlugin::dependecyJob(ILaunchConfiguration* config) const
+{
+    return PlasmoidLauncher::calculateDependencies(config);
+}
+
+KUrl ExecutePlasmoidPlugin::workingDirectory(ILaunchConfiguration* config) const
+{
+    return PlasmoidExecutionJob::workingDirectory(config);
+}
+
+QString ExecutePlasmoidPlugin::environmentGroup(ILaunchConfiguration* /*config*/) const
+{
+    return QString();
+}
+
+QString ExecutePlasmoidPlugin::nativeAppConfigTypeId() const
+{
+    return PlasmoidExecutionConfigType::typeId();
+}
+
+bool ExecutePlasmoidPlugin::useTerminal(ILaunchConfiguration* /*config*/) const
+{
+    return false;
+}
+
+QString ExecutePlasmoidPlugin::terminal(ILaunchConfiguration* /*config*/) const
+{
+    return QString();
+}

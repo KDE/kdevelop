@@ -39,7 +39,7 @@ set(kdevgdb_PART_SRCS
     gdbparser.cpp
     stty.cpp
     disassemblewidget.cpp
-#    memviewdlg.cpp
+    memviewdlg.cpp
     gdboutputwidget.cpp
 #    debuggertracingdialog.cpp
     breakpointcontroller.cpp
@@ -140,5 +140,6 @@ target_link_libraries(gdbtest
 
 ########### install files ###############
 
-install(FILES kdevgdb.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+configure_file(kdevgdb.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevgdb.desktop)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevgdb.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 install( FILES kdevgdbui.rc DESTINATION ${DATA_INSTALL_DIR}/kdevgdb )

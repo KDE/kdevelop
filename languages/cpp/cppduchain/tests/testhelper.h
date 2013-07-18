@@ -23,6 +23,7 @@
 #include <QByteArray>
 
 #include "dumpchain.h"
+#include <templatedeclaration.h>
 #include "control.h"
 #include <language/duchain/duchainlock.h>
 #include <language/checks/dataaccessrepository.h>
@@ -77,6 +78,13 @@ private:
   DumpChain cppDumper;
 
 };
+
+void dump(const TemplateDeclaration::InstantiationsHash& instantiations);
+
+/**
+ * Read contents of file @p file in cppduchain/tests/data directory.
+ */
+QByteArray readCodeFile(const QString& file);
 
 }
 

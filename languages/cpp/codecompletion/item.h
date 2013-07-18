@@ -65,8 +65,6 @@ public:
   virtual void execute(KTextEditor::Document* document, const KTextEditor::Range& word);
 
   virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const;
-
-  virtual QList<KDevelop::IndexedType> typeForArgumentMatching() const;
   
   //Prefix that will be stripped from all identifiers(For example the namespace)
   QualifiedIdentifier stripPrefix() const;
@@ -148,7 +146,6 @@ class TypeConversionCompletionItem : public KDevelop::CompletionTreeItem {
     virtual int argumentHintDepth() const;
     virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const;
     QList<KDevelop::IndexedType> type() const;
-    virtual QList<KDevelop::IndexedType> typeForArgumentMatching() const;
     void setPrefix(QString s);
     virtual void execute(KTextEditor::Document* document, const KTextEditor::Range& word);
   private:

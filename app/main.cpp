@@ -68,6 +68,7 @@
 #include <iostream>
 
 #include "welcomepage/welcomepageview.h"
+#include "splash.h"
 
 using KDevelop::Core;
 
@@ -241,7 +242,7 @@ int main( int argc, char *argv[] )
             }
             qout << si.uuid.toString() << '\t' << si.description;
 
-            if(!KDevelop::SessionController::tryLockSession(si.uuid.toString()))
+            if(KDevelop::SessionController::isSessionRunning(si.uuid.toString()))
                 qout << "     " << i18n("[running]");
 
             qout << endl;
@@ -258,7 +259,7 @@ int main( int argc, char *argv[] )
         QList<KDevelop::SessionInfo> candidates;
         foreach(const KDevelop::SessionInfo& si, KDevelop::SessionController::availableSessionInfo())
             if( (!si.name.isEmpty() || !si.projects.isEmpty() || args->isSet("pid")) &&
-                (!args->isSet("pid") || !KDevelop::SessionController::tryLockSession(si.uuid.toString())))
+                (!args->isSet("pid") || KDevelop::SessionController::isSessionRunning(si.uuid.toString())))
                 candidates << si;
         
         if(candidates.size() == 0)
@@ -276,11 +277,11 @@ int main( int argc, char *argv[] )
             
             int chosen;
             std::cin >> chosen;
-            if(chosen >= 0 && chosen < candidates.size())
+            if(std::cin.good() && (chosen >= 0 && chosen < candidates.size()))
             {
                 session = candidates[chosen].uuid.toString();
             }else{
-                qerr << "bad pick" << endl;
+                qerr << "invalid selection" << endl;
                 return 1;
             }
         }
@@ -316,6 +317,9 @@ int main( int argc, char *argv[] )
         // session doesn't exist, we can create it
     } else if ( args->isSet("open-session") ) {
         session = args->getOption("open-session");
+        //If there is a session and a project with the same name, always open the session
+        //regardless of the order encountered
+        QString projectAsSession;
         bool found = false;
         foreach(const KDevelop::SessionInfo& si, KDevelop::SessionController::availableSessionInfo())
         {
@@ -323,11 +327,24 @@ int main( int argc, char *argv[] )
                 found = true;
                 break;
             }
+            else if (projectAsSession.isEmpty()) {
+                foreach(const KUrl& k, si.projects)
+                {
+                    QString fn(k.fileName());
+                    fn = fn.left(fn.indexOf('.'));
+                    if ( session == fn )
+                        projectAsSession = si.uuid;
+                }
+            }
         }
         if ( !found ) {
-            QTextStream qerr(stderr);
-            qerr << endl << i18n("Cannot open unknown session %1. See --sessions switch for available sessions or use -cs to create a new one.", session) << endl;
-            return 1;
+            if ( projectAsSession.isEmpty() ) {
+                QTextStream qerr(stderr);
+                qerr << endl << i18n("Cannot open unknown session %1. See --sessions switch for available sessions or use -cs to create a new one.", session) << endl;
+                return 1;
+            }
+            else
+                session = projectAsSession;
         }
     }
 
@@ -340,46 +357,29 @@ int main( int argc, char *argv[] )
             return 5;
         }
 
-        KDevelop::SessionController::LockSessionState state = KDevelop::SessionController::tryLockSession( sessionData->uuid.toString() );
-        if(state.success) {
+        KDevelop::SessionRunInfo sessionInfo = KDevelop::SessionController::sessionRunInfo( sessionData->uuid.toString() );
+        if (!sessionInfo.isRunning) {
             kError() << session << sessionData->name << "is not running";
             return 5;
         } else {
             // Print the PID and we're ready
-            std::cout << state.holderPid << std::endl;
+            std::cout << sessionInfo.holderPid << std::endl;
             return 0;
-        }
-    }
-
-    // If the session to load is known by this point,
-    // try to do the same iterative lock-check as in SessionController::loadDefaultSession().
-    KDevelop::SessionController::LockSessionState state;
-    if( sessionData ) {
-        do {
-            state = KDevelop::SessionController::tryLockSession( sessionData->uuid.toString() );
-            if( state ) {
-                break;
-            } else {
-                session = KDevelop::SessionController::handleLockedSession( sessionData->name, sessionData->uuid.toString(), state );
-                sessionData = findSessionInList( sessions, session );
-            }
-        } while( sessionData );
-        if( !state ) {
-            return 1;
         }
     }
 
     KDevIDEExtension::init();
 
-    KSplashScreen* splash = 0;
+    KDevSplashScreen* splash = 0;
     QString splashFile = KStandardDirs::locate( "appdata", "pics/kdevelop-splash.png" );
     if( !splashFile.isEmpty() )
     {
         QPixmap pm;
         pm.load( splashFile );
-        splash = new KSplashScreen( pm );
+        splash = new KDevSplashScreen( pm );
         splash->show();
         splash->repaint();
+        app.processEvents();
     }
 
     if(!Core::initialize(splash, Core::Default, session))
@@ -453,7 +453,7 @@ int main( int argc, char *argv[] )
             }
             if (launcher.second.isEmpty()) {
                 QTextStream qerr(stderr);
-                qerr << endl << i18n("Cannot find launcher %1").arg(args->getOption("debug")) << endl;
+                qerr << endl << i18n("Cannot find launcher %1", args->getOption("debug")) << endl;
                 return 1;
             }
             KDevelop::ILaunchConfiguration* ilaunch = core->runController()->createLaunchConfiguration(type, launcher, 0, launchName);
@@ -492,7 +492,7 @@ int main( int argc, char *argv[] )
             }
 
             if(!core->documentController()->openDocument(f, line))
-                kWarning() << i18n("Could not open %1") << args->arg(i);
+                kWarning() << i18n("Could not open %1", args->arg(i));
         }
         args->clear();
     }

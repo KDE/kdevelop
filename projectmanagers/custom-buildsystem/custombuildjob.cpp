@@ -68,11 +68,14 @@ CustomBuildJob::CustomBuildJob( CustomBuildSystem* plugin, KDevelop::ProjectBase
     setTitle( QString("%1 %2").arg( cmd ).arg( item->text() ) );
     setObjectName( QString("%1 %2").arg( cmd ).arg( item->text() ) );
     builddir = plugin->buildDirectory( item ).toLocalFile();
-    KConfigGroup grp = plugin->configuration( item->project() ).group( subgrpname );
-    enabled = grp.readEntry( ConfigConstants::toolEnabled, false );
-    cmd = grp.readEntry( ConfigConstants::toolExecutable, KUrl() ).toLocalFile();
-    environment = grp.readEntry( ConfigConstants::toolEnvironment, "" );
-    arguments = grp.readEntry( ConfigConstants::toolArguments, "" );
+    KConfigGroup g = plugin->configuration( item->project() );
+    if(g.isValid()) {
+        KConfigGroup grp = g.group( subgrpname );
+        enabled = grp.readEntry( ConfigConstants::toolEnabled, false );
+        cmd = grp.readEntry( ConfigConstants::toolExecutable, KUrl() ).toLocalFile();
+        environment = grp.readEntry( ConfigConstants::toolEnvironment, "" );
+        arguments = grp.readEntry( ConfigConstants::toolArguments, "" );
+    }
     setDelegate( new KDevelop::OutputDelegate );
 }
 
@@ -91,13 +94,21 @@ void CustomBuildJob::start()
         setErrorText( i18n( "This command is disabled" ) );
         emitResult();
     } else {
+        // prepend the command name to the argument string
+        // so that splitArgs works correctly
+        const QString allargv = KShell::quoteArg(cmd) + " " + arguments;
+
         KShell::Errors err;
-        QStringList strargs = KShell::splitArgs( arguments, KShell::AbortOnMeta, &err );
+        QStringList strargs = KShell::splitArgs( allargv, KShell::AbortOnMeta, &err );
         if( err != KShell::NoError ) {
             setError( WrongArgs );
             setErrorText( i18n( "The given arguments would need a real shell, this is not supported currently." ) );
             emitResult();
         }
+        // and remove the command name back out of the split argument list
+        Q_ASSERT(!strargs.isEmpty());
+        strargs.removeFirst();
+
         setStandardToolView( KDevelop::IOutputView::BuildView );
         setBehaviours( KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
         KDevelop::OutputModel* model = new KDevelop::OutputModel( builddir );

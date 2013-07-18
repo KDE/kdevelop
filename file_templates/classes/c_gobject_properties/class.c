@@ -1,7 +1,7 @@
 {% load kdev_filters %}
 /*
 
-{{ license|lines_prepend:" * "
+{{ license|lines_prepend:" * " }}
  */
 
 

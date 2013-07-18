@@ -231,7 +231,7 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
                 else
                     rx.indexIn(*(it2-1));
                 last=rx.matchedLength()>0;
-                
+                m_matches = rx.capturedTexts();
                 itEnd=it2-1;
             }   break;
             case LESS: {

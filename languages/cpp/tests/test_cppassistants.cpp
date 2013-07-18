@@ -40,6 +40,9 @@
 #include <language/duchain/duchain.h>
 #include <language/codegen/coderepresentation.h>
 #include <shell/documentcontroller.h>
+#include <interfaces/ilanguage.h>
+#include <navigation/macronavigationcontext.h>
+#include <navigation/navigationwidget.h>
 
 using namespace KDevelop;
 using namespace KTextEditor;
@@ -307,6 +310,15 @@ void TestCppAssistants::testSignatureAssistant_data()
        )
     << "class Foo {\nint bar(char* b, int a, int c = 10); \n};"
     << "int Foo::bar(char* b, int a, int c)\n{ a = c; b = new char; return a + *b; }";
+
+  // see https://bugs.kde.org/show_bug.cgi?id=299393
+  // actually related to the whitespaces in the header...
+  QTest::newRow("Change Function Constness")
+    << "class Foo {\nvoid bar( const Foo& ) const;\n};"
+    << "void Foo::bar(const Foo&) const\n{}"
+    << (QList<StateChange>() << StateChange(Testbed::CppDoc, Range(0,25,0,31), "", SHOULD_ASSIST))
+    << "class Foo {\nvoid bar( const Foo& );\n};"
+    << "void Foo::bar(const Foo&)\n{}";
 }
 
 void TestCppAssistants::testSignatureAssistant()
@@ -333,4 +345,52 @@ void TestCppAssistants::testSignatureAssistant()
   QCOMPARE(testbed.documentText(Testbed::HeaderDoc), finalHeaderContents);
   QCOMPARE(testbed.documentText(Testbed::CppDoc), finalCppContents);
 }
+
+void TestCppAssistants::testMacroExpansion_data()
+{
+  QTest::addColumn<QString>("input");
+  QTest::addColumn<QString>("expected");
+  QTest::addColumn<int>("macroLine");
+
+  QTest::newRow("nonewlines") << "#define FOO(arg1,arg2,arg3) BAR(arg1,arg2,arg3)\nint main(){\nFOO(1,2,3)\n}"
+                              << "BAR(1 ,2 ,3 ) "
+                              << 2;
+
+  QTest::newRow("newlines") << "#define FOO(arg1,arg2,arg3) BAR(arg1,arg2,arg3)\nint main(){\nFOO(1,\n2,\n3)\n}"
+                            << "BAR(1 ,2 ,3 ) "
+                            << 2;
+
+  QTest::newRow("invalid")  << "#define FOO(arg1,arg2,arg3) BAR(arg1,arg2,arg3)\nint main(){\nFOO(1,\n2,\n3\n}"
+                            << "FOO"
+                            << 2;
+
+  QTest::newRow("multibrace") << "#define FOO(arg1,arg2,arg3) BAR(arg1,arg2,arg3)\nint main(){\nFOO((1),\n2,\n3)\n}"
+                              << "BAR((1) ,2 ,3 ) "
+                              << 2;
+}
+
+void TestCppAssistants::testMacroExpansion()
+{
+  QFETCH(QString, input);
+  QFETCH(QString, expected);
+  QFETCH(int, macroLine);
+
+  KUrl url(createFile(input));
+  Core::self()->documentController()->openDocument(url);
+  DUChain::self()->waitForUpdate(IndexedString(url), KDevelop::TopDUContext::AllDeclarationsAndContexts);
+
+  ILanguage* language = ICore::self()->languageController()->languagesForUrl(url).at(0);
+  QVERIFY(language);
+
+  QWidget *macroWidget = language->languageSupport()->specialLanguageObjectNavigationWidget(url, SimpleCursor(macroLine,0));
+  QVERIFY(macroWidget);
+  Cpp::NavigationWidget *macroNavigationWidget = dynamic_cast<Cpp::NavigationWidget*>(macroWidget);
+  QVERIFY(macroNavigationWidget);
+  Cpp::MacroNavigationContext *macroContext = dynamic_cast<Cpp::MacroNavigationContext*>(macroNavigationWidget->context().data());
+  QVERIFY(macroContext);
+
+  QCOMPARE(macroContext->body(),expected);
+  Core::self()->documentController()->documentForUrl(url)->close(KDevelop::IDocument::Discard);
+}
+
 #include "test_cppassistants.moc"

@@ -53,7 +53,7 @@ class MissingIncludePathAssistant : public KDevelop::IAssistant {
 public:
   MissingIncludePathAssistant(KDevelop::IndexedString url, QString directive);
   virtual QString title() const;
-  virtual QList< KDevelop::IAssistantAction::Ptr > actions() const;
+  virtual void createActions();
 private:
   KDevelop::IndexedString m_url;
   QString m_directive;

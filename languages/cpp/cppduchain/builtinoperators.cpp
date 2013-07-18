@@ -70,9 +70,6 @@ struct ConstantBinaryExpressionEvaluator {
         endValue = left->ConstantIntegralType::value<Type>() > right->ConstantIntegralType::value<Type>();
         type = IntegralType::TypeBoolean;
       break;
-      case Token_assign:
-        endValue = right->ConstantIntegralType::value<Type>();
-      break;
       case Token_eq:
         endValue = left->ConstantIntegralType::value<Type>() == right->ConstantIntegralType::value<Type>();
         type = IntegralType::TypeBoolean;

@@ -20,8 +20,8 @@ void TestPool::initTestCase()
 
 void TestPool::testSimpleAllocation()
 {
-    rxx_allocator<int> alloc;
-    int *p = alloc.allocate(3);
+    MemoryPool pool;
+    int *p = pool.allocate<int>(3);
     p[0] = 10;
     p[1] = 3;
     p[2] = INT_MAX;
@@ -29,38 +29,38 @@ void TestPool::testSimpleAllocation()
     QCOMPARE(p[1], 3);
     QCOMPARE(p[2], INT_MAX);
 
-    int *p2 = alloc.allocate(1);
-    alloc.construct(p2, 11);
+    int *p2 = pool.allocate<int>(1);
+    pool.construct(p2, 11);
     QCOMPARE(*p2, 11);
-    alloc.destroy(p);
+    pool.destroy(p);
     //nothing happens here (???)
     QCOMPARE(*p2, 11);
 }
 
 void TestPool::testObjectAllocation()
 {
-    rxx_allocator<PoolObject> alloc;
-    PoolObject *p = alloc.allocate(1);
+    MemoryPool pool;
+    PoolObject *p = pool.allocate<PoolObject>(1);
     //object is not yet initialized (it's actually zeroed
     //because the block in the pool is zeroed
     QCOMPARE(p->foo, 0);
-    alloc.construct(p, PoolObject());
+    pool.construct(p, PoolObject());
     //now we have the object there
     QCOMPARE(p->foo, 3);
-    alloc.destroy(p);
+    pool.destroy(p);
     //destructor was called, the "foo" field is zeroed again
     QCOMPARE(p->foo, 0);
 }
 
 void TestPool::testNewBlockAllocation()
 {
-    rxx_allocator<int> alloc;
-    int *p = alloc.allocate(alloc._S_block_size / sizeof(int));
+    MemoryPool pool;
+    int *p = pool.allocate<int>(MemoryPool::BLOCK_SIZE / sizeof(int));
     //the last one in a block
-    int lastOne = alloc._S_block_size / sizeof(int) - 1;
+    int lastOne = MemoryPool::BLOCK_SIZE / sizeof(int) - 1;
     p[lastOne] = 10;
     //the first one in another block
-    int *p2 = alloc.allocate(1);
+    int *p2 = pool.allocate<int>();
     p2[0] = 11;
     QCOMPARE(p[lastOne], 10);
     QCOMPARE(p2[0], 11);
@@ -68,15 +68,15 @@ void TestPool::testNewBlockAllocation()
 
 void TestPool::testWastedMemoryDueToBlockAllocation()
 {
-    rxx_allocator<int> alloc;
+    MemoryPool alloc;
     //allocate a block and leave 2 last elements unallocated
-    int *p = alloc.allocate(alloc._S_block_size / sizeof(int) - 2);
+    int *p = alloc.allocate<int>(MemoryPool::BLOCK_SIZE / sizeof(int) - 2);
     //the last one in a block
-    int lastOne = alloc._S_block_size / sizeof(int) - 3;
+    int lastOne = MemoryPool::BLOCK_SIZE / sizeof(int) - 3;
     p[lastOne] = 10;
     //allocate 5 elements and watch that 2 elements in the previous block
     //are forgotten and a new block is created to allocate 5 elements continuously
-    int *p2 = alloc.allocate(5);
+    int *p2 = alloc.allocate<int>(5);
     p2[0] = 11;
 
     QCOMPARE(p[lastOne], 10);
@@ -88,23 +88,22 @@ void TestPool::testWastedMemoryDueToBlockAllocation()
     QCOMPARE(p2[0], 11);
 }
 
-void TestPool::testStdlibCompliance()
+void TestPool::benchManyAllocations()
 {
-#ifndef Q_CC_MSVC
-    std::vector<int, rxx_allocator<int> > v;
-    v.push_back(5);
-    v.push_back(55);
-    v.push_back(555);
-    QCOMPARE(v[0], 5);
-    QCOMPARE(v[1], 55);
-    QCOMPARE(v[2], 555);
-    v.pop_back();
-    QCOMPARE(v[0], 5);
-    QCOMPARE(v[1], 55);
-    QCOMPARE(v.size(), size_t(2));
-    v.push_back(10);
-    QCOMPARE(v[2], 10);
-#endif
+  MemoryPool pool;
+  QBENCHMARK {
+    pool.allocate<char>(64);
+  }
+}
+
+void TestPool::benchManyPools()
+{
+  QBENCHMARK {
+    MemoryPool pool;
+    for(int i = 0; i < 1000; ++i) {
+      pool.allocate<char>(64);
+    }
+  }
 }
 
 #include "test_pool.moc"

@@ -66,7 +66,7 @@ GDBOutputWidget::GDBOutputWidget(CppDebuggerPlugin* plugin, QWidget *parent) :
 //     setWindowIcon(KIcon("inline_image"));
     setWindowIcon(KIcon("debugger"));
     setWindowTitle(i18n("GDB Output"));
-    setToolTip(i18n("<b>GDB output</b><p>"
+    setWhatsThis(i18n("<b>GDB output</b><p>"
                     "Shows all gdb commands being executed. "
                     "You can also issue any other gdb command while debugging.</p>"));
 

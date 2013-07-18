@@ -67,6 +67,9 @@ namespace CppTools {
     ///Finds a storage-path for the given start path, and reads the custom include path settings
     ///If none were found, returns an invalid item
     static CustomIncludePathsSettings findAndRead(QString startPath);
+    ///Same as findAndRead, but also convert all relative paths into absolute ones from the
+    ///storage path.
+    static CustomIncludePathsSettings findAndReadAbsolute(const QString& startPath);
     
     //Stores these settings exclusively, overwriting any old ones for the storage path
     bool write();

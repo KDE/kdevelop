@@ -160,3 +160,25 @@ TopDUContext* TestHelper::parse(const QByteArray& unit, DumpAreas dump, TopDUCon
 
   return top;
 }
+
+namespace Cpp {
+void dump(const TemplateDeclaration::InstantiationsHash& instantiations)
+{
+  TemplateDeclaration::InstantiationsHash::const_iterator it = instantiations.constBegin();
+  while(it != instantiations.constEnd()) {
+    qDebug() << it.key().information().toString();
+    ++it;
+  }
+}
+
+QByteArray readCodeFile(const QString& file)
+{
+  QFile f(QFileInfo(__FILE__).absolutePath() + QLatin1String("/data/") + file);
+  qDebug() << f.fileName();
+  if (!f.open(QIODevice::ReadOnly)) {
+    kWarning() << "Could not open test file" << file;
+    return QByteArray();
+  }
+  return f.readAll();
+}
+}

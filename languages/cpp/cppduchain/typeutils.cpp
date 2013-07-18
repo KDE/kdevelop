@@ -312,4 +312,15 @@ AbstractType::Ptr removeConstants(AbstractType::Ptr type, const TopDUContext* so
     
     return type;
 }
+
+bool isVarArgs(const AbstractType::Ptr& type)
+{
+  DelayedType::Ptr delayed = type.cast<DelayedType>();
+  if (!delayed) {
+    return false;
+  }
+  static const IndexedQualifiedIdentifier ellipsis = IndexedQualifiedIdentifier(QualifiedIdentifier("..."));
+  return delayed->identifier().identifier() == ellipsis;
+}
+
 }

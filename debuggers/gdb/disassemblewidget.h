@@ -3,6 +3,7 @@
  *
  * Copyright 1999 John Birch <jbb@kdevelop.org>
  * Copyright 2007 Hamish Rodda <rodda@kde.org>
+ * Copyright 2013 Vlas Puhov <vlas.puhov@mail.ru>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -65,6 +66,20 @@ private:
     Ui::SelectAddress m_ui;
 };
 
+class DisassembleWindow : public QTreeWidget
+{
+public:
+    DisassembleWindow(QWidget *parent = 0);
+
+protected:
+   virtual void contextMenuEvent(QContextMenuEvent *e);
+
+private:
+    QAction* m_selectAddrAction;
+    QAction* m_jumpToLocation;
+    QAction* m_runUntilCursor;
+};
+
 
 class Breakpoint;
 class DebugSession;
@@ -80,7 +95,6 @@ public:
         Icon,
         Address,
         Function,
-        Offset,
         Instruction,
         ColumnCount
     };
@@ -101,34 +115,37 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void currentSessionChanged(KDevelop::IDebugSession* session);
+    void jumpToCursor();
+    void runToCursor();
 
 protected:
     virtual void showEvent(QShowEvent*);
     virtual void hideEvent(QHideEvent*);
-    virtual void contextMenuEvent(QContextMenuEvent*);
     bool hasValidAddrRange();
     void enableControls(bool enabled);
+
 
 private:
     bool displayCurrent();
     
-    // Disassemble memory region addr1..addr2
-    // if addr2 is empty, 128 bytes range taken
-    // if addr1 is empty, $pc is used
-    void getAsmToDisplay(const QString& addr1=QString(),
-        const QString& addr2=QString() );
+    /// Disassembles memory region from..to
+    /// if from is empty current execution position is used
+    /// if to is empty, 256 bytes range is taken
+    void disassembleMemoryRegion(const QString& from=QString(),
+        const QString& to=QString() );
 
-    /// callback for GDBCommand
-    void memoryRead(const GDBMI::ResultRecord& r);
+    /// callbacks for GDBCommands
+    void disassembleMemoryHandler(const GDBMI::ResultRecord& r);
+    void updateExecutionAddressHandler(const GDBMI::ResultRecord& r);
 
+    //for str to uint conversion.
+    bool ok;
     bool    active_;
     unsigned long    lower_;
     unsigned long    upper_;
     unsigned long    address_;
-    QString m_currentAddress;
     
-    QTreeWidget* m_treeWidget;
-    QAction* m_selectAddrAction;
+    DisassembleWindow * m_disassembleWindow;
     QComboBox* m_startAddress;
     QComboBox* m_endAddress;
     QPushButton* m_evalButton;

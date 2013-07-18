@@ -23,6 +23,13 @@
 #include "cmake-test-paths.h"
 #include <cmakebuilddirchooser.h>
 #include <kconfig.h>
+#include <QFileInfo>
+#include <QDir>
+#include <QDebug>
+#include <qtest_kde.h>
+#include <interfaces/iproject.h>
+#include <interfaces/icore.h>
+#include <interfaces/iprojectcontroller.h>
 
 static QString currentBuildDirKey = "CurrentBuildDir";
 static QString currentCMakeBinaryKey = "Current CMake Binary";
@@ -41,25 +48,37 @@ struct TestProjectPaths {
     KUrl configFile;
 };
 
+#define WAIT_FOR_OPEN_SIGNAL \
+{\
+    bool gotSignal = QTest::kWaitForSignal(KDevelop::ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), 30000);\
+    Q_ASSERT(gotSignal && "Timeout while waiting for opened signal");\
+} void(0)
+
 TestProjectPaths projectPaths(const QString& project, QString name = QString())
 {
-    if (name.isEmpty()) {
-        name = project;
-    }
-
     TestProjectPaths paths;
-    QFileInfo info(CMAKE_TESTS_PROJECTS_DIR "/" + project);
-    Q_ASSERT(info.exists());
-
-    paths.sourceDir = info.canonicalFilePath();
+    if(QDir::isRelativePath(project)) {
+        QFileInfo info(QString(CMAKE_TESTS_PROJECTS_DIR)+"/"+project);
+        Q_ASSERT(info.exists());
+        paths.sourceDir = info.canonicalFilePath();
+    } else {
+        paths.sourceDir = project;
+    }
     paths.sourceDir.adjustPath(KUrl::AddTrailingSlash);
 
+    QString kdev4Name;
+    if (name.isEmpty()) {
+        QDir d(paths.sourceDir.toLocalFile());
+        kdev4Name = d.entryList(QStringList("*.kdev4"), QDir::Files).takeFirst();
+    } else
+        kdev4Name = name+".kdev4";
+
     paths.projectFile = paths.sourceDir;
-    paths.projectFile.addPath(name + ".kdev4");
+    paths.projectFile.addPath(kdev4Name);
     Q_ASSERT(QFile::exists(paths.projectFile.toLocalFile()));
 
     paths.configFile = paths.sourceDir;
-    paths.configFile.addPath(".kdev4/" + name + ".kdev4");
+    paths.configFile.addPath(".kdev4/" + kdev4Name);
 
     return paths;
 }
@@ -86,7 +105,7 @@ void defaultConfigure(const TestProjectPaths& paths)
         QDir buildFolder( bd.buildFolder().toLocalFile() );
         if ( !buildFolder.exists() ) {
             if ( !buildFolder.mkpath( buildFolder.absolutePath() ) ) {
-                QFAIL("The build directory did not exist and could not be created.");
+                Q_ASSERT(false && "The build directory did not exist and could not be created.");
             }
         }
     }
@@ -99,6 +118,22 @@ void defaultConfigure(const TestProjectPaths& paths)
     cmakeGrp.writeEntry( projectBuildDirs, QStringList() << bd.buildFolder().toLocalFile());
 
     config.sync();
+}
+
+KDevelop::IProject* loadProject(const QString& name, const QString& relative = QString())
+{
+    const TestProjectPaths paths = projectPaths(name+relative, name);
+    defaultConfigure(paths);
+
+    KDevelop::ICore::self()->projectController()->openProject(paths.projectFile);
+    WAIT_FOR_OPEN_SIGNAL;
+
+    KDevelop::IProject* project = KDevelop::ICore::self()->projectController()->findProjectByName(name);
+    Q_ASSERT(project);
+    Q_ASSERT(project->buildSystemManager());
+    Q_ASSERT(paths.projectFile == project->projectFileUrl());
+    Q_ASSERT(project->folder() == project->folder());
+    return project;
 }
 
 #endif

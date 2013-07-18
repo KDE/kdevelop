@@ -103,6 +103,7 @@ ContextBuilder::ContextBuilder (ParseSession* session)
   , m_onlyComputeSimplified(false)
   , m_computeEmpty(false)
   , m_currentInitializer(0)
+  , m_currentCondition(0)
   , m_mapAst(false)
 {
 }
@@ -872,17 +873,17 @@ void ContextBuilder::handleRangeBasedFor(ExpressionAST* container, ForRangeDecla
   visit(iterator);
 }
 
-void ContextBuilder::createTypeForInitializer(InitializerAST* /*node*/) {
-}
+void ContextBuilder::createTypeForDeclarator(DeclaratorAST* /*node*/)
+{ }
 
-void ContextBuilder::closeTypeForInitializer(InitializerAST* /*node*/) {
-}
+void ContextBuilder::closeTypeForDeclarator(DeclaratorAST* /*node*/)
+{ }
 
-void ContextBuilder::createTypeForDeclarator(DeclaratorAST* /*node*/) {
-}
+void ContextBuilder::createTypeForInitializer(InitializerAST* /*node*/)
+{ }
 
-void ContextBuilder::closeTypeForDeclarator(DeclaratorAST* /*node*/) {
-}
+void ContextBuilder::createTypeForCondition(ConditionAST* /*node*/)
+{ }
 
 void ContextBuilder::visitParameterDeclarationClause(ParameterDeclarationClauseAST* node)
 {
@@ -929,9 +930,13 @@ void ContextBuilder::visitDeclarator(DeclaratorAST *node) {
     return;
 
   createTypeForDeclarator(node);
-  
-  if(m_currentInitializer) //Needs to be visited now, so the type-builder can use the initializer to build a constant integral tyoe
-    createTypeForInitializer(m_currentInitializer); 
+
+  // These need to be visited now, so the type-builder can use them
+  // to build a constant integral types
+  if(m_currentInitializer)
+    createTypeForInitializer(m_currentInitializer);
+  else if(m_currentCondition)
+    createTypeForCondition(m_currentCondition);
 
   if (node->parameter_declaration_clause && (compilingContexts() || node->parameter_declaration_clause->ducontext)) {
     DUContext* ctx = openContext(node->parameter_declaration_clause, DUContext::Function, node->id);
@@ -947,9 +952,6 @@ void ContextBuilder::visitDeclarator(DeclaratorAST *node) {
   visit(node->trailing_return_type);
   //END Finished with default visitor
 
-  if(m_currentInitializer)
-    closeTypeForInitializer(m_currentInitializer);
-  
   closeTypeForDeclarator(node);
 
   if (node->parameter_declaration_clause && (compilingContexts() || node->parameter_declaration_clause->ducontext))
@@ -1131,6 +1133,13 @@ void ContextBuilder::visitLambdaDeclarator(LambdaDeclaratorAST* node)
   if (node->parameter_declaration_clause) {
     closeContext();
   }
+}
+
+void ContextBuilder::visitCondition(ConditionAST* node)
+{
+  m_currentCondition = node;
+  DefaultVisitor::visitCondition(node);
+  m_currentCondition = 0;
 }
 
 bool ContextBuilder::createContextIfNeeded(AST* node, DUContext* importedParentContext)

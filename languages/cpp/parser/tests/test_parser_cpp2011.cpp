@@ -95,6 +95,13 @@ void TestParser::testVariadicTemplates_data()
   QTest::newRow("pack-expansion-funcptr") << "template<typename ... Args> void foo(Args... args) { typedef int (*t5)(Args...); }\n";
   QTest::newRow("sizeof...") << "template<typename ... Arg> void A(Arg ... params) { int i = sizeof...(params); }\n";
   QTest::newRow("template-template-param") << "template<template <typename> class... Magic> struct foo{};\n";
+  // see: https://bugs.kde.org/show_bug.cgi?id=288439
+  QTest::newRow("functionptr") << "template<typename signature> class Function;\n"
+                                  "template<typename ret, typename... Args> class Function<ret (*)(Args...)> { };";
+  QTest::newRow("ptrtomember-functionptr") << "template<typename... Ts, typename Obj> void foo(Obj* obj, void (Obj::*method)(Ts...));";
+  QTest::newRow("unnamed-funcargs") << "template<typename T> struct Foo{};\n"
+                                       "template<typename... Ts> void bar(Foo<Ts>...);";
+  QTest::newRow("expand-intargs") << "template<typename, int...> struct Blah;";
   ///TODO: attribute-list?
   ///TODO: alignment-specifier?
   ///TODO: capture-list?
@@ -105,7 +112,6 @@ void TestParser::testVariadicTemplates()
   QFETCH(QString, code);
   TranslationUnitAST* ast = parse(code.toUtf8());
   dump(ast);
-  QEXPECT_FAIL("pack-expansion-is_function", "function pointer is improperly parsed", Abort);
   QVERIFY(control.problems().isEmpty());
 
   QVERIFY(ast);
@@ -405,6 +411,9 @@ void TestParser::testInitList_data()
   QTest::newRow("map") << "std::map<std::string,int> anim = { {\"bear\",4}, {\"cassowary\",2}, {\"tiger\",7} };";
   QTest::newRow("operator[]") << "void foo() { x[{1,2,3}] = 7; }"; // 5.2.1
   QTest::newRow("member") << "class a { a() : b{1,2,3} {} int b[3]; };";
+  QTest::newRow("condition") << "void f() { if (std::complex<double> foo{1, 2}) {} }";
+  QTest::newRow("temporary") << "auto s = std::string{};";
+  QTest::newRow("temporary-template") << "auto c = std::complex<double>{1, 2};";
 }
 
 void TestParser::testInitList()
@@ -557,6 +566,17 @@ void TestParser::testNoexcept()
   TranslationUnitAST* ast = parse( "void f1() noexcept;\n"
                                    "void f2() noexcept(false);\n"
                                    "class a { void m1() noexcept; void m2() noexcept(true); };" );
+  QVERIFY(ast);
+  dump(ast);
+  QVERIFY(control.problems().isEmpty());
+}
+
+void TestParser::testReferenceBindings()
+{
+  TranslationUnitAST* ast = parse( "class foo {\n"
+                                   "  void bar() &;\n"
+                                   "  void bar() &&;\n"
+                                   "};" );
   QVERIFY(ast);
   dump(ast);
   QVERIFY(control.problems().isEmpty());

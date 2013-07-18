@@ -41,18 +41,21 @@
 
 using namespace KDevelop;
 
-CTestRunJob::CTestRunJob(CTestSuite* suite, const QStringList& cases, OutputJob::OutputJobVerbosity verbosity, QObject* parent)
+CTestRunJob::CTestRunJob(CTestSuite* suite, const QStringList& cases, OutputJob::OutputJobVerbosity verbosity, bool expectFail, QObject* parent)
 : KJob(parent)
 , m_suite(suite)
 , m_cases(cases)
 , m_job(0)
 , m_outputJob(0)
 , m_verbosity(verbosity)
+, m_expectFail(expectFail)
 {
     foreach (const QString& testCase, cases)
     {
         m_caseResults[testCase] = TestResult::NotRun;
     }
+
+    setCapabilities(Killable);
 }
 
 
@@ -136,10 +139,6 @@ bool CTestRunJob::doKill()
 
 void CTestRunJob::processFinished(KJob* job)
 {
-    if(OutputModel* model = qobject_cast<OutputModel*>(m_outputJob->model())) {
-        model->flushLineBuffer();
-    }
-    
     TestResult result;
     result.testCaseResults = m_caseResults;
     if (job->error() == OutputJob::FailedShownError) {
@@ -148,6 +147,12 @@ void CTestRunJob::processFinished(KJob* job)
         result.suiteResult = TestResult::Passed;
     } else {
         result.suiteResult = TestResult::Error;
+    }
+
+    // in case the job was killed, mark this job as killed as well
+    if (job->error() == KJob::KilledJobError) {
+        setError(KJob::KilledJobError);
+        setErrorText("Child job was killed.");
     }
 
     kDebug() << result.suiteResult << result.testCaseResults;
@@ -182,11 +187,11 @@ void CTestRunJob::rowsInserted(const QModelIndex &parent, int startRow, int endR
             TestResult::TestCaseResult result = TestResult::NotRun;
             if (line.startsWith("PASS   :"))
             {
-                result = TestResult::Passed;
+                result = m_expectFail ? TestResult::UnexpectedPass : TestResult::Passed;
             }
             else if (line.startsWith("FAIL!  :"))
             {
-                result = TestResult::Failed;
+                result = m_expectFail ? TestResult::ExpectedFail : TestResult::Failed;
             }
             else if (line.startsWith("XFAIL  :"))
             {

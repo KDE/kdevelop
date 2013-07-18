@@ -47,10 +47,109 @@ ExpressionParser::ExpressionParser( bool strict, bool debug, bool propagateConst
 {
 }
 
+QHash<QByteArray, ExpressionEvaluationResult> buildStaticLookupTable()
+{
+  QHash<QByteArray, ExpressionEvaluationResult> ret;
+  ExpressionEvaluationResult res;
+  IntegralType::Ptr type(new IntegralType());
+
+  type->setDataType(IntegralType::TypeBoolean);
+  res.type = type->indexed();
+  ret.insert("bool", res);
+
+  type->setDataType(IntegralType::TypeChar);
+  res.type = type->indexed();
+  ret.insert("char", res);
+
+  type->setDataType(IntegralType::TypeFloat);
+  res.type = type->indexed();
+  ret.insert("float", res);
+
+  type->setDataType(IntegralType::TypeDouble);
+  res.type = type->indexed();
+  ret.insert("double", res);
+
+  type->setDataType(IntegralType::TypeInt);
+  res.type = type->indexed();
+  ret.insert("int", res);
+
+  type->setDataType(IntegralType::TypeVoid);
+  res.type = type->indexed();
+  ret.insert("void", res);
+
+  type->setDataType(IntegralType::TypeWchar_t);
+  res.type = type->indexed();
+  ret.insert("wchar_t", res);
+
+  ConstantIntegralType::Ptr constType(new ConstantIntegralType);
+  constType->setDataType(IntegralType::TypeBoolean);
+  constType->setValue<bool>(true);
+  res.type = constType->indexed();
+  ret.insert("true", res);
+  ///NOTE: the trailing space is by intention, apparently thats what gets queried
+  ret.insert("true ", res);
+
+  constType->setValue<bool>(false);
+  res.type = constType->indexed();
+  ret.insert("false", res);
+  ///NOTE: the trailing space is by intention, apparently thats what gets queried
+  ret.insert("false ", res);
+
+  DelayedType::Ptr ellipsis(new DelayedType);
+  ellipsis->setKind(DelayedType::Unresolved);
+  ellipsis->setIdentifier(IndexedTypeIdentifier("..."));
+  res.type = ellipsis->indexed();
+  ret.insert("...", res);
+
+  ///TODO: extend at will
+
+  return ret;
+}
+
+bool tryDirectLookup(const QByteArray& unit)
+{
+  if (unit.isEmpty()) {
+    return false;
+  }
+  if (!std::isalpha(unit.at(0)) && unit.at(0) != '_') {
+    return false;
+  }
+  for (QByteArray::const_iterator it = unit.constBegin() + 1; it != unit.constEnd(); ++it) {
+    if (!std::isalnum(*it) && *it != ':' && *it != '_') {
+      return false;
+    }
+  }
+  return true;
+}
+
 ExpressionEvaluationResult ExpressionParser::evaluateType( const QByteArray& unit, DUContextPointer context, const TopDUContext* source, bool forceExpression ) {
 
   if( m_debug )
     kDebug(9007) << "==== .Evaluating ..:" << endl << unit;
+
+  // fast path for common built-in types
+  static const QHash<QByteArray, ExpressionEvaluationResult> staticLookupTable = buildStaticLookupTable();
+  QHash< QByteArray, ExpressionEvaluationResult >::const_iterator it = staticLookupTable.constFind(unit);
+  if (it != staticLookupTable.constEnd()) {
+    return it.value();
+  }
+
+  // fast path for direct lookup of identifiers
+  if (!forceExpression && tryDirectLookup(unit)) {
+    DUChainReadLocker lock;
+    QList< Declaration* > decls = context->findDeclarations(QualifiedIdentifier(QString::fromUtf8(unit)),
+                                                            CursorInRevision::invalid(),
+                                                            AbstractType::Ptr(),
+                                                            source);
+    if (!decls.isEmpty()) {
+      ExpressionEvaluationResult res;
+      foreach(Declaration* decl, decls) {
+        res.allDeclarations.append(decl->id());
+      }
+      res.type = decls.first()->indexedType();
+      return res;
+    }
+  }
 
   ParseSession session;
 
@@ -81,10 +180,8 @@ ExpressionEvaluationResult ExpressionParser::evaluateType( const QByteArray& uni
     kDebug() << "context disappeared";
     return ExpressionEvaluationResult();
   }
-  
+
   ExpressionEvaluationResult ret = evaluateType( ast, &session, source );
-
-
   return ret;
 }
 

@@ -96,6 +96,8 @@ private slots:
   void testADLNameAlias();
   void testADLTemplateArguments();
   void testADLTemplateTemplateArguments();
+  void testADLEllipsis();
+  void testAssignmentOperators();
   void testTemplateEnums();
   void testIntegralTemplates();
   void testTypedef();
@@ -179,6 +181,7 @@ private slots:
   void testContextSearch();
 
   void testEllipsis();
+  void testEllipsisVexing();
 
   void testMultiByteCStrings();
 
@@ -208,6 +211,7 @@ private slots:
   void testEnum2011_data();
   void testEnum2011();
   void testDecltype();
+  void testDecltypeTypedef();
   void testDecltypeUses();
   void testTrailingReturnType();
   void testConstexpr();

@@ -417,8 +417,9 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
     closeType();
 }
 
-void TypeBuilder::createTypeForInitializer(InitializerAST *node) {
-  if(m_onlyComputeSimplified) {
+void TypeBuilder::createIntegralTypeForExpression(ExpressionAST* expression)
+{
+  if (!expression) {
     return;
   }
 
@@ -430,6 +431,86 @@ void TypeBuilder::createTypeForInitializer(InitializerAST *node) {
     }
   }
 
+  if (!integral) {
+    return;
+  }
+
+  if (!(integral->modifiers() & AbstractType::ConstModifier) && !m_lastTypeWasAuto) {
+    return;
+  }
+
+  bool openedType = false;
+  bool delay = false;
+  ///@todo This is nearly a copy of visitEnumerator and parts of visitSimpleTypeSpecifier, merge it
+  {
+    //Parse the expression, and create a CppConstantIntegralType, since we know the value
+    Cpp::ExpressionParser parser;
+    DUChainReadLocker lock(DUChain::lock());
+    expression->ducontext = currentContext();
+    Cpp::ExpressionEvaluationResult res = parser.evaluateType( expression, editor()->parseSession() );
+
+    //Delay the type-resolution of template-parameters
+    if( res.allDeclarations.size() ) {
+      Declaration* decl = res.allDeclarations[0].getDeclaration(currentContext()->topContext());
+      ///@todo Do a check on all involved types, also template parameters, by giving the parameter to evaluateType
+      if( dynamic_cast<TemplateParameterDeclaration*>(decl) || isTemplateDependent(decl))
+        delay = true;
+    }
+
+    if ( !delay && res.isValid() && res.isInstance ) {
+      const AbstractType::Ptr& type = prepareTypeForExpression(res.type.abstractType(), integral->modifiers());
+      if (type) {
+        openType( type );
+        openedType = true;
+      }
+    }
+  }
+  if( delay || !openedType ) {
+    ///Only record the strings, because these expressions may depend on template-parameters and thus must be evaluated later
+    QString str = stringFromSessionTokens( editor()->parseSession(), expression->start_token, expression->end_token ).trimmed();
+
+    QualifiedIdentifier id( str, true );
+
+    openDelayedType(IndexedTypeIdentifier(id), expression, DelayedType::Delayed);
+    openedType = true;
+  }
+
+  if(openedType)
+    closeType();
+}
+
+AbstractType::Ptr TypeBuilder::prepareTypeForExpression(AbstractType::Ptr type, quint64 modifiers)
+{
+  if (!m_lastTypeWasAuto) {
+    return type;
+  }
+
+  // remove references or aliases
+  type = TypeUtils::realType( type, topContext() );
+  // Turn "5" into "int"
+  type = TypeUtils::removeConstants( type, topContext() );
+
+  if (!type) {
+    // NOTE: the type might not be valid anymore, see https://bugs.kde.org/show_bug.cgi?id=318972
+    return type;
+  }
+
+  // ensure proper const modifier is set
+  type->setModifiers( modifiers );
+
+  if (ReferenceType::Ptr ref = lastType().cast<ReferenceType>()) {
+    ref->setBaseType( type );
+    type = ref.cast<AbstractType>();
+  }
+
+  return type;
+}
+
+void TypeBuilder::createTypeForInitializer(InitializerAST *node) {
+  if(m_onlyComputeSimplified) {
+    return;
+  }
+
   ExpressionAST* expression = 0;
   if (node->initializer_clause && node->initializer_clause->expression) {
     // auto foo = ...;
@@ -439,66 +520,16 @@ void TypeBuilder::createTypeForInitializer(InitializerAST *node) {
     expression = node->expression;
   }
 
-  if(integral && (integral->modifiers() & AbstractType::ConstModifier || m_lastTypeWasAuto)
-      && expression)
-  {
-    //Parse the expression, and create a CppConstantIntegralType, since we know the value
-    Cpp::ExpressionParser parser;
-
-    bool openedType = false;
-    Cpp::ExpressionEvaluationResult res;
-
-    bool delay = false;
-    ///@todo This is nearly a copy of visitEnumerator and parts of visitSimpleTypeSpecifier, merge it
-    if(!delay) {
-      DUChainReadLocker lock(DUChain::lock());
-      expression->ducontext = currentContext();
-      res = parser.evaluateType( expression, editor()->parseSession() );
-
-      //Delay the type-resolution of template-parameters
-      if( res.allDeclarations.size() ) {
-        Declaration* decl = res.allDeclarations[0].getDeclaration(currentContext()->topContext());
-        ///@todo Do a check on all involved types, also template parameters, by giving the parameter to evaluateType
-        if( dynamic_cast<TemplateParameterDeclaration*>(decl) || isTemplateDependent(decl))
-          delay = true;
-      }
-
-      if ( !delay && res.isValid() && res.isInstance ) {
-        AbstractType::Ptr type = res.type.abstractType();
-        if ( m_lastTypeWasAuto )
-        {
-          // remove references or aliases
-          type = TypeUtils::realType( type, topContext() );
-          // Turn "5" into "int"
-          type = TypeUtils::removeConstants( type, topContext() );
-          // ensure proper const modifier is set
-          type->setModifiers( integral->modifiers() );
-          if (ReferenceType::Ptr ref = lastType().cast<ReferenceType>()) {
-            ref->setBaseType( type );
-            type = ref.cast<AbstractType>();
-          }
-        }
-        
-        openType( type );
-        openedType = true;
-      }
-    }
-    if( delay || !openedType ) {
-      ///Only record the strings, because these expressions may depend on template-parameters and thus must be evaluated later
-      QString str = stringFromSessionTokens( editor()->parseSession(), expression->start_token, expression->end_token ).trimmed();
-
-      QualifiedIdentifier id( str, true );
-
-      openDelayedType(IndexedTypeIdentifier(id), node, DelayedType::Delayed);
-      openedType = true;
-    }
-    
-    if(openedType)
-      closeType();
-  }
+  createIntegralTypeForExpression(expression);
 }
 
-void TypeBuilder::closeTypeForInitializer(InitializerAST* /*node*/) {
+void TypeBuilder::createTypeForCondition(ConditionAST* node)
+{
+  if (m_onlyComputeSimplified) {
+    return;
+  }
+
+  createIntegralTypeForExpression(node->expression);
 }
 
 bool TypeBuilder::openTypeFromName(NameAST* name, uint modifiers, bool needClass) {
@@ -745,16 +776,17 @@ void TypeBuilder::createTypeForDeclarator(DeclaratorAST *node) {
     } while (it != end);
   }
 
-  if (node->parameter_declaration_clause)
+  if (node->parameter_declaration_clause) {
     // New function type
     openType(FunctionType::Ptr(openFunction(node)));
+  }
 }
 
 void TypeBuilder::closeTypeForDeclarator(DeclaratorAST *node) {
-  if (node->parameter_declaration_clause)
+  if (node->parameter_declaration_clause) {
     closeType();
+  }
 }
-
 
 void TypeBuilder::visitArrayExpression(ExpressionAST* expression)
 {

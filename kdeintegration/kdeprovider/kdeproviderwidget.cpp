@@ -62,17 +62,6 @@ KDEProviderWidget::KDEProviderWidget(QWidget* parent)
     layout()->addItem(topLayout);
     layout()->addWidget(m_projects);
     
-    m_dialog = new KConfigDialog(this, "settings", KDEProviderSettings::self());
-    m_dialog->setFaceType(KPageDialog::Auto);
-    QWidget* page = new QWidget(m_dialog);
-
-    Ui::KDEConfig configUi;
-    configUi.setupUi(page);
-    configUi.kcfg_gitProtocol->setProperty("kcfg_property", QByteArray("currentText"));
-    
-    m_dialog->addPage(page, i18n("General") );
-    connect(m_dialog, SIGNAL(settingsChanged(QString)), this, SLOT(loadSettings()));
-    
     QSortFilterProxyModel* proxyModel = new QSortFilterProxyModel(this);
     proxyModel->setSourceModel(model);
     proxyModel->setDynamicSortFilter(true);
@@ -83,10 +72,15 @@ KDEProviderWidget::KDEProviderWidget(QWidget* parent)
     filterLine->setProxy(proxyModel);
 }
 
-VcsLocation extractLocation(const QVariantMap& urls)
+VcsLocation extractLocation(const QModelIndex& pos)
 {
     QString gitUrl=KDEProviderSettings::self()->gitProtocol();
-    return VcsLocation(urls[gitUrl].toUrl());
+    if(gitUrl=="kde:") {
+        return VcsLocation(KUrl("kde:"+pos.data(KDEProjectsModel::IdentifierRole).toString()));
+    } else {
+        QMap<QString, QVariant> urls = pos.data(KDEProjectsModel::VcsLocationRole).toMap();
+        return VcsLocation(urls[gitUrl].toUrl());
+    }
 }
 
 VcsJob* KDEProviderWidget::createWorkingCopy(const KUrl& destinationDirectory)
@@ -101,7 +95,7 @@ VcsJob* KDEProviderWidget::createWorkingCopy(const KUrl& destinationDirectory)
         return 0;
     }
     IBasicVersionControl* vcIface = plugin->extension<IBasicVersionControl>();
-    VcsJob* ret = vcIface->createWorkingCopy(extractLocation(pos.data(KDEProjectsModel::VcsLocationRole).toMap()), destinationDirectory);
+    VcsJob* ret = vcIface->createWorkingCopy(extractLocation(pos), destinationDirectory);
     
     return ret;
 }
@@ -113,10 +107,21 @@ bool KDEProviderWidget::isCorrect() const
 
 void KDEProviderWidget::showSettings()
 {
-    if(KConfigDialog::showDialog("kdesettings"))
-        return;
+    KConfigDialog* dialog = new KConfigDialog(this, "settings", KDEProviderSettings::self());
+    dialog->setFaceType(KPageDialog::Auto);
+    QWidget* page = new QWidget(dialog);
+
+    Ui::KDEConfig configUi;
+    configUi.setupUi(page);
+    configUi.kcfg_gitProtocol->setProperty("kcfg_property", QByteArray("currentText"));
+    int idx = configUi.kcfg_gitProtocol->findText(KDEProviderSettings::self()->gitProtocol());
+    if(idx>=0) {
+        configUi.kcfg_gitProtocol->setCurrentIndex(idx);
+    }
     
-    m_dialog->show();
+    dialog->button(KDialog::Default)->setVisible(false);
+    dialog->addPage(page, i18n("General") );
+    dialog->show();
 }
 
 void KDEProviderWidget::projectIndexChanged(const QModelIndex& currentIndex)

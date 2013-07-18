@@ -94,45 +94,9 @@ namespace Cpp {
 using namespace KDevelop;
 using namespace TypeUtils;
 
-QHash<quint16, QString> initOperatorNames() {
-  QHash<quint16, QString> ret;
-  ret['+'] = "+";
-  ret['-'] = "-";
-  ret['*'] = "*";
-  ret['/'] = "/";
-  ret['%'] = "%";
-  ret['^'] = "^";
-  ret['&'] = "&";
-  ret['|'] = "|";
-  ret['~'] = "~";
-  ret['!'] = "!";
-  ret['='] = "=";
-  ret['<'] = "<";
-  ret['>'] = ">";
-  ret[','] = ",";
-  ret[Token_assign] = "+=";
-  ret[Token_leftshift] = "<<";
-  ret[Token_rightshift] = ">>";
-  ret[Token_eq] = "==";
-  ret[Token_not_eq] = "!=";
-  ret[Token_leq] = "<=";
-  ret[Token_geq] = ">=";
-  ret[Token_not_eq] = "!=";
-  ret[Token_and] = "&&";
-  ret[Token_or] = "||";
-
-  return ret;
-}
-
-QHash<quint16, QString> operatorNames = initOperatorNames();
-//BUG use the much more complete list from tokens.cpp
 QString operatorNameFromTokenKind( quint16 tokenKind )
 {
-  QHash<quint16, QString>::const_iterator it = operatorNames.constFind(tokenKind);
-  if( it == operatorNames.constEnd() )
-    return QString();
-  else
-    return *it;
+  return token_text(tokenKind);
 }
 
 QList<DeclarationPointer> convert( const QList<Declaration*>& list ) {
@@ -207,6 +171,7 @@ ExpressionVisitor::ExpressionVisitor(ParseSession* session, const KDevelop::TopD
 , m_topContext(0)
 , m_reportRealProblems(false)
 , m_propagateConstness(propagateConstness)
+, m_handlingFunctionCallOrInit(false)
 {
 }
 
@@ -1871,7 +1836,8 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     return !fail;
   }
 
-  void ExpressionVisitor::visitFunctionCall(FunctionCallAST* node) {
+  void ExpressionVisitor::handleFunctionCallOrInit(AST* node, ExpressionAST* arguments) {
+    PushValue<bool> handler(m_handlingFunctionCallOrInit, true);
     /**
      * If a class name was found, get its constructors.
      * */
@@ -1908,7 +1874,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
     clearLast();
 
-    bool fail = !buildParametersFromExpression(node->arguments);
+    bool fail = !buildParametersFromExpression(arguments);
 
     LOCKDUCHAIN;
 
@@ -2054,6 +2020,20 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
     if( m_lastType )
       expressionType( node, m_lastType, m_lastInstance );
+  }
+
+  void ExpressionVisitor::visitFunctionCall(FunctionCallAST* node)
+  {
+    handleFunctionCallOrInit(node, node->arguments);
+  }
+
+  void ExpressionVisitor::visitBracedInitList(BracedInitListAST* node)
+  {
+    if (m_handlingFunctionCallOrInit) {
+      DefaultVisitor::visitBracedInitList(node);
+      return;
+    }
+    handleFunctionCallOrInit(node, node);
   }
 
   void ExpressionVisitor::visitSignalSlotExpression(SignalSlotExpressionAST* node) {

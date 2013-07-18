@@ -101,7 +101,12 @@ const QSet<QString> BINARY_OPERATORS =
       BINARY_ARITHMETIC_OPERATORS + ARITHMETIC_COMPARISON_OPERATORS;
 //These will be skipped over to find parent contexts
 const QSet<QString> UNARY_OPERATORS = QString("++ -- ! ~ + - & *").split(' ').toSet();
-const QSet<QString> KEYWORD_ACCESS_STRINGS = QString("const_cast< static_cast< dynamic_cast< reinterpret_cast< const typedef public public: protected protected: private private: virtual return else throw emit Q_EMIT case delete delete[] new friend class").split(' ').toSet();
+//When these operators create a parent context it's safe to use their expression type to match against
+//This is only used for the builtin operators, and not the overloaded operators (assuming overloaded operators are found)
+//Add any operators where you expect the lhs type and the rhs type to be the same, at least usually
+//TODO: boolean logic operators could maybe have a fixed match type of boolean
+const QSet<QString> MATCH_TYPE_OPERATORS = QString("!= <= >= = == + - * / % > < -= += *= /= %=").split(' ').toSet();
+const QSet<QString> KEYWORD_ACCESS_STRINGS = QString("const_cast< static_cast< dynamic_cast< reinterpret_cast< const typedef public public: protected protected: private private: virtual return else throw emit Q_EMIT case delete delete[] new friend class namespace").split(' ').toSet();
 //When these appear as access strings, only show types
 const QSet<QString> SHOW_TYPES_ACCESS_STRINGS = QString("const_cast< static_cast< dynamic_cast< reinterpret_cast< const typedef public protected private virtual new friend class").split(' ').toSet();
 //A parent context is created for these access strings
@@ -381,38 +386,6 @@ Declaration* containerDeclForType(AbstractType::Ptr givenType, TopDUContext* top
   return 0; //Type could not be identified or was not a class declaration
 }
 
-typedef QPair<Declaration*, bool> DeclAccessPair;
-//Look through localDeclarations of "container" for items matching "type"
-QList<DeclAccessPair> containedItemsMatchingType(Declaration *container, const IndexedType& type, TopDUContext *top, bool isPointer)
-{
-  static const Identifier arrowOpIdentifier("operator->");
-  QList<DeclAccessPair> ret;
-  if (!container || !container->internalContext())
-    return ret;
-  Cpp::TypeConversion conv(top);
-  Declaration *arrowOperator = 0;
-  QVector<Declaration*> containedDeclarations = container->internalContext()->localDeclarations(top);
-  foreach(Declaration *decl, containedDeclarations)
-  {
-    if (decl->isTypeAlias() || decl->isForwardDeclaration() || decl->type<EnumerationType>())
-      continue; //Skip declarations that are not accessed via ./->
-
-    if (!isPointer && decl->identifier() == arrowOpIdentifier)
-      arrowOperator = decl;
-
-    AbstractType::Ptr declEffectiveType = Cpp::effectiveType(decl);
-    if (!declEffectiveType.isNull() && conv.implicitConversion(declEffectiveType->indexed(), type))
-      ret << DeclAccessPair(decl, isPointer);
-  }
-  //If we found an "->", try to treat it as a smart pointer
-  if (arrowOperator)
-  {
-    //containerDeclForType will likely change isPointer... good thing we don't use it again
-    ret += containedItemsMatchingType(containerDeclForType(Cpp::effectiveType(arrowOperator), top, isPointer), type, top, true);
-  }
-  return ret;
-}
-
 CodeCompletionContext::
 CodeCompletionContext( KDevelop::DUContextPointer context, const QString& text,
                        const QString& followingText, const KDevelop::CursorInRevision& position,
@@ -612,6 +585,10 @@ bool CodeCompletionContext::testContextValidity(const QString &expressionPrefix,
     case BinaryOpFunctionCallAccess:
       return m_expressionResult.isInstance;
     case MemberAccess:
+    case ArrowMemberAccess:
+      if (!m_expressionResult.isInstance)
+        return false;
+      //Fall-through
     case MemberChoose:
     case StaticMemberChoose:
       return !m_expression.isEmpty();
@@ -891,6 +868,9 @@ CodeCompletionContext::AccessType CodeCompletionContext::findAccessType( const Q
   //TODO: add support for MemberChoose
   if( accessStr == "::" )
     return StaticMemberChoose;
+
+  if ( accessStr == "namespace" )
+    return NamespaceAccess;
 
   if ( m_depth > 0 )
   {
@@ -1198,36 +1178,9 @@ QSet<DUContext*> CodeCompletionContext::memberAccessContainers() const {
   return ret;
 }
 
-KDevelop::IndexedType CodeCompletionContext::applyPointerConversionForMatching(KDevelop::IndexedType type, bool fromLValue) const {
-  if(!m_duContext)
-    return KDevelop::IndexedType();
-  
-  if(m_pointerConversionsBeforeMatching == 0)
-    return type;
-  AbstractType::Ptr t = type.abstractType();
-  if(!t)
-    return KDevelop::IndexedType();
-
-  //Can only take addresses of lvalues
-  if(m_pointerConversionsBeforeMatching > 1 || (m_pointerConversionsBeforeMatching && !fromLValue))
-    return IndexedType();
-  
-  if(m_pointerConversionsBeforeMatching > 0) {
-    for(int a = 0; a < m_pointerConversionsBeforeMatching; ++a) {
-      
-      t = TypeUtils::increasePointerDepth(t);
-      if(!t)
-        return IndexedType();
-    }
-  }else{
-    for(int a = m_pointerConversionsBeforeMatching; a < 0; ++a) {
-      t = TypeUtils::decreasePointerDepth(t, m_duContext->topContext());
-      if(!t)
-        return IndexedType();
-    }
-  }
-  
-  return t->indexed();
+int CodeCompletionContext::pointerConversions() const
+{
+  return m_pointerConversionsBeforeMatching;
 }
 
 CodeCompletionContext::~CodeCompletionContext() {
@@ -1554,7 +1507,6 @@ QList< CompletionTreeItemPointer > CodeCompletionContext::binaryFunctionAccessCo
       if(decl)
         showName = decl->toString() + " " + m_operator;
     }
-
     items << CompletionTreeItemPointer( new TypeConversionCompletionItem( showName, useType, depth(), KSharedPtr <Cpp::CodeCompletionContext >(this) ) );
   }
 
@@ -1685,7 +1637,10 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::signalSlotAccessCompleti
 QList<IndexedType> CodeCompletionContext::matchTypes()
 {
   QSet<KDevelop::IndexedType> ret;
-  if (m_accessType == BinaryOpFunctionCallAccess || m_accessType == FunctionCallAccess )
+  switch(m_accessType)
+  {
+  case BinaryOpFunctionCallAccess:
+  case FunctionCallAccess:
   {
     //MatchTypes for custom operator functions
     foreach(const Function &func, m_matchingFunctionOverloads)
@@ -1696,22 +1651,62 @@ QList<IndexedType> CodeCompletionContext::matchTypes()
       if(funcType && funcType->indexedArgumentsSize() > (uint)func.matchedArguments)
         ret << funcType->indexedArguments()[func.matchedArguments];
     }
-    /* generally matching the other side's type is only useful for "=" or "==" ... Consider:
+    /* generally matching the other side's type is only useful for MATCH_TYPE_OPERATORS ... Consider:
      * if (foo && foo == "str" || <complete here>)
      * The expressionResult preceeding the "||" operator is ["str"] and not [foo == "str"] as it should be
      * therefore the matchType will be "const char *" and not "boolean" as it should be
      * If this is fixed, we could use more operators here. See expressionBefore().
      */
-    if (!m_matchingFunctionOverloads.size() && (m_operator == "=" || m_operator == "=="))
+    if ( !m_matchingFunctionOverloads.size() && MATCH_TYPE_OPERATORS.contains(m_operator) )
       ret << m_expressionResult.type;
+
+    /* A hack: constructor initialization currently is FunctionCallAccess, although obviously the
+     * expression is not a function. Still, we want the match type here, so we check the parents
+     * of this parent and if there we find constructor completion, we can use m_expressionResult
+     */
+    if ( m_expressionResult.isInstance && !m_expressionResult.type.abstractType().cast<FunctionType>() )
+      ret << m_expressionResult.type;
+    break;
   }
-  else if (m_accessType == ReturnAccess)
-  {
+  case ReturnAccess:
     if (AbstractType::Ptr returnType = functionReturnType(m_duContext.data()))
       ret << returnType->indexed();
+    break;
+  case CaseAccess:
+    if (m_expressionResult.isValid() && m_expressionResult.type)
+      ret << m_expressionResult.type;
+  default:
+    break;
   }
-  //As of now, no other access types have any matchTypes
   return ret.toList();
+}
+
+QList<DeclAccessPair> CodeCompletionContext::containedItemsMatchingType(Declaration *container, const IndexedType& type, TopDUContext *top, bool isPointer) const
+{
+  static const Identifier arrowOpIdentifier("operator->");
+  QList<DeclAccessPair> ret;
+  if (!container || !container->internalContext())
+    return ret;
+  Cpp::TypeConversion conv(top);
+  Declaration *arrowOperator = 0;
+  QVector<Declaration*> containedDeclarations = container->internalContext()->localDeclarations(top);
+  foreach(Declaration *decl, containedDeclarations)
+  {
+    if (decl->isTypeAlias() || decl->isForwardDeclaration() || decl->type<EnumerationType>())
+      continue; //Skip declarations that are not accessed via ./->
+
+    if (!isPointer && decl->identifier() == arrowOpIdentifier)
+      arrowOperator = decl;
+
+    AbstractType::Ptr declEffectiveType = Cpp::effectiveType(decl);
+    if (!declEffectiveType.isNull() && conv.implicitConversion(declEffectiveType->indexed(), type)
+        && filterDeclaration(dynamic_cast<ClassMemberDeclaration*>(decl)))
+      ret << DeclAccessPair(decl, isPointer);
+  }
+  //If we found an "->", try to treat it as a smart pointer
+  if (arrowOperator)
+    ret += containedItemsMatchingType(containerDeclForType(Cpp::effectiveType(arrowOperator), top, isPointer), type, top, true);
+  return ret;
 }
 
 QList<DeclAccessPair> CodeCompletionContext::getLookaheadMatches(Declaration* forDecl, const QList<IndexedType>& matchTypes) const
@@ -1721,8 +1716,13 @@ QList<DeclAccessPair> CodeCompletionContext::getLookaheadMatches(Declaration* fo
     return ret; //We can only use instances, for now no sub decls of functions either TODO: be nice to get no-arg functions at least
   bool typeIsPointer = false;
   Declaration *containerDecl = containerDeclForType(Cpp::effectiveType(forDecl), m_duContext->topContext(), typeIsPointer);
-  foreach(const IndexedType &matchType, matchTypes)
+  foreach(const IndexedType &matchType, matchTypes) {
+    //Don't lookahead if the current type is a (precise) match
+    //Cheaper than checking if it converts, and probably good enough
+    if (matchType == forDecl->indexedType())
+      continue;
     ret += containedItemsMatchingType(containerDecl, matchType, m_duContext->topContext(), typeIsPointer);
+  }
   //Could use hideOverloadedDeclarations theoretically here, but it would do very little since we don't have the real declaration depth
   return ret;
 }
@@ -1801,10 +1801,6 @@ QList< CompletionTreeItemPointer > CodeCompletionContext::standardAccessCompleti
     
   decls = Cpp::hideOverloadedDeclarations(decls, typeIsConst);
 
-  QList<IndexedType> matchTypes;
-  if (m_parentContext)
-    matchTypes = parentContext()->matchTypes();
-  QList<CompletionTreeItemPointer> lookaheadMatches;
   foreach( const DeclarationDepthPair& decl, decls ) {
     NormalDeclarationCompletionItem* item = new NormalDeclarationCompletionItem(DeclarationPointer(decl.first), KDevelop::CodeCompletionContext::Ptr(this), decl.second );
 
@@ -1812,42 +1808,6 @@ QList< CompletionTreeItemPointer > CodeCompletionContext::standardAccessCompleti
       item->m_fixedMatchQuality = 0;
 
     items << CompletionTreeItemPointer(item);
-
-    if (!matchTypes.size())
-      continue;
-
-    QList<DeclAccessPair> lookaheadDecls = getLookaheadMatches(decl.first, matchTypes);
-    foreach(const DeclAccessPair &lookaheadDecl, lookaheadDecls)
-    {
-      NormalDeclarationCompletionItem* lookaheadItem =
-          new NormalDeclarationCompletionItem(DeclarationPointer(lookaheadDecl.first), KDevelop::CodeCompletionContext::Ptr(this));
-      lookaheadItem->prefixText = decl.first->identifier().toString() + (lookaheadDecl.second ? "->" : ".");
-      //Perhaps it'd be nice to have these stand out more without polluting the "Best Matches"
-      //NormalDeclarationCompletionItem should be refactored in order to make subclassing simpler
-      lookaheadItem->m_fixedMatchQuality = 0;
-      lookaheadMatches << CompletionTreeItemPointer(lookaheadItem);
-    }
-  }
-  eventuallyAddGroup(i18n("Lookahead Matches"), 100, lookaheadMatches);
-
-  ///Eventually show additional specificly known items for the matched argument-type, like for example enumerators for enum types
-  CodeCompletionContext* parent = parentContext();
-  if(parent) {
-    if(parent->accessType() == FunctionCallAccess) {
-      foreach(const Cpp::OverloadResolutionFunction& function, parent->functions()) {
-        if(function.function.isValid() && function.function.isViable() && function.function.declaration()) {
-          //uint parameterNumber = parent->m_knownArgumentExpressions.size() + function.matchedArguments;
-          Declaration* functionDecl = function.function.declaration().data();
-          if(functionDecl->type<FunctionType>()->arguments().count() > function.matchedArguments) {
-            items += specialItemsForArgumentType(functionDecl->type<FunctionType>()->arguments()[function.matchedArguments]);
-          }
-        }
-      }
-    }
-    else if (parent->accessType() == BinaryOpFunctionCallAccess || parent->accessType() == CaseAccess)
-    {
-      items += specialItemsForArgumentType(parent->m_expressionResult.type.abstractType());
-    }
   }
 
   return items;
@@ -1889,7 +1849,7 @@ void CodeCompletionContext::addCPPBuiltin()
   }
 
   ClassFunctionDeclaration* classFun = dynamic_cast<ClassFunctionDeclaration*>(DUChainUtils::declarationForDefinition(functionContext->owner(), m_duContext->topContext()));
-  
+
   if(classFun && !classFun->isStatic() && classFun->context()->owner()
               && m_onlyShow != ShowSignals && m_onlyShow != ShowSlots && m_onlyShow != ShowTypes)
   {
@@ -1978,9 +1938,21 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& sh
         break;
     }
 
+    LOCKDUCHAIN; if (!m_duContext) return items;
+    if (m_accessType == MemberAccess ||
+        m_accessType == ArrowMemberAccess ||
+        m_accessType == MemberChoose ||
+        m_accessType == NoMemberAccess)
+      addLookaheadMatches(items);
+
+    if (parentContext()) {
+      foreach(const IndexedType &matchType, parentContext()->matchTypes()) {
+        addSpecialItemsForArgumentType(matchType.abstractType());
+      }
+    }
+
     if(depth() == 0)
     {
-      LOCKDUCHAIN; if (!m_duContext) return items;
       //Eventually add missing include-completion in cases like SomeNamespace::NotIncludedClass|
       if(m_accessType == StaticMemberChoose) {
 #ifndef TEST_COMPLETION
@@ -1995,6 +1967,36 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& sh
     }
 
     return items;
+}
+
+void CodeCompletionContext::addLookaheadMatches(const QList<CompletionTreeItemPointer> items)
+{
+  QList<IndexedType> matchTypes;
+  if (m_parentContext)
+    matchTypes = parentContext()->matchTypes();
+
+  if (!matchTypes.size())
+    return;
+
+  QList<CompletionTreeItemPointer> lookaheadMatches;
+  foreach( const CompletionTreeItemPointer &item, items ) {
+    Declaration* decl = item->declaration().data();
+    if (!decl)
+      continue;
+
+    QList<DeclAccessPair> lookaheadDecls = getLookaheadMatches(decl, matchTypes);
+    foreach(const DeclAccessPair &lookaheadDecl, lookaheadDecls)
+    {
+      NormalDeclarationCompletionItem* lookaheadItem =
+          new NormalDeclarationCompletionItem(DeclarationPointer(lookaheadDecl.first), KDevelop::CodeCompletionContext::Ptr(this));
+      lookaheadItem->prefixText = decl->identifier().toString() + (lookaheadDecl.second ? "->" : ".");
+      //Perhaps it'd be nice to have these stand out more without polluting the "Best Matches"
+      //NormalDeclarationCompletionItem should be refactored in order to make subclassing simpler
+      lookaheadItem->m_fixedMatchQuality = 0;
+      lookaheadMatches << CompletionTreeItemPointer(lookaheadItem);
+    }
+  }
+  eventuallyAddGroup(i18n("Lookahead Matches"), 800, lookaheadMatches);
 }
 
 QList<CompletionTreeItemPointer> CodeCompletionContext::getImplementationHelpers() {
@@ -2051,27 +2053,25 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::getImplementationHelpers
   return ret;
 }
 
-QList< KSharedPtr< KDevelop::CompletionTreeItem > > CodeCompletionContext::specialItemsForArgumentType(TypePtr< KDevelop::AbstractType > type) {
-  QList< KSharedPtr< KDevelop::CompletionTreeItem > > items;
+void CodeCompletionContext::addSpecialItemsForArgumentType(AbstractType::Ptr type) {
+  QList< CompletionTreeItemPointer > items;
   if(EnumerationType::Ptr enumeration = TypeUtils::realType(type, m_duContext->topContext()).cast<EnumerationType>()) {
     Declaration* enumDecl = enumeration->declaration(m_duContext->topContext());
     if(enumDecl && enumDecl->internalContext()) {
-
-      // This is necessary to avoid duplication of locally visible enumerators, which also get added by standardAccessCompletionItems().
-      if( visibleFromWithin( enumDecl, m_duContext.data() ) )
-        return items;
-
       DUContext* enumInternal = enumDecl->internalContext();
       foreach(Declaration* enumerator, enumInternal->localDeclarations()) {
-        items << CompletionTreeItemPointer(new NormalDeclarationCompletionItem( DeclarationPointer(enumerator), KDevelop::CodeCompletionContext::Ptr(this), 0 ));
-        static_cast<NormalDeclarationCompletionItem*>(items.back().data())->prependScopePrefix = true;
+        NormalDeclarationCompletionItem *item =
+            new NormalDeclarationCompletionItem( DeclarationPointer(enumerator), KDevelop::CodeCompletionContext::Ptr(this), 0 );
+        item->prependScopePrefix = true;
+        item->m_fixedMatchQuality = 0;
+        items << CompletionTreeItemPointer(item);
       }
     }
   }
-  return items;
+  eventuallyAddGroup("Enum values", 0, items);
 }
 
-bool CodeCompletionContext::visibleFromWithin(KDevelop::Declaration* decl, DUContext* currentContext) {
+bool CodeCompletionContext::visibleFromWithin(Declaration* decl, DUContext* currentContext) const {
   if(!decl || !currentContext)
     return false;
   if(currentContext->imports(decl->context()))
@@ -2080,7 +2080,7 @@ bool CodeCompletionContext::visibleFromWithin(KDevelop::Declaration* decl, DUCon
   return visibleFromWithin(decl, currentContext->parentContext());
 }
 
-bool CodeCompletionContext::isIntegralConstant(Declaration* decl, bool acceptHelperItems) {
+bool CodeCompletionContext::isIntegralConstant(Declaration* decl, bool acceptHelperItems) const {
 
     // Usability issue: if we're matching for integral constants,
     // types and functions are also allowed (see filterDeclaration()),
@@ -2142,7 +2142,7 @@ static inline int getIntegralReturnType(const AbstractType::Ptr& type)
   return intType->dataType();
 }
 
-bool  CodeCompletionContext::filterDeclaration(Declaration* decl, DUContext* declarationContext, bool dynamic) {
+bool  CodeCompletionContext::filterDeclaration(Declaration* decl, DUContext* declarationContext, bool dynamic) const {
   if(!decl)
     return true;
 
@@ -2175,6 +2175,9 @@ bool  CodeCompletionContext::filterDeclaration(Declaration* decl, DUContext* dec
       return false;
     }
   }
+
+  if (m_accessType == NamespaceAccess)
+    return decl->kind() == Declaration::Namespace || decl->kind() == Declaration::NamespaceAlias;
 
   if(m_onlyShow == ShowIntegralConstants && !isIntegralConstant(decl, true))
     return false;
@@ -2209,7 +2212,7 @@ bool  CodeCompletionContext::filterDeclaration(Declaration* decl, DUContext* dec
       && getIntegralReturnType(decl->abstractType()) == IntegralType::TypeVoid)
   {
     const ExpressionEvaluationResult& result =
-            static_cast<CodeCompletionContext*>(m_parentContext.data())->m_expressionResult;
+            static_cast<const CodeCompletionContext*>(m_parentContext.data())->m_expressionResult;
     // for now only hide in non-lvalue expressions so we don't get problems in sig/slot connections e.g.
     if (result.type.isValid() && !result.isLValue())
       return false;
@@ -2218,7 +2221,7 @@ bool  CodeCompletionContext::filterDeclaration(Declaration* decl, DUContext* dec
   return true;
 }
 
-bool  CodeCompletionContext::filterDeclaration(ClassMemberDeclaration* decl, DUContext* declarationContext) {
+bool CodeCompletionContext::filterDeclaration(ClassMemberDeclaration* decl, DUContext* declarationContext) const {
   if(m_doAccessFiltering && decl) {
     if(!Cpp::isAccessible(m_localClass ? m_localClass.data() : m_duContext.data(), decl, m_duContext->topContext(), declarationContext))
       return false;

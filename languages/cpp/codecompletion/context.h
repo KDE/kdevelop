@@ -42,6 +42,7 @@ namespace KDevelop {
 
   class CompletionTreeItem;
   typedef KSharedPtr<CompletionTreeItem> CompletionTreeItemPointer;
+  typedef QPair<Declaration*, bool> DeclAccessPair;
 }
 
 namespace Cpp {
@@ -88,6 +89,7 @@ namespace Cpp {
         TemplateAccess,       /// "bla<."
         ReturnAccess,         /// "return " -- Takes into account return type
         CaseAccess,           /// "case " -- Takes into account switch expression type
+        NamespaceAccess
       };
 
       /**
@@ -155,8 +157,7 @@ namespace Cpp {
       * */
       QList<KDevelop::IncludeItem> includeItems() const;
 
-      ///*DUChain must be locked*
-      KDevelop::IndexedType applyPointerConversionForMatching(KDevelop::IndexedType type, bool fromLValue) const;
+      int pointerConversions() const;
       
       QString followingText() const;
       
@@ -252,14 +253,21 @@ namespace Cpp {
       QList<CompletionTreeItemPointer> standardAccessCompletionItems();
       QList<CompletionTreeItemPointer> getImplementationHelpers();
       QList<CompletionTreeItemPointer> getImplementationHelpersInternal(const QualifiedIdentifier& minimumScope, DUContext* context);
+
+      ///For a given @param container, find members which match the given @param type
+      ///@param isPointer specifies whether the container should be accessed with operator->
+      ///@returns a list of declarations paired with whether or not they use "operator->"
+      ///Note that a non-pointer container may declare an operator-> (ie, smart pointer)
+      QList<DeclAccessPair> containedItemsMatchingType(Declaration *container, const IndexedType& type, TopDUContext *top, bool isPointer) const;
       ///If @param forDecl is an instance of a class, find declarations in that class which match @param matchTypes
       ///@returns the list of matching declarations and whether or not you need the arrow operator (->) to access them
-      QList< QPair<Declaration*, bool> > getLookaheadMatches(Declaration* forDecl, const QList<IndexedType>& matchTypes) const;
+      QList<DeclAccessPair> getLookaheadMatches(Declaration* forDecl, const QList<IndexedType>& matchTypes) const;
+      void addLookaheadMatches(const QList<CompletionTreeItemPointer> items);
 
       ///*DUChain must be locked*
-      bool  filterDeclaration(Declaration* decl, DUContext* declarationContext = 0, bool dynamic = true);
+      bool  filterDeclaration(Declaration* decl, DUContext* declarationContext = 0, bool dynamic = true) const;
       ///*DUChain must be locked*
-      bool  filterDeclaration(ClassMemberDeclaration* decl, DUContext* declarationContext = 0);
+      bool  filterDeclaration(ClassMemberDeclaration* decl, DUContext* declarationContext = 0) const;
       ///Replaces the member-access type at the current cursor position from "from" to "new", for example from "->" to "."
       ///*DUChain must be locked*
       void replaceCurrentAccess(QString old, QString _new);
@@ -269,14 +277,14 @@ namespace Cpp {
       
       ///@param type The type of the argument the items are matched to.
       ///*DUChain must be locked*
-      QList<CompletionTreeItemPointer> specialItemsForArgumentType(AbstractType::Ptr type);
+      void addSpecialItemsForArgumentType(AbstractType::Ptr type);
       
       ///Returns whether the declaration is directly visible from within the current context
-      bool visibleFromWithin(Declaration* decl, DUContext* currentContext);
+      bool visibleFromWithin(Declaration* decl, DUContext* currentContext) const;
 
       ///Returns whether the declaration can be considered an integral constant
       ///@param acceptHelperItems whether we check for filtering (true) or for marking match quality (false)
-      bool isIntegralConstant(Declaration* decl, bool acceptHelperItems);
+      bool isIntegralConstant(Declaration* decl, bool acceptHelperItems) const;
       
       ///Returns whether the end of m_text is a valid completion-position
       bool isValidPosition();

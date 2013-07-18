@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="134" name="kdevelop" >
+<kpartgui version="136" name="kdevelop" >
 <MenuBar>
 
   <Menu name="session" append="first_menu">
@@ -38,7 +38,9 @@
 
     <Separator />
 
-    <Action name="run_stop" />
+    <Action name="run_stop_all" />
+    <Action name="run_stop_menu" />
+
 
     <Separator />
     <DefineGroup name="debug" /> <!-- ### remove me -->
@@ -159,7 +161,8 @@
   <DefineGroup append="run_operations" name="run_operations"/>
   <Action name="run_execute" group="run_operations"/>
   <Action name="run_debug" group="run_operations"/>
-  <Action name="run_stop" group="run_operations" />
+  <Action name="run_stop_all" group="run_operations" />
+  <Action name="run_stop_menu" group="run_operations" />
   <Separator/>
   <Action name="file_new" />
   <DefineGroup append="file_operations" name="file_operations"/>

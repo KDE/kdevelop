@@ -27,8 +27,8 @@ private slots:
 
     void testWastedMemoryDueToBlockAllocation();
 
-    void testStdlibCompliance();
-
+    void benchManyPools();
+    void benchManyAllocations();
 };
 
 #endif

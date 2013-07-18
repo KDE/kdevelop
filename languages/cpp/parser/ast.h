@@ -469,6 +469,8 @@ public:
   ExceptionSpecificationAST *exception_spec;
   TrailingReturnTypeAST* trailing_return_type;
   const ListNode<uint> *virt_specifiers;
+  // either & or && token or null
+  uint ref_qualifier;
   bool isVariadic;
 };
 
@@ -819,8 +821,8 @@ public:
 
   DECLARE_AST_NODE(Namespace)
 
-  uint namespace_name;
   LinkageBodyAST *linkage_body;
+  uint namespace_name;
   bool inlined : 1;
 };
 
@@ -1218,11 +1220,11 @@ public:
 
   DECLARE_AST_NODE(TypeParameter)
 
-  uint type;
   NameAST *name;
   TypeIdAST *type_id;
   const ListNode<TemplateParameterAST*> *template_parameters;
   NameAST *template_name;
+  uint type;
   bool isVariadic;
 };
 
@@ -1252,9 +1254,9 @@ public:
 
   DECLARE_AST_NODE(UnqualifiedName)
 
-  uint tilde;
+  bool tilde : 1;
+  bool ellipsis : 1;
   uint id;
-  bool ellipsis;
   OperatorFunctionIdAST *operator_id;
   const ListNode<TemplateArgumentAST*> *template_arguments;
 };

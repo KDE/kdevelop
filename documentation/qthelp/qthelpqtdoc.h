@@ -31,6 +31,12 @@ class QtHelpQtDoc : public QtHelpProviderAbstract
         virtual QIcon icon() const;
         virtual QString name() const;
         void registerDocumentations();
+
+    private:
+        void loadDirectory(const QString& path);
+
+    private slots:
+        void lookupDone(int code);
 };
 
 #endif // QTHELPQTDOC_H

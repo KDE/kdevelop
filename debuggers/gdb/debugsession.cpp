@@ -29,6 +29,7 @@
 
 #include <QtCore/QFileInfo>
 #include <QtGui/QApplication>
+#include <QRegExp>
 
 #include <KMessageBox>
 #include <KLocalizedString>
@@ -69,7 +70,6 @@ DebugSession::DebugSession()
       commandQueue_(new CommandQueue),
       tty_(0),
       state_(s_dbgNotStarted|s_appNotStarted),
-      programHasExited_(false),
       state_reload_needed(false),
       stateReloadInProgress_(false)
 {
@@ -674,11 +674,10 @@ void DebugSession::slotProgramStopped(const GDBMI::ResultRecord& r)
     if (reason == "exited-normally" || reason == "exited")
     {
         if (r.hasField("exit-code")) {
-            programNoApp(i18n("Exited with return code: %1").arg(r["exit-code"].literal()));
+            programNoApp(i18n("Exited with return code: %1", r["exit-code"].literal()));
         } else {
             programNoApp(i18n("Exited normally"));
         }
-        programHasExited_ = true;
         state_reload_needed = false;
         return;
     }
@@ -686,8 +685,6 @@ void DebugSession::slotProgramStopped(const GDBMI::ResultRecord& r)
     if (reason == "exited-signalled")
     {
         programNoApp(i18n("Exited on signal %1", r["signal-name"].literal()));
-        // FIXME: figure out why this variable is needed.
-        programHasExited_ = true;
         state_reload_needed = false;
         return;
     }
@@ -802,24 +799,19 @@ void DebugSession::programNoApp(const QString& msg)
 
     // Note: this method can be called when we open an invalid
     // core file. In that case, tty_ won't be set.
-    if (tty_)
+    if (tty_){
         tty_->readRemaining();
+        // Tty is no longer usable, delete it. Without this, QSocketNotifier
+        // will continiously bomd STTY with signals, so we need to either disable
+        // QSocketNotifier, or delete STTY. The latter is simpler, since we can't
+        // reuse it for future debug sessions anyway.
+        delete tty_;
+        tty_ = 0;
+    }
 
-    // Tty is no longer usable, delete it. Without this, QSocketNotifier
-    // will continiously bomd STTY with signals, so we need to either disable
-    // QSocketNotifier, or delete STTY. The latter is simpler, since we can't
-    // reuse it for future debug sessions anyway.
-
-    delete tty_;
-    tty_ = 0;
-
-    m_gdb.data()->kill();
-    m_gdb.data()->deleteLater();
-
-    setStateOn(s_dbgNotStarted);
+    stopDebugger();
 
     raiseEvent(program_exited);
-
     raiseEvent(debugger_exited);
 
     emit showMessage(msg, 0);
@@ -830,7 +822,7 @@ void DebugSession::programNoApp(const QString& msg)
 
 void DebugSession::programFinished(const QString& msg)
 {
-    QString m = QString("*** %0 ***").arg(msg);
+    QString m = QString("*** %0 ***").arg(msg.trimmed());
     emit applicationStandardErrorLines(QStringList(m));
 
     /* Also show message in gdb window, so that users who
@@ -849,9 +841,13 @@ void DebugSession::parseStreamRecord(const GDBMI::StreamRecord& s)
             setStateOff(s_appRunning);
             setStateOn(s_appNotStarted|s_programExited);
         } else if (line.startsWith("The program no longer exists")
-            || line.startsWith("Program exited"))
+                   || line.startsWith("Program exited"))
         {
             programNoApp(line);
+            //TODO: check if it's the last inferior, or something
+        }else if(!line.isEmpty() && line.at(0) == '[' && line.contains( QRegExp("\\[Inferior 1 \\(process \\d+\\) exited .*\\]"))){
+            programNoApp(line);
+            state_reload_needed = false;
         }
     }
 }
@@ -945,7 +941,7 @@ bool DebugSession::startDebugger(KDevelop::ILaunchConfiguration* cfg)
     return true;
 }
 
-bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg)
+bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg, IExecutePlugin* iface)
 {
     if (stateIsOn( s_appNotStarted ) )
     {
@@ -980,8 +976,6 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg)
         }
     }
 
-    IExecutePlugin* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IExecutePlugin")->extension<IExecutePlugin>();
-    Q_ASSERT(iface);
 
     // Configuration values
     bool    config_forceBPSet_ = grp.readEntry( GDBDebugger::allowForcedBPEntry, true );
@@ -993,6 +987,7 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg)
     KUrl config_runGdbScript_ = grp.readEntry( GDBDebugger::remoteGdbRunEntry, KUrl() );
     int config_outputRadix_ = 10;
     
+    Q_ASSERT(iface);
     bool config_useExternalTerminal = iface->useTerminal( cfg );
     QString config_externalTerminal = iface->terminal( cfg );
     if (!config_externalTerminal.isEmpty()) {
@@ -1177,7 +1172,25 @@ void DebugSession::runUntil(const KUrl& url, int line)
                 QString("%1:%2").arg(url.toLocalFile()).arg(line)));
 }
 
+void DebugSession::runUntil(QString& address){
+    if (stateIsOn(s_dbgNotStarted|s_shuttingDown))
+        return;
+
+    if (!address.isEmpty()) {
+        queueCmd(new GDBCommand(GDBMI::ExecUntil, QString("*%1").arg(address)));
+    }
+}
 // **************************************************************************
+
+void DebugSession::jumpToMemoryAddress(QString& address){
+    if (stateIsOn(s_dbgNotStarted|s_shuttingDown))
+        return;
+
+    if (!address.isEmpty()) {
+        queueCmd(new GDBCommand(GDBMI::NonMI, QString("tbreak *%1").arg(address)));
+        queueCmd(new GDBCommand(GDBMI::NonMI, QString("jump *%1").arg(address)));
+    }
+}
 
 void DebugSession::jumpTo(const KUrl& url, int line)
 {

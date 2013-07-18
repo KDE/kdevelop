@@ -220,25 +220,6 @@ Range CodeCompletionModel::completionRange(View* view, const KTextEditor::Cursor
     return range;
 }
 
-void CodeCompletionModel::foundDeclarations(QList<KSharedPtr<KDevelop::CompletionTreeElement> > item, KSharedPtr<KDevelop::CodeCompletionContext> completionContext) {
-  //Set the static match-context, in case the argument-hints are not shown
-  
-  setStaticMatchContext(QList<IndexedType>());
-  
-  if(completionContext) {
-    Cpp::CodeCompletionContext* argumentFunctions = dynamic_cast<Cpp::CodeCompletionContext*>(completionContext->parentContext());
-    if(argumentFunctions) {
-      QList<IndexedType> types;
-      bool abort = false;
-      foreach(CompletionTreeItemPointer item, argumentFunctions->completionItems(abort, false))
-        types += item->typeForArgumentMatching();
-      
-      setStaticMatchContext(types);
-    }
-  }
-  KDevelop::CodeCompletionModel::foundDeclarations(item, completionContext);
-}
-
 }
 
 #include "model.moc"

@@ -958,15 +958,13 @@ void CPPParseJob::setIncludeStack(const QStack< DocumentCursor > & includeStack)
   m_includeStack = includeStack;
 }
 
-TopDUContext::Features CPPParseJob::standardMinimumFeatures() const
-{
-    return TopDUContext::SimplifiedVisibleDeclarationsAndContexts;
-}
-
 TopDUContext::Features CPPParseJob::slaveMinimumFeatures() const
 {
-    TopDUContext::Features slaveMinimumFeatures = standardMinimumFeatures();
-    
+    TopDUContext::Features slaveMinimumFeatures = KDevelop::TopDUContext::Empty;
+    if (minimumFeatures() & TopDUContext::SimplifiedVisibleDeclarationsAndContexts) {
+      slaveMinimumFeatures = TopDUContext::SimplifiedVisibleDeclarationsAndContexts;
+    }
+
     if(minimumFeatures() & TopDUContext::Recursive)
       slaveMinimumFeatures = (TopDUContext::Features)(minimumFeatures() & (~TopDUContext::ForceUpdate));
     else if((minimumFeatures() & TopDUContext::VisibleDeclarationsAndContexts) == TopDUContext::VisibleDeclarationsAndContexts)

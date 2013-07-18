@@ -36,8 +36,6 @@ private slots:
     void loadSimpleProject();
     void buildDirProject();
     void loadMultiPathProject();
-private:
-    KDevelop::TestCore* m_core;
 };
 
 #endif

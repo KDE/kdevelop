@@ -38,6 +38,8 @@
 #include <shell/shellextension.h>
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
+#include <tests/testfile.h>
+#include <tests/testproject.h>
 #include <qtest_kde.h>
 #include <language/codecompletion/codecompletiontesthelper.h>
 #include <dumpchain.h>
@@ -45,11 +47,15 @@
 #include <language/duchain/parsingenvironment.h>
 #include <language/duchain/codemodel.h>
 #include <typeinfo>
+#include <KTempDir>
 #include <language/duchain/classdeclaration.h>
 #include <cppducontext.h>
 #include <interfaces/iassistant.h>
 #include <interfaces/foregroundlock.h>
 #include <language/duchain/use.h>
+#include <language/duchain/duchainutils.h>
+
+#include "codegen/simplerefactoring.h"
 
 QTEST_KDEMAIN(TestCppCodegen, GUI )
 
@@ -142,11 +148,10 @@ void TestCppCodegen::testAssistants_data()
     "   val = Hank;\n"
     "  }\n"
     "};\n";
-  QTest::newRow("local_class") << inClass << 5 << 0 << "Honk val = Hank;";
-  // 1 is the label
-  QTest::newRow("private_class") << inClass << 5 << 2 << "private:\n    Honk val;";
-  QTest::newRow("protected_class") << inClass << 5 << 3 << "protected:\n    Honk val;";
-  QTest::newRow("public_class") << inClass << 5 << 4 << "}\n    Honk val;";
+  QTest::newRow("local_class") << inClass << 4 << 0 << "Honk val = Hank;";
+  QTest::newRow("private_class") << inClass << 4 << 1 << "private:\n    Honk val;";
+  QTest::newRow("protected_class") << inClass << 4 << 2 << "protected:\n    Honk val;";
+  QTest::newRow("public_class") << inClass << 4 << 3 << "}\n    Honk val;";
 
   QString inOtherClass =
     "class other {\n"
@@ -735,6 +740,101 @@ void TestCppCodegen::testMacroDeclarationOrder()
   QVERIFY(directVal->abstractType()->toString() == "function char ()");
   QVERIFY(macroKey->abstractType()->toString() == "function int ()");
   QVERIFY(macroVal->abstractType()->toString() == "function char ()");
+}
+
+void TestCppCodegen::testMoveIntoSource()
+{
+  QFETCH(QString, origHeader);
+  QFETCH(QString, origImpl);
+  QFETCH(QString, newHeader);
+  QFETCH(QString, newImpl);
+  QFETCH(QualifiedIdentifier, id);
+
+  TestFile header(origHeader, "h");
+  TestFile impl(origImpl, "cpp", &header);
+
+  header.parse(KDevelop::TopDUContext::AllDeclarationsContextsAndUses);
+  QVERIFY(header.waitForParsed());
+  ReferencedTopDUContext refTop = header.topContext();
+  QVERIFY(refTop);
+
+  IndexedDeclaration declaration;
+  {
+    DUChainReadLocker lock;
+    TopDUContext* top = DUChainUtils::contentContextFromProxyContext(refTop);
+    QList< Declaration* > decls = top->findDeclarations(id);
+    QCOMPARE(decls.size(), 1);
+    declaration = IndexedDeclaration(decls.first());
+    QVERIFY(declaration.isValid());
+  }
+  CodeRepresentation::setDiskChangesForbidden(false);
+  QCOMPARE(SimpleRefactoring::self().moveIntoSource(declaration), QString());
+  CodeRepresentation::setDiskChangesForbidden(true);
+
+  QCOMPARE(header.fileContents(), newHeader);
+  QCOMPARE(impl.fileContents(), newImpl);
+}
+
+void TestCppCodegen::testMoveIntoSource_data()
+{
+  QTest::addColumn<QString>("origHeader");
+  QTest::addColumn<QString>("origImpl");
+  QTest::addColumn<QString>("newHeader");
+  QTest::addColumn<QString>("newImpl");
+  QTest::addColumn<QualifiedIdentifier>("id");
+
+  const QualifiedIdentifier fooId("::foo");
+
+  QTest::newRow("globalfunction") << QString("int foo()\n{\n    int i = 0;\n    return 0;\n}\n")
+                                  << QString()
+                                  << QString("int foo();\n")
+                                  << QString("\nint foo()\n{\n    int i = 0;\n    return 0;\n}\n")
+                                  << fooId;
+
+  QTest::newRow("staticfunction") << QString("static int foo()\n{\n    int i = 0;\n    return 0;\n}\n")
+                                  << QString()
+                                  << QString("static int foo();\n")
+                                  << QString("\nint foo()\n{\n    int i = 0;\n    return 0;\n}\n")
+                                  << fooId;
+
+  QTest::newRow("funcsameline") << QString("int foo() {\n    int i = 0;\n    return 0;\n}\n")
+                                << QString()
+                                << QString("int foo();\n")
+                                << QString("\nint foo() {\n    int i = 0;\n    return 0;\n}\n")
+                                << fooId;
+
+  QTest::newRow("func-comment") << QString("int foo()\n/* foobar */ {\n    int i = 0;\n    return 0;\n}\n")
+                                << QString()
+                                << QString("int foo()\n/* foobar */;\n")
+                                ///TODO: should the comment be moved as well?
+                                << QString("\nint foo() {\n    int i = 0;\n    return 0;\n}\n")
+                                << fooId;
+
+  QTest::newRow("func-odd-spaces") << QString("int foo()\n/*asdf*/\n {\n    int i = 0;\n    return 0;\n}\n")
+                                << QString()
+                                << QString("int foo()\n/*asdf*/;\n")
+                                ///TODO: should the comment be moved as well?
+                                << QString("\nint foo()\n{\n    int i = 0;\n    return 0;\n}\n")
+                                << fooId;
+
+  const QualifiedIdentifier aFooId("a::foo");
+  QTest::newRow("class-method") << QString("class a {\n    int foo(){\n        return 0;\n    }\n};\n")
+                                << QString()
+                                << QString("class a {\n    int foo();\n};\n")
+                                << QString("\nint a::foo() {\n    return 0;\n}\n")
+                                << aFooId;
+
+  QTest::newRow("class-method-const") << QString("class a {\n    int foo() const\n    {\n        return 0;\n    }\n};\n")
+                                << QString()
+                                << QString("class a {\n    int foo() const;\n};\n")
+                                << QString("\nint a::foo() const\n{\n    return 0;\n}\n")
+                                << aFooId;
+
+  QTest::newRow("class-method-const-sameline") << QString("class a {\n    int foo() const{\n        return 0;\n    }\n};\n")
+                                << QString()
+                                << QString("class a {\n    int foo() const;\n};\n")
+                                << QString("\nint a::foo() const {\n    return 0;\n}\n")
+                                << aFooId;
 }
 
 #include "test_cppcodegen.moc"

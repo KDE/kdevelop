@@ -199,6 +199,15 @@ void TestExpressionParser::testIntegralType() {
     QCOMPARE(ciType->value<char>(), 'x');
   }
   {
+    Cpp::ExpressionEvaluationResult result = parser.evaluateType("char(1)", KDevelop::DUContextPointer(top));
+    QVERIFY(result.isValid());
+
+    AbstractType::Ptr aType(result.type.abstractType());
+    IntegralType::Ptr iType = aType.cast<IntegralType>();
+    QVERIFY(iType);
+    QCOMPARE(iType->dataType(), (uint)IntegralType::TypeChar);
+  }
+  {
       Cpp::ExpressionEvaluationResult result = parser.evaluateType("5", KDevelop::DUContextPointer(top));
       QVERIFY(result.isValid());
       
@@ -665,6 +674,13 @@ void TestExpressionParser::testSimpleExpression() {
   QVERIFY(result.isInstance);
   lock.unlock();
 
+  result = parser.evaluateExpression( "new Cont{}", KDevelop::DUContextPointer(testContext));
+  lock.lock();
+  QVERIFY(result.isValid());
+  QCOMPARE(result.type.abstractType()->toString(), QString("Cont*"));
+  QVERIFY(result.isInstance);
+  lock.unlock();
+
   result = parser.evaluateExpression( "5", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
@@ -1046,6 +1062,15 @@ void TestExpressionParser::testOperators() {
   QCOMPARE(result.type.abstractType()->toString(), QString("Cont"));
   lock.unlock();
 
+  //A simple test: Constructing a type should always result in the type, no matter whether there is a constructor.
+  result = parser.evaluateExpression( "Cont{5}", KDevelop::DUContextPointer(ctx));
+  lock.lock();
+  QVERIFY(result.isValid());
+  QVERIFY(result.isInstance);
+  QVERIFY(result.type.abstractType());
+  QCOMPARE(result.type.abstractType()->toString(), QString("Cont"));
+  lock.unlock();
+
   lock.lock();
   release(ctx);
 }
@@ -1355,6 +1380,55 @@ void TestExpressionParser::testCharacterTypes()
   QEXPECT_FAIL("char16_t-str", "not yet supported, see ExpressionVisitor::visitStringLiteral", Abort);
   QEXPECT_FAIL("char32_t-str", "not yet supported, see ExpressionVisitor::visitStringLiteral", Abort);
   QCOMPARE(integralType->dataType(), type);
+}
+
+void TestExpressionParser::benchEvaluateType()
+{
+  DUChainWriteLocker lock;
+  QFETCH(DUContextPointer, context);
+  QFETCH(QByteArray, type);
+
+  QVERIFY(context);
+
+  Cpp::ExpressionParser parser;
+  QBENCHMARK {
+    parser.evaluateType(type, context);
+  }
+}
+
+void TestExpressionParser::benchEvaluateType_data()
+{
+  QTest::addColumn<DUContextPointer>("context");
+  QTest::addColumn<QByteArray>("type");
+
+  DUChainWriteLocker lock;
+  DUContextPointer top(parse("namespace ns { struct A { int b; }; } template<class T, typename _T2> struct B { }; int main(int argc) {ns::A a;}", DumpNone));
+  QVERIFY(top->childContexts().size() == 5);
+
+  QTest::newRow("global-char") << top << QByteArray("char");
+  QTest::newRow("global-bool") << top << QByteArray("bool");
+  QTest::newRow("global-false") << top << QByteArray("false ");
+  QTest::newRow("global-true") << top << QByteArray("true ");
+  QTest::newRow("global-void") << top << QByteArray("void");
+  QTest::newRow("global-float") << top << QByteArray("float");
+  QTest::newRow("global-double") << top << QByteArray("double");
+  QTest::newRow("global-int") << top << QByteArray("int");
+  QTest::newRow("global-int-number") << top << QByteArray("1234");
+  QTest::newRow("global-long-number") << top << QByteArray("1234l");
+  QTest::newRow("global-long-long-number") << top << QByteArray("1234ll");
+  QTest::newRow("global-ns::A") << top << QByteArray("ns::A");
+  QTest::newRow("global-B") << top << QByteArray("B");
+
+  DUContextPointer tplCtx(top->childContexts().at(2));
+  QTest::newRow("tpl-T") << tplCtx << QByteArray("T");
+  QTest::newRow("tpl-_T2") << tplCtx << QByteArray("_T2");
+  QTest::newRow("tpl-ns::A") << tplCtx << QByteArray("ns::A");
+  QTest::newRow("tpl-B") << tplCtx << QByteArray("B");
+
+  DUContextPointer mainCtx(top->childContexts().last());
+  QTest::newRow("main-ns::A") << mainCtx << QByteArray("ns::A");
+  QTest::newRow("main-a.b") << mainCtx << QByteArray("a.b");
+  QTest::newRow("main-B") << mainCtx << QByteArray("B");
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

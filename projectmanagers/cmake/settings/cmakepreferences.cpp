@@ -32,6 +32,7 @@
 #include <KDebug>
 
 #include <QFile>
+#include <QDir>
 #include <QHeaderView>
 
 #include "ui_cmakebuildsettings.h"
@@ -81,7 +82,6 @@ CMakePreferences::CMakePreferences(QWidget* parent, const QVariantList& args)
     connect(m_prefsUi->addBuildDir, SIGNAL(pressed()), this, SLOT(createBuildDir()));
     connect(m_prefsUi->removeBuildDir, SIGNAL(pressed()), this, SLOT(removeBuildDir()));
     connect(m_prefsUi->showAdvanced, SIGNAL(toggled(bool)), this, SLOT(showAdvanced(bool)));
-    connect(m_prefsUi->cmakeDirectory, SIGNAL(urlSelected(KUrl)), this, SLOT(changed()));
     connect(m_prefsUi->environment, SIGNAL(currentIndexChanged(int)), this, SLOT(changed()));
     
     showInternal(m_prefsUi->showInternal->checkState());
@@ -117,7 +117,6 @@ void CMakePreferences::load()
     CMake::removeOverrideBuildDirIndex(m_project); // addItems() triggers buildDirChanged(), compensate for it
     m_prefsUi->buildDirs->setCurrentIndex( CMake::currentBuildDirIndex(m_project) );
     m_prefsUi->environment->setCurrentProfile( CMake::currentEnvironment(m_project) );
-    m_prefsUi->cmakeDirectory->setUrl( CMake::cmakeDirectory(m_project) );
     
     m_srcFolder=m_subprojFolder;
     m_srcFolder.cd( CMake::projectRootRelative(m_project) );
@@ -155,8 +154,7 @@ void CMakePreferences::save()
     }
     
     CMake::setCurrentEnvironment( m_project, m_prefsUi->environment->currentProfile() );
-    CMake::setCmakeDirectory( m_project, m_prefsUi->cmakeDirectory->url() );
-    KCModule::save(); // TODO: is this needed? all the CMake::set* functions do their own ->sync()...
+    KCModule::save();
     
     kDebug(9042) << "writing to cmake config: using builddir " << CMake::currentBuildDirIndex(m_project);
     kDebug(9042) << "writing to cmake config: builddir path " << CMake::currentBuildDir(m_project);
@@ -164,7 +162,6 @@ void CMakePreferences::save()
     kDebug(9042) << "writing to cmake config: build type " << CMake::currentBuildType(m_project);
     kDebug(9042) << "writing to cmake config: cmake binary " << CMake::currentCMakeBinary(m_project);
     kDebug(9042) << "writing to cmake config: environment " << CMake::currentEnvironment(m_project);
-    kDebug(9042) << "writing to cmake config: internal directory " << CMake::cmakeDirectory(m_project);
     
     //We run cmake on the builddir to generate it 
     if (needReconfiguring) {
@@ -364,6 +361,7 @@ void CMakePreferences::configure()
         connect(job, SIGNAL(finished(KJob*)), SLOT(cacheUpdated()));
     }
 
+    connect(job, SIGNAL(finished(KJob*)), m_project, SLOT(reloadModel()));
     KDevelop::ICore::self()->runController()->registerJob(job);
 }
 

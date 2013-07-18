@@ -120,6 +120,7 @@ private slots:
   void testNamespaceCompletion();
   void testNamespaceAliasCompletion();
   void testNamespaceAliasCycleCompletion();
+  void testAfterNamespace();
   void testTemplateMemberAccess();
   void testTemplateArguments();
   void testTemplateFunction();
@@ -153,6 +154,7 @@ private slots:
   void testNoQuadrupleColon();
   void testLookaheadMatches_data();
   void testLookaheadMatches();
+  void testMemberAccessInstance();
 public:
   enum DumpArea {
     DumpNone = 0,

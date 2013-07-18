@@ -29,7 +29,6 @@ static char const * const _S_token_names[] = {
   "and_eq",
   "arrow",
   "asm",
-  "assign",
   "auto",
   "bitand",
   "bitor",
@@ -134,6 +133,13 @@ static char const * const _S_token_names[] = {
   "whitespaces",
   "xor",
   "xor_eq",
+  "star_eq",
+  "plus_eq",
+  "minus_eq",
+  "div_eq",
+  "leftshift_eq",
+  "rightshift_eq",
+  "remainder_eq",
   "__qt_signal__",
   "__qt_slot__",
   "__qt_property__"
@@ -147,7 +153,6 @@ static char const * const _S_token_texts[] = {
   "&=",
   "->",
   "asm",
-  "=",
   "auto",
   "&",
   "|",
@@ -252,6 +257,13 @@ static char const * const _S_token_texts[] = {
   "whitespaces",
   "^",
   "^=",
+  "*=",
+  "+=",
+  "-=",
+  "/=",
+  "<<=",
+  ">>=",
+  "%=",
   "__qt_signal__",
   "__qt_slot__",
   "__qt_property__"
@@ -373,6 +385,13 @@ char const *token_name(int token)
 
   Q_ASSERT(0);
   return 0;
+}
+
+bool token_is_assignment(int token)
+{
+  return token == '=' || token == Token_and_eq || token == Token_xor_eq || token == Token_or_eq
+         || token == Token_leftshift_eq || token == Token_rightshift_eq || token == Token_star_eq
+         || token == Token_plus_eq || token == Token_minus_eq || token == Token_div_eq || token == Token_remainder_eq;
 }
 
 char const *token_text(int token)

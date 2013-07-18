@@ -134,8 +134,9 @@ void GDB::execute(GDBCommand* command)
     isRunning_ = false;
     receivedReply_ = false;
 
-    process_->write(commandText.toLatin1(),
-                    commandText.length());
+    QByteArray commandUtf8 = commandText.toUtf8();
+
+    process_->write(commandUtf8, commandUtf8.length());
 
     QString prettyCmd = currentCmd_->cmdToSend();
     prettyCmd.remove( QRegExp("set prompt \032.\n") );

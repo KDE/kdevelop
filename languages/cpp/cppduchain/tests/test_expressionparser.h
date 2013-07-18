@@ -81,6 +81,9 @@ private slots:
   void testCharacterTypes_data();
   void testCharacterTypes();
 
+  void benchEvaluateType();
+  void benchEvaluateType_data();
+
 public:
   enum DumpArea {
     DumpNone = 0,

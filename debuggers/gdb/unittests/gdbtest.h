@@ -86,12 +86,15 @@ private Q_SLOTS:
     void parseBug304730();
     void testMultipleLocationsBreakpoint();
     void testBug301287();
+    void testMultipleBreakpoint();
+    void testRegularExpressionBreakpoint();
 
 private:
     void waitForState(GDBDebugger::DebugSession *session,
                       KDevelop::IDebugSession::DebuggerState state,
                       const char *file, int line,
                       bool expectFail = false);
+    IExecutePlugin* m_iface;
 };
 
 }

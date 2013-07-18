@@ -72,7 +72,7 @@ double bar ()
 <sect1 id="terminology"><title>Terminology</title>
 <para>&kdevelop; has the concept of <emphasis>sessions</emphasis> and <emphasis>projects</emphasis>. A session contains all projects that have something to do with each other. For the examples that follow, assume you are the developer of both a library and an application that uses it. You can think of the core KDE libraries as the former and &kdevelop; as the latter. Another example: Let's say you are a &Linux; kernel hacker but you are also working on a device driver for &Linux; that hasn't been merged into the kernel tree yet.</para>
 <para>So taking the latter as an example, you would have a session in &kdevelop; that has two projects: the &Linux; kernel and the device driver. You will want to group them into a single session (rather than having two sessions with a single project each) because it will be useful to be able to see the kernel functions and data structures in &kdevelop; whenever you write source code for the driver &mdash; for example so that you can get kernel function and variable names auto-expanded, or so that you can see kernel function documentation while hacking on the device driver.</para>
-<para>Now imagine you also happen to be a KDE developer. Then you would have a second session that contains KDE as a project. You could in principle have just one session for all of this, but there is no real reason for this: in your KDE work, you don't need to access kernel or device driver functions; and you don't want KDE class names autoexpanded while working working on the &Linux; kernel. Finally, building some of the KDE libraries is independent of re-compiling the &Linux; kernel (whereas whenever you compile the device driver it would also be good to re-compile the &Linux; kernel if some of the kernel header files have changed).</para>
+<para>Now imagine you also happen to be a KDE developer. Then you would have a second session that contains KDE as a project. You could in principle have just one session for all of this, but there is no real reason for this: in your KDE work, you don't need to access kernel or device driver functions; and you don't want KDE class names autoexpanded while working on the &Linux; kernel. Finally, building some of the KDE libraries is independent of re-compiling the &Linux; kernel (whereas whenever you compile the device driver it would also be good to re-compile the &Linux; kernel if some of the kernel header files have changed).</para>
 <para>Finally, another use for sessions is if you work both on the current development version of a project, as well as on a branch: in that case, you don't want &kdevelop; to confuse classes that belong to mainline and the branch, so you'd have two sessions, with the same set of projects but from different directories (corresponding to different development branches).</para>
 </sect1>
 <sect1 id="setting-up-a-session-and-importing-an-existing-project"><title>Setting up a session and importing an existing project</title>
@@ -180,7 +180,7 @@ double bar ()
 <para><programlisting>for (typename Triangulation&lt; dim&gt;::active_cell_iterator cell
       = triangulation.begin_active();
    cell != triangulation.end();
-   ++cell)</programlisting> This is an awkward expression but it will look almost exactly like this everytime you need such a loop &mdash; which would make it a good candidate for a snippet.</para>
+   ++cell)</programlisting> This is an awkward expression but it will look almost exactly like this every time you need such a loop &mdash; which would make it a good candidate for a snippet.</para>
 <itemizedlist>
 <listitem><para><guilabel>Konsole</guilabel>: Opens a command line window inside &kdevelop;'s main window, for the occasional command you may want to enter (&eg; to run <varname>./configure</varname>).
 </para></listitem>
@@ -298,6 +298,21 @@ double bar ()
     </caption>
   </mediaobject>
 </screenshot></para>
+</sect2>
+<sect2 id="rainbow-color-highlighting-explained"><title>Rainbow color highlighting explained</title> 
+<para><application>KDevelop</application> uses a variety of colors to highlight different objects in source code. If you know what the different colors mean, you can very quickly extract a lot of information from source code just by looking at the colors, without reading a single character. The highlighting rules are as follows:
+</para>
+<itemizedlist>
+<listitem><para>Objects of type Class / Struct, Enum (the values and the type), (global) functions, and class members each have their own color assigned (classes are green, enums are dark red, and members are dark yellow or violet, (global) functions are always violet).</para></listitem>
+<listitem><para>All global variables are colored in dark green.</para></listitem>
+<listitem><para>Identifiers which are typedefs for another type are colored in teal.</para></listitem>
+<listitem><para>All declarations and definitions of objects are in bold.</para></listitem>
+<listitem><para>If a member is accessed from within the context where it is defined (base or derived class) it appears in yellow, otherwise it appears in violet.</para></listitem>
+<listitem><para>If a member is private or protected, it gets colored in a slightly darker color when used.</para></listitem>
+<listitem><para>For variables local to a function body scope, rainbow colors are picked based on a hash of the identifier. This includes the parameters to the function. An identifier always will have the same color within its scope (but the same identifier will get a different color if it represents a different object, &ie; if it is redefined in a more nested scope), and you will usually get the same color for the same identifier name in different scopes. Thus, if you have multiple functions taking parameters with the same names, the arguments will all look the same color-wise. These rainbow colors can be turned off separately from the global coloring in the settings dialog.</para></listitem>
+<listitem><para>Identifiers for which &kdevelop; could not determine the corresponding declaration are colored in white. This can sometimes be caused by missing <varname>#include</varname> directives.</para></listitem>
+<listitem><para>In addition to that coloring, the normal editor syntax highlighting will be applied, as known from &kate;. &kdevelop;'s semantic highlighting will always override the editor highlighting if there is a conflict.</para></listitem>
+</itemizedlist>
 </sect2>
 </sect1>
 <sect1 id="navigating-in-source-code"><title>Navigating in source code</title>

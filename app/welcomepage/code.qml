@@ -48,15 +48,12 @@ StandardBackground {
         }
     }
 
-    Item {
-        id: item1
-        x: root.marginLeft
-        height: parent.height
-        width: parent.width-x
-        
-        Loader {
-            id: codeContents
-            anchors.fill: parent
+    Loader {
+        id: codeContents
+        anchors {
+            fill: parent
+            leftMargin: root.marginLeft+root.margins
+            margins: root.margins
         }
     }
     states: [

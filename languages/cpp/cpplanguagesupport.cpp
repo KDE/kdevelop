@@ -793,10 +793,17 @@ QWidget* CppLanguageSupport::specialLanguageObjectNavigationWidget(const KUrl& u
     //Check whether tail contains arguments
     QString tail = found.second.trimmed(); ///@todo make this better.
     if(tail.startsWith("(")) {
-      int i = findClose( tail, 0 );
-      if(i != -1) {
-        text += tail.left(i+1);
+      //properly support macro expansions when arguments contain newlines
+      int foundClosingBrace = findClose( tail, 0 );
+      KDevelop::IDocument* doc = core()->documentController()->documentForUrl(url);
+      if(doc && doc->textDocument() && doc->textDocument()->activeView() && foundClosingBrace < 0) {
+        const int lines = doc->textDocument()->lines();
+        for (int lineNumber = position.line + 1; foundClosingBrace < 0 && lineNumber < lines; lineNumber++) {
+          tail += doc->textDocument()->line(lineNumber).trimmed();
+          foundClosingBrace = findClose( tail, 0 );
+        }
       }
+      text += tail.left(foundClosingBrace + 1);
     }
 
     {

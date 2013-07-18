@@ -127,9 +127,6 @@ private:
      */
     QStringList parseCustomMakeFile( const KDevelop::Path &makefile );
 
-private slots:
-    void slotDirty(const QString& path);
-
 private:
     class Private;
     Private *d;

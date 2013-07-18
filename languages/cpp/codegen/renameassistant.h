@@ -23,6 +23,7 @@
 #include <language/duchain/identifier.h>
 #include <language/duchain/indexedstring.h>
 #include <language/duchain/declaration.h>
+#include "renameaction.h"
 #include <ktexteditor/view.h>
 
 
@@ -51,7 +52,7 @@ private:
   KDevelop::Identifier m_oldDeclarationName;
   QString m_newDeclarationName;
   KDevelop::PersistentMovingRange::Ptr m_newDeclarationRange;
-  QMap <KDevelop::IndexedString, QList <KDevelop::RangeInRevision > > m_oldDeclarationUses;
+  QVector<RevisionedFileRanges> m_oldDeclarationUses;
   KTextEditor::View *m_view;
   bool m_isUseful : 1;
   bool m_renameFile : 1;

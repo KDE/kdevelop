@@ -67,7 +67,7 @@ protected:
   virtual void createTypeForDeclarator(DeclaratorAST *node);
   virtual void closeTypeForDeclarator(DeclaratorAST *node);
   virtual void createTypeForInitializer(InitializerAST *node);
-  virtual void closeTypeForInitializer(InitializerAST *node);
+  virtual void createTypeForCondition(ConditionAST *node);
   virtual void visitTrailingReturnType(TrailingReturnTypeAST *node);
 
   /// Returns whether a type was opened
@@ -152,7 +152,7 @@ protected:
   // Use PushValue<bool> to manipulate this.
   bool m_inTypedef;
   
-  private:
+private:
 
   //Correctly applies the current modifiers to the given type
   void applyModifiers(AbstractType::Ptr type, uint modifiers);
@@ -160,6 +160,9 @@ protected:
   void openDelayedType(const KDevelop::IndexedTypeIdentifier& identifier, AST* node, DelayedType::Kind kind);
 
   KDevelop::FunctionType* openFunction(DeclaratorAST *node);
+
+  void createIntegralTypeForExpression(ExpressionAST *expression);
+  AbstractType::Ptr prepareTypeForExpression(AbstractType::Ptr type, quint64 modifiers);
 
   int m_currentEnumeratorValue;
   bool m_lastTypeWasInstance;

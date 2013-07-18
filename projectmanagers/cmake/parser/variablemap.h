@@ -37,7 +37,7 @@ class KDEVCMAKECOMMON_EXPORT VariableMap : public QHash<QString, QStringList>
         ///only for very special cases, usually should use insert. bypasses scopes
         iterator insertMulti(const QString& varName, const QStringList& value);
         
-        QStringList value(const QString& varName) const;
+//         QStringList value(const QString& varName) const;
 //         QStringList take(const QString& varName);
 //         int remove(const QString& varName);
         int removeMulti(const QString& varName);

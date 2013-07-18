@@ -12,3 +12,7 @@ Doxyfile
 *.kdevses
 .*kate-swp
 build/
+mem.log.*
+massif.*
+callgrind.*
+perf.data*

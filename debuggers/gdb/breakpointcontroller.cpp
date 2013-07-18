@@ -401,7 +401,12 @@ void BreakpointController::handleBreakpointList(const GDBMI::ResultRecord &r)
             } else if (type == "acc watchpoint") {
                 b = breakpointModel()->addAccessWatchpoint();
             } else {
-                b = breakpointModel()->addCodeBreakpoint();
+                //for multiple breakpoints(constructor/destructor... ) show only the parent breakpoint(1, 1.1, 1.2, ... only 1), because all other can be usefull only in dissasembleWidget.
+                if(mi_b.hasField("number") && !mi_b["number"].literal().contains(".")){
+                    b = breakpointModel()->addCodeBreakpoint();
+                }else{
+                    continue;
+                }
             }
             previousType = type;
         }
@@ -435,7 +440,12 @@ void BreakpointController::update(KDevelop::Breakpoint *breakpoint, const GDBMI:
                 if (rx.indexIn(location) != -1) {
                     breakpoint->setLocation(KUrl(unquoteExpression(rx.cap(1))), rx.cap(2).toInt()-1);
                 } else {
-                    kWarning() << "can't parse location" << location;
+                    //for regular expression breakpoints and not only...
+                    if(b.hasField("fullname") && b.hasField("line")){
+                        breakpoint->setLocation(KUrl(unquoteExpression(b["fullname"].literal())), b["line"].toInt()-1);
+                    }else{
+                        kWarning() << "can't parse location" << location;
+                    }
                 }
             } else {
                 breakpoint->setData(KDevelop::Breakpoint::LocationColumn, unquoteExpression(location));

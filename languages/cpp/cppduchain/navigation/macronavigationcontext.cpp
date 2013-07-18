@@ -147,4 +147,9 @@ QString MacroNavigationContext::html(bool shorten)
   return currentHtml();
 }
 
+QString MacroNavigationContext::body() const
+{
+  return m_body;
+}
+
 }

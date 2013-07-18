@@ -24,6 +24,7 @@
 #define EXECUTEPLASMOIDPLUGIN_H
 
 #include <interfaces/iplugin.h>
+#include <execute/iexecuteplugin.h>
 #include <QtCore/QVariant>
 #include <QtCore/QProcess>
 
@@ -31,13 +32,23 @@ class PlasmoidExecutionConfigType;
 class KUrl;
 class KJob;
 
-class ExecutePlasmoidPlugin : public KDevelop::IPlugin
+class ExecutePlasmoidPlugin : public KDevelop::IPlugin, public IExecutePlugin
 {
     Q_OBJECT
+    Q_INTERFACES( IExecutePlugin )
     public:
         ExecutePlasmoidPlugin(QObject *parent, const QVariantList & = QVariantList() );
         virtual ~ExecutePlasmoidPlugin();
         virtual void unload();
+
+        virtual KUrl executable(KDevelop::ILaunchConfiguration* config, QString& error) const;
+        virtual QStringList arguments(KDevelop::ILaunchConfiguration* config, QString& error) const;
+        virtual KJob* dependecyJob(KDevelop::ILaunchConfiguration* config) const;
+        virtual QString environmentGroup(KDevelop::ILaunchConfiguration* config) const;
+        virtual QString nativeAppConfigTypeId() const;
+        virtual QString terminal(KDevelop::ILaunchConfiguration* config) const;
+        virtual bool useTerminal(KDevelop::ILaunchConfiguration* config) const;
+        virtual KUrl workingDirectory(KDevelop::ILaunchConfiguration* config) const;
 
     private:
         PlasmoidExecutionConfigType* m_configType;

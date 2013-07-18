@@ -20,7 +20,9 @@
 
 #ifndef CHARTOOLS
 #define CHARTOOLS
-#include <QChar>
+
+#include <cctype>
+
 #include "cppparserexport.h"
 
 template<class T>
@@ -30,45 +32,51 @@ class QByteArray;
 typedef QVector<unsigned int> PreprocessedContents;
 
 inline bool isSpace(char c) {
-  return QChar(c).isSpace();
+  return std::isspace(c);
 }
 
 inline bool isLetter(char c) {
-  return QChar(c).isLetter();
+  return std::isalpha(c);
 }
 
 inline bool isLetterOrNumber(char c) {
-  return QChar(c).isLetterOrNumber();
+  return std::isalnum(c);
 }
 
 inline bool isNumber(char c) {
-  return QChar(c).isNumber();
+  return std::isdigit(c);
 }
 
 //Takes an index as delt with during preprocessing, and determines whether it is a fake-index that represents
 //a character. If the 0xffff0000 bits are set, it is a custom character.
-#define isCharacter(index) ((index & 0xffff0000) == 0xffff0000)
+inline bool isCharacter(uint index) {
+  return (index & 0xffff0000) == 0xffff0000;
+}
 
 //Creates an index that represents the given character
-#define indexFromCharacter(character) ((unsigned int)character | 0xffff0000)
+inline uint indexFromCharacter(char character) {
+  return (uint)character | 0xffff0000;
+}
 
 //Extracts the character that is represented by the index
-#define characterFromIndex(index) ((char)(index & 0xffff))
+inline char characterFromIndex(uint index) {
+  return (char)(index & 0xffff);
+}
 
 inline bool isSpace(unsigned int c) {
-  return isCharacter(c) && QChar(characterFromIndex(c)).isSpace();
+  return isCharacter(c) && isSpace(characterFromIndex(c));
 }
 
 inline bool isLetter(unsigned int c) {
-  return isCharacter(c) && QChar(characterFromIndex(c)).isLetter();
+  return isCharacter(c) && isLetter(characterFromIndex(c));
 }
 
 inline bool isLetterOrNumber(unsigned int c) {
-  return isCharacter(c) && QChar(characterFromIndex(c)).isLetterOrNumber();
+  return isCharacter(c) && isLetterOrNumber(characterFromIndex(c));
 }
 
 inline bool isNumber(unsigned int c) {
-  return isCharacter(c) && QChar(characterFromIndex(c)).isNumber();
+  return isCharacter(c) && isNumber(characterFromIndex(c));
 }
 
 ///Opposite of convertFromByteArray

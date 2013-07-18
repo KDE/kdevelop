@@ -119,7 +119,9 @@ QString GdbConfigPage::title() const
 }
 
 
-GdbLauncher::GdbLauncher( GDBDebugger::CppDebuggerPlugin* p ) : m_plugin( p )
+GdbLauncher::GdbLauncher( GDBDebugger::CppDebuggerPlugin* p, IExecutePlugin* execute )
+    : m_plugin( p )
+    , m_execute( execute )
 {
     factoryList << new GdbConfigPageFactory();
 }
@@ -148,15 +150,15 @@ KJob* GdbLauncher::start(const QString& launchMode, KDevelop::ILaunchConfigurati
     }
     if( launchMode == "debug" )
     {
-        IExecutePlugin* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IExecutePlugin")->extension<IExecutePlugin>();
-        Q_ASSERT(iface);
         QList<KJob*> l;
-        KJob* depjob = iface->dependecyJob(cfg);
+        Q_ASSERT(m_execute);
+        QString err;
+        KJob* depjob = m_execute->dependecyJob(cfg);
         if( depjob ) 
         {
             l << depjob;
         }
-        l << new GDBDebugger::DebugJob( m_plugin, cfg );
+        l << new GDBDebugger::DebugJob( m_plugin, cfg, m_execute );
         return new KDevelop::ExecuteCompositeJob( KDevelop::ICore::self()->runController(), l );
     }
     kWarning() << "Unknown launch mode" << launchMode << "for config:" << cfg->name();
