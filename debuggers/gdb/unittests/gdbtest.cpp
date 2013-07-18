@@ -1585,21 +1585,24 @@ void GdbTest::testCatchpoint()
 
 }
 
+//TODO: figure out why do we need this test? And do we need it at all??
 void GdbTest::testThreadAndFrameInfo()
 {
     TestDebugSession *session = new TestDebugSession;
     TestLaunchConfiguration cfg(findExecutable("debugeethreads"));
     QString fileName = findSourceFile("debugeethreads.cpp");
-    QSignalSpy outputSpy(session, SIGNAL(gdbUserCommandStdout(QString)));
 
     breakpoints()->addCodeBreakpoint(fileName, 38);
     QVERIFY(session->startProgram(&cfg, m_iface));
-    session->frameStackModel()->fetchThreads();
-    session->addCommand(new UserCommand(GDBMI::StackListLocals, QLatin1String("0")));
-    WAIT_FOR_STATE(session, DebugSession::PausedState);
     QTest::qWait(1000);
 
-    QVERIFY(outputSpy.count() == 2);
+    QSignalSpy outputSpy(session, SIGNAL(gdbUserCommandStdout(QString)));
+
+    session->addCommand(
+                new UserCommand(GDBMI::ThreadInfo,""));
+    session->addCommand(new UserCommand(GDBMI::StackListLocals, QLatin1String("0")));
+    QTest::qWait(1000);
+    QCOMPARE(outputSpy.count(), 2);
     QVERIFY(outputSpy.last().at(0).toString().contains(QLatin1String("--thread 1")));
 
     session->run();
