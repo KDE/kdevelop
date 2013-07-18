@@ -301,13 +301,15 @@ void TestPath::testPath_data()
 {
     QTest::addColumn<QString>("input");
 
+    QTest::ignoreMessage(QtWarningMsg, "Path::init: invalid/unsupported Path encountered: \"\"");
+    QTest::ignoreMessage(QtWarningMsg, "Path::init: invalid/unsupported Path encountered: \"\"");
+    QTest::ignoreMessage(QtWarningMsg, "Path::init: invalid/unsupported Path encountered: \"\"");
     QTest::newRow("invalid") << "";
     QTest::newRow("path") << "/tmp/foo/asdf.txt";
     QTest::newRow("path-folder") << "/tmp/foo/asdf/";
     QTest::newRow("root") << "/";
     QTest::newRow("clean-path") << "/tmp/..///asdf/";
-    QTest::newRow("remote-nopath") << "http://www.test.com";
-    QTest::newRow("remote-nopath-slash") << "http://www.test.com/";
+    QTest::newRow("remote-root") << "http://www.test.com/";
     QTest::newRow("http") << "http://www.test.com/tmp/asdf.txt";
     QTest::newRow("file") << "file:///tmp/foo/asdf.txt";
     QTest::newRow("file-folder") << "file:///tmp/foo/bar/";
@@ -326,12 +328,27 @@ void TestPath::testPathInvalid()
 void TestPath::testPathInvalid_data()
 {
     QTest::addColumn<QString>("input");
+
+    QTest::ignoreMessage(QtWarningMsg, "Path::init: invalid/unsupported Path encountered: \"\"");
     QTest::newRow("empty") << "";
+
+    QTest::ignoreMessage(QtWarningMsg, "Path::init: invalid/unsupported Path encountered: \"http://test.com/#hello\"");
     QTest::newRow("fragment") << "http://test.com/#hello";
+
+    QTest::ignoreMessage(QtWarningMsg, "Path::init: invalid/unsupported Path encountered: \"http://test.com/?hello\"");
     QTest::newRow("query") << "http://test.com/?hello";
+
+    QTest::ignoreMessage(QtWarningMsg, "Path::init: invalid/unsupported Path encountered: \"file:///home/weis/kde.tgz#gzip:/%23tar:/kdebase\"");
     QTest::newRow("suburl") << "file:///home/weis/kde.tgz#gzip:/#tar:/kdebase";
+
+    QTest::ignoreMessage(QtWarningMsg, "Path::init: invalid/unsupported Path encountered: \"../foo/bar\"");
     QTest::newRow("relative") << "../foo/bar";
+
+    QTest::ignoreMessage(QtWarningMsg, "Path::init: invalid/unsupported Path encountered: \"asdfasdf\"");
     QTest::newRow("name") << "asdfasdf";
+
+    QTest::ignoreMessage(QtWarningMsg, "Path::init: invalid/unsupported Path encountered: \"http://www.test.com\"");
+    QTest::newRow("remote-nopath") << "http://www.test.com";
 }
 
 void TestPath::testPathOperators()

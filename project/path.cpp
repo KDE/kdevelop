@@ -52,10 +52,9 @@ void Path::init(KUrl url)
     // - sub urls
     // - query
     // nor do we support relative urls
-    if (!url.isValid() || url.hasFragment() || url.hasQuery() || url.hasSubUrl() || url.isRelative())
-    {
+    if (!url.isValid() || url.hasFragment() || url.hasQuery() || url.hasSubUrl() || url.isRelative() || !url.hasPath()) {
         // invalid
-        qWarning() << "Path::init: invalid/unsupported Path encountered:" << url;
+        qWarning("Path::init: invalid/unsupported Path encountered: \"%s\"", qPrintable(url.pathOrUrl()));
         return;
     }
 
