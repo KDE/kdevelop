@@ -22,13 +22,15 @@
 #include <language/duchain/navigation/abstractnavigationcontext.h>
 #include "../../parser/rpp/pp-macro.h"
 
+#include "../cppduchainexport.h"
+
 namespace KTextEditor {
 class View;
 }
 
 namespace Cpp {
 
-class MacroNavigationContext : public KDevelop::AbstractNavigationContext
+class KDEVCPPDUCHAIN_EXPORT MacroNavigationContext : public KDevelop::AbstractNavigationContext
 {
 public:
   MacroNavigationContext(const rpp::pp_macro& macro, QString preprocessedBody);

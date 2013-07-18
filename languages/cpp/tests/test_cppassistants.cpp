@@ -386,7 +386,7 @@ void TestCppAssistants::testMacroExpansion()
   QVERIFY(macroWidget);
   Cpp::NavigationWidget *macroNavigationWidget = dynamic_cast<Cpp::NavigationWidget*>(macroWidget);
   QVERIFY(macroNavigationWidget);
-  Cpp::MacroNavigationContext *macroContext = static_cast<Cpp::MacroNavigationContext*>(macroNavigationWidget->context().data());
+  Cpp::MacroNavigationContext *macroContext = dynamic_cast<Cpp::MacroNavigationContext*>(macroNavigationWidget->context().data());
   QVERIFY(macroContext);
 
   QCOMPARE(macroContext->body(),expected);
