@@ -14,6 +14,7 @@ if (GIT_FOUND)
         ../gitplugin.cpp
         ../gitclonejob.cpp
         ../stashmanagerdialog.cpp
+        ../stashpatchsource.cpp
         ../gitjob.cpp
         ../gitmessagehighlighter.cpp
     )

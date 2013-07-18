@@ -9,6 +9,7 @@ add_subdirectory(icons)
 
 set(kdevgit_PART_SRCS
     stashmanagerdialog.cpp
+    stashpatchsource.cpp
     gitmessagehighlighter.cpp
     gitclonejob.cpp
     gitplugin.cpp

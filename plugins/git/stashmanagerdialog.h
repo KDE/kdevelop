@@ -38,6 +38,7 @@ class StashManagerDialog : public KDialog
         virtual ~StashManagerDialog();
         
     public slots:
+        void showStash();
         void applyClicked();
         void branchClicked();
         void popClicked();

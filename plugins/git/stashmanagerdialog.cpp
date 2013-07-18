@@ -21,11 +21,14 @@
 #include "stashmanagerdialog.h"
 #include "ui_stashmanagerdialog.h"
 #include "gitplugin.h"
+#include "stashpatchsource.h"
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
+#include <interfaces/iplugincontroller.h>
 #include <KMessageBox>
 #include <QInputDialog>
 #include <vcs/dvcs/dvcsjob.h>
+#include <shell/core.h>
 
 StashManagerDialog::StashManagerDialog(const QDir& stashed, GitPlugin* plugin, QWidget* parent)
     : KDialog(parent), m_plugin(plugin), m_dir(stashed)
@@ -40,6 +43,7 @@ StashManagerDialog::StashManagerDialog(const QDir& stashed, GitPlugin* plugin, Q
     StashModel* m = new StashModel(stashed, plugin, this);
     m_ui->stashView->setModel(m);
     
+    connect(m_ui->show,   SIGNAL(clicked(bool)), SLOT(showStash()));
     connect(m_ui->apply,  SIGNAL(clicked(bool)), SLOT(applyClicked()));
     connect(m_ui->branch, SIGNAL(clicked(bool)), SLOT(branchClicked()));
     connect(m_ui->pop,    SIGNAL(clicked(bool)), SLOT(popClicked()));
@@ -77,6 +81,15 @@ void StashManagerDialog::runStash(const QStringList& arguments)
     mainWidget()->setEnabled(false);
     
     KDevelop::ICore::self()->runController()->registerJob(job);
+}
+
+void StashManagerDialog::showStash()
+{
+    KDevelop::IPatchReview * review = KDevelop::ICore::self()->pluginController()->extensionForPlugin<KDevelop::IPatchReview>();
+    KDevelop::IPatchSource::Ptr stashPatch(new StashPatchSource(selection(), m_plugin, m_dir));
+
+    review->startReview(stashPatch);
+    accept();
 }
 
 void StashManagerDialog::applyClicked()
