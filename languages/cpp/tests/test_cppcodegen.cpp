@@ -57,7 +57,7 @@
 
 #include "codegen/simplerefactoring.h"
 
-QTEST_KDEMAIN(TestCppCodegen, GUI )
+QTEST_KDEMAIN(TestCppCodegen, NoGUI )
 
 using namespace KDevelop;
 
