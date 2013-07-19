@@ -19,13 +19,7 @@
 #ifndef CPPUTILS_H
 #define CPPUTILS_H
 
-#include <QStringList>
 #include "environmentmanager.h"
-
-class QString;
-
-extern QStringList headerExtensions;
-extern QStringList sourceExtensions;
 
 namespace KDevelop
 {
@@ -77,6 +71,11 @@ KUrl::List findIncludePaths(const KUrl& source, QList<KDevelop::ProblemPointer>*
   * @param prependAddedPathToName If this is true, @p addPath is prepended to each of the returned items paths
   * */
 QList<KDevelop::IncludeItem> allFilesInIncludePath(const KUrl& source, bool local, const QString& addPath, KUrl::List addIncludePaths = KUrl::List(), bool onlyAddedIncludePaths = false, bool prependAddedPathToName = false, bool allowSourceFiles = false );
+
+/// @return List of possible header extensions used for definition/declaration fallback switching
+QStringList headerExtensions();
+/// @return List of possible source extensions used for definition/declaration fallback switching
+QStringList sourceExtensions();
 
 struct ReplaceCurrentAccess : public QObject
 {

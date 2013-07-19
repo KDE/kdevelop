@@ -41,10 +41,6 @@
 
 #include <QDirIterator>
 
-//List of possible headers used for definition/declaration fallback switching
-QStringList headerExtensions(QString("h,H,hh,hxx,hpp,tlh,h++").split(','));
-QStringList sourceExtensions(QString("c,cc,cpp,c++,cxx,C,m,mm,M,inl,_impl.h").split(','));
-
 template<class T>
 QList<T> makeListUnique(QList<T> list)
 {
@@ -122,20 +118,20 @@ KUrl sourceOrHeaderCandidate( const KUrl &url, bool fast )
     possibleExts << "h";
   }
   // if file is a header file search for implementation file
-  else if ( headerExtensions.contains( ext ) )
+  else if ( headerExtensions().contains( ext ) )
   {
-    foreach(const QString& ext, sourceExtensions)
+    foreach(const QString& ext, sourceExtensions())
       candidates << ( base + addDot(ext) );
 
-    possibleExts = sourceExtensions;
+    possibleExts = sourceExtensions();
   }
   // if file is an implementation file, search for header file
-  else if ( sourceExtensions.contains( ext ) )
+  else if ( sourceExtensions().contains( ext ) )
   {
-    foreach(const QString& ext, headerExtensions)
+    foreach(const QString& ext, headerExtensions())
       candidates << ( base + addDot(ext) );
 
-    possibleExts = headerExtensions;
+    possibleExts = headerExtensions();
   }
   // search for files from the assembled candidate lists, return the first
   // candidate file that actually exists or QString::null if nothing is found.
@@ -195,7 +191,7 @@ bool isHeader(const KUrl &url) {
   if ( ext.isEmpty() )
     return true;
   
-  return headerExtensions.contains(ext);
+  return headerExtensions().contains(ext);
 }
 
 QStringList standardIncludePaths()
@@ -364,7 +360,7 @@ QList<KDevelop::IncludeItem> allFilesInIncludePath(const KUrl& source, bool loca
             if(item.name.startsWith('.') || item.name.endsWith("~")) //This filters out ".", "..", and hidden files, and backups
               continue;
             QString suffix = dirContent.fileInfo().suffix();
-            if(!dirContent.fileInfo().suffix().isEmpty() && !headerExtensions.contains(suffix) && (!allowSourceFiles || !sourceExtensions.contains(suffix)))
+            if(!dirContent.fileInfo().suffix().isEmpty() && !headerExtensions().contains(suffix) && (!allowSourceFiles || !sourceExtensions().contains(suffix)))
               continue;
             
             QString fullPath = dirContent.fileInfo().canonicalFilePath();
@@ -423,6 +419,18 @@ void ReplaceCurrentAccess::exec(KUrl url, QString old, QString _new)
       }
     }
   }
+}
+
+QStringList headerExtensions()
+{
+  static const QStringList headerExtensions = QString("h,H,hh,hxx,hpp,tlh,h++").split(',');
+  return headerExtensions;
+}
+
+QStringList sourceExtensions()
+{
+  static const QStringList sourceExtensions = QString("c,cc,cpp,c++,cxx,C,m,mm,M,inl,_impl.h").split(',');
+  return sourceExtensions;
 }
 
 }

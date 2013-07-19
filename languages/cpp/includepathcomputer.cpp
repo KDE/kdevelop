@@ -45,7 +45,7 @@ IncludePathComputer::IncludePathComputer(const KUrl& file, QList<KDevelop::Probl
 
 void IncludePathComputer::computeForeground() {
 
-  if(headerExtensions.contains(QFileInfo(m_source.toLocalFile()).suffix())) {
+  if(CppUtils::headerExtensions().contains(QFileInfo(m_source.toLocalFile()).suffix())) {
     //This file is a header. Since a header doesn't represent a target, we just try to get the include-paths for the corresponding source-file, if there is one.
     KUrl newSource = CppUtils::sourceOrHeaderCandidate(m_source, true);
     if(newSource.isValid())
@@ -136,7 +136,7 @@ void IncludePathComputer::computeBackground() {
       QDirIterator it(fileInfo.dir().path());
       while(it.hasNext()) {
         QString file = it.next();
-        foreach(const QString& ext, sourceExtensions) {
+        foreach(const QString& ext, CppUtils::sourceExtensions()) {
           if(file != fileInfo.fileName() && file.endsWith(ext)) {
             DUChainReadLocker lock(DUChain::lock(), 300);
             if(lock.locked()) {

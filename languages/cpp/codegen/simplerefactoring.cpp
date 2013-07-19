@@ -153,7 +153,7 @@ QString SimpleRefactoring::moveIntoSource(const IndexedDeclaration& iDecl)
 
   KDevelop::IndexedString url = decl->url();
   KUrl targetUrl = decl->url().toUrl();
-  if(headerExtensions.contains(QFileInfo(targetUrl.toLocalFile()).suffix())) {
+  if(CppUtils::headerExtensions().contains(QFileInfo(targetUrl.toLocalFile()).suffix())) {
     targetUrl = CppUtils::sourceOrHeaderCandidate(targetUrl);
   }
   if(!targetUrl.isValid()) {
