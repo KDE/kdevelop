@@ -3474,7 +3474,7 @@ TopDUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dum
 
   PreprocessedContents contents;
 
-  preprocess( url, QString::fromUtf8(unit), included, parent, false, &file, &locationTable, &contents ).toUtf8();
+  preprocess( url, QString::fromUtf8(unit), included, parent, false, &file, &locationTable, &contents );
 
   session->setContents( contents, locationTable );
 
