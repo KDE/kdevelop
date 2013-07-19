@@ -125,7 +125,6 @@ set(cppcodegentest_SRCS
   test_cppcodegen.cpp
 
   ${test_common_SRCS}
-  ../codegen/simplerefactoring.cpp
 )
 
 add_definitions(-DBUILD_TESTS)
