@@ -89,25 +89,21 @@ void CTestFindSuitesTest::testCTestSuite()
 
 void CTestFindSuitesTest::testQtTestSuite()
 {
-    Q_ASSERT(false && "This test for some reason makes my system memory usage grow infinitely");
     IProject* project = loadProject( "unit_tests_kde" );
     QVERIFY2(project, "Project was not opened");
     WAIT_FOR_SUITES(1, 10)
     QList<ITestSuite*> suites = ICore::self()->testController()->testSuitesForProject(project);
     
-    QCOMPARE(suites.size(), 2);
-    ITestSuite* suite = suites.first();
+    QCOMPARE(suites.size(), 1);
+    CTestSuite* suite = static_cast<CTestSuite*>(suites.first());
+    QVERIFY(suite);
     QCOMPARE(suite->cases().size(), 5);
 
     DUChainReadLocker locker(DUChain::lock());
     QVERIFY(suite->declaration().isValid());
 
-    foreach (ITestSuite* suite, suites)
-    {
-        CTestSuite* ctest = (CTestSuite*)(suite);
-        QString exeSubdir = KUrl::relativeUrl(project->folder(), ctest->executable().directory());
-        QCOMPARE(exeSubdir, ctest->name() == "unittestskde-nonstd-location" ? QString("build/bin") : QString("build") );
-    }
+    QString exeSubdir = KUrl::relativeUrl(project->folder(), suite->executable().directory());
+    QCOMPARE(exeSubdir, QString("build") );
 
     foreach (const QString& testCase, suite->cases())
     {
