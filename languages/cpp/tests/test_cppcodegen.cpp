@@ -67,10 +67,10 @@ void TestCppCodegen::initTestCase()
 {
   //Initialize KDevelop components
   AutoTestShell::init();
-  Core::initialize(0, KDevelop::Core::NoUi);
-  
+  TestCore::initialize();
+
   Core::self()->languageController()->backgroundParser()->setDelay(1);
-  
+
   CodeRepresentation::setDiskChangesForbidden(true);
   
   globalTestLock = new ForegroundLock;
@@ -78,7 +78,7 @@ void TestCppCodegen::initTestCase()
 
 void TestCppCodegen::cleanupTestCase()
 {
-  Core::self()->cleanup();
+  TestCore::shutdown();
   delete globalTestLock;
   globalTestLock = 0;
 }
