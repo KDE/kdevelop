@@ -1436,7 +1436,7 @@ changes in these files have nothing to do with the other ones I made to this pro
 <itemizedlist>
 <listitem><para>kdelibs-devel &gt;= 4.3 - http://www.kde.org
 </para></listitem>
-<listitem><para>qt-devel &gt;= 4.5.2 - http://qt.nokia.com
+<listitem><para>qt-devel &gt;= 4.5.2 - http://qt-project.org/
 </para></listitem>
 <listitem><para>boost-devel &gt;= 1.35 - http://www.boost.org
 </para></listitem>
