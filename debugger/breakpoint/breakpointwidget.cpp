@@ -74,7 +74,7 @@ BreakpointWidget::BreakpointWidget(IDebugController *controller, QWidget *parent
 
     table_->setModel(m_debugController->breakpointModel());
 
-    connect(table_, SIGNAL(clicked(QModelIndex)), this, SLOT(slotRowClicked(QModelIndex)));
+    connect(table_, SIGNAL(clicked(QModelIndex)), this, SLOT(slotOpenFile(QModelIndex)));
     connect(table_->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(slotUpdateBreakpointDetail()));
     connect(m_debugController->breakpointModel(), SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(slotUpdateBreakpointDetail()));
     connect(m_debugController->breakpointModel(), SIGNAL(rowsRemoved(QModelIndex,int,int)), SLOT(slotUpdateBreakpointDetail()));
@@ -362,15 +362,17 @@ void BreakpointWidget::breakpointError(KDevelop::Breakpoint* b, const QString& m
     pop->show(p);
 }
 
-void BreakpointWidget::slotRowClicked(const QModelIndex& index)
+void BreakpointWidget::slotOpenFile(const QModelIndex& breakpointIdx)
 {
-    if (index.column() != Breakpoint::LocationColumn)
+    if (breakpointIdx.column() != Breakpoint::LocationColumn){
         return;
-    Breakpoint *bp = m_debugController->breakpointModel()->breakpoint(index.row());
-    if (!bp)
+    }
+    Breakpoint *bp = m_debugController->breakpointModel()->breakpoint(breakpointIdx.row());
+    if (!bp || bp->line() == -1 || bp->url().isEmpty() ){
         return;
-   ICore::self()->documentController()->openDocument(bp->url().pathOrUrl(KUrl::RemoveTrailingSlash), KTextEditor::Cursor(bp->line(), 0));
-   
+    }
+
+   ICore::self()->documentController()->openDocument(bp->url().pathOrUrl(KUrl::RemoveTrailingSlash), KTextEditor::Cursor(bp->line(), IDocumentController::DefaultMode));
 }
 
 void BreakpointWidget::slotDisableAllBreakpoints()
