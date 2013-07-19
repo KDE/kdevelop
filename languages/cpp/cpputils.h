@@ -57,8 +57,6 @@ QPair<KUrl, KUrl> findInclude(const KUrl::List& includePaths, const KUrl& localP
 ///Thread-safe
 bool needsUpdate(const Cpp::EnvironmentFilePointer& file, const KUrl& localPath, const KUrl::List& includePaths );
 
-const KDevelop::ParsingEnvironment * standardEnvironment();
-
 ///Returns the include-path. Each dir has a trailing slash. Search should be iterated forward through the list
 ///@param problems If this is nonzero, eventual problems will be added to the list
 KUrl::List findIncludePaths(const KUrl& source, QList<KDevelop::ProblemPointer>* problems);
