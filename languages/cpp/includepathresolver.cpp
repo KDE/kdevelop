@@ -73,13 +73,30 @@ using namespace std;
 
 
 namespace {
+  ///After how many seconds should we retry?
+  static const int CACHE_FAIL_FOR_SECONDS = 200;
 
-   ///After how many seconds should we retry?
-   static const int CACHE_FAIL_FOR_SECONDS = 200;
+  static const int processTimeoutSeconds = 30;
 
-   static const int processTimeoutSeconds = 30;
+  struct CacheEntry
+  {
+    CacheEntry()
+    : failed(false)
+    { }
+    KDevelop::ModificationRevisionSet modificationTime;
+    QStringList paths;
+    QString errorMessage, longErrorMessage;
+    bool failed;
+    QMap<QString,bool> failedFiles;
+    QDateTime failTime;
+  };
+  typedef QMap<QString, CacheEntry> Cache;
 
+  static Cache s_cache;
+  static QMutex s_cacheMutex;
 }
+
+
 
 namespace CppTools {
   
@@ -251,9 +268,6 @@ namespace CppTools {
 }
 
 using namespace CppTools;
-
-IncludePathResolver::Cache IncludePathResolver::m_cache;
-QMutex IncludePathResolver::m_cacheMutex;
 
 bool CustomIncludePathsSettings::isValid() const {
   return !storagePath.isEmpty();
@@ -476,8 +490,8 @@ KUrl IncludePathResolver::mapToBuild(const KUrl& url) {
 }
 
 void CppTools::IncludePathResolver::clearCache() {
-  QMutexLocker l( &m_cacheMutex );
-  m_cache.clear();
+  QMutexLocker l( &s_cacheMutex );
+    s_cache.clear();
 }
 
 PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& file, const QString& _workingDirectory, int maxStepsUp ) {
@@ -592,9 +606,9 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
   dependency += resultOnFail.includePathDependency;
   Cache::iterator it;
   {
-    QMutexLocker l( &m_cacheMutex );
-    it = m_cache.find( dir.path() );
-    if( it != m_cache.end() ) {
+    QMutexLocker l( &s_cacheMutex );
+    it = s_cache.find( dir.path() );
+    if( it != s_cache.end() ) {
       cachedPaths = (*it).paths;
       if( dependency == (*it).modificationTime ) {
         if( !(*it).failed ) {
@@ -674,9 +688,9 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
       res.paths = cachedPaths; //We failed, maybe there is an old cached result, use that.
 
   {
-    QMutexLocker l( &m_cacheMutex );
-    if( it == m_cache.end() )
-      it = m_cache.insert( dir.path(), CacheEntry() );
+    QMutexLocker l( &s_cacheMutex );
+    if( it == s_cache.end() )
+      it = s_cache.insert( dir.path(), CacheEntry() );
 
     CacheEntry& ce(*it);
     ce.paths = res.paths;
