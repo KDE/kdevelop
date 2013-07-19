@@ -69,10 +69,10 @@ private Q_SLOTS:
     void slotPopupMenuAboutToShow();
     
 private:
-    QTableView* table_;
+    QTableView* m_breakpointsView;
     BreakpointDetails* details_;
     QMenu* popup_;
-    bool firstShow_;
+    bool m_firstShow;
     IDebugController *m_debugController;
     QAction* breakpointDisableAll_;
     QAction* breakpointEnableAll_;

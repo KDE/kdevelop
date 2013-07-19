@@ -45,7 +45,7 @@
 using namespace KDevelop;
 
 BreakpointWidget::BreakpointWidget(IDebugController *controller, QWidget *parent)
-: QWidget(parent), firstShow_(true), m_debugController(controller),
+: QWidget(parent), m_firstShow(true), m_debugController(controller),
   breakpointDisableAll_(0), breakpointEnableAll_(0), breakpointRemoveAll_(0)
 {
     setWindowTitle(i18nc("@title:window", "Debugger Breakpoints"));
@@ -61,21 +61,21 @@ BreakpointWidget::BreakpointWidget(IDebugController *controller, QWidget *parent
     QSplitter *s = new QSplitter(this);
     layout->addWidget(s);
 
-    table_ = new QTableView(s);
-    table_->setSelectionBehavior(QAbstractItemView::SelectRows);
-    table_->setSelectionMode(QAbstractItemView::SingleSelection);
-    table_->horizontalHeader()->setHighlightSections(false);
-    table_->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft);
+    m_breakpointsView = new QTableView(s);
+    m_breakpointsView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    m_breakpointsView->setSelectionMode(QAbstractItemView::SingleSelection);
+    m_breakpointsView->horizontalHeader()->setHighlightSections(false);
+    m_breakpointsView->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft);
     details_ = new BreakpointDetails(s);
 
     s->setStretchFactor(0, 2);
 
-    table_->verticalHeader()->hide();
+    m_breakpointsView->verticalHeader()->hide();
 
-    table_->setModel(m_debugController->breakpointModel());
+    m_breakpointsView->setModel(m_debugController->breakpointModel());
 
-    connect(table_, SIGNAL(clicked(QModelIndex)), this, SLOT(slotOpenFile(QModelIndex)));
-    connect(table_->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(slotUpdateBreakpointDetail()));
+    connect(m_breakpointsView, SIGNAL(clicked(QModelIndex)), this, SLOT(slotOpenFile(QModelIndex)));
+    connect(m_breakpointsView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(slotUpdateBreakpointDetail()));
     connect(m_debugController->breakpointModel(), SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(slotUpdateBreakpointDetail()));
     connect(m_debugController->breakpointModel(), SIGNAL(rowsRemoved(QModelIndex,int,int)), SLOT(slotUpdateBreakpointDetail()));
     connect(m_debugController->breakpointModel(), SIGNAL(modelReset()), SLOT(slotUpdateBreakpointDetail()));
@@ -251,33 +251,30 @@ void slotContextMenuSelect( QAction* action )
 #endif
 
 
-void BreakpointWidget::showEvent(QShowEvent * event)
+void BreakpointWidget::showEvent(QShowEvent *)
 {
-    Q_UNUSED(event);
-    if (firstShow_)
-    {
-        /* FIXME: iterate over all possible names. */
-        int id_width = QFontMetrics(font()).width("MMWrite");
-        QHeaderView* header = table_->horizontalHeader();
-        int width = header->width();
+    if (m_firstShow) {
+        QHeaderView* header = m_breakpointsView->horizontalHeader();
 
-        header->resizeSection(0, 32);
-        width -= 32;
-        header->resizeSection(1, 32);
-        width -= 32;
-        header->resizeSection(2, id_width);
-        width -= id_width;
-        header->resizeSection(3, width/2);
-        header->resizeSection(4, width/2);
-        firstShow_ = false;
+        for (int i = 0; i < m_breakpointsView->model()->columnCount(); ++i) {
+            if(i == Breakpoint::LocationColumn){
+                continue;
+            }
+            m_breakpointsView->resizeColumnToContents(i);
+        }
+        //for some reasons sometimes width can be very small about 200... But it doesn't matter as we use tooltip anyway.
+        int width = m_breakpointsView->size().width();
+
+        header->resizeSection(Breakpoint::LocationColumn, width > 400 ? width/2 : header->sectionSize(Breakpoint::LocationColumn)*2 );
+        m_firstShow = false;
     }
 }
 
 void BreakpointWidget::edit(KDevelop::Breakpoint *n)
 {
     QModelIndex index = m_debugController->breakpointModel()->breakpointIndex(n, Breakpoint::LocationColumn);
-    table_->setCurrentIndex(index);
-    table_->edit(index);
+    m_breakpointsView->setCurrentIndex(index);
+    m_breakpointsView->edit(index);
 }
 
 
@@ -305,7 +302,7 @@ void KDevelop::BreakpointWidget::slotAddBlankAccessWatchpoint()
 
 void BreakpointWidget::slotRemoveBreakpoint()
 {
-    QItemSelectionModel* sel = table_->selectionModel();
+    QItemSelectionModel* sel = m_breakpointsView->selectionModel();
     QModelIndexList selected = sel->selectedIndexes();
     IF_DEBUG( kDebug() << selected; )
     if (!selected.isEmpty()) {
@@ -321,7 +318,7 @@ void BreakpointWidget::slotRemoveAllBreakpoints()
 
 void BreakpointWidget::slotUpdateBreakpointDetail()
 {
-    QModelIndexList selected = table_->selectionModel()->selectedIndexes();
+    QModelIndexList selected = m_breakpointsView->selectionModel()->selectedIndexes();
     IF_DEBUG( kDebug() << selected; )
     if (selected.isEmpty()) {
         details_->setItem(0);
@@ -334,7 +331,7 @@ void BreakpointWidget::breakpointHit(KDevelop::Breakpoint* b)
 {
     IF_DEBUG( kDebug() << b; )
     QModelIndex index = m_debugController->breakpointModel()->breakpointIndex(b, 0);
-    table_->selectionModel()->select(
+    m_breakpointsView->selectionModel()->select(
         index,
         QItemSelectionModel::Rows
         | QItemSelectionModel::ClearAndSelect);
@@ -346,14 +343,14 @@ void BreakpointWidget::breakpointError(KDevelop::Breakpoint* b, const QString& m
 
     // FIXME: we probably should prevent this error notification during
     // initial setting of breakpoint, to avoid a cloud of popups.
-    if (!table_->isVisible())
+    if (!m_breakpointsView->isVisible())
         return;
 
     QModelIndex index = m_debugController->breakpointModel()->breakpointIndex(b, column);
-    QPoint p = table_->visualRect(index).topLeft();
-    p = table_->mapToGlobal(p);
+    QPoint p = m_breakpointsView->visualRect(index).topLeft();
+    p = m_breakpointsView->mapToGlobal(p);
 
-    KPassivePopup *pop = new KPassivePopup(table_);
+    KPassivePopup *pop = new KPassivePopup(m_breakpointsView);
     pop->setPopupStyle(KPassivePopup::Boxed);
     pop->setAutoDelete(true);
     // FIXME: the icon, too.

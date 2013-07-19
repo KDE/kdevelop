@@ -166,6 +166,10 @@ QVariant Breakpoint::data(int column, int role) const
         return QVariant();
     }
 
+    if (role == Qt::ToolTipRole && column == LocationColumn && kind_ == CodeBreakpoint && m_line != -1) {
+        return QString(m_url.pathOrUrl(KUrl::RemoveTrailingSlash) + ':' + QString::number(m_line+1));
+    }
+
     if (column == LocationColumn && (role == Qt::DisplayRole || role == Qt::EditRole)) {
         QString ret;
         if (kind_ == CodeBreakpoint && m_line != -1) {
