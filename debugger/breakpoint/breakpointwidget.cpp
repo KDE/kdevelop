@@ -118,16 +118,6 @@ void BreakpointWidget::setupPopupMenu()
         i18nc("Data access breakpoint", "Data &access"),
         this, SLOT(slotAddBlankAccessWatchpoint()));
 
-    #if 0
-    m_breakpointShow = m_ctxMenu->addAction( i18n( "Show text" ) );
-
-
-    m_breakpointEdit = m_ctxMenu->addAction( i18n( "Edit" ) );
-    m_breakpointEdit->setShortcut(Qt::Key_Enter);
-
-    m_breakpointDisable = m_ctxMenu->addAction( i18n( "Disable" ) );
-    #endif
-
     QAction* breakpointDelete = popup_->addAction(
         KIcon("edit-delete"),
         i18n( "&Delete" ),
@@ -144,54 +134,11 @@ void BreakpointWidget::setupPopupMenu()
     breakpointRemoveAll_ = popup_->addAction(i18n("&Remove all"), this, SLOT(slotRemoveAllBreakpoints()));
 
     connect(popup_,SIGNAL(aboutToShow()), this, SLOT(slotPopupMenuAboutToShow()));
-
-#if 0
-    connect( m_ctxMenu,     SIGNAL(triggered(QAction*)),
-        this,          SLOT(slotContextMenuSelect(QAction*)) );
-#endif
 }
 
 
 void BreakpointWidget::contextMenuEvent(QContextMenuEvent* event)
 {
-#if 0
-    Breakpoint *bp = breakpoints()->breakpointForIndex(indexAt(event->pos()));
-
-    if (!bp)
-    {
-        bp = breakpoints()->breakpointForIndex(currentIndex());
-    }
-
-    if (bp)
-    {
-        m_breakpointShow->setEnabled(bp->hasFileAndLine());
-
-        if (bp->isEnabled( ))
-        {
-            m_breakpointDisable->setText( i18n("Disable") );
-        }
-        else
-        {
-            m_breakpointDisable->setText( i18n("Enable") );
-        }
-    }
-    else
-    {
-        m_breakpointShow->setEnabled(false);
-    }
-
-    m_breakpointDisable->setEnabled(bp);
-    m_breakpointDelete->setEnabled(bp);
-    m_breakpointEdit->setEnabled(bp);
-
-    bool has_bps = !breakpoints()->breakpoints().isEmpty();
-    m_breakpointDisableAll->setEnabled(has_bps);
-    m_breakpointEnableAll->setEnabled(has_bps);
-    m_breakpointDelete->setEnabled(has_bps);
-
-    m_ctxMenuBreakpoint = bp;
-    m_ctxMenu->popup( event->globalPos() );
-#endif
     popup_->popup(event->globalPos());
 }
 
@@ -217,39 +164,6 @@ void BreakpointWidget::slotPopupMenuAboutToShow()
     }
        
 }
-
-
-#if 0
-void slotContextMenuSelect( QAction* action )
-{
-    #if 0
-    int                  col;
-    Breakpoint          *bp = m_ctxMenuBreakpoint;
-
-    if ( action == m_breakpointShow ) {
-        if (FilePosBreakpoint* fbp = dynamic_cast<FilePosBreakpoint*>(bp))
-            emit gotoSourcePosition(fbp->fileName(), fbp->lineNum()-1);
-
-    } else if ( action == m_breakpointEdit ) {
-        col = currentIndex().column();
-        if (col == BreakpointController::Location || col ==  BreakpointController::Condition || col == BreakpointController::IgnoreCount)
-            openPersistentEditor(model()->index(currentIndex().row(), col, QModelIndex()));
-
-    } else if ( action == m_breakpointDisable ) {
-        bp->setEnabled( !bp->isEnabled( ) );
-        bp->sendToGdb();
-
-    } else if ( action == m_breakpointDisableAll || action == m_breakpointEnableAll ) {
-        foreach (Breakpoint* breakpoint, breakpoints()->breakpoints())
-        {
-            breakpoint->setEnabled(action == m_breakpointEnableAll);
-            breakpoint->sendToGdb();
-        }
-    }
-    #endif
-}
-#endif
-
 
 void BreakpointWidget::showEvent(QShowEvent *)
 {
