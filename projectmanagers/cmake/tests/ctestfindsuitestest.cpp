@@ -48,8 +48,7 @@ void CTestFindSuitesTest::initTestCase()
 {
     AutoTestShell::init();
     TestCore::initialize();
-    DUChain::self()->disablePersistentStorage();
-    
+
     cleanup();
 }
 
