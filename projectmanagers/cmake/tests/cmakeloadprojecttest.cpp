@@ -32,21 +32,22 @@
 #include "cmakeast.h"
 #include <cmakeparserutils.h>
 #include <tests/autotestshell.h>
+#include <tests/testcore.h>
 #include <cmakeprojectdata.h>
 
 QTEST_MAIN( CMakeLoadProjectTest )
 
 using namespace KDevelop;
 
-CMakeLoadProjectTest::CMakeLoadProjectTest()
+void CMakeLoadProjectTest::initTestCase()
 {
     AutoTestShell::init();
-    KDevelop::Core::initialize(0, KDevelop::Core::NoUi);
+    TestCore::initialize(Core::NoUi);
 }
 
-CMakeLoadProjectTest::~CMakeLoadProjectTest()
+void CMakeLoadProjectTest::cleanupTestCase()
 {
-    KDevelop::Core::self()->shutdown();
+    TestCore::shutdown();
 }
 
 void CMakeLoadProjectTest::testTinyCMakeProject()

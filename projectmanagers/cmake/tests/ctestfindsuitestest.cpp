@@ -63,7 +63,7 @@ void CTestFindSuitesTest::cleanup()
 
 void CTestFindSuitesTest::cleanupTestCase()
 {
-    Core::self()->shutdown();
+    TestCore::shutdown();
 }
 
 void CTestFindSuitesTest::testCTestSuite()

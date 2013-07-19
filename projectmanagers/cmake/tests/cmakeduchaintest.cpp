@@ -30,6 +30,7 @@
 #include <language/duchain/use.h>
 #include <language/duchain/indexedstring.h>
 #include <tests/autotestshell.h>
+#include <tests/testcore.h>
 #include <language/duchain/parsingenvironment.h>
 
 using namespace KDevelop;
@@ -39,13 +40,16 @@ QTEST_MAIN( CMakeDUChainTest )
 Q_DECLARE_METATYPE(QList<RangeInRevision>)
 Q_DECLARE_METATYPE(QSet<RangeInRevision>)
 
-CMakeDUChainTest::CMakeDUChainTest() {
+void CMakeDUChainTest::initTestCase()
+{
     AutoTestShell::init();
-    KDevelop::Core::initialize(0, KDevelop::Core::NoUi);
+    TestCore::initialize(Core::NoUi);
 }
 
-CMakeDUChainTest::~CMakeDUChainTest()
-{}
+void CMakeDUChainTest::cleanupTestCase()
+{
+    TestCore::shutdown();
+}
 
 void CMakeDUChainTest::testDUChainWalk_data()
 {

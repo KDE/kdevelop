@@ -95,8 +95,7 @@ TestCppCodeCompletion::TestCppCodeCompletion()
 void TestCppCodeCompletion::initTestCase()
 {
   KDevelop::AutoTestShell::init();
-  TestCore* core = new KDevelop::TestCore();
-  core->initialize(KDevelop::Core::NoUi);
+  TestCore::initialize(Core::NoUi);
   Cpp::EnvironmentManager::init();
 
   DUChain::self()->disablePersistentStorage();
@@ -109,6 +108,7 @@ void TestCppCodeCompletion::initTestCase()
 
 void TestCppCodeCompletion::cleanupTestCase()
 {
+  TestCore::shutdown();
 }
 
 Declaration* TestCppCodeCompletion::findDeclaration(DUContext* context, const Identifier& id, const CursorInRevision& position)
