@@ -2,6 +2,7 @@
  * This file is part of KDevelop
  *
  * Copyright 2008 Vladimir Prus <ghost@cs.msu.su>
+ * Copyright 2013 Vlas Puhov <vlas.puhov@mail.ru>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -27,6 +28,7 @@
 #include <QHeaderView>
 #include <QMenu>
 #include <QContextMenuEvent>
+#include <QStyledItemDelegate>
 
 #include <KIcon>
 #include <KLocalizedString>
@@ -43,6 +45,11 @@
 #include <interfaces/idocumentcontroller.h>
 
 using namespace KDevelop;
+
+QString BreakpointDelegate::displayText ( const QVariant& value, const QLocale& ) const{
+    int i = value.toString().lastIndexOf('/');
+    return ( i == -1 ) ? value.toString() : "..." + value.toString().right(value.toString().size() - i);
+}
 
 BreakpointWidget::BreakpointWidget(IDebugController *controller, QWidget *parent)
 : QWidget(parent), m_firstShow(true), m_debugController(controller),
@@ -73,6 +80,8 @@ BreakpointWidget::BreakpointWidget(IDebugController *controller, QWidget *parent
     m_breakpointsView->verticalHeader()->hide();
 
     m_breakpointsView->setModel(m_debugController->breakpointModel());
+
+    m_breakpointsView->setItemDelegateForColumn(Breakpoint::LocationColumn, new BreakpointDelegate(this));
 
     connect(m_breakpointsView, SIGNAL(clicked(QModelIndex)), this, SLOT(slotOpenFile(QModelIndex)));
     connect(m_breakpointsView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(slotUpdateBreakpointDetail()));

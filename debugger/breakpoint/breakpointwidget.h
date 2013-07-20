@@ -2,6 +2,7 @@
  * This file is part of KDevelop
  *
  * Copyright 2008 Vladimir Prus <ghost@cs.msu.su>
+ * Copyright 2013 Vlas Puhov <vlas.puhov@mail.ru>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -23,12 +24,20 @@
 #define KDEVPLATFORM_BREAKPOINTWIDGET_H
 
 #include <QtGui/QWidget>
+#include <QStyledItemDelegate>
 #include "../debuggerexport.h"
 
 class QModelIndex;
 class QItemSelection;
 class QTableView;
 class QMenu;
+
+class BreakpointDelegate : public QStyledItemDelegate
+{
+public:
+    BreakpointDelegate(QWidget * parent) : QStyledItemDelegate(parent){}
+    virtual QString displayText ( const QVariant& value, const QLocale& ) const;
+};
 
 namespace KDevelop {
 class IDebugController;
@@ -51,9 +60,6 @@ private:
     void edit(KDevelop::Breakpoint *n);
 
 private Q_SLOTS:
-#if 0
-    void slotContextMenuSelect( QAction* action );
-#endif
     void slotAddBlankBreakpoint();
     void slotAddBlankWatchpoint();
     void slotAddBlankReadWatchpoint();
