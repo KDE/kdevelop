@@ -84,6 +84,8 @@ BreakpointWidget::BreakpointWidget(IDebugController *controller, QWidget *parent
     m_breakpointsView->setItemDelegateForColumn(Breakpoint::LocationColumn, new BreakpointDelegate(this));
 
     connect(m_breakpointsView, SIGNAL(clicked(QModelIndex)), this, SLOT(slotOpenFile(QModelIndex)));
+    connect(m_breakpointsView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(slotOpenFile(QModelIndex)));
+
     connect(m_breakpointsView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(slotUpdateBreakpointDetail()));
     connect(m_debugController->breakpointModel(), SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(slotUpdateBreakpointDetail()));
     connect(m_debugController->breakpointModel(), SIGNAL(rowsRemoved(QModelIndex,int,int)), SLOT(slotUpdateBreakpointDetail()));
@@ -292,7 +294,7 @@ void BreakpointWidget::slotOpenFile(const QModelIndex& breakpointIdx)
         return;
     }
 
-   ICore::self()->documentController()->openDocument(bp->url().pathOrUrl(KUrl::RemoveTrailingSlash), KTextEditor::Cursor(bp->line(), IDocumentController::DefaultMode));
+   ICore::self()->documentController()->openDocument(bp->url().pathOrUrl(KUrl::RemoveTrailingSlash), KTextEditor::Cursor(bp->line(), 0), IDocumentController::DoNotFocus);
 }
 
 void BreakpointWidget::slotDisableAllBreakpoints()
