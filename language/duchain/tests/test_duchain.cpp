@@ -127,21 +127,21 @@ void TestDUChain::testStringSets() {
       QString dbg = "created set: ";
       for(std::set<Index>::const_iterator it = realSets[a].begin(); it != realSets[a].end(); ++it)
         dbg += QString("%1 ").arg(*it);
-      kDebug() << dbg;
+      qDebug() << dbg;
 
       dbg = "repo.   set: ";
       for(std::set<Index>::const_iterator it = tempSet.begin(); it != tempSet.end(); ++it)
         dbg += QString("%1 ").arg(*it);
-      kDebug() << dbg;
+      qDebug() << dbg;
 
-      kDebug() << "DOT-Graph:\n\n" << sets[a].dumpDotGraph() << "\n\n";
+      qDebug() << "DOT-Graph:\n\n" << sets[a].dumpDotGraph() << "\n\n";
       QFAIL("sets are not the same!");
     }
   }
 
   for(int cycle = 0; cycle < 100; ++cycle) {
       if(cycle % 10 == 0)
-         kDebug() << "cycle" << cycle;
+         qDebug() << "cycle" << cycle;
 
     for(unsigned int a = 0; a < setCount; a++) {
       for(unsigned int b = 0; b < setCount; b++) {
@@ -158,39 +158,39 @@ void TestDUChain::testStringSets() {
         if(_difference.stdSet() != _realDifference)
         {
           {
-            kDebug() << "SET a:";
+            qDebug() << "SET a:";
             QString dbg = "";
             for(std::set<Index>::const_iterator it = realSets[a].begin(); it != realSets[a].end(); ++it)
               dbg += QString("%1 ").arg(*it);
-            kDebug() << dbg;
+            qDebug() << dbg;
 
-            kDebug() << "DOT-Graph:\n\n" << sets[a].dumpDotGraph() << "\n\n";
+            qDebug() << "DOT-Graph:\n\n" << sets[a].dumpDotGraph() << "\n\n";
           }
           {
-            kDebug() << "SET b:";
+            qDebug() << "SET b:";
             QString dbg = "";
             for(std::set<Index>::const_iterator it = realSets[b].begin(); it != realSets[b].end(); ++it)
               dbg += QString("%1 ").arg(*it);
-            kDebug() << dbg;
+            qDebug() << dbg;
 
-            kDebug() << "DOT-Graph:\n\n" << sets[b].dumpDotGraph() << "\n\n";
+            qDebug() << "DOT-Graph:\n\n" << sets[b].dumpDotGraph() << "\n\n";
           }
 
           {
             std::set<Index> tempSet = _difference.stdSet();
 
-            kDebug() << "SET difference:";
+            qDebug() << "SET difference:";
             QString dbg = "real    set: ";
             for(std::set<Index>::const_iterator it = _realDifference.begin(); it != _realDifference.end(); ++it)
               dbg += QString("%1 ").arg(*it);
-            kDebug() << dbg;
+            qDebug() << dbg;
 
             dbg = "repo.   set: ";
             for(std::set<Index>::const_iterator it = tempSet.begin(); it != tempSet.end(); ++it)
               dbg += QString("%1 ").arg(*it);
-            kDebug() << dbg;
+            qDebug() << dbg;
 
-            kDebug() << "DOT-Graph:\n\n" << _difference.dumpDotGraph() << "\n\n";
+            qDebug() << "DOT-Graph:\n\n" << _difference.dumpDotGraph() << "\n\n";
           }
           QFAIL("difference sets are not the same!");
         }
@@ -210,39 +210,39 @@ void TestDUChain::testStringSets() {
         if(_union.stdSet() != _realUnion)
         {
           {
-            kDebug() << "SET a:";
+            qDebug() << "SET a:";
             QString dbg = "";
             for(std::set<Index>::const_iterator it = realSets[a].begin(); it != realSets[a].end(); ++it)
               dbg += QString("%1 ").arg(*it);
-            kDebug() << dbg;
+            qDebug() << dbg;
 
-            kDebug() << "DOT-Graph:\n\n" << sets[a].dumpDotGraph() << "\n\n";
+            qDebug() << "DOT-Graph:\n\n" << sets[a].dumpDotGraph() << "\n\n";
           }
           {
-            kDebug() << "SET b:";
+            qDebug() << "SET b:";
             QString dbg = "";
             for(std::set<Index>::const_iterator it = realSets[b].begin(); it != realSets[b].end(); ++it)
               dbg += QString("%1 ").arg(*it);
-            kDebug() << dbg;
+            qDebug() << dbg;
 
-            kDebug() << "DOT-Graph:\n\n" << sets[b].dumpDotGraph() << "\n\n";
+            qDebug() << "DOT-Graph:\n\n" << sets[b].dumpDotGraph() << "\n\n";
           }
 
           {
             std::set<Index> tempSet = _union.stdSet();
 
-            kDebug() << "SET union:";
+            qDebug() << "SET union:";
             QString dbg = "real    set: ";
             for(std::set<Index>::const_iterator it = _realUnion.begin(); it != _realUnion.end(); ++it)
               dbg += QString("%1 ").arg(*it);
-            kDebug() << dbg;
+            qDebug() << dbg;
 
             dbg = "repo.   set: ";
             for(std::set<Index>::const_iterator it = tempSet.begin(); it != tempSet.end(); ++it)
               dbg += QString("%1 ").arg(*it);
-            kDebug() << dbg;
+            qDebug() << dbg;
 
-            kDebug() << "DOT-Graph:\n\n" << _union.dumpDotGraph() << "\n\n";
+            qDebug() << "DOT-Graph:\n\n" << _union.dumpDotGraph() << "\n\n";
           }
 
           QFAIL("union sets are not the same");
@@ -273,51 +273,54 @@ void TestDUChain::testStringSets() {
         if(_intersection.stdSet() != _realIntersection)
         {
           {
-            kDebug() << "SET a:";
+            qDebug() << "SET a:";
             QString dbg = "";
             for(std::set<Index>::const_iterator it = realSets[a].begin(); it != realSets[a].end(); ++it)
               dbg += QString("%1 ").arg(*it);
-            kDebug() << dbg;
+            qDebug() << dbg;
 
-            kDebug() << "DOT-Graph:\n\n" << sets[a].dumpDotGraph() << "\n\n";
+            qDebug() << "DOT-Graph:\n\n" << sets[a].dumpDotGraph() << "\n\n";
           }
           {
-            kDebug() << "SET b:";
+            qDebug() << "SET b:";
             QString dbg = "";
             for(std::set<Index>::const_iterator it = realSets[b].begin(); it != realSets[b].end(); ++it)
               dbg += QString("%1 ").arg(*it);
-            kDebug() << dbg;
+            qDebug() << dbg;
 
-            kDebug() << "DOT-Graph:\n\n" << sets[b].dumpDotGraph() << "\n\n";
+            qDebug() << "DOT-Graph:\n\n" << sets[b].dumpDotGraph() << "\n\n";
           }
 
           {
             std::set<Index> tempSet = _intersection.stdSet();
 
-            kDebug() << "SET intersection:";
+            qDebug() << "SET intersection:";
             QString dbg = "real    set: ";
             for(std::set<Index>::const_iterator it = _realIntersection.begin(); it != _realIntersection.end(); ++it)
               dbg += QString("%1 ").arg(*it);
-            kDebug() << dbg;
+            qDebug() << dbg;
 
             dbg = "repo.   set: ";
             for(std::set<Index>::const_iterator it = tempSet.begin(); it != tempSet.end(); ++it)
               dbg += QString("%1 ").arg(*it);
-            kDebug() << dbg;
+            qDebug() << dbg;
 
-            kDebug() << "DOT-Graph:\n\n" << _intersection.dumpDotGraph() << "\n\n";
+            qDebug() << "DOT-Graph:\n\n" << _intersection.dumpDotGraph() << "\n\n";
           }
           QFAIL("intersection sets are not the same");
         }
       }
     }
-#ifdef DEBUG_STRINGREPOSITORY
-    kDebug() << "cycle " << cycle;
-  kDebug() << "Clock-cycles needed for set-building: repository-set: " << repositoryClockTime << " generic-set: " << genericClockTime;
-  kDebug() << "Clock-cycles needed for intersection: repository-sets: " << repositoryIntersectionClockTime << " generic-set: " << genericIntersectionClockTime << " QSet: " << qsetIntersectionClockTime;
-  kDebug() << "Clock-cycles needed for union: repository-sets: " << repositoryUnionClockTime << " generic-set: " << genericUnionClockTime;
-  kDebug() << "Clock-cycles needed for difference: repository-sets: " << repositoryDifferenceClockTime << " generic-set: " << genericDifferenceClockTime;
-#endif
+
+    qDebug() << "cycle " << cycle;
+    qDebug() << "Clock-cycles needed for set-building: repository-set: " << repositoryClockTime
+             << " generic-set: " << genericClockTime;
+    qDebug() << "Clock-cycles needed for intersection: repository-sets: " << repositoryIntersectionClockTime
+             << " generic-set: " << genericIntersectionClockTime << " QSet: " << qsetIntersectionClockTime;
+    qDebug() << "Clock-cycles needed for union: repository-sets: " << repositoryUnionClockTime
+             << " generic-set: " << genericUnionClockTime;
+    qDebug() << "Clock-cycles needed for difference: repository-sets: " << repositoryDifferenceClockTime
+             << " generic-set: " << genericDifferenceClockTime;
   }
 }
 
