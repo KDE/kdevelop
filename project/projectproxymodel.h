@@ -26,10 +26,11 @@
 #include <QList>
 #include <QSharedPointer>
 #include <QRegExp>
+#include <QHash>
 
 namespace KDevelop {
-class ProjectModel;
-class ProjectBaseItem;
+    class ProjectModel;
+    class ProjectBaseItem;
 }
 
 class KDEVPLATFORMPROJECT_EXPORT ProjectProxyModel : public QSortFilterProxyModel
@@ -53,6 +54,11 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectProxyModel : public QSortFilterProxyMode
         void recursivelyEmitParentsChanged(const QModelIndex& index);
         QList<QSharedPointer<QRegExp> > mFilenameFilters;
         QList<QSharedPointer<QRegExp> > mFilenameExcludeFilters;
+        mutable QHash<KDevelop::ProjectBaseItem*, bool> mFilterCache;
+
+    private Q_SLOTS:
+        void invalidateCache();
+
 };
 
 #endif
