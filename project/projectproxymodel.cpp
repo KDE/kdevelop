@@ -31,7 +31,7 @@ ProjectProxyModel::ProjectProxyModel(QObject * parent)
     setDynamicSortFilter(true);
     sort(0); //initiate sorting regardless of the view
     connect(this, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
-            this, SLOT(clearCache()));
+            this, SLOT(invalidateCache()));
 }
 
 KDevelop::ProjectModel * ProjectProxyModel::projectModel() const
