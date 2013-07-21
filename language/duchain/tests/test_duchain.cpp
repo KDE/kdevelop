@@ -135,8 +135,8 @@ void TestDUChain::testStringSets() {
       kDebug() << dbg;
 
       kDebug() << "DOT-Graph:\n\n" << sets[a].dumpDotGraph() << "\n\n";
+      QFAIL("sets are not the same!");
     }
-    QVERIFY(tempSet == realSets[a]);
   }
 
   for(int cycle = 0; cycle < 100; ++cycle) {
@@ -192,8 +192,8 @@ void TestDUChain::testStringSets() {
 
             kDebug() << "DOT-Graph:\n\n" << _difference.dumpDotGraph() << "\n\n";
           }
+          QFAIL("difference sets are not the same!");
         }
-        QVERIFY(_difference.stdSet() == _realDifference);
 
 
         /// ------ UNION
@@ -244,8 +244,9 @@ void TestDUChain::testStringSets() {
 
             kDebug() << "DOT-Graph:\n\n" << _union.dumpDotGraph() << "\n\n";
           }
+
+          QFAIL("union sets are not the same");
         }
-        QVERIFY(_union.stdSet() == _realUnion);
 
         std::set<Index> _realIntersection;
 
@@ -306,8 +307,8 @@ void TestDUChain::testStringSets() {
 
             kDebug() << "DOT-Graph:\n\n" << _intersection.dumpDotGraph() << "\n\n";
           }
+          QFAIL("intersection sets are not the same");
         }
-        QVERIFY(_intersection.stdSet() == _realIntersection);
       }
     }
 #ifdef DEBUG_STRINGREPOSITORY
