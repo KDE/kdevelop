@@ -48,9 +48,6 @@
 //Extremely slow
 // #define TEST_NORMAL_IMPORTS
 
-//Uncomment the following line to get additional output from the string-repository test
-//#define DEBUG_STRINGREPOSITORY
-
 QTEST_MAIN(TestDUChain)
 
 using namespace KDevelop;
