@@ -24,6 +24,8 @@
 #include "test_duchain.h"
 
 #include <QTest>
+#include <QElapsedTimer>
+
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 
@@ -38,7 +40,6 @@
 #include <language/util/basicsetrepository.h>
 
 // #include <typeinfo>
-#include <time.h>
 #include <set>
 #include <algorithm>
 #include <iterator> // needed for std::insert_iterator on windows
@@ -56,6 +57,19 @@ using namespace KDevelop;
 using namespace Utils;
 
 typedef BasicSetRepository::Index Index;
+
+struct Timer
+{
+  Timer()
+  {
+    m_timer.start();
+  }
+  qint64 elapsed()
+  {
+    return m_timer.nsecsElapsed();
+  }
+  QElapsedTimer m_timer;
+};
 
 void TestDUChain::initTestCase()
 {
@@ -81,18 +95,18 @@ void TestDUChain::testStringSets() {
 
 //  kDebug() << "Start repository-layout: \n" << rep.dumpDotGraph();
 
-  clock_t repositoryClockTime = 0; //Time spent on repository-operations
-  clock_t genericClockTime = 0; //Time spend on equivalent operations with generic sets
+  qint64 repositoryTime = 0; //Time spent on repository-operations
+  qint64 genericTime = 0; //Time spend on equivalent operations with generic sets
 
-  clock_t repositoryIntersectionClockTime = 0; //Time spent on repository-operations
-  clock_t genericIntersectionClockTime = 0; //Time spend on equivalent operations with generic sets
-  clock_t qsetIntersectionClockTime = 0; //Time spend on equivalent operations with generic sets
+  qint64 repositoryIntersectionTime = 0; //Time spent on repository-operations
+  qint64 genericIntersectionTime = 0; //Time spend on equivalent operations with generic sets
+  qint64 qsetIntersectionTime = 0; //Time spend on equivalent operations with generic sets
 
-  clock_t repositoryUnionClockTime = 0; //Time spent on repository-operations
-  clock_t genericUnionClockTime = 0; //Time spend on equivalent operations with generic sets
+  qint64 repositoryUnionTime = 0; //Time spent on repository-operations
+  qint64 genericUnionTime = 0; //Time spend on equivalent operations with generic sets
 
-  clock_t repositoryDifferenceClockTime = 0; //Time spent on repository-operations
-  clock_t genericDifferenceClockTime = 0; //Time spend on equivalent operations with generic sets
+  qint64 repositoryDifferenceTime = 0; //Time spent on repository-operations
+  qint64 genericDifferenceTime = 0; //Time spend on equivalent operations with generic sets
 
   Set sets[setCount];
   std::set<Index> realSets[setCount];
@@ -110,14 +124,16 @@ void TestDUChain::testStringSets() {
         choose = (rand() % itemCount) + 1;
       }
 
-      clock_t c = clock();
+      Timer t;
       chosenIndices.insert(chosenIndices.end(), choose);
-      genericClockTime += clock() - c;
+      genericTime += t.elapsed();
     }
 
-    clock_t c = clock();
-    sets[a] = rep.createSet(chosenIndices);
-    repositoryClockTime += clock() - c;
+    {
+      Timer t;
+      sets[a] = rep.createSet(chosenIndices);
+      repositoryTime += t.elapsed();
+    }
 
     realSets[a] = chosenIndices;
 
@@ -147,13 +163,18 @@ void TestDUChain::testStringSets() {
       for(unsigned int b = 0; b < setCount; b++) {
         /// ----- SUBTRACTION/DIFFERENCE
         std::set<Index> _realDifference;
-        clock_t c = clock();
-        std::set_difference(realSets[a].begin(), realSets[a].end(), realSets[b].begin(), realSets[b].end(), std::insert_iterator<std::set<Index> >(_realDifference, _realDifference.begin()));
-        genericDifferenceClockTime += clock() - c;
+        {
+          Timer t;
+          std::set_difference(realSets[a].begin(), realSets[a].end(), realSets[b].begin(), realSets[b].end(), std::insert_iterator<std::set<Index> >(_realDifference, _realDifference.begin()));
+          genericDifferenceTime += t.elapsed();
+        }
 
-        c = clock();
-        Set _difference = sets[a] - sets[b];
-        repositoryDifferenceClockTime += clock() - c;
+        Set _difference;
+        {
+          Timer t;
+          _difference = sets[a] - sets[b];
+          repositoryDifferenceTime += t.elapsed();
+        }
 
         if(_difference.stdSet() != _realDifference)
         {
@@ -199,13 +220,18 @@ void TestDUChain::testStringSets() {
         /// ------ UNION
 
         std::set<Index> _realUnion;
-        c = clock();
-        std::set_union(realSets[a].begin(), realSets[a].end(), realSets[b].begin(), realSets[b].end(), std::insert_iterator<std::set<Index> >(_realUnion, _realUnion.begin()));
-        genericUnionClockTime += clock() - c;
+        {
+          Timer t;
+          std::set_union(realSets[a].begin(), realSets[a].end(), realSets[b].begin(), realSets[b].end(), std::insert_iterator<std::set<Index> >(_realUnion, _realUnion.begin()));
+          genericUnionTime += t.elapsed();
+        }
 
-        c = clock();
-        Set _union = sets[a] + sets[b];
-        repositoryUnionClockTime += clock() - c;
+        Set _union;
+        {
+          Timer t;
+          _union = sets[a] + sets[b];
+          repositoryUnionTime += t.elapsed();
+        }
 
         if(_union.stdSet() != _realUnion)
         {
@@ -251,24 +277,32 @@ void TestDUChain::testStringSets() {
         std::set<Index> _realIntersection;
 
         /// -------- INTERSECTION
-        c = clock();
-        std::set_intersection(realSets[a].begin(), realSets[a].end(), realSets[b].begin(), realSets[b].end(), std::insert_iterator<std::set<Index> >(_realIntersection, _realIntersection.begin()));
-        genericIntersectionClockTime += clock() - c;
+        {
+          Timer t;
+          std::set_intersection(realSets[a].begin(), realSets[a].end(), realSets[b].begin(), realSets[b].end(), std::insert_iterator<std::set<Index> >(_realIntersection, _realIntersection.begin()));
+          genericIntersectionTime += t.elapsed();
+        }
 
         //Just for fun: Test how fast QSet intersections are
         QSet<Index> first, second;
-        for(std::set<Index>::const_iterator it = realSets[a].begin(); it != realSets[a].end(); ++it)
+        for(std::set<Index>::const_iterator it = realSets[a].begin(); it != realSets[a].end(); ++it) {
           first.insert(*it);
-        for(std::set<Index>::const_iterator it = realSets[b].begin(); it != realSets[b].end(); ++it)
+        }
+        for(std::set<Index>::const_iterator it = realSets[b].begin(); it != realSets[b].end(); ++it) {
           second.insert(*it);
-        c = clock();
-        QSet<Index> i = first.intersect(second);
-        qsetIntersectionClockTime += clock() - c;
+        }
+        {
+          Timer t;
+          QSet<Index> i = first.intersect(second);
+          qsetIntersectionTime += t.elapsed();
+        }
 
-        c = clock();
-        Set _intersection = sets[a] & sets[b];
-        repositoryIntersectionClockTime += clock() - c;
-
+        Set _intersection;
+        {
+          Timer t;
+          _intersection = sets[a] & sets[b];
+          repositoryIntersectionTime += t.elapsed();
+        }
 
         if(_intersection.stdSet() != _realIntersection)
         {
@@ -313,14 +347,14 @@ void TestDUChain::testStringSets() {
     }
 
     qDebug() << "cycle " << cycle;
-    qDebug() << "Clock-cycles needed for set-building: repository-set: " << repositoryClockTime
-             << " generic-set: " << genericClockTime;
-    qDebug() << "Clock-cycles needed for intersection: repository-sets: " << repositoryIntersectionClockTime
-             << " generic-set: " << genericIntersectionClockTime << " QSet: " << qsetIntersectionClockTime;
-    qDebug() << "Clock-cycles needed for union: repository-sets: " << repositoryUnionClockTime
-             << " generic-set: " << genericUnionClockTime;
-    qDebug() << "Clock-cycles needed for difference: repository-sets: " << repositoryDifferenceClockTime
-             << " generic-set: " << genericDifferenceClockTime;
+    qDebug() << "ns needed for set-building: repository-set: " << float(repositoryTime)
+             << " generic-set: " << float(genericTime);
+    qDebug() << "ns needed for intersection: repository-sets: " << float(repositoryIntersectionTime)
+             << " generic-set: " << float(genericIntersectionTime) << " QSet: " << float(qsetIntersectionTime);
+    qDebug() << "ns needed for union: repository-sets: " << float(repositoryUnionTime)
+             << " generic-set: " << float(genericUnionTime);
+    qDebug() << "ns needed for difference: repository-sets: " << float(repositoryDifferenceTime)
+             << " generic-set: " << float(genericDifferenceTime);
   }
 }
 
