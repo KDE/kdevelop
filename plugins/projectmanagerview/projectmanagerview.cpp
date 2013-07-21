@@ -70,6 +70,7 @@ QWidget* ProjectManagerFilterAction::createWidget( QWidget* parent )
     KLineEdit* edit = new KLineEdit(parent);
     edit->setClickMessage(i18n("Filter..."));
     edit->setClearButtonShown(true);
+    edit->setToolTip(toolTip());
     connect(edit, SIGNAL(textChanged(QString)), this, SIGNAL(filterChanged(QString)));
 
     const QString filterString = m_projectManagerView->filterString();
