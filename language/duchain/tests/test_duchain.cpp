@@ -502,7 +502,7 @@ void TestDUChain::testImportStructure()
   for(int t = 0; t < cycles; ++t) {
     QList<TestContext*> allContexts;
     //Create a random structure
-    int contextCount = 120;
+    int contextCount = 50;
     int verifyOnceIn = contextCount/*((contextCount*contextCount)/20)+1*/; //Verify once in every chances(not in all cases, becase else the import-structure isn't built on-demand!)
     int clearOnceIn = contextCount;
     for(int a = 0; a < contextCount; a++)
