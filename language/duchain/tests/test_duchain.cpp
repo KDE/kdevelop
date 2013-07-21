@@ -73,7 +73,7 @@ void TestDUChain::cleanupTestCase()
 
 void TestDUChain::testStringSets() {
 
-  const unsigned int setCount = 11;
+  const unsigned int setCount = 8;
   const unsigned int choiceCount = 40;
   const unsigned int itemCount = 120;
 
