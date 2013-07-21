@@ -66,9 +66,11 @@ QVariant ProjectProxyModel::data(const QModelIndex& index, int role) const
             }
             break;
         case Qt::DisplayRole:
+            if (!index.isValid()) {
+                break;
+            }
             int modelRowCount = sourceModel()->rowCount(mapToSource(index));
-            if(index.isValid()
-                && modelRowCount > 0
+            if(modelRowCount > 0
                 && (!mFilenameFilters.isEmpty() || !mFilenameExcludeFilters.isEmpty())
             ) {
                 QString text = QSortFilterProxyModel::data(index, role).toString();
