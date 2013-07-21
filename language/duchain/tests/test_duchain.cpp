@@ -549,13 +549,12 @@ void TestDUChain::testImportStructure()
       }
     }
 
-  kDebug() << "after: " << KDevelop::RecursiveImportRepository::repository()->getDataRepository().statistics().print();
+    kDebug() << "after: " << KDevelop::RecursiveImportRepository::repository()->getDataRepository().statistics().print();
 
-  for(int a = 0; a < contextCount; ++a)
-    delete allContexts[a];
-  allContexts.clear();
-  kDebug() << "after cleanup: " << KDevelop::RecursiveImportRepository::repository()->getDataRepository().statistics().print();
-
+    for(int a = 0; a < contextCount; ++a)
+      delete allContexts[a];
+    allContexts.clear();
+    kDebug() << "after cleanup: " << KDevelop::RecursiveImportRepository::repository()->getDataRepository().statistics().print();
   }
   clock_t endClock = clock();
   kDebug() << "total clock cycles needed for import-structure test:" << endClock - startClock;
