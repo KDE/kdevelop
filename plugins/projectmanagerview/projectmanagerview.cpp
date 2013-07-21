@@ -62,7 +62,9 @@ ProjectManagerFilterAction::ProjectManagerFilterAction(ProjectManagerView* paren
     setIcon(KIcon("view-filter"));
     setText(i18n("Filter..."));
     setToolTip(i18n("Insert wildcard patterns to filter the project view"
-                    " for files and targets for matching items."));
+                    " for files and targets for matching items.\n"
+                    "Prepend patterns with an exclamation mark to negate them.\n"
+                    "Separate different patterns with semicolons or spaces."));
 }
 
 QWidget* ProjectManagerFilterAction::createWidget( QWidget* parent )
