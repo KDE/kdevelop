@@ -33,6 +33,9 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/persistentsymboltable.h>
 #include <language/duchain/codemodel.h>
+#include <language/duchain/types/typesystemdata.h>
+#include <language/duchain/types/integraltype.h>
+#include <language/duchain/types/typeregister.h>
 
 #include <language/codegen/coderepresentation.h>
 
@@ -748,6 +751,59 @@ void TestDUChain::benchCodeModel()
     CodeModel::self().addItem(file, QualifiedIdentifier("testQID" + QString::number(i++)),
                               KDevelop::CodeModelItem::Class);
   }
+}
+
+void TestDUChain::benchTypeRegistry()
+{
+  IntegralTypeData data;
+  data.m_dataType = IntegralType::TypeInt;
+  data.typeClassId = IntegralType::Identity;
+  data.inRepository = false;
+  data.m_modifiers = 42;
+  data.m_dynamic = false;
+  data.refCount = 1;
+
+  IntegralTypeData to;
+
+  QFETCH(int, func);
+
+  QBENCHMARK {
+    switch(func) {
+      case 0:
+        TypeSystem::self().dataClassSize(data);
+        break;
+      case 1:
+        TypeSystem::self().dynamicSize(data);
+        break;
+      case 2:
+        TypeSystem::self().create(&data);
+        break;
+      case 3:
+        TypeSystem::self().isFactoryLoaded(data);
+        break;
+      case 4:
+        TypeSystem::self().copy(data, to, !data.m_dynamic);
+        break;
+      case 5:
+        TypeSystem::self().copy(data, to, data.m_dynamic);
+        break;
+      case 6:
+        TypeSystem::self().callDestructor(&data);
+        break;
+    }
+  }
+}
+
+void TestDUChain::benchTypeRegistry_data()
+{
+  QTest::addColumn<int>("func");
+  QTest::newRow("dataClassSize") << 0;
+  QTest::newRow("dynamicSize") << 1;
+  QTest::newRow("create") << 2;
+  QTest::newRow("isFactoryLoaded") << 3;
+  QTest::newRow("copy") << 4;
+  QTest::newRow("copyNonDynamic") << 5;
+  QTest::newRow("callDestructor") << 6;
 }
 
 #include "test_duchain.moc"
