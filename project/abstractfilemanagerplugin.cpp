@@ -612,10 +612,10 @@ bool AbstractFileManagerPlugin::copyFilesAndFolders(const KUrl::List& items, Pro
     return success;
 }
 
-bool AbstractFileManagerPlugin::isValid( const KUrl& /*url*/, const bool /*isFolder*/,
-                                         IProject* /*project*/ ) const
+bool AbstractFileManagerPlugin::isValid( const KUrl& url, const bool isFolder,
+                                         IProject* project ) const
 {
-    return true;
+    return core()->projectController()->includeInProject(url, isFolder, project);
 }
 
 ProjectFileItem* AbstractFileManagerPlugin::createFileItem( IProject* project, const KUrl& url,

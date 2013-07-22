@@ -117,7 +117,15 @@ public:
      * @returns wether project files should be parsed or not
      */
     static bool parseAllProjectSources();
-    
+
+    /**
+     * Queries all IProjectFilter plugins and checks whether any filter says that
+     * the given @p path should not be part of the @p project.
+     *
+     * @sa KDevelop::IProjectFilter::includeInProject
+     */
+    Q_SCRIPTABLE virtual bool includeInProject(const KUrl& path, bool isFolder, IProject* project) const = 0;
+
 public Q_SLOTS:
     /**
      * Tries finding a project-file for the given source-url and opens it.

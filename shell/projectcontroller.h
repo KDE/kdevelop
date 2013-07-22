@@ -39,6 +39,7 @@ class Core;
 class UiController;
 class Context;
 class ContextMenuExtension;
+class IPlugin;
 
 class KDEVPLATFORMSHELL_EXPORT IProjectDialogProvider : public QObject
 {
@@ -92,6 +93,8 @@ public:
 
     ContextMenuExtension contextMenuExtension( KDevelop::Context* ctx );
 
+    virtual bool includeInProject(const KUrl& path, bool isFolder, IProject* project) const;
+
 public Q_SLOTS:
     virtual void openProjectForUrl( const KUrl &sourceUrl );
     virtual void fetchProject();
@@ -137,6 +140,8 @@ private:
     Q_PRIVATE_SLOT(d, void updateActionStates( KDevelop::Context* ) )
     Q_PRIVATE_SLOT(d, void closeSelectedProjects() )
     Q_PRIVATE_SLOT(d, void openProjectConfig() )
+    Q_PRIVATE_SLOT(d, void pluginLoaded( KDevelop::IPlugin* ) )
+    Q_PRIVATE_SLOT(d, void unloadingPlugin( KDevelop::IPlugin* ) )
     class ProjectControllerPrivate* const d;
     friend class ProjectControllerPrivate;
 };
