@@ -140,7 +140,7 @@ signals:
      *
      * @param orgs A list of the names of the organizations.
      */
-    void orgsUpdated(const QStringList orgs);
+    void orgsUpdated(const QStringList &orgs);
 
 private slots:
     /**
