@@ -1,6 +1,7 @@
-/* This file is part of KDevelop
-    CopyRight 2010 Milian Wolff <mail@milianw.de>
-    Copyright 2004,2005 Roberto Raggi <roberto@kdevelop.org>
+/*
+    This file is part of KDevelop
+
+    Copyright 2013 Milian Wolff <mail@milianw.de>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -17,17 +18,12 @@
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
 */
-#ifndef KDEVPLATFORM_PLUGIN_GENERICMANAGER_H
-#define KDEVPLATFORM_PLUGIN_GENERICMANAGER_H
 
-#include <project/abstractfilemanagerplugin.h>
+#include "iprojectfilter.h"
 
-class GenericProjectManager: public KDevelop::AbstractFileManagerPlugin
+using namespace KDevelop;
+
+IProjectFilter::~IProjectFilter()
 {
-    Q_OBJECT
 
-public:
-    explicit GenericProjectManager( QObject* parent = 0, const QVariantList& args = QVariantList() );
-};
-
-#endif // KDEVPLATFORM_PLUGIN_GENERICIMPORTER_H
+}

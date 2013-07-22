@@ -16,7 +16,7 @@
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
 */
-#include "genericprojectmanagerpreferences.h"
+#include "projectfilterkcm.h"
 
 #include <QLayout>
 
@@ -30,41 +30,41 @@
 #include <project/interfaces/iprojectfilemanager.h>
 #include <project/projectmodel.h>
 
-#include "genericprojectmanagersettings.h"
-#include "ui_genericprojectmanagersettings.h"
+#include "ui_projectfiltersettings.h"
+
+#include "projectfilterdebug.h"
 
 using namespace KDevelop;
 
-K_PLUGIN_FACTORY(GenericProjectManagerPreferencesFactory, registerPlugin<GenericProjectManagerPreferences>();)
-K_EXPORT_PLUGIN(GenericProjectManagerPreferencesFactory("kcm_kdev_genericprojectmanagersettings"))
+K_PLUGIN_FACTORY(ProjectFilterKCMFactory, registerPlugin<ProjectFilterKCM>();)
+K_EXPORT_PLUGIN(ProjectFilterKCMFactory("kcm_kdevprojectfilter"))
 
-GenericProjectManagerPreferences::GenericProjectManagerPreferences(QWidget *parent, const QVariantList &args)
-    :ProjectKCModule<GenericProjectManagerSettings>(GenericProjectManagerPreferencesFactory::componentData(),
-        parent, args)
+ProjectFilterKCM::ProjectFilterKCM(QWidget* parent, const QVariantList& args)
+    : ProjectKCModule<ProjectFilterSettings>(ProjectFilterKCMFactory::componentData(), parent, args)
+    , m_preferencesDialog(new Ui::ProjectFilterSettings)
 {
     QVBoxLayout *l = new QVBoxLayout(this);
     QWidget *w = new QWidget;
-    preferencesDialog = new Ui::GenericProjectManagerSettings;
-    preferencesDialog->setupUi(w);
+
+    m_preferencesDialog->setupUi(w);
     l->addWidget(w);
 
-    addConfig( GenericProjectManagerSettings::self(), w );
+    addConfig( ProjectFilterSettings::self(), w );
     load();
 }
 
-GenericProjectManagerPreferences::~GenericProjectManagerPreferences()
+ProjectFilterKCM::~ProjectFilterKCM()
 {
-    delete preferencesDialog;
 }
 
-void GenericProjectManagerPreferences::save()
+void ProjectFilterKCM::save()
 {
-    ProjectKCModule<GenericProjectManagerSettings>::save();
-    GenericProjectManagerSettings::self()->writeConfig();
+    ProjectKCModule<ProjectFilterSettings>::save();
+    ProjectFilterSettings::self()->writeConfig();
 
     IProject* project = 0;
     Q_FOREACH (IProject* p, ICore::self()->projectController()->projects()) {
-        if (p->projectFileUrl() == GenericProjectManagerSettings::self()->projectFileUrl()) {
+        if (p->projectFileUrl() == ProjectFilterSettings::self()->projectFileUrl()) {
             project = p;
             break;
         }
@@ -74,10 +74,10 @@ void GenericProjectManagerPreferences::save()
     }
 }
 
-void GenericProjectManagerPreferences::load()
+void ProjectFilterKCM::load()
 {
-    ProjectKCModule<GenericProjectManagerSettings>::load();
-    GenericProjectManagerSettings::self()->readConfig();
+    ProjectKCModule<ProjectFilterSettings>::load();
+    ProjectFilterSettings::self()->readConfig();
 }
 
-#include "genericprojectmanagerpreferences.moc"
+#include "projectfilterkcm.moc"

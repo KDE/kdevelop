@@ -1,5 +1,5 @@
-File=genericprojectmanagersettings.kcfg
-ClassName=GenericProjectManagerSettings
+File=projectfiltersettings.kcfg
+ClassName=ProjectFilterSettings
 Singleton=true
 UseEnumTypes=true
 SetUserTexts=true

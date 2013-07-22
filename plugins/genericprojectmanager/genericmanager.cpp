@@ -24,9 +24,6 @@
 #include <KAboutData>
 #include <KConfigGroup>
 
-#include <interfaces/iproject.h>
-#include <project/projectmodel.h>
-
 using namespace KDevelop;
 
 K_PLUGIN_FACTORY(GenericSupportFactory, registerPlugin<GenericProjectManager>(); )
@@ -39,68 +36,5 @@ GenericProjectManager::GenericProjectManager( QObject* parent, const QVariantLis
 {
 }
 
-void GenericProjectManager::updateIncludeRules( IProject* project )
-{
-    KConfigGroup filtersConfig = project->projectConfiguration()->group("Filters");
-    QStringList includes = filtersConfig.readEntry("Includes", QStringList("*"));
-    QStringList excludes = filtersConfig.readEntry("Excludes", QStringList() << "*/.*" << "*~");
-
-    m_includeRules[project] = qMakePair(includes, excludes);
-}
-
-KJob* GenericProjectManager::createImportJob( ProjectFolderItem* item )
-{
-    updateIncludeRules(item->project());
-    return AbstractFileManagerPlugin::createImportJob( item );
-}
-
-bool GenericProjectManager::reload( ProjectFolderItem* item )
-{
-    updateIncludeRules(item->project());
-    return AbstractFileManagerPlugin::reload( item );
-}
-
-bool GenericProjectManager::isValid( const KUrl &url, const bool isFolder, IProject* project ) const
-{
-    if ( isFolder && url.fileName() == ".kdev4" && url.upUrl() == project->folder() ) {
-        return false;
-    } else if ( url == project->projectFileUrl() ) {
-        return false;
-    }
-
-    bool ok = isFolder;
-
-    // we operate on the path of this url relative to the project base
-    // by prepending a slash we can filter hidden files with the pattern "*/.*"
-    // by appending a slash to folders we can filter them with "*/"
-    const QString relativePath = '/' + project->relativeUrl( url ).path(
-        isFolder ? KUrl::AddTrailingSlash : KUrl::RemoveTrailingSlash
-    );
-
-    Q_ASSERT( m_includeRules.contains( project ) );
-    const IncludeRules& rules = m_includeRules.value( project );
-
-    QStringList::ConstIterator it;
-    for ( it = rules.first.constBegin(); !ok && it != rules.first.constEnd(); ++it ) {
-        QRegExp rx( *it, Qt::CaseSensitive, QRegExp::Wildcard );
-        if ( rx.exactMatch( relativePath ) ) {
-            ok = true;
-            break;
-        }
-    }
-
-    if ( !ok ) {
-        return false;
-    }
-
-    for ( it = rules.second.constBegin(); it != rules.second.constEnd(); ++it ) {
-        QRegExp rx( *it, Qt::CaseSensitive, QRegExp::Wildcard );
-        if ( rx.exactMatch( relativePath ) ) {
-            return false;
-        }
-    }
-
-    return true;
-}
 
 #include "genericmanager.moc"

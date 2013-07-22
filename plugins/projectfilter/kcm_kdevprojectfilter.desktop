@@ -1,0 +1,14 @@
+[Desktop Entry]
+Icon=view-filter
+Type=Service
+ServiceTypes=KCModule
+
+X-KDE-ModuleType=Library
+X-KDE-Library=kcm_kdevprojectfilter
+X-KDE-FactoryName=kcm_kdevprojectfilter
+X-KDE-ParentApp=kdevplatform
+X-KDE-ParentComponents=KDevProjectFilter
+X-KDE-CfgDlgHierarchy=GENERAL
+
+Name=Project Filter
+Comment=Configure which files and folders inside the project folder should be included or excluded.

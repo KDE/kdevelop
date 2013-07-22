@@ -1,4 +1,5 @@
 /* This file is part of KDevelop
+    Copyright 2013 Milian Wolff <mail@milianw.de>
     Copyright 2008 Alexander Dymo <adymo@kdevelop.org>
 
     This library is free software; you can redistribute it and/or
@@ -16,34 +17,33 @@
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
 */
-#ifndef KDEVPLATFORM_PLUGIN_GENERICPROJECTMANAGERPREFERENCES_H
-#define KDEVPLATFORM_PLUGIN_GENERICPROJECTMANAGERPREFERENCES_H
+#ifndef KDEVPLATFORM_PLUGIN_PROJECTFILTERKCM_H
+#define KDEVPLATFORM_PLUGIN_PROJECTFILTERKCM_H
 
 #include <project/projectkcmodule.h>
 
-class KConfigDialogManager;
-class GenericProjectManagerSettings;
+#include "projectfiltersettings.h"
 
 namespace Ui
 {
-class GenericProjectManagerSettings;
+class ProjectFilterSettings;
 }
 
 namespace KDevelop
 {
 
-class GenericProjectManagerPreferences: public ProjectKCModule<GenericProjectManagerSettings> {
+class ProjectFilterKCM : public ProjectKCModule<ProjectFilterSettings>
+{
     Q_OBJECT
 public:
-    GenericProjectManagerPreferences(QWidget *parent, const QVariantList &args);
-    virtual ~GenericProjectManagerPreferences();
+    ProjectFilterKCM(QWidget* parent, const QVariantList& args);
+    virtual ~ProjectFilterKCM();
 
     virtual void save();
     virtual void load();
 
 private:
-    Ui::GenericProjectManagerSettings *preferencesDialog;
-    KConfigDialogManager* m_manager;
+    QScopedPointer<Ui::ProjectFilterSettings> m_preferencesDialog;
 };
 
 }
