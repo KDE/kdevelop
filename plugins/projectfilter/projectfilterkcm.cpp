@@ -22,6 +22,7 @@
 
 #include <kgenericfactory.h>
 #include <KConfigDialogManager>
+#include <KSettings/Dispatcher>
 
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
@@ -62,16 +63,7 @@ void ProjectFilterKCM::save()
     ProjectKCModule<ProjectFilterSettings>::save();
     ProjectFilterSettings::self()->writeConfig();
 
-    IProject* project = 0;
-    Q_FOREACH (IProject* p, ICore::self()->projectController()->projects()) {
-        if (p->projectFileUrl() == ProjectFilterSettings::self()->projectFileUrl()) {
-            project = p;
-            break;
-        }
-    }
-    if (project && project->projectFileManager()) {
-        project->projectFileManager()->reload(project->projectItem());
-    }
+    KSettings::Dispatcher::reparseConfiguration("kdevprojectfilter");
 }
 
 void ProjectFilterKCM::load()

@@ -25,12 +25,14 @@
 #include <KPluginFactory>
 #include <KAboutData>
 #include <KConfigGroup>
+#include <KSettings/Dispatcher>
 
 #include <interfaces/iproject.h>
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
 
 #include "projectfilterdebug.h"
+#include <project/interfaces/iprojectfilemanager.h>
 
 using namespace KDevelop;
 
@@ -48,9 +50,9 @@ ProjectFilter::ProjectFilter( QObject* parent, const QVariantList& /*args*/ )
     connect(core()->projectController(), SIGNAL(projectClosing(KDevelop::IProject*)),
             SLOT(projectClosing(KDevelop::IProject*)));
 
-    foreach(IProject* project, core()->projectController()->projects()) {
-        updateFiltersForProject(project);
-    }
+    updateProjectFilters();
+
+    KSettings::Dispatcher::registerComponent(componentData(), this, "updateProjectFilters");
 }
 
 Filters filtersForProject( IProject* project )
@@ -112,9 +114,19 @@ bool ProjectFilter::includeInProject( const KUrl &url, const bool isFolder, IPro
     return true;
 }
 
-void ProjectFilter::updateFiltersForProject(IProject* project)
+void ProjectFilter::updateProjectFilters()
 {
-    m_filters[project] = filtersForProject(project);
+    foreach(IProject* project, core()->projectController()->projects()) {
+        Filters newFilters = filtersForProject(project);
+        Filters& filters = m_filters[project];
+        if (filters != newFilters) {
+            projectFilterDebug() << "reload project to take project filter changes into account:" << project->name();
+            filters = newFilters;
+            if (project->projectFileManager()) {
+                project->projectFileManager()->reload(project->projectItem());
+            }
+        }
+    }
 }
 
 void ProjectFilter::projectClosing(IProject* project)

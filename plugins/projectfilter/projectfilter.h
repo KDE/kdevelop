@@ -33,6 +33,14 @@ namespace KDevelop {
 struct Filters {
     QVector<QRegExp> include;
     QVector<QRegExp> exclude;
+    bool operator==(const Filters& o) const
+    {
+        return include == o.include && exclude == o.exclude;
+    }
+    bool operator!=(const Filters& o) const
+    {
+        return !operator==(o);
+    }
 };
 
 class ProjectFilter: public IPlugin, IProjectFilter
@@ -46,7 +54,7 @@ public:
     virtual bool includeInProject(const KUrl& path, bool isFolder, IProject* project) const;
 
 private slots:
-    void updateFiltersForProject(KDevelop::IProject*);
+    void updateProjectFilters();
     void projectClosing(KDevelop::IProject*);
 
 private:
