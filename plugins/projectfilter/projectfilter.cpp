@@ -27,6 +27,8 @@
 #include <KConfigGroup>
 
 #include <interfaces/iproject.h>
+#include <interfaces/icore.h>
+#include <interfaces/iprojectcontroller.h>
 
 #include "projectfilterdebug.h"
 
@@ -42,15 +44,29 @@ ProjectFilter::ProjectFilter( QObject* parent, const QVariantList& /*args*/ )
     : IPlugin( ProjectFilterFactory::componentData(), parent )
 {
     KDEV_USE_EXTENSION_INTERFACE( IProjectFilter )
+
+    connect(core()->projectController(), SIGNAL(projectClosing(KDevelop::IProject*)),
+            SLOT(projectClosing(KDevelop::IProject*)));
+
+    foreach(IProject* project, core()->projectController()->projects()) {
+        updateFiltersForProject(project);
+    }
 }
 
-void ProjectFilter::updateIncludeRules( IProject* project )
+Filters filtersForProject( IProject* project )
 {
-    KConfigGroup filtersConfig = project->projectConfiguration()->group("Filters");
-    QStringList includes = filtersConfig.readEntry("Includes", QStringList("*"));
-    QStringList excludes = filtersConfig.readEntry("Excludes", QStringList() << "*/.*" << "*~");
+    const KConfigGroup& config = project->projectConfiguration()->group("Filters");
+    Filters filters;
 
-    m_includeRules[project] = qMakePair(includes, excludes);
+    foreach(const QString& includePattern, config.readEntry("Includes", QStringList("*"))) {
+        filters.include << QRegExp( includePattern, Qt::CaseSensitive, QRegExp::Wildcard );
+    }
+
+    foreach(const QString& excludePattern, config.readEntry("Excludes", QStringList() << "*/.*" << "*~")) {
+        filters.exclude << QRegExp( excludePattern, Qt::CaseSensitive, QRegExp::Wildcard );
+    }
+
+    return filters;
 }
 
 bool ProjectFilter::includeInProject( const KUrl &url, const bool isFolder, IProject* project ) const
@@ -61,7 +77,11 @@ bool ProjectFilter::includeInProject( const KUrl &url, const bool isFolder, IPro
         return false;
     }
 
-    bool ok = isFolder;
+    QHash< IProject*, Filters >::iterator it = m_filters.find(project);
+    if (it == m_filters.end()) {
+        it = m_filters.insert(project, filtersForProject(project));
+    }
+    const Filters& filters = *it;
 
     // we operate on the path of this url relative to the project base
     // by prepending a slash we can filter hidden files with the pattern "*/.*"
@@ -70,13 +90,10 @@ bool ProjectFilter::includeInProject( const KUrl &url, const bool isFolder, IPro
         isFolder ? KUrl::AddTrailingSlash : KUrl::RemoveTrailingSlash
     );
 
-    Q_ASSERT( m_includeRules.contains( project ) );
-    const IncludeRules& rules = m_includeRules.value( project );
+    bool ok = isFolder;
 
-    QStringList::ConstIterator it;
-    for ( it = rules.first.constBegin(); !ok && it != rules.first.constEnd(); ++it ) {
-        QRegExp rx( *it, Qt::CaseSensitive, QRegExp::Wildcard );
-        if ( rx.exactMatch( relativePath ) ) {
+    foreach( const QRegExp& include, filters.include ) {
+        if ( include.exactMatch( relativePath ) ) {
             ok = true;
             break;
         }
@@ -86,14 +103,23 @@ bool ProjectFilter::includeInProject( const KUrl &url, const bool isFolder, IPro
         return false;
     }
 
-    for ( it = rules.second.constBegin(); it != rules.second.constEnd(); ++it ) {
-        QRegExp rx( *it, Qt::CaseSensitive, QRegExp::Wildcard );
-        if ( rx.exactMatch( relativePath ) ) {
+    foreach( const QRegExp& exclude, filters.exclude ) {
+        if ( exclude.exactMatch( relativePath ) ) {
             return false;
         }
     }
 
     return true;
+}
+
+void ProjectFilter::updateFiltersForProject(IProject* project)
+{
+    m_filters[project] = filtersForProject(project);
+}
+
+void ProjectFilter::projectClosing(IProject* project)
+{
+    m_filters.remove(project);
 }
 
 #include "projectfilter.moc"

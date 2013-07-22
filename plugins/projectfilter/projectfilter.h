@@ -26,13 +26,18 @@
 #include <project/interfaces/iprojectfilter.h>
 
 #include <QVariantList>
+#include <QVector>
 
 namespace KDevelop {
+
+struct Filters {
+    QVector<QRegExp> include;
+    QVector<QRegExp> exclude;
+};
 
 class ProjectFilter: public IPlugin, IProjectFilter
 {
     Q_OBJECT
-
     Q_INTERFACES( KDevelop::IProjectFilter )
 
 public:
@@ -40,13 +45,16 @@ public:
 
     virtual bool includeInProject(const KUrl& path, bool isFolder, IProject* project) const;
 
+private slots:
+    void updateFiltersForProject(KDevelop::IProject*);
+    void projectClosing(KDevelop::IProject*);
+
 private:
-    ///FIXME: clean this up
-    typedef QPair<QStringList, QStringList> IncludeRules;
-    void updateIncludeRules( KDevelop::IProject* project );
-    QHash< KDevelop::IProject*, IncludeRules > m_includeRules;
+    mutable QHash<KDevelop::IProject*, Filters> m_filters;
 };
 
 }
+
+Q_DECLARE_TYPEINFO(KDevelop::Filters, Q_MOVABLE_TYPE);
 
 #endif // KDEVPLATFORM_PLUGIN_PROJECTFILTER_H
