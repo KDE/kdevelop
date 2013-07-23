@@ -114,17 +114,18 @@ bool ProjectFilter::includeInProject( const KUrl &url, const bool isFolder, IPro
         isFolder ? KUrl::AddTrailingSlash : KUrl::RemoveTrailingSlash
     );
 
-    bool ok = isFolder;
-
-    foreach( const QRegExp& include, filters.include ) {
-        if ( include.exactMatch( relativePath ) ) {
-            ok = true;
-            break;
+    if (!isFolder) { // only run the include pattern on files
+        bool ok = false;
+        foreach( const QRegExp& include, filters.include ) {
+            if ( include.exactMatch( relativePath ) ) {
+                ok = true;
+                break;
+            }
         }
-    }
 
-    if ( !ok ) {
-        return false;
+        if ( !ok ) {
+            return false;
+        }
     }
 
     foreach( const QRegExp& exclude, filters.exclude ) {
