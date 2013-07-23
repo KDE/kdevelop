@@ -26,6 +26,7 @@
 #include <KAboutData>
 #include <KConfigGroup>
 #include <KSettings/Dispatcher>
+#include <QFile>
 
 #include <interfaces/iproject.h>
 #include <interfaces/icore.h>
@@ -64,7 +65,7 @@ Filters filtersForProject( IProject* project )
         filters.include << QRegExp( includePattern, Qt::CaseSensitive, QRegExp::Wildcard );
     }
 
-    foreach(const QString& excludePattern, config.readEntry("Excludes", QStringList() << "*/.*" << "*~")) {
+    foreach(const QString& excludePattern, config.readEntry("Excludes", QStringList() << "*/.*")) {
         filters.exclude << QRegExp( excludePattern, Qt::CaseSensitive, QRegExp::Wildcard );
     }
 
@@ -73,11 +74,32 @@ Filters filtersForProject( IProject* project )
 
 bool ProjectFilter::includeInProject( const KUrl &url, const bool isFolder, IProject* project ) const
 {
-    if ( isFolder && url.fileName() == ".kdev4" && url.upUrl() == project->folder() ) {
-        return false;
-    } else if ( url == project->projectFileUrl() ) {
+    if (!isFolder && url == project->projectFileUrl()) {
+        // do not show the project file
+        ///TODO: enable egain once the project page is ready for consumption
         return false;
     }
+
+    // filter some common files out that probably (hopefully?) noone will ever want to see
+    const QString& name = url.fileName();
+    // simple equals-matching, fast and efficient and suitable for most cases
+    static const QSet<QString> invalidFolders = QSet<QString>()
+        << ".git" << "CVS" << ".svn" << "_svn"
+        << ".kdev4" << "SCCS" << "_darcs" << ".hg" << ".bzr";
+    if (isFolder && invalidFolders.contains(name)) {
+        return false;
+    } else if (!isFolder && (name.endsWith(".o") || name.endsWith(".a")
+                          || name.startsWith("moc_") || name.endsWith(".moc")
+                          || name.endsWith(".so") || name.contains(".so.")
+                          || name.startsWith(".swp.") || name.endsWith('~')
+                          || (name.startsWith('.') && (name.endsWith(".kate-swp") || name.endsWith(".swp")))))
+    {
+        return false;
+    } else if (isFolder && url.isLocalFile() && QFile::exists(url.toLocalFile() + "/.kdev_ignore")) {
+        return false;
+    }
+
+    // from here on the user can configure what he wants to see or not.
 
     QHash< IProject*, Filters >::iterator it = m_filters.find(project);
     if (it == m_filters.end()) {

@@ -9,7 +9,7 @@
       <default>*</default>
     </entry>
     <entry name="excludes" key="Excludes" type="StringList">
-      <default>*/.*,*/*~</default>
+      <default>*/.*</default>
     </entry>
   </group>
 </kcfg>

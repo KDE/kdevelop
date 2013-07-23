@@ -98,7 +98,6 @@ struct AbstractFileManagerPlugin::Private {
 
     QHash<IProject*, KDirWatch*> m_watchers;
     QHash<IProject*, QList<FileManagerListJob*> > m_projectJobs;
-    QSet<QString> importFileNameFilter;
     QVector<QString> m_stoppedFolders;
 };
 
@@ -159,11 +158,6 @@ void AbstractFileManagerPlugin::Private::addJobItems(FileManagerListJob* job,
     foreach ( const KIO::UDSEntry& entry, entries ) {
         QString name = entry.stringValue( KIO::UDSEntry::UDS_NAME );
         if (name == "." || name == "..") {
-            continue;
-        }
-
-        // Simple equals-matching, fast and efficient and suitable for most cases
-        if( importFileNameFilter.contains( name ) ) {
             continue;
         }
 
@@ -633,11 +627,6 @@ ProjectFolderItem* AbstractFileManagerPlugin::createFolderItem( IProject* projec
 KDirWatch* AbstractFileManagerPlugin::projectWatcher( IProject* project ) const
 {
     return d->m_watchers.value( project, 0 );
-}
-
-void AbstractFileManagerPlugin::setImportFileNameFilter(const QStringList& filterNames)
-{
-    d->importFileNameFilter = filterNames.toSet();
 }
 
 //END Plugin

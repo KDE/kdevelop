@@ -101,18 +101,6 @@ protected:
      */
     KDirWatch* projectWatcher( KDevelop::IProject* project ) const;
 
-    /**
-     * Sets a list of filenames to ignore when importing a project
-     * the filter is applied to files and folders, so both will be ignored.
-     *
-     * The filenames are matched via QString::operator==(), so no wildcard or
-     * regex-matching for now
-     * 
-     * This can be used for things like VCS-folders/files or other things a
-     * plugin might want to hide.
-     */
-    void setImportFileNameFilter( const QStringList& filterNames );
-
 Q_SIGNALS:
     void folderAdded(KDevelop::ProjectFolderItem* folder);
     void folderRemoved(KDevelop::ProjectFolderItem* folder);
