@@ -56,7 +56,6 @@ CustomBuildSystem::CustomBuildSystem( QObject *parent, const QVariantList & )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectBuilder )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBuildSystemManager )
-    setImportFileNameFilter( QStringList() << ".git" << "CVS" << ".svn" << "_svn" << ".kdev4" << "SCCS" << "_darcs" << ".hg" << ".bzr" );
 }
 
 CustomBuildSystem::~CustomBuildSystem()
