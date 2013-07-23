@@ -14,7 +14,7 @@
    <item>
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Include files match the following patterns into the project:</string>
+      <string>Include files that match any of the following patterns in the project:</string>
      </property>
     </widget>
    </item>
@@ -24,7 +24,7 @@
    <item>
     <widget class="QLabel" name="label_2">
      <property name="text">
-      <string>Exclude files that match the following patterns from the project:</string>
+      <string>Exclude files that match any of the following patterns from the project:</string>
      </property>
     </widget>
    </item>
