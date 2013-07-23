@@ -61,7 +61,11 @@ Filters filtersForProject( IProject* project )
     const KConfigGroup& config = project->projectConfiguration()->group("Filters");
     Filters filters;
 
-    foreach(const QString& includePattern, config.readEntry("Includes", QStringList("*"))) {
+    foreach(const QString& includePattern, config.readEntry("Includes", QStringList())) {
+        if (includePattern == "*") {
+            // optimize: this always matches, no need to run it.
+            continue;
+        }
         filters.include << QRegExp( includePattern, Qt::CaseSensitive, QRegExp::Wildcard );
     }
 
@@ -114,7 +118,8 @@ bool ProjectFilter::includeInProject( const KUrl &url, const bool isFolder, IPro
         isFolder ? KUrl::AddTrailingSlash : KUrl::RemoveTrailingSlash
     );
 
-    if (!isFolder) { // only run the include pattern on files
+    if (!isFolder && !filters.include.isEmpty()) {
+        // only run the include pattern on files
         bool ok = false;
         foreach( const QRegExp& include, filters.include ) {
             if ( include.exactMatch( relativePath ) ) {
