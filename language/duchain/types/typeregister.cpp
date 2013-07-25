@@ -19,47 +19,69 @@
 #include "typeregister.h"
 
 namespace KDevelop {
-AbstractType* TypeSystem::create(AbstractTypeData* data) const {
-  if(uint(m_factories.size()) <= data->typeClassId || m_fastFactories[data->typeClassId] == 0)
+AbstractType* TypeSystem::create(AbstractTypeData* data) const
+{
+  if (!isFactoryLoaded(*data)) {
     return 0;
-  return m_fastFactories[data->typeClassId]->create(data);
+  }
+  return m_factories.value(data->typeClassId)->create(data);
 }
 
-void TypeSystem::callDestructor(AbstractTypeData* data) const {
-  if(uint(m_factories.size()) <= data->typeClassId || m_fastFactories[data->typeClassId] == 0)
-    return;
-  return m_fastFactories[data->typeClassId]->callDestructor(data);
-}
-
-uint TypeSystem::dynamicSize(const AbstractTypeData& data) const {
-  if(uint(m_factories.size()) <= data.typeClassId || m_fastFactories[data.typeClassId] == 0)
-    return 0;
-  return m_fastFactories[data.typeClassId]->dynamicSize(data);
-}
-
-uint TypeSystem::dataClassSize(const AbstractTypeData& data) const {
-  if(uint(m_dataClassSizes.size()) <= data.typeClassId || m_fastFactories[data.typeClassId] == 0)
-    return 0;
-  return m_fastDataClassSizes[data.typeClassId];
-}
-
-bool TypeSystem::isFactoryLoaded(const AbstractTypeData& data) const {
-  if(uint(m_factories.size()) <= data.typeClassId || m_fastFactories[data.typeClassId] == 0)
-    return false;
-  else
-    return true;
-}
-
-void TypeSystem::copy(const AbstractTypeData& from, AbstractTypeData& to, bool constant) const {
-  if(uint(m_factories.size()) <= from.typeClassId || m_factories[from.typeClassId] == 0) {
-    Q_ASSERT(0); //Shouldn't try to copy an unknown type
+void TypeSystem::callDestructor(AbstractTypeData* data) const
+{
+  if (!isFactoryLoaded(*data)) {
     return;
   }
-  return m_factories[from.typeClassId]->copy(from, to, constant);
+  return m_factories.value(data->typeClassId)->callDestructor(data);
+}
+
+uint TypeSystem::dynamicSize(const AbstractTypeData& data) const
+{
+  if (!isFactoryLoaded(data)) {
+    return 0;
+  }
+  return m_factories.value(data.typeClassId)->dynamicSize(data);
+}
+
+uint TypeSystem::dataClassSize(const AbstractTypeData& data) const
+{
+  Q_ASSERT(m_dataClassSizes.contains(data.typeClassId));
+  return m_dataClassSizes.value(data.typeClassId);
+}
+
+bool TypeSystem::isFactoryLoaded(const AbstractTypeData& data) const
+{
+  return m_factories.contains(data.typeClassId);
+}
+
+void TypeSystem::copy(const AbstractTypeData& from, AbstractTypeData& to, bool constant) const
+{
+  //Shouldn't try to copy an unknown type
+  Q_ASSERT(isFactoryLoaded(from));
+  return m_factories.value(from.typeClassId)->copy(from, to, constant);
 }
 
 TypeSystem& TypeSystem::self() {
   static TypeSystem system;
   return system;
 }
+
+void TypeSystem::registerTypeClassInternal(AbstractTypeFactory* repo, uint dataClassSize, uint identity)
+{
+  Q_ASSERT(!m_factories.contains(identity));
+  m_factories.insert(identity, repo);
+  Q_ASSERT(!m_dataClassSizes.contains(identity));
+  m_dataClassSizes.insert(identity, dataClassSize);
+}
+
+void TypeSystem::unregisterTypeClassInternal(uint identity)
+{
+  AbstractTypeFactory* repo = m_factories.take(identity);
+  Q_ASSERT(repo);
+  delete repo;
+  int removed = m_dataClassSizes.remove(identity);
+  Q_ASSERT(removed);
+  Q_UNUSED(removed);
+}
+
 }
