@@ -50,14 +50,12 @@ public:
 
     void import(ProjectFolderItem* folder)
     {
-        QList<KDevelop::ProjectFolderItem*> subFolders = m_importer->parse(folder);
-        foreach(KDevelop::ProjectFolderItem* sub, subFolders)
-        {
-            if(!cancel)
+        foreach(ProjectFolderItem* sub, m_importer->parse(folder)) {
+            if(!cancel) {
                 import(sub);
-        }  
+            }
+        }
     }
-
 };
 
 ImportProjectJob::ImportProjectJob(ProjectFolderItem *folder, IProjectFileManager *importer)
@@ -116,5 +114,6 @@ void ImportProjectJob::importCanceled()
 }
 
 }
+
 #include "importprojectjob.moc"
 

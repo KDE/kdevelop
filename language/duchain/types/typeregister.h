@@ -130,31 +130,18 @@ class KDEVPLATFORMLANGUAGE_EXPORT TypeSystem {
      * Register a new AbstractType subclass.
      */
     template<class T, class Data>
-    void registerTypeClass() {
-      Q_ASSERT(T::Identity < 64);
-      if(m_factories.size() <= T::Identity) {
-        m_factories.resize(T::Identity+1);
-        m_dataClassSizes.resize(T::Identity+1);
-        
-        m_fastDataClassSizes = m_dataClassSizes.data();
-        m_fastFactories = m_factories.data();
-      }
-
-      Q_ASSERT(!m_factories[T::Identity]);
-      m_factories[T::Identity] = new TypeFactory<T, Data>();
-      m_dataClassSizes[T::Identity] = sizeof(Data);
+    void registerTypeClass()
+    {
+      registerTypeClassInternal(new TypeFactory<T, Data>(), sizeof(Data), T::Identity);
     }
 
     /**
      * Unregister an AbstractType subclass.
      */
     template<class T, class Data>
-    void unregisterTypeClass() {
-      Q_ASSERT(m_factories.size() > T::Identity);
-      Q_ASSERT(m_factories[T::Identity]);
-      delete m_factories[T::Identity];
-      m_factories[T::Identity] = 0;
-      m_dataClassSizes[T::Identity] = 0;
+    void unregisterTypeClass()
+    {
+      unregisterTypeClassInternal(T::Identity);
     }
 
     /**
@@ -181,16 +168,16 @@ class KDEVPLATFORMLANGUAGE_EXPORT TypeSystem {
     ///Returns true if the factory for this data type is loaded.
     ///If false is returned, then any of the other calls will fail.
     bool isFactoryLoaded(const AbstractTypeData& data) const;
-    
+
     /// Access the static TypeSystem instance.
     static TypeSystem& self();
 
   private:
-    QVector<AbstractTypeFactory*> m_factories;
-    AbstractTypeFactory** m_fastFactories;
-    
-    QVector<uint> m_dataClassSizes;
-    uint* m_fastDataClassSizes;
+    void registerTypeClassInternal(AbstractTypeFactory* repo, uint dataClassSize, uint identity);
+    void unregisterTypeClassInternal(uint identity);
+
+    QHash<uint, AbstractTypeFactory*> m_factories;
+    QHash<uint, uint> m_dataClassSizes;
 };
 
 /// Helper class to register an AbstractType subclass.

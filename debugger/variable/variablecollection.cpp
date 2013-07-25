@@ -24,6 +24,7 @@
 #include "variablecollection.h"
 
 #include <QFont>
+#include <QApplication>
 
 #include <KLocale>
 #include <KDebug>
@@ -484,6 +485,12 @@ textHintRequested(const KTextEditor::Cursor& cursor, QString&)
     if (ICore::self()->uiController()->activeArea()->objectName() != "debug")
         return;
 
+    //TODO: These keyboardModifiers should also hide already opened tooltip, and show another one for code area.
+    if (QApplication::keyboardModifiers() == Qt::ControlModifier ||
+        QApplication::keyboardModifiers() == Qt::AltModifier){
+        return;
+    }
+    
     // Figure what is the parent widget and what is the text to show
     KTextEditor::View* view = dynamic_cast<KTextEditor::View*>(sender());
     if (!view)
