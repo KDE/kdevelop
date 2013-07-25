@@ -1,5 +1,6 @@
 /*
    Copyright 2009 Niko Sams <niko.sams@gmail.com>
+   Copyright 2013 Vlas Puhov <vlas.puhov@mail.ru>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -88,6 +89,7 @@ private Q_SLOTS:
     void testBug301287();
     void testMultipleBreakpoint();
     void testRegularExpressionBreakpoint();
+    void testChangeBreakpointWhileRunning();
 
 private:
     void waitForState(GDBDebugger::DebugSession *session,

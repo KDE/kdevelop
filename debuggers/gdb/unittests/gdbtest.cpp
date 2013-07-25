@@ -249,13 +249,13 @@ void GdbTest::testDisableBreakpoint()
     KDevelop::Breakpoint *b;
 
     b = breakpoints()->addCodeBreakpoint(debugeeFileName, firstBreakLine);
-    b->setData(KDevelop::Breakpoint::EnableColumn, false);
+    b->setData(KDevelop::Breakpoint::EnableColumn, Qt::Unchecked);
 
 
     //this is needed to emulate debug from GUI. If we are in edit mode, the debugSession doesn't exist.
     KDevelop::ICore::self()->debugController()->breakpointModel()->blockSignals(true);
     b = breakpoints()->addCodeBreakpoint(debugeeFileName, secondBreakLine);
-    b->setData(KDevelop::Breakpoint::EnableColumn, false);
+    b->setData(KDevelop::Breakpoint::EnableColumn, Qt::Unchecked);
     //all disabled breakpoints were added
 
     KDevelop::Breakpoint * thirdBreak = breakpoints()->addCodeBreakpoint(debugeeFileName, thirdBreakLine);
@@ -268,12 +268,12 @@ void GdbTest::testDisableBreakpoint()
     QCOMPARE(session->currentLine(), thirdBreak->line());
 
     //disable existing breakpoint
-    thirdBreak->setData(KDevelop::Breakpoint::EnableColumn, false);
+    thirdBreak->setData(KDevelop::Breakpoint::EnableColumn, Qt::Unchecked);
 
     //add another disabled breakpoint
     b = breakpoints()->addCodeBreakpoint(debugeeFileName, fourthBreakLine);
     QTest::qWait(300);
-    b->setData(KDevelop::Breakpoint::EnableColumn, false);
+    b->setData(KDevelop::Breakpoint::EnableColumn, Qt::Unchecked);
 
     QTest::qWait(300);
     session->run();
@@ -1711,7 +1711,7 @@ void GdbTest::testMultipleBreakpoint()
         WAIT_FOR_STATE(session, DebugSession::PausedState);
         QCOMPARE(breakpoints()->breakpoints().count(), 1);
 
-        b->setData(KDevelop::Breakpoint::EnableColumn, false);
+        b->setData(KDevelop::Breakpoint::EnableColumn, Qt::Unchecked);
         session->run();
         WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
@@ -1734,6 +1734,31 @@ void GdbTest::testRegularExpressionBreakpoint()
         WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
+void GdbTest::testChangeBreakpointWhileRunning() {
+
+    TestDebugSession *session = new TestDebugSession;
+
+    TestLaunchConfiguration c(findExecutable("debugeeslow"));
+    KDevelop::Breakpoint* b = breakpoints()->addCodeBreakpoint("debugeeslow.cpp:32");
+    session->startProgram(&c, m_iface);
+    
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    QVERIFY(session->currentLine() >= 30 && session->currentLine() <= 34 );
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::ActiveState);
+    b->setData(KDevelop::Breakpoint::EnableColumn, Qt::Unchecked);
+    //to make one loop
+    QTest::qWait(2000);
+    WAIT_FOR_STATE(session, DebugSession::ActiveState);
+    
+    b->setData(KDevelop::Breakpoint::EnableColumn, Qt::Checked);
+    QTest::qWait(100);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    b->setData(KDevelop::Breakpoint::EnableColumn, Qt::Unchecked);
+    session->run();
+    QTest::qWait(100);
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
+}
 
 void GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::DebuggerState state,
                             const char *file, int line, bool expectFail)
