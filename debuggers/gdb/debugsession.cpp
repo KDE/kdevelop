@@ -703,7 +703,10 @@ void DebugSession::slotProgramStopped(const GDBMI::ResultRecord& r)
         state_reload_needed = false;
         return;
     }
-
+    
+    //Indicates if program state should be reloaded immediately.
+    bool updateState = false;
+    
     if (reason == "signal-received")
     {
         QString name = r["signal-name"].literal();
@@ -728,6 +731,9 @@ void DebugSession::slotProgramStopped(const GDBMI::ResultRecord& r)
             setStateOff(s_explicitBreakInto);
             // Will show the source line in the code
             // handling non-special stop kinds, below.
+            
+            //If program is interrupted by breakpointcontroller reloadProgramState() won't be called, because the last command in queue'll be ExecContinue.
+            updateState = true;
         }
 
         if (!suppress_reporting)
@@ -761,10 +767,13 @@ void DebugSession::slotProgramStopped(const GDBMI::ResultRecord& r)
             if (!file.isEmpty()) {
                 // gdb counts lines from 1 and we don't
                 setCurrentPosition(KUrl::fromLocalFile(file), line.toInt()-1, addr);
-
-                raiseEvent(program_state_changed);
-                state_reload_needed = false;
+                
+                updateState = true;
             }
+        }
+   
+        if (updateState) {
+            reloadProgramState();
         }
     }
 }
