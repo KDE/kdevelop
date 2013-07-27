@@ -56,9 +56,10 @@ public:
 private slots:
     void updateProjectFilters();
     void projectClosing(KDevelop::IProject*);
+    void projectAboutToBeOpened(KDevelop::IProject*);
 
 private:
-    mutable QHash<KDevelop::IProject*, Filters> m_filters;
+    QHash<KDevelop::IProject*, Filters> m_filters;
 };
 
 }

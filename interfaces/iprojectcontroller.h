@@ -145,14 +145,14 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     /**
-     * emitted right before a project is started to be loaded.
+     * Emitted right before a project is started to be loaded.
+     *
      * At this point all sanity checks have been done, so the project
      * is really going to be loaded. Will be followed by @ref projectOpened signal
      * when loading completes or by @ref projectOpeningAborted if there are errors during loading
      * or it is aborted.
-     * @note the given project won't be very useful as it doesn't have all things
-     * setup properly
-     * @param url the url of the project that is about to be opened.
+     *
+     * @param project the project that is about to be opened.
      */
     void projectAboutToBeOpened( KDevelop::IProject* project );
     /**

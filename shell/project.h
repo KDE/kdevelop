@@ -165,6 +165,12 @@ public Q_SLOTS:
      */
     bool inProject(const KUrl &url) const;
 
+signals:
+    /**
+     * Internal signal to make IProjectController::projectAboutToOpen useful.
+     */
+    void aboutToOpen(KDevelop::IProject*);
+
 private:
     Q_PRIVATE_SLOT(d, void importDone(KJob*))
     Q_PRIVATE_SLOT(d, void reloadDone(KJob*))

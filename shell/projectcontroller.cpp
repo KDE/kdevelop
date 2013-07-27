@@ -300,7 +300,8 @@ public:
         m_core->pluginControllerInternal()->loadProjectPlugins();
 
         Project* project = new Project();
-        emit q->projectAboutToBeOpened( project );
+        QObject::connect(project, SIGNAL(aboutToOpen(KDevelop::IProject*)),
+                         q, SIGNAL(projectAboutToBeOpened(KDevelop::IProject*)));
         if ( !project->open( url ) )
         {
             m_currentlyOpening.removeAll(url);

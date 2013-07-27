@@ -537,6 +537,7 @@ bool Project::open( const KUrl& projectFileUrl_ )
 
     Q_ASSERT(d->manager);
 
+    emit aboutToOpen(this);
     if (!d->importTopItem(iface) ) {
         return false;
     }

@@ -50,6 +50,8 @@ ProjectFilter::ProjectFilter( QObject* parent, const QVariantList& /*args*/ )
 
     connect(core()->projectController(), SIGNAL(projectClosing(KDevelop::IProject*)),
             SLOT(projectClosing(KDevelop::IProject*)));
+    connect(core()->projectController(), SIGNAL(projectAboutToBeOpened(KDevelop::IProject*)),
+            SLOT(projectAboutToBeOpened(KDevelop::IProject*)));
 
     updateProjectFilters();
 
@@ -105,11 +107,7 @@ bool ProjectFilter::includeInProject( const KUrl &url, const bool isFolder, IPro
 
     // from here on the user can configure what he wants to see or not.
 
-    QHash< IProject*, Filters >::iterator it = m_filters.find(project);
-    if (it == m_filters.end()) {
-        it = m_filters.insert(project, filtersForProject(project));
-    }
-    const Filters& filters = *it;
+    const Filters& filters = m_filters.value(project);
 
     // we operate on the path of this url relative to the project base
     // by prepending a slash we can filter hidden files with the pattern "*/.*"
@@ -155,6 +153,11 @@ void ProjectFilter::updateProjectFilters()
             }
         }
     }
+}
+
+void ProjectFilter::projectAboutToBeOpened(IProject* project)
+{
+    m_filters[project] = filtersForProject(project);
 }
 
 void ProjectFilter::projectClosing(IProject* project)
