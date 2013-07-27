@@ -21,44 +21,15 @@
 
 #include "projectfilter.h"
 
-#include <KPluginLoader>
-#include <KPluginFactory>
-#include <KAboutData>
+#include <interfaces/iproject.h>
+
 #include <KConfigGroup>
-#include <KSettings/Dispatcher>
+#include <QSet>
 #include <QFile>
 
-#include <interfaces/iproject.h>
-#include <interfaces/icore.h>
-#include <interfaces/iprojectcontroller.h>
+namespace KDevelop {
 
-#include "projectfilterdebug.h"
-#include <project/interfaces/iprojectfilemanager.h>
-
-using namespace KDevelop;
-
-K_PLUGIN_FACTORY(ProjectFilterFactory, registerPlugin<ProjectFilter>(); )
-K_EXPORT_PLUGIN(ProjectFilterFactory(
-    KAboutData("kdevprojectfilter", "kdevprojectfilter", ki18n("Project Filter"),
-               "0.1", ki18n("Configure which files and folders inside the project folder should be included or excluded."),
-               KAboutData::License_GPL)))
-
-ProjectFilter::ProjectFilter( QObject* parent, const QVariantList& /*args*/ )
-    : IPlugin( ProjectFilterFactory::componentData(), parent )
-{
-    KDEV_USE_EXTENSION_INTERFACE( IProjectFilter )
-
-    connect(core()->projectController(), SIGNAL(projectClosing(KDevelop::IProject*)),
-            SLOT(projectClosing(KDevelop::IProject*)));
-    connect(core()->projectController(), SIGNAL(projectAboutToBeOpened(KDevelop::IProject*)),
-            SLOT(projectAboutToBeOpened(KDevelop::IProject*)));
-
-    updateProjectFilters();
-
-    KSettings::Dispatcher::registerComponent(componentData(), this, "updateProjectFilters");
-}
-
-Filters filtersForProject( IProject* project )
+Filters filtersForProject( const IProject* const project )
 {
     const KConfigGroup& config = project->projectConfiguration()->group("Filters");
     Filters filters;
@@ -78,9 +49,26 @@ Filters filtersForProject( IProject* project )
     return filters;
 }
 
-bool ProjectFilter::includeInProject( const KUrl &url, const bool isFolder, IProject* project ) const
+}
+
+using namespace KDevelop;
+
+ProjectFilter::ProjectFilter( const IProject* const project )
+    : m_filters( filtersForProject(project) )
+    , m_projectFile( project->projectFileUrl() )
+    , m_project( project->folder() )
 {
-    if (!isFolder && url == project->projectFileUrl()) {
+
+}
+
+ProjectFilter::~ProjectFilter()
+{
+
+}
+
+bool ProjectFilter::isValid( const KUrl &url, const bool isFolder ) const
+{
+    if (!isFolder && url == m_projectFile) {
         // do not show the project file
         ///TODO: enable egain once the project page is ready for consumption
         return false;
@@ -107,19 +95,16 @@ bool ProjectFilter::includeInProject( const KUrl &url, const bool isFolder, IPro
 
     // from here on the user can configure what he wants to see or not.
 
-    const Filters& filters = m_filters.value(project);
-
     // we operate on the path of this url relative to the project base
     // by prepending a slash we can filter hidden files with the pattern "*/.*"
     // by appending a slash to folders we can filter them with "*/"
-    const QString relativePath = '/' + project->relativeUrl( url ).path(
-        isFolder ? KUrl::AddTrailingSlash : KUrl::RemoveTrailingSlash
-    );
 
-    if (!isFolder && !filters.include.isEmpty()) {
+    const QString relativePath = makeRelative(url, isFolder);
+
+    if (!isFolder && !m_filters.include.isEmpty()) {
         // only run the include pattern on files
         bool ok = false;
-        foreach( const QRegExp& include, filters.include ) {
+        foreach( const QRegExp& include, m_filters.include ) {
             if ( include.exactMatch( relativePath ) ) {
                 ok = true;
                 break;
@@ -131,7 +116,7 @@ bool ProjectFilter::includeInProject( const KUrl &url, const bool isFolder, IPro
         }
     }
 
-    foreach( const QRegExp& exclude, filters.exclude ) {
+    foreach( const QRegExp& exclude, m_filters.exclude ) {
         if ( exclude.exactMatch( relativePath ) ) {
             return false;
         }
@@ -140,29 +125,16 @@ bool ProjectFilter::includeInProject( const KUrl &url, const bool isFolder, IPro
     return true;
 }
 
-void ProjectFilter::updateProjectFilters()
+QString ProjectFilter::makeRelative(const KUrl& url, bool isFolder) const
 {
-    foreach(IProject* project, core()->projectController()->projects()) {
-        Filters newFilters = filtersForProject(project);
-        Filters& filters = m_filters[project];
-        if (filters != newFilters) {
-            projectFilterDebug() << "reload project to take project filter changes into account:" << project->name();
-            filters = newFilters;
-            if (project->projectFileManager()) {
-                project->projectFileManager()->reload(project->projectItem());
-            }
-        }
+    if (!m_project.isParentOf(url)) {
+        return url.path(isFolder ? KUrl::AddTrailingSlash : KUrl::RemoveTrailingSlash);
     }
-}
 
-void ProjectFilter::projectAboutToBeOpened(IProject* project)
-{
-    m_filters[project] = filtersForProject(project);
-}
+    QString ret = '/' + KUrl::relativeUrl( m_project, url );
+    if (isFolder && !ret.endsWith('/')) {
+        ret.append('/');
+    }
 
-void ProjectFilter::projectClosing(IProject* project)
-{
-    m_filters.remove(project);
+    return ret;
 }
-
-#include "projectfilter.moc"

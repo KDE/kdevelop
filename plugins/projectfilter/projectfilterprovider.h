@@ -19,56 +19,40 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef PROJECTFILTER_H
-#define PROJECTFILTER_H
+#ifndef KDEVPLATFORM_PLUGIN_PROJECTFILTERPROVIDER_H
+#define KDEVPLATFORM_PLUGIN_PROJECTFILTERPROVIDER_H
 
-#include <QRegExp>
-#include <QVector>
+#include <interfaces/iplugin.h>
+#include <project/interfaces/iprojectfilterprovider.h>
 
-#include <KUrl>
+#include "projectfilter.h"
 
-#include <project/interfaces/iprojectfilter.h>
+#include <QVariantList>
 
 namespace KDevelop {
 
-class IProject;
-
-struct Filters
+class ProjectFilterProvider: public IPlugin, IProjectFilterProvider
 {
-    QVector<QRegExp> include;
-    QVector<QRegExp> exclude;
+    Q_OBJECT
+    Q_INTERFACES( KDevelop::IProjectFilterProvider )
 
-    bool operator==(const Filters& o) const
-    {
-        return include == o.include && exclude == o.exclude;
-    }
-
-    bool operator!=(const Filters& o) const
-    {
-        return !operator==(o);
-    }
-};
-
-Filters filtersForProject( const IProject* const project );
-
-class ProjectFilter : public IProjectFilter
-{
 public:
-    ProjectFilter(const IProject* const project);
-    virtual ~ProjectFilter();
+    explicit ProjectFilterProvider( QObject* parent = 0, const QVariantList& args = QVariantList() );
 
-    virtual bool isValid(const KUrl& path, bool isFolder) const;
+    virtual QSharedPointer<IProjectFilter> createFilter(IProject* project) const;
+
+signals:
+    void filterChanged(KDevelop::IProjectFilterProvider*, KDevelop::IProject*);
+
+private slots:
+    void updateProjectFilters();
+    void projectClosing(KDevelop::IProject*);
+    void projectAboutToBeOpened(KDevelop::IProject*);
 
 private:
-    QString makeRelative(const KUrl& url, bool isFolder) const;
-
-    Filters m_filters;
-    KUrl m_projectFile;
-    KUrl m_project;
+    QHash<KDevelop::IProject*, Filters> m_filters;
 };
 
 }
 
-Q_DECLARE_TYPEINFO(KDevelop::Filters, Q_MOVABLE_TYPE);
-
-#endif // PROJECTFILTER_H
+#endif // KDEVPLATFORM_PLUGIN_PROJECTFILTERPROVIDER_H

@@ -15,6 +15,7 @@ set(kdevplatformproject_LIB_SRCS
     interfaces/iprojectfilemanager.cpp
     interfaces/ibuildsystemmanager.cpp
     interfaces/iprojectfilter.cpp
+    interfaces/iprojectfilterprovider.cpp
 )
 
 
@@ -38,6 +39,7 @@ install(FILES
     interfaces/iprojectfilemanager.h
     interfaces/ibuildsystemmanager.h
     interfaces/iprojectfilter.h
+    interfaces/iprojectfilterprovider.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/project/interfaces COMPONENT Devel
  )
 

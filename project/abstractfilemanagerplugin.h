@@ -32,6 +32,7 @@ class KDirWatch;
 namespace KDevelop {
 
 class FileManagerListJob;
+class IProjectFilterProvider;
 
 /**
  * This class can be used as a common base for file managers.
@@ -130,6 +131,7 @@ private:
 
     Q_PRIVATE_SLOT(d, void pluginLoaded( KDevelop::IPlugin* ) )
     Q_PRIVATE_SLOT(d, void unloadingPlugin( KDevelop::IPlugin* ) )
+    Q_PRIVATE_SLOT(d, void filterChanged( KDevelop::IProjectFilterProvider*, KDevelop::IProject* ) )
 };
 
 }

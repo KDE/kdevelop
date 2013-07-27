@@ -31,13 +31,10 @@ class KUrl;
 namespace KDevelop
 {
 
-class IProject;
-
 /**
- * @short An interface to filter files and folders in a project.
+ * @short The actual project filter object.
  *
- * Plugins implementing this interface will be queried to decide
- * whether a given file or folder is to be included in a project.
+ * Instances of this class should allow threadsafe filtering of project contents.
  *
  * @author Milian Wolff
  */
@@ -51,16 +48,13 @@ public:
      *
      * @param path is the path that you want to be checked.
      * @param isFolder distinguishes between files and folders.
-     * @param project the project for which this is checked, relevant for settings.
      *
      * @return true when the given path should be included in the project,
      *         false otherwise, i.e. when the path should be hidden.
      */
-    virtual bool includeInProject(const KUrl& path, bool isFolder, IProject* project) const = 0;
+    virtual bool isValid(const KUrl& path, bool isFolder) const = 0;
 };
 
 }
-
-Q_DECLARE_INTERFACE( KDevelop::IProjectFilter, "org.kdevelop.IProjectFilter")
 
 #endif // KDEVPLATFORM_IPROJECTFILTER_H

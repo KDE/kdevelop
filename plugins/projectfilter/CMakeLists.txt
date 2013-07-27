@@ -3,6 +3,7 @@
 ##############################
 
 set( projectfilter_SRCS
+    projectfilterprovider.cpp
     projectfilter.cpp
     projectfilterdebug.cpp
 )
