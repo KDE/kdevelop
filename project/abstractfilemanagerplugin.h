@@ -127,6 +127,9 @@ private:
 
     Q_PRIVATE_SLOT(d, void projectClosing(KDevelop::IProject* project))
     Q_PRIVATE_SLOT(d, void jobFinished(KJob* job))
+
+    Q_PRIVATE_SLOT(d, void pluginLoaded( KDevelop::IPlugin* ) )
+    Q_PRIVATE_SLOT(d, void unloadingPlugin( KDevelop::IPlugin* ) )
 };
 
 }

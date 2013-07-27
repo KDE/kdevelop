@@ -25,6 +25,7 @@
 #include "helper.h"
 
 #include <QFileInfo>
+#include <QApplication>
 
 #include <KConfigGroup>
 #include <KDebug>
@@ -37,7 +38,8 @@
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
 #include <interfaces/iprojectcontroller.h>
-#include <QApplication>
+#include <interfaces/iplugincontroller.h>
+#include <interfaces/iprojectfilter.h>
 
 #define ifDebug(x)
 
@@ -96,9 +98,13 @@ struct AbstractFileManagerPlugin::Private {
 
     void removeFolder(ProjectFolderItem* folder);
 
+    void pluginLoaded(IPlugin* plugin);
+    void unloadingPlugin(IPlugin* plugin);
+
     QHash<IProject*, KDirWatch*> m_watchers;
     QHash<IProject*, QList<FileManagerListJob*> > m_projectJobs;
     QVector<QString> m_stoppedFolders;
+    QVector<IProjectFilter*> m_filters;
 };
 
 void AbstractFileManagerPlugin::Private::projectClosing(IProject* project)
@@ -412,6 +418,24 @@ void AbstractFileManagerPlugin::Private::removeFolder(ProjectFolderItem* folder)
     folder->parent()->removeRow( folder->row() );
 }
 
+void AbstractFileManagerPlugin::Private::pluginLoaded(IPlugin* plugin)
+{
+    IProjectFilter* filter = plugin->extension<IProjectFilter>();
+    if (filter) {
+        m_filters << filter;
+    }
+}
+
+void AbstractFileManagerPlugin::Private::unloadingPlugin(IPlugin* plugin)
+{
+    IProjectFilter* filter = plugin->extension<IProjectFilter>();
+    if (filter) {
+        int idx = m_filters.indexOf(qobject_cast<IProjectFilter*>(plugin));
+        Q_ASSERT(idx != -1);
+        m_filters.remove(idx);
+    }
+}
+
 //END Private
 
 //BEGIN Plugin
@@ -427,6 +451,15 @@ AbstractFileManagerPlugin::AbstractFileManagerPlugin( const KComponentData& inst
 
     connect(core()->projectController(), SIGNAL(projectClosing(KDevelop::IProject*)),
             this, SLOT(projectClosing(KDevelop::IProject*)));
+
+    connect(core()->pluginController(), SIGNAL(pluginLoaded(KDevelop::IPlugin*)),
+            SLOT(pluginLoaded(KDevelop::IPlugin*)));
+    connect(core()->pluginController(), SIGNAL(unloadingPlugin(KDevelop::IPlugin*)),
+            SLOT(unloadingPlugin(KDevelop::IPlugin*)));
+
+    foreach(IPlugin* plugin, core()->pluginController()->loadedPlugins()) {
+        d->pluginLoaded(plugin);
+    }
 }
 
 AbstractFileManagerPlugin::~AbstractFileManagerPlugin()
@@ -609,7 +642,12 @@ bool AbstractFileManagerPlugin::copyFilesAndFolders(const KUrl::List& items, Pro
 bool AbstractFileManagerPlugin::isValid( const KUrl& url, const bool isFolder,
                                          IProject* project ) const
 {
-    return core()->projectController()->includeInProject(url, isFolder, project);
+    foreach(IProjectFilter* filter, d->m_filters) {
+        if (!filter->includeInProject(url, isFolder, project)) {
+            return false;
+        }
+    }
+    return true;
 }
 
 ProjectFileItem* AbstractFileManagerPlugin::createFileItem( IProject* project, const KUrl& url,

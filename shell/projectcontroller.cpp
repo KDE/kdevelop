@@ -63,7 +63,6 @@ Boston, MA 02110-1301, USA.
 #include <project/interfaces/iprojectfilemanager.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/interfaces/iprojectbuilder.h>
-#include <project/interfaces/iprojectfilter.h>
 #include <project/projectmodel.h>
 #include <project/projectbuildsetmodel.h>
 #include <interfaces/ilanguagecontroller.h>
@@ -113,7 +112,6 @@ public:
     bool m_foundProjectFile; //Temporary flag used while searching the hierarchy for a project file
     bool m_cleaningUp; //Temporary flag enabled while destroying the project-controller
     QPointer<ProjectChangesModel> m_changesModel;
-    QVector<IProjectFilter*> m_filters;
 
     ProjectControllerPrivate( ProjectController* p )
         : m_core(0), model(0), selectionModel(0), dialog(0), m_configuringProject(0), q(p), buildset(0), m_foundProjectFile(false), m_cleaningUp(false)
@@ -310,25 +308,6 @@ public:
             project->deleteLater();
         }
     }
-
-    void pluginLoaded(IPlugin* plugin)
-    {
-        IProjectFilter* filter = plugin->extension<IProjectFilter>();
-        if (filter) {
-            m_filters << filter;
-        }
-    }
-
-    void unloadingPlugin(IPlugin* plugin)
-    {
-        IProjectFilter* filter = plugin->extension<IProjectFilter>();
-        if (filter) {
-            int idx = m_filters.indexOf(qobject_cast<IProjectFilter*>(plugin));
-            if (idx != -1) {
-                m_filters.remove(idx);
-            }
-        }
-    }
 };
 
 IProjectDialogProvider::IProjectDialogProvider()
@@ -489,15 +468,6 @@ ProjectController::ProjectController( Core* core )
     //      initialized *before* the project controller
     if (Core::self()->setupFlags() != Core::NoUi) {
         setupActions();
-    }
-
-    connect(core->pluginController(), SIGNAL(pluginLoaded(KDevelop::IPlugin*)),
-            SLOT(pluginLoaded(KDevelop::IPlugin*)));
-    connect(core->pluginController(), SIGNAL(unloadingPlugin(KDevelop::IPlugin*)),
-            SLOT(unloadingPlugin(KDevelop::IPlugin*)));
-
-    foreach(IPlugin* plugin, core->pluginController()->loadedPlugins()) {
-        d->pluginLoaded(plugin);
     }
 }
 
@@ -1171,16 +1141,6 @@ QString ProjectController::mapSourceBuild( const QString& path, bool reverse, bo
         }
     }
     return QString();
-}
-
-bool ProjectController::includeInProject(const KUrl& path, bool isFolder, IProject* project) const
-{
-    foreach(IProjectFilter* filter, d->m_filters) {
-        if (!filter->includeInProject(path, isFolder, project)) {
-            return false;
-        }
-    }
-    return true;
 }
 
 }
