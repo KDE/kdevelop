@@ -52,6 +52,8 @@
 #include <project/projectmodel.h>
 #include <project/importprojectjob.h>
 #include <project/helper.h>
+#include <project/projectfiltermanager.h>
+#include <project/interfaces/iprojectfilter.h>
 #include <language/duchain/parsingenvironment.h>
 #include <language/duchain/indexedstring.h>
 #include <language/duchain/duchain.h>
@@ -87,6 +89,7 @@
 
 #include <language/highlighting/codehighlighting.h>
 #include <interfaces/iruncontroller.h>
+#include <interfaces/foregroundlock.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>
 #include <vcs/vcsjob.h>
 #include <project/interfaces/iprojectbuilder.h>
@@ -466,6 +469,7 @@ QList<ProjectBaseItem*> castToBase(const QList<T*>& ptrs)
 
 CMakeManager::CMakeManager( QObject* parent, const QVariantList& )
     : KDevelop::IPlugin( CMakeSupportFactory::componentData(), parent )
+    , m_filter( new ProjectFilterManager( this ) )
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBuildSystemManager )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
@@ -680,18 +684,28 @@ KDevelop::ReferencedTopDUContext CMakeManager::includeScript(const QString& file
     return CMakeParserUtils::includeScript( file, parent, &m_projectsData[project], dir, env.variables(profile));
 }
 
+bool CMakeManager::isValid(const KUrl& path, bool isFolder, const Filters& filters) const
+{
+    foreach(const QSharedPointer<IProjectFilter>& filter, filters) {
+        if (!filter->isValid(path, isFolder)) {
+            return false;
+        }
+    }
+    return true;
+}
 
-
-QSet<QString> filterFiles(const QStringList& orig)
+QSet<QString> CMakeManager::filterFiles(const QFileInfoList& orig, const KUrl& folderUrl, const Filters& filters) const
 {
     QSet<QString> ret;
-    foreach(const QString& str, orig)
+    ret.reserve(orig.size());
+    foreach(const QFileInfo& info, orig)
     {
-        ///@todo This filter should be configurable, and filtering should be done on a manager-independent level
-        if (str.endsWith(QLatin1Char('~')) || str.endsWith(QLatin1String(".bak")))
-            continue;
-
-        ret.insert(str);
+        const QString& fileName = info.fileName();
+        KUrl url = folderUrl;
+        url.addPath(fileName);
+        if (isValid(url, info.isDir(), filters)) {
+            ret.insert(fileName);
+        }
     }
     return ret;
 }
@@ -721,6 +735,25 @@ QStringList resolvePaths(const KUrl& baseUrl, const QStringList& pathsToResolve)
 }
 
 QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolderItem* item )
+{
+    Filters filters;
+    {
+        ///HACK: this is called from a background thread. Get a copy of the filters
+        ///      while holding the foreground thread to prevent race conditions.
+        ///      Then afterwards the filters can be used without locks.
+        ForegroundLock lock;
+        ///TODO: the isManaged check is only required since there is no way to differentiate
+        ///      between loading a project initially and reloading it later on
+        if (!m_filter->isManaged(item->project())) {
+            m_filter->add(item->project());
+        }
+        filters = m_filter->filtersForProject(item->project());
+    }
+    parse(item, filters);
+    return QList<KDevelop::ProjectFolderItem*>();
+}
+
+void CMakeManager::parse( KDevelop::ProjectFolderItem* item, const Filters& filters )
 {
     IProject* project = item->project();
     Q_ASSERT(isReloading(project));
@@ -784,7 +817,11 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                 path.addPath(subf.name);
             }
             path.adjustPath(KUrl::AddTrailingSlash);
-            
+
+            if(!isValid(path, true, filters)) {
+                continue;
+            }
+
             if(QDir(path.toLocalFile()).exists())
             {
                 alreadyAdded.append(subf.name);
@@ -947,7 +984,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                                   Q_ARG(KDevelop::ProjectFolderItem*, item));
         
         foreach(KDevelop::ProjectFolderItem* item, folderList) {
-            parse(item);
+            parse(item, filters);
         }
         data.vm.popScope();
     } else if( folder ) {
@@ -959,9 +996,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
         kDebug(9042) << "Folder Item which is not a CMake folder parsed:" << item->url() << item->type();
     }
     // Use item here since folder may be 0.
-    reloadFiles(item);
-
-    return QList<KDevelop::ProjectFolderItem*>();
+    reloadFiles(item, filters);
 }
 
 ProjectFileItem* containsFile(const KUrl& file, const QList<ProjectFileItem*>& tfiles)
@@ -1269,7 +1304,7 @@ void CMakeManager::dirtyFile(const QString & dirty)
             m_busyProjects += p;
             locker.unlock();
             
-            reloadFiles(folders.first());
+            reloadFiles(folders.first(), m_filter->filtersForProject(p));
             cleanupToDelete(p);
             
             locker.relock();
@@ -1279,7 +1314,7 @@ void CMakeManager::dirtyFile(const QString & dirty)
     }
 }
 
-void CMakeManager::reloadFiles(ProjectFolderItem* item)
+void CMakeManager::reloadFiles(ProjectFolderItem* item, const Filters& filters)
 {
     Q_ASSERT(isReloading(item->project()));
     
@@ -1289,14 +1324,14 @@ void CMakeManager::reloadFiles(ProjectFolderItem* item)
         return;
     }
     
-    QStringList entriesL = d.entryList( QDir::AllEntries | QDir::NoDotAndDotDot);
-    QSet<QString> entries = filterFiles(entriesL);
-    
     KUrl folderurl = item->url();
     folderurl.cleanPath();
 
     kDebug() << "Reloading Directory!" << folderurl;
     
+    QFileInfoList entriesL = d.entryInfoList( QDir::AllEntries | QDir::NoDotAndDotDot);
+    QSet<QString> entries = filterFiles(entriesL, folderurl, filters);
+
     //We look for removed elements
     for(int i=0; i<item->rowCount(); i++)
     {
@@ -1335,7 +1370,7 @@ void CMakeManager::reloadFiles(ProjectFolderItem* item)
             } else if(isCorrectFolder(fileurl, item->project())) {
                 fileurl.adjustPath(KUrl::AddTrailingSlash);
                 ProjectFolderItem* it = new ProjectFolderItem( item->project(), fileurl, 0 );
-                reloadFiles(it);
+                reloadFiles(it, filters);
                 {
                     QMutexLocker locker(&m_dirWatchersMutex);
                     m_watchers[item->project()]->addPath(fileurl.toLocalFile());
@@ -1792,6 +1827,8 @@ void CMakeManager::projectClosing(IProject* p)
     
     QMutexLocker locker(&m_dirWatchersMutex);
     delete m_watchers.take(p);
+
+    m_filter->remove(p);
 }
 
 void CMakeManager::addDeleteItem(ProjectBaseItem* item)
