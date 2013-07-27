@@ -152,7 +152,7 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent, bool setLastUs
     caseSensitiveCheck->setChecked(cg.readEntry("case_sens", true));
 
     QList<IProject*> projects = m_plugin->core()->projectController()->projects();
-        setDirectory( !projects.isEmpty() ? allOpenProjectsString : QDir::homePath() );
+    setDirectory( cg.readEntry("SearchPath", !projects.isEmpty() ? allOpenProjectsString : QDir::homePath() ));
 
     directoryRequester->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
 
@@ -277,6 +277,7 @@ GrepDialog::~GrepDialog()
     cg.writeEntry("LastUsedTemplateIndex", templateTypeCombo->currentIndex());
     cg.writeEntry("LastUsedTemplateString", qCombo2StringList(templateEdit));
     cg.writeEntry("LastUsedReplacementTemplateString", qCombo2StringList(templateEdit));
+    cg.writeEntry("SearchPath", directoryRequester->lineEdit()->text());
     cg.sync();
 }
 

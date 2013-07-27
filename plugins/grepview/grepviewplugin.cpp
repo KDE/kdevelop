@@ -173,31 +173,11 @@ void GrepViewPlugin::showDialog(bool setLastUsed, QString pattern, bool showOpti
         dlg->enableButtonOk( !pattern.isEmpty() );
     }
 
+    //if directory is empty then use a default value from the config file.
     if (!m_directory.isEmpty()) {
         dlg->setDirectory(m_directory);
-    } else {
-        KUrl currentUrl;
-        KDevelop::IDocument *document = core()->documentController()->activeDocument();
-        bool enableProjectBox = false;
-        if( document )
-        {
-            currentUrl = document->url();
-        }
-        if( currentUrl.isValid() )
-        {
-            KDevelop::IProject *proj = core()->projectController()->findProjectForUrl( currentUrl );
-            if( proj && proj->folder().isLocalFile() )
-            {
-                enableProjectBox = !proj->files().isEmpty();
-                if (!m_directory.startsWith(proj->folder().toLocalFile()))
-                {
-                    dlg->setDirectory( proj->folder().toLocalFile() );
-                }
-            }
-        }
-        dlg->setEnableProjectBox(enableProjectBox);
-    }
-
+    } 
+    
     if(showOptions)
         dlg->show();
     else{
