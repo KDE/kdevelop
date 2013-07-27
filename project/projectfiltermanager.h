@@ -25,11 +25,14 @@
 #include "projectexport.h"
 
 #include <QObject>
+#include <QVector>
+#include <QSharedPointer>
 
 class KUrl;
 
 namespace KDevelop {
 
+class IProjectFilter;
 class IProjectFilterProvider;
 class IPlugin;
 class IProject;
@@ -40,6 +43,9 @@ class IProject;
  * Use this class in implementations of IProjectFileManager to simplify
  * the management of IProjectFilter instances for projects managed by
  * your file manager.
+ *
+ * NOTE: This interface is _not_ threadsafe. But you can use filtersForProject()
+ * to implement thread safe filtering.
  *
  * @author Milian Wolff
  */
@@ -65,6 +71,21 @@ public:
      * Remove the managed filters of the given project.
      */
     void remove(IProject* project);
+
+    /**
+     * TODO: remove this once the cmake manager got cleaned up to not need this
+     *       anymore.
+     *
+     * @return true if the project is managed, false otherwise.
+     */
+    bool isManaged(IProject* project) const;
+
+    /**
+     * @return the current list of project filters for a given managed project.
+     *
+     * This can be used to implement a thread safe project filtering
+     */
+    QVector<QSharedPointer<IProjectFilter> > filtersForProject(IProject* project) const;
 
 private:
     struct Private;

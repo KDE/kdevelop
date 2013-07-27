@@ -167,6 +167,11 @@ void ProjectFilterManager::remove(IProject* project)
     d->m_filters.remove(project);
 }
 
+bool ProjectFilterManager::isManaged(IProject* project) const
+{
+    return d->m_filters.contains(project);
+}
+
 bool ProjectFilterManager::isValid(const KUrl& path, bool isFolder, IProject* project) const
 {
     foreach(const Filter& filter, d->m_filters[project]) {
@@ -175,6 +180,17 @@ bool ProjectFilterManager::isValid(const KUrl& path, bool isFolder, IProject* pr
         }
     }
     return true;
+}
+
+QVector< QSharedPointer< IProjectFilter > > ProjectFilterManager::filtersForProject(IProject* project) const
+{
+    QVector< QSharedPointer< IProjectFilter > > ret;
+    QVector< Filter > filters = d->m_filters[project];
+    ret.reserve(filters.size());
+    foreach(const Filter& filter, filters) {
+        ret << filter.filter;
+    }
+    return ret;
 }
 //END
 
