@@ -38,9 +38,8 @@
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
 #include <interfaces/iprojectcontroller.h>
-#include <interfaces/iplugincontroller.h>
-#include <interfaces/iprojectfilterprovider.h>
-#include <interfaces/iprojectfilter.h>
+
+#include "projectfiltermanager.h"
 
 #define ifDebug(x)
 
@@ -62,16 +61,7 @@ ProjectFolderItem* getParentFolder(ProjectBaseItem* item)
     }
 }
 
-struct Filter
-{
-    QSharedPointer<IProjectFilter> filter;
-    // required for bookkeeping
-    IProjectFilterProvider* provider;
-};
-
 }
-
-Q_DECLARE_TYPEINFO(Filter, Q_MOVABLE_TYPE);
 
 //END Helper
 
@@ -108,16 +98,10 @@ struct AbstractFileManagerPlugin::Private {
 
     void removeFolder(ProjectFolderItem* folder);
 
-    QVector<Filter> filtersForProject(IProject* project);
-    void pluginLoaded(IPlugin* plugin);
-    void unloadingPlugin(IPlugin* plugin);
-    void filterChanged(IProjectFilterProvider* provider, IProject* project);
-
     QHash<IProject*, KDirWatch*> m_watchers;
     QHash<IProject*, QList<FileManagerListJob*> > m_projectJobs;
     QVector<QString> m_stoppedFolders;
-    QVector<IProjectFilterProvider*> m_filterProvider;
-    QHash<IProject*, QVector<Filter> > m_filters;
+    ProjectFilterManager m_filters;
 };
 
 void AbstractFileManagerPlugin::Private::projectClosing(IProject* project)
@@ -432,80 +416,6 @@ void AbstractFileManagerPlugin::Private::removeFolder(ProjectFolderItem* folder)
     folder->parent()->removeRow( folder->row() );
 }
 
-QVector<Filter> AbstractFileManagerPlugin::Private::filtersForProject(IProject* project)
-{
-    QVector<Filter> ret;
-    ret.reserve(m_filterProvider.size());
-    foreach(IProjectFilterProvider* provider, m_filterProvider) {
-        Filter filter;
-        filter.provider = provider;
-        filter.filter = provider->createFilter(project);
-        ret << filter;
-    }
-    return ret;
-}
-
-void AbstractFileManagerPlugin::Private::pluginLoaded(IPlugin* plugin)
-{
-    IProjectFilterProvider* filterProvider = plugin->extension<IProjectFilterProvider>();
-    if (filterProvider) {
-        m_filterProvider << filterProvider;
-        QObject::connect(plugin, SIGNAL(filterChanged(KDevelop::IProjectFilterProvider*, KDevelop::IProject*)),
-                         q, SLOT(filterChanged(KDevelop::IProjectFilterProvider*, KDevelop::IProject*)));
-        QHash< IProject*, QVector< Filter > >::iterator it = m_filters.begin();
-        while(it != m_filters.end()) {
-            Filter filter;
-            filter.provider = filterProvider;
-            filter.filter = filterProvider->createFilter(it.key());
-            it.value().append(filter);
-            ++it;
-        }
-    }
-}
-
-void AbstractFileManagerPlugin::Private::unloadingPlugin(IPlugin* plugin)
-{
-    IProjectFilterProvider* filterProvider = plugin->extension<IProjectFilterProvider>();
-    if (filterProvider) {
-        int idx = m_filterProvider.indexOf(qobject_cast<IProjectFilterProvider*>(plugin));
-        Q_ASSERT(idx != -1);
-        m_filterProvider.remove(idx);
-        QHash< IProject*, QVector<Filter> >::iterator filtersIt = m_filters.begin();
-        while(filtersIt != m_filters.end()) {
-            QVector<Filter>& filters = filtersIt.value();
-            Filter* filter = filters.begin();
-            while(filter != filters.end()) {
-                if ((*filter).provider == filterProvider) {
-                    filter = filters.erase(filter);
-                    continue;
-                }
-                ++filter;
-            }
-            ++filtersIt;
-        }
-    }
-}
-
-void AbstractFileManagerPlugin::Private::filterChanged(IProjectFilterProvider* provider, IProject* project)
-{
-    if (!m_filters.contains(project)) {
-        return;
-    }
-
-    QVector< Filter >& filters = m_filters[project];
-    Filter* it = filters.begin();
-    while(it != filters.end()) {
-        if (it->provider == provider) {
-            it->filter = provider->createFilter(project);
-            kDebug(9517) << "project filter changed, reloading" << project->name();
-            q->reload(project->projectItem());
-            return;
-        }
-        ++it;
-    }
-    Q_ASSERT_X(false, Q_FUNC_INFO, "Unknown provider changed its filter");
-}
-
 //END Private
 
 //BEGIN Plugin
@@ -521,15 +431,6 @@ AbstractFileManagerPlugin::AbstractFileManagerPlugin( const KComponentData& inst
 
     connect(core()->projectController(), SIGNAL(projectClosing(KDevelop::IProject*)),
             this, SLOT(projectClosing(KDevelop::IProject*)));
-
-    connect(core()->pluginController(), SIGNAL(pluginLoaded(KDevelop::IPlugin*)),
-            SLOT(pluginLoaded(KDevelop::IPlugin*)));
-    connect(core()->pluginController(), SIGNAL(unloadingPlugin(KDevelop::IPlugin*)),
-            SLOT(unloadingPlugin(KDevelop::IPlugin*)));
-
-    foreach(IPlugin* plugin, core()->pluginController()->loadedPlugins()) {
-        d->pluginLoaded(plugin);
-    }
 }
 
 AbstractFileManagerPlugin::~AbstractFileManagerPlugin()
@@ -568,7 +469,7 @@ ProjectFolderItem *AbstractFileManagerPlugin::import( IProject *project )
         d->m_watchers[project]->addDir(project->folder().toLocalFile(), KDirWatch::WatchSubDirs | KDirWatch:: WatchFiles );
     }
 
-    d->m_filters[project] = d->filtersForProject(project);
+    d->m_filters.add(project);
 
     return projectRoot;
 }
@@ -714,12 +615,7 @@ bool AbstractFileManagerPlugin::copyFilesAndFolders(const KUrl::List& items, Pro
 bool AbstractFileManagerPlugin::isValid( const KUrl& url, const bool isFolder,
                                          IProject* project ) const
 {
-    foreach(const Filter& filter, d->m_filters[project]) {
-        if (!filter.filter->isValid(url, isFolder)) {
-            return false;
-        }
-    }
-    return true;
+    return d->m_filters.isValid(url, isFolder, project);
 }
 
 ProjectFileItem* AbstractFileManagerPlugin::createFileItem( IProject* project, const KUrl& url,
