@@ -35,15 +35,55 @@ QTEST_KDEMAIN(TestProjectFilter, NoGUI);
 
 using namespace KDevelop;
 
-typedef QSharedPointer<KDevelop::TestProject> Project;
+typedef QSharedPointer<ProjectFilter> Filter;
 
-Q_DECLARE_METATYPE(Project)
+Q_DECLARE_METATYPE(Filter)
+
+namespace {
+
+const bool Invalid = false;
+const bool Valid = true;
+const bool Folder = true;
+const bool File = false;
+
+struct MatchTest
+{
+    QString path;
+    bool isFolder;
+    bool shouldMatch;
+};
+
+void addTests(const QString& tag, const TestProject& project, const Filter& filter, MatchTest* tests, uint numTests)
+{
+    for (uint i = 0; i < numTests; ++i) {
+        const MatchTest& test = tests[i];
+        QTest::newRow(qstrdup(qPrintable(tag + ':' + test.path)))
+            << filter
+            << KUrl(project.folder(), test.path)
+            << test.isFolder
+            << test.shouldMatch;
+
+        if (test.isFolder) {
+            // also test folder with trailing slash - should not make a difference
+            QTest::newRow(qstrdup(qPrintable(tag + ':' + test.path + '/')))
+                << filter
+                << KUrl(project.folder(), test.path + '/')
+                << test.isFolder
+                << test.shouldMatch;
+        }
+    }
+}
+
+///FIXME: remove once we can use c++11
+#define ADD_TESTS(tag, project, filter, tests) addTests(tag, project, filter, tests, sizeof(tests) / sizeof(tests[0]))
+
+}
 
 void TestProjectFilter::initTestCase()
 {
     AutoTestShell::init();
     TestCore::initialize(Core::NoUi);
-    qRegisterMetaType<Project>();
+    qRegisterMetaType<Filter>();
 }
 
 void TestProjectFilter::cleanupTestCase()
@@ -53,44 +93,43 @@ void TestProjectFilter::cleanupTestCase()
 
 void TestProjectFilter::match()
 {
-    QFETCH(Project, project);
+    QFETCH(Filter, filter);
     QFETCH(KUrl, path);
     QFETCH(bool, isFolder);
     QFETCH(bool, expectedIsValid);
 
-    ProjectFilter filter(project.data());
-    QCOMPARE(filter.isValid(path, isFolder), expectedIsValid);
+    QCOMPARE(filter->isValid(path, isFolder), expectedIsValid);
 }
 
 void TestProjectFilter::match_data()
 {
-    QTest::addColumn<Project>("project");
+    QTest::addColumn<Filter>("filter");
     QTest::addColumn<KUrl>("path");
     QTest::addColumn<bool>("isFolder");
     QTest::addColumn<bool>("expectedIsValid");
 
     {
-        // this is just with default filters
-        Project project(new TestProject);
-        QTest::newRow("projectRoot") << project << project->folder() << true << true;
+        // test default filters
+        TestProject project;
+        Filter filter(new ProjectFilter(&project));
 
-        QTest::newRow(".kdev4") << project << KUrl(project->folder(), ".kdev4") << true << false;
-        QTest::newRow(".kdev4/") << project << KUrl(project->folder(), ".kdev4/") << true << false;
-        QTest::newRow("project.kdev4") << project << project->projectFileUrl() << false << false;
+        QTest::newRow("projectRoot") << filter << project.folder() << Folder << Valid;
+        QTest::newRow("project.kdev4") << filter << project.projectFileUrl() << File << Invalid;
 
-        QTest::newRow("folder") << project << KUrl(project->folder(), "folder") << true << true;
-        QTest::newRow("folder/") << project << KUrl(project->folder(), "folder/") << true << true;
-        QTest::newRow("folder/folder") << project << KUrl(project->folder(), "folder/folder") << true << true;
-        QTest::newRow("folder/folder/") << project << KUrl(project->folder(), "folder/folder/") << true << true;
+        MatchTest tests[] = {
+            //{path, isFolder, isValid}
+            {".kdev4", Folder, Invalid},
 
-        QTest::newRow("file") << project << KUrl(project->folder(), "file") << false << true;
-        QTest::newRow("folder/file") << project << KUrl(project->folder(), "folder/file") << false << true;
-
-        QTest::newRow(".file") << project << KUrl(project->folder(), ".file") << false << false;
-        QTest::newRow("folder/.file") << project << KUrl(project->folder(), "folder/.file") << false << false;
-        QTest::newRow(".folder") << project << KUrl(project->folder(), ".folder") << true << false;
-        QTest::newRow(".folder/") << project << KUrl(project->folder(), ".folder/") << true << false;
-        QTest::newRow("folder/.folder") << project << KUrl(project->folder(), "folder/.folder") << true << false;
+            {"folder", Folder, Valid},
+            {"folder/folder", Folder, Valid},
+            {"file", File, Valid},
+            {"folder/file", File, Valid},
+            {".file", File, Invalid},
+            {".folder", Folder, Invalid},
+            {"folder/.folder", Folder, Invalid},
+            {"folder/.file", File, Invalid}
+        };
+        ADD_TESTS("default", project, filter, tests);
     }
 }
 
