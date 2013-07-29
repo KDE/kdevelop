@@ -70,11 +70,27 @@ void TestProjectFilter::match_data()
     QTest::addColumn<bool>("expectedIsValid");
 
     {
+        // this is just with default filters
         Project project(new TestProject);
         QTest::newRow("projectRoot") << project << project->folder() << true << true;
+
         QTest::newRow(".kdev4") << project << KUrl(project->folder(), ".kdev4") << true << false;
         QTest::newRow(".kdev4/") << project << KUrl(project->folder(), ".kdev4/") << true << false;
         QTest::newRow("project.kdev4") << project << project->projectFileUrl() << false << false;
+
+        QTest::newRow("folder") << project << KUrl(project->folder(), "folder") << true << true;
+        QTest::newRow("folder/") << project << KUrl(project->folder(), "folder/") << true << true;
+        QTest::newRow("folder/folder") << project << KUrl(project->folder(), "folder/folder") << true << true;
+        QTest::newRow("folder/folder/") << project << KUrl(project->folder(), "folder/folder/") << true << true;
+
+        QTest::newRow("file") << project << KUrl(project->folder(), "file") << false << true;
+        QTest::newRow("folder/file") << project << KUrl(project->folder(), "folder/file") << false << true;
+
+        QTest::newRow(".file") << project << KUrl(project->folder(), ".file") << false << false;
+        QTest::newRow("folder/.file") << project << KUrl(project->folder(), "folder/.file") << false << false;
+        QTest::newRow(".folder") << project << KUrl(project->folder(), ".folder") << true << false;
+        QTest::newRow(".folder/") << project << KUrl(project->folder(), ".folder/") << true << false;
+        QTest::newRow("folder/.folder") << project << KUrl(project->folder(), "folder/.folder") << true << false;
     }
 }
 
