@@ -213,6 +213,29 @@ void TestProjectFilter::match_data()
         };
         ADD_TESTS("exclude:*/foo/", project, filter, tests);
     }
+    {
+        // test mixed stuff
+        FilterTestProject project(QStringList() << "*.inc", QStringList() << "*/bar/" << "*ex.inc");
+        Filter filter(new ProjectFilter(&project));
+
+        QTest::newRow("projectRoot") << filter << project.folder() << Folder << Valid;
+        QTest::newRow("project.kdev4") << filter << project.projectFileUrl() << File << Invalid;
+
+        MatchTest tests[] = {
+            //{path, isFolder, isValid}
+            {".kdev4", Folder, Invalid},
+
+            {"folder", Folder, Valid},
+            {"file", File, Invalid},
+            {"file.inc", File, Valid},
+            {"file.ex.inc", File, Invalid},
+            {"folder/file", File, Invalid},
+            {"folder/file.inc", File, Valid},
+            {"folder/file.ex.inc", File, Invalid},
+            {"bar", Folder, Invalid},
+        };
+        ADD_TESTS("mixed", project, filter, tests);
+    }
 }
 
 #include "test_projectfilter.moc"
