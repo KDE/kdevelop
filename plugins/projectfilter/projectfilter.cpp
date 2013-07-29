@@ -72,6 +72,9 @@ bool ProjectFilter::isValid( const KUrl &url, const bool isFolder ) const
         // do not show the project file
         ///TODO: enable egain once the project page is ready for consumption
         return false;
+    } else if (isFolder && url == m_project) {
+        // always show the project root
+        return true;
     }
 
     // filter some common files out that probably (hopefully?) noone will ever want to see
