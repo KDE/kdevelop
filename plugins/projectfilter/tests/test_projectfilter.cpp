@@ -24,6 +24,7 @@
 #include <qtest_kde.h>
 
 #include <QDebug>
+#include <KConfigGroup>
 
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
@@ -53,7 +54,22 @@ struct MatchTest
     bool shouldMatch;
 };
 
-void addTests(const QString& tag, const TestProject& project, const Filter& filter, MatchTest* tests, uint numTests)
+class FilterTestProject : public TestProject
+{
+public:
+    FilterTestProject(const QStringList& includes, const QStringList& excludes)
+    {
+        KConfigGroup filters = projectConfiguration()->group("Filters");
+        filters.writeEntry("Includes", includes);
+        filters.writeEntry("Excludes", excludes);
+    }
+    virtual ~FilterTestProject()
+    {
+        projectConfiguration()->deleteGroup("Filters");
+    }
+};
+
+void addTests(const QString& tag, const FilterTestProject& project, const Filter& filter, MatchTest* tests, uint numTests)
 {
     for (uint i = 0; i < numTests; ++i) {
         const MatchTest& test = tests[i];
@@ -110,7 +126,9 @@ void TestProjectFilter::match_data()
 
     {
         // test default filters
-        TestProject project;
+        FilterTestProject project((QStringList()), QStringList());
+        // delete group to get explicit defaults
+        project.projectConfiguration()->deleteGroup("Filters");
         Filter filter(new ProjectFilter(&project));
 
         QTest::newRow("projectRoot") << filter << project.folder() << Folder << Valid;
@@ -130,6 +148,49 @@ void TestProjectFilter::match_data()
             {"folder/.file", File, Invalid}
         };
         ADD_TESTS("default", project, filter, tests);
+    }
+    {
+        // test includes
+        FilterTestProject project(QStringList() << "*.cpp", QStringList());
+        Filter filter(new ProjectFilter(&project));
+
+        QTest::newRow("projectRoot") << filter << project.folder() << Folder << Valid;
+        QTest::newRow("project.kdev4") << filter << project.projectFileUrl() << File << Invalid;
+
+        MatchTest tests[] = {
+            //{path, isFolder, isValid}
+            {".kdev4", Folder, Invalid},
+
+            {"folder", Folder, Valid},
+            {"file", File, Invalid},
+            {"file.cpp", File, Valid},
+            {".file.cpp", File, Valid},
+            {"folder/file.cpp", File, Valid},
+            {"folder/.file.cpp", File, Valid}
+        };
+        ADD_TESTS("include*.cpp", project, filter, tests);
+        project.projectConfiguration();
+    }
+    {
+        // test excludes
+        FilterTestProject project(QStringList(), QStringList() << "*.cpp");
+        Filter filter(new ProjectFilter(&project));
+
+        QTest::newRow("projectRoot") << filter << project.folder() << Folder << Valid;
+        QTest::newRow("project.kdev4") << filter << project.projectFileUrl() << File << Invalid;
+
+        MatchTest tests[] = {
+            //{path, isFolder, isValid}
+            {".kdev4", Folder, Invalid},
+
+            {"folder", Folder, Valid},
+            {"file", File, Valid},
+            {"file.cpp", File, Invalid},
+            {"folder.cpp", Folder, Valid},
+            {"folder/file.cpp", File, Invalid},
+            {"folder/folder.cpp", Folder, Valid}
+        };
+        ADD_TESTS("exclude*.cpp", project, filter, tests);
     }
 }
 
