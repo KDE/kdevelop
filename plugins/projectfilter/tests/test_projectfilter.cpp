@@ -168,7 +168,7 @@ void TestProjectFilter::match_data()
             {"folder/file.cpp", File, Valid},
             {"folder/.file.cpp", File, Valid}
         };
-        ADD_TESTS("include*.cpp", project, filter, tests);
+        ADD_TESTS("include:*.cpp", project, filter, tests);
         project.projectConfiguration();
     }
     {
@@ -190,7 +190,28 @@ void TestProjectFilter::match_data()
             {"folder/file.cpp", File, Invalid},
             {"folder/folder.cpp", Folder, Valid}
         };
-        ADD_TESTS("exclude*.cpp", project, filter, tests);
+        ADD_TESTS("exclude:*.cpp", project, filter, tests);
+    }
+    {
+        // test excludes on folders
+        FilterTestProject project(QStringList(), QStringList() << "*/foo/");
+        Filter filter(new ProjectFilter(&project));
+
+        QTest::newRow("projectRoot") << filter << project.folder() << Folder << Valid;
+        QTest::newRow("project.kdev4") << filter << project.projectFileUrl() << File << Invalid;
+
+        MatchTest tests[] = {
+            //{path, isFolder, isValid}
+            {".kdev4", Folder, Invalid},
+
+            {"folder", Folder, Valid},
+            {"file", File, Valid},
+            {"foo", Folder, Invalid},
+            {"folder/file", File, Valid},
+            {"folder/foo", Folder, Invalid},
+            {"folder/foo", File, Valid}
+        };
+        ADD_TESTS("exclude:*/foo/", project, filter, tests);
     }
 }
 
