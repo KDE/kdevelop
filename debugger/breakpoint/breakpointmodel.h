@@ -53,6 +53,8 @@ public:
     virtual bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex());
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
     virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
+
+     ///Note: to retrieve the full path use Breakpoint::LocationRole, Qt::DisplayRole returns only a file's name
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
  

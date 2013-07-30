@@ -49,6 +49,10 @@ public:
         PendingState,
         CleanState
     };
+    ///Custom roles for retrieving data from breakpoint model.
+    enum BreakpointRole{
+        LocationRole = Qt::UserRole + 1 ///< Retrieves breakpoint's full path unlike Qt::DisplayRole. Note: it's only appliable to LocationColumn.
+    };
 
     Breakpoint(BreakpointModel *model, BreakpointKind kind);
     Breakpoint(BreakpointModel *model, const KConfigGroup& config);
@@ -57,6 +61,7 @@ public:
     bool setData(int index, const QVariant& value);
     void setDeleted();
 
+    ///Note: to retrieve the full path use LocationRole, Qt::DisplayRole return only a file's name
     QVariant data(int column, int role) const;
 
     void save(KConfigGroup& config);
