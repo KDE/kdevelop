@@ -175,7 +175,7 @@ void GrepViewPlugin::showDialog(bool setLastUsed, QString pattern, bool showOpti
 
     //if directory is empty then use a default value from the config file.
     if (!m_directory.isEmpty()) {
-        dlg->setDirectory(m_directory);
+        dlg->setSearchLocations(m_directory);
     } 
     
     if(showOptions)
