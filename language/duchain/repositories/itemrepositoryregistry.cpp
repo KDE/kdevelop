@@ -69,8 +69,8 @@ struct ItemRepositoryRegistryPrivate {
 
   ItemRepositoryRegistryPrivate(ItemRepositoryRegistry* owner)
   : m_owner(owner)
-  , m_mutex(QMutex::Recursive)
   , m_shallDelete(false)
+  , m_mutex(QMutex::Recursive)
   {
   }
 
