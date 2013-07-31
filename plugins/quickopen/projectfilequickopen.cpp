@@ -44,8 +44,11 @@ ProjectFileData::ProjectFileData( const ProjectFile& file )
 QString ProjectFileData::text() const
 {
     KUrl u(m_file.projectUrl);
-    u.adjustPath(KUrl::AddTrailingSlash);
-    return KUrl::relativeUrl( u, KUrl(m_file.pathOrUrl) );
+    QString ret = KUrl::relativePath( u.pathOrUrl(), m_file.pathOrUrl );
+    if (ret.startsWith(QLatin1String("./"))) {
+        ret.remove(0, 2);
+    }
+    return ret;
 }
 
 QString ProjectFileData::htmlDescription() const
