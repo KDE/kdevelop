@@ -398,7 +398,7 @@ p, li { white-space: pre-wrap; }
    <item row="5" column="1" colspan="3">
     <widget class="KComboBox" name="searchPaths">
      <property name="toolTip">
-      <string>Select the location where you want to search. It can be a directory, a file, or a semicolon separated(without spaces) list of directories/files.</string>
+      <string>Select the location where you want to search. It can be a directory, a file, or a semicolon separated (without spaces) list of directories/files.</string>
      </property>
      <property name="editable">
       <bool>true</bool>
