@@ -32,19 +32,6 @@
    <string>Find-Replace In Files</string>
   </property>
   <layout class="QGridLayout">
-   <item row="0" column="0">
-    <widget class="QLabel" name="label_8">
-     <property name="text">
-      <string>Pattern:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-     <property name="buddy">
-      <cstring>patternCombo</cstring>
-     </property>
-    </widget>
-   </item>
    <item row="0" column="1" colspan="5">
     <widget class="KComboBox" name="patternCombo">
      <property name="sizePolicy">
@@ -111,32 +98,71 @@ p, li { white-space: pre-wrap; }
      </property>
     </widget>
    </item>
-   <item row="1" column="4" colspan="2">
-    <widget class="KComboBox" name="templateTypeCombo"/>
+   <item row="5" column="5">
+    <widget class="KPushButton" name="syncButton">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="toolTip">
+      <string>Synchronize with current document directory.</string>
+     </property>
+    </widget>
    </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="label_10">
+   <item row="6" column="0">
+    <widget class="QLabel" name="depthLabel">
      <property name="text">
-      <string>Regular Expression:</string>
+      <string>Depth:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
      <property name="buddy">
-      <cstring>regexCheck</cstring>
+      <cstring>depthSpin</cstring>
      </property>
     </widget>
    </item>
-   <item row="3" column="1">
-    <widget class="QCheckBox" name="regexCheck">
+   <item row="6" column="1">
+    <widget class="QSpinBox" name="depthSpin">
      <property name="toolTip">
-      <string>Enable or disable regular expression.</string>
+      <string extracomment="Maximum level of recursion. For folder-based searches, that means the level of subfolders. Choose 0 to look only in files inside the current folder, or Full to search also on the subfoldersâ€™s files, theirs subfoldersâ€™ files, and so on."/>
      </property>
+     <property name="specialValueText">
+      <string extracomment="Full recursion will be used. For folder-based searches, that means searching in the target folder and all the subfolders, their subfolders, and so on.">Full</string>
+     </property>
+     <property name="minimum">
+      <number>-1</number>
+     </property>
+     <property name="value">
+      <number>-1</number>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="label_8">
      <property name="text">
-      <string/>
+      <string>Pattern:</string>
      </property>
-     <property name="checked">
-      <bool>true</bool>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buddy">
+      <cstring>patternCombo</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Files:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buddy">
+      <cstring>filesCombo</cstring>
      </property>
     </widget>
    </item>
@@ -172,7 +198,7 @@ p, li { white-space: pre-wrap; }
      </property>
     </widget>
    </item>
-   <item row="4" column="0">
+   <item row="5" column="0">
     <widget class="QLabel" name="label_5">
      <property name="text">
       <string>Location(s):</string>
@@ -180,67 +206,54 @@ p, li { white-space: pre-wrap; }
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
-     <property name="buddy">
-      <cstring>directoryRequester</cstring>
-     </property>
     </widget>
    </item>
-   <item row="4" column="1" colspan="4">
-    <widget class="KUrlRequester" name="directoryRequester">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
+   <item row="9" column="3" colspan="3">
+    <spacer>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
      </property>
-     <property name="toolTip">
-      <string>Select the location where you want to search. It can be a directory, a file, or a semicolon separated list of directories/files.</string>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
      </property>
-    </widget>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>361</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
    </item>
-   <item row="4" column="5">
-    <widget class="KPushButton" name="syncButton">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="toolTip">
-      <string>Synchronize with current document directory.</string>
-     </property>
-    </widget>
+   <item row="1" column="4" colspan="2">
+    <widget class="KComboBox" name="templateTypeCombo"/>
    </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="depthLabel">
+   <item row="3" column="0">
+    <widget class="QLabel" name="label_10">
      <property name="text">
-      <string>Depth:</string>
+      <string>Regular Expression:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
      <property name="buddy">
-      <cstring>depthSpin</cstring>
+      <cstring>regexCheck</cstring>
      </property>
     </widget>
    </item>
-   <item row="5" column="1">
-    <widget class="QSpinBox" name="depthSpin">
+   <item row="3" column="1">
+    <widget class="QCheckBox" name="regexCheck">
      <property name="toolTip">
-       <string extracomment="Maximum level of recursion. For folder-based searches, that means the level of subfolders. Choose 0 to look only in files inside the current folder, or Full to search also on the subfoldersâ€™s files, theirs subfoldersâ€™ files, and so on."/>
+      <string>Enable or disable regular expression.</string>
      </property>
-     <property name="specialValueText">
-       <string extracomment="Full recursion will be used. For folder-based searches, that means searching in the target folder and all the subfolders, their subfolders, and so on.">Full</string>
+     <property name="text">
+      <string/>
      </property>
-     <property name="minimum">
-       <number>-1</number>
-     </property>
-     <property name="value">
-       <number>-1</number>
+     <property name="checked">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
-   <item row="5" column="2">
+   <item row="6" column="2">
     <widget class="QLabel" name="limitToProjectLabel">
      <property name="text">
       <string>Limit to project files:</string>
@@ -253,7 +266,7 @@ p, li { white-space: pre-wrap; }
      </property>
     </widget>
    </item>
-   <item row="5" column="3">
+   <item row="6" column="3">
     <widget class="QCheckBox" name="limitToProjectCheck">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -269,20 +282,7 @@ p, li { white-space: pre-wrap; }
      </property>
     </widget>
    </item>
-   <item row="6" column="0">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Files:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-     <property name="buddy">
-      <cstring>filesCombo</cstring>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="1" colspan="5">
+   <item row="7" column="1" colspan="5">
     <widget class="KComboBox" name="filesCombo">
      <property name="toolTip">
       <string>Files filter.</string>
@@ -298,7 +298,7 @@ p, li { white-space: pre-wrap; }
      </property>
     </widget>
    </item>
-   <item row="7" column="0">
+   <item row="8" column="0">
     <widget class="QLabel" name="label_2">
      <property name="text">
       <string>Exclude:</string>
@@ -311,7 +311,7 @@ p, li { white-space: pre-wrap; }
      </property>
     </widget>
    </item>
-   <item row="7" column="1" colspan="5">
+   <item row="8" column="1" colspan="5">
     <widget class="KComboBox" name="excludeCombo">
      <property name="toolTip">
       <string>Files pattern to exclude</string>
@@ -327,7 +327,7 @@ p, li { white-space: pre-wrap; }
      </property>
     </widget>
    </item>
-   <item row="8" column="0">
+   <item row="9" column="0">
     <spacer>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -343,7 +343,7 @@ p, li { white-space: pre-wrap; }
      </property>
     </spacer>
    </item>
-   <item row="8" column="1">
+   <item row="9" column="1">
     <spacer>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -359,7 +359,7 @@ p, li { white-space: pre-wrap; }
      </property>
     </spacer>
    </item>
-   <item row="8" column="2">
+   <item row="9" column="2">
     <spacer>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -371,22 +371,6 @@ p, li { white-space: pre-wrap; }
       <size>
        <width>151</width>
        <height>31</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="8" column="3" colspan="3">
-    <spacer>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>361</width>
-       <height>20</height>
       </size>
      </property>
     </spacer>
@@ -411,6 +395,47 @@ p, li { white-space: pre-wrap; }
      </property>
     </widget>
    </item>
+   <item row="5" column="1" colspan="3">
+    <widget class="KComboBox" name="searchPaths">
+     <property name="toolTip">
+      <string>Select the location where you want to search. It can be a directory, a file, or a semicolon separated (without spaces) list of directories/files.</string>
+     </property>
+     <property name="editable">
+      <bool>true</bool>
+     </property>
+     <property name="autoCompletion">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="4">
+    <widget class="QPushButton" name="directorySelector">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>30</width>
+       <height>30</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>Select a directory to search in.</string>
+     </property>
+     <property name="text">
+      <string>...</string>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <customwidgets>
@@ -424,11 +449,6 @@ p, li { white-space: pre-wrap; }
    <extends>QPushButton</extends>
    <header>kpushbutton.h</header>
   </customwidget>
-  <customwidget>
-   <class>KUrlRequester</class>
-   <extends>QFrame</extends>
-   <header>kurlrequester.h</header>
-  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>patternCombo</tabstop>
@@ -437,9 +457,7 @@ p, li { white-space: pre-wrap; }
   <tabstop>replacementTemplateEdit</tabstop>
   <tabstop>regexCheck</tabstop>
   <tabstop>caseSensitiveCheck</tabstop>
-  <tabstop>directoryRequester</tabstop>
   <tabstop>syncButton</tabstop>
-  <tabstop>recursiveCheck</tabstop>
   <tabstop>limitToProjectCheck</tabstop>
   <tabstop>filesCombo</tabstop>
   <tabstop>excludeCombo</tabstop>

@@ -24,20 +24,12 @@
 #define KDEVPLATFORM_BREAKPOINTWIDGET_H
 
 #include <QtGui/QWidget>
-#include <QStyledItemDelegate>
 #include "../debuggerexport.h"
 
 class QModelIndex;
 class QItemSelection;
 class QTableView;
 class QMenu;
-
-class BreakpointDelegate : public QStyledItemDelegate
-{
-public:
-    BreakpointDelegate(QWidget * parent) : QStyledItemDelegate(parent){}
-    virtual QString displayText ( const QVariant& value, const QLocale& ) const;
-};
 
 namespace KDevelop {
 class IDebugController;
