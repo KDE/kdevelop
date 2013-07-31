@@ -219,7 +219,7 @@ struct DelayedTypeResolver : public KDevelop::TypeExchanger
   virtual AbstractType::Ptr exchange( const AbstractType::Ptr& type )
   {
     ThreadLocalData& data = threadDataLocal();
-    PushValue<uint> inc(data.delayedDepth, +1);
+    PushValue<uint> inc(data.delayedDepth, data.delayedDepth + 1);
     if( data.delayedDepth > 30 ) {
       kDebug(9007) << "Too much depth in DelayedTypeResolver::exchange, while exchanging" << (type ? type->toString() : QString("(null)"));
       return type;
@@ -273,7 +273,6 @@ struct DelayedTypeResolver : public KDevelop::TypeExchanger
         if( aType )
           aType->exchangeTypes(this);
 
-        
         return typeCopy;
       }
     }
@@ -633,7 +632,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
         ///an AliasDeclaration represents a C++ "using bla::bla;" declaration.
         if(AliasDeclaration* alias = dynamic_cast<AliasDeclaration*>(instantiatedDeclaration)) {
           ThreadLocalData& data = threadDataLocal();
-          PushValue<uint> safety(data.aliasDepth, +1);
+          PushValue<uint> safety(data.aliasDepth, data.delayedDepth + 1);
           if(data.aliasDepth > 30) {
             kWarning() << "depth-limit reached while resolving alias-declaration" << alias->identifier().toString() << "within" << parentContext->scopeIdentifier(true).toString();
           }else {
