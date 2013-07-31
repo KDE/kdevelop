@@ -160,6 +160,7 @@ struct ThreadLocalData {
   uint delayedDepth;
   // recursion counter for alias type resolution
   uint aliasDepth;
+  uint specializedFromDepth;
 };
 
 #if (QT_VERSION >= 0x040801)
@@ -385,7 +386,30 @@ TemplateDeclaration* TemplateDeclaration::instantiatedFrom() const {
 }
 
 void TemplateDeclaration::setSpecializedFrom(TemplateDeclaration* other) {
-  
+  ThreadLocalData& data = threadDataLocal();
+  PushValue<uint> safety(data.specializedFromDepth, data.specializedFromDepth+1);
+  if(data.specializedFromDepth > 30) {
+    QString withVal = "other";
+    if( other ) {
+      if( other->instantiatedFrom() ) {
+        withVal += ".instantiatedFrom() == " + other->instantiatedFrom()->id(true).qualifiedIdentifier().toString();
+      } else if( other->specializedFrom().data() ) {
+        withVal += ".specialiedFrom().data() == " + other->specializedFrom().data()->identifier().toString();
+      } else {
+        withVal += ".specializedFrom().data() == null && other.instantiatedFrom() == null";
+      }
+    } else {
+      withVal = " == null";
+    }
+    kWarning()
+        << "depth-limit reached while setting specializedFrom"
+        << (specializedFrom().data()
+            ? specializedFrom().data()->identifier().toString()
+            : "this specializedFrom is null")
+        << "with" << withVal;
+    return;
+  }
+
   if(other && other->instantiatedFrom()) {
     setSpecializedFrom(other->instantiatedFrom());
     return;
