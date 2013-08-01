@@ -627,8 +627,9 @@ TemplateDeclaration* DeclarationBuilder::findSpecializedFrom(Declaration* specia
   QList<Declaration*> specFromDecls = searchInContext->findLocalDeclarations(searchForIdentifier);
   foreach(Declaration * possibleSpec, specFromDecls)
   {
-    if (possibleSpec != specializedDeclaration)
-      return dynamic_cast<TemplateDeclaration*>(possibleSpec);
+    TemplateDeclaration *asTemplateDecl = dynamic_cast<TemplateDeclaration*>(possibleSpec);
+    if (!isSpecialization(asTemplateDecl))
+      return asTemplateDecl;
   }
   return 0;
 }
