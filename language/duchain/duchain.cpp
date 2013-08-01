@@ -266,10 +266,11 @@ class DUChainPrivate
       }
 
       void stopThread() {
-        m_waitMutex.lock();
-        m_stopRunning = true;
-        m_wait.wakeAll(); //Wakes the thread up, so it notices it should exit
-        m_waitMutex.unlock();
+        {
+          QMutexLocker lock(&m_waitMutex);
+          m_stopRunning = true;
+          m_wait.wakeAll(); //Wakes the thread up, so it notices it should exit
+        }
         wait();
       }
 
@@ -279,9 +280,8 @@ class DUChainPrivate
           for(uint s = 0; s < cleanupEverySeconds; ++s) {
             if(m_stopRunning)
               break;
-            m_waitMutex.lock();
+            QMutexLocker lock(&m_waitMutex);
             m_wait.wait(&m_waitMutex, 1000);
-            m_waitMutex.unlock();
           }
           if(m_stopRunning)
             break;
@@ -465,12 +465,13 @@ public:
 
     info->makeDynamic(); //By doing this, we make sure the data is actually being destroyed in the destructor
 
-    m_chainsMutex.lock();
-    bool removed = m_fileEnvironmentInformations.remove(info->url(), info);
-    
-    bool removed2 = m_indexEnvironmentInformations.remove(info->indexedTopContext().index());
-    
-    m_chainsMutex.unlock();
+    bool removed = false;
+    bool removed2 = false;
+    {
+      QMutexLocker lock(&m_chainsMutex);
+      removed = m_fileEnvironmentInformations.remove(info->url(), info);
+      removed2 = m_indexEnvironmentInformations.remove(info->indexedTopContext().index());
+    }
     
     {
       //Remove it from the environment information lists if it was there
@@ -1672,7 +1673,7 @@ KDevelop::ReferencedTopDUContext DUChain::waitForUpdate(const KDevelop::IndexedS
 
   WaitForUpdate waiter;
   
-  waiter.m_dataMutex.lock();
+  waiter.m_dataMutex.lockInline();
   
   {
     DUChainReadLocker readLock(DUChain::lock());

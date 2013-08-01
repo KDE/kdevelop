@@ -430,7 +430,7 @@ Set::Iterator& Set::Iterator::operator++() {
   Q_ASSERT(d->nodeStackSize);
   
   if(d->repository->m_mutex)
-    d->repository->m_mutex->lock();
+    d->repository->m_mutex->lockInline();
   
   ++d->currentIndex;
   
@@ -457,7 +457,7 @@ Set::Iterator& Set::Iterator::operator++() {
   Q_ASSERT(d->nodeStackSize == 0 || d->currentIndex < d->nodeStack[0]->end());
   
   if(d->repository->m_mutex)
-    d->repository->m_mutex->unlock();
+    d->repository->m_mutex->unlockInline();
   
   return *this;
 }
@@ -1060,10 +1060,10 @@ BasicSetRepository* Set::repository() const {
 void Set::staticRef() {
   if(!m_tree)
     return;
-    m_repository->m_mutex->lock();
+
+    QMutexLocker lock(m_repository->m_mutex);
     SetNodeData* data = m_repository->dataRepository.dynamicItemFromIndexSimple(m_tree);
     ++data->m_refCount;
-    m_repository->m_mutex->unlock();
 }
 
 ///Mutex must be locked
@@ -1096,11 +1096,9 @@ void Set::staticUnref() {
   if(!m_tree)
     return;
   
-    m_repository->m_mutex->lock();
+    QMutexLocker lock(m_repository->m_mutex);
     
     unrefNode(m_tree);
-    
-    m_repository->m_mutex->unlock();
 }
 
 StringSetRepository::StringSetRepository(QString name) : Utils::BasicSetRepository(name) {

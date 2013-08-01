@@ -81,20 +81,18 @@ class SpinLock
                     }
                     
                     //We need to wait now
-                    m_data.waitingMutex.lock();
+                    QMutexLocker lock(&m_data.waitingMutex);
                     m_data.needWake = true;
                     m_data.waitingCondition.wait(&m_data.waitingMutex, mSleep);
-                    m_data.waitingMutex.unlock();
                 }
             }else{
                 //No timeout
                 while(!m_data.lock.testAndSetOrdered(0, 1))
                 {
                     //We need to wait now
-                    m_data.waitingMutex.lock();
+                    QMutexLocker lock(&m_data.waitingMutex);
                     m_data.needWake = true;
                     m_data.waitingCondition.wait(&m_data.waitingMutex, mSleep);
-                    m_data.waitingMutex.unlock();
                 }
             }
         }

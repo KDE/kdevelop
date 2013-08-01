@@ -1031,10 +1031,10 @@ struct Locker { //This is a dummy that does nothing
 template<>
 struct Locker<true> {
   Locker(QMutex* mutex) : m_mutex(mutex) {
-    m_mutex->lock();
+    m_mutex->lockInline();
   }
   ~Locker() {
-    m_mutex->unlock();
+    m_mutex->unlockInline();
   }
   QMutex* m_mutex;
 };
