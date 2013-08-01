@@ -156,7 +156,7 @@ QIcon ProjectFileData::icon() const
      *       in a large list of quickopen items becomes very slow.
      */
     static QHash<QString, QPixmap> iconCache;
-    QHash< QString, QPixmap >::iterator it = iconCache.find(iconName);
+    QHash< QString, QPixmap >::const_iterator it = iconCache.constFind(iconName);
     if (it != iconCache.constEnd()) {
         return it.value();
     }
