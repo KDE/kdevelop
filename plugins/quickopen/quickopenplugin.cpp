@@ -420,8 +420,6 @@ void QuickOpenWidget::prepareShow()
   
   connect( o.list->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)), this, SLOT(currentChanged(QModelIndex,QModelIndex)) );
   connect( o.list->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this, SLOT(currentChanged(QItemSelection,QItemSelection)) );
-  
-  updateScrollBarState();
 }
 
 void QuickOpenWidgetDialog::run() {
@@ -506,14 +504,6 @@ void QuickOpenWidget::updateProviders() {
   m_model->enableProviders( checkedItems, checkedScopes );
 }
 
-void QuickOpenWidget::updateScrollBarState()
-{
-  if(m_model->rowCount(QModelIndex()) > rowCountForDisablingScrollBar)
-    o.list->verticalScrollBar()->setEnabled(false);
-  else
-    o.list->verticalScrollBar()->setEnabled(true);
-}
-
 void QuickOpenWidget::textChanged( const QString& str )
 {
   // "cheap" when something was just appended to the current filter
@@ -525,8 +515,6 @@ void QuickOpenWidget::textChanged( const QString& str )
 void QuickOpenWidget::applyFilter()
 {
   m_model->textChanged( m_filter );
-
-  updateScrollBarState();
 
   QModelIndex currentIndex = m_model->index(0, 0, QModelIndex());
   o.list->selectionModel()->setCurrentIndex( currentIndex, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows | QItemSelectionModel::Current );

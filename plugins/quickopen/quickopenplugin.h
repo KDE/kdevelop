@@ -170,8 +170,6 @@ class QuickOpenWidget : public QMenu {
   void updateProviders();
   void doubleClicked ( const QModelIndex & index );
 
-  void updateScrollBarState();
-
   void applyFilter();
 
   private:

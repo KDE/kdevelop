@@ -44,12 +44,12 @@ public:
     ~SimplePThreadMutex() {
         pthread_mutex_destroy(&m_mutex);
     }
-    void lock() {
+    void lockInline() {
         int result = pthread_mutex_lock(&m_mutex);
         Q_ASSERT(result == 0);
         Q_UNUSED(result);
     }
-    void unlock() {
+    void unlockInline() {
         int result = pthread_mutex_unlock(&m_mutex);
         Q_ASSERT(result == 0);
         Q_UNUSED(result);
@@ -101,7 +101,7 @@ void lockForegroundMutexInternal() {
         // We already have the mutex
         ++recursion;
     }else{
-        internalMutex.lock();
+        internalMutex.lockInline();
         Q_ASSERT(recursion == 0 && holderThread == 0);
         holderThread = QThread::currentThread();
         recursion = 1;
@@ -134,7 +134,7 @@ void unlockForegroundMutexInternal() {
     if(recursion == 0)
     {
         holderThread = 0;
-        internalMutex.unlock();
+        internalMutex.unlockInline();
     }
 }
 }
@@ -166,13 +166,13 @@ void KDevelop::ForegroundLock::relock()
                 public:
                 virtual void doInternal() {
                     // By locking the mutex, we make sure that the requester is actually waiting for the condition
-                    waitMutex.lock();
+                    waitMutex.lockInline();
                     // Now we release the foreground lock
                     TemporarilyReleaseForegroundLock release;
                     // And signalize to the requester that we've released it
                     condition.wakeAll();
                     // Allow the requester to actually wake up, by unlocking m_waitMutex
-                    waitMutex.unlock();
+                    waitMutex.unlockInline();
                     // Now wait until the requester is ready
                     QMutexLocker lock(&finishMutex);
                 }
