@@ -40,12 +40,6 @@ using namespace KDevelop;
 
 //BEGIN: private
 
-QTextStream globalOut(stdout);
-// use a QDebug to utilize operator<<() overloads
-// but don't use kDebug() to make sure we always print it, no matter what
-// is set in kdebugdialog
-QDebug qout(globalOut.device());
-
 class DumpChain
 {
 public:
@@ -74,7 +68,7 @@ private:
   int m_level;
 public:
   Indent(int level): m_level(level) {}
-  friend QDebug operator<<(QDebug debug, const Indent& ind) {
+  friend QDebug& operator<<(QDebug& debug, const Indent& ind) {
     for (int i=0; i<ind.m_level; i++) {
       debug << ' ';
     }
@@ -84,6 +78,12 @@ public:
 
 void DumpChain::dump( DUContext * context, int allowedDepth )
 {
+  QTextStream globalOut(stdout);
+  // use a QDebug to utilize operator<<() overloads
+  // but don't use kDebug() to make sure we always print it, no matter what
+  // is set in kdebugdialog
+  QDebug qout(globalOut.device());
+
   if(!top || top != context->topContext()) {
     top = context->topContext();
     if (!top->problems().isEmpty()) {
