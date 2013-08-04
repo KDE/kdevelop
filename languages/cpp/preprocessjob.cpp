@@ -88,7 +88,7 @@ PreprocessJob::~PreprocessJob() {
 }
 
 KDevelop::ParsingEnvironment* PreprocessJob::createStandardEnvironment() {
-    CppPreprocessEnvironment* ret = new CppPreprocessEnvironment(0, Cpp::EnvironmentFilePointer());
+    CppPreprocessEnvironment* ret = new CppPreprocessEnvironment(Cpp::EnvironmentFilePointer());
     ret->merge( CppUtils::standardMacros() );
     
     return ret;
@@ -148,7 +148,7 @@ void PreprocessJob::run()
     m_pp = &preprocessor;
 
     //Eventually initialize the environment with the parent-environment to get its macros
-    m_currentEnvironment = new CppPreprocessEnvironment( &preprocessor, m_firstEnvironmentFile );
+    m_currentEnvironment = new CppPreprocessEnvironment( m_firstEnvironmentFile );
 
     //If we are included from another preprocessor, copy its macros
     if( parentJob()->parentPreprocessor() ) {

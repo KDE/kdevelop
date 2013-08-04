@@ -119,7 +119,7 @@ void UseBuilder::visitTypeIDOperator(TypeIDOperatorAST* node)
 class UseExpressionVisitor : public Cpp::ExpressionVisitor {
   public:
   UseExpressionVisitor(ParseSession* session, UseBuilder* useBuilder, bool dumpProblems = false, bool mapAst = false)
-    : Cpp::ExpressionVisitor(session, 0, false, false, mapAst), m_builder(useBuilder), m_lastEndToken(0), m_dumpProblems(dumpProblems) {
+    : Cpp::ExpressionVisitor(session, 0, false, false, mapAst), m_builder(useBuilder), m_dumpProblems(dumpProblems) {
     reportRealProblems(true);
   }
   ~UseExpressionVisitor() {
@@ -158,7 +158,6 @@ class UseExpressionVisitor : public Cpp::ExpressionVisitor {
     }
 
     UseBuilder* m_builder;
-    std::size_t m_lastEndToken; //Assume everything is processed from left to right
     bool m_dumpProblems;
 };
 

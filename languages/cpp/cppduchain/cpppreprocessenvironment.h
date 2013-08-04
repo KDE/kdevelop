@@ -30,7 +30,7 @@ class IndexedString;
 
 class KDEVCPPDUCHAIN_EXPORT CppPreprocessEnvironment : public rpp::Environment, public KDevelop::ParsingEnvironment {
 public:
-  CppPreprocessEnvironment( rpp::pp* preprocessor, KSharedPtr<Cpp::EnvironmentFile> environmentFile );
+  CppPreprocessEnvironment( const KSharedPtr<Cpp::EnvironmentFile>& environmentFile );
 
   ~CppPreprocessEnvironment();
 

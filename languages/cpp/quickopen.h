@@ -50,7 +50,6 @@ class IncludeFileData : public KDevelop::QuickOpenDataBase {
     virtual QIcon icon() const;
   private:
     KDevelop::IncludeItem m_item;
-    bool m_isDirectory;
     KDevelop::TopDUContextPointer m_includedFrom;
 };
 

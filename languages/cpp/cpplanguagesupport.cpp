@@ -33,8 +33,6 @@
 #include <QReadWriteLock>
 #include <kactioncollection.h>
 #include <kaction.h>
-#include <QExtensionFactory>
-#include <QtDesigner/QExtensionFactory>
 
 #include <kdebug.h>
 #include <kcomponentdata.h>
@@ -164,7 +162,6 @@ static QStringList mimeTypesList()
 CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*args*/ )
     : KDevelop::IPlugin( KDevCppSupportFactory::componentData(), parent ),
       KDevelop::ILanguageSupport(),
-      m_standardMacros(0),
       m_mimeTypes(mimeTypesList())
 {
     m_self = this;
@@ -196,7 +193,7 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
     // else we are in NoUi mode (duchainify, unit tests, ...) and hence cannot find the Quickopen plugin
 
 #ifdef DEBUG_UI_LOCKUP
-    m_blockTester = new UIBlockTester(LOCKUP_INTERVAL);
+    new UIBlockTester(LOCKUP_INTERVAL, this);
 #endif
 
     m_assistant = new Cpp::StaticCodeAssistant;
@@ -842,7 +839,11 @@ UIBlockTester::UIBlockTesterThread::UIBlockTesterThread( UIBlockTester& parent )
          m_stop = true;
  }
 
- UIBlockTester::UIBlockTester( uint milliseconds ) : m_thread( *this ), m_msecs( milliseconds ) {
+UIBlockTester::UIBlockTester( uint milliseconds, QObject* parent )
+  : QObject(parent)
+  , m_thread( *this )
+  , m_msecs( milliseconds )
+{
          m_timer = new QTimer( this );
          m_timer->start( milliseconds/10 );
          connect( m_timer, SIGNAL(timeout()), this, SLOT(timer()) );

@@ -487,7 +487,7 @@ void EnvironmentFile::addStrings( const std::set<Utils::BasicSetRepository::Inde
 }
 
 //The parameter should be a EnvironmentFile that was lexed AFTER the content of this file
-void EnvironmentFile::merge( const EnvironmentFile& file, CppPreprocessEnvironment* env ) {
+void EnvironmentFile::merge( const EnvironmentFile& file ) {
   ENSURE_WRITE_LOCKED
   //We have to read the other file
   ENSURE_FILE_READ_LOCKED(file)

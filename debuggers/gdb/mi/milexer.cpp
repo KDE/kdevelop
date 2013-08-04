@@ -139,7 +139,8 @@ int MILexer::nextToken(int &pos, int &len)
         start = m_ptr;
 
         ch = m_contents[m_ptr];
-        (this->*s_scan_table[ch < 128 ? ch : 128])(&kind);
+        Q_ASSERT(ch >= 0 && short(ch) < 128);
+        (this->*s_scan_table[static_cast<uchar>(ch)])(&kind);
 
         switch (kind) {
             case Token_whitespaces:

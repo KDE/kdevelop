@@ -23,7 +23,7 @@
 
 #include <QtTest/QtTest>
 
-class CMakeProjectData;
+struct CMakeProjectData;
 class CMakeProjectVisitor;
 class CMakeAst;
 

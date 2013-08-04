@@ -27,7 +27,7 @@
 #include "debugsession.h"
 using namespace GDBDebugger;
 
-namespace GDBMI { class ResultRecord; }
+namespace GDBMI { struct ResultRecord; }
 
 namespace KDevelop {
     

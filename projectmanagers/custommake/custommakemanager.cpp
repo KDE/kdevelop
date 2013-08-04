@@ -132,7 +132,7 @@ QList<ProjectTargetItem*> CustomMakeManager::targets(KDevelop::ProjectFolderItem
 }
 
 //TODO: make filtering generic
-bool CustomMakeManager::isValid(const KUrl& url, const bool isFolder, IProject* project) const
+bool CustomMakeManager::isValid(const KUrl& url, const bool isFolder, IProject* /*project*/) const
 {
     const QString name = url.fileName();
     const QStringList invalidFolders = QStringList() << ".kdev4" << ".svn" << ".git" << "CVS"

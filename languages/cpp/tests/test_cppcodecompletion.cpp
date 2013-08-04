@@ -3424,7 +3424,7 @@ QString TestCppCodeCompletion::preprocess( const IndexedString& url, const QStri
     if( paramEnvironmentFile )
       *paramEnvironmentFile = environmentFile;
 
-    CppPreprocessEnvironment* currentEnvironment = new CppPreprocessEnvironment( &preprocessor, environmentFile );
+    CppPreprocessEnvironment* currentEnvironment = new CppPreprocessEnvironment( environmentFile );
     preprocessor.setEnvironment( currentEnvironment );
     currentEnvironment->setEnvironmentFile( environmentFile );
 

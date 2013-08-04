@@ -54,13 +54,6 @@ QString linePrefix( KTextEditor::Document* document, const KTextEditor::Range& w
     return document->text( linePrefixRange );
 }
 
-QString lineSuffix( KTextEditor::Document* document, const KTextEditor::Range& word )
-{
-    int endLineLength = document->lineLength( word.end().line() );
-    KTextEditor::Range lineSuffixRange( word.end().line(), word.end().column(), word.end().line(), endLineLength );
-    return document->text( lineSuffixRange );
-}
-
 QString lineSuffixAndWord( KTextEditor::Document* document, const KTextEditor::Range& word )
 {
     int endLineLength = document->lineLength( word.end().line() );
@@ -810,8 +803,8 @@ void TypeConversionCompletionItem::execute(KTextEditor::Document* document, cons
     document->replaceText( word, m_text );
 }
 
-QVariant TypeConversionCompletionItem::data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const {
-
+QVariant TypeConversionCompletionItem::data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* /*model*/) const
+{
   switch (role) {
     case Qt::DisplayRole:
       switch (index.column()) {
