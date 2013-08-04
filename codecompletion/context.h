@@ -20,23 +20,22 @@
  *
  */
 
-#ifndef QMLJS_COMPL_CONTEXT_H
-#define QMLJS_COMPL_CONTEXT_H
+#ifndef QMLJS_CONTEXT_H
+#define QMLJS_CONTEXT_H
 
 #include <language/codecompletion/codecompletioncontext.h>
 #include <language/duchain/ducontext.h>
 
-using namespace KDevelop;
-
 namespace QmlJS {
 
-class CodeCompletionContext : public KDevelop::CodeCompletionContext {
+class CodeCompletionContext : public KDevelop::CodeCompletionContext
+{
 public:
-    CodeCompletionContext(KDevelop::DUContextPointer context, const QString& text,
+    CodeCompletionContext(const KDevelop::DUContextPointer& context, const QString& text,
                           const KDevelop::CursorInRevision& position, int depth = 0);
     virtual QList< KDevelop::CompletionTreeItemPointer > completionItems(bool& abort, bool fullCompletion = true);
 };
 
 }
 
-#endif
+#endif // QMLJS_CONTEXT_H

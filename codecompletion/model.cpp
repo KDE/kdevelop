@@ -33,7 +33,7 @@ CodeCompletionModel::CodeCompletionModel(QObject* parent)
 
 KDevelop::CodeCompletionWorker* CodeCompletionModel::createCompletionWorker()
 {
-    return new QmlJS::CodeCompletionWorker(this);
+    return new CodeCompletionWorker(this);
 }
 
 }

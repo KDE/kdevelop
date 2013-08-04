@@ -21,6 +21,7 @@
  */
 
 #include "context.h"
+
 #include <language/codecompletion/codecompletionitem.h>
 #include <language/codecompletion/normaldeclarationcompletionitem.h>
 #include <language/duchain/declaration.h>
@@ -34,7 +35,8 @@ typedef QPair<Declaration*, int> DeclarationDepthPair;
 
 namespace QmlJS {
 
-CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QString& text, const KDevelop::CursorInRevision& position, int depth)
+CodeCompletionContext::CodeCompletionContext(const DUContextPointer& context, const QString& text,
+                                             const CursorInRevision& position, int depth)
     : KDevelop::CodeCompletionContext(context, text, position, depth)
 {
     // Determine which kind of completion should be offered

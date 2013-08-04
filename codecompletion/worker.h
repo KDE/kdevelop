@@ -34,10 +34,11 @@ public:
     CodeCompletionWorker(KDevelop::CodeCompletionModel* model);
 
 protected:
-    virtual KDevelop::CodeCompletionContext* createCompletionContext(KDevelop::DUContextPointer context, const QString& contextText,
-                      const QString& followingText, const KDevelop::CursorInRevision& position) const;
+    virtual KDevelop::CodeCompletionContext* createCompletionContext(
+        KDevelop::DUContextPointer context, const QString& contextText,
+        const QString& followingText, const KDevelop::CursorInRevision& position) const;
 };
 
 }
 
-#endif // WORKER_H
+#endif // QMLJS_WORKER_H

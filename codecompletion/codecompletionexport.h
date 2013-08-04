@@ -26,7 +26,6 @@
 /* needed for KDE_EXPORT macros */
 #include <kdemacros.h>
 
-
 #ifndef KDEVQMLJSCOMPLETION_EXPORT
 # ifdef MAKE_KDEV4QMLJSCOMPLETION_LIB
 #  define KDEVQMLJSCOMPLETION_EXPORT KDE_EXPORT

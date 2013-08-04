@@ -20,13 +20,17 @@
  *
  */
 
-#include "kdevqmljsexport.h"
+#ifndef QMLJS_MODEL_H
+#define QMLJS_MODEL_H
+
+#include "codecompletionexport.h"
 
 #include <language/codecompletion/codecompletionmodel.h>
 
 namespace QmlJS {
 
-class KDEVQMLJSCOMPLETION_EXPORT CodeCompletionModel : public KDevelop::CodeCompletionModel {
+class KDEVQMLJSCOMPLETION_EXPORT CodeCompletionModel : public KDevelop::CodeCompletionModel
+{
 public:
     CodeCompletionModel(QObject* parent);
 protected:
@@ -34,3 +38,5 @@ protected:
 };
 
 }
+
+#endif // QMLJS_MODEL_H

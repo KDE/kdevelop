@@ -23,19 +23,19 @@
 #include "worker.h"
 #include "context.h"
 
+using namespace KDevelop;
+
 namespace QmlJS {
 
-CodeCompletionWorker::CodeCompletionWorker(KDevelop::CodeCompletionModel* model)
+CodeCompletionWorker::CodeCompletionWorker(CodeCompletionModel* model)
     : KDevelop::CodeCompletionWorker(model)
 {
 
 }
 
-KDevelop::CodeCompletionContext* CodeCompletionWorker::createCompletionContext(KDevelop::DUContextPointer context,
-          const QString& contextText, const QString& followingText, const KDevelop::CursorInRevision& position) const
+KDevelop::CodeCompletionContext* CodeCompletionWorker::createCompletionContext(DUContextPointer context,
+          const QString& contextText, const QString& /*followingText*/, const CursorInRevision& position) const
 {
-    Q_UNUSED(followingText);
-
     return new QmlJS::CodeCompletionContext(context, contextText, position);
 }
 
