@@ -112,7 +112,7 @@ void TestDeclarations::testQMLId()
     ParseSession session(file, "/** file comment **/\n"
                                "import QtQuick 1.0\n"
                                "/**\n * some comment\n */\n"
-                               "Text { id: test; }");
+                               "Text { id: test; Text { id: child; } }");
     QVERIFY(session.ast());
     QVERIFY(session.problems().isEmpty());
     QCOMPARE(session.language(), QmlJS::Document::QmlLanguage);
@@ -130,7 +130,19 @@ void TestDeclarations::testQMLId()
     QCOMPARE(dec->abstractType()->toString(), QString("Text"));
     QCOMPARE(QString::fromUtf8(dec->comment()), QString("some comment"));
     QVERIFY(dec->internalContext());
-    QCOMPARE(dec->internalContext()->range(), RangeInRevision(5, 6, 5, 17));
+    QCOMPARE(dec->internalContext()->range(), RangeInRevision(5, 6, 5, 37));
+
+    // test recompile
+    DeclarationPointer oldDec(dec);
+
+    lock.unlock();
+    DeclarationBuilder builder2(&session);
+    top = builder2.build(file, session.ast(), top);
+    lock.lock();
+
+    QVERIFY(oldDec);
+    QCOMPARE(top->localDeclarations().size(), 1);
+    QCOMPARE(oldDec.data(), top->localDeclarations().at(0));
 }
 
 #include "testdeclarations.moc"

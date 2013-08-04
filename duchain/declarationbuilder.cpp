@@ -29,6 +29,62 @@
 
 using namespace KDevelop;
 
+namespace {
+
+struct FindIdentifierVisitor : public QmlJS::AST::Visitor
+{
+    FindIdentifierVisitor()
+    : m_identifier(0)
+    {
+    }
+
+    virtual bool visit(QmlJS::AST::UiObjectDefinition*)
+    {
+        return false;
+    }
+
+    virtual bool visit(QmlJS::AST::UiPublicMember*)
+    {
+        return false;
+    }
+
+    virtual bool visit(QmlJS::AST::UiSourceElement*)
+    {
+        return false;
+    }
+
+    virtual bool visit(QmlJS::AST::UiScriptBinding* node)
+    {
+        return !m_identifier && node->qualifiedId && node->qualifiedId->name == QLatin1String("id");
+    }
+
+    virtual bool visit(QmlJS::AST::IdentifierExpression* node)
+    {
+        Q_ASSERT(!m_identifier);
+        m_identifier = node;
+        return false;
+    }
+
+    QmlJS::AST::IdentifierExpression* m_identifier;
+};
+
+QualifiedIdentifier findIdentifier(QmlJS::AST::UiObjectMemberList* members)
+{
+    if (!members) {
+        return QualifiedIdentifier();
+    }
+
+    FindIdentifierVisitor visitor;
+    members->accept0(&visitor);
+    if (visitor.m_identifier) {
+        return QualifiedIdentifier(visitor.m_identifier->name.toString());
+    } else {
+        return QualifiedIdentifier();
+    }
+}
+
+}
+
 DeclarationBuilder::DeclarationBuilder(ParseSession* session)
 {
     m_session = session;
@@ -130,10 +186,11 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiObjectDefinition* node)
     type->setDeclarationId(id);
 
     const RangeInRevision range = m_session->locationToRange(node->qualifiedTypeNameId->identifierToken);
+    const QualifiedIdentifier& identifier = findIdentifier(node->initializer->members);
+
     {
         DUChainWriteLocker lock;
-        ///TODO: recompiling won't work properly here since the name is not yet known
-        ClassDeclaration* decl = openDeclaration<ClassDeclaration>(QualifiedIdentifier(), range);
+        ClassDeclaration* decl = openDeclaration<ClassDeclaration>(identifier, range);
         decl->setKind(Declaration::Type);
         decl->setType(type);
         openType(type);
@@ -158,28 +215,6 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiObjectInitializer* node)
     Q_ASSERT(currentDeclaration<ClassDeclaration>());
     currentDeclaration()->setInternalContext(currentContext());
     return ret;
-}
-
-bool DeclarationBuilder::visit(QmlJS::AST::UiScriptBinding* node)
-{
-    m_lastIdentifier = 0;
-    return  DeclarationBuilderBase::visit(node);
-}
-
-void DeclarationBuilder::endVisit(QmlJS::AST::UiScriptBinding* node)
-{
-    DeclarationBuilderBase::endVisit(node);
-    if (m_lastIdentifier && node->qualifiedId && node->qualifiedId->name == QLatin1String("id")) {
-        DUChainWriteLocker lock;
-        Q_ASSERT(currentDeclaration<ClassDeclaration>());
-        currentDeclaration()->setIdentifier(Identifier(m_lastIdentifier->name.toString()));
-    }
-}
-
-void DeclarationBuilder::endVisit(QmlJS::AST::IdentifierExpression* node)
-{
-    DeclarationBuilderBase::endVisit(node);
-    m_lastIdentifier = node;
 }
 
 void DeclarationBuilder::setComment(QmlJS::AST::Node* node)
