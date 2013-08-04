@@ -152,6 +152,16 @@ void DeclarationBuilder::endVisit(QmlJS::AST::UiObjectDefinition* node)
     kDebug() << last->abstractType()->toString();
 }
 
+bool DeclarationBuilder::visit(QmlJS::AST::UiObjectInitializer* node)
+{
+    bool ret = DeclarationBuilderBase::visit(node);
+    DUChainWriteLocker lock;
+    Q_ASSERT(currentContext());
+    Q_ASSERT(currentDeclaration<ClassDeclaration>());
+    currentDeclaration()->setInternalContext(currentContext());
+    return ret;
+}
+
 bool DeclarationBuilder::visit(QmlJS::AST::UiScriptBinding* node)
 {
     m_lastIdentifier = 0;

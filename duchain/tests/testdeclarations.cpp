@@ -129,6 +129,8 @@ void TestDeclarations::testQMLId()
     QCOMPARE(dec->identifier().toString(), QString("test"));
     QCOMPARE(dec->abstractType()->toString(), QString("Text"));
     QCOMPARE(QString::fromUtf8(dec->comment()), QString("some comment"));
+    QVERIFY(dec->internalContext());
+    QCOMPARE(dec->internalContext()->range(), RangeInRevision(5, 6, 5, 17));
 }
 
 #include "testdeclarations.moc"
