@@ -59,7 +59,7 @@ void saveDUChainItem(QList<ArrayWithPosition>& data, DUChainBase& item, uint& to
   data.back().second += size;
   totalDataOffset += size;
 
-  DUChainBaseData& target(*((DUChainBaseData*)(data.back().first.constData() + pos)));
+  DUChainBaseData& target(*(reinterpret_cast<DUChainBaseData*>(data.back().first.data() + pos)));
 
   if(item.d_func()->isDynamic()) {
     //Change from dynamic data to constant data
@@ -131,7 +131,7 @@ TopDUContextDynamicData::ItemDataInfo TopDUContextDynamicData::writeDataInfo(con
   m_data.back().second += size;
   totalDataOffset += size;
 
-  DUChainBaseData& target(*((DUChainBaseData*)(m_data.back().first.constData() + pos)));
+  DUChainBaseData& target(*reinterpret_cast<DUChainBaseData*>(m_data.back().first.data() + pos));
   memcpy(&target, data, size);
 
   verifyDataInfo(ret, m_data);
@@ -177,7 +177,7 @@ QList<IndexedDUContext> TopDUContextDynamicData::loadImporters(uint topContextIn
 
      //We only read the most needed stuff, not the whole top-context data
      QByteArray data = file.read(readValue);
-     const TopDUContextData* topData = (const TopDUContextData*)data.constData();
+     const TopDUContextData* topData = reinterpret_cast<const TopDUContextData*>(data.constData());
      FOREACH_FUNCTION(const IndexedDUContext& importer, topData->m_importers)
       ret << importer;
   }
@@ -198,7 +198,7 @@ QList<IndexedDUContext> TopDUContextDynamicData::loadImports(uint topContextInde
 
      //We only read the most needed stuff, not the whole top-context data
      QByteArray data = file.read(readValue);
-     const TopDUContextData* topData = (const TopDUContextData*)data.constData();
+     const TopDUContextData* topData = reinterpret_cast<const TopDUContextData*>(data.constData());
      FOREACH_FUNCTION(const DUContext::Import& import, topData->m_importedContexts)
       ret << import.indexedContext();
   }
@@ -226,7 +226,7 @@ IndexedString TopDUContextDynamicData::loadUrl(uint topContextIndex) {
 
      //We only read the most needed stuff, not the whole top-context data
      QByteArray data = file.read(sizeof(TopDUContextData));
-     const TopDUContextData* topData = (const TopDUContextData*)data.constData();
+     const TopDUContextData* topData = reinterpret_cast<const TopDUContextData*>(data.constData());
      Q_ASSERT(topData->m_url.isEmpty() || topData->m_url.index() >> 16);
      return topData->m_url;
   }
@@ -321,7 +321,7 @@ TopDUContext* TopDUContextDynamicData::load(uint topContextIndex) {
     //now readValue is filled with the top-context data size
     QByteArray topContextData = file.read(readValue);
 
-    DUChainBaseData* topData = (DUChainBaseData*)topContextData.constData();
+    DUChainBaseData* topData = reinterpret_cast<DUChainBaseData*>(topContextData.data());
 /*    IndexedString language = static_cast<TopDUContextData*>(topData)->m_language;
     if(!language.isEmpty()) {*/
       ///@todo Load the language if it isn't loaded yet, problem: We're possibly not in the foreground thread!
@@ -477,10 +477,14 @@ void TopDUContextDynamicData::store() {
       if(!m_fastContexts[a]) {
         if(oldContextDataOffsets.size() > a && oldContextDataOffsets[a].dataOffset) {
           //Directly copy the old data range into the new data
-          if(m_mappedData)
-            m_contextDataOffsets << writeDataInfo(oldContextDataOffsets[a], (const DUChainBaseData*)(m_mappedData + oldContextDataOffsets[a].dataOffset), currentDataOffset);
-          else
-            m_contextDataOffsets << writeDataInfo(oldContextDataOffsets[a], (const DUChainBaseData*)pointerInData(oldData, oldContextDataOffsets[a].dataOffset), currentDataOffset);
+          if(m_mappedData) {
+            m_contextDataOffsets << writeDataInfo(oldContextDataOffsets[a],
+              reinterpret_cast<const DUChainBaseData*>(m_mappedData + oldContextDataOffsets[a].dataOffset), currentDataOffset);
+          } else {
+            m_contextDataOffsets << writeDataInfo(oldContextDataOffsets[a],
+              reinterpret_cast<const DUChainBaseData*>(pointerInData(oldData, oldContextDataOffsets[a].dataOffset)),
+              currentDataOffset);
+          }
         }else{
           m_contextDataOffsets << ItemDataInfo();
         }
@@ -500,10 +504,15 @@ void TopDUContextDynamicData::store() {
       if(!m_fastDeclarations[a]) {
         if(oldDeclarationDataOffsets.size() > a && oldDeclarationDataOffsets[a].dataOffset) {
           //Directly copy the old data range into the new data
-          if(m_mappedData)
-            m_declarationDataOffsets << writeDataInfo(oldDeclarationDataOffsets[a], (const DUChainBaseData*)(m_mappedData + oldDeclarationDataOffsets[a].dataOffset), currentDataOffset);
-          else
-            m_declarationDataOffsets << writeDataInfo(oldDeclarationDataOffsets[a], (const DUChainBaseData*)pointerInData(oldData, oldDeclarationDataOffsets[a].dataOffset), currentDataOffset);
+          if(m_mappedData) {
+            m_declarationDataOffsets << writeDataInfo(oldDeclarationDataOffsets[a],
+              reinterpret_cast<const DUChainBaseData*>(m_mappedData + oldDeclarationDataOffsets[a].dataOffset),
+              currentDataOffset);
+          } else {
+            m_declarationDataOffsets << writeDataInfo(oldDeclarationDataOffsets[a],
+              reinterpret_cast<const DUChainBaseData*>(pointerInData(oldData, oldDeclarationDataOffsets[a].dataOffset)),
+              currentDataOffset);
+          }
         }else{
           m_declarationDataOffsets << ItemDataInfo();
         }
@@ -632,11 +641,15 @@ Declaration* TopDUContextDynamicData::getDeclarationForIndex(uint index) const {
         
         Q_ASSERT(!m_itemRetrievalForbidden);
         
-        m_fastDeclarations[realIndex] = static_cast<Declaration*>(DUChainItemSystem::self().create((DUChainBaseData*)(pointerInData(m_declarationDataOffsets[realIndex].dataOffset))));
+        const DUChainBaseData* data = reinterpret_cast<const DUChainBaseData*>(
+          pointerInData(m_declarationDataOffsets[realIndex].dataOffset));
+        ///FIXME: ugly, remove const_cast
+        m_fastDeclarations[realIndex] = static_cast<Declaration*>(DUChainItemSystem::self().create(
+          const_cast<DUChainBaseData*>(data)));
         if(!m_fastDeclarations[realIndex]) {
           //When this happens, the declaration has not been registered correctly.
           //We can stop here, because else we will get crashes later.
-          kError() << "Failed to load declaration with identity" << ((DUChainBaseData*)(pointerInData(m_declarationDataOffsets[realIndex].dataOffset)))->classId;
+          kError() << "Failed to load declaration with identity" << data->classId;
           Q_ASSERT(0);
         }else{
           DUContext* context = getContextForIndex(m_declarationDataOffsets[realIndex].parentContext);
@@ -730,11 +743,14 @@ DUContext* TopDUContextDynamicData::getContextForIndex(uint index) const {
         Q_ASSERT(!m_itemRetrievalForbidden);
         
         //Construct the context, and eventuall its parent first
-        *fastContextsPos = dynamic_cast<DUContext*>(DUChainItemSystem::self().create((DUChainBaseData*)(pointerInData(m_contextDataOffsets[realIndex].dataOffset))));
+        ///TODO: ugly, remove const_cast
+        const DUChainBaseData* data = reinterpret_cast<const DUChainBaseData*>(
+          pointerInData(m_contextDataOffsets[realIndex].dataOffset));
+        *fastContextsPos = dynamic_cast<DUContext*>(DUChainItemSystem::self().create(const_cast<DUChainBaseData*>(data)));
         if(!*fastContextsPos) {
           //When this happens, the declaration has not been registered correctly.
           //We can stop here, because else we will get crashes later.
-          kError() << "Failed to load declaration with identity" << ((DUChainBaseData*)(pointerInData(m_contextDataOffsets[realIndex].dataOffset)))->classId;
+          kError() << "Failed to load declaration with identity" << data->classId;
         }else{
           (*fastContextsPos)->rebuildDynamicData(getContextForIndex(m_contextDataOffsets[realIndex].parentContext), index);
         }

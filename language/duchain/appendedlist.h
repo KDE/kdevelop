@@ -296,7 +296,7 @@ class TemporaryDataManager {
     APPENDED_LIST_COMMON(container, type, name) \
     const type* name() const { \
       if((name ## Data & KDevelop::DynamicAppendedListRevertMask) == 0) return 0; \
-      if(!appendedListsDynamic()) return (type*)(((char*)this) + classSize() + offsetBehindBase()); \
+      if(!appendedListsDynamic()) return reinterpret_cast<const type*>(reinterpret_cast<const char*>(this) + classSize() + offsetBehindBase()); \
       else return temporaryHash ## container ## name().getItem(name ## Data).data(); \
     } \
     unsigned int name ## OffsetBehind() const { return name ## Size() * sizeof(type) + offsetBehindBase(); } \
@@ -309,7 +309,7 @@ class TemporaryDataManager {
     APPENDED_LIST_COMMON(container, type, name) \
     const type* name() const {\
       if((name ## Data & KDevelop::DynamicAppendedListRevertMask) == 0) return 0; \
-      if(!appendedListsDynamic()) return (type*)(((char*)this) + classSize() + predecessor ## OffsetBehind()); \
+      if(!appendedListsDynamic()) return reinterpret_cast<const type*>(reinterpret_cast<const char*>(this) + classSize() + predecessor ## OffsetBehind()); \
       else return temporaryHash ## container ## name().getItem(name ## Data).data(); \
     } \
     unsigned int name ## OffsetBehind() const { return name ## Size() * sizeof(type) + predecessor ## OffsetBehind(); } \
