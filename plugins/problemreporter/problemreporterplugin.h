@@ -52,7 +52,8 @@ class ProblemReporterPlugin : public KDevelop::IPlugin
     ProblemModel* getModel() const;
 
   private Q_SLOTS:
-    void updateReady(const KDevelop::IndexedString &url);
+    void updateReady(const KDevelop::IndexedString &url,
+                     const KDevelop::ReferencedTopDUContext& = KDevelop::ReferencedTopDUContext());
     void textDocumentCreated(KDevelop::IDocument* document);
     void parseJobFinished(KDevelop::ParseJob* parseJob);
 
