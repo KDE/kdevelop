@@ -26,6 +26,7 @@
 #include <language/codecompletion/normaldeclarationcompletionitem.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/duchainlock.h>
+#include <language/duchain/classdeclaration.h>
 
 #include <KDebug>
 
@@ -34,6 +35,19 @@ using namespace KDevelop;
 typedef QPair<Declaration*, int> DeclarationDepthPair;
 
 namespace QmlJS {
+
+class UiObjectDefinitionItem : public NormalDeclarationCompletionItem
+{
+public:
+    UiObjectDefinitionItem(const DeclarationPointer& decl)
+    : NormalDeclarationCompletionItem(decl)
+    {
+    }
+    virtual KTextEditor::CodeCompletionModel::CompletionProperties completionProperties() const
+    {
+        return KTextEditor::CodeCompletionModel::GlobalScope | KTextEditor::CodeCompletionModel::Class;
+    }
+};
 
 CodeCompletionContext::CodeCompletionContext(const DUContextPointer& context, const QString& text,
                                              const CursorInRevision& position, int depth)
@@ -58,10 +72,17 @@ QList< CompletionTreeItemPointer > CodeCompletionContext::completionItems(bool& 
 
     if ( duContext() ) {
         DUChainReadLocker lock;
-        QList<DeclarationDepthPair> locals = duContext()->allDeclarations(m_position, duContext()->topContext(), false);
+        QList<DeclarationDepthPair> locals = duContext()->allDeclarations(m_position, duContext()->topContext());
         foreach ( const DeclarationDepthPair& decl, locals ) {
-            CompletionTreeItem* item = new NormalDeclarationCompletionItem(DeclarationPointer(decl.first));
-            items << CompletionTreeItemPointer(item);
+            CompletionTreeItemPointer item;
+            DeclarationPointer declaration(decl.first);
+            if (dynamic_cast<ClassDeclaration*>(decl.first)) {
+                item.attach(new UiObjectDefinitionItem(declaration));
+            } else {
+                item.attach(new NormalDeclarationCompletionItem(declaration));
+            }
+            Q_ASSERT(item);
+            items << item;
         }
     }
     return items;
