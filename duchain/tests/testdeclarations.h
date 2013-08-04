@@ -32,6 +32,8 @@ private slots:
     void cleanupTestCase();
 
     void testFunction();
+
+    void testQMLId();
 };
 
 #endif // TESTCONTEXTS_H

@@ -32,6 +32,7 @@
 
 #include <language/duchain/types/functiontype.h>
 #include <language/duchain/types/integraltype.h>
+#include <language/duchain/classdeclaration.h>
 
 QTEST_KDEMAIN(TestDeclarations, NoGUI);
 
@@ -56,6 +57,7 @@ void TestDeclarations::testFunction()
     ParseSession session(file, "/**\n * some comment\n */\n"
                                "function foo(arg1, arg2, arg3) { var i = 0; }");
     QVERIFY(session.ast());
+    QVERIFY(session.problems().isEmpty());
     QCOMPARE(session.language(), QmlJS::Document::JavaScriptLanguage);
 
     DeclarationBuilder builder(&session);
@@ -100,6 +102,33 @@ void TestDeclarations::testFunction()
     QVERIFY(bodyCtx->findDeclarations(arg3->identifier()).contains(arg3));
 
     QCOMPARE(bodyCtx->localDeclarations().count(), 1);
+}
+
+void TestDeclarations::testQMLId()
+{
+    const IndexedString file("qmlId.qml");
+    //                          0         1         2         3
+    //                          01234567890123456789012345678901234567890
+    ParseSession session(file, "/** file comment **/\n"
+                               "import QtQuick 1.0\n"
+                               "/**\n * some comment\n */\n"
+                               "Text { id: test; }");
+    QVERIFY(session.ast());
+    QVERIFY(session.problems().isEmpty());
+    QCOMPARE(session.language(), QmlJS::Document::QmlLanguage);
+
+    DeclarationBuilder builder(&session);
+    ReferencedTopDUContext top = builder.build(file, session.ast());
+    QVERIFY(top);
+
+    DUChainReadLocker lock;
+
+    QCOMPARE(top->localDeclarations().size(), 1);
+    ClassDeclaration* dec = dynamic_cast<ClassDeclaration*>(top->localDeclarations().first());
+    QVERIFY(dec);
+    QCOMPARE(dec->identifier().toString(), QString("test"));
+    QCOMPARE(dec->abstractType()->toString(), QString("Text"));
+    QCOMPARE(QString::fromUtf8(dec->comment()), QString("some comment"));
 }
 
 #include "testdeclarations.moc"

@@ -47,7 +47,19 @@ protected:
     virtual bool visit(QmlJS::AST::FormalParameterList* node);
     virtual bool visit(QmlJS::AST::VariableDeclaration* node);
 
+    virtual bool visit(QmlJS::AST::UiObjectDefinition* node);
+    virtual void endVisit(QmlJS::AST::UiObjectDefinition* node);
+    virtual bool visit(QmlJS::AST::UiScriptBinding* node);
+    virtual void endVisit(QmlJS::AST::UiScriptBinding* node);
+    virtual void endVisit(QmlJS::AST::IdentifierExpression* node);
+
     virtual void closeContext();
+
+private:
+    using DeclarationBuilderBase::setComment;
+    void setComment(QmlJS::AST::Node* node);
+
+    QmlJS::AST::IdentifierExpression* m_lastIdentifier;
 };
 
 #endif // DECLARATIONBUILDER_H
