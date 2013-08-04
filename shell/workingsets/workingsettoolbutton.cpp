@@ -58,12 +58,7 @@ void WorkingSetToolButton::setWorkingSet(WorkingSet* set)
 {
     m_set = set;
 
-    if (!set) {
-        setIcon(QIcon());
-        return;
-    }
-
-    setIcon(set->icon());
+    setIcon(set ? set->icon() : QIcon());
 }
 
 void WorkingSetToolButton::contextMenuEvent(QContextMenuEvent* ev)
