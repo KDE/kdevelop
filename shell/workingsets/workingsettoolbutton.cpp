@@ -40,16 +40,6 @@
 
 using namespace KDevelop;
 
-
-QString htmlColorElement(int element) {
-    QString ret = QString("%1").arg(element, 2, 16, QChar('0'));
-    return ret;
-}
-
-QString htmlColor(QColor color) {
-    return '#' + htmlColorElement(color.red()) + htmlColorElement(color.green()) + htmlColorElement(color.blue());
-}
-
 WorkingSetToolButton::WorkingSetToolButton(QWidget* parent, WorkingSet* set)
     : QToolButton(parent), m_set(set), m_toolTipEnabled(true)
 {
