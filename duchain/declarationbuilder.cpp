@@ -134,6 +134,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiObjectDefinition* node)
         DUChainWriteLocker lock;
         ///TODO: recompiling won't work properly here since the name is not yet known
         ClassDeclaration* decl = openDeclaration<ClassDeclaration>(QualifiedIdentifier(), range);
+        decl->setKind(Declaration::Type);
         decl->setType(type);
         openType(type);
     }
@@ -146,10 +147,7 @@ void DeclarationBuilder::endVisit(QmlJS::AST::UiObjectDefinition* node)
     DeclarationBuilderBase::endVisit(node);
 
     closeType();
-    DUChainWriteLocker lock;
-    Declaration* last = currentDeclaration();
     closeDeclaration();
-    kDebug() << last->abstractType()->toString();
 }
 
 bool DeclarationBuilder::visit(QmlJS::AST::UiObjectInitializer* node)

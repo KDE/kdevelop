@@ -27,6 +27,7 @@
 #include <language/duchain/declaration.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/classdeclaration.h>
+#include <language/duchain/codemodel.h>
 
 #include <KDebug>
 
@@ -70,22 +71,43 @@ QList< CompletionTreeItemPointer > CodeCompletionContext::completionItems(bool& 
         return items;
     }
 
-    if ( duContext() ) {
-        DUChainReadLocker lock;
-        QList<DeclarationDepthPair> locals = duContext()->allDeclarations(m_position, duContext()->topContext());
+    DUChainReadLocker lock;
+    if ( m_duContext ) {
+        items += globalItems();
+
+        const QList<DeclarationDepthPair>& locals = m_duContext->allDeclarations(m_position, duContext()->topContext());
         foreach ( const DeclarationDepthPair& decl, locals ) {
-            CompletionTreeItemPointer item;
-            DeclarationPointer declaration(decl.first);
             if (dynamic_cast<ClassDeclaration*>(decl.first)) {
-                item.attach(new UiObjectDefinitionItem(declaration));
-            } else {
-                item.attach(new NormalDeclarationCompletionItem(declaration));
+                continue;
             }
-            Q_ASSERT(item);
-            items << item;
+            DeclarationPointer declaration(decl.first);
+            items << CompletionTreeItemPointer(new NormalDeclarationCompletionItem(declaration));
         }
     }
     return items;
 }
+
+QList<CompletionTreeItemPointer> CodeCompletionContext::globalItems() const
+{
+    QList<CompletionTreeItemPointer> ret;
+
+    uint itemCount = 0;
+    const CodeModelItem* items = 0;
+    CodeModel::self().items(m_duContext->url(), itemCount, items);
+    for (uint i = 0; i < itemCount; ++i) {
+        const CodeModelItem& item = items[i];
+        if (item.kind & CodeModelItem::Class && item.id.isValid()) {
+            foreach(Declaration* dec, m_duContext->findDeclarations(item.id.identifier())) {
+                if (dynamic_cast<ClassDeclaration*>(dec)) {
+                    ret << CompletionTreeItemPointer(new UiObjectDefinitionItem(DeclarationPointer(dec)));
+                    break;
+                }
+            }
+        }
+    }
+
+    return ret;
+}
+
 
 }
