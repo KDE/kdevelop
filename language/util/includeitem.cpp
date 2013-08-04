@@ -21,11 +21,14 @@
 namespace KDevelop {
 
 IncludeItem::IncludeItem()
-	: isDirectory(false), pathNumber(0) {
+    : pathNumber(0)
+    , isDirectory(false)
+{
 }
 
 ///Constructs the url from basePath and name.
-KUrl IncludeItem::url() const {
+KUrl IncludeItem::url() const
+{
   KUrl u;
   if( !basePath.isEmpty() ) {
     u = KUrl( basePath );
@@ -35,5 +38,5 @@ KUrl IncludeItem::url() const {
   }
   return u;
 }
-  
+
 }
