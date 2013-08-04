@@ -33,7 +33,7 @@ class WorkingSetToolButton : public QToolButton {
     Q_OBJECT
 
 public:
-    WorkingSetToolButton(QWidget* parent, WorkingSet* set, MainWindow* mainWindow);
+    WorkingSetToolButton(QWidget* parent, WorkingSet* set);
 
     void disableTooltip() {
         m_toolTipEnabled = false;
@@ -56,7 +56,6 @@ private:
     virtual void contextMenuEvent(QContextMenuEvent* ev);
     virtual bool event(QEvent* e);
     WorkingSet* m_set;
-    MainWindow* m_mainWindow;
     bool m_toolTipEnabled;
 };
 

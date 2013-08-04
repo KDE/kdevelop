@@ -63,7 +63,7 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
     // title bar
     {
         QHBoxLayout* topLayout = new QHBoxLayout;
-        m_setButton = new WorkingSetToolButton(this, set, mainwindow);
+        m_setButton = new WorkingSetToolButton(this, set);
         m_setButton->hide();
 
         topLayout->addSpacing(5);

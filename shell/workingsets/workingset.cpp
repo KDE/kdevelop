@@ -23,7 +23,6 @@
 
 #include <KTextEditor/Document>
 #include <KColorUtils>
-#include <KIconEffect>
 
 #include <QApplication>
 
@@ -41,20 +40,9 @@ using namespace KDevelop;
 
 bool WorkingSet::m_loading = false;
 
-WorkingSet::WorkingSet(QString id)
-    : m_id(id)
-{
-    m_activeIcon = generateIcon(true);
-    m_inactiveIcon = generateIcon(false);
-    m_inactiveNonPersistentIcon = m_inactiveIcon;
-}
+namespace {
 
-WorkingSet::WorkingSet( const KDevelop::WorkingSet& rhs ) : QObject()
-{
-    m_id =  rhs.m_id + "_copy_";
-}
-
-QIcon WorkingSet::generateIcon(bool active) const
+QIcon generateIcon(const QString& id)
 {
     ///FIXME: change color of active/inactive icon
     QImage pixmap(16, 16, QImage::Format_ARGB32);
@@ -62,7 +50,7 @@ QIcon WorkingSet::generateIcon(bool active) const
     pixmap.fill(QColor::fromRgba(qRgba(0, 0, 0, 0)));
     // calculate layout and colors depending on the working set ID
     // modulo it so it's around 2^28, leaving some space before uint overflows
-    const uint setId = qHash(m_id) % 268435459;
+    const uint setId = qHash(id) % 268435459;
     // amount of colored squares in this icon (the rest is grey or whatever you set as default color)
     // use 4-6-4-1 weighting for 1, 2, 3, 4 squares, because that's the number of arrangements for each
     const uint coloredCount = (setId % 15 < 4) ? 1 : (setId % 15 < 10) ? 2 : (setId % 15 == 14) ? 4 : 3;
@@ -124,6 +112,20 @@ QIcon WorkingSet::generateIcon(bool active) const
         at += 1;
     }
     return QIcon(QPixmap::fromImage(pixmap));
+}
+
+}
+
+WorkingSet::WorkingSet(const QString& id)
+    : m_id(id)
+    , m_icon(generateIcon(id))
+{
+}
+
+WorkingSet::WorkingSet( const KDevelop::WorkingSet& rhs )
+    : m_id(rhs.m_id + "_copy_")
+{
+    ///FIXME: what about the icon?
 }
 
 void WorkingSet::saveFromArea( Sublime::Area* a, Sublime::AreaIndex * area, KConfigGroup setGroup, KConfigGroup areaGroup )
@@ -484,11 +486,9 @@ bool WorkingSet::isPersistent() const {
     return group.readEntry("persistent", false);
 }
 
-QIcon WorkingSet::inactiveIcon() const {
-    if(isPersistent())
-        return m_inactiveIcon;
-    else
-        return m_inactiveNonPersistentIcon;
+QIcon WorkingSet::icon() const
+{
+    return m_icon;
 }
 
 bool WorkingSet::isConnected( Sublime::Area* area )
@@ -580,11 +580,6 @@ void WorkingSet::changed( Sublime::Area* area )
   }
 
   emit setChangedSignificantly();
-}
-
-QIcon WorkingSet::activeIcon() const
-{
-  return m_activeIcon;
 }
 
 #include "workingset.moc"

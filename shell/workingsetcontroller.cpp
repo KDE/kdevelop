@@ -120,7 +120,7 @@ WorkingSet* WorkingSetController::getWorkingSet(const QString& id)
 
 QWidget* WorkingSetController::createSetManagerWidget(MainWindow* parent, Sublime::Area* fixedArea) {
     if (fixedArea) {
-        return new WorkingSetWidget(parent, fixedArea);
+        return new WorkingSetWidget(fixedArea, parent);
     } else {
         return new ClosedWorkingSetsWidget(parent);
     }

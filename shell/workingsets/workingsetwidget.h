@@ -30,8 +30,6 @@ class Area;
 
 namespace KDevelop {
 
-class MainWindow;
-
 class WorkingSetController;
 class WorkingSet;
 
@@ -43,7 +41,7 @@ class WorkingSetWidget : public WorkingSetToolButton {
     Q_OBJECT
 
 public:
-    WorkingSetWidget(MainWindow* parent, Sublime::Area* area);
+    WorkingSetWidget(Sublime::Area* area, QWidget* parent = 0);
     virtual void setVisible( bool visible );
 
 private slots:
