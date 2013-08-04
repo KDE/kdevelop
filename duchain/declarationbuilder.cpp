@@ -160,6 +160,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiScriptBinding* node)
 
 void DeclarationBuilder::endVisit(QmlJS::AST::UiScriptBinding* node)
 {
+    DeclarationBuilderBase::endVisit(node);
     if (m_lastIdentifier && node->qualifiedId && node->qualifiedId->name == QLatin1String("id")) {
         DUChainWriteLocker lock;
         Q_ASSERT(currentDeclaration<ClassDeclaration>());
@@ -169,6 +170,7 @@ void DeclarationBuilder::endVisit(QmlJS::AST::UiScriptBinding* node)
 
 void DeclarationBuilder::endVisit(QmlJS::AST::IdentifierExpression* node)
 {
+    DeclarationBuilderBase::endVisit(node);
     m_lastIdentifier = node;
 }
 
