@@ -33,6 +33,8 @@ private slots:
 
     void testFunctionContext();
     void testFunctionContext_data();
+
+    void testQMLContext();
 };
 
 #endif // TESTCONTEXTS_H

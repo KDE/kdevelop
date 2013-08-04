@@ -65,7 +65,10 @@ public:
     void setParseSession(ParseSession* session);
 
     using Visitor::visit;
+    using Visitor::endVisit;
     virtual bool visit(QmlJS::AST::FunctionDeclaration* node);
+    virtual bool visit(QmlJS::AST::UiObjectInitializer* node);
+    virtual void endVisit(QmlJS::AST::UiObjectInitializer* node);
 
     Editor* editor() const;
 

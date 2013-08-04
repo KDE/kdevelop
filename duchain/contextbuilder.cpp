@@ -71,6 +71,11 @@ void ContextBuilder::setParseSession(ParseSession* session)
     m_session = session;
 }
 
+Editor* ContextBuilder::editor() const
+{
+    return m_editor.data();
+}
+
 bool ContextBuilder::visit(QmlJS::AST::FunctionDeclaration* node)
 {
     const QualifiedIdentifier functionName(node->name.toString());
@@ -95,7 +100,16 @@ bool ContextBuilder::visit(QmlJS::AST::FunctionDeclaration* node)
     return false;
 }
 
-Editor* ContextBuilder::editor() const
+bool ContextBuilder::visit(QmlJS::AST::UiObjectInitializer* node)
 {
-    return m_editor.data();
+    const RangeInRevision range(m_session->locationToRange(node->lbraceToken).end,
+                                m_session->locationToRange(node->rbraceToken).start);
+    openContext(node, range, DUContext::Class);
+
+    return true;
+}
+
+void ContextBuilder::endVisit(QmlJS::AST::UiObjectInitializer* /*node*/)
+{
+    closeContext();
 }

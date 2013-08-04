@@ -103,4 +103,45 @@ void TestContexts::testFunctionContext_data()
                            << RangeInRevision(0, 16, 1, 0);
 }
 
+void TestContexts::testQMLContext()
+{
+    const IndexedString file("testQMLContext.qml");
+    ParseSession session(file, "Text {\n"
+                               "  id: main\n"
+                               "  Text {\n"
+                               "    id: child1\n"
+                               "  }\n"
+                               "  Text {\n"
+                               "    id: child2\n"
+                               "  }\n"
+                               "}\n");
+    QVERIFY(session.ast());
+    QCOMPARE(session.language(), QmlJS::Document::QmlLanguage);
+
+    ContextBuilder builder;
+    builder.setParseSession(&session);
+    ReferencedTopDUContext top = builder.build(file, session.ast());
+    QVERIFY(top);
+
+    DUChainReadLocker lock;
+
+    QCOMPARE(top->type(), DUContext::Global);
+
+    QCOMPARE(top->childContexts().count(), 1);
+    DUContext* mainCtx = top->childContexts().first();
+    QCOMPARE(mainCtx->type(), DUContext::Class);
+    QCOMPARE(mainCtx->range(), RangeInRevision(0, 6, 8, 0));
+    QCOMPARE(mainCtx->childContexts().size(), 2);
+
+    DUContext* child1Ctx = mainCtx->childContexts().first();
+    QCOMPARE(child1Ctx->type(), DUContext::Class);
+    QCOMPARE(child1Ctx->range(), RangeInRevision(2, 8, 4, 2));
+    QCOMPARE(child1Ctx->childContexts().size(), 0);
+
+    DUContext* child2Ctx = mainCtx->childContexts().last();
+    QCOMPARE(child2Ctx->type(), DUContext::Class);
+    QCOMPARE(child2Ctx->range(), RangeInRevision(5, 8, 7, 2));
+    QCOMPARE(child2Ctx->childContexts().size(), 0);
+}
+
 #include "testcontexts.moc"
