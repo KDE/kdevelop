@@ -56,6 +56,7 @@ WorkingSet::WorkingSet( const KDevelop::WorkingSet& rhs ) : QObject()
 
 QIcon WorkingSet::generateIcon(bool active) const
 {
+    ///FIXME: change color of active/inactive icon
     QImage pixmap(16, 16, QImage::Format_ARGB32);
     // fill the background with a transparent color
     pixmap.fill(QColor::fromRgba(qRgba(0, 0, 0, 0)));
