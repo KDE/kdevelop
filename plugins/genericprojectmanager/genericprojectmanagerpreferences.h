@@ -43,7 +43,6 @@ public:
 
 private:
     Ui::GenericProjectManagerSettings *preferencesDialog;
-    KConfigDialogManager* m_manager;
 };
 
 }

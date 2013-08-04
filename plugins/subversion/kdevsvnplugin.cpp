@@ -11,7 +11,6 @@
 
 #include "kdevsvnplugin.h"
 
-#include <QtDesigner/QExtensionFactory>
 #include <QAction>
 #include <QVariant>
 #include <QTextStream>
@@ -81,7 +80,7 @@ K_EXPORT_PLUGIN(KDevSvnFactory(KAboutData("kdevsubversion", "kdevsubversion", ki
 
 KDevSvnPlugin::KDevSvnPlugin(QObject *parent, const QVariantList &)
         : KDevelop::IPlugin(KDevSvnFactory::componentData(), parent)
-        , m_common(new KDevelop::VcsPluginHelper(this, this)), svnmenu( 0 ),
+        , m_common(new KDevelop::VcsPluginHelper(this, this)),
         copy_action( 0 ), move_action( 0 )
 {
     KDEV_USE_EXTENSION_INTERFACE(KDevelop::IBasicVersionControl)

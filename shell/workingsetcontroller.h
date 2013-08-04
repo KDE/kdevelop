@@ -48,7 +48,7 @@ class WorkingSetController : public QObject
     Q_OBJECT
 
 public:
-    WorkingSetController(KDevelop::Core* core) ;
+    WorkingSetController();
     void initialize();
     void cleanup();
 
@@ -107,7 +107,6 @@ private:
     QSet<QString> m_usedIcons;
     QMap<QString, WorkingSet*> m_workingSets;
     WorkingSet* m_emptyWorkingSet;
-    KDevelop::Core* m_core;
     QTimer* m_hideToolTipTimer;
     QPointer<KDevelop::ActiveToolTip> m_tooltip;
     // This is set to true while the working-set controller is forcing a working-set

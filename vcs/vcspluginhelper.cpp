@@ -11,7 +11,6 @@
 
 #include "vcspluginhelper.h"
 
-#include <QtDesigner/QExtensionFactory>
 #include <QAction>
 #include <QVariant>
 #include <QMenu>

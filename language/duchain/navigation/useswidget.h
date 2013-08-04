@@ -84,7 +84,6 @@ namespace KDevelop {
       private:
         QHBoxLayout* m_headerLayout;
         QToolButton *m_previousButton, *m_nextButton;
-        uint m_maxHeight;
         bool m_allowScrolling, m_useArrows;
     };
     
@@ -155,7 +154,6 @@ namespace KDevelop {
         private:
             const QString headerLineText() const;
             QLabel* m_headerLine;
-            bool m_showDeclarations;
             UsesWidgetCollector* m_collector;
             QProgressBar* m_progressBar;
         public slots:

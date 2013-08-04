@@ -42,8 +42,8 @@ using namespace KDevelop;
 
 const int toolTipTimeout = 2000;
 
-WorkingSetController::WorkingSetController(Core* core)
-    : m_emptyWorkingSet(0), m_core(core), m_changingWorkingSet(false)
+WorkingSetController::WorkingSetController()
+    : m_emptyWorkingSet(0), m_changingWorkingSet(false)
 {
     m_hideToolTipTimer = new QTimer(this);
     m_hideToolTipTimer->setInterval(toolTipTimeout);

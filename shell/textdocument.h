@@ -82,8 +82,8 @@ private:
     Q_PRIVATE_SLOT(d, void documentSaved(KTextEditor::Document*,bool))
     Q_PRIVATE_SLOT(d, void saveSessionConfig());
 
-    class TextDocumentPrivate * const d;
-    friend class TextDocumentPrivate;
+    struct TextDocumentPrivate * const d;
+    friend struct TextDocumentPrivate;
 };
 
 class KDEVPLATFORMSHELL_EXPORT TextView : public Sublime::View

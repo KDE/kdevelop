@@ -28,7 +28,7 @@
 
 namespace KDevelop {
 
-struct PersistentMovingRangePrivate;
+class PersistentMovingRangePrivate;
 
 /**
  * A range object that is automatically adapted to all changes a user does to a document. The object

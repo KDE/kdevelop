@@ -90,7 +90,7 @@ public Q_SLOTS:
     virtual void deselectAll();
 
 private:
-    class OverridesPagePrivate* const d;
+    struct OverridesPagePrivate* const d;
 };
 
 }
