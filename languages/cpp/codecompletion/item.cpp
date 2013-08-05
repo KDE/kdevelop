@@ -98,8 +98,12 @@ AbstractType::Ptr applyPointerConversions(AbstractType::Ptr type, int pointerCon
 
 int getMatchQuality(CodeCompletionContext *context, const Declaration* decl, TopDUContext* top)
 {
-  if (!context->parentContext())
+  if (!context->parentContext() || decl->kind() == Declaration::Type
+      || decl->kind() == Declaration::Namespace || decl->kind() == Declaration::NamespaceAlias)
+  {
     return 0;
+  }
+
   QList<IndexedType> matchTypes = context->parentContext()->matchTypes();
   if (matchTypes.isEmpty())
     return 0;
