@@ -31,56 +31,31 @@ using namespace KDevelop;
 
 namespace {
 
-struct FindIdentifierVisitor : public QmlJS::AST::Visitor
-{
-    FindIdentifierVisitor()
-    : m_identifier(0)
-    {
-    }
-
-    virtual bool visit(QmlJS::AST::UiObjectDefinition*)
-    {
-        return false;
-    }
-
-    virtual bool visit(QmlJS::AST::UiPublicMember*)
-    {
-        return false;
-    }
-
-    virtual bool visit(QmlJS::AST::UiSourceElement*)
-    {
-        return false;
-    }
-
-    virtual bool visit(QmlJS::AST::UiScriptBinding* node)
-    {
-        return !m_identifier && node->qualifiedId && node->qualifiedId->name == QLatin1String("id");
-    }
-
-    virtual bool visit(QmlJS::AST::IdentifierExpression* node)
-    {
-        Q_ASSERT(!m_identifier);
-        m_identifier = node;
-        return false;
-    }
-
-    QmlJS::AST::IdentifierExpression* m_identifier;
-};
-
+/**
+ * Find the 'id: <identifier>' in a given object member list.
+ *
+ * This is a bit ugly, and a Visitor is seemlingly more appropriate
+ * for the task. But it is very hard to write it (lots of code) such
+ * that it does not recurse into any other node...
+ */
 QualifiedIdentifier findIdentifier(QmlJS::AST::UiObjectMemberList* members)
 {
-    if (!members) {
-        return QualifiedIdentifier();
+    for (QmlJS::AST::UiObjectMemberList *it = members; it; it = it->next) {
+        QmlJS::AST::UiScriptBinding* binding = QmlJS::AST::cast<QmlJS::AST::UiScriptBinding*>(it->member);
+        if (!binding || !binding->qualifiedId || binding->qualifiedId->name != QLatin1String("id")) {
+            continue;
+        }
+        QmlJS::AST::ExpressionStatement* statement = QmlJS::AST::cast<QmlJS::AST::ExpressionStatement*>(binding->statement);
+        if (!statement) {
+            continue;
+        }
+        QmlJS::AST::IdentifierExpression* identifier = QmlJS::AST::cast<QmlJS::AST::IdentifierExpression*>(statement->expression);
+        if (!identifier) {
+            continue;
+        }
+        return QualifiedIdentifier(identifier->name.toString());
     }
-
-    FindIdentifierVisitor visitor;
-    members->accept0(&visitor);
-    if (visitor.m_identifier) {
-        return QualifiedIdentifier(visitor.m_identifier->name.toString());
-    } else {
-        return QualifiedIdentifier();
-    }
+    return QualifiedIdentifier();
 }
 
 }
