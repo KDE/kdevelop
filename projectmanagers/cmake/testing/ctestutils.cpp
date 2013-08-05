@@ -30,15 +30,22 @@
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iruncontroller.h>
+#include <interfaces/iprojectcontroller.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/projectmodel.h>
+#include <language/duchain/indexedstring.h>
 
 using namespace KDevelop;
 
-void CTestUtils::createTestSuites(const QList< Test >& testSuites, ProjectFolderItem* folder)
+void CTestUtils::createTestSuites(const QList< Test >& testSuites, const KUrl& path)
 {
-    QString binDir = folder->project()->buildSystemManager()->buildDirectory(folder->project()->projectItem()).toLocalFile();
-    KUrl currentBinDir = folder->project()->buildSystemManager()->buildDirectory(folder);
+    ProjectFolderItem* folder = ICore::self()->projectController()->projectModel()->itemForUrl(IndexedString(path))->folder();
+    if(!folder)
+        return;
+
+    IProject* project = folder->project();
+    QString binDir = project->buildSystemManager()->buildDirectory(project->projectItem()).toLocalFile();
+    KUrl currentBinDir = project->buildSystemManager()->buildDirectory(folder);
     KUrl currentSourceDir = folder->url();
     
     foreach (const Test& test, testSuites)
@@ -46,7 +53,7 @@ void CTestUtils::createTestSuites(const QList< Test >& testSuites, ProjectFolder
         QString exe = test.executable;
         if (test.isTarget)
         {
-            QList<ProjectTargetItem*> items = folder->project()->buildSystemManager()->targets(folder);
+            QList<ProjectTargetItem*> items = project->buildSystemManager()->targets(folder);
             foreach (ProjectTargetItem* item, items)
             {
                 ProjectExecutableTargetItem * exeTgt = item->executable();
@@ -92,7 +99,7 @@ void CTestUtils::createTestSuites(const QList< Test >& testSuites, ProjectFolder
             (*it).replace("#[bin_dir]", binDir);
         }
         
-        CTestSuite* suite = new CTestSuite(test.name, exeUrl, files, folder->project(), args, test.properties.value("WILL_FAIL", "FALSE") == "TRUE");
+        CTestSuite* suite = new CTestSuite(test.name, exeUrl, files, project, args, test.properties.value("WILL_FAIL", "FALSE") == "TRUE");
         ICore::self()->runController()->registerJob(new CTestFindJob(suite));
     }
 }

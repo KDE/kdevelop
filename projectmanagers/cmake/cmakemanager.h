@@ -143,7 +143,7 @@ private slots:
     void directoryChanged(const QString& dir);
     void filesystemBuffererTimeout();
 
-    void createTestSuites(const QList<Test>& testSuites, KDevelop::ProjectFolderItem* folder);
+    void createTestSuites(const QList<Test>& testSuites, const KUrl& folder);
 private:
     void addDeleteItem(KDevelop::ProjectBaseItem* item);
     void reimport(CMakeFolderItem* fi);
