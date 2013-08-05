@@ -107,42 +107,70 @@ void TestDeclarations::testFunction()
 void TestDeclarations::testQMLId()
 {
     const IndexedString file("qmlId.qml");
-    //                          0         1         2         3
-    //                          01234567890123456789012345678901234567890
-    ParseSession session(file, "/** file comment **/\n"
-                               "import QtQuick 1.0\n"
-                               "/**\n * some comment\n */\n"
-                               "Text { id: test; Text { id: child; } }");
-    QVERIFY(session.ast());
-    QVERIFY(session.problems().isEmpty());
-    QCOMPARE(session.language(), QmlJS::Document::QmlLanguage);
 
-    DeclarationBuilder builder(&session);
-    ReferencedTopDUContext top = builder.build(file, session.ast());
-    QVERIFY(top);
+    ReferencedTopDUContext top;
 
-    DUChainReadLocker lock;
+    DeclarationPointer oldDec;
+    {
+        //                          0         1         2         3
+        //                          01234567890123456789012345678901234567890
+        ParseSession session(file, "/** file comment **/\n"
+                                   "import QtQuick 1.0\n"
+                                   "/**\n * some comment\n */\n"
+                                   "Text { id: test; Text { id: child; } }");
+        QVERIFY(session.ast());
+        QVERIFY(session.problems().isEmpty());
+        QCOMPARE(session.language(), QmlJS::Document::QmlLanguage);
 
-    QCOMPARE(top->localDeclarations().size(), 1);
-    ClassDeclaration* dec = dynamic_cast<ClassDeclaration*>(top->localDeclarations().first());
-    QVERIFY(dec);
-    QCOMPARE(dec->identifier().toString(), QString("test"));
-    QCOMPARE(dec->abstractType()->toString(), QString("Text"));
-    QCOMPARE(QString::fromUtf8(dec->comment()), QString("some comment"));
-    QVERIFY(dec->internalContext());
-    QCOMPARE(dec->internalContext()->range(), RangeInRevision(5, 6, 5, 37));
+        DeclarationBuilder builder(&session);
+        top = builder.build(file, session.ast());
+        QVERIFY(top);
+
+        DUChainReadLocker lock;
+
+        QCOMPARE(top->localDeclarations().size(), 1);
+        ClassDeclaration* dec = dynamic_cast<ClassDeclaration*>(top->localDeclarations().first());
+        QVERIFY(dec);
+        QCOMPARE(dec->identifier().toString(), QString("test"));
+        QCOMPARE(dec->abstractType()->toString(), QString("Text"));
+        QCOMPARE(QString::fromUtf8(dec->comment()), QString("some comment"));
+        QVERIFY(dec->internalContext());
+        QCOMPARE(dec->internalContext()->range(), RangeInRevision(5, 6, 5, 37));
+
+        oldDec = dec;
+    }
 
     // test recompile
-    DeclarationPointer oldDec(dec);
+    {
+        //                          0         1         2         3
+        //                          01234567890123456789012345678901234567890
+        ParseSession session(file, "/** file comment **/\n"
+                                   "import QtQuick 1.0\n"
+                                   "/**\n * some comment\n */\n"
+                                   "Text { id: test; Text { id: child;}\n"
+                                   " Text {id: foo;} }");
+        QVERIFY(session.ast());
+        QVERIFY(session.problems().isEmpty());
+        QCOMPARE(session.language(), QmlJS::Document::QmlLanguage);
 
-    lock.unlock();
-    DeclarationBuilder builder2(&session);
-    top = builder2.build(file, session.ast(), top);
-    lock.lock();
+        DeclarationBuilder builder(&session);
+        ReferencedTopDUContext top2 = builder.build(file, session.ast(), top);
+        QVERIFY(top2);
+        QCOMPARE(top2.data(), top.data());
 
-    QVERIFY(oldDec);
-    QCOMPARE(top->localDeclarations().size(), 1);
-    QCOMPARE(oldDec.data(), top->localDeclarations().at(0));
+        DUChainReadLocker lock;
+
+        QCOMPARE(top->localDeclarations().size(), 1);
+        ClassDeclaration* dec = dynamic_cast<ClassDeclaration*>(top->localDeclarations().first());
+        QVERIFY(dec);
+        QVERIFY(oldDec);
+        QVERIFY(oldDec.data() == dec);
+        QCOMPARE(dec->identifier().toString(), QString("test"));
+        QCOMPARE(dec->abstractType()->toString(), QString("Text"));
+        QCOMPARE(QString::fromUtf8(dec->comment()), QString("some comment"));
+        QVERIFY(dec->internalContext());
+        QCOMPARE(dec->internalContext()->range(), RangeInRevision(5, 6, 6, 17));
+    }
 }
 
 #include "testdeclarations.moc"
