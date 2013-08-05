@@ -108,19 +108,19 @@ int getMatchQuality(CodeCompletionContext *context, const Declaration* decl, Top
   if (pointerConversions > 1)
     return 0; //Can't do "&&foo"
 
+  IndexedType effectiveDeclType = applyPointerConversions(effectiveType(decl), pointerConversions, top)->indexed();
+
+  bool fromLValue = (bool)decl->type<ReferenceType>() ||
+                    (!dynamic_cast<const AbstractFunctionDeclaration*>(decl) &&
+                      decl->kind() == Declaration::Instance);
+  if(pointerConversions > 0 && !fromLValue)
+    return 0;
+
+  Cpp::TypeConversion conv(top);
+
   int bestQuality = 0;
   foreach(const IndexedType& type, matchTypes) {
-    Cpp::TypeConversion conv(top);
-
-    bool fromLValue = (bool)decl->type<ReferenceType>() ||
-                      (!dynamic_cast<const AbstractFunctionDeclaration*>(decl) &&
-                        decl->kind() == Declaration::Instance);
-    if(pointerConversions > 0 && !fromLValue)
-      continue;
-
-    AbstractType::Ptr effectiveDeclType = applyPointerConversions(effectiveType(decl), pointerConversions, top);
-
-    int quality = conv.implicitConversion( effectiveDeclType->indexed(), type, fromLValue )  * 10 / Cpp::MaximumConversionResult;
+    int quality = conv.implicitConversion( effectiveDeclType, type, fromLValue )  * 10 / Cpp::MaximumConversionResult;
     if(quality > bestQuality)
       bestQuality = quality;
   }
@@ -532,9 +532,10 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
 
   switch (role) {
     case CodeCompletionModel::MatchQuality:
-      if(m_fixedMatchQuality != -1)
-        return m_fixedMatchQuality;
-      return getMatchQuality(completionContext().data(), dec, model->currentTopContext().data());
+      if(m_fixedMatchQuality == -1) {
+        m_fixedMatchQuality = getMatchQuality(completionContext().data(), dec, model->currentTopContext().data());
+      }
+      return m_fixedMatchQuality;
 
     case CodeCompletionModel::ItemSelected:
        return QVariant(Cpp::NavigationWidget::shortDescription(dec));

@@ -1636,6 +1636,10 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::signalSlotAccessCompleti
 
 QList<IndexedType> CodeCompletionContext::matchTypes()
 {
+  if (!m_cachedMatchTypes.isEmpty()) {
+    return m_cachedMatchTypes;
+  }
+
   QSet<KDevelop::IndexedType> ret;
   switch(m_accessType)
   {
@@ -1678,7 +1682,9 @@ QList<IndexedType> CodeCompletionContext::matchTypes()
   default:
     break;
   }
-  return ret.toList();
+
+  m_cachedMatchTypes = ret.toList();
+  return m_cachedMatchTypes;
 }
 
 QList<DeclAccessPair> CodeCompletionContext::containedItemsMatchingType(Declaration *container, const IndexedType& type, TopDUContext *top, bool isPointer) const

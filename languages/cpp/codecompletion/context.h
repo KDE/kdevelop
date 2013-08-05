@@ -346,6 +346,8 @@ namespace Cpp {
       bool m_doAccessFiltering;
       DUContextPointer m_localClass;
 
+      QList<IndexedType> m_cachedMatchTypes;
+
       friend class ImplementationHelperItem;
   };
 }
