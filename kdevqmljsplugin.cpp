@@ -51,7 +51,7 @@ KDevQmlJsPlugin::KDevQmlJsPlugin(QObject* parent, const QVariantList& )
     KDEV_USE_EXTENSION_INTERFACE(ILanguageSupport)
 
     CodeCompletionModel* codeCompletion = new QmlJS::CodeCompletionModel(this);
-    new KDevelop::CodeCompletion(this, codeCompletion, "qml/js");
+    new KDevelop::CodeCompletion(this, codeCompletion, name());
 }
 
 ParseJob* KDevQmlJsPlugin::createParseJob(const IndexedString& url)
