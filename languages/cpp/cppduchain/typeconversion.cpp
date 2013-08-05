@@ -123,7 +123,9 @@ TypeConversion::~TypeConversion() {
  *  - an ellipsis conversion sequence
  *
  * */
-uint TypeConversion::implicitConversion( IndexedType _from, IndexedType _to, bool fromLValue, bool noUserDefinedConversion ) {
+uint TypeConversion::implicitConversion( const IndexedType& _from, const IndexedType& _to,
+                                         bool fromLValue, bool noUserDefinedConversion )
+{
   m_baseConversionLevels = 0;
 
   int conv = 0;

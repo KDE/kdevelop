@@ -85,7 +85,8 @@ class KDEVCPPDUCHAIN_EXPORT TypeConversion {
      * @return Whether there is an implicit conversion sequence available. 0 when no conversion is possible, else a positive number. The higher it is, the better the conversion. Maximum should be MaximumConversionResult
      **/
 
-    uint implicitConversion( IndexedType from, IndexedType to, bool fromLValue = true, bool noUserDefinedConversion = false );
+    uint implicitConversion( const IndexedType& from, const IndexedType& to,
+                             bool fromLValue = true, bool noUserDefinedConversion = false );
 
     /**
      * Returns the count of steps by which a class needed to be converted to it's base-class during the last implicit conversion.

@@ -104,7 +104,7 @@ int getMatchQuality(CodeCompletionContext *context, const Declaration* decl, Top
     return 0;
   }
 
-  QList<IndexedType> matchTypes = context->parentContext()->matchTypes();
+  const QList<IndexedType>& matchTypes = context->parentContext()->matchTypes();
   if (matchTypes.isEmpty())
     return 0;
 
@@ -112,7 +112,7 @@ int getMatchQuality(CodeCompletionContext *context, const Declaration* decl, Top
   if (pointerConversions > 1)
     return 0; //Can't do "&&foo"
 
-  IndexedType effectiveDeclType = applyPointerConversions(effectiveType(decl), pointerConversions, top)->indexed();
+  const IndexedType& effectiveDeclType = applyPointerConversions(effectiveType(decl), pointerConversions, top)->indexed();
 
   bool fromLValue = (bool)decl->type<ReferenceType>() ||
                     (!dynamic_cast<const AbstractFunctionDeclaration*>(decl) &&
