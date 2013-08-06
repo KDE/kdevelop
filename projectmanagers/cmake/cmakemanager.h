@@ -131,13 +131,10 @@ public:
     QStringList processGeneratorExpression(const QStringList& expr, KDevelop::IProject* project, KDevelop::ProjectTargetItem* target) const;
     bool isReloading(KDevelop::IProject* p);
 
-public slots:
-    void cleanupItems();
-    
 signals:
     void folderRenamed(const KUrl& oldFolder, KDevelop::ProjectFolderItem* newFolder);
     void fileRenamed(const KUrl& oldFile, KDevelop::ProjectFileItem* newFile);
-    
+
 private slots:
     void dirtyFile(const QString& file);
 
@@ -153,7 +150,6 @@ private:
     void addDeleteItem(KDevelop::ProjectBaseItem* item);
     void reimport(CMakeFolderItem* fi);
     CacheValues readCache(const KUrl &path) const;
-    void cleanupToDelete(KDevelop::IProject* p);
     bool renameFileOrFolder(KDevelop::ProjectBaseItem *item, const KUrl &newUrl);
     
     QMutex m_reparsingMutex;
@@ -173,8 +169,6 @@ private:
     KDevelop::ICodeHighlighting *m_highlight;
     
     QList<KDevelop::ProjectBaseItem*> m_clickedItems;
-    QSet<QString> m_toDelete;
-    QHash<KUrl, KUrl> m_renamed;
     QSet<KDevelop::ProjectBaseItem*> m_cleanupItems;
 
     QTimer* m_fileSystemChangeTimer;
