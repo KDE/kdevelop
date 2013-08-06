@@ -944,7 +944,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
         qRegisterMetaType<KDevelop::ProjectFolderItem* >("KDevelop::ProjectFolderItem*");
         QMetaObject::invokeMethod(this, "createTestSuites", Qt::QueuedConnection,
                                   Q_ARG(QList<Test>, data.testSuites),
-                                  Q_ARG(KUrl, item->url()));
+                                  Q_ARG(KDevelop::ProjectFolderItem*, item));
         
         foreach(KDevelop::ProjectFolderItem* item, folderList) {
             parse(item);
@@ -1828,8 +1828,9 @@ void CMakeManager::cleanupItems()
     m_cleanupItems.clear();
 }
 
-void CMakeManager::createTestSuites(const QList<Test>& testSuites, const KUrl& folder)
+void CMakeManager::createTestSuites(const QList< Test >& testSuites, ProjectFolderItem* folder)
 {
+    kDebug();
     CTestUtils::createTestSuites(testSuites, folder);
 }
 
