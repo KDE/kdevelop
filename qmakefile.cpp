@@ -37,7 +37,9 @@ void resolveShellGlobbingInternal( QStringList& entries, const QStringList& segm
 
 QStringList resolveShellGlobbingInternal( const QStringList& segments, QDir& dir, int offset = 0 )
 {
-    Q_ASSERT(segments.size() > offset);
+    if (offset >= segments.size()) {
+        return QStringList();
+    }
 
     const QString& pathPattern = segments.at(offset);
 
