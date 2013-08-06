@@ -49,6 +49,8 @@ struct Target
     CMakeFunctionDesc desc;
     QString name;
     QStringList libraries;
+    QString location;
+    QString outputName;
 };
 typedef Target CMakeTarget; //Workaround for namespacing. fix me!
 

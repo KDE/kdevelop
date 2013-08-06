@@ -106,8 +106,6 @@ class KDEVCMAKECOMMON_EXPORT CMakeFolderItem
         
         KDevelop::ProjectTargetItem* targetNamed(Target::Type type, const QString& targetName) const;
         KDevelop::ProjectFolderItem* folderNamed(const QString& name) const;
-        QList<ProjectBaseItem*> cleanupBuildFolders(const QList<Subdirectory>& subs);
-        QList<ProjectBaseItem*> cleanupTargets(const QList<CMakeTarget>& targets);
     private:
         KDevelop::ReferencedTopDUContext m_topcontext;
         CMakeFolderItem* m_formerParent;

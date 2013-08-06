@@ -105,6 +105,7 @@ public:
     QList<KDevelop::ProjectTargetItem*> targets() const;
     QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectFolderItem* folder) const;
 
+    void importDirectory(KDevelop::IProject* project, const KUrl& url, const KDevelop::ReferencedTopDUContext& parentTop);
     virtual QList<KDevelop::ProjectFolderItem*> parse( KDevelop::ProjectFolderItem* dom );
     virtual KDevelop::ProjectFolderItem* import( KDevelop::IProject *project );
     
@@ -121,9 +122,14 @@ public:
     virtual KDevelop::ICodeHighlighting* codeHighlighting() const;
     virtual QWidget* specialLanguageObjectNavigationWidget(const KUrl& url, const KDevelop::SimpleCursor& position);
     
+    void addPending(const KUrl& url, CMakeFolderItem* folder);
+    CMakeFolderItem* takePending(const KUrl& url);
+    void addWatcher(KDevelop::IProject* p, const QString& path);
+    
     void deleteItemLater(KDevelop::ProjectBaseItem* item);
     void deleteAllLater(const QList< KDevelop::ProjectBaseItem* >& items);
     QStringList processGeneratorExpression(const QStringList& expr, KDevelop::IProject* project, KDevelop::ProjectTargetItem* target) const;
+    bool isReloading(KDevelop::IProject* p);
 
 public slots:
     void cleanupItems();
@@ -143,13 +149,10 @@ private slots:
     void directoryChanged(const QString& dir);
     void filesystemBuffererTimeout();
 
-    void createTestSuites(const QList<Test>& testSuites, KDevelop::ProjectFolderItem* folder);
 private:
     void addDeleteItem(KDevelop::ProjectBaseItem* item);
     void reimport(CMakeFolderItem* fi);
     CacheValues readCache(const KUrl &path) const;
-    bool isReloading(KDevelop::IProject* p);
-    bool isCorrectFolder(const KUrl& url, KDevelop::IProject* p) const;
     void cleanupToDelete(KDevelop::IProject* p);
     bool renameFileOrFolder(KDevelop::ProjectBaseItem *item, const KUrl &newUrl);
     
@@ -161,9 +164,6 @@ private:
     KDevelop::ReferencedTopDUContext includeScript(const QString& file, KDevelop::IProject * project, const QString& currentDir,
                                                     KDevelop::ReferencedTopDUContext parent);
     
-    void setTargetFiles(KDevelop::ProjectTargetItem* target, const KUrl::List& files);
-    void reloadFiles(KDevelop::ProjectFolderItem* item);
-
     QMap<KDevelop::IProject*, CMakeProjectData> m_projectsData;
     QMap<KDevelop::IProject*, QFileSystemWatcher*> m_watchers;
     QMap<KUrl, CMakeFolderItem*> m_pending;

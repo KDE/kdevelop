@@ -47,6 +47,7 @@ set( cmakemanager_SRCS
   cmakenavigationwidget.cpp
   cmakemanager.cpp
   cmakecodecompletionmodel.cpp
+  cmakecommitchangesjob.cpp
 )
 
 set( cmakemanager_UI

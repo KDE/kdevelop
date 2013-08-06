@@ -452,39 +452,42 @@ void CMakeProjectVisitor::defineTarget(const QString& id, const QStringList& sou
         d->setAbstractType(targetType);
     }
     
-    Target target;
-    target.name=id.isEmpty() ? "<wrong-target>" : id;
-    target.declaration=IndexedDeclaration(d);
-    target.files=sources;
-    target.type=t;
-    target.desc=p.code->at(p.line);
-    
-    m_targetForId[id]=target;
+    QMap<QString, QStringList>& targetProps = m_props[TargetProperty][id];
 
     QString exe=id;
     QString locationDir = m_vars->value("CMAKE_CURRENT_BINARY_DIR").join(QString());
     switch(t) {
         case Target::Executable: {
             exe += m_vars->value("CMAKE_EXECUTABLE_SUFFIX").join(QString());
-            locationDir = m_vars->value("CMAKE_RUNTIME_OUTPUT_DIRECTORY").join(QString());
-            if (!locationDir.isEmpty()) {
-                m_props[TargetProperty][id]["RUNTIME_OUTPUT_DIRECTORY"]=QStringList(locationDir);
-            }
+            if(targetProps.contains("RUNTIME_OUTPUT_DIRECTORY"))
+                locationDir=targetProps["RUNTIME_OUTPUT_DIRECTORY"].first();
+            else
+                locationDir=m_vars->value("EXECUTABLE_OUTPUT_PATH").join(QString());
         }   break;
         case Target::Library: {
             exe = QString("%1%2%3").arg(m_vars->value("CMAKE_LIBRARY_PREFIX").join(QString()))
                                    .arg(id)
                                    .arg(m_vars->value("CMAKE_LIBRARY_SUFFIX").join(QString()));
-            locationDir = m_vars->value("CMAKE_LIBRARY_OUTPUT_DIRECTORY").join(QString());
-            if (!locationDir.isEmpty()) {
-                m_props[TargetProperty][id]["LIBRARY_OUTPUT_DIRECTORY"]=QStringList(locationDir);
-            }
+            if(targetProps.contains("LIBRARY_OUTPUT_DIRECTORY"))
+                locationDir=targetProps["LIBRARY_OUTPUT_DIRECTORY"].first();
+            else
+                locationDir=m_vars->value("LIBRARY_OUTPUT_PATH").join(QString());
         }   break;
         case Target::Custom:
             break;
     }
     
-    m_props[TargetProperty][id]["LOCATION"]=QStringList(locationDir+'/'+exe);
+    Target target;
+    target.name=id.isEmpty() ? "<wrong-target>" : id;
+    target.declaration=IndexedDeclaration(d);
+    target.files=sources;
+    target.type=t;
+    target.desc=p.code->at(p.line);
+    target.location = locationDir;
+    target.outputName = targetProps.value("OUTPUT_NAME", QStringList(id)).first();
+    m_targetForId[id]=target;
+    
+    targetProps["LOCATION"] = QStringList(locationDir+'/'+exe);
 }
 
 int CMakeProjectVisitor::visit(const AddExecutableAst *exec)
