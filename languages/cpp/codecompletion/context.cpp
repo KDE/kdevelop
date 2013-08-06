@@ -1729,6 +1729,15 @@ QList<DeclAccessPair> CodeCompletionContext::getLookaheadMatches(Declaration* fo
   TopDUContext* top = m_duContext->topContext();
   bool typeIsPointer = false;
   Declaration* container = containerDeclForType(Cpp::effectiveType(forDecl), top, typeIsPointer);
+  if (!container) {
+    return ret;
+  }
+
+  QHash<Declaration*, QList<DeclAccessPair> >::const_iterator cacheIt = m_lookaheadMatchesCache.constFind(container);
+  if (cacheIt != m_lookaheadMatchesCache.constEnd()) {
+    return cacheIt.value();
+  }
+
   /// FIXME: use QVector + std::remove_if
   ret = containedDeclarationsForLookahead(container, top, typeIsPointer);
 
@@ -1759,6 +1768,9 @@ QList<DeclAccessPair> CodeCompletionContext::getLookaheadMatches(Declaration* fo
 
   // Could use hideOverloadedDeclarations theoretically here, but it would do very
   // little since we don't have the real declaration depth
+
+  m_lookaheadMatchesCache.insert(container, ret);
+
   return ret;
 }
 
@@ -2031,6 +2043,8 @@ void CodeCompletionContext::addLookaheadMatches(const QList<CompletionTreeItemPo
       lookaheadMatches << CompletionTreeItemPointer(lookaheadItem);
     }
   }
+  m_lookaheadMatchesCache.clear();
+
   eventuallyAddGroup(i18n("Lookahead Matches"), 800, lookaheadMatches);
 }
 

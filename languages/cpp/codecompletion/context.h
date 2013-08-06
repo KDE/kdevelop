@@ -347,6 +347,10 @@ namespace Cpp {
       DUContextPointer m_localClass;
 
       QList<IndexedType> m_cachedMatchTypes;
+      /// Maps container declaration to cached return value of getLookaheadMatches
+      /// This is useful, as otherwise we'd repeat the same stuff for every variable
+      /// with the same type accessible from the current scope
+      mutable QHash<Declaration*, QList<DeclAccessPair> > m_lookaheadMatchesCache;
 
       friend class ImplementationHelperItem;
   };
