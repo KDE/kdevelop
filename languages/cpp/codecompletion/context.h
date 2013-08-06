@@ -254,15 +254,15 @@ namespace Cpp {
       QList<CompletionTreeItemPointer> getImplementationHelpers();
       QList<CompletionTreeItemPointer> getImplementationHelpersInternal(const QualifiedIdentifier& minimumScope, DUContext* context);
 
-      ///For a given @param container, find members which match the given @param type
-      ///@param isPointer specifies whether the container should be accessed with operator->
-      ///@returns a list of declarations paired with whether or not they use "operator->"
-      ///Note that a non-pointer container may declare an operator-> (ie, smart pointer)
-      QList<DeclAccessPair> containedItemsMatchingType(Declaration *container, const IndexedType& type, TopDUContext *top, bool isPointer) const;
       ///If @param forDecl is an instance of a class, find declarations in that class which match @param matchTypes
       ///@returns the list of matching declarations and whether or not you need the arrow operator (->) to access them
       QList<DeclAccessPair> getLookaheadMatches(Declaration* forDecl, const QList<IndexedType>& matchTypes) const;
       void addLookaheadMatches(const QList<CompletionTreeItemPointer> items);
+      ///For a given @param container, find members which may potentially be used for lookahead matching
+      ///@param isPointer specifies whether the container should be accessed with operator->
+      ///@returns a list of declarations paired with whether or not they use "operator->"
+      ///Note that a non-pointer container may declare an operator-> (ie, smart pointer)
+      QList<DeclAccessPair> containedDeclarationsForLookahead(Declaration* decl, TopDUContext* top, bool isPointer) const;
 
       ///*DUChain must be locked*
       bool  filterDeclaration(Declaration* decl, DUContext* declarationContext = 0, bool dynamic = true) const;

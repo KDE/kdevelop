@@ -358,7 +358,7 @@ QString getUnaryOperator(const QString &context)
 }
 
 //Returns the class or struct declaration for the given type
-Declaration* containerDeclForType(AbstractType::Ptr givenType, TopDUContext* top, bool &typeIsPointer)
+Declaration* containerDeclForType(const AbstractType::Ptr& givenType, TopDUContext* top, bool &typeIsPointer)
 {
   if (PointerType::Ptr ptrType = givenType.cast<PointerType>())
   {
@@ -1687,31 +1687,37 @@ QList<IndexedType> CodeCompletionContext::matchTypes()
   return m_cachedMatchTypes;
 }
 
-QList<DeclAccessPair> CodeCompletionContext::containedItemsMatchingType(Declaration *container, const IndexedType& type, TopDUContext *top, bool isPointer) const
+QList<DeclAccessPair> CodeCompletionContext::containedDeclarationsForLookahead(Declaration* container, TopDUContext* top,
+                                                                               bool isPointer) const
 {
-  static const Identifier arrowOpIdentifier("operator->");
+  static const IndexedIdentifier arrowOpIdentifier(Identifier("operator->"));
   QList<DeclAccessPair> ret;
   if (!container || !container->internalContext())
     return ret;
-  Cpp::TypeConversion conv(top);
+
   Declaration *arrowOperator = 0;
-  QVector<Declaration*> containedDeclarations = container->internalContext()->localDeclarations(top);
-  foreach(Declaration *decl, containedDeclarations)
+  QVector<Declaration*> declarations = container->internalContext()->localDeclarations(top);
+  foreach(Declaration *decl, declarations)
   {
     if (decl->isTypeAlias() || decl->isForwardDeclaration() || decl->type<EnumerationType>())
       continue; //Skip declarations that are not accessed via ./->
 
-    if (!isPointer && decl->identifier() == arrowOpIdentifier)
+    if (!isPointer && decl->indexedIdentifier() == arrowOpIdentifier)
       arrowOperator = decl;
 
-    AbstractType::Ptr declEffectiveType = Cpp::effectiveType(decl);
-    if (!declEffectiveType.isNull() && conv.implicitConversion(declEffectiveType->indexed(), type)
-        && filterDeclaration(dynamic_cast<ClassMemberDeclaration*>(decl)))
+    if (!filterDeclaration(dynamic_cast<ClassMemberDeclaration*>(decl))) {
+      continue;
+    }
+
+    if (Cpp::effectiveType(decl)) {
       ret << DeclAccessPair(decl, isPointer);
+    }
   }
   //If we found an "->", try to treat it as a smart pointer
-  if (arrowOperator)
-    ret += containedItemsMatchingType(containerDeclForType(Cpp::effectiveType(arrowOperator), top, isPointer), type, top, true);
+  if (arrowOperator) {
+    ret += containedDeclarationsForLookahead( containerDeclForType(Cpp::effectiveType(arrowOperator), top, isPointer),
+                                              top, true );
+  }
   return ret;
 }
 
@@ -1720,16 +1726,39 @@ QList<DeclAccessPair> CodeCompletionContext::getLookaheadMatches(Declaration* fo
   QList<DeclAccessPair> ret;
   if (forDecl->isFunctionDeclaration() || forDecl->kind() != Declaration::Instance || !forDecl->abstractType())
     return ret; //We can only use instances, for now no sub decls of functions either TODO: be nice to get no-arg functions at least
+  TopDUContext* top = m_duContext->topContext();
   bool typeIsPointer = false;
-  Declaration *containerDecl = containerDeclForType(Cpp::effectiveType(forDecl), m_duContext->topContext(), typeIsPointer);
-  foreach(const IndexedType &matchType, matchTypes) {
-    //Don't lookahead if the current type is a (precise) match
-    //Cheaper than checking if it converts, and probably good enough
-    if (matchType == forDecl->indexedType())
-      continue;
-    ret += containedItemsMatchingType(containerDecl, matchType, m_duContext->topContext(), typeIsPointer);
+  Declaration* container = containerDeclForType(Cpp::effectiveType(forDecl), top, typeIsPointer);
+  /// FIXME: use QVector + std::remove_if
+  ret = containedDeclarationsForLookahead(container, top, typeIsPointer);
+
+  QList<DeclAccessPair>::iterator it = ret.begin();
+  Cpp::TypeConversion conv(top);
+  while (it != ret.end()) {
+    bool match = false;
+    const IndexedType& declEffectiveType = Cpp::effectiveType(it->first)->indexed();
+    Q_ASSERT(declEffectiveType);
+
+    foreach (const IndexedType& matchType, matchTypes) {
+      //Don't lookahead if the current type is a (precise) match
+      //Cheaper than checking if it converts, and probably good enough
+      if (matchType == forDecl->indexedType())
+        continue;
+      if (conv.implicitConversion(declEffectiveType, matchType)) {
+        match = true;
+        break;
+      }
+    }
+
+    if (!match) {
+      it = ret.erase(it);
+    } else {
+      ++it;
+    }
   }
-  //Could use hideOverloadedDeclarations theoretically here, but it would do very little since we don't have the real declaration depth
+
+  // Could use hideOverloadedDeclarations theoretically here, but it would do very
+  // little since we don't have the real declaration depth
   return ret;
 }
 
