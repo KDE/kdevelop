@@ -48,6 +48,7 @@ public:
     explicit CMakeCommitChangesJob(const KUrl& url, CMakeManager* manager, KDevelop::IProject* parent);
 
     KUrl::List addProjectData(const CMakeProjectData* data);
+    void setParentJob(CMakeCommitChangesJob* job);
     virtual void start();
 
 private slots:
@@ -56,6 +57,8 @@ private slots:
 private:
     void reloadFiles(KDevelop::ProjectFolderItem* item);
     void setTargetFiles(KDevelop::ProjectTargetItem* target, const KUrl::List& files);
+    KDevelop::ProjectFolderItem* parentItem();
+    KDevelop::ProjectFolderItem* itemFor(const KUrl& url) const;
 
     KUrl m_url;
     QList<Subdirectory> m_subdirectories;
@@ -66,7 +69,9 @@ private:
 
     QStringList m_directories;
     QStringList m_definitions;
-
+    CMakeCommitChangesJob* m_parentJob;
+    QMap<KUrl, KDevelop::ProjectFolderItem*> m_createdFolders;
+    bool m_projectDataAdded;
 };
 
 #endif // CMAKECOMMITCHANGESJOB_H

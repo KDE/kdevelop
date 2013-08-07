@@ -630,13 +630,13 @@ KDevelop::ReferencedTopDUContext CMakeManager::includeScript(const QString& file
 
 QList< ProjectFolderItem* > CMakeManager::parse(ProjectFolderItem* dom)
 {
-    Q_ASSERT(dom == dom->project()->projectItem());
+    Q_ASSERT(dom->url() == dom->project()->folder());
     CMakeFolderItem* item = dynamic_cast<CMakeFolderItem*>(dom);
-    importDirectory(dom->project(), dom->url(), item->topDUContext());
+    importDirectory(dom->project(), dom->url(), 0, 0);
     return QList<KDevelop::ProjectFolderItem*>();
 }
 
-void CMakeManager::importDirectory(IProject* project, const KUrl& url, const KDevelop::ReferencedTopDUContext& parentTop)
+void CMakeManager::importDirectory(IProject* project, const KUrl& url, const KDevelop::ReferencedTopDUContext& parentTop, CMakeCommitChangesJob* parentJob)
 {
     Q_ASSERT(isReloading(project));
     addWatcher(project, url.toLocalFile(KUrl::AddTrailingSlash));
@@ -645,6 +645,9 @@ void CMakeManager::importDirectory(IProject* project, const KUrl& url, const KDe
     cmakeListsPath.addPath("CMakeLists.txt");
     
     CMakeCommitChangesJob* commitJob = new CMakeCommitChangesJob(url, this, project);
+    commitJob->setParentJob(parentJob);
+    commitJob->setAutoDelete(false);
+    commitJob->start();
     if(QFile::exists(cmakeListsPath.toLocalFile()))
     {
         KDevelop::ReferencedTopDUContext curr;
@@ -655,7 +658,7 @@ void CMakeManager::importDirectory(IProject* project, const KUrl& url, const KDe
         
         kDebug(9042) << "Adding cmake: " << cmakeListsPath << " to the model";
 
-        QString binDir=KUrl::relativePath(project->projectItem()->url().toLocalFile(), url.toLocalFile());
+        QString binDir=KUrl::relativePath(project->folder().toLocalFile(), url.toLocalFile());
         if(binDir.startsWith("./"))
             binDir=binDir.remove(0, 2);
         
@@ -663,15 +666,14 @@ void CMakeManager::importDirectory(IProject* project, const KUrl& url, const KDe
 
         data.vm.pushScope();
         ReferencedTopDUContext ctx = includeScript(cmakeListsPath.toLocalFile(), project,
-                                                   url.toLocalFile(KUrl::KUrl::RemoveTrailingSlash), curr);
+                                                   url.toLocalFile(KUrl::RemoveTrailingSlash), curr);
         KUrl::List folderList = commitJob->addProjectData(&data);
         foreach(const KUrl& folder, folderList) {
-            importDirectory(project, folder, ctx);
+            importDirectory(project, folder, ctx, commitJob);
         }
         data.vm.popScope();
     }
 
-    commitJob->start();
 }
 
 QList<KDevelop::ProjectTargetItem*> CMakeManager::targets() const

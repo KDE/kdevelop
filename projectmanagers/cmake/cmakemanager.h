@@ -37,6 +37,7 @@
 #include "icmakemanager.h"
 #include "cmakeprojectvisitor.h"
 
+class CMakeCommitChangesJob;
 class QFileSystemWatcher;
 struct CMakeProjectData;
 class QStandardItem;
@@ -105,7 +106,7 @@ public:
     QList<KDevelop::ProjectTargetItem*> targets() const;
     QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectFolderItem* folder) const;
 
-    void importDirectory(KDevelop::IProject* project, const KUrl& url, const KDevelop::ReferencedTopDUContext& parentTop);
+    void importDirectory(KDevelop::IProject* project, const KUrl& url, const KDevelop::ReferencedTopDUContext& parentTop, CMakeCommitChangesJob* job);
     virtual QList<KDevelop::ProjectFolderItem*> parse( KDevelop::ProjectFolderItem* dom );
     virtual KDevelop::ProjectFolderItem* import( KDevelop::IProject *project );
     

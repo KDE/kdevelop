@@ -110,31 +110,43 @@ static QList<KDevelop::ProjectBaseItem*> cleanupBuildFolders(CMakeFolderItem* it
 /////////////////////////////////////////
 
 CMakeCommitChangesJob::CMakeCommitChangesJob(const KUrl& url, CMakeManager* manager, KDevelop::IProject* parent)
-    : KJob(parent)
+    : KJob()
     , m_url(url)
     , m_project(parent)
     , m_manager(manager)
+    , m_parentJob(0)
+    , m_projectDataAdded(false)
 {
     moveToThread(parent->thread());
 }
 
 KUrl::List CMakeCommitChangesJob::addProjectData(const CMakeProjectData* data)
 {
+    m_projectDataAdded = true;
     KUrl::List ret;
     m_tests = data->testSuites;
     
     QSet<QString> alreadyAdded;
-    foreach(const Subdirectory& subf, m_subdirectories) {
+    foreach(const Subdirectory& subf, data->subdirectories) {
         if(subf.name.isEmpty() || alreadyAdded.contains(subf.name)) //empty case would not be necessary if we didn't process the wrong lines
             continue;
         alreadyAdded.insert(subf.name);
-        m_subdirectories = data->subdirectories;
+        m_subdirectories += subf;
+
+        KUrl path(subf.name);
+        if(path.isRelative())
+        {
+            path=m_url;
+            path.addPath(subf.name);
+        }
+        path.adjustPath(KUrl::AddTrailingSlash);
+        ret += path;
     }
 
     QString dir = m_url.toLocalFile(KUrl::RemoveTrailingSlash);
     if(data->vm.value("CMAKE_INCLUDE_CURRENT_DIR")==QStringList("ON")) {
         m_directories += dir;
-//         m_directories += m_manager->buildDirectory(folder).toLocalFile();
+        m_directories += data->vm.value("CMAKE_CURRENT_BINARY_DIR");
     }
     m_directories += resolvePaths(m_url, data->properties[DirectoryProperty][dir]["INCLUDE_DIRECTORIES"]);
     m_directories.removeAll(QString());
@@ -165,6 +177,20 @@ KUrl::List CMakeCommitChangesJob::addProjectData(const CMakeProjectData* data)
     return ret;
 }
 
+ProjectFolderItem* CMakeCommitChangesJob::parentItem()
+{
+    if(m_parentJob==0)
+        return m_project->projectItem()->folder();
+    else {
+        return m_parentJob->itemFor(m_url);
+    }
+}
+
+ProjectFolderItem* CMakeCommitChangesJob::itemFor(const KUrl& url) const
+{
+    return m_createdFolders[url];
+}
+
 void CMakeCommitChangesJob::start()
 {
     QMetaObject::invokeMethod(this, "makeChanges", Qt::QueuedConnection);
@@ -172,121 +198,128 @@ void CMakeCommitChangesJob::start()
 
 void CMakeCommitChangesJob::makeChanges()
 {
+    qDebug() << "changes" << m_url;
     Q_ASSERT(m_project->thread() == QThread::currentThread());
-    CMakeFolderItem* folder = dynamic_cast<CMakeFolderItem*>( m_project->foldersForUrl(m_url).first() );
-    Q_ASSERT(folder);
+    ProjectFolderItem* f = parentItem();
+    Q_ASSERT(f);
 
-    qDeleteAll(cleanupBuildFolders(folder, m_subdirectories));
-    foreach(const Subdirectory& subf, m_subdirectories)
-    {
-        KUrl path(subf.name);
-        if(path.isRelative())
+    if(m_projectDataAdded) {
+        CMakeFolderItem* folder = dynamic_cast<CMakeFolderItem*>(f);
+        Q_ASSERT(folder);
+        qDeleteAll(cleanupBuildFolders(folder, m_subdirectories));
+        foreach(const Subdirectory& subf, m_subdirectories)
         {
-            path=m_url;
-            path.addPath(subf.name);
-        }
-        path.adjustPath(KUrl::AddTrailingSlash);
-        
-        if(QDir(path.toLocalFile()).exists())
-        {
-            CMakeFolderItem* parent=folder;
-            if(path.upUrl()!=m_url)
-                parent=0;
-
-            CMakeFolderItem* a = 0;
-            ProjectFolderItem* ff = folder->folderNamed(subf.name);
-            if(ff)
+            KUrl path(subf.name);
+            if(path.isRelative())
             {
-                if(ff->type()!=ProjectBaseItem::BuildFolder)
-                    delete ff;
-                else
-                    a = static_cast<CMakeFolderItem*>(ff);
+                path=m_url;
+                path.addPath(subf.name);
             }
-            if(!a)
-                a = new CMakeFolderItem( folder->project(), path, subf.build_dir, parent );
-            else
-                a->setUrl(path);
+            path.adjustPath(KUrl::AddTrailingSlash);
             
-            if(!parent) {
-                a->setFormerParent(folder);
-                m_manager->addPending(path, a);
-            }
-
-            a->setDescriptor(subf.desc);
-        }
-    }
-
-    folder->setIncludeDirectories(m_directories);
-    folder->defineVariables(m_definitions);
-
-    QSet<ProjectTargetItem*> deletableTargets = folder->targetList().toSet();
-    foreach ( const ProcessedTarget& pt, m_targets)
-    {
-        const Target& t = pt.target;
-        
-        KUrl resolvedPath;
-        if(!t.location.isEmpty())
-            resolvedPath=CMake::resolveSystemDirs(folder->project(), QStringList(t.location)).first();
-        
-        KDevelop::ProjectTargetItem* targetItem = folder->targetNamed(t.type, t.name);
-        if (targetItem)
-            deletableTargets.remove(targetItem);
-        else {
-            switch(t.type)
+            if(QDir(path.toLocalFile()).exists())
             {
-                case Target::Library:
-                    targetItem = new CMakeLibraryTargetItem( m_project, t.name,
-                                                            folder, t.declaration, t.outputName, resolvedPath);
-                    break;
-                case Target::Executable:
-                    targetItem = new CMakeExecutableTargetItem( m_project, t.name,
-                                                                folder, t.declaration, t.outputName, resolvedPath);
-                    break;
-                case Target::Custom:
-                    targetItem = new CMakeCustomTargetItem( m_project, t.name,
-                                                            folder, t.declaration, t.outputName );
-                    break;
+                CMakeFolderItem* parent=folder;
+                if(path.upUrl()!=m_url)
+                    parent=0;
+
+                CMakeFolderItem* a = 0;
+                ProjectFolderItem* ff = folder->folderNamed(subf.name);
+                if(ff)
+                {
+                    if(ff->type()!=ProjectBaseItem::BuildFolder)
+                        delete ff;
+                    else
+                        a = static_cast<CMakeFolderItem*>(ff);
+                }
+                if(!a)
+                    a = new CMakeFolderItem( folder->project(), path, subf.build_dir, parent );
+                else
+                    a->setUrl(path);
+                
+                if(!parent) {
+                    a->setFormerParent(folder);
+                    m_manager->addPending(path, a);
+                }
+
+                a->setDescriptor(subf.desc);
+                m_createdFolders[a->url()] = a;
             }
         }
-        
-        DescriptorAttatched* descAtt=dynamic_cast<DescriptorAttatched*>(targetItem);
-        if(descAtt)
-            descAtt->setDescriptor(t.desc);
 
-        CompilationDataAttached* incAtt = dynamic_cast<CompilationDataAttached*>(targetItem);
-        if(incAtt) {
-            incAtt->setIncludeDirectories(resolvePaths(m_url, pt.includes));
-            incAtt->defineVariables(pt.defines);
-        }
-        
-        KUrl::List tfiles;
-        foreach( const QString & sFile, t.files)
+        folder->setIncludeDirectories(m_directories);
+        folder->defineVariables(m_definitions);
+
+        QSet<ProjectTargetItem*> deletableTargets = folder->targetList().toSet();
+        foreach ( const ProcessedTarget& pt, m_targets)
         {
-            if(sFile.startsWith("#[") || sFile.isEmpty() || sFile.endsWith('/'))
-                continue;
-
-            KUrl sourceFile(sFile);
-
-            // important: we want the behavior of KUrl::isRelative(), *not* KUrl::isRelativeUrl()
-            if(sourceFile.isRelative()) {
-                sourceFile = m_url;
-                sourceFile.addPath( sFile );
-                if(!QFile::exists(sourceFile.toLocalFile())) {
-                    sourceFile.clear();
+            const Target& t = pt.target;
+            
+            KUrl resolvedPath;
+            if(!t.location.isEmpty())
+                resolvedPath=CMake::resolveSystemDirs(folder->project(), QStringList(t.location)).first();
+            
+            KDevelop::ProjectTargetItem* targetItem = folder->targetNamed(t.type, t.name);
+            if (targetItem)
+                deletableTargets.remove(targetItem);
+            else {
+                switch(t.type)
+                {
+                    case Target::Library:
+                        targetItem = new CMakeLibraryTargetItem( m_project, t.name,
+                                                                folder, t.declaration, t.outputName, resolvedPath);
+                        break;
+                    case Target::Executable:
+                        targetItem = new CMakeExecutableTargetItem( m_project, t.name,
+                                                                    folder, t.declaration, t.outputName, resolvedPath);
+                        break;
+                    case Target::Custom:
+                        targetItem = new CMakeCustomTargetItem( m_project, t.name,
+                                                                folder, t.declaration, t.outputName );
+                        break;
                 }
             }
-            sourceFile.cleanPath();
+            
+            DescriptorAttatched* descAtt=dynamic_cast<DescriptorAttatched*>(targetItem);
+            if(descAtt)
+                descAtt->setDescriptor(t.desc);
 
-            if(!sourceFile.isEmpty())
-                tfiles += sourceFile;
-            kDebug(9042) << "..........Adding:" << sourceFile << sFile << m_url;
+            CompilationDataAttached* incAtt = dynamic_cast<CompilationDataAttached*>(targetItem);
+            if(incAtt) {
+                incAtt->setIncludeDirectories(resolvePaths(m_url, pt.includes));
+                incAtt->defineVariables(pt.defines);
+            }
+            
+            KUrl::List tfiles;
+            foreach( const QString & sFile, t.files)
+            {
+                if(sFile.startsWith("#[") || sFile.isEmpty() || sFile.endsWith('/'))
+                    continue;
+
+                KUrl sourceFile(sFile);
+
+                // important: we want the behavior of KUrl::isRelative(), *not* KUrl::isRelativeUrl()
+                if(sourceFile.isRelative()) {
+                    sourceFile = m_url;
+                    sourceFile.addPath( sFile );
+                    if(!QFile::exists(sourceFile.toLocalFile())) {
+                        sourceFile.clear();
+                    }
+                }
+                sourceFile.cleanPath();
+
+                if(!sourceFile.isEmpty())
+                    tfiles += sourceFile;
+                kDebug(9042) << "..........Adding:" << sourceFile << sFile << m_url;
+            }
+            
+            setTargetFiles(targetItem, tfiles);
         }
-        
-        setTargetFiles(targetItem, tfiles);
-    }
-    qDeleteAll(deletableTargets);
+        qDeleteAll(deletableTargets);
 
-//     CTestUtils::createTestSuites(m_tests, m_url);
+//         CTestUtils::createTestSuites(m_tests, m_url);
+    }
+    reloadFiles(f);
     emitResult();
 }
 
@@ -355,12 +388,14 @@ void CMakeCommitChangesJob::reloadFiles(ProjectFolderItem* item)
             
             if(pendingfolder) {
                 newItems += pendingfolder;
+                m_createdFolders[pendingfolder->url()] = pendingfolder;
             } else if(isCorrectFolder(fileurl, item->project())) {
                 fileurl.adjustPath(KUrl::AddTrailingSlash);
                 ProjectFolderItem* it = new ProjectFolderItem( item->project(), fileurl, 0 );
                 reloadFiles(it);
                 m_manager->addWatcher(item->project(), fileurl.toLocalFile());
                 newItems += it;
+                m_createdFolders[it->url()] = it;
             }
         }
         else
@@ -370,4 +405,9 @@ void CMakeCommitChangesJob::reloadFiles(ProjectFolderItem* item)
     }
     foreach(ProjectBaseItem* it, newItems)
         item->appendRow(it);
+}
+
+void CMakeCommitChangesJob::setParentJob(CMakeCommitChangesJob* job)
+{
+    m_parentJob = job;
 }
