@@ -28,8 +28,9 @@
 #include <kprocess.h>
 #include <kstandarddirs.h>
 #include "cmakeprojectvisitor.h"
+#include "cmakeprojectdata.h"
+#include "cmakecachereader.h"
 #include <ktempdir.h>
-#include <cmakeprojectdata.h>
 
 namespace CMakeParserUtils
 {
@@ -198,5 +199,37 @@ namespace CMakeParserUtils
         data->vm.remove("CMAKE_CURRENT_BINARY_DIR");
         
         return v.context();
+    }
+    
+    CacheValues readCache(const KUrl &path)
+    {
+        QFile file(path.toLocalFile());
+        if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        {
+            kDebug() << "error. Could not find the file" << path;
+            return CacheValues();
+        }
+
+        CacheValues ret;
+        QTextStream in(&file);
+        kDebug(9042) << "Reading cache:" << path;
+        QStringList currentComment;
+        while (!in.atEnd())
+        {
+            QString line = in.readLine().trimmed();
+            if(!line.isEmpty() && line[0].isLetter()) //it is a variable
+            {
+                CacheLine c;
+                c.readLine(line);
+                if(c.flag().isEmpty()) {
+                    ret[c.name()]=CacheEntry(c.value(), currentComment.join("\n"));
+                    currentComment.clear();
+                }
+    //             kDebug(9042) << "Cache line" << line << c.name();
+            }
+            else if(line.startsWith("//"))
+                currentComment += line.right(line.count()-2);
+        }
+        return ret;
     }
 }

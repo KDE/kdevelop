@@ -106,7 +106,7 @@ public:
     QList<KDevelop::ProjectTargetItem*> targets() const;
     QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectFolderItem* folder) const;
 
-    void importDirectory(KDevelop::IProject* project, const KUrl& url, const KDevelop::ReferencedTopDUContext& parentTop, CMakeCommitChangesJob* job);
+    CMakeCommitChangesJob* importDirectory(KDevelop::IProject* project, const KUrl& url, const KDevelop::ReferencedTopDUContext& parentTop);
     virtual QList<KDevelop::ProjectFolderItem*> parse( KDevelop::ProjectFolderItem* dom );
     virtual KDevelop::ProjectFolderItem* import( KDevelop::IProject *project );
     
@@ -150,7 +150,6 @@ private slots:
 private:
     void addDeleteItem(KDevelop::ProjectBaseItem* item);
     void reimport(CMakeFolderItem* fi);
-    CacheValues readCache(const KUrl &path) const;
     bool renameFileOrFolder(KDevelop::ProjectBaseItem *item, const KUrl &newUrl);
     
     QMutex m_reparsingMutex;

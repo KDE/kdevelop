@@ -480,7 +480,7 @@ KDevelop::ReferencedTopDUContext CMakeManager::initializeProject(CMakeFolderItem
     
     KUrl cachefile=buildDirectory(project->projectItem());
     cachefile.addPath("CMakeCache.txt");
-    data->cache=readCache(cachefile);
+    data->cache = CMakeParserUtils::readCache(cachefile);
 
     KDevelop::ReferencedTopDUContext buildstrapContext;
     {
@@ -551,7 +551,6 @@ KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
         CMake::updateConfig( project, i );
     kDebug(9042) << "== completed updating cmake settings";
 
-    CMakeFolderItem* rootItem=0;
     KUrl cmakeInfoFile(project->projectFileUrl());
     cmakeInfoFile = cmakeInfoFile.upUrl();
     cmakeInfoFile.addPath("CMakeLists.txt");
@@ -562,59 +561,58 @@ KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
     if ( !cmakeInfoFile.isLocalFile() )
     {
         kWarning() << "error. not a local file. CMake support doesn't handle remote projects";
+        return 0;
+    }
+    
+    if(CMake::hasProjectRootRelative(project))
+    {
+        QString relative=CMake::projectRootRelative(project);
+        folderUrl.cd(relative);
     }
     else
     {
-        if(CMake::hasProjectRootRelative(project))
+        KDialog chooseRoot;
+        QWidget *e=new QWidget(&chooseRoot);
+        Ui::CMakePossibleRoots ui;
+        ui.setupUi(e);
+        chooseRoot.setMainWidget(e);
+        for(KUrl aux=folderUrl; QFile::exists(aux.toLocalFile()+"/CMakeLists.txt"); aux=aux.upUrl())
+            ui.candidates->addItem(aux.toLocalFile());
+
+        if(ui.candidates->count()>1)
         {
-            QString relative=CMake::projectRootRelative(project);
-            folderUrl.cd(relative);
+            connect(ui.candidates, SIGNAL(itemActivated(QListWidgetItem*)), &chooseRoot,SLOT(accept()));
+            ui.candidates->setMinimumSize(384,192);
+            int a=chooseRoot.exec();
+            if(!a || !ui.candidates->currentItem())
+            {
+                return 0;
+            }
+            KUrl choice=KUrl(ui.candidates->currentItem()->text());
+            CMake::setProjectRootRelative(project, KUrl::relativeUrl(folderUrl, choice));
+            folderUrl=choice;
         }
         else
         {
-            KDialog chooseRoot;
-            QWidget *e=new QWidget(&chooseRoot);
-            Ui::CMakePossibleRoots ui;
-            ui.setupUi(e);
-            chooseRoot.setMainWidget(e);
-            for(KUrl aux=folderUrl; QFile::exists(aux.toLocalFile()+"/CMakeLists.txt"); aux=aux.upUrl())
-                ui.candidates->addItem(aux.toLocalFile());
-
-            if(ui.candidates->count()>1)
-            {
-                connect(ui.candidates, SIGNAL(itemActivated(QListWidgetItem*)), &chooseRoot,SLOT(accept()));
-                ui.candidates->setMinimumSize(384,192);
-                int a=chooseRoot.exec();
-                if(!a || !ui.candidates->currentItem())
-                {
-                    return 0;
-                }
-                KUrl choice=KUrl(ui.candidates->currentItem()->text());
-                CMake::setProjectRootRelative(project, KUrl::relativeUrl(folderUrl, choice));
-                folderUrl=choice;
-            }
-            else
-            {
-                CMake::setProjectRootRelative(project, "./");
-            }
+            CMake::setProjectRootRelative(project, "./");
         }
-
-        rootItem = new CMakeFolderItem(project, project->folder(), QString(), 0 );
-
-        KUrl cachefile=buildDirectory(rootItem);
-        if( cachefile.isEmpty() ) {
-            CMake::checkForNeedingConfigure(project);
-        }
-        cachefile.addPath("CMakeCache.txt");
-        
-        QFileSystemWatcher* w = new QFileSystemWatcher(project);
-        w->setObjectName(project->name()+"_ProjectWatcher");
-        w->addPath(cachefile.toLocalFile());
-        connect(w, SIGNAL(fileChanged(QString)), SLOT(dirtyFile(QString)));
-        connect(w, SIGNAL(directoryChanged(QString)), SLOT(directoryChanged(QString)));
-        m_watchers[project] = w;
-        Q_ASSERT(rootItem->rowCount()==0);
     }
+
+    CMakeFolderItem* rootItem = new CMakeFolderItem(project, project->folder(), QString(), 0 );
+    KUrl cachefile=buildDirectory(rootItem);
+    if( cachefile.isEmpty() ) {
+        CMake::checkForNeedingConfigure(project);
+    }
+    cachefile.addPath("CMakeCache.txt");
+    
+    QFileSystemWatcher* w = new QFileSystemWatcher(project);
+    w->setObjectName(project->name()+"_ProjectWatcher");
+    w->addPath(cachefile.toLocalFile());
+    connect(w, SIGNAL(fileChanged(QString)), SLOT(dirtyFile(QString)));
+    connect(w, SIGNAL(directoryChanged(QString)), SLOT(directoryChanged(QString)));
+    m_watchers[project] = w;
+    Q_ASSERT(rootItem->rowCount()==0);
+    
     return rootItem;
 }
 
@@ -631,49 +629,37 @@ KDevelop::ReferencedTopDUContext CMakeManager::includeScript(const QString& file
 QList< ProjectFolderItem* > CMakeManager::parse(ProjectFolderItem* dom)
 {
     Q_ASSERT(dom->url() == dom->project()->folder());
-    CMakeFolderItem* item = dynamic_cast<CMakeFolderItem*>(dom);
-    importDirectory(dom->project(), dom->url(), 0, 0);
+    importDirectory(dom->project(), dom->url(), initializeProject(dynamic_cast<CMakeFolderItem*>(dom)));
     return QList<KDevelop::ProjectFolderItem*>();
 }
 
-void CMakeManager::importDirectory(IProject* project, const KUrl& url, const KDevelop::ReferencedTopDUContext& parentTop, CMakeCommitChangesJob* parentJob)
+CMakeCommitChangesJob* CMakeManager::importDirectory(IProject* project, const KUrl& url, const KDevelop::ReferencedTopDUContext& parentTop)
 {
     Q_ASSERT(isReloading(project));
     addWatcher(project, url.toLocalFile(KUrl::AddTrailingSlash));
     
-    KUrl cmakeListsPath(url);
-    cmakeListsPath.addPath("CMakeLists.txt");
+    KUrl cmakeListsPath(url, "CMakeLists.txt");
     
     CMakeCommitChangesJob* commitJob = new CMakeCommitChangesJob(url, this, project);
-    commitJob->setParentJob(parentJob);
-    commitJob->setAutoDelete(false);
-    commitJob->start();
     if(QFile::exists(cmakeListsPath.toLocalFile()))
     {
-        KDevelop::ReferencedTopDUContext curr;
-        if(url==project->folder())
-            curr=initializeProject(dynamic_cast<CMakeFolderItem*>(project->projectItem()));
-        else
-            curr=parentTop;
-        
         kDebug(9042) << "Adding cmake: " << cmakeListsPath << " to the model";
 
-        QString binDir=KUrl::relativePath(project->folder().toLocalFile(), url.toLocalFile());
-        if(binDir.startsWith("./"))
-            binDir=binDir.remove(0, 2);
-        
         CMakeProjectData& data=m_projectsData[project];
 
         data.vm.pushScope();
         ReferencedTopDUContext ctx = includeScript(cmakeListsPath.toLocalFile(), project,
-                                                   url.toLocalFile(KUrl::RemoveTrailingSlash), curr);
+                                                   url.toLocalFile(KUrl::RemoveTrailingSlash), parentTop);
         KUrl::List folderList = commitJob->addProjectData(&data);
         foreach(const KUrl& folder, folderList) {
-            importDirectory(project, folder, ctx, commitJob);
+            CMakeCommitChangesJob* job = importDirectory(project, folder, ctx);
+            connect(commitJob, SIGNAL(folderCreated(KDevelop::ProjectFolderItem*)),
+                    job, SLOT(folderAvailable(KDevelop::ProjectFolderItem*)));
         }
         data.vm.popScope();
     }
-
+    commitJob->start();
+    return commitJob;
 }
 
 QList<KDevelop::ProjectTargetItem*> CMakeManager::targets() const
@@ -907,7 +893,7 @@ void CMakeManager::dirtyFile(const QString & dirty)
         Q_ASSERT(folders.isEmpty() || folders.size()==1);
         
         if(!folders.isEmpty()) {
-            CMakeCommitChangesJob* job = new CMakeCommitChangesJob(KUrl::fromLocalFile(dirty), this, p);
+            CMakeCommitChangesJob* job = new CMakeCommitChangesJob(dirtyFile, this, p);
             job->start();
         }
     }
@@ -979,38 +965,6 @@ void CMakeManager::jumpToDeclaration()
 
         ICore::self()->documentController()->openDocument(url, c);
     }
-}
-
-CacheValues CMakeManager::readCache(const KUrl &path) const
-{
-    QFile file(path.toLocalFile());
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        kDebug() << "error. Could not find the file" << path;
-        return CacheValues();
-    }
-
-    CacheValues ret;
-    QTextStream in(&file);
-    kDebug(9042) << "Reading cache:" << path;
-    QStringList currentComment;
-    while (!in.atEnd())
-    {
-        QString line = in.readLine().trimmed();
-        if(!line.isEmpty() && line[0].isLetter()) //it is a variable
-        {
-            CacheLine c;
-            c.readLine(line);
-            if(c.flag().isEmpty()) {
-                ret[c.name()]=CacheEntry(c.value(), currentComment.join("\n"));
-                currentComment.clear();
-            }
-//             kDebug(9042) << "Cache line" << line << c.name();
-        }
-        else if(line.startsWith("//"))
-            currentComment += line.right(line.count()-2);
-    }
-    return ret;
 }
 
 bool CMakeManager::moveFilesAndFolders(const QList< ProjectBaseItem* > &items, ProjectFolderItem* toFolder)
