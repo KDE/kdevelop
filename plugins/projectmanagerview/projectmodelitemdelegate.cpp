@@ -66,7 +66,7 @@ void ProjectModelItemDelegate::drawBranchName(QPainter* painter, const QStyleOpt
     QPalette::ColorGroup colorGroup = selected ? QPalette::Active : QPalette::Disabled;
     painter->save();
     painter->setPen(option.palette.color(colorGroup, QPalette::Text));
-    painter->drawText(rect.adjusted(1,1, -1,-1), text);
+    painter->drawText(rect, text);
     painter->restore();
 }
 
