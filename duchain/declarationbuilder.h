@@ -54,6 +54,9 @@ protected:
     virtual bool visit(QmlJS::AST::UiScriptBinding* node);
     virtual void endVisit(QmlJS::AST::UiScriptBinding* node);
 
+    virtual bool visit(QmlJS::AST::UiPublicMember* node);
+    virtual void endVisit(QmlJS::AST::UiPublicMember* node);
+
     virtual void closeContext();
 
 private:

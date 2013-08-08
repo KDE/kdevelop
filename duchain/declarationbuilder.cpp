@@ -220,6 +220,30 @@ void DeclarationBuilder::endVisit(QmlJS::AST::UiScriptBinding* node)
     }
 }
 
+bool DeclarationBuilder::visit(QmlJS::AST::UiPublicMember* node)
+{
+    setComment(node);
+
+    const RangeInRevision& range = m_session->locationToRange(node->identifierToken);
+    const QualifiedIdentifier id(node->name.toString());
+    const AbstractType::Ptr type(new IntegralType(IntegralType::TypeMixed));
+
+    {
+        DUChainWriteLocker lock;
+        ClassMemberDeclaration* dec = openDeclaration<ClassMemberDeclaration>(id, range);
+        dec->setAbstractType(type);
+    }
+    openType(type);
+
+    return DeclarationBuilderBase::visit(node);
+}
+
+void DeclarationBuilder::endVisit(QmlJS::AST::UiPublicMember* /*node*/)
+{
+    closeType();
+    closeDeclaration();
+}
+
 void DeclarationBuilder::setComment(QmlJS::AST::Node* node)
 {
     setComment(m_session->commentForLocation(node->firstSourceLocation()).toUtf8());

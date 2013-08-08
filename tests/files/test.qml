@@ -9,7 +9,8 @@ Text {
     text: "asdf"
 
     /**
-     * "toString" : "mixed foo"
+     * "EXPECT_FAIL" : { "toString" : "type deduction not implemented" },
+     * "toString" : "int foo"
      */
     property int foo: 1
 
