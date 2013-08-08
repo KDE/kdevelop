@@ -39,6 +39,8 @@ struct ProcessedTarget
     Target target;
     QStringList includes;
     QStringList defines;
+    QString outputName;
+    QString location;
 };
 
 class CMakeCommitChangesJob : public KJob

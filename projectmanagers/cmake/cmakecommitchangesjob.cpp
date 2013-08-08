@@ -158,7 +158,7 @@ KUrl::List CMakeCommitChangesJob::addProjectData(const CMakeProjectData* data)
     m_definitions = data->properties[DirectoryProperty][dir]["COMPILE_DEFINITIONS"];
 
     foreach(const Target& t, data->targets) {
-        const QMap<QString, QStringList> targetProps = data->properties[TargetProperty][t.name];
+        const QMap<QString, QStringList>& targetProps = data->properties[TargetProperty][t.name];
         if(targetProps["FOLDER"]==QStringList("CTestDashboardTargets"))
             continue; //filter some annoying targets
 
@@ -166,7 +166,9 @@ KUrl::List CMakeCommitChangesJob::addProjectData(const CMakeProjectData* data)
         target.target = t;
         target.defines = targetProps["COMPILE_DEFINITIONS"];
         target.includes = targetProps["INCLUDE_DIRECTORIES"];
-
+        target.outputName = targetProps.value("OUTPUT_NAME", QStringList(t.name)).join(QString());
+        target.location = targetProps["LOCATION"].join(QString());
+        
         foreach(const QString& dep, t.libraries) {
             const QMap<QString, QStringList>& depData = data->properties.value(TargetProperty).value(dep);
             if(!depData.isEmpty()) {
@@ -252,8 +254,8 @@ void CMakeCommitChangesJob::makeChanges()
         const Target& t = pt.target;
         
         KUrl resolvedPath;
-        if(!t.location.isEmpty())
-            resolvedPath=CMake::resolveSystemDirs(folder->project(), QStringList(t.location)).first();
+        if(!pt.location.isEmpty())
+            resolvedPath=CMake::resolveSystemDirs(folder->project(), QStringList(pt.location)).first();
         
         KDevelop::ProjectTargetItem* targetItem = folder->targetNamed(t.type, t.name);
         if (targetItem)
@@ -263,15 +265,15 @@ void CMakeCommitChangesJob::makeChanges()
             {
                 case Target::Library:
                     targetItem = new CMakeLibraryTargetItem( m_project, t.name,
-                                                            folder, t.declaration, t.outputName, resolvedPath);
+                                                            folder, t.declaration, pt.outputName, resolvedPath);
                     break;
                 case Target::Executable:
                     targetItem = new CMakeExecutableTargetItem( m_project, t.name,
-                                                                folder, t.declaration, t.outputName, resolvedPath);
+                                                                folder, t.declaration, pt.outputName, resolvedPath);
                     break;
                 case Target::Custom:
                     targetItem = new CMakeCustomTargetItem( m_project, t.name,
-                                                            folder, t.declaration, t.outputName );
+                                                            folder, t.declaration, pt.outputName );
                     break;
             }
         }
