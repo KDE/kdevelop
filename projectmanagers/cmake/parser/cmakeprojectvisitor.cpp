@@ -343,9 +343,10 @@ int CMakeProjectVisitor::visit( const SetDirectoryPropsAst * dirProps)
 {   
     QString dir=m_vars->value("CMAKE_CURRENT_SOURCE_DIR").join(QString());
     kDebug(9042) << "setting directory props for " << dirProps->properties() << dir;
+    QMap<QString, QStringList>& dprops = m_props[DirectoryProperty][dir];
     foreach(const SetDirectoryPropsAst::PropPair& t, dirProps->properties())
     {
-        m_props[DirectoryProperty][dir][t.first] = t.second.split(';');
+        dprops[t.first] = t.second.split(';');
     }
     return 1;
 }
