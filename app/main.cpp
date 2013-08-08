@@ -32,23 +32,16 @@
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
-#include <kxmlguiwindow.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
 #include <ksplashscreen.h>
 #include <ktexteditor/cursor.h>
-#include <KMessageBox>
-#include <KProcess>
 
 #include <QFileInfo>
 #include <QPixmap>
-#include <QTimer>
 #include <QDir>
+#include <QProcess>
 #include <QSessionManager>
-#include <QThread>
-#include <QDBusConnection>
-#include <QDBusInterface>
-#include <QDBusReply>
 #include <QTextStream>
 
 #include <shell/core.h>
