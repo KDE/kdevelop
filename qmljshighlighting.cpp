@@ -35,7 +35,7 @@ public:
         // everything that is not a function declaration.
         // In the future we will have to investigate how to handle properties
         // of a function/object
-        return !dec->isFunctionDeclaration();
+        return dec->kind() == Declaration::Instance && dec->context()->type() != DUContext::Class;
     }
 };
 
