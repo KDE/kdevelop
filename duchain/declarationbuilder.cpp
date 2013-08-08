@@ -103,7 +103,6 @@ void DeclarationBuilder::endVisit(QmlJS::AST::FunctionDeclaration* node)
     Declaration* last = currentDeclaration();
     closeDeclaration();
     last->setType(lastType());
-    kDebug() << last->abstractType()->toString();
 }
 
 bool DeclarationBuilder::visit(QmlJS::AST::FormalParameterList* node)
