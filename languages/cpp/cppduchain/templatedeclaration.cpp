@@ -603,6 +603,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
             ///Resolve the delayed type, and import the context
             DelayedTypeResolver res(contextCopy, source);
             AbstractType::Ptr newType( res.exchange(delayed.cast<AbstractType>()) );
+            newType = TypeUtils::unAliasedType(newType);
 
             if( CppClassType::Ptr baseClass = newType.cast<CppClassType>() )
             {
@@ -614,7 +615,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
               newInstance.baseClass = newType->indexed();
               klass->replaceBaseClass( num, newInstance );
             } else {
-//               kDebug(9007) << "Resolved bad base-class";
+              kWarning(9007) << "Resolved bad base-class" << delayed->toString() << (newType ? newType->toString() : QString());
             }
           }
           ++num;
