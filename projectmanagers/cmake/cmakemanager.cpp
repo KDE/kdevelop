@@ -40,6 +40,7 @@
 #include <KMessageBox>
 #include <ktexteditor/document.h>
 #include <KStandardDirs>
+#include <KCompositeJob>
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
@@ -98,6 +99,37 @@ using namespace KDevelop;
 
 K_PLUGIN_FACTORY(CMakeSupportFactory, registerPlugin<CMakeManager>(); )
 K_EXPORT_PLUGIN(CMakeSupportFactory(KAboutData("kdevcmakemanager","kdevcmake", ki18n("CMake Manager"), "0.1", ki18n("Support for managing CMake projects"), KAboutData::License_GPL)))
+
+class WaitAllJobs : public KCompositeJob
+{
+public:
+    friend class CMakeManager;
+    WaitAllJobs(QObject* parent)
+        : KCompositeJob(parent)
+        , m_started(false) {}
+    
+    virtual void start() {
+        m_started = true;
+        QMetaObject::invokeMethod(this, "reconsider", Qt::QueuedConnection);
+    }
+
+    virtual void slotResult(KJob* job) {
+        KCompositeJob::slotResult(job);
+        reconsider();
+    }
+    void addJob(KJob* job) {
+        addSubjob(job);
+    }
+private slots:
+    void reconsider()
+    {
+        if(subjobs().isEmpty() && m_started)
+            emitResult();
+    }
+
+private:
+    bool m_started;
+};
 
 namespace {
 
@@ -626,14 +658,20 @@ KDevelop::ReferencedTopDUContext CMakeManager::includeScript(const QString& file
     return CMakeParserUtils::includeScript( file, parent, &m_projectsData[project], dir, env.variables(profile));
 }
 
-QList< ProjectFolderItem* > CMakeManager::parse(ProjectFolderItem* dom)
+QList< ProjectFolderItem* > CMakeManager::parse(ProjectFolderItem* dom) { return QList< ProjectFolderItem* >(); }
+
+
+KJob* CMakeManager::createImportJob(ProjectFolderItem* dom)
 {
     Q_ASSERT(dom->url() == dom->project()->folder());
-    importDirectory(dom->project(), dom->url(), initializeProject(dynamic_cast<CMakeFolderItem*>(dom)));
-    return QList<KDevelop::ProjectFolderItem*>();
+    WaitAllJobs* waitJob = new WaitAllJobs(this);
+    KJob* commitJob = importDirectory(dom->project(), dom->url(), waitJob, initializeProject(dynamic_cast<CMakeFolderItem*>(dom)));
+    waitJob->addJob(commitJob);
+    commitJob->start();
+    return waitJob;
 }
 
-CMakeCommitChangesJob* CMakeManager::importDirectory(IProject* project, const KUrl& url, const KDevelop::ReferencedTopDUContext& parentTop)
+CMakeCommitChangesJob* CMakeManager::importDirectory(IProject* project, const KUrl& url, WaitAllJobs* wjob, const KDevelop::ReferencedTopDUContext& parentTop)
 {
     Q_ASSERT(isReloading(project));
     addWatcher(project, url.toLocalFile(KUrl::AddTrailingSlash));
@@ -652,7 +690,8 @@ CMakeCommitChangesJob* CMakeManager::importDirectory(IProject* project, const KU
                                                    url.toLocalFile(KUrl::RemoveTrailingSlash), parentTop);
         KUrl::List folderList = commitJob->addProjectData(&data);
         foreach(const KUrl& folder, folderList) {
-            CMakeCommitChangesJob* job = importDirectory(project, folder, ctx);
+            CMakeCommitChangesJob* job = importDirectory(project, folder, wjob, ctx);
+            wjob->addJob(job);
             connect(commitJob, SIGNAL(folderCreated(KDevelop::ProjectFolderItem*)),
                     job, SLOT(folderAvailable(KDevelop::ProjectFolderItem*)));
         }

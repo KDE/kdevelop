@@ -118,6 +118,7 @@ CMakeCommitChangesJob::CMakeCommitChangesJob(const KUrl& url, CMakeManager* mana
     , m_parentItem(0)
     , m_waiting(false)
 {
+    setObjectName(url.prettyUrl());
     moveToThread(parent->thread());
     if(m_url == m_project->folder()) {
         m_parentItem = m_project->projectItem()->folder();
