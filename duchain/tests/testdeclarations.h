@@ -34,6 +34,7 @@ private slots:
     void testFunction();
 
     void testQMLId();
+    void testProperty();
 };
 
 #endif // TESTCONTEXTS_H

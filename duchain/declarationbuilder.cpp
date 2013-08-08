@@ -191,6 +191,35 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiObjectInitializer* node)
     return ret;
 }
 
+bool DeclarationBuilder::visit(QmlJS::AST::UiScriptBinding* node)
+{
+    if (node->qualifiedId && node->qualifiedId->name != QLatin1String("id")) {
+        setComment(node);
+
+        const RangeInRevision& range = m_session->locationToRange(node->qualifiedId->identifierToken);
+        const QualifiedIdentifier id(node->qualifiedId->name.toString());
+        const AbstractType::Ptr type(new IntegralType(IntegralType::TypeMixed));
+
+        DUChainWriteLocker lock;
+        {
+            ClassMemberDeclaration* dec = openDeclaration<ClassMemberDeclaration>(id, range);
+            dec->setAbstractType(type);
+        }
+        openType(type);
+    }
+    return DeclarationBuilderBase::visit(node);
+}
+
+void DeclarationBuilder::endVisit(QmlJS::AST::UiScriptBinding* node)
+{
+    DeclarationBuilderBase::endVisit(node);
+
+    if (node->qualifiedId && node->qualifiedId->name != QLatin1String("id")) {
+        closeType();
+        closeDeclaration();
+    }
+}
+
 void DeclarationBuilder::setComment(QmlJS::AST::Node* node)
 {
     setComment(m_session->commentForLocation(node->firstSourceLocation()).toUtf8());

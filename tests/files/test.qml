@@ -9,7 +9,7 @@ Text {
     text: "asdf"
 
     /**
-     * "toString" : "int foo"
+     * "toString" : "mixed foo"
      */
     property int foo: 1
 

@@ -173,4 +173,38 @@ void TestDeclarations::testQMLId()
     }
 }
 
+void TestDeclarations::testProperty()
+{
+    const IndexedString file("qmlProperty.qml");
+    //                          0         1         2         3
+    //                          01234567890123456789012345678901234567890
+    ParseSession session(file, "Text {\n"
+                               " /// some comment\n"
+                               " foo: 1;\n"
+                               "}");
+    QVERIFY(session.ast());
+    QVERIFY(session.problems().isEmpty());
+    QCOMPARE(session.language(), QmlJS::Document::QmlLanguage);
+
+    DeclarationBuilder builder(&session);
+    ReferencedTopDUContext top = builder.build(file, session.ast());
+    QVERIFY(top);
+
+    DUChainReadLocker lock;
+
+    QCOMPARE(top->localDeclarations().size(), 1);
+    ClassDeclaration* text = dynamic_cast<ClassDeclaration*>(top->localDeclarations().first());
+    QVERIFY(text);
+    QVERIFY(text->internalContext());
+    QCOMPARE(text->internalContext()->type(), DUContext::Class);
+    QCOMPARE(text->internalContext()->localDeclarations().size(), 1);
+    ClassMemberDeclaration* foo = dynamic_cast<ClassMemberDeclaration*>(text->internalContext()->localDeclarations().first());
+    QVERIFY(foo);
+    QCOMPARE(foo->identifier().toString(), QString("foo"));
+    QVERIFY(foo->abstractType());
+    QEXPECT_FAIL("", "type deduction not yet implemented", Continue);
+    QCOMPARE(foo->abstractType()->toString(), QString("int"));
+    QCOMPARE(QString::fromUtf8(foo->comment()), QString("some comment"));
+}
+
 #include "testdeclarations.moc"
