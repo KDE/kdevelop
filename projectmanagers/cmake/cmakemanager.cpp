@@ -665,9 +665,15 @@ QList< ProjectFolderItem* > CMakeManager::parse(ProjectFolderItem* dom) { return
 
 KJob* CMakeManager::createImportJob(ProjectFolderItem* dom)
 {
-    Q_ASSERT(dom->url() == dom->project()->folder());
+    ReferencedTopDUContext ctx;
+    if(dom->url() == dom->project()->folder()) {
+        ctx = initializeProject(dynamic_cast<CMakeFolderItem*>(dom));
+    } else {
+        DUChainReadLocker lock;
+        ctx = DUChain::self()->chainForDocument(KUrl(dom->url(), "CMakeLists.txt"));
+    }
     WaitAllJobs* waitJob = new WaitAllJobs(this);
-    KJob* commitJob = importDirectory(dom->project(), dom->url(), waitJob, initializeProject(dynamic_cast<CMakeFolderItem*>(dom)));
+    KJob* commitJob = importDirectory(dom->project(), dom->url(), waitJob, ctx);
     waitJob->addJob(commitJob);
     commitJob->start();
     return waitJob;

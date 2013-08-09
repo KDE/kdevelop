@@ -122,6 +122,10 @@ CMakeCommitChangesJob::CMakeCommitChangesJob(const KUrl& url, CMakeManager* mana
     moveToThread(parent->thread());
     if(m_url == m_project->folder()) {
         m_parentItem = m_project->projectItem()->folder();
+    } else {
+        QList<ProjectFolderItem*> folders = parent->foldersForUrl(m_url);
+        if(!folders.isEmpty())
+            m_parentItem = folders.first();
     }
 }
 
