@@ -123,8 +123,10 @@ public:
 private slots:
     void reconsider()
     {
-        if(subjobs().isEmpty() && m_started)
+        if(subjobs().isEmpty() && m_started) {
+            m_started = false; //don't emit the result twice!
             emitResult();
+        }
     }
 
 private:
