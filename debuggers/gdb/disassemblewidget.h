@@ -32,11 +32,15 @@
 #include <KIcon>
 #include <KDialog>
 
+#include <KConfigGroup>
+
 #include "ui_selectaddress.h"
 
 /***************************************************************************/
 /***************************************************************************/
 /***************************************************************************/
+
+class QSplitter;
 
 namespace KDevelop {
     class IDebugSession;
@@ -44,6 +48,8 @@ namespace KDevelop {
 
 namespace GDBDebugger
 {
+
+class RegistersManager;
 
 class SelectAddrDialog: public KDialog
 {
@@ -54,7 +60,10 @@ public:
     
     QString getAddr() const
     { return hasValidAddress() ? m_ui.comboBox->currentText() : QString(); }
-    
+
+    void setAddress(QString address){
+        m_ui.comboBox->setCurrentItem( address, true);
+    }
     bool hasValidAddress() const;
     void updateOkState();
      
@@ -79,7 +88,6 @@ private:
     QAction* m_jumpToLocation;
     QAction* m_runUntilCursor;
 };
-
 
 class Breakpoint;
 class DebugSession;
@@ -109,9 +117,7 @@ public Q_SLOTS:
     void slotActivate(bool activate);
     void slotDeactivate();
     void slotShowStepInSource(const KUrl &fileName, int lineNum, const QString &address);
-    void slotValidateEdits();
     void slotChangeAddress();
-    void slotShowAddrRange();
 
 private Q_SLOTS:
     void currentSessionChanged(KDevelop::IDebugSession* session);
@@ -121,9 +127,7 @@ private Q_SLOTS:
 protected:
     virtual void showEvent(QShowEvent*);
     virtual void hideEvent(QHideEvent*);
-    bool hasValidAddrRange();
     void enableControls(bool enabled);
-
 
 private:
     bool displayCurrent();
@@ -144,14 +148,16 @@ private:
     unsigned long    lower_;
     unsigned long    upper_;
     unsigned long    address_;
+
+    RegistersManager* m_registersManager ;
     
     DisassembleWindow * m_disassembleWindow;
-    QComboBox* m_startAddress;
-    QComboBox* m_endAddress;
-    QPushButton* m_evalButton;
     
     static const KIcon icon_;
     SelectAddrDialog* m_dlg;
+
+    KConfigGroup m_config;
+    QSplitter *m_s;
 };
 
 }

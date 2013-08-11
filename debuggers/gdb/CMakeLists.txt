@@ -54,6 +54,11 @@ set(kdevgdb_PART_SRCS
     variablecontroller.cpp
     gdbframestackmodel.cpp
     gdbvariable.cpp
+    registers/registersview.cpp
+    registers/registercontroller.cpp
+    registers/registersmanager.cpp
+    registers/registercontroller_x86.cpp
+    registers/registercontroller_arm.cpp
 )
 
 if(KDE4WORKSPACE_FOUND)
@@ -68,6 +73,7 @@ set(kdevgdb_PART_UI
     debuggerconfigwidget.ui
     selectcore.ui
     selectaddress.ui
+    registers/registersview.ui
 )
 
 kde4_add_ui_files(kdevgdb_PART_SRCS ${kdevgdb_PART_UI})
@@ -109,6 +115,11 @@ set(gdbtest_PART_SRCS
     variablecontroller.cpp
     gdbframestackmodel.cpp
     gdbvariable.cpp
+    registers/registersview.cpp
+    registers/registercontroller.cpp
+    registers/registersmanager.cpp
+    registers/registercontroller_x86.cpp
+    registers/registercontroller_arm.cpp
 )
 
 if(KDE4WORKSPACE_FOUND)
@@ -121,6 +132,7 @@ endif(KDE4WORKSPACE_FOUND)
 kde4_add_ui_files(gdbtest_PART_SRCS
     debuggertracingdialog.ui
     selectaddress.ui
+    registers/registersview.ui
 )
 kde4_add_unit_test(gdbtest ${gdbtest_PART_SRCS})
 target_link_libraries(gdbtest
