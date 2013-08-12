@@ -25,6 +25,7 @@
 #include "../mi/gdbmi.h"
 
 #include <qmath.h>
+#include <QRegExp>
 
 #include <KDebug>
 
@@ -131,7 +132,7 @@ const RegistersGroup& RegisterControllerGeneral_x86::fillFlags ( RegistersGroup&
 void RegisterControllerGeneral_x86::setRegisterValueForGroup ( const QString& group, const Register& reg )
 {
      if ( group == enumToString ( General ) ) {
-          setGeneralRegister ( reg );
+          setGeneralRegister ( reg, group );
      } else if ( group == enumToString ( Flags ) ) {
           setFlagRegister ( reg, m_eflags );
      } else if ( group == enumToString ( FPU ) ) {
@@ -148,20 +149,20 @@ void RegisterControllerGeneral_x86::setRegisterValueForGroup ( const QString& gr
 void RegisterControllerGeneral_x86::setFPURegister ( const Register& reg )
 {
      kDebug() << "Setting FPU register through setGeneralRegister";
-     setGeneralRegister ( reg );
+     setGeneralRegister ( reg, enumToString ( FPU ) );
 }
 
 void RegisterControllerGeneral_x86::setXMMRegister ( const Register& reg )
 {
      kDebug() << "Setting XMM register through setGeneralRegister";
      //TODO:
-     setGeneralRegister ( reg );
+     setGeneralRegister ( reg, enumToString ( XMM ) );
 }
 
 void RegisterControllerGeneral_x86::setSegmentRegister ( const Register& reg )
 {
      kDebug() << "Setting segment register through setGeneralRegister";
-     setGeneralRegister ( reg );
+     setGeneralRegister ( reg, enumToString ( Segment ) );
 }
 
 //TODO:
@@ -173,18 +174,25 @@ const RegistersTooltipGroup& RegisterControllerGeneral_x86::getTooltipsForRegist
 
 void RegisterControllerGeneral_x86::updateRegisters ( const QString group )
 {
-
      if ( m_debugSession && !m_debugSession->stateIsOn ( s_dbgNotStarted|s_shuttingDown ) ) {
           if ( !m_registerNamesInitialized ) {
                initializeRegisters();
                m_registerNamesInitialized = true;
           }
-          //TODO:
-          if ( !group.isEmpty() ) {
-               kDebug() << "It's not supported yet" << group;
+
+          if ( group != enumToString ( FPU ) ) {
+               IRegisterController::updateRegisters ( group );
           }
 
-          IRegisterController::updateRegisters();
+          if ( group == enumToString ( FPU ) || group.isEmpty() ) {
+               //Gdb's missing feature workaround.
+               if ( group == enumToString ( FPU ) || group.isEmpty() ) {
+                    if ( m_debugSession && !m_debugSession->stateIsOn ( s_dbgNotStarted|s_shuttingDown ) ) {
+                         m_debugSession->addCommand (
+                              new CliCommand ( GDBMI::NonMI, "info all-registers $st0 $st1 $st2 $st3 $st4 $st5 $st6 $st7", this, &RegisterControllerGeneral_x86::handleFPURegisters ) );
+                    }
+               }
+          }
      }
 }
 
@@ -281,6 +289,33 @@ const RegistersGroup& RegisterControllerGeneral_x86::convertValuesForGroup ( Reg
           }
      }
      return registersGroup;
+}
+
+void RegisterControllerGeneral_x86::handleFPURegisters ( const QStringList& record )
+{
+     QRegExp rx ( "^(st[0-8])\\s+((?:-?\\d+\\.?\\d+(?:e(\\+|-)\\d+)?)|(?:\\d+))$" );
+     QVector<Register> registers;
+     foreach ( QString s, record ) {
+          if ( rx.exactMatch ( s ) ) {
+               registers.push_back ( Register ( rx.cap ( 1 ), rx.cap ( 2 ) ) );
+          }
+     }
+
+     if ( registers.size() != 8 ) {
+          kDebug() << "can't parse FPU. Wrong format";
+          kDebug() << record;
+          kDebug() << "registers ";
+          foreach ( Register r, registers ) {
+               kDebug() << r.name << ' ' << r.value;
+          }
+     } else {
+          foreach ( Register r, registers ) {
+               if ( m_registers.contains ( r.name ) ) {
+                    m_registers[r.name] = r.value;
+               }
+          }
+          emit registersInGroupChanged ( enumToString ( FPU ) );
+     }
 }
 
 }

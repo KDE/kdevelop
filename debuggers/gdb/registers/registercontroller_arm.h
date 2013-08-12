@@ -68,6 +68,9 @@ protected:
      void setVFPD_Register ( const Register& reg );
      void setVFPQ_Register ( const Register& reg );
 
+     //Gdb's workaround
+     void handleVFPSRegisters( const QStringList& record );
+
 private:
      static FlagRegister m_cpsr;
 

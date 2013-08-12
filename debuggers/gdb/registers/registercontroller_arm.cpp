@@ -144,7 +144,7 @@ const RegistersGroup& RegisterController_Arm::fillFlags ( RegistersGroup& flagsG
 void RegisterController_Arm::setRegisterValueForGroup ( const QString& group, const Register& reg )
 {
      if ( group == enumToString ( General ) ) {
-          setGeneralRegister ( reg );
+          setGeneralRegister ( reg, enumToString ( General ) );
      } else if ( group == enumToString ( Flags ) ) {
           setFlagRegister ( reg, m_cpsr );
      } else if ( group == enumToString ( VFP_single ) ) {
@@ -161,21 +161,21 @@ void RegisterController_Arm::setRegisterValueForGroup ( const QString& group, co
 void RegisterController_Arm::setVFPS_Register ( const Register& reg )
 {
      kDebug() << "Setting VFPS register through setGeneralRegister";
-     setGeneralRegister ( reg );
+     setGeneralRegister ( reg, enumToString ( VFP_single ) );
 }
 
 void RegisterController_Arm::setVFPD_Register ( const Register& reg )
 {
      kDebug() << "Setting VFPD register through setGeneralRegister";
      //TODO:
-     setGeneralRegister ( reg );
+     setGeneralRegister ( reg, enumToString ( VFP_double ) );
 }
 
 void RegisterController_Arm::setVFPQ_Register ( const Register& reg )
 {
      kDebug() << "Setting VFPQ register through setGeneralRegister";
      //TODO:
-     setGeneralRegister ( reg );
+     setGeneralRegister ( reg, enumToString ( VFP_quad ) );
 }
 
 //TODO:
@@ -187,18 +187,56 @@ const RegistersTooltipGroup& RegisterController_Arm::getTooltipsForRegistersInGr
 
 void RegisterController_Arm::updateRegisters ( const QString group )
 {
-
      if ( m_debugSession && !m_debugSession->stateIsOn ( s_dbgNotStarted|s_shuttingDown ) ) {
+
           if ( !m_registerNamesInitialized ) {
                initializeRegisters();
                m_registerNamesInitialized = true;
           }
-          //TODO:
-          if ( !group.isEmpty() ) {
-               kDebug() << "It's not supported yet" << group;
+
+          if ( group != enumToString ( VFP_single ) ) {
+               IRegisterController::updateRegisters ( group );
           }
 
-          IRegisterController::updateRegisters();
+          //Gdb's missing feature workaround.
+          if ( group == enumToString ( VFP_single ) || group.isEmpty() ) {
+               QString command = "info all-registers ";
+               foreach ( Register r, getRegistersFromGroupInternally ( enumToString ( VFP_single ) ).registers ) {
+                    command += "$" + r.name + ' ';
+               }
+
+               if ( m_debugSession && !m_debugSession->stateIsOn ( s_dbgNotStarted|s_shuttingDown ) ) {
+                    m_debugSession->addCommand (
+                         new CliCommand ( GDBMI::NonMI, command, this, &RegisterController_Arm::handleVFPSRegisters ) );
+               }
+          }
+     }
+}
+
+void RegisterController_Arm::handleVFPSRegisters ( const QStringList& record )
+{
+     QRegExp rx ( "^(s\\d+)\\s+((?:-?\\d+\\.?\\d+(?:e(\\+|-)\\d+)?)|(?:\\d+))$" );
+     QVector<Register> registers;
+     foreach ( QString s, record ) {
+          if ( rx.exactMatch ( s ) ) {
+               registers.push_back ( Register ( rx.cap ( 1 ), rx.cap ( 2 ) ) );
+          }
+     }
+
+     if ( registers.size() != 32 ) {
+          kDebug() << "can't parse VFP single. Wrong format";
+          kDebug() << record;
+          kDebug() << "Parsed registers: ";
+          foreach ( Register r, registers ) {
+               kDebug() << r.name << ' ' << r.value;
+          }
+     } else {
+          foreach ( Register r, registers ) {
+               if ( m_registers.contains ( r.name ) ) {
+                    m_registers[r.name] = r.value;
+               }
+          }
+          emit registersInGroupChanged ( enumToString ( VFP_single ) );
      }
 }
 

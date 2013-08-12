@@ -36,8 +36,21 @@ void IRegisterController::setSession ( DebugSession* debugSession )
      m_debugSession = debugSession;
 }
 
-void IRegisterController::updateRegisters ( const QString /*group*/ )
+void IRegisterController::updateRegisters ( const QString group )
 {
+     if ( m_groupsToUpdate.contains ( group ) ) {
+          kDebug() << "Already updating";
+          return;
+     }
+
+     if ( group.isEmpty() ) {
+          kDebug() << "Update all";
+          m_groupsToUpdate.clear();
+     } else {
+          kDebug() << "Update" << group << "All groups: " << m_groupsToUpdate;
+          m_groupsToUpdate << group;
+          return;
+     }
 
      if ( m_debugSession && !m_debugSession->stateIsOn ( s_dbgNotStarted|s_shuttingDown ) ) {
           m_debugSession->addCommand (
@@ -49,43 +62,48 @@ void IRegisterController::getRegisterNamesHandler ( const GDBMI::ResultRecord& r
 {
      const GDBMI::Value& names = r["register-names"];
 
-     m_registres.clear();
+     m_rawRegisterNames.clear();
      for ( int i = 0; i < names.size(); ++i ) {
           const GDBMI::Value& entry = names[i];
           if ( !entry.literal().isEmpty() ) {
                //  kDebug() << "Inserting name " << entry.literal() << "number " << i;
-               m_registres.insert ( i, Register ( entry.literal(), QString() ) );
+               m_rawRegisterNames.insert ( i, entry.literal() );
           }
      }
 }
 
 void IRegisterController::updateRegisterValuesHandler ( const GDBMI::ResultRecord& r )
 {
-     if ( m_registres.isEmpty() ) {
+     if ( m_rawRegisterNames.isEmpty() ) {
           kDebug() << "Registers not initialized yet!";
           return;
      }
+
      const GDBMI::Value& values = r["register-values"];
      for ( int i = 0; i < values.size(); ++i ) {
           const GDBMI::Value& entry = values[i];
           int number = entry["number"].literal().toInt();
           //kDebug() << "Considering number " << number;
-          if ( m_registres.contains ( number ) ) {
-               QString v = entry["value"].literal();
-               m_registres[number].value = v;
+          if ( m_rawRegisterNames.contains ( number ) ) {
+               QString value = entry["value"].literal();
+               m_registers.insert ( m_rawRegisterNames[number], value );
                //  kDebug() << "Inserting value " << v << "to name" << m_registres[number].name;
           }
      }
-     kDebug() << getNamesOfRegisterGroups().size() << "groups to change registers";
+     kDebug() << m_groupsToUpdate.size() << "groups to change registers";
+     kDebug() << m_groupsToUpdate;
      foreach ( QString group, getNamesOfRegisterGroups() ) {
-          emit registersInGroupChanged ( group );
+          if ( m_groupsToUpdate.isEmpty() || m_groupsToUpdate.contains ( group ) ) {
+               emit registersInGroupChanged ( group );
+          }
      }
+     m_groupsToUpdate.clear();
 }
 
 void IRegisterController::setRegisterValue ( const Register& reg )
 {
 
-     if ( !m_registres.isEmpty() ) {
+     if ( !m_rawRegisterNames.isEmpty() ) {
           QString group = getGroupForRegisterName ( reg.name );
           if ( !group.isEmpty() ) {
                setRegisterValueForGroup ( group, reg );
@@ -97,17 +115,11 @@ void IRegisterController::setRegisterValue ( const Register& reg )
 
 const QString& IRegisterController::getRegisterValue ( const QString& name ) const
 {
-     Q_ASSERT ( !m_registres.isEmpty() );
+     Q_ASSERT ( !m_rawRegisterNames.isEmpty() );
      static QString value;
      if ( !name.isEmpty() ) {
-          QMap<int, Register >::const_iterator it = m_registres.constBegin();
-
-          while ( it != m_registres.constEnd() ) {
-               if ( it.value().name == name ) {
-                    value = it.value().value;
-                    break;
-               }
-               it++;
+          if ( m_registers.contains ( name ) ) {
+               value = m_registers.value ( name );
           }
      }
      return value;
@@ -141,22 +153,16 @@ const RegistersGroup& IRegisterController::getRegistersFromGroup ( const QString
 
 RegistersGroup& IRegisterController::fillValuesForRegisters ( RegistersGroup& registersArray )
 {
-     if ( m_registres.isEmpty() ) {
+     if ( m_rawRegisterNames.isEmpty() ) {
           kDebug() << "Registers not initialized yet";
           static RegistersGroup empty;
           return empty;
      }
 
-     QMap<int, Register>::const_iterator it = m_registres.constBegin();
-
-     while ( it != m_registres.constEnd() ) {
-          for ( int i = 0; i < registersArray.registers.size(); i++ ) {
-               if ( it.value().name == registersArray.registers[i].name ) {
-                    registersArray.registers[i].value = it.value().value;
-                    break;
-               }
+     for ( int i = 0; i < registersArray.registers.size(); i++ ) {
+          if ( m_registers.contains ( registersArray.registers[i].name ) ) {
+               registersArray.registers[i].value = m_registers.value ( registersArray.registers[i].name );
           }
-          it++;
      }
      return registersArray;
 }
@@ -171,21 +177,21 @@ void IRegisterController::setFlagRegister ( const Register& reg, const FlagRegis
 
      if ( idx != -1 ) {
           flagsValue ^= ( int ) qPow ( 2, flag.bits[idx].toUInt() );
-          setGeneralRegister ( Register ( flag.registerName, QString ( "%1" ).arg ( flagsValue ) ) );
+          setGeneralRegister ( Register ( flag.registerName, QString ( "%1" ).arg ( flagsValue ) ) , "Flags" );
      } else {
-          updateRegisters();
+          updateRegisters ( "Flags" );
           kDebug() << reg.name << ' ' << reg.value << "is incorrect flag name/value";
      }
 }
 
-void IRegisterController::setGeneralRegister ( const Register& reg )
+void IRegisterController::setGeneralRegister ( const Register& reg, const QString& group )
 {
      QString command = QString ( "set var $%1=%2" ).arg ( reg.name ).arg ( reg.value );
      kDebug() << "Setting general register" << command;
 
      if ( m_debugSession ) {
           m_debugSession->addCommand ( new GDBCommand ( GDBMI::NonMI, command ) );
-          updateRegisters();
+          updateRegisters ( group );
      } else {
           kDebug() << "Session has ended";
      }

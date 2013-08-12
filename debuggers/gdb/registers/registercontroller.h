@@ -136,8 +136,8 @@ protected:
      ///Fills value for each register in @p RegistersGroup.
      virtual RegistersGroup& fillValuesForRegisters ( RegistersGroup& registersArray );
 
-     ///Sets new value for register @p reg.
-     virtual void setGeneralRegister ( const Register& reg );
+     ///Sets new value for register @p reg, from group @p group.
+     virtual void setGeneralRegister ( const Register& reg, const QString& group );
 
      ///Converts registers in @p registersGroup to the format @p format.
      virtual const RegistersGroup& convertValuesForGroup ( RegistersGroup& registersGroup, RegistersFormat format = Raw );
@@ -161,8 +161,14 @@ protected:
      void initializeRegisters();
 
 protected:
-     ///All registers in format: number, name, value.
-     QMap<int, Register > m_registres;
+     ///Registers names as it sees debugger (in format: number, name).
+     QMap<int, QString > m_rawRegisterNames;
+
+     ///Real registers: name, value
+     QMap<QString, QString > m_registers;
+
+     ///Which groups should be updated(emitted @p registersInGroupChanged signal), is empty - all.
+     QStringList m_groupsToUpdate;
 
      ///Current debug session;
      DebugSession* m_debugSession;

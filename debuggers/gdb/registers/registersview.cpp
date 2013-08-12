@@ -157,7 +157,7 @@ void RegistersView::menuTriggered ( QAction* group )
                if ( !t.isNull() ) {
                     kDebug() << "Update";
                     if ( m_registerController ) {
-                         m_registerController->updateRegisters();
+                         m_registerController->updateRegisters ( group->text() );
                     }
                }
           }
@@ -331,7 +331,7 @@ void RegistersView::TablesManager::clearAllAssociations()
 
 void RegistersView::flagChangedInternally ( QTableWidgetItem* item )
 {
-     if ( item->column() != RegisterValue || item->text().length() != 1 ) {
+     if ( item->column() != RegisterValue || item->text().length() != 1 || item->flags() & Qt::ItemIsEditable ) {
           return;
      }
 
