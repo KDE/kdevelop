@@ -621,7 +621,7 @@ TemplateDeclaration* DeclarationBuilder::findSpecializedFrom(Declaration* specia
   if (!searchInContext)
     searchInContext = currentContext();
 
-  QList<Declaration*> specFromDecls = searchInContext->findLocalDeclarations(searchForIdentifier);
+  QList<Declaration*> specFromDecls = searchInContext->findDeclarations(searchForIdentifier);
   foreach(Declaration * possibleSpec, specFromDecls)
   {
     TemplateDeclaration *asTemplateDecl = dynamic_cast<TemplateDeclaration*>(possibleSpec);
@@ -636,7 +636,7 @@ T* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, const Iden
 {
   DUChainWriteLocker lock(DUChain::lock());
 
-  KDevelop::DUContext* templateCtx = hasTemplateContext(m_importedParentContexts, topContext()).context(topContext());
+  KDevelop::DUContext* templateCtx = hasTemplateContext(m_importedParentContexts + currentContext()->importedParentContexts(), topContext()).context(topContext());
 
   ///We always need to create a template declaration when we're within a template, so the declaration can be accessed
   ///by specialize(..) and its indirect DeclarationId

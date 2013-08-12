@@ -3634,6 +3634,15 @@ void TestDUChain::testSpecializedTemplates() {
 
   }
   {
+    // Test template specializations of nested classes
+    QByteArray text("struct A { struct B { template<class T> struct C {}; }; };\n"
+                    "template<> struct A::B::C<int> { typedef int Type; };\n");
+    LockedTopDUContext top = parse(text, DumpNone);
+
+    Declaration* specialization = findDeclaration(top, QualifiedIdentifier("A::B::C<int>::Type"));
+    QVERIFY(specialization);
+  }
+  {
     //                 0         1         2         3         4         5
     //                 012345678901234567890123456789012345678901234567890123456789
     QByteArray text("template<class T>\n"
