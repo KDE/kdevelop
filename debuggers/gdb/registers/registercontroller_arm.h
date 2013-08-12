@@ -68,7 +68,7 @@ protected:
      void setVFPD_Register ( const Register& reg );
      void setVFPQ_Register ( const Register& reg );
 
-     //Gdb's workaround
+     //VFP registers workaround.
      void handleVFPSRegisters( const QStringList& record );
 
 private:

@@ -38,18 +38,20 @@ void IRegisterController::setSession ( DebugSession* debugSession )
 
 void IRegisterController::updateRegisters ( const QString group )
 {
-     if ( m_groupsToUpdate.contains ( group ) ) {
-          kDebug() << "Already updating";
+     if ( m_pendingGroups.contains ( group ) ) {
+          kDebug() << "Already updating " << group;
           return;
      }
 
      if ( group.isEmpty() ) {
           kDebug() << "Update all";
-          m_groupsToUpdate.clear();
+          m_pendingGroups.clear();
      } else {
-          kDebug() << "Update" << group << "All groups: " << m_groupsToUpdate;
-          m_groupsToUpdate << group;
-          return;
+          kDebug() << "Update" << group << "All groups: " << m_pendingGroups;
+          m_pendingGroups << group;
+          if ( m_pendingGroups.size() != 1 ) {
+               return;
+          }
      }
 
      if ( m_debugSession && !m_debugSession->stateIsOn ( s_dbgNotStarted|s_shuttingDown ) ) {
@@ -90,14 +92,14 @@ void IRegisterController::updateRegisterValuesHandler ( const GDBMI::ResultRecor
                //  kDebug() << "Inserting value " << v << "to name" << m_registres[number].name;
           }
      }
-     kDebug() << m_groupsToUpdate.size() << "groups to change registers";
-     kDebug() << m_groupsToUpdate;
+     kDebug() << m_pendingGroups.size() << "groups to change registers";
+     kDebug() << m_pendingGroups;
      foreach ( QString group, getNamesOfRegisterGroups() ) {
-          if ( m_groupsToUpdate.isEmpty() || m_groupsToUpdate.contains ( group ) ) {
+          if ( m_pendingGroups.isEmpty() || m_pendingGroups.contains ( group ) ) {
                emit registersInGroupChanged ( group );
           }
      }
-     m_groupsToUpdate.clear();
+     m_pendingGroups.clear();
 }
 
 void IRegisterController::setRegisterValue ( const Register& reg )

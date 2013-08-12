@@ -59,7 +59,7 @@ protected:
 
      const RegistersGroup& fillFlags ( RegistersGroup& flagsGroup );
 
-     //this is a workaround. It should be called after IRegisterController::updateRegisters update handler.
+     //this is a workaround for FPU registers.
      void handleFPURegisters(const QStringList& record);
 
      enum RegisterGroups {General, Flags, FPU, XMM, Segment};

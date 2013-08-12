@@ -181,17 +181,23 @@ void RegisterControllerGeneral_x86::updateRegisters ( const QString group )
           }
 
           if ( group != enumToString ( FPU ) ) {
-               IRegisterController::updateRegisters ( group );
+               if ( group.isEmpty() ) {
+                    QStringList groups = getNamesOfRegisterGroups();
+                    groups.removeOne ( enumToString ( FPU ) );
+                    foreach ( QString g, groups ) {
+                         IRegisterController::updateRegisters ( g );
+                    }
+               } else {
+                    IRegisterController::updateRegisters ( group );
+               }
           }
 
-          if ( group == enumToString ( FPU ) || group.isEmpty() ) {
-               //Gdb's missing feature workaround.
                if ( group == enumToString ( FPU ) || group.isEmpty() ) {
                     if ( m_debugSession && !m_debugSession->stateIsOn ( s_dbgNotStarted|s_shuttingDown ) ) {
+                        //TODO: use mi interface instead.
                          m_debugSession->addCommand (
                               new CliCommand ( GDBMI::NonMI, "info all-registers $st0 $st1 $st2 $st3 $st4 $st5 $st6 $st7", this, &RegisterControllerGeneral_x86::handleFPURegisters ) );
                     }
-               }
           }
      }
 }

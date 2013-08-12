@@ -65,7 +65,7 @@ struct RegistersGroup {
      QVector<Register> registers;
      RegistersFormat format; ///<Current format
      bool flag; ///<true if this group is flags group.
-     bool editable; ///<shows if registers can be edited.
+     bool editable; ///<indicates if registers can be edited.
 };
 
 struct RegisterTooltip {
@@ -161,14 +161,14 @@ protected:
      void initializeRegisters();
 
 protected:
-     ///Registers names as it sees debugger (in format: number, name).
+     ///Register names as it sees debugger (in format: number, name).
      QMap<int, QString > m_rawRegisterNames;
 
      ///Real registers: name, value
      QMap<QString, QString > m_registers;
 
-     ///Which groups should be updated(emitted @p registersInGroupChanged signal), is empty - all.
-     QStringList m_groupsToUpdate;
+     ///Groups that should be updated(emitted @p registersInGroupChanged signal), if empty - all.
+     QStringList m_pendingGroups;
 
      ///Current debug session;
      DebugSession* m_debugSession;

@@ -195,10 +195,17 @@ void RegisterController_Arm::updateRegisters ( const QString group )
           }
 
           if ( group != enumToString ( VFP_single ) ) {
-               IRegisterController::updateRegisters ( group );
+               if ( group.isEmpty() ) {
+                    QStringList groups = getNamesOfRegisterGroups();
+                    groups.removeOne ( enumToString ( VFP_single ) );
+                    foreach ( QString g, groups ) {
+                         IRegisterController::updateRegisters ( g );
+                    }
+               } else {
+                    IRegisterController::updateRegisters ( group );
+               }
           }
 
-          //Gdb's missing feature workaround.
           if ( group == enumToString ( VFP_single ) || group.isEmpty() ) {
                QString command = "info all-registers ";
                foreach ( Register r, getRegistersFromGroupInternally ( enumToString ( VFP_single ) ).registers ) {
@@ -206,8 +213,14 @@ void RegisterController_Arm::updateRegisters ( const QString group )
                }
 
                if ( m_debugSession && !m_debugSession->stateIsOn ( s_dbgNotStarted|s_shuttingDown ) ) {
+                    //TODO: use mi interface instead.
                     m_debugSession->addCommand (
                          new CliCommand ( GDBMI::NonMI, command, this, &RegisterController_Arm::handleVFPSRegisters ) );
+               }
+
+               if ( group == enumToString ( VFP_single ) ) {
+                    IRegisterController::updateRegisters ( enumToString ( VFP_double ) );
+                    IRegisterController::updateRegisters ( enumToString ( VFP_quad ) );
                }
           }
      }
