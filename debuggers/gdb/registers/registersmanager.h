@@ -24,17 +24,15 @@
 #include <QObject>
 #include <QStringList>
 
-namespace GDBDebugger {
-class RegistersView;
-class IRegisterController;
-class DebugSession;
-}
-
 namespace GDBMI {
 struct ResultRecord;
 }
 
 namespace GDBDebugger {
+
+class RegistersView;
+class IRegisterController;
+class DebugSession;
 
 namespace {
 enum Architecture {x86, x86_64, arm, other = 100, undefined};
@@ -46,7 +44,7 @@ class ArchitectureParser : public QObject {
 
 public:
 
-     ArchitectureParser ( QObject* parent ) : QObject ( parent ) {}
+     ArchitectureParser ( QObject* parent );
 
      ///Asynchronously determines current architecture. emits @p architectureParsed when ready.
      void determineArchitecture ( DebugSession* debugSession );
@@ -69,7 +67,6 @@ class RegistersManager : public QObject {
 
 public:
      RegistersManager ( QWidget* parent );
-     ~RegistersManager() {};
 
 public Q_SLOTS:
      void setSession ( DebugSession* debugSession );
@@ -88,7 +85,7 @@ private:
 
      Architecture m_currentArchitecture;
 
-     ///True when architecture has changed(e.g. from x86 to arm)
+     ///True if architecture could has changed(e.g. from x86 to arm)
      bool m_needToCheckArch;
 };
 

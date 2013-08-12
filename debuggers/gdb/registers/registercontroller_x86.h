@@ -28,36 +28,33 @@ struct ResultRecord;
 }
 
 namespace GDBDebugger {
+
 class DebugSession;
-}
-
-namespace GDBDebugger {
-
 
 class RegisterControllerGeneral_x86 : public IRegisterController {
 public:
 
-     virtual const RegistersTooltipGroup& getTooltipsForRegistersInGroup ( const QString& group ) const;
+     virtual RegistersTooltipGroup getTooltipsForRegistersInGroup ( const QString& group ) const;
 
-     virtual const QStringList& getNamesOfRegisterGroups() const;
+     virtual QStringList getNamesOfRegisterGroups() const;
 
 public slots:
-     virtual void updateRegisters ( const QString group = QString() );
+     virtual void updateRegisters ( const QString& group = QString() );
 
 protected:
      RegisterControllerGeneral_x86 ( QObject* parent, DebugSession* debugSession = 0 ) :IRegisterController ( parent, debugSession ), m_registerNamesInitialized ( false ) {}
 
      virtual ~RegisterControllerGeneral_x86() {}
 
-     virtual RegistersGroup& getRegistersFromGroupInternally ( const QString& group );
+     virtual RegistersGroup& registersFromGroupInternally ( const QString& group );
 
-     virtual const RegistersGroup& convertValuesForGroup ( RegistersGroup& registersGroup, RegistersFormat format = Raw );
+     virtual RegistersGroup convertValuesForGroup ( RegistersGroup& registersGroup, RegistersFormat format = Raw );
 
-     virtual RegistersGroup& fillValuesForRegisters ( RegistersGroup& registersArray );
+     virtual RegistersGroup& fillValuesForRegisters ( RegistersGroup& registers );
 
      virtual void setRegisterValueForGroup ( const QString& group, const Register& reg );
 
-     const RegistersGroup& fillFlags ( RegistersGroup& flagsGroup );
+     RegistersGroup fillFlags ( RegistersGroup& flagsGroup );
 
      //this is a workaround for FPU registers.
      void handleFPURegisters(const QStringList& record);
@@ -85,7 +82,7 @@ public:
      ~RegisterController_x86() {}
 
 private:
-     virtual RegistersGroup& getRegistersFromGroupInternally ( const QString& group );
+     virtual RegistersGroup& registersFromGroupInternally ( const QString& group );
 };
 
 class RegisterController_x86_64 : public RegisterControllerGeneral_x86 {
@@ -96,7 +93,7 @@ public:
      ~RegisterController_x86_64() {}
 private:
 
-     virtual RegistersGroup& getRegistersFromGroupInternally ( const QString& group );
+     virtual RegistersGroup& registersFromGroupInternally ( const QString& group );
 };
 }
 

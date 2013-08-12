@@ -61,9 +61,7 @@ public:
     QString getAddr() const
     { return hasValidAddress() ? m_ui.comboBox->currentText() : QString(); }
 
-    void setAddress(QString address){
-        m_ui.comboBox->setCurrentItem( address, true);
-    }
+    void setAddress(const QString& address);
     bool hasValidAddress() const;
     void updateOkState();
      
@@ -75,10 +73,12 @@ private:
     Ui::SelectAddress m_ui;
 };
 
+class DisassembleWidget;
+
 class DisassembleWindow : public QTreeWidget
 {
 public:
-    DisassembleWindow(QWidget *parent = 0);
+    DisassembleWindow(QWidget *parent, DisassembleWidget* widget);
 
 protected:
    virtual void contextMenuEvent(QContextMenuEvent *e);
@@ -157,7 +157,7 @@ private:
     SelectAddrDialog* m_dlg;
 
     KConfigGroup m_config;
-    QSplitter *m_s;
+    QSplitter *m_splitter;
 };
 
 }

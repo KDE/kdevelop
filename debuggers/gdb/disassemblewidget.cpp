@@ -30,7 +30,6 @@
 #include <kdeversion.h>
 #include <ktextedit.h>
 #include <kglobalsettings.h>
-#include <KConfigGroup>
 
 #include <QShowEvent>
 #include <QHideEvent>
@@ -49,7 +48,7 @@
 #include <debugger/interfaces/idebugsession.h>
 #include "debugsession.h"
 
-#include "./registers/registersmanager.h"
+#include "registers/registersmanager.h"
 
 using namespace GDBMI;
 
@@ -98,18 +97,17 @@ void SelectAddrDialog::itemSelected()
 
 
 
-DisassembleWindow::DisassembleWindow(QWidget *parent)
+DisassembleWindow::DisassembleWindow(QWidget *parent, DisassembleWidget* widget)
     : QTreeWidget(parent)
 {
     /*context menu commands */{
     m_selectAddrAction = new QAction(i18n("Change &address"), this);
     m_selectAddrAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-    //FIXME: Figure out something better than parent()->parent()
-    connect(m_selectAddrAction, SIGNAL(triggered()), this->parent()->parent(), SLOT(slotChangeAddress()));
+    connect(m_selectAddrAction, SIGNAL(triggered()), widget, SLOT(slotChangeAddress()));
 
     m_jumpToLocation = new QAction(KIcon("debug-execute-to-cursor"), i18n("&Jump to Cursor"), this);
     m_jumpToLocation->setWhatsThis(i18n("Sets the execution pointer to the current cursor position."));
-    connect(m_jumpToLocation,SIGNAL(triggered()), this->parent()->parent(), SLOT(jumpToCursor()));
+    connect(m_jumpToLocation,SIGNAL(triggered()), widget, SLOT(jumpToCursor()));
 
     m_runUntilCursor = new QAction(KIcon("debug-run-cursor"), i18n("&Run to Cursor"), this);
     m_runUntilCursor->setWhatsThis(i18n("Continues execution until the cursor position is reached."));
@@ -135,7 +133,8 @@ DisassembleWidget::DisassembleWidget(CppDebuggerPlugin* plugin, QWidget *parent)
         active_(false),
         lower_(0),
         upper_(0),
-        address_(0)
+        address_(0),
+        m_splitter(new QSplitter(this))
 {
         QVBoxLayout* topLayout = new QVBoxLayout(this);
     
@@ -145,12 +144,11 @@ DisassembleWidget::DisassembleWidget(CppDebuggerPlugin* plugin, QWidget *parent)
 
 
     {   // initialize disasm/registers views
-        m_s = new QSplitter(this);
-        topLayout->addWidget(m_s);
+        topLayout->addWidget(m_splitter);
 
         //topLayout->setMargin(0);
 
-        m_disassembleWindow = new DisassembleWindow(m_s);
+        m_disassembleWindow = new DisassembleWindow(m_splitter, this);
 
         m_disassembleWindow->setWhatsThis(i18n("<b>Machine code display</b><p>"
                         "A machine code view into your running "
@@ -168,15 +166,15 @@ DisassembleWidget::DisassembleWidget(CppDebuggerPlugin* plugin, QWidget *parent)
 
         m_disassembleWindow->setHeaderLabels(QStringList() << "" << i18n("Address") << i18n("Function") << i18n("Instruction"));
 
-        m_s->setStretchFactor(0, 1);
+        m_splitter->setStretchFactor(0, 1);
 
-        m_registersManager = new RegistersManager(m_s);
+        m_registersManager = new RegistersManager(m_splitter);
 
         m_config = KGlobal::config()->group("Disassemble/Registers View");
 
         QByteArray state = m_config.readEntry<QByteArray>("splitterState", QByteArray());
         if (!state.isEmpty()) {
-            m_s->restoreState(state);
+            m_splitter->restoreState(state);
         }
 
     }
@@ -243,7 +241,7 @@ void DisassembleWidget::currentSessionChanged(KDevelop::IDebugSession* s)
 
 DisassembleWidget::~DisassembleWidget()
 {
-   m_config.writeEntry("splitterState", m_s->saveState());
+   m_config.writeEntry("splitterState", m_splitter->saveState());
 }
 
 /***************************************************************************/
@@ -423,6 +421,11 @@ void DisassembleWidget::slotChangeAddress()
 
     if (addr < lower_ || addr > upper_ || !displayCurrent())
         disassembleMemoryRegion(m_dlg->getAddr());
+}
+
+void SelectAddrDialog::setAddress ( const QString& address )
+{
+     m_ui.comboBox->setCurrentItem ( address, true );
 }
 
 }

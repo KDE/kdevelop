@@ -38,10 +38,10 @@ RegistersView::RegistersView ( QWidget* p ) : QWidget ( p ), m_registerControlle
 
      connect ( m_menu, SIGNAL ( triggered ( QAction* ) ), this, SLOT ( menuTriggered ( QAction* ) ) );
 
+     m_tablesManager.addTable ( Table ( fourthTable, fourthLabel ) );
      m_tablesManager.addTable ( Table ( thirdTable, thirdLabel ) );
      m_tablesManager.addTable ( Table ( secondTable, secondLabel ) );
      m_tablesManager.addTable ( Table ( firstTable, firstLabel ) );
-
      m_tablesManager.load();
 }
 
@@ -121,7 +121,7 @@ void RegistersView::contextMenuEvent ( QContextMenuEvent* e )
      }
 }
 
-void RegistersView::addItemToFormatSubmenu ( QMenu* m, QString name, int format )
+void RegistersView::addItemToFormatSubmenu ( QMenu* m, const QString& name, int format )
 {
      QAction* a = m->addAction ( name );
      a->setData ( format );
@@ -149,13 +149,10 @@ void RegistersView::menuTriggered ( QAction* group )
           t = m_tablesManager.getTableForGroup ( group->text() );
           //already showing
           if ( !t.isNull() ) {
-               kDebug() << "Already showing";
                m_tablesManager.removeAssociation ( group->text() );
           } else {
-               kDebug() << "Create";
                t = m_tablesManager.createTableForGroup ( group->text() );
                if ( !t.isNull() ) {
-                    kDebug() << "Update";
                     if ( m_registerController ) {
                          m_registerController->updateRegisters ( group->text() );
                     }
@@ -324,8 +321,8 @@ RegistersView::TablesManager::TablesManager ( RegistersView* parent ) :m_parent 
 
 void RegistersView::TablesManager::clearAllAssociations()
 {
-     for ( int i = 0; i < m_tableRegistersAssociation.count(); i++ ) {
-          removeAssociation ( m_tableRegistersAssociation[i].registersGroup );
+     foreach ( TableRegistersAssociation a, m_tableRegistersAssociation ) {
+          removeAssociation ( a.registersGroup );
      }
 }
 
@@ -341,6 +338,24 @@ void RegistersView::flagChangedInternally ( QTableWidgetItem* item )
 
      kDebug() << changedRegister.name << ' ' << changedRegister.value;
      emit registerChanged ( changedRegister );
+}
+
+RegistersView::Table::Table() : tableWidget ( 0 ), name ( 0 ) {}
+
+RegistersView::Table::Table ( QTableWidget* _tableWidget, QLabel* _name ) : tableWidget ( _tableWidget ), name ( _name ) {}
+
+bool RegistersView::Table::isNull()
+{
+     return !tableWidget;
+}
+
+RegistersView::TableRegistersAssociation::TableRegistersAssociation() {}
+
+RegistersView::TableRegistersAssociation::TableRegistersAssociation ( RegistersView::Table _table, QString _registersGroup ) : table ( _table ), registersGroup ( _registersGroup ) {}
+
+RegistersView::TablesManager::~TablesManager()
+{
+     save();
 }
 
 }

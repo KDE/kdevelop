@@ -29,11 +29,8 @@ struct ResultRecord;
 }
 
 namespace GDBDebugger {
+
 class DebugSession;
-}
-
-namespace GDBDebugger {
-
 
 class RegisterController_Arm : public IRegisterController {
 public:
@@ -41,23 +38,23 @@ public:
      RegisterController_Arm ( QObject* parent, DebugSession* debugSession = 0 ) :IRegisterController ( parent, debugSession ), m_registerNamesInitialized ( false ) {}
      ~RegisterController_Arm () {}
 
-     virtual const RegistersTooltipGroup& getTooltipsForRegistersInGroup ( const QString& group ) const;
+     virtual RegistersTooltipGroup getTooltipsForRegistersInGroup ( const QString& group ) const;
 
-     virtual const QStringList& getNamesOfRegisterGroups() const;
+     virtual QStringList getNamesOfRegisterGroups() const;
 
 public slots:
-     virtual void updateRegisters ( const QString group = QString() );
+     virtual void updateRegisters ( const QString& group = QString() );
 
 protected:
-     virtual RegistersGroup& getRegistersFromGroupInternally ( const QString& group );
+     virtual RegistersGroup& registersFromGroupInternally ( const QString& group );
 
-     virtual const RegistersGroup& convertValuesForGroup ( RegistersGroup& registersGroup, RegistersFormat format = Raw );
+     virtual RegistersGroup convertValuesForGroup ( RegistersGroup& registersGroup, RegistersFormat format = Raw );
 
-     virtual RegistersGroup& fillValuesForRegisters ( RegistersGroup& registersArray );
+     virtual RegistersGroup& fillValuesForRegisters ( RegistersGroup& registers );
 
      virtual void setRegisterValueForGroup ( const QString& group, const Register& reg );
 
-     const RegistersGroup& fillFlags ( RegistersGroup& flagsGroup );
+     RegistersGroup fillFlags ( RegistersGroup& flagsGroup );
 
      enum RegisterGroups {General, Flags, VFP_single, VFP_double, VFP_quad};
 

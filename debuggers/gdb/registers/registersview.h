@@ -21,19 +21,17 @@
 #ifndef REGISTERSVIEW_H
 #define REGISTERSVIEW_H
 
-#include "ui_registersview.h"
+#include "../ui_registersview.h"
 
 #include <KConfigGroup>
-
-namespace GDBDebugger {
-struct Register;
-struct RegistersGroup;
-class IRegisterController;
-}
 
 class QMenu;
 
 namespace GDBDebugger {
+
+struct Register;
+struct RegistersGroup;
+class IRegisterController;
 
 /** @brief Class for displaying registers content */
 class RegistersView : public QWidget, private Ui::registersView {
@@ -59,27 +57,17 @@ private:
 
      ///Convenient representation of table.
      struct Table {
-          Table() {
-               tableWidget = 0, name = 0;
-          }
-          Table ( QTableWidget* _tableWidget, QLabel* _name ) {
-               tableWidget = _tableWidget;
-               name = _name;
-          }
-          bool isNull() {
-               return !tableWidget;
-          }
+          Table();
+          Table ( QTableWidget* _tableWidget, QLabel* _name );
+          bool isNull();
           QTableWidget* tableWidget;
           QLabel* name;
      };
 
      ///Association between @p table and @p registers group.
      struct TableRegistersAssociation {
-          TableRegistersAssociation() {}
-          TableRegistersAssociation ( Table _table, QString _registersGroup ) {
-               table = _table;
-               registersGroup = _registersGroup;
-          }
+          TableRegistersAssociation();
+          TableRegistersAssociation ( Table _table, QString _registersGroup );
           RegistersView::Table table;
           QString registersGroup;
      };
@@ -88,9 +76,7 @@ private:
      class TablesManager {
      public:
           TablesManager ( RegistersView* parent );
-          ~TablesManager() {
-               save();
-          }
+          ~TablesManager();
 
           void save();
           void load();
@@ -135,7 +121,7 @@ signals:
      void registerChanged ( const Register& reg );
 
 private:
-     void addItemToFormatSubmenu ( QMenu* m, QString name, int format );
+     void addItemToFormatSubmenu ( QMenu* m, const QString& name, int format );
 private:
      QMenu* m_menu;
      IRegisterController* m_registerController;

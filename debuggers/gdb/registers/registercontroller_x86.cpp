@@ -33,19 +33,19 @@ namespace GDBDebugger {
 
 FlagRegister RegisterControllerGeneral_x86::m_eflags;
 
-RegistersGroup&  RegisterControllerGeneral_x86::fillValuesForRegisters ( RegistersGroup& registersArray )
+RegistersGroup&  RegisterControllerGeneral_x86::fillValuesForRegisters ( RegistersGroup& registers )
 {
-     kDebug() << "Filling values for registers: " << registersArray.groupName;
-     if ( registersArray.groupName == enumToString ( Flags ) ) {
-          registersArray = fillFlags ( registersArray );
+     kDebug() << "Filling values for registers: " << registers.groupName;
+     if ( registers.groupName == enumToString ( Flags ) ) {
+          registers = fillFlags ( registers );
      } else {
-          registersArray = IRegisterController::fillValuesForRegisters ( registersArray );
+          registers = IRegisterController::fillValuesForRegisters ( registers );
      }
 
-     return registersArray;
+     return registers;
 }
 
-RegistersGroup& RegisterControllerGeneral_x86::getRegistersFromGroupInternally ( const QString& group )
+RegistersGroup& RegisterControllerGeneral_x86::registersFromGroupInternally ( const QString& group )
 {
      static RegistersGroup FPUregisters;
      static RegistersGroup FlagRegisters;
@@ -94,8 +94,8 @@ RegistersGroup& RegisterControllerGeneral_x86::getRegistersFromGroupInternally (
      static RegistersGroup v;
      return v;
 }
-//Make some enum and grouptoString conversion.
-const QStringList& RegisterControllerGeneral_x86::getNamesOfRegisterGroups() const
+
+QStringList RegisterControllerGeneral_x86::getNamesOfRegisterGroups() const
 {
      static QStringList registerGroups;
      static bool initialized = false;
@@ -106,7 +106,7 @@ const QStringList& RegisterControllerGeneral_x86::getNamesOfRegisterGroups() con
      return registerGroups;
 }
 
-const RegistersGroup& RegisterControllerGeneral_x86::fillFlags ( RegistersGroup& flagsGroup )
+RegistersGroup RegisterControllerGeneral_x86::fillFlags ( RegistersGroup& flagsGroup )
 {
 
      kDebug() << "Filling flags";
@@ -116,7 +116,7 @@ const RegistersGroup& RegisterControllerGeneral_x86::fillFlags ( RegistersGroup&
 //     }
 
      bool ok;
-     int flagsValue = getRegisterValue ( m_eflags.registerName ).toInt ( &ok,16 );
+     int flagsValue = registerValue ( m_eflags.registerName ).toInt ( &ok,16 );
 
      for ( int idx = 0; idx < m_eflags.flags.count(); idx++ ) {
           flagsGroup.registers[idx].value = ( ( flagsValue >> m_eflags.bits[idx].toInt() ) & 1 ) ? "1": "0";
@@ -166,13 +166,13 @@ void RegisterControllerGeneral_x86::setSegmentRegister ( const Register& reg )
 }
 
 //TODO:
-const RegistersTooltipGroup& RegisterControllerGeneral_x86::getTooltipsForRegistersInGroup ( const QString& /*group*/ ) const
+RegistersTooltipGroup RegisterControllerGeneral_x86::getTooltipsForRegistersInGroup ( const QString& /*group*/ ) const
 {
      static RegistersTooltipGroup v;
      return v;
 }
 
-void RegisterControllerGeneral_x86::updateRegisters ( const QString group )
+void RegisterControllerGeneral_x86::updateRegisters ( const QString& group )
 {
      if ( m_debugSession && !m_debugSession->stateIsOn ( s_dbgNotStarted|s_shuttingDown ) ) {
           if ( !m_registerNamesInitialized ) {
@@ -219,7 +219,7 @@ QString RegisterControllerGeneral_x86::enumToString ( const RegisterGroups group
      return QString();
 }
 
-RegistersGroup& RegisterController_x86_64::getRegistersFromGroupInternally ( const QString& group )
+RegistersGroup& RegisterController_x86_64::registersFromGroupInternally ( const QString& group )
 {
      static RegistersGroup generalPurposeRegisters;
      static RegistersGroup XMMregisters;
@@ -249,11 +249,11 @@ RegistersGroup& RegisterController_x86_64::getRegistersFromGroupInternally ( con
      } else if ( group == enumToString ( XMM ) ) {
           return XMMregisters;
      } else {
-          return RegisterControllerGeneral_x86::getRegistersFromGroupInternally ( group );
+          return RegisterControllerGeneral_x86::registersFromGroupInternally ( group );
      }
 }
 
-RegistersGroup& RegisterController_x86::getRegistersFromGroupInternally ( const QString& group )
+RegistersGroup& RegisterController_x86::registersFromGroupInternally ( const QString& group )
 {
      static RegistersGroup generalPurposeRegisters;
      static RegistersGroup XMMregisters;
@@ -283,15 +283,15 @@ RegistersGroup& RegisterController_x86::getRegistersFromGroupInternally ( const 
      } else if ( group == enumToString ( XMM ) ) {
           return XMMregisters;
      } else {
-          return RegisterControllerGeneral_x86::getRegistersFromGroupInternally ( group );
+          return RegisterControllerGeneral_x86::registersFromGroupInternally ( group );
      }
 }
 
-const RegistersGroup& RegisterControllerGeneral_x86::convertValuesForGroup ( RegistersGroup& registersGroup, RegistersFormat format )
+RegistersGroup RegisterControllerGeneral_x86::convertValuesForGroup ( RegistersGroup& registersGroup, RegistersFormat format )
 {
      if ( format != Raw && format != Natural ) {
           if ( registersGroup.groupName == enumToString ( General ) || registersGroup.groupName == enumToString ( Segment ) ) {
-               return convertValuesForGroupInternally ( registersGroup, format );
+               return IRegisterController::convertValuesForGroup ( registersGroup, format );
           }
      }
      return registersGroup;

@@ -32,19 +32,19 @@ namespace GDBDebugger {
 
 FlagRegister RegisterController_Arm::m_cpsr;
 
-RegistersGroup&  RegisterController_Arm::fillValuesForRegisters ( RegistersGroup& registersArray )
+RegistersGroup&  RegisterController_Arm::fillValuesForRegisters ( RegistersGroup& registers )
 {
-     kDebug() << "Filling values for registers: " << registersArray.groupName;
-     if ( registersArray.groupName == enumToString ( Flags ) ) {
-          registersArray = fillFlags ( registersArray );
+     kDebug() << "Filling values for registers: " << registers.groupName;
+     if ( registers.groupName == enumToString ( Flags ) ) {
+          registers = fillFlags ( registers );
      } else {
-          registersArray = IRegisterController::fillValuesForRegisters ( registersArray );
+          registers = IRegisterController::fillValuesForRegisters ( registers );
      }
 
-     return registersArray;
+     return registers;
 }
 
-RegistersGroup& RegisterController_Arm::getRegistersFromGroupInternally ( const QString& group )
+RegistersGroup& RegisterController_Arm::registersFromGroupInternally ( const QString& group )
 {
      static RegistersGroup VFP_singleregisters;
      static RegistersGroup FlagRegisters;
@@ -111,7 +111,7 @@ RegistersGroup& RegisterController_Arm::getRegistersFromGroupInternally ( const 
      return v;
 }
 
-const QStringList& RegisterController_Arm::getNamesOfRegisterGroups() const
+QStringList RegisterController_Arm::getNamesOfRegisterGroups() const
 {
      static QStringList registerGroups;
      static bool initialized = false;
@@ -122,13 +122,13 @@ const QStringList& RegisterController_Arm::getNamesOfRegisterGroups() const
      return registerGroups;
 }
 
-const RegistersGroup& RegisterController_Arm::fillFlags ( RegistersGroup& flagsGroup )
+RegistersGroup RegisterController_Arm::fillFlags ( RegistersGroup& flagsGroup )
 {
 
      kDebug() << "Filling flags";
 
      bool ok;
-     quint32 flagsValue = getRegisterValue ( m_cpsr.registerName ).toUInt ( &ok,16 );
+     quint32 flagsValue = registerValue ( m_cpsr.registerName ).toUInt ( &ok,16 );
 
      for ( int idx = 0; idx < m_cpsr.flags.count(); idx++ ) {
           flagsGroup.registers[idx].value = ( ( flagsValue >> m_cpsr.bits[idx].toInt() ) & 1 ) ? "1": "0";
@@ -179,13 +179,13 @@ void RegisterController_Arm::setVFPQ_Register ( const Register& reg )
 }
 
 //TODO:
-const RegistersTooltipGroup& RegisterController_Arm::getTooltipsForRegistersInGroup ( const QString& /*group*/ ) const
+RegistersTooltipGroup RegisterController_Arm::getTooltipsForRegistersInGroup ( const QString& /*group*/ ) const
 {
      static RegistersTooltipGroup v;
      return v;
 }
 
-void RegisterController_Arm::updateRegisters ( const QString group )
+void RegisterController_Arm::updateRegisters ( const QString& group )
 {
      if ( m_debugSession && !m_debugSession->stateIsOn ( s_dbgNotStarted|s_shuttingDown ) ) {
 
@@ -208,7 +208,7 @@ void RegisterController_Arm::updateRegisters ( const QString group )
 
           if ( group == enumToString ( VFP_single ) || group.isEmpty() ) {
                QString command = "info all-registers ";
-               foreach ( Register r, getRegistersFromGroupInternally ( enumToString ( VFP_single ) ).registers ) {
+               foreach ( Register r, registersFromGroupInternally ( enumToString ( VFP_single ) ).registers ) {
                     command += "$" + r.name + ' ';
                }
 
@@ -270,11 +270,11 @@ QString RegisterController_Arm::enumToString ( const RegisterGroups group ) cons
      return QString();
 }
 
-const RegistersGroup& RegisterController_Arm::convertValuesForGroup ( RegistersGroup& registersGroup, RegistersFormat format )
+RegistersGroup RegisterController_Arm::convertValuesForGroup ( RegistersGroup& registersGroup, RegistersFormat format )
 {
      if ( format != Raw && format != Natural ) {
           if ( registersGroup.groupName == enumToString ( General ) ) {
-               return convertValuesForGroupInternally ( registersGroup, format );
+               return IRegisterController::convertValuesForGroup ( registersGroup, format );
           }
      }
 

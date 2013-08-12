@@ -151,7 +151,6 @@ void RegistersManager::updateRegisters()
                }
           }
           if ( m_currentArchitecture == undefined ) {
-               kDebug() << "Trying to parse arch";
                m_architectureParser->determineArchitecture ( m_debugSession );
           }
 
@@ -162,5 +161,7 @@ void RegistersManager::updateRegisters()
           }
      }
 }
+
+ArchitectureParser::ArchitectureParser ( QObject* parent ) : QObject ( parent ) {}
 
 }

@@ -32,10 +32,8 @@ struct ResultRecord;
 }
 
 namespace GDBDebugger {
-class DebugSession;
-}
 
-namespace GDBDebugger {
+class DebugSession;
 
 enum RegistersFormat {
      Binary = 2,
@@ -48,19 +46,13 @@ enum RegistersFormat {
 ///Register in format: @p name, @p value
 struct Register {
      Register() {}
-     Register ( QString _name, QString _value ) {
-          name = _name;
-          value = _value;
-     }
+     Register ( QString _name, QString _value ):name(_name), value(_value) {}
      QString name;
      QString value;
 };
 ///List of @p registers for @p groupName in @p format
 struct RegistersGroup {
-     RegistersGroup() {
-          flag = false;
-          editable = true;
-     }
+     RegistersGroup():flag(false), editable(true) {}
      QString groupName;
      QVector<Register> registers;
      RegistersFormat format; ///<Current format
@@ -94,59 +86,48 @@ public:
      void setSession ( DebugSession* debugSession );
 
      ///There'll be at least 2 groups: "General" and "Flags", also "XMM", "FPU", "Segment" for x86, x86_64 architectures.
-     virtual const QStringList& getNamesOfRegisterGroups() const = 0;
+     virtual QStringList getNamesOfRegisterGroups() const = 0;
 
      ///Returns tooltips for each register in group in format: name, tooltip(e.g. C - carry flag...)
-     virtual const RegistersTooltipGroup& getTooltipsForRegistersInGroup ( const QString& group ) const = 0;
+     virtual RegistersTooltipGroup getTooltipsForRegistersInGroup ( const QString& group ) const = 0;
 
      ///Returns registers from the @p group, or empty registers group if @p group is invalid. Use it only after @p registersInGroupChanged signal was emitted, otherwise registers won't be up to date.
-     const RegistersGroup& getRegistersFromGroup ( const QString& group, const RegistersFormat format = Raw );
+     RegistersGroup getRegistersFromGroup ( const QString& group, const RegistersFormat format = Raw );
 
 public slots:
      ///Sends updated register's @p reg value to the debugger.
      virtual void setRegisterValue ( const Register& reg );
 
      ///Updates registers in @p group. If @p group is empty - updates all registers.
-     virtual void updateRegisters ( const QString group = QString() );
+     virtual void updateRegisters ( const QString& group = QString() );
 
 Q_SIGNALS:
      ///Emitted whenever registers in @p group has changed.
      void registersInGroupChanged ( const QString& group );
 
-protected Q_SLOTS:
-
-     ///Handles initialization of register's names.
-     void getRegisterNamesHandler ( const GDBMI::ResultRecord& r );
-
-     ///Handles updated values for registers.
-     void updateRegisterValuesHandler ( const GDBMI::ResultRecord& r );
-
 protected:
 
-     IRegisterController ( QObject* parent, DebugSession* debugSession = 0 ) :QObject ( parent ), m_debugSession ( debugSession ) {}
+     IRegisterController ( QObject* parent, DebugSession* debugSession = 0 );
 
-     virtual ~IRegisterController() {}
+     virtual ~IRegisterController();
 
      ///Sets value for @p register from @p group.
      virtual void  setRegisterValueForGroup ( const QString& group, const Register& reg ) = 0;
 
      ///Returns names of registers  without value(or with invalid one). Can be useful to get names of all registers from a group. It's used as parameter to @sa fillValuesForRegisters.
-     virtual RegistersGroup& getRegistersFromGroupInternally ( const QString& group ) = 0;
+     virtual RegistersGroup& registersFromGroupInternally ( const QString& group ) = 0;
 
      ///Fills value for each register in @p RegistersGroup.
-     virtual RegistersGroup& fillValuesForRegisters ( RegistersGroup& registersArray );
+     virtual RegistersGroup& fillValuesForRegisters ( RegistersGroup& registers );
 
      ///Sets new value for register @p reg, from group @p group.
      virtual void setGeneralRegister ( const Register& reg, const QString& group );
 
      ///Converts registers in @p registersGroup to the format @p format.
-     virtual const RegistersGroup& convertValuesForGroup ( RegistersGroup& registersGroup, RegistersFormat format = Raw );
+     virtual RegistersGroup convertValuesForGroup ( RegistersGroup& registersGroup, RegistersFormat format = Raw );
 
      ///Returns value for the given @p name, empty string if the name is incorrect or there is no registers yet.
-     const QString& getRegisterValue ( const QString& name ) const;
-
-     ///Really converts registers in @p registersGroup to format @p format.
-     const RegistersGroup& convertValuesForGroupInternally ( RegistersGroup& registersGroup, RegistersFormat format );
+     QString registerValue ( const QString& name ) const;
 
      /** Sets a flag register.
       * @param reg register to set
@@ -155,16 +136,26 @@ protected:
      void setFlagRegister ( const Register& reg, const FlagRegister& flag );
 
      ///Returns group that given register belongs to.
-     const QString getGroupForRegisterName ( const QString& name );
+     QString getGroupForRegisterName ( const QString& name );
 
      ///Initializes registers, that is gets names of all available registers. Should be called once.
      void initializeRegisters();
 
-protected:
+private :
+
+     ///Handles initialization of register's names.
+     void getRegisterNamesHandler ( const GDBMI::ResultRecord& r );
+
+     ///Handles updated values for registers.
+     void updateRegisterValuesHandler ( const GDBMI::ResultRecord& r );
+
+private:
      ///Register names as it sees debugger (in format: number, name).
      QMap<int, QString > m_rawRegisterNames;
 
-     ///Real registers: name, value
+protected:
+
+     ///Registers in format: name, value
      QMap<QString, QString > m_registers;
 
      ///Groups that should be updated(emitted @p registersInGroupChanged signal), if empty - all.
@@ -175,5 +166,11 @@ protected:
 };
 
 }
+
+Q_DECLARE_TYPEINFO(GDBDebugger::Register, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(GDBDebugger::RegistersGroup, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(GDBDebugger::RegisterTooltip, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(GDBDebugger::RegistersTooltipGroup, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(GDBDebugger::FlagRegister, Q_MOVABLE_TYPE);
 
 #endif
