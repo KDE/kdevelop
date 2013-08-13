@@ -155,7 +155,6 @@ private:
     bool renameFileOrFolder(KDevelop::ProjectBaseItem *item, const KUrl &newUrl);
     
     QMutex m_reparsingMutex;
-    QMutex m_busyProjectsMutex;
     QMutex m_dirWatchersMutex;
     KDevelop::ReferencedTopDUContext initializeProject(CMakeFolderItem*);
     

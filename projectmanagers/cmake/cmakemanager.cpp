@@ -102,6 +102,7 @@ K_EXPORT_PLUGIN(CMakeSupportFactory(KAboutData("kdevcmakemanager","kdevcmake", k
 
 class WaitAllJobs : public KCompositeJob
 {
+Q_OBJECT
 public:
     friend class CMakeManager;
     WaitAllJobs(QObject* parent)
@@ -795,13 +796,10 @@ void CMakeManager::reimport(CMakeFolderItem* fi)
 {
     Q_ASSERT(fi && fi->project());
     Q_ASSERT(!isReloading(fi->project()));
+    m_busyProjects += fi->project();
+    
     KJob *job=createImportJob(fi);
     job->setProperty("project", qVariantFromValue(fi->project()));
-    
-    QMutexLocker locker(&m_busyProjectsMutex);
-    Q_ASSERT(!m_busyProjects.contains(fi->project()));
-    m_busyProjects += fi->project();
-    locker.unlock();
     
     connect( job, SIGNAL(result(KJob*)), this, SLOT(reimportDone(KJob*)) );
     ICore::self()->runController()->registerJob( job );
@@ -811,20 +809,13 @@ void CMakeManager::reimportDone(KJob* job)
 {
     IProject* p = job->property("project").value<KDevelop::IProject*>();
     
-    QMutexLocker locker(&m_busyProjectsMutex);
-    Q_ASSERT(m_busyProjects.contains(p));
     m_busyProjects.remove(p);
 }
 
 bool CMakeManager::isReloading(IProject* p)
 {
-    if(!p->isReady())
-        return true;
-    
-    QMutexLocker locker(&m_busyProjectsMutex);
-    return m_busyProjects.contains(p);
+    return !p->isReady() || m_busyProjects.contains(p);
 }
-
 
 void CMakeManager::deletedWatched(const QString& path)
 {
@@ -1385,3 +1376,4 @@ void CMakeManager::addWatcher(IProject* p, const QString& path)
 }
 
 #include "cmakemanager.moc"
+#include "moc_cmakemanager.cpp"
