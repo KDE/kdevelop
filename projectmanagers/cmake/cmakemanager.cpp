@@ -660,7 +660,8 @@ KDevelop::ReferencedTopDUContext CMakeManager::includeScript(const QString& file
     return CMakeParserUtils::includeScript( file, parent, &m_projectsData[project], dir, env.variables(profile));
 }
 
-QList< ProjectFolderItem* > CMakeManager::parse(ProjectFolderItem* dom) { return QList< ProjectFolderItem* >(); }
+QList<ProjectFolderItem*> CMakeManager::parse(ProjectFolderItem*)
+{ return QList< ProjectFolderItem* >(); }
 
 
 KJob* CMakeManager::createImportJob(ProjectFolderItem* dom)
