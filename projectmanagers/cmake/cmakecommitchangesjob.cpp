@@ -190,7 +190,7 @@ KUrl::List CMakeCommitChangesJob::addProjectData(const CMakeProjectData* data)
 
 void CMakeCommitChangesJob::start()
 {
-    if(m_parentItem) {
+    if(!m_projectDataAdded || dynamic_cast<CMakeFolderItem*>(m_parentItem)) {
         QMetaObject::invokeMethod(this, "makeChanges", Qt::QueuedConnection);
     } else
         m_waiting = true;
