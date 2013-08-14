@@ -48,6 +48,7 @@ set( cmakemanager_SRCS
   cmakemanager.cpp
   cmakecodecompletionmodel.cpp
   cmakecommitchangesjob.cpp
+  cmakeimportjob.cpp
 )
 
 set( cmakemanager_UI

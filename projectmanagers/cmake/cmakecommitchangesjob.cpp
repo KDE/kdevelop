@@ -190,8 +190,9 @@ KUrl::List CMakeCommitChangesJob::addProjectData(const CMakeProjectData* data)
 
 void CMakeCommitChangesJob::start()
 {
-    if(!m_projectDataAdded || dynamic_cast<CMakeFolderItem*>(m_parentItem)) {
+    if((!m_projectDataAdded && m_parentItem) || dynamic_cast<CMakeFolderItem*>(m_parentItem)) {
         QMetaObject::invokeMethod(this, "makeChanges", Qt::QueuedConnection);
+        m_waiting = false;
     } else
         m_waiting = true;
 }
@@ -200,6 +201,7 @@ void CMakeCommitChangesJob::makeChanges()
 {
     Q_ASSERT(m_project->thread() == QThread::currentThread());
     ProjectFolderItem* f = m_parentItem;
+    m_manager->addWatcher(m_project, m_url.toLocalFile(KUrl::AddTrailingSlash));
 
     if(!m_projectDataAdded) {
         reloadFiles();
@@ -409,8 +411,10 @@ void CMakeCommitChangesJob::folderAvailable(ProjectFolderItem* item)
 {
     if(item->url() == m_url) {
         m_parentItem = item;
-        if(m_waiting)
+        if(m_waiting) {
             start();
+            Q_ASSERT(!m_waiting);
+        }
     }
 }
 void CMakeCommitChangesJob::reloadFiles()

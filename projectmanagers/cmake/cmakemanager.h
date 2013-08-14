@@ -107,7 +107,6 @@ public:
     QList<KDevelop::ProjectTargetItem*> targets() const;
     QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectFolderItem* folder) const;
 
-    CMakeCommitChangesJob* importDirectory(KDevelop::IProject* project, const KUrl& url, WaitAllJobs* job, const KDevelop::ReferencedTopDUContext& parentTop);
     virtual QList<KDevelop::ProjectFolderItem*> parse( KDevelop::ProjectFolderItem* dom );
     virtual KDevelop::ProjectFolderItem* import( KDevelop::IProject *project );
     virtual KJob* createImportJob(KDevelop::ProjectFolderItem* item);
@@ -129,10 +128,9 @@ public:
     CMakeFolderItem* takePending(const KUrl& url);
     void addWatcher(KDevelop::IProject* p, const QString& path);
     
-    void deleteItemLater(KDevelop::ProjectBaseItem* item);
-    void deleteAllLater(const QList< KDevelop::ProjectBaseItem* >& items);
     QStringList processGeneratorExpression(const QStringList& expr, KDevelop::IProject* project, KDevelop::ProjectTargetItem* target) const;
     bool isReloading(KDevelop::IProject* p);
+    CMakeProjectData* projectData(KDevelop::IProject* project);
 
 signals:
     void folderRenamed(const KUrl& oldFolder, KDevelop::ProjectFolderItem* newFolder);
@@ -150,16 +148,10 @@ private slots:
     void filesystemBuffererTimeout();
 
 private:
-    void addDeleteItem(KDevelop::ProjectBaseItem* item);
     void reimport(CMakeFolderItem* fi);
     bool renameFileOrFolder(KDevelop::ProjectBaseItem *item, const KUrl &newUrl);
     
-    KDevelop::ReferencedTopDUContext initializeProject(CMakeFolderItem*);
-    
-    KDevelop::ReferencedTopDUContext includeScript(const QString& file, KDevelop::IProject * project, const QString& currentDir,
-                                                    KDevelop::ReferencedTopDUContext parent);
-    
-    QMap<KDevelop::IProject*, CMakeProjectData> m_projectsData;
+    QMap<KDevelop::IProject*, CMakeProjectData*> m_projectsData;
     QMap<KDevelop::IProject*, QFileSystemWatcher*> m_watchers;
     QMap<KUrl, CMakeFolderItem*> m_pending;
     

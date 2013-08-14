@@ -85,6 +85,7 @@
 #include <interfaces/idocumentation.h>
 #include "cmakeprojectdata.h"
 #include "cmakecommitchangesjob.h"
+#include "cmakeimportjob.h"
 
 #include <language/highlighting/codehighlighting.h>
 #include <interfaces/iruncontroller.h>
@@ -99,40 +100,6 @@ using namespace KDevelop;
 
 K_PLUGIN_FACTORY(CMakeSupportFactory, registerPlugin<CMakeManager>(); )
 K_EXPORT_PLUGIN(CMakeSupportFactory(KAboutData("kdevcmakemanager","kdevcmake", ki18n("CMake Manager"), "0.1", ki18n("Support for managing CMake projects"), KAboutData::License_GPL)))
-
-class WaitAllJobs : public KCompositeJob
-{
-Q_OBJECT
-public:
-    friend class CMakeManager;
-    WaitAllJobs(QObject* parent)
-        : KCompositeJob(parent)
-        , m_started(false) {}
-    
-    virtual void start() {
-        m_started = true;
-        QMetaObject::invokeMethod(this, "reconsider", Qt::QueuedConnection);
-    }
-
-    virtual void slotResult(KJob* job) {
-        KCompositeJob::slotResult(job);
-        reconsider();
-    }
-    void addJob(KJob* job) {
-        addSubjob(job);
-    }
-private slots:
-    void reconsider()
-    {
-        if(subjobs().isEmpty() && m_started) {
-            m_started = false; //don't emit the result twice!
-            emitResult();
-        }
-    }
-
-private:
-    bool m_started;
-};
 
 namespace {
 
@@ -499,80 +466,6 @@ KUrl CMakeManager::buildDirectory(KDevelop::ProjectBaseItem *item) const
     return ret;
 }
 
-KDevelop::ReferencedTopDUContext CMakeManager::initializeProject(CMakeFolderItem* rootFolder)
-{
-    KDevelop::IProject* project = rootFolder->project();
-    KUrl baseUrl=CMake::projectRoot(project);
-    
-    QPair<VariableMap,QStringList> initials = CMakeParserUtils::initialVariables();
-    CMakeProjectData* data = &m_projectsData[project];
-    
-    data->clear();
-    data->modulePath=initials.first["CMAKE_MODULE_PATH"];
-    data->vm=initials.first;
-    data->vm.insertGlobal("CMAKE_SOURCE_DIR", QStringList(baseUrl.toLocalFile(KUrl::RemoveTrailingSlash)));
-    
-    KUrl cachefile=buildDirectory(project->projectItem());
-    cachefile.addPath("CMakeCache.txt");
-    data->cache = CMakeParserUtils::readCache(cachefile);
-
-    KDevelop::ReferencedTopDUContext buildstrapContext;
-    {
-        KUrl buildStrapUrl = baseUrl;
-        buildStrapUrl.addPath("buildstrap");
-        DUChainWriteLocker lock(DUChain::lock());
-        
-        buildstrapContext = DUChain::self()->chainForDocument(buildStrapUrl);
-        
-        if(buildstrapContext) {
-            buildstrapContext->clearLocalDeclarations();
-            buildstrapContext->clearImportedParentContexts();
-            buildstrapContext->deleteChildContextsRecursively();
-        }else{
-            IndexedString idxpath(buildStrapUrl);
-            buildstrapContext=new TopDUContext(idxpath, RangeInRevision(0,0, 0,0),
-                                               new ParsingEnvironmentFile(idxpath));
-            DUChain::self()->addDocumentChain(buildstrapContext);
-        }
-        
-        Q_ASSERT(buildstrapContext);
-    }
-    ReferencedTopDUContext ref=buildstrapContext;
-    foreach(const QString& script, initials.second)
-    {
-        ref = includeScript(CMakeProjectVisitor::findFile(script, data->modulePath, QStringList()), project, baseUrl.toLocalFile(), ref);
-    }
-    
-    //Initialize parent parts of the project that don't belong to the tree (because it's a partial import)
-    if(baseUrl.isParentOf(project->folder()) && baseUrl!=project->folder())
-    {
-        QList<KUrl> toimport;
-        toimport += baseUrl;
-        QStringList includes;
-        while(!toimport.isEmpty()) {
-            KUrl script = toimport.takeFirst(), currentDir=script;
-            script.addPath("CMakeLists.txt");
-            
-            QString dir = currentDir.toLocalFile();
-            ref = includeScript(script.toLocalFile(), project, dir, ref);
-            Q_ASSERT(ref);
-            includes << data->properties[DirectoryProperty][dir]["INCLUDE_DIRECTORIES"];
-            rootFolder->defineVariables(data->properties[DirectoryProperty][dir]["COMPILE_DEFINITIONS"]);
-            
-            foreach(const Subdirectory& s, data->subdirectories) {
-                KUrl candidate = currentDir;
-                candidate.addPath(s.name);
-                
-                if(candidate.isParentOf(project->folder()) && candidate!=project->folder())
-                    toimport += candidate;
-            }
-        }
-        rootFolder->setIncludeDirectories(includes);
-        rootFolder->setBuildDir(KUrl::relativeUrl(baseUrl, project->folder()));
-    }
-    return ref;
-}
-
 KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
 {
     kDebug(9042) << "== migrating cmake settings";
@@ -650,64 +543,13 @@ KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
     return rootItem;
 }
 
-
-KDevelop::ReferencedTopDUContext CMakeManager::includeScript(const QString& file,
-                                                        KDevelop::IProject * project, const QString& dir, ReferencedTopDUContext parent)
-{
-    addWatcher(project, file);
-    QString profile = CMake::currentEnvironment(project);
-    const KDevelop::EnvironmentGroupList env( KGlobal::config() );
-    return CMakeParserUtils::includeScript( file, parent, &m_projectsData[project], dir, env.variables(profile));
-}
-
 QList<ProjectFolderItem*> CMakeManager::parse(ProjectFolderItem*)
 { return QList< ProjectFolderItem* >(); }
 
 
 KJob* CMakeManager::createImportJob(ProjectFolderItem* dom)
 {
-    ReferencedTopDUContext ctx;
-    if(dom->url() == dom->project()->folder()) {
-        ctx = initializeProject(dynamic_cast<CMakeFolderItem*>(dom));
-    } else {
-        DUChainReadLocker lock;
-        ctx = DUChain::self()->chainForDocument(KUrl(dom->url(), "CMakeLists.txt"));
-    }
-    WaitAllJobs* waitJob = new WaitAllJobs(this);
-    KJob* commitJob = importDirectory(dom->project(), dom->url(), waitJob, ctx);
-    waitJob->addJob(commitJob);
-    commitJob->start();
-    return waitJob;
-}
-
-CMakeCommitChangesJob* CMakeManager::importDirectory(IProject* project, const KUrl& url, WaitAllJobs* wjob, const KDevelop::ReferencedTopDUContext& parentTop)
-{
-    Q_ASSERT(isReloading(project));
-    addWatcher(project, url.toLocalFile(KUrl::AddTrailingSlash));
-    
-    KUrl cmakeListsPath(url, "CMakeLists.txt");
-    
-    CMakeCommitChangesJob* commitJob = new CMakeCommitChangesJob(url, this, project);
-    if(QFile::exists(cmakeListsPath.toLocalFile()))
-    {
-        kDebug(9042) << "Adding cmake: " << cmakeListsPath << " to the model";
-
-        CMakeProjectData& data=m_projectsData[project];
-
-        data.vm.pushScope();
-        ReferencedTopDUContext ctx = includeScript(cmakeListsPath.toLocalFile(), project,
-                                                   url.toLocalFile(KUrl::RemoveTrailingSlash), parentTop);
-        KUrl::List folderList = commitJob->addProjectData(&data);
-        foreach(const KUrl& folder, folderList) {
-            CMakeCommitChangesJob* job = importDirectory(project, folder, wjob, ctx);
-            wjob->addJob(job);
-            connect(commitJob, SIGNAL(folderCreated(KDevelop::ProjectFolderItem*)),
-                    job, SLOT(folderAvailable(KDevelop::ProjectFolderItem*)));
-        }
-        data.vm.popScope();
-    }
-    commitJob->start();
-    return commitJob;
+    return new CMakeImportJob(dom, this);
 }
 
 QList<KDevelop::ProjectTargetItem*> CMakeManager::targets() const
@@ -719,7 +561,6 @@ QList<KDevelop::ProjectTargetItem*> CMakeManager::targets() const
     }
     return ret;
 }
-
 
 KUrl::List CMakeManager::includeDirectories(KDevelop::ProjectBaseItem *item) const
 {
@@ -1322,9 +1163,10 @@ QPair<QString, QString> CMakeManager::cacheValue(KDevelop::IProject* project, co
     }
     
 //     kDebug() << "cache value " << id << project << (m_projectsData.contains(project) && m_projectsData[project].cache.contains(id));
-    if(m_projectsData.contains(project) && m_projectsData[project].cache.contains(id))
+    CMakeProjectData* data = m_projectsData[project];
+    if(data && data->cache.contains(id))
     {
-        const CacheEntry& e=m_projectsData[project].cache.value(id);
+        const CacheEntry& e=data->cache.value(id);
         ret.first=e.value;
         ret.second=e.doc;
     }
@@ -1333,20 +1175,19 @@ QPair<QString, QString> CMakeManager::cacheValue(KDevelop::IProject* project, co
 
 void CMakeManager::projectClosing(IProject* p)
 {
-    m_projectsData.remove(p); 
-    
+    delete m_projectsData.take(p); 
     delete m_watchers.take(p);
 }
 
 QStringList CMakeManager::processGeneratorExpression(const QStringList& expr, IProject* project, ProjectTargetItem* target) const
 {
     QStringList ret;
-    const CMakeProjectData& data = m_projectsData[project];
-    GenerationExpressionSolver exec(data.properties);
+    const CMakeProjectData* data = m_projectsData[project];
+    GenerationExpressionSolver exec(data->properties);
     if(target)
         exec.setTargetName(target->text());
 
-    exec.defineVariable("INSTALL_PREFIX", data.vm.value("CMAKE_INSTALL_PREFIX").join(QString()));
+    exec.defineVariable("INSTALL_PREFIX", data->vm.value("CMAKE_INSTALL_PREFIX").join(QString()));
     for(QStringList::const_iterator it = expr.constBegin(), itEnd = expr.constEnd(); it!=itEnd; ++it) {
         QStringList val = exec.run(*it).split(';');
         ret += val;
@@ -1369,5 +1210,12 @@ void CMakeManager::addWatcher(IProject* p, const QString& path)
     m_watchers[p]->addPath(path);
 }
 
-#include "cmakemanager.moc"
-#include "moc_cmakemanager.cpp"
+CMakeProjectData* CMakeManager::projectData(IProject* project)
+{
+    CMakeProjectData* data = m_projectsData[project];
+    if(!data) {
+        data = new CMakeProjectData;
+        m_projectsData[project] = data;
+    }
+    return data;
+}
