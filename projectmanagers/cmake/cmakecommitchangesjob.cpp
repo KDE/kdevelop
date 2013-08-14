@@ -198,7 +198,6 @@ void CMakeCommitChangesJob::start()
 
 void CMakeCommitChangesJob::makeChanges()
 {
-    qDebug() << "changes" << m_url;
     Q_ASSERT(m_project->thread() == QThread::currentThread());
     ProjectFolderItem* f = m_parentItem;
 

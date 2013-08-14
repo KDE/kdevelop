@@ -154,8 +154,6 @@ private:
     void reimport(CMakeFolderItem* fi);
     bool renameFileOrFolder(KDevelop::ProjectBaseItem *item, const KUrl &newUrl);
     
-    QMutex m_reparsingMutex;
-    QMutex m_dirWatchersMutex;
     KDevelop::ReferencedTopDUContext initializeProject(CMakeFolderItem*);
     
     KDevelop::ReferencedTopDUContext includeScript(const QString& file, KDevelop::IProject * project, const QString& currentDir,

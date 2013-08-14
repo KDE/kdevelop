@@ -502,7 +502,6 @@ KUrl CMakeManager::buildDirectory(KDevelop::ProjectBaseItem *item) const
 KDevelop::ReferencedTopDUContext CMakeManager::initializeProject(CMakeFolderItem* rootFolder)
 {
     KDevelop::IProject* project = rootFolder->project();
-    QMutexLocker locker(&m_reparsingMutex);
     KUrl baseUrl=CMake::projectRoot(project);
     
     QPair<VariableMap,QStringList> initials = CMakeParserUtils::initialVariables();
@@ -808,7 +807,6 @@ void CMakeManager::reimport(CMakeFolderItem* fi)
 void CMakeManager::reimportDone(KJob* job)
 {
     IProject* p = job->property("project").value<KDevelop::IProject*>();
-    
     m_busyProjects.remove(p);
 }
 
@@ -880,8 +878,6 @@ void CMakeManager::dirtyFile(const QString & dirty)
     
     if(p && dirtyFile.fileName() == "CMakeLists.txt")
     {
-        QMutexLocker locker(&m_reparsingMutex);
-        
         QList<ProjectFileItem*> files=p->filesForUrl(dirtyFile);
         kDebug(9032) << dirtyFile << "is dirty" << files.count();
 
@@ -1339,7 +1335,6 @@ void CMakeManager::projectClosing(IProject* p)
 {
     m_projectsData.remove(p); 
     
-    QMutexLocker locker(&m_dirWatchersMutex);
     delete m_watchers.take(p);
 }
 
@@ -1371,7 +1366,6 @@ CMakeFolderItem* CMakeManager::takePending(const KUrl& url)
 
 void CMakeManager::addWatcher(IProject* p, const QString& path)
 {
-    QMutexLocker locker(&m_dirWatchersMutex);
     m_watchers[p]->addPath(path);
 }
 
