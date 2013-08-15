@@ -270,18 +270,19 @@ void CMakeCommitChangesJob::makeChanges()
             switch(t.type)
             {
                 case Target::Library:
-                    targetItem = new CMakeLibraryTargetItem( m_project, t.name,
-                                                            folder, t.declaration, pt.outputName, resolvedPath);
+                    targetItem = new CMakeLibraryTargetItem( m_project, t.name, folder, pt.outputName, resolvedPath);
                     break;
                 case Target::Executable:
-                    targetItem = new CMakeExecutableTargetItem( m_project, t.name,
-                                                                folder, t.declaration, pt.outputName, resolvedPath);
+                    targetItem = new CMakeExecutableTargetItem( m_project, t.name, folder, pt.outputName, resolvedPath);
                     break;
                 case Target::Custom:
-                    targetItem = new CMakeCustomTargetItem( m_project, t.name,
-                                                            folder, t.declaration, pt.outputName );
+                    targetItem = new CMakeCustomTargetItem( m_project, t.name, folder, pt.outputName );
                     break;
             }
+        }
+        DUChainAttatched* duchainAtt=dynamic_cast<DUChainAttatched*>(targetItem);
+        if(duchainAtt) {
+            duchainAtt->setDeclaration(t.declaration);
         }
         
         DescriptorAttatched* descAtt=dynamic_cast<DescriptorAttatched*>(targetItem);

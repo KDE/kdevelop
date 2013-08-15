@@ -53,8 +53,10 @@ class KDEVCMAKECOMMON_EXPORT DUChainAttatched
     public:
         // Required, and must be non-inline, for dynamic_cast to work
         virtual ~DUChainAttatched();
-        DUChainAttatched(KDevelop::IndexedDeclaration _decl) : decl(_decl) {}
+        DUChainAttatched() {}
+        DUChainAttatched(const KDevelop::IndexedDeclaration& _decl) : decl(_decl) {}
         KDevelop::IndexedDeclaration declaration() const { return decl; }
+        void setDeclaration(KDevelop::IndexedDeclaration declaration) { decl = declaration; }
     private:
         KDevelop::IndexedDeclaration decl;
 };
@@ -118,8 +120,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeExecutableTargetItem
 {
     public:
         CMakeExecutableTargetItem(KDevelop::IProject* project, const QString &name,
-                                  CMakeFolderItem *parent, KDevelop::IndexedDeclaration c,
-                                  const QString& _outputName, const KUrl& basepath);
+                                  CMakeFolderItem *parent, const QString& _outputName, const KUrl& basepath);
         
         virtual KUrl builtUrl() const;
         virtual KUrl installedUrl() const;
@@ -135,7 +136,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeLibraryTargetItem
 {
     public:
         CMakeLibraryTargetItem(KDevelop::IProject* project, const QString &name,
-                               CMakeFolderItem *parent, KDevelop::IndexedDeclaration c,
+                               CMakeFolderItem *parent,
                                const QString& _outputName, const KUrl& /*basepath*/);
             
     private:
@@ -147,8 +148,8 @@ class KDEVCMAKECOMMON_EXPORT CMakeCustomTargetItem
 {
     public:
         CMakeCustomTargetItem(KDevelop::IProject* project, const QString &name,
-                               CMakeFolderItem *parent, KDevelop::IndexedDeclaration c, const QString& _outputName)
-            : KDevelop::ProjectTargetItem( project, name, parent), DUChainAttatched(c), outputName(_outputName) {}
+                               CMakeFolderItem *parent, const QString& _outputName)
+            : KDevelop::ProjectTargetItem( project, name, parent), outputName(_outputName) {}
             
     private:
         QString outputName;

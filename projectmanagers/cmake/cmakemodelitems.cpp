@@ -138,25 +138,21 @@ KDevelop::ProjectFolderItem* CMakeFolderItem::folderNamed(const QString& name) c
     return 0;
 }
 
-CMakeExecutableTargetItem::CMakeExecutableTargetItem(KDevelop::IProject* project, const QString& name, CMakeFolderItem* parent, KDevelop::IndexedDeclaration c, const QString& _outputName, const KUrl& basepath)
+CMakeExecutableTargetItem::CMakeExecutableTargetItem(KDevelop::IProject* project, const QString& name, CMakeFolderItem* parent, const QString& _outputName, const KUrl& basepath)
     : KDevelop::ProjectExecutableTargetItem( project, name, parent)
-    , DUChainAttatched(c)
     , outputName(_outputName)
     , path(basepath)
 {}
 
-CMakeLibraryTargetItem::CMakeLibraryTargetItem(KDevelop::IProject* project, const QString& name, CMakeFolderItem* parent, KDevelop::IndexedDeclaration c, const QString& _outputName, const KUrl&)
-    : KDevelop::ProjectLibraryTargetItem( project, name, parent), DUChainAttatched(c), outputName(_outputName)
+CMakeLibraryTargetItem::CMakeLibraryTargetItem(KDevelop::IProject* project, const QString& name, CMakeFolderItem* parent, const QString& _outputName, const KUrl&)
+    : KDevelop::ProjectLibraryTargetItem( project, name, parent), outputName(_outputName)
 {}
 
-CMakeFolderItem::~CMakeFolderItem() {
-}
+CMakeFolderItem::~CMakeFolderItem() {}
 
-DescriptorAttatched::~DescriptorAttatched() {
-}
+DescriptorAttatched::~DescriptorAttatched() {}
 
-DUChainAttatched::~DUChainAttatched() {
-}
+DUChainAttatched::~DUChainAttatched() {}
 
 CompilationDataAttached::~CompilationDataAttached() {}
 
