@@ -32,6 +32,8 @@
 #include <interfaces/iproject.h>
 #include <util/environmentgrouplist.h>
 #include <KCompositeJob>
+#include <QtConcurrentRun>
+#include <QFutureWatcher>
 
 using namespace KDevelop;
 
@@ -44,11 +46,6 @@ public:
         : KCompositeJob(parent)
         , m_started(false) {}
     
-    virtual void start() {
-        m_started = true;
-        QMetaObject::invokeMethod(this, "reconsider", Qt::QueuedConnection);
-    }
-
     virtual void slotResult(KJob* job) {
         KCompositeJob::slotResult(job);
         reconsider();
@@ -56,6 +53,13 @@ public:
     void addJob(KJob* job) {
         addSubjob(job);
     }
+
+public slots:
+    virtual void start() {
+        m_started = true;
+        QMetaObject::invokeMethod(this, "reconsider", Qt::QueuedConnection);
+    }
+
 private slots:
     void reconsider()
     {
@@ -76,21 +80,29 @@ CMakeImportJob::CMakeImportJob(ProjectFolderItem* dom, CMakeManager* parent)
     , m_data(parent->projectData(dom->project()))
     , m_manager(parent)
     , m_wjob(new WaitAllJobs(this))
-{}
+    , m_futureWatcher(new QFutureWatcher<void>)
+{
+    connect(m_wjob, SIGNAL(finished(KJob*)), SLOT(waitFinished(KJob*)));
+    connect(m_futureWatcher, SIGNAL(finished()), m_wjob, SLOT(start()));
+}
 
 void CMakeImportJob::start()
 {
+    QFuture<void> future = QtConcurrent::run(this, &CMakeImportJob::initialize);
+    m_futureWatcher->setFuture(future);
+}
+
+void CMakeImportJob::initialize()
+{
     ReferencedTopDUContext ctx;
-    if(m_dom->url() == m_dom->project()->folder()) {
+    if(m_dom->url() == m_project->folder()) {
         ctx = initializeProject(dynamic_cast<CMakeFolderItem*>(m_dom));
     } else {
         DUChainReadLocker lock;
         ctx = DUChain::self()->chainForDocument(KUrl(m_dom->url(), "CMakeLists.txt"));
         Q_ASSERT(ctx);
     }
-    importDirectory(m_dom->project(), m_dom->url(), ctx);
-    connect(m_wjob, SIGNAL(finished(KJob*)), SLOT(waitFinished(KJob*)));
-    m_wjob->start();
+    importDirectory(m_project, m_dom->url(), ctx);
 }
 
 KDevelop::ReferencedTopDUContext CMakeImportJob::initializeProject(CMakeFolderItem* rootFolder)

@@ -23,6 +23,7 @@
 
 #include <KJob>
 
+template<class T>class QFutureWatcher;
 class KUrl;
 class WaitAllJobs;
 class CMakeManager;
@@ -48,6 +49,7 @@ class CMakeImportJob : public KJob
         void waitFinished(KJob* job);
 
     private:
+        void initialize();
         CMakeCommitChangesJob* importDirectory(KDevelop::IProject* project, const KUrl& url, const KDevelop::ReferencedTopDUContext& parentTop);
         KDevelop::ReferencedTopDUContext initializeProject(CMakeFolderItem*);
         KDevelop::ReferencedTopDUContext includeScript(const QString& file, const QString& currentDir, KDevelop::ReferencedTopDUContext parent);
@@ -57,6 +59,7 @@ class CMakeImportJob : public KJob
         CMakeProjectData* m_data;
         CMakeManager* m_manager;
         WaitAllJobs* m_wjob;
+        QFutureWatcher<void>* m_futureWatcher;
 };
 
 #endif // CMAKEIMPORTJOB_H
