@@ -34,6 +34,7 @@ GenericName[pt_BR]=Compilador de projetos
 GenericName[sk]=Prekladač projektov
 GenericName[sv]=Projektbyggare
 GenericName[tr]=Proje Oluşturucu
+GenericName[ug]=قۇرۇلۇش ياسىغۇچ
 GenericName[uk]=Збирання проектів
 GenericName[x-test]=xxProject Builderxx
 Comment=KDevelop Ninja Builder
