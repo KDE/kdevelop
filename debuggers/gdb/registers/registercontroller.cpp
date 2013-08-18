@@ -47,7 +47,7 @@ void IRegisterController::updateRegisters ( const QString& group )
           kDebug() << "Update all";
           m_pendingGroups.clear();
      } else {
-          kDebug() << "Update" << group << "All groups: " << m_pendingGroups;
+          kDebug() << "Update " << group << "All groups: " << m_pendingGroups;
           m_pendingGroups << group;
           if ( m_pendingGroups.size() != 1 ) {
                return;
@@ -67,10 +67,8 @@ void IRegisterController::getRegisterNamesHandler ( const GDBMI::ResultRecord& r
      m_rawRegisterNames.clear();
      for ( int i = 0; i < names.size(); ++i ) {
           const GDBMI::Value& entry = names[i];
-          if ( !entry.literal().isEmpty() ) {
-               //  kDebug() << "Inserting name " << entry.literal() << "number " << i;
-               m_rawRegisterNames.insert ( i, entry.literal() );
-          }
+          //  kDebug() << "Inserting name " << entry.literal() << "number " << i;
+          m_rawRegisterNames.push_back ( entry.literal() );
      }
 }
 
@@ -85,13 +83,13 @@ void IRegisterController::updateRegisterValuesHandler ( const GDBMI::ResultRecor
      for ( int i = 0; i < values.size(); ++i ) {
           const GDBMI::Value& entry = values[i];
           int number = entry["number"].literal().toInt();
-          //kDebug() << "Considering number " << number;
-          if ( m_rawRegisterNames.contains ( number ) ) {
+          Q_ASSERT ( m_rawRegisterNames.size() >  number );
+          if ( !m_rawRegisterNames[number].isEmpty() ) {
                QString value = entry["value"].literal();
                m_registers.insert ( m_rawRegisterNames[number], value );
-               //  kDebug() << "Inserting value " << v << "to name" << m_registres[number].name;
           }
      }
+
      kDebug() << "groups to change registers: " << m_pendingGroups;
      foreach ( QString group, getNamesOfRegisterGroups() ) {
           if ( m_pendingGroups.isEmpty() || m_pendingGroups.contains ( group ) ) {

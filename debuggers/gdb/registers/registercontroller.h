@@ -21,7 +21,7 @@
 #ifndef _REGISTERCONTROLLER_H_
 #define _REGISTERCONTROLLER_H_
 
-#include <QMap>
+#include <QHash>
 #include <QVector>
 #include <QObject>
 #include <QStringList>
@@ -151,12 +151,12 @@ private :
 
 private:
      ///Register names as it sees debugger (in format: number, name).
-     QMap<int, QString > m_rawRegisterNames;
+     QVector<QString > m_rawRegisterNames;
 
 protected:
 
      ///Registers in format: name, value
-     QMap<QString, QString > m_registers;
+     QHash<QString, QString > m_registers;
 
      ///Groups that should be updated(emitted @p registersInGroupChanged signal), if empty - all.
      QStringList m_pendingGroups;
