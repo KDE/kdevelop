@@ -44,7 +44,7 @@ RegistersGroup&  RegisterController_Arm::updateValuesForRegisters ( RegistersGro
      return registers;
 }
 
-RegistersGroup& RegisterController_Arm::registersFromGroupInternally ( const QString& group )
+RegistersGroup RegisterController_Arm::registersFromGroupInternally ( const QString& group )
 {
      RegistersGroup registers;
 
@@ -66,7 +66,7 @@ QStringList RegisterController_Arm::namesOfRegisterGroups() const
      return registerGroups;
 }
 
-RegistersGroup RegisterController_Arm::updateFlagValues ( RegistersGroup& flagsGroup )
+RegistersGroup& RegisterController_Arm::updateFlagValues ( RegistersGroup& flagsGroup )
 {
 
      kDebug() << "Updating flags";
@@ -207,7 +207,7 @@ QString RegisterController_Arm::enumToString ( const RegisterGroups group ) cons
      return QString();
 }
 
-RegistersGroup RegisterController_Arm::convertValuesForGroup ( RegistersGroup& registersGroup, RegistersFormat format )
+RegistersGroup& RegisterController_Arm::convertValuesForGroup ( RegistersGroup& registersGroup, RegistersFormat format )
 {
      if ( format != Raw && format != Natural ) {
           if ( registersGroup.groupName == enumToString ( General ) ) {

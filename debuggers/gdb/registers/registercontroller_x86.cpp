@@ -45,7 +45,7 @@ RegistersGroup&  RegisterControllerGeneral_x86::updateValuesForRegisters ( Regis
      return registers;
 }
 
-RegistersGroup& RegisterControllerGeneral_x86::registersFromGroupInternally ( const QString& group )
+RegistersGroup RegisterControllerGeneral_x86::registersFromGroupInternally ( const QString& group )
 {
      RegistersGroup registers;
 
@@ -67,7 +67,7 @@ QStringList RegisterControllerGeneral_x86::namesOfRegisterGroups() const
      return registerGroups;
 }
 
-RegistersGroup RegisterControllerGeneral_x86::updateFlagValues ( RegistersGroup& flagsGroup )
+RegistersGroup& RegisterControllerGeneral_x86::updateFlagValues ( RegistersGroup& flagsGroup )
 {
 
      kDebug() << "Updating flags";
@@ -178,7 +178,7 @@ QString RegisterControllerGeneral_x86::enumToString ( const RegisterGroups group
      return QString();
 }
 
-RegistersGroup RegisterControllerGeneral_x86::convertValuesForGroup ( RegistersGroup& registersGroup, RegistersFormat format )
+RegistersGroup& RegisterControllerGeneral_x86::convertValuesForGroup ( RegistersGroup& registersGroup, RegistersFormat format )
 {
      if ( format != Raw && format != Natural ) {
           if ( registersGroup.groupName == enumToString ( General ) || registersGroup.groupName == enumToString ( Segment ) ) {

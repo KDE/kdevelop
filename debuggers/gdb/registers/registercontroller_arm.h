@@ -43,16 +43,16 @@ public slots:
      virtual void updateRegisters ( const QString& group = QString() );
 
 protected:
-     virtual RegistersGroup& registersFromGroupInternally ( const QString& group );
+     virtual RegistersGroup registersFromGroupInternally ( const QString& group );
 
-     virtual RegistersGroup convertValuesForGroup ( RegistersGroup& registersGroup, RegistersFormat format = Raw );
+     virtual RegistersGroup& convertValuesForGroup ( RegistersGroup& registersGroup, RegistersFormat format = Raw );
      virtual QStringList registerNamesForGroup ( const QString& group );
 
      virtual RegistersGroup& updateValuesForRegisters ( RegistersGroup& registers );
 
      virtual void setRegisterValueForGroup ( const QString& group, const Register& reg );
 
-     RegistersGroup updateFlagValues ( RegistersGroup& flagsGroup );
+     RegistersGroup& updateFlagValues ( RegistersGroup& flagsGroup );
 
      enum RegisterGroups {General, Flags, VFP_single, VFP_double, VFP_quad};
 

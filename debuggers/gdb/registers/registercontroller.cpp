@@ -145,7 +145,8 @@ QString IRegisterController::groupForRegisterName ( const QString& name )
 
 RegistersGroup IRegisterController::registersFromGroup ( const QString& group, const RegistersFormat format )
 {
-     return convertValuesForGroup ( registersFromGroupInternally ( group ) , format );
+     RegistersGroup g = registersFromGroupInternally ( group );
+     return convertValuesForGroup ( g, format );
 }
 
 RegistersGroup& IRegisterController::updateValuesForRegisters ( RegistersGroup& registers )
@@ -194,7 +195,7 @@ void IRegisterController::setGeneralRegister ( const Register& reg, const QStrin
      }
 }
 
-RegistersGroup IRegisterController::convertValuesForGroup ( RegistersGroup& registersGroup, RegistersFormat format )
+RegistersGroup& IRegisterController::convertValuesForGroup ( RegistersGroup& registersGroup, RegistersFormat format )
 {
      kDebug() << "Converting for group" << registersGroup.groupName;
      bool ok;
