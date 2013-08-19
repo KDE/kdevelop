@@ -106,18 +106,18 @@ void RegisterController_Arm::setVFPS_Register ( const Register& reg )
      setGeneralRegister ( reg, enumToString ( VFP_single ) );
 }
 
-void RegisterController_Arm::setVFPD_Register ( const Register& reg )
+void RegisterController_Arm::setVFPD_Register ( const Register& /*reg*/ )
 {
      kDebug() << "Setting VFPD register through setGeneralRegister";
-     //TODO:
-     setGeneralRegister ( reg, enumToString ( VFP_double ) );
+     //FIXME: gdb doesn't support setting values for registers with more than 64 bits directly(all that structures stuff should be used.).
+     //setGeneralRegister ( reg, enumToString ( VFP_double ) );
 }
 
-void RegisterController_Arm::setVFPQ_Register ( const Register& reg )
+void RegisterController_Arm::setVFPQ_Register ( const Register& /*reg */)
 {
      kDebug() << "Setting VFPQ register through setGeneralRegister";
-     //TODO:
-     setGeneralRegister ( reg, enumToString ( VFP_quad ) );
+     //FIXME:
+    // setGeneralRegister ( reg, enumToString ( VFP_quad ) );
 }
 
 void RegisterController_Arm::updateRegisters ( const QString& group )

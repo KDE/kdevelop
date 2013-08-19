@@ -70,10 +70,6 @@ RegistersGroup& RegisterControllerGeneral_x86::updateFlagValues ( RegistersGroup
 
      kDebug() << "Updating flags";
 
-//     foreach(Register r, flagsGroup.registers) {
-//         kDebug() << r.name << ' ' << r.value << '\n';
-//     }
-
      bool ok;
      int flagsValue = registerValue ( m_eflags.registerName ).toInt ( &ok,16 );
 
@@ -111,11 +107,11 @@ void RegisterControllerGeneral_x86::setFPURegister ( const Register& reg )
      setGeneralRegister ( reg, enumToString ( FPU ) );
 }
 
-void RegisterControllerGeneral_x86::setXMMRegister ( const Register& reg )
+void RegisterControllerGeneral_x86::setXMMRegister ( const Register& /*reg */)
 {
      kDebug() << "Setting XMM register through setGeneralRegister";
-     //TODO:
-     setGeneralRegister ( reg, enumToString ( XMM ) );
+     //FIXME:
+     //setGeneralRegister ( reg, enumToString ( XMM ) );
 }
 
 void RegisterControllerGeneral_x86::setSegmentRegister ( const Register& reg )

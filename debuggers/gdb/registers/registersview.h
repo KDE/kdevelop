@@ -55,7 +55,7 @@ private:
 
      enum RegisterColumns {RegisterName, RegisterValue};
 
-     ///Convenient representation of table.
+     ///Convenient representation of a table.
      struct Table {
           Table();
           Table ( QTableWidget* _tableWidget, QLabel* _name );
@@ -82,7 +82,7 @@ private:
           void load();
           ///Returns the table associated with the @p group, empty table if there is no association.
           Table tableForGroup ( const QString& group ) const;
-          ///Creates association between @p group and table. Returns the table associated with the group, empty table if there is no more empty tables, or already exists association for this group
+          ///Creates association between @p group and a table. Returns the table associated with the group, empty table if there is no more free tables, or already exists association for this group
           Table createTableForGroup ( const QString& group );
           ///Removes association between @p group and table if any.
           bool removeAssociation ( const QString& group );
@@ -93,14 +93,13 @@ private:
           ///Return names of all associated groups,
           const QStringList allGroups() const;
 
-          ///@return: number of empty tables.
+          ///@return: number of free tables.
           int numOfFreeTables() const;
 
           void clearAllAssociations();
 
      private:
           RegistersView* m_parent;
-          ///Associations.
           QVector<TableRegistersAssociation> m_tableRegistersAssociation;
           KConfigGroup m_config;
      };
@@ -111,7 +110,7 @@ private:
 private slots:
      ///Called whenever @p item in any table has changed.
      void registerChangedInternally ( QTableWidgetItem* item );
-     ///If item is a flag then send updated value, otherwise do nothing.
+     ///If @p item is a flag then send updated value, otherwise do nothing.
      void flagChangedInternally ( QTableWidgetItem* item );
      ///Changes visible tables or register formates.
      void menuTriggered ( QAction* );
