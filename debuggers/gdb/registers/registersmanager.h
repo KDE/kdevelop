@@ -55,7 +55,7 @@ Q_SIGNALS:
 
 private:
 
-     void getRegisterNamesHandler ( const GDBMI::ResultRecord& r );
+     void registerNamesHandler ( const GDBMI::ResultRecord& r );
      void parseArchitecture();
 
      QStringList m_registerNames;

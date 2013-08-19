@@ -111,7 +111,7 @@ RegistersGroup& RegisterController_Arm::registersFromGroupInternally ( const QSt
      return v;
 }
 
-QStringList RegisterController_Arm::getNamesOfRegisterGroups() const
+QStringList RegisterController_Arm::namesOfRegisterGroups() const
 {
      static QStringList registerGroups;
      static bool initialized = false;
@@ -178,13 +178,6 @@ void RegisterController_Arm::setVFPQ_Register ( const Register& reg )
      setGeneralRegister ( reg, enumToString ( VFP_quad ) );
 }
 
-//TODO:
-RegistersTooltipGroup RegisterController_Arm::getTooltipsForRegistersInGroup ( const QString& /*group*/ ) const
-{
-     static RegistersTooltipGroup v;
-     return v;
-}
-
 void RegisterController_Arm::updateRegisters ( const QString& group )
 {
      if ( m_debugSession && !m_debugSession->stateIsOn ( s_dbgNotStarted|s_shuttingDown ) ) {
@@ -196,7 +189,7 @@ void RegisterController_Arm::updateRegisters ( const QString& group )
 
           if ( group != enumToString ( VFP_single ) ) {
                if ( group.isEmpty() ) {
-                    QStringList groups = getNamesOfRegisterGroups();
+                    QStringList groups = namesOfRegisterGroups();
                     groups.removeOne ( enumToString ( VFP_single ) );
                     foreach ( QString g, groups ) {
                          IRegisterController::updateRegisters ( g );
@@ -280,5 +273,7 @@ RegistersGroup RegisterController_Arm::convertValuesForGroup ( RegistersGroup& r
 
      return registersGroup;
 }
+
+RegisterController_Arm::RegisterController_Arm ( QObject* parent, DebugSession* debugSession ) :IRegisterController ( parent, debugSession ), m_registerNamesInitialized ( false ) {}
 
 }

@@ -60,16 +60,6 @@ struct RegistersGroup {
      bool editable; ///<indicates if registers can be edited.
 };
 
-struct RegisterTooltip {
-     QString registerName;
-     QString tooltip;
-};
-
-struct RegistersTooltipGroup {
-     QString groupName;
-     QVector<RegisterTooltip> registers;
-};
-
 struct FlagRegister {
      QStringList flags;
      QStringList bits;
@@ -86,13 +76,10 @@ public:
      void setSession ( DebugSession* debugSession );
 
      ///There'll be at least 2 groups: "General" and "Flags", also "XMM", "FPU", "Segment" for x86, x86_64 architectures.
-     virtual QStringList getNamesOfRegisterGroups() const = 0;
-
-     ///Returns tooltips for each register in group in format: name, tooltip(e.g. C - carry flag...)
-     virtual RegistersTooltipGroup getTooltipsForRegistersInGroup ( const QString& group ) const = 0;
+     virtual QStringList namesOfRegisterGroups() const = 0;
 
      ///Returns registers from the @p group, or empty registers group if @p group is invalid. Use it only after @p registersInGroupChanged signal was emitted, otherwise registers won't be up to date.
-     RegistersGroup getRegistersFromGroup ( const QString& group, const RegistersFormat format = Raw );
+     RegistersGroup registersFromGroup ( const QString& group, const RegistersFormat format = Raw );
 
 public slots:
      ///Sends updated register's @p reg value to the debugger.
@@ -136,7 +123,7 @@ protected:
      void setFlagRegister ( const Register& reg, const FlagRegister& flag );
 
      ///Returns group that given register belongs to.
-     QString getGroupForRegisterName ( const QString& name );
+     QString groupForRegisterName ( const QString& name );
 
      ///Initializes registers, that is gets names of all available registers. Should be called once.
      void initializeRegisters();
@@ -144,7 +131,7 @@ protected:
 private :
 
      ///Handles initialization of register's names.
-     void getRegisterNamesHandler ( const GDBMI::ResultRecord& r );
+     void registerNamesHandler ( const GDBMI::ResultRecord& r );
 
      ///Handles updated values for registers.
      void updateRegisterValuesHandler ( const GDBMI::ResultRecord& r );
@@ -153,13 +140,13 @@ private:
      ///Register names as it sees debugger (in format: number, name).
      QVector<QString > m_rawRegisterNames;
 
+     ///Groups that should be updated(emitted @p registersInGroupChanged signal), if empty - all.
+     QStringList m_pendingGroups;
+
 protected:
 
      ///Registers in format: name, value
      QHash<QString, QString > m_registers;
-
-     ///Groups that should be updated(emitted @p registersInGroupChanged signal), if empty - all.
-     QStringList m_pendingGroups;
 
      ///Current debug session;
      DebugSession* m_debugSession;
@@ -169,8 +156,6 @@ protected:
 
 Q_DECLARE_TYPEINFO(GDBDebugger::Register, Q_MOVABLE_TYPE);
 Q_DECLARE_TYPEINFO(GDBDebugger::RegistersGroup, Q_MOVABLE_TYPE);
-Q_DECLARE_TYPEINFO(GDBDebugger::RegisterTooltip, Q_MOVABLE_TYPE);
-Q_DECLARE_TYPEINFO(GDBDebugger::RegistersTooltipGroup, Q_MOVABLE_TYPE);
 Q_DECLARE_TYPEINFO(GDBDebugger::FlagRegister, Q_MOVABLE_TYPE);
 
 #endif

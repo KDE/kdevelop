@@ -35,12 +35,9 @@ class DebugSession;
 class RegisterController_Arm : public IRegisterController {
 public:
 
-     RegisterController_Arm ( QObject* parent, DebugSession* debugSession = 0 ) :IRegisterController ( parent, debugSession ), m_registerNamesInitialized ( false ) {}
-     ~RegisterController_Arm () {}
+     RegisterController_Arm ( QObject* parent, DebugSession* debugSession = 0 );
 
-     virtual RegistersTooltipGroup getTooltipsForRegistersInGroup ( const QString& group ) const;
-
-     virtual QStringList getNamesOfRegisterGroups() const;
+     virtual QStringList namesOfRegisterGroups() const;
 
 public slots:
      virtual void updateRegisters ( const QString& group = QString() );

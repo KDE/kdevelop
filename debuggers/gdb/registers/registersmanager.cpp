@@ -57,7 +57,7 @@ void ArchitectureParser::parseArchitecture()
      emit architectureParsed ( arch );
 }
 
-void ArchitectureParser::getRegisterNamesHandler ( const GDBMI::ResultRecord& r )
+void ArchitectureParser::registerNamesHandler ( const GDBMI::ResultRecord& r )
 {
      const GDBMI::Value& names = r["register-names"];
 
@@ -76,7 +76,7 @@ void ArchitectureParser::determineArchitecture ( DebugSession* debugSession )
 {
      if ( debugSession ) {
           debugSession->addCommand (
-               new GDBCommand ( GDBMI::DataListRegisterNames, "", this, &ArchitectureParser::getRegisterNamesHandler ) );
+               new GDBCommand ( GDBMI::DataListRegisterNames, "", this, &ArchitectureParser::registerNamesHandler ) );
      }
 }
 

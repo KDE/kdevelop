@@ -90,7 +90,7 @@ void RegistersView::contextMenuEvent ( QContextMenuEvent* e )
 {
      QStringList groups;
      if ( m_registerController ) {
-          groups = m_registerController->getNamesOfRegisterGroups();
+          groups = m_registerController->namesOfRegisterGroups();
      }
 
      m_menu->clear();
@@ -102,7 +102,7 @@ void RegistersView::contextMenuEvent ( QContextMenuEvent* e )
      foreach ( QString group, groups ) {
           a = m->addAction ( group );
           a->setCheckable ( true );
-          if ( !m_tablesManager.getTableForGroup ( group ).isNull() ) {
+          if ( !m_tablesManager.tableForGroup ( group ).isNull() ) {
                a->setChecked ( true );
           } else if ( !m_tablesManager.numOfFreeTables() ) {
                a->setEnabled ( false );
@@ -146,7 +146,7 @@ void RegistersView::menuTriggered ( QAction* group )
      } else {
           kDebug() << "Changing table for group" << group->text();
           Table t;
-          t = m_tablesManager.getTableForGroup ( group->text() );
+          t = m_tablesManager.tableForGroup ( group->text() );
           //already showing
           if ( !t.isNull() ) {
                m_tablesManager.removeAssociation ( group->text() );
@@ -161,7 +161,7 @@ void RegistersView::menuTriggered ( QAction* group )
      }
 }
 
-RegistersView::Table RegistersView::TablesManager::getTableForGroup ( const QString& group ) const
+RegistersView::Table RegistersView::TablesManager::tableForGroup ( const QString& group ) const
 {
      Table t;
 
@@ -245,9 +245,9 @@ void RegistersView::registersInGroupChanged ( const QString& group )
      kDebug() << "Updating GUI";
 
      if ( m_registerController ) {
-          const RegistersGroup& registersGroup = m_registerController->getRegistersFromGroup ( group, ( RegistersFormat ) m_registersFormat );
+          const RegistersGroup& registersGroup = m_registerController->registersFromGroup ( group, ( RegistersFormat ) m_registersFormat );
 
-          Table t = m_tablesManager.getTableForGroup ( registersGroup.groupName );
+          Table t = m_tablesManager.tableForGroup ( registersGroup.groupName );
           if ( !t.isNull() ) {
                updateRegistersInTable ( t, registersGroup );
           }
@@ -263,8 +263,8 @@ void RegistersView::setController ( IRegisterController* controller )
           connect ( this, SIGNAL ( registerChanged ( const Register& ) ), controller, SLOT ( setRegisterValue ( const Register& ) ) );
 
           //if architecture has changed, clear all tables.
-          QStringList groups = controller->getNamesOfRegisterGroups();
-          foreach ( QString g, m_tablesManager.getAllGroups() ) {
+          QStringList groups = controller->namesOfRegisterGroups();
+          foreach ( QString g, m_tablesManager.allGroups() ) {
                if ( !groups.contains ( g ) ) {
                     m_tablesManager.clearAllAssociations();
                     m_tablesManager.createTableForGroup ( "General" );
@@ -276,7 +276,7 @@ void RegistersView::setController ( IRegisterController* controller )
      m_registerController = controller;
 }
 
-const QStringList RegistersView::TablesManager::getAllGroups() const
+const QStringList RegistersView::TablesManager::allGroups() const
 {
      QStringList groups;
      foreach ( TableRegistersAssociation a, m_tableRegistersAssociation ) {
@@ -292,7 +292,7 @@ void RegistersView::TablesManager::save()
      m_config.writeEntry ( "format", m_parent->m_registersFormat );
      m_config.writeEntry ( "number", m_tableRegistersAssociation.count() - numOfFreeTables() );
 
-     QStringList groups = getAllGroups();
+     QStringList groups = allGroups();
 
      for ( int i = 0; i < groups.count(); i++ ) {
           kDebug() << "Saving group" << groups[i];

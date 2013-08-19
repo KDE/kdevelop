@@ -60,7 +60,7 @@ void IRegisterController::updateRegisters ( const QString& group )
      }
 }
 
-void IRegisterController::getRegisterNamesHandler ( const GDBMI::ResultRecord& r )
+void IRegisterController::registerNamesHandler ( const GDBMI::ResultRecord& r )
 {
      const GDBMI::Value& names = r["register-names"];
 
@@ -91,7 +91,7 @@ void IRegisterController::updateRegisterValuesHandler ( const GDBMI::ResultRecor
      }
 
      kDebug() << "groups to change registers: " << m_pendingGroups;
-     foreach ( QString group, getNamesOfRegisterGroups() ) {
+     foreach ( QString group, namesOfRegisterGroups() ) {
           if ( m_pendingGroups.isEmpty() || m_pendingGroups.contains ( group ) ) {
                emit registersInGroupChanged ( group );
           }
@@ -103,7 +103,7 @@ void IRegisterController::setRegisterValue ( const Register& reg )
 {
 
      if ( !m_rawRegisterNames.isEmpty() ) {
-          QString group = getGroupForRegisterName ( reg.name );
+          QString group = groupForRegisterName ( reg.name );
           if ( !group.isEmpty() ) {
                setRegisterValueForGroup ( group, reg );
           }
@@ -127,12 +127,12 @@ QString IRegisterController::registerValue ( const QString& name ) const
 void IRegisterController::initializeRegisters()
 {
      m_debugSession->addCommand (
-          new GDBCommand ( GDBMI::DataListRegisterNames, "", this, &IRegisterController::getRegisterNamesHandler ) );
+          new GDBCommand ( GDBMI::DataListRegisterNames, "", this, &IRegisterController::registerNamesHandler ) );
 }
 
-QString IRegisterController::getGroupForRegisterName ( const QString& name )
+QString IRegisterController::groupForRegisterName ( const QString& name )
 {
-     foreach ( QString group, getNamesOfRegisterGroups() ) {
+     foreach ( QString group, namesOfRegisterGroups() ) {
           RegistersGroup registersInGroups = registersFromGroupInternally ( group );
           foreach ( Register r, registersInGroups.registers ) {
                if ( r.name == name ) {
@@ -143,7 +143,7 @@ QString IRegisterController::getGroupForRegisterName ( const QString& name )
      return QString();
 }
 
-RegistersGroup IRegisterController::getRegistersFromGroup ( const QString& group, const RegistersFormat format )
+RegistersGroup IRegisterController::registersFromGroup ( const QString& group, const RegistersFormat format )
 {
      return convertValuesForGroup ( fillValuesForRegisters ( registersFromGroupInternally ( group ) ), format );
 }

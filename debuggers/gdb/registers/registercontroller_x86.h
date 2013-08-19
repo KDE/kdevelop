@@ -34,17 +34,13 @@ class DebugSession;
 class RegisterControllerGeneral_x86 : public IRegisterController {
 public:
 
-     virtual RegistersTooltipGroup getTooltipsForRegistersInGroup ( const QString& group ) const;
-
-     virtual QStringList getNamesOfRegisterGroups() const;
+     virtual QStringList namesOfRegisterGroups() const;
 
 public slots:
      virtual void updateRegisters ( const QString& group = QString() );
 
 protected:
      RegisterControllerGeneral_x86 ( QObject* parent, DebugSession* debugSession = 0 ) :IRegisterController ( parent, debugSession ), m_registerNamesInitialized ( false ) {}
-
-     virtual ~RegisterControllerGeneral_x86() {}
 
      virtual RegistersGroup& registersFromGroupInternally ( const QString& group );
 
@@ -77,9 +73,7 @@ protected:
 class RegisterController_x86 : public RegisterControllerGeneral_x86 {
 
 public:
-     RegisterController_x86 ( QObject* parent, DebugSession* debugSession = 0 ) :RegisterControllerGeneral_x86 ( parent, debugSession ) {}
-
-     ~RegisterController_x86() {}
+     RegisterController_x86 ( QObject* parent, DebugSession* debugSession = 0 );
 
 private:
      virtual RegistersGroup& registersFromGroupInternally ( const QString& group );
@@ -88,9 +82,8 @@ private:
 class RegisterController_x86_64 : public RegisterControllerGeneral_x86 {
 
 public:
-     RegisterController_x86_64 ( QObject* parent, DebugSession* debugSession = 0 ) :RegisterControllerGeneral_x86 ( parent, debugSession ) {}
+     RegisterController_x86_64 ( QObject* parent, DebugSession* debugSession = 0 );
 
-     ~RegisterController_x86_64() {}
 private:
 
      virtual RegistersGroup& registersFromGroupInternally ( const QString& group );

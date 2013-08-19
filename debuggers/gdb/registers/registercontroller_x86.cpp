@@ -95,7 +95,7 @@ RegistersGroup& RegisterControllerGeneral_x86::registersFromGroupInternally ( co
      return v;
 }
 
-QStringList RegisterControllerGeneral_x86::getNamesOfRegisterGroups() const
+QStringList RegisterControllerGeneral_x86::namesOfRegisterGroups() const
 {
      static QStringList registerGroups;
      static bool initialized = false;
@@ -165,13 +165,6 @@ void RegisterControllerGeneral_x86::setSegmentRegister ( const Register& reg )
      setGeneralRegister ( reg, enumToString ( Segment ) );
 }
 
-//TODO:
-RegistersTooltipGroup RegisterControllerGeneral_x86::getTooltipsForRegistersInGroup ( const QString& /*group*/ ) const
-{
-     static RegistersTooltipGroup v;
-     return v;
-}
-
 void RegisterControllerGeneral_x86::updateRegisters ( const QString& group )
 {
      if ( m_debugSession && !m_debugSession->stateIsOn ( s_dbgNotStarted|s_shuttingDown ) ) {
@@ -182,7 +175,7 @@ void RegisterControllerGeneral_x86::updateRegisters ( const QString& group )
 
           if ( group != enumToString ( FPU ) ) {
                if ( group.isEmpty() ) {
-                    QStringList groups = getNamesOfRegisterGroups();
+                    QStringList groups = namesOfRegisterGroups();
                     groups.removeOne ( enumToString ( FPU ) );
                     foreach ( QString g, groups ) {
                          IRegisterController::updateRegisters ( g );
@@ -323,5 +316,9 @@ void RegisterControllerGeneral_x86::handleFPURegisters ( const QStringList& reco
           emit registersInGroupChanged ( enumToString ( FPU ) );
      }
 }
+
+RegisterController_x86::RegisterController_x86 ( QObject* parent, DebugSession* debugSession ) :RegisterControllerGeneral_x86 ( parent, debugSession ) {}
+
+RegisterController_x86_64::RegisterController_x86_64 ( QObject* parent, DebugSession* debugSession ) :RegisterControllerGeneral_x86 ( parent, debugSession ) {}
 
 }

@@ -81,7 +81,7 @@ private:
           void save();
           void load();
           ///Returns the table associated with the @p group, empty table if there is no association.
-          Table getTableForGroup ( const QString& group ) const;
+          Table tableForGroup ( const QString& group ) const;
           ///Creates association between @p group and table. Returns the table associated with the group, empty table if there is no more empty tables, or already exists association for this group
           Table createTableForGroup ( const QString& group );
           ///Removes association between @p group and table if any.
@@ -91,7 +91,7 @@ private:
           void addTable ( Table table );
 
           ///Return names of all associated groups,
-          const QStringList getAllGroups() const;
+          const QStringList allGroups() const;
 
           ///@return: number of empty tables.
           int numOfFreeTables() const;
