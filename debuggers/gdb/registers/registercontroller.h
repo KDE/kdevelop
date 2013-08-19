@@ -104,8 +104,11 @@ protected:
      ///Returns names of registers  without value(or with invalid one). Can be useful to get names of all registers from a group. It's used as parameter to @sa fillValuesForRegisters.
      virtual RegistersGroup& registersFromGroupInternally ( const QString& group ) = 0;
 
-     ///Fills value for each register in @p RegistersGroup.
-     virtual RegistersGroup& fillValuesForRegisters ( RegistersGroup& registers );
+     ///Return names of all registers for @p group.
+     virtual QStringList registerNamesForGroup ( const QString& group ) = 0;
+
+     ///Updates value for each register in @p RegistersGroup.
+     virtual RegistersGroup& updateValuesForRegisters ( RegistersGroup& registers );
 
      ///Sets new value for register @p reg, from group @p group.
      virtual void setGeneralRegister ( const Register& reg, const QString& group );

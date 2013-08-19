@@ -40,17 +40,19 @@ public slots:
      virtual void updateRegisters ( const QString& group = QString() );
 
 protected:
-     RegisterControllerGeneral_x86 ( QObject* parent, DebugSession* debugSession = 0 ) :IRegisterController ( parent, debugSession ), m_registerNamesInitialized ( false ) {}
+     RegisterControllerGeneral_x86 ( QObject* parent, DebugSession* debugSession = 0 );
 
      virtual RegistersGroup& registersFromGroupInternally ( const QString& group );
 
      virtual RegistersGroup convertValuesForGroup ( RegistersGroup& registersGroup, RegistersFormat format = Raw );
 
-     virtual RegistersGroup& fillValuesForRegisters ( RegistersGroup& registers );
+     virtual QStringList registerNamesForGroup ( const QString& group );
+
+     virtual RegistersGroup& updateValuesForRegisters ( RegistersGroup& registers );
 
      virtual void setRegisterValueForGroup ( const QString& group, const Register& reg );
 
-     RegistersGroup fillFlags ( RegistersGroup& flagsGroup );
+     RegistersGroup updateFlagValues ( RegistersGroup& flagsGroup );
 
      //this is a workaround for FPU registers.
      void handleFPURegisters(const QStringList& record);
@@ -64,9 +66,19 @@ protected:
      void setXMMRegister ( const Register& reg );
      void setSegmentRegister ( const Register& reg );
      void setEFfagRegister ( const Register& reg );
+private:
+    void initRegisterNames();;
+
+protected:
+     QStringList m_FPUregisterNames;
+     QStringList m_flagRegisterNames;
+     QStringList m_segmentRegisterNames;
+     QStringList m_generalPurposeRegisterNames;
+     QStringList m_XMMregisterNames;
 
      static FlagRegister m_eflags;
 
+     ///Indicates if register names were initialized.
      bool m_registerNamesInitialized;
 };
 
@@ -76,7 +88,7 @@ public:
      RegisterController_x86 ( QObject* parent, DebugSession* debugSession = 0 );
 
 private:
-     virtual RegistersGroup& registersFromGroupInternally ( const QString& group );
+     void initRegisterNames();
 };
 
 class RegisterController_x86_64 : public RegisterControllerGeneral_x86 {
@@ -85,8 +97,7 @@ public:
      RegisterController_x86_64 ( QObject* parent, DebugSession* debugSession = 0 );
 
 private:
-
-     virtual RegistersGroup& registersFromGroupInternally ( const QString& group );
+     void initRegisterNames();
 };
 }
 

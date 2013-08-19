@@ -32,13 +32,13 @@ namespace GDBDebugger {
 
 FlagRegister RegisterController_Arm::m_cpsr;
 
-RegistersGroup&  RegisterController_Arm::fillValuesForRegisters ( RegistersGroup& registers )
+RegistersGroup&  RegisterController_Arm::updateValuesForRegisters ( RegistersGroup& registers )
 {
-     kDebug() << "Filling values for registers: " << registers.groupName;
+     kDebug() << "Updating values for registers: " << registers.groupName;
      if ( registers.groupName == enumToString ( Flags ) ) {
-          registers = fillFlags ( registers );
+          registers = updateFlagValues ( registers );
      } else {
-          registers = IRegisterController::fillValuesForRegisters ( registers );
+          registers = IRegisterController::updateValuesForRegisters ( registers );
      }
 
      return registers;
@@ -46,86 +46,30 @@ RegistersGroup&  RegisterController_Arm::fillValuesForRegisters ( RegistersGroup
 
 RegistersGroup& RegisterController_Arm::registersFromGroupInternally ( const QString& group )
 {
-     static RegistersGroup VFP_singleregisters;
-     static RegistersGroup FlagRegisters;
-     static RegistersGroup VFP_doubleRegisters;
-     static RegistersGroup GeneralRegisters;
-     static RegistersGroup VFP_quadRegisters;
+     RegistersGroup registers;
 
-     static bool initialized = false;
-
-     if ( !initialized ) {
-
-          VFP_singleregisters.groupName = enumToString ( VFP_single );
-          for ( int i = 0; i < 32; i++ ) {
-               VFP_singleregisters.registers.push_back ( Register ( "s" + QString::number ( i ), QString() ) );
-          }
-
-          FlagRegisters.groupName = enumToString ( Flags );
-          FlagRegisters.flag = true;
-          m_cpsr.registerName = "cpsr";
-          m_cpsr.flags << "Q" << "V" << "C" << "Z" << "N";
-          m_cpsr.bits << "27" << "28" << "29" << "30" << "31";
-          for ( int i = 0; i < m_cpsr.flags.size(); i++ ) {
-               FlagRegisters.registers.push_back ( Register ( m_cpsr.flags[i], QString() ) );
-          }
-
-          GeneralRegisters.groupName = enumToString ( General );
-          for ( int i = 0; i < 13; i++ ) {
-               GeneralRegisters.registers.push_back ( Register ( "r" + QString::number ( i ), QString() ) );
-          }
-          GeneralRegisters.registers.push_back ( Register ( "sp", QString() ) );
-          GeneralRegisters.registers.push_back ( Register ( "lr", QString() ) );
-          GeneralRegisters.registers.push_back ( Register ( "pc", QString() ) );
-
-          VFP_doubleRegisters.groupName = enumToString ( VFP_double );
-          VFP_doubleRegisters.editable = false;
-          for ( int i = 0; i < 32; i++ ) {
-               VFP_doubleRegisters.registers.push_back ( Register ( "d" + QString::number ( i ), QString() ) );
-          }
-
-          VFP_quadRegisters.groupName = enumToString ( VFP_quad );
-          VFP_quadRegisters.editable = false;
-          for ( int i = 0; i < 16; i++ ) {
-               VFP_quadRegisters.registers.push_back ( Register ( "q" + QString::number ( i ), QString() ) );
-          }
-
-          initialized = true;
+     registers.groupName = group;
+     registers.editable = ( group == enumToString ( VFP_double ) || group == enumToString ( VFP_quad ) ) ? false : true;
+     registers.flag = ( group == enumToString ( Flags ) ) ? true : false;
+     foreach ( QString name, registerNamesForGroup ( group ) ) {
+          registers.registers.append ( Register ( name, QString() ) );
      }
 
-     if ( group == enumToString ( Flags ) ) {
-          return FlagRegisters;
-     } else if ( group == enumToString ( VFP_single ) ) {
-          return VFP_singleregisters;
-     }  else if ( group == enumToString ( VFP_quad ) ) {
-          return VFP_quadRegisters;
-     }  else if ( group == enumToString ( VFP_double ) ) {
-          return VFP_doubleRegisters;
-     }  else if ( group == enumToString ( General ) ) {
-          return GeneralRegisters;
-     } else {
-          kDebug() << group << "is incorrect group";
-     }
-
-     static RegistersGroup v;
-     return v;
+     return updateValuesForRegisters ( registers );
 }
 
 QStringList RegisterController_Arm::namesOfRegisterGroups() const
 {
-     static QStringList registerGroups;
-     static bool initialized = false;
-     if ( !initialized ) {
-          registerGroups << enumToString ( General ) << enumToString ( Flags ) << enumToString ( VFP_single ) << enumToString ( VFP_double ) << enumToString ( VFP_quad );
-          initialized = true;
-     }
+     QStringList registerGroups;
+     registerGroups << enumToString ( General ) << enumToString ( Flags ) << enumToString ( VFP_single ) << enumToString ( VFP_double ) << enumToString ( VFP_quad );
+
      return registerGroups;
 }
 
-RegistersGroup RegisterController_Arm::fillFlags ( RegistersGroup& flagsGroup )
+RegistersGroup RegisterController_Arm::updateFlagValues ( RegistersGroup& flagsGroup )
 {
 
-     kDebug() << "Filling flags";
+     kDebug() << "Updating flags";
 
      bool ok;
      quint32 flagsValue = registerValue ( m_cpsr.registerName ).toUInt ( &ok,16 );
@@ -201,8 +145,8 @@ void RegisterController_Arm::updateRegisters ( const QString& group )
 
           if ( group == enumToString ( VFP_single ) || group.isEmpty() ) {
                QString command = "info all-registers ";
-               foreach ( Register r, registersFromGroupInternally ( enumToString ( VFP_single ) ).registers ) {
-                    command += "$" + r.name + ' ';
+               foreach ( QString name, registerNamesForGroup ( enumToString ( VFP_single ) ) ) {
+                    command += "$" + name + ' ';
                }
 
                if ( m_debugSession && !m_debugSession->stateIsOn ( s_dbgNotStarted|s_shuttingDown ) ) {
@@ -275,5 +219,48 @@ RegistersGroup RegisterController_Arm::convertValuesForGroup ( RegistersGroup& r
 }
 
 RegisterController_Arm::RegisterController_Arm ( QObject* parent, DebugSession* debugSession ) :IRegisterController ( parent, debugSession ), m_registerNamesInitialized ( false ) {}
+
+void RegisterController_Arm::initRegisterNames()
+{
+     for ( int i = 0; i < 32; i++ ) {
+          m_VFP_singleregisterNames << ( "s" + QString::number ( i ), QString() );
+     }
+
+     m_cpsr.registerName = "cpsr";
+     m_cpsr.flags << "Q" << "V" << "C" << "Z" << "N";
+     m_cpsr.bits << "27" << "28" << "29" << "30" << "31";
+
+     m_flagRegisterNames = m_cpsr.flags;
+
+     for ( int i = 0; i < 13; i++ ) {
+          m_generalRegisterNames << ( "r" + QString::number ( i ) );
+     }
+     m_generalRegisterNames << "sp" << "lr" << "pc";
+
+     for ( int i = 0; i < 32; i++ ) {
+          m_VFP_doubleRegisterNames << ( "d" + QString::number ( i ) );
+     }
+
+     for ( int i = 0; i < 16; i++ ) {
+          m_VFP_quadRegisterNames << ( "q" + QString::number ( i ) );
+     }
+}
+
+QStringList RegisterController_Arm::registerNamesForGroup ( const QString& group )
+{
+     if ( group == enumToString ( General ) ) {
+          return m_generalRegisterNames;
+     } else if ( group == enumToString ( Flags ) ) {
+          return m_flagRegisterNames;
+     } else if ( group == enumToString ( VFP_single ) ) {
+          return m_VFP_singleregisterNames;
+     } else if ( group == enumToString ( VFP_double ) ) {
+          return m_VFP_doubleRegisterNames;
+     } else if ( group == enumToString ( VFP_quad ) ) {
+          return m_VFP_quadRegisterNames;
+     } else {
+          return QStringList();
+     }
+}
 
 }

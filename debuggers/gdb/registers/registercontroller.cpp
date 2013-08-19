@@ -145,10 +145,10 @@ QString IRegisterController::groupForRegisterName ( const QString& name )
 
 RegistersGroup IRegisterController::registersFromGroup ( const QString& group, const RegistersFormat format )
 {
-     return convertValuesForGroup ( fillValuesForRegisters ( registersFromGroupInternally ( group ) ), format );
+     return convertValuesForGroup ( registersFromGroupInternally ( group ) , format );
 }
 
-RegistersGroup& IRegisterController::fillValuesForRegisters ( RegistersGroup& registers )
+RegistersGroup& IRegisterController::updateValuesForRegisters ( RegistersGroup& registers )
 {
      if ( m_rawRegisterNames.isEmpty() ) {
           kDebug() << "Registers not initialized yet";

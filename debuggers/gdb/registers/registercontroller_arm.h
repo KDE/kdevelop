@@ -46,12 +46,13 @@ protected:
      virtual RegistersGroup& registersFromGroupInternally ( const QString& group );
 
      virtual RegistersGroup convertValuesForGroup ( RegistersGroup& registersGroup, RegistersFormat format = Raw );
+     virtual QStringList registerNamesForGroup ( const QString& group );
 
-     virtual RegistersGroup& fillValuesForRegisters ( RegistersGroup& registers );
+     virtual RegistersGroup& updateValuesForRegisters ( RegistersGroup& registers );
 
      virtual void setRegisterValueForGroup ( const QString& group, const Register& reg );
 
-     RegistersGroup fillFlags ( RegistersGroup& flagsGroup );
+     RegistersGroup updateFlagValues ( RegistersGroup& flagsGroup );
 
      enum RegisterGroups {General, Flags, VFP_single, VFP_double, VFP_quad};
 
@@ -65,7 +66,15 @@ protected:
      //VFP registers workaround.
      void handleVFPSRegisters( const QStringList& record );
 
+     QStringList m_VFP_singleregisterNames;
+     QStringList m_flagRegisterNames;
+     QStringList m_VFP_doubleRegisterNames;
+     QStringList m_generalRegisterNames;
+     QStringList m_VFP_quadRegisterNames;
+
 private:
+     void initRegisterNames();
+
      static FlagRegister m_cpsr;
 
      bool m_registerNamesInitialized;
