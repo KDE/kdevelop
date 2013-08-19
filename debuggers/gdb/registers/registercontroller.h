@@ -46,7 +46,7 @@ enum RegistersFormat {
 ///Register in format: @p name, @p value
 struct Register {
      Register() {}
-     Register ( QString _name, QString _value ):name(_name), value(_value) {}
+     Register ( const QString& _name, const QString& _value ):name(_name), value(_value) {}
      QString name;
      QString value;
 };
@@ -79,7 +79,7 @@ public:
      virtual QStringList namesOfRegisterGroups() const = 0;
 
      ///Returns registers from the @p group, or empty registers group if @p group is invalid. Use it only after @p registersInGroupChanged signal was emitted, otherwise registers won't be up to date.
-     RegistersGroup registersFromGroup ( const QString& group, const RegistersFormat format = Raw );
+     RegistersGroup registersFromGroup ( const QString& group, const RegistersFormat& format = Raw );
 
 public slots:
      ///Sends updated register's @p reg value to the debugger.
@@ -116,7 +116,7 @@ protected:
 
      ///Converts registers in @p registersGroup to the format @p format.
      ///@return: the same group with converted(if any) values.
-     virtual RegistersGroup& convertValuesForGroup ( RegistersGroup& registersGroup, RegistersFormat format = Raw );
+     virtual RegistersGroup& convertValuesForGroup ( RegistersGroup& registersGroup, const RegistersFormat& format = Raw );
 
      ///Returns value for the given @p name, empty string if the name is incorrect or there is no registers yet.
      QString registerValue ( const QString& name ) const;

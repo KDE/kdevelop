@@ -111,7 +111,7 @@ DisassembleWindow::DisassembleWindow(QWidget *parent, DisassembleWidget* widget)
 
     m_runUntilCursor = new QAction(KIcon("debug-run-cursor"), i18n("&Run to Cursor"), this);
     m_runUntilCursor->setWhatsThis(i18n("Continues execution until the cursor position is reached."));
-    connect(m_runUntilCursor,SIGNAL(triggered()), this->parent()->parent(), SLOT(runToCursor()));
+    connect(m_runUntilCursor,SIGNAL(triggered()), widget, SLOT(runToCursor()));
     }
 }
 

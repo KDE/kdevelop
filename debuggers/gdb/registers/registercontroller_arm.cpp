@@ -122,7 +122,9 @@ void RegisterController_Arm::setVFPQ_Register ( const Register& /*reg */)
 
 void RegisterController_Arm::updateRegisters ( const QString& group )
 {
-     if ( m_debugSession && !m_debugSession->stateIsOn ( s_dbgNotStarted|s_shuttingDown ) ) {
+     if ( !m_debugSession || m_debugSession->stateIsOn ( s_dbgNotStarted|s_shuttingDown ) ) {
+         return;
+     }
 
           if ( !m_registerNamesInitialized ) {
                initializeRegisters();
@@ -133,7 +135,7 @@ void RegisterController_Arm::updateRegisters ( const QString& group )
                if ( group.isEmpty() ) {
                     QStringList groups = namesOfRegisterGroups();
                     groups.removeOne ( enumToString ( VFP_single ) );
-                    foreach ( QString g, groups ) {
+                    foreach ( const QString g, groups ) {
                          IRegisterController::updateRegisters ( g );
                     }
                } else {
@@ -143,7 +145,7 @@ void RegisterController_Arm::updateRegisters ( const QString& group )
 
           if ( group == enumToString ( VFP_single ) || group.isEmpty() ) {
                QString command = "info all-registers ";
-               foreach ( QString name, registerNamesForGroup ( enumToString ( VFP_single ) ) ) {
+               foreach ( const QString name, registerNamesForGroup ( enumToString ( VFP_single ) ) ) {
                     command += "$" + name + ' ';
                }
 
@@ -158,14 +160,13 @@ void RegisterController_Arm::updateRegisters ( const QString& group )
                     IRegisterController::updateRegisters ( enumToString ( VFP_quad ) );
                }
           }
-     }
 }
 
 void RegisterController_Arm::handleVFPSRegisters ( const QStringList& record )
 {
-     QRegExp rx ( "^(s\\d+)\\s+((?:-?\\d+\\.?\\d+(?:e(\\+|-)\\d+)?)|(?:\\d+))$" );
+     const QRegExp rx ( "^(s\\d+)\\s+((?:-?\\d+\\.?\\d+(?:e(\\+|-)\\d+)?)|(?:\\d+))$" );
      QVector<Register> registers;
-     foreach ( QString s, record ) {
+     foreach ( const QString s, record ) {
           if ( rx.exactMatch ( s ) ) {
                registers.push_back ( Register ( rx.cap ( 1 ), rx.cap ( 2 ) ) );
           }
@@ -179,7 +180,7 @@ void RegisterController_Arm::handleVFPSRegisters ( const QStringList& record )
                kDebug() << r.name << ' ' << r.value;
           }
      } else {
-          foreach ( Register r, registers ) {
+          foreach ( const Register r, registers ) {
                if ( m_registers.contains ( r.name ) ) {
                     m_registers[r.name] = r.value;
                }
@@ -188,7 +189,7 @@ void RegisterController_Arm::handleVFPSRegisters ( const QStringList& record )
      }
 }
 
-QString RegisterController_Arm::enumToString ( const RegisterGroups group ) const
+QString RegisterController_Arm::enumToString ( const RegisterGroups& group ) const
 {
      switch ( group ) {
      case General:
@@ -205,7 +206,7 @@ QString RegisterController_Arm::enumToString ( const RegisterGroups group ) cons
      return QString();
 }
 
-RegistersGroup& RegisterController_Arm::convertValuesForGroup ( RegistersGroup& registersGroup, RegistersFormat format )
+RegistersGroup& RegisterController_Arm::convertValuesForGroup ( RegistersGroup& registersGroup, const RegistersFormat& format )
 {
      if ( format != Raw && format != Natural ) {
           if ( registersGroup.groupName == enumToString ( General ) ) {

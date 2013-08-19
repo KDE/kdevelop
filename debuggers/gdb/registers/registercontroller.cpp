@@ -91,7 +91,7 @@ void IRegisterController::updateRegisterValuesHandler ( const GDBMI::ResultRecor
      }
 
      kDebug() << "groups to change registers: " << m_pendingGroups;
-     foreach ( QString group, namesOfRegisterGroups() ) {
+     foreach ( const QString group, namesOfRegisterGroups() ) {
           if ( m_pendingGroups.isEmpty() || m_pendingGroups.contains ( group ) ) {
                emit registersInGroupChanged ( group );
           }
@@ -103,7 +103,7 @@ void IRegisterController::setRegisterValue ( const Register& reg )
 {
 
      if ( !m_rawRegisterNames.isEmpty() ) {
-          QString group = groupForRegisterName ( reg.name );
+          const QString group = groupForRegisterName ( reg.name );
           if ( !group.isEmpty() ) {
                setRegisterValueForGroup ( group, reg );
           }
@@ -115,7 +115,7 @@ void IRegisterController::setRegisterValue ( const Register& reg )
 QString IRegisterController::registerValue ( const QString& name ) const
 {
      Q_ASSERT ( !m_rawRegisterNames.isEmpty() );
-     static QString value;
+     QString value;
      if ( !name.isEmpty() ) {
           if ( m_registers.contains ( name ) ) {
                value = m_registers.value ( name );
@@ -132,9 +132,9 @@ void IRegisterController::initializeRegisters()
 
 QString IRegisterController::groupForRegisterName ( const QString& name )
 {
-     foreach ( QString group, namesOfRegisterGroups() ) {
+     foreach ( const QString group, namesOfRegisterGroups() ) {
           RegistersGroup registersInGroups = registersFromGroupInternally ( group );
-          foreach ( Register r, registersInGroups.registers ) {
+          foreach ( const Register r, registersInGroups.registers ) {
                if ( r.name == name ) {
                     return group;
                }
@@ -143,7 +143,7 @@ QString IRegisterController::groupForRegisterName ( const QString& name )
      return QString();
 }
 
-RegistersGroup IRegisterController::registersFromGroup ( const QString& group, const RegistersFormat format )
+RegistersGroup IRegisterController::registersFromGroup ( const QString& group, const RegistersFormat& format )
 {
      RegistersGroup g = registersFromGroupInternally ( group );
      return convertValuesForGroup ( g, format );
@@ -184,7 +184,7 @@ void IRegisterController::setFlagRegister ( const Register& reg, const FlagRegis
 
 void IRegisterController::setGeneralRegister ( const Register& reg, const QString& group )
 {
-     QString command = QString ( "set var $%1=%2" ).arg ( reg.name ).arg ( reg.value );
+     const QString command = QString ( "set var $%1=%2" ).arg ( reg.name ).arg ( reg.value );
      kDebug() << "Setting general register" << command;
 
      if ( m_debugSession ) {
@@ -195,12 +195,12 @@ void IRegisterController::setGeneralRegister ( const Register& reg, const QStrin
      }
 }
 
-RegistersGroup& IRegisterController::convertValuesForGroup ( RegistersGroup& registersGroup, RegistersFormat format )
+RegistersGroup& IRegisterController::convertValuesForGroup ( RegistersGroup& registersGroup, const RegistersFormat& format )
 {
      kDebug() << "Converting for group" << registersGroup.groupName;
      bool ok;
      for ( int i = 0; i < registersGroup.registers.size(); i++ ) {
-          QString converted = QString::number ( registersGroup.registers[i].value.toULongLong ( &ok, 16 ), ( int ) format );
+          const QString converted = QString::number ( registersGroup.registers[i].value.toULongLong ( &ok, 16 ), ( int ) format );
           // kDebug() << "Before " << registersGroup.registers[i].value;
           if ( ok ) {
                registersGroup.registers[i].value = converted;

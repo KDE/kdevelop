@@ -45,30 +45,31 @@ RegistersView::RegistersView ( QWidget* p ) : QWidget ( p ), m_registerControlle
      m_tablesManager.load();
 }
 
-void RegistersView::updateRegistersInTable ( Table tableName, const RegistersGroup& registersGroup )
+void RegistersView::updateRegistersInTable ( const Table& table, const RegistersGroup& registersGroup )
 {
-     tableName.name->setText ( registersGroup.groupName );
+     Table _table = table;
+     _table.name->setText ( registersGroup.groupName );
 
-     tableName.tableWidget->blockSignals ( true );
+     _table.tableWidget->blockSignals ( true );
 
-     tableName.tableWidget->setRowCount ( registersGroup.registers.size() );
-     kDebug() << "rows " << tableName.tableWidget->rowCount();
+     _table.tableWidget->setRowCount ( registersGroup.registers.size() );
+     kDebug() << "rows " << _table.tableWidget->rowCount();
      for ( int i = 0 ; i < registersGroup.registers.size(); ++i ) {
           QTableWidgetItem *newItem = new QTableWidgetItem ( registersGroup.registers[i].name );
           newItem->setFlags ( Qt::ItemIsEnabled );
-          tableName.tableWidget->setItem ( i, RegisterName, newItem );
+          _table.tableWidget->setItem ( i, RegisterName, newItem );
 
           newItem = new QTableWidgetItem ( registersGroup.registers[i].value );
           if ( registersGroup.flag || !registersGroup.editable ) {
                newItem->setFlags ( Qt::ItemIsEnabled );
           }
-          tableName.tableWidget->setItem ( i, RegisterValue, newItem );
+          _table.tableWidget->setItem ( i, RegisterValue, newItem );
      }
 
-     int width = tableName.tableWidget->columnWidth ( RegisterName ) + tableName.tableWidget->columnWidth ( RegisterValue ) + 10;
-     tableName.tableWidget->setMinimumWidth ( width );
+     int width = _table.tableWidget->columnWidth ( RegisterName ) + _table.tableWidget->columnWidth ( RegisterValue ) + 10;
+     _table.tableWidget->setMinimumWidth ( width );
 
-     tableName.tableWidget->blockSignals ( false );
+     _table.tableWidget->blockSignals ( false );
 }
 
 void RegistersView::registerChangedInternally ( QTableWidgetItem* item )
@@ -80,7 +81,7 @@ void RegistersView::registerChangedInternally ( QTableWidgetItem* item )
 
      const QTableWidget* table = static_cast<const QTableWidget*> ( sender() );
 
-     Register changedRegister ( table->item ( item->row(), RegisterName )->text(), item->text() );
+     const Register changedRegister ( table->item ( item->row(), RegisterName )->text(), item->text() );
 
      kDebug() << changedRegister.name << ' ' << changedRegister.value;
      emit registerChanged ( changedRegister );
@@ -99,7 +100,7 @@ void RegistersView::contextMenuEvent ( QContextMenuEvent* e )
 
      QAction* a;
      QMenu* m = m_menu->addMenu ( "Show" );
-     foreach ( QString group, groups ) {
+     foreach ( const QString group, groups ) {
           a = m->addAction ( group );
           a->setCheckable ( true );
           if ( !m_tablesManager.tableForGroup ( group ).isNull() ) {
@@ -165,13 +166,15 @@ RegistersView::Table RegistersView::TablesManager::tableForGroup ( const QString
 {
      Table t;
 
-     if ( !group.isEmpty() ) {
-          foreach ( TableRegistersAssociation a, m_tableRegistersAssociation ) {
-               if ( a.registersGroup == group ) {
-                    kDebug() << "Get table" << group;
-                    t = a.table;
-                    break;
-               }
+     if ( group.isEmpty() ) {
+          return t;
+     }
+
+     foreach ( const TableRegistersAssociation a, m_tableRegistersAssociation ) {
+          if ( a.registersGroup == group ) {
+               kDebug() << "Get table" << group;
+               t = a.table;
+               break;
           }
      }
 
@@ -181,16 +184,18 @@ RegistersView::Table RegistersView::TablesManager::tableForGroup ( const QString
 RegistersView::Table RegistersView::TablesManager::createTableForGroup ( const QString& group )
 {
      Table t;
-     if ( !group.isEmpty() ) {
-          for ( int i = 0; i < m_tableRegistersAssociation.count(); i++ ) {
-               if ( m_tableRegistersAssociation[i].registersGroup.isEmpty() ) {
-                    kDebug() << "Create table for group" << group;
-                    m_tableRegistersAssociation[i].registersGroup = group;
-                    t = m_tableRegistersAssociation[i].table;
-                    t.name->show();
-                    t.tableWidget->show();
-                    break;
-               }
+     if ( group.isEmpty() ) {
+          return t;
+     }
+
+     for ( int i = 0; i < m_tableRegistersAssociation.count(); i++ ) {
+          if ( m_tableRegistersAssociation[i].registersGroup.isEmpty() ) {
+               kDebug() << "Create table for group" << group;
+               m_tableRegistersAssociation[i].registersGroup = group;
+               t = m_tableRegistersAssociation[i].table;
+               t.name->show();
+               t.tableWidget->show();
+               break;
           }
      }
 
@@ -199,39 +204,42 @@ RegistersView::Table RegistersView::TablesManager::createTableForGroup ( const Q
 
 bool RegistersView::TablesManager::removeAssociation ( const QString& group )
 {
-     if ( !group.isEmpty() ) {
-          for ( int i = 0; i < m_tableRegistersAssociation.count(); i++ ) {
-               if ( m_tableRegistersAssociation[i].registersGroup == group ) {
-                    kDebug() << "Remove association " << group;
-                    m_tableRegistersAssociation[i].registersGroup.clear();
-                    m_tableRegistersAssociation[i].table.tableWidget->hide();
-                    m_tableRegistersAssociation[i].table.name->hide();
-                    return true;
-               }
+     if ( group.isEmpty() ) {
+          return false;
+     }
+
+     for ( int i = 0; i < m_tableRegistersAssociation.count(); i++ ) {
+          if ( m_tableRegistersAssociation[i].registersGroup == group ) {
+               kDebug() << "Remove association " << group;
+               m_tableRegistersAssociation[i].registersGroup.clear();
+               m_tableRegistersAssociation[i].table.tableWidget->hide();
+               m_tableRegistersAssociation[i].table.name->hide();
+               return true;
           }
      }
      return false;
 }
 
-void RegistersView::TablesManager::addTable ( RegistersView::Table table )
+void RegistersView::TablesManager::addTable ( const RegistersView::Table& table )
 {
-     kDebug() << "Add table" << table.name->text();
-     m_tableRegistersAssociation.push_back ( TableRegistersAssociation ( table, "" ) );
+     Table _table = table;
+     kDebug() << "Add table" << _table.name->text();
+     m_tableRegistersAssociation.push_back ( TableRegistersAssociation ( _table, "" ) );
 
-     table.tableWidget->hide();
-     table.name->hide();
-     table.tableWidget->horizontalHeader()->setResizeMode ( QHeaderView::ResizeToContents );
-     table.tableWidget->setSelectionMode ( QAbstractItemView::SingleSelection );
-     table.tableWidget->setMinimumWidth ( 10 );
+     _table.tableWidget->hide();
+     _table.name->hide();
+     _table.tableWidget->horizontalHeader()->setResizeMode ( QHeaderView::ResizeToContents );
+     _table.tableWidget->setSelectionMode ( QAbstractItemView::SingleSelection );
+     _table.tableWidget->setMinimumWidth ( 10 );
 
-     connect ( table.tableWidget, SIGNAL ( itemChanged ( QTableWidgetItem* ) ), m_parent, SLOT ( registerChangedInternally ( QTableWidgetItem* ) ) );
-     connect ( table.tableWidget, SIGNAL ( itemDoubleClicked ( QTableWidgetItem* ) ), m_parent, SLOT ( flagChangedInternally ( QTableWidgetItem* ) ) );
+     connect ( _table.tableWidget, SIGNAL ( itemChanged ( QTableWidgetItem* ) ), m_parent, SLOT ( registerChangedInternally ( QTableWidgetItem* ) ) );
+     connect ( _table.tableWidget, SIGNAL ( itemDoubleClicked ( QTableWidgetItem* ) ), m_parent, SLOT ( flagChangedInternally ( QTableWidgetItem* ) ) );
 }
 
 int RegistersView::TablesManager::numOfFreeTables() const
 {
      int count = 0;
-     foreach ( TableRegistersAssociation a, m_tableRegistersAssociation ) {
+     foreach ( const TableRegistersAssociation a, m_tableRegistersAssociation ) {
           if ( a.registersGroup.isEmpty() ) {
                count++;
           }
@@ -245,9 +253,9 @@ void RegistersView::registersInGroupChanged ( const QString& group )
      kDebug() << "Updating GUI";
 
      if ( m_registerController ) {
-          const RegistersGroup& registersGroup = m_registerController->registersFromGroup ( group, ( RegistersFormat ) m_registersFormat );
+          const RegistersGroup registersGroup = m_registerController->registersFromGroup ( group, ( RegistersFormat ) m_registersFormat );
 
-          Table t = m_tablesManager.tableForGroup ( registersGroup.groupName );
+          const Table t = m_tablesManager.tableForGroup ( registersGroup.groupName );
           if ( !t.isNull() ) {
                updateRegistersInTable ( t, registersGroup );
           }
@@ -264,7 +272,7 @@ void RegistersView::setController ( IRegisterController* controller )
 
           //if architecture has changed, clear all tables.
           QStringList groups = controller->namesOfRegisterGroups();
-          foreach ( QString g, m_tablesManager.allGroups() ) {
+          foreach ( const QString g, m_tablesManager.allGroups() ) {
                if ( !groups.contains ( g ) ) {
                     m_tablesManager.clearAllAssociations();
                     m_tablesManager.createTableForGroup ( "General" );
@@ -279,7 +287,7 @@ void RegistersView::setController ( IRegisterController* controller )
 const QStringList RegistersView::TablesManager::allGroups() const
 {
      QStringList groups;
-     foreach ( TableRegistersAssociation a, m_tableRegistersAssociation ) {
+     foreach ( const TableRegistersAssociation a, m_tableRegistersAssociation ) {
           if ( !a.registersGroup.isEmpty() ) {
                groups << a.registersGroup;
           }
@@ -292,7 +300,7 @@ void RegistersView::TablesManager::save()
      m_config.writeEntry ( "format", m_parent->m_registersFormat );
      m_config.writeEntry ( "number", m_tableRegistersAssociation.count() - numOfFreeTables() );
 
-     QStringList groups = allGroups();
+     const QStringList groups = allGroups();
 
      for ( int i = 0; i < groups.count(); i++ ) {
           kDebug() << "Saving group" << groups[i];
@@ -321,7 +329,7 @@ RegistersView::TablesManager::TablesManager ( RegistersView* parent ) :m_parent 
 
 void RegistersView::TablesManager::clearAllAssociations()
 {
-     foreach ( TableRegistersAssociation a, m_tableRegistersAssociation ) {
+     foreach ( const TableRegistersAssociation a, m_tableRegistersAssociation ) {
           removeAssociation ( a.registersGroup );
      }
 }
@@ -334,7 +342,7 @@ void RegistersView::flagChangedInternally ( QTableWidgetItem* item )
 
      const QTableWidget* table = static_cast<const QTableWidget*> ( sender() );
 
-     Register changedRegister ( table->item ( item->row(), RegisterName )->text(), item->text() );
+     const Register changedRegister ( table->item ( item->row(), RegisterName )->text(), item->text() );
 
      kDebug() << changedRegister.name << ' ' << changedRegister.value;
      emit registerChanged ( changedRegister );
@@ -344,14 +352,14 @@ RegistersView::Table::Table() : tableWidget ( 0 ), name ( 0 ) {}
 
 RegistersView::Table::Table ( QTableWidget* _tableWidget, QLabel* _name ) : tableWidget ( _tableWidget ), name ( _name ) {}
 
-bool RegistersView::Table::isNull()
+bool RegistersView::Table::isNull() const
 {
      return !tableWidget;
 }
 
 RegistersView::TableRegistersAssociation::TableRegistersAssociation() {}
 
-RegistersView::TableRegistersAssociation::TableRegistersAssociation ( RegistersView::Table _table, QString _registersGroup ) : table ( _table ), registersGroup ( _registersGroup ) {}
+RegistersView::TableRegistersAssociation::TableRegistersAssociation ( const RegistersView::Table& _table, const QString& _registersGroup ) : table ( _table ), registersGroup ( _registersGroup ) {}
 
 RegistersView::TablesManager::~TablesManager()
 {

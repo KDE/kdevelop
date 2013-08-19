@@ -45,7 +45,7 @@ public slots:
 protected:
      virtual RegistersGroup registersFromGroupInternally ( const QString& group );
 
-     virtual RegistersGroup& convertValuesForGroup ( RegistersGroup& registersGroup, RegistersFormat format = Raw );
+     virtual RegistersGroup& convertValuesForGroup ( RegistersGroup& registersGroup, const RegistersFormat& format = Raw );
      virtual QStringList registerNamesForGroup ( const QString& group );
 
      virtual RegistersGroup& updateValuesForRegisters ( RegistersGroup& registers );
@@ -56,7 +56,7 @@ protected:
 
      enum RegisterGroups {General, Flags, VFP_single, VFP_double, VFP_quad};
 
-     QString enumToString ( const RegisterGroups group ) const;
+     QString enumToString ( const RegisterGroups& group ) const;
      //None of functions below checks value for validity, if value is invalid updateRegistres() will restore the previous state.
 
      void setVFPS_Register ( const Register& reg );

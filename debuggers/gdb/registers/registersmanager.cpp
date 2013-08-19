@@ -36,7 +36,7 @@ void ArchitectureParser::parseArchitecture()
 {
      Architecture arch = other;
 
-     foreach ( QString reg, m_registerNames ) {
+     foreach ( const QString reg, m_registerNames ) {
           if ( reg == "rax" ) {
                arch = x86_64;
                break;
@@ -139,7 +139,10 @@ void RegistersManager::setSession ( DebugSession* debugSession )
 
 void RegistersManager::updateRegisters()
 {
-     if ( m_debugSession && !m_debugSession->stateIsOn ( s_dbgNotStarted|s_shuttingDown ) ) {
+     if ( !m_debugSession || m_debugSession->stateIsOn ( s_dbgNotStarted|s_shuttingDown ) ) {
+         return;
+     }
+
           kDebug() << "Updating registers";
           if ( m_needToCheckArch ) {
                m_needToCheckArch = false;
@@ -159,7 +162,6 @@ void RegistersManager::updateRegisters()
           } else {
                kDebug() << "No registerController, yet?";
           }
-     }
 }
 
 ArchitectureParser::ArchitectureParser ( QObject* parent ) : QObject ( parent ) {}

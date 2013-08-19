@@ -122,7 +122,10 @@ void RegisterControllerGeneral_x86::setSegmentRegister ( const Register& reg )
 
 void RegisterControllerGeneral_x86::updateRegisters ( const QString& group )
 {
-     if ( m_debugSession && !m_debugSession->stateIsOn ( s_dbgNotStarted|s_shuttingDown ) ) {
+     if ( !m_debugSession || m_debugSession->stateIsOn ( s_dbgNotStarted|s_shuttingDown ) ) {
+         return;
+     }
+
           if ( !m_registerNamesInitialized ) {
                initializeRegisters();
                m_registerNamesInitialized = true;
@@ -132,7 +135,7 @@ void RegisterControllerGeneral_x86::updateRegisters ( const QString& group )
                if ( group.isEmpty() ) {
                     QStringList groups = namesOfRegisterGroups();
                     groups.removeOne ( enumToString ( FPU ) );
-                    foreach ( QString g, groups ) {
+                    foreach ( const QString g, groups ) {
                          IRegisterController::updateRegisters ( g );
                     }
                } else {
@@ -144,7 +147,7 @@ void RegisterControllerGeneral_x86::updateRegisters ( const QString& group )
                if ( m_debugSession && !m_debugSession->stateIsOn ( s_dbgNotStarted|s_shuttingDown ) ) {
 
                     QString command = "info all-registers ";
-                    foreach ( QString name, registerNamesForGroup ( enumToString ( FPU ) ) ) {
+                    foreach ( const QString name, registerNamesForGroup ( enumToString ( FPU ) ) ) {
                          command += "$" + name + ' ';
                     }
                     //TODO: use mi interface instead.
@@ -152,10 +155,9 @@ void RegisterControllerGeneral_x86::updateRegisters ( const QString& group )
                          new CliCommand ( GDBMI::NonMI, command, this, &RegisterControllerGeneral_x86::handleFPURegisters ) );
                }
           }
-     }
 }
 
-QString RegisterControllerGeneral_x86::enumToString ( const RegisterGroups group ) const
+QString RegisterControllerGeneral_x86::enumToString ( const RegisterGroups& group ) const
 {
      switch ( group ) {
      case General:
@@ -172,7 +174,7 @@ QString RegisterControllerGeneral_x86::enumToString ( const RegisterGroups group
      return QString();
 }
 
-RegistersGroup& RegisterControllerGeneral_x86::convertValuesForGroup ( RegistersGroup& registersGroup, RegistersFormat format )
+RegistersGroup& RegisterControllerGeneral_x86::convertValuesForGroup ( RegistersGroup& registersGroup, const RegistersFormat& format )
 {
      if ( format != Raw && format != Natural ) {
           if ( registersGroup.groupName == enumToString ( General ) || registersGroup.groupName == enumToString ( Segment ) ) {
@@ -184,9 +186,9 @@ RegistersGroup& RegisterControllerGeneral_x86::convertValuesForGroup ( Registers
 
 void RegisterControllerGeneral_x86::handleFPURegisters ( const QStringList& record )
 {
-     QRegExp rx ( "^(st[0-8])\\s+((?:-?\\d+\\.?\\d+(?:e(\\+|-)\\d+)?)|(?:\\d+))$" );
+     const QRegExp rx ( "^(st[0-8])\\s+((?:-?\\d+\\.?\\d+(?:e(\\+|-)\\d+)?)|(?:\\d+))$" );
      QVector<Register> registers;
-     foreach ( QString s, record ) {
+     foreach ( const QString s, record ) {
           if ( rx.exactMatch ( s ) ) {
                registers.push_back ( Register ( rx.cap ( 1 ), rx.cap ( 2 ) ) );
           }
@@ -194,11 +196,11 @@ void RegisterControllerGeneral_x86::handleFPURegisters ( const QStringList& reco
 
      if ( registers.size() != 8 ) {
           kDebug() << "can't parse FPU. Wrong format" << record << "registers: ";
-          foreach ( Register r, registers ) {
+          foreach ( const Register r, registers ) {
                kDebug() << r.name << ' ' << r.value;
           }
      } else {
-          foreach ( Register r, registers ) {
+          foreach ( const Register r, registers ) {
                if ( m_registers.contains ( r.name ) ) {
                     m_registers[r.name] = r.value;
                }

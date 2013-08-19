@@ -59,7 +59,7 @@ private:
      struct Table {
           Table();
           Table ( QTableWidget* _tableWidget, QLabel* _name );
-          bool isNull();
+          bool isNull() const;
           QTableWidget* tableWidget;
           QLabel* name;
      };
@@ -67,7 +67,7 @@ private:
      ///Association between @p table and @p registers group.
      struct TableRegistersAssociation {
           TableRegistersAssociation();
-          TableRegistersAssociation ( Table _table, QString _registersGroup );
+          TableRegistersAssociation ( const Table& _table, const QString& _registersGroup );
           RegistersView::Table table;
           QString registersGroup;
      };
@@ -88,7 +88,7 @@ private:
           bool removeAssociation ( const QString& group );
 
           ///Adds @p table to the list of available tables
-          void addTable ( Table table );
+          void addTable ( const Table& table );
 
           ///Return names of all associated groups,
           const QStringList allGroups() const;
@@ -104,8 +104,8 @@ private:
           KConfigGroup m_config;
      };
 
-     ///Updates/inserts values from @p registersGroup in table @p tableName.
-     void updateRegistersInTable ( Table tableName, const RegistersGroup& registersGroup );
+     ///Updates/inserts values from @p registersGroup in table @p table.
+     void updateRegistersInTable ( const Table& table, const RegistersGroup& registersGroup );
 
 private slots:
      ///Called whenever @p item in any table has changed.

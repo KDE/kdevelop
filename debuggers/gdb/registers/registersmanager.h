@@ -51,7 +51,7 @@ public:
 
 Q_SIGNALS:
      ///Emits current CPU architecture. @sa determineArchitecture
-     void architectureParsed ( Architecture );
+     void architectureParsed ( const Architecture );
 
 private:
 
@@ -73,7 +73,7 @@ public Q_SLOTS:
      ///Updates all registers.
      void updateRegisters();
      ///@sa ArchitectureParser::determineArchitecture
-     void architectureParsedSlot ( Architecture arch );
+     void architectureParsedSlot ( const Architecture arch );
 
 private:
      RegistersView* m_registersView;
