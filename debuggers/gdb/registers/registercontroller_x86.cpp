@@ -31,8 +31,6 @@
 
 namespace GDBDebugger {
 
-FlagRegister RegisterControllerGeneral_x86::m_eflags;
-
 RegistersGroup&  RegisterControllerGeneral_x86::updateValuesForRegisters ( RegistersGroup& registers )
 {
      kDebug() << "Updating values for registers: " << registers.groupName;
@@ -61,7 +59,7 @@ RegistersGroup RegisterControllerGeneral_x86::registersFromGroupInternally ( con
 
 QStringList RegisterControllerGeneral_x86::namesOfRegisterGroups() const
 {
-     static QStringList registerGroups;
+     QStringList registerGroups;
      registerGroups << enumToString ( General ) << enumToString ( Flags ) << enumToString ( FPU ) << enumToString ( XMM ) << enumToString ( Segment );
 
      return registerGroups;

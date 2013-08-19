@@ -76,7 +76,7 @@ protected:
      QStringList m_generalPurposeRegisterNames;
      QStringList m_XMMregisterNames;
 
-     static FlagRegister m_eflags;
+     FlagRegister m_eflags;
 
      ///Indicates if register names were initialized.
      bool m_registerNamesInitialized;

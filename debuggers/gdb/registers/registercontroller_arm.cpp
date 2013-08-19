@@ -30,8 +30,6 @@
 
 namespace GDBDebugger {
 
-FlagRegister RegisterController_Arm::m_cpsr;
-
 RegistersGroup&  RegisterController_Arm::updateValuesForRegisters ( RegistersGroup& registers )
 {
      kDebug() << "Updating values for registers: " << registers.groupName;

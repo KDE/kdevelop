@@ -75,7 +75,7 @@ protected:
 private:
      void initRegisterNames();
 
-     static FlagRegister m_cpsr;
+     FlagRegister m_cpsr;
 
      bool m_registerNamesInitialized;
 };
