@@ -55,7 +55,7 @@ protected:
      RegistersGroup& updateFlagValues ( RegistersGroup& flagsGroup );
 
      //this is a workaround for FPU registers.
-     void handleFPURegisters(const QStringList& record);
+     void handleFPURegisters ( const QStringList& record );
 
      enum RegisterGroups {General, Flags, FPU, XMM, Segment};
 
@@ -67,7 +67,7 @@ protected:
      void setSegmentRegister ( const Register& reg );
      void setEFfagRegister ( const Register& reg );
 private:
-    void initRegisterNames();;
+     void initRegisterNames();;
 
 protected:
      QStringList m_FPUregisterNames;

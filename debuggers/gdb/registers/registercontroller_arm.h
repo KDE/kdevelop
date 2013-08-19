@@ -66,7 +66,7 @@ protected:
      //VFP registers workaround.
      void handleVFPSRegisters( const QStringList& record );
 
-     QStringList m_VFP_singleregisterNames;
+     QStringList m_VFP_singleRegisterNames;
      QStringList m_flagRegisterNames;
      QStringList m_VFP_doubleRegisterNames;
      QStringList m_generalRegisterNames;

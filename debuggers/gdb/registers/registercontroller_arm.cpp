@@ -216,12 +216,15 @@ RegistersGroup& RegisterController_Arm::convertValuesForGroup ( RegistersGroup& 
      return registersGroup;
 }
 
-RegisterController_Arm::RegisterController_Arm ( QObject* parent, DebugSession* debugSession ) :IRegisterController ( parent, debugSession ), m_registerNamesInitialized ( false ) {}
+RegisterController_Arm::RegisterController_Arm ( QObject* parent, DebugSession* debugSession ) :IRegisterController ( parent, debugSession ), m_registerNamesInitialized ( false )
+{
+    initRegisterNames();
+}
 
 void RegisterController_Arm::initRegisterNames()
 {
      for ( int i = 0; i < 32; i++ ) {
-          m_VFP_singleregisterNames << ( "s" + QString::number ( i ), QString() );
+          m_VFP_singleRegisterNames << ( "s" + QString::number ( i ) );
      }
 
      m_cpsr.registerName = "cpsr";
@@ -251,7 +254,7 @@ QStringList RegisterController_Arm::registerNamesForGroup ( const QString& group
      } else if ( group == enumToString ( Flags ) ) {
           return m_flagRegisterNames;
      } else if ( group == enumToString ( VFP_single ) ) {
-          return m_VFP_singleregisterNames;
+          return m_VFP_singleRegisterNames;
      } else if ( group == enumToString ( VFP_double ) ) {
           return m_VFP_doubleRegisterNames;
      } else if ( group == enumToString ( VFP_quad ) ) {
