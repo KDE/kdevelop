@@ -28,6 +28,7 @@
 #include <KConfigGroup>
 
 class QMenu;
+class QSignalMapper;
 
 namespace GDBDebugger {
 
@@ -114,8 +115,10 @@ private slots:
      void registerChangedInternally ( QTableWidgetItem* item );
      ///If @p item is a flag then send updated value, otherwise do nothing.
      void flagChangedInternally ( QTableWidgetItem* item );
-     ///Changes visible tables or register formates.
-     void menuTriggered ( QAction* );
+     ///Changes register formates.
+     void formatMenuTriggered ( int );
+     ///Changes visible tables
+     void showMenuTriggered ( const QString& );
 
 signals:
      ///Emitted whenever register @p reg in a table has changed.
@@ -125,6 +128,7 @@ private:
      void addItemToFormatSubmenu ( QMenu* m, const QString& name, const RegistersFormat& format );
 private:
      QMenu* m_menu;
+     QSignalMapper* m_mapper;
      IRegisterController* m_registerController;
      TablesManager m_tablesManager;
      RegistersFormat m_registersFormat;

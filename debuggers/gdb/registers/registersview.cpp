@@ -22,6 +22,7 @@
 
 #include <QMenu>
 #include <QContextMenuEvent>
+#include <QSignalMapper>
 
 #include <KDebug>
 
@@ -33,8 +34,10 @@ RegistersView::RegistersView ( QWidget* p ) : QWidget ( p ), m_registerControlle
      setupUi ( this );
 
      m_menu = new QMenu ( this );
+     m_mapper = new QSignalMapper ( this );
 
-     connect ( m_menu, SIGNAL ( triggered ( QAction* ) ), this, SLOT ( menuTriggered ( QAction* ) ) );
+     connect ( m_mapper, SIGNAL ( mapped ( int ) ), this, SLOT ( formatMenuTriggered ( int ) ) );
+     connect ( m_mapper, SIGNAL ( mapped ( QString ) ), this, SLOT ( showMenuTriggered ( QString ) ) );
 
      m_tablesManager.addTable ( Table ( fourthTable, fourthLabel ) );
      m_tablesManager.addTable ( Table ( thirdTable, thirdLabel ) );
@@ -52,6 +55,7 @@ void RegistersView::updateRegistersInTable ( const Table& table, const Registers
 
      _table.tableWidget->setRowCount ( registersGroup.registers.size() );
      kDebug() << "rows " << _table.tableWidget->rowCount();
+
      for ( int i = 0 ; i < registersGroup.registers.size(); ++i ) {
           QTableWidgetItem *newItem = new QTableWidgetItem ( registersGroup.registers[i].name );
           newItem->setFlags ( Qt::ItemIsEnabled );
@@ -94,9 +98,12 @@ void RegistersView::contextMenuEvent ( QContextMenuEvent* e )
 
      m_menu->clear();
 
-     m_menu->addAction ( "Update" );
-
      QAction* a;
+
+     a = m_menu->addAction ( "Update" );
+     m_mapper->setMapping ( a, a->text() );
+     connect ( a, SIGNAL ( triggered() ), m_mapper, SLOT ( map() ) );
+
      QMenu* m = m_menu->addMenu ( "Show" );
      foreach ( const QString group, groups ) {
           a = m->addAction ( group );
@@ -106,6 +113,8 @@ void RegistersView::contextMenuEvent ( QContextMenuEvent* e )
           } else if ( !m_tablesManager.numOfFreeTables() ) {
                a->setEnabled ( false );
           }
+          m_mapper->setMapping ( a, a->text() );
+          connect ( a, SIGNAL ( triggered() ), m_mapper, SLOT ( map() ) );
      }
 
      m = m_menu->addMenu ( "Format" );
@@ -115,9 +124,7 @@ void RegistersView::contextMenuEvent ( QContextMenuEvent* e )
      addItemToFormatSubmenu ( m, QString ( "Oct" ), Octal );
      addItemToFormatSubmenu ( m, QString ( "Bin" ), Binary );
 
-     if ( !m_menu->actions().isEmpty() ) {
-          m_menu->exec ( e->globalPos() );
-     }
+     m_menu->exec ( e->globalPos() );
 }
 
 void RegistersView::addItemToFormatSubmenu ( QMenu* m, const QString& name, const RegistersFormat& format )
@@ -128,35 +135,39 @@ void RegistersView::addItemToFormatSubmenu ( QMenu* m, const QString& name, cons
           a->setCheckable ( true );
           a->setChecked ( true );
      }
+     m_mapper->setMapping ( a, a->data().toInt() );
+     connect ( a, SIGNAL ( triggered() ), m_mapper, SLOT ( map() ) );
 }
 
-void RegistersView::menuTriggered ( QAction* group )
+void RegistersView::showMenuTriggered ( const QString& group )
 {
-
-     if ( group->text() == "Hex" || group->text() == "Dec" || group->text() == "Oct" || group->text() == "Bin" || group->text() == "Raw" ) {
-          m_registersFormat = static_cast<RegistersFormat>( group->data().toInt());
-          if ( m_registerController ) {
-               m_registerController->updateRegisters();
-          }
-     } else if ( group->text() == "Update" ) {
+     if ( group == "Update" ) {
           if ( m_registerController ) {
                m_registerController->updateRegisters();
           }
      } else {
-          kDebug() << "Changing table for group" << group->text();
+          kDebug() << "Changing table for group" << group;
           Table t;
-          t = m_tablesManager.tableForGroup ( group->text() );
+          t = m_tablesManager.tableForGroup ( group );
           //already showing
           if ( !t.isNull() ) {
-               m_tablesManager.removeAssociation ( group->text() );
+               m_tablesManager.removeAssociation ( group );
           } else {
-               t = m_tablesManager.createTableForGroup ( group->text() );
+               t = m_tablesManager.createTableForGroup ( group );
                if ( !t.isNull() ) {
                     if ( m_registerController ) {
-                         m_registerController->updateRegisters ( group->text() );
+                         m_registerController->updateRegisters ( group );
                     }
                }
           }
+     }
+}
+
+void RegistersView::formatMenuTriggered ( int format )
+{
+     m_registersFormat = static_cast<RegistersFormat> ( format );
+     if ( m_registerController ) {
+          m_registerController->updateRegisters();
      }
 }
 
@@ -295,7 +306,7 @@ const QStringList RegistersView::TablesManager::allGroups() const
 
 void RegistersView::TablesManager::save()
 {
-     m_config.writeEntry ( "format", static_cast<int>(m_parent->m_registersFormat) );
+     m_config.writeEntry ( "format", static_cast<int> ( m_parent->m_registersFormat ) );
      m_config.writeEntry ( "number", m_tableRegistersAssociation.count() - numOfFreeTables() );
 
      const QStringList groups = allGroups();
@@ -309,7 +320,7 @@ void RegistersView::TablesManager::save()
 
 void RegistersView::TablesManager::load()
 {
-     m_parent->m_registersFormat = static_cast<RegistersFormat> (m_config.readEntry ( "format", static_cast<int>(m_parent->m_registersFormat) ));
+     m_parent->m_registersFormat = static_cast<RegistersFormat> ( m_config.readEntry ( "format", static_cast<int> ( m_parent->m_registersFormat ) ) );
      int tablesCount = m_config.readEntry ( "number", -1 );
      if ( tablesCount == -1 ) {
           createTableForGroup ( "General" );
