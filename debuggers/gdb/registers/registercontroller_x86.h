@@ -23,81 +23,86 @@
 
 #include "registercontroller.h"
 
-namespace GDBMI {
+namespace GDBMI
+{
 struct ResultRecord;
 }
 
-namespace GDBDebugger {
+namespace GDBDebugger
+{
 
 class DebugSession;
 
-class RegisterControllerGeneral_x86 : public IRegisterController {
+class RegisterControllerGeneral_x86 : public IRegisterController
+{
 public:
 
-     virtual QStringList namesOfRegisterGroups() const;
+    virtual QStringList namesOfRegisterGroups() const;
 
 public slots:
-     virtual void updateRegisters ( const QString& group = QString() );
+    virtual void updateRegisters(const QString& group = QString());
 
 protected:
-     RegisterControllerGeneral_x86 ( QObject* parent, DebugSession* debugSession = 0 );
+    RegisterControllerGeneral_x86(QObject* parent, DebugSession* debugSession = 0);
 
-     virtual RegistersGroup registersFromGroupInternally ( const QString& group );
+    virtual RegistersGroup registersFromGroupInternally(const QString& group);
 
-     virtual void convertValuesForGroup ( RegistersGroup& registersGroup, const RegistersFormat& format = Raw );
+    virtual void convertValuesForGroup(RegistersGroup& registersGroup, const RegistersFormat& format = Raw);
 
-     virtual QStringList registerNamesForGroup ( const QString& group );
+    virtual QStringList registerNamesForGroup(const QString& group);
 
-     virtual void updateValuesForRegisters ( RegistersGroup& registers );
+    virtual void updateValuesForRegisters(RegistersGroup& registers);
 
-     virtual void setRegisterValueForGroup ( const QString& group, const Register& reg );
+    virtual void setRegisterValueForGroup(const QString& group, const Register& reg);
 
-     void updateFlagValues ( RegistersGroup& flagsGroup );
+    void updateFlagValues(RegistersGroup& flagsGroup);
 
-     //this is a workaround for FPU registers.
-     void handleFPURegisters ( const QStringList& record );
+    //this is a workaround for FPU registers.
+    void handleFPURegisters(const QStringList& record);
 
-     enum RegisterGroups {General, Flags, FPU, XMM, Segment};
+    enum RegisterGroups {General, Flags, FPU, XMM, Segment};
 
-     QString enumToString ( const RegisterGroups& group ) const;
-     //None of functions below checks value for validity, if value is invalid updateRegistres() will restore the previous state.
+    QString enumToString(const RegisterGroups& group) const;
+    //None of functions below checks value for validity, if value is invalid updateRegistres() will restore the previous state.
 
-     void setFPURegister ( const Register& reg );
-     void setXMMRegister ( const Register& reg );
-     void setSegmentRegister ( const Register& reg );
-     void setEFfagRegister ( const Register& reg );
+    void setFPURegister(const Register& reg);
+    void setXMMRegister(const Register& reg);
+    void setSegmentRegister(const Register& reg);
+    void setEFfagRegister(const Register& reg);
 private:
-     void initRegisterNames();;
+    void initRegisterNames();;
 
 protected:
-     QStringList m_FPUregisterNames;
-     QStringList m_flagRegisterNames;
-     QStringList m_segmentRegisterNames;
-     QStringList m_generalPurposeRegisterNames;
-     QStringList m_XMMregisterNames;
+    QStringList m_FPUregisterNames;
+    QStringList m_flagRegisterNames;
+    QStringList m_segmentRegisterNames;
+    QStringList m_generalPurposeRegisterNames;
+    QStringList m_XMMregisterNames;
 
-     FlagRegister m_eflags;
+    FlagRegister m_eflags;
 
-     ///Indicates if register names were initialized.
-     bool m_registerNamesInitialized;
+    ///Indicates if register names were initialized.
+    bool m_registerNamesInitialized;
 };
 
-class RegisterController_x86 : public RegisterControllerGeneral_x86 {
+class RegisterController_x86 : public RegisterControllerGeneral_x86
+{
 
 public:
-     RegisterController_x86 ( QObject* parent, DebugSession* debugSession = 0 );
+    RegisterController_x86(QObject* parent, DebugSession* debugSession = 0);
 
 private:
-     void initRegisterNames();
+    void initRegisterNames();
 };
 
-class RegisterController_x86_64 : public RegisterControllerGeneral_x86 {
+class RegisterController_x86_64 : public RegisterControllerGeneral_x86
+{
 
 public:
-     RegisterController_x86_64 ( QObject* parent, DebugSession* debugSession = 0 );
+    RegisterController_x86_64(QObject* parent, DebugSession* debugSession = 0);
 
 private:
-     void initRegisterNames();
+    void initRegisterNames();
 };
 }
 

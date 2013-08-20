@@ -24,69 +24,74 @@
 #include <QObject>
 #include <QStringList>
 
-namespace GDBMI {
+namespace GDBMI
+{
 struct ResultRecord;
 }
 
-namespace GDBDebugger {
+namespace GDBDebugger
+{
 
 class RegistersView;
 class IRegisterController;
 class DebugSession;
 
-namespace {
+namespace
+{
 enum Architecture {x86, x86_64, arm, other = 100, undefined};
 }
 
 /** @brief Determines current CPU architecture */
-class ArchitectureParser : public QObject {
-     Q_OBJECT
+class ArchitectureParser : public QObject
+{
+    Q_OBJECT
 
 public:
 
-     ArchitectureParser ( QObject* parent );
+    ArchitectureParser(QObject* parent);
 
-     ///Asynchronously determines current architecture. emits @p architectureParsed when ready.
-     void determineArchitecture ( DebugSession* debugSession );
+    ///Asynchronously determines current architecture. emits @p architectureParsed when ready.
+    void determineArchitecture(DebugSession* debugSession);
 
 Q_SIGNALS:
-     ///Emits current CPU architecture. @sa determineArchitecture
-     void architectureParsed ( const Architecture );
+    ///Emits current CPU architecture. @sa determineArchitecture
+    void architectureParsed(const Architecture);
 
 private:
 
-     void registerNamesHandler ( const GDBMI::ResultRecord& r );
-     void parseArchitecture();
+    void registerNamesHandler(const GDBMI::ResultRecord& r);
+    void parseArchitecture();
 
-     QStringList m_registerNames;
+    QStringList m_registerNames;
 };
 
 
-class RegistersManager : public QObject {
-     Q_OBJECT
+class RegistersManager : public QObject
+{
+    Q_OBJECT
 
 public:
-     RegistersManager ( QWidget* parent );
+    RegistersManager(QWidget* parent);
 
 public Q_SLOTS:
-     void setSession ( DebugSession* debugSession );
-     ///Updates all registers.
-     void updateRegisters();
-     ///@sa ArchitectureParser::determineArchitecture
-     void architectureParsedSlot ( const Architecture arch );
+    void setSession(DebugSession* debugSession);
+    ///Updates all registers.
+    void updateRegisters();
+    ///@sa ArchitectureParser::determineArchitecture
+    void architectureParsedSlot(const Architecture arch);
 
 private:
-     RegistersView* m_registersView;
-     IRegisterController* m_registerController;
+    RegistersView* m_registersView;
+    IRegisterController* m_registerController;
 
-     ArchitectureParser* m_architectureParser;
+    ArchitectureParser* m_architectureParser;
 
-     DebugSession* m_debugSession;
+    DebugSession* m_debugSession;
 
-     Architecture m_currentArchitecture;
+    Architecture m_currentArchitecture;
 
-     ///True if architecture could has changed(e.g. from x86 to arm)
-     bool m_needToCheckArch;
+    ///True if architecture could has changed(e.g. from x86 to arm)
+    bool m_needToCheckArch;
 };
 
 }

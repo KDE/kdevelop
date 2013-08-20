@@ -24,60 +24,63 @@
 
 #include "registercontroller.h"
 
-namespace GDBMI {
+namespace GDBMI
+{
 struct ResultRecord;
 }
 
-namespace GDBDebugger {
+namespace GDBDebugger
+{
 
 class DebugSession;
 
-class RegisterController_Arm : public IRegisterController {
+class RegisterController_Arm : public IRegisterController
+{
 public:
 
-     RegisterController_Arm ( QObject* parent, DebugSession* debugSession = 0 );
+    RegisterController_Arm(QObject* parent, DebugSession* debugSession = 0);
 
-     virtual QStringList namesOfRegisterGroups() const;
+    virtual QStringList namesOfRegisterGroups() const;
 
 public slots:
-     virtual void updateRegisters ( const QString& group = QString() );
+    virtual void updateRegisters(const QString& group = QString());
 
 protected:
-     virtual RegistersGroup registersFromGroupInternally ( const QString& group );
+    virtual RegistersGroup registersFromGroupInternally(const QString& group);
 
-     virtual void convertValuesForGroup ( RegistersGroup& registersGroup, const RegistersFormat& format = Raw );
-     virtual QStringList registerNamesForGroup ( const QString& group );
+    virtual void convertValuesForGroup(RegistersGroup& registersGroup, const RegistersFormat& format = Raw);
+    virtual QStringList registerNamesForGroup(const QString& group);
 
-     virtual void updateValuesForRegisters ( RegistersGroup& registers );
+    virtual void updateValuesForRegisters(RegistersGroup& registers);
 
-     virtual void setRegisterValueForGroup ( const QString& group, const Register& reg );
+    virtual void setRegisterValueForGroup(const QString& group, const Register& reg);
 
-     void updateFlagValues ( RegistersGroup& flagsGroup );
+    void updateFlagValues(RegistersGroup& flagsGroup);
 
-     enum RegisterGroups {General, Flags, VFP_single, VFP_double, VFP_quad};
+    enum RegisterGroups {General, Flags, VFP_single, VFP_double, VFP_quad};
 
-     QString enumToString ( const RegisterGroups& group ) const;
-     //None of functions below checks value for validity, if value is invalid updateRegistres() will restore the previous state.
+    QString enumToString(const RegisterGroups& group) const;
+    //None of functions below checks value for validity, if value is invalid updateRegistres() will restore the previous state.
 
-     void setVFPS_Register ( const Register& reg );
-     void setVFPD_Register ( const Register& reg );
-     void setVFPQ_Register ( const Register& reg );
+    void setVFPS_Register(const Register& reg);
+    void setVFPD_Register(const Register& reg);
+    void setVFPQ_Register(const Register& reg);
 
-     //VFP registers workaround.
-     void handleVFPSRegisters( const QStringList& record );
+    //VFP registers workaround.
+    void handleVFPSRegisters(const QStringList& record);
 
-     QStringList m_VFP_singleRegisterNames;
-     QStringList m_flagRegisterNames;
-     QStringList m_VFP_doubleRegisterNames;
-     QStringList m_generalRegisterNames;
-     QStringList m_VFP_quadRegisterNames;
+    QStringList m_VFP_singleRegisterNames;
+    QStringList m_flagRegisterNames;
+    QStringList m_VFP_doubleRegisterNames;
+    QStringList m_generalRegisterNames;
+    QStringList m_VFP_quadRegisterNames;
 
 private:
-     void initRegisterNames();
+    void initRegisterNames();
 
-     FlagRegister m_cpsr;
+    FlagRegister m_cpsr;
 
-     bool m_registerNamesInitialized;
+    bool m_registerNamesInitialized;
 };
 
 }

@@ -30,140 +30,138 @@
 #include <KDebug>
 
 
-namespace GDBDebugger {
+namespace GDBDebugger
+{
 
 void ArchitectureParser::parseArchitecture()
 {
-     Architecture arch = other;
+    Architecture arch = other;
 
-     foreach ( const QString reg, m_registerNames ) {
-          if ( reg == "rax" ) {
-               arch = x86_64;
-               break;
-          } else if ( reg == "r0" ) {
-               arch = arm;
-               break;
-               //we don't break because x86_64 contains eax too.
-          } else if ( reg == "eax" ) {
-               arch = x86;
-          }
-     }
+    foreach (const QString& reg, m_registerNames) {
+        if (reg == "rax") {
+            arch = x86_64;
+            break;
+        } else if (reg == "r0") {
+            arch = arm;
+            break;
+        } else if (reg == "eax") {
+            arch = x86;
+            //we don't break because x86_64 contains eax too.
+        }
+    }
 
-     if ( arch == other ) {
-          kDebug() << "Unsupported architecture";
-     }
-
-     kDebug() << "arch is parsed";
-     emit architectureParsed ( arch );
+    kDebug() << "arch is parsed";
+    emit architectureParsed(arch);
 }
 
-void ArchitectureParser::registerNamesHandler ( const GDBMI::ResultRecord& r )
+void ArchitectureParser::registerNamesHandler(const GDBMI::ResultRecord& r)
 {
-     const GDBMI::Value& names = r["register-names"];
+    const GDBMI::Value& names = r["register-names"];
 
-     m_registerNames.clear();
-     for ( int i = 0; i < names.size(); ++i ) {
-          const GDBMI::Value& entry = names[i];
-          if ( !entry.literal().isEmpty() ) {
-               m_registerNames << entry.literal();
-          }
-     }
+    m_registerNames.clear();
+    for (int i = 0; i < names.size(); ++i) {
+        const GDBMI::Value& entry = names[i];
+        if (!entry.literal().isEmpty()) {
+            m_registerNames << entry.literal();
+        }
+    }
 
-     parseArchitecture();
+    parseArchitecture();
 }
 
-void ArchitectureParser::determineArchitecture ( DebugSession* debugSession )
+void ArchitectureParser::determineArchitecture(DebugSession* debugSession)
 {
-     if ( debugSession ) {
-          debugSession->addCommand (
-               new GDBCommand ( GDBMI::DataListRegisterNames, "", this, &ArchitectureParser::registerNamesHandler ) );
-     }
+    if (debugSession) {
+        debugSession->addCommand(
+            new GDBCommand(GDBMI::DataListRegisterNames, "", this, &ArchitectureParser::registerNamesHandler));
+    }
 }
 
-RegistersManager::RegistersManager ( QWidget* parent ) :QObject ( parent ), m_registerController ( 0 ), m_debugSession ( 0 ), m_currentArchitecture ( undefined ), m_needToCheckArch ( false )
+RegistersManager::RegistersManager(QWidget* parent)
+: QObject(parent), m_registerController(0), m_debugSession(0), m_currentArchitecture(undefined), m_needToCheckArch(false)
 {
-     m_registersView = new RegistersView ( parent );
-     m_architectureParser = new ArchitectureParser ( this );
+    m_registersView = new RegistersView(parent);
+    m_architectureParser = new ArchitectureParser(this);
 
-     connect ( m_architectureParser, SIGNAL ( architectureParsed ( Architecture ) ), this, SLOT ( architectureParsedSlot ( Architecture ) ) );
+    connect(m_architectureParser, SIGNAL(architectureParsed(Architecture)), this, SLOT(architectureParsedSlot(Architecture)));
 }
 
-void RegistersManager::architectureParsedSlot ( Architecture arch )
+void RegistersManager::architectureParsedSlot(Architecture arch)
 {
-     kDebug() << "Changing arch?" << m_registerController << m_currentArchitecture;
+    kDebug() << "Changing arch?" << " Current controller: " << m_registerController << "Current arch " << m_currentArchitecture;
 
-     if ( m_registerController || m_currentArchitecture != undefined ) {
-          return;
-     }
+    if (m_registerController || m_currentArchitecture != undefined) {
+        return;
+    }
 
-     switch ( arch ) {
-     case x86:
-          m_registerController = new RegisterController_x86 ( this, m_debugSession );
-          kDebug() << "Found x86 architecture";
-          break;
-     case x86_64:
-          m_registerController = new RegisterController_x86_64 ( this, m_debugSession );
-          kDebug() << "Found x86_64 architecture";
-          break;
-     case arm:
-          m_registerController = new RegisterController_Arm ( this, m_debugSession );
-          kDebug() << "Found Arm architecture";
-          break;
-     default:
-          kDebug() << "Unsupported architecture. Registers won't be available.";
-          break;
-     }
+    switch (arch) {
+    case x86:
+        m_registerController = new RegisterController_x86(this, m_debugSession);
+        kDebug() << "Found x86 architecture";
+        break;
+    case x86_64:
+        m_registerController = new RegisterController_x86_64(this, m_debugSession);
+        kDebug() << "Found x86_64 architecture";
+        break;
+    case arm:
+        m_registerController = new RegisterController_Arm(this, m_debugSession);
+        kDebug() << "Found Arm architecture";
+        break;
+    default:
+        kWarning() << "Unsupported architecture. Registers won't be available.";
+        break;
+    }
 
-     m_currentArchitecture = arch;
+    m_currentArchitecture = arch;
 
-     if ( m_registerController ) {
-          m_registersView->setController ( m_registerController );
+    if (m_registerController) {
+        m_registersView->setController(m_registerController);
 
-          updateRegisters();
-     }
+        updateRegisters();
+    }
 }
 
-void RegistersManager::setSession ( DebugSession* debugSession )
+void RegistersManager::setSession(DebugSession* debugSession)
 {
-     kDebug() << "Change session" << debugSession;
-     m_debugSession = debugSession;
-     if ( m_registerController ) {
-          m_registerController->setSession ( debugSession );
-     }
-     if ( !m_debugSession ) {
-          kDebug() << "Will reparse arch";
-          m_needToCheckArch = true;
-          m_registersView->setController ( 0 );
-     }
+    kDebug() << "Change session" << debugSession;
+    m_debugSession = debugSession;
+    if (m_registerController) {
+        m_registerController->setSession(debugSession);
+    }
+    if (!m_debugSession) {
+        kDebug() << "Will reparse arch";
+        m_needToCheckArch = true;
+        m_registersView->setController(0);
+    }
 }
 
 void RegistersManager::updateRegisters()
 {
-     if ( !m_debugSession || m_debugSession->stateIsOn ( s_dbgNotStarted|s_shuttingDown ) ) {
-          return;
-     }
+    if (!m_debugSession || m_debugSession->stateIsOn(s_dbgNotStarted | s_shuttingDown)) {
+        return;
+    }
 
-     kDebug() << "Updating registers";
-     if ( m_needToCheckArch ) {
-          m_needToCheckArch = false;
-          m_currentArchitecture = undefined;
-          if ( m_registerController ) {
-               kDebug() << "Deleting registerController";
-               m_registerController->deleteLater();
-               m_registerController = 0 ;
-          }
-     }
-     if ( m_currentArchitecture == undefined ) {
-          m_architectureParser->determineArchitecture ( m_debugSession );
-     }
+    kDebug() << "Updating registers";
+    if (m_needToCheckArch) {
+        m_needToCheckArch = false;
+        m_currentArchitecture = undefined;
+        if (m_registerController) {
+            kDebug() << "Deleting registerController";
+            m_registerController->deleteLater();
+            m_registerController = 0 ;
+        }
+    }
+    if (m_currentArchitecture == undefined) {
+        m_architectureParser->determineArchitecture(m_debugSession);
+    }
 
-     if ( m_registerController ) {
-          m_registerController->updateRegisters();
-     } else {
-          kDebug() << "No registerController, yet?";
-     }
+    if (m_registerController) {
+        m_registerController->updateRegisters();
+    } else {
+        kDebug() << "No registerController, yet?";
+    }
 }
 
-ArchitectureParser::ArchitectureParser ( QObject* parent ) : QObject ( parent ) {}
+ArchitectureParser::ArchitectureParser(QObject* parent) : QObject(parent) {}
 
 }
