@@ -66,7 +66,6 @@ QStringList RegisterController_Arm::namesOfRegisterGroups() const
 
 RegistersGroup& RegisterController_Arm::updateFlagValues ( RegistersGroup& flagsGroup )
 {
-
      kDebug() << "Updating flags";
 
      bool ok;
@@ -113,53 +112,53 @@ void RegisterController_Arm::setVFPD_Register ( const Register& /*reg*/ )
      //setGeneralRegister ( reg, enumToString ( VFP_double ) );
 }
 
-void RegisterController_Arm::setVFPQ_Register ( const Register& /*reg */)
+void RegisterController_Arm::setVFPQ_Register ( const Register& /*reg */ )
 {
      kDebug() << "Setting VFPQ register through setGeneralRegister";
      //FIXME:
-    // setGeneralRegister ( reg, enumToString ( VFP_quad ) );
+     // setGeneralRegister ( reg, enumToString ( VFP_quad ) );
 }
 
 void RegisterController_Arm::updateRegisters ( const QString& group )
 {
      if ( !m_debugSession || m_debugSession->stateIsOn ( s_dbgNotStarted|s_shuttingDown ) ) {
-         return;
+          return;
      }
 
-          if ( !m_registerNamesInitialized ) {
-               initializeRegisters();
-               m_registerNamesInitialized = true;
+     if ( !m_registerNamesInitialized ) {
+          initializeRegisters();
+          m_registerNamesInitialized = true;
+     }
+
+     if ( group != enumToString ( VFP_single ) ) {
+          if ( group.isEmpty() ) {
+               QStringList groups = namesOfRegisterGroups();
+               groups.removeOne ( enumToString ( VFP_single ) );
+               foreach ( const QString g, groups ) {
+                    IRegisterController::updateRegisters ( g );
+               }
+          } else {
+               IRegisterController::updateRegisters ( group );
+          }
+     }
+
+     if ( group == enumToString ( VFP_single ) || group.isEmpty() ) {
+          QString command = "info all-registers ";
+          foreach ( const QString name, registerNamesForGroup ( enumToString ( VFP_single ) ) ) {
+               command += "$" + name + ' ';
           }
 
-          if ( group != enumToString ( VFP_single ) ) {
-               if ( group.isEmpty() ) {
-                    QStringList groups = namesOfRegisterGroups();
-                    groups.removeOne ( enumToString ( VFP_single ) );
-                    foreach ( const QString g, groups ) {
-                         IRegisterController::updateRegisters ( g );
-                    }
-               } else {
-                    IRegisterController::updateRegisters ( group );
-               }
+          if ( m_debugSession && !m_debugSession->stateIsOn ( s_dbgNotStarted|s_shuttingDown ) ) {
+               //TODO: use mi interface instead.
+               m_debugSession->addCommand (
+                    new CliCommand ( GDBMI::NonMI, command, this, &RegisterController_Arm::handleVFPSRegisters ) );
           }
 
-          if ( group == enumToString ( VFP_single ) || group.isEmpty() ) {
-               QString command = "info all-registers ";
-               foreach ( const QString name, registerNamesForGroup ( enumToString ( VFP_single ) ) ) {
-                    command += "$" + name + ' ';
-               }
-
-               if ( m_debugSession && !m_debugSession->stateIsOn ( s_dbgNotStarted|s_shuttingDown ) ) {
-                    //TODO: use mi interface instead.
-                    m_debugSession->addCommand (
-                         new CliCommand ( GDBMI::NonMI, command, this, &RegisterController_Arm::handleVFPSRegisters ) );
-               }
-
-               if ( group == enumToString ( VFP_single ) ) {
-                    IRegisterController::updateRegisters ( enumToString ( VFP_double ) );
-                    IRegisterController::updateRegisters ( enumToString ( VFP_quad ) );
-               }
+          if ( group == enumToString ( VFP_single ) ) {
+               IRegisterController::updateRegisters ( enumToString ( VFP_double ) );
+               IRegisterController::updateRegisters ( enumToString ( VFP_quad ) );
           }
+     }
 }
 
 void RegisterController_Arm::handleVFPSRegisters ( const QStringList& record )
@@ -219,7 +218,7 @@ RegistersGroup& RegisterController_Arm::convertValuesForGroup ( RegistersGroup& 
 
 RegisterController_Arm::RegisterController_Arm ( QObject* parent, DebugSession* debugSession ) :IRegisterController ( parent, debugSession ), m_registerNamesInitialized ( false )
 {
-    initRegisterNames();
+     initRegisterNames();
 }
 
 void RegisterController_Arm::initRegisterNames()

@@ -140,28 +140,28 @@ void RegistersManager::setSession ( DebugSession* debugSession )
 void RegistersManager::updateRegisters()
 {
      if ( !m_debugSession || m_debugSession->stateIsOn ( s_dbgNotStarted|s_shuttingDown ) ) {
-         return;
+          return;
      }
 
-          kDebug() << "Updating registers";
-          if ( m_needToCheckArch ) {
-               m_needToCheckArch = false;
-               m_currentArchitecture = undefined;
-               if ( m_registerController ) {
-                    kDebug() << "Deleting registerController";
-                    m_registerController->deleteLater();
-                    m_registerController = 0 ;
-               }
-          }
-          if ( m_currentArchitecture == undefined ) {
-               m_architectureParser->determineArchitecture ( m_debugSession );
-          }
-
+     kDebug() << "Updating registers";
+     if ( m_needToCheckArch ) {
+          m_needToCheckArch = false;
+          m_currentArchitecture = undefined;
           if ( m_registerController ) {
-               m_registerController->updateRegisters();
-          } else {
-               kDebug() << "No registerController, yet?";
+               kDebug() << "Deleting registerController";
+               m_registerController->deleteLater();
+               m_registerController = 0 ;
           }
+     }
+     if ( m_currentArchitecture == undefined ) {
+          m_architectureParser->determineArchitecture ( m_debugSession );
+     }
+
+     if ( m_registerController ) {
+          m_registerController->updateRegisters();
+     } else {
+          kDebug() << "No registerController, yet?";
+     }
 }
 
 ArchitectureParser::ArchitectureParser ( QObject* parent ) : QObject ( parent ) {}

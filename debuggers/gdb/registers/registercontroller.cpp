@@ -101,7 +101,6 @@ void IRegisterController::updateRegisterValuesHandler ( const GDBMI::ResultRecor
 
 void IRegisterController::setRegisterValue ( const Register& reg )
 {
-
      if ( !m_rawRegisterNames.isEmpty() ) {
           const QString group = groupForRegisterName ( reg.name );
           if ( !group.isEmpty() ) {

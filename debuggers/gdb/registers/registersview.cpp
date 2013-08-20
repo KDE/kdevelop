@@ -258,16 +258,17 @@ int RegistersView::TablesManager::numOfFreeTables() const
 
 void RegistersView::registersInGroupChanged ( const QString& group )
 {
+     if ( !m_registerController ) {
+          return;
+     }
 
-     kDebug() << "Updating GUI";
+     kDebug() << "Updating registers";
 
-     if ( m_registerController ) {
-          const RegistersGroup registersGroup = m_registerController->registersFromGroup ( group, m_registersFormat );
+     const RegistersGroup registersGroup = m_registerController->registersFromGroup ( group, m_registersFormat );
 
-          const Table t = m_tablesManager.tableForGroup ( registersGroup.groupName );
-          if ( !t.isNull() ) {
-               updateRegistersInTable ( t, registersGroup );
-          }
+     const Table t = m_tablesManager.tableForGroup ( registersGroup.groupName );
+     if ( !t.isNull() ) {
+          updateRegistersInTable ( t, registersGroup );
      }
 }
 

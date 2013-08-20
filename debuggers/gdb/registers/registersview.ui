@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>registersView</class>
- <widget class="QWidget" name="registersView">
+ <class>RegistersView</class>
+ <widget class="QWidget" name="RegistersView">
   <property name="geometry">
    <rect>
     <x>0</x>

@@ -37,7 +37,7 @@ struct RegistersGroup;
 class IRegisterController;
 
 /** @brief Class for displaying registers content */
-class RegistersView : public QWidget, private Ui::registersView {
+class RegistersView : public QWidget, private Ui::RegistersView {
      Q_OBJECT
 
 public:
@@ -115,8 +115,8 @@ private slots:
      void registerChangedInternally ( QTableWidgetItem* item );
      ///If @p item is a flag then send updated value, otherwise do nothing.
      void flagChangedInternally ( QTableWidgetItem* item );
-     ///Changes register formates.
-     void formatMenuTriggered ( int );
+     ///Changes register formates to @p format.
+     void formatMenuTriggered ( int format);
      ///Changes visible tables
      void showMenuTriggered ( const QString& );
 

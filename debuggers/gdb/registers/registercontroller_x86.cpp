@@ -67,7 +67,6 @@ QStringList RegisterControllerGeneral_x86::namesOfRegisterGroups() const
 
 RegistersGroup& RegisterControllerGeneral_x86::updateFlagValues ( RegistersGroup& flagsGroup )
 {
-
      kDebug() << "Updating flags";
 
      bool ok;
@@ -107,7 +106,7 @@ void RegisterControllerGeneral_x86::setFPURegister ( const Register& reg )
      setGeneralRegister ( reg, enumToString ( FPU ) );
 }
 
-void RegisterControllerGeneral_x86::setXMMRegister ( const Register& /*reg */)
+void RegisterControllerGeneral_x86::setXMMRegister ( const Register& /*reg */ )
 {
      kDebug() << "Setting XMM register through setGeneralRegister";
      //FIXME:
@@ -123,38 +122,38 @@ void RegisterControllerGeneral_x86::setSegmentRegister ( const Register& reg )
 void RegisterControllerGeneral_x86::updateRegisters ( const QString& group )
 {
      if ( !m_debugSession || m_debugSession->stateIsOn ( s_dbgNotStarted|s_shuttingDown ) ) {
-         return;
+          return;
      }
 
-          if ( !m_registerNamesInitialized ) {
-               initializeRegisters();
-               m_registerNamesInitialized = true;
-          }
+     if ( !m_registerNamesInitialized ) {
+          initializeRegisters();
+          m_registerNamesInitialized = true;
+     }
 
-          if ( group != enumToString ( FPU ) ) {
-               if ( group.isEmpty() ) {
-                    QStringList groups = namesOfRegisterGroups();
-                    groups.removeOne ( enumToString ( FPU ) );
-                    foreach ( const QString g, groups ) {
-                         IRegisterController::updateRegisters ( g );
-                    }
-               } else {
-                    IRegisterController::updateRegisters ( group );
+     if ( group != enumToString ( FPU ) ) {
+          if ( group.isEmpty() ) {
+               QStringList groups = namesOfRegisterGroups();
+               groups.removeOne ( enumToString ( FPU ) );
+               foreach ( const QString g, groups ) {
+                    IRegisterController::updateRegisters ( g );
                }
+          } else {
+               IRegisterController::updateRegisters ( group );
           }
+     }
 
-          if ( group == enumToString ( FPU ) || group.isEmpty() ) {
-               if ( m_debugSession && !m_debugSession->stateIsOn ( s_dbgNotStarted|s_shuttingDown ) ) {
+     if ( group == enumToString ( FPU ) || group.isEmpty() ) {
+          if ( m_debugSession && !m_debugSession->stateIsOn ( s_dbgNotStarted|s_shuttingDown ) ) {
 
-                    QString command = "info all-registers ";
-                    foreach ( const QString name, registerNamesForGroup ( enumToString ( FPU ) ) ) {
-                         command += "$" + name + ' ';
-                    }
-                    //TODO: use mi interface instead.
-                    m_debugSession->addCommand (
-                         new CliCommand ( GDBMI::NonMI, command, this, &RegisterControllerGeneral_x86::handleFPURegisters ) );
+               QString command = "info all-registers ";
+               foreach ( const QString name, registerNamesForGroup ( enumToString ( FPU ) ) ) {
+                    command += "$" + name + ' ';
                }
+               //TODO: use mi interface instead.
+               m_debugSession->addCommand (
+                    new CliCommand ( GDBMI::NonMI, command, this, &RegisterControllerGeneral_x86::handleFPURegisters ) );
           }
+     }
 }
 
 QString RegisterControllerGeneral_x86::enumToString ( const RegisterGroups& group ) const
