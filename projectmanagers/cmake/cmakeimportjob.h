@@ -22,6 +22,7 @@
 #define CMAKEIMPORTJOB_H
 
 #include <KJob>
+#include "cmakeprojectdata.h"
 
 template<class T>class QFutureWatcher;
 class KUrl;
@@ -29,7 +30,6 @@ class WaitAllJobs;
 class CMakeManager;
 class CMakeFolderItem;
 class CMakeCommitChangesJob;
-struct CMakeProjectData;
 namespace KDevelop
 {
     class IProject;
@@ -44,6 +44,8 @@ class CMakeImportJob : public KJob
         CMakeImportJob(KDevelop::ProjectFolderItem* dom, CMakeManager* parent);
 
         virtual void start();
+        KDevelop::IProject* project() const { return m_project; }
+        CMakeProjectData projectData() const { return m_data;  }
 
     private slots:
         void waitFinished(KJob* job);
@@ -56,7 +58,7 @@ class CMakeImportJob : public KJob
 
         KDevelop::IProject* m_project;
         KDevelop::ProjectFolderItem* m_dom;
-        CMakeProjectData* m_data;
+        CMakeProjectData m_data;
         CMakeManager* m_manager;
         WaitAllJobs* m_wjob;
         QFutureWatcher<void>* m_futureWatcher;

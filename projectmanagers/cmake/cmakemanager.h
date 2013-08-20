@@ -130,7 +130,7 @@ public:
     
     QStringList processGeneratorExpression(const QStringList& expr, KDevelop::IProject* project, KDevelop::ProjectTargetItem* target) const;
     bool isReloading(KDevelop::IProject* p);
-    CMakeProjectData* projectData(KDevelop::IProject* project);
+    CMakeProjectData projectData(KDevelop::IProject* project);
 
 signals:
     void folderRenamed(const KUrl& oldFolder, KDevelop::ProjectFolderItem* newFolder);
@@ -141,11 +141,11 @@ private slots:
 
     void jumpToDeclaration();
     void projectClosing(KDevelop::IProject*);
-    void reimportDone(KJob* job);
     
     void deletedWatched(const QString& directory);
     void directoryChanged(const QString& dir);
     void filesystemBuffererTimeout();
+    void importFinished(KJob* job);
 
 private:
     void reimport(CMakeFolderItem* fi);

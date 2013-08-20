@@ -549,7 +549,9 @@ QList<ProjectFolderItem*> CMakeManager::parse(ProjectFolderItem*)
 
 KJob* CMakeManager::createImportJob(ProjectFolderItem* dom)
 {
-    return new CMakeImportJob(dom, this);
+    KJob* job = new CMakeImportJob(dom, this);
+    connect(job, SIGNAL(finished(KJob*)), SLOT(importFinished(KJob*)));
+    return job;
 }
 
 QList<KDevelop::ProjectTargetItem*> CMakeManager::targets() const
@@ -645,10 +647,12 @@ void CMakeManager::reimport(CMakeFolderItem* fi)
     ICore::self()->runController()->registerJob( job );
 }
 
-void CMakeManager::reimportDone(KJob* job)
+void CMakeManager::importFinished(KJob* j)
 {
-    IProject* p = job->property("project").value<KDevelop::IProject*>();
-    m_busyProjects.remove(p);
+    CMakeImportJob* job = qobject_cast<CMakeImportJob*>(j);
+    Q_ASSERT(job);
+    m_busyProjects.remove(job->project());
+    *m_projectsData[job->project()] = job->projectData();
 }
 
 bool CMakeManager::isReloading(IProject* p)
@@ -1210,12 +1214,13 @@ void CMakeManager::addWatcher(IProject* p, const QString& path)
     m_watchers[p]->addPath(path);
 }
 
-CMakeProjectData* CMakeManager::projectData(IProject* project)
+CMakeProjectData CMakeManager::projectData(IProject* project)
 {
+    Q_ASSERT(QThread::currentThread() == project->thread());
     CMakeProjectData* data = m_projectsData[project];
     if(!data) {
         data = new CMakeProjectData;
         m_projectsData[project] = data;
     }
-    return data;
+    return *data;
 }

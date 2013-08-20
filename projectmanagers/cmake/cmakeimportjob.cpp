@@ -111,14 +111,14 @@ KDevelop::ReferencedTopDUContext CMakeImportJob::initializeProject(CMakeFolderIt
     
     QPair<VariableMap,QStringList> initials = CMakeParserUtils::initialVariables();
     
-    m_data->clear();
-    m_data->modulePath=initials.first["CMAKE_MODULE_PATH"];
-    m_data->vm=initials.first;
-    m_data->vm.insertGlobal("CMAKE_SOURCE_DIR", QStringList(baseUrl.toLocalFile(KUrl::RemoveTrailingSlash)));
+    m_data.clear();
+    m_data.modulePath=initials.first["CMAKE_MODULE_PATH"];
+    m_data.vm=initials.first;
+    m_data.vm.insertGlobal("CMAKE_SOURCE_DIR", QStringList(baseUrl.toLocalFile(KUrl::RemoveTrailingSlash)));
     
     KUrl cachefile = m_manager->buildDirectory(m_project->projectItem());
     cachefile.addPath("CMakeCache.txt");
-    m_data->cache = CMakeParserUtils::readCache(cachefile);
+    m_data.cache = CMakeParserUtils::readCache(cachefile);
 
     KDevelop::ReferencedTopDUContext buildstrapContext;
     {
@@ -144,7 +144,7 @@ KDevelop::ReferencedTopDUContext CMakeImportJob::initializeProject(CMakeFolderIt
     ReferencedTopDUContext ref=buildstrapContext;
     foreach(const QString& script, initials.second)
     {
-        ref = includeScript(CMakeProjectVisitor::findFile(script, m_data->modulePath, QStringList()), baseUrl.toLocalFile(), ref);
+        ref = includeScript(CMakeProjectVisitor::findFile(script, m_data.modulePath, QStringList()), baseUrl.toLocalFile(), ref);
     }
     
     //Initialize parent parts of the project that don't belong to the tree (because it's a partial import)
@@ -160,10 +160,10 @@ KDevelop::ReferencedTopDUContext CMakeImportJob::initializeProject(CMakeFolderIt
             QString dir = currentDir.toLocalFile();
             ref = includeScript(script.toLocalFile(), dir, ref);
             Q_ASSERT(ref);
-            includes << m_data->properties[DirectoryProperty][dir]["INCLUDE_DIRECTORIES"];
-            rootFolder->defineVariables(m_data->properties[DirectoryProperty][dir]["COMPILE_DEFINITIONS"]);
+            includes << m_data.properties[DirectoryProperty][dir]["INCLUDE_DIRECTORIES"];
+            rootFolder->defineVariables(m_data.properties[DirectoryProperty][dir]["COMPILE_DEFINITIONS"]);
             
-            foreach(const Subdirectory& s, m_data->subdirectories) {
+            foreach(const Subdirectory& s, m_data.subdirectories) {
                 KUrl candidate = currentDir;
                 candidate.addPath(s.name);
                 
@@ -187,7 +187,7 @@ KDevelop::ReferencedTopDUContext CMakeImportJob::includeScript(const QString& fi
     m_manager->addWatcher(m_project, file);
     QString profile = CMake::currentEnvironment(m_project);
     const KDevelop::EnvironmentGroupList env( KGlobal::config() );
-    return CMakeParserUtils::includeScript( file, parent, m_data, dir, env.variables(profile));
+    return CMakeParserUtils::includeScript( file, parent, &m_data, dir, env.variables(profile));
 }
 
 CMakeCommitChangesJob* CMakeImportJob::importDirectory(IProject* project, const KUrl& url, const KDevelop::ReferencedTopDUContext& parentTop)
@@ -199,16 +199,16 @@ CMakeCommitChangesJob* CMakeImportJob::importDirectory(IProject* project, const 
     {
         kDebug(9042) << "Adding cmake: " << cmakeListsPath << " to the model";
 
-        m_data->vm.pushScope();
+        m_data.vm.pushScope();
         ReferencedTopDUContext ctx = includeScript(cmakeListsPath.toLocalFile(),
                                                    url.toLocalFile(KUrl::RemoveTrailingSlash), parentTop);
-        KUrl::List folderList = commitJob->addProjectData(m_data);
+        KUrl::List folderList = commitJob->addProjectData(&m_data);
         foreach(const KUrl& folder, folderList) {
             CMakeCommitChangesJob* job = importDirectory(project, folder, ctx);
             connect(commitJob, SIGNAL(folderCreated(KDevelop::ProjectFolderItem*)),
                     job, SLOT(folderAvailable(KDevelop::ProjectFolderItem*)));
         }
-        m_data->vm.popScope();
+        m_data.vm.popScope();
     }
     commitJob->start();
     m_wjob->addJob(commitJob);
