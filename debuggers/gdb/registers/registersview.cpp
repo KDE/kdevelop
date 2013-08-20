@@ -25,8 +25,6 @@
 
 #include <KDebug>
 
-#include "registercontroller.h"
-
 namespace GDBDebugger {
 
 RegistersView::RegistersView ( QWidget* p ) : QWidget ( p ), m_registerController ( 0 ), m_tablesManager ( this ), m_registersFormat ( Raw )
@@ -111,22 +109,22 @@ void RegistersView::contextMenuEvent ( QContextMenuEvent* e )
      }
 
      m = m_menu->addMenu ( "Format" );
-     addItemToFormatSubmenu ( m, QString ( "Dec" ), ( int ) Decimal );
-     addItemToFormatSubmenu ( m, QString ( "Hex" ), ( int ) Hexadecimal );
-     addItemToFormatSubmenu ( m, QString ( "Raw" ), ( int ) Raw );
-     addItemToFormatSubmenu ( m, QString ( "Oct" ), ( int ) Octal );
-     addItemToFormatSubmenu ( m, QString ( "Bin" ), ( int ) Binary );
+     addItemToFormatSubmenu ( m, QString ( "Dec" ), Decimal );
+     addItemToFormatSubmenu ( m, QString ( "Hex" ), Hexadecimal );
+     addItemToFormatSubmenu ( m, QString ( "Raw" ), Raw );
+     addItemToFormatSubmenu ( m, QString ( "Oct" ), Octal );
+     addItemToFormatSubmenu ( m, QString ( "Bin" ), Binary );
 
      if ( !m_menu->actions().isEmpty() ) {
           m_menu->exec ( e->globalPos() );
      }
 }
 
-void RegistersView::addItemToFormatSubmenu ( QMenu* m, const QString& name, int format )
+void RegistersView::addItemToFormatSubmenu ( QMenu* m, const QString& name, const RegistersFormat& format )
 {
      QAction* a = m->addAction ( name );
      a->setData ( format );
-     if ( ( RegistersFormat ) format == m_registersFormat ) {
+     if ( format == m_registersFormat ) {
           a->setCheckable ( true );
           a->setChecked ( true );
      }
@@ -136,7 +134,7 @@ void RegistersView::menuTriggered ( QAction* group )
 {
 
      if ( group->text() == "Hex" || group->text() == "Dec" || group->text() == "Oct" || group->text() == "Bin" || group->text() == "Raw" ) {
-          m_registersFormat = group->data().toInt();
+          m_registersFormat = static_cast<RegistersFormat>( group->data().toInt());
           if ( m_registerController ) {
                m_registerController->updateRegisters();
           }
@@ -253,7 +251,7 @@ void RegistersView::registersInGroupChanged ( const QString& group )
      kDebug() << "Updating GUI";
 
      if ( m_registerController ) {
-          const RegistersGroup registersGroup = m_registerController->registersFromGroup ( group, ( RegistersFormat ) m_registersFormat );
+          const RegistersGroup registersGroup = m_registerController->registersFromGroup ( group, m_registersFormat );
 
           const Table t = m_tablesManager.tableForGroup ( registersGroup.groupName );
           if ( !t.isNull() ) {
@@ -297,7 +295,7 @@ const QStringList RegistersView::TablesManager::allGroups() const
 
 void RegistersView::TablesManager::save()
 {
-     m_config.writeEntry ( "format", m_parent->m_registersFormat );
+     m_config.writeEntry ( "format", static_cast<int>(m_parent->m_registersFormat) );
      m_config.writeEntry ( "number", m_tableRegistersAssociation.count() - numOfFreeTables() );
 
      const QStringList groups = allGroups();
@@ -311,7 +309,7 @@ void RegistersView::TablesManager::save()
 
 void RegistersView::TablesManager::load()
 {
-     m_parent->m_registersFormat = m_config.readEntry ( "format", m_parent->m_registersFormat );
+     m_parent->m_registersFormat = static_cast<RegistersFormat> (m_config.readEntry ( "format", static_cast<int>(m_parent->m_registersFormat) ));
      int tablesCount = m_config.readEntry ( "number", -1 );
      if ( tablesCount == -1 ) {
           createTableForGroup ( "General" );

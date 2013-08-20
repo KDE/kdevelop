@@ -23,6 +23,8 @@
 
 #include "../ui_registersview.h"
 
+#include "registercontroller.h"
+
 #include <KConfigGroup>
 
 class QMenu;
@@ -120,12 +122,12 @@ signals:
      void registerChanged ( const Register& reg );
 
 private:
-     void addItemToFormatSubmenu ( QMenu* m, const QString& name, int format );
+     void addItemToFormatSubmenu ( QMenu* m, const QString& name, const RegistersFormat& format );
 private:
      QMenu* m_menu;
      IRegisterController* m_registerController;
      TablesManager m_tablesManager;
-     int m_registersFormat;
+     RegistersFormat m_registersFormat;
 
      friend class TablesManager;
 };
