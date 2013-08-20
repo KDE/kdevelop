@@ -44,15 +44,15 @@ protected:
 
      virtual RegistersGroup registersFromGroupInternally ( const QString& group );
 
-     virtual RegistersGroup& convertValuesForGroup ( RegistersGroup& registersGroup, const RegistersFormat& format = Raw );
+     virtual void convertValuesForGroup ( RegistersGroup& registersGroup, const RegistersFormat& format = Raw );
 
      virtual QStringList registerNamesForGroup ( const QString& group );
 
-     virtual RegistersGroup& updateValuesForRegisters ( RegistersGroup& registers );
+     virtual void updateValuesForRegisters ( RegistersGroup& registers );
 
      virtual void setRegisterValueForGroup ( const QString& group, const Register& reg );
 
-     RegistersGroup& updateFlagValues ( RegistersGroup& flagsGroup );
+     void updateFlagValues ( RegistersGroup& flagsGroup );
 
      //this is a workaround for FPU registers.
      void handleFPURegisters ( const QStringList& record );

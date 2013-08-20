@@ -31,16 +31,14 @@
 
 namespace GDBDebugger {
 
-RegistersGroup&  RegisterControllerGeneral_x86::updateValuesForRegisters ( RegistersGroup& registers )
+void RegisterControllerGeneral_x86::updateValuesForRegisters ( RegistersGroup& registers )
 {
      kDebug() << "Updating values for registers: " << registers.groupName;
      if ( registers.groupName == enumToString ( Flags ) ) {
-          registers = updateFlagValues ( registers );
+          updateFlagValues ( registers );
      } else {
-          registers = IRegisterController::updateValuesForRegisters ( registers );
+          IRegisterController::updateValuesForRegisters ( registers );
      }
-
-     return registers;
 }
 
 RegistersGroup RegisterControllerGeneral_x86::registersFromGroupInternally ( const QString& group )
@@ -54,7 +52,8 @@ RegistersGroup RegisterControllerGeneral_x86::registersFromGroupInternally ( con
           registers.registers.append ( Register ( name, QString() ) );
      }
 
-     return updateValuesForRegisters ( registers );
+     updateValuesForRegisters ( registers );
+     return registers;
 }
 
 QStringList RegisterControllerGeneral_x86::namesOfRegisterGroups() const
@@ -65,7 +64,7 @@ QStringList RegisterControllerGeneral_x86::namesOfRegisterGroups() const
      return registerGroups;
 }
 
-RegistersGroup& RegisterControllerGeneral_x86::updateFlagValues ( RegistersGroup& flagsGroup )
+void RegisterControllerGeneral_x86::updateFlagValues ( RegistersGroup& flagsGroup )
 {
      kDebug() << "Updating flags";
 
@@ -79,8 +78,6 @@ RegistersGroup& RegisterControllerGeneral_x86::updateFlagValues ( RegistersGroup
 //     foreach(Register r, flagsGroup.registers) {
 //         kDebug() << r.name << ' ' << r.value;
 //     }
-
-     return flagsGroup;
 }
 
 void RegisterControllerGeneral_x86::setRegisterValueForGroup ( const QString& group, const Register& reg )
@@ -173,19 +170,18 @@ QString RegisterControllerGeneral_x86::enumToString ( const RegisterGroups& grou
      return QString();
 }
 
-RegistersGroup& RegisterControllerGeneral_x86::convertValuesForGroup ( RegistersGroup& registersGroup, const RegistersFormat& format )
+void RegisterControllerGeneral_x86::convertValuesForGroup ( RegistersGroup& registersGroup, const RegistersFormat& format )
 {
      if ( format != Raw && format != Natural ) {
           if ( registersGroup.groupName == enumToString ( General ) || registersGroup.groupName == enumToString ( Segment ) ) {
-               return IRegisterController::convertValuesForGroup ( registersGroup, format );
+               IRegisterController::convertValuesForGroup ( registersGroup, format );
           }
      }
-     return registersGroup;
 }
 
 void RegisterControllerGeneral_x86::handleFPURegisters ( const QStringList& record )
 {
-     const QRegExp rx ( "^(st[0-8])\\s+((?:-?\\d+\\.?\\d+(?:e(\\+|-)\\d+)?)|(?:\\d+))$" );
+     const QRegExp rx ( "^(st[0-8])\\s+((?:-?\\d+\\.?\\d+(?:e(\\+|-)\\d+)?)|(?:-?\\d+))$" );
      QVector<Register> registers;
      foreach ( const QString s, record ) {
           if ( rx.exactMatch ( s ) ) {

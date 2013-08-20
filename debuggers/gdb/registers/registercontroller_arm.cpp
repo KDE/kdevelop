@@ -30,16 +30,14 @@
 
 namespace GDBDebugger {
 
-RegistersGroup&  RegisterController_Arm::updateValuesForRegisters ( RegistersGroup& registers )
+void  RegisterController_Arm::updateValuesForRegisters ( RegistersGroup& registers )
 {
      kDebug() << "Updating values for registers: " << registers.groupName;
      if ( registers.groupName == enumToString ( Flags ) ) {
-          registers = updateFlagValues ( registers );
+          updateFlagValues ( registers );
      } else {
-          registers = IRegisterController::updateValuesForRegisters ( registers );
+          IRegisterController::updateValuesForRegisters ( registers );
      }
-
-     return registers;
 }
 
 RegistersGroup RegisterController_Arm::registersFromGroupInternally ( const QString& group )
@@ -53,7 +51,8 @@ RegistersGroup RegisterController_Arm::registersFromGroupInternally ( const QStr
           registers.registers.append ( Register ( name, QString() ) );
      }
 
-     return updateValuesForRegisters ( registers );
+     updateValuesForRegisters ( registers );
+     return registers;
 }
 
 QStringList RegisterController_Arm::namesOfRegisterGroups() const
@@ -64,7 +63,7 @@ QStringList RegisterController_Arm::namesOfRegisterGroups() const
      return registerGroups;
 }
 
-RegistersGroup& RegisterController_Arm::updateFlagValues ( RegistersGroup& flagsGroup )
+void RegisterController_Arm::updateFlagValues ( RegistersGroup& flagsGroup )
 {
      kDebug() << "Updating flags";
 
@@ -78,8 +77,6 @@ RegistersGroup& RegisterController_Arm::updateFlagValues ( RegistersGroup& flags
 //     foreach(Register r, flagsGroup.registers) {
 //         kDebug() << r.name << ' ' << r.value;
 //     }
-
-     return flagsGroup;
 }
 
 void RegisterController_Arm::setRegisterValueForGroup ( const QString& group, const Register& reg )
@@ -163,7 +160,7 @@ void RegisterController_Arm::updateRegisters ( const QString& group )
 
 void RegisterController_Arm::handleVFPSRegisters ( const QStringList& record )
 {
-     const QRegExp rx ( "^(s\\d+)\\s+((?:-?\\d+\\.?\\d+(?:e(\\+|-)\\d+)?)|(?:\\d+))$" );
+     const QRegExp rx ( "^(s\\d+)\\s+((?:-?\\d+\\.?\\d+(?:e(\\+|-)\\d+)?)|(?:-?\\d+))$" );
      QVector<Register> registers;
      foreach ( const QString s, record ) {
           if ( rx.exactMatch ( s ) ) {
@@ -205,15 +202,13 @@ QString RegisterController_Arm::enumToString ( const RegisterGroups& group ) con
      return QString();
 }
 
-RegistersGroup& RegisterController_Arm::convertValuesForGroup ( RegistersGroup& registersGroup, const RegistersFormat& format )
+void RegisterController_Arm::convertValuesForGroup ( RegistersGroup& registersGroup, const RegistersFormat& format )
 {
      if ( format != Raw && format != Natural ) {
           if ( registersGroup.groupName == enumToString ( General ) ) {
-               return IRegisterController::convertValuesForGroup ( registersGroup, format );
+               IRegisterController::convertValuesForGroup ( registersGroup, format );
           }
      }
-
-     return registersGroup;
 }
 
 RegisterController_Arm::RegisterController_Arm ( QObject* parent, DebugSession* debugSession ) :IRegisterController ( parent, debugSession ), m_registerNamesInitialized ( false )

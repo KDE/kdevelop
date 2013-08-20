@@ -145,15 +145,15 @@ QString IRegisterController::groupForRegisterName ( const QString& name )
 RegistersGroup IRegisterController::registersFromGroup ( const QString& group, const RegistersFormat& format )
 {
      RegistersGroup g = registersFromGroupInternally ( group );
-     return convertValuesForGroup ( g, format );
+     convertValuesForGroup ( g, format );
+     return g;
 }
 
-RegistersGroup& IRegisterController::updateValuesForRegisters ( RegistersGroup& registers )
+void IRegisterController::updateValuesForRegisters ( RegistersGroup& registers )
 {
      if ( m_rawRegisterNames.isEmpty() ) {
           kDebug() << "Registers not initialized yet";
-          static RegistersGroup empty;
-          return empty;
+          return;
      }
 
      for ( int i = 0; i < registers.registers.size(); i++ ) {
@@ -161,7 +161,6 @@ RegistersGroup& IRegisterController::updateValuesForRegisters ( RegistersGroup& 
                registers.registers[i].value = m_registers.value ( registers.registers[i].name );
           }
      }
-     return registers;
 }
 
 void IRegisterController::setFlagRegister ( const Register& reg, const FlagRegister& flag )
@@ -194,7 +193,7 @@ void IRegisterController::setGeneralRegister ( const Register& reg, const QStrin
      }
 }
 
-RegistersGroup& IRegisterController::convertValuesForGroup ( RegistersGroup& registersGroup, const RegistersFormat& format )
+void IRegisterController::convertValuesForGroup ( RegistersGroup& registersGroup, const RegistersFormat& format )
 {
      kDebug() << "Converting for group" << registersGroup.groupName;
      bool ok;
@@ -206,8 +205,6 @@ RegistersGroup& IRegisterController::convertValuesForGroup ( RegistersGroup& reg
           }
           // kDebug() << "After " << registersGroup.registers[i].value;
      }
-
-     return registersGroup;
 }
 
 IRegisterController::IRegisterController ( QObject* parent, DebugSession* debugSession ) :QObject ( parent ), m_debugSession ( debugSession ) {}

@@ -107,16 +107,19 @@ protected:
      ///Return names of all registers for @p group.
      virtual QStringList registerNamesForGroup ( const QString& group ) = 0;
 
-     ///Updates value for each register in @p RegistersGroup.
-     ///@return: the same group with updated values.
-     virtual RegistersGroup& updateValuesForRegisters ( RegistersGroup& registers );
+     /**Updates value for each register in the group.
+      * @param [out] registers Registers which values should be updated.
+      */
+     virtual void updateValuesForRegisters ( RegistersGroup& registers );
 
      ///Sets new value for register @p reg, from group @p group.
      virtual void setGeneralRegister ( const Register& reg, const QString& group );
 
-     ///Converts registers in @p registersGroup to the format @p format.
-     ///@return: the same group with converted(if any) values.
-     virtual RegistersGroup& convertValuesForGroup ( RegistersGroup& registersGroup, const RegistersFormat& format = Raw );
+      /**Converts values for each register in the group.
+      * @param [out] registers Registers which values should be converted.
+      * @param format Format used for conversion.
+      */
+     virtual void convertValuesForGroup ( RegistersGroup& registersGroup, const RegistersFormat& format = Raw );
 
      ///Returns value for the given @p name, empty string if the name is incorrect or there is no registers yet.
      QString registerValue ( const QString& name ) const;
