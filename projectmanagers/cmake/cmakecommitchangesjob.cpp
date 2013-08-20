@@ -129,14 +129,14 @@ CMakeCommitChangesJob::CMakeCommitChangesJob(const KUrl& url, CMakeManager* mana
     }
 }
 
-KUrl::List CMakeCommitChangesJob::addProjectData(const CMakeProjectData* data)
+KUrl::List CMakeCommitChangesJob::addProjectData(const CMakeProjectData& data)
 {
     m_projectDataAdded = true;
     KUrl::List ret;
-    m_tests = data->testSuites;
+    m_tests = data.testSuites;
     
     QSet<QString> alreadyAdded;
-    foreach(const Subdirectory& subf, data->subdirectories) {
+    foreach(const Subdirectory& subf, data.subdirectories) {
         if(subf.name.isEmpty() || alreadyAdded.contains(subf.name)) //empty case would not be necessary if we didn't process the wrong lines
             continue;
         alreadyAdded.insert(subf.name);
@@ -153,17 +153,17 @@ KUrl::List CMakeCommitChangesJob::addProjectData(const CMakeProjectData* data)
     }
 
     QString dir = m_url.toLocalFile(KUrl::RemoveTrailingSlash);
-    if(data->vm.value("CMAKE_INCLUDE_CURRENT_DIR")==QStringList("ON")) {
+    if(data.vm.value("CMAKE_INCLUDE_CURRENT_DIR")==QStringList("ON")) {
         m_directories += dir;
-        m_directories += data->vm.value("CMAKE_CURRENT_BINARY_DIR");
+        m_directories += data.vm.value("CMAKE_CURRENT_BINARY_DIR");
     }
-    m_directories += resolvePaths(m_url, data->properties[DirectoryProperty][dir]["INCLUDE_DIRECTORIES"]);
+    m_directories += resolvePaths(m_url, data.properties[DirectoryProperty][dir]["INCLUDE_DIRECTORIES"]);
     m_directories.removeAll(QString());
 
-    m_definitions = data->properties[DirectoryProperty][dir]["COMPILE_DEFINITIONS"];
+    m_definitions = data.properties[DirectoryProperty][dir]["COMPILE_DEFINITIONS"];
 
-    foreach(const Target& t, data->targets) {
-        const QMap<QString, QStringList>& targetProps = data->properties[TargetProperty][t.name];
+    foreach(const Target& t, data.targets) {
+        const QMap<QString, QStringList>& targetProps = data.properties[TargetProperty][t.name];
         if(targetProps["FOLDER"]==QStringList("CTestDashboardTargets"))
             continue; //filter some annoying targets
 
@@ -175,12 +175,12 @@ KUrl::List CMakeCommitChangesJob::addProjectData(const CMakeProjectData* data)
         target.location = targetProps["LOCATION"].join(QString());
         
         foreach(const QString& dep, t.libraries) {
-            const QMap<QString, QStringList>& depData = data->properties.value(TargetProperty).value(dep);
+            const QMap<QString, QStringList>& depData = data.properties.value(TargetProperty).value(dep);
             if(!depData.isEmpty()) {
                 target.includes += depData["INTERFACE_INCLUDE_DIRECTORIES"];
                 target.defines += depData["INTERFACE_COMPILE_DEFINITIONS"];
             } else {
-                kDebug() << "error: couldn't find dependency " << dep << data->properties.value(TargetProperty).keys();
+                kDebug() << "error: couldn't find dependency " << dep << data.properties.value(TargetProperty).keys();
             }
         }
         m_targets += target;

@@ -202,7 +202,7 @@ CMakeCommitChangesJob* CMakeImportJob::importDirectory(IProject* project, const 
         m_data.vm.pushScope();
         ReferencedTopDUContext ctx = includeScript(cmakeListsPath.toLocalFile(),
                                                    url.toLocalFile(KUrl::RemoveTrailingSlash), parentTop);
-        KUrl::List folderList = commitJob->addProjectData(&m_data);
+        KUrl::List folderList = commitJob->addProjectData(m_data);
         foreach(const KUrl& folder, folderList) {
             CMakeCommitChangesJob* job = importDirectory(project, folder, ctx);
             connect(commitJob, SIGNAL(folderCreated(KDevelop::ProjectFolderItem*)),

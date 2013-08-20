@@ -49,7 +49,7 @@ Q_OBJECT
 public:
     explicit CMakeCommitChangesJob(const KUrl& url, CMakeManager* manager, KDevelop::IProject* parent);
 
-    KUrl::List addProjectData(const CMakeProjectData* data);
+    KUrl::List addProjectData(const CMakeProjectData& data);
     virtual void start();
 
 public slots:
