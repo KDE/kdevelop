@@ -641,8 +641,6 @@ void CMakeManager::reimport(CMakeFolderItem* fi)
     m_busyProjects += fi->project();
     
     KJob *job=createImportJob(fi);
-    job->setProperty("project", qVariantFromValue(fi->project()));
-    
     connect(job, SIGNAL(result(KJob*)), SLOT(importFinished(KJob*)));
     ICore::self()->runController()->registerJob( job );
 }
