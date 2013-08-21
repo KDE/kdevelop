@@ -643,7 +643,7 @@ void CMakeManager::reimport(CMakeFolderItem* fi)
     KJob *job=createImportJob(fi);
     job->setProperty("project", qVariantFromValue(fi->project()));
     
-    connect( job, SIGNAL(result(KJob*)), this, SLOT(reimportDone(KJob*)) );
+    connect(job, SIGNAL(result(KJob*)), SLOT(importFinished(KJob*)));
     ICore::self()->runController()->registerJob( job );
 }
 
