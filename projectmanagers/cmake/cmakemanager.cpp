@@ -649,11 +649,8 @@ bool CMakeManager::isReloading(IProject* p)
     return !p->isReady() || m_busyProjects.contains(p);
 }
 
-void CMakeManager::deletedWatchedDirectory(const KUrl& dir)
+void CMakeManager::deletedWatchedDirectory(IProject* p, const KUrl& dir)
 {
-    IProject* p=ICore::self()->projectController()->findProjectForUrl(dir);
-    Q_ASSERT(p && !isReloading(p)); //caller ensures so
-    
     if(p->folder().equals(dir, KUrl::CompareWithoutTrailingSlash)) {
         ICore::self()->projectController()->closeProject(p);
     } else {
@@ -696,7 +693,7 @@ void CMakeManager::realDirectoryChanged(const QString& dir)
     
     if(!QFile::exists(dir)) {
         path.adjustPath(KUrl::AddTrailingSlash);
-        deletedWatchedDirectory(path);
+        deletedWatchedDirectory(p, path);
     } else
         dirtyFile(dir);
 }

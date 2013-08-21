@@ -140,7 +140,6 @@ private slots:
     void jumpToDeclaration();
     void projectClosing(KDevelop::IProject*);
     
-    void deletedWatchedDirectory(const KUrl& dir);
     void directoryChanged(const QString& dir);
     void filesystemBuffererTimeout();
     void importFinished(KJob* job);
@@ -150,6 +149,7 @@ private:
     bool isReloading(KDevelop::IProject* p);
     bool renameFileOrFolder(KDevelop::ProjectBaseItem *item, const KUrl &newUrl);
     void realDirectoryChanged(const QString& dir);
+    void deletedWatchedDirectory(KDevelop::IProject* p, const KUrl& dir);
     
     QMap<KDevelop::IProject*, CMakeProjectData*> m_projectsData;
     QMap<KDevelop::IProject*, QFileSystemWatcher*> m_watchers;
