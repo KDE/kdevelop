@@ -526,20 +526,21 @@ KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
     }
 
     CMakeFolderItem* rootItem = new CMakeFolderItem(project, project->folder(), QString(), 0 );
-    KUrl cachefile=buildDirectory(rootItem);
-    if( cachefile.isEmpty() ) {
-        CMake::checkForNeedingConfigure(project);
-    }
-    cachefile.addPath("CMakeCache.txt");
-    
     QFileSystemWatcher* w = new QFileSystemWatcher(project);
     w->setObjectName(project->name()+"_ProjectWatcher");
-    w->addPath(cachefile.toLocalFile());
     connect(w, SIGNAL(fileChanged(QString)), SLOT(dirtyFile(QString)));
     connect(w, SIGNAL(directoryChanged(QString)), SLOT(directoryChanged(QString)));
     m_watchers[project] = w;
-    Q_ASSERT(rootItem->rowCount()==0);
     
+    KUrl cachefile=CMake::currentBuildDir(project);
+    if( cachefile.isEmpty() ) {
+        CMake::checkForNeedingConfigure(project);
+    } else {
+        cachefile.addPath("CMakeCache.txt");
+        w->addPath(cachefile.toLocalFile());
+    }
+    
+    Q_ASSERT(rootItem->rowCount()==0);
     return rootItem;
 }
 
@@ -616,33 +617,23 @@ KDevelop::IProjectBuilder * CMakeManager::builder() const
 
 bool CMakeManager::reload(KDevelop::ProjectFolderItem* folder)
 {
+    kDebug(9032) << "reloading" << folder->url();
     if(isReloading(folder->project()))
         return false;
     
-    CMakeFolderItem* item=dynamic_cast<CMakeFolderItem*>(folder);
-    if ( !item ) {
-        ProjectBaseItem* it = folder;
-        while(!item && it->parent()) {
-            it = it->parent();
-            item = dynamic_cast<CMakeFolderItem*>(it);
-        }
-        if(!item)
-            return false;
+    CMakeFolderItem* fi = dynamic_cast<CMakeFolderItem*>(folder);
+    for(ProjectBaseItem* it = folder; !fi && it->parent();) {
+        it = it->parent();
+        fi = dynamic_cast<CMakeFolderItem*>(it);
     }
+    Q_ASSERT(fi && "at least the root item should be a CMakeFolderItem");
 
-    reimport(item);
-    return true;
-}
-
-void CMakeManager::reimport(CMakeFolderItem* fi)
-{
-    Q_ASSERT(fi && fi->project());
-    Q_ASSERT(!isReloading(fi->project()));
     m_busyProjects += fi->project();
-    
+
     KJob *job=createImportJob(fi);
     connect(job, SIGNAL(result(KJob*)), SLOT(importFinished(KJob*)));
     ICore::self()->runController()->registerJob( job );
+    return true;
 }
 
 void CMakeManager::importFinished(KJob* j)
@@ -658,25 +649,22 @@ bool CMakeManager::isReloading(IProject* p)
     return !p->isReady() || m_busyProjects.contains(p);
 }
 
-void CMakeManager::deletedWatched(const QString& path)
+void CMakeManager::deletedWatchedDirectory(const KUrl& dir)
 {
-    KUrl url(path);
-    IProject* p=ICore::self()->projectController()->findProjectForUrl(url);
+    IProject* p=ICore::self()->projectController()->findProjectForUrl(dir);
+    Q_ASSERT(p && !isReloading(p)); //caller ensures so
     
-    if(p && !isReloading(p)) {
-        if(p->folder().equals(url, KUrl::CompareWithoutTrailingSlash)) {
-            ICore::self()->projectController()->closeProject(p);
+    if(p->folder().equals(dir, KUrl::CompareWithoutTrailingSlash)) {
+        ICore::self()->projectController()->closeProject(p);
+    } else {
+        if(dir.fileName()=="CMakeLists.txt") {
+            QList<ProjectFolderItem*> folders = p->foldersForUrl(dir.upUrl());
+            foreach(ProjectFolderItem* folder, folders)
+                reload(folder);
         } else {
-            if(url.fileName()=="CMakeLists.txt") {
-                QList<ProjectFolderItem*> folders = p->foldersForUrl(url.upUrl());
-                foreach(ProjectFolderItem* folder, folders) 
-                    reload(folder);
-            } else {
-                qDeleteAll(p->itemsForUrl(path));
-            }
+            qDeleteAll(p->itemsForUrl(dir));
         }
-    } else if(p)
-        qDeleteAll(p->itemsForUrl(path));
+    }
 }
 
 void CMakeManager::directoryChanged(const QString& dir)
@@ -693,20 +681,23 @@ void CMakeManager::filesystemBuffererTimeout()
     m_fileSystemChangedBuffer.clear();
 }
 
-QString addTrailingSlash(const QString& path)
-{
-    return (path.isEmpty() || path.endsWith('/')) ? path : path+'/';
-}
-
 void CMakeManager::realDirectoryChanged(const QString& dir)
 {
-    IProject* p=ICore::self()->projectController()->findProjectForUrl(KUrl(dir));
-    if(!p || isReloading(p))
+    KUrl path(dir);
+    IProject* p=ICore::self()->projectController()->findProjectForUrl(dir);
+    bool reloading = isReloading(p);
+    if(!p || reloading) {
+        if(reloading) {
+            m_fileSystemChangedBuffer << dir;
+            m_fileSystemChangeTimer->start();
+        }
         return;
+    }
     
-    if(!QFile::exists(dir))
-        deletedWatched(addTrailingSlash(dir));
-    else
+    if(!QFile::exists(dir)) {
+        path.adjustPath(KUrl::AddTrailingSlash);
+        deletedWatchedDirectory(path);
+    } else
         dirtyFile(dir);
 }
 
@@ -719,60 +710,54 @@ void CMakeManager::dirtyFile(const QString & dirty)
     if(p && isReloading(p))
         return;
     
-    if(p && dirtyFile.fileName() == "CMakeLists.txt")
+    if(p)
     {
-        QList<ProjectFileItem*> files=p->filesForUrl(dirtyFile);
-        kDebug(9032) << dirtyFile << "is dirty" << files.count();
+        if(dirtyFile.fileName() == "CMakeLists.txt") {
+            QList<ProjectFileItem*> files=p->filesForUrl(dirtyFile);;
 
-        Q_ASSERT(files.count()==1);
-        CMakeFolderItem *folderItem=static_cast<CMakeFolderItem*>(files.first()->parent());
-        
+            Q_ASSERT(files.count()==1);
+            CMakeFolderItem *folderItem=static_cast<CMakeFolderItem*>(files.first()->parent());
 #if 0
-            KUrl relative=KUrl::relativeUrl(projectBaseUrl, dir);
-            initializeProject(proj, dir);
-            KUrl current=projectBaseUrl;
-            QStringList subs=relative.toLocalFile().split("/");
-            subs.append(QString());
-            for(; !subs.isEmpty(); current.cd(subs.takeFirst()))
-            {
-                parseOnly(proj, current);
-            }
+                KUrl relative=KUrl::relativeUrl(projectBaseUrl, dir);
+                initializeProject(proj, dir);
+                KUrl current=projectBaseUrl;
+                QStringList subs=relative.toLocalFile().split("/");
+                subs.append(QString());
+                for(; !subs.isEmpty(); current.cd(subs.takeFirst()))
+                {
+                    parseOnly(proj, current);
+                }
 #endif
-
-        
-        reload(folderItem);
+            reload(folderItem);
+        }
+        else if(QFileInfo(dirty).isDir())
+        {
+            QList<ProjectFolderItem*> folders=p->foldersForUrl(dirty);
+            Q_ASSERT(folders.isEmpty() || folders.size()==1);
+            
+            if(!folders.isEmpty()) {
+                CMakeCommitChangesJob* job = new CMakeCommitChangesJob(dirtyFile, this, p);
+                job->start();
+            }
+        }
     }
-    else if(dirtyFile.fileName() == "CMakeCache.txt") {
-        KUrl builddirUrl;
+    else if(dirtyFile.fileName()=="CMakeCache.txt")
+    {
         IProject* p=0;
         //we first have to check from which project is this builddir
         foreach(KDevelop::IProject* pp, m_watchers.uniqueKeys()) {
-            KUrl url = pp->buildSystemManager()->buildDirectory(pp->projectItem());
-            if(dirtyFile.upUrl().equals(url, KUrl::CompareWithoutTrailingSlash)) {
-                builddirUrl=url;
-                p=pp;
+            KUrl buildDir = CMake::currentBuildDir(pp);
+            if(dirtyFile.upUrl().equals(buildDir, KUrl::CompareWithoutTrailingSlash)) {
+                reload(p->projectItem());
             }
         }
-        
-        if(p && !isReloading(p)) {
-            reload(p->projectItem());
-        }
-    } else if(dirty.endsWith(".cmake"))
+    }
+    else if(dirty.endsWith(".cmake"))
     {
         foreach(KDevelop::IProject* project, m_watchers.uniqueKeys())
         {
             if(m_watchers[project]->files().contains(dirty))
                 reload(project->projectItem());
-        }
-    }
-    else if(p && QFileInfo(dirty).isDir())
-    {
-        QList<ProjectFolderItem*> folders=p->foldersForUrl(dirty);
-        Q_ASSERT(folders.isEmpty() || folders.size()==1);
-        
-        if(!folders.isEmpty()) {
-            CMakeCommitChangesJob* job = new CMakeCommitChangesJob(dirtyFile, this, p);
-            job->start();
         }
     }
 }
