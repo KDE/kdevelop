@@ -480,7 +480,8 @@ void CMakeProjectVisitor::defineTarget(const QString& id, const QStringList& sou
     target.desc=p.code->at(p.line);
     m_targetForId[id]=target;
     
-    targetProps["LOCATION"] = QStringList(locationDir+'/'+exe);
+    targetProps["OUTPUT_NAME"] = QStringList(exe);
+    targetProps["LOCATION"] = QStringList(locationDir);
 }
 
 int CMakeProjectVisitor::visit(const AddExecutableAst *exec)
