@@ -128,7 +128,7 @@ void RegistersView::contextMenuEvent(QContextMenuEvent* e)
     m_menu->exec(e->globalPos());
 }
 
-void RegistersView::addItemToFormatSubmenu(QMenu* m, const QString& name, const RegistersFormat& format)
+void RegistersView::addItemToFormatSubmenu(QMenu* m, const QString& name, RegistersFormat format)
 {
     QAction* a = m->addAction(name);
     a->setData(format);

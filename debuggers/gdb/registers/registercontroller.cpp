@@ -193,7 +193,7 @@ void IRegisterController::setGeneralRegister(const Register& reg, const QString&
     }
 }
 
-void IRegisterController::convertValuesForGroup(RegistersGroup& registersGroup, const RegistersFormat& format)
+void IRegisterController::convertValuesForGroup(RegistersGroup& registersGroup, RegistersFormat format)
 {
     kDebug() << "Converting for group" << registersGroup.groupName;
     bool ok;

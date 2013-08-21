@@ -178,24 +178,14 @@ void RegisterController_Arm::handleVFPSRegisters(const QStringList& record)
     }
 }
 
-QString RegisterController_Arm::enumToString(const RegisterGroups& group) const
+QString RegisterController_Arm::enumToString(ArmRegisterGroups group) const
 {
-    switch (group) {
-    case General:
-        return "General";
-    case Flags:
-        return "Flags";
-    case VFP_single:
-        return "VFP single-word";
-    case VFP_double:
-        return "VFP double-word";
-    case VFP_quad:
-        return "VFP quad-word";
-    }
-    return QString();
+    static QString groups[LAST_REGISTER] = {"General", "Flags", "VFP single-word", "VFP double-word", "VFP quad-word"};
+
+    return groups[group];
 }
 
-void RegisterController_Arm::convertValuesForGroup(RegistersGroup& registersGroup, const RegistersFormat& format)
+void RegisterController_Arm::convertValuesForGroup(RegistersGroup& registersGroup, RegistersFormat format)
 {
     if (format != Raw && format != Natural) {
         if (registersGroup.groupName == enumToString(General)) {

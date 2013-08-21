@@ -47,7 +47,7 @@ protected:
 
     virtual RegistersGroup registersFromGroupInternally(const QString& group);
 
-    virtual void convertValuesForGroup(RegistersGroup& registersGroup, const RegistersFormat& format = Raw);
+    virtual void convertValuesForGroup(RegistersGroup& registersGroup, RegistersFormat format = Raw);
 
     virtual QStringList registerNamesForGroup(const QString& group);
 
@@ -60,9 +60,9 @@ protected:
     //this is a workaround for FPU registers.
     void handleFPURegisters(const QStringList& record);
 
-    enum RegisterGroups {General, Flags, FPU, XMM, Segment};
+    enum X86RegisterGroups {General, Flags, FPU, XMM, Segment, LAST_REGISTER};
 
-    QString enumToString(const RegisterGroups& group) const;
+    QString enumToString(X86RegisterGroups group) const;
     //None of functions below checks value for validity, if value is invalid updateRegistres() will restore the previous state.
 
     void setFPURegister(const Register& reg);

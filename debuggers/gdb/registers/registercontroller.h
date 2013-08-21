@@ -122,7 +122,7 @@ protected:
     * @param [out] registers Registers which values should be converted.
     * @param format Format used for conversion.
     */
-    virtual void convertValuesForGroup(RegistersGroup& registersGroup, const RegistersFormat& format = Raw);
+    virtual void convertValuesForGroup(RegistersGroup& registersGroup, RegistersFormat format = Raw);
 
     ///Returns value for the given @p name, empty string if the name is incorrect or there is no registers yet.
     QString registerValue(const QString& name) const;

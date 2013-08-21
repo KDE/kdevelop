@@ -128,7 +128,7 @@ signals:
     void registerChanged(const Register& reg);
 
 private:
-    void addItemToFormatSubmenu(QMenu* m, const QString& name, const RegistersFormat& format);
+    void addItemToFormatSubmenu(QMenu* m, const QString& name, RegistersFormat format);
 private:
     QMenu* m_menu;
     QSignalMapper* m_mapper;

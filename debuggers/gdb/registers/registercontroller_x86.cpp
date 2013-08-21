@@ -146,24 +146,14 @@ void RegisterControllerGeneral_x86::updateRegisters(const QString& group)
     }
 }
 
-QString RegisterControllerGeneral_x86::enumToString(const RegisterGroups& group) const
+QString RegisterControllerGeneral_x86::enumToString(X86RegisterGroups group) const
 {
-    switch (group) {
-    case General:
-        return "General";
-    case Flags:
-        return "Flags";
-    case FPU:
-        return "FPU";
-    case XMM:
-        return "XMM";
-    case Segment:
-        return "Segment";
-    }
-    return QString();
+    static QString groups[LAST_REGISTER] = {"General", "Flags", "FPU", "XMM", "Segment"};
+
+    return groups[group];
 }
 
-void RegisterControllerGeneral_x86::convertValuesForGroup(RegistersGroup& registersGroup, const RegistersFormat& format)
+void RegisterControllerGeneral_x86::convertValuesForGroup(RegistersGroup& registersGroup, RegistersFormat format)
 {
     if (format != Raw && format != Natural) {
         if (registersGroup.groupName == enumToString(General) || registersGroup.groupName == enumToString(Segment)) {
