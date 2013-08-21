@@ -128,8 +128,6 @@ public:
     CMakeFolderItem* takePending(const KUrl& url);
     void addWatcher(KDevelop::IProject* p, const QString& path);
     
-    QStringList processGeneratorExpression(const QStringList& expr, KDevelop::IProject* project, KDevelop::ProjectTargetItem* target) const;
-    bool isReloading(KDevelop::IProject* p);
     CMakeProjectData projectData(KDevelop::IProject* project);
 
 signals:
@@ -148,6 +146,8 @@ private slots:
     void importFinished(KJob* job);
 
 private:
+    QStringList processGeneratorExpression(const QStringList& expr, KDevelop::IProject* project, KDevelop::ProjectTargetItem* target) const;
+    bool isReloading(KDevelop::IProject* p);
     bool renameFileOrFolder(KDevelop::ProjectBaseItem *item, const KUrl &newUrl);
     void realDirectoryChanged(const QString& dir);
     
