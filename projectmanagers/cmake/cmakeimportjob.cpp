@@ -51,7 +51,10 @@ public:
         reconsider();
     }
     void addJob(KJob* job) {
+        Q_ASSERT(thread() == QThread::currentThread());
+//         Q_ASSERT(thread() == job->thread());
         addSubjob(job);
+        job->start();
     }
 
 public slots:
@@ -79,17 +82,27 @@ CMakeImportJob::CMakeImportJob(ProjectFolderItem* dom, CMakeManager* parent)
     , m_dom(dom)
     , m_data(parent->projectData(dom->project()))
     , m_manager(parent)
-    , m_wjob(new WaitAllJobs(this))
     , m_futureWatcher(new QFutureWatcher<void>)
 {
-    connect(m_wjob, SIGNAL(finished(KJob*)), SLOT(waitFinished(KJob*)));
-    connect(m_futureWatcher, SIGNAL(finished()), m_wjob, SLOT(start()));
+    connect(m_futureWatcher, SIGNAL(finished()), SLOT(importFinished()));
 }
 
 void CMakeImportJob::start()
 {
     QFuture<void> future = QtConcurrent::run(this, &CMakeImportJob::initialize);
     m_futureWatcher->setFuture(future);
+}
+
+void CMakeImportJob::importFinished()
+{
+    Q_ASSERT(m_project->thread() == QThread::currentThread());
+
+    WaitAllJobs* wjob = new WaitAllJobs(this);
+    connect(wjob, SIGNAL(finished(KJob*)), SLOT(waitFinished(KJob*)));
+    foreach(KJob* job, m_jobs) {
+        wjob->addJob(job);
+    }
+    wjob->start();
 }
 
 void CMakeImportJob::initialize()
@@ -192,9 +205,12 @@ KDevelop::ReferencedTopDUContext CMakeImportJob::includeScript(const QString& fi
 
 CMakeCommitChangesJob* CMakeImportJob::importDirectory(IProject* project, const KUrl& url, const KDevelop::ReferencedTopDUContext& parentTop)
 {
+    Q_ASSERT(thread() == m_project->thread());
     KUrl cmakeListsPath(url, "CMakeLists.txt");
     
     CMakeCommitChangesJob* commitJob = new CMakeCommitChangesJob(url, m_manager, project);
+    commitJob->moveToThread(thread());
+    m_jobs += commitJob;
     if(QFile::exists(cmakeListsPath.toLocalFile()))
     {
         kDebug(9042) << "Adding cmake: " << cmakeListsPath << " to the model";
@@ -210,9 +226,20 @@ CMakeCommitChangesJob* CMakeImportJob::importDirectory(IProject* project, const 
         }
         m_data.vm.popScope();
     }
-    commitJob->start();
-    m_wjob->addJob(commitJob);
+    
     return commitJob;
+}
+
+IProject* CMakeImportJob::project() const
+{
+    Q_ASSERT(!m_futureWatcher->isRunning());
+    return m_project;
+}
+
+CMakeProjectData CMakeImportJob::projectData() const
+{
+    Q_ASSERT(!m_futureWatcher->isRunning());
+    return m_data;
 }
 
 #include "moc_cmakeimportjob.cpp"

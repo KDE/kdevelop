@@ -704,9 +704,6 @@ void CMakeManager::dirtyFile(const QString & dirty)
     IProject* p=ICore::self()->projectController()->findProjectForUrl(dirtyFile);
 
     kDebug() << "dirty FileSystem: " << dirty << (p ? isReloading(p) : 0);
-    if(p && isReloading(p))
-        return;
-    
     if(p)
     {
         if(dirtyFile.fileName() == "CMakeLists.txt") {
@@ -727,7 +724,7 @@ void CMakeManager::dirtyFile(const QString & dirty)
 #endif
             reload(folderItem);
         }
-        else if(QFileInfo(dirty).isDir())
+        else if(QFileInfo(dirty).isDir() && !isReloading(p))
         {
             QList<ProjectFolderItem*> folders=p->foldersForUrl(dirty);
             Q_ASSERT(folders.isEmpty() || folders.size()==1);

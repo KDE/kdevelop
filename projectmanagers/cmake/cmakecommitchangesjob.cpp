@@ -109,21 +109,20 @@ static QList<KDevelop::ProjectBaseItem*> cleanupBuildFolders(CMakeFolderItem* it
 
 /////////////////////////////////////////
 
-CMakeCommitChangesJob::CMakeCommitChangesJob(const KUrl& url, CMakeManager* manager, KDevelop::IProject* parent)
+CMakeCommitChangesJob::CMakeCommitChangesJob(const KUrl& url, CMakeManager* manager, KDevelop::IProject* project)
     : KJob()
     , m_url(url)
-    , m_project(parent)
+    , m_project(project)
     , m_manager(manager)
     , m_projectDataAdded(false)
     , m_parentItem(0)
     , m_waiting(false)
 {
     setObjectName(url.prettyUrl());
-    moveToThread(parent->thread());
     if(m_url == m_project->folder()) {
         m_parentItem = m_project->projectItem()->folder();
     } else {
-        QList<ProjectFolderItem*> folders = parent->foldersForUrl(m_url);
+        QList<ProjectFolderItem*> folders = project->foldersForUrl(m_url);
         if(!folders.isEmpty())
             m_parentItem = folders.first();
     }
@@ -190,6 +189,7 @@ KUrl::List CMakeCommitChangesJob::addProjectData(const CMakeProjectData& data)
 
 void CMakeCommitChangesJob::start()
 {
+    Q_ASSERT(m_project->thread() == QThread::currentThread());
     if((!m_projectDataAdded && m_parentItem) || dynamic_cast<CMakeFolderItem*>(m_parentItem)) {
         QMetaObject::invokeMethod(this, "makeChanges", Qt::QueuedConnection);
         m_waiting = false;

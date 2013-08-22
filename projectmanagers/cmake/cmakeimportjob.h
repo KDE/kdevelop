@@ -26,7 +26,6 @@
 
 template<class T>class QFutureWatcher;
 class KUrl;
-class WaitAllJobs;
 class CMakeManager;
 class CMakeFolderItem;
 class CMakeCommitChangesJob;
@@ -44,11 +43,12 @@ class CMakeImportJob : public KJob
         CMakeImportJob(KDevelop::ProjectFolderItem* dom, CMakeManager* parent);
 
         virtual void start();
-        KDevelop::IProject* project() const { return m_project; }
-        CMakeProjectData projectData() const { return m_data;  }
+        KDevelop::IProject* project() const;
+        CMakeProjectData projectData() const;
 
     private slots:
         void waitFinished(KJob* job);
+        void importFinished();
 
     private:
         void initialize();
@@ -60,8 +60,8 @@ class CMakeImportJob : public KJob
         KDevelop::ProjectFolderItem* m_dom;
         CMakeProjectData m_data;
         CMakeManager* m_manager;
-        WaitAllJobs* m_wjob;
         QFutureWatcher<void>* m_futureWatcher;
+        QVector<CMakeCommitChangesJob*> m_jobs;
 };
 
 #endif // CMAKEIMPORTJOB_H

@@ -47,7 +47,7 @@ class CMakeCommitChangesJob : public KJob
 {
 Q_OBJECT
 public:
-    explicit CMakeCommitChangesJob(const KUrl& url, CMakeManager* manager, KDevelop::IProject* parent);
+    explicit CMakeCommitChangesJob(const KUrl& url, CMakeManager* manager, KDevelop::IProject* project);
 
     KUrl::List addProjectData(const CMakeProjectData& data);
     virtual void start();

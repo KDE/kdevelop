@@ -1,10 +1,7 @@
 project(cmakemanager)
 kde4_no_enable_final(cmakemanager)
-include_directories(
-    
-    ${CMAKE_CURRENT_SOURCE_DIR}/parser
-    ${cmakebuilder_SOURCE_DIR}
-)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/parser)
+
 add_subdirectory(tests)
 add_subdirectory(icons)
 
