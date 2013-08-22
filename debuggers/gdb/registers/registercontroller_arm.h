@@ -69,16 +69,12 @@ protected:
     //VFP registers workaround.
     void handleVFPSRegisters(const QStringList& record);
 
-    QStringList m_VFP_singleRegisterNames;
-    QStringList m_flagRegisterNames;
-    QStringList m_VFP_doubleRegisterNames;
-    QStringList m_generalRegisterNames;
-    QStringList m_VFP_quadRegisterNames;
+    static QVector<QStringList> m_registerNames;
 
 private:
     void initRegisterNames();
 
-    FlagRegister m_cpsr;
+    static FlagRegister m_cpsr;
 
     bool m_registerNamesInitialized;
 };

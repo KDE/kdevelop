@@ -31,6 +31,9 @@
 namespace GDBDebugger
 {
 
+QVector<QStringList> RegisterController_Arm::m_registerNames;
+FlagRegister RegisterController_Arm::m_cpsr;
+
 void  RegisterController_Arm::updateValuesForRegisters(RegistersGroup* registers)
 {
     kDebug() << "Updating values for registers: " << registers->groupName;
@@ -201,47 +204,52 @@ void RegisterController_Arm::convertValuesForGroup(RegistersGroup* registersGrou
 
 RegisterController_Arm::RegisterController_Arm(QObject* parent, DebugSession* debugSession) : IRegisterController(parent, debugSession), m_registerNamesInitialized(false)
 {
-    initRegisterNames();
+    if (m_registerNames.isEmpty()) {
+        for (int i = 0; i < static_cast<int>(LAST_REGISTER); i++) {
+            m_registerNames.append(QStringList());
+        }
+        initRegisterNames();
+    }
 }
 
 void RegisterController_Arm::initRegisterNames()
 {
     for (int i = 0; i < 32; i++) {
-        m_VFP_singleRegisterNames << ("s" + QString::number(i));
+        m_registerNames[VFP_single] << ("s" + QString::number(i));
     }
 
     m_cpsr.registerName = "cpsr";
     m_cpsr.flags << "Q" << "V" << "C" << "Z" << "N";
     m_cpsr.bits << "27" << "28" << "29" << "30" << "31";
 
-    m_flagRegisterNames = m_cpsr.flags;
+    m_registerNames[Flags] = m_cpsr.flags;
 
     for (int i = 0; i < 13; i++) {
-        m_generalRegisterNames << ("r" + QString::number(i));
+        m_registerNames[General] << ("r" + QString::number(i));
     }
-    m_generalRegisterNames << "sp" << "lr" << "pc";
+    m_registerNames[General] << "sp" << "lr" << "pc";
 
     for (int i = 0; i < 32; i++) {
-        m_VFP_doubleRegisterNames << ("d" + QString::number(i));
+        m_registerNames[VFP_double] << ("d" + QString::number(i));
     }
 
     for (int i = 0; i < 16; i++) {
-        m_VFP_quadRegisterNames << ("q" + QString::number(i));
+        m_registerNames[VFP_quad] << ("q" + QString::number(i));
     }
 }
 
 QStringList RegisterController_Arm::registerNamesForGroup(const QString& group)
 {
     if (group == enumToString(General)) {
-        return m_generalRegisterNames;
+        return m_registerNames[General];
     } else if (group == enumToString(Flags)) {
-        return m_flagRegisterNames;
+        return m_registerNames[Flags];
     } else if (group == enumToString(VFP_single)) {
-        return m_VFP_singleRegisterNames;
+        return m_registerNames[VFP_single];
     } else if (group == enumToString(VFP_double)) {
-        return m_VFP_doubleRegisterNames;
+        return m_registerNames[VFP_double];
     } else if (group == enumToString(VFP_quad)) {
-        return m_VFP_quadRegisterNames;
+        return m_registerNames[VFP_quad];
     } else {
         return QStringList();
     }

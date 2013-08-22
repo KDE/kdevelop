@@ -32,6 +32,9 @@
 namespace GDBDebugger
 {
 
+QVector<QStringList> RegisterControllerGeneral_x86::m_registerNames;
+FlagRegister RegisterControllerGeneral_x86::m_eflags;
+
 void RegisterControllerGeneral_x86::updateValuesForRegisters(RegistersGroup* registers)
 {
     kDebug() << "Updating values for registers: " << registers->groupName;
@@ -193,68 +196,75 @@ void RegisterControllerGeneral_x86::handleFPURegisters(const QStringList& record
 }
 
 RegisterController_x86::RegisterController_x86(QObject* parent, DebugSession* debugSession)
-: RegisterControllerGeneral_x86(parent, debugSession)
+    : RegisterControllerGeneral_x86(parent, debugSession)
 {
     initRegisterNames();
 }
 
 RegisterController_x86_64::RegisterController_x86_64(QObject* parent, DebugSession* debugSession)
-: RegisterControllerGeneral_x86(parent, debugSession)
+    : RegisterControllerGeneral_x86(parent, debugSession)
 {
     initRegisterNames();
 }
 
 RegisterControllerGeneral_x86::RegisterControllerGeneral_x86(QObject* parent, DebugSession* debugSession)
-: IRegisterController(parent, debugSession), m_registerNamesInitialized(false)
+    : IRegisterController(parent, debugSession), m_registerNamesInitialized(false)
 {
-    initRegisterNames();
+    if (m_registerNames.isEmpty()) {
+        for (int i = 0; i < static_cast<int>(LAST_REGISTER); i++) {
+            m_registerNames.append(QStringList());
+        }
+        initRegisterNames();
+    }
 }
 
 void RegisterControllerGeneral_x86::initRegisterNames()
 {
     for (int i = 0; i < 8; i++) {
-        m_FPUregisterNames << ("st" + QString::number(i));
+        m_registerNames[FPU] << ("st" + QString::number(i));
     }
 
-    m_flagRegisterNames << "C" << "P" << "A" << "Z" << "S" << "T" << "D" << "O";
+    m_registerNames[Flags] << "C" << "P" << "A" << "Z" << "S" << "T" << "D" << "O";
 
-    m_segmentRegisterNames << "cs" << "ss" << "ds" << "es" << "fs" << "gs";
+    m_registerNames[Segment] << "cs" << "ss" << "ds" << "es" << "fs" << "gs";
 
-    m_eflags.flags = m_flagRegisterNames;
+    m_eflags.flags = m_registerNames[Flags];
     m_eflags.bits << "0" << "2" << "4" << "6" << "7" << "8" << "10" << "11";
     m_eflags.registerName = "eflags";
 }
 
 void RegisterController_x86::initRegisterNames()
 {
-    m_generalPurposeRegisterNames << "eax" << "ebx" << "ecx" << "edx" << "esi" << "edi" << "ebp" << "esp" << "eip";
+        m_registerNames[General] = QStringList() << "eax" << "ebx" << "ecx" << "edx" << "esi" << "edi" << "ebp" << "esp" << "eip";
 
-    for (int i = 0; i < 8; i++) {
-        m_XMMregisterNames << ("xmm" + QString::number(i));
-    }
+        m_registerNames[XMM].clear();
+        for (int i = 0; i < 8; i++) {
+            m_registerNames[XMM] << ("xmm" + QString::number(i));
+        }
 }
 
 void RegisterController_x86_64::initRegisterNames()
 {
-    m_generalPurposeRegisterNames << "rax" << "rbx" << "rcx" << "rdx" << "rsi" << "rdi" << "rbp" << "rsp" << "r8" << "r9" << "r10" << "r11" << "r12" << "r13" << "r14" << "r15" << "rip";
+        m_registerNames[General] = QStringList() << "rax" << "rbx" << "rcx" << "rdx" << "rsi" << "rdi" << "rbp" << "rsp" << "r8" << "r9" << "r10" << "r11" << "r12" << "r13" << "r14" << "r15" << "rip";
 
-    for (int i = 0; i < 16; i++) {
-        m_XMMregisterNames << ("xmm" + QString::number(i));
-    }
+        m_registerNames[XMM].clear();
+        for (int i = 0; i < 16; i++) {
+            m_registerNames[XMM] << ("xmm" + QString::number(i));
+        }
 }
 
 QStringList RegisterControllerGeneral_x86::registerNamesForGroup(const QString& group)
 {
     if (group == enumToString(General)) {
-        return m_generalPurposeRegisterNames;
+        return m_registerNames[General];
     } else if (group == enumToString(XMM)) {
-        return m_XMMregisterNames;
+        return m_registerNames[XMM];
     } else if (group == enumToString(Flags)) {
-        return m_flagRegisterNames;
+        return m_registerNames[Flags];
     } else if (group == enumToString(FPU)) {
-        return m_FPUregisterNames;
+        return m_registerNames[FPU];
     } else if (group == enumToString(Segment)) {
-        return m_segmentRegisterNames;
+        return m_registerNames[Segment];
     } else {
         return QStringList();
     }

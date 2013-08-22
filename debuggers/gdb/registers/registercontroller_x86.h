@@ -73,13 +73,9 @@ private:
     void initRegisterNames();;
 
 protected:
-    QStringList m_FPUregisterNames;
-    QStringList m_flagRegisterNames;
-    QStringList m_segmentRegisterNames;
-    QStringList m_generalPurposeRegisterNames;
-    QStringList m_XMMregisterNames;
+    static QVector<QStringList> m_registerNames;
 
-    FlagRegister m_eflags;
+    static FlagRegister m_eflags;
 
     ///Indicates if register names were initialized.
     bool m_registerNamesInitialized;
