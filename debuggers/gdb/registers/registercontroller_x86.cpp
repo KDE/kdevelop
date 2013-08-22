@@ -59,8 +59,7 @@ RegistersGroup RegisterControllerGeneral_x86::registersFromGroupInternally(const
 
 QStringList RegisterControllerGeneral_x86::namesOfRegisterGroups() const
 {
-    QStringList registerGroups;
-    registerGroups << enumToString(General) << enumToString(Flags) << enumToString(FPU) << enumToString(XMM) << enumToString(Segment);
+    static const QStringList registerGroups = QStringList() << enumToString(General) << enumToString(Flags) << enumToString(FPU) << enumToString(XMM) << enumToString(Segment);
 
     return registerGroups;
 }

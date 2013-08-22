@@ -58,8 +58,7 @@ RegistersGroup RegisterController_Arm::registersFromGroupInternally(const QStrin
 
 QStringList RegisterController_Arm::namesOfRegisterGroups() const
 {
-    QStringList registerGroups;
-    registerGroups << enumToString(General) << enumToString(Flags) << enumToString(VFP_single) << enumToString(VFP_double) << enumToString(VFP_quad);
+    static const QStringList registerGroups = QStringList() << enumToString(General) << enumToString(Flags) << enumToString(VFP_single) << enumToString(VFP_double) << enumToString(VFP_quad);
 
     return registerGroups;
 }

@@ -152,7 +152,7 @@ RegistersGroup IRegisterController::registersFromGroup(const QString& group, con
 
 void IRegisterController::updateValuesForRegisters(RegistersGroup& registers)
 {
-    if (m_rawRegisterNames.isEmpty()) {
+    if (m_registers.isEmpty()) {
         kDebug() << "Registers not initialized yet";
         return;
     }
