@@ -137,9 +137,9 @@ bool IRegisterController::initializeRegisters()
 QString IRegisterController::groupForRegisterName(const QString& name)
 {
     foreach (const QString & group, namesOfRegisterGroups()) {
-        const RegistersGroup registersInGroups = registersFromGroupInternally(group);
-        foreach (const Register & r, registersInGroups.registers) {
-            if (r.name == name) {
+        const QStringList registersInGroup = registerNamesForGroup(group);
+        foreach (const QString & n, registersInGroup) {
+            if (n == name) {
                 return group;
             }
         }
@@ -147,7 +147,7 @@ QString IRegisterController::groupForRegisterName(const QString& name)
     return QString();
 }
 
-RegistersGroup IRegisterController::registersFromGroup(const QString& group, const RegistersFormat& format)
+RegistersGroup IRegisterController::registersFromGroup(const QString& group, RegistersFormat format)
 {
     RegistersGroup g = registersFromGroupInternally(group);
     convertValuesForGroup(&g, format);
@@ -201,7 +201,7 @@ void IRegisterController::convertValuesForGroup(RegistersGroup* registersGroup, 
 {
     bool ok;
     for (int i = 0; i < registersGroup->registers.size(); i++) {
-        const QString converted = QString::number(registersGroup->registers[i].value.toULongLong(&ok, 16), (int) format);
+        const QString converted = QString::number(registersGroup->registers[i].value.toULongLong(&ok, 16), static_cast<int> (format));
         if (ok) {
             registersGroup->registers[i].value = converted;
         } else {

@@ -82,7 +82,7 @@ public:
     virtual QStringList namesOfRegisterGroups() const = 0;
 
     ///Returns registers from the @p group, or empty registers group if @p group is invalid. Use it only after @p registersInGroupChanged signal was emitted, otherwise registers won't be up to date.
-    RegistersGroup registersFromGroup(const QString& group, const RegistersFormat& format = Raw);
+    RegistersGroup registersFromGroup(const QString& group, RegistersFormat format = Raw);
 
 public slots:
     ///Sends updated register's @p reg value to the debugger.

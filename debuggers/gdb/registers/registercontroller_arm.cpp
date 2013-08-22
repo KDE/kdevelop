@@ -160,7 +160,7 @@ void RegisterController_Arm::handleVFPSRegisters(const QStringList& record)
     //s3       -12345.6789
     //s10       12.34
     //s15       1.1e+2
-    //s30       2.345e-10
+    //s30       -23.45e-10
     const QRegExp rx("^(s\\d+)\\s+((?:-?\\d+\\.?\\d+(?:e(\\+|-)\\d+)?)|(?:-?\\d+))$");
     QVector<Register> registers;
     foreach (const QString & s, record) {
@@ -240,19 +240,14 @@ void RegisterController_Arm::initRegisterNames()
 
 QStringList RegisterController_Arm::registerNamesForGroup(const QString& group)
 {
-    if (group == enumToString(General)) {
-        return m_registerNames[General];
-    } else if (group == enumToString(Flags)) {
-        return m_registerNames[Flags];
-    } else if (group == enumToString(VFP_single)) {
-        return m_registerNames[VFP_single];
-    } else if (group == enumToString(VFP_double)) {
-        return m_registerNames[VFP_double];
-    } else if (group == enumToString(VFP_quad)) {
-        return m_registerNames[VFP_quad];
-    } else {
-        return QStringList();
+
+    for (int i = 0; i < static_cast<int>(LAST_REGISTER); i++) {
+        if (group == enumToString(static_cast<ArmRegisterGroups>(i))) {
+            return m_registerNames[i];
+        }
     }
+
+    return QStringList();
 }
 
 }

@@ -55,7 +55,6 @@ void RegistersView::updateRegistersInTable(const Table& table, const RegistersGr
     _table.tableWidget->blockSignals(true);
 
     _table.tableWidget->setRowCount(registersGroup.registers.size());
-    kDebug() << "table " << _table.name->text() << " has " << _table.tableWidget->rowCount() << " rows";
 
     for (int i = 0 ; i < registersGroup.registers.size(); ++i) {
         QTableWidgetItem* newItem = new QTableWidgetItem(registersGroup.registers[i].name);
