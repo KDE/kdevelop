@@ -34,6 +34,7 @@
 #include <qstylepainter.h>
 #include <qstyleoption.h>
 #include <qevent.h>
+#include <QPushButton>
 #include <KColorScheme>
 #include "blur.h"
 
@@ -64,70 +65,6 @@ class AreaTabButton : public QWidget {
 
     private:
     bool m_isCurrent;
-};
-
-class AreaTabBar : public QTabBar {
-    public:
-    AreaTabBar(QWidget* parent) ;
-
-    //Non-vertual overload: Respected by mainwindow.cpp
-    void setCurrentIndex(int index) ;
-    
-    virtual QSize tabSizeHint ( int index ) const ;
-    
-    void clearTabs() {
-        while(count())
-            removeTab(0);
-        buttons.clear();
-        areaIds.clear();
-    }
-    
-    QString areaId(int index) const {
-        return areaIds[index];
-    }
-    
-    void addCustomTab(QString text, QIcon icon, bool isCurrent, QString areaId, QWidget* customButtonWidget) {
-        // plain sublime doens't provide customButtonWidget, only kdevelop shell does
-        // TODO: adymo: refactor
-        if (customButtonWidget) {
-            customButtonWidget->setParent(this);
-            customButtonWidget->show();
-        }
-        areaIds << areaId;
-        buttons << new AreaTabButton(text, icon, 16, this, isCurrent, customButtonWidget);
-        addTab(QString());
-        setTabButton(count()-1, LeftSide, buttons.last());
-    }
-    
-    virtual void paintEvent ( QPaintEvent* );
-    
-    private:
-    QList<QString> areaIds;
-    QList<AreaTabButton*> buttons;
-    int m_currentIndex;
-};
-
-class AreaTabWidget : public QWidget {
-    public:
-    AreaTabWidget(QWidget* parent = 0) ;
-    
-    virtual QSize sizeHint() const ;
-    
-    virtual void paintEvent(QPaintEvent *ev);
-    
-    ///The widget is owned by this tab-widget
-    void setTabSideWidget(QWidget* widget) {
-        if(areaSideWidget)
-            delete areaSideWidget;
-        areaSideWidget = widget;
-        m_leftLayout->insertWidget(0, areaSideWidget);
-    }
-
-    AreaTabBar* tabBar;
-    QWidget* areaSideWidget;
-
-    QHBoxLayout* m_layout;
-    QVBoxLayout* m_leftLayout;
 };
 
 class MainWindowPrivate: public QObject {
@@ -179,7 +116,6 @@ public:
     QWidget *centralWidget;
     QWidget* bgCentralWidget;
     QSplitter* splitterCentralWidget;
-    AreaTabWidget* areaSwitcher;
 
     IdealController *idealController;
     int ignoreDockShown;
@@ -193,7 +129,6 @@ public slots:
     void toolViewAdded(Sublime::View *toolView, Sublime::Position position);
     void aboutToRemoveToolView(Sublime::View *toolView, Sublime::Position position);
     void toolViewMoved(Sublime::View *toolView, Sublime::Position position);
-    void toggleArea(int index);
 
     void setTabBarLeftCornerWidget(QWidget* widget);
 

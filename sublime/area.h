@@ -28,6 +28,7 @@
 
 #include <KDE/KConfigGroup>
 
+class QAction;
 namespace Sublime {
 
 class AreaIndex;
@@ -232,6 +233,7 @@ public:
     */
     template <typename Operator>
     void walkToolViews(Operator &op, Positions positions);
+    QList<QAction*> actions() const;
     
 Q_SIGNALS:
     /**Emitted when a new view is added to the area.*/
