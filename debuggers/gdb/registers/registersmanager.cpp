@@ -37,7 +37,7 @@ void ArchitectureParser::parseArchitecture()
 {
     Architecture arch = other;
 
-    foreach (const QString& reg, m_registerNames) {
+    foreach (const QString & reg, m_registerNames) {
         if (reg == "rax") {
             arch = x86_64;
             break;
@@ -50,7 +50,6 @@ void ArchitectureParser::parseArchitecture()
         }
     }
 
-    kDebug() << "arch is parsed";
     emit architectureParsed(arch);
 }
 
@@ -71,16 +70,17 @@ void ArchitectureParser::registerNamesHandler(const GDBMI::ResultRecord& r)
 
 void ArchitectureParser::determineArchitecture(DebugSession* debugSession)
 {
-    if (debugSession) {
-        debugSession->addCommand(
-            new GDBCommand(GDBMI::DataListRegisterNames, "", this, &ArchitectureParser::registerNamesHandler));
+    if (!debugSession || debugSession->stateIsOn(s_dbgNotStarted | s_shuttingDown)) {
+        return;
     }
+
+    debugSession->addCommand(
+        new GDBCommand(GDBMI::DataListRegisterNames, "", this, &ArchitectureParser::registerNamesHandler));
 }
 
 RegistersManager::RegistersManager(QWidget* parent)
-: QObject(parent), m_registerController(0), m_debugSession(0), m_currentArchitecture(undefined), m_needToCheckArch(false)
+: QObject(parent), m_registersView(new RegistersView(parent)), m_registerController(0), m_debugSession(0), m_currentArchitecture(undefined), m_needToCheckArch(false)
 {
-    m_registersView = new RegistersView(parent);
     m_architectureParser = new ArchitectureParser(this);
 
     connect(m_architectureParser, SIGNAL(architectureParsed(Architecture)), this, SLOT(architectureParsedSlot(Architecture)));
@@ -88,7 +88,7 @@ RegistersManager::RegistersManager(QWidget* parent)
 
 void RegistersManager::architectureParsedSlot(Architecture arch)
 {
-    kDebug() << "Changing arch?" << " Current controller: " << m_registerController << "Current arch " << m_currentArchitecture;
+    kDebug() << " Current controller: " << m_registerController << "Current arch " << m_currentArchitecture;
 
     if (m_registerController || m_currentArchitecture != undefined) {
         return;
@@ -123,7 +123,7 @@ void RegistersManager::architectureParsedSlot(Architecture arch)
 
 void RegistersManager::setSession(DebugSession* debugSession)
 {
-    kDebug() << "Change session" << debugSession;
+    kDebug() << "Change session " << debugSession;
     m_debugSession = debugSession;
     if (m_registerController) {
         m_registerController->setSession(debugSession);
@@ -162,6 +162,7 @@ void RegistersManager::updateRegisters()
     }
 }
 
-ArchitectureParser::ArchitectureParser(QObject* parent) : QObject(parent) {}
+ArchitectureParser::ArchitectureParser(QObject* parent)
+: QObject(parent) {}
 
 }

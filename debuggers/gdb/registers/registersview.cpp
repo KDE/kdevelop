@@ -55,7 +55,7 @@ void RegistersView::updateRegistersInTable(const Table& table, const RegistersGr
     _table.tableWidget->blockSignals(true);
 
     _table.tableWidget->setRowCount(registersGroup.registers.size());
-    kDebug() << "table " << _table.name << " has " << _table.tableWidget->rowCount() << " rows";
+    kDebug() << "table " << _table.name->text() << " has " << _table.tableWidget->rowCount() << " rows";
 
     for (int i = 0 ; i < registersGroup.registers.size(); ++i) {
         QTableWidgetItem* newItem = new QTableWidgetItem(registersGroup.registers[i].name);
@@ -77,7 +77,6 @@ void RegistersView::updateRegistersInTable(const Table& table, const RegistersGr
 
 void RegistersView::registerChangedInternally(QTableWidgetItem* item)
 {
-    kDebug() << "Sending changed register";
     if (item->column() != RegisterValue) {
         return;
     }
@@ -147,7 +146,6 @@ void RegistersView::showMenuTriggered(const QString& group)
             m_registerController->updateRegisters();
         }
     } else {
-        kDebug() << "Changing table for group" << group;
         Table t;
         t = m_tablesManager.tableForGroup(group);
         //already showing
@@ -278,7 +276,7 @@ void RegistersView::setController(IRegisterController* controller)
         connect(this, SIGNAL(registerChanged(const Register&)), controller, SLOT(setRegisterValue(const Register&)));
 
         //if architecture has changed, clear all tables.
-        QStringList groups = controller->namesOfRegisterGroups();
+        const QStringList groups = controller->namesOfRegisterGroups();
         foreach (const QString& g, m_tablesManager.allGroups()) {
             if (!groups.contains(g)) {
                 m_tablesManager.clearAllAssociations();

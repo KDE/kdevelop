@@ -48,7 +48,7 @@ void IRegisterController::updateRegisters(const QString& group)
         kDebug() << "Update all";
         m_pendingGroups.clear();
     } else {
-        kDebug() << "Update " << group << "All groups: " << m_pendingGroups;
+        kDebug() << "Update: " << group << "All groups: " << m_pendingGroups;
         m_pendingGroups << group;
         if (m_pendingGroups.size() != 1) {
             return;
@@ -68,7 +68,6 @@ void IRegisterController::registerNamesHandler(const GDBMI::ResultRecord& r)
     m_rawRegisterNames.clear();
     for (int i = 0; i < names.size(); ++i) {
         const GDBMI::Value& entry = names[i];
-        //  kDebug() << "Inserting name " << entry.literal() << "number " << i;
         m_rawRegisterNames.push_back(entry.literal());
     }
 }
@@ -86,13 +85,13 @@ void IRegisterController::updateRegisterValuesHandler(const GDBMI::ResultRecord&
         int number = entry["number"].literal().toInt();
         Q_ASSERT(m_rawRegisterNames.size() >  number);
         if (!m_rawRegisterNames[number].isEmpty()) {
-            QString value = entry["value"].literal();
+            const QString value = entry["value"].literal();
             m_registers.insert(m_rawRegisterNames[number], value);
         }
     }
 
     kDebug() << "groups to change registers: " << m_pendingGroups;
-    foreach (const QString& group, namesOfRegisterGroups()) {
+    foreach (const QString & group, namesOfRegisterGroups()) {
         if (m_pendingGroups.isEmpty() || m_pendingGroups.contains(group)) {
             emit registersInGroupChanged(group);
         }
@@ -102,7 +101,7 @@ void IRegisterController::updateRegisterValuesHandler(const GDBMI::ResultRecord&
 
 void IRegisterController::setRegisterValue(const Register& reg)
 {
-    if (!m_rawRegisterNames.isEmpty()) {
+    if (!m_registers.isEmpty()) {
         const QString group = groupForRegisterName(reg.name);
         if (!group.isEmpty()) {
             setRegisterValueForGroup(group, reg);
@@ -114,7 +113,7 @@ void IRegisterController::setRegisterValue(const Register& reg)
 
 QString IRegisterController::registerValue(const QString& name) const
 {
-    Q_ASSERT(!m_rawRegisterNames.isEmpty());
+    Q_ASSERT(!m_registers.isEmpty());
     QString value;
     if (!name.isEmpty()) {
         if (m_registers.contains(name)) {
@@ -124,17 +123,22 @@ QString IRegisterController::registerValue(const QString& name) const
     return value;
 }
 
-void IRegisterController::initializeRegisters()
+bool IRegisterController::initializeRegisters()
 {
+    if (!m_debugSession || m_debugSession->stateIsOn(s_dbgNotStarted | s_shuttingDown)) {
+        return false;
+    }
+
     m_debugSession->addCommand(
         new GDBCommand(GDBMI::DataListRegisterNames, "", this, &IRegisterController::registerNamesHandler));
+    return true;
 }
 
 QString IRegisterController::groupForRegisterName(const QString& name)
 {
-    foreach (const QString& group, namesOfRegisterGroups()) {
-        RegistersGroup registersInGroups = registersFromGroupInternally(group);
-        foreach (const Register& r, registersInGroups.registers) {
+    foreach (const QString & group, namesOfRegisterGroups()) {
+        const RegistersGroup registersInGroups = registersFromGroupInternally(group);
+        foreach (const Register & r, registersInGroups.registers) {
             if (r.name == name) {
                 return group;
             }
@@ -168,11 +172,11 @@ void IRegisterController::setFlagRegister(const Register& reg, const FlagRegiste
 {
     quint32 flagsValue = registerValue(flag.registerName).toUInt(0, 16);
 
-    kDebug() << "Set flag " << reg.name << ' ' << reg.value << ' ' << flag.flags << flagsValue;
+    kDebug() << "Set flag " << reg.name << ' ' << reg.value << ' ' << flag.flags << ' ' << flagsValue;
     const int idx = flag.flags.indexOf(reg.name);
 
     if (idx != -1) {
-        flagsValue ^= static_cast<int> (qPow(2, flag.bits[idx].toUInt()));
+        flagsValue ^= static_cast<int>(qPow(2, flag.bits[idx].toUInt()));
         setGeneralRegister(Register(flag.registerName, QString("%1").arg(flagsValue)) , "Flags");
     } else {
         updateRegisters("Flags");
@@ -183,9 +187,9 @@ void IRegisterController::setFlagRegister(const Register& reg, const FlagRegiste
 void IRegisterController::setGeneralRegister(const Register& reg, const QString& group)
 {
     const QString command = QString("set var $%1=%2").arg(reg.name).arg(reg.value);
-    kDebug() << "Setting general register" << command;
+    kDebug() << "Setting register: " << command;
 
-    if (m_debugSession) {
+    if (m_debugSession && !m_debugSession->stateIsOn(s_dbgNotStarted | s_shuttingDown)) {
         m_debugSession->addCommand(new GDBCommand(GDBMI::NonMI, command));
         updateRegisters(group);
     } else {
@@ -195,19 +199,19 @@ void IRegisterController::setGeneralRegister(const Register& reg, const QString&
 
 void IRegisterController::convertValuesForGroup(RegistersGroup& registersGroup, RegistersFormat format)
 {
-    kDebug() << "Converting for group" << registersGroup.groupName;
     bool ok;
     for (int i = 0; i < registersGroup.registers.size(); i++) {
         const QString converted = QString::number(registersGroup.registers[i].value.toULongLong(&ok, 16), (int) format);
-        // kDebug() << "Before " << registersGroup.registers[i].value;
         if (ok) {
             registersGroup.registers[i].value = converted;
+        } else {
+            kDebug() << "Can't convert value for group" << registersGroup.groupName << ' ' << registersGroup.registers[i].name << ' ' << registersGroup.registers[i].value;
         }
-        // kDebug() << "After " << registersGroup.registers[i].value;
     }
 }
 
-IRegisterController::IRegisterController(QObject* parent, DebugSession* debugSession) : QObject(parent), m_debugSession(debugSession) {}
+IRegisterController::IRegisterController(QObject* parent, DebugSession* debugSession)
+: QObject(parent), m_debugSession(debugSession) {}
 
 IRegisterController::~IRegisterController() {}
 

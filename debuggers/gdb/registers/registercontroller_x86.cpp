@@ -49,7 +49,7 @@ RegistersGroup RegisterControllerGeneral_x86::registersFromGroupInternally(const
     registers.groupName = group;
     registers.editable = (group == enumToString(XMM)) ? false : true;
     registers.flag = (group == enumToString(Flags)) ? true : false;
-    foreach (const QString& name, registerNamesForGroup(group)) {
+    foreach (const QString & name, registerNamesForGroup(group)) {
         registers.registers.append(Register(name, QString()));
     }
 
@@ -66,8 +66,6 @@ QStringList RegisterControllerGeneral_x86::namesOfRegisterGroups() const
 
 void RegisterControllerGeneral_x86::updateFlagValues(RegistersGroup& flagsGroup)
 {
-    kDebug() << "Updating flags";
-
     int flagsValue = registerValue(m_eflags.registerName).toInt(0, 16);
 
     for (int idx = 0; idx < m_eflags.flags.count(); idx++) {
@@ -115,15 +113,16 @@ void RegisterControllerGeneral_x86::updateRegisters(const QString& group)
     }
 
     if (!m_registerNamesInitialized) {
-        initializeRegisters();
-        m_registerNamesInitialized = true;
+        if (initializeRegisters()) {
+            m_registerNamesInitialized = true;
+        }
     }
 
     if (group != enumToString(FPU)) {
         if (group.isEmpty()) {
             QStringList groups = namesOfRegisterGroups();
             groups.removeOne(enumToString(FPU));
-            foreach (const QString& g, groups) {
+            foreach (const QString & g, groups) {
                 IRegisterController::updateRegisters(g);
             }
         } else {
@@ -135,7 +134,7 @@ void RegisterControllerGeneral_x86::updateRegisters(const QString& group)
         if (m_debugSession && !m_debugSession->stateIsOn(s_dbgNotStarted | s_shuttingDown)) {
 
             QString command = "info all-registers ";
-            foreach (const QString& name, registerNamesForGroup(enumToString(FPU))) {
+            foreach (const QString & name, registerNamesForGroup(enumToString(FPU))) {
                 command += "$" + name + ' ';
             }
             //TODO: use mi interface instead.
@@ -147,7 +146,7 @@ void RegisterControllerGeneral_x86::updateRegisters(const QString& group)
 
 QString RegisterControllerGeneral_x86::enumToString(X86RegisterGroups group) const
 {
-    static QString groups[LAST_REGISTER] = {"General", "Flags", "FPU", "XMM", "Segment"};
+    static const QString groups[LAST_REGISTER] = {"General", "Flags", "FPU", "XMM", "Segment"};
 
     return groups[group];
 }
@@ -163,9 +162,16 @@ void RegisterControllerGeneral_x86::convertValuesForGroup(RegistersGroup& regist
 
 void RegisterControllerGeneral_x86::handleFPURegisters(const QStringList& record)
 {
+    //st0       0
+    //st1       -1
+    //st2       123456789
+    //st3       -12345.6789
+    //st4       12.34
+    //st5       1.1e+2
+    //st6       2.345e-10
     const QRegExp rx("^(st[0-8])\\s+((?:-?\\d+\\.?\\d+(?:e(\\+|-)\\d+)?)|(?:-?\\d+))$");
     QVector<Register> registers;
-    foreach (const QString& s, record) {
+    foreach (const QString & s, record) {
         if (rx.exactMatch(s)) {
             registers.push_back(Register(rx.cap(1), rx.cap(2)));
         }
@@ -173,11 +179,11 @@ void RegisterControllerGeneral_x86::handleFPURegisters(const QStringList& record
 
     if (registers.size() != 8) {
         kDebug() << "can't parse FPU. Wrong format" << record << "registers: ";
-        foreach (const Register& r, registers) {
+        foreach (const Register & r, registers) {
             kDebug() << r.name << ' ' << r.value;
         }
     } else {
-        foreach (const Register& r, registers) {
+        foreach (const Register & r, registers) {
             if (m_registers.contains(r.name)) {
                 m_registers[r.name] = r.value;
             }
@@ -186,17 +192,20 @@ void RegisterControllerGeneral_x86::handleFPURegisters(const QStringList& record
     }
 }
 
-RegisterController_x86::RegisterController_x86(QObject* parent, DebugSession* debugSession) : RegisterControllerGeneral_x86(parent, debugSession)
+RegisterController_x86::RegisterController_x86(QObject* parent, DebugSession* debugSession)
+: RegisterControllerGeneral_x86(parent, debugSession)
 {
     initRegisterNames();
 }
 
-RegisterController_x86_64::RegisterController_x86_64(QObject* parent, DebugSession* debugSession) : RegisterControllerGeneral_x86(parent, debugSession)
+RegisterController_x86_64::RegisterController_x86_64(QObject* parent, DebugSession* debugSession)
+: RegisterControllerGeneral_x86(parent, debugSession)
 {
     initRegisterNames();
 }
 
-RegisterControllerGeneral_x86::RegisterControllerGeneral_x86(QObject* parent, DebugSession* debugSession) : IRegisterController(parent, debugSession), m_registerNamesInitialized(false)
+RegisterControllerGeneral_x86::RegisterControllerGeneral_x86(QObject* parent, DebugSession* debugSession)
+: IRegisterController(parent, debugSession), m_registerNamesInitialized(false)
 {
     initRegisterNames();
 }

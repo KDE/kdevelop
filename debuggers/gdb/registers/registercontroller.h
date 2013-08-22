@@ -136,8 +136,8 @@ protected:
     ///Returns group that given register belongs to.
     QString groupForRegisterName(const QString& name);
 
-    ///Initializes registers, that is gets names of all available registers. Should be called once.
-    void initializeRegisters();
+    ///Initializes registers, that is gets names of all available registers. Returns true is succeed.
+    bool initializeRegisters();
 
 private :
 
