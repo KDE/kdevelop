@@ -737,12 +737,11 @@ void CMakeManager::dirtyFile(const QString & dirty)
     }
     else if(dirtyFile.fileName()=="CMakeCache.txt")
     {
-        IProject* p=0;
         //we first have to check from which project is this builddir
         foreach(KDevelop::IProject* pp, m_watchers.uniqueKeys()) {
             KUrl buildDir = CMake::currentBuildDir(pp);
             if(dirtyFile.upUrl().equals(buildDir, KUrl::CompareWithoutTrailingSlash)) {
-                reload(p->projectItem());
+                reload(pp->projectItem());
             }
         }
     }
