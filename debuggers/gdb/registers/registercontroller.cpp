@@ -150,20 +150,20 @@ QString IRegisterController::groupForRegisterName(const QString& name)
 RegistersGroup IRegisterController::registersFromGroup(const QString& group, const RegistersFormat& format)
 {
     RegistersGroup g = registersFromGroupInternally(group);
-    convertValuesForGroup(g, format);
+    convertValuesForGroup(&g, format);
     return g;
 }
 
-void IRegisterController::updateValuesForRegisters(RegistersGroup& registers)
+void IRegisterController::updateValuesForRegisters(RegistersGroup* registers)
 {
     if (m_registers.isEmpty()) {
         kDebug() << "Registers not initialized yet";
         return;
     }
 
-    for (int i = 0; i < registers.registers.size(); i++) {
-        if (m_registers.contains(registers.registers[i].name)) {
-            registers.registers[i].value = m_registers.value(registers.registers[i].name);
+    for (int i = 0; i < registers->registers.size(); i++) {
+        if (m_registers.contains(registers->registers[i].name)) {
+            registers->registers[i].value = m_registers.value(registers->registers[i].name);
         }
     }
 }
@@ -197,15 +197,15 @@ void IRegisterController::setGeneralRegister(const Register& reg, const QString&
     }
 }
 
-void IRegisterController::convertValuesForGroup(RegistersGroup& registersGroup, RegistersFormat format)
+void IRegisterController::convertValuesForGroup(RegistersGroup* registersGroup, RegistersFormat format)
 {
     bool ok;
-    for (int i = 0; i < registersGroup.registers.size(); i++) {
-        const QString converted = QString::number(registersGroup.registers[i].value.toULongLong(&ok, 16), (int) format);
+    for (int i = 0; i < registersGroup->registers.size(); i++) {
+        const QString converted = QString::number(registersGroup->registers[i].value.toULongLong(&ok, 16), (int) format);
         if (ok) {
-            registersGroup.registers[i].value = converted;
+            registersGroup->registers[i].value = converted;
         } else {
-            kDebug() << "Can't convert value for group" << registersGroup.groupName << ' ' << registersGroup.registers[i].name << ' ' << registersGroup.registers[i].value;
+            kDebug() << "Can't convert value for group" << registersGroup->groupName << ' ' << registersGroup->registers[i].name << ' ' << registersGroup->registers[i].value;
         }
     }
 }

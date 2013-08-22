@@ -31,10 +31,10 @@
 namespace GDBDebugger
 {
 
-void  RegisterController_Arm::updateValuesForRegisters(RegistersGroup& registers)
+void  RegisterController_Arm::updateValuesForRegisters(RegistersGroup* registers)
 {
-    kDebug() << "Updating values for registers: " << registers.groupName;
-    if (registers.groupName == enumToString(Flags)) {
+    kDebug() << "Updating values for registers: " << registers->groupName;
+    if (registers->groupName == enumToString(Flags)) {
         updateFlagValues(registers);
     } else {
         IRegisterController::updateValuesForRegisters(registers);
@@ -52,7 +52,7 @@ RegistersGroup RegisterController_Arm::registersFromGroupInternally(const QStrin
         registers.registers.append(Register(name, QString()));
     }
 
-    updateValuesForRegisters(registers);
+    updateValuesForRegisters(&registers);
     return registers;
 }
 
@@ -63,12 +63,12 @@ QStringList RegisterController_Arm::namesOfRegisterGroups() const
     return registerGroups;
 }
 
-void RegisterController_Arm::updateFlagValues(RegistersGroup& flagsGroup)
+void RegisterController_Arm::updateFlagValues(RegistersGroup* flagsGroup)
 {
     quint32 flagsValue = registerValue(m_cpsr.registerName).toUInt(0, 16);
 
     for (int idx = 0; idx < m_cpsr.flags.count(); idx++) {
-        flagsGroup.registers[idx].value = ((flagsValue >> m_cpsr.bits[idx].toInt()) & 1) ? "1" : "0";
+        flagsGroup->registers[idx].value = ((flagsValue >> m_cpsr.bits[idx].toInt()) & 1) ? "1" : "0";
     }
 }
 
@@ -190,10 +190,10 @@ QString RegisterController_Arm::enumToString(ArmRegisterGroups group) const
     return groups[group];
 }
 
-void RegisterController_Arm::convertValuesForGroup(RegistersGroup& registersGroup, RegistersFormat format)
+void RegisterController_Arm::convertValuesForGroup(RegistersGroup* registersGroup, RegistersFormat format)
 {
     if (format != Raw && format != Natural) {
-        if (registersGroup.groupName == enumToString(General)) {
+        if (registersGroup->groupName == enumToString(General)) {
             IRegisterController::convertValuesForGroup(registersGroup, format);
         }
     }

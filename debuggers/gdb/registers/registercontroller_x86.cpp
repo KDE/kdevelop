@@ -32,10 +32,10 @@
 namespace GDBDebugger
 {
 
-void RegisterControllerGeneral_x86::updateValuesForRegisters(RegistersGroup& registers)
+void RegisterControllerGeneral_x86::updateValuesForRegisters(RegistersGroup* registers)
 {
-    kDebug() << "Updating values for registers: " << registers.groupName;
-    if (registers.groupName == enumToString(Flags)) {
+    kDebug() << "Updating values for registers: " << registers->groupName;
+    if (registers->groupName == enumToString(Flags)) {
         updateFlagValues(registers);
     } else {
         IRegisterController::updateValuesForRegisters(registers);
@@ -53,7 +53,7 @@ RegistersGroup RegisterControllerGeneral_x86::registersFromGroupInternally(const
         registers.registers.append(Register(name, QString()));
     }
 
-    updateValuesForRegisters(registers);
+    updateValuesForRegisters(&registers);
     return registers;
 }
 
@@ -64,12 +64,12 @@ QStringList RegisterControllerGeneral_x86::namesOfRegisterGroups() const
     return registerGroups;
 }
 
-void RegisterControllerGeneral_x86::updateFlagValues(RegistersGroup& flagsGroup)
+void RegisterControllerGeneral_x86::updateFlagValues(RegistersGroup* flagsGroup)
 {
     int flagsValue = registerValue(m_eflags.registerName).toInt(0, 16);
 
     for (int idx = 0; idx < m_eflags.flags.count(); idx++) {
-        flagsGroup.registers[idx].value = ((flagsValue >> m_eflags.bits[idx].toInt()) & 1) ? "1" : "0";
+        flagsGroup->registers[idx].value = ((flagsValue >> m_eflags.bits[idx].toInt()) & 1) ? "1" : "0";
     }
 }
 
@@ -151,10 +151,10 @@ QString RegisterControllerGeneral_x86::enumToString(X86RegisterGroups group) con
     return groups[group];
 }
 
-void RegisterControllerGeneral_x86::convertValuesForGroup(RegistersGroup& registersGroup, RegistersFormat format)
+void RegisterControllerGeneral_x86::convertValuesForGroup(RegistersGroup* registersGroup, RegistersFormat format)
 {
     if (format != Raw && format != Natural) {
-        if (registersGroup.groupName == enumToString(General) || registersGroup.groupName == enumToString(Segment)) {
+        if (registersGroup->groupName == enumToString(General) || registersGroup->groupName == enumToString(Segment)) {
             IRegisterController::convertValuesForGroup(registersGroup, format);
         }
     }
