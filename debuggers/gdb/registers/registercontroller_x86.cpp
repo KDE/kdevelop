@@ -28,6 +28,7 @@
 #include <QRegExp>
 
 #include <KDebug>
+#include <KLocalizedString>
 
 namespace GDBDebugger
 {
@@ -149,7 +150,7 @@ void RegisterControllerGeneral_x86::updateRegisters(const QString& group)
 
 QString RegisterControllerGeneral_x86::enumToString(X86RegisterGroups group) const
 {
-    static const QString groups[LAST_REGISTER] = {"General", "Flags", "FPU", "XMM", "Segment"};
+    static const QString groups[LAST_REGISTER] = {i18n("General"), i18n("Flags"), i18n("FPU"), i18n("XMM"), i18n("Segment")};
 
     return groups[group];
 }

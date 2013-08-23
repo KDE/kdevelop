@@ -27,6 +27,7 @@
 #include <qmath.h>
 
 #include <KDebug>
+#include <KLocalizedString>
 
 namespace GDBDebugger
 {
@@ -188,7 +189,7 @@ void RegisterController_Arm::handleVFPSRegisters(const QStringList& record)
 
 QString RegisterController_Arm::enumToString(ArmRegisterGroups group) const
 {
-    static const QString groups[LAST_REGISTER] = {"General", "Flags", "VFP single-word", "VFP double-word", "VFP quad-word"};
+    static const QString groups[LAST_REGISTER] = {i18n("General"), i18n("Flags"), i18n("VFP single-word"), i18n("VFP double-word"), i18n("VFP quad-word")};
 
     return groups[group];
 }
