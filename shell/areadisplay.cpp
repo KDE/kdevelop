@@ -36,12 +36,14 @@ AreaDisplay::AreaDisplay(KDevelop::MainWindow* parent)
     : QWidget(parent)
     , m_mainWindow(parent)
 {
-    connect(parent, SIGNAL(areaChanged(Sublime::Area*)), SLOT(newArea(Sublime::Area*)));
     setLayout(new QHBoxLayout);
     layout()->setContentsMargins(0,0,0,0);
+    layout()->addWidget(Core::self()->workingSetControllerInternal()->createSetManagerWidget(m_mainWindow));
 
     m_button = new QPushButton(this);
     layout()->addWidget(m_button);
+
+    connect(parent, SIGNAL(areaChanged(Sublime::Area*)), SLOT(newArea(Sublime::Area*)));
 }
 
 void AreaDisplay::newArea(Sublime::Area* area)
@@ -64,12 +66,12 @@ void AreaDisplay::newArea(Sublime::Area* area)
     m_button->setMenu(m);
 
     QBoxLayout* l = qobject_cast<QBoxLayout*>(layout());
-    if(l->count()>=2) {
+    if(l->count()>=3) {
         QLayoutItem* item = l->takeAt(0);
         delete item->widget();
         delete item;
     }
-    l->insertWidget(0, m_mainWindow->customButtonForAreaSwitcher(area));
+    l->insertWidget(0, Core::self()->workingSetControllerInternal()->createSetManagerWidget(m_mainWindow, area));
 }
 
 void AreaDisplay::backToCode()
