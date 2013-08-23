@@ -231,6 +231,7 @@ void RegisterControllerGeneral_x86::initRegisterNames()
     m_eflags.flags = m_registerNames[Flags];
     m_eflags.bits << "0" << "2" << "4" << "6" << "7" << "8" << "10" << "11";
     m_eflags.registerName = "eflags";
+    m_eflags.groupName = enumToString(Flags);
 }
 
 void RegisterController_x86::initRegisterNames()

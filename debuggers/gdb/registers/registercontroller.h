@@ -66,6 +66,7 @@ struct FlagRegister {
     QStringList flags;
     QStringList bits;
     QString registerName;
+    QString groupName;
 };
 
 /** @brief Class for managing registers: it can retrieve, change and send registers back to the debugger.*/

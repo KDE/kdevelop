@@ -221,6 +221,7 @@ void RegisterController_Arm::initRegisterNames()
     m_cpsr.registerName = "cpsr";
     m_cpsr.flags << "Q" << "V" << "C" << "Z" << "N";
     m_cpsr.bits << "27" << "28" << "29" << "30" << "31";
+    m_cpsr.groupName = enumToString(Flags);
 
     m_registerNames[Flags] = m_cpsr.flags;
 
