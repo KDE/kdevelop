@@ -233,8 +233,13 @@ public:
     */
     template <typename Operator>
     void walkToolViews(Operator &op, Positions positions);
+
+    /** Adds an action to the area. They will be made available from different places, like the Area Display*/
+    void addAction(QAction* action);
+
+    /** @returns the actions related to the area  */
     QList<QAction*> actions() const;
-    
+
 Q_SIGNALS:
     /**Emitted when a new view is added to the area.*/
     void viewAdded(Sublime::AreaIndex*, Sublime::View*);
@@ -257,6 +262,7 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void positionChanged(Sublime::View*, int);
+    void actionDestroyed(QObject* action);
 
 private:
     template <typename Operator>

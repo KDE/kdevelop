@@ -53,6 +53,7 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/isession.h>
 #include <QSignalMapper>
 #include <interfaces/contextmenuextension.h>
+#include <sublime/area.h>
 #include <kmenu.h>
 
 using namespace KDevelop;
@@ -428,6 +429,7 @@ void RunController::setupActions()
     d->runAction->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in currently active launch configuration."));
     ac->addAction("run_execute", d->runAction);
     connect(d->runAction, SIGNAL(triggered(bool)), this, SLOT(slotExecute()));
+    Core::self()->uiControllerInternal()->area(0, "code")->addAction(d->runAction);
 
     d->dbgAction = new KAction( KIcon("debug-run"), i18n("Debug Launch"), this);
     d->dbgAction->setShortcut(Qt::Key_F9);
@@ -437,6 +439,7 @@ void RunController::setupActions()
     d->dbgAction->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in currently active launch configuration inside a Debugger."));
     ac->addAction("run_debug", d->dbgAction);
     connect(d->dbgAction, SIGNAL(triggered(bool)), this, SLOT(slotDebug()));
+    Core::self()->uiControllerInternal()->area(0, "code")->addAction(d->dbgAction);
 
     d->profileAction = new KAction( KIcon(""), i18n("Profile Launch"), this);
     d->profileAction->setToolTip(i18nc("@info:tooltip", "Profile current launch"));
@@ -454,6 +457,7 @@ void RunController::setupActions()
     action->setEnabled(false);
     ac->addAction("run_stop_all", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(stopAllProcesses()));
+    Core::self()->uiControllerInternal()->area(0, "debug")->addAction(action);
 
     action = d->stopJobsMenu = new KActionMenu( KIcon("process-stop"), i18n("Stop"), this);
     action->setIconText(i18nc("Short text for 'Stop' used in the toolbar", "Stop"));

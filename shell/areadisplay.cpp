@@ -55,9 +55,10 @@ void AreaDisplay::newArea(Sublime::Area* area)
     m_button->setIcon(KIcon(currentArea->iconName()));
 
     QMenu* m = new QMenu(m_button);
-//     m->addActions(area->actions());
+    m->addActions(area->actions());
     if(currentArea->objectName() != "code") {
-        m->addSeparator();
+        if(!m->actions().isEmpty())
+            m->addSeparator();
         m->addAction(KIcon("document-edit"), i18n("Back to code"), this, SLOT(backToCode()));
     }
     m_button->setMenu(m);
