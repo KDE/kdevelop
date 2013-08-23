@@ -52,7 +52,7 @@ public:
 
     /*! @p status must implement KDevelop::IStatus */
     void registerStatus(QObject* status);
-    
+
 public Q_SLOTS:
     /*! Shows an error message in the status bar.
         @p message The message
@@ -64,9 +64,10 @@ public Q_SLOTS:
         return Sublime::MainWindow::windowTitle();
     }
 
-public Q_SLOTS:
     virtual void setVisible( bool visible );
     void configureShortcuts();
+    virtual void loadSettings();
+    virtual void saveSettings();
 
 Q_SIGNALS:
     void finishedLoading();
@@ -77,10 +78,6 @@ protected:
     //reimplemented from KXMLGUIBuilder to support visible menubar separators
     QAction *createCustomElement(QWidget *parent, int index, const QDomElement &element);
 
-public Q_SLOTS:
-    virtual void loadSettings();
-    virtual void saveSettings();
-protected:
     virtual void initialize();
     virtual void cleanup();
     virtual void initializeStatusBar();
