@@ -53,11 +53,6 @@ MainWindow::MainWindow(Controller *controller, Qt::WindowFlags flags)
     setDockOptions(QMainWindow::AnimatedDocks);
 }
 
-QWidget* MainWindow::customButtonForAreaSwitcher ( Area* /*area*/ )
-{
-    return 0;
-}
-
 bool MainWindow::containsView(View* view) const
 {
     foreach(Area* area, areas())
