@@ -144,6 +144,7 @@ void RegistersManager::updateRegisters()
         m_needToCheckArch = false;
         m_currentArchitecture = undefined;
         if (m_registerController) {
+            m_registersView->setController(0);
             kDebug() << "Deleting registerController";
             m_registerController->deleteLater();
             m_registerController = 0 ;
