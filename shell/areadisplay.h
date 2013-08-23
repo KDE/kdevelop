@@ -44,6 +44,9 @@ class AreaDisplay : public QWidget
     public:
         explicit AreaDisplay(KDevelop::MainWindow* parent);
 
+        virtual QSize sizeHint() const;
+        virtual QSize minimumSizeHint() const;
+
     private slots:
         void newArea(Sublime::Area* area);
         void backToCode();

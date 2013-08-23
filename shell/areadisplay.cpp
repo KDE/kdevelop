@@ -23,6 +23,7 @@
 #include <sublime/area.h>
 #include <interfaces/iuicontroller.h>
 #include <KLocalizedString>
+#include <KMenuBar>
 
 #include <QMenu>
 #include <QPushButton>
@@ -37,10 +38,9 @@ AreaDisplay::AreaDisplay(KDevelop::MainWindow* parent)
 {
     connect(parent, SIGNAL(areaChanged(Sublime::Area*)), SLOT(newArea(Sublime::Area*)));
     setLayout(new QHBoxLayout);
+    layout()->setContentsMargins(0,0,0,0);
 
     m_button = new QPushButton(this);
-    m_button->setMaximumHeight(16);
-    m_button->setFlat(true);
     layout()->addWidget(m_button);
 }
 
@@ -58,7 +58,7 @@ void AreaDisplay::newArea(Sublime::Area* area)
 //     m->addActions(area->actions());
     if(currentArea->objectName() != "code") {
         m->addSeparator();
-        m->addAction(KIcon("go-back"), i18n("Back to code"), this, SLOT(backToCode()));
+        m->addAction(KIcon("document-edit"), i18n("Back to code"), this, SLOT(backToCode()));
     }
     m_button->setMenu(m);
 
@@ -74,4 +74,16 @@ void AreaDisplay::newArea(Sublime::Area* area)
 void AreaDisplay::backToCode()
 {
     ICore::self()->uiController()->switchToArea("code", IUiController::ThisWindow);
+}
+
+QSize AreaDisplay::minimumSizeHint() const
+{
+    QSize hint = QWidget::minimumSizeHint();
+    hint = hint.boundedTo(QSize(hint.width(), m_mainWindow->menuBar()->height()-1));
+    return hint;
+}
+
+QSize AreaDisplay::sizeHint() const
+{
+    return minimumSizeHint();
 }
