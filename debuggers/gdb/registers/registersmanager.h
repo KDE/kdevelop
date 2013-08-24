@@ -23,6 +23,7 @@
 
 #include <QObject>
 #include <QStringList>
+#include <QScopedPointer>
 
 namespace GDBMI
 {
@@ -82,7 +83,8 @@ public Q_SLOTS:
 
 private:
     RegistersView* m_registersView;
-    IRegisterController* m_registerController;
+
+    QScopedPointer<IRegisterController> m_registerController;
 
     ArchitectureParser* m_architectureParser;
 

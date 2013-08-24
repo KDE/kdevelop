@@ -38,7 +38,7 @@ class RegisterController_Arm : public IRegisterController
 {
 public:
 
-    RegisterController_Arm(QObject* parent, DebugSession* debugSession = 0);
+    RegisterController_Arm(DebugSession* debugSession = 0, QObject* parent = 0);
 
     virtual QStringList namesOfRegisterGroups() const;
 

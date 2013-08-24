@@ -43,7 +43,7 @@ public slots:
     virtual void updateRegisters(const QString& group = QString());
 
 protected:
-    RegisterControllerGeneral_x86(QObject* parent, DebugSession* debugSession = 0);
+    RegisterControllerGeneral_x86(DebugSession* debugSession = 0, QObject* parent = 0);
 
     virtual RegistersGroup registersFromGroupInternally(const QString& group);
 
@@ -85,7 +85,7 @@ class RegisterController_x86 : public RegisterControllerGeneral_x86
 {
 
 public:
-    RegisterController_x86(QObject* parent, DebugSession* debugSession = 0);
+    RegisterController_x86(DebugSession* debugSession = 0, QObject* parent = 0);
 
 private:
     void initRegisterNames();
@@ -95,7 +95,7 @@ class RegisterController_x86_64 : public RegisterControllerGeneral_x86
 {
 
 public:
-    RegisterController_x86_64(QObject* parent, DebugSession* debugSession = 0);
+    RegisterController_x86_64(DebugSession* debugSession = 0, QObject* parent = 0);
 
 private:
     void initRegisterNames();

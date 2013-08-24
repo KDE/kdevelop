@@ -196,20 +196,20 @@ void RegisterControllerGeneral_x86::handleFPURegisters(const QStringList& record
     }
 }
 
-RegisterController_x86::RegisterController_x86(QObject* parent, DebugSession* debugSession)
-    : RegisterControllerGeneral_x86(parent, debugSession)
+RegisterController_x86::RegisterController_x86(DebugSession* debugSession, QObject* parent)
+    : RegisterControllerGeneral_x86(debugSession, parent)
 {
     initRegisterNames();
 }
 
-RegisterController_x86_64::RegisterController_x86_64(QObject* parent, DebugSession* debugSession)
-    : RegisterControllerGeneral_x86(parent, debugSession)
+RegisterController_x86_64::RegisterController_x86_64(DebugSession* debugSession, QObject* parent)
+    : RegisterControllerGeneral_x86(debugSession, parent)
 {
     initRegisterNames();
 }
 
-RegisterControllerGeneral_x86::RegisterControllerGeneral_x86(QObject* parent, DebugSession* debugSession)
-    : IRegisterController(parent, debugSession), m_registerNamesInitialized(false)
+RegisterControllerGeneral_x86::RegisterControllerGeneral_x86(DebugSession* debugSession, QObject* parent)
+    : IRegisterController(debugSession, parent), m_registerNamesInitialized(false)
 {
     if (m_registerNames.isEmpty()) {
         for (int i = 0; i < static_cast<int>(LAST_REGISTER); i++) {

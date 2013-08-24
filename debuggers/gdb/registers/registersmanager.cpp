@@ -94,15 +94,15 @@ void RegistersManager::architectureParsedSlot(Architecture arch)
 
     switch (arch) {
     case x86:
-        m_registerController = new RegisterController_x86(this, m_debugSession);
+        m_registerController.reset(new RegisterController_x86(m_debugSession)) ;
         kDebug() << "Found x86 architecture";
         break;
     case x86_64:
-        m_registerController = new RegisterController_x86_64(this, m_debugSession);
+        m_registerController.reset(new RegisterController_x86_64(m_debugSession));
         kDebug() << "Found x86_64 architecture";
         break;
     case arm:
-        m_registerController = new RegisterController_Arm(this, m_debugSession);
+        m_registerController.reset(new RegisterController_Arm(m_debugSession));
         kDebug() << "Found Arm architecture";
         break;
     default:
@@ -113,7 +113,7 @@ void RegistersManager::architectureParsedSlot(Architecture arch)
     m_currentArchitecture = arch;
 
     if (m_registerController) {
-        m_registersView->setController(m_registerController);
+        m_registersView->setController(m_registerController.data());
 
         updateRegisters();
     }
@@ -145,9 +145,7 @@ void RegistersManager::updateRegisters()
         m_currentArchitecture = undefined;
         if (m_registerController) {
             m_registersView->setController(0);
-            kDebug() << "Deleting registerController";
-            m_registerController->deleteLater();
-            m_registerController = 0 ;
+            m_registerController.reset();
         }
     }
     if (m_currentArchitecture == undefined) {

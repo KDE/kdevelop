@@ -210,7 +210,7 @@ void IRegisterController::convertValuesForGroup(RegistersGroup* registersGroup, 
     }
 }
 
-IRegisterController::IRegisterController(QObject* parent, DebugSession* debugSession)
+IRegisterController::IRegisterController(DebugSession* debugSession, QObject* parent)
 : QObject(parent), m_debugSession(debugSession) {}
 
 IRegisterController::~IRegisterController() {}

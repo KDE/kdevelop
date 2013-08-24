@@ -203,7 +203,7 @@ void RegisterController_Arm::convertValuesForGroup(RegistersGroup* registersGrou
     }
 }
 
-RegisterController_Arm::RegisterController_Arm(QObject* parent, DebugSession* debugSession) : IRegisterController(parent, debugSession), m_registerNamesInitialized(false)
+RegisterController_Arm::RegisterController_Arm(DebugSession* debugSession, QObject* parent) : IRegisterController(debugSession, parent), m_registerNamesInitialized(false)
 {
     if (m_registerNames.isEmpty()) {
         for (int i = 0; i < static_cast<int>(LAST_REGISTER); i++) {

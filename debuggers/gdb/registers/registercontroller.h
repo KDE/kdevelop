@@ -98,9 +98,7 @@ Q_SIGNALS:
 
 protected:
 
-    IRegisterController(QObject* parent, DebugSession* debugSession = 0);
-
-    virtual ~IRegisterController();
+    IRegisterController(DebugSession* debugSession = 0, QObject* parent = 0);
 
     ///Sets value for @p register from @p group.
     virtual void  setRegisterValueForGroup(const QString& group, const Register& reg) = 0;
@@ -139,6 +137,9 @@ protected:
 
     ///Initializes registers, that is gets names of all available registers. Returns true is succeed.
     bool initializeRegisters();
+
+public:
+    virtual ~IRegisterController();
 
 private :
 
