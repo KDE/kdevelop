@@ -63,7 +63,7 @@ private:
     ///Convenient representation of a table.
     struct Table {
         Table();
-        Table(QTableWidget* _tableWidget, QLabel* _name);
+        Table(QTableWidget* tableWidget, QLabel* name);
         bool isNull() const;
         QTableWidget* tableWidget;
         QLabel* name;
@@ -72,7 +72,7 @@ private:
     ///Association between @p table and @p registers group.
     struct TableRegistersAssociation {
         TableRegistersAssociation();
-        TableRegistersAssociation(const Table& _table, const QString& _registersGroup);
+        TableRegistersAssociation(const Table& table, const QString& registersGroup);
         RegistersView::Table table;
         QString registersGroup;
     };
@@ -132,6 +132,7 @@ private:
 private:
     QMenu* m_menu;
     QSignalMapper* m_mapper;
+
     IRegisterController* m_registerController;
     TablesManager m_tablesManager;
     RegistersFormat m_registersFormat;

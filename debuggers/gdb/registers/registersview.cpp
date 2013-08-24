@@ -30,7 +30,7 @@ namespace GDBDebugger
 {
 
 RegistersView::RegistersView(QWidget* p)
-: QWidget(p), m_registerController(0), m_tablesManager(this), m_registersFormat(Raw)
+    : QWidget(p), m_registerController(0), m_tablesManager(this), m_registersFormat(Raw)
 {
     setupUi(this);
 
@@ -90,10 +90,9 @@ void RegistersView::registerChangedInternally(QTableWidgetItem* item)
 
 void RegistersView::contextMenuEvent(QContextMenuEvent* e)
 {
-    QStringList groups;
-    if (m_registerController) {
-        groups = m_registerController->namesOfRegisterGroups();
-    }
+    Q_ASSERT(m_registerController);
+
+    QStringList groups = m_registerController->namesOfRegisterGroups();
 
     m_menu->clear();
 
@@ -104,7 +103,7 @@ void RegistersView::contextMenuEvent(QContextMenuEvent* e)
     connect(a, SIGNAL(triggered()), m_mapper, SLOT(map()));
 
     QMenu* m = m_menu->addMenu("Show");
-    foreach (const QString& group, groups) {
+    foreach (const QString & group, groups) {
         a = m->addAction(group);
         a->setCheckable(true);
         if (!m_tablesManager.tableForGroup(group).isNull()) {
@@ -141,9 +140,7 @@ void RegistersView::addItemToFormatSubmenu(QMenu* m, const QString& name, Regist
 void RegistersView::showMenuTriggered(const QString& group)
 {
     if (group == "Update") {
-        if (m_registerController) {
-            m_registerController->updateRegisters();
-        }
+        m_registerController->updateRegisters();
     } else {
         Table t;
         t = m_tablesManager.tableForGroup(group);
@@ -153,9 +150,7 @@ void RegistersView::showMenuTriggered(const QString& group)
         } else {
             t = m_tablesManager.createTableForGroup(group);
             if (!t.isNull()) {
-                if (m_registerController) {
-                    m_registerController->updateRegisters(group);
-                }
+                m_registerController->updateRegisters(group);
             }
         }
     }
@@ -164,9 +159,7 @@ void RegistersView::showMenuTriggered(const QString& group)
 void RegistersView::formatMenuTriggered(int format)
 {
     m_registersFormat = static_cast<RegistersFormat>(format);
-    if (m_registerController) {
-        m_registerController->updateRegisters();
-    }
+    m_registerController->updateRegisters();
 }
 
 RegistersView::Table RegistersView::TablesManager::tableForGroup(const QString& group) const
@@ -177,7 +170,7 @@ RegistersView::Table RegistersView::TablesManager::tableForGroup(const QString& 
         return t;
     }
 
-    foreach (const TableRegistersAssociation& a, m_tableRegistersAssociation) {
+    foreach (const TableRegistersAssociation & a, m_tableRegistersAssociation) {
         if (a.registersGroup == group) {
             t = a.table;
             break;
@@ -242,7 +235,7 @@ void RegistersView::TablesManager::addTable(const RegistersView::Table& table)
 int RegistersView::TablesManager::numOfFreeTables() const
 {
     int count = 0;
-    foreach (const TableRegistersAssociation& a, m_tableRegistersAssociation) {
+    foreach (const TableRegistersAssociation & a, m_tableRegistersAssociation) {
         if (a.registersGroup.isEmpty()) {
             count++;
         }
@@ -252,9 +245,7 @@ int RegistersView::TablesManager::numOfFreeTables() const
 
 void RegistersView::registersInGroupChanged(const QString& group)
 {
-    if (!m_registerController) {
-        return;
-    }
+    Q_ASSERT(m_registerController);
 
     kDebug() << "Updating registers";
 
@@ -276,7 +267,7 @@ void RegistersView::setController(IRegisterController* controller)
 
         //if architecture has changed, clear all tables.
         const QStringList groups = controller->namesOfRegisterGroups();
-        foreach (const QString& g, m_tablesManager.allGroups()) {
+        foreach (const QString & g, m_tablesManager.allGroups()) {
             if (!groups.contains(g)) {
                 m_tablesManager.clearAllAssociations();
                 m_tablesManager.createTableForGroup("General");
@@ -291,7 +282,7 @@ void RegistersView::setController(IRegisterController* controller)
 const QStringList RegistersView::TablesManager::allGroups() const
 {
     QStringList groups;
-    foreach (const TableRegistersAssociation& a, m_tableRegistersAssociation) {
+    foreach (const TableRegistersAssociation & a, m_tableRegistersAssociation) {
         if (!a.registersGroup.isEmpty()) {
             groups << a.registersGroup;
         }
@@ -307,7 +298,6 @@ void RegistersView::TablesManager::save()
     const QStringList groups = allGroups();
 
     for (int i = 0; i < groups.count(); i++) {
-        kDebug() << "Saving group" << groups[i];
         m_config.writeEntry(QString::number(i), groups[i]);
     }
 }
@@ -332,7 +322,7 @@ RegistersView::TablesManager::TablesManager(RegistersView* parent) : m_parent(pa
 
 void RegistersView::TablesManager::clearAllAssociations()
 {
-    foreach (const TableRegistersAssociation& a, m_tableRegistersAssociation) {
+    foreach (const TableRegistersAssociation & a, m_tableRegistersAssociation) {
         removeAssociation(a.registersGroup);
     }
 }
@@ -352,10 +342,10 @@ void RegistersView::flagChangedInternally(QTableWidgetItem* item)
 }
 
 RegistersView::Table::Table()
-: tableWidget(0), name(0) {}
+    : tableWidget(0), name(0) {}
 
-RegistersView::Table::Table(QTableWidget* _tableWidget, QLabel* _name)
-: tableWidget(_tableWidget), name(_name) {}
+RegistersView::Table::Table(QTableWidget* tableWidget, QLabel* name)
+    : tableWidget(tableWidget), name(name) {}
 
 bool RegistersView::Table::isNull() const
 {
@@ -364,8 +354,8 @@ bool RegistersView::Table::isNull() const
 
 RegistersView::TableRegistersAssociation::TableRegistersAssociation() {}
 
-RegistersView::TableRegistersAssociation::TableRegistersAssociation(const RegistersView::Table& _table, const QString& _registersGroup)
-: table(_table), registersGroup(_registersGroup) {}
+RegistersView::TableRegistersAssociation::TableRegistersAssociation(const RegistersView::Table& table, const QString& registersGroup)
+    : table(table), registersGroup(registersGroup) {}
 
 RegistersView::TablesManager::~TablesManager()
 {
