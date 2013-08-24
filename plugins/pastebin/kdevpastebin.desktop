@@ -24,6 +24,7 @@ Comment[nl]=Deze plugin helpt u om uw patches naar de Pastebin-service te upload
 Comment[pl]=Wtyczka ta pomaga ci wysyłać swoje łatki do usługi Pastebin
 Comment[pt]=Este 'plugin' ajuda-o a enviar as suas modificações para o serviço Pastebin
 Comment[pt_BR]=Este plugin o auxilia a enviar suas modificações para o serviço Pastebin
+Comment[ru]=Это расширение помогает загружать фрагменты кода на сайт Pastebin
 Comment[sk]=Tento plugin vám pomôže nahrať vaše záplaty na službu Pastebin
 Comment[sl]=Vstavek vam pomaga pri pošiljanju popravkov na storitev Pastebin
 Comment[sv]=Det här insticksprogrammet hjälper till att ladda upp programfixar till tjänsten Pastebin

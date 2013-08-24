@@ -24,6 +24,7 @@ Comment[nl]=ReviewBoard-integratie voor KDevelop
 Comment[pl]=Integracja tablic przeglądu dla KDevelop
 Comment[pt]=Integração do ReviewBoard para o KDevelop
 Comment[pt_BR]=Integração do ReviewBoard para o KDevelop
+Comment[ru]=Интеграция ReviewBoard в KDevelop
 Comment[sk]=Integrácia ReviewBoard pre KDevelop
 Comment[sl]=Vgradnja orodja ReviewBoard v KDevelop
 Comment[sv]=Integrering av Reviewboard i KDevelop
