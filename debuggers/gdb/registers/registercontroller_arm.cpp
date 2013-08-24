@@ -89,7 +89,7 @@ void RegisterController_Arm::setRegisterValueForGroup(const QString& group, cons
     } else if (group == enumToString(VFP_quad)) {
         setVFPQ_Register(reg);
     } else {
-        kDebug() << group << "is incorrect group";
+        Q_ASSERT(0);
     }
 }
 

@@ -90,7 +90,7 @@ void RegisterControllerGeneral_x86::setRegisterValueForGroup(const QString& grou
     } else if (group == enumToString(Segment)) {
         setSegmentRegister(reg);
     } else {
-        kDebug() << group << "is incorrect group";
+        Q_ASSERT(0);
     }
 }
 

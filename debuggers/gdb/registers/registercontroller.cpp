@@ -205,7 +205,7 @@ void IRegisterController::convertValuesForGroup(RegistersGroup* registersGroup, 
         if (ok) {
             registersGroup->registers[i].value = converted;
         } else {
-            kDebug() << "Can't convert value for group" << registersGroup->groupName << ' ' << registersGroup->registers[i].name << ' ' << registersGroup->registers[i].value;
+            kDebug() << "Can't convert register value to format: " << format << ' ' << registersGroup->registers[i].name << ' ' << registersGroup->registers[i].value;
         }
     }
 }
