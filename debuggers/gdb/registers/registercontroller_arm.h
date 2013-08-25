@@ -56,8 +56,6 @@ protected:
 
     virtual void setRegisterValueForGroup(const QString& group, const Register& reg);
 
-    void updateFlagValues(RegistersGroup* flagsGroup) const;
-
     enum ArmRegisterGroups {General, Flags, VFP_single, VFP_double, VFP_quad, LAST_REGISTER};
 
     QString enumToString(ArmRegisterGroups group) const;

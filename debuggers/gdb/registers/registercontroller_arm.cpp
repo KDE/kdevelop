@@ -39,7 +39,7 @@ void  RegisterController_Arm::updateValuesForRegisters(RegistersGroup* registers
 {
     kDebug() << "Updating values for registers: " << registers->groupName;
     if (registers->groupName == enumToString(Flags)) {
-        updateFlagValues(registers);
+        updateFlagValues(registers, m_cpsr);
     } else {
         IRegisterController::updateValuesForRegisters(registers);
     }
@@ -67,15 +67,6 @@ QStringList RegisterController_Arm::namesOfRegisterGroups() const
     static const QStringList registerGroups = QStringList() << enumToString(General) << enumToString(Flags) << enumToString(VFP_single) << enumToString(VFP_double) << enumToString(VFP_quad);
 
     return registerGroups;
-}
-
-void RegisterController_Arm::updateFlagValues(RegistersGroup* flagsGroup) const
-{
-    quint32 flagsValue = registerValue(m_cpsr.registerName).toUInt(0, 16);
-
-    for (int idx = 0; idx < m_cpsr.flags.count(); idx++) {
-        flagsGroup->registers[idx].value = ((flagsValue >> m_cpsr.bits[idx].toInt()) & 1) ? "1" : "0";
-    }
 }
 
 void RegisterController_Arm::setRegisterValueForGroup(const QString& group, const Register& reg)

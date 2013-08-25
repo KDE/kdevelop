@@ -125,9 +125,12 @@ protected:
 
     /** Sets a flag register.
      * @param reg register to set
-     * @param flag flag corresponding to @p reg
+     * @param flag flag register @p reg belongs to.
      */
     void setFlagRegister(const Register& reg, const FlagRegister& flag);
+
+    ///Updates values in @p flagsGroup for @p flagRegister.
+    void updateFlagValues(RegistersGroup* flagsGroup, const FlagRegister& flagRegister) const;
 
     ///Returns group that given register belongs to.
     QString groupForRegisterName(const QString& name) const;

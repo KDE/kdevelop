@@ -55,8 +55,6 @@ protected:
 
     virtual void setRegisterValueForGroup(const QString& group, const Register& reg);
 
-    void updateFlagValues(RegistersGroup* flagsGroup) const;
-
     //this is a workaround for FPU registers.
     void handleFPURegisters(const QStringList& record);
 

@@ -207,4 +207,13 @@ IRegisterController::IRegisterController(DebugSession* debugSession, QObject* pa
 
 IRegisterController::~IRegisterController() {}
 
+void IRegisterController::updateFlagValues(RegistersGroup* flagsGroup, const FlagRegister& flagRegister) const
+{
+    quint32 flagsValue = registerValue(flagRegister.registerName).toInt(0, 16);
+
+    for (int idx = 0; idx < flagRegister.flags.count(); idx++) {
+        flagsGroup->registers[idx].value = ((flagsValue >> flagRegister.bits[idx].toInt()) & 1) ? "1" : "0";
+    }
+}
+
 }
