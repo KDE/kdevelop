@@ -22,16 +22,15 @@
 
 #include <QWidget>
 
-
 class QPushButton;
 class QMenu;
 
 namespace KDevelop {
-    class MainWindow;
+class MainWindow;
 }
 namespace Sublime {
-    class MainWindow;
-    class Area;
+class MainWindow;
+class Area;
 }
 
 /**
@@ -41,20 +40,20 @@ namespace Sublime {
 class AreaDisplay : public QWidget
 {
     Q_OBJECT
-    public:
-        explicit AreaDisplay(KDevelop::MainWindow* parent);
+public:
+    explicit AreaDisplay(KDevelop::MainWindow* parent);
 
-        virtual QSize sizeHint() const;
-        virtual QSize minimumSizeHint() const;
+    virtual QSize sizeHint() const;
+    virtual QSize minimumSizeHint() const;
 
-    private slots:
-        void newArea(Sublime::Area* area);
-        void backToCode();
+private slots:
+    void newArea(Sublime::Area* area);
+    void backToCode();
 
-    private:
-        QMenu* m_menu;
-        QPushButton* m_button;
-        KDevelop::MainWindow* m_mainWindow;
+private:
+    QMenu* m_menu;
+    QPushButton* m_button;
+    KDevelop::MainWindow* m_mainWindow;
 };
 
 #endif // AREADISPLAY_H

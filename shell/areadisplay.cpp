@@ -18,17 +18,19 @@
  ***************************************************************************/
 
 #include "areadisplay.h"
+
 #include "mainwindow.h"
 #include "workingsetcontroller.h"
+
 #include <sublime/area.h>
 #include <interfaces/iuicontroller.h>
+
 #include <KLocalizedString>
 #include <KMenuBar>
 
 #include <QMenu>
 #include <QPushButton>
 #include <QHBoxLayout>
-#include <qlayout.h>
 
 using namespace KDevelop;
 
@@ -37,7 +39,7 @@ AreaDisplay::AreaDisplay(KDevelop::MainWindow* parent)
     , m_mainWindow(parent)
 {
     setLayout(new QHBoxLayout);
-    layout()->setContentsMargins(0,0,0,0);
+    layout()->setContentsMargins(0, 0, 0, 0);
     layout()->addWidget(Core::self()->workingSetControllerInternal()->createSetManagerWidget(m_mainWindow));
 
     m_button = new QPushButton(this);
