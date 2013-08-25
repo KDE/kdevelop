@@ -63,17 +63,17 @@ private:
     ///Convenient representation of a table.
     struct Table {
         Table();
-        Table(QTableWidget* tableWidget, QLabel* name);
+        Table(QTableWidget* tableWidget, int idx);
         bool isNull() const;
         QTableWidget* tableWidget;
-        QLabel* name;
+        int index;
     };
 
     ///Association between @p table and @p registers group.
     struct TableRegistersAssociation {
         TableRegistersAssociation();
         TableRegistersAssociation(const Table& table, const QString& registersGroup);
-        RegistersView::Table table;
+        Table table;
         QString registersGroup;
     };
 
@@ -105,6 +105,9 @@ private:
         void clearAllAssociations();
 
     private:
+        ///Sets name for the table @p t in the view.
+        void setNameForTable(TableRegistersAssociation& t);
+
         RegistersView* m_parent;
         QVector<TableRegistersAssociation> m_tableRegistersAssociation;
         KConfigGroup m_config;
@@ -120,8 +123,8 @@ private slots:
     void flagChangedInternally(QTableWidgetItem* item);
     ///Changes register formates to @p format.
     void formatMenuTriggered(int format);
-    ///Changes visible tables
-    void showMenuTriggered(const QString&);
+    ///Updates visible tables
+    void updateMenuTriggered(void);
 
 signals:
     ///Emitted whenever register @p reg in a table has changed.
