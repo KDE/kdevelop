@@ -108,7 +108,7 @@ QVariant FilterModel::headerData(int section, Qt::Orientation orientation, int r
     } else if (section == MatchOn) {
         return i18n("Match On");
     } else if (section == Inclusive) {
-        return i18n("Inclusive");
+        return i18n("Type");
     }
 
     return QVariant();
@@ -155,6 +155,41 @@ QVariant FilterModel::data(const QModelIndex& index, int role) const
     }
 
     return QVariant();
+}
+
+bool FilterModel::setData(const QModelIndex& index, const QVariant& value, int role)
+{
+    if (!index.isValid()) {
+        return false;
+    }
+    Q_ASSERT(!index.parent().isValid());
+    Q_ASSERT(index.row() >= 0 && index.row() < m_filters.size());
+    Q_ASSERT(index.column() >= 0 && index.column() < NUM_COLUMNS);
+    if (role != Qt::EditRole) {
+        return false;
+    }
+    Filter& filter = m_filters[index.row()];
+    const int column = index.column();
+    if (column == Pattern) {
+        filter.pattern.setPattern(value.toString());
+    } else if (column == MatchOn) {
+        filter.matchOn = static_cast<Filter::MatchOn>(value.toInt());
+    } else if (column == Targets) {
+        filter.targets = static_cast<Filter::Targets>(value.toInt());
+    } else if (column == Inclusive) {
+        filter.inclusive = value.toBool();
+    }
+    dataChanged(index, index);
+    return true;
+}
+
+Qt::ItemFlags FilterModel::flags(const QModelIndex& index) const
+{
+    Qt::ItemFlags baseFlags = QAbstractTableModel::flags(index);
+    if (index.isValid() && !index.parent().isValid()) {
+        return baseFlags | Qt::ItemIsEditable;
+    }
+    return baseFlags;
 }
 
 #include "filtermodel.moc"

@@ -36,6 +36,7 @@
 
 #include "projectfilterdebug.h"
 #include "filtermodel.h"
+#include "comboboxdelegate.h"
 
 using namespace KDevelop;
 
@@ -57,6 +58,22 @@ ProjectFilterKCM::ProjectFilterKCM(QWidget* parent, const QVariantList& args)
     m_ui->filters->header()->setResizeMode(FilterModel::MatchOn, QHeaderView::ResizeToContents);
     m_ui->filters->header()->setResizeMode(FilterModel::Targets, QHeaderView::ResizeToContents);
     m_ui->filters->header()->setResizeMode(FilterModel::Inclusive, QHeaderView::ResizeToContents);
+    m_ui->filters->setItemDelegateForColumn(FilterModel::MatchOn,
+        new ComboBoxDelegate(QVector<ComboBoxDelegate::Item>()
+                << ComboBoxDelegate::Item(i18n("relative path"), static_cast<int>(Filter::RelativePath))
+                << ComboBoxDelegate::Item(i18n("basename"), static_cast<int>(Filter::Basename))
+            , this));
+    m_ui->filters->setItemDelegateForColumn(FilterModel::Targets,
+        new ComboBoxDelegate(QVector<ComboBoxDelegate::Item>()
+                << ComboBoxDelegate::Item(i18n("files"), static_cast<int>(Filter::Files))
+                << ComboBoxDelegate::Item(i18n("folders"), static_cast<int>(Filter::Folders))
+                << ComboBoxDelegate::Item(i18n("files and folders"), static_cast<int>(Filter::Folders | Filter::Files))
+            , this));
+    m_ui->filters->setItemDelegateForColumn(FilterModel::Inclusive,
+        new ComboBoxDelegate(QVector<ComboBoxDelegate::Item>()
+                << ComboBoxDelegate::Item(i18n("exclusive"), false)
+                << ComboBoxDelegate::Item(i18n("inclusive"), true)
+            , this));
     l->addWidget(w);
 
     addConfig( ProjectFilterSettings::self(), w );

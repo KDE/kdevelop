@@ -28,6 +28,7 @@ set( projectfilterkcm_SRCS
     projectfilterdebug.cpp
     filter.cpp
     filtermodel.cpp
+    comboboxdelegate.cpp
 )
 
 set( projectfilterkcm_UI
