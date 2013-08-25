@@ -29,7 +29,7 @@
 
 namespace KDevelop {
 
-class TestResult;
+struct TestResult;
 
 class IProject;
 class ITestSuite;
