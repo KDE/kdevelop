@@ -233,10 +233,7 @@ ProjectFolderItem* QMakeProjectManager::projectRootItem( IProject* project, cons
     projecturl.setFileName( projectfile );
     QHash<QString,QString> qmvars = queryQMake( project );
     const QString mkSpecFile = findBasicMkSpec( qmvars );
-    if (mkSpecFile.isEmpty()) {
-        kWarning() << "disabling QMake support";
-        return new ProjectFolderItem( project, url, 0 );
-    }
+    Q_ASSERT(!mkSpecFile.isEmpty());
     QMakeMkSpecs* mkspecs = new QMakeMkSpecs( mkSpecFile, qmvars );
     mkspecs->setProject( project );
     mkspecs->read();
@@ -368,20 +365,19 @@ ProjectFolderItem* QMakeProjectManager::import( IProject* project )
         return 0;
     }
 
-    ProjectFolderItem* ret = AbstractFileManagerPlugin::import( project );
-
-    connect(projectWatcher(project), SIGNAL(dirty(QString)),
-            this, SLOT(slotDirty(QString)));
-    
-    if(projectNeedsConfiguration(project)) {
-        QMakeBuildDirChooserDialog *chooser = new QMakeBuildDirChooserDialog(project);
-        if(chooser->exec() == QDialog::Rejected)
-        {
+    while (projectNeedsConfiguration(project)) {
+        QMakeBuildDirChooserDialog chooser(project);
+        if(chooser.exec() == QDialog::Rejected) {
             kDebug() << "User stopped project import";
             //TODO: return 0 has no effect.
             return 0;
         }
     }
+
+    ProjectFolderItem* ret = AbstractFileManagerPlugin::import( project );
+
+    connect(projectWatcher(project), SIGNAL(dirty(QString)),
+            this, SLOT(slotDirty(QString)));
 
     return ret;
 }
@@ -596,16 +592,19 @@ void QMakeProjectManager::slotRunQMake()
 
 bool QMakeProjectManager::projectNeedsConfiguration(IProject* project)
 {
-    KConfigGroup cg(project->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
-    bool qmakeValid = cg.readEntry<KUrl>(QMakeConfig::QMAKE_BINARY, KUrl("")).isValid();
-    if (!qmakeValid) {
+    const QString qmakeBinary = QMakeConfig::qmakeBinary( project );
+    if (qmakeBinary.isEmpty()) {
         return true;
     }
-    if (queryQMake(project).isEmpty()) {
+    const QHash<QString, QString> vars = queryQMake(project);
+    if (vars.isEmpty()) {
         return true;
     }
-    bool buildDirValid = cg.readEntry<KUrl>(QMakeConfig::BUILD_FOLDER, KUrl("")).isValid();
-    if (!buildDirValid) {
+    if (findBasicMkSpec(vars).isEmpty()) {
+        return true;
+    }
+    ;
+    if (QMakeConfig::buildDirFromSrc(project, project->folder()).isEmpty()) {
         return true;
     }
     return false;
