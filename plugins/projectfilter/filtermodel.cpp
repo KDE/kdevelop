@@ -24,6 +24,7 @@
 #include <QDebug>
 
 #include <KLocalizedString>
+#include <KIcon>
 
 #include "tests/modeltest.h"
 
@@ -123,7 +124,7 @@ QVariant FilterModel::data(const QModelIndex& index, int role) const
     Q_ASSERT(index.row() >= 0 && index.row() < m_filters.size());
     Q_ASSERT(index.column() >= 0 && index.column() < NUM_COLUMNS);
 
-    if (role != Qt::DisplayRole) {
+    if (role != Qt::DisplayRole && role != Qt::DecorationRole) {
         return QVariant();
     }
 
@@ -131,13 +132,25 @@ QVariant FilterModel::data(const QModelIndex& index, int role) const
     const int column = index.column();
 
     if (column == Pattern) {
+        if (role == Qt::DecorationRole) {
+            return KIcon("view-filter");
+        }
         return filter.pattern.pattern();
     } else if (column == Targets) {
         if (filter.targets & Filter::Files && filter.targets & Filter::Folders) {
+            if (role == Qt::DecorationRole) {
+                return KIcon("document-open");
+            }
             return i18n("files and folders");
         } else if (filter.targets & Filter::Folders) {
+            if (role == Qt::DecorationRole) {
+                return KIcon("folder");
+            }
             return i18n("folders");
         } else {
+            if (role == Qt::DecorationRole) {
+                return KIcon("text-plain");
+            }
             return i18n("files");
         }
     } else if (column == MatchOn) {
@@ -148,8 +161,14 @@ QVariant FilterModel::data(const QModelIndex& index, int role) const
         }
     } else if (column == Inclusive) {
         if (filter.inclusive) {
+            if (role == Qt::DecorationRole) {
+                return KIcon("kt-add-filters");
+            }
             return i18n("inclusive");
         } else {
+            if (role == Qt::DecorationRole) {
+                return KIcon("kt-remove-filters");
+            }
             return i18n("exclusive");
         }
     }
