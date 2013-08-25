@@ -35,7 +35,7 @@ namespace Sublime {
 }
 
 /**
- * This widget displays the current area by the menu 
+ * This widget displays the current area by the menu
  */
 
 class AreaDisplay : public QWidget

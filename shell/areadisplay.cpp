@@ -52,7 +52,7 @@ void AreaDisplay::newArea(Sublime::Area* area)
         m_button->menu()->deleteLater();
 
     Sublime::Area* currentArea = m_mainWindow->area();
-    
+
     m_button->setText(currentArea->title());
     m_button->setIcon(KIcon(currentArea->iconName()));
 
