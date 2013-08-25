@@ -25,6 +25,7 @@ Comment[nl]=Deze plugin biedt het openen van bestanden met geassocieerde externe
 Comment[pl]=Ta wtyczka pozwala na otwieranie plików, z którymi są powiązane zewnętrzne programy.
 Comment[pt]=Este 'plugin' permite abrir os ficheiros com as aplicações externas associadas.
 Comment[pt_BR]=Este plugin permite abrir os arquivos com os aplicativos externos associados.
+Comment[ru]=Это расширение позволяет открывать файлы в связанном внешнем приложении.
 Comment[sk]=Tento plugin umožňuje otvoriť súbory s asociovanými externými aplikáciami.
 Comment[sl]=Vstavek omogoča odpiranje datotek v povezanih zunanjih programih.
 Comment[sv]=Insticksprogrammet tillåter att öppna filer med tillhörande externa program.
