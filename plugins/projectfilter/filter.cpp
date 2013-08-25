@@ -21,7 +21,7 @@
 
 #include "filter.h"
 
-#include <QVector>
+#include <KConfigGroup>
 
 using namespace KDevelop;
 
@@ -62,6 +62,43 @@ Filters defaultFilters()
     ret << filter;
 
     return ret;
+}
+
+Filters readFilters(const KSharedConfig::Ptr& config)
+{
+    Filters filters;
+    if (!config->hasGroup("Filters")) {
+        return defaultFilters();
+    }
+    const KConfigGroup& group = config->group("Filters");
+
+    foreach(const QString& subGroup, group.groupList()) {
+        const KConfigGroup& subConfig = group.group(subGroup);
+        const QString pattern = subConfig.readEntry("pattern", QString());
+        Filter::Targets targets(subConfig.readEntry("targets", 0));
+        Filter::MatchOn matchOn = static_cast<Filter::MatchOn>(subConfig.readEntry("matchOn", 0));
+        bool inclusive = subConfig.readEntry("inclusive", false);
+        filters << Filter(pattern, targets, matchOn, inclusive);
+    }
+
+    return filters;
+}
+
+void writeFilters(const Filters& filters, KSharedConfig::Ptr config)
+{
+    // clear existing
+    config->deleteGroup("Filters");
+
+    // write new
+    KConfigGroup group = config->group("Filters");
+    int i = 0;
+    foreach(const Filter& filter, filters) {
+        KConfigGroup subGroup = group.group(QString::number(i++));
+        subGroup.writeEntry("pattern", filter.pattern.pattern());
+        subGroup.writeEntry("matchOn", static_cast<int>(filter.matchOn));
+        subGroup.writeEntry("targets", static_cast<int>(filter.targets));
+        subGroup.writeEntry("inclusive", filter.inclusive);
+    }
 }
 
 }

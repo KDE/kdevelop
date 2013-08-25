@@ -26,6 +26,8 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevprojectfilter.desktop DESTINATION 
 set( projectfilterkcm_SRCS
     projectfilterkcm.cpp
     projectfilterdebug.cpp
+    filter.cpp
+    filtermodel.cpp
 )
 
 set( projectfilterkcm_UI
@@ -37,6 +39,7 @@ kde4_add_kcfg_files( projectfilterkcm_SRCS projectfiltersettings.kcfgc )
 kde4_add_plugin( kcm_kdevprojectfilter ${projectfilterkcm_SRCS} )
 target_link_libraries( kcm_kdevprojectfilter
     ${KDE4_KCMUTILS_LIBS} ${KDE4_KDEUI_LIBS}
+    kdevplatformtests
     kdevplatformproject kdevplatformutil kdevplatforminterfaces)
 
 install( TARGETS kcm_kdevprojectfilter DESTINATION ${PLUGIN_INSTALL_DIR} )

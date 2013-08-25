@@ -19,54 +19,49 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FILTER_H
-#define FILTER_H
+#ifndef FILTERMODEL_H
+#define FILTERMODEL_H
 
-#include <QRegExp>
-#include <QVector>
-#include <KSharedConfig>
+#include <QAbstractTableModel>
+
+#include "filter.h"
 
 namespace KDevelop {
 
-struct Filter
+class FilterModel : public QAbstractTableModel
 {
+    Q_OBJECT
+
 public:
-    Filter();
+    explicit FilterModel(QObject* parent = 0);
+    virtual ~FilterModel();
 
-    enum Target {
-        Files = 1,
-        Folders = 2
+    Filters filters() const;
+    void setFilters(const Filters& filters);
+
+    void addFilter();
+    void removeFilter(int row);
+    void moveFilterUp(int row);
+    void moveFilterDown(int row);
+
+    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
+
+    virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+
+    enum Columns {
+        Pattern,
+        Targets,
+        MatchOn,
+        Inclusive,
+        NUM_COLUMNS
     };
-    Q_DECLARE_FLAGS(Targets, Target);
-    enum MatchOn {
-        RelativePath,
-        Basename
-    };
 
-    Filter(const QString& pattern, Targets targets, MatchOn matchOn, bool inclusive);
-
-    bool operator==(const Filter& other) const;
-
-
-    QRegExp pattern;
-    Targets targets;
-    MatchOn matchOn;
-    /**
-     * If set to true, reverses the match to be inclusive and negates the
-     * previously applied exclusive filters.
-     */
-    bool inclusive;
+private:
+    Filters m_filters;
 };
-
-typedef QVector<Filter> Filters;
-
-Filters defaultFilters();
-
-Filters readFilters(const KSharedConfig::Ptr& config);
-void writeFilters(const Filters& filters, KSharedConfig::Ptr config);
 
 }
 
-Q_DECLARE_TYPEINFO(KDevelop::Filter, Q_MOVABLE_TYPE);
-
-#endif // FILTER_H
+#endif // FILTERMODEL_H

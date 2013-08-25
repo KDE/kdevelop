@@ -32,6 +32,8 @@ class ProjectFilterSettings;
 namespace KDevelop
 {
 
+class FilterModel;
+
 class ProjectFilterKCM : public ProjectKCModule<ProjectFilterSettings>
 {
     Q_OBJECT
@@ -42,8 +44,16 @@ public:
     virtual void save();
     virtual void load();
 
+private slots:
+    void add();
+    void remove();
+    void moveUp();
+    void moveDown();
+    void selectionChanged();
+
 private:
-    QScopedPointer<Ui::ProjectFilterSettings> m_preferencesDialog;
+    FilterModel *m_model;
+    QScopedPointer<Ui::ProjectFilterSettings> m_ui;
 };
 
 }

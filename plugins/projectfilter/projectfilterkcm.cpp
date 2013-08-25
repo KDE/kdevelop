@@ -19,6 +19,7 @@
 #include "projectfilterkcm.h"
 
 #include <QLayout>
+#include <QStandardItemModel>
 
 #include <kgenericfactory.h>
 #include <KConfigDialogManager>
@@ -34,6 +35,7 @@
 #include "ui_projectfiltersettings.h"
 
 #include "projectfilterdebug.h"
+#include "filtermodel.h"
 
 using namespace KDevelop;
 
@@ -42,16 +44,32 @@ K_EXPORT_PLUGIN(ProjectFilterKCMFactory("kcm_kdevprojectfilter"))
 
 ProjectFilterKCM::ProjectFilterKCM(QWidget* parent, const QVariantList& args)
     : ProjectKCModule<ProjectFilterSettings>(ProjectFilterKCMFactory::componentData(), parent, args)
-    , m_preferencesDialog(new Ui::ProjectFilterSettings)
+    , m_model(new FilterModel(this))
+    , m_ui(new Ui::ProjectFilterSettings)
 {
     QVBoxLayout *l = new QVBoxLayout(this);
     QWidget *w = new QWidget;
 
-    m_preferencesDialog->setupUi(w);
+    m_ui->setupUi(w);
+    m_ui->filters->setSelectionMode(QAbstractItemView::SingleSelection);
+    m_ui->filters->setModel(m_model);
+    m_ui->filters->header()->setResizeMode(FilterModel::Pattern, QHeaderView::Stretch);
+    m_ui->filters->header()->setResizeMode(FilterModel::MatchOn, QHeaderView::ResizeToContents);
+    m_ui->filters->header()->setResizeMode(FilterModel::Targets, QHeaderView::ResizeToContents);
+    m_ui->filters->header()->setResizeMode(FilterModel::Inclusive, QHeaderView::ResizeToContents);
     l->addWidget(w);
 
     addConfig( ProjectFilterSettings::self(), w );
     load();
+    selectionChanged();
+
+    connect(m_ui->filters->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+            SLOT(selectionChanged()));
+
+    connect(m_ui->add, SIGNAL(clicked(bool)), SLOT(add()));
+    connect(m_ui->remove, SIGNAL(clicked(bool)), SLOT(remove()));
+    connect(m_ui->moveUp, SIGNAL(clicked(bool)), SLOT(moveUp()));
+    connect(m_ui->moveDown, SIGNAL(clicked(bool)), SLOT(moveDown()));
 }
 
 ProjectFilterKCM::~ProjectFilterKCM()
@@ -60,18 +78,56 @@ ProjectFilterKCM::~ProjectFilterKCM()
 
 void ProjectFilterKCM::save()
 {
-    ProjectKCModule<ProjectFilterSettings>::save();
-
-    //FIXME
+    writeFilters(m_model->filters(), project()->projectConfiguration());
+    project()->projectConfiguration()->sync();
 
     KSettings::Dispatcher::reparseConfiguration("kdevprojectfilter");
 }
 
 void ProjectFilterKCM::load()
 {
-    ProjectKCModule<ProjectFilterSettings>::load();
-
-    //FIXME
+    m_model->setFilters(readFilters(project()->projectConfiguration()));
 }
+
+void ProjectFilterKCM::selectionChanged()
+{
+    bool hasSelection = m_ui->filters->currentIndex().isValid();
+    int row = -1;
+    if (hasSelection) {
+        row = m_ui->filters->currentIndex().row();
+    }
+    m_ui->remove->setEnabled(hasSelection);
+
+    m_ui->moveDown->setEnabled(hasSelection && row != m_model->rowCount() - 1);
+    m_ui->moveUp->setEnabled(hasSelection && row != 0);
+}
+
+void ProjectFilterKCM::add()
+{
+    m_model->addFilter();
+    selectionChanged();
+}
+
+void ProjectFilterKCM::remove()
+{
+    Q_ASSERT(m_ui->filters->currentIndex().isValid());
+    m_model->removeFilter(m_ui->filters->currentIndex().row());
+    selectionChanged();
+}
+
+void ProjectFilterKCM::moveUp()
+{
+    Q_ASSERT(m_ui->filters->currentIndex().isValid());
+    m_model->moveFilterUp(m_ui->filters->currentIndex().row());
+    selectionChanged();
+}
+
+void ProjectFilterKCM::moveDown()
+{
+    Q_ASSERT(m_ui->filters->currentIndex().isValid());
+    m_model->moveFilterDown(m_ui->filters->currentIndex().row());
+    selectionChanged();
+}
+
 
 #include "projectfilterkcm.moc"

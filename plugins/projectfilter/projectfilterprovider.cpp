@@ -25,7 +25,6 @@
 #include <KPluginFactory>
 #include <KAboutData>
 #include <KSettings/Dispatcher>
-#include <KConfigGroup>
 
 #include <interfaces/iproject.h>
 #include <interfaces/icore.h>
@@ -34,30 +33,6 @@
 #include "projectfilterdebug.h"
 
 using namespace KDevelop;
-
-namespace {
-
-Filters filtersForProject(const IProject* const project)
-{
-    Filters filters;
-    if (!project->projectConfiguration()->hasGroup("Filters")) {
-        return defaultFilters();
-    }
-    const KConfigGroup& config = project->projectConfiguration()->group("Filters");
-
-    foreach(const QString& group, config.groupList()) {
-        const KConfigGroup& subConfig = config.group(group);
-        const QString pattern = subConfig.readEntry("pattern", QString());
-        Filter::Targets targets(subConfig.readEntry("targets", 0));
-        Filter::MatchOn matchOn = static_cast<Filter::MatchOn>(subConfig.readEntry("matchOn", 0));
-        bool inclusive = subConfig.readEntry("inclusive", false);
-        filters << Filter(pattern, targets, matchOn, inclusive);
-    }
-
-    return filters;
-}
-
-}
 
 K_PLUGIN_FACTORY(ProjectFilterProviderFactory, registerPlugin<ProjectFilterProvider>(); )
 K_EXPORT_PLUGIN(ProjectFilterProviderFactory(
@@ -88,7 +63,7 @@ QSharedPointer<IProjectFilter> ProjectFilterProvider::createFilter(IProject* pro
 void ProjectFilterProvider::updateProjectFilters()
 {
     foreach(IProject* project, core()->projectController()->projects()) {
-        Filters newFilters = filtersForProject(project);
+        Filters newFilters = readFilters(project->projectConfiguration());
         Filters& filters = m_filters[project];
         if (filters != newFilters) {
             projectFilterDebug() << "project filter changed:" << project->name();
@@ -100,7 +75,7 @@ void ProjectFilterProvider::updateProjectFilters()
 
 void ProjectFilterProvider::projectAboutToBeOpened(IProject* project)
 {
-    m_filters[project] = filtersForProject(project);
+    m_filters[project] = readFilters(project->projectConfiguration());
 }
 
 void ProjectFilterProvider::projectClosing(IProject* project)
