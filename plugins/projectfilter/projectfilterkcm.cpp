@@ -124,6 +124,9 @@ void ProjectFilterKCM::selectionChanged()
 void ProjectFilterKCM::add()
 {
     m_model->addFilter();
+    const QModelIndex index = m_model->index(m_model->rowCount() - 1, FilterModel::Pattern, QModelIndex());
+    m_ui->filters->setCurrentIndex(index);
+    m_ui->filters->edit(index);
     emit changed(true);
 }
 
