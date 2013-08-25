@@ -99,6 +99,10 @@ void writeFilters(const Filters& filters, KSharedConfig::Ptr config)
         subGroup.writeEntry("targets", static_cast<int>(filter.targets));
         subGroup.writeEntry("inclusive", filter.inclusive);
     }
+    if (i == 0) {
+        // to make sure we don't think the filters where not configured yet
+        group.writeEntry("dummy", false);
+    }
 }
 
 }
