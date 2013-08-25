@@ -94,7 +94,7 @@ static QVariant runSynchronously(KDevelop::VcsJob* job)
 }
 
 BranchesListModel::BranchesListModel(QObject* parent)
-    : QStandardItemModel(parent), dvcsplugin(dvcsplugin)
+    : QStandardItemModel(parent), dvcsplugin(0)
 {
     QHash< int, QByteArray > roles = roleNames();
     roles.insert(CurrentRole, "isCurrent");

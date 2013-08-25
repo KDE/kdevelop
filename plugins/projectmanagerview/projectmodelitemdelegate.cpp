@@ -18,13 +18,10 @@
 */
 
 #include "projectmodelitemdelegate.h"
+
 #include "vcsoverlayproxymodel.h"
-#include <KLocalizedString>
-#include <QTextDocument>
+
 #include <QPainter>
-#include <QAbstractTextDocumentLayout>
-#include <QApplication>
-#include <QTextObject>
 #include <QDebug>
 
 ProjectModelItemDelegate::ProjectModelItemDelegate(QObject* parent)
@@ -58,7 +55,8 @@ void ProjectModelItemDelegate::paint(QPainter* painter, const QStyleOptionViewIt
     drawFocus(painter, opt, displayRect);
 }
 
-void ProjectModelItemDelegate::drawBranchName(QPainter* painter, const QStyleOptionViewItem& option, const QRect& rect, const QString& branchName) const
+void ProjectModelItemDelegate::drawBranchName(QPainter* painter, const QStyleOptionViewItem& option,
+                                              const QRect& rect, const QString& branchName) const
 {
     QString text = option.fontMetrics.elidedText(branchName, Qt::ElideRight, rect.width());
 
@@ -66,7 +64,7 @@ void ProjectModelItemDelegate::drawBranchName(QPainter* painter, const QStyleOpt
     QPalette::ColorGroup colorGroup = selected ? QPalette::Active : QPalette::Disabled;
     painter->save();
     painter->setPen(option.palette.color(colorGroup, QPalette::Text));
-    painter->drawText(rect.adjusted(1,1, -1,-1), text);
+    painter->drawText(rect, text);
     painter->restore();
 }
 
@@ -77,7 +75,8 @@ void ProjectModelItemDelegate::drawStyledBackground(QPainter* painter, const QSt
     style->drawPrimitive(QStyle::PE_PanelItemViewItem, &option, painter, opt.widget);
 }
 
-void ProjectModelItemDelegate::drawDisplay(QPainter* painter, const QStyleOptionViewItem& option, const QRect& rect, const QString& text) const
+void ProjectModelItemDelegate::drawDisplay(QPainter* painter, const QStyleOptionViewItem& option,
+                                           const QRect& rect, const QString& text) const
 {
     QPalette::ColorGroup cg = option.state & QStyle::State_Enabled
                             ? QPalette::Normal : QPalette::Disabled;

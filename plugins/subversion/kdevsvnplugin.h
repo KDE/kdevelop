@@ -145,7 +145,6 @@ public Q_SLOTS:
     void ctxCheckout();
 private:
     std::auto_ptr<KDevelop::VcsPluginHelper> m_common;
-    QMenu* svnmenu;
     QAction* copy_action;
     QAction* move_action;
 };

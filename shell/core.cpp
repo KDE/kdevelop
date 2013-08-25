@@ -141,7 +141,7 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
     }
     if( !workingSetController && !(mode & Core::NoUi) )
     {
-        workingSetController = new WorkingSetController(m_core);
+        workingSetController = new WorkingSetController();
     }
     kDebug() << "Creating ui controller";
     if( !uiController )

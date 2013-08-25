@@ -23,6 +23,7 @@ Comment[nl]=Externe scripts of programma's uitvoeren om de inhoud van de bewerke
 Comment[pl]=Uruchamiaj zewnętrzne skrypty lub programy, aby manipulować zawartością edytora lub innymi dowolnymi działaniami.
 Comment[pt]=Executa programas ou aplicações externa para manipular o conteúdo do editor ou efectua outras acções arbitrárias.
 Comment[pt_BR]=Execute scripts externos ou aplicativos para manipular os conteúdos do editor ou para fazer outras ações ordinárias.
+Comment[ru]=Запускает внешние сценарии или приложения, взаимодействующие с редактором кода и выполняющие другие действия.
 Comment[sk]=Spustí externé skripty alebo aplikácie na manipuláciu s obsahom editora alebo robí iné ľubovoľné akcie.
 Comment[sl]=Zaganjajte zunanje skripte ali programe, ki upravljajo z vsebino urejevalnika ali pa opravljajo druga poljubna dejanja.
 Comment[sv]=Kör externa skript eller program för att behandla editorns innehåll eller utför andra godtyckliga åtgärder.

@@ -38,7 +38,7 @@ class DiffModel;
 }
 namespace Kompare
 {
-class Info;
+struct Info;
 }
 
 class DiffSettings;

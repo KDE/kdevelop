@@ -40,18 +40,8 @@
 
 using namespace KDevelop;
 
-
-QString htmlColorElement(int element) {
-    QString ret = QString("%1").arg(element, 2, 16, QChar('0'));
-    return ret;
-}
-
-QString htmlColor(QColor color) {
-    return '#' + htmlColorElement(color.red()) + htmlColorElement(color.green()) + htmlColorElement(color.blue());
-}
-
-WorkingSetToolButton::WorkingSetToolButton(QWidget* parent, WorkingSet* set, MainWindow* mainWindow)
-    : QToolButton(parent), m_set(set), m_mainWindow(mainWindow), m_toolTipEnabled(true)
+WorkingSetToolButton::WorkingSetToolButton(QWidget* parent, WorkingSet* set)
+    : QToolButton(parent), m_set(set), m_toolTipEnabled(true)
 {
     setFocusPolicy(Qt::NoFocus);
     setWorkingSet(set);
@@ -68,16 +58,7 @@ void WorkingSetToolButton::setWorkingSet(WorkingSet* set)
 {
     m_set = set;
 
-    if (!set) {
-        setIcon(QIcon());
-        return;
-    }
-
-    if(m_mainWindow && m_mainWindow->area() && m_mainWindow->area()->workingSet() == set->id()) {
-        setIcon(set->activeIcon());
-    }else{
-        setIcon(set->inactiveIcon());
-    }
+    setIcon(set ? set->icon() : QIcon());
 }
 
 void WorkingSetToolButton::contextMenuEvent(QContextMenuEvent* ev)

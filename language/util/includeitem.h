@@ -25,21 +25,22 @@
 
 namespace KDevelop {
 
-class KDEVPLATFORMLANGUAGE_EXPORT IncludeItem {
+class KDEVPLATFORMLANGUAGE_EXPORT IncludeItem
+{
 public:
   IncludeItem();
 
   ///Constructs the url from basePath and name.
   KUrl url() const;
 
-  ///If this is true, this item represents a sub-directory. Else it represents a file.
-  bool isDirectory;
   ///The name of this include-item, starting behind basePath.
   QString name;
   ///basePath + name = Absolute path of file
   KUrl basePath;
   ///Which path in the include-path was used to find this item?
   int pathNumber;
+  ///If this is true, this item represents a sub-directory. Else it represents a file.
+  bool isDirectory;
 };
 
 }

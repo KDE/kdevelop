@@ -200,7 +200,9 @@ NavigatableWidgetList::~NavigatableWidgetList() {
   delete m_headerLayout;
 }
 
-NavigatableWidgetList::NavigatableWidgetList(bool allowScrolling, uint maxHeight, bool vertical) : m_maxHeight(maxHeight), m_allowScrolling(allowScrolling) {
+NavigatableWidgetList::NavigatableWidgetList(bool allowScrolling, uint maxHeight, bool vertical)
+:  m_allowScrolling(allowScrolling)
+{
   m_layout = new QVBoxLayout;
   m_layout->setMargin(0);
   m_layout->setSizeConstraint(QLayout::SetMinAndMaxSize);

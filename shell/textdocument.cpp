@@ -314,6 +314,9 @@ public:
         else {
             statusLabel->setHidden(true);
         }
+#else
+        Q_UNUSED(view);
+        Q_UNUSED(mode);
 #endif
     }
     QWidget* widget;

@@ -28,7 +28,7 @@
 namespace KDevelop {
 
 struct SessionRunInfo;
-class TryLockSessionResult;
+struct TryLockSessionResult;
 
 class SessionLock : public ISessionLock
 {

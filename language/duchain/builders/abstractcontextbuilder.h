@@ -277,15 +277,13 @@ protected:
   inline void setCompilingContexts(bool compilingContexts) { m_compilingContexts = compilingContexts; }
 
   /**
-   * Create child contexts for only a portion of the document at \a url.
+   * Create child contexts for only a portion of the document.
    *
-   * \param url The url of the document to parse
    * \param node The AST node which corresponds to the context to parse
    * \param parent The DUContext which encompasses the \a node.
    * \returns The DUContext which was reparsed, ie. \a parent.
    */
-  DUContext* buildSubContexts( const KUrl& url, T *node,
-                                         DUContext* parent )
+  DUContext* buildSubContexts( T *node, DUContext* parent )
   {
   //     m_compilingContexts = true;
   //     m_recompiling = false;

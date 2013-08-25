@@ -147,10 +147,11 @@ class EnvironmentInformationRequest {
   void createItem(EnvironmentInformationItem* item) const {
     new (item) EnvironmentInformationItem(m_index, DUChainItemSystem::self().dynamicSize(*m_file->d_func()));
     Q_ASSERT(m_file->d_func()->m_dynamic);
-    DUChainItemSystem::self().copy(*m_file->d_func(), *(DUChainBaseData*)(((char*)item) + sizeof(EnvironmentInformationItem)), true);
-    Q_ASSERT((*(DUChainBaseData*)(((char*)item) + sizeof(EnvironmentInformationItem))).m_range == m_file->d_func()->m_range);
-    Q_ASSERT((*(DUChainBaseData*)(((char*)item) + sizeof(EnvironmentInformationItem))).classId == m_file->d_func()->classId);
-    Q_ASSERT((*(DUChainBaseData*)(((char*)item) + sizeof(EnvironmentInformationItem))).m_dynamic == false);
+    DUChainBaseData* data = reinterpret_cast<DUChainBaseData*>(reinterpret_cast<char*>(item) + sizeof(EnvironmentInformationItem));
+    DUChainItemSystem::self().copy(*m_file->d_func(), *data, true);
+    Q_ASSERT(data->m_range == m_file->d_func()->m_range);
+    Q_ASSERT(data->classId == m_file->d_func()->classId);
+    Q_ASSERT(data->m_dynamic == false);
   }
   
   static void destroy(EnvironmentInformationItem* item, KDevelop::AbstractItemRepository&) {
@@ -328,7 +329,8 @@ public:
       ///@todo Solve this more duchain-like
       QFile f(globalItemRepositoryRegistry().path() + "/parsing_environment_data");
       bool opened = f.open(QIODevice::ReadOnly);
-      ParsingEnvironmentFile::m_staticData = (StaticParsingEnvironmentData*) new char[sizeof(StaticParsingEnvironmentData)];
+      ///FIXME: ugh, so ugly
+      ParsingEnvironmentFile::m_staticData = reinterpret_cast<StaticParsingEnvironmentData*>( new char[sizeof(StaticParsingEnvironmentData)]);
       if(opened) {
         kDebug() << "reading parsing-environment static data";
         //Read
@@ -640,7 +642,7 @@ public:
           Q_ASSERT(index);
 
           EnvironmentInformationItem* item = const_cast<EnvironmentInformationItem*>(m_environmentInfo.itemFromIndex(index));
-          DUChainBaseData* theData = (DUChainBaseData*)(((char*)item) + sizeof(EnvironmentInformationItem));
+          DUChainBaseData* theData = reinterpret_cast<DUChainBaseData*>(reinterpret_cast<char*>(item) + sizeof(EnvironmentInformationItem));
 
           Q_ASSERT(theData->m_range == file->d_func()->m_range);
           Q_ASSERT(theData->m_dynamic == false);
@@ -931,7 +933,10 @@ public:
     if(alreadyLoaded)
       return alreadyLoaded;
     
-    ParsingEnvironmentFile* ret = dynamic_cast<ParsingEnvironmentFile*>(DUChainItemSystem::self().create( (DUChainBaseData*)(((char*)&item) + sizeof(EnvironmentInformationItem)) ));
+    ///FIXME: ugly, and remove const_cast
+    ParsingEnvironmentFile* ret = dynamic_cast<ParsingEnvironmentFile*>(DUChainItemSystem::self().create(
+      const_cast<DUChainBaseData*>(reinterpret_cast<const DUChainBaseData*>(reinterpret_cast<const char*>(&item) + sizeof(EnvironmentInformationItem)))
+    ));
     if(ret) {
       Q_ASSERT(ret->d_func()->classId);
       Q_ASSERT(ret->indexedTopContext().index() == topContextIndex);

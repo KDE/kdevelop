@@ -43,7 +43,6 @@ public:
     void setRecursive( bool );
     SvnInternalJobBase* internalJob() const;
 private:
-    SvnCommitDialog* m_commitdlg;
     SvnInternalCommitJob* m_job;
 };
 
