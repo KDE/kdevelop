@@ -23,16 +23,14 @@
 #define KDEVPLATFORM_PROJECTTESTJOB_H
 
 #include <KJob>
-#include <QList>
 
 #include "utilexport.h"
 
 namespace KDevelop {
 
-struct TestResult;
-
 class IProject;
 class ITestSuite;
+struct TestResult;
 
 /**
  * A combined result of a project test job
@@ -42,6 +40,12 @@ class ITestSuite;
  **/
 struct KDEVPLATFORMUTIL_EXPORT ProjectTestResult
 {
+    ProjectTestResult()
+        : total(0)
+        , passed(0)
+        , failed(0)
+        , error(0)
+    {}
     /**
      * The total number of test suites launched in this job
      **/
@@ -101,20 +105,19 @@ public:
      **/
     ProjectTestResult testResult();
 
-private Q_SLOTS:
-    void runNext();
-    void gotResult(KDevelop::ITestSuite* suite, const KDevelop::TestResult& result);
-
 protected:
     virtual bool doKill();
 
 private:
-    QList<ITestSuite*> m_suites;
-    KJob* m_currentJob;
-    ITestSuite* m_currentSuite;
-    ProjectTestResult m_result;
+    struct Private;
+    QScopedPointer<Private> d;
+
+    Q_PRIVATE_SLOT(d, void runNext());
+    Q_PRIVATE_SLOT(d, void gotResult(KDevelop::ITestSuite* suite, const KDevelop::TestResult& result));
 };
 
 }
+
+Q_DECLARE_TYPEINFO(KDevelop::ProjectTestResult, Q_MOVABLE_TYPE);
 
 #endif // KDEVPLATFORM_PROJECTTESTJOB_H

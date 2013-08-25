@@ -28,58 +28,37 @@
 
 using namespace KDevelop;
 
-ProjectTestJob::ProjectTestJob(IProject* project, QObject* parent): KJob(parent)
+struct ProjectTestJob::Private
 {
-    setCapabilities(Killable);
-    setObjectName(i18n("Run all tests in %1", project->name()));
+    Private(ProjectTestJob* q)
+        : q(q)
+        , m_currentJob(0)
+        , m_currentSuite(0)
+    {}
 
-    m_suites = ICore::self()->testController()->testSuitesForProject(project);
-    connect (ICore::self()->testController(), SIGNAL(testRunFinished(KDevelop::ITestSuite*,KDevelop::TestResult)), SLOT(gotResult(KDevelop::ITestSuite*,KDevelop::TestResult)));
+    void runNext();
+    void gotResult(ITestSuite* suite, const TestResult& result);
 
-    m_result.error = 0;
-    m_result.failed = 0;
-    m_result.passed = 0;
-    m_result.total = 0;
-    m_currentSuite = 0;
-    m_currentJob = 0;
-}
+    ProjectTestJob* q;
 
-ProjectTestJob::~ProjectTestJob()
-{
+    QList<ITestSuite*> m_suites;
+    KJob* m_currentJob;
+    ITestSuite* m_currentSuite;
+    ProjectTestResult m_result;
+};
 
-}
-
-void ProjectTestJob::start()
-{
-    runNext();
-}
-
-bool ProjectTestJob::doKill()
-{
-    if (m_currentJob)
-    {
-        m_currentJob->kill();
-    }
-    else
-    {
-        m_suites.clear();
-    }
-    return true;
-}
-
-void ProjectTestJob::runNext()
+void ProjectTestJob::Private::runNext()
 {
     m_currentSuite = m_suites.takeFirst();
     m_currentJob = m_currentSuite->launchAllCases(ITestSuite::Silent);
     m_currentJob->start();
 }
 
-void ProjectTestJob::gotResult(ITestSuite* suite, const TestResult& result)
+void ProjectTestJob::Private::gotResult(ITestSuite* suite, const TestResult& result)
 {
-    if (suite == m_currentSuite)
-    {
+    if (suite == m_currentSuite) {
         m_result.total++;
-        emitPercent(m_result.total, m_result.total + m_suites.size());
+        q->emitPercent(m_result.total, m_result.total + m_suites.size());
 
         switch (result.suiteResult)
         {
@@ -99,20 +78,49 @@ void ProjectTestJob::gotResult(ITestSuite* suite, const TestResult& result)
                 break;
         }
 
-        if (m_suites.isEmpty())
-        {
-            emitResult();
-        }
-        else
-        {
+        if (m_suites.isEmpty()) {
+            q->emitResult();
+        } else {
             runNext();
         }
     }
 }
 
+ProjectTestJob::ProjectTestJob(IProject* project, QObject* parent)
+    : KJob(parent)
+    , d(new Private(this))
+{
+    setCapabilities(Killable);
+    setObjectName(i18n("Run all tests in %1", project->name()));
+
+    d->m_suites = ICore::self()->testController()->testSuitesForProject(project);
+    connect(ICore::self()->testController(), SIGNAL(testRunFinished(KDevelop::ITestSuite*,KDevelop::TestResult)),
+            SLOT(gotResult(KDevelop::ITestSuite*,KDevelop::TestResult)));
+}
+
+ProjectTestJob::~ProjectTestJob()
+{
+
+}
+
+void ProjectTestJob::start()
+{
+    d->runNext();
+}
+
+bool ProjectTestJob::doKill()
+{
+    if (d->m_currentJob) {
+        d->m_currentJob->kill();
+    } else {
+        d->m_suites.clear();
+    }
+    return true;
+}
+
 ProjectTestResult ProjectTestJob::testResult()
 {
-    return m_result;
+    return d->m_result;
 }
 
 #include "projecttestjob.moc"
