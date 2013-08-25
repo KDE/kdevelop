@@ -55,12 +55,7 @@ void NameASTVisitor::visitUnqualifiedName(UnqualifiedNameAST *node)
   if (node->tilde)
     tmp_name = IndexedString(QLatin1String("~") + tmp_name.str());
   if (OperatorFunctionIdAST *op_id = node->operator_id) {
-#if defined(__GNUC__)
-#warning "NameASTVisitor::visitUnqualifiedName() -- implement me"
-#endif
-
-    QString tmpString;
-    tmpString += QLatin1String("operator");
+    QString tmpString = QLatin1String("operator");
 
     if (op_id->op && op_id->op->op)
       tmpString +=  m_session->stringForNode(op_id->op, true);

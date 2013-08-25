@@ -42,8 +42,8 @@ namespace CppTools { class IncludePathResolver; }
 
 ///A class that helps detecting what exactly makes the UI block. To use it, just place a breakpoint on UIBlockTester::lockup() and inspect the execution-position of the main thread
 class UIBlockTester : public QObject {
-        Q_OBJECT
-    class UIBlockTesterThread : public QThread {
+Q_OBJECT
+  class UIBlockTesterThread : public QThread {
     public:
       UIBlockTesterThread( UIBlockTester& parent );
       void run();
@@ -51,12 +51,12 @@ class UIBlockTester : public QObject {
     private:
       UIBlockTester& m_parent;
       bool m_stop;
-    };
+  };
   friend class UIBlockTesterThread;
 public:
 
   ///@param milliseconds when the ui locks for .. milliseconds, lockup() is called
-  UIBlockTester( uint milliseconds );
+  UIBlockTester( uint milliseconds, QObject* parent );
   ~UIBlockTester();
 
 private slots:
@@ -147,11 +147,9 @@ private:
 
     CppHighlighting *m_highlights;
     KDevelop::CodeCompletion *m_cc, *m_missingIncludeCompletion;
-    Cpp::ReferenceCountedMacroSet *m_standardMacros;
     
     CppTools::IncludePathResolver *m_includeResolver;
     IncludeFileDataProvider* m_quickOpenDataProvider;
-    UIBlockTester* m_blockTester;
     
     Cpp::StaticCodeAssistant * m_assistant;
 

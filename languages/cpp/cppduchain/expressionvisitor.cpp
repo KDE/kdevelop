@@ -372,7 +372,8 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
   }
 
 
-  AbstractType::Ptr ExpressionVisitor::realLastType(bool* constant) const {
+  AbstractType::Ptr ExpressionVisitor::realLastType() const
+  {
     LOCKDUCHAIN;
     return AbstractType::Ptr(realType( m_lastType, topContext() ));
   }
@@ -1545,7 +1546,8 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       expressionType( node, m_lastType, m_lastInstance );
   }
 
-  bool ExpressionVisitor::dereferenceLastPointer(AST* node) {
+  bool ExpressionVisitor::dereferenceLastPointer()
+  {
     if( PointerType::Ptr pt = realLastType().cast<PointerType>() )
     {
       //Dereference
@@ -1586,7 +1588,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     case '*':
     {
       LOCKDUCHAIN;
-      if( dereferenceLastPointer(node) ) {
+      if( dereferenceLastPointer() ) {
       } else {
         //Get return-value of operator*
         findMember(node, m_lastType, Identifier("operator*") );
@@ -2129,7 +2131,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       LOCKDUCHAIN;
 
       //If the type the subscript-operator is applied on is a pointer, dereference it
-      if( dereferenceLastPointer(node) ) {
+      if( dereferenceLastPointer() ) {
         //Make visit the sub-expression, so uses are built
         lock.unlock();
 
@@ -2194,7 +2196,8 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     m_lastInstance = Instance(true);
   }
 
-  void ExpressionVisitor::visitCondition(ConditionAST* node)  {
+  void ExpressionVisitor::visitCondition(ConditionAST* /*node*/)
+  {
     LOCKDUCHAIN;
     m_lastType = AbstractType::Ptr( new KDevelop::IntegralType(IntegralType::TypeBoolean) );
     m_lastInstance = Instance(true);
@@ -2226,7 +2229,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
   }
 
 
-  void ExpressionVisitor::visitStringLiteral(StringLiteralAST* node)  {
+  void ExpressionVisitor::visitStringLiteral(StringLiteralAST* /*node*/) {
     LOCKDUCHAIN;
     ///TODO: proper support for wchar_t, char16_t and char32_t strings
     putStringType();

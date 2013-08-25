@@ -32,23 +32,16 @@
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
-#include <kxmlguiwindow.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
 #include <ksplashscreen.h>
 #include <ktexteditor/cursor.h>
-#include <KMessageBox>
-#include <KProcess>
 
 #include <QFileInfo>
 #include <QPixmap>
-#include <QTimer>
 #include <QDir>
+#include <QProcess>
 #include <QSessionManager>
-#include <QThread>
-#include <QDBusConnection>
-#include <QDBusInterface>
-#include <QDBusReply>
 #include <QTextStream>
 
 #include <shell/core.h>
@@ -111,7 +104,7 @@ int main( int argc, char *argv[] )
 {
     static const char description[] = I18N_NOOP( "The KDevelop Integrated Development Environment" );
     KAboutData aboutData( "kdevelop", 0, ki18n( "KDevelop" ), QByteArray(VERSION), ki18n(description), KAboutData::License_GPL,
-                          ki18n( "Copyright 1999-2012, The KDevelop developers" ), KLocalizedString(), "http://www.kdevelop.org/" );
+                          ki18n( "Copyright 1999-2013, The KDevelop developers" ), KLocalizedString(), "http://www.kdevelop.org/" );
     aboutData.addAuthor( ki18n("Andreas Pakulat"), ki18n( "Architecture, VCS Support, Project Management Support, QMake Projectmanager" ), "apaku@gmx.de" );
     aboutData.addAuthor( ki18n("Alexander Dymo"), ki18n( "Architecture, Sublime UI, Ruby support" ), "adymo@kdevelop.org" );
     aboutData.addAuthor( ki18n("David Nolden"), ki18n( "Definition-Use Chain, C++ Support, Code Navigation, Code Completion, Coding Assistance, Refactoring" ), "david.nolden.kdevelop@art-master.de" );

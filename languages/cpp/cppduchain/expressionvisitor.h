@@ -242,17 +242,16 @@ private:
    *
    *
    *  !!DU-Chain must be locked!
-  * @param constant will be set to true when one of the references made the result constant
    * @return return-value will only be zero if m_lastType is zero
    */
-  AbstractType::Ptr realLastType(bool* constant = 0) const;
+  AbstractType::Ptr realLastType() const;
 
   /**
    * Dereferences m_lastType if it is a pointer-type, else returns false.
    *
    * !!DU-Chain must be locked!
    * */
-  bool dereferenceLastPointer(AST* node);
+  bool dereferenceLastPointer();
 
   /**
    *  m_lastType must be a pointer. It will be dereferenced in m_lastType,

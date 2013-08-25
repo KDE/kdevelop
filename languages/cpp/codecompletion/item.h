@@ -87,7 +87,8 @@ public:
   bool m_isQtSignalSlotCompletion, m_isTemplateCompletion;
 
   //If this is not -1, it can be a fixed match-quality from 0 to 10, that will be used non-dynamically.
-  int m_fixedMatchQuality;
+  //otherwise this is calculated and cached on the first read
+  mutable int m_fixedMatchQuality;
   
   virtual KTextEditor::CodeCompletionModel::CompletionProperties completionProperties() const;
 

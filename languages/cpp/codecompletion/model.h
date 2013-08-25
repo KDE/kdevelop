@@ -66,6 +66,7 @@ class CodeCompletionModel : public KDevelop::CodeCompletionModel
     virtual bool shouldStartCompletion (KTextEditor::View*, const QString&, bool userInsertion, const KTextEditor::Cursor&);
     virtual KDevelop::CodeCompletionWorker* createCompletionWorker();
 
+    virtual void foundDeclarations(QList< KSharedPtr< KDevelop::CompletionTreeElement > > item, KSharedPtr< KDevelop::CodeCompletionContext > completionContext);
   private:
     KSharedPtr<Cpp::CodeCompletionContext> m_completionContext;
 };

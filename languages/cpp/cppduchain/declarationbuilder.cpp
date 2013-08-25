@@ -512,10 +512,7 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
 
     applyFunctionSpecifiers();
   } else if (isFuncPtr) {
-    Declaration* decl = openDeclaration<Declaration>(node->sub_declarator->id, node);
-    ///TODO: I don't know why this is required but without it the function is
-    ///not found by its declaration id...
-//     decl->setAlwaysForceDirect(true);
+    openDeclaration<Declaration>(node->sub_declarator->id, node);
   } else {
     openDefinition(node->id, node, node->id == 0);
   }
@@ -627,8 +624,9 @@ TemplateDeclaration* DeclarationBuilder::findSpecializedFrom(Declaration* specia
   QList<Declaration*> specFromDecls = searchInContext->findLocalDeclarations(searchForIdentifier);
   foreach(Declaration * possibleSpec, specFromDecls)
   {
-    if (possibleSpec != specializedDeclaration)
-      return dynamic_cast<TemplateDeclaration*>(possibleSpec);
+    TemplateDeclaration *asTemplateDecl = dynamic_cast<TemplateDeclaration*>(possibleSpec);
+    if (!isSpecialization(asTemplateDecl))
+      return asTemplateDecl;
   }
   return 0;
 }

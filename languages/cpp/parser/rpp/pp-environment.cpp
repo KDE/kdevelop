@@ -32,9 +32,8 @@
 
 using namespace rpp;
 
-Environment::Environment(pp* preprocessor)
-  : m_preprocessor(preprocessor)
-  , m_locationTable(new LocationTable)
+Environment::Environment()
+  : m_locationTable(new LocationTable)
 {
 }
 

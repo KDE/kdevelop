@@ -32,8 +32,8 @@
 class QModelIndex;
 
 namespace GDBMI {
-class ResultRecord;
-class Value;
+struct ResultRecord;
+struct Value;
 }
 
 namespace GDBDebugger

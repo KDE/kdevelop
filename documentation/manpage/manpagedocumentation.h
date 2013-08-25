@@ -68,10 +68,6 @@ class ManPageHomeDocumentation : public QObject, public KDevelop::IDocumentation
         virtual QString name() const;
         virtual QString description() const { return name(); }
         virtual QWidget* documentationWidget ( KDevelop::DocumentationFindWidget* findWidget, QWidget* parent = 0 );
-    private:
-        QWidget* m_loadingWidget;
-        QTreeView* m_contents;
-
 };
 
 

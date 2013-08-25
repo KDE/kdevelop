@@ -36,7 +36,6 @@ namespace KDevelop {
 namespace rpp {
 
 class pp_macro;
-class pp;
 class LocationTable;
 
 class KDEVCPPRPP_EXPORT Environment
@@ -44,7 +43,7 @@ class KDEVCPPRPP_EXPORT Environment
 public:
   typedef QHash<KDevelop::IndexedString, pp_macro*> EnvironmentMap;
 
-  Environment(pp* preprocessor);
+  Environment();
   virtual ~Environment();
 
   void clearMacro(const KDevelop::IndexedString& name);
@@ -78,7 +77,6 @@ private:
   EnvironmentMap m_environment;
 
   QVector<pp_macro*> m_ownedMacros;
-  pp* m_preprocessor;
   LocationTable* m_locationTable;
 };
 
