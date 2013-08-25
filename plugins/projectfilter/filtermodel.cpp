@@ -124,7 +124,9 @@ QVariant FilterModel::data(const QModelIndex& index, int role) const
     Q_ASSERT(index.row() >= 0 && index.row() < m_filters.size());
     Q_ASSERT(index.column() >= 0 && index.column() < NUM_COLUMNS);
 
-    if (role != Qt::DisplayRole && role != Qt::DecorationRole && role != Qt::EditRole) {
+    if (role != Qt::DisplayRole && role != Qt::DecorationRole
+        && role != Qt::EditRole && role != Qt::ToolTipRole)
+    {
         return QVariant();
     }
 
@@ -134,11 +136,15 @@ QVariant FilterModel::data(const QModelIndex& index, int role) const
     if (column == Pattern) {
         if (role == Qt::DecorationRole) {
             return KIcon("view-filter");
+        } else if (role == Qt::ToolTipRole) {
+            return i18n("<qt>The wildcard pattern defines whether a file or folder is included in a project or not.</qt>");
         }
         return filter.pattern.pattern();
     } else if (column == Targets) {
         if (role == Qt::EditRole) {
             return static_cast<int>(filter.targets);
+        } else if (role == Qt::ToolTipRole) {
+            return i18n("The target defines what type of item the filter is matched against.<br />Filters either apply only to files, only to folders or to both.");
         }
         if (filter.targets & Filter::Files && filter.targets & Filter::Folders) {
             if (role == Qt::DecorationRole) {
@@ -159,6 +165,8 @@ QVariant FilterModel::data(const QModelIndex& index, int role) const
     } else if (column == MatchOn) {
         if (role == Qt::EditRole) {
             return static_cast<int>(filter.matchOn);
+        } else if (role == Qt::ToolTipRole) {
+            return i18n("The pattern can be matched either against the basename or the the path relative to the project root.<br />Relative paths start with a forward slash.");
         }
         if (filter.matchOn == Filter::Basename) {
             return i18n("basename");
@@ -168,6 +176,8 @@ QVariant FilterModel::data(const QModelIndex& index, int role) const
     } else if (column == Inclusive) {
         if (role == Qt::EditRole) {
             return filter.inclusive;
+        } else if (role == Qt::ToolTipRole) {
+            return i18n("Filters by default exclude items from the project. Inclusive patterns can be used to include items which where matched by previous exclusive patterns.<br />E.g. to only include files ending on <code>\".cpp\"</code> in your project, you could exclude all files via <code>\"*\"</code> and then apply an inclusive <code>\"*.cpp\"</code> pattern.");
         }
         if (filter.inclusive) {
             if (role == Qt::DecorationRole) {
