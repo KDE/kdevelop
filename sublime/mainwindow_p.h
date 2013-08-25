@@ -36,7 +36,6 @@
 #include <qevent.h>
 #include <QPushButton>
 #include <KColorScheme>
-#include "blur.h"
 
 class QMenu;
 class QAction;
