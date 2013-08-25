@@ -11,7 +11,6 @@ include_directories(
 
 set( projectmodeltest_SRCS
     projectmodeltest.cpp
-    ${CMAKE_SOURCE_DIR}/tests/modeltest.cpp
 )
 
 kde4_add_unit_test(projectmodeltest ${projectmodeltest_SRCS})

@@ -30,9 +30,9 @@ kde4_add_unit_test(sublime-viewactivationtest ${viewactivationtest_SRCS})
 target_link_libraries(sublime-viewactivationtest ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS} sublime )
 
 
-set( aggregatemodeltest_SRCS aggregatemodeltest.cpp ${KDevPlatform_SOURCE_DIR}/tests/modeltest.cpp )
+set( aggregatemodeltest_SRCS aggregatemodeltest.cpp )
 kde4_add_unit_test(sublime-aggregatemodeltest ${aggregatemodeltest_SRCS})
-target_link_libraries(sublime-aggregatemodeltest ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS} sublime )
+target_link_libraries(sublime-aggregatemodeltest ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS} sublime kdevplatformtests )
 
 set( toolviewtoolbartest_SRCS toolviewtoolbartest.cpp )
 kde4_add_unit_test(sublime-toolviewtoolbartest ${toolviewtoolbartest_SRCS})

@@ -11,6 +11,7 @@ set(kdevplatformtests_LIB_SRCS
     testlanguagecontroller.cpp
     testhelpers.cpp
     testplugincontroller.cpp
+    modeltest.cpp
 )
 
 kde4_add_library(kdevplatformtests SHARED ${kdevplatformtests_LIB_SRCS})
