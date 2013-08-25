@@ -82,6 +82,8 @@ ProjectFilterKCM::ProjectFilterKCM(QWidget* parent, const QVariantList& args)
 
     connect(m_ui->filters->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
             SLOT(selectionChanged()));
+    connect(this, SIGNAL(changed(bool)), SLOT(selectionChanged()));
+    connect(m_model, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(emitChanged()));
 
     connect(m_ui->add, SIGNAL(clicked(bool)), SLOT(add()));
     connect(m_ui->remove, SIGNAL(clicked(bool)), SLOT(remove()));
@@ -122,29 +124,33 @@ void ProjectFilterKCM::selectionChanged()
 void ProjectFilterKCM::add()
 {
     m_model->addFilter();
-    selectionChanged();
+    emit changed(true);
 }
 
 void ProjectFilterKCM::remove()
 {
     Q_ASSERT(m_ui->filters->currentIndex().isValid());
     m_model->removeFilter(m_ui->filters->currentIndex().row());
-    selectionChanged();
+    emit changed(true);
 }
 
 void ProjectFilterKCM::moveUp()
 {
     Q_ASSERT(m_ui->filters->currentIndex().isValid());
     m_model->moveFilterUp(m_ui->filters->currentIndex().row());
-    selectionChanged();
+    emit changed(true);
 }
 
 void ProjectFilterKCM::moveDown()
 {
     Q_ASSERT(m_ui->filters->currentIndex().isValid());
     m_model->moveFilterDown(m_ui->filters->currentIndex().row());
-    selectionChanged();
+    emit changed(true);
 }
 
+void ProjectFilterKCM::emitChanged()
+{
+    emit changed(true);
+}
 
 #include "projectfilterkcm.moc"

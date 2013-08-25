@@ -50,6 +50,7 @@ private slots:
     void moveUp();
     void moveDown();
     void selectionChanged();
+    void emitChanged();
 
 private:
     FilterModel *m_model;
