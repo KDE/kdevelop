@@ -231,6 +231,33 @@ void TestProjectFilter::match_data()
         };
         ADD_TESTS("mixed", project, filter, tests);
     }
+    {
+        // relative path
+        const TestProject project;
+        const Filters filters = Filters()
+            << Filter("/foo/*bar", Filter::Targets(Filter::Files | Filter::Folders), Filter::RelativePath, false);
+        TestFilter filter(new ProjectFilter(&project, filters));
+
+        QTest::newRow("projectRoot") << filter << project.folder() << Folder << Valid;
+        QTest::newRow("project.kdev4") << filter << project.projectFileUrl() << File << Invalid;
+
+        MatchTest tests[] = {
+            //{path, isFolder, isValid}
+            {".kdev4", Folder, Invalid},
+
+            {"foo", Folder, Valid},
+            {"bar", File, Valid},
+            {"foo/bar", Folder, Invalid},
+            {"foo/bar", File, Invalid},
+            {"foo/asdf/bar", Folder, Invalid},
+            {"foo/asdf/bar", File, Invalid},
+            {"foo/asdf_bar", Folder, Invalid},
+            {"foo/asdf_bar", File, Invalid},
+            {"asdf/bar", File, Valid},
+            {"asdf/foo/bar", File, Valid},
+        };
+        ADD_TESTS("relative", project, filter, tests);
+    }
 }
 
 #include "test_projectfilter.moc"

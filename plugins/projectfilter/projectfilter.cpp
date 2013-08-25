@@ -25,6 +25,7 @@
 
 #include <QSet>
 #include <QFile>
+#include <QDebug>
 
 using namespace KDevelop;
 
@@ -101,12 +102,12 @@ bool ProjectFilter::isValid( const KUrl &url, const bool isFolder ) const
 QString ProjectFilter::makeRelative(const KUrl& url, bool isFolder) const
 {
     if (!m_project.isParentOf(url)) {
-        return url.path(isFolder ? KUrl::AddTrailingSlash : KUrl::RemoveTrailingSlash);
+        return url.path(KUrl::RemoveTrailingSlash);
     }
 
     QString ret = '/' + KUrl::relativeUrl( m_project, url );
-    if (isFolder && !ret.endsWith('/')) {
-        ret.append('/');
+    if (isFolder && ret.endsWith('/')) {
+        ret.chop(1);
     }
 
     return ret;

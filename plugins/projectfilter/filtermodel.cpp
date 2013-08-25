@@ -166,7 +166,7 @@ QVariant FilterModel::data(const QModelIndex& index, int role) const
         if (role == Qt::EditRole) {
             return static_cast<int>(filter.matchOn);
         } else if (role == Qt::ToolTipRole) {
-            return i18n("The pattern can be matched either against the basename or the the path relative to the project root.<br />Relative paths start with a forward slash.");
+            return i18n("The pattern can be matched either against the basename or the the path relative to the project root.<br />Relative paths start with a forward slash. Trailing slashes are removed.");
         }
         if (filter.matchOn == Filter::Basename) {
             return i18n("basename");
