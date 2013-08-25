@@ -45,17 +45,17 @@ public slots:
 protected:
     RegisterControllerGeneral_x86(DebugSession* debugSession = 0, QObject* parent = 0);
 
-    virtual RegistersGroup registersFromGroupInternally(const QString& group);
+    virtual RegistersGroup registersFromGroup(const QString& group, RegistersFormat format = Raw) const;
 
-    virtual void convertValuesForGroup(RegistersGroup* registersGroup, RegistersFormat format = Raw);
+    virtual void convertValuesForGroup(RegistersGroup* registersGroup, RegistersFormat format = Raw) const;
 
-    virtual QStringList registerNamesForGroup(const QString& group);
+    virtual QStringList registerNamesForGroup(const QString& group) const;
 
-    virtual void updateValuesForRegisters(RegistersGroup* registers);
+    virtual void updateValuesForRegisters(RegistersGroup* registers) const;
 
     virtual void setRegisterValueForGroup(const QString& group, const Register& reg);
 
-    void updateFlagValues(RegistersGroup* flagsGroup);
+    void updateFlagValues(RegistersGroup* flagsGroup) const;
 
     //this is a workaround for FPU registers.
     void handleFPURegisters(const QStringList& record);

@@ -113,7 +113,6 @@ void IRegisterController::setRegisterValue(const Register& reg)
 
 QString IRegisterController::registerValue(const QString& name) const
 {
-    Q_ASSERT(!m_registers.isEmpty());
     QString value;
     if (!name.isEmpty()) {
         if (m_registers.contains(name)) {
@@ -134,7 +133,7 @@ bool IRegisterController::initializeRegisters()
     return true;
 }
 
-QString IRegisterController::groupForRegisterName(const QString& name)
+QString IRegisterController::groupForRegisterName(const QString& name) const
 {
     foreach (const QString & group, namesOfRegisterGroups()) {
         const QStringList registersInGroup = registerNamesForGroup(group);
@@ -147,14 +146,7 @@ QString IRegisterController::groupForRegisterName(const QString& name)
     return QString();
 }
 
-RegistersGroup IRegisterController::registersFromGroup(const QString& group, RegistersFormat format)
-{
-    RegistersGroup g = registersFromGroupInternally(group);
-    convertValuesForGroup(&g, format);
-    return g;
-}
-
-void IRegisterController::updateValuesForRegisters(RegistersGroup* registers)
+void IRegisterController::updateValuesForRegisters(RegistersGroup* registers) const
 {
     if (m_registers.isEmpty()) {
         kDebug() << "Registers not initialized yet";
@@ -197,7 +189,7 @@ void IRegisterController::setGeneralRegister(const Register& reg, const QString&
     }
 }
 
-void IRegisterController::convertValuesForGroup(RegistersGroup* registersGroup, RegistersFormat format)
+void IRegisterController::convertValuesForGroup(RegistersGroup* registersGroup, RegistersFormat format) const
 {
     bool ok;
     for (int i = 0; i < registersGroup->registers.size(); i++) {

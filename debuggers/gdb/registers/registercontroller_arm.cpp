@@ -35,7 +35,7 @@ namespace GDBDebugger
 QVector<QStringList> RegisterController_Arm::m_registerNames;
 FlagRegister RegisterController_Arm::m_cpsr;
 
-void  RegisterController_Arm::updateValuesForRegisters(RegistersGroup* registers)
+void  RegisterController_Arm::updateValuesForRegisters(RegistersGroup* registers) const
 {
     kDebug() << "Updating values for registers: " << registers->groupName;
     if (registers->groupName == enumToString(Flags)) {
@@ -45,7 +45,7 @@ void  RegisterController_Arm::updateValuesForRegisters(RegistersGroup* registers
     }
 }
 
-RegistersGroup RegisterController_Arm::registersFromGroupInternally(const QString& group)
+RegistersGroup RegisterController_Arm::registersFromGroup(const QString& group, RegistersFormat format) const
 {
     RegistersGroup registers;
 
@@ -57,6 +57,8 @@ RegistersGroup RegisterController_Arm::registersFromGroupInternally(const QStrin
     }
 
     updateValuesForRegisters(&registers);
+    convertValuesForGroup(&registers, format);
+
     return registers;
 }
 
@@ -67,7 +69,7 @@ QStringList RegisterController_Arm::namesOfRegisterGroups() const
     return registerGroups;
 }
 
-void RegisterController_Arm::updateFlagValues(RegistersGroup* flagsGroup)
+void RegisterController_Arm::updateFlagValues(RegistersGroup* flagsGroup) const
 {
     quint32 flagsValue = registerValue(m_cpsr.registerName).toUInt(0, 16);
 
@@ -194,7 +196,7 @@ QString RegisterController_Arm::enumToString(ArmRegisterGroups group) const
     return groups[group];
 }
 
-void RegisterController_Arm::convertValuesForGroup(RegistersGroup* registersGroup, RegistersFormat format)
+void RegisterController_Arm::convertValuesForGroup(RegistersGroup* registersGroup, RegistersFormat format) const
 {
     if (format != Raw && format != Natural) {
         if (registersGroup->groupName == enumToString(General)) {
@@ -240,7 +242,7 @@ void RegisterController_Arm::initRegisterNames()
     }
 }
 
-QStringList RegisterController_Arm::registerNamesForGroup(const QString& group)
+QStringList RegisterController_Arm::registerNamesForGroup(const QString& group) const
 {
 
     for (int i = 0; i < static_cast<int>(LAST_REGISTER); i++) {

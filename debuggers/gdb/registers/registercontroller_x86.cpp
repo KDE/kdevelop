@@ -36,7 +36,7 @@ namespace GDBDebugger
 QVector<QStringList> RegisterControllerGeneral_x86::m_registerNames;
 FlagRegister RegisterControllerGeneral_x86::m_eflags;
 
-void RegisterControllerGeneral_x86::updateValuesForRegisters(RegistersGroup* registers)
+void RegisterControllerGeneral_x86::updateValuesForRegisters(RegistersGroup* registers) const
 {
     kDebug() << "Updating values for registers: " << registers->groupName;
     if (registers->groupName == enumToString(Flags)) {
@@ -46,7 +46,7 @@ void RegisterControllerGeneral_x86::updateValuesForRegisters(RegistersGroup* reg
     }
 }
 
-RegistersGroup RegisterControllerGeneral_x86::registersFromGroupInternally(const QString& group)
+RegistersGroup RegisterControllerGeneral_x86::registersFromGroup(const QString& group, RegistersFormat format) const
 {
     RegistersGroup registers;
 
@@ -58,6 +58,8 @@ RegistersGroup RegisterControllerGeneral_x86::registersFromGroupInternally(const
     }
 
     updateValuesForRegisters(&registers);
+    convertValuesForGroup(&registers, format);
+
     return registers;
 }
 
@@ -68,7 +70,7 @@ QStringList RegisterControllerGeneral_x86::namesOfRegisterGroups() const
     return registerGroups;
 }
 
-void RegisterControllerGeneral_x86::updateFlagValues(RegistersGroup* flagsGroup)
+void RegisterControllerGeneral_x86::updateFlagValues(RegistersGroup* flagsGroup) const
 {
     int flagsValue = registerValue(m_eflags.registerName).toInt(0, 16);
 
@@ -155,7 +157,7 @@ QString RegisterControllerGeneral_x86::enumToString(X86RegisterGroups group) con
     return groups[group];
 }
 
-void RegisterControllerGeneral_x86::convertValuesForGroup(RegistersGroup* registersGroup, RegistersFormat format)
+void RegisterControllerGeneral_x86::convertValuesForGroup(RegistersGroup* registersGroup, RegistersFormat format) const
 {
     if (format != Raw && format != Natural) {
         if (registersGroup->groupName == enumToString(General) || registersGroup->groupName == enumToString(Segment)) {
@@ -255,7 +257,7 @@ void RegisterController_x86_64::initRegisterNames()
     }
 }
 
-QStringList RegisterControllerGeneral_x86::registerNamesForGroup(const QString& group)
+QStringList RegisterControllerGeneral_x86::registerNamesForGroup(const QString& group) const
 {
     for (int i = 0; i < static_cast<int>(LAST_REGISTER); i++) {
         if (group == enumToString(static_cast<X86RegisterGroups>(i))) {

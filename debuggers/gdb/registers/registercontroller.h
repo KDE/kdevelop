@@ -83,7 +83,7 @@ public:
     virtual QStringList namesOfRegisterGroups() const = 0;
 
     ///Returns registers from the @p group, or empty registers group if @p group is invalid. Use it only after @p registersInGroupChanged signal was emitted, otherwise registers won't be up to date.
-    RegistersGroup registersFromGroup(const QString& group, RegistersFormat format = Raw);
+    virtual RegistersGroup registersFromGroup(const QString& group, RegistersFormat format = Raw) const = 0;
 
 public slots:
     ///Sends updated register's @p reg value to the debugger.
@@ -103,16 +103,13 @@ protected:
     ///Sets value for @p register from @p group.
     virtual void  setRegisterValueForGroup(const QString& group, const Register& reg) = 0;
 
-    ///Returns registers with up to date values.
-    virtual RegistersGroup registersFromGroupInternally(const QString& group) = 0;
-
     ///Return names of all registers for @p group.
-    virtual QStringList registerNamesForGroup(const QString& group) = 0;
+    virtual QStringList registerNamesForGroup(const QString& group) const = 0;
 
     /**Updates value for each register in the group.
      * @param [out] registers Registers which values should be updated.
      */
-    virtual void updateValuesForRegisters(RegistersGroup* registers);
+    virtual void updateValuesForRegisters(RegistersGroup* registers) const;
 
     ///Sets new value for register @p reg, from group @p group.
     virtual void setGeneralRegister(const Register& reg, const QString& group);
@@ -121,7 +118,7 @@ protected:
     * @param [out] registers Registers which values should be converted.
     * @param format Format used for conversion.
     */
-    virtual void convertValuesForGroup(RegistersGroup* registersGroup, RegistersFormat format = Raw);
+    virtual void convertValuesForGroup(RegistersGroup* registersGroup, RegistersFormat format = Raw) const;
 
     ///Returns value for the given @p name, empty string if the name is incorrect or there is no registers yet.
     QString registerValue(const QString& name) const;
@@ -133,7 +130,7 @@ protected:
     void setFlagRegister(const Register& reg, const FlagRegister& flag);
 
     ///Returns group that given register belongs to.
-    QString groupForRegisterName(const QString& name);
+    QString groupForRegisterName(const QString& name) const;
 
     ///Initializes registers, that is gets names of all available registers. Returns true is succeed.
     bool initializeRegisters();
