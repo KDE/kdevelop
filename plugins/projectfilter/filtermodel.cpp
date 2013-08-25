@@ -124,7 +124,7 @@ QVariant FilterModel::data(const QModelIndex& index, int role) const
     Q_ASSERT(index.row() >= 0 && index.row() < m_filters.size());
     Q_ASSERT(index.column() >= 0 && index.column() < NUM_COLUMNS);
 
-    if (role != Qt::DisplayRole && role != Qt::DecorationRole) {
+    if (role != Qt::DisplayRole && role != Qt::DecorationRole && role != Qt::EditRole) {
         return QVariant();
     }
 
@@ -137,6 +137,9 @@ QVariant FilterModel::data(const QModelIndex& index, int role) const
         }
         return filter.pattern.pattern();
     } else if (column == Targets) {
+        if (role == Qt::EditRole) {
+            return static_cast<int>(filter.targets);
+        }
         if (filter.targets & Filter::Files && filter.targets & Filter::Folders) {
             if (role == Qt::DecorationRole) {
                 return KIcon("document-open");
@@ -154,12 +157,18 @@ QVariant FilterModel::data(const QModelIndex& index, int role) const
             return i18n("files");
         }
     } else if (column == MatchOn) {
+        if (role == Qt::EditRole) {
+            return static_cast<int>(filter.matchOn);
+        }
         if (filter.matchOn == Filter::Basename) {
             return i18n("basename");
         } else {
             return i18n("relative path");
         }
     } else if (column == Inclusive) {
+        if (role == Qt::EditRole) {
+            return filter.inclusive;
+        }
         if (filter.inclusive) {
             if (role == Qt::DecorationRole) {
                 return KIcon("kt-add-filters");
