@@ -23,8 +23,6 @@
 #define QMAKEBUILDDIRCHOOSER_H
 
 #include "ui_qmakebuilddirchooser.h"
-#include <interfaces/iproject.h>
-#include <qtextstream.h>
 
 namespace KDevelop {
     class IProject;
@@ -68,13 +66,13 @@ public:
     KUrl installPrefix() const;
     int buildType() const;
     QString extraArgs() const;
-    
+
     void setQmakeBin(const KUrl &url);
     void setBuildDir(const KUrl &url);
     void setInstallPrefix(const KUrl &url);
     void setBuildType(int type);
     void setExtraArgs(const QString &args);
-    
+
 protected:
     KDevelop::IProject* m_project;
 };

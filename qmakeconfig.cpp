@@ -25,6 +25,7 @@
 #include <KConfigGroup>
 #include <KStandardDirs>
 #include <KDebug>
+#include <KProcess>
 
 #include <interfaces/iproject.h>
 
@@ -79,4 +80,55 @@ QString QMakeConfig::qmakeBinary(const IProject* project)
     }
     Q_ASSERT(!exe.isEmpty());
     return exe;
+}
+
+QHash<QString, QString> QMakeConfig::queryQMake(const QString& qmakeBinary)
+{
+    QHash<QString,QString> hash;
+    KProcess p;
+    p.setOutputChannelMode( KProcess::OnlyStdoutChannel );
+    p << qmakeBinary << "-query";
+    int execed = p.execute();
+    if (execed != 0) {
+        kWarning() << "failed to execute qmake query " << p.program().join(" ") << "return code was:" << execed;
+        return QHash<QString,QString>();
+    }
+
+    foreach( const QByteArray& line, p.readAllStandardOutput().split('\n')) {
+        const int colon = line.indexOf(':');
+        if (colon == -1) {
+            continue;
+        }
+        const QByteArray key = line.left(colon);
+        const QByteArray value = line.mid(colon + 1);
+        hash.insert(key, value);
+    }
+    kDebug(9024) << "Ran qmake (" << p.program().join(" ") << "), found:" << hash;
+    return hash;
+}
+
+QString QMakeConfig::findBasicMkSpec( const QHash<QString,QString>& qmakeVars )
+{
+    QString path;
+    if (qmakeVars.contains("QMAKE_MKSPECS")) {
+        // qt4
+        path = qmakeVars["QMAKE_MKSPECS"] + "/default";
+    } else if (!qmakeVars.contains("QMAKE_MKSPECS") && qmakeVars.contains("QMAKE_SPEC")) {
+        // qt5 doesn't have the MKSPECS nor default anymore
+        if (qmakeVars.contains("QT_HOST_PREFIX")) {
+            // cross compilation
+            path = qmakeVars["QT_HOST_PREFIX"];
+        } else {
+            Q_ASSERT(qmakeVars.contains("QT_INSTALL_PREFIX"));
+            path = qmakeVars["QT_INSTALL_PREFIX"];
+        }
+        path += "/mkspecs/" + qmakeVars["QMAKE_SPEC"];
+    }
+    path += "/qmake.conf";
+
+    QFileInfo fi( path );
+    if( !fi.exists() )
+        return QString();
+
+    return fi.absoluteFilePath();
 }

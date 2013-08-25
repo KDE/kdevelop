@@ -34,6 +34,8 @@
 #include "../qmakeconfig.h"
 #include "qmakebuilderconfig.h"
 
+#include <interfaces/iproject.h>
+
 K_PLUGIN_FACTORY(QMakeBuilderPreferencesFactory, registerPlugin<QMakeBuilderPreferences>(); )
 K_EXPORT_PLUGIN(QMakeBuilderPreferencesFactory("kcm_kdev_qmakebuilder"))
 
@@ -57,6 +59,9 @@ QMakeBuilderPreferences::QMakeBuilderPreferences(QWidget* parent, const QVariant
 
     m_chooserUi = new QMakeBuildDirChooser(m_prefsUi->groupBox, project());
     m_chooserUi->kcfg_buildDir->setEnabled(false);  // build directory MUST NOT be changed here
+    connect(m_chooserUi->kcfg_qmakeBin, SIGNAL(textChanged(QString)), this, SLOT(validate()));
+    connect(m_chooserUi->kcfg_buildDir, SIGNAL(textChanged(QString)), this, SLOT(validate()));
+    connect(m_chooserUi->kcfg_installPrefix, SIGNAL(textChanged(QString)), this, SLOT(validate()));
     l->addWidget( w );
     addConfig( QMakeBuilderSettings::self(), w );
 
@@ -91,6 +96,8 @@ void QMakeBuilderPreferences::load()
     kDebug() << "Loaded" << m_prefsUi->buildDirCombo->count() << (m_prefsUi->buildDirCombo->count() > 1);
     m_prefsUi->removeButton->setEnabled(m_prefsUi->buildDirCombo->count() > 1);
     connect(m_prefsUi->buildDirCombo, SIGNAL(currentIndexChanged(QString)), this, SLOT(loadOtherConfig(QString)));
+
+    validate();
 }
 
 

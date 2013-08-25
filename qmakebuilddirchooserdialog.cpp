@@ -23,6 +23,8 @@
 #include <KDebug>
 #include "qmakeconfig.h"
 
+#include <interfaces/iproject.h>
+
 QMakeBuildDirChooserDialog::QMakeBuildDirChooserDialog(KDevelop::IProject* project, QWidget* parent) :
     KDialog(parent),
     QMakeBuildDirChooser(mainWidget(), project)
@@ -30,16 +32,18 @@ QMakeBuildDirChooserDialog::QMakeBuildDirChooserDialog(KDevelop::IProject* proje
     setButtons( KDialog::Ok | KDialog::Cancel );
     setCaption( i18n("Configure QMake build settings") );
     setDefaultButton( KDialog::Ok );
-        
+
     connect(kcfg_qmakeBin, SIGNAL(textChanged(QString)), this, SLOT(validate()));
     connect(kcfg_buildDir, SIGNAL(textChanged(QString)), this, SLOT(validate()));
     connect(kcfg_installPrefix, SIGNAL(textChanged(QString)), this, SLOT(validate()));
     //connect(extraArguments, SIGNAL(textChanged(QString)), this, SLOT(validate()));
-    
+
     loadConfig();
     //save; like this, we can be sure to have a qmake binary and build path set
     //(even if user clicks Cancel)
     saveConfig();
+
+    validate();
 }
 
 QMakeBuildDirChooserDialog::~QMakeBuildDirChooserDialog()
@@ -62,7 +66,7 @@ void QMakeBuildDirChooserDialog::saveConfig()
 
 void QMakeBuildDirChooserDialog::slotButtonClicked(int button)
 {
-    if(button == KDialog::Ok) 
+    if(button == KDialog::Ok)
     {
         if(isValid())
         {

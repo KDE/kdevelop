@@ -183,33 +183,6 @@ ProjectFolderItem* QMakeProjectManager::createFolderItem( IProject* project, con
     }
 }
 
-QString findBasicMkSpec( const QHash<QString,QString>& qmakeVars )
-{
-    QString path;
-    if (qmakeVars.contains("QMAKE_MKSPECS")) {
-        // qt4
-        path = qmakeVars["QMAKE_MKSPECS"] + "/default";
-    } else if (!qmakeVars.contains("QMAKE_MKSPECS") && qmakeVars.contains("QMAKE_SPEC")) {
-        // qt5 doesn't have the MKSPECS nor default anymore
-        if (qmakeVars.contains("QT_HOST_PREFIX")) {
-            // cross compilation
-            path = qmakeVars["QT_HOST_PREFIX"];
-        } else {
-            Q_ASSERT(qmakeVars.contains("QT_INSTALL_PREFIX"));
-            path = qmakeVars["QT_INSTALL_PREFIX"];
-        }
-        path += "/mkspecs/" + qmakeVars["QMAKE_SPEC"];
-    }
-    path += "/qmake.conf";
-
-    QFileInfo fi( path );
-    qDebug() << path << fi.exists();
-    if( !fi.exists() )
-        return QString();
-
-    return fi.absoluteFilePath();
-}
-
 ProjectFolderItem* QMakeProjectManager::projectRootItem( IProject* project, const KUrl& url )
 {
     QFileInfo fi( url.toLocalFile() );
@@ -232,7 +205,7 @@ ProjectFolderItem* QMakeProjectManager::projectRootItem( IProject* project, cons
     projecturl.adjustPath( KUrl::AddTrailingSlash );
     projecturl.setFileName( projectfile );
     QHash<QString,QString> qmvars = queryQMake( project );
-    const QString mkSpecFile = findBasicMkSpec( qmvars );
+    const QString mkSpecFile = QMakeConfig::findBasicMkSpec( qmvars );
     Q_ASSERT(!mkSpecFile.isEmpty());
     QMakeMkSpecs* mkspecs = new QMakeMkSpecs( mkSpecFile, qmvars );
     mkspecs->setProject( project );
@@ -509,28 +482,7 @@ QHash<QString,QString> QMakeProjectManager::queryQMake( IProject* project ) cons
     if( !project->folder().isLocalFile() || !m_builder )
         return QHash<QString,QString>();
 
-    QHash<QString,QString> hash;
-    KProcess p;
-    p.setOutputChannelMode( KProcess::OnlyStdoutChannel );
-    p.setWorkingDirectory( project->folder().toLocalFile() );
-    p << QMakeConfig::qmakeBinary( project ) << "-query";
-    int execed = p.execute();
-    if (execed != 0) {
-        kWarning() << "failed to execute qmake query for project" << project->name() << p.program().join(" ") << "return code was:" << execed;
-        return QHash<QString,QString>();
-    }
-
-    foreach( const QByteArray& line, p.readAllStandardOutput().split('\n')) {
-        const int colon = line.indexOf(':');
-        if (colon == -1) {
-            continue;
-        }
-        const QByteArray key = line.left(colon);
-        const QByteArray value = line.mid(colon + 1);
-        hash.insert(key, value);
-    }
-    kDebug(9024) << "Ran qmake (" << p.program().join(" ") << "), found:" << hash;
-    return hash;
+    return QMakeConfig::queryQMake(QMakeConfig::qmakeBinary( project ));
 }
 
 QMakeCache* QMakeProjectManager::findQMakeCache( IProject* project, const KUrl& path ) const
@@ -600,7 +552,7 @@ bool QMakeProjectManager::projectNeedsConfiguration(IProject* project)
     if (vars.isEmpty()) {
         return true;
     }
-    if (findBasicMkSpec(vars).isEmpty()) {
+    if (QMakeConfig::findBasicMkSpec(vars).isEmpty()) {
         return true;
     }
     ;
