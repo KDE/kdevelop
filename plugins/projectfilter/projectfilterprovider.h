@@ -50,7 +50,7 @@ private slots:
     void projectAboutToBeOpened(KDevelop::IProject*);
 
 private:
-    QHash<KDevelop::IProject*, Filters> m_filters;
+    QHash<KDevelop::IProject*, QVector<Filter> > m_filters;
 };
 
 }

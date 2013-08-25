@@ -61,7 +61,8 @@ ProjectFilterKCM::~ProjectFilterKCM()
 void ProjectFilterKCM::save()
 {
     ProjectKCModule<ProjectFilterSettings>::save();
-    ProjectFilterSettings::self()->writeConfig();
+
+    //FIXME
 
     KSettings::Dispatcher::reparseConfiguration("kdevprojectfilter");
 }
@@ -69,7 +70,8 @@ void ProjectFilterKCM::save()
 void ProjectFilterKCM::load()
 {
     ProjectKCModule<ProjectFilterSettings>::load();
-    ProjectFilterSettings::self()->readConfig();
+
+    //FIXME
 }
 
 #include "projectfilterkcm.moc"

@@ -23,38 +23,13 @@
 
 #include <interfaces/iproject.h>
 
-#include <KConfigGroup>
 #include <QSet>
 #include <QFile>
 
-namespace KDevelop {
-
-Filters filtersForProject( const IProject* const project )
-{
-    const KConfigGroup& config = project->projectConfiguration()->group("Filters");
-    Filters filters;
-
-    foreach(const QString& includePattern, config.readEntry("Includes", QStringList())) {
-        if (includePattern == "*") {
-            // optimize: this always matches, no need to run it.
-            continue;
-        }
-        filters.include << QRegExp( includePattern, Qt::CaseSensitive, QRegExp::Wildcard );
-    }
-
-    foreach(const QString& excludePattern, config.readEntry("Excludes", QStringList() << "*/.*")) {
-        filters.exclude << QRegExp( excludePattern, Qt::CaseSensitive, QRegExp::Wildcard );
-    }
-
-    return filters;
-}
-
-}
-
 using namespace KDevelop;
 
-ProjectFilter::ProjectFilter( const IProject* const project )
-    : m_filters( filtersForProject(project) )
+ProjectFilter::ProjectFilter( const IProject* const project, const QVector<Filter>& filters )
+    : m_filters( filters )
     , m_projectFile( project->projectFileUrl() )
     , m_project( project->folder() )
 {
@@ -104,28 +79,23 @@ bool ProjectFilter::isValid( const KUrl &url, const bool isFolder ) const
 
     const QString relativePath = makeRelative(url, isFolder);
 
-    if (!isFolder && !m_filters.include.isEmpty()) {
-        // only run the include pattern on files
-        bool ok = false;
-        foreach( const QRegExp& include, m_filters.include ) {
-            if ( include.exactMatch( relativePath ) ) {
-                ok = true;
-                break;
+    bool isValid = true;
+    foreach( const Filter& filter, m_filters ) {
+        if (isFolder && !(filter.targets & Filter::Folders)) {
+            continue;
+        } else if (!isFolder && !(filter.targets & Filter::Files)) {
+            continue;
+        }
+        if ((!isValid && filter.inclusive) || (isValid && !filter.inclusive)) {
+            const bool match = filter.pattern.exactMatch( filter.matchOn == Filter::Basename ? name : relativePath );
+            if (filter.inclusive) {
+                isValid = match;
+            } else {
+                isValid = !match;
             }
         }
-
-        if ( !ok ) {
-            return false;
-        }
     }
-
-    foreach( const QRegExp& exclude, m_filters.exclude ) {
-        if ( exclude.exactMatch( relativePath ) ) {
-            return false;
-        }
-    }
-
-    return true;
+    return isValid;
 }
 
 QString ProjectFilter::makeRelative(const KUrl& url, bool isFolder) const

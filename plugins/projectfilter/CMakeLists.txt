@@ -6,6 +6,7 @@ set( projectfilter_SRCS
     projectfilterprovider.cpp
     projectfilter.cpp
     projectfilterdebug.cpp
+    filter.cpp
 )
 
 kde4_add_plugin( kdevprojectfilter ${projectfilter_SRCS} )

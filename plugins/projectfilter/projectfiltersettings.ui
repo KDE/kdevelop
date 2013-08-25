@@ -12,37 +12,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Include files that match any of the following patterns in the project:</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="KEditListBox" name="kcfg_includes"/>
-   </item>
-   <item>
-    <widget class="QLabel" name="label_2">
-     <property name="text">
-      <string>Exclude files that match any of the following patterns from the project:</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="KEditListBox" name="kcfg_excludes"/>
-   </item>
-   <item>
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>198</height>
-      </size>
-     </property>
-    </spacer>
+    <widget class="KEditListBox" name="kcfg_filters"/>
    </item>
   </layout>
  </widget>

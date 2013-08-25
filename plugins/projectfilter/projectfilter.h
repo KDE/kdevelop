@@ -29,32 +29,16 @@
 
 #include <project/interfaces/iprojectfilter.h>
 
+#include "filter.h"
+
 namespace KDevelop {
 
 class IProject;
 
-struct Filters
-{
-    QVector<QRegExp> include;
-    QVector<QRegExp> exclude;
-
-    bool operator==(const Filters& o) const
-    {
-        return include == o.include && exclude == o.exclude;
-    }
-
-    bool operator!=(const Filters& o) const
-    {
-        return !operator==(o);
-    }
-};
-
-Filters filtersForProject( const IProject* const project );
-
 class ProjectFilter : public IProjectFilter
 {
 public:
-    ProjectFilter(const IProject* const project);
+    ProjectFilter(const IProject* const project, const Filters& filters);
     virtual ~ProjectFilter();
 
     virtual bool isValid(const KUrl& path, bool isFolder) const;
@@ -68,7 +52,5 @@ private:
 };
 
 }
-
-Q_DECLARE_TYPEINFO(KDevelop::Filters, Q_MOVABLE_TYPE);
 
 #endif // PROJECTFILTER_H

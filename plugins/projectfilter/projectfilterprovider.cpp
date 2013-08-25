@@ -25,6 +25,7 @@
 #include <KPluginFactory>
 #include <KAboutData>
 #include <KSettings/Dispatcher>
+#include <KConfigGroup>
 
 #include <interfaces/iproject.h>
 #include <interfaces/icore.h>
@@ -33,6 +34,30 @@
 #include "projectfilterdebug.h"
 
 using namespace KDevelop;
+
+namespace {
+
+Filters filtersForProject(const IProject* const project)
+{
+    Filters filters;
+    if (!project->projectConfiguration()->hasGroup("Filters")) {
+        return defaultFilters();
+    }
+    const KConfigGroup& config = project->projectConfiguration()->group("Filters");
+
+    foreach(const QString& group, config.groupList()) {
+        const KConfigGroup& subConfig = config.group(group);
+        const QString pattern = subConfig.readEntry("pattern", QString());
+        Filter::Targets targets(subConfig.readEntry("targets", 0));
+        Filter::MatchOn matchOn = static_cast<Filter::MatchOn>(subConfig.readEntry("matchOn", 0));
+        bool inclusive = subConfig.readEntry("inclusive", false);
+        filters << Filter(pattern, targets, matchOn, inclusive);
+    }
+
+    return filters;
+}
+
+}
 
 K_PLUGIN_FACTORY(ProjectFilterProviderFactory, registerPlugin<ProjectFilterProvider>(); )
 K_EXPORT_PLUGIN(ProjectFilterProviderFactory(
@@ -57,7 +82,7 @@ ProjectFilterProvider::ProjectFilterProvider( QObject* parent, const QVariantLis
 
 QSharedPointer<IProjectFilter> ProjectFilterProvider::createFilter(IProject* project) const
 {
-    return QSharedPointer<IProjectFilter>(new ProjectFilter(project));
+    return QSharedPointer<IProjectFilter>(new ProjectFilter(project, m_filters[project]));
 }
 
 void ProjectFilterProvider::updateProjectFilters()

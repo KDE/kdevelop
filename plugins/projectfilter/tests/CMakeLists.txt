@@ -1,6 +1,7 @@
 kde4_add_unit_test(testprojectfilter
     test_projectfilter.cpp
     ../projectfilter.cpp
+    ../filter.cpp
 )
 
 target_link_libraries(testprojectfilter

@@ -36,9 +36,9 @@ QTEST_KDEMAIN(TestProjectFilter, NoGUI);
 
 using namespace KDevelop;
 
-typedef QSharedPointer<ProjectFilter> Filter;
+typedef QSharedPointer<ProjectFilter> TestFilter;
 
-Q_DECLARE_METATYPE(Filter)
+Q_DECLARE_METATYPE(TestFilter)
 
 namespace {
 
@@ -54,22 +54,7 @@ struct MatchTest
     bool shouldMatch;
 };
 
-class FilterTestProject : public TestProject
-{
-public:
-    FilterTestProject(const QStringList& includes, const QStringList& excludes)
-    {
-        KConfigGroup filters = projectConfiguration()->group("Filters");
-        filters.writeEntry("Includes", includes);
-        filters.writeEntry("Excludes", excludes);
-    }
-    virtual ~FilterTestProject()
-    {
-        projectConfiguration()->deleteGroup("Filters");
-    }
-};
-
-void addTests(const QString& tag, const FilterTestProject& project, const Filter& filter, MatchTest* tests, uint numTests)
+void addTests(const QString& tag, const TestProject& project, const TestFilter& filter, MatchTest* tests, uint numTests)
 {
     for (uint i = 0; i < numTests; ++i) {
         const MatchTest& test = tests[i];
@@ -99,7 +84,7 @@ void TestProjectFilter::initTestCase()
 {
     AutoTestShell::init();
     TestCore::initialize(Core::NoUi);
-    qRegisterMetaType<Filter>();
+    qRegisterMetaType<TestFilter>();
 }
 
 void TestProjectFilter::cleanupTestCase()
@@ -109,7 +94,7 @@ void TestProjectFilter::cleanupTestCase()
 
 void TestProjectFilter::match()
 {
-    QFETCH(Filter, filter);
+    QFETCH(TestFilter, filter);
     QFETCH(KUrl, path);
     QFETCH(bool, isFolder);
     QFETCH(bool, expectedIsValid);
@@ -119,17 +104,15 @@ void TestProjectFilter::match()
 
 void TestProjectFilter::match_data()
 {
-    QTest::addColumn<Filter>("filter");
+    QTest::addColumn<TestFilter>("filter");
     QTest::addColumn<KUrl>("path");
     QTest::addColumn<bool>("isFolder");
     QTest::addColumn<bool>("expectedIsValid");
 
     {
         // test default filters
-        FilterTestProject project((QStringList()), QStringList());
-        // delete group to get explicit defaults
-        project.projectConfiguration()->deleteGroup("Filters");
-        Filter filter(new ProjectFilter(&project));
+        const TestProject project;
+        TestFilter filter(new ProjectFilter(&project, defaultFilters()));
 
         QTest::newRow("projectRoot") << filter << project.folder() << Folder << Valid;
         QTest::newRow("project.kdev4") << filter << project.projectFileUrl() << File << Invalid;
@@ -150,31 +133,11 @@ void TestProjectFilter::match_data()
         ADD_TESTS("default", project, filter, tests);
     }
     {
-        // test includes
-        FilterTestProject project(QStringList() << "*.cpp", QStringList());
-        Filter filter(new ProjectFilter(&project));
-
-        QTest::newRow("projectRoot") << filter << project.folder() << Folder << Valid;
-        QTest::newRow("project.kdev4") << filter << project.projectFileUrl() << File << Invalid;
-
-        MatchTest tests[] = {
-            //{path, isFolder, isValid}
-            {".kdev4", Folder, Invalid},
-
-            {"folder", Folder, Valid},
-            {"file", File, Invalid},
-            {"file.cpp", File, Valid},
-            {".file.cpp", File, Valid},
-            {"folder/file.cpp", File, Valid},
-            {"folder/.file.cpp", File, Valid}
-        };
-        ADD_TESTS("include:*.cpp", project, filter, tests);
-        project.projectConfiguration();
-    }
-    {
-        // test excludes
-        FilterTestProject project(QStringList(), QStringList() << "*.cpp");
-        Filter filter(new ProjectFilter(&project));
+        // test exclude files, basename
+        const TestProject project;
+        const Filters filters = Filters()
+            << Filter("*.cpp", Filter::Files, Filter::Basename, false);
+        TestFilter filter(new ProjectFilter(&project, filters));
 
         QTest::newRow("projectRoot") << filter << project.folder() << Folder << Valid;
         QTest::newRow("project.kdev4") << filter << project.projectFileUrl() << File << Invalid;
@@ -194,8 +157,10 @@ void TestProjectFilter::match_data()
     }
     {
         // test excludes on folders
-        FilterTestProject project(QStringList(), QStringList() << "*/foo/");
-        Filter filter(new ProjectFilter(&project));
+        const TestProject project;
+        const Filters filters = Filters()
+            << Filter("foo", Filter::Folders, Filter::Basename, false);
+        TestFilter filter(new ProjectFilter(&project, filters));
 
         QTest::newRow("projectRoot") << filter << project.folder() << Folder << Valid;
         QTest::newRow("project.kdev4") << filter << project.projectFileUrl() << File << Invalid;
@@ -211,12 +176,42 @@ void TestProjectFilter::match_data()
             {"folder/foo", Folder, Invalid},
             {"folder/foo", File, Valid}
         };
-        ADD_TESTS("exclude:*/foo/", project, filter, tests);
+        ADD_TESTS("exclude:foo", project, filter, tests);
+    }
+    {
+        // test includes
+        const TestProject project;
+        const Filters filters = Filters()
+            << Filter("*", Filter::Files, Filter::Basename, false)
+            << Filter("*.cpp", Filter::Files, Filter::Basename, true);
+        TestFilter filter(new ProjectFilter(&project, filters));
+
+        QTest::newRow("projectRoot") << filter << project.folder() << Folder << Valid;
+        QTest::newRow("project.kdev4") << filter << project.projectFileUrl() << File << Invalid;
+
+        MatchTest tests[] = {
+            //{path, isFolder, isValid}
+            {".kdev4", Folder, Invalid},
+
+            {"folder", Folder, Valid},
+            {"file", File, Invalid},
+            {"file.cpp", File, Valid},
+            {".file.cpp", File, Valid},
+            {"folder/file.cpp", File, Valid},
+            {"folder/.file.cpp", File, Valid}
+        };
+        ADD_TESTS("include:*.cpp", project, filter, tests);
+        project.projectConfiguration();
     }
     {
         // test mixed stuff
-        FilterTestProject project(QStringList() << "*.inc", QStringList() << "*/bar/" << "*ex.inc");
-        Filter filter(new ProjectFilter(&project));
+        const TestProject project;
+        const Filters filters = Filters()
+            << Filter("*", Filter::Files, Filter::Basename, false)
+            << Filter("*.inc", Filter::Files, Filter::Basename, true)
+            << Filter("*ex.inc", Filter::Files, Filter::Basename, false)
+            << Filter("bar", Filter::Folders, Filter::Basename, false);
+        TestFilter filter(new ProjectFilter(&project, filters));
 
         QTest::newRow("projectRoot") << filter << project.folder() << Folder << Valid;
         QTest::newRow("project.kdev4") << filter << project.projectFileUrl() << File << Invalid;
