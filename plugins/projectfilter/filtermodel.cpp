@@ -107,7 +107,7 @@ QVariant FilterModel::headerData(int section, Qt::Orientation orientation, int r
     } else if (section == Targets) {
         return i18n("Targets");
     } else if (section == MatchOn) {
-        return i18n("Match On");
+        return i18n("Match Against");
     } else if (section == Inclusive) {
         return i18n("Type");
     }
