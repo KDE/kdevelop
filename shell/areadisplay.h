@@ -22,7 +22,7 @@
 
 #include <QWidget>
 
-class QToolButton;
+class QPushButton;
 class QMenu;
 
 namespace KDevelop {
@@ -52,7 +52,7 @@ private slots:
 
 private:
     QMenu* m_menu;
-    QToolButton* m_button;
+    QPushButton* m_button;
     KDevelop::MainWindow* m_mainWindow;
 };
 
