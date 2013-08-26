@@ -33,11 +33,16 @@
 #include "../debugger/interfaces/idebugsession.h"
 
 class KAction;
+
+namespace Sublime {
+    class Area;
+}
+
 namespace KParts {
     class Part;
 }
-namespace KDevelop {
 
+namespace KDevelop {
 class Context;
 class ContextMenuExtension;
 
@@ -80,6 +85,7 @@ private Q_SLOTS:
     void clearExecutionPoint();
     
     void partAdded(KParts::Part* part);
+    void areaChanged(Sublime::Area* newArea);
 
 Q_SIGNALS:
     void raiseFramestackViews();

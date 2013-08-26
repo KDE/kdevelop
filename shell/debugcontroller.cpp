@@ -318,6 +318,7 @@ void DebugController::addSession(IDebugSession* session)
         QString workingSet = mainWindow->area()->workingSet();
         ICore::self()->uiController()->switchToArea("debug", IUiController::ThisWindow);
         mainWindow->area()->setWorkingSet(workingSet);
+        connect(mainWindow, SIGNAL(areaChanged(Sublime::Area*)), SLOT(areaChanged(Sublime::Area*)));
     }
 }
 
@@ -507,6 +508,13 @@ void DebugController::stepOverInstruction() {
 void DebugController::stepOut() {
     if (m_currentSession) {
         m_currentSession.data()->stepOut();
+    }
+}
+
+void DebugController::areaChanged(Sublime::Area* newArea)
+{
+    if (newArea->objectName()!="debug") {
+        stopDebugger();
     }
 }
 
