@@ -31,6 +31,7 @@
 #include <QMenu>
 #include <QPushButton>
 #include <QHBoxLayout>
+#include <QLabel>
 
 using namespace KDevelop;
 
@@ -39,6 +40,10 @@ AreaDisplay::AreaDisplay(KDevelop::MainWindow* parent)
     , m_mainWindow(parent)
 {
     setLayout(new QHBoxLayout);
+    QLabel* separator = new QLabel("|", this);
+    separator->setEnabled(false);
+    layout()->addWidget(separator);
+
     layout()->setContentsMargins(0, 0, 0, 0);
     layout()->addWidget(Core::self()->workingSetControllerInternal()->createSetManagerWidget(m_mainWindow));
 
@@ -69,7 +74,7 @@ void AreaDisplay::newArea(Sublime::Area* area)
     m_button->setMenu(m);
 
     QBoxLayout* l = qobject_cast<QBoxLayout*>(layout());
-    if(l->count()>=3) {
+    if(l->count()>=4) {
         QLayoutItem* item = l->takeAt(0);
         delete item->widget();
         delete item;
