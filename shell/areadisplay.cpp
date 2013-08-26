@@ -97,5 +97,7 @@ QSize AreaDisplay::minimumSizeHint() const
 
 QSize AreaDisplay::sizeHint() const
 {
-    return minimumSizeHint();
+    QSize hint = QWidget::sizeHint();
+    hint = hint.boundedTo(QSize(hint.width(), m_mainWindow->menuBar()->height()-1));
+    return hint;
 }
