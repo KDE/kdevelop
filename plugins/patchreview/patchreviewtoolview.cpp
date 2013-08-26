@@ -32,6 +32,7 @@
 #include <sublime/area.h>
 #include <sublime/view.h>
 #include <sublime/document.h>
+#include <sublime/mainwindow.h>
 #include <KLineEdit>
 #include <KTextEditor/Document>
 #include <QMenu>
@@ -80,6 +81,9 @@ PatchReviewToolView::PatchReviewToolView( QWidget* parent, PatchReviewPlugin* pl
     connect( plugin, SIGNAL( patchChanged() ), SLOT( patchChanged() ) );
     connect( plugin, SIGNAL( startingNewReview() ), SLOT( startingNewReview() ) );
     connect( ICore::self()->documentController(), SIGNAL( documentActivated( KDevelop::IDocument* ) ), this, SLOT( documentActivated( KDevelop::IDocument* ) ) );
+
+    Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>( ICore::self()->uiController()->activeMainWindow() );
+    connect(w, SIGNAL(areaChanged(Sublime::Area*)), m_plugin, SLOT(areaChanged(Sublime::Area*)));
 
     showEditDialog();
     patchChanged();

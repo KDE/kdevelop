@@ -560,6 +560,13 @@ void PatchReviewPlugin::exporterSelected( QAction* action ) {
     }
 }
 
+void PatchReviewPlugin::areaChanged(Sublime::Area* area)
+{
+    if(area->objectName() != "review") {
+        closeReview();
+    }
+}
+
 #include "patchreview.moc"
 
 // kate: space-indent on; indent-width 2; tab-width 2; replace-tabs on

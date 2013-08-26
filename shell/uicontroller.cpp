@@ -224,18 +224,6 @@ UiController::~UiController()
 
 void UiController::setupActions()
 {
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 8, 0))
-    if (d->defaultMainWindow->menuBar()->isNativeMenuBar()) {
-        KActionCollection* ac = d->defaultMainWindow->actionCollection();
-
-        // When running on an appmenu-enabled system, one cannot add widgets in the
-        // menubar corner. In this case, move area switcher to main toolbar.
-        KAction* switcherAction = new KAction(this);
-        switcherAction->setText(i18n("Area Switcher")); // For the toolbar edit dialog
-        switcherAction->setDefaultWidget(d->defaultMainWindow->areaSwitcher());
-        ac->addAction("area_switcher", switcherAction);
-    }
-#endif
 }
 
 void UiController::mainWindowDeleted(MainWindow* mw)
