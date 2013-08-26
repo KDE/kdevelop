@@ -429,7 +429,6 @@ void RunController::setupActions()
     d->runAction->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in currently active launch configuration."));
     ac->addAction("run_execute", d->runAction);
     connect(d->runAction, SIGNAL(triggered(bool)), this, SLOT(slotExecute()));
-    Core::self()->uiControllerInternal()->area(0, "code")->addAction(d->runAction);
 
     d->dbgAction = new KAction( KIcon("debug-run"), i18n("Debug Launch"), this);
     d->dbgAction->setShortcut(Qt::Key_F9);
