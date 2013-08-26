@@ -70,11 +70,6 @@ QList< Area* > MainWindow::areas() const
     return areas;
 }
 
-void MainWindow::setupAreaSelector()
-{
-    
-}
-
 MainWindow::~MainWindow()
 {
     kDebug() << "destroying mainwindow";
@@ -152,8 +147,6 @@ void MainWindow::setArea(Area *area)
         this, SLOT(aboutToRemoveToolView(Sublime::View*,Sublime::Position)));
     connect(area, SIGNAL(toolViewMoved(Sublime::View*,Sublime::Position)),
         this, SLOT(toolViewMoved(Sublime::View*,Sublime::Position)));
-     connect(area, SIGNAL(changedWorkingSet(Sublime::Area*,QString,QString)),
-        this, SLOT(setupAreaSelector()));
 }
 
 void MainWindow::initializeStatusBar()

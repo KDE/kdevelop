@@ -131,7 +131,6 @@ protected:
     QWidget *statusBarLocation();
     virtual void initializeStatusBar();
 protected Q_SLOTS:
-    virtual void setupAreaSelector();
     virtual void tabContextMenuRequested(Sublime::View*, KMenu*);
     virtual void tabToolTipRequested(Sublime::View* view, Sublime::Container* container, int tab);
     /**Called whenever the user requests a context menu on a dockwidget bar.

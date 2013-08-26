@@ -199,8 +199,6 @@ void MainWindow::loadSettings()
     else if( bottomright == 1 )
         setCorner( Qt::BottomRightCorner, Qt::BottomDockWidgetArea );
 
-    setupAreaSelector();
-
     Sublime::MainWindow::loadSettings();
 }
 

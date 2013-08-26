@@ -456,10 +456,6 @@ void MainWindowPrivate::viewRemovedInternal(AreaIndex* index, View* view)
 {
     Q_UNUSED(index);
     Q_UNUSED(view);
-    // A formerly non-empty working-set has become empty, and a relayout of the area-selector may be required
-    if(m_mainWindow->area()->views().size() == 0)
-        m_mainWindow->setupAreaSelector();
-    
     setBackgroundVisible(area->views().isEmpty());
 }
 
@@ -505,11 +501,7 @@ void MainWindowPrivate::viewAdded(Sublime::AreaIndex *index, Sublime::View *view
     emit m_mainWindow->viewAdded( view );
     
     setTabBarLeftCornerWidget(m_leftTabbarCornerWidget.data());
-    
-    // A formerly empty working-set may become non-empty, and a relayout of the area-selector may be required
-    if(m_mainWindow->area()->views().size() == 1)
-        m_mainWindow->setupAreaSelector();
-    
+
     setBackgroundVisible(false);
 }
 
