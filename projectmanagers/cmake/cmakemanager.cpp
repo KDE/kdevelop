@@ -314,6 +314,7 @@ void CMakeManager::importFinished(KJob* j)
 
 bool CMakeManager::isReloading(IProject* p)
 {
+    Q_ASSERT(p);
     return !p->isReady() || m_busyProjects.contains(p);
 }
 
@@ -350,9 +351,8 @@ void CMakeManager::realDirectoryChanged(const QString& dir)
 {
     KUrl path(dir);
     IProject* p=ICore::self()->projectController()->findProjectForUrl(dir);
-    bool reloading = isReloading(p);
-    if(!p || reloading) {
-        if(reloading) {
+    if(!p || isReloading(p)) {
+        if(p) {
             m_fileSystemChangedBuffer << dir;
             m_fileSystemChangeTimer->start();
         }
