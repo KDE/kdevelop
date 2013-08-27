@@ -164,7 +164,6 @@ void IRegisterController::setFlagRegister(const Register& reg, const FlagRegiste
 {
     quint32 flagsValue = registerValue(flag.registerName).toUInt(0, 16);
 
-    kDebug() << "Set flag " << reg.name << ' ' << reg.value << ' ' << flag.flags << ' ' << flagsValue;
     const int idx = flag.flags.indexOf(reg.name);
 
     if (idx != -1) {
@@ -209,7 +208,7 @@ IRegisterController::~IRegisterController() {}
 
 void IRegisterController::updateFlagValues(RegistersGroup* flagsGroup, const FlagRegister& flagRegister) const
 {
-    quint32 flagsValue = registerValue(flagRegister.registerName).toInt(0, 16);
+    const quint32 flagsValue = registerValue(flagRegister.registerName).toUInt(0, 16);
 
     for (int idx = 0; idx < flagRegister.flags.count(); idx++) {
         flagsGroup->registers[idx].value = ((flagsValue >> flagRegister.bits[idx].toInt()) & 1) ? "1" : "0";
