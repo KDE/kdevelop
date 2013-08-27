@@ -39,6 +39,8 @@ RegistersView::RegistersView(QWidget* p)
 
     connect(m_mapper, SIGNAL(mapped(int)), this, SLOT(formatMenuTriggered(int)));
 
+    connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(updateMenuTriggered()));
+
     m_tablesManager.addTable(Table(registers, 0));
     m_tablesManager.addTable(Table(flags, 0));
     m_tablesManager.addTable(Table(table_1, 1));
@@ -99,12 +101,15 @@ void RegistersView::contextMenuEvent(QContextMenuEvent* e)
     QAction* a = m_menu->addAction("Update");
     connect(a, SIGNAL(triggered()), this, SLOT(updateMenuTriggered()));
 
-    QMenu* m = m_menu->addMenu("Format");
-    addItemToFormatSubmenu(m, QString("Dec"), Decimal);
-    addItemToFormatSubmenu(m, QString("Hex"), Hexadecimal);
-    addItemToFormatSubmenu(m, QString("Raw"), Raw);
-    addItemToFormatSubmenu(m, QString("Oct"), Octal);
-    addItemToFormatSubmenu(m, QString("Bin"), Binary);
+    //Format changing makes sense only for general registers (maybe for segment too),
+    if (tabWidget->currentIndex() == 0) {
+        QMenu* m = m_menu->addMenu("Format");
+        addItemToFormatSubmenu(m, QString("Dec"), Decimal);
+        addItemToFormatSubmenu(m, QString("Hex"), Hexadecimal);
+        addItemToFormatSubmenu(m, QString("Raw"), Raw);
+        addItemToFormatSubmenu(m, QString("Oct"), Octal);
+        addItemToFormatSubmenu(m, QString("Bin"), Binary);
+    }
 
     m_menu->exec(e->globalPos());
 }
@@ -214,10 +219,12 @@ void RegistersView::registersInGroupChanged(const QString& group)
 
     kDebug() << "Updating registers";
 
-    const RegistersGroup registersGroup = m_registerController->registersFromGroup(group, m_registersFormat);
+    const Table t = m_tablesManager.tableForGroup(group);
 
-    const Table t = m_tablesManager.tableForGroup(registersGroup.groupName);
-    if (!t.isNull()) {
+    if (!t.isNull() && t.index == tabWidget->currentIndex()) {
+        //TODO: move format from global scope to group.
+        const RegistersGroup registersGroup = m_registerController->registersFromGroup(group, (t.index == 0) ? m_registersFormat : Raw);
+
         updateRegistersInTable(t, registersGroup);
     }
 }

@@ -167,6 +167,7 @@ DisassembleWidget::DisassembleWidget(CppDebuggerPlugin* plugin, QWidget *parent)
         m_disassembleWindow->setHeaderLabels(QStringList() << "" << i18n("Address") << i18n("Function") << i18n("Instruction"));
 
         m_splitter->setStretchFactor(0, 1);
+        m_splitter->setContentsMargins(0, 0, 0, 0);
 
         m_registersManager = new RegistersManager(m_splitter);
 
