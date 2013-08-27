@@ -46,7 +46,6 @@ RegistersView::RegistersView(QWidget* p)
     m_tablesManager.addTable(Table(table_1, 1));
     m_tablesManager.addTable(Table(table_2, 2));
     m_tablesManager.addTable(Table(table_3, 3));
-    m_tablesManager.addTable(Table(table_4, 4));
     m_tablesManager.load();
 }
 
@@ -183,6 +182,8 @@ bool RegistersView::TablesManager::removeAssociation(const QString& group)
     for (int i = 0; i < m_tableRegistersAssociation.count(); i++) {
         if (m_tableRegistersAssociation[i].registersGroup == group) {
             m_tableRegistersAssociation[i].registersGroup.clear();
+            int idx = m_tableRegistersAssociation[i].table.index;
+            m_parent->tabWidget->setTabText(idx, "");
             return true;
         }
     }
