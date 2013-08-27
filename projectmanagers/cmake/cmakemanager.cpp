@@ -20,59 +20,45 @@
  */
 
 #include "cmakemanager.h"
+#include "cmakeedit.h"
 
-#include <QList>
-#include <QVector>
-#include <QDomDocument>
 #include <QDir>
-#include <QQueue>
 #include <QThread>
 #include <QFileSystemWatcher>
 #include <QTimer>
 
-#include <kpluginfactory.h>
-#include <kpluginloader.h>
+#include <KPluginFactory>
+#include <KPluginLoader>
 #include <KAboutData>
-#include <KDialog>
-#include <kparts/mainwindow.h>
 #include <KUrl>
 #include <KAction>
 #include <KMessageBox>
 #include <ktexteditor/document.h>
 #include <KStandardDirs>
-#include <KCompositeJob>
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
 #include <interfaces/iplugincontroller.h>
+#include <interfaces/iruncontroller.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/context.h>
+#include <interfaces/idocumentation.h>
+#include <util/environmentgrouplist.h>
+#include <language/highlighting/codehighlighting.h>
 #include <project/projectmodel.h>
-#include <project/importprojectjob.h>
 #include <project/helper.h>
-#include <language/duchain/parsingenvironment.h>
-#include <language/duchain/indexedstring.h>
-#include <language/duchain/duchain.h>
-#include <language/duchain/dumpchain.h>
-#include <language/duchain/topducontext.h>
-#include <language/duchain/declaration.h>
-#include <language/duchain/duchainlock.h>
-#include <language/duchain/duchainutils.h>
+#include <project/interfaces/iprojectbuilder.h>
 #include <language/codecompletion/codecompletion.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/use.h>
+#include <language/duchain/duchain.h>
 
-#include "cmakemodelitems.h"
 #include "cmakenavigationwidget.h"
 #include "cmakecachereader.h"
-#include "cmakeastvisitor.h"
-#include "cmakeprojectvisitor.h"
-#include "cmakeexport.h"
 #include "cmakecodecompletionmodel.h"
-#include "cmakeutils.h"
-#include "cmaketypes.h"
-#include "parser/cmakeparserutils.h"
 #include <generationexpressionsolver.h>
 #include "icmakedocumentation.h"
 
@@ -81,19 +67,11 @@
 #endif
 
 #include "ui_cmakepossibleroots.h"
-#include <language/duchain/use.h>
-#include <interfaces/idocumentation.h>
+#include "cmakemodelitems.h"
 #include "cmakeprojectdata.h"
 #include "cmakecommitchangesjob.h"
 #include "cmakeimportjob.h"
-#include "cmakeedit.h"
-
-#include <language/highlighting/codehighlighting.h>
-#include <interfaces/iruncontroller.h>
-#include <vcs/interfaces/ibasicversioncontrol.h>
-#include <vcs/vcsjob.h>
-#include <project/interfaces/iprojectbuilder.h>
-#include <util/environmentgrouplist.h>
+#include "cmakeutils.h"
 
 Q_DECLARE_METATYPE(KDevelop::IProject*);
 
@@ -501,7 +479,7 @@ void CMakeManager::jumpToDeclaration()
         KTextEditor::Cursor c;
         KUrl url;
         {
-            KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
+            KDevelop::DUChainReadLocker lock;
             Declaration* decl = du->declaration().data();
             if(!decl)
                 return;
