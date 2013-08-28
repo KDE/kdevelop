@@ -155,24 +155,30 @@ namespace CMakeParserUtils
             qDebug() << "lala " << s.name;
         }
     }
-    
-    KDevelop::ReferencedTopDUContext includeScript(const QString& file, KDevelop::ReferencedTopDUContext parent, CMakeProjectData* data, const QString& sourcedir, const QMap< QString, QString >& env)
-    {
-        kDebug(9042) << "Running cmake script: " << file;
-        CMakeFileContent f = CMakeListsParser::readCMakeFile(file);
-        data->vm.insertGlobal("CMAKE_CURRENT_LIST_FILE", QStringList(file));
-        data->vm.insertGlobal("CMAKE_CURRENT_LIST_DIR", QStringList(QFileInfo(file).dir().absolutePath()));
 
-        const QString projectSourceDir = data->vm.value("CMAKE_SOURCE_DIR").first();
-        const QString projectBinDir = data->vm.value("CMAKE_BINARY_DIR").join(QString());
+    QString binaryPath(const QString& sourcedir, const QString& projectSourceDir, const QString projectBinDir)
+    {
         QString binDir = projectBinDir;
         // CURRENT_BINARY_DIR must point to the subfolder if any"
         if (sourcedir.startsWith(projectSourceDir)) {
             Q_ASSERT(projectSourceDir.size()==sourcedir.size() || sourcedir.at(projectSourceDir.size()) == '/');
             binDir += sourcedir.mid(projectSourceDir.size());
         }
-        data->vm.insertGlobal("CMAKE_BINARY_DIR", QStringList(projectBinDir));
-        data->vm.insertGlobal("CMAKE_CURRENT_BINARY_DIR", QStringList(binDir));
+        return binDir;
+    }
+    
+    KDevelop::ReferencedTopDUContext includeScript(const QString& file, const KDevelop::ReferencedTopDUContext& parent, CMakeProjectData* data, const QString& sourcedir, const QMap<QString, QString>& env)
+    {
+        kDebug(9042) << "Running cmake script: " << file;
+
+        CMakeFileContent f = CMakeListsParser::readCMakeFile(file);
+        data->vm.insertGlobal("CMAKE_CURRENT_LIST_FILE", QStringList(file));
+        data->vm.insertGlobal("CMAKE_CURRENT_LIST_DIR", QStringList(QFileInfo(file).dir().absolutePath()));
+
+        const QString projectSourceDir = data->vm.value("CMAKE_SOURCE_DIR").first();
+        const QString projectBinDir = data->vm.value("CMAKE_BINARY_DIR").join(QString());
+
+        data->vm.insertGlobal("CMAKE_CURRENT_BINARY_DIR", QStringList(binaryPath(sourcedir, projectSourceDir, projectBinDir)));
         data->vm.insertGlobal("CMAKE_CURRENT_SOURCE_DIR", QStringList(sourcedir));
         
         CMakeProjectVisitor v(file, parent);

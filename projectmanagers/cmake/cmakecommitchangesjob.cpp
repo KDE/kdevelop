@@ -24,6 +24,7 @@
 #include "cmakemodelitems.h"
 #include "cmakeutils.h"
 #include "cmakemanager.h"
+#include <cmakeparserutils.h>
 #include <QThread>
 
 using namespace KDevelop;
@@ -154,7 +155,7 @@ KUrl::List CMakeCommitChangesJob::addProjectData(const CMakeProjectData& data)
     QString dir = m_url.toLocalFile(KUrl::RemoveTrailingSlash);
     if(data.vm.value("CMAKE_INCLUDE_CURRENT_DIR")==QStringList("ON")) {
         m_directories += dir;
-        m_directories += data.vm.value("CMAKE_CURRENT_BINARY_DIR");
+        m_directories += CMakeParserUtils::binaryPath(dir, m_project->folder().toLocalFile(KUrl::RemoveTrailingSlash), CMake::currentBuildDir(m_project).toLocalFile(KUrl::RemoveTrailingSlash));
     }
     m_directories += resolvePaths(m_url, data.properties[DirectoryProperty][dir]["INCLUDE_DIRECTORIES"]);
     m_directories.removeAll(QString());

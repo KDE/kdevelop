@@ -58,9 +58,11 @@ namespace CMakeParserUtils
     /** Runs the process specified by @p execName with @p args */
     KDEVCMAKECOMMON_EXPORT QString executeProcess(const QString& execName, const QStringList& args=QStringList());
     
-    KDEVCMAKECOMMON_EXPORT KDevelop::ReferencedTopDUContext includeScript( const QString& file, KDevelop::ReferencedTopDUContext parent, CMakeProjectData* data, const QString& sourcedir, const QMap<QString, QString>& env);
+    KDEVCMAKECOMMON_EXPORT KDevelop::ReferencedTopDUContext includeScript( const QString& file, const KDevelop::ReferencedTopDUContext& parent, CMakeProjectData* data, const QString& sourcedir, const QMap< QString, QString >& env);
     
     KDEVCMAKECOMMON_EXPORT CacheValues readCache(const KUrl &path);
+
+    KDEVCMAKECOMMON_EXPORT QString binaryPath(const QString& sourcedir, const QString& projectSourceDir, const QString projectBinDir);
 }
 
 #endif
