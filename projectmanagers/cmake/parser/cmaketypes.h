@@ -67,11 +67,17 @@ struct Test
     QStringList arguments;
     QStringList files;
     bool isTarget;
-    QMap<QString, QString> properties;
+    QHash<QString, QString> properties;
 };
 
+Q_DECLARE_TYPEINFO(Test, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(Subdirectory, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(Target, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(CacheEntry, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(Macro, Q_MOVABLE_TYPE);
+
 enum PropertyType { GlobalProperty, DirectoryProperty, TargetProperty, SourceProperty, TestProperty, CacheProperty, VariableProperty };
-typedef QMap<QString, QMap<QString, QStringList> > CategoryType;
+typedef QHash<QString, QMap<QString, QStringList> > CategoryType;
 typedef QMap<PropertyType, CategoryType > CMakeProperties;
 
 typedef QHash<QString, Macro> MacroMap;

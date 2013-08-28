@@ -66,7 +66,7 @@ CMakeProjectVisitor::CMakeProjectVisitor(const QString& root, ReferencedTopDUCon
 QStringList CMakeProjectVisitor::envVarDirectories(const QString &varName) const
 {
     QString env;
-    QMap< QString, QString >::const_iterator it=m_environmentProfile.constFind(varName);
+    QMap<QString, QString>::const_iterator it=m_environmentProfile.constFind(varName);
     if(it!=m_environmentProfile.constEnd())
         env = *it;
     else
@@ -1099,7 +1099,7 @@ int CMakeProjectVisitor::visit(const TryCompileAst *tca)
 int CMakeProjectVisitor::visit(const TargetLinkLibrariesAst *tll)
 {
     kDebug(9042) << "target_link_libraries";
-    QMap<QString, Target>::iterator target = m_targetForId.find(tll->target());
+    QHash<QString, Target>::iterator target = m_targetForId.find(tll->target());
     //TODO: we can add a problem if the target is not found
     if(target != m_targetForId.end()) {
         target->libraries << tll->debugLibs() << tll->optimizedLibs() << tll->otherLibs();
@@ -2205,12 +2205,12 @@ int CMakeProjectVisitor::visit(const GetDirPropertyAst* getdp)
 
 int CMakeProjectVisitor::visit(const SetTestsPropsAst* stp)
 {
-    QMap<QString,QString> props;
+    QHash<QString,QString> props;
     foreach(const SetTestsPropsAst::PropPair& property, stp->properties()) {
         props.insert(property.first, property.second);
     }
 
-    for(QList<Test>::iterator it=m_testSuites.begin(), itEnd=m_testSuites.end(); it!=itEnd; ++it) {
+    for(QVector<Test>::iterator it=m_testSuites.begin(), itEnd=m_testSuites.end(); it!=itEnd; ++it) {
         it->properties = props;
     }
     return 1;

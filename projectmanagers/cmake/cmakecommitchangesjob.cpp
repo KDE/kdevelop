@@ -86,7 +86,7 @@ static bool isCorrectFolder(const KUrl& url, IProject* p)
 }
 
 template <class T>
-static bool textInList(const QList<T>& list, KDevelop::ProjectBaseItem* item)
+static bool textInList(const QVector<T>& list, KDevelop::ProjectBaseItem* item)
 {
     foreach(const T& s, list) {
         if(item->text()==s.name)
@@ -95,7 +95,7 @@ static bool textInList(const QList<T>& list, KDevelop::ProjectBaseItem* item)
     return false;
 }
 
-static QList<KDevelop::ProjectBaseItem*> cleanupBuildFolders(CMakeFolderItem* item, const QList< Subdirectory >& subs)
+static QList<KDevelop::ProjectBaseItem*> cleanupBuildFolders(CMakeFolderItem* item, const QVector<Subdirectory>& subs)
 {
     QList<ProjectBaseItem*> ret;
     QList<KDevelop::ProjectFolderItem*> folders = item->folderList();

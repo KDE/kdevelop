@@ -151,9 +151,9 @@ private:
     void realDirectoryChanged(const QString& dir);
     void deletedWatchedDirectory(KDevelop::IProject* p, const KUrl& dir);
     
-    QMap<KDevelop::IProject*, CMakeProjectData*> m_projectsData;
-    QMap<KDevelop::IProject*, QFileSystemWatcher*> m_watchers;
-    QMap<KUrl, CMakeFolderItem*> m_pending;
+    QHash<KDevelop::IProject*, CMakeProjectData*> m_projectsData;
+    QHash<KDevelop::IProject*, QFileSystemWatcher*> m_watchers;
+    QHash<KUrl, CMakeFolderItem*> m_pending;
     
     QSet<KDevelop::IProject*> m_busyProjects;
     

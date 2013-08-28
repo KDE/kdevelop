@@ -42,6 +42,7 @@ struct ProcessedTarget
     QString outputName;
     QString location;
 };
+Q_DECLARE_TYPEINFO(ProcessedTarget, Q_MOVABLE_TYPE);
 
 class CMakeCommitChangesJob : public KJob
 {
@@ -67,9 +68,9 @@ private:
     void setTargetFiles(KDevelop::ProjectTargetItem* target, const KUrl::List& files);
 
     KUrl m_url;
-    QList<Subdirectory> m_subdirectories;
-    QList<ProcessedTarget> m_targets;
-    QList<Test> m_tests;
+    QVector<Subdirectory> m_subdirectories;
+    QVector<ProcessedTarget> m_targets;
+    QVector<Test> m_tests;
     KDevelop::IProject* m_project;
     CMakeManager* m_manager;
 
