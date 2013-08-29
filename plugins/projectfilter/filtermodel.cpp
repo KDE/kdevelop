@@ -137,7 +137,15 @@ QVariant FilterModel::data(const QModelIndex& index, int role) const
         if (role == Qt::DecorationRole) {
             return QVariant();
         } else if (role == Qt::ToolTipRole) {
-            return i18n("<qt>The wildcard pattern defines whether a file or folder is included in a project or not.</qt>");
+            return i18n(
+                "The wildcard pattern defines whether a file or folder is included in a project or not.<br />"
+                "The pattern is matched case-sensitively either against the items path relative to the project root"
+                " or against the items basename. Relative paths start with a forward slash, trailing slashes of folders are removed.<br />"
+                "To match any path ending on a given pattern e.g., use a filter matching the pattern \"*/foo/bar\" on the relative path."
+            );
+        } else if (role == Qt::EditRole && filter.pattern.isEmpty() && filter.matchOn == Filter::RelativePath) {
+            // a sane default where the user can append to
+            return QString("*/");
         }
         return filter.pattern.pattern();
     } else if (column == Targets) {
@@ -166,7 +174,13 @@ QVariant FilterModel::data(const QModelIndex& index, int role) const
         if (role == Qt::EditRole) {
             return static_cast<int>(filter.matchOn);
         } else if (role == Qt::ToolTipRole) {
-            return i18n("The pattern can be matched either against the basename or the the path relative to the project root.<br />Relative paths start with a forward slash. Trailing slashes are removed.");
+            return i18n(
+                "The pattern can be matched either against the basename or the the path relative to the project root.<br/>"
+                "Relative paths start with a forward slash. Trailing slashes are removed."
+                "In most cases it is sufficient to match against the basename. For more fine grained control use the relative path.<br/>"
+                "To match for example <code>\"foo\"</code> in a folder called <code>\"bar\"</code> anywhere in the project"
+                " use a relative path filter with the pattern <code>\"*/bar/foo\"</code>."
+            );
         }
         if (filter.matchOn == Filter::Basename) {
             return i18n("basename");
