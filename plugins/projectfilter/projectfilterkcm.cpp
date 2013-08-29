@@ -84,6 +84,10 @@ ProjectFilterKCM::ProjectFilterKCM(QWidget* parent, const QVariantList& args)
             SLOT(selectionChanged()));
     connect(this, SIGNAL(changed(bool)), SLOT(selectionChanged()));
     connect(m_model, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(emitChanged()));
+    connect(m_model, SIGNAL(rowsInserted(QModelIndex, int, int)), SLOT(emitChanged()));
+    connect(m_model, SIGNAL(rowsRemoved(QModelIndex, int, int)), SLOT(emitChanged()));
+    connect(m_model, SIGNAL(modelReset()), SLOT(emitChanged()));
+    connect(m_model, SIGNAL(rowsMoved(QModelIndex, int, int, QModelIndex, int)), SLOT(emitChanged()));
 
     connect(m_ui->add, SIGNAL(clicked(bool)), SLOT(add()));
     connect(m_ui->remove, SIGNAL(clicked(bool)), SLOT(remove()));
@@ -108,6 +112,11 @@ void ProjectFilterKCM::load()
     m_model->setFilters(readFilters(project()->projectConfiguration()));
 }
 
+void ProjectFilterKCM::defaults()
+{
+    m_model->setFilters(defaultFilters());
+}
+
 void ProjectFilterKCM::selectionChanged()
 {
     bool hasSelection = m_ui->filters->currentIndex().isValid();
@@ -127,28 +136,24 @@ void ProjectFilterKCM::add()
     const QModelIndex index = m_model->index(m_model->rowCount() - 1, FilterModel::Pattern, QModelIndex());
     m_ui->filters->setCurrentIndex(index);
     m_ui->filters->edit(index);
-    emit changed(true);
 }
 
 void ProjectFilterKCM::remove()
 {
     Q_ASSERT(m_ui->filters->currentIndex().isValid());
     m_model->removeFilter(m_ui->filters->currentIndex().row());
-    emit changed(true);
 }
 
 void ProjectFilterKCM::moveUp()
 {
     Q_ASSERT(m_ui->filters->currentIndex().isValid());
     m_model->moveFilterUp(m_ui->filters->currentIndex().row());
-    emit changed(true);
 }
 
 void ProjectFilterKCM::moveDown()
 {
     Q_ASSERT(m_ui->filters->currentIndex().isValid());
     m_model->moveFilterDown(m_ui->filters->currentIndex().row());
-    emit changed(true);
 }
 
 void ProjectFilterKCM::emitChanged()
