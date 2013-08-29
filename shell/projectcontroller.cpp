@@ -526,6 +526,7 @@ void ProjectController::setupActions()
     action->setText( i18n( "Commit Current Project..." ) );
     action->setIconText( i18n( "Commit..." ) );
     action->setIcon( KIcon("svn-commit") );
+    d->m_core->uiControllerInternal()->area(0, "code")->addAction(action);
 
     KSharedConfig * config = KGlobal::config().data();
 //     KConfigGroup group = config->group( "General Options" );

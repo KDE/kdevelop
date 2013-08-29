@@ -43,6 +43,7 @@ Boston, MA 02110-1301, USA.
 #include <kxmlguifactory.h>
 #include <ktoggleaction.h>
 #include <KWindowSystem>
+#include <KMenuBar>
 
 #include <sublime/area.h>
 #include "shellextension.h"
@@ -54,6 +55,7 @@ Boston, MA 02110-1301, USA.
 #include "workingsetcontroller.h"
 #include "sessioncontroller.h"
 #include "sourceformattercontroller.h"
+#include "areadisplay.h"
 
 #include <interfaces/isession.h>
 #include <interfaces/iprojectcontroller.h>
@@ -70,18 +72,12 @@ void MainWindow::applyMainWindowSettings(const KConfigGroup& config, bool force)
         KXmlGuiWindow::applyMainWindowSettings(config, force);
 }
 
-QWidget* MainWindow::customButtonForAreaSwitcher ( Sublime::Area* area )
-{
-    return Core::self()->workingSetControllerInternal()->createSetManagerWidget(this, area);
-}
-
 MainWindow::MainWindow( Sublime::Controller *parent, Qt::WFlags flags )
         : Sublime::MainWindow( parent, flags )
 {
     QDBusConnection::sessionBus().registerObject( "/kdevelop/MainWindow",
         this, QDBusConnection::ExportScriptableSlots );
 
-    setAreaSwitcherCornerWidget(Core::self()->workingSetControllerInternal()->createSetManagerWidget(this));
     setAcceptDrops( true );
     KConfigGroup cg = KGlobal::config()->group( "UiSettings" );
     int bottomleft = cg.readEntry( "BottomLeftCornerOwner", 0 );
@@ -111,8 +107,7 @@ MainWindow::MainWindow( Sublime::Controller *parent, Qt::WFlags flags )
         setXMLFile( ShellExtension::getInstance() ->xmlFile() );
     }
 
-//    connect(this->guiFactory(), SIGNAL(clientAdded(KXMLGUIClient*)),
-//            d, SLOT(fixToolbar()));
+    menuBar()->setCornerWidget(new AreaDisplay(this), Qt::TopRightCorner);
 }
 
 MainWindow::~ MainWindow()
@@ -203,8 +198,6 @@ void MainWindow::loadSettings()
         setCorner( Qt::BottomRightCorner, Qt::RightDockWidgetArea );
     else if( bottomright == 1 )
         setCorner( Qt::BottomRightCorner, Qt::BottomDockWidgetArea );
-
-    setupAreaSelector();
 
     Sublime::MainWindow::loadSettings();
 }

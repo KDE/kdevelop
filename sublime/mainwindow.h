@@ -70,9 +70,6 @@ public:
        set, to prevent saving a half-broken state.  */
     void enableAreaSettingsSave();
 
-    /** Allows setting an additional widget that will be inserted next to the area-switcher tabs */
-    void setAreaSwitcherCornerWidget(QWidget* widget);
-    
     /** Allows setting an additional widget that will be inserted left to the document tab-bar.
       *  The ownership goes to the target.  */
     void setTabBarLeftCornerWidget(QWidget* widget);
@@ -134,7 +131,6 @@ protected:
     QWidget *statusBarLocation();
     virtual void initializeStatusBar();
 protected Q_SLOTS:
-    virtual void setupAreaSelector();
     virtual void tabContextMenuRequested(Sublime::View*, KMenu*);
     virtual void tabToolTipRequested(Sublime::View* view, Sublime::Container* container, int tab);
     /**Called whenever the user requests a context menu on a dockwidget bar.
@@ -149,12 +145,6 @@ public: // FIXME?
 
     /**Reimplemented to save settings.*/
     virtual bool queryClose();
-
-    /**Reimplement this to add custom buttons into the area switchers. The default-implementation returns zero, which means that no button is added
-      *The returned button is owned by the caller, and deleted at will. */
-    virtual QWidget* customButtonForAreaSwitcher ( Area* area );
-
-    QWidget* areaSwitcher() const;
 
 private:
     

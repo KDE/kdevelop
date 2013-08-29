@@ -31,6 +31,7 @@
 #include <QtGui/QDesktopWidget>
 #include <KDE/KStatusBar>
 #include <KDE/KMenuBar>
+#include <KLocalizedString>
 
 #include "area.h"
 #include "view.h"
@@ -47,16 +48,9 @@ MainWindow::MainWindow(Controller *controller, Qt::WindowFlags flags)
     connect(this, SIGNAL(destroyed()), controller, SLOT(areaReleased()));
 
     loadGeometry(KGlobal::config()->group("Main Window"));
-    d->areaSwitcher = new AreaTabWidget(menuBar());
-    menuBar()->setCornerWidget(d->areaSwitcher, Qt::TopRightCorner);
 
     // don't allow AllowTabbedDocks - that doesn't make sense for "ideal" UI
     setDockOptions(QMainWindow::AnimatedDocks);
-}
-
-QWidget* MainWindow::customButtonForAreaSwitcher ( Area* /*area*/ )
-{
-    return 0;
 }
 
 bool MainWindow::containsView(View* view) const
@@ -74,48 +68,6 @@ QList< Area* > MainWindow::areas() const
         areas = controller()->defaultAreas();
 
     return areas;
-}
-
-void MainWindow::setupAreaSelector() {
-    disconnect(d->areaSwitcher->tabBar, SIGNAL(currentChanged(int)), d, SLOT(toggleArea(int)));
-    
-    d->areaSwitcher->setUpdatesEnabled(false);
-    
-    d->areaSwitcher->tabBar->clearTabs();
-    
-    int currentIndex = -1;
-    
-    QList< Area* > areas = this->areas();
-    
-    QSet<QString> hadAreaName;
-    
-    for(int a = 0; a < areas.size(); ++a) {
-        Area* theArea = areas[a];
-        
-        if(hadAreaName.contains(theArea->objectName()))
-            continue;
-        
-        hadAreaName.insert(theArea->objectName());
-        
-        if(theArea->objectName() == area()->objectName()) {
-            currentIndex = a;
-        }
-        
-        d->areaSwitcher->tabBar->addCustomTab(theArea->title(), KIcon(theArea->iconName()), currentIndex == a, theArea->objectName(), customButtonForAreaSwitcher(theArea));
-    }
-    
-    d->areaSwitcher->tabBar->setCurrentIndex(currentIndex);
-    
-    d->areaSwitcher->updateGeometry();
-    
-    d->areaSwitcher->setUpdatesEnabled(true);
-    
-    connect(d->areaSwitcher->tabBar, SIGNAL(currentChanged(int)), d, SLOT(toggleArea(int)));
-}
-
-QWidget* MainWindow::areaSwitcher() const
-{
-    return d->areaSwitcher;
 }
 
 MainWindow::~MainWindow()
@@ -195,8 +147,6 @@ void MainWindow::setArea(Area *area)
         this, SLOT(aboutToRemoveToolView(Sublime::View*,Sublime::Position)));
     connect(area, SIGNAL(toolViewMoved(Sublime::View*,Sublime::Position)),
         this, SLOT(toolViewMoved(Sublime::View*,Sublime::Position)));
-     connect(area, SIGNAL(changedWorkingSet(Sublime::Area*,QString,QString)),
-        this, SLOT(setupAreaSelector()));
 }
 
 void MainWindow::initializeStatusBar()
@@ -434,11 +384,6 @@ void MainWindow::enableAreaSettingsSave()
 QWidget *MainWindow::statusBarLocation()
 {
     return d->idealController->statusBarLocation();
-}
-
-void MainWindow::setAreaSwitcherCornerWidget(QWidget* widget)
-{
-    d->areaSwitcher->setTabSideWidget(widget);
 }
 
 void MainWindow::setTabBarLeftCornerWidget(QWidget* widget)
