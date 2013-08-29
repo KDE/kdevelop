@@ -24,6 +24,7 @@
 #include <kgenericfactory.h>
 #include <KConfigDialogManager>
 #include <KSettings/Dispatcher>
+#include <KMessageWidget>
 
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
@@ -156,8 +157,34 @@ void ProjectFilterKCM::moveDown()
     m_model->moveFilterDown(m_ui->filters->currentIndex().row());
 }
 
+static void addError(const QString& message, QWidget* parent)
+{
+    KMessageWidget* widget = new KMessageWidget(parent);
+    widget->setMessageType(KMessageWidget::Error);
+    widget->setText(message);
+    parent->layout()->addWidget(widget);
+}
+
 void ProjectFilterKCM::emitChanged()
 {
+    qDeleteAll(m_ui->messages->findChildren<KMessageWidget*>());
+
+    foreach(const Filter& filter, m_model->filters()) {
+        const QString &pattern = filter.pattern.pattern();
+        if (pattern.isEmpty()) {
+            addError(i18n("A filter with an empty pattern will match all items. Use <code>\"*\"</code> to make this explicit."),
+                     m_ui->messages);
+        } else if (filter.matchOn == Filter::Basename && pattern.contains('/')) {
+            addError(i18n("The pattern <code>\"%1\"</code> contains \"/\" and is matched against basenames."
+                          " This will never match.", pattern),
+                     m_ui->messages);
+        } else if (filter.matchOn == Filter::RelativePath && !pattern.startsWith('*') && !pattern.startsWith('/')) {
+            addError(i18n("The pattern <code>\"%1\"</code> does not start with either <code>\"/\"</code> nor"
+                          " <code>\"*\"</code> and is matched against relative paths. This will never match.", pattern),
+                     m_ui->messages);
+        }
+    }
+
     emit changed(true);
 }
 
