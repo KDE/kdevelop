@@ -128,7 +128,28 @@ void TestProjectFilter::match_data()
             {".file", File, Invalid},
             {".folder", Folder, Invalid},
             {"folder/.folder", Folder, Invalid},
-            {"folder/.file", File, Invalid}
+            {"folder/.file", File, Invalid},
+
+            {".git", Folder, Invalid},
+            {"_darcs", Folder, Invalid},
+            {"_svn", Folder, Invalid},
+            {".svn", Folder, Invalid},
+            {"CVS", Folder, Invalid},
+            {"SCCS", Folder, Invalid},
+            {".hg", Folder, Invalid},
+            {".bzr", Folder, Invalid},
+
+            {"foo.o", File, Invalid},
+            {"foo.so", File, Invalid},
+            {"foo.so.1", File, Invalid},
+            {"foo.a", File, Invalid},
+            {"moc_foo.cpp", File, Invalid},
+            {"foo.moc", File, Invalid},
+            {"ui_foo.h", File, Invalid},
+            {"qrc_foo.cpp", File, Invalid},
+            {"foo.cpp~", File, Invalid},
+            {".foo.cpp.kate-swp", File, Invalid},
+            {".foo.cpp.swp", File, Invalid}
         };
         ADD_TESTS("default", project, filter, tests);
     }
@@ -136,7 +157,7 @@ void TestProjectFilter::match_data()
         // test exclude files, basename
         const TestProject project;
         const Filters filters = Filters()
-            << Filter("*.cpp", Filter::Files, Filter::Basename, false);
+            << Filter("*.cpp", Filter::Files, Filter::Basename);
         TestFilter filter(new ProjectFilter(&project, filters));
 
         QTest::newRow("projectRoot") << filter << project.folder() << Folder << Valid;
@@ -159,7 +180,7 @@ void TestProjectFilter::match_data()
         // test excludes on folders
         const TestProject project;
         const Filters filters = Filters()
-            << Filter("foo", Filter::Folders, Filter::Basename, false);
+            << Filter("foo", Filter::Folders, Filter::Basename);
         TestFilter filter(new ProjectFilter(&project, filters));
 
         QTest::newRow("projectRoot") << filter << project.folder() << Folder << Valid;
@@ -182,8 +203,8 @@ void TestProjectFilter::match_data()
         // test includes
         const TestProject project;
         const Filters filters = Filters()
-            << Filter("*", Filter::Files, Filter::Basename, false)
-            << Filter("*.cpp", Filter::Files, Filter::Basename, true);
+            << Filter("*", Filter::Files, Filter::Basename)
+            << Filter("*.cpp", Filter::Files, Filter::Basename, Filter::Inclusive);
         TestFilter filter(new ProjectFilter(&project, filters));
 
         QTest::newRow("projectRoot") << filter << project.folder() << Folder << Valid;
@@ -207,10 +228,10 @@ void TestProjectFilter::match_data()
         // test mixed stuff
         const TestProject project;
         const Filters filters = Filters()
-            << Filter("*", Filter::Files, Filter::Basename, false)
-            << Filter("*.inc", Filter::Files, Filter::Basename, true)
-            << Filter("*ex.inc", Filter::Files, Filter::Basename, false)
-            << Filter("bar", Filter::Folders, Filter::Basename, false);
+            << Filter("*", Filter::Files, Filter::Basename, Filter::Exclusive)
+            << Filter("*.inc", Filter::Files, Filter::Basename, Filter::Inclusive)
+            << Filter("*ex.inc", Filter::Files, Filter::Basename, Filter::Exclusive)
+            << Filter("bar", Filter::Folders, Filter::Basename, Filter::Exclusive);
         TestFilter filter(new ProjectFilter(&project, filters));
 
         QTest::newRow("projectRoot") << filter << project.folder() << Folder << Valid;
@@ -235,7 +256,7 @@ void TestProjectFilter::match_data()
         // relative path
         const TestProject project;
         const Filters filters = Filters()
-            << Filter("/foo/*bar", Filter::Targets(Filter::Files | Filter::Folders), Filter::RelativePath, false);
+            << Filter("/foo/*bar", Filter::Targets(Filter::Files | Filter::Folders), Filter::RelativePath);
         TestFilter filter(new ProjectFilter(&project, filters));
 
         QTest::newRow("projectRoot") << filter << project.folder() << Folder << Valid;

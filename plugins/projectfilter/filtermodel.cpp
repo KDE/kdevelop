@@ -175,11 +175,11 @@ QVariant FilterModel::data(const QModelIndex& index, int role) const
         }
     } else if (column == Inclusive) {
         if (role == Qt::EditRole) {
-            return filter.inclusive;
+            return static_cast<int>(filter.type);
         } else if (role == Qt::ToolTipRole) {
             return i18n("Filters by default exclude items from the project. Inclusive patterns can be used to include items which where matched by previous exclusive patterns.<br />E.g. to only include files ending on <code>\".cpp\"</code> in your project, you could exclude all files via <code>\"*\"</code> and then apply an inclusive <code>\"*.cpp\"</code> pattern.");
         }
-        if (filter.inclusive) {
+        if (filter.type == Filter::Inclusive) {
             if (role == Qt::DecorationRole) {
                 return KIcon("kt-add-filters");
             }
@@ -215,7 +215,7 @@ bool FilterModel::setData(const QModelIndex& index, const QVariant& value, int r
     } else if (column == Targets) {
         filter.targets = static_cast<Filter::Targets>(value.toInt());
     } else if (column == Inclusive) {
-        filter.inclusive = value.toBool();
+        filter.type = static_cast<Filter::Type>(value.toInt());
     }
     dataChanged(index, index);
     return true;

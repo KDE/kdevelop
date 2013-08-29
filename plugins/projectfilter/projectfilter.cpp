@@ -53,22 +53,13 @@ bool ProjectFilter::isValid( const KUrl &url, const bool isFolder ) const
         return true;
     }
 
-    // filter some common files out that probably (hopefully?) noone will ever want to see
+    if (isFolder && url.isLocalFile() && QFile::exists(url.toLocalFile() + "/.kdev_ignore")) {
+        return false;
+    }
+
     const QString& name = url.fileName();
-    // simple equals-matching, fast and efficient and suitable for most cases
-    static const QSet<QString> invalidFolders = QSet<QString>()
-        << ".git" << "CVS" << ".svn" << "_svn"
-        << ".kdev4" << "SCCS" << "_darcs" << ".hg" << ".bzr";
-    if (isFolder && invalidFolders.contains(name)) {
-        return false;
-    } else if (!isFolder && (name.endsWith(".o") || name.endsWith(".a")
-                          || name.startsWith("moc_") || name.endsWith(".moc")
-                          || name.endsWith(".so") || name.contains(".so.")
-                          || name.startsWith(".swp.") || name.endsWith('~')
-                          || (name.startsWith('.') && (name.endsWith(".kate-swp") || name.endsWith(".swp")))))
-    {
-        return false;
-    } else if (isFolder && url.isLocalFile() && QFile::exists(url.toLocalFile() + "/.kdev_ignore")) {
+
+    if (isFolder && name == QLatin1String(".kdev4")) {
         return false;
     }
 
@@ -87,9 +78,9 @@ bool ProjectFilter::isValid( const KUrl &url, const bool isFolder ) const
         } else if (!isFolder && !(filter.targets & Filter::Files)) {
             continue;
         }
-        if ((!isValid && filter.inclusive) || (isValid && !filter.inclusive)) {
+        if ((!isValid && filter.type == Filter::Inclusive) || (isValid && filter.type == Filter::Exclusive)) {
             const bool match = filter.pattern.exactMatch( filter.matchOn == Filter::Basename ? name : relativePath );
-            if (filter.inclusive) {
+            if (filter.type == Filter::Inclusive) {
                 isValid = match;
             } else {
                 isValid = !match;

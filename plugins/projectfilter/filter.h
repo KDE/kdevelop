@@ -31,8 +31,6 @@ namespace KDevelop {
 struct Filter
 {
 public:
-    Filter();
-
     enum Target {
         Files = 1,
         Folders = 2
@@ -43,19 +41,22 @@ public:
         Basename
     };
 
-    Filter(const QString& pattern, Targets targets, MatchOn matchOn, bool inclusive);
+    enum Type {
+        /// Hides matched targets.
+        Exclusive,
+        /// Reverses the match to be inclusive and negates the previously applied exclusive filters.
+        Inclusive
+    };
+
+    Filter();
+    Filter(const QString& pattern, Targets targets, MatchOn matchOn, Type type = Exclusive);
 
     bool operator==(const Filter& other) const;
-
 
     QRegExp pattern;
     Targets targets;
     MatchOn matchOn;
-    /**
-     * If set to true, reverses the match to be inclusive and negates the
-     * previously applied exclusive filters.
-     */
-    bool inclusive;
+    Type type;
 };
 
 typedef QVector<Filter> Filters;
