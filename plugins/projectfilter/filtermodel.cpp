@@ -135,7 +135,7 @@ QVariant FilterModel::data(const QModelIndex& index, int role) const
 
     if (column == Pattern) {
         if (role == Qt::DecorationRole) {
-            return KIcon("view-filter");
+            return QVariant();
         } else if (role == Qt::ToolTipRole) {
             return i18n("<qt>The wildcard pattern defines whether a file or folder is included in a project or not.</qt>");
         }
@@ -181,12 +181,12 @@ QVariant FilterModel::data(const QModelIndex& index, int role) const
         }
         if (filter.type == Filter::Inclusive) {
             if (role == Qt::DecorationRole) {
-                return KIcon("kt-add-filters");
+                return KIcon("list-add");
             }
             return i18n("inclusive");
         } else {
             if (role == Qt::DecorationRole) {
-                return KIcon("kt-remove-filters");
+                return KIcon("list-remove");
             }
             return i18n("exclusive");
         }
