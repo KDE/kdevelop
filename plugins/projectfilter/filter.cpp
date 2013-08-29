@@ -88,8 +88,14 @@ Filters readFilters(const KSharedConfig::Ptr& config)
         return defaultFilters();
     }
     const KConfigGroup& group = config->group("Filters");
+    const int size = group.readEntry("size", 0);
 
-    foreach(const QString& subGroup, group.groupList()) {
+    filters.reserve(size);
+    for (int i = 0; i < size; ++i) {
+        const QByteArray subGroup = QByteArray::number(i);
+        if (!group.hasGroup(subGroup)) {
+            continue;
+        }
         const KConfigGroup& subConfig = group.group(subGroup);
         const QString pattern = subConfig.readEntry("pattern", QString());
         Filter::Targets targets(subConfig.readEntry("targets", 0));
@@ -108,17 +114,14 @@ void writeFilters(const Filters& filters, KSharedConfig::Ptr config)
 
     // write new
     KConfigGroup group = config->group("Filters");
+    group.writeEntry("size", filters.size());
     int i = 0;
     foreach(const Filter& filter, filters) {
-        KConfigGroup subGroup = group.group(QString::number(i++));
+        KConfigGroup subGroup = group.group(QByteArray::number(i++));
         subGroup.writeEntry("pattern", filter.pattern.pattern());
         subGroup.writeEntry("matchOn", static_cast<int>(filter.matchOn));
         subGroup.writeEntry("targets", static_cast<int>(filter.targets));
         subGroup.writeEntry("inclusive", static_cast<int>(filter.type));
-    }
-    if (i == 0) {
-        // to make sure we don't think the filters where not configured yet
-        group.writeEntry("dummy", false);
     }
 }
 
