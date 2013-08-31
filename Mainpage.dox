@@ -7,28 +7,28 @@
  *
  * The libraries available in this KDE module are:
  *
- * - <a href="interfaces/html/index.html"><b>interfaces</b></a>.
+ * - <a href="../interfaces/html/index.html"><b>interfaces</b></a>.
  *   <i>Library with the basic interfaces for the Shell.</i>
  *
- * - <a href="language/html/index.html"><b>language</b></a>.
+ * - <a href="../language/html/index.html"><b>language</b></a>.
  *   <i>Language Interfaces and helper library.</i>
  *
- * - <a href="project/html/index.html"><b>outputview</b></a>.
+ * - <a href="../outputview/html/index.html"><b>outputview</b></a>.
  *   <i>Interface and Library for the Outputview.</i>
  *
- * - <a href="project/html/index.html"><b>project</b></a>.
+ * - <a href="../project/html/index.html"><b>project</b></a>.
  *   <i>Project library and manager interfaces.</i>
  *
- * - <a href="shell/html/index.html"><b>shell</b></a>.
+ * - <a href="../shell/html/index.html"><b>shell</b></a>.
  *   <i>The application shell.</i>
  *
- * - <a href="sublime/html/index.html"><b>sublime</b></a>.
+ * - <a href="../sublime/html/index.html"><b>sublime</b></a>.
  *   <i>Sublime the user interface library.</i>
  *
- * - <a href="util/html/index.html"><b>util</b></a>.
+ * - <a href="../util/html/index.html"><b>util</b></a>.
  *   <i>A library with stuff that doesn't fit elsewhere.</i>
  *
- * - <a href="vcs/html/index.html"><b>vcs</b></a>.
+ * - <a href="../vcs/html/index.html"><b>vcs</b></a>.
  *   <i>Interfaces and support library for Version Control Systems.</i>
  *
  * @b Read about the KDevelop Platform architecture in
