@@ -131,7 +131,6 @@ void RegistersView::TablesManager::addTable(const RegistersView::Table& table)
 
     QString name = m_parent->m_modelsManager->addView(table.tableWidget);
 
-    kDebug() << "Got name: " << name;
     m_tableRegistersAssociation.push_back(TableRegistersAssociation(_table, name));
     changeName(_table, name);
 }

@@ -22,31 +22,65 @@
 
 #include <QStandardItemModel>
 #include <QAbstractItemView>
+#include <QSharedPointer>
 
 #include <KDebug>
 
 namespace GDBDebugger
 {
 
-ModelsManager::ModelsManager(QObject* parent) : QObject(parent), m_controller(0) {}
+struct Model {
+    Model();
+    Model(const QString& name, QSharedPointer<QStandardItemModel> model, QAbstractItemView* view);
+    bool operator==(const Model& m);
+
+    QString name;
+    QSharedPointer<QStandardItemModel> model;
+    QAbstractItemView* view;
+};
+
+class Models
+{
+public:
+    QStandardItemModel* addModel(const Model& m);
+
+    void removeModel(const QString& name);
+
+    void clear();
+
+    bool contains(const QString& name);
+    bool contains(QAbstractItemView* view);
+    bool contains(QStandardItemModel* model);
+
+    QString nameForView(QAbstractItemView* view);
+
+    ///Returns registered model for @p name, 0 if not registered.
+    QStandardItemModel* modelForName(const QString& name);
+    ///Returns registered model for @p view, 0 if not registered.
+    QStandardItemModel* modelForView(QAbstractItemView* view);
+
+private:
+    ///All models
+    QVector<Model> m_models;
+};
+
+ModelsManager::ModelsManager(QObject* parent) : QObject(parent), m_models(new Models), m_controller(0) {}
 
 ModelsManager::~ModelsManager() {}
 
 QString ModelsManager::addView(QAbstractItemView* view)
 {
     kDebug() << "Add view" << view;
-    if (m_models.contains(view)) {
-        kDebug() << "Already here";
-        return m_models.nameForView(view);
+    if (m_models->contains(view)) {
+        return m_models->nameForView(view);
     }
 
     Q_ASSERT(m_controller);
 
     QString name;
     foreach (const QString & group, m_controller->namesOfRegisterGroups()) {
-        if (!m_models.contains(group)) {
-            QStandardItemModel* m = m_models.addModel(Model(group, QSharedPointer<QStandardItemModel>(new QStandardItemModel()), view));
-            kDebug() << "Current model: " << m << "group " << group;
+        if (!m_models->contains(group)) {
+            QStandardItemModel* m = m_models->addModel(Model(group, QSharedPointer<QStandardItemModel>(new QStandardItemModel()), view));
             view->setModel(m);
 
             //FIXME: receive item's flags as parameters.
@@ -59,7 +93,6 @@ QString ModelsManager::addView(QAbstractItemView* view)
         }
     }
 
-    kDebug() << "Returning name" << name;
     return name;
 }
 
@@ -69,13 +102,12 @@ void ModelsManager::removeView(const QString& name)
         return;
     }
 
-    m_models.removeModel(name);
+    m_models->removeModel(name);
 }
 
 void ModelsManager::updateModelForGroup(const RegistersGroup& group)
 {
-    kDebug() << "Updating registers in model for the group: " << group.groupName;
-    QStandardItemModel* model = m_models.modelForName(group.groupName);
+    QStandardItemModel* model = m_models->modelForName(group.groupName);
 
     if (!model) {
         return;
@@ -92,7 +124,6 @@ void ModelsManager::updateModelForGroup(const RegistersGroup& group)
         QStandardItem* n = new QStandardItem(r.name);
         n->setFlags(Qt::ItemIsEnabled);
 
-        kDebug() << r.name << " " << r.value;
         QStandardItem* v = new QStandardItem(r.value);
         if (group.flag || !group.editable) {
             v->setFlags(Qt::ItemIsEnabled);
@@ -111,7 +142,7 @@ void ModelsManager::itemChanged(const QModelIndex& idx)
     QAbstractItemView* view = static_cast<QAbstractItemView*>(sender());
     int row = idx.row();
 
-    QStandardItemModel* model = m_models.modelForView(view);
+    QStandardItemModel* model = m_models->modelForView(view);
 
     QStandardItem* item = model->item(row, 0);
 
@@ -123,13 +154,7 @@ void ModelsManager::itemChanged(const QModelIndex& idx)
 
 QStandardItemModel* Models::addModel(const Model& m)
 {
-    kDebug() << "size: " << m_models.size();
-    foreach (Model m, m_models) {
-        kDebug() << "\nname:" << m.name << " " << m.model << " " << m.view;
-    }
-
     if (!contains(m.name) && !contains(m.view) && !contains(m.model.data())) {
-        kDebug() << "Adding model";
         m_models.append(m);
         return m.model.data();
     }
@@ -206,14 +231,12 @@ void ModelsManager::itemChanged(QStandardItem* i)
     r.name = name->text();
     r.value = i->text();
 
-    kDebug() << "Item changed: " << r.name;
-
     emit registerChanged(r);
 }
 
 QStandardItemModel* ModelsManager::modelForName(const QString& name)
 {
-    return m_models.modelForName(name);
+    return m_models->modelForName(name);
 }
 
 QString Models::nameForView(QAbstractItemView* view)
@@ -230,7 +253,7 @@ void ModelsManager::setController(IRegisterController* rc)
 {
     m_controller = rc;
     if (!m_controller) {
-        m_models.clear();
+        m_models->clear();
     }
 }
 

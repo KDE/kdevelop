@@ -25,7 +25,7 @@
 #include <QVector>
 #include <QString>
 #include <QStringList>
-#include <QSharedPointer>
+#include <QScopedPointer>
 
 #include "registercontroller.h"
 
@@ -36,44 +36,7 @@ class QModelIndex;
 
 namespace GDBDebugger
 {
-
-struct Model {
-    Model();
-    Model(const QString& name, QSharedPointer<QStandardItemModel> model, QAbstractItemView* view);
-    bool operator==(const Model& m);
-
-    QString name;
-    QSharedPointer<QStandardItemModel> model;
-    QAbstractItemView* view;
-};
-
-class Models
-{
-public:
-    QStandardItemModel* addModel(const Model& m);
-
-    void removeModel(const QString& name);
-
-    void clear();
-
-    bool contains(const QString& name);
-
-    bool contains(QAbstractItemView* view);
-
-    bool contains(QStandardItemModel* model);
-
-    QString nameForView(QAbstractItemView* view);
-
-    ///Returns registered model for @p name, 0 if not registered.
-    QStandardItemModel* modelForName(const QString& name);
-
-    ///Returns registered model for @p view, 0 if not registered.
-    QStandardItemModel* modelForView(QAbstractItemView* view);
-
-private:
-    ///All models
-    QVector<Model> m_models;
-};
+class Models;
 
 class ModelsManager : public QObject
 {
@@ -119,7 +82,7 @@ private Q_SLOTS:
     void itemChanged(QStandardItem*);
 
 private:
-    Models m_models;
+    QScopedPointer<Models> m_models;
 
     IRegisterController* m_controller;
 };

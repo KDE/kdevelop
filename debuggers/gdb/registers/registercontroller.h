@@ -82,6 +82,7 @@ public:
     virtual QStringList namesOfRegisterGroups() const = 0;
 
 signals:
+    ///Emits @p group with updated registers.
     void registersChanged(const RegistersGroup& g);
 
 public slots:
@@ -94,11 +95,11 @@ public slots:
 protected:
     IRegisterController(DebugSession* debugSession = 0, QObject* parent = 0);
 
-    ///Returns registers from the @p group, or empty registers group if @p group is invalid. Use it only after @p registersInGroupChanged signal was emitted, otherwise registers won't be up to date.
+    ///Returns registers from the @p group, or empty registers group if @p group is invalid.
     virtual RegistersGroup registersFromGroup(const QString& group, RegistersFormat format = Raw) const = 0;
 
     ///Sets value for @p register from @p group.
-    virtual void  setRegisterValueForGroup(const QString& group, const Register& reg) = 0;
+    virtual void setRegisterValueForGroup(const QString& group, const Register& reg) = 0;
 
     ///Return names of all registers for @p group.
     virtual QStringList registerNamesForGroup(const QString& group) const = 0;
