@@ -55,6 +55,7 @@ ProjectFilterKCM::ProjectFilterKCM(QWidget* parent, const QVariantList& args)
     m_ui->setupUi(w);
     m_ui->filters->setSelectionMode(QAbstractItemView::SingleSelection);
     m_ui->filters->setModel(m_model);
+    m_ui->filters->setRootIsDecorated(false);
     m_ui->filters->header()->setResizeMode(FilterModel::Pattern, QHeaderView::Stretch);
     m_ui->filters->header()->setResizeMode(FilterModel::Targets, QHeaderView::ResizeToContents);
     m_ui->filters->header()->setResizeMode(FilterModel::Inclusive, QHeaderView::ResizeToContents);
