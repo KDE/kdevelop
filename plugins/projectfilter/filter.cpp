@@ -33,7 +33,7 @@ Filter::Filter()
 }
 
 Filter::Filter(const SerializedFilter& filter)
-    : pattern(QString(), Qt::CaseSensitive, QRegExp::Wildcard)
+    : pattern(QString(), Qt::CaseSensitive, QRegExp::WildcardUnix)
     , targets(filter.targets)
     , type(filter.type)
 {

@@ -301,6 +301,27 @@ void TestProjectFilter::match_data()
         };
         ADD_TESTS("trailingslash", project, filter, tests);
     }
+    {
+        // escaping
+        const TestProject project;
+        const Filters filters = Filters()
+            << Filter(SerializedFilter("foo\\*bar", Filter::Files));
+        TestFilter filter(new ProjectFilter(&project, filters));
+
+        QTest::newRow("projectRoot") << filter << project.folder() << Folder << Valid;
+        QTest::newRow("project.kdev4") << filter << project.projectFileUrl() << File << Invalid;
+
+        MatchTest tests[] = {
+            //{path, isFolder, isValid}
+            {".kdev4", Folder, Invalid},
+
+            {"foobar", Folder, Valid},
+            {"fooasdfbar", File, Valid},
+            {"foo*bar", File, Invalid},
+            {"foo/bar", Folder, Valid}
+        };
+        ADD_TESTS("escaping", project, filter, tests);
+    }
 }
 
 #include "test_projectfilter.moc"
