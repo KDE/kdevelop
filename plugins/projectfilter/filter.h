@@ -28,6 +28,13 @@
 
 namespace KDevelop {
 
+struct SerializedFilter;
+
+/**
+ * The Filter is a the class which is used for actual matching against items.
+ *
+ * It "compiles" serialized filters for performance and extracts useful information.
+ */
 struct Filter
 {
 public:
@@ -36,10 +43,6 @@ public:
         Folders = 2
     };
     Q_DECLARE_FLAGS(Targets, Target);
-    enum MatchOn {
-        RelativePath,
-        Basename
-    };
 
     enum Type {
         /// Hides matched targets.
@@ -49,25 +52,45 @@ public:
     };
 
     Filter();
-    Filter(const QString& pattern, Targets targets, MatchOn matchOn, Type type = Exclusive);
+    Filter(const SerializedFilter& filter);
 
-    bool operator==(const Filter& other) const;
+    bool operator==(const Filter& filter) const
+    {
+        return filter.pattern == pattern
+            && filter.targets == targets
+            && filter.type == type;
+    }
 
     QRegExp pattern;
     Targets targets;
-    MatchOn matchOn;
     Type type;
 };
 
 typedef QVector<Filter> Filters;
 
-Filters defaultFilters();
+/**
+ * SerializedFilter is what gets stored on disk in the configuration and represents
+ * the interface which the user can interact with.
+ */
+struct SerializedFilter
+{
+    SerializedFilter();
+    SerializedFilter(const QString& pattern, Filter::Targets targets, Filter::Type type = Filter::Exclusive);
+    QString pattern;
+    Filter::Targets targets;
+    Filter::Type type;
+};
 
-Filters readFilters(const KSharedConfig::Ptr& config);
-void writeFilters(const Filters& filters, KSharedConfig::Ptr config);
+typedef QVector<SerializedFilter> SerializedFilters;
+
+SerializedFilters defaultFilters();
+SerializedFilters readFilters(const KSharedConfig::Ptr& config);
+void writeFilters(const SerializedFilters& filters, KSharedConfig::Ptr config);
+Filters deserialize(const SerializedFilters& filters);
 
 }
 
 Q_DECLARE_TYPEINFO(KDevelop::Filter, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(KDevelop::SerializedFilter, Q_MOVABLE_TYPE);
 
 #endif // FILTER_H

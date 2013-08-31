@@ -56,14 +56,8 @@ ProjectFilterKCM::ProjectFilterKCM(QWidget* parent, const QVariantList& args)
     m_ui->filters->setSelectionMode(QAbstractItemView::SingleSelection);
     m_ui->filters->setModel(m_model);
     m_ui->filters->header()->setResizeMode(FilterModel::Pattern, QHeaderView::Stretch);
-    m_ui->filters->header()->setResizeMode(FilterModel::MatchOn, QHeaderView::ResizeToContents);
     m_ui->filters->header()->setResizeMode(FilterModel::Targets, QHeaderView::ResizeToContents);
     m_ui->filters->header()->setResizeMode(FilterModel::Inclusive, QHeaderView::ResizeToContents);
-    m_ui->filters->setItemDelegateForColumn(FilterModel::MatchOn,
-        new ComboBoxDelegate(QVector<ComboBoxDelegate::Item>()
-                << ComboBoxDelegate::Item(i18n("relative path"), static_cast<int>(Filter::RelativePath))
-                << ComboBoxDelegate::Item(i18n("basename"), static_cast<int>(Filter::Basename))
-            , this));
     m_ui->filters->setItemDelegateForColumn(FilterModel::Targets,
         new ComboBoxDelegate(QVector<ComboBoxDelegate::Item>()
                 << ComboBoxDelegate::Item(i18n("files"), static_cast<int>(Filter::Files))
@@ -173,14 +167,6 @@ void ProjectFilterKCM::emitChanged()
         const QString &pattern = filter.pattern.pattern();
         if (pattern.isEmpty()) {
             addError(i18n("A filter with an empty pattern will match all items. Use <code>\"*\"</code> to make this explicit."),
-                     m_ui->messages);
-        } else if (filter.matchOn == Filter::Basename && pattern.contains('/')) {
-            addError(i18n("The pattern <code>\"%1\"</code> contains \"/\" and is matched against basenames."
-                          " This will never match.", pattern),
-                     m_ui->messages);
-        } else if (filter.matchOn == Filter::RelativePath && !pattern.startsWith('*') && !pattern.startsWith('/')) {
-            addError(i18n("The pattern <code>\"%1\"</code> does not start with either <code>\"/\"</code> nor"
-                          " <code>\"*\"</code> and is matched against relative paths. This will never match.", pattern),
                      m_ui->messages);
         }
     }

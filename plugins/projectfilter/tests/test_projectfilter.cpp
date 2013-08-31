@@ -112,7 +112,7 @@ void TestProjectFilter::match_data()
     {
         // test default filters
         const TestProject project;
-        TestFilter filter(new ProjectFilter(&project, defaultFilters()));
+        TestFilter filter(new ProjectFilter(&project, deserialize(defaultFilters())));
 
         QTest::newRow("projectRoot") << filter << project.folder() << Folder << Valid;
         QTest::newRow("project.kdev4") << filter << project.projectFileUrl() << File << Invalid;
@@ -157,7 +157,7 @@ void TestProjectFilter::match_data()
         // test exclude files, basename
         const TestProject project;
         const Filters filters = Filters()
-            << Filter("*.cpp", Filter::Files, Filter::Basename);
+            << Filter(SerializedFilter("*.cpp", Filter::Files));
         TestFilter filter(new ProjectFilter(&project, filters));
 
         QTest::newRow("projectRoot") << filter << project.folder() << Folder << Valid;
@@ -180,7 +180,7 @@ void TestProjectFilter::match_data()
         // test excludes on folders
         const TestProject project;
         const Filters filters = Filters()
-            << Filter("foo", Filter::Folders, Filter::Basename);
+            << Filter(SerializedFilter("foo", Filter::Folders));
         TestFilter filter(new ProjectFilter(&project, filters));
 
         QTest::newRow("projectRoot") << filter << project.folder() << Folder << Valid;
@@ -203,8 +203,8 @@ void TestProjectFilter::match_data()
         // test includes
         const TestProject project;
         const Filters filters = Filters()
-            << Filter("*", Filter::Files, Filter::Basename)
-            << Filter("*.cpp", Filter::Files, Filter::Basename, Filter::Inclusive);
+            << Filter(SerializedFilter("*", Filter::Files))
+            << Filter(SerializedFilter("*.cpp", Filter::Files, Filter::Inclusive));
         TestFilter filter(new ProjectFilter(&project, filters));
 
         QTest::newRow("projectRoot") << filter << project.folder() << Folder << Valid;
@@ -228,10 +228,10 @@ void TestProjectFilter::match_data()
         // test mixed stuff
         const TestProject project;
         const Filters filters = Filters()
-            << Filter("*", Filter::Files, Filter::Basename, Filter::Exclusive)
-            << Filter("*.inc", Filter::Files, Filter::Basename, Filter::Inclusive)
-            << Filter("*ex.inc", Filter::Files, Filter::Basename, Filter::Exclusive)
-            << Filter("bar", Filter::Folders, Filter::Basename, Filter::Exclusive);
+            << Filter(SerializedFilter("*", Filter::Files, Filter::Exclusive))
+            << Filter(SerializedFilter("*.inc", Filter::Files, Filter::Inclusive))
+            << Filter(SerializedFilter("*ex.inc", Filter::Files, Filter::Exclusive))
+            << Filter(SerializedFilter("bar", Filter::Folders, Filter::Exclusive));
         TestFilter filter(new ProjectFilter(&project, filters));
 
         QTest::newRow("projectRoot") << filter << project.folder() << Folder << Valid;
@@ -256,7 +256,7 @@ void TestProjectFilter::match_data()
         // relative path
         const TestProject project;
         const Filters filters = Filters()
-            << Filter("/foo/*bar", Filter::Targets(Filter::Files | Filter::Folders), Filter::RelativePath);
+            << Filter(SerializedFilter("/foo/*bar", Filter::Targets(Filter::Files | Filter::Folders)));
         TestFilter filter(new ProjectFilter(&project, filters));
 
         QTest::newRow("projectRoot") << filter << project.folder() << Folder << Valid;

@@ -41,12 +41,12 @@ FilterModel::~FilterModel()
 
 }
 
-Filters FilterModel::filters() const
+SerializedFilters FilterModel::filters() const
 {
     return m_filters;
 }
 
-void FilterModel::setFilters(const Filters& filters)
+void FilterModel::setFilters(const SerializedFilters& filters)
 {
     beginResetModel();
     m_filters = filters;
@@ -56,7 +56,7 @@ void FilterModel::setFilters(const Filters& filters)
 void FilterModel::addFilter()
 {
     beginInsertRows(QModelIndex(), m_filters.size(), m_filters.size());
-    m_filters << Filter();
+    m_filters << SerializedFilter();
     endInsertRows();
 }
 
@@ -106,8 +106,6 @@ QVariant FilterModel::headerData(int section, Qt::Orientation orientation, int r
         return i18n("Pattern");
     } else if (section == Targets) {
         return i18n("Targets");
-    } else if (section == MatchOn) {
-        return i18n("Match Against");
     } else if (section == Inclusive) {
         return i18n("Type");
     }
@@ -130,7 +128,7 @@ QVariant FilterModel::data(const QModelIndex& index, int role) const
         return QVariant();
     }
 
-    const Filter& filter = m_filters.at(index.row());
+    const SerializedFilter& filter = m_filters.at(index.row());
     const int column = index.column();
 
     if (column == Pattern) {
@@ -139,15 +137,12 @@ QVariant FilterModel::data(const QModelIndex& index, int role) const
         } else if (role == Qt::ToolTipRole) {
             return i18n(
                 "The wildcard pattern defines whether a file or folder is included in a project or not.<br />"
-                "The pattern is matched case-sensitively either against the items path relative to the project root"
-                " or against the items basename. Relative paths start with a forward slash, trailing slashes of folders are removed.<br />"
-                "To match any path ending on a given pattern e.g., use a filter matching the pattern \"*/foo/bar\" on the relative path."
+                "The pattern is matched case-sensitively against the items relative path to the project root."
+                "The relative path starts with a forward slash, trailing slashes of folders are removed.<br />"
+                "Patterns which do not explicitly start with either <code>\"/\"</code> or <code>\"*\"</code> implicitly get <code>\"*/\"</code> prepended and thus match any item with a relative path ending on the given pattern."
             );
-        } else if (role == Qt::EditRole && filter.pattern.isEmpty() && filter.matchOn == Filter::RelativePath) {
-            // a sane default where the user can append to
-            return QString("*/");
         }
-        return filter.pattern.pattern();
+        return filter.pattern;
     } else if (column == Targets) {
         if (role == Qt::EditRole) {
             return static_cast<int>(filter.targets);
@@ -169,23 +164,6 @@ QVariant FilterModel::data(const QModelIndex& index, int role) const
                 return KIcon("text-plain");
             }
             return i18n("files");
-        }
-    } else if (column == MatchOn) {
-        if (role == Qt::EditRole) {
-            return static_cast<int>(filter.matchOn);
-        } else if (role == Qt::ToolTipRole) {
-            return i18n(
-                "The pattern can be matched either against the basename or the the path relative to the project root.<br/>"
-                "Relative paths start with a forward slash. Trailing slashes are removed."
-                "In most cases it is sufficient to match against the basename. For more fine grained control use the relative path.<br/>"
-                "To match for example <code>\"foo\"</code> in a folder called <code>\"bar\"</code> anywhere in the project"
-                " use a relative path filter with the pattern <code>\"*/bar/foo\"</code>."
-            );
-        }
-        if (filter.matchOn == Filter::Basename) {
-            return i18n("basename");
-        } else {
-            return i18n("relative path");
         }
     } else if (column == Inclusive) {
         if (role == Qt::EditRole) {
@@ -220,12 +198,10 @@ bool FilterModel::setData(const QModelIndex& index, const QVariant& value, int r
     if (role != Qt::EditRole) {
         return false;
     }
-    Filter& filter = m_filters[index.row()];
+    SerializedFilter& filter = m_filters[index.row()];
     const int column = index.column();
     if (column == Pattern) {
-        filter.pattern.setPattern(value.toString());
-    } else if (column == MatchOn) {
-        filter.matchOn = static_cast<Filter::MatchOn>(value.toInt());
+        filter.pattern = value.toString();
     } else if (column == Targets) {
         filter.targets = static_cast<Filter::Targets>(value.toInt());
     } else if (column == Inclusive) {

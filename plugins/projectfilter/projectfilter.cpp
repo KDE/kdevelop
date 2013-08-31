@@ -79,7 +79,7 @@ bool ProjectFilter::isValid( const KUrl &url, const bool isFolder ) const
             continue;
         }
         if ((!isValid && filter.type == Filter::Inclusive) || (isValid && filter.type == Filter::Exclusive)) {
-            const bool match = filter.pattern.exactMatch( filter.matchOn == Filter::Basename ? name : relativePath );
+            const bool match = filter.pattern.exactMatch( relativePath );
             if (filter.type == Filter::Inclusive) {
                 isValid = match;
             } else {

@@ -63,7 +63,7 @@ QSharedPointer<IProjectFilter> ProjectFilterProvider::createFilter(IProject* pro
 void ProjectFilterProvider::updateProjectFilters()
 {
     foreach(IProject* project, core()->projectController()->projects()) {
-        Filters newFilters = readFilters(project->projectConfiguration());
+        Filters newFilters = deserialize(readFilters(project->projectConfiguration()));
         Filters& filters = m_filters[project];
         if (filters != newFilters) {
             projectFilterDebug() << "project filter changed:" << project->name();
@@ -75,7 +75,7 @@ void ProjectFilterProvider::updateProjectFilters()
 
 void ProjectFilterProvider::projectAboutToBeOpened(IProject* project)
 {
-    m_filters[project] = readFilters(project->projectConfiguration());
+    m_filters[project] = deserialize(readFilters(project->projectConfiguration()));
 }
 
 void ProjectFilterProvider::projectClosing(IProject* project)

@@ -36,8 +36,8 @@ public:
     explicit FilterModel(QObject* parent = 0);
     virtual ~FilterModel();
 
-    Filters filters() const;
-    void setFilters(const Filters& filters);
+    SerializedFilters filters() const;
+    void setFilters(const SerializedFilters& filters);
 
     void addFilter();
     void removeFilter(int row);
@@ -55,13 +55,12 @@ public:
     enum Columns {
         Pattern,
         Targets,
-        MatchOn,
         Inclusive,
         NUM_COLUMNS
     };
 
 private:
-    Filters m_filters;
+    SerializedFilters m_filters;
 };
 
 }

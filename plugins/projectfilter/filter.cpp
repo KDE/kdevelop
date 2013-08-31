@@ -27,43 +27,54 @@ using namespace KDevelop;
 
 Filter::Filter()
     : targets(Files | Folders)
-    , matchOn(RelativePath)
     , type(Exclusive)
 {
 
 }
 
-Filter::Filter(const QString& pattern, Filter::Targets targets, Filter::MatchOn matchOn, Type type)
-    : pattern(pattern, Qt::CaseSensitive, QRegExp::Wildcard)
+Filter::Filter(const SerializedFilter& filter)
+    : pattern(QString(), Qt::CaseSensitive, QRegExp::Wildcard)
+    , targets(filter.targets)
+    , type(filter.type)
+{
+    if (filter.pattern.startsWith('/') || filter.pattern.startsWith('*')) {
+        pattern.setPattern(filter.pattern);
+    } else {
+        // implicitly match against trailing relative path
+        pattern.setPattern(QLatin1String("*/") + filter.pattern);
+    }
+}
+
+SerializedFilter::SerializedFilter()
+    : targets(Filter::Files | Filter::Folders)
+    , type(Filter::Exclusive)
+{
+
+}
+
+SerializedFilter::SerializedFilter(const QString& pattern, Filter::Targets targets, Filter::Type type)
+    : pattern(pattern)
     , targets(targets)
-    , matchOn(matchOn)
     , type(type)
 {
 
 }
 
-bool Filter::operator==(const Filter& other) const
-{
-    return pattern == other.pattern
-        && targets == other.targets
-        && type == other.type;
-}
-
 namespace KDevelop {
 
-Filters defaultFilters()
+SerializedFilters defaultFilters()
 {
-    Filters ret;
+    SerializedFilters ret;
 
     // filter hidden files
-    ret << Filter(".*", Filter::Targets(Filter::Files | Filter::Folders), Filter::Basename);
+    ret << SerializedFilter(".*", Filter::Targets(Filter::Files | Filter::Folders));
 
     // common vcs folders which we want to hide
     static const QVector<QString> invalidFolders = QVector<QString>()
         << ".git" << "CVS" << ".svn" << "_svn"
         << "SCCS" << "_darcs" << ".hg" << ".bzr";
     foreach(const QString& folder, invalidFolders) {
-        ret << Filter(folder, Filter::Folders, Filter::Basename);
+        ret << SerializedFilter(folder, Filter::Folders);
     }
 
     // common files which we want to hide
@@ -75,15 +86,15 @@ Filters defaultFilters()
         // backup files
         << "*~" << ".*.kate-swp" << ".*.swp";
     foreach(const QString& filePattern, filePatterns) {
-        ret << Filter(filePattern, Filter::Files, Filter::Basename);
+        ret << SerializedFilter(filePattern, Filter::Files);
     }
 
     return ret;
 }
 
-Filters readFilters(const KSharedConfig::Ptr& config)
+SerializedFilters readFilters(const KSharedConfig::Ptr& config)
 {
-    Filters filters;
+    SerializedFilters filters;
     if (!config->hasGroup("Filters")) {
         return defaultFilters();
     }
@@ -99,15 +110,14 @@ Filters readFilters(const KSharedConfig::Ptr& config)
         const KConfigGroup& subConfig = group.group(subGroup);
         const QString pattern = subConfig.readEntry("pattern", QString());
         Filter::Targets targets(subConfig.readEntry("targets", 0));
-        Filter::MatchOn matchOn = static_cast<Filter::MatchOn>(subConfig.readEntry("matchOn", 0));
         Filter::Type type = static_cast<Filter::Type>(subConfig.readEntry("inclusive", 0));
-        filters << Filter(pattern, targets, matchOn, type);
+        filters << SerializedFilter(pattern, targets, type);
     }
 
     return filters;
 }
 
-void writeFilters(const Filters& filters, KSharedConfig::Ptr config)
+void writeFilters(const SerializedFilters& filters, KSharedConfig::Ptr config)
 {
     // clear existing
     config->deleteGroup("Filters");
@@ -116,13 +126,22 @@ void writeFilters(const Filters& filters, KSharedConfig::Ptr config)
     KConfigGroup group = config->group("Filters");
     group.writeEntry("size", filters.size());
     int i = 0;
-    foreach(const Filter& filter, filters) {
+    foreach(const SerializedFilter& filter, filters) {
         KConfigGroup subGroup = group.group(QByteArray::number(i++));
-        subGroup.writeEntry("pattern", filter.pattern.pattern());
-        subGroup.writeEntry("matchOn", static_cast<int>(filter.matchOn));
+        subGroup.writeEntry("pattern", filter.pattern);
         subGroup.writeEntry("targets", static_cast<int>(filter.targets));
         subGroup.writeEntry("inclusive", static_cast<int>(filter.type));
     }
+}
+
+Filters deserialize(const SerializedFilters& filters)
+{
+    Filters ret;
+    ret.reserve(filters.size());
+    foreach(const SerializedFilter& filter, filters) {
+        ret << Filter(filter);
+    }
+    return ret;
 }
 
 }
