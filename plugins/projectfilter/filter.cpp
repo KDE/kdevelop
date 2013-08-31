@@ -37,12 +37,17 @@ Filter::Filter(const SerializedFilter& filter)
     , targets(filter.targets)
     , type(filter.type)
 {
-    if (filter.pattern.startsWith('/') || filter.pattern.startsWith('*')) {
-        pattern.setPattern(filter.pattern);
-    } else {
+    QString pattern = filter.pattern;
+    if (!filter.pattern.startsWith('/') && !filter.pattern.startsWith('*')) {
         // implicitly match against trailing relative path
-        pattern.setPattern(QLatin1String("*/") + filter.pattern);
+        pattern.prepend(QLatin1String("*/"));
     }
+    if (pattern.endsWith('/') && targets != Filter::Files) {
+        // implicitly match against folders
+        targets = Filter::Folders;
+        pattern.chop(1);
+    }
+    this->pattern.setPattern(pattern);
 }
 
 SerializedFilter::SerializedFilter()

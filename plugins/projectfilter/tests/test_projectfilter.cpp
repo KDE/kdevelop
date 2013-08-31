@@ -279,6 +279,28 @@ void TestProjectFilter::match_data()
         };
         ADD_TESTS("relative", project, filter, tests);
     }
+    {
+        // trailing slash
+        const TestProject project;
+        const Filters filters = Filters()
+            << Filter(SerializedFilter("bar/", Filter::Targets(Filter::Files | Filter::Folders)));
+        TestFilter filter(new ProjectFilter(&project, filters));
+
+        QTest::newRow("projectRoot") << filter << project.folder() << Folder << Valid;
+        QTest::newRow("project.kdev4") << filter << project.projectFileUrl() << File << Invalid;
+
+        MatchTest tests[] = {
+            //{path, isFolder, isValid}
+            {".kdev4", Folder, Invalid},
+
+            {"foo", Folder, Valid},
+            {"bar", File, Valid},
+            {"bar", Folder, Invalid},
+            {"foo/bar", File, Valid},
+            {"foo/bar", Folder, Invalid}
+        };
+        ADD_TESTS("trailingslash", project, filter, tests);
+    }
 }
 
 #include "test_projectfilter.moc"

@@ -169,6 +169,9 @@ void ProjectFilterKCM::emitChanged()
         if (pattern.isEmpty()) {
             addError(i18n("A filter with an empty pattern will match all items. Use <code>\"*\"</code> to make this explicit."),
                      m_ui->messages);
+        } else if (pattern.endsWith('/') && filter.targets == Filter::Files) {
+            addError(i18n("A filter ending on <code>\"/\"</code> can never match a file."),
+                     m_ui->messages);
         }
     }
 
