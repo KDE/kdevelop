@@ -324,4 +324,63 @@ void TestProjectFilter::match_data()
     }
 }
 
+static KUrl::List createUrls(KUrl base, int folderDepth, int foldersPerFolder, int filesPerFolder)
+{
+    KUrl::List urls;
+    base.adjustPath(KUrl::AddTrailingSlash);
+    urls << base;
+
+    for(int i = 0; i < filesPerFolder; ++i) {
+        if (i % 2) {
+            urls << KUrl(base, QString("file%1.cpp").arg(i));
+        } else {
+            urls << KUrl(base, QString("file%1.h").arg(i));
+        }
+    }
+    for(int i = 0; i < foldersPerFolder && folderDepth > 0; ++i) {
+        urls += createUrls(KUrl(base, QString("folder%1").arg(i)), folderDepth - 1, foldersPerFolder, filesPerFolder);
+    }
+    return urls;
+}
+
+void TestProjectFilter::bench()
+{
+    QFETCH(TestFilter, filter);
+    QFETCH(KUrl::List, urls);
+
+    QBENCHMARK {
+        foreach(const KUrl& url, urls) {
+            filter->isValid(url, url.path().endsWith('/'));
+        }
+    }
+}
+
+void TestProjectFilter::bench_data()
+{
+    QTest::addColumn<TestFilter>("filter");
+    QTest::addColumn<KUrl::List>("urls");
+
+    const TestProject project;
+
+    QVector<KUrl::List> urlSets = QVector<KUrl::List>()
+        << createUrls(project.folder(), 3, 5, 10)
+        << createUrls(project.folder(), 3, 5, 20)
+        << createUrls(project.folder(), 4, 5, 10)
+        << createUrls(project.folder(), 3, 10, 10);
+
+    {
+        TestFilter filter(new ProjectFilter(&project, Filters()));
+        foreach(const KUrl::List& urls, urlSets) {
+            QTest::newRow(qstrdup(QByteArray("baseline-") + QByteArray::number(urls.size()))) << filter << urls;
+        }
+    }
+
+    {
+        TestFilter filter(new ProjectFilter(&project, deserialize(defaultFilters())));
+        foreach(const KUrl::List& urls, urlSets) {
+            QTest::newRow(qstrdup(QByteArray("defaults-") + QByteArray::number(urls.size()))) << filter << urls;
+        }
+    }
+}
+
 #include "test_projectfilter.moc"

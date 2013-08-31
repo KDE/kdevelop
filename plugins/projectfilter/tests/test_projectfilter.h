@@ -33,6 +33,9 @@ private slots:
 
     void match();
     void match_data();
+
+    void bench();
+    void bench_data();
 };
 
 #endif // TESTPROJECTFILTER_H
