@@ -57,19 +57,16 @@ bool ProjectFilter::isValid( const KUrl &url, const bool isFolder ) const
         return false;
     }
 
-    const QString& name = url.fileName();
-
-    if (isFolder && name == QLatin1String(".kdev4")) {
-        return false;
-    }
-
     // from here on the user can configure what he wants to see or not.
 
     // we operate on the path of this url relative to the project base
     // by prepending a slash we can filter hidden files with the pattern "*/.*"
-    // by appending a slash to folders we can filter them with "*/"
 
     const QString relativePath = makeRelative(url, isFolder);
+
+    if (isFolder && relativePath.endsWith(QLatin1String("/.kdev4"))) {
+        return false;
+    }
 
     bool isValid = true;
     foreach( const Filter& filter, m_filters ) {
