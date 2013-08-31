@@ -176,7 +176,7 @@ void RegisterController_Arm::handleVFPSRegisters(const QStringList& record)
                 m_registers[r.name] = r.value;
             }
         }
-        emit registersInGroupChanged(enumToString(VFP_single));
+        emit registersChanged(registersFromGroup(enumToString(VFP_single)));
     }
 }
 

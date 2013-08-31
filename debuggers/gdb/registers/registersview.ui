@@ -31,7 +31,7 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QTableWidget" name="registers">
+        <widget class="QTableView" name="registers">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -56,27 +56,10 @@
          <property name="horizontalScrollBarPolicy">
           <enum>Qt::ScrollBarAlwaysOff</enum>
          </property>
-         <property name="rowCount">
-          <number>0</number>
-         </property>
-         <property name="columnCount">
-          <number>2</number>
-         </property>
-         <attribute name="horizontalHeaderVisible">
-          <bool>false</bool>
-         </attribute>
-         <attribute name="verticalHeaderVisible">
-          <bool>false</bool>
-         </attribute>
-         <attribute name="verticalHeaderDefaultSectionSize">
-          <number>15</number>
-         </attribute>
-         <column/>
-         <column/>
         </widget>
        </item>
        <item>
-        <widget class="QTableWidget" name="flags">
+        <widget class="QTableView" name="flags">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -101,23 +84,6 @@
          <property name="horizontalScrollBarPolicy">
           <enum>Qt::ScrollBarAlwaysOff</enum>
          </property>
-         <property name="rowCount">
-          <number>0</number>
-         </property>
-         <property name="columnCount">
-          <number>2</number>
-         </property>
-         <attribute name="horizontalHeaderVisible">
-          <bool>false</bool>
-         </attribute>
-         <attribute name="verticalHeaderVisible">
-          <bool>false</bool>
-         </attribute>
-         <attribute name="verticalHeaderDefaultSectionSize">
-          <number>15</number>
-         </attribute>
-         <column/>
-         <column/>
         </widget>
        </item>
       </layout>
@@ -131,7 +97,7 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QTableWidget" name="table_1">
+        <widget class="QTableView" name="table_1">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -150,20 +116,6 @@
          <property name="horizontalScrollBarPolicy">
           <enum>Qt::ScrollBarAlwaysOff</enum>
          </property>
-         <property name="columnCount">
-          <number>2</number>
-         </property>
-         <attribute name="horizontalHeaderVisible">
-          <bool>false</bool>
-         </attribute>
-         <attribute name="verticalHeaderVisible">
-          <bool>false</bool>
-         </attribute>
-         <attribute name="verticalHeaderDefaultSectionSize">
-          <number>15</number>
-         </attribute>
-         <column/>
-         <column/>
         </widget>
        </item>
       </layout>
@@ -177,7 +129,7 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QTableWidget" name="table_2">
+        <widget class="QTableView" name="table_2">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -196,20 +148,6 @@
          <property name="horizontalScrollBarPolicy">
           <enum>Qt::ScrollBarAlwaysOff</enum>
          </property>
-         <property name="columnCount">
-          <number>2</number>
-         </property>
-         <attribute name="horizontalHeaderVisible">
-          <bool>false</bool>
-         </attribute>
-         <attribute name="verticalHeaderVisible">
-          <bool>false</bool>
-         </attribute>
-         <attribute name="verticalHeaderDefaultSectionSize">
-          <number>15</number>
-         </attribute>
-         <column/>
-         <column/>
         </widget>
        </item>
       </layout>
@@ -223,7 +161,7 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QTableWidget" name="table_3">
+        <widget class="QTableView" name="table_3">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -242,20 +180,6 @@
          <property name="horizontalScrollBarPolicy">
           <enum>Qt::ScrollBarAlwaysOff</enum>
          </property>
-         <property name="columnCount">
-          <number>2</number>
-         </property>
-         <attribute name="horizontalHeaderVisible">
-          <bool>false</bool>
-         </attribute>
-         <attribute name="verticalHeaderVisible">
-          <bool>false</bool>
-         </attribute>
-         <attribute name="verticalHeaderDefaultSectionSize">
-          <number>15</number>
-         </attribute>
-         <column/>
-         <column/>
         </widget>
        </item>
       </layout>

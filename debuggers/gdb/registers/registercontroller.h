@@ -75,30 +75,27 @@ class IRegisterController : public QObject
     Q_OBJECT
 
 public:
-
     ///Sets session @p debugSession to send commands to.
     void setSession(DebugSession* debugSession);
 
     ///There'll be at least 2 groups: "General" and "Flags", also "XMM", "FPU", "Segment" for x86, x86_64 architectures.
     virtual QStringList namesOfRegisterGroups() const = 0;
 
-    ///Returns registers from the @p group, or empty registers group if @p group is invalid. Use it only after @p registersInGroupChanged signal was emitted, otherwise registers won't be up to date.
-    virtual RegistersGroup registersFromGroup(const QString& group, RegistersFormat format = Raw) const = 0;
+signals:
+    void registersChanged(const RegistersGroup& g);
 
 public slots:
-    ///Sends updated register's @p reg value to the debugger.
-    virtual void setRegisterValue(const Register& reg);
-
     ///Updates registers in @p group. If @p group is empty - updates all registers.
     virtual void updateRegisters(const QString& group = QString());
 
-Q_SIGNALS:
-    ///Emitted whenever registers in @p group has changed.
-    void registersInGroupChanged(const QString& group);
+    ///Sends updated register's @p reg value to the debugger.
+    virtual void setRegisterValue(const Register& reg);
 
 protected:
-
     IRegisterController(DebugSession* debugSession = 0, QObject* parent = 0);
+
+    ///Returns registers from the @p group, or empty registers group if @p group is invalid. Use it only after @p registersInGroupChanged signal was emitted, otherwise registers won't be up to date.
+    virtual RegistersGroup registersFromGroup(const QString& group, RegistersFormat format = Raw) const = 0;
 
     ///Sets value for @p register from @p group.
     virtual void  setRegisterValueForGroup(const QString& group, const Register& reg) = 0;
@@ -142,7 +139,6 @@ public:
     virtual ~IRegisterController();
 
 private :
-
     ///Handles initialization of register's names.
     void registerNamesHandler(const GDBMI::ResultRecord& r);
 
@@ -157,7 +153,6 @@ private:
     QStringList m_pendingGroups;
 
 protected:
-
     ///Registers in format: name, value
     QHash<QString, QString > m_registers;
 

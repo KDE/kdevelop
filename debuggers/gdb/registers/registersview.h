@@ -23,7 +23,7 @@
 
 #include "../ui_registersview.h"
 
-#include "registercontroller.h"
+#include "modelsmanager.h"
 
 #include <KConfigGroup>
 
@@ -33,9 +33,7 @@ class QSignalMapper;
 namespace GDBDebugger
 {
 
-struct Register;
-struct RegistersGroup;
-class IRegisterController;
+class ModelsManager;
 
 /** @brief Class for displaying registers content */
 class RegistersView : public QWidget, private Ui::RegistersView
@@ -45,27 +43,27 @@ class RegistersView : public QWidget, private Ui::RegistersView
 public:
     RegistersView(QWidget* p = 0);
 
-    void setController(IRegisterController* controller);
+    void enable(bool enabled);
 
-public slots:
+    void setModel(ModelsManager* m);
 
-    ///Updates registers in table if there is association between a table and the @p group.
-    void registersInGroupChanged(const QString& group);
+signals:
+    void needToUpdateRegisters();
 
 protected:
     ///Allows to choose tables/register formates.
     virtual void contextMenuEvent(QContextMenuEvent* e);
 
+public Q_SLOTS:
+    void nameForViewChanged(const QString& oldName, const QString& newName);
+
 private:
-
-    enum RegisterColumns {RegisterName, RegisterValue};
-
     ///Convenient representation of a table.
     struct Table {
         Table();
-        Table(QTableWidget* tableWidget, int idx);
+        Table(QTableView* tableWidget, int idx);
         bool isNull() const;
-        QTableWidget* tableWidget;
+        QTableView* tableWidget;
         int index;
     };
 
@@ -88,21 +86,19 @@ private:
         void load();
         ///Returns the table associated with the @p group, empty table if there is no association.
         Table tableForGroup(const QString& group) const;
-        ///Creates association between @p group and a table. Returns the table associated with the group, empty table if there is no more free tables, or already exists association for this group
-        Table createTableForGroup(const QString& group);
+
         ///Removes association between @p group and table if any.
         bool removeAssociation(const QString& group);
 
         ///Adds @p table to the list of available tables
         void addTable(const Table& table);
 
-        ///Return names of all associated groups,
-        const QStringList allGroups() const;
-
-        ///@return: number of free tables.
-        int numOfFreeTables() const;
-
         void clearAllAssociations();
+
+        ///Sets new @p name for the @p table.
+        void changeName(const Table& table, const QString& name);
+
+        bool isEmpty();
 
     private:
         ///Sets name for the table @p t in the view.
@@ -113,22 +109,11 @@ private:
         KConfigGroup m_config;
     };
 
-    ///Updates/inserts values from @p registersGroup in table @p table.
-    void updateRegistersInTable(const Table& table, const RegistersGroup& registersGroup);
-
 private slots:
-    ///Called whenever @p item in any table has changed.
-    void registerChangedInternally(QTableWidgetItem* item);
-    ///If @p item is a flag then send updated value, otherwise do nothing.
-    void flagChangedInternally(QTableWidgetItem* item);
     ///Changes register formates to @p format.
     void formatMenuTriggered(int format);
     ///Updates visible tables
     void updateMenuTriggered(void);
-
-signals:
-    ///Emitted whenever register @p reg in a table has changed.
-    void registerChanged(const Register& reg);
 
 private:
     void addItemToFormatSubmenu(QMenu* m, const QString& name, RegistersFormat format);
@@ -136,7 +121,8 @@ private:
     QMenu* m_menu;
     QSignalMapper* m_mapper;
 
-    IRegisterController* m_registerController;
+    ///FIXME: not member at all
+    ModelsManager* m_modelsManager;
     TablesManager m_tablesManager;
     RegistersFormat m_registersFormat;
 

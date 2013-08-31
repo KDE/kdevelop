@@ -24,6 +24,8 @@
 #include "registercontroller_arm.h"
 #include "registersview.h"
 
+#include "modelsmanager.h"
+
 #include "../gdbcommand.h"
 #include "../debugsession.h"
 
@@ -79,9 +81,12 @@ void ArchitectureParser::determineArchitecture(DebugSession* debugSession)
 }
 
 RegistersManager::RegistersManager(QWidget* parent)
-: QObject(parent), m_registersView(new RegistersView(parent)), m_registerController(0), m_architectureParser(new ArchitectureParser(this)), m_debugSession(0), m_currentArchitecture(undefined), m_needToCheckArch(false)
+: QObject(parent), m_registersView(new RegistersView(parent)), m_registerController(0), m_architectureParser(new ArchitectureParser(this)), m_debugSession(0), m_modelsManager(new ModelsManager(this)), m_currentArchitecture(undefined), m_needToCheckArch(false)
 {
     connect(m_architectureParser, SIGNAL(architectureParsed(Architecture)), this, SLOT(architectureParsedSlot(Architecture)));
+
+    m_registersView->setModel(m_modelsManager);
+    m_modelsManager->setController(0);
 }
 
 void RegistersManager::architectureParsedSlot(Architecture arch)
@@ -106,6 +111,7 @@ void RegistersManager::architectureParsedSlot(Architecture arch)
         kDebug() << "Found Arm architecture";
         break;
     default:
+        m_registerController.reset();
         kWarning() << "Unsupported architecture. Registers won't be available.";
         break;
     }
@@ -113,7 +119,15 @@ void RegistersManager::architectureParsedSlot(Architecture arch)
     m_currentArchitecture = arch;
 
     if (m_registerController) {
-        m_registersView->setController(m_registerController.data());
+        m_modelsManager->setController(m_registerController.data());
+
+        m_registersView->enable(true);
+
+        connect(m_modelsManager, SIGNAL(registerChanged(Register)), m_registerController.data(), SLOT(setRegisterValue(Register)));
+
+        connect(m_registerController.data(), SIGNAL(registersChanged(RegistersGroup)), m_modelsManager, SLOT(updateModelForGroup(RegistersGroup)));
+
+        connect(m_registersView, SIGNAL(needToUpdateRegisters()), m_registerController.data(), SLOT(updateRegisters()));
 
         updateRegisters();
     }
@@ -129,7 +143,7 @@ void RegistersManager::setSession(DebugSession* debugSession)
     if (!m_debugSession) {
         kDebug() << "Will reparse arch";
         m_needToCheckArch = true;
-        m_registersView->setController(0);
+        m_registersView->enable(false);
     }
 }
 
@@ -144,7 +158,7 @@ void RegistersManager::updateRegisters()
         m_needToCheckArch = false;
         m_currentArchitecture = undefined;
         if (m_registerController) {
-            m_registersView->setController(0);
+            m_registersView->enable(false);
             m_registerController.reset();
         }
     }

@@ -185,7 +185,7 @@ void RegisterControllerGeneral_x86::handleFPURegisters(const QStringList& record
                 m_registers[r.name] = r.value;
             }
         }
-        emit registersInGroupChanged(enumToString(FPU));
+        emit registersChanged(registersFromGroup(enumToString(FPU)));
     }
 }
 

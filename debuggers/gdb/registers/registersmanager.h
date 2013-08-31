@@ -36,6 +36,7 @@ namespace GDBDebugger
 class RegistersView;
 class IRegisterController;
 class DebugSession;
+class ModelsManager;
 
 namespace
 {
@@ -89,6 +90,8 @@ private:
     ArchitectureParser* m_architectureParser;
 
     DebugSession* m_debugSession;
+
+    ModelsManager* m_modelsManager;
 
     Architecture m_currentArchitecture;
 

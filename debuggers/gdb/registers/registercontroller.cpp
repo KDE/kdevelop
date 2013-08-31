@@ -93,7 +93,7 @@ void IRegisterController::updateRegisterValuesHandler(const GDBMI::ResultRecord&
     kDebug() << "groups to change registers: " << m_pendingGroups;
     foreach (const QString & group, namesOfRegisterGroups()) {
         if (m_pendingGroups.isEmpty() || m_pendingGroups.contains(group)) {
-            emit registersInGroupChanged(group);
+            emit registersChanged(registersFromGroup(group));
         }
     }
     m_pendingGroups.clear();
