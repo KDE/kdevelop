@@ -41,6 +41,8 @@ public:
 
     virtual QSharedPointer<IProjectFilter> createFilter(IProject* project) const;
 
+    virtual ContextMenuExtension contextMenuExtension(Context* context);
+
 signals:
     void filterChanged(KDevelop::IProjectFilterProvider*, KDevelop::IProject*);
 
@@ -48,6 +50,8 @@ private slots:
     void updateProjectFilters();
     void projectClosing(KDevelop::IProject*);
     void projectAboutToBeOpened(KDevelop::IProject*);
+
+    void addFilterFromContextMenu();
 
 private:
     QHash<KDevelop::IProject*, QVector<Filter> > m_filters;

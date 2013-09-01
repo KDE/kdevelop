@@ -443,5 +443,6 @@ Q_DECLARE_METATYPE(KDevelop::ProjectLibraryTargetItem*)
 Q_DECLARE_METATYPE(KDevelop::ProjectExecutableTargetItem*)
 Q_DECLARE_METATYPE(KDevelop::ProjectTargetItem*)
 Q_DECLARE_METATYPE(KDevelop::ProjectBuildFolderItem*)
+Q_DECLARE_METATYPE(QList<KDevelop::ProjectBaseItem*>)
 
 #endif // KDEVPLATFORM_PROJECTMODEL_H

@@ -98,7 +98,6 @@ ProjectFilterKCM::~ProjectFilterKCM()
 void ProjectFilterKCM::save()
 {
     writeFilters(m_model->filters(), project()->projectConfiguration());
-    project()->projectConfiguration()->sync();
 
     KSettings::Dispatcher::reparseConfiguration("kdevprojectfilter");
 }

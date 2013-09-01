@@ -137,6 +137,7 @@ void writeFilters(const SerializedFilters& filters, KSharedConfig::Ptr config)
         subGroup.writeEntry("targets", static_cast<int>(filter.targets));
         subGroup.writeEntry("inclusive", static_cast<int>(filter.type));
     }
+    config->sync();
 }
 
 Filters deserialize(const SerializedFilters& filters)

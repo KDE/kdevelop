@@ -25,12 +25,20 @@
 #include <KPluginFactory>
 #include <KAboutData>
 #include <KSettings/Dispatcher>
+#include <KIcon>
+#include <KMessageBox>
+#include <KParts/MainWindow>
+#include <QAction>
 
 #include <interfaces/iproject.h>
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
+#include <interfaces/context.h>
+#include <interfaces/contextmenuextension.h>
+#include <interfaces/iuicontroller.h>
 
 #include "projectfilterdebug.h"
+#include <project/projectmodel.h>
 
 using namespace KDevelop;
 
@@ -58,6 +66,67 @@ ProjectFilterProvider::ProjectFilterProvider( QObject* parent, const QVariantLis
 QSharedPointer<IProjectFilter> ProjectFilterProvider::createFilter(IProject* project) const
 {
     return QSharedPointer<IProjectFilter>(new ProjectFilter(project, m_filters[project]));
+}
+
+ContextMenuExtension ProjectFilterProvider::contextMenuExtension(Context* context)
+{
+    ContextMenuExtension ret;
+    if (!context->hasType(Context::ProjectItemContext)) {
+        return ret;
+    }
+
+    ProjectItemContext* ctx = static_cast<ProjectItemContext*>( context );
+
+    QList<ProjectBaseItem*> items = ctx->items();
+    // filter out project roots, targets and items in targets
+    QList< ProjectBaseItem* >::iterator it = items.begin();
+    while (it != items.end()) {
+        if ((*it)->isProjectRoot() || (*it)->target() || !(*it)->parent()->folder()) {
+            it = items.erase(it);
+        } else {
+            ++it;
+        }
+    }
+    if (items.isEmpty()) {
+        return ret;
+    }
+
+    QAction* action = new QAction(KIcon("view-filter"),
+                                  i18np("Exclude item from project.",
+                                        "Exclude items from project",
+                                        items.size()), this);
+    action->setData(QVariant::fromValue(items));
+    connect(action, SIGNAL(triggered(bool)), SLOT(addFilterFromContextMenu()));
+    ret.addAction(ContextMenuExtension::FileGroup, action);
+    return ret;
+}
+
+void ProjectFilterProvider::addFilterFromContextMenu()
+{
+    QAction* action = qobject_cast<QAction*>(sender());
+    Q_ASSERT(action);
+    QList<ProjectBaseItem*> items = action->data().value<QList<ProjectBaseItem*> >();
+    QHash<IProject*, SerializedFilters> changedProjectFilters;
+    foreach(ProjectBaseItem* item, items) {
+        if (!changedProjectFilters.contains(item->project())) {
+            changedProjectFilters[item->project()] = readFilters(item->project()->projectConfiguration());
+        }
+        SerializedFilters& filters = changedProjectFilters[item->project()];
+        filters << SerializedFilter('/' + KUrl::relativeUrl(item->project()->folder(), item->url()),
+                                    item->folder() ? Filter::Folders : Filter::Files);
+    }
+    QHash< IProject*, SerializedFilters >::const_iterator it = changedProjectFilters.constBegin();
+    while (it != changedProjectFilters.constEnd()) {
+        writeFilters(it.value(), it.key()->projectConfiguration());
+        m_filters[it.key()] = deserialize(it.value());
+        emit filterChanged(this, it.key());
+        ++it;
+    }
+
+    KMessageBox::information(ICore::self()->uiController()->activeMainWindow(),
+                             i18np("A filter for the item was added. To undo, use the project filter settings.",
+                                   "A filter for the items was added. To undo, use the project filter settings.",
+                                   items.size()), i18n("Project Filter Added"), "projectfilter-addfromctxmenu");
 }
 
 void ProjectFilterProvider::updateProjectFilters()
