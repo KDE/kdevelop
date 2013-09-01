@@ -118,17 +118,10 @@ void RegistersManager::architectureParsedSlot(Architecture arch)
 
     m_currentArchitecture = arch;
 
+    m_modelsManager->setController(m_registerController.data());
+    m_registersView->enable(m_registerController ? true : false);
+
     if (m_registerController) {
-        m_modelsManager->setController(m_registerController.data());
-
-        m_registersView->enable(true);
-
-        connect(m_modelsManager, SIGNAL(registerChanged(Register)), m_registerController.data(), SLOT(setRegisterValue(Register)));
-
-        connect(m_registerController.data(), SIGNAL(registersChanged(RegistersGroup)), m_modelsManager, SLOT(updateModelForGroup(RegistersGroup)));
-
-        connect(m_registersView, SIGNAL(needToUpdateRegisters()), m_registerController.data(), SLOT(updateRegisters()));
-
         updateRegisters();
     }
 }

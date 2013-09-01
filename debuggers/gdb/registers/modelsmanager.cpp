@@ -20,6 +20,8 @@
 
 #include "modelsmanager.h"
 
+#include "registercontroller.h"
+
 #include <QStandardItemModel>
 #include <QAbstractItemView>
 #include <QSharedPointer>
@@ -28,6 +30,60 @@
 
 namespace GDBDebugger
 {
+
+class Converters
+{
+public:
+    static QString formatToString(Format format);
+
+    static Format stringToFormat(const QString& format);
+};
+
+QString Converters::formatToString(Format format)
+{
+    switch (format) {
+    case Binary:
+        return "Binary";
+    case Decimal:
+        return "Decimal";
+    case Hexadecimal:
+        return "Hexadecimal";
+    case Natural:
+        return "Natural";
+    case Octal:
+        return "Octal";
+    case Raw:
+        return "Raw";
+    default:
+        kDebug() << format;
+        Q_ASSERT(0);
+        return QString();
+    }
+}
+
+Format Converters::stringToFormat(const QString& format)
+{
+    Format def = Raw;
+
+    if (formatToString(Binary) == format) {
+        return Binary;
+    }
+    if (formatToString(Octal) == format) {
+        return Octal;
+    }
+    if (formatToString(Decimal) == format) {
+        return Decimal;
+    }
+    if (formatToString(Hexadecimal) == format) {
+        return Hexadecimal;
+    }
+    for (int i = Raw; i < LAST_FORMAT; i++) {
+        if (formatToString(static_cast<Format>(i)) == format) {
+            return static_cast<Format>(i);
+        }
+    }
+    return def;
+}
 
 struct Model {
     Model();
@@ -43,8 +99,6 @@ class Models
 {
 public:
     QStandardItemModel* addModel(const Model& m);
-
-    void removeModel(const QString& name);
 
     void clear();
 
@@ -70,7 +124,6 @@ ModelsManager::~ModelsManager() {}
 
 QString ModelsManager::addView(QAbstractItemView* view)
 {
-    kDebug() << "Add view" << view;
     if (m_models->contains(view)) {
         return m_models->nameForView(view);
     }
@@ -78,17 +131,17 @@ QString ModelsManager::addView(QAbstractItemView* view)
     Q_ASSERT(m_controller);
 
     QString name;
-    foreach (const QString & group, m_controller->namesOfRegisterGroups()) {
-        if (!m_models->contains(group)) {
-            QStandardItemModel* m = m_models->addModel(Model(group, QSharedPointer<QStandardItemModel>(new QStandardItemModel()), view));
+    foreach (const GroupsName & group, m_controller->namesOfRegisterGroups()) {
+        if (!m_models->contains(group.name())) {
+            QStandardItemModel* m = m_models->addModel(Model(group.name(), QSharedPointer<QStandardItemModel>(new QStandardItemModel()), view));
             view->setModel(m);
 
             //FIXME: receive item's flags as parameters.
-            if (group == "Flags") {
+            if (group.name() == "Flags") {
                 connect(view, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(itemChanged(QModelIndex)));
             }
 
-            name = group;
+            name = group.name();
             break;
         }
     }
@@ -96,18 +149,9 @@ QString ModelsManager::addView(QAbstractItemView* view)
     return name;
 }
 
-void ModelsManager::removeView(const QString& name)
-{
-    if (name.isEmpty()) {
-        return;
-    }
-
-    m_models->removeModel(name);
-}
-
 void ModelsManager::updateModelForGroup(const RegistersGroup& group)
 {
-    QStandardItemModel* model = m_models->modelForName(group.groupName);
+    QStandardItemModel* model = m_models->modelForName(group.groupName.name());
 
     if (!model) {
         return;
@@ -159,15 +203,6 @@ QStandardItemModel* Models::addModel(const Model& m)
         return m.model.data();
     }
     return 0;
-}
-
-void Models::removeModel(const QString& name)
-{
-    foreach (const Model & m, m_models) {
-        if (m.name == name) {
-            m_models.remove(m_models.indexOf(m));
-        }
-    }
 }
 
 bool Models::contains(const QString& name)
@@ -234,11 +269,6 @@ void ModelsManager::itemChanged(QStandardItem* i)
     emit registerChanged(r);
 }
 
-QStandardItemModel* ModelsManager::modelForName(const QString& name)
-{
-    return m_models->modelForName(name);
-}
-
 QString Models::nameForView(QAbstractItemView* view)
 {
     foreach (const Model & m, m_models) {
@@ -254,6 +284,10 @@ void ModelsManager::setController(IRegisterController* rc)
     m_controller = rc;
     if (!m_controller) {
         m_models->clear();
+    } else {
+        connect(this, SIGNAL(registerChanged(Register)), m_controller, SLOT(setRegisterValue(Register)));
+
+        connect(m_controller, SIGNAL(registersChanged(RegistersGroup)), this, SLOT(updateModelForGroup(RegistersGroup)));
     }
 }
 
@@ -270,12 +304,48 @@ bool Model::operator==(const Model& m)
 void ModelsManager::updateRegisters(const QString& group)
 {
     Q_ASSERT(m_controller);
-    m_controller->updateRegisters(group);
+    if (group.isEmpty()) {
+        m_controller->updateRegisters(GroupsName());
+    } else {
+        foreach (const GroupsName & g, m_controller->namesOfRegisterGroups()) {
+            if (g.name() == group) {
+                m_controller->updateRegisters(g);
+                break;
+            }
+        }
+    }
 }
 
 void Models::clear()
 {
     m_models.clear();
+}
+
+void ModelsManager::setFormat(const QString& group, const QString& format)
+{
+    foreach (const GroupsName & g, m_controller->namesOfRegisterGroups()) {
+        if (g.name() == group) {
+            m_controller->setFormat(Converters::stringToFormat(format), g);
+            break;
+        }
+    }
+}
+
+QStringList ModelsManager::formats(const QString& group) const
+{
+    QVector<Format> formats; formats << Raw;
+    QStringList l;
+    foreach (const GroupsName & g, m_controller->namesOfRegisterGroups()) {
+        if (g.name() == group) {
+            formats = m_controller->formats(g);
+            break;
+        }
+    }
+
+    foreach (Format fmt, formats) {
+        l << Converters::formatToString(fmt);
+    }
+    return l;
 }
 
 }

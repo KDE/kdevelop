@@ -27,8 +27,6 @@
 #include <QStringList>
 #include <QScopedPointer>
 
-#include "registercontroller.h"
-
 class QAbstractItemView;
 class QStandardItemModel;
 class QStandardItem;
@@ -37,6 +35,9 @@ class QModelIndex;
 namespace GDBDebugger
 {
 class Models;
+class IRegisterController;
+struct Register;
+struct RegistersGroup;
 
 class ModelsManager : public QObject
 {
@@ -48,26 +49,20 @@ public:
     virtual ~ModelsManager();
 
     ///Adds new @p view with @p name, if not yet registered.
+    ///All views removed after debug session ended.
     ///@return: Name of the new view.
     QString addView(QAbstractItemView* view);
-
-    ///Removes existing view with @p name, if any.
-    void removeView(const QString& name);
-
-    QStandardItemModel* modelForName(const QString& name);
 
     void setController(IRegisterController* rc);
 
     ///Sets @p format for the @p group, if format is valid. Does nothing otherwise.
-    void setFormat(const QString& group, RegistersFormat format);//FIXME:
+    void setFormat(const QString& group, const QString& format);
 
-    ///Returns all supported formats for @p group
-    QVector<RegistersFormat> formats(const QString& group) const;;//FIXME:
+    ///Returns all supported formats for @p group. The first one is current.
+    QStringList formats(const QString& group) const;
 
 Q_SIGNALS:
-    ///Emitted whenever name for view changes(e.g. when architecture changes).
-    void nameForViewChanged(const QString& oldName, const QString& newName);
-
+    ///Emitted when a register in a model changed. Updated value should be send to the debugger.
     void registerChanged(const Register&);
 
 public Q_SLOTS:

@@ -40,25 +40,25 @@ public:
 
     RegisterController_Arm(DebugSession* debugSession = 0, QObject* parent = 0);
 
-    virtual QStringList namesOfRegisterGroups() const;
+    virtual QVector<GroupsName> namesOfRegisterGroups() const;
 
 public slots:
-    virtual void updateRegisters(const QString& group = QString());
+    virtual void updateRegisters(const GroupsName& group = GroupsName());
 
 protected:
-    virtual RegistersGroup registersFromGroup(const QString& group, RegistersFormat format = Raw) const;
+    virtual RegistersGroup registersFromGroup(const GroupsName& group) const;
 
-    virtual void convertValuesForGroup(RegistersGroup* registersGroup, RegistersFormat format = Raw) const;
+    virtual void convertValuesForGroup(RegistersGroup* registersGroup) const;
 
-    virtual QStringList registerNamesForGroup(const QString& group) const;
+    virtual QStringList registerNamesForGroup(const GroupsName& group) const;
 
     virtual void updateValuesForRegisters(RegistersGroup* registers) const;
 
-    virtual void setRegisterValueForGroup(const QString& group, const Register& reg);
+    virtual void setRegisterValueForGroup(const GroupsName& group, const Register& reg);
 
     enum ArmRegisterGroups {General, Flags, VFP_single, VFP_double, VFP_quad, LAST_REGISTER};
 
-    QString enumToString(ArmRegisterGroups group) const;
+    GroupsName enumToGroupName(ArmRegisterGroups group) const;
     //None of functions below checks value for validity, if value is invalid updateRegistres() will restore the previous state.
 
     void setVFPS_Register(const Register& reg);

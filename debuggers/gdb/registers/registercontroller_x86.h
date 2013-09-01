@@ -36,31 +36,30 @@ class DebugSession;
 class RegisterControllerGeneral_x86 : public IRegisterController
 {
 public:
-
-    virtual QStringList namesOfRegisterGroups() const;
+    QVector<GroupsName> namesOfRegisterGroups() const;
 
 public slots:
-    virtual void updateRegisters(const QString& group = QString());
+    virtual void updateRegisters(const GroupsName& group = GroupsName());
 
 protected:
     RegisterControllerGeneral_x86(DebugSession* debugSession = 0, QObject* parent = 0);
 
-    virtual RegistersGroup registersFromGroup(const QString& group, RegistersFormat format = Raw) const;
+    virtual RegistersGroup registersFromGroup(const GroupsName& group) const;
 
-    virtual void convertValuesForGroup(RegistersGroup* registersGroup, RegistersFormat format = Raw) const;
+    virtual void convertValuesForGroup(RegistersGroup* registersGroup) const;
 
-    virtual QStringList registerNamesForGroup(const QString& group) const;
+    virtual QStringList registerNamesForGroup(const GroupsName& group) const;
 
     virtual void updateValuesForRegisters(RegistersGroup* registers) const;
 
-    virtual void setRegisterValueForGroup(const QString& group, const Register& reg);
+    virtual void setRegisterValueForGroup(const GroupsName& group, const Register& reg);
 
     //this is a workaround for FPU registers.
     void handleFPURegisters(const QStringList& record);
 
     enum X86RegisterGroups {General, Flags, FPU, XMM, Segment, LAST_REGISTER};
 
-    QString enumToString(X86RegisterGroups group) const;
+    GroupsName enumToGroupName(X86RegisterGroups group) const;
     //None of functions below checks value for validity, if value is invalid updateRegistres() will restore the previous state.
 
     void setFPURegister(const Register& reg);

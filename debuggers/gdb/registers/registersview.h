@@ -54,77 +54,57 @@ protected:
     ///Allows to choose tables/register formates.
     virtual void contextMenuEvent(QContextMenuEvent* e);
 
-public Q_SLOTS:
-    void nameForViewChanged(const QString& oldName, const QString& newName);
-
 private:
+    QString currentView();
+
     ///Convenient representation of a table.
     struct Table {
         Table();
         Table(QTableView* tableWidget, int idx);
-        bool isNull() const;
         QTableView* tableWidget;
-        int index;
+        int index;///unique index on the screen
+        QString name;
     };
 
-    ///Association between @p table and @p registers group.
-    struct TableRegistersAssociation {
-        TableRegistersAssociation();
-        TableRegistersAssociation(const Table& table, const QString& registersGroup);
-        Table table;
-        QString registersGroup;
-    };
-
-    /** @brief Manages associations between tables and register groups.*/
+    /** @brief Tables view manager.*/
     class TablesManager
     {
     public:
-        TablesManager(RegistersView* parent);
+        TablesManager(RegistersView*);
         ~TablesManager();
 
         void save();
         void load();
-        ///Returns the table associated with the @p group, empty table if there is no association.
-        Table tableForGroup(const QString& group) const;
 
-        ///Removes association between @p group and table if any.
-        bool removeAssociation(const QString& group);
-
-        ///Adds @p table to the list of available tables
+        ///Adds @p table to the list of tables with assigning it a name.
         void addTable(const Table& table);
 
-        void clearAllAssociations();
-
-        ///Sets new @p name for the @p table.
-        void changeName(const Table& table, const QString& name);
-
-        bool isEmpty();
+        void clear();
 
     private:
         ///Sets name for the table @p t in the view.
-        void setNameForTable(TableRegistersAssociation& t);
+        void setNameForTable(Table& t, const QString& name);
 
         RegistersView* m_parent;
-        QVector<TableRegistersAssociation> m_tableRegistersAssociation;
+        QVector<Table> m_tables;
         KConfigGroup m_config;
     };
 
 private slots:
     ///Changes register formates to @p format.
-    void formatMenuTriggered(int format);
+    void formatMenuTriggered(const QString& format);
     ///Updates visible tables
     void updateMenuTriggered(void);
 
 private:
-    void addItemToFormatSubmenu(QMenu* m, const QString& name, RegistersFormat format);
+    void addItemToFormatSubmenu(QMenu* m, const QString& format);
+
 private:
     QMenu* m_menu;
     QSignalMapper* m_mapper;
 
-    ///FIXME: not member at all
     ModelsManager* m_modelsManager;
     TablesManager m_tablesManager;
-    RegistersFormat m_registersFormat;
 
     friend class TablesManager;
 };

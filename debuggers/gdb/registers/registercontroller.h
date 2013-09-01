@@ -37,13 +37,35 @@ namespace GDBDebugger
 
 class DebugSession;
 
-enum RegistersFormat {
+class GroupsName
+{
+public:
+    QString name() const {return _name;}
+    int index() const {return _index;}
+
+    bool operator==(const GroupsName& g) const{return _name == g.name();}
+
+    GroupsName():_index(-1){}
+
+private:
+    GroupsName(const QString& name, int idx): _name(name), _index(idx) {}
+
+private:
+    QString _name;
+    int _index; ///Should be unique for each group for current architecture (0, 1...n).
+
+    friend class IRegisterController;
+    friend struct RegistersGroup;
+};
+
+enum Format {
     Binary = 2,
     Octal = 8,
     Decimal = 10,
     Hexadecimal = 16,
     Raw,
-    Natural
+    Natural,
+    LAST_FORMAT
 };
 ///Register in format: @p name, @p value
 struct Register {
@@ -55,9 +77,9 @@ struct Register {
 ///List of @p registers for @p groupName in @p format
 struct RegistersGroup {
     RegistersGroup(): flag(false), editable(true) {}
-    QString groupName;
+    GroupsName groupName;
     QVector<Register> registers;
-    RegistersFormat format; ///<Current format
+    Format format; ///<Current format
     bool flag; ///<true if this group is flags group.
     bool editable; ///<indicates if registers can be edited.
 };
@@ -66,7 +88,7 @@ struct FlagRegister {
     QStringList flags;
     QStringList bits;
     QString registerName;
-    QString groupName;
+    GroupsName groupName;
 };
 
 /** @brief Class for managing registers: it can retrieve, change and send registers back to the debugger.*/
@@ -79,7 +101,13 @@ public:
     void setSession(DebugSession* debugSession);
 
     ///There'll be at least 2 groups: "General" and "Flags", also "XMM", "FPU", "Segment" for x86, x86_64 architectures.
-    virtual QStringList namesOfRegisterGroups() const = 0;
+    virtual QVector<GroupsName> namesOfRegisterGroups() const = 0;
+
+    ///Returns all supported formats for @p group
+    QVector<Format> formats(const GroupsName& group);
+
+    ///Sets current format for the @p group, if format is supported. Does nothing otherwise.
+    void setFormat(Format f, const GroupsName& group);
 
 signals:
     ///Emits @p group with updated registers.
@@ -87,7 +115,7 @@ signals:
 
 public slots:
     ///Updates registers in @p group. If @p group is empty - updates all registers.
-    virtual void updateRegisters(const QString& group = QString());
+    virtual void updateRegisters(const GroupsName& group = GroupsName());
 
     ///Sends updated register's @p reg value to the debugger.
     virtual void setRegisterValue(const Register& reg);
@@ -96,13 +124,13 @@ protected:
     IRegisterController(DebugSession* debugSession = 0, QObject* parent = 0);
 
     ///Returns registers from the @p group, or empty registers group if @p group is invalid.
-    virtual RegistersGroup registersFromGroup(const QString& group, RegistersFormat format = Raw) const = 0;
+    virtual RegistersGroup registersFromGroup(const GroupsName& group) const = 0;
 
     ///Sets value for @p register from @p group.
-    virtual void setRegisterValueForGroup(const QString& group, const Register& reg) = 0;
+    virtual void setRegisterValueForGroup(const GroupsName& group, const Register& reg) = 0;
 
-    ///Return names of all registers for @p group.
-    virtual QStringList registerNamesForGroup(const QString& group) const = 0;
+    ///Returns names of all registers for @p group.
+    virtual QStringList registerNamesForGroup(const GroupsName& group) const = 0;
 
     /**Updates value for each register in the group.
      * @param [out] registers Registers which values should be updated.
@@ -110,13 +138,12 @@ protected:
     virtual void updateValuesForRegisters(RegistersGroup* registers) const;
 
     ///Sets new value for register @p reg, from group @p group.
-    virtual void setGeneralRegister(const Register& reg, const QString& group);
+    virtual void setGeneralRegister(const Register& reg, const GroupsName& group);
 
     /**Converts values for each register in the group.
     * @param [out] registers Registers which values should be converted.
-    * @param format Format used for conversion.
     */
-    virtual void convertValuesForGroup(RegistersGroup* registersGroup, RegistersFormat format = Raw) const;
+    virtual void convertValuesForGroup(RegistersGroup* registersGroup) const;
 
     ///Returns value for the given @p name, empty string if the name is incorrect or there is no registers yet.
     QString registerValue(const QString& name) const;
@@ -131,10 +158,12 @@ protected:
     void updateFlagValues(RegistersGroup* flagsGroup, const FlagRegister& flagRegister) const;
 
     ///Returns group that given register belongs to.
-    QString groupForRegisterName(const QString& name) const;
+    GroupsName groupForRegisterName(const QString& name) const;
 
     ///Initializes registers, that is gets names of all available registers. Returns true is succeed.
     bool initializeRegisters();
+
+    GroupsName createGroupName(const QString& name, int idx) const;
 
 public:
     virtual ~IRegisterController();
@@ -151,11 +180,14 @@ private:
     QVector<QString > m_rawRegisterNames;
 
     ///Groups that should be updated(emitted @p registersInGroupChanged signal), if empty - all.
-    QStringList m_pendingGroups;
+    QVector<GroupsName> m_pendingGroups;
 
 protected:
     ///Registers in format: name, value
     QHash<QString, QString > m_registers;
+
+    ///Supported formats for each register's group. First format is current.
+    QVector<QVector<Format> > m_formats;
 
     ///Current debug session;
     DebugSession* m_debugSession;

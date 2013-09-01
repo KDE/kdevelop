@@ -37,18 +37,18 @@ void IRegisterController::setSession(DebugSession* debugSession)
     m_debugSession = debugSession;
 }
 
-void IRegisterController::updateRegisters(const QString& group)
+void IRegisterController::updateRegisters(const GroupsName& group)
 {
     if (m_pendingGroups.contains(group)) {
-        kDebug() << "Already updating " << group;
+        kDebug() << "Already updating " << group.name();
         return;
     }
 
-    if (group.isEmpty()) {
+    if (group.name().isEmpty()) {
         kDebug() << "Update all";
         m_pendingGroups.clear();
     } else {
-        kDebug() << "Update: " << group << "All groups: " << m_pendingGroups;
+        kDebug() << "Update: " << group.name();
         m_pendingGroups << group;
         if (m_pendingGroups.size() != 1) {
             return;
@@ -90,8 +90,12 @@ void IRegisterController::updateRegisterValuesHandler(const GDBMI::ResultRecord&
         }
     }
 
-    kDebug() << "groups to change registers: " << m_pendingGroups;
-    foreach (const QString & group, namesOfRegisterGroups()) {
+    kDebug() << "groups to change registers: ";
+    foreach (const GroupsName & g, m_pendingGroups) {
+        kDebug() << g.name();
+    }
+
+    foreach (const GroupsName & group, namesOfRegisterGroups()) {
         if (m_pendingGroups.isEmpty() || m_pendingGroups.contains(group)) {
             emit registersChanged(registersFromGroup(group));
         }
@@ -102,8 +106,8 @@ void IRegisterController::updateRegisterValuesHandler(const GDBMI::ResultRecord&
 void IRegisterController::setRegisterValue(const Register& reg)
 {
     if (!m_registers.isEmpty()) {
-        const QString group = groupForRegisterName(reg.name);
-        if (!group.isEmpty()) {
+        const GroupsName group = groupForRegisterName(reg.name);
+        if (!group.name().isEmpty()) {
             setRegisterValueForGroup(group, reg);
         }
     } else {
@@ -133,9 +137,9 @@ bool IRegisterController::initializeRegisters()
     return true;
 }
 
-QString IRegisterController::groupForRegisterName(const QString& name) const
+GroupsName IRegisterController::groupForRegisterName(const QString& name) const
 {
-    foreach (const QString & group, namesOfRegisterGroups()) {
+    foreach (const GroupsName & group, namesOfRegisterGroups()) {
         const QStringList registersInGroup = registerNamesForGroup(group);
         foreach (const QString & n, registersInGroup) {
             if (n == name) {
@@ -143,7 +147,7 @@ QString IRegisterController::groupForRegisterName(const QString& name) const
             }
         }
     }
-    return QString();
+    return GroupsName();
 }
 
 void IRegisterController::updateValuesForRegisters(RegistersGroup* registers) const
@@ -175,7 +179,7 @@ void IRegisterController::setFlagRegister(const Register& reg, const FlagRegiste
     }
 }
 
-void IRegisterController::setGeneralRegister(const Register& reg, const QString& group)
+void IRegisterController::setGeneralRegister(const Register& reg, const GroupsName& group)
 {
     const QString command = QString("set var $%1=%2").arg(reg.name).arg(reg.value);
     kDebug() << "Setting register: " << command;
@@ -188,15 +192,15 @@ void IRegisterController::setGeneralRegister(const Register& reg, const QString&
     }
 }
 
-void IRegisterController::convertValuesForGroup(RegistersGroup* registersGroup, RegistersFormat format) const
+void IRegisterController::convertValuesForGroup(RegistersGroup* registersGroup) const
 {
     bool ok;
     for (int i = 0; i < registersGroup->registers.size(); i++) {
-        const QString converted = QString::number(registersGroup->registers[i].value.toULongLong(&ok, 16), static_cast<int> (format));
+        const QString converted = QString::number(registersGroup->registers[i].value.toULongLong(&ok, 16), static_cast<int> (registersGroup->format));
         if (ok) {
             registersGroup->registers[i].value = converted;
         } else {
-            kDebug() << "Can't convert register value to format: " << format << ' ' << registersGroup->registers[i].name << ' ' << registersGroup->registers[i].value;
+            kDebug() << "Can't convert register value to format: " << registersGroup->format << ' ' << registersGroup->registers[i].name << ' ' << registersGroup->registers[i].value;
         }
     }
 }
@@ -212,6 +216,36 @@ void IRegisterController::updateFlagValues(RegistersGroup* flagsGroup, const Fla
 
     for (int idx = 0; idx < flagRegister.flags.count(); idx++) {
         flagsGroup->registers[idx].value = ((flagsValue >> flagRegister.bits[idx].toInt()) & 1) ? "1" : "0";
+    }
+}
+
+QVector<Format> IRegisterController::formats(const GroupsName& group)
+{
+    int idx = -1;
+    foreach (const GroupsName & g, namesOfRegisterGroups()) {
+        if (g == group) {
+            idx = g.index();
+        }
+    }
+    Q_ASSERT(idx != -1);
+    return m_formats[idx];
+}
+
+GroupsName IRegisterController::createGroupName(const QString& name, int idx) const
+{
+    return GroupsName(name, idx);
+}
+
+void IRegisterController::setFormat(Format f, const GroupsName& group)
+{
+    foreach (const GroupsName & g, namesOfRegisterGroups()) {
+        if (g == group) {
+            int i = m_formats[g.index()].indexOf(f);
+            if (i != -1) {
+                m_formats[g.index()].remove(i);
+                m_formats[g.index()].prepend(f);
+            }
+        }
     }
 }
 

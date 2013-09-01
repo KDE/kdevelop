@@ -38,58 +38,57 @@ FlagRegister RegisterControllerGeneral_x86::m_eflags;
 
 void RegisterControllerGeneral_x86::updateValuesForRegisters(RegistersGroup* registers) const
 {
-    kDebug() << "Updating values for registers: " << registers->groupName;
-    if (registers->groupName == enumToString(Flags)) {
+    kDebug() << "Updating values for registers: " << registers->groupName.name();
+    if (registers->groupName == enumToGroupName(Flags)) {
         updateFlagValues(registers, m_eflags);
     } else {
         IRegisterController::updateValuesForRegisters(registers);
     }
 }
 
-RegistersGroup RegisterControllerGeneral_x86::registersFromGroup(const QString& group, RegistersFormat format) const
+RegistersGroup RegisterControllerGeneral_x86::registersFromGroup(const GroupsName& group) const
 {
     RegistersGroup registers;
 
     registers.groupName = group;
-    registers.editable = (group == enumToString(XMM)) ? false : true;
-    registers.flag = (group == enumToString(Flags)) ? true : false;
+    registers.editable = (group == enumToGroupName(XMM)) ? false : true;
+    registers.flag = (group == enumToGroupName(Flags)) ? true : false;
+    registers.format = m_formats[group.index()].first();
     foreach (const QString & name, registerNamesForGroup(group)) {
         registers.registers.append(Register(name, QString()));
     }
 
     updateValuesForRegisters(&registers);
-    convertValuesForGroup(&registers, format);
+    convertValuesForGroup(&registers);
 
     return registers;
 }
 
-QStringList RegisterControllerGeneral_x86::namesOfRegisterGroups() const
+QVector<GroupsName> RegisterControllerGeneral_x86::namesOfRegisterGroups() const
 {
-    static const QStringList registerGroups = QStringList() << enumToString(General) << enumToString(Flags) << enumToString(FPU) << enumToString(XMM) << enumToString(Segment);
+    static const QVector<GroupsName> registerGroups =  QVector<GroupsName>() << enumToGroupName(General) << enumToGroupName(Flags) << enumToGroupName(FPU) << enumToGroupName(XMM) << enumToGroupName(Segment);
 
     return registerGroups;
 }
 
-void RegisterControllerGeneral_x86::setRegisterValueForGroup(const QString& group, const Register& reg)
+void RegisterControllerGeneral_x86::setRegisterValueForGroup(const GroupsName& group, const Register& reg)
 {
-    if (group == enumToString(General)) {
+    if (group == enumToGroupName(General)) {
         setGeneralRegister(reg, group);
-    } else if (group == enumToString(Flags)) {
+    } else if (group == enumToGroupName(Flags)) {
         setFlagRegister(reg, m_eflags);
-    } else if (group == enumToString(FPU)) {
+    } else if (group == enumToGroupName(FPU)) {
         setFPURegister(reg);
-    } else if (group == enumToString(XMM)) {
+    } else if (group == enumToGroupName(XMM)) {
         setXMMRegister(reg);
-    } else if (group == enumToString(Segment)) {
+    } else if (group == enumToGroupName(Segment)) {
         setSegmentRegister(reg);
-    } else {
-        Q_ASSERT(0);
     }
 }
 
 void RegisterControllerGeneral_x86::setFPURegister(const Register& reg)
 {
-    setGeneralRegister(reg, enumToString(FPU));
+    setGeneralRegister(reg, enumToGroupName(FPU));
 }
 
 void RegisterControllerGeneral_x86::setXMMRegister(const Register& /*reg */)
@@ -100,10 +99,10 @@ void RegisterControllerGeneral_x86::setXMMRegister(const Register& /*reg */)
 
 void RegisterControllerGeneral_x86::setSegmentRegister(const Register& reg)
 {
-    setGeneralRegister(reg, enumToString(Segment));
+    setGeneralRegister(reg, enumToGroupName(Segment));
 }
 
-void RegisterControllerGeneral_x86::updateRegisters(const QString& group)
+void RegisterControllerGeneral_x86::updateRegisters(const GroupsName& group)
 {
     if (!m_debugSession || m_debugSession->stateIsOn(s_dbgNotStarted | s_shuttingDown)) {
         return;
@@ -115,11 +114,11 @@ void RegisterControllerGeneral_x86::updateRegisters(const QString& group)
         }
     }
 
-    if (group != enumToString(FPU)) {
-        if (group.isEmpty()) {
-            QStringList groups = namesOfRegisterGroups();
-            groups.removeOne(enumToString(FPU));
-            foreach (const QString & g, groups) {
+    if (group.name() != enumToGroupName(FPU).name()) {
+        if (group.name().isEmpty()) {
+            QVector<GroupsName> groups = namesOfRegisterGroups();
+            groups.remove(groups.indexOf(enumToGroupName(FPU)));
+            foreach (const GroupsName & g, groups) {
                 IRegisterController::updateRegisters(g);
             }
         } else {
@@ -127,11 +126,11 @@ void RegisterControllerGeneral_x86::updateRegisters(const QString& group)
         }
     }
 
-    if (group == enumToString(FPU) || group.isEmpty()) {
+    if (group == enumToGroupName(FPU) || group.name().isEmpty()) {
         if (m_debugSession && !m_debugSession->stateIsOn(s_dbgNotStarted | s_shuttingDown)) {
 
             QString command = "info all-registers ";
-            foreach (const QString & name, registerNamesForGroup(enumToString(FPU))) {
+            foreach (const QString & name, registerNamesForGroup(enumToGroupName(FPU))) {
                 command += "$" + name + ' ';
             }
             //TODO: use mi interface instead.
@@ -141,19 +140,17 @@ void RegisterControllerGeneral_x86::updateRegisters(const QString& group)
     }
 }
 
-QString RegisterControllerGeneral_x86::enumToString(X86RegisterGroups group) const
+GroupsName RegisterControllerGeneral_x86::enumToGroupName(X86RegisterGroups group) const
 {
-    static const QString groups[LAST_REGISTER] = {i18n("General"), i18n("Flags"), i18n("FPU"), i18n("XMM"), i18n("Segment")};
+    static const GroupsName groups[LAST_REGISTER] = { createGroupName(i18n("General"), General), createGroupName(i18n("Flags"), Flags), createGroupName(i18n("FPU"), FPU), createGroupName(i18n("XMM"), XMM), createGroupName(i18n("Segment"), Segment)};
 
     return groups[group];
 }
 
-void RegisterControllerGeneral_x86::convertValuesForGroup(RegistersGroup* registersGroup, RegistersFormat format) const
+void RegisterControllerGeneral_x86::convertValuesForGroup(RegistersGroup* registersGroup) const
 {
-    if (format != Raw && format != Natural) {
-        if (registersGroup->groupName == enumToString(General) || registersGroup->groupName == enumToString(Segment)) {
-            IRegisterController::convertValuesForGroup(registersGroup, format);
-        }
+    if (registersGroup->format != Raw && registersGroup->format != Natural) {
+        IRegisterController::convertValuesForGroup(registersGroup);
     }
 }
 
@@ -185,7 +182,7 @@ void RegisterControllerGeneral_x86::handleFPURegisters(const QStringList& record
                 m_registers[r.name] = r.value;
             }
         }
-        emit registersChanged(registersFromGroup(enumToString(FPU)));
+        emit registersChanged(registersFromGroup(enumToGroupName(FPU)));
     }
 }
 
@@ -210,6 +207,26 @@ RegisterControllerGeneral_x86::RegisterControllerGeneral_x86(DebugSession* debug
         }
         initRegisterNames();
     }
+
+    int n = 0;
+    while (n++ < namesOfRegisterGroups().size()) {
+        m_formats.append(QVector<Format>());
+    }
+
+    m_formats[General].append(Raw);
+    m_formats[General].append(Binary);
+    m_formats[General].append(Decimal);
+    m_formats[General].append(Hexadecimal);
+    m_formats[General].append(Octal);
+    m_formats[General].append(Natural);
+
+    m_formats[Flags].append(Raw);
+
+    m_formats[FPU].append(Raw);
+
+    m_formats[Segment] = m_formats[General];
+
+    m_formats[XMM].append(Raw);
 }
 
 void RegisterControllerGeneral_x86::initRegisterNames()
@@ -225,7 +242,7 @@ void RegisterControllerGeneral_x86::initRegisterNames()
     m_eflags.flags = m_registerNames[Flags];
     m_eflags.bits << "0" << "2" << "4" << "6" << "7" << "8" << "10" << "11";
     m_eflags.registerName = "eflags";
-    m_eflags.groupName = enumToString(Flags);
+    m_eflags.groupName = enumToGroupName(Flags);
 }
 
 void RegisterController_x86::initRegisterNames()
@@ -248,10 +265,10 @@ void RegisterController_x86_64::initRegisterNames()
     }
 }
 
-QStringList RegisterControllerGeneral_x86::registerNamesForGroup(const QString& group) const
+QStringList RegisterControllerGeneral_x86::registerNamesForGroup(const GroupsName& group) const
 {
     for (int i = 0; i < static_cast<int>(LAST_REGISTER); i++) {
-        if (group == enumToString(static_cast<X86RegisterGroups>(i))) {
+        if (group == enumToGroupName(static_cast<X86RegisterGroups>(i))) {
             return m_registerNames[i];
         }
     }
