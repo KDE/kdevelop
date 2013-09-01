@@ -22,6 +22,7 @@
 #include <project/projectmodel.h>
 #include <QMenu>
 #include <KIcon>
+#include <KMenu>
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/context.h>
@@ -34,12 +35,10 @@ class Populator : public QObject
 {
     Q_OBJECT
 public:
-    Populator(KDevelop::ProjectBaseItem* item, QAction* action, const QPoint& pos, const QString& text, QMenu* parentMenu)
-    : QObject(parentMenu)
-    , m_item(item)
+    Populator(KDevelop::ProjectBaseItem* item, QAction* action, const QPoint& pos, const QString& text)
+    : m_item(item)
     , m_pos(pos)
     , m_text(text)
-    , m_parentMenu(parentMenu)
     {
         connect(action, SIGNAL(destroyed(QObject*)), SLOT(deleteLater()));
         connect(action, SIGNAL(triggered(bool)), SLOT(populate()));
@@ -48,8 +47,9 @@ public:
 public Q_SLOTS:
     void populate()
     {
-        QMenu* menu = new QMenu(m_text, m_parentMenu);
-        menu->addAction(m_text)->setEnabled(false);;
+        KMenu* menu = new KMenu(m_text);
+        connect(menu, SIGNAL(aboutToHide()), menu, SLOT(deleteLater()));
+        menu->addAction(KIcon(m_item->iconName()), m_text)->setEnabled(false);
         ProjectItemContext context(QList< ProjectBaseItem* >() << m_item);
         QList<ContextMenuExtension> extensions = ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( &context );
         ContextMenuExtension::populateMenu(menu, extensions);
@@ -60,7 +60,6 @@ private:
     KDevelop::ProjectBaseItem* m_item;
     QPoint m_pos;
     QString m_text;
-    QMenu* m_parentMenu;
 };
 
 void populateParentItemsMenu( ProjectBaseItem* item, QMenu* menu )
@@ -91,7 +90,7 @@ void populateParentItemsMenu( ProjectBaseItem* item, QMenu* menu )
             QAction* action = menu->addAction(text);
             action->setIcon(KIcon(parent->iconName()));
             // The populator will either spawn a menu when the action is triggered, or it will delete itself
-            new Populator(parent, action, QCursor::pos(), text, menu);
+            new Populator(parent, action, QCursor::pos(), text);
         }
 
         parent = parent->parent();
