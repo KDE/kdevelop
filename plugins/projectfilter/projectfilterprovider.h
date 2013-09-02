@@ -31,7 +31,7 @@
 
 namespace KDevelop {
 
-class ProjectFilterProvider: public IPlugin, IProjectFilterProvider
+class ProjectFilterProvider: public IPlugin, public IProjectFilterProvider
 {
     Q_OBJECT
     Q_INTERFACES( KDevelop::IProjectFilterProvider )
