@@ -26,15 +26,12 @@
 #include <KLocalizedString>
 #include <KIcon>
 
-#include "tests/modeltest.h"
-
 using namespace KDevelop;
 
 FilterModel::FilterModel(QObject* parent)
     : QAbstractTableModel(parent)
     , m_ignoredLastInsert(false)
 {
-    new ModelTest(this, this);
 }
 
 FilterModel::~FilterModel()

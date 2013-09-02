@@ -40,7 +40,6 @@ kde4_add_kcfg_files( projectfilterkcm_SRCS projectfiltersettings.kcfgc )
 kde4_add_plugin( kcm_kdevprojectfilter ${projectfilterkcm_SRCS} )
 target_link_libraries( kcm_kdevprojectfilter
     ${KDE4_KCMUTILS_LIBS} ${KDE4_KDEUI_LIBS}
-    kdevplatformtests
     kdevplatformproject kdevplatformutil kdevplatforminterfaces)
 
 install( TARGETS kcm_kdevprojectfilter DESTINATION ${PLUGIN_INSTALL_DIR} )
