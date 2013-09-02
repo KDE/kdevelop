@@ -47,10 +47,15 @@ public:
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
     virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
 
+    virtual Qt::DropActions supportedDropActions() const;
+    virtual Qt::ItemFlags flags(const QModelIndex& index) const;
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    virtual Qt::ItemFlags flags(const QModelIndex& index) const;
     virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
+    virtual bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex());
+    virtual bool insertRows(int row, int count, const QModelIndex& parent = QModelIndex());
+    virtual QMap< int, QVariant > itemData(const QModelIndex& index) const;
+    virtual bool setItemData(const QModelIndex& index, const QMap< int, QVariant >& roles);
 
     enum Columns {
         Pattern,
@@ -61,6 +66,8 @@ public:
 
 private:
     SerializedFilters m_filters;
+    // workaround a strange behavior in Qt when we try to drop after the last item in the list
+    bool m_ignoredLastInsert;
 };
 
 }

@@ -32,6 +32,7 @@ using namespace KDevelop;
 
 FilterModel::FilterModel(QObject* parent)
     : QAbstractTableModel(parent)
+    , m_ignoredLastInsert(false)
 {
     new ModelTest(this, this);
 }
@@ -196,7 +197,7 @@ bool FilterModel::setData(const QModelIndex& index, const QVariant& value, int r
     Q_ASSERT(!index.parent().isValid());
     Q_ASSERT(index.row() >= 0 && index.row() < m_filters.size());
     Q_ASSERT(index.column() >= 0 && index.column() < NUM_COLUMNS);
-    if (role != Qt::EditRole) {
+    if (role != Qt::EditRole && role != Qt::DisplayRole) {
         return false;
     }
     SerializedFilter& filter = m_filters[index.row()];
@@ -212,13 +213,94 @@ bool FilterModel::setData(const QModelIndex& index, const QVariant& value, int r
     return true;
 }
 
+Qt::DropActions FilterModel::supportedDropActions() const
+{
+    return Qt::MoveAction;
+}
+
 Qt::ItemFlags FilterModel::flags(const QModelIndex& index) const
 {
     Qt::ItemFlags baseFlags = QAbstractTableModel::flags(index);
     if (index.isValid() && !index.parent().isValid()) {
-        return baseFlags | Qt::ItemIsEditable;
+        return baseFlags | Qt::ItemIsEditable | Qt::ItemIsDragEnabled;
     }
-    return baseFlags;
+    return baseFlags | Qt::ItemIsDropEnabled;
+}
+
+bool FilterModel::insertRows(int row, int count, const QModelIndex& parent)
+{
+    Q_ASSERT(!parent.isValid());
+    Q_ASSERT(count == 1);
+    if (row == -1) {
+        // after end of list and we cannot just append either as then the
+        // later setData events will fails...
+        m_ignoredLastInsert = true;
+        return false;
+    }
+    m_ignoredLastInsert = false;
+    Q_ASSERT(row >= 0 && row <= m_filters.size());
+    Q_ASSERT(row + count - 1 <= m_filters.size());
+
+    beginInsertRows(parent, row, row + count - 1);
+    for (int i = 0; i < count; ++i) {
+        m_filters.insert(row + i, SerializedFilter());
+    }
+    endInsertRows();
+    return true;
+}
+
+bool FilterModel::removeRows(int row, int count, const QModelIndex& parent)
+{
+    Q_ASSERT(!parent.isValid());
+    Q_ASSERT(count == 1);
+    Q_ASSERT(row >= 0 && row < m_filters.size());
+    Q_ASSERT(row + count <= m_filters.size());
+
+    if (m_ignoredLastInsert) {
+        return false;
+    }
+
+    beginRemoveRows(parent, row, row + count - 1);
+    m_filters.remove(row, count);
+    endRemoveRows();
+
+    return true;
+}
+
+QMap<int, QVariant> FilterModel::itemData(const QModelIndex& index) const
+{
+    QMap<int, QVariant> ret;
+    if (!index.isValid()) {
+        return ret;
+    }
+    Q_ASSERT(!index.parent().isValid());
+    Q_ASSERT(index.row() >= 0 && index.row() < m_filters.size());
+    const SerializedFilter& filter = m_filters.at(index.row());
+    ret.insert(Qt::UserRole + Pattern, filter.pattern);
+    ret.insert(Qt::UserRole + Inclusive, static_cast<int>(filter.type));
+    ret.insert(Qt::UserRole + Targets, static_cast<int>(filter.targets));
+    return ret;
+}
+
+bool FilterModel::setItemData(const QModelIndex& index, const QMap< int, QVariant >& roles)
+{
+    Q_ASSERT(index.isValid());
+    Q_ASSERT(!index.parent().isValid());
+    Q_ASSERT(index.row() >= 0 && index.row() < m_filters.size());
+    Q_ASSERT(roles.size() == 3);
+    Q_ASSERT(roles.contains(Qt::UserRole + Pattern));
+    Q_ASSERT(roles.contains(Qt::UserRole + Inclusive));
+    Q_ASSERT(roles.contains(Qt::UserRole + Targets));
+
+    if (m_ignoredLastInsert) {
+        return false;
+    }
+
+    SerializedFilter& filter = m_filters[index.row()];
+    filter.pattern = roles[Qt::UserRole + Pattern].toString();
+    filter.type = Filter::Type(roles[Qt::UserRole + Inclusive].toInt());
+    filter.targets = Filter::Targets(roles[Qt::UserRole + Targets].toInt());
+    return true;
 }
 
 #include "filtermodel.moc"

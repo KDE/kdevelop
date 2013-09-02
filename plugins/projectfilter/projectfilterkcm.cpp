@@ -72,6 +72,9 @@ ProjectFilterKCM::ProjectFilterKCM(QWidget* parent, const QVariantList& args)
                 << ComboBoxDelegate::Item(i18n("inclusive"), true)
             , this));
     m_ui->filters->installEventFilter(this);
+    m_ui->filters->setDragEnabled(true);
+    m_ui->filters->setDragDropMode(QAbstractItemView::InternalMove);
+    m_ui->filters->setAutoScroll(true);
     l->addWidget(w);
 
     addConfig( ProjectFilterSettings::self(), w );
