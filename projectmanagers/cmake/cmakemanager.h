@@ -57,6 +57,8 @@ namespace KDevelop
     class ProjectBaseItem;
     class ProjectFileItem;
     class ProjectTargetItem;
+    class ProjectFilterManager;
+    class IProjectFilter;
     class ParseJob;
     class ContextMenuExtension;
     class Context;
@@ -130,6 +132,8 @@ public:
     
     CMakeProjectData projectData(KDevelop::IProject* project);
 
+    KDevelop::ProjectFilterManager* filterManager() const;
+
 signals:
     void folderRenamed(const KUrl& oldFolder, KDevelop::ProjectFolderItem* newFolder);
     void fileRenamed(const KUrl& oldFile, KDevelop::ProjectFileItem* newFile);
@@ -164,6 +168,7 @@ private:
 
     QTimer* m_fileSystemChangeTimer;
     QSet<QString> m_fileSystemChangedBuffer;
+    KDevelop::ProjectFilterManager* const m_filter;
 };
 
 #endif

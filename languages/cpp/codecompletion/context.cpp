@@ -2056,7 +2056,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::getImplementationHelpers
     ret += getImplementationHelpersInternal(m_duContext->scopeIdentifier(true), searchInContext);
 
   if(!CppUtils::isHeader( searchInContext->url().toUrl() )) {
-    KUrl headerUrl = CppUtils::sourceOrHeaderCandidate( searchInContext->url().toUrl(), true );
+    KUrl headerUrl = CppUtils::sourceOrHeaderCandidate( searchInContext->url().toUrl(), false );
     searchInContext = ICore::self()->languageController()->language("C++")->languageSupport()->standardContext(headerUrl);
     if(searchInContext)
       ret += getImplementationHelpersInternal(m_duContext->scopeIdentifier(true), searchInContext);

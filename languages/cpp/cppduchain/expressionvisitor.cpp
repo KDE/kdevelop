@@ -1889,7 +1889,8 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
     MissingDeclarationType::Ptr missing;
     
-    if( declarations.isEmpty()) {
+    Declaration* dec = declarations.isEmpty() ? 0 : declarations.first().data();
+    if( !dec ) {
       missing = oldLastType.cast<Cpp::MissingDeclarationType>();
       if (missing) {
         // Eventually use ADL lookup to find the missing declaration
@@ -1902,7 +1903,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     }else{
       // Eventually use ADL
       if(!m_hadMemberAccess)
-        helper.setFunctionNameForADL(QualifiedIdentifier(declarations.first()->identifier()));
+        helper.setFunctionNameForADL(QualifiedIdentifier(dec->identifier()));
     }
     
     ViableFunction viable;

@@ -51,6 +51,7 @@
 #include <project/projectmodel.h>
 #include <project/helper.h>
 #include <project/interfaces/iprojectbuilder.h>
+#include <project/projectfiltermanager.h>
 #include <language/codecompletion/codecompletion.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/use.h>
@@ -84,6 +85,7 @@ const QString DIALOG_CAPTION = i18n("KDevelop - CMake Support");
 
 CMakeManager::CMakeManager( QObject* parent, const QVariantList& )
     : KDevelop::IPlugin( CMakeSupportFactory::componentData(), parent )
+    , m_filter( new ProjectFilterManager( this ) )
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBuildSystemManager )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
@@ -199,6 +201,7 @@ KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
     connect(w, SIGNAL(fileChanged(QString)), SLOT(dirtyFile(QString)));
     connect(w, SIGNAL(directoryChanged(QString)), SLOT(directoryChanged(QString)));
     m_watchers[project] = w;
+    m_filter->add(project);
     
     KUrl cachefile=CMake::currentBuildDir(project);
     if( cachefile.isEmpty() ) {
@@ -837,6 +840,8 @@ void CMakeManager::projectClosing(IProject* p)
 {
     delete m_projectsData.take(p); 
     delete m_watchers.take(p);
+
+    m_filter->remove(p);
 }
 
 QStringList CMakeManager::processGeneratorExpression(const QStringList& expr, IProject* project, ProjectTargetItem* target) const
@@ -879,4 +884,9 @@ CMakeProjectData CMakeManager::projectData(IProject* project)
         m_projectsData[project] = data;
     }
     return *data;
+}
+
+ProjectFilterManager* CMakeManager::filterManager() const
+{
+    return m_filter;
 }
