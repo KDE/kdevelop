@@ -121,27 +121,12 @@ IProjectFileManager::Features QMakeProjectManager::features() const
     return Features(Folders | Targets | Files);
 }
 
-bool QMakeProjectManager::isValid( const KUrl& url, const bool isFolder, IProject* /*project*/ ) const
+bool QMakeProjectManager::isValid( const KUrl& url, const bool isFolder, IProject* project ) const
 {
-    // TODO: filter setup
-
-    QString name = url.fileName();
-    const QStringList invalidFolders = QStringList() << ".kdev4" << ".svn" << ".git" << "CVS";
-    if (isFolder && invalidFolders.contains( name )) {
+    if (isFolder && url.fileName().startsWith("Makefile") ) {
         return false;
-    } else if (!isFolder && (name.startsWith("Makefile") || name.endsWith(".o")
-                          || name.startsWith("moc_") || name.endsWith(".moc")
-                          || name.endsWith(".so") || name.contains(".so.")
-                          || name.startsWith(".swp.") || name.endsWith('~')
-                          || (name.startsWith('.')
-                                && (name.endsWith(".kate-swp") || name.endsWith(".swp")))))
-    {
-        return false;
-    } else if (isFolder && QFile::exists(url.toLocalFile() + "/.kdev_ignore")) {
-        return false;
-    } else {
-        return true;
     }
+    return AbstractFileManagerPlugin::isValid(url, isFolder, project);
 }
 
 KUrl QMakeProjectManager::buildDirectory(ProjectBaseItem* item) const
