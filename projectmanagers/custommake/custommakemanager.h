@@ -112,7 +112,6 @@ public:
     virtual QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectFolderItem*) const;
 
 protected:
-    virtual bool isValid(const KUrl& url, const bool isFolder, KDevelop::IProject* project) const;
     virtual KDevelop::ProjectFileItem* createFileItem(KDevelop::IProject* project, const KUrl& url, KDevelop::ProjectBaseItem* parent);
     virtual KDevelop::ProjectFolderItem* createFolderItem(KDevelop::IProject* project, const KUrl& url, KDevelop::ProjectBaseItem* parent = 0);
 
