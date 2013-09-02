@@ -20,6 +20,7 @@
 
 #include <QLayout>
 #include <QStandardItemModel>
+#include <QKeyEvent>
 
 #include <kgenericfactory.h>
 #include <KConfigDialogManager>
@@ -70,6 +71,7 @@ ProjectFilterKCM::ProjectFilterKCM(QWidget* parent, const QVariantList& args)
                 << ComboBoxDelegate::Item(i18n("exclusive"), false)
                 << ComboBoxDelegate::Item(i18n("inclusive"), true)
             , this));
+    m_ui->filters->installEventFilter(this);
     l->addWidget(w);
 
     addConfig( ProjectFilterSettings::self(), w );
@@ -110,6 +112,19 @@ void ProjectFilterKCM::load()
 void ProjectFilterKCM::defaults()
 {
     m_model->setFilters(defaultFilters());
+}
+
+bool ProjectFilterKCM::eventFilter(QObject* object, QEvent* event)
+{
+    Q_ASSERT(object == m_ui->filters);
+    if (event->type() == QEvent::KeyRelease) {
+        QKeyEvent* key = static_cast<QKeyEvent*>(event);
+        if (key->key() == Qt::Key_Delete && key->modifiers() == Qt::NoModifier && m_ui->filters->currentIndex().isValid()) {
+            remove();
+            return true;
+        }
+    }
+    return false;
 }
 
 void ProjectFilterKCM::selectionChanged()

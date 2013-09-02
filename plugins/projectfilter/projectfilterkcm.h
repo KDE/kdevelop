@@ -45,6 +45,9 @@ public:
     virtual void load();
     virtual void defaults();
 
+protected:
+    virtual bool eventFilter(QObject* object, QEvent* event);
+
 private slots:
     void add();
     void remove();
