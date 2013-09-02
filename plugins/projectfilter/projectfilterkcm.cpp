@@ -145,7 +145,7 @@ void ProjectFilterKCM::selectionChanged()
 
 void ProjectFilterKCM::add()
 {
-    m_model->addFilter();
+    m_model->insertRows(m_model->rowCount(), 1);
     const QModelIndex index = m_model->index(m_model->rowCount() - 1, FilterModel::Pattern, QModelIndex());
     m_ui->filters->setCurrentIndex(index);
     m_ui->filters->edit(index);
@@ -154,7 +154,7 @@ void ProjectFilterKCM::add()
 void ProjectFilterKCM::remove()
 {
     Q_ASSERT(m_ui->filters->currentIndex().isValid());
-    m_model->removeFilter(m_ui->filters->currentIndex().row());
+    m_model->removeRows(m_ui->filters->currentIndex().row(), 1);
 }
 
 void ProjectFilterKCM::moveUp()

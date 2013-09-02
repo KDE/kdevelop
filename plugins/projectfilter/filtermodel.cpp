@@ -51,20 +51,6 @@ void FilterModel::setFilters(const SerializedFilters& filters)
     endResetModel();
 }
 
-void FilterModel::addFilter()
-{
-    beginInsertRows(QModelIndex(), m_filters.size(), m_filters.size());
-    m_filters << SerializedFilter();
-    endInsertRows();
-}
-
-void FilterModel::removeFilter(int row)
-{
-    beginRemoveRows(QModelIndex(), row, row);
-    m_filters.remove(row);
-    endRemoveRows();
-}
-
 void FilterModel::moveFilterUp(int row)
 {
     beginMoveRows(QModelIndex(), row, row, QModelIndex(), row - 1);

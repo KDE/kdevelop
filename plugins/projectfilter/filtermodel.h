@@ -39,8 +39,6 @@ public:
     SerializedFilters filters() const;
     void setFilters(const SerializedFilters& filters);
 
-    void addFilter();
-    void removeFilter(int row);
     void moveFilterUp(int row);
     void moveFilterDown(int row);
 
