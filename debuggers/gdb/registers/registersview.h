@@ -48,7 +48,7 @@ public:
     void setModel(ModelsManager* m);
 
 signals:
-    void needToUpdateRegisters();
+    void needToUpdateRegisters(const QString&);
 
 protected:
     ///Allows to choose tables/register formates.
@@ -94,7 +94,7 @@ private slots:
     ///Changes register formates to @p format.
     void formatMenuTriggered(const QString& format);
     ///Updates visible tables
-    void updateMenuTriggered(void);
+    void updateMenuTriggered(int idx = -1);
 
 private:
     void addItemToFormatSubmenu(QMenu* m, const QString& format);

@@ -60,6 +60,7 @@ set(kdevgdb_PART_SRCS
     registers/registercontroller_x86.cpp
     registers/registercontroller_arm.cpp
     registers/modelsmanager.cpp
+    registers/converters.cpp
 )
 
 if(KDE4WORKSPACE_FOUND)
@@ -122,6 +123,7 @@ set(gdbtest_PART_SRCS
     registers/registercontroller_x86.cpp
     registers/registercontroller_arm.cpp
     registers/modelsmanager.cpp
+    registers/converters.cpp
 )
 
 if(KDE4WORKSPACE_FOUND)

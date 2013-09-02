@@ -39,7 +39,7 @@ RegistersView::RegistersView(QWidget* p)
 
     connect(m_mapper, SIGNAL(mapped(QString)), this, SLOT(formatMenuTriggered(QString)));
 
-    connect(this, SIGNAL(needToUpdateRegisters()), m_modelsManager, SLOT(updateRegisters()));
+    connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(updateMenuTriggered(int)));
 }
 
 void RegistersView::contextMenuEvent(QContextMenuEvent* e)
@@ -77,9 +77,11 @@ void RegistersView::addItemToFormatSubmenu(QMenu* m, const QString& format)
     connect(a, SIGNAL(triggered()), m_mapper, SLOT(map()));
 }
 
-void RegistersView::updateMenuTriggered(void)
+void RegistersView::updateMenuTriggered(int /*idx*/)
 {
-    emit needToUpdateRegisters();
+    if (!currentView().isEmpty()) {
+        emit needToUpdateRegisters(currentView());
+    }
 }
 
 void RegistersView::formatMenuTriggered(const QString& format)
@@ -174,6 +176,7 @@ void RegistersView::TablesManager::setNameForTable(Table& t, const QString& name
 void RegistersView::setModel(ModelsManager* m)
 {
     m_modelsManager = m;
+    connect(this, SIGNAL(needToUpdateRegisters(QString)), m_modelsManager, SLOT(updateRegisters(QString)));
 }
 
 QString RegistersView::currentView()
@@ -183,6 +186,9 @@ QString RegistersView::currentView()
 
 void RegistersView::TablesManager::clear()
 {
+    foreach(const Table& t, m_tables) {
+        m_parent->tabWidget->setTabText(t.index, "");
+    }
     m_tables.clear();
 }
 

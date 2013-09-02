@@ -64,7 +64,16 @@ enum Format {
     Decimal = 10,
     Hexadecimal = 16,
     Raw,
-    Natural,
+
+    v4_float,
+    v2_double,
+    v4_int32,
+    v2_int64,
+
+    u32,
+    u64,
+    f32,
+    f64,
     LAST_FORMAT
 };
 ///Register in format: @p name, @p value
@@ -76,12 +85,11 @@ struct Register {
 };
 ///List of @p registers for @p groupName in @p format
 struct RegistersGroup {
-    RegistersGroup(): flag(false), editable(true) {}
+    RegistersGroup(): flag(false) {}
     GroupsName groupName;
     QVector<Register> registers;
     Format format; ///<Current format
     bool flag; ///<true if this group is flags group.
-    bool editable; ///<indicates if registers can be edited.
 };
 
 struct FlagRegister {
@@ -165,6 +173,9 @@ protected:
 
     GroupsName createGroupName(const QString& name, int idx) const;
 
+    ///Returns register's number for @p name.
+    QString numberForName(const QString& name) const;
+
 public:
     virtual ~IRegisterController();
 
@@ -176,13 +187,14 @@ private :
     void updateRegisterValuesHandler(const GDBMI::ResultRecord& r);
 
 private:
-    ///Register names as it sees debugger (in format: number, name).
-    QVector<QString > m_rawRegisterNames;
 
     ///Groups that should be updated(emitted @p registersInGroupChanged signal), if empty - all.
     QVector<GroupsName> m_pendingGroups;
 
 protected:
+    ///Register names as it sees debugger (in format: number, name).
+    QVector<QString > m_rawRegisterNames;
+
     ///Registers in format: name, value
     QHash<QString, QString > m_registers;
 

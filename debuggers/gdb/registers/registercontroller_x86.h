@@ -56,6 +56,7 @@ protected:
 
     //this is a workaround for FPU registers.
     void handleFPURegisters(const QStringList& record);
+    void handleXMMRegisters(const GDBMI::ResultRecord& r);
 
     enum X86RegisterGroups {General, Flags, FPU, XMM, Segment, LAST_REGISTER};
 

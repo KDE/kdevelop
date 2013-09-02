@@ -21,6 +21,7 @@
 #include "modelsmanager.h"
 
 #include "registercontroller.h"
+#include "converters.h"
 
 #include <QStandardItemModel>
 #include <QAbstractItemView>
@@ -30,60 +31,6 @@
 
 namespace GDBDebugger
 {
-
-class Converters
-{
-public:
-    static QString formatToString(Format format);
-
-    static Format stringToFormat(const QString& format);
-};
-
-QString Converters::formatToString(Format format)
-{
-    switch (format) {
-    case Binary:
-        return "Binary";
-    case Decimal:
-        return "Decimal";
-    case Hexadecimal:
-        return "Hexadecimal";
-    case Natural:
-        return "Natural";
-    case Octal:
-        return "Octal";
-    case Raw:
-        return "Raw";
-    default:
-        kDebug() << format;
-        Q_ASSERT(0);
-        return QString();
-    }
-}
-
-Format Converters::stringToFormat(const QString& format)
-{
-    Format def = Raw;
-
-    if (formatToString(Binary) == format) {
-        return Binary;
-    }
-    if (formatToString(Octal) == format) {
-        return Octal;
-    }
-    if (formatToString(Decimal) == format) {
-        return Decimal;
-    }
-    if (formatToString(Hexadecimal) == format) {
-        return Hexadecimal;
-    }
-    for (int i = Raw; i < LAST_FORMAT; i++) {
-        if (formatToString(static_cast<Format>(i)) == format) {
-            return static_cast<Format>(i);
-        }
-    }
-    return def;
-}
 
 struct Model {
     Model();
@@ -138,7 +85,8 @@ QString ModelsManager::addView(QAbstractItemView* view)
 
             //FIXME: receive item's flags as parameters.
             if (group.name() == "Flags") {
-                connect(view, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(itemChanged(QModelIndex)));
+                disconnect(view, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(flagChanged(QModelIndex)));
+                connect(view, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(flagChanged(QModelIndex)));
             }
 
             name = group.name();
@@ -160,28 +108,28 @@ void ModelsManager::updateModelForGroup(const RegistersGroup& group)
     disconnect(model, SIGNAL(itemChanged(QStandardItem*)), this, SLOT(itemChanged(QStandardItem*)));
 
     model->setRowCount(group.registers.count());
-    model->setColumnCount(2);
+    model->setColumnCount(group.registers.first().value.split(' ').size() + 1);
 
-    int i = 0;
-
-    foreach (const Register & r, group.registers) {
+    for (int row = 0; row < group.registers.count(); row++) {
+        const Register& r = group.registers[row];
         QStandardItem* n = new QStandardItem(r.name);
         n->setFlags(Qt::ItemIsEnabled);
 
-        QStandardItem* v = new QStandardItem(r.value);
-        if (group.flag || !group.editable) {
-            v->setFlags(Qt::ItemIsEnabled);
+        const QStringList& values = r.value.split(' ');
+        for (int column = 0; column  < values.count(); column ++) {
+            QStandardItem* v = new QStandardItem(values[column]);
+            if (group.flag) {
+                v->setFlags(Qt::ItemIsEnabled);
+            }
+            model->setItem(row, column + 1, v);
         }
-
-        //FIXME; enable more than 2 columns(for XMM e.t.c.)
-        model->setItem(i, 0, n);
-        model->setItem(i++, 1, v);
+        model->setItem(row, 0, n);
     }
 
     connect(model, SIGNAL(itemChanged(QStandardItem*)), this, SLOT(itemChanged(QStandardItem*)));
 }
 
-void ModelsManager::itemChanged(const QModelIndex& idx)
+void ModelsManager::flagChanged(const QModelIndex& idx)
 {
     QAbstractItemView* view = static_cast<QAbstractItemView*>(sender());
     int row = idx.row();
@@ -258,14 +206,15 @@ QStandardItemModel* Models::modelForView(QAbstractItemView* view)
 void ModelsManager::itemChanged(QStandardItem* i)
 {
     QStandardItemModel* model = static_cast<QStandardItemModel*>(sender());
+
     int row = i->row();
 
-    QStandardItem* name = model->item(row, 0);
-
     Register r;
-    r.name = name->text();
-    r.value = i->text();
-
+    r.name = model->item(row, 0)->text();
+    for (int i = 1; i < model->columnCount(); i++) {
+        r.value += model->item(row, i)->text() + ' ';
+    }
+    r.value = r.value.trimmed();
     emit registerChanged(r);
 }
 

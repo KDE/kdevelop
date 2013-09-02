@@ -23,6 +23,7 @@
 #include "../debugsession.h"
 #include "../gdbcommand.h"
 #include "../mi/gdbmi.h"
+#include "converters.h"
 
 #include <qmath.h>
 #include <QRegExp>
@@ -51,7 +52,6 @@ RegistersGroup RegisterControllerGeneral_x86::registersFromGroup(const GroupsNam
     RegistersGroup registers;
 
     registers.groupName = group;
-    registers.editable = (group == enumToGroupName(XMM)) ? false : true;
     registers.flag = (group == enumToGroupName(Flags)) ? true : false;
     registers.format = m_formats[group.index()].first();
     foreach (const QString & name, registerNamesForGroup(group)) {
@@ -91,10 +91,16 @@ void RegisterControllerGeneral_x86::setFPURegister(const Register& reg)
     setGeneralRegister(reg, enumToGroupName(FPU));
 }
 
-void RegisterControllerGeneral_x86::setXMMRegister(const Register& /*reg */)
+void RegisterControllerGeneral_x86::setXMMRegister(const Register& reg)
 {
-    //FIXME:
-    //setGeneralRegister ( reg, enumToString ( XMM ) );
+    Register r = reg;
+    r.value = r.value.trimmed();
+    r.value.replace(' ', ',');
+    r.value.append('}');
+    r.value.prepend('{');
+    r.name += '.' + Converters::formatToString(m_formats[XMM].first());
+
+    setGeneralRegister(r, enumToGroupName(XMM));
 }
 
 void RegisterControllerGeneral_x86::setSegmentRegister(const Register& reg)
@@ -114,10 +120,11 @@ void RegisterControllerGeneral_x86::updateRegisters(const GroupsName& group)
         }
     }
 
-    if (group.name() != enumToGroupName(FPU).name()) {
+    if (group.name() != enumToGroupName(FPU).name() && group.name() != enumToGroupName(XMM).name()) {
         if (group.name().isEmpty()) {
             QVector<GroupsName> groups = namesOfRegisterGroups();
             groups.remove(groups.indexOf(enumToGroupName(FPU)));
+            groups.remove(groups.indexOf(enumToGroupName(XMM)));
             foreach (const GroupsName & g, groups) {
                 IRegisterController::updateRegisters(g);
             }
@@ -138,6 +145,19 @@ void RegisterControllerGeneral_x86::updateRegisters(const GroupsName& group)
                 new CliCommand(GDBMI::NonMI, command, this, &RegisterControllerGeneral_x86::handleFPURegisters));
         }
     }
+
+    if (group == enumToGroupName(XMM) || group.name().isEmpty()) {
+        if (m_debugSession && !m_debugSession->stateIsOn(s_dbgNotStarted | s_shuttingDown)) {
+
+            QString registers;
+            foreach (const QString & name, registerNamesForGroup(enumToGroupName(XMM))) {
+                registers += numberForName(name) + ' ';
+            }
+
+            m_debugSession->addCommand(
+                new GDBCommand(GDBMI::DataListRegisterValues, "N " + registers, this, &RegisterControllerGeneral_x86::handleXMMRegisters));
+        }
+    }
 }
 
 GroupsName RegisterControllerGeneral_x86::enumToGroupName(X86RegisterGroups group) const
@@ -149,7 +169,7 @@ GroupsName RegisterControllerGeneral_x86::enumToGroupName(X86RegisterGroups grou
 
 void RegisterControllerGeneral_x86::convertValuesForGroup(RegistersGroup* registersGroup) const
 {
-    if (registersGroup->format != Raw && registersGroup->format != Natural) {
+    if (registersGroup->format != Raw) {
         IRegisterController::convertValuesForGroup(registersGroup);
     }
 }
@@ -218,7 +238,6 @@ RegisterControllerGeneral_x86::RegisterControllerGeneral_x86(DebugSession* debug
     m_formats[General].append(Decimal);
     m_formats[General].append(Hexadecimal);
     m_formats[General].append(Octal);
-    m_formats[General].append(Natural);
 
     m_formats[Flags].append(Raw);
 
@@ -226,7 +245,10 @@ RegisterControllerGeneral_x86::RegisterControllerGeneral_x86(DebugSession* debug
 
     m_formats[Segment] = m_formats[General];
 
-    m_formats[XMM].append(Raw);
+    m_formats[XMM].append(v4_float);
+    m_formats[XMM].append(v2_double);
+    m_formats[XMM].append(v4_int32);
+    m_formats[XMM].append(v2_int64);
 }
 
 void RegisterControllerGeneral_x86::initRegisterNames()
@@ -274,6 +296,32 @@ QStringList RegisterControllerGeneral_x86::registerNamesForGroup(const GroupsNam
     }
 
     return QStringList();
+}
+
+void RegisterControllerGeneral_x86::handleXMMRegisters(const GDBMI::ResultRecord& r)
+{
+    Format currentFormat = formats(enumToGroupName(XMM)).first();
+
+    const GDBMI::Value& values = r["register-values"];
+    for (int i = 0; i < values.size(); ++i) {
+        const GDBMI::Value& entry = values[i];
+        int number = entry["number"].literal().toInt();
+        Q_ASSERT(m_rawRegisterNames.size() >  number);
+
+        QString record = entry["value"].literal();
+
+        int start = record.indexOf(Converters::formatToString(currentFormat));
+        start = record.indexOf('{', start);
+        int end = record.indexOf('}', start);
+
+        QString value = record.mid(start + 1, end - start - 1).remove(',');
+
+        if (!m_rawRegisterNames[number].isEmpty()) {
+            m_registers.insert(m_rawRegisterNames[number], value);
+        }
+    }
+
+    emit registersChanged(registersFromGroup(enumToGroupName(XMM)));
 }
 
 }

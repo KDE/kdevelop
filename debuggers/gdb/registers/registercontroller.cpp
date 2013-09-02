@@ -70,6 +70,9 @@ void IRegisterController::registerNamesHandler(const GDBMI::ResultRecord& r)
         const GDBMI::Value& entry = names[i];
         m_rawRegisterNames.push_back(entry.literal());
     }
+
+    //When here probably request for updating XMM registers was sent, but m_rawRegisterNames were not initialized yet, so request was wrong. So update everything once again.
+    updateRegisters();
 }
 
 void IRegisterController::updateRegisterValuesHandler(const GDBMI::ResultRecord& r)
@@ -194,6 +197,10 @@ void IRegisterController::setGeneralRegister(const Register& reg, const GroupsNa
 
 void IRegisterController::convertValuesForGroup(RegistersGroup* registersGroup) const
 {
+    if (registersGroup->format > Hexadecimal) {
+        return;
+    }
+
     bool ok;
     for (int i = 0; i < registersGroup->registers.size(); i++) {
         const QString converted = QString::number(registersGroup->registers[i].value.toULongLong(&ok, 16), static_cast<int> (registersGroup->format));
@@ -247,6 +254,32 @@ void IRegisterController::setFormat(Format f, const GroupsName& group)
             }
         }
     }
+}
+
+QString IRegisterController::numberForName(const QString& name) const
+{
+    //Requests for number come in order(if the previous was, let's say 10, then most likely the next one'll be 11)
+    static int previousNumber = -1;
+    if (m_rawRegisterNames.isEmpty()) {
+        previousNumber = -1;
+        return QString::number(previousNumber);
+    }
+
+    if (previousNumber != -1 && m_rawRegisterNames.size() > ++previousNumber) {
+        if (m_rawRegisterNames[previousNumber] == name) {
+            return QString::number(previousNumber);
+        }
+    }
+
+    for (int number = 0; number < m_rawRegisterNames.size(); number++) {
+        if (name == m_rawRegisterNames[number]) {
+            previousNumber = number;
+            return QString::number(number);
+        }
+    }
+
+    previousNumber = -1;
+    return QString::number(previousNumber);
 }
 
 }

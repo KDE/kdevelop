@@ -72,7 +72,7 @@ public Q_SLOTS:
     void updateRegisters(const QString& group = QString());
 
 private Q_SLOTS:
-    void itemChanged(const QModelIndex&);
+    void flagChanged(const QModelIndex&);
 
     void itemChanged(QStandardItem*);
 

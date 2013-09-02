@@ -153,6 +153,7 @@ void RegistersManager::updateRegisters()
         if (m_registerController) {
             m_registersView->enable(false);
             m_registerController.reset();
+            m_modelsManager->setController(0);
         }
     }
     if (m_currentArchitecture == undefined) {
