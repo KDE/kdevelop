@@ -121,7 +121,7 @@ QVariant FilterModel::data(const QModelIndex& index, int role) const
         } else if (role == Qt::ToolTipRole) {
             return i18n(
                 "The wildcard pattern defines whether a file or folder is included in a project or not.<br />"
-                "The pattern is matched case-sensitively against the items relative path to the project root."
+                "The pattern is matched case-sensitively against the items relative path to the project root. "
                 "The relative path starts with a forward slash, trailing slashes of folders are removed.<br />"
                 "Patterns ending on <code>\"/\"</code> are implicitly considered to match against folders only.<br />"
                 "Patterns which do not explicitly start with either <code>\"/\"</code> or <code>\"*\"</code> implicitly get <code>\"*/\"</code> prepended and thus match any item with a relative path ending on the given pattern."
