@@ -26,6 +26,7 @@
 #include "cmakeprojectdata.h"
 #include "cmakemodelitems.h"
 #include <project/projectmodel.h>
+#include <project/projectfiltermanager.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/parsingenvironment.h>
@@ -221,6 +222,9 @@ CMakeCommitChangesJob* CMakeImportJob::importDirectory(IProject* project, const 
                                                    url.toLocalFile(KUrl::RemoveTrailingSlash), parentTop);
         KUrl::List folderList = commitJob->addProjectData(m_data);
         foreach(const KUrl& folder, folderList) {
+            if (!m_manager->filterManager()->isValid(folder, true, project)) {
+                continue;
+            }
             CMakeCommitChangesJob* job = importDirectory(project, folder, ctx);
             connect(commitJob, SIGNAL(folderCreated(KDevelop::ProjectFolderItem*)),
                     job, SLOT(folderAvailable(KDevelop::ProjectFolderItem*)));

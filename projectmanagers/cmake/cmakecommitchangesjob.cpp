@@ -25,6 +25,8 @@
 #include "cmakeutils.h"
 #include "cmakemanager.h"
 #include <cmakeparserutils.h>
+#include <project/projectfiltermanager.h>
+#include <project/interfaces/iprojectfilter.h>
 #include <QThread>
 
 using namespace KDevelop;
@@ -62,14 +64,19 @@ static QStringList resolvePaths(const KUrl& baseUrl, const QStringList& pathsToR
     return resolvedPaths;
 }
 
-static QSet<QString> filterFiles(const QStringList& orig)
+static QSet<QString> filterFiles(const QFileInfoList& orig, const KUrl& base, IProject* project, ProjectFilterManager* filter)
 {
     QSet<QString> ret;
-    foreach(const QString& str, orig)
+    ret.reserve(orig.size());
+    foreach(const QFileInfo& info, orig)
     {
-        ///@todo This filter should be configurable, and filtering should be done on a manager-independent level
-        if (str.endsWith(QLatin1Char('~')) || str.endsWith(QLatin1String(".bak")))
+        const QString str = info.fileName();
+        KUrl url = base;
+        url.addPath(str);
+
+        if (!filter->isValid(url, info.isDir(), project)) {
             continue;
+        }
 
         ret.insert(str);
     }
@@ -78,9 +85,9 @@ static QSet<QString> filterFiles(const QStringList& orig)
 
 static bool isCorrectFolder(const KUrl& url, IProject* p)
 {
-    KUrl cache(url,"CMakeCache.txt"), missing(url, ".kdev_ignore");
+    KUrl cache(url,"CMakeCache.txt");
     
-    bool ret = !QFile::exists(cache.toLocalFile()) && !QFile::exists(missing.toLocalFile());
+    bool ret = !QFile::exists(cache.toLocalFile());
     ret &= !CMake::allBuildDirs(p).contains(url.toLocalFile(KUrl::RemoveTrailingSlash));
     
     return ret;
@@ -222,6 +229,9 @@ void CMakeCommitChangesJob::makeChanges()
         }
         path.adjustPath(KUrl::AddTrailingSlash);
         
+        if (!m_manager->filterManager()->isValid(path, true, m_project)) {
+            continue;
+        }
         if(QDir(path.toLocalFile()).exists())
         {
             CMakeFolderItem* parent=folder;
@@ -350,12 +360,12 @@ void CMakeCommitChangesJob::reloadFiles(ProjectFolderItem* item)
         kDebug() << "Trying to return a directory that doesn't exist:" << item->url();
         return;
     }
-    
-    QStringList entriesL = d.entryList( QDir::AllEntries | QDir::NoDotAndDotDot);
-    QSet<QString> entries = filterFiles(entriesL);
-    
+
     KUrl folderurl = item->url();
     folderurl.cleanPath();
+
+    const QFileInfoList entriesL = d.entryInfoList(QDir::AllEntries | QDir::NoDotAndDotDot);
+    QSet<QString> entries = filterFiles(entriesL, folderurl, item->project(), m_manager->filterManager());
 
     kDebug() << "Reloading Directory!" << folderurl;
     
