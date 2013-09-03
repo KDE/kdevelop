@@ -123,6 +123,13 @@ bool ProjectFilterKCM::eventFilter(QObject* object, QEvent* event)
     if (event->type() == QEvent::KeyRelease) {
         QKeyEvent* key = static_cast<QKeyEvent*>(event);
         if (key->key() == Qt::Key_Delete && key->modifiers() == Qt::NoModifier && m_ui->filters->currentIndex().isValid()) {
+            // workaround https://bugs.kde.org/show_bug.cgi?id=324451
+            // there is no other way I see to figure out whether an editor is showing...
+            QWidget* editor = m_ui->filters->viewport()->findChild<QWidget*>();
+            if (editor && editor->isVisible()) {
+                // editor is showing
+                return false;
+            }
             remove();
             return true;
         }
