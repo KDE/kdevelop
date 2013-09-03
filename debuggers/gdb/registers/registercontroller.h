@@ -37,22 +37,28 @@ namespace GDBDebugger
 
 class DebugSession;
 
+enum RegisterType {general, structured, flag};
+
 class GroupsName
 {
 public:
-    QString name() const {return _name;}
+    QString name() const { return _name;}
     int index() const {return _index;}
+    RegisterType type() const{return _type; }
+    QString flagName() const{return _flagName;}
 
-    bool operator==(const GroupsName& g) const{return _name == g.name();}
+    bool operator==(const GroupsName& g) const {return _name == g.name();}
 
-    GroupsName():_index(-1){}
+    GroupsName(): _index(-1), _type(general) {}
 
 private:
-    GroupsName(const QString& name, int idx): _name(name), _index(idx) {}
+    GroupsName(const QString& name, int idx, RegisterType type = general, const QString flag = QString()): _name(name), _index(idx), _type(type), _flagName(flag) {}
 
 private:
     QString _name;
     int _index; ///Should be unique for each group for current architecture (0, 1...n).
+    RegisterType _type;
+    QString _flagName; ///Used only for flag registers.
 
     friend class IRegisterController;
     friend struct RegistersGroup;
@@ -145,9 +151,6 @@ protected:
      */
     virtual void updateValuesForRegisters(RegistersGroup* registers) const;
 
-    ///Sets new value for register @p reg, from group @p group.
-    virtual void setGeneralRegister(const Register& reg, const GroupsName& group);
-
     /**Converts values for each register in the group.
     * @param [out] registers Registers which values should be converted.
     */
@@ -162,6 +165,12 @@ protected:
      */
     void setFlagRegister(const Register& reg, const FlagRegister& flag);
 
+    ///Sets new value for register @p reg, from group @p group.
+    void setGeneralRegister(const Register& reg, const GroupsName& group);
+
+    ///Sets new value for structured register(XMM, VFP quad and other) @p reg, from group @p group.
+    void setStructuredRegister(const Register& reg, const GroupsName& group);
+
     ///Updates values in @p flagsGroup for @p flagRegister.
     void updateFlagValues(RegistersGroup* flagsGroup, const FlagRegister& flagRegister) const;
 
@@ -171,7 +180,7 @@ protected:
     ///Initializes registers, that is gets names of all available registers. Returns true is succeed.
     bool initializeRegisters();
 
-    GroupsName createGroupName(const QString& name, int idx) const;
+    GroupsName createGroupName(const QString& name, int idx, RegisterType t = general, const QString flag = QString()) const;
 
     ///Returns register's number for @p name.
     QString numberForName(const QString& name) const;
@@ -183,8 +192,13 @@ private :
     ///Handles initialization of register's names.
     void registerNamesHandler(const GDBMI::ResultRecord& r);
 
-    ///Handles updated values for registers.
-    void updateRegisterValuesHandler(const GDBMI::ResultRecord& r);
+    ///Parses new values for general registers from @p r and updates it in m_registers.
+    ///Emits registersChanged signal.
+    void generalRegistersHandler(const GDBMI::ResultRecord& r);
+
+    ///Parses new values for structured registers from @p r and updates it in m_registers.
+    ///Emits registersChanged signal.
+    virtual void structuredRegistersHandler(const GDBMI::ResultRecord& r);
 
 private:
 

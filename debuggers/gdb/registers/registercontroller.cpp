@@ -20,14 +20,15 @@
 
 #include "registercontroller.h"
 
-#include "../debugsession.h"
-
 #include <qmath.h>
+#include <QRegExp>
 
 #include <KDebug>
 
+#include "../debugsession.h"
 #include "../gdbcommand.h"
 #include "../mi/gdbmi.h"
+#include "converters.h"
 
 namespace GDBDebugger
 {
@@ -39,26 +40,43 @@ void IRegisterController::setSession(DebugSession* debugSession)
 
 void IRegisterController::updateRegisters(const GroupsName& group)
 {
+    if (!m_debugSession || m_debugSession->stateIsOn(s_dbgNotStarted | s_shuttingDown)) {
+        return;
+    }
+
     if (m_pendingGroups.contains(group)) {
         kDebug() << "Already updating " << group.name();
         return;
     }
 
     if (group.name().isEmpty()) {
-        kDebug() << "Update all";
-        m_pendingGroups.clear();
+        foreach (const GroupsName & g, namesOfRegisterGroups()) {
+            IRegisterController::updateRegisters(g);
+        }
     } else {
-        kDebug() << "Update: " << group.name();
+        kDebug() << "Updating: " << group.name();
         m_pendingGroups << group;
-        if (m_pendingGroups.size() != 1) {
-            return;
+    }
+
+    QString registers = (group.type() == structured) ? "N " : "r ";
+
+    if (group.type() == flag) {
+        registers += numberForName(group.flagName());
+    } else {
+        foreach (const QString & name, registerNamesForGroup(group)) {
+            registers += numberForName(name) + ' ';
         }
     }
 
-    if (m_debugSession && !m_debugSession->stateIsOn(s_dbgNotStarted | s_shuttingDown)) {
-        m_debugSession->addCommand(
-            new GDBCommand(GDBMI::DataListRegisterValues, "r", this, &IRegisterController::updateRegisterValuesHandler));
+    //Not initialized yet. They'll be updated afterwards.
+    if (registers.contains("-1")) {
+        kDebug() << "Will update later";
+        m_pendingGroups.clear();
+        return;
     }
+
+    m_debugSession->addCommand(
+        new GDBCommand(GDBMI::DataListRegisterValues, registers, this, (group.type() == structured) ? &IRegisterController::structuredRegistersHandler : &IRegisterController::generalRegistersHandler));
 }
 
 void IRegisterController::registerNamesHandler(const GDBMI::ResultRecord& r)
@@ -71,50 +89,56 @@ void IRegisterController::registerNamesHandler(const GDBMI::ResultRecord& r)
         m_rawRegisterNames.push_back(entry.literal());
     }
 
-    //When here probably request for updating XMM registers was sent, but m_rawRegisterNames were not initialized yet, so request was wrong. So update everything once again.
+    //When here probably request for updating registers was sent, but m_rawRegisterNames were not initialized yet, so it wasn't successful. Update everything once again.
     updateRegisters();
 }
 
-void IRegisterController::updateRegisterValuesHandler(const GDBMI::ResultRecord& r)
+void IRegisterController::generalRegistersHandler(const GDBMI::ResultRecord& r)
 {
-    if (m_rawRegisterNames.isEmpty()) {
-        kDebug() << "Registers not initialized yet!";
-        return;
-    }
+    Q_ASSERT(!m_rawRegisterNames.isEmpty());
+
+    QString registerName;
 
     const GDBMI::Value& values = r["register-values"];
     for (int i = 0; i < values.size(); ++i) {
         const GDBMI::Value& entry = values[i];
         int number = entry["number"].literal().toInt();
         Q_ASSERT(m_rawRegisterNames.size() >  number);
+
         if (!m_rawRegisterNames[number].isEmpty()) {
+            if (registerName.isEmpty()) {
+                registerName = m_rawRegisterNames[number];
+            }
             const QString value = entry["value"].literal();
             m_registers.insert(m_rawRegisterNames[number], value);
         }
     }
 
-    kDebug() << "groups to change registers: ";
-    foreach (const GroupsName & g, m_pendingGroups) {
-        kDebug() << g.name();
-    }
+    GroupsName group = groupForRegisterName(registerName);
 
-    foreach (const GroupsName & group, namesOfRegisterGroups()) {
-        if (m_pendingGroups.isEmpty() || m_pendingGroups.contains(group)) {
-            emit registersChanged(registersFromGroup(group));
+    //FIXME: handle flag registers in a proper way.
+    if (group.name().isEmpty()) {
+        foreach(const GroupsName& g, namesOfRegisterGroups()) {
+            if(g.type() == flag){
+                group = g;
+                break;
+            }
         }
     }
-    m_pendingGroups.clear();
+
+    if (m_pendingGroups.contains(group)) {
+        emit registersChanged(registersFromGroup(group));
+        m_pendingGroups.remove(m_pendingGroups.indexOf(group));
+    }
 }
 
 void IRegisterController::setRegisterValue(const Register& reg)
 {
-    if (!m_registers.isEmpty()) {
-        const GroupsName group = groupForRegisterName(reg.name);
-        if (!group.name().isEmpty()) {
-            setRegisterValueForGroup(group, reg);
-        }
-    } else {
-        kDebug() << "Registers not initialized yet!";
+    Q_ASSERT(!m_registers.isEmpty());
+
+    const GroupsName group = groupForRegisterName(reg.name);
+    if (!group.name().isEmpty()) {
+        setRegisterValueForGroup(group, reg);
     }
 }
 
@@ -155,10 +179,7 @@ GroupsName IRegisterController::groupForRegisterName(const QString& name) const
 
 void IRegisterController::updateValuesForRegisters(RegistersGroup* registers) const
 {
-    if (m_registers.isEmpty()) {
-        kDebug() << "Registers not initialized yet";
-        return;
-    }
+    Q_ASSERT(!m_registers.isEmpty());
 
     for (int i = 0; i < registers->registers.size(); i++) {
         if (m_registers.contains(registers->registers[i].name)) {
@@ -184,15 +205,15 @@ void IRegisterController::setFlagRegister(const Register& reg, const FlagRegiste
 
 void IRegisterController::setGeneralRegister(const Register& reg, const GroupsName& group)
 {
+    if (!m_debugSession || m_debugSession->stateIsOn(s_dbgNotStarted | s_shuttingDown)) {
+        return;
+    }
+
     const QString command = QString("set var $%1=%2").arg(reg.name).arg(reg.value);
     kDebug() << "Setting register: " << command;
 
-    if (m_debugSession && !m_debugSession->stateIsOn(s_dbgNotStarted | s_shuttingDown)) {
-        m_debugSession->addCommand(new GDBCommand(GDBMI::NonMI, command));
-        updateRegisters(group);
-    } else {
-        kDebug() << "Session has ended";
-    }
+    m_debugSession->addCommand(new GDBCommand(GDBMI::NonMI, command));
+    updateRegisters(group);
 }
 
 void IRegisterController::convertValuesForGroup(RegistersGroup* registersGroup) const
@@ -238,9 +259,9 @@ QVector<Format> IRegisterController::formats(const GroupsName& group)
     return m_formats[idx];
 }
 
-GroupsName IRegisterController::createGroupName(const QString& name, int idx) const
+GroupsName IRegisterController::createGroupName(const QString& name, int idx, RegisterType t, const QString flag) const
 {
-    return GroupsName(name, idx);
+    return GroupsName(name, idx, t, flag);
 }
 
 void IRegisterController::setFormat(Format f, const GroupsName& group)
@@ -258,7 +279,7 @@ void IRegisterController::setFormat(Format f, const GroupsName& group)
 
 QString IRegisterController::numberForName(const QString& name) const
 {
-    //Requests for number come in order(if the previous was, let's say 10, then most likely the next one'll be 11)
+    //Requests for number come in order(if the previous was, let's say 10, then most likely the next one will be 11)
     static int previousNumber = -1;
     if (m_rawRegisterNames.isEmpty()) {
         previousNumber = -1;
@@ -280,6 +301,73 @@ QString IRegisterController::numberForName(const QString& name) const
 
     previousNumber = -1;
     return QString::number(previousNumber);
+}
+
+void IRegisterController::setStructuredRegister(const Register& reg, const GroupsName& group)
+{
+    Register r = reg;
+    r.value = r.value.trimmed();
+    r.value.replace(' ', ',');
+    if (r.value.contains(',')) {
+        r.value.append('}');
+        r.value.prepend('{');
+    }
+
+    r.name += '.' + Converters::formatToString(m_formats[group.index()].first());
+
+    setGeneralRegister(r, group);
+}
+
+void IRegisterController::structuredRegistersHandler(const GDBMI::ResultRecord& r)
+{
+    //Parsing records in format like:
+    //{u8 = {0, 0, 128, 146, 0, 48, 197, 65}, u16 = {0, 37504, 12288, 16837}, u32 = {2457862144, 1103441920}, u64 = 4739246961893310464, f32 = {-8.07793567e-28, 24.6484375}, f64 = 710934821}
+    //{u8 = {0 <repeats 16 times>}, u16 = {0, 0, 0, 0, 0, 0, 0, 0}, u32 = {0, 0, 0, 0}, u64 = {0, 0}, f32 = {0, 0, 0, 0}, f64 = {0, 0}}
+
+    QRegExp rx("^\\s*=\\s*\\{(.*)\\}");
+    rx.setMinimal(true);
+
+    QString registerName;
+    Format currentFormat = LAST_FORMAT;
+    GroupsName group;
+    const GDBMI::Value& values = r["register-values"];
+
+    Q_ASSERT(!m_rawRegisterNames.isEmpty());
+
+    for (int i = 0; i < values.size(); ++i) {
+        const GDBMI::Value& entry = values[i];
+        int number = entry["number"].literal().toInt();
+        registerName = m_rawRegisterNames[number];
+        if (currentFormat == LAST_FORMAT) {
+            group = groupForRegisterName(registerName);
+            currentFormat = formats(group).first();
+        }
+
+        QString record = entry["value"].literal();
+
+        int start = record.indexOf(Converters::formatToString(currentFormat));
+        Q_ASSERT(start != -1);
+        start += Converters::formatToString(currentFormat).size();
+
+        QString value = record.right(record.size() - start);
+        int idx = rx.indexIn(value);
+        value = rx.cap(1);
+
+        if (idx == -1) {
+            //if here then value without braces: u64 = 4739246961893310464, f32 = {-8.07793567e-28, 24.6484375}, f64 = 710934821}
+            QRegExp rx2("=\\s+(.*)(\\}|,)");
+            rx2.setMinimal(true);
+            rx2.indexIn(record, start);
+            value = rx2.cap(1);
+        }
+        value = value.trimmed().remove(',');
+        m_registers.insert(registerName, value);
+    }
+
+    if (m_pendingGroups.contains(group)) {
+        emit registersChanged(registersFromGroup(group));
+        m_pendingGroups.remove(m_pendingGroups.indexOf(group));
+    }
 }
 
 }

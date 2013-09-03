@@ -93,30 +93,12 @@ void RegisterController_Arm::setVFPS_Register(const Register& reg)
 
 void RegisterController_Arm::setVFPD_Register(const Register& reg)
 {
-    Register r = reg;
-    r.value = r.value.trimmed();
-    r.value.replace(' ', ',');
-    if (r.value.contains(',')) {
-        r.value.append('}');
-        r.value.prepend('{');
-    }
-
-    r.name += '.' + Converters::formatToString(m_formats[VFP_double].first());
-
-    setGeneralRegister(r, enumToGroupName(VFP_double));
+    setStructuredRegister(reg, enumToGroupName(VFP_double));
 }
 
 void RegisterController_Arm::setVFPQ_Register(const Register& reg)
 {
-    Register r = reg;
-    r.value = r.value.trimmed();
-    r.value.replace(' ', ',');
-    r.value.append('}');
-    r.value.prepend('{');
-
-    r.name += '.' + Converters::formatToString(m_formats[VFP_quad].first());
-
-    setGeneralRegister(r, enumToGroupName(VFP_quad));
+    setStructuredRegister(reg, enumToGroupName(VFP_quad));
 }
 
 void RegisterController_Arm::updateRegisters(const GroupsName& group)
@@ -131,12 +113,10 @@ void RegisterController_Arm::updateRegisters(const GroupsName& group)
         }
     }
 
-    if (group.name() != enumToGroupName(VFP_single).name() && group.name() != enumToGroupName(VFP_double).name() && group.name() != enumToGroupName(VFP_quad).name()) {
+    if (group.name() != enumToGroupName(VFP_single).name()) {
         if (group.name().isEmpty()) {
             QVector<GroupsName> groups = namesOfRegisterGroups();
             groups.remove(groups.indexOf(enumToGroupName(VFP_single)));
-            groups.remove(groups.indexOf(enumToGroupName(VFP_double)));
-            groups.remove(groups.indexOf(enumToGroupName(VFP_quad)));
             foreach (const GroupsName & g, groups) {
                 IRegisterController::updateRegisters(g);
             }
@@ -146,6 +126,10 @@ void RegisterController_Arm::updateRegisters(const GroupsName& group)
     }
 
     if (group == enumToGroupName(VFP_single) || group.name().isEmpty()) {
+        if (numberForName(registerNamesForGroup(enumToGroupName(VFP_single)).first()) == "-1") {
+            return;
+        }
+
         QString command = "info all-registers ";
         foreach (const QString & name, registerNamesForGroup(enumToGroupName(VFP_single))) {
             command += "$" + name + ' ';
@@ -155,32 +139,6 @@ void RegisterController_Arm::updateRegisters(const GroupsName& group)
             //TODO: use mi interface instead.
             m_debugSession->addCommand(
                 new CliCommand(GDBMI::NonMI, command, this, &RegisterController_Arm::handleVFPSRegisters));
-        }
-    }
-
-    if (group == enumToGroupName(VFP_double) || group.name().isEmpty()) {
-        if (m_debugSession && !m_debugSession->stateIsOn(s_dbgNotStarted | s_shuttingDown)) {
-
-            QString registers;
-            foreach (const QString & name, registerNamesForGroup(enumToGroupName(VFP_double))) {
-                registers += numberForName(name) + ' ';
-            }
-
-            m_debugSession->addCommand(
-                new GDBCommand(GDBMI::DataListRegisterValues, "N " + registers, this, &RegisterController_Arm::handleVFPDRegisters));
-        }
-    }
-
-    if (group == enumToGroupName(VFP_quad) || group.name().isEmpty()) {
-        if (m_debugSession && !m_debugSession->stateIsOn(s_dbgNotStarted | s_shuttingDown)) {
-
-            QString registers;
-            foreach (const QString & name, registerNamesForGroup(enumToGroupName(VFP_quad))) {
-                registers += numberForName(name) + ' ';
-            }
-
-            m_debugSession->addCommand(
-                new GDBCommand(GDBMI::DataListRegisterValues, "N " + registers, this, &RegisterController_Arm::handleVFPQRegisters));
         }
     }
 }
@@ -211,9 +169,7 @@ void RegisterController_Arm::handleVFPSRegisters(const QStringList& record)
         }
     } else {
         foreach (const Register & r, registers) {
-            if (m_registers.contains(r.name)) {
-                m_registers[r.name] = r.value;
-            }
+            m_registers.insert(r.name, r.value);
         }
         emit registersChanged(registersFromGroup(enumToGroupName(VFP_single)));
     }
@@ -221,7 +177,7 @@ void RegisterController_Arm::handleVFPSRegisters(const QStringList& record)
 
 GroupsName RegisterController_Arm::enumToGroupName(ArmRegisterGroups group) const
 {
-    static const GroupsName groups[LAST_REGISTER] = { createGroupName(i18n("General"), General) , createGroupName(i18n("Flags"), Flags), createGroupName(i18n("VFP single-word"), VFP_single), createGroupName(i18n("VFP double-word"), VFP_double), createGroupName(i18n("VFP quad-word"), VFP_quad)};
+    static const GroupsName groups[LAST_REGISTER] = { createGroupName(i18n("General"), General) , createGroupName(i18n("Flags"), Flags, flag, m_cpsr.registerName), createGroupName(i18n("VFP single-word"), VFP_single), createGroupName(i18n("VFP double-word"), VFP_double, structured), createGroupName(i18n("VFP quad-word"), VFP_quad, structured)};
 
     return groups[group];
 }
@@ -302,72 +258,6 @@ QStringList RegisterController_Arm::registerNamesForGroup(const GroupsName& grou
     }
 
     return QStringList();
-}
-
-void RegisterController_Arm::handleVFPQRegisters(const GDBMI::ResultRecord& r)
-{
-    Format currentFormat = formats(enumToGroupName(VFP_quad)).first();
-
-    const GDBMI::Value& values = r["register-values"];
-    for (int i = 0; i < values.size(); ++i) {
-        const GDBMI::Value& entry = values[i];
-        int number = entry["number"].literal().toInt();
-        Q_ASSERT(m_rawRegisterNames.size() >  number);
-
-        QString record = entry["value"].literal();
-
-        int start = record.indexOf(Converters::formatToString(currentFormat));
-        start = record.indexOf('{', start);
-
-        QString value;
-        if (start != -1) {
-            int end = record.indexOf('}', start);
-            value = record.mid(start + 1, end - start - 1).remove(',');
-        } else {
-            ///TODO:
-            value = record.mid(record.lastIndexOf('=') + 1);
-            value.remove('}');
-        }
-        value = value.trimmed();
-        if (!m_rawRegisterNames[number].isEmpty()) {
-            m_registers.insert(m_rawRegisterNames[number], value);
-        }
-    }
-
-    emit registersChanged(registersFromGroup(enumToGroupName(VFP_quad)));
-}
-
-void RegisterController_Arm::handleVFPDRegisters(const GDBMI::ResultRecord& r)
-{
-    Format currentFormat = formats(enumToGroupName(VFP_double)).first();
-
-    const GDBMI::Value& values = r["register-values"];
-    for (int i = 0; i < values.size(); ++i) {
-        const GDBMI::Value& entry = values[i];
-        int number = entry["number"].literal().toInt();
-        Q_ASSERT(m_rawRegisterNames.size() >  number);
-
-        QString record = entry["value"].literal();
-
-        int start = record.indexOf(Converters::formatToString(currentFormat));
-        start = record.indexOf('{', start);
-
-        QString value;
-        if (start != -1) {
-            int end = record.indexOf('}', start);
-            value = record.mid(start + 1, end - start - 1).remove(',');
-        } else {
-            ///TODO:
-            value = record.mid(record.lastIndexOf('=') + 1);
-            value.remove('}');
-        }
-        value = value.trimmed();
-        if (!m_rawRegisterNames[number].isEmpty()) {
-            m_registers.insert(m_rawRegisterNames[number], value);
-        }
-    }
-
-    emit registersChanged(registersFromGroup(enumToGroupName(VFP_double)));
 }
 
 }

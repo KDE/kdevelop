@@ -67,8 +67,6 @@ protected:
 
     //VFP registers workaround.
     void handleVFPSRegisters(const QStringList& record);
-    void handleVFPDRegisters(const GDBMI::ResultRecord& r);
-    void handleVFPQRegisters(const GDBMI::ResultRecord& r);
 
     static QVector<QStringList> m_registerNames;
 
