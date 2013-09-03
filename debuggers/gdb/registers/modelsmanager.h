@@ -27,6 +27,8 @@
 #include <QStringList>
 #include <QScopedPointer>
 
+#include <KConfigGroup>
+
 class QAbstractItemView;
 class QStandardItemModel;
 class QStandardItem;
@@ -38,6 +40,7 @@ class Models;
 class IRegisterController;
 struct Register;
 struct RegistersGroup;
+struct GroupsName;
 
 class ModelsManager : public QObject
 {
@@ -71,6 +74,10 @@ public Q_SLOTS:
     ///Forcedly updates registers in @p group.
     void updateRegisters(const QString& group = QString());
 
+private:
+    void save(const GroupsName&);
+    void load(const GroupsName&);
+
 private Q_SLOTS:
     void flagChanged(const QModelIndex&);
 
@@ -80,6 +87,8 @@ private:
     QScopedPointer<Models> m_models;
 
     IRegisterController* m_controller;
+
+    KConfigGroup m_config;
 };
 
 }

@@ -25,8 +25,6 @@
 
 #include "modelsmanager.h"
 
-#include <KConfigGroup>
-
 class QMenu;
 class QSignalMapper;
 
@@ -47,9 +45,6 @@ public:
 
     void setModel(ModelsManager* m);
 
-signals:
-    void needToUpdateRegisters(const QString&);
-
 protected:
     ///Allows to choose tables/register formates.
     virtual void contextMenuEvent(QContextMenuEvent* e);
@@ -57,38 +52,14 @@ protected:
 private:
     QString currentView();
 
-    ///Convenient representation of a table.
-    struct Table {
-        Table();
-        Table(QTableView* tableWidget, int idx);
-        QTableView* tableWidget;
-        int index;///unique index on the screen
-        QString name;
-    };
+    ///Adds @p v to the list of view with assigning it a name.
+    void addView(QTableView* view, int idx);
 
-    /** @brief Tables view manager.*/
-    class TablesManager
-    {
-    public:
-        TablesManager(RegistersView*);
-        ~TablesManager();
+    ///Clear names of all views.
+    void clear();
 
-        void save();
-        void load();
-
-        ///Adds @p table to the list of tables with assigning it a name.
-        void addTable(const Table& table);
-
-        void clear();
-
-    private:
-        ///Sets name for the table @p t in the view.
-        void setNameForTable(Table& t, const QString& name);
-
-        RegistersView* m_parent;
-        QVector<Table> m_tables;
-        KConfigGroup m_config;
-    };
+    ///Sets name for the table with index @p idx to the @p name.
+    void setNameForTable(int idx, const QString& name);
 
 private slots:
     ///Changes register formates to @p format.
@@ -104,7 +75,6 @@ private:
     QSignalMapper* m_mapper;
 
     ModelsManager* m_modelsManager;
-    TablesManager m_tablesManager;
 
     friend class TablesManager;
 };

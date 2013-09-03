@@ -28,9 +28,13 @@
 
 namespace GDBDebugger
 {
+namespace
+{
+const int TABLES_COUNT = 5;
+}
 
 RegistersView::RegistersView(QWidget* p)
-    : QWidget(p), m_modelsManager(0), m_tablesManager(this)
+    : QWidget(p), m_modelsManager(0)
 {
     setupUi(this);
 
@@ -54,7 +58,7 @@ void RegistersView::contextMenuEvent(QContextMenuEvent* e)
     const QStringList formats = m_modelsManager->formats(group);
     if (formats.size() > 1) {
         QMenu* m = m_menu->addMenu("Format");
-        foreach (const QString& fmt, formats) {
+        foreach (const QString & fmt, formats) {
             addItemToFormatSubmenu(m, fmt);
         }
     }
@@ -80,7 +84,7 @@ void RegistersView::addItemToFormatSubmenu(QMenu* m, const QString& format)
 void RegistersView::updateMenuTriggered(int /*idx*/)
 {
     if (!currentView().isEmpty()) {
-        emit needToUpdateRegisters(currentView());
+        m_modelsManager->updateRegisters(currentView());
     }
 }
 
@@ -88,25 +92,20 @@ void RegistersView::formatMenuTriggered(const QString& format)
 {
     m_modelsManager->setFormat(currentView(), format);
     m_modelsManager->updateRegisters(currentView());
-
-    m_tablesManager.save();
 }
 
-void RegistersView::TablesManager::addTable(const RegistersView::Table& table)
+void RegistersView::addView(QTableView* view, int idx)
 {
-    Table _table = table;
+    view->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+    view->horizontalHeader()->hide();
+    view->verticalHeader()->hide();
+    view->setSelectionMode(QAbstractItemView::SingleSelection);
+    view->setMinimumWidth(10);
+    view->verticalHeader()->setDefaultSectionSize(15);
 
-    _table.tableWidget->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
-    _table.tableWidget->horizontalHeader()->hide();
-    _table.tableWidget->verticalHeader()->hide();
-    _table.tableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
-    _table.tableWidget->setMinimumWidth(10);
-    _table.tableWidget->verticalHeader()->setDefaultSectionSize(15);
+    QString name = m_modelsManager->addView(view);
 
-    QString name = m_parent->m_modelsManager->addView(table.tableWidget);
-
-    m_tables.push_back(_table);
-    setNameForTable(_table, name);
+    setNameForTable(idx, name);
 }
 
 void RegistersView::enable(bool enabled)
@@ -114,69 +113,28 @@ void RegistersView::enable(bool enabled)
     setEnabled(enabled);
     if (enabled) {
 
-        m_tablesManager.clear();
+        clear();
 
-        m_tablesManager.addTable(Table(registers, 0));
-        m_tablesManager.addTable(Table(flags, 0));
-        m_tablesManager.addTable(Table(table_1, 1));
-        m_tablesManager.addTable(Table(table_2, 2));
-        m_tablesManager.addTable(Table(table_3, 3));
-        m_tablesManager.load();
+        addView(registers, 0);
+        addView(flags, 0);
+        addView(table_1, 1);
+        addView(table_2, 2);
+        addView(table_3, 3);
     }
 }
 
-void RegistersView::TablesManager::save()
+void RegistersView::setNameForTable(int idx, const QString& name)
 {
-    foreach (const Table & t, m_tables) {
-        m_config.writeEntry(t.name, m_parent->m_modelsManager->formats(t.name).first());
-    }
-}
-
-void RegistersView::TablesManager::load()
-{
-    foreach (const Table & t, m_tables) {
-        QString format = m_config.readEntry(t.name, m_parent->m_modelsManager->formats(t.name).first());
-
-        m_parent->m_modelsManager->setFormat(t.name, format);
-    }
-}
-
-RegistersView::TablesManager::TablesManager(RegistersView* v): m_parent(v)
-{
-    m_config = KGlobal::config()->group("Tables manager");
-}
-
-RegistersView::Table::Table()
-    : tableWidget(0), index(-1) {}
-
-RegistersView::Table::Table(QTableView* tableWidget, int idx)
-    : tableWidget(tableWidget), index(idx) {}
-
-RegistersView::TablesManager::~TablesManager(){}
-
-void RegistersView::TablesManager::setNameForTable(Table& t, const QString& name)
-{
-    Q_ASSERT(t.index != -1);
-    int idx = t.index;
-
-    for (int i = 0; i < m_tables.count(); i++) {
-        if (m_tables[i].tableWidget == t.tableWidget) {
-            m_tables[i].name = name;
-            break;
-        }
-    }
-
-    kDebug() << name << " " << t.index;
-    const QString text = m_parent->tabWidget->tabText(idx);
+    kDebug() << name << " " << idx;
+    const QString text = tabWidget->tabText(idx);
     if (!text.contains(name)) {
-        m_parent->tabWidget->setTabText(idx, text.isEmpty() ? name : text + '/' + name);
+        tabWidget->setTabText(idx, text.isEmpty() ? name : text + '/' + name);
     }
 }
 
 void RegistersView::setModel(ModelsManager* m)
 {
     m_modelsManager = m;
-    connect(this, SIGNAL(needToUpdateRegisters(QString)), m_modelsManager, SLOT(updateRegisters(QString)));
 }
 
 QString RegistersView::currentView()
@@ -184,12 +142,11 @@ QString RegistersView::currentView()
     return tabWidget->tabText(tabWidget->currentIndex()).split('/').first();
 }
 
-void RegistersView::TablesManager::clear()
+void RegistersView::clear()
 {
-    foreach(const Table& t, m_tables) {
-        m_parent->tabWidget->setTabText(t.index, "");
+    for (int i = 0; i < TABLES_COUNT; i++) {
+        tabWidget->setTabText(i, "");
     }
-    m_tables.clear();
 }
 
 }

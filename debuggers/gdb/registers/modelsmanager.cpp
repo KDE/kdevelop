@@ -28,6 +28,9 @@
 #include <QSharedPointer>
 
 #include <KDebug>
+#include <KGlobal>
+#include <KSharedPtr>
+#include <KSharedConfig>
 
 namespace GDBDebugger
 {
@@ -65,7 +68,7 @@ private:
     QVector<Model> m_models;
 };
 
-ModelsManager::ModelsManager(QObject* parent) : QObject(parent), m_models(new Models), m_controller(0) {}
+ModelsManager::ModelsManager(QObject* parent) : QObject(parent), m_models(new Models), m_controller(0), m_config(KGlobal::config()->group("Register models")) {}
 
 ModelsManager::~ModelsManager() {}
 
@@ -83,13 +86,13 @@ QString ModelsManager::addView(QAbstractItemView* view)
             QStandardItemModel* m = m_models->addModel(Model(group.name(), QSharedPointer<QStandardItemModel>(new QStandardItemModel()), view));
             view->setModel(m);
 
-            //FIXME: receive item's flags as parameters.
-            if (group.name() == "Flags") {
+            if (group.type() == flag) {
                 disconnect(view, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(flagChanged(QModelIndex)));
                 connect(view, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(flagChanged(QModelIndex)));
             }
 
             name = group.name();
+            load(group);
             break;
         }
     }
@@ -275,6 +278,7 @@ void ModelsManager::setFormat(const QString& group, const QString& format)
     foreach (const GroupsName & g, m_controller->namesOfRegisterGroups()) {
         if (g.name() == group) {
             m_controller->setFormat(Converters::stringToFormat(format), g);
+            save(g);
             break;
         }
     }
@@ -295,6 +299,17 @@ QStringList ModelsManager::formats(const QString& group) const
         l << Converters::formatToString(fmt);
     }
     return l;
+}
+
+void ModelsManager::save(const GroupsName& g)
+{
+    m_config.writeEntry(g.name(), static_cast<int>(m_controller->formats(g).first()));
+}
+
+void ModelsManager::load(const GroupsName& g)
+{
+    Format format = static_cast<Format>(m_config.readEntry(g.name(), static_cast<int>(m_controller->formats(g).first())));
+    setFormat(g.name(), Converters::formatToString(format));
 }
 
 }
