@@ -40,9 +40,10 @@ AreaDisplay::AreaDisplay(KDevelop::MainWindow* parent)
     , m_mainWindow(parent)
 {
     setLayout(new QHBoxLayout);
-    QLabel* separator = new QLabel("|", this);
-    separator->setEnabled(false);
-    layout()->addWidget(separator);
+    m_separator = new QLabel("|", this);
+    m_separator->setEnabled(false);
+    m_separator->setVisible(false);
+    layout()->addWidget(m_separator);
 
     layout()->setContentsMargins(0, 0, 0, 0);
     layout()->addWidget(Core::self()->workingSetControllerInternal()->createSetManagerWidget(m_mainWindow));
@@ -80,7 +81,19 @@ void AreaDisplay::newArea(Sublime::Area* area)
         delete item->widget();
         delete item;
     }
-    l->insertWidget(0, Core::self()->workingSetControllerInternal()->createSetManagerWidget(m_mainWindow, area));
+    QWidget* w = Core::self()->workingSetControllerInternal()->createSetManagerWidget(m_mainWindow, area);
+    w->installEventFilter(this);
+    l->insertWidget(0, w);
+}
+
+bool AreaDisplay::eventFilter(QObject* obj, QEvent* event)
+{
+    if (event->type() == QEvent::Show) {
+        m_separator->setVisible(true);
+    } else if (event->type() == QEvent::QEvent::Hide) {
+        m_separator->setVisible(false);
+    }
+    return QObject::eventFilter(obj, event);
 }
 
 void AreaDisplay::backToCode()

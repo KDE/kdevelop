@@ -22,6 +22,7 @@
 
 #include <QWidget>
 
+class QLabel;
 class QPushButton;
 class QMenu;
 
@@ -46,11 +47,15 @@ public:
     virtual QSize sizeHint() const;
     virtual QSize minimumSizeHint() const;
 
+protected:
+    virtual bool eventFilter(QObject* obj, QEvent* event);
+
 private slots:
     void newArea(Sublime::Area* area);
     void backToCode();
 
 private:
+    QLabel* m_separator;
     QMenu* m_menu;
     QPushButton* m_button;
     KDevelop::MainWindow* m_mainWindow;
