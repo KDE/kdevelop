@@ -91,7 +91,7 @@ QVariant FilterModel::headerData(int section, Qt::Orientation orientation, int r
     } else if (section == Targets) {
         return i18n("Targets");
     } else if (section == Inclusive) {
-        return i18n("Type");
+        return i18n("Action");
     }
 
     return QVariant();
@@ -138,17 +138,17 @@ QVariant FilterModel::data(const QModelIndex& index, int role) const
             if (role == Qt::DecorationRole) {
                 return KIcon("document-open");
             }
-            return i18n("files and folders");
+            return i18n("Files and Folders");
         } else if (filter.targets & Filter::Folders) {
             if (role == Qt::DecorationRole) {
                 return KIcon("folder");
             }
-            return i18n("folders");
+            return i18n("Folders");
         } else {
             if (role == Qt::DecorationRole) {
                 return KIcon("text-plain");
             }
-            return i18n("files");
+            return i18n("Files");
         }
     } else if (column == Inclusive) {
         if (role == Qt::EditRole) {
@@ -160,12 +160,12 @@ QVariant FilterModel::data(const QModelIndex& index, int role) const
             if (role == Qt::DecorationRole) {
                 return KIcon("list-add");
             }
-            return i18n("inclusive");
+            return i18n("Include");
         } else {
             if (role == Qt::DecorationRole) {
                 return KIcon("list-remove");
             }
-            return i18n("exclusive");
+            return i18n("Exclude");
         }
     }
 

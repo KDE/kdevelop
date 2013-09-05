@@ -62,14 +62,14 @@ ProjectFilterKCM::ProjectFilterKCM(QWidget* parent, const QVariantList& args)
     m_ui->filters->header()->setResizeMode(FilterModel::Inclusive, QHeaderView::ResizeToContents);
     m_ui->filters->setItemDelegateForColumn(FilterModel::Targets,
         new ComboBoxDelegate(QVector<ComboBoxDelegate::Item>()
-                << ComboBoxDelegate::Item(i18n("files"), static_cast<int>(Filter::Files))
-                << ComboBoxDelegate::Item(i18n("folders"), static_cast<int>(Filter::Folders))
-                << ComboBoxDelegate::Item(i18n("files and folders"), static_cast<int>(Filter::Folders | Filter::Files))
+                << ComboBoxDelegate::Item(i18n("Files"), static_cast<int>(Filter::Files))
+                << ComboBoxDelegate::Item(i18n("Folders"), static_cast<int>(Filter::Folders))
+                << ComboBoxDelegate::Item(i18n("Files and Folders"), static_cast<int>(Filter::Folders | Filter::Files))
             , this));
     m_ui->filters->setItemDelegateForColumn(FilterModel::Inclusive,
         new ComboBoxDelegate(QVector<ComboBoxDelegate::Item>()
-                << ComboBoxDelegate::Item(i18n("exclusive"), false)
-                << ComboBoxDelegate::Item(i18n("inclusive"), true)
+                << ComboBoxDelegate::Item(i18n("Exclude"), false)
+                << ComboBoxDelegate::Item(i18n("Include"), true)
             , this));
     m_ui->filters->installEventFilter(this);
     m_ui->filters->setDragEnabled(true);
