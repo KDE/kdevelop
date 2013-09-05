@@ -26,6 +26,7 @@
 #include <QStandardItemModel>
 #include <QAbstractItemView>
 #include <QSharedPointer>
+#include <QVector>
 
 #include <KDebug>
 #include <KGlobal>

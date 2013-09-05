@@ -22,7 +22,6 @@
 #define MODELSMANAGER_H
 
 #include <QObject>
-#include <QVector>
 #include <QString>
 #include <QStringList>
 #include <QScopedPointer>

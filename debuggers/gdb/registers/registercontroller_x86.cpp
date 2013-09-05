@@ -21,12 +21,7 @@
 #include "registercontroller_x86.h"
 
 #include "../debugsession.h"
-#include "../gdbcommand.h"
-#include "../mi/gdbmi.h"
 #include "converters.h"
-
-#include <qmath.h>
-#include <QRegExp>
 
 #include <KDebug>
 #include <KLocalizedString>
@@ -103,10 +98,6 @@ void RegisterControllerGeneral_x86::setSegmentRegister(const Register& reg)
 
 void RegisterControllerGeneral_x86::updateRegisters(const GroupsName& group)
 {
-    if (!m_debugSession || m_debugSession->stateIsOn(s_dbgNotStarted | s_shuttingDown)) {
-        return;
-    }
-
     if (!m_registerNamesInitialized) {
         if (initializeRegisters()) {
             m_registerNamesInitialized = true;

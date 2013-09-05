@@ -127,16 +127,6 @@ void IRegisterController::generalRegistersHandler(const GDBMI::ResultRecord& r)
 
     GroupsName group = groupForRegisterName(registerName);
 
-    //FIXME: handle flag registers in a proper way.
-    if (group.name().isEmpty()) {
-        foreach(const GroupsName& g, namesOfRegisterGroups()) {
-            if(g.type() == flag){
-                group = g;
-                break;
-            }
-        }
-    }
-
     if (m_pendingGroups.contains(group)) {
         emit registersChanged(registersFromGroup(group));
         m_pendingGroups.remove(m_pendingGroups.indexOf(group));
@@ -179,6 +169,9 @@ GroupsName IRegisterController::groupForRegisterName(const QString& name) const
 {
     foreach (const GroupsName & group, namesOfRegisterGroups()) {
         const QStringList registersInGroup = registerNamesForGroup(group);
+        if (group.flagName() == name) {
+            return group;
+        }
         foreach (const QString & n, registersInGroup) {
             if (n == name) {
                 return group;

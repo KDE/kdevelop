@@ -21,12 +21,8 @@
 #include "registercontroller_arm.h"
 
 #include "../debugsession.h"
-#include "../gdbcommand.h"
-#include "../mi/gdbmi.h"
 
 #include "converters.h"
-
-#include <qmath.h>
 
 #include <KDebug>
 #include <KLocalizedString>
@@ -103,10 +99,6 @@ void RegisterController_Arm::setVFPQ_Register(const Register& reg)
 
 void RegisterController_Arm::updateRegisters(const GroupsName& group)
 {
-    if (!m_debugSession || m_debugSession->stateIsOn(s_dbgNotStarted | s_shuttingDown)) {
-        return;
-    }
-
     if (!m_registerNamesInitialized) {
         if (initializeRegisters()) {
             m_registerNamesInitialized = true;

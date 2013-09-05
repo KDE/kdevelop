@@ -19,7 +19,6 @@
 
 #include "converters.h"
 
-#include <KDebug>
 #include <KLocalizedString>
 
 namespace GDBDebugger
