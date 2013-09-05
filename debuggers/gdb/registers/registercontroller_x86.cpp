@@ -113,38 +113,12 @@ void RegisterControllerGeneral_x86::updateRegisters(const GroupsName& group)
         }
     }
 
-    if (group.name() != enumToGroupName(FPU).name()) {
-        if (group.name().isEmpty()) {
-            QVector<GroupsName> groups = namesOfRegisterGroups();
-            groups.remove(groups.indexOf(enumToGroupName(FPU)));
-            foreach (const GroupsName & g, groups) {
-                IRegisterController::updateRegisters(g);
-            }
-        } else {
-            IRegisterController::updateRegisters(group);
-        }
-    }
-
-    if (group == enumToGroupName(FPU) || group.name().isEmpty()) {
-        if (m_debugSession && !m_debugSession->stateIsOn(s_dbgNotStarted | s_shuttingDown)) {
-            if (numberForName(registerNamesForGroup(enumToGroupName(FPU)).first()) == "-1") {
-                return;
-            }
-
-            QString command = "info all-registers ";
-            foreach (const QString & name, registerNamesForGroup(enumToGroupName(FPU))) {
-                command += "$" + name + ' ';
-            }
-            //TODO: use mi interface instead.
-            m_debugSession->addCommand(
-                new CliCommand(GDBMI::NonMI, command, this, &RegisterControllerGeneral_x86::handleFPURegisters));
-        }
-    }
+    IRegisterController::updateRegisters(group);
 }
 
 GroupsName RegisterControllerGeneral_x86::enumToGroupName(X86RegisterGroups group) const
 {
-    static const GroupsName groups[LAST_REGISTER] = { createGroupName(i18n("General"), General), createGroupName(i18n("Flags"), Flags, flag, m_eflags.registerName), createGroupName(i18n("FPU"), FPU), createGroupName(i18n("XMM"), XMM, structured), createGroupName(i18n("Segment"), Segment)};
+    static const GroupsName groups[LAST_REGISTER] = { createGroupName(i18n("General"), General), createGroupName(i18n("Flags"), Flags, flag, m_eflags.registerName), createGroupName(i18n("FPU"), FPU, floatPoint), createGroupName(i18n("XMM"), XMM, structured), createGroupName(i18n("Segment"), Segment)};
 
     return groups[group];
 }
@@ -153,36 +127,6 @@ void RegisterControllerGeneral_x86::convertValuesForGroup(RegistersGroup* regist
 {
     if (registersGroup->format != Raw) {
         IRegisterController::convertValuesForGroup(registersGroup);
-    }
-}
-
-void RegisterControllerGeneral_x86::handleFPURegisters(const QStringList& record)
-{
-    //st0       0
-    //st1       -1
-    //st2       123456789
-    //st3       -12345.6789
-    //st4       12.34
-    //st5       1.1e+2
-    //st6       -23.45e-10
-    const QRegExp rx("^(st[0-8])\\s+((?:-?\\d+\\.?\\d+(?:e(\\+|-)\\d+)?)|(?:-?\\d+))$");
-    QVector<Register> registers;
-    foreach (const QString & s, record) {
-        if (rx.exactMatch(s)) {
-            registers.push_back(Register(rx.cap(1), rx.cap(2)));
-        }
-    }
-
-    if (registers.size() != 8) {
-        kDebug() << "can't parse FPU. Wrong format" << record << "registers: ";
-        foreach (const Register & r, registers) {
-            kDebug() << r.name << ' ' << r.value;
-        }
-    } else {
-        foreach (const Register & r, registers) {
-            m_registers.insert(r.name, r.value);
-        }
-        emit registersChanged(registersFromGroup(enumToGroupName(FPU)));
     }
 }
 

@@ -58,7 +58,12 @@ void IRegisterController::updateRegisters(const GroupsName& group)
         m_pendingGroups << group;
     }
 
-    QString registers = (group.type() == structured) ? "N " : "r ";
+    QString registers;
+    if (group.type() == structured || group.type() == floatPoint) {
+        registers = "N ";
+    } else {
+        registers = "r ";
+    }
 
     if (group.type() == flag) {
         registers += numberForName(group.flagName());
@@ -75,8 +80,14 @@ void IRegisterController::updateRegisters(const GroupsName& group)
         return;
     }
 
-    m_debugSession->addCommand(
-        new GDBCommand(GDBMI::DataListRegisterValues, registers, this, (group.type() == structured) ? &IRegisterController::structuredRegistersHandler : &IRegisterController::generalRegistersHandler));
+    void (IRegisterController::* handler)(const GDBMI::ResultRecord&);
+    if (group.type() == structured) {
+        handler = &IRegisterController::structuredRegistersHandler;
+    } else {
+        handler = &IRegisterController::generalRegistersHandler;
+    }
+
+    m_debugSession->addCommand(new GDBCommand(GDBMI::DataListRegisterValues, registers, this, handler));
 }
 
 void IRegisterController::registerNamesHandler(const GDBMI::ResultRecord& r)

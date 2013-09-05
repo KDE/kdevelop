@@ -113,71 +113,12 @@ void RegisterController_Arm::updateRegisters(const GroupsName& group)
         }
     }
 
-    if (group.name() != enumToGroupName(VFP_single).name()) {
-        if (group.name().isEmpty()) {
-            QVector<GroupsName> groups = namesOfRegisterGroups();
-            groups.remove(groups.indexOf(enumToGroupName(VFP_single)));
-            foreach (const GroupsName & g, groups) {
-                IRegisterController::updateRegisters(g);
-            }
-        } else {
-            IRegisterController::updateRegisters(group);
-        }
-    }
-
-    if (group == enumToGroupName(VFP_single) || group.name().isEmpty()) {
-        if (numberForName(registerNamesForGroup(enumToGroupName(VFP_single)).first()) == "-1") {
-            return;
-        }
-
-        QString command = "info all-registers ";
-        foreach (const QString & name, registerNamesForGroup(enumToGroupName(VFP_single))) {
-            command += "$" + name + ' ';
-        }
-
-        if (m_debugSession && !m_debugSession->stateIsOn(s_dbgNotStarted | s_shuttingDown)) {
-            //TODO: use mi interface instead.
-            m_debugSession->addCommand(
-                new CliCommand(GDBMI::NonMI, command, this, &RegisterController_Arm::handleVFPSRegisters));
-        }
-    }
-}
-
-void RegisterController_Arm::handleVFPSRegisters(const QStringList& record)
-{
-    //s0       0
-    //s1       -1
-    //s2       123456789
-    //s3       -12345.6789
-    //s10       12.34
-    //s15       1.1e+2
-    //s30       -23.45e-10
-    const QRegExp rx("^(s\\d+)\\s+((?:-?\\d+\\.?\\d+(?:e(\\+|-)\\d+)?)|(?:-?\\d+))$");
-    QVector<Register> registers;
-    foreach (const QString & s, record) {
-        if (rx.exactMatch(s)) {
-            registers.push_back(Register(rx.cap(1), rx.cap(2)));
-        }
-    }
-
-    if (registers.size() != 32) {
-        kDebug() << "can't parse VFP single. Wrong format";
-        kDebug() << record;
-        kDebug() << "Parsed registers: ";
-        foreach (const Register & r, registers) {
-            kDebug() << r.name << ' ' << r.value;
-        }
-    } else {
-        foreach (const Register & r, registers) {
-            m_registers.insert(r.name, r.value);
-        }
-        emit registersChanged(registersFromGroup(enumToGroupName(VFP_single)));
-    }
+    IRegisterController::updateRegisters(group);
 }
 
 GroupsName RegisterController_Arm::enumToGroupName(ArmRegisterGroups group) const
 {
-    static const GroupsName groups[LAST_REGISTER] = { createGroupName(i18n("General"), General) , createGroupName(i18n("Flags"), Flags, flag, m_cpsr.registerName), createGroupName(i18n("VFP single-word"), VFP_single), createGroupName(i18n("VFP double-word"), VFP_double, structured), createGroupName(i18n("VFP quad-word"), VFP_quad, structured)};
+    static const GroupsName groups[LAST_REGISTER] = { createGroupName(i18n("General"), General) , createGroupName(i18n("Flags"), Flags, flag, m_cpsr.registerName), createGroupName(i18n("VFP single-word"), VFP_single, floatPoint), createGroupName(i18n("VFP double-word"), VFP_double, structured), createGroupName(i18n("VFP quad-word"), VFP_quad, structured)};
 
     return groups[group];
 }

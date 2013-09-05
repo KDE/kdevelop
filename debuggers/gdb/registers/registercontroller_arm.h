@@ -65,9 +65,6 @@ protected:
     void setVFPD_Register(const Register& reg);
     void setVFPQ_Register(const Register& reg);
 
-    //VFP registers workaround.
-    void handleVFPSRegisters(const QStringList& record);
-
     static QVector<QStringList> m_registerNames;
 
 private:

@@ -37,7 +37,7 @@ namespace GDBDebugger
 
 class DebugSession;
 
-enum RegisterType {general, structured, flag};
+enum RegisterType {general, structured, flag, floatPoint};
 
 class GroupsName
 {

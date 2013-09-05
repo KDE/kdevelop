@@ -54,9 +54,6 @@ protected:
 
     virtual void setRegisterValueForGroup(const GroupsName& group, const Register& reg);
 
-    //this is a workaround for FPU registers.
-    void handleFPURegisters(const QStringList& record);
-
     enum X86RegisterGroups {General, Flags, FPU, XMM, Segment, LAST_REGISTER};
 
     GroupsName enumToGroupName(X86RegisterGroups group) const;
