@@ -87,8 +87,7 @@ QString ModelsManager::addView(QAbstractItemView* view)
             view->setModel(m);
 
             if (group.type() == flag) {
-                disconnect(view, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(flagChanged(QModelIndex)));
-                connect(view, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(flagChanged(QModelIndex)));
+                connect(view, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(flagChanged(QModelIndex)), Qt::UniqueConnection);
             }
 
             name = group.name();
@@ -113,10 +112,18 @@ void ModelsManager::updateModelForGroup(const RegistersGroup& group)
     model->setRowCount(group.registers.count());
     model->setColumnCount(group.registers.first().value.split(' ').size() + 1);
 
+    //set names and values separately as names don't change so often.
+    if (!model->item(0, 0)) {
+        for (int row = 0; row < group.registers.count(); row++) {
+            const Register& r = group.registers[row];
+            QStandardItem* n = new QStandardItem(r.name);
+            n->setFlags(Qt::ItemIsEnabled);
+            model->setItem(row, 0, n);
+        }
+    }
+
     for (int row = 0; row < group.registers.count(); row++) {
         const Register& r = group.registers[row];
-        QStandardItem* n = new QStandardItem(r.name);
-        n->setFlags(Qt::ItemIsEnabled);
 
         const QStringList& values = r.value.split(' ');
         for (int column = 0; column  < values.count(); column ++) {
@@ -126,7 +133,6 @@ void ModelsManager::updateModelForGroup(const RegistersGroup& group)
             }
             model->setItem(row, column + 1, v);
         }
-        model->setItem(row, 0, n);
     }
 
     connect(model, SIGNAL(itemChanged(QStandardItem*)), this, SLOT(itemChanged(QStandardItem*)));

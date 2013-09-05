@@ -86,7 +86,7 @@ RegistersManager::RegistersManager(QWidget* parent)
     connect(m_architectureParser, SIGNAL(architectureParsed(Architecture)), this, SLOT(architectureParsedSlot(Architecture)));
 
     m_registersView->setModel(m_modelsManager);
-    m_modelsManager->setController(0);
+    setController(0);
 }
 
 void RegistersManager::architectureParsedSlot(Architecture arch)
@@ -118,8 +118,7 @@ void RegistersManager::architectureParsedSlot(Architecture arch)
 
     m_currentArchitecture = arch;
 
-    m_modelsManager->setController(m_registerController.data());
-    m_registersView->enable(m_registerController ? true : false);
+    setController(m_registerController.data());
 
     if (m_registerController) {
         updateRegisters();
@@ -136,7 +135,7 @@ void RegistersManager::setSession(DebugSession* debugSession)
     if (!m_debugSession) {
         kDebug() << "Will reparse arch";
         m_needToCheckArch = true;
-        m_registersView->enable(false);
+        setController(0);
     }
 }
 
@@ -150,18 +149,14 @@ void RegistersManager::updateRegisters()
     if (m_needToCheckArch) {
         m_needToCheckArch = false;
         m_currentArchitecture = undefined;
-        if (m_registerController) {
-            m_registersView->enable(false);
-            m_registerController.reset();
-            m_modelsManager->setController(0);
-        }
+        setController(0);
     }
     if (m_currentArchitecture == undefined) {
         m_architectureParser->determineArchitecture(m_debugSession);
     }
 
     if (m_registerController) {
-        m_registerController->updateRegisters();
+        m_registersView->updateRegisters();
     } else {
         kDebug() << "No registerController, yet?";
     }
@@ -169,5 +164,13 @@ void RegistersManager::updateRegisters()
 
 ArchitectureParser::ArchitectureParser(QObject* parent)
 : QObject(parent) {}
+
+void RegistersManager::setController(IRegisterController* c)
+{
+    m_registerController.reset(c);
+    m_modelsManager->setController(c);
+
+    m_registersView->enable(c ? true : false);
+}
 
 }

@@ -43,7 +43,7 @@ RegistersView::RegistersView(QWidget* p)
 
     connect(m_mapper, SIGNAL(mapped(QString)), this, SLOT(formatMenuTriggered(QString)));
 
-    connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(updateMenuTriggered(int)));
+    connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(updateRegisters()));
 }
 
 void RegistersView::contextMenuEvent(QContextMenuEvent* e)
@@ -51,9 +51,9 @@ void RegistersView::contextMenuEvent(QContextMenuEvent* e)
     m_menu->clear();
 
     QAction* a = m_menu->addAction("Update");
-    connect(a, SIGNAL(triggered()), this, SLOT(updateMenuTriggered()));
+    connect(a, SIGNAL(triggered()), this, SLOT(updateRegisters()));
 
-    QString group = currentView();
+    QString group = activeViews().first();
 
     const QStringList formats = m_modelsManager->formats(group);
     if (formats.size() > 1) {
@@ -71,7 +71,7 @@ void RegistersView::addItemToFormatSubmenu(QMenu* m, const QString& format)
     QAction* a = m->addAction(format);
     a->setCheckable(true);
 
-    const QString view = currentView();
+    const QString view = activeViews().first();
 
     if (format == m_modelsManager->formats(view).first()) {
         a->setChecked(true);
@@ -81,17 +81,17 @@ void RegistersView::addItemToFormatSubmenu(QMenu* m, const QString& format)
     connect(a, SIGNAL(triggered()), m_mapper, SLOT(map()));
 }
 
-void RegistersView::updateMenuTriggered(int /*idx*/)
+void RegistersView::updateRegisters()
 {
-    if (!currentView().isEmpty()) {
-        m_modelsManager->updateRegisters(currentView());
+    foreach (const QString& v, activeViews()) {
+        m_modelsManager->updateRegisters(v);
     }
 }
 
 void RegistersView::formatMenuTriggered(const QString& format)
 {
-    m_modelsManager->setFormat(currentView(), format);
-    m_modelsManager->updateRegisters(currentView());
+    m_modelsManager->setFormat(activeViews().first(), format);
+    updateRegisters();
 }
 
 void RegistersView::addView(QTableView* view, int idx)
@@ -137,9 +137,9 @@ void RegistersView::setModel(ModelsManager* m)
     m_modelsManager = m;
 }
 
-QString RegistersView::currentView()
+QStringList RegistersView::activeViews()
 {
-    return tabWidget->tabText(tabWidget->currentIndex()).split('/').first();
+    return tabWidget->tabText(tabWidget->currentIndex()).split('/');
 }
 
 void RegistersView::clear()

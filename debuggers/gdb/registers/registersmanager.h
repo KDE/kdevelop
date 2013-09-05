@@ -67,7 +67,6 @@ private:
     QStringList m_registerNames;
 };
 
-
 class RegistersManager : public QObject
 {
     Q_OBJECT
@@ -83,6 +82,8 @@ public Q_SLOTS:
     void architectureParsedSlot(const Architecture arch);
 
 private:
+    void setController(IRegisterController* c);
+
     RegistersView* m_registersView;
 
     QScopedPointer<IRegisterController> m_registerController;

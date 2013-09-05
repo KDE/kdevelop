@@ -45,12 +45,17 @@ public:
 
     void setModel(ModelsManager* m);
 
+public slots:
+    ///Updates registers for active views.
+    void updateRegisters();
+
 protected:
     ///Allows to choose tables/register formates.
     virtual void contextMenuEvent(QContextMenuEvent* e);
 
 private:
-    QString currentView();
+    ///Returns list of active view.
+    QStringList activeViews();
 
     ///Adds @p v to the list of view with assigning it a name.
     void addView(QTableView* view, int idx);
@@ -64,8 +69,6 @@ private:
 private slots:
     ///Changes register formates to @p format.
     void formatMenuTriggered(const QString& format);
-    ///Updates visible tables
-    void updateMenuTriggered(int idx = -1);
 
 private:
     void addItemToFormatSubmenu(QMenu* m, const QString& format);
@@ -75,8 +78,6 @@ private:
     QSignalMapper* m_mapper;
 
     ModelsManager* m_modelsManager;
-
-    friend class TablesManager;
 };
 
 }
