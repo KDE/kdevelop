@@ -71,7 +71,13 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
         topLayout->addWidget(icon);
         topLayout->addSpacing(5);
 
-        QLabel* name = new QLabel(i18n("<b>Working Set</b>"));
+        QString label;
+        if (m_set->isConnected(mainwindow->area())) {
+            label = i18n("<b>Active Working Set</b>");
+        } else {
+            label = i18n("<b>Working Set</b>");
+        }
+        QLabel* name = new QLabel(label);
         name->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
         topLayout->addWidget(name);
          topLayout->addSpacing(10);
