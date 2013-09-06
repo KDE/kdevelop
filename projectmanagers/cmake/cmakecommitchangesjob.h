@@ -51,6 +51,7 @@ public:
     explicit CMakeCommitChangesJob(const KUrl& url, CMakeManager* manager, KDevelop::IProject* project);
 
     KUrl::List addProjectData(const CMakeProjectData& data);
+    void setFindParentItem(bool find);
     virtual void start();
 
 public slots:
@@ -80,6 +81,7 @@ private:
     KDevelop::ProjectFolderItem* m_parentItem;
     bool m_waiting;
     bool m_reloadFiles;
+    bool m_findParent;
 };
 
 #endif // CMAKECOMMITCHANGESJOB_H

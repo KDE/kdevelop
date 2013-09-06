@@ -226,6 +226,7 @@ CMakeCommitChangesJob* CMakeImportJob::importDirectory(IProject* project, const 
                 continue;
             }
             CMakeCommitChangesJob* job = importDirectory(project, folder, ctx);
+            job->setFindParentItem(false);
             connect(commitJob, SIGNAL(folderCreated(KDevelop::ProjectFolderItem*)),
                     job, SLOT(folderAvailable(KDevelop::ProjectFolderItem*)));
         }

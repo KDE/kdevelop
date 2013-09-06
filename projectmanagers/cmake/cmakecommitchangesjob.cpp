@@ -125,15 +125,9 @@ CMakeCommitChangesJob::CMakeCommitChangesJob(const KUrl& url, CMakeManager* mana
     , m_projectDataAdded(false)
     , m_parentItem(0)
     , m_waiting(false)
+    , m_findParent(true)
 {
     setObjectName(url.prettyUrl());
-    if(m_url == m_project->folder()) {
-        m_parentItem = m_project->projectItem()->folder();
-    } else {
-        QList<ProjectFolderItem*> folders = project->foldersForUrl(m_url);
-        if(!folders.isEmpty())
-            m_parentItem = folders.first();
-    }
 }
 
 KUrl::List CMakeCommitChangesJob::addProjectData(const CMakeProjectData& data)
@@ -198,6 +192,17 @@ KUrl::List CMakeCommitChangesJob::addProjectData(const CMakeProjectData& data)
 void CMakeCommitChangesJob::start()
 {
     Q_ASSERT(m_project->thread() == QThread::currentThread());
+
+    if(!m_parentItem && m_findParent) {
+        if(m_url == m_project->folder()) {
+            m_parentItem = m_project->projectItem()->folder();
+        } else {
+            QList<ProjectFolderItem*> folders = m_project->foldersForUrl(m_url);
+            if(!folders.isEmpty())
+                m_parentItem = folders.first();
+        }
+    }
+
     if((!m_projectDataAdded && m_parentItem) || dynamic_cast<CMakeFolderItem*>(m_parentItem)) {
         QMetaObject::invokeMethod(this, "makeChanges", Qt::QueuedConnection);
         m_waiting = false;
@@ -435,4 +440,9 @@ void CMakeCommitChangesJob::reloadFiles()
     Q_ASSERT(m_parentItem);
     reloadFiles(m_parentItem);
     emitResult();
+}
+
+void CMakeCommitChangesJob::setFindParentItem(bool find)
+{
+    m_findParent = find;
 }
