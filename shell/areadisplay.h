@@ -23,7 +23,7 @@
 #include <QWidget>
 
 class QLabel;
-class QPushButton;
+class QToolButton;
 class QMenu;
 
 namespace KDevelop {
@@ -57,7 +57,7 @@ private slots:
 private:
     QLabel* m_separator;
     QMenu* m_menu;
-    QPushButton* m_button;
+    QToolButton* m_button;
     KDevelop::MainWindow* m_mainWindow;
 };
 

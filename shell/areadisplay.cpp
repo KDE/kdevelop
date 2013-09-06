@@ -29,7 +29,7 @@
 #include <KMenuBar>
 
 #include <QMenu>
-#include <QPushButton>
+#include <QToolButton>
 #include <QHBoxLayout>
 #include <QLabel>
 
@@ -48,8 +48,10 @@ AreaDisplay::AreaDisplay(KDevelop::MainWindow* parent)
     layout()->setContentsMargins(0, 0, 0, 0);
     layout()->addWidget(Core::self()->workingSetControllerInternal()->createSetManagerWidget(m_mainWindow));
 
-    m_button = new QPushButton(this);
-    m_button->setFlat(true);
+    m_button = new QToolButton(this);
+    m_button->setAutoRaise(true);
+    m_button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    m_button->setPopupMode(QToolButton::InstantPopup);
     layout()->addWidget(m_button);
 
     connect(parent, SIGNAL(areaChanged(Sublime::Area*)), SLOT(newArea(Sublime::Area*)));
