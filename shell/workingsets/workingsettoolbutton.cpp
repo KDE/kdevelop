@@ -45,6 +45,7 @@ WorkingSetToolButton::WorkingSetToolButton(QWidget* parent, WorkingSet* set)
 {
     setFocusPolicy(Qt::NoFocus);
     setWorkingSet(set);
+    setAutoRaise(true);
 
     connect(this, SIGNAL(clicked(bool)), SLOT(buttonTriggered()));
 }
