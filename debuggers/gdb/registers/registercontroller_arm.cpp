@@ -20,10 +20,6 @@
 
 #include "registercontroller_arm.h"
 
-#include "../debugsession.h"
-
-#include "converters.h"
-
 #include <KDebug>
 #include <KLocalizedString>
 
@@ -48,14 +44,12 @@ RegistersGroup RegisterController_Arm::registersFromGroup(const GroupsName& grou
     RegistersGroup registers;
 
     registers.groupName = group;
-    registers.flag = (group == enumToGroupName(Flags)) ? true : false;
-    registers.format = m_formats[group.index()].first();
+    registers.format = m_formatsModes[group.index()].formats.first();
     foreach (const QString & name, registerNamesForGroup(group)) {
         registers.registers.append(Register(name, QString()));
     }
 
     updateValuesForRegisters(&registers);
-    convertValuesForGroup(&registers);
 
     return registers;
 }
@@ -115,13 +109,6 @@ GroupsName RegisterController_Arm::enumToGroupName(ArmRegisterGroups group) cons
     return groups[group];
 }
 
-void RegisterController_Arm::convertValuesForGroup(RegistersGroup* registersGroup) const
-{
-    if (registersGroup->format != Raw) {
-        IRegisterController::convertValuesForGroup(registersGroup);
-    }
-}
-
 RegisterController_Arm::RegisterController_Arm(DebugSession* debugSession, QObject* parent) : IRegisterController(debugSession, parent), m_registerNamesInitialized(false)
 {
     if (m_registerNames.isEmpty()) {
@@ -133,25 +120,30 @@ RegisterController_Arm::RegisterController_Arm(DebugSession* debugSession, QObje
 
     int n = 0;
     while (n++ < namesOfRegisterGroups().size()) {
-        m_formats.append(QVector<Format>());
+        m_formatsModes.append(FormatsModes());
     }
 
-    m_formats[General].append(Raw);
-    m_formats[General].append(Binary);
-    m_formats[General].append(Decimal);
-    m_formats[General].append(Hexadecimal);
-    m_formats[General].append(Octal);
+    m_formatsModes[VFP_double].formats.append(Binary);
+    m_formatsModes[VFP_double].formats.append(Decimal);
+    m_formatsModes[VFP_double].formats.append(Hexadecimal);
+    m_formatsModes[VFP_double].formats.append(Octal);
+    m_formatsModes[VFP_double].formats.append(Unsigned);
+    m_formatsModes[VFP_double].modes.append(u32);
+    m_formatsModes[VFP_double].modes.append(u64);
+    m_formatsModes[VFP_double].modes.append(f32);
+    m_formatsModes[VFP_double].modes.append(f64);
 
-    m_formats[Flags].append(Raw);
+    m_formatsModes[Flags].formats.append(Raw);
+    m_formatsModes[Flags].modes.append(natural);
 
-    m_formats[VFP_single].append(Raw);
+    m_formatsModes[VFP_single].formats.append(Decimal);
+    m_formatsModes[VFP_single].modes.append(natural);
 
-    m_formats[VFP_double].append(u32);
-    m_formats[VFP_double].append(u64);
-    m_formats[VFP_double].append(f32);
-    m_formats[VFP_double].append(f64);
+    m_formatsModes[VFP_quad] = m_formatsModes[VFP_double];
 
-    m_formats[VFP_quad] = m_formats[VFP_double];
+    m_formatsModes[General].formats.append(Raw);
+    m_formatsModes[General].formats << m_formatsModes[VFP_double].formats;
+    m_formatsModes[General].modes.append(natural);
 }
 
 void RegisterController_Arm::initRegisterNames()

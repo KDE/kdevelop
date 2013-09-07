@@ -23,11 +23,6 @@
 
 #include "registercontroller.h"
 
-namespace GDBMI
-{
-struct ResultRecord;
-}
-
 namespace GDBDebugger
 {
 
@@ -45,8 +40,6 @@ protected:
     RegisterControllerGeneral_x86(DebugSession* debugSession = 0, QObject* parent = 0);
 
     virtual RegistersGroup registersFromGroup(const GroupsName& group) const;
-
-    virtual void convertValuesForGroup(RegistersGroup* registersGroup) const;
 
     virtual QStringList registerNamesForGroup(const GroupsName& group) const;
 

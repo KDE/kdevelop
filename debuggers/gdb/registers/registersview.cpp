@@ -20,11 +20,15 @@
 
 #include "registersview.h"
 
+#include "modelsmanager.h"
+#include "converters.h"
+
 #include <QMenu>
 #include <QContextMenuEvent>
 #include <QSignalMapper>
 
 #include <KDebug>
+#include <KLocalizedString>
 
 namespace GDBDebugger
 {
@@ -34,14 +38,13 @@ const int TABLES_COUNT = 5;
 }
 
 RegistersView::RegistersView(QWidget* p)
-    : QWidget(p), m_modelsManager(0)
+    : QWidget(p), m_menu(new QMenu(this)), m_mapper(new QSignalMapper(this)), m_modelsManager(0)
 {
     setupUi(this);
 
-    m_menu = new QMenu(this);
-    m_mapper = new QSignalMapper(this);
+    setupActions();
 
-    connect(m_mapper, SIGNAL(mapped(QString)), this, SLOT(formatMenuTriggered(QString)));
+    connect(m_mapper, SIGNAL(mapped(QString)), this, SLOT(menuTriggered(QString)));
 
     connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(updateRegisters()));
 }
@@ -50,48 +53,98 @@ void RegistersView::contextMenuEvent(QContextMenuEvent* e)
 {
     m_menu->clear();
 
-    QAction* a = m_menu->addAction("Update");
+    QAction* a = m_menu->addAction(i18n("Update"));
     connect(a, SIGNAL(triggered()), this, SLOT(updateRegisters()));
 
     QString group = activeViews().first();
 
-    const QStringList formats = m_modelsManager->formats(group);
+    foreach (QAction * act, m_actions) {
+        act->setChecked(false);
+    }
+
+    const QVector<Format> formats = m_modelsManager->formats(group);
     if (formats.size() > 1) {
-        QMenu* m = m_menu->addMenu("Format");
-        foreach (const QString & fmt, formats) {
-            addItemToFormatSubmenu(m, fmt);
+        QMenu* m = m_menu->addMenu(i18n("Format"));
+        foreach (Format fmt, formats) {
+            m->addAction(findAction(Converters::formatToString(fmt)));
         }
+        findAction(Converters::formatToString(formats.first()))->setChecked(true);
+    }
+
+    const QVector<Mode> modes = m_modelsManager->modes(group);
+    if (modes.size() > 1) {
+        QMenu* m = m_menu->addMenu(i18n("Mode"));
+        foreach (Mode mode, modes) {
+            m->addAction(findAction(Converters::modeToString(mode)));
+        }
+        findAction(Converters::modeToString(modes.first()))->setChecked(true);
     }
 
     m_menu->exec(e->globalPos());
 }
 
-void RegistersView::addItemToFormatSubmenu(QMenu* m, const QString& format)
-{
-    QAction* a = m->addAction(format);
-    a->setCheckable(true);
-
-    const QString view = activeViews().first();
-
-    if (format == m_modelsManager->formats(view).first()) {
-        a->setChecked(true);
-    }
-
-    m_mapper->setMapping(a, a->text());
-    connect(a, SIGNAL(triggered()), m_mapper, SLOT(map()));
-}
-
 void RegistersView::updateRegisters()
 {
-    foreach (const QString& v, activeViews()) {
+    changeAvaliableActions();
+
+    foreach (const QString & v, activeViews()) {
         m_modelsManager->updateRegisters(v);
     }
 }
 
-void RegistersView::formatMenuTriggered(const QString& format)
+void RegistersView::menuTriggered(const QString& formatOrMode)
 {
-    m_modelsManager->setFormat(activeViews().first(), format);
+    Format f = Converters::stringToFormat(formatOrMode);
+    if (f != LAST_FORMAT) {
+        m_modelsManager->setFormat(activeViews().first(), f);
+    } else {
+        m_modelsManager->setMode(activeViews().first(), Converters::stringToMode(formatOrMode));
+    }
+
     updateRegisters();
+}
+
+void RegistersView::changeAvaliableActions()
+{
+    const QString view = activeViews().first();
+    if (view.isEmpty()) {
+        return;
+    }
+
+    const QVector<Format> formats = m_modelsManager->formats(view) ;
+    const QVector<Mode> modes = m_modelsManager->modes(view);
+
+    foreach (QAction * a, m_actions) {
+        bool enable = false;
+        foreach (Format f, formats) {
+            if (a->text() == Converters::formatToString(f)) {
+                enable = true;
+                break;
+            }
+        }
+
+        if (!enable) {
+            foreach (Mode m, modes) {
+                if (a->text() == Converters::modeToString(m)) {
+                    enable = true;
+                    break;
+                }
+            }
+        }
+
+        a->setVisible(enable);
+        a->setEnabled(enable);
+    }
+}
+
+QAction* RegistersView::findAction(const QString& name)
+{
+    foreach (QAction * a, m_actions) {
+        if (a->text() == name) {
+            return a;
+        }
+    }
+    return 0;
 }
 
 void RegistersView::addView(QTableView* view, int idx)
@@ -120,6 +173,8 @@ void RegistersView::enable(bool enabled)
         addView(table_1, 1);
         addView(table_2, 2);
         addView(table_3, 3);
+
+        changeAvaliableActions();
     }
 }
 
@@ -147,6 +202,42 @@ void RegistersView::clear()
     for (int i = 0; i < TABLES_COUNT; i++) {
         tabWidget->setTabText(i, "");
     }
+}
+
+void RegistersView::setupActions()
+{
+    insertAction(Converters::formatToString(Binary), Qt::Key_B);
+    insertAction(Converters::formatToString(Octal), Qt::Key_O);
+    insertAction(Converters::formatToString(Decimal), Qt::Key_D);
+    insertAction(Converters::formatToString(Hexadecimal), Qt::Key_H);
+    insertAction(Converters::formatToString(Raw), Qt::Key_R);
+    insertAction(Converters::formatToString(Unsigned), Qt::Key_U);
+
+    insertAction(Converters::modeToString(natural), Qt::Key_N);
+
+    insertAction(Converters::modeToString(u32), Qt::Key_I);
+    insertAction(Converters::modeToString(u64), Qt::Key_L);
+    insertAction(Converters::modeToString(f32), Qt::Key_F);
+    insertAction(Converters::modeToString(f64), Qt::Key_P);
+
+    insertAction(Converters::modeToString(v2_double), Qt::Key_P);
+    insertAction(Converters::modeToString(v2_int64), Qt::Key_L);
+    insertAction(Converters::modeToString(v4_float), Qt::Key_F);
+    insertAction(Converters::modeToString(v4_int32), Qt::Key_I);
+}
+
+void RegistersView::insertAction(const QString& name, Qt::Key k)
+{
+    QAction* a = new QAction(this);
+    a->setCheckable(true);
+    a->setShortcut(k);
+    a->setText(name);
+    a->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    m_actions.append(a);
+    addAction(a);
+
+    m_mapper->setMapping(a, a->text());
+    connect(a, SIGNAL(triggered()), m_mapper, SLOT(map()));
 }
 
 }

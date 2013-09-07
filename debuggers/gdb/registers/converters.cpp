@@ -28,24 +28,24 @@ QString Converters::formatToString(Format format)
 {
     if (format == Binary) {
         return i18n("Binary");
-    }else if (format == Octal) {
+    } else if (format == Octal) {
         return i18n("Octal");
-    }else if (format == Decimal) {
+    } else if (format == Decimal) {
         return i18n("Decimal");
-    }else if (format == Hexadecimal) {
+    } else if (format == Hexadecimal) {
         return i18n("Hexadecimal");
+    } else if (format == Raw) {
+        return i18n("Raw");
+    } else if (format == Unsigned) {
+        return i18n("Unsigned");
     }
 
-    int idx = format - Raw;
-    Q_ASSERT(idx >= 0 && idx < LAST_FORMAT);
-    static const QString formats[LAST_FORMAT - Raw] = {i18n("Raw"), "v4_float", "v2_double", "v4_int32", "v2_int64", "u32", "u64", "f32", "f64"};
-    return formats[idx];
+    Q_ASSERT(0);
+    return QString();
 }
 
 Format Converters::stringToFormat(const QString& format)
 {
-    Format def = Raw;
-
     if (formatToString(Binary) == format) {
         return Binary;
     }
@@ -58,12 +58,33 @@ Format Converters::stringToFormat(const QString& format)
     if (formatToString(Hexadecimal) == format) {
         return Hexadecimal;
     }
-    for (int i = Raw; i < LAST_FORMAT; i++) {
-        if (formatToString(static_cast<Format>(i)) == format) {
-            return static_cast<Format>(i);
+    if (formatToString(Raw) == format) {
+        return Raw;
+    }
+    if (formatToString(Unsigned) == format) {
+        return Unsigned;
+    }
+
+    return LAST_FORMAT;
+}
+
+Mode Converters::stringToMode(const QString& mode)
+{
+    for (int i = 0; i < LAST_MODE; i++) {
+        if (modeToString(static_cast<Mode>(i)) == mode) {
+            return static_cast<Mode>(i);
         }
     }
-    return def;
+
+    return LAST_MODE;
+}
+
+QString Converters::modeToString(Mode mode)
+{
+    Q_ASSERT(mode >= 0 && mode < LAST_MODE);
+
+    static const QString modes[LAST_MODE] = {"natural", "v4_float", "v2_double", "v4_int32", "v2_int64", "u32", "u64", "f32", "f64"};
+    return modes[mode];
 }
 
 }

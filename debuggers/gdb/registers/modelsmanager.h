@@ -23,10 +23,12 @@
 
 #include <QObject>
 #include <QString>
-#include <QStringList>
+#include <QVector>
 #include <QScopedPointer>
 
 #include <KConfigGroup>
+
+#include "registercontroller.h"
 
 class QAbstractItemView;
 class QStandardItemModel;
@@ -58,10 +60,16 @@ public:
     void setController(IRegisterController* rc);
 
     ///Sets @p format for the @p group, if format is valid. Does nothing otherwise.
-    void setFormat(const QString& group, const QString& format);
+    void setFormat(const QString& group, Format format);
 
     ///Returns all supported formats for @p group. The first one is current.
-    QStringList formats(const QString& group) const;
+    QVector<Format> formats(const QString& group) const;
+
+    ///Sets @p mode for the @p group, if mode is valid. Does nothing otherwise.
+    void setMode(const QString& group, Mode mode);
+
+    ///Returns all supported modes for @p group. The first one is current.
+    QVector<Mode> modes(const QString& group) const;
 
 Q_SIGNALS:
     ///Emitted when a register in a model changed. Updated value should be send to the debugger.

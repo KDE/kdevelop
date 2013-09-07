@@ -53,16 +53,42 @@ void IRegisterController::updateRegisters(const GroupsName& group)
         foreach (const GroupsName & g, namesOfRegisterGroups()) {
             IRegisterController::updateRegisters(g);
         }
+        return;
     } else {
         kDebug() << "Updating: " << group.name();
         m_pendingGroups << group;
     }
 
     QString registers;
-    if (group.type() == structured || group.type() == floatPoint) {
-        registers = "N ";
-    } else {
+    Format currentFormat = formats(group).first();
+    switch (currentFormat) {
+    case Binary:
+        registers = "t ";
+        break;
+    case Octal:
+        registers = "o ";
+        break;
+    case Decimal :
+        registers = "d ";
+        break;
+    case Hexadecimal:
+        registers = "x ";
+        break;
+    case Raw:
         registers = "r ";
+        break;
+    case Unsigned:
+        registers = "u ";
+        break;
+    default:
+        break;
+    }
+
+    //float point registers have only two reasonable format.
+    Mode currentMode = modes(group).first();
+    if (((currentMode >= v4_float && currentMode <= v2_double) ||
+        (currentMode >= f32 && currentMode <= f64) || group.type() == floatPoint) && currentFormat != Raw) {
+        registers = "N ";
     }
 
     if (group.type() == flag) {
@@ -81,7 +107,7 @@ void IRegisterController::updateRegisters(const GroupsName& group)
     }
 
     void (IRegisterController::* handler)(const GDBMI::ResultRecord&);
-    if (group.type() == structured) {
+    if (group.type() == structured && currentFormat != Raw) {
         handler = &IRegisterController::structuredRegistersHandler;
     } else {
         handler = &IRegisterController::generalRegistersHandler;
@@ -220,23 +246,6 @@ void IRegisterController::setGeneralRegister(const Register& reg, const GroupsNa
     updateRegisters(group);
 }
 
-void IRegisterController::convertValuesForGroup(RegistersGroup* registersGroup) const
-{
-    if (registersGroup->format > Hexadecimal) {
-        return;
-    }
-
-    bool ok;
-    for (int i = 0; i < registersGroup->registers.size(); i++) {
-        const QString converted = QString::number(registersGroup->registers[i].value.toULongLong(&ok, 16), static_cast<int> (registersGroup->format));
-        if (ok) {
-            registersGroup->registers[i].value = converted;
-        } else {
-            kDebug() << "Can't convert register value to format: " << registersGroup->format << ' ' << registersGroup->registers[i].name << ' ' << registersGroup->registers[i].value;
-        }
-    }
-}
-
 IRegisterController::IRegisterController(DebugSession* debugSession, QObject* parent)
 : QObject(parent), m_debugSession(debugSession) {}
 
@@ -260,7 +269,7 @@ QVector<Format> IRegisterController::formats(const GroupsName& group)
         }
     }
     Q_ASSERT(idx != -1);
-    return m_formats[idx];
+    return m_formatsModes[idx].formats;
 }
 
 GroupsName IRegisterController::createGroupName(const QString& name, int idx, RegisterType t, const QString flag) const
@@ -272,10 +281,10 @@ void IRegisterController::setFormat(Format f, const GroupsName& group)
 {
     foreach (const GroupsName & g, namesOfRegisterGroups()) {
         if (g == group) {
-            int i = m_formats[g.index()].indexOf(f);
+            int i = m_formatsModes[g.index()].formats.indexOf(f);
             if (i != -1) {
-                m_formats[g.index()].remove(i);
-                m_formats[g.index()].prepend(f);
+                m_formatsModes[g.index()].formats.remove(i);
+                m_formatsModes[g.index()].formats.prepend(f);
             }
         }
     }
@@ -317,7 +326,7 @@ void IRegisterController::setStructuredRegister(const Register& reg, const Group
         r.value.prepend('{');
     }
 
-    r.name += '.' + Converters::formatToString(m_formats[group.index()].first());
+    r.name += '.' + Converters::modeToString(m_formatsModes[group.index()].modes.first());
 
     setGeneralRegister(r, group);
 }
@@ -332,7 +341,7 @@ void IRegisterController::structuredRegistersHandler(const GDBMI::ResultRecord& 
     rx.setMinimal(true);
 
     QString registerName;
-    Format currentFormat = LAST_FORMAT;
+    Mode currentMode = LAST_MODE;
     GroupsName group;
     const GDBMI::Value& values = r["register-values"];
 
@@ -342,16 +351,15 @@ void IRegisterController::structuredRegistersHandler(const GDBMI::ResultRecord& 
         const GDBMI::Value& entry = values[i];
         int number = entry["number"].literal().toInt();
         registerName = m_rawRegisterNames[number];
-        if (currentFormat == LAST_FORMAT) {
+        if (currentMode == LAST_MODE) {
             group = groupForRegisterName(registerName);
-            currentFormat = formats(group).first();
+            currentMode = modes(group).first();
         }
 
         QString record = entry["value"].literal();
-
-        int start = record.indexOf(Converters::formatToString(currentFormat));
+        int start = record.indexOf(Converters::modeToString(currentMode));
         Q_ASSERT(start != -1);
-        start += Converters::formatToString(currentFormat).size();
+        start += Converters::modeToString(currentMode).size();
 
         QString value = record.right(record.size() - start);
         int idx = rx.indexIn(value);
@@ -371,6 +379,31 @@ void IRegisterController::structuredRegistersHandler(const GDBMI::ResultRecord& 
     if (m_pendingGroups.contains(group)) {
         emit registersChanged(registersFromGroup(group));
         m_pendingGroups.remove(m_pendingGroups.indexOf(group));
+    }
+}
+
+QVector< Mode > IRegisterController::modes(const GroupsName& group)
+{
+    int idx = -1;
+    foreach (const GroupsName & g, namesOfRegisterGroups()) {
+        if (g == group) {
+            idx = g.index();
+        }
+    }
+    Q_ASSERT(idx != -1);
+    return m_formatsModes[idx].modes;
+}
+
+void IRegisterController::setMode(Mode m, const GroupsName& group)
+{
+    foreach (const GroupsName & g, namesOfRegisterGroups()) {
+        if (g == group) {
+            int i = m_formatsModes[g.index()].modes.indexOf(m);
+            if (i != -1) {
+                m_formatsModes[g.index()].modes.remove(i);
+                m_formatsModes[g.index()].modes.prepend(m);
+            }
+        }
     }
 }
 

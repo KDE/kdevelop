@@ -20,13 +20,9 @@
 
 #include "modelsmanager.h"
 
-#include "registercontroller.h"
-#include "converters.h"
-
 #include <QStandardItemModel>
 #include <QAbstractItemView>
 #include <QSharedPointer>
-#include <QVector>
 
 #include <KDebug>
 #include <KGlobal>
@@ -39,7 +35,7 @@ namespace GDBDebugger
 struct Model {
     Model();
     Model(const QString& name, QSharedPointer<QStandardItemModel> model, QAbstractItemView* view);
-    bool operator==(const Model& m);
+    bool operator==(const Model& m) const;
 
     QString name;
     QSharedPointer<QStandardItemModel> model;
@@ -53,16 +49,16 @@ public:
 
     void clear();
 
-    bool contains(const QString& name);
-    bool contains(QAbstractItemView* view);
-    bool contains(QStandardItemModel* model);
+    bool contains(const QString& name) const;
+    bool contains(QAbstractItemView* view) const;
+    bool contains(QStandardItemModel* model) const;
 
-    QString nameForView(QAbstractItemView* view);
+    QString nameForView(QAbstractItemView* view) const;
 
     ///Returns registered model for @p name, 0 if not registered.
-    QStandardItemModel* modelForName(const QString& name);
+    QStandardItemModel* modelForName(const QString& name) const;
     ///Returns registered model for @p view, 0 if not registered.
-    QStandardItemModel* modelForView(QAbstractItemView* view);
+    QStandardItemModel* modelForView(QAbstractItemView* view) const;
 
 private:
     ///All models
@@ -129,7 +125,7 @@ void ModelsManager::updateModelForGroup(const RegistersGroup& group)
         const QStringList& values = r.value.split(' ');
         for (int column = 0; column  < values.count(); column ++) {
             QStandardItem* v = new QStandardItem(values[column]);
-            if (group.flag) {
+            if (group.groupName.type() == flag) {
                 v->setFlags(Qt::ItemIsEnabled);
             }
             model->setItem(row, column + 1, v);
@@ -163,7 +159,7 @@ QStandardItemModel* Models::addModel(const Model& m)
     return 0;
 }
 
-bool Models::contains(const QString& name)
+bool Models::contains(const QString& name) const
 {
     foreach (const Model & m, m_models) {
         if (m.name == name) {
@@ -173,7 +169,7 @@ bool Models::contains(const QString& name)
     return false;
 }
 
-bool Models::contains(QAbstractItemView* view)
+bool Models::contains(QAbstractItemView* view) const
 {
     foreach (const Model & m, m_models) {
         if (m.view == view) {
@@ -183,7 +179,7 @@ bool Models::contains(QAbstractItemView* view)
     return false;
 }
 
-bool Models::contains(QStandardItemModel* model)
+bool Models::contains(QStandardItemModel* model) const
 {
     foreach (const Model & m, m_models) {
         if (m.model.data() == model) {
@@ -193,7 +189,7 @@ bool Models::contains(QStandardItemModel* model)
     return false;
 }
 
-QStandardItemModel* Models::modelForName(const QString& name)
+QStandardItemModel* Models::modelForName(const QString& name) const
 {
     foreach (const Model & m, m_models) {
         if (m.name == name) {
@@ -203,7 +199,7 @@ QStandardItemModel* Models::modelForName(const QString& name)
     return 0;
 }
 
-QStandardItemModel* Models::modelForView(QAbstractItemView* view)
+QStandardItemModel* Models::modelForView(QAbstractItemView* view) const
 {
     foreach (const Model & m, m_models) {
         if (m.view == view) {
@@ -228,7 +224,7 @@ void ModelsManager::itemChanged(QStandardItem* i)
     emit registerChanged(r);
 }
 
-QString Models::nameForView(QAbstractItemView* view)
+QString Models::nameForView(QAbstractItemView* view) const
 {
     foreach (const Model & m, m_models) {
         if (m.view == view) {
@@ -255,7 +251,7 @@ Model::Model() {}
 Model::Model(const QString& name, QSharedPointer<QStandardItemModel> model, QAbstractItemView* view)
     : name(name), model(model), view(view) {}
 
-bool Model::operator==(const Model& m)
+bool Model::operator==(const Model& m) const
 {
     return m.model == model && m.view == view && m.name == name;
 }
@@ -280,21 +276,21 @@ void Models::clear()
     m_models.clear();
 }
 
-void ModelsManager::setFormat(const QString& group, const QString& format)
+void ModelsManager::setFormat(const QString& group, Format format)
 {
     foreach (const GroupsName & g, m_controller->namesOfRegisterGroups()) {
         if (g.name() == group) {
-            m_controller->setFormat(Converters::stringToFormat(format), g);
+            m_controller->setFormat(format, g);
             save(g);
             break;
         }
     }
 }
 
-QStringList ModelsManager::formats(const QString& group) const
+QVector<Format> ModelsManager::formats(const QString& group) const
 {
     QVector<Format> formats; formats << Raw;
-    QStringList l;
+
     foreach (const GroupsName & g, m_controller->namesOfRegisterGroups()) {
         if (g.name() == group) {
             formats = m_controller->formats(g);
@@ -302,21 +298,50 @@ QStringList ModelsManager::formats(const QString& group) const
         }
     }
 
-    foreach (Format fmt, formats) {
-        l << Converters::formatToString(fmt);
-    }
-    return l;
+    return formats;
 }
 
 void ModelsManager::save(const GroupsName& g)
 {
-    m_config.writeEntry(g.name(), static_cast<int>(m_controller->formats(g).first()));
+    KConfigGroup group = m_config.group(g.name());
+    group.writeEntry("format", static_cast<int>(m_controller->formats(g).first()));
+    group.writeEntry("mode", static_cast<int>(m_controller->modes(g).first()));
 }
 
 void ModelsManager::load(const GroupsName& g)
 {
-    Format format = static_cast<Format>(m_config.readEntry(g.name(), static_cast<int>(m_controller->formats(g).first())));
-    setFormat(g.name(), Converters::formatToString(format));
+    KConfigGroup group = m_config.group(g.name());
+
+    Format format = static_cast<Format>(group.readEntry("format", static_cast<int>(m_controller->formats(g).first())));
+    setFormat(g.name(), format);
+
+    Mode mode = static_cast<Mode>(group.readEntry("mode", static_cast<int>(m_controller->modes(g).first())));
+    setMode(g.name(), mode);
+}
+
+QVector< Mode > ModelsManager::modes(const QString& group) const
+{
+    QVector<Mode> modes;
+
+    foreach (const GroupsName & g, m_controller->namesOfRegisterGroups()) {
+        if (g.name() == group) {
+            modes = m_controller->modes(g);
+            break;
+        }
+    }
+
+    return modes;
+}
+
+void ModelsManager::setMode(const QString& group, Mode mode)
+{
+    foreach (const GroupsName & g, m_controller->namesOfRegisterGroups()) {
+        if (g.name() == group) {
+            m_controller->setMode(mode, g);
+            save(g);
+            break;
+        }
+    }
 }
 
 }

@@ -29,8 +29,10 @@ class Converters
 {
 public:
     static QString formatToString(Format format);
-
     static Format stringToFormat(const QString& format);
+
+    static Mode stringToMode(const QString& mode);
+    static QString modeToString(Mode mode);
 };
 
 }

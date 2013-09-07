@@ -20,9 +20,6 @@
 
 #include "registercontroller_x86.h"
 
-#include "../debugsession.h"
-#include "converters.h"
-
 #include <KDebug>
 #include <KLocalizedString>
 
@@ -47,14 +44,12 @@ RegistersGroup RegisterControllerGeneral_x86::registersFromGroup(const GroupsNam
     RegistersGroup registers;
 
     registers.groupName = group;
-    registers.flag = (group == enumToGroupName(Flags)) ? true : false;
-    registers.format = m_formats[group.index()].first();
+    registers.format = m_formatsModes[group.index()].formats.first();
     foreach (const QString & name, registerNamesForGroup(group)) {
         registers.registers.append(Register(name, QString()));
     }
 
     updateValuesForRegisters(&registers);
-    convertValuesForGroup(&registers);
 
     return registers;
 }
@@ -114,13 +109,6 @@ GroupsName RegisterControllerGeneral_x86::enumToGroupName(X86RegisterGroups grou
     return groups[group];
 }
 
-void RegisterControllerGeneral_x86::convertValuesForGroup(RegistersGroup* registersGroup) const
-{
-    if (registersGroup->format != Raw) {
-        IRegisterController::convertValuesForGroup(registersGroup);
-    }
-}
-
 RegisterController_x86::RegisterController_x86(DebugSession* debugSession, QObject* parent)
     : RegisterControllerGeneral_x86(debugSession, parent)
 {
@@ -145,25 +133,30 @@ RegisterControllerGeneral_x86::RegisterControllerGeneral_x86(DebugSession* debug
 
     int n = 0;
     while (n++ < namesOfRegisterGroups().size()) {
-        m_formats.append(QVector<Format>());
+        m_formatsModes.append(FormatsModes());
     }
 
-    m_formats[General].append(Raw);
-    m_formats[General].append(Binary);
-    m_formats[General].append(Decimal);
-    m_formats[General].append(Hexadecimal);
-    m_formats[General].append(Octal);
+    m_formatsModes[XMM].formats.append(Binary);
+    m_formatsModes[XMM].formats.append(Decimal);
+    m_formatsModes[XMM].formats.append(Hexadecimal);
+    m_formatsModes[XMM].formats.append(Octal);
+    m_formatsModes[XMM].formats.append(Unsigned);
+    m_formatsModes[XMM].modes.append(v4_float);
+    m_formatsModes[XMM].modes.append(v2_double);
+    m_formatsModes[XMM].modes.append(v4_int32);
+    m_formatsModes[XMM].modes.append(v2_int64);
 
-    m_formats[Flags].append(Raw);
+    m_formatsModes[Flags].formats.append(Raw);
+    m_formatsModes[Flags].modes.append(natural);
 
-    m_formats[FPU].append(Raw);
+    m_formatsModes[FPU].formats.append(Decimal);
+    m_formatsModes[FPU].modes.append(natural);
 
-    m_formats[Segment] = m_formats[General];
+    m_formatsModes[General].modes.append(natural);
+    m_formatsModes[General].formats.append(Raw);
+    m_formatsModes[General].formats << m_formatsModes[XMM].formats;
 
-    m_formats[XMM].append(v4_float);
-    m_formats[XMM].append(v2_double);
-    m_formats[XMM].append(v4_int32);
-    m_formats[XMM].append(v2_int64);
+    m_formatsModes[Segment] = m_formatsModes[General];
 }
 
 void RegisterControllerGeneral_x86::initRegisterNames()

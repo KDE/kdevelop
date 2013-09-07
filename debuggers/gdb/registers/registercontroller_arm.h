@@ -24,11 +24,6 @@
 
 #include "registercontroller.h"
 
-namespace GDBMI
-{
-struct ResultRecord;
-}
-
 namespace GDBDebugger
 {
 
@@ -47,8 +42,6 @@ public slots:
 
 protected:
     virtual RegistersGroup registersFromGroup(const GroupsName& group) const;
-
-    virtual void convertValuesForGroup(RegistersGroup* registersGroup) const;
 
     virtual QStringList registerNamesForGroup(const GroupsName& group) const;
 

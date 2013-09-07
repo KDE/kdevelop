@@ -70,6 +70,13 @@ enum Format {
     Decimal = 10,
     Hexadecimal = 16,
     Raw,
+    Unsigned,
+
+    LAST_FORMAT
+};
+
+enum Mode {
+    natural,
 
     v4_float,
     v2_double,
@@ -80,8 +87,15 @@ enum Format {
     u64,
     f32,
     f64,
-    LAST_FORMAT
+
+    LAST_MODE
 };
+
+struct FormatsModes {
+    QVector<Format> formats;
+    QVector<Mode> modes;
+};
+
 ///Register in format: @p name, @p value
 struct Register {
     Register() {}
@@ -117,11 +131,17 @@ public:
     ///There'll be at least 2 groups: "General" and "Flags", also "XMM", "FPU", "Segment" for x86, x86_64 architectures.
     virtual QVector<GroupsName> namesOfRegisterGroups() const = 0;
 
-    ///Returns all supported formats for @p group
+    ///Returns all supported formats for @p group (bin, dec, hex ...)
     QVector<Format> formats(const GroupsName& group);
 
     ///Sets current format for the @p group, if format is supported. Does nothing otherwise.
     void setFormat(Format f, const GroupsName& group);
+
+    ///Returns all supported modes for @p group (i.e. how to display group: 2 int, 4 float or other number of columns)
+    QVector<Mode> modes(const GroupsName& group);
+
+    ///Sets current mode for the @p group, if mode is supported. Does nothing otherwise.
+    void setMode(Mode m, const GroupsName& group);
 
 signals:
     ///Emits @p group with updated registers.
@@ -150,11 +170,6 @@ protected:
      * @param [out] registers Registers which values should be updated.
      */
     virtual void updateValuesForRegisters(RegistersGroup* registers) const;
-
-    /**Converts values for each register in the group.
-    * @param [out] registers Registers which values should be converted.
-    */
-    virtual void convertValuesForGroup(RegistersGroup* registersGroup) const;
 
     ///Returns value for the given @p name, empty string if the name is incorrect or there is no registers yet.
     QString registerValue(const QString& name) const;
@@ -212,8 +227,8 @@ protected:
     ///Registers in format: name, value
     QHash<QString, QString > m_registers;
 
-    ///Supported formats for each register's group. First format is current.
-    QVector<QVector<Format> > m_formats;
+    ///Supported formats and modes for each register's group. First format/mode is current.
+    QVector<FormatsModes > m_formatsModes;
 
     ///Current debug session;
     DebugSession* m_debugSession;
@@ -224,5 +239,7 @@ protected:
 Q_DECLARE_TYPEINFO(GDBDebugger::Register, Q_MOVABLE_TYPE);
 Q_DECLARE_TYPEINFO(GDBDebugger::RegistersGroup, Q_MOVABLE_TYPE);
 Q_DECLARE_TYPEINFO(GDBDebugger::FlagRegister, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(GDBDebugger::GroupsName, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(GDBDebugger::FormatsModes, Q_MOVABLE_TYPE);
 
 #endif
