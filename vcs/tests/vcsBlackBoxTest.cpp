@@ -71,7 +71,7 @@ void validatingExecJob(int line, VcsJob* j, VcsJob::JobStatus status = VcsJob::J
 {
     TRACE("Called from line" << line);
     QVERIFY(j);
-    // Print the commmands in full, for easier bug location
+    // Print the commands in full, for easier bug location
 #if 0
     if (QLatin1String(j->metaObject()->className()) == "DVcsJob") {
         kDebug() << "Command: \"" << ((DVcsJob*)j)->process()->program() << ((DVcsJob*)j)->process()->workingDirectory();

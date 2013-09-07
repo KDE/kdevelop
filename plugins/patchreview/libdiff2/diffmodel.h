@@ -109,7 +109,7 @@ public:
 	/**
 	 * @p oldlines - lines that were removed.
 	 * @p newLines - lines that were inserted.
-	 * @p startPos - number of line at which the change occured
+	 * @p startPos - number of line at which the change occurred
 	 */
 	QPair<QList<Difference*>, QList<Difference*> > linesChanged(const QStringList& oldLines, const QStringList& newLines, int editLineNumber);
 

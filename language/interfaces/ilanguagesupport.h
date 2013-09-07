@@ -119,7 +119,7 @@ public:
       * - The default "Insensitive" will only schedule a document for reparsing when
       *   a change in a non-whitespace area happens (non-whitespace chars added or whitespace
       *   added where it was surrounded by characters)
-      * - "IndentOnly" will additionaly schedule the document for reparsing if a whitespace
+      * - "IndentOnly" will additionally schedule the document for reparsing if a whitespace
       *   change occurs at the beginning of the line (more exactly, if all characters before the
       *   changed ones are whitespace)
       * - "Sensitive" will always schedule the document for reparsing, no matter what was changed.

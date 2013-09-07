@@ -647,7 +647,7 @@ class sparse_hashtable {
       const size_type target =
           static_cast<size_type>(settings.shrink_size(resize_to*2));
       if (table.num_nonempty() - num_deleted + delta >= target) {
-        // Good, we won't be below the shrink threshhold even if we double.
+        // Good, we won't be below the shrink threshold even if we double.
         resize_to *= 2;
       }
     }

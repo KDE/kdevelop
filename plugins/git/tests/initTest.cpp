@@ -91,7 +91,7 @@ void GitInitTest::repoInit()
     //and for non-git dir, I hope nobody has /tmp under git
     QVERIFY(!m_plugin->isValidDirectory(KUrl("/tmp")));
 
-    //we have nothing, so ouput should be empty
+    //we have nothing, so output should be empty
     DVcsJob * j2 = m_plugin->gitRevParse(gitRepo, QStringList(QString("--branches")));
     QVERIFY(j2);
     QVERIFY(j2->exec());
@@ -177,7 +177,7 @@ void GitInitTest::commitFiles()
     j = m_plugin->status(KUrl::List(gitTest_BaseDir));
     VERIFYJOB(j);
 
-    //since we commited the file to the "pure" repository, .git/refs/heads/master should exist
+    //since we committed the file to the "pure" repository, .git/refs/heads/master should exist
     //TODO: maybe other method should be used
     QString headRefName(gitRepo + "/refs/heads/master");
     QVERIFY(QFileInfo(headRefName).exists());

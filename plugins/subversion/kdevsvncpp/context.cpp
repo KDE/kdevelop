@@ -137,7 +137,7 @@ public:
       svn_config_ensure(c_configDir, pool);
 
 
-      // intialize authentication providers
+      // initialize authentication providers
       // * simple
       // * username
       // * simple prompt

@@ -51,7 +51,7 @@ AreaDisplay::AreaDisplay(KDevelop::MainWindow* parent)
     m_button = new QToolButton(this);
     m_button->setToolTip(i18n(
         "Execute actions to change the area.<br />"
-        "An area is a a toolview configuration for a specific use case. "
+        "An area is a toolview configuration for a specific use case. "
         "From here you can also navigate back to the default code area."));
     m_button->setAutoRaise(true);
     m_button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);

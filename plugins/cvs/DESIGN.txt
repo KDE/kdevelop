@@ -34,7 +34,7 @@ The CVS plugin is separated into three part.
    similar actions get executed would be an overkill. Therefore 
    CvsMainView also provides a generic output view that just displays 
    the plain text output from such jobs. Unlike custom views, this 
-   generic view can not be closed and it will simply append the ouput 
+   generic view can not be closed and it will simply append the output 
    from each job that got connected to it.
 
 
@@ -50,7 +50,7 @@ The workflow of the CVS plugin looks like this:
    returns a pointer to the CvsJobs object
 6) CvsPart calls start() for the returned CvsJob object and continues
    with either #6.1 or #6.2
-6.1) Connectes the job's result() signal to the generic ouput view 
+6.1) Connectes the job's result() signal to the generic output view 
      from CvsMainView
 6.2) Creates a custom view, connects the job's result() signal to it
      and adds the view to CvsMainView

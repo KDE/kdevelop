@@ -222,7 +222,7 @@ inline bool satisfied(TopDUContext::Features features, TopDUContext::Features re
   return (features & required) == required;
 }
 
-///Makes sure the the file has the correct features attached, and if minimumFeatures contains AllDeclarationsContextsAndUsesForRecursive, then also checks all imports.
+///Makes sure the file has the correct features attached, and if minimumFeatures contains AllDeclarationsContextsAndUsesForRecursive, then also checks all imports.
 bool ParsingEnvironmentFile::featuresMatch(TopDUContext::Features minimumFeatures, QSet<const ParsingEnvironmentFile*>& checked) const {
   
   if(checked.contains(this))

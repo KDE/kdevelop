@@ -63,7 +63,7 @@ using namespace KDevelop;
 void validatingExecJob(VcsJob* j, VcsJob::JobStatus status = VcsJob::JobSucceeded)
 {
     QVERIFY(j);
-    // Print the commmands in full, for easier bug location
+    // Print the commands in full, for easier bug location
 #if 0
     if (QLatin1String(j->metaObject()->className()) == "DVcsJob") {
         kDebug() << "Command: \"" << ((DVcsJob*)j)->getChildproc()->program() << ((DVcsJob*)j)->getChildproc()->workingDirectory();

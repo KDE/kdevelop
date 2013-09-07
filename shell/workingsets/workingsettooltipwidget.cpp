@@ -300,7 +300,7 @@ void WorkingSetToolTipWidget::updateFileButtons()
         (*it)->m_label->setIsActiveFile(it.key() == activeFile);
     }
 
-    // NOTE: allways hide merge&subtract all on current working set
+    // NOTE: always hide merge&subtract all on current working set
     // if we want to enable mergeButton, we have to fix it's behavior since it operates directly on the
     // set contents and not on the m_fileWidgets
     m_mergeButton->setHidden(allOpen || currentWorkingSet == m_set);

@@ -568,7 +568,7 @@ void AreaOperationTest::splitViewActiveTabsTest()
     // at first show of the area, the active view should be m_pView111
     QCOMPARE(mw.activeView(), m_pView111);
 
-    // Try to get to the the main container :
+    // Try to get to the main container :
     // get the central widget
     QWidget *pCentral = mw.centralWidget();
     QVERIFY(pCentral);

@@ -20,7 +20,7 @@ class QComboBox;
 /// Returns the contents of a QComboBox as a QStringList
 QStringList qCombo2StringList( QComboBox* combo, bool allowEmpty = false );
 
-/// Replaces each occurence of "%s" in pattern by searchString (and "%%" by "%")
+/// Replaces each occurrence of "%s" in pattern by searchString (and "%%" by "%")
 QString substitudePattern(const QString& pattern, const QString& searchString);
 
 #endif

@@ -607,7 +607,7 @@ void ContextBrowserPlugin::updateForView(View* view)
     if(view->selection())
     {
       // If something is selected, we unhighlight everything, so that we don't conflict with the
-      // kate plugin that highlights occurences of the selected string, and also to reduce the
+      // kate plugin that highlights occurrences of the selected string, and also to reduce the
       // overall amount of concurrent highlighting.
       allowHighlight = false;
     }

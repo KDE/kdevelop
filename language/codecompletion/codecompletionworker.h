@@ -76,7 +76,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionWorker : public QObject
   protected:
     
     virtual void computeCompletions(DUContextPointer context, const KTextEditor::Cursor& position, QString followingText, const KTextEditor::Range& contextRange, const QString& contextText);
-    ///This can be overriden to compute an own grouping in the completion-list.
+    ///This can be overridden to compute an own grouping in the completion-list.
     ///The default implementation groups items in a way that improves the efficiency of the completion-model, thus the default-implementation should be preferred.
     virtual QList<KSharedPtr<CompletionTreeElement> > computeGroups(QList<CompletionTreeItemPointer> items, KSharedPtr<CodeCompletionContext> completionContext);
     ///If you don't need to reimplement computeCompletions, you can implement only this.

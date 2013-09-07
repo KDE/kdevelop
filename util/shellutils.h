@@ -29,7 +29,7 @@ class QString;
 namespace KDevelop {
 
 /**
-* Asks user of an arbitary question by using either a \ref KMessageBox or stdin/stderr.
+* Asks user of an arbitrary question by using either a \ref KMessageBox or stdin/stderr.
 *
 * @return @c true if user chose "Yes" and @c false otherwise.
 */

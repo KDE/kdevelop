@@ -29,7 +29,7 @@ namespace KDevelop {
   *
   * In KDevelop, this object is used when referencing a ranges that do _not_ point into the
   * most most current document revision. Therefore, before applying such a range in the text
-  * documents, it has to be translated into the current document revision explicity, thereby replaying
+  * documents, it has to be translated into the current document revision explicitly, thereby replaying
   * eventual changes (see DUChainBase::translate...)
   */
 

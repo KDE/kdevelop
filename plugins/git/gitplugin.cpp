@@ -142,7 +142,7 @@ QString revisionInterval(const KDevelop::VcsRevision& rev, const KDevelop::VcsRe
 {
     QString ret;
     if(rev.revisionType()==VcsRevision::Special &&
-                rev.revisionValue().value<VcsRevision::RevisionSpecialType>()==VcsRevision::Start) //if we want it to the begining just put the revisionInterval
+                rev.revisionValue().value<VcsRevision::RevisionSpecialType>()==VcsRevision::Start) //if we want it to the beginning just put the revisionInterval
         ret = toRevisionName(limit, QString());
     else {
         QString dst = toRevisionName(limit);

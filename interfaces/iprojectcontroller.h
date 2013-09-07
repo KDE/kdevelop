@@ -114,7 +114,7 @@ public:
     Q_SCRIPTABLE virtual QString prettyFileName(KUrl url, FormattingOptions format = FormatHtml) const = 0;
 
     /**
-     * @returns wether project files should be parsed or not
+     * @returns whether project files should be parsed or not
      */
     static bool parseAllProjectSources();
 

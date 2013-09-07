@@ -42,7 +42,7 @@ namespace svn
 
   Entry::~Entry()
   {
-    // no need to explicitely de-allocate m_entry
+    // no need to explicitly de-allocate m_entry
     // since this will be handled by m_pool
   }
 

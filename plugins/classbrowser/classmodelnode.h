@@ -208,7 +208,7 @@ public:
   virtual ~ClassNode();
 
   /// Lookup a contained class and return the related node.
-  /// @return the the node pointer or 0 if non was found.
+  /// @return the node pointer or 0 if non was found.
   ClassNode* findSubClass(const KDevelop::IndexedQualifiedIdentifier& a_id);
 
 public: // Node overrides
