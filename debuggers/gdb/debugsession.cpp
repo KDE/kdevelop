@@ -850,13 +850,11 @@ void DebugSession::parseStreamRecord(const GDBMI::StreamRecord& s)
             setStateOff(s_appRunning);
             setStateOn(s_appNotStarted|s_programExited);
         } else if (line.startsWith("The program no longer exists")
-                   || line.startsWith("Program exited"))
-        {
+                   || line.startsWith("Program exited")) {
             programNoApp(line);
-            //TODO: check if it's the last inferior, or something
-        }else if(!line.isEmpty() && line.at(0) == '[' && line.contains( QRegExp("\\[Inferior 1 \\(process \\d+\\) exited .*\\]"))){
-            programNoApp(line);
-            state_reload_needed = false;
+        } else if (!line.isEmpty() && line.at(0) == '[' && line.contains(QRegExp("^\\[Inferior \\d+ \\(.*process|target.*\\) exited .*\\]"))) {
+            m_inferiorExitCode = line;
+            addCommand(new CliCommand(GDBMI::NonMI, "info inferiors", this,  &DebugSession::lastInferiorHandler));
         }
     }
 }
@@ -1486,6 +1484,22 @@ void DebugSession::handleTargetAttach(const GDBMI::ResultRecord& r)
             i18n("Startup error"));
         stopDebugger();
     }
+}
+
+void DebugSession::lastInferiorHandler(const QStringList& l)
+{
+    //* 1    <null>
+    QRegExp rx("^\\*?\\s+\\d+\\s+\\<null\\>\\s.*$");
+
+    for (int i = 2 ; i < l.size(); i++) {
+        if (!rx.exactMatch(l[i])) {
+            kDebug() << "Still running: " << l[i];
+            return;
+        }
+    }
+    kDebug() << "Exiting";
+    programNoApp(m_inferiorExitCode);
+    state_reload_needed = false;
 }
 
 }
