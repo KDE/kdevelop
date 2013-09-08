@@ -54,7 +54,7 @@
           <enum>QFrame::NoFrame</enum>
          </property>
          <property name="horizontalScrollBarPolicy">
-          <enum>Qt::ScrollBarAlwaysOff</enum>
+          <enum>Qt::ScrollBarAsNeeded</enum>
          </property>
         </widget>
        </item>
@@ -82,7 +82,7 @@
           <enum>QFrame::NoFrame</enum>
          </property>
          <property name="horizontalScrollBarPolicy">
-          <enum>Qt::ScrollBarAlwaysOff</enum>
+          <enum>Qt::ScrollBarAsNeeded</enum>
          </property>
         </widget>
        </item>
@@ -114,7 +114,7 @@
           <enum>QFrame::NoFrame</enum>
          </property>
          <property name="horizontalScrollBarPolicy">
-          <enum>Qt::ScrollBarAlwaysOff</enum>
+          <enum>Qt::ScrollBarAsNeeded</enum>
          </property>
         </widget>
        </item>
@@ -146,7 +146,7 @@
           <enum>QFrame::NoFrame</enum>
          </property>
          <property name="horizontalScrollBarPolicy">
-          <enum>Qt::ScrollBarAlwaysOff</enum>
+          <enum>Qt::ScrollBarAsNeeded</enum>
          </property>
         </widget>
        </item>
@@ -178,7 +178,7 @@
           <enum>QFrame::NoFrame</enum>
          </property>
          <property name="horizontalScrollBarPolicy">
-          <enum>Qt::ScrollBarAlwaysOff</enum>
+          <enum>Qt::ScrollBarAsNeeded</enum>
          </property>
         </widget>
        </item>

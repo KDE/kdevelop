@@ -96,7 +96,7 @@ struct FormatsModes {
     QVector<Mode> modes;
 };
 
-///Register in format: @p name, @p value
+///Register in format: @p name, @p value - space separated list of values
 struct Register {
     Register() {}
     Register(const QString& _name, const QString& _value): name(_name), value(_value) {}

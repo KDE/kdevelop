@@ -123,8 +123,18 @@ void ModelsManager::updateModelForGroup(const RegistersGroup& group)
         const Register& r = group.registers[row];
 
         const QStringList& values = r.value.split(' ');
+
+        //binary format workaround.
+        Format currentFormat = formats(group.groupName.name()).first();
+        Mode currentMode = modes(group.groupName.name()).first();
+        QString prefix;
+        if (currentFormat == Binary && ((currentMode < v4_float || currentMode > v2_double) &&
+        (currentMode < f32 || currentMode > f64) && group.groupName.type() != floatPoint)) {
+            prefix = "0b";
+        }
+
         for (int column = 0; column  < values.count(); column ++) {
-            QStandardItem* v = new QStandardItem(values[column]);
+            QStandardItem* v = new QStandardItem(prefix + values[column]);
             if (group.groupName.type() == flag) {
                 v->setFlags(Qt::ItemIsEnabled);
             }
