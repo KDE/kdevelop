@@ -17,6 +17,8 @@ X-KDevelop-LoadMode=AlwaysOn
 
 Name=Project Filter
 Name[cs]=Filtr projektů
+Name[de]=Projektfilter
+Name[es]=Filtro del proyecto
 Name[fi]=Projektisuodatin
 Name[nl]=Projectfilter
 Name[pt]=Filtro de Projectos
@@ -26,6 +28,7 @@ Name[sv]=Projektfilter
 Name[uk]=Фільтр проекту
 Name[x-test]=xxProject Filterxx
 Comment=Configure which files and folders inside the project folder should be included or excluded.
+Comment[es]=Configura qué archivos y carpetas contenidos en la carpeta del proyecto se deben incluir o excluir.
 Comment[nl]=Stel in welke bestanden en mappen in de projectmap meegenomen of uitgesloten moeten worden.
 Comment[pt]=Configura os ficheiros e pastas, dentro da pasta do projecto, que devem ser incluídos ou excluídos.
 Comment[pt_BR]=Configura os arquivos e pastas, dentro da pasta do projeto, que devem ser incluídos ou excluídos.
