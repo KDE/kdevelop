@@ -65,10 +65,10 @@ private:
 };
 
 enum Format {
-    Binary = 2,
-    Octal = 8,
-    Decimal = 10,
-    Hexadecimal = 16,
+    Binary,
+    Octal,
+    Decimal,
+    Hexadecimal,
     Raw,
     Unsigned,
 

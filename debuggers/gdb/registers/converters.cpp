@@ -26,43 +26,18 @@ namespace GDBDebugger
 
 QString Converters::formatToString(Format format)
 {
-    if (format == Binary) {
-        return i18n("Binary");
-    } else if (format == Octal) {
-        return i18n("Octal");
-    } else if (format == Decimal) {
-        return i18n("Decimal");
-    } else if (format == Hexadecimal) {
-        return i18n("Hexadecimal");
-    } else if (format == Raw) {
-        return i18n("Raw");
-    } else if (format == Unsigned) {
-        return i18n("Unsigned");
-    }
+    Q_ASSERT(format >= 0 && format < LAST_FORMAT);
 
-    Q_ASSERT(0);
-    return QString();
+    static const QString formats[LAST_FORMAT] = {i18n("Binary"), i18n("Octal"), i18n("Decimal"), i18n("Hexadecimal"), i18n("Raw"), i18n("Unsigned")};
+    return formats[format];
 }
 
 Format Converters::stringToFormat(const QString& format)
 {
-    if (formatToString(Binary) == format) {
-        return Binary;
-    }
-    if (formatToString(Octal) == format) {
-        return Octal;
-    }
-    if (formatToString(Decimal) == format) {
-        return Decimal;
-    }
-    if (formatToString(Hexadecimal) == format) {
-        return Hexadecimal;
-    }
-    if (formatToString(Raw) == format) {
-        return Raw;
-    }
-    if (formatToString(Unsigned) == format) {
-        return Unsigned;
+    for (int i = 0; i < LAST_FORMAT; i++) {
+        if (formatToString(static_cast<Format>(i)) == format) {
+            return static_cast<Format>(i);
+        }
     }
 
     return LAST_FORMAT;
