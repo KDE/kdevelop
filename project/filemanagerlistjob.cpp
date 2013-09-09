@@ -29,7 +29,7 @@ using namespace KDevelop;
 FileManagerListJob::FileManagerListJob(ProjectFolderItem* item, const bool forceRecursion)
     : KIO::Job(), m_item(0), m_forceRecursion(forceRecursion), m_aborted(false)
 {
-    /* the following line is not an error in judgement, apparently starting a
+    /* the following line is not an error in judgment, apparently starting a
      * listJob while the previous one hasn't self-destructed takes a lot of time,
      * so we give the job a chance to selfdestruct first */
     connect( this, SIGNAL(nextJob()), SLOT(startNextJob()), Qt::QueuedConnection );

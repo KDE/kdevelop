@@ -264,7 +264,7 @@ struct DocumentControllerPrivate {
                 if( !url.isLocalFile() && mimeType->isDefault() )
                 {
                     // fall back to text/plain, for remote files without extension, i.e. COPYING, LICENSE, ...
-                    // using a syncronous KIO::MimetypeJob is hazardous and may lead to repeated calls to
+                    // using a synchronous KIO::MimetypeJob is hazardous and may lead to repeated calls to
                     // this function without it having returned in the first place
                     // and this function is *not* reentrant, see assert below:
                     // Q_ASSERT(!documents.contains(url) || documents[url]==doc);

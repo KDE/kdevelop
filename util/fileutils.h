@@ -32,7 +32,7 @@ namespace KDevelop {
  * Removes the local directory @p dir with all its contents.
  *
  * This is especially useful in cases where we want to remove
- * a directory syncronously. The alternative @c KIO::NetAccess::del
+ * a directory synchronously. The alternative @c KIO::NetAccess::del
  * uses a nested eventloop *and* requires a UI. The function below
  * requires neither but is of course limited to local files.
  *

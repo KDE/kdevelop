@@ -33,7 +33,7 @@ StandardDocumentationView::StandardDocumentationView(DocumentationFindWidget* fi
 
 void StandardDocumentationView::search ( const QString& text, DocumentationFindWidget::FindOptions options )
 {
-    //Highlighting has been commented because it doesn't let me jump arround all occurrences
+    //Highlighting has been commented because it doesn't let me jump around all occurrences
 //     page()->findText(QString(), QWebPage::HighlightAllOccurrences);
 
     QWebPage::FindFlags ff=QWebPage::FindWrapsAroundDocument /*| QWebPage::HighlightAllOccurrences*/;
