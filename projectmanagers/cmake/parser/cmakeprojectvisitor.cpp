@@ -66,7 +66,7 @@ CMakeProjectVisitor::CMakeProjectVisitor(const QString& root, ReferencedTopDUCon
 QStringList CMakeProjectVisitor::envVarDirectories(const QString &varName) const
 {
     QString env;
-    QMap< QString, QString >::const_iterator it=m_environmentProfile.constFind(varName);
+    QMap<QString, QString>::const_iterator it=m_environmentProfile.constFind(varName);
     if(it!=m_environmentProfile.constEnd())
         env = *it;
     else
@@ -343,9 +343,10 @@ int CMakeProjectVisitor::visit( const SetDirectoryPropsAst * dirProps)
 {   
     QString dir=m_vars->value("CMAKE_CURRENT_SOURCE_DIR").join(QString());
     kDebug(9042) << "setting directory props for " << dirProps->properties() << dir;
+    QMap<QString, QStringList>& dprops = m_props[DirectoryProperty][dir];
     foreach(const SetDirectoryPropsAst::PropPair& t, dirProps->properties())
     {
-        m_props[DirectoryProperty][dir][t.first] = t.second.split(';');
+        dprops[t.first] = t.second.split(';');
     }
     return 1;
 }
@@ -451,6 +452,25 @@ void CMakeProjectVisitor::defineTarget(const QString& id, const QStringList& sou
         AbstractType::Ptr targetType(new TargetType);
         d->setAbstractType(targetType);
     }
+
+    QMap<QString, QStringList>& targetProps = m_props[TargetProperty][id];
+    QString exe=id, locationDir;
+    switch(t) {
+        case Target::Executable: {
+            exe += m_vars->value("CMAKE_EXECUTABLE_SUFFIX").join(QString());
+            locationDir = m_vars->value("CMAKE_RUNTIME_OUTPUT_DIRECTORY").join(QString());
+            targetProps["RUNTIME_OUTPUT_DIRECTORY"] = QStringList(locationDir);
+        }   break;
+        case Target::Library: {
+            exe = QString("%1%2%3").arg(m_vars->value("CMAKE_LIBRARY_PREFIX").join(QString()))
+                                   .arg(id)
+                                   .arg(m_vars->value("CMAKE_LIBRARY_SUFFIX").join(QString()));
+            locationDir = m_vars->value("CMAKE_LIBRARY_OUTPUT_DIRECTORY").join(QString());
+            targetProps["LIBRARY_OUTPUT_DIRECTORY"] = QStringList(locationDir);
+        }   break;
+        case Target::Custom:
+            break;
+    }
     
     Target target;
     target.name=id.isEmpty() ? "<wrong-target>" : id;
@@ -458,33 +478,10 @@ void CMakeProjectVisitor::defineTarget(const QString& id, const QStringList& sou
     target.files=sources;
     target.type=t;
     target.desc=p.code->at(p.line);
-    
     m_targetForId[id]=target;
-
-    QString exe=id;
-    QString locationDir = m_vars->value("CMAKE_CURRENT_BINARY_DIR").join(QString());
-    switch(t) {
-        case Target::Executable: {
-            exe += m_vars->value("CMAKE_EXECUTABLE_SUFFIX").join(QString());
-            locationDir = m_vars->value("CMAKE_RUNTIME_OUTPUT_DIRECTORY").join(QString());
-            if (!locationDir.isEmpty()) {
-                m_props[TargetProperty][id]["RUNTIME_OUTPUT_DIRECTORY"]=QStringList(locationDir);
-            }
-        }   break;
-        case Target::Library: {
-            exe = QString("%1%2%3").arg(m_vars->value("CMAKE_LIBRARY_PREFIX").join(QString()))
-                                   .arg(id)
-                                   .arg(m_vars->value("CMAKE_LIBRARY_SUFFIX").join(QString()));
-            locationDir = m_vars->value("CMAKE_LIBRARY_OUTPUT_DIRECTORY").join(QString());
-            if (!locationDir.isEmpty()) {
-                m_props[TargetProperty][id]["LIBRARY_OUTPUT_DIRECTORY"]=QStringList(locationDir);
-            }
-        }   break;
-        case Target::Custom:
-            break;
-    }
     
-    m_props[TargetProperty][id]["LOCATION"]=QStringList(locationDir+'/'+exe);
+    targetProps["OUTPUT_NAME"] = QStringList(exe);
+    targetProps["LOCATION"] = QStringList(locationDir);
 }
 
 int CMakeProjectVisitor::visit(const AddExecutableAst *exec)
@@ -1102,7 +1099,7 @@ int CMakeProjectVisitor::visit(const TryCompileAst *tca)
 int CMakeProjectVisitor::visit(const TargetLinkLibrariesAst *tll)
 {
     kDebug(9042) << "target_link_libraries";
-    QMap<QString, Target>::iterator target = m_targetForId.find(tll->target());
+    QHash<QString, Target>::iterator target = m_targetForId.find(tll->target());
     //TODO: we can add a problem if the target is not found
     if(target != m_targetForId.end()) {
         target->libraries << tll->debugLibs() << tll->optimizedLibs() << tll->otherLibs();
@@ -2208,12 +2205,12 @@ int CMakeProjectVisitor::visit(const GetDirPropertyAst* getdp)
 
 int CMakeProjectVisitor::visit(const SetTestsPropsAst* stp)
 {
-    QMap<QString,QString> props;
+    QHash<QString,QString> props;
     foreach(const SetTestsPropsAst::PropPair& property, stp->properties()) {
         props.insert(property.first, property.second);
     }
 
-    for(QList<Test>::iterator it=m_testSuites.begin(), itEnd=m_testSuites.end(); it!=itEnd; ++it) {
+    for(QVector<Test>::iterator it=m_testSuites.begin(), itEnd=m_testSuites.end(); it!=itEnd; ++it) {
         it->properties = props;
     }
     return 1;

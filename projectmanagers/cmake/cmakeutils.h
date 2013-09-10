@@ -22,6 +22,7 @@
 #define CMAKEUTILS_H
 
 #include "cmakeexport.h"
+#include <KUrl>
 #include <QStringList>
 
 namespace KDevelop
@@ -190,6 +191,8 @@ namespace CMake
      * Override is then cleared and index set to -1.
      */
     KDEVCMAKECOMMON_EXPORT void removeBuildDirConfig( KDevelop::IProject* project );
+
+    KDEVCMAKECOMMON_EXPORT KUrl::List resolveSystemDirs(KDevelop::IProject* project, const QStringList& dirs);
 }
 
 #endif

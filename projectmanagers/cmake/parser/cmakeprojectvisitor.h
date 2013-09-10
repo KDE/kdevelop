@@ -23,7 +23,6 @@
 
 #include <QString>
 #include <QStringList>
-#include <QMap>
 #include <QHash>
 #include <QStack>
 
@@ -112,10 +111,10 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         const CacheValues* cache() const { return m_cache; }
         
         QString projectName() const { return m_projectName; }
-        QList<Subdirectory> subdirectories() const { return m_subdirectories; }
-        QList<Target> targets() const { return m_targetForId.values(); }
+        QVector<Subdirectory> subdirectories() const { return m_subdirectories; }
+        QVector<Target> targets() const { return m_targetForId.values().toVector(); }
         QStringList resolveDependencies(const QStringList& target) const;
-        QList<Test> testSuites() const { return m_testSuites; }
+        QVector<Test> testSuites() const { return m_testSuites; }
             
         int walk(const CMakeFileContent& fc, int line, bool isClean=false);
         
@@ -159,7 +158,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
             }
         };
         
-        static QList< IntPair > parseArgument(const QString &exp);
+        static QList<IntPair> parseArgument(const QString &exp);
         
     private:
         QStringList envVarDirectories(const QString &varName) const;
@@ -189,9 +188,9 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         CMakeProperties m_props;
         QStringList m_modulePath;
         QString m_projectName;
-        QList<Subdirectory> m_subdirectories;
-        QMap<QString, QStringList> m_generatedFiles;
-        QMap<QString, Target> m_targetForId;
+        QVector<Subdirectory> m_subdirectories;
+        QHash<QString, QStringList> m_generatedFiles;
+        QHash<QString, Target> m_targetForId;
         
         QStack<VisitorState> m_backtrace;
         QString m_root;
@@ -205,7 +204,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         bool m_hitReturn;
         QMap<QString, QString> m_environmentProfile;
 
-        QList<Test> m_testSuites;
+        QVector<Test> m_testSuites;
 };
 
 #endif

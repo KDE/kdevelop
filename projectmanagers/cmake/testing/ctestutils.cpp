@@ -35,7 +35,7 @@
 
 using namespace KDevelop;
 
-void CTestUtils::createTestSuites(const QList< Test >& testSuites, ProjectFolderItem* folder)
+void CTestUtils::createTestSuites(const QVector<Test>& testSuites, ProjectFolderItem* folder)
 {
     QString binDir = folder->project()->buildSystemManager()->buildDirectory(folder->project()->projectItem()).toLocalFile();
     KUrl currentBinDir = folder->project()->buildSystemManager()->buildDirectory(folder);

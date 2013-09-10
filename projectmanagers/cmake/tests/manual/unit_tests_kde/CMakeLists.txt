@@ -3,7 +3,6 @@ project(unittestskde)
 enable_testing()
 set(KDE4_BUILD_TESTS ON)
 
-find_package(Qt4 COMPONENTS QtCore QtGui REQUIRED)
 find_package(KDE4 REQUIRED)
 
 include_directories( ${KDE4_INCLUDES} ${QT_INCLUDES} )
