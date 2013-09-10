@@ -42,20 +42,6 @@
 #include <QMetaClassInfo>
 #include <QThread>
 
-// Utility function to determine between direct connection and blocking-queued-connection
-// for emitting of signals for data changes/row addition/removal
-// BlockingQueuedConnection is necessary here as slots connected to the "aboutToBe" signals
-// expect the actual model content to not have changed yet. So we need to make sure the
-// signal is delivered before we really do something.
-static Qt::ConnectionType getConnectionTypeForSignalDelivery( KDevelop::ProjectModel* model )
-{
-    if( QThread::currentThread() == model->thread() ) {
-        return Qt::DirectConnection;
-    } else {
-        return Qt::BlockingQueuedConnection;
-    }
-}
-
 namespace KDevelop
 {
 
@@ -199,7 +185,7 @@ ProjectBaseItem* ProjectBaseItem::takeRow(int row)
     Q_ASSERT(row >= 0 && row < d->children.size());
     
     if( model() ) {
-        QMetaObject::invokeMethod( model(), "rowsAboutToBeRemoved", getConnectionTypeForSignalDelivery( model() ), Q_ARG(QModelIndex, index()), Q_ARG(int, row), Q_ARG(int, row) );
+        QMetaObject::invokeMethod( model(), "rowsAboutToBeRemoved", Qt::DirectConnection, Q_ARG(QModelIndex, index()), Q_ARG(int, row), Q_ARG(int, row) );
     }
     ProjectBaseItem* olditem = d->children.takeAt( row );
     olditem->d_func()->parent = 0;
@@ -212,7 +198,7 @@ ProjectBaseItem* ProjectBaseItem::takeRow(int row)
     }
     
     if( model() ) {
-        QMetaObject::invokeMethod( model(), "rowsRemoved", getConnectionTypeForSignalDelivery( model() ), Q_ARG(QModelIndex, index()), Q_ARG(int, row), Q_ARG(int, row) );
+        QMetaObject::invokeMethod( model(), "rowsRemoved", Qt::DirectConnection, Q_ARG(QModelIndex, index()), Q_ARG(int, row), Q_ARG(int, row) );
     }
     return olditem;
 }
@@ -232,7 +218,7 @@ void ProjectBaseItem::removeRows(int row, int count)
     Q_ASSERT(row >= 0 && row + count <= d->children.size());
 
     if( model() ) {
-        QMetaObject::invokeMethod( model(), "rowsAboutToBeRemoved", getConnectionTypeForSignalDelivery( model() ), Q_ARG(QModelIndex, index()), Q_ARG(int, row), Q_ARG(int, row + count - 1) );
+        QMetaObject::invokeMethod( model(), "rowsAboutToBeRemoved", Qt::DirectConnection, Q_ARG(QModelIndex, index()), Q_ARG(int, row), Q_ARG(int, row + count - 1) );
     }
 
     //NOTE: we unset parent, row and model manually to speed up the deletion
@@ -260,7 +246,7 @@ void ProjectBaseItem::removeRows(int row, int count)
     }
 
     if( model() ) {
-        QMetaObject::invokeMethod( model(), "rowsRemoved", getConnectionTypeForSignalDelivery( model() ), Q_ARG(QModelIndex, index()), Q_ARG(int, row), Q_ARG(int, row + count - 1) );
+        QMetaObject::invokeMethod( model(), "rowsRemoved", Qt::DirectConnection, Q_ARG(QModelIndex, index()), Q_ARG(int, row), Q_ARG(int, row + count - 1) );
     }
 }
 
@@ -350,7 +336,7 @@ void ProjectBaseItem::setText( const QString& text )
     d->text = text;
     if( d->model ) {
         QModelIndex idx = index();
-        QMetaObject::invokeMethod( d->model, "dataChanged", getConnectionTypeForSignalDelivery( d->model ), Q_ARG(QModelIndex, idx), Q_ARG(QModelIndex, idx) );
+        QMetaObject::invokeMethod( d->model, "dataChanged", Qt::DirectConnection, Q_ARG(QModelIndex, idx), Q_ARG(QModelIndex, idx) );
     }
 }
 
@@ -429,14 +415,14 @@ void ProjectBaseItem::appendRow( ProjectBaseItem* item )
     int startrow,endrow;
     if( model() ) {
         startrow = endrow = d->children.count();
-        QMetaObject::invokeMethod( model(), "rowsAboutToBeInserted", getConnectionTypeForSignalDelivery( model() ), Q_ARG(QModelIndex, index()), Q_ARG(int, startrow), Q_ARG(int, endrow) );
+        QMetaObject::invokeMethod( model(), "rowsAboutToBeInserted", Qt::DirectConnection, Q_ARG(QModelIndex, index()), Q_ARG(int, startrow), Q_ARG(int, endrow) );
     }
     d->children.append( item );
     item->setRow( d->children.count() - 1 );
     item->d_func()->parent = this;
     item->setModel( model() );
     if( model() ) {
-        QMetaObject::invokeMethod( model(), "rowsInserted", getConnectionTypeForSignalDelivery( model() ), Q_ARG( QModelIndex, index() ), Q_ARG( int, startrow ), Q_ARG( int, endrow ) );
+        QMetaObject::invokeMethod( model(), "rowsInserted", Qt::DirectConnection, Q_ARG( QModelIndex, index() ), Q_ARG( int, startrow ), Q_ARG( int, endrow ) );
     }
 }
 
