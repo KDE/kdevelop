@@ -68,7 +68,6 @@
 #include "vcsstatusinfo.h"
 #include <qboxlayout.h>
 #include <qlabel.h>
-#include <QMenu>
 #include "widgets/vcsdiffpatchsources.h"
 #include "widgets/flexibleaction.h"
 #include <interfaces/isession.h>

@@ -45,7 +45,6 @@
 #include "navigation/abstractdeclarationnavigationcontext.h"
 #include "navigation/abstractnavigationwidget.h"
 #include "ducontextdynamicdata.h"
-#include "abstractfunctiondeclaration.h"
 
 ///It is fine to use one global static mutex here
 

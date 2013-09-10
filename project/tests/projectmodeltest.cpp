@@ -28,7 +28,6 @@
 #include <projectproxymodel.h>
 #include <tests/modeltest.h>
 #include <tests/testproject.h>
-#include <projectproxymodel.h>
 #include <tests/kdevsignalspy.h>
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
