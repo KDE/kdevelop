@@ -3,14 +3,9 @@ Name=Testing YAML Template
 Name[bs]=Testiranje YAML predloška
 Name[ca]=Plantilla YAML de prova
 Name[ca@valencia]=Plantilla YAML de prova
-<<<<<<< HEAD
 Name[da]=Tester YAML-skabelon
 Name[de]=Testvorlage für YAML
 Name[el]=Δοκιμή προτύπου YAML
-=======
-Name[de]=Testvorlage für YAML
-Name[el]=Δοκιμή YAML template
->>>>>>> 1.5
 Name[es]=Prueba de plantilla YAML
 Name[et]=YAML malli testimine
 Name[fi]=Testi-YAML-malli
@@ -33,6 +28,9 @@ Name[uk]=Тестовий шаблон YAML
 Name[x-test]=xxTesting YAML Templatexx
 Name[zh_CN]=YAML 测试模板
 Name[zh_TW]=測試 YAML 樣本
+<<<<<<< HEAD
+=======
+>>>>>>> 1.5
 Comment=A test description in YAML
 Comment[bs]=Opis testa u  YAML
 Comment[ca]=Una descripció de prova en YAML
