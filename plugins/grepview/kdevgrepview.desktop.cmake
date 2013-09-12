@@ -20,7 +20,6 @@ Comment[nds]=Stellt gau Dörsöken vun mehr Dateien mit Söökmustern oder regul
 Comment[nl]=Staat toe snel te zoeken naar meerdere bestanden met gebruik van patronen of reguliere expressies. En staat ook vervanging toe.
 Comment[pl]=Pozwala na szybkie znajdowanie wielu plików wykorzystując wzorce lub regularne wyrażenia. Pozwala także na ich zastępowanie.
 Comment[pt]=Permite pesquisar rapidamente em vários ficheiros, usando padrões ou expressões regulares, permitindo também efectuar substituições.
-Comment[pt_BR]=Permite pesquisar rapidamente em vários arquivos, usando padrões ou expressões regulares e também realizar substituições.
 Comment[ru]=Позволяет быстро искать (и заменять) текст по множеству файлов, применяя шаблоны поиска или регулярные выражения.
 Comment[sk]=Umožní rýchle hľadanie viacerých súborov pomocou vzorov alebo regulárnych výrazov a umožní ich nahradiť.
 Comment[sl]=Omogoča hitro iskanje po več datotekah, z uporabo vzorcev ali pa logičnih izrazov. Omogoča tudi zamenjave.
