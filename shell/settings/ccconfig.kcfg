@@ -8,15 +8,6 @@
     <entry name="automaticInvocation" key="Automatic Invocation" type="Bool">
     <default>true</default>
 </entry>
-    <entry name="minimalAutomaticCompletion" key="minimalAutomaticCompletion" type="Bool">
-    <default>true</default>
-</entry>
-    <entry name="alwaysFullCompletion" key="alwaysFullCompletion" type="Bool">
-    <default>false</default>
-</entry>
-    <entry name="alwaysMinimalCompletion" key="alwaysMinimalCompletion" type="Bool">
-    <default>false</default>
-    </entry>
     <entry name="highlightSemanticProblems" key="highlightSemanticProblems" type="Bool">
     <default>true</default>
     </entry>
@@ -35,8 +26,16 @@
     <entry name="minFilesForSimplifiedParsing" key="minFilesForSimplifiedParsing" type="Int">
     <default>100000</default>
     </entry>
-    <entry name="todoMarkerWords" key="todoMarkerWords" type="StringList">
-    <default>TODO,FIXME</default>
+    <entry name="todoMarkerWords" key="todoMarkerWords" type="String">
+    <default>TODO FIXME</default>
+    </entry>
+    <entry name="completionDetail" key="completionDetail" type="Enum">
+    <choices>
+    <choice name="Minimal" />
+    <choice name="MinimalWhenAutomatic" />
+    <choice name="AlwaysFull" />
+    </choices>
+    <default>MinimalWhenAutomatic</default>
     </entry>
   </group>
 </kcfg>

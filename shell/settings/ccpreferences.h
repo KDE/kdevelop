@@ -44,9 +44,7 @@ public:
 
     virtual void save();
 
-    virtual void load();
-    
-    void writeToSettings();
+    void notifySettingsChanged();
 
 private:
     Ui::CCSettings *preferencesDialog;

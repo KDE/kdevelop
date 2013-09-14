@@ -30,7 +30,6 @@
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/codecompletioninterface.h>
-#include <KShell>
 
 #include "../core.h"
 #include <interfaces/idocumentcontroller.h>
@@ -59,8 +58,6 @@ CCPreferences::CCPreferences( QWidget *parent, const QVariantList &args )
     QWidget* w = new QWidget;
     preferencesDialog = new Ui::CCSettings;
     preferencesDialog->setupUi( w );
-    connect(preferencesDialog->todoMarkerWords, SIGNAL(textChanged(QString)), SLOT(changed()));
-    connect(preferencesDialog->completionDetail, SIGNAL(currentIndexChanged(int)), SLOT(changed()));
 
     l->addWidget( w );
 
@@ -69,30 +66,11 @@ CCPreferences::CCPreferences( QWidget *parent, const QVariantList &args )
     load();
 }
 
-void CCPreferences::load()
-{
-    KCModule::load();
-    ICompletionSettings* s = ICore::self()->languageController()->completionSettings();
-    QStringList words = s->todoMarkerWords();
-    preferencesDialog->todoMarkerWords->setText(KShell::joinArgs(words));
-    preferencesDialog->completionDetail->setCurrentIndex(s->completionLevel());
-}
-
-void CCPreferences::writeToSettings()
+void CCPreferences::notifySettingsChanged()
 {
     CompletionSettings& settings(static_cast<CompletionSettings&>(*ICore::self()->languageController()->completionSettings()));
-    settings.m_automatic = preferencesDialog->kcfg_automaticInvocation->isChecked();
-    
-    settings.m_level = ICompletionSettings::CompletionLevel(preferencesDialog->completionDetail->currentIndex());
-    settings.m_localColorizationLevel = preferencesDialog->kcfg_localColorization->value();
-    settings.m_globalColorizationLevel = preferencesDialog->kcfg_globalColorization->value();
-    settings.m_highlightSemanticProblems = preferencesDialog->kcfg_highlightSemanticProblems->isChecked();
-    settings.m_highlightProblematicLines = preferencesDialog->kcfg_highlightProblematicLines->isChecked();
-    settings.m_showMultiLineInformation = preferencesDialog->kcfg_showMultiLineSelectionInformation->isChecked();
-    settings.m_minFilesForSimplifiedParsing = preferencesDialog->kcfg_minFilesForSimplifiedParsing->value();
-    settings.m_todoMarkerWords = KShell::splitArgs(preferencesDialog->todoMarkerWords->text());
-    
-    emit settings.emitChanged();
+
+    settings.emitChanged();
 }
 
 CCPreferences::~CCPreferences( )
@@ -109,8 +87,8 @@ void CCPreferences::save()
             foreach (View* view, textDoc->views())
                 if (CodeCompletionInterface* cc = dynamic_cast<CodeCompletionInterface*>(view))
                     cc->setAutomaticInvocationEnabled(preferencesDialog->kcfg_automaticInvocation->isChecked());
-    
-    writeToSettings();
+
+    notifySettingsChanged();
 }
 
 }
