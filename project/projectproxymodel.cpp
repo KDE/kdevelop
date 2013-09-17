@@ -30,6 +30,8 @@ ProjectProxyModel::ProjectProxyModel(QObject * parent)
 {
     setDynamicSortFilter(true);
     sort(0); //initiate sorting regardless of the view
+    connect(this, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
+            this, SLOT(invalidateCache()));
 }
 
 KDevelop::ProjectModel * ProjectProxyModel::projectModel() const
@@ -64,9 +66,15 @@ QVariant ProjectProxyModel::data(const QModelIndex& index, int role) const
             }
             break;
         case Qt::DisplayRole:
-            if(index.isValid() && hasChildren(index) && (!mFilenameFilters.isEmpty() || !mFilenameExcludeFilters.isEmpty())) {
+            if (!index.isValid()) {
+                break;
+            }
+            int modelRowCount = sourceModel()->rowCount(mapToSource(index));
+            if(modelRowCount > 0
+                && (!mFilenameFilters.isEmpty() || !mFilenameExcludeFilters.isEmpty())
+            ) {
                 QString text = QSortFilterProxyModel::data(index, role).toString();
-                int hiddenElements = sourceModel()->rowCount(mapToSource(index)) - rowCount(index);
+                int hiddenElements = modelRowCount - rowCount(index);
                 return i18n("%1 (%2 hidden)", text, hiddenElements);
             }
             break;
@@ -81,10 +89,10 @@ bool ProjectProxyModel::recursiveFilterAcceptsRow(KDevelop::ProjectBaseItem *ite
     }
 
     if (mFilenameFilters.isEmpty() && mFilenameExcludeFilters.isEmpty()) {
-        return true;
+        return true; //No filter set, show everything
     }
 
-    bool retval; // Show all items by default
+    bool retval;
 
     if (mFilenameFilters.isEmpty() && !mFilenameExcludeFilters.isEmpty()) {
         // Exclude filter is specified only -> show all by default
@@ -125,13 +133,27 @@ bool ProjectProxyModel::recursiveFilterAcceptsRow(KDevelop::ProjectBaseItem *ite
             }
         }
     }
+
+    mFilterCache[item] = retval;
+
     return retval;
 }
 
 bool ProjectProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
+    if (!sourceParent.isValid()) {
+        return true; //Always display the root element
+    }
+
     const QModelIndex& index = sourceModel()->index(sourceRow, 0, sourceParent);
     KDevelop::ProjectBaseItem *item = projectModel()->itemFromIndex(index);
+
+    QHash<KDevelop::ProjectBaseItem*, bool>::const_iterator it = mFilterCache.constFind(item);
+    if (it != mFilterCache.constEnd()) {
+        //Cache hit
+        return it.value();
+    }
+
     return recursiveFilterAcceptsRow(item);
 }
 
@@ -164,6 +186,8 @@ void ProjectProxyModel::setFilterString(const QString &filters)
         }
     }
 
+    invalidateCache();
+
     invalidateFilter();
     recursivelyEmitParentsChanged(QModelIndex());
 }
@@ -178,3 +202,15 @@ void ProjectProxyModel::recursivelyEmitParentsChanged(const QModelIndex& idx)
     }
     emit dataChanged(idx, idx);
 }
+
+void ProjectProxyModel::invalidateCache()
+{
+    // This could be improved by updating the cache here instead of clearing it and waiting for it to be filled again.
+    // Possible improvements, as suggested by Milian:
+    //  - only recache for items where the data got changed
+    //  - only remove items that where removed from the model
+    //  - only add items that where added to the model (this might actually work already)
+
+    mFilterCache.clear();
+}
+

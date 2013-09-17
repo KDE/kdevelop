@@ -45,6 +45,8 @@ private slots:
 //     void testImportCache();
 
     void benchCodeModel();
+    void benchTypeRegistry();
+    void benchTypeRegistry_data();
 };
 
 #endif // KDEVPLATFORM_TEST_DUCHAIN_H

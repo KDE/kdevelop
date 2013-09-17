@@ -24,9 +24,13 @@
 #include <language/duchain/indexedstring.h>
 #include "libdiff2/diffmodel.h"
 
+
 class PatchHighlighter;
 namespace KDevelop {
 class IDocument;
+}
+namespace Sublime {
+class Area;
 }
 
 class PatchReviewToolViewFactory;
@@ -38,7 +42,7 @@ class DiffModel;
 }
 namespace Kompare
 {
-class Info;
+struct Info;
 }
 
 class DiffSettings;
@@ -94,6 +98,7 @@ public Q_SLOTS :
     void highlightPatch();
     void updateKompareModel();
     void forceUpdate();
+    void areaChanged(Sublime::Area* area);
 
 private Q_SLOTS :
     void documentClosed( KDevelop::IDocument* );

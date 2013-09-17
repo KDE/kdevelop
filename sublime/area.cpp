@@ -21,6 +21,7 @@
 #include <QMap>
 #include <QList>
 #include <QStringList>
+#include <QAction>
 
 #include <kdebug.h>
 
@@ -94,9 +95,8 @@ struct AreaPrivate {
     QString iconName;
     QString workingSet;
     QWeakPointer<View> activeView;
+    QList<QAction*> m_actions;
 };
-
-
 
 // class Area
 
@@ -468,6 +468,22 @@ void Area::clearViews(bool silent)
 {
     foreach(Sublime::View* view, views())
         closeView(view, silent);
+}
+
+QList<QAction*> Area::actions() const
+{
+    return d->m_actions;
+}
+
+void Area::addAction(QAction* action)
+{
+    connect(action, SIGNAL(destroyed(QObject*)), SLOT(actionDestroyed(QObject*)));
+    d->m_actions.append(action);
+}
+
+void Area::actionDestroyed(QObject* action)
+{
+    d->m_actions.removeAll(qobject_cast<QAction*>(action));
 }
 
 }

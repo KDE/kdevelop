@@ -2,6 +2,7 @@
  * This file is part of KDevelop
  *
  * Copyright 2008 Vladimir Prus <ghost@cs.msu.su>
+ * Copyright 2013 Vlas Puhov <vlas.puhov@mail.ru>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -45,7 +46,7 @@
 using namespace KDevelop;
 
 BreakpointWidget::BreakpointWidget(IDebugController *controller, QWidget *parent)
-: QWidget(parent), firstShow_(true), m_debugController(controller),
+: QWidget(parent), m_firstShow(true), m_debugController(controller),
   breakpointDisableAll_(0), breakpointEnableAll_(0), breakpointRemoveAll_(0)
 {
     setWindowTitle(i18nc("@title:window", "Debugger Breakpoints"));
@@ -61,21 +62,23 @@ BreakpointWidget::BreakpointWidget(IDebugController *controller, QWidget *parent
     QSplitter *s = new QSplitter(this);
     layout->addWidget(s);
 
-    table_ = new QTableView(s);
-    table_->setSelectionBehavior(QAbstractItemView::SelectRows);
-    table_->setSelectionMode(QAbstractItemView::SingleSelection);
-    table_->horizontalHeader()->setHighlightSections(false);
-    table_->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft);
+    m_breakpointsView = new QTableView(s);
+    m_breakpointsView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    m_breakpointsView->setSelectionMode(QAbstractItemView::SingleSelection);
+    m_breakpointsView->horizontalHeader()->setHighlightSections(false);
+    m_breakpointsView->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft);
     details_ = new BreakpointDetails(s);
 
     s->setStretchFactor(0, 2);
 
-    table_->verticalHeader()->hide();
+    m_breakpointsView->verticalHeader()->hide();
 
-    table_->setModel(m_debugController->breakpointModel());
+    m_breakpointsView->setModel(m_debugController->breakpointModel());
 
-    connect(table_, SIGNAL(clicked(QModelIndex)), this, SLOT(slotRowClicked(QModelIndex)));
-    connect(table_->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(slotUpdateBreakpointDetail()));
+    connect(m_breakpointsView, SIGNAL(clicked(QModelIndex)), this, SLOT(slotOpenFile(QModelIndex)));
+    connect(m_breakpointsView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(slotOpenFile(QModelIndex)));
+
+    connect(m_breakpointsView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(slotUpdateBreakpointDetail()));
     connect(m_debugController->breakpointModel(), SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(slotUpdateBreakpointDetail()));
     connect(m_debugController->breakpointModel(), SIGNAL(rowsRemoved(QModelIndex,int,int)), SLOT(slotUpdateBreakpointDetail()));
     connect(m_debugController->breakpointModel(), SIGNAL(modelReset()), SLOT(slotUpdateBreakpointDetail()));
@@ -118,16 +121,6 @@ void BreakpointWidget::setupPopupMenu()
         i18nc("Data access breakpoint", "Data &access"),
         this, SLOT(slotAddBlankAccessWatchpoint()));
 
-    #if 0
-    m_breakpointShow = m_ctxMenu->addAction( i18n( "Show text" ) );
-
-
-    m_breakpointEdit = m_ctxMenu->addAction( i18n( "Edit" ) );
-    m_breakpointEdit->setShortcut(Qt::Key_Enter);
-
-    m_breakpointDisable = m_ctxMenu->addAction( i18n( "Disable" ) );
-    #endif
-
     QAction* breakpointDelete = popup_->addAction(
         KIcon("edit-delete"),
         i18n( "&Delete" ),
@@ -144,54 +137,11 @@ void BreakpointWidget::setupPopupMenu()
     breakpointRemoveAll_ = popup_->addAction(i18n("&Remove all"), this, SLOT(slotRemoveAllBreakpoints()));
 
     connect(popup_,SIGNAL(aboutToShow()), this, SLOT(slotPopupMenuAboutToShow()));
-
-#if 0
-    connect( m_ctxMenu,     SIGNAL(triggered(QAction*)),
-        this,          SLOT(slotContextMenuSelect(QAction*)) );
-#endif
 }
 
 
 void BreakpointWidget::contextMenuEvent(QContextMenuEvent* event)
 {
-#if 0
-    Breakpoint *bp = breakpoints()->breakpointForIndex(indexAt(event->pos()));
-
-    if (!bp)
-    {
-        bp = breakpoints()->breakpointForIndex(currentIndex());
-    }
-
-    if (bp)
-    {
-        m_breakpointShow->setEnabled(bp->hasFileAndLine());
-
-        if (bp->isEnabled( ))
-        {
-            m_breakpointDisable->setText( i18n("Disable") );
-        }
-        else
-        {
-            m_breakpointDisable->setText( i18n("Enable") );
-        }
-    }
-    else
-    {
-        m_breakpointShow->setEnabled(false);
-    }
-
-    m_breakpointDisable->setEnabled(bp);
-    m_breakpointDelete->setEnabled(bp);
-    m_breakpointEdit->setEnabled(bp);
-
-    bool has_bps = !breakpoints()->breakpoints().isEmpty();
-    m_breakpointDisableAll->setEnabled(has_bps);
-    m_breakpointEnableAll->setEnabled(has_bps);
-    m_breakpointDelete->setEnabled(has_bps);
-
-    m_ctxMenuBreakpoint = bp;
-    m_ctxMenu->popup( event->globalPos() );
-#endif
     popup_->popup(event->globalPos());
 }
 
@@ -218,66 +168,30 @@ void BreakpointWidget::slotPopupMenuAboutToShow()
        
 }
 
-
-#if 0
-void slotContextMenuSelect( QAction* action )
+void BreakpointWidget::showEvent(QShowEvent *)
 {
-    #if 0
-    int                  col;
-    Breakpoint          *bp = m_ctxMenuBreakpoint;
+    if (m_firstShow) {
+        QHeaderView* header = m_breakpointsView->horizontalHeader();
 
-    if ( action == m_breakpointShow ) {
-        if (FilePosBreakpoint* fbp = dynamic_cast<FilePosBreakpoint*>(bp))
-            emit gotoSourcePosition(fbp->fileName(), fbp->lineNum()-1);
-
-    } else if ( action == m_breakpointEdit ) {
-        col = currentIndex().column();
-        if (col == BreakpointController::Location || col ==  BreakpointController::Condition || col == BreakpointController::IgnoreCount)
-            openPersistentEditor(model()->index(currentIndex().row(), col, QModelIndex()));
-
-    } else if ( action == m_breakpointDisable ) {
-        bp->setEnabled( !bp->isEnabled( ) );
-        bp->sendToGdb();
-
-    } else if ( action == m_breakpointDisableAll || action == m_breakpointEnableAll ) {
-        foreach (Breakpoint* breakpoint, breakpoints()->breakpoints())
-        {
-            breakpoint->setEnabled(action == m_breakpointEnableAll);
-            breakpoint->sendToGdb();
+        for (int i = 0; i < m_breakpointsView->model()->columnCount(); ++i) {
+            if(i == Breakpoint::LocationColumn){
+                continue;
+            }
+            m_breakpointsView->resizeColumnToContents(i);
         }
-    }
-    #endif
-}
-#endif
+        //for some reasons sometimes width can be very small about 200... But it doesn't matter as we use tooltip anyway.
+        int width = m_breakpointsView->size().width();
 
-
-void BreakpointWidget::showEvent(QShowEvent * event)
-{
-    Q_UNUSED(event);
-    if (firstShow_)
-    {
-        /* FIXME: iterate over all possible names. */
-        int id_width = QFontMetrics(font()).width("MMWrite");
-        QHeaderView* header = table_->horizontalHeader();
-        int width = header->width();
-
-        header->resizeSection(0, 32);
-        width -= 32;
-        header->resizeSection(1, 32);
-        width -= 32;
-        header->resizeSection(2, id_width);
-        width -= id_width;
-        header->resizeSection(3, width/2);
-        header->resizeSection(4, width/2);
-        firstShow_ = false;
+        header->resizeSection(Breakpoint::LocationColumn, width > 400 ? width/2 : header->sectionSize(Breakpoint::LocationColumn)*2 );
+        m_firstShow = false;
     }
 }
 
 void BreakpointWidget::edit(KDevelop::Breakpoint *n)
 {
     QModelIndex index = m_debugController->breakpointModel()->breakpointIndex(n, Breakpoint::LocationColumn);
-    table_->setCurrentIndex(index);
-    table_->edit(index);
+    m_breakpointsView->setCurrentIndex(index);
+    m_breakpointsView->edit(index);
 }
 
 
@@ -305,7 +219,7 @@ void KDevelop::BreakpointWidget::slotAddBlankAccessWatchpoint()
 
 void BreakpointWidget::slotRemoveBreakpoint()
 {
-    QItemSelectionModel* sel = table_->selectionModel();
+    QItemSelectionModel* sel = m_breakpointsView->selectionModel();
     QModelIndexList selected = sel->selectedIndexes();
     IF_DEBUG( kDebug() << selected; )
     if (!selected.isEmpty()) {
@@ -321,7 +235,7 @@ void BreakpointWidget::slotRemoveAllBreakpoints()
 
 void BreakpointWidget::slotUpdateBreakpointDetail()
 {
-    QModelIndexList selected = table_->selectionModel()->selectedIndexes();
+    QModelIndexList selected = m_breakpointsView->selectionModel()->selectedIndexes();
     IF_DEBUG( kDebug() << selected; )
     if (selected.isEmpty()) {
         details_->setItem(0);
@@ -334,7 +248,7 @@ void BreakpointWidget::breakpointHit(KDevelop::Breakpoint* b)
 {
     IF_DEBUG( kDebug() << b; )
     QModelIndex index = m_debugController->breakpointModel()->breakpointIndex(b, 0);
-    table_->selectionModel()->select(
+    m_breakpointsView->selectionModel()->select(
         index,
         QItemSelectionModel::Rows
         | QItemSelectionModel::ClearAndSelect);
@@ -346,14 +260,14 @@ void BreakpointWidget::breakpointError(KDevelop::Breakpoint* b, const QString& m
 
     // FIXME: we probably should prevent this error notification during
     // initial setting of breakpoint, to avoid a cloud of popups.
-    if (!table_->isVisible())
+    if (!m_breakpointsView->isVisible())
         return;
 
     QModelIndex index = m_debugController->breakpointModel()->breakpointIndex(b, column);
-    QPoint p = table_->visualRect(index).topLeft();
-    p = table_->mapToGlobal(p);
+    QPoint p = m_breakpointsView->visualRect(index).topLeft();
+    p = m_breakpointsView->mapToGlobal(p);
 
-    KPassivePopup *pop = new KPassivePopup(table_);
+    KPassivePopup *pop = new KPassivePopup(m_breakpointsView);
     pop->setPopupStyle(KPassivePopup::Boxed);
     pop->setAutoDelete(true);
     // FIXME: the icon, too.
@@ -362,15 +276,17 @@ void BreakpointWidget::breakpointError(KDevelop::Breakpoint* b, const QString& m
     pop->show(p);
 }
 
-void BreakpointWidget::slotRowClicked(const QModelIndex& index)
+void BreakpointWidget::slotOpenFile(const QModelIndex& breakpointIdx)
 {
-    if (index.column() != Breakpoint::LocationColumn)
+    if (breakpointIdx.column() != Breakpoint::LocationColumn){
         return;
-    Breakpoint *bp = m_debugController->breakpointModel()->breakpoint(index.row());
-    if (!bp)
+    }
+    Breakpoint *bp = m_debugController->breakpointModel()->breakpoint(breakpointIdx.row());
+    if (!bp || bp->line() == -1 || bp->url().isEmpty() ){
         return;
-   ICore::self()->documentController()->openDocument(bp->url().pathOrUrl(KUrl::RemoveTrailingSlash), KTextEditor::Cursor(bp->line(), 0));
-   
+    }
+
+   ICore::self()->documentController()->openDocument(bp->url().pathOrUrl(KUrl::RemoveTrailingSlash), KTextEditor::Cursor(bp->line(), 0), IDocumentController::DoNotFocus);
 }
 
 void BreakpointWidget::slotDisableAllBreakpoints()

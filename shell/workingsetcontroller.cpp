@@ -42,8 +42,8 @@ using namespace KDevelop;
 
 const int toolTipTimeout = 2000;
 
-WorkingSetController::WorkingSetController(Core* core)
-    : m_emptyWorkingSet(0), m_core(core), m_changingWorkingSet(false)
+WorkingSetController::WorkingSetController()
+    : m_emptyWorkingSet(0), m_changingWorkingSet(false)
 {
     m_hideToolTipTimer = new QTimer(this);
     m_hideToolTipTimer->setInterval(toolTipTimeout);
@@ -120,7 +120,7 @@ WorkingSet* WorkingSetController::getWorkingSet(const QString& id)
 
 QWidget* WorkingSetController::createSetManagerWidget(MainWindow* parent, Sublime::Area* fixedArea) {
     if (fixedArea) {
-        return new WorkingSetWidget(parent, fixedArea);
+        return new WorkingSetWidget(fixedArea, parent);
     } else {
         return new ClosedWorkingSetsWidget(parent);
     }

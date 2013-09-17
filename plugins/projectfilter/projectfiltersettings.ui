@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ProjectFilterSettings</class>
+ <widget class="QWidget" name="ProjectFilterSettings">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>696</width>
+    <height>400</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <widget class="QWidget" name="messages" native="true">
+     <layout class="QVBoxLayout" name="verticalLayout_3"/>
+    </widget>
+   </item>
+   <item>
+    <widget class="QWidget" name="widget_2" native="true">
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QTreeView" name="filters"/>
+      </item>
+      <item alignment="Qt::AlignTop">
+       <widget class="QWidget" name="widget" native="true">
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <widget class="QPushButton" name="add">
+           <property name="text">
+            <string>Add</string>
+           </property>
+           <property name="icon">
+            <iconset theme="list-add">
+             <normaloff/>
+            </iconset>
+           </property>
+           <property name="default">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="remove">
+           <property name="text">
+            <string>Remove</string>
+           </property>
+           <property name="icon">
+            <iconset theme="list-remove">
+             <normaloff/>
+            </iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="moveUp">
+           <property name="text">
+            <string>Move Up</string>
+           </property>
+           <property name="icon">
+            <iconset theme="arrow-up">
+             <normaloff/>
+            </iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="moveDown">
+           <property name="text">
+            <string>Move Down</string>
+           </property>
+           <property name="icon">
+            <iconset theme="arrow-down">
+             <normaloff/>
+            </iconset>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -127,17 +127,38 @@ QWidget* ProjectFileData::expandingWidget() const
     return 0;
 }
 
+static QString iconNameForUrl(const IndexedString& url)
+{
+    if (url.isEmpty()) {
+        return QString("tab-duplicate");
+    }
+    ProjectBaseItem* item = ICore::self()->projectController()->projectModel()->itemForPath(url);
+    if (item) {
+        return item->iconName();
+    }
+    return QString("unknown");
+}
+
 QIcon ProjectFileData::icon() const
 {
-    if (m_file.indexedUrl.isEmpty()) {
-        return KIcon("tab-duplicate");
-    } else {
-        ProjectBaseItem* item = ICore::self()->projectController()->projectModel()->itemForPath(m_file.indexedUrl);
-        if (item) {
-            return KIcon(item->iconName());
-        }
+    const QString& iconName = iconNameForUrl(m_file.indexedUrl);
+
+    /**
+     * FIXME: Move this cache into a more central place and reuse it elsewhere.
+     *        The project model e.g. could reuse this as well.
+     *
+     * Note: We cache here since otherwise displaying and esp. scrolling
+     *       in a large list of quickopen items becomes very slow.
+     */
+    static QHash<QString, QPixmap> iconCache;
+    QHash< QString, QPixmap >::const_iterator it = iconCache.constFind(iconName);
+    if (it != iconCache.constEnd()) {
+        return it.value();
     }
-    return KIcon("unknown");
+
+    const QPixmap& pixmap = KIconLoader::global()->loadIcon(iconName, KIconLoader::Small);
+    iconCache.insert(iconName, pixmap);
+    return pixmap;
 }
 
 BaseFileDataProvider::BaseFileDataProvider()

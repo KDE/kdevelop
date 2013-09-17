@@ -75,7 +75,8 @@ protected:
     /**
      * Filter interface making it possible to hide files and folders from a project.
      *
-     * The default implementation will show all files.
+     * The default implementation will query all IProjectFilter plugins and ask them
+     * whether a given url should be included or not.
      *
      * @return True when @p path should belong to @p project, false otherwise.
      */
@@ -108,7 +109,7 @@ protected:
      *
      * The filenames are matched via QString::operator==(), so no wildcard or
      * regex-matching for now
-     * 
+     *
      * This can be used for things like VCS-folders/files or other things a
      * plugin might want to hide.
      */

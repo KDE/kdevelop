@@ -124,10 +124,6 @@ bool ClassTree::event( QEvent* event )
   return QAbstractItemView::event( event );
 }
 
-template <class T>
-void test( int a ) {
-}
-
 ClassModel* ClassTree::model()
 {
   return static_cast<ClassModel*>( QTreeView::model() );

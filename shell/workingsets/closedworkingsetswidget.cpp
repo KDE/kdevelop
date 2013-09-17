@@ -120,7 +120,7 @@ void ClosedWorkingSetsWidget::addWorkingSet( WorkingSet* set )
     }
 
 //     kDebug() << "adding button for" << set->id();
-    WorkingSetToolButton* button = new WorkingSetToolButton(this, set, m_mainWindow);
+    WorkingSetToolButton* button = new WorkingSetToolButton(this, set);
     button->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Ignored));
 
     m_layout->addWidget(button);

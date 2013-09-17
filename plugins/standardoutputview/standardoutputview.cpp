@@ -24,7 +24,6 @@
 #include "toolviewdata.h"
 
 #include <QtCore/QList>
-#include <QtDesigner/QExtensionFactory>
 #include <QtCore/QAbstractItemModel>
 #include <QtGui/QAction>
 #include <QtGui/QAbstractItemDelegate>

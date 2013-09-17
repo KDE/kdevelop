@@ -55,6 +55,8 @@ set(kdevplatformshell_LIB_SRCS
     progresswidget/overlaywidget.cpp
     progresswidget/progressdialog.cpp
 
+    areadisplay.cpp
+
 # TODO: Re-Enable after generating new kross bindings for project model
 #     kross/krossplugin.cpp
 #     kross/krossbuildsystemmanager.cpp

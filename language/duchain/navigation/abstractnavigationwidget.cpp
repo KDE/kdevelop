@@ -196,7 +196,7 @@ void AbstractNavigationWidget::update() {
     if(m_context->isWidgetMaximized()) {
       //Leave unused room to the widget
       m_browser->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-      m_browser->setMaximumHeight(25);
+      m_browser->setMaximumHeight(m_idealTextSize.height());
     }
   }
 

@@ -23,7 +23,7 @@
 
 namespace KDevelop {
 
-class ReferenceCountManager;
+struct ReferenceCountManager;
 class AbstractRepositoryManager;
 
 class TypeRepository

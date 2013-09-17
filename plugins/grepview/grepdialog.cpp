@@ -18,6 +18,7 @@
 #include <QRegExp>
 #include <QBoxLayout>
 #include <QStringList>
+#include <QMenu>
 
 #include <kfiledialog.h>
 #include <kpushbutton.h>
@@ -29,7 +30,6 @@
 #include <kdebug.h>
 #include <kcombobox.h>
 #include <kurlcompletion.h>
-#include <kurlrequester.h>
 #include <kstandarddirs.h>
 #include <klineedit.h>
 
@@ -39,14 +39,13 @@
 #include <interfaces/iruncontroller.h>
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
+#include <interfaces/isession.h>
 
 #include "grepviewplugin.h"
 #include "grepjob.h"
 #include "grepoutputview.h"
 #include "grepfindthread.h"
 #include "greputil.h"
-#include <interfaces/isession.h>
-#include <QMenu>
 
 using namespace KDevelop;
 
@@ -102,6 +101,11 @@ const QStringList excludepatterns = QStringList()
     << "/CVS/,/SCCS/,/.svn/,/_darcs/,/build/,/.git/"
     << "";
 
+///Separator used to separate search paths.
+const QString pathsSeparator(";");
+
+///Max number of items in paths combo box.
+const int pathsMaxCount = 25;
 }
 
 const KDialog::ButtonCode GrepDialog::SearchButton  = KDialog::User1;
@@ -151,10 +155,13 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent, bool setLastUs
 
     caseSensitiveCheck->setChecked(cg.readEntry("case_sens", true));
 
-    QList<IProject*> projects = m_plugin->core()->projectController()->projects();
-        setDirectory( !projects.isEmpty() ? allOpenProjectsString : QDir::homePath() );
+    searchPaths->setCompletionObject(new KUrlCompletion());
+    searchPaths->setAutoDeleteCompletionObject(true);
 
-    directoryRequester->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
+    QList<IProject*> projects = m_plugin->core()->projectController()->projects();
+
+    searchPaths->addItems(cg.readEntry("SearchPaths", QStringList(!projects.isEmpty() ? allOpenProjectsString : QDir::homePath() ) ));
+    searchPaths->setInsertPolicy(QComboBox::InsertAtTop);
 
     syncButton->setIcon(KIcon("dirsync"));
     syncButton->setMenu(createSyncButtonMenu());
@@ -173,7 +180,18 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent, bool setLastUs
     patternComboEditTextChanged( patternCombo->currentText() );
     patternCombo->setFocus();
     
-    connect(directoryRequester, SIGNAL(textChanged(QString)), this, SLOT(directoryChanged(QString)));
+    connect(searchPaths, SIGNAL(activated(QString)), this, SLOT(setSearchLocations(QString)));
+
+    connect(directorySelector, SIGNAL(clicked(bool)), this, SLOT(selectDirectoryDialog()) );
+}
+
+void GrepDialog::selectDirectoryDialog()
+{
+    QString dirName = KFileDialog::getExistingDirectory(searchPaths->lineEdit()->text(), this, tr("Select directory to search in"));
+
+    if (!dirName.isEmpty()) {
+        setSearchLocations(dirName);
+    }
 }
 
 void GrepDialog::addUrlToMenu(QMenu* menu, KUrl url)
@@ -194,7 +212,7 @@ void GrepDialog::synchronizeDirActionTriggered(bool)
 {
     QAction* action = qobject_cast<QAction*>(sender());
     Q_ASSERT(action);
-    setDirectory(action->data().value<QString>());
+    setSearchLocations(action->data().value<QString>());
 }
 
 QMenu* GrepDialog::createSyncButtonMenu()
@@ -277,6 +295,7 @@ GrepDialog::~GrepDialog()
     cg.writeEntry("LastUsedTemplateIndex", templateTypeCombo->currentIndex());
     cg.writeEntry("LastUsedTemplateString", qCombo2StringList(templateEdit));
     cg.writeEntry("LastUsedReplacementTemplateString", qCombo2StringList(templateEdit));
+    cg.writeEntry("SearchPaths", qCombo2StringList(searchPaths));
     cg.sync();
 }
 
@@ -297,14 +316,26 @@ void GrepDialog::setPattern(const QString &pattern)
     patternCombo->setEditText(pattern);
 }
 
-void GrepDialog::setDirectory(const QString &dir)
+void GrepDialog::setSearchLocations(const QString &dir)
 {
-    if(QDir::isAbsolutePath(dir))
-    {
-        directoryRequester->fileDialog()->setUrl( KUrl( dir ) );
-        directoryRequester->completionObject()->setDir( dir );
+    if(!dir.isEmpty()) {
+        if(QDir::isAbsolutePath(dir))
+        {
+            static_cast<KUrlCompletion*>(searchPaths->completionObject())->setDir( dir );
+        }
+
+            if (searchPaths->contains(dir)) {
+                searchPaths->removeItem(searchPaths->findText(dir));
+            }
+
+            searchPaths->insertItem(0, dir);
+            searchPaths->setCurrentItem(dir);
+
+            if (searchPaths->count() > pathsMaxCount) {
+                searchPaths->removeItem(searchPaths->count() - 1);
+            }
     }
-    directoryRequester->lineEdit()->setText(dir);
+    directoryChanged(dir);
 }
 
 QString GrepDialog::patternString() const
@@ -361,7 +392,7 @@ void GrepDialog::patternComboEditTextChanged( const QString& text)
 QList< KUrl > GrepDialog::getDirectoryChoice() const
 {
     QList< KUrl > ret;
-    QString text = directoryRequester->lineEdit()->text();
+    QString text = searchPaths->currentText();
     if(text == allOpenFilesString)
     {
         foreach(IDocument* doc, ICore::self()->documentController()->openDocuments())
@@ -371,7 +402,7 @@ QList< KUrl > GrepDialog::getDirectoryChoice() const
         foreach(IProject* project, ICore::self()->projectController()->projects())
             ret << project->folder();
     }else{
-        QStringList semicolonSeparatedFileList = text.split(';');
+        QStringList semicolonSeparatedFileList = text.split(pathsSeparator);
         if(!semicolonSeparatedFileList.isEmpty() && QFileInfo(semicolonSeparatedFileList[0]).exists())
         {
             // We use QFileInfo to make sure this is really a semicolon-separated file list, not a file containing
@@ -379,7 +410,7 @@ QList< KUrl > GrepDialog::getDirectoryChoice() const
             foreach(QString file, semicolonSeparatedFileList)
                 ret << KUrl::fromPath(file);
         }else{
-            ret << directoryRequester->url();
+            ret << KUrl(searchPaths->currentText());
         }
     }
     return ret;
@@ -428,7 +459,7 @@ void GrepDialog::performAction(KDialog::ButtonCode button)
     
     GrepJob* job = m_plugin->newGrepJob();
     
-    QString descriptionOrUrl(directoryRequester->lineEdit()->text());
+    QString descriptionOrUrl(searchPaths->currentText());
     QString description = descriptionOrUrl;
     // Shorten the description
     if(descriptionOrUrl != allOpenFilesString && descriptionOrUrl != allOpenProjectsString && choice.size() > 1)

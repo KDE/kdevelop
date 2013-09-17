@@ -456,10 +456,6 @@ void MainWindowPrivate::viewRemovedInternal(AreaIndex* index, View* view)
 {
     Q_UNUSED(index);
     Q_UNUSED(view);
-    // A formerly non-empty working-set has become empty, and a relayout of the area-selector may be required
-    if(m_mainWindow->area()->views().size() == 0)
-        m_mainWindow->setupAreaSelector();
-    
     setBackgroundVisible(area->views().isEmpty());
 }
 
@@ -505,11 +501,7 @@ void MainWindowPrivate::viewAdded(Sublime::AreaIndex *index, Sublime::View *view
     emit m_mainWindow->viewAdded( view );
     
     setTabBarLeftCornerWidget(m_leftTabbarCornerWidget.data());
-    
-    // A formerly empty working-set may become non-empty, and a relayout of the area-selector may be required
-    if(m_mainWindow->area()->views().size() == 1)
-        m_mainWindow->setupAreaSelector();
-    
+
     setBackgroundVisible(false);
 }
 
@@ -712,174 +704,6 @@ void MainWindowPrivate::widgetCloseRequest(QWidget* widget)
     }
 }
 
-void MainWindowPrivate::toggleArea ( int index ) {
-    m_mainWindow->controller()->showArea(areaSwitcher->tabBar->areaId(index), m_mainWindow);
-}
-
-void AreaTabBar::paintEvent ( QPaintEvent* ev ) {
-    QTabBar::paintEvent(ev);
-    if ( currentIndex() != -1 ) {
-        QStylePainter p ( this );
-        //Draw highlight behind current area
-        QRect activeRect = tabRect ( currentIndex() );
-        QRect tabArea = activeRect;
-        QImage img ( tabArea.width(), tabArea.height(), QImage::Format_ARGB32 );
-        img.fill ( 0 );
-        QPainter paintImg ( &img );
-        QColor color ( palette().color ( QPalette::Active, QPalette::Highlight ) );
-        color.setAlpha ( 70 );
-        QRect paint = tabArea;
-        const int margin = 8;
-        paint.setLeft ( margin );
-        paint.setTop ( margin );
-        paint.setRight ( activeRect.width()-margin );
-        paint.setBottom ( activeRect.height()-margin );
-
-        paintImg.fillRect ( paint, color );
-        expblur<16,7> ( img, margin/2 );
-        p.drawImage ( tabArea, img );
-    }
-}
-
-void AreaTabWidget::paintEvent ( QPaintEvent* ev ) {
-    QWidget::paintEvent ( ev );
-
-    if ( tabBar->isVisible() && tabBar->count() > 0 ) {
-        QStylePainter p ( this );
-
-        QStyleOptionTabBarBase optTabBase;
-        optTabBase.init ( tabBar );
-        optTabBase.shape = tabBar->shape();
-        optTabBase.tabBarRect = tabBar->rect();
-        optTabBase.tabBarRect.moveTopLeft(tabBar->pos());
-
-        int sideWidth = width()-tabBar->width();
-
-        QStyleOptionTab tabOverlap;
-        tabOverlap.shape = tabBar->shape();
-        int overlap = style()->pixelMetric ( QStyle::PM_TabBarBaseOverlap, &tabOverlap, tabBar );
-        QRect rect;
-        rect.setRect ( 0, height()-overlap, sideWidth, overlap );
-        optTabBase.rect = rect;
-
-        QImage img ( sideWidth, height(), QImage::Format_ARGB32 );
-        img.fill ( 0 );
-        QStylePainter p2 ( &img, tabBar );
-        p2.drawPrimitive ( QStyle::PE_FrameTabBarBase, optTabBase );
-
-        {
-            //Blend the painted line out to the left
-            QLinearGradient blendOut ( 0, 0, sideWidth, 0 );
-            blendOut.setColorAt ( 0, QColor ( 255, 255, 255, 255 ) );
-            blendOut.setColorAt ( 1, QColor ( 0, 0, 0, 0 ) );
-            QBrush blendBrush ( blendOut );
-
-            p2.setCompositionMode ( QPainter::CompositionMode_DestinationOut );
-            p2.fillRect ( img.rect(), blendBrush );
-        }
-
-        p.setCompositionMode ( QPainter::CompositionMode_SourceOver );
-        p.drawImage ( img.rect(), img );
-    }
-}
-
-QSize AreaTabWidget::sizeHint() const {
-    QMenuBar* menuBar = qobject_cast<QMenuBar*>(parent());
-    if ( !menuBar ) {
-        return QWidget::sizeHint();
-    }
-    //Resize to hold the whole length up to the menu
-    static bool zeroSizeHint = false;
-    if ( zeroSizeHint )
-        return QSize();
-    zeroSizeHint = true;
-    int available = menuBar->parentWidget()->width() - menuBar->sizeHint().width() - 10;
-    zeroSizeHint = false;
-    QSize orig = tabBar->sizeHint();
-    int addFade = available - orig.width();
-    
-    int perfectFade = 500;
-    if(areaSideWidget)
-        perfectFade += areaSideWidget->sizeHint().width();
-    
-    if(addFade > perfectFade)
-        addFade = perfectFade;
-    
-    int wantWidth = addFade + orig.width();
-    
-    if ( wantWidth > orig.width() )
-        orig.setWidth ( wantWidth );
-    return orig;
-}
-
-AreaTabWidget::AreaTabWidget ( QWidget* parent ) : QWidget ( parent ), areaSideWidget(0) {
-    m_layout = new QHBoxLayout ( this );
-    m_layout->setAlignment ( Qt::AlignRight );
-    tabBar = new AreaTabBar ( this );
-    m_layout->addWidget ( tabBar );
-    m_layout->setContentsMargins ( 0,0,0,0 );
-    m_leftLayout = new QVBoxLayout;
-    
-    m_leftLayout->setContentsMargins(11, 4, 11, 8); ///@todo These margins are a bit too hardcoded, should depend on style
-    m_layout->insertLayout(0, m_leftLayout);
-}
-
-QSize AreaTabBar::tabSizeHint ( int index ) const {
-    //Since we move all contents into the button, we give approximately the button size as size-hint
-    //QTabBar seems to add useless space for the non-existing tab text
-    QSize ret = QTabBar::tabSizeHint(index);
-    
-    if(ret.width() > buttons[index]->sizeHint().width()+16)
-        ret.setWidth(buttons[index]->sizeHint().width() + 16); ///@todo Where does the offset come from?
-    return ret;
-}
-
-
-void AreaTabButton::setIsCurrent ( bool arg1 ) {
-    m_isCurrent = arg1;
-}
-
-void AreaTabBar::setCurrentIndex ( int index ) {
-    m_currentIndex = index;
-    foreach(AreaTabButton* button, buttons) {
-        button->setIsCurrent(buttons.indexOf(button) == index);
-    }
-    QTabBar::setCurrentIndex ( index );
-    foreach(AreaTabButton* button, buttons) {
-        button->update();
-    }
-    update();
-}
-
-AreaTabBar::AreaTabBar ( QWidget* parent ) : QTabBar ( parent ), m_currentIndex ( -1 ) {
-    setShape ( QTabBar::RoundedNorth );
-    setDocumentMode ( true );
-    setExpanding ( false );
-    setLayoutDirection ( Qt::RightToLeft );
-    setDrawBase ( false );
-    setUsesScrollButtons ( false );
-    setFocusPolicy( Qt::NoFocus );
-    QPalette pal = palette();
-}
-
-AreaTabButton::AreaTabButton ( QString text, QIcon icon, uint iconSize, QWidget* parent, bool isCurrent, QWidget* _customButtonWidget )
-	: QWidget ( parent ), customButtonWidget(_customButtonWidget), m_isCurrent ( isCurrent )
-{
-    QHBoxLayout* layout = new QHBoxLayout ( this );
-    iconLabel = new QLabel ( this );
-    iconLabel->setPixmap ( icon.pixmap ( QSize ( iconSize, iconSize ) ) );
-    iconLabel->setAutoFillBackground ( false );
-    textLabel = new QLabel ( this );
-    textLabel->setText ( text );
-    textLabel->setAutoFillBackground ( false );
-    if(customButtonWidget) {
-        customButtonWidget->setParent(this);
-        layout->addWidget(customButtonWidget);
-    }
-    layout->addWidget ( textLabel );
-    layout->addWidget ( iconLabel );
-    layout->setMargin ( 0 );
-}
 
 void MainWindowPrivate::setTabBarLeftCornerWidget(QWidget* widget)
 {

@@ -166,20 +166,29 @@ QVariant Breakpoint::data(int column, int role) const
         return QVariant();
     }
 
-    if (column == LocationColumn && (role == Qt::DisplayRole || role == Qt::EditRole)) {
-        QString ret;
-        if (kind_ == CodeBreakpoint && m_line != -1) {
-            ret = m_url.pathOrUrl(KUrl::RemoveTrailingSlash);
-            ret += ':' + QString::number(m_line+1);
-        } else {
-            ret = m_expression;
-        }
-        if (!address_.isEmpty() && role == Qt::DisplayRole) {
-            ret = QString("%1 (%2)").arg(ret).arg(address_);
-        }
-        return ret;
-    } else if (column == ConditionColumn && (role == Qt::DisplayRole || role == Qt::EditRole)) {
+    if (column == ConditionColumn && (role == Qt::DisplayRole || role == Qt::EditRole)) {
         return m_condition;
+    }
+
+    if (column == LocationColumn) {
+        if (role == LocationRole || role == Qt::EditRole || role == Qt::ToolTipRole || role == Qt::DisplayRole) {
+            QString ret;
+            if (kind_ == CodeBreakpoint && m_line != -1) {
+                if (role == Qt::DisplayRole) {
+                    ret = m_url.fileName();
+                } else {
+                    ret = m_url.pathOrUrl(KUrl::RemoveTrailingSlash);
+                }
+                ret += ':' + QString::number(m_line+1);
+            } else {
+                ret = m_expression;
+            }
+            //FIXME: there should be proper columns for function name and address.
+            if (!address_.isEmpty() && role == Qt::DisplayRole) {
+                ret = QString("%1 (%2)").arg(ret).arg(address_);
+            }
+            return ret;
+        }
     }
 
     return QVariant();
@@ -219,7 +228,7 @@ void Breakpoint::setLocation(const KUrl& url, int line)
 }
 
 QString KDevelop::Breakpoint::location() {
-    return data(LocationColumn, Qt::DisplayRole).toString();
+    return data(LocationColumn, LocationRole).toString();
 }
 
 

@@ -11,10 +11,13 @@ set(kdevplatformproject_LIB_SRCS
     projectproxymodel.cpp
     abstractfilemanagerplugin.cpp
     filemanagerlistjob.cpp
+    projectfiltermanager.cpp
+    path.cpp
     interfaces/iprojectbuilder.cpp
     interfaces/iprojectfilemanager.cpp
     interfaces/ibuildsystemmanager.cpp
-    path.cpp
+    interfaces/iprojectfilter.cpp
+    interfaces/iprojectfilterprovider.cpp
 )
 
 
@@ -37,6 +40,8 @@ install(FILES
     interfaces/iprojectbuilder.h
     interfaces/iprojectfilemanager.h
     interfaces/ibuildsystemmanager.h
+    interfaces/iprojectfilter.h
+    interfaces/iprojectfilterprovider.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/project/interfaces COMPONENT Devel
  )
 
@@ -53,5 +58,6 @@ install(FILES
     helper.h
     abstractfilemanagerplugin.h
     path.h
+    projectfiltermanager.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/project COMPONENT Devel
  )

@@ -25,6 +25,7 @@
 #include "helper.h"
 
 #include <QFileInfo>
+#include <QApplication>
 
 #include <KConfigGroup>
 #include <KDebug>
@@ -38,7 +39,8 @@
 #include <interfaces/iruncontroller.h>
 #include <interfaces/iprojectcontroller.h>
 #include <language/duchain/indexedstring.h>
-#include <QApplication>
+
+#include "projectfiltermanager.h"
 
 #define ifDebug(x)
 
@@ -99,8 +101,8 @@ struct AbstractFileManagerPlugin::Private {
 
     QHash<IProject*, KDirWatch*> m_watchers;
     QHash<IProject*, QList<FileManagerListJob*> > m_projectJobs;
-    QSet<QString> importFileNameFilter;
     QVector<QString> m_stoppedFolders;
+    ProjectFilterManager m_filters;
 };
 
 void AbstractFileManagerPlugin::Private::projectClosing(IProject* project)
@@ -115,6 +117,7 @@ void AbstractFileManagerPlugin::Private::projectClosing(IProject* project)
         m_projectJobs.remove(project);
     }
     delete m_watchers.take(project);
+    m_filters.remove(project);
 }
 
 KIO::Job* AbstractFileManagerPlugin::Private::eventuallyReadFolder( ProjectFolderItem* item,
@@ -160,11 +163,6 @@ void AbstractFileManagerPlugin::Private::addJobItems(FileManagerListJob* job,
     foreach ( const KIO::UDSEntry& entry, entries ) {
         QString name = entry.stringValue( KIO::UDSEntry::UDS_NAME );
         if (name == "." || name == "..") {
-            continue;
-        }
-
-        // Simple equals-matching, fast and efficient and suitable for most cases
-        if( importFileNameFilter.contains( name ) ) {
             continue;
         }
 
@@ -477,6 +475,8 @@ ProjectFolderItem *AbstractFileManagerPlugin::import( IProject *project )
         d->m_watchers[project]->addDir(project->folder().toLocalFile(), KDirWatch::WatchSubDirs | KDirWatch:: WatchFiles );
     }
 
+    d->m_filters.add(project);
+
     return projectRoot;
 }
 
@@ -625,10 +625,10 @@ bool AbstractFileManagerPlugin::copyFilesAndFolders(const Path::List& items, Pro
     return success;
 }
 
-bool AbstractFileManagerPlugin::isValid( const Path& /*path*/, const bool /*isFolder*/,
-                                         IProject* /*project*/ ) const
+bool AbstractFileManagerPlugin::isValid( const Path& path, const bool isFolder,
+                                         IProject* project ) const
 {
-    return true;
+    return d->m_filters.isValid( path, isFolder, project );
 }
 
 ProjectFileItem* AbstractFileManagerPlugin::createFileItem( IProject* project, const Path& path,
@@ -646,11 +646,6 @@ ProjectFolderItem* AbstractFileManagerPlugin::createFolderItem( IProject* projec
 KDirWatch* AbstractFileManagerPlugin::projectWatcher( IProject* project ) const
 {
     return d->m_watchers.value( project, 0 );
-}
-
-void AbstractFileManagerPlugin::setImportFileNameFilter(const QStringList& filterNames)
-{
-    d->importFileNameFilter = filterNames.toSet();
 }
 
 //END Plugin

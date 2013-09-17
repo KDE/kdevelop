@@ -194,8 +194,9 @@ public:
         {
             IPlugin* plugin = *it;
             const KPluginInfo info = m_core->pluginController()->pluginInfo( plugin );
-            if (info.property("X-KDevelop-Category").toString() != "Project")
+            if (info.property("X-KDevelop-Category").toString() != "Project") {
                 continue;
+            }
             IProjectFileManager* manager = plugin->extension<KDevelop::IProjectFileManager>();
             if( manager && manager != project->projectFileManager() )
             {
@@ -299,7 +300,8 @@ public:
         m_core->pluginControllerInternal()->loadProjectPlugins();
 
         Project* project = new Project();
-        emit q->projectAboutToBeOpened( project );
+        QObject::connect(project, SIGNAL(aboutToOpen(KDevelop::IProject*)),
+                         q, SIGNAL(projectAboutToBeOpened(KDevelop::IProject*)));
         if ( !project->open( url ) )
         {
             m_currentlyOpening.removeAll(url);
@@ -307,7 +309,6 @@ public:
             project->deleteLater();
         }
     }
-
 };
 
 IProjectDialogProvider::IProjectDialogProvider()
@@ -525,6 +526,7 @@ void ProjectController::setupActions()
     action->setText( i18n( "Commit Current Project..." ) );
     action->setIconText( i18n( "Commit..." ) );
     action->setIcon( KIcon("svn-commit") );
+    d->m_core->uiControllerInternal()->area(0, "code")->addAction(action);
 
     KSharedConfig * config = KGlobal::config().data();
 //     KConfigGroup group = config->group( "General Options" );

@@ -529,6 +529,7 @@ bool Project::open( const Path& projectFile )
 
     Q_ASSERT(d->manager);
 
+    emit aboutToOpen(this);
     if (!d->importTopItem(iface) ) {
         return false;
     }

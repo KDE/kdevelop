@@ -154,34 +154,27 @@ class Bucket {
         m_lastUsed = 0;
       }
     }
-    
+
     template<class T>
-    void readIn(char*& from, int count, T* to) {
-      for(int a = 0; a < count; ++a) {
-        *to = *((T*)from);
-        ++to;
-        from += sizeof(T);
-      }
+    void readValue(char*& from, T& to) {
+      to = *reinterpret_cast<T*>(from);
+      from += sizeof(T);
     }
-    template<class T>
-    void readOne(char*& from, T& to) {
-      readIn(from, 1, &to);
-    }
-    
+
     void initializeFromMap(char* current) {
       if(!m_data) {
           char* start = current;
-          readOne(current, m_monsterBucketExtent);
+          readValue(current, m_monsterBucketExtent);
           Q_ASSERT(current - start == 4);
-          readOne(current, m_available);
+          readValue(current, m_available);
           m_objectMapSize = ObjectMapSize;
-          m_objectMap = (short unsigned int*)current;
+          m_objectMap = reinterpret_cast<short unsigned int*>(current);
           current += sizeof(short unsigned int) * m_objectMapSize;
-          m_nextBucketHash = (short unsigned int*)current;
+          m_nextBucketHash = reinterpret_cast<short unsigned int*>(current);
           current += sizeof(short unsigned int) * NextBucketHashSize;
-          readOne<short unsigned int>(current, m_largestFreeItem);
-          readOne<unsigned int>(current, m_freeItemCount);
-          readOne<bool>(current, m_dirty);
+          readValue(current, m_largestFreeItem);
+          readValue(current, m_freeItemCount);
+          readValue(current, m_dirty);
           m_data = current;
           m_mappedData = current;
 
@@ -322,7 +315,7 @@ class Bucket {
         if(markForReferenceCounting)
           enableDUChainReferenceCounting(m_data, dataSize());
         
-        request.createItem((Item*)(m_data + insertedAt));
+        request.createItem(reinterpret_cast<Item*>(m_data + insertedAt));
       
         if(markForReferenceCounting)
           disableDUChainReferenceCounting(m_data);
@@ -437,7 +430,7 @@ class Bucket {
       if(markForReferenceCounting)
         enableDUChainReferenceCounting(m_data, dataSize());
         
-      request.createItem((Item*)(m_data + insertedAt));
+      request.createItem(reinterpret_cast<Item*>(m_data + insertedAt));
 
       if(markForReferenceCounting)
         disableDUChainReferenceCounting(m_data);
@@ -654,7 +647,7 @@ class Bucket {
     ///@warning When using multi-threading, mutex() must be locked as long as you use the returned data
     inline const Item* itemFromIndex(unsigned short index) const {
       m_lastUsed = 0;
-      return (Item*)(m_data+index);
+      return reinterpret_cast<Item*>(m_data+index);
     }
 
     bool isEmpty() const {
@@ -686,7 +679,7 @@ class Bucket {
           //Get the follower early, so there is no problems when the current
           //index is removed
           
-          if(!visitor((const Item*)(m_data+currentIndex)))
+          if(!visitor(reinterpret_cast<const Item*>(m_data+currentIndex)))
             return false;
 
           currentIndex = followerIndex(currentIndex);
@@ -709,7 +702,7 @@ class Bucket {
             //Get the follower early, so there is no problems when the current
             //index is removed
             
-            const Item* item = (const Item*)(m_data+currentIndex);
+            const Item* item = reinterpret_cast<const Item*>(m_data+currentIndex);
             
             if(!ItemRequest::persistent(item)) {
               changed += item->itemSize();
@@ -817,7 +810,7 @@ class Bucket {
       for(uint a = 0; a < m_objectMapSize; ++a) {
         uint currentIndex = m_objectMap[a];
         while(currentIndex) {
-          found += ((const Item*)(m_data+currentIndex))->itemSize() + AdditionalSpacePerItem;
+          found += reinterpret_cast<const Item*>(m_data+currentIndex)->itemSize() + AdditionalSpacePerItem;
 
           currentIndex = followerIndex(currentIndex);
         }
@@ -989,21 +982,21 @@ class Bucket {
     ///@param index the index of an item @return The index of the next item in the chain of items with a same local hash, or zero
     inline unsigned short followerIndex(unsigned short index) const {
       Q_ASSERT(index >= 2);
-      return *((unsigned short*)(m_data+(index-2)));
+      return *reinterpret_cast<unsigned short*>(m_data+(index-2));
     }
 
     void setFollowerIndex(unsigned short index, unsigned short follower) {
       Q_ASSERT(index >= 2);
-      *((unsigned short*)(m_data+(index-2))) = follower;
+      *reinterpret_cast<unsigned short*>(m_data+(index-2)) = follower;
     }
     // Only returns the current value if the item is actually free
     inline unsigned short freeSize(unsigned short index) const {
-      return *((unsigned short*)(m_data+index));
+      return *reinterpret_cast<unsigned short*>(m_data+index);
     }
 
     //Convenience function to set the free-size, only for freed items
     void setFreeSize(unsigned short index, unsigned short size) {
-      *((unsigned short*)(m_data+index)) = size;
+      *reinterpret_cast<unsigned short*>(m_data+index) = size;
     }
 
     uint m_monsterBucketExtent; //If this is a monster-bucket, this contains the count of follower-buckets that belong to this one
@@ -1031,10 +1024,10 @@ struct Locker { //This is a dummy that does nothing
 template<>
 struct Locker<true> {
   Locker(QMutex* mutex) : m_mutex(mutex) {
-    m_mutex->lock();
+    m_mutex->lockInline();
   }
   ~Locker() {
-    m_mutex->unlock();
+    m_mutex->unlockInline();
   }
   QMutex* m_mutex;
 };
@@ -2317,9 +2310,9 @@ class ItemRepository : public AbstractItemRepository {
       bool doMMapLoading = (bool)m_fileMap;
       
       uint offset = ((bucketNumber-1) * MyBucket::DataSize);
-      if(m_file && offset < m_fileMapSize && doMMapLoading && *((uint*)(m_fileMap + offset)) == 0) {
+      if(m_file && offset < m_fileMapSize && doMMapLoading && *reinterpret_cast<uint*>(m_fileMap + offset) == 0) {
 //         kDebug() << "loading bucket mmap:" << bucketNumber;
-        m_fastBuckets[bucketNumber]->initializeFromMap(((char*)m_fileMap) + offset);
+        m_fastBuckets[bucketNumber]->initializeFromMap(reinterpret_cast<char*>(m_fileMap + offset));
       } else if(m_file) {
         //Either memory-mapping is disabled, or the item is not in the existing memory-map, 
         //so we have to load it the classical way.
@@ -2332,6 +2325,7 @@ class ItemRepository : public AbstractItemRepository {
           uint monsterBucketExtent;
           m_file->read((char*)(&monsterBucketExtent), sizeof(unsigned int));;
           m_file->seek(offset);
+          ///FIXME: use the data here instead of copying it again in prepareChange
           QByteArray data = m_file->read((1+monsterBucketExtent) * MyBucket::DataSize);
           m_fastBuckets[bucketNumber]->initializeFromMap(data.data());
           m_fastBuckets[bucketNumber]->prepareChange();

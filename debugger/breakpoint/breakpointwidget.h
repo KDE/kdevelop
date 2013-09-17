@@ -2,6 +2,7 @@
  * This file is part of KDevelop
  *
  * Copyright 2008 Vladimir Prus <ghost@cs.msu.su>
+ * Copyright 2013 Vlas Puhov <vlas.puhov@mail.ru>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -51,16 +52,13 @@ private:
     void edit(KDevelop::Breakpoint *n);
 
 private Q_SLOTS:
-#if 0
-    void slotContextMenuSelect( QAction* action );
-#endif
     void slotAddBlankBreakpoint();
     void slotAddBlankWatchpoint();
     void slotAddBlankReadWatchpoint();
     void slotAddBlankAccessWatchpoint();
     void slotRemoveBreakpoint();
     void slotUpdateBreakpointDetail();
-    void slotRowClicked(const QModelIndex& index);
+    void slotOpenFile(const QModelIndex& breakpointIdx);
     void breakpointError(KDevelop::Breakpoint *b, const QString& msg, int column);
     void breakpointHit(KDevelop::Breakpoint *b);
     void slotDisableAllBreakpoints();
@@ -69,10 +67,10 @@ private Q_SLOTS:
     void slotPopupMenuAboutToShow();
     
 private:
-    QTableView* table_;
+    QTableView* m_breakpointsView;
     BreakpointDetails* details_;
     QMenu* popup_;
-    bool firstShow_;
+    bool m_firstShow;
     IDebugController *m_debugController;
     QAction* breakpointDisableAll_;
     QAction* breakpointEnableAll_;

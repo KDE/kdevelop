@@ -53,6 +53,7 @@
  *   definition : DeclTestObject
  *   null : bool
  *   defaultParameter : string
+ *   toString : string
  */
 
 namespace KDevelop
@@ -208,6 +209,13 @@ DeclarationTest(defaultParameter)
     return OWNER_NOT_FUNC;
   int argIndex = context->localDeclarations().indexOf(decl);
   return compareValues(funcDecl->defaultParameterForArgument(argIndex).str(), value, "Declaration's default parameter");
+}
+
+///JSON type: string
+///@returns stringified declaration
+DeclarationTest(toString)
+{
+  return compareValues(decl->toString(), value, "Declaration's toString");
 }
 
 }

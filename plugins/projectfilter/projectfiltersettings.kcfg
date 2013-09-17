@@ -4,12 +4,5 @@
       xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
       http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
   <kcfgfile arg="true"/>
-  <group name="Filters">
-    <entry name="includes" key="Includes" type="StringList">
-      <default>*</default>
-    </entry>
-    <entry name="excludes" key="Excludes" type="StringList">
-      <default>*/.*,*/*~</default>
-    </entry>
-  </group>
+  <!-- data read/write is handled with hand written code, see ProjectFilterKCM -->
 </kcfg>

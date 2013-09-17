@@ -24,6 +24,8 @@
 #include "test_duchain.h"
 
 #include <QTest>
+#include <QElapsedTimer>
+
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 
@@ -31,6 +33,9 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/persistentsymboltable.h>
 #include <language/duchain/codemodel.h>
+#include <language/duchain/types/typesystemdata.h>
+#include <language/duchain/types/integraltype.h>
+#include <language/duchain/types/typeregister.h>
 
 #include <language/codegen/coderepresentation.h>
 
@@ -38,7 +43,6 @@
 #include <language/util/basicsetrepository.h>
 
 // #include <typeinfo>
-#include <time.h>
 #include <set>
 #include <algorithm>
 #include <iterator> // needed for std::insert_iterator on windows
@@ -47,15 +51,25 @@
 //Extremely slow
 // #define TEST_NORMAL_IMPORTS
 
-//Uncomment the following line to get additional output from the string-repository test
-//#define DEBUG_STRINGREPOSITORY
-
 QTEST_MAIN(TestDUChain)
 
 using namespace KDevelop;
 using namespace Utils;
 
 typedef BasicSetRepository::Index Index;
+
+struct Timer
+{
+  Timer()
+  {
+    m_timer.start();
+  }
+  qint64 elapsed()
+  {
+    return m_timer.nsecsElapsed();
+  }
+  QElapsedTimer m_timer;
+};
 
 void TestDUChain::initTestCase()
 {
@@ -73,7 +87,7 @@ void TestDUChain::cleanupTestCase()
 
 void TestDUChain::testStringSets() {
 
-  const unsigned int setCount = 11;
+  const unsigned int setCount = 8;
   const unsigned int choiceCount = 40;
   const unsigned int itemCount = 120;
 
@@ -81,18 +95,18 @@ void TestDUChain::testStringSets() {
 
 //  kDebug() << "Start repository-layout: \n" << rep.dumpDotGraph();
 
-  clock_t repositoryClockTime = 0; //Time spent on repository-operations
-  clock_t genericClockTime = 0; //Time spend on equivalent operations with generic sets
+  qint64 repositoryTime = 0; //Time spent on repository-operations
+  qint64 genericTime = 0; //Time spend on equivalent operations with generic sets
 
-  clock_t repositoryIntersectionClockTime = 0; //Time spent on repository-operations
-  clock_t genericIntersectionClockTime = 0; //Time spend on equivalent operations with generic sets
-  clock_t qsetIntersectionClockTime = 0; //Time spend on equivalent operations with generic sets
+  qint64 repositoryIntersectionTime = 0; //Time spent on repository-operations
+  qint64 genericIntersectionTime = 0; //Time spend on equivalent operations with generic sets
+  qint64 qsetIntersectionTime = 0; //Time spend on equivalent operations with generic sets
 
-  clock_t repositoryUnionClockTime = 0; //Time spent on repository-operations
-  clock_t genericUnionClockTime = 0; //Time spend on equivalent operations with generic sets
+  qint64 repositoryUnionTime = 0; //Time spent on repository-operations
+  qint64 genericUnionTime = 0; //Time spend on equivalent operations with generic sets
 
-  clock_t repositoryDifferenceClockTime = 0; //Time spent on repository-operations
-  clock_t genericDifferenceClockTime = 0; //Time spend on equivalent operations with generic sets
+  qint64 repositoryDifferenceTime = 0; //Time spent on repository-operations
+  qint64 genericDifferenceTime = 0; //Time spend on equivalent operations with generic sets
 
   Set sets[setCount];
   std::set<Index> realSets[setCount];
@@ -110,14 +124,16 @@ void TestDUChain::testStringSets() {
         choose = (rand() % itemCount) + 1;
       }
 
-      clock_t c = clock();
+      Timer t;
       chosenIndices.insert(chosenIndices.end(), choose);
-      genericClockTime += clock() - c;
+      genericTime += t.elapsed();
     }
 
-    clock_t c = clock();
-    sets[a] = rep.createSet(chosenIndices);
-    repositoryClockTime += clock() - c;
+    {
+      Timer t;
+      sets[a] = rep.createSet(chosenIndices);
+      repositoryTime += t.elapsed();
+    }
 
     realSets[a] = chosenIndices;
 
@@ -127,196 +143,218 @@ void TestDUChain::testStringSets() {
       QString dbg = "created set: ";
       for(std::set<Index>::const_iterator it = realSets[a].begin(); it != realSets[a].end(); ++it)
         dbg += QString("%1 ").arg(*it);
-      kDebug() << dbg;
+      qDebug() << dbg;
 
       dbg = "repo.   set: ";
       for(std::set<Index>::const_iterator it = tempSet.begin(); it != tempSet.end(); ++it)
         dbg += QString("%1 ").arg(*it);
-      kDebug() << dbg;
+      qDebug() << dbg;
 
-      kDebug() << "DOT-Graph:\n\n" << sets[a].dumpDotGraph() << "\n\n";
+      qDebug() << "DOT-Graph:\n\n" << sets[a].dumpDotGraph() << "\n\n";
+      QFAIL("sets are not the same!");
     }
-    QVERIFY(tempSet == realSets[a]);
   }
 
   for(int cycle = 0; cycle < 100; ++cycle) {
       if(cycle % 10 == 0)
-         kDebug() << "cycle" << cycle;
+         qDebug() << "cycle" << cycle;
 
     for(unsigned int a = 0; a < setCount; a++) {
       for(unsigned int b = 0; b < setCount; b++) {
         /// ----- SUBTRACTION/DIFFERENCE
         std::set<Index> _realDifference;
-        clock_t c = clock();
-        std::set_difference(realSets[a].begin(), realSets[a].end(), realSets[b].begin(), realSets[b].end(), std::insert_iterator<std::set<Index> >(_realDifference, _realDifference.begin()));
-        genericDifferenceClockTime += clock() - c;
+        {
+          Timer t;
+          std::set_difference(realSets[a].begin(), realSets[a].end(), realSets[b].begin(), realSets[b].end(), std::insert_iterator<std::set<Index> >(_realDifference, _realDifference.begin()));
+          genericDifferenceTime += t.elapsed();
+        }
 
-        c = clock();
-        Set _difference = sets[a] - sets[b];
-        repositoryDifferenceClockTime += clock() - c;
+        Set _difference;
+        {
+          Timer t;
+          _difference = sets[a] - sets[b];
+          repositoryDifferenceTime += t.elapsed();
+        }
 
         if(_difference.stdSet() != _realDifference)
         {
           {
-            kDebug() << "SET a:";
+            qDebug() << "SET a:";
             QString dbg = "";
             for(std::set<Index>::const_iterator it = realSets[a].begin(); it != realSets[a].end(); ++it)
               dbg += QString("%1 ").arg(*it);
-            kDebug() << dbg;
+            qDebug() << dbg;
 
-            kDebug() << "DOT-Graph:\n\n" << sets[a].dumpDotGraph() << "\n\n";
+            qDebug() << "DOT-Graph:\n\n" << sets[a].dumpDotGraph() << "\n\n";
           }
           {
-            kDebug() << "SET b:";
+            qDebug() << "SET b:";
             QString dbg = "";
             for(std::set<Index>::const_iterator it = realSets[b].begin(); it != realSets[b].end(); ++it)
               dbg += QString("%1 ").arg(*it);
-            kDebug() << dbg;
+            qDebug() << dbg;
 
-            kDebug() << "DOT-Graph:\n\n" << sets[b].dumpDotGraph() << "\n\n";
+            qDebug() << "DOT-Graph:\n\n" << sets[b].dumpDotGraph() << "\n\n";
           }
 
           {
             std::set<Index> tempSet = _difference.stdSet();
 
-            kDebug() << "SET difference:";
+            qDebug() << "SET difference:";
             QString dbg = "real    set: ";
             for(std::set<Index>::const_iterator it = _realDifference.begin(); it != _realDifference.end(); ++it)
               dbg += QString("%1 ").arg(*it);
-            kDebug() << dbg;
+            qDebug() << dbg;
 
             dbg = "repo.   set: ";
             for(std::set<Index>::const_iterator it = tempSet.begin(); it != tempSet.end(); ++it)
               dbg += QString("%1 ").arg(*it);
-            kDebug() << dbg;
+            qDebug() << dbg;
 
-            kDebug() << "DOT-Graph:\n\n" << _difference.dumpDotGraph() << "\n\n";
+            qDebug() << "DOT-Graph:\n\n" << _difference.dumpDotGraph() << "\n\n";
           }
+          QFAIL("difference sets are not the same!");
         }
-        QVERIFY(_difference.stdSet() == _realDifference);
 
 
         /// ------ UNION
 
         std::set<Index> _realUnion;
-        c = clock();
-        std::set_union(realSets[a].begin(), realSets[a].end(), realSets[b].begin(), realSets[b].end(), std::insert_iterator<std::set<Index> >(_realUnion, _realUnion.begin()));
-        genericUnionClockTime += clock() - c;
+        {
+          Timer t;
+          std::set_union(realSets[a].begin(), realSets[a].end(), realSets[b].begin(), realSets[b].end(), std::insert_iterator<std::set<Index> >(_realUnion, _realUnion.begin()));
+          genericUnionTime += t.elapsed();
+        }
 
-        c = clock();
-        Set _union = sets[a] + sets[b];
-        repositoryUnionClockTime += clock() - c;
+        Set _union;
+        {
+          Timer t;
+          _union = sets[a] + sets[b];
+          repositoryUnionTime += t.elapsed();
+        }
 
         if(_union.stdSet() != _realUnion)
         {
           {
-            kDebug() << "SET a:";
+            qDebug() << "SET a:";
             QString dbg = "";
             for(std::set<Index>::const_iterator it = realSets[a].begin(); it != realSets[a].end(); ++it)
               dbg += QString("%1 ").arg(*it);
-            kDebug() << dbg;
+            qDebug() << dbg;
 
-            kDebug() << "DOT-Graph:\n\n" << sets[a].dumpDotGraph() << "\n\n";
+            qDebug() << "DOT-Graph:\n\n" << sets[a].dumpDotGraph() << "\n\n";
           }
           {
-            kDebug() << "SET b:";
+            qDebug() << "SET b:";
             QString dbg = "";
             for(std::set<Index>::const_iterator it = realSets[b].begin(); it != realSets[b].end(); ++it)
               dbg += QString("%1 ").arg(*it);
-            kDebug() << dbg;
+            qDebug() << dbg;
 
-            kDebug() << "DOT-Graph:\n\n" << sets[b].dumpDotGraph() << "\n\n";
+            qDebug() << "DOT-Graph:\n\n" << sets[b].dumpDotGraph() << "\n\n";
           }
 
           {
             std::set<Index> tempSet = _union.stdSet();
 
-            kDebug() << "SET union:";
+            qDebug() << "SET union:";
             QString dbg = "real    set: ";
             for(std::set<Index>::const_iterator it = _realUnion.begin(); it != _realUnion.end(); ++it)
               dbg += QString("%1 ").arg(*it);
-            kDebug() << dbg;
+            qDebug() << dbg;
 
             dbg = "repo.   set: ";
             for(std::set<Index>::const_iterator it = tempSet.begin(); it != tempSet.end(); ++it)
               dbg += QString("%1 ").arg(*it);
-            kDebug() << dbg;
+            qDebug() << dbg;
 
-            kDebug() << "DOT-Graph:\n\n" << _union.dumpDotGraph() << "\n\n";
+            qDebug() << "DOT-Graph:\n\n" << _union.dumpDotGraph() << "\n\n";
           }
+
+          QFAIL("union sets are not the same");
         }
-        QVERIFY(_union.stdSet() == _realUnion);
 
         std::set<Index> _realIntersection;
 
         /// -------- INTERSECTION
-        c = clock();
-        std::set_intersection(realSets[a].begin(), realSets[a].end(), realSets[b].begin(), realSets[b].end(), std::insert_iterator<std::set<Index> >(_realIntersection, _realIntersection.begin()));
-        genericIntersectionClockTime += clock() - c;
+        {
+          Timer t;
+          std::set_intersection(realSets[a].begin(), realSets[a].end(), realSets[b].begin(), realSets[b].end(), std::insert_iterator<std::set<Index> >(_realIntersection, _realIntersection.begin()));
+          genericIntersectionTime += t.elapsed();
+        }
 
         //Just for fun: Test how fast QSet intersections are
         QSet<Index> first, second;
-        for(std::set<Index>::const_iterator it = realSets[a].begin(); it != realSets[a].end(); ++it)
+        for(std::set<Index>::const_iterator it = realSets[a].begin(); it != realSets[a].end(); ++it) {
           first.insert(*it);
-        for(std::set<Index>::const_iterator it = realSets[b].begin(); it != realSets[b].end(); ++it)
+        }
+        for(std::set<Index>::const_iterator it = realSets[b].begin(); it != realSets[b].end(); ++it) {
           second.insert(*it);
-        c = clock();
-        QSet<Index> i = first.intersect(second);
-        qsetIntersectionClockTime += clock() - c;
+        }
+        {
+          Timer t;
+          QSet<Index> i = first.intersect(second);
+          qsetIntersectionTime += t.elapsed();
+        }
 
-        c = clock();
-        Set _intersection = sets[a] & sets[b];
-        repositoryIntersectionClockTime += clock() - c;
-
+        Set _intersection;
+        {
+          Timer t;
+          _intersection = sets[a] & sets[b];
+          repositoryIntersectionTime += t.elapsed();
+        }
 
         if(_intersection.stdSet() != _realIntersection)
         {
           {
-            kDebug() << "SET a:";
+            qDebug() << "SET a:";
             QString dbg = "";
             for(std::set<Index>::const_iterator it = realSets[a].begin(); it != realSets[a].end(); ++it)
               dbg += QString("%1 ").arg(*it);
-            kDebug() << dbg;
+            qDebug() << dbg;
 
-            kDebug() << "DOT-Graph:\n\n" << sets[a].dumpDotGraph() << "\n\n";
+            qDebug() << "DOT-Graph:\n\n" << sets[a].dumpDotGraph() << "\n\n";
           }
           {
-            kDebug() << "SET b:";
+            qDebug() << "SET b:";
             QString dbg = "";
             for(std::set<Index>::const_iterator it = realSets[b].begin(); it != realSets[b].end(); ++it)
               dbg += QString("%1 ").arg(*it);
-            kDebug() << dbg;
+            qDebug() << dbg;
 
-            kDebug() << "DOT-Graph:\n\n" << sets[b].dumpDotGraph() << "\n\n";
+            qDebug() << "DOT-Graph:\n\n" << sets[b].dumpDotGraph() << "\n\n";
           }
 
           {
             std::set<Index> tempSet = _intersection.stdSet();
 
-            kDebug() << "SET intersection:";
+            qDebug() << "SET intersection:";
             QString dbg = "real    set: ";
             for(std::set<Index>::const_iterator it = _realIntersection.begin(); it != _realIntersection.end(); ++it)
               dbg += QString("%1 ").arg(*it);
-            kDebug() << dbg;
+            qDebug() << dbg;
 
             dbg = "repo.   set: ";
             for(std::set<Index>::const_iterator it = tempSet.begin(); it != tempSet.end(); ++it)
               dbg += QString("%1 ").arg(*it);
-            kDebug() << dbg;
+            qDebug() << dbg;
 
-            kDebug() << "DOT-Graph:\n\n" << _intersection.dumpDotGraph() << "\n\n";
+            qDebug() << "DOT-Graph:\n\n" << _intersection.dumpDotGraph() << "\n\n";
           }
+          QFAIL("intersection sets are not the same");
         }
-        QVERIFY(_intersection.stdSet() == _realIntersection);
       }
     }
-#ifdef DEBUG_STRINGREPOSITORY
-    kDebug() << "cycle " << cycle;
-  kDebug() << "Clock-cycles needed for set-building: repository-set: " << repositoryClockTime << " generic-set: " << genericClockTime;
-  kDebug() << "Clock-cycles needed for intersection: repository-sets: " << repositoryIntersectionClockTime << " generic-set: " << genericIntersectionClockTime << " QSet: " << qsetIntersectionClockTime;
-  kDebug() << "Clock-cycles needed for union: repository-sets: " << repositoryUnionClockTime << " generic-set: " << genericUnionClockTime;
-  kDebug() << "Clock-cycles needed for difference: repository-sets: " << repositoryDifferenceClockTime << " generic-set: " << genericDifferenceClockTime;
-#endif
+
+    qDebug() << "cycle " << cycle;
+    qDebug() << "ns needed for set-building: repository-set: " << float(repositoryTime)
+             << " generic-set: " << float(genericTime);
+    qDebug() << "ns needed for intersection: repository-sets: " << float(repositoryIntersectionTime)
+             << " generic-set: " << float(genericIntersectionTime) << " QSet: " << float(qsetIntersectionTime);
+    qDebug() << "ns needed for union: repository-sets: " << float(repositoryUnionTime)
+             << " generic-set: " << float(genericUnionTime);
+    qDebug() << "ns needed for difference: repository-sets: " << float(repositoryDifferenceTime)
+             << " generic-set: " << float(genericDifferenceTime);
   }
 }
 
@@ -492,7 +530,7 @@ uint collectNaiveNodeCount(uint currentNode) {
 
 void TestDUChain::testImportStructure()
 {
-  clock_t startClock = clock();
+  Timer total;
   kDebug() << "before: " << KDevelop::RecursiveImportRepository::repository()->getDataRepository().statistics().print();
 
   ///Maintains a naive import-structure along with a real top-context import structure, and allows comparing both.
@@ -502,7 +540,7 @@ void TestDUChain::testImportStructure()
   for(int t = 0; t < cycles; ++t) {
     QList<TestContext*> allContexts;
     //Create a random structure
-    int contextCount = 120;
+    int contextCount = 50;
     int verifyOnceIn = contextCount/*((contextCount*contextCount)/20)+1*/; //Verify once in every chances(not in all cases, becase else the import-structure isn't built on-demand!)
     int clearOnceIn = contextCount;
     for(int a = 0; a < contextCount; a++)
@@ -549,16 +587,14 @@ void TestDUChain::testImportStructure()
       }
     }
 
-  kDebug() << "after: " << KDevelop::RecursiveImportRepository::repository()->getDataRepository().statistics().print();
+    kDebug() << "after: " << KDevelop::RecursiveImportRepository::repository()->getDataRepository().statistics().print();
 
-  for(int a = 0; a < contextCount; ++a)
-    delete allContexts[a];
-  allContexts.clear();
-  kDebug() << "after cleanup: " << KDevelop::RecursiveImportRepository::repository()->getDataRepository().statistics().print();
-
+    for(int a = 0; a < contextCount; ++a)
+      delete allContexts[a];
+    allContexts.clear();
+    kDebug() << "after cleanup: " << KDevelop::RecursiveImportRepository::repository()->getDataRepository().statistics().print();
   }
-  clock_t endClock = clock();
-  kDebug() << "total clock cycles needed for import-structure test:" << endClock - startClock;
+  qDebug() << "total ns needed for import-structure test:" << float(total.elapsed());
 }
 
 class TestWorker : public QObject
@@ -715,6 +751,59 @@ void TestDUChain::benchCodeModel()
     CodeModel::self().addItem(file, QualifiedIdentifier("testQID" + QString::number(i++)),
                               KDevelop::CodeModelItem::Class);
   }
+}
+
+void TestDUChain::benchTypeRegistry()
+{
+  IntegralTypeData data;
+  data.m_dataType = IntegralType::TypeInt;
+  data.typeClassId = IntegralType::Identity;
+  data.inRepository = false;
+  data.m_modifiers = 42;
+  data.m_dynamic = false;
+  data.refCount = 1;
+
+  IntegralTypeData to;
+
+  QFETCH(int, func);
+
+  QBENCHMARK {
+    switch(func) {
+      case 0:
+        TypeSystem::self().dataClassSize(data);
+        break;
+      case 1:
+        TypeSystem::self().dynamicSize(data);
+        break;
+      case 2:
+        TypeSystem::self().create(&data);
+        break;
+      case 3:
+        TypeSystem::self().isFactoryLoaded(data);
+        break;
+      case 4:
+        TypeSystem::self().copy(data, to, !data.m_dynamic);
+        break;
+      case 5:
+        TypeSystem::self().copy(data, to, data.m_dynamic);
+        break;
+      case 6:
+        TypeSystem::self().callDestructor(&data);
+        break;
+    }
+  }
+}
+
+void TestDUChain::benchTypeRegistry_data()
+{
+  QTest::addColumn<int>("func");
+  QTest::newRow("dataClassSize") << 0;
+  QTest::newRow("dynamicSize") << 1;
+  QTest::newRow("create") << 2;
+  QTest::newRow("isFactoryLoaded") << 3;
+  QTest::newRow("copy") << 4;
+  QTest::newRow("copyNonDynamic") << 5;
+  QTest::newRow("callDestructor") << 6;
 }
 
 #include "test_duchain.moc"

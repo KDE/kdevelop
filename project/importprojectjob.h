@@ -21,15 +21,8 @@
 #define KDEVPLATFORM_IMPORTPROJECTJOB_H
 
 #include <kjob.h>
-// #include "projectmodel.h"
+
 #include "projectexport.h"
-
-class QStandardItem;
-
-namespace ThreadWeaver
-{
-class Job;
-}
 
 namespace KDevelop
 {

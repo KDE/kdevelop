@@ -28,17 +28,6 @@ class GenericProjectManager: public KDevelop::AbstractFileManagerPlugin
 
 public:
     explicit GenericProjectManager( QObject* parent = 0, const QVariantList& args = QVariantList() );
-
-    virtual KJob* createImportJob( KDevelop::ProjectFolderItem* item );
-    virtual bool reload( KDevelop::ProjectFolderItem* item );
-
-protected:
-    virtual bool isValid( const KDevelop::Path& path, const bool isFolder, KDevelop::IProject* project ) const;
-
-private:
-    typedef QPair<QStringList, QStringList> IncludeRules;
-    void updateIncludeRules( KDevelop::IProject* project );
-    QMap< KDevelop::IProject*, IncludeRules > m_includeRules;
 };
 
 #endif // KDEVPLATFORM_PLUGIN_GENERICIMPORTER_H

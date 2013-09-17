@@ -41,7 +41,7 @@ using namespace KTextEditor;
 namespace KDevelop {
 
 ///Intermediate nodes
-class CompletionTreeNode;
+struct CompletionTreeNode;
 ///Leaf items
 class CompletionTreeItem;
 

@@ -301,6 +301,7 @@ bool PluginController::unloadPlugin(IPlugin* plugin, PluginDeletion deletion)
 {
     kDebug() << "unloading plugin:" << plugin << pluginInfo( plugin ).name();
 
+    emit unloadingPlugin(plugin);
     plugin->unload();
     emit pluginUnloaded(plugin);
 

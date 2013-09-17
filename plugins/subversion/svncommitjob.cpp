@@ -120,7 +120,7 @@ void SvnInternalCommitJob::run()
 }
 
 SvnCommitJob::SvnCommitJob( KDevSvnPlugin* parent )
-    : SvnJobBase( parent, KDevelop::OutputJob::Verbose ), m_commitdlg( 0 )
+    : SvnJobBase( parent, KDevelop::OutputJob::Verbose )
 {
     setType( KDevelop::VcsJob::Commit );
     m_job = new SvnInternalCommitJob( this );

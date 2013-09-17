@@ -34,7 +34,6 @@ public:
     ~GrepDialog();
 
     void setPattern(const QString &pattern);
-    void setDirectory(const QString &dir);
     void setEnableProjectBox(bool enable);
 
     QString patternString() const;
@@ -51,7 +50,12 @@ public:
 
     void start();
     
+public Q_SLOTS:
+    ///Sets directory(ies)/files to search in. Also it can be semicolon separated list of directories/files or one of special strings: allOpenFilesString, allOpenProjectsString
+    void setSearchLocations(const QString &dir);
+
 private Q_SLOTS:
+
     void performAction(KDialog::ButtonCode button);
     void templateTypeComboActivated(int);
     void patternComboEditTextChanged( const QString& );
@@ -60,6 +64,9 @@ private Q_SLOTS:
     void addUrlToMenu(QMenu* ret, KUrl url);
     void addStringToMenu(QMenu* ret, QString string);
     void synchronizeDirActionTriggered(bool);
+
+    ///Opens the dialog to select a directory to search in, and inserts it into Location(s) field.
+    void selectDirectoryDialog();
 
 private:
     // Returns the chosen directories or files (only the top directories, not subfiles)

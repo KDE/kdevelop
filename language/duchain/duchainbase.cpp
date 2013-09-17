@@ -235,21 +235,18 @@ QMutex shouldCreateConstantDataStorageMutex;
 QSet<QThread*> shouldCreateConstantDataStorage;
 
 bool DUChainBaseData::shouldCreateConstantData() {
-  shouldCreateConstantDataStorageMutex.lock();
+  QMutexLocker lock(&shouldCreateConstantDataStorageMutex);
   bool ret = shouldCreateConstantDataStorage.contains( QThread::currentThread() );
-  shouldCreateConstantDataStorageMutex.unlock();
   return ret;
 }
 
 void DUChainBaseData::setShouldCreateConstantData(bool should) {
-  shouldCreateConstantDataStorageMutex.lock();
+  QMutexLocker lock(&shouldCreateConstantDataStorageMutex);
   
   if(should)
     shouldCreateConstantDataStorage.insert(QThread::currentThread());
   else
     shouldCreateConstantDataStorage.remove(QThread::currentThread());
-  
-  shouldCreateConstantDataStorageMutex.unlock();
 }
 
 }

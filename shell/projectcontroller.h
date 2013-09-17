@@ -39,6 +39,7 @@ class Core;
 class UiController;
 class Context;
 class ContextMenuExtension;
+class IPlugin;
 
 class KDEVPLATFORMSHELL_EXPORT IProjectDialogProvider : public QObject
 {
