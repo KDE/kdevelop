@@ -46,7 +46,7 @@ public:
 
 private:
     // data
-    class LicensePagePrivate* const d;
+    struct LicensePagePrivate* const d;
     Q_PRIVATE_SLOT(d, void licenseComboChanged(int license))
 };
 

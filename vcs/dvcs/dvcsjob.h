@@ -36,7 +36,7 @@
 #include "../vcsjob.h"
 
 class QDir;
-class DVcsJobPrivate;
+struct DVcsJobPrivate;
 
 /**
  * This class is capable of running our dvcs commands. 

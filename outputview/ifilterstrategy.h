@@ -27,7 +27,7 @@ class QString;
 namespace KDevelop
 {
 
-class FilteredItem;
+struct FilteredItem;
 
 /**
 * Interface class for filtering output. Filtered output is divided into two catagories: Errors

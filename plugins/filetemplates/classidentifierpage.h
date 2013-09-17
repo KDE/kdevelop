@@ -68,7 +68,7 @@ private Q_SLOTS:
     void checkIdentifier();
 
 private:
-    class ClassIdentifierPagePrivate* const d;
+    struct ClassIdentifierPagePrivate* const d;
 };
 
 #endif // KDEVPLATFORM_PLUGIN_CLASSIDENTIFIERPAGE_H

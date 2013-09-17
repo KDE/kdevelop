@@ -69,7 +69,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ControlFlowGraph
     QVector<ControlFlowNode*> deadNodes() const;
   private:
     ControlFlowGraph(const ControlFlowGraph&);
-    class Private;
+    struct Private;
     Private* d;
 };
 

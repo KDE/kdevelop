@@ -59,7 +59,6 @@ protected:
 
 private:
     VariableTree *varTree_;
-    KLineEdit *watchVarEntry_;
     KHistoryComboBox *watchVarEditor_;
     VariablesRoot *variablesRoot_;
 };
