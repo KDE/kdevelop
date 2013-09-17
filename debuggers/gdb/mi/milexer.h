@@ -25,7 +25,7 @@
 #include <QVector>
 
 class MILexer;
-class TokenStream;
+struct TokenStream;
 
 typedef void (MILexer::*scan_fun_ptr)(int *kind);
 

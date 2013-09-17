@@ -233,12 +233,10 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public KDevelop::ParsingEnvironmen
     
     ///The parameter should be a EnvironmentFile that was processed AFTER the content of this file
     ///@param file The file to merge
-    ///@param env Optionally, the current environment that is active _before_ the
-    ///           included file is "virtually" processed.
     ///@warning The file must _not_ be merged yet into the environment when this is called. Also,
     ///         after merging the environment-files a file cannot be merged into the environment any more,
     ///         so this should only be used indirectly through CppPreprocessEnvironment::merge
-    void merge( const EnvironmentFile& file, CppPreprocessEnvironment* env = 0 );
+    void merge( const EnvironmentFile& file );
 
     bool operator <  ( const EnvironmentFile& rhs ) const {
       return url() < rhs.url();

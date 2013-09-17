@@ -219,7 +219,7 @@ struct DelayedTypeResolver : public KDevelop::TypeExchanger
   virtual AbstractType::Ptr exchange( const AbstractType::Ptr& type )
   {
     ThreadLocalData& data = threadDataLocal();
-    PushValue<uint> inc(data.delayedDepth, +1);
+    PushValue<uint> inc(data.delayedDepth, data.delayedDepth + 1);
     if( data.delayedDepth > 30 ) {
       kDebug(9007) << "Too much depth in DelayedTypeResolver::exchange, while exchanging" << (type ? type->toString() : QString("(null)"));
       return type;
@@ -284,7 +284,6 @@ struct DelayedTypeResolver : public KDevelop::TypeExchanger
         if( aType )
           aType->exchangeTypes(this);
 
-        
         return typeCopy;
       }
     }
@@ -604,6 +603,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
             ///Resolve the delayed type, and import the context
             DelayedTypeResolver res(contextCopy, source);
             AbstractType::Ptr newType( res.exchange(delayed.cast<AbstractType>()) );
+            newType = TypeUtils::unAliasedType(newType);
 
             if( CppClassType::Ptr baseClass = newType.cast<CppClassType>() )
             {
@@ -615,7 +615,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
               newInstance.baseClass = newType->indexed();
               klass->replaceBaseClass( num, newInstance );
             } else {
-//               kDebug(9007) << "Resolved bad base-class";
+              kWarning(9007) << "Resolved bad base-class" << delayed->toString() << (newType ? newType->toString() : QString());
             }
           }
           ++num;
@@ -644,7 +644,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
         ///an AliasDeclaration represents a C++ "using bla::bla;" declaration.
         if(AliasDeclaration* alias = dynamic_cast<AliasDeclaration*>(instantiatedDeclaration)) {
           ThreadLocalData& data = threadDataLocal();
-          PushValue<uint> safety(data.aliasDepth, +1);
+          PushValue<uint> safety(data.aliasDepth, data.delayedDepth + 1);
           if(data.aliasDepth > 30) {
             kWarning() << "depth-limit reached while resolving alias-declaration" << alias->identifier().toString() << "within" << parentContext->scopeIdentifier(true).toString();
           }else {
@@ -755,7 +755,6 @@ void TemplateDeclaration::deleteAllInstantiations()
   foreach( TemplateDeclaration* decl, instantiations ) {
     Q_ASSERT(decl);
     decl->m_instantiatedFrom = 0;
-    Declaration* realDecl = dynamic_cast<Declaration*>(decl);
     //Only delete real insantiations, not specializations
     //FIXME: before this checked for decl->isAnonymous
     //This was a problem because some instantiations are not anonymous, so they end up orphaned from their m_instantiatedFrom

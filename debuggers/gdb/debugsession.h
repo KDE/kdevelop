@@ -221,7 +221,7 @@ private:
     void destroyCmds();
     void removeInfoRequests();
     /** Called when there are no pending commands and 'state_reload_needed'
-        is true.
+        is true. Also can be used to immediately reload program state.
         Issues commands to completely reload all program state shown
         to the user.
     */
@@ -266,6 +266,7 @@ private Q_SLOTS:
         Otherwise, shows a dialog box and reloads view state.  */
     void defaultErrorHandler(const GDBMI::ResultRecord& result);
 
+    /**Triggered every time program begins/continues it's execution.*/
     void programRunning();
 
     // All of these slots are entered in the controller's thread, as they use queued connections or are called internally
@@ -320,10 +321,12 @@ private:
     // Some state variables
     DBGStateFlags     state_;
 
+    /**When program stops and all commands from queue are executed and this variable is true, program state shown to the user is updated.*/
     bool state_reload_needed;
 
     QTime commandExecutionTime;
 
+    /**True if program has stopped and all stuff like breakpoints is being updated.*/
     bool stateReloadInProgress_;
 };
 

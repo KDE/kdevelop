@@ -33,11 +33,10 @@
 class CMakeDUChainTest : public QObject
 {
     Q_OBJECT
-    public:
-        CMakeDUChainTest();
-        ~CMakeDUChainTest();
-
     private slots:
+        void initTestCase();
+        void cleanupTestCase();
+
         void testUses_data();
         void testUses();
         void testDUChainWalk_data();

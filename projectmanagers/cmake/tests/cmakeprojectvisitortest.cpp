@@ -32,6 +32,7 @@
 #include <cmakecondition.h>
 #include <cmakeparserutils.h>
 #include <tests/autotestshell.h>
+#include <tests/testcore.h>
 #include <astfactory.h>
 #include <cmakeprojectdata.h>
 #include <KTempDir>
@@ -59,8 +60,17 @@ static QSharedPointer<KTemporaryFile> prepareVisitoTestScript(const QString &scr
 CMakeProjectVisitorTest::CMakeProjectVisitorTest()
  : CMakeProjectVisitor( QString(), 0)
 {
+}
+
+void CMakeProjectVisitorTest::initTestCase()
+{
     AutoTestShell::init();
-    KDevelop::Core::initialize(0, KDevelop::Core::NoUi);
+    TestCore::initialize(Core::NoUi);
+}
+
+void CMakeProjectVisitorTest::cleanupTestCase()
+{
+    TestCore::shutdown();
 }
 
 void CMakeProjectVisitorTest::init()

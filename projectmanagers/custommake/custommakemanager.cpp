@@ -131,28 +131,6 @@ QList<ProjectTargetItem*> CustomMakeManager::targets(KDevelop::ProjectFolderItem
     return ret;
 }
 
-//TODO: make filtering generic
-bool CustomMakeManager::isValid(const Path& path, const bool isFolder, IProject* project) const
-{
-    const QString name = path.lastPathSegment();
-    const QStringList invalidFolders = QStringList() << ".kdev4" << ".svn" << ".git" << "CVS"
-                                                     << ".bzr" << "_darcs" << ".hg";
-    if (isFolder && invalidFolders.contains( name )) {
-        return false;
-    } else if (!isFolder && (name.endsWith(".o") || name.endsWith(".a")
-                          || name.startsWith("moc_") || name.endsWith(".moc")
-                          || name.endsWith(".so") || name.contains(".so.")
-                          || name.startsWith(".swp.") || name.endsWith('~')
-                          || (name.startsWith('.') && name.endsWith(".kate-swp"))))
-    {
-        return false;
-    } else if (isFolder && QFile::exists(path.toLocalFile() + "/.kdev_ignore")) {
-        return false;
-    } else {
-        return true;
-    }
-}
-
 ProjectFileItem* CustomMakeManager::createFileItem(IProject* project, const Path& path, ProjectBaseItem* parent)
 {
     KDevelop::ProjectFileItem *item = new KDevelop::ProjectFileItem( project, path, parent );

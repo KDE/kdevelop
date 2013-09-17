@@ -98,19 +98,6 @@ namespace CppTools {
       
     private:
       bool m_isResolving;
-      struct CacheEntry {
-        CacheEntry() : failed(false) {
-        }
-        KDevelop::ModificationRevisionSet modificationTime;
-        QStringList paths;
-        QString errorMessage, longErrorMessage;
-        bool failed;
-        QMap<QString,bool> failedFiles;
-        QDateTime failTime;
-      };
-      typedef QMap<QString, CacheEntry> Cache;
-      static Cache m_cache;
-      static QMutex m_cacheMutex;
 
       KUrl mapToBuild(const KUrl& url);
 

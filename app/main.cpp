@@ -32,24 +32,20 @@
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
-#include <kxmlguiwindow.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
 #include <ksplashscreen.h>
+#include <kmessagebox.h>
 #include <ktexteditor/cursor.h>
-#include <KMessageBox>
-#include <KProcess>
 
 #include <QFileInfo>
 #include <QPixmap>
-#include <QTimer>
 #include <QDir>
+#include <QProcess>
 #include <QSessionManager>
-#include <QThread>
-#include <QDBusConnection>
+#include <QTextStream>
 #include <QDBusInterface>
 #include <QDBusReply>
-#include <QTextStream>
 
 #include <shell/core.h>
 #include <shell/mainwindow.h>
@@ -71,6 +67,9 @@
 #include "splash.h"
 
 using KDevelop::Core;
+
+// Represents a file to be opened, consisting of its URL and the linenumber to jump to
+typedef QPair<QString, int> File;
 
 class KDevelopApplication: public KApplication {
 public:
@@ -107,11 +106,77 @@ const KDevelop::SessionInfo* findSessionInList( QList<KDevelop::SessionInfo>& se
     return 0;
 }
 
+/// Parses a filename given as an argument by determining its line number and full path
+File parseFilename(QString argument)
+{
+    if ( KUrl::isRelativeUrl(argument) && ! argument.startsWith('/') ) {
+        argument = QDir::currentPath() + "/" + argument;
+    }
+    //Allow opening specific lines in documents, like mydoc.cpp:10
+    int lineNumberOffset = argument.lastIndexOf(':');
+    int line = -1;
+    if( lineNumberOffset != -1 )
+    {
+        bool isInt;
+        int lineNr = argument.mid(lineNumberOffset+1).toInt(&isInt);
+        if (isInt)
+        {
+            argument = argument.left(lineNumberOffset);
+            line = lineNr;
+        }
+    }
+    return File(argument, line);
+}
+
+/// Performs a DBus call to open the given @p files in the running kdev instance identified by @p pid
+/// Returns the exit status
+int openFilesInRunningInstance(const QVector<File>& files, int pid)
+{
+    QDBusInterface iface(QString("org.kdevelop.kdevelop-%1").arg(pid),
+                                 "/org/kdevelop/DocumentController", "org.kdevelop.DocumentController");
+
+    QStringList urls;
+    foreach ( const File& file, files ) {
+        urls << file.first;
+    }
+    QDBusReply<bool> result = iface.call("openDocumentsSimple", QVariant(urls));
+    if ( ! result.value() ) {
+        KMessageBox::sorry(0, i18n("Some of the requested files could not be opened."));
+        return 1;
+    }
+    return 0;
+}
+
+/// Gets the PID of a running KDevelop instance, eventually asking the user if there is more than one.
+/// Returns -1 in case there are no running sessions.
+int getRunningSessionPid()
+{
+    QList<KDevelop::SessionInfo> candidates;
+    foreach( const KDevelop::SessionInfo& si, KDevelop::SessionController::availableSessionInfo() ) {
+        if( KDevelop::SessionController::isSessionRunning(si.uuid.toString()) ) {
+            candidates << si;
+        }
+    }
+    if ( candidates.isEmpty() ) {
+        return -1;
+    }
+
+    QString sessionUuid;
+    if ( candidates.size() == 1 ) {
+        sessionUuid = candidates.first().uuid.toString();
+    }
+    else {
+        const QString title = i18n("Select the session to open the document in");
+        sessionUuid = KDevelop::SessionController::showSessionChooserDialog(title, true);
+    }
+    return KDevelop::SessionController::sessionRunInfo(sessionUuid).holderPid;
+}
+
 int main( int argc, char *argv[] )
 {
     static const char description[] = I18N_NOOP( "The KDevelop Integrated Development Environment" );
     KAboutData aboutData( "kdevelop", 0, ki18n( "KDevelop" ), QByteArray(VERSION), ki18n(description), KAboutData::License_GPL,
-                          ki18n( "Copyright 1999-2012, The KDevelop developers" ), KLocalizedString(), "http://www.kdevelop.org/" );
+                          ki18n( "Copyright 1999-2013, The KDevelop developers" ), KLocalizedString(), "http://www.kdevelop.org/" );
     aboutData.addAuthor( ki18n("Andreas Pakulat"), ki18n( "Architecture, VCS Support, Project Management Support, QMake Projectmanager" ), "apaku@gmx.de" );
     aboutData.addAuthor( ki18n("Alexander Dymo"), ki18n( "Architecture, Sublime UI, Ruby support" ), "adymo@kdevelop.org" );
     aboutData.addAuthor( ki18n("David Nolden"), ki18n( "Definition-Use Chain, C++ Support, Code Navigation, Code Completion, Coding Assistance, Refactoring" ), "david.nolden.kdevelop@art-master.de" );
@@ -216,7 +281,7 @@ int main( int argc, char *argv[] )
                        "Example: kdevelop --debug gdb myapp --foo bar"));
 
     options.add("pid");
-           
+
     options.add("+files", ki18n( "Files to load" ));
 
     options.add(":", ki18n("Deprecated options:"));
@@ -250,9 +315,23 @@ int main( int argc, char *argv[] )
         return 0;
     }
 
+    // Handle extra arguments, which stand for files to open
+    QVector<File> initialFiles;
+    for ( int i = 0; i < args->count(); i++ ) {
+        initialFiles.append(parseFilename(args->arg(i)));
+    }
+    if ( ! initialFiles.isEmpty() && ! args->isSet("open-session") && ! args->isSet("new-session") )
+    {
+        int pid = getRunningSessionPid();
+        if ( pid > 0 ) {
+            return openFilesInRunningInstance(initialFiles, pid);
+        }
+        // else there are no running sessions, and the generated list of files will be opened below.
+    }
+
     // if empty, restart kdevelop with last active session, see SessionController::defaultSessionId
     QString session;
-    
+
     if(args->isSet("pss"))
     {
         QTextStream qerr(stderr);
@@ -466,35 +545,11 @@ int main( int argc, char *argv[] )
 
         core->runControllerInternal()->execute("debug", launch);
     } else {
-        int count=args->count();
-        for(int i=0; i<count; ++i)
-        {
-            QString file=args->arg(i);
-            //Allow opening specific lines in documents, like mydoc.cpp:10
-            int lineNumberOffset = file.lastIndexOf(':');
-            KTextEditor::Cursor line;
-            if( lineNumberOffset != -1 )
-            {
-                bool isInt;
-                int lineNr = file.mid(lineNumberOffset+1).toInt(&isInt);
-                if (isInt)
-                {
-                    file = file.left(lineNumberOffset);
-                    line = KTextEditor::Cursor(lineNr, 0);
-                }
+        foreach ( const File& file, initialFiles ) {
+            if(!core->documentController()->openDocument(file.first, KTextEditor::Cursor(file.second, 0))) {
+                kWarning() << i18n("Could not open %1", file.first);
             }
-
-            KUrl f;
-            if( QFileInfo(file).isRelative() ) {
-                f = KUrl( QDir::currentPath(), file );
-            } else {
-                f = file;
-            }
-
-            if(!core->documentController()->openDocument(f, line))
-                kWarning() << i18n("Could not open %1", args->arg(i));
         }
-        args->clear();
     }
 
 #ifdef WITH_WELCOMEPAGE

@@ -95,8 +95,7 @@ TestCppCodeCompletion::TestCppCodeCompletion()
 void TestCppCodeCompletion::initTestCase()
 {
   KDevelop::AutoTestShell::init();
-  TestCore* core = new KDevelop::TestCore();
-  core->initialize(KDevelop::Core::NoUi);
+  TestCore::initialize(Core::NoUi);
   Cpp::EnvironmentManager::init();
 
   DUChain::self()->disablePersistentStorage();
@@ -109,6 +108,7 @@ void TestCppCodeCompletion::initTestCase()
 
 void TestCppCodeCompletion::cleanupTestCase()
 {
+  TestCore::shutdown();
 }
 
 Declaration* TestCppCodeCompletion::findDeclaration(DUContext* context, const Identifier& id, const CursorInRevision& position)
@@ -3424,7 +3424,7 @@ QString TestCppCodeCompletion::preprocess( const IndexedString& url, const QStri
     if( paramEnvironmentFile )
       *paramEnvironmentFile = environmentFile;
 
-    CppPreprocessEnvironment* currentEnvironment = new CppPreprocessEnvironment( &preprocessor, environmentFile );
+    CppPreprocessEnvironment* currentEnvironment = new CppPreprocessEnvironment( environmentFile );
     preprocessor.setEnvironment( currentEnvironment );
     currentEnvironment->setEnvironmentFile( environmentFile );
 
@@ -3474,7 +3474,7 @@ TopDUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dum
 
   PreprocessedContents contents;
 
-  preprocess( url, QString::fromUtf8(unit), included, parent, false, &file, &locationTable, &contents ).toUtf8();
+  preprocess( url, QString::fromUtf8(unit), included, parent, false, &file, &locationTable, &contents );
 
   session->setContents( contents, locationTable );
 

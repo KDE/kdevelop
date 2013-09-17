@@ -512,10 +512,7 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
 
     applyFunctionSpecifiers();
   } else if (isFuncPtr) {
-    Declaration* decl = openDeclaration<Declaration>(node->sub_declarator->id, node);
-    ///TODO: I don't know why this is required but without it the function is
-    ///not found by its declaration id...
-//     decl->setAlwaysForceDirect(true);
+    openDeclaration<Declaration>(node->sub_declarator->id, node);
   } else {
     openDefinition(node->id, node, node->id == 0);
   }
@@ -624,11 +621,12 @@ TemplateDeclaration* DeclarationBuilder::findSpecializedFrom(Declaration* specia
   if (!searchInContext)
     searchInContext = currentContext();
 
-  QList<Declaration*> specFromDecls = searchInContext->findLocalDeclarations(searchForIdentifier);
+  QList<Declaration*> specFromDecls = searchInContext->findDeclarations(searchForIdentifier);
   foreach(Declaration * possibleSpec, specFromDecls)
   {
-    if (possibleSpec != specializedDeclaration)
-      return dynamic_cast<TemplateDeclaration*>(possibleSpec);
+    TemplateDeclaration *asTemplateDecl = dynamic_cast<TemplateDeclaration*>(possibleSpec);
+    if (!isSpecialization(asTemplateDecl))
+      return asTemplateDecl;
   }
   return 0;
 }
@@ -638,7 +636,7 @@ T* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, const Iden
 {
   DUChainWriteLocker lock(DUChain::lock());
 
-  KDevelop::DUContext* templateCtx = hasTemplateContext(m_importedParentContexts, topContext()).context(topContext());
+  KDevelop::DUContext* templateCtx = hasTemplateContext(m_importedParentContexts + currentContext()->importedParentContexts(), topContext()).context(topContext());
 
   ///We always need to create a template declaration when we're within a template, so the declaration can be accessed
   ///by specialize(..) and its indirect DeclarationId

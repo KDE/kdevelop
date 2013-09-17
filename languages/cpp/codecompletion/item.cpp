@@ -54,13 +54,6 @@ QString linePrefix( KTextEditor::Document* document, const KTextEditor::Range& w
     return document->text( linePrefixRange );
 }
 
-QString lineSuffix( KTextEditor::Document* document, const KTextEditor::Range& word )
-{
-    int endLineLength = document->lineLength( word.end().line() );
-    KTextEditor::Range lineSuffixRange( word.end().line(), word.end().column(), word.end().line(), endLineLength );
-    return document->text( lineSuffixRange );
-}
-
 QString lineSuffixAndWord( KTextEditor::Document* document, const KTextEditor::Range& word )
 {
     int endLineLength = document->lineLength( word.end().line() );
@@ -105,9 +98,13 @@ AbstractType::Ptr applyPointerConversions(AbstractType::Ptr type, int pointerCon
 
 int getMatchQuality(CodeCompletionContext *context, const Declaration* decl, TopDUContext* top)
 {
-  if (!context->parentContext())
+  if (!context->parentContext() || decl->kind() == Declaration::Type
+      || decl->kind() == Declaration::Namespace || decl->kind() == Declaration::NamespaceAlias)
+  {
     return 0;
-  QList<IndexedType> matchTypes = context->parentContext()->matchTypes();
+  }
+
+  const QList<IndexedType>& matchTypes = context->parentContext()->matchTypes();
   if (matchTypes.isEmpty())
     return 0;
 
@@ -115,19 +112,19 @@ int getMatchQuality(CodeCompletionContext *context, const Declaration* decl, Top
   if (pointerConversions > 1)
     return 0; //Can't do "&&foo"
 
+  const IndexedType& effectiveDeclType = applyPointerConversions(effectiveType(decl), pointerConversions, top)->indexed();
+
+  bool fromLValue = (bool)decl->type<ReferenceType>() ||
+                    (!dynamic_cast<const AbstractFunctionDeclaration*>(decl) &&
+                      decl->kind() == Declaration::Instance);
+  if(pointerConversions > 0 && !fromLValue)
+    return 0;
+
+  Cpp::TypeConversion conv(top);
+
   int bestQuality = 0;
   foreach(const IndexedType& type, matchTypes) {
-    Cpp::TypeConversion conv(top);
-
-    bool fromLValue = (bool)decl->type<ReferenceType>() ||
-                      (!dynamic_cast<const AbstractFunctionDeclaration*>(decl) &&
-                        decl->kind() == Declaration::Instance);
-    if(pointerConversions > 0 && !fromLValue)
-      continue;
-
-    AbstractType::Ptr effectiveDeclType = applyPointerConversions(effectiveType(decl), pointerConversions, top);
-
-    int quality = conv.implicitConversion( effectiveDeclType->indexed(), type, fromLValue )  * 10 / Cpp::MaximumConversionResult;
+    int quality = conv.implicitConversion( effectiveDeclType, type, fromLValue )  * 10 / Cpp::MaximumConversionResult;
     if(quality > bestQuality)
       bestQuality = quality;
   }
@@ -539,9 +536,10 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
 
   switch (role) {
     case CodeCompletionModel::MatchQuality:
-      if(m_fixedMatchQuality != -1)
-        return m_fixedMatchQuality;
-      return getMatchQuality(completionContext().data(), dec, model->currentTopContext().data());
+      if(m_fixedMatchQuality == -1) {
+        m_fixedMatchQuality = getMatchQuality(completionContext().data(), dec, model->currentTopContext().data());
+      }
+      return m_fixedMatchQuality;
 
     case CodeCompletionModel::ItemSelected:
        return QVariant(Cpp::NavigationWidget::shortDescription(dec));
@@ -810,8 +808,8 @@ void TypeConversionCompletionItem::execute(KTextEditor::Document* document, cons
     document->replaceText( word, m_text );
 }
 
-QVariant TypeConversionCompletionItem::data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const {
-
+QVariant TypeConversionCompletionItem::data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* /*model*/) const
+{
   switch (role) {
     case Qt::DisplayRole:
       switch (index.column()) {

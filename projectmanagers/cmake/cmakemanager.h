@@ -55,6 +55,8 @@ namespace KDevelop
     class ProjectBaseItem;
     class ProjectFileItem;
     class ProjectTargetItem;
+    class ProjectFilterManager;
+    class IProjectFilter;
     class ParseJob;
     class ContextMenuExtension;
     class Context;
@@ -157,12 +159,17 @@ private:
     QMutex m_busyProjectsMutex;
     QMutex m_dirWatchersMutex;
     KDevelop::ReferencedTopDUContext initializeProject(CMakeFolderItem*);
-    
+
     KDevelop::ReferencedTopDUContext includeScript(const QString& file, KDevelop::IProject * project, const QString& currentDir,
                                                     KDevelop::ReferencedTopDUContext parent);
-    
+
     void setTargetFiles(KDevelop::ProjectTargetItem* target, const KUrl::List& files);
-    void reloadFiles(KDevelop::ProjectFolderItem* item);
+    /// FIXME: this is jumping through hoops to make the code use the filters in a threadsafe way
+    ///        the whole structure needs to be cleaned up to decouple the project loading
+    ///        from the cmake parsing. a proper job based approach would work well I think.
+    typedef QVector<QSharedPointer<KDevelop::IProjectFilter> > Filters;
+    void reloadFiles(KDevelop::ProjectFolderItem* item, const Filters& filters);
+    void parse(KDevelop::ProjectFolderItem* item, const Filters& filters);
 
     QMap<KDevelop::IProject*, CMakeProjectData> m_projectsData;
     QMap<KDevelop::IProject*, QFileSystemWatcher*> m_watchers;
@@ -180,6 +187,10 @@ private:
     QTimer* m_fileSystemChangeTimer;
     QSet<QString> m_fileSystemChangedBuffer;
     void realDirectoryChanged(const QString& dir);
+
+    QSet<QString> filterFiles(const QFileInfoList& orig, const KDevelop::Path& folder, const Filters& filters) const;
+    bool isValid(const KDevelop::Path& path, bool isFolder, const Filters& filters) const;
+    KDevelop::ProjectFilterManager* const m_filter;
 };
 
 #endif

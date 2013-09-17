@@ -5,31 +5,36 @@ include_directories(
     ${KDevelop_BINARY_DIR}/languages/cpp
 )
 
+set(setuphelpers_SRCS
+
+  ../setuphelpers.cpp
+  ../setuphelpers_gcc.cpp
+)
+if(MSVC)
+    list(APPEND setuphelpers_SRCS ../setuphelpers_msvc.cpp)
+endif(MSVC)
+
 set(test_common_SRCS
 
   ../codecompletion/context.cpp
-  ../codecompletion/item.cpp
   ../codecompletion/helpers.cpp
   ../codecompletion/implementationhelperitem.cpp
-  ../cpphighlighting.cpp
-  ../codecompletion/model.cpp
-  ../quickopen.cpp
-  ../codegen/simplerefactoring.cpp
-  ../includepathresolver.cpp
-  ../setuphelpers.cpp
-  ../setuphelpers_gcc.cpp
-  ../codegen/progressdialogs.cpp
-  ../codegen/unresolvedincludeassistant.cpp
-  ../cpputils.cpp
-  ../codecompletion/worker.cpp
-  ../includepathcomputer.cpp
-  ../codecompletion/missingincludemodel.cpp
+  ../codecompletion/item.cpp
   ../codecompletion/missingincludeitem.cpp
-)
+  ../codecompletion/missingincludemodel.cpp
+  ../codecompletion/model.cpp
+  ../codecompletion/worker.cpp
+  ../codegen/progressdialogs.cpp
+  ../codegen/simplerefactoring.cpp
+  ../codegen/unresolvedincludeassistant.cpp
+  ../cpphighlighting.cpp
+  ../cpputils.cpp
+  ../includepathcomputer.cpp
+  ../includepathresolver.cpp
+  ../quickopen.cpp
 
-if(MSVC)
-    list(APPEND test_common_SRCS ../setuphelpers_msvc.cpp)
-endif(MSVC)
+  ${setuphelpers_SRCS}
+)
 
 ########### next target ###############
 
@@ -124,8 +129,13 @@ set(cppcodecompletiontest_SRCS
 set(cppcodegentest_SRCS
   test_cppcodegen.cpp
 
-  ${test_common_SRCS}
+  ../codegen/progressdialogs.cpp
   ../codegen/simplerefactoring.cpp
+  ../codegen/unresolvedincludeassistant.cpp
+  ../cpputils.cpp
+  ../includepathcomputer.cpp
+  ../includepathresolver.cpp
+  ${setuphelpers_SRCS}
 )
 
 add_definitions(-DBUILD_TESTS)

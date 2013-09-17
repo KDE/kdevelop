@@ -23,7 +23,7 @@
 
 #include <QtTest/QtTest>
 
-class CMakeProjectData;
+struct CMakeProjectData;
 class CMakeProjectVisitor;
 class CMakeAst;
 
@@ -35,11 +35,10 @@ class CMakeAst;
 class CMakeLoadProjectTest : public QObject
 {
 Q_OBJECT
-public:
-    CMakeLoadProjectTest();
-    ~CMakeLoadProjectTest();
-
 private slots:
+    void initTestCase();
+    void cleanupTestCase();
+
     //Note: These could be done as data-driven tests, but they are separate so that one can
     // more easily profile a plain-cmake vs. qt4-only vs. kde4 project
     void testTinyCMakeProject();

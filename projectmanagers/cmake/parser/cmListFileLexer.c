@@ -1560,7 +1560,10 @@ static void cmListFileLexer_yy_load_buffer_state  (yyscan_t yyscanner)
         b->yy_bs_column = 0;
     }
 
-        b->yy_is_interactive = file ? (isatty( fileno(file) ) > 0) : 0;
+    /* does not work on clang, and not required for kdevelop - disable it for now
+     * b->yy_is_interactive = file ? (isatty( fileno(file) ) > 0) : 0;
+     */
+        b->yy_is_interactive = 0;
     
         errno = oerrno;
 }
