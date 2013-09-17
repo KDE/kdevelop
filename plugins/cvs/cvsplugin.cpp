@@ -169,7 +169,7 @@ void CvsPlugin::slotStatus()
     KDevelop::VcsJob* j = status(url, KDevelop::IBasicVersionControl::Recursive);
     CvsJob* job = dynamic_cast<CvsJob*>(j);
     if (job) {
-        CvsGenericOutputView* view = new CvsGenericOutputView(this, job);
+        CvsGenericOutputView* view = new CvsGenericOutputView(job);
         emit addNewTabToMainView(view, i18n("Status"));
         KDevelop::ICore::self()->runController()->registerJob(job);
     }

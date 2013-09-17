@@ -34,7 +34,7 @@ CvsMainView::CvsMainView( CvsPlugin *plugin, QWidget* parent )
             this, SLOT(slotAddTab(QWidget*,QString)) );
 
     // create a default output view
-    m_mainview = new CvsGenericOutputView(m_plugin);
+    m_mainview = new CvsGenericOutputView;
     tabwidget->addTab( m_mainview, i18n("CVS") );
 
     // add a close button as corner widget

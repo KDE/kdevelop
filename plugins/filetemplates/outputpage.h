@@ -79,8 +79,8 @@ Q_SIGNALS:
     void isValid(bool valid);
 
 private:
-    friend class OutputPagePrivate;
-    class OutputPagePrivate* const d;
+    friend struct OutputPagePrivate;
+    struct OutputPagePrivate* const d;
 
     Q_PRIVATE_SLOT(d, void updateFileNames());
 

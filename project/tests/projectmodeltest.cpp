@@ -72,8 +72,8 @@ class SignalReceiver : public QObject
 {
 Q_OBJECT
 public:
-    SignalReceiver(ProjectModel* _model, QObject* parent = 0)
-        : QObject(parent), model( _model )
+    SignalReceiver(QObject* parent = 0)
+        : QObject(parent)
     {
     }
     QThread* threadOfSignalEmission() const
@@ -87,7 +87,6 @@ private slots:
     }
 private:
     QThread* threadOfReceivedSignal;
-    ProjectModel* model;
 };
 
 void debugItemModel(QAbstractItemModel* m, const QModelIndex& parent=QModelIndex(), int depth=0)
@@ -515,7 +514,7 @@ void ProjectModelTest::testAddItemInThread()
     ProjectFolderItem* root = new ProjectFolderItem( 0, KUrl("file:///f1"), 0 );
     model->appendRow( root );
     AddItemThread t( root );
-    SignalReceiver check( model );
+    SignalReceiver check;
     connect( model, SIGNAL(rowsInserted(QModelIndex,int,int)), &check, SLOT(rowsInserted(QModelIndex,int,int)), Qt::DirectConnection );
     KDevelop::KDevSignalSpy spy( &t, SIGNAL(addedItems()), Qt::QueuedConnection );
     t.start();

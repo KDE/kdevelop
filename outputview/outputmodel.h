@@ -32,8 +32,8 @@ class KUrl;
 namespace KDevelop
 {
 
-class FilteredItem;
-class OutputModelPrivate;
+struct FilteredItem;
+struct OutputModelPrivate;
 
 class KDEVPLATFORMOUTPUTVIEW_EXPORT OutputModel : public QAbstractListModel, public KDevelop::IOutputViewModel
 {
@@ -74,7 +74,7 @@ public Q_SLOTS:
 
 private:
     OutputModelPrivate* const d;
-    friend class OutputModelPrivate;
+    friend struct OutputModelPrivate;
     Q_PRIVATE_SLOT(d, void linesParsed(const QVector<KDevelop::FilteredItem>& lines));
 };
 

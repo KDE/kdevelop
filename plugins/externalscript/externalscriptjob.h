@@ -64,7 +64,6 @@ private slots:
 private:
   void appendLine( const QString &l );
 
-  ExternalScriptPlugin* m_plugin;
   KProcess* m_proc;
   KDevelop::ProcessLineMaker* m_lineMaker;
   ExternalScriptItem::OutputMode m_outputMode;

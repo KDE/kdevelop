@@ -31,15 +31,12 @@ class CvsJob;
 class CvsGenericOutputView : public QWidget, private Ui::CvsGenericOutputViewBase {
     Q_OBJECT
 public:
-    explicit CvsGenericOutputView(CvsPlugin *plugin, CvsJob* job=0, QWidget* parent=0);
+    explicit CvsGenericOutputView(CvsJob* job = 0, QWidget* parent = 0);
     virtual ~CvsGenericOutputView();
 
 public slots:
     void appendText(const QString& text);
     void slotJobFinished(KJob* job);
-
-private:
-    CvsPlugin* m_plugin;
 };
 
 #endif
