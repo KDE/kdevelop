@@ -25,30 +25,14 @@
 
 #include "make/imakebuilder.h"
 
-//#include <config.h>
-
-#include <QtCore/QStringList>
-#include <QtCore/QSignalMapper>
-
-
-#include <project/projectmodel.h>
-
 #include <interfaces/iproject.h>
-#include <interfaces/icore.h>
-#include <interfaces/iplugincontroller.h>
 #include <outputview/ioutputview.h>
 #include <outputview/outputmodel.h>
+#include <project/projectmodel.h>
 #include <util/commandexecutor.h>
-#include <QtDesigner/QExtensionFactory>
 
-#include <kpluginfactory.h>
-#include <kpluginloader.h>
-#include <kconfig.h>
-#include <kconfiggroup.h>
-#include <kdialog.h>
-#include <kglobal.h>
-#include <klocale.h>
 #include <kdebug.h>
+#include <klocale.h>
 
 QMakeJob::QMakeJob(QObject *parent)
     : OutputJob(parent)
@@ -70,7 +54,6 @@ void QMakeJob::start()
     setModel(new KDevelop::OutputModel);
     startOutput();
 
-    m_item = m_project->projectItem();
     QString cmd = QMakeConfig::qmakeBinary( m_project );
     m_cmd = new KDevelop::CommandExecutor(cmd, this);
     connect(m_cmd, SIGNAL(receivedStandardError(const QStringList&)),
@@ -78,7 +61,8 @@ void QMakeJob::start()
     connect(m_cmd, SIGNAL(receivedStandardOutput(const QStringList&)),
             model(), SLOT(appendLines(const QStringList&) ) );
     m_cmd->setWorkingDirectory( m_project->folder().toLocalFile() );
-    connect( m_cmd, SIGNAL( failed() ), this, SLOT( slotFailed() ) );
+    connect( m_cmd, SIGNAL( failed(QProcess::ProcessError) ),
+             this, SLOT( slotFailed(QProcess::ProcessError) ) );
     connect( m_cmd, SIGNAL( completed(int) ), this, SLOT( slotCompleted(int) ) );
     m_cmd->start();
 }
@@ -91,8 +75,10 @@ void QMakeJob::setProject(KDevelop::IProject* project)
         setObjectName(i18n("QMake: %1", m_project->name()));
 }
 
-void QMakeJob::slotFailed()
+void QMakeJob::slotFailed(QProcess::ProcessError error)
 {
+    kDebug() << error;
+
     if (!m_killed) {
         setError(ConfigureError);
         // FIXME need more detail i guess

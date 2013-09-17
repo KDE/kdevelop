@@ -95,29 +95,6 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="label_4">
-     <property name="text">
-      <string>Extra arguments:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="1">
-    <widget class="KLineEdit" name="kcfg_extraArgs"/>
-   </item>
-   <item row="5" column="0" colspan="2">
-    <widget class="QLabel" name="status">
-     <property name="styleSheet">
-      <string notr="true">QLabel { color : red; }</string>
-     </property>
-     <property name="text">
-      <string notr="true">Status Message...</string>
-     </property>
-     <property name="wordWrap">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
    <item row="3" column="1">
     <widget class="QComboBox" name="kcfg_buildType">
      <property name="editable">
@@ -143,6 +120,19 @@
      </item>
     </widget>
    </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="label_4">
+     <property name="text">
+      <string>Extra arguments:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="KLineEdit" name="kcfg_extraArgs"/>
+   </item>
+   <item row="5" column="0" colspan="2">
+    <widget class="KMessageWidget" name="status" native="true"/>
+   </item>
   </layout>
  </widget>
  <customwidgets>
@@ -150,11 +140,18 @@
    <class>KUrlRequester</class>
    <extends>QFrame</extends>
    <header>kurlrequester.h</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
    <class>KLineEdit</class>
    <extends>QLineEdit</extends>
    <header>klineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KMessageWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">kmessagewidget.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <tabstops>

@@ -23,18 +23,7 @@
 
 #include <interfaces/iplugin.h>
 #include "iqmakebuilder.h"
-#include <QtCore/QList>
-#include <QtCore/QPair>
 #include <QtCore/QVariant>
-
-class QStringList;
-class QSignalMapper;
-class KDialog;
-namespace KDevelop{
-    class ProjectBaseItem;
-    class CommandExecutor;
-    class OutputModel;
-}
 
 /**
 @author Andreas Pakulat
@@ -62,18 +51,9 @@ Q_SIGNALS:
     void cleaned(KDevelop::ProjectBaseItem*);
     void configured(KDevelop::ProjectBaseItem*);
     void pruned(KDevelop::ProjectBaseItem*);
-private Q_SLOTS:
-    void qmakeCompleted( int id );
-    void distcleanCompleted( KDevelop::ProjectBaseItem*, const QString& );
-    void errored( int id );
 
 private:
-    QMap< KDevelop::ProjectBaseItem*, int > m_ids;
-    QMap< int, KDevelop::CommandExecutor* > m_cmds;
-    QMap< int, KDevelop::ProjectBaseItem* > m_items;
-    QMap< int, KDevelop::OutputModel* > m_models;
     KDevelop::IPlugin* m_makeBuilder;
-    int toolviewid;
 };
 
 #endif // QMAKEBUILDER_H

@@ -24,8 +24,9 @@
 
 #include <outputview/outputjob.h>
 
+#include <QProcess>
+
 namespace KDevelop{
-    class ProjectBaseItem;
     class CommandExecutor;
     class OutputModel;
     class IProject;
@@ -55,13 +56,12 @@ protected:
     bool doKill();
 
 private Q_SLOTS:
-    void slotFailed();
+    void slotFailed(QProcess::ProcessError);
     void slotCompleted(int);
     
 private:
     KDevelop::IProject* m_project;
     KDevelop::CommandExecutor* m_cmd;
-    KDevelop::ProjectBaseItem* m_item;
     bool m_killed;
 };
 

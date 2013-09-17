@@ -48,6 +48,16 @@ public:
      * Returns the QMake binary configured for the given @p project.
      */
     static QString qmakeBinary(const KDevelop::IProject* project);
+
+    /**
+     * Query QMake and return the thus obtained QMake variables.
+     */
+    static QHash<QString, QString> queryQMake(const QString& qmakeBinary);
+
+    /**
+     * Given the QMake variables, try to find a basic MkSpec.
+     */
+    static QString findBasicMkSpec( const QHash<QString,QString>& qmakeVars );
 };
 
 #endif

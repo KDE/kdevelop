@@ -59,6 +59,8 @@
 #include <KDirWatch>
 #include <interfaces/iprojectcontroller.h>
 
+#include "version.h"
+
 using namespace KDevelop;
 
 //BEGIN Helpers
@@ -76,7 +78,7 @@ QMakeFolderItem* findQMakeFolderParent(ProjectBaseItem* item) {
 
 K_PLUGIN_FACTORY(QMakeSupportFactory, registerPlugin<QMakeProjectManager>(); )
 K_EXPORT_PLUGIN(QMakeSupportFactory(KAboutData(
-    "kdevqmakemanager","kdevqmake", ki18n("QMake Manager"), "1.3.60",
+    "kdevqmakemanager","kdevqmake", ki18n("QMake Manager"), VERSION_STR,
     ki18n("Support for managing QMake projects"), KAboutData::License_GPL)))
 
 QMakeProjectManager* QMakeProjectManager::m_self = 0;
@@ -119,27 +121,12 @@ IProjectFileManager::Features QMakeProjectManager::features() const
     return Features(Folders | Targets | Files);
 }
 
-bool QMakeProjectManager::isValid( const Path& path, const bool isFolder, IProject* /*project*/ ) const
+bool QMakeProjectManager::isValid( const Path& path, const bool isFolder, IProject* project ) const
 {
-    // TODO: filter setup
-
-    QString name = path.fileName();
-    const QStringList invalidFolders = QStringList() << ".kdev4" << ".svn" << ".git" << "CVS";
-    if (isFolder && invalidFolders.contains( name )) {
+    if (!isFolder && path.lastPathSegment().startsWith("Makefile") ) {
         return false;
-    } else if (!isFolder && (name.startsWith("Makefile") || name.endsWith(".o")
-                          || name.startsWith("moc_") || name.endsWith(".moc")
-                          || name.endsWith(".so") || name.contains(".so.")
-                          || name.startsWith(".swp.") || name.endsWith('~')
-                          || (name.startsWith('.')
-                                && (name.endsWith(".kate-swp") || name.endsWith(".swp")))))
-    {
-        return false;
-    } else if (isFolder && QFile::exists(path.toLocalFile() + "/.kdev_ignore")) {
-        return false;
-    } else {
-        return true;
     }
+    return AbstractFileManagerPlugin::isValid(path, isFolder, project);
 }
 
 KUrl QMakeProjectManager::buildDirectory(ProjectBaseItem* item) const
@@ -181,26 +168,6 @@ ProjectFolderItem* QMakeProjectManager::createFolderItem( IProject* project, con
     }
 }
 
-QString findBasicMkSpec( const QHash<QString,QString>& qmakeVars )
-{
-    QString path;
-    if (qmakeVars.contains("QMAKE_MKSPECS")) {
-        // qt4
-        path = qmakeVars["QMAKE_MKSPECS"] + "/default";
-    } else if (!qmakeVars.contains("QMAKE_MKSPECS") && qmakeVars.contains("QT_INSTALL_PREFIX") && qmakeVars.contains("QMAKE_SPEC")) {
-        // qt5 doesn't have the MKSPECS nor default anymore
-        path = qmakeVars["QT_INSTALL_PREFIX"] + "/mkspecs/" + qmakeVars["QMAKE_SPEC"];
-    }
-    path += "/qmake.conf";
-
-    QFileInfo fi( path );
-    qDebug() << path << fi.exists();
-    if( !fi.exists() )
-        return QString();
-
-    return fi.absoluteFilePath();
-}
-
 ProjectFolderItem* QMakeProjectManager::projectRootItem( IProject* project, const Path& path )
 {
     QFileInfo fi( path.toLocalFile() );
@@ -220,7 +187,9 @@ ProjectFolderItem* QMakeProjectManager::projectRootItem( IProject* project, cons
     }
 
     QHash<QString,QString> qmvars = queryQMake( project );
-    QMakeMkSpecs* mkspecs = new QMakeMkSpecs( findBasicMkSpec( qmvars ), qmvars );
+    const QString mkSpecFile = QMakeConfig::findBasicMkSpec( qmvars );
+    Q_ASSERT(!mkSpecFile.isEmpty());
+    QMakeMkSpecs* mkspecs = new QMakeMkSpecs( mkSpecFile, qmvars );
     mkspecs->setProject( project );
     mkspecs->read();
     QMakeCache* cache = findQMakeCache( project );
@@ -257,7 +226,10 @@ ProjectFolderItem* QMakeProjectManager::buildFolderItem( IProject* project, cons
 
     //TODO: included by not-parent file (in a nother file-tree-branch).
     QMakeFolderItem* qmakeParent = findQMakeFolderParent(parent);
-    Q_ASSERT(qmakeParent);
+    if (!qmakeParent) {
+        // happens for bad qmake configurations
+        return 0;
+    }
 
     foreach( const QString& file, projectFiles ) {
         const QString absFile = dir.absoluteFilePath(file);
@@ -335,7 +307,7 @@ void QMakeProjectManager::slotFolderAdded( ProjectFolderItem* folder )
             QMakeTargetItem* target = new QMakeTargetItem( pro, folder->project(), s, folder );
             ///FIXME: use Path
             foreach( const KUrl& u, pro->filesForTarget(s) ) {
-                new ProjectFileItem( folder->project(), u, target );
+                new ProjectFileItem( folder->project(), Path(u), target );
                 ///TODO: signal?
             }
         }
@@ -352,20 +324,19 @@ ProjectFolderItem* QMakeProjectManager::import( IProject* project )
         return 0;
     }
 
-    ProjectFolderItem* ret = AbstractFileManagerPlugin::import( project );
-
-    connect(projectWatcher(project), SIGNAL(dirty(QString)),
-            this, SLOT(slotDirty(QString)));
-    
-    if(projectNeedsConfiguration(project)) {
-        QMakeBuildDirChooserDialog *chooser = new QMakeBuildDirChooserDialog(project);
-        if(chooser->exec() == QDialog::Rejected)
-        {
+    while (projectNeedsConfiguration(project)) {
+        QMakeBuildDirChooserDialog chooser(project);
+        if(chooser.exec() == QDialog::Rejected) {
             kDebug() << "User stopped project import";
             //TODO: return 0 has no effect.
             return 0;
         }
     }
+
+    ProjectFolderItem* ret = AbstractFileManagerPlugin::import( project );
+
+    connect(projectWatcher(project), SIGNAL(dirty(QString)),
+            this, SLOT(slotDirty(QString)));
 
     return ret;
 }
@@ -481,7 +452,10 @@ QHash< QString, QString > QMakeProjectManager::defines(ProjectBaseItem* item) co
 {
     QHash<QString,QString> d;
     QMakeFolderItem *folder = findQMakeFolderParent(item);
-    Q_ASSERT(folder);
+    if (!folder) {
+        // happens for bad qmake configurations
+        return d;
+    }
     foreach(QMakeProjectFile *pro, folder->projectFiles()) {
         foreach(QMakeProjectFile::DefinePair def, pro->defines()) {
             d.insert(def.first, def.second);
@@ -495,26 +469,7 @@ QHash<QString,QString> QMakeProjectManager::queryQMake( IProject* project ) cons
     if( !project->folder().isLocalFile() || !m_builder )
         return QHash<QString,QString>();
 
-    QHash<QString,QString> hash;
-    KProcess p;
-    p.setOutputChannelMode( KProcess::OnlyStdoutChannel );
-    p.setWorkingDirectory( project->folder().toLocalFile() );
-    p << QMakeConfig::qmakeBinary( project ) << "-query";
-    int execed = p.execute();
-    Q_ASSERT_X(!execed, Q_FUNC_INFO, qPrintable(p.program().join(" ")));
-    Q_UNUSED(execed);
-
-    foreach( const QByteArray& line, p.readAllStandardOutput().split('\n')) {
-        const int colon = line.indexOf(':');
-        if (colon == -1) {
-            continue;
-        }
-        const QByteArray key = line.left(colon);
-        const QByteArray value = line.mid(colon + 1);
-        hash.insert(key, value);
-    }
-    kDebug(9024) << "Ran qmake (" << p.program().join(" ") << "), found:" << hash;
-    return hash;
+    return QMakeConfig::queryQMake(QMakeConfig::qmakeBinary( project ));
 }
 
 QMakeCache* QMakeProjectManager::findQMakeCache( IProject* project, const KUrl& path ) const
@@ -576,11 +531,22 @@ void QMakeProjectManager::slotRunQMake()
 
 bool QMakeProjectManager::projectNeedsConfiguration(IProject* project)
 {
-    KConfigGroup cg(project->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
-    bool qmakeValid = cg.readEntry<KUrl>(QMakeConfig::QMAKE_BINARY, KUrl("")).isValid();
-    bool buildDirValid = cg.readEntry<KUrl>(QMakeConfig::BUILD_FOLDER, KUrl("")).isValid();
-    kDebug() << "qmakeValid=" << qmakeValid << "  buildDirValid=" << buildDirValid;
-    return( !(qmakeValid && buildDirValid) );
+    const QString qmakeBinary = QMakeConfig::qmakeBinary( project );
+    if (qmakeBinary.isEmpty()) {
+        return true;
+    }
+    const QHash<QString, QString> vars = queryQMake(project);
+    if (vars.isEmpty()) {
+        return true;
+    }
+    if (QMakeConfig::findBasicMkSpec(vars).isEmpty()) {
+        return true;
+    }
+    ;
+    if (QMakeConfig::buildDirFromSrc(project, project->folder()).isEmpty()) {
+        return true;
+    }
+    return false;
 }
 
 #include "qmakemanager.moc"

@@ -1,12 +1,20 @@
 project(QMakeManager)
-
-enable_testing()
-
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${QMakeManager_SOURCE_DIR}/cmake/)
 
-find_package(KDE4 4.5.0 REQUIRED)
-find_package(KDevPlatform 1.3.60 REQUIRED)
+find_package(KDE4 REQUIRED)
+find_package(KDevPlatform 1.5.60 REQUIRED)
 find_package(KDevelop REQUIRED)
+
+set(VERSION_MAJOR 1)
+set(VERSION_MINOR 5)
+set(VERSION_PATCH 60)
+
+configure_file(
+  "${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake"
+  "${CMAKE_CURRENT_BINARY_DIR}/version.h"
+  @ONLY
+)
+enable_testing()
 
 include_directories( ${KDE4_INCLUDES} ${KDEVPLATFORM_INCLUDE_DIR} ${KDEVELOP_INCLUDE_DIR} )
 

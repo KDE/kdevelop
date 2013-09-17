@@ -22,11 +22,7 @@
 #include "make/imakebuilder.h"
 #include "../qmakeconfig.h"
 
-//#include <config.h>
-
 #include <QtCore/QStringList>
-#include <QtCore/QSignalMapper>
-
 
 #include <project/projectmodel.h>
 
@@ -34,16 +30,10 @@
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
 #include <outputview/ioutputview.h>
-#include <outputview/outputmodel.h>
 #include <util/commandexecutor.h>
-#include <QtDesigner/QExtensionFactory>
 
 #include <kpluginfactory.h>
-#include <kpluginloader.h>
 #include <kaboutdata.h>
-#include <kconfig.h>
-#include <kconfiggroup.h>
-#include <kdialog.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -153,23 +143,4 @@ KJob* QMakeBuilder::install(KDevelop::ProjectBaseItem *dom)
     return 0;
 }
 
-
-void QMakeBuilder::distcleanCompleted( KDevelop::ProjectBaseItem* item, const QString& )
-{
-    emit pruned( item );
-}
-
-void QMakeBuilder::qmakeCompleted(int id)
-{
-    if( m_items.contains( id ) )
-        emit configured( m_items.value(id) );
-}
-
-void QMakeBuilder::errored(int id)
-{
-    if( m_items.contains(id))
-        emit failed(m_items.value(id));
-}
-
 #include "qmakebuilder.moc"
-

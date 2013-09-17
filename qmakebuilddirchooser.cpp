@@ -21,18 +21,27 @@
 
 #include "qmakebuilddirchooser.h"
 #include "qmakeconfig.h"
+
 #include <KStandardDirs>
 #include <KDebug>
+#include <KMessageWidget>
+
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/interfaces/iprojectbuilder.h>
+
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
+#include <interfaces/iproject.h>
 
 QMakeBuildDirChooser::QMakeBuildDirChooser(QWidget *parent, KDevelop::IProject* project)
     :  Ui::QMakeBuildDirChooser(), m_project(project)
 {
     setupUi(parent);
-    status->setText("");
+
+    status->hide();
+    status->setCloseButtonVisible(false);
+    status->setMessageType(KMessageWidget::Error);
+    status->setWordWrap(true);
     kcfg_buildDir->setMode(KFile::Directory | KFile::LocalOnly);
     kcfg_installPrefix->setMode(KFile::Directory);
     kcfg_qmakeBin->setMode(KFile::File | KFile::ExistingOnly | KFile::LocalOnly);
@@ -81,7 +90,6 @@ void QMakeBuildDirChooser::loadConfig(const QString& config)
     setInstallPrefix( build.readEntry<KUrl>(QMakeConfig::INSTALL_PREFIX, KUrl("")) );
     setExtraArgs( build.readEntry<QString>(QMakeConfig::EXTRA_ARGUMENTS, ""));
     setBuildType( build.readEntry<int>(QMakeConfig::BUILD_TYPE, 0) );
-    status->setText("");
 }
 
 bool QMakeBuildDirChooser::isValid(QString *message)
@@ -115,9 +123,18 @@ bool QMakeBuildDirChooser::isValid(QString *message)
         {
             msg = i18n("QMake binary is not executable.");
             valid = false;
+        } else {
+            const QHash<QString, QString> vars = QMakeConfig::queryQMake(info.absoluteFilePath());
+            if (vars.isEmpty()) {
+                msg = i18n("QMake binary cannot be queried for variables.");
+                valid = false;
+            } else if (QMakeConfig::findBasicMkSpec(vars).isEmpty()) {
+                msg = i18n("No basic MkSpec file could be found for the given QMake binary.");
+                valid = false;
+            }
         }
     }
-    
+
     if(buildDir().isEmpty())
     {
         msg = i18n("Please specify a build folder.");
@@ -142,14 +159,19 @@ bool QMakeBuildDirChooser::isValid(QString *message)
     if(!installPrefix().isEmpty() && !installPrefix().isLocalFile())
     {
         msg = i18n("Install prefix must be a local path (may also be left empty).");
-        valid = false;        
+        valid = false;
     }
-    
+
     if (message)
     {
         *message = msg;
     }
-    status->setText(msg);
+    if (valid) {
+        status->animatedHide();
+    } else {
+        status->setText(msg);
+        status->animatedShow();
+    }
     kDebug() << "VALID == " << valid;
     return valid;
 }
