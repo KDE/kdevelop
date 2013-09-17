@@ -382,7 +382,8 @@ QStandardItem* TestView::addProject(IProject* project)
 
 void TestView::removeProject(IProject* project)
 {
-    delete itemForProject(project);
+    QStandardItem* projectItem = itemForProject(project);
+    m_model->removeRow(projectItem->row());
 }
 
 void TestView::doubleClicked(const QModelIndex& index)
