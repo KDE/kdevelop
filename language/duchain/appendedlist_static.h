@@ -64,14 +64,14 @@ namespace KDevelop {
 
 #define APPENDED_LIST_FIRST_STATIC(type, name) \
       APPENDED_LIST_COMMON_STATIC(type, name) \
-      const type* name() const { return name ## List.data( ((char*)this) + sizeof(SelfType) ); } \
+      const type* name() const { return name ## List.data( reinterpret_cast<const char*>(this) + sizeof(SelfType) ); } \
       unsigned int name ## OffsetBehind() const { return name ## List.dynamicDataSize(); } \
       template<class T> bool name ## ListChainEquals( const T& rhs ) const { return name ## Equals(rhs); } \
       template<class T> void name ## CopyAllFrom( const T& rhs ) { name ## List.copy(const_cast<type*>(name()), rhs.name(), rhs.name ## Size()); }
 
 #define APPENDED_LIST_STATIC(type, name, predecessor) \
       APPENDED_LIST_COMMON_STATIC(type, name) \
-      const type* name() const { return name ## List.data( ((char*)this) + sizeof(SelfType) + predecessor ## OffsetBehind() ); } \
+      const type* name() const { return name ## List.data( reinterpret_cast<const char*>(this) + sizeof(SelfType) + predecessor ## OffsetBehind() ); } \
       unsigned int name ## OffsetBehind() const { return name ## List.dynamicDataSize() + predecessor ## OffsetBehind(); } \
       template<class T> bool name ## ListChainEquals( const T& rhs ) const { return name ## Equals(rhs) && predecessor ## ListChainEquals(rhs); } \
       template<class T> void name ## CopyAllFrom( const T& rhs ) { name ## List.copy(const_cast<type*>(name()), rhs.name(), rhs.name ## Size()); predecessor ## CopyAllFrom(); }
@@ -90,7 +90,7 @@ class AppendedList : public KDevVarLengthArray<T, 10> {
     unsigned int dynamicDataSize() const {
       return this->size() * sizeof(T);
     }
-    const T* data(char* /*position*/) const {
+    const T* data(const char* /*position*/) const {
       return KDevVarLengthArray<T, 10>::data();
     }
     void copy(T* /*target*/, const T* data, uint size) {
@@ -125,8 +125,8 @@ class AppendedList<false, T> {
     }
 
     //currentOffset should point to the position where the data of this item should be saved
-    const T* data(char* position) const {
-      return (T*)position;
+    const T* data(const char* position) const {
+      return reinterpret_cast<const T*>(position);
     }
     //Count of bytes that were appeendd
     unsigned int dynamicDataSize() const {

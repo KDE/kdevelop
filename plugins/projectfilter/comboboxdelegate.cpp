@@ -37,7 +37,7 @@ ComboBoxDelegate::~ComboBoxDelegate()
 
 }
 
-QWidget* ComboBoxDelegate::createEditor(QWidget* parent, const QStyleOptionViewItem& /*option*/, const QModelIndex& index) const
+QWidget* ComboBoxDelegate::createEditor(QWidget* parent, const QStyleOptionViewItem& /*option*/, const QModelIndex& /*index*/) const
 {
     QComboBox* ret = new QComboBox(parent);
     ret->setEditable(false);

@@ -43,7 +43,7 @@ public:
 public Q_SLOTS:
     void updateState();
     void doubleClicked(const QModelIndex& index);
-    void filterTextChanged(const QString& filterText);
+    void filterTextChanged();
 
 private Q_SLOTS:
     void deleteButtonPressed();

@@ -36,18 +36,6 @@ DashboardPluginLoader::DashboardPluginLoader()
     PluginLoader::setPluginLoader(this);
 }
 
-namespace
-{
-    
-KPluginInfo queryPlugin(const QString &id )
-{
-    KService::List serviceList = KServiceTypeTrader::self()->query( "KDevelop/Dashboard", QString("[X-KDE-PluginInfo-Name]=='%1'").arg(id) );
-
-    return KPluginInfo( serviceList.first() );
-}
-
-}
-
 Plasma::DataEngine* DashboardPluginLoader::internalLoadDataEngine(const QString& name)
 {
     if (name == "org.kdevelop.projects") {

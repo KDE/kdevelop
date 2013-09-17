@@ -81,7 +81,7 @@ Qt::ItemFlags AggregateModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
         return 0;
-    return Qt::ItemIsEnabled & Qt::ItemIsSelectable;
+    return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }
 
 QVariant AggregateModel::headerData(int section, Qt::Orientation orientation, int role) const

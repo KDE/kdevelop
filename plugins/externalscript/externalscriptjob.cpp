@@ -48,7 +48,6 @@
 
 ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, ExternalScriptPlugin* parent )
     : KDevelop::OutputJob( parent ),
-    m_plugin( parent ),
     m_proc( 0 ), m_lineMaker( 0 ),
     m_outputMode( item->outputMode() ), m_inputMode( item->inputMode() ),
     m_errorMode( item->errorMode() ), m_filterMode( item->filterMode() ),

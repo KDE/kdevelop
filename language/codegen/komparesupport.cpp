@@ -153,7 +153,7 @@ struct KompareWidgetsPrivate
 {
 };
 
-KompareWidgets::KompareWidgets() : d(0)
+KompareWidgets::KompareWidgets()
 {
 }
 

@@ -31,7 +31,7 @@ class QStringList;
 namespace KDevelop {
 
 class TemplateRenderer;
-class TemplateEnginePrivate;
+struct TemplateEnginePrivate;
 
 /**
  * Central template engine where template directories and archives can be registered.

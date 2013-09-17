@@ -25,7 +25,6 @@ Boston, MA 02110-1301, USA.
 #include <QInputDialog>
 #include <KMessageBox>
 #include <KIconLoader>
-#include <KGenericFactory>
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/editor.h>

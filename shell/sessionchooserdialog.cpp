@@ -64,7 +64,7 @@ SessionChooserDialog::SessionChooserDialog(QListView* view, QAbstractItemModel* 
     button(Ok)->setIcon(KIcon("media-playback-start"));
 }
 
-void SessionChooserDialog::filterTextChanged(const QString& filterText)
+void SessionChooserDialog::filterTextChanged()
 {
     m_view->selectionModel()->setCurrentIndex(m_model->index(0, 0), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
     bool enabled = m_view->model()->rowCount(QModelIndex())>0;

@@ -30,21 +30,17 @@ namespace Sublime {
 class View;
 class Document;
 
-class ViewPrivate
+struct ViewPrivate
 {
-public:
-    ViewPrivate(View *v);
+    ViewPrivate();
     Document *doc;
     QWidget *widget;
     void unsetWidget();
     View::WidgetOwnership ws;
-
-private:
-    View *view;
 };
 
-ViewPrivate::ViewPrivate(View * v)
-    :doc(0), widget(0), view(v)
+ViewPrivate::ViewPrivate()
+    :doc(0), widget(0)
 {
 }
 
@@ -54,7 +50,7 @@ void ViewPrivate::unsetWidget()
 }
 
 View::View(Document *doc, WidgetOwnership ws )
-    :QObject(doc), d(new ViewPrivate(this))
+    :QObject(doc), d(new ViewPrivate)
 {
     d->doc = doc;
     d->ws = ws;

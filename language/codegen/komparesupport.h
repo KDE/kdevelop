@@ -55,7 +55,9 @@ class KompareWidgets
     void hideWidget(int index);
 
   private:
+#ifdef HAVE_KOMPARE
     KompareWidgetsPrivate * const d;
+#endif
 };
 
 }

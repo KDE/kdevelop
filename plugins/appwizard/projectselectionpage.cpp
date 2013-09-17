@@ -117,7 +117,6 @@ void ProjectSelectionPage::templateChanged(int current)
 
 void ProjectSelectionPage::itemChanged( const QModelIndex& current)
 {
-    KStandardDirs* dirs = KDevelop::ICore::self()->componentData().dirs();
     QString picPath = current.data( KDevelop::TemplatesModel::IconNameRole ).toString();
     if( picPath.isEmpty() ) {
         KIcon icon("kdevelop");
