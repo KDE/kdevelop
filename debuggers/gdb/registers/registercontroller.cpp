@@ -226,7 +226,7 @@ void IRegisterController::setFlagRegister(const Register& reg, const FlagRegiste
 
     if (idx != -1) {
         flagsValue ^= static_cast<int>(qPow(2, flag.bits[idx].toUInt()));
-        setGeneralRegister(Register(flag.registerName, QString("%1").arg(flagsValue)), flag.groupName);
+        setGeneralRegister(Register(flag.registerName, QString("0x%1").arg(flagsValue, 0, 16)), flag.groupName);
     } else {
         updateRegisters(flag.groupName);
         kDebug() << reg.name << ' ' << reg.value << "is incorrect flag name/value";
