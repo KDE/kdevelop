@@ -89,6 +89,7 @@ void AreaDisplay::newArea(Sublime::Area* area)
     }
     QWidget* w = Core::self()->workingSetControllerInternal()->createSetManagerWidget(m_mainWindow, area);
     w->installEventFilter(this);
+    m_separator->setVisible(w->isVisible());
     l->insertWidget(0, w);
 }
 
