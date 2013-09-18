@@ -51,10 +51,11 @@ RegistersView::RegistersView(QWidget* p)
 
 void RegistersView::contextMenuEvent(QContextMenuEvent* e)
 {
-    m_menu->clear();
-
-    QAction* a = m_menu->addAction(i18n("Update"));
-    connect(a, SIGNAL(triggered()), this, SLOT(updateRegisters()));
+    //Don't remove update action.
+    const QList<QAction*> actions = m_menu->actions();
+    for (int i = 1; i < actions.count(); i++) {
+        m_menu->removeAction(actions[i]);
+    }
 
     QString group = activeViews().first();
 
@@ -206,14 +207,20 @@ void RegistersView::clear()
 
 void RegistersView::setupActions()
 {
+    QAction* updateAction = new QAction(this);
+    updateAction->setShortcut(Qt::Key_U);
+    updateAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    updateAction->setText(i18n("Update"));
+    connect(updateAction, SIGNAL(triggered()), this, SLOT(updateRegisters()));
+    addAction(updateAction);
+    m_menu->addAction(updateAction);
+
     insertAction(Converters::formatToString(Binary), Qt::Key_B);
     insertAction(Converters::formatToString(Octal), Qt::Key_O);
     insertAction(Converters::formatToString(Decimal), Qt::Key_D);
     insertAction(Converters::formatToString(Hexadecimal), Qt::Key_H);
     insertAction(Converters::formatToString(Raw), Qt::Key_R);
-    insertAction(Converters::formatToString(Unsigned), Qt::Key_U);
-
-    insertAction(Converters::modeToString(natural), Qt::Key_N);
+    insertAction(Converters::formatToString(Unsigned), Qt::Key_N);
 
     insertAction(Converters::modeToString(u32), Qt::Key_I);
     insertAction(Converters::modeToString(u64), Qt::Key_L);
