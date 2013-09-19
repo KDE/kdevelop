@@ -97,7 +97,7 @@ bool AreaDisplay::eventFilter(QObject* obj, QEvent* event)
 {
     if (event->type() == QEvent::Show) {
         m_separator->setVisible(true);
-    } else if (event->type() == QEvent::QEvent::Hide) {
+    } else if (event->type() == QEvent::Hide) {
         m_separator->setVisible(false);
     }
     return QObject::eventFilter(obj, event);
