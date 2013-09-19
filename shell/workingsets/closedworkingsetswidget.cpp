@@ -50,7 +50,7 @@ ClosedWorkingSetsWidget::ClosedWorkingSetsWidget( MainWindow* window )
     }
 
     connect(Core::self()->workingSetControllerInternal(), SIGNAL(aboutToRemoveWorkingSet(WorkingSet*)),
-            this, SLOT(aboutToRemoveWorkingSet(WorkingSet*)));
+            this, SLOT(removeWorkingSet(WorkingSet*)));
 
     connect(Core::self()->workingSetControllerInternal(), SIGNAL(workingSetAdded(WorkingSet*)),
             this, SLOT(addWorkingSet(WorkingSet*)));
@@ -89,17 +89,14 @@ void ClosedWorkingSetsWidget::changedWorkingSet( Sublime::Area* area, const QStr
 
     if (!to.isEmpty()) {
         WorkingSet* newSet = getWorkingSet(to);
-        if (m_buttons.contains(newSet)) {
-            delete m_buttons.take(newSet);
-        }
+        removeWorkingSet(newSet);
     }
 }
 
-void ClosedWorkingSetsWidget::aboutToRemoveWorkingSet( WorkingSet* set )
+void ClosedWorkingSetsWidget::removeWorkingSet( WorkingSet* set )
 {
-    if (m_buttons.contains(set)) {
-        delete m_buttons.take(set);
-    }
+    delete m_buttons.take(set);
+    Q_ASSERT(m_buttons.size() == m_layout->count());
 }
 
 void ClosedWorkingSetsWidget::addWorkingSet( WorkingSet* set )
