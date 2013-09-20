@@ -37,9 +37,9 @@ using namespace KDevelop;
 
 void CTestUtils::createTestSuites(const QVector<Test>& testSuites, ProjectFolderItem* folder)
 {
-    QString binDir = folder->project()->buildSystemManager()->buildDirectory(folder->project()->projectItem()).toLocalFile();
-    KUrl currentBinDir = folder->project()->buildSystemManager()->buildDirectory(folder);
-    KUrl currentSourceDir = folder->url();
+    const QString binDir = folder->project()->buildSystemManager()->buildDirectory(folder->project()->projectItem()).toLocalFile();
+    const KUrl currentBinDir = folder->project()->buildSystemManager()->buildDirectory(folder);
+    const KUrl currentSourceDir = folder->url();
     
     foreach (const Test& test, testSuites)
     {
@@ -50,11 +50,7 @@ void CTestUtils::createTestSuites(const QVector<Test>& testSuites, ProjectFolder
             foreach (ProjectTargetItem* item, items)
             {
                 ProjectExecutableTargetItem * exeTgt = item->executable();
-                if (exeTgt == 0)
-                {
-                    continue;
-                }
-                if (exeTgt->text() == test.executable)
+                if (exeTgt && exeTgt->text() == test.executable)
                 {
                     exe = exeTgt->builtUrl().toLocalFile();
                     kDebug(9042) << "Found proper test target path" << test.executable << "->" << exe;
@@ -63,35 +59,21 @@ void CTestUtils::createTestSuites(const QVector<Test>& testSuites, ProjectFolder
             }
         }
         exe.replace("#[bin_dir]", binDir);
-        KUrl exeUrl = KUrl(exe);
-        if (exeUrl.isRelative())
-        {
-            exeUrl = currentBinDir;
-            exeUrl.addPath(test.executable);
-        }
-        
+        const KUrl exeUrl(currentBinDir, exe);
+
         QStringList files;
         foreach (const QString& file, test.files)
         {
-            KUrl fileUrl(file);
-            if (fileUrl.isRelative())
-            {
-                fileUrl = currentSourceDir;
-                fileUrl.addPath(file);
-            }
+            QString localFile = QString(file).replace("#[bin_dir]", binDir);
+            files << KUrl(currentSourceDir, localFile).toLocalFile();
+        }
 
-            QString localFile = fileUrl.toLocalFile();
-            localFile.replace("#[bin_dir]", binDir);
-            files << localFile;
-        }
-        
-        
         QStringList args = test.arguments;
-        for (QStringList::iterator it = args.begin(); it != args.end(); ++it)
+        for (QStringList::iterator it = args.begin(), end = args.end(); it != end; ++it)
         {
-            (*it).replace("#[bin_dir]", binDir);
+            it->replace("#[bin_dir]", binDir);
         }
-        
+
         CTestSuite* suite = new CTestSuite(test.name, exeUrl, files, folder->project(), args, test.properties.value("WILL_FAIL", "FALSE") == "TRUE");
         ICore::self()->runController()->registerJob(new CTestFindJob(suite));
     }

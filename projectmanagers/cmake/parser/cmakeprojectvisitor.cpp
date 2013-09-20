@@ -274,6 +274,17 @@ int CMakeProjectVisitor::visit(const CMakeAst *ast)
     return 1;
 }
 
+QHash<QString, Target>::iterator findTargetForExecutable(const QString& exe, QHash<QString, Target>& targets)
+{
+    QHash<QString, Target>::iterator ret = targets.find(exe);
+    if(ret==targets.constEnd()) {
+        QString exe2 = exe;
+        exe2 = exe2.mid(exe2.indexOf('/')+1);
+        ret = targets.find(exe2);
+    }
+    return ret;
+}
+
 int CMakeProjectVisitor::visit( const AddTestAst * test)
 {
     Test t;
@@ -281,33 +292,29 @@ int CMakeProjectVisitor::visit( const AddTestAst * test)
     t.executable = test->exeName();
     t.arguments = test->testArgs();
 
-    if (m_targetForId.contains(t.executable))
+    // Strip the extensions and full path added by kde4_add_unit_test,
+    //this way it's much more useful, e.g. we can pass it to gdb
+    if (t.executable.endsWith(".shell"))
     {
-        t.files = m_targetForId[t.executable].files;
-        t.isTarget = true;
+        t.executable.chop(6);
+    }
+    else if (t.executable.endsWith(".bat"))
+    {
+        t.executable.chop(4);
+    }
+
+    QHash<QString, Target>::iterator it = findTargetForExecutable(t.executable, m_targetForId);
+    if (it == m_targetForId.end())
+    {
+        kDebug(9042) << "Target not found for test" << t.executable;
     }
     else 
     {
-        // Strip the extensions and full path added by kde4_add_unit_test
-        QString exe = t.executable;
-        if (exe.endsWith(".shell"))
-        {
-            exe.chop(6);
-        }
-        else if (exe.endsWith(".bat"))
-        {
-            exe.chop(4);
-        }
-        exe = exe.split('/').last();
-        if (m_targetForId.contains(exe))
-        {
-            t.executable = exe;
-            t.files = m_targetForId[exe].files;
-            t.isTarget = true;
-        }
+        t.files = it->files;
+        t.isTarget = true;
     }
     t.files.removeAll("TEST"); // Added by kde4_add_unit_test
-    
+
     kDebug(9042) << "AddTestAst" << t.executable << t.files;
     m_testSuites << t;
     return 1;
@@ -471,6 +478,10 @@ void CMakeProjectVisitor::defineTarget(const QString& id, const QStringList& sou
         case Target::Custom:
             break;
     }
+
+    if(locationDir.isEmpty()) {
+        locationDir = m_vars->value("CMAKE_CURRENT_BINARY_DIR").join(QString());
+    }
     
     Target target;
     target.name=id.isEmpty() ? "<wrong-target>" : id;
@@ -481,7 +492,7 @@ void CMakeProjectVisitor::defineTarget(const QString& id, const QStringList& sou
     m_targetForId[id]=target;
     
     targetProps["OUTPUT_NAME"] = QStringList(exe);
-    targetProps["LOCATION"] = QStringList(locationDir);
+    targetProps["LOCATION"] = QStringList(locationDir+'/'+exe);
 }
 
 int CMakeProjectVisitor::visit(const AddExecutableAst *exec)
