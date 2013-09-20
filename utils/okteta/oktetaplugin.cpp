@@ -43,8 +43,10 @@
 #include <bytetabletoolfactory.h>
 #include <bookmarkstoolviewfactory.h>
 #include <bookmarkstoolfactory.h>
+#ifndef BIG_ENDIAN
 #include <structurestoolviewfactory.h>
 #include <structurestoolfactory.h>
+#endif
 // Okteta Kasten
 #if KASTEN_VERSION == 2
 #include <bytearrayviewprofilemanager.h>

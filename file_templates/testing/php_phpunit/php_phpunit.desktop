@@ -79,7 +79,11 @@ Language[nb]=Php
 Language[nl]=PHP
 Language[pl]=Php
 Language[pt]=PHP
+<<<<<<< HEAD
 Language[pt_BR]=Php
+=======
+Language[pt_BR]=PHP
+>>>>>>> 4.5
 Language[ru]=Php
 Language[sk]=Php
 Language[sl]=Php
