@@ -866,8 +866,10 @@ struct ConstantUnaryExpressionEvaluator {
       break;
       case Token_incr:
         endValue = left->value<Type>()+1;
+      break;
       case Token_decr:
         endValue = left->value<Type>()-1;
+      break;
     }
   }
 
