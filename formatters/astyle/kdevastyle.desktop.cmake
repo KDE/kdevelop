@@ -60,11 +60,7 @@ Name[nds]=AStyle-Formateerhülpprogramm
 Name[nl]=Backend voor AStyle formatteerprogramma
 Name[pl]=Silnik formatowania AStyle
 Name[pt]=Infra-Estrutura de Formatação do AStyle
-<<<<<<< HEAD:formatters/astyle/kdevastyle.desktop.cmake
 Name[pt_BR]=Infraestrutura de formatação do AStyle
-=======
-Name[pt_BR]=Formatador AStyle 
->>>>>>> 4.5:formatters/astyle/kdevastyle.desktop
 Name[ru]=Механизм форматирования кода AStyle
 Name[sk]=Backend formátovača AStyle
 Name[sl]=Zaledje oblikovalnika AStyle
@@ -75,6 +71,9 @@ Name[uk]=Сервер форматування AStyle
 Name[x-test]=xxAStyle Formatter Backendxx
 Name[zh_CN]=AStyle 格式化器后端
 Name[zh_TW]=AStyle 格式器後端介面
+<<<<<<< HEAD:formatters/astyle/kdevastyle.desktop.cmake
+=======
+>>>>>>> 4.5:formatters/astyle/kdevastyle.desktop
 GenericName=Formatter Backend
 GenericName[bs]=Formater pozadine
 GenericName[ca]=Dorsal del formatador

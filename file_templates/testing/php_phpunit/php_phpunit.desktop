@@ -79,11 +79,7 @@ Language[nb]=Php
 Language[nl]=PHP
 Language[pl]=Php
 Language[pt]=PHP
-<<<<<<< HEAD
 Language[pt_BR]=Php
-=======
-Language[pt_BR]=PHP
->>>>>>> 4.5
 Language[ru]=Php
 Language[sk]=Php
 Language[sl]=Php
@@ -93,6 +89,9 @@ Language[uk]=PHP
 Language[x-test]=xxPhpxx
 Language[zh_CN]=Php
 Language[zh_TW]=Php
+<<<<<<< HEAD
+=======
+>>>>>>> 4.5
 Type=Test
 Files=Implementation
 

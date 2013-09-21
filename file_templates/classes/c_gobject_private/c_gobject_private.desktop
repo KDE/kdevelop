@@ -116,11 +116,7 @@ Name[nb]=Hode
 Name[nl]=Kop
 Name[pl]=Nagłówek
 Name[pt]=Inclusão
-<<<<<<< HEAD
 Name[pt_BR]=Cabeçalho
-=======
-Name[pt_BR]=Inclusão
->>>>>>> 4.5
 Name[ru]=Заголовок
 Name[sk]=Hlavička
 Name[sl]=Glava
@@ -131,6 +127,9 @@ Name[uk]=Заголовок
 Name[x-test]=xxHeaderxx
 Name[zh_CN]=头文件
 Name[zh_TW]=標頭
+<<<<<<< HEAD
+=======
+>>>>>>> 4.5
 File=class.h
 OutputFile={% for ns in namespaces %}{{ ns }}_{% endfor %}{{ name }}.h
 
