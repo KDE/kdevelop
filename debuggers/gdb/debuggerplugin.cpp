@@ -152,7 +152,7 @@ CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
     this, "org.kdevelop.debugger.ConsoleView",Qt::BottomDockWidgetArea);
 
     core()->uiController()->addToolView(
-        i18n("Disassemble"),
+        i18n("Disassemble/Registers"),
         disassemblefactory);
 
     core()->uiController()->addToolView(
