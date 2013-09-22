@@ -21,7 +21,7 @@
 #ifndef REGISTERSVIEW_H
 #define REGISTERSVIEW_H
 
-#include "../ui_registersview.h"
+#include "ui_registersview.h"
 
 #include <QVector>
 
