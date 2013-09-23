@@ -252,10 +252,11 @@ struct DocumentControllerPrivate {
             }
             else
             {
-                //make sure the URL exists
-                if ( !url.isValid() || !KIO::NetAccess::exists( url, KIO::NetAccess::SourceSide, ICore::self()->uiController()->activeMainWindow() ) )
-                {
-                    kDebug() << "cannot find URL:" << url.url();
+                if ( !url.isValid() ) {
+                    // Exit if the url is invalid (should not happen)
+                    // If the url is valid and the file does not already exist,
+                    // kate creates the file and gives a message saying so
+                    kDebug() << "invalid URL:" << url.url();
                     return 0;
                 }
 
