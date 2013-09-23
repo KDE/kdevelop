@@ -1,5 +1,6 @@
 /***************************************************************************
  *   Copyright 2008 Harald Fernengel <harry@kdevelop.org>                  *
+ *   Copyright 2013 Milian Wolff <mail@milianw.de>                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -22,6 +23,7 @@
 
 #include <QtCore/QStringList>
 
+#include "kdevplatformtestsexport.h"
 #include <shell/shellextension.h>
 #include <shell/core.h>
 
@@ -43,9 +45,12 @@
 namespace KDevelop
 {
 
-class AutoTestShell : public KDevelop::ShellExtension
+class KDEVPLATFORMTESTS_EXPORT AutoTestShell : public KDevelop::ShellExtension
 {
 public:
+    AutoTestShell(const QStringList& plugins)
+        : m_plugins(plugins)
+    {}
     QString xmlFile() { return QString(); }
     virtual QString binaryPath() { return QString(); };
     QString defaultProfile() { return "kdevtest"; }
@@ -57,9 +62,21 @@ public:
     }
     QString projectFileExtension() { return QString(); }
     QString projectFileDescription() { return QString(); }
-    QStringList defaultPlugins() { return QStringList(); }
+    QStringList defaultPlugins() { return m_plugins; }
 
-    static void init() { s_instance = new AutoTestShell; }
+    /**
+     * Initialize the AutoTestShell and set the global instance.
+     *
+     * @p plugins A list of default global plugins which should be loaded.
+     *            By default, all global plugins are loaded.
+     */
+    static void init(const QStringList& plugins = QStringList())
+    {
+        s_instance = new AutoTestShell(plugins);
+    }
+
+private:
+    QStringList m_plugins;
 };
 
 }
