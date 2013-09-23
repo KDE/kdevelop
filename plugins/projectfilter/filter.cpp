@@ -99,13 +99,17 @@ SerializedFilters defaultFilters()
 
 SerializedFilters readFilters(const KSharedConfig::Ptr& config)
 {
-    SerializedFilters filters;
     if (!config->hasGroup("Filters")) {
         return defaultFilters();
     }
     const KConfigGroup& group = config->group("Filters");
-    const int size = group.readEntry("size", 0);
+    const int size = group.readEntry("size", -1);
+    if (size == -1) {
+        // fallback
+        return defaultFilters();
+    }
 
+    SerializedFilters filters;
     filters.reserve(size);
     for (int i = 0; i < size; ++i) {
         const QByteArray subGroup = QByteArray::number(i);
