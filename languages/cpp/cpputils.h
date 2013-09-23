@@ -75,15 +75,6 @@ QStringList headerExtensions();
 /// @return List of possible source extensions used for definition/declaration fallback switching
 QStringList sourceExtensions();
 
-struct ReplaceCurrentAccess : public QObject
-{
-  Q_OBJECT
-  
-  public slots:
-    //Invoked directly from within the code-completion context
-    void exec(KUrl url, QString old, QString _new);
-};
-  
 }
 
 
