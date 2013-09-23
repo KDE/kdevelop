@@ -51,7 +51,7 @@ typedef CodeCompletionItemTester<Cpp::CodeCompletionContext> CompletionItemTeste
 
 void TestSpecialCompletion::initTestCase()
 {
-    AutoTestShell::init();
+    AutoTestShell::init(QStringList() << "kdevcppsupport");
     TestCore::initialize(Core::NoUi);
     TestCore* core = dynamic_cast<TestCore*>(TestCore::self());
     QVERIFY(core);

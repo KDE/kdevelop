@@ -94,7 +94,7 @@ TestCppCodeCompletion::TestCppCodeCompletion()
 
 void TestCppCodeCompletion::initTestCase()
 {
-  KDevelop::AutoTestShell::init();
+  AutoTestShell::init(QStringList() << "kdevcppsupport");
   TestCore::initialize(Core::NoUi);
   Cpp::EnvironmentManager::init();
 
