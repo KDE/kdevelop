@@ -38,10 +38,7 @@ class IRegisterController;
 class DebugSession;
 class ModelsManager;
 
-namespace
-{
 enum Architecture {x86, x86_64, arm, other = 100, undefined};
-}
 
 /** @brief Determines current CPU architecture */
 class ArchitectureParser : public QObject
