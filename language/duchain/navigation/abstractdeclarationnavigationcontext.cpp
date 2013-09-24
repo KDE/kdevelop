@@ -482,6 +482,9 @@ void AbstractDeclarationNavigationContext::htmlClass()
       case ClassDeclarationData::Interface:
         modifyHtml() += "interface ";
         break;
+      case ClassDeclarationData::Trait:
+        modifyHtml() += "trait ";
+        break;
       default:
         modifyHtml() += "<unknown type> ";
         break;

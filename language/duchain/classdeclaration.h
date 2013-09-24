@@ -52,7 +52,8 @@ public:
     Class,
     Struct,
     Union,
-    Interface
+    Interface,
+    Trait
   };
   
   enum ClassModifier {
