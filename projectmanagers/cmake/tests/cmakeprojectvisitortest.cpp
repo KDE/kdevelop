@@ -753,6 +753,45 @@ void CMakeProjectVisitorTest::testGlobs_data()
                 "message(STATUS \"RESULT:\" ${RESULT})\n"
                 << files << symlinks << expectedResults;
     }
+
+    {
+        QStringList files;
+        files << "subdir/aaa/a.cpp";
+        files << "subdir/bbb/b.cpp";
+        files << "subdir/CMakeLists.txt";
+
+        QList<StringPair> symlinks;
+
+        QStringList expectedResults;
+        expectedResults << "subdir/aaa";
+
+        QTest::newRow("glob_directories") <<
+        "project(simpletest)\n"
+//                 "cmake_minimum_required(VERSION 2.8)\n"
+        "file(GLOB RESULT \"subdir/a*\")\n"
+        "message(STATUS \"RESULT: ${RESULT}\")\n"
+        << files << symlinks << expectedResults;
+    }
+
+    {
+        QStringList files;
+        files << "subdir/aaa/a.cpp";
+        files << "subdir/bbb/b.cpp";
+        files << "subdir/CMakeLists.txt";
+
+        QList<StringPair> symlinks;
+
+        QStringList expectedResults;
+        expectedResults << "subdir/aaa";
+        expectedResults << "subdir/bbb";
+
+        QTest::newRow("glob_negation") <<
+        "project(simpletest)\n"
+        //                 "cmake_minimum_required(VERSION 2.8)\n"
+        "file(GLOB RESULT \"subdir/[!.]*\")\n"
+        "message(STATUS \"RESULT: ${RESULT}\")\n"
+        << files << symlinks << expectedResults;
+    }
 }
 
 void CMakeProjectVisitorTest::testGlobs()
@@ -804,7 +843,6 @@ void CMakeProjectVisitorTest::testGlobs()
     VariableMap::const_iterator it = v.variables()->constFind("RESULT");
     QVERIFY2(it != v.variables()->constEnd(), "RESULT variable doesn't exist");
     QStringList filesFound = it.value();
-    filesFound.sort();
     QDir baseDir(dir.name());
     for (int i = 0; i < filesFound.size(); i++)
     {
@@ -813,39 +851,13 @@ void CMakeProjectVisitorTest::testGlobs()
             filesFound[i] = baseDir.relativeFilePath(file);
     }
 
-    expectedFiles.sort();
-
-    int i = 0;
-    int iCount = filesFound.size();
-    int iNormal = 0;
-    int iNormalCount = expectedFiles.size();
-    while (i<iCount && iNormal<iNormalCount)
+    foreach(QString file, filesFound.toSet().subtract(expectedFiles.toSet()))
     {
-        int res = filesFound[i].compare(expectedFiles[iNormal]);
-        if (res == 0)
-        {
-            filesFound.removeAt(i);
-            expectedFiles.removeAt(iNormal);
-            iCount--;
-            iNormalCount--;
-        }
-        else if (res > 0)
-        {
-            iNormal++;
-        }
-        else
-        {
-            i++;
-        }
+        qWarning() << "This file was found, but it shouldn't: " << file;
     }
-    
-    foreach(QString file, filesFound)
+    foreach(QString file, expectedFiles.toSet().subtract(filesFound.toSet()))
     {
-        QWARN(("This file was found, but it shouldn't: " + file).toLatin1());
-    }
-    foreach(QString file, expectedFiles)
-    {
-        QWARN(("This file wasn't found: " + file).toLatin1());
+        qWarning() << "This file wasn't found: " << file;
     }
 }
 
