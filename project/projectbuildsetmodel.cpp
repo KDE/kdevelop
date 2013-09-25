@@ -82,9 +82,7 @@ KDevelop::ProjectBaseItem* BuildItem::findItem() const
 {
     KDevelop::ProjectModel* model=KDevelop::ICore::self()->projectController()->projectModel();
     QModelIndex idx = model->pathToIndex(m_itemPath);
-    KDevelop::ProjectBaseItem* item = dynamic_cast<KDevelop::ProjectBaseItem*>(model->itemFromIndex(idx));
-    
-    return item;
+    return model->itemFromIndex(idx);
 }
 
 bool operator==( const BuildItem& rhs, const BuildItem& lhs  )
