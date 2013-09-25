@@ -277,7 +277,7 @@ void CMakeCommitChangesJob::makeChanges()
         
         KUrl resolvedPath;
         if(!pt.location.isEmpty())
-            resolvedPath=CMake::resolveSystemDirs(folder->project(), QStringList(pt.location)).first();
+            resolvedPath=CMake::resolveSystemDirs(folder->project(), QStringList(pt.location), KUrl::LeaveTrailingSlash).first();
         
         KDevelop::ProjectTargetItem* targetItem = folder->targetNamed(t.type, t.name);
         if (targetItem)

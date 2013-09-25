@@ -150,7 +150,7 @@ inline  QString replaceInstallDir(QString in, QString installDir)
 namespace CMake
 {
 
-KUrl::List resolveSystemDirs(KDevelop::IProject* project, const QStringList& dirs)
+KUrl::List resolveSystemDirs(KDevelop::IProject* project, const QStringList& dirs, KUrl::AdjustPathOption option)
 {
     QString buildDir = CMake::currentBuildDir(project).toLocalFile(KUrl::AddTrailingSlash);
     QString installDir = CMake::currentInstallDir(project).toLocalFile(KUrl::AddTrailingSlash);
@@ -169,7 +169,7 @@ KUrl::List resolveSystemDirs(KDevelop::IProject* project, const QStringList& dir
         }
         KUrl d(s);
         d.cleanPath();
-        d.adjustPath(KUrl::AddTrailingSlash);
+        d.adjustPath(option);
 //         kDebug(9042) << "resolved" << _s << "to" << d;
 
         if (!newList.contains(d))

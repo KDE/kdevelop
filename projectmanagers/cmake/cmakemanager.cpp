@@ -245,7 +245,10 @@ KUrl::List CMakeManager::includeDirectories(KDevelop::ProjectBaseItem *item) con
         if(CompilationDataAttached* includer = dynamic_cast<CompilationDataAttached*>( item )) {
             QStringList dirs = includer->includeDirectories(item);
             //Here there's the possibility that it might not be a target. We should make sure that's not the case
-            return CMake::resolveSystemDirs(project, processGeneratorExpression(dirs, project, dynamic_cast<ProjectTargetItem*>(item)));
+            ProjectTargetItem* tItem = dynamic_cast<ProjectTargetItem*>(item);
+            return CMake::resolveSystemDirs(project, processGeneratorExpression(dirs,
+                                                                                project,
+                                                                                tItem), KUrl::AddTrailingSlash);
         }
         item = item->parent();
 //         kDebug(9042) << "Looking for an includer: " << item;

@@ -192,7 +192,7 @@ namespace CMake
      */
     KDEVCMAKECOMMON_EXPORT void removeBuildDirConfig( KDevelop::IProject* project );
 
-    KDEVCMAKECOMMON_EXPORT KUrl::List resolveSystemDirs(KDevelop::IProject* project, const QStringList& dirs);
+    KDEVCMAKECOMMON_EXPORT KUrl::List resolveSystemDirs(KDevelop::IProject* project, const QStringList& dirs, KUrl::AdjustPathOption option);
 }
 
 #endif

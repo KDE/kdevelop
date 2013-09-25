@@ -99,12 +99,12 @@ void CompilationDataAttached::defineVariables(const QStringList& vars)
 KUrl CMakeExecutableTargetItem::builtUrl() const
 {
     KUrl ret;
-    if(path.isEmpty())
+    if(path.isEmpty()) {
         ret=project()->buildSystemManager()->buildDirectory(const_cast<CMakeExecutableTargetItem*>(this));
-    else
+        ret.addPath(outputName);
+    } else
         ret=path;
     
-    ret.addPath(outputName);
     return ret;
 }
 
