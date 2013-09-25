@@ -40,7 +40,7 @@ struct ProcessedTarget
     QStringList includes;
     QStringList defines;
     QString outputName;
-    QString location;
+    KUrl location;
 };
 Q_DECLARE_TYPEINFO(ProcessedTarget, Q_MOVABLE_TYPE);
 

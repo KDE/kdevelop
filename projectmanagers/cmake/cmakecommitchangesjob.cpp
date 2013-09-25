@@ -173,7 +173,8 @@ KUrl::List CMakeCommitChangesJob::addProjectData(const CMakeProjectData& data)
         target.defines = targetProps["COMPILE_DEFINITIONS"];
         target.includes = targetProps["INCLUDE_DIRECTORIES"];
         target.outputName = targetProps.value("OUTPUT_NAME", QStringList(t.name)).join(QString());
-        target.location = targetProps["LOCATION"].join(QString());
+        target.location =
+            CMake::resolveSystemDirs(m_project, targetProps["LOCATION"]).first();
         
         foreach(const QString& dep, t.libraries) {
             const QMap<QString, QStringList>& depData = data.properties.value(TargetProperty).value(dep);
@@ -275,10 +276,6 @@ void CMakeCommitChangesJob::makeChanges()
     {
         const Target& t = pt.target;
         
-        KUrl resolvedPath;
-        if(!pt.location.isEmpty())
-            resolvedPath=CMake::resolveSystemDirs(folder->project(), QStringList(pt.location), KUrl::LeaveTrailingSlash).first();
-        
         KDevelop::ProjectTargetItem* targetItem = folder->targetNamed(t.type, t.name);
         if (targetItem)
             deletableTargets.remove(targetItem);
@@ -286,10 +283,10 @@ void CMakeCommitChangesJob::makeChanges()
             switch(t.type)
             {
                 case Target::Library:
-                    targetItem = new CMakeLibraryTargetItem( m_project, t.name, folder, pt.outputName, resolvedPath);
+                    targetItem = new CMakeLibraryTargetItem( m_project, t.name, folder, pt.outputName, pt.location);
                     break;
                 case Target::Executable:
-                    targetItem = new CMakeExecutableTargetItem( m_project, t.name, folder, pt.outputName, resolvedPath);
+                    targetItem = new CMakeExecutableTargetItem( m_project, t.name, folder, pt.outputName, pt.location);
                     break;
                 case Target::Custom:
                     targetItem = new CMakeCustomTargetItem( m_project, t.name, folder, pt.outputName );
