@@ -2513,8 +2513,6 @@ QStringList CMakeProjectVisitor::traverseGlob(const QString& startPath, const QS
     {
         //We're in place. Lets match files from startPath dir.
         kDebug(9042) << "Matching files in " << startPath << " with glob " << expr;
-        QStringList nameFilters;
-        nameFilters << expr;
         QStringList dirsToSearch;
         if (recursive)
         {
@@ -2540,10 +2538,12 @@ QStringList CMakeProjectVisitor::traverseGlob(const QString& startPath, const QS
         else
             dirsToSearch << startPath;
         QStringList filePaths;
+
+        const QStringList nameFilters(expr);
         foreach (const QString& dirToSearch, dirsToSearch)
         {
             QDir dir(dirToSearch);
-            QStringList fileNames = dir.entryList(nameFilters, QDir::Files);
+            QStringList fileNames = dir.entryList(nameFilters, QDir::Files|QDir::Dirs|QDir::NoDotAndDotDot);
             foreach (const QString& fileName, fileNames)
             {
                 filePaths << dir.filePath(fileName);
@@ -2562,9 +2562,7 @@ QStringList CMakeProjectVisitor::traverseGlob(const QString& startPath, const QS
         if (startPath.isEmpty())
             return QStringList();
         //it's really a glob, not just dir name
-        QStringList nameFilters;
-        nameFilters << dirGlob;
-        matchedDirs = QDir(startPath).entryList(nameFilters, QDir::NoDotAndDotDot | QDir::Dirs);
+        matchedDirs = QDir(startPath).entryList(QStringList(dirGlob), QDir::NoDotAndDotDot | QDir::Dirs);
     }
     else
     {
