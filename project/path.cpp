@@ -338,6 +338,13 @@ void Path::clear()
     m_data.clear();
 }
 
+Path Path::cd(const QString& dir) const
+{
+    KUrl url = toUrl();
+    url.cd(dir);
+    return Path(url);
+}
+
 namespace KDevelop {
 uint qHash(const Path& path)
 {

@@ -57,11 +57,11 @@ public:
     int fileCount() const { return 0; }
     ProjectFileItem* fileAt( int ) const { return 0; }
     QList<ProjectFileItem*> files() const;
-    virtual QList< ProjectBaseItem* > itemsForPath(const IndexedString& path) const { return QList< ProjectBaseItem* >(); }
+    virtual QList< ProjectBaseItem* > itemsForPath(const IndexedString&) const { return QList< ProjectBaseItem* >(); }
     virtual QList< ProjectBaseItem* > itemsForUrl(const KUrl&) const { return QList< ProjectBaseItem* >(); }
-    virtual QList< ProjectFileItem* > filesForPath(const IndexedString& file) const { return QList<ProjectFileItem*>(); }
+    virtual QList< ProjectFileItem* > filesForPath(const IndexedString&) const { return QList<ProjectFileItem*>(); }
     KDE_DEPRECATED QList<ProjectFileItem*> filesForUrl( const KUrl& ) const { return QList<ProjectFileItem*>(); }
-    virtual QList< ProjectFolderItem* > foldersForPath(const IndexedString& folder) const { return QList<ProjectFolderItem*>(); }
+    virtual QList< ProjectFolderItem* > foldersForPath(const IndexedString&) const { return QList<ProjectFolderItem*>(); }
     KDE_DEPRECATED QList<ProjectFolderItem*> foldersForUrl( const KUrl& ) const { return QList<ProjectFolderItem*>(); }
     void reloadModel() { }
     Path projectFile() const;

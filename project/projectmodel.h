@@ -149,7 +149,11 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem
         QList<ProjectFileItem*> fileList() const;
 
         virtual bool lessThan( const KDevelop::ProjectBaseItem* ) const;
-        KDE_DEPRECATED static bool urlLessThan(KDevelop::ProjectBaseItem* item1, KDevelop::ProjectBaseItem* item2);
+        static bool pathLessThan(KDevelop::ProjectBaseItem* item1, KDevelop::ProjectBaseItem* item2);
+        KDE_DEPRECATED static bool urlLessThan(KDevelop::ProjectBaseItem* item1, KDevelop::ProjectBaseItem* item2)
+        {
+            return pathLessThan(item1, item2);
+        }
 
         /** @returns the @p row item in the list of children of this item or 0 if there is no such child. */
         ProjectBaseItem* child( int row ) const;

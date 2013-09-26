@@ -318,6 +318,15 @@ public:
      */
     void clear();
 
+    /**
+     * Change directory by relative path @p dir.
+     *
+     * NOTE: This is expensive.
+     *
+     * @sa KUrl::cd
+     */
+    Path cd(const QString& dir) const;
+
 private:
     /**
      * Initialize this Path from the data of @p url.

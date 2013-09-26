@@ -305,7 +305,7 @@ void ProjectModelTest::testItemSanity()
     model->appendRow( parent );
     QCOMPARE( parent->index(), model->index(0, 0, QModelIndex()) );
     QSignalSpy s( model, SIGNAL(dataChanged(QModelIndex,QModelIndex)) );
-    parent->setUrl( KUrl("file:///newtest") );
+    parent->setPath( Path("/newtest") );
     QCOMPARE( s.count(), 1 );
     QCOMPARE( model->data( parent->index() ).toString(), QString("newtest") );
 
@@ -462,7 +462,6 @@ void ProjectModelTest::testWithProject()
     QCOMPARE( item, rootItem );
     QCOMPARE( item->text(), proj->name() );
     QCOMPARE( item->path(), proj->path() );
-    QCOMPARE( item->url(), proj->folder() );
 }
 
 void ProjectModelTest::testItemsForPath()

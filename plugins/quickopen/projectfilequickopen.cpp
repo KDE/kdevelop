@@ -258,14 +258,6 @@ QSet<IndexedString> openFiles()
     }
     return openFiles;
 }
-QSet<Path> openFilesPaths()
-{
-    QSet<Path> openFiles;
-    foreach( IDocument* doc, ICore::self()->documentController()->openDocuments() ) {
-        openFiles << Path(doc->url());
-    }
-    return openFiles;
-}
 }
 
 bool sortProjectFiles(const ProjectFile& left, const ProjectFile& right)

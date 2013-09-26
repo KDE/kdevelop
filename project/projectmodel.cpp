@@ -414,9 +414,9 @@ bool ProjectBaseItem::lessThan( const KDevelop::ProjectBaseItem* item ) const
     return false;
 }
 
-bool ProjectBaseItem::urlLessThan(ProjectBaseItem* item1, ProjectBaseItem* item2)
+bool ProjectBaseItem::pathLessThan(ProjectBaseItem* item1, ProjectBaseItem* item2)
 {
-    return item1->url().path() < item2->url().path();
+    return item1->path() < item2->path();
 }
 
 IProject* ProjectBaseItem::project() const

@@ -105,9 +105,10 @@ public:
         if( !folder )
             return files;
         // Check top level files
+        const Path path(url);
         foreach( ProjectFileItem* file, folder->fileList() )
         {
-            if( file->url() == url )
+            if( file->path() == path )
             {
                 files << file;
             }
@@ -118,7 +119,7 @@ public:
         {
             foreach( ProjectFileItem* file, target->fileList() )
             {
-                if( file->url() == url )
+                if( file->path() == path )
                 {
                     files << file;
                 }
@@ -185,7 +186,7 @@ void DumbProject::close()
 
 bool DumbProject::inProject( const KUrl& url ) const
 {
-    return ( !filesForUrl( url ).isEmpty() || url.equals( d->topItem->url(), KUrl::CompareWithoutTrailingSlash ) );
+    return ( !filesForUrl( url ).isEmpty() || url.equals( d->topItem->path().toUrl(), KUrl::CompareWithoutTrailingSlash ) );
 }
 
 ProjectFileItem* DumbProject::fileAt( int num ) const
@@ -209,7 +210,7 @@ QList<ProjectFileItem *> KDevelop::DumbProject::files() const
 
 QList<ProjectFileItem*> DumbProject::filesForUrl(const KUrl& url) const
 {
-    KUrl u = d->topItem->url();
+    const KUrl u = d->topItem->path().toUrl();
     if ( u.protocol() != url.protocol() || u.host() != url.host() )
         return QList<ProjectFileItem*>();
 

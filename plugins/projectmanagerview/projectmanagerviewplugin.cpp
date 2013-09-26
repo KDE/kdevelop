@@ -482,7 +482,7 @@ void ProjectManagerViewPlugin::createFolderFromContextMenu( )
         if ( item->folder() ) {
             QWidget* window(ICore::self()->uiController()->activeMainWindow()->window());
             QString name = QInputDialog::getText ( window,
-                                i18n ( "Create Folder in %1", item->folder()->url().prettyUrl() ), i18n ( "Folder Name" ) );
+                                i18n ( "Create Folder in %1", item->folder()->path().pathOrUrl() ), i18n ( "Folder Name" ) );
             if (!name.isEmpty()) {
                 item->project()->projectFileManager()->addFolder( Path(item->path(), name), item->folder() );
             }
@@ -503,9 +503,9 @@ void ProjectManagerViewPlugin::removeItems(const QList< ProjectBaseItem* >& item
 
     //copy the list of selected items and sort it to guarantee parents will come before children
     QList<KDevelop::ProjectBaseItem*> sortedItems = items;
-    qSort(sortedItems.begin(), sortedItems.end(), ProjectBaseItem::urlLessThan);
+    qSort(sortedItems.begin(), sortedItems.end(), ProjectBaseItem::pathLessThan);
 
-    KUrl lastFolder;
+    Path lastFolder;
     QMap< IProjectFileManager*, QList<KDevelop::ProjectBaseItem*> > filteredItems;
     QStringList itemPaths;
     foreach( KDevelop::ProjectBaseItem* item, sortedItems )
@@ -514,16 +514,16 @@ void ProjectManagerViewPlugin::removeItems(const QList< ProjectBaseItem* >& item
             continue;
         } else if (item->folder() || item->file()) {
             //make sure no children of folders that will be deleted are listed
-            if (lastFolder.isParentOf(item->url())) {
+            if (lastFolder.isParentOf(item->path())) {
                 continue;
             } else if (item->folder()) {
-                lastFolder = item->url();
+                lastFolder = item->path();
             }
 
             IProjectFileManager* manager = item->project()->projectFileManager();
             if (manager) {
                 filteredItems[manager] << item;
-                itemPaths << item->url().path();
+                itemPaths << item->path().pathOrUrl();
             }
         }
     }
@@ -618,7 +618,7 @@ void ProjectManagerViewPlugin::renameItems(const QList< ProjectBaseItem* >& item
 ProjectFileItem* createFile(const ProjectFolderItem* item)
 {
     QWidget* window = ICore::self()->uiController()->activeMainWindow()->window();
-    QString name = QInputDialog::getText(window, i18n("Create File in %1", item->url().prettyUrl()), i18n("File Name"));
+    QString name = QInputDialog::getText(window, i18n("Create File in %1", item->path().pathOrUrl()), i18n("File Name"));
 
     if(name.isEmpty())
         return 0;

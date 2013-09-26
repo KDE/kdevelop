@@ -112,7 +112,7 @@ void ProjectFilterProvider::addFilterFromContextMenu()
             changedProjectFilters[item->project()] = readFilters(item->project()->projectConfiguration());
         }
         SerializedFilters& filters = changedProjectFilters[item->project()];
-        filters << SerializedFilter('/' + KUrl::relativeUrl(item->project()->folder(), item->url()),
+        filters << SerializedFilter('/' + item->project()->path().relativePath(item->path()),
                                     item->folder() ? Filter::Folders : Filter::Files);
     }
     QHash< IProject*, SerializedFilters >::const_iterator it = changedProjectFilters.constBegin();
