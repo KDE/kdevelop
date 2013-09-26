@@ -423,6 +423,7 @@ void ImplementationHelperItem::execute(KTextEditor::Document* document, const KT
 
     Cpp::SourceCodeInsertion insertion(updated.data());
     insertion.setContext(classContext);
+    insertion.setAccess(Declaration::Private);
 
     QString slotName = completionContext()->followingText();
     if(slotName.isEmpty())
