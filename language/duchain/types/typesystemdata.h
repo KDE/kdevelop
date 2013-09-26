@@ -39,7 +39,7 @@ KDEVPLATFORMLANGUAGE_EXPORT DECLARE_LIST_MEMBER_HASH(FunctionTypeData, m_argumen
  * Within your inherited data types, you can use the mechanisms described in appendedlist.h
  *
  * You must explicitly implement the copy constructor, see appendedlist.h for more information on copying dynamic data.
- * When calling initalizeAppendedLists() as described there, you should always use m_dynamic as parameter.
+ * When calling initializeAppendedLists() as described there, you should always use m_dynamic as parameter.
  */
 class KDEVPLATFORMLANGUAGE_EXPORT AbstractTypeData
 {

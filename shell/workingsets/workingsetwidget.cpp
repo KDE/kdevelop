@@ -57,6 +57,7 @@ void WorkingSetWidget::setVisible( bool visible )
 {
     // never show empty working sets
     // TODO: I overloaded this only because hide() in the ctor does not work, other ideas?
+    // It's not that it doesn't work from the constructor, it's that the value changes when the button is added on a layout.
     QWidget::setVisible( visible && (workingSet() && !workingSet()->isEmpty()) );
 }
 
@@ -72,22 +73,19 @@ void WorkingSetWidget::changingWorkingSet( Sublime::Area* area, const QString& /
                    this, SLOT(setChangedSignificantly()));
     }
 
-    if (newSet.isEmpty()) {
-        setWorkingSet(0);
-        setVisible(false);
-    } else {
-        setWorkingSet(getSet(newSet));
-        connect(workingSet(), SIGNAL(setChangedSignificantly()),
-                   this, SLOT(setChangedSignificantly()));
-        setVisible(!workingSet()->isEmpty());
+    WorkingSet* set = getSet(newSet);
+    setWorkingSet(set);
+
+    if (set) {
+        connect(set, SIGNAL(setChangedSignificantly()),
+                     SLOT(setChangedSignificantly()));
     }
+    setVisible(set && !set->isEmpty());
 }
 
 void WorkingSetWidget::setChangedSignificantly()
 {
-    if (workingSet()->isEmpty()) {
-        setVisible(false);
-    }
+    setVisible(!workingSet()->isEmpty());
 }
 
 #include "workingsetwidget.moc"

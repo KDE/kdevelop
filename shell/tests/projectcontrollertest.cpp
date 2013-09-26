@@ -306,7 +306,7 @@ void ProjectControllerTest::openMultiple()
     rootItem = i->folder();\
 } void(0)
 
-/*! Verify that the the projectitem @p item has a single child item
+/*! Verify that the projectitem @p item has a single child item
  *  named @p name with url @p url. @p subFolder is an output parameter
  *  that contains the sub-folder projectitem. */
 #define ASSERT_SINGLE_SUBFOLDER_IN(item, name, url__, subFolder) \

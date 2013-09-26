@@ -381,7 +381,7 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
 
         d->setStatus(d->document, false);
 
-        /* It appears, that by default a part will be deleted the the
+        /* It appears, that by default a part will be deleted the
            first view containing it is deleted.  Since we do want
            to have several views, disable that behaviour.  */
         d->document->setAutoDeletePart(false);

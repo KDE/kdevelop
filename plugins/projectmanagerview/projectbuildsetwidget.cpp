@@ -44,7 +44,6 @@
 
 #include "ui_projectbuildsetwidget.h"
 #include <QHeaderView>
-#include <project/projectbuildsetmodel.h>
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/context.h>
 #include <interfaces/iplugincontroller.h>

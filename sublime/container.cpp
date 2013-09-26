@@ -245,6 +245,7 @@ Container::Container(QWidget *parent)
     d->tabBar->setTabsClosable(true);
     d->tabBar->setMovable(true);
     d->tabBar->setExpanding(false);
+    d->tabBar->setSelectionBehaviorOnRemove(QTabBar::SelectPreviousTab);
 }
 
 void Container::setLeftCornerWidget(QWidget* widget)

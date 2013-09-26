@@ -68,7 +68,6 @@
 #include "vcsstatusinfo.h"
 #include <qboxlayout.h>
 #include <qlabel.h>
-#include <QMenu>
 #include "widgets/vcsdiffpatchsources.h"
 #include "widgets/flexibleaction.h"
 #include <interfaces/isession.h>
@@ -270,17 +269,20 @@ void VcsPluginHelper::revert()
 
 void VcsPluginHelper::revertDone(KJob* job)
 {
-    d->modificationTimer = new QTimer;
-    d->modificationTimer->setInterval(100);
-    connect(d->modificationTimer, SIGNAL(timeout()), SLOT(delayedModificationWarningOn()));
+    QTimer* modificationTimer = new QTimer;
+    modificationTimer->setInterval(100);
+    connect(modificationTimer, SIGNAL(timeout()), SLOT(delayedModificationWarningOn()));
+    connect(modificationTimer, SIGNAL(timeout()), SLOT(deleteLater()));
+
     
-    d->modificationTimer->setProperty("urls", job->property("urls"));
-    d->modificationTimer->start();
+    modificationTimer->setProperty("urls", job->property("urls"));
+    modificationTimer->start();
 }
 
 void VcsPluginHelper::delayedModificationWarningOn()
 {
-    KUrl::List urls = d->modificationTimer->property("urls").value<KUrl::List>();
+    QObject* timer = sender();
+    KUrl::List urls = timer->property("urls").value<KUrl::List>();
     
     foreach(const KUrl& url, urls) {
         IDocument* doc=ICore::self()->documentController()->documentForUrl(url);
@@ -292,8 +294,6 @@ void VcsPluginHelper::delayedModificationWarningOn()
             modif->setModifiedOnDiskWarning(true);
         }
     }
-    
-    d->modificationTimer->deleteLater();
 }
 
 

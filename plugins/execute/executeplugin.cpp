@@ -176,8 +176,7 @@ KUrl ExecutePlugin::executable( KDevelop::ILaunchConfiguration* cfg, QString& er
     {
         QStringList prjitem = grp.readEntry( ExecutePlugin::projectTargetEntry, QStringList() );
         KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
-        KDevelop::ProjectBaseItem* item = dynamic_cast<KDevelop::ProjectBaseItem*>( model->itemFromIndex( 
-        model->pathToIndex(prjitem) ) );
+        KDevelop::ProjectBaseItem* item = model->itemFromIndex( model->pathToIndex(prjitem) );
         if( item && item->executable() )
         {
             // TODO: Need an option in the gui to choose between installed and builddir url here, currently cmake only supports builddir url

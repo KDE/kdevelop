@@ -207,7 +207,7 @@ public:
     bool holdingRevision(qint64 revision) const;
 
     /**
-     * Use this fuction to acquire a revision. As long as the returned object is stored somewhere,
+     * Use this function to acquire a revision. As long as the returned object is stored somewhere,
      * the revision can be used for transformations in MovingInterface, and especially for
      * DocumentChangeTracker::transformBetweenRevisions.
      *

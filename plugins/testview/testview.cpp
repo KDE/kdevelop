@@ -200,7 +200,7 @@ KIcon TestView::iconForTestResult(TestResult::TestCaseResult result)
             return KIcon("dialog-ok-apply");
 
         case TestResult::UnexpectedPass:
-            // This is a very rare occurence, so the icon should stand out
+            // This is a very rare occurrence, so the icon should stand out
             return KIcon("dialog-warning");
 
         case TestResult::Failed:
@@ -382,7 +382,8 @@ QStandardItem* TestView::addProject(IProject* project)
 
 void TestView::removeProject(IProject* project)
 {
-    delete itemForProject(project);
+    QStandardItem* projectItem = itemForProject(project);
+    m_model->removeRow(projectItem->row());
 }
 
 void TestView::doubleClicked(const QModelIndex& index)

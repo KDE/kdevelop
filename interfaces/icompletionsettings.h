@@ -31,7 +31,8 @@ namespace KDevelop {
             enum CompletionLevel {
                 Minimal,
                 MinimalWhenAutomatic,
-                AlwaysFull
+                AlwaysFull,
+                LAST_LEVEL
             };
 
             Q_SCRIPTABLE virtual int minFilesForSimplifiedParsing() const = 0;

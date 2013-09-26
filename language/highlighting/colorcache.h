@@ -98,7 +98,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ColorCache : public QObject
     void colorsGotChanged();
 
   private slots:
-    /// if neccessary, adapt to the colors of this document
+    /// if necessary, adapt to the colors of this document
     void slotDocumentActivated(KDevelop::IDocument*);
     /// settings got changed, update to the settings of the sender
     void slotViewSettingsChanged();
@@ -125,7 +125,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ColorCache : public QObject
     void update();
 
     /// try to access the KatePart settings for the given doc or fallback to the global KDE scheme
-    /// and update the colors if neccessary
+    /// and update the colors if necessary
     /// @see generateColors(), updateColorsFromScheme()
     void updateColorsFromDocument(KTextEditor::Document* doc);
 

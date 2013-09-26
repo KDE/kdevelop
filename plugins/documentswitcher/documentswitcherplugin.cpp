@@ -85,7 +85,7 @@ DocumentSwitcherPlugin::DocumentSwitcherPlugin(QObject *parent, const QVariantLi
     view->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     view->addAction( forwardAction );
     view->addAction( backwardAction );
-    connect( view, SIGNAL(clicked(QModelIndex)), SLOT(switchToView(QModelIndex)) );
+    connect( view, SIGNAL(pressed(QModelIndex)), SLOT(switchToClicked(QModelIndex)) );
     connect( view, SIGNAL(activated(QModelIndex)), SLOT(switchToView(QModelIndex)) );
     
     model = new QStandardItemModel( view );
@@ -193,6 +193,12 @@ DocumentSwitcherPlugin::~DocumentSwitcherPlugin()
 {
 }
 
+void DocumentSwitcherPlugin::switchToClicked( const QModelIndex& idx )
+{
+    view->selectionModel()->select(idx, QItemSelectionModel::ClearAndSelect);
+    switchToView(idx);
+}
+
 void DocumentSwitcherPlugin::switchToView( const QModelIndex& idx )
 {
     Q_UNUSED( idx );
@@ -264,7 +270,7 @@ bool DocumentSwitcherPlugin::eventFilter( QObject* watched, QEvent* ev )
     Sublime::MainWindow* mw = dynamic_cast<Sublime::MainWindow*>( watched );
     if( mw && ev->type() == QEvent::WindowActivate )
     {
-        enableActions(mw);
+        enableActions();
     }
     return QObject::eventFilter( watched, ev );
 }
@@ -278,14 +284,14 @@ void DocumentSwitcherPlugin::addView( Sublime::View* view )
     kDebug() << "got signal from mainwindow:" << mainwindow << mainwindow->windowTitle();
     kDebug() << "its area is:" << mainwindow->area() << mainwindow->area()->title();
     kDebug() << "adding view:" << view << view->document()->title();
-    enableActions( mainwindow );
+    enableActions();
     documentLists[mainwindow][mainwindow->area()].append( view );
 }
 
-void DocumentSwitcherPlugin::enableActions( Sublime::MainWindow* mw ) 
+void DocumentSwitcherPlugin::enableActions()
 {
-    forwardAction->setEnabled( documentLists[mw][mw->area()].size() > 1 );
-    backwardAction->setEnabled( documentLists[mw][mw->area()].size() > 1 );
+    forwardAction->setEnabled(true);
+    backwardAction->setEnabled(true);
 }
 
 
@@ -316,7 +322,7 @@ void DocumentSwitcherPlugin::changeArea( Sublime::Area* area )
         kDebug() << "got area change, storing its views";
         storeAreaViewList( mainwindow, area );
     }
-    enableActions( mainwindow );
+    enableActions();
 }
 void DocumentSwitcherPlugin::changeView( Sublime::View* view )
 {
@@ -337,7 +343,7 @@ void DocumentSwitcherPlugin::changeView( Sublime::View* view )
     kDebug() << "current area is:" << area << area->title() << "mainwnidow:" << mainwindow << mainwindow->windowTitle();;
     kDebug() << "idx of this view in list:" << documentLists[mainwindow][area].indexOf( view );
     documentLists[mainwindow][area].prepend( view );
-    enableActions(mainwindow);
+    enableActions();
 }
 
 void DocumentSwitcherPlugin::removeView( Sublime::View* view ) 
@@ -359,7 +365,7 @@ void DocumentSwitcherPlugin::removeView( Sublime::View* view )
     kDebug() << "removing view, list should now not contain this view anymore" << view << view->document()->title();
     kDebug() << "current area is:" << area << area->title() << "mainwnidow:" << mainwindow << mainwindow->windowTitle();;
     kDebug() << "idx of this view in list:" << documentLists[mainwindow][area].indexOf( view );
-    enableActions(mainwindow);
+    enableActions();
 }
 
 #include "documentswitcherplugin.moc"

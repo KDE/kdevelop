@@ -51,7 +51,7 @@ AreaDisplay::AreaDisplay(KDevelop::MainWindow* parent)
     m_button = new QToolButton(this);
     m_button->setToolTip(i18n(
         "Execute actions to change the area.<br />"
-        "An area is a a toolview configuration for a specific use case. "
+        "An area is a toolview configuration for a specific use case. "
         "From here you can also navigate back to the default code area."));
     m_button->setAutoRaise(true);
     m_button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
@@ -89,6 +89,7 @@ void AreaDisplay::newArea(Sublime::Area* area)
     }
     QWidget* w = Core::self()->workingSetControllerInternal()->createSetManagerWidget(m_mainWindow, area);
     w->installEventFilter(this);
+    m_separator->setVisible(w->isVisible());
     l->insertWidget(0, w);
 }
 
@@ -96,7 +97,7 @@ bool AreaDisplay::eventFilter(QObject* obj, QEvent* event)
 {
     if (event->type() == QEvent::Show) {
         m_separator->setVisible(true);
-    } else if (event->type() == QEvent::QEvent::Hide) {
+    } else if (event->type() == QEvent::Hide) {
         m_separator->setVisible(false);
     }
     return QObject::eventFilter(obj, event);

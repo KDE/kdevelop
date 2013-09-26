@@ -250,7 +250,7 @@ void InteractiveDiffTest::testDifferenceContents_data()
         DifferenceHash expectedDifferences;
         expectedDifferences.insert(0, qMakePair(sourceLines, destinationLines));
 
-        // The first exisiting difference inside the edit
+        // The first existing difference inside the edit
         QTest::newRow("First inside") << patch << oldLines << newLines << 1 << true << 1 << expectedDifferences;
     }
     {

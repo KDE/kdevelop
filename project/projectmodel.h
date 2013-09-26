@@ -228,7 +228,7 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem
 
         /**
          * Renames the item to the new name.
-         * @returns status information wether the renaming succeeded.
+         * @returns status information whether the renaming succeeded.
          */
         virtual RenameStatus rename( const QString& newname );
         

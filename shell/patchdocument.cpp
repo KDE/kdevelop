@@ -91,7 +91,7 @@ QWidget* createNavPart(QWidget* parent, KParts::Part* part)
 
 QWidget* PatchDocument::createViewWidget(QWidget* parent)
 {
-    //Overriden so that we don't get openUrl triggered by createPart
+    //Overridden so that we don't get openUrl triggered by createPart
     KParts::Part *part = Core::self()->partControllerInternal()->createPart("text/x-patch", "Kompare/ViewPart");
     if( part )
     {

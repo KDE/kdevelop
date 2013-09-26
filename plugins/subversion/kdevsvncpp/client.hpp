@@ -234,7 +234,7 @@ public:
      *
      * @param targets targets to lock
      * @param force force setting/stealing lock
-     * @param comment writing comment about lock setting is neccessary
+     * @param comment writing comment about lock setting is necessary
      * @exception ClientException
      */
     void

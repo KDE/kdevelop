@@ -85,7 +85,7 @@ public:
 
     /**
      * When a plugin wants to add elements to the vcs menu, this method can be
-     * overriden.
+     * overridden.
      */
     virtual void additionalMenuEntries(QMenu* menu, const KUrl::List& urls);
 public Q_SLOTS:

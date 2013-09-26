@@ -71,7 +71,7 @@ void validatingExecJob(int line, VcsJob* j, VcsJob::JobStatus status = VcsJob::J
 {
     TRACE("Called from line" << line);
     QVERIFY(j);
-    // Print the commmands in full, for easier bug location
+    // Print the commands in full, for easier bug location
 #if 0
     if (QLatin1String(j->metaObject()->className()) == "DVcsJob") {
         kDebug() << "Command: \"" << ((DVcsJob*)j)->process()->program() << ((DVcsJob*)j)->process()->workingDirectory();
@@ -237,7 +237,7 @@ void Repo::commit(int line, const QString& message, const KUrl::List& objects, K
         }
     }
 
-    TRACE("Commiting: " << objects);
+    TRACE("Committing: " << objects);
 
     validatingExecJob(__LINE__, vcs->commit(message, objects2, mode));
     verifyState(line);
@@ -370,7 +370,7 @@ void VcsBlackBoxTest::initTestCase()
                 repositoryLocation.setRepositoryTag("start");
                 repositoryLocation.setUserData(qVariantFromValue(QString("vcsBlackBoxTest")));
                 KUrl emptySourcedir(remoteRepos->name() + emptyImportDirName);
-                validatingExecJob(__LINE__, icentr->import("Inital import", emptySourcedir, repositoryLocation));
+                validatingExecJob(__LINE__, icentr->import("Initial import", emptySourcedir, repositoryLocation));
                 repositoryLocation.setUserData(QVariant());
                 repositoryLocation.setRepositoryTag(QString());
                 m_primary.push_back(RepoPtr(new CRepo(icentr, repositoryLocation, remoteRepos)));

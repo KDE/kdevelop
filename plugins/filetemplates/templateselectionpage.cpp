@@ -131,7 +131,7 @@ void TemplateSelectionPagePrivate::previewTemplate(const QString& file)
         preview->document()->openUrl(fileUrls.value(out.identifier));
         ++idx;
     }
-    // remove superflous tabs from last time
+    // remove superfluous tabs from last time
     while (ui->tabWidget->count() > fileUrls.size()) {
         delete ui->tabWidget->widget(fileUrls.size());
     }

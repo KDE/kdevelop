@@ -60,7 +60,7 @@ class TemplateRenderer;
  *
  * For each file name in the @c Files array, TemplateClassGenerator expects a section with the same name.
  * this section should contain three keys:
- * @li @c Name - User-visible name for this file. This will be show the the user in the dialog and can be translated.
+ * @li @c Name - User-visible name for this file. This will be show the user in the dialog and can be translated.
  * @li @c File - The input file name in the template archive. The template for this file will be read from here.
  * @li @c OutputFile - The suggested output file name. This will be renderer as a template, so it can contain variables.
  *

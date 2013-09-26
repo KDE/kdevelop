@@ -52,6 +52,7 @@ Boston, MA 02110-1301, USA.
 #include <KMessageBox>
 #include <KAboutData>
 #include <KLineEdit>
+#include <KStringHandler>
 #include <QGroupBox>
 #include <QBoxLayout>
 #include <QStandardItemModel>
@@ -445,7 +446,7 @@ private slots:
     {
         Q_ASSERT(qobject_cast<Session*>(sender()));
         Session* s = static_cast<Session*>(sender());
-        sessionActions[s]->setText( s->description() );
+        sessionActions[s]->setText( KStringHandler::rsqueeze(s->description()) );
     }
     
     void recoveryStorageTimeout()
@@ -544,7 +545,7 @@ void SessionController::updateSessionDescriptions()
 {
     for(QHash< Session*, QAction* >::iterator it = d->sessionActions.begin(); it != d->sessionActions.end(); ++it) {
         it.key()->updateDescription();
-        if (*it) (*it)->setText(it.key()->description());
+        if (*it) (*it)->setText(KStringHandler::rsqueeze(it.key()->description()));
     }
 }
 

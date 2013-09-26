@@ -29,7 +29,7 @@ class QTreeWidgetItem;
 namespace KDevelop {
 
 /**
- * Assistant page for choosing class functions, overriden from base classes. 
+ * Assistant page for choosing class functions, overridden from base classes. 
  */
 class OverridesPage : public QWidget
 {
@@ -44,7 +44,7 @@ public:
      * Calls @c addPotentialOverride() on each function, where more filtering can be applied.
      *
      * @param directBases Declarations of base classes from which the new class inherits directly.
-     * @param allBases Declarations of all base classes from which functions can be overriden
+     * @param allBases Declarations of all base classes from which functions can be overridden
      */
     virtual void addBaseClasses(const QList<DeclarationPointer>& directBases,
                                 const QList<DeclarationPointer>& allBases);
@@ -67,7 +67,7 @@ public:
      * The DUChain must be locked for reading before calling this function
      *
      * @param category the user-visible category name
-     * @param declarations a list of declarations that can be overriden or implemented in the new class
+     * @param declarations a list of declarations that can be overridden or implemented in the new class
      */
     void addCustomDeclarations(const QString& category, const QList< KDevelop::DeclarationPointer >& declarations);
 

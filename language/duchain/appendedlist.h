@@ -39,7 +39,7 @@ class AbstractItemRepository;
  * version to the other.
  *
  * @warning Always follow these rules:
- * You must call initalizeAppendedLists(bool) on construction, also in any copy-constructor, but before calling copyFrom(..).
+ * You must call initializeAppendedLists(bool) on construction, also in any copy-constructor, but before calling copyFrom(..).
  * The parameter to that function should be whether the lists in the items should be dynamic, and thus most times "true".
  * You must call freeAppendedLists() on destruction, our you will be leaking memory(only when dynamic)
  *

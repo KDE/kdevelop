@@ -175,7 +175,7 @@ public:
             ILauncher* launcher = 0;
             foreach (ILauncher *l, type->launchers())
             {
-                //kDebug() << "avaliable launcher" << l << l->id() << l->supportedModes();
+                //kDebug() << "available launcher" << l << l->id() << l->supportedModes();
                 if (l->supportedModes().contains(mode->id())) {
                     launcher = l;
                     break;
@@ -188,7 +188,7 @@ public:
                 foreach (LaunchConfiguration *l, launchConfigurations) {
                     QStringList path = l->config().readEntry(ConfiguredFromProjectItemEntry, QStringList());
                     if (l->type() == type && path == itemPath) {
-                        kDebug() << "allready generated ilaunch" << path;
+                        kDebug() << "already generated ilaunch" << path;
                         ilaunch = l;
                         break;
                     }

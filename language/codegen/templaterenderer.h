@@ -57,7 +57,7 @@ class DocumentChangeSet;
  * directories or archive files to the list of files search for inclusion.
  *
  * Directories named "kdevcodegen/templates" in the "data" resource type are always included in the search path,
- * there is no need to add them explicitely. Additionally, TemplateRenderer adds the "lib" resource directories
+ * there is no need to add them explicitly. Additionally, TemplateRenderer adds the "lib" resource directories
  * to the Grantlee plugin search path, so plugins installed there will be available to templates.
  *
  **/
@@ -181,7 +181,7 @@ public:
      *
      * As their name suggests, @c output_file_x contains the relative path from baseUrl() to the URL of the
      * x's output location, while @c output_file_x_absolute contains x's absolute output URL.
-     * Both are avaliable to templates as strings.
+     * Both are available to templates as strings.
      *
      * @param fileTemplate the source file template to render
      * @param baseUrl the base URL used for calculating relative output file URLs

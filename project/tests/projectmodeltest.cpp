@@ -28,7 +28,6 @@
 #include <projectproxymodel.h>
 #include <tests/modeltest.h>
 #include <tests/testproject.h>
-#include <projectproxymodel.h>
 #include <tests/kdevsignalspy.h>
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
@@ -44,48 +43,6 @@ using KDevelop::ProjectBuildFolderItem;
 using KDevelop::Path;
 
 using KDevelop::TestProject;
-
-class AddItemThread : public QThread
-{
-Q_OBJECT
-public:
-    AddItemThread( ProjectBaseItem* _parentItem, QObject* parent = 0 )
-        : QThread( parent ), parentItem( _parentItem )
-    {
-    }
-    virtual void run()
-    {
-        this->sleep( 1 );
-        ProjectFolderItem* folder = new ProjectFolderItem( "folder1", parentItem );
-        new ProjectFileItem( "file1", folder );
-        emit addedItems();
-    }
-signals:
-    void addedItems();
-private:
-    ProjectBaseItem* parentItem;
-};
-
-class SignalReceiver : public QObject
-{
-Q_OBJECT
-public:
-    SignalReceiver(QObject* parent = 0)
-        : QObject(parent)
-    {
-    }
-    QThread* threadOfSignalEmission() const
-    {
-        return threadOfReceivedSignal;
-    }
-private slots:
-    void rowsInserted( const QModelIndex&, int, int )
-    {
-        threadOfReceivedSignal = QThread::currentThread();
-    }
-private:
-    QThread* threadOfReceivedSignal;
-};
 
 void debugItemModel(QAbstractItemModel* m, const QModelIndex& parent=QModelIndex(), int depth=0)
 {
@@ -508,19 +465,6 @@ void ProjectModelTest::testWithProject()
     QCOMPARE( item->url(), proj->folder() );
 }
 
-void ProjectModelTest::testAddItemInThread()
-{
-    ProjectFolderItem* root = new ProjectFolderItem( 0, Path(KUrl::fromPath("/f1")), 0 );
-    model->appendRow( root );
-    AddItemThread t( root );
-    SignalReceiver check;
-    connect( model, SIGNAL(rowsInserted(QModelIndex,int,int)), &check, SLOT(rowsInserted(QModelIndex,int,int)), Qt::DirectConnection );
-    KDevelop::KDevSignalSpy spy( &t, SIGNAL(addedItems()), Qt::QueuedConnection );
-    t.start();
-    QVERIFY(spy.wait( 10000 ));
-    QCOMPARE( qApp->thread(), check.threadOfSignalEmission() );
-}
-
 void ProjectModelTest::testItemsForPath()
 {
     QFETCH(Path, path);
@@ -609,5 +553,3 @@ void ProjectModelTest::testProjectFileIcon()
 }
 
 QTEST_KDEMAIN( ProjectModelTest, GUI)
-#include "projectmodeltest.moc"
-#include "moc_projectmodeltest.cpp"

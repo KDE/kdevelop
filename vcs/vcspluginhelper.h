@@ -65,7 +65,10 @@ public Q_SLOTS:
     void diffJobFinished(KJob* job);
     
     void revertDone(KJob* job);
+
+private Q_SLOTS:
     void delayedModificationWarningOn();
+
 private:
     struct VcsPluginHelperPrivate;
     std::auto_ptr<VcsPluginHelperPrivate> d;

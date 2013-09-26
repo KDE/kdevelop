@@ -235,8 +235,8 @@ FileTemplatesPlugin::TemplateType FileTemplatesPlugin::determineTemplateType(con
             * all the files in the directory are template files.
             *
             * On the other hand, file templates use the generic suffix ".desktop".
-            * Fortunately, those explicitely list input and output files, so we
-            * only match the explicitely listed files
+            * Fortunately, those explicitly list input and output files, so we
+            * only match the explicitly listed files
             */
             if (entry.endsWith(".kdevtemplate"))
             {

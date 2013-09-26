@@ -104,7 +104,7 @@ public:
     virtual KIcon icon() const = 0;
     
     /**
-     * Check wether this launch configuration type can launch the given project item
+     * Check whether this launch configuration type can launch the given project item
      * @param item the project tree item to test 
      * @returns true if this configuration type can launch the given item, false otherwise
      */
@@ -127,7 +127,7 @@ public:
                                                       const QStringList &args ) const = 0;
 
     /**
-    * Check wether this launch configuration type can launch the given file
+    * Check whether this launch configuration type can launch the given file
     * @param file the file to test launchability
     * @returns true if this configuration type can launch the given file, false otherwise
     */

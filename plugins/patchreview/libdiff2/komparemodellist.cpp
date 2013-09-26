@@ -315,7 +315,7 @@ bool KompareModelList::saveDestination( DiffModel* model )
 {
 	kDebug(8101) << "KompareModelList::saveDestination: " << endl;
 
-	// Unecessary safety check, we can guarantee there are unsaved changes!!!
+	// Unnecessary safety check, we can guarantee there are unsaved changes!!!
 	if( !model->hasUnsavedChanges() )
 		return true;
 

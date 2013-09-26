@@ -215,7 +215,7 @@ void ShellBuddyTest::testActivation()
 
 void ShellBuddyTest::testDisableBuddies()
 {
-/*  3. Disactivate buddy option, Activate open next to active tab
+/*  3. Deactivate buddy option, Activate open next to active tab
        Open a.cpp a.l.txt
        Verify order (a.cpp a.l.txt)
        Verify that a.l.txt is activated

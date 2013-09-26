@@ -38,9 +38,12 @@
        </widget>
       </item>
       <item row="3" column="1">
-       <widget class="QComboBox" name="completionDetail">
+       <widget class="QComboBox" name="kcfg_completionDetail">
         <property name="toolTip">
          <string>&lt;p&gt;The code completion UI has a minimal mode and a detailed mode.&lt;br&gt;Choose in what cases full code completion will be displayed.&lt;/p&gt;</string>
+        </property>
+        <property name="currentIndex">
+         <number>1</number>
         </property>
         <item>
          <property name="text">
@@ -187,7 +190,7 @@
        </widget>
       </item>
       <item row="13" column="1">
-       <widget class="QLineEdit" name="todoMarkerWords">
+       <widget class="QLineEdit" name="kcfg_todoMarkerWords">
         <property name="toolTip">
          <string>Space-separated list of words that make a comment represent a TODO item.</string>
         </property>
@@ -238,7 +241,7 @@
      <zorder>label_5</zorder>
      <zorder>kcfg_highlightProblematicLines</zorder>
      <zorder>label_3</zorder>
-     <zorder>todoMarkerWords</zorder>
+     <zorder>kcfg_todoMarkerWords</zorder>
      <zorder>kcfg_globalColorization</zorder>
      <zorder>globalColorizationLabel</zorder>
      <zorder>localColorizationLabel</zorder>

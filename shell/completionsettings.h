@@ -25,80 +25,45 @@
 #include <ksharedconfig.h>  
 #include <kglobal.h>
 
-class CompletionSettings : public KDevelop::ICompletionSettings {
+namespace KDevelop
+{
+
+class CompletionSettings : public KDevelop::ICompletionSettings
+{
 public:
-    CompletionSettings()
-        : m_level(MinimalWhenAutomatic), m_automatic(true),
-          m_highlightSemanticProblems(true), m_highlightProblematicLines(false), m_showMultiLineInformation(false),
-          m_localColorizationLevel(170), m_globalColorizationLevel(255), m_minFilesForSimplifiedParsing(100000)
-    {
-        m_todoMarkerWords << "TODO" << "FIXME";
-    }
+    virtual CompletionLevel completionLevel() const;
 
-    bool readBoolConfig(QString name, bool _default = false) const {
-        KConfigGroup group(KGlobal::config(), "Language Support");
-        return group.readEntry( name, _default );
-    }
+    virtual bool automaticCompletionEnabled() const;
 
-    int readIntConfig(QString name, int _default = 0) const {
-        KConfigGroup group(KGlobal::config(), "Language Support");
-        return group.readEntry( name, _default );
-    }
-    
-    virtual CompletionLevel completionLevel() const {
-        CompletionLevel level(m_level);
-        if(readBoolConfig("alwaysFullCompletion"))
-            level = AlwaysFull;
-        if(readBoolConfig("minimalAutomaticCompletion"))
-            level = MinimalWhenAutomatic;
-        if(readBoolConfig("alwaysMinimalCompletion"))
-            level = Minimal;
-        
-        return level;
-    }
-        
-    virtual bool automaticCompletionEnabled() const {
-        return readBoolConfig("Automatic Invocation", m_automatic);
-    }
-    
-    void emitChanged() {
-        emit settingsChanged(this);
-    }
-    
-    virtual int localColorizationLevel() const {
-        return readIntConfig("localColorization", m_localColorizationLevel);
-    }
-    
-    virtual int globalColorizationLevel() const {
-        return readIntConfig("globalColorization", m_globalColorizationLevel);
-    }
-    
-    virtual bool highlightSemanticProblems() const {
-        return readBoolConfig("highlightSemanticProblems", m_highlightSemanticProblems);
-    }
-    
-    virtual bool highlightProblematicLines() const {
-        return readBoolConfig("highlightProblematicLines", m_highlightProblematicLines);
-    }
-    
-    virtual bool showMultiLineSelectionInformation() const {
-        return readBoolConfig("showMultiLineSelectionInformation", m_showMultiLineInformation);
-    }
-    
-    virtual int minFilesForSimplifiedParsing() const {
-        return readIntConfig("minFilesForSimplifiedParsing", m_minFilesForSimplifiedParsing);
-    }
+    void emitChanged() { emit settingsChanged(this); }
+
+    virtual int localColorizationLevel() const;
+
+    virtual int globalColorizationLevel() const;
+
+    virtual bool highlightSemanticProblems() const;
+
+    virtual bool highlightProblematicLines() const;
+
+    virtual bool showMultiLineSelectionInformation() const;
+
+    virtual int minFilesForSimplifiedParsing() const;
 
     virtual QStringList todoMarkerWords() const;
-    
-    static CompletionSettings& self();
-    
-    CompletionLevel m_level;
-    bool m_automatic, m_highlightSemanticProblems, m_highlightProblematicLines, m_showMultiLineInformation;
-    int m_localColorizationLevel;
-    int m_globalColorizationLevel;
-    int m_minFilesForSimplifiedParsing;
-    QStringList m_todoMarkerWords;
-};
 
+    static CompletionSettings& self();
+
+private:
+    CompletionSettings();
+
+    const CompletionLevel m_level;
+    const bool m_automatic, m_highlightSemanticProblems, m_highlightProblematicLines, m_showMultiLineInformation;
+    const int m_localColorizationLevel;
+    const int m_globalColorizationLevel;
+    const int m_minFilesForSimplifiedParsing;
+    const QString m_todoMarkerWords;
+
+    const KConfigGroup m_languageGroup;
+};
+}
 #endif

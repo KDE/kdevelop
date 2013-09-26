@@ -113,7 +113,7 @@ namespace svn
     const char *
     lastChangedAuthor() const;
 
-    /** @return wether the info contains working copy stuff */
+    /** @return whether the info contains working copy stuff */
     bool
     hasWcInfo () const;
 

@@ -95,7 +95,7 @@ Type=QStringList
 [PropertyDef::X-KDevelop-Language]
 Type=QString
 
-# optional, defines wether the plugin can be disabled
+# optional, defines whether the plugin can be disabled
 # by the user. Possible values are "AlwaysOn" and "UserSelectable".
 # If the property is missing then UserSelectable is assumed
 [PropertyDef::X-KDevelop-LoadMode]

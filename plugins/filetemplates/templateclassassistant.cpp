@@ -170,7 +170,7 @@ void TemplateClassAssistantPrivate::addFilesToTarget (const QHash< QString, KUrl
 
     if (targets.isEmpty())
     {
-        // If no target was explicitely found yet, try all the targets in the current folder
+        // If no target was explicitly found yet, try all the targets in the current folder
         foreach (ProjectBaseItem* item, items)
         {
             targets << item->targetList();

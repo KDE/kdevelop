@@ -172,7 +172,7 @@ QString Session::generateDescription( const SessionInfo& info, const QString& pr
     if( prettyContents.isEmpty() ) {
         prettyContentsFormatted = i18n("(no projects)");
     } else {
-        prettyContentsFormatted = KStringHandler::rsqueeze(prettyContents);
+        prettyContentsFormatted = prettyContents;
     }
 
     QString description;

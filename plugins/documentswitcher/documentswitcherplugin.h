@@ -48,6 +48,7 @@ public:
     virtual void unload();
 public slots:
     void switchToView( const QModelIndex& );
+    void switchToClicked(const QModelIndex& );
 private slots:
     void addView( Sublime::View* );
     void changeView( Sublime::View* );
@@ -62,7 +63,7 @@ protected:
 private:
     void setViewGeometry(Sublime::MainWindow* window);
     void storeAreaViewList( Sublime::MainWindow* mainwindow, Sublime::Area* area );
-    void enableActions( Sublime::MainWindow* mw );
+    void enableActions();
     void fillModel( Sublime::MainWindow* window );
     void walk(const int from, const int to);
     // Need to use QObject here as we only have a QObject* in

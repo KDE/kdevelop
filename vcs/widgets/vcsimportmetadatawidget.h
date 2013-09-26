@@ -43,13 +43,13 @@ public:
     virtual QString message() const = 0;
 
     /**
-     * Check wether the given data is valid.
+     * Check whether the given data is valid.
      * @returns true if all data in the widget is valid
      */
     virtual bool hasValidData() const = 0;
     
     /**
-     * Select wether the widget should re-use the last part of the source location
+     * Select whether the widget should re-use the last part of the source location
      * for the destination. The default implementation simply ignores this setting.
      */
     virtual void setUseSourceDirForDestination( bool ) {}

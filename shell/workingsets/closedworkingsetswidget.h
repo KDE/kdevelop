@@ -55,7 +55,7 @@ private slots:
     void areaChanged(Sublime::Area* area);
     void changedWorkingSet(Sublime::Area* area, const QString& from, const QString& to);
     void addWorkingSet(WorkingSet* set);
-    void aboutToRemoveWorkingSet( WorkingSet* );
+    void removeWorkingSet( WorkingSet* );
 
 private:
     MainWindow* m_mainWindow;
