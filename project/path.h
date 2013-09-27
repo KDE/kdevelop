@@ -27,8 +27,7 @@
 #include <QMetaType>
 #include <QString>
 #include <QVector>
-
-class KUrl;
+#include <KUrl>
 
 namespace KDevelop {
 
@@ -338,8 +337,12 @@ private:
     QVector<QString> m_data;
 };
 
-KDEVPLATFORMPROJECT_EXPORT uint qHash(const KDevelop::Path& path);
+KDEVPLATFORMPROJECT_EXPORT uint qHash(const Path& path);
 
+/**
+ * Convert the @p list of KUrls to a list of Paths.
+ */
+KDEVPLATFORMPROJECT_EXPORT Path::List toPathList(const KUrl::List& list);
 }
 
 /**

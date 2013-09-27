@@ -21,8 +21,6 @@
 
 #include "path.h"
 
-#include <KUrl>
-
 #include <QStringList>
 #include <QDebug>
 
@@ -350,6 +348,19 @@ uint qHash(const Path& path)
 {
     // TODO: optimize using RunningHash
     return qHash(path.pathOrUrl());
+}
+
+Path::List toPathList(const KUrl::List& list)
+{
+    Path::List ret;
+    ret.reserve(list.size());
+    foreach(const KUrl& url, list) {
+        Path path(url);
+        if (path.isValid()) {
+            ret << path;
+        }
+    }
+    return ret;
 }
 }
 

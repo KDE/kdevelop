@@ -677,14 +677,7 @@ void ProjectManagerViewPlugin::pasteFromContextMenu()
 
     const QMimeData* data = qApp->clipboard()->mimeData();
     kDebug() << data->urls();
-    Path::List paths;
-    paths.reserve(data->urls().size());
-    foreach(const KUrl& url, data->urls()) {
-        Path p(url);
-        if (p.isValid()) {
-            paths << p;
-        }
-    }
+    const Path::List paths = toPathList(data->urls());
     bool success = destItem->project()->projectFileManager()->copyFilesAndFolders(paths, destItem->folder());
 
     if (success) {
