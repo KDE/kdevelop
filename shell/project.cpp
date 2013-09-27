@@ -395,7 +395,7 @@ public:
             foreach( IPlugin* p, pluginManager->allPluginsForExtension( "org.kdevelop.IBasicVersionControl" ) )
             {
                 IBasicVersionControl* iface = p->extension<KDevelop::IBasicVersionControl>();
-                if( iface && iface->isVersionControlled( topItem->url() ) )
+                if( iface && iface->isVersionControlled( topItem->path().toUrl() ) )
                 {
                     vcsPlugin = p;
                     projectGroup.writeEntry("VersionControlSupport", pluginManager->pluginInfo( p ).pluginName() );

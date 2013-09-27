@@ -51,6 +51,7 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/context.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <project/projectmodel.h>
+#include <project/path.h>
 
 #include "core.h"
 #include "mainwindow.h"
@@ -980,7 +981,7 @@ QString DocumentController::activeDocumentPath( QString target ) const
         Context* selection = ICore::self()->selectionController()->currentSelection();
         if(selection && selection->type() == Context::ProjectItemContext && static_cast<ProjectItemContext*>(selection)->items().size())
         {
-            QString ret = static_cast<ProjectItemContext*>(selection)->items()[0]->url().pathOrUrl();
+            QString ret = static_cast<ProjectItemContext*>(selection)->items()[0]->path().pathOrUrl();
             if(static_cast<ProjectItemContext*>(selection)->items()[0]->folder())
                 ret += "/.";
             return  ret;

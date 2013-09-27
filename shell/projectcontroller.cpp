@@ -302,7 +302,7 @@ public:
         Project* project = new Project();
         QObject::connect(project, SIGNAL(aboutToOpen(KDevelop::IProject*)),
                          q, SIGNAL(projectAboutToBeOpened(KDevelop::IProject*)));
-        if ( !project->open( url ) )
+        if ( !project->open( Path(url) ) )
         {
             m_currentlyOpening.removeAll(url);
             q->abortOpeningProject(project);
@@ -862,9 +862,12 @@ void ProjectController::unloadUnusedProjectPlugins(IProject* proj)
 // helper method for closeProject()
 void ProjectController::closeAllOpenedFiles(IProject* proj)
 {
+    ///TODO: optimize, go through open files, use model->itemForPath and
+    ///      check whether that item belongs to the given project
+    ///      then close it
     Q_FOREACH( ProjectFileItem *fileItem, proj->files() )
     {
-        Core::self()->documentControllerInternal()->closeDocument( fileItem->url() );
+        Core::self()->documentControllerInternal()->closeDocument( fileItem->path().toUrl() );
     }
 }
 
@@ -927,10 +930,9 @@ ProjectModel* ProjectController::projectModel()
 
 IProject* ProjectController::findProjectForUrl( const KUrl& url ) const
 {
-    Q_FOREACH( IProject* proj, d->m_projects )
-    {
-        if( proj->inProject( url ) )
-            return proj;
+    ProjectBaseItem* item = d->model->itemForPath(IndexedString(url));
+    if (item) {
+        return item->project();
     }
     return 0;
 }
@@ -1069,14 +1071,14 @@ void ProjectController::commitCurrentProject()
     IProject* project = ICore::self()->projectController()->findProjectForUrl(url);
     
     if(project && project->versionControlPlugin()) {
-        KUrl baseUrl=project->projectItem()->url();
         IPlugin* plugin = project->versionControlPlugin();
         IBasicVersionControl* vcs=plugin->extension<IBasicVersionControl>();
         
         if(vcs) {
             ICore::self()->documentController()->saveAllDocuments(KDevelop::IDocument::Silent);
 
-            VCSCommitDiffPatchSource* patchSource = new VCSCommitDiffPatchSource(new VCSStandardDiffUpdater(vcs, baseUrl));
+            const Path basePath = project->path();
+            VCSCommitDiffPatchSource* patchSource = new VCSCommitDiffPatchSource(new VCSStandardDiffUpdater(vcs, basePath.toUrl()));
 
             bool ret = showVcsDiff(patchSource);
 
