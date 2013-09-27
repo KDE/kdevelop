@@ -228,7 +228,7 @@ class TestSet {
         ///       turns out that the below is often
         ///       *not* true - is this what we want?
         ///       => add proper Q_VERIFY!
-        QVERIFY(realSet.find(i) == realSet.end());
+        bool contained = realSet.find(i) != realSet.end();
         std_contains += clock() - start;
         
         start = clock();
@@ -236,6 +236,7 @@ class TestSet {
         emb_contains += clock() - start;
         
         QVERIFY(set.contains(i));
+        QVERIFY(contained);
         set.verify();
     }
     
