@@ -228,6 +228,8 @@ public:
      *
      * For instance, ftp://host/dir/ is a parent of ftp://host/dir/subdir/blub,
      * or /foo is a parent of /foo/bar.
+     *
+     * NOTE: Contrary to KUrl::isParentOf this returns false if the path equals this one.
      */
     bool isParentOf(const Path& path) const;
 

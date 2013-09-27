@@ -264,6 +264,7 @@ void TestPath::testPath()
     QVERIFY(!optUrl.isParentOf(Path()));
     QVERIFY(!Path().isParentOf(optUrl));
     QVERIFY(!Path().isParentOf(Path()));
+    QVERIFY(!optUrl.isParentOf(optUrl));
 
     QCOMPARE(optUrl.isRemote(), optUrl.isValid() && !optUrl.isLocalFile());
     QCOMPARE(optUrl.isRemote(), optUrl.isValid() && !optUrl.remotePrefix().isEmpty());
