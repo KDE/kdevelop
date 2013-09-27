@@ -87,13 +87,13 @@ void IncludePathComputer::computeForeground() {
 
         m_projectName = project->name();
         m_projectDirectory = project->folder();
-        m_effectiveBuildDirectory = m_buildDirectory = buildManager->buildDirectory(project->projectItem());
+        m_effectiveBuildDirectory = m_buildDirectory = buildManager->buildDirectory(project->projectItem()).toUrl();
         kDebug(9007) << "Got build-directory from project manager:" << m_effectiveBuildDirectory;
 
         if(m_projectDirectory == m_effectiveBuildDirectory)
             m_projectDirectory = m_effectiveBuildDirectory = KUrl();
 
-        KUrl::List dirs = buildManager->includeDirectories(file);
+        Path::List dirs = buildManager->includeDirectories(file);
 
         m_defines = buildManager->defines(file);
         
@@ -101,11 +101,11 @@ void IncludePathComputer::computeForeground() {
 
         kDebug(9007) << "Got " << dirs.count() << " include-paths from build-manager";
 
-        foreach( KUrl dir, dirs ) {
-            dir.adjustPath(KUrl::AddTrailingSlash);
-            if(!m_hasPath.contains(dir))
-              m_ret << dir;
-            m_hasPath.insert(dir);
+        foreach( const Path& dir, dirs ) {
+            const KUrl url = dir.toUrl();
+            if(!m_hasPath.contains(url))
+              m_ret << url;
+            m_hasPath.insert(url);
         }
     }
 
