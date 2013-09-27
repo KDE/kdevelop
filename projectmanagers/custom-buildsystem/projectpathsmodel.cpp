@@ -21,6 +21,8 @@
 
 #include <klocale.h>
 #include <interfaces/iproject.h>
+#include <language/duchain/indexedstring.h>
+#include <project/path.h>
 
 #include "custombuildsystemconfig.h"
 
@@ -171,7 +173,7 @@ bool ProjectPathsModel::removeRows( int row, int count, const QModelIndex& paren
 
 void ProjectPathsModel::addPath( const KUrl& url )
 {
-    if( !project->inProject(url) ) {
+    if( !project->inProject(KDevelop::IndexedString(url))) {
         return;
     }
 
@@ -201,18 +203,18 @@ QString ProjectPathsModel::sanitizeUrl( KUrl url, bool needRelative ) const
 
     url.cleanPath();
     if( needRelative )
-        url = KUrl::relativeUrl( project->folder(), url );
+        url = KUrl::relativeUrl( project->path().toUrl(), url );
     return url.pathOrUrl( KUrl::RemoveTrailingSlash );
 }
 
 QString ProjectPathsModel::sanitizePath( const QString& path, bool expectRelative, bool needRelative ) const
 {
     Q_ASSERT( project );
-    Q_ASSERT( expectRelative || project->inProject(path) );
+    Q_ASSERT( expectRelative || project->inProject(KDevelop::IndexedString(path)) );
 
     KUrl url;
     if( expectRelative ) {
-        url = project->folder();
+        url = project->path().toUrl();
         url.addPath(path);
     } else {
         url = path;
