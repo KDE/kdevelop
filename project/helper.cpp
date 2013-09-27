@@ -18,6 +18,7 @@
 */
 
 #include "helper.h"
+#include "path.h"
 
 #include <KTemporaryFile>
 #include <KIO/NetAccess>
@@ -69,6 +70,11 @@ bool KDevelop::removeUrl(const KDevelop::IProject* project, const KUrl& url, con
     return true;
 }
 
+bool KDevelop::removePath(const KDevelop::IProject* project, const KDevelop::Path& path, const bool isFolder)
+{
+    return removeUrl(project, path.toUrl(), isFolder);
+}
+
 bool KDevelop::createFile(const KUrl& file)
 {
     if (KIO::NetAccess::exists( file, KIO::NetAccess::DestinationSide, QApplication::activeWindow() )) {
@@ -93,6 +99,11 @@ bool KDevelop::createFile(const KUrl& file)
     return true;
 }
 
+bool KDevelop::createFile(const KDevelop::Path& file)
+{
+    return createFile(file.toUrl());
+}
+
 bool KDevelop::createFolder(const KUrl& folder)
 {
     if ( !KIO::NetAccess::mkdir( folder, QApplication::activeWindow() ) ) {
@@ -100,6 +111,11 @@ bool KDevelop::createFolder(const KUrl& folder)
         return false;
     }
     return true;
+}
+
+bool KDevelop::createFolder(const KDevelop::Path& folder)
+{
+    return createFolder(folder.toUrl());
 }
 
 bool KDevelop::renameUrl(const KDevelop::IProject* project, const KUrl& oldname, const KUrl& newname)
@@ -141,6 +157,11 @@ bool KDevelop::renameUrl(const KDevelop::IProject* project, const KUrl& oldname,
     }
 }
 
+bool KDevelop::renamePath(const KDevelop::IProject* project, const KDevelop::Path& oldName, const KDevelop::Path& newName)
+{
+    return renameUrl(project, oldName.toUrl(), newName.toUrl());
+}
+
 bool KDevelop::copyUrl(const KDevelop::IProject* project, const KUrl& source, const KUrl& target)
 {
     IPlugin* vcsplugin=project->versionControlPlugin();
@@ -158,4 +179,9 @@ bool KDevelop::copyUrl(const KDevelop::IProject* project, const KUrl& source, co
     // Fallback for the case of no vcs, or not-vcs-managed file/folder
     KIO::CopyJob* job=KIO::copy(source, target);
     return KIO::NetAccess::synchronousRun(job, 0);
+}
+
+bool KDevelop::copyPath(const KDevelop::IProject* project, const KDevelop::Path& source, const KDevelop::Path& target)
+{
+    return copyUrl(project, source.toUrl(), target.toUrl());
 }
