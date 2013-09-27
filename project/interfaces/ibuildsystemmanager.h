@@ -22,8 +22,6 @@
 #ifndef KDEVPLATFORM_IBUILDSYSTEMMANAGER_H
 #define KDEVPLATFORM_IBUILDSYSTEMMANAGER_H
 
-#include <KUrl>
-
 #include "iprojectfilemanager.h"
 
 #include "../projectexport.h"
@@ -63,7 +61,7 @@ public:
     /**
      * Provide a list of include directories.
      */
-    virtual KUrl::List includeDirectories(ProjectBaseItem*) const = 0;
+    virtual Path::List includeDirectories(ProjectBaseItem*) const = 0;
 
     /**
      * Provide a list of preprocessor defines for the project item
@@ -116,7 +114,7 @@ public:
     /**
      * Get the toplevel build directory for the project
      */
-    virtual KUrl buildDirectory(ProjectBaseItem*) const = 0;
+    virtual Path buildDirectory(ProjectBaseItem*) const = 0;
 };
 
 }

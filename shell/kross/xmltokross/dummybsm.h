@@ -32,15 +32,15 @@ class DummyBSM : public KDevelop::IPlugin, public KDevelop::IBuildSystemManager
     Q_INTERFACES( KDevelop::IBuildSystemManager )
     Q_INTERFACES( KDevelop::IProjectFileManager )
     public:
-        explicit DummyBSM(QObject *parent=0, const QVariantList& args=QVariantList(), const KUrl::List& cf=KUrl::List());
+        explicit DummyBSM(QObject *parent=0, const QVariantList& args=QVariantList(), const KDevelop::Path::List& cf = KDevelop::Path::List());
         
         QList<KDevelop::ProjectFolderItem*> parse( KDevelop::ProjectFolderItem* dom ) { Q_UNUSED( dom ); return QList<KDevelop::ProjectFolderItem*>(); }
         KDevelop::ProjectFolderItem* import(KDevelop::IProject *project );
 
         KDevelop::IProjectBuilder* builder() const { return 0; }
-        KUrl buildDirectory(KDevelop::ProjectBaseItem*) const { return m_buildDir; }
+        KDevelop::Path buildDirectory(KDevelop::ProjectBaseItem*) const { return m_buildDir; }
 
-        KUrl::List includeDirectories(KDevelop::ProjectBaseItem *) const { qDebug("jojooooooooooojo"); return m_includeDirectories; }
+        KDevelop::Path::List includeDirectories(KDevelop::ProjectBaseItem *) const { qDebug("jojooooooooooojo"); return m_includeDirectories; }
         QHash<QString,QString> defines(KDevelop::ProjectBaseItem *) const { return m_defines; }
         QList<KDevelop::ProjectTargetItem*> targets() const;
         QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectFolderItem*) const;
@@ -60,14 +60,14 @@ class DummyBSM : public KDevelop::IPlugin, public KDevelop::IBuildSystemManager
         QHash<QString,QString> environment(KDevelop::ProjectBaseItem *) const { return QHash<QString, QString>(); }
         Features features() const { return Targets | Files | Folders; }
         
-        void setBuildDir(const KUrl& buildDir) { m_buildDir=buildDir; }
-        void setIncludeDirectories(const KUrl::List& id) { m_includeDirectories=id; }
+        void setBuildDir(const KDevelop::Path& buildDir) { m_buildDir=buildDir; }
+        void setIncludeDirectories(const KDevelop::Path::List& id) { m_includeDirectories=id; }
         void setDefinesDirectories(const QHash<QString, QString>& defs) { m_defines=defs; }
         bool reload(KDevelop::ProjectFolderItem*) { return true; }
     private:
-        KUrl::List m_controlledFiles;
-        KUrl m_buildDir;
-        KUrl::List m_includeDirectories;
+        KDevelop::Path::List m_controlledFiles;
+        KDevelop::Path m_buildDir;
+        KDevelop::Path::List m_includeDirectories;
         QHash<QString, QString> m_defines;
         KDevelop::ProjectTargetItem* m_target;
         KDevelop::ProjectFolderItem* m_folder;

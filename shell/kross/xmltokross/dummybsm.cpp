@@ -24,7 +24,7 @@
 
 K_PLUGIN_FACTORY(DummyBSMFactory, registerPlugin<DummyBSM>(); )
 
-DummyBSM::DummyBSM(QObject *parent, const QVariantList& args, const KUrl::List& cf)
+DummyBSM::DummyBSM(QObject *parent, const QVariantList& args, const KDevelop::Path::List& cf)
     : KDevelop::IPlugin( DummyBSMFactory::componentData(), parent ), m_controlledFiles(cf)
 {
     Q_UNUSED( args );
@@ -37,10 +37,8 @@ KDevelop::ProjectFolderItem* DummyBSM::import(KDevelop::IProject *project )
     m_folder=new KDevelop::ProjectFolderItem(project, KDevelop::Path("/"), 0);
     m_target=new KDevelop::ProjectTargetItem(project, "standard", m_folder);
     qDebug() << "importing" << m_controlledFiles;
-    foreach(const KUrl& url, m_controlledFiles)
+    foreach(const KDevelop::Path& header, m_controlledFiles)
     {
-        ///TODO: use Path directly
-        KDevelop::Path header(url);
         KDevelop::Path cpp(header.parent(), header.lastPathSegment().replace(".h", ".cpp"));
         new KDevelop::ProjectFileItem(project, header, m_target);
         new KDevelop::ProjectFileItem(project, cpp, m_target);

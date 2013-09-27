@@ -70,6 +70,7 @@ DUChainExtractor::DUChainExtractor(QObject* parent) : QObject(parent), m_done(fa
             this, SLOT(parsingFinished(KDevelop::ParseJob*)));
 }
 
+// TODO: use Path API?
 void DUChainExtractor::start(const KUrl& _input, const KUrl& builddir,
                              const KUrl::List& includes, const QString& filename, 
                              const QString& directory, const QStringList& toinclude, const QString& output)
@@ -80,9 +81,9 @@ void DUChainExtractor::start(const KUrl& _input, const KUrl& builddir,
     m_toinclude=toinclude;
     m_output=output;
     
-    m_manager = new DummyBSM(0, QVariantList(), KUrl::List() << _input);
-    m_manager->setBuildDir(builddir);
-    m_manager->setIncludeDirectories(includes);
+    m_manager = new DummyBSM(0, QVariantList(), Path::List() << Path(_input));
+    m_manager->setBuildDir(Path(builddir));
+    m_manager->setIncludeDirectories(toPathList(includes));
     DumbProject* project = new DumbProject();
     project->setManagerPlugin(m_manager);
     Core::self()->projectControllerInternal()->addProject(project);
