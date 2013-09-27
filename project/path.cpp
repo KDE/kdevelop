@@ -92,7 +92,7 @@ Path::Path(const Path& other, const QString& child)
     addPath(child);
 }
 
-QString generatePathOrUrl(bool onlyPath, bool isLocalFile, const QVector<QString>& data)
+static QString generatePathOrUrl(bool onlyPath, bool isLocalFile, const QVector<QString>& data)
 {
     // more or less a copy of QtPrivate::QStringList_join
     const int size = data.size();
@@ -197,7 +197,7 @@ QString Path::relativePath(const Path& path) const
     return relativePath;
 }
 
-bool isParentPath(const QVector<QString>& parent, const QVector<QString>& child, bool direct)
+static bool isParentPath(const QVector<QString>& parent, const QVector<QString>& child, bool direct)
 {
     if (direct && child.size() != parent.size() + 1) {
         return false;
