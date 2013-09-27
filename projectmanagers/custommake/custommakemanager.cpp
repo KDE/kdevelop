@@ -75,9 +75,9 @@ IProjectBuilder* CustomMakeManager::builder() const
     return d->m_builder;
 }
 
-KUrl::List CustomMakeManager::includeDirectories(KDevelop::ProjectBaseItem*) const
+Path::List CustomMakeManager::includeDirectories(KDevelop::ProjectBaseItem*) const
 {
-    return KUrl::List();
+    return Path::List();
 }
 
 QHash<QString,QString> CustomMakeManager::defines(KDevelop::ProjectBaseItem*) const
@@ -111,7 +111,7 @@ bool CustomMakeManager::removeFilesFromTargets(const QList< ProjectFileItem* > &
     return false;
 }
 
-KUrl CustomMakeManager::buildDirectory(KDevelop::ProjectBaseItem* item) const
+Path CustomMakeManager::buildDirectory(KDevelop::ProjectBaseItem* item) const
 {
     ProjectFolderItem *fi=dynamic_cast<ProjectFolderItem*>(item);
     for(; !fi && item; )
@@ -120,9 +120,9 @@ KUrl CustomMakeManager::buildDirectory(KDevelop::ProjectBaseItem* item) const
         fi=dynamic_cast<ProjectFolderItem*>(item);
     }
     if(!fi) {
-        return item->project()->folder();
+        return item->project()->path();
     }
-    return fi->url();
+    return fi->path();
 }
 
 QList<ProjectTargetItem*> CustomMakeManager::targets(KDevelop::ProjectFolderItem*) const

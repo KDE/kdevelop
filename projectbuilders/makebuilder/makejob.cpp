@@ -114,7 +114,7 @@ KUrl MakeJob::workingDirectory() const
 
     KDevelop::IBuildSystemManager *bldMan = it->project()->buildSystemManager();
     if( bldMan )
-        return bldMan->buildDirectory( it ); // the correct build dir
+        return bldMan->buildDirectory( it ).toUrl(); // the correct build dir
     else
     {
         // Just build in-source, where the build directory equals the one with particular target/source.
@@ -122,7 +122,7 @@ KUrl MakeJob::workingDirectory() const
             switch( item->type() ) {
             case KDevelop::ProjectBaseItem::Folder:
             case KDevelop::ProjectBaseItem::BuildFolder:
-                return static_cast<KDevelop::ProjectFolderItem*>(item)->url();
+                return static_cast<KDevelop::ProjectFolderItem*>(item)->path().toUrl();
                 break;
             case KDevelop::ProjectBaseItem::Target:
             case KDevelop::ProjectBaseItem::File:

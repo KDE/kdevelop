@@ -53,7 +53,7 @@ public:
     /**
      * Provide a list of include directories.
      */
-    virtual KUrl::List includeDirectories(KDevelop::ProjectBaseItem*) const;
+    virtual KDevelop::Path::List includeDirectories(KDevelop::ProjectBaseItem*) const;
 
     /**
      * Provide a list of files that contain the preprocessor defines for the
@@ -98,7 +98,7 @@ public:
     /**
      * Get the toplevel build directory for the project
      */
-    virtual KUrl buildDirectory(KDevelop::ProjectBaseItem*) const;
+    virtual KDevelop::Path buildDirectory(KDevelop::ProjectBaseItem*) const;
 
     /**
      * Get a list of all the targets in this project

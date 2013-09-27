@@ -73,32 +73,29 @@ KJob* CustomBuildSystem::build( ProjectBaseItem* dom )
     return new CustomBuildJob( this, dom, CustomBuildSystemTool::Build );
 }
 
-KUrl CustomBuildSystem::buildDirectory( ProjectBaseItem*  item ) const
+Path CustomBuildSystem::buildDirectory( ProjectBaseItem*  item ) const
 {
-    KUrl u;
+    Path p;
     if( item->folder() ) {
-        u = item->url();
+        p = item->path();
     } else {
         ProjectBaseItem* parent = item;
         while( !parent->folder() ) {
             parent = parent->parent();
         }
-        u = parent->url();
+        p = parent->path();
     }
-    KUrl projecturl = item->project()->projectItem()->url();
-    QString relative = KUrl::relativeUrl( projecturl, u );
-    KUrl builddir;
+    const QString relative = item->project()->path().relativePath(p);
     KConfigGroup grp = configuration( item->project() );
     if(grp.isValid()) {
-        builddir = grp.readEntry( ConfigConstants::buildDirKey, projecturl );
+        Path builddir = Path(grp.readEntry( ConfigConstants::buildDirKey, KUrl() ));
         if(!builddir.isValid() )  // set builddir to default if project contains a buildDirKey that does not have a value 
         {
-            builddir = projecturl;
+            builddir = item->project()->path();
         }
         builddir.addPath( relative );
-        builddir.cleanPath();
     }
-    return builddir;
+    return Path();
 }
 
 IProjectBuilder* CustomBuildSystem::builder() const
@@ -154,12 +151,12 @@ ProjectFolderItem* CustomBuildSystem::createFolderItem( IProject* project,
     return new ProjectBuildFolderItem( project, path, parent );
 }
 
-KUrl::List CustomBuildSystem::includeDirectories( ProjectBaseItem* item ) const
+Path::List CustomBuildSystem::includeDirectories( ProjectBaseItem* item ) const
 {
     QStringList includes;
     KConfigGroup cfg = configuration( item->project() );
     if(!cfg.isValid())
-        return KUrl::List();
+        return Path::List();
 
     KConfigGroup groupForItem = findMatchingPathGroup( cfg, item );
     if( groupForItem.isValid() ) {
@@ -168,7 +165,7 @@ KUrl::List CustomBuildSystem::includeDirectories( ProjectBaseItem* item ) const
         ds.setVersion( QDataStream::Qt_4_5 );
         ds >> includes;
     }
-    return KUrl::List( includes );
+    return KDevelop::toPathList(KUrl::List( includes ));
 }
 
 KJob* CustomBuildSystem::install( ProjectBaseItem* item )
@@ -208,24 +205,24 @@ KConfigGroup CustomBuildSystem::configuration( IProject* project ) const
 KConfigGroup CustomBuildSystem::findMatchingPathGroup(const KConfigGroup& cfg, ProjectBaseItem* item) const
 {
     KConfigGroup candidateGroup;
-    KUrl candidateTargetDirectory;
+    Path candidateTargetDirectory;
 
-    KUrl itemUrl = item->url();
-    KUrl rootDirectory = item->project()->folder();
+    const Path itemPath = item->path();
+    const Path rootDirectory = item->project()->path();
 
     foreach( const QString& groupName, cfg.groupList() ) {
         if( groupName.startsWith( ConfigConstants::projectPathPrefix ) ) {
             KConfigGroup pathGroup = cfg.group(groupName);
 
             QString targetDirectoryRelative = pathGroup.readEntry( ConfigConstants::projectPathKey, "" );
-            KUrl targetDirectory = rootDirectory;
+            Path targetDirectory = rootDirectory;
             // note: a dot represents the project root
             if (targetDirectoryRelative != ".") {
                 targetDirectory.addPath( targetDirectoryRelative );
             }
 
-            if( targetDirectory.isParentOf(itemUrl) ) {
-                if( candidateTargetDirectory.isEmpty() || candidateTargetDirectory.isParentOf(targetDirectory) ) {
+            if( targetDirectory.isParentOf(itemPath) ) {
+                if( candidateTargetDirectory.isValid() || candidateTargetDirectory.isParentOf(targetDirectory) ) {
                   candidateGroup = pathGroup;
                   candidateTargetDirectory = targetDirectory;
                 }

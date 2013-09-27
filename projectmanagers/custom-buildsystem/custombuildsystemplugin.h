@@ -69,11 +69,11 @@ public:
 // BuildSystemManager API
 public:
     bool addFilesToTarget( const QList<KDevelop::ProjectFileItem*>& file, KDevelop::ProjectTargetItem* parent );
-    KUrl buildDirectory( KDevelop::ProjectBaseItem* ) const;
+    KDevelop::Path buildDirectory( KDevelop::ProjectBaseItem* ) const;
     IProjectBuilder* builder() const;
     KDevelop::ProjectTargetItem* createTarget( const QString& target, KDevelop::ProjectFolderItem* parent );
     QHash<QString, QString> defines( KDevelop::ProjectBaseItem* ) const;
-    KUrl::List includeDirectories( KDevelop::ProjectBaseItem* ) const;
+    KDevelop::Path::List includeDirectories( KDevelop::ProjectBaseItem* ) const;
     bool removeFilesFromTargets( const QList<KDevelop::ProjectFileItem*>& );
     bool removeTarget( KDevelop::ProjectTargetItem* target );
     QList<KDevelop::ProjectTargetItem*> targets( KDevelop::ProjectFolderItem* ) const;
