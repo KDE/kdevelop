@@ -112,14 +112,14 @@ QList<ProjectFileItem*> fileItemsWithin(const QList<ProjectBaseItem*> items)
 
 QList<ProjectBaseItem*> topLevelItemsWithin(QList<ProjectBaseItem*> items)
 {
-    qSort(items.begin(), items.end(), ProjectBaseItem::urlLessThan);
-    KUrl lastFolder;
+    qSort(items.begin(), items.end(), ProjectBaseItem::pathLessThan);
+    Path lastFolder;
     for (int i = items.size() - 1; i >= 0; --i)
     {
-        if (lastFolder.isParentOf(items[i]->url()))
+        if (lastFolder.isParentOf(items[i]->path()))
             items.removeAt(i);
         else if (items[i]->folder())
-            lastFolder = items[i]->url();
+            lastFolder = items[i]->path();
     }
     return items;
 }
