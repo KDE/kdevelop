@@ -69,7 +69,6 @@ public:
 private:
   KDevelop::QuickOpenDataPointer data( uint pos ) const;
 
-  QSet<KDevelop::IndexedString> m_usingFiles;
   ItemTypes m_itemTypes;
   KDevelop::IQuickOpen* m_quickopen;
   QVector<CodeModelViewItem> m_currentItems;
