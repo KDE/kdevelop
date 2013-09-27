@@ -68,8 +68,9 @@
 #include <interfaces/ilanguage.h>
 #include <interfaces/foregroundlock.h>
 
-///Created statically as this object must be a child of the main thread
-CppUtils::ReplaceCurrentAccess accessReplacer;
+using namespace KDevelop;
+
+namespace {
 
 ///If this is enabled, no chain of useless argument-hints for binary operators is created.
 const bool NO_MULTIPLE_BINARY_OPERATORS = true;
@@ -126,7 +127,48 @@ const int UNARY_OPERATOR_MATCH = 2; //++
 //Whether identifiers starting with "__" or "_Uppercase" and that are not declared in the current file should be excluded from the code completion
 const bool excludeReservedIdentifiers = true;
 
-using namespace KDevelop;
+/**
+ * A helper "worker" object which lives in the main thread.
+ */
+struct MainThreadHelper : public QObject
+{
+  Q_OBJECT
+
+  public slots:
+    void replaceCurrentAccess(const KUrl& url, const QString& oldAccess, const QString& newAccess);
+};
+
+void MainThreadHelper::replaceCurrentAccess(const KUrl& url, const QString& oldAccess, const QString& newAccess)
+{
+  IDocument* document = ICore::self()->documentController()->documentForUrl(url);
+  if(document) {
+    KTextEditor::Document* textDocument = document->textDocument();
+    if(textDocument) {
+      KTextEditor::View* activeView = textDocument->activeView();
+      if(activeView) {
+        KTextEditor::Cursor cursor = activeView->cursorPosition();
+
+        static KUrl lastUrl;
+        static KTextEditor::Cursor lastPos;
+        if(lastUrl == url && lastPos == cursor) {
+          kDebug() << "Not doing the same access replacement twice at" << lastUrl << lastPos;
+          return;
+        }
+        lastUrl = url;
+        lastPos = cursor;
+
+        KTextEditor::Range oldRange = KTextEditor::Range(cursor - KTextEditor::Cursor(0, oldAccess.length()), cursor);
+        if(oldRange.start().column() >= 0 && textDocument->text(oldRange) == oldAccess) {
+          textDocument->replaceText(oldRange, newAccess);
+        }
+      }
+    }
+  }
+}
+
+static MainThreadHelper s_mainThreadHelper;
+
+}
 
 namespace Cpp {
 
@@ -2282,10 +2324,11 @@ bool CodeCompletionContext::filterDeclaration(ClassMemberDeclaration* decl, DUCo
   return filterDeclaration((Declaration*)decl, declarationContext, false);
 }
 
-void CodeCompletionContext::replaceCurrentAccess(QString old, QString _new)
+void CodeCompletionContext::replaceCurrentAccess(const QString& old, const QString& _new)
 {
   //We must not change the document from within the background, so we use a queued connection to an object created in the foregroud
-  QMetaObject::invokeMethod(&accessReplacer, "exec", Qt::QueuedConnection, Q_ARG(KUrl, m_duContext->url().toUrl()), Q_ARG(QString, old), Q_ARG(QString, _new));
+  QMetaObject::invokeMethod(&s_mainThreadHelper, "replaceCurrentAccess", Qt::QueuedConnection,
+                            Q_ARG(KUrl, m_duContext->url().toUrl()), Q_ARG(QString, old), Q_ARG(QString, _new));
 }
 
 int CodeCompletionContext::matchPosition() const {
@@ -2434,3 +2477,5 @@ void CodeCompletionContext::setFollowingText(QString str) {
 
 
 }
+
+#include "context.moc"

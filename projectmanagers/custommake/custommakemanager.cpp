@@ -116,7 +116,7 @@ KUrl CustomMakeManager::buildDirectory(KDevelop::ProjectBaseItem* item) const
     ProjectFolderItem *fi=dynamic_cast<ProjectFolderItem*>(item);
     for(; !fi && item; )
     {
-        item=dynamic_cast<ProjectBaseItem*>(item->parent());
+        item=item->parent();
         fi=dynamic_cast<ProjectFolderItem*>(item);
     }
     if(!fi) {

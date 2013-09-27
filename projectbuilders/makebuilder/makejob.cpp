@@ -183,7 +183,7 @@ QStringList MakeJob::commandLine() const
         cmdline << "-k";
     }
 
-    int jobnumber = builderGroup.readEntry("Number Of Jobs", 1);
+    int jobnumber = builderGroup.readEntry("Number Of Jobs", 2);
     if(jobnumber>1) {
         QString jobNumberArg = QString("-j%1").arg(jobnumber);
         cmdline << jobNumberArg;

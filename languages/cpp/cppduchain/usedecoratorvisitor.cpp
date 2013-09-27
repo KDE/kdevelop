@@ -250,12 +250,10 @@ void UseDecoratorVisitor::visitUnaryExpression(UnaryExpressionAST* node)
   QList<DataAccess::DataAccessFlags> args;
   if(optype) {
     args = typesToDataAccessFlags(optype->arguments());
-    if(args.isEmpty()) { //if there's no argument, create a delayed type of the first with the proper flags
-      if(optype->modifiers()&AbstractType::ConstModifier)
-        args.append(DataAccess::DataAccessFlags(DataAccess::Read | DataAccess::Write));
-      else
-        args.append(DataAccess::Read);
-    }
+    if(optype->modifiers()&AbstractType::ConstModifier)
+      args.append(DataAccess::Read);
+    else
+      args.append(DataAccess::DataAccessFlags(DataAccess::Read | DataAccess::Write));
   } else {
     if(optoken.kind==Token_incr || optoken.kind==Token_decr) {
       args.append(DataAccess::DataAccessFlags(DataAccess::Read | DataAccess::Write));
@@ -367,12 +365,17 @@ void UseDecoratorVisitor::visitIncrDecrExpression(IncrDecrExpressionAST* node)
 {
   PushValue<KDevelop::DataAccess::DataAccessFlags> v(m_defaultFlags, DataAccess::Read);
   FunctionType::Ptr optype = m_session->typeFromCallAst(node);
-  
-  if(optype)
-    m_callStack.top()=typesToDataAccessFlags(optype->arguments());
-  else
-    m_callStack.top()=(QList<DataAccess::DataAccessFlags>() << (DataAccess::DataAccessFlags(DataAccess::Read | DataAccess::Write)));
-  
+
+  DataAccess::DataAccessFlags flags(DataAccess::Read);
+  if(optype) {
+    if(!(optype->modifiers()&FunctionType::ConstModifier)) {
+      flags |= DataAccess::Write;
+      flags |= DataAccess::Call;
+    }
+  } else
+    flags |= DataAccess::Write;
+  m_callStack.top() = QList<DataAccess::DataAccessFlags>() << flags;
+
   m_argStack.top() = 0;
 }
 

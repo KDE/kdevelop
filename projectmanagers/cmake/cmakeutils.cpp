@@ -135,10 +135,50 @@ void writeProjectBaseParameter( KDevelop::IProject* project, const QString& key,
     baseGrp.writeEntry( key, value );
 }
 
+inline QString replaceBuildDir(QString in, QString buildDir)
+{
+    return in.replace("#[bin_dir]", buildDir);
+}
+
+inline  QString replaceInstallDir(QString in, QString installDir)
+{
+    return in.replace("#[install_dir]", installDir);
+}
+
 } // namespace
 
 namespace CMake
 {
+
+KUrl::List resolveSystemDirs(KDevelop::IProject* project, const QStringList& dirs, KUrl::AdjustPathOption option)
+{
+    QString buildDir = CMake::currentBuildDir(project).toLocalFile(KUrl::AddTrailingSlash);
+    QString installDir = CMake::currentInstallDir(project).toLocalFile(KUrl::AddTrailingSlash);
+
+    KUrl::List newList;
+    foreach(const QString& _s, dirs)
+    {
+        QString s=_s;
+        if(s.startsWith(QString::fromUtf8("#[bin_dir]")))
+        {
+            s= replaceBuildDir(s, buildDir);
+        }
+        else if(s.startsWith(QString::fromUtf8("#[install_dir]")))
+        {
+            s= replaceInstallDir(s, installDir);
+        }
+        KUrl d(s);
+        d.cleanPath();
+        d.adjustPath(option);
+//         kDebug(9042) << "resolved" << _s << "to" << d;
+
+        if (!newList.contains(d))
+        {
+            newList.append(d);
+        }
+    }
+    return newList;
+}
 
 ///NOTE: when you change this, update @c defaultConfigure in cmakemanagertest.cpp
 bool checkForNeedingConfigure( KDevelop::IProject* project )

@@ -37,6 +37,8 @@
 #include "icmakemanager.h"
 #include "cmakeprojectvisitor.h"
 
+class WaitAllJobs;
+class CMakeCommitChangesJob;
 class QFileSystemWatcher;
 struct CMakeProjectData;
 class QStandardItem;
@@ -101,7 +103,7 @@ public:
 
     virtual bool renameFile(KDevelop::ProjectFileItem*, const KDevelop::Path&);
     virtual bool renameFolder(KDevelop::ProjectFolderItem*, const KDevelop::Path&);
-    virtual bool moveFilesAndFolders( const QList< KDevelop::ProjectBaseItem* > &items, KDevelop::ProjectFolderItem *newParent );
+    virtual bool moveFilesAndFolders(const QList< KDevelop::ProjectBaseItem* > &items, KDevelop::ProjectFolderItem *newParent);
     virtual bool copyFilesAndFolders(const KDevelop::Path::List &items, KDevelop::ProjectFolderItem* newParent);
 
     QList<KDevelop::ProjectTargetItem*> targets() const;
@@ -109,6 +111,7 @@ public:
 
     virtual QList<KDevelop::ProjectFolderItem*> parse( KDevelop::ProjectFolderItem* dom );
     virtual KDevelop::ProjectFolderItem* import( KDevelop::IProject *project );
+    virtual KJob* createImportJob(KDevelop::ProjectFolderItem* item);
     
     virtual bool reload(KDevelop::ProjectFolderItem*);
 
@@ -123,73 +126,49 @@ public:
     virtual KDevelop::ICodeHighlighting* codeHighlighting() const;
     virtual QWidget* specialLanguageObjectNavigationWidget(const KUrl& url, const KDevelop::SimpleCursor& position);
     
-    void deleteItemLater(KDevelop::ProjectBaseItem* item);
-    void deleteAllLater(const QList< KDevelop::ProjectBaseItem* >& items);
-    QStringList processGeneratorExpression(const QStringList& expr, KDevelop::IProject* project, KDevelop::ProjectTargetItem* target) const;
-
-public slots:
-    void cleanupItems();
+    void addPending(const KUrl& url, CMakeFolderItem* folder);
+    CMakeFolderItem* takePending(const KUrl& url);
+    void addWatcher(KDevelop::IProject* p, const QString& path);
     
+    CMakeProjectData projectData(KDevelop::IProject* project);
+
+    KDevelop::ProjectFilterManager* filterManager() const;
+
 signals:
     void folderRenamed(const KDevelop::Path& oldFolder, KDevelop::ProjectFolderItem* newFolder);
     void fileRenamed(const KDevelop::Path& oldFile, KDevelop::ProjectFileItem* newFile);
-    
+
 private slots:
     void dirtyFile(const QString& file);
 
     void jumpToDeclaration();
     void projectClosing(KDevelop::IProject*);
-    void reimportDone(KJob* job);
     
-    void deletedWatched(const QString& directory);
     void directoryChanged(const QString& dir);
     void filesystemBuffererTimeout();
+    void importFinished(KJob* job);
 
-    void createTestSuites(const QList<Test>& testSuites, KDevelop::ProjectFolderItem* folder);
 private:
-    void addDeleteItem(KDevelop::ProjectBaseItem* item);
-    void reimport(CMakeFolderItem* fi);
-    CacheValues readCache(const KUrl &path) const;
+    QStringList processGeneratorExpression(const QStringList& expr, KDevelop::IProject* project, KDevelop::ProjectTargetItem* target) const;
     bool isReloading(KDevelop::IProject* p);
-    bool isCorrectFolder(const KDevelop::Path& path, KDevelop::IProject* p) const;
-    void cleanupToDelete(KDevelop::IProject* p);
-    bool renameFileOrFolder(KDevelop::ProjectBaseItem *item, const KDevelop::Path &newPath);
+
+    bool renameFileOrFolder(KDevelop::ProjectBaseItem *item, const KDevelop::Path &newUrl);
+    void realDirectoryChanged(const QString& dir);
+    void deletedWatchedDirectory(KDevelop::IProject* p, const KUrl& dir);
     
-    QMutex m_reparsingMutex;
-    QMutex m_busyProjectsMutex;
-    QMutex m_dirWatchersMutex;
-    KDevelop::ReferencedTopDUContext initializeProject(CMakeFolderItem*);
-
-    KDevelop::ReferencedTopDUContext includeScript(const QString& file, KDevelop::IProject * project, const QString& currentDir,
-                                                    KDevelop::ReferencedTopDUContext parent);
-
-    void setTargetFiles(KDevelop::ProjectTargetItem* target, const KUrl::List& files);
-    /// FIXME: this is jumping through hoops to make the code use the filters in a threadsafe way
-    ///        the whole structure needs to be cleaned up to decouple the project loading
-    ///        from the cmake parsing. a proper job based approach would work well I think.
-    typedef QVector<QSharedPointer<KDevelop::IProjectFilter> > Filters;
-    void reloadFiles(KDevelop::ProjectFolderItem* item, const Filters& filters);
-    void parse(KDevelop::ProjectFolderItem* item, const Filters& filters);
-
-    QMap<KDevelop::IProject*, CMakeProjectData> m_projectsData;
-    QMap<KDevelop::IProject*, QFileSystemWatcher*> m_watchers;
-    QHash<KDevelop::Path, CMakeFolderItem*> m_pending;
+    QHash<KDevelop::IProject*, CMakeProjectData*> m_projectsData;
+    QHash<KDevelop::IProject*, QFileSystemWatcher*> m_watchers;
+    QHash<KUrl, CMakeFolderItem*> m_pending;
     
     QSet<KDevelop::IProject*> m_busyProjects;
     
     KDevelop::ICodeHighlighting *m_highlight;
     
     QList<KDevelop::ProjectBaseItem*> m_clickedItems;
-    QSet<QString> m_toDelete;
-    QHash<KUrl, KUrl> m_renamed;
     QSet<KDevelop::ProjectBaseItem*> m_cleanupItems;
 
     QTimer* m_fileSystemChangeTimer;
     QSet<QString> m_fileSystemChangedBuffer;
-    void realDirectoryChanged(const QString& dir);
-
-    QSet<QString> filterFiles(const QFileInfoList& orig, const KDevelop::Path& folder, const Filters& filters) const;
-    bool isValid(const KDevelop::Path& path, bool isFolder, const Filters& filters) const;
     KDevelop::ProjectFilterManager* const m_filter;
 };
 

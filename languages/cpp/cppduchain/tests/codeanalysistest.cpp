@@ -87,6 +87,8 @@ void CodeAnalysisTest::testUseReadWrite_data()
                                   << (QVariantList() << uint(DataAccess::Write|DataAccess::Read));
   QTest::newRow("oper++") << "struct C { bool operator++(int); }; C e; bool f() { e++; }"
                                   << (QVariantList() << uint(DataAccess::Write|DataAccess::Read));
+  QTest::newRow("int++") << "void f() { int e; e++; }"
+                                  << (QVariantList() << uint(DataAccess::Write|DataAccess::Read));
   QTest::newRow("member-dot") << "struct C { C boh(); }; C e; bool f() { e.boh().boh().boh(); }"
                                   << (QVariantList() << uint(DataAccess::Write|DataAccess::Read) << uint(DataAccess::Call|DataAccess::Read|DataAccess::Write) << uint(DataAccess::Call|DataAccess::Read|DataAccess::Write) << uint(DataAccess::Call|DataAccess::Read|DataAccess::Write));
   QTest::newRow("member-arrow") << "struct C { C boh(); }; C* e; bool f() { e->boh(); }"

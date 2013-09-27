@@ -21,6 +21,7 @@
 #include "cmakeloadprojecttest.h"
 #include "cmake-test-paths.h"
 
+#include <qtest_kde.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/topducontext.h>
@@ -35,7 +36,10 @@
 #include <tests/testcore.h>
 #include <cmakeprojectdata.h>
 
-QTEST_MAIN( CMakeLoadProjectTest )
+inline QDebug &operator<<(QDebug debug, const Target &target)
+{ debug << target.name; return debug.maybeSpace(); }
+
+QTEST_KDEMAIN( CMakeLoadProjectTest, GUI )
 
 using namespace KDevelop;
 
@@ -68,22 +72,37 @@ void CMakeLoadProjectTest::testSmallQt4Project()
     QCOMPARE(v.targets.at( 0 ).files, QStringList() << "qt4app.cpp" << "main.cpp" );
 }
 
+int findTarget(const QVector<Target>& targets, const QString& name)
+{
+    for(int i=0, count=targets.count(); i<count; ++i) {
+        if(targets[i].name==name)
+            return i;
+    }
+    return -1;
+}
 
 void CMakeLoadProjectTest::testSmallKDE4Project()
 {
     CMakeProjectData v = parseProject(CMAKE_TESTS_PROJECTS_DIR "/kde4app");
     QCOMPARE(v.targets.count(), 3);
     QCOMPARE(v.projectName, QString("kde4app"));
-    QCOMPARE(v.targets.at( 0 ).name, QString("kde4app") );
-    QCOMPARE(v.targets.at( 0).files, QStringList() << "kde4app.cpp" << "main.cpp" << "kde4appview.cpp" 
-                                                      << CMAKE_TESTS_PROJECTS_DIR "/kde4app/ui_kde4appview_base.h" 
-                                                      << CMAKE_TESTS_PROJECTS_DIR "/kde4app/ui_prefs_base.h" 
-                                                      << CMAKE_TESTS_PROJECTS_DIR "/kde4app/settings.cpp" 
+
+    int idx = findTarget(v.targets, "kde4app");
+    QVERIFY(idx>=0);
+    QCOMPARE(v.targets.at( idx ).name, QString("kde4app") );
+    QCOMPARE(v.targets.at( idx ).files, QStringList() << "kde4app.cpp" << "main.cpp" << "kde4appview.cpp"
+                                                      << CMAKE_TESTS_PROJECTS_DIR "/kde4app/ui_kde4appview_base.h"
+                                                      << CMAKE_TESTS_PROJECTS_DIR "/kde4app/ui_prefs_base.h"
+                                                      << CMAKE_TESTS_PROJECTS_DIR "/kde4app/settings.cpp"
                                                       << CMAKE_TESTS_PROJECTS_DIR "/kde4app/settings.h" );
-    QCOMPARE(v.targets.at( 1 ).name, QString("testkde4app") );
-    
-    QCOMPARE(v.targets.at( 1 ).files, QStringList() << "kde4app.cpp");
-    QCOMPARE(v.targets.at( 2 ).name, QString("uninstall") );
+    int testIdx = findTarget(v.targets, "testkde4app");
+    QVERIFY(testIdx>=0);
+    QCOMPARE(v.targets.at( testIdx ).name, QString("testkde4app") );
+    QCOMPARE(v.targets.at( testIdx ).files, QStringList() << "kde4app.cpp");
+
+    int uninstallIdx = findTarget(v.targets, "uninstall");
+    QVERIFY(uninstallIdx>=0);
+    QCOMPARE(v.targets.at( uninstallIdx ).name, QString("uninstall") );
     QCOMPARE(v.vm.value("CMAKE_INCLUDE_CURRENT_DIR"), QStringList("ON"));
 }
 

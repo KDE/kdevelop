@@ -268,9 +268,10 @@ namespace Cpp {
       bool  filterDeclaration(Declaration* decl, DUContext* declarationContext = 0, bool dynamic = true) const;
       ///*DUChain must be locked*
       bool  filterDeclaration(ClassMemberDeclaration* decl, DUContext* declarationContext = 0) const;
-      ///Replaces the member-access type at the current cursor position from "from" to "new", for example from "->" to "."
-      ///*DUChain must be locked*
-      void replaceCurrentAccess(QString old, QString _new);
+      /// Request a replace of the member-access type at the current cursor position from "oldAccess"
+      /// to "newAccess", for example from "->" to "."
+      /// The actual replacement is delayed into the foreground thread.
+      void replaceCurrentAccess(const QString& oldAccess, const QString& newAccess);
 
       ///Creates the group and adds it to m_storedUngroupedItems if items is not empty
       void eventuallyAddGroup(QString name, int priority, QList< KSharedPtr< KDevelop::CompletionTreeItem > > items);

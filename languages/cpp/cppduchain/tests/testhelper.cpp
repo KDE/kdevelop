@@ -80,7 +80,7 @@ LockedTopDUContext::~LockedTopDUContext()
 
 void TestHelper::initShell()
 {
-  AutoTestShell::init();
+  AutoTestShell::init(QStringList() << "kdevcppsupport");
   TestCore* core = new TestCore();
   core->initialize(KDevelop::Core::NoUi);
   EnvironmentManager::init();

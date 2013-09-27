@@ -54,7 +54,7 @@ Cpp::StaticCodeAssistant *staticCodeAssistant = 0;
 
 void TestCppAssistants::initTestCase()
 {
-  AutoTestShell::init();
+  AutoTestShell::init(QStringList() << "kdevcppsupport");
   TestCore::initialize();
   DUChain::self()->disablePersistentStorage();
   Core::self()->languageController()->backgroundParser()->setDelay(0);

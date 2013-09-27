@@ -98,7 +98,7 @@ public:
 private slots:
   void initTestCase()
   {
-    KDevelop::AutoTestShell::init();
+    KDevelop::AutoTestShell::init(QStringList() << "kdevcppsupport");
     KDevelop::TestCore* core = new KDevelop::TestCore();
     core->initialize(KDevelop::Core::NoUi);
   }

@@ -26,8 +26,6 @@
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
-#include <interfaces/idocumentcontroller.h>
-#include <interfaces/idocument.h>
 
 #include <language/codegen/coderepresentation.h>
 #include <language/duchain/declaration.h>
@@ -385,40 +383,6 @@ QList<KDevelop::IncludeItem> allFilesInIncludePath(const KUrl& source, bool loca
     }
 
     return ret;
-}
-
-
-void ReplaceCurrentAccess::exec(KUrl url, QString old, QString _new)
-{
-  IDocument* document = ICore::self()->documentController()->documentForUrl(url);
-  if(document) {
-    KTextEditor::Document* textDocument = document->textDocument();
-    if(textDocument) {
-      KTextEditor::View* activeView = textDocument->activeView();
-      if(activeView) {
-        KTextEditor::Cursor cursor = activeView->cursorPosition();
-        
-        static KUrl lastUrl;
-        static KTextEditor::Cursor lastPos;
-        static QString lastOld;
-        static QString lastNew;
-        if(lastUrl == url && lastPos == cursor)
-        {
-          kDebug() << "Not doing the same access replacement twice at" << lastUrl << lastPos;
-          return;
-        }
-        lastUrl = url;
-        lastPos = cursor;
-        lastOld = old;
-        lastNew = _new;
-        
-        KTextEditor::Range oldRange = KTextEditor::Range(cursor-KTextEditor::Cursor(0,old.length()), cursor);
-        if(oldRange.start().column() >= 0 && textDocument->text(oldRange) == old) {
-          textDocument->replaceText(oldRange, _new);
-        }
-      }
-    }
-  }
 }
 
 QStringList headerExtensions()

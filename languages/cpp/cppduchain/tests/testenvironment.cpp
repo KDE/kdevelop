@@ -37,7 +37,7 @@ using namespace Cpp;
 
 void TestEnvironment::initTestCase()
 {
-  AutoTestShell::init();
+  AutoTestShell::init(QStringList() << "kdevcppsupport");
   TestCore::initialize(Core::NoUi);
 
   Cpp::EnvironmentManager::init();

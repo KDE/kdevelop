@@ -7,9 +7,9 @@
 struct CMakeProjectData
 {
     QString projectName;
-    QList<Subdirectory> subdirectories;
-    QList<Target> targets;
-    QList<Test> testSuites;
+    QVector<Subdirectory> subdirectories;
+    QVector<Target> targets;
+    QVector<Test> testSuites;
     
     VariableMap vm;
     MacroMap mm;

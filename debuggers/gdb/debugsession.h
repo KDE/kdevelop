@@ -243,6 +243,9 @@ private:
 
     bool startDebugger(KDevelop::ILaunchConfiguration* cfg);
 
+    ///Checks if exited inferior is the last one, if so ends the debug session.
+    void lastInferiorHandler(const QStringList& l);
+
 private Q_SLOTS:
 
     void gdbReady();
@@ -328,6 +331,9 @@ private:
 
     /**True if program has stopped and all stuff like breakpoints is being updated.*/
     bool stateReloadInProgress_;
+
+    ///Exit code of the last inferior(in format: exit normally, with code "number" e.t.c)
+    QString m_inferiorExitCode;
 };
 
 }

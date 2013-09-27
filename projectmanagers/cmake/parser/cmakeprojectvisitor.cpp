@@ -66,7 +66,7 @@ CMakeProjectVisitor::CMakeProjectVisitor(const QString& root, ReferencedTopDUCon
 QStringList CMakeProjectVisitor::envVarDirectories(const QString &varName) const
 {
     QString env;
-    QMap< QString, QString >::const_iterator it=m_environmentProfile.constFind(varName);
+    QMap<QString, QString>::const_iterator it=m_environmentProfile.constFind(varName);
     if(it!=m_environmentProfile.constEnd())
         env = *it;
     else
@@ -274,6 +274,17 @@ int CMakeProjectVisitor::visit(const CMakeAst *ast)
     return 1;
 }
 
+QHash<QString, Target>::iterator findTargetForExecutable(const QString& exe, QHash<QString, Target>& targets)
+{
+    QHash<QString, Target>::iterator ret = targets.find(exe);
+    if(ret==targets.constEnd()) {
+        QString exe2 = exe;
+        exe2 = exe2.mid(exe2.indexOf('/')+1);
+        ret = targets.find(exe2);
+    }
+    return ret;
+}
+
 int CMakeProjectVisitor::visit( const AddTestAst * test)
 {
     Test t;
@@ -281,33 +292,29 @@ int CMakeProjectVisitor::visit( const AddTestAst * test)
     t.executable = test->exeName();
     t.arguments = test->testArgs();
 
-    if (m_targetForId.contains(t.executable))
+    // Strip the extensions and full path added by kde4_add_unit_test,
+    //this way it's much more useful, e.g. we can pass it to gdb
+    if (t.executable.endsWith(".shell"))
     {
-        t.files = m_targetForId[t.executable].files;
-        t.isTarget = true;
+        t.executable.chop(6);
+    }
+    else if (t.executable.endsWith(".bat"))
+    {
+        t.executable.chop(4);
+    }
+
+    QHash<QString, Target>::iterator it = findTargetForExecutable(t.executable, m_targetForId);
+    if (it == m_targetForId.end())
+    {
+        kDebug(9042) << "Target not found for test" << t.executable;
     }
     else 
     {
-        // Strip the extensions and full path added by kde4_add_unit_test
-        QString exe = t.executable;
-        if (exe.endsWith(".shell"))
-        {
-            exe.chop(6);
-        }
-        else if (exe.endsWith(".bat"))
-        {
-            exe.chop(4);
-        }
-        exe = exe.split('/').last();
-        if (m_targetForId.contains(exe))
-        {
-            t.executable = exe;
-            t.files = m_targetForId[exe].files;
-            t.isTarget = true;
-        }
+        t.files = it->files;
+        t.isTarget = true;
     }
     t.files.removeAll("TEST"); // Added by kde4_add_unit_test
-    
+
     kDebug(9042) << "AddTestAst" << t.executable << t.files;
     m_testSuites << t;
     return 1;
@@ -343,9 +350,10 @@ int CMakeProjectVisitor::visit( const SetDirectoryPropsAst * dirProps)
 {   
     QString dir=m_vars->value("CMAKE_CURRENT_SOURCE_DIR").join(QString());
     kDebug(9042) << "setting directory props for " << dirProps->properties() << dir;
+    QMap<QString, QStringList>& dprops = m_props[DirectoryProperty][dir];
     foreach(const SetDirectoryPropsAst::PropPair& t, dirProps->properties())
     {
-        m_props[DirectoryProperty][dir][t.first] = t.second.split(';');
+        dprops[t.first] = t.second.split(';');
     }
     return 1;
 }
@@ -451,6 +459,29 @@ void CMakeProjectVisitor::defineTarget(const QString& id, const QStringList& sou
         AbstractType::Ptr targetType(new TargetType);
         d->setAbstractType(targetType);
     }
+
+    QMap<QString, QStringList>& targetProps = m_props[TargetProperty][id];
+    QString exe=id, locationDir;
+    switch(t) {
+        case Target::Executable: {
+            exe += m_vars->value("CMAKE_EXECUTABLE_SUFFIX").join(QString());
+            locationDir = m_vars->value("CMAKE_RUNTIME_OUTPUT_DIRECTORY").join(QString());
+            targetProps["RUNTIME_OUTPUT_DIRECTORY"] = QStringList(locationDir);
+        }   break;
+        case Target::Library: {
+            exe = QString("%1%2%3").arg(m_vars->value("CMAKE_LIBRARY_PREFIX").join(QString()))
+                                   .arg(id)
+                                   .arg(m_vars->value("CMAKE_LIBRARY_SUFFIX").join(QString()));
+            locationDir = m_vars->value("CMAKE_LIBRARY_OUTPUT_DIRECTORY").join(QString());
+            targetProps["LIBRARY_OUTPUT_DIRECTORY"] = QStringList(locationDir);
+        }   break;
+        case Target::Custom:
+            break;
+    }
+
+    if(locationDir.isEmpty()) {
+        locationDir = m_vars->value("CMAKE_CURRENT_BINARY_DIR").join(QString());
+    }
     
     Target target;
     target.name=id.isEmpty() ? "<wrong-target>" : id;
@@ -458,33 +489,10 @@ void CMakeProjectVisitor::defineTarget(const QString& id, const QStringList& sou
     target.files=sources;
     target.type=t;
     target.desc=p.code->at(p.line);
-    
     m_targetForId[id]=target;
-
-    QString exe=id;
-    QString locationDir = m_vars->value("CMAKE_CURRENT_BINARY_DIR").join(QString());
-    switch(t) {
-        case Target::Executable: {
-            exe += m_vars->value("CMAKE_EXECUTABLE_SUFFIX").join(QString());
-            locationDir = m_vars->value("CMAKE_RUNTIME_OUTPUT_DIRECTORY").join(QString());
-            if (!locationDir.isEmpty()) {
-                m_props[TargetProperty][id]["RUNTIME_OUTPUT_DIRECTORY"]=QStringList(locationDir);
-            }
-        }   break;
-        case Target::Library: {
-            exe = QString("%1%2%3").arg(m_vars->value("CMAKE_LIBRARY_PREFIX").join(QString()))
-                                   .arg(id)
-                                   .arg(m_vars->value("CMAKE_LIBRARY_SUFFIX").join(QString()));
-            locationDir = m_vars->value("CMAKE_LIBRARY_OUTPUT_DIRECTORY").join(QString());
-            if (!locationDir.isEmpty()) {
-                m_props[TargetProperty][id]["LIBRARY_OUTPUT_DIRECTORY"]=QStringList(locationDir);
-            }
-        }   break;
-        case Target::Custom:
-            break;
-    }
     
-    m_props[TargetProperty][id]["LOCATION"]=QStringList(locationDir+'/'+exe);
+    targetProps["OUTPUT_NAME"] = QStringList(exe);
+    targetProps["LOCATION"] = QStringList(locationDir+'/'+exe);
 }
 
 int CMakeProjectVisitor::visit(const AddExecutableAst *exec)
@@ -1102,7 +1110,7 @@ int CMakeProjectVisitor::visit(const TryCompileAst *tca)
 int CMakeProjectVisitor::visit(const TargetLinkLibrariesAst *tll)
 {
     kDebug(9042) << "target_link_libraries";
-    QMap<QString, Target>::iterator target = m_targetForId.find(tll->target());
+    QHash<QString, Target>::iterator target = m_targetForId.find(tll->target());
     //TODO: we can add a problem if the target is not found
     if(target != m_targetForId.end()) {
         target->libraries << tll->debugLibs() << tll->optimizedLibs() << tll->otherLibs();
@@ -2208,12 +2216,12 @@ int CMakeProjectVisitor::visit(const GetDirPropertyAst* getdp)
 
 int CMakeProjectVisitor::visit(const SetTestsPropsAst* stp)
 {
-    QMap<QString,QString> props;
+    QHash<QString,QString> props;
     foreach(const SetTestsPropsAst::PropPair& property, stp->properties()) {
         props.insert(property.first, property.second);
     }
 
-    for(QList<Test>::iterator it=m_testSuites.begin(), itEnd=m_testSuites.end(); it!=itEnd; ++it) {
+    for(QVector<Test>::iterator it=m_testSuites.begin(), itEnd=m_testSuites.end(); it!=itEnd; ++it) {
         it->properties = props;
     }
     return 1;
@@ -2505,8 +2513,6 @@ QStringList CMakeProjectVisitor::traverseGlob(const QString& startPath, const QS
     {
         //We're in place. Lets match files from startPath dir.
         kDebug(9042) << "Matching files in " << startPath << " with glob " << expr;
-        QStringList nameFilters;
-        nameFilters << expr;
         QStringList dirsToSearch;
         if (recursive)
         {
@@ -2532,10 +2538,12 @@ QStringList CMakeProjectVisitor::traverseGlob(const QString& startPath, const QS
         else
             dirsToSearch << startPath;
         QStringList filePaths;
+
+        const QStringList nameFilters(expr);
         foreach (const QString& dirToSearch, dirsToSearch)
         {
             QDir dir(dirToSearch);
-            QStringList fileNames = dir.entryList(nameFilters, QDir::Files);
+            QStringList fileNames = dir.entryList(nameFilters, QDir::Files|QDir::Dirs|QDir::NoDotAndDotDot);
             foreach (const QString& fileName, fileNames)
             {
                 filePaths << dir.filePath(fileName);
@@ -2554,9 +2562,7 @@ QStringList CMakeProjectVisitor::traverseGlob(const QString& startPath, const QS
         if (startPath.isEmpty())
             return QStringList();
         //it's really a glob, not just dir name
-        QStringList nameFilters;
-        nameFilters << dirGlob;
-        matchedDirs = QDir(startPath).entryList(nameFilters, QDir::NoDotAndDotDot | QDir::Dirs);
+        matchedDirs = QDir(startPath).entryList(QStringList(dirGlob), QDir::NoDotAndDotDot | QDir::Dirs);
     }
     else
     {

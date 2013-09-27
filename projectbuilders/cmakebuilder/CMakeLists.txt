@@ -49,6 +49,4 @@ target_link_libraries( kcm_kdev_cmakebuilder ${KDE4_KIO_LIBS} ${KDEVPLATFORM_INT
 install( TARGETS kcm_kdev_cmakebuilder DESTINATION ${PLUGIN_INSTALL_DIR} )
 install( FILES kcm_kdev_cmakebuilder.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 
-########### install files ###############
-install( FILES data.kdev4 DESTINATION ${DATA_INSTALL_DIR}/kdevcmakebuilder )
 

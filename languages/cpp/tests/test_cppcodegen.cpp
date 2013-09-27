@@ -66,7 +66,7 @@ ForegroundLock* globalTestLock = 0;
 void TestCppCodegen::initTestCase()
 {
   //Initialize KDevelop components
-  AutoTestShell::init();
+  AutoTestShell::init(QStringList() << "kdevcppsupport");
   TestCore::initialize(Core::NoUi);
 
   Core::self()->languageController()->backgroundParser()->setDelay(1);

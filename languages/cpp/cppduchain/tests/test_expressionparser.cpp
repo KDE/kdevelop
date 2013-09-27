@@ -88,7 +88,7 @@ TestExpressionParser::TestExpressionParser()
 
 void TestExpressionParser::initTestCase()
 {
-  AutoTestShell::init();
+  AutoTestShell::init(QStringList() << "kdevcppsupport");
   TestCore* core = new TestCore();
   core->initialize(KDevelop::Core::NoUi);
   EnvironmentManager::init();

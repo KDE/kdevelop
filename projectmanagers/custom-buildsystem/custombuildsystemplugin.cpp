@@ -81,7 +81,7 @@ KUrl CustomBuildSystem::buildDirectory( ProjectBaseItem*  item ) const
     } else {
         ProjectBaseItem* parent = item;
         while( !parent->folder() ) {
-            parent = dynamic_cast<ProjectBaseItem*>( parent->parent() );
+            parent = parent->parent();
         }
         u = parent->url();
     }

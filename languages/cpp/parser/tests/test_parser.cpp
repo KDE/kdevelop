@@ -57,7 +57,7 @@ QString preprocess(const QString& contents) {
 
 void TestParser::initTestCase()
 {
-  KDevelop::AutoTestShell::init();
+  KDevelop::AutoTestShell::init(QStringList() << "kdevcppsupport");
   KDevelop::TestCore* core = new KDevelop::TestCore();
   core->initialize(KDevelop::Core::NoUi);
 }

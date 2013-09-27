@@ -38,6 +38,8 @@
 #include <QBoxLayout>
 #include <QComboBox>
 #include <QPushButton>
+#include <QSplitter>
+#include <QHeaderView>
 
 #include <klocale.h>
 
@@ -45,6 +47,8 @@
 #include <interfaces/idebugcontroller.h>
 #include <debugger/interfaces/idebugsession.h>
 #include "debugsession.h"
+
+#include "registers/registersmanager.h"
 
 using namespace GDBMI;
 
@@ -93,22 +97,21 @@ void SelectAddrDialog::itemSelected()
 
 
 
-DisassembleWindow::DisassembleWindow(QWidget *parent)
+DisassembleWindow::DisassembleWindow(QWidget *parent, DisassembleWidget* widget)
     : QTreeWidget(parent)
 {
     /*context menu commands */{
     m_selectAddrAction = new QAction(i18n("Change &address"), this);
     m_selectAddrAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-    connect(m_selectAddrAction, SIGNAL(triggered()), this->parent(), SLOT(slotChangeAddress()));
+    connect(m_selectAddrAction, SIGNAL(triggered()), widget, SLOT(slotChangeAddress()));
 
     m_jumpToLocation = new QAction(KIcon("debug-execute-to-cursor"), i18n("&Jump to Cursor"), this);
     m_jumpToLocation->setWhatsThis(i18n("Sets the execution pointer to the current cursor position."));
-    connect(m_jumpToLocation,SIGNAL(triggered()), this->parent(), SLOT(jumpToCursor()));
+    connect(m_jumpToLocation,SIGNAL(triggered()), widget, SLOT(jumpToCursor()));
 
     m_runUntilCursor = new QAction(KIcon("debug-run-cursor"), i18n("&Run to Cursor"), this);
     m_runUntilCursor->setWhatsThis(i18n("Continues execution until the cursor position is reached."));
-    connect(m_runUntilCursor,SIGNAL(triggered()), this->parent(), SLOT(runToCursor()));
-
+    connect(m_runUntilCursor,SIGNAL(triggered()), widget, SLOT(runToCursor()));
     }
 }
 
@@ -130,58 +133,22 @@ DisassembleWidget::DisassembleWidget(CppDebuggerPlugin* plugin, QWidget *parent)
         active_(false),
         lower_(0),
         upper_(0),
-        address_(0)
+        address_(0),
+        m_splitter(new QSplitter(this))
 {
-    QVBoxLayout* topLayout = new QVBoxLayout(this);
+        QVBoxLayout* topLayout = new QVBoxLayout(this);
     
-    {   // initialize controls
         QHBoxLayout* controlsLayout = new QHBoxLayout;
-        QVBoxLayout* startLayout = new QVBoxLayout;
-        QVBoxLayout* endLayout = new QVBoxLayout;
 
-        QLabel* startAddr = new QLabel(i18n("Start address:"), this);
-        QLabel* endAddr   = new QLabel(i18n("End Address:"), this);
-        
-        m_startAddress = new QComboBox(this);
-        m_startAddress->setEditable(true);
-        m_startAddress->setSizeAdjustPolicy(QComboBox::AdjustToContents);
-        m_startAddress->setMinimumContentsLength( 2+2*sizeof(void*) );
-        m_startAddress->setInsertPolicy(QComboBox::InsertAtTop);
-        
-        m_endAddress = new QComboBox(this);
-        m_endAddress->setEditable(true);
-        m_endAddress->setSizeAdjustPolicy(QComboBox::AdjustToContents);
-        m_endAddress->setMinimumContentsLength( 2+2*sizeof(void*) );
-        m_endAddress->setInsertPolicy(QComboBox::InsertAtTop);
-        
-        m_evalButton = new QPushButton(i18nc("@action:button", "Display"), this);
-
-        startLayout->addWidget(startAddr);
-        startLayout->addWidget(m_startAddress);
-        endLayout->addWidget(endAddr);
-        endLayout->addWidget(m_endAddress);
-
-        controlsLayout->addLayout(startLayout);
-        controlsLayout->addLayout(endLayout);
-
-        controlsLayout->addWidget(m_evalButton);
-        controlsLayout->addStretch(0);
-
-        topLayout->addSpacing(5);
         topLayout->addLayout(controlsLayout);
 
-        connect(m_startAddress, SIGNAL(editTextChanged(QString)), 
-                this, SLOT(slotValidateEdits()) );
-        connect(m_endAddress, SIGNAL(editTextChanged(QString)), 
-                this, SLOT(slotValidateEdits()) );
 
-        connect(m_evalButton, SIGNAL(clicked(bool)),
-                this, SLOT(slotShowAddrRange()) );
-    }
+    {   // initialize disasm/registers views
+        topLayout->addWidget(m_splitter);
 
-    
-    {   // initialize disasm view
-        m_disassembleWindow = new DisassembleWindow(this);
+        //topLayout->setMargin(0);
+
+        m_disassembleWindow = new DisassembleWindow(m_splitter, this);
 
         m_disassembleWindow->setWhatsThis(i18n("<b>Machine code display</b><p>"
                         "A machine code view into your running "
@@ -199,15 +166,24 @@ DisassembleWidget::DisassembleWidget(CppDebuggerPlugin* plugin, QWidget *parent)
 
         m_disassembleWindow->setHeaderLabels(QStringList() << "" << i18n("Address") << i18n("Function") << i18n("Instruction"));
 
-        topLayout->addWidget(m_disassembleWindow);
-        topLayout->setStretchFactor(m_disassembleWindow, 1);
-        topLayout->setMargin(0);
+        m_splitter->setStretchFactor(0, 1);
+        m_splitter->setContentsMargins(0, 0, 0, 0);
+
+        m_registersManager = new RegistersManager(m_splitter);
+
+        m_config = KGlobal::config()->group("Disassemble/Registers View");
+
+        QByteArray state = m_config.readEntry<QByteArray>("splitterState", QByteArray());
+        if (!state.isEmpty()) {
+            m_splitter->restoreState(state);
+        }
+
     }
     
     setLayout(topLayout);
     
     setWindowIcon( KIcon("system-run") );
-    setWindowTitle(i18n("Disassemble View"));
+    setWindowTitle(i18n("Disassemble/Registers View"));
     
     KDevelop::IDebugController* pDC=KDevelop::ICore::self()->debugController();
     Q_ASSERT(pDC);
@@ -253,17 +229,21 @@ void DisassembleWidget::currentSessionChanged(KDevelop::IDebugSession* s)
     
     enableControls( session != NULL ); // disable if session closed
 
-    if (!session) return;
+    m_registersManager->setSession(session);
 
-    connect(session, SIGNAL(showStepInSource(KUrl,int,QString)),
+    if (session) {
+        connect(session, SIGNAL(showStepInSource(KUrl,int,QString)),
                 SLOT(slotShowStepInSource(KUrl,int,QString)));
+    }
 }
 
 
 /***************************************************************************/
 
 DisassembleWidget::~DisassembleWidget()
-{}
+{
+   m_config.writeEntry("splitterState", m_splitter->saveState());
+}
 
 /***************************************************************************/
 
@@ -301,6 +281,7 @@ void DisassembleWidget::slotActivate(bool activate)
         active_ = activate;
         if (active_)
         {
+            m_registersManager->updateRegisters();
             if (!displayCurrent())
                 disassembleMemoryRegion();
         }
@@ -318,6 +299,8 @@ void DisassembleWidget::slotShowStepInSource(   const KUrl &, int,
 
     if (!displayCurrent())
         disassembleMemoryRegion();
+
+    m_registersManager->updateRegisters();
 }
 
 void DisassembleWidget::updateExecutionAddressHandler(const GDBMI::ResultRecord& r)
@@ -331,20 +314,6 @@ void DisassembleWidget::updateExecutionAddressHandler(const GDBMI::ResultRecord&
         disassembleMemoryRegion(addr);
     }
 }
-
-void DisassembleWidget::slotShowAddrRange()
-{
-    if( !hasValidAddrRange() ) return;
-    
-    QString addr1 = m_startAddress->currentText();
-    QString addr2 = m_endAddress->currentText();
-    
-    if ( m_startAddress->findText(addr1) < 0 ) m_startAddress->addItem(addr1);
-    if ( m_endAddress->findText(addr2) < 0 ) m_endAddress->addItem(addr2);
-    
-    disassembleMemoryRegion(addr1, addr2);
-}
-
 
 /***************************************************************************/
 
@@ -402,10 +371,8 @@ void DisassembleWidget::disassembleMemoryHandler(const GDBMI::ResultRecord& r)
 
         if (i == 0) {
             lower_ = addr.toULong(&ok,16);
-            m_startAddress->setEditText(addr);
         } else  if (i == content.size()-1) {
             upper_ = addr.toULong(&ok,16);
-            m_endAddress->setEditText(addr);
         }
     }
 
@@ -435,31 +402,8 @@ void DisassembleWidget::slotDeactivate()
     slotActivate(false);
 }
 
-bool DisassembleWidget::hasValidAddrRange()
-{
-    bool ok;
-    qlonglong start = m_startAddress->currentText().toLongLong(&ok, 16);
-    if(!ok) return false;
-    
-    qlonglong end = m_endAddress->currentText().toLongLong(&ok, 16);
-    if(!ok) return false;
-    
-    if( start < end && end-start < 128*1024 ) // don't show more than 128K at once
-        return true;
-    else
-        return false;
-}
-
-void DisassembleWidget::slotValidateEdits()
-{
-    m_evalButton->setEnabled( active_ && hasValidAddrRange() );
-}
-
 void DisassembleWidget::enableControls(bool enabled)
 {
-    m_startAddress->setEnabled(enabled);
-    m_endAddress->setEnabled(enabled);
-    m_evalButton->setEnabled(enabled && hasValidAddrRange());
     m_disassembleWindow->setEnabled(enabled);
 }
 
@@ -468,6 +412,10 @@ void DisassembleWidget::slotChangeAddress()
     if(!m_dlg) return;
     m_dlg->updateOkState();
     
+    if (!m_disassembleWindow->selectedItems().isEmpty()) {
+        m_dlg->setAddress(m_disassembleWindow->selectedItems().first()->text(Address));
+    }
+
     if( m_dlg->exec() == KDialog::Rejected) return;
 
     unsigned long addr = m_dlg->getAddr().toULong(&ok,16);
@@ -475,8 +423,11 @@ void DisassembleWidget::slotChangeAddress()
     if (addr < lower_ || addr > upper_ || !displayCurrent())
         disassembleMemoryRegion(m_dlg->getAddr());
 }
-    
-/***************************************************************************/
+
+void SelectAddrDialog::setAddress ( const QString& address )
+{
+     m_ui.comboBox->setCurrentItem ( address, true );
+}
 
 }
 

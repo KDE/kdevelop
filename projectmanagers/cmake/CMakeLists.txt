@@ -1,10 +1,7 @@
 project(cmakemanager)
 kde4_no_enable_final(cmakemanager)
-include_directories(
-    
-    ${CMAKE_CURRENT_SOURCE_DIR}/parser
-    ${cmakebuilder_SOURCE_DIR}
-)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/parser)
+
 add_subdirectory(tests)
 add_subdirectory(icons)
 
@@ -47,6 +44,9 @@ set( cmakemanager_SRCS
   cmakenavigationwidget.cpp
   cmakemanager.cpp
   cmakecodecompletionmodel.cpp
+  cmakecommitchangesjob.cpp
+  cmakeimportjob.cpp
+  cmakeedit.cpp
 )
 
 set( cmakemanager_UI
@@ -110,4 +110,3 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevcmakemanager.desktop DESTINATION $
 configure_file(kdevcmakedocumentation.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevcmakedocumentation.desktop)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevcmakedocumentation.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install(FILES kcm_kdevcmake_settings.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-install(FILES data.kdev4 DESTINATION ${DATA_INSTALL_DIR}/kdevcmakemanager )
