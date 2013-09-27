@@ -930,6 +930,10 @@ ProjectModel* ProjectController::projectModel()
 
 IProject* ProjectController::findProjectForUrl( const KUrl& url ) const
 {
+    if (d->m_projects.isEmpty()) {
+        return 0;
+    }
+
     ProjectBaseItem* item = d->model->itemForPath(IndexedString(url));
     if (item) {
         return item->project();
