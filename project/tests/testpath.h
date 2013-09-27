@@ -44,6 +44,8 @@ private slots:
     void testPathInvalid_data();
     void testPathOperators();
     void testPathOperators_data();
+    void testPathAddData();
+    void testPathAddData_data();
 };
 
 #endif // TESTPATH_H

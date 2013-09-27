@@ -298,7 +298,6 @@ void Path::addPath(const QString& path)
         return;
     }
     ///FIXME: this needs to be implemented
-    Q_ASSERT(!path.startsWith('/'));
     Q_ASSERT(!path.contains("../"));
     Q_ASSERT(KUrl::isRelativeUrl(path));
     QStringList newData = path.split('/', QString::SkipEmptyParts);

@@ -395,4 +395,35 @@ void TestPath::testPathOperators_data()
     QTest::newRow("e-f") << e << f << true << false;
 }
 
+void TestPath::testPathAddData()
+{
+    QFETCH(QString, pathToAdd);
+
+    const QString base("/foo/bar/asdf/");
+
+    KUrl baseUrl(base);
+    baseUrl.addPath(pathToAdd);
+    baseUrl.cleanPath();
+
+    Path basePath(base);
+    basePath.addPath(pathToAdd);
+
+    QCOMPARE(basePath.toUrl(), baseUrl);
+    QCOMPARE(basePath.pathOrUrl(), baseUrl.pathOrUrl());
+}
+
+void TestPath::testPathAddData_data()
+{
+    QTest::addColumn<QString>("pathToAdd");
+
+    const QStringList paths = QStringList()
+        << "file.txt"
+        << "path/file.txt"
+        << "path//file.txt"
+        << "/absolute";
+    foreach(const QString &path, paths) {
+        QTest::newRow(qstrdup(path.toUtf8().constData())) << path;
+    }
+}
+
 #include "testpath.moc"

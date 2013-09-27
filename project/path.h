@@ -302,6 +302,9 @@ public:
 
     /**
      * Append @p path to this Path.
+     *
+     * NOTE: If @p path starts with a slash, this function ignores it.
+     *       I.e. you cannot set the path this way. @sa KUrl::addPath
      */
     void addPath(const QString& path);
 
