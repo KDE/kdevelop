@@ -149,34 +149,31 @@ KUrl sourceOrHeaderCandidate( const KUrl &url, bool fast )
 
   //kDebug( 9007 ) << "Now searching in project files." << endl;
   // Our last resort: search the project file list for matching files
-  KUrl::List projectFileList;
 
-  foreach (KDevelop::IProject *project, ICore::self()->projectController()->projects()) {
-      if (project->inProject(url)) {
-        QList<ProjectFileItem*> files = project->files();
-        foreach(ProjectFileItem* file, files)
-          projectFileList << file->url();
-      }
-  }
-  
   QFileInfo candidateFileWoExt;
   QString candidateFileWoExtString;
-  foreach ( const KUrl& url, projectFileList )
-  {
-    candidateFileWoExt.setFile(url.toLocalFile());
-    //kDebug( 9007 ) << "candidate file: " << url << endl;
-    if( !candidateFileWoExt.suffix().isEmpty() )
-      candidateFileWoExtString = candidateFileWoExt.fileName().replace( "." + candidateFileWoExt.suffix(), "" );
 
-    if ( candidateFileWoExtString == fileNameWoExt )
-    {
-      if ( possibleExts.contains( candidateFileWoExt.suffix() ) || candidateFileWoExt.suffix().isEmpty() )
-      {
-        //kDebug( 9007 ) << "checking if " << url << " exists" << endl;
-        return url;
+  const IndexedString file(url);
+  foreach (KDevelop::IProject *project, ICore::self()->projectController()->projects()) {
+      if (project->inProject(file)) {
+        foreach(const IndexedString& otherFile, project->fileSet()) {
+          candidateFileWoExt.setFile(otherFile.str());
+          //kDebug( 9007 ) << "candidate file: " << otherFile.str() << endl;
+          if( !candidateFileWoExt.suffix().isEmpty() )
+            candidateFileWoExtString = candidateFileWoExt.fileName().replace( "." + candidateFileWoExt.suffix(), "" );
+
+          if ( candidateFileWoExtString == fileNameWoExt )
+          {
+            if ( possibleExts.contains( candidateFileWoExt.suffix() ) || candidateFileWoExt.suffix().isEmpty() )
+            {
+              //kDebug( 9007 ) << "checking if " << url << " exists" << endl;
+              return otherFile.toUrl();
+            }
+          }
+        }
       }
-    }
   }
+
   return KUrl();
 }
 
