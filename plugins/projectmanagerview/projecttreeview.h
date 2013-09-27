@@ -40,6 +40,7 @@ class ProjectFileItem;
 class ProjectTargetItem;
 class ProjectBaseItem;
 class NavigationToolTip;
+class Path;
 }
 
 class ProjectTreeView: public QTreeView
@@ -54,7 +55,7 @@ class ProjectTreeView: public QTreeView
         virtual bool event(QEvent* event);
 
     Q_SIGNALS:
-        void activateUrl( const KUrl &url );
+        void activate( const KDevelop::Path &url );
 
     protected Q_SLOTS:
         void slotActivated( const QModelIndex &index );

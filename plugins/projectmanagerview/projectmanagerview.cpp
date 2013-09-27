@@ -41,6 +41,7 @@
 #include <interfaces/iproject.h>
 #include <project/projectproxymodel.h>
 #include <project/projectmodel.h>
+#include <project/path.h>
 
 #include "../openwith/iopenwith.h"
 
@@ -133,7 +134,7 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
     addAction(plugin->actionCollection()->action("project_install"));
     addAction(plugin->actionCollection()->action("project_clean"));
 
-    connect(m_ui->projectTreeView, SIGNAL(activateUrl(KUrl)), this, SLOT(openUrl(KUrl)));
+    connect(m_ui->projectTreeView, SIGNAL(activate(KDevelop::Path)), this, SLOT(open(KDevelop::Path)));
 
     m_ui->buildSetView->setProjectView( this );
 
@@ -293,9 +294,9 @@ void ProjectManagerView::locateCurrentDocument()
     }
 }
 
-void ProjectManagerView::openUrl( const KUrl& url )
+void ProjectManagerView::open( const Path& path )
 {
-    IOpenWith::openFiles(KUrl::List() << url);
+    IOpenWith::openFiles(KUrl::List() << path.toUrl());
 }
 
 QString ProjectManagerView::filterString() const

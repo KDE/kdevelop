@@ -161,7 +161,7 @@ void CurrentProjectSet::setCurrentDocumentInternal(const KDevelop::IndexedString
         m_currentProject = projectForUrl;
         QList<ProjectFileItem*> files = m_currentProject->files();
         foreach (ProjectFileItem* file, files) {
-            m_documents.insert(IndexedString(file->url()));
+            m_documents.insert(file->path().toIndexed());
         }
         emit changed();
     }
@@ -177,7 +177,7 @@ AllProjectSet::AllProjectSet(ProblemModel* parent)
 {
     foreach(const IProject* project, model()->plugin()->core()->projectController()->projects()) {
         foreach (ProjectFileItem* file, project->files()) {
-            m_documents.insert(IndexedString(file->url()));
+            m_documents.insert(file->path().toIndexed());
         }
         trackProjectFiles(project);
     }

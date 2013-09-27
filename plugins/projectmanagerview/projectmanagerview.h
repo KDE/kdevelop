@@ -40,6 +40,7 @@ class VcsOverlayProxyModel;
 namespace KDevelop
 {
 class ProjectBaseItem;
+class Path;
 }
 
 class ProjectManagerView;
@@ -91,7 +92,7 @@ private slots:
     void selectionChanged();
     void locateCurrentDocument();
     void updateSyncAction();
-    void openUrl( const KUrl& );
+    void open( const KDevelop::Path& );
     void setFilterString(const QString&);
 
 private:

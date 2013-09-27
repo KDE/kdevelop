@@ -30,6 +30,7 @@
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/context.h>
 #include <project/projectmodel.h>
+#include <project/path.h>
 #include <kmimetype.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>
@@ -80,7 +81,7 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension( KDevelop::C
     } else if ( projctx && projctx->items().count() > 0 ) {
         foreach( ProjectBaseItem* item, projctx->items() ) {
             if( item->file() ) {
-                m_urls << item->file()->url();
+                m_urls << item->file()->path().toUrl();
             }
         }
     }

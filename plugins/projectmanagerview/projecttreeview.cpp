@@ -277,7 +277,7 @@ void ProjectTreeView::slotActivated( const QModelIndex &index )
     KDevelop::ProjectBaseItem *item = index.data(ProjectModel::ProjectItemRole).value<ProjectBaseItem*>();
     if ( item && item->file() )
     {
-        emit activateUrl( item->file()->url() );
+        emit activate( item->file()->path() );
     }
 }
 //TODO test whether this could be replaced by projectbuildsetwidget.cpp::showContextMenu_appendActions
@@ -407,7 +407,7 @@ bool ProjectTreeView::event(QEvent* event)
             m_idx=idx;
             ProjectFileItem* file=it->file();
             KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
-            TopDUContext* top= DUChainUtils::standardContextForUrl(file->url());
+            TopDUContext* top= DUChainUtils::standardContextForUrl(file->path().toUrl());
             
             if(m_tooltip)
                 m_tooltip->close();

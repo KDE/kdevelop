@@ -38,6 +38,7 @@
 #include <outputview/outputmodel.h>
 
 #include <project/projectmodel.h>
+#include <project/path.h>
 
 #include <language/interfaces/editorcontext.h>
 
@@ -165,7 +166,7 @@ KDevelop::ContextMenuExtension ExternalScriptPlugin::contextMenuExtension( KDeve
     KDevelop::ProjectItemContext* projctx = dynamic_cast<KDevelop::ProjectItemContext*>( context );
     foreach( KDevelop::ProjectBaseItem* item, projctx->items() ) {
       if ( item->file() ) {
-        m_urls << item->file()->url();
+        m_urls << item->file()->path().toUrl();
       }
     }
   } else if ( context->type() == KDevelop::Context::EditorContext ) {
