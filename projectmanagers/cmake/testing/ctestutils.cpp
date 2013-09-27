@@ -38,8 +38,8 @@ using namespace KDevelop;
 void CTestUtils::createTestSuites(const QVector<Test>& testSuites, ProjectFolderItem* folder)
 {
     const QString binDir = folder->project()->buildSystemManager()->buildDirectory(folder->project()->projectItem()).toLocalFile();
-    const KUrl currentBinDir = folder->project()->buildSystemManager()->buildDirectory(folder);
-    const KUrl currentSourceDir = folder->url();
+    const Path currentBinDir = folder->project()->buildSystemManager()->buildDirectory(folder);
+    const Path currentSourceDir = folder->path();
     
     foreach (const Test& test, testSuites)
     {
@@ -59,13 +59,13 @@ void CTestUtils::createTestSuites(const QVector<Test>& testSuites, ProjectFolder
             }
         }
         exe.replace("#[bin_dir]", binDir);
-        const KUrl exeUrl(currentBinDir, exe);
+        const Path exePath(currentBinDir, exe);
 
         QStringList files;
         foreach (const QString& file, test.files)
         {
             QString localFile = QString(file).replace("#[bin_dir]", binDir);
-            files << KUrl(currentSourceDir, localFile).toLocalFile();
+            files << Path(currentSourceDir, localFile).toLocalFile();
         }
 
         QStringList args = test.arguments;
@@ -74,7 +74,7 @@ void CTestUtils::createTestSuites(const QVector<Test>& testSuites, ProjectFolder
             it->replace("#[bin_dir]", binDir);
         }
 
-        CTestSuite* suite = new CTestSuite(test.name, exeUrl, files, folder->project(), args, test.properties.value("WILL_FAIL", "FALSE") == "TRUE");
+        CTestSuite* suite = new CTestSuite(test.name, exePath.toUrl(), files, folder->project(), args, test.properties.value("WILL_FAIL", "FALSE") == "TRUE");
         ICore::self()->runController()->registerJob(new CTestFindJob(suite));
     }
 }

@@ -121,15 +121,15 @@ QString CMakeManager::errorDescription() const
 CMakeManager::~CMakeManager()
 {}
 
-KUrl CMakeManager::buildDirectory(KDevelop::ProjectBaseItem *item) const
+Path CMakeManager::buildDirectory(KDevelop::ProjectBaseItem *item) const
 {
     CMakeFolderItem *fi=dynamic_cast<CMakeFolderItem*>(item);
-    KUrl ret;
+    Path ret;
     ProjectBaseItem* parent = fi ? fi->formerParent() : item->parent();
     if (parent)
         ret=buildDirectory(parent);
     else
-        ret=CMake::currentBuildDir(item->project());
+        ret=Path(CMake::currentBuildDir(item->project()));
     
     if(fi)
         ret.addPath(fi->buildDir());
@@ -236,7 +236,7 @@ QList<KDevelop::ProjectTargetItem*> CMakeManager::targets() const
     return ret;
 }
 
-KUrl::List CMakeManager::includeDirectories(KDevelop::ProjectBaseItem *item) const
+Path::List CMakeManager::includeDirectories(KDevelop::ProjectBaseItem *item) const
 {
     IProject* project = item->project();
 //     kDebug(9042) << "Querying inc dirs for " << item;
@@ -246,15 +246,15 @@ KUrl::List CMakeManager::includeDirectories(KDevelop::ProjectBaseItem *item) con
             QStringList dirs = includer->includeDirectories(item);
             //Here there's the possibility that it might not be a target. We should make sure that's not the case
             ProjectTargetItem* tItem = dynamic_cast<ProjectTargetItem*>(item);
-            return CMake::resolveSystemDirs(project, processGeneratorExpression(dirs,
+            return toPathList(CMake::resolveSystemDirs(project, processGeneratorExpression(dirs,
                                                                                 project,
-                                                                                tItem), KUrl::AddTrailingSlash);
+                                                                                tItem), KUrl::AddTrailingSlash));
         }
         item = item->parent();
 //         kDebug(9042) << "Looking for an includer: " << item;
     }
     // No includer found, so no include-directories to be returned;
-    return KUrl::List();
+    return Path::List();
 }
 
 QHash< QString, QString > CMakeManager::defines(KDevelop::ProjectBaseItem *item ) const

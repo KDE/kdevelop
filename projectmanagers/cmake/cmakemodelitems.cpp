@@ -100,7 +100,7 @@ KUrl CMakeExecutableTargetItem::builtUrl() const
 {
     KUrl ret;
     if(path.isEmpty()) {
-        ret=project()->buildSystemManager()->buildDirectory(const_cast<CMakeExecutableTargetItem*>(this));
+        ret=project()->buildSystemManager()->buildDirectory(const_cast<CMakeExecutableTargetItem*>(this)).toUrl();
         ret.addPath(outputName);
     } else
         ret=path;
