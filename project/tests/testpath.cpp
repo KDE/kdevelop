@@ -399,17 +399,24 @@ void TestPath::testPathAddData()
 {
     QFETCH(QString, pathToAdd);
 
-    const QString base("/foo/bar/asdf/");
+    const QStringList bases = QStringList()
+        << "/foo/bar/asdf/"
+        << "file:///foo/bar/asdf/"
+        << "http://www.asdf.com/foo/bar/asdf/"
+        << "/"
+        ;
+    foreach(const QString& base, bases) {
+        KUrl baseUrl(base);
+        baseUrl.addPath(pathToAdd);
+        baseUrl.cleanPath();
+        baseUrl.adjustPath(KUrl::RemoveTrailingSlash);
 
-    KUrl baseUrl(base);
-    baseUrl.addPath(pathToAdd);
-    baseUrl.cleanPath();
+        Path basePath(base);
+        basePath.addPath(pathToAdd);
 
-    Path basePath(base);
-    basePath.addPath(pathToAdd);
-
-    QCOMPARE(basePath.toUrl(), baseUrl);
-    QCOMPARE(basePath.pathOrUrl(), baseUrl.pathOrUrl());
+        QCOMPARE(basePath.toUrl(), baseUrl);
+        QCOMPARE(basePath.pathOrUrl(), baseUrl.pathOrUrl());
+    }
 }
 
 void TestPath::testPathAddData_data()
@@ -420,7 +427,16 @@ void TestPath::testPathAddData_data()
         << "file.txt"
         << "path/file.txt"
         << "path//file.txt"
-        << "/absolute";
+        << "/absolute"
+        << "../"
+        << ".."
+        << "../../../"
+        << "./foo"
+        << "../relative"
+        << "../../relative"
+        << "../foo/../bar"
+        << "../foo/./bar"
+        << "../../../../../../../invalid";
     foreach(const QString &path, paths) {
         QTest::newRow(qstrdup(path.toUtf8().constData())) << path;
     }

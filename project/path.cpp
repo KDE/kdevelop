@@ -292,14 +292,38 @@ void Path::setLastPathSegment(const QString& name)
     }
 }
 
+static void cleanPath(QVector<QString>* data, const bool isRemote)
+{
+    if (data->isEmpty()) {
+        return;
+    }
+    QString* it = data->begin();
+    const int startOffset = isRemote ? 1 : 0;
+    it += startOffset;
+    while(it != data->end()) {
+        if (*it == QLatin1String("..")) {
+            if (it == (data->begin() + startOffset)) {
+                it = data->erase(it);
+            } else {
+                it = data->erase(it - 1, it + 1);
+            }
+        } else if (*it == QLatin1String(".")) {
+            it = data->erase(it);
+        } else {
+            ++it;
+        }
+    }
+    if (data->count() == startOffset) {
+        data->append(QString());
+    }
+}
+
 void Path::addPath(const QString& path)
 {
     if (path.isEmpty()) {
         return;
     }
-    ///FIXME: this needs to be implemented
-    Q_ASSERT(!path.contains("../"));
-    Q_ASSERT(KUrl::isRelativeUrl(path));
+
     QStringList newData = path.split('/', QString::SkipEmptyParts);
     if (newData.isEmpty()) {
         return;
@@ -311,6 +335,8 @@ void Path::addPath(const QString& path)
     }
 
     m_data += newData.toVector();
+
+    cleanPath(&m_data, isRemote());
 }
 
 Path Path::parent() const
