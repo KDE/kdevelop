@@ -185,9 +185,10 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiObjectInitializer* node)
 {
     bool ret = DeclarationBuilderBase::visit(node);
     DUChainWriteLocker lock;
-    Q_ASSERT(currentContext());
-    Q_ASSERT(currentDeclaration<ClassDeclaration>());
-    currentDeclaration()->setInternalContext(currentContext());
+    if (currentDeclaration<ClassDeclaration>()) {
+        Q_ASSERT(currentContext());
+        currentDeclaration()->setInternalContext(currentContext());
+    }
     return ret;
 }
 
