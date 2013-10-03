@@ -34,7 +34,7 @@
 #include "filemanager.h"
 
 K_PLUGIN_FACTORY(KDevFileManagerFactory, registerPlugin<KDevFileManagerPlugin>(); )
-K_EXPORT_PLUGIN(KDevFileManagerFactory(KAboutData("kdevfilemanager","kdevfilemanager",ki18n("File Manager"), "0.1", ki18n("Browse the filesystem"), KAboutData::License_GPL)))
+K_EXPORT_PLUGIN(KDevFileManagerFactory(KAboutData("kdevfilemanager","kdevfilemanager",ki18n("File Manager"), "0.1", ki18n("This plugin brings a filemanager to KDevelop."), KAboutData::License_GPL)))
 
 
 class KDevFileManagerViewFactory: public KDevelop::IToolViewFactory{
