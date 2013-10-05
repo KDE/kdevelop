@@ -40,7 +40,7 @@ K_EXPORT_PLUGIN(SwitchToBuddyPluginFactory(KAboutData(
                                            ,"kdevswitchtobuddy"
                                            , ki18n("Switch to Buddy")
                                            , "0.1"
-                                           , ki18n("Switch to buddy document in code editor.")
+                                           , ki18n("Allows switching between buddy documents like implementation and header file.")
                                            , KAboutData::License_GPL)
                                            .addAuthor(ki18n("André Stein")
                                            , ki18n("Author")
