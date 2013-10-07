@@ -20,6 +20,7 @@ Name[cs]=Filtr projektů
 Name[de]=Projektfilter
 Name[es]=Filtro del proyecto
 Name[fi]=Projektisuodatin
+Name[hu]=Projektszűrő
 Name[nb]=Prosjektfilter
 Name[nl]=Projectfilter
 Name[pt]=Filtro de Projectos
