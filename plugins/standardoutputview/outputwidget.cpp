@@ -56,6 +56,7 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
     , stackwidget(0)
     , data(tvdata)
     , m_closeButton(0)
+    , m_closeAllButton(0)
     , nextAction(0)
     , previousAction(0)
     , activateOnSelect(0)
@@ -77,7 +78,20 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
         m_closeButton->setIcon( KIcon("tab-close") );
         m_closeButton->adjustSize();
         m_closeButton->setToolTip( i18n( "Close the currently active output view") );
-        tabwidget->setCornerWidget( m_closeButton, Qt::TopRightCorner );
+        m_closeAllButton = new QToolButton( this );
+        connect(m_closeAllButton, SIGNAL(clicked()),
+                this, SLOT(closeOtherViews()));
+        m_closeAllButton->setIcon(KIcon("tab-close-other"));
+        m_closeAllButton->adjustSize();
+        m_closeAllButton->setToolTip( i18n( "Close all other output views" ) );
+
+        QWidget* toolbar = new QWidget(this);
+        QBoxLayout* toolbarLayout =  new QBoxLayout(QBoxLayout::LeftToRight);
+        toolbarLayout->setMargin(0);
+        toolbar->setLayout(toolbarLayout);
+        toolbarLayout->addWidget(m_closeButton);
+        toolbarLayout->addWidget(m_closeAllButton);
+        tabwidget->setCornerWidget(toolbar, Qt::TopRightCorner);
     } else if ( data->type == KDevelop::IOutputView::HistoryView )
     {
         stackwidget = new QStackedWidget( this );
@@ -275,6 +289,25 @@ void OutputWidget::closeActiveView()
             {
                 data->plugin->removeOutput( id );
             }
+        }
+    }
+    enableActions();
+}
+
+void OutputWidget::closeOtherViews()
+{
+    QWidget* widget = tabwidget->currentWidget();
+    if (!widget)
+        return;
+
+    foreach (int id, views.keys()) {
+        if (views.value(id) == widget) {
+            continue; // leave the active view open
+        }
+
+        OutputData* od = data->outputdata.value(id);
+        if (od->behaviour & KDevelop::IOutputView::AllowUserClose) {
+            data->plugin->removeOutput( id );
         }
     }
     enableActions();
