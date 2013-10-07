@@ -16,6 +16,7 @@ Comment[fi]=Tämä liitännäinen näyttää kaikkien parhaillaan ladattujen asi
 Comment[fr]=Ce module externe affiche une vue graphique de tous les documents actuellement chargés et les sépare par type MIME.
 Comment[ga]=Taispeánann an breiseán seo amharc grafach ar gach cáipéis atá luchtaithe faoi láthair, agus dealaíonn sé iad de réir a gcineál MIME.
 Comment[gl]=Este engadido mostra unha vista gráfica de todos os documentos agora cargados e sepáraos segundo o seu tipo mime.
+Comment[hu]=Ez a bővítmény megjeleníti minden jelenleg betöltött dokumentum grafikus nézetét és szétválasztja őket MIME-típus szerint.
 Comment[it]=Questa estensione mostra una vista grafica di tutti i documenti attualmente caricati e li separa per il tipo MIME.
 Comment[kk]=Бұл плагині бүкіл жүктелген құжаттарды MIME-түрі бойынша бөліп графикалық пішінде көрсетеді.
 Comment[nb]=Dette programtillegget gir en grafisk visning av alle dokumenter som nå er lastet inn og skiller dem etter mimetype.

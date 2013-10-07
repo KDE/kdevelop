@@ -16,6 +16,7 @@ Comment[et]=See plugin pakub külgvaates teavet aktiivse keele konteksti kohta n
 Comment[fi]=Tämä liitännäinen näyttää tietoja nykyisestä kielikontekstista sivunäkymässä ja korostaa olennaisia esittelyjä ja käyttöjä.
 Comment[fr]=Ce module externe affiche des informations sur le contexte du langage actuel dans une vue latérale, et met en surbrillance les déclarations et utilisations pertinentes.
 Comment[gl]=Este engadido mostra información acerca do contexto da linguaxe actual nunha vista lateral, e realza as declaracións e utilizacións relevantes.
+Comment[hu]=Ez a bővítmény a jelenlegi nyelvi környezetről jelenít meg információkat egy oldalnézetben és kiemeli a lényeges deklarációkat és használatokat.
 Comment[it]=Questa estensione mostra le informazioni sul contesto del linguaggio corrente in una vista laterale, mettendo in evidenza le dichiarazioni e gli usi.
 Comment[kk]=Бұл плагині, бүйірдегі көріністе, қолданыстағы тілінің контексті туралы мәліметті келтіреді және тиісті мәлімдемелер мен қолдануларын бояп белгілейді.
 Comment[nb]=Dette programtillegget viser informasjon om gjeldende språkkontekst i et sidevindu, og fremhever relevante deklarasjoner og bruk.
