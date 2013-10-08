@@ -92,7 +92,7 @@ public:
     ProjectManagerViewPluginPrivate()
     {}
     KDevProjectManagerViewFactory *factory;
-    QList<KDevelop::ProjectBaseItem*> ctxProjectItemList;
+    QList<QPersistentModelIndex> ctxProjectItemList;
     KAction* m_buildAll;
     KAction* m_build;
     KAction* m_install;
@@ -100,6 +100,16 @@ public:
     KAction* m_configure;
     KAction* m_prune;
 };
+
+static QList<ProjectBaseItem*> itemsFromIndexes(const QList<QPersistentModelIndex>& indexes)
+{
+    QList<ProjectBaseItem*> items;
+    ProjectModel* model = ICore::self()->projectController()->projectModel();
+    foreach(const QModelIndex& index, indexes) {
+        items += model->itemFromIndex(index);
+    }
+    return items;
+}
 
 ProjectManagerViewPlugin::ProjectManagerViewPlugin( QObject *parent, const QVariantList& )
         : IPlugin( ProjectManagerFactory::componentData(), parent ), d(new ProjectManagerViewPluginPrivate)
@@ -218,7 +228,7 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
     needsPaste = needsCreateFolder;
     
     foreach( ProjectBaseItem* item, items ) {
-        d->ctxProjectItemList << item;
+        d->ctxProjectItemList << item->index();
         //needsBuildItems if items are limited to targets and buildfolders
         needsBuildItems &= item->target() || item->type() == ProjectBaseItem::BuildFolder;
 
@@ -313,8 +323,10 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
 void ProjectManagerViewPlugin::closeProjects()
 {
     QList<KDevelop::IProject*> projectsToClose;
-    foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
+    ProjectModel* model = ICore::self()->projectController()->projectModel();
+    foreach( const QModelIndex& index, d->ctxProjectItemList )
     {
+        KDevelop::ProjectBaseItem* item = model->itemFromIndex(index);
         if( !projectsToClose.contains( item->project() ) )
         {
             projectsToClose << item->project();
@@ -330,19 +342,19 @@ void ProjectManagerViewPlugin::closeProjects()
 
 void ProjectManagerViewPlugin::installItemsFromContextMenu()
 {
-    runBuilderJob( BuilderJob::Install, d->ctxProjectItemList );
+    runBuilderJob( BuilderJob::Install, itemsFromIndexes(d->ctxProjectItemList) );
     d->ctxProjectItemList.clear();
 }
 
 void ProjectManagerViewPlugin::cleanItemsFromContextMenu()
 {
-    runBuilderJob( BuilderJob::Clean, d->ctxProjectItemList );
+    runBuilderJob( BuilderJob::Clean, itemsFromIndexes( d->ctxProjectItemList ) );
     d->ctxProjectItemList.clear();
 }
 
 void ProjectManagerViewPlugin::buildItemsFromContextMenu()
 {
-    runBuilderJob( BuilderJob::Build, d->ctxProjectItemList );
+    runBuilderJob( BuilderJob::Build, itemsFromIndexes( d->ctxProjectItemList ) );
     d->ctxProjectItemList.clear();
 }
 
@@ -419,7 +431,7 @@ void ProjectManagerViewPlugin::buildProjectItems()
 
 void ProjectManagerViewPlugin::addItemsFromContextMenuToBuildset( )
 {
-    foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
+    foreach( KDevelop::ProjectBaseItem* item, itemsFromIndexes( d->ctxProjectItemList ))
     {
         ICore::self()->projectController()->buildSetModel()->addProjectItem( item );
     }
@@ -427,7 +439,7 @@ void ProjectManagerViewPlugin::addItemsFromContextMenuToBuildset( )
 
 void ProjectManagerViewPlugin::runTargetsFromContextMenu( )
 {
-    foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
+    foreach( KDevelop::ProjectBaseItem* item, itemsFromIndexes( d->ctxProjectItemList ))
     {
         KDevelop::ProjectExecutableTargetItem* t=item->executable();
         if(t)
@@ -441,14 +453,15 @@ void ProjectManagerViewPlugin::projectConfiguration( )
 {
     if( !d->ctxProjectItemList.isEmpty() )
     {
-        core()->projectController()->configureProject( d->ctxProjectItemList.at( 0 )->project() );
+        ProjectModel* model = ICore::self()->projectController()->projectModel();
+        core()->projectController()->configureProject( model->itemFromIndex(d->ctxProjectItemList.at( 0 ))->project() );
     }
 }
 
 void ProjectManagerViewPlugin::reloadFromContextMenu( )
 {
     QList< KDevelop::ProjectFolderItem* > folders;
-    foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
+    foreach( KDevelop::ProjectBaseItem* item, itemsFromIndexes( d->ctxProjectItemList ) )
     {
         if ( item->folder() ) {
             // since reloading should be recursive, only pass the upper-most items
@@ -476,7 +489,7 @@ void ProjectManagerViewPlugin::reloadFromContextMenu( )
 
 void ProjectManagerViewPlugin::createFolderFromContextMenu( )
 {
-    foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
+    foreach( KDevelop::ProjectBaseItem* item, itemsFromIndexes( d->ctxProjectItemList ))
     {
         if ( item->folder() ) {
             QWidget* window(ICore::self()->uiController()->activeMainWindow()->window());
@@ -493,7 +506,7 @@ void ProjectManagerViewPlugin::createFolderFromContextMenu( )
 
 void ProjectManagerViewPlugin::removeFromContextMenu()
 {
-    removeItems(d->ctxProjectItemList);
+    removeItems(itemsFromIndexes( d->ctxProjectItemList ));
 }
 
 void ProjectManagerViewPlugin::removeItems(const QList< ProjectBaseItem* >& items)
@@ -555,7 +568,7 @@ void ProjectManagerViewPlugin::removeItems(const QList< ProjectBaseItem* >& item
 
 void ProjectManagerViewPlugin::removeTargetFilesFromContextMenu()
 {
-    QList<ProjectBaseItem*> items = d->ctxProjectItemList;
+    QList<ProjectBaseItem*> items = itemsFromIndexes( d->ctxProjectItemList );
     QMap< IBuildSystemManager*, QList<KDevelop::ProjectFileItem*> > itemsByBuildSystem;
     foreach(ProjectBaseItem *item, items)
         itemsByBuildSystem[item->project()->buildSystemManager()].append(item->file());
@@ -567,7 +580,7 @@ void ProjectManagerViewPlugin::removeTargetFilesFromContextMenu()
 
 void ProjectManagerViewPlugin::renameItemFromContextMenu()
 {
-    renameItems(d->ctxProjectItemList);
+    renameItems(itemsFromIndexes( d->ctxProjectItemList ));
 }
 
 void ProjectManagerViewPlugin::renameItems(const QList< ProjectBaseItem* >& items)
@@ -634,7 +647,7 @@ ProjectFileItem* createFile(const ProjectFolderItem* item)
 
 void ProjectManagerViewPlugin::createFileFromContextMenu( )
 {
-    foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
+    foreach( KDevelop::ProjectBaseItem* item, itemsFromIndexes( d->ctxProjectItemList ) )
     {
         if ( item->folder() ) {
             createFile(item->folder());
