@@ -56,6 +56,8 @@ namespace KDevelop
 struct DistributedVersionControlPluginPrivate {
     explicit DistributedVersionControlPluginPrivate(DistributedVersionControlPlugin * pThis)
             : m_common(new VcsPluginHelper(pThis, pThis)) {}
+
+    ~DistributedVersionControlPluginPrivate() { delete m_common; }
     VcsPluginHelper* m_common;
 };
 
