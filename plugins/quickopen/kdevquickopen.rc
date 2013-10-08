@@ -3,10 +3,10 @@
 <MenuBar>
   <Menu name="navigation">
     <Action name="quick_open"
-	    group="navigation_file"/>
+	    group="navigation_code"/>
 
     <Action name="quick_open_file"
-	    group="navigation_file"/>
+	    group="navigation_code"/>
 
     <Action name="quick_open_class"
 	    group="navigation_code"/>
@@ -18,19 +18,19 @@
 	    group="navigation_code"/>
 
     <Action name="quick_open_prev_function"
-            group="navigation_code"/>
+            group="navigation_fxn"/>
 
     <Action name="quick_open_next_function"
-            group="navigation_code"/>
+            group="navigation_fxn"/>
 
     <Action name="quick_open_outline"
-            group="navigation_code"/>
+            group="navigation_fxn"/>
 
     <Action name="quick_open_jump_declaration"
-	    group="navigation_code"/>
+	    group="navigation_jmp"/>
 
     <Action name="quick_open_jump_definition"
-	    group="navigation_code"/>
+	    group="navigation_jmp"/>
 
   </Menu>
 </MenuBar>

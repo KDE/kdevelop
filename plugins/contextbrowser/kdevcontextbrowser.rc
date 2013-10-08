@@ -5,19 +5,19 @@
     <text context="@title:menu">Navigation</text>
 
     <Action name="previous_context"
-	    group="navigation_code"/>
+	    group="navigation_cxt"/>
 
     <Action name="next_context"
-	    group="navigation_code"/>
+	    group="navigation_cxt"/>
 
     <Action name="previous_use"
-            group="navigation_code"/>
+            group="navigation_use"/>
 
     <Action name="next_use"
-            group="navigation_code"/>
+            group="navigation_use"/>
 
     <Action name="context_outline"
-            group="navigation_code"/>
+            group="navigation_cxt"/>
   </Menu>
 </MenuBar>
 
