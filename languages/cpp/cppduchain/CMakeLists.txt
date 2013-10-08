@@ -32,7 +32,6 @@ set(kdevcppduchain_LIB_SRCS
     cppduchain.cpp
     templateparameterdeclaration.cpp
     qtfunctiondeclaration.cpp
-    qpropertydeclaration.cpp
     cppducontext.cpp
     typeutils.cpp
     templatedeclaration.cpp

@@ -201,6 +201,8 @@ private slots:
   void testBug269352();
   void testRenameClass();
 
+  void testQProperty();
+
   //BEGIN C++2011
   void testRangeBasedFor();
   void testRangeBasedForClass();

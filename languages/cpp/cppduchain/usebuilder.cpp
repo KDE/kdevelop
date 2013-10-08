@@ -116,6 +116,16 @@ void UseBuilder::visitTypeIDOperator(TypeIDOperatorAST* node)
   visitExpression(node);
 }
 
+void UseBuilder::visitQPropertyDeclaration(QPropertyDeclarationAST* node)
+{
+  buildUsesForName(node->getter);
+  buildUsesForName(node->setter);
+  buildUsesForName(node->notifier);
+  buildUsesForName(node->designableMethod);
+  buildUsesForName(node->scriptableMethod);
+  DefaultVisitor::visitQPropertyDeclaration(node);
+}
+
 class UseExpressionVisitor : public Cpp::ExpressionVisitor {
   public:
   UseExpressionVisitor(ParseSession* session, UseBuilder* useBuilder, bool dumpProblems = false, bool mapAst = false)

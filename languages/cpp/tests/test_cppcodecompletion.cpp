@@ -55,7 +55,6 @@
 #include "cppduchain/missingdeclarationassistant.h"
 #include <qstandarditemmodel.h>
 #include <language/duchain/functiondefinition.h>
-#include "qpropertydeclaration.h"
 
 #include <language/codecompletion/codecompletiontesthelper.h>
 #include <language/duchain/persistentsymboltable.h>
@@ -3202,10 +3201,8 @@ void TestCppCodeCompletion::testProperties()
   DUChainWriteLocker lock;
   QVERIFY(top->problems().isEmpty());
   QVector<Declaration*> declarations = top->childContexts().first()->localDeclarations();
-  QCOMPARE(declarations.count(), 3);
-  Cpp::QPropertyDeclaration* property = dynamic_cast<Cpp::QPropertyDeclaration*>(declarations.first());
-  QVERIFY(property);
-  Declaration* getter = declarations.at(1);
+  QCOMPARE(declarations.count(), 2);
+  Declaration* getter = declarations.first();
   QVERIFY(getter->isFunctionDeclaration());
   Declaration* setter = declarations.last();
   QVERIFY(getter->isFunctionDeclaration());
@@ -3218,7 +3215,6 @@ void TestCppCodeCompletion::testProperties()
   QVERIFY(complCtx.completionContext->isValid());
   QCOMPARE(complCtx.completionContext->accessType(), Cpp::CodeCompletionContext::MemberAccess);
   QCOMPARE(complCtx.completionContext->onlyShow(), Cpp::CodeCompletionContext::ShowAll);
-  QVERIFY(!complCtx.containsDeclaration(property));
   QVERIFY(complCtx.containsDeclaration(getter));
   QVERIFY(complCtx.containsDeclaration(setter));
   }
@@ -3227,7 +3223,6 @@ void TestCppCodeCompletion::testProperties()
   QVERIFY(complCtx.completionContext->isValid());
   QCOMPARE(complCtx.completionContext->accessType(), Cpp::CodeCompletionContext::ArrowMemberAccess);
   QCOMPARE(complCtx.completionContext->onlyShow(), Cpp::CodeCompletionContext::ShowAll);
-  QVERIFY(!complCtx.containsDeclaration(property));
   QVERIFY(complCtx.containsDeclaration(getter));
   QVERIFY(complCtx.containsDeclaration(setter));
   }

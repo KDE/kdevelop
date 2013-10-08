@@ -57,7 +57,6 @@
 #include "missingincludemodel.h"
 #include <templateparameterdeclaration.h>
 #include <language/duchain/classdeclaration.h>
-#include "qpropertydeclaration.h"
 #include "model.h"
 #include "helpers.h"
 
@@ -2316,10 +2315,6 @@ bool CodeCompletionContext::filterDeclaration(ClassMemberDeclaration* decl, DUCo
   if(m_doAccessFiltering && decl) {
     if(!Cpp::isAccessible(m_localClass ? m_localClass.data() : m_duContext.data(), decl, m_duContext->topContext(), declarationContext))
       return false;
-  }
-  // filter properties from code completion, they mostly have to be accessed via their getter/setters
-  if (dynamic_cast<QPropertyDeclaration*>(decl)) {
-    return false;
   }
   return filterDeclaration((Declaration*)decl, declarationContext, false);
 }

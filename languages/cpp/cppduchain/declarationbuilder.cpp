@@ -42,7 +42,6 @@
 #include <util/pushvalue.h>
 
 #include "qtfunctiondeclaration.h"
-#include "qpropertydeclaration.h"
 #include "cppeditorintegrator.h"
 #include "name_compiler.h"
 #include <language/duchain/classfunctiondeclaration.h>
@@ -256,27 +255,6 @@ void DeclarationBuilder::visitInitDeclarator(InitDeclaratorAST *node)
   DeclarationBuilderBase::visitInitDeclarator(node);
 }
 
-void DeclarationBuilder::visitQPropertyDeclaration(QPropertyDeclarationAST* node)
-{
-  QPropertyDeclaration *decl = openDeclaration<QPropertyDeclaration>(node->name, node->name);
-  decl->setIsStored(node->stored);
-  decl->setIsUser(node->user);
-  decl->setIsConstant(node->constant);
-  decl->setIsFinal(node->final);
-
-  DeclarationBuilderBase::visitQPropertyDeclaration(node);
-  AbstractType::Ptr type = lastType();
-  closeDeclaration(true);
-
-  if(type) {
-    DUChainWriteLocker lock(DUChain::lock());
-    decl->setAbstractType(type);
-    decl->setAccessPolicy(KDevelop::Declaration::Public);
-  }
-
-  m_pendingPropertyDeclarations.insert(currentContext(), qMakePair(decl, node));
-}
-
 void DeclarationBuilder::handleRangeBasedFor(ExpressionAST* container, ForRangeDeclarationAst* iterator)
 {
   ContextBuilder::handleRangeBasedFor(container, iterator);
@@ -353,57 +331,6 @@ void DeclarationBuilder::handleRangeBasedFor(ExpressionAST* container, ForRangeD
     } else {
       // invalid type
       m_lastDeclaration->setAbstractType(AbstractType::Ptr(0));
-    }
-  }
-}
-
-KDevelop::IndexedDeclaration DeclarationBuilder::resolveMethodName(NameAST *node)
-{
-  QualifiedIdentifier id;
-  identifierForNode(node, id);
-
-  DUChainReadLocker lock(DUChain::lock());
-  if(currentDeclaration() && currentDeclaration()->internalContext()) {
-    const QList<Declaration*> declarations = currentDeclaration()->internalContext()->findDeclarations(id, CursorInRevision::invalid(), AbstractType::Ptr(), 0, DUContext::OnlyFunctions);
-    if(!declarations.isEmpty())
-      return KDevelop::IndexedDeclaration(declarations.first());
-  }
-
-  return KDevelop::IndexedDeclaration();
-}
-
-void DeclarationBuilder::resolvePendingPropertyDeclarations(const QList<PropertyResolvePair> &pairs)
-{
-  foreach(const PropertyResolvePair &pair, pairs) {
-    if(pair.second->getter){
-      const KDevelop::IndexedDeclaration declaration = resolveMethodName(pair.second->getter);
-      if(declaration.isValid())
-        pair.first->setReadMethod(declaration);
-    }
-    if(pair.second->setter){
-      const KDevelop::IndexedDeclaration declaration = resolveMethodName(pair.second->setter);
-      if(declaration.isValid())
-        pair.first->setWriteMethod(declaration);
-    }
-    if(pair.second->resetter){
-      const KDevelop::IndexedDeclaration declaration = resolveMethodName(pair.second->resetter);
-      if(declaration.isValid())
-        pair.first->setResetMethod(declaration);
-    }
-    if(pair.second->notifier){
-      const KDevelop::IndexedDeclaration declaration = resolveMethodName(pair.second->notifier);
-      if(declaration.isValid())
-        pair.first->setNotifyMethod(declaration);
-    }
-    if(pair.second->designableMethod){
-      const KDevelop::IndexedDeclaration declaration = resolveMethodName(pair.second->designableMethod);
-      if(declaration.isValid())
-        pair.first->setDesignableMethod(declaration);
-    }
-    if(pair.second->scriptableMethod){
-      const KDevelop::IndexedDeclaration declaration = resolveMethodName(pair.second->scriptableMethod);
-      if(declaration.isValid())
-        pair.first->setScriptableMethod(declaration);
     }
   }
 }
@@ -1091,16 +1018,6 @@ void DeclarationBuilder::classContextOpened(ClassSpecifierAST* /*node*/, DUConte
   //We need to set this early, so we can do correct search while building
   DUChainWriteLocker lock(DUChain::lock());
   currentDeclaration()->setInternalContext(context);
-}
-
-void DeclarationBuilder::closeContext()
-{
-  if (!m_pendingPropertyDeclarations.isEmpty()) {
-    if(m_pendingPropertyDeclarations.contains(currentContext()))
-      resolvePendingPropertyDeclarations(m_pendingPropertyDeclarations.values(currentContext()));
-  }
-
-  DeclarationBuilderBase::closeContext();
 }
 
 void DeclarationBuilder::visitNamespace(NamespaceAST* ast) {
