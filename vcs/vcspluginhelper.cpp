@@ -263,7 +263,7 @@ void VcsPluginHelper::revertDone(KJob* job)
     QTimer* modificationTimer = new QTimer;
     modificationTimer->setInterval(100);
     connect(modificationTimer, SIGNAL(timeout()), SLOT(delayedModificationWarningOn()));
-    connect(modificationTimer, SIGNAL(timeout()), SLOT(deleteLater()));
+    connect(modificationTimer, SIGNAL(timeout()), modificationTimer, SLOT(deleteLater()));
 
     
     modificationTimer->setProperty("urls", job->property("urls"));
