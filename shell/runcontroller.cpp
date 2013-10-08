@@ -110,7 +110,6 @@ public:
     QHash<KJob*, KAction*> jobs;
     KAction* stopAction;
     KActionMenu* stopJobsMenu;
-    KAction* profileAction;
     KAction* runAction;
     KAction* dbgAction;
     KSelectAction* currentTargetAction;
@@ -440,12 +439,13 @@ void RunController::setupActions()
     connect(d->dbgAction, SIGNAL(triggered(bool)), this, SLOT(slotDebug()));
     Core::self()->uiControllerInternal()->area(0, "code")->addAction(d->dbgAction);
 
-    d->profileAction = new KAction( KIcon(""), i18n("Profile Launch"), this);
-    d->profileAction->setToolTip(i18nc("@info:tooltip", "Profile current launch"));
-    d->profileAction->setStatusTip(i18n("Profile current launch"));
-    d->profileAction->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in currently active launch configuration inside a Profiler."));
-    ac->addAction("run_profile", d->profileAction);
-    connect(d->profileAction, SIGNAL(triggered(bool)), this, SLOT(slotProfile()));
+//     TODO: at least get a profile target, it's sad to have the menu entry without a profiler
+//     KAction* profileAction = new KAction( KIcon(""), i18n("Profile Launch"), this);
+//     profileAction->setToolTip(i18nc("@info:tooltip", "Profile current launch"));
+//     profileAction->setStatusTip(i18n("Profile current launch"));
+//     profileAction->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in currently active launch configuration inside a Profiler."));
+//     ac->addAction("run_profile", profileAction);
+//     connect(profileAction, SIGNAL(triggered(bool)), this, SLOT(slotProfile()));
 
     action = d->stopAction = new KAction( KIcon("process-stop"), i18n("Stop All Jobs"), this);
     action->setIconText(i18nc("Short text for 'Stop All Jobs' used in the toolbar", "Stop All"));
