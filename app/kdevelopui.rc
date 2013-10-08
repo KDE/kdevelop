@@ -58,6 +58,14 @@
     <Separator />
     <DefineGroup name="navigation_code"/>
     <Separator />
+    <DefineGroup name="navigation_fxn"/>
+    <Separator />
+    <DefineGroup name="navigation_jmp"/>
+    <Separator />
+    <DefineGroup name="navigation_use"/>
+    <Separator />
+    <DefineGroup name="navigation_cxt"/>
+    <Separator />
     <Merge />
   </Menu>
 
