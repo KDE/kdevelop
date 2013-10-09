@@ -359,7 +359,11 @@ void TestCppCodeCompletion::testInvalidContexts()
 
 void TestCppCodeCompletion::testMemberAccess()
 {
-  QByteArray method = "template<class T1, class T2> class T { public: T1 ta(); class U { public: class V{ };  }; }; class X { public: X(){}; int a(int a, T<int,int> b); int b;}; T<int,int> t; X* getX() { }";
+  QByteArray method = "template<class T1, class T2> class T { public: T1 ta(); class U { public: class V{ };  }; };"
+                      "class X { public: X(){}; int a(int a, T<int,int> b); int b;};"
+                      "T<int,int> t;"
+                      "X* getX() { }"
+                      "class Z { public: Z() = delete; static int a(int b); };";
   TopDUContext* top = parse(method, DumpNone);
   int ctxt = 4;
   DUChainWriteLocker lock(DUChain::lock());
@@ -381,6 +385,9 @@ void TestCppCodeCompletion::testMemberAccess()
   CompletionItemTester testColons2(top->childContexts()[ctxt], "T::U::");
   QCOMPARE(testColons2.names, QStringList() << "V");
   QCOMPARE(testColons2.completionContext->accessType(), Cpp::CodeCompletionContext::StaticMemberChoose);
+  CompletionItemTester testDeleted(top->childContexts()[ctxt], "Z::");
+  QCOMPARE(testDeleted.names, QStringList() << "a");
+  QCOMPARE(testDeleted.completionContext->accessType(), Cpp::CodeCompletionContext::StaticMemberChoose);
   release(top);
 }
 
