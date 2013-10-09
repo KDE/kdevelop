@@ -3101,6 +3101,8 @@ void TestCppCodeCompletion::testArgumentList()
   codeToArgList.insert("void foo(int arg[][1]){}", "(int arg[][1])");
   codeToArgList.insert("void foo(int arg[1][1]){}", "(int arg[1][1])");
   codeToArgList.insert("void foo(int arg[][1][1]){}", "(int arg[][1][1])");
+  codeToArgList.insert("void foo(void){}", "(void)");
+  codeToArgList.insert("void foo(int){}", "(int)");
   QMap< QByteArray, QString >::const_iterator it = codeToArgList.constBegin();
   while (it != codeToArgList.constEnd()){
     qDebug() << "input function is:" << it.key();

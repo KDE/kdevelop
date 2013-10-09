@@ -166,7 +166,10 @@ void createArgumentList(const NormalDeclarationCompletionItem& item, QString& re
           ret += Cpp::shortenedTypeString(type, ctx, 1000000);
         }else
           ret += Cpp::shortenedTypeString(type, ctx, desiredArgumentTypeLength, item.stripPrefix());
-        ret += " " + (*paramNameIt)->identifier().toString();
+        const QString ident = (*paramNameIt)->identifier().toString();
+        if (!ident.isEmpty()) {
+          ret += " " + ident;
+        }
         ret += arrayAppendix;
       } else if (argument)
         ret += argument->toString();
