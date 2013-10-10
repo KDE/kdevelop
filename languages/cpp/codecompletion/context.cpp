@@ -2236,6 +2236,10 @@ bool  CodeCompletionContext::filterDeclaration(Declaration* decl, DUContext* dec
   if(!decl)
     return true;
 
+  if (decl->isExplicitlyDeleted()) {
+    return false;
+  }
+
   if(dynamic_cast<TemplateParameterDeclaration*>(decl) && !visibleFromWithin(decl, m_duContext.data()))
     return false;
   
