@@ -443,8 +443,9 @@ CMakeProjectVisitor::VisitorState CMakeProjectVisitor::stackTop() const
     return p;
 }
 
-void CMakeProjectVisitor::defineTarget(const QString& id, const QStringList& sources, Target::Type t)
+void CMakeProjectVisitor::defineTarget(const QString& _id, const QStringList& sources, Target::Type t)
 {
+    QString id = _id.isEmpty() ? "<wrong-target>" : _id;
     kDebug(9042) << "Defining target" << id;
     if (m_targetForId.contains(id))
         kDebug(9032) << "warning! there already was a target called" << id;
@@ -484,12 +485,12 @@ void CMakeProjectVisitor::defineTarget(const QString& id, const QStringList& sou
     }
     
     Target target;
-    target.name=id.isEmpty() ? "<wrong-target>" : id;
+    target.name=id;
     target.declaration=IndexedDeclaration(d);
     target.files=sources;
     target.type=t;
     target.desc=p.code->at(p.line);
-    m_targetForId[id]=target;
+    m_targetForId[target.name]=target;
     
     targetProps["OUTPUT_NAME"] = QStringList(exe);
     targetProps["LOCATION"] = QStringList(locationDir+'/'+exe);

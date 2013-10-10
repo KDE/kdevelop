@@ -256,3 +256,8 @@ void CMakeManagerTest::testConditionsInSubdirectoryBasedOnRootVariables()
     QList< ProjectBaseItem* > subdirectoryFooItems = project->itemsForUrl(subdirectoryFooCpp);
     QCOMPARE(subdirectoryFooItems.size(), 4); // three items for the targets, one item for the plain file
 }
+
+void CMakeManagerTest::testFaultyTarget()
+{
+    loadProject("faulty_target");
+}
