@@ -126,6 +126,8 @@ private slots:
   void testTemplateFunction();
   void testImportTypedef();
   void testConstructorCompletion();
+  void testConstructorUsageCompletion_data();
+  void testConstructorUsageCompletion();
   void testAssistant();
   void testCompletionInExternalClassDefinition();
   void testCompletionBehindTypedeffedConstructor();

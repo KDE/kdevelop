@@ -241,7 +241,10 @@ QList< ViableFunction > OverloadResolver::resolveListOffsetted( const ParameterL
     Declaration* decl = applyImplicitTemplateParameters( mergedParams, it.key() );
     if ( !decl )
       continue;
-    
+
+    if (decl->isExplicitlyDeleted())
+      continue;
+
     ViableFunction viable( m_topContext.data(), decl, m_constness );
     viable.matchParameters( mergedParams, partial );
 
