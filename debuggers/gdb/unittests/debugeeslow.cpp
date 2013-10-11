@@ -26,7 +26,8 @@ void foo() {
     std::cout << i << std::endl;
     sleep(2);
 }
-int main(int argc, char **argv) {
+
+int main() {
     std::cout << "Hello, world!" << std::endl;
     for (int i=0; i<3; i++) {
         foo();
