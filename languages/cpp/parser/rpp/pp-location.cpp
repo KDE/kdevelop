@@ -38,8 +38,12 @@ LocationTable::LocationTable()
   anchor(0, Anchor(0,0), 0);
 }
 
+namespace {
+static const std::size_t EMPTY_CACHE = -1;
+}
+
 LocationTable::LocationTable(const PreprocessedContents& contents)
-  : m_positionAtLastOffset(-1)
+  : m_positionAtLastOffset(EMPTY_CACHE)
 {
   anchor(0, Anchor(0,0), 0);
 
@@ -55,9 +59,8 @@ QPair<rpp::Anchor, uint> LocationTable::positionAt(std::size_t offset, const Pre
 {
   AnchorInTable ret = anchorForOffset(offset, collapseIfMacroExpansion);
 
-  // NOTE: when m_positionAtLastOffset == -1 we have not used the cache yet
-  // and all the members of m_lastAnchorInTable will be uninitialized.
-  if (m_positionAtLastOffset != -1 && m_lastAnchorInTable == ret && offset >= m_positionAtLastOffset) {
+  // NOTE: when the cache is empty all the members of m_lastAnchorInTable will be uninitialized.
+  if (m_positionAtLastOffset != EMPTY_CACHE && m_lastAnchorInTable == ret && offset >= m_positionAtLastOffset) {
     // use cached position
     ret.anchor.column = m_positionAtColumnCache;
 

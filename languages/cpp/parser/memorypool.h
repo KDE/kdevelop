@@ -144,7 +144,7 @@ private:
   int m_currentBlock;
   size_t m_currentIndex;
 
-  friend class MemoryPoolCache;
+  friend struct MemoryPoolCache;
 };
 
 #endif // RXX_ALLOCATOR_H
