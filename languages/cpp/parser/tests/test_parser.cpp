@@ -474,7 +474,6 @@ void TestParser::testComments6() {
 void TestParser::testComments7()
 {
   QByteArray module("//TranslationUnitComment\n\n//Foo\\\nbar\nint i;\n");
-  qDebug() << module;
   TranslationUnitAST* ast = parse(module);
   const ListNode<DeclarationAST*>* it = ast->declarations;
   QVERIFY(control.problems().isEmpty());
@@ -482,6 +481,22 @@ void TestParser::testComments7()
   it = it->next;
   QVERIFY(it);
   QCOMPARE(QString::fromUtf8(CommentFormatter().formatComment(it->element->comments, lastSession)), QString("Foo bar"));
+}
+
+void TestParser::testEscapedNewline_data()
+{
+  QTest::addColumn<QByteArray>("module");
+  QTest::newRow("simple") << QByteArray("\\\nint i;\n");
+  QTest::newRow("after-decl") << QByteArray("int a;\\\nint b;\n");
+  QTest::newRow("after-decl-white") << QByteArray("int a; \\\nint b;\n");
+  QTest::newRow("member-initializer") << QByteArray("struct s {\n  int a, b;\n  s():\\\n    a(0),\\\n    b(0)\n  {}\n};\n");
+}
+
+void TestParser::testEscapedNewline()
+{
+  QFETCH(QByteArray, module);
+  TranslationUnitAST* ast = parse(module);
+  QVERIFY(control.problems().isEmpty());
 }
 
 void TestParser::testPreprocessor() {
