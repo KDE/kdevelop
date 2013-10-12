@@ -16,8 +16,9 @@ struct CMakeProjectData
     CMakeProperties properties;
     CacheValues cache;
     QStringList modulePath;
+    QHash<QString,QString> targetAlias;
     
-    void clear() { vm.clear(); mm.clear(); properties.clear();  cache.clear(); }
+    void clear() { vm.clear(); mm.clear(); properties.clear(); cache.clear(); targetAlias.clear(); }
 };
 
 #endif

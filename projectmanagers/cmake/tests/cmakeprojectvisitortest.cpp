@@ -509,6 +509,15 @@ void CMakeProjectVisitorTest::testRun_data()
     QTest::newRow("reducedemptyvars") <<
                             "string(REPLACE ${A} ${B} X ${A})\n"
                             << cacheValues << results;
+
+    results.clear();
+    results << StringPair("result", "hello");
+    QTest::newRow("library alias") <<
+                            "add_library(mylib file.cpp)\n"
+                            "add_library(My::Lib ALIAS mylib)\n"
+                            "set_target_properties(mylib PROPERTIES fu hello)\n"
+                            "get_target_property(result My::Lib fu)\n"
+                            << cacheValues << results;
 }
 
 void CMakeProjectVisitorTest::testRun()

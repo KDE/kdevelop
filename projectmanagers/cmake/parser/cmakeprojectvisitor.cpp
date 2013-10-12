@@ -336,8 +336,9 @@ int CMakeProjectVisitor::visit(const ProjectAst *project)
 int CMakeProjectVisitor::visit( const SetTargetPropsAst * targetProps)
 {
     kDebug(9042) << "setting target props for " << targetProps->targets() << targetProps->properties();
-    foreach(const QString& tname, targetProps->targets())
+    foreach(const QString& _tname, targetProps->targets())
     {
+        QString tname = m_targetAlias.value(_tname, _tname);
         foreach(const SetTargetPropsAst::PropPair& t, targetProps->properties())
         {
             m_props[TargetProperty][tname][t.first] = t.second.split(';');
@@ -360,11 +361,12 @@ int CMakeProjectVisitor::visit( const SetDirectoryPropsAst * dirProps)
 
 int CMakeProjectVisitor::visit( const GetTargetPropAst * prop)
 {
-    kDebug(9042) << "getting target " << prop->target() << " prop " << prop->property() << prop->variableName();
+    QString targetName = prop->target();
+    kDebug(9042) << "getting target " << targetName << " prop " << prop->property() << prop->variableName();
     QStringList value;
     
     CategoryType& category = m_props[TargetProperty];
-    CategoryType::iterator itTarget = category.find(prop->target());
+    CategoryType::iterator itTarget = category.find(m_targetAlias.value(targetName, targetName));
     if(itTarget!=category.end()) {
         QMap<QString, QStringList>& targetProps = itTarget.value();
         if(!targetProps.contains(prop->property())) {
@@ -509,7 +511,9 @@ int CMakeProjectVisitor::visit(const AddExecutableAst *exec)
 
 int CMakeProjectVisitor::visit(const AddLibraryAst *lib)
 {
-    if(!lib->isImported())
+    if(lib->isAlias())
+        m_targetAlias[lib->libraryName()] = lib->aliasTarget();
+    else if(!lib->isImported())
         defineTarget(lib->libraryName(), lib->sourceLists(), Target::Library);
     kDebug(9042) << "lib:" << lib->libraryName();
     return 1;
@@ -1122,7 +1126,7 @@ int CMakeProjectVisitor::visit(const TargetLinkLibrariesAst *tll)
 int CMakeProjectVisitor::visit(const TargetIncludeDirectoriesAst* tid)
 {
     CategoryType& targetProps = m_props[TargetProperty];
-    CategoryType::iterator it = targetProps.find(tid->target());
+    CategoryType::iterator it = targetProps.find(m_targetAlias.value(tid->target(), tid->target()));
     //TODO: we can add a problem if the target is not found
     if(it != targetProps.end()) {
         QStringList includes;

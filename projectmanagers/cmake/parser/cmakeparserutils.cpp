@@ -195,6 +195,7 @@ namespace CMakeParserUtils
         data->targets=v.targets();
         data->properties=v.properties();
         data->testSuites=v.testSuites();
+        data->targetAlias=v.targetAlias();
         
         //printSubdirectories(data->subdirectories);
         

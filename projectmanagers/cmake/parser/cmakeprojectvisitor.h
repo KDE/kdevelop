@@ -142,6 +142,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         
         QStringList variableValue(const QString& var) const;
         void setProperties(const CMakeProperties& properties) { m_props = properties; }
+        QHash<QString, QString> targetAlias() { return m_targetAlias; }
         
     protected:
         struct IntPair
@@ -203,6 +204,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         bool m_hitBreak;
         bool m_hitReturn;
         QMap<QString, QString> m_environmentProfile;
+        QHash<QString, QString> m_targetAlias;
 
         QVector<Test> m_testSuites;
 };

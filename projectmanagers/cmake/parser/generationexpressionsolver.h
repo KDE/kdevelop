@@ -27,8 +27,8 @@
 class KDEVCMAKECOMMON_EXPORT GenerationExpressionSolver
 {
     public:
-        GenerationExpressionSolver(const CMakeProperties& properties);
-        void setTargetName(const QString& name) { m_name = name; }
+        GenerationExpressionSolver(const CMakeProperties& properties, const QHash<QString, QString>& alias);
+        void setTargetName(const QString& name);
 
         void defineVariable(const QString& key, const QString& value);
         QString run(const QString& op);
@@ -40,6 +40,7 @@ class KDEVCMAKECOMMON_EXPORT GenerationExpressionSolver
         static QHash<QString, QString> s_vars;
         static QSet<QString> s_neededValues;
         QHash<QString, QString> m_values;
+        const QHash<QString, QString> m_alias;
         const CMakeProperties m_props;
         QString m_name;
 };
