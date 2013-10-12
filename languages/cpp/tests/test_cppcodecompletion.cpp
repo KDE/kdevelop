@@ -1030,6 +1030,72 @@ void TestCppCodeCompletion::testConstructorCompletion() {
   }
 }
 
+void TestCppCodeCompletion::testConstructorUsageCompletion_data()
+{
+  QTest::addColumn<QString>("code");        // existing source code
+  QTest::addColumn<QStringList>("args");        // completion arguments
+  QTest::addColumn<QStringList>("not_args");    // forbidden completion arguments
+
+  // only the default constructor is present
+  QTest::newRow("only default")
+    << "class A { A(); };"
+    << (QStringList() << "()")
+    << QStringList();
+  // the default constructor and one overload
+  QTest::newRow("Default and int")
+    << "class A { A(); A(int); };"
+    << (QStringList() << "()" << "(int)")
+    << QStringList();
+  // the default constructor and two overloads
+  QTest::newRow("Default, int and float")
+    << "class A { A(); A(int); A(float); };"
+    << (QStringList() << "()" << "(int)" << "(float)")
+    << QStringList();
+  // deleted default constructor and two overloads
+  QTest::newRow("no default, int and float")
+    << "class A { A() = delete; A(int); A(float); };"
+    << (QStringList() << "(int)" << "(float)")
+    << (QStringList() << "()");
+  // the default and copy constructors are present
+  QTest::newRow("default and copy")
+    << "class A { A(); A(const A&); };"
+    << (QStringList() << "()" << "(const A&)")
+    << QStringList();
+  // the default and copy constructors are deleted
+  QTest::newRow("default and copy")
+    << "class A { A() = delete; A(const A&) = delete; };"
+    << QStringList()
+    << (QStringList() << "()" << "(const A&)");
+  // the default and copy constructors are deleted, but another one is present
+  QTest::newRow("default and copy")
+    << "class A { A() = delete; A(const A&) = delete; A(int); };"
+    << (QStringList() << "(int)")
+    << (QStringList() << "()" << "(const A&)");
+}
+
+void TestCppCodeCompletion::testConstructorUsageCompletion()
+{
+  QFETCH(QString, code);
+  QFETCH(QStringList, args);
+  QFETCH(QStringList, not_args);
+
+  TopDUContext* context = parse( code.toAscii(), DumpNone /*DumpDUChain | DumpAST */);
+  DUChainWriteLocker lock(DUChain::lock());
+
+  CompletionItemTester tester(context, "void k() { A *a = new A(");
+
+  QStringList foundargs;
+  for (int i = 0; i < tester.items.count(); i++)
+    foundargs << tester.itemData(i, KTextEditor::CodeCompletionModel::Arguments).toString();
+  qDebug() << foundargs << args << not_args;
+  foreach(const QString &arg, args)
+    QVERIFY(foundargs.contains(arg));
+  foreach(const QString &arg, not_args)
+    QVERIFY(!foundargs.contains(arg));
+
+  release(context);
+}
+
 void TestCppCodeCompletion::testParentConstructor_data()
 {
   QTest::addColumn<QString>("code");        // existing source code

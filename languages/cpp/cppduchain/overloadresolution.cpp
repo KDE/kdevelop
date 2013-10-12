@@ -247,8 +247,10 @@ QList< ViableFunction > OverloadResolver::resolveListOffsetted( const ParameterL
     ifDebugOverloadResolution(qDebug() << it.key()->toString() << decl; )
     if ( !decl )
       continue;
-    
-    ifDebugOverloadResolution(qDebug() << decl->toString(); )
+
+    if (decl->isExplicitlyDeleted())
+      continue;
+
     ViableFunction viable( m_topContext.data(), decl, m_constness );
     viable.matchParameters( mergedParams, partial );
 
