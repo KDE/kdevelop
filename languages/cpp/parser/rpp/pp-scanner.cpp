@@ -110,15 +110,18 @@ void pp_skip_comment_or_divop::operator()(Stream& input, Stream& output, bool ou
         return;
     }
 
-    if (outputText) {
+    if (input == '\\' && input.peek() == indexFromCharacter('\n')) {
+      ++input;
+      ++input;
+      output << ' ';
+      output.mark(input.inputPosition());
+    } else if (outputText) {
       output << input;
       ++input;
-
     } else if (input == '\n') {
       output << '\n';
       ++input;
       output.mark(input.inputPosition());
-
     } else {
       output << ' ';
       ++input;

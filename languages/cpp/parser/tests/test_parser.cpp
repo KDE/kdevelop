@@ -471,6 +471,19 @@ void TestParser::testComments6() {
   QCOMPARE(CommentFormatter().formatComment(it->element->comments, lastSession), QByteArray("foo"));
 }
 
+void TestParser::testComments7()
+{
+  QByteArray module("//TranslationUnitComment\n\n//Foo\\\nbar\nint i;\n");
+  qDebug() << module;
+  TranslationUnitAST* ast = parse(module);
+  const ListNode<DeclarationAST*>* it = ast->declarations;
+  QVERIFY(control.problems().isEmpty());
+  QVERIFY(it);
+  it = it->next;
+  QVERIFY(it);
+  QCOMPARE(QString::fromUtf8(CommentFormatter().formatComment(it->element->comments, lastSession)), QString("Foo bar"));
+}
+
 void TestParser::testPreprocessor() {
   QCOMPARE(preprocess("#define TEST (1L<<10)\nTEST").trimmed(), QString("(1L<<10)"));
   QCOMPARE(preprocess("#define SELF OTHER\n#define OTHER SELF\nSELF").trimmed(), QString("SELF"));
@@ -991,7 +1004,10 @@ TranslationUnitAST* TestParser::parse(const QByteArray& unit)
   control = Control(); // Clear the problems
   Parser parser(&control);
   lastSession = new ParseSession();
-  lastSession->setContentsAndGenerateLocationTable(tokenizeFromByteArray(unit));
+
+  rpp::Preprocessor preprocessor;
+  rpp::pp pp(&preprocessor);
+  lastSession->setContentsAndGenerateLocationTable(pp.processFile("anonymous", unit));
   return  parser.parse(lastSession);
 }
 
