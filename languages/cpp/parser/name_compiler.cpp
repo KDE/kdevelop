@@ -62,8 +62,11 @@ IndexedTypeIdentifier typeIdentifierFromTemplateArgument(ParseSession* session, 
     id = IndexedTypeIdentifier(tc.identifier());
     //node->type_id->type_specifier->cv
     
-    if(node->type_id->type_specifier)
-      id.setIsConstant(parseConstVolatile(session, node->type_id->type_specifier->cv) & AbstractType::ConstModifier);
+    if(node->type_id->type_specifier) {
+      uint cv = parseConstVolatile(session, node->type_id->type_specifier->cv);
+      id.setIsConstant(cv & AbstractType::ConstModifier);
+      id.setIsVolatile(cv & AbstractType::VolatileModifier);
+    }
     
     if(node->type_id->declarator && node->type_id->declarator->ptr_ops)
     {

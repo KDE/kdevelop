@@ -24,6 +24,64 @@
 using namespace Cpp;
 using namespace KDevelop;
 
+static bool isConstBased(const AbstractType::Ptr& type)
+{
+  if (type->modifiers() & AbstractType::ConstModifier)
+    return true;
+  if (ArrayType::Ptr arrayType = type.cast<ArrayType>())
+    return arrayType->elementType() ? isConstBased(arrayType->elementType()) : false;
+  if (PointerType::Ptr ptrType = type.cast<PointerType>())
+    return ptrType->baseType() ? isConstBased(ptrType->baseType()) : false;
+  return false;
+}
+
+static bool isConstBased(const IndexedTypeIdentifier& type)
+{
+  return type.isConstant();
+}
+
+static bool isVolatileBased(const AbstractType::Ptr& type)
+{
+  if (type->modifiers() & AbstractType::VolatileModifier)
+    return true;
+  if (ArrayType::Ptr arrayType = type.cast<ArrayType>())
+    return arrayType->elementType() ? isVolatileBased(arrayType->elementType()) : false;
+  if (PointerType::Ptr ptrType = type.cast<PointerType>())
+    return ptrType->baseType() ? isVolatileBased(ptrType->baseType()) : false;
+  return false;
+}
+
+static bool isVolatileBased(const IndexedTypeIdentifier& type)
+{
+  return type.isVolatile();
+}
+
+template<typename A, typename B, typename C>
+static bool matchCV(const A& parameterType, const B& argumentType, C* res)
+{
+  if (isConstBased(parameterType))
+  {
+    if (!argumentType.template cast<PointerType>() && isConstBased(argumentType))
+      res->constMatch = true;
+    else
+    {
+      res->valid = false;
+      return false; //Invalid, param is const and arg is either non-const or has a different ptr-depth
+    }
+  }
+  if (isVolatileBased(parameterType))
+  {
+    if (!argumentType.template cast<PointerType>() && isVolatileBased(argumentType))
+      res->volatileMatch = true;
+    else
+    {
+      res->valid = false;
+      return false; //Invalid, param is volatile and arg is either non-volatile or has a different ptr-depth
+    }
+  }
+  return true;
+}
+
 TemplateResolver::TemplateResolver(const TopDUContext* topContext)
 :m_topContext(topContext) { }
 
@@ -37,17 +95,6 @@ uint TemplateResolver::matchTemplateParameterTypes( const AbstractType::Ptr& arg
   TemplateMatchType matchResult;
   matchTemplateParameterTypesInternal(argumentType, parameterType, instantiatedTypes, matchResult);
   return matchResult.toUint();
-}
-
-bool isConstBased(AbstractType::Ptr type)
-{
-  if (type->modifiers() & AbstractType::ConstModifier)
-    return true;
-  if (ArrayType::Ptr arrayType = type.cast<ArrayType>())
-    return arrayType->elementType() ? isConstBased(arrayType->elementType()) : false;
-  if (PointerType::Ptr ptrType = type.cast<PointerType>())
-    return ptrType->baseType() ? isConstBased(ptrType->baseType()) : false;
-  return false;
 }
 
 bool TemplateResolver::templateHandleConstIntegralType(const AbstractType::Ptr& argumentType, const AbstractType::Ptr& parameterType, TemplateMatchType& res) const
@@ -84,18 +131,7 @@ bool TemplateResolver::templateHandleDelayedType ( const AbstractType::Ptr& argu
   //Delayed id should never have pointer depth, or it would be a pointerType and not a delayedType
   //If it's possible somehow for it to be both, it's not correctly handled here
   Q_ASSERT(!paramDelayedId.pointerDepth());
-  if ( paramDelayedId.isConstant() )
-  {
-    if ( isConstBased(argumentType) && !argumentType.cast<PointerType>() )
-      res.constMatch = true;
-    else
-    {
-      //Case 1: Parameter is const, argument is not, no match
-      //Case 2: Argument is a "const type" with at least one pointer depth,
-      //  parameter type is a "const type" with no further pointer depth, no match
-      res.valid = false;
-    }
-  }
+  matchCV(paramDelayedId, argumentType, &res);
   ///TODO: the code only uses the last identifier and used to verify that
   ///      only one Identifier is actually contained in the QualifiedIdentifier
   ///      in the paramDelayedId
@@ -177,9 +213,14 @@ bool TemplateResolver::templateHandleArrayType(const AbstractType::Ptr& argument
 {
   ArrayType::Ptr argumentArray = argumentType.cast<ArrayType>();
   ArrayType::Ptr parameterArray = parameterType.cast<ArrayType>();
-  if ( argumentArray && parameterArray && (( argumentArray->modifiers() & AbstractType::ConstModifier ) == ( parameterArray->modifiers() & AbstractType::ConstModifier ) ) ) {
+  if ( argumentArray && parameterArray
+      && ( argumentArray->modifiers() & (AbstractType::VolatileModifier | AbstractType::ConstModifier ) )
+          == ( parameterArray->modifiers() & (AbstractType::VolatileModifier | AbstractType::ConstModifier ) ) )
+    {
     if ( argumentArray->modifiers() & AbstractType::ConstModifier )
       res.constMatch = true;
+    if ( argumentArray->modifiers() & AbstractType::VolatileModifier )
+      res.volatileMatch = true;
     res.arrayMatch = true;
     matchTemplateParameterTypesInternal( argumentArray->elementType(), parameterArray->elementType(), instantiatedTypes, res );
     return true;
@@ -280,15 +321,8 @@ void TemplateResolver::matchTemplateParameterTypesInternal ( const AbstractType:
   if (templateHandleArrayType(argumentType, parameterType, instantiatedTypes, res))
     return;
 
-  if (isConstBased(parameterType))
-  {
-    if (!argumentType.cast<PointerType>() && isConstBased(argumentType))
-      res.constMatch = true;
-    else
-    {
-      res.valid = false;
-      return; //Invalid, param is const and arg is either non-const or has a different ptr-depth
-    }
+  if (!matchCV(parameterType, argumentType, &res)) {
+    return;
   }
 
   if ( CppTemplateParameterType::Ptr templateParam = parameterType.cast<CppTemplateParameterType>() )

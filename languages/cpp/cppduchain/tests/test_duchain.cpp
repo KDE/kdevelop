@@ -4955,6 +4955,8 @@ void TestDUChain::testSpecializationSelection()
 {
   QByteArray method("template<class T1> struct Foo { void normal() {} };\n"
                     "template<class T1> struct Foo<const T1> { void typeIsConst() {} };\n"
+                    "template<class T1> struct Foo<volatile T1> { void typeIsVolatile() {} };\n"
+                    "template<class T1> struct Foo<const volatile T1> { void typeIsConstVolatile() {} };\n"
                     "template<class T1> struct Foo<T1*> { void typeIsPtr() {} };\n"
                     "template<class T1> struct Foo<T1**> { void typeIsPtrPtr() {} };\n"
                     "template<class T1> struct Foo<const T1*> { void typeIsConstPtr() {} };\n"
@@ -4968,6 +4970,8 @@ void TestDUChain::testSpecializationSelection()
   LockedTopDUContext top = parse(method, DumpNone);
   QVERIFY(findDeclaration(top, QualifiedIdentifier("Foo<int>::normal")));
   QVERIFY(findDeclaration(top, QualifiedIdentifier("Foo<const int>::typeIsConst")));
+  QVERIFY(findDeclaration(top, QualifiedIdentifier("Foo<volatile int>::typeIsVolatile")));
+  QVERIFY(findDeclaration(top, QualifiedIdentifier("Foo<const volatile int>::typeIsConstVolatile")));
   QVERIFY(findDeclaration(top, QualifiedIdentifier("Foo<int*>::typeIsPtr")));
   QVERIFY(findDeclaration(top, QualifiedIdentifier("Foo<const int*>::typeIsConstPtr")));
   QVERIFY(findDeclaration(top, QualifiedIdentifier("Foo<int&&>::typeIsRValue")));

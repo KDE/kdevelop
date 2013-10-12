@@ -120,6 +120,8 @@ uint buildIdentifierForType(AbstractType::Ptr type, IndexedTypeIdentifier& id, u
   }
   if(type->modifiers() & AbstractType::ConstModifier)
     id.setIsConstant(true);
+  if(type->modifiers() & AbstractType::VolatileModifier)
+    id.setIsVolatile(true);
   return pointerLevel;
 }
 

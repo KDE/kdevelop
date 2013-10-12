@@ -678,6 +678,86 @@ void TestDUChain::testLambdaCapture()
   QCOMPARE(funType->returnType().cast<IntegralType>()->dataType(), (uint) IntegralType::TypeVoid);
 }
 
+void TestDUChain::testTemplateSpecializeVolatile()
+{
+  // see also: https://bugs.kde.org/show_bug.cgi?id=321885
+  const QByteArray code(
+    "template<typename _Tp>\n"
+    "struct numeric_limits { };\n"
+    "\n"
+    "template<typename _Tp>\n"
+    "  struct numeric_limits<const _Tp>\n"
+    "  : public numeric_limits<_Tp> { };\n"
+    "\n"
+    "template<typename _Tp>\n"
+    "  struct numeric_limits<volatile _Tp>\n"
+    "  : public numeric_limits<_Tp> { };\n"
+    "\n"
+    "template<typename _Tp>\n"
+    "  struct numeric_limits<const volatile _Tp>\n"
+    "  : public numeric_limits<_Tp> { };\n"
+    "\n"
+    "template<>\n"
+    "struct numeric_limits<double>\n"
+    "{\n"
+    "  static double epsilon();\n"
+    "};\n"
+    "\n"
+    "int main() {\n"
+    "  numeric_limits< double > a;\n"
+    "  a.epsilon();\n"
+    "  numeric_limits< const double > b;\n"
+    "  b.epsilon();\n"
+    "  numeric_limits< volatile double > c;\n"
+    "  c.epsilon();\n"
+    "  numeric_limits< const volatile double > d;\n"
+    "  d.epsilon();\n"
+    "}\n"
+  );
+  LockedTopDUContext top = parse(code, DumpAll);
+  QVERIFY(top);
+  DUChainReadLocker lock;
+  QVERIFY(top->problems().isEmpty());
+
+  QCOMPARE(top->localDeclarations().size(), 6);
+
+  TemplateDeclaration* tplDec = dynamic_cast<TemplateDeclaration*>(top->localDeclarations().at(0));
+  QVERIFY(tplDec);
+  QCOMPARE(tplDec->specializationsSize(), 4u);
+  QCOMPARE(tplDec->instantiations().size(), 7);
+
+  int declIdx = 1;
+  foreach(const QString id, QStringList() << "const _Tp" << "volatile _Tp" << "const volatile _Tp") {
+    Declaration* specRaw = top->localDeclarations().at(declIdx++);
+    TemplateDeclaration* spec = dynamic_cast<TemplateDeclaration*>(specRaw);
+    QVERIFY(spec);
+    QVERIFY(spec->specializedFrom().isValid());
+    QVERIFY(spec->specializedWith().isValid());
+    InstantiationInformation info = spec->specializedWith().information();
+    QCOMPARE(info.templateParametersSize(), 1u);
+    QVERIFY(info.templateParameters()[0].isValid());
+    AbstractType::Ptr specParam = info.templateParameters()[0].abstractType();
+    QVERIFY(specParam);
+    QCOMPARE(specParam->toString(), id);
+  }
+
+  QCOMPARE(top->childContexts().last()->localDeclarations().size(), 4);
+  QCOMPARE(top->childContexts().last()->localDeclarations().at(0)->abstractType()->toString(),
+           QString("numeric_limits< double >"));
+  QVERIFY(top->childContexts().last()->findUseAt(CursorInRevision(23, 6)) != -1);
+  QEXPECT_FAIL("", "Delegation of the const/volatile to the non-const/volatile does not work", Abort);
+  QCOMPARE(top->childContexts().last()->localDeclarations().at(1)->abstractType()->toString(),
+           QString("numeric_limits< const double >"));
+  QCOMPARE(top->childContexts().last()->localDeclarations().at(2)->abstractType()->toString(),
+           QString("numeric_limits< volatile double >"));
+  QCOMPARE(top->childContexts().last()->localDeclarations().at(3)->abstractType()->toString(),
+           QString("numeric_limits< const volatile double >"));
+  // should all work
+  QVERIFY(top->childContexts().last()->findUseAt(CursorInRevision(25, 6)) != -1);
+  QVERIFY(top->childContexts().last()->findUseAt(CursorInRevision(27, 6)) != -1);
+  QVERIFY(top->childContexts().last()->findUseAt(CursorInRevision(29, 6)) != -1);
+}
+
 void TestDUChain::testTemplateSpecializeArray()
 {
   // see also: https://bugs.kde.org/show_bug.cgi?id=294306

@@ -78,8 +78,11 @@ namespace Cpp {
 AbstractType::Ptr applyPointerReference( AbstractType::Ptr ptr, const KDevelop::IndexedTypeIdentifier& id ) {
   AbstractType::Ptr ret = ptr;
 
-  if(ret && static_cast<bool>(ret->modifiers() & AbstractType::ConstModifier) != id.isConstant())
-    ret->setModifiers(id.isConstant() ? AbstractType::ConstModifier : AbstractType::NoModifiers);
+  if(ret && ((static_cast<bool>(ret->modifiers() & AbstractType::ConstModifier) != id.isConstant())
+         || (static_cast<bool>(ret->modifiers() & AbstractType::VolatileModifier) != id.isVolatile()))) {
+    ret->setModifiers((id.isConstant() ? AbstractType::ConstModifier : AbstractType::NoModifiers)
+                    | (id.isVolatile() ? AbstractType::VolatileModifier : AbstractType::NoModifiers));
+  }
 
   for( int a = 0; a < id.pointerDepth(); ++a ) {
     uint modifiers = AbstractType::NoModifiers;
@@ -95,7 +98,9 @@ AbstractType::Ptr applyPointerReference( AbstractType::Ptr ptr, const KDevelop::
   if(id.isReference() ) {
     uint modifiers = AbstractType::NoModifiers;
     if( id.isConstant() )
-      modifiers = AbstractType::ConstModifier;
+      modifiers |= AbstractType::ConstModifier;
+    if( id.isVolatile() )
+      modifiers |= AbstractType::VolatileModifier;
 
     ReferenceType::Ptr newRet( new ReferenceType() );
     newRet->setModifiers(modifiers);

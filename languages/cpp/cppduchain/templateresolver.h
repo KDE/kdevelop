@@ -53,7 +53,7 @@ class KDEVCPPDUCHAIN_EXPORT TemplateResolver {
     struct TemplateMatchType
     {
       TemplateMatchType():
-        valid(true), constMatch(false), referenceMatch(false), arrayMatch(false),
+        valid(true), constMatch(false), referenceMatch(false), volatileMatch(false), arrayMatch(false),
         templateArgsMatch(false), pointerMatchDepth(0)
       {
       }
@@ -67,8 +67,11 @@ class KDEVCPPDUCHAIN_EXPORT TemplateResolver {
       //Given a reference/RValue argument, is the parameter also a reference/RValue?
       //A non-reference/RValue argument against a reference/RValue parameter is not valid
       bool referenceMatch;
-      //Given a reference argument, is the parameter also a reference?
-      //A non-reference argument against a reference parameter is not valid
+      //Given a volatile argument, is the parameter also a volatile?
+      //A non-volatile argument against a volatile parameter is not valid.
+      bool volatileMatch;
+      //Given an array argument, is the parameter also a array?
+      //A non-array argument against a array parameter is not valid
       bool arrayMatch;
       //Given a template declaration argument, do it and its arguments match the parameter and its parameters?
       bool templateArgsMatch;
@@ -82,7 +85,9 @@ class KDEVCPPDUCHAIN_EXPORT TemplateResolver {
 
         if (!valid)
           return 0;
-        return (uint)constMatch + (uint)referenceMatch + (uint)arrayMatch + (uint)templateArgsMatch + pointerMatchDepth + 1;
+        return (uint)constMatch + (uint)referenceMatch
+             + (uint)arrayMatch + (uint)volatileMatch
+             + (uint)templateArgsMatch + pointerMatchDepth + 1;
       }
     };
 

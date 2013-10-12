@@ -225,6 +225,7 @@ private slots:
   void testLambdaCapture();
   void testTemplateSpecializeArray();
   void testTemplateSpecializeRValue();
+  void testTemplateSpecializeVolatile();
   void testAliasDeclaration();
   void testAuto();
   void testNoexcept();

@@ -918,6 +918,8 @@ struct TemplateTypeExchanger : public KDevelop::TypeExchanger {
         
         if(type->modifiers() & AbstractType::ConstModifier)
             id.setIsConstant(true);
+        if(type->modifiers() & AbstractType::VolatileModifier)
+            id.setIsVolatile(true);
            
         newType->setIdentifier(id);
         newType->setKind(KDevelop::DelayedType::Delayed);
