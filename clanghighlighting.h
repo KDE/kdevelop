@@ -21,10 +21,10 @@
 #include <language/highlighting/codehighlighting.h>
 
 
-class Highlighting : public KDevelop::CodeHighlighting
+class ClangHighlighting : public KDevelop::CodeHighlighting
 {
 public:
-    Highlighting(QObject* parent);
+    ClangHighlighting(QObject* parent);
 
     virtual KDevelop::CodeHighlightingInstance* createInstance() const;
 

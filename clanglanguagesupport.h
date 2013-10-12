@@ -43,17 +43,14 @@ public:
     /** Name Of the Language */
     virtual QString name() const;
 
-    /** Parsejob used by background parser to parse given Url */
-    virtual KDevelop::ParseJob *createParseJob(const KUrl &url);
-
-    /** the actual language object */
-    virtual KDevelop::ILanguage *language();
+    /** Parsejob used by background parser to parse given url */
+    virtual KDevelop::ParseJob *createParseJob(const KDevelop::IndexedString &url);
 
     /** the code highlighter */
-    virtual const KDevelop::ICodeHighlighting* codeHighlighting() const;
+    virtual KDevelop::ICodeHighlighting* codeHighlighting() const;
 
 private:
-    const KDevelop::ICodeHighlighting *const m_highlighting;
+    KDevelop::ICodeHighlighting *const m_highlighting;
     FileManager *const m_fileManager;
 };
 

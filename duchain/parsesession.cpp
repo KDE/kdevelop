@@ -25,11 +25,6 @@ static clang::CompilerInstance* compilerInstance()
     ci->setTarget(pti);
     
     clang::LangOptions &langOpts = ci->getLangOpts();
-    langOpts.GNUMode = 1;
-    langOpts.CXXExceptions = 1;
-    langOpts.RTTI = 1;
-    langOpts.Bool = 1;
-    langOpts.CPlusPlus = 1;
 
     clang::HeaderSearchOptions &hso = ci->getHeaderSearchOpts();
     hso.AddPath("/usr/include", clang::frontend::Angled, false, false, false);

@@ -1,0 +1,11 @@
+kde4_add_library(kdevclangduchain
+    clangduchainhelpers.cpp
+    contextbuilder.cpp
+    declarationbuilder.cpp
+    duchainbuilder.cpp
+    typebuilder.cpp
+    parsesession.cpp
+)
+target_link_libraries(kdevclangduchain
+    ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
+)

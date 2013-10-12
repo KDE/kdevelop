@@ -17,7 +17,7 @@
 
 #include "clanghighlighting.h"
 
-class Highlighting::Instance : public KDevelop::CodeHighlightingInstance
+class ClangHighlighting::Instance : public KDevelop::CodeHighlightingInstance
 {
 public:
     Instance(const KDevelop::CodeHighlighting* highlighting);
@@ -25,19 +25,19 @@ public:
 
 };
 
-Highlighting::Instance::Instance(const KDevelop::CodeHighlighting *highlighting)
+ClangHighlighting::Instance::Instance(const KDevelop::CodeHighlighting *highlighting)
     : CodeHighlightingInstance(highlighting)
 {
     setUseRainbowColor(true);
 }
 
 
-Highlighting::Highlighting(QObject* parent)
+ClangHighlighting::Highlighting(QObject* parent)
     : CodeHighlighting(parent)
 {
 }
 
-KDevelop::CodeHighlightingInstance* Highlighting::createInstance() const
+KDevelop::CodeHighlightingInstance* ClangHighlighting::createInstance() const
 {
     return new Instance(this);
 }
