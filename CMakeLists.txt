@@ -1,6 +1,6 @@
 project(kdev-clang)
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR})
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/)
 find_package(KDE4 REQUIRED)
 find_package(KDevPlatform 1.5.60 REQUIRED)
 find_package(LLVM REQUIRED)
