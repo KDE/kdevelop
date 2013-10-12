@@ -48,9 +48,6 @@ public:
    * or the actual text (the default).
    */
   void operator()(Stream& input, Stream& output, bool outputText = false);
-
-private:
-  bool m_outputText;
 };
 
 class pp_skip_identifier
