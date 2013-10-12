@@ -965,7 +965,12 @@ void QualifiedIdentifier::prepareWrite() {
 }
 
 uint IndexedTypeIdentifier::hash() const {
-    uint bitfields = m_isConstant | (m_isReference << 1) | (m_isRValue << 2) | (m_pointerDepth << 3) | (m_pointerConstMask << 8);
+    quint32 bitfields = m_isConstant
+      | (m_isReference << 1)
+      | (m_isRValue << 2)
+      | (m_isVolatile << 3)
+      | (m_pointerDepth << 4)
+      | (m_pointerConstMask << 9);
     return KDevHash() << m_identifier.getIndex() << bitfields;
 }
 
@@ -974,6 +979,7 @@ bool IndexedTypeIdentifier::operator==(const IndexedTypeIdentifier& rhs) const {
         && m_isConstant == rhs.m_isConstant
         && m_isReference == rhs.m_isReference
         && m_isRValue == rhs.m_isRValue
+        && m_isVolatile == rhs.m_isVolatile
         && m_pointerConstMask == rhs.m_pointerConstMask
         && m_pointerDepth == rhs.m_pointerDepth;
 }
@@ -1006,14 +1012,25 @@ void IndexedTypeIdentifier::setIsConstant(bool isConst) {
   m_isConstant = isConst;
 }
 
+bool IndexedTypeIdentifier::isVolatile() const
+{
+  return m_isVolatile;
+}
+
+void IndexedTypeIdentifier::setIsVolatile(bool isVolatile)
+{
+  m_isVolatile = isVolatile;
+}
+
 ///Returns the pointer depth. Example for C++: "char*" has pointer-depth 1, "char***" has pointer-depth 3
 int IndexedTypeIdentifier::pointerDepth() const {
   return m_pointerDepth;
 }
 
 /**Sets the pointer-depth to the specified count
-  * For efficiency-reasons the maximum currently is 32. */
+  * For efficiency-reasons the maximum currently is 23. */
 void IndexedTypeIdentifier::setPointerDepth(int depth) {
+  Q_ASSERT(depth <= 23 && depth >= 0);
   ///Clear the mask in removed fields
   for(int s = depth; s < (int)m_pointerDepth; ++s)
     setIsConstPointer(s, false);
@@ -1036,6 +1053,9 @@ QString IndexedTypeIdentifier::toString(bool ignoreExplicitlyGlobal) const {
   QString ret;
   if(isConstant())
     ret += "const ";
+  if(isVolatile())
+    ret += "volatile ";
+
   ret += m_identifier.identifier().toString(ignoreExplicitlyGlobal);
   for(int a = 0; a < pointerDepth(); ++a) {
     ret += '*';
@@ -1055,6 +1075,7 @@ IndexedTypeIdentifier::IndexedTypeIdentifier(KDevelop::IndexedQualifiedIdentifie
 , m_isConstant(false)
 , m_isReference(false)
 , m_isRValue(false)
+, m_isVolatile(false)
 , m_pointerDepth(0)
 , m_pointerConstMask(0)
 { }
@@ -1064,6 +1085,7 @@ IndexedTypeIdentifier::IndexedTypeIdentifier(const QString& identifier, bool isE
 , m_isConstant(false)
 , m_isReference(false)
 , m_isRValue(false)
+, m_isVolatile(false)
 , m_pointerDepth(0)
 , m_pointerConstMask(0)
 { }
