@@ -428,10 +428,19 @@ QList<KDevelop::ProjectTargetItem*> targetsInFolder(KDevelop::ProjectFolderItem*
     return ret;
 }
 
+bool actionLess(QAction* a, QAction* b)
+{
+    return a->text() < b->text();
+}
+
+bool menuLess(QMenu* a, QMenu* b)
+{
+    return a->title() < b->title();
+}
+
 QMenu* NativeAppConfigType::launcherSuggestions()
 {
-    QMenu* ret = new QMenu;
-    ret->setTitle(i18n("Project Executables"));
+    QMenu* ret = new QMenu(i18n("Project Executables"));
     
     KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
     QList<KDevelop::IProject*> projects = KDevelop::ICore::self()->projectController()->projects();
@@ -439,20 +448,47 @@ QMenu* NativeAppConfigType::launcherSuggestions()
     foreach(KDevelop::IProject* project, projects) {
         if(project->projectFileManager()->features() & KDevelop::IProjectFileManager::Targets) {
             QList<KDevelop::ProjectTargetItem*> targets=targetsInFolder(project->projectItem());
-            
-            QMenu* projectMenu = ret->addMenu(project->name());
+            QHash<KDevelop::ProjectBaseItem*, QList<QAction*> > targetsContainer;
+            QMenu* projectMenu = ret->addMenu(KIcon("project-development"), project->name());
             foreach(KDevelop::ProjectTargetItem* target, targets) {
                 if(target->executable()) {
                     QStringList path = model->pathFromIndex(target->index());
                     if(!path.isEmpty()){
-                        QAction* act = projectMenu->addAction(QString());
+                        QAction* act = new QAction(projectMenu);
                         act->setData(KDevelop::joinWithEscaping(path, '/','\\'));
+                        act->setProperty("name", target->text());
                         path.removeFirst();
                         act->setText(path.join("/"));
+                        act->setIcon(KIcon("system-run"));
                         connect(act, SIGNAL(triggered(bool)), SLOT(suggestionTriggered()));
+                        targetsContainer[target->parent()].append(act);
                     }
                 }
             }
+
+            QList<QAction*> separateActions;
+            QList<QMenu*> submenus;
+            foreach(KDevelop::ProjectBaseItem* folder, targetsContainer.keys()) {
+                QList<QAction*> actions = targetsContainer.value(folder);
+                if(actions.size()==1 || !folder->parent()) {
+                    separateActions += actions.first();
+                } else {
+                    foreach(QAction* a, actions) {
+                        a->setText(a->property("name").toString());
+                    }
+                    QStringList path = model->pathFromIndex(folder->index());
+                    path.removeFirst();
+                    QMenu* submenu = new QMenu(path.join("/"));
+                    submenu->addActions(actions);
+                    submenus += submenu;
+                }
+            }
+            qSort(separateActions.begin(), separateActions.end(), actionLess);
+            qSort(submenus.begin(), submenus.end(), menuLess);
+            foreach(QMenu* m, submenus)
+                projectMenu->addMenu(m);
+            projectMenu->addActions(separateActions);
+
             projectMenu->setEnabled(!projectMenu->isEmpty());
         }
     }
