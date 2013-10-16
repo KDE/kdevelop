@@ -225,7 +225,6 @@ KDevelop::AbstractType::Ptr matchingClassPointer(const KDevelop::AbstractType::P
   if(actualStructure) {
     DUContext* internal = actualStructure->internalContext(topContext);
     if(internal) {
-      typedef QPair<Declaration*, int> DeclarationDepthPair;
       foreach(Declaration* decl, internal->findDeclarations(Cpp::castIdentifier().identifier(), CursorInRevision::invalid(), topContext, (DUContext::SearchFlags)(DUContext::DontSearchInParent | DUContext::NoFiltering))) {
         FunctionType::Ptr funType = decl->type<FunctionType>();
         if(funType && funType->returnType()) {

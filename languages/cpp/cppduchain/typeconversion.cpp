@@ -610,6 +610,8 @@ bool TypeConversion::isAccessible(const ClassMemberDeclaration* decl) {
 
 ConversionRank TypeConversion::ellipsisConversion( AbstractType::Ptr from, AbstractType::Ptr to )
 {
+  Q_UNUSED(from);
+
   if (TypeUtils::isVarArgs(to)) {
     return ExactMatch;
   }
