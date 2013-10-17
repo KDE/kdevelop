@@ -540,7 +540,6 @@ bool QMakeProjectManager::projectNeedsConfiguration(IProject* project)
     if (QMakeConfig::findBasicMkSpec(vars).isEmpty()) {
         return true;
     }
-    ;
     if (QMakeConfig::buildDirFromSrc(project, project->folder()).isEmpty()) {
         return true;
     }
