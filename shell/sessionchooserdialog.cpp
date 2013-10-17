@@ -56,7 +56,7 @@ SessionChooserDialog::SessionChooserDialog(QListView* view, QAbstractItemModel* 
     view->setMouseTracking(true);
     view->installEventFilter(this);
     filter->installEventFilter(this);
-    connect(filter, SIGNAL(textChanged(QString)), SLOT(filterTextChanged(QString)));
+    connect(filter, SIGNAL(textChanged(QString)), SLOT(filterTextChanged()));
 
     setCaption(i18n("Pick a Session"));
     setButtons(KDialog::Ok | KDialog::Close);
