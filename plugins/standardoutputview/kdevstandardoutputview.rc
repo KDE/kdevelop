@@ -3,8 +3,8 @@
 <MenuBar>
   <Menu name="navigation">
     <Text context="@title:menu">Navigation</Text>
-    <Action name="next_error" />
     <Action name="prev_error" />
+    <Action name="next_error" />
   </Menu>
 </MenuBar>
 </kpartgui>
