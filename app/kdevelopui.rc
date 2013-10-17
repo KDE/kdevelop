@@ -133,6 +133,8 @@
     <Separator/>
     <Action name="split_horizontal"/>
     <Action name="split_vertical"/>
+    <Action name="view_previous_split"/>
+    <Action name="view_next_split"/>
     <Separator/>
     <DefineGroup name="window_operations"/>
     <Separator/>
