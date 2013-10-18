@@ -597,14 +597,6 @@ void CPPInternalParseJob::run()
         }
       }
 
-      bool isStandardContext = false;
-      {
-        DUChainReadLocker l(DUChain::lock());
-        TopDUContext* knownStandardContext = DUChainUtils::standardContextForUrl(parentJob()->document().toUrl());
-
-        isStandardContext = (parentJob()->masterJob() == parentJob() || knownStandardContext == updatingContentContext || !knownStandardContext);
-      }
-
       kDebug( 9007 ) << (contentContext ? "updating" : "building") << "duchain for" << parentJob()->document().str();
 
       uint oldItemCount = 0;
