@@ -162,6 +162,7 @@ private:
   KDevelop::FunctionType* openFunction(DeclaratorAST *node);
 
   void createIntegralTypeForExpression(ExpressionAST *expression);
+  AbstractType::Ptr prepareTypeForExpression(AbstractType::Ptr type, quint64 modifiers);
 
   int m_currentEnumeratorValue;
   bool m_lastTypeWasInstance;
