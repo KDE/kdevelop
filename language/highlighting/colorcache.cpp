@@ -295,8 +295,9 @@ void ColorCache::updateInternal()
 
 QColor ColorCache::blend(QColor color, uchar ratio) const
 {
+  Q_ASSERT(m_backgroundColor.isValid());
   Q_ASSERT(m_foregroundColor.isValid());
-  if ( KColorUtils::luma(m_foregroundColor) >= 0.5 ) {
+  if ( KColorUtils::luma(m_foregroundColor) > KColorUtils::luma(m_backgroundColor) ) {
     // for dark color schemes, produce a fitting color first
     color = KColorUtils::tint(m_foregroundColor, color, 0.5).rgb();
   }
@@ -306,7 +307,7 @@ QColor ColorCache::blend(QColor color, uchar ratio) const
 
 QColor ColorCache::blendBackground(QColor color, uchar ratio) const
 {
-/*  if ( KColorUtils::luma(m_backgroundColor) >= 0.5 ) {
+/*  if ( KColorUtils::luma(m_foregroundColor) > KColorUtils::luma(m_backgroundColor) ) {
     // for dark color schemes, produce a fitting color first
     color = KColorUtils::tint(m_foregroundColor, color, 0.5).rgb();
   }*/
