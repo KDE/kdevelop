@@ -116,15 +116,10 @@ QIcon generateIcon(const QString& id)
 }
 
 WorkingSet::WorkingSet(const QString& id)
-    : m_id(id)
+    : QObject()
+    , m_id(id)
     , m_icon(generateIcon(id))
 {
-}
-
-WorkingSet::WorkingSet( const KDevelop::WorkingSet& rhs )
-    : m_id(rhs.m_id + "_copy_")
-{
-    ///FIXME: what about the icon?
 }
 
 void WorkingSet::saveFromArea( Sublime::Area* a, Sublime::AreaIndex * area, KConfigGroup setGroup, KConfigGroup areaGroup )
@@ -498,12 +493,6 @@ bool WorkingSet::isConnected( Sublime::Area* area )
 QString WorkingSet::id() const
 {
   return m_id;
-}
-
-WorkingSet* WorkingSet::clone()
-{
-  WorkingSet* ret = new WorkingSet( *this );
-  return ret;
 }
 
 bool WorkingSet::hasConnectedAreas() const

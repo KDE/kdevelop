@@ -48,9 +48,6 @@ public:
 
     QString id() const;
 
-    ///Creates a copy of this working-set with a new identity
-    WorkingSet* clone();
-
     QStringList fileList() const;
 
     bool isEmpty() const;
@@ -86,8 +83,6 @@ private:
 
     void saveFromArea(Sublime::Area* area, Sublime::AreaIndex *areaIndex, KConfigGroup setGroup, KConfigGroup areaGroup);
     void loadToArea(Sublime::Area* area, Sublime::AreaIndex *areaIndex, KConfigGroup setGroup, KConfigGroup areaGroup, QMultiMap<QString, Sublime::View*>& recycle);
-
-    WorkingSet(const WorkingSet& rhs);
 
     QString m_id;
     QIcon m_icon;
