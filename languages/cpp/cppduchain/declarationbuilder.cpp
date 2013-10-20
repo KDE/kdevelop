@@ -1024,8 +1024,8 @@ void DeclarationBuilder::classContextOpened(ClassSpecifierAST* /*node*/, DUConte
 
 void DeclarationBuilder::visitNamespace(NamespaceAST* ast) {
 
+  RangeInRevision range;
   {
-    RangeInRevision range;
     Identifier id;
     
     if(ast->namespace_name)
@@ -1050,10 +1050,23 @@ void DeclarationBuilder::visitNamespace(NamespaceAST* ast) {
   
   DeclarationBuilderBase::visitNamespace(ast);
   
+  QualifiedIdentifier qid;
   {
     DUChainWriteLocker lock(DUChain::lock());
     currentDeclaration()->setKind(KDevelop::Declaration::Namespace);
+    qid = currentDeclaration()->qualifiedIdentifier();
     clearLastType();
+    closeDeclaration();
+  }
+
+  // support for C++11 inlined namespaces by implicitly "using" the namespace in the parent context
+  // i.e. compare to visitUsingDirective()
+  if( ast->inlined && compilingContexts() ) {
+    RangeInRevision aliasRange(range.end + CursorInRevision(0, 1), 0);
+    DUChainWriteLocker lock;
+    NamespaceAliasDeclaration* decl = openDeclarationReal<NamespaceAliasDeclaration>(0, 0, globalImportIdentifier(), false, false,
+                                                                                     &aliasRange);
+    decl->setImportIdentifier( qid );
     closeDeclaration();
   }
 }

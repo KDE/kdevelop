@@ -1025,3 +1025,24 @@ void TestDUChain::testNoexcept()
   DUChainReadLocker lock;
   QVERIFY(top->problems().isEmpty());
 }
+
+void TestDUChain::testInlineNamespace()
+{
+    const QByteArray code(
+      "inline namespace a { void foo (); }\n"
+      "int main() {\n"
+      "  a::foo();\n"
+      "  foo();\n"
+      "}\n"
+  );
+  LockedTopDUContext top = parse(code, DumpAll);
+  QVERIFY(top);
+  DUChainReadLocker lock;
+  QVERIFY(top->problems().isEmpty());
+
+  Declaration* foo = top->childContexts().first()->localDeclarations().first();
+  QCOMPARE(foo->uses().size(), 1);
+  QCOMPARE(foo->uses().begin()->size(), 2);
+  QCOMPARE(foo->uses().begin()->at(0), RangeInRevision(2, 5, 2, 8));
+  QCOMPARE(foo->uses().begin()->at(1), RangeInRevision(3, 2, 3, 5));
+}

@@ -229,6 +229,7 @@ private slots:
   void testAliasDeclaration();
   void testAuto();
   void testNoexcept();
+  void testInlineNamespace();
   //END C++2011
 
 private:
