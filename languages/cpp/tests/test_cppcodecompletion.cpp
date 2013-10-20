@@ -3767,4 +3767,14 @@ void TestCppCodeCompletion::testMemberAccessInstance()
   release(top);
 }
 
+void TestCppCodeCompletion::testNestedInlineNamespace()
+{
+  QByteArray test = "namespace a { inline namespace b { void foo(); } } int main() {}";
+  TopDUContext* top = parse(test, DumpAll);
+  DUChainWriteLocker lock;
+  CompletionItemTester tester(top->childContexts()[2], "a::");
+  QCOMPARE(tester.names, QStringList() << "b" << "foo" );
+  release(top);
+}
+
 #include "test_cppcodecompletion.moc"

@@ -53,6 +53,8 @@ namespace Cpp {
     int expressionBefore( const QString& _text, int index );
   #endif
 
+  typedef QPair<Declaration*, int> DeclarationDepthPair;
+
   /**
    * This class is responsible for finding out what kind of completion is needed, what expression should be evaluated for the container-class of the completion, what conversion will be applied to the result of the completion, etc.
    * */
@@ -311,6 +313,8 @@ namespace Cpp {
       bool doIncludeCompletion();
       ///Handle code-completion for constructor-initializers, \returns true if valid
       bool doConstructorCompletion();
+
+      QList<DeclarationDepthPair> namespaceItems(KDevelop::DUContext* duContext, const KDevelop::CursorInRevision& position, bool global) const;
 
       AccessType m_accessType;
       QString m_expression;
