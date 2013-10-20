@@ -132,8 +132,8 @@ static File parseFilename(QString argument)
 /// Returns the exit status
 static int openFilesInRunningInstance(const QVector<File>& files, int pid)
 {
-    QDBusInterface iface(QString("org.kdevelop.kdevelop-%1").arg(pid),
-                                 "/org/kdevelop/DocumentController", "org.kdevelop.DocumentController");
+    const QString service = QString("org.kdevelop.kdevelop-%1").arg(pid);
+    QDBusInterface iface(service, "/org/kdevelop/DocumentController", "org.kdevelop.DocumentController");
 
     QStringList urls;
     foreach ( const File& file, files ) {
@@ -144,6 +144,10 @@ static int openFilesInRunningInstance(const QVector<File>& files, int pid)
         KMessageBox::sorry(0, i18n("Some of the requested files could not be opened."));
         return 1;
     }
+    // make the window visible
+    QDBusMessage makeVisible = QDBusMessage::createMethodCall( service, "/kdevelop/MainWindow", "org.kdevelop.MainWindow",
+                                                           "ensureVisible" );
+    QDBusConnection::sessionBus().asyncCall( makeVisible );
     return 0;
 }
 
