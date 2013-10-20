@@ -603,7 +603,6 @@ bool TypeBuilder::openTypeFromName(NameAST* name, uint modifiers, bool needClass
    openedType = true;
    IndexedTypeIdentifier typeId(id);
    typeId.setIsConstant(modifiers & AbstractType::ConstModifier);
-   typeId.setIsVolatile(modifiers & AbstractType::VolatileModifier);
    
    openDelayedType(typeId, name, templateDeclarationDepth() ? DelayedType::Delayed : DelayedType::Unresolved );
 
