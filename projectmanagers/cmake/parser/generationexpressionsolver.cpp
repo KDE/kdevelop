@@ -27,8 +27,8 @@ QHash<QString, QString> GenerationExpressionSolver::s_vars;
 QSet<QString> GenerationExpressionSolver::s_neededValues;
 
 GenerationExpressionSolver::GenerationExpressionSolver(const CMakeProperties& properties, const QHash<QString, QString>& alias)
-    : m_props(properties)
-    , m_alias(alias)
+    : m_alias(alias)
+    , m_props(properties)
 {
     if(s_vars.isEmpty()) {
         s_vars["ANGLE-R"] = QChar('>');

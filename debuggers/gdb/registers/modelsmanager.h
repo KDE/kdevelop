@@ -41,7 +41,7 @@ class Models;
 class IRegisterController;
 struct Register;
 struct RegistersGroup;
-struct GroupsName;
+class GroupsName;
 
 class ModelsManager : public QObject
 {
