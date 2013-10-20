@@ -26,6 +26,10 @@
 #include <QtGui/QtGui>
 #include <project/tests/projectmodeltest.h>
 
+// always enable assertions here
+#undef Q_ASSERT
+#define Q_ASSERT(cond) ((!(cond)) ? qt_assert(#cond,__FILE__,__LINE__) : qt_noop())
+
 /*!
     Connect to all of the models signals.  Whenever anything happens recheck everything.
 */

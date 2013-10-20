@@ -45,13 +45,14 @@ class KDEVPLATFORMUTIL_EXPORT MultiLevelListView : public QWidget
     Q_OBJECT
 public:
     /**
-     * Creates a new MultiLevelListView with parent @p parent and the specified number of @p levels.
+     * Creates a new MultiLevelListView with parent @p parent.
+     *
+     * Call setLevels() afterwards to set the number of list views.
      *
      * @param parent parent widget
      * @param f window flags, passed to QWidget
-     * @param levels the number of levels in this view
      */
-    explicit MultiLevelListView(QWidget* parent = 0, Qt::WindowFlags f = 0, int levels = 2);
+    explicit MultiLevelListView(QWidget* parent = 0, Qt::WindowFlags f = 0);
     /**
      * Default destructor
      */

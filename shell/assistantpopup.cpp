@@ -56,6 +56,7 @@ AssistantPopup::AssistantPopup(QWidget* parent, const IAssistant::Ptr& assistant
 bool AssistantPopup::eventFilter(QObject* object, QEvent* event)
 {
     Q_ASSERT(object == m_contextWidget);
+    Q_UNUSED(object);
     if (event->type() == QEvent::Resize) {
         updatePosition();
     } else if (event->type() == QEvent::Hide) {
