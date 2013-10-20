@@ -484,7 +484,7 @@ void ContextBuilder::visitEnumSpecifier(EnumSpecifierAST* node)
   //In case of an "enum class" this enum creates its own context.
   openContext(node, DUContext::Enum, node->isClass ? node->name : 0 );
 
-  {
+  if (!node->isClass) {
     DUChainWriteLocker lock(DUChain::lock());
     currentContext()->setPropagateDeclarations(true);
   }
