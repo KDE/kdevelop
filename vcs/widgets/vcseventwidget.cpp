@@ -109,10 +109,14 @@ void VcsEventWidgetPrivate::eventViewClicked( const QModelIndex &index )
     
     if( ev.revision().revisionType() != KDevelop::VcsRevision::Invalid )
     {
+        m_ui->itemEventView->setEnabled(true);
+        m_ui->message->setEnabled(true);
         m_ui->message->setPlainText( ev.message() );
         m_detailModel->addItemEvents( ev.items() );
     }else
     {
+        m_ui->itemEventView->setEnabled(false);
+        m_ui->message->setEnabled(false);
         m_ui->message->clear();
     }
 
