@@ -30,6 +30,7 @@
 #include <KSharedConfig>
 #include <KDebug>
 #include <KProcess>
+#include <KStandardDirs>
 #include <qtest_kde.h>
 
 #include <tests/testcore.h>
@@ -1758,6 +1759,34 @@ void GdbTest::testChangeBreakpointWhileRunning() {
     session->run();
     QTest::qWait(100);
     WAIT_FOR_STATE(session, DebugSession::EndedState);
+}
+
+void GdbTest::testDebugInExternalTerminal()
+{
+    TestLaunchConfiguration cfg;
+
+    foreach (const QString & console, QStringList() << "konsole" << "xterm" << "xfce4-terminal" << "gnome-terminal") {
+
+        TestDebugSession* session = 0;
+        if (KStandardDirs::findExe(console).isEmpty()) {
+            continue;
+        }
+
+        session = new TestDebugSession();
+
+        cfg.config().writeEntry("External Terminal"/*ExecutePlugin::terminalEntry*/, console);
+        cfg.config().writeEntry("Use External Terminal"/*ExecutePlugin::useTerminalEntry*/, true);
+
+        KDevelop::Breakpoint* b = breakpoints()->addCodeBreakpoint(debugeeFileName, 28);
+
+        session->startProgram(&cfg, m_iface);
+        WAIT_FOR_STATE(session, DebugSession::PausedState);
+        QCOMPARE(session->breakpointController()->breakpointState(b), KDevelop::Breakpoint::CleanState);
+        session->stepInto();
+        WAIT_FOR_STATE(session, DebugSession::PausedState);
+        session->run();
+        WAIT_FOR_STATE(session, DebugSession::EndedState);
+    }
 }
 
 void GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::DebuggerState state,
