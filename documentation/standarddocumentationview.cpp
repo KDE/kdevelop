@@ -20,7 +20,7 @@
 
 #include "standarddocumentationview.h"
 #include "documentationfindwidget.h"
-#include <QDebug>
+#include <KDebug>
 
 using namespace KDevelop;
 
@@ -46,4 +46,20 @@ void StandardDocumentationView::search ( const QString& text, DocumentationFindW
     page()->findText(text, ff);
 }
 
+void StandardDocumentationView::setDocumentation(const IDocumentation::Ptr& doc)
+{
+    if(m_doc)
+        disconnect(m_doc.data());
+    m_doc = doc;
+    update();
+    if(m_doc)
+        connect(m_doc.data(), SIGNAL(descriptionChanged()), SLOT(update()));
+}
 
+void StandardDocumentationView::update()
+{
+    if(m_doc)
+        setHtml(m_doc->description());
+    else
+        kDebug() << "calling StandardDocumentationView::update() on an unitialized view";
+}

@@ -25,8 +25,7 @@
 #include "../duchainpointer.h"
 #include "navigationaction.h"
 #include "../types/structuretype.h"
-
-
+#include <util/ksharedobject.h>
 
 namespace KDevelop {
 
@@ -59,8 +58,9 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(Colorizer::Formatting);
 class AbstractNavigationContext;
 typedef KSharedPtr<AbstractNavigationContext> NavigationContextPointer;
 
-class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public KShared
+class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public QObject, public KSharedObject
 {
+  Q_OBJECT
   public:
     AbstractNavigationContext( KDevelop::TopDUContextPointer topContext = KDevelop::TopDUContextPointer(), AbstractNavigationContext* previousContext = 0 );
 
@@ -102,6 +102,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public KShared
     NavigationContextPointer executeLink(QString link);
 
     NavigationContextPointer execute(const NavigationAction& action);
+
+  Q_SIGNALS:
+    void contentsChanged();
 
   protected:
     
