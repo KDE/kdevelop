@@ -68,7 +68,7 @@ class CMakeDocumentation : public KDevelop::IPlugin, public ICMakeDocumentation
         void collectIds(const QString& param, Type type);
         
         QMap<QString, Type> m_typeForName;
-        QString mCMakeCmd;
+        const QString mCMakeCmd;
         QStringListModel* m_index;
 };
 

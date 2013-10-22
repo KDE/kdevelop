@@ -47,11 +47,11 @@ KDevelop::IDocumentationProvider* CMakeDoc::provider() const { return s_provider
 
 CMakeDocumentation::CMakeDocumentation(QObject* parent, const QVariantList&)
     : KDevelop::IPlugin( CMakeSupportDocFactory::componentData(), parent )
+    , mCMakeCmd(KStandardDirs::findExe("cmake"))
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IDocumentationProvider )
     KDEV_USE_EXTENSION_INTERFACE( ICMakeDocumentation )
-    
-    mCMakeCmd=KStandardDirs::findExe("cmake");
+
     if (mCMakeCmd.isEmpty()) {
         return;
     }
