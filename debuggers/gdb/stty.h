@@ -26,9 +26,11 @@
 #define _STTY_H_
 
 class QSocketNotifier;
+class QProcess;
 
 #include <QObject>
 #include <QString>
+#include <QScopedPointer>
 
 namespace GDBDebugger
 {
@@ -60,7 +62,7 @@ private:
     int ferr;
     QSocketNotifier *out;
     QString ttySlave;
-    int pid_;
+    QScopedPointer<QProcess> m_externalTerminal;
     bool external_;
 
     char pty_master[50];  // "/dev/ptyxx" | "/dev/ptmx"

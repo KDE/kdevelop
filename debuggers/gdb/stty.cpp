@@ -62,6 +62,7 @@
 #include <QSocketNotifier>
 #include <QString>
 #include <QFile>
+#include <QProcess>
 
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -122,7 +123,7 @@ STTY::STTY(bool ext, const QString &termAppName)
     : QObject(),
       out(0),
       ttySlave(""),
-      pid_(0),
+      m_externalTerminal(0),
       external_(ext)
 {
     if (ext) {
@@ -141,9 +142,6 @@ STTY::STTY(bool ext, const QString &termAppName)
 
 STTY::~STTY()
 {
-    if (pid_)
-        ::kill(pid_, SIGTERM);
-
     if (out) {
         ::close(fout);
         delete out;
@@ -307,49 +305,17 @@ bool STTY::findExternalTTY(const QString &termApp)
 #endif
             return false;
 
-    int pid = ::fork();
-    if (pid < 0) {             // No process
-        ::unlink(fifo);
-        return false;
+    m_externalTerminal.reset(new QProcess());
+
+    if (appName == "konsole") {
+        m_externalTerminal->start(appName, QStringList() << "-e" << "sh" << "-c" << "tty>" + QString(fifo) + ";exec<&-;exec>&-;while :;do sleep 3600;done");
+    } else if (appName == "xfce4-terminal") {
+        m_externalTerminal->start(appName, QStringList() << "-e" << " sh -c \"tty>" + QString(fifo) + ";\"\"<&\\-\"\">&\\-;\"\"while :;\"\"do sleep 3600;\"\"done\"");
+    } else {
+        m_externalTerminal->start(appName, QStringList() << "-e" << "sh -c \"tty>" + QString(fifo) + ";exec<&-;exec>&-;while :;do sleep 3600;done\"");
     }
 
-    if (pid == 0) {            // child process
-        /*
-         * Spawn a console that in turn runs a shell script that passes us
-         * back the terminal name and then only sits and waits.
-         */
-        QString script = QString("tty>") + QString(fifo) +
-            QString(";"                  // fifo name
-                    "trap \"\" INT QUIT TSTP;"	  // ignore various signals
-                    "exec<&-;exec>&-;"		        // close stdin and stdout
-                    "while :;do sleep 3600;done");
-        const char* scriptStr = script.toLatin1();
-
-        QByteArray rawAppName = appName.toLocal8Bit();
-        if ( termApp == "konsole" )
-        {
-            ::execlp( rawAppName, rawAppName,
-                  "-caption", i18n("kdevelop: Debug application console").toLocal8Bit().data(),
-                  "-e",       "sh",
-                  "-c",       scriptStr,
-                  (char *)0);
-        }
-        else
-        {        
-            ::execlp( rawAppName, rawAppName,
-                  "-e",       "sh",
-                  "-c",       scriptStr,
-                  (char *)0);
-        }
-
-        // Should not get here, as above should always work
-        ::exit(1);
-    }
-
-    // parent process
-    if (pid <= 0)
-        ::exit(1);
-
+    sleep(1);
     // Open the communication between us (the parent) and the
     // child (the process running on a tty console)
     // FIXME: if child fails for any reason, this will block.
@@ -376,7 +342,6 @@ bool STTY::findExternalTTY(const QString &termApp)
         *newline = 0;      // clobber the new line
 
     ttySlave = ttyname;
-    pid_ = pid;
 
     return true;
 }
