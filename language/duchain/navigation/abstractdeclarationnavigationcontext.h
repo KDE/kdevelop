@@ -32,15 +32,15 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractDeclarationNavigationContext : public 
     AbstractDeclarationNavigationContext( DeclarationPointer decl, KDevelop::TopDUContextPointer topContext, AbstractNavigationContext* previousContext = 0 );
 
     virtual QString name() const;
-    virtual QString html(bool shorten = false);
 
     DeclarationPointer declaration() const;
-    
+
     ///Execute an action. For example "show_uses" shows the uses of the declaration.
     ///Returns the context pointer for the new state.
     virtual NavigationContextPointer executeKeyAction(QString key);
 
   protected:
+    virtual QString html(bool shorten = false);
     DeclarationPointer m_declaration;
 
     ///Should returns a stripped version of the declarations qualified identifier, with all implicit/redundant parts removed
