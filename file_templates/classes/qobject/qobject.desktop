@@ -30,6 +30,7 @@ Comment=QObject subclass with properties
 Comment[bs]=QObject podklasa s svojstvima
 Comment[ca]=Subclasse QObject amb propietats
 Comment[ca@valencia]=Subclasse QObject amb propietats
+Comment[de]=Eine GObject-Unterklasse mit Eigenschaften
 Comment[el]=QObject subclass με ιδιότητες
 Comment[es]=Subclase de QObject con propiedades
 Comment[et]=QObjecti alamklass omadustega
