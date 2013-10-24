@@ -314,18 +314,17 @@ bool STTY::findExternalTTY(const QString& termApp)
         return false;
     }
 
-    for (int i = 0; i < 5000; i++) {
-        if (file.readAll().isEmpty()) {
+    for (int i = 0; i < 500; i++) {
+        if (!file.bytesAvailable()) {
             QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
-            usleep(100);
+            usleep(8000);
         } else {
             kDebug() << "Received terminal output(tty)";
             break;
         }
     }
 
-    usleep(200);
-    file.seek(0);
+    usleep(1000);
     ttySlave = file.readAll().trimmed();
 
     file.close();
