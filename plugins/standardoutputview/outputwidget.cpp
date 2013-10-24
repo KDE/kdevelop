@@ -562,7 +562,7 @@ void OutputWidget::copySelection()
     QClipboard *cb = QApplication::clipboard();
     QModelIndexList indexes = view->selectionModel()->selectedRows();
     QString content;
-    Q_FOREACH( QModelIndex index, indexes) {
+    Q_FOREACH( const QModelIndex& index, indexes) {
       content += view->model()->data(index).toString() + '\n';
     }
     cb->setText(content);
