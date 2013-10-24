@@ -43,6 +43,8 @@ public:
     STTY(bool ext=false, const QString &termAppName=QString());
     ~STTY();
 
+    ///Call it if getSlave returns an empty string.
+    QString lastError(){return m_lastError;}
     QString getSlave()    { return ttySlave; };
     void readRemaining();
 
@@ -62,6 +64,7 @@ private:
     int ferr;
     QSocketNotifier *out;
     QString ttySlave;
+    QString m_lastError;
     QScopedPointer<QProcess> m_externalTerminal;
     bool external_;
 

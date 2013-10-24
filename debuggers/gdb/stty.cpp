@@ -238,7 +238,13 @@ int STTY::findTTY()
         ioctl(ptyfd, TIOCSPTLCK, &flag); // unlock pty
 #endif
     }
-
+    if (ptyfd==-1) {
+        m_lastError = i18n("Cannot use the tty* or pty* devices.\n"
+                                    "Check the settings on /dev/tty* and /dev/pty*\n"
+                                    "As root you may need to \"chmod ug+rw\" tty* and pty* devices "
+                                    "and/or add the user to the tty group using "
+                                    "\"usermod -aG tty username\".");
+    }
     return ptyfd;
 }
 
@@ -282,13 +288,13 @@ bool STTY::findExternalTTY(const QString& termApp)
     QString appName(termApp.isEmpty() ? QString("xterm") : termApp);
 
     if (KStandardDirs::findExe(appName).isEmpty()) {
-        kWarning() << "Incorrect terminal name";
+        m_lastError = termApp + i18n(" is incorrect terminal name");
         return false;
     }
 
     QTemporaryFile file;
     if (!file.open()) {
-        kWarning() << "Can't create a temporary file";
+        m_lastError = i18n("Can't create a temporary file");
         return false;
     }
 
@@ -303,7 +309,7 @@ bool STTY::findExternalTTY(const QString& termApp)
     }
 
     if (!m_externalTerminal->waitForStarted(500)) {
-        kDebug() << "Can't run terminal: " << appName;
+        m_lastError = "Can't run terminal: " + appName;
         m_externalTerminal->terminate();
         return false;
     }
@@ -325,7 +331,7 @@ bool STTY::findExternalTTY(const QString& termApp)
     file.close();
 
     if (ttySlave.isEmpty()) {
-        kWarning() << "Can't get " << appName << " tty.";
+        m_lastError = i18n("Can't get ") + appName + " tty/pty. Check that " + appName + " is actually a terminal and that it accepts these arguments: " + "-e " + "sh -c \"tty>" + file.fileName() + ";exec<&-;exec>&-;while :;do sleep 3600;done\"";
     }
     return true;
 }

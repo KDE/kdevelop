@@ -1011,11 +1011,7 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg, IExecutePlu
     QString tty(m_tty->getSlave());
     if (tty.isEmpty())
     {
-        KMessageBox::information(qApp->activeWindow(), i18n("GDB cannot use the tty* or pty* devices.\n"
-                                    "Check the settings on /dev/tty* and /dev/pty*\n"
-                                    "As root you may need to \"chmod ug+rw\" tty* and pty* devices "
-                                    "and/or add the user to the tty group using "
-                                    "\"usermod -aG tty username\"."), i18n("Warning"));
+        KMessageBox::information(qApp->activeWindow(), m_tty->lastError(), i18n("Warning"));
 
         m_tty.reset(0);
         return false;
