@@ -15,6 +15,7 @@ Comment[et]=See plugin pakub KDevelopile põimitud konsooli käsurea kiireks ja 
 Comment[fi]=Tämä liitännäinen tarjoaa KDevelop-ohjelmalle upotetun pääteikkunan nopeaan ja helppoon komentorivityöskentelyyn.
 Comment[fr]=Ce module externe fournit à KDevelop une console intégrée permettant un accès rapide et aisé à la ligne de commande.
 Comment[gl]=Este engadido fornécelle a KDevelop un konsole integrado para dispor de acceso rápido e sinxelo á liña de ordes.
+Comment[hu]=Ez a bővítmény szolgáltatja a KDevelopot egy beágyazott konzollal a gyors és könnyű parancssori hozzáféréshez.
 Comment[it]=Questa estensione dota KDevelop di una console integrata per una rapido e facile accesso alla riga di comando.
 Comment[ja]=コマンドラインに簡単に素早くアクセスできるように KDevelop に組み込み Konsole を提供します
 Comment[kk]=Бұл плагині KDevelop құрамына, тез және ыңғайлы командаларды орындау үшін konsole-ді ендіреді.
