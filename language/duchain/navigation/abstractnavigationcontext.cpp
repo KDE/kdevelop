@@ -55,8 +55,7 @@ KDevelop::TopDUContextPointer AbstractNavigationContext::topContext() const {
 
 
 AbstractNavigationContext::AbstractNavigationContext( KDevelop::TopDUContextPointer topContext, AbstractNavigationContext* previousContext)
-  : KSharedObject(*(QObject*)this)
-  , m_selectedLink(0), m_shorten(false), m_linkCount(-1), m_currentPositionLine(0),
+  : m_selectedLink(0), m_shorten(false), m_linkCount(-1), m_currentPositionLine(0),
     m_previousContext(previousContext), m_topContext(topContext)
 {
 }
