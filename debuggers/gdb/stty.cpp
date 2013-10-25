@@ -62,6 +62,8 @@
 #include <QSocketNotifier>
 #include <QString>
 #include <QFile>
+#include <QProcess>
+#include <QTemporaryFile>
 
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -122,7 +124,7 @@ STTY::STTY(bool ext, const QString &termAppName)
     : QObject(),
       out(0),
       ttySlave(""),
-      pid_(0),
+      m_externalTerminal(0),
       external_(ext)
 {
     if (ext) {
@@ -141,9 +143,6 @@ STTY::STTY(bool ext, const QString &termAppName)
 
 STTY::~STTY()
 {
-    if (pid_)
-        ::kill(pid_, SIGTERM);
-
     if (out) {
         ::close(fout);
         delete out;
@@ -239,7 +238,13 @@ int STTY::findTTY()
         ioctl(ptyfd, TIOCSPTLCK, &flag); // unlock pty
 #endif
     }
-
+    if (ptyfd==-1) {
+        m_lastError = i18n("Cannot use the tty* or pty* devices.\n"
+                                    "Check the settings on /dev/tty* and /dev/pty*\n"
+                                    "As root you may need to \"chmod ug+rw\" tty* and pty* devices "
+                                    "and/or add the user to the tty group using "
+                                    "\"usermod -aG tty username\".");
+    }
     return ptyfd;
 }
 
@@ -278,110 +283,57 @@ void STTY::readRemaining()
         OutReceived(fout);
 }
 
-// **************************************************************************
-
-#define FIFO_FILE "/tmp/debug_tty.XXXXXX"
-
-bool STTY::findExternalTTY(const QString &termApp)
+bool STTY::findExternalTTY(const QString& termApp)
 {
     QString appName(termApp.isEmpty() ? QString("xterm") : termApp);
 
-    if ( KStandardDirs::findExe( termApp ).isEmpty() )
-    {
+    if (KStandardDirs::findExe(appName).isEmpty()) {
+        m_lastError = termApp + i18n(" is incorrect terminal name");
         return false;
     }
 
-    char fifo[] = FIFO_FILE;
-    int fifo_fd;
-    if ((fifo_fd = mkstemp(fifo)) == -1)
-        return false;
-
-    ::close(fifo_fd);
-    ::unlink(fifo);
-
-    // create a fifo that will pass in the tty name
-#ifdef HAVE_MKFIFO
-    if (::mkfifo(fifo, S_IRUSR|S_IWUSR) < 0)
-#else
-        if (::mknod(fifo, S_IFIFO | S_IRUSR|S_IWUSR, 0) < 0)
-#endif
-            return false;
-
-    int pid = ::fork();
-    if (pid < 0) {             // No process
-        ::unlink(fifo);
+    QTemporaryFile file;
+    if (!file.open()) {
+        m_lastError = i18n("Can't create a temporary file");
         return false;
     }
 
-    if (pid == 0) {            // child process
-        /*
-         * Spawn a console that in turn runs a shell script that passes us
-         * back the terminal name and then only sits and waits.
-         */
-        QString script = QString("tty>") + QString(fifo) +
-            QString(";"                  // fifo name
-                    "trap \"\" INT QUIT TSTP;"	  // ignore various signals
-                    "exec<&-;exec>&-;"		        // close stdin and stdout
-                    "while :;do sleep 3600;done");
-        const char* scriptStr = script.toLatin1();
+    m_externalTerminal.reset(new QProcess(this));
 
-        QByteArray rawAppName = appName.toLocal8Bit();
-        if ( termApp == "konsole" )
-        {
-            ::execlp( rawAppName, rawAppName,
-                  "-caption", i18n("kdevelop: Debug application console").toLocal8Bit().data(),
-                  "-e",       "sh",
-                  "-c",       scriptStr,
-                  (char *)0);
+    if (appName == "konsole") {
+        m_externalTerminal->start(appName, QStringList() << "-e" << "sh" << "-c" << "tty>" + file.fileName() + ";exec<&-;exec>&-;while :;do sleep 3600;done");
+    } else if (appName == "xfce4-terminal") {
+        m_externalTerminal->start(appName, QStringList() << "-e" << " sh -c \"tty>" + file.fileName() + ";\"\"<&\\-\"\">&\\-;\"\"while :;\"\"do sleep 3600;\"\"done\"");
+    } else {
+        m_externalTerminal->start(appName, QStringList() << "-e" << "sh -c \"tty>" + file.fileName() + ";exec<&-;exec>&-;while :;do sleep 3600;done\"");
+    }
+
+    if (!m_externalTerminal->waitForStarted(500)) {
+        m_lastError = "Can't run terminal: " + appName;
+        m_externalTerminal->terminate();
+        return false;
+    }
+
+    for (int i = 0; i < 500; i++) {
+        if (!file.bytesAvailable()) {
+            QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+            usleep(8000);
+        } else {
+            kDebug() << "Received terminal output(tty)";
+            break;
         }
-        else
-        {        
-            ::execlp( rawAppName, rawAppName,
-                  "-e",       "sh",
-                  "-c",       scriptStr,
-                  (char *)0);
-        }
-
-        // Should not get here, as above should always work
-        ::exit(1);
     }
 
-    // parent process
-    if (pid <= 0)
-        ::exit(1);
+    usleep(1000);
+    ttySlave = file.readAll().trimmed();
 
-    // Open the communication between us (the parent) and the
-    // child (the process running on a tty console)
-    // FIXME: if child fails for any reason, this will block.
-    // should make the child report error via pipe
-    fifo_fd = ::open(fifo, O_RDONLY);
-    if (fifo_fd < 0)
-        return false;
+    file.close();
 
-    // Get the ttyname from the fifo buffer that the child process
-    // has sent.
-    char ttyname[50];
-    int n = ::read(fifo_fd, ttyname, sizeof(ttyname)-sizeof(char));
-
-    ::close(fifo_fd);
-    ::unlink(fifo);
-
-    // No name??
-    if (n <= 0)
-        return false;
-
-    // remove whitespace
-    ttyname[n] = 0;
-    if (char* newline = strchr(ttyname, '\n'))
-        *newline = 0;      // clobber the new line
-
-    ttySlave = ttyname;
-    pid_ = pid;
-
+    if (ttySlave.isEmpty()) {
+        m_lastError = i18n("Can't get ") + appName + " tty/pty. Check that " + appName + " is actually a terminal and that it accepts these arguments: " + "-e " + "sh -c \"tty>" + file.fileName() + ";exec<&-;exec>&-;while :;do sleep 3600;done\"";
+    }
     return true;
 }
-
 }
-
 // **************************************************************************
 #include "stty.moc"

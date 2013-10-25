@@ -27,6 +27,7 @@
 #define GDB_DEBUGSESSION_H
 
 #include <QWeakPointer>
+#include <QScopedPointer>
 
 #include <KConfigGroup>
 
@@ -318,7 +319,7 @@ private:
 
     CommandQueue*   commandQueue_;
 
-    STTY*             tty_;
+    QScopedPointer<STTY> m_tty;
     QString           badCore_;
 
     // Some state variables
