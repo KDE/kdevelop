@@ -274,7 +274,7 @@ void STTY::OutReceived(int f)
         // cycles.
         out->setEnabled(false);
     }
-    
+
 }
 
 void STTY::readRemaining()
@@ -288,7 +288,7 @@ bool STTY::findExternalTTY(const QString& termApp)
     QString appName(termApp.isEmpty() ? QString("xterm") : termApp);
 
     if (KStandardDirs::findExe(appName).isEmpty()) {
-        m_lastError = termApp + i18n(" is incorrect terminal name");
+        m_lastError = i18n("%1 is incorrect terminal name", termApp);
         return false;
     }
 
@@ -330,7 +330,7 @@ bool STTY::findExternalTTY(const QString& termApp)
     file.close();
 
     if (ttySlave.isEmpty()) {
-        m_lastError = i18n("Can't get ") + appName + " tty/pty. Check that " + appName + " is actually a terminal and that it accepts these arguments: " + "-e " + "sh -c \"tty>" + file.fileName() + ";exec<&-;exec>&-;while :;do sleep 3600;done\"";
+        m_lastError = i18n("Can't get %1 tty/pty. Check that %1 is actually a terminal and that it accepts these arguments: -e sh -c \"tty> %2 ;exec<&-;exec>&-;while :;do sleep 3600;done\"", appName, file.fileName());
     }
     return true;
 }
