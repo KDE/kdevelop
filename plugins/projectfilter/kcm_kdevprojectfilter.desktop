@@ -12,6 +12,7 @@ X-KDE-CfgDlgHierarchy=GENERAL
 
 Name=Project Filter
 Name[cs]=Filtr projektů
+Name[da]=Projektfilter
 Name[de]=Projektfilter
 Name[es]=Filtro del proyecto
 Name[fi]=Projektisuodatin
@@ -29,6 +30,7 @@ Name[uk]=Фільтр проекту
 Name[x-test]=xxProject Filterxx
 Name[zh_TW]=專案過濾器
 Comment=Configure which files and folders inside the project folder should be included or excluded.
+Comment[da]=Indstil hvilke filer og mapper i projektmappen der skal medtages eller undtages.
 Comment[de]=Legt fest, welche Dateien und Ordner innerhalb des Projektordners ein- oder ausgeschlossen werden sollen.
 Comment[es]=Configura qué archivos y carpetas contenidos en la carpeta del proyecto se deben incluir o excluir.
 Comment[fr]=Configure quels fichiers et dossier au sein du projet doivent être inclus ou exclus.
