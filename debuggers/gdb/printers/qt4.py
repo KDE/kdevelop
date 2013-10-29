@@ -493,7 +493,7 @@ class QUrlPrinter:
     def to_string(self):
         try:
             return self.val['d']['encodedOriginal']
-        except RuntimeError, error:
+        except RuntimeError:
             #if no debug information is avaliable for Qt, try guessing the correct address for encodedOriginal
             #problem with this is that if QUrlPrivate members get changed, this fails
             offset = gdb.lookup_type('int').sizeof
