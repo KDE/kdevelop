@@ -1,3 +1,4 @@
+# general
 apidocs
 .kdev4
 *~
@@ -11,3 +12,9 @@ build
 massif.out.*
 callgrind.out.*
 .*kate-swp
+
+# from kdiff3
+*.BACKUP.*
+*.BASE.*
+*.LOCAL.*
+*.REMOTE.*
