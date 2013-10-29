@@ -28,14 +28,7 @@
 #include <klocale.h>
 #include <ksplashscreen.h>
 
-#include <sublime/area.h>
-#include <sublime/tooldocument.h>
-
-#include <language/duchain/topducontext.h>
-#include <language/duchain/repositories/itemrepository.h>
 #include <language/duchain/duchain.h>
-
-#include "shellextension.h"
 
 #include "mainwindow.h"
 #include "sessioncontroller.h"
