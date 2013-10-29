@@ -1,3 +1,4 @@
+# general
 apidocs
 .kdev4
 build
@@ -16,3 +17,9 @@ mem.log.*
 massif.*
 callgrind.*
 perf.data*
+
+# from kdiff3
+*.BACKUP.*
+*.BASE.*
+*.LOCAL.*
+*.REMOTE.*
