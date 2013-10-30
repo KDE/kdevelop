@@ -1709,10 +1709,13 @@ DUContext* DUContext::Import::context(const TopDUContext* topContext, bool insta
     //More accurately, that no specialized or cross-topContext imports will, but if the former assumption fails the latter will too
     if (AbstractFunctionDeclaration *functionDecl = dynamic_cast<AbstractFunctionDeclaration*>(decl))
     {
-      Q_ASSERT(functionDecl->internalFunctionContext());
-      return functionDecl->internalFunctionContext();
+      if (functionDecl->internalFunctionContext()) {
+        return functionDecl->internalFunctionContext();
+      } else {
+        kWarning() << "Import of function declaration without internal function context encountered!";
+      }
     }
-    else if(decl)
+    if(decl)
       return decl->logicalInternalContext(topContext);
     else
       return 0;
