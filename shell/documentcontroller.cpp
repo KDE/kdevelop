@@ -1216,7 +1216,7 @@ void DocumentController::vcsAnnotateCurrentDocument()
     KUrl url = doc->url();
     IProject* project = KDevelop::ICore::self()->projectController()->findProjectForUrl(url);
     IBasicVersionControl* iface = 0;
-    if(project) {
+    if(project && project->versionControlPlugin()) {
         iface = project->versionControlPlugin()->extension<IBasicVersionControl>();
     }
 
