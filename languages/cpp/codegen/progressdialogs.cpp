@@ -53,7 +53,7 @@ RefactoringProgressDialog::RefactoringProgressDialog(QString action) {
   m_progressBar = new StringProgressBar;
   layoutV->addWidget(m_progressBar);
   
-  m_cancelButton = new QPushButton(i18n("Cancel"));
+  m_cancelButton = new QPushButton(KIcon("dialog-cancel"), i18n("Cancel"));
   layout->addWidget(m_cancelButton, 0, Qt::AlignRight);
   
   resize(380, 90);//layoutV->sizeHint().height());
