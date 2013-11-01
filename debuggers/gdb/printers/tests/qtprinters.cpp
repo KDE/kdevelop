@@ -71,7 +71,7 @@ public:
             output.append(l);
         }
         output.chop(7); //remove (gdb) prompt
-        if (output.contains("Traceback")) {
+        if (output.contains("Traceback") || output.contains("Exception")) {
             qDebug() << output;
             qFatal("Unexpected Python Exception");
         }
