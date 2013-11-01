@@ -35,7 +35,8 @@ public:
     GdbProcess(const QString &program) : QProcess()
     {
         setProcessChannelMode(MergedChannels);
-        QProcess::start("gdb", (QStringList() << (BINARY_PATH + '/' + program)));
+        // don't attempt to load .gdbinit in home (may cause unexpected results)
+        QProcess::start("gdb", (QStringList() << "-nh" << (BINARY_PATH + '/' + program)));
         waitForStarted();
         QByteArray prompt = waitForPrompt();
         QVERIFY(!prompt.contains("No such file or directory"));
