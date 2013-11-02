@@ -454,17 +454,11 @@ int main( int argc, char *argv[] )
 
     KDevIDEExtension::init();
 
-    KDevSplashScreen* splash = 0;
-    QString splashFile = KStandardDirs::locate( "appdata", "pics/kdevelop-splash.png" );
-    if( !splashFile.isEmpty() )
-    {
-        QPixmap pm;
-        pm.load( splashFile );
-        splash = new KDevSplashScreen( pm );
-        splash->show();
-        splash->repaint();
-        app.processEvents();
-    }
+    KDevSplashScreen* splash = new KDevSplashScreen;
+    splash->show();
+    splash->repaint();
+    app.processEvents();
+    return 0;
 
     if(!Core::initialize(splash, Core::Default, session))
         return 5;

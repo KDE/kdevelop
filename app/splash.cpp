@@ -1,5 +1,6 @@
 /***************************************************************************
  *   Copyright 2013 Sven Brauch <svenbrauch@gmail.com>                     *
+ *   Copyright 2013 Milian Wolff <mail@milianw.de>                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -19,22 +20,35 @@
 
 #include "splash.h"
 
-KDevSplashScreen::KDevSplashScreen(const QPixmap& pixmap, Qt::WindowFlags f)
-    : KSplashScreen(pixmap, f | Qt::FramelessWindowHint)
+#include <KDebug>
+#include <KIconLoader>
+
+#include <KStandardDirs>
+#include <QDeclarativeView>
+#include <QDeclarativeEngine>
+#include <QDeclarativeContext>
+#include <QGraphicsItem>
+
+#include "config.h"
+
+KDevSplashScreen::KDevSplashScreen()
+    : KSplashScreen(QPixmap(), Qt::Popup | Qt::FramelessWindowHint)
     , m_view(new QDeclarativeView)
 {
+    setFixedSize(QSize(475, 301));
+    m_view->resize(size());
+    m_view->engine()->rootContext()->setContextProperty("appIcon", KIconLoader().iconPath("kdevelop", 0));
+    m_view->engine()->rootContext()->setContextProperty("appVersion", VERSION);
+
     QString splashScript = KStandardDirs::locate("data", "kdevelop/splash.qml");
-    setFixedSize(pixmap.size());
     m_view->setSource(QUrl(splashScript));
     if ( ! m_view->rootObject() ) {
-        return;
+        kWarning() << "Could not find KDevelop splash screen: kdevelop/splash.qml";
     }
-    m_view->resize(pixmap.size());
 }
 
 KDevSplashScreen::~KDevSplashScreen()
 {
-    delete m_view;
 }
 
 void KDevSplashScreen::drawContents(QPainter* painter)
