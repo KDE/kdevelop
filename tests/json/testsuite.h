@@ -22,6 +22,7 @@
 #include <QVariantMap>
 #include "delayedoutput.h"
 #include <language/duchain/types/abstracttype.h>
+#include <QDebug>
 
 namespace KDevelop
 {
@@ -50,7 +51,6 @@ public:
   static TestSuite& get();
   bool addTest(const QString& testName, TestFunction testFunc)
   {
-    qDebug() << testName << "ADD TEST" << __PRETTY_FUNCTION__ << this;
     m_testFunctions.insert(testName, testFunc);
     return true;
   }
@@ -64,7 +64,6 @@ public:
       if (it.key() == EXPECT_FAIL)
         continue;
 
-      qDebug() << m_testFunctions.keys() << __PRETTY_FUNCTION__ << this;
       QString result = m_testFunctions.value(it.key(), &TestSuite<T>::noSuchTest)(it.value(), object);
       QString expectedFailure = expectedFails.value(it.key(), QString()).toString();
 
@@ -99,7 +98,7 @@ private:
   }
   QHash<QString, TestFunction> m_testFunctions;
 
-  TestSuite() { qDebug() << "NEW TEST SUITE #################################" << __PRETTY_FUNCTION__ << this; }
+  TestSuite() { }
   Q_DISABLE_COPY(TestSuite);
 
   friend TestSuite<Declaration*>& declarationTestSuite();
