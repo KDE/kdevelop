@@ -1,3 +1,17 @@
+# kdevplatform version
+set(KDEVPLATFORM_VERSION_MAJOR 1)
+set(KDEVPLATFORM_VERSION_MINOR 6)
+set(KDEVPLATFORM_VERSION_PATCH 60)
+
+# plugin versions listed in the .desktop files
+set(KDEV_PLUGIN_VERSION 17)
+
+# library version / SO version
+set(KDEVPLATFORM_LIB_VERSION 8.0.0)
+set(KDEVPLATFORM_LIB_SOVERSION 8)
+
+################################################################################
+
 cmake_minimum_required(VERSION 2.6)
 
 project(KDevPlatform)
@@ -6,15 +20,8 @@ set(KDE4_BUILD_TESTS "ON" CACHE "BOOL" "Enable building of tests" FORCE )
 
 set(CMAKE_MODULE_PATH ${KDevPlatform_SOURCE_DIR}/cmake/modules)
 
-set(KDEVPLATFORM_VERSION_MAJOR 1)
-set(KDEVPLATFORM_VERSION_MINOR 6)
-set(KDEVPLATFORM_VERSION_PATCH 60)
-set(KDEV_PLUGIN_VERSION 17)
-
 set(KDE_MIN_VERSION "4.7.0")
 find_package(KDE4 4.7.0 REQUIRED)
-set(KDEVPLATFORM_LIB_VERSION 8.0.0)
-set(KDEVPLATFORM_LIB_SOVERSION 8)
 
 find_package(Grantlee 0.1.7)
 find_package(QJSON)
