@@ -38,7 +38,9 @@ KDevSplashScreen::KDevSplashScreen()
     setFixedSize(QSize(475, 301));
     m_view->resize(size());
     m_view->engine()->rootContext()->setContextProperty("appIcon", KIconLoader().iconPath("kdevelop", 0));
-    m_view->engine()->rootContext()->setContextProperty("appVersion", VERSION);
+    m_view->engine()->rootContext()->setContextProperty("appVersionMajor", VERSION_MAJOR);
+    m_view->engine()->rootContext()->setContextProperty("appVersionMinor", VERSION_MINOR);
+    m_view->engine()->rootContext()->setContextProperty("appVersionPatch", VERSION_PATCH);
 
     QString splashScript = KStandardDirs::locate("data", "kdevelop/splash.qml");
     m_view->setSource(QUrl(splashScript));

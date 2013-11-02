@@ -133,7 +133,7 @@ Rectangle {
         }
         style: Text.Raised;
         styleColor: "black"
-        text: "KDevelop " + appVersion.split('.')[0] + "." + appVersion.split('.')[1] +
-              "<span style='font-size:15px;'>&nbsp;." + appVersion.split('.')[2] + "</span>"
+        text: "KDevelop " + appVersionMajor + "." + appVersionMinor +
+              "<span style='font-size:15px;'>&nbsp;." + appVersionPatch + "</span>"
     }
 }
