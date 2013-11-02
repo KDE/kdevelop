@@ -458,7 +458,6 @@ int main( int argc, char *argv[] )
     splash->show();
     splash->repaint();
     app.processEvents();
-    return 0;
 
     if(!Core::initialize(splash, Core::Default, session))
         return 5;
