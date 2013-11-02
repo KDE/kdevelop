@@ -1,12 +1,17 @@
+# KDevelop version
+set( KDEVELOP_VERSION_MAJOR 4 )
+set( KDEVELOP_VERSION_MINOR 6 )
+set( KDEVELOP_VERSION_PATCH 60 )
+# KDevplatform dependency version
+set( KDEVPLATFORM_VERSION "1.${KDEVELOP_VERSION_MINOR}.${KDEVELOP_VERSION_PATCH}" )
+
+################################################################################
+
 project(KDevelop)
 
 set(KDE4_BUILD_TESTS "ON" CACHE "BOOL" "Enable building of tests" FORCE )
 
 set(CMAKE_MODULE_PATH ${KDevelop_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH})
-
-set( KDEVELOP_VERSION_MAJOR 4 )
-set( KDEVELOP_VERSION_MINOR 6 )
-set( KDEVELOP_VERSION_PATCH 60 )
 
 set(KDE_MIN_VERSION "4.7.0")
 find_package(KDE4 4.7.0 REQUIRED)
@@ -25,7 +30,7 @@ if("${_isSystemLibDir}" STREQUAL "-1")
 endif("${_isSystemLibDir}" STREQUAL "-1")
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
-find_package(KDevPlatform 1.6.60 REQUIRED)
+find_package(KDevPlatform ${KDEVPLATFORM_VERSION} REQUIRED)
 
 include_directories(${KDEVPLATFORM_INCLUDE_DIR})
 
