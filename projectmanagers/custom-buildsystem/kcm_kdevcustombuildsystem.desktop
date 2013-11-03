@@ -43,6 +43,7 @@ Comment[bs]=Konfiguriši vlastite alate za gradnju i uključivanja/definicije za
 Comment[ca]=Configura una eina de construcció personalitzada de projectes i les inclusions/definicions per la implementació del llenguatge.
 Comment[ca@valencia]=Configura una eina de construcció personalitzada de projectes i les inclusions/definicions per la implementació del llenguatge.
 Comment[da]=Indstil et projekts tilpassede byggeværktøj og inkluderinger/definitioner for sprogunderstøttelsen.
+Comment[de]=Einrichtung eines Projekt-Build-Systems und „includes/defines“ für die Sprachen-Unterstützung
 Comment[el]=Διαμόρφωση ενός εργαλείου προσαρμοσμένης κατασκευής και των include/define για τη γλωσσική υποστήριξη.
 Comment[es]=Configurar una herramienta de construcción personalizada de proyectos e includes y defines para el lenguaje.
 Comment[et]=Projektide kohandatud ehitamistööriista ning keeletoetuseks vajalike päiste ja definitsioonide seadistamine.
