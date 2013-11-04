@@ -1,0 +1,47 @@
+[Desktop Entry]
+Icon=kdevelop
+Type=Service
+ServiceTypes=KCModule
+
+X-KDE-ModuleType=Library
+X-KDE-Library=kcm_kdev_ninjabuilder
+X-KDE-FactoryName=kcm_kdev_ninjabuilder
+X-KDE-ParentApp=kdevplatformproject
+X-KDE-ParentComponents=KDevNinjaBuilder
+X-KDE-CfgDlgHierarchy=BUILDTOOL
+
+Name=Ninja
+Name[de]=Ninja
+Name[es]=Ninja
+Name[et]=Ninja
+Name[fr]=Ninja
+Name[ga]=Ninja
+Name[gl]=Ninja
+Name[hu]=Ninja
+Name[nl]=Ninja
+Name[pl]=Ninja
+Name[pt]=Ninja
+Name[pt_BR]=Ninja
+Name[sk]=Ninja
+Name[sv]=Ninja
+Name[tr]=Ninja
+Name[ug]=تاقەت
+Name[uk]=Ninja
+Name[x-test]=xxNinjaxx
+Comment=Configure Ninja settings
+Comment[de]=Ninja-Einstellungen festlegen
+Comment[es]=Configurar las preferencias de Ninja
+Comment[et]=Ninja seadistamine
+Comment[fr]=Configure les paramètres de Ninja
+Comment[ga]=Cumraigh socruithe Ninja
+Comment[gl]=Configura os parámetros de Ninja
+Comment[hu]=Ninja beállítások módosítása
+Comment[nl]=Ninja-instellingen configureren
+Comment[pl]=Konfiguruj ustawienia Ninja
+Comment[pt]=Configurar as definições do Ninja
+Comment[pt_BR]=Configurar as opções do Ninja
+Comment[sk]=Konfigurovať nastavenia Ninja
+Comment[sv]=Anpassa inställningar för Ninja
+Comment[tr]=Ninja ayarlarını yapılandır
+Comment[uk]=Налаштувати параметри Ninja
+Comment[x-test]=xxConfigure Ninja settingsxx

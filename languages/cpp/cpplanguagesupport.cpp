@@ -265,7 +265,11 @@ void CppLanguageSupport::switchDefinitionDeclaration()
     {
       lock.unlock();
       kDebug(9007) << "Parsing switch-candidate before switching" << switchCandidate;
-      DUChain::self()->waitForUpdate(IndexedString(switchCandidate), TopDUContext::VisibleDeclarationsAndContexts);
+      ReferencedTopDUContext updatedContext = DUChain::self()->waitForUpdate(IndexedString(switchCandidate), TopDUContext::VisibleDeclarationsAndContexts);
+      if (!updatedContext) {
+        kDebug(9007) << "Failed to update document:" << switchCandidate;
+        return;
+      }
     }
   }
   
