@@ -250,16 +250,22 @@ struct DocumentControllerPrivate {
             {
                 mimeType = KMimeType::mimeType("text/plain");
             }
+            else if (!url.isValid())
+            {
+                // Exit if the url is invalid (should not happen)
+                // If the url is valid and the file does not already exist,
+                // kate creates the file and gives a message saying so
+                kDebug() << "invalid URL:" << url.url();
+                return 0;
+            }
+            else if (!KIO::NetAccess::exists( url, KIO::NetAccess::SourceSide, ICore::self()->uiController()->activeMainWindow() ))
+            {
+                // enfore text mime type in order to create a kate part editor which then can be used to create the file
+                // otherwise we could end up opening e.g. okteta which then crashes, see: https://bugs.kde.org/id=326434
+                mimeType = KMimeType::mimeType("text/plain");
+            }
             else
             {
-                if ( !url.isValid() ) {
-                    // Exit if the url is invalid (should not happen)
-                    // If the url is valid and the file does not already exist,
-                    // kate creates the file and gives a message saying so
-                    kDebug() << "invalid URL:" << url.url();
-                    return 0;
-                }
-
                 mimeType = KMimeType::findByUrl( url );
                 
                 if( !url.isLocalFile() && mimeType->isDefault() )
