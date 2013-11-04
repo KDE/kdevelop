@@ -1689,6 +1689,11 @@ KDevelop::ReferencedTopDUContext DUChain::waitForUpdate(const KDevelop::IndexedS
 //   waiter.m_waitMutex.lock();
 //   waiter.m_dataMutex.unlock();
   while(!waiter.m_ready) {
+    // we might have been shut down in the meanwhile
+    if (!ICore::self()) {
+      return 0;
+    }
+
     QMetaObject::invokeMethod(ICore::self()->languageController()->backgroundParser(), "parseDocuments");
     QApplication::processEvents();
     usleep(1000);
