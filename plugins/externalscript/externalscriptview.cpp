@@ -44,7 +44,7 @@ ExternalScriptView::ExternalScriptView( ExternalScriptPlugin* plugin, QWidget* p
   m_model->setSourceModel( m_plugin->model() );
   m_model->setDynamicSortFilter( true );
   m_model->sort( 0 );
-  connect( filterText, SIGNAL(userTextChanged(QString)),
+  connect( filterText, SIGNAL(textEdited(QString)),
            m_model, SLOT(setFilterWildcard(QString)) );
 
   scriptTree->setModel( m_model );

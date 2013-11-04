@@ -140,7 +140,7 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
         filterAction->setDefaultWidget(filterInput);
         addAction(filterAction);
 
-        connect(filterInput, SIGNAL(userTextChanged(QString)),
+        connect(filterInput, SIGNAL(textEdited(QString)),
                 this, SLOT(outputFilter(QString)) );
         if( data->type & KDevelop::IOutputView::MultipleView )
         {
