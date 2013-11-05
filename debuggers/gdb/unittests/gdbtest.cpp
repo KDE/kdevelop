@@ -1333,22 +1333,28 @@ void GdbTest::testPickupManuallyInsertedBreakpointOnlyOnce()
     TestLaunchConfiguration cfg;
 
     breakpoints()->addCodeBreakpoint(KUrl("debugee.cpp"), 31);
+    breakpoints()->addCodeBreakpoint(KUrl("debugee.cpp"), 21);
     QVERIFY(session->startProgram(&cfg, m_iface));
 
     //inject here, so it behaves similar like a command from .gdbinit
     session->addCommandToFront(new GDBCommand(GDBMI::NonMI, "break debugee.cpp:32"));
+    session->addCommandToFront(new GDBCommand(GDBMI::NonMI, "break foo"));
 
     WAIT_FOR_STATE(session, DebugSession::PausedState);
 
     session->stepInto();
     WAIT_FOR_STATE(session, DebugSession::PausedState);
     QTest::qWait(1000); //wait for breakpoints update
-    QCOMPARE(breakpoints()->breakpoints().count(), 1);
-    QCOMPARE(breakpoints()->rowCount(), 1+1);
+    QCOMPARE(breakpoints()->breakpoints().count(), 2);
 
     KDevelop::Breakpoint *b = breakpoints()->breakpoint(0);
     QVERIFY(b);
     QCOMPARE(b->line(), 31); //we start with 0, gdb with 1
+    QCOMPARE(b->url().url(), QString("debugee.cpp"));
+
+    b = breakpoints()->breakpoint(1);
+    QVERIFY(b);
+    QCOMPARE(b->line(), 21);
     QCOMPARE(b->url().url(), QString("debugee.cpp"));
 }
 
