@@ -131,7 +131,7 @@ void IdealController::addView(Qt::DockWidgetArea area, View* view)
         m_dockwidget_to_action[dock] = m_view_to_action[view] = action;
 
         m_docks->addAction(action);
-        connect(dock, SIGNAL(close()), action, SLOT(toggle()));
+        connect(dock, SIGNAL(closeRequested()), action, SLOT(toggle()));
     }
 
     connect(dock, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(dockLocationChanged(Qt::DockWidgetArea)));
