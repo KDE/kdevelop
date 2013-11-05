@@ -1,7 +1,7 @@
 # force debug symbols for our debugees
 set(CMAKE_BUILD_TYPE debugfull)
 
-add_definitions(-DPRINTER_BIN_DIR="\\"${CMAKE_CURRENT_BINARY_DIR}\\"")
+configure_file(qtprintersconfig.h.in qtprintersconfig.h)
 
 add_executable(qstring qstring.cpp)
 target_link_libraries(qstring ${QT_QTCORE_LIBRARY})

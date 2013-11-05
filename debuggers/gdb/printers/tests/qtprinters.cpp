@@ -24,6 +24,8 @@
 #include <QFileInfo>
 #include <QDir>
 
+#include "qtprintersconfig.h"
+
 const QString BINARY_PATH(PRINTER_BIN_DIR);
 
 namespace GDBDebugger
