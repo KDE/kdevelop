@@ -38,8 +38,8 @@ class RangePrinter:
         self.val = val
 
     def to_string(self):
-        return "[ (%d, %d) -> (%d, %d) ]" % (self.val['m_start']['m_line'], self.val['m_start']['m_column'],
-                                             self.val['m_end']['m_line'], self.val['m_end']['m_column'])
+        return "[(%d, %d) -> (%d, %d)]" % (self.val['m_start']['m_line'], self.val['m_start']['m_column'],
+                                           self.val['m_end']['m_line'], self.val['m_end']['m_column'])
 
 pretty_printers_dict = {}
 

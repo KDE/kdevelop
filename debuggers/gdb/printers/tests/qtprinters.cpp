@@ -399,7 +399,7 @@ void QtPrintersTest::testKTextEditorTypes()
     QByteArray data = gdb.execute("print cursor");
     QCOMPARE(data, QByteArray("$1 = [1, 1]"));
     data = gdb.execute("print range");
-    QCOMPARE(data, QByteArray("$2 = [ (1, 1) -> (2, 2) ]"));
+    QCOMPARE(data, QByteArray("$2 = [(1, 1) -> (2, 2)]"));
 }
 
 }
