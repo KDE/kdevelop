@@ -3753,6 +3753,7 @@ void TestCppCodeCompletion::testLookaheadMatches()
   DUChainWriteLocker lock(DUChain::lock());
   DUContext *testContext = top->childContexts()[4]->childContexts()[1];
   CompletionItemTester tester(testContext, insert);
+  qDebug() << tester.names << "VERSUS" << completions;
   QCOMPARE(tester.names.toSet(), completions.toSet());
   release(top);
 }
