@@ -74,7 +74,7 @@ public:
 
 Q_SIGNALS:
     void activateView(Sublime::View* view);
-    void closeRequest(QWidget *w);
+    void requestClose(QWidget *w);
     void tabContextMenuRequested(Sublime::View* view, KMenu* menu);
     /**
      * @p view The view represented by the tab that was hovered
@@ -88,7 +88,7 @@ private Q_SLOTS:
     void documentTitleChanged(Sublime::Document* doc);
     void statusIconChanged(Sublime::Document*);
     void statusChanged(Sublime::View *view);
-    void closeRequest(int idx);
+    void requestClose(int idx);
     void tabMoved(int from, int to);
     void wheelScroll(int);
     void contextMenu(int, const QPoint&);

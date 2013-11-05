@@ -233,11 +233,11 @@ Container::Container(QWidget *parent)
     l->addWidget(d->stack);
 
     connect(d->tabBar, SIGNAL(currentChanged(int)), this, SLOT(widgetActivated(int)));
-    connect(d->tabBar, SIGNAL(tabCloseRequested(int)), this, SLOT(closeRequest(int)));
+    connect(d->tabBar, SIGNAL(tabCloseRequested(int)), this, SLOT(requestClose(int)));
     connect(d->tabBar, SIGNAL(tabMoved(int,int)), this, SLOT(tabMoved(int,int)));
     connect(d->tabBar, SIGNAL(wheelDelta(int)), this, SLOT(wheelScroll(int)));
     connect(d->tabBar, SIGNAL(contextMenu(int,QPoint)), this, SLOT(contextMenu(int,QPoint)));
-    connect(d->tabBar, SIGNAL(mouseMiddleClick(int)), this, SLOT(closeRequest(int)));
+    connect(d->tabBar, SIGNAL(mouseMiddleClick(int)), this, SLOT(requestClose(int)));
     connect(d->documentListMenu, SIGNAL(triggered(QAction*)), this, SLOT(documentListActionTriggered(QAction*)));
 
     KConfigGroup group = KGlobal::config()->group("UiSettings");
@@ -295,9 +295,9 @@ void Container::wheelScroll(int delta)
     widgetActivated( nextIndex );
 }
 
-void Container::closeRequest(int idx)
+void Container::requestClose(int idx)
 {
-    emit closeRequest((widget(idx)));
+    emit requestClose(widget(idx));
 }
 
 void Container::widgetActivated(int idx)
@@ -520,7 +520,7 @@ void Container::contextMenu( int currentTab, const QPoint& pos )
 
     if (triggered) {
         if ( triggered == closeTabAction ) {
-            closeRequest(currentTab);
+            requestClose(currentTab);
         } else if ( triggered == closeOtherTabsAction ) {
             // activate the remaining tab
             widgetActivated(currentTab);
@@ -533,7 +533,7 @@ void Container::contextMenu( int currentTab, const QPoint& pos )
             }
             // finally close other tabs
             foreach( QWidget* tab, otherTabs ) {
-                closeRequest(tab);
+                requestClose(tab);
             }
         } else if ( triggered == closeAllTabsAction ) {
             // activate last tab
@@ -541,7 +541,7 @@ void Container::contextMenu( int currentTab, const QPoint& pos )
             // close all
             QList<QWidget*> tabs;
             for ( int i = 0; i < count(); ++i ) {
-                closeRequest(widget(i));
+                requestClose(widget(i));
             }
         } // else the action was handled by someone else
     }
