@@ -42,18 +42,10 @@
 #include "topducontextdata.h"
 #include "duchainregister.h"
 #include "topducontextdynamicdata.h"
+
 // #define DEBUG_SEARCH
-using namespace KTextEditor;
 
 const uint maxApplyAliasesRecursion = 100;
-
-namespace std {
-#if defined(Q_CC_MSVC)
-  using namespace stdext;
-#else
-  using namespace __gnu_cxx;
-#endif
-}
 
 namespace KDevelop
 {
@@ -310,37 +302,6 @@ public:
     rebuildImportStructureRecursion(rebuild);
   }
 
-/*  void needImportStructure() const {
-    return; //We always have an import-structure now*/
-//     if(m_haveImportStructure)
-//       return;
-
-/*    for(QVector<DUContextPointer>::const_iterator parentIt = m_importedParentContexts.constBegin(); parentIt != m_importedParentContexts.constEnd(); ++parentIt) {
-      TopDUContext* top = dynamic_cast<TopDUContext*>(const_cast<DUContext*>(parentIt->data())); //To avoid detaching, use const iterator
-      if(top) {
-        RecursiveImports::iterator it = m_recursiveImports.find(top);
-        if(it == m_recursiveImports.end() || it->first != 1) {
-
-          if(it == m_recursiveImports.end())
-            m_recursiveImports.insert(top, qMakePair(1, const_cast<const TopDUContext*>(top)));
-          else
-            *it = qMakePair(1, const_cast<const TopDUContext*>(top));
-
-          top->m_local->needImportStructure();
-
-          for(RecursiveImports::const_iterator importIt = top->m_local->m_recursiveImports.constBegin(); importIt != top->m_local->m_recursiveImports.constEnd(); ++importIt) {
-            it = m_recursiveImports.find(importIt.key());
-            if(it == m_recursiveImports.end())
-              m_recursiveImports.insert(importIt.key(), qMakePair(importIt->first+1, const_cast<const TopDUContext*>(top)));
-            else if(it->first > importIt->first+1)
-              *it = qMakePair(importIt->first+1, const_cast<const TopDUContext*>(top)); //Found a shorter path
-          }
-        }
-      }
-    }*/
-//     m_haveImportStructure = true;
-//   }
-
   //Has an entry for every single recursively imported file, that contains the shortest path, and the next context on that path to the imported context.
   //This does not need to be stored to disk, because it is defined implicitly.
   //What makes this most complicated is the fact that loops are allowed in the import structure.
@@ -348,18 +309,6 @@ public:
   mutable RecursiveImports m_recursiveImports;
   mutable TopDUContext::IndexedRecursiveImports m_indexedRecursiveImports;
   private:
-
-//     void childClosure(QSet<TopDUContext*>& children) {
-//       if(children.contains(m_ctxt))
-//         return;
-//       children.insert(m_ctxt);
-//       for(QVector<DUContext*>::const_iterator it = m_importedChildContexts.constBegin(); it != m_importedChildContexts.constEnd(); ++it) {
-//         TopDUContext* top = dynamic_cast<TopDUContext*>(const_cast<DUContext*>(*it)); //We need to do const cast, to avoid senseless detaching
-//         if(top)
-//           top->m_local->childClosure(children);
-//       }
-//     }
-
   void addImportedContextRecursion(const TopDUContext* traceNext, const TopDUContext* imported, int depth, bool temporary = false) {
 
     if(m_ctxt->usingImportsCache())
@@ -775,17 +724,6 @@ void TopDUContext::setParsingEnvironmentFile(ParsingEnvironmentFile* file)
     file->setImportsCache(d_func()->m_importsCache);
   }
 }
-
-///Decides whether the cache contains a valid list of visible declarations for the given hash.
-///@param hash The hash-value, @param data The cache @param items Will be filled with the cached declarations. Will be left alone if none were found.
-/*void eventuallyUseCache(uint hash, TopDUContext::CacheData* cache, const IndexedDeclaration*& items, uint& itemCount) {
-  //Check whether we have all visible global items cached
-  TopDUContext::CacheData::HashType::iterator it = cache->visibleDeclarations.find( hash );
-  if( it != cache->visibleDeclarations.end() ) {
-    itemCount = (uint)(*it).second.size();
-    items = (*it).second.constData();
-  }
-}*/
 
 struct TopDUContext::FindDeclarationsAcceptor {
   FindDeclarationsAcceptor(const TopDUContext* _top, DeclarationList& _target, const DeclarationChecker& _check, SearchFlags _flags) : top(_top), target(_target), check(_check) {
