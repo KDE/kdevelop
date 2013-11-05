@@ -45,22 +45,6 @@ class ProjectBaseItem;
 class ProjectManagerView;
 class ProjectManagerViewPlugin;
 
-class ProjectManagerFilterAction : public KAction {
-    Q_OBJECT
-
-public:
-    explicit ProjectManagerFilterAction(ProjectManagerView* parent);
-
-signals:
-    void filterChanged(const QString& filter);
-
-protected:
-    virtual QWidget* createWidget( QWidget* parent );
-
-private:
-    ProjectManagerView* m_projectManagerView;
-};
-
 //own subclass to the current view can be passed from ProjectManagetView to ProjectManagerViewPlugin
 class ProjectManagerViewItemContext : public KDevelop::ProjectItemContext
 {
@@ -82,7 +66,6 @@ public:
     QList<KDevelop::ProjectBaseItem*> selectedItems() const;
     void selectItems(const QList<KDevelop::ProjectBaseItem*> &items);
     void expandItem(KDevelop::ProjectBaseItem *item);
-    QString filterString() const;
 
 protected:
     virtual bool eventFilter(QObject* obj, QEvent* event);
@@ -92,7 +75,6 @@ private slots:
     void locateCurrentDocument();
     void updateSyncAction();
     void openUrl( const KUrl& );
-    void setFilterString(const QString&);
 
 private:
     QModelIndex indexFromView(const QModelIndex& index) const;
@@ -104,7 +86,6 @@ private:
     ProjectProxyModel* m_modelFilter;
     VcsOverlayProxyModel* m_overlayProxy;
     ProjectManagerViewPlugin* m_plugin;
-    QString m_filterString;
 };
 
 #endif // KDEVPLATFORM_PLUGIN_PROJECTMANAGERVIEW_H

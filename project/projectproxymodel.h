@@ -43,21 +43,8 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectProxyModel : public QSortFilterProxyMode
         QModelIndex proxyIndexFromItem(KDevelop::ProjectBaseItem* item) const;
         KDevelop::ProjectBaseItem* itemFromProxyIndex(const QModelIndex&) const;
 
-        void setFilterString(const QString &filters);
-
-        virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-
     private:
         KDevelop::ProjectModel* projectModel() const;
-        bool filterAcceptsRow(int sourceRow, const QModelIndex & sourceParent) const;
-        bool recursiveFilterAcceptsRow(KDevelop::ProjectBaseItem *item) const;
-        void recursivelyEmitParentsChanged(const QModelIndex& index);
-        QList<QSharedPointer<QRegExp> > mFilenameFilters;
-        QList<QSharedPointer<QRegExp> > mFilenameExcludeFilters;
-        mutable QHash<KDevelop::ProjectBaseItem*, bool> mFilterCache;
-
-    private Q_SLOTS:
-        void invalidateCache();
 
 };
 
