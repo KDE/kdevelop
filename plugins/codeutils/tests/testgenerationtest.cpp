@@ -68,7 +68,7 @@ void TestGenerationTest::init()
 
 void TestGenerationTest::yamlTemplate()
 {
-    QString description = ICore::self()->componentData().dirs()->findResource("data", "testgenerationtest/template_descriptions/test_yaml.desktop");
+    QString description = ICore::self()->componentData().dirs()->findResource("data", "testgenerationtest/template_descriptions/test_yaml2.desktop");
     QVERIFY(!description.isEmpty());
     SourceFileTemplate file;
     file.setTemplateDescription(description, "testgenerationtest");
