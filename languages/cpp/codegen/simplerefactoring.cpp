@@ -212,7 +212,6 @@ QString SimpleRefactoring::moveIntoSource(const IndexedDeclaration& iDecl)
       headerRange.start.column--;
     }
   }
-  qDebug() << prefixText << prefixRange;
   const QString body = code->rangeText(headerRange.textRange());
   SourceCodeInsertion ins(targetTopContext);
   QualifiedIdentifier namespaceIdentifier = decl->internalContext()->parentContext()->scopeIdentifier(false);

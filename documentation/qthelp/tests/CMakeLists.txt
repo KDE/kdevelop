@@ -1,4 +1,4 @@
-add_definitions( -DQTHELP_FILES="\\"${CMAKE_CURRENT_SOURCE_DIR}/documentation\\"" )
+configure_file(testqthelpconfig.h.in testqthelpconfig.h)
 
 set(qthelpplugintest_SRCS
     testqthelpplugin.cpp

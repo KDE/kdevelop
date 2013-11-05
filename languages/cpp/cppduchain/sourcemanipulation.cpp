@@ -291,7 +291,7 @@ bool KDevelop::SourceCodeInsertion::insertFunctionDeclaration(KDevelop::Identifi
   if(body.isEmpty())
     decl += ";";
   else {
-    if (!body.startsWith(' ')) {
+    if (!body.startsWith(' ') && !body.startsWith('\n')) {
       decl += " ";
     }
     decl += zeroIndentation(body);

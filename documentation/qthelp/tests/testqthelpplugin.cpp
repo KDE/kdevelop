@@ -26,6 +26,11 @@
 
 #include <kdebug.h>
 
+#include "testqthelpconfig.h"
+
+const QString VALID1 = QTHELP_FILES + QString("/valid1.qch");
+const QString VALID2 = QTHELP_FILES + QString("/valid2.qch");
+const QString INVALID = QTHELP_FILES + QString("/invalid.qch");
 
 QTEST_KDEMAIN_CORE(TestQtHelpPlugin)
 

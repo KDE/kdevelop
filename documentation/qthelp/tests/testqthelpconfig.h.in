@@ -1,0 +1,1 @@
+#define QTHELP_FILES "${CMAKE_CURRENT_SOURCE_DIR}/documentation"
