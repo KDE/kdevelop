@@ -827,6 +827,15 @@ void GdbTest::testStackSwitchThread()
 
 void GdbTest::testAttach()
 {
+    // if on linux, ensure we can actually attach
+    QFile canRun("/proc/sys/kernel/yama/ptrace_scope");
+    if (canRun.exists()) {
+        QVERIFY(canRun.open(QIODevice::ReadOnly));
+        if (canRun.read(1).toInt() != 0) {
+            QSKIP("ptrace attaching not allows, skipping test. To enable it, set /proc/sys/kernel/yama/ptrace_scope to 0.", SkipAll);
+        }
+    }
+
     QString fileName = findSourceFile("debugeeslow.cpp");
 
     KProcess debugeeProcess;

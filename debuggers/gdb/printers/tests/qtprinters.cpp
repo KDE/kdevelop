@@ -36,8 +36,14 @@ public:
     {
         setProcessChannelMode(MergedChannels);
         // don't attempt to load .gdbinit in home (may cause unexpected results)
-        QProcess::start("gdb", (QStringList() << "-nh" << (BINARY_PATH + '/' + program)));
-        waitForStarted();
+        QProcess::start("gdb", (QStringList() << "-nx" << (BINARY_PATH + '/' + program)));
+        const bool started = waitForStarted();
+        if (!started) {
+            qDebug() << "Failed to start 'gdb' executable:" << errorString();
+            Q_ASSERT(false);
+            return;
+        }
+
         QByteArray prompt = waitForPrompt();
         QVERIFY(!prompt.contains("No such file or directory"));
         execute("set confirm off");
@@ -386,7 +392,6 @@ void QtPrintersTest::testQUuid()
     gdb.execute("break quuid.cpp:4");
     gdb.execute("run");
     QByteArray data = gdb.execute("print id");
-    qDebug() << data;
     QVERIFY(data.contains("{9ec3b70b-d105-42bf-b3b4-656e44d2e223}"));
 }
 

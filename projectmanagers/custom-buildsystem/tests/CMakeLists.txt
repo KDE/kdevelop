@@ -3,7 +3,7 @@ set( custombuildsystemplugintest_SRCS
      ../debugarea.cpp
    )
 
-add_definitions( -DPROJECTS_SOURCE_DIR="\\"${CMAKE_CURRENT_SOURCE_DIR}/projects\\"" )
+configure_file(testconfig.h.in testconfig.h)
 
 kde4_add_unit_test( custombuildsystemplugintest ${custombuildsystemplugintest_SRCS} )
 target_link_libraries( custombuildsystemplugintest

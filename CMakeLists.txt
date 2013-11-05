@@ -7,6 +7,8 @@ set( KDEVPLATFORM_VERSION "1.${KDEVELOP_VERSION_MINOR}.${KDEVELOP_VERSION_PATCH}
 
 ################################################################################
 
+cmake_minimum_required(VERSION 2.8)
+
 project(KDevelop)
 
 set(KDE4_BUILD_TESTS "ON" CACHE "BOOL" "Enable building of tests" FORCE )

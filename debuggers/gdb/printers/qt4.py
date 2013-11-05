@@ -88,7 +88,7 @@ class QByteArrayPrinter:
 class QListPrinter:
     "Print a QList"
 
-    class _iterator:
+    class _iterator(Iterator):
         def __init__(self, nodetype, d):
             self.nodetype = nodetype
             self.d = d
@@ -151,7 +151,7 @@ class QListPrinter:
 class QVectorPrinter:
     "Print a QVector"
 
-    class _iterator:
+    class _iterator(Iterator):
         def __init__(self, nodetype, d, p):
             self.nodetype = nodetype
             self.d = d
@@ -188,7 +188,7 @@ class QVectorPrinter:
 class QLinkedListPrinter:
     "Print a QLinkedList"
 
-    class _iterator:
+    class _iterator(Iterator):
         def __init__(self, nodetype, begin, size):
             self.nodetype = nodetype
             self.it = begin
@@ -226,7 +226,7 @@ class QLinkedListPrinter:
 class QMapPrinter:
     "Print a QMap"
 
-    class _iterator:
+    class _iterator(Iterator):
         def __init__(self, val):
             self.val = val
             self.ktype = self.val.type.template_argument(0)
@@ -303,7 +303,7 @@ class QMapPrinter:
 class QHashPrinter:
     "Print a QHash"
 
-    class _iterator:
+    class _iterator(Iterator):
         def __init__(self, val):
             self.val = val
             self.d = self.val['d']
@@ -514,7 +514,7 @@ class QSetPrinter:
     def __init__(self, val):
         self.val = val
 
-    class _iterator:
+    class _iterator(Iterator):
         def __init__(self, hashIterator):
             self.hashIterator = hashIterator
             self.count = 0
