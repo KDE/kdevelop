@@ -37,7 +37,13 @@ public:
         setProcessChannelMode(MergedChannels);
         // don't attempt to load .gdbinit in home (may cause unexpected results)
         QProcess::start("gdb", (QStringList() << "-nh" << (BINARY_PATH + '/' + program)));
-        waitForStarted();
+        const bool started = waitForStarted();
+        if (!started) {
+            qDebug() << "Failed to start 'gdb' executable:" << errorString();
+            Q_ASSERT(false);
+            return;
+        }
+
         QByteArray prompt = waitForPrompt();
         QVERIFY(!prompt.contains("No such file or directory"));
         execute("set confirm off");
