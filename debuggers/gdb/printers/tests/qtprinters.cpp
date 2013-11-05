@@ -35,7 +35,8 @@ public:
     GdbProcess(const QString &program) : QProcess()
     {
         setProcessChannelMode(MergedChannels);
-        QProcess::start("gdb", (QStringList() << (BINARY_PATH + '/' + program)));
+        // don't attempt to load .gdbinit in home (may cause unexpected results)
+        QProcess::start("gdb", (QStringList() << "-nh" << (BINARY_PATH + '/' + program)));
         waitForStarted();
         QByteArray prompt = waitForPrompt();
         QVERIFY(!prompt.contains("No such file or directory"));
@@ -49,6 +50,8 @@ public:
           << "sys.path.insert(0, '"+printersDir.path().toAscii()+"')"
           << "from qt4 import register_qt4_printers"
           << "register_qt4_printers (None)"
+          << "from kde4 import register_kde4_printers"
+          << "register_kde4_printers (None)"
           << "end";
         foreach (const QByteArray &i, p) {
             write(i + "\n");
@@ -71,7 +74,7 @@ public:
             output.append(l);
         }
         output.chop(7); //remove (gdb) prompt
-        if (output.contains("Traceback")) {
+        if (output.contains("Traceback") || output.contains("Exception")) {
             qDebug() << output;
             qFatal("Unexpected Python Exception");
         }
@@ -385,6 +388,18 @@ void QtPrintersTest::testQUuid()
     QByteArray data = gdb.execute("print id");
     qDebug() << data;
     QVERIFY(data.contains("{9ec3b70b-d105-42bf-b3b4-656e44d2e223}"));
+}
+
+void QtPrintersTest::testKTextEditorTypes()
+{
+    GdbProcess gdb("ktexteditortypes");
+    gdb.execute("break ktexteditortypes.cpp:9");
+    gdb.execute("run");
+
+    QByteArray data = gdb.execute("print cursor");
+    QCOMPARE(data, QByteArray("$1 = [1, 1]"));
+    data = gdb.execute("print range");
+    QCOMPARE(data, QByteArray("$2 = [(1, 1) -> (2, 2)]"));
 }
 
 }

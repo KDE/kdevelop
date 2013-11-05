@@ -51,6 +51,9 @@ target_link_libraries(qchar ${QT_QTCORE_LIBRARY})
 add_executable(quuid quuid.cpp)
 target_link_libraries(quuid ${QT_QTCORE_LIBRARY})
 
+add_executable(ktexteditortypes ktexteditortypes.cpp)
+target_link_libraries(ktexteditortypes ${QT_QTCORE_LIBRARY} ${KDE4_KTEXTEDITOR_LIBS})
+
 kde4_add_unit_test(qtprinters qtprinters.cpp)
 target_link_libraries(qtprinters
     ${QT_QTCORE_LIBRARY}

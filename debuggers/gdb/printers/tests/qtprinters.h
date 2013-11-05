@@ -45,6 +45,7 @@ private Q_SLOTS:
     void testQSetString();
     void testQChar();
     void testQUuid();
+    void testKTextEditorTypes();
 };
 
 }
