@@ -2,12 +2,9 @@ project(kdevelop4-custom-buildsystem)
 
 include(MacroLibrary)
 
-# Needs to be updated on kdevelop releases
-set(CUSTOM_BUILDSYSTEM_VERSION 1.2.60)
-
 include_directories( ${KDE4_INCLUDES} ${KDEVPLATFORM_INCLUDE_DIR})
 
-add_definitions( ${QT_DEFINITIONS} ${KDE4_DEFINITIONS} -DCUSTOM_BUILDSYSTEM_VERSION=\\\"${CUSTOM_BUILDSYSTEM_VERSION}\\\" )
+add_definitions( ${QT_DEFINITIONS} ${KDE4_DEFINITIONS} )
 
 ## Unittests
 add_subdirectory( tests )
