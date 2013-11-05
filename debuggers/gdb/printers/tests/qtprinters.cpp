@@ -36,7 +36,7 @@ public:
     {
         setProcessChannelMode(MergedChannels);
         // don't attempt to load .gdbinit in home (may cause unexpected results)
-        QProcess::start("gdb", (QStringList() << "-nh" << (BINARY_PATH + '/' + program)));
+        QProcess::start("gdb", (QStringList() << "-nx" << (BINARY_PATH + '/' + program)));
         const bool started = waitForStarted();
         if (!started) {
             qDebug() << "Failed to start 'gdb' executable:" << errorString();
