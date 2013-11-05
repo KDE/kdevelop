@@ -1,5 +1,0 @@
-name: {{ name }}
-cases:
-{% for case in testCases %}
-- name: {{ case }}
-{% endfor %}

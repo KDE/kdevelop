@@ -1,6 +1,6 @@
 set (codeutils_tests_template_DIRS
     test_qtestlib
-    test_yaml
+    test_yaml2
 )
 
 
