@@ -1605,17 +1605,24 @@ void GdbTest::testCatchpoint()
     session->run();
     WAIT_FOR_STATE(session, DebugSession::PausedState);
     QTest::qWait(1000);
-    QCOMPARE(fsModel->currentFrame(), 1); //first frame skiped because somewhere inside stdlib
-    QCOMPARE(session->line(), 22);
 
-    QModelIndex i = variableCollection()->index(1, 0);
-    QCOMPARE(variableCollection()->rowCount(i), 1);
-    COMPARE_DATA(variableCollection()->index(0, 0, i), "i");
-    COMPARE_DATA(variableCollection()->index(0, 1, i), "20");
+    // TODO: Fix API in FrameStackModel? At least introduce FrameStackModel::frames(int)
+    typedef KDevelop::IFrameStackModel::FrameItem FrameItem;
+    QVector<FrameItem> frames;
+    const QModelIndex thread1Index = fsModel->index(0, 0);
+    for (int i = 0; i < fsModel->rowCount(thread1Index); ++i) {
+        FrameItem frame = fsModel->frame(fsModel->index(i, 0, thread1Index));
+        frames << frame;
+        qDebug() << frame.file << frame.line;
+    }
+
+    QVERIFY(frames.size() >= 2);
+    // frame 0 is somewhere inside libstdc++
+    QCOMPARE(frames[1].file, KUrl(findSourceFile("debugeeexception.cpp")));
+    QCOMPARE(frames[1].line, 22);
 
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
-
 }
 
 //TODO: figure out why do we need this test? And do we need it at all??
