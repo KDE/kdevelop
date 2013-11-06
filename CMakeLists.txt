@@ -72,7 +72,8 @@ target_link_libraries( kdevqmakemanager
 
 ########### install files ###############
 
-install( FILES kdevqmakemanager.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+configure_file(kdevqmakemanager.desktop.cmake ${CMAKE_BINARY_DIR}/kdevqmakemanager.desktop)
+install( FILES ${CMAKE_BINARY_DIR}/kdevqmakemanager.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install(TARGETS kdevqmakemanager DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 ########### cdash / unit tests ###############
