@@ -41,23 +41,17 @@
 
 using namespace KDevelop;
 
-CTestSuite::CTestSuite(const QString& name, const KUrl& executable, const QStringList& files, IProject* project, const QStringList& args, bool expectFail):
+CTestSuite::CTestSuite(const QString& name, const KUrl& executable, const KUrl::List& files, IProject* project, const QStringList& args, bool expectFail):
 m_executable(executable),
 m_name(name),
 m_args(args),
+m_files(files),
 m_project(project),
 m_expectFail(expectFail)
 {
     m_executable.cleanPath();
     Q_ASSERT(project);
     kDebug() << m_name << m_executable << m_project->name();
-    
-    foreach (const QString& file, files)
-    {
-        KUrl url(file);
-        url.cleanPath();
-        m_files << url.toLocalFile();
-    }
 }
 
 CTestSuite::~CTestSuite()
@@ -197,7 +191,7 @@ void CTestSuite::setTestCases(const QStringList& cases)
     m_cases = cases;
 }
 
-QStringList CTestSuite::sourceFiles() const
+KUrl::List CTestSuite::sourceFiles() const
 {
     return m_files;
 }

@@ -112,11 +112,9 @@ void CMakeLoadProjectTest::testSmallProjectWithTests()
     QCOMPARE(v.testSuites.count(), 5);
     QCOMPARE(v.projectName, QString("unittests"));
     
-    QCOMPARE(v.testSuites.at(0).files, QStringList() << "success.cpp");
     QCOMPARE(v.testSuites.at(0).name, QString("success"));
     QCOMPARE(v.testSuites.at(0).arguments.count(), 0);
     
-    QCOMPARE(v.testSuites.at(3).files, QStringList() << "math_test.cpp");
     QCOMPARE(v.testSuites.at(3).name, QString("test_four"));
     QCOMPARE(v.testSuites.at(3).arguments.count(), 1);
     QCOMPARE(v.testSuites.at(3).arguments.at(0), QString("4"));
@@ -128,10 +126,8 @@ void CMakeLoadProjectTest::testKDE4ProjectWithTests()
     QCOMPARE(v.testSuites.count(), 1); //cmake-test-unittestskde
     QCOMPARE(v.projectName, QString("unittestskde"));
     
-    QCOMPARE(v.testSuites.at(0).files, QStringList() << "test.cpp");
     QCOMPARE(v.testSuites.at(0).name, QString("cmake-test-unittestskde"));
     QCOMPARE(v.testSuites.at(0).arguments.count(), 0);
-    QVERIFY(KUrl(v.testSuites.at(0).executable).isRelative());
 }
 
 CMakeProjectData CMakeLoadProjectTest::parseProject( const QString& sourcedir )

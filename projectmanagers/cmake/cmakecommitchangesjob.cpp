@@ -335,8 +335,8 @@ void CMakeCommitChangesJob::makeChanges()
     }
     qDeleteAll(deletableTargets);
 
-    reloadFiles();
     CTestUtils::createTestSuites(m_tests, folder);
+    reloadFiles();
 }
 
 void CMakeCommitChangesJob::setTargetFiles(ProjectTargetItem* target, const KUrl::List& files)

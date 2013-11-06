@@ -21,7 +21,7 @@
 #define CTESTFINDJOB_H
 
 #include <KJob>
-#include <QStringList>
+#include <KUrl>
 
 namespace KDevelop {
 class IndexedString;
@@ -47,7 +47,7 @@ protected:
     virtual bool doKill();
 private:
     CTestSuite* m_suite;
-    QStringList m_pendingFiles;
+    KUrl::List m_pendingFiles;
 };
 
 #endif // CTESTFINDJOB_H

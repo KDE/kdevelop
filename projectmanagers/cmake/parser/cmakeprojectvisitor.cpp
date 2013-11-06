@@ -303,19 +303,7 @@ int CMakeProjectVisitor::visit( const AddTestAst * test)
         t.executable.chop(4);
     }
 
-    QHash<QString, Target>::iterator it = findTargetForExecutable(t.executable, m_targetForId);
-    if (it == m_targetForId.end())
-    {
-        kDebug(9042) << "Target not found for test" << t.executable;
-    }
-    else 
-    {
-        t.files = it->files;
-        t.isTarget = true;
-    }
-    t.files.removeAll("TEST"); // Added by kde4_add_unit_test
-
-    kDebug(9042) << "AddTestAst" << t.executable << t.files;
+    kDebug(9042) << "AddTestAst" << t.executable;
     m_testSuites << t;
     return 1;
 }

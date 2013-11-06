@@ -1386,6 +1386,11 @@ void GdbTest::testRunGdbScript()
 
 void GdbTest::testRemoteDebug()
 {
+    const QString gdbserverExecutable = KStandardDirs::findExe("gdbserver");
+    if (gdbserverExecutable.isEmpty()) {
+        QSKIP("Skipping, gdbserver not available", SkipSingle);
+    }
+
     TestDebugSession *session = new TestDebugSession;
 
     QTemporaryFile shellScript(QDir::currentPath()+"/shellscript");
@@ -1422,6 +1427,11 @@ void GdbTest::testRemoteDebug()
 
 void GdbTest::testRemoteDebugInsertBreakpoint()
 {
+    const QString gdbserverExecutable = KStandardDirs::findExe("gdbserver");
+    if (gdbserverExecutable.isEmpty()) {
+        QSKIP("Skipping, gdbserver not available", SkipSingle);
+    }
+
     TestDebugSession *session = new TestDebugSession;
 
     breakpoints()->addCodeBreakpoint(debugeeFileName, 35);
@@ -1468,6 +1478,11 @@ void GdbTest::testRemoteDebugInsertBreakpoint()
 
 void GdbTest::testRemoteDebugInsertBreakpointPickupOnlyOnce()
 {
+    const QString gdbserverExecutable = KStandardDirs::findExe("gdbserver");
+    if (gdbserverExecutable.isEmpty()) {
+        QSKIP("Skipping, gdbserver not available", SkipSingle);
+    }
+
     TestDebugSession *session = new TestDebugSession;
 
     breakpoints()->addCodeBreakpoint(debugeeFileName, 35);
@@ -1621,6 +1636,8 @@ void GdbTest::testThreadAndFrameInfo()
     session->addCommand(new UserCommand(GDBMI::StackListLocals, QLatin1String("0")));
     QTest::qWait(1000);
     QCOMPARE(outputSpy.count(), 2);
+    qDebug() << outputSpy.at(0).first().toString();
+    qDebug() << outputSpy.at(1).first().toString();
     QVERIFY(outputSpy.last().at(0).toString().contains(QLatin1String("--thread 1")));
 
     session->run();
