@@ -1636,6 +1636,8 @@ void GdbTest::testThreadAndFrameInfo()
     session->addCommand(new UserCommand(GDBMI::StackListLocals, QLatin1String("0")));
     QTest::qWait(1000);
     QCOMPARE(outputSpy.count(), 2);
+    qDebug() << outputSpy.at(0).first().toString();
+    qDebug() << outputSpy.at(1).first().toString();
     QVERIFY(outputSpy.last().at(0).toString().contains(QLatin1String("--thread 1")));
 
     session->run();
