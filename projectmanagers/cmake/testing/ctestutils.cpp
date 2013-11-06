@@ -30,8 +30,10 @@
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iruncontroller.h>
+#include <interfaces/iprojectcontroller.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/projectmodel.h>
+#include <QFileInfo>
 
 using namespace KDevelop;
 
@@ -42,33 +44,28 @@ void CTestUtils::createTestSuites(const QVector<Test>& testSuites, ProjectFolder
     const QString binDir = bsm->buildDirectory(project->projectItem()).toLocalFile();
     const KUrl currentBinDir = bsm->buildDirectory(folder);
     const KUrl currentSourceDir = folder->url();
-    
+
     foreach (const Test& test, testSuites)
     {
+        KUrl::List files;
         QString exe = test.executable;
-        if (test.isTarget)
+        QString targetName = QFileInfo(exe).fileName();
+        QList<ProjectTargetItem*> items = bsm->targets(folder);
+        foreach (ProjectTargetItem* item, items)
         {
-            QList<ProjectTargetItem*> items = bsm->targets(folder);
-            foreach (ProjectTargetItem* item, items)
+            ProjectExecutableTargetItem * exeTgt = item->executable();
+            if (exeTgt && (exeTgt->text() == test.executable || exeTgt->text()==targetName))
             {
-                ProjectExecutableTargetItem * exeTgt = item->executable();
-                if (exeTgt && exeTgt->text() == test.executable)
-                {
-                    exe = exeTgt->builtUrl().toLocalFile();
-                    kDebug(9042) << "Found proper test target path" << test.executable << "->" << exe;
-                    break;
+                exe = exeTgt->builtUrl().toLocalFile();
+                kDebug(9042) << "Found proper test target path" << test.executable << "->" << exe;
+                foreach(ProjectFileItem* file, exeTgt->fileList()) {
+                    files += file->url();
                 }
+                break;
             }
         }
         exe.replace("#[bin_dir]", binDir);
         const KUrl exeUrl(currentBinDir, exe);
-
-        QStringList files;
-        foreach (const QString& file, test.files)
-        {
-            QString localFile = QString(file).replace("#[bin_dir]", binDir);
-            files << KUrl(currentSourceDir, localFile).toLocalFile();
-        }
 
         QStringList args = test.arguments;
         for (QStringList::iterator it = args.begin(), end = args.end(); it != end; ++it)
