@@ -93,7 +93,7 @@ void FrameStackModel::setFrames(int threadNumber, QList<FrameItem> frames)
     }
 
     //if first frame doesn't contain debug ifnormation (no line numbers) set
-    //currentPosition to the first frame with debug information
+    //currentFrame to the first frame with debug information
     if (m_currentThread == threadNumber && m_updateCurrentFrameOnNextFetch) {
         m_currentFrame = 0;
         foreach (const FrameItem &frame, frames) {

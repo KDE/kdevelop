@@ -56,6 +56,12 @@ public:
         QString name;
     };
     void setThreads(const QList<ThreadItem> &threads);
+    /**
+     * Update frames for thread @p threadNumber
+     *
+     * @note The currentFrame property will be set to the first frame
+     *   containing debug information
+     */
     void setFrames(int threadNumber, QList<FrameItem> frames);
     void insertFrames(int threadNumber, const QList<FrameItem> &frames);
     void setHasMoreFrames(int threadNumber, bool hasMoreFrames);
