@@ -1386,6 +1386,11 @@ void GdbTest::testRunGdbScript()
 
 void GdbTest::testRemoteDebug()
 {
+    const QString gdbserverExecutable = KStandardDirs::findExe("gdbserver");
+    if (gdbserverExecutable.isEmpty()) {
+        QSKIP("Skipping, gdbserver not available", SkipSingle);
+    }
+
     TestDebugSession *session = new TestDebugSession;
 
     QTemporaryFile shellScript(QDir::currentPath()+"/shellscript");
@@ -1422,6 +1427,11 @@ void GdbTest::testRemoteDebug()
 
 void GdbTest::testRemoteDebugInsertBreakpoint()
 {
+    const QString gdbserverExecutable = KStandardDirs::findExe("gdbserver");
+    if (gdbserverExecutable.isEmpty()) {
+        QSKIP("Skipping, gdbserver not available", SkipSingle);
+    }
+
     TestDebugSession *session = new TestDebugSession;
 
     breakpoints()->addCodeBreakpoint(debugeeFileName, 35);
@@ -1468,6 +1478,11 @@ void GdbTest::testRemoteDebugInsertBreakpoint()
 
 void GdbTest::testRemoteDebugInsertBreakpointPickupOnlyOnce()
 {
+    const QString gdbserverExecutable = KStandardDirs::findExe("gdbserver");
+    if (gdbserverExecutable.isEmpty()) {
+        QSKIP("Skipping, gdbserver not available", SkipSingle);
+    }
+
     TestDebugSession *session = new TestDebugSession;
 
     breakpoints()->addCodeBreakpoint(debugeeFileName, 35);
