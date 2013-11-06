@@ -20,6 +20,7 @@
 
 #include "test_qmakeproject.h"
 #include "../qmakeconfig.h"
+#include "qmaketestconfig.h"
 
 #include <shell/core.h>
 #include <tests/autotestshell.h>
