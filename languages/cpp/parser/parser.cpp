@@ -1132,9 +1132,6 @@ bool Parser::parseAsmDefinition(DeclarationAST *&node)
   const ListNode<uint> *cv = 0;
   parseCvQualify(cv);
 
-#if defined(__GNUC__)
-#warning "implement me"
-#endif
   skip('(', ')');
   advance();
   ADVANCE(';', ";");
@@ -2036,7 +2033,6 @@ bool Parser::parseFunctionSpecifier(const ListNode<uint> *&node)
 
 bool Parser::parseTypeId(TypeIdAST *&node)
 {
-  /// @todo implement the AST for typeId
   uint start = session->token_stream->cursor();
 
   TypeSpecifierAST *spec = 0;
