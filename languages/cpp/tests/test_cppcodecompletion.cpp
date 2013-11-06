@@ -53,7 +53,7 @@
 #include <language/duchain/classdeclaration.h>
 #include "cppduchain/missingdeclarationproblem.h"
 #include "cppduchain/missingdeclarationassistant.h"
-#include <qstandarditemmodel.h>
+#include "overloadresolutionhelper.h"
 #include <language/duchain/functiondefinition.h>
 
 #include <language/codecompletion/codecompletiontesthelper.h>

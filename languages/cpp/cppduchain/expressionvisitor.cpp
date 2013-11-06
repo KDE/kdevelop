@@ -35,13 +35,13 @@
 #include "type_visitor.h"
 #include "lexer.h"
 #include "overloadresolution.h"
-#include "cppduchain.h"
 #include "overloadresolutionhelper.h"
 #include "builtinoperators.h"
 #include "qtfunctiondeclaration.h"
 #include "missingdeclarationtype.h"
 #include "missingdeclarationproblem.h"
 #include "dumpchain.h"
+#include "ptrtomembertype.h"
 
 //If this is enabled and a type is not found, it is searched again with verbose debug output.
 //#define DEBUG_RESOLUTION_PROBLEMS

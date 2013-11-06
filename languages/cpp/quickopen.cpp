@@ -32,6 +32,7 @@
 #include <interfaces/idocument.h>
 #include <ktexteditor/document.h>
 
+#include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
 
 #include "cppduchain/navigation/navigationwidget.h"

@@ -27,7 +27,6 @@
 #include <QStack>
 
 #include "cmakeastvisitor.h"
-#include "cmakelistsparser.h"
 #include "cmaketypes.h"
 #include <language/duchain/topducontext.h>
 

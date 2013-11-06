@@ -18,17 +18,18 @@
 #include <ktexteditor/document.h>
 #include <klocalizedstring.h>
 #include <language/duchain/duchainutils.h>
+#include "context.h"
 #include "helpers.h"
 #include <language/duchain/types/functiontype.h>
 #include <language/duchain/classfunctiondeclaration.h>
 #include <qtfunctiondeclaration.h>
+#include <cppduchain.h>
+#include <sourcemanipulation.h>
 #include <language/codegen/coderepresentation.h>
+#include <language/codegen/documentchangeset.h>
 #include <language/backgroundparser/backgroundparser.h>
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
-#include <language/duchain/parsingenvironment.h>
-#include <sourcemanipulation.h>
-#include <cppduchain.h>
 
 namespace Cpp {
 

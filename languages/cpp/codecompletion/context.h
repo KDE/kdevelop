@@ -19,13 +19,9 @@
 #ifndef CODECOMPLETIONCONTEXT_H
 #define CODECOMPLETIONCONTEXT_H
 
-#include <ktexteditor/cursor.h>
 #include <ksharedptr.h>
 #include <language/duchain/duchainpointer.h>
 #include "../cppduchain/typeconversion.h"
-#include "../cppduchain/expressionparser.h"
-#include "../cppduchain/viablefunctions.h"
-#include "../cppduchain/overloadresolutionhelper.h"
 #include "../cppduchain/expressionevaluationresult.h"
 #include <language/util/includeitem.h>
 #include "item.h"

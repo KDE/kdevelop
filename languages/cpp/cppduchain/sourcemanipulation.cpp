@@ -18,8 +18,8 @@
 #include <language/codegen/coderepresentation.h>
 #include "qtfunctiondeclaration.h"
 #include "declarationbuilder.h"
-#include "environmentmanager.h"
 #include "templateparameterdeclaration.h"
+#include <language/duchain/parsingenvironment.h>
 #include <language/duchain/stringhelpers.h>
 
 using namespace KDevelop;

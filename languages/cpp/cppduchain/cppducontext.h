@@ -50,7 +50,6 @@ While construction:
 
 #include <language/duchain/ducontext.h>
 
-#include <QSet>
 #include <QMutex>
 
 #include <language/duchain/abstractfunctiondeclaration.h>
@@ -61,10 +60,10 @@ While construction:
 #include <language/duchain/classfunctiondeclaration.h>
 #include <language/duchain/namespacealiasdeclaration.h>
 #include "typeutils.h"
-#include "cpptypes.h"
+#include "templatedeclaration.h"
+#include "expressionevaluationresult.h"
 #include "cppduchain.h"
 #include "templatedeclaration.h"
-#include "expressionparser.h"
 #include "cppdebughelper.h"
 
 using namespace KDevelop;

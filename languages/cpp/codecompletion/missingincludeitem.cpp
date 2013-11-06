@@ -25,6 +25,7 @@
 #include "../cppduchain/navigation/navigationwidget.h"
 #include "../cppduchain/typeutils.h"
 #include "../cppduchain/templateparameterdeclaration.h"
+#include "../cppduchain/expressionevaluationresult.h"
 #include "../cpplanguagesupport.h"
 #include "../cpputils.h"
 #include "model.h"
@@ -32,8 +33,6 @@
 #include <ktexteditor/document.h>
 #include <language/duchain/classdeclaration.h>
 #include <language/duchain/duchainutils.h>
-#include <declarationbuilder.h>
-#include <language/duchain/stringhelpers.h>
 #include "helpers.h"
 #include "missingincludemodel.h"
 #include <language/duchain/aliasdeclaration.h>

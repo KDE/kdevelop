@@ -20,20 +20,18 @@
 #include "test_duchain.h"
 
 #include <QTest>
-#include <QWidget>
 
 #include "declarationbuilder.h"
 #include "usebuilder.h"
 #include "cpptypes.h"
 #include "templateparameterdeclaration.h"
-#include "cppeditorintegrator.h"
 #include "dumptypes.h"
-#include "environmentmanager.h"
 #include "typeutils.h"
 #include "templatedeclaration.h"
-#include "tokens.h"
 #include "qtfunctiondeclaration.h"
 #include "sourcemanipulation.h"
+#include "ptrtomembertype.h"
+#include "overloadresolution.h"
 
 #include "rpp/chartools.h"
 #include "rpp/pp-engine.h"

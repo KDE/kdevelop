@@ -33,13 +33,12 @@
 #include "name_compiler.h"
 #include <language/duchain/dumpchain.h>
 #include "environmentmanager.h"
+#include "expressionvisitor.h"
 
-#include <climits>
 #include "cppdebughelper.h"
 #include "debugbuilders.h"
 #include "rpp/chartools.h"
 #include "tokens.h"
-#include <klocalizedstring.h>
 
 using namespace KTextEditor;
 using namespace KDevelop;

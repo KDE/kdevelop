@@ -32,6 +32,7 @@
 #include <language/duchain/declaration.h>
 #include <language/duchain/types/functiontype.h>
 #include <language/duchain/types/delayedtype.h>
+#include <language/interfaces/iproblem.h>
 
 #include <KProcess>
 #include <KLocale>

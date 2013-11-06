@@ -22,29 +22,16 @@
 
 #include "worker.h"
 
+#include "context.h"
+
 #include <kdebug.h>
 
-#include <ktexteditor/view.h>
-#include <ktexteditor/document.h>
-#include <klocale.h>
-
-#include "../cppduchain/cppduchain.h"
-#include "../cppduchain/typeutils.h"
-
-#include "../cppduchain/overloadresolutionhelper.h"
-
-#include <language/duchain/declaration.h>
-#include <language/duchain/ducontext.h>
-#include "../cppduchain/cpptypes.h"
+#include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
-#include <language/duchain/duchainbase.h>
-#include <language/duchain/dumpchain.h>
-#include <language/codecompletion/codecompletioncontext.h>
-#include <language/duchain/duchainutils.h>
+#include <language/duchain/types/functiontype.h>
 #include <language/duchain/parsingenvironment.h>
 
 using namespace KDevelop;
-using namespace TypeUtils;
 
 namespace Cpp {
 
@@ -57,7 +44,7 @@ KDevelop::CodeCompletionContext* CodeCompletionWorker::createCompletionContext(K
   return new Cpp::CodeCompletionContext( context, contextText, followingText, position );
 }
 
-void CodeCompletionWorker::updateContextRange(KTextEditor::Range& contextRange, KTextEditor::View* /*view*/, DUContextPointer context) const
+void CodeCompletionWorker::updateContextRange(KTextEditor::Range& contextRange, KTextEditor::View* view, DUContextPointer context) const
 {
   if(context && context->owner() && context->owner()->type<FunctionType>()) {
     if(!context->owner()->type<FunctionType>()->returnType()) {

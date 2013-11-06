@@ -20,9 +20,10 @@
 #define MISSINGINCLUDECOMPLETIONITEM_H
 
 #include "item.h"
-#include "../cppduchain/expressionevaluationresult.h"
 
 namespace Cpp {
+
+class ExpressionEvaluationResult;
 
 class MissingIncludeCompletionItem : public KDevelop::CompletionTreeItem
 {

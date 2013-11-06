@@ -27,10 +27,10 @@
 #include <language/duchain/abstractfunctiondeclaration.h>
 #include <language/duchain/duchainutils.h>
 #include <QTextFormat>
-#include <QStringList>
-#include "../cppduchain/overloadresolution.h"
 #include "../cppduchain/cpptypes.h"
 #include "../cppduchain/cppduchain.h"
+#include "../cppduchain/overloadresolutionhelper.h"
+#include "../cppduchain/viablefunctions.h"
 #include <templatedeclaration.h>
 #include <templateparameterdeclaration.h>
 #include "../cpputils.h"

@@ -29,6 +29,8 @@ namespace Cpp
 
   using namespace KDevelop;
 
+  class ADLHelper;
+
 /**
  * @brief Performs type traversal by ADLHelper in type traversal.
  */

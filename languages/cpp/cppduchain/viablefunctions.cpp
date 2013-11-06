@@ -21,10 +21,9 @@
 #include <language/duchain/ducontext.h>
 #include <language/duchain/topducontext.h>
 #include <language/duchain/declaration.h>
-#include <language/duchain/classfunctiondeclaration.h>
-#include "cppduchain/cpptypes.h"
+#include <language/duchain/abstractfunctiondeclaration.h>
 #include "templatedeclaration.h"
-#include "missingdeclarationtype.h"
+#include "typeconversion.h"
 
 #define ifDebug(x)
 // #define ifDebug(x) x

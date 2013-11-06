@@ -29,6 +29,7 @@
 #include "typeutils.h"
 #include <QtAlgorithms>
 #include "adlhelper.h"
+#include "typeconversion.h"
 #include <language/duchain/persistentsymboltable.h>
 
 using namespace Cpp;

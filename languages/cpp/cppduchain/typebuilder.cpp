@@ -37,6 +37,7 @@
 #include "parser/rpp/chartools.h"
 #include "cppdebughelper.h"
 #include "debugbuilders.h"
+#include "ptrtomembertype.h"
 #include <language/duchain/types/typealiastype.h>
 #include <util/pushvalue.h>
 #include "typeutils.h"

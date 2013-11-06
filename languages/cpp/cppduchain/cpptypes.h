@@ -25,18 +25,13 @@
 
 #include <QtCore/QList>
 #include <QtCore/QString>
-#include <QtCore/QVector>
-#include <QtCore/QPair>
-#include <util/kdevvarlengtharray.h>
 
 #include <language/duchain/identifier.h>
-#include <language/duchain/types/typesystemdata.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/types/identifiedtype.h>
 #include "cppduchainexport.h"
 #include <language/duchain/types/alltypes.h>
 #include <language/duchain/types/typesystem.h>
-#include "ptrtomembertype.h"
 
 namespace KDevelop
 {

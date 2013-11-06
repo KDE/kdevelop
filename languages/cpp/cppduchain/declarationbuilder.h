@@ -24,7 +24,6 @@
 #include <language/duchain/builders/abstractdeclarationbuilder.h>
 #include "cppduchainexport.h"
 #include <language/duchain/declaration.h>
-#include <language/duchain/duchainpointer.h>
 #include <language/duchain/classfunctiondeclaration.h>
 #include <language/duchain/classdeclaration.h>
 

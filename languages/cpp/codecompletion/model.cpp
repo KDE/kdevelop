@@ -22,47 +22,17 @@
 
 #include "model.h"
 
-#include <QIcon>
-#include <QMetaType>
-#include <QTextFormat>
-#include <QBrush>
-#include <QDir>
 #include <kdebug.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
-#include <kiconloader.h>
 
-
-#include "../cppduchain/cppduchain.h"
-#include "../cppduchain/typeutils.h"
-
-#include "../cppduchain/overloadresolutionhelper.h"
-
-#include <language/duchain/declaration.h>
-#include "../cppduchain/cpptypes.h"
-#include "../cppduchain/typeutils.h"
-#include <language/duchain/classfunctiondeclaration.h>
-#include <language/duchain/ducontext.h>
-#include <language/duchain/duchain.h>
-#include <language/duchain/namespacealiasdeclaration.h>
-#include <language/duchain/parsingenvironment.h>
-#include <language/duchain/duchainlock.h>
-#include <language/duchain/duchainbase.h>
-#include <language/duchain/topducontext.h>
-#include <language/duchain/dumpchain.h>
 #include <language/codecompletion/codecompletioncontext.h>
-#include "../cppduchain/navigation/navigationwidget.h"
-#include "../preprocessjob.h"
-#include <language/duchain/duchainutils.h>
 #include "worker.h"
-#include "../cpplanguagesupport.h"
-#include <language/editor/modificationrevision.h>
-#include <language/duchain/specializationstore.h>
-#include "implementationhelperitem.h"
+#include "context.h"
+#include "../cppduchain/typeconversion.h"
 
 using namespace KTextEditor;
 using namespace KDevelop;
-using namespace TypeUtils;
 
 namespace Cpp {
 

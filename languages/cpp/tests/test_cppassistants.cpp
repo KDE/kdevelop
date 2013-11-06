@@ -24,7 +24,6 @@
 
 #include <QtTest/QtTest>
 #include <KTempDir>
-#include <KAction>
 #include <qtest_kde.h>
 
 #include <tests/autotestshell.h>

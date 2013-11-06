@@ -17,6 +17,7 @@
 */
 
 #include "context.h"
+
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
 #include <klocalizedstring.h>
@@ -41,6 +42,7 @@
 #include "../cppduchain/cppduchain.h"
 #include "../cppduchain/typeutils.h"
 #include "../cppduchain/overloadresolution.h"
+#include "../cppduchain/overloadresolutionhelper.h"
 #include "../cppduchain/viablefunctions.h"
 #include "../cppduchain/environmentmanager.h"
 #include "../cppduchain/cpptypes.h"
@@ -56,6 +58,7 @@
 #include <qtfunctiondeclaration.h>
 #include "missingincludemodel.h"
 #include <templateparameterdeclaration.h>
+#include <expressionparser.h>
 #include <language/duchain/classdeclaration.h>
 #include "model.h"
 #include "helpers.h"

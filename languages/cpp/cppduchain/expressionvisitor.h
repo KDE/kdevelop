@@ -21,22 +21,20 @@
 
 #include <language/duchain/types/abstracttype.h>
 #include <language/duchain/declaration.h>
-#include <language/duchain/ducontext.h>
-#include "visitor.h"
+#include <language/interfaces/iproblem.h>
 #include "default_visitor.h"
 #include "cppduchainexport.h"
 #include "overloadresolution.h" /* needed for OverloadResover::Parameter */
 #include "cpptypes.h"
 
-
 namespace KDevelop {
   class Declaration;
   class DUContext;
+  class TopDUContext;
+  class Problem;
 }
 
 class Token;
-class TranslationUnitAST;
-class AST;
 
 namespace Cpp {
 using namespace KDevelop;

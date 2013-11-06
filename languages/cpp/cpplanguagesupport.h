@@ -25,20 +25,33 @@
 
 #include <interfaces/iplugin.h>
 #include <language/interfaces/ilanguagesupport.h>
+#include <language/duchain/topducontext.h>
 #include <interfaces/ibuddydocumentfinder.h>
-#include "environmentmanager.h"
+
+#include <QDateTime>
 #include <QThread>
+#include <QTimer>
+#include <QMutex>
+
+namespace rpp {
+class pp_macro;
+}
 
 class CppHighlighting;
 class CPPParseJob;
-class CppCodeCompletion;
-class AST;
-class TranslationUnitAST;
 class IncludeFileDataProvider;
 
-namespace KDevelop { class ICodeHighlighting; class IProject; class IDocument; class SimpleRange; class CodeCompletion; template<class T> class DUChainPointer; typedef DUChainPointer<TopDUContext> TopDUContextPointer; }
-namespace Cpp { class EnvironmentManager; class StaticCodeAssistant; }
-namespace CppTools { class IncludePathResolver; }
+namespace KDevelop {
+  class ICodeHighlighting;
+  class SimpleRange;
+  class CodeCompletion;
+}
+namespace Cpp {
+  class StaticCodeAssistant;
+}
+namespace CppTools {
+  class IncludePathResolver;
+}
 
 ///A class that helps detecting what exactly makes the UI block. To use it, just place a breakpoint on UIBlockTester::lockup() and inspect the execution-position of the main thread
 class UIBlockTester : public QObject {

@@ -14,25 +14,21 @@
 #ifndef ENVIRONMENTMANAGER_H
 #define ENVIRONMENTMANAGER_H
 
-#include <map>
-#include <QtCore/qglobal.h>
-
-#include <QtCore/QDateTime>
 #include <QtCore/QList>
 #include <QtCore/QMap>
 #include <QMutex>
 
-#include <kurl.h>
 #include <ksharedptr.h>
 
 #include <language/duchain/parsingenvironment.h>
 #include <language/editor/modificationrevision.h>
-#include <language/interfaces/iproblem.h>
-#include <language/duchain/topducontext.h>
 
 #include "cppduchainexport.h"
-#include <language/util/setrepository.h>
 #include "parser/rpp/macrorepository.h"
+
+namespace KDevelop {
+  class TopDUContext;
+}
 
 /** 
  * The environment-manager helps achieving right representation of the way c++ works:

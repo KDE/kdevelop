@@ -15,9 +15,6 @@
 
 #include <QString>
 #include <QStringList>
-#include <QDateTime>
-#include <QMap>
-#include <QMutex>
 #include <language/editor/modificationrevisionset.h>
 
 class KUrl;

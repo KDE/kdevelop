@@ -19,15 +19,14 @@
 #include "usebuilder.h"
 
 #include "cppeditorintegrator.h"
-#include "name_compiler.h"
 #include <language/duchain/declaration.h>
 #include <language/duchain/use.h>
 #include <language/duchain/topducontext.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
-#include <rpp/pp-location.h>
 
 #include "expressionvisitor.h"
+#include "typeconversion.h"
 #include <parsesession.h>
 
 #include <KLocalizedString>

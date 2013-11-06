@@ -31,14 +31,12 @@
 #include <KSharedPtr>
 #include <KTextEditor/Range>
 
-#include "includepathcomputer.h"
-
 #include "parser/parsesession.h"
-
 #include "cppduchain/contextbuilder.h"
 
 class PreprocessJob;
 class CppLanguageSupport;
+class CppPreprocessEnvironment;
 class CPPInternalParseJob;
 
 namespace Cpp {
@@ -46,6 +44,9 @@ namespace Cpp {
 }
 
 namespace KDevelop {
+    class DocumentCursor;
+    class ILanguageSupport;
+    class IndexedString;
     class TopDUContext;
 }
 
@@ -64,7 +65,7 @@ public:
      * If parentPreprocessor is set, no jobs will be automatically created, since everything should be parsed in foreground.
      * Instead the preprocessor should call parseForeground();
      * */
-    CPPParseJob( const IndexedString &url, ILanguageSupport* languageSupport, PreprocessJob* parentPreprocessor = 0  );
+    CPPParseJob( const KDevelop::IndexedString &url, KDevelop::ILanguageSupport* languageSupport, PreprocessJob* parentPreprocessor = 0  );
 
 //  CPPParseJob( KDevelop::Document* document, CppLanguageSupport* parent );
 

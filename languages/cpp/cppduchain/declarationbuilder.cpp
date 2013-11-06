@@ -43,12 +43,11 @@
 
 #include "qtfunctiondeclaration.h"
 #include "cppeditorintegrator.h"
-#include "name_compiler.h"
+#include "environmentmanager.h"
 #include <language/duchain/classfunctiondeclaration.h>
 #include <language/duchain/functiondeclaration.h>
 #include <language/duchain/functiondefinition.h>
 #include "templateparameterdeclaration.h"
-#include "type_compiler.h"
 #include "tokens.h"
 #include "parsesession.h"
 #include "cpptypes.h"
@@ -61,6 +60,7 @@
 #include "usebuilder.h"
 
 #include "overloadresolutionhelper.h"
+#include "expressionparser.h"
 
 using namespace KTextEditor;
 using namespace KDevelop;

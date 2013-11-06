@@ -31,14 +31,10 @@
 #include <language/duchain/navigation/useswidget.h>
 #include <qlineedit.h>
 #include <qpushbutton.h>
-#include <qprogressbar.h>
 #include <QTabWidget>
 #include <language/codegen/documentchangeset.h>
-#include <qapplication.h>
-#include <qdatetime.h>
 #include "progressdialogs.h"
 #include <language/duchain/navigation/abstractnavigationwidget.h>
-#include <limits>
 #include <language/duchain/use.h>
 #include <language/duchain/classmemberdeclaration.h>
 #include <language/duchain/classfunctiondeclaration.h>
@@ -46,8 +42,6 @@
 #include <language/duchain/functiondefinition.h>
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>
-//#include "cppnewclass.h"
-//#include "makeimplementationprivate.h"
 #include <templatedeclaration.h>
 #include "../cpputils.h"
 #include <interfaces/iuicontroller.h>
@@ -58,9 +52,9 @@
 #include <kparts/mainwindow.h>
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/classdeclaration.h>
-#include <dumptree.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iselectioncontroller.h>
+#include <interfaces/contextmenuextension.h>
 
 using namespace KDevelop;
 

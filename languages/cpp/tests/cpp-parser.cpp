@@ -20,7 +20,6 @@
  ***************************************************************************/
 
 #include "parsesession.h"
-#include "lexer.h"
 #include "parser.h"
 #include "dumptree.h"
 #include "ast.h"
@@ -34,10 +33,7 @@
 #include "rpp/preprocessor.h"
 #include "rpp/pp-engine.h"
 
-#include "environmentmanager.h"
-
 #include "contextbuilder.h"
-#include "cpppreprocessenvironment.h"
 #include "cpputils.h"
 #include "control.h"
 #include <memorypool.h>

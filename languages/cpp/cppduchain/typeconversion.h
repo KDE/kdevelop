@@ -19,20 +19,14 @@
 #ifndef TYPECONVERSION_H
 #define TYPECONVERSION_H
 
-#include <QList>
-#include <qcontainerfwd.h>
-
 #include <language/duchain/types/abstracttype.h>
-#include <language/duchain/types/indexedtype.h>
-#include <util/kdevvarlengtharray.h>
 
 #include "cppduchainexport.h"
-#include <QMap>
-#include <QPair>
 #include <language/duchain/classmemberdeclaration.h>
 #include <language/duchain/types/pointertype.h>
 
 namespace KDevelop {
+  class IndexedType;
   class TopDUContext;
 }
 

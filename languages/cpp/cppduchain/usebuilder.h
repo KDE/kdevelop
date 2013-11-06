@@ -22,7 +22,8 @@
 #include "contextbuilder.h"
 #include "cppduchainexport.h"
 #include <language/duchain/builders/abstractusebuilder.h>
-#include <parsesession.h>
+
+class ParseSession;
 
 class UseBuilderBase : public KDevelop::AbstractUseBuilder<AST, NameAST, ContextBuilder> {
   public:

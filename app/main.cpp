@@ -39,7 +39,6 @@
 #include <ktexteditor/cursor.h>
 
 #include <QFileInfo>
-#include <QPixmap>
 #include <QDir>
 #include <QProcess>
 #include <QSessionManager>
@@ -58,6 +57,7 @@
 #include <shell/session.h>
 #include <interfaces/ilauncher.h>
 #include <interfaces/iproject.h>
+#include <interfaces/launchconfigurationtype.h>
 
 #include "kdevideextension.h"
 

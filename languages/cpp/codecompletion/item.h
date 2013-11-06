@@ -23,14 +23,15 @@
 #define COMPLETIONITEM_H
 
 #include <ksharedptr.h>
-#include <ktexteditor/codecompletionmodel.h>
-
 #include <language/duchain/duchainpointer.h>
 #include <language/codecompletion/codecompletionitem.h>
 #include <language/codecompletion/normaldeclarationcompletionitem.h>
 #include <language/codecompletion/abstractincludefilecompletionitem.h>
 #include "../cppduchain/navigation/navigationwidget.h"
-#include "context.h"
+
+namespace KDevelop {
+  class QualifiedIdentifier;
+}
 
 namespace KTextEditor {
   class CodeCompletionModel;
@@ -67,7 +68,7 @@ public:
   virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const;
   
   //Prefix that will be stripped from all identifiers(For example the namespace)
-  QualifiedIdentifier stripPrefix() const;
+  KDevelop::QualifiedIdentifier stripPrefix() const;
   
   bool completingTemplateParameters() const;
   
@@ -102,12 +103,12 @@ private:
   
   void needCachedArgumentList() const;
   
-  QString keepRemainingWord(Identifier id);
-  QString keepRemainingWord(const StructureType::Ptr &type, const Identifier &id, const QString &insertAccessor);
+  QString keepRemainingWord(KDevelop::Identifier id);
+  QString keepRemainingWord(const KDevelop::StructureType::Ptr &type, const KDevelop::Identifier &id, const QString &insertAccessor);
   
 
   
-  mutable DeclarationPointer m_cachedTypeStringDecl;
+  mutable KDevelop::DeclarationPointer m_cachedTypeStringDecl;
   mutable QString m_cachedTypeString;
   mutable uint m_cachedTypeStringLength;
   

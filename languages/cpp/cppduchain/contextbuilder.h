@@ -23,8 +23,6 @@
 
 #include "default_visitor.h"
 
-#include <QtCore/QSet>
-
 #include "cppducontext.h"
 
 #include <language/duchain/builders/abstractcontextbuilder.h>
@@ -32,11 +30,10 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/identifier.h>
 #include <language/duchain/ducontext.h>
+#include <language/duchain/classdeclaration.h>
 #include <ksharedptr.h>
 #include "cppduchainexport.h"
 #include "cppeditorintegrator.h"
-#include <language/duchain/classdeclaration.h>
-#include "environmentmanager.h"
 
 //Uncomment this to debug what happens to context ranges when new ones are inserted
 //#define DEBUG_CONTEXT_RANGES
@@ -50,9 +47,7 @@ class DUContext;
 class TopDUContext;
 }
 
-class CppEditorIntegrator;
 class ParseSession;
-class NameCompiler;
 
 namespace KTextEditor { class Range; }
 

@@ -35,7 +35,6 @@
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/classdeclaration.h>
 #include "../cppduchain/qtfunctiondeclaration.h"
-#include <language/duchain/use.h>
 #include <typeutils.h>
 #include <cppduchain.h>
 #include <templatedeclaration.h>

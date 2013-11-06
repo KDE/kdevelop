@@ -23,28 +23,19 @@
 #ifndef KDEVCPPCODECOMPLETIONMODEL_H
 #define KDEVCPPCODECOMPLETIONMODEL_H
 
-#include <QPair>
-#include <QMap>
 #include <language/codecompletion/codecompletionmodel.h>
 #include <ksharedptr.h>
 #include <language/duchain/duchainpointer.h>
 #include <language/codecompletion/codecompletioncontext.h>
-#include "item.h"
-#include <ktexteditor/codecompletionmodelcontrollerinterface.h>
-#include <kdeversion.h>
-
-class QIcon;
-class QString;
-class QMutex;
 
 namespace KDevelop {
   class DUContext;
   class Declaration;
+  class CodeCompletionContext;
   class CompletionTreeElement;
 }
 
 namespace Cpp {
-  class CodeCompletionContext;
   class NavigationWidget;
   class CodeCompletionWorker;
 

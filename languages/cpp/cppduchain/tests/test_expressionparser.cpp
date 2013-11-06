@@ -28,13 +28,9 @@
 #include "declarationbuilder.h"
 #include "usebuilder.h"
 #include <language/duchain/declaration.h>
-#include <language/editor/documentrange.h>
 #include <language/duchain/dumpchain.h>
-#include "cppeditorintegrator.h"
-#include "dumptypes.h"
 #include "environmentmanager.h"
 #include "templatedeclaration.h"
-#include "cppducontext.h"
 #include <rpp/chartools.h>
 
 
@@ -44,7 +40,7 @@
 #include "rpp/preprocessor.h"
 #include "expressionvisitor.h"
 #include "expressionparser.h"
-#include <language/duchain/classfunctiondeclaration.h>
+#include "typeconversion.h"
 
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
@@ -460,11 +456,6 @@ void TestExpressionParser::testSmartPointer() {
   QCOMPARE(baseTemplateContext->type(), DUContext::Template);
   kDebug(9007) << typeid(baseTemplateContext).name();
   kDebug(9007) << typeid(specialTemplateContext).name();
-/*  CppDUContext<DUContext>* baseTemplateCtx = dynamic_cast<CppDUContext<DUContext>*>(baseTemplateContext);
-  CppDUContext<DUContext>* specialTemplateCtx = dynamic_cast<CppDUContext<DUContext>*>(specialTemplateContext);
-  QVERIFY(baseTemplateCtx);
-  QVERIFY(specialTemplateCtx);
-  QCOMPARE(specialTemplateCtx->instantiatedFrom(), baseTemplateContext);*/
 
   QCOMPARE(specialTemplateContext->localDeclarations().count(), 1);
   QCOMPARE(baseTemplateContext->localDeclarations().count(), 1);
