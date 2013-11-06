@@ -49,7 +49,7 @@ public slots:
     void contextMenuRequested(const QPoint &point);
 
 Q_SIGNALS:
-    void close();
+    void closeRequested();
 
 private Q_SLOTS:
     void slotRemove();

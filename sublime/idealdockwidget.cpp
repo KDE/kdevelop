@@ -54,7 +54,7 @@ IdealDockWidget::IdealDockWidget(IdealController *controller, Sublime::MainWindo
     if (closeButton) {
     disconnect(closeButton, SIGNAL(clicked()), 0, 0);
 
-    connect(closeButton, SIGNAL(clicked(bool)), SIGNAL(close()));
+    connect(closeButton, SIGNAL(clicked(bool)), SIGNAL(closeRequested()));
     }
 
     setFeatures(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable);
