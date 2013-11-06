@@ -40,6 +40,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/iplugincontroller.h>
+#include <interfaces/idocumentcontroller.h>
 #include <project/projectmodel.h>
 
 #include "iexecutescriptplugin.h"
@@ -74,7 +75,20 @@ ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfigu
         return;
     }
 
-    KUrl script = iface->script( cfg, err );
+    KUrl script;
+    if( !iface->runCurrentFile( cfg ) )
+    {
+        script = iface->script( cfg, err );
+    } else {
+        KDevelop::IDocument* document = KDevelop::ICore::self()->documentController()->activeDocument();
+        if( !document )
+        {
+            setError( -1 );
+            setErrorText( i18n( "There is no active document to launch." ) );
+            return;
+        }
+        script = document->url();
+    }
 
     if( !err.isEmpty() )
     {
