@@ -23,10 +23,8 @@
 #include <QtCore/QStringList>
 #include <cmaketypes.h>
 
-class Kurl;
 namespace KDevelop
 {
-class IProject;
 class ProjectFolderItem;
 }
 
