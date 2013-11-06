@@ -20,8 +20,6 @@
 #ifndef KDEVPLATFORM_DUCHAINBASE_H
 #define KDEVPLATFORM_DUCHAINBASE_H
 
-#include <language/editor/simplerange.h>
-#include <language/editor/rangeinrevision.h>
 #include "../languageexport.h"
 #include "appendedlist.h"
 #include "duchainpointer.h"

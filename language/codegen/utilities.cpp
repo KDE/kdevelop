@@ -28,6 +28,8 @@
 #include <duchain/classfunctiondeclaration.h>
 #include <duchain/types/functiontype.h>
 
+#include <KUrl>
+
 namespace KDevelop
 {
 

@@ -23,6 +23,8 @@
 #include <sublime/view.h>
 #include <sublime/area.h>
 
+#include <shell/core.h>
+
 #include "partdocument.h"
 #include "mainwindow.h"
 

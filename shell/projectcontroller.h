@@ -26,7 +26,6 @@ Boston, MA 02110-1301, USA.
 
 #include "shellexport.h"
 
-class QModelIndex;
 namespace KIO {
     class Job;
 }
@@ -36,7 +35,6 @@ namespace KDevelop
 
 class IProject;
 class Core;
-class UiController;
 class Context;
 class ContextMenuExtension;
 class IPlugin;

@@ -23,6 +23,7 @@
 
 #include <typeinfo>
 #include <language/duchain/duchainlock.h>
+#include <language/duchain/duchainobserver.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/persistentsymboltable.h>
 #include <language/duchain/codemodel.h>

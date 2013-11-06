@@ -64,6 +64,7 @@
 #include "waitforupdate.h"
 #include "referencecounting.h"
 #include "importers.h"
+#include "duchainobserver.h"
 
 namespace {
 //Additional "soft" cleanup steps that are done before the actual cleanup.

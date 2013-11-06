@@ -33,7 +33,6 @@
 #include "duchainpointer.h"
 #include "declarationid.h"
 #include "indexedducontext.h"
-#include "localindexedducontext.h"
 
 class QWidget;
 

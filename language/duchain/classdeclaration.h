@@ -22,16 +22,12 @@
 
 #include <language/duchain/declaration.h>
 #include <language/duchain/declarationdata.h>
-#include <language/duchain/types/structuretype.h>
 #include <language/duchain/classmemberdeclarationdata.h>
 #include <language/duchain/classmemberdeclaration.h>
 
 namespace KDevelop {
-  class QualifiedIdentifier;
   class DUContext;
   class TopDUContext;
-  class IndexedString;
-  class SimpleRange;
 }
 
 namespace KDevelop {

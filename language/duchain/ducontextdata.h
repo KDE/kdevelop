@@ -22,8 +22,6 @@
 #ifndef DUCONTEXTDATA_H
 #define DUCONTEXTDATA_H
 
-#include "../editor/cursorinrevision.h"
-
 #include "duchainbase.h"
 #include "ducontext.h"
 #include "duchainpointer.h"
@@ -32,6 +30,7 @@
 #include "../languageexport.h"
 
 #include "localindexeddeclaration.h"
+#include "localindexedducontext.h"
 
 namespace KDevelop{
 class DUContext;

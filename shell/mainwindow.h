@@ -25,7 +25,6 @@ Boston, MA 02110-1301, USA.
 
 #include <KDE/KXmlGuiWindow>
 
-#include "core.h"
 #include <sublime/mainwindow.h>
 
 #include "shellexport.h"
@@ -35,7 +34,6 @@ namespace KTextEditor { class View; }
 namespace KDevelop
 {
 
-class Context;
 class IDocument;
 
 /**

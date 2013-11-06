@@ -22,13 +22,12 @@
 
 #include <QtCore/QList>
 #include <QtCore/QMap>
-//#include <QtCore/qcontainerfwd.h>
 
-#include "identifier.h"
-#include "indexedstring.h"
 #include "types/abstracttype.h"
 #include "duchainbase.h"
-#include "topducontext.h"
+#include "instantiationinformation.h"
+#include "identifier.h"
+#include "indexeddeclaration.h"
 
 class QByteArray;
 
@@ -37,12 +36,13 @@ namespace KDevelop
 
 class AbstractType;
 class DUContext;
-class Use;
+class IndexedString;
 class ForwardDeclaration;
 class DeclarationData;
 class DeclarationId;
 class Declaration;
 class IndexedTopDUContext;
+class TopDUContext;
 
 
 /**

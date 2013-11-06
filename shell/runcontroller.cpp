@@ -31,14 +31,15 @@ Boston, MA 02110-1301, USA.
 #include <KDE/KLocale>
 #include <KDE/KDebug>
 #include <KDE/KColorScheme>
-#include <KDE/KCompositeJob>
 #include <kdialogjobuidelegate.h>
 
 #include <interfaces/iproject.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/ilauncher.h>
 #include <interfaces/ilaunchmode.h>
+#include <interfaces/launchconfigurationtype.h>
 #include <outputview/ioutputview.h>
+#include <outputview/outputjob.h>
 #include <project/projectmodel.h>
 #include <project/interfaces/iprojectbuilder.h>
 #include <project/interfaces/ibuildsystemmanager.h>
@@ -53,6 +54,7 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/isession.h>
 #include <QSignalMapper>
 #include <interfaces/contextmenuextension.h>
+#include <interfaces/context.h>
 #include <sublime/area.h>
 #include <kmenu.h>
 

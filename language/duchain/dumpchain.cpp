@@ -35,6 +35,7 @@
 #include "functiondefinition.h"
 
 #include <editor/rangeinrevision.h>
+#include <interfaces/iproblem.h>
 
 using namespace KDevelop;
 

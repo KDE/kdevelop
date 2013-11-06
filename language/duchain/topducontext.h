@@ -20,8 +20,6 @@
 #ifndef KDEVPLATFORM_TOPDUCONTEXT_H
 #define KDEVPLATFORM_TOPDUCONTEXT_H
 
-#include <QtCore/QMutex>
-
 #include "ducontext.h"
 #include <language/util/setrepository.h>
 #include <QMetaType>

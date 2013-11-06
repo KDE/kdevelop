@@ -25,6 +25,7 @@
 #include <KPluginLoader>
 #include <KAboutData>
 #include <QAction>
+#include <QFile>
 #include <QSignalMapper>
 
 #include <interfaces/icore.h>

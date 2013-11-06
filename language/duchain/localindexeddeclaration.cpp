@@ -20,6 +20,7 @@
 
 #include "declaration.h"
 #include "topducontextdynamicdata.h"
+#include "topducontext.h"
 
 using namespace KDevelop;
 

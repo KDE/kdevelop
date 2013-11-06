@@ -23,13 +23,13 @@
 #ifndef KDEVPLATFORM_DUCHAINUTILS_H
 #define KDEVPLATFORM_DUCHAINUTILS_H
 
-#include <KDE/KIcon>
-
 #include <ktexteditor/codecompletionmodel.h>
 
 #include "../languageexport.h"
 
 class KUrl;
+
+class QIcon;
 
 namespace KDevelop {
 
@@ -39,7 +39,6 @@ class DUContext;
 class SimpleCursor;
 class IndexedString;
 class TopDUContext;
-class IndexedDUContext;
 class IndexedDeclaration;
 
 /**

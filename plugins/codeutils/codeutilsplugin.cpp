@@ -45,6 +45,7 @@
 #include <language/duchain/declaration.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/abstractfunctiondeclaration.h>
+#include <language/duchain/topducontext.h>
 #include <language/duchain/types/functiontype.h>
 #include <language/codegen/templaterenderer.h>
 #include <language/codegen/codedescription.h>

@@ -37,6 +37,7 @@
 #include "workingsets/workingsettooltipwidget.h"
 #include "workingsets/workingsetwidget.h"
 #include "workingsets/closedworkingsetswidget.h"
+#include "core.h"
 
 using namespace KDevelop;
 

@@ -18,6 +18,7 @@
  ***************************************************************************/
 #include "textdocument.h"
 
+#include <QFile>
 #include <QPointer>
 #include <QMenu>
 #include <QAction>
@@ -31,8 +32,6 @@
 #include <kconfiggroup.h>
 #include <kstandarddirs.h>
 #include <kxmlguifactory.h>
-#include <kactioncollection.h>
-#include <kstatusbar.h>
 #include <kdeversion.h>
 
 #include <ktexteditor/view.h>
@@ -42,9 +41,6 @@
 #include <ktexteditor/markinterface.h>
 #include <ktexteditor/configinterface.h>
 #include <ktexteditor/sessionconfiginterface.h>
-
-#include <sublime/area.h>
-#include <sublime/view.h>
 
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>

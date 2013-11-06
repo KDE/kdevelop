@@ -38,7 +38,6 @@
 #include <ktexteditor/movinginterface.h>
 
 #include "backgroundparser.h"
-#include "parserdependencypolicy.h"
 #include "duchain/topducontext.h"
 
 #include "duchain/duchainlock.h"
@@ -52,6 +51,7 @@
 #include <duchain/declaration.h>
 #include <duchain/use.h>
 #include <interfaces/icodehighlighting.h>
+#include <interfaces/iproblem.h>
 
 
 using namespace KTextEditor;

@@ -23,11 +23,14 @@
 #include <KDE/KXMLGUIClient>
 
 #include <sublime/view.h>
-#include <ktexteditor/view.h>
 
 #include "partdocument.h"
 
 #include "shellexport.h"
+
+namespace KTextEditor {
+class View;
+}
 
 namespace KDevelop {
 
