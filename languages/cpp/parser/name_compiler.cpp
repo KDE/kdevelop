@@ -140,9 +140,6 @@ void NameCompiler::visitUnqualifiedName(UnqualifiedNameAST *node)
 
   if (OperatorFunctionIdAST *op_id = node->operator_id)
     {
-#if defined(__GNUC__)
-#warning "NameCompiler::visitUnqualifiedName() -- implement me"
-#endif
       static QString operatorString("operator");
       QString tmp = operatorString;
 
