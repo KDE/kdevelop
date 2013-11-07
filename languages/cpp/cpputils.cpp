@@ -394,5 +394,3 @@ QStringList sourceExtensions()
 }
 
 }
-
-#include "cpputils.moc"
