@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=QMake Project Manager
+Name[bs]=QMake projekt menadžer
 Name[ca]=Gestor de projectes QMake
 Name[ca@valencia]=Gestor de projectes QMake
 Name[de]=QMake-Projektverwaltung
@@ -24,6 +25,7 @@ Name[tr]=QMake Proje Yöneticisi
 Name[uk]=Керування проектами QMake
 Name[x-test]=xxQMake Project Managerxx
 Comment=Imports and edits QMake projects
+Comment[bs]=Uvozi i uređuje QMake projekte
 Comment[de]=Importiert und bearbeitet QMake-Projekte
 Comment[en_GB]=Imports and edits QMake projects
 Comment[es]=Importa y edita proyectos de QMake

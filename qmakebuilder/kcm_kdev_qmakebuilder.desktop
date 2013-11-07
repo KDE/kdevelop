@@ -11,6 +11,7 @@ X-KDE-ParentComponents=KDevQMakeBuilder
 X-KDE-CfgDlgHierarchy=BUILDTOOL
 
 Name=QMake
+Name[bs]=QMake
 Name[ca]=QMake
 Name[ca@valencia]=QMake
 Name[cs]=QMake
@@ -35,6 +36,7 @@ Name[tr]=QMake
 Name[uk]=QMake
 Name[x-test]=xxQMakexx
 Comment=Configure QMake settings
+Comment[bs]=Konfiguriši QMake postavke
 Comment[ca]=Configura els arranjaments de QMake
 Comment[ca@valencia]=Configura els arranjaments de QMake
 Comment[de]=QMake-Einstellungen festlegen
