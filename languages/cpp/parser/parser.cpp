@@ -4024,9 +4024,6 @@ bool Parser::parseDeclarationInternal(DeclarationAST *&node)
 
       ADVANCE(';', ";");
 
-#if defined(__GNUC__)
-#warning "mark the ast as constant"
-#endif
       SimpleDeclarationAST *ast = CreateNode<SimpleDeclarationAST>(session->mempool);
       ast->init_declarators = declarators;
 
