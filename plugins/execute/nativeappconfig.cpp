@@ -367,7 +367,7 @@ NativeAppConfigType::~NativeAppConfigType()
 
 QString NativeAppConfigType::name() const
 {
-    return i18n("Application");
+    return i18n("Compiled Binary");
 }
 
 
