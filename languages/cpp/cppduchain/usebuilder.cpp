@@ -118,6 +118,7 @@ void UseBuilder::visitTypeIDOperator(TypeIDOperatorAST* node)
 
 void UseBuilder::visitQPropertyDeclaration(QPropertyDeclarationAST* node)
 {
+  buildUsesForName(node->member);
   buildUsesForName(node->getter);
   buildUsesForName(node->setter);
   buildUsesForName(node->resetter);

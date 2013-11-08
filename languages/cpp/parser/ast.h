@@ -334,6 +334,8 @@ public:
   const ListNode<PtrOperatorAST*> *ptr_ops;
   NameAST *name;
 
+  /// MEMBER, since Qt 5.1
+  NameAST *member;
   NameAST *getter;
   NameAST *setter;
   NameAST *resetter;

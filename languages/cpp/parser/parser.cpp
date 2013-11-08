@@ -5323,6 +5323,7 @@ bool Parser::parseQProperty(DeclarationAST *&node)
     uint start = session->token_stream->cursor();
     QPropertyDeclarationAST *ast = CreateNode<QPropertyDeclarationAST>(session->mempool);
 
+    ast->member = 0;
     ast->getter = 0;
     ast->setter = 0;
     ast->resetter = 0;
@@ -5350,6 +5351,7 @@ bool Parser::parseQProperty(DeclarationAST *&node)
     if(!parseName(ast->name))
       return false;
 
+    static KDevelop::IndexedString memberStr("MEMBER");
     static KDevelop::IndexedString readStr("READ");
     static KDevelop::IndexedString writeStr("WRITE");
     static KDevelop::IndexedString resetStr("RESET");
@@ -5363,7 +5365,11 @@ bool Parser::parseQProperty(DeclarationAST *&node)
 
     while(session->token_stream->lookAhead() != ')') {
       const KDevelop::IndexedString propertyField = session->token_stream->symbol(session->token_stream->cursor());
-      if(propertyField == readStr) {
+      if (propertyField == memberStr) {
+        advance(); // skip MEMBER
+        if (!parseName(ast->member))
+          return false;
+      } else if(propertyField == readStr) {
         advance(); // skip READ
         if(!parseName(ast->getter))
           return false;
