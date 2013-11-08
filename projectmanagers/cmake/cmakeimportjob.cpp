@@ -113,7 +113,7 @@ void CMakeImportJob::initialize()
         ctx = initializeProject(dynamic_cast<CMakeFolderItem*>(m_dom));
     } else {
         DUChainReadLocker lock;
-        ctx = DUChain::self()->chainForDocument(KUrl(m_dom->url(), "CMakeLists.txt"));
+        ctx = DUChain::self()->chainForDocument(KUrl(m_dom->parent()->url(), "CMakeLists.txt"));
         Q_ASSERT(ctx);
     }
     importDirectory(m_project, m_dom->url(), ctx);
