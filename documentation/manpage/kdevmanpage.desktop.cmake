@@ -44,7 +44,6 @@ Name[el]=Man Pages
 Name[en_GB]=Man Pages
 Name[es]=Páginas man
 Name[et]=Man-leheküljed
-Name[fa]=صفحات راهنما
 Name[fi]=Mansivut
 Name[fr]=Pages de manuel
 Name[gl]=Páxinas de manuais

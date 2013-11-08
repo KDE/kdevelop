@@ -2,6 +2,7 @@
 Type=Service
 Name=Ninja Project Builder
 Name[de]=Ninja-Projekterstellung
+Name[es]=Constructor de proyectos Ninja
 Name[nl]=Ninja-project bouwprogramma
 Name[pt]=Construtor de Projectos Ninja
 Name[pt_BR]=Compilador de projetos Ninja
@@ -47,6 +48,7 @@ GenericName[zh_CN]=工程构建器
 GenericName[zh_TW]=專案編譯器
 Comment=KDevelop Ninja Builder
 Comment[de]=KDevelop-Ninja-Erstellung
+Comment[es]=Constructor Ninja para KDevelop
 Comment[nl]=KDevelop Ninja-bouwprogramma
 Comment[pt]=Construtor Ninja do KDevelop
 Comment[pt_BR]=Compilador Ninja do KDevelop
