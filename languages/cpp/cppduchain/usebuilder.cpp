@@ -120,6 +120,7 @@ void UseBuilder::visitQPropertyDeclaration(QPropertyDeclarationAST* node)
 {
   buildUsesForName(node->getter);
   buildUsesForName(node->setter);
+  buildUsesForName(node->resetter);
   buildUsesForName(node->notifier);
   buildUsesForName(node->designableMethod);
   buildUsesForName(node->scriptableMethod);
