@@ -20,6 +20,7 @@
 #include <language/duchain/duchain.h>
 #include <language/duchain/dumpchain.h>
 #include <language/codegen/coderepresentation.h>
+#include <language/backgroundparser/backgroundparser.h>
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
 #include <tests/json/declarationvalidator.h>
@@ -30,6 +31,7 @@
 #include <tests/json/jsondeclarationtests.h>
 #include <tests/json/jsonducontexttests.h>
 #include <tests/json/jsontypetests.h>
+#include <interfaces/ilanguagecontroller.h>
 #include "cppjsontests.h"
 
 using namespace KDevelop;

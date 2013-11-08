@@ -69,6 +69,8 @@
 #include <cpputils.h>
 #include <interfaces/ilanguage.h>
 #include <interfaces/foregroundlock.h>
+#include <interfaces/icore.h>
+#include <interfaces/ilanguagecontroller.h>
 
 using namespace KDevelop;
 

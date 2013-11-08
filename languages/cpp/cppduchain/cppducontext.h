@@ -63,6 +63,7 @@ While construction:
 #include "templatedeclaration.h"
 #include "expressionevaluationresult.h"
 #include "cppduchain.h"
+#include "cpptypes.h"
 #include "templatedeclaration.h"
 #include "cppdebughelper.h"
 

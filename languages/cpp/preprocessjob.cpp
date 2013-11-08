@@ -22,11 +22,7 @@
 
 #include "preprocessjob.h"
 
-//#include <valgrind/memcheck.h>
-
-
 #include <QFile>
-#include <QFileInfo>
 #include <QByteArray>
 #include <QMutexLocker>
 #include <QReadWriteLock>
@@ -45,6 +41,8 @@
 #include <threadweaver/Thread.h>
 
 #include <interfaces/ilanguage.h>
+#include <interfaces/icore.h>
+#include <interfaces/ilanguagecontroller.h>
 
 #include "cpplanguagesupport.h"
 #include "cppparsejob.h"

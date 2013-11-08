@@ -52,9 +52,11 @@
 #include <kparts/mainwindow.h>
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/classdeclaration.h>
+#include <language/backgroundparser/backgroundparser.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iselectioncontroller.h>
 #include <interfaces/contextmenuextension.h>
+#include <interfaces/ilanguagecontroller.h>
 
 using namespace KDevelop;
 

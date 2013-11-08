@@ -62,9 +62,12 @@
 
 #include <language/backgroundparser/parsejob.h>
 #include <language/backgroundparser/urlparselock.h>
+#include <language/backgroundparser/backgroundparser.h>
 
 #include <interfaces/ilanguage.h>
 #include <interfaces/iuicontroller.h>
+#include <interfaces/icore.h>
+#include <interfaces/ilanguagecontroller.h>
 #include <cpppreprocessenvironment.h>
 #include <language/checks/dataaccessrepository.h>
 #include <language/checks/controlflowgraph.h>

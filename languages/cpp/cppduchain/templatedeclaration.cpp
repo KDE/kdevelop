@@ -29,9 +29,7 @@
 #include <language/duchain/aliasdeclaration.h>
 #include <language/duchain/functiondeclaration.h>
 #include <language/duchain/functiondefinition.h>
-#include <language/duchain/repositories/itemrepository.h>
 #include <language/duchain/classfunctiondeclaration.h>
-#include <language/duchain/appendedlist.h>
 
 #include "templateparameterdeclaration.h"
 #include "qtfunctiondeclaration.h"
@@ -41,13 +39,7 @@
 #include <language/duchain/classdeclaration.h>
 #include <language/duchain/duchainregister.h>
 #include <util/pushvalue.h>
-#include <name_compiler.h>
 #include <parsesession.h>
-#include <rpp/chartools.h>
-#include <rpp/pp-location.h>
-#include <control.h>
-#include <parser.h>
-#include <typeinfo>
 
 using namespace KDevelop;
 using namespace Cpp;

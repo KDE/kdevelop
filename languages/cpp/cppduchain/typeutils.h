@@ -22,10 +22,8 @@
 #include <QHash>
 #include <language/duchain/types/typeutils.h>
 #include "cppduchainexport.h"
-#include <language/duchain/declaration.h>
 #include "cpptypes.h"
 
-struct C;
 namespace KDevelop {
   class DUContext;
   class Declaration;
