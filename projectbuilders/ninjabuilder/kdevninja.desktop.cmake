@@ -1,8 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=Ninja Project Builder
+Name[cs]=Překladač projektů Ninja
 Name[de]=Ninja-Projekterstellung
 Name[es]=Constructor de proyectos Ninja
+Name[fi]=Ninja-projektikäännin
+Name[hu]=Ninja projektfordító
 Name[nl]=Ninja-project bouwprogramma
 Name[pt_BR]=Compilador de projetos Ninja
 Name[sv]=Ninja projektbyggverktyg
@@ -48,6 +51,8 @@ GenericName[zh_TW]=專案編譯器
 Comment=KDevelop Ninja Builder
 Comment[de]=KDevelop-Ninja-Erstellung
 Comment[es]=Constructor Ninja para KDevelop
+Comment[fi]=KDevelop Ninja-käännin
+Comment[hu]=KDevelop Ninja fordító
 Comment[nl]=KDevelop Ninja-bouwprogramma
 Comment[pt_BR]=Compilador Ninja do KDevelop
 Comment[sv]=KDevelop byggverktyg för Ninja
