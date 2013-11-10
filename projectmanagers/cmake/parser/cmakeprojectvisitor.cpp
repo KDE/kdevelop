@@ -278,7 +278,7 @@ int CMakeProjectVisitor::visit(const CMakeAst *ast)
 QHash<QString, Target>::iterator findTargetForExecutable(const QString& exe, QHash<QString, Target>& targets)
 {
     QHash<QString, Target>::iterator ret = targets.find(exe);
-    if(ret==targets.constEnd()) {
+    if(ret==targets.end()) {
         QString exe2 = exe;
         exe2 = exe2.mid(exe2.indexOf('/')+1);
         ret = targets.find(exe2);
