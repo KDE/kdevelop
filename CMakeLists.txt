@@ -1,5 +1,7 @@
 project(kdev-qml)
 
+cmake_minimum_required(VERSION 2.8)
+
 find_package(KDE4 REQUIRED)
 find_package(KDevPlatform 1.6.60 REQUIRED)
 find_package(KDeclarative REQUIRED)
@@ -32,7 +34,6 @@ add_subdirectory(libs)
 add_subdirectory(duchain)
 add_subdirectory(tests)
 add_subdirectory(codecompletion)
-add_subdirectory(navigation)
 
 kde4_add_plugin(kdevqmljslanguagesupport
     qmljsparsejob.cpp
