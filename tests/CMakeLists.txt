@@ -15,7 +15,7 @@ target_link_libraries(qml-parser
 ########### next target ###############
 
 find_package(QJSON)
-if(QJSON_FOUND)
+if(QJSON_FOUND AND KDEVPLATFORM_JSONTESTS_LIBRARIES)
   set(filestest_SRCS test_files.cpp)
   kde4_add_unit_test(filestest ${filestest_SRCS})
   configure_file("testfilepaths.h.cmake" "testfilepaths.h" ESCAPE_QUOTES)
@@ -27,4 +27,4 @@ if(QJSON_FOUND)
       ${KDEVPLATFORM_JSONTESTS_LIBRARIES}
       kdevqmljsduchain
   )
-endif(QJSON_FOUND)
+endif()
