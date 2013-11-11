@@ -707,15 +707,15 @@ void TestParser::testQProperty_data()
                           << false << true << false << true << false << false << false;
   QTest::newRow("notify") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop NOTIFY prop)\n};")
                           << false << true << false << false << true << false << false;
-  QTest::newRow("desable") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop DESIGNABLE prop)\n};")
+  QTest::newRow("designable_method") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop DESIGNABLE prop)\n};")
                             << false << true << false << false << false << true << false;
-  QTest::newRow("scpable") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop SCRIPTABLE prop)\n};")
+  QTest::newRow("scriptable_method") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop SCRIPTABLE prop)\n};")
                             << false << true << false << false << false << false << true;
   QTest::newRow("revision") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop REVISION 1)\n};")
                             << false << true << false << false << false << false << false;
-  QTest::newRow("desvalue") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop DESIGNABLE false)\n};")
+  QTest::newRow("designable_bool") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop DESIGNABLE false)\n};")
                             << false << true << false << false << false << false << false;
-  QTest::newRow("scpvalue") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop SCRIPTABLE false)\n};")
+  QTest::newRow("scriptable_bool") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop SCRIPTABLE false)\n};")
                             << false << true << false << false << false << false << false;
   QTest::newRow("stored") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop STORED false)\n};")
                           << false << true << false << false << false << false << false;
