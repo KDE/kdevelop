@@ -5349,6 +5349,7 @@ bool Parser::parseQProperty(DeclarationAST *&node)
     static KDevelop::IndexedString writeStr("WRITE");
     static KDevelop::IndexedString resetStr("RESET");
     static KDevelop::IndexedString notifyStr("NOTIFY");
+    static KDevelop::IndexedString revisionStr("REVISION");
     static KDevelop::IndexedString designableStr("DESIGNABLE");
     static KDevelop::IndexedString scriptableStr("SCRIPTABLE");
     static KDevelop::IndexedString storedStr("STORED");
@@ -5378,7 +5379,14 @@ bool Parser::parseQProperty(DeclarationAST *&node)
         advance(); // skip NOTIFY
         if(!parseName(ast->notifier))
           return false;
-      }else if(propertyField == designableStr){
+      } else if (propertyField == revisionStr) {
+        advance(); // skip REVISION
+        if (session->token_stream->lookAhead() == Token_number_literal) {
+          advance();
+        } else {
+          return false;
+        }
+      } else if(propertyField == designableStr){
         advance(); // skip DESIGNABLE
         if(session->token_stream->lookAhead() == Token_true){
           advance(); // skip 'true'
