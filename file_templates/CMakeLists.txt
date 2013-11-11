@@ -23,6 +23,7 @@ kdevplatform_add_file_templates(${filetemplate_DIRS})
 install ( FILES
     common/method_declaration_cpp.txt
     common/method_definition_cpp.txt
+    common/license_header_cpp.txt
     common/class_declaration_cpp.txt
     common/cpp_header.h
     common/cpp_header_onlyfunctions.h

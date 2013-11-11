@@ -1,10 +1,5 @@
 {% load kdev_filters %}
-{% block license_header %}
-/*
-
- {{ license|lines_prepend:" * " }}
- */
-{% endblock license_header %}
+{% include "license_header_cpp.txt" %}
 
 
 {% block include_guard_open %}
