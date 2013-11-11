@@ -176,7 +176,7 @@ struct TextDocumentPrivate {
 
     // Determines whether the current contents of this document in the editor
     // could be retrieved from the VCS if they were dismissed.
-    virtual void queryCanRecreateFromVcs(KTextEditor::Document* document) const {
+    void queryCanRecreateFromVcs(KTextEditor::Document* document) const {
         IProject* project = Core::self()->projectController()->findProjectForUrl( document->url() );
         if (!project) {
             return;
