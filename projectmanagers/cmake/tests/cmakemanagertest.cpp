@@ -186,6 +186,10 @@ void CMakeManagerTest::testTargetIncludeDirectories()
 
 void CMakeManagerTest::testQt5App()
 {
+    if (!qgetenv("KDEV_CMAKE_TEST_QT5").toInt()) {
+        QSKIP("Test only passes if Qt5 is available, define KDEV_CMAKE_TEST_QT5 to enable this test.", SkipAll);
+    }
+
     IProject* project = loadProject("qt5_app");
 
     KUrl mainCpp(project->folder(), "main.cpp");
