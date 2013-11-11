@@ -496,6 +496,7 @@ void TestParser::testEscapedNewline()
 {
   QFETCH(QByteArray, module);
   TranslationUnitAST* ast = parse(module);
+  Q_UNUSED(ast);
   QVERIFY(control.problems().isEmpty());
 }
 
