@@ -74,17 +74,17 @@
      </property>
      <item>
       <property name="text">
-       <string>kdesu</string>
+       <string notr="true">kdesu</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>kdesudo</string>
+       <string notr="true">kdesudo</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>sudo</string>
+       <string notr="true">sudo</string>
       </property>
      </item>
     </widget>
