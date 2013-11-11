@@ -31,6 +31,7 @@
 #include <interfaces/iplugincontroller.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/builderjob.h>
+#include <projectbuilders/makebuilder/imakebuilder.h>
 
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
@@ -78,9 +79,7 @@ void CMakeBuilder::addBuilder(const QString& neededfile, const QStringList& gene
             foreach(const QString& gen, generators) {
                 m_buildersForGenerator[gen] = b;
             }
-            connect(i, SIGNAL(built(KDevelop::ProjectBaseItem*)), this, SLOT(buildFinished(KDevelop::ProjectBaseItem*)));
-            connect(i, SIGNAL(failed(KDevelop::ProjectBaseItem*)), this, SLOT(buildFinished(KDevelop::ProjectBaseItem*)));
-            
+
             connect(i, SIGNAL(built(KDevelop::ProjectBaseItem*)), this, SIGNAL(built(KDevelop::ProjectBaseItem*)));
             connect(i, SIGNAL(failed(KDevelop::ProjectBaseItem*)), this, SIGNAL(failed(KDevelop::ProjectBaseItem*)));
             connect(i, SIGNAL(cleaned(KDevelop::ProjectBaseItem*)), this, SIGNAL(cleaned(KDevelop::ProjectBaseItem*)));
@@ -93,33 +92,12 @@ void CMakeBuilder::addBuilder(const QString& neededfile, const QStringList& gene
     }
 }
 
-void CMakeBuilder::buildFinished(KDevelop::ProjectBaseItem* it)
-{
-    if(m_deleteWhenDone.remove(it)) {
-        delete it->parent();
-    }
-}
-
 KJob* CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
 {
-    KDevelop::ProjectBaseItem* builditem = dom;
     KDevelop::IProject* p = dom->project();
     IProjectBuilder* builder = builderForProject(p);
     if( builder )
     {
-        if(dom->file())
-        {
-            KDevelop::ProjectFileItem* file = dom->file();
-            int lastDot = file->text().lastIndexOf('.');
-            QString target = file->text().mid(0, lastDot)+".o";
-             
-            CMakeFolderItem *fldr = new CMakeFolderItem(p, dom->url().upUrl(), KUrl::relativeUrl(p->folder(), file->url().upUrl()), 0);
-            KDevelop::ProjectTargetItem *it = new KDevelop::ProjectTargetItem(p, target);
-            fldr->appendRow(it);
-             
-            builditem=it;
-            m_deleteWhenDone << it;
-        }
         KJob* configure = 0;
         if( CMake::checkForNeedingConfigure(dom->project()) )
         {
@@ -131,15 +109,30 @@ KJob* CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
                                i18n("No Build Directory configured, cannot build"), i18n("Aborting build") );
             return 0;
         }
-        
+        KJob* build = 0;
+        if(dom->file())
+        {
+            IMakeBuilder* makeBuilder = dynamic_cast<IMakeBuilder*>(builder);
+            if (!makeBuilder) {
+                return 0;
+            }
+            KDevelop::ProjectFileItem* file = dom->file();
+            int lastDot = file->text().lastIndexOf('.');
+            QString target = file->text().mid(0, lastDot)+".o";
+            build = makeBuilder->executeMakeTarget(dom->parent(), target);
+            qDebug() << "create build job for target" << build << dom << target;
+        }
         kDebug(9032) << "Building with make";
-        KJob* build = builder->build(builditem);
-        if( configure ) 
+        if (!build)
+        {
+            build = builder->build(dom);
+        }
+        if( configure )
         {
             kDebug() << "creating composite job";
             KDevelop::BuilderJob* builderJob = new KDevelop::BuilderJob;
-            builderJob->addCustomJob( KDevelop::BuilderJob::Configure, configure, builditem );
-            builderJob->addCustomJob( KDevelop::BuilderJob::Build, build, builditem );
+            builderJob->addCustomJob( KDevelop::BuilderJob::Configure, configure, dom );
+            builderJob->addCustomJob( KDevelop::BuilderJob::Build, build, dom );
             builderJob->updateJobName();
             build = builderJob;
         }
