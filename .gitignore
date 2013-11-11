@@ -2,6 +2,7 @@
 apidocs
 .kdev4
 *~
+*.bak
 doxygen.log
 build
 *.patch
