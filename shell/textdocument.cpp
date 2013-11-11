@@ -20,6 +20,7 @@
 
 #include <QFile>
 #include <QPointer>
+#include <QTextCodec>
 #include <QMenu>
 #include <QAction>
 #include <QVBoxLayout>
@@ -48,6 +49,8 @@
 #include <interfaces/icompletionsettings.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
+
+#include <vcs/interfaces/icontentawareversioncontrol.h>
 
 #include <language/interfaces/editorcontext.h>
 
@@ -162,7 +165,61 @@ struct TextDocumentPrivate {
                 break;
         }
 
+        // In some cases, the VCS (e.g. git) can know whether the old contents are "valuable", i.e.
+        // not retrieveable from the VCS. If that is not the case, then the document can safely be
+        // reloaded without displaying a dialog asking the user.
+        if ( dirty ) {
+            queryCanRecreateFromVcs(document);
+        }
         setStatus(document, dirty);
+    }
+
+    // Determines whether the current contents of this document in the editor
+    // could be retrieved from the VCS if they were dismissed.
+    virtual void queryCanRecreateFromVcs(KTextEditor::Document* document) const {
+        IProject* project = Core::self()->projectController()->findProjectForUrl( document->url() );
+        if (!project) {
+            return;
+        }
+        IContentAwareVersionControl* iface;
+        iface = qobject_cast< KDevelop::IContentAwareVersionControl* >(project->versionControlPlugin());
+        if (!iface) {
+            return;
+        }
+        if ( !qobject_cast<KTextEditor::ModificationInterface*>( document ) ) {
+            return;
+        }
+
+        CheckInRepositoryJob* req = iface->isInRepository( document );
+        if ( !req ) {
+            return;
+        }
+        QObject::connect(req, SIGNAL(finished(bool)),
+                         m_textDocument, SLOT(repositoryCheckFinished(bool)));
+        // Abort the request when the user edits the document
+        QObject::connect(m_textDocument->textDocument(), SIGNAL(textChanged(KTextEditor::Document*)),
+                         req, SLOT(abort()));
+    }
+
+    void repositoryCheckFinished(bool canRecreate) {
+        if ( state != IDocument::Dirty && state != IDocument::DirtyAndModified ) {
+            // document is not dirty for whatever reason, nothing to do.
+            return;
+        }
+        if ( ! canRecreate ) {
+            return;
+        }
+        KTextEditor::ModificationInterface* modIface = qobject_cast<KTextEditor::ModificationInterface*>( document );
+        Q_ASSERT(modIface);
+        // Ok, all safe, we can clean up the document. Close it if the file is gone,
+        // and reload if it's still there.
+        setStatus(document, false);
+        modIface->setModifiedOnDisk(KTextEditor::ModificationInterface::OnDiskUnmodified);
+        if ( QFile::exists(document->url().path()) ) {
+            m_textDocument->reload();
+        } else {
+            m_textDocument->close(KDevelop::IDocument::Discard);
+        }
     }
 
     void setStatus(KTextEditor::Document* document, bool dirty)

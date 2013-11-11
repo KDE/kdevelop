@@ -84,6 +84,7 @@ private:
     Q_PRIVATE_SLOT(d, void slotDocumentLoaded())
     Q_PRIVATE_SLOT(d, void documentSaved(KTextEditor::Document*,bool))
     Q_PRIVATE_SLOT(d, void saveSessionConfig());
+    Q_PRIVATE_SLOT(d, void repositoryCheckFinished(bool));
 
     struct TextDocumentPrivate * const d;
     friend struct TextDocumentPrivate;

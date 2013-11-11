@@ -32,6 +32,7 @@
 #include <QDateTime>
 #include <QFileSystemWatcher>
 #include <QTimer>
+#include <QTextCodec>
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
@@ -54,6 +55,7 @@
 #include <KStandardDirs>
 #include <KTextEdit>
 #include <KDirWatch>
+#include <KTextEditor/Document>
 #include "gitjob.h"
 #include "gitmessagehighlighter.h"
 
@@ -1398,4 +1400,78 @@ void GitPlugin::fileChanged(const QString& file)
 void GitPlugin::delayedBranchChanged()
 {
     emit repositoryBranchChanged(m_branchesChange.takeFirst());
+}
+
+CheckInRepositoryJob* GitPlugin::isInRepository(KTextEditor::Document* document)
+{
+    CheckInRepositoryJob* job = new GitPluginCheckInRepositoryJob(document, repositoryRoot(document->url()).path());
+    job->start();
+    return job;
+}
+
+GitPluginCheckInRepositoryJob::GitPluginCheckInRepositoryJob(KTextEditor::Document* document,
+                                                             const QString& rootDirectory)
+    : CheckInRepositoryJob(document)
+    , m_hashjob(0)
+    , m_findjob(0)
+    , m_rootDirectory(rootDirectory)
+{
+
+}
+
+void GitPluginCheckInRepositoryJob::start()
+{
+    const QTextCodec* codec = QTextCodec::codecForName(document()->encoding().toAscii());
+
+    const QDir workingDirectory(m_rootDirectory);
+    if ( ! workingDirectory.exists() ) {
+        emit finished(false);
+        return;
+    }
+
+    m_findjob = new QProcess(this);
+    m_findjob->setWorkingDirectory(m_rootDirectory);
+
+    m_hashjob = new QProcess(this);
+    m_hashjob->setWorkingDirectory(m_rootDirectory);
+    m_hashjob->setStandardOutputProcess(m_findjob);
+
+    connect(m_findjob, SIGNAL(finished(int)), SLOT(repositoryQueryFinished(int)));
+    connect(m_hashjob, SIGNAL(error(QProcess::ProcessError)), SLOT(processFailed(QProcess::ProcessError)));
+    connect(m_findjob, SIGNAL(error(QProcess::ProcessError)), SLOT(processFailed(QProcess::ProcessError)));
+
+    m_hashjob->start("git", QStringList() << "hash-object" << "--stdin");
+    m_findjob->start("git", QStringList() << "cat-file" << "--batch-check");
+
+    for ( int i = 0; i < document()->lines(); i++ ) {
+        m_hashjob->write(codec->fromUnicode(document()->line(i)));
+        if ( i != document()->lines() - 1 ) {
+            m_hashjob->write("\n");
+        }
+    }
+    m_hashjob->closeWriteChannel();
+
+}
+
+GitPluginCheckInRepositoryJob::~GitPluginCheckInRepositoryJob()
+{
+    if ( m_findjob && m_findjob->state() == QProcess::Running ) {
+        m_findjob->kill();
+    }
+    if ( m_hashjob && m_hashjob->state() == QProcess::Running ) {
+        m_hashjob->kill();
+    }
+}
+
+void GitPluginCheckInRepositoryJob::processFailed(QProcess::ProcessError err)
+{
+    kDebug() << "calling git failed with error:" << err;
+    emit finished(false);
+}
+
+void GitPluginCheckInRepositoryJob::repositoryQueryFinished(int)
+{
+    const QByteArray output = m_findjob->readAllStandardOutput();
+    bool requestSucceeded = output.contains(" blob ");
+    emit finished(requestSucceeded);
 }
