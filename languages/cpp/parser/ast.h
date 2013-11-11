@@ -334,21 +334,15 @@ public:
   const ListNode<PtrOperatorAST*> *ptr_ops;
   NameAST *name;
 
+  /// MEMBER, since Qt 5.1
+  NameAST *member;
   NameAST *getter;
   NameAST *setter;
   NameAST *resetter;
   NameAST *notifier;
 
   NameAST *designableMethod;
-  bool designableValue;
-
   NameAST *scriptableMethod;
-  bool scriptableValue;
-
-  bool stored;
-  bool user;
-  bool constant;
-  bool final;
 };
 
 class CastExpressionAST : public ExpressionAST
