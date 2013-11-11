@@ -696,52 +696,33 @@ void TestParser::testQProperty_data()
   QTest::addColumn<bool>("hasNotifierMethod");
   QTest::addColumn<bool>("hasDesignableMethod");
   QTest::addColumn<bool>("hasScriptableMethod");
-  QTest::addColumn<bool>("isDesignable");
-  QTest::addColumn<bool>("isScriptable");
-  QTest::addColumn<bool>("isStored");
-  QTest::addColumn<bool>("isUser");
-  QTest::addColumn<bool>("isConstant");
-  QTest::addColumn<bool>("isFinal");
 
   QTest::newRow("member") << QByteArray("class Class{\n__qt_property__(bool myProp MEMBER m_prop)\n};")
-                          << true << false << false << false << false << false << false
-                          << true << true << true << false << false << false;
+                          << true << false << false << false << false << false << false;
   QTest::newRow("read") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop)\n};")
-                        << false << true << false << false << false << false << false
-                        << true << true << true << false << false << false;
+                        << false << true << false << false << false << false << false;
   QTest::newRow("write") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop WRITE prop)\n};")
-                          << false << true << true << false << false << false << false
-                          << true << true << true << false << false << false;
+                          << false << true << true << false << false << false << false;
   QTest::newRow("reset") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop RESET prop)\n};")
-                          << false << true << false << true << false << false << false
-                          << true << true << true << false << false << false;
+                          << false << true << false << true << false << false << false;
   QTest::newRow("notify") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop NOTIFY prop)\n};")
-                          << false << true << false << false << true << false << false
-                          << true << true << true << false << false << false;
+                          << false << true << false << false << true << false << false;
   QTest::newRow("desable") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop DESIGNABLE prop)\n};")
-                            << false << true << false << false << false << true << false
-                            << true << true << true << false << false << false;
+                            << false << true << false << false << false << true << false;
   QTest::newRow("scpable") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop SCRIPTABLE prop)\n};")
-                            << false << true << false << false << false << false << true
-                            << true << true << true << false << false << false;
+                            << false << true << false << false << false << false << true;
   QTest::newRow("desvalue") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop DESIGNABLE false)\n};")
-                            << false << true << false << false << false << false << false
-                            << false << true << true << false << false << false;
+                            << false << true << false << false << false << false << false;
   QTest::newRow("scpvalue") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop SCRIPTABLE false)\n};")
-                            << false << true << false << false << false << false << false
-                            << true << false << true << false << false << false;
+                            << false << true << false << false << false << false << false;
   QTest::newRow("stored") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop STORED false)\n};")
-                          << false << true << false << false << false << false << false
-                          << true << true << false << false << false << false;
+                          << false << true << false << false << false << false << false;
   QTest::newRow("user") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop USER true)\n};")
-                        << false << true << false << false << false << false << false
-                        << true << true << true << true << false << false;
+                        << false << true << false << false << false << false << false;
   QTest::newRow("constant") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop CONSTANT)\n};")
-                            << false << true << false << false << false << false << false
-                            << true << true << true << false << true << false;
+                            << false << true << false << false << false << false << false;
   QTest::newRow("final") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop FINAL)\n};")
-                          << false << true << false << false << false << false << false
-                          << true << true << true << false << false << true;
+                          << false << true << false << false << false << false << false;
 }
 
 void TestParser::testQProperty()
@@ -754,12 +735,6 @@ void TestParser::testQProperty()
   QFETCH(bool, hasNotifierMethod);
   QFETCH(bool, hasDesignableMethod);
   QFETCH(bool, hasScriptableMethod);
-  QFETCH(bool, isDesignable);
-  QFETCH(bool, isScriptable);
-  QFETCH(bool, isStored);
-  QFETCH(bool, isUser);
-  QFETCH(bool, isConstant);
-  QFETCH(bool, isFinal);
 
   TranslationUnitAST* ast = parse(code);
 
@@ -776,12 +751,6 @@ void TestParser::testQProperty()
   QVERIFY((propAst->notifier != 0) == hasNotifierMethod);
   QVERIFY((propAst->designableMethod != 0) == hasDesignableMethod);
   QVERIFY((propAst->scriptableMethod != 0) == hasScriptableMethod);
-  QCOMPARE(propAst->designableValue, isDesignable);
-  QCOMPARE(propAst->scriptableValue, isScriptable);
-  QCOMPARE(propAst->stored, isStored);
-  QCOMPARE(propAst->user, isUser);
-  QCOMPARE(propAst->constant, isConstant);
-  QCOMPARE(propAst->final, isFinal);
 }
 
 void TestParser::testDesignatedInitializers()

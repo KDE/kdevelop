@@ -342,15 +342,7 @@ public:
   NameAST *notifier;
 
   NameAST *designableMethod;
-  bool designableValue;
-
   NameAST *scriptableMethod;
-  bool scriptableValue;
-
-  bool stored;
-  bool user;
-  bool constant;
-  bool final;
 };
 
 class CastExpressionAST : public ExpressionAST

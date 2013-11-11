@@ -5329,14 +5329,7 @@ bool Parser::parseQProperty(DeclarationAST *&node)
     ast->resetter = 0;
     ast->notifier = 0;
     ast->designableMethod = 0;
-    ast->designableValue = true;
     ast->scriptableMethod = 0;
-    ast->scriptableValue = true;
-    ast->stored = true;
-    ast->user = false;
-    ast->constant = false;
-    ast->final = false;
-
 
     CHECK(Token___qt_property__);
     CHECK('(');
@@ -5389,10 +5382,8 @@ bool Parser::parseQProperty(DeclarationAST *&node)
         advance(); // skip DESIGNABLE
         if(session->token_stream->lookAhead() == Token_true){
           advance(); // skip 'true'
-          ast->designableValue = true;
         }else if(session->token_stream->lookAhead() == Token_false){
           advance(); // skip 'false'
-          ast->designableValue = false;
         }else{
           if(!parseName(ast->designableMethod))
             return false;
@@ -5401,10 +5392,8 @@ bool Parser::parseQProperty(DeclarationAST *&node)
         advance(); // skip SCRIPTABLE
         if(session->token_stream->lookAhead() == Token_true){
           advance(); // skip 'true'
-          ast->scriptableValue = true;
         }else if(session->token_stream->lookAhead() == Token_false){
           advance(); // skip 'false'
-          ast->scriptableValue = false;
         }else{
           if(!parseName(ast->scriptableMethod))
             return false;
@@ -5413,10 +5402,8 @@ bool Parser::parseQProperty(DeclarationAST *&node)
         advance(); // skip STORED
         if(session->token_stream->lookAhead() == Token_true){
           advance(); // skip 'true'
-          ast->stored = true;
         }else if(session->token_stream->lookAhead() == Token_false){
           advance(); // skip 'false'
-          ast->stored = false;
         }else{
           return false;
         }
@@ -5424,19 +5411,15 @@ bool Parser::parseQProperty(DeclarationAST *&node)
         advance(); // skip USER
         if(session->token_stream->lookAhead() == Token_true){
           advance(); // skip 'true'
-          ast->user = true;
         }else if(session->token_stream->lookAhead() == Token_false){
           advance(); // skip 'false'
-          ast->user = false;
         }else{
           return false;
         }
       }else if(propertyField == constantStr){
         advance(); // skip CONSTANT
-        ast->constant = true;
       }else if(propertyField == finalStr){
         advance(); // skip FINAL
-        ast->final = true;
       }else{
         return false;
       }
