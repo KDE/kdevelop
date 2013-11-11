@@ -3,6 +3,7 @@ Type=Service
 Exec=blubb
 Comment=Allows fast searching of multiple files using patterns or regular expressions. And allow to replace it too.
 Comment[bs]=Omogućava brzo pretraživanje više datoteka pomoću obrazaca i regularnim izrazima. I omogućava da ga zamjenu takođe.
+Comment[ca]=Permet la cerca ràpida de múltiples fitxers usant patrons o expressions regulars. I també permet substitucions.
 Comment[da]=Muliggør hurtig søgning af flere filer med brug af mønstre eller regulære udtryk. Muliggør også erstatning.
 Comment[de]=Ermöglicht es, Dateien mit Hilfe von Mustern und regulären Ausdrücken zu durchsuchen bzw. Ersetzungen vorzunehmen.
 Comment[el]=Επιτρέπει γρήγορη αναζήτηση πολλών αρχείων με χρήση προτύπων ή κανονικών εκφράσεων. Επιτρέπει και την αντικατάστασή τους επίσης.
