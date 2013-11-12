@@ -19,13 +19,12 @@ var d = 1.2;
 
 /**
  * "EXPECT_FAIL" : { "returnType" : "return type is not properly deduced" },
- * "returnType" : { "toString" : "String" }
+ * "returnType" : { "toString" : "string" }
  */
 function testVariables()
 {
  /**
-  * "EXPECT_FAIL" : { "type" : "string type is not properly deduced" },
-  * "type" : { "toString" : "String" }
+  * "type" : { "toString" : "string" }
   */
   var b = "some text";
   return b;

@@ -38,6 +38,12 @@ void ExpressionVisitor::endVisit(QmlJS::AST::NumericLiteral* node)
     }
 }
 
+void ExpressionVisitor::endVisit(QmlJS::AST::StringLiteral* node)
+{
+    Q_UNUSED(node)
+    m_lastType.push(AbstractType::Ptr(new IntegralType(IntegralType::TypeString)));
+}
+
 AbstractType::Ptr ExpressionVisitor::lastType()
 {
     return ( m_lastType.isEmpty() ?
