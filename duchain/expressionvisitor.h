@@ -39,8 +39,10 @@ public:
 
 protected:
     virtual void endVisit(QmlJS::AST::ArrayLiteral*);
+    virtual void endVisit(QmlJS::AST::FalseLiteral*);
     virtual void endVisit(QmlJS::AST::NumericLiteral*);
     virtual void endVisit(QmlJS::AST::StringLiteral*);
+    virtual void endVisit(QmlJS::AST::TrueLiteral*);
 
 private:
     QStack<KDevelop::AbstractType::Ptr> m_lastType;

@@ -33,6 +33,12 @@ void ExpressionVisitor::endVisit(QmlJS::AST::ArrayLiteral* node)
     m_lastType.push(AbstractType::Ptr(new IntegralType(IntegralType::TypeArray)));
 }
 
+void ExpressionVisitor::endVisit(QmlJS::AST::FalseLiteral* node)
+{
+    Q_UNUSED(node)
+    m_lastType.push(AbstractType::Ptr(new IntegralType(IntegralType::TypeBoolean)));
+}
+
 void ExpressionVisitor::endVisit(QmlJS::AST::NumericLiteral* node)
 {
     if (QString::number(node->value).contains('.')) {
@@ -46,6 +52,12 @@ void ExpressionVisitor::endVisit(QmlJS::AST::StringLiteral* node)
 {
     Q_UNUSED(node)
     m_lastType.push(AbstractType::Ptr(new IntegralType(IntegralType::TypeString)));
+}
+
+void ExpressionVisitor::endVisit(QmlJS::AST::TrueLiteral* node)
+{
+    Q_UNUSED(node)
+    m_lastType.push(AbstractType::Ptr(new IntegralType(IntegralType::TypeBoolean)));
 }
 
 AbstractType::Ptr ExpressionVisitor::lastType()
