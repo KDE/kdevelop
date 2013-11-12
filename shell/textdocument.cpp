@@ -177,7 +177,16 @@ struct TextDocumentPrivate {
     // Determines whether the current contents of this document in the editor
     // could be retrieved from the VCS if they were dismissed.
     void queryCanRecreateFromVcs(KTextEditor::Document* document) const {
-        IProject* project = Core::self()->projectController()->findProjectForUrl( document->url() );
+        IProject* project = 0;
+        // Find projects by checking which one contains the file's parent directory,
+        // to avoid issues with the cmake manager temporarily removing files from a project
+        // during reloading.
+        foreach ( KDevelop::IProject* current, Core::self()->projectController()->projects() ) {
+            if ( current->folder().isParentOf(document->url()) ) {
+                project = current;
+                break;
+            }
+        }
         if (!project) {
             return;
         }
