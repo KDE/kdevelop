@@ -25,6 +25,7 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/classdeclaration.h>
 
+#include "expressionvisitor.h"
 #include "parsesession.h"
 
 using namespace KDevelop;
@@ -128,8 +129,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::VariableDeclaration* node)
     const RangeInRevision range = m_session->locationToRange(node->identifierToken);
     DUChainWriteLocker lock;
     Declaration* dec = openDeclaration<Declaration>(name, range);
-    IntegralType* type = new IntegralType(IntegralType::TypeMixed);
-    dec->setType(IntegralType::Ptr(type));
+    dec->setType(findType(node));
     closeDeclaration();
 
     return DeclarationBuilderBase::visit(node);

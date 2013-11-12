@@ -8,10 +8,14 @@ function helloWorld()
 }
 
 /**
- * "EXPECT_FAIL" : { "type" : "int type is not properly deduced" },
  * "type" : { "toString" : "int" }
  */
 var a = 5;
+
+/**
+ * "type" : { "toString" : "double" }
+ */
+var d = 1.2;
 
 /**
  * "EXPECT_FAIL" : { "returnType" : "return type is not properly deduced" },
