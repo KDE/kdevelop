@@ -21,10 +21,9 @@
 
 #include <QStack>
 
-#include <qmljs/parser/qmljsast_p.h>
-
-#include <language/duchain/types/abstracttype.h>
 #include <language/duchain/types/integraltype.h>
+
+#include <qmljs/parser/qmljsast_p.h>
 
 #include "duchainexport.h"
 
@@ -39,6 +38,7 @@ public:
     KDevelop::AbstractType::Ptr lastType();
 
 protected:
+    virtual void endVisit(QmlJS::AST::ArrayLiteral*);
     virtual void endVisit(QmlJS::AST::NumericLiteral*);
     virtual void endVisit(QmlJS::AST::StringLiteral*);
 

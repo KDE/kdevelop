@@ -18,6 +18,11 @@ var a = 5;
 var d = 1.2;
 
 /**
+ * "type" : { "toString" : "array" }
+ */
+var array = [1, 2, 3];
+
+/**
  * "EXPECT_FAIL" : { "returnType" : "return type is not properly deduced" },
  * "returnType" : { "toString" : "string" }
  */

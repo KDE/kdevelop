@@ -18,8 +18,6 @@
 
 #include "expressionvisitor.h"
 
-#include <language/duchain/types/integraltype.h>
-
 using namespace KDevelop;
 
 AbstractType::Ptr findType(QmlJS::AST::Node* node)
@@ -27,6 +25,12 @@ AbstractType::Ptr findType(QmlJS::AST::Node* node)
     ExpressionVisitor visitor;
     QmlJS::AST::Node::accept(node, &visitor);
     return visitor.lastType();
+}
+
+void ExpressionVisitor::endVisit(QmlJS::AST::ArrayLiteral* node)
+{
+    Q_UNUSED(node)
+    m_lastType.push(AbstractType::Ptr(new IntegralType(IntegralType::TypeArray)));
 }
 
 void ExpressionVisitor::endVisit(QmlJS::AST::NumericLiteral* node)
@@ -48,5 +52,5 @@ AbstractType::Ptr ExpressionVisitor::lastType()
 {
     return ( m_lastType.isEmpty() ?
         AbstractType::Ptr(new IntegralType(IntegralType::TypeMixed)) :
-        m_lastType.last());
+        m_lastType.last() );
 }
