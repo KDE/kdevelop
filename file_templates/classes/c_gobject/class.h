@@ -1,8 +1,5 @@
 {% load kdev_filters %}
-/*
-
-{{ license|lines_prepend:" * " }}
- */
+{% include "license_header_cpp.txt" %}
 
 
 {% with namespaces|join:"_"|default:"___"|add:"_"|cut:"____"|upper as uc_prefix %}

@@ -72,7 +72,7 @@ QString CMakeFunctionArgument::unescapeValue(const QString& value)
 void CMakeFunctionDesc::addArguments( const QStringList& args, bool addEvenIfEmpty )
 {
     if(addEvenIfEmpty && args.isEmpty())
-        arguments += QString();
+        arguments += CMakeFunctionArgument();
     else foreach( const QString& arg, args )
     {
         CMakeFunctionArgument cmakeArg( arg );
@@ -128,7 +128,7 @@ CMakeFileContent CMakeListsParser::readCMakeFile(const QString & fileName)
                 function.line = token->line;
                 function.column = token->column;
 
-                readError = !readCMakeFunction( lexer, function, fileName );
+                readError = !readCMakeFunction( lexer, function);
                 ret.append(function);
 
                 if(readError)
@@ -143,7 +143,7 @@ CMakeFileContent CMakeListsParser::readCMakeFile(const QString & fileName)
     return ret;
 }
 
-bool CMakeListsParser::readCMakeFunction(cmListFileLexer *lexer, CMakeFunctionDesc &func, const QString & fileName)
+bool CMakeListsParser::readCMakeFunction(cmListFileLexer *lexer, CMakeFunctionDesc &func)
 {
         // Command name has already been parsed.  Read the left paren.
     cmListFileLexer_Token* token;
@@ -171,18 +171,18 @@ bool CMakeListsParser::readCMakeFunction(cmListFileLexer *lexer, CMakeFunctionDe
                 } else if(parenthesis<0)
                     return false;
                 else
-                    func.arguments << CMakeFunctionArgument( QString::fromLocal8Bit(token->text), false, fileName, token->line, token->column );
+                    func.arguments << CMakeFunctionArgument( QString::fromLocal8Bit(token->text), false, token->line, token->column );
                 break;
             case cmListFileLexer_Token_ParenLeft:
                 parenthesis++;
-                func.arguments << CMakeFunctionArgument( QString::fromLocal8Bit(token->text), false, fileName, token->line, token->column );
+                func.arguments << CMakeFunctionArgument( QString::fromLocal8Bit(token->text), false, token->line, token->column );
                 break;
             case cmListFileLexer_Token_Identifier:
             case cmListFileLexer_Token_ArgumentUnquoted:
-                func.arguments << CMakeFunctionArgument( QString::fromLocal8Bit(token->text), false, fileName, token->line, token->column );
+                func.arguments << CMakeFunctionArgument( QString::fromLocal8Bit(token->text), false, token->line, token->column );
                 break;
             case cmListFileLexer_Token_ArgumentQuoted:
-                func.arguments << CMakeFunctionArgument( QString::fromLocal8Bit(token->text), true, fileName, token->line, token->column+1 );
+                func.arguments << CMakeFunctionArgument( QString::fromLocal8Bit(token->text), true, token->line, token->column+1 );
                 break;
             case cmListFileLexer_Token_Newline:
                 break;
@@ -226,10 +226,13 @@ bool CMakeFunctionDesc::operator==(const CMakeFunctionDesc & other) const
     value=unescapeValue(value);
 }*/
 
-CMakeFunctionArgument::CMakeFunctionArgument(const QString & v, bool q, const QString &, quint32 l, quint32 c)
-    : value(v), quoted(q)/*, filePath(file)*/, line(l), column(c)
+CMakeFunctionArgument::CMakeFunctionArgument(const QString& v, bool q, quint32 l, quint32 c)
+    : value(unescapeValue(v)), quoted(q), line(l), column(c)
 {
-    value=unescapeValue(value);
 }
 
+CMakeFunctionArgument::CMakeFunctionArgument(const QString& v)
+    : value(v), quoted(false), line(0), column(0)
+{
+}
 

@@ -518,6 +518,13 @@ void CMakeProjectVisitorTest::testRun_data()
                             "set_target_properties(mylib PROPERTIES fu hello)\n"
                             "get_target_property(result My::Lib fu)\n"
                             << cacheValues << results;
+    results.clear();
+    results << StringPair("result", "hell\\o");
+    QTest::newRow("escaping") <<
+                            "set(resultA \"hell\\\\o\")\n"
+                            "set(resultB \"${resultA}\")\n"
+                            "set(result \"${resultB}\")\n"
+                            << cacheValues << results;
 }
 
 void CMakeProjectVisitorTest::testRun()

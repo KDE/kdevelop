@@ -19,7 +19,7 @@ set( cmakecommon_SRCS
   parser/cmakecondition.cpp
   parser/cmakeprojectvisitor.cpp 
   parser/variablemap.cpp
-  parser/cmakedebugvisitor.cpp
+#   parser/cmakedebugvisitor.cpp
   parser/cmakecachereader.cpp
   parser/cmakeparserutils.cpp
   parser/cmakeduchaintypes.cpp

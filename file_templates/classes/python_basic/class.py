@@ -1,8 +1,12 @@
 {% load kdev_filters %}
+{% block license_header %}
+{% if license %}
 #
 
 {{ license|lines_prepend:"# " }}
 #
+{% endif %}
+{% endblock license_header %}
 
 
 class {{ name }}{% if base_classes %}({% for inh in base_classes %}{{ inh.baseType }}{% if not forloop.last %}, {% endif %}{% endfor %}){% endif %}:

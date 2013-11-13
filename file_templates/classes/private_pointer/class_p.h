@@ -1,8 +1,5 @@
 {% load kdev_filters %}
-/*
-
- {{ license|lines_prepend:" * " }}
- */
+{% include "license_header_cpp.txt" %}
 
 
 #ifndef {{ private_class_name|upper}}_H

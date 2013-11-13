@@ -979,6 +979,7 @@ int CMakeProjectVisitor::visit(const FindLibraryAst *flib)
         locationOptions += m_vars->value("CMAKE_FRAMEWORK_PATH");
         
         locationOptions += m_vars->value("CMAKE_SYSTEM_LIBRARY_PATH");
+        locationOptions += m_vars->value("CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES");
         
         opt=m_vars->value("CMAKE_SYSTEM_PREFIX_PATH");
         foreach(const QString& s, opt)

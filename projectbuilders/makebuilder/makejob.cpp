@@ -51,6 +51,7 @@ MakeJob::MakeJob(QObject* parent, KDevelop::ProjectBaseItem* item,
     , m_overrideTargets(overrideTargets)
     , m_variables(variables)
 {
+    Q_ASSERT(item && item->model() && m_idx.isValid() && this->item() == item);
     setCapabilities( Killable );
     setFilteringStrategy( OutputModel::CompilerFilter );
     setProperties( NeedWorkingDirectory | PortableMessages | DisplayStderr | IsBuilderHint );
