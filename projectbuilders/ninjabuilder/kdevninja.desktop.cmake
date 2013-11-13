@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=Ninja Project Builder
+Name[bs]=Graditelj Ninja projekta
 Name[ca]=Constructor de projectes Ninja
 Name[cs]=Překladač projektů Ninja
 Name[de]=Ninja-Projekterstellung
@@ -55,6 +56,7 @@ GenericName[x-test]=xxProject Builderxx
 GenericName[zh_CN]=工程构建器
 GenericName[zh_TW]=專案編譯器
 Comment=KDevelop Ninja Builder
+Comment[bs]=KDevelop Ninja izgraditelj
 Comment[ca]=Constructor Ninja del KDevelop
 Comment[de]=KDevelop-Ninja-Erstellung
 Comment[es]=Constructor Ninja para KDevelop
