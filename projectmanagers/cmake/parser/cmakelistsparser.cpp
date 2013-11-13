@@ -226,10 +226,13 @@ bool CMakeFunctionDesc::operator==(const CMakeFunctionDesc & other) const
     value=unescapeValue(value);
 }*/
 
-CMakeFunctionArgument::CMakeFunctionArgument(const QString & v, bool q, const QString &, quint32 l, quint32 c)
-    : value(v), quoted(q)/*, filePath(file)*/, line(l), column(c)
+CMakeFunctionArgument::CMakeFunctionArgument(const QString& v, bool q, const QString& file, quint32 l, quint32 c)
+    : value(unescapeValue(v)), quoted(q)/*, filePath(file)*/, line(l), column(c)
 {
-    value=unescapeValue(value);
 }
 
+CMakeFunctionArgument::CMakeFunctionArgument(const QString& v)
+    : value(v), quoted(false), line(0), column(0)
+{
+}
 

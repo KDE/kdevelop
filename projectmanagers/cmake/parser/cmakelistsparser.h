@@ -39,8 +39,8 @@
 struct CMakeFunctionArgument
 {
     CMakeFunctionArgument(): value(), quoted(false), line(0), column(0) {}
-    
-    CMakeFunctionArgument(const QString& v, bool q = false,
+    CMakeFunctionArgument(const QString& v);
+    CMakeFunctionArgument(const QString& v, bool q,
                           const QString& file = QString(), quint32 l = 0, quint32 c=0);
     inline bool operator == (const CMakeFunctionArgument& r) const
     {
