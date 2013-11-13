@@ -40,8 +40,7 @@ struct CMakeFunctionArgument
 {
     CMakeFunctionArgument(): value(), quoted(false), line(0), column(0) {}
     CMakeFunctionArgument(const QString& v);
-    CMakeFunctionArgument(const QString& v, bool q,
-                          const QString& file = QString(), quint32 l = 0, quint32 c=0);
+    CMakeFunctionArgument(const QString& v, bool q, quint32 l = 0, quint32 c=0);
     inline bool operator == (const CMakeFunctionArgument& r) const
     {
         return (this->value == r.value) && (this->quoted == r.quoted);
@@ -135,9 +134,7 @@ public:
     static CMakeFileContent readCMakeFile(const QString& fileName);
     
 private:
-    static bool readCMakeFunction( cmListFileLexer*,
-                                    CMakeFunctionDesc&,
-                                    const QString& fileName);
+    static bool readCMakeFunction( cmListFileLexer* lexer, CMakeFunctionDesc& func);
 
 };
 
