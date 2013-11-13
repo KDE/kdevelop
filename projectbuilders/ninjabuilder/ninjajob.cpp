@@ -147,7 +147,7 @@ void NinjaJob::appendLines(const QStringList& lines)
     for(QStringList::iterator it=ret.end(); it!=ret.begin(); ) {
         --it;
         bool curr = it->startsWith('[');
-        if(prev && curr || it->endsWith("] "))
+        if((prev && curr) || it->endsWith("] "))
             it = ret.erase(it);
         prev = curr;
     }
