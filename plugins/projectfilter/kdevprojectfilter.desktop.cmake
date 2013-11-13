@@ -16,7 +16,8 @@ X-KDevelop-Mode=GUI
 X-KDevelop-LoadMode=AlwaysOn
 
 Name=Project Filter
-Name[ca]=Filtra el Projecte
+Name[bs]=Projekt Filter
+Name[ca]=Filtre de projecte
 Name[cs]=Filtr projektů
 Name[de]=Projektfilter
 Name[es]=Filtro del proyecto
@@ -36,6 +37,7 @@ Name[uk]=Фільтр проекту
 Name[x-test]=xxProject Filterxx
 Name[zh_TW]=專案過濾器
 Comment=Configure which files and folders inside the project folder should be included or excluded.
+Comment[bs]=Konfiguriši koje datoteke i direktoriji unutar projekta trebaju biti uključeni ili isključeni.
 Comment[ca]=Configura quins fitxers i carpetes dins de la carpeta del projecte s'han d'incloure o excloure.
 Comment[de]=Legt fest, welche Dateien und Ordner innerhalb des Projektordners ein- oder ausgeschlossen werden sollen.
 Comment[es]=Configura qué archivos y carpetas contenidos en la carpeta del proyecto se deben incluir o excluir.
