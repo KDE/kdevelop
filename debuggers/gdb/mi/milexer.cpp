@@ -139,7 +139,7 @@ int MILexer::nextToken(int &pos, int &len)
         start = m_ptr;
 
         ch = m_contents[m_ptr];
-        Q_ASSERT(ch >= 0 && short(ch) < 128);
+        Q_ASSERT(ch >= 0);
         (this->*s_scan_table[static_cast<uchar>(ch)])(&kind);
 
         switch (kind) {
