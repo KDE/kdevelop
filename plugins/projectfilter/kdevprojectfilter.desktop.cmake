@@ -16,7 +16,7 @@ X-KDevelop-Mode=GUI
 X-KDevelop-LoadMode=AlwaysOn
 
 Name=Project Filter
-Name[ca]=Filtra el Projecte
+Name[ca]=Filtre de projecte
 Name[cs]=Filtr projektů
 Name[da]=Projektfilter
 Name[de]=Projektfilter
