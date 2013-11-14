@@ -148,7 +148,7 @@ class UseExpressionVisitor : public Cpp::ExpressionVisitor {
 
       if (decl && decl->isExplicitlyDeleted()) {
         KSharedPtr<KDevelop::Problem> problem(new Problem);
-        problem->setDescription(i18n("use of deleted function"));
+        problem->setDescription(i18n("Use of deleted function: %1", decl->identifier().toString()));
 
         problem->setSource(KDevelop::ProblemData::SemanticAnalysis);
 
