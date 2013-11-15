@@ -113,11 +113,11 @@ bool DeclarationBuilder::visit(QmlJS::AST::FormalParameterList* node)
         const RangeInRevision range = m_session->locationToRange(plist->identifierToken);
         DUChainWriteLocker lock;
         Declaration* dec = openDeclaration<Declaration>(name, range);
-        IntegralType* type = new IntegralType(IntegralType::TypeMixed);
-        dec->setType(IntegralType::Ptr(type));
+        IntegralType::Ptr type(new IntegralType(IntegralType::TypeMixed));
+        dec->setType(type);
         closeDeclaration();
         if (FunctionType::Ptr funType = currentType<FunctionType>()) {
-            funType->addArgument(type);
+            funType->addArgument(type.cast<AbstractType>());
         }
     }
 
