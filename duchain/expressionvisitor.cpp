@@ -19,6 +19,7 @@
 #include "expressionvisitor.h"
 
 #include <language/duchain/declaration.h>
+#include <language/duchain/types/structuretype.h>
 
 #include "helper.h"
 
@@ -57,6 +58,11 @@ void ExpressionVisitor::endVisit(QmlJS::AST::NumericLiteral* node)
     } else {
         m_lastType.push(AbstractType::Ptr(new IntegralType(IntegralType::TypeInt)));
     }
+}
+
+void ExpressionVisitor::endVisit(QmlJS::AST::ObjectLiteral* /*node*/)
+{
+    m_lastType.push(AbstractType::Ptr(new StructureType));
 }
 
 void ExpressionVisitor::endVisit(QmlJS::AST::StringLiteral* node)

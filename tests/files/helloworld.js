@@ -28,6 +28,13 @@ var d = 1.2;
 var array = [1, 2, 3];
 
 /**
+ * "type" : { "toString" : "class" }
+ */
+var obj = {
+    foo: "bar"
+};
+
+/**
  * "type" : { "toString"  : "function string ()" },
  * "returnType" : { "toString" : "string" }
  */
