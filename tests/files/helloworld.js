@@ -28,6 +28,13 @@ var d = 1.2;
 var array = [1, 2, 3];
 
 /**
+ * "type" : { "toString" : "mixed" }
+ */
+var c = function(a) {
+    return a;
+};
+
+/**
  * "type" : { "toString" : "class" }
  */
 var obj = {

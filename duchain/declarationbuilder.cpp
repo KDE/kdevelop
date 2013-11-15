@@ -106,6 +106,31 @@ void DeclarationBuilder::endVisit(QmlJS::AST::FunctionDeclaration* node)
     last->setType(lastType());
 }
 
+bool DeclarationBuilder::visit(QmlJS::AST::FunctionExpression* node)
+{
+    FunctionType::Ptr type(new FunctionType);
+    type->setReturnType(AbstractType::Ptr(new IntegralType(IntegralType::TypeMixed)));
+
+    {
+        DUChainWriteLocker lock;
+        Declaration* last = currentDeclaration();
+        last->setType(type);
+        openType(type);
+    }
+
+    return DeclarationBuilderBase::visit(node);
+}
+
+void DeclarationBuilder::endVisit(QmlJS::AST::FunctionExpression* node)
+{
+    DeclarationBuilderBase::endVisit(node);
+
+    closeType();
+    DUChainWriteLocker lock;
+    Declaration* last = currentDeclaration();
+    last->setType(lastType());
+}
+
 bool DeclarationBuilder::visit(QmlJS::AST::FormalParameterList* node)
 {
     for (QmlJS::AST::FormalParameterList *plist = node; plist; plist = plist->next) {
@@ -142,9 +167,15 @@ bool DeclarationBuilder::visit(QmlJS::AST::VariableDeclaration* node)
     DUChainWriteLocker lock;
     Declaration* dec = openDeclaration<Declaration>(name, range);
     dec->setType(findType(node));
-    closeDeclaration();
 
     return DeclarationBuilderBase::visit(node);
+}
+
+void DeclarationBuilder::endVisit(QmlJS::AST::VariableDeclaration* node)
+{
+    DeclarationBuilderBase::endVisit(node);
+
+    closeDeclaration();
 }
 
 void DeclarationBuilder::closeContext()
