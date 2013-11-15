@@ -128,8 +128,9 @@ void DeclarationBuilder::endVisit(QmlJS::AST::ReturnStatement* node)
 {
     DeclarationBuilderBase::endVisit(node);
 
-    FunctionType::Ptr type = currentType<FunctionType>();
-    type->setReturnType(findType(node->expression));
+    if (FunctionType::Ptr type = currentType<FunctionType>()) {
+        type->setReturnType(findType(node->expression));
+    }
 }
 
 bool DeclarationBuilder::visit(QmlJS::AST::VariableDeclaration* node)
