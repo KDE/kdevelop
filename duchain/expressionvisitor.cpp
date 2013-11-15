@@ -18,13 +18,15 @@
 
 #include "expressionvisitor.h"
 
+#include <language/duchain/declaration.h>
+
+#include "helper.h"
+
 using namespace KDevelop;
 
-AbstractType::Ptr findType(QmlJS::AST::Node* node)
+ExpressionVisitor::ExpressionVisitor(DUContext* context) :
+    m_context(context)
 {
-    ExpressionVisitor visitor;
-    QmlJS::AST::Node::accept(node, &visitor);
-    return visitor.lastType();
 }
 
 void ExpressionVisitor::endVisit(QmlJS::AST::ArrayLiteral* node)
@@ -37,6 +39,15 @@ void ExpressionVisitor::endVisit(QmlJS::AST::FalseLiteral* node)
 {
     Q_UNUSED(node)
     m_lastType.push(AbstractType::Ptr(new IntegralType(IntegralType::TypeBoolean)));
+}
+
+void ExpressionVisitor::endVisit(QmlJS::AST::IdentifierExpression* node)
+{
+    const QualifiedIdentifier name(node->name.toString());
+    DeclarationPointer dec = QmlJS::getDeclaration(name, DUContextPointer(m_context));
+    if (dec) {
+        m_lastType.push(dec->abstractType());
+    }
 }
 
 void ExpressionVisitor::endVisit(QmlJS::AST::NumericLiteral* node)

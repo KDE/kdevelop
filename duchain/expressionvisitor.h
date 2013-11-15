@@ -22,30 +22,33 @@
 #include <QStack>
 
 #include <language/duchain/types/integraltype.h>
+#include <language/duchain/ducontext.h>
 
 #include <qmljs/parser/qmljsast_p.h>
 
 #include "duchainexport.h"
 
-KDevelop::AbstractType::Ptr findType(QmlJS::AST::Node* node);
-
 class KDEVQMLJSDUCHAIN_EXPORT ExpressionVisitor : public QmlJS::AST::Visitor
 {
 public:
+    explicit ExpressionVisitor(KDevelop::DUContext* context);
+
     using Visitor::visit;
     using Visitor::endVisit;
 
     KDevelop::AbstractType::Ptr lastType();
 
 protected:
-    virtual void endVisit(QmlJS::AST::ArrayLiteral*);
-    virtual void endVisit(QmlJS::AST::FalseLiteral*);
-    virtual void endVisit(QmlJS::AST::NumericLiteral*);
-    virtual void endVisit(QmlJS::AST::StringLiteral*);
-    virtual void endVisit(QmlJS::AST::TrueLiteral*);
+    virtual void endVisit(QmlJS::AST::ArrayLiteral* node);
+    virtual void endVisit(QmlJS::AST::FalseLiteral* node);
+    virtual void endVisit(QmlJS::AST::IdentifierExpression* node);
+    virtual void endVisit(QmlJS::AST::NumericLiteral* node);
+    virtual void endVisit(QmlJS::AST::StringLiteral* node);
+    virtual void endVisit(QmlJS::AST::TrueLiteral* node);
 
 private:
     QStack<KDevelop::AbstractType::Ptr> m_lastType;
+    KDevelop::DUContext* m_context;
 
 };
 

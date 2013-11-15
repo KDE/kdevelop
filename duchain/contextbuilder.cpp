@@ -18,7 +18,7 @@
  *************************************************************************************/
 
 #include "contextbuilder.h"
-
+#include "expressionvisitor.h"
 #include "parsesession.h"
 
 using namespace KDevelop;
@@ -39,6 +39,13 @@ RangeInRevision ContextBuilder::editorFindRange(QmlJS::AST::Node* fromNode, QmlJ
 QualifiedIdentifier ContextBuilder::identifierForNode(QmlJS::AST::IdentifierPropertyName* node)
 {
     return QualifiedIdentifier(node->id.toString());
+}
+
+AbstractType::Ptr ContextBuilder::findType(QmlJS::AST::Node* node)
+{
+    ExpressionVisitor visitor(currentContext());
+    QmlJS::AST::Node::accept(node, &visitor);
+    return visitor.lastType();
 }
 
 void ContextBuilder::setContextOnNode(QmlJS::AST::Node* node, DUContext* context)

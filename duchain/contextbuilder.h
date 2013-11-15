@@ -21,6 +21,7 @@
 #define CONTEXTBUILDER_H
 
 #include <language/duchain/builders/abstractcontextbuilder.h>
+#include <language/duchain/types/abstracttype.h>
 
 #include <qmljs/parser/qmljsast_p.h>
 #include <qmljs/qmljsdocument.h>
@@ -62,6 +63,7 @@ public:
     virtual KDevelop::TopDUContext* newTopContext(const KDevelop::RangeInRevision& range,
                                                   KDevelop::ParsingEnvironmentFile* file = 0);
 
+    KDevelop::AbstractType::Ptr findType(QmlJS::AST::Node* node);
     void setParseSession(ParseSession* session);
 
     using Visitor::visit;

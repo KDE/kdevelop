@@ -39,7 +39,7 @@ namespace {
  * for the task. But it is very hard to write it (lots of code) such
  * that it does not recurse into any other node...
  */
-QualifiedIdentifier findIdentifier(QmlJS::AST::UiObjectMemberList* members)
+static QualifiedIdentifier findIdentifier(QmlJS::AST::UiObjectMemberList* members)
 {
     for (QmlJS::AST::UiObjectMemberList *it = members; it; it = it->next) {
         QmlJS::AST::UiScriptBinding* binding = QmlJS::AST::cast<QmlJS::AST::UiScriptBinding*>(it->member);
@@ -113,12 +113,23 @@ bool DeclarationBuilder::visit(QmlJS::AST::FormalParameterList* node)
         const RangeInRevision range = m_session->locationToRange(plist->identifierToken);
         DUChainWriteLocker lock;
         Declaration* dec = openDeclaration<Declaration>(name, range);
-        IntegralType* type = new IntegralType(IntegralType::TypeMixed);
-        dec->setType(IntegralType::Ptr(type));
+        IntegralType::Ptr type(new IntegralType(IntegralType::TypeMixed));
+        dec->setType(type);
         closeDeclaration();
+        if (FunctionType::Ptr funType = currentType<FunctionType>()) {
+            funType->addArgument(type.cast<AbstractType>());
+        }
     }
 
     return DeclarationBuilderBase::visit(node);
+}
+
+void DeclarationBuilder::endVisit(QmlJS::AST::ReturnStatement* node)
+{
+    DeclarationBuilderBase::endVisit(node);
+
+    FunctionType::Ptr type = currentType<FunctionType>();
+    type->setReturnType(findType(node->expression));
 }
 
 bool DeclarationBuilder::visit(QmlJS::AST::VariableDeclaration* node)

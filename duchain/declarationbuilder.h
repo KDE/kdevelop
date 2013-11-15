@@ -47,8 +47,11 @@ protected:
     virtual bool visit(QmlJS::AST::FormalParameterList* node);
     virtual bool visit(QmlJS::AST::VariableDeclaration* node);
 
+    virtual void endVisit(QmlJS::AST::ReturnStatement* node);
+
     virtual bool visit(QmlJS::AST::UiObjectDefinition* node);
     virtual void endVisit(QmlJS::AST::UiObjectDefinition* node);
+
     virtual bool visit(QmlJS::AST::UiObjectInitializer* node);
 
     virtual bool visit(QmlJS::AST::UiScriptBinding* node);
