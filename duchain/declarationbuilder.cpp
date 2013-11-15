@@ -243,16 +243,15 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiPublicMember* node)
     {
         DUChainWriteLocker lock;
         ClassMemberDeclaration* dec = openDeclaration<ClassMemberDeclaration>(id, range);
-        dec->setAbstractType(type);
+        dec->setAbstractType(findType(node->statement));
     }
-    openType(type);
 
     return DeclarationBuilderBase::visit(node);
 }
 
-void DeclarationBuilder::endVisit(QmlJS::AST::UiPublicMember* /*node*/)
+void DeclarationBuilder::endVisit(QmlJS::AST::UiPublicMember* node)
 {
-    closeType();
+    Q_UNUSED(node)
     closeDeclaration();
 }
 
