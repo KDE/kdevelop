@@ -13,6 +13,11 @@ function helloWorld()
 var a = 5;
 
 /**
+ * "type" : { "toString" : "int" }
+ */
+var b = a;
+
+/**
  * "type" : { "toString" : "double" }
  */
 var d = 1.2;
@@ -23,7 +28,7 @@ var d = 1.2;
 var array = [1, 2, 3];
 
 /**
- * "EXPECT_FAIL" : { "returnType" : "return type is not properly deduced" },
+ * "type" : { "toString"  : "function string ()" },
  * "returnType" : { "toString" : "string" }
  */
 function testVariables()
@@ -36,8 +41,8 @@ function testVariables()
 }
 
 /**
- * "EXPECT_FAIL" : { "type" : "neither arg type nor ret type is properly deduced" },
- * "type": { "toString" : "function mixed (mixed)" }
+ * "type": { "toString" : "function mixed (mixed)" },
+ * "returnType" : { "toString" : "mixed" }
  */
 function testReturnMixedArg(arg)
 {
