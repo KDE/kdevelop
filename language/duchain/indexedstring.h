@@ -25,10 +25,6 @@
 class KUrl;
 
 namespace KDevelop {
-class IndexedString;
-}
-
-namespace KDevelop {
 
 /**
  * This string does "disk reference-counting", which means that reference-counts are maintainted,
