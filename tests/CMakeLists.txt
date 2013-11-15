@@ -4,6 +4,7 @@ add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9532 )
 include_directories( ${KDevPlatform_SOURCE_DIR}/shell )
 
 set(kdevplatformtests_LIB_SRCS
+    autotestshell.cpp
     kdevsignalspy.cpp
     testcore.cpp
     testproject.cpp

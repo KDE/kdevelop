@@ -32,7 +32,7 @@ class DelayedOutputPrivate;
 class KDEVPLATFORMJSONTESTS_EXPORT DelayedOutput
 {
 public:
-  class Delay
+  class KDEVPLATFORMJSONTESTS_EXPORT Delay
   {
   public:
     Delay(DelayedOutput* output);
