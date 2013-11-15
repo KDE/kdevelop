@@ -39,7 +39,7 @@ namespace {
  * for the task. But it is very hard to write it (lots of code) such
  * that it does not recurse into any other node...
  */
-QualifiedIdentifier findIdentifier(QmlJS::AST::UiObjectMemberList* members)
+static QualifiedIdentifier findIdentifier(QmlJS::AST::UiObjectMemberList* members)
 {
     for (QmlJS::AST::UiObjectMemberList *it = members; it; it = it->next) {
         QmlJS::AST::UiScriptBinding* binding = QmlJS::AST::cast<QmlJS::AST::UiScriptBinding*>(it->member);
