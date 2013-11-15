@@ -116,8 +116,9 @@ bool DeclarationBuilder::visit(QmlJS::AST::FormalParameterList* node)
         IntegralType* type = new IntegralType(IntegralType::TypeMixed);
         dec->setType(IntegralType::Ptr(type));
         closeDeclaration();
-        FunctionType::Ptr funType = currentType<FunctionType>();
-        funType->addArgument(findType(plist));
+        if (FunctionType::Ptr funType = currentType<FunctionType>()) {
+            funType->addArgument(type);
+        }
     }
 
     return DeclarationBuilderBase::visit(node);

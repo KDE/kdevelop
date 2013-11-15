@@ -44,7 +44,10 @@ void ExpressionVisitor::endVisit(QmlJS::AST::FalseLiteral* node)
 void ExpressionVisitor::endVisit(QmlJS::AST::IdentifierExpression* node)
 {
     const QualifiedIdentifier name(node->name.toString());
-    m_lastType.push(QmlJS::getDeclaration(name, DUContextPointer(m_context))->abstractType());
+    DeclarationPointer dec = QmlJS::getDeclaration(name, DUContextPointer(m_context));
+    if (dec) {
+        m_lastType.push(dec->abstractType());
+    }
 }
 
 void ExpressionVisitor::endVisit(QmlJS::AST::NumericLiteral* node)
