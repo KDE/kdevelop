@@ -171,7 +171,14 @@ protected:
    *
    * \returns the current abstract type being parsed.
    */
-  inline KDevelop::AbstractType::Ptr currentAbstractType() { return m_typeStack.top(); }
+  inline KDevelop::AbstractType::Ptr currentAbstractType()
+  {
+    if (m_typeStack.isEmpty()) {
+      return AbstractType::Ptr();
+    } else {
+      return m_typeStack.top();
+    }
+  }
 
   /**
    * Retrieve the current type being parsed.
@@ -181,7 +188,7 @@ protected:
    * \returns the current type being parsed.
    */
   template <class T2>
-  TypePtr<T2> currentType() { return TypePtr<T2>::dynamicCast(m_typeStack.top()); }
+  TypePtr<T2> currentType() { return currentAbstractType().template cast<T2>(); }
 
   /**
    * Search for a type with the identifier given by \a name.
