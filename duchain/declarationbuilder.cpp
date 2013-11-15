@@ -238,20 +238,21 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiPublicMember* node)
 
     const RangeInRevision& range = m_session->locationToRange(node->identifierToken);
     const QualifiedIdentifier id(node->name.toString());
-    const AbstractType::Ptr type(new IntegralType(IntegralType::TypeMixed));
+    const AbstractType::Ptr type = findType(node->statement);
 
     {
         DUChainWriteLocker lock;
         ClassMemberDeclaration* dec = openDeclaration<ClassMemberDeclaration>(id, range);
-        dec->setAbstractType(findType(node->statement));
+        dec->setAbstractType(type);
     }
+    openType(type);
 
     return DeclarationBuilderBase::visit(node);
 }
 
-void DeclarationBuilder::endVisit(QmlJS::AST::UiPublicMember* node)
+void DeclarationBuilder::endVisit(QmlJS::AST::UiPublicMember* /*node*/)
 {
-    Q_UNUSED(node)
+    closeType();
     closeDeclaration();
 }
 
