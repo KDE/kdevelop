@@ -690,21 +690,48 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
     QStringList postfix=QStringList() << QString() << "/cmake" << "/CMake";
     QStringList configPath;
     QStringList lookupPaths = m_cache->value("CMAKE_PREFIX_PATH").value.split(';', QString::SkipEmptyParts) + m_vars->value("CMAKE_SYSTEM_PREFIX_PATH");
-    
+
+    // note: should note be done if NO_SYSTEM_ENVIRONMENT_PATH is set, see docs:
+    /* 4. Search the standard system environment variables. This can be skipped
+     * if NO_SYSTEM_ENVIRONMENT_PATH is passed. Path entries ending in "/bin" or
+     * "/sbin" are automatically converted to their parent directories.
+     */
+    foreach(const QString& lookup, envVarDirectories("PATH"))
+    {
+        if (lookup.endsWith("/bin")) {
+            lookupPaths << lookup.left(lookup.length() - 4);
+        } else if (lookup.endsWith("/sbin")) {
+            lookupPaths << lookup.left(lookup.length() - 5);
+        } else {
+            lookupPaths << lookup;
+        }
+    }
+
+    const bool useLib64 = m_props[GlobalProperty][QString()]["FIND_LIBRARY_USE_LIB64_PATHS"].contains("TRUE");
+    QSet<QString> handled;
     foreach(const QString& lookup, lookupPaths)
     {
-        if(QFile::exists(lookup))
-            foreach(const QString& post, postfix)
-            {
-                configPath.prepend(lookup+"/share/"+name.toLower()+post);
-                configPath.prepend(lookup+"/share/"+name+post);
-                configPath.prepend(lookup+"/share/cmake/"+name.toLower()+post);
-                configPath.prepend(lookup+"/share/cmake/"+name+post);
-                configPath.prepend(lookup+"/lib/"+name.toLower()+post);
-                configPath.prepend(lookup+"/lib/"+name+post);
-                configPath.prepend(lookup+"/lib/cmake/"+name.toLower()+post);
-                configPath.prepend(lookup+"/lib/cmake/"+name+post);
+        if(!QFile::exists(lookup) || handled.contains(lookup)) {
+            continue;
+        }
+        foreach(const QString& post, postfix)
+        {
+            configPath.prepend(lookup+"/share/"+name.toLower()+post);
+            configPath.prepend(lookup+"/share/"+name+post);
+            configPath.prepend(lookup+"/share/cmake/"+name.toLower()+post);
+            configPath.prepend(lookup+"/share/cmake/"+name+post);
+            configPath.prepend(lookup+"/lib/"+name.toLower()+post);
+            configPath.prepend(lookup+"/lib/"+name+post);
+            configPath.prepend(lookup+"/lib/cmake/"+name.toLower()+post);
+            configPath.prepend(lookup+"/lib/cmake/"+name+post);
+            if (useLib64) {
+                configPath.prepend(lookup+"/lib64/"+name.toLower()+post);
+                configPath.prepend(lookup+"/lib64/"+name+post);
+                configPath.prepend(lookup+"/lib64/cmake/"+name.toLower()+post);
+                configPath.prepend(lookup+"/lib64/cmake/"+name+post);
             }
+        }
+        handled << lookup;
     }
 
     QString varName=pack->name()+"_DIR";
