@@ -20,6 +20,7 @@
 
 #include <language/duchain/declaration.h>
 #include <language/duchain/types/structuretype.h>
+#include <language/duchain/types/functiontype.h>
 
 #include "helper.h"
 
@@ -30,15 +31,13 @@ ExpressionVisitor::ExpressionVisitor(DUContext* context) :
 {
 }
 
-void ExpressionVisitor::endVisit(QmlJS::AST::ArrayLiteral* node)
+void ExpressionVisitor::endVisit(QmlJS::AST::ArrayLiteral* /*node*/)
 {
-    Q_UNUSED(node)
     m_lastType.push(AbstractType::Ptr(new IntegralType(IntegralType::TypeArray)));
 }
 
-void ExpressionVisitor::endVisit(QmlJS::AST::FalseLiteral* node)
+void ExpressionVisitor::endVisit(QmlJS::AST::FalseLiteral* /*node*/)
 {
-    Q_UNUSED(node)
     m_lastType.push(AbstractType::Ptr(new IntegralType(IntegralType::TypeBoolean)));
 }
 
@@ -65,16 +64,19 @@ void ExpressionVisitor::endVisit(QmlJS::AST::ObjectLiteral* /*node*/)
     m_lastType.push(AbstractType::Ptr(new StructureType));
 }
 
-void ExpressionVisitor::endVisit(QmlJS::AST::StringLiteral* node)
+void ExpressionVisitor::endVisit(QmlJS::AST::StringLiteral* /*node*/)
 {
-    Q_UNUSED(node)
     m_lastType.push(AbstractType::Ptr(new IntegralType(IntegralType::TypeString)));
 }
 
-void ExpressionVisitor::endVisit(QmlJS::AST::TrueLiteral* node)
+void ExpressionVisitor::endVisit(QmlJS::AST::TrueLiteral* /*node*/)
 {
-    Q_UNUSED(node)
     m_lastType.push(AbstractType::Ptr(new IntegralType(IntegralType::TypeBoolean)));
+}
+
+void ExpressionVisitor::endVisit(QmlJS::AST::FunctionExpression* /*node*/)
+{
+    m_lastType.push(AbstractType::Ptr(new FunctionType));
 }
 
 AbstractType::Ptr ExpressionVisitor::lastType()

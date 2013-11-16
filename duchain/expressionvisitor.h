@@ -46,6 +46,7 @@ protected:
     virtual void endVisit(QmlJS::AST::ObjectLiteral* node);
     virtual void endVisit(QmlJS::AST::StringLiteral* node);
     virtual void endVisit(QmlJS::AST::TrueLiteral* node);
+    virtual void endVisit(QmlJS::AST::FunctionExpression* node);
 
 private:
     QStack<KDevelop::AbstractType::Ptr> m_lastType;

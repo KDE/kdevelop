@@ -28,7 +28,6 @@ var d = 1.2;
 var array = [1, 2, 3];
 
 /**
- * "EXPECT_FAIL" : { "type" : "argument type is improperly deduced" },
  * "type" : { "toString" : "function mixed (mixed)" }
  */
 var c = function(a) {

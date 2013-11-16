@@ -44,9 +44,6 @@ protected:
     virtual bool visit(QmlJS::AST::FunctionDeclaration* node);
     virtual void endVisit(QmlJS::AST::FunctionDeclaration* node);
 
-    virtual bool visit(QmlJS::AST::FunctionExpression* node);
-    virtual void endVisit(QmlJS::AST::FunctionExpression* node);
-
     virtual bool visit(QmlJS::AST::VariableDeclaration* node);
     virtual void endVisit(QmlJS::AST::VariableDeclaration* node);
 

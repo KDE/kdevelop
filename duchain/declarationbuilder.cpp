@@ -101,23 +101,6 @@ void DeclarationBuilder::endVisit(QmlJS::AST::FunctionDeclaration* node)
     closeAndAssignType();
 }
 
-bool DeclarationBuilder::visit(QmlJS::AST::FunctionExpression* node)
-{
-    FunctionType::Ptr type(new FunctionType);
-    type->setReturnType(AbstractType::Ptr(new IntegralType(IntegralType::TypeMixed)));
-
-    openType(type);
-
-    return DeclarationBuilderBase::visit(node);
-}
-
-void DeclarationBuilder::endVisit(QmlJS::AST::FunctionExpression* node)
-{
-    DeclarationBuilderBase::endVisit(node);
-
-    closeType();
-}
-
 bool DeclarationBuilder::visit(QmlJS::AST::FormalParameterList* node)
 {
     for (QmlJS::AST::FormalParameterList *plist = node; plist; plist = plist->next) {
@@ -152,7 +135,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::VariableDeclaration* node)
 
     const QualifiedIdentifier name(node->name.toString());
     const RangeInRevision range = m_session->locationToRange(node->identifierToken);
-    AbstractType::Ptr type = findType(node);
+    const AbstractType::Ptr type = findType(node->expression);
     {
         DUChainWriteLocker lock;
         openDeclaration<Declaration>(name, range);
