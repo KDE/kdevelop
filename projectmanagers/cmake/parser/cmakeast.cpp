@@ -1774,6 +1774,7 @@ bool GetFilenameComponentAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     QString t = func.arguments[2].value;
     
     if(t=="PATH") m_type=Path;
+    else if(t=="REALPATH") m_type=RealPath;
     else if(t=="ABSOLUTE") m_type=Absolute;
     else if(t=="NAME") m_type=Name;
     else if(t=="EXT") m_type=Ext;

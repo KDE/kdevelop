@@ -1709,6 +1709,9 @@ int CMakeProjectVisitor::visit(const GetFilenameComponentAst *filecomp)
             if(idx>=0)
                 val=filecomp->fileName().left(idx);
         }   break;
+        case GetFilenameComponentAst::RealPath: {
+            val = fi.canonicalFilePath();
+        }   break;
         case GetFilenameComponentAst::Absolute:
             val=fi.absoluteFilePath();
             break;

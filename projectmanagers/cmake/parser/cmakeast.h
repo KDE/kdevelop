@@ -398,7 +398,7 @@ CMAKE_END_AST_CLASS( GetDirPropertyAst )
 
 
 CMAKE_BEGIN_AST_CLASS( GetFilenameComponentAst )
-    enum ComponentType { Path, Absolute, Name, Ext, NameWe, Program };
+    enum ComponentType { Path, RealPath, Absolute, Name, Ext, NameWe, Program };
 CMAKE_ADD_AST_MEMBER( QString, variableName )
 CMAKE_ADD_AST_MEMBER( QString, fileName )
 CMAKE_ADD_AST_MEMBER( ComponentType, type )
