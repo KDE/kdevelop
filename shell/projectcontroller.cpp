@@ -552,6 +552,10 @@ ProjectController::~ProjectController()
 
 void ProjectController::cleanup()
 {
+    if ( d->m_currentlyOpening.isEmpty() ) {
+        d->saveListOfOpenedProjects();
+    }
+
     d->m_cleaningUp = true;
     if( buildSetModel() ) {
         buildSetModel()->storeToSession( Core::self()->activeSession() );
