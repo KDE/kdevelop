@@ -112,8 +112,12 @@ QList< CMakeProjectVisitor::IntPair > CMakeProjectVisitor::parseArgument(const Q
                 gotDollar=false;
                 break;
             case '}':
-                if(!opened.isEmpty())
-                    pos.append(IntPair(opened.pop(), i, opened.count()));
+                if(!opened.isEmpty()) {
+                    // note: don't merge this into the function call below,
+                    // the evaluation order is undefined then!
+                    int start = opened.pop();
+                    pos.append(IntPair(start, i, opened.count() + 1));
+                }
                 break;
         }
     }
