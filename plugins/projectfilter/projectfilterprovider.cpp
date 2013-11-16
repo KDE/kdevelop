@@ -92,7 +92,7 @@ ContextMenuExtension ProjectFilterProvider::contextMenuExtension(Context* contex
     }
 
     QAction* action = new QAction(KIcon("view-filter"),
-                                  i18np("Exclude item from project.",
+                                  i18np("Exclude item from project",
                                         "Exclude items from project",
                                         items.size()), this);
     action->setData(QVariant::fromValue(items));
