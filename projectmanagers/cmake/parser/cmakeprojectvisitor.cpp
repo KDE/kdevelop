@@ -689,7 +689,8 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
     QString name=pack->name();
     QStringList postfix=QStringList() << QString() << "/cmake" << "/CMake";
     QStringList configPath;
-    QStringList lookupPaths = m_cache->value("CMAKE_PREFIX_PATH").value.split(';', QString::SkipEmptyParts) + m_vars->value("CMAKE_SYSTEM_PREFIX_PATH");
+    QStringList lookupPaths = envVarDirectories("CMAKE_PREFIX_PATH") + m_vars->value("CMAKE_PREFIX_PATH")
+                            + m_vars->value("CMAKE_SYSTEM_PREFIX_PATH");
 
     // note: should note be done if NO_SYSTEM_ENVIRONMENT_PATH is set, see docs:
     /* 4. Search the standard system environment variables. This can be skipped
@@ -941,12 +942,12 @@ int CMakeProjectVisitor::visit(const FindPathAst *fpath)
 
     if(!fpath->noDefaultPath())
     {
-        QStringList pp=m_vars->value("CMAKE_PREFIX_PATH");
+        QStringList pp = envVarDirectories("CMAKE_PREFIX_PATH") + m_vars->value("CMAKE_PREFIX_PATH");
         foreach(const QString& path, pp) {
             locationOptions += path+"/include";
         }
         locationOptions += pp;
-        locationOptions += m_vars->value("CMAKE_INCLUDE_PATH");
+        locationOptions += envVarDirectories("CMAKE_INCLUDE_PATH") + m_vars->value("CMAKE_INCLUDE_PATH");
         locationOptions += m_vars->value("CMAKE_FRAMEWORK_PATH");
         
         pp=m_vars->value("CMAKE_SYSTEM_PREFIX_PATH");
@@ -1001,11 +1002,11 @@ int CMakeProjectVisitor::visit(const FindLibraryAst *flib)
     if(!flib->noDefaultPath())
     {
 
-        QStringList opt=m_vars->value("CMAKE_PREFIX_PATH");
+        QStringList opt = envVarDirectories("CMAKE_PREFIX_PATH") + m_vars->value("CMAKE_PREFIX_PATH");
         foreach(const QString& s, opt)
             locationOptions.append(s+"/lib");
 
-        locationOptions += m_vars->value("CMAKE_LIBRARY_PATH");
+        locationOptions += envVarDirectories("CMAKE_LIBRARY_PATH") + m_vars->value("CMAKE_LIBRARY_PATH");
         locationOptions += m_vars->value("CMAKE_FRAMEWORK_PATH");
         
         locationOptions += m_vars->value("CMAKE_SYSTEM_LIBRARY_PATH");
@@ -1064,12 +1065,12 @@ int CMakeProjectVisitor::visit(const FindFileAst *ffile)
     QStringList locationOptions = ffile->path()+ffile->hints();
     if(!ffile->noDefaultPath())
     {
-        QStringList pp=m_vars->value("CMAKE_PREFIX_PATH");
+        QStringList pp = envVarDirectories("CMAKE_PREFIX_PATH") + m_vars->value("CMAKE_PREFIX_PATH");
         foreach(const QString& path, pp) {
             locationOptions += path+"/include";
         }
         locationOptions += pp;
-        locationOptions += m_vars->value("CMAKE_INCLUDE_PATH");
+        locationOptions += envVarDirectories("CMAKE_INCLUDE_PATH") + m_vars->value("CMAKE_INCLUDE_PATH");
         locationOptions += m_vars->value("CMAKE_FRAMEWORK_PATH");
         
         pp=m_vars->value("CMAKE_SYSTEM_PREFIX_PATH");
