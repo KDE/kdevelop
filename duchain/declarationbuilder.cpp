@@ -87,10 +87,9 @@ bool DeclarationBuilder::visit(QmlJS::AST::FunctionDeclaration* node)
 
     {
         DUChainWriteLocker lock;
-        FunctionDeclaration* fun = openDeclaration<FunctionDeclaration>(name, range);
-        fun->setType(type);
-        openType(type);
+        openDeclaration<FunctionDeclaration>(name, range);
     }
+    openType(type);
 
     return DeclarationBuilderBase::visit(node);
 }
@@ -99,11 +98,7 @@ void DeclarationBuilder::endVisit(QmlJS::AST::FunctionDeclaration* node)
 {
     DeclarationBuilderBase::endVisit(node);
 
-    closeType();
-    DUChainWriteLocker lock;
-    Declaration* last = currentDeclaration();
-    closeDeclaration();
-    last->setType(lastType());
+    closeAndAssignType();
 }
 
 bool DeclarationBuilder::visit(QmlJS::AST::FunctionExpression* node)
@@ -111,12 +106,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::FunctionExpression* node)
     FunctionType::Ptr type(new FunctionType);
     type->setReturnType(AbstractType::Ptr(new IntegralType(IntegralType::TypeMixed)));
 
-    {
-        DUChainWriteLocker lock;
-        Declaration* last = currentDeclaration();
-        last->setType(type);
-        openType(type);
-    }
+    openType(type);
 
     return DeclarationBuilderBase::visit(node);
 }
@@ -126,9 +116,6 @@ void DeclarationBuilder::endVisit(QmlJS::AST::FunctionExpression* node)
     DeclarationBuilderBase::endVisit(node);
 
     closeType();
-    DUChainWriteLocker lock;
-    Declaration* last = currentDeclaration();
-    last->setType(lastType());
 }
 
 bool DeclarationBuilder::visit(QmlJS::AST::FormalParameterList* node)
@@ -153,6 +140,7 @@ void DeclarationBuilder::endVisit(QmlJS::AST::ReturnStatement* node)
 {
     DeclarationBuilderBase::endVisit(node);
 
+    DUChainWriteLocker lock;
     if (FunctionType::Ptr type = currentType<FunctionType>()) {
         type->setReturnType(findType(node->expression));
     }
@@ -164,9 +152,12 @@ bool DeclarationBuilder::visit(QmlJS::AST::VariableDeclaration* node)
 
     const QualifiedIdentifier name(node->name.toString());
     const RangeInRevision range = m_session->locationToRange(node->identifierToken);
-    DUChainWriteLocker lock;
-    Declaration* dec = openDeclaration<Declaration>(name, range);
-    dec->setType(findType(node));
+    AbstractType::Ptr type = findType(node);
+    {
+        DUChainWriteLocker lock;
+        openDeclaration<Declaration>(name, range);
+    }
+    openType(type);
 
     return DeclarationBuilderBase::visit(node);
 }
@@ -175,19 +166,22 @@ void DeclarationBuilder::endVisit(QmlJS::AST::VariableDeclaration* node)
 {
     DeclarationBuilderBase::endVisit(node);
 
-    closeDeclaration();
+    closeAndAssignType();
 }
 
 void DeclarationBuilder::closeContext()
 {
-    DUChainWriteLocker lock;
-    if (FunctionDeclaration* function = dynamic_cast<FunctionDeclaration*>(currentDeclaration())) {
+    {
+        DUChainWriteLocker lock;
+        FunctionDeclaration* function = dynamic_cast<FunctionDeclaration*>(currentDeclaration());
         DUContext* ctx = currentContext();
-        if (ctx->type() == DUContext::Function) {
-            function->setInternalFunctionContext(ctx);
-        } else {
-            Q_ASSERT(ctx->type() == DUContext::Other);
-            function->setInternalContext(ctx);
+        if (function && ctx) {
+            if (ctx->type() == DUContext::Function) {
+                function->setInternalFunctionContext(ctx);
+            } else {
+                Q_ASSERT(ctx->type() == DUContext::Other);
+                function->setInternalContext(ctx);
+            }
         }
     }
     DeclarationBuilderBase::closeContext();
@@ -209,9 +203,8 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiObjectDefinition* node)
         DUChainWriteLocker lock;
         ClassDeclaration* decl = openDeclaration<ClassDeclaration>(identifier, range);
         decl->setKind(Declaration::Type);
-        decl->setType(type);
-        openType(type);
     }
+    openType(type);
 
     return DeclarationBuilderBase::visit(node);
 }
@@ -220,8 +213,7 @@ void DeclarationBuilder::endVisit(QmlJS::AST::UiObjectDefinition* node)
 {
     DeclarationBuilderBase::endVisit(node);
 
-    closeType();
-    closeDeclaration();
+    closeAndAssignType();
 }
 
 bool DeclarationBuilder::visit(QmlJS::AST::UiObjectInitializer* node)
@@ -244,10 +236,9 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiScriptBinding* node)
         const QualifiedIdentifier id(node->qualifiedId->name.toString());
         const AbstractType::Ptr type(new IntegralType(IntegralType::TypeMixed));
 
-        DUChainWriteLocker lock;
         {
-            ClassMemberDeclaration* dec = openDeclaration<ClassMemberDeclaration>(id, range);
-            dec->setAbstractType(type);
+            DUChainWriteLocker lock;
+            openDeclaration<ClassMemberDeclaration>(id, range);
         }
         openType(type);
     }
@@ -259,8 +250,7 @@ void DeclarationBuilder::endVisit(QmlJS::AST::UiScriptBinding* node)
     DeclarationBuilderBase::endVisit(node);
 
     if (node->qualifiedId && node->qualifiedId->name != QLatin1String("id")) {
-        closeType();
-        closeDeclaration();
+        closeAndAssignType();
     }
 }
 
@@ -274,21 +264,34 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiPublicMember* node)
 
     {
         DUChainWriteLocker lock;
-        ClassMemberDeclaration* dec = openDeclaration<ClassMemberDeclaration>(id, range);
-        dec->setAbstractType(type);
+        openDeclaration<ClassMemberDeclaration>(id, range);
     }
     openType(type);
 
     return DeclarationBuilderBase::visit(node);
 }
 
-void DeclarationBuilder::endVisit(QmlJS::AST::UiPublicMember* /*node*/)
+void DeclarationBuilder::endVisit(QmlJS::AST::UiPublicMember* node)
 {
-    closeType();
-    closeDeclaration();
+    DeclarationBuilderBase::endVisit(node);
+
+    closeAndAssignType();
 }
 
 void DeclarationBuilder::setComment(QmlJS::AST::Node* node)
 {
     setComment(m_session->commentForLocation(node->firstSourceLocation()).toUtf8());
+}
+
+void DeclarationBuilder::closeAndAssignType()
+{
+    closeType();
+    Declaration* dec = currentDeclaration();
+    Q_ASSERT(dec);
+    Q_ASSERT(lastType());
+    {
+        DUChainWriteLocker lock;
+        dec->setType(lastType());
+    }
+    closeDeclaration();
 }

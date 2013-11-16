@@ -68,6 +68,8 @@ protected:
     virtual void closeContext();
 
 private:
+    void closeAndAssignType();
+
     using DeclarationBuilderBase::setComment;
     void setComment(QmlJS::AST::Node* node);
 };
