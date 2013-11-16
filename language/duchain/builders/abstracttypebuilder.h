@@ -49,7 +49,7 @@ public:
    *
    * Used for unit tests only.
    */
-  const QList< KDevelop::AbstractType::Ptr >& topTypes() const
+  const QList< AbstractType::Ptr >& topTypes() const
   {
     return m_topTypes;
   }
@@ -91,7 +91,7 @@ protected:
    * Retrieve the last type that was encountered.
    * \returns the last encountered type.
    */
-  KDevelop::AbstractType::Ptr lastType() const
+  AbstractType::Ptr lastType() const
   {
     return m_lastType;
   }
@@ -101,7 +101,7 @@ protected:
    *
    * \param ptr pointer to the last encountered type.
    */
-  void setLastType(KDevelop::AbstractType::Ptr ptr)
+  void setLastType(const AbstractType::Ptr& ptr)
   {
     m_lastType = ptr;
   }
@@ -116,7 +116,7 @@ protected:
    * Simulates that the given type was created.
    * After calling, this type will be the last type.
    * */
-  void injectType(const KDevelop::AbstractType::Ptr& type)
+  void injectType(const AbstractType::Ptr& type)
   {
     openType(type);
     closeType();
@@ -128,19 +128,19 @@ protected:
    * */
   template <class T2>
   void injectType(const TypePtr<T2>& type)
-  { injectType(KDevelop::AbstractType::Ptr::staticCast(type)); }
+  { injectType(AbstractType::Ptr::staticCast(type)); }
 
   /**
    * Opens the given \a type, and sets it to be the current type.
    */
   template <class T2>
-  void openType(TypePtr<T2> type)
-  { openAbstractType(KDevelop::AbstractType::Ptr::staticCast(type)); }
+  void openType(const TypePtr<T2>& type)
+  { openAbstractType(AbstractType::Ptr::staticCast(type)); }
 
   /**
    * Opens the given \a type, and sets it to be the current type.
    */
-  void openAbstractType(KDevelop::AbstractType::Ptr type)
+  void openAbstractType(const AbstractType::Ptr& type)
   {
     m_typeStack.append(type);
   }
@@ -171,7 +171,7 @@ protected:
    *
    * \returns the current abstract type being parsed.
    */
-  inline KDevelop::AbstractType::Ptr currentAbstractType()
+  inline AbstractType::Ptr currentAbstractType()
   {
     if (m_typeStack.isEmpty()) {
       return AbstractType::Ptr();
@@ -260,11 +260,11 @@ protected:
   }
 
 private:
-  QStack<KDevelop::AbstractType::Ptr> m_typeStack;
+  QStack<AbstractType::Ptr> m_typeStack;
 
-  KDevelop::AbstractType::Ptr m_lastType;
+  AbstractType::Ptr m_lastType;
 
-  QList<KDevelop::AbstractType::Ptr> m_topTypes;
+  QList<AbstractType::Ptr> m_topTypes;
 };
 
 }
