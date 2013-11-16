@@ -113,8 +113,12 @@ QList< CMakeProjectVisitor::IntPair > CMakeProjectVisitor::parseArgument(const Q
                 gotDollar=false;
                 break;
             case '}':
-                if(!opened.isEmpty())
-                    pos.append(IntPair(opened.pop(), i, opened.count()));
+                if(!opened.isEmpty()) {
+                    // note: don't merge this into the function call below,
+                    // the evaluation order is undefined then!
+                    int start = opened.pop();
+                    pos.append(IntPair(start, i, opened.count() + 1));
+                }
                 break;
         }
     }
@@ -686,22 +690,50 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
     QString name=pack->name();
     QStringList postfix=QStringList() << QString() << "/cmake" << "/CMake";
     QStringList configPath;
-    QStringList lookupPaths = m_cache->value("CMAKE_PREFIX_PATH").value.split(';', QString::SkipEmptyParts) + m_vars->value("CMAKE_SYSTEM_PREFIX_PATH");
-    
+    QStringList lookupPaths = envVarDirectories("CMAKE_PREFIX_PATH") + m_vars->value("CMAKE_PREFIX_PATH")
+                            + m_vars->value("CMAKE_SYSTEM_PREFIX_PATH");
+
+    // note: should note be done if NO_SYSTEM_ENVIRONMENT_PATH is set, see docs:
+    /* 4. Search the standard system environment variables. This can be skipped
+     * if NO_SYSTEM_ENVIRONMENT_PATH is passed. Path entries ending in "/bin" or
+     * "/sbin" are automatically converted to their parent directories.
+     */
+    foreach(const QString& lookup, envVarDirectories("PATH"))
+    {
+        if (lookup.endsWith("/bin")) {
+            lookupPaths << lookup.left(lookup.length() - 4);
+        } else if (lookup.endsWith("/sbin")) {
+            lookupPaths << lookup.left(lookup.length() - 5);
+        } else {
+            lookupPaths << lookup;
+        }
+    }
+
+    const bool useLib64 = m_props[GlobalProperty][QString()]["FIND_LIBRARY_USE_LIB64_PATHS"].contains("TRUE");
+    QSet<QString> handled;
     foreach(const QString& lookup, lookupPaths)
     {
-        if(QFile::exists(lookup))
-            foreach(const QString& post, postfix)
-            {
-                configPath.prepend(lookup+"/share/"+name.toLower()+post);
-                configPath.prepend(lookup+"/share/"+name+post);
-                configPath.prepend(lookup+"/share/cmake/"+name.toLower()+post);
-                configPath.prepend(lookup+"/share/cmake/"+name+post);
-                configPath.prepend(lookup+"/lib/"+name.toLower()+post);
-                configPath.prepend(lookup+"/lib/"+name+post);
-                configPath.prepend(lookup+"/lib/cmake/"+name.toLower()+post);
-                configPath.prepend(lookup+"/lib/cmake/"+name+post);
+        if(!QFile::exists(lookup) || handled.contains(lookup)) {
+            continue;
+        }
+        foreach(const QString& post, postfix)
+        {
+            configPath.prepend(lookup+"/share/"+name.toLower()+post);
+            configPath.prepend(lookup+"/share/"+name+post);
+            configPath.prepend(lookup+"/share/cmake/"+name.toLower()+post);
+            configPath.prepend(lookup+"/share/cmake/"+name+post);
+            configPath.prepend(lookup+"/lib/"+name.toLower()+post);
+            configPath.prepend(lookup+"/lib/"+name+post);
+            configPath.prepend(lookup+"/lib/cmake/"+name.toLower()+post);
+            configPath.prepend(lookup+"/lib/cmake/"+name+post);
+            if (useLib64) {
+                configPath.prepend(lookup+"/lib64/"+name.toLower()+post);
+                configPath.prepend(lookup+"/lib64/"+name+post);
+                configPath.prepend(lookup+"/lib64/cmake/"+name.toLower()+post);
+                configPath.prepend(lookup+"/lib64/cmake/"+name+post);
             }
+        }
+        handled << lookup;
     }
 
     QString varName=pack->name()+"_DIR";
@@ -911,12 +943,12 @@ int CMakeProjectVisitor::visit(const FindPathAst *fpath)
 
     if(!fpath->noDefaultPath())
     {
-        QStringList pp=m_vars->value("CMAKE_PREFIX_PATH");
+        QStringList pp = envVarDirectories("CMAKE_PREFIX_PATH") + m_vars->value("CMAKE_PREFIX_PATH");
         foreach(const QString& path, pp) {
             locationOptions += path+"/include";
         }
         locationOptions += pp;
-        locationOptions += m_vars->value("CMAKE_INCLUDE_PATH");
+        locationOptions += envVarDirectories("CMAKE_INCLUDE_PATH") + m_vars->value("CMAKE_INCLUDE_PATH");
         locationOptions += m_vars->value("CMAKE_FRAMEWORK_PATH");
         
         pp=m_vars->value("CMAKE_SYSTEM_PREFIX_PATH");
@@ -971,11 +1003,11 @@ int CMakeProjectVisitor::visit(const FindLibraryAst *flib)
     if(!flib->noDefaultPath())
     {
 
-        QStringList opt=m_vars->value("CMAKE_PREFIX_PATH");
+        QStringList opt = envVarDirectories("CMAKE_PREFIX_PATH") + m_vars->value("CMAKE_PREFIX_PATH");
         foreach(const QString& s, opt)
             locationOptions.append(s+"/lib");
 
-        locationOptions += m_vars->value("CMAKE_LIBRARY_PATH");
+        locationOptions += envVarDirectories("CMAKE_LIBRARY_PATH") + m_vars->value("CMAKE_LIBRARY_PATH");
         locationOptions += m_vars->value("CMAKE_FRAMEWORK_PATH");
         
         locationOptions += m_vars->value("CMAKE_SYSTEM_LIBRARY_PATH");
@@ -1034,12 +1066,12 @@ int CMakeProjectVisitor::visit(const FindFileAst *ffile)
     QStringList locationOptions = ffile->path()+ffile->hints();
     if(!ffile->noDefaultPath())
     {
-        QStringList pp=m_vars->value("CMAKE_PREFIX_PATH");
+        QStringList pp = envVarDirectories("CMAKE_PREFIX_PATH") + m_vars->value("CMAKE_PREFIX_PATH");
         foreach(const QString& path, pp) {
             locationOptions += path+"/include";
         }
         locationOptions += pp;
-        locationOptions += m_vars->value("CMAKE_INCLUDE_PATH");
+        locationOptions += envVarDirectories("CMAKE_INCLUDE_PATH") + m_vars->value("CMAKE_INCLUDE_PATH");
         locationOptions += m_vars->value("CMAKE_FRAMEWORK_PATH");
         
         pp=m_vars->value("CMAKE_SYSTEM_PREFIX_PATH");
@@ -1677,6 +1709,9 @@ int CMakeProjectVisitor::visit(const GetFilenameComponentAst *filecomp)
             int idx = filecomp->fileName().lastIndexOf(QDir::separator());
             if(idx>=0)
                 val=filecomp->fileName().left(idx);
+        }   break;
+        case GetFilenameComponentAst::RealPath: {
+            val = fi.canonicalFilePath();
         }   break;
         case GetFilenameComponentAst::Absolute:
             val=fi.absoluteFilePath();

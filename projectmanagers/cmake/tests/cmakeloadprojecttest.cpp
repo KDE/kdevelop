@@ -26,6 +26,7 @@
 #include <language/duchain/duchain.h>
 #include <language/duchain/topducontext.h>
 
+#include "cmake-test-paths.h"
 
 #include "cmListFileLexer.h"
 #include "cmakelistsparser.h"
@@ -139,6 +140,7 @@ CMakeProjectData CMakeLoadProjectTest::parseProject( const QString& sourcedir )
     CMakeProjectData data;
     data.vm = initials.first;
     data.vm.insert("CMAKE_SOURCE_DIR", QStringList(sourcedir));
+    data.vm.insert("CMAKE_PREFIX_PATH", QString::fromLatin1(TEST_PREFIX_PATH).split(';', QString::SkipEmptyParts));
     
     KDevelop::ReferencedTopDUContext buildstrapContext=new TopDUContext(IndexedString("buildstrap"), RangeInRevision(0,0, 0,0));
     DUChain::self()->addDocumentChain(buildstrapContext);
@@ -159,6 +161,12 @@ CMakeProjectData CMakeLoadProjectTest::parseProject( const QString& sourcedir )
     v.setMacroMap(&data.mm);
     v.setCacheValues(&data.cache);
     v.setModulePath(modulesPath);
+    v.setProperties(data.properties);
+    QMap<QString, QString> env;
+    env["CMAKE_PREFIX_PATH"] = QString::fromLatin1(TEST_ENV_PREFIX_PATH);
+    env["CMAKE_INCLUDE_PATH"] = QString::fromLatin1(TEST_ENV_INCLUDE_PATH);
+    env["CMAKE_LIBRARY_PATH"] = QString::fromLatin1(TEST_ENV_LIBRARY_PATH);
+    v.setEnvironmentProfile( env );
     v.walk(code, 0);
     
     data.projectName=v.projectName();

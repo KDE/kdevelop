@@ -575,6 +575,8 @@ void CMakeProjectVisitorTest::testFinder_data()
     QTest::newRow("Phonon") << "Phonon" << QString();
     QTest::newRow("Automoc4") << "Automoc4" << QString();
     QTest::newRow("Boost") << "Boost" << QString("1.39");
+    QTest::newRow("TestLib") << "TestLib" << QString();
+    QTest::newRow("TestLib64") << "TestLib64" << QString();
 //     QTest::newRow("Eigen2") << "Eigen2" << QString();
 //     QTest::newRow("Exiv2") << "Exiv2" << QString();
 //     QTest::newRow("QtGStreamer") << "QtGStreamer" << QString(); //commented because it might not be installed
@@ -608,7 +610,7 @@ void CMakeProjectVisitorTest::testFinder()
     data.vm.insert("CMAKE_SOURCE_DIR", QStringList("./"));
     data.vm.insert("CMAKE_BINARY_DIR", QStringList("./"));
     data.vm.insert("CMAKE_MODULE_PATH", modulePath);
-    data.cache.insert("CMAKE_PREFIX_PATH", CacheEntry(TEST_PREFIX_PATH));
+    data.vm.insert("CMAKE_PREFIX_PATH", QString::fromLatin1(TEST_PREFIX_PATH).split(';', QString::SkipEmptyParts));
     
     foreach(const QString& script, buildstrap)
     {
@@ -621,6 +623,15 @@ void CMakeProjectVisitorTest::testFinder()
     v.setVariableMap(&data.vm);
     v.setMacroMap(&data.mm);
     v.setCacheValues( &data.cache );
+    QMap<QString, QString> env;
+    env["PATH"] = QString::fromLatin1(CMAKE_TESTS_PROJECTS_DIR "/bin:") + QString::fromLatin1(qgetenv("PATH"));
+    env["CMAKE_PREFIX_PATH"] = QString::fromLatin1(TEST_ENV_PREFIX_PATH);
+    env["CMAKE_INCLUDE_PATH"] = QString::fromLatin1(TEST_ENV_INCLUDE_PATH);
+    env["CMAKE_LIBRARY_PATH"] = QString::fromLatin1(TEST_ENV_LIBRARY_PATH);
+    v.setEnvironmentProfile( env );
+    CMakeProperties props;
+    props[GlobalProperty][QString()]["FIND_LIBRARY_USE_LIB64_PATHS"] = QStringList() << "TRUE";
+    v.setProperties( props );
     v.walk(code, 0);
     
     QString foundvar=QString("%1_FOUND").arg(module);
