@@ -94,6 +94,7 @@ public slots:
     void quickOpenFunction();
     void quickOpenClass();
     void quickOpenDeclaration();
+    void quickOpenOpenFile();
     void quickOpenDefinition();
     void quickOpenNavigate();
     void quickOpenNavigateFunctions();

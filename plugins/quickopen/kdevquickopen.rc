@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevQuickopen" version="8">
+<kpartgui name="KDevQuickopen" version="9">
 <MenuBar>
   <Menu name="navigation">
     <Action name="quick_open"
@@ -13,6 +13,9 @@
 
     <Action name="quick_open_function"
 	    group="navigation_code"/>
+
+    <Action name="quick_open_already_open"
+        group="navigation_code"/>
 
     <Action name="quick_open_navigate"
 	    group="navigation_code"/>

@@ -763,6 +763,12 @@ void QuickOpenPlugin::createActionsForMainWindow(Sublime::MainWindow* /*window*/
     quickOpenFunction->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_M );
     connect(quickOpenFunction, SIGNAL(triggered(bool)), this, SLOT(quickOpenFunction()));
 
+    KAction* quickOpenAlreadyOpen = actions.addAction("quick_open_already_open");
+    quickOpenAlreadyOpen->setText( i18n("Quick Open &Already Open File") );
+    quickOpenAlreadyOpen->setIcon( KIcon("quickopen-file") );
+    quickOpenAlreadyOpen->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_F );
+    connect(quickOpenAlreadyOpen, SIGNAL(triggered(bool)), this, SLOT(quickOpenOpenFile()));
+
     KAction* quickOpenDocumentation = actions.addAction("quick_open_documentation");
     quickOpenDocumentation->setText( i18n("Quick Open &Documentation") );
     quickOpenDocumentation->setIcon( KIcon("quickopen-documentation") );
@@ -920,7 +926,9 @@ void QuickOpenPlugin::showQuickOpen( ModelTypes modes )
   if( modes & Classes )
     initialItems << i18n("Classes");
   
-  QStringList useScopes = lastUsedScopes;
+  QStringList useScopes;
+  if ( modes != OpenFiles )
+    useScopes = lastUsedScopes;
   
   if((modes & OpenFiles) && !useScopes.contains(i18n("Currently Open")))
     useScopes << i18n("Currently Open");
@@ -991,6 +999,11 @@ void QuickOpenPlugin::quickOpenFunction()
 void QuickOpenPlugin::quickOpenClass()
 {
   showQuickOpen( Classes );
+}
+
+void QuickOpenPlugin::quickOpenOpenFile()
+{
+  showQuickOpen( OpenFiles );
 }
 
 void QuickOpenPlugin::quickOpenDocumentation()
