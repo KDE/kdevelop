@@ -3,6 +3,7 @@ include_directories( ${KDevPlatform_SOURCE_DIR}/shell )
 set(kdevplatformjsontests_LIB_SRCS
     delayedoutput.cpp
     declarationvalidator.cpp
+    testsuite.cpp
 )
 
 kde4_add_library(kdevplatformjsontests SHARED ${kdevplatformjsontests_LIB_SRCS})
@@ -25,6 +26,7 @@ install(FILES
     kdevplatformjsontestsexport.h
     jsontesthelpers.h
     testsuite.h
+    testsuite.cpp
     jsondeclarationtests.h
     jsonducontexttests.h
     jsontypetests.h
