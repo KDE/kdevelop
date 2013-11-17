@@ -18,10 +18,9 @@
  */
 
 #include "applychangeswidget.h"
+
 #include "komparesupport.h"
 #include <ktexteditor/document.h>
-// #include <ktexteditor/editor.h>
-// #include <ktexteditor/editorchooser.h>
 #include <ktexteditor/view.h>
 
 #include <kparts/part.h>
@@ -29,6 +28,7 @@
 #include <KTabWidget>
 #include <KMimeType>
 #include <KMimeTypeTrader>
+#include <QBoxLayout>
 #include <QLayout>
 #include <QSplitter>
 #include <QLabel>

@@ -23,7 +23,11 @@
 #include <KDE/KDialog>
 #include "../languageexport.h"
 
-namespace KTextEditor { class Document; class Range;}
+namespace KTextEditor {
+class Document;
+class Range;
+}
+
 class KUrl;
 class QModelIndex;
 
