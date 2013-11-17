@@ -60,7 +60,7 @@ public:
   ///      and doesn't require changing a top-contexts data only because a class was derived from.
   APPENDED_LIST(DUContextData, IndexedDUContext, m_importers, m_childContexts);
 
-  ///@warning: Whenever m_localDeclarations is read or written, DUContextDynamicData::m_localDeclarationsMutex must be locked.
+  ///@warning: Whenever m_localDeclarations is read or written, the duchain must be locked
   APPENDED_LIST(DUContextData, LocalIndexedDeclaration, m_localDeclarations, m_importers);
   /**
    * Vector of all uses in this context
