@@ -56,17 +56,13 @@ public:
     {
         qDeleteAll(m_temps);
     }
-    
-    void addItem(QStandardItemModel* mit, KTextEditor::Document *document, const KTextEditor::Range &range, const QString& type, const QString& removedText = QString());
-    void jump( const QModelIndex & idx);
+
     void createEditPart(const KDevelop::IndexedString& url);
     void updateButtonLabel();
 
-    
     ApplyChangesWidget * const parent;
     int m_index;
     QList<KParts::ReadWritePart*> m_editParts;
-    QList<QStandardItemModel*> m_changes;
     QList<KTemporaryFile * > m_temps;
     QList<IndexedString > m_files;
     KTabWidget * m_documentTabs;
@@ -162,39 +158,6 @@ Q_DECLARE_METATYPE(KTextEditor::Range)
 namespace KDevelop
 {
 
-void ApplyChangesWidgetPrivate::addItem(QStandardItemModel* mit, KTextEditor::Document *document, const KTextEditor::Range &range, const QString& type, const QString& removedText)
-{
-    bool isFirst=mit->rowCount()==0;
-    QStringList edition=document->textLines(range);
-    if(edition.first().isEmpty())
-        edition.removeFirst();
-    QStandardItem* it= new QStandardItem(edition.join("\n").append(removedText));
-    QStandardItem* action= new QStandardItem(type);
-
-    it->setData(qVariantFromValue(range));
-    it->setEditable(false);
-    action->setEditable(false);
-    mit->appendRow(QList<QStandardItem*>() << it << action);
-    if(isFirst)
-        jump(it->index());
-}
-
-void ApplyChangesWidget::jump( const QModelIndex & idx)
-{
-    d->jump(idx);
-}
-
-void ApplyChangesWidgetPrivate::jump( const QModelIndex & idx)
-{
-    Q_ASSERT( m_index == m_documentTabs->currentIndex());
-    
-    QStandardItem *it=m_changes[m_index]->itemFromIndex(idx);
-    KTextEditor::View* view=qobject_cast<KTextEditor::View*>(m_editParts[m_index]->widget());
-    KTextEditor::Range r=it->data().value<KTextEditor::Range>();
-    view->setSelection(r);
-    view->setCursorPosition(r.start());
-}
-
 void ApplyChangesWidgetPrivate::updateButtonLabel()
 {
     KPushButton * switchButton(parent->button(KDialog::User1));
@@ -242,41 +205,9 @@ void ApplyChangesWidgetPrivate::createEditPart(const IndexedString & file)
         m_temps << temp;
     }
     m_editParts[m_index]->openUrl(url);
-    
-    m_changes.insert(m_index, new QStandardItemModel(widget));
-    m_changes[m_index]->setHorizontalHeaderLabels(QStringList(i18n("Text")) << i18n("Action"));
-    
-    QTreeView *changesView=new QTreeView(widget);
-    changesView->setRootIsDecorated(false);
-    changesView->setModel(m_changes[m_index]);
+
     v->addWidget(m_editParts[m_index]->widget());
-    v->addWidget(changesView);
     v->setSizes(QList<int>() << 400 << 100);
-    
-    QObject::connect(m_editParts[m_index], SIGNAL(textChanged(KTextEditor::Document*,KTextEditor::Range,KTextEditor::Range)),
-            parent, SLOT(change(KTextEditor::Document*,KTextEditor::Range,KTextEditor::Range)));
-    QObject::connect(m_editParts[m_index], SIGNAL(textInserted(KTextEditor::Document*,KTextEditor::Range)),
-            parent, SLOT(insertion(KTextEditor::Document*,KTextEditor::Range)));
-    QObject::connect(m_editParts[m_index], SIGNAL(textRemoved(KTextEditor::Document*,KTextEditor::Range,QString)),
-            parent, SLOT(removal(KTextEditor::Document*,KTextEditor::Range,QString)));
-    QObject::connect(changesView, SIGNAL(activated(QModelIndex)),
-            parent, SLOT(jump(QModelIndex)));
-}
-
-void ApplyChangesWidget::change (KTextEditor::Document *document, const KTextEditor::Range &,
-                const KTextEditor::Range &newRange)
-{
-    d->addItem(d->m_changes[d->m_index], document, newRange, i18n("Change"));
-}
-
-void ApplyChangesWidget::insertion(KTextEditor::Document *document, const KTextEditor::Range &range)
-{
-    d->addItem(d->m_changes[d->m_index], document, range, i18n("Insert"));
-}
-
-void ApplyChangesWidget::removal(KTextEditor::Document *document, const KTextEditor::Range &range, const QString &oldText)
-{
-    d->addItem(d->m_changes[d->m_index], document, KTextEditor::Range(range.start(), range.start()), i18n("Remove"), oldText);
 }
 
 void ApplyChangesWidget::switchEditView()

@@ -64,14 +64,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ApplyChangesWidget : public KDialog
         void switchEditView();
         ///Called to signal a change to the currently viewed index
         void indexChanged(int);
-        
-    private Q_SLOTS:
-        void change (KTextEditor::Document *document, const KTextEditor::Range &oldRange,
-                const KTextEditor::Range &newRange);
-        void insertion (KTextEditor::Document *document, const KTextEditor::Range &range);
-        void removal (KTextEditor::Document *document, const KTextEditor::Range &range, const QString &oldText);
-        void jump( const QModelIndex &);
-        
+
     private:
         ApplyChangesWidgetPrivate * d;
 };
