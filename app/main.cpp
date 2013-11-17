@@ -456,7 +456,7 @@ int main( int argc, char *argv[] )
 
     KDevSplashScreen* splash = 0;
     QString splashFile = KStandardDirs::locate( "appdata", "pics/kdevelop-splash.png" );
-    if( !splashFile.isEmpty() )
+    if( !splashFile.isEmpty() && !QProcessEnvironment::systemEnvironment().contains("KDEV_DISABLE_SPLASH") )
     {
         QPixmap pm;
         pm.load( splashFile );
