@@ -45,18 +45,6 @@ using KDevelop::TestCore;
 using KDevelop::AutoTestShell;
 using KDevelop::KDevSignalSpy;
 
-static void deleteDir( QDir dir )
-{
-    foreach( const QString& f, dir.entryList( QDir::NoDotAndDotDot | QDir::AllEntries ) ) {
-        if( QFileInfo( f ).isDir() ) {
-            deleteDir( QDir( dir.absoluteFilePath( f ) ) );
-            dir.rmdir( f );
-        } else {
-            dir.remove( f );
-        }
-    }
-}
-
 void CustomBuildSystemPluginTest::cleanupTestCase()
 {
     TestCore::shutdown();
