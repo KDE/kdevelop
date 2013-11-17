@@ -1,0 +1,18 @@
+[Desktop Entry]
+Icon=go-up
+Type=Service
+ServiceTypes=KCModule
+
+X-KDE-ModuleType=Library
+X-KDE-Library=kcm_kdev_cppcheck
+X-KDE-FactoryName=kcm_kdev_cppcheck
+X-KDE-ParentApp=kdevplatformproject
+X-KDE-ParentComponents=kdevplatformproject,kdevcppcheck
+X-KDE-CfgDlgHierarchy=GENERAL
+
+Name=CPPCheck
+Name[de]=CPPCheck
+Name[x-test]=xxCPPCheckxx
+Comment=Configure CPPCheck
+Comment[de]=CPPCheck einrichten
+Comment[x-test]=xxConfigure CPPCheckxx
