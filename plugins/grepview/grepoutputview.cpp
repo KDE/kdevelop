@@ -79,7 +79,7 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
     m_expandAll->setEnabled(false);
     QAction *separator = new QAction(this);
     separator->setSeparator(true);
-    QAction *change_criteria = new QAction(KIcon("configure"), i18n("&Change Search Settings"), this);
+    QAction *newSearchAction = new QAction(KIcon("edit-find"), i18n("New &Search"), this);
     m_clearSearchHistory = new QAction(KIcon("edit-clear-list"), i18n("Clear Search History"), this);
     
     addAction(m_prev);
@@ -87,7 +87,7 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
     addAction(m_collapseAll);
     addAction(m_expandAll);
     addAction(separator);
-    addAction(change_criteria);
+    addAction(newSearchAction);
     addAction(m_clearSearchHistory);
     
     separator = new QAction(this);
@@ -129,7 +129,7 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
     
     connect(replacementCombo, SIGNAL(editTextChanged(QString)), SLOT(replacementTextChanged(QString)));
     
-    connect(change_criteria, SIGNAL(triggered(bool)), this, SLOT(showDialog()));
+    connect(newSearchAction, SIGNAL(triggered(bool)), this, SLOT(showDialog()));
     
     updateCheckable();
 }
