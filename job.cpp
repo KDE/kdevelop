@@ -165,9 +165,6 @@ void        Job::processModeArgs(QStringList & out,
         {
             bool n = cfg.readEntry(mode_args[i][0], false);
             val = n ? "yes" : "no";
-        } else if (argtype == "float") {
-            int n = cfg.readEntry(mode_args[i][0], 1);
-            val.sprintf("%d.0", n);
         }
         else if (argtype == "float")
         {
@@ -445,9 +442,11 @@ void Job::addToolArgs(QStringList &args, KConfigGroup &cfg) const
  * KProcessOutputToParser implementation
  */
 KProcessOutputToParser::KProcessOutputToParser(Parser* parser)
-{    m_parser = parser;
+{   
+    m_parser = parser;
     m_device = new QBuffer();
     m_device->open(QIODevice::WriteOnly);
+    m_process = 0L;
 }
 
 KProcessOutputToParser::~KProcessOutputToParser()
@@ -477,7 +476,7 @@ void KProcessOutputToParser::processEnded(int , QProcess::ExitStatus status)
 
         m_device->close();
     }
-    
+    delete m_process;
 }
 
 void KProcessOutputToParser::newDataFromStdOut()
