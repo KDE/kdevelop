@@ -56,18 +56,18 @@ public:
         stack
     };
 
-    virtual QAbstractItemModel  *getQAbstractItemModel(int n = 0) = 0;
+    virtual QAbstractItemModel*  getQAbstractItemModel(int n = 0) = 0;
 
     virtual void newElement(cppcheck::Model::eElementType) {}
-    virtual void newItem(ModelItem *) {}
-    virtual void newData(cppcheck::Model::eElementType, QString, QString, int, QString, QString, QString, QString, QString ) {}
+    virtual void newItem(ModelItem*) {}
+    virtual void newData(cppcheck::Model::eElementType, QString, QString, int, QString, QString, QString, QString, QString) {}
     virtual void reset() {};
 
-    void          setModelWrapper(ModelWrapper *mdlw);
-    ModelWrapper  *getModelWrapper() const;
-    Job           *job() const;
+    void          setModelWrapper(ModelWrapper* mdlw);
+    ModelWrapper*  getModelWrapper() const;
+    Job*           job() const;
 protected:
-    ModelWrapper  *m_modelWrapper;
+    ModelWrapper*  m_modelWrapper;
 };
 
 }

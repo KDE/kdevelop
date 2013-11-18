@@ -30,7 +30,7 @@ Model::Model()
     m_modelWrapper = NULL;
 }
 
-void Model::setModelWrapper(ModelWrapper *mdl)
+void Model::setModelWrapper(ModelWrapper* mdl)
 {
     m_modelWrapper = mdl;
 }
@@ -43,7 +43,7 @@ ModelWrapper* Model::getModelWrapper() const
 Job*    Model::job() const
 {
     if (m_modelWrapper != NULL)
-      return m_modelWrapper->job();
+        return m_modelWrapper->job();
     return NULL;
 }
 }
