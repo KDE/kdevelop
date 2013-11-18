@@ -5,6 +5,10 @@ project(cppcheck)
 find_package(KDE4 REQUIRED)
 find_package(KDevPlatform 1.5.0 REQUIRED)
 
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
+include( MacroLibrary )
+include(KDevPluginVersion)
+
 include_directories(
     ${KDEVPLATFORM_INCLUDE_DIR}
     ${KDE4_INCLUDES}
