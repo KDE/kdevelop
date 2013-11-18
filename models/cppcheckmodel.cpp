@@ -76,11 +76,6 @@ QVariant CppcheckModel::data(const QModelIndex & index, int role) const
         case ErrorFile:
             if (CppcheckError* e = dynamic_cast<CppcheckError*>(item)) {
                return e->ErrorFile;
-                if (e->ErrorFile.isEmpty())
-                    return QString("-");
-                else {
-                   return e->ErrorFile;
-                }
             }
             break;
         case ErrorLine:
