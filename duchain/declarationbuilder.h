@@ -44,8 +44,10 @@ protected:
     virtual bool visit(QmlJS::AST::FunctionDeclaration* node);
     virtual void endVisit(QmlJS::AST::FunctionDeclaration* node);
 
-    virtual bool visit(QmlJS::AST::FormalParameterList* node);
     virtual bool visit(QmlJS::AST::VariableDeclaration* node);
+    virtual void endVisit(QmlJS::AST::VariableDeclaration* node);
+
+    virtual bool visit(QmlJS::AST::FormalParameterList* node);
 
     virtual void endVisit(QmlJS::AST::ReturnStatement* node);
 
@@ -63,6 +65,8 @@ protected:
     virtual void closeContext();
 
 private:
+    void closeAndAssignType();
+
     using DeclarationBuilderBase::setComment;
     void setComment(QmlJS::AST::Node* node);
 };

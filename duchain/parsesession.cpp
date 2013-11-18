@@ -72,7 +72,7 @@ IndexedString ParseSession::url() const
 QList<ProblemPointer> ParseSession::problems() const
 {
     QList<ProblemPointer> problems;
-    foreach(const QmlJS::DiagnosticMessage& msg, m_doc->diagnosticMessages()) {
+    foreach (const QmlJS::DiagnosticMessage& msg, m_doc->diagnosticMessages()) {
         ProblemPointer p(new Problem);
         p->setDescription(msg.message);
         p->setSeverity(ProblemData::Error);

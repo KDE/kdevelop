@@ -2,26 +2,30 @@ import QtQuick 1.0
 
 /**
  * "toString" : "class someId",
- * "type" : { "toString"  : "Text" }
+ * "type" : { "toString" : "Text" }
  */
 Text {
     id: someId
     text: "asdf"
 
     /**
-     * "EXPECT_FAIL" : { "toString" : "type deduction not implemented" },
      * "toString" : "int foo"
      */
     property int foo: 1
 
     /**
+     * "toString" : "bool bar"
+     */
+    property bool bar: false
+
+    /**
      * "toString" : "class ",
-     * "type" : { "toString"  : "Foo" }
+     * "type" : { "toString" : "Foo" }
      */
     Foo {
         /**
          * "toString" : "class bar",
-         * "type" : { "toString"  : "Bar" }
+         * "type" : { "toString" : "Bar" }
          */
         Bar {
             id: bar
@@ -29,6 +33,7 @@ Text {
     }
 
     /**
+     * "type" : { "toString" : "function void (mixed)" },
      * "returnType" : { "toString" : "void" }
      */
     function foo(arg)

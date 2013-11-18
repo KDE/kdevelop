@@ -85,6 +85,16 @@ Editor* ContextBuilder::editor() const
 
 bool ContextBuilder::visit(QmlJS::AST::FunctionDeclaration* node)
 {
+    return visitFunction(node);
+}
+
+bool ContextBuilder::visit(QmlJS::AST::FunctionExpression* node)
+{
+    return visitFunction(node);
+}
+
+bool ContextBuilder::visitFunction(QmlJS::AST::FunctionExpression* node)
+{
     const QualifiedIdentifier functionName(node->name.toString());
 
     const RangeInRevision pRange(m_session->locationToRange(node->lparenToken).end,

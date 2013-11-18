@@ -28,17 +28,39 @@ var d = 1.2;
 var array = [1, 2, 3];
 
 /**
+ * "type" : { "toString" : "function mixed (mixed)" }
+ */
+var c = function(a) {
+  /**
+   * "type" : { "toString" : "mixed" }
+   */
+  return a;
+};
+
+/**
+ * "type" : { "toString" : "<class>" }
+ */
+var obj = {
+  foo: "bar"
+};
+
+/**
  * "type" : { "toString"  : "function string ()" },
  * "returnType" : { "toString" : "string" }
  */
 function testVariables()
 {
- /**
-  * "type" : { "toString" : "string" }
-  */
+  /**
+   * "type" : { "toString" : "string" }
+   */
   var b = "some text";
   return b;
 }
+
+/**
+ * "type" : { "toString" : "string" }
+ */
+var arg = "arg";
 
 /**
  * "type": { "toString" : "function mixed (mixed)" },
@@ -46,5 +68,8 @@ function testVariables()
  */
 function testReturnMixedArg(arg)
 {
-    return arg;
+  /**
+   * "type" : { "toString" : "mixed" }
+   */
+  return arg;
 }

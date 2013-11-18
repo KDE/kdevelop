@@ -29,8 +29,6 @@
 #include <language/duchain/classdeclaration.h>
 #include <language/duchain/codemodel.h>
 
-#include <KDebug>
-
 using namespace KDevelop;
 
 typedef QPair<Declaration*, int> DeclarationDepthPair;
@@ -97,7 +95,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::globalItems() const
     for (uint i = 0; i < itemCount; ++i) {
         const CodeModelItem& item = items[i];
         if (item.kind & CodeModelItem::Class && item.id.isValid()) {
-            foreach(Declaration* dec, m_duContext->findDeclarations(item.id.identifier())) {
+            foreach (Declaration* dec, m_duContext->findDeclarations(item.id.identifier())) {
                 if (dynamic_cast<ClassDeclaration*>(dec)) {
                     ret << CompletionTreeItemPointer(new UiObjectDefinitionItem(DeclarationPointer(dec)));
                     break;
