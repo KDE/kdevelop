@@ -18,6 +18,7 @@
 
 #include "helper.h"
 
+#include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
 
 namespace QmlJS
