@@ -61,7 +61,8 @@ install(TARGETS kdevcppcheck DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 ########### install files ###############
 
-install( FILES kdevcppcheck.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+configure_file(kdevcppcheck.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevcppcheck.desktop)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevcppcheck.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 install( FILES kdevcppcheck.rc DESTINATION ${DATA_INSTALL_DIR}/kdevcppcheck )
 
 
