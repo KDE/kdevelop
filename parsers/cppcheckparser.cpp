@@ -35,7 +35,13 @@
 namespace cppcheck
 {
 
-CppcheckParser::CppcheckParser(QObject *parent)
+CppcheckParser::CppcheckParser(QObject *parent) :
+    ErrorLine(0),
+    ErrorFile(""),
+    Message(""),
+    MessageVerbose(""),
+    Severity(Unknown),
+    ProjectPath("")
 {
     Q_UNUSED(parent)
 }

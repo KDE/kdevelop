@@ -33,7 +33,11 @@ namespace cppcheck
 {
 
 CppcheckError::CppcheckError(cppcheck::CppcheckModel* parent)
-    : m_parent(parent)
+    : m_parent(parent),
+    ErrorLine(0),
+    uniqueId(0),
+    threadId(0),
+    m_kind(Unknown)
 {
 }
 
@@ -146,7 +150,10 @@ const QList<CppcheckFrame *> &CppcheckStack::getFrames() const
 }
 
 CppcheckFrame::CppcheckFrame(CppcheckStack* parent)
-    : m_parent(parent)
+    : m_parent(parent),
+    ErrorLine(0),
+    line(0),
+    instructionPointer(0L)
 {
 }
 
