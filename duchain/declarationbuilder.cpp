@@ -174,9 +174,9 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiObjectDefinition* node)
 {
     setComment(node);
 
+    const DeclarationId id(QualifiedIdentifier(node->qualifiedTypeNameId->name.toString()));
     ///TODO: find type, potentially in C++
     StructureType::Ptr type(new StructureType);
-    DeclarationId id(QualifiedIdentifier(node->qualifiedTypeNameId->name.toString()));
     type->setDeclarationId(id);
 
     const RangeInRevision range = m_session->locationToRange(node->qualifiedTypeNameId->identifierToken);
@@ -201,7 +201,7 @@ void DeclarationBuilder::endVisit(QmlJS::AST::UiObjectDefinition* node)
 
 bool DeclarationBuilder::visit(QmlJS::AST::UiObjectInitializer* node)
 {
-    bool ret = DeclarationBuilderBase::visit(node);
+    const bool ret = DeclarationBuilderBase::visit(node);
     DUChainWriteLocker lock;
     if (currentDeclaration<ClassDeclaration>()) {
         Q_ASSERT(currentContext());

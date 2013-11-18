@@ -1,5 +1,5 @@
 /*************************************************************************************
- *  Copyright (C) 2013 by Andrea Scarpino <andrea@archlinux.org>                     *
+ *  Copyright (C) 2013 by Andrea Scarpino <scarpino@kde.org>                         *
  *                                                                                   *
  *  This program is free software; you can redistribute it and/or                    *
  *  modify it under the terms of the GNU General Public License                      *
@@ -18,7 +18,6 @@
 
 #include "helper.h"
 
-#include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
 
 namespace QmlJS
@@ -29,7 +28,7 @@ DeclarationPointer getDeclaration(const QualifiedIdentifier& id, const DUContext
 {
     DUChainReadLocker lock;
     if (context) {
-        foreach(Declaration* dec, context->findDeclarations(id)) {
+        foreach (Declaration* dec, context->findDeclarations(id)) {
             return DeclarationPointer(dec);
         }
     }
