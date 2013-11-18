@@ -28,7 +28,7 @@
 #include <KTextEditor/Document>
 #include <KTextEditor/MovingInterface>
 
-#include <kdebug.h>
+#include <KDebug>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
 
@@ -42,27 +42,25 @@ namespace cppcheck
 CppcheckView::CppcheckView()
 {
     connect(this, SIGNAL(activated(QModelIndex)), SLOT(openDocument(QModelIndex)));
-    connect(this, SIGNAL( doubleClicked(const QModelIndex&) ), this, SLOT( doubleClicked(const QModelIndex&) ) );
+    connect(this, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(doubleClicked(const QModelIndex&)));
 }
 
-CppcheckView::~CppcheckView() {
-//     for (int i=0;i < ErrorLinesMakerList.length(), i++) {
-//         delete (ErrorLinesMakerList.at(i));
-//     }
+CppcheckView::~CppcheckView()
+{
 }
 
-void CppcheckView::setModel(cppcheck::Model * m)
+void CppcheckView::setModel(cppcheck::Model* m)
 {
     QTreeView::setModel(m->getQAbstractItemModel());
-    this->header()->setResizeMode( QHeaderView::ResizeToContents );
+    header()->setResizeMode(QHeaderView::ResizeToContents);
 }
 
-cppcheck::Model * CppcheckView::model(void)
+cppcheck::Model* CppcheckView::model(void)
 {
-    return dynamic_cast<cppcheck::Model *>(QTreeView::model());
+    return dynamic_cast<cppcheck::Model*>(QTreeView::model());
 }
 
-void CppcheckView::openDocument(const QModelIndex & index)
+void CppcheckView::openDocument(const QModelIndex& index)
 {
     if (cppcheck::CppcheckFrame* frame = dynamic_cast<cppcheck::CppcheckFrame*>(static_cast<cppcheck::CppcheckModel*>(model())->itemForIndex(index))) {
         KUrl doc = frame->url();
@@ -72,13 +70,14 @@ void CppcheckView::openDocument(const QModelIndex & index)
     }
 }
 
-void CppcheckView::doubleClicked(const QModelIndex& index) {
+void CppcheckView::doubleClicked(const QModelIndex& index)
+{
     int row = index.row();
     QString ClickedCellContent =  index.data().toString();
     QString ProjectPath = index.model()->index(row, CppcheckModel::ProjectPath).data().toString();
-    QString FileName= index.model()->index(row, CppcheckModel::ErrorFile).data().toString();
+    QString FileName = index.model()->index(row, CppcheckModel::ErrorFile).data().toString();
     int LineNumber = index.model()->index(row, CppcheckModel::ErrorLine).data().toInt();
-    
+
     kDebug() << "double clicked: (row: " << row << ") " << ClickedCellContent << "=> " << ProjectPath + FileName << ":" << LineNumber ;
     if (LineNumber > -1) {
         // go there
@@ -86,15 +85,14 @@ void CppcheckView::doubleClicked(const QModelIndex& index) {
         if (doc.isValid() && KIO::NetAccess::exists(doc, KIO::NetAccess::SourceSide, qApp->activeWindow())) {
 
             // check ifts open (all files check)
-            if (KDevelop::ICore::self()->documentController()->documentForUrl(doc) == NULL) {                
+            if (KDevelop::ICore::self()->documentController()->documentForUrl(doc) == 0) {
                 // not open
-                 kDebug() << "file not open, open it"; 
-                KDevelop::ICore::self()->documentController()->openDocument(doc, KTextEditor::Cursor(qMax(0, LineNumber-1), 0));
-            }
-            else {
+                kDebug() << "file not open, open it";
+                KDevelop::ICore::self()->documentController()->openDocument(doc, KTextEditor::Cursor(qMax(0, LineNumber - 1), 0));
+            } else {
                 kDebug() << "file already open";
                 // open
-                KDevelop::ICore::self()->documentController()->openDocument(doc, KTextEditor::Cursor(qMax(0, LineNumber-1), 0));
+                KDevelop::ICore::self()->documentController()->openDocument(doc, KTextEditor::Cursor(qMax(0, LineNumber - 1), 0));
             }
         }
     }

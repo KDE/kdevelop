@@ -35,9 +35,7 @@ class Parser: public QObject, public QXmlStreamReader
 
 public:
 
-    Parser(QObject* parent = 0) {
-        Q_UNUSED(parent);
-    };
+    Parser(QObject* parent = 0);
 
 signals:
     /**
@@ -58,7 +56,7 @@ signals:
     /**
      * Emission of an item from a parser to a model
      */
-    void newItem(ModelItem *);
+    void newItem(ModelItem*);
 
 public slots:
 

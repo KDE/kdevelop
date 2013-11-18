@@ -43,11 +43,11 @@ public:
     using QTreeView::setModel;
     using QTreeView::model;
 
-    void setModel(cppcheck::Model * m);
-    cppcheck::Model * model(void);
+    void setModel(cppcheck::Model* m);
+    cppcheck::Model* model(void);
 
 private:
-    QList<KTextEditor::MovingRange*> ErrorLinesMakerList; 
+    QList<KTextEditor::MovingRange*> ErrorLinesMakerList;
 
 private Q_SLOTS:
     void openDocument(const QModelIndex& index);

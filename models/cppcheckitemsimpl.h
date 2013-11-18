@@ -45,27 +45,25 @@ public:
 
     CppcheckError(cppcheck::CppcheckModel* parent);
 
-    virtual ~CppcheckError();
+    ~CppcheckError();
 
-    virtual CppcheckModel* parent() const;
+    CppcheckModel* parent() const;
 
-    CppcheckStack *addStack();
+    CppcheckStack* addStack();
 
-    CppcheckStack *lastStack() const;
+    CppcheckStack* lastStack() const;
 
-    const QList<CppcheckStack *> &getStack() const;
+    const QList<CppcheckStack*>& getStack() const;
 
-    virtual void incomingData(QString name, QString value, int ErrorLine, QString ErrorFile, QString Message, QString MessageVerbose, QString ProjectPath, QString Severity);
+    void incomingData(QString name, QString value, int ErrorLine, QString ErrorFile, QString Message, QString MessageVerbose, QString ProjectPath, QString Severity);
 
     void setKind(const QString& s);
 
-    int uniqueId;
-    int threadId;
+private:
+    CppcheckModel* m_parent;
+    QList<CppcheckStack*> m_stack;
 
-    enum {
-        Unknown,
-    } m_kind;
-
+public:
     QString what, auxWhat, text;
     int ErrorLine;
     QString ErrorFile;
@@ -74,29 +72,34 @@ public:
     QString ProjectPath;
     QString Severity;
 
-private:
-    CppcheckModel* m_parent;
-    QList<CppcheckStack *> m_stack;
+    int uniqueId;
+    int threadId;
+
+    enum {
+        Unknown,
+    } m_kind;
+
+
 };
 
 class CppcheckStack : public CppcheckItem
 {
 public:
-    CppcheckStack(CppcheckError *parent);
+    CppcheckStack(CppcheckError* parent);
 
-    virtual ~CppcheckStack();
+    ~CppcheckStack();
 
-    virtual CppcheckError* parent() const;
+    CppcheckError* parent() const;
 
-    virtual void incomingData(QString name, QString value, int ErrorLine, QString ErrorFile, QString Message, QString MessageVerbose, QString ProjectPath, QString Severity);
+    void incomingData(QString name, QString value, int ErrorLine, QString ErrorFile, QString Message, QString MessageVerbose, QString ProjectPath, QString Severity);
 
     QString what() const;
 
-    CppcheckFrame *addFrame();
+    CppcheckFrame* addFrame();
 
-    CppcheckFrame *lastFrame() const;
+    CppcheckFrame* lastFrame() const;
 
-    const QList<CppcheckFrame *> &getFrames() const;
+    const QList<CppcheckFrame*>& getFrames() const;
 
 private:
     QList<CppcheckFrame*> m_frames;
@@ -115,14 +118,13 @@ public:
      */
     CppcheckFrame(CppcheckStack* parent);
 
-    virtual CppcheckStack* parent() const;
+    CppcheckStack* parent() const;
 
-    virtual void incomingData(QString name, QString value, int ErrorLine, QString ErrorFile, QString Message, QString MessageVerbose, QString ProjectPath, QString Severity);
+    void incomingData(QString name, QString value, int ErrorLine, QString ErrorFile, QString Message, QString MessageVerbose, QString ProjectPath, QString Severity);
 
     KUrl url() const;
 
-    int instructionPointer, line;
-    QString obj, fn, dir, file;
+public:
     CppcheckStack* m_parent;
 
 private:
@@ -132,6 +134,12 @@ private:
     QString MessageVerbose;
     QString ProjectPath;
     QString Severity;
+
+public:
+    int instructionPointer, line;
+    QString obj, fn, dir, file;
+    
+
 };
 }
 

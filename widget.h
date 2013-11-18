@@ -41,7 +41,7 @@ public:
     cppcheck::Plugin* plugin() const;
 
 protected:
-    virtual void 	resizeEvent ( QResizeEvent * event );
+    void resizeEvent ( QResizeEvent * event );
 public slots:
     void updateTabText(cppcheck::Model * model, const QString & text);
 

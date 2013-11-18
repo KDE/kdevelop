@@ -40,8 +40,7 @@ class Marks : public QObject
 public:
 
     Marks(cppcheck::Plugin *plugin);
-
-    virtual ~Marks();
+    ~Marks();
 
 private slots:
     /*

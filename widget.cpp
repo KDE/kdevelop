@@ -51,7 +51,7 @@ cppcheck::IView * ViewFactoryPrivate::make(cppcheck::Model * m)
         return new cppcheck::CppcheckView();
 
     kDebug() << "view not yet implemented";
-    return NULL;
+    return 0;
 }
 
 Widget::Widget(cppcheck::Plugin * plugin, QWidget * parent)
@@ -133,11 +133,11 @@ void Widget::updateTabText(cppcheck::Model * model, const QString & text)
 
 void Widget::resizeEvent( QResizeEvent *event )
 {
-    for (int i = 0; i < this->count(); ++i)
+    for (int i = 0; i < count(); ++i)
     {
         //notify child size has changed
-        IView *view = dynamic_cast<IView *>(this->widget(i));
-        if (view != NULL)
+        IView *view = dynamic_cast<IView *>(widget(i));
+        if (view != 0)
             view->WidgetContainerResizeEvent(event);
     }
 }

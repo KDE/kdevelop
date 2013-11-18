@@ -32,7 +32,7 @@ namespace cppcheck
 class ModelEvents
 {
 public:
-    virtual ~ModelEvents() {}
+    virtual ~ModelEvents();
     virtual void modelChanged() = 0;
 };
 
@@ -52,7 +52,7 @@ public:
 
     ModelWrapper(Model *impl);
 
-    virtual ~ModelWrapper();
+    ~ModelWrapper();
 
 public slots:
 

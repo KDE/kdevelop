@@ -25,12 +25,12 @@
 #include "cppcheckmodel.h"
 
 #include <QApplication>
-#include <qdir.h>
+#include <QDir>
 
-#include <kdebug.h>
+#include <KDebug>
 #include <kmessagebox.h>
-#include <klocale.h>
-#include <kglobalsettings.h>
+#include <KLocale>
+#include <KGlobalSettings>
 #include <KIconLoader>
 #include <iostream>
 
@@ -43,7 +43,7 @@
 namespace cppcheck
 {
 
-CppcheckModel::CppcheckModel(QObject * parent)
+CppcheckModel::CppcheckModel(QObject* parent)
 {
     Q_UNUSED(parent); // do we need it ?
 }
@@ -53,19 +53,19 @@ CppcheckModel::~ CppcheckModel()
     //    qDeleteAll(errors);
 }
 
-int CppcheckModel::columnCount(const QModelIndex & parent) const
+int CppcheckModel::columnCount(const QModelIndex& parent) const
 {
     Q_UNUSED(parent)
     return numColumns;
 }
 
-QVariant CppcheckModel::data(const QModelIndex & index, int role) const
+QVariant CppcheckModel::data(const QModelIndex& index, int role) const
 {
     CppcheckItem* item = itemForIndex(index);
 
     switch (role) {
-    case Qt::DisplayRole:   
-      switch (index.column()) {
+    case Qt::DisplayRole:
+        switch (index.column()) {
 //         case Severity:
 //             if (CppcheckError* e = dynamic_cast<CppcheckError*>(item)) {
 // //                 return e->Severity;
@@ -75,7 +75,7 @@ QVariant CppcheckModel::data(const QModelIndex & index, int role) const
 //             break;
         case ErrorFile:
             if (CppcheckError* e = dynamic_cast<CppcheckError*>(item)) {
-               return e->ErrorFile;
+                return e->ErrorFile;
             }
             break;
         case ErrorLine:
@@ -88,18 +88,18 @@ QVariant CppcheckModel::data(const QModelIndex & index, int role) const
             break;
         case Message:
             if (CppcheckError* e = dynamic_cast<CppcheckError*>(item)) {
-               return e->Message;
+                return e->Message;
             }
             break;
         case ProjectPath:
             if (CppcheckError* e = dynamic_cast<CppcheckError*>(item)) {
-               return e->ProjectPath;
-               //return e->ErrorFile;
+                return e->ProjectPath;
+                //return e->ErrorFile;
             }
             break;
-       case MessageVerbose:
+        case MessageVerbose:
             if (CppcheckError* e = dynamic_cast<CppcheckError*>(item)) {
-               return e->MessageVerbose;
+                return e->MessageVerbose;
             }
             break;
 
@@ -117,28 +117,28 @@ QVariant CppcheckModel::data(const QModelIndex & index, int role) const
 //             break;
         case ErrorFile:
             if (CppcheckError* e = dynamic_cast<CppcheckError*>(item)) {
-               return e->ProjectPath + e->ErrorFile;
+                return e->ProjectPath + e->ErrorFile;
             }
             break;
         case ErrorLine:
             if (CppcheckError* e = dynamic_cast<CppcheckError*>(item)) {
-               return QString().setNum(e->ErrorLine);
+                return QString().setNum(e->ErrorLine);
             }
             break;
         case Message:
             if (CppcheckError* e = dynamic_cast<CppcheckError*>(item)) {
 //                return e->Message;
-                  return QString("<p>"+e->MessageVerbose+"</p>");
+                return QString("<p>" + e->MessageVerbose + "</p>");
             }
             break;
         case ProjectPath:
             if (CppcheckError* e = dynamic_cast<CppcheckError*>(item)) {
-               return e->ProjectPath;
+                return e->ProjectPath;
             }
             break;
         case MessageVerbose:
             if (CppcheckError* e = dynamic_cast<CppcheckError*>(item)) {
-               return e->MessageVerbose;
+                return e->MessageVerbose;
             }
             break;
 
@@ -154,36 +154,35 @@ QVariant CppcheckModel::data(const QModelIndex & index, int role) const
 //             break;
         case ErrorFile:
             if (CppcheckError* e = dynamic_cast<CppcheckError*>(item)) {
-               return e->ErrorFile;
+                return e->ErrorFile;
             }
             break;
         case ErrorLine:
             if (CppcheckError* e = dynamic_cast<CppcheckError*>(item)) {
-               return QString().setNum(e->ErrorLine);
+                return QString().setNum(e->ErrorLine);
             }
             break;
         case Message:
             if (CppcheckError* e = dynamic_cast<CppcheckError*>(item)) {
-               return e->Message;
+                return e->Message;
             }
             break;
         case ProjectPath:
             if (CppcheckError* e = dynamic_cast<CppcheckError*>(item)) {
-               return e->ProjectPath;
+                return e->ProjectPath;
             }
             break;
         case MessageVerbose:
             if (CppcheckError* e = dynamic_cast<CppcheckError*>(item)) {
-               return e->MessageVerbose;
+                return e->MessageVerbose;
             }
             break;
         }
 
 
-    // begin
-    case Qt::DecorationRole:
-        {        
-            switch (index.column()) {
+        // begin
+    case Qt::DecorationRole: {
+        switch (index.column()) {
 //                 case Severity:
 //                     if (CppcheckError* e = dynamic_cast<CppcheckError*>(item)) {
 //                         //return e->Severity;
@@ -202,41 +201,38 @@ QVariant CppcheckModel::data(const QModelIndex & index, int role) const
 //                         break;
 //                     }
 //                     break;
-                case ErrorFile:
-                    if (CppcheckError* e = dynamic_cast<CppcheckError*>(item)) {
-                        //return e->Severity;
-                        if (e->Severity == "error") {
-                            return QVariant( KIconLoader().loadIcon( "dialog_close", KIconLoader::NoGroup, 16 ));
-                        }
-                       else if (e->Severity == "warning") {
-                            return QVariant( KIconLoader().loadIcon( "task-attention.png", KIconLoader::NoGroup, 16 ));
-                        }
-                        else if (e->Severity == "style") {
-                            return QVariant( KIconLoader().loadIcon( "documentinfo", KIconLoader::NoGroup, 16 ));
-                        }
-                        else if (e->Severity == "information") {
-                            return QVariant( KIconLoader().loadIcon( "documentinfo", KIconLoader::NoGroup, 16 ));
-                        }
-                        break;
-                    }
-                    break;
-                case ErrorLine:
-                    break;
-                case Message:
-                    break;
-                case ProjectPath:
-                    break;
-                case MessageVerbose:
-                    break;
-            }
+        case ErrorFile:
+            if (CppcheckError* e = dynamic_cast<CppcheckError*>(item)) {
+                //return e->Severity;
+                if (e->Severity == "error") {
+                    return QVariant(KIconLoader().loadIcon("dialog_close", KIconLoader::NoGroup, 16));
+                } else if (e->Severity == "warning") {
+                    return QVariant(KIconLoader().loadIcon("task-attention.png", KIconLoader::NoGroup, 16));
+                } else if (e->Severity == "style") {
+                    return QVariant(KIconLoader().loadIcon("documentinfo", KIconLoader::NoGroup, 16));
+                } else if (e->Severity == "information") {
+                    return QVariant(KIconLoader().loadIcon("documentinfo", KIconLoader::NoGroup, 16));
+                }
                 break;
             }
-            // end
-        
-        break;
+            break;
+        case ErrorLine:
+            break;
+        case Message:
+            break;
+        case ProjectPath:
+            break;
+        case MessageVerbose:
+            break;
         }
+        break;
+    }
+    // end
 
-    
+    break;
+    }
+
+
     return QVariant();
 }
 
@@ -265,13 +261,13 @@ QVariant CppcheckModel::headerData(int section, Qt::Orientation orientation, int
             return i18n("Message detailed");
             break;
 
-        break;
+            break;
         }
     }
     return QVariant();
 }
 
-QModelIndex CppcheckModel::index(int row, int column, const QModelIndex & p) const
+QModelIndex CppcheckModel::index(int row, int column, const QModelIndex& p) const
 {
     if (row < 0 || column < 0 || column >= numColumns)
         return QModelIndex();
@@ -288,17 +284,17 @@ QModelIndex CppcheckModel::index(int row, int column, const QModelIndex & p) con
     } else if (CppcheckError* e = dynamic_cast<CppcheckError*>(parent)) {
         int r2 = row;
 
-        foreach(CppcheckStack * stack, e->getStack()) {
+        foreach (CppcheckStack * stack, e->getStack()) {
             if (row < stack->getFrames().size())
                 return createIndex(row, column, stack->getFrames().at(row));
             r2 -= stack->getFrames().count();
         }
-    
+
     }
     return QModelIndex();
 }
 
-QModelIndex CppcheckModel::parent(const QModelIndex & index) const
+QModelIndex CppcheckModel::parent(const QModelIndex& index) const
 {
     CppcheckItem* item = itemForIndex(index);
     if (!item)
@@ -307,7 +303,7 @@ QModelIndex CppcheckModel::parent(const QModelIndex & index) const
     return indexForItem(item, 0);
 }
 
-int CppcheckModel::rowCount(const QModelIndex & p) const
+int CppcheckModel::rowCount(const QModelIndex& p) const
 {
     if (!p.isValid())
         return m_errors.count();
@@ -322,8 +318,8 @@ int CppcheckModel::rowCount(const QModelIndex & p) const
 
     if (CppcheckError* e = dynamic_cast<CppcheckError*>(parent)) {
         int ret = 0;
-        foreach(const CppcheckStack * stack, e->getStack())
-        ret += stack->getFrames().count();
+        foreach (const CppcheckStack * stack, e->getStack())
+            ret += stack->getFrames().count();
 //         kDebug() << "rowCount: " << ret;
         return ret;
     }
@@ -382,7 +378,6 @@ void CppcheckModel::newFrame()
 
 void CppcheckModel::reset()
 {
-    //    qDeleteAll(errors);
     m_errors.clear();
     QAbstractItemModel::reset();
 }
@@ -395,17 +390,25 @@ void CppcheckModel::newData(CppcheckModel::eElementType e, QString name, QString
     default:
         break;
     }
-    emit static_cast<ModelEvents *>(m_modelWrapper)->modelChanged();
+    emit static_cast<ModelEvents*>(m_modelWrapper)->modelChanged();
 }
 
 void CppcheckModel::incomingData(QString, QString, int, QString, QString, QString, QString, QString)
 {
 }
 
-void CppcheckModel::newItem(cppcheck::ModelItem *)
+void CppcheckModel::newItem(cppcheck::ModelItem*)
 {
     // TODO use it instead of the other signals
 }
+
+CppcheckItem* CppcheckModel::parent() const {
+        return 0L;
+    }
+
+QAbstractItemModel*  CppcheckModel::getQAbstractItemModel(int) {
+        return this;
+    }
 
 }
 

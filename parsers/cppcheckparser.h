@@ -1,4 +1,4 @@
-/* This file is part of KDevelop
+/* This file is part of KDevelo
  * Copyright 2006-2008 Hamish Rodda <rodda@kde.org>
  * Copyright 2011 Mathieu Lornac <mathieu.lornac@gmail.com>
  * Copyright 2011 Damien Coppel <damien.coppel@gmail.com>
@@ -26,9 +26,9 @@
 
 #include <QXmlStreamReader>
 #include <QApplication>
-#include <kdebug.h>
-#include <kmessagebox.h>
-#include <klocale.h>
+#include <KDebug>
+#include <KMessageBox>
+#include <KLocale>
 
 #include "cppcheckitems.h"
 #include "cppcheckmodel.h"
@@ -48,8 +48,8 @@ class CppcheckParser : public Parser
 
 public:
 
-    CppcheckParser(QObject *parent = 0);
-    virtual ~CppcheckParser();
+    CppcheckParser(QObject* parent = 0);
+    ~CppcheckParser();
 
 
 signals:

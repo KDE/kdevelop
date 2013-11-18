@@ -60,7 +60,7 @@
 #include "job.h"
 #include "widget.h"
 
-#include <kxmlguifactory.h>
+#include <KXMLGUIFactory>
 
 
 using namespace KDevelop;
@@ -71,28 +71,26 @@ K_EXPORT_PLUGIN(CppcheckFactory(KAboutData("kdevcppcheck", "kdevcppcheck", ki18n
 namespace cppcheck
 {
 
-class WidgetFactory : public KDevelop::IToolViewFactory
+WidgetFactory::WidgetFactory(cppcheck::Plugin* plugin)
+        : m_plugin(plugin)
 {
-public:
-    WidgetFactory(cppcheck::Plugin* plugin)
-        : m_plugin(plugin) {
-    }
+}
 
-    virtual QWidget* create(QWidget *parent = 0) {
+QWidget* WidgetFactory::create(QWidget *parent)
+{
         return new cppcheck::Widget(m_plugin, parent);
-    }
+}
 
-    virtual Qt::DockWidgetArea defaultPosition() {
-        return Qt::BottomDockWidgetArea;
-    }
+Qt::DockWidgetArea WidgetFactory::defaultPosition()
+{
+    return Qt::BottomDockWidgetArea;
+}
 
-    virtual QString id() const {
-        return "org.kdevelop.CppcheckView";
-    }
+QString WidgetFactory::id() const
+{
+    return "org.kdevelop.CppcheckView";
+}
 
-private:
-    cppcheck::Plugin* m_plugin;
-};
 
 Plugin::Plugin(QObject *parent, const QVariantList&)
     : IPlugin(CppcheckFactory::componentData(), parent)

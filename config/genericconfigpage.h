@@ -1,6 +1,6 @@
 /* This file is part of KDevelop
    Copyright 2013 Christoph Thielecke <crissi99@gmx.de>
-   
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
    License as published by the Free Software Foundation; either
@@ -21,8 +21,8 @@
 #define CPPCHECKGENERICCONFIGPAGE_H_
 
 #include <QObject>
-#include <kcmodule.h>
-#include <ksharedconfig.h>
+#include <KCModule>
+#include <KSharedConfig>
 class KIcon;
 
 namespace cppcheck
@@ -40,11 +40,11 @@ class   GenericConfigPage : public KCModule
 
 public:
 
-    GenericConfigPage(QWidget *parent, const QVariantList &args = QVariantList() );
+    GenericConfigPage(QWidget* parent, const QVariantList& args = QVariantList());
     ~GenericConfigPage();
-    
-    virtual KIcon icon() const;
-    virtual QString title() const;
+
+    KIcon icon() const;
+    QString title() const;
 
 signals:
 
@@ -53,7 +53,7 @@ public slots:
     void load();
 
 private:
-    Ui::GenericConfig *ui;
+    Ui::GenericConfig* ui;
 };
 
 }

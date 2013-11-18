@@ -29,8 +29,7 @@
 class CppcheckItem
 {
 public:
-
-    virtual ~CppcheckItem() {}
+    ~CppcheckItem() {}
 
     virtual CppcheckItem* parent() const = 0;
 

@@ -27,8 +27,8 @@
 
 #include <QProcess>
 #include <QTcpSocket>
-#include <klocale.h>
-#include <kurl.h>
+#include <KLocale>
+#include <KUrl>
 #include <QFileInfo>
 #include <QTimer>
 #include <QBuffer>
@@ -63,15 +63,15 @@ class Job : public KDevelop::OutputJob
     Q_OBJECT
 
 public:
-    Job(cppcheck::Plugin *inst, bool allFiles, QObject* parent = 0);
-    virtual ~Job();
+    Job(cppcheck::Plugin* inst, bool allFiles, QObject* parent = 0);
+    ~Job();
     cppcheck::Plugin* plugin() const;
     KDevelop::OutputModel* model();
-    virtual void start();
-    virtual bool doKill();
+    void start();
+    bool doKill();
 
 signals:
-    void updateTabText(cppcheck::Model *, const QString & text);
+    void updateTabText(cppcheck::Model*, const QString& text);
     void jobFinished();
 
 private slots:
@@ -84,16 +84,16 @@ private slots:
 protected:
     typedef QString   t_cppcheck_cfg_argarray[][3];
 
-    virtual void beforeStart(); // called before launching the process
-    virtual void processStarted(); // called after the process has been launched
-    virtual void processEnded(); // called when the process ended
+    void beforeStart(); // called before launching the process
+    void processStarted(); // called after the process has been launched
+    void processEnded(); // called when the process ended
 
-    void addToolArgs(QStringList &args, KConfigGroup &cfg) const;
+    void addToolArgs(QStringList& args, KConfigGroup& cfg) const;
 
-    void processModeArgs(QStringList & out,
+    void processModeArgs(QStringList& out,
                          const t_cppcheck_cfg_argarray mode_args,
                          int mode_args_count,
-                         KConfigGroup & cfg) const;
+                         KConfigGroup& cfg) const;
 
     QStringList buildCommandLine() const;
 
@@ -109,13 +109,13 @@ protected:
 
     KDevelop::ProcessLineMaker* m_applicationOutput;
     KDevelop::ILaunchConfiguration* m_launchcfg;
-    cppcheck::Plugin *m_plugin;
+    cppcheck::Plugin* m_plugin;
 
     // The cppcheck output file
-    QFile *m_file;
+    QFile* m_file;
     bool      m_killed;
     bool allFiles;
-    QBuffer *string_device;
+    QBuffer* string_device;
     QString stdout_output;
     QString stderr_output;
 
@@ -128,7 +128,7 @@ private:
  */
 class KProcessOutputToParser : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     KProcessOutputToParser(Parser* inst);
     ~KProcessOutputToParser();
@@ -139,9 +139,9 @@ private slots:
     void  processEnded(int returnCode, QProcess::ExitStatus status);
 
 private:
-    KProcess  *m_process;
-    QIODevice *m_device;
-    Parser    *m_parser;
+    KProcess*  m_process;
+    QIODevice* m_device;
+    Parser*    m_parser;
 
 };
 }

@@ -32,11 +32,11 @@
 #include <QBuffer>
 #include <QFileInfo>
 
-#include <klocale.h>
-#include <kdebug.h>
-#include <kmessagebox.h>
+#include <KLocale>
+#include <KDebug>
+#include <KMessageBox>
 #include <KProcess>
-#include <kshell.h>
+#include <KShell>
 
 #include <util/processlinemaker.h>
 #include <outputview/outputmodel.h>
@@ -71,15 +71,14 @@ class ModelParserFactoryPrivate
 {
 
 public:
-    void make(const QString &type, cppcheck::Model* &m_model, cppcheck::Parser* &m_parser);
+    void make(const QString& type, cppcheck::Model*& m_model, cppcheck::Parser*& m_parser);
 
 };
 
-void ModelParserFactoryPrivate::make(const QString &tool, cppcheck::Model* &m_model, cppcheck::Parser* &m_parser)
+void ModelParserFactoryPrivate::make(const QString& tool, cppcheck::Model*& m_model, cppcheck::Parser*& m_parser)
 {
-    ModelWrapper *modelWrapper = NULL;
-    if (tool == "cppcheck")
-    {
+    ModelWrapper* modelWrapper = 0;
+    if (tool == "cppcheck") {
         m_model = new cppcheck::CppcheckModel();
         modelWrapper = new ModelWrapper(m_model);
         m_parser = new cppcheck::CppcheckParser();
@@ -94,7 +93,7 @@ void ModelParserFactoryPrivate::make(const QString &tool, cppcheck::Model* &m_mo
     m_model->reset();
 }
 
-Job::Job(cppcheck::Plugin *inst, bool allFiles, QObject* parent)
+Job::Job(cppcheck::Plugin* inst, bool allFiles, QObject* parent)
     : KDevelop::OutputJob(parent)
     , m_process(new KProcess(this))
     , m_pid(0)
@@ -110,7 +109,7 @@ Job::Job(cppcheck::Plugin *inst, bool allFiles, QObject* parent)
     connect(m_process,  SIGNAL(readyReadStandardOutput()),
             SLOT(readyReadStandardOutput()));
     connect(m_process,  SIGNAL(readyReadStandardError()),
-          SLOT(readyReadStandardError()));
+            SLOT(readyReadStandardError()));
     connect(m_process, SIGNAL(finished(int, QProcess::ExitStatus)),
             SLOT(processFinished(int, QProcess::ExitStatus)));
     connect(m_process, SIGNAL(error(QProcess::ProcessError)),
@@ -130,49 +129,37 @@ Job::~Job()
 {
     doKill();
     if (m_model && m_model->getModelWrapper())
-        m_model->getModelWrapper()->job(NULL);
+        m_model->getModelWrapper()->job(0);
     delete m_process;
     delete m_applicationOutput;
-
-    if (string_device) {
-//        string_device->close();
-        //delete string_device;
-    }
     delete m_parser;
 }
 
-void        Job::processModeArgs(QStringList & out,
+void        Job::processModeArgs(QStringList& out,
                                  const t_cppcheck_cfg_argarray mode_args,
                                  int mode_args_count,
-                                 KConfigGroup & cfg) const
+                                 KConfigGroup& cfg) const
 {
     // For each option, set the right string in the arguments list
     for (int i = 0; i < mode_args_count; ++i) {
         QString val;
-       QString argtype = mode_args[i][2];
+        QString argtype = mode_args[i][2];
 
         if (argtype == "str")
             val = cfg.readEntry(mode_args[i][0]);
-        else if (argtype == "int")
-        {
+        else if (argtype == "int") {
             int n = cfg.readEntry(mode_args[i][0], 0);
-            if (n)
-            {
+            if (n) {
                 val.sprintf("%d", n);
             }
-        }
-        else if (argtype == "bool")
-        {
+        } else if (argtype == "bool") {
             bool n = cfg.readEntry(mode_args[i][0], false);
             val = n ? "yes" : "no";
-        }
-        else if (argtype == "float")
-        {
+        } else if (argtype == "float") {
             int n = cfg.readEntry(mode_args[i][0], 1);
             val.sprintf("%d.0", n);
         }
-        if (val.length())
-        {
+        if (val.length()) {
             QString argument = QString(mode_args[i][1]) + val;
             out << argument;
         }
@@ -188,19 +175,14 @@ void Job::readyReadStandardError()
 
 void Job::readyReadStandardOutput()
 {
-	QString stdout_content_local = m_process->readAllStandardOutput();
-        stdout_output += stdout_content_local;
-        m_applicationOutput->slotReceivedStdout(stdout_content_local.toLocal8Bit());
+    QString stdout_content_local = m_process->readAllStandardOutput();
+    stdout_output += stdout_content_local;
+    m_applicationOutput->slotReceivedStdout(stdout_content_local.toLocal8Bit());
 }
 
 QStringList Job::buildCommandLine() const
 {
-    static const t_cppcheck_cfg_argarray generic_args =
-    {
-//         {"Current Tool",        "--tool=",      "str"},
-//         {"Stackframe Depth",    "--num-callers=",   "int"},
-//         {"Maximum Stackframe Size", "--max-stackframe=",    "int"},
-//         {"Limit Errors",        "--error-limit=",   "bool"}
+    static const t_cppcheck_cfg_argarray generic_args = {
     };
     static const int        generic_args_count = sizeof(generic_args) / sizeof(*generic_args);
 
@@ -209,16 +191,15 @@ QStringList Job::buildCommandLine() const
 
     QStringList     args;
     args.append(KShell::splitArgs(cfg.readEntry("Cppcheck Arguments", "")));
-    
+
     args.append("--force");
-//     args.append("--enable=all");
     args.append("--xml-version=2");
 
     /* extra parameters */
     QString cppcheckParameters(cfg.readEntry("cppcheckParameters", ""));
     if (!cppcheckParameters.isEmpty())
         args.append(cppcheckParameters);
-    
+
     bool additionalCheckStyle = cfg.readEntry("AdditionalCheckStyle", false);
     if (additionalCheckStyle)
         args.append("--enable=style");
@@ -227,7 +208,7 @@ QStringList Job::buildCommandLine() const
     if (additionalCheckPerformance)
         args.append("--enable=performance");
 
-    
+
     bool additionalCheckPortability = cfg.readEntry("AdditionalCheckPortability", false);
     if (additionalCheckPortability)
         args.append("--enable=portability");
@@ -238,32 +219,26 @@ QStringList Job::buildCommandLine() const
     bool AdditionalCheckUnusedFunction = cfg.readEntry("AdditionalCheckUnusedFunction", false);
     if (AdditionalCheckUnusedFunction)
         args.append("--enable=unusedFunction");
-    
+
     bool additionalCheckMissingInclude = cfg.readEntry("AdditionalCheckMissingInclude", false);
     if (additionalCheckMissingInclude)
         args.append("--enable=missingInclude");
 
-//     for (int i=0;i< KDevelop::ICore::self()->projectController()->projects().count(); i++) {
-//         kDebug() << "project folder: "<< KDevelop::ICore::self()->projectController()->projects().at(i)->folder();
-//     }
-
-    if(allFiles == false) {
+    if (allFiles == false) {
         kDebug() << "checking file: " << m_plugin->core()->documentController()->activeDocument()->url().toLocalFile() << "(" << "" << ")";
-        args.append(m_plugin->core()->documentController()->activeDocument()->url().toLocalFile() );
-    }
-    else {
+        args.append(m_plugin->core()->documentController()->activeDocument()->url().toLocalFile());
+    } else {
         kDebug() << "checking all files";
         // project path
-        for (int i=0;i< KDevelop::ICore::self()->projectController()->projects().count(); i++) {
+        for (int i = 0; i < KDevelop::ICore::self()->projectController()->projects().count(); i++) {
             args.append(KDevelop::ICore::self()->projectController()->projects().at(i)->folder().toLocalFile());
         }
     }
-    
+
     QString         tool = cfg.readEntry("Current Tool", "cppcheck");
     processModeArgs(args, generic_args, generic_args_count, cfg);
 
     addToolArgs(args, cfg);
-//     stderr_content.clear();
     return args;
 }
 
@@ -276,8 +251,8 @@ void Job::start()
 
     QString err;
 
-     QString envgrp = "";
-    
+    QString envgrp = "";
+
     setStandardToolView(KDevelop::IOutputView::DebugView);
     setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll);
     setModel(new KDevelop::OutputModel());
@@ -287,7 +262,7 @@ void Job::start()
     Q_ASSERT(m_process->state() != QProcess::Running);
 
     // some tools need to initialize stuff before the process starts
-    this->beforeStart();
+    beforeStart();
 
     QStringList cppcheckArgs;
 
@@ -305,27 +280,26 @@ void Job::start()
     connect(m_applicationOutput, SIGNAL(receivedStderrLines(QStringList)),
             model(), SLOT(appendLines(QStringList)));
 
-    
+
 
     emit updateTabText(m_model, i18n("job running (pid=%1)",  m_pid));
 
-    this->processStarted();
+    processStarted();
 }
 
 bool Job::doKill()
 {
-    if (m_process && m_process->pid())
-    {
+    if (m_process && m_process->pid()) {
         m_process->kill();
         m_killed = true;
-        m_process = NULL;
+        m_process = 0;
     }
     return true;
 }
 
 
 
-cppcheck::Plugin * Job::plugin() const
+cppcheck::Plugin* Job::plugin() const
 {
     return m_plugin;
 }
@@ -359,12 +333,11 @@ void Job::processErrored(QProcess::ProcessError e)
 
 void Job::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
-    qDebug() << "Process Finished, exitCode" << exitCode << "process exit status" << exitStatus;
+    kDebug() << "Process Finished, exitCode" << exitCode << "process exit status" << exitStatus;
 
     QString tabname = i18n("cppcheck finished (pid=%1,exit=%2)", m_pid, exitCode);
-    
-    if (exitCode != 0)
-    {
+
+    if (exitCode != 0) {
         /*
         ** Here, check if Cppcheck failed (because of bad parameters or whatever).
         ** Because Cppcheck always returns 1 on failure, and the profiled application's return
@@ -381,19 +354,13 @@ void Job::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
         kDebug() << "cppcheck failed, error output: ";
         kDebug() << stderr_output;
 
-        const QString &s = stdout_output;
-//         if (s.startsWith("cppcheck:"))
-        {
-            QStringList err = s.split("\n");
-            
-            //KMessageBox::error(qApp->activeWindow(), err, i18n("Cppcheck Error"));
-            tabname = i18n("job failed");
-            model()->appendLines(err);
-        }
-    }
-    else {
+        const QString& s = stdout_output;
+        QStringList err = s.split("\n");
+        tabname = i18n("job failed");
+        model()->appendLines(err);
+    } else {
         // success
-        
+
         string_device = new QBuffer();
         string_device->open(QIODevice::ReadWrite);
         string_device->write(stdout_output.toLocal8Bit());
@@ -403,7 +370,7 @@ void Job::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
 
         emit updateTabText(m_model, tabname);
     }
-    this->processEnded();
+    processEnded();
     emitResult();
     emit jobFinished();
 }
@@ -425,16 +392,13 @@ KDevelop::OutputModel* Job::model()
     return dynamic_cast<KDevelop::OutputModel*>(KDevelop::OutputJob::model());
 }
 
-void Job::addToolArgs(QStringList &args, KConfigGroup &cfg) const
+void Job::addToolArgs(QStringList& args, KConfigGroup& cfg) const
 {
     static const t_cppcheck_cfg_argarray cppcheck_args = {
         {"Cppcheck Arguments", "", "str"},
-//        {"Freelist Size", "--freelist-vol=", "int"},
-//        {"Show Reachable", "--show-reachable=", "bool"},
-//        {"Undef Value Errors",  "--undef-value-errors=", "bool"}
     };
     static const int        count = sizeof(cppcheck_args) / sizeof(*cppcheck_args);
-    
+
     processModeArgs(args, cppcheck_args, count, cfg);
 }
 
@@ -442,7 +406,7 @@ void Job::addToolArgs(QStringList &args, KConfigGroup &cfg) const
  * KProcessOutputToParser implementation
  */
 KProcessOutputToParser::KProcessOutputToParser(Parser* parser)
-{   
+{
     m_parser = parser;
     m_device = new QBuffer();
     m_device->open(QIODevice::WriteOnly);
@@ -471,8 +435,7 @@ int KProcessOutputToParser::execute(QString execPath, QStringList args)
 void KProcessOutputToParser::processEnded(int , QProcess::ExitStatus status)
 {
     kDebug() << status;
-    if (status == QProcess::NormalExit)
-    {
+    if (status == QProcess::NormalExit) {
 
         m_device->close();
     }

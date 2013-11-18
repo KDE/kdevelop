@@ -26,14 +26,19 @@
 #include <QPointer>
 #include <QVariant>
 
+#include <interfaces/icore.h>
 #include <interfaces/iplugin.h>
 #include <interfaces/istatus.h>
+
+#include <interfaces/iuicontroller.h>
 
 #include "imodel.h"
 
 class KJob;
 class KUrl;
 class QTreeView;
+
+
 
 namespace cppcheck
 {
@@ -48,9 +53,9 @@ class Plugin : public KDevelop::IPlugin
 public:
     Plugin(QObject *parent, const QVariantList & = QVariantList());
 
-    virtual ~Plugin();
+    ~Plugin();
 
-    virtual void unload();
+    void unload();
 
     void incomingModel(cppcheck::Model* model);
 
@@ -70,6 +75,22 @@ private:
     cppcheck::WidgetFactory *m_factory;
     cppcheck::Marks         *m_marks;
 };
+
+class WidgetFactory : public KDevelop::IToolViewFactory
+{
+public:
+    WidgetFactory(cppcheck::Plugin* plugin);
+
+    QWidget* create(QWidget *parent = 0);
+
+    Qt::DockWidgetArea defaultPosition();
+    QString id() const;
+
+private:
+    cppcheck::Plugin* m_plugin;
+};
+
+
 }
 
 

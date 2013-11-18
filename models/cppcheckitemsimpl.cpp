@@ -24,7 +24,7 @@
 #include "cppcheckitemsimpl.h"
 #include "cppcheckmodel.h"
 
-#include <kdebug.h>
+#include <KDebug>
 
 ///////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
@@ -34,10 +34,11 @@ namespace cppcheck
 
 CppcheckError::CppcheckError(cppcheck::CppcheckModel* parent)
     : m_parent(parent),
-    ErrorLine(0),
-    uniqueId(0),
-    threadId(0),
-    m_kind(Unknown)
+      ErrorLine(0),
+      ErrorFile(""),
+      uniqueId(0),
+      threadId(0),
+      m_kind(Unknown)
 {
 }
 
@@ -53,17 +54,17 @@ CppcheckModel* CppcheckError::parent() const
 void CppcheckError::incomingData(QString name, QString value, int ErrorLine, QString ErrorFile, QString Message, QString MessageVerbose, QString ProjectPath, QString Severity)
 {
     if (name == "unique")
-        this->uniqueId = value.toInt(0L, 16);
+        uniqueId = value.toInt(0L, 16);
     else if (name == "tid")
-        this->threadId = value.toInt();
+        threadId = value.toInt();
     else if (name == "kind")
-        this->setKind(value);
+        setKind(value);
     else if (name == "what")
-        this->what = value;
+        what = value;
     else if (name == "text")
-        this->text = value;
+        text = value;
     else if (name == "auxwhat")
-        this->auxWhat = value;
+        auxWhat = value;
 
     this->ErrorLine = ErrorLine;
     this->ErrorFile = ErrorFile;
@@ -82,18 +83,18 @@ void CppcheckError::setKind(const QString& s)
 }
 
 
-CppcheckStack *CppcheckError::addStack()
+CppcheckStack* CppcheckError::addStack()
 {
     m_stack << new CppcheckStack(this);
     return m_stack.back();
 }
 
-CppcheckStack *CppcheckError::lastStack() const
+CppcheckStack* CppcheckError::lastStack() const
 {
     return m_stack.back();
 }
 
-const QList<CppcheckStack *> &CppcheckError::getStack() const
+const QList<CppcheckStack*>& CppcheckError::getStack() const
 {
     return m_stack;
 }
@@ -105,7 +106,7 @@ QString CppcheckStack::what() const
     return "In cppcheckstack what";
 }
 
-CppcheckStack::CppcheckStack(CppcheckError *parent)
+CppcheckStack::CppcheckStack(CppcheckError* parent)
     : m_parent(parent)
 {
 }
@@ -133,27 +134,27 @@ void CppcheckStack::incomingData(QString name, QString value, int ErrorLine, QSt
 }
 
 
-CppcheckFrame *CppcheckStack::addFrame()
+CppcheckFrame* CppcheckStack::addFrame()
 {
     m_frames << new CppcheckFrame(this);
     return m_frames.back();
 }
 
-CppcheckFrame *CppcheckStack::lastFrame() const
+CppcheckFrame* CppcheckStack::lastFrame() const
 {
     return m_frames.back();
 }
 
-const QList<CppcheckFrame *> &CppcheckStack::getFrames() const
+const QList<CppcheckFrame*>& CppcheckStack::getFrames() const
 {
     return m_frames;
 }
 
 CppcheckFrame::CppcheckFrame(CppcheckStack* parent)
     : m_parent(parent),
-    ErrorLine(0),
-    line(0),
-    instructionPointer(0L)
+      ErrorLine(0),
+      instructionPointer(0L),
+      line(0)
 {
 }
 
@@ -165,17 +166,17 @@ CppcheckStack* CppcheckFrame::parent() const
 void CppcheckFrame::incomingData(QString name, QString value, int ErrorLine, QString ErrorFile, QString Message, QString MessageVerbose, QString ProjectPath, QString Severity)
 {
     if (name == "ip")
-        this->instructionPointer = value.toInt(0L, 16);
+        instructionPointer = value.toInt(0L, 16);
     else if (name == "obj")
-        this->obj = value;
+        obj = value;
     else if (name == "fn")
-        this->fn = value;
+        fn = value;
     else if (name == "dir")
-        this->dir = value;
+        dir = value;
     else if (name == "file")
-        this->file = value;
+        file = value;
     else if (name == "line")
-        this->line = value.toInt();
+        line = value.toInt();
 
     this->ErrorLine = ErrorLine;
     this->ErrorFile = ErrorFile;

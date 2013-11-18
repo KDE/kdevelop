@@ -43,8 +43,8 @@ class CppcheckError;
  * \author Hamish Rodda \<roddakde.org\>
  */
 class CppcheckModel : public QAbstractItemModel,
-                      public cppcheck::Model,
-                      public CppcheckItem
+    public cppcheck::Model,
+    public CppcheckItem
 
 {
     Q_OBJECT
@@ -52,9 +52,9 @@ class CppcheckModel : public QAbstractItemModel,
 public:
 
     CppcheckModel(QObject* parent = 0);
-    virtual ~CppcheckModel();
+    ~CppcheckModel();
 
-    virtual QAbstractItemModel  *getQAbstractItemModel(int) {return this;}
+    QAbstractItemModel*  getQAbstractItemModel(int);
 
     enum Columns {
         //Index = 0,
@@ -69,21 +69,19 @@ public:
     static const int numColumns = 5;
 
     // Item
-    virtual CppcheckItem* parent() const {
-        return 0L;
-    }
+    CppcheckItem* parent() const;
 
     // Model
     QModelIndex indexForItem(CppcheckItem* item, int column = 0) const;
     CppcheckItem* itemForIndex(const QModelIndex& index) const;
 
-    virtual void incomingData(QString name, QString value, int ErrorLine, QString ErrorFile, QString Message, QString MessageVerbose, QString ProjectPath, QString Severity);
-    virtual int columnCount(const QModelIndex & parent = QModelIndex()) const;
-    virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-    virtual QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
-    virtual QModelIndex index(int row, int column, const QModelIndex & parent = QModelIndex()) const;
-    virtual QModelIndex parent(const QModelIndex & index) const;
-    virtual int rowCount(const QModelIndex & parent = QModelIndex()) const;
+    void incomingData(QString name, QString value, int ErrorLine, QString ErrorFile, QString Message, QString MessageVerbose, QString ProjectPath, QString Severity);
+    int columnCount(const QModelIndex& parent = QModelIndex()) const;
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+    QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
+    QModelIndex parent(const QModelIndex& index) const;
+    int rowCount(const QModelIndex& parent = QModelIndex()) const;
 
     void newStack();
     void newFrame();
@@ -93,12 +91,12 @@ public:
     /**
      * Reception of a new item in the model
      */
-    virtual void newElement(cppcheck::Model::eElementType);
+    void newElement(cppcheck::Model::eElementType);
 
     /**
      * Reception of data to register to the current item
      */
-    virtual void newData(cppcheck::Model::eElementType, QString name, QString value, int ErrorLine, QString ErrorFile, QString Message, QString MessageVerbose, QString ProjectPath, QString Severity);
+    void newData(cppcheck::Model::eElementType, QString name, QString value, int ErrorLine, QString ErrorFile, QString Message, QString MessageVerbose, QString ProjectPath, QString Severity);
 
     /**
      * Resets the model content
@@ -108,10 +106,10 @@ public:
     /**
      * Reception of a new item
      */
-    virtual void newItem(cppcheck::ModelItem *);
+    void newItem(cppcheck::ModelItem*);
     ////END SLOTS WRAPER////
 private:
-    QList<CppcheckError *> m_errors;
+    QList<CppcheckError*> m_errors;
 
 
 };

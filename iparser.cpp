@@ -24,4 +24,9 @@
 namespace cppcheck
 {
 
+Parser::Parser(QObject* parent): QObject(parent)
+{
+    Q_UNUSED(parent);
+}
+
 }

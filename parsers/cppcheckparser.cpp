@@ -21,9 +21,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <kdebug.h>
-// #include <interfaces/iplugincontroller.h>
-// #include <interfaces/idocumentcontroller.h>
+#include <KDebug>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>
@@ -35,7 +33,7 @@
 namespace cppcheck
 {
 
-CppcheckParser::CppcheckParser(QObject *parent) :
+CppcheckParser::CppcheckParser(QObject* parent) :
     ErrorLine(0),
     ErrorFile(""),
     Message(""),
@@ -56,19 +54,13 @@ void CppcheckParser::clear()
     m_buffer.clear();
     cppcheckArgs.clear();
     programArgs.clear();
-
-    // Send rest signal to model
-    //    emit reset();
-    // qDeleteAll(errors);
-    // errors.clear();
-    // reset();
 }
 bool CppcheckParser::startElement()
 {
     m_buffer.clear();
     State newState = Unknown;
 
-    kDebug() << "CppcheckParser::startElement: elem: " << qPrintable( name().toString());
+    kDebug() << "CppcheckParser::startElement: elem: " << qPrintable(name().toString());
 
 
     if (name() == "results")
@@ -81,23 +73,18 @@ bool CppcheckParser::startElement()
         newState = Location;
         if (attributes().hasAttribute("line"))
             ErrorLine = attributes().value("line").toString().toInt();
-       if (attributes().hasAttribute("file")) {
+        if (attributes().hasAttribute("file")) {
             ErrorFile = attributes().value("file").toString();
-                /* get project path */
-                // find project
-                //ICore::self()->projectController()->findProjectForUrl(...)
-                //returns 0 if there's no project for the file
-                ProjectPath = "";
-                for (int i=0;i< KDevelop::ICore::self()->projectController()->projects().count(); i++) {
-                    //kDebug() << "project folder: "<< KDevelop::ICore::self()->projectController()->projects().at(i)->folder().toLocalFile() << "in project: " << KDevelop::ICore::self()->projectController()->projects().at(i)->name() << " => " << KDevelop::ICore::self()->projectController()->findProjectForUrl(KUrl(ErrorFile));
-                    if (KDevelop::ICore::self()->projectController()->findProjectForUrl(KUrl(ErrorFile)) != 0){
-                            ProjectPath = KDevelop::ICore::self()->projectController()->projects().at(i)->folder().toLocalFile();
-                    }
+            /* get project path */
+            ProjectPath = "";
+            for (int i = 0; i < KDevelop::ICore::self()->projectController()->projects().count(); i++) {
+                if (KDevelop::ICore::self()->projectController()->findProjectForUrl(KUrl(ErrorFile)) != 0) {
+                    ProjectPath = KDevelop::ICore::self()->projectController()->projects().at(i)->folder().toLocalFile();
                 }
-                ErrorFile.remove(ProjectPath);
             }
-       }
-    else if (name() == "error") {
+            ErrorFile.remove(ProjectPath);
+        }
+    } else if (name() == "error") {
         newState = Error;
         ErrorLine = -1;
         ErrorFile = "";
@@ -114,7 +101,6 @@ bool CppcheckParser::startElement()
         emit newElement(cppcheck::CppcheckModel::startError);
     } else {
         m_stateStack.push(m_stateStack.top());
-        //m_stateStack.push(newState);
         return true;
     }
     m_stateStack.push(newState);
@@ -123,7 +109,7 @@ bool CppcheckParser::startElement()
 
 bool CppcheckParser::endElement()
 {
-    kDebug() << "CppcheckParser::endElement: elem: " << qPrintable( name().toString());
+    kDebug() << "CppcheckParser::endElement: elem: " << qPrintable(name().toString());
     State state = m_stateStack.pop();
     switch (state) {
     case CppCheck:
@@ -134,7 +120,6 @@ bool CppcheckParser::endElement()
         // errors finished
         break;
     case Error:
-        //kDebug() << "CppcheckParser::endElement: elm: " << qPrintable( name().toString());
         kDebug() << "CppcheckParser::endElement: new error elem: line: " << ErrorLine << " at " << ErrorFile << ", msg: " << Message;
         emit newData(cppcheck::CppcheckModel::error, name().toString(), m_buffer, ErrorLine, ErrorFile, Message, MessageVerbose, ProjectPath, Severity);
         break;
@@ -153,8 +138,8 @@ void CppcheckParser::parse()
 {
     kDebug() << "CppcheckParser::parse!";
 
-    
-    
+
+
     while (!atEnd()) {
         int readNextVal = readNext();
         switch (readNextVal) {
@@ -175,7 +160,7 @@ void CppcheckParser::parse()
             break;
         }
     }
-     kDebug() << "CppcheckParser::parse: end";
+    kDebug() << "CppcheckParser::parse: end";
 
     if (hasError()) {
         switch (error()) {

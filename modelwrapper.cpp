@@ -12,7 +12,7 @@
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
     General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
+  You should have received a copy of the GNU General Public License
    along with this program; see the file COPYING.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
@@ -41,9 +41,6 @@ ModelWrapper::~ModelWrapper()
 
 void ModelWrapper::job(cppcheck::Job * job)
 {
-    //TODO: Search an other way to that :
-    //QObject::connect(job, SIGNAL(destroyed()),
-    //        this->getQAbstractItemModel(), SLOT(jobDestroyed()));
     m_job = job;
 }
 
@@ -54,7 +51,7 @@ cppcheck::Job * ModelWrapper::job(void)
 
 void ModelWrapper::jobDestroyed(void)
 {
-    m_job = NULL;
+    m_job = 0;
 }
 
 void ModelWrapper::newElement(Model::eElementType type)
@@ -75,6 +72,10 @@ void ModelWrapper::newItem(ModelItem *item)
 void ModelWrapper::reset()
 {
     m_modelImplementation->reset();
+}
+
+ModelEvents::~ModelEvents()
+{
 }
 
 

@@ -4,7 +4,7 @@
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
    License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
+   version 2 of the License, o (at your option) any later version.
 
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -17,15 +17,15 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <kdebug.h>
-#include <kpluginfactory.h>
+#include <KDebug>
+#include <KPluginFactory>
 
 #include "genericconfigpage.h"
 #include "plugin.h"
 
 #include "ui_genericconfig.h"
 
-K_PLUGIN_FACTORY(CppcheckPreferencesFactory, registerPlugin<cppcheck::GenericConfigPage>(); )
+K_PLUGIN_FACTORY(CppcheckPreferencesFactory, registerPlugin<cppcheck::GenericConfigPage>();)
 K_EXPORT_PLUGIN(CppcheckPreferencesFactory("kcm_kdev_cppcheck"));
 
 
@@ -34,22 +34,19 @@ namespace cppcheck
 
 
 
-GenericConfigPage::GenericConfigPage(QWidget *parent, const QVariantList &args )
-    : KCModule( CppcheckPreferencesFactory::componentData(), parent, args )
+GenericConfigPage::GenericConfigPage(QWidget* parent, const QVariantList& args)
+    : KCModule(CppcheckPreferencesFactory::componentData(), parent, args)
 {
 
     ui = new Ui::GenericConfig();
     ui->setupUi(this);
-
-    //connect(ui->cppcheckExecutable, SIGNAL(textChanged(QString)), SIGNAL(changed()));
-    //connect(ui->cppcheckExecutable, SIGNAL(urlSelected(KUrl)), SIGNAL(changed()));
-    //connect(ui->cppcheckParameters, SIGNAL(textEdited(QString)), SIGNAL(changed()));
     connect(ui->SavePushButton , SIGNAL(clicked()), this, SLOT(save()));
 }
 
 GenericConfigPage::~GenericConfigPage(void)
 {
-    
+    disconnect(ui->SavePushButton , SIGNAL(clicked()), this, SLOT(save()));
+    delete ui;
 }
 
 KIcon GenericConfigPage::icon() const
