@@ -26,8 +26,6 @@
 
 using namespace KDevelop;
 
-QTextStream qout(stdout);
-
 QString DebugVisitor::stringForAstKind(int kind)
 {
     switch (kind) {
@@ -161,6 +159,8 @@ void DebugVisitor::printNode(QmlJS::AST::Node* node, Position position)
     const QmlJS::AST::SourceLocation start = node->firstSourceLocation();
     const QmlJS::AST::SourceLocation end = node->lastSourceLocation();
     const QmlJS::AST::SourceLocation location = position == Start ? start : end;
+
+    static QTextStream qout(stdout);
 
     qout << indent() << stringForAstKind(node->kind)
          << " [(" << start.startLine << ", " << start.startColumn << "), "
