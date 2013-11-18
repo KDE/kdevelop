@@ -1,9 +1,9 @@
+cmake_minimum_required (VERSION 2.8)
 
 project(cppcheck)
-add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9002 )
 
 find_package(KDE4 REQUIRED)
-find_package(KDevPlatform 0.9.96 REQUIRED)
+find_package(KDevPlatform 1.5.0 REQUIRED)
 
 include_directories(
     ${KDEVPLATFORM_INCLUDE_DIR}
