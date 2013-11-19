@@ -34,6 +34,13 @@
 
 using namespace KDevelop;
 
+enum Column {
+    ClassOrFunctionColumn, ///< Column represents either a base class item or a function item
+    AccessColumn,
+    IsSignalColumn,
+    IsSlotColumn
+};
+
 struct KDevelop::OverridesPagePrivate
 {
     OverridesPagePrivate()
@@ -73,7 +80,7 @@ QList< DeclarationPointer > OverridesPage::selectedOverrides() const
         for (int j = 0; j < item->childCount(); ++j)
         {
             QTreeWidgetItem* child = item->child(j);
-            if (child->checkState(0) == Qt::Checked)
+            if (child->checkState(ClassOrFunctionColumn) == Qt::Checked)
             {
                 kDebug() << "Adding declaration" << d->declarationMap[child]->toString();
                 declarations << d->declarationMap[child];
@@ -102,7 +109,7 @@ void OverridesPage::addBaseClasses(const QList<DeclarationPointer>& directBases,
         DUContext* context = baseClass->internalContext();
 
         QTreeWidgetItem* classItem = new QTreeWidgetItem(overrideTree(), QStringList() << baseClass->qualifiedIdentifier().toString());
-        classItem->setIcon(0, DUChainUtils::iconForDeclaration(baseClass.data()));
+        classItem->setIcon(ClassOrFunctionColumn, DUChainUtils::iconForDeclaration(baseClass.data()));
 
         //For this internal context get all the function declarations inside the class
         foreach (Declaration * childDeclaration, context->localDeclarations()) {
@@ -172,21 +179,21 @@ void OverridesPage::addPotentialOverride(QTreeWidgetItem* classItem, const Decla
 
     QTreeWidgetItem* overrideItem = new QTreeWidgetItem(classItem, QStringList() << childDeclaration->toString());
     overrideItem->setFlags( Qt::ItemFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable) );
-    overrideItem->setCheckState( 0, d->chosenOverrides.contains(childDeclaration) ? Qt::Checked : Qt::Unchecked );
-    overrideItem->setIcon(0, DUChainUtils::iconForDeclaration(childDeclaration.data()));
-    overrideItem->setData(0, Qt::UserRole, QVariant::fromValue(IndexedDeclaration(childDeclaration.data())));
-    overrideItem->setText(1, accessModifier);
+    overrideItem->setCheckState(ClassOrFunctionColumn, d->chosenOverrides.contains(childDeclaration) ? Qt::Checked : Qt::Unchecked);
+    overrideItem->setIcon(ClassOrFunctionColumn, DUChainUtils::iconForDeclaration(childDeclaration.data()));
+    overrideItem->setData(ClassOrFunctionColumn, Qt::UserRole, QVariant::fromValue(IndexedDeclaration(childDeclaration.data())));
+    overrideItem->setText(AccessColumn, accessModifier);
 
     if (ClassFunctionDeclaration* function = dynamic_cast<ClassFunctionDeclaration*>(childDeclaration.data())) {
-        overrideItem->setCheckState( 2, function->isSignal() ? Qt::Checked : Qt::Unchecked );
-        overrideItem->setCheckState( 3, function->isSlot() ? Qt::Checked : Qt::Unchecked );
+        overrideItem->setCheckState(IsSignalColumn, function->isSignal() ? Qt::Checked : Qt::Unchecked);
+        overrideItem->setCheckState(IsSlotColumn, function->isSlot() ? Qt::Checked : Qt::Unchecked);
     }
 
     ClassFunctionDeclaration* classFunction = dynamic_cast<ClassFunctionDeclaration*>(childDeclaration.data());
     if(classFunction && classFunction->isAbstract()) {
-        overrideItem->setIcon(0, KIcon("flag-red"));
-        overrideItem->setCheckState(0, Qt::Checked);
-        overrideItem->setText(0, overrideItem->text(0) + " = 0");///@todo this is C++ specific
+        overrideItem->setIcon(ClassOrFunctionColumn, KIcon("flag-red"));
+        overrideItem->setCheckState(ClassOrFunctionColumn, Qt::Checked);
+        overrideItem->setText(ClassOrFunctionColumn, overrideItem->text(ClassOrFunctionColumn) + " = 0");///@todo this is C++ specific
         classItem->removeChild(overrideItem);
         classItem->insertChild(0, overrideItem);
     }
@@ -209,7 +216,7 @@ void OverridesPage::selectAll()
     for (int i = 0; i < d->overrides->overridesTree->topLevelItemCount(); ++i) {
         QTreeWidgetItem* item = d->overrides->overridesTree->topLevelItem(i);
         for (int j = 0; j < item->childCount(); ++j)
-            item->child(j)->setCheckState(0, Qt::Checked);
+            item->child(j)->setCheckState(ClassOrFunctionColumn, Qt::Checked);
     }
 }
 
@@ -218,7 +225,7 @@ void OverridesPage::deselectAll()
     for (int i = 0; i < d->overrides->overridesTree->topLevelItemCount(); ++i) {
         QTreeWidgetItem* item = d->overrides->overridesTree->topLevelItem(i);
         for (int j = 0; j < item->childCount(); ++j)
-            item->child(j)->setCheckState(0, Qt::Unchecked);
+            item->child(j)->setCheckState(ClassOrFunctionColumn, Qt::Unchecked);
     }
 }
 
