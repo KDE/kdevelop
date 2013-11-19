@@ -1131,7 +1131,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       // apply pointer ops to lvalue type
       visitNodes(this, node->declarator->ptr_ops);
       CppClassType::Ptr constructedType;
-      if (!m_lastType || !m_lastType.cast<PointerType>()) {
+      if (!m_lastType || !isPointerType(m_lastType)) {
         // Do not blindly dereference, esp. for 'foo* f = new foo;' expressions.
         // Note how computeConstructedType only takes the declaration in
         // m_lastDeclarations into account.
