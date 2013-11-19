@@ -32,7 +32,11 @@ class QByteArray;
 typedef QVector<unsigned int> PreprocessedContents;
 
 inline bool isSpace(char c) {
+#ifdef _MSC_VER
+  return isspace(c);
+#else
   return std::isspace(c);
+#endif
 }
 
 inline bool isLetter(char c) {
