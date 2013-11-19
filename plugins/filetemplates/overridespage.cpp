@@ -36,9 +36,8 @@ using namespace KDevelop;
 
 enum Column {
     ClassOrFunctionColumn, ///< Column represents either a base class item or a function item
-    AccessColumn,
-    IsSignalColumn,
-    IsSlotColumn
+    AccessColumn, ///< Column represents the access policy of a function
+    PropertiesColumn ///< Column represents the properties of a function (e.g. if it's a ctor, dtor, signal, slot, ...)
 };
 
 static QString accessPolicyToString(Declaration::AccessPolicy accessPolicy)
@@ -56,6 +55,24 @@ static QString accessPolicyToString(Declaration::AccessPolicy accessPolicy)
         Q_ASSERT(false);
         return QString();
     }
+}
+
+static QString functionPropertiesToString(ClassFunctionDeclaration* decl)
+{
+    Q_ASSERT(decl);
+    QStringList properties;
+    if (decl->isConstructor()) {
+        properties << i18n("Constructor");
+    } else if (decl->isDestructor()) {
+        properties << i18n("Destructor");
+    } else if (decl->isSignal()) {
+        properties << i18n("Signal");
+    } else if (decl->isSlot()) {
+        properties << i18n("Slot");
+    } else if (decl->isAbstract()) {
+        properties << i18n("Abstract function");
+    }
+    return properties.join(", ");
 }
 
 struct KDevelop::OverridesPagePrivate
@@ -192,13 +209,11 @@ void OverridesPage::addPotentialOverride(QTreeWidgetItem* classItem, const Decla
     overrideItem->setIcon(ClassOrFunctionColumn, DUChainUtils::iconForDeclaration(childDeclaration.data()));
     overrideItem->setData(ClassOrFunctionColumn, Qt::UserRole, QVariant::fromValue(IndexedDeclaration(childDeclaration.data())));
     overrideItem->setText(AccessColumn, accessPolicyToString(function->accessPolicy()));
-    overrideItem->setCheckState(IsSignalColumn, function->isSignal() ? Qt::Checked : Qt::Unchecked);
-    overrideItem->setCheckState(IsSlotColumn, function->isSlot() ? Qt::Checked : Qt::Unchecked);
+    overrideItem->setText(PropertiesColumn, functionPropertiesToString(function));
 
     if (function->isAbstract()) {
         overrideItem->setIcon(ClassOrFunctionColumn, KIcon("flag-red"));
         overrideItem->setCheckState(ClassOrFunctionColumn, Qt::Checked);
-        overrideItem->setText(ClassOrFunctionColumn, overrideItem->text(ClassOrFunctionColumn) + " = 0");///@todo this is C++ specific
         classItem->removeChild(overrideItem);
         classItem->insertChild(0, overrideItem);
     }

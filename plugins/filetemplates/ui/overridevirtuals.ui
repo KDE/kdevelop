@@ -61,12 +61,7 @@
         </column>
         <column>
          <property name="text">
-          <string>Signal</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>Slot</string>
+          <string>Properties</string>
          </property>
         </column>
        </widget>
