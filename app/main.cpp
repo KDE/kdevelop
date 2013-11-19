@@ -454,8 +454,9 @@ int main( int argc, char *argv[] )
 
     KDevIDEExtension::init();
 
+    KDevSplashScreen* splash = 0;
     if ( !QProcessEnvironment::systemEnvironment().contains("KDEV_DISABLE_SPLASH") ) {
-        KDevSplashScreen* splash = new KDevSplashScreen;
+        splash = new KDevSplashScreen;
         splash->show();
         splash->repaint();
         app.processEvents();
