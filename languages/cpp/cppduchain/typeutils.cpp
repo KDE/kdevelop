@@ -186,25 +186,30 @@ using namespace KDevelop;
       functions << (*it);
   }
 
-  void getConstructors(const CppClassType::Ptr& klass, const TopDUContext* topContext, QList<Declaration*>& functions) {
+  QList<Declaration*> getConstructors(const CppClassType::Ptr& klass, const TopDUContext* topContext)
+  {
+    QList<Declaration*> functions;
     Declaration* klassDecl = klass->declaration(topContext);
     DUContext* context = klassDecl ? klassDecl->internalContext() : 0;
     if( !context || !context->owner() || !context->owner() ) {
 //       kDebug(9007) << "Tried to get constructors of a class without context";
-      return;
+      return functions;
     }
-    
+
     Identifier id(context->owner()->identifier());
     id.clearTemplateIdentifiers();
 
-    QList<Declaration*> declarations = context->findLocalDeclarations(id, CursorInRevision::invalid(), topContext, AbstractType::Ptr(), DUContext::OnlyFunctions);
+    const QList<Declaration*>& declarations = context->findLocalDeclarations(id, CursorInRevision::invalid(), topContext, AbstractType::Ptr(), DUContext::OnlyFunctions);
 
-    for( QList<Declaration*>::iterator it = declarations.begin(); it != declarations.end(); ++it ) {
-      ClassFunctionDeclaration* functionDeclaration = dynamic_cast<ClassFunctionDeclaration*>( *it );
-      if( functionDeclaration && functionDeclaration->isConstructor() )
-        functions <<  *it;
+    foreach( Declaration* dec, declarations ) {
+      ClassFunctionDeclaration* functionDeclaration = dynamic_cast<ClassFunctionDeclaration*>( dec );
+      if( functionDeclaration && functionDeclaration->isConstructor() ) {
+        functions << dec;
+      }
     }
+    return functions;
   }
+
   bool isPublicBaseClass( const CppClassType::Ptr& c, const CppClassType::Ptr& base, const KDevelop::TopDUContext* topContext, int* baseConversionLevels ) {
     if (!c || !base) {
       return false;
