@@ -45,7 +45,9 @@ void ExpressionVisitor::endVisit(QmlJS::AST::IdentifierExpression* node)
 {
     const QualifiedIdentifier name(node->name.toString());
     DeclarationPointer dec = QmlJS::getDeclaration(name, DUContextPointer(m_context));
-    if (dec) {
+    // TODO: the declaration won't have a type yet, if it is used recursively, we'd need to delay it then
+    //       or add proper reference/pointer semantics to Declaration::abstractType
+    if (dec && dec->abstractType()) {
         m_lastType.push(dec->abstractType());
     }
 }
@@ -76,7 +78,9 @@ void ExpressionVisitor::endVisit(QmlJS::AST::TrueLiteral* /*node*/)
 
 void ExpressionVisitor::endVisit(QmlJS::AST::FunctionExpression* /*node*/)
 {
-    m_lastType.push(AbstractType::Ptr(new FunctionType));
+    FunctionType::Ptr type(new FunctionType);
+    type->setReturnType(AbstractType::Ptr(new IntegralType(IntegralType::TypeVoid)));
+    m_lastType.push(type.cast<AbstractType>());
 }
 
 AbstractType::Ptr ExpressionVisitor::lastType()

@@ -117,6 +117,11 @@ public:
     void setContextOnNode(QmlJS::AST::Node* node, KDevelop::DUContext* context);
     KDevelop::DUContext* contextFromNode(QmlJS::AST::Node* node) const;
 
+    /**
+     * Dump AST tree to stdout.
+     */
+    void dumpNode(QmlJS::AST::Node* node) const;
+
 private:
     KDevelop::IndexedString m_url;
     QmlJS::Document::MutablePtr m_doc;
