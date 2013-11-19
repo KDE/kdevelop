@@ -294,7 +294,7 @@ GrepDialog::~GrepDialog()
     cg.writeEntry("file_patterns", qCombo2StringList(filesCombo));
     cg.writeEntry("LastUsedTemplateIndex", templateTypeCombo->currentIndex());
     cg.writeEntry("LastUsedTemplateString", qCombo2StringList(templateEdit));
-    cg.writeEntry("LastUsedReplacementTemplateString", qCombo2StringList(templateEdit));
+    cg.writeEntry("LastUsedReplacementTemplateString", qCombo2StringList(replacementTemplateEdit));
     cg.writeEntry("SearchPaths", qCombo2StringList(searchPaths));
     cg.sync();
 }
