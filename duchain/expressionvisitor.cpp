@@ -76,7 +76,9 @@ void ExpressionVisitor::endVisit(QmlJS::AST::TrueLiteral* /*node*/)
 
 void ExpressionVisitor::endVisit(QmlJS::AST::FunctionExpression* /*node*/)
 {
-    m_lastType.push(AbstractType::Ptr(new FunctionType));
+    FunctionType::Ptr type(new FunctionType);
+    type->setReturnType(AbstractType::Ptr(new IntegralType(IntegralType::TypeVoid)));
+    m_lastType.push(type.cast<AbstractType>());
 }
 
 AbstractType::Ptr ExpressionVisitor::lastType()
