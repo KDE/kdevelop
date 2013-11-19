@@ -16,16 +16,19 @@
    Boston, MA 02110-1301, USA.
 */
 
-// "useCount" : 5
+// "useCount" : 7
 struct Blub
 {
-  // "useCount" : 0
-  Blub(Blub *);
-  // "useCount" : 0
+  // "useCount" : 1
+  Blub(Blub * = 0);
+  // "useCount" : 1
   Blub& operator=(const Blub&) = delete;
 };
 
 void foo()
 {
   Blub* f = new Blub;
+  Blub f2 = f;
+  Blub f3;
+  f3 = f2;
 }

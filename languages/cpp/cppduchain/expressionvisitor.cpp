@@ -1162,11 +1162,14 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         { // report operator= use in i.e.: foo = bar;
           token = node->initializer->start_token;
           fail = !buildParametersFromExpression(node->initializer->initializer_clause);
-          LOCKDUCHAIN;
           declarations.clear();
+          LOCKDUCHAIN;
           if ( ClassDeclaration* cdec = dynamic_cast<ClassDeclaration*>(constructedType->declaration(m_source)) ) {
+            // constructors are handled automatically in the overload resultion
+            declarations << DeclarationPointer(cdec);
             ///TODO: global operator= functions, for now only class members are handled
-            foreach(Declaration* dec, cdec->internalContext()->findDeclarations(Identifier("operator="))) {
+            static const Identifier opEq("operator=");
+            foreach(Declaration* dec, cdec->internalContext()->findDeclarations(opEq)) {
               declarations << DeclarationPointer(dec);
             }
           }
