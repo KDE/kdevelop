@@ -207,13 +207,13 @@ void ExpressionVisitor::reportRealProblems(bool report) {
   m_reportRealProblems = report;
 }
 
-void ExpressionVisitor::realProblem( ProblemPointer problem ) {
+void ExpressionVisitor::realProblem( const ProblemPointer& problem ) {
   if(m_reportRealProblems && m_problems.size() < maxExpressionVisitorProblems) {
     m_problems << problem;
   }
 }
 
-QList< KSharedPtr< KDevelop::Problem > > ExpressionVisitor::realProblems() const {
+QList<ProblemPointer> ExpressionVisitor::realProblems() const {
   return m_problems;
 }
 
@@ -254,16 +254,15 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
 
     isConst |= isConstant(base);
 
-    IdentifiedType* idType = dynamic_cast<IdentifiedType*>( base.unsafeData() );
     //Make sure that it is a structure-type, because other types do not have members
-    StructureType* structureType = dynamic_cast<StructureType*>( base.unsafeData() );
+    const StructureType::Ptr& structureType = base.cast<StructureType>();
 
-    if( !structureType || !idType ) {
+    if( !structureType ) {
       problem( node, QString("findMember called on non-identified or non-structure type \"%1\"").arg(base ? base->toString() : "<type disappeared>") );
       return;
     }
 
-    Declaration* declaration = idType->declaration(topContext());
+    Declaration* declaration = structureType->declaration(topContext());
     MUST_HAVE(declaration);
     MUST_HAVE(declaration->context());
 
@@ -385,7 +384,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
 
     clearLast();
 
-    PointerType* pnt = dynamic_cast<PointerType*>( base.unsafeData() );
+    const PointerType::Ptr& pnt = base.cast<PointerType>();
     if( pnt ) {
       if( constant )
         (*constant) |= (pnt->modifiers() & AbstractType::ConstModifier);
@@ -444,17 +443,16 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
 
       isConst |= isConstant(m_lastType);
 
-      IdentifiedType* idType = dynamic_cast<IdentifiedType*>( m_lastType.unsafeData() );
       //Make sure that it is a structure-type, because other types do not have members
-      StructureType* structureType = dynamic_cast<StructureType*>( m_lastType.unsafeData() );
+      const StructureType::Ptr& structureType = m_lastType.cast<StructureType>();
 
-      if( !structureType || !idType ) {
+      if( !structureType ) {
         problem( node, QString("member searched in non-identified or non-structure type \"%1\"").arg(m_lastType ? m_lastType->toString() : "<type disappeared>") );
         clearLast();
         return;
       }
 
-      Declaration* declaration = idType->declaration(topContext());
+      Declaration* declaration = structureType->declaration(topContext());
       MUST_HAVE(declaration);
       MUST_HAVE(declaration->context());
 
@@ -483,9 +481,10 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
     if( identifier == trueIdentifier || identifier == falseIdentifier ) {
       ///We have a boolean constant, we need to catch that here
       LOCKDUCHAIN;
-      m_lastType = AbstractType::Ptr(new ConstantIntegralType(IntegralType::TypeBoolean));
+      ConstantIntegralType::Ptr type(new ConstantIntegralType(IntegralType::TypeBoolean));
+      type->setValue<qint64>( identifier == trueIdentifier );
+      m_lastType = type.cast<AbstractType>();
       m_lastInstance = Instance( true );
-      static_cast<ConstantIntegralType*>(m_lastType.unsafeData())->setValue<qint64>( identifier == trueIdentifier );
     } else {
       LOCKDUCHAIN;
 
@@ -510,7 +509,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
         missing->searchStartContext = const_cast<DUContext*>(m_currentContext);
 
         if(m_reportRealProblems && m_problems.size() < maxExpressionVisitorProblems) {
-          KSharedPtr<KDevelop::Problem> problem(new Cpp::MissingDeclarationProblem(missing));
+          ProblemPointer problem(new Cpp::MissingDeclarationProblem(missing));
           problem->setSource(KDevelop::ProblemData::SemanticAnalysis);
           CppEditorIntegrator editor(session());
           
@@ -545,7 +544,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
           m_lastInstance = Instance(false);
 
         //A CppTemplateParameterType represents an unresolved template-parameter, so create a DelayedType instead.
-        if( dynamic_cast<CppTemplateParameterType*>(m_lastType.unsafeData()) )
+        if( m_lastType.cast<CppTemplateParameterType>() )
           createDelayedType(node, false);
       }
     }
@@ -604,11 +603,13 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
 
 
         if( num.endsWith('f') ) {
-          m_lastType = AbstractType::Ptr(new ConstantIntegralType(IntegralType::TypeFloat));
-          static_cast<ConstantIntegralType*>(m_lastType.unsafeData())->setValue<float>((float)val);
+          ConstantIntegralType::Ptr type(new ConstantIntegralType(IntegralType::TypeFloat));
+          type->setValue<float>((float)val);
+          m_lastType = type.cast<AbstractType>();
         } else {
-          m_lastType = AbstractType::Ptr(new ConstantIntegralType(IntegralType::TypeDouble));
-          static_cast<ConstantIntegralType*>(m_lastType.unsafeData())->setValue<double>(val);
+          ConstantIntegralType::Ptr type(new ConstantIntegralType(IntegralType::TypeDouble));
+          type->setValue<double>(val);
+          m_lastType = type.cast<AbstractType>();
         }
       } else {
         qint64 val = 0;
@@ -637,7 +638,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
     } else if(token.kind == Token_char_literal) {
       // char literal e.g. 'x'
       LOCKDUCHAIN;
-      ConstantIntegralType* charType = new ConstantIntegralType(IntegralType::TypeChar);
+      ConstantIntegralType::Ptr charType(new ConstantIntegralType(IntegralType::TypeChar));
       if ( token.size == 3 ) {
         charType->setValue<char>( m_session->token_stream->symbolByteArray(token).at(1) );
       } else {
@@ -663,14 +664,15 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
         }
       }
 
-      m_lastType = AbstractType::Ptr(charType);
+      m_lastType = charType.cast<AbstractType>();
       m_lastInstance = Instance( true );
     } else if (token.kind == Token_true || token.kind == Token_false) {
       ///We have a boolean constant, we need to catch that here
       LOCKDUCHAIN;
-      m_lastType = AbstractType::Ptr(new ConstantIntegralType(IntegralType::TypeBoolean));
+      ConstantIntegralType::Ptr type(new ConstantIntegralType(IntegralType::TypeBoolean));
+      type->setValue<qint64>( token.kind == Token_true );
+      m_lastType = type.cast<AbstractType>();
       m_lastInstance = Instance( true );
-      static_cast<ConstantIntegralType*>(m_lastType.unsafeData())->setValue<qint64>( token.kind == Token_true );
     } else if( token.kind == Token_this ) {
       LOCKDUCHAIN;
 
@@ -817,7 +819,7 @@ struct ConstantUnaryExpressionEvaluator {
   /**
    * Writes the results into endValue, type, and modifier.
    * */
-  ConstantUnaryExpressionEvaluator( quint16 tokenKind, ConstantIntegralType* left ) {
+  ConstantUnaryExpressionEvaluator( quint16 tokenKind, const ConstantIntegralType::Ptr& left ) {
     endValue = 0;
     type = left->dataType();
     modifier = left->modifiers();
@@ -839,7 +841,7 @@ struct ConstantUnaryExpressionEvaluator {
   }
 
   //This function is used to disable some operators on bool and double values
-  void evaluateSpecialTokens( quint16 tokenKind, ConstantIntegralType* left ) {
+  void evaluateSpecialTokens( quint16 tokenKind, const ConstantIntegralType::Ptr& left ) {
     switch( tokenKind ) {
       case '~':
         endValue = ~left->value<Type>();
@@ -850,22 +852,23 @@ struct ConstantUnaryExpressionEvaluator {
     }
   }
 
-  AbstractType::Ptr createType() {
-    AbstractType::Ptr ret = AbstractType::Ptr(new ConstantIntegralType(type));
+  AbstractType::Ptr createType() const
+  {
+    ConstantIntegralType::Ptr ret(new ConstantIntegralType(type));
     ret->setModifiers(modifier);
-    static_cast<ConstantIntegralType*>(ret.unsafeData())->setValue<Type>( endValue );
-    return ret;
+    ret->setValue<Type>( endValue );
+    return ret.cast<AbstractType>();
   }
 };
 
 template<>
-void ConstantUnaryExpressionEvaluator<double>::evaluateSpecialTokens( quint16 tokenKind, ConstantIntegralType* left ) {
+void ConstantUnaryExpressionEvaluator<double>::evaluateSpecialTokens( quint16 tokenKind, const ConstantIntegralType::Ptr& left ) {
   Q_UNUSED(tokenKind);
   Q_UNUSED(left);
 }
 
 template<>
-void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( quint16 tokenKind, ConstantIntegralType* left ) {
+void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( quint16 tokenKind, const ConstantIntegralType::Ptr& left ) {
   Q_UNUSED(tokenKind);
   Q_UNUSED(left);
 }
@@ -1003,7 +1006,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       return;
     }
 
-    if( dynamic_cast<DelayedType*>(rightType.unsafeData()) || dynamic_cast<DelayedType*>(leftType.unsafeData()) ) {
+    if( rightType.cast<DelayedType>() || leftType.cast<DelayedType>() ) {
       m_lastInstance = Instance(true);
       createDelayedType(node);
       return;
@@ -1098,7 +1101,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         ///Allow non-types, because we sometimes don't know whether something is a type or not, and it may get parsed as a type.
         m_lastInstance = Instance(decls.first());
 
-      if( dynamic_cast<CppTemplateParameterType*>(m_lastType.unsafeData()) )
+      if( m_lastType.cast<CppTemplateParameterType>() )
         createDelayedType(ast, false);
     } else {
       problem(ast, "Could not resolve type");
@@ -1491,7 +1494,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     visit(node->condition);
 
 
-    if( dynamic_cast<DelayedType*>(m_lastType.unsafeData()) ) {
+    if( m_lastType.cast<DelayedType>() ) {
       //Store the expression so it's evaluated later
       m_lastInstance = Instance(true);
       createDelayedType(node);
@@ -1513,7 +1516,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
     {
       LOCKDUCHAIN;
-      if( ConstantIntegralType* condition = dynamic_cast<ConstantIntegralType*>( conditionType.unsafeData() ) ) {
+      if( const ConstantIntegralType::Ptr& condition = conditionType.cast<ConstantIntegralType>() ) {
         ///For constant integral types, the condition could be evaluated, so we choose the correct result.
         if( condition->value<quint64>() == 0 ) {
           ///The right expression is the correct one, so do nothing
@@ -1627,11 +1630,11 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     break;
     default:
     {
-      KDevelop::IntegralType* integral = dynamic_cast<KDevelop::IntegralType*>(m_lastType.unsafeData());
+      const IntegralType::Ptr& integral = m_lastType.cast<IntegralType>();
       if( integral ) {
         //The type of integral types does not change on unary operators
         //Eventually evaluate the value of constant integral types
-        ConstantIntegralType* constantIntegral = dynamic_cast<ConstantIntegralType*>(integral);
+        const ConstantIntegralType::Ptr& constantIntegral = integral.cast<ConstantIntegralType>();
 
         if( constantIntegral ) {
 
@@ -1711,7 +1714,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     if( !m_lastType )
       return;
 
-    KDevelop::FunctionType* f = dynamic_cast<KDevelop::FunctionType*>( m_lastType.unsafeData() );
+    const FunctionType::Ptr& f = m_lastType.cast<FunctionType>();
     if( !f ) {
       LOCKDUCHAIN;
       problem(node, QString("cannot get return-type of type %1, it is not a function-type").arg(m_lastType->toString()));
@@ -1931,7 +1934,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     if( !chosenFunction && constructedType )
     {
       //Default-constructor is used
-      m_lastType = AbstractType::Ptr(constructedType.unsafeData());
+      m_lastType = constructedType.cast<AbstractType>();
       DeclarationPointer decl(constructedType->declaration(topContext()));
       m_lastInstance = Instance(decl.data());
       m_lastDeclarations.clear();
@@ -1978,8 +1981,8 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       // Remove the MissingDeclarationProblem which has been created alongside MissingDeclarationType
       for(int idx = m_problems.size()-1; idx >= 0; --idx)
       {
-        KSharedPtr<KDevelop::Problem>& prob(m_problems[idx]);
-        MissingDeclarationProblem * pMissing = dynamic_cast<MissingDeclarationProblem*>(prob.data());
+        const ProblemPointer& prob = m_problems[idx];
+        const MissingDeclarationProblem* pMissing = dynamic_cast<const MissingDeclarationProblem*>(prob.constData());
         if (pMissing && pMissing->type == missing )
         {
           m_problems.removeAt(idx);
@@ -1992,7 +1995,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
     if( constructedType ) {
       //Constructor was called
-      m_lastType = AbstractType::Ptr(constructedType.unsafeData());
+      m_lastType = constructedType.cast<AbstractType>();
       m_lastInstance = Instance(constructedType->declaration(topContext()));
     } else if (chosenFunction) {
       KDevelop::FunctionType::Ptr functionType = chosenFunction->abstractType().cast<KDevelop::FunctionType>();
@@ -2233,7 +2236,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
     PointerType::Ptr p( new PointerType() );
 
-    p->setBaseType( AbstractType::Ptr(i.unsafeData()) );
+    p->setBaseType( i.cast<AbstractType>() );
 
     m_lastType = p.cast<AbstractType>();
     m_lastInstance = Instance(true);
@@ -2250,7 +2253,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     ///post-fix increment/decrement like "i++" or "i--"
     ///This does neither change the evaluated value, nor the type(except for overloaded operators)
 
-    if( dynamic_cast<KDevelop::IntegralType*>(m_lastType.unsafeData()) ) {
+    if( m_lastType.cast<IntegralType>() ) {
       ///Leave the type and its value alone
     } else {
       ///It is not an integral type, try finding an overloaded operator and use the return-value

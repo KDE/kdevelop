@@ -96,7 +96,7 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionVisitor : public DefaultVisitor {
     void reportRealProblems(bool);
     
     //Returns all posted real problems that appeared during this run. Only if reportRealProblems(true) has been called before.
-    QList<KSharedPtr<KDevelop::Problem> > realProblems() const;
+    QList<ProblemPointer> realProblems() const;
     
     ///Returns the last queried list of declarations
     QList<DeclarationPointer> lastDeclarations() const;
@@ -144,7 +144,7 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionVisitor : public DefaultVisitor {
      *
      * @see reportRealProblems()
      */
-    void realProblem( ProblemPointer problem );
+    void realProblem( const ProblemPointer& problem );
 
     const DUContext* currentContext() const;
 
@@ -219,7 +219,7 @@ private:
     const KDevelop::TopDUContext* m_topContext;
     bool m_reportRealProblems;
 
-    QList<KSharedPtr<KDevelop::Problem> > m_problems;
+    QList<ProblemPointer> m_problems;
 
     /// set to true when member access on a const object should result in a const type
     /// i.e.: 'const A* a; decltype((a->x)) b;', here b should be const
