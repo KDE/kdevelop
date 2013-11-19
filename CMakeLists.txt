@@ -42,14 +42,6 @@ if("${_isSystemLibDir}" STREQUAL "-1")
 endif("${_isSystemLibDir}" STREQUAL "-1")
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
-set(KOMPARE_FOUND FALSE)
-#macro_optional_find_package(Kompare)
-macro_bool_to_01(KOMPARE_FOUND HAVE_KOMPARE)
-#macro_log_feature(KOMPARE_FOUND "Kompare" "KPart to view file differences."
-#                        "http://www.caffeinated.me.uk/kompare/" FALSE ""
-#                        "Required for difference checking. From KDE SDK package, KDE 4.3.61 or higher needed.")
-
-
 add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS -DQURL_NO_CAST_FROM_QSTRING)
 

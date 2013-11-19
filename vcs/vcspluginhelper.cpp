@@ -58,10 +58,6 @@
 #include <language/duchain/duchain.h>
 #include <language/interfaces/editorcontext.h>
 
-#include <config-kdevplatform.h>
-#ifdef HAVE_KOMPARE
-#include <interfaces/ipatchdocument.h>
-#endif
 #include <interfaces/ipatchsource.h>
 #include <KTemporaryFile>
 #include <qtextedit.h>

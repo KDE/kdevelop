@@ -115,7 +115,6 @@ set(kdevplatformlanguage_LIB_SRCS
     codegen/coderepresentation.cpp
     codegen/documentchangeset.cpp
     codegen/duchainchangeset.cpp
-    codegen/komparesupport.cpp
     codegen/utilities.cpp
     codegen/templatesmodel.cpp
     codegen/templateclassgenerator.cpp

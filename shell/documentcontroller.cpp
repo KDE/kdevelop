@@ -68,10 +68,6 @@ Boston, MA 02110-1301, USA.
 #include <config-kdevplatform.h>
 #include <language/backgroundparser/backgroundparser.h>
 
-#ifdef HAVE_KOMPARE
-    #include "patchdocument.h"
-#endif
-
 #define EMPTY_DOCUMENT_URL i18n("Untitled")
 
 namespace KDevelop

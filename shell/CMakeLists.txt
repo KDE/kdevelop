@@ -85,10 +85,6 @@ set(kdevplatformshell_LIB_SRCS
 #     kross/wrappers/krossqtoolbar.cpp
 )
 
-if(HAVE_KOMPARE)
-	set(kdevplatformshell_LIB_SRCS ${kdevplatformshell_LIB_SRCS} patchdocument.cpp)
-endif(HAVE_KOMPARE)
-
 # Check if KTE is new enough to have the EditVIMode view mode flag
 try_compile( HAVE_EDITVIMODE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/testeditvimode.cpp
              CMAKE_FLAGS "-DINCLUDE_DIRECTORIES=${KDE4_INCLUDES}"
