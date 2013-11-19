@@ -17,6 +17,7 @@
 *************************************************************************************/
 
 #include "parsesession.h"
+#include "debugvisitor.h"
 #include <qmljs/parser/qmljsast_p.h>
 
 #include <language/editor/simplerange.h>
@@ -153,4 +154,10 @@ void ParseSession::setContextOnNode(QmlJS::AST::Node* node, DUContext* context)
 DUContext* ParseSession::contextFromNode(QmlJS::AST::Node* node) const
 {
     return m_astToContext.value(node);
+}
+
+void ParseSession::dumpNode(QmlJS::AST::Node* node) const
+{
+    DebugVisitor v(this);
+    v.startVisiting(node);
 }

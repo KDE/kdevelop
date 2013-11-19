@@ -30,7 +30,7 @@ class ParseSession;
 class KDEVQMLJSDUCHAIN_EXPORT DebugVisitor : public QmlJS::AST::Visitor
 {
 public:
-    DebugVisitor(ParseSession* session);
+    DebugVisitor(const ParseSession* session);
 
     void startVisiting(QmlJS::AST::Node* node);
 
@@ -48,7 +48,7 @@ private:
     };
     void printNode(QmlJS::AST::Node* node, Position position);
 
-    ParseSession* m_session;
+    const ParseSession* m_session;
     uint m_depth;
 };
 

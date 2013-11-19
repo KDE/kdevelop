@@ -124,7 +124,7 @@ QString DebugVisitor::stringForAstKind(int kind)
     return "<unknown node kind>";
 }
 
-DebugVisitor::DebugVisitor(ParseSession* session)
+DebugVisitor::DebugVisitor(const ParseSession* session)
 : m_session(session)
 , m_depth(0)
 {
