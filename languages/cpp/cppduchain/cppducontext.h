@@ -663,14 +663,12 @@ class CppDUContext : public BaseContext {
         
         l.unlock();
         
-        if(first->isAnonymous()) {
-          Q_ASSERT(first->m_instantiatedFrom == this);
-          delete first;
-        } else {
-          Q_ASSERT(first->m_instantiatedFrom == this);
-          first->setInstantiatedFrom(0, InstantiationInformation());
-          Q_ASSERT(first->m_instantiatedFrom == 0);
-        }
+        ///TODO: anonymous contexts should get deleted but that is crashy
+        ///      see also declarationbuilder which also encountered this
+        ///      issue before and also removed the context deletion...
+        Q_ASSERT(first->m_instantiatedFrom == this);
+        first->setInstantiatedFrom(0, InstantiationInformation());
+        Q_ASSERT(first->m_instantiatedFrom == 0);
         
         oldFirst = first;
         

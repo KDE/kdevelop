@@ -5048,8 +5048,7 @@ void TestDUChain::testTemplatesRebind2() {
 
   LockedTopDUContext top = parse(method, DumpNone);
 
-  QList<Declaration*> constructors;
-  TypeUtils::getConstructors( top->localDeclarations()[2]->abstractType().cast<CppClassType>(), top, constructors );
+  QList<Declaration*> constructors = TypeUtils::getConstructors( top->localDeclarations()[2]->abstractType().cast<CppClassType>(), top );
   QCOMPARE(constructors.size(), 1);
   OverloadResolver resolution( DUContextPointer(top->localDeclarations()[2]->internalContext()), TopDUContextPointer(top) );
   QVERIFY(resolution.resolveConstructor( OverloadResolver::ParameterList() ));

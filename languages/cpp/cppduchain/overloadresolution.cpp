@@ -137,11 +137,9 @@ void OverloadResolver::expandDeclarations( const QList<Declaration*>& declaratio
       else
       {
         //Classes should be substituted with their constructors
-        QList<Declaration*> decls;
-        TypeUtils::getConstructors( klass, m_topContext.data(), decls );
-
-        foreach( Declaration* decl, decls )
-        newDeclarations.insert( decl );
+        foreach( Declaration* decl, TypeUtils::getConstructors( klass, m_topContext.data() ) ) {
+          newDeclarations.insert( decl );
+        }
       }
     }
     else
@@ -170,10 +168,9 @@ void OverloadResolver::expandDeclarations( const QList<QPair<OverloadResolver::P
       else
       {
         //Classes should be substituted with their constructors
-        QList<Declaration*> functions;
-        TypeUtils::getConstructors( klass, m_topContext.data(), functions );
-        foreach( Declaration* f, functions )
-        newDeclarations.insert( f, decl.first );
+        foreach( Declaration* f, TypeUtils::getConstructors( klass, m_topContext.data() ) ) {
+          newDeclarations.insert( f, decl.first );
+        }
       }
     }
     else
