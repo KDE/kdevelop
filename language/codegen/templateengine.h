@@ -49,6 +49,7 @@ public:
 
 private:
     TemplateEngine();
+    ~TemplateEngine();
 
     Q_DISABLE_COPY(TemplateEngine)
 
