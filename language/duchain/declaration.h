@@ -198,7 +198,7 @@ public:
    * */
   void setExplicitlyDeleted(bool deleted);
   /**
-   * Determine whether this declaration is implicitly created or not.
+   * Determine whether this declaration is "explicitly deleted" or not.
    */
   bool isExplicitlyDeleted() const;
 
