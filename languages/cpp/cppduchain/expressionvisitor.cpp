@@ -1128,7 +1128,16 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
   {
     if(node->declarator)
     {
-      CppClassType::Ptr constructedType = computeConstructedType();
+      // apply pointer ops to lvalue type
+      visitNodes(this, node->declarator->ptr_ops);
+      CppClassType::Ptr constructedType;
+      if (!m_lastType || !m_lastType.cast<PointerType>()) {
+        // Do not blindly dereference, esp. for 'foo* f = new foo;' expressions.
+        // Note how computeConstructedType only takes the declaration in
+        // m_lastDeclarations into account.
+        // Thus, if the lvalue is a pointer we definitely should not get a ClassType.
+        constructedType = computeConstructedType();
+      }
 
       //Build constructor uses (similar to visitFunctionCall)
 
@@ -1171,8 +1180,6 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       if(fail || !constructedType) {
         DefaultVisitor::visitInitDeclarator(node);
         return;
-      } else {
-        visitNodes(this,node->declarator->ptr_ops);
       }
 
       DeclarationPointer chosenFunction;
