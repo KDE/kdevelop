@@ -31,8 +31,6 @@
 #include <QLayout>
 #include <QSplitter>
 #include <QLabel>
-#include <QStandardItemModel>
-#include <QTreeView>
 #include <QDebug>
 #include <KPushButton>
 #include "coderepresentation.h"

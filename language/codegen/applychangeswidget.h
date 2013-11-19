@@ -25,11 +25,7 @@
 
 namespace KTextEditor {
 class Document;
-class Range;
 }
-
-class KUrl;
-class QModelIndex;
 
 namespace KDevelop
 {
