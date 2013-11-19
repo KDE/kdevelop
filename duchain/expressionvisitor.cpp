@@ -45,7 +45,9 @@ void ExpressionVisitor::endVisit(QmlJS::AST::IdentifierExpression* node)
 {
     const QualifiedIdentifier name(node->name.toString());
     DeclarationPointer dec = QmlJS::getDeclaration(name, DUContextPointer(m_context));
-    if (dec) {
+    // TODO: the declaration won't have a type yet, if it is used recursively, we'd need to delay it then
+    //       or add proper reference/pointer semantics to Declaration::abstractType
+    if (dec && dec->abstractType()) {
         m_lastType.push(dec->abstractType());
     }
 }
