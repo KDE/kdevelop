@@ -60,8 +60,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT ApplyChangesWidget : public KDialog
         void updateDiffView(int index = -1);
     
     public Q_SLOTS:
-        ///Called when a change between comparison and edition is requested
-        void switchEditView();
         ///Called to signal a change to the currently viewed index
         void indexChanged(int);
 

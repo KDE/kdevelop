@@ -19,7 +19,6 @@
 
 #include "applychangeswidget.h"
 
-#include "komparesupport.h"
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
 
@@ -58,7 +57,6 @@ public:
     }
 
     void createEditPart(const KDevelop::IndexedString& url);
-    void updateButtonLabel();
 
     ApplyChangesWidget * const parent;
     int m_index;
@@ -67,8 +65,6 @@ public:
     QList<IndexedString > m_files;
     KTabWidget * m_documentTabs;
     QLabel* m_info;
-    
-    KompareWidgets m_kompare;
 };
 
 ApplyChangesWidget::ApplyChangesWidget(QWidget* parent)
@@ -76,14 +72,8 @@ ApplyChangesWidget::ApplyChangesWidget(QWidget* parent)
 {
     setSizeGripEnabled(true);
     setInitialSize(QSize(800, 400));
-    
-    KDialog::setButtons(KDialog::Ok | KDialog::Cancel | KDialog::User1);
-    KPushButton * switchButton(KDialog::button(KDialog::User1));
-    switchButton->setText(i18n("Edit Document"));
-    switchButton->setEnabled(d->m_kompare.enabled);
-    
-    connect(switchButton, SIGNAL(released()),
-            this, SLOT(switchEditView()));
+
+    KDialog::setButtons(KDialog::Ok | KDialog::Cancel);
     
     QWidget* w=new QWidget(this);
     d->m_info=new QLabel(w);
@@ -126,13 +116,11 @@ void ApplyChangesWidget::addDocuments(const IndexedString & original)
         d->m_documentTabs->addTab(w, original.str());
         d->m_documentTabs->setCurrentWidget(w);
 
-        
         d->m_files.insert(d->m_index, original);
         d->createEditPart(original);
     } else {
         d->m_index=idx;
     }
-    switchEditView();
 }
 
 bool ApplyChangesWidget::applyAllChanges()
@@ -157,16 +145,6 @@ Q_DECLARE_METATYPE(KTextEditor::Range)
 
 namespace KDevelop
 {
-
-void ApplyChangesWidgetPrivate::updateButtonLabel()
-{
-    KPushButton * switchButton(parent->button(KDialog::User1));
-    
-    if(m_kompare.widgetActive(m_index))
-        switchButton->setText(i18n("Edit Document"));
-    else
-        switchButton->setText(i18n("View Differences"));
-}
 
 void ApplyChangesWidgetPrivate::createEditPart(const IndexedString & file)
 {
@@ -210,42 +188,17 @@ void ApplyChangesWidgetPrivate::createEditPart(const IndexedString & file)
     v->setSizes(QList<int>() << 400 << 100);
 }
 
-void ApplyChangesWidget::switchEditView()
-{
-    if(d->m_kompare.widgetActive(d->m_index))
-    {
-        //Chage into editPart
-        d->m_editParts[d->m_index]->widget()->parentWidget()->setVisible(true);
-        d->m_kompare.hideWidget(d->m_index);
-    }
-    else
-    {
-        d->m_editParts[d->m_index]->widget()->parentWidget()->setVisible(false);
-        //Change into KomparePart
-        d->m_kompare.compare(d->m_files[d->m_index], document()->text(),
-                             d->m_documentTabs->widget(d->m_index), d->m_index);
-    }
-    
-    d->updateButtonLabel();
-}
-
 void ApplyChangesWidget::indexChanged(int newIndex)
 {
     Q_ASSERT(newIndex != -1);
     d->m_index = newIndex;
-    d->updateButtonLabel();
 }
 
 void ApplyChangesWidget::updateDiffView(int index)
 {
     int prevIndex = d->m_index;
     d->m_index = index == -1 ? d->m_index : index;
-    
-    switchEditView();
-    switchEditView();
-    
     d->m_index = prevIndex;
-    
 }
 
 }
