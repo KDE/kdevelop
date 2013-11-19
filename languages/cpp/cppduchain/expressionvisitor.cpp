@@ -1719,8 +1719,6 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
   {
     CppClassType::Ptr constructedType;
 
-    AbstractType::Ptr oldLastType = m_lastType;
-
     if(!m_lastInstance) {
       LOCKDUCHAIN;
       if(m_lastDeclarations.isEmpty() && m_lastType && !m_lastInstance) {
