@@ -41,6 +41,23 @@ enum Column {
     IsSlotColumn
 };
 
+static QString accessPolicyToString(Declaration::AccessPolicy accessPolicy)
+{
+    switch (accessPolicy) {
+    case Declaration::DefaultAccess:
+    case Declaration::Public:
+        return i18n("Public");
+    case Declaration::Protected:
+        return i18n("Protected");
+    case Declaration::Private:
+        return i18n("Private");
+    default:
+        qCritical("Unexpected value for Declaration::AccessPolicy: %d", accessPolicy);
+        Q_ASSERT(false);
+        return QString();
+    }
+}
+
 struct KDevelop::OverridesPagePrivate
 {
     OverridesPagePrivate()
@@ -143,6 +160,17 @@ void OverridesPage::addBaseClasses(const QList<DeclarationPointer>& directBases,
 
 void OverridesPage::addPotentialOverride(QTreeWidgetItem* classItem, const DeclarationPointer& childDeclaration)
 {
+    ClassFunctionDeclaration* function = dynamic_cast<ClassFunctionDeclaration*>(childDeclaration.data());
+    if (!function) {
+        kDebug() << "Declaration is not a function:" << childDeclaration->identifier().toString();
+        return;
+    }
+
+    if (function->accessPolicy() == Declaration::Private) {
+        kDebug() << "Declaration is private, returning:" << function->identifier().toString();
+        return;
+    }
+
     kDebug() << childDeclaration->toString();
     if (d->overriddenFunctions.contains(childDeclaration->identifier()))
     {
@@ -158,39 +186,16 @@ void OverridesPage::addPotentialOverride(QTreeWidgetItem* classItem, const Decla
 
     d->overriddenFunctions.insert(childDeclaration->identifier(), childDeclaration);
 
-    QString accessModifier;
-    if (ClassMemberDeclaration* member = dynamic_cast<ClassMemberDeclaration*>(childDeclaration.data())) {
-        switch (member->accessPolicy()) {
-            case Declaration::DefaultAccess:
-            case Declaration::Public:
-                accessModifier = i18n("Public");
-                break;
-
-            case Declaration::Protected:
-                accessModifier = i18n("Protected");
-                break;
-
-            case Declaration::Private:
-                accessModifier = i18n("Private");
-                kDebug() << "Declaration is private, returning";
-                return;
-        }
-    }
-
     QTreeWidgetItem* overrideItem = new QTreeWidgetItem(classItem, QStringList() << childDeclaration->toString());
     overrideItem->setFlags( Qt::ItemFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable) );
     overrideItem->setCheckState(ClassOrFunctionColumn, d->chosenOverrides.contains(childDeclaration) ? Qt::Checked : Qt::Unchecked);
     overrideItem->setIcon(ClassOrFunctionColumn, DUChainUtils::iconForDeclaration(childDeclaration.data()));
     overrideItem->setData(ClassOrFunctionColumn, Qt::UserRole, QVariant::fromValue(IndexedDeclaration(childDeclaration.data())));
-    overrideItem->setText(AccessColumn, accessModifier);
+    overrideItem->setText(AccessColumn, accessPolicyToString(function->accessPolicy()));
+    overrideItem->setCheckState(IsSignalColumn, function->isSignal() ? Qt::Checked : Qt::Unchecked);
+    overrideItem->setCheckState(IsSlotColumn, function->isSlot() ? Qt::Checked : Qt::Unchecked);
 
-    if (ClassFunctionDeclaration* function = dynamic_cast<ClassFunctionDeclaration*>(childDeclaration.data())) {
-        overrideItem->setCheckState(IsSignalColumn, function->isSignal() ? Qt::Checked : Qt::Unchecked);
-        overrideItem->setCheckState(IsSlotColumn, function->isSlot() ? Qt::Checked : Qt::Unchecked);
-    }
-
-    ClassFunctionDeclaration* classFunction = dynamic_cast<ClassFunctionDeclaration*>(childDeclaration.data());
-    if(classFunction && classFunction->isAbstract()) {
+    if (function->isAbstract()) {
         overrideItem->setIcon(ClassOrFunctionColumn, KIcon("flag-red"));
         overrideItem->setCheckState(ClassOrFunctionColumn, Qt::Checked);
         overrideItem->setText(ClassOrFunctionColumn, overrideItem->text(ClassOrFunctionColumn) + " = 0");///@todo this is C++ specific
