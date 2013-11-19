@@ -168,8 +168,10 @@ bool DUContextDynamicData::imports(const DUContext* context, const TopDUContext*
     return true;
 
   if(maxDepth == 0) {
-    ImportsHash checked(500);
+    ImportsHash checked;//(500);
+#ifndef Q_OS_WIN
     checked.set_empty_key(0);
+#endif
     return importsSafeButSlow(context, source, checked);
   }
 

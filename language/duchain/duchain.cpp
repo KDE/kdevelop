@@ -42,7 +42,9 @@
 #include <interfaces/foregroundlock.h>
 #include <interfaces/isession.h>
 
+#ifndef Q_OS_WIN
 #include <util/google/dense_hash_map>
+#endif
 
 #include "../interfaces/ilanguagesupport.h"
 #include "../interfaces/icodehighlighting.h"
