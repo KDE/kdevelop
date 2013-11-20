@@ -43,7 +43,7 @@ KDevSplashScreen::KDevSplashScreen()
     m_view->engine()->rootContext()->setContextProperty("appVersionPatch", VERSION_PATCH);
 
     QString splashScript = KStandardDirs::locate("data", "kdevelop/splash.qml");
-    m_view->setSource(QUrl(splashScript));
+    m_view->setSource(QUrl::fromLocalFile(splashScript));
     if ( ! m_view->rootObject() ) {
         kWarning() << "Could not find KDevelop splash screen: kdevelop/splash.qml";
     }
