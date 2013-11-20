@@ -29,6 +29,7 @@
 #include <kparts/mainwindow.h>
 
 #include <QApplication>
+#include <QFileInfo>
 #include <interfaces/iproject.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>
 #include <interfaces/iplugin.h>
@@ -59,8 +60,8 @@ bool KDevelop::removeUrl(const KDevelop::IProject* project, const KUrl& url, con
         }
     }
 
-    //if we didn't find a VCS, we remove using KIO
-    if ( !KIO::NetAccess::del( url, window ) ) {
+    //if we didn't find a VCS, we remove using KIO (if the file still exists, the vcs plugin might have simply deleted the url without returning a job
+    if ( !KIO::NetAccess::del( url, window ) && url.isLocalFile() && (QFileInfo(url.toLocalFile())).exists() ) {
         KMessageBox::error( window,
             isFolder ? i18n( "Cannot remove folder <i>%1</i>.", url.pathOrUrl() )
                         : i18n( "Cannot remove file <i>%1</i>.", url.pathOrUrl() ) );
