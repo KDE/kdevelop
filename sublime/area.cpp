@@ -351,7 +351,6 @@ void Area::load(const KConfigGroup& group)
 
 bool Area::wantToolView(const QString& id)
 {
-    kDebug() << d->desiredToolViews << " " << id;
     return (d->desiredToolViews.contains(id));
 }
 
