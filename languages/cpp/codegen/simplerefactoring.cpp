@@ -32,6 +32,7 @@
 #include <qlineedit.h>
 #include <qpushbutton.h>
 #include <QTabWidget>
+#include <QLabel>
 #include <language/codegen/documentchangeset.h>
 #include "progressdialogs.h"
 #include <language/duchain/navigation/abstractnavigationwidget.h>

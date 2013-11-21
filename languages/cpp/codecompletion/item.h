@@ -24,6 +24,7 @@
 
 #include <ksharedptr.h>
 #include <language/duchain/duchainpointer.h>
+#include <language/duchain/types/structuretype.h>
 #include <language/codecompletion/codecompletionitem.h>
 #include <language/codecompletion/normaldeclarationcompletionitem.h>
 #include <language/codecompletion/abstractincludefilecompletionitem.h>
