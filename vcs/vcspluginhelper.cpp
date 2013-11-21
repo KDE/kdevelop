@@ -98,12 +98,12 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
         commitAction = new KAction(KIcon("svn-commit"), i18n("Commit..."), parent);
         updateAction = new KAction(KIcon("svn-update"), i18n("Update"), parent);
         addAction = new KAction(KIcon("list-add"), i18n("Add"), parent);
-        diffToBaseAction = new KAction(KIcon("vcs_diff"), i18n("Show Differences..."), parent);
+        diffToBaseAction = new KAction(KIcon("text-x-patch"), i18n("Show Differences..."), parent);
         revertAction = new KAction(KIcon("archive-remove"), i18n("Revert"), parent);
         historyAction = new KAction(KIcon("view-history"), i18n("History..."), parent);
         annotationAction = new KAction(KIcon("user-properties"), i18n("Annotation..."), parent);
-        diffForRevAction = new KAction(KIcon("vcs_diff"), i18n("Show Diff..."), parent);
-        diffForRevGlobalAction = new KAction(KIcon("vcs_diff"), i18n("Show Diff (all files)..."), parent);
+        diffForRevAction = new KAction(KIcon("text-x-patch"), i18n("Show Diff..."), parent);
+        diffForRevGlobalAction = new KAction(KIcon("text-x-patch"), i18n("Show Diff (all files)..."), parent);
         pushAction = new KAction(KIcon("arrow-up-double"), i18n("Push"), parent);
         pullAction = new KAction(KIcon("arrow-down-double"), i18n("Pull"), parent);
         

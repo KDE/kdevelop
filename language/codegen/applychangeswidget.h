@@ -27,6 +27,7 @@ namespace KTextEditor {
 class Document;
 }
 
+
 namespace KDevelop
 {
 class IndexedString;

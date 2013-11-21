@@ -60,7 +60,7 @@ OpenProjectPage::OpenProjectPage( const KUrl& startUrl, QWidget* parent )
         }
     }
 	
-    filters.prepend( QString( "%1|All Project Files (%1)").arg(allEntry.join(" ") ) );
+    filters.prepend( i18n( "%1|All Project Files (%1)", allEntry.join(" ") ) );
 
     fileWidget->setFilter( filters.join("\n") );
 
