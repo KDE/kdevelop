@@ -20,11 +20,15 @@
 #define KDEVPLATFORM_ABSTRACTDECLARATIONNAVIGATIONCONTEXT_H
 
 #include "abstractnavigationcontext.h"
+#include "../declaration.h"
 #include "../duchainpointer.h"
-#include "../types/structuretype.h"
-#include <language/duchain/declaration.h>
+#include "../types/abstracttype.h"
 
 namespace KDevelop {
+
+class IdentifiedType;
+class Identifier;
+class QualifiedIdentifier;
 
 class KDEVPLATFORMLANGUAGE_EXPORT AbstractDeclarationNavigationContext : public AbstractNavigationContext
 {

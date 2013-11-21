@@ -38,6 +38,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/idocumentationcontroller.h>
 #include <duchain/types/typealiastype.h>
+#include <duchain/types/structuretype.h>
 #include <duchain/classdeclaration.h>
 #include <typeinfo>
 

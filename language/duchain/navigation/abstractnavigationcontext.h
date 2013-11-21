@@ -23,9 +23,8 @@
 
 #include "../../languageexport.h"
 #include "../duchainpointer.h"
+#include "../indexeddeclaration.h"
 #include "navigationaction.h"
-#include "../types/structuretype.h"
-#include <util/ksharedobject.h>
 
 namespace KDevelop {
 
