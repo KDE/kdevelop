@@ -31,6 +31,7 @@
 
 namespace KDevelop {
   class QualifiedIdentifier;
+  class Identifier;
 }
 
 namespace KTextEditor {
@@ -103,7 +104,7 @@ private:
   
   void needCachedArgumentList() const;
   
-  QString keepRemainingWord(KDevelop::Identifier id);
+  QString keepRemainingWord(const KDevelop::Identifier& id);
   QString keepRemainingWord(const KDevelop::StructureType::Ptr &type, const KDevelop::Identifier &id, const QString &insertAccessor);
   
 

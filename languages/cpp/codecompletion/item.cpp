@@ -349,7 +349,7 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
   }
 }
 
-QString NormalDeclarationCompletionItem::keepRemainingWord(Identifier id)
+QString NormalDeclarationCompletionItem::keepRemainingWord(const Identifier& id)
 {
   DUChainReadLocker lock;
 
