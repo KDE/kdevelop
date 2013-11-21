@@ -268,6 +268,7 @@ QSet<IndexedString> openFiles()
     }
     return openFiles;
 }
+
 QSet<QString> openFilesPathsOrUrls()
 {
     QSet<QString> openFiles;
@@ -275,7 +276,6 @@ QSet<QString> openFilesPathsOrUrls()
         openFiles << doc->url().pathOrUrl();
     }
     return openFiles;
-}
 }
 
 bool sortProjectFiles(const ProjectFile& left, const ProjectFile& right)
@@ -285,6 +285,7 @@ bool sortProjectFiles(const ProjectFile& left, const ProjectFile& right)
         return left.project < right.project;
     }
     return left.pathOrUrl < right.pathOrUrl;
+}
 }
 
 void ProjectFileDataProvider::reset()
