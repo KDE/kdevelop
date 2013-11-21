@@ -49,10 +49,10 @@
 
 using namespace KDevelop;
 
-void debugMsgs(const QString& message) { kDebug(9032) << "message:" << message; }
+static void debugMsgs(const QString& message) { kDebug(9032) << "message:" << message; }
 
 
-bool isGenerated(const QString& name)
+static bool isGenerated(const QString& name)
 {
     return name.indexOf("#[")>=0;
 }
@@ -167,7 +167,7 @@ QStringList CMakeProjectVisitor::theValue(const QString& exp, const IntPair& the
     return value;
 }
 
-QString replaceOne(const QString& var, const QString& id, const QString& value, int dollar)
+static QString replaceOne(const QString& var, const QString& id, const QString& value, int dollar)
 {
 //     kDebug() << "ooo" << var << value << id << var[dollar+id.size()-1] << (dollar+id.size());
 //     kDebug() << "kkkk" << var.mid(0, dollar) << value << var.mid(dollar+id.size(), var.size()-(dollar+id.size()));
@@ -279,7 +279,7 @@ int CMakeProjectVisitor::visit(const CMakeAst *ast)
     return 1;
 }
 
-QHash<QString, Target>::iterator findTargetForExecutable(const QString& exe, QHash<QString, Target>& targets)
+static QHash<QString, Target>::iterator findTargetForExecutable(const QString& exe, QHash<QString, Target>& targets)
 {
     QHash<QString, Target>::iterator ret = targets.find(exe);
     if(ret==targets.end()) {
@@ -1337,7 +1337,8 @@ int CMakeProjectVisitor::visit(const MacroCallAst *call)
     return 1;
 }
 
-void usesForArguments(const QStringList& names, const QList<int>& args, const ReferencedTopDUContext& topctx, const CMakeFunctionDesc& func)
+static void usesForArguments(const QStringList& names, const QList<int>& args, const ReferencedTopDUContext& topctx,
+                             const CMakeFunctionDesc& func)
 {
     //TODO: Should not return here
     if(args.size()!=names.size())
@@ -1849,7 +1850,7 @@ int CMakeProjectVisitor::visit(const ListAst *list)
     return 1;
 }
 
-int toCommandEnd(const CMakeAst* fea)
+static int toCommandEnd(const CMakeAst* fea)
 {
     QString command = fea->content()[fea->line()].name;
     QString endCommand = "end"+command;
@@ -2107,7 +2108,7 @@ int CMakeProjectVisitor::visit(const CustomTargetAst *ctar)
     return 1;
 }
 
-QPair<QString, QString> definition(const QString& param)
+static QPair<QString, QString> definition(const QString& param)
 {
     QPair<QString, QString> ret;
     if(!param.startsWith("-D"))
@@ -2127,8 +2128,10 @@ int CMakeProjectVisitor::visit(const AddDefinitionsAst *addDef)
         if(def.isEmpty())
             continue;
         QPair<QString, QString> definePair=definition(def);
-        if(definePair.first.isEmpty())
+        if(definePair.first.isEmpty()) {
             kDebug(9042) << "error: definition not matched" << def;
+            continue;
+        }
 
         m_defs[definePair.first]=definePair.second;
         kDebug(9042) << "added definition" << definePair.first << "=" << definePair.second << " from " << def;
@@ -2305,7 +2308,7 @@ CMakeFunctionDesc CMakeProjectVisitor::resolveVariables(const CMakeFunctionDesc 
 
 enum RecursivityType { No, Yes, End, Break, Return };
 
-RecursivityType recursivity(const QString& functionName)
+static RecursivityType recursivity(const QString& functionName)
 {
     QString upperFunctioName=functionName;
     if(upperFunctioName=="if" || upperFunctioName=="while" ||

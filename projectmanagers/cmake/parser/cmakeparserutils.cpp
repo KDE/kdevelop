@@ -188,6 +188,7 @@ namespace CMakeParserUtils
         v.setModulePath(data->modulePath);
         v.setEnvironmentProfile(env);
         v.setProperties(data->properties);
+        v.setDefinitions(data->definitions);
         v.walk(f, 0, true);
         
         data->projectName=v.projectName();
@@ -196,6 +197,7 @@ namespace CMakeParserUtils
         data->properties=v.properties();
         data->testSuites=v.testSuites();
         data->targetAlias=v.targetAlias();
+        data->definitions=v.definitions();
         
         //printSubdirectories(data->subdirectories);
         
@@ -237,5 +239,13 @@ namespace CMakeParserUtils
                 currentComment += line.right(line.count()-2);
         }
         return ret;
+    }
+
+    void addDefinitions(const QStringList& from, CMakeDefinitions* to)
+    {
+        Q_ASSERT(to);
+        foreach(const QString& v, from) {
+            to->insert(v.section('=', 0, 0), v.section('=', 1, -1));
+        }
     }
 }

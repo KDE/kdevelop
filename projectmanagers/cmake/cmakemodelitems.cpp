@@ -20,6 +20,7 @@
  */
 
 #include "cmakemodelitems.h"
+#include <cmakeparserutils.h>
 #include <QString>
 #include <QThread>
 #include <kdebug.h>
@@ -89,10 +90,9 @@ CMakeDefinitions CompilationDataAttached::definitions(CMakeFolderItem* parentFol
     return result;
 }
 
-void CompilationDataAttached::defineVariables(const QStringList& vars)
+void CompilationDataAttached::addDefinitions(const QStringList& vars)
 {
-    foreach(const QString& v, vars)
-        m_defines.insert(v.section('=', 0, 0), v.section('=', 1, -1));
+    CMakeParserUtils::addDefinitions(vars, &m_defines);
 }
 
 

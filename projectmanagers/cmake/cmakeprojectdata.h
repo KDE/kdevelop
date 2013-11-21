@@ -15,6 +15,7 @@ struct CMakeProjectData
     MacroMap mm;
     CMakeProperties properties;
     CacheValues cache;
+    CMakeDefinitions definitions;
     QStringList modulePath;
     QHash<QString,QString> targetAlias;
     

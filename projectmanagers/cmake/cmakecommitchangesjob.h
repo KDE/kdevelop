@@ -76,7 +76,7 @@ private:
     CMakeManager* m_manager;
 
     QStringList m_directories;
-    QStringList m_definitions;
+    CMakeDefinitions m_definitions;
     bool m_projectDataAdded;
     KDevelop::ProjectFolderItem* m_parentItem;
     bool m_waiting;
