@@ -176,7 +176,8 @@ KDevelop::ReferencedTopDUContext CMakeImportJob::initializeProject(CMakeFolderIt
             ref = includeScript(script.toLocalFile(), dir, ref);
             Q_ASSERT(ref);
             includes << m_data.properties[DirectoryProperty][dir]["INCLUDE_DIRECTORIES"];
-            rootFolder->defineVariables(m_data.properties[DirectoryProperty][dir]["COMPILE_DEFINITIONS"]);
+            CMakeParserUtils::addDefinitions(m_data.properties[DirectoryProperty][dir]["COMPILE_DEFINITIONS"], &m_data.definitions);
+            rootFolder->setDefinitions(m_data.definitions);
             
             foreach(const Subdirectory& s, m_data.subdirectories) {
                 KUrl candidate = currentDir;

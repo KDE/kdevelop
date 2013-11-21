@@ -2126,8 +2126,10 @@ int CMakeProjectVisitor::visit(const AddDefinitionsAst *addDef)
         if(def.isEmpty())
             continue;
         QPair<QString, QString> definePair=definition(def);
-        if(definePair.first.isEmpty())
+        if(definePair.first.isEmpty()) {
             kDebug(9042) << "error: definition not matched" << def;
+            continue;
+        }
 
         m_defs[definePair.first]=definePair.second;
         kDebug(9042) << "added definition" << definePair.first << "=" << definePair.second << " from " << def;

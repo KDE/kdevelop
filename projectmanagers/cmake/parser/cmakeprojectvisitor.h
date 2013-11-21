@@ -103,12 +103,14 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         void setVariableMap( VariableMap* vars );
         void setMacroMap( MacroMap* macros ) { m_macros=macros; }
         void setModulePath(const QStringList& mp) { m_modulePath=mp; }
+        void setDefinitions(const CMakeDefinitions& defs) { m_defs=defs; }
         
         /** sets the @p profile env variables that will be used to override those in the current system */
         void setEnvironmentProfile(const QMap<QString, QString>& profile) { m_environmentProfile = profile; }
 
         const VariableMap* variables() const { return m_vars; }
         const CacheValues* cache() const { return m_cache; }
+        CMakeDefinitions definitions() const { return m_defs; }
         
         QString projectName() const { return m_projectName; }
         QVector<Subdirectory> subdirectories() const { return m_subdirectories; }

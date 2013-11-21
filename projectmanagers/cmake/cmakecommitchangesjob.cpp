@@ -161,7 +161,8 @@ KUrl::List CMakeCommitChangesJob::addProjectData(const CMakeProjectData& data)
     m_directories += resolvePaths(m_url, data.properties[DirectoryProperty][dir]["INCLUDE_DIRECTORIES"]);
     m_directories.removeAll(QString());
 
-    m_definitions = data.properties[DirectoryProperty][dir]["COMPILE_DEFINITIONS"];
+    m_definitions.unite(data.definitions);
+    CMakeParserUtils::addDefinitions(data.properties[DirectoryProperty][dir]["COMPILE_DEFINITIONS"], &m_definitions);
 
     foreach(const Target& t, data.targets) {
         const QMap<QString, QStringList>& targetProps = data.properties[TargetProperty][t.name];
@@ -269,7 +270,7 @@ void CMakeCommitChangesJob::makeChanges()
     }
 
     folder->setIncludeDirectories(m_directories);
-    folder->defineVariables(m_definitions);
+    folder->setDefinitions(m_definitions);
 
     QSet<ProjectTargetItem*> deletableTargets = folder->targetList().toSet();
     foreach ( const ProcessedTarget& pt, m_targets)
@@ -305,7 +306,7 @@ void CMakeCommitChangesJob::makeChanges()
         CompilationDataAttached* incAtt = dynamic_cast<CompilationDataAttached*>(targetItem);
         if(incAtt) {
             incAtt->setIncludeDirectories(resolvePaths(m_url, pt.includes));
-            incAtt->defineVariables(pt.defines);
+            incAtt->addDefinitions(pt.defines);
         }
         
         KUrl::List tfiles;
