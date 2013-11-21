@@ -17,19 +17,24 @@
 */
 
 #include "projectfilequickopen.h"
+
 #include <QIcon>
 #include <QTextBrowser>
 #include <QApplication>
-#include <klocale.h>
+
+#include <KLocale>
+
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/iproject.h>
 #include <interfaces/icore.h>
+
 #include <language/duchain/topducontext.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/indexedstring.h>
 #include <language/duchain/parsingenvironment.h>
+
 #include <project/projectmodel.h>
 
 #include "../openwith/iopenwith.h"
