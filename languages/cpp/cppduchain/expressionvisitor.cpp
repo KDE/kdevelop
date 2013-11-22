@@ -1244,7 +1244,6 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     visit(node->parameter_declaration_clause);
     visit(node->exception_spec);
     {
-    LOCKDUCHAIN;
     if( node->array_dimensions && oldLastType ) {
       ArrayType::Ptr p( new ArrayType() );
       p->setElementType( oldLastType );
@@ -1419,7 +1418,6 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
     if( m_lastType )
     {
-      LOCKDUCHAIN;
       ///@todo cv-qualifiers
       PointerType::Ptr p( new PointerType() );
       p->setBaseType( m_lastType );
@@ -1511,7 +1509,6 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     visit(node->right_expression);
 
     {
-      LOCKDUCHAIN;
       if( const ConstantIntegralType::Ptr& condition = conditionType.cast<ConstantIntegralType>() ) {
         ///For constant integral types, the condition could be evaluated, so we choose the correct result.
         if( condition->value<quint64>() == 0 ) {
