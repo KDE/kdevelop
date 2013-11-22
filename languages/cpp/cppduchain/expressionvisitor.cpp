@@ -2210,8 +2210,9 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     m_lastInstance = Instance(true);
   }
 
-  void ExpressionVisitor::visitCondition(ConditionAST* /*node*/)
+  void ExpressionVisitor::visitCondition(ConditionAST* node)
   {
+    DefaultVisitor::visitCondition(node);
     LOCKDUCHAIN;
     m_lastType = AbstractType::Ptr( new KDevelop::IntegralType(IntegralType::TypeBoolean) );
     m_lastInstance = Instance(true);
