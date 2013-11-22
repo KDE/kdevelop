@@ -177,6 +177,7 @@ KDevelop::ReferencedTopDUContext CMakeImportJob::initializeProject(CMakeFolderIt
             Q_ASSERT(ref);
             includes << m_data.properties[DirectoryProperty][dir]["INCLUDE_DIRECTORIES"];
             CMakeParserUtils::addDefinitions(m_data.properties[DirectoryProperty][dir]["COMPILE_DEFINITIONS"], &m_data.definitions);
+            CMakeParserUtils::addDefinitions(m_data.vm["CMAKE_CXX_FLAGS"], &m_data.definitions, true);
             rootFolder->setDefinitions(m_data.definitions);
             
             foreach(const Subdirectory& s, m_data.subdirectories) {

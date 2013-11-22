@@ -163,6 +163,7 @@ KUrl::List CMakeCommitChangesJob::addProjectData(const CMakeProjectData& data)
 
     m_definitions.unite(data.definitions);
     CMakeParserUtils::addDefinitions(data.properties[DirectoryProperty][dir]["COMPILE_DEFINITIONS"], &m_definitions);
+    CMakeParserUtils::addDefinitions(data.vm["CMAKE_CXX_FLAGS"], &m_definitions, true);
 
     foreach(const Target& t, data.targets) {
         const QMap<QString, QStringList>& targetProps = data.properties[TargetProperty][t.name];

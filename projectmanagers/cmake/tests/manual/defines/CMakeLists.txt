@@ -1,7 +1,8 @@
 project(defines)
 
 add_definitions(-std=c++0x -DBAR=foo)
-add_definitions(-DFOO=bar -DBLA=blub)
+add_definitions("-DFOO=bar -DBLA=blub")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DASDF=asdf -DXYZ")
 add_executable(target main.cpp)
 
 set_property( DIRECTORY PROPERTY COMPILE_DEFINITIONS A AV=1 )
