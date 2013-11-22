@@ -471,16 +471,15 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
       return;
     }
 
-    QualifiedIdentifier identifier = nameV.identifier();
+    const QualifiedIdentifier& identifier = nameV.identifier();
 
     ///@todo It would be better if the parser would treat true and false exactly
     ///like constant-integer expressions, storing them in a primary expression.
-    static QualifiedIdentifier trueIdentifier("true");
-    static QualifiedIdentifier falseIdentifier("false");
+    static const QualifiedIdentifier trueIdentifier("true");
+    static const QualifiedIdentifier falseIdentifier("false");
 
     if( identifier == trueIdentifier || identifier == falseIdentifier ) {
       ///We have a boolean constant, we need to catch that here
-      LOCKDUCHAIN;
       ConstantIntegralType::Ptr type(new ConstantIntegralType(IntegralType::TypeBoolean));
       type->setValue<qint64>( identifier == trueIdentifier );
       m_lastType = type.cast<AbstractType>();
@@ -592,7 +591,6 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
     if (token.kind == Token_number_literal) {
       QString num = m_session->token_stream->symbolString(token);
 
-      LOCKDUCHAIN;
       if( num.indexOf('.') != -1 || num.endsWith('f') || num.endsWith('d') ) {
         double val = 0;
         bool ok = false;
@@ -637,7 +635,6 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
       return;
     } else if(token.kind == Token_char_literal) {
       // char literal e.g. 'x'
-      LOCKDUCHAIN;
       ConstantIntegralType::Ptr charType(new ConstantIntegralType(IntegralType::TypeChar));
       if ( token.size == 3 ) {
         charType->setValue<char>( m_session->token_stream->symbolByteArray(token).at(1) );
@@ -668,7 +665,6 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
       m_lastInstance = Instance( true );
     } else if (token.kind == Token_true || token.kind == Token_false) {
       ///We have a boolean constant, we need to catch that here
-      LOCKDUCHAIN;
       ConstantIntegralType::Ptr type(new ConstantIntegralType(IntegralType::TypeBoolean));
       type->setValue<qint64>( token.kind == Token_true );
       m_lastType = type.cast<AbstractType>();
@@ -2014,7 +2010,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     if(chosenFunction)
       if(m_mapAst) session()->mapCallAstToType(node, chosenFunction->type<FunctionType>());
 
-    static IndexedString functionCallOperatorIdentifier("operator()");
+    static const IndexedString functionCallOperatorIdentifier("operator()");
 
     bool createUseOnParen = (bool)chosenFunction && (constructedType || chosenFunction->identifier().identifier() == functionCallOperatorIdentifier);
     //Re-create the use we have discarded earlier, this time with the correct overloaded function chosen.
@@ -2055,8 +2051,6 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
   void ExpressionVisitor::visitSignalSlotExpression(SignalSlotExpressionAST* node) {
 
     //So uses for the argument-types are built
-    LOCKDUCHAIN;
-
     putStringType();
 
     if(m_parameters.isEmpty())
@@ -2064,6 +2058,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
     DUContext* container = 0;///@todo check whether signal/slot match, warn if not.
 
+    LOCKDUCHAIN;
     StructureType::Ptr slotStructure = TypeUtils::targetType(TypeUtils::matchingClassPointer(qObjectPtrType(), TypeUtils::realType(m_parameters.back().type, m_topContext), m_topContext), m_topContext).cast<StructureType>();
     if(slotStructure)
       container = slotStructure->internalContext(m_topContext);
@@ -2205,7 +2200,6 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
   void ExpressionVisitor::visitSizeofExpression(SizeofExpressionAST* node)  {
     visit(node->type_id);
     visit(node->expression);
-    LOCKDUCHAIN;
     m_lastType = AbstractType::Ptr( new KDevelop::IntegralType(IntegralType::TypeInt) );
     m_lastInstance = Instance(true);
   }
@@ -2213,7 +2207,6 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
   void ExpressionVisitor::visitCondition(ConditionAST* node)
   {
     DefaultVisitor::visitCondition(node);
-    LOCKDUCHAIN;
     m_lastType = AbstractType::Ptr( new KDevelop::IntegralType(IntegralType::TypeBoolean) );
     m_lastInstance = Instance(true);
   }
@@ -2245,7 +2238,6 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
 
   void ExpressionVisitor::visitStringLiteral(StringLiteralAST* /*node*/) {
-    LOCKDUCHAIN;
     ///TODO: proper support for wchar_t, char16_t and char32_t strings
     putStringType();
   }
@@ -2270,7 +2262,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         helper.setOperator( OverloadResolver::Parameter(m_lastType, isLValue( m_lastType, m_lastInstance ), m_lastInstance.declaration.data() ) );
 
         //Overloaded postfix operators have one additional int parameter
-        static AbstractType::Ptr integer = AbstractType::Ptr(new ConstantIntegralType(IntegralType::TypeInt));
+        static const AbstractType::Ptr integer = AbstractType::Ptr(new ConstantIntegralType(IntegralType::TypeInt));
         helper.setKnownParameters( OverloadResolver::Parameter( integer, false ) );
 
         ViableFunction viable = helper.resolve();
