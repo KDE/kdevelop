@@ -226,20 +226,22 @@ void CMakeManagerTest::testDefines()
 
         if (dynamic_cast<CMakeExecutableTargetItem*>( mainContainer )) {
             QEXPECT_FAIL("", "SOURCE definitions are not implemented yet", Continue);
-            QCOMPARE(defines.size(), 12);
-            QCOMPARE(defines.size(), 9);
+            QCOMPARE(defines.size(), 14);
+            QCOMPARE(defines.size(), 11);
             QCOMPARE(defines.value("B", QString("not found")), QString());
             QCOMPARE(defines.value("BV", QString("not found")), QString("1"));
             QCOMPARE(defines.value("BV2", QString("not found")), QString("2"));
             foundInTarget = true;
         } else {
             QEXPECT_FAIL("", "SOURCE definitions are not implemented yet", Continue);
-            QCOMPARE(defines.size(), 9);
-            QCOMPARE(defines.size(), 6);
+            QCOMPARE(defines.size(), 11);
+            QCOMPARE(defines.size(), 8);
         }
         QCOMPARE(defines.value("BAR", QString("not found")), QString("foo"));
         QCOMPARE(defines.value("FOO", QString("not found")), QString("bar"));
         QCOMPARE(defines.value("BLA", QString("not found")), QString("blub"));
+        QCOMPARE(defines.value("ASDF", QString("not found")), QString("asdf"));
+        QCOMPARE(defines.value("XYZ", QString("not found")), QString());
         QCOMPARE(defines.value("A", QString("not found")), QString());
         QCOMPARE(defines.value("AV", QString("not found")), QString("1"));
         QCOMPARE(defines.value("AV2", QString("not found")), QString("2"));

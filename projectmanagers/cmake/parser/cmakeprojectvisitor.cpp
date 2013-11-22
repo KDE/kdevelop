@@ -23,6 +23,7 @@
 #include "cmakecondition.h"
 #include "astfactory.h"
 #include "cmakeduchaintypes.h"
+#include "cmakeparserutils.h"
 
 #include <language/editor/simplerange.h>
 #include <language/duchain/topducontext.h>
@@ -2107,50 +2108,16 @@ int CMakeProjectVisitor::visit(const CustomTargetAst *ctar)
     return 1;
 }
 
-static QPair<QString, QString> definition(const QString& param)
-{
-    QPair<QString, QString> ret;
-    if(!param.startsWith("-D"))
-        return ret;
-    int eq=param.indexOf('=', 2);
-    ret.first=param.mid(2, eq-2);
-    if(eq>0)
-        ret.second=param.mid(eq+1);
-    return ret;
-}
-
 int CMakeProjectVisitor::visit(const AddDefinitionsAst *addDef)
 {
 //     kDebug(9042) << "Adding defs: " << addDef->definitions();
-    foreach(const QString& def, addDef->definitions())
-    {
-        if(def.isEmpty())
-            continue;
-        QPair<QString, QString> definePair=definition(def);
-        if(definePair.first.isEmpty()) {
-            kDebug(9042) << "error: definition not matched" << def;
-            continue;
-        }
-
-        m_defs[definePair.first]=definePair.second;
-        kDebug(9042) << "added definition" << definePair.first << "=" << definePair.second << " from " << def;
-    }
+    CMakeParserUtils::addDefinitions(addDef->definitions(), &m_defs, true);
     return 1;
 }
 
 int CMakeProjectVisitor::visit(const RemoveDefinitionsAst *remDef)
 {
-    foreach(const QString& def, remDef->definitions())
-    {
-        if(def.isEmpty())
-            continue;
-        QPair<QString, QString> definePair=definition(def);
-        if(definePair.first.isEmpty())
-            kDebug(9042) << "error: definition not matched" << def;
-
-        m_defs.remove(definePair.first);
-        kDebug(9042) << "removed definition" << definePair.first << " from " << def;
-    }
+    CMakeParserUtils::removeDefinitions(remDef->definitions(), &m_defs, true);
     return 1;
 }
 
