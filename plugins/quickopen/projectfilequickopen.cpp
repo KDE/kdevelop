@@ -268,7 +268,9 @@ namespace
 QSet<IndexedString> openFiles()
 {
     QSet<IndexedString> openFiles;
-    foreach( IDocument* doc, ICore::self()->documentController()->openDocuments() ) {
+    const QList<IDocument*>& docs = ICore::self()->documentController()->openDocuments();
+    openFiles.reserve(docs.size());
+    foreach( IDocument* doc, docs ) {
         openFiles << IndexedString(doc->url().pathOrUrl());
     }
     return openFiles;
@@ -277,7 +279,9 @@ QSet<IndexedString> openFiles()
 QSet<QString> openFilesPathsOrUrls()
 {
     QSet<QString> openFiles;
-    foreach( IDocument* doc, ICore::self()->documentController()->openDocuments() ) {
+    const QList<IDocument*>& docs = ICore::self()->documentController()->openDocuments();
+    openFiles.reserve(docs.size());
+    foreach( IDocument* doc, docs ) {
         openFiles << doc->url().pathOrUrl();
     }
     return openFiles;
@@ -325,11 +329,13 @@ QSet<IndexedString> ProjectFileDataProvider::files() const
 void OpenFilesDataProvider::reset()
 {
     Base::clearFilter();
-    QList<ProjectFile> currentFiles;
     IProjectController* projCtrl = ICore::self()->projectController();
     IDocumentController* docCtrl = ICore::self()->documentController();
+    const QList<IDocument*>& docs = docCtrl->openDocuments();
 
-    foreach( IDocument* doc, docCtrl->openDocuments() ) {
+    QList<ProjectFile> currentFiles;
+    currentFiles.reserve(docs.size());
+    foreach( IDocument* doc, docs ) {
         ProjectFile f;
         f.pathOrUrl = doc->url().pathOrUrl();
         IProject* project = projCtrl->findProjectForUrl(doc->url());
