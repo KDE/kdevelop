@@ -388,6 +388,26 @@ void QtPrintersTest::testQChar()
     QVERIFY(gdb.execute("print c").contains("\"k\""));
 }
 
+void QtPrintersTest::testQListPOD()
+{
+    GdbProcess gdb("qlistpod");
+    gdb.execute("break qlistpod.cpp:31");
+    gdb.execute("run");
+    QVERIFY(gdb.execute("print b").contains("false"));
+    QVERIFY(gdb.execute("print c").contains("50"));
+    QVERIFY(gdb.execute("print uc").contains("50"));
+    QVERIFY(gdb.execute("print s").contains("50"));
+    QVERIFY(gdb.execute("print us").contains("50"));
+    QVERIFY(gdb.execute("print i").contains("50"));
+    QVERIFY(gdb.execute("print ui").contains("50"));
+    QVERIFY(gdb.execute("print l").contains("50"));
+    QVERIFY(gdb.execute("print ul").contains("50"));
+    QVERIFY(gdb.execute("print i64").contains("50"));
+    QVERIFY(gdb.execute("print ui64").contains("50"));
+    QVERIFY(gdb.execute("print f").contains("50"));
+    QVERIFY(gdb.execute("print d").contains("50"));
+}
+
 void QtPrintersTest::testQUuid()
 {
     GdbProcess gdb("quuid");
