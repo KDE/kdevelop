@@ -45,6 +45,7 @@ Comment[ca]=Configura quins fitxers i carpetes dins de la carpeta del projecte s
 Comment[da]=Indstil hvilke filer og mapper i projektmappen der skal medtages eller undtages.
 Comment[de]=Legt fest, welche Dateien und Ordner innerhalb des Projektordners ein- oder ausgeschlossen werden sollen.
 Comment[es]=Configura qué archivos y carpetas contenidos en la carpeta del proyecto se deben incluir o excluir.
+Comment[fi]=Valitse, mitkä projektikansiossa olevat tiedostot ja kansiot pitäisi ottaa mukaan ja mitkä pitäisi jättää pois.
 Comment[fr]=Configure quels fichiers et dossier au sein du projet doivent être inclus ou exclus.
 Comment[gl]=Configurar cales ficheiros e cartafoles dentro do cartafol do proxecto deben incluírse ou excluírse.
 Comment[it]=Configura quali file e cartelle nella cartella del progetto devono essere incluse o escluse.
