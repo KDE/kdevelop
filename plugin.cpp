@@ -52,6 +52,8 @@
 #include <interfaces/idebugcontroller.h>
 #include <util/executecompositejob.h>
 
+#include <language/interfaces/editorcontext.h>
+
 #include "plugin.h"
 #include "marks.h"
 #include "cppcheckmodel.h"
@@ -160,5 +162,19 @@ void Plugin::result()
     QWidget *toolview_widget = KDevelop::ICore::self()->uiController()->findToolView(i18n("Cppcheck"), m_factory);
     KDevelop::ICore::self()->uiController()->raiseToolView(toolview_widget);
 }
+
+KDevelop::ContextMenuExtension Plugin::contextMenuExtension(KDevelop::Context* context)
+{
+    KDevelop::ContextMenuExtension extension = KDevelop::IPlugin::contextMenuExtension(context);
+
+    if ( context->type() == KDevelop::Context::EditorContext ) {
+    KDevelop::EditorContext *econtext = dynamic_cast<KDevelop::EditorContext*>(context);
+        QAction* action = new QAction(KIcon("document-new"), i18n("Cppcheck for current file"), this);
+        connect(action, SIGNAL(triggered(bool)), this, SLOT(runCppcheckFile()));
+        extension.addAction(KDevelop::ContextMenuExtension::ExtensionGroup, action);
+    }
+    return extension;
+}
+
 }
 #include "plugin.moc"

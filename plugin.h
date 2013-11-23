@@ -29,6 +29,7 @@
 #include <interfaces/istatus.h>
 
 #include <interfaces/iuicontroller.h>
+#include <interfaces/contextmenuextension.h>
 
 #include "imodel.h"
 
@@ -56,6 +57,7 @@ public:
     void unload();
 
     void incomingModel(cppcheck::Model* model);
+    virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
 
 signals:
     void newModel(cppcheck::Model* model);
