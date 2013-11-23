@@ -1,8 +1,6 @@
 // -*- Mode: C++/l; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 8; -*-
 
 /* This file is part of KDevelop
- *  Copyright 2011 Sebastien Rannou <mxs@sbrk.org>
- *  Copyright 2007-2008 Hamish Rodda <rodda@kde.org>
  *  Copyright 2013 Christoph Thielecke <crissi99@gmx.de>
 
    This program is free software; you can redistribute it and/or
@@ -61,16 +59,7 @@ Widget::Widget(cppcheck::Plugin * plugin, QWidget * parent)
     setWindowIcon(KIcon("fork"));
     setWindowTitle(i18n("Cppcheck Output"));
 
-    setWhatsThis(i18n("<b>Cppcheck</b><p>Shows the output of cppcheck. Cppcheck detects:<br/>"
-                      "use of uninitialized memory;<br/>"
-                      "reading/writing memory after it has been free'd;<br/>"
-                      "reading/writing off the end of malloc'd blocks;<br/>"
-                      "reading/writing inappropriate areas on the stack;<br/>"
-                      "memory leaks &mdash; where pointers to malloc'd blocks are lost forever;<br/>"
-                      "passing of uninitialised and/or unaddressable memory to system calls;<br/>"
-                      "mismatched use of malloc/new/new [] vs free/delete/delete [];<br/>"
-                      "some abuses of the POSIX pthread API.</p>"));
-
+    setWhatsThis(i18n("<b>Cppcheck</b><p>Shows the output of cppcheck."));
     setTabsClosable(true);
     connect(this, SIGNAL(tabCloseRequested(int)), this, SLOT(destroyRequestedTab(int)));
     connect(plugin, SIGNAL(newModel(cppcheck::Model*)), this, SLOT(newModel(cppcheck::Model *)));

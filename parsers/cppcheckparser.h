@@ -1,8 +1,4 @@
-/* This file is part of KDevelo
- * Copyright 2006-2008 Hamish Rodda <rodda@kde.org>
- * Copyright 2011 Mathieu Lornac <mathieu.lornac@gmail.com>
- * Copyright 2011 Damien Coppel <damien.coppel@gmail.com>
- * Copyright 2011 Lionel Duc <lionel.data@gmail.com>
+/* This file is part of KDevelop
  * Copyright 2013 Christoph Thielecke <crissi99@gmx.de>
 
    This program is free software; you can redistribute it and/or
