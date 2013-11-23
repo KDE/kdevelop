@@ -84,7 +84,7 @@ public:
         output.chop(7); //remove (gdb) prompt
         if (output.contains("Traceback") || output.contains("Exception")) {
             qDebug() << output;
-            qFatal("Unexpected Python Exception");
+            QTest::qFail("Unexpected Python Exception", __FILE__, __LINE__);
         }
         return output;
     }
