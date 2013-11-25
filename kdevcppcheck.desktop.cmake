@@ -2,7 +2,7 @@
 Type=Service
 Icon=kdevelop
 Exec=blubb
-Comment=CPPCheck is a tool that helps you find syntax problems in programs. http://cppcheck.sf.net/
+Comment=Cppcheck is a tool that helps you find syntax problems in programs. http://cppcheck.sf.net/
 Comment[de]=CPPCheck ist ein Werkzeug, das Ihnen hilft, Syntaxprobleme in Programmen zu finden. http://cppcheck.sf.net/
 Comment[nl]=CPPCheck is een hulpmiddel dat helpt u bij het vinden van problemen in de syntaxis in programma's. http://cppcheck.sf.net/
 Comment[pt]=O CPPCheck é uma ferramenta que o ajuda a detectar problemas de sintaxe nos programas. http://cppcheck.sf.net/

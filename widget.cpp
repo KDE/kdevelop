@@ -59,7 +59,7 @@ Widget::Widget(cppcheck::Plugin * plugin, QWidget * parent)
     setWindowIcon(KIcon("fork"));
     setWindowTitle(i18n("Cppcheck Output"));
 
-    setWhatsThis(i18n("<b>Cppcheck</b><p>Shows the output of cppcheck."));
+    setWhatsThis(i18n("<b>Cppcheck</b><p>Shows the output of cppcheck.</p>"));
     setTabsClosable(true);
     connect(this, SIGNAL(tabCloseRequested(int)), this, SLOT(destroyRequestedTab(int)));
     connect(plugin, SIGNAL(newModel(cppcheck::Model*)), this, SLOT(newModel(cppcheck::Model *)));
@@ -82,7 +82,7 @@ void Widget::newModel(cppcheck::Model * model)
         w->setModel(model);
         connect(job, SIGNAL(updateTabText(cppcheck::Model *, const QString &)),
                 this, SLOT(updateTabText(cppcheck::Model *, const QString &)));
-        addTab(dynamic_cast<QWidget *>(w), i18n("job scheduled"));
+        addTab(dynamic_cast<QWidget *>(w), i18n("Job scheduled"));
         setCurrentWidget(dynamic_cast<QWidget *>(w));
         setMovable(true);
     }
