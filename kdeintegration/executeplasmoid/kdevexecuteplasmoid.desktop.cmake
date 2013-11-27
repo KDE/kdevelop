@@ -60,6 +60,7 @@ Name[zh_TW]=Plasmoid 啟動器
 GenericName=Plasmoid Launcher Support
 GenericName[bs]=Podrška za pokretač plazmoida
 GenericName[ca]=Implementació de llançadors de plasmoides
+GenericName[ca@valencia]=Implementació de llançadors de plasmoides
 GenericName[da]=Understøttelse af plasmoidstarteren
 GenericName[de]=Unterstützung für Plasmoid-Starter
 GenericName[el]=Υποστήριξη εκτελεστή πλασμοειδών
