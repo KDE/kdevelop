@@ -51,6 +51,9 @@ target_link_libraries(qchar ${QT_QTCORE_LIBRARY})
 add_executable(quuid quuid.cpp)
 target_link_libraries(quuid ${QT_QTCORE_LIBRARY})
 
+add_executable(qlistpod qlistpod.cpp)
+target_link_libraries(qlistpod ${QT_QTCORE_LIBRARY})
+
 add_executable(ktexteditortypes ktexteditortypes.cpp)
 target_link_libraries(ktexteditortypes ${QT_QTCORE_LIBRARY} ${KDE4_KTEXTEDITOR_LIBS})
 

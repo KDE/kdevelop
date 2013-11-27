@@ -33,7 +33,6 @@
 
 NinjaJob::NinjaJob(KDevelop::ProjectBaseItem* item, const QStringList& arguments, const QByteArray& signal, QObject* parent)
     : OutputExecuteJob(parent)
-    , m_lastLine(false)
     , m_isInstalling(false)
     , m_idx(item->index())
     , m_signal(signal)
