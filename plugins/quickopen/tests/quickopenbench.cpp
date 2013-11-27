@@ -20,6 +20,8 @@
 
 #include "quickopenbench.h"
 
+#include <QIcon>
+
 #include <qtest_kde.h>
 
 QTEST_KDEMAIN(QuickOpenBench, GUI);

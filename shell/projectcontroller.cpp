@@ -282,7 +282,6 @@ public:
                                     m_core->uiController()->activeMainWindow() );
             return;
         }
-        m_currentlyOpening += url;
 
         foreach( IProject* project, m_projects )
         {
@@ -296,6 +295,8 @@ public:
                 }
             }
         }
+
+        m_currentlyOpening += url;
 
         m_core->pluginControllerInternal()->loadProjectPlugins();
 

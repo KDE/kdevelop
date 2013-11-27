@@ -17,19 +17,24 @@
 */
 
 #include "projectfilequickopen.h"
+
 #include <QIcon>
 #include <QTextBrowser>
 #include <QApplication>
-#include <klocale.h>
+
+#include <KLocale>
+
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/iproject.h>
 #include <interfaces/icore.h>
+
 #include <language/duchain/topducontext.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/indexedstring.h>
 #include <language/duchain/parsingenvironment.h>
+
 #include <project/projectmodel.h>
 
 #include "../openwith/iopenwith.h"
@@ -263,19 +268,23 @@ namespace
 QSet<IndexedString> openFiles()
 {
     QSet<IndexedString> openFiles;
-    foreach( IDocument* doc, ICore::self()->documentController()->openDocuments() ) {
+    const QList<IDocument*>& docs = ICore::self()->documentController()->openDocuments();
+    openFiles.reserve(docs.size());
+    foreach( IDocument* doc, docs ) {
         openFiles << IndexedString(doc->url().pathOrUrl());
     }
     return openFiles;
 }
+
 QSet<QString> openFilesPathsOrUrls()
 {
     QSet<QString> openFiles;
-    foreach( IDocument* doc, ICore::self()->documentController()->openDocuments() ) {
+    const QList<IDocument*>& docs = ICore::self()->documentController()->openDocuments();
+    openFiles.reserve(docs.size());
+    foreach( IDocument* doc, docs ) {
         openFiles << doc->url().pathOrUrl();
     }
     return openFiles;
-}
 }
 
 bool sortProjectFiles(const ProjectFile& left, const ProjectFile& right)
@@ -285,6 +294,7 @@ bool sortProjectFiles(const ProjectFile& left, const ProjectFile& right)
         return left.project < right.project;
     }
     return left.pathOrUrl < right.pathOrUrl;
+}
 }
 
 void ProjectFileDataProvider::reset()
@@ -319,11 +329,13 @@ QSet<IndexedString> ProjectFileDataProvider::files() const
 void OpenFilesDataProvider::reset()
 {
     Base::clearFilter();
-    QList<ProjectFile> currentFiles;
     IProjectController* projCtrl = ICore::self()->projectController();
     IDocumentController* docCtrl = ICore::self()->documentController();
+    const QList<IDocument*>& docs = docCtrl->openDocuments();
 
-    foreach( IDocument* doc, docCtrl->openDocuments() ) {
+    QList<ProjectFile> currentFiles;
+    currentFiles.reserve(docs.size());
+    foreach( IDocument* doc, docs ) {
         ProjectFile f;
         f.pathOrUrl = doc->url().pathOrUrl();
         IProject* project = projCtrl->findProjectForUrl(doc->url());
