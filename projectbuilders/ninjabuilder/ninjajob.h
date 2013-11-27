@@ -52,7 +52,6 @@ class NinjaJob : public KDevelop::OutputExecuteJob
 
     private:
         KDevelop::ProjectBaseItem* item() const;
-        bool m_lastLine;
         bool m_isInstalling;
         QPersistentModelIndex m_idx;
         QByteArray m_signal;
