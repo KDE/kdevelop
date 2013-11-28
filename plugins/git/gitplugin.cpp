@@ -448,7 +448,6 @@ VcsJob* GitPlugin::remove(const KUrl::List& files)
         QFileInfo fileInfo(file.toLocalFile());
 
         QStringList otherStr = getLsFiles(dotGitDir, QStringList() << "--others" << "--" << file.toLocalFile(), KDevelop::OutputJob::Silent);
-        kDebug() << "other files" << otherStr;
         if(!otherStr.isEmpty()) {
             //remove files not under version control
             KUrl::List otherFiles;
@@ -459,6 +458,7 @@ VcsJob* GitPlugin::remove(const KUrl::List& files)
                 //if it's an unversioned file we are done, don't use git rm on it
                 i.remove();
             }
+            kDebug() << "other files" << otherFiles;
             KIO::NetAccess::synchronousRun(KIO::trash(otherFiles), 0);
         }
 
