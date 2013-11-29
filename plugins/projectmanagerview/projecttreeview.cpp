@@ -81,7 +81,7 @@ ProjectTreeView::ProjectTreeView( QWidget *parent )
     setItemDelegate(new ProjectModelItemDelegate(this));
 
     connect( this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(popupContextMenu(QPoint)) );
-    connect( this, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(slotActivated(QModelIndex)) );
+    connect( this, SIGNAL(clicked(QModelIndex)), this, SLOT(slotActivated(QModelIndex)) );
 
     connect( ICore::self(), SIGNAL(aboutToShutdown()),
              this, SLOT(aboutToShutdown()));
