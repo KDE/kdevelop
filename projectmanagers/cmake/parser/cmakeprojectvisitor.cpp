@@ -2050,7 +2050,7 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
             break;
         case StringAst::Substring:
         {
-            QString res=sast->input()[0];
+            QString res=sast->input().join(QString());
             res=res.mid(sast->begin(), sast->length());
             m_vars->insert(sast->outputVariable(), QStringList(res));
         }   break;
