@@ -36,12 +36,12 @@ class EnvironmentGroupModel : public QAbstractTableModel, public EnvironmentGrou
     Q_OBJECT
 public:
     EnvironmentGroupModel();
-    int rowCount( const QModelIndex& ) const;
-    int columnCount( const QModelIndex& ) const;
+    int rowCount( const QModelIndex &parent = QModelIndex() ) const;
+    int columnCount( const QModelIndex &parent = QModelIndex()  ) const;
     Qt::ItemFlags flags( const QModelIndex& idx ) const;
-    QVariant data( const QModelIndex& idx, int role ) const;
-    QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
-    bool setData( const QModelIndex& idx, const QVariant&, int role );
+    QVariant data( const QModelIndex& idx, int role = Qt::DisplayRole) const;
+    QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+    bool setData( const QModelIndex& idx, const QVariant&, int role = Qt::EditRole);
     void setCurrentGroup( const QString& group );
     void loadFromConfig( KConfig* );
     void saveToConfig( KConfig* );
