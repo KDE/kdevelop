@@ -1465,6 +1465,11 @@ int CMakeProjectVisitor::visit(const ExecProgramAst *exec)
 
     foreach(const QString& arg, argsTemp)
     {
+        if(arg.contains("#[bin_dir]")) {
+            if(!exec->outputVariable().isEmpty())
+                m_vars->insert(exec->outputVariable(), QStringList("OFF"));
+            return 1;
+        }
         args += arg.split(' ');
     }
     kDebug(9042) << "Executing:" << execName << "::" << args << "in" << exec->workingDirectory();
@@ -1509,7 +1514,17 @@ int CMakeProjectVisitor::visit(const ExecuteProcessAst *exec)
             kDebug(9032) << "Error: trying to execute empty command";
             break;
         }
-        
+        else
+        {
+            foreach(const QString& arg, _args) {
+                if(arg.contains("#[bin_dir]")) {
+                    if(!exec->outputVariable().isEmpty())
+                        m_vars->insert(exec->outputVariable(), QStringList("OFF"));
+                    return 1;
+                }
+            }
+        }
+
         QString workingDir = exec->workingDirectory();
         if(!QFile::exists(workingDir))
         {
@@ -2036,7 +2051,7 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
             break;
         case StringAst::Substring:
         {
-            QString res=sast->input()[0];
+            QString res=sast->input().join(QString());
             res=res.mid(sast->begin(), sast->length());
             m_vars->insert(sast->outputVariable(), QStringList(res));
         }   break;
