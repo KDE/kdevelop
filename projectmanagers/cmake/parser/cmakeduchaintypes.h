@@ -25,7 +25,7 @@
 #include <language/duchain/types/typesystemdata.h>
 #include "cmaketypes.h"
 
-struct KDEVPLATFORMLANGUAGE_EXPORT TargetTypeData : public KDevelop::AbstractTypeData {
+struct KDEVCMAKECOMMON_EXPORT TargetTypeData : public KDevelop::AbstractTypeData {
   TargetTypeData() {}
   ~TargetTypeData() {}
    
