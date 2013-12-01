@@ -112,6 +112,28 @@ DUContext* getContextAt(KUrl url, KTextEditor::Cursor cursor) {
   return contextForHighlightingAt(SimpleCursor(cursor), topContext);
 }
 
+static DeclarationPointer cursorDeclaration()
+{
+  IDocument* doc = ICore::self()->documentController()->activeDocument();
+  if (!doc) {
+    return DeclarationPointer();
+  }
+
+  KTextEditor::Document* textDoc = doc->textDocument();
+  if (!textDoc) {
+    return DeclarationPointer();
+  }
+
+  KTextEditor::View* view = textDoc->activeView();
+  if (!view) {
+    return DeclarationPointer();
+  }
+
+  DUChainReadLocker lock;
+
+  Declaration *decl = DUChainUtils::declarationForDefinition(DUChainUtils::itemUnderCursor(doc->url(), SimpleCursor(view->cursorPosition())));
+  return DeclarationPointer(decl);
+}
 
 class ContextBrowserViewFactory: public KDevelop::IToolViewFactory
 {
@@ -324,7 +346,6 @@ KDevelop::ContextMenuExtension ContextBrowserPlugin::contextMenuExtension(KDevel
   
   qRegisterMetaType<KDevelop::IndexedDeclaration>("KDevelop::IndexedDeclaration");
   
-  m_findUses->setData(QVariant::fromValue(codeContext->declaration()));
   menuExt.addAction(KDevelop::ContextMenuExtension::ExtensionGroup, m_findUses);
 
   return menuExt;
@@ -366,11 +387,7 @@ void ContextBrowserPlugin::showUsesDelayed(const DeclarationPointer& declaration
 
 void ContextBrowserPlugin::findUses()
 {
-  QAction* action = qobject_cast<QAction*>(sender());
-  Q_ASSERT(action);
-  
-  KDevelop::IndexedDeclaration decl = action->data().value<KDevelop::IndexedDeclaration>();
-  showUses(DeclarationPointer(decl.declaration()));
+  showUses(cursorDeclaration());
 }
 
 void ContextBrowserPlugin::textHintRequested(const KTextEditor::Cursor& cursor, QString&) {
