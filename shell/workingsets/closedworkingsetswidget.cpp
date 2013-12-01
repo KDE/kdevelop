@@ -23,6 +23,8 @@
 
 #include <sublime/area.h>
 
+#include <shell/core.h>
+
 #include "mainwindow.h"
 #include "workingsetcontroller.h"
 

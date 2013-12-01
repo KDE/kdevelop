@@ -28,14 +28,7 @@
 #include <klocale.h>
 #include <ksplashscreen.h>
 
-#include <sublime/area.h>
-#include <sublime/tooldocument.h>
-
-#include <language/duchain/topducontext.h>
-#include <language/duchain/repositories/itemrepository.h>
 #include <language/duchain/duchain.h>
-
-#include "shellextension.h"
 
 #include "mainwindow.h"
 #include "sessioncontroller.h"
@@ -104,7 +97,7 @@ KAboutData aboutData()
     KAboutData aboutData( "kdevplatform", "kdevplatform", 
                           ki18n("KDevelop Platform"), KDEVPLATFORM_VERSION_STR, 
                           ki18n("Development Platform for IDE-like Applications"), 
-                          KAboutData::License_LGPL_V2, ki18n( "Copyright 2004-2012, The KDevelop developers" ),
+                          KAboutData::License_LGPL_V2, ki18n( "Copyright 2004-2013, The KDevelop developers" ),
                           KLocalizedString(), "http://www.kdevelop.org" );
     aboutData.addAuthor( ki18n("Andreas Pakulat"), ki18n( "Architecture, VCS Support, Project Management Support, QMake Projectmanager" ), "apaku@gmx.de" );
     aboutData.addAuthor( ki18n("Alexander Dymo"), ki18n( "Architecture, Sublime UI, Ruby support" ), "adymo@kdevelop.org" );

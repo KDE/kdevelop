@@ -23,6 +23,11 @@
 namespace KDevelop
 {
 
+IDocumentation::IDocumentation()
+    : KSharedObject(*(QObject*)this)
+{}
+
+
 IDocumentation::~IDocumentation()
 {}
 

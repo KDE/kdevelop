@@ -28,9 +28,6 @@ Name[uk]=Тестовий шаблон YAML
 Name[x-test]=xxTesting YAML Templatexx
 Name[zh_CN]=YAML 测试模板
 Name[zh_TW]=測試 YAML 樣本
-<<<<<<< HEAD
-=======
->>>>>>> 1.5
 Comment=A test description in YAML
 Comment[bs]=Opis testa u  YAML
 Comment[ca]=Una descripció de prova en YAML

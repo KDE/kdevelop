@@ -81,7 +81,7 @@ ProjectTreeView::ProjectTreeView( QWidget *parent )
     setItemDelegate(new ProjectModelItemDelegate(this));
 
     connect( this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(popupContextMenu(QPoint)) );
-    connect( this, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(slotActivated(QModelIndex)) );
+    connect( this, SIGNAL(activated(QModelIndex)), this, SLOT(slotActivated(QModelIndex)) );
 
     connect( ICore::self(), SIGNAL(aboutToShutdown()),
              this, SLOT(aboutToShutdown()));
@@ -274,6 +274,10 @@ QModelIndex ProjectTreeView::mapFromItem(const ProjectBaseItem* item)
 
 void ProjectTreeView::slotActivated( const QModelIndex &index )
 {
+    if ( QApplication::keyboardModifiers() & Qt::CTRL || QApplication::keyboardModifiers() & Qt::SHIFT ) {
+        // Do not open file when Ctrl or Shift is pressed; that's for selection
+        return;
+    }
     KDevelop::ProjectBaseItem *item = index.data(ProjectModel::ProjectItemRole).value<ProjectBaseItem*>();
     if ( item && item->file() )
     {

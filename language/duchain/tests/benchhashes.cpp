@@ -281,6 +281,7 @@ void BenchHashes::typeRepo()
       }
     }
   } else if (type == 5) {
+#ifdef HAVE_UNORDERED_MAP
     std::unordered_map<int, TypeRepoTestData*> v;
     for(int i = 0; i < 100; ++i) {
       v[i] = new TypeRepoTestData;
@@ -290,6 +291,7 @@ void BenchHashes::typeRepo()
         v.at(i)->size++;
       }
     }
+#endif
   } else if (type == 6) {
     // for the idea, look at c++'s lexer.cpp
     const int vectors = 5;

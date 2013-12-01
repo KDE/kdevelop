@@ -164,7 +164,8 @@ QString SessionLock::handleLockedSession(const QString& sessionName, const QStri
                                                                     QDBus::Block,
                                                                     timeout_ms );
         if( reply.type() == QDBusMessage::ReplyMessage ) {
-            qDebug() << i18nc( "@info:shell", "made running %1 instance (PID: %2) visible", runInfo.holderApp, runInfo.holderPid );
+            QTextStream out(stdout);
+            out << i18nc( "@info:shell", "made running %1 instance (PID: %2) visible", runInfo.holderApp, runInfo.holderPid ) << endl;
             return QString();
         } else {
             kWarning() << i18nc("@info:shell", "running %1 instance (PID: %2) is apparently hung", runInfo.holderApp, runInfo.holderPid);

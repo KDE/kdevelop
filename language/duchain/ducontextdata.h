@@ -22,8 +22,6 @@
 #ifndef DUCONTEXTDATA_H
 #define DUCONTEXTDATA_H
 
-#include "../editor/cursorinrevision.h"
-
 #include "duchainbase.h"
 #include "ducontext.h"
 #include "duchainpointer.h"
@@ -32,6 +30,7 @@
 #include "../languageexport.h"
 
 #include "localindexeddeclaration.h"
+#include "localindexedducontext.h"
 
 namespace KDevelop{
 class DUContext;
@@ -61,7 +60,7 @@ public:
   ///      and doesn't require changing a top-contexts data only because a class was derived from.
   APPENDED_LIST(DUContextData, IndexedDUContext, m_importers, m_childContexts);
 
-  ///@warning: Whenever m_localDeclarations is read or written, DUContextDynamicData::m_localDeclarationsMutex must be locked.
+  ///@warning: Whenever m_localDeclarations is read or written, the duchain must be locked
   APPENDED_LIST(DUContextData, LocalIndexedDeclaration, m_localDeclarations, m_importers);
   /**
    * Vector of all uses in this context

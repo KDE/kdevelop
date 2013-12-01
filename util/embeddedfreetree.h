@@ -548,6 +548,7 @@ namespace KDevelop {
                 }
                 uint counted = countFreeItems(*m_centralFreeItem);
                 Q_ASSERT(count == counted);
+                Q_UNUSED(counted);
             }
             
             QPair<int, int> leftAndRightRealItems(int pos) {
@@ -895,6 +896,7 @@ namespace KDevelop {
                }
                uint counted = countFreeItems(*m_centralFreeItem);
                Q_ASSERT(count == counted);
+               Q_UNUSED(counted);
            }
            
            const Data& m_remove;

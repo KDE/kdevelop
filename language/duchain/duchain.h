@@ -22,7 +22,6 @@
 
 #include <QtCore/QObject>
 
-#include "duchainobserver.h"
 #include "topducontext.h"
 
 class KUrl;
@@ -33,8 +32,8 @@ namespace KDevelop
 class IDocument;
 class TopDUContext;
 class DUChainLock;
+class DUChainObserver;
 
-class IdentifiedFile;
 class ParsingEnvironmentManager;
 class ParsingEnvironment;
 class ParsingEnvironmentFile;

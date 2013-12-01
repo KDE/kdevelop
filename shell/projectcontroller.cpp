@@ -282,7 +282,6 @@ public:
                                     m_core->uiController()->activeMainWindow() );
             return;
         }
-        m_currentlyOpening += url;
 
         foreach( IProject* project, m_projects )
         {
@@ -296,6 +295,8 @@ public:
                 }
             }
         }
+
+        m_currentlyOpening += url;
 
         m_core->pluginControllerInternal()->loadProjectPlugins();
 
@@ -552,6 +553,10 @@ ProjectController::~ProjectController()
 
 void ProjectController::cleanup()
 {
+    if ( d->m_currentlyOpening.isEmpty() ) {
+        d->saveListOfOpenedProjects();
+    }
+
     d->m_cleaningUp = true;
     if( buildSetModel() ) {
         buildSetModel()->storeToSession( Core::self()->activeSession() );

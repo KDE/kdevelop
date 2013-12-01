@@ -316,7 +316,10 @@ public:
 
   bool isConstant() const;
   void setIsConstant(bool);
-  
+
+  bool isVolatile() const;
+  void setIsVolatile(bool);
+
   IndexedQualifiedIdentifier identifier() const ;
   
   void setIdentifier(IndexedQualifiedIdentifier id);
@@ -325,7 +328,7 @@ public:
   int pointerDepth() const;
   /**Sets the pointer-depth to the specified count
    * When the pointer-depth is increased, the "isConstPointer" values for new depths will be initialized with false.
-   * For efficiency-reasons the maximum currently is 32. */
+   * For efficiency-reasons the maximum currently is 23. */
   void setPointerDepth(int);
 
   ///Whether the target of pointer 'depthNumber' is constant
@@ -348,8 +351,9 @@ public:
     bool m_isConstant : 1;
     bool m_isReference : 1;
     bool m_isRValue : 1;
+    bool m_isVolatile : 1;
     uint m_pointerDepth : 5;
-    uint m_pointerConstMask : 24;
+    uint m_pointerConstMask : 23;
 };
 
 KDEVPLATFORMLANGUAGE_EXPORT uint qHash(const IndexedTypeIdentifier& id);

@@ -47,7 +47,7 @@ public:
     
     virtual void unload();
 public slots:
-    void switchToView( const QModelIndex& );
+    void itemActivated( const QModelIndex& );
     void switchToClicked(const QModelIndex& );
 private slots:
     void addView( Sublime::View* );

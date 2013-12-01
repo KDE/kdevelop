@@ -21,6 +21,7 @@
 
 #include "mainwindow.h"
 #include "workingsetcontroller.h"
+#include "core.h"
 
 #include <sublime/area.h>
 #include <interfaces/iuicontroller.h>

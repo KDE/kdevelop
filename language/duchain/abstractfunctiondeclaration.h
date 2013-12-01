@@ -22,12 +22,12 @@
 
 #include <QtCore/QString>
 #include "../languageexport.h"
-#include "indexedstring.h"
 #include "indexedducontext.h"
 
 namespace KDevelop
 {
 class DUContext;
+class IndexedString;
 
 class AbstractFunctionDeclarationData
 {

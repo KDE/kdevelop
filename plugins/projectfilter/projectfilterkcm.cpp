@@ -120,6 +120,7 @@ void ProjectFilterKCM::defaults()
 bool ProjectFilterKCM::eventFilter(QObject* object, QEvent* event)
 {
     Q_ASSERT(object == m_ui->filters);
+    Q_UNUSED(object);
     if (event->type() == QEvent::KeyRelease) {
         QKeyEvent* key = static_cast<QKeyEvent*>(event);
         if (key->key() == Qt::Key_Delete && key->modifiers() == Qt::NoModifier && m_ui->filters->currentIndex().isValid()) {

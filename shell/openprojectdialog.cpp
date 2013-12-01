@@ -63,7 +63,7 @@ OpenProjectDialog::OpenProjectDialog( bool fetch, const KUrl& startUrl, QWidget*
         currentPage = openPage;
     }
 
-    QWidget* page = new ProjectInfoPage( this );
+    ProjectInfoPage* page = new ProjectInfoPage( this );
     connect( page, SIGNAL(projectNameChanged(QString)), this, SLOT(validateProjectName(QString)) );
     connect( page, SIGNAL(projectManagerChanged(QString)), this, SLOT(validateProjectManager(QString)) );
     projectInfoPage = addPage( page, i18n("Project Information") );

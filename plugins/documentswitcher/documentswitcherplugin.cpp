@@ -43,6 +43,7 @@
 #include <interfaces/idocument.h>
 
 #include <QScrollBar>
+#include <QApplication>
 #include <QDir>
 
 #include <algorithm>
@@ -86,7 +87,7 @@ DocumentSwitcherPlugin::DocumentSwitcherPlugin(QObject *parent, const QVariantLi
     view->addAction( forwardAction );
     view->addAction( backwardAction );
     connect( view, SIGNAL(pressed(QModelIndex)), SLOT(switchToClicked(QModelIndex)) );
-    connect( view, SIGNAL(activated(QModelIndex)), SLOT(switchToView(QModelIndex)) );
+    connect( view, SIGNAL(activated(QModelIndex)), SLOT(itemActivated(QModelIndex)) );
     
     model = new QStandardItemModel( view );
     view->setModel( model );    
@@ -196,13 +197,12 @@ DocumentSwitcherPlugin::~DocumentSwitcherPlugin()
 void DocumentSwitcherPlugin::switchToClicked( const QModelIndex& idx )
 {
     view->selectionModel()->select(idx, QItemSelectionModel::ClearAndSelect);
-    switchToView(idx);
+    itemActivated(idx);
 }
 
-void DocumentSwitcherPlugin::switchToView( const QModelIndex& idx )
+void DocumentSwitcherPlugin::itemActivated( const QModelIndex& idx )
 {
     Q_UNUSED( idx );
-    view->hide();
     if( view->selectionModel()->selectedRows().isEmpty() )
     {
         return;
@@ -210,12 +210,29 @@ void DocumentSwitcherPlugin::switchToView( const QModelIndex& idx )
     int row = view->selectionModel()->selectedRows().first().row();
     
     Sublime::MainWindow* window = qobject_cast<Sublime::MainWindow*>( KDevelop::ICore::self()->uiController()->activeMainWindow() );
+    Sublime::View* activatedView = 0;
     if( window && documentLists.contains( window ) && documentLists[window].contains( window->area() ) )
     {
         const QList<Sublime::View*> l = documentLists[window][window->area()];
         if( row >= 0 && row < l.size() )
         {
-            window->activateView( l.at( row ) );
+            activatedView = l.at( row );
+        }
+    }
+    if( activatedView ) {
+        if( QApplication::mouseButtons() & Qt::MiddleButton )
+        {
+            window->area()->closeView( activatedView );
+            fillModel( window );
+            if ( model->rowCount() == 0 ) {
+                view->hide();
+            } else {
+                view->selectionModel()->select( view->model()->index(0, 0), QItemSelectionModel::ClearAndSelect );
+            }
+        } else
+        {
+            window->activateView( activatedView );
+            view->hide();
         }
     }
 }

@@ -38,6 +38,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/idocumentationcontroller.h>
 #include <duchain/types/typealiastype.h>
+#include <duchain/types/structuretype.h>
 #include <duchain/classdeclaration.h>
 #include <typeinfo>
 
@@ -81,7 +82,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
   
   if( !shorten ) {
     doc = ICore::self()->documentationController()->documentationForDeclaration(m_declaration.data());
-    
+
     const AbstractFunctionDeclaration* function = dynamic_cast<const AbstractFunctionDeclaration*>(m_declaration.data());
     if( function ) {
       htmlFunction();
@@ -262,11 +263,11 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
     if(comment.isEmpty() && doc) {
       comment = doc->description();
       if(!comment.isEmpty()) {
+        connect(doc.data(), SIGNAL(descriptionChanged()), this, SIGNAL(contentsChanged()));
         modifyHtml() += "<br />" + commentHighlight(comment);
       }
     } else if(!comment.isEmpty()) {
-      comment.replace("<br />", "\n"); //do not escape html newlines within the comment
-      comment.replace("<br/>", "\n");
+      comment.replace(QRegExp("<br */>"), "\n"); //do not escape html newlines within the comment
       comment = Qt::escape(comment);
       comment.replace('\n', "<br />"); //Replicate newlines in html
       modifyHtml() += commentHighlight(comment);
@@ -481,6 +482,9 @@ void AbstractDeclarationNavigationContext::htmlClass()
         break;
       case ClassDeclarationData::Interface:
         modifyHtml() += "interface ";
+        break;
+      case ClassDeclarationData::Trait:
+        modifyHtml() += "trait ";
         break;
       default:
         modifyHtml() += "<unknown type> ";

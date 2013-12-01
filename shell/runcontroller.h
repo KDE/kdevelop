@@ -28,10 +28,6 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/iruncontroller.h>
 
 #include <interfaces/ilaunchconfiguration.h>
-#include <interfaces/launchconfigurationtype.h>
-
-#include <outputview/outputjob.h>
-#include <interfaces/context.h>
 
 #include "shellexport.h"
 
@@ -42,10 +38,12 @@ class KStatefulBrush;
 
 namespace KDevelop
 {
+class Context;
 class ContextMenuExtension;
 class IPlugin;
 class IProject;
 class LaunchConfiguration;
+class LaunchConfigurationType;
 
 class KDEVPLATFORMSHELL_EXPORT RunController : public IRunController
 {

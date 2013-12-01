@@ -51,6 +51,7 @@ QString ExecuteScriptPlugin::interpreterEntry = "Interpreter";
 QString ExecuteScriptPlugin::workingDirEntry = "Working Directory";
 QString ExecuteScriptPlugin::executableEntry = "Executable";
 QString ExecuteScriptPlugin::executeOnRemoteHostEntry = "Execute on Remote Host";
+QString ExecuteScriptPlugin::runCurrentFileEntry = "Run current file";
 QString ExecuteScriptPlugin::remoteHostEntry = "Remote Host";
 QString ExecuteScriptPlugin::argumentsEntry = "Arguments";
 QString ExecuteScriptPlugin::isExecutableEntry = "isExecutable";
@@ -191,7 +192,15 @@ int ExecuteScriptPlugin::outputFilterModeId( KDevelop::ILaunchConfiguration* cfg
     return cfg->config().readEntry( ExecuteScriptPlugin::outputFilteringEntry, 0 );
 }
 
+bool ExecuteScriptPlugin::runCurrentFile(ILaunchConfiguration* cfg) const
+{
+    if( !cfg )
+    {
+        return false;
+    }
 
+    return cfg->config().readEntry( ExecuteScriptPlugin::runCurrentFileEntry, true );
+}
 
 QString ExecuteScriptPlugin::interpreter( KDevelop::ILaunchConfiguration* cfg, QString& err ) const
 {

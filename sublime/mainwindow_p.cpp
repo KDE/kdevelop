@@ -126,11 +126,13 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
 
     action = new KAction(i18n("Next Tool View"), this);
     action->setShortcut(Qt::META | Qt::CTRL | Qt::Key_N);
+    action->setIcon(KIcon("go-next"));
     connect(action, SIGNAL(triggered(bool)), SLOT(selectNextDock()));
     ac->addAction("select_next_dock", action);
 
     action = new KAction(i18n("Previous Tool View"), this);
     action->setShortcut(Qt::META | Qt::CTRL | Qt::Key_P);
+    action->setIcon(KIcon("go-previous"));
     connect(action, SIGNAL(triggered(bool)), SLOT(selectPreviousDock()));
     ac->addAction("select_previous_dock", action);
 
@@ -306,7 +308,7 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
                     d->m_mainWindow, SLOT(tabContextMenuRequested(Sublime::View*,KMenu*)));
             connect(container, SIGNAL(tabToolTipRequested(Sublime::View*,Sublime::Container*,int)),
                     d->m_mainWindow, SLOT(tabToolTipRequested(Sublime::View*,Sublime::Container*,int)));
-            connect(container, SIGNAL(closeRequest(QWidget*)),
+            connect(container, SIGNAL(requestClose(QWidget*)),
                     d, SLOT(widgetCloseRequest(QWidget*)), Qt::QueuedConnection);
             splitter->addWidget(container);
         }

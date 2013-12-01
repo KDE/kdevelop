@@ -42,7 +42,7 @@
 #include "legacy/editsnippet.h"
 
 K_PLUGIN_FACTORY(SnippetFactory, registerPlugin<SnippetPlugin>(); )
-K_EXPORT_PLUGIN(SnippetFactory(KAboutData("kdevsnippet","kdevsnippet", ki18n("Snippets"), "0.1", ki18n("Support for managing and using code snippets"), KAboutData::License_GPL)))
+K_EXPORT_PLUGIN(SnippetFactory(KAboutData("kdevsnippet","kdevsnippet", ki18n("Snippets"), "0.1", ki18n("This plugin allows to store code snippets and insert them into open files"), KAboutData::License_GPL)))
 
 SnippetPlugin* SnippetPlugin::m_self = 0;
 

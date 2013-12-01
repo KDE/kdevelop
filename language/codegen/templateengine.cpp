@@ -65,6 +65,10 @@ TemplateEngine::TemplateEngine()
     d->engine.addTemplateLoader(AbstractTemplateLoader::Ptr(ArchiveTemplateLoader::self()));
 }
 
+TemplateEngine::~TemplateEngine()
+{
+}
+
 void TemplateEngine::addTemplateDirectories(const QStringList& directories)
 {
     FileSystemTemplateLoader* loader = new FileSystemTemplateLoader;

@@ -262,12 +262,10 @@ QModelIndex MultiLevelListViewPrivate::mapFromSource(QModelIndex index, int leve
     return index;
 }
 
-MultiLevelListView::MultiLevelListView(QWidget* parent, Qt::WindowFlags f, int levels)
+MultiLevelListView::MultiLevelListView(QWidget* parent, Qt::WindowFlags f)
 : QWidget(parent, f)
 , d(new MultiLevelListViewPrivate(this))
 {
-    Q_ASSERT(levels > 1);
-
     delete layout();
     setLayout(new QHBoxLayout());
     layout()->setContentsMargins(0, 0, 0, 0);

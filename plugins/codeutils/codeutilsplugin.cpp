@@ -45,6 +45,7 @@
 #include <language/duchain/declaration.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/abstractfunctiondeclaration.h>
+#include <language/duchain/topducontext.h>
 #include <language/duchain/types/functiontype.h>
 #include <language/codegen/templaterenderer.h>
 #include <language/codegen/codedescription.h>
@@ -56,7 +57,7 @@ using namespace KDevelop;
 using namespace KTextEditor;
 
 K_PLUGIN_FACTORY(CodeUtilsPluginFactory, registerPlugin<CodeUtilsPlugin>(); )
-K_EXPORT_PLUGIN(CodeUtilsPluginFactory(KAboutData("kdevcodeutils","kdevcodeutils", ki18n("Code Utilities"), "0.1", ki18n("Various utilities that help you code faster."), KAboutData::License_GPL)
+K_EXPORT_PLUGIN(CodeUtilsPluginFactory(KAboutData("kdevcodeutils","kdevcodeutils", ki18n("Code Utilities"), "0.1", ki18n("Collection of various utilities that increase productivity while programming."), KAboutData::License_GPL)
     .addAuthor(ki18n("Milian Wolff"), ki18n("Author"), "mail@milianw.de", "http://milianw.de")
 ))
 

@@ -6,21 +6,33 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>600</width>
-    <height>418</height>
+    <width>675</width>
+    <height>510</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Script</string>
+      <string>Interpreter</string>
      </property>
      <layout class="QFormLayout" name="formLayout_3">
+      <property name="fieldGrowthPolicy">
+       <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+      </property>
+      <property name="labelAlignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+      <property name="formAlignment">
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+      </property>
       <item row="0" column="0">
        <widget class="QLabel" name="label_7">
         <property name="text">
-         <string>Interpreter Command:</string>
+         <string>Script interpreter:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
@@ -62,22 +74,55 @@
         </item>
        </widget>
       </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_2">
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox_4">
+     <property name="title">
+      <string>Script file</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QRadioButton" name="runCurrentFile">
         <property name="text">
-         <string>Script File:</string>
+         <string>Run the file currently open in the editor</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
-       <widget class="KUrlRequester" name="executablePath">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="clickMessage">
-         <string>Enter the absolute path to the script to run</string>
+      <item>
+       <widget class="QRadioButton" name="runFixedFile">
+        <property name="text">
+         <string>Always run the same file</string>
         </property>
        </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QLabel" name="scriptLabel">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="text">
+           <string>Script file:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="KUrlRequester" name="executablePath">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="clickMessage" stdset="0">
+           <string>Enter the absolute path to the script to run</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
     </widget>
@@ -90,6 +135,9 @@
      <layout class="QFormLayout" name="formLayout">
       <property name="fieldGrowthPolicy">
        <enum>QFormLayout::ExpandingFieldsGrow</enum>
+      </property>
+      <property name="labelAlignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
       <item row="0" column="0">
        <widget class="QLabel" name="label_3">
@@ -109,7 +157,7 @@
         <property name="placeholderText">
          <string/>
         </property>
-        <property name="clickMessage">
+        <property name="clickMessage" stdset="0">
          <string>Enter arguments to give to the executable</string>
         </property>
        </widget>
@@ -129,7 +177,7 @@
         <property name="toolTip">
          <string>Select a working directory for the executable</string>
         </property>
-        <property name="clickMessage">
+        <property name="clickMessage" stdset="0">
          <string>Select a working directory for the executable</string>
         </property>
        </widget>
@@ -199,26 +247,40 @@
      <property name="title">
       <string>Execute on Host</string>
      </property>
-     <layout class="QFormLayout" name="formLayout_2">
-      <property name="fieldGrowthPolicy">
-       <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-      </property>
-      <item row="0" column="0">
+     <layout class="QVBoxLayout" name="verticalLayout_3">
+      <item>
        <widget class="QCheckBox" name="remoteHostCheckbox">
         <property name="text">
-         <string>Remote Host (ssh):</string>
+         <string>Execute on remote host</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
-       <widget class="KLineEdit" name="remoteHost">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="clickMessage">
-         <string>Enter a remote host (user@example.com)</string>
-        </property>
-       </widget>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="QLabel" name="remoteHostLabel">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="text">
+           <string>Remote host (ssh):</string>
+          </property>
+          <property name="buddy">
+           <cstring>remoteHost</cstring>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="KLineEdit" name="remoteHost">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="clickMessage" stdset="0">
+           <string>Enter a remote host (user@example.com)</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
     </widget>
@@ -262,14 +324,77 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>executablePath</tabstop>
   <tabstop>arguments</tabstop>
   <tabstop>workingDirectory</tabstop>
   <tabstop>environment</tabstop>
   <tabstop>outputFilteringMode</tabstop>
-  <tabstop>remoteHostCheckbox</tabstop>
   <tabstop>remoteHost</tabstop>
  </tabstops>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>runFixedFile</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>executablePath</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>337</x>
+     <y>157</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>337</x>
+     <y>179</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>remoteHostCheckbox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>remoteHostLabel</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>337</x>
+     <y>413</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>86</x>
+     <y>443</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>remoteHostCheckbox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>remoteHost</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>337</x>
+     <y>413</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>401</x>
+     <y>443</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>runFixedFile</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>scriptLabel</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>337</x>
+     <y>157</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>179</x>
+     <y>183</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

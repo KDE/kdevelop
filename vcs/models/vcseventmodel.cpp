@@ -156,6 +156,7 @@ void VcsEventModel::fetchMore(const QModelIndex& parent)
 {
     d->fetching = true;
     Q_ASSERT(!parent.isValid());
+    Q_UNUSED(parent);
     VcsJob* job = d->m_iface->log(d->m_url, d->m_rev, qMax(rowCount(), 100));
     connect( this, SIGNAL(destroyed(QObject*)), job, SLOT(kill()) );
     connect( job, SIGNAL(finished(KJob*)), SLOT(jobReceivedResults(KJob*)) );

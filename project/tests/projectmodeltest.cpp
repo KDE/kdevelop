@@ -507,23 +507,20 @@ void ProjectModelTest::testItemsForPath_data()
 void ProjectModelTest::testProjectProxyModel()
 {
     ProjectFolderItem* root = new ProjectFolderItem(0, Path(KUrl::fromPath("/tmp/")));
-    new ProjectFileItem("a1", root);
     new ProjectFileItem("b1", root);
-    new ProjectFileItem("c1", root);
+    new ProjectFileItem("a1", root);
     new ProjectFileItem("d1", root);
+    new ProjectFileItem("c1", root);
     model->appendRow(root);
-    
+
     QModelIndex proxyRoot = proxy->mapFromSource(root->index());
     QCOMPARE(model->rowCount(root->index()), 4);
     QCOMPARE(proxy->rowCount(proxyRoot), 4);
-    
-    proxy->setFilterString("*1");
-    QCOMPARE(proxy->rowCount(proxyRoot), 4);
-    
-    proxy->setFilterString("a*");
-    debugItemModel(proxy);
-    QCOMPARE(proxy->rowCount(proxyRoot), 1);
-    
+    QCOMPARE(proxy->index(0, 0, proxy->index(0, 0)).data().toString(), QString("a1"));
+    QCOMPARE(proxy->index(1, 0, proxy->index(0, 0)).data().toString(), QString("b1"));
+    QCOMPARE(proxy->index(2, 0, proxy->index(0, 0)).data().toString(), QString("c1"));
+    QCOMPARE(proxy->index(3, 0, proxy->index(0, 0)).data().toString(), QString("d1"));
+
     model->clear();
 }
 

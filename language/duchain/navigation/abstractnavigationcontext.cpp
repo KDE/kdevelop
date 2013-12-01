@@ -38,6 +38,7 @@
 #include "../types/enumerationtype.h"
 #include "../types/referencetype.h"
 #include "../types/pointertype.h"
+#include "../types/structuretype.h"
 #include <interfaces/icontextbrowser.h>
 #include <interfaces/idocumentationcontroller.h>
 #include <interfaces/iplugincontroller.h>

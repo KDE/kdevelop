@@ -43,6 +43,7 @@
 
 #include <interfaces/ilauncher.h>
 #include <interfaces/ilaunchmode.h>
+#include <interfaces/launchconfigurationtype.h>
 #include <QLayout>
 #include <QMenu>
 #include <QLabel>

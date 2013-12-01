@@ -53,11 +53,14 @@ EnvironmentWidget::EnvironmentWidget( QWidget *parent )
     ui.variableTable->horizontalHeader()->setResizeMode( 1, QHeaderView::Stretch );
     ui.newButton->setIcon(KIcon("list-add"));
     ui.deleteButton->setIcon(KIcon("list-remove"));
+    ui.newMultipleButton->setIcon(KIcon("format-list-unordered"));
 
     connect( ui.newButton, SIGNAL(clicked()),
              SLOT(newButtonClicked()) );
     connect( ui.deleteButton, SIGNAL(clicked()),
              SLOT(deleteButtonClicked()) );
+    connect( ui.newMultipleButton, SIGNAL(clicked()),
+             SLOT(newMultipleButtonClicked()) );
 
     connect( ui.addgrpBtn, SIGNAL(clicked()), SLOT(addGroupClicked()) );
     connect( ui.addgrpBtn, SIGNAL(clicked()), SIGNAL(changed()) );
@@ -164,6 +167,37 @@ void EnvironmentWidget::deleteButtonClicked()
     }
     
     groupModel->removeVariables( mapped );
+}
+
+void EnvironmentWidget::newMultipleButtonClicked()
+{
+    KDialog * dialog = new KDialog( this );
+    dialog->setCaption( i18n( "New Environment Variables" ) );
+    dialog->setButtons( KDialog::Ok | KDialog::Cancel );
+    dialog->setDefaultButton( KDialog::Ok );
+
+    QWidget *main = new QWidget( dialog );
+    QVBoxLayout *layout = new QVBoxLayout( main );
+
+    KTextEdit *edit = new KTextEdit( main );
+    layout->addWidget( edit );
+    edit->setClickMessage("VARIABLE1=VALUE1\nVARIABLE2=VALUE2");
+    edit->setFocus();
+    dialog->setMainWidget( main );
+
+    if ( dialog->exec() != QDialog::Accepted ) {
+        return;
+    }
+
+    QStringList lines = edit->toPlainText().split( "\n", QString::SkipEmptyParts );
+
+    foreach(const QString &line, lines) {
+        QString name = line.section('=', 0, 0);
+        QString value = line.section('=', 1, -1).trimmed();
+        if (!name.isEmpty() && !value.isEmpty()) {
+            groupModel->addVariable( name, value );
+        }
+    }
 }
 
 void EnvironmentWidget::addGroupClicked()

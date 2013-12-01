@@ -350,7 +350,7 @@ protected:
    * \param identifier The range which encompasses the name of this context, if one exists.
    * \returns the opened context.
    */
-  DUContext* openContext(T* node, const KDevelop::RangeInRevision& range, DUContext::ContextType type, NameT* identifier = 0)
+  DUContext* openContext(T* node, const RangeInRevision& range, DUContext::ContextType type, NameT* identifier = 0)
   {
     if (m_compilingContexts) {
       DUContext* ret = openContextInternal(range, type, identifier ? identifierForNode(identifier) : QualifiedIdentifier());
@@ -372,7 +372,7 @@ protected:
    * \param identifier The identifier for this context
    * \returns the opened context.
    */
-  DUContext* openContext(T* node, const KDevelop::RangeInRevision& range, DUContext::ContextType type, QualifiedIdentifier id)
+  DUContext* openContext(T* node, const RangeInRevision& range, DUContext::ContextType type, const QualifiedIdentifier& id)
   {
     if (m_compilingContexts) {
       DUContext* ret = openContextInternal(range, type, id);

@@ -42,7 +42,9 @@
 #include <interfaces/foregroundlock.h>
 #include <interfaces/isession.h>
 
+#ifndef Q_OS_WIN
 #include <util/google/dense_hash_map>
+#endif
 
 #include "../interfaces/ilanguagesupport.h"
 #include "../interfaces/icodehighlighting.h"
@@ -64,6 +66,7 @@
 #include "waitforupdate.h"
 #include "referencecounting.h"
 #include "importers.h"
+#include "duchainobserver.h"
 
 namespace {
 //Additional "soft" cleanup steps that are done before the actual cleanup.
@@ -1689,6 +1692,11 @@ KDevelop::ReferencedTopDUContext DUChain::waitForUpdate(const KDevelop::IndexedS
 //   waiter.m_waitMutex.lock();
 //   waiter.m_dataMutex.unlock();
   while(!waiter.m_ready) {
+    // we might have been shut down in the meanwhile
+    if (!ICore::self()) {
+      return 0;
+    }
+
     QMetaObject::invokeMethod(ICore::self()->languageController()->backgroundParser(), "parseDocuments");
     QApplication::processEvents();
     usleep(1000);

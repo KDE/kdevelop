@@ -26,6 +26,7 @@
 #include <language/backgroundparser/backgroundparser.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
+#include <language/interfaces/iproblem.h>
 
 #include <interfaces/ilanguage.h>
 #include <interfaces/iplugincontroller.h>

@@ -19,7 +19,6 @@
 #ifndef PROJECT_FILE_QUICKOPEN
 #define PROJECT_FILE_QUICKOPEN
 
-#include <QIcon>
 #include <language/interfaces/quickopendataprovider.h>
 #include <language/interfaces/quickopenfilter.h>
 #include <language/duchain/indexedstring.h>
@@ -30,6 +29,8 @@ namespace KDevelop {
 class IProject;
 class ProjectFileItem;
 }
+
+class QIcon;
 
 /**
  * Internal data class for the BaseFileDataProvider and ProjectFileData.

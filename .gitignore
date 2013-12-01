@@ -1,6 +1,8 @@
+# general
 apidocs
 .kdev4
 *~
+*.bak
 doxygen.log
 build
 *.patch
@@ -11,3 +13,9 @@ build
 massif.out.*
 callgrind.out.*
 .*kate-swp
+
+# from kdiff3
+*.BACKUP.*
+*.BASE.*
+*.LOCAL.*
+*.REMOTE.*

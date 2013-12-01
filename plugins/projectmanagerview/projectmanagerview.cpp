@@ -54,36 +54,6 @@
 
 using namespace KDevelop;
 
-//BEGIN ProjectManagerFilterAction
-
-ProjectManagerFilterAction::ProjectManagerFilterAction(ProjectManagerView* parent)
-    : KAction( parent )
-    , m_projectManagerView(parent)
-{
-    setIcon(KIcon("view-filter"));
-    setText(i18n("Filter..."));
-    setToolTip(i18n("Insert wildcard patterns to filter the project view"
-                    " for files and targets for matching items.\n"
-                    "Prepend patterns with an exclamation mark to negate them.\n"
-                    "Separate different patterns with semicolons or spaces."));
-}
-
-QWidget* ProjectManagerFilterAction::createWidget( QWidget* parent )
-{
-    KLineEdit* edit = new KLineEdit(parent);
-    edit->setClickMessage(i18n("Filter..."));
-    edit->setClearButtonShown(true);
-    edit->setToolTip(toolTip());
-    connect(edit, SIGNAL(textChanged(QString)), this, SIGNAL(filterChanged(QString)));
-
-    const QString filterString = m_projectManagerView->filterString();
-    edit->setText(filterString);
-
-    return edit;
-}
-
-//END ProjectManagerFilterAction
-
 ProjectManagerViewItemContext::ProjectManagerViewItemContext(const QList< ProjectBaseItem* >& items, ProjectManagerView* view)
     : ProjectItemContext(items), m_view(view)
 {
@@ -97,7 +67,6 @@ ProjectManagerView *ProjectManagerViewItemContext::view() const
 
 static const char* sessionConfigGroup = "ProjectManagerView";
 static const char* splitterStateConfigKey = "splitterState";
-static const char* filterConfigKey = "filter";
 static const int projectTreeViewStrechFactor = 75; // %
 static const int projectBuildSetStrechFactor = 25; // %
 
@@ -139,23 +108,11 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
     m_ui->buildSetView->setProjectView( this );
 
     m_modelFilter = new ProjectProxyModel( this );
-    m_modelFilter->setDynamicSortFilter( true );
     m_modelFilter->setSourceModel(ICore::self()->projectController()->projectModel());
     m_overlayProxy = new VcsOverlayProxyModel( this );
     m_overlayProxy->setSourceModel(m_modelFilter);
 
     m_ui->projectTreeView->setModel( m_overlayProxy );
-
-    QString filterText;
-    if (pmviewConfig.hasKey(filterConfigKey)) {
-        filterText = pmviewConfig.readEntry(filterConfigKey, QString());
-    }
-    setFilterString(filterText);
-
-    ProjectManagerFilterAction* filterAction = new ProjectManagerFilterAction(this);
-    connect(filterAction, SIGNAL(filterChanged(QString)),
-            this, SLOT(setFilterString(QString)));
-    addAction(filterAction);
 
     connect( m_ui->projectTreeView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
              this, SLOT(selectionChanged()) );
@@ -219,7 +176,6 @@ ProjectManagerView::~ProjectManagerView()
 {
     KConfigGroup pmviewConfig(ICore::self()->activeSession()->config(), sessionConfigGroup);
     pmviewConfig.writeEntry(splitterStateConfigKey, m_ui->splitter->saveState());
-    pmviewConfig.writeEntry(filterConfigKey, m_filterString);
     pmviewConfig.sync();
 
     delete m_ui;
@@ -297,17 +253,6 @@ void ProjectManagerView::locateCurrentDocument()
 void ProjectManagerView::open( const Path& path )
 {
     IOpenWith::openFiles(KUrl::List() << path.toUrl());
-}
-
-QString ProjectManagerView::filterString() const
-{
-    return m_filterString;
-}
-
-void ProjectManagerView::setFilterString(const QString &text)
-{
-    m_filterString = text;
-    m_modelFilter->setFilterString(text);
 }
 
 QModelIndex ProjectManagerView::indexFromView(const QModelIndex& index) const

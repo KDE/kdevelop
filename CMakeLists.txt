@@ -1,4 +1,18 @@
-cmake_minimum_required(VERSION 2.6)
+# kdevplatform version
+set(KDEVPLATFORM_VERSION_MAJOR 1)
+set(KDEVPLATFORM_VERSION_MINOR 6)
+set(KDEVPLATFORM_VERSION_PATCH 60)
+
+# plugin versions listed in the .desktop files
+set(KDEV_PLUGIN_VERSION 17)
+
+# library version / SO version
+set(KDEVPLATFORM_LIB_VERSION 8.0.0)
+set(KDEVPLATFORM_LIB_SOVERSION 8)
+
+################################################################################
+
+cmake_minimum_required(VERSION 2.8)
 
 project(KDevPlatform)
 
@@ -6,15 +20,8 @@ set(KDE4_BUILD_TESTS "ON" CACHE "BOOL" "Enable building of tests" FORCE )
 
 set(CMAKE_MODULE_PATH ${KDevPlatform_SOURCE_DIR}/cmake/modules)
 
-set(KDEVPLATFORM_VERSION_MAJOR 1)
-set(KDEVPLATFORM_VERSION_MINOR 5)
-set(KDEVPLATFORM_VERSION_PATCH 60)
-set(KDEV_PLUGIN_VERSION 16)
-
 set(KDE_MIN_VERSION "4.7.0")
 find_package(KDE4 4.7.0 REQUIRED)
-set(KDEVPLATFORM_LIB_VERSION 7.0.0)
-set(KDEVPLATFORM_LIB_SOVERSION 7)
 
 find_package(Grantlee 0.1.7)
 find_package(QJSON)
@@ -34,14 +41,6 @@ if("${_isSystemLibDir}" STREQUAL "-1")
   set(CMAKE_INSTALL_RPATH "${LIB_INSTALL_DIR}")
 endif("${_isSystemLibDir}" STREQUAL "-1")
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-
-set(KOMPARE_FOUND FALSE)
-#macro_optional_find_package(Kompare)
-macro_bool_to_01(KOMPARE_FOUND HAVE_KOMPARE)
-#macro_log_feature(KOMPARE_FOUND "Kompare" "KPart to view file differences."
-#                        "http://www.caffeinated.me.uk/kompare/" FALSE ""
-#                        "Required for difference checking. From KDE SDK package, KDE 4.3.61 or higher needed.")
-
 
 add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS -DQURL_NO_CAST_FROM_QSTRING)

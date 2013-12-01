@@ -39,7 +39,7 @@ void DocumentSwitcherTreeView::keyReleaseEvent( QKeyEvent* event )
 {
     if( event->key() == Qt::Key_Control ) 
     {
-        plugin->switchToView( selectionModel()->currentIndex() );
+        plugin->itemActivated( selectionModel()->currentIndex() );
         event->accept();
         hide();
     } else 

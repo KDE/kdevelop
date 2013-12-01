@@ -283,11 +283,6 @@ bool ItemRepositoryRegistryPrivate::open(const QString& path)
 
   if(clear) {
     kWarning() << QString("The data-repository at %1 has to be cleared.").arg(m_path);
-#ifdef Q_OS_WIN
-    /// on Windows a file can't be deleted unless the last file handle gets closed
-    /// deleteDataDirectory would enter a never ending loop
-    crashesFile.close();
-#endif
     deleteDataDirectory();
   }
 

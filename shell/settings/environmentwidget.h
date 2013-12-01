@@ -58,6 +58,7 @@ Q_SIGNALS:
 private Q_SLOTS:
     void newButtonClicked();
     void deleteButtonClicked();
+    void newMultipleButtonClicked();
     void addGroupClicked();
     void removeGroupClicked();
     void activeGroupChanged( int );

@@ -90,6 +90,9 @@ public Q_SLOTS:
     void split(Qt::Orientation orientation);
     void toggleFullScreen(bool fullScreen);
 
+    void gotoNextSplit();
+    void gotoPreviousSplit();
+
     void newToolbarConfig();
 
     void settingsDialog();

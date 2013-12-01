@@ -23,8 +23,10 @@
 #define KDEVPLATFORM_PLUGIN_GIT_PLUGIN_H
 
 #include <vcs/interfaces/idistributedversioncontrol.h>
+#include <vcs/interfaces/icontentawareversioncontrol.h>
 #include <vcs/dvcs/dvcsplugin.h>
 #include <QObject>
+#include <QProcess>
 #include <vcs/vcsstatusinfo.h>
 #include <outputview/outputjob.h>
 #include <vcs/vcsjob.h>
@@ -37,6 +39,24 @@ namespace KDevelop
     class VcsJob;
     class VcsRevision;
 }
+
+class GitPluginCheckInRepositoryJob : public KDevelop::CheckInRepositoryJob
+{
+    Q_OBJECT
+public:
+    GitPluginCheckInRepositoryJob(KTextEditor::Document* document, const QString& rootDirectory);
+    virtual ~GitPluginCheckInRepositoryJob();
+    virtual void start();
+
+private slots:
+    void repositoryQueryFinished(int);
+    void processFailed(QProcess::ProcessError);
+
+private:
+    QProcess* m_hashjob;
+    QProcess* m_findjob;
+    QString m_rootDirectory;
+};
 
 class StandardJob : public KDevelop::VcsJob
 {
@@ -64,10 +84,10 @@ class StandardJob : public KDevelop::VcsJob
  * It implements the DVCS dependent things not implemented in KDevelop::DistributedVersionControlPlugin
  * @author Evgeniy Ivanov <powerfox@kde.ru>
  */
-class GitPlugin: public KDevelop::DistributedVersionControlPlugin
+class GitPlugin: public KDevelop::DistributedVersionControlPlugin, public KDevelop::IContentAwareVersionControl
 {
     Q_OBJECT
-    Q_INTERFACES(KDevelop::IBasicVersionControl KDevelop::IDistributedVersionControl)
+    Q_INTERFACES(KDevelop::IBasicVersionControl KDevelop::IDistributedVersionControl KDevelop::IContentAwareVersionControl)
     friend class GitInitTest;
 public:
     GitPlugin(QObject *parent, const QVariantList & args = QVariantList() );
@@ -139,6 +159,8 @@ public:
     virtual bool hasError() const;
     virtual QString errorDescription() const;
     virtual void registerRepositoryForCurrentBranchChanges(const KUrl& repository);
+
+    KDevelop::CheckInRepositoryJob* isInRepository(KTextEditor::Document* document);
 protected:
   
     KUrl repositoryRoot(const KUrl& path);

@@ -18,9 +18,11 @@
 
 #include <util/kdevvarlengtharray.h>
 #include <util/convenientfreelist.h>
+#include <language/util/setrepository.h>
 #include "../languageexport.h"
 #include "declaration.h"
 #include "ducontext.h"
+#include "topducontext.h"
 
 #ifndef KDEVPLATFORM_PERSISTENTSYMBOLTABLE_H
 #define KDEVPLATFORM_PERSISTENTSYMBOLTABLE_H

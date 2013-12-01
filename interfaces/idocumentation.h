@@ -23,6 +23,7 @@
 #include <QtCore/QString>
 #include <KDE/KSharedPtr>
 #include "interfacesexport.h"
+#include <util/ksharedobject.h>
 
 class QWidget;
 
@@ -32,10 +33,16 @@ namespace KDevelop
 class DocumentationFindWidget;
 class IDocumentationProvider;
 
-class KDEVPLATFORMINTERFACES_EXPORT IDocumentation : public KShared
+class KDEVPLATFORMINTERFACES_EXPORT IDocumentation : public QObject, public KSharedObject
 {
+    Q_OBJECT
+    Q_PROPERTY(QString name READ name CONSTANT)
+    Q_PROPERTY(QString description READ description NOTIFY descriptionChanged)
+    Q_PROPERTY(IDocumentationProvider* provider READ provider CONSTANT)
     public:
         typedef KSharedPtr<IDocumentation> Ptr;
+        IDocumentation();
+
         virtual ~IDocumentation();
         
         /** @returns the name of the documented information*/
@@ -53,6 +60,9 @@ class KDEVPLATFORMINTERFACES_EXPORT IDocumentation : public KShared
         virtual QWidget* documentationWidget(DocumentationFindWidget* findWidget, QWidget* parent=0) = 0;
         
         virtual IDocumentationProvider* provider() const = 0;
+
+    Q_SIGNALS:
+        void descriptionChanged();
 };
 
 }

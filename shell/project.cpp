@@ -48,6 +48,7 @@
 #include <interfaces/iplugin.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iruncontroller.h>
+#include <interfaces/isession.h>
 #include <project/projectmodel.h>
 #include <project/path.h>
 #include <language/duchain/indexedstring.h>
@@ -258,7 +259,8 @@ public:
         if ( !statJob->exec() ) //be sync for right now
         {
             KMessageBox::sorry( Core::self()->uiControllerInternal()->defaultMainWindow(),
-                            i18n( "Unable to load the project file %1",
+                            i18n( "Unable to load the project file %1.<br>"
+                                  "The project has been removed from the session.",
                                   projectFile.pathOrUrl() ) );
             return false;
         }

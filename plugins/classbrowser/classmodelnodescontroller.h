@@ -23,9 +23,10 @@
 #define KDEVPLATFORM_PLUGIN_CLASSMODELNODESCONTROLLER_H
 
 #include <QObject>
-#include <QMap>
 #include <language/duchain/indexedstring.h>
 #include <language/duchain/ducontext.h>
+
+class QTimer;
 
 class ClassModelNodeDocumentChangedInterface
 {

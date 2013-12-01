@@ -21,9 +21,15 @@
 
 #include <QVariantMap>
 #include "delayedoutput.h"
+#include <language/duchain/types/abstracttype.h>
+#include <QDebug>
 
 namespace KDevelop
 {
+
+class DUContext;
+
+class Declaration;
 
 const QString EXPECT_FAIL =    "EXPECT_FAIL";
 const QString FAILED_TO_FAIL = "\"%1\" FAILED TO FAIL AS EXPECTED: \"%2\" %3";
@@ -31,17 +37,19 @@ const QString EXPECTED_FAIL =  "\"%1\" FAILED (expected): %2 %3";
 const QString FAIL =           "\"%1\" FAILED: %2 %3";
 const QString TEST_NOT_FOUND = "Test not found";
 
+template<class T> class TestSuite;
+
+KDEVPLATFORMJSONTESTS_EXPORT TestSuite<KDevelop::Declaration*>& declarationTestSuite();
+KDEVPLATFORMJSONTESTS_EXPORT TestSuite<KDevelop::DUContext*>& contextTestSuite();
+KDEVPLATFORMJSONTESTS_EXPORT TestSuite<KDevelop::AbstractType::Ptr>& typeTestSuite();
+
 template<class T>
 class KDEVPLATFORMJSONTESTS_EXPORT TestSuite
 {
 public:
   typedef QString (*TestFunction)(const QVariant&, T);
-  static TestSuite<T>& get()
-  {
-    static TestSuite<T> _inst;
-    return _inst;
-  };
-  bool addTest(QString testName, TestFunction testFunc)
+  static TestSuite& get();
+  bool addTest(const QString& testName, TestFunction testFunc)
   {
     m_testFunctions.insert(testName, testFunc);
     return true;
@@ -92,12 +100,36 @@ private:
 
   TestSuite() { }
   Q_DISABLE_COPY(TestSuite);
+
+  friend TestSuite<Declaration*>& declarationTestSuite();
+  friend TestSuite<DUContext*>& contextTestSuite();
+  friend TestSuite<AbstractType::Ptr>& typeTestSuite();
 };
 
 template<class T>
 inline bool runTests(const QVariantMap &data, T object)
 {
     return TestSuite<T>::get().runTests(data, object);
+}
+
+///TODO: Once we can use C++11, see whether this can be cleaned up by extern templates
+template<>
+inline TestSuite<Declaration*>& TestSuite<Declaration*>::get()
+{
+    return declarationTestSuite();
+}
+
+template<>
+inline TestSuite<DUContext*>& TestSuite<DUContext*>::get()
+{
+    return contextTestSuite();
+}
+
+
+template<>
+inline TestSuite<AbstractType::Ptr>& TestSuite<AbstractType::Ptr>::get()
+{
+    return typeTestSuite();
 }
 
 }

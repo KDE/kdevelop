@@ -46,7 +46,7 @@
 #include <QDBusConnection>
 
 K_PLUGIN_FACTORY(GrepViewFactory, registerPlugin<GrepViewPlugin>(); )
-K_EXPORT_PLUGIN(GrepViewFactory(KAboutData("kdevgrepview","kdevgrepview", ki18n("Find/Replace in Files"), "0.1", ki18n("Support for running grep over a list of files"), KAboutData::License_GPL)))
+K_EXPORT_PLUGIN(GrepViewFactory(KAboutData("kdevgrepview","kdevgrepview", ki18n("Find/Replace in Files"), "0.1", ki18n("Allows fast searching of multiple files using patterns or regular expressions. And allow to replace it too."), KAboutData::License_GPL)))
 
 GrepViewPlugin::GrepViewPlugin( QObject *parent, const QVariantList & )
     : KDevelop::IPlugin( GrepViewFactory::componentData(), parent ), m_currentJob(0)

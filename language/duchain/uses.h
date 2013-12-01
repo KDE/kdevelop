@@ -20,8 +20,7 @@
 #define KDEVPLATFORM_USES_H
 
 #include "../languageexport.h"
-#include "declarationid.h"
-
+#include <util/kdevvarlengtharray.h>
 
 namespace KDevelop {
 

@@ -18,9 +18,10 @@
 */
 
 #include "abstractfunctiondeclaration.h"
-#include <QStringList>
+
 #include "types/functiontype.h"
 #include "declaration.h"
+#include "ducontext.h"
 
 namespace KDevelop {
 

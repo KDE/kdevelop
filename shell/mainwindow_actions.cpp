@@ -122,6 +122,45 @@ void MainWindowPrivate::split(Qt::Orientation orientation)
     m_mainWindow->activateView(newView);
 }
 
+static void gotoPrevNextSplit(bool next)
+{
+    UiController* ui = Core::self()->uiControllerInternal();
+
+    if( !ui->activeSublimeWindow() )
+        return;
+
+    Sublime::Area* area = ui->activeSublimeWindow()->area();
+    if (!area)
+        return;
+
+    QList<Sublime::View*> topViews = ui->activeSublimeWindow()->getTopViews();
+
+    Sublime::View *activeView = ui->activeSublimeWindow()->activeView();
+    if (!activeView)
+        return;
+
+    int viewIndex = topViews.indexOf(activeView);
+    viewIndex = next ? viewIndex + 1 : viewIndex -1;
+
+    if (viewIndex < 0)
+        viewIndex = topViews.count() - 1;
+    else if (viewIndex >= topViews.count())
+        viewIndex = 0;
+
+    if (viewIndex >= 0 && viewIndex < topViews.count())
+        ui->activeSublimeWindow()->activateView(topViews.at(viewIndex));
+}
+
+void MainWindowPrivate::gotoNextSplit()
+{
+    gotoPrevNextSplit(true);
+}
+
+void MainWindowPrivate::gotoPreviousSplit()
+{
+    gotoPrevNextSplit(false);
+}
+
 void MainWindowPrivate::toggleFullScreen(bool fullScreen)
 {
     KToggleFullScreenAction::setFullScreen( m_mainWindow, fullScreen );

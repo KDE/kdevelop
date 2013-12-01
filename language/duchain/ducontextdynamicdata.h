@@ -23,7 +23,12 @@
 #define DUCONTEXTDYNAMICDATA_H
 
 #include "ducontextdata.h"
+
+#ifdef Q_OS_WIN
+#include <hash_map>
+#else
 #include <util/google/dense_hash_map>
+#endif
 
 namespace KDevelop {
 
@@ -47,8 +52,7 @@ public:
   //Whether this context uses m_localDeclarationsHash
   bool m_hasLocalDeclarationsHash;
   
-  static QMutex m_localDeclarationsMutex;
-  ///@warning: Whenever m_localDeclarations is read or written, m_localDeclarationsHash must be locked.
+  ///@warning: Whenever m_localDeclarations is read or written, the duchain must be locked
   DeclarationsHash m_localDeclarationsHash; //This hash can contain more declarations than m_localDeclarations, due to declarations propagated up from children.
   
   uint m_indexInTopContext; //Index of this DUContext in the top-context
@@ -86,10 +90,10 @@ public:
    * This propagates the declaration into the parent search-hashes,
    * up to the first parent that has m_propagateDeclarations set to false.
    * 
-   * Must be called with m_localDeclarationsMutex locked
+   * Must be called with duchain locked
   */
   void addDeclarationToHash(const Identifier& identifer, Declaration* declaration);
-  ///Must be called with m_localDeclarationsMutex locked
+  ///Must be called with duchain locked
   void removeDeclarationFromHash(const Identifier& identifer, Declaration* declaration);
 
   ///Adds all declarations that should be in the hash into the hash
@@ -206,7 +210,9 @@ public:
   /**
    * This can deal with endless recursion
    */
-  
+#ifdef Q_OS_WIN
+  typedef std::hash_map<const DUContextDynamicData*, bool> ImportsHash;
+#else
   struct ImportsHash_Op {
     size_t operator() (const DUContextDynamicData* data) const {
       return (size_t)data;
@@ -214,6 +220,7 @@ public:
   };
   
   typedef google::dense_hash_map<const DUContextDynamicData*, bool, ImportsHash_Op> ImportsHash;
+#endif
   
   bool importsSafeButSlow(const DUContext* context, const TopDUContext* source, ImportsHash& checked) const;
 };

@@ -64,6 +64,12 @@ void ScriptAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelo
     executablePath->setUrl( cfg.readEntry( ExecuteScriptPlugin::executableEntry, "" ) );
     remoteHostCheckbox->setChecked( cfg.readEntry( ExecuteScriptPlugin::executeOnRemoteHostEntry, false ) );
     remoteHost->setText( cfg.readEntry( ExecuteScriptPlugin::remoteHostEntry, "" ) );
+    bool runCurrent = cfg.readEntry( ExecuteScriptPlugin::runCurrentFileEntry, true );
+    if ( runCurrent ) {
+        runCurrentFile->setChecked( true );
+    } else {
+        runFixedFile->setChecked( true );
+    }
     arguments->setText( cfg.readEntry( ExecuteScriptPlugin::argumentsEntry, "" ) );
     workingDirectory->setUrl( cfg.readEntry( ExecuteScriptPlugin::workingDirEntry, KUrl() ) );
     environment->setCurrentProfile( cfg.readEntry( ExecuteScriptPlugin::environmentGroupEntry, "default" ) );
@@ -93,7 +99,6 @@ ScriptAppConfigPage::ScriptAppConfigPage( QWidget* parent )
     connect( workingDirectory, SIGNAL(urlSelected(KUrl)), SIGNAL(changed()) );
     connect( workingDirectory->lineEdit(), SIGNAL(textEdited(QString)), SIGNAL(changed()) );
     connect( environment, SIGNAL(currentIndexChanged(int)), SIGNAL(changed()) );
-    connect( remoteHostCheckbox, SIGNAL(toggled(bool)), remoteHost, SLOT(setEnabled(bool)));
     //connect( runInTerminal, SIGNAL(toggled(bool)), SIGNAL(changed()) );
 }
 
@@ -104,6 +109,7 @@ void ScriptAppConfigPage::saveToConfiguration( KConfigGroup cfg, KDevelop::IProj
     cfg.writeEntry( ExecuteScriptPlugin::executableEntry, executablePath->url() );
     cfg.writeEntry( ExecuteScriptPlugin::executeOnRemoteHostEntry, remoteHostCheckbox->isChecked() );
     cfg.writeEntry( ExecuteScriptPlugin::remoteHostEntry, remoteHost->text() );
+    cfg.writeEntry( ExecuteScriptPlugin::runCurrentFileEntry, runCurrentFile->isChecked() );
     cfg.writeEntry( ExecuteScriptPlugin::argumentsEntry, arguments->text() );
     cfg.writeEntry( ExecuteScriptPlugin::workingDirEntry, workingDirectory->url() );
     cfg.writeEntry( ExecuteScriptPlugin::environmentGroupEntry, environment->currentProfile() );

@@ -55,7 +55,9 @@ _kdevplatform_set_lib_vars( OUTPUTVIEW kdevplatformoutputview )
 _kdevplatform_set_lib_vars( DEBUGGER kdevplatformdebugger )
 _kdevplatform_set_lib_vars( DOCUMENTATION kdevplatformdocumentation )
 _kdevplatform_set_lib_vars( TESTS kdevplatformtests )
+if ( @QJSON_FOUND@ )
 _kdevplatform_set_lib_vars( JSONTESTS kdevplatformjsontests )
+endif()
 
 include(${_KDEVPLATFORM_CURRENT_DIR}/KDevPlatformMacros.cmake)
 

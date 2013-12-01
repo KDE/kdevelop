@@ -64,8 +64,6 @@ using namespace KTextEditor;
 
 namespace KDevelop
 {
-QMutex DUContextDynamicData::m_localDeclarationsMutex(QMutex::Recursive);
-
 DEFINE_LIST_MEMBER_HASH(DUContextData, m_childContexts, LocalIndexedDUContext)
 DEFINE_LIST_MEMBER_HASH(DUContextData, m_importers, IndexedDUContext)
 DEFINE_LIST_MEMBER_HASH(DUContextData, m_importedContexts, DUContext::Import)
@@ -170,8 +168,10 @@ bool DUContextDynamicData::imports(const DUContext* context, const TopDUContext*
     return true;
 
   if(maxDepth == 0) {
-    ImportsHash checked(500);
+    ImportsHash checked;//(500);
+#ifndef Q_OS_WIN
     checked.set_empty_key(0);
+#endif
     return importsSafeButSlow(context, source, checked);
   }
 
@@ -267,10 +267,6 @@ void DUContextDynamicData::addDeclaration( Declaration * newDeclaration )
 {
   // The definition may not have its identifier set when it's assigned... 
   // allow dupes here, TODO catch the error elsewhere
-  {
-    QMutexLocker lock(&m_localDeclarationsMutex);
-
-//     m_localDeclarations.append(newDeclaration);
 
   //If this context is temporary, added declarations should be as well, and viceversa
   Q_ASSERT(isContextTemporary(m_indexInTopContext) == isContextTemporary(newDeclaration->ownIndex()));
@@ -297,19 +293,17 @@ void DUContextDynamicData::addDeclaration( Declaration * newDeclaration )
       break;
     }
   }
+
   if( !inserted ) //We haven't found any child that is before this one, so prepend it
     m_context->d_func_dynamic()->m_localDeclarationsList().insert(0, newDeclaration);
 
-    addDeclarationToHash(newDeclaration->identifier(), newDeclaration);
-  }
+  addDeclarationToHash(newDeclaration->identifier(), newDeclaration);
 
   //DUChain::contextChanged(m_context, DUChainObserver::Addition, DUChainObserver::LocalDeclarations, newDeclaration);
 }
 
 bool DUContextDynamicData::removeDeclaration(Declaration* declaration)
 {
-  QMutexLocker lock(&m_localDeclarationsMutex);
-
   if(!m_topContext->deleting()) //We can save a lot of time by just not caring about the hash while deleting
     removeDeclarationFromHash(declaration->identifier(), declaration);
 
@@ -322,7 +316,7 @@ bool DUContextDynamicData::removeDeclaration(Declaration* declaration)
 }
 
 void DUContext::changingIdentifier( Declaration* decl, const Identifier& from, const Identifier& to ) {
-  QMutexLocker lock(&DUContextDynamicData::m_localDeclarationsMutex);
+  ENSURE_CAN_WRITE
   m_dynamicData->removeDeclarationFromHash(from, decl);
   m_dynamicData->addDeclarationToHash(to, decl);
 }
@@ -360,7 +354,6 @@ void DUContextDynamicData::addChildContext( DUContext * context )
   }
 
   if(context->d_func()->m_propagateDeclarations) {
-    QMutexLocker lock(&DUContextDynamicData::m_localDeclarationsMutex);
     disableLocalDeclarationsHash();
     if(needsLocalDeclarationsHash())
       enableLocalDeclarationsHash(m_context);
@@ -581,8 +574,6 @@ void DUContext::setPropagateDeclarations(bool propagate)
   ENSURE_CAN_WRITE
   DUCHAIN_D_DYNAMIC(DUContext);
   
-  QMutexLocker lock(&DUContextDynamicData::m_localDeclarationsMutex);
-  
   if(propagate == d->m_propagateDeclarations)
     return;
 
@@ -629,8 +620,6 @@ void DUContext::findLocalDeclarationsInternal( const Identifier& identifier,
                                                SearchFlags flags ) const
 {
   {
-     QMutexLocker lock(&DUContextDynamicData::m_localDeclarationsMutex);
-
      struct Checker {
        Checker(SearchFlags flags, const AbstractType::Ptr& dataType, const CursorInRevision & position, DUContext::ContextType ownType) : m_flags(flags), m_dataType(dataType), m_position(position), m_ownType(ownType) {
        }
@@ -1000,7 +989,6 @@ QVector<Declaration*> DUContext::localDeclarations(const TopDUContext* source) c
   Q_UNUSED(source);
   ENSURE_CAN_READ
 
-  QMutexLocker lock(&DUContextDynamicData::m_localDeclarationsMutex);
   QVector<Declaration*> ret;
   FOREACH_FUNCTION(const LocalIndexedDeclaration& decl, d_func()->m_localDeclarations) {
     ret << decl.data(topContext());
@@ -1015,6 +1003,8 @@ void DUContext::mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& def
                                           const TopDUContext* source,
                                           bool searchInParents, int currentDepth) const
 {
+  ENSURE_CAN_READ
+
   if((currentDepth > 300 && currentDepth < 1000) || currentDepth > 1300) {
     kDebug() << "too much depth";
     return;
@@ -1031,7 +1021,6 @@ void DUContext::mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& def
         currentDepth += 1000;
 
       {
-        QMutexLocker lock(&DUContextDynamicData::m_localDeclarationsMutex);
         DUContextDynamicData::VisibleDeclarationIterator it(m_dynamicData);
         while(it) {
           Declaration* decl = *it;
@@ -1076,7 +1065,6 @@ void DUContext::deleteLocalDeclarations()
   ENSURE_CAN_WRITE
   KDevVarLengthArray<LocalIndexedDeclaration> declarations;
   {
-    QMutexLocker lock(&DUContextDynamicData::m_localDeclarationsMutex);
     FOREACH_FUNCTION(const LocalIndexedDeclaration& decl, d_func()->m_localDeclarations)
       declarations.append(decl);
   }
@@ -1504,7 +1492,6 @@ void DUContext::cleanIfNotEncountered(const QSet<DUChainBase*>& encountered)
   // will return zero for already deleted declarations.
   KDevVarLengthArray<LocalIndexedDeclaration, 10> declarationsCopy; 
   {
-    QMutexLocker lock(&DUContextDynamicData::m_localDeclarationsMutex);
     declarationsCopy = d_func_dynamic()->m_localDeclarationsList();
   }
 
@@ -1709,10 +1696,13 @@ DUContext* DUContext::Import::context(const TopDUContext* topContext, bool insta
     //More accurately, that no specialized or cross-topContext imports will, but if the former assumption fails the latter will too
     if (AbstractFunctionDeclaration *functionDecl = dynamic_cast<AbstractFunctionDeclaration*>(decl))
     {
-      Q_ASSERT(functionDecl->internalFunctionContext());
-      return functionDecl->internalFunctionContext();
+      if (functionDecl->internalFunctionContext()) {
+        return functionDecl->internalFunctionContext();
+      } else {
+        kWarning() << "Import of function declaration without internal function context encountered!";
+      }
     }
-    else if(decl)
+    if(decl)
       return decl->logicalInternalContext(topContext);
     else
       return 0;
@@ -1727,13 +1717,13 @@ bool DUContext::Import::isDirect() const {
 
 void DUContext::visit(DUChainVisitor& visitor)
 {
+  ENSURE_CAN_READ
+
   visitor.visit(this);
   
   TopDUContext* top = topContext();
   
   {
-    QMutexLocker lock(&DUContextDynamicData::m_localDeclarationsMutex);
-    
     FOREACH_FUNCTION(const LocalIndexedDeclaration& decl, d_func()->m_localDeclarations)
       visitor.visit(decl.data(top));
   }

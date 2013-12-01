@@ -22,10 +22,8 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QPointer>
-#include <KDE/KSharedPtr>
 #include <ktextbrowser.h>
 
-#include "../duchainpointer.h"
 #include "../../interfaces/quickopendataprovider.h"
 #include "../../languageexport.h"
 #include "abstractnavigationcontext.h"
@@ -90,7 +88,7 @@ namespace KDevelop {
       void initBrowser(int height);
       void update();
 
-      NavigationContextPointer m_context, m_startContext;
+      NavigationContextPointer m_startContext;
 
       TopDUContextPointer m_topContext;
 
@@ -99,6 +97,8 @@ namespace KDevelop {
       QString m_currentText;
       mutable QSize m_idealTextSize;
 
+    private:
+      NavigationContextPointer m_context;
   };
 }
 

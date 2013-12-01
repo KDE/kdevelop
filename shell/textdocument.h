@@ -23,11 +23,14 @@
 #include <KDE/KXMLGUIClient>
 
 #include <sublime/view.h>
-#include <ktexteditor/view.h>
 
 #include "partdocument.h"
 
 #include "shellexport.h"
+
+namespace KTextEditor {
+class View;
+}
 
 namespace KDevelop {
 
@@ -81,6 +84,7 @@ private:
     Q_PRIVATE_SLOT(d, void slotDocumentLoaded())
     Q_PRIVATE_SLOT(d, void documentSaved(KTextEditor::Document*,bool))
     Q_PRIVATE_SLOT(d, void saveSessionConfig());
+    Q_PRIVATE_SLOT(d, void repositoryCheckFinished(bool));
 
     struct TextDocumentPrivate * const d;
     friend struct TextDocumentPrivate;

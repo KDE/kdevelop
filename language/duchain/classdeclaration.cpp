@@ -22,6 +22,7 @@
 #include <language/duchain/declaration.h>
 #include <language/duchain/appendedlist.h>
 #include <language/duchain/duchainregister.h>
+#include "types/structuretype.h"
 
 
 namespace KDevelop {
@@ -156,6 +157,9 @@ QString ClassDeclaration::toString() const {
       break;
     case ClassDeclarationData::Interface:
       ret += "interface ";
+      break;
+    case ClassDeclarationData::Trait:
+      ret += "trait ";
       break;
     case ClassDeclarationData::Union:
       ret += "union ";

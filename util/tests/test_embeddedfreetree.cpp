@@ -224,10 +224,6 @@ class TestSet {
         emb_insertion += clock() - start;
         
         start = clock();
-        ///FIXME: what is the expected outcome?
-        ///       turns out that the below is often
-        ///       *not* true - is this what we want?
-        ///       => add proper Q_VERIFY!
         bool contained = realSet.find(i) != realSet.end();
         std_contains += clock() - start;
         

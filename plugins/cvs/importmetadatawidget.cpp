@@ -27,10 +27,10 @@ ImportMetadataWidget::ImportMetadataWidget(QWidget *parent)
     connect( m_ui->sourceLoc, SIGNAL(textChanged(QString)), SIGNAL(changed()) );
     connect( m_ui->sourceLoc, SIGNAL(urlSelected(KUrl)), SIGNAL(changed()) );
     connect( m_ui->comment, SIGNAL(textChanged()), SIGNAL(changed()) );
-    connect( m_ui->module, SIGNAL(userTextChanged(QString)), SIGNAL(changed()) );
-    connect( m_ui->releaseTag, SIGNAL(userTextChanged(QString)), SIGNAL(changed()) );
-    connect( m_ui->repository, SIGNAL(userTextChanged(QString)), SIGNAL(changed()) );
-    connect( m_ui->vendorTag, SIGNAL(userTextChanged(QString)), SIGNAL(changed()) );
+    connect( m_ui->module, SIGNAL(textEdited(QString)), SIGNAL(changed()) );
+    connect( m_ui->releaseTag, SIGNAL(textEdited(QString)), SIGNAL(changed()) );
+    connect( m_ui->repository, SIGNAL(textEdited(QString)), SIGNAL(changed()) );
+    connect( m_ui->vendorTag, SIGNAL(textEdited(QString)), SIGNAL(changed()) );
     
 }
 

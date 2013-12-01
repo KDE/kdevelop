@@ -24,7 +24,7 @@
 #include <language/duchain/duchainpointer.h>
 
 #include <QString>
-#include <QAbstractItemModel>
+#include <QVariant>
 #include <QVector>
 
 /**

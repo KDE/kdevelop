@@ -441,6 +441,8 @@ PatchHighlighter::PatchHighlighter( Diff2::DiffModel* model, IDocument* kdoc, Pa
     connect( doc, SIGNAL( markToolTipRequested( KTextEditor::Document*, KTextEditor::Mark, QPoint, bool & ) ), this, SLOT( markToolTipRequested( KTextEditor::Document*, KTextEditor::Mark, QPoint, bool & ) ) );
     connect( doc, SIGNAL( markClicked( KTextEditor::Document*, KTextEditor::Mark, bool & ) ), this, SLOT( markClicked( KTextEditor::Document*, KTextEditor::Mark, bool & ) ) );
     connect( doc, SIGNAL( aboutToDeleteMovingInterfaceContent( KTextEditor::Document* ) ), this, SLOT( aboutToDeleteMovingInterfaceContent( KTextEditor::Document* ) ) );
+    connect( doc, SIGNAL( aboutToInvalidateMovingInterfaceContent( KTextEditor::Document* ) ),
+             this, SLOT( aboutToDeleteMovingInterfaceContent( KTextEditor::Document* ) ) );
 
     textInserted( kdoc->textDocument(), kdoc->textDocument()->documentRange() );
 }

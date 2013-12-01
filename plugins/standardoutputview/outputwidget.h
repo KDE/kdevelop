@@ -55,6 +55,7 @@ public Q_SLOTS:
     void changeModel( int id );
     void changeDelegate( int id );
     void closeActiveView();
+    void closeOtherViews();
     void selectNextItem();
     void selectPrevItem();
     void activate(const QModelIndex&);
@@ -86,6 +87,7 @@ private:
     QStackedWidget* stackwidget;
     const ToolViewData* data;
     QToolButton* m_closeButton;
+    QToolButton* m_closeAllButton;
     KAction* nextAction;
     KAction* previousAction;
     KToggleAction* activateOnSelect;

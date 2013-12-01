@@ -47,6 +47,7 @@ class ExecuteScriptPlugin : public KDevelop::IPlugin, public IExecuteScriptPlugi
     static QString executableEntry;
     static QString executeOnRemoteHostEntry;
     static QString remoteHostEntry;
+    static QString runCurrentFileEntry;
     static QString argumentsEntry;
     static QString isExecutableEntry;
     static QString environmentGroupEntry;
@@ -66,6 +67,7 @@ class ExecuteScriptPlugin : public KDevelop::IPlugin, public IExecuteScriptPlugi
     //bool useTerminal( KDevelop::ILaunchConfiguration* ) const;
     QString scriptAppConfigTypeId() const;
     int outputFilterModeId( KDevelop::ILaunchConfiguration* ) const;
+    bool runCurrentFile(KDevelop::ILaunchConfiguration*) const;
 
     ScriptAppConfigType* m_configType;
 };

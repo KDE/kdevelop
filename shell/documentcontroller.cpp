@@ -69,10 +69,6 @@ Boston, MA 02110-1301, USA.
 #include <config-kdevplatform.h>
 #include <language/backgroundparser/backgroundparser.h>
 
-#ifdef HAVE_KOMPARE
-    #include "patchdocument.h"
-#endif
-
 #define EMPTY_DOCUMENT_URL i18n("Untitled")
 
 namespace KDevelop
@@ -251,16 +247,22 @@ struct DocumentControllerPrivate {
             {
                 mimeType = KMimeType::mimeType("text/plain");
             }
+            else if (!url.isValid())
+            {
+                // Exit if the url is invalid (should not happen)
+                // If the url is valid and the file does not already exist,
+                // kate creates the file and gives a message saying so
+                kDebug() << "invalid URL:" << url.url();
+                return 0;
+            }
+            else if (!KIO::NetAccess::exists( url, KIO::NetAccess::SourceSide, ICore::self()->uiController()->activeMainWindow() ))
+            {
+                // enfore text mime type in order to create a kate part editor which then can be used to create the file
+                // otherwise we could end up opening e.g. okteta which then crashes, see: https://bugs.kde.org/id=326434
+                mimeType = KMimeType::mimeType("text/plain");
+            }
             else
             {
-                if ( !url.isValid() ) {
-                    // Exit if the url is invalid (should not happen)
-                    // If the url is valid and the file does not already exist,
-                    // kate creates the file and gives a message saying so
-                    kDebug() << "invalid URL:" << url.url();
-                    return 0;
-                }
-
                 mimeType = KMimeType::findByUrl( url );
                 
                 if( !url.isLocalFile() && mimeType->isDefault() )
@@ -581,10 +583,6 @@ DocumentController::DocumentController( QObject *parent )
     connect(this, SIGNAL(documentUrlChanged(KDevelop::IDocument*)), this, SLOT(changeDocumentUrl(KDevelop::IDocument*)));
 
     if(!(Core::self()->setupFlags() & Core::NoUi)) setupActions();
-
-#ifdef HAVE_KOMPARE
-    registerDocumentForMimetype("text/x-patch", new PatchDocumentFactory);
-#endif
 }
 
 void DocumentController::initialize()
@@ -1217,7 +1215,7 @@ void DocumentController::vcsAnnotateCurrentDocument()
     KUrl url = doc->url();
     IProject* project = KDevelop::ICore::self()->projectController()->findProjectForUrl(url);
     IBasicVersionControl* iface = 0;
-    if(project) {
+    if(project && project->versionControlPlugin()) {
         iface = project->versionControlPlugin()->extension<IBasicVersionControl>();
     }
 

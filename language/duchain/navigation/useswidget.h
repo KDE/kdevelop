@@ -15,22 +15,20 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
+
 #ifndef KDEVPLATFORM_USESWIDGET_H
 #define KDEVPLATFORM_USESWIDGET_H
 
 #include <QWidget>
-#include <QLabel>
 #include <QScrollArea>
 
 #include <language/duchain/declaration.h>
 #include <language/duchain/topducontext.h>
-#include <language/editor/cursorinrevision.h>
 #include "../../languageexport.h"
 #include "usescollector.h"
 #include <language/editor/persistentmovingrange.h>
 
-class KComboBox;
-class QComboBox;
+class QLabel;
 class QToolButton;
 class QVBoxLayout;
 class QHBoxLayout;

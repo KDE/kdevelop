@@ -24,6 +24,7 @@
 #include <QWebView>
 #include "documentationexport.h"
 #include "documentationfindwidget.h"
+#include <interfaces/idocumentation.h>
 
 namespace KDevelop
 {
@@ -36,12 +37,24 @@ class KDEVPLATFORMDOCUMENTATION_EXPORT StandardDocumentationView : public QWebVi
     Q_OBJECT
 public:
     explicit StandardDocumentationView(DocumentationFindWidget* findWidget, QWidget* parent = 0 );
+    void setDocumentation(const IDocumentation::Ptr& doc);
 
 public slots:
     /**
      * Search for @p text in the documentation view.
      */
     void search(const QString& text, KDevelop::DocumentationFindWidget::FindOptions options);
+
+    /**
+     * Updates the contents, in case it was initialized with a documentation instance,
+     * doesn't change anything otherwise
+     *
+     * @sa setDocumentation(IDocumentation::Ptr)
+     */
+    void update();
+
+private:
+    IDocumentation::Ptr m_doc;
 };
 
 }

@@ -59,10 +59,6 @@
 #include <language/duchain/duchain.h>
 #include <language/interfaces/editorcontext.h>
 
-#include <config-kdevplatform.h>
-#ifdef HAVE_KOMPARE
-#include <interfaces/ipatchdocument.h>
-#endif
 #include <interfaces/ipatchsource.h>
 #include <KTemporaryFile>
 #include <qtextedit.h>
@@ -98,18 +94,17 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
     KAction * diffForRevGlobalAction;
     KAction * pushAction;
     KAction * pullAction;
-    QPointer<QTimer> modificationTimer;
     
     void createActions(VcsPluginHelper* parent) {
         commitAction = new KAction(KIcon("svn-commit"), i18n("Commit..."), parent);
         updateAction = new KAction(KIcon("svn-update"), i18n("Update"), parent);
         addAction = new KAction(KIcon("list-add"), i18n("Add"), parent);
-        diffToBaseAction = new KAction(KIcon("vcs_diff"), i18n("Show Differences..."), parent);
+        diffToBaseAction = new KAction(KIcon("text-x-patch"), i18n("Show Differences..."), parent);
         revertAction = new KAction(KIcon("archive-remove"), i18n("Revert"), parent);
         historyAction = new KAction(KIcon("view-history"), i18n("History..."), parent);
         annotationAction = new KAction(KIcon("user-properties"), i18n("Annotation..."), parent);
-        diffForRevAction = new KAction(KIcon("vcs_diff"), i18n("Show Diff..."), parent);
-        diffForRevGlobalAction = new KAction(KIcon("vcs_diff"), i18n("Show Diff (all files)..."), parent);
+        diffForRevAction = new KAction(KIcon("text-x-patch"), i18n("Show Diff..."), parent);
+        diffForRevGlobalAction = new KAction(KIcon("text-x-patch"), i18n("Show Diff (all files)..."), parent);
         pushAction = new KAction(KIcon("arrow-up-double"), i18n("Push"), parent);
         pullAction = new KAction(KIcon("arrow-down-double"), i18n("Pull"), parent);
         
@@ -273,7 +268,7 @@ void VcsPluginHelper::revertDone(KJob* job)
     QTimer* modificationTimer = new QTimer;
     modificationTimer->setInterval(100);
     connect(modificationTimer, SIGNAL(timeout()), SLOT(delayedModificationWarningOn()));
-    connect(modificationTimer, SIGNAL(timeout()), SLOT(deleteLater()));
+    connect(modificationTimer, SIGNAL(timeout()), modificationTimer, SLOT(deleteLater()));
 
     
     modificationTimer->setProperty("urls", job->property("urls"));

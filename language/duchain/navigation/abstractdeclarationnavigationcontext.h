@@ -20,11 +20,15 @@
 #define KDEVPLATFORM_ABSTRACTDECLARATIONNAVIGATIONCONTEXT_H
 
 #include "abstractnavigationcontext.h"
+#include "../declaration.h"
 #include "../duchainpointer.h"
-#include "../types/structuretype.h"
-#include <language/duchain/declaration.h>
+#include "../types/abstracttype.h"
 
 namespace KDevelop {
+
+class IdentifiedType;
+class Identifier;
+class QualifiedIdentifier;
 
 class KDEVPLATFORMLANGUAGE_EXPORT AbstractDeclarationNavigationContext : public AbstractNavigationContext
 {
@@ -32,15 +36,15 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractDeclarationNavigationContext : public 
     AbstractDeclarationNavigationContext( DeclarationPointer decl, KDevelop::TopDUContextPointer topContext, AbstractNavigationContext* previousContext = 0 );
 
     virtual QString name() const;
-    virtual QString html(bool shorten = false);
 
     DeclarationPointer declaration() const;
-    
+
     ///Execute an action. For example "show_uses" shows the uses of the declaration.
     ///Returns the context pointer for the new state.
     virtual NavigationContextPointer executeKeyAction(QString key);
 
   protected:
+    virtual QString html(bool shorten = false);
     DeclarationPointer m_declaration;
 
     ///Should returns a stripped version of the declarations qualified identifier, with all implicit/redundant parts removed

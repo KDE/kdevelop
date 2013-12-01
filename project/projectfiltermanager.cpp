@@ -93,7 +93,7 @@ void ProjectFilterManager::Private::unloadingPlugin(IPlugin* plugin)
         QHash< IProject*, QVector<Filter> >::iterator filtersIt = m_filters.begin();
         while(filtersIt != m_filters.end()) {
             QVector<Filter>& filters = filtersIt.value();
-            Filter* filter = filters.begin();
+            QVector<Filter>::iterator filter = filters.begin();
             while(filter != filters.end()) {
                 if ((*filter).provider == filterProvider) {
                     filter = filters.erase(filter);
@@ -113,7 +113,7 @@ void ProjectFilterManager::Private::filterChanged(IProjectFilterProvider* provid
     }
 
     QVector< Filter >& filters = m_filters[project];
-    Filter* it = filters.begin();
+    QVector<Filter>::iterator it = filters.begin();
     while(it != filters.end()) {
         if (it->provider == provider) {
             it->filter = provider->createFilter(project);

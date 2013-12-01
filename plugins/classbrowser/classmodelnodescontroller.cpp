@@ -23,6 +23,7 @@
 #include "classmodelnode.h"
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
+#include <language/duchain/duchainobserver.h>
 #include <language/duchain/classdeclaration.h>
 #include <QTimer>
 

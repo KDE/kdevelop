@@ -52,6 +52,7 @@ install(FILES
 licenses/GPL\ v2
 licenses/GPL\ v3
 licenses/LGPL\ v2
+licenses/LGPL\ v3
 licenses/Apache\ v2
 licenses/BSD
 licenses/Boost
