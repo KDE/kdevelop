@@ -188,6 +188,7 @@ namespace CMakeParserUtils
         v.setModulePath(data->modulePath);
         v.setEnvironmentProfile(env);
         v.setProperties(data->properties);
+        v.setDefinitions(data->definitions);
         v.walk(f, 0, true);
         
         data->projectName=v.projectName();
@@ -195,6 +196,8 @@ namespace CMakeParserUtils
         data->targets=v.targets();
         data->properties=v.properties();
         data->testSuites=v.testSuites();
+        data->targetAlias=v.targetAlias();
+        data->definitions=v.definitions();
         
         //printSubdirectories(data->subdirectories);
         
@@ -236,5 +239,67 @@ namespace CMakeParserUtils
                 currentComment += line.right(line.count()-2);
         }
         return ret;
+    }
+
+    /**
+     * Parse a string which contains definition(s), the thing is that in CMake you can do funky things:
+     *
+     * add_definitions(-DFOO -DBAR)
+     * add_definitions("-DLA=LU -DA=B")
+     * set_property( DIRECTORY PROPERTY COMPILE_DEFINITIONS A AV=1 )
+     * ...
+     *
+     * TODO: this probably fails with defines containing spaces...
+     */
+    static void parseDefinition(const QString& param, const bool expectDashD, const bool remove, CMakeDefinitions* defs)
+    {
+        int pos = 0;
+
+        while (pos != -1 && pos < param.size()) {
+            if (param.at(pos).isSpace()) {
+                ++pos;
+                continue;
+            } else if (expectDashD) {
+                if (param.midRef(pos, 2) != QLatin1String("-D")) {
+                    pos = param.indexOf(' ', pos);
+                    continue;
+                }
+                pos += 2;
+            }
+            const int eq = param.indexOf('=', pos);
+            const int space = param.indexOf(' ', pos);
+            QString key;
+            QString value;
+            if (eq != -1 && (eq < space || space == -1)) {
+                key = param.mid(pos, eq - pos);
+                if (!remove) {
+                    value = param.mid(eq + 1, space - (eq + 1));
+                }
+            } else {
+                key = param.mid(pos, space - pos);
+            }
+            if (remove) {
+                defs->remove(key);
+            } else {
+                defs->insert(key, value);
+            }
+            pos = space;
+        }
+    }
+
+    void addDefinitions(const QStringList& definitions, CMakeDefinitions* to, const bool expectDashD)
+    {
+        Q_ASSERT(to);
+        foreach(const QString& v, definitions) {
+            parseDefinition(v, expectDashD, false, to);
+        }
+    }
+
+    void removeDefinitions(const QStringList& definitions, CMakeDefinitions* from, const bool expectDashD)
+    {
+        Q_ASSERT(from);
+        foreach(const QString& v, definitions) {
+            parseDefinition(v, expectDashD, true, from);
+        }
     }
 }

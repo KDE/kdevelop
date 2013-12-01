@@ -201,6 +201,8 @@ private slots:
   void testBug269352();
   void testRenameClass();
 
+  void testQProperty();
+
   //BEGIN C++2011
   void testRangeBasedFor();
   void testRangeBasedForClass();
@@ -223,9 +225,11 @@ private slots:
   void testLambdaCapture();
   void testTemplateSpecializeArray();
   void testTemplateSpecializeRValue();
+  void testTemplateSpecializeVolatile();
   void testAliasDeclaration();
   void testAuto();
   void testNoexcept();
+  void testInlineNamespace();
   //END C++2011
 
 private:

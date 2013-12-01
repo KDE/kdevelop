@@ -63,6 +63,9 @@ namespace CMakeParserUtils
     KDEVCMAKECOMMON_EXPORT CacheValues readCache(const KUrl &path);
 
     KDEVCMAKECOMMON_EXPORT QString binaryPath(const QString& sourcedir, const QString& projectSourceDir, const QString projectBinDir);
+
+    KDEVCMAKECOMMON_EXPORT void addDefinitions(const QStringList& definitions, CMakeDefinitions* to, const bool expectDashD = false);
+    KDEVCMAKECOMMON_EXPORT void removeDefinitions(const QStringList& definitions, CMakeDefinitions* from, const bool expectDashD = false);
 }
 
 #endif

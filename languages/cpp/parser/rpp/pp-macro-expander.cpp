@@ -193,7 +193,15 @@ void pp_macro_expander::operator()(Stream& input, Stream& output, bool substitut
     {
       skip_comment_or_divop(input, output, true);
     }else{
-      if (input == '\n')
+      if (input == '\\' && input.peekNextCharacter() == '\n')
+      {
+        ++input;
+        ++input;
+        skip_blanks(input, output);
+        if (!input.atEnd() && input == '#')
+          break;
+      }
+      else if (input == '\n')
       {
         output << input;
 

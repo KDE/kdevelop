@@ -126,6 +126,8 @@ private slots:
   void testTemplateFunction();
   void testImportTypedef();
   void testConstructorCompletion();
+  void testConstructorUsageCompletion_data();
+  void testConstructorUsageCompletion();
   void testAssistant();
   void testCompletionInExternalClassDefinition();
   void testCompletionBehindTypedeffedConstructor();
@@ -155,6 +157,7 @@ private slots:
   void testLookaheadMatches_data();
   void testLookaheadMatches();
   void testMemberAccessInstance();
+  void testNestedInlineNamespace();
 public:
   enum DumpArea {
     DumpNone = 0,

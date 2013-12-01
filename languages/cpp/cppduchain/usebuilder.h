@@ -22,7 +22,8 @@
 #include "contextbuilder.h"
 #include "cppduchainexport.h"
 #include <language/duchain/builders/abstractusebuilder.h>
-#include <parsesession.h>
+
+class ParseSession;
 
 class UseBuilderBase : public KDevelop::AbstractUseBuilder<AST, NameAST, ContextBuilder> {
   public:
@@ -86,6 +87,7 @@ protected:
   virtual void visitUsingDirective(UsingDirectiveAST* node);
   virtual void visitNamespaceAliasDefinition(NamespaceAliasDefinitionAST* node);
   virtual void visitTypeIDOperator(TypeIDOperatorAST* node);
+  virtual void visitQPropertyDeclaration(QPropertyDeclarationAST* );
 
 private:
   void buildUsesForName(NameAST* name);

@@ -210,13 +210,13 @@ void CMakeAstTest::testAddLibraryGoodParse_data()
     QStringList argList, argList2, argList3, argList4;
 
     func.name = func2.name = func3.name = func4.name = func5.name =  "add_library";
-    argList << "foo" << "${SRCS}";
+    argList << "foo" << "a.cpp";
     func.addArguments( argList );
 
-    argList2 << "foo2" << "SHARED" << "${SRCS}";
+    argList2 << "foo2" << "SHARED" << "a.cpp";
     func2.addArguments( argList2 );
 
-    argList3 << "foo3" << "EXCLUDE_FROM_ALL" << "${SRCS}";
+    argList3 << "foo3" << "EXCLUDE_FROM_ALL" << "a.cpp";
     func3.addArguments( argList3 );
 
     argList4 << "foo4" << "MODULE" << "EXCLUDE_FROM_ALL" << "foo.c" << "bar.c" << "baz.c";
@@ -230,6 +230,7 @@ void CMakeAstTest::testAddLibraryGoodParse_data()
     QTest::newRow( "exclude" ) << func3;
     QTest::newRow( "full" ) << func4;
     QTest::newRow( "imported" ) << func5;
+    QTest::newRow( "alias" ) << CMakeFunctionDesc("add_library", QString("A ALIAS B").split(' '));
 }
 
 void CMakeAstTest::testAddLibraryBadParse()
@@ -247,7 +248,7 @@ void CMakeAstTest::testAddLibraryBadParse_data()
 
     func.name = func2.name = func3.name = "add_library";
     func.name = "wrong_name";
-    argList << "foo" << "${SRCS}";
+    argList << "foo" << "a.cpp";
     func.addArguments( argList );
 
     func2.addArguments( argList2 );

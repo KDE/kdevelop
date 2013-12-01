@@ -18,8 +18,8 @@
 #include <language/codegen/coderepresentation.h>
 #include "qtfunctiondeclaration.h"
 #include "declarationbuilder.h"
-#include "environmentmanager.h"
 #include "templateparameterdeclaration.h"
+#include <language/duchain/parsingenvironment.h>
 #include <language/duchain/stringhelpers.h>
 
 using namespace KDevelop;
@@ -291,7 +291,7 @@ bool KDevelop::SourceCodeInsertion::insertFunctionDeclaration(KDevelop::Identifi
   if(body.isEmpty())
     decl += ";";
   else {
-    if (!body.startsWith(' ')) {
+    if (!body.startsWith(' ') && !body.startsWith('\n')) {
       decl += " ";
     }
     decl += zeroIndentation(body);

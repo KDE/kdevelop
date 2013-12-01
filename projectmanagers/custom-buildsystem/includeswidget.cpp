@@ -122,6 +122,7 @@ void IncludesWidget::deleteIncludePath()
 
 void IncludesWidget::includePathUrlSelected(const KUrl& url)
 {
+    Q_UNUSED(url);
     updateEnablements();
 }
 
@@ -138,11 +139,10 @@ void IncludesWidget::updateEnablements() {
 
 QString IncludesWidget::makeIncludeDirAbsolute(const KUrl& url) const
 {
-    KUrl path = ui->includePathRequester->url();
-    QString localFile = path.toLocalFile();
-    if( path.isRelative() ) {
+    QString localFile = url.toLocalFile();
+    if( url.isRelative() ) {
         // Relative, make absolute based on startDir of the requester
-        localFile = ui->includePathRequester->startDir().toLocalFile( KUrl::AddTrailingSlash ) + path.path();
+        localFile = ui->includePathRequester->startDir().toLocalFile( KUrl::AddTrailingSlash ) + url.path();
     }
     return localFile;
 }

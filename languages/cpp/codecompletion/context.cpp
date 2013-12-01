@@ -17,6 +17,7 @@
 */
 
 #include "context.h"
+
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
 #include <klocalizedstring.h>
@@ -41,6 +42,7 @@
 #include "../cppduchain/cppduchain.h"
 #include "../cppduchain/typeutils.h"
 #include "../cppduchain/overloadresolution.h"
+#include "../cppduchain/overloadresolutionhelper.h"
 #include "../cppduchain/viablefunctions.h"
 #include "../cppduchain/environmentmanager.h"
 #include "../cppduchain/cpptypes.h"
@@ -56,8 +58,8 @@
 #include <qtfunctiondeclaration.h>
 #include "missingincludemodel.h"
 #include <templateparameterdeclaration.h>
+#include <expressionparser.h>
 #include <language/duchain/classdeclaration.h>
-#include "qpropertydeclaration.h"
 #include "model.h"
 #include "helpers.h"
 
@@ -67,6 +69,8 @@
 #include <cpputils.h>
 #include <interfaces/ilanguage.h>
 #include <interfaces/foregroundlock.h>
+#include <interfaces/icore.h>
+#include <interfaces/ilanguagecontroller.h>
 
 using namespace KDevelop;
 
@@ -171,8 +175,6 @@ static MainThreadHelper s_mainThreadHelper;
 }
 
 namespace Cpp {
-
-typedef QPair<Declaration*, int> DeclarationDepthPair;
 
 //Search for a copy-constructor within class
 //*DUChain must be locked*
@@ -1357,10 +1359,10 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::memberAccessCompletionIt
       return items;
     ifDebug( kDebug() << "container:" << ctx->scopeIdentifier(true).toString(); )
 
-    foreach( const DeclarationDepthPair& decl,
-            Cpp::hideOverloadedDeclarations(
-              ctx->allDeclarations(ctx->range().end, m_duContext->topContext(), false ),
-              typeIsConst ) )
+    QList<DeclarationDepthPair> decls = ctx->allDeclarations(ctx->range().end, m_duContext->topContext(), false );
+    decls += namespaceItems(ctx, ctx->range().end, false);
+
+    foreach( const DeclarationDepthPair& decl, Cpp::hideOverloadedDeclarations(decls, typeIsConst ) )
     {
       //If we have StaticMemberChoose, which means A::Bla, show only static members, except if we're within a class that derives from the container
       ClassMemberDeclaration* classMember = dynamic_cast<ClassMemberDeclaration*>(decl.first);
@@ -1816,6 +1818,62 @@ QList<DeclAccessPair> CodeCompletionContext::getLookaheadMatches(Declaration* fo
   return ret;
 }
 
+QList<DeclarationDepthPair> CodeCompletionContext::namespaceItems(DUContext* duContext, const CursorInRevision& position, bool global) const
+{
+  QList<DeclarationDepthPair> decls;
+  QList<Declaration*> foundDecls;
+  //Collect the contents of unnamed namespaces
+  if (global) {
+    foundDecls = duContext->findDeclarations(QualifiedIdentifier(unnamedNamespaceIdentifier().identifier()), position);
+  } else {
+    foundDecls = duContext->findLocalDeclarations(unnamedNamespaceIdentifier().identifier(), position);
+  }
+  foreach(Declaration* ns, foundDecls)
+    if(ns->kind() == Declaration::Namespace && ns->internalContext())
+      decls += ns->internalContext()->allDeclarations(position, duContext->topContext(), false);
+
+  //Collect the Declarations from all "using namespace" imported contexts
+  if (global) {
+    foundDecls = duContext->findDeclarations( globalImportIdentifier(), position,
+                                               0, DUContext::NoFiltering );
+  } else {
+    foundDecls = duContext->findLocalDeclarations( globalImportIdentifier(), position,
+                                                   0, AbstractType::Ptr(), DUContext::NoFiltering );
+  }
+
+  QSet<QualifiedIdentifier> ids;
+  foreach(Declaration* importDecl, foundDecls) {
+    NamespaceAliasDeclaration* aliasDecl = dynamic_cast<NamespaceAliasDeclaration*>(importDecl);
+    if(aliasDecl) {
+      ids.insert(aliasDecl->importIdentifier());
+    }else{
+      kDebug() << "Import is not based on NamespaceAliasDeclaration";
+    }
+  }
+
+  QualifiedIdentifier ownNamespaceScope = Cpp::namespaceScopeComponentFromContext(duContext->scopeIdentifier(true), duContext, duContext->topContext());
+  if(!ownNamespaceScope.isEmpty())
+    for(int a = 1; a <= ownNamespaceScope.count(); ++a)
+      ids += ownNamespaceScope.left(a);
+
+  foreach(const QualifiedIdentifier &id, ids) {
+    QList<Declaration*> importedContextDecls = duContext->findDeclarations( id );
+    foreach(Declaration* contextDecl, importedContextDecls) {
+      if(contextDecl->kind() != Declaration::Namespace || !contextDecl->internalContext())
+        continue;
+      DUContext* context = contextDecl->internalContext();
+
+      if(context->range().contains(duContext->range()) && context->url() == duContext->url())
+        continue; //If the context surrounds the current one, the declarations are visible through allDeclarations(..).
+      foreach(Declaration* decl, context->localDeclarations()) {
+        if(filterDeclaration(decl))
+          decls << qMakePair(decl, 1200);
+      }
+    }
+  }
+  return decls;
+}
+
 QList< CompletionTreeItemPointer > CodeCompletionContext::standardAccessCompletionItems() {
   QList<CompletionTreeItemPointer> items;
   LOCKDUCHAIN; if (!m_duContext) return items;
@@ -1828,46 +1886,7 @@ QList< CompletionTreeItemPointer > CodeCompletionContext::standardAccessCompleti
       typeIsConst = true;
   }
   QList<DeclarationDepthPair> decls = m_duContext->allDeclarations(m_duContext->type() == DUContext::Class ? m_duContext->range().end : m_position, m_duContext->topContext());
-
-  //Collect the contents of unnamed namespaces
-  QList<Declaration*> unnamed = m_duContext->findDeclarations(QualifiedIdentifier(unnamedNamespaceIdentifier().identifier()), m_position);
-  foreach(Declaration* ns, unnamed)
-    if(ns->kind() == Declaration::Namespace && ns->internalContext())
-      decls += ns->internalContext()->allDeclarations(m_position, m_duContext->topContext(), false);
-
-  //Collect the Declarations from all "using namespace" imported contexts
-  QList<Declaration*> imports = m_duContext->findDeclarations( globalImportIdentifier(), m_position, 0, DUContext::NoFiltering );
-
-  QSet<QualifiedIdentifier> ids;
-  foreach(Declaration* importDecl, imports) {
-    NamespaceAliasDeclaration* aliasDecl = dynamic_cast<NamespaceAliasDeclaration*>(importDecl);
-    if(aliasDecl) {
-      ids.insert(aliasDecl->importIdentifier());
-    }else{
-      kDebug() << "Import is not based on NamespaceAliasDeclaration";
-    }
-  }
-
-  QualifiedIdentifier ownNamespaceScope = Cpp::namespaceScopeComponentFromContext(m_duContext->scopeIdentifier(true), m_duContext.data(), m_duContext->topContext());
-  if(!ownNamespaceScope.isEmpty())
-    for(int a = 1; a <= ownNamespaceScope.count(); ++a)
-      ids += ownNamespaceScope.left(a);
-
-  foreach(const QualifiedIdentifier &id, ids) {
-    QList<Declaration*> importedContextDecls = m_duContext->findDeclarations( id );
-    foreach(Declaration* contextDecl, importedContextDecls) {
-      if(contextDecl->kind() != Declaration::Namespace || !contextDecl->internalContext())
-        continue;
-      DUContext* context = contextDecl->internalContext();
-
-      if(context->range().contains(m_duContext->range()) && context->url() == m_duContext->url())
-        continue; //If the context surrounds the current one, the declarations are visible through allDeclarations(..).
-      foreach(Declaration* decl, context->localDeclarations()) {
-        if(filterDeclaration(decl))
-          decls << qMakePair(decl, 1200);
-      }
-    }
-  }
+  decls += namespaceItems(m_duContext.data(), m_position, true);
 
   QList<DeclarationDepthPair> oldDecls = decls;
   decls.clear();
@@ -2237,6 +2256,10 @@ bool  CodeCompletionContext::filterDeclaration(Declaration* decl, DUContext* dec
   if(!decl)
     return true;
 
+  if (decl->isExplicitlyDeleted()) {
+    return false;
+  }
+
   if(dynamic_cast<TemplateParameterDeclaration*>(decl) && !visibleFromWithin(decl, m_duContext.data()))
     return false;
   
@@ -2316,10 +2339,6 @@ bool CodeCompletionContext::filterDeclaration(ClassMemberDeclaration* decl, DUCo
   if(m_doAccessFiltering && decl) {
     if(!Cpp::isAccessible(m_localClass ? m_localClass.data() : m_duContext.data(), decl, m_duContext->topContext(), declarationContext))
       return false;
-  }
-  // filter properties from code completion, they mostly have to be accessed via their getter/setters
-  if (dynamic_cast<QPropertyDeclaration*>(decl)) {
-    return false;
   }
   return filterDeclaration((Declaration*)decl, declarationContext, false);
 }

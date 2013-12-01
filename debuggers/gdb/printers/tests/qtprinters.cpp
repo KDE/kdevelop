@@ -24,6 +24,8 @@
 #include <QFileInfo>
 #include <QDir>
 
+#include "qtprintersconfig.h"
+
 const QString BINARY_PATH(PRINTER_BIN_DIR);
 
 namespace GDBDebugger
@@ -35,8 +37,15 @@ public:
     GdbProcess(const QString &program) : QProcess()
     {
         setProcessChannelMode(MergedChannels);
-        QProcess::start("gdb", (QStringList() << (BINARY_PATH + '/' + program)));
-        waitForStarted();
+        // don't attempt to load .gdbinit in home (may cause unexpected results)
+        QProcess::start("gdb", (QStringList() << "-nx" << (BINARY_PATH + '/' + program)));
+        const bool started = waitForStarted();
+        if (!started) {
+            qDebug() << "Failed to start 'gdb' executable:" << errorString();
+            Q_ASSERT(false);
+            return;
+        }
+
         QByteArray prompt = waitForPrompt();
         QVERIFY(!prompt.contains("No such file or directory"));
         execute("set confirm off");
@@ -49,6 +58,8 @@ public:
           << "sys.path.insert(0, '"+printersDir.path().toAscii()+"')"
           << "from qt4 import register_qt4_printers"
           << "register_qt4_printers (None)"
+          << "from kde4 import register_kde4_printers"
+          << "register_kde4_printers (None)"
           << "end";
         foreach (const QByteArray &i, p) {
             write(i + "\n");
@@ -71,9 +82,9 @@ public:
             output.append(l);
         }
         output.chop(7); //remove (gdb) prompt
-        if (output.contains("Traceback")) {
+        if (output.contains("Traceback") || output.contains("Exception")) {
             qDebug() << output;
-            qFatal("Unexpected Python Exception");
+            QTest::qFail("Unexpected Python Exception", __FILE__, __LINE__);
         }
         return output;
     }
@@ -377,14 +388,45 @@ void QtPrintersTest::testQChar()
     QVERIFY(gdb.execute("print c").contains("\"k\""));
 }
 
+void QtPrintersTest::testQListPOD()
+{
+    GdbProcess gdb("qlistpod");
+    gdb.execute("break qlistpod.cpp:31");
+    gdb.execute("run");
+    QVERIFY(gdb.execute("print b").contains("false"));
+    QVERIFY(gdb.execute("print c").contains("50"));
+    QVERIFY(gdb.execute("print uc").contains("50"));
+    QVERIFY(gdb.execute("print s").contains("50"));
+    QVERIFY(gdb.execute("print us").contains("50"));
+    QVERIFY(gdb.execute("print i").contains("50"));
+    QVERIFY(gdb.execute("print ui").contains("50"));
+    QVERIFY(gdb.execute("print l").contains("50"));
+    QVERIFY(gdb.execute("print ul").contains("50"));
+    QVERIFY(gdb.execute("print i64").contains("50"));
+    QVERIFY(gdb.execute("print ui64").contains("50"));
+    QVERIFY(gdb.execute("print f").contains("50"));
+    QVERIFY(gdb.execute("print d").contains("50"));
+}
+
 void QtPrintersTest::testQUuid()
 {
     GdbProcess gdb("quuid");
     gdb.execute("break quuid.cpp:4");
     gdb.execute("run");
     QByteArray data = gdb.execute("print id");
-    qDebug() << data;
     QVERIFY(data.contains("{9ec3b70b-d105-42bf-b3b4-656e44d2e223}"));
+}
+
+void QtPrintersTest::testKTextEditorTypes()
+{
+    GdbProcess gdb("ktexteditortypes");
+    gdb.execute("break ktexteditortypes.cpp:9");
+    gdb.execute("run");
+
+    QByteArray data = gdb.execute("print cursor");
+    QCOMPARE(data, QByteArray("$1 = [1, 1]"));
+    data = gdb.execute("print range");
+    QCOMPARE(data, QByteArray("$2 = [(1, 1) -> (2, 2)]"));
 }
 
 }

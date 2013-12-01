@@ -24,13 +24,11 @@
 #include <language/duchain/builders/abstractdeclarationbuilder.h>
 #include "cppduchainexport.h"
 #include <language/duchain/declaration.h>
-#include <language/duchain/duchainpointer.h>
 #include <language/duchain/classfunctiondeclaration.h>
 #include <language/duchain/classdeclaration.h>
 
 namespace Cpp
 {
-class QPropertyDeclaration;
 class TemplateDeclaration;
 }
 
@@ -98,14 +96,11 @@ protected:
   virtual void visitNamespaceAliasDefinition(NamespaceAliasDefinitionAST*);
   virtual void visitTypeId(TypeIdAST *);
   virtual void visitInitDeclarator(InitDeclaratorAST *node);
-  virtual void visitQPropertyDeclaration(QPropertyDeclarationAST *);
   virtual void handleRangeBasedFor(ExpressionAST* container, ForRangeDeclarationAst* iterator);
   virtual void visitAliasDeclaration(AliasDeclarationAST* );
 
   virtual void classTypeOpened(KDevelop::AbstractType::Ptr);
   virtual void classContextOpened(ClassSpecifierAST *node, DUContext* context);
-
-  virtual void closeContext();
 
 private:
   //Returns true if the given parameter declaration clause is really a parameter declaration clause, depending on the given parameters.
@@ -191,12 +186,6 @@ private:
   bool m_collectQtFunctionSignature;
   QByteArray m_qtFunctionSignature;
 
-  // QProperty handling
-  typedef QPair<Cpp::QPropertyDeclaration*, QPropertyDeclarationAST*> PropertyResolvePair;
-  QMultiHash<DUContext*, PropertyResolvePair> m_pendingPropertyDeclarations;
-  KDevelop::IndexedDeclaration resolveMethodName(NameAST *node);
-  void resolvePendingPropertyDeclarations(const QList<PropertyResolvePair> &pairs);
-  
   /// Inherited from AbstractDeclarationBuilder:
 
   inline Declaration* currentDeclaration() const { return m_declarationStack.isEmpty() ? 0 : m_declarationStack.top(); }

@@ -53,9 +53,8 @@
 #include <language/duchain/classdeclaration.h>
 #include "cppduchain/missingdeclarationproblem.h"
 #include "cppduchain/missingdeclarationassistant.h"
-#include <qstandarditemmodel.h>
+#include "overloadresolutionhelper.h"
 #include <language/duchain/functiondefinition.h>
-#include "qpropertydeclaration.h"
 
 #include <language/codecompletion/codecompletiontesthelper.h>
 #include <language/duchain/persistentsymboltable.h>
@@ -362,7 +361,11 @@ void TestCppCodeCompletion::testInvalidContexts()
 
 void TestCppCodeCompletion::testMemberAccess()
 {
-  QByteArray method = "template<class T1, class T2> class T { public: T1 ta(); class U { public: class V{ };  }; }; class X { public: X(){}; int a(int a, T<int,int> b); int b;}; T<int,int> t; X* getX() { }";
+  QByteArray method = "template<class T1, class T2> class T { public: T1 ta(); class U { public: class V{ };  }; };"
+                      "class X { public: X(){}; int a(int a, T<int,int> b); int b;};"
+                      "T<int,int> t;"
+                      "X* getX() { }"
+                      "class Z { public: Z() = delete; static int a(int b); };";
   TopDUContext* top = parse(method, DumpNone);
   int ctxt = 4;
   DUChainWriteLocker lock(DUChain::lock());
@@ -384,6 +387,9 @@ void TestCppCodeCompletion::testMemberAccess()
   CompletionItemTester testColons2(top->childContexts()[ctxt], "T::U::");
   QCOMPARE(testColons2.names, QStringList() << "V");
   QCOMPARE(testColons2.completionContext->accessType(), Cpp::CodeCompletionContext::StaticMemberChoose);
+  CompletionItemTester testDeleted(top->childContexts()[ctxt], "Z::");
+  QCOMPARE(testDeleted.names, QStringList() << "a");
+  QCOMPARE(testDeleted.completionContext->accessType(), Cpp::CodeCompletionContext::StaticMemberChoose);
   release(top);
 }
 
@@ -1022,6 +1028,72 @@ void TestCppCodeCompletion::testConstructorCompletion() {
     
     release(context);
   }
+}
+
+void TestCppCodeCompletion::testConstructorUsageCompletion_data()
+{
+  QTest::addColumn<QString>("code");        // existing source code
+  QTest::addColumn<QStringList>("args");        // completion arguments
+  QTest::addColumn<QStringList>("not_args");    // forbidden completion arguments
+
+  // only the default constructor is present
+  QTest::newRow("only default")
+    << "class A { A(); };"
+    << (QStringList() << "()")
+    << QStringList();
+  // the default constructor and one overload
+  QTest::newRow("Default and int")
+    << "class A { A(); A(int); };"
+    << (QStringList() << "()" << "(int)")
+    << QStringList();
+  // the default constructor and two overloads
+  QTest::newRow("Default, int and float")
+    << "class A { A(); A(int); A(float); };"
+    << (QStringList() << "()" << "(int)" << "(float)")
+    << QStringList();
+  // deleted default constructor and two overloads
+  QTest::newRow("no default, int and float")
+    << "class A { A() = delete; A(int); A(float); };"
+    << (QStringList() << "(int)" << "(float)")
+    << (QStringList() << "()");
+  // the default and copy constructors are present
+  QTest::newRow("default and copy")
+    << "class A { A(); A(const A&); };"
+    << (QStringList() << "()" << "(const A&)")
+    << QStringList();
+  // the default and copy constructors are deleted
+  QTest::newRow("default and copy")
+    << "class A { A() = delete; A(const A&) = delete; };"
+    << QStringList()
+    << (QStringList() << "()" << "(const A&)");
+  // the default and copy constructors are deleted, but another one is present
+  QTest::newRow("default and copy")
+    << "class A { A() = delete; A(const A&) = delete; A(int); };"
+    << (QStringList() << "(int)")
+    << (QStringList() << "()" << "(const A&)");
+}
+
+void TestCppCodeCompletion::testConstructorUsageCompletion()
+{
+  QFETCH(QString, code);
+  QFETCH(QStringList, args);
+  QFETCH(QStringList, not_args);
+
+  TopDUContext* context = parse( code.toAscii(), DumpNone /*DumpDUChain | DumpAST */);
+  DUChainWriteLocker lock(DUChain::lock());
+
+  CompletionItemTester tester(context, "void k() { A *a = new A(");
+
+  QStringList foundargs;
+  for (int i = 0; i < tester.items.count(); i++)
+    foundargs << tester.itemData(i, KTextEditor::CodeCompletionModel::Arguments).toString();
+  qDebug() << foundargs << args << not_args;
+  foreach(const QString &arg, args)
+    QVERIFY(foundargs.contains(arg));
+  foreach(const QString &arg, not_args)
+    QVERIFY(!foundargs.contains(arg));
+
+  release(context);
 }
 
 void TestCppCodeCompletion::testParentConstructor_data()
@@ -3100,6 +3172,8 @@ void TestCppCodeCompletion::testArgumentList()
   codeToArgList.insert("void foo(int arg[][1]){}", "(int arg[][1])");
   codeToArgList.insert("void foo(int arg[1][1]){}", "(int arg[1][1])");
   codeToArgList.insert("void foo(int arg[][1][1]){}", "(int arg[][1][1])");
+  codeToArgList.insert("void foo(void){}", "(void)");
+  codeToArgList.insert("void foo(int){}", "(int)");
   QMap< QByteArray, QString >::const_iterator it = codeToArgList.constBegin();
   while (it != codeToArgList.constEnd()){
     qDebug() << "input function is:" << it.key();
@@ -3202,10 +3276,8 @@ void TestCppCodeCompletion::testProperties()
   DUChainWriteLocker lock;
   QVERIFY(top->problems().isEmpty());
   QVector<Declaration*> declarations = top->childContexts().first()->localDeclarations();
-  QCOMPARE(declarations.count(), 3);
-  Cpp::QPropertyDeclaration* property = dynamic_cast<Cpp::QPropertyDeclaration*>(declarations.first());
-  QVERIFY(property);
-  Declaration* getter = declarations.at(1);
+  QCOMPARE(declarations.count(), 2);
+  Declaration* getter = declarations.first();
   QVERIFY(getter->isFunctionDeclaration());
   Declaration* setter = declarations.last();
   QVERIFY(getter->isFunctionDeclaration());
@@ -3218,7 +3290,6 @@ void TestCppCodeCompletion::testProperties()
   QVERIFY(complCtx.completionContext->isValid());
   QCOMPARE(complCtx.completionContext->accessType(), Cpp::CodeCompletionContext::MemberAccess);
   QCOMPARE(complCtx.completionContext->onlyShow(), Cpp::CodeCompletionContext::ShowAll);
-  QVERIFY(!complCtx.containsDeclaration(property));
   QVERIFY(complCtx.containsDeclaration(getter));
   QVERIFY(complCtx.containsDeclaration(setter));
   }
@@ -3227,7 +3298,6 @@ void TestCppCodeCompletion::testProperties()
   QVERIFY(complCtx.completionContext->isValid());
   QCOMPARE(complCtx.completionContext->accessType(), Cpp::CodeCompletionContext::ArrowMemberAccess);
   QCOMPARE(complCtx.completionContext->onlyShow(), Cpp::CodeCompletionContext::ShowAll);
-  QVERIFY(!complCtx.containsDeclaration(property));
   QVERIFY(complCtx.containsDeclaration(getter));
   QVERIFY(complCtx.containsDeclaration(setter));
   }
@@ -3683,6 +3753,7 @@ void TestCppCodeCompletion::testLookaheadMatches()
   DUChainWriteLocker lock(DUChain::lock());
   DUContext *testContext = top->childContexts()[4]->childContexts()[1];
   CompletionItemTester tester(testContext, insert);
+  qDebug() << tester.names << "VERSUS" << completions;
   QCOMPARE(tester.names.toSet(), completions.toSet());
   release(top);
 }
@@ -3694,6 +3765,16 @@ void TestCppCodeCompletion::testMemberAccessInstance()
   DUChainWriteLocker lock(DUChain::lock());
   CompletionItemTester tester(top->childContexts()[2], "foo.");
   QCOMPARE(tester.names, QStringList());
+  release(top);
+}
+
+void TestCppCodeCompletion::testNestedInlineNamespace()
+{
+  QByteArray test = "namespace a { inline namespace b { void foo(); } } int main() {}";
+  TopDUContext* top = parse(test, DumpAll);
+  DUChainWriteLocker lock;
+  CompletionItemTester tester(top->childContexts()[2], "a::");
+  QCOMPARE(tester.names, QStringList() << "b" << "foo" );
   release(top);
 }
 

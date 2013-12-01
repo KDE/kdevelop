@@ -28,7 +28,6 @@
 
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
-#include <KMessageBox>
 
 #include "cppduchain.h"
 #include "renameaction.h"

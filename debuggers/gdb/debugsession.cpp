@@ -68,7 +68,7 @@ DebugSession::DebugSession()
       justRestarted_(false),
       m_config(KGlobal::config(), "GDB Debugger"),
       commandQueue_(new CommandQueue),
-      tty_(0),
+      m_tty(0),
       state_(s_dbgNotStarted|s_appNotStarted),
       state_reload_needed(false),
       stateReloadInProgress_(false)
@@ -808,14 +808,13 @@ void DebugSession::programNoApp(const QString& msg)
 
     // Note: this method can be called when we open an invalid
     // core file. In that case, tty_ won't be set.
-    if (tty_){
-        tty_->readRemaining();
+    if (m_tty){
+        m_tty->readRemaining();
         // Tty is no longer usable, delete it. Without this, QSocketNotifier
         // will continiously bomd STTY with signals, so we need to either disable
         // QSocketNotifier, or delete STTY. The latter is simpler, since we can't
         // reuse it for future debug sessions anyway.
-        delete tty_;
-        tty_ = 0;
+        m_tty.reset(0);
     }
 
     stopDebugger();
@@ -1002,28 +1001,19 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg, IExecutePlu
         config_externalTerminal = KShell::splitArgs(config_externalTerminal).first();
     }
 
-    // Need to set up a new TTY for each run...
-    if (tty_)
-        delete tty_;
-
-    tty_ = new STTY(config_useExternalTerminal, config_externalTerminal);
+    m_tty.reset(new STTY(config_useExternalTerminal, config_externalTerminal));
     if (!config_useExternalTerminal)
     {
-        connect( tty_, SIGNAL(OutOutput(QByteArray)), SIGNAL(ttyStdout(QByteArray)) );
-        connect( tty_, SIGNAL(ErrOutput(QByteArray)), SIGNAL(ttyStderr(QByteArray)) );
+        connect( m_tty.data(), SIGNAL(OutOutput(QByteArray)), SIGNAL(ttyStdout(QByteArray)) );
+        connect( m_tty.data(), SIGNAL(ErrOutput(QByteArray)), SIGNAL(ttyStderr(QByteArray)) );
     }
 
-    QString tty(tty_->getSlave());
+    QString tty(m_tty->getSlave());
     if (tty.isEmpty())
     {
-        KMessageBox::information(qApp->activeWindow(), i18n("GDB cannot use the tty* or pty* devices.\n"
-                                    "Check the settings on /dev/tty* and /dev/pty*\n"
-                                    "As root you may need to \"chmod ug+rw\" tty* and pty* devices "
-                                    "and/or add the user to the tty group using "
-                                    "\"usermod -G tty username\"."), i18n("Warning"));
+        KMessageBox::information(qApp->activeWindow(), m_tty->lastError(), i18n("Warning"));
 
-        delete tty_;
-        tty_ = 0;
+        m_tty.reset(0);
         return false;
     }
 
@@ -1073,7 +1063,7 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg, IExecutePlu
 
     if (!config_runShellScript_.isEmpty()) {
         // Special for remote debug...
-        QByteArray tty(tty_->getSlave().toLatin1());
+        QByteArray tty(m_tty->getSlave().toLatin1());
         QByteArray options = QByteArray(">") + tty + QByteArray("  2>&1 <") + tty;
 
         QProcess *proc = new QProcess;

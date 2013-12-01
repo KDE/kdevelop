@@ -3,7 +3,7 @@
 <MenuBar>
   <Menu name="navigation">
     <text context="@title:menu">Navigation</text>
-    <Action name="switch_definition_declaration" group="navigation_code"/>
+    <Action name="switch_definition_declaration" group="navigation_jmp"/>
   </Menu>
   <Menu name="code">
     <text context="@title:menu">Code</text>

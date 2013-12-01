@@ -42,14 +42,12 @@
 #include <util/pushvalue.h>
 
 #include "qtfunctiondeclaration.h"
-#include "qpropertydeclaration.h"
 #include "cppeditorintegrator.h"
-#include "name_compiler.h"
+#include "environmentmanager.h"
 #include <language/duchain/classfunctiondeclaration.h>
 #include <language/duchain/functiondeclaration.h>
 #include <language/duchain/functiondefinition.h>
 #include "templateparameterdeclaration.h"
-#include "type_compiler.h"
 #include "tokens.h"
 #include "parsesession.h"
 #include "cpptypes.h"
@@ -62,6 +60,7 @@
 #include "usebuilder.h"
 
 #include "overloadresolutionhelper.h"
+#include "expressionparser.h"
 
 using namespace KTextEditor;
 using namespace KDevelop;
@@ -256,27 +255,6 @@ void DeclarationBuilder::visitInitDeclarator(InitDeclaratorAST *node)
   DeclarationBuilderBase::visitInitDeclarator(node);
 }
 
-void DeclarationBuilder::visitQPropertyDeclaration(QPropertyDeclarationAST* node)
-{
-  QPropertyDeclaration *decl = openDeclaration<QPropertyDeclaration>(node->name, node->name);
-  decl->setIsStored(node->stored);
-  decl->setIsUser(node->user);
-  decl->setIsConstant(node->constant);
-  decl->setIsFinal(node->final);
-
-  DeclarationBuilderBase::visitQPropertyDeclaration(node);
-  AbstractType::Ptr type = lastType();
-  closeDeclaration(true);
-
-  if(type) {
-    DUChainWriteLocker lock(DUChain::lock());
-    decl->setAbstractType(type);
-    decl->setAccessPolicy(KDevelop::Declaration::Public);
-  }
-
-  m_pendingPropertyDeclarations.insert(currentContext(), qMakePair(decl, node));
-}
-
 void DeclarationBuilder::handleRangeBasedFor(ExpressionAST* container, ForRangeDeclarationAst* iterator)
 {
   ContextBuilder::handleRangeBasedFor(container, iterator);
@@ -353,57 +331,6 @@ void DeclarationBuilder::handleRangeBasedFor(ExpressionAST* container, ForRangeD
     } else {
       // invalid type
       m_lastDeclaration->setAbstractType(AbstractType::Ptr(0));
-    }
-  }
-}
-
-KDevelop::IndexedDeclaration DeclarationBuilder::resolveMethodName(NameAST *node)
-{
-  QualifiedIdentifier id;
-  identifierForNode(node, id);
-
-  DUChainReadLocker lock(DUChain::lock());
-  if(currentDeclaration() && currentDeclaration()->internalContext()) {
-    const QList<Declaration*> declarations = currentDeclaration()->internalContext()->findDeclarations(id, CursorInRevision::invalid(), AbstractType::Ptr(), 0, DUContext::OnlyFunctions);
-    if(!declarations.isEmpty())
-      return KDevelop::IndexedDeclaration(declarations.first());
-  }
-
-  return KDevelop::IndexedDeclaration();
-}
-
-void DeclarationBuilder::resolvePendingPropertyDeclarations(const QList<PropertyResolvePair> &pairs)
-{
-  foreach(const PropertyResolvePair &pair, pairs) {
-    if(pair.second->getter){
-      const KDevelop::IndexedDeclaration declaration = resolveMethodName(pair.second->getter);
-      if(declaration.isValid())
-        pair.first->setReadMethod(declaration);
-    }
-    if(pair.second->setter){
-      const KDevelop::IndexedDeclaration declaration = resolveMethodName(pair.second->setter);
-      if(declaration.isValid())
-        pair.first->setWriteMethod(declaration);
-    }
-    if(pair.second->resetter){
-      const KDevelop::IndexedDeclaration declaration = resolveMethodName(pair.second->resetter);
-      if(declaration.isValid())
-        pair.first->setResetMethod(declaration);
-    }
-    if(pair.second->notifier){
-      const KDevelop::IndexedDeclaration declaration = resolveMethodName(pair.second->notifier);
-      if(declaration.isValid())
-        pair.first->setNotifyMethod(declaration);
-    }
-    if(pair.second->designableMethod){
-      const KDevelop::IndexedDeclaration declaration = resolveMethodName(pair.second->designableMethod);
-      if(declaration.isValid())
-        pair.first->setDesignableMethod(declaration);
-    }
-    if(pair.second->scriptableMethod){
-      const KDevelop::IndexedDeclaration declaration = resolveMethodName(pair.second->scriptableMethod);
-      if(declaration.isValid())
-        pair.first->setScriptableMethod(declaration);
     }
   }
 }
@@ -991,6 +918,8 @@ struct TemplateTypeExchanger : public KDevelop::TypeExchanger {
         
         if(type->modifiers() & AbstractType::ConstModifier)
             id.setIsConstant(true);
+        if(type->modifiers() & AbstractType::VolatileModifier)
+            id.setIsVolatile(true);
            
         newType->setIdentifier(id);
         newType->setKind(KDevelop::DelayedType::Delayed);
@@ -1093,20 +1022,10 @@ void DeclarationBuilder::classContextOpened(ClassSpecifierAST* /*node*/, DUConte
   currentDeclaration()->setInternalContext(context);
 }
 
-void DeclarationBuilder::closeContext()
-{
-  if (!m_pendingPropertyDeclarations.isEmpty()) {
-    if(m_pendingPropertyDeclarations.contains(currentContext()))
-      resolvePendingPropertyDeclarations(m_pendingPropertyDeclarations.values(currentContext()));
-  }
-
-  DeclarationBuilderBase::closeContext();
-}
-
 void DeclarationBuilder::visitNamespace(NamespaceAST* ast) {
 
+  RangeInRevision range;
   {
-    RangeInRevision range;
     Identifier id;
     
     if(ast->namespace_name)
@@ -1131,10 +1050,23 @@ void DeclarationBuilder::visitNamespace(NamespaceAST* ast) {
   
   DeclarationBuilderBase::visitNamespace(ast);
   
+  QualifiedIdentifier qid;
   {
     DUChainWriteLocker lock(DUChain::lock());
     currentDeclaration()->setKind(KDevelop::Declaration::Namespace);
+    qid = currentDeclaration()->qualifiedIdentifier();
     clearLastType();
+    closeDeclaration();
+  }
+
+  // support for C++11 inlined namespaces by implicitly "using" the namespace in the parent context
+  // i.e. compare to visitUsingDirective()
+  if( ast->inlined && compilingContexts() ) {
+    RangeInRevision aliasRange(range.end + CursorInRevision(0, 1), 0);
+    DUChainWriteLocker lock;
+    NamespaceAliasDeclaration* decl = openDeclarationReal<NamespaceAliasDeclaration>(0, 0, globalImportIdentifier(), false, false,
+                                                                                     &aliasRange);
+    decl->setImportIdentifier( qid );
     closeDeclaration();
   }
 }

@@ -15,9 +15,11 @@ struct CMakeProjectData
     MacroMap mm;
     CMakeProperties properties;
     CacheValues cache;
+    CMakeDefinitions definitions;
     QStringList modulePath;
+    QHash<QString,QString> targetAlias;
     
-    void clear() { vm.clear(); mm.clear(); properties.clear();  cache.clear(); }
+    void clear() { vm.clear(); mm.clear(); properties.clear(); cache.clear(); targetAlias.clear(); }
 };
 
 #endif

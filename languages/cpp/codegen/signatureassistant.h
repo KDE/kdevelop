@@ -22,12 +22,13 @@
 #include <interfaces/iassistant.h>
 #include <language/duchain/identifier.h>
 #include <language/duchain/topducontext.h>
-#include <language/duchain/types/indexedtype.h>
-#include <language/duchain/indexedstring.h>
-
-#include <ktexteditor/view.h>
-#include <KUrl>
 #include "adaptsignatureaction.h"
+
+#include <KUrl>
+
+namespace KTextEditor {
+class View;
+}
 
 namespace KDevelop {
 class ParseJob;

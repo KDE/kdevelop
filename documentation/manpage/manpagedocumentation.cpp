@@ -41,24 +41,20 @@ ManPagePlugin* ManPageDocumentation::s_provider=0;
 ManPageDocumentation::ManPageDocumentation(ManPage page)
     : m_url(page.second), m_name(page.first)
 {
-    m_description = getManPageContent();
+    KIO::StoredTransferJob* transferJob = KIO::storedGet(m_url, KIO::NoReload, KIO::HideProgressInfo);
+    connect( transferJob, SIGNAL(finished(KJob*)), SLOT(finished(KJob*)));
+    transferJob->start();
 }
 
-void ManPageDocumentation::readDataFromManPage(KIO::Job * job, const QByteArray &data){
-    Q_UNUSED(job);
-    m_manPageBuffer.append(QString::fromUtf8(data));
-}
-
-QString ManPageDocumentation::getManPageContent()
+void ManPageDocumentation::finished(KJob* j)
 {
-    KIO::TransferJob  * transferJob = KIO::get(m_url, KIO::NoReload, KIO::HideProgressInfo);
-    connect( transferJob, SIGNAL(data(KIO::Job*,QByteArray)),
-             this, SLOT(readDataFromManPage(KIO::Job*,QByteArray)) );
-    if (transferJob->exec()){
-        return m_manPageBuffer;
+    KIO::StoredTransferJob* job = qobject_cast<KIO::StoredTransferJob*>(j);
+    if(job && job->error()==0) {
+        m_description = QString::fromUtf8(job->data());
     } else {
-        return i18n("Could not find any documentation for '%1'", m_name);
+        m_description = i18n("Could not find any documentation for '%1'", m_name);
     }
+    emit descriptionChanged();
 }
 
 KDevelop::IDocumentationProvider* ManPageDocumentation::provider() const
@@ -74,7 +70,7 @@ QString ManPageDocumentation::description() const
 QWidget* ManPageDocumentation::documentationWidget(KDevelop::DocumentationFindWidget* findWidget, QWidget* parent )
 {
     KDevelop::StandardDocumentationView* view = new KDevelop::StandardDocumentationView(findWidget, parent);
-    view->setHtml(description());
+    view->setDocumentation(KSharedPtr<IDocumentation>(this));
     view->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
     QObject::connect(view, SIGNAL(linkClicked(QUrl)), ManPageDocumentation::s_provider->model(), SLOT(showItemFromUrl(QUrl)));
     return view;

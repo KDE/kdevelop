@@ -1,7 +1,9 @@
+# general
 apidocs
 .kdev4
 build
 *~
+*.bak
 *.orig
 *.rej
 doxygen.log
@@ -16,3 +18,9 @@ mem.log.*
 massif.*
 callgrind.*
 perf.data*
+
+# from kdiff3
+*.BACKUP.*
+*.BASE.*
+*.LOCAL.*
+*.REMOTE.*

@@ -23,11 +23,8 @@
 #ifndef PREPROCESSJOB_H
 #define PREPROCESSJOB_H
 
-class CPPParseJob;
-
-#include <kurl.h>
-#include <language/backgroundparser/parsejob.h>
 #include <ksharedptr.h>
+#include <threadweaver/Job.h>
 
 #include "parser/rpp/preprocessor.h"
 
@@ -44,6 +41,7 @@ namespace rpp {
     class pp;
 }
 
+class CPPParseJob;
 class CppPreprocessEnvironment;
 
 /**

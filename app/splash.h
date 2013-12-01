@@ -1,5 +1,6 @@
 /***************************************************************************
  *   Copyright 2013 Sven Brauch <svenbrauch@gmail.com>                     *
+ *   Copyright 2013 Milian Wolff <mail@milianw.de>                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -21,22 +22,19 @@
 #define KDEVSPLASH_H
 
 #include <ksplashscreen.h>
-#include <QPainter>
-#include <QApplication>
-#include <qgraphicsitem.h>
-#include <QDeclarativeView>
-#include <QDebug>
-#include <KStandardDirs>
 
-// This class is responsible for drawing the KDevelop splashscreen since
-// version 4.6. A background image is passed in from outside, which
-// contains the KDevelop logo and the text "KDevelop" and the version number
-// on a solid background.
-// This class draws a partially transparent QML scene on top of that image.
-class KDevSplashScreen : public KSplashScreen {
-Q_OBJECT
+class QDeclarativeView;
+
+/**
+ * This class is draws the KDevelop splashscreen.
+ *
+ * The actualy splash design can be adapted via splash.qml
+ */
+class KDevSplashScreen : public KSplashScreen
+{
+    Q_OBJECT
 public:
-    explicit KDevSplashScreen(const QPixmap& pixmap, Qt::WindowFlags f = 0);
+    explicit KDevSplashScreen();
     virtual ~KDevSplashScreen();
     virtual void drawContents(QPainter* painter);
 
@@ -44,7 +42,7 @@ public slots:
     void progress(int progress);
 
 private:
-    QDeclarativeView* m_view;
+    QScopedPointer<QDeclarativeView> m_view;
     int m_progress;
 };
 

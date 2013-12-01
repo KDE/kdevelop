@@ -19,16 +19,10 @@
 #ifndef EXPRESSIONPARSER_H
 #define EXPRESSIONPARSER_H
 
-#include <ksharedptr.h>
 #include <language/duchain/duchainpointer.h>
-#include <language/duchain/duchainlock.h>
-#include <language/duchain/duchain.h>
-#include <language/duchain/ducontext.h>
-#include "visitor.h"
 #include "cppduchainexport.h"
-#include "expressionvisitor.h"
 
-class TranslationUnitAST;
+class ParseSession;
 class AST;
 namespace KDevelop {
 class Declaration;

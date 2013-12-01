@@ -20,7 +20,6 @@
 
 #include "setuphelpers.h"
 #include "parser/rpp/preprocessor.h"
-#include "preprocessjob.h"
 #include "includepathcomputer.h"
 
 #include <interfaces/icore.h>
@@ -33,9 +32,6 @@
 #include <language/util/includeitem.h>
 
 #include <project/projectmodel.h>
-
-#include <KTextEditor/Document>
-#include <KTextEditor/View>
 
 #include <QDirIterator>
 
@@ -395,5 +391,3 @@ QStringList sourceExtensions()
 }
 
 }
-
-#include "cpputils.moc"

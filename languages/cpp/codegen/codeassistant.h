@@ -23,12 +23,7 @@
 
 #include <interfaces/iassistant.h>
 
-#include <KTextEditor/Cursor>
-
-#include <language/duchain/declarationid.h>
-#include <language/duchain/topducontext.h>
 #include <language/duchain/indexedstring.h>
-#include <language/duchain/types/indexedtype.h>
 
 #include "renameassistant.h"
 
@@ -37,6 +32,7 @@ typedef QWeakPointer<KTextEditor::Document> SafeDocumentPointer;
 class QTimer;
 
 namespace KTextEditor {
+class Cursor;
 class Document;
 class Range;
 class View;
@@ -46,6 +42,7 @@ namespace KDevelop {
 class IDocument;
 class ParseJob;
 class DUContext;
+class TopDUContext;
 }
 
 namespace Cpp {

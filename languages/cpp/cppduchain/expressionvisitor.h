@@ -21,22 +21,20 @@
 
 #include <language/duchain/types/abstracttype.h>
 #include <language/duchain/declaration.h>
-#include <language/duchain/ducontext.h>
-#include "visitor.h"
+#include <language/interfaces/iproblem.h>
 #include "default_visitor.h"
 #include "cppduchainexport.h"
 #include "overloadresolution.h" /* needed for OverloadResover::Parameter */
 #include "cpptypes.h"
 
-
 namespace KDevelop {
   class Declaration;
   class DUContext;
+  class TopDUContext;
+  class Problem;
 }
 
 class Token;
-class TranslationUnitAST;
-class AST;
 
 namespace Cpp {
 using namespace KDevelop;
@@ -96,7 +94,7 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionVisitor : public DefaultVisitor {
     void reportRealProblems(bool);
     
     //Returns all posted real problems that appeared during this run. Only if reportRealProblems(true) has been called before.
-    QList<KSharedPtr<KDevelop::Problem> > realProblems() const;
+    QList<ProblemPointer> realProblems() const;
     
     ///Returns the last queried list of declarations
     QList<DeclarationPointer> lastDeclarations() const;
@@ -144,7 +142,7 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionVisitor : public DefaultVisitor {
      *
      * @see reportRealProblems()
      */
-    void realProblem( ProblemPointer problem );
+    void realProblem( const ProblemPointer& problem );
 
     const DUContext* currentContext() const;
 
@@ -219,7 +217,7 @@ private:
     const KDevelop::TopDUContext* m_topContext;
     bool m_reportRealProblems;
 
-    QList<KSharedPtr<KDevelop::Problem> > m_problems;
+    QList<ProblemPointer> m_problems;
 
     /// set to true when member access on a const object should result in a const type
     /// i.e.: 'const A* a; decltype((a->x)) b;', here b should be const

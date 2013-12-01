@@ -33,6 +33,7 @@
 #include <tests/testcore.h>
 #include <usedecoratorvisitor.h>
 #include <controlflowgraphbuilder.h>
+#include <environmentmanager.h>
 
 using namespace KDevelop;
 

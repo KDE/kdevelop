@@ -21,11 +21,11 @@
 #ifndef SIMPLEREFACTORING_H
 #define SIMPLEREFACTORING_H
 
-#include <interfaces/contextmenuextension.h>
 #include <interfaces/context.h>
 #include <language/codegen/documentchangeset.h>
 
 namespace KDevelop {
+class ContextMenuExtension;
 class IndexedDeclaration;
 class Declaration;
 }

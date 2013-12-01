@@ -1132,9 +1132,6 @@ bool Parser::parseAsmDefinition(DeclarationAST *&node)
   const ListNode<uint> *cv = 0;
   parseCvQualify(cv);
 
-#if defined(__GNUC__)
-#warning "implement me"
-#endif
   skip('(', ')');
   advance();
   ADVANCE(';', ";");
@@ -2036,7 +2033,6 @@ bool Parser::parseFunctionSpecifier(const ListNode<uint> *&node)
 
 bool Parser::parseTypeId(TypeIdAST *&node)
 {
-  /// @todo implement the AST for typeId
   uint start = session->token_stream->cursor();
 
   TypeSpecifierAST *spec = 0;
@@ -4028,9 +4024,6 @@ bool Parser::parseDeclarationInternal(DeclarationAST *&node)
 
       ADVANCE(';', ";");
 
-#if defined(__GNUC__)
-#warning "mark the ast as constant"
-#endif
       SimpleDeclarationAST *ast = CreateNode<SimpleDeclarationAST>(session->mempool);
       ast->init_declarators = declarators;
 
@@ -5330,19 +5323,13 @@ bool Parser::parseQProperty(DeclarationAST *&node)
     uint start = session->token_stream->cursor();
     QPropertyDeclarationAST *ast = CreateNode<QPropertyDeclarationAST>(session->mempool);
 
+    ast->member = 0;
     ast->getter = 0;
     ast->setter = 0;
     ast->resetter = 0;
     ast->notifier = 0;
     ast->designableMethod = 0;
-    ast->designableValue = true;
     ast->scriptableMethod = 0;
-    ast->scriptableValue = true;
-    ast->stored = true;
-    ast->user = false;
-    ast->constant = false;
-    ast->final = false;
-
 
     CHECK(Token___qt_property__);
     CHECK('(');
@@ -5357,10 +5344,12 @@ bool Parser::parseQProperty(DeclarationAST *&node)
     if(!parseName(ast->name))
       return false;
 
+    static KDevelop::IndexedString memberStr("MEMBER");
     static KDevelop::IndexedString readStr("READ");
     static KDevelop::IndexedString writeStr("WRITE");
     static KDevelop::IndexedString resetStr("RESET");
     static KDevelop::IndexedString notifyStr("NOTIFY");
+    static KDevelop::IndexedString revisionStr("REVISION");
     static KDevelop::IndexedString designableStr("DESIGNABLE");
     static KDevelop::IndexedString scriptableStr("SCRIPTABLE");
     static KDevelop::IndexedString storedStr("STORED");
@@ -5370,7 +5359,11 @@ bool Parser::parseQProperty(DeclarationAST *&node)
 
     while(session->token_stream->lookAhead() != ')') {
       const KDevelop::IndexedString propertyField = session->token_stream->symbol(session->token_stream->cursor());
-      if(propertyField == readStr) {
+      if (propertyField == memberStr) {
+        advance(); // skip MEMBER
+        if (!parseName(ast->member))
+          return false;
+      } else if(propertyField == readStr) {
         advance(); // skip READ
         if(!parseName(ast->getter))
           return false;
@@ -5386,14 +5379,19 @@ bool Parser::parseQProperty(DeclarationAST *&node)
         advance(); // skip NOTIFY
         if(!parseName(ast->notifier))
           return false;
-      }else if(propertyField == designableStr){
+      } else if (propertyField == revisionStr) {
+        advance(); // skip REVISION
+        if (session->token_stream->lookAhead() == Token_number_literal) {
+          advance();
+        } else {
+          return false;
+        }
+      } else if(propertyField == designableStr){
         advance(); // skip DESIGNABLE
         if(session->token_stream->lookAhead() == Token_true){
           advance(); // skip 'true'
-          ast->designableValue = true;
         }else if(session->token_stream->lookAhead() == Token_false){
           advance(); // skip 'false'
-          ast->designableValue = false;
         }else{
           if(!parseName(ast->designableMethod))
             return false;
@@ -5402,10 +5400,8 @@ bool Parser::parseQProperty(DeclarationAST *&node)
         advance(); // skip SCRIPTABLE
         if(session->token_stream->lookAhead() == Token_true){
           advance(); // skip 'true'
-          ast->scriptableValue = true;
         }else if(session->token_stream->lookAhead() == Token_false){
           advance(); // skip 'false'
-          ast->scriptableValue = false;
         }else{
           if(!parseName(ast->scriptableMethod))
             return false;
@@ -5414,10 +5410,8 @@ bool Parser::parseQProperty(DeclarationAST *&node)
         advance(); // skip STORED
         if(session->token_stream->lookAhead() == Token_true){
           advance(); // skip 'true'
-          ast->stored = true;
         }else if(session->token_stream->lookAhead() == Token_false){
           advance(); // skip 'false'
-          ast->stored = false;
         }else{
           return false;
         }
@@ -5425,19 +5419,15 @@ bool Parser::parseQProperty(DeclarationAST *&node)
         advance(); // skip USER
         if(session->token_stream->lookAhead() == Token_true){
           advance(); // skip 'true'
-          ast->user = true;
         }else if(session->token_stream->lookAhead() == Token_false){
           advance(); // skip 'false'
-          ast->user = false;
         }else{
           return false;
         }
       }else if(propertyField == constantStr){
         advance(); // skip CONSTANT
-        ast->constant = true;
       }else if(propertyField == finalStr){
         advance(); // skip FINAL
-        ast->final = true;
       }else{
         return false;
       }

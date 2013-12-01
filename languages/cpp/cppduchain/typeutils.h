@@ -22,10 +22,8 @@
 #include <QHash>
 #include <language/duchain/types/typeutils.h>
 #include "cppduchainexport.h"
-#include <language/duchain/declaration.h>
 #include "cpptypes.h"
 
-struct C;
 namespace KDevelop {
   class DUContext;
   class Declaration;
@@ -116,7 +114,7 @@ namespace TypeUtils {
   /**
    * Returns all constructors
    * */
-  KDEVCPPDUCHAIN_EXPORT void getConstructors(const CppClassType::Ptr& klass, const TopDUContext* topContext, QList<Declaration*>& functions);
+  KDEVCPPDUCHAIN_EXPORT QList<Declaration*> getConstructors(const CppClassType::Ptr& klass, const TopDUContext* topContext);
   /**
    * Tries to return the internal context of a declaration, for example the internal context of a class can be found by calling this with the class'es declaration.
    **/

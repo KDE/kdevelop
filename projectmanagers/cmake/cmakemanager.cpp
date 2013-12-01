@@ -826,7 +826,7 @@ QWidget* CMakeManager::specialLanguageObjectNavigationWidget(const KUrl& url, co
 QPair<QString, QString> CMakeManager::cacheValue(KDevelop::IProject* project, const QString& id) const
 {
     QPair<QString, QString> ret;
-    if(project==0 && !m_projectsData.keys().isEmpty())
+    if(project==0 && !m_projectsData.isEmpty())
     {
         project=m_projectsData.keys().first();
     }
@@ -854,7 +854,7 @@ QStringList CMakeManager::processGeneratorExpression(const QStringList& expr, IP
 {
     QStringList ret;
     const CMakeProjectData* data = m_projectsData[project];
-    GenerationExpressionSolver exec(data->properties);
+    GenerationExpressionSolver exec(data->properties, data->targetAlias);
     if(target)
         exec.setTargetName(target->text());
 

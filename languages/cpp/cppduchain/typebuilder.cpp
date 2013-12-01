@@ -37,6 +37,7 @@
 #include "parser/rpp/chartools.h"
 #include "cppdebughelper.h"
 #include "debugbuilders.h"
+#include "ptrtomembertype.h"
 #include <language/duchain/types/typealiastype.h>
 #include <util/pushvalue.h>
 #include "typeutils.h"
@@ -603,6 +604,7 @@ bool TypeBuilder::openTypeFromName(NameAST* name, uint modifiers, bool needClass
    openedType = true;
    IndexedTypeIdentifier typeId(id);
    typeId.setIsConstant(modifiers & AbstractType::ConstModifier);
+   typeId.setIsVolatile(modifiers & AbstractType::VolatileModifier);
    
    openDelayedType(typeId, name, templateDeclarationDepth() ? DelayedType::Delayed : DelayedType::Unresolved );
 

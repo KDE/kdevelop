@@ -27,10 +27,10 @@
 #include <language/duchain/abstractfunctiondeclaration.h>
 #include <language/duchain/duchainutils.h>
 #include <QTextFormat>
-#include <QStringList>
-#include "../cppduchain/overloadresolution.h"
 #include "../cppduchain/cpptypes.h"
 #include "../cppduchain/cppduchain.h"
+#include "../cppduchain/overloadresolutionhelper.h"
+#include "../cppduchain/viablefunctions.h"
 #include <templatedeclaration.h>
 #include <templateparameterdeclaration.h>
 #include "../cpputils.h"
@@ -166,7 +166,10 @@ void createArgumentList(const NormalDeclarationCompletionItem& item, QString& re
           ret += Cpp::shortenedTypeString(type, ctx, 1000000);
         }else
           ret += Cpp::shortenedTypeString(type, ctx, desiredArgumentTypeLength, item.stripPrefix());
-        ret += " " + (*paramNameIt)->identifier().toString();
+        const QString ident = (*paramNameIt)->identifier().toString();
+        if (!ident.isEmpty()) {
+          ret += " " + ident;
+        }
         ret += arrayAppendix;
       } else if (argument)
         ret += argument->toString();

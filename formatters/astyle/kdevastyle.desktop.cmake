@@ -19,7 +19,7 @@ Comment[gl]=Un engadido para formatar o código fonte segundo un conxunto espec�
 Comment[hu]=Egy bővítőmodul forráskód formázásához a megadott szabályok alapján.
 Comment[it]=Un'estensione per la formattazione del codice sorgente secondo uno specifico insieme di regole
 Comment[ja]=指定された規則に従ってソースコードを整形します
-Comment[kk]=Келтірілген ереже жиыны бойынша бастапқы кодты пішімдеу плагины
+Comment[kk]=Келтірілген ереже жиыны бойынша бастапқы кодты пішімдеу плагині
 Comment[lv]=Sparudnis pirmkoda formatēšanai atbilstoši dotu noteikumu kopai
 Comment[nb]=Et programtillegg for formattering av kildekode i følge et bestemt regelsett
 Comment[nds]=En Moduul för't Formateren vun Borntext langs angeven Regeln
@@ -71,9 +71,6 @@ Name[uk]=Сервер форматування AStyle
 Name[x-test]=xxAStyle Formatter Backendxx
 Name[zh_CN]=AStyle 格式化器后端
 Name[zh_TW]=AStyle 格式器後端介面
-<<<<<<< HEAD:formatters/astyle/kdevastyle.desktop.cmake
-=======
->>>>>>> 4.5:formatters/astyle/kdevastyle.desktop
 GenericName=Formatter Backend
 GenericName[bs]=Formater pozadine
 GenericName[ca]=Dorsal del formatador

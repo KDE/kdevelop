@@ -53,10 +53,18 @@
     <text context="@title:menu">&amp;Navigation</text>
     <DefineGroup name="navigation_file"/>
     <Separator />
-    <Action name="next_error" />
     <Action name="previous_error" />
+    <Action name="next_error" />
     <Separator />
     <DefineGroup name="navigation_code"/>
+    <Separator />
+    <DefineGroup name="navigation_fxn"/>
+    <Separator />
+    <DefineGroup name="navigation_jmp"/>
+    <Separator />
+    <DefineGroup name="navigation_use"/>
+    <Separator />
+    <DefineGroup name="navigation_cxt"/>
     <Separator />
     <Merge />
   </Menu>
@@ -104,8 +112,8 @@
     <Action name="new_window"/>
     <Separator/>
     <Action name="add_toolview"/>
-    <Action name="select_next_dock"/>
     <Action name="select_previous_dock"/>
+    <Action name="select_next_dock"/>
     <Action name="docks_submenu"/>
     <Action name="user_interface"/>
     <DefineGroup name="history_operations"/>
@@ -119,12 +127,13 @@
     <Merge/>
     <Separator/>
     <DefineGroup name="view_operations"/>
-    
-    <Action name="view_next_window"/>
     <Action name="view_previous_window"/>
+    <Action name="view_next_window"/>
     <Separator/>
     <Action name="split_horizontal"/>
     <Action name="split_vertical"/>
+    <Action name="view_previous_split"/>
+    <Action name="view_next_split"/>
     <Separator/>
     <DefineGroup name="window_operations"/>
     <Separator/>

@@ -19,24 +19,21 @@
 #ifndef OVERLOADRESOLUTION_H
 #define OVERLOADRESOLUTION_H
 
+#include <language/duchain/declaration.h>
 #include <language/duchain/duchainpointer.h>
-#include "typeconversion.h"
 #include <QList>
 #include "cppduchainexport.h"
 #include <language/duchain/identifier.h>
 
-class CppTemplateParameterType;
-
 namespace KDevelop {
   class DUContext;
   class Declaration;
-  class FunctionType;
 }
 
 namespace Cpp {
 using namespace KDevelop;
   class ViableFunction;
-  class ADLHelper;
+
 /**
  * Models overloaded function resolution
  * The du-chain must be locked for the whole lifetime of this object.

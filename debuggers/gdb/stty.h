@@ -26,9 +26,11 @@
 #define _STTY_H_
 
 class QSocketNotifier;
+class QProcess;
 
 #include <QObject>
 #include <QString>
+#include <QScopedPointer>
 
 namespace GDBDebugger
 {
@@ -41,6 +43,8 @@ public:
     STTY(bool ext=false, const QString &termAppName=QString());
     ~STTY();
 
+    ///Call it if getSlave returns an empty string.
+    QString lastError(){return m_lastError;}
     QString getSlave()    { return ttySlave; };
     void readRemaining();
 
@@ -60,7 +64,8 @@ private:
     int ferr;
     QSocketNotifier *out;
     QString ttySlave;
-    int pid_;
+    QString m_lastError;
+    QScopedPointer<QProcess> m_externalTerminal;
     bool external_;
 
     char pty_master[50];  // "/dev/ptyxx" | "/dev/ptmx"

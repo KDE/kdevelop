@@ -55,7 +55,9 @@ target_link_libraries(buddiestest
 ########### next target ###############
 
 find_package(QJSON)
-if(QJSON_FOUND)
+# Also check that kdevplatform is built with JSON support
+# see: https://bugs.kde.org/show_bug.cgi?id=327095
+if(QJSON_FOUND AND KDEVPLATFORM_JSONTESTS_LIBRARIES)
   set(cppfilestest_SRCS test_cppfiles.cpp)
   kde4_add_unit_test(cppfilestest ${cppfilestest_SRCS})
   configure_file("testfilepaths.h.cmake" "testfilepaths.h" ESCAPE_QUOTES)
@@ -67,7 +69,7 @@ if(QJSON_FOUND)
       ${KDEVPLATFORM_JSONTESTS_LIBRARIES}
       kdev4cppduchain
   )
-endif(QJSON_FOUND)
+endif()
 
 ########### next target ###############
 
@@ -108,7 +110,6 @@ target_link_libraries(cppassistantstest ${QT_QTTEST_LIBRARY}
     kdev4cppduchain
     kdev4cpprpp
     kdev4cppparser
-    kdevcpplanguagesupport
     ${KDEVPLATFORM_INTERFACES_LIBRARIES}
     ${KDEVPLATFORM_PROJECT_LIBRARIES}
     ${KDE4_THREADWEAVER_LIBRARIES}

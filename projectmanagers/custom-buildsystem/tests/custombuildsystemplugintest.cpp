@@ -36,6 +36,8 @@
 #include <project/projectmodel.h>
 #include <kconfiggroup.h>
 
+#include "testconfig.h"
+
 using KDevelop::Core;
 using KDevelop::ICore;
 using KDevelop::IProject;
@@ -43,18 +45,6 @@ using KDevelop::TestCore;
 using KDevelop::AutoTestShell;
 using KDevelop::KDevSignalSpy;
 using KDevelop::Path;
-
-void deleteDir( QDir dir )
-{
-    foreach( const QString& f, dir.entryList( QDir::NoDotAndDotDot | QDir::AllEntries ) ) {
-        if( QFileInfo( f ).isDir() ) {
-            deleteDir( QDir( dir.absoluteFilePath( f ) ) );
-            dir.rmdir( f );
-        } else {
-            dir.remove( f );
-        }
-    }
-}
 
 void CustomBuildSystemPluginTest::cleanupTestCase()
 {

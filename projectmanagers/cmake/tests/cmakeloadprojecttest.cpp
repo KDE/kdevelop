@@ -26,6 +26,7 @@
 #include <language/duchain/duchain.h>
 #include <language/duchain/topducontext.h>
 
+#include "cmake-test-paths.h"
 
 #include "cmListFileLexer.h"
 #include "cmakelistsparser.h"
@@ -112,11 +113,9 @@ void CMakeLoadProjectTest::testSmallProjectWithTests()
     QCOMPARE(v.testSuites.count(), 5);
     QCOMPARE(v.projectName, QString("unittests"));
     
-    QCOMPARE(v.testSuites.at(0).files, QStringList() << "success.cpp");
     QCOMPARE(v.testSuites.at(0).name, QString("success"));
     QCOMPARE(v.testSuites.at(0).arguments.count(), 0);
     
-    QCOMPARE(v.testSuites.at(3).files, QStringList() << "math_test.cpp");
     QCOMPARE(v.testSuites.at(3).name, QString("test_four"));
     QCOMPARE(v.testSuites.at(3).arguments.count(), 1);
     QCOMPARE(v.testSuites.at(3).arguments.at(0), QString("4"));
@@ -128,10 +127,8 @@ void CMakeLoadProjectTest::testKDE4ProjectWithTests()
     QCOMPARE(v.testSuites.count(), 1); //cmake-test-unittestskde
     QCOMPARE(v.projectName, QString("unittestskde"));
     
-    QCOMPARE(v.testSuites.at(0).files, QStringList() << "test.cpp");
     QCOMPARE(v.testSuites.at(0).name, QString("cmake-test-unittestskde"));
     QCOMPARE(v.testSuites.at(0).arguments.count(), 0);
-    QVERIFY(KUrl(v.testSuites.at(0).executable).isRelative());
 }
 
 CMakeProjectData CMakeLoadProjectTest::parseProject( const QString& sourcedir )
@@ -143,6 +140,7 @@ CMakeProjectData CMakeLoadProjectTest::parseProject( const QString& sourcedir )
     CMakeProjectData data;
     data.vm = initials.first;
     data.vm.insert("CMAKE_SOURCE_DIR", QStringList(sourcedir));
+    data.vm.insert("CMAKE_PREFIX_PATH", QString::fromLatin1(TEST_PREFIX_PATH).split(';', QString::SkipEmptyParts));
     
     KDevelop::ReferencedTopDUContext buildstrapContext=new TopDUContext(IndexedString("buildstrap"), RangeInRevision(0,0, 0,0));
     DUChain::self()->addDocumentChain(buildstrapContext);
@@ -163,6 +161,12 @@ CMakeProjectData CMakeLoadProjectTest::parseProject( const QString& sourcedir )
     v.setMacroMap(&data.mm);
     v.setCacheValues(&data.cache);
     v.setModulePath(modulesPath);
+    v.setProperties(data.properties);
+    QMap<QString, QString> env;
+    env["CMAKE_PREFIX_PATH"] = QString::fromLatin1(TEST_ENV_PREFIX_PATH);
+    env["CMAKE_INCLUDE_PATH"] = QString::fromLatin1(TEST_ENV_INCLUDE_PATH);
+    env["CMAKE_LIBRARY_PATH"] = QString::fromLatin1(TEST_ENV_LIBRARY_PATH);
+    v.setEnvironmentProfile( env );
     v.walk(code, 0);
     
     data.projectName=v.projectName();

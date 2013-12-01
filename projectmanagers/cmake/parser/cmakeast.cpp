@@ -495,12 +495,14 @@ AddLibraryAst::AddLibraryAst()
         s_typeForName.insert("STATIC", Static);
         s_typeForName.insert("SHARED", Shared);
         s_typeForName.insert("MODULE", Module);
+        s_typeForName.insert("OBJECT", Object);
         s_typeForName.insert("UNKNOWN", Unknown);
     }
     
     m_type = Static;
     m_isImported = false;
     m_excludeFromAll = false;
+    m_isAlias = false;
 }
 
 AddLibraryAst::~AddLibraryAst()
@@ -536,16 +538,23 @@ bool AddLibraryAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             m_excludeFromAll = true;
             ++it;
         }
+        else if ( it->value == "ALIAS") {
+            m_isAlias = true;
+            ++it;
+            if(it==itEnd)
+                return false;
+            m_aliasTarget = it->value;
+        }
         else
             break;
     }
 
-    if ( !m_isImported )
+    if ( !m_isImported && !m_isAlias)
     {
         while ( it != itEnd )
         {
-                m_sourceLists.append( it->value );
-                ++it;
+            m_sourceLists.append( it->value );
+            ++it;
         }
 
         if ( m_sourceLists.isEmpty() )
@@ -1765,6 +1774,7 @@ bool GetFilenameComponentAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     QString t = func.arguments[2].value;
     
     if(t=="PATH") m_type=Path;
+    else if(t=="REALPATH") m_type=RealPath;
     else if(t=="ABSOLUTE") m_type=Absolute;
     else if(t=="NAME") m_type=Name;
     else if(t=="EXT") m_type=Ext;

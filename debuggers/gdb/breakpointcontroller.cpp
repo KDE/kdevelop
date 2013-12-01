@@ -223,6 +223,13 @@ void BreakpointController::handleBreakpointListInitial(const GDBMI::ResultRecord
                     updateBreakpoint = b;
                 }
             } else if (b->kind() == KDevelop::Breakpoint::CodeBreakpoint) {
+                QString condition;
+                if (mi_b.hasField("cond")) {
+                    condition = mi_b["cond"].literal();
+                }
+                if (condition != b->condition())
+                    continue;
+
                 QString location = mi_b["original-location"].literal();
                 kDebug() << "location" << location;
                 QRegExp rx("^(.+):(\\d+)$");
@@ -232,6 +239,8 @@ void BreakpointController::handleBreakpointListInitial(const GDBMI::ResultRecord
                     } else {
                         kDebug() << "!=" << b->location();
                     }
+                } else if (location == b->location()) {
+                    updateBreakpoint = b;
                 }
             }
             if (updateBreakpoint) break;

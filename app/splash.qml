@@ -43,7 +43,12 @@ Rectangle {
     width: 475
     height: 301
     anchors.fill: parent
-    color: "#00FFFFFF"
+    gradient: Gradient {
+         GradientStop { position: 0.0; color: "#0A0A0A" }
+         GradientStop { position: 0.5; color: "#1F1F1F" }
+         GradientStop { position: 1.0; color: "#0A0A0A" }
+     }
+
     // scanlines always look fancy
     ListView {
         anchors.fill: parent
@@ -88,7 +93,7 @@ Rectangle {
             }
         }
     }
-    // this is, quite obvioulsy, the text in the upper right corner
+    // text in the upper right corner
     Text {
         anchors.margins: 6
         anchors.left: parent.left
@@ -96,6 +101,39 @@ Rectangle {
         color: "white"
         opacity: 0.65
         text: "KDevelop Integrated Development Environment – http://kdevelop.org<br>" + root.progress+"%"
-        font.pointSize: 7
+        font.pixelSize: 12
+    }
+    // icon in the lower left corner
+    Image {
+        id: icon
+        anchors {
+            bottom: parent.bottom
+            left: parent.left
+            margins: 6
+        }
+        width: 48
+        height: width
+        source: appIcon
+    }
+    // Text next to the icon
+    Text {
+        anchors {
+            left: icon.right
+            bottom: parent.bottom
+            margins: 8
+        }
+        height: icon.height
+        width: parent.width - icon.width
+        color: "white"
+        verticalAlignment: Text.AlignVCenter
+        font {
+            pixelSize: 35
+            bold: true
+            family: "sans"
+        }
+        style: Text.Raised;
+        styleColor: "black"
+        text: "KDevelop " + appVersionMajor + "." + appVersionMinor +
+              "<span style='font-size:15px;'>&nbsp;." + appVersionPatch + "</span>"
     }
 }

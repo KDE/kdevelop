@@ -20,20 +20,18 @@
 #include "test_duchain.h"
 
 #include <QTest>
-#include <QWidget>
 
 #include "declarationbuilder.h"
 #include "usebuilder.h"
 #include "cpptypes.h"
 #include "templateparameterdeclaration.h"
-#include "cppeditorintegrator.h"
 #include "dumptypes.h"
-#include "environmentmanager.h"
 #include "typeutils.h"
 #include "templatedeclaration.h"
-#include "tokens.h"
 #include "qtfunctiondeclaration.h"
 #include "sourcemanipulation.h"
+#include "ptrtomembertype.h"
+#include "overloadresolution.h"
 
 #include "rpp/chartools.h"
 #include "rpp/pp-engine.h"
@@ -4955,6 +4953,8 @@ void TestDUChain::testSpecializationSelection()
 {
   QByteArray method("template<class T1> struct Foo { void normal() {} };\n"
                     "template<class T1> struct Foo<const T1> { void typeIsConst() {} };\n"
+                    "template<class T1> struct Foo<volatile T1> { void typeIsVolatile() {} };\n"
+                    "template<class T1> struct Foo<const volatile T1> { void typeIsConstVolatile() {} };\n"
                     "template<class T1> struct Foo<T1*> { void typeIsPtr() {} };\n"
                     "template<class T1> struct Foo<T1**> { void typeIsPtrPtr() {} };\n"
                     "template<class T1> struct Foo<const T1*> { void typeIsConstPtr() {} };\n"
@@ -4968,6 +4968,8 @@ void TestDUChain::testSpecializationSelection()
   LockedTopDUContext top = parse(method, DumpNone);
   QVERIFY(findDeclaration(top, QualifiedIdentifier("Foo<int>::normal")));
   QVERIFY(findDeclaration(top, QualifiedIdentifier("Foo<const int>::typeIsConst")));
+  QVERIFY(findDeclaration(top, QualifiedIdentifier("Foo<volatile int>::typeIsVolatile")));
+  QVERIFY(findDeclaration(top, QualifiedIdentifier("Foo<const volatile int>::typeIsConstVolatile")));
   QVERIFY(findDeclaration(top, QualifiedIdentifier("Foo<int*>::typeIsPtr")));
   QVERIFY(findDeclaration(top, QualifiedIdentifier("Foo<const int*>::typeIsConstPtr")));
   QVERIFY(findDeclaration(top, QualifiedIdentifier("Foo<int&&>::typeIsRValue")));
@@ -5046,8 +5048,7 @@ void TestDUChain::testTemplatesRebind2() {
 
   LockedTopDUContext top = parse(method, DumpNone);
 
-  QList<Declaration*> constructors;
-  TypeUtils::getConstructors( top->localDeclarations()[2]->abstractType().cast<CppClassType>(), top, constructors );
+  QList<Declaration*> constructors = TypeUtils::getConstructors( top->localDeclarations()[2]->abstractType().cast<CppClassType>(), top );
   QCOMPARE(constructors.size(), 1);
   OverloadResolver resolution( DUContextPointer(top->localDeclarations()[2]->internalContext()), TopDUContextPointer(top) );
   QVERIFY(resolution.resolveConstructor( OverloadResolver::ParameterList() ));
@@ -6062,6 +6063,43 @@ void TestDUChain::testRenameClass()
   QCOMPARE(top->localDeclarations().first()->identifier().toString(), QString("B"));
   QCOMPARE(top->childContexts().size(), 1);
   QCOMPARE(top->childContexts().first()->localScopeIdentifier().toString(), QString("B"));
+}
+
+void TestDUChain::testQProperty()
+{
+  LockedTopDUContext top = parse(
+    "class QString {};\n"
+    "class A {\n"
+    "  __qt_property__(QString a READ a WRITE setA NOTIFY aChanged)\n"
+    "public:\n"
+    "  QString a();\n"
+    "  void setA(const QString&);\n"
+    "__qt_signals__:\n"
+    "  void aChanged(QString);\n"
+    "};\n");
+
+  QVERIFY(top);
+  QVERIFY(top->problems().isEmpty());
+  QCOMPARE(top->localDeclarations().size(), 2);
+  QCOMPARE(top->childContexts().size(), 2);
+  Declaration* QStringDecl = top->localDeclarations().first();
+  QCOMPARE(QStringDecl->uses().size(), 1);
+  QCOMPARE(QStringDecl->uses().begin()->size(), 4);
+  QCOMPARE(QStringDecl->uses().begin()->first(), RangeInRevision(2, 18, 2, 25));
+  QVector<Declaration*> decls = top->childContexts().last()->localDeclarations();
+  QCOMPARE(decls.size(), 3);
+  QCOMPARE(decls.at(0)->toString(), QLatin1String("QString a ()"));
+  QCOMPARE(decls.at(0)->uses().size(), 1);
+  QCOMPARE(decls.at(0)->uses().begin()->size(), 1);
+  QCOMPARE(decls.at(0)->uses().begin()->first(), RangeInRevision(2, 33, 2, 34));
+  QCOMPARE(decls.at(1)->toString(), QLatin1String("void setA (const QString&)"));
+  QCOMPARE(decls.at(1)->uses().size(), 1);
+  QCOMPARE(decls.at(1)->uses().begin()->size(), 1);
+  QCOMPARE(decls.at(1)->uses().begin()->first(), RangeInRevision(2, 41, 2, 45));
+  QCOMPARE(decls.at(2)->toString(), QLatin1String("void aChanged (QString)"));
+  QCOMPARE(decls.at(2)->uses().size(), 1);
+  QCOMPARE(decls.at(2)->uses().begin()->size(), 1);
+  QCOMPARE(decls.at(2)->uses().begin()->first(), RangeInRevision(2, 53, 2, 61));
 }
 
 #include "test_duchain.moc"

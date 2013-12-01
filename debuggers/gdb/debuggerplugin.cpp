@@ -90,7 +90,7 @@ namespace GDBDebugger
 {
 
 K_PLUGIN_FACTORY(CppDebuggerFactory, registerPlugin<CppDebuggerPlugin>(); )
-K_EXPORT_PLUGIN(CppDebuggerFactory(KAboutData("kdevgdb","kdevgdb", ki18n("GDB Support"), "0.1", ki18n("Support for running apps in GDB"), KAboutData::License_GPL)))
+K_EXPORT_PLUGIN(CppDebuggerFactory(KAboutData("kdevgdb","kdevgdb", ki18n("GDB Support"), "0.1", ki18n("This plugin provides a frontend for GDB, a source-level debugger for C, C++ and more."), KAboutData::License_GPL)))
 
 template<class T>
 class DebuggerToolFactory : public KDevelop::IToolViewFactory

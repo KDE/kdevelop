@@ -18,7 +18,6 @@
 #ifndef VIABLEFUNCTIONS_H
 #define VIABLEFUNCTIONS_H
 
-#include <QList>
 #include "overloadresolution.h"
 #include "cppduchainexport.h"
 #include <language/duchain/duchainpointer.h>
@@ -27,6 +26,7 @@
 namespace KDevelop  {
   class Declaration;
   class AbstractFunctionDeclaration;
+  class FunctionType;
 }
 
 ///The here defined class is about finding best viable functions as defined in iso c++ draft 13.3.3

@@ -152,6 +152,10 @@ void CMakeManagerTest::testTargetIncludeDirectories()
 
 void CMakeManagerTest::testQt5App()
 {
+    if (!qgetenv("KDEV_CMAKE_TEST_QT5").toInt()) {
+        QSKIP("Test only passes if Qt5 is available, define KDEV_CMAKE_TEST_QT5 to enable this test.", SkipAll);
+    }
+
     IProject* project = loadProject("qt5_app");
 
     Path mainCpp(project->path(), "main.cpp");
@@ -171,9 +175,9 @@ void CMakeManagerTest::testQt5App()
     QVERIFY(foundCore);
 }
 
-void CMakeManagerTest::testTargetDefines()
+void CMakeManagerTest::testDefines()
 {
-    IProject* project = loadProject("target_defines");
+    IProject* project = loadProject("defines");
 
     Path mainCpp(project->path(), "main.cpp");
     QVERIFY(QFile::exists(mainCpp.toLocalFile()));
@@ -187,11 +191,32 @@ void CMakeManagerTest::testTargetDefines()
         QHash<QString, QString> defines = project->buildSystemManager()->defines(mainCppItem);
 
         if (dynamic_cast<CMakeExecutableTargetItem*>( mainContainer )) {
-            QCOMPARE(defines.size(), 1);
-            QVERIFY(defines.contains(QString("VALUE")));
-            QCOMPARE(defines.value("VALUE"), QString("1"));
+            QEXPECT_FAIL("", "SOURCE definitions are not implemented yet", Continue);
+            QCOMPARE(defines.size(), 14);
+            QCOMPARE(defines.size(), 11);
+            QCOMPARE(defines.value("B", QString("not found")), QString());
+            QCOMPARE(defines.value("BV", QString("not found")), QString("1"));
+            QCOMPARE(defines.value("BV2", QString("not found")), QString("2"));
             foundInTarget = true;
+        } else {
+            QEXPECT_FAIL("", "SOURCE definitions are not implemented yet", Continue);
+            QCOMPARE(defines.size(), 11);
+            QCOMPARE(defines.size(), 8);
         }
+        QCOMPARE(defines.value("BAR", QString("not found")), QString("foo"));
+        QCOMPARE(defines.value("FOO", QString("not found")), QString("bar"));
+        QCOMPARE(defines.value("BLA", QString("not found")), QString("blub"));
+        QCOMPARE(defines.value("ASDF", QString("not found")), QString("asdf"));
+        QCOMPARE(defines.value("XYZ", QString("not found")), QString());
+        QCOMPARE(defines.value("A", QString("not found")), QString());
+        QCOMPARE(defines.value("AV", QString("not found")), QString("1"));
+        QCOMPARE(defines.value("AV2", QString("not found")), QString("2"));
+        QEXPECT_FAIL("", "", Continue);
+        QCOMPARE(defines.value("C", QString("not found")), QString());
+        QEXPECT_FAIL("", "", Continue);
+        QCOMPARE(defines.value("CV", QString("not found")), QString("1"));
+        QEXPECT_FAIL("", "", Continue);
+        QCOMPARE(defines.value("CV2", QString("not found")), QString("2"));
     }
     QVERIFY(foundInTarget);
 }
@@ -221,4 +246,9 @@ void CMakeManagerTest::testConditionsInSubdirectoryBasedOnRootVariables()
     QVERIFY(QFile::exists(subdirectoryFooCpp.toLocalFile()));
     QList< ProjectBaseItem* > subdirectoryFooItems = project->itemsForPath(subdirectoryFooCpp.toIndexed());
     QCOMPARE(subdirectoryFooItems.size(), 4); // three items for the targets, one item for the plain file
+}
+
+void CMakeManagerTest::testFaultyTarget()
+{
+    loadProject("faulty_target");
 }

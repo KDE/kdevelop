@@ -71,7 +71,7 @@ class KDEVCMAKECOMMON_EXPORT CompilationDataAttached
 
         CMakeDefinitions definitions(CMakeFolderItem* parent) const;
         void setDefinitions(const CMakeDefinitions& defs) { m_defines=defs; }
-        void defineVariables(const QStringList& vars);
+        void addDefinitions(const QStringList& vars);
 
     private:
         CMakeDefinitions m_defines;

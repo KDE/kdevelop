@@ -39,7 +39,6 @@
 #include <ktexteditor/cursor.h>
 
 #include <QFileInfo>
-#include <QPixmap>
 #include <QDir>
 #include <QProcess>
 #include <QSessionManager>
@@ -58,6 +57,7 @@
 #include <shell/session.h>
 #include <interfaces/ilauncher.h>
 #include <interfaces/iproject.h>
+#include <interfaces/launchconfigurationtype.h>
 
 #include "kdevideextension.h"
 
@@ -90,7 +90,7 @@ public:
 /// Tries to find a session identified by @p data in @p sessions.
 /// The @p data may be either a session's name or a string-representation of its UUID.
 /// @return pointer to the session or NULL if nothing appropriate has been found
-const KDevelop::SessionInfo* findSessionInList( QList<KDevelop::SessionInfo>& sessions, const QString& data )
+static const KDevelop::SessionInfo* findSessionInList( QList<KDevelop::SessionInfo>& sessions, const QString& data )
 {
     // We won't search a session without input data, since that could lead to false-positives
     // with unnamed sessions
@@ -107,7 +107,7 @@ const KDevelop::SessionInfo* findSessionInList( QList<KDevelop::SessionInfo>& se
 }
 
 /// Parses a filename given as an argument by determining its line number and full path
-File parseFilename(QString argument)
+static File parseFilename(QString argument)
 {
     if ( KUrl::isRelativeUrl(argument) && ! argument.startsWith('/') ) {
         argument = QDir::currentPath() + "/" + argument;
@@ -130,10 +130,10 @@ File parseFilename(QString argument)
 
 /// Performs a DBus call to open the given @p files in the running kdev instance identified by @p pid
 /// Returns the exit status
-int openFilesInRunningInstance(const QVector<File>& files, int pid)
+static int openFilesInRunningInstance(const QVector<File>& files, int pid)
 {
-    QDBusInterface iface(QString("org.kdevelop.kdevelop-%1").arg(pid),
-                                 "/org/kdevelop/DocumentController", "org.kdevelop.DocumentController");
+    const QString service = QString("org.kdevelop.kdevelop-%1").arg(pid);
+    QDBusInterface iface(service, "/org/kdevelop/DocumentController", "org.kdevelop.DocumentController");
 
     QStringList urls;
     foreach ( const File& file, files ) {
@@ -144,12 +144,16 @@ int openFilesInRunningInstance(const QVector<File>& files, int pid)
         KMessageBox::sorry(0, i18n("Some of the requested files could not be opened."));
         return 1;
     }
+    // make the window visible
+    QDBusMessage makeVisible = QDBusMessage::createMethodCall( service, "/kdevelop/MainWindow", "org.kdevelop.MainWindow",
+                                                           "ensureVisible" );
+    QDBusConnection::sessionBus().asyncCall( makeVisible );
     return 0;
 }
 
 /// Gets the PID of a running KDevelop instance, eventually asking the user if there is more than one.
 /// Returns -1 in case there are no running sessions.
-int getRunningSessionPid()
+static int getRunningSessionPid()
 {
     QList<KDevelop::SessionInfo> candidates;
     foreach( const KDevelop::SessionInfo& si, KDevelop::SessionController::availableSessionInfo() ) {
@@ -451,12 +455,8 @@ int main( int argc, char *argv[] )
     KDevIDEExtension::init();
 
     KDevSplashScreen* splash = 0;
-    QString splashFile = KStandardDirs::locate( "appdata", "pics/kdevelop-splash.png" );
-    if( !splashFile.isEmpty() )
-    {
-        QPixmap pm;
-        pm.load( splashFile );
-        splash = new KDevSplashScreen( pm );
+    if ( !QProcessEnvironment::systemEnvironment().contains("KDEV_DISABLE_SPLASH") ) {
+        splash = new KDevSplashScreen;
         splash->show();
         splash->repaint();
         app.processEvents();

@@ -81,11 +81,12 @@ int main(int argc, char** argv)
     KApplication app;
     if(args->count()==0) {
         args->usageError("Didn't provide a project to open");
+        return 0;
     }
 
     KDevProjectOpen opener;
     for(int i=0; i<args->count(); ++i) {
-        opener.openProject(args->arg(i));
+        opener.openProject(args->url(i));
     }
     args->clear();
     return app.exec();

@@ -61,12 +61,10 @@ struct Subdirectory
 
 struct Test
 {
-    Test() : isTarget(false) {}
+    Test() {}
     QString name;
     QString executable;
     QStringList arguments;
-    QStringList files;
-    bool isTarget;
     QHash<QString, QString> properties;
 };
 

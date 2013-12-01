@@ -20,13 +20,13 @@
 #include "type_visitor.h"
 #include "name_visitor.h"
 #include "lexer.h"
-#include "symbol.h"
 #include "tokens.h"
 #include "parsesession.h"
-#include "cppduchain.h"
+#include "expressionparser.h"
 #include "expressionvisitor.h"
 #include "typebuilder.h"
 #include "parser/rpp/chartools.h"
+#include "ptrtomembertype.h"
 
 #include <language/duchain/duchainlock.h>
 

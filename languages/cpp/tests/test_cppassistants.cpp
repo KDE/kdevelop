@@ -24,7 +24,6 @@
 
 #include <QtTest/QtTest>
 #include <KTempDir>
-#include <KAction>
 #include <qtest_kde.h>
 
 #include <tests/autotestshell.h>
@@ -73,7 +72,7 @@ void TestCppAssistants::cleanupTestCase()
   globalTestLock = 0;
 }
 
-QString createFile(QString fileContents)
+static QString createFile(const QString& fileContents)
 {
   static KTempDir dirA;
   static int i = 0;
@@ -94,12 +93,12 @@ public:
     CppDoc
   };
 
-  Testbed(QString headerContents, QString cppContents)
+  Testbed(const QString& headerContents, const QString& cppContents)
   {
     m_headerDocument.url = createFile(headerContents);
     m_headerDocument.textDoc = openDocument(m_headerDocument.url);
 
-    m_cppDocument.url = createFile(cppContents.prepend(QString("#include \"%1\"\n").arg(m_headerDocument.url)));
+    m_cppDocument.url = createFile(QString("#include \"%1\"\n").arg(m_headerDocument.url) + cppContents);
     m_cppDocument.textDoc = openDocument(m_cppDocument.url);
   }
   ~Testbed()
@@ -108,7 +107,7 @@ public:
     Core::self()->documentController()->documentForUrl(m_headerDocument.url)->close(KDevelop::IDocument::Discard);
   }
 
-  void changeDocument(TestDoc which, Range where, QString what, bool waitForUpdate = false)
+  void changeDocument(TestDoc which, Range where, const QString& what, bool waitForUpdate = false)
   {
     TestDocument document;
     if (which == CppDoc)
@@ -145,7 +144,7 @@ private:
     Document *textDoc;
   };
 
-  Document* openDocument(QString url)
+  Document* openDocument(const QString& url)
   {
     Core::self()->documentController()->openDocument(url);
     DUChain::self()->waitForUpdate(IndexedString(url), KDevelop::TopDUContext::AllDeclarationsAndContexts);
@@ -163,12 +162,12 @@ private:
 struct StateChange
 {
   StateChange(){};
-  StateChange(Testbed::TestDoc _document, Range _range, QString _newText, QString _result)
+  StateChange(Testbed::TestDoc document, const Range& range, const QString& newText, const QString& result)
+    : document(document)
+    , range(range)
+    , newText(newText)
+    , result(result)
   {
-    document = _document;
-    range = _range;
-    newText = _newText;
-    result = _result;
   }
   Testbed::TestDoc document;
   Range range;

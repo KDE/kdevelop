@@ -58,7 +58,7 @@ void GenerationExpressionSolverTest::testRun()
 
     CMakeProperties props;
     props[TargetProperty]["tgt"]["TEST_PROPERTY"] = QStringList("hola");
-    GenerationExpressionSolver solver(props);
+    GenerationExpressionSolver solver(props, QHash<QString,QString>());
     solver.defineVariable("WOP", "bonjour");
     solver.setTargetName("tgt");
     QString ret = solver.run(input);

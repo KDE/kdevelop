@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+      http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
+  <kcfgfile arg="true"/>
+  <include>ninjabuilderpreferences.h</include>
+  <group name="NinjaBuilder">
+    <entry name="displayOnly" key="Display Only" type="Bool">
+        <default>false</default>
+    </entry>
+    <entry name="installAsRoot" key="Install As Root" type="Bool">
+        <default>false</default>
+    </entry>
+    <entry name="overrideNumberOfJobs" key="Override Number Of Jobs" type="Bool">
+        <default>false</default>
+    </entry>
+    <entry name="suCommand" key="Su Command" type="Int">
+    </entry>
+    <entry name="numberOfJobs" key="Number Of Jobs" type="UInt">
+        <default>1</default>
+    </entry>
+    <entry name="numberOfErrors" key="Number Of Errors" type="UInt">
+        <default>1</default>
+    </entry>
+    <entry name="additionalOptions" key="Additional Options" type="String">
+    </entry>
+    <entry name="environmentProfile" key="Default Ninja Environment Profile" type="String">
+        <default>default</default>
+    </entry>
+  </group>
+</kcfg>

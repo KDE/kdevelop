@@ -29,6 +29,7 @@
 #include "typeutils.h"
 #include <QtAlgorithms>
 #include "adlhelper.h"
+#include "typeconversion.h"
 #include <language/duchain/persistentsymboltable.h>
 
 using namespace Cpp;
@@ -136,11 +137,9 @@ void OverloadResolver::expandDeclarations( const QList<Declaration*>& declaratio
       else
       {
         //Classes should be substituted with their constructors
-        QList<Declaration*> decls;
-        TypeUtils::getConstructors( klass, m_topContext.data(), decls );
-
-        foreach( Declaration* decl, decls )
-        newDeclarations.insert( decl );
+        foreach( Declaration* decl, TypeUtils::getConstructors( klass, m_topContext.data() ) ) {
+          newDeclarations.insert( decl );
+        }
       }
     }
     else
@@ -169,10 +168,9 @@ void OverloadResolver::expandDeclarations( const QList<QPair<OverloadResolver::P
       else
       {
         //Classes should be substituted with their constructors
-        QList<Declaration*> functions;
-        TypeUtils::getConstructors( klass, m_topContext.data(), functions );
-        foreach( Declaration* f, functions )
-        newDeclarations.insert( f, decl.first );
+        foreach( Declaration* f, TypeUtils::getConstructors( klass, m_topContext.data() ) ) {
+          newDeclarations.insert( f, decl.first );
+        }
       }
     }
     else
@@ -247,8 +245,10 @@ QList< ViableFunction > OverloadResolver::resolveListOffsetted( const ParameterL
     ifDebugOverloadResolution(qDebug() << it.key()->toString() << decl; )
     if ( !decl )
       continue;
-    
-    ifDebugOverloadResolution(qDebug() << decl->toString(); )
+
+    if (decl->isExplicitlyDeleted())
+      continue;
+
     ViableFunction viable( m_topContext.data(), decl, m_constness );
     viable.matchParameters( mergedParams, partial );
 

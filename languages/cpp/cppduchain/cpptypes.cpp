@@ -20,13 +20,8 @@
 
 #include "cpptypes.h"
 
-#include <language/duchain/classfunctiondeclaration.h>
 #include <language/duchain/abstractfunctiondeclaration.h>
-#include <language/duchain/indexedstring.h>
-#include <language/duchain/types/typeregister.h>
 #include "templateparameterdeclaration.h"
-#include <language/duchain/ducontext.h> //Only for FOREACH_ARRAY
-#include "templatedeclaration.h"
 
 using namespace KDevelop;
 
@@ -52,7 +47,7 @@ QString CppClassType::toString() const
   QualifiedIdentifier id = qualifiedIdentifier();
   if (!id.isEmpty()) {
     if(declarationId().specialization().index())
-      return AbstractType::toString() + Cpp::IndexedInstantiationInformation(declarationId().specialization()).information().applyToIdentifier(id).toString();
+      return AbstractType::toString() + KDevelop::IndexedInstantiationInformation(declarationId().specialization()).information().applyToIdentifier(id).toString();
     else
     return AbstractType::toString() + id.toString();
   }

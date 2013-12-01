@@ -505,6 +505,8 @@ void DefaultVisitor::visitQPropertyDeclaration(QPropertyDeclarationAST *node)
   visitNodes(this, node->ptr_ops);
   visit(node->name);
 
+  if (node->member)
+    visit(node->member);
   if (node->getter)
     visit(node->getter);
   if (node->setter)

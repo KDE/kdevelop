@@ -33,13 +33,12 @@
 #include "name_compiler.h"
 #include <language/duchain/dumpchain.h>
 #include "environmentmanager.h"
+#include "expressionvisitor.h"
 
-#include <climits>
 #include "cppdebughelper.h"
 #include "debugbuilders.h"
 #include "rpp/chartools.h"
 #include "tokens.h"
-#include <klocalizedstring.h>
 
 using namespace KTextEditor;
 using namespace KDevelop;
@@ -484,7 +483,7 @@ void ContextBuilder::visitEnumSpecifier(EnumSpecifierAST* node)
   //In case of an "enum class" this enum creates its own context.
   openContext(node, DUContext::Enum, node->isClass ? node->name : 0 );
 
-  {
+  if (!node->isClass) {
     DUChainWriteLocker lock(DUChain::lock());
     currentContext()->setPropagateDeclarations(true);
   }

@@ -19,23 +19,16 @@
 #ifndef TEMPLATEDECLARATION_H
 #define TEMPLATEDECLARATION_H
 
-#include <QList>
 #include <QMutex>
 
-#include <language/duchain/declaration.h>
-#include <language/duchain/declarationid.h>
 #include <language/duchain/forwarddeclaration.h>
+#include <language/duchain/duchainbase.h>
 #include <language/duchain/duchainpointer.h>
 #include <language/duchain/ducontext.h>
-#include <language/duchain/topducontext.h>
 #include "cppduchainexport.h"
-#include <language/duchain/appendedlist.h>
-#include "expressionevaluationresult.h"
-#include <interfaces/icore.h>
-#include <interfaces/ilanguagecontroller.h>
-#include <language/backgroundparser/backgroundparser.h>
 #include <language/duchain/instantiationinformation.h>
 
+using namespace KDevelop;
 
 namespace KTextEditor {
   class Range;
@@ -43,7 +36,9 @@ namespace KTextEditor {
 namespace  KDevelop {
   class DUContext;
   class Declaration;
+  class DeclarationId;
   class DelayedType;
+  class TopDUContext;
 }
 
 namespace Cpp {

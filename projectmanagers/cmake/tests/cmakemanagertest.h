@@ -43,10 +43,11 @@ private slots:
     void testRelativePaths();
     void testTargetIncludeDirectories();
     void testTargetIncludePaths();
-    void testTargetDefines();
+    void testDefines();
     void testCustomTargetSources();
     void testConditionsInSubdirectoryBasedOnRootVariables();
     void testQt5App();
+    void testFaultyTarget();
 };
 
 #endif // CMAKEMANAGERTEST_H

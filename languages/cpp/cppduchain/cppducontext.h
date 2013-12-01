@@ -50,7 +50,6 @@ While construction:
 
 #include <language/duchain/ducontext.h>
 
-#include <QSet>
 #include <QMutex>
 
 #include <language/duchain/abstractfunctiondeclaration.h>
@@ -61,10 +60,11 @@ While construction:
 #include <language/duchain/classfunctiondeclaration.h>
 #include <language/duchain/namespacealiasdeclaration.h>
 #include "typeutils.h"
-#include "cpptypes.h"
-#include "cppduchain.h"
 #include "templatedeclaration.h"
-#include "expressionparser.h"
+#include "expressionevaluationresult.h"
+#include "cppduchain.h"
+#include "cpptypes.h"
+#include "templatedeclaration.h"
 #include "cppdebughelper.h"
 
 using namespace KDevelop;
@@ -663,14 +663,12 @@ class CppDUContext : public BaseContext {
         
         l.unlock();
         
-        if(first->isAnonymous()) {
-          Q_ASSERT(first->m_instantiatedFrom == this);
-          delete first;
-        } else {
-          Q_ASSERT(first->m_instantiatedFrom == this);
-          first->setInstantiatedFrom(0, InstantiationInformation());
-          Q_ASSERT(first->m_instantiatedFrom == 0);
-        }
+        ///TODO: anonymous contexts should get deleted but that is crashy
+        ///      see also declarationbuilder which also encountered this
+        ///      issue before and also removed the context deletion...
+        Q_ASSERT(first->m_instantiatedFrom == this);
+        first->setInstantiatedFrom(0, InstantiationInformation());
+        Q_ASSERT(first->m_instantiatedFrom == 0);
         
         oldFirst = first;
         

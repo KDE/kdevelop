@@ -13,7 +13,7 @@
    <item>
     <widget class="QLabel" name="label" >
      <property name="text" >
-      <string>KDevelop has found several possible project root for your project, please select the correct one.</string>
+      <string>KDevelop has found several possible root directories for your project, please select the correct one.</string>
      </property>
      <property name="wordWrap" >
       <bool>true</bool>

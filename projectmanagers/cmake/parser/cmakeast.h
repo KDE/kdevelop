@@ -135,10 +135,12 @@ CMAKE_ADD_AST_MEMBER( QStringList, sourceLists )
 CMAKE_END_AST_CLASS( AddExecutableAst )
 
 CMAKE_BEGIN_AST_CLASS( AddLibraryAst )
-enum LibraryType {Shared, Static, Module, Unknown};
+enum LibraryType {Shared, Static, Module, Object, Unknown};
 CMAKE_ADD_AST_MEMBER( QString, libraryName )
 CMAKE_ADD_AST_MEMBER( LibraryType, type )
 CMAKE_ADD_AST_MEMBER( bool, isImported )
+CMAKE_ADD_AST_MEMBER( bool, isAlias )
+CMAKE_ADD_AST_MEMBER( QString, aliasTarget )
 CMAKE_ADD_AST_MEMBER( bool, excludeFromAll )
 CMAKE_ADD_AST_MEMBER( QStringList, sourceLists )
 static QMap<QString, LibraryType> s_typeForName;
@@ -396,7 +398,7 @@ CMAKE_END_AST_CLASS( GetDirPropertyAst )
 
 
 CMAKE_BEGIN_AST_CLASS( GetFilenameComponentAst )
-    enum ComponentType { Path, Absolute, Name, Ext, NameWe, Program };
+    enum ComponentType { Path, RealPath, Absolute, Name, Ext, NameWe, Program };
 CMAKE_ADD_AST_MEMBER( QString, variableName )
 CMAKE_ADD_AST_MEMBER( QString, fileName )
 CMAKE_ADD_AST_MEMBER( ComponentType, type )

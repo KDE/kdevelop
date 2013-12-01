@@ -27,7 +27,6 @@
 #include <language/duchain/indexedstring.h>
 #include <language/duchain/declaration.h>
 
-#include <cctype>
 #include "ast.h"
 #include "dumptree.h"
 #include "parentvisitor.h"

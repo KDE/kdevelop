@@ -1,7 +1,7 @@
 # force debug symbols for our debugees
 set(CMAKE_BUILD_TYPE debugfull)
 
-add_definitions(-DPRINTER_BIN_DIR="\\"${CMAKE_CURRENT_BINARY_DIR}\\"")
+configure_file(qtprintersconfig.h.in qtprintersconfig.h)
 
 add_executable(qstring qstring.cpp)
 target_link_libraries(qstring ${QT_QTCORE_LIBRARY})
@@ -50,6 +50,12 @@ target_link_libraries(qchar ${QT_QTCORE_LIBRARY})
 
 add_executable(quuid quuid.cpp)
 target_link_libraries(quuid ${QT_QTCORE_LIBRARY})
+
+add_executable(qlistpod qlistpod.cpp)
+target_link_libraries(qlistpod ${QT_QTCORE_LIBRARY})
+
+add_executable(ktexteditortypes ktexteditortypes.cpp)
+target_link_libraries(ktexteditortypes ${QT_QTCORE_LIBRARY} ${KDE4_KTEXTEDITOR_LIBS})
 
 kde4_add_unit_test(qtprinters qtprinters.cpp)
 target_link_libraries(qtprinters

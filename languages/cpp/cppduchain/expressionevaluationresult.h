@@ -19,14 +19,9 @@
 #define EXPRESSIONEVALUATIONRESULT_H
 
 #include "cppduchainexport.h"
-#include <language/duchain/appendedlist.h>
 #include <language/duchain/declarationid.h>
 #include <language/duchain/types/referencetype.h>
 #include <language/duchain/types/indexedtype.h>
-
-namespace KDevelop {
-  class IndexedType;
-}
 
 class QString;
 

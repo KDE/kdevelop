@@ -1,1 +1,2 @@
 *.desktop merge=ours
+*.desktop.cmake merge=ours

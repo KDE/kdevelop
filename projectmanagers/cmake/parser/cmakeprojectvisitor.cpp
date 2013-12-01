@@ -23,6 +23,7 @@
 #include "cmakecondition.h"
 #include "astfactory.h"
 #include "cmakeduchaintypes.h"
+#include "cmakeparserutils.h"
 
 #include <language/editor/simplerange.h>
 #include <language/duchain/topducontext.h>
@@ -32,6 +33,7 @@
 #include <language/duchain/declaration.h>
 #include <language/duchain/types/functiontype.h>
 #include <language/duchain/types/delayedtype.h>
+#include <language/interfaces/iproblem.h>
 
 #include <KProcess>
 #include <KLocale>
@@ -48,10 +50,10 @@
 
 using namespace KDevelop;
 
-void debugMsgs(const QString& message) { kDebug(9032) << "message:" << message; }
+static void debugMsgs(const QString& message) { kDebug(9032) << "message:" << message; }
 
 
-bool isGenerated(const QString& name)
+static bool isGenerated(const QString& name)
 {
     return name.indexOf("#[")>=0;
 }
@@ -112,8 +114,12 @@ QList< CMakeProjectVisitor::IntPair > CMakeProjectVisitor::parseArgument(const Q
                 gotDollar=false;
                 break;
             case '}':
-                if(!opened.isEmpty())
-                    pos.append(IntPair(opened.pop(), i, opened.count()));
+                if(!opened.isEmpty()) {
+                    // note: don't merge this into the function call below,
+                    // the evaluation order is undefined then!
+                    int start = opened.pop();
+                    pos.append(IntPair(start, i, opened.count() + 1));
+                }
                 break;
         }
     }
@@ -162,7 +168,7 @@ QStringList CMakeProjectVisitor::theValue(const QString& exp, const IntPair& the
     return value;
 }
 
-QString replaceOne(const QString& var, const QString& id, const QString& value, int dollar)
+static QString replaceOne(const QString& var, const QString& id, const QString& value, int dollar)
 {
 //     kDebug() << "ooo" << var << value << id << var[dollar+id.size()-1] << (dollar+id.size());
 //     kDebug() << "kkkk" << var.mid(0, dollar) << value << var.mid(dollar+id.size(), var.size()-(dollar+id.size()));
@@ -274,10 +280,10 @@ int CMakeProjectVisitor::visit(const CMakeAst *ast)
     return 1;
 }
 
-QHash<QString, Target>::iterator findTargetForExecutable(const QString& exe, QHash<QString, Target>& targets)
+static QHash<QString, Target>::iterator findTargetForExecutable(const QString& exe, QHash<QString, Target>& targets)
 {
     QHash<QString, Target>::iterator ret = targets.find(exe);
-    if(ret==targets.constEnd()) {
+    if(ret==targets.end()) {
         QString exe2 = exe;
         exe2 = exe2.mid(exe2.indexOf('/')+1);
         ret = targets.find(exe2);
@@ -303,19 +309,7 @@ int CMakeProjectVisitor::visit( const AddTestAst * test)
         t.executable.chop(4);
     }
 
-    QHash<QString, Target>::iterator it = findTargetForExecutable(t.executable, m_targetForId);
-    if (it == m_targetForId.end())
-    {
-        kDebug(9042) << "Target not found for test" << t.executable;
-    }
-    else 
-    {
-        t.files = it->files;
-        t.isTarget = true;
-    }
-    t.files.removeAll("TEST"); // Added by kde4_add_unit_test
-
-    kDebug(9042) << "AddTestAst" << t.executable << t.files;
+    kDebug(9042) << "AddTestAst" << t.executable;
     m_testSuites << t;
     return 1;
 }
@@ -336,8 +330,9 @@ int CMakeProjectVisitor::visit(const ProjectAst *project)
 int CMakeProjectVisitor::visit( const SetTargetPropsAst * targetProps)
 {
     kDebug(9042) << "setting target props for " << targetProps->targets() << targetProps->properties();
-    foreach(const QString& tname, targetProps->targets())
+    foreach(const QString& _tname, targetProps->targets())
     {
+        QString tname = m_targetAlias.value(_tname, _tname);
         foreach(const SetTargetPropsAst::PropPair& t, targetProps->properties())
         {
             m_props[TargetProperty][tname][t.first] = t.second.split(';');
@@ -360,11 +355,12 @@ int CMakeProjectVisitor::visit( const SetDirectoryPropsAst * dirProps)
 
 int CMakeProjectVisitor::visit( const GetTargetPropAst * prop)
 {
-    kDebug(9042) << "getting target " << prop->target() << " prop " << prop->property() << prop->variableName();
+    QString targetName = prop->target();
+    kDebug(9042) << "getting target " << targetName << " prop " << prop->property() << prop->variableName();
     QStringList value;
     
     CategoryType& category = m_props[TargetProperty];
-    CategoryType::iterator itTarget = category.find(prop->target());
+    CategoryType::iterator itTarget = category.find(m_targetAlias.value(targetName, targetName));
     if(itTarget!=category.end()) {
         QMap<QString, QStringList>& targetProps = itTarget.value();
         if(!targetProps.contains(prop->property())) {
@@ -443,8 +439,9 @@ CMakeProjectVisitor::VisitorState CMakeProjectVisitor::stackTop() const
     return p;
 }
 
-void CMakeProjectVisitor::defineTarget(const QString& id, const QStringList& sources, Target::Type t)
+void CMakeProjectVisitor::defineTarget(const QString& _id, const QStringList& sources, Target::Type t)
 {
+    QString id = _id.isEmpty() ? "<wrong-target>" : _id;
     kDebug(9042) << "Defining target" << id;
     if (m_targetForId.contains(id))
         kDebug(9032) << "warning! there already was a target called" << id;
@@ -484,12 +481,12 @@ void CMakeProjectVisitor::defineTarget(const QString& id, const QStringList& sou
     }
     
     Target target;
-    target.name=id.isEmpty() ? "<wrong-target>" : id;
+    target.name=id;
     target.declaration=IndexedDeclaration(d);
     target.files=sources;
     target.type=t;
     target.desc=p.code->at(p.line);
-    m_targetForId[id]=target;
+    m_targetForId[target.name]=target;
     
     targetProps["OUTPUT_NAME"] = QStringList(exe);
     targetProps["LOCATION"] = QStringList(locationDir+'/'+exe);
@@ -508,7 +505,9 @@ int CMakeProjectVisitor::visit(const AddExecutableAst *exec)
 
 int CMakeProjectVisitor::visit(const AddLibraryAst *lib)
 {
-    if(!lib->isImported())
+    if(lib->isAlias())
+        m_targetAlias[lib->libraryName()] = lib->aliasTarget();
+    else if(!lib->isImported())
         defineTarget(lib->libraryName(), lib->sourceLists(), Target::Library);
     kDebug(9042) << "lib:" << lib->libraryName();
     return 1;
@@ -692,22 +691,50 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
     QString name=pack->name();
     QStringList postfix=QStringList() << QString() << "/cmake" << "/CMake";
     QStringList configPath;
-    QStringList lookupPaths = m_cache->value("CMAKE_PREFIX_PATH").value.split(';', QString::SkipEmptyParts) + m_vars->value("CMAKE_SYSTEM_PREFIX_PATH");
-    
+    QStringList lookupPaths = envVarDirectories("CMAKE_PREFIX_PATH") + m_vars->value("CMAKE_PREFIX_PATH")
+                            + m_vars->value("CMAKE_SYSTEM_PREFIX_PATH");
+
+    // note: should note be done if NO_SYSTEM_ENVIRONMENT_PATH is set, see docs:
+    /* 4. Search the standard system environment variables. This can be skipped
+     * if NO_SYSTEM_ENVIRONMENT_PATH is passed. Path entries ending in "/bin" or
+     * "/sbin" are automatically converted to their parent directories.
+     */
+    foreach(const QString& lookup, envVarDirectories("PATH"))
+    {
+        if (lookup.endsWith("/bin")) {
+            lookupPaths << lookup.left(lookup.length() - 4);
+        } else if (lookup.endsWith("/sbin")) {
+            lookupPaths << lookup.left(lookup.length() - 5);
+        } else {
+            lookupPaths << lookup;
+        }
+    }
+
+    const bool useLib64 = m_props[GlobalProperty][QString()]["FIND_LIBRARY_USE_LIB64_PATHS"].contains("TRUE");
+    QSet<QString> handled;
     foreach(const QString& lookup, lookupPaths)
     {
-        if(QFile::exists(lookup))
-            foreach(const QString& post, postfix)
-            {
-                configPath.prepend(lookup+"/share/"+name.toLower()+post);
-                configPath.prepend(lookup+"/share/"+name+post);
-                configPath.prepend(lookup+"/share/cmake/"+name.toLower()+post);
-                configPath.prepend(lookup+"/share/cmake/"+name+post);
-                configPath.prepend(lookup+"/lib/"+name.toLower()+post);
-                configPath.prepend(lookup+"/lib/"+name+post);
-                configPath.prepend(lookup+"/lib/cmake/"+name.toLower()+post);
-                configPath.prepend(lookup+"/lib/cmake/"+name+post);
+        if(!QFile::exists(lookup) || handled.contains(lookup)) {
+            continue;
+        }
+        foreach(const QString& post, postfix)
+        {
+            configPath.prepend(lookup+"/share/"+name.toLower()+post);
+            configPath.prepend(lookup+"/share/"+name+post);
+            configPath.prepend(lookup+"/share/cmake/"+name.toLower()+post);
+            configPath.prepend(lookup+"/share/cmake/"+name+post);
+            configPath.prepend(lookup+"/lib/"+name.toLower()+post);
+            configPath.prepend(lookup+"/lib/"+name+post);
+            configPath.prepend(lookup+"/lib/cmake/"+name.toLower()+post);
+            configPath.prepend(lookup+"/lib/cmake/"+name+post);
+            if (useLib64) {
+                configPath.prepend(lookup+"/lib64/"+name.toLower()+post);
+                configPath.prepend(lookup+"/lib64/"+name+post);
+                configPath.prepend(lookup+"/lib64/cmake/"+name.toLower()+post);
+                configPath.prepend(lookup+"/lib64/cmake/"+name+post);
             }
+        }
+        handled << lookup;
     }
 
     QString varName=pack->name()+"_DIR";
@@ -917,12 +944,12 @@ int CMakeProjectVisitor::visit(const FindPathAst *fpath)
 
     if(!fpath->noDefaultPath())
     {
-        QStringList pp=m_vars->value("CMAKE_PREFIX_PATH");
+        QStringList pp = envVarDirectories("CMAKE_PREFIX_PATH") + m_vars->value("CMAKE_PREFIX_PATH");
         foreach(const QString& path, pp) {
             locationOptions += path+"/include";
         }
         locationOptions += pp;
-        locationOptions += m_vars->value("CMAKE_INCLUDE_PATH");
+        locationOptions += envVarDirectories("CMAKE_INCLUDE_PATH") + m_vars->value("CMAKE_INCLUDE_PATH");
         locationOptions += m_vars->value("CMAKE_FRAMEWORK_PATH");
         
         pp=m_vars->value("CMAKE_SYSTEM_PREFIX_PATH");
@@ -977,14 +1004,15 @@ int CMakeProjectVisitor::visit(const FindLibraryAst *flib)
     if(!flib->noDefaultPath())
     {
 
-        QStringList opt=m_vars->value("CMAKE_PREFIX_PATH");
+        QStringList opt = envVarDirectories("CMAKE_PREFIX_PATH") + m_vars->value("CMAKE_PREFIX_PATH");
         foreach(const QString& s, opt)
             locationOptions.append(s+"/lib");
 
-        locationOptions += m_vars->value("CMAKE_LIBRARY_PATH");
+        locationOptions += envVarDirectories("CMAKE_LIBRARY_PATH") + m_vars->value("CMAKE_LIBRARY_PATH");
         locationOptions += m_vars->value("CMAKE_FRAMEWORK_PATH");
         
         locationOptions += m_vars->value("CMAKE_SYSTEM_LIBRARY_PATH");
+        locationOptions += m_vars->value("CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES");
         
         opt=m_vars->value("CMAKE_SYSTEM_PREFIX_PATH");
         foreach(const QString& s, opt)
@@ -1039,12 +1067,12 @@ int CMakeProjectVisitor::visit(const FindFileAst *ffile)
     QStringList locationOptions = ffile->path()+ffile->hints();
     if(!ffile->noDefaultPath())
     {
-        QStringList pp=m_vars->value("CMAKE_PREFIX_PATH");
+        QStringList pp = envVarDirectories("CMAKE_PREFIX_PATH") + m_vars->value("CMAKE_PREFIX_PATH");
         foreach(const QString& path, pp) {
             locationOptions += path+"/include";
         }
         locationOptions += pp;
-        locationOptions += m_vars->value("CMAKE_INCLUDE_PATH");
+        locationOptions += envVarDirectories("CMAKE_INCLUDE_PATH") + m_vars->value("CMAKE_INCLUDE_PATH");
         locationOptions += m_vars->value("CMAKE_FRAMEWORK_PATH");
         
         pp=m_vars->value("CMAKE_SYSTEM_PREFIX_PATH");
@@ -1121,7 +1149,7 @@ int CMakeProjectVisitor::visit(const TargetLinkLibrariesAst *tll)
 int CMakeProjectVisitor::visit(const TargetIncludeDirectoriesAst* tid)
 {
     CategoryType& targetProps = m_props[TargetProperty];
-    CategoryType::iterator it = targetProps.find(tid->target());
+    CategoryType::iterator it = targetProps.find(m_targetAlias.value(tid->target(), tid->target()));
     //TODO: we can add a problem if the target is not found
     if(it != targetProps.end()) {
         QStringList includes;
@@ -1310,7 +1338,8 @@ int CMakeProjectVisitor::visit(const MacroCallAst *call)
     return 1;
 }
 
-void usesForArguments(const QStringList& names, const QList<int>& args, const ReferencedTopDUContext& topctx, const CMakeFunctionDesc& func)
+static void usesForArguments(const QStringList& names, const QList<int>& args, const ReferencedTopDUContext& topctx,
+                             const CMakeFunctionDesc& func)
 {
     //TODO: Should not return here
     if(args.size()!=names.size())
@@ -1436,6 +1465,11 @@ int CMakeProjectVisitor::visit(const ExecProgramAst *exec)
 
     foreach(const QString& arg, argsTemp)
     {
+        if(arg.contains("#[bin_dir]")) {
+            if(!exec->outputVariable().isEmpty())
+                m_vars->insert(exec->outputVariable(), QStringList("OFF"));
+            return 1;
+        }
         args += arg.split(' ');
     }
     kDebug(9042) << "Executing:" << execName << "::" << args << "in" << exec->workingDirectory();
@@ -1480,7 +1514,17 @@ int CMakeProjectVisitor::visit(const ExecuteProcessAst *exec)
             kDebug(9032) << "Error: trying to execute empty command";
             break;
         }
-        
+        else
+        {
+            foreach(const QString& arg, _args) {
+                if(arg.contains("#[bin_dir]")) {
+                    if(!exec->outputVariable().isEmpty())
+                        m_vars->insert(exec->outputVariable(), QStringList("OFF"));
+                    return 1;
+                }
+            }
+        }
+
         QString workingDir = exec->workingDirectory();
         if(!QFile::exists(workingDir))
         {
@@ -1683,6 +1727,9 @@ int CMakeProjectVisitor::visit(const GetFilenameComponentAst *filecomp)
             if(idx>=0)
                 val=filecomp->fileName().left(idx);
         }   break;
+        case GetFilenameComponentAst::RealPath: {
+            val = fi.canonicalFilePath();
+        }   break;
         case GetFilenameComponentAst::Absolute:
             val=fi.absoluteFilePath();
             break;
@@ -1819,7 +1866,7 @@ int CMakeProjectVisitor::visit(const ListAst *list)
     return 1;
 }
 
-int toCommandEnd(const CMakeAst* fea)
+static int toCommandEnd(const CMakeAst* fea)
 {
     QString command = fea->content()[fea->line()].name;
     QString endCommand = "end"+command;
@@ -2004,7 +2051,7 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
             break;
         case StringAst::Substring:
         {
-            QString res=sast->input()[0];
+            QString res=sast->input().join(QString());
             res=res.mid(sast->begin(), sast->length());
             m_vars->insert(sast->outputVariable(), QStringList(res));
         }   break;
@@ -2077,48 +2124,16 @@ int CMakeProjectVisitor::visit(const CustomTargetAst *ctar)
     return 1;
 }
 
-QPair<QString, QString> definition(const QString& param)
-{
-    QPair<QString, QString> ret;
-    if(!param.startsWith("-D"))
-        return ret;
-    int eq=param.indexOf('=', 2);
-    ret.first=param.mid(2, eq-2);
-    if(eq>0)
-        ret.second=param.mid(eq+1);
-    return ret;
-}
-
 int CMakeProjectVisitor::visit(const AddDefinitionsAst *addDef)
 {
 //     kDebug(9042) << "Adding defs: " << addDef->definitions();
-    foreach(const QString& def, addDef->definitions())
-    {
-        if(def.isEmpty())
-            continue;
-        QPair<QString, QString> definePair=definition(def);
-        if(definePair.first.isEmpty())
-            kDebug(9042) << "error: definition not matched" << def;
-
-        m_defs[definePair.first]=definePair.second;
-        kDebug(9042) << "added definition" << definePair.first << "=" << definePair.second << " from " << def;
-    }
+    CMakeParserUtils::addDefinitions(addDef->definitions(), &m_defs, true);
     return 1;
 }
 
 int CMakeProjectVisitor::visit(const RemoveDefinitionsAst *remDef)
 {
-    foreach(const QString& def, remDef->definitions())
-    {
-        if(def.isEmpty())
-            continue;
-        QPair<QString, QString> definePair=definition(def);
-        if(definePair.first.isEmpty())
-            kDebug(9042) << "error: definition not matched" << def;
-
-        m_defs.remove(definePair.first);
-        kDebug(9042) << "removed definition" << definePair.first << " from " << def;
-    }
+    CMakeParserUtils::removeDefinitions(remDef->definitions(), &m_defs, true);
     return 1;
 }
 
@@ -2275,7 +2290,7 @@ CMakeFunctionDesc CMakeProjectVisitor::resolveVariables(const CMakeFunctionDesc 
 
 enum RecursivityType { No, Yes, End, Break, Return };
 
-RecursivityType recursivity(const QString& functionName)
+static RecursivityType recursivity(const QString& functionName)
 {
     QString upperFunctioName=functionName;
     if(upperFunctioName=="if" || upperFunctioName=="while" ||

@@ -24,7 +24,7 @@ void foo() {
     int *i=0;
     *i = 0;
 }
-int main(int argc, char **argv) {
+int main() {
     std::cout << "Hello, world!" << std::endl;
     foo();
     return 0;

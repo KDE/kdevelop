@@ -62,8 +62,11 @@ IndexedTypeIdentifier typeIdentifierFromTemplateArgument(ParseSession* session, 
     id = IndexedTypeIdentifier(tc.identifier());
     //node->type_id->type_specifier->cv
     
-    if(node->type_id->type_specifier)
-      id.setIsConstant(parseConstVolatile(session, node->type_id->type_specifier->cv) & AbstractType::ConstModifier);
+    if(node->type_id->type_specifier) {
+      uint cv = parseConstVolatile(session, node->type_id->type_specifier->cv);
+      id.setIsConstant(cv & AbstractType::ConstModifier);
+      id.setIsVolatile(cv & AbstractType::VolatileModifier);
+    }
     
     if(node->type_id->declarator && node->type_id->declarator->ptr_ops)
     {
@@ -137,9 +140,6 @@ void NameCompiler::visitUnqualifiedName(UnqualifiedNameAST *node)
 
   if (OperatorFunctionIdAST *op_id = node->operator_id)
     {
-#if defined(__GNUC__)
-#warning "NameCompiler::visitUnqualifiedName() -- implement me"
-#endif
       static QString operatorString("operator");
       QString tmp = operatorString;
 

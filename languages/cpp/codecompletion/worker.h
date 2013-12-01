@@ -40,8 +40,8 @@ class CodeCompletionWorker : public KDevelop::CodeCompletionWorker
 
   protected:
     virtual void computeCompletions(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, QString followingText, const KTextEditor::Range& _contextRange, const QString& _contextText);
-    virtual KDevelop::CodeCompletionContext* createCompletionContext(KDevelop::DUContextPointer context, const QString &contextText, const QString &followingText, const CursorInRevision &position) const;
-    virtual void updateContextRange(KTextEditor::Range& contextRange, KTextEditor::View* view, DUContextPointer context) const;
+    virtual KDevelop::CodeCompletionContext* createCompletionContext(KDevelop::DUContextPointer context, const QString &contextText, const QString &followingText, const KDevelop::CursorInRevision &position) const;
+    virtual void updateContextRange(KTextEditor::Range& contextRange, KTextEditor::View* view, KDevelop::DUContextPointer context) const;
 };
 
 }

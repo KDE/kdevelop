@@ -37,7 +37,6 @@
 #include "cppducontext.h"
 #include <language/duchain/use.h>
 #include "templateparameterdeclaration.h"
-#include "qpropertydeclaration.h"
 #include <language/duchain/classdeclaration.h>
 
 
@@ -121,6 +120,8 @@ uint buildIdentifierForType(AbstractType::Ptr type, IndexedTypeIdentifier& id, u
   }
   if(type->modifiers() & AbstractType::ConstModifier)
     id.setIsConstant(true);
+  if(type->modifiers() & AbstractType::VolatileModifier)
+    id.setIsVolatile(true);
   return pointerLevel;
 }
 
@@ -142,10 +143,6 @@ QList< QPair<Declaration*, int> > hideOverloadedDeclarations( const QList< QPair
 
   typedef QPair<Declaration*, int> Pair;
   foreach(  const Pair& decl, declarations ) {
-    // FIXME: this is hackish but we must hide properties here...
-    if (dynamic_cast<QPropertyDeclaration*>(decl.first)) {
-      continue;
-    }
     depthHash[decl.first] = decl.second;
 
     QHash<Identifier, Declaration*>::iterator it = nearestDeclaration.find(decl.first->identifier());

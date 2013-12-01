@@ -61,14 +61,14 @@ class CMakeDocumentation : public KDevelop::IPlugin, public ICMakeDocumentation
         void delayedInitialization();
         
     Q_SIGNALS:
-        virtual void addHistory(const KSharedPtr< KDevelop::IDocumentation >& doc) const;
+        void addHistory(const KSharedPtr< KDevelop::IDocumentation >& doc) const;
     
     private:
         void initializeModel() const;
         void collectIds(const QString& param, Type type);
         
         QMap<QString, Type> m_typeForName;
-        QString mCMakeCmd;
+        const QString mCMakeCmd;
         QStringListModel* m_index;
 };
 

@@ -173,6 +173,13 @@ Cpp::ReferenceCountedMacroSet setupStandardMacros()
       insertMacro( macros, m );
     }
 
+    {
+      // see: https://bugs.kde.org/show_bug.cgi?id=325882
+      rpp::pp_macro m("__final");
+      m.setDefinitionText( "final" );
+      insertMacro( macros, m );
+    }
+
 #ifdef _MSC_VER    
     foreach(const rpp::pp_macro* macro, msvcStandardMacros())
 #else

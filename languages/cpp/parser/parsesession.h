@@ -22,11 +22,9 @@
 #include <cstdlib>
 
 #include <QtCore/QString>
-#include <QtCore/QByteArray>
 
 #include <cppparserexport.h>
 #include <ksharedptr.h>
-#include <kurl.h>
 #include "rpp/anchor.h"
 
 #include <language/duchain/indexedstring.h>

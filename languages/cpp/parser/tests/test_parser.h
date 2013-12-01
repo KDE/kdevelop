@@ -55,6 +55,10 @@ private slots:
   void testComments4();
   void testComments5();
   void testComments6();
+  void testComments7();
+
+  void testEscapedNewline();
+  void testEscapedNewline_data();
 
   void testPreprocessor();
   void testPreprocessorStringify();

@@ -16,8 +16,8 @@
 
 #include "missingincludemodel.h"
 #include "item.h"
-#include <klocalizedstring.h>
 #include "missingincludeitem.h"
+#include <expressionevaluationresult.h>
 #include <language/duchain/duchainutils.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>

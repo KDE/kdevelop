@@ -25,25 +25,17 @@
 
 #include <QList>
 #include <QPair>
-#include "cppduchainexport.h"
-#include <language/duchain/indexedstring.h>
 #include <QSet>
-#include <language/duchain/identifier.h>
+#include "cppduchainexport.h"
 #include <language/duchain/types/abstracttype.h>
-
-namespace KTextEditor {
-  class Cursor;
-}
+#include <language/duchain/identifier.h>
 
 namespace KDevelop {
   class Declaration;
   class ClassMemberDeclaration;
   class DUContext;
   class TopDUContext;
-  class Identifier;
-  class QualifiedIdentifier;
   class CursorInRevision;
-  class IndexedString;
 }
 
 namespace Cpp {

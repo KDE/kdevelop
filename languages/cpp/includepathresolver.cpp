@@ -469,6 +469,10 @@ IncludePathResolver::IncludePathResolver() : m_isResolving(false), m_outOfSource
 
 ///More efficient solution: Only do exactly one call for each directory. During that call, mark all source-files as changed, and make all targets for those files.
 PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& file ) {
+  if (file.isEmpty()) {
+    // for unit tests with temporary files
+    return PathResolutionResult();
+  }
   QFileInfo fi( file );
   return resolveIncludePath( fi.fileName(), fi.absolutePath() );
 }

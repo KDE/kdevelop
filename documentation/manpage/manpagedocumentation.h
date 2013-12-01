@@ -37,7 +37,7 @@ class KHTMLPart;
 
 class ManPagePlugin;
 
-class ManPageDocumentation : public QObject, public KDevelop::IDocumentation
+class ManPageDocumentation : public KDevelop::IDocumentation
 {
     Q_OBJECT
     public:
@@ -48,19 +48,18 @@ class ManPageDocumentation : public QObject, public KDevelop::IDocumentation
         virtual QWidget* documentationWidget(KDevelop::DocumentationFindWidget* findWidget, QWidget* parent = 0);
         virtual KDevelop::IDocumentationProvider* provider() const;
         static ManPagePlugin* s_provider;
-        QString getManPageContent();
+
     private slots:
-        void readDataFromManPage(KIO::Job * job, const QByteArray &data);
+        void finished(KJob*);
 
     private:
         const KUrl m_url;
         const QString m_name;
         QString m_description;
-        QString m_manPageBuffer;
 
 };
 
-class ManPageHomeDocumentation : public QObject, public KDevelop::IDocumentation
+class ManPageHomeDocumentation : public KDevelop::IDocumentation
 {
     Q_OBJECT
     public:

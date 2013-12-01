@@ -31,6 +31,8 @@
 #include <interfaces/iplugincontroller.h>
 #include "configconstants.h"
 
+#include "config.h"
+
 #include "custombuildjob.h"
 
 using KDevelop::ProjectTargetItem;
@@ -48,7 +50,7 @@ using KDevelop::IProject;
 using KDevelop::Path;
 
 K_PLUGIN_FACTORY(CustomBuildSystemFactory, registerPlugin<CustomBuildSystem>(); )
-K_EXPORT_PLUGIN(CustomBuildSystemFactory(KAboutData("kdevcustombuildsystem","kdevcustombuildsystem", ki18n("Custom Build System"), CUSTOM_BUILDSYSTEM_VERSION, ki18n("Support for building and managing custom build systems"), KAboutData::License_GPL, ki18n("Copyright 2010 Andreas Pakulat <apaku@gmx.de>"), KLocalizedString(), "", "apaku@gmx.de" )))
+K_EXPORT_PLUGIN(CustomBuildSystemFactory(KAboutData("kdevcustombuildsystem","kdevcustombuildsystem", ki18n("Custom Build System"), VERSION, ki18n("Support for building and managing custom build systems"), KAboutData::License_GPL, ki18n("Copyright 2010 Andreas Pakulat <apaku@gmx.de>"), KLocalizedString(), "", "apaku@gmx.de" )))
 
 
 CustomBuildSystem::CustomBuildSystem( QObject *parent, const QVariantList & )

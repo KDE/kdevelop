@@ -62,9 +62,12 @@
 
 #include <language/backgroundparser/parsejob.h>
 #include <language/backgroundparser/urlparselock.h>
+#include <language/backgroundparser/backgroundparser.h>
 
 #include <interfaces/ilanguage.h>
 #include <interfaces/iuicontroller.h>
+#include <interfaces/icore.h>
+#include <interfaces/ilanguagecontroller.h>
 #include <cpppreprocessenvironment.h>
 #include <language/checks/dataaccessrepository.h>
 #include <language/checks/controlflowgraph.h>
@@ -595,14 +598,6 @@ void CPPInternalParseJob::run()
             dump.dump(ast, parentJob()->parseSession()->token_stream);
 #endif
         }
-      }
-
-      bool isStandardContext = false;
-      {
-        DUChainReadLocker l(DUChain::lock());
-        TopDUContext* knownStandardContext = DUChainUtils::standardContextForUrl(parentJob()->document().toUrl());
-
-        isStandardContext = (parentJob()->masterJob() == parentJob() || knownStandardContext == updatingContentContext || !knownStandardContext);
       }
 
       kDebug( 9007 ) << (contentContext ? "updating" : "building") << "duchain for" << parentJob()->document().str();

@@ -22,8 +22,8 @@
 #define PTRTOMEMBERTYPE_H
 
 #include <language/duchain/types/pointertype.h>
-#include <language/duchain/types/structuretype.h>
 #include "cppduchainexport.h"
+
 namespace Cpp {
 class PtrToMemberTypeData;
 class KDEVCPPDUCHAIN_EXPORT PtrToMemberType : public KDevelop::PointerType

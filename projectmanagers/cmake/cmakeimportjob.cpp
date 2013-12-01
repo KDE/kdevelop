@@ -113,7 +113,7 @@ void CMakeImportJob::initialize()
         ctx = initializeProject(dynamic_cast<CMakeFolderItem*>(m_dom));
     } else {
         DUChainReadLocker lock;
-        ctx = DUChain::self()->chainForDocument(KUrl(m_dom->url(), "CMakeLists.txt"));
+        ctx = DUChain::self()->chainForDocument(KUrl(m_dom->parent()->url(), "CMakeLists.txt"));
         Q_ASSERT(ctx);
     }
     importDirectory(m_project, m_dom->url(), ctx);
@@ -176,7 +176,9 @@ KDevelop::ReferencedTopDUContext CMakeImportJob::initializeProject(CMakeFolderIt
             ref = includeScript(script.toLocalFile(), dir, ref);
             Q_ASSERT(ref);
             includes << m_data.properties[DirectoryProperty][dir]["INCLUDE_DIRECTORIES"];
-            rootFolder->defineVariables(m_data.properties[DirectoryProperty][dir]["COMPILE_DEFINITIONS"]);
+            CMakeParserUtils::addDefinitions(m_data.properties[DirectoryProperty][dir]["COMPILE_DEFINITIONS"], &m_data.definitions);
+            CMakeParserUtils::addDefinitions(m_data.vm["CMAKE_CXX_FLAGS"], &m_data.definitions, true);
+            rootFolder->setDefinitions(m_data.definitions);
             
             foreach(const Subdirectory& s, m_data.subdirectories) {
                 KUrl candidate = currentDir;

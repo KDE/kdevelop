@@ -32,7 +32,7 @@ class QWebView;
 class QtHelpProviderAbstract;
 class QTemporaryFile;
 
-class QtHelpDocumentation : public QObject, public KDevelop::IDocumentation
+class QtHelpDocumentation : public KDevelop::IDocumentation
 {
     Q_OBJECT
     public:
@@ -69,7 +69,7 @@ class QtHelpDocumentation : public QObject, public KDevelop::IDocumentation
         QWeakPointer<QTemporaryFile> m_lastStyleSheet;
 };
 
-class HomeDocumentation : public QObject, public KDevelop::IDocumentation
+class HomeDocumentation : public KDevelop::IDocumentation
 {
     Q_OBJECT
     public:
