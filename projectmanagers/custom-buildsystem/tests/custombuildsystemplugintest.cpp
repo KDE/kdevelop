@@ -92,7 +92,7 @@ void CustomBuildSystemPluginTest::buildDirProject()
    
     Path currentBuilddir = project->buildSystemManager()->buildDirectory( project->projectItem() );
 
-    QCOMPARE( currentBuilddir, Path( projecturl ) );
+    QCOMPARE( currentBuilddir, Path( projecturl ).parent() );
 }
 
 

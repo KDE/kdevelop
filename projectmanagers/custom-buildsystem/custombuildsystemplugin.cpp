@@ -89,15 +89,17 @@ Path CustomBuildSystem::buildDirectory( ProjectBaseItem*  item ) const
     }
     const QString relative = item->project()->path().relativePath(p);
     KConfigGroup grp = configuration( item->project() );
-    if(grp.isValid()) {
-        Path builddir = Path(grp.readEntry( ConfigConstants::buildDirKey, KUrl() ));
-        if(!builddir.isValid() )  // set builddir to default if project contains a buildDirKey that does not have a value 
-        {
-            builddir = item->project()->path();
-        }
-        builddir.addPath( relative );
+    if(!grp.isValid()) {
+        return Path();
     }
-    return Path();
+
+    Path builddir(grp.readEntry( ConfigConstants::buildDirKey, KUrl() ));
+    if(!builddir.isValid() )  // set builddir to default if project contains a buildDirKey that does not have a value
+    {
+        builddir = item->project()->path();
+    }
+    builddir.addPath( relative );
+    return builddir;
 }
 
 IProjectBuilder* CustomBuildSystem::builder() const
@@ -223,8 +225,8 @@ KConfigGroup CustomBuildSystem::findMatchingPathGroup(const KConfigGroup& cfg, P
                 targetDirectory.addPath( targetDirectoryRelative );
             }
 
-            if( targetDirectory.isParentOf(itemPath) ) {
-                if( candidateTargetDirectory.isValid() || candidateTargetDirectory.isParentOf(targetDirectory) ) {
+            if( targetDirectory == itemPath || targetDirectory.isParentOf(itemPath) ) {
+                if( !candidateTargetDirectory.isValid() || candidateTargetDirectory.isParentOf(targetDirectory) ) {
                   candidateGroup = pathGroup;
                   candidateTargetDirectory = targetDirectory;
                 }
