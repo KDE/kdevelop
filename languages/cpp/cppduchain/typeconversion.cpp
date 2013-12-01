@@ -148,7 +148,7 @@ uint TypeConversion::implicitConversion( const IndexedType& _from, const Indexed
   // in regard to constness
   // TODO: is this maybe something that should *always* be done in removeConstants?
   AbstractType::Ptr nonConstFrom = removeConstants(from, m_topContext);
-  if (nonConstFrom != from) {
+  if (nonConstFrom && nonConstFrom != from) {
     from = nonConstFrom;
     from->setModifiers(from->modifiers() | AbstractType::ConstModifier);
   }
