@@ -75,22 +75,22 @@
 
 #include <sublime/mainwindow.h>
 
-static const unsigned int highlightingTimeout = 150;
-static const float highlightingZDepth = -5000;
-static const int maxHistoryLength = 30;
-
 using KDevelop::ILanguage;
 using KTextEditor::Attribute;
 using KTextEditor::View;
 
-bool toolTipEnabled = true;
-
 // Helper that follows the QObject::parent() chain, and returns the highest widget that has no parent.
-QWidget* masterWidget(QWidget* w) {
+QWidget* masterWidget(QWidget* w)
+{
   while(w && w->parent() && qobject_cast<QWidget*>(w->parent()))
     w = qobject_cast<QWidget*>(w->parent());
   return w;
 }
+
+namespace {
+const unsigned int highlightingTimeout = 150;
+const float highlightingZDepth = -5000;
+const int maxHistoryLength = 30;
 
 // Helper that determines the context to use for highlighting at a specific position
 DUContext* contextForHighlightingAt(const SimpleCursor& position, TopDUContext* topContext)
@@ -106,13 +106,14 @@ DUContext* contextForHighlightingAt(const SimpleCursor& position, TopDUContext* 
 }
 
 ///Duchain must be locked
-DUContext* getContextAt(KUrl url, KTextEditor::Cursor cursor) {
+DUContext* getContextAt(const KUrl& url, KTextEditor::Cursor cursor)
+{
   TopDUContext* topContext = DUChainUtils::standardContextForUrl(url);
   if (!topContext) return 0;
   return contextForHighlightingAt(SimpleCursor(cursor), topContext);
 }
 
-static DeclarationPointer cursorDeclaration()
+DeclarationPointer cursorDeclaration()
 {
   IDocument* doc = ICore::self()->documentController()->activeDocument();
   if (!doc) {
@@ -133,6 +134,8 @@ static DeclarationPointer cursorDeclaration()
 
   Declaration *decl = DUChainUtils::declarationForDefinition(DUChainUtils::itemUnderCursor(doc->url(), SimpleCursor(view->cursorPosition())));
   return DeclarationPointer(decl);
+}
+
 }
 
 class ContextBrowserViewFactory: public KDevelop::IToolViewFactory
@@ -159,6 +162,7 @@ public:
 private:
     ContextBrowserPlugin *m_plugin;
 };
+
 KXMLGUIClient* ContextBrowserPlugin::createGUIForMainWindow( Sublime::MainWindow* window )
 {
     KXMLGUIClient* ret = KDevelop::IPlugin::createGUIForMainWindow( window );
@@ -401,8 +405,7 @@ void ContextBrowserPlugin::textHintRequested(const KTextEditor::Cursor& cursor, 
   }
   m_updateTimer->start(1); // triggers updateViews()
   
-  if(toolTipEnabled)
-    showToolTip(view, cursor);
+  showToolTip(view, cursor);
 }
 
 void ContextBrowserPlugin::stopDelayedBrowsing() {
