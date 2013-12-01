@@ -867,12 +867,10 @@ void ProjectController::unloadUnusedProjectPlugins(IProject* proj)
 // helper method for closeProject()
 void ProjectController::closeAllOpenedFiles(IProject* proj)
 {
-    ///TODO: optimize, go through open files, use model->itemForPath and
-    ///      check whether that item belongs to the given project
-    ///      then close it
-    Q_FOREACH( ProjectFileItem *fileItem, proj->files() )
-    {
-        Core::self()->documentControllerInternal()->closeDocument( fileItem->path().toUrl() );
+    foreach(IDocument* doc, Core::self()->documentController()->openDocuments()) {
+        if (proj->inProject(IndexedString(doc->url()))) {
+            doc->close();
+        }
     }
 }
 
