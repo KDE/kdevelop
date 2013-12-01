@@ -49,6 +49,10 @@ IDebugSession* IVariableController::session() const
 
 void IVariableController::stateChanged(IDebugSession::DebuggerState state)
 {
+    if (!ICore::self() || ICore::self()->shuttingDown()) {
+        return;
+    }
+
     if (state == IDebugSession::ActiveState) {
         //variables are now outdated, update them
         m_activeThread = -1;
