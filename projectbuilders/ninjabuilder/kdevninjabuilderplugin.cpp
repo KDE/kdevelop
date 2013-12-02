@@ -66,7 +66,7 @@ static QStringList argumentsForItem(KDevelop::ProjectBaseItem* item)
 
     switch(item->type()) {
         case KDevelop::ProjectBaseItem::File:
-          return QStringList(item->url().toLocalFile()+'^');
+          return QStringList(item->path().toLocalFile()+'^');
         case KDevelop::ProjectBaseItem::Target:
         case KDevelop::ProjectBaseItem::ExecutableTarget:
         case KDevelop::ProjectBaseItem::LibraryTarget:
