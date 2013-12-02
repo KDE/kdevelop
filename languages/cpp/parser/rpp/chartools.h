@@ -41,22 +41,22 @@ typedef QVector<unsigned int> PreprocessedContents;
  */
 inline bool isSpace(char c) {
 #ifdef _MSC_VER
-  return isspace((uchar)c);
+  return isspace(static_cast<uchar>(c));
 #else
-  return std::isspace((uchar)c);
+  return std::isspace(static_cast<uchar>(c));
 #endif
 }
 
 inline bool isLetter(char c) {
-  return std::isalpha((uchar)c);
+  return std::isalpha(static_cast<uchar>(c));
 }
 
 inline bool isLetterOrNumber(char c) {
-  return std::isalnum((uchar)c);
+  return std::isalnum(static_cast<uchar>(c));
 }
 
 inline bool isNumber(char c) {
-  return std::isdigit((uchar)c);
+  return std::isdigit(static_cast<uchar>(c));
 }
 
 //Takes an index as delt with during preprocessing, and determines whether it is a fake-index that represents
