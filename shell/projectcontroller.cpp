@@ -157,13 +157,13 @@ public:
         KSharedConfig::Ptr config = Core::self()->activeSession()->config();
         KConfigGroup group = config->group( "General Options" );
     
-        KUrl::List openProjects;
+        QStringList openProjects;
     
         foreach( IProject* project, m_projects ) {
-            openProjects.append(project->projectFileUrl());
+            openProjects.append(project->projectFile().pathOrUrl());
         }
     
-        group.writeEntry( "Open Projects", openProjects.toStringList() );
+        group.writeEntry( "Open Projects", openProjects );
         group.sync();
     }
 
