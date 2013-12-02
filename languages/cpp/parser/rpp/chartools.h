@@ -31,24 +31,32 @@ class QString;
 class QByteArray;
 typedef QVector<unsigned int> PreprocessedContents;
 
+/**
+ * Attempt to fix bug 328285
+ *
+ * This is more or less a work-around to make rpp a bit more robust against
+ * non-7bit ASCII chars.
+ *
+ * See explanation at: http://stackoverflow.com/a/6693878
+ */
 inline bool isSpace(char c) {
 #ifdef _MSC_VER
-  return isspace(c);
+  return isspace((uchar)c);
 #else
-  return std::isspace(c);
+  return std::isspace((uchar)c);
 #endif
 }
 
 inline bool isLetter(char c) {
-  return std::isalpha(c);
+  return std::isalpha((uchar)c);
 }
 
 inline bool isLetterOrNumber(char c) {
-  return std::isalnum(c);
+  return std::isalnum((uchar)c);
 }
 
 inline bool isNumber(char c) {
-  return std::isdigit(c);
+  return std::isdigit((uchar)c);
 }
 
 //Takes an index as delt with during preprocessing, and determines whether it is a fake-index that represents
