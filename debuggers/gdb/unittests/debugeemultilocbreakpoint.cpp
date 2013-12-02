@@ -27,7 +27,9 @@ inline int aPlusB(int a) {
 int main()
 {
     int test1 = aPlusB(1, 1);
+    (void)test1;
     int test4 = aPlusB(2);
+    (void)test4;
 
     return 0;
 }
