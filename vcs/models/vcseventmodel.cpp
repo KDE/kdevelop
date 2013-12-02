@@ -25,6 +25,7 @@
 #include <QDateTime>
 #include <QList>
 
+#include <kglobal.h>
 #include <klocale.h>
 
 #include "../vcsevent.h"
@@ -70,7 +71,7 @@ int VcsEventModel::rowCount( const QModelIndex& parent) const
 
 int VcsEventModel::columnCount( const QModelIndex& parent) const
 {
-    return parent.isValid() ? 0 : 4;
+    return parent.isValid() ? 0 : ColumnCount;
 }
 
 QVariant VcsEventModel::data( const QModelIndex& idx, int role ) const
@@ -84,18 +85,15 @@ QVariant VcsEventModel::data( const QModelIndex& idx, int role ) const
     KDevelop::VcsEvent ev = d->m_events.at( idx.row() );
     switch( idx.column() )
     {
-        case 0:
+        case RevisionColumn:
             return QVariant( ev.revision().revisionValue() );
-            break;
-        case 1:
+        case SummaryColumn:
+            // show the first line only
+            return QVariant( ev.message().section('\n', 0, 0) );
+        case AuthorColumn:
             return QVariant( ev.author() );
-            break;
-        case 2:
-            return QVariant( ev.date() );
-            break;
-        case 3:
-            return QVariant( ev.message() );
-            break;
+        case DateColumn:
+            return QVariant( KGlobal::locale()->formatDateTime( ev.date() ) );
         default:
             break;
     }
@@ -108,18 +106,14 @@ QVariant VcsEventModel::headerData( int section, Qt::Orientation orientation, in
         return QVariant();
     switch( section )
     {
-        case 0:
+        case RevisionColumn:
             return QVariant( i18n("Revision") );
-            break;
-        case 1:
-            return QVariant( i18n("Author") );
-            break;
-        case 2:
-            return QVariant( i18n("Date") );
-            break;
-        case 3:
+        case SummaryColumn:
             return QVariant( i18n("Message") );
-            break;
+        case AuthorColumn:
+            return QVariant( i18n("Author") );
+        case DateColumn:
+            return QVariant( i18n("Date") );
         default:
             break;
     }
@@ -130,10 +124,8 @@ void VcsEventModel::addEvents( const QList<KDevelop::VcsEvent>& list )
 {
     if( list.isEmpty() )
         return;
-    if( rowCount() > 0 )
-        beginInsertRows( QModelIndex(), rowCount(), rowCount()+list.count()-1 );
-    else
-        beginInsertRows( QModelIndex(), rowCount(), list.count()-1 );
+
+    beginInsertRows( QModelIndex(), rowCount(), rowCount()+list.count()-1 );
     d->m_events += list;
     endInsertRows();
 }

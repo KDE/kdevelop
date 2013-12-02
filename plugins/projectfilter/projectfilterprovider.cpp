@@ -92,8 +92,8 @@ ContextMenuExtension ProjectFilterProvider::contextMenuExtension(Context* contex
     }
 
     QAction* action = new QAction(KIcon("view-filter"),
-                                  i18np("Exclude item from project",
-                                        "Exclude items from project",
+                                  i18np("Exclude Item From Project",
+                                        "Exclude Items From Project",
                                         items.size()), this);
     action->setData(QVariant::fromValue(items));
     connect(action, SIGNAL(triggered(bool)), SLOT(addFilterFromContextMenu()));

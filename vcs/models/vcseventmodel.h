@@ -38,6 +38,14 @@ class KDEVPLATFORMVCS_EXPORT VcsEventModel : public QAbstractTableModel
 {
 Q_OBJECT
 public:
+    enum Column {
+        RevisionColumn,
+        SummaryColumn,
+        AuthorColumn,
+        DateColumn,
+        ColumnCount,
+    };
+
     VcsEventModel( KDevelop::IBasicVersionControl* iface, const KDevelop::VcsRevision& rev, const KUrl& url, QObject* parent );
     ~VcsEventModel();
     int rowCount( const QModelIndex& = QModelIndex() ) const;
