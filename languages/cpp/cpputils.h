@@ -37,7 +37,7 @@ namespace CppUtils
 int findEndOfInclude(QString line);
 
 ///If @param fast is true, no exhaustive search is done as fallback.
-KUrl sourceOrHeaderCandidate( const KUrl &url, bool fast = false );
+QString sourceOrHeaderCandidate( const QString &path, bool fast = false );
 
 ///Returns true if the given url is a header, looking at he known file extensions
 bool isHeader(const KUrl &url);
@@ -59,7 +59,7 @@ bool needsUpdate(const Cpp::EnvironmentFilePointer& file, const KUrl& localPath,
 
 ///Returns the include-path. Each dir has a trailing slash. Search should be iterated forward through the list
 ///@param problems If this is nonzero, eventual problems will be added to the list
-KUrl::List findIncludePaths(const KUrl& source, QList<KDevelop::ProblemPointer>* problems);
+QStringList findIncludePaths(const QString& source, QList<KDevelop::ProblemPointer>* problems);
 
 /**
   * Returns a list of all files within the include-path of the given file
@@ -68,7 +68,9 @@ KUrl::List findIncludePaths(const KUrl& source, QList<KDevelop::ProblemPointer>*
   * @param onlyAddedIncludePaths If this is true, only the include-paths given in @p addIncludePaths will be used
   * @param prependAddedPathToName If this is true, @p addPath is prepended to each of the returned items paths
   * */
-QList<KDevelop::IncludeItem> allFilesInIncludePath(const KUrl& source, bool local, const QString& addPath, KUrl::List addIncludePaths = KUrl::List(), bool onlyAddedIncludePaths = false, bool prependAddedPathToName = false, bool allowSourceFiles = false );
+QList<KDevelop::IncludeItem> allFilesInIncludePath(const QString& source, bool local, const QString& addPath,
+                                                   const QStringList& addIncludePaths = QStringList(), bool onlyAddedIncludePaths = false,
+                                                   bool prependAddedPathToName = false, bool allowSourceFiles = false );
 
 /// @return List of possible header extensions used for definition/declaration fallback switching
 QStringList headerExtensions();

@@ -1145,7 +1145,7 @@ bool CodeCompletionContext::doIncludeCompletion()
 
 #ifndef TEST_COMPLETION
   bool local = line.startsWith('"');
-  m_includeItems = CppUtils::allFilesInIncludePath(KUrl(m_duContext->url().str()), local, prefixPath);
+  m_includeItems = CppUtils::allFilesInIncludePath(m_duContext->url().str(), local, prefixPath);
 #endif
 
   return true;
@@ -2117,7 +2117,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::getImplementationHelpers
     ret += getImplementationHelpersInternal(m_duContext->scopeIdentifier(true), searchInContext);
 
   if(!CppUtils::isHeader( searchInContext->url().toUrl() )) {
-    KUrl headerUrl = CppUtils::sourceOrHeaderCandidate( searchInContext->url().toUrl(), false );
+    KUrl headerUrl = CppUtils::sourceOrHeaderCandidate( searchInContext->url().str(), false );
     searchInContext = ICore::self()->languageController()->language("C++")->languageSupport()->standardContext(headerUrl);
     if(searchInContext)
       ret += getImplementationHelpersInternal(m_duContext->scopeIdentifier(true), searchInContext);

@@ -57,13 +57,13 @@ namespace CppTools {
     QString storageFile() const;
     bool isValid() const ;
     
-    static CustomIncludePathsSettings read(QString storagePath);
+    static CustomIncludePathsSettings read(const QString& storagePath);
     ///Finds a valid storage file above the given start path that contains custom include paht settings
     ///If no valid storage file is found, returns an empty string
-    static QString find(QString startPath);
+    static QString find(const QString& startPath);
     ///Finds a storage-path for the given start path, and reads the custom include path settings
     ///If none were found, returns an invalid item
-    static CustomIncludePathsSettings findAndRead(QString startPath);
+    static CustomIncludePathsSettings findAndRead(const QString& startPath);
     ///Same as findAndRead, but also convert all relative paths into absolute ones from the
     ///storage path.
     static CustomIncludePathsSettings findAndReadAbsolute(const QString& startPath);
@@ -91,7 +91,7 @@ namespace CppTools {
       
       static void clearCache();
       
-      KDevelop::ModificationRevisionSet findIncludePathDependency(QString file);
+      KDevelop::ModificationRevisionSet findIncludePathDependency(const QString& file);
       
     private:
       bool m_isResolving;

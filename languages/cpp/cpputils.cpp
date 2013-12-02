@@ -36,12 +36,12 @@
 #include <QDirIterator>
 
 template<class T>
-QList<T> makeListUnique(QList<T> list)
+static QList<T> makeListUnique(const QList<T>& list)
 {
   QList<T> ret;
-  
-  QSet<T> set;
-  foreach(T item, list)
+
+  QSet<QString> set;
+  foreach(const T& item, list)
   {
     if(!set.contains(item))
     {
@@ -80,17 +80,15 @@ int findEndOfInclude(QString line)
   return line.indexOf("include") + 7;
 }
 
-KUrl sourceOrHeaderCandidate( const KUrl &url, bool fast )
+QString sourceOrHeaderCandidate( const QString &path_, bool fast )
 {
-  QString urlPath = url.toLocalFile(); ///@todo Make this work with real urls
-
 // get the path of the currently active document
-  QFileInfo fi( urlPath );
+  QFileInfo fi( path_ );
   QString path = fi.filePath();
   // extract the exension
   QString ext = fi.suffix();
   if ( ext.isEmpty() )
-    return KUrl();
+    return QString();
   // extract the base path (full path without '.' and extension)
   QString base = path.left( path.length() - ext.length() - 1 );
   //kDebug( 9007 ) << "base: " << base << ", ext: " << ext << endl;
@@ -141,7 +139,7 @@ KUrl sourceOrHeaderCandidate( const KUrl &url, bool fast )
   }
 
   if(fast)
-    return KUrl();
+    return QString();
 
   //kDebug( 9007 ) << "Now searching in project files." << endl;
   // Our last resort: search the project file list for matching files
@@ -149,7 +147,7 @@ KUrl sourceOrHeaderCandidate( const KUrl &url, bool fast )
   QFileInfo candidateFileWoExt;
   QString candidateFileWoExtString;
 
-  const IndexedString file(url);
+  const IndexedString file(path);
   foreach (KDevelop::IProject *project, ICore::self()->projectController()->projects()) {
       if (project->inProject(file)) {
         foreach(const IndexedString& otherFile, project->fileSet()) {
@@ -163,14 +161,14 @@ KUrl sourceOrHeaderCandidate( const KUrl &url, bool fast )
             if ( possibleExts.contains( candidateFileWoExt.suffix() ) || candidateFileWoExt.suffix().isEmpty() )
             {
               //kDebug( 9007 ) << "checking if " << url << " exists" << endl;
-              return otherFile.toUrl();
+              return otherFile.str();
             }
           }
         }
       }
   }
 
-  return KUrl();
+  return QString();
 }
 
 
@@ -293,53 +291,52 @@ bool needsUpdate(const Cpp::EnvironmentFilePointer& file, const KUrl& localPath,
   return false;
 }
 
-KUrl::List findIncludePaths(const KUrl& source, QList<KDevelop::ProblemPointer>* problems) {
+QStringList findIncludePaths(const QString& source, QList<KDevelop::ProblemPointer>* problems) {
   IncludePathComputer comp(source, problems);
   comp.computeForeground();
   comp.computeBackground();
   return comp.result();
 }
 
-QList<KDevelop::IncludeItem> allFilesInIncludePath(const KUrl& source, bool local, const QString& addPath, KUrl::List addIncludePaths, bool onlyAddedIncludePaths, bool prependAddedPathToName, bool allowSourceFiles) {
-
-    QMap<KUrl, bool> hadPaths; //Only process each path once
+QList<KDevelop::IncludeItem> allFilesInIncludePath(const QString& source, bool local, const QString& addPath,
+                                                   const QStringList& addIncludePaths, bool onlyAddedIncludePaths,
+                                                   bool prependAddedPathToName, bool allowSourceFiles)
+{
     QList<KDevelop::IncludeItem> ret;
 
-    KUrl::List paths;
+    QStringList paths;
     if ( addPath.startsWith('/') ) {
-      paths << KUrl("/");
+      paths << QString("/");
     } else {
       paths = addIncludePaths;
       if(!onlyAddedIncludePaths) {
         paths += findIncludePaths(source, 0);
 
         if(local) {
-            KUrl localPath = source;
+            KUrl localPath(source);
             localPath.setFileName(QString());
-            paths.push_front(localPath);
+            paths.push_front(localPath.toLocalFile());
         }
       }
     }
 
-    paths = makeListUnique<KUrl>(paths);
+    paths = makeListUnique<QString>(paths);
     int pathNumber = 0;
 
     QSet<QString> hadIncludePaths;
-    foreach(const KUrl& path, paths)
+    foreach(const QString& path, paths)
     {
-        if(!hadPaths.contains(path)) {
-            hadPaths[path] = true;
-        }else{
-            continue;
+        if(hadIncludePaths.contains(path)) {
+          continue;
         }
-        if(!path.isLocalFile()) {
-            kDebug(9007) << "include-path " << path << " is not local";
-            continue;
+        hadIncludePaths.insert(path);
+        QString searchPath = path;
+        if (!addPath.isEmpty() && !addPath.startsWith('/')) {
+          if (!searchPath.endsWith('/')) {
+            searchPath += '/';
+          }
+          searchPath += addPath;
         }
-        KUrl searchPathUrl = path;
-        QString absoluteBase = searchPathUrl.toLocalFile();
-        searchPathUrl.addPath(addPath);
-        QString searchPath = searchPathUrl.toLocalFile();
 
         QDirIterator dirContent(searchPath);
 
@@ -362,7 +359,7 @@ QList<KDevelop::IncludeItem> allFilesInIncludePath(const KUrl& source, bool loca
             }
             if(prependAddedPathToName) {
               item.name = addPath + item.name;
-              item.basePath = absoluteBase;
+              item.basePath = path;
             } else {
               item.basePath = searchPath;
             }

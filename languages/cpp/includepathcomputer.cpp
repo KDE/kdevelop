@@ -17,55 +17,59 @@
 #include "includepathcomputer.h"
 #include "cpplanguagesupport.h"
 #include "cpputils.h"
+
 #include <interfaces/iproject.h>
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
+
 #include <project/projectmodel.h>
 #include <project/interfaces/ibuildsystemmanager.h>
-#include <klocalizedstring.h>
+
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
-#include <QDirIterator>
 #include <language/duchain/duchainutils.h>
+
+#include <KLocalizedString>
+
+#include <QDirIterator>
+#include <QCoreApplication>
 
 using namespace KDevelop;
 
 #define DEBUG_INCLUDE_PATHS 1
 const bool enableIncludePathResolution = true;
 
-QList<KUrl> convertToUrls(const QList<IndexedString>& stringList) {
-  QList<KUrl> ret;
-  foreach(const IndexedString& str, stringList)
-    ret << KUrl(str.str());
-  return ret;
-}
-
-IncludePathComputer::IncludePathComputer(const KUrl& file, QList<KDevelop::ProblemPointer>* problems) : m_source(file), m_problems(problems), m_ready(false), m_gotPathsFromManager(false) {
+IncludePathComputer::IncludePathComputer(const QString& file, QList<ProblemPointer>* problems)
+  : m_source(file)
+  , m_problems(problems)
+  , m_ready(false)
+  , m_gotPathsFromManager(false)
+{
 }
 
 void IncludePathComputer::computeForeground() {
-
-  if(CppUtils::headerExtensions().contains(QFileInfo(m_source.toLocalFile()).suffix())) {
+  Q_ASSERT(QThread::currentThread() == qApp->thread());
+  if(CppUtils::headerExtensions().contains(QFileInfo(m_source).suffix())) {
     //This file is a header. Since a header doesn't represent a target, we just try to get the include-paths for the corresponding source-file, if there is one.
-    KUrl newSource = CppUtils::sourceOrHeaderCandidate(m_source, true);
-    if(newSource.isValid())
+    QString newSource = CppUtils::sourceOrHeaderCandidate(m_source, true);
+    if(!newSource.isEmpty())
       m_source = newSource;
   }
 
+  QFileInfo info(m_source);
+  m_source = info.absoluteFilePath();
+
   if( m_source.isEmpty() ) {
     foreach( const QString& path, CppUtils::standardIncludePaths()) {
-        KUrl u(path);
-        if(!m_hasPath.contains(u)) {
-          m_ret << KUrl(path);
-          m_hasPath.insert(u);
-        }
+      addPath(path);
     }
     kDebug() << "cannot compute include-paths without source-file";
     return;
   }
 
+  const IndexedString indexedSource(m_source);
     foreach (KDevelop::IProject *project, KDevelop::ICore::self()->projectController()->projects()) {
-        QList<KDevelop::ProjectFileItem*> files = project->filesForUrl(m_source);
+        QList<KDevelop::ProjectFileItem*> files = project->filesForPath(indexedSource);
         if (files.isEmpty())
             continue;
 
@@ -86,12 +90,12 @@ void IncludePathComputer::computeForeground() {
         }
 
         m_projectName = project->name();
-        m_projectDirectory = project->folder();
-        m_effectiveBuildDirectory = m_buildDirectory = buildManager->buildDirectory(project->projectItem()).toUrl();
+        m_projectDirectory = project->path();
+        m_effectiveBuildDirectory = m_buildDirectory = buildManager->buildDirectory(project->projectItem());
         kDebug(9007) << "Got build-directory from project manager:" << m_effectiveBuildDirectory;
 
         if(m_projectDirectory == m_effectiveBuildDirectory)
-            m_projectDirectory = m_effectiveBuildDirectory = KUrl();
+            m_projectDirectory = m_effectiveBuildDirectory = Path();
 
         Path::List dirs = buildManager->includeDirectories(file);
 
@@ -102,10 +106,7 @@ void IncludePathComputer::computeForeground() {
         kDebug(9007) << "Got " << dirs.count() << " include-paths from build-manager";
 
         foreach( const Path& dir, dirs ) {
-            const KUrl url = dir.toUrl();
-            if(!m_hasPath.contains(url))
-              m_ret << url;
-            m_hasPath.insert(url);
+          addPath(dir.toLocalFile());
         }
     }
 
@@ -119,12 +120,12 @@ void IncludePathComputer::computeBackground() {
     if(m_ready)
       return;
     
-    if(!m_effectiveBuildDirectory.isEmpty())
+    if(m_effectiveBuildDirectory.isValid())
         m_includeResolver.setOutOfSourceBuildSystem(m_projectDirectory.toLocalFile(), m_effectiveBuildDirectory.toLocalFile());
     
     QList<QString> standardPaths = CppUtils::standardIncludePaths();
     
-    m_includePathDependency = m_includeResolver.findIncludePathDependency(m_source.toLocalFile());
+    m_includePathDependency = m_includeResolver.findIncludePathDependency(m_source);
     kDebug() << "current include path dependency state:" << m_includePathDependency.toString();
     
     ///@todo Resolve include-paths either once per directory, or once per target. Do not iterate over the duchain.
@@ -132,7 +133,7 @@ void IncludePathComputer::computeBackground() {
     if(!m_ready) {
       //Try taking the include-paths from another file in the directory
       kDebug(9007) << "Did not get any include-paths for" << m_source;
-      QFileInfo fileInfo(m_source.toLocalFile());
+      QFileInfo fileInfo(m_source);
       QDirIterator it(fileInfo.dir().path());
       while(it.hasNext()) {
         QString file = it.next();
@@ -150,7 +151,7 @@ void IncludePathComputer::computeBackground() {
                 if(envFile->includePaths().size() <= standardPaths.size() )
                   continue;
                 foreach(const KDevelop::IndexedString& str, envFile->includePaths()) {
-                  m_ret << str.toUrl();
+                  str.str();
                 }
                 kDebug(9007) << "took include-paths for" <<  m_source << "from duchain of" <<  file;
                 m_ready = true;
@@ -172,10 +173,10 @@ void IncludePathComputer::computeBackground() {
     if( (m_ret.isEmpty() || DEBUG_INCLUDE_PATHS) && enableIncludePathResolution ) {
         //Fallback-search using include-path resolver
 
-        if(!m_effectiveBuildDirectory.isEmpty()) {
+        if(m_effectiveBuildDirectory.isValid()) {
             m_includeResolver.setOutOfSourceBuildSystem(m_projectDirectory.toLocalFile(), m_effectiveBuildDirectory.toLocalFile());
         } else {
-            if(!m_projectDirectory.isEmpty() && m_problems) {
+            if(m_projectDirectory.isValid() && m_problems) {
                 //Report that the build-manager did not return the build-directory, for debugging
                 KDevelop::Problem* newProblem = new Problem;
                 newProblem->setSource(KDevelop::ProblemData::Preprocessor);
@@ -186,46 +187,23 @@ void IncludePathComputer::computeBackground() {
             }
             m_includeResolver.resetOutOfSourceBuild();
         }
-        CppTools::PathResolutionResult result = m_includeResolver.resolveIncludePath(m_source.toLocalFile());
+        CppTools::PathResolutionResult result = m_includeResolver.resolveIncludePath(m_source);
         m_includePathDependency = result.includePathDependency;
         kDebug() << "new include path dependency:" << m_includePathDependency.toString();
         
 //         if (result) {
-          bool hadMissingPath = false;
           if( !m_gotPathsFromManager ) {
               foreach( const QString &res, result.paths ) {
-                  KUrl r(res);
-                  r.adjustPath(KUrl::AddTrailingSlash);
-                  if(!m_hasPath.contains(r))
-                    m_ret << r;
-                  m_hasPath.insert(r);
+                addPath(res);
               }
           } else {
               //Compare the includes found by the includepathresolver to the ones returned by the project-manager, and complain eaach missing path.
               foreach( const QString& res, result.paths ) {
+                  if( !m_hasPath.contains(res) ) {
+                      addPath(res);
 
-                  KUrl r(res);
-                  r.adjustPath(KUrl::AddTrailingSlash);
-
-                  KUrl r2(res);
-                  r2.adjustPath(KUrl::RemoveTrailingSlash);
-
-                  if( !m_hasPath.contains(r) && !m_hasPath.contains(r2) ) {
-                      hadMissingPath = true;
-                      if(!m_hasPath.contains(r))
-                        m_ret << r;
-                      m_hasPath.insert(r);
-
-                      kDebug(9007) << "Include-path was missing in list returned by build-manager, adding it now. file was:" << m_source << "missing path:" << r.pathOrUrl();
+                      kDebug(9007) << "Include-path was missing in list returned by build-manager, adding it now. file was:" << m_source << "missing path:" << res;
                   }
-              }
-
-              if( hadMissingPath ) {
-                  QString paths;
-                  foreach( const KUrl& u, m_ret )
-                      paths += u.pathOrUrl() + "\n";
-
-                  kDebug(9007) << "Total list of include-paths:\n" << paths << "\nEnd of list";
               }
           }
         if(!result) {
@@ -249,10 +227,10 @@ void IncludePathComputer::computeBackground() {
             Cpp::EnvironmentFile* envFile = dynamic_cast<Cpp::EnvironmentFile*>(ctx->parsingEnvironmentFile().data());
             if(envFile)
             {
-              m_ret = convertToUrls(envFile->includePaths());
               kDebug(9007) << "Took include-path for" << m_source << "from a random parsed duchain-version of it";
-              foreach(const KUrl &url, m_ret)
-                m_hasPath.insert(url);
+              foreach(const IndexedString &indexedPath, envFile->includePaths()) {
+                addPath(indexedPath.str());
+              }
             }else{
               kWarning() << "Missing cpp environment-file for" << m_source;
             }
@@ -261,11 +239,16 @@ void IncludePathComputer::computeBackground() {
 
     //Insert the standard-paths at the end
     foreach( const QString& path, standardPaths) {
-      KUrl u(path);
-      if(!m_hasPath.contains(u))
-        m_ret << KUrl(path);
-      m_hasPath.insert(u);
+      addPath(path);
     }
 
     m_ready = true;
+}
+
+void IncludePathComputer::addPath(const QString& path)
+{
+  if (!m_hasPath.contains(path)) {
+    m_hasPath.insert(path);
+    m_ret.append(path);
+  }
 }

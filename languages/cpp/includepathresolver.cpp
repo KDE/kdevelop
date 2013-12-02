@@ -278,7 +278,7 @@ bool CppTools::CustomIncludePathsSettings::delete_() {
   return QFile::remove(file);
 }
 
-KDevelop::ModificationRevisionSet IncludePathResolver::findIncludePathDependency(QString file)
+KDevelop::ModificationRevisionSet IncludePathResolver::findIncludePathDependency(const QString& file)
 {
   KDevelop::ModificationRevisionSet rev;
   CppTools::CustomIncludePathsSettings settings = CustomIncludePathsSettings::findAndReadAbsolute(file);
@@ -314,9 +314,10 @@ KDevelop::ModificationRevisionSet IncludePathResolver::findIncludePathDependency
   return rev;
 }
 
-QString CppTools::CustomIncludePathsSettings::find(QString startPath)
+QString CppTools::CustomIncludePathsSettings::find(const QString& startPath)
 {
   KUrl current(startPath);
+  Q_ASSERT(!current.isRelative());
   //Find old settings
   CppTools::CustomIncludePathsSettings settings;
   
@@ -329,13 +330,13 @@ QString CppTools::CustomIncludePathsSettings::find(QString startPath)
     
     if(current == current.upUrl())
       return QString();
-    
+
     current = current.upUrl();
   }
   return QString();
 }
 
-CppTools::CustomIncludePathsSettings CppTools::CustomIncludePathsSettings::findAndRead(QString current)
+CppTools::CustomIncludePathsSettings CppTools::CustomIncludePathsSettings::findAndRead(const QString& current)
 {
   QString file = find(current);
   if(file.isEmpty())
@@ -371,7 +372,7 @@ CppTools::CustomIncludePathsSettings CppTools::CustomIncludePathsSettings::findA
   return settings;
 }
 
-CustomIncludePathsSettings CustomIncludePathsSettings::read(QString storagePath) {
+CustomIncludePathsSettings CustomIncludePathsSettings::read(const QString& storagePath) {
   QDir sourceDir( storagePath );
   CustomIncludePathsSettings ret;
 

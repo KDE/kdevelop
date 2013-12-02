@@ -235,17 +235,17 @@ void IncludeFileDataProvider::setFilterText( const QString& _text )
 
   if( text.contains( '/' ) )
   {
-    KUrl::List addIncludePaths;
+    QStringList addIncludePaths;
     QList<IncludeItem> allIncludeItems = m_baseItems;
     
     bool explicitPath = false;
     if(text.startsWith('/')) {
-      addIncludePaths << KUrl("/");
+      addIncludePaths << QString("/");
       allIncludeItems.clear();
       text = text.mid(1);
       explicitPath = true;
     } else if(text.startsWith("~/")) {
-      addIncludePaths << KUrl(QDir::homePath());
+      addIncludePaths << QDir::homePath();
       allIncludeItems.clear();
       text = text.mid(2);
       explicitPath = true;
@@ -254,14 +254,14 @@ void IncludeFileDataProvider::setFilterText( const QString& _text )
       u.setFileName(QString());
       if(!u.isEmpty())
         u = u.upUrl();
-      addIncludePaths << u;
+      addIncludePaths << u.toLocalFile();
       allIncludeItems.clear();
       text = text.mid(3);
       explicitPath = true;
     }else if(text.startsWith("./")) {
       KUrl u(m_baseUrl);
       u.setFileName(QString());
-      addIncludePaths << u;
+      addIncludePaths << u.toLocalFile();
       allIncludeItems.clear();
       text = text.mid(2);
       explicitPath = true;
@@ -280,7 +280,7 @@ void IncludeFileDataProvider::setFilterText( const QString& _text )
       kDebug(9007) << "extracted prefix " << prefixPath;
 
       if( m_allowPossibleImports || explicitPath )
-        allIncludeItems += CppUtils::allFilesInIncludePath( m_baseUrl, true, prefixPath, addIncludePaths, explicitPath, true, true );
+        allIncludeItems += CppUtils::allFilesInIncludePath( m_baseUrl.toLocalFile(), true, prefixPath, addIncludePaths, explicitPath, true, true );
 
       if( m_allowImports )
         allIncludeItems += getAllIncludedItems( m_duContext, prefixPath );
@@ -330,7 +330,7 @@ void IncludeFileDataProvider::reset()
   QList<IncludeItem> allIncludeItems;
 
   if( m_allowPossibleImports )
-    allIncludeItems += CppUtils::allFilesInIncludePath( m_baseUrl, true, QString(), KUrl::List(), false, true, true );
+    allIncludeItems += CppUtils::allFilesInIncludePath( m_baseUrl.toLocalFile(), true, QString(), QStringList(), false, true, true );
 
   if( m_allowImports )
     allIncludeItems += getAllIncludedItems( m_duContext );
