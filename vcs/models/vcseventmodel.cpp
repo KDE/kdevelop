@@ -87,17 +87,13 @@ QVariant VcsEventModel::data( const QModelIndex& idx, int role ) const
     {
         case RevisionColumn:
             return QVariant( ev.revision().revisionValue() );
-            break;
         case SummaryColumn:
             // show the first line only
             return QVariant( ev.message().section('\n', 0, 0) );
-            break;
         case AuthorColumn:
             return QVariant( ev.author() );
-            break;
         case DateColumn:
             return QVariant( KGlobal::locale()->formatDateTime( ev.date() ) );
-            break;
         default:
             break;
     }
@@ -112,16 +108,12 @@ QVariant VcsEventModel::headerData( int section, Qt::Orientation orientation, in
     {
         case RevisionColumn:
             return QVariant( i18n("Revision") );
-            break;
         case SummaryColumn:
             return QVariant( i18n("Message") );
-            break;
         case AuthorColumn:
             return QVariant( i18n("Author") );
-            break;
         case DateColumn:
             return QVariant( i18n("Date") );
-            break;
         default:
             break;
     }
@@ -132,10 +124,8 @@ void VcsEventModel::addEvents( const QList<KDevelop::VcsEvent>& list )
 {
     if( list.isEmpty() )
         return;
-    if( rowCount() > 0 )
-        beginInsertRows( QModelIndex(), rowCount(), rowCount()+list.count()-1 );
-    else
-        beginInsertRows( QModelIndex(), rowCount(), list.count()-1 );
+
+    beginInsertRows( QModelIndex(), rowCount(), rowCount()+list.count()-1 );
     d->m_events += list;
     endInsertRows();
 }
