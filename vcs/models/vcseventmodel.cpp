@@ -25,6 +25,7 @@
 #include <QDateTime>
 #include <QList>
 
+#include <kglobal.h>
 #include <klocale.h>
 
 #include "../vcsevent.h"
@@ -91,7 +92,7 @@ QVariant VcsEventModel::data( const QModelIndex& idx, int role ) const
             return QVariant( ev.author() );
             break;
         case 2:
-            return QVariant( ev.date() );
+            return QVariant( KGlobal::locale()->formatDateTime( ev.date() ) );
             break;
         case 3:
             return QVariant( ev.message() );
