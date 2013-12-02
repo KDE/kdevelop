@@ -179,9 +179,9 @@ VcsEventWidget::VcsEventWidget( const KUrl& url, const VcsRevision& rev, KDevelo
     d->m_ui->eventView->setContextMenuPolicy( Qt::CustomContextMenu );
     QHeaderView* header = d->m_ui->eventView->header();
     header->setResizeMode( 0, QHeaderView::ResizeToContents );
-    header->setResizeMode( 1, QHeaderView::ResizeToContents );
+    header->setResizeMode( 1, QHeaderView::Stretch );
     header->setResizeMode( 2, QHeaderView::ResizeToContents );
-    header->setResizeMode( 3, QHeaderView::Stretch );
+    header->setResizeMode( 3, QHeaderView::ResizeToContents );
 
     d->m_detailModel = new VcsItemEventModel(this);
     d->m_ui->itemEventView->setModel( d->m_detailModel );
