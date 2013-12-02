@@ -32,7 +32,7 @@ namespace KDevelop {
 }
 class CMakeManager;
 class CMakeFolderItem;
-class CMakeProjectData;
+struct CMakeProjectData;
 
 struct ProcessedTarget
 {
