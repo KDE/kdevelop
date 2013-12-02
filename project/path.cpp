@@ -89,6 +89,10 @@ void Path::init(KUrl url)
 Path::Path(const Path& other, const QString& child)
 : m_data(other.m_data)
 {
+    if (child.startsWith('/')) {
+        // absolute path: only share the remote part of @p other
+        m_data.resize(isRemote() ? 1 : 0);
+    }
     addPath(child);
 }
 
@@ -326,6 +330,10 @@ void Path::addPath(const QString& path)
 
     QStringList newData = path.split('/', QString::SkipEmptyParts);
     if (newData.isEmpty()) {
+        if (m_data.size() == (isRemote() ? 1 : 0)) {
+            // this represents the root path, we just turned an invalid path into it
+            m_data << QString();
+        }
         return;
     }
 

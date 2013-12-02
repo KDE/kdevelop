@@ -251,6 +251,14 @@ void TestPath::testPath()
         QVERIFY(optUrl.isParentOf(relativePath));
         QVERIFY(!relativePath.isParentOf(optUrl));
 
+        Path absolutePath(optUrl, "/laa/loo");
+        QCOMPARE(absolutePath.path(), QLatin1String("/laa/loo"));
+        QCOMPARE(KUrl(url, "/laa/loo").path(), QLatin1String("/laa/loo"));
+
+        Path absolutePath2(optUrl, "/");
+        QCOMPARE(absolutePath2.path(), QLatin1String("/"));
+        QCOMPARE(KUrl(url, "/").path(), QLatin1String("/"));
+
         Path unrelatedPath("https://test@blubasdf.com:12345/");
         QCOMPARE(optUrl.relativePath(unrelatedPath), unrelatedPath.pathOrUrl());
         QCOMPARE(unrelatedPath.relativePath(optUrl), optUrl.pathOrUrl());
@@ -441,6 +449,43 @@ void TestPath::testPathAddData_data()
     foreach(const QString &path, paths) {
         QTest::newRow(qstrdup(path.toUtf8().constData())) << path;
     }
+}
+
+void TestPath::testPathBaseCtor()
+{
+    QFETCH(QString, base);
+    QFETCH(QString, subPath);
+
+    const Path basePath(base);
+
+    const Path path(basePath, subPath);
+
+    KUrl url(base);
+    if (KUrl(subPath).isRelative()) {
+        url.addPath(subPath);
+    } else {
+        url.setPath(subPath);
+    }
+    url.cleanPath();
+
+    QCOMPARE(path.pathOrUrl(), url.pathOrUrl(KUrl::RemoveTrailingSlash));
+}
+
+void TestPath::testPathBaseCtor_data()
+{
+    QTest::addColumn<QString>("base");
+    QTest::addColumn<QString>("subPath");
+
+    QTest::newRow("empty") << "" << "";
+    QTest::newRow("root-empty") << "/" << "";
+    QTest::newRow("root-root") << "/" << "/";
+    QTest::newRow("root-relative") << "/" << "bar";
+    QTest::newRow("root-relative-dirty") << "/" << "bar//foo/a/..";
+    QTest::newRow("empty-relative") << "" << "bar/foo/";
+    QTest::newRow("path-relative") << "/foo/bar" << "bar/foo";
+    QTest::newRow("path-absolute") << "/foo/bar" << "/bar/foo";
+    QTest::newRow("remote-path-absolute") << "http://foo.com/foo/bar" << "/bar/foo";
+    QTest::newRow("remote-path-relative") << "http://foo.com/foo/bar" << "bar/foo";
 }
 
 #include "testpath.moc"

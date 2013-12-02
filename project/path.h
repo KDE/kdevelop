@@ -111,6 +111,10 @@ public:
      * This implicitly shares the data of @p base and thus is very efficient
      * memory wise compared to creating two Paths from separate strings.
      *
+     * @p subPath A relative or absolute path. If this is an absolute path then
+     * the path in @p base will be ignored and only the remote data copied. If
+     * this is a relative path it will be combined with @p base.
+     *
      * @sa addPath()
      */
     Path(const Path& base, const QString& subPath = QString());
