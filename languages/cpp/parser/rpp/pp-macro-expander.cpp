@@ -227,7 +227,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output, bool substitut
           IndexedString previous;
           if (output.offset() > 0) {
             previous = IndexedString::fromIndex(output.popLastOutput()); //Previous already has been expanded
-            while(output.offset() > 0 && isCharacter(previous.index()) && isSpace(characterFromIndex(previous.index())))
+            while(output.offset() > 0 && isSpace(previous.index()))
               previous = IndexedString::fromIndex(output.popLastOutput());   
           }
           output.appendString(output.currentOutputAnchor(), previous);
@@ -433,7 +433,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output, bool substitut
           
         IndexedString previous = IndexedString::fromIndex(indexFromCharacter(' ')); //Previous already has been expanded
         uint stepsBack = 0;
-        while(isCharacter(previous.index()) && isSpace(characterFromIndex(previous.index())) && output.peekLastOutput(stepsBack)) {
+        while(isSpace(previous.index()) && output.peekLastOutput(stepsBack)) {
           previous = IndexedString::fromIndex(output.peekLastOutput(stepsBack));
           ++stepsBack;
         }
