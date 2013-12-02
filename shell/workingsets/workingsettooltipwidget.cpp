@@ -135,7 +135,7 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
 
         m_subtractButton = new QPushButton;
         m_subtractButton->setIcon(KIcon("list-remove"));
-        m_subtractButton->setText(i18n("Subtract All"));
+        m_subtractButton->setText(i18n("Remove All"));
         m_subtractButton->setToolTip(i18n("Remove all documents that are part of this working set from the currently active working set."));
         m_subtractButton->setFlat(true);
         connect(m_subtractButton, SIGNAL(clicked(bool)), m_setButton, SLOT(subtractSet()));
