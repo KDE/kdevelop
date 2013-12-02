@@ -95,7 +95,8 @@ QVariant VcsEventModel::data( const QModelIndex& idx, int role ) const
             return QVariant( KGlobal::locale()->formatDateTime( ev.date() ) );
             break;
         case 3:
-            return QVariant( ev.message() );
+            // show the first line only
+            return QVariant( ev.message().section('\n', 0, 0) );
             break;
         default:
             break;

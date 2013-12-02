@@ -177,7 +177,7 @@ VcsEventWidget::VcsEventWidget( const KUrl& url, const VcsRevision& rev, KDevelo
     d->m_ui->eventView->setModel( d->m_logModel );
     d->m_ui->eventView->sortByColumn(0, Qt::DescendingOrder);
     d->m_ui->eventView->setContextMenuPolicy( Qt::CustomContextMenu );
-    QHeaderView* header = d->m_ui->eventView->horizontalHeader();
+    QHeaderView* header = d->m_ui->eventView->header();
     header->setResizeMode( 0, QHeaderView::ResizeToContents );
     header->setResizeMode( 1, QHeaderView::ResizeToContents );
     header->setResizeMode( 2, QHeaderView::ResizeToContents );

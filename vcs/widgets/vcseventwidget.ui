@@ -21,7 +21,7 @@
   </property>
   <layout class="QGridLayout">
    <item row="0" column="0" colspan="2">
-    <widget class="QTableView" name="eventView">
+    <widget class="QTreeView" name="eventView">
      <property name="alternatingRowColors">
       <bool>true</bool>
      </property>
@@ -31,18 +31,18 @@
      <property name="selectionBehavior">
       <enum>QAbstractItemView::SelectRows</enum>
      </property>
-     <property name="wordWrap">
+     <property name="rootIsDecorated">
       <bool>false</bool>
      </property>
-     <property name="cornerButtonEnabled">
-      <bool>false</bool>
-     </property>
-     <attribute name="horizontalHeaderVisible">
+     <property name="uniformRowHeights">
       <bool>true</bool>
-     </attribute>
-     <attribute name="verticalHeaderVisible">
+     </property>
+     <property name="sortingEnabled">
       <bool>false</bool>
-     </attribute>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
     </widget>
    </item>
    <item row="1" column="0">
