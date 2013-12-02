@@ -233,13 +233,13 @@ QList<ILanguage*> LanguageController::languagesForUrl(const KUrl &url)
     for(LanguageControllerPrivate::MimeTypeCache::const_iterator it = d->mimeTypeCache.constBegin();
         it != d->mimeTypeCache.constEnd(); ++it)
     {
-        foreach(QString pattern, it.key()->patterns()) {
+        foreach(const QString& pattern, it.key()->patterns()) {
             if(pattern.startsWith('*')) {
-                pattern = pattern.mid(1);
-                if (!pattern.contains('*')) {
+                const QStringRef subPattern = pattern.midRef(1);
+                if (!subPattern.contains('*')) {
                     //optimize: we can skip the expensive QRegExp in this case
                     //and do a simple string compare (much faster)
-                    if (fileName.endsWith(pattern)) {
+                    if (fileName.endsWith(subPattern)) {
                         languages << *it;
                     }
                     continue;
