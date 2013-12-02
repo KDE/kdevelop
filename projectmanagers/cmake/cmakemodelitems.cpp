@@ -98,14 +98,12 @@ void CompilationDataAttached::addDefinitions(const QStringList& vars)
 
 KUrl CMakeExecutableTargetItem::builtUrl() const
 {
-    KUrl ret;
-    if(path.isEmpty()) {
-        ret=project()->buildSystemManager()->buildDirectory(const_cast<CMakeExecutableTargetItem*>(this)).toUrl();
+    if(!path.isValid()) {
+        KDevelop::Path ret = project()->buildSystemManager()->buildDirectory(const_cast<CMakeExecutableTargetItem*>(this));
         ret.addPath(outputName);
+        return ret.toUrl();
     } else
-        ret=path;
-    
-    return ret;
+        return path.toUrl();
 }
 
 bool isTargetType(Target::Type type, KDevelop::ProjectTargetItem* t)
@@ -138,13 +136,13 @@ KDevelop::ProjectFolderItem* CMakeFolderItem::folderNamed(const QString& name) c
     return 0;
 }
 
-CMakeExecutableTargetItem::CMakeExecutableTargetItem(KDevelop::IProject* project, const QString& name, CMakeFolderItem* parent, const QString& _outputName, const KUrl& basepath)
+CMakeExecutableTargetItem::CMakeExecutableTargetItem(KDevelop::IProject* project, const QString& name, CMakeFolderItem* parent, const QString& _outputName, const KDevelop::Path& basepath)
     : KDevelop::ProjectExecutableTargetItem( project, name, parent)
     , outputName(_outputName)
     , path(basepath)
 {}
 
-CMakeLibraryTargetItem::CMakeLibraryTargetItem(KDevelop::IProject* project, const QString& name, CMakeFolderItem* parent, const QString& _outputName, const KUrl&)
+CMakeLibraryTargetItem::CMakeLibraryTargetItem(KDevelop::IProject* project, const QString& name, CMakeFolderItem* parent, const QString& _outputName, const KDevelop::Path&)
     : KDevelop::ProjectLibraryTargetItem( project, name, parent), outputName(_outputName)
 {}
 

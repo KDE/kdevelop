@@ -25,12 +25,12 @@
 #include "cmakeprojectdata.h"
 
 template<class T>class QFutureWatcher;
-class KUrl;
 class CMakeManager;
 class CMakeFolderItem;
 class CMakeCommitChangesJob;
 namespace KDevelop
 {
+    class Path;
     class IProject;
     class ProjectFolderItem;
     class ReferencedTopDUContext;
@@ -52,7 +52,7 @@ class CMakeImportJob : public KJob
 
     private:
         void initialize();
-        CMakeCommitChangesJob* importDirectory(KDevelop::IProject* project, const KUrl& url, const KDevelop::ReferencedTopDUContext& parentTop);
+        CMakeCommitChangesJob* importDirectory(KDevelop::IProject* project, const KDevelop::Path& path, const KDevelop::ReferencedTopDUContext& parentTop);
         KDevelop::ReferencedTopDUContext initializeProject(CMakeFolderItem*);
         KDevelop::ReferencedTopDUContext includeScript(const QString& file, const QString& currentDir, KDevelop::ReferencedTopDUContext parent);
 

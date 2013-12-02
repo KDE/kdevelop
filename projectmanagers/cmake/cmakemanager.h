@@ -126,8 +126,8 @@ public:
     virtual KDevelop::ICodeHighlighting* codeHighlighting() const;
     virtual QWidget* specialLanguageObjectNavigationWidget(const KUrl& url, const KDevelop::SimpleCursor& position);
     
-    void addPending(const KUrl& url, CMakeFolderItem* folder);
-    CMakeFolderItem* takePending(const KUrl& url);
+    void addPending(const KDevelop::Path& path, CMakeFolderItem* folder);
+    CMakeFolderItem* takePending(const KDevelop::Path& path);
     void addWatcher(KDevelop::IProject* p, const QString& path);
     
     CMakeProjectData projectData(KDevelop::IProject* project);
@@ -158,7 +158,7 @@ private:
     
     QHash<KDevelop::IProject*, CMakeProjectData*> m_projectsData;
     QHash<KDevelop::IProject*, QFileSystemWatcher*> m_watchers;
-    QHash<KUrl, CMakeFolderItem*> m_pending;
+    QHash<KDevelop::Path, CMakeFolderItem*> m_pending;
     
     QSet<KDevelop::IProject*> m_busyProjects;
     

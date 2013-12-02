@@ -29,6 +29,7 @@
 #include <language/duchain/topducontext.h>
 #include <parser/cmakelistsparser.h>
 #include <parser/cmaketypes.h>
+#include <project/path.h>
 
 namespace KDevelop {
     class IProject;
@@ -120,14 +121,14 @@ class KDEVCMAKECOMMON_EXPORT CMakeExecutableTargetItem
 {
     public:
         CMakeExecutableTargetItem(KDevelop::IProject* project, const QString &name,
-                                  CMakeFolderItem *parent, const QString& _outputName, const KUrl& basepath);
+                                  CMakeFolderItem *parent, const QString& _outputName, const KDevelop::Path& basepath);
         
         virtual KUrl builtUrl() const;
         virtual KUrl installedUrl() const;
         
     private:
         QString outputName;
-        KUrl path;
+        KDevelop::Path path;
 };
 
 class KDEVCMAKECOMMON_EXPORT CMakeLibraryTargetItem
@@ -137,7 +138,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeLibraryTargetItem
     public:
         CMakeLibraryTargetItem(KDevelop::IProject* project, const QString &name,
                                CMakeFolderItem *parent,
-                               const QString& _outputName, const KUrl& /*basepath*/);
+                               const QString& _outputName, const KDevelop::Path& /*basepath*/);
             
     private:
         QString outputName;

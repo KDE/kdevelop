@@ -109,46 +109,43 @@ void CMakeImportJob::importFinished()
 void CMakeImportJob::initialize()
 {
     ReferencedTopDUContext ctx;
-    if(m_dom->url() == m_project->folder()) {
+    if(m_dom->path() == m_project->path()) {
         ctx = initializeProject(dynamic_cast<CMakeFolderItem*>(m_dom));
     } else {
         DUChainReadLocker lock;
-        ctx = DUChain::self()->chainForDocument(KUrl(m_dom->parent()->url(), "CMakeLists.txt"));
+        ctx = DUChain::self()->chainForDocument(Path(m_dom->parent()->path(), "CMakeLists.txt").toIndexed());
         Q_ASSERT(ctx);
     }
-    importDirectory(m_project, m_dom->url(), ctx);
+    importDirectory(m_project, m_dom->path(), ctx);
 }
 
 KDevelop::ReferencedTopDUContext CMakeImportJob::initializeProject(CMakeFolderItem* rootFolder)
 {
-    KUrl baseUrl=CMake::projectRoot(m_project);
+    Path base(CMake::projectRoot(m_project));
     
     QPair<VariableMap,QStringList> initials = CMakeParserUtils::initialVariables();
     
     m_data.clear();
     m_data.modulePath=initials.first["CMAKE_MODULE_PATH"];
     m_data.vm=initials.first;
-    m_data.vm.insertGlobal("CMAKE_SOURCE_DIR", QStringList(baseUrl.toLocalFile(KUrl::RemoveTrailingSlash)));
+    m_data.vm.insertGlobal("CMAKE_SOURCE_DIR", QStringList(base.toLocalFile()));
     m_data.vm.insertGlobal("CMAKE_BINARY_DIR", QStringList(CMake::currentBuildDir(m_project).toLocalFile(KUrl::RemoveTrailingSlash)));
     
-    KUrl cachefile = m_manager->buildDirectory(m_project->projectItem()).toUrl();
-    cachefile.addPath("CMakeCache.txt");
+    const Path cachefile(m_manager->buildDirectory(m_project->projectItem()), "CMakeCache.txt");
     m_data.cache = CMakeParserUtils::readCache(cachefile);
 
     KDevelop::ReferencedTopDUContext buildstrapContext;
     {
-        KUrl buildStrapUrl = baseUrl;
-        buildStrapUrl.addPath("buildstrap");
-        DUChainWriteLocker lock(DUChain::lock());
+        const IndexedString idxpath = Path(base, "buildstrap").toIndexed();
+        DUChainWriteLocker lock;
         
-        buildstrapContext = DUChain::self()->chainForDocument(buildStrapUrl);
+        buildstrapContext = DUChain::self()->chainForDocument(idxpath);
         
         if(buildstrapContext) {
             buildstrapContext->clearLocalDeclarations();
             buildstrapContext->clearImportedParentContexts();
             buildstrapContext->deleteChildContextsRecursively();
         }else{
-            IndexedString idxpath(buildStrapUrl);
             buildstrapContext=new TopDUContext(idxpath, RangeInRevision(0,0, 0,0),
                                                new ParsingEnvironmentFile(idxpath));
             DUChain::self()->addDocumentChain(buildstrapContext);
@@ -159,18 +156,18 @@ KDevelop::ReferencedTopDUContext CMakeImportJob::initializeProject(CMakeFolderIt
     ReferencedTopDUContext ref=buildstrapContext;
     foreach(const QString& script, initials.second)
     {
-        ref = includeScript(CMakeProjectVisitor::findFile(script, m_data.modulePath, QStringList()), baseUrl.toLocalFile(), ref);
+        ref = includeScript(CMakeProjectVisitor::findFile(script, m_data.modulePath, QStringList()), base.toLocalFile(), ref);
     }
     
     //Initialize parent parts of the project that don't belong to the tree (because it's a partial import)
-    if(baseUrl.isParentOf(m_project->folder()) && baseUrl!=m_project->folder())
+    if(base.isParentOf(m_project->path()))
     {
-        QList<KUrl> toimport;
-        toimport += baseUrl;
+        QList<Path> toimport;
+        toimport += base;
         QStringList includes;
         while(!toimport.isEmpty()) {
-            KUrl script = toimport.takeFirst(), currentDir=script;
-            script.addPath("CMakeLists.txt");
+            const Path currentDir = toimport.takeFirst();
+            const Path script(currentDir, "CMakeLists.txt");
             
             QString dir = currentDir.toLocalFile();
             ref = includeScript(script.toLocalFile(), dir, ref);
@@ -181,15 +178,14 @@ KDevelop::ReferencedTopDUContext CMakeImportJob::initializeProject(CMakeFolderIt
             rootFolder->setDefinitions(m_data.definitions);
             
             foreach(const Subdirectory& s, m_data.subdirectories) {
-                KUrl candidate = currentDir;
-                candidate.addPath(s.name);
-                
-                if(candidate.isParentOf(m_project->folder()) && candidate!=m_project->folder())
+                const Path candidate(currentDir, s.name);
+
+                if(candidate.isParentOf(m_project->path()))
                     toimport += candidate;
             }
         }
         rootFolder->setIncludeDirectories(includes);
-        rootFolder->setBuildDir(KUrl::relativeUrl(baseUrl, m_project->folder()));
+        rootFolder->setBuildDir(base.relativePath(m_project->path()));
     }
     return ref;
 }
@@ -207,12 +203,12 @@ KDevelop::ReferencedTopDUContext CMakeImportJob::includeScript(const QString& fi
     return CMakeParserUtils::includeScript( file, parent, &m_data, dir, env.variables(profile));
 }
 
-CMakeCommitChangesJob* CMakeImportJob::importDirectory(IProject* project, const KUrl& url, const KDevelop::ReferencedTopDUContext& parentTop)
+CMakeCommitChangesJob* CMakeImportJob::importDirectory(IProject* project, const Path& path, const KDevelop::ReferencedTopDUContext& parentTop)
 {
     Q_ASSERT(thread() == m_project->thread());
-    KUrl cmakeListsPath(url, "CMakeLists.txt");
+    Path cmakeListsPath(path, "CMakeLists.txt");
     
-    CMakeCommitChangesJob* commitJob = new CMakeCommitChangesJob(url, m_manager, project);
+    CMakeCommitChangesJob* commitJob = new CMakeCommitChangesJob(path, m_manager, project);
     commitJob->moveToThread(thread());
     m_jobs += commitJob;
     if(QFile::exists(cmakeListsPath.toLocalFile()))
@@ -221,11 +217,10 @@ CMakeCommitChangesJob* CMakeImportJob::importDirectory(IProject* project, const 
 
         m_data.vm.pushScope();
         ReferencedTopDUContext ctx = includeScript(cmakeListsPath.toLocalFile(),
-                                                   url.toLocalFile(KUrl::RemoveTrailingSlash), parentTop);
-        // TODO: port to Path API
-        KUrl::List folderList = commitJob->addProjectData(m_data);
-        foreach(const KUrl& folder, folderList) {
-            if (!m_manager->filterManager()->isValid(Path(folder), true, project)) {
+                                                   path.toLocalFile(), parentTop);
+        Path::List folderList = commitJob->addProjectData(m_data);
+        foreach(const Path& folder, folderList) {
+            if (!m_manager->filterManager()->isValid(folder, true, project)) {
                 continue;
             }
             CMakeCommitChangesJob* job = importDirectory(project, folder, ctx);

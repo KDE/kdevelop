@@ -27,55 +27,48 @@
 #include <cmakeparserutils.h>
 #include <project/projectfiltermanager.h>
 #include <project/interfaces/iprojectfilter.h>
+
+#include <KUrl>
+
 #include <QThread>
 
 using namespace KDevelop;
 
-static ProjectFileItem* containsFile(const KUrl& file, const QList<ProjectFileItem*>& tfiles)
+static ProjectFileItem* containsFile(const Path& file, const QList<ProjectFileItem*>& tfiles)
 {
     foreach(ProjectFileItem* f, tfiles) {
-        if(f->url()==file)
+        if(f->path()==file)
             return f;
     }
     return 0;
 }
 
-static QStringList resolvePaths(const KUrl& baseUrl, const QStringList& pathsToResolve)
+static QStringList resolvePaths(const Path& base, const QStringList& pathsToResolve)
 {
     QStringList resolvedPaths;
+    resolvedPaths.reserve(pathsToResolve.size());
     foreach(const QString& pathToResolve, pathsToResolve)
     {
         QString dir(pathToResolve);
         if(!pathToResolve.startsWith("#[") && !pathToResolve.startsWith("$<"))
         {
-            if(KUrl( pathToResolve ).isRelative())
-            {
-                KUrl path(baseUrl);
-                path.addPath(pathToResolve);
-                dir=path.toLocalFile();
-            }
-
-            KUrl simp(dir); //We use this to simplify dir
-            simp.cleanPath();
-            dir=simp.toLocalFile();
+            dir = Path(base, pathToResolve).toLocalFile();
         }
         resolvedPaths.append(dir);
     }
     return resolvedPaths;
 }
 
-static QSet<QString> filterFiles(const QFileInfoList& orig, const KUrl& base, IProject* project, ProjectFilterManager* filter)
+static QSet<QString> filterFiles(const QFileInfoList& orig, const Path& base, IProject* project, ProjectFilterManager* filter)
 {
     QSet<QString> ret;
     ret.reserve(orig.size());
     foreach(const QFileInfo& info, orig)
     {
         const QString str = info.fileName();
-        KUrl url = base;
-        url.addPath(str);
+        const Path path(base, str);
 
-        // TODO: Port to Path API
-        if (!filter->isValid(Path(url), info.isDir(), project)) {
+        if (!filter->isValid(path, info.isDir(), project)) {
             continue;
         }
 
@@ -84,13 +77,13 @@ static QSet<QString> filterFiles(const QFileInfoList& orig, const KUrl& base, IP
     return ret;
 }
 
-static bool isCorrectFolder(const KUrl& url, IProject* p)
+static bool isCorrectFolder(const Path& path, IProject* p)
 {
-    KUrl cache(url,"CMakeCache.txt");
-    
-    bool ret = !QFile::exists(cache.toLocalFile());
-    ret &= !CMake::allBuildDirs(p).contains(url.toLocalFile(KUrl::RemoveTrailingSlash));
-    
+    const QString cache = Path(path, "CMakeCache.txt").toLocalFile();
+
+    bool ret = !QFile::exists(cache);
+    ret &= !CMake::allBuildDirs(p).contains(path.toLocalFile());
+
     return ret;
 }
 
@@ -118,9 +111,9 @@ static QList<KDevelop::ProjectBaseItem*> cleanupBuildFolders(CMakeFolderItem* it
 
 /////////////////////////////////////////
 
-CMakeCommitChangesJob::CMakeCommitChangesJob(const KUrl& url, CMakeManager* manager, KDevelop::IProject* project)
+CMakeCommitChangesJob::CMakeCommitChangesJob(const Path& path, CMakeManager* manager, KDevelop::IProject* project)
     : KJob()
-    , m_url(url)
+    , m_path(path)
     , m_project(project)
     , m_manager(manager)
     , m_projectDataAdded(false)
@@ -128,13 +121,13 @@ CMakeCommitChangesJob::CMakeCommitChangesJob(const KUrl& url, CMakeManager* mana
     , m_waiting(false)
     , m_findParent(true)
 {
-    setObjectName(url.prettyUrl());
+    setObjectName(path.pathOrUrl());
 }
 
-KUrl::List CMakeCommitChangesJob::addProjectData(const CMakeProjectData& data)
+Path::List CMakeCommitChangesJob::addProjectData(const CMakeProjectData& data)
 {
     m_projectDataAdded = true;
-    KUrl::List ret;
+    Path::List ret;
     m_tests = data.testSuites;
     
     QSet<QString> alreadyAdded;
@@ -144,22 +137,15 @@ KUrl::List CMakeCommitChangesJob::addProjectData(const CMakeProjectData& data)
         alreadyAdded.insert(subf.name);
         m_subdirectories += subf;
 
-        KUrl path(subf.name);
-        if(path.isRelative())
-        {
-            path=m_url;
-            path.addPath(subf.name);
-        }
-        path.adjustPath(KUrl::AddTrailingSlash);
-        ret += path;
+        ret += Path(m_path, subf.name);
     }
 
-    QString dir = m_url.toLocalFile(KUrl::RemoveTrailingSlash);
+    QString dir = m_path.toLocalFile();
     if(data.vm.value("CMAKE_INCLUDE_CURRENT_DIR")==QStringList("ON")) {
         m_directories += dir;
-        m_directories += CMakeParserUtils::binaryPath(dir, m_project->folder().toLocalFile(KUrl::RemoveTrailingSlash), CMake::currentBuildDir(m_project).toLocalFile(KUrl::RemoveTrailingSlash));
+        m_directories += CMakeParserUtils::binaryPath(dir, m_project->path().toLocalFile(), CMake::currentBuildDir(m_project).toLocalFile(KUrl::RemoveTrailingSlash));
     }
-    m_directories += resolvePaths(m_url, data.properties[DirectoryProperty][dir]["INCLUDE_DIRECTORIES"]);
+    m_directories += resolvePaths(m_path, data.properties[DirectoryProperty][dir]["INCLUDE_DIRECTORIES"]);
     m_directories.removeAll(QString());
 
     m_definitions.unite(data.definitions);
@@ -177,7 +163,7 @@ KUrl::List CMakeCommitChangesJob::addProjectData(const CMakeProjectData& data)
         target.includes = targetProps["INCLUDE_DIRECTORIES"];
         target.outputName = targetProps.value("OUTPUT_NAME", QStringList(t.name)).join(QString());
         target.location =
-            CMake::resolveSystemDirs(m_project, targetProps["LOCATION"]).first();
+            Path(CMake::resolveSystemDirs(m_project, targetProps["LOCATION"]).first());
         
         foreach(const QString& dep, t.libraries) {
             const QMap<QString, QStringList>& depData = data.properties.value(TargetProperty).value(dep);
@@ -198,10 +184,10 @@ void CMakeCommitChangesJob::start()
     Q_ASSERT(m_project->thread() == QThread::currentThread());
 
     if(!m_parentItem && m_findParent) {
-        if(m_url == m_project->folder()) {
+        if(m_path == m_project->path()) {
             m_parentItem = m_project->projectItem()->folder();
         } else {
-            QList<ProjectFolderItem*> folders = m_project->foldersForUrl(m_url);
+            QList<ProjectFolderItem*> folders = m_project->foldersForPath(m_path.toIndexed());
             if(!folders.isEmpty())
                 m_parentItem = folders.first();
         }
@@ -218,7 +204,7 @@ void CMakeCommitChangesJob::makeChanges()
 {
     Q_ASSERT(m_project->thread() == QThread::currentThread());
     ProjectFolderItem* f = m_parentItem;
-    m_manager->addWatcher(m_project, m_url.toLocalFile(KUrl::AddTrailingSlash));
+    m_manager->addWatcher(m_project, m_path.toLocalFile());
 
     if(!m_projectDataAdded) {
         reloadFiles();
@@ -230,22 +216,15 @@ void CMakeCommitChangesJob::makeChanges()
     qDeleteAll(cleanupBuildFolders(folder, m_subdirectories));
     foreach(const Subdirectory& subf, m_subdirectories)
     {
-        //TODO: port to Path API
-        KUrl path(subf.name);
-        if(path.isRelative())
-        {
-            path=m_url;
-            path.addPath(subf.name);
-        }
-        path.adjustPath(KUrl::AddTrailingSlash);
+        const Path path(m_path, subf.name);
         
-        if (!m_manager->filterManager()->isValid(Path(path), true, m_project)) {
+        if (!m_manager->filterManager()->isValid(path, true, m_project)) {
             continue;
         }
         if(QDir(path.toLocalFile()).exists())
         {
             CMakeFolderItem* parent=folder;
-            if(path.upUrl()!=m_url)
+            if(!m_path.isDirectParentOf(path))
                 parent=0;
 
             CMakeFolderItem* a = 0;
@@ -258,9 +237,9 @@ void CMakeCommitChangesJob::makeChanges()
                     a = static_cast<CMakeFolderItem*>(ff);
             }
             if(!a)
-                a = new CMakeFolderItem( folder->project(), Path(path), subf.build_dir, parent );
+                a = new CMakeFolderItem( folder->project(), path, subf.build_dir, parent );
             else
-                a->setUrl(path);
+                a->setPath(path);
             emit folderCreated(a);
 
             if(!parent) {
@@ -308,31 +287,25 @@ void CMakeCommitChangesJob::makeChanges()
 
         CompilationDataAttached* incAtt = dynamic_cast<CompilationDataAttached*>(targetItem);
         if(incAtt) {
-            incAtt->setIncludeDirectories(resolvePaths(m_url, pt.includes));
+            incAtt->setIncludeDirectories(resolvePaths(m_path, pt.includes));
             incAtt->addDefinitions(pt.defines);
         }
         
-        KUrl::List tfiles;
+        Path::List tfiles;
         foreach( const QString & sFile, t.files)
         {
             if(sFile.startsWith("#[") || sFile.isEmpty() || sFile.endsWith('/'))
                 continue;
 
-            KUrl sourceFile(sFile);
+            const Path sourceFile(m_path, sFile);
 
-            // important: we want the behavior of KUrl::isRelative(), *not* KUrl::isRelativeUrl()
-            if(sourceFile.isRelative()) {
-                sourceFile = m_url;
-                sourceFile.addPath( sFile );
-                if(!QFile::exists(sourceFile.toLocalFile())) {
-                    sourceFile.clear();
-                }
+            if(!sourceFile.isValid() || !QFile::exists(sourceFile.toLocalFile())) {
+                kDebug(9042) << "..........Skipping non-existing source file:" << sourceFile << sFile << m_path;
+                continue;
             }
-            sourceFile.cleanPath();
 
-            if(!sourceFile.isEmpty())
-                tfiles += sourceFile;
-            kDebug(9042) << "..........Adding:" << sourceFile << sFile << m_url;
+            tfiles += sourceFile;
+            kDebug(9042) << "..........Adding:" << sourceFile << sFile << m_path;
         }
         
         setTargetFiles(targetItem, tfiles);
@@ -343,20 +316,19 @@ void CMakeCommitChangesJob::makeChanges()
     reloadFiles();
 }
 
-// TODO: Port to Path API
-void CMakeCommitChangesJob::setTargetFiles(ProjectTargetItem* target, const KUrl::List& files)
+void CMakeCommitChangesJob::setTargetFiles(ProjectTargetItem* target, const Path::List& files)
 {
     QList<ProjectFileItem*> tfiles = target->fileList();
     foreach(ProjectFileItem* file, tfiles) {
-        if(!files.contains(file->url()))
+        if(!files.contains(file->path()))
             delete file;
     }
     
     tfiles = target->fileList(); //We need to recreate the list without the removed items
-    foreach(const KUrl& file, files) {
+    foreach(const Path& file, files) {
         ProjectFileItem* f = containsFile(file, tfiles);
         if(!f)
-            new KDevelop::ProjectFileItem( target->project(), Path(file), target );
+            new KDevelop::ProjectFileItem( target->project(), file, target );
     }
 }
 
@@ -371,8 +343,7 @@ void CMakeCommitChangesJob::reloadFiles(ProjectFolderItem* item)
     const Path folderPath = item->path();
 
     const QFileInfoList entriesL = d.entryInfoList(QDir::AllEntries | QDir::NoDotAndDotDot);
-    // TODO: port to path API
-    QSet<QString> entries = filterFiles(entriesL, folderPath.toUrl(), item->project(), m_manager->filterManager());
+    QSet<QString> entries = filterFiles(entriesL, folderPath, item->project(), m_manager->filterManager());
 
     kDebug() << "Reloading Directory!" << folderPath;
     
@@ -402,12 +373,11 @@ void CMakeCommitChangesJob::reloadFiles(ProjectFolderItem* item)
 
         if( QFileInfo( filePath.toLocalFile() ).isDir() )
         {
-            //TODO: port to Path API
-            ProjectFolderItem* pendingfolder = m_manager->takePending(filePath.toUrl());
+            ProjectFolderItem* pendingfolder = m_manager->takePending(filePath);
             
             if(pendingfolder) {
                 newItems += pendingfolder;
-            } else if(isCorrectFolder(filePath.toUrl(), item->project())) { // TODO: port to path API
+            } else if(isCorrectFolder(filePath, item->project())) {
                 ProjectFolderItem* it = new ProjectFolderItem( item->project(), filePath );
                 reloadFiles(it);
                 m_manager->addWatcher(item->project(), filePath.toLocalFile());
@@ -425,7 +395,7 @@ void CMakeCommitChangesJob::reloadFiles(ProjectFolderItem* item)
 
 void CMakeCommitChangesJob::folderAvailable(ProjectFolderItem* item)
 {
-    if(item->url() == m_url) {
+    if(item->path() == m_path) {
         m_parentItem = item;
         if(m_waiting) {
             start();

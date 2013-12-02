@@ -148,11 +148,9 @@ KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
         CMake::updateConfig( project, i );
     kDebug(9042) << "== completed updating cmake settings";
 
-    KUrl cmakeInfoFile(project->projectFileUrl());
-    cmakeInfoFile = cmakeInfoFile.upUrl();
-    cmakeInfoFile.addPath("CMakeLists.txt");
+    const Path cmakeInfoFile(project->projectFile().parent(), "CMakeLists.txt");
 
-    KUrl folderUrl=project->folder();
+    Path folderPath = project->path();
     kDebug(9042) << "file is" << cmakeInfoFile.toLocalFile();
 
     if ( !cmakeInfoFile.isLocalFile() )
@@ -164,7 +162,7 @@ KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
     if(CMake::hasProjectRootRelative(project))
     {
         QString relative=CMake::projectRootRelative(project);
-        folderUrl.cd(relative);
+        folderPath.cd(relative);
     }
     else
     {
@@ -173,7 +171,7 @@ KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
         Ui::CMakePossibleRoots ui;
         ui.setupUi(e);
         chooseRoot.setMainWidget(e);
-        for(KUrl aux=folderUrl; QFile::exists(aux.toLocalFile()+"/CMakeLists.txt"); aux=aux.upUrl())
+        for(Path aux = folderPath; QFile::exists(aux.toLocalFile()+"/CMakeLists.txt"); aux = aux.parent())
             ui.candidates->addItem(aux.toLocalFile());
 
         if(ui.candidates->count()>1)
@@ -185,9 +183,9 @@ KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
             {
                 return 0;
             }
-            KUrl choice=KUrl(ui.candidates->currentItem()->text());
-            CMake::setProjectRootRelative(project, KUrl::relativeUrl(folderUrl, choice));
-            folderUrl=choice;
+            const Path choice(ui.candidates->currentItem()->text());
+            CMake::setProjectRootRelative(project, folderPath.relativePath(choice));
+            folderPath = choice;
         }
         else
         {
@@ -291,7 +289,7 @@ KDevelop::IProjectBuilder * CMakeManager::builder() const
 
 bool CMakeManager::reload(KDevelop::ProjectFolderItem* folder)
 {
-    kDebug(9032) << "reloading" << folder->url();
+    kDebug(9032) << "reloading" << folder->path();
     if(isReloading(folder->project()))
         return false;
     
@@ -400,11 +398,11 @@ void CMakeManager::dirtyFile(const QString & dirty)
         }
         else if(QFileInfo(dirty).isDir() && !isReloading(p))
         {
-            QList<ProjectFolderItem*> folders=p->foldersForUrl(dirty);
+            QList<ProjectFolderItem*> folders=p->foldersForPath(IndexedString(dirty));
             Q_ASSERT(folders.isEmpty() || folders.size()==1);
             
             if(!folders.isEmpty()) {
-                CMakeCommitChangesJob* job = new CMakeCommitChangesJob(dirtyFile, this, p);
+                CMakeCommitChangesJob* job = new CMakeCommitChangesJob(Path(dirtyFile), this, p);
                 job->start();
             }
         }
@@ -866,14 +864,14 @@ QStringList CMakeManager::processGeneratorExpression(const QStringList& expr, IP
     return ret;
 }
 
-void CMakeManager::addPending(const KUrl& url, CMakeFolderItem* folder)
+void CMakeManager::addPending(const Path& path, CMakeFolderItem* folder)
 {
-    m_pending.insert(url, folder);
+    m_pending.insert(path, folder);
 }
 
-CMakeFolderItem* CMakeManager::takePending(const KUrl& url)
+CMakeFolderItem* CMakeManager::takePending(const Path& path)
 {
-    return m_pending.take(url);
+    return m_pending.take(path);
 }
 
 void CMakeManager::addWatcher(IProject* p, const QString& path)
