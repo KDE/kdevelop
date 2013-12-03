@@ -56,7 +56,7 @@ Q_SIGNALS:
     void changed();
 
 private Q_SLOTS:
-    void newButtonClicked();
+    void handleVariableInserted(const QVariant& value);
     void deleteButtonClicked();
     void newMultipleButtonClicked();
     void addGroupClicked();
@@ -65,8 +65,6 @@ private Q_SLOTS:
     void enableDeleteButton();
     void setAsDefault();
     void enableButtons( const QString& );
-
-private:
 
 private:
     Ui::EnvironmentWidget ui;

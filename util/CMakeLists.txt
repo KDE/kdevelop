@@ -19,6 +19,7 @@ set(kdevplatformutil_LIB_SRCS
     shellutils.cpp
     sequentiallyrunjobs.cpp
     multilevellistview.cpp
+    placeholderitemproxymodel.cpp
     projecttestjob.cpp
 )
 
@@ -76,5 +77,6 @@ install( FILES
     fileutils.h
     sequentiallyrunjobs.h
     multilevellistview.h
+    placeholderitemproxymodel.h
     projecttestjob.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/util COMPONENT Devel)
