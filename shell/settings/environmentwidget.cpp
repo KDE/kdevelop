@@ -159,14 +159,15 @@ void EnvironmentWidget::deleteButtonClicked()
     QModelIndexList selected = ui.variableTable->selectionModel()->selectedRows();
     if( selected.isEmpty() )
         return;
-    
-    QModelIndexList mapped;
+
+    QStringList variables;
     foreach( const QModelIndex &idx, selected )
     {
-        mapped << proxyModel->mapToSource( idx );
+        const QString variable = idx.data(EnvironmentGroupModel::VariableRole).toString();
+        variables << variable;
     }
-    
-    groupModel->removeVariables( mapped );
+
+    groupModel->removeVariables(variables);
 }
 
 void EnvironmentWidget::newMultipleButtonClicked()
