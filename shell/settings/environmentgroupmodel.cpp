@@ -120,15 +120,19 @@ bool EnvironmentGroupModel::setData( const QModelIndex& idx, const QVariant& dat
     return true;
 }
 
-void EnvironmentGroupModel::addVariable( const QString& var, const QString& value )
+QModelIndex EnvironmentGroupModel::addVariable( const QString& var, const QString& value )
 {
-    if (m_varsByIndex.indexOf(var) > -1)
-        return; //No Duplicates
-    
-    beginInsertRows( QModelIndex(), rowCount( QModelIndex() ), rowCount( QModelIndex() ) );
+    const int pos = m_varsByIndex.indexOf(var);
+    if (pos != -1) {
+        return index(pos, 0, QModelIndex()); // No duplicates
+    }
+
+    const int insertPos = rowCount( QModelIndex() );
+    beginInsertRows( QModelIndex(), insertPos, insertPos );
     m_varsByIndex << var;
     variables( m_currentGroup ).insert( var, value );
     endInsertRows();
+    return index(insertPos, 0, QModelIndex());
 }
 
 void EnvironmentGroupModel::removeGroup( const QString& grp )

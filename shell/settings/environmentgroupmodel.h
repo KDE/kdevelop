@@ -45,7 +45,7 @@ public:
     void setCurrentGroup( const QString& group );
     void loadFromConfig( KConfig* );
     void saveToConfig( KConfig* );
-    void addVariable( const QString& var, const QString& value );
+    QModelIndex addVariable( const QString& var, const QString& value );
     void removeVariables( QModelIndexList variables );
     void removeGroup( const QString& grp );
     void changeDefaultGroup( const QString& grp );

@@ -68,6 +68,30 @@ private slots:
 
         array.clear();
     }
+
+    void mixed()
+    {
+        KDevVarLengthArray<int, 10> array;
+        array.append(1);
+        array << 2;
+        array.insert(0, 0);
+        QCOMPARE(array.back(), 2);
+        array.pop_back();
+        QCOMPARE(array.back(), 1);
+        array.append(1);
+        QVERIFY(array.removeOne(1));
+        QCOMPARE(array.toList(), QList<int>() << 0 << 1);
+        QCOMPARE(array.toVector(), QVector<int>() << 0 << 1);
+        array.insert(0, 42);
+        QCOMPARE(array.toVector(), QVector<int>() << 42 << 0 << 1);
+        array.remove(0);
+        QCOMPARE(array.toVector(), QVector<int>() << 0 << 1);
+        QVERIFY(array.contains(1));
+        QVERIFY(!array.contains(42));
+        QCOMPARE(array.back(), 1);
+        QCOMPARE(array.indexOf(1), 1);
+        QCOMPARE(array.indexOf(42), -1);
+    }
 };
 
 QTEST_MAIN(TestKDevVarLengthArray)

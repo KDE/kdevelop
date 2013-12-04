@@ -17,8 +17,6 @@ set(kdevfiletemplates_PART_SRCS
 
 kde4_add_ui_files(kdevfiletemplates_PART_SRCS
     templatepreviewtoolview.ui
-    ui/classmembers.ui
-    ui/classoptions.ui
     ui/licensechooser.ui
     ui/newclass.ui
     ui/outputlocation.ui
