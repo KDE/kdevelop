@@ -544,6 +544,16 @@ void TestParser::testPreprocessor() {
   QCOMPARE(preprocess("#if (2147483647L + 10L) > 0\n 10\n #endif\n").trimmed(), QString("10"));
 
   QCOMPARE(preprocess("#ifdef\n"), QString("*ERROR*"));
+
+  // From windows headers:
+  // #define __$drv_unit_user_code FOO
+  // ...
+  // #define __allowed(p) __$allowed_##p
+  // #define __inout __allowed(on_parameter)
+  // Make sure '__inout' resolves to '__$allowed_on_parameter' and not to '__$drv_unit_user_code FOO $allowed_on_parameter'
+  // because '$' is not recognized as valid char of a macro name macro char.
+  // '$' is accepted by some compilers, see http://stackoverflow.com/a/369524
+  QCOMPARE(preprocess("#define __$a a\n#define __$b b\n#define FOO __$a\nFOO").trimmed(), QString("a"));
   
   QEXPECT_FAIL("", "Backslash incorrectly handled", Continue);
   QCOMPARE(preprocess("bla \\\n#define foobar oc\nfoobar\n").replace(QRegExp("[\n\t ]+"), " ").trimmed(), QString("bla #define foobar oc foobar"));

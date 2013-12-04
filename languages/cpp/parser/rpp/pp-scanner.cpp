@@ -145,7 +145,7 @@ uint pp_skip_identifier::operator()(Stream& input)
       while (!input.atEnd()) {
         uint current = input.current();
         
-        if (!isLetterOrNumber(current) && input != '_' && isCharacter(current))
+        if (isCharacter(current) && !isValidMacroIdentifierToken(characterFromIndex(current)))
           break;
         
         if(ret.isEmpty())
@@ -159,7 +159,7 @@ uint pp_skip_identifier::operator()(Stream& input)
     }
     //Collect characters and connect them to an IndexedString
     
-    if (!isLetterOrNumber(input.current()) && input != '_')
+    if (isCharacter(input.current()) && !isValidMacroIdentifierToken(characterFromIndex(input.current())))
         break;
 
     char c = characterFromIndex(input);
@@ -174,7 +174,7 @@ uint pp_skip_identifier::operator()(Stream& input)
 void pp_skip_number::operator()(Stream& input, Stream& output)
 {
   while (!input.atEnd()) {
-    if (isCharacter(input.current()) && !isLetterOrNumber(input.current()) && input != '_')
+    if (isCharacter(input.current()) && !isValidMacroIdentifierToken(characterFromIndex(input.current())))
         return;
 
     output << input;

@@ -97,7 +97,7 @@ PreprocessedContents tokenizeFromByteArray(const QByteArray& array) {
     }
     
     if(tokenizing) {
-      if(isLetterOrNumber(*data) || *data == '_') {
+      if(isValidMacroIdentifierToken(*data)) {
         hash.append(*data);
         identifier.append(*data);
       }else{
