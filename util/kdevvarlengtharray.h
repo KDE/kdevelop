@@ -50,47 +50,44 @@ public:
     }
 
     ///Returns the index of the given item in this array, or -1
-    int indexOf(const T& t) const {
-        for(int a = 0; a < Base::size(); ++a) {
-            if(t == Base::data()[a]) {
-                return a;
+    int indexOf(const T& t) const
+    {
+        const T* const end = Base::end();
+        for(const T* it = Base::begin(); it != end; ++it) {
+            if(t == *it) {
+                return (it - Base::begin());
             }
         }
         return -1;
     }
 
-    ///Append given item to the array.
-    inline KDevVarLengthArray& operator<<(const T &t) {
-        Base::append(t);
-        return *this;
-    }
-
     ///Returns whether the given item is contained in this array
-    inline bool contains(const T& value) const;
-
-    ///Inserts the given item at the given position, moving all items behind the position back
-    inline void insert(int position, const T& item);
-
-    ///Removes the given position from the array, moving all items behind it one back.
-    inline void remove(int position);
+    inline bool contains(const T& value) const
+    {
+        return indexOf(value) != -1;
+    }
 
     ///Removes exactly one occurrence of the given value from the array. Returns false if none was found.
     inline bool removeOne(const T& value);
 
     ///Returns last item in the array.
-    inline T& back() {
-        return Base::data()[Base::size()-1];
+    inline T& back()
+    {
+        Q_ASSERT(!Base::isEmpty());
+        return *(Base::end()-1);
     }
 
     ///Returns last item in the array.
-    inline const T& back() const {
-        return Base::data()[Base::size()-1];
+    inline const T& back() const
+    {
+        Q_ASSERT(!Base::isEmpty());
+        return *(Base::constEnd()-1);
     }
 
     ///Removes last item from the array but does not return it, use @c back() if required.
-    inline void pop_back() {
-        Q_ASSERT(Base::size() > 0);
-        Base::resize(Base::size()-1);
+    inline void pop_back()
+    {
+        Base::removeLast();
     }
 
     /// @return QList of items in this array
@@ -101,56 +98,24 @@ public:
 };
 
 template <class T, int Prealloc>
-Q_INLINE_TEMPLATE bool KDevVarLengthArray<T, Prealloc>::contains(const T& value) const
-{
-    for(int a = 0; a < Base::size(); ++a) {
-        if(Base::data()[a] == value) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-template <class T, int Prealloc>
-Q_INLINE_TEMPLATE void KDevVarLengthArray<T, Prealloc>::insert(int position, const T& item)
-{
-    Q_ASSERT(position >= 0 && position <= Base::size());
-    Base::resize(Base::size()+1);
-    for(int a = Base::size()-1; a > position; --a) {
-        Base::data()[a] = Base::data()[a-1];
-    }
-    Base::data()[position] = item;
-}
-
-template <class T, int Prealloc>
-Q_INLINE_TEMPLATE void KDevVarLengthArray<T, Prealloc>::remove(int position)
-{
-    Q_ASSERT(position >= 0 && position < Base::size());
-    for(int a = position; a < Base::size()-1; ++a) {
-        Base::data()[a] = Base::data()[a+1];
-    }
-    Base::resize(Base::size()-1);
-}
-
-template <class T, int Prealloc>
 Q_INLINE_TEMPLATE bool KDevVarLengthArray<T, Prealloc>::removeOne(const T& value)
 {
-    for(int a = 0; a < Base::size(); ++a) {
-        if(Base::data()[a] == value) {
-            remove(a);
-            return true;
-        }
+    const int idx = indexOf(value);
+    if (idx == -1) {
+        return false;
     }
-    return false;
+    Base::remove(idx);
+    return true;
 }
 
 template <class T, int Prealloc>
 Q_OUTOFLINE_TEMPLATE QList< T > KDevVarLengthArray<T, Prealloc>::toList() const
 {
     QList<T> ret;
-    for(int a = 0; a < Base::size(); ++a) {
-        ret << Base::data()[a];
+    ret.reserve(Base::size());
+    const T* const end = Base::constEnd();
+    for(const T* it = Base::constBegin(); it != end; ++it) {
+        ret << *it;
     }
 
     return ret;
@@ -160,8 +125,10 @@ template <class T, int Prealloc>
 Q_OUTOFLINE_TEMPLATE QVector< T > KDevVarLengthArray<T, Prealloc>::toVector() const
 {
     QVector<T> ret;
-    for(int a = 0; a < Base::size(); ++a) {
-        ret << Base::data()[a];
+    ret.reserve(Base::size());
+    const T* const end = Base::constEnd();
+    for(const T* it = Base::constBegin(); it != end; ++it) {
+        ret << *it;
     }
 
     return ret;
