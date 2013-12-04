@@ -134,14 +134,15 @@ QString MacroNavigationContext::html(bool shorten)
 
   const KUrl url = m_macro->file.toUrl();
   const QString path = url.pathOrUrl();
-  NavigationAction action(url, KTextEditor::Cursor(m_macro->sourceLine,0));
+  KTextEditor::Cursor cursor(m_macro->sourceLine, 0);
+  NavigationAction action(url, cursor);
   modifyHtml() += i18nc("%1: macro type, i.e.: 'Function macro' or just 'Macro'"
                         "%2: the macro name and arguments"
                         "%3 the link to the definition",
                         "%1: %2, defined in %3",
                         (m_macro->function_like ? i18n("Function macro") : i18n("Macro")),
                         importantHighlight(m_macro->name.str()) + args,
-                        createLink(path, path, action) );
+                        createLink(QString("%1 :%2").arg(path).arg(cursor.line()+1), path, action));
 
   modifyHtml() += fontSizeSuffix(shorten) + "</p></body></html>";
   return currentHtml();
