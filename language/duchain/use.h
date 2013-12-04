@@ -49,9 +49,12 @@ class KDEVPLATFORMLANGUAGE_EXPORT Use
 {
 public:
 
-  Use(const RangeInRevision& range = RangeInRevision::invalid(), int declarationIndex = std::numeric_limits<int>::max()) : m_range(range), m_declarationIndex(declarationIndex) {
+  Use(const RangeInRevision& range = RangeInRevision::invalid(), int declarationIndex = std::numeric_limits<int>::max())
+    : m_range(range)
+    , m_declarationIndex(declarationIndex)
+  {
   }
-  
+
   Declaration* usedDeclaration(TopDUContext* topContext) const;
 
   RangeInRevision m_range;
