@@ -63,6 +63,8 @@ public:
 
 }
 
+Q_DECLARE_TYPEINFO(KDevelop::Use, Q_MOVABLE_TYPE);
+
 #endif // KDEVPLATFORM_DEFINITIONUSE_H
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on
