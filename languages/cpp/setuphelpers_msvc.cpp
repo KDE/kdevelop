@@ -2,6 +2,7 @@
 * This file is part of KDevelop
 *
 * Copyright 2010 Patrick Spendrin <ps_ml@gmx.de>
+* Copyright 2013 Kevin Funk <kevin@kfunk.org>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU Library General Public License as
@@ -94,10 +95,71 @@ QVector<rpp::pp_macro*> computeMsvcStandardMacros()
     return ret;
 }
 
+QVector<rpp::pp_macro*> computeMsvcBuiltinMacros()
+{
+    QVector<rpp::pp_macro*> macros;
+
+    {
+        // MSVC builtin attributes
+        macros.append(new rpp::pp_macro("__cdecl"));
+        macros.append(new rpp::pp_macro("__fastcall"));
+        macros.append(new rpp::pp_macro("__stdcall"));
+        macros.append(new rpp::pp_macro("__thiscall"));
+    }
+
+    // MSVC builtin types
+    // see http://msdn.microsoft.com/en-us/library/cc953fe1.aspx
+    {
+        rpp::pp_macro* m = new rpp::pp_macro("__int8");
+        m->setDefinitionText("char");
+        macros.append(m);
+
+        m = new rpp::pp_macro("__int16");
+        m->setDefinitionText("short");
+        macros.append(m);
+
+        m = new rpp::pp_macro("__int32");
+        m->setDefinitionText("int");
+        macros.append(m);
+
+        m = new rpp::pp_macro("__int64");
+        m->setDefinitionText("long long");
+        macros.append(m);
+
+        macros.append(new rpp::pp_macro("__ptr32"));
+        macros.append(new rpp::pp_macro("__ptr64"));
+    }
+
+    // MSVC specific modifiers
+    // see http://msdn.microsoft.com/en-us/library/vstudio/s04b5w00.aspx
+    {
+        rpp::pp_macro* m = new rpp::pp_macro("__declspec");
+        m->function_like = true;
+        m->fixed = true;
+        m->formalsList().append(IndexedString("param"));
+        macros.append(m);
+
+        macros.append(new rpp::pp_macro("__sptr"));
+        macros.append(new rpp::pp_macro("__uptr"));
+        macros.append(new rpp::pp_macro("__unaligned"));
+        macros.append(new rpp::pp_macro("__w64"));
+    }
+
+    // MSVC function specifiers
+    // see http://msdn.microsoft.com/de-de/library/z8y1yy88.aspx
+    {
+        macros.append(new rpp::pp_macro("__inline"));
+        macros.append(new rpp::pp_macro("__forceinline"));
+    }
+
+    return macros;
+}
+
 const QVector<rpp::pp_macro*>& msvcStandardMacros()
 {
-  static QVector<rpp::pp_macro*> macros = computeMsvcStandardMacros();
-  return macros;
+    static const QVector<rpp::pp_macro*> macros =
+        computeMsvcStandardMacros() + computeMsvcBuiltinMacros();
+    return macros;
 }
 
 }
