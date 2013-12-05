@@ -3021,10 +3021,10 @@ void TestCppCodeCompletion::testPreprocessor() {
   TEST_FILE_PARSE_ONLY
   
   IncludeFileList includes;
-  
+
   {
     QString a = "#define Q(c) c; char* q = #c; \n Q(int i;\n char* c = \"a\";)\n";
-    QString preprocessed = preprocess(IndexedString(), a, includes);  
+    QString preprocessed = preprocess(IndexedString(), a, includes);
     kDebug() << "preprocessed:" << preprocessed;
     QVERIFY(preprocessed.contains("\"int i;\\n char* c = \\\"a\\\";")); //The newline must have been escaped correctly, and the string as well
     TopDUContext* top = parse(a.toLocal8Bit(), DumpNone);
@@ -3050,7 +3050,7 @@ void TestCppCodeCompletion::testPreprocessor() {
   }
   {
     QString a = "#define Q(c) c ## ULL \n void test() {int i = Q(0x5);}";
-    QString preprocessed = preprocess(IndexedString(), a, includes);  
+    QString preprocessed = preprocess(IndexedString(), a, includes);
     kDebug() << "preprocessed:" << preprocessed;
     TopDUContext* top = parse(a.toLocal8Bit(), DumpNone);
     DUChainWriteLocker lock(DUChain::lock());
@@ -3059,7 +3059,7 @@ void TestCppCodeCompletion::testPreprocessor() {
   }
   {
     QString a = "#define MA(x) T<x> a\n #define MB(x) T<x>\n #define MC(X) int\n #define MD(X) c\n template <typename P1> struct A {}; template <typename P2> struct T {}; int main(int argc, char ** argv) { MA(A<int>); A<MB(int)> b; MC(a)MD(b); MC(a)d; }";
-    QString preprocessed = preprocess(IndexedString(), a, includes);  
+    QString preprocessed = preprocess(IndexedString(), a, includes);
     kDebug() << "preprocessed:" << preprocessed;
     TopDUContext* top = parse(a.toUtf8(), DumpAll);
     DUChainWriteLocker lock(DUChain::lock());
@@ -3161,6 +3161,22 @@ void TestCppCodeCompletion::testPreprocessor() {
     TopDUContext* top = parse(QByteArray("struct a { int i; }; int o = __builtin_offsetof(struct a, i);"), DumpNone);
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->localDeclarations().count(), 2);
+  }
+  {
+    QString parsed = preprocess(IndexedString("somefile"),
+      "#define NC(...) __VA_ARGS__\nNC(bla,bla)\n", includes)
+      .replace(QRegExp("[\n\t ]+"), "");
+    QEXPECT_FAIL("", "Variadic macros unsupported", Continue);
+    QCOMPARE(parsed, QString("bla,bla"));
+    // fallback: at least don't fail parsing altogether, see https://bugs.kde.org/show_bug.cgi?id=308556
+    QCOMPARE(parsed, QString());
+
+    parsed = preprocess(IndexedString("somefile"),
+      "#define PUT_BETWEEN(x,y) x y x\n#define NC(...) __VA_ARGS__\nPUT_BETWEEN(NC(pair<a,b>), c)\n", includes)
+      .replace(QRegExp("[\n\t ]+"), " ").trimmed();
+    QEXPECT_FAIL("", "Variadic macros unsupported", Continue);
+    QCOMPARE(parsed, QString("pair<a,b> c pair<a,b>"));
+
   }
 }
 

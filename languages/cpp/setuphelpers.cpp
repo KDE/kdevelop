@@ -180,6 +180,9 @@ Cpp::ReferenceCountedMacroSet setupStandardMacros()
       insertMacro( macros, m );
     }
 
+    // see: https://bugs.kde.org/show_bug.cgi?id=308556
+    insertMacro( macros, rpp::pp_macro("__VA_ARGS__") );
+
 #ifdef _MSC_VER    
     foreach(const rpp::pp_macro* macro, msvcStandardMacros())
 #else
