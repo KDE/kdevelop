@@ -70,7 +70,7 @@ void DebugJob::start()
     
     if(!QFileInfo(executable).isExecutable()){
         setError( -1 );
-        setErrorText( QString("It doesn't seem like %1 is an executable at all").arg(executable));
+        setErrorText(QString("'%1' is not an executable").arg(executable));
         emitResult();
         return;
     }
