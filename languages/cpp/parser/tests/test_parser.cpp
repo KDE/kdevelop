@@ -564,12 +564,6 @@ void TestParser::testPreprocessor() {
   QEXPECT_FAIL("", "Empty expansions incorrectly handled", Continue);
   QCOMPARE(preprocess("#define foo(x) foo##x\n#define _A\n\n#define CALL(X, Y) X _A (Y)\nCALL(foo, 13)\n").replace(QRegExp("[\n\t ]+"), ""), QString("foo(13)"));
   
-  QEXPECT_FAIL("", "Variadic macros unsupported", Continue);
-  QCOMPARE(preprocess("#define NC(...) __VA_ARGS__\nNC(bla,bla)\n").replace(QRegExp("[\n\t ]+"), ""), QString("bla,bla"));
-  
-  QEXPECT_FAIL("", "Variadic macros unsupported", Continue);
-  QCOMPARE(preprocess("#define PUT_BETWEEN(x,y) x y x\n#define NC(...) __VA_ARGS__\nPUT_BETWEEN(NC(pair<a,b>), c)\n").replace(QRegExp("[\n\t ]+"), " ").trimmed(), QString("pair<a,b> c pair<a,b>"));
-
   QEXPECT_FAIL("", "Variadic arguments cannot be left empty (GCC extension)", Continue);
   QCOMPARE(preprocess("#define NC(x,y...) x y\nNC(kde,ve)\nNC(lop)").replace(QRegExp("[\n\t ]+"), ""), QString("kdevelop"));
   
