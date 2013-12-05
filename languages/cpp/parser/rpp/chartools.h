@@ -91,6 +91,18 @@ inline bool isNumber(unsigned int c) {
   return isCharacter(c) && isNumber(characterFromIndex(c));
 }
 
+/**
+ * Whether input @p c is a valid macro identifier character
+ *
+ * In theory the standard only allows 'a-z', 'A-Z', '0-9', and '_',
+ * however, GCC + MSVC accept '$' as well
+ *
+ * See http://stackoverflow.com/a/369524
+ */
+inline bool isValidMacroIdentifierToken(char c) {
+  return isLetterOrNumber(c) || c == '_' || c == '$';
+}
+
 ///Opposite of convertFromByteArray
 KDEVCPPRPP_EXPORT QByteArray stringFromContents(const PreprocessedContents& contents, int offset = 0, int count = 0);
 
