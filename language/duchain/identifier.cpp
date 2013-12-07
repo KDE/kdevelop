@@ -134,13 +134,8 @@ static RepositoryManager< ItemRepository<ConstantIdentifierPrivate, IdentifierIt
   return identifierRepositoryObject;
 }
 
-///This has to be initialized now, else we will get a crash when multiple threads try accessing it for the first time in the same moment
 uint emptyConstantIdentifierPrivateIndex() {
-  static uint index = identifierRepository()->index(DynamicIdentifierPrivate());
-  
-  if(index == 0) ///Just so the function is instantiated right now
-    identifierRepository()->deleteItem(0);
-  
+  static const uint index = identifierRepository()->index(DynamicIdentifierPrivate());
   return index;
 }
 
@@ -282,10 +277,8 @@ static RepositoryManager< ItemRepository<ConstantQualifiedIdentifierPrivate, Qua
 }
 
 uint emptyConstantQualifiedIdentifierPrivateIndex() {
-   static uint index = qualifiedidentifierRepository()->index(DynamicQualifiedIdentifierPrivate());
-    if(index == 0) ///Just so the function is instantiated right now
-      identifierRepository()->deleteItem(0);
-   return index;
+  static const uint index = qualifiedidentifierRepository()->index(DynamicQualifiedIdentifierPrivate());
+  return index;
 }
 
 const ConstantQualifiedIdentifierPrivate* emptyConstantQualifiedIdentifierPrivate() {
@@ -1285,8 +1278,8 @@ IndexedQualifiedIdentifier::operator QualifiedIdentifier() const {
 }
 
 void initIdentifierRepository() {
-  identifierRepository();
-  qualifiedidentifierRepository();
+  emptyConstantIdentifierPrivateIndex();
+  emptyConstantQualifiedIdentifierPrivateIndex();
 }
 
 }

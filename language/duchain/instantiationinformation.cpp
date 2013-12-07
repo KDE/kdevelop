@@ -121,13 +121,13 @@ static KDevelop::RepositoryManager<KDevelop::ItemRepository<InstantiationInforma
     return instantiationInformationRepositoryObject;
 }
 
-void initInstantiationInformationRepository() {
-  instantiationInformationRepository();
-}
-
 uint standardInstantiationInformationIndex() {
   static uint idx = instantiationInformationRepository()->index( InstantiationInformation() );
   return idx;
+}
+
+void initInstantiationInformationRepository() {
+  standardInstantiationInformationIndex();
 }
 
 IndexedInstantiationInformation::IndexedInstantiationInformation() : m_index(0) {
