@@ -42,8 +42,6 @@
 #include <interfaces/foregroundlock.h>
 #include <interfaces/isession.h>
 
-#include <util/google/dense_hash_map>
-
 #include "../interfaces/ilanguagesupport.h"
 #include "../interfaces/icodehighlighting.h"
 #include "../backgroundparser/backgroundparser.h"
