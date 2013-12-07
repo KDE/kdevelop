@@ -354,5 +354,3 @@ install(FILES
     checks/controlflownode.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/checks COMPONENT Devel
 )
-
-
