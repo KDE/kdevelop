@@ -140,7 +140,8 @@ uint emptyConstantIdentifierPrivateIndex() {
 }
 
 const ConstantIdentifierPrivate* emptyConstantIdentifierPrivate() {
-  return identifierRepository()->itemFromIndex(emptyConstantIdentifierPrivateIndex());
+  static const ConstantIdentifierPrivate item;
+  return &item;
 }
 
 bool IndexedIdentifier::isEmpty() const {
@@ -282,7 +283,8 @@ uint emptyConstantQualifiedIdentifierPrivateIndex() {
 }
 
 const ConstantQualifiedIdentifierPrivate* emptyConstantQualifiedIdentifierPrivate() {
-  return qualifiedidentifierRepository()->itemFromIndex(emptyConstantQualifiedIdentifierPrivateIndex());
+  static const ConstantQualifiedIdentifierPrivate item;
+  return &item;
 }
 
 // uint QualifiedIdentifier::combineHash(uint leftHash, uint /*leftSize*/, Identifier appendIdentifier) {
@@ -1279,7 +1281,9 @@ IndexedQualifiedIdentifier::operator QualifiedIdentifier() const {
 
 void initIdentifierRepository() {
   emptyConstantIdentifierPrivateIndex();
+  emptyConstantIdentifierPrivate();
   emptyConstantQualifiedIdentifierPrivateIndex();
+  emptyConstantQualifiedIdentifierPrivate();
 }
 
 }
