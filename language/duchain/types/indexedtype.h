@@ -100,6 +100,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedType : public ReferenceCountManager {
     uint m_index;
 };
 
+inline uint qHash(const IndexedType& type)
+{
+  return type.hash();
+}
+
 }
 
 Q_DECLARE_TYPEINFO(KDevelop::IndexedType, Q_MOVABLE_TYPE);

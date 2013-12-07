@@ -360,6 +360,16 @@ KDEVPLATFORMLANGUAGE_EXPORT uint qHash(const IndexedTypeIdentifier& id);
 KDEVPLATFORMLANGUAGE_EXPORT uint qHash(const QualifiedIdentifier& id);
 KDEVPLATFORMLANGUAGE_EXPORT uint qHash(const Identifier& id);
 
+inline uint qHash(const IndexedIdentifier& id)
+{
+  return id.getIndex();
+}
+
+inline uint qHash(const IndexedQualifiedIdentifier& id)
+{
+  return id.getIndex();
+}
+
 }
 
 Q_DECLARE_TYPEINFO(KDevelop::IndexedQualifiedIdentifier, Q_MOVABLE_TYPE);

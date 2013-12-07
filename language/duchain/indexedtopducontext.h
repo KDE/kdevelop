@@ -134,6 +134,11 @@ struct IndexedTopDUContextIndexConversion {
   }
 };
 
+inline uint qHash(const IndexedTopDUContext& ctx)
+{
+  return ctx.index();
+}
+
 }
 
 Q_DECLARE_METATYPE(KDevelop::IndexedTopDUContext);
