@@ -142,42 +142,20 @@ void DUContextDynamicData::scopeIdentifier(bool includeClasses, QualifiedIdentif
     target += m_context->d_func()->m_scopeIdentifier;
 }
 
-bool DUContextDynamicData::importsSafeButSlow(const DUContext* context, const TopDUContext* source,
-                                              ImportsHash& checked) const
-{
-  if( this == context->m_dynamicData )
-    return true;
-
-  if(checked.find(this) != checked.end())
-    return false;
-  checked.insert(std::make_pair(this, true));
-
-  FOREACH_FUNCTION( const DUContext::Import& ctx, m_context->d_func()->m_importedContexts ) {
-    DUContext* import = ctx.context(source);
-    if(import == context || (import && import->m_dynamicData->importsSafeButSlow(context, source, checked)))
-      return true;
-  }
-
-  return false;
-}
-
 bool DUContextDynamicData::imports(const DUContext* context, const TopDUContext* source,
-                                   int maxDepth) const
+                                   QSet<const DUContextDynamicData*>* recursionGuard) const
 {
   if( this == context->m_dynamicData )
     return true;
 
-  if(maxDepth == 0) {
-    ImportsHash checked;//(500);
-#ifndef Q_OS_WIN
-    checked.set_empty_key(0);
-#endif
-    return importsSafeButSlow(context, source, checked);
+  if (recursionGuard->contains(this)) {
+    return false;
   }
+  recursionGuard->insert(this);
 
   FOREACH_FUNCTION( const DUContext::Import& ctx, m_context->d_func()->m_importedContexts ) {
     DUContext* import = ctx.context(source);
-    if(import == context || (import && import->m_dynamicData->imports(context, source, maxDepth-1)))
+    if(import == context || (import && import->m_dynamicData->imports(context, source, recursionGuard)))
       return true;
   }
 
@@ -843,7 +821,9 @@ bool DUContext::imports(const DUContext* origin, const CursorInRevision& /*posit
 {
   ENSURE_CAN_READ
 
-  return m_dynamicData->imports(origin, topContext(), 4);
+  QSet<const DUContextDynamicData*> recursionGuard;
+  recursionGuard.reserve(8);
+  return m_dynamicData->imports(origin, topContext(), &recursionGuard);
 }
 
 bool DUContext::addIndirectImport(const DUContext::Import& import) {
