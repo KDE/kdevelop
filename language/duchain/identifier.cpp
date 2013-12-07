@@ -134,12 +134,12 @@ static RepositoryManager< ItemRepository<ConstantIdentifierPrivate, IdentifierIt
   return identifierRepositoryObject;
 }
 
-uint emptyConstantIdentifierPrivateIndex() {
+static uint emptyConstantIdentifierPrivateIndex() {
   static const uint index = identifierRepository()->index(DynamicIdentifierPrivate());
   return index;
 }
 
-const ConstantIdentifierPrivate* emptyConstantIdentifierPrivate() {
+static const ConstantIdentifierPrivate* emptyConstantIdentifierPrivate() {
   static const ConstantIdentifierPrivate item;
   return &item;
 }
@@ -268,7 +268,7 @@ struct QualifiedIdentifierItemRequest {
   const DynamicQualifiedIdentifierPrivate& m_identifier;
 };
 
-AbstractRepositoryManager* returnIdentifierRepository() {
+static AbstractRepositoryManager* returnIdentifierRepository() {
   return &identifierRepository();
 }
 
@@ -277,12 +277,12 @@ static RepositoryManager< ItemRepository<ConstantQualifiedIdentifierPrivate, Qua
     return qualifiedidentifierRepositoryObject;
 }
 
-uint emptyConstantQualifiedIdentifierPrivateIndex() {
+static uint emptyConstantQualifiedIdentifierPrivateIndex() {
   static const uint index = qualifiedidentifierRepository()->index(DynamicQualifiedIdentifierPrivate());
   return index;
 }
 
-const ConstantQualifiedIdentifierPrivate* emptyConstantQualifiedIdentifierPrivate() {
+static const ConstantQualifiedIdentifierPrivate* emptyConstantQualifiedIdentifierPrivate() {
   static const ConstantQualifiedIdentifierPrivate item;
   return &item;
 }
