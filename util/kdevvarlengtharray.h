@@ -23,13 +23,6 @@
 
 #include <QtCore/QVarLengthArray>
 
-///Foreach macro that also works with QVarLengthArray or KDevVarLengthArray
-///@warning Unlike the Qt foreach macro, this does not temporarily copy the array, which means its size must not be changed during the iteration.
-#define FOREACH_ARRAY(item, container) \
-        for(int a__ = 0, mustDo__ = 1; a__ < container.size(); ++a__) \
-            if((mustDo__ == 0 || mustDo__ == 1) && (mustDo__ = 2)) \
-                for(item(container[a__]); mustDo__; mustDo__ = 0)
-
 /**
  * Extended QVarLengthArray with additional convenience API.
  */
