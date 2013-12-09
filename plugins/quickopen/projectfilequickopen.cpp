@@ -58,7 +58,7 @@ QString ProjectFileData::text() const
 
 QString ProjectFileData::htmlDescription() const
 {
-  return "<small><small>" + i18nc("%1: project name", "Project %1", m_file.project)  + "</small></small>";
+  return "<small><small>" + i18nc("%1: project name", "Project %1", project())  + "</small></small>";
 }
 
 bool ProjectFileData::execute( QString& filterText )
@@ -122,14 +122,14 @@ QWidget* ProjectFileData::expandingWidget() const
     if( chosen ) {
         return chosen->createNavigationWidget(0, 0,
             "<small><small>"
-            + i18nc("%1: project name", "Project %1", m_file.project)
+            + i18nc("%1: project name", "Project %1", project())
             + "</small></small>");
     } else {
         QTextBrowser* ret = new QTextBrowser();
         ret->resize(400, 100);
         ret->setText(
                 "<small><small>"
-                + i18nc("%1: project name", "Project %1", m_file.project)
+                + i18nc("%1: project name", "Project %1", project())
                 + "<br>" + i18n("Not parsed yet") + "</small></small>");
         return ret;
     }
@@ -169,6 +169,16 @@ QIcon ProjectFileData::icon() const
     const QPixmap& pixmap = KIconLoader::global()->loadIcon(iconName, KIconLoader::Small);
     iconCache.insert(iconName, pixmap);
     return pixmap;
+}
+
+QString ProjectFileData::project() const
+{
+    const IProject* project = ICore::self()->projectController()->findProjectForUrl(m_file.projectUrl);
+    if (project) {
+        return project->name();
+    } else {
+        return i18n("none");
+    }
 }
 
 BaseFileDataProvider::BaseFileDataProvider()
@@ -251,7 +261,6 @@ void ProjectFileDataProvider::projectOpened( IProject* project )
 void ProjectFileDataProvider::fileAddedToSet( IProject* project, const IndexedString& url )
 {
     ProjectFile f;
-    f.project = project->name();
     f.projectUrl = project->folder();
     f.pathOrUrl = url.str();
     f.indexedUrl = url;
@@ -337,9 +346,6 @@ void OpenFilesDataProvider::reset()
         IProject* project = projCtrl->findProjectForUrl(doc->url());
         if (project) {
             f.projectUrl = project->folder();
-            f.project = project->name();
-        } else {
-            f.project = i18n("none");
         }
         currentFiles << f;
     }

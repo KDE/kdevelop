@@ -43,8 +43,6 @@ struct ProjectFile
     //       this url, use the non-broken KUrl api via:
     //       KUrl(QUrl).pathOrUrl() or similar.
     QUrl projectUrl;
-    // project name
-    QString project;
     // indexed url - only set for project files
     // currently open documents don't use this!
     KDevelop::IndexedString indexedUrl;
@@ -71,6 +69,8 @@ public:
     virtual QIcon icon() const;
 
     QList<QVariant> highlighting() const;
+
+    QString project() const;
 
 private:
     ProjectFile m_file;
