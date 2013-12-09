@@ -78,10 +78,10 @@ ContextMenuExtension ProjectFilterProvider::contextMenuExtension(Context* contex
     ProjectItemContext* ctx = static_cast<ProjectItemContext*>( context );
 
     QList<ProjectBaseItem*> items = ctx->items();
-    // filter out project roots, targets and items in targets
+    // filter out project roots and items in targets
     QList< ProjectBaseItem* >::iterator it = items.begin();
     while (it != items.end()) {
-        if ((*it)->isProjectRoot() || (*it)->target() || !(*it)->parent()->folder()) {
+        if ((*it)->isProjectRoot() || !(*it)->parent()->folder()) {
             it = items.erase(it);
         } else {
             ++it;
@@ -112,7 +112,13 @@ void ProjectFilterProvider::addFilterFromContextMenu()
             changedProjectFilters[item->project()] = readFilters(item->project()->projectConfiguration());
         }
         SerializedFilters& filters = changedProjectFilters[item->project()];
-        filters << SerializedFilter('/' + KUrl::relativeUrl(item->project()->folder(), item->url()),
+        KUrl url;
+        if (item->target()) {
+            url = KUrl(item->parent()->url(), item->text());
+        } else {
+            url = item->url();
+        }
+        filters << SerializedFilter('/' + KUrl::relativeUrl(item->project()->folder(), url),
                                     item->folder() ? Filter::Folders : Filter::Files);
     }
     QHash< IProject*, SerializedFilters >::const_iterator it = changedProjectFilters.constBegin();
