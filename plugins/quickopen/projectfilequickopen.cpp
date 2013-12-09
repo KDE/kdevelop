@@ -289,10 +289,6 @@ QSet<QString> openFilesPathsOrUrls()
 
 bool sortProjectFiles(const ProjectFile& left, const ProjectFile& right)
 {
-    // arbitrarily sort projects (fast)
-    if ( left.project != right.project ) {
-        return left.project < right.project;
-    }
     return left.pathOrUrl < right.pathOrUrl;
 }
 }
