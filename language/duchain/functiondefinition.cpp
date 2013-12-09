@@ -49,7 +49,7 @@ Declaration* FunctionDefinition::declaration(const TopDUContext* topContext) con
   
   KDevVarLengthArray<Declaration*> declarations = d_func()->m_declaration.getDeclarations(topContext ? topContext : this->topContext());
   
-  foreach(Declaration* decl, declarations) {
+  FOREACH_ARRAY(Declaration* decl, declarations) {
     if(!dynamic_cast<FunctionDefinition*>(decl))
       return decl;
   }
@@ -81,7 +81,7 @@ FunctionDefinition* FunctionDefinition::definition(const Declaration* decl)
 {
   ENSURE_CHAIN_READ_LOCKED
   KDevVarLengthArray<IndexedDeclaration> allDefinitions = DUChain::definitions()->definitions(decl->id());
-  foreach(const IndexedDeclaration& decl, allDefinitions) {
+  FOREACH_ARRAY(const IndexedDeclaration& decl, allDefinitions) {
     if(decl.data()) ///@todo Find better ways of deciding which definition to use
       return dynamic_cast<FunctionDefinition*>(decl.data());
   }

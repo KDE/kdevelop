@@ -520,7 +520,7 @@ public:
       
       //Process the indices in a separate step after copying them from the array, so we don't need m_environmentListInfo.mutex locked,
       //and can call loadInformation(..) safely, which else might lead to a deadlock.
-      foreach(uint topContextIndex, topContextIndices) {
+      FOREACH_ARRAY(uint topContextIndex, topContextIndices) {
         KSharedPtr< ParsingEnvironmentFile > p = ParsingEnvironmentFilePointer(loadInformation(topContextIndex));
         if(p) {
          ret << p;

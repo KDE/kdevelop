@@ -733,7 +733,7 @@ bool DUContext::findDeclarationsInternal( const SearchItem::PtrList & baseIdenti
   if( d->m_importedContextsSize() != 0 ) {
     ///Step 2: Give identifiers that are not marked as explicitly-global to imported contexts(explicitly global ones are treatead in TopDUContext)
     SearchItem::PtrList nonGlobalIdentifiers;
-    foreach( const SearchItem::Ptr& identifier, aliasedIdentifiers )
+    FOREACH_ARRAY( const SearchItem::Ptr& identifier, aliasedIdentifiers )
       if( !identifier->isExplicitlyGlobal )
         nonGlobalIdentifiers << identifier;
 
@@ -795,7 +795,7 @@ QList< QualifiedIdentifier > DUContext::fullyApplyAliases(const QualifiedIdentif
   }
   
   QList<QualifiedIdentifier> ret;
-  foreach(const SearchItem::Ptr& item, identifiers)
+  FOREACH_ARRAY(const SearchItem::Ptr& item, identifiers)
     ret += item->toList();
   
   return ret;
@@ -909,7 +909,7 @@ QVector<DUContext*> DUContext::importers() const
   if(owner()) {
     //Add indirect importers to the list
     KDevVarLengthArray<IndexedDUContext> indirect = Importers::self().importers(owner()->id());
-    foreach(const IndexedDUContext& ctx, indirect) {
+    FOREACH_ARRAY(const IndexedDUContext& ctx, indirect) {
       ret << ctx.context();
     }
   }
@@ -1052,7 +1052,7 @@ void DUContext::deleteLocalDeclarations()
   TopDUContext* top = topContext();
   //If we are deleting something that is not stored to disk, we need to create + delete the declarations,
   //so their destructor unregisters from the persistent symbol table and from TopDUContextDynamicData
-  foreach(const LocalIndexedDeclaration& decl, declarations)
+  FOREACH_ARRAY(const LocalIndexedDeclaration& decl, declarations)
     if(decl.isLoaded(top) || !top->deleting() || !top->isOnDisk())
       delete decl.data(top);
 }
@@ -1233,7 +1233,7 @@ void DUContext::applyAliases(const SearchItem::PtrList& baseIdentifiers, SearchI
     return;
   }
 
-  foreach( const SearchItem::Ptr& identifier, baseIdentifiers ) {
+  FOREACH_ARRAY( const SearchItem::Ptr& identifier, baseIdentifiers ) {
     bool addUnmodified = true;
 
     if( !identifier->isExplicitlyGlobal ) {
@@ -1241,7 +1241,7 @@ void DUContext::applyAliases(const SearchItem::PtrList& baseIdentifiers, SearchI
       if( !imports.isEmpty() )
       {
         //We have namespace-imports.
-        foreach( Declaration* importDecl, imports )
+        FOREACH_ARRAY( Declaration* importDecl, imports )
         {
           //Search for the identifier with the import-identifier prepended
           if(dynamic_cast<NamespaceAliasDeclaration*>(importDecl))
@@ -1262,7 +1262,7 @@ void DUContext::applyAliases(const SearchItem::PtrList& baseIdentifiers, SearchI
         if(!aliases.isEmpty()) {
           //The first part of the identifier has been found as a namespace-alias.
           //In c++, we only need the first alias. However, just to be correct, follow them all for now.
-          foreach( Declaration* aliasDecl, aliases )
+          FOREACH_ARRAY( Declaration* aliasDecl, aliases )
           {
             if(!dynamic_cast<NamespaceAliasDeclaration*>(aliasDecl))
               continue;
@@ -1475,7 +1475,7 @@ void DUContext::cleanIfNotEncountered(const QSet<DUChainBase*>& encountered)
     declarationsCopy = d_func_dynamic()->m_localDeclarationsList();
   }
 
-  foreach(const LocalIndexedDeclaration& indexedDec, declarationsCopy)
+  FOREACH_ARRAY(const LocalIndexedDeclaration& indexedDec, declarationsCopy)
   {
     Declaration* dec = indexedDec.data(topContext());
     if (dec && !encountered.contains(dec) && (!dec->isAutoDeclaration() || !dec->hasUses()))
@@ -1485,7 +1485,7 @@ void DUContext::cleanIfNotEncountered(const QSet<DUChainBase*>& encountered)
   //Copy since the array may change during the iteration
   KDevVarLengthArray<LocalIndexedDUContext, 10> childrenCopy = d_func_dynamic()->m_childContextsList();
   
-  foreach(const LocalIndexedDUContext& childContext, childrenCopy)
+  FOREACH_ARRAY(const LocalIndexedDUContext& childContext, childrenCopy)
     if (!encountered.contains(childContext.data(topContext())))
       delete childContext.data(topContext());
 }
@@ -1642,7 +1642,7 @@ void DUContext::SearchItem::addToEachNode(SearchItem::Ptr other) {
 
 void DUContext::SearchItem::addToEachNode(SearchItem::PtrList other) {
   int added = 0;
-  foreach(const SearchItem::Ptr& o, other) {
+  FOREACH_ARRAY(const SearchItem::Ptr& o, other) {
     if(!o->isExplicitlyGlobal) {
       next.append(o);
       ++added;

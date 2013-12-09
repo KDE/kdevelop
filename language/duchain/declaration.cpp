@@ -726,7 +726,7 @@ QMap<IndexedString, QList<RangeInRevision> > Declaration::uses() const
 
   KDevVarLengthArray<IndexedTopDUContext> useContexts = DUChain::uses()->uses(id());
 
-  foreach(const IndexedTopDUContext& indexedContext, useContexts) {
+  FOREACH_ARRAY(const IndexedTopDUContext& indexedContext, useContexts) {
     TopDUContext* context = indexedContext.data();
     if(context) {
       QMap<RangeInRevision, bool>& ranges(tempUses[context->url()]);
@@ -792,7 +792,7 @@ QMap<IndexedString, QList<SimpleRange> > Declaration::usesCurrentRevision() cons
 
   KDevVarLengthArray<IndexedTopDUContext> useContexts = DUChain::uses()->uses(id());
 
-  foreach(const IndexedTopDUContext& indexedContext, useContexts) {
+  FOREACH_ARRAY(const IndexedTopDUContext& indexedContext, useContexts) {
     TopDUContext* context = indexedContext.data();
     if(context) {
       QMap<SimpleRange, bool>& ranges(tempUses[context->url()]);
