@@ -143,6 +143,10 @@ ProjectFileItem* CustomMakeManager::createFileItem(IProject* project, const KUrl
         QStringList targetlist = parseCustomMakeFile( url );
         foreach( const QString &target, targetlist )
         {
+            if(!isValid(KUrl(parent->url(), target), false, project)){
+                continue;
+            }
+
             new CustomMakeTargetItem( project, target, parent );
 //             d->m_testItems.append( targetItem ); // debug
         }
