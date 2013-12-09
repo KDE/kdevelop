@@ -24,7 +24,7 @@
 
 #include "utilexport.h"
 
-#include <KIdentityProxyModel>
+#include <kidentityproxymodel.h>
 
 #include <QScopedPointer>
 
