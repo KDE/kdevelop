@@ -34,6 +34,9 @@ class QIcon;
  */
 struct ProjectFile
 {
+    ProjectFile()
+    : outsideOfProject(false)
+    {}
     // string representation of the url
     QString pathOrUrl;
     // project root folder url
@@ -45,10 +48,16 @@ struct ProjectFile
     // indexed url - only set for project files
     // currently open documents don't use this!
     KDevelop::IndexedString indexedUrl;
+    // true for files which reside outside of the project root
+    // this happens e.g. for generated files in out-of-source build folders
+    bool outsideOfProject;
 };
 
 inline bool operator<(const ProjectFile& left, const ProjectFile& right)
 {
+    if (left.outsideOfProject != right.outsideOfProject) {
+        return !left.outsideOfProject;
+    }
     return left.pathOrUrl < right.pathOrUrl;
 }
 

@@ -290,6 +290,7 @@ void ProjectFileDataProvider::fileAddedToSet( IProject* project, const IndexedSt
     f.projectUrl = project->folder();
     f.pathOrUrl = url.str();
     f.indexedUrl = url;
+    f.outsideOfProject = !f.pathOrUrl.startsWith( project->folder().pathOrUrl() );
     QList<ProjectFile>::iterator it = qLowerBound(m_projectFiles.begin(), m_projectFiles.end(), f);
     if (it == m_projectFiles.end() || it->pathOrUrl != f.pathOrUrl) {
         m_projectFiles.insert(it, f);
@@ -300,9 +301,22 @@ void ProjectFileDataProvider::fileRemovedFromSet( IProject*, const IndexedString
 {
     ProjectFile item;
     item.pathOrUrl = url.str();
+
+    // fast-path for non-generated files
+    // NOTE: figuring out whether something is generated is expensive... and since
+    // generated files are rare we apply this two-step algorithm here
     QList<ProjectFile>::iterator it = qBinaryFind(m_projectFiles.begin(), m_projectFiles.end(), item);
     if (it != m_projectFiles.end()) {
         m_projectFiles.erase(it);
+        return;
+    }
+
+    // last try: maybe it was generated
+    item.outsideOfProject = true;
+    it = qBinaryFind(m_projectFiles.begin(), m_projectFiles.end(), item);
+    if (it != m_projectFiles.end()) {
+        m_projectFiles.erase(it);
+        return;
     }
 }
 
