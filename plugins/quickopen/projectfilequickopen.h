@@ -35,7 +35,6 @@ class QIcon;
 struct ProjectFile
 {
     // string representation of the url
-    // also stored (and shared) in the ProjectFileDataProvider's map
     QString pathOrUrl;
     // project root folder url
     // NOTE: this is using a QUrl to save memory
@@ -47,6 +46,11 @@ struct ProjectFile
     // currently open documents don't use this!
     KDevelop::IndexedString indexedUrl;
 };
+
+inline bool operator<(const ProjectFile& left, const ProjectFile& right)
+{
+    return left.pathOrUrl < right.pathOrUrl;
+}
 
 Q_DECLARE_TYPEINFO(ProjectFile, Q_MOVABLE_TYPE);
 
@@ -115,7 +119,7 @@ private:
     // project files sorted by their url
     // this is done so we can limit ourselves to a relatively fast
     // filtering without any expensive sorting in reset().
-    QMap<QString, ProjectFile> m_projectFiles;
+    QList<ProjectFile> m_projectFiles;
 };
 
 /**

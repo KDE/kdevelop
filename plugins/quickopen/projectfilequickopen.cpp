@@ -41,6 +41,44 @@
 
 using namespace KDevelop;
 
+namespace {
+
+QSet<IndexedString> openFiles()
+{
+    QSet<IndexedString> openFiles;
+    const QList<IDocument*>& docs = ICore::self()->documentController()->openDocuments();
+    openFiles.reserve(docs.size());
+    foreach( IDocument* doc, docs ) {
+        openFiles << IndexedString(doc->url().pathOrUrl());
+    }
+    return openFiles;
+}
+
+QSet<QString> openFilesPathsOrUrls()
+{
+    QSet<QString> openFiles;
+    const QList<IDocument*>& docs = ICore::self()->documentController()->openDocuments();
+    openFiles.reserve(docs.size());
+    foreach( IDocument* doc, docs ) {
+        openFiles << doc->url().pathOrUrl();
+    }
+    return openFiles;
+}
+
+QString iconNameForUrl(const IndexedString& url)
+{
+    if (url.isEmpty()) {
+        return QString("tab-duplicate");
+    }
+    ProjectBaseItem* item = ICore::self()->projectController()->projectModel()->itemForUrl(url);
+    if (item) {
+        return item->iconName();
+    }
+    return QString("unknown");
+}
+
+}
+
 ProjectFileData::ProjectFileData( const ProjectFile& file )
 : m_file(file)
 {
@@ -135,18 +173,6 @@ QWidget* ProjectFileData::expandingWidget() const
     }
 
     return 0;
-}
-
-static QString iconNameForUrl(const IndexedString& url)
-{
-    if (url.isEmpty()) {
-        return QString("tab-duplicate");
-    }
-    ProjectBaseItem* item = ICore::self()->projectController()->projectModel()->itemForUrl(url);
-    if (item) {
-        return item->iconName();
-    }
-    return QString("unknown");
 }
 
 QIcon ProjectFileData::icon() const
@@ -264,57 +290,36 @@ void ProjectFileDataProvider::fileAddedToSet( IProject* project, const IndexedSt
     f.projectUrl = project->folder();
     f.pathOrUrl = url.str();
     f.indexedUrl = url;
-    m_projectFiles.insert(f.pathOrUrl, f);
+    QList<ProjectFile>::iterator it = qLowerBound(m_projectFiles.begin(), m_projectFiles.end(), f);
+    if (it == m_projectFiles.end() || it->pathOrUrl != f.pathOrUrl) {
+        m_projectFiles.insert(it, f);
+    }
 }
 
 void ProjectFileDataProvider::fileRemovedFromSet( IProject*, const IndexedString& url )
 {
-    m_projectFiles.remove(url.str());
-}
-
-namespace
-{
-QSet<IndexedString> openFiles()
-{
-    QSet<IndexedString> openFiles;
-    const QList<IDocument*>& docs = ICore::self()->documentController()->openDocuments();
-    openFiles.reserve(docs.size());
-    foreach( IDocument* doc, docs ) {
-        openFiles << IndexedString(doc->url().pathOrUrl());
+    ProjectFile item;
+    item.pathOrUrl = url.str();
+    QList<ProjectFile>::iterator it = qBinaryFind(m_projectFiles.begin(), m_projectFiles.end(), item);
+    if (it != m_projectFiles.end()) {
+        m_projectFiles.erase(it);
     }
-    return openFiles;
-}
-
-QSet<QString> openFilesPathsOrUrls()
-{
-    QSet<QString> openFiles;
-    const QList<IDocument*>& docs = ICore::self()->documentController()->openDocuments();
-    openFiles.reserve(docs.size());
-    foreach( IDocument* doc, docs ) {
-        openFiles << doc->url().pathOrUrl();
-    }
-    return openFiles;
-}
-
-bool sortProjectFiles(const ProjectFile& left, const ProjectFile& right)
-{
-    return left.pathOrUrl < right.pathOrUrl;
-}
 }
 
 void ProjectFileDataProvider::reset()
 {
     Base::clearFilter();
 
-    QSet<QString> openFiles = openFilesPathsOrUrls();
-    QList<ProjectFile> projectFiles;
-    projectFiles.reserve(m_projectFiles.size());
+    QList<ProjectFile> projectFiles = m_projectFiles;
 
-    for(QMap<QString, ProjectFile>::const_iterator it = m_projectFiles.constBegin();
-        it != m_projectFiles.constEnd(); ++it)
+    const QSet<QString>& openFiles = openFilesPathsOrUrls();
+    for(QList<ProjectFile>::iterator it = projectFiles.begin();
+        it != projectFiles.end();)
     {
-        if (!openFiles.contains(it.key())) {
-            projectFiles << *it;
+        if (openFiles.contains(it->pathOrUrl)) {
+            it = projectFiles.erase(it);
+        } else {
+            ++it;
         }
     }
 
@@ -350,7 +355,7 @@ void OpenFilesDataProvider::reset()
         currentFiles << f;
     }
 
-    qSort(currentFiles.begin(), currentFiles.end(), sortProjectFiles);
+    qSort(currentFiles);
 
     setItems(currentFiles);
 }
