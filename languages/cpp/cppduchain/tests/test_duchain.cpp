@@ -3173,13 +3173,28 @@ void TestDUChain::testConstructorUses()
 
     QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 2);
 
-    ///@todo Make these work! (ExpressionVisitor::buildParametersFromDeclaration)
-    #if 0
-    QCOMPARE(top->childContexts()[0]->localDeclarations()[0].uses().size(), 1);
-    QCOMPARE(top->childContexts()[0]->localDeclarations()[1].uses().size(), 1);
-    #endif
-
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().size(), 1);
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().size(), 1);
   }
+
+  {
+    // also see https://bugs.kde.org/show_bug.cgi?id=300347
+    const QByteArray text = "struct B { B(); }; void test() { B a; B b(); }";
+    LockedTopDUContext top = parse(text, DumpAll);
+    QCOMPARE(top->childContexts().size(), 3);
+    QCOMPARE(top->childContexts()[2]->localDeclarations().size(), 2);
+
+    QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 1);
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().begin()->size(), 2);
+
+    // Grab first use of B(), 'B a' => range points to position after 'a', start == end
+    RangeInRevision range = top->childContexts()[0]->localDeclarations()[0]->uses().begin().value()[0];
+    QCOMPARE(range, RangeInRevision(0, 36, 0, 36));
+    // Grab second use of B(), 'B b()' => range points to '('
+    range = top->childContexts()[0]->localDeclarations()[0]->uses().begin().value()[1];
+    QCOMPARE(range, RangeInRevision(0, 41, 0, 42));
+  }
+
   {
     // NOTE: This test is currently broken because only the 2nd case is reported.
     QByteArray text;

@@ -1148,18 +1148,22 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
       bool fail = true;
 
-      size_t token = node->start_token;
+      size_t start_token = node->start_token;
       //NOTE: we might have an initializer in a class for pure virtual methods,
       //      but we just ignore that. See also TestDUChain::testForwardDeclaration4
-      if(node->initializer && m_currentContext->type() != DUContext::Class)
+      if(m_currentContext->type() != DUContext::Class)
       {
-        if(node->initializer->expression && !node->initializer->initializer_clause)
+        if (!node->initializer) {
+          // No InitializerAST => Default-initialization (e.g. '{ A a; }')
+          start_token = node->end_token;
+          fail = false;
+        } else if(node->initializer->expression && !node->initializer->initializer_clause)
         {
-          token = node->initializer->start_token;
+          start_token = node->initializer->start_token;
           fail = !buildParametersFromExpression(node->initializer->expression);
         } else if(!node->initializer->expression && node->initializer->initializer_clause && constructedType)
         { // report operator= use in i.e.: foo = bar;
-          token = node->initializer->start_token;
+          start_token = node->initializer->start_token;
           fail = !buildParametersFromExpression(node->initializer->initializer_clause);
           declarations.clear();
           LOCKDUCHAIN;
@@ -1174,7 +1178,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
           }
         } else if (!node->initializer->expression && !node->initializer->initializer_clause) {
           // ctor without parameters, i.e.: foo();
-          token = node->initializer->start_token;
+          start_token = node->initializer->start_token;
           fail = false;
         }
       }
@@ -1202,7 +1206,10 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       }
 
       if(chosenFunction) {
-        newUse( node , token, token+1, chosenFunction );
+        // if there's an InitializerAST, we let 'Show Uses' point to the opening bracket of the ctor call
+        // unfortunately for cases '{ A a; }', we don't have anything we can point to
+        const size_t end_token = start_token + (node->initializer ? 1 : 0);
+        newUse( node , start_token, end_token, chosenFunction );
         if(m_mapAst) session()->mapCallAstToType(node, chosenFunction->type<FunctionType>());
       }
     }else{
