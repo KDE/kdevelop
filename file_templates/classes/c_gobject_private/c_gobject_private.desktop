@@ -127,9 +127,6 @@ Name[uk]=Заголовок
 Name[x-test]=xxHeaderxx
 Name[zh_CN]=头文件
 Name[zh_TW]=標頭
-<<<<<<< HEAD
-=======
->>>>>>> 4.5
 File=class.h
 OutputFile={% for ns in namespaces %}{{ ns }}_{% endfor %}{{ name }}.h
 
