@@ -162,7 +162,7 @@ KDevelop::ContextMenuExtension GrepViewPlugin::contextMenuExtension(KDevelop::Co
 
 void GrepViewPlugin::showDialog(bool setLastUsed, QString pattern, bool showOptions)
 {
-    GrepDialog* dlg = new GrepDialog( this, core()->uiController()->activeMainWindow(), setLastUsed );
+    GrepDialog* dlg = new GrepDialog( this, core()->uiController()->activeMainWindow() );
     KDevelop::IDocument* doc = core()->documentController()->activeDocument();
     
     if(!pattern.isEmpty())

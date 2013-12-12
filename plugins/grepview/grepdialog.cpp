@@ -110,7 +110,7 @@ const int pathsMaxCount = 25;
 
 const KDialog::ButtonCode GrepDialog::SearchButton  = KDialog::User1;
 
-GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent, bool setLastUsed )
+GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
     : KDialog(parent), Ui::GrepWidget(), m_plugin( plugin )
 {
     setAttribute(Qt::WA_DeleteOnClose);
@@ -124,12 +124,6 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent, bool setLastUs
     setupUi(mainWidget());
 
     KConfigGroup cg = ICore::self()->activeSession()->config()->group( "GrepDialog" );
-    
-    // add default values when the most recent ones should not be set
-    if(!setLastUsed)
-    {
-        patternCombo->addItem( "" );
-    }
 
     patternCombo->addItems( cg.readEntry("LastSearchItems", QStringList()) );
     patternCombo->setInsertPolicy(QComboBox::InsertAtTop);
