@@ -304,12 +304,9 @@ void MainWindow::initialize()
     connect(Core::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), SLOT(updateCaption()), Qt::QueuedConnection);
     connect(Core::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*)), SLOT(updateCaption()), Qt::QueuedConnection);
     connect(Core::self()->documentController(), SIGNAL(documentUrlChanged(KDevelop::IDocument*)), SLOT(updateCaption()), Qt::QueuedConnection);
-    
-    connect(Core::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), SLOT(updateCaption()));
-    connect(Core::self()->projectController(), SIGNAL(projectClosed(KDevelop::IProject*)), SLOT(updateCaption()));
 
-    connect(Core::self()->sessionController()->activeSession(), SIGNAL(nameChanged(QString,QString)), SLOT(updateCaption()));
-    
+    connect(Core::self()->sessionController()->activeSession(), SIGNAL(sessionUpdated(KDevelop::ISession*)), SLOT(updateCaption()));
+
     updateCaption();
 }
 

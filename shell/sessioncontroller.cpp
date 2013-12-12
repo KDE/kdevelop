@@ -252,11 +252,6 @@ public:
                 (*it)->setCheckable(false);
         }
 
-        connect(Core::self()->projectController(), SIGNAL(projectClosed(KDevelop::IProject*)),
-                activeSession, SLOT(updateContainedProjects()));
-        connect(Core::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)),
-                activeSession, SLOT(updateContainedProjects()));
-
         return result;
     }
 
@@ -282,11 +277,14 @@ public:
         a->setText( s->description() );
         a->setCheckable( false );
         a->setData( s->id().toString() );
+
         sessionActions[s] = a;
         q->actionCollection()->addAction( "session_"+s->id().toString(), a );
         q->unplugActionList( "available_sessions" );
         q->plugActionList( "available_sessions", grp->actions() );
-        connect(s, SIGNAL(nameChanged(QString,QString)), SLOT(nameChanged()));
+
+        connect( s, SIGNAL(sessionUpdated(KDevelop::ISession*)), SLOT(sessionUpdated(KDevelop::ISession*)) );
+        sessionUpdated( s );
     }
 
     SessionController* q;
@@ -441,12 +439,10 @@ private slots:
         
         recoveryDirectoryIsOwn = true;
     }
-    
-    void nameChanged()
+
+    void sessionUpdated( KDevelop::ISession* s )
     {
-        Q_ASSERT(qobject_cast<Session*>(sender()));
-        Session* s = static_cast<Session*>(sender());
-        sessionActions[s]->setText( KStringHandler::rsqueeze(s->description()) );
+        sessionActions[static_cast<Session*>( s )]->setText( KStringHandler::rsqueeze(s->description()) );
     }
     
     void recoveryStorageTimeout()
@@ -540,14 +536,6 @@ private slots:
     }
 };
 
-
-void SessionController::updateSessionDescriptions()
-{
-    for(QHash< Session*, QAction* >::iterator it = d->sessionActions.begin(); it != d->sessionActions.end(); ++it) {
-        it.key()->updateDescription();
-        if (*it) (*it)->setText(KStringHandler::rsqueeze(it.key()->description()));
-    }
-}
 
 SessionController::SessionController( QObject *parent )
         : QObject( parent ), d(new SessionControllerPrivate(this))
@@ -643,10 +631,6 @@ void SessionController::initialize( const QString& session )
         }
     }
     loadDefaultSession( session );
-
-    connect(Core::self()->projectController(), SIGNAL(projectClosed(KDevelop::IProject*)), SLOT(updateSessionDescriptions()));
-    connect(Core::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), SLOT(updateSessionDescriptions()));
-    updateSessionDescriptions();
 }
 
 

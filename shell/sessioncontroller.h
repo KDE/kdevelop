@@ -160,8 +160,6 @@ Q_SIGNALS:
     void sessionLoaded( ISession* );
     void sessionDeleted( const QString& id);
     void quitSession();
-private slots:
-    void updateSessionDescriptions();
 private:
     Q_PRIVATE_SLOT( d, void newSession() )
     Q_PRIVATE_SLOT( d, void configureSessions() )

@@ -152,19 +152,17 @@ public:
         proj->projectConfiguration()->sync();
         m_configuringProject = 0;
     }
+
     void saveListOfOpenedProjects()
     {
-        KSharedConfig::Ptr config = Core::self()->activeSession()->config();
-        KConfigGroup group = config->group( "General Options" );
-    
         KUrl::List openProjects;
-    
+        openProjects.reserve( m_projects.size() );
+
         foreach( IProject* project, m_projects ) {
             openProjects.append(project->projectFileUrl());
         }
-    
-        group.writeEntry( "Open Projects", openProjects.toStringList() );
-        group.sync();
+
+        Core::self()->activeSession()->setContainedProjects( openProjects );
     }
 
     // Recursively collects builder dependencies for a project.
@@ -796,14 +794,7 @@ void ProjectController::projectImportingFinished( IProject* project )
     d->m_projectPlugins.insert( project, pluglist );
     d->m_projects.append( project );
 
-    if(!Core::self()->sessionController()->activeSession()->containedProjects().contains(project->projectFileUrl()))
-        d->saveListOfOpenedProjects();
-    
-//     KActionCollection * ac = d->m_core->uiController()->defaultMainWindow()->actionCollection();
-//     QAction * action;
-
-    //action = ac->action( "project_close" );
-    //action->setEnabled( true );
+    d->saveListOfOpenedProjects();
 
     if (Core::self()->setupFlags() != Core::NoUi)
     {

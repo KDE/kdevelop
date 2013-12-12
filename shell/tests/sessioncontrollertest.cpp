@@ -33,8 +33,6 @@
 #include "../session.h"
 #include "../uicontroller.h"
 
-Q_DECLARE_METATYPE( KDevelop::ISession* )
-
 using namespace KDevelop;
 
 using QTest::kWaitForSignal;
@@ -75,6 +73,7 @@ void SessionControllerTest::initTestCase()
     TestCore::initialize(Core::NoUi);
     m_core = Core::self();
     qRegisterMetaType<KDevelop::ISession*>();
+    qRegisterMetaType<KDevelop::Session*>();
 }
 
 void SessionControllerTest::init()
@@ -119,15 +118,10 @@ void SessionControllerTest::renameSession()
     KDevelop::Session *s = m_sessionCtrl->createSession( sessionName );
     QCOMPARE( sessionName, s->name() );
     verifySessionDir( s );
-    QSignalSpy spy(s, SIGNAL(nameChanged(QString,QString)));
+    QSignalSpy spy(s, SIGNAL(sessionUpdated(KDevelop::ISession*)));
     s->setName( newSessionName );
     QCOMPARE( newSessionName, s->name() );
-    
     QCOMPARE( spy.size(), 1 );
-    QList<QVariant> arguments = spy.takeFirst();
-
-    QCOMPARE( sessionName, arguments.at(1).toString() );
-    QCOMPARE( newSessionName, arguments.at(0).toString() );
 
     verifySessionDir( s );
 }
@@ -139,15 +133,10 @@ void SessionControllerTest::canRenameActiveSession()
     KDevelop::Session *s = m_sessionCtrl->createSession( sessionName );
     QCOMPARE( sessionName, s->name() );
     m_sessionCtrl->loadSession( sessionName );
-    QSignalSpy spy(s, SIGNAL(nameChanged(QString,QString)));
+    QSignalSpy spy(s, SIGNAL(sessionUpdated(KDevelop::ISession*)));
     s->setName( newSessionName );
     QCOMPARE( newSessionName, s->name() );
-    
     QCOMPARE( spy.size(), 1 );
-    QList<QVariant> arguments = spy.takeFirst();
-
-    QCOMPARE( sessionName, arguments.at(1).toString() );
-    QCOMPARE( newSessionName, arguments.at(0).toString() );
 
     verifySessionDir( s );
 }
