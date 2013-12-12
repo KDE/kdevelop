@@ -22,6 +22,7 @@
 #include <KDebug>
 #include <KLocalizedString>
 #include <KConfigGroup>
+#include <KStandardDirs>
 #include <interfaces/iproject.h>
 #include <outputview/outputmodel.h>
 #include <project/interfaces/ibuildsystemmanager.h>
@@ -44,7 +45,7 @@ NinjaJob::NinjaJob(KDevelop::ProjectBaseItem* item, const QStringList& arguments
     setFilteringStrategy( KDevelop::OutputModel::CompilerFilter );
     setProperties( NeedWorkingDirectory | PortableMessages | DisplayStderr | IsBuilderHint | PostProcessOutput );
 
-    *this << "ninja";
+    *this << ninjaBinary();
     *this << arguments;
 
     QStringList targets;
@@ -66,6 +67,15 @@ NinjaJob::NinjaJob(KDevelop::ProjectBaseItem* item, const QStringList& arguments
 void NinjaJob::setIsInstalling( bool isInstalling )
 {
     m_isInstalling = isInstalling;
+}
+
+QString NinjaJob::ninjaBinary()
+{
+    QString path = KStandardDirs::findExe("ninja-build");
+    if (path.isEmpty()) {
+        path = KStandardDirs::findExe("ninja");
+    }
+    return path;
 }
 
 KUrl NinjaJob::workingDirectory() const
