@@ -47,6 +47,35 @@
 K_PLUGIN_FACTORY(GrepViewFactory, registerPlugin<GrepViewPlugin>(); )
 K_EXPORT_PLUGIN(GrepViewFactory(KAboutData("kdevgrepview","kdevgrepview", ki18n("Find/Replace in Files"), "0.1", ki18n("Allows fast searching of multiple files using patterns or regular expressions. And allow to replace it too."), KAboutData::License_GPL)))
 
+static QString patternFromSelection(const KDevelop::IDocument* doc)
+{
+    if (!doc)
+        return QString();
+
+    QString pattern;
+    KTextEditor::Range range = doc->textSelection();
+    if( range.isValid() )
+    {
+        pattern = doc->textDocument()->text( range );
+    }
+    if( pattern.isEmpty() )
+    {
+        pattern = doc->textWord();
+    }
+
+    // Before anything, this removes line feeds from the
+    // beginning and the end.
+    int len = pattern.length();
+    if (len > 0 && pattern[0] == '\n')
+    {
+        pattern.remove(0, 1);
+        len--;
+    }
+    if (len > 0 && pattern[len-1] == '\n')
+        pattern.truncate(len-1);
+    return pattern;
+}
+
 GrepViewPlugin::GrepViewPlugin( QObject *parent, const QVariantList & )
     : KDevelop::IPlugin( GrepViewFactory::componentData(), parent ), m_currentJob(0)
 {
@@ -142,30 +171,7 @@ void GrepViewPlugin::showDialog(bool setLastUsed, QString pattern, bool showOpti
     }
     else if(!setLastUsed)
     {
-        QString pattern;
-        if( doc )
-        {
-            KTextEditor::Range range = doc->textSelection();
-            if( range.isValid() )
-            {
-                pattern = doc->textDocument()->text( range );
-            }
-            if( pattern.isEmpty() )
-            {
-                pattern = doc->textWord();
-            }
-        }
-
-        // Before anything, this removes line feeds from the
-        // beginning and the end.
-        int len = pattern.length();
-        if (len > 0 && pattern[0] == '\n')
-        {
-            pattern.remove(0, 1);
-            len--;
-        }
-        if (len > 0 && pattern[len-1] == '\n')
-            pattern.truncate(len-1);
+        QString pattern = patternFromSelection(doc);
         if (!pattern.isEmpty()) {
             dlg->setPattern( pattern );
         }
