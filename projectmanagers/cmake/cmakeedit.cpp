@@ -287,7 +287,7 @@ bool changesWidgetRemoveFileFromTarget(const ProjectBaseItem *item, ApplyChanges
     return followUses(widget->document(), targetRange, relative, lists, false, QString());
 }
 
-bool changesWidgetRemoveItems(const QList<ProjectBaseItem*> &items, ApplyChangesWidget *widget)
+bool changesWidgetRemoveItems(const QSet<ProjectBaseItem*> &items, ApplyChangesWidget *widget)
 {
     foreach(ProjectBaseItem *item, items)
     {

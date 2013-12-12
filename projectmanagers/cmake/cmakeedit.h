@@ -39,7 +39,7 @@ namespace CMakeEdit {
     QList<KDevelop::ProjectBaseItem*> cmakeListedItemsAffectedByItemsChanged(const QList<KDevelop::ProjectBaseItem*> &items);
 
     bool changesWidgetRemoveFilesFromTargets(const QList<KDevelop::ProjectFileItem*> &files, KDevelop::ApplyChangesWidget *widget);
-    bool changesWidgetRemoveItems(const QList<KDevelop::ProjectBaseItem*> &items, KDevelop::ApplyChangesWidget *widget);
+    bool changesWidgetRemoveItems(const QSet<KDevelop::ProjectBaseItem*>& items, KDevelop::ApplyChangesWidget* widget);
     bool changesWidgetAddFolder(const KUrl &folderUrl, const CMakeFolderItem *toFolder, KDevelop::ApplyChangesWidget *widget);
     bool changesWidgetRemoveCMakeFolder(const CMakeFolderItem *folder, KDevelop::ApplyChangesWidget *widget);
     bool changesWidgetAddFolder(const KUrl &folderUrl, const CMakeFolderItem *toFolder, KDevelop::ApplyChangesWidget *widget);
