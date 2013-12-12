@@ -20,7 +20,6 @@
 #include "ninjajob.h"
 #include <KAboutData>
 #include <KPluginFactory>
-#include <KStandardDirs>
 #include <KDebug>
 #include <KConfigGroup>
 #include <KShell>
@@ -43,7 +42,7 @@ KDevNinjaBuilderPlugin::KDevNinjaBuilderPlugin(QObject* parent, const QVariantLi
 
 bool KDevNinjaBuilderPlugin::hasError() const
 {
-    return KStandardDirs::findExe("ninja").isEmpty();
+    return NinjaJob::ninjaBinary().isEmpty();
 }
 
 static QStringList targetsInFolder(KDevelop::ProjectFolderItem* item)
