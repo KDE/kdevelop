@@ -115,13 +115,16 @@ protected:
     virtual KDevelop::ProjectFileItem* createFileItem(KDevelop::IProject* project, const KUrl& url, KDevelop::ProjectBaseItem* parent);
     virtual KDevelop::ProjectFolderItem* createFolderItem(KDevelop::IProject* project, const KUrl& url, KDevelop::ProjectBaseItem* parent = 0);
 
+private slots:
+    void reloadMakefile(KDevelop::ProjectFileItem *item);
+
 private:
     /**
      * Initialize targets by reading Makefile in @arg dir
      * @return Target lists in Makefile at @arg dir.
      */
     QStringList parseCustomMakeFile( const KUrl &makefile );
-
+    void createTargetItems(KDevelop::IProject* project, const KUrl& url, KDevelop::ProjectBaseItem* parent);
 private:
     class Private;
     Private *d;

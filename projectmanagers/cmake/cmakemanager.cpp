@@ -588,7 +588,6 @@ bool CMakeManager::removeFilesAndFolders(const QList<KDevelop::ProjectBaseItem*>
     foreach(ProjectBaseItem* item, items)
     {
         Q_ASSERT(item->folder() || item->file());
-        Q_ASSERT(!item->file() || !item->file()->parent()->target());
 
         urls += item->url();
         if(!p)
@@ -600,7 +599,7 @@ bool CMakeManager::removeFilesAndFolders(const QList<KDevelop::ProjectBaseItem*>
     changesWidget.setCaption(DIALOG_CAPTION);
     changesWidget.setInformation(i18n("Remove files and folders from CMakeLists as follows:"));
 
-    bool cmakeSuccessful = changesWidgetRemoveItems(cmakeListedItemsAffectedByItemsChanged(items), &changesWidget);
+    bool cmakeSuccessful = changesWidgetRemoveItems(cmakeListedItemsAffectedByItemsChanged(items).toSet(), &changesWidget);
 
     if (changesWidget.hasDocuments() && cmakeSuccessful)
         cmakeSuccessful &= changesWidget.exec() && changesWidget.applyAllChanges();
