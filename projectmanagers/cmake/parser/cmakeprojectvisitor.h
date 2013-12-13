@@ -175,7 +175,6 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         QStringList theValue(const QString& exp, const IntPair& p) const;
         
         void defineTarget(const QString& id, const QStringList& sources, Target::Type t);
-        int notImplemented(const QString& n) const;
         bool haveToFind(const QString &varName);
         void createDefinitions(const CMakeAst* ast);
         void createUses(const CMakeFunctionDesc& ast);

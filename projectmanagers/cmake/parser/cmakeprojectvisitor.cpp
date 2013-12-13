@@ -256,12 +256,6 @@ QStringList CMakeProjectVisitor::resolveVariable(const CMakeFunctionArgument &ex
     return ret;
 }
 
-int CMakeProjectVisitor::notImplemented(const QString &name) const
-{
-    kDebug(9042) << "not implemented!" << name;
-    return 1;
-}
-
 bool CMakeProjectVisitor::hasMacro(const QString& name) const
 {
     Q_ASSERT(m_macros);
