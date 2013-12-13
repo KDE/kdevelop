@@ -80,6 +80,7 @@ QString EnvironmentSelectionWidget::currentProfile() const
 void EnvironmentSelectionWidget::setCurrentProfile( const QString& profile )
 {
     d->comboBox->setCurrentIndex( d->comboBox->findData( profile, Qt::EditRole ) );
+    emit currentProfileChanged(profile);
 }
 
 void EnvironmentSelectionWidget::reconfigure()

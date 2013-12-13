@@ -40,7 +40,7 @@ namespace KDevelop
 class KDEVPLATFORMUTIL_EXPORT EnvironmentSelectionWidget : public QWidget
 {
     Q_OBJECT
-    Q_PROPERTY( QString currentProfile READ currentProfile WRITE setCurrentProfile USER true )
+    Q_PROPERTY( QString currentProfile READ currentProfile WRITE setCurrentProfile NOTIFY currentProfileChanged USER true )
 
 public:
     explicit EnvironmentSelectionWidget( QWidget *parent = 0 );
@@ -75,6 +75,9 @@ public slots:
      * Makes the widget re-read its environment group list.
      */
     void reconfigure();
+
+Q_SIGNALS:
+    void currentProfileChanged(const QString& currentProfile);
 
 private:
     struct EnvironmentSelectionWidgetPrivate* const d;
