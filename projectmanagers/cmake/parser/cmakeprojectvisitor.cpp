@@ -2357,7 +2357,7 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line, bool isClea
             KSharedPtr<Problem> p(new Problem);
             p->setDescription(i18n("%1 is a deprecated command and should not be used", func.name));
             p->setRange(it->nameRange());
-            p->setFinalLocation(DocumentRange(url, KDevelop::RangeInRevision(it->nameRange().start, it->nameRange().end).castToSimpleRange()));
+            p->setFinalLocation(DocumentRange(url, it->nameRange().castToSimpleRange()));
             m_topctx->addProblem(p);
         }
         element->setContent(fc, line);
