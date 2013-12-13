@@ -201,6 +201,7 @@ KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
     connect(w, SIGNAL(fileChanged(QString)), SLOT(dirtyFile(QString)));
     connect(w, SIGNAL(directoryChanged(QString)), SLOT(directoryChanged(QString)));
     m_watchers[project] = w;
+    kDebug(9042) << "Added watcher for project " << project << project->name();
     m_filter->add(project);
     
     KUrl cachefile=CMake::currentBuildDir(project);
@@ -844,6 +845,8 @@ void CMakeManager::projectClosing(IProject* p)
     delete m_watchers.take(p);
 
     m_filter->remove(p);
+
+    kDebug(9042) << "Project closed" << p;
 }
 
 QStringList CMakeManager::processGeneratorExpression(const QStringList& expr, IProject* project, ProjectTargetItem* target) const
@@ -874,7 +877,12 @@ CMakeFolderItem* CMakeManager::takePending(const KUrl& url)
 
 void CMakeManager::addWatcher(IProject* p, const QString& path)
 {
-    m_watchers[p]->addPath(path);
+    if (QFileSystemWatcher* watcher = m_watchers.value(p)) {
+        watcher->addPath(path);
+    } else {
+        kWarning() << "Could not find a watcher for project" << p << p->name() << ", path " << path;
+        Q_ASSERT(false);
+    }
 }
 
 CMakeProjectData CMakeManager::projectData(IProject* project)
