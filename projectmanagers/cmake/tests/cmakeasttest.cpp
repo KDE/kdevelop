@@ -792,7 +792,6 @@ void CMakeAstTest::testCustomCommandGoodParse_data()
     QStringList argList;
     argList << "OUTPUT" << "foo" << "COMMAND" << "bar";
     func.addArguments( argList );
-    func.filePath = QString();
     func.line = 0;
 
     CMakeFunctionDesc func1;
@@ -841,7 +840,6 @@ void CMakeAstTest::testCustomCommandBadParse_data()
     QTest::addColumn<CMakeFunctionDesc>( "function" );
     CMakeFunctionDesc func;
     func.name = "foo";
-    func.filePath = QString();
     func.line = 0;
 
     CMakeFunctionDesc func_noargs;
@@ -852,32 +850,11 @@ void CMakeAstTest::testCustomCommandBadParse_data()
     QStringList argList2;
     argList2 << "nottarget" << "foo" << "notcommand" << "foo1";
     func2.addArguments( argList2 );
-    func2.filePath = QString();
     func2.line = 0;
 
-    CMakeFunctionDesc func3;
-    func3.name = "add_custom_command";
-    QStringList argList3;
-    argList3 << "target" << "foo" << "no_pre_build" << "foo1";
-    func3.addArguments( argList3 );
-    func3.filePath = QString();
-    func3.line = 0;
-
-    CMakeFunctionDesc func4;
-    func4.name = "add_custom_command";
-    QStringList argList4;
-    argList4 << "output" << "foo1" << "no_command" << "foo2";
-    func4.addArguments( argList4 );
-    func4.filePath = QString();
-    func4.line = 0;
-
-    CMakeFunctionDesc func5;
-    func3.name = "add_custom_command";
-    QStringList argList5;
-    argList5 << "target" << "foo" << "PRE_BUILD" << "no_command";
-    func5.addArguments( argList5 );
-    func5.filePath = QString();
-    func5.line = 0;
+    CMakeFunctionDesc func3("add_custom_command", QStringList("target") << "foo" << "no_pre_build" << "foo1");
+    CMakeFunctionDesc func4("add_custom_command", QStringList("output") << "foo1" << "no_command" << "foo2");
+    CMakeFunctionDesc func5("add_custom_command", QStringList("target") << "foo" << "PRE_BUILD" << "no_command");
 
     QTest::newRow( "wrong function" ) << func;
     QTest::newRow( "right function. no args" ) << func_noargs;

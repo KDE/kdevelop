@@ -197,6 +197,8 @@ bool CMakeListsParser::readCMakeFunction(cmListFileLexer *lexer, CMakeFunctionDe
 
 CMakeFunctionDesc::CMakeFunctionDesc(const QString& name, const QStringList& args)
     : name(name)
+    , line(0)
+    , endLine(0)
 {
     addArguments(args);
 }
