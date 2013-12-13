@@ -2343,9 +2343,6 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line, bool isClea
         
         CMakeAst* element = AstFactory::self()->createAst(it->name);
 
-        if(!element)
-            element = new MacroCallAst;
-
         createUses(*it);
 //         kDebug(9042) << "resolving:" << it->writeBack();
             
