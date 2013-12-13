@@ -94,18 +94,23 @@ QString CMakeFunctionDesc::writeBack() const
     return output;
 }
 
-CMakeFileContent CMakeListsParser::readCMakeFile(const QString & fileName)
+CMakeFileContent CMakeListsParser::readCMakeFile(const QString & _fileName)
 {
     cmListFileLexer* lexer = cmListFileLexer_New();
     if ( !lexer )
         return CMakeFileContent();
-    if ( !cmListFileLexer_SetFileName( lexer, qPrintable( fileName ) ) ) {
-        kDebug(9042) << "cmake read error. could not read " << fileName;
+    if ( !cmListFileLexer_SetFileName( lexer, qPrintable( _fileName ) ) ) {
+        kDebug(9042) << "cmake read error. could not read " << _fileName;
         cmListFileLexer_Delete(lexer);
         return CMakeFileContent();
     }
 
     CMakeFileContent ret;
+    KUrl u = KUrl::fromLocalFile(_fileName);
+    u.cleanPath();
+    QString fileName = u.toLocalFile();
+
+
     bool readError = false, haveNewline = true;
     cmListFileLexer_Token* token;
 

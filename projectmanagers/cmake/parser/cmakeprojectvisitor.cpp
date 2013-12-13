@@ -810,10 +810,9 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
     return 1;
 }
 
-KDevelop::ReferencedTopDUContext CMakeProjectVisitor::createContext(const KUrl& path, ReferencedTopDUContext aux,
+KDevelop::ReferencedTopDUContext CMakeProjectVisitor::createContext(const IndexedString& idxpath, ReferencedTopDUContext aux,
                                                                     int endl ,int endc, bool isClean)
 {
-    const IndexedString idxpath(path);
     DUChainWriteLocker lock(DUChain::lock());
     KDevelop::ReferencedTopDUContext topctx=DUChain::self()->chainForDocument(idxpath);
     
@@ -2300,10 +2299,10 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line, bool isClea
         return 0;
     
     ReferencedTopDUContext aux=m_topctx;
-    KUrl url(fc[0].filePath);
-    url.cleanPath();
+
+    IndexedString url(fc.first().filePath);
     
-    if(!m_topctx || m_topctx->url().toUrl()!=url)
+    if(!m_topctx || m_topctx->url()!=url)
     {
         kDebug(9042) << "Creating a context for" << url;
         m_topctx=createContext(url, aux ? aux : m_parentCtx, fc.last().endLine-1, fc.last().endColumn-1, isClean);
@@ -2322,15 +2321,11 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line, bool isClea
     {
         Q_ASSERT( line<fc.count() );
         Q_ASSERT( line>=0 );
-//         kDebug(9042) << "@" << line;
-
         Q_ASSERT( *it == fc[line] );
-//         kDebug(9042) << "At line" << line << "/" << fc.count();
 
         RecursivityType r = recursivity(it->name);
         if(r==End || r==Break || r==Return || m_hitBreak || m_hitReturn)
         {
-//             kDebug(9042) << "Found an end." << func.writeBack();
             m_backtrace.pop();
             m_topctx=aux;
             
@@ -2352,7 +2347,7 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line, bool isClea
         if(!correct)
         {
             kDebug(9042) << "error! found an error while processing" << func.writeBack() << "was" << it->writeBack() << endl
-                << " at" << func.filePath << ":" << func.line << endl;
+                << " at" << url << ":" << func.line << endl;
             //FIXME: Should avoid to run?
         }
         
@@ -2362,7 +2357,7 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line, bool isClea
             KSharedPtr<Problem> p(new Problem);
             p->setDescription(i18n("%1 is a deprecated command and should not be used", func.name));
             p->setRange(it->nameRange());
-            p->setFinalLocation(DocumentRange(IndexedString(url), KDevelop::RangeInRevision(it->nameRange().start, it->nameRange().end).castToSimpleRange()));
+            p->setFinalLocation(DocumentRange(url, KDevelop::RangeInRevision(it->nameRange().start, it->nameRange().end).castToSimpleRange()));
             m_topctx->addProblem(p);
         }
         element->setContent(fc, line);
@@ -2380,7 +2375,7 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line, bool isClea
             KSharedPtr<Problem> p(new Problem);
             p->setDescription(i18n("Unfinished function. "));
             p->setRange(it->nameRange());
-            p->setFinalLocation(DocumentRange(IndexedString(url), KDevelop::RangeInRevision(fc.first().range().start, fc.last().range().end).castToSimpleRange()));
+            p->setFinalLocation(DocumentRange(url, KDevelop::RangeInRevision(fc.first().range().start, fc.last().range().end).castToSimpleRange()));
             
             DUChainWriteLocker lock(DUChain::lock());
             m_topctx->addProblem(p);
