@@ -11,7 +11,7 @@ set(completion_SRCS
 
 kde4_add_library(kdevqmljscompletion SHARED ${completion_SRCS})
 
-target_link_libraries(kdevqmljscompletion
+target_link_libraries(kdevqmljscompletion LINK_PRIVATE
     ${KDE4_KDECORE_LIBS}
     ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
     ${KDEVPLATFORM_INTERFACES_LIBRARIES}

@@ -115,6 +115,11 @@ kde4_add_library(kdevqtc-qmlsupport SHARED
 # 	utils/unixutils.cpp
 # 	utils/wizard.cpp
 )
-target_link_libraries(kdevqtc-qmlsupport ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTSCRIPT_LIBRARY} ${QT_QTNETWORK_LIBRARY})
+target_link_libraries(kdevqtc-qmlsupport LINK_PRIVATE
+    ${QT_QTCORE_LIBRARY}
+    ${QT_QTGUI_LIBRARY}
+    ${QT_QTSCRIPT_LIBRARY}
+    ${QT_QTNETWORK_LIBRARY}
+)
 
 install(TARGETS kdevqtc-qmlsupport ${INSTALL_TARGETS_DEFAULT_ARGS} )

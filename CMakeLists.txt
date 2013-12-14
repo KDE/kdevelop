@@ -6,7 +6,7 @@ set(VERSION_PATCH 60)
 # KDevplatform dependency version
 set( KDEVPLATFORM_VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}" )
 
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8.9)
 
 find_package(KDE4 REQUIRED)
 find_package(KDevPlatform ${KDEVPLATFORM_VERSION} REQUIRED)

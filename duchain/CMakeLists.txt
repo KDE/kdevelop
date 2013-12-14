@@ -9,13 +9,11 @@ kde4_add_library(kdevqmljsduchain SHARED
     debugvisitor.cpp
 )
 
-target_link_libraries(kdevqmljsduchain
+target_link_libraries(kdevqmljsduchain LINK_PRIVATE
     ${QT_QTCORE_LIBRARY}
-    ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-    kdevqtc-qmlsupport
 )
 
-target_link_libraries(kdevqmljsduchain LINK_INTERFACE_LIBRARIES
+target_link_libraries(kdevqmljsduchain LINK_PUBLIC
     ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
     kdevqtc-qmlsupport
 )
