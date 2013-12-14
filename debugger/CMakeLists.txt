@@ -23,16 +23,16 @@ set( kdevplatformdebugger_LIB_SRCS
     framestack/framestackwidget.cpp
 )
 kde4_add_library(kdevplatformdebugger SHARED ${kdevplatformdebugger_LIB_SRCS})
-target_link_libraries(kdevplatformdebugger
-        kdevplatforminterfaces
-        kdevplatformutil
-        ${QT_QTCORE_LIBRARY} 
-        ${KDE4_KDEUI_LIBS}
-        ${KDE4_KTEXTEDITOR_LIBS}
-    )
-target_link_libraries(kdevplatformdebugger LINK_INTERFACE_LIBRARIES 
-        kdevplatforminterfaces
-        kdevplatformutil)
+target_link_libraries(kdevplatformdebugger LINK_PUBLIC
+    kdevplatforminterfaces
+    kdevplatformutil
+)
+target_link_libraries(kdevplatformdebugger LINK_PRIVATE
+    ${QT_QTCORE_LIBRARY}
+    ${KDE4_KDEUI_LIBS}
+    ${KDE4_KTEXTEDITOR_LIBS}
+)
+
 set_target_properties(kdevplatformdebugger PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
 install(TARGETS kdevplatformdebugger EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
 

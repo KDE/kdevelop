@@ -21,13 +21,15 @@ set(kdevplatformproject_LIB_SRCS
 
 
 kde4_add_library(kdevplatformproject SHARED ${kdevplatformproject_LIB_SRCS})
-target_link_libraries(kdevplatformproject
-        kdevplatforminterfaces
-        kdevplatformutil
-        kdevplatformlanguage
-        ${KDE4_KIO_LIBS})
-target_link_libraries(kdevplatformproject LINK_INTERFACE_LIBRARIES
-        kdevplatforminterfaces)
+target_link_libraries(kdevplatformproject LINK_PUBLIC
+    kdevplatforminterfaces
+)
+target_link_libraries(kdevplatformproject LINK_PRIVATE
+    kdevplatforminterfaces
+    kdevplatformutil
+    kdevplatformlanguage
+    ${KDE4_KIO_LIBS}
+)
 set_target_properties(kdevplatformproject PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
 install(TARGETS kdevplatformproject EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
 

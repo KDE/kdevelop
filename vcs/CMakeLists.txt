@@ -47,19 +47,17 @@ set(kdevplatformvcs_LIB_SRCS
 
 kde4_add_ui_files(kdevplatformvcs_LIB_SRCS ${kdevplatformvcs_UIS})
 kde4_add_library(kdevplatformvcs SHARED ${kdevplatformvcs_LIB_SRCS})
-target_link_libraries(kdevplatformvcs 
+target_link_libraries(kdevplatformvcs LINK_PUBLIC
+    kdevplatformoutputview
+    kdevplatforminterfaces
+)
+target_link_libraries(kdevplatformvcs LINK_PRIVATE
     ${KDE4_KIO_LIBS}
     ${KDE4_KPARTS_LIBS}
-    kdevplatforminterfaces 
     kdevplatformutil
     kdevplatformproject
     kdevplatformlanguage
-    kdevplatformoutputview
 )
-# add kdevplatform* when they're exported targets
-target_link_libraries(kdevplatformvcs LINK_INTERFACE_LIBRARIES 
-    kdevplatformoutputview
-    kdevplatforminterfaces)
 set_target_properties(kdevplatformvcs PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
 install(TARGETS kdevplatformvcs EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
 

@@ -12,8 +12,7 @@ set(KDEVPLATFORM_LIB_SOVERSION 8)
 
 ################################################################################
 
-cmake_minimum_required(VERSION 2.8)
-
+cmake_minimum_required(VERSION 2.8.9)
 project(KDevPlatform)
 
 set(KDE4_BUILD_TESTS "ON" CACHE "BOOL" "Enable building of tests" FORCE )
