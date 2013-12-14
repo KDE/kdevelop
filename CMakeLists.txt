@@ -33,6 +33,10 @@ include_directories(
 add_definitions(-DQT_CREATOR) # :D
 add_definitions(-DQML_BUILD_STATIC_LIB=0 -DQMLJS_BUILD_DIR)
 
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+endif()
+
 add_subdirectory(libs)
 add_subdirectory(duchain)
 add_subdirectory(tests)
