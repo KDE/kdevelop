@@ -220,8 +220,7 @@ void DebugSession::_gdbStateChanged(DBGStateFlags oldState, DBGStateFlags newSta
     }
 
     // And now? :-)
-    kDebug(9012) << "Debugger state: " << newState << ": ";
-    kDebug(9012) << "   " << message;
+    kDebug(9012) << "state: " << newState << message;
 
     if (!message.isEmpty())
         emit showMessage(message, 3000);
