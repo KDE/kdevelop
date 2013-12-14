@@ -31,7 +31,9 @@ endif(BUILD_qmake_parser)
 #       Its only purpose is to support the plugin without needing to add all source files
 #       to the plugin target
 kde4_add_library( kdev4qmakeparser SHARED ${parser_STAT_SRCS} ${parser_GEN_SRCS})
-target_link_libraries(kdev4qmakeparser ${KDE4_KDECORE_LIBS})
+target_link_libraries(kdev4qmakeparser LINK_PRIVATE
+    ${KDE4_KDECORE_LIBS}
+)
 
 install(TARGETS kdev4qmakeparser ${INSTALL_TARGETS_DEFAULT_ARGS})
 
