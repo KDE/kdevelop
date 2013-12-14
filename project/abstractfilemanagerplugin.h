@@ -110,6 +110,9 @@ Q_SIGNALS:
     void fileRemoved(KDevelop::ProjectFileItem* file);
     void fileRenamed(const KUrl& oldFile, KDevelop::ProjectFileItem* newFile);
 
+    void reloadedFileItem(KDevelop::ProjectFileItem* file);
+    void reloadedFolderItem(KDevelop::ProjectFolderItem* folder);
+
 private:
     struct Private;
 //     friend class Private;

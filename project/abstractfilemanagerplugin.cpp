@@ -212,6 +212,7 @@ void AbstractFileManagerPlugin::Private::addJobItems(FileManagerListJob* job,
                     //no need to add this item, but we still want to recurse into it
                     job->addSubDir( f );
                 }
+                emit q->reloadedFolderItem( f );
             }
         } else if ( ProjectFileItem* f =  baseItem->child(j)->file() ) {
             // check if this is still a valid file
@@ -224,6 +225,7 @@ void AbstractFileManagerPlugin::Private::addJobItems(FileManagerListJob* job,
             } else {
                 // this file already exists in the view
                 files.removeAt( index );
+                emit q->reloadedFileItem( f );
             }
         }
     }
