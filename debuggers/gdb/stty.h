@@ -61,7 +61,6 @@ private:
 
 private:
     int fout;
-    int ferr;
     QSocketNotifier *out;
     QString ttySlave;
     QString m_lastError;

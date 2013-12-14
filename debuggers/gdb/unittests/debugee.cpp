@@ -24,7 +24,7 @@ void foo() {
     noop();
     noop();
 }
-int main(int argc, char **argv) {
+int main() {
     std::cout << "Hello, world!" << std::endl;
     foo();
     foo();

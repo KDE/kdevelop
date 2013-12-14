@@ -984,14 +984,12 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg, IExecutePlu
 
 
     // Configuration values
-    bool    config_forceBPSet_ = grp.readEntry( GDBDebugger::allowForcedBPEntry, true );
     bool    config_displayStaticMembers_ = grp.readEntry( GDBDebugger::staticMembersEntry, false );
     bool    config_asmDemangle_ = grp.readEntry( GDBDebugger::demangleNamesEntry, true );
     KUrl config_dbgShell_ = grp.readEntry( GDBDebugger::debuggerShellEntry, KUrl() );
     KUrl config_configGdbScript_ = grp.readEntry( GDBDebugger::remoteGdbConfigEntry, KUrl() );
     KUrl config_runShellScript_ = grp.readEntry( GDBDebugger::remoteGdbShellEntry, KUrl() );
     KUrl config_runGdbScript_ = grp.readEntry( GDBDebugger::remoteGdbRunEntry, KUrl() );
-    int config_outputRadix_ = 10;
     
     Q_ASSERT(iface);
     bool config_useExternalTerminal = iface->useTerminal( cfg );

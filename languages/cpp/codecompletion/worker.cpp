@@ -44,7 +44,7 @@ KDevelop::CodeCompletionContext* CodeCompletionWorker::createCompletionContext(K
   return new Cpp::CodeCompletionContext( context, contextText, followingText, position );
 }
 
-void CodeCompletionWorker::updateContextRange(KTextEditor::Range& contextRange, KTextEditor::View* view, DUContextPointer context) const
+void CodeCompletionWorker::updateContextRange(KTextEditor::Range& contextRange, KTextEditor::View*, DUContextPointer context) const
 {
   if(context && context->owner() && context->owner()->type<FunctionType>()) {
     if(!context->owner()->type<FunctionType>()->returnType()) {

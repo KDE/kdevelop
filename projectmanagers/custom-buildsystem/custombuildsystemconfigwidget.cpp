@@ -170,7 +170,7 @@ void CustomBuildSystemConfigWidget::saveConfig( KConfigGroup& grp, CustomBuildSy
     }
 }
 
-void CustomBuildSystemConfigWidget::saveTo( KConfig* cfg, KDevelop::IProject* project )
+void CustomBuildSystemConfigWidget::saveTo( KConfig* cfg, KDevelop::IProject* /*project*/ )
 {
     KConfigGroup subgrp = cfg->group( ConfigConstants::customBuildSystemGroup );
     subgrp.deleteGroup();

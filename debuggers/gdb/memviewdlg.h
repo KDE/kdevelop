@@ -33,9 +33,9 @@ class QToolBox;
 
 namespace GDBDebugger
 {
+    class CppDebuggerPlugin;
     class MemoryView;
     class GDBController;
-    class CppDebuggerPlugin;
 
     class MemoryViewerWidget : public QWidget
     {
@@ -56,8 +56,6 @@ namespace GDBDebugger
         void slotChildDestroyed(QObject* child);
 
     private: // Data
-        CppDebuggerPlugin* m_plugin;
-        GDBController* controller_;
         QToolBox* toolBox_;
         QList<MemoryView*> memoryViews_;
     };
@@ -66,7 +64,7 @@ namespace GDBDebugger
     {
         Q_OBJECT
     public:
-        MemoryView(GDBController* controller, QWidget* parent);
+        MemoryView(QWidget* parent);
 
         void debuggerStateChanged(DBGStateFlags state);
 
@@ -105,7 +103,6 @@ namespace GDBDebugger
         void initWidget();
 
     private:
-        GDBController* controller_;
         class MemoryRangeSelector* rangeSelector_;
         QWidget* khexedit2_widget;
 
