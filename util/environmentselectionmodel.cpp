@@ -81,7 +81,7 @@ QVariant EnvironmentSelectionModel::data( const QModelIndex& index, int role ) c
     }
 }
 
-bool EnvironmentSelectionModel::setData( const QModelIndex& index, const QVariant& value, int role )
+bool EnvironmentSelectionModel::setData( const QModelIndex& /*index*/, const QVariant& /*value*/, int /*role*/ )
 {
     return false;
 }

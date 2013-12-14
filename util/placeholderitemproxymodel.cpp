@@ -25,9 +25,8 @@
 
 using namespace KDevelop;
 
-class PlaceholderItemProxyModel::Private
+struct PlaceholderItemProxyModel::Private
 {
-public:
     Private(PlaceholderItemProxyModel* qq)
         : q(qq)
         , m_hintColumn(0)
