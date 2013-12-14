@@ -41,6 +41,8 @@ QString generateToolGroupName( CustomBuildSystemTool::ActionType type )
     };
 
     Q_ASSERT( type >= 0 && type < toolTypeCount );
+    Q_UNUSED( toolTypeCount );
+
     return ConfigConstants::toolGroupPrefix + toolTypes[type];
 }
 
@@ -232,9 +234,10 @@ void CustomBuildSystemConfigWidget::removeConfig()
 void CustomBuildSystemConfigWidget::verify() {
     Q_ASSERT( ui->currentConfig->count() == configs.count() );
 
-    bool hasAnyConfigurations = (configs.count() != 0);
-    bool configurationSelected = (ui->currentConfig->currentIndex() >= 0);
-    Q_ASSERT( !hasAnyConfigurations || configurationSelected );
+
+    const bool hasAnyConfigurations = (configs.count() != 0);
+
+    Q_ASSERT( !hasAnyConfigurations || (ui->currentConfig->currentIndex() >= 0) );
 
     ui->configWidget->setEnabled( hasAnyConfigurations );
     ui->removeConfig->setEnabled( hasAnyConfigurations );

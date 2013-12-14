@@ -236,8 +236,13 @@ bool checkForNeedingConfigure( KDevelop::IProject* project )
 KUrl projectRoot(KDevelop::IProject* project)
 {
     KUrl projectPath = project->folder();
-    bool correct=projectPath.cd(CMake::projectRootRelative(project));
+
+    // We need this as its own variable as .cd mutates the object and would be
+    // turned into a no-op by assert
+    const bool correct = projectPath.cd(CMake::projectRootRelative(project));
     Q_ASSERT(correct);
+    Q_UNUSED(correct);
+
     return projectPath;
 }
 
