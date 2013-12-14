@@ -1,14 +1,17 @@
 project(kdev-qml)
 
-cmake_minimum_required(VERSION 2.8)
-
-find_package(KDE4 REQUIRED)
-find_package(KDevPlatform 1.6.60 REQUIRED)
-find_package(KDeclarative REQUIRED)
-
 set(VERSION_MAJOR 1)
 set(VERSION_MINOR 6)
 set(VERSION_PATCH 60)
+# KDevplatform dependency version
+set( KDEVPLATFORM_VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}" )
+
+cmake_minimum_required(VERSION 2.8)
+
+find_package(KDE4 REQUIRED)
+find_package(KDevPlatform ${KDEVPLATFORM_VERSION} REQUIRED)
+find_package(KDeclarative REQUIRED)
+
 
 configure_file(
   "${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake"
