@@ -27,7 +27,7 @@
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
 
-#include "hashconfig.h"
+#include <unordered_map>
 
 // similar to e.g. modificationrevision.cpp
 struct DataT {
@@ -38,8 +38,6 @@ struct DataT {
 typedef QPair<KDevelop::IndexedString, DataT> DataPair;
 typedef QVector<DataPair> InputData;
 
-#ifdef HAVE_UNORDERED_MAP
-#include <unordered_map>
 
 struct IndexedStringHash
 {
@@ -57,9 +55,6 @@ inline void insertData(StlHash& hash, const InputData& data)
     hash.insert(std::make_pair(pair.first, pair.second));
   }
 }
-
-#define HAVE_STL_HASH
-#endif
 
 typedef QHash<KDevelop::IndexedString, DataT> QStringHash;
 inline void insertData(QStringHash& hash, const InputData& data)
@@ -100,10 +95,8 @@ void BenchHashes::feedData()
       data << qMakePair(IndexedString(QString::number(i)), DataT());
     }
     QCOMPARE(data.size(), size);
-#ifdef HAVE_STL_HASH
     QTest::newRow(qPrintable(QString("unordered_map-%1").arg(size)))
       << true << data;
-#endif
     QTest::newRow(qPrintable(QString("qhash-%1").arg(size)))
       << false << data;
   }
@@ -115,12 +108,10 @@ void BenchHashes::insert()
   QFETCH(InputData, data);
 
   if (useStl) {
-#ifdef HAVE_STL_HASH
     QBENCHMARK {
       StlHash hash;
       insertData(hash, data);
     }
-#endif
   } else {
     QBENCHMARK {
       QStringHash hash;
@@ -140,7 +131,6 @@ void BenchHashes::find()
   QFETCH(InputData, data);
 
   if(useStl) {
-#ifdef HAVE_STL_HASH
     StlHash hash;
     insertData(hash, data);
     QBENCHMARK {
@@ -148,7 +138,6 @@ void BenchHashes::find()
         (void) hash.find(pair.first);
       }
     }
-#endif
   } else {
     QStringHash hash;
     insertData(hash, data);
@@ -171,7 +160,6 @@ void BenchHashes::constFind()
   QFETCH(InputData, data);
 
   if(useStl) {
-#ifdef HAVE_STL_HASH
     StlHash hash;
     insertData(hash, data);
     const StlHash& constHash = hash;
@@ -180,7 +168,6 @@ void BenchHashes::constFind()
         (void) constHash.find(pair.first);
       }
     }
-#endif
   } else {
     QStringHash hash;
     insertData(hash, data);
@@ -203,7 +190,6 @@ void BenchHashes::remove()
   QFETCH(InputData, data);
 
   if(useStl) {
-#ifdef HAVE_STL_HASH
     StlHash hash;
     insertData(hash, data);
     QBENCHMARK {
@@ -211,7 +197,6 @@ void BenchHashes::remove()
         hash.erase(pair.first);
       }
     }
-#endif
   } else {
     QStringHash hash;
     insertData(hash, data);
@@ -281,7 +266,6 @@ void BenchHashes::typeRepo()
       }
     }
   } else if (type == 5) {
-#ifdef HAVE_UNORDERED_MAP
     std::unordered_map<int, TypeRepoTestData*> v;
     for(int i = 0; i < 100; ++i) {
       v[i] = new TypeRepoTestData;
@@ -291,7 +275,6 @@ void BenchHashes::typeRepo()
         v.at(i)->size++;
       }
     }
-#endif
   } else if (type == 6) {
     // for the idea, look at c++'s lexer.cpp
     const int vectors = 5;

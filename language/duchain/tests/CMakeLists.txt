@@ -42,23 +42,6 @@ target_link_libraries(itemrepositoryregistry_deferred_test ${QT_QTTEST_LIBRARY}
 
 ########### next target ###############
 
-# TODO: Remove when LTS for g++ < 4.3 has ended.
-#       See also: languages/cpp/parser/parser.h in KDevelop
-if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    include(CheckIncludeFileCXX)
-    set(CMAKE_REQUIRED_FLAGS "-std=c++0x")
-    check_include_file_cxx(unordered_map HAVE_UNORDERED_MAP)
-    set(CMAKE_REQUIRED_FLAGS "")
-
-    if(HAVE_UNORDERED_MAP)
-      message(STATUS "Enabling c++0x support for unordered map")
-      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
-    endif(HAVE_UNORDERED_MAP)
-endif(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-
-configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/hashconfig.h.cmake
-                ${CMAKE_CURRENT_BINARY_DIR}/hashconfig.h )
-
 set(benchhashes_SRCS benchhashes.cpp)
 
 kde4_add_unit_test(benchhashes ${benchhashes_SRCS})
