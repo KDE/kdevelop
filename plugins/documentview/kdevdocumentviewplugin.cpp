@@ -20,7 +20,6 @@
 */
 
 #include "kdevdocumentviewplugin.h"
-#include "kdevdocumentviewdelegate.h"
 #include "kdevdocumentview.h"
 #include "kdevdocumentmodel.h"
 #include "kdevdocumentselection.h"

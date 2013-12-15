@@ -57,7 +57,7 @@ KDevDocumentView::KDevDocumentView( KDevDocumentViewPlugin *plugin, QWidget *par
 
     m_documentModel = new KDevDocumentModel(this);
 
-    m_delegate = new KDevDocumentViewDelegate( this, this );
+    m_delegate = new KDevDocumentViewDelegate( this );
 
     m_proxy = new QSortFilterProxyModel( this );
     m_proxy->setSourceModel( m_documentModel );
@@ -78,7 +78,6 @@ KDevDocumentView::KDevDocumentView( KDevDocumentViewPlugin *plugin, QWidget *par
 
     setFocusPolicy( Qt::NoFocus );
 
-    setRootIsDecorated( false );
     header()->hide();
 
     setSelectionBehavior( QAbstractItemView::SelectRows );

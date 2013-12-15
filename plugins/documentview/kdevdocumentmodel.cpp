@@ -36,6 +36,7 @@ KDevCategoryItem::KDevCategoryItem( const QString &name )
         : KDevDocumentItem( name )
 {
     setToolTip( name );
+    setIcon( KIcon("folder") );
 }
 
 KDevCategoryItem::~KDevCategoryItem()
