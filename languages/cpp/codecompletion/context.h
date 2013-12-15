@@ -314,7 +314,8 @@ namespace Cpp {
       ///Handle code-completion for constructor-initializers, \returns true if valid
       bool doConstructorCompletion();
 
-      QList<DeclarationDepthPair> namespaceItems(KDevelop::DUContext* duContext, const KDevelop::CursorInRevision& position, bool global) const;
+      QList<DeclarationDepthPair> namespaceItems(KDevelop::DUContext* duContext, const KDevelop::CursorInRevision& position, bool global,
+                                                 const QSet<KDevelop::DUContext*>& skipContexts = QSet<KDevelop::DUContext*>()) const;
 
       AccessType m_accessType;
       QString m_expression;

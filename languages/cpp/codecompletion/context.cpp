@@ -1355,7 +1355,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::memberAccessCompletionIt
     ifDebug( kDebug() << "container:" << ctx->scopeIdentifier(true).toString(); )
 
     QList<DeclarationDepthPair> decls = ctx->allDeclarations(ctx->range().end, m_duContext->topContext(), false );
-    decls += namespaceItems(ctx, ctx->range().end, false);
+    decls += namespaceItems(ctx, ctx->range().end, false, containers);
 
     foreach( const DeclarationDepthPair& decl, Cpp::hideOverloadedDeclarations(decls, typeIsConst ) )
     {
@@ -1813,7 +1813,8 @@ QList<DeclAccessPair> CodeCompletionContext::getLookaheadMatches(Declaration* fo
   return ret;
 }
 
-QList<DeclarationDepthPair> CodeCompletionContext::namespaceItems(DUContext* duContext, const CursorInRevision& position, bool global) const
+QList<DeclarationDepthPair> CodeCompletionContext::namespaceItems(DUContext* duContext, const CursorInRevision& position,
+                                                                  bool global, const QSet<DUContext*>& skipContexts) const
 {
   QList<DeclarationDepthPair> decls;
   QList<Declaration*> foundDecls;
@@ -1857,6 +1858,9 @@ QList<DeclarationDepthPair> CodeCompletionContext::namespaceItems(DUContext* duC
       if(contextDecl->kind() != Declaration::Namespace || !contextDecl->internalContext())
         continue;
       DUContext* context = contextDecl->internalContext();
+      if (skipContexts.contains(context)) {
+        continue;
+      }
 
       if(context->range().contains(duContext->range()) && context->url() == duContext->url())
         continue; //If the context surrounds the current one, the declarations are visible through allDeclarations(..).
