@@ -27,15 +27,10 @@ class KDevDocumentViewDelegate: public QItemDelegate
 {
     Q_OBJECT
 public:
-    explicit KDevDocumentViewDelegate( QTreeView *view, QObject *parent = 0 );
+    explicit KDevDocumentViewDelegate( QObject *parent = 0 );
     virtual ~KDevDocumentViewDelegate();
 
     virtual void paint( QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
-    virtual QSize sizeHint( const QStyleOptionViewItem &opt, const QModelIndex &index ) const;
-
-private:
-    QTreeView *m_view;
 };
 
 #endif // KDEVPLATFORM_PLUGIN_KDEVCLASSVIEWDELEGATE_H
-

@@ -24,9 +24,8 @@ Boston, MA 02110-1301, USA.
 
 #include <kdebug.h>
 
-KDevDocumentViewDelegate::KDevDocumentViewDelegate( QTreeView *view, QObject *parent )
-        : QItemDelegate( parent ),
-        m_view( view )
+KDevDocumentViewDelegate::KDevDocumentViewDelegate( QObject *parent )
+    : QItemDelegate( parent )
 {}
 
 KDevDocumentViewDelegate::~KDevDocumentViewDelegate()
@@ -40,38 +39,9 @@ void KDevDocumentViewDelegate::paint( QPainter *painter, const QStyleOptionViewI
     if ( !model->parent( index ).isValid() )
     {
         // this is a top-level item.
-        QStyleOptionButton buttonOption;
-
-        buttonOption.state = option.state;
-#ifdef Q_WS_MAC
-
-        buttonOption.state |= QStyle::State_Raised;
-#endif
-
-        buttonOption.state &= ~QStyle::State_HasFocus;
-
-        buttonOption.rect = option.rect;
-        buttonOption.palette = option.palette;
-        buttonOption.features = QStyleOptionButton::None;
-
-        QStyleOption branchOption;
-        static const int i = 9; // ### hardcoded in qcommonstyle.cpp
-        QRect r = option.rect;
-        branchOption.rect = QRect( r.left() + i / 2, r.top() + ( r.height() - i ) / 2, i, i );
-        branchOption.palette = option.palette;
-        branchOption.state = QStyle::State_Children;
-
-        if ( m_view->isExpanded( index ) )
-            branchOption.state |= QStyle::State_Open;
-
-        m_view->style() ->drawPrimitive( QStyle::PE_IndicatorBranch, &branchOption, painter, m_view );
-
-        // draw text
-        QRect textrect = QRect( r.left() + i * 2, r.top(), r.width() - ( ( 5 * i ) / 2 ), r.height() );
-        QString text = elidedText( option.fontMetrics, textrect.width(), Qt::ElideRight,
-                                   model->data( index, Qt::DisplayRole ).toString() );
-        m_view->style() ->drawItemText( painter, textrect, Qt::AlignLeft | Qt::AlignVCenter,
-                                        option.palette, m_view->isEnabled(), text );
+        QStyleOptionViewItem o = option;
+        o.textElideMode = Qt::ElideLeft;
+        QItemDelegate::paint( painter, o, index );
     }
     else
     {
@@ -79,12 +49,4 @@ void KDevDocumentViewDelegate::paint( QPainter *painter, const QStyleOptionViewI
     }
 }
 
-QSize KDevDocumentViewDelegate::sizeHint( const QStyleOptionViewItem &opt, const QModelIndex &index ) const
-{
-    QStyleOptionViewItem option = opt;
-    QSize sz = QItemDelegate::sizeHint( opt, index ) + QSize( 2, 4 );
-    return sz;
-}
-
 #include "kdevdocumentviewdelegate.moc"
-
