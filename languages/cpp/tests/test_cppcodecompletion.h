@@ -158,6 +158,7 @@ private slots:
   void testLookaheadMatches();
   void testMemberAccessInstance();
   void testNestedInlineNamespace();
+  void testDuplicatedNamespace();
 public:
   enum DumpArea {
     DumpNone = 0,

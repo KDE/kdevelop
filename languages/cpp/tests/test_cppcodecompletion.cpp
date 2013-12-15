@@ -3794,4 +3794,20 @@ void TestCppCodeCompletion::testNestedInlineNamespace()
   release(top);
 }
 
+void TestCppCodeCompletion::testDuplicatedNamespace()
+{
+  // see also: https://bugs.kde.org/show_bug.cgi?id=328803
+  QByteArray test( "namespace foo { const int bar = 1; }\n"
+                   "namespace foo { const int asdf = 1; }\n"
+                   "namespace foo { }\n"
+                   "int main() {}\n" );
+  TopDUContext* top = parse(test, DumpNone);
+  DUChainWriteLocker lock;
+  CompletionItemTester tester(top->childContexts().last(), "foo::");
+  //TODO: the sort-order is apparently undefined...
+  qSort(tester.names);
+  QCOMPARE(tester.names, QStringList() << "asdf" << "bar" );
+  release(top);
+}
+
 #include "test_cppcodecompletion.moc"
