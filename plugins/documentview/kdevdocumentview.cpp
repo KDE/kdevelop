@@ -308,17 +308,12 @@ void KDevDocumentView::closed( KDevelop::IDocument* document )
 
 void KDevDocumentView::updateCategoryItem( KDevCategoryItem *item )
 {
-    QString label = QFileInfo(item->url().pathOrUrl()).path();
-
-    foreach ( const KDevelop::IProject* prj, m_projects ) {
-        const QString possibleLabel = prj->relativeUrl( KUrl(label) ).pathOrUrl();
-        if ( !possibleLabel.startsWith( "../" ) )
-            label = possibleLabel;
-        else
-            label.replace( QDir::homePath(), "~" );
+    QString text = KDevelop::ICore::self()->projectController()->prettyFilePath(item->url(), KDevelop::IProjectController::FormatPlain);
+    // remove trailing slash
+    if (text.length() > 1) {
+        text.chop(1);
     }
-
-    item->setText( label );
+    item->setText(text);
 }
 
 bool projectPathlongerThan( const KDevelop::IProject* prj1, const KDevelop::IProject* prj2 )
@@ -331,12 +326,6 @@ bool projectPathlongerThan( const KDevelop::IProject* prj1, const KDevelop::IPro
 
 void KDevDocumentView::updateProjectPaths()
 {
-
-    m_projects = KDevelop::ICore::self()->projectController()->projects();
-
-    // sort folders, longest first, so replacing them one by one is save
-    qSort( m_projects.begin(), m_projects.end(), projectPathlongerThan );
-
     foreach ( KDevCategoryItem *it, m_documentModel->categoryList() )
         updateCategoryItem( it );
 }
