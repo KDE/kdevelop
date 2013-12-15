@@ -82,6 +82,12 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedString {
    */
   explicit IndexedString( const QByteArray& str );
 
+  IndexedString( IndexedString&& o ) noexcept
+    : m_index(o.m_index)
+  {
+    o.m_index = 0;
+  }
+
   /**
    * Returns a not reference-counted IndexedString that represents the given index.
    *
@@ -159,6 +165,13 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedString {
   QByteArray byteArray() const;
 
   IndexedString& operator=(const IndexedString&);
+
+  IndexedString& operator=(IndexedString&& o) noexcept
+  {
+    m_index = o.m_index;
+    o.m_index = 0;
+    return *this;
+  }
 
   /**
    * Fast index-based comparison
