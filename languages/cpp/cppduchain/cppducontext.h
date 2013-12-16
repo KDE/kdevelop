@@ -82,7 +82,7 @@ extern QMutex cppDuContextInstantiationsMutex;
           QualifiedIdentifier i;
           i.setExplicitlyGlobal( isExplicitlyGlobal );
           StatePtr s(new State);
-          s->identifier = i;
+          s->identifier = std::move(i);
           m_states << s;
         }
 
