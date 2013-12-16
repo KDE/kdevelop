@@ -1065,7 +1065,7 @@ QualifiedIdentifier QualifiedIdentifier::mid(int pos, int len) const
   return ret;
 }
 
-const Identifier QualifiedIdentifier::at(int i) const
+Identifier QualifiedIdentifier::at(int i) const
 {
   if(m_index) {
     Q_ASSERT(i >= 0 && i < (int)cd->identifiersSize());

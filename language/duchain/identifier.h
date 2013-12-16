@@ -248,7 +248,7 @@ public:
   Identifier first() const;
   Identifier last() const;
   Identifier top() const;
-  const Identifier at(int i) const;
+  Identifier at(int i) const;
   /**
    * @param pos Position where to start the copy.
    * @param len If this is -1, the whole following part will be returned.
