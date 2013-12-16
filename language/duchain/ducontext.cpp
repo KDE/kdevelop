@@ -80,12 +80,12 @@ DUChainVisitor::~DUChainVisitor()
  * We leak here, to prevent a possible crash during destruction, as the destructor
  * of Identifier is not safe to be called after the duchain has been destroyed
  */
-Identifier& globalImportIdentifier() {
-  static Identifier globalImportIdentifierObject(*new Identifier("{...import...}"));
+const Identifier& globalImportIdentifier() {
+  static const Identifier globalImportIdentifierObject(*new Identifier("{...import...}"));
   return globalImportIdentifierObject;
 }
-Identifier& globalAliasIdentifier() {
-  static Identifier globalAliasIdentifierObject(*new Identifier("{...alias...}"));
+const Identifier& globalAliasIdentifier() {
+  static const Identifier globalAliasIdentifierObject(*new Identifier("{...alias...}"));
   return globalAliasIdentifierObject;
 }
 
