@@ -1402,6 +1402,11 @@ bool IndexedQualifiedIdentifier::isValid() const
   return index != emptyConstantQualifiedIdentifierPrivateIndex();
 }
 
+bool IndexedQualifiedIdentifier::isEmpty() const
+{
+  return index == emptyConstantQualifiedIdentifierPrivateIndex();
+}
+
 int cnt = 0;
 
 IndexedQualifiedIdentifier IndexedTypeIdentifier::identifier() const

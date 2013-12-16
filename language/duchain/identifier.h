@@ -115,6 +115,7 @@ public:
   }
 
   bool isValid() const;
+  bool isEmpty() const;
 
   QualifiedIdentifier identifier() const;
   operator QualifiedIdentifier() const;

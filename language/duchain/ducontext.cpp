@@ -672,7 +672,7 @@ void DUContext::findLocalDeclarationsInternal( const Identifier& identifier,
         if(checked)
             ret.append(checked);
       }
-    }else if(d_func()->m_inSymbolTable && !this->localScopeIdentifier().isEmpty() && !identifier.isEmpty()) {
+    }else if(d_func()->m_inSymbolTable && !indexedLocalScopeIdentifier().isEmpty() && !identifier.isEmpty()) {
        //This context is in the symbol table, use the symbol-table to speed up the search
        QualifiedIdentifier id(scopeIdentifier(true) + identifier);
 
@@ -1298,13 +1298,12 @@ void DUContext::applyAliases(const SearchItem::PtrList& baseIdentifiers, SearchI
 void DUContext::applyUpwardsAliases(SearchItem::PtrList& identifiers, const TopDUContext* /*source*/) const {
 
   if(type() == Namespace) {
-    QualifiedIdentifier localId = d_func()->m_scopeIdentifier;
-    if(localId.isEmpty())
+    if(d_func()->m_scopeIdentifier.isEmpty())
       return;
 
     //Make sure we search for the items in all namespaces of the same name, by duplicating each one with the namespace-identifier prepended.
     //We do this by prepending items to the current identifiers that equal the local scope identifier.
-    SearchItem::Ptr newItem( new SearchItem(localId) );
+    SearchItem::Ptr newItem( new SearchItem(d_func()->m_scopeIdentifier.identifier()) );
 
     //This will exclude explictly global identifiers
     newItem->addToEachNode( identifiers );
