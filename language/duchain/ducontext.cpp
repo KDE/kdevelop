@@ -1530,7 +1530,7 @@ QList<RangeInRevision> allUses(DUContext* context, int declarationIndex, bool no
   return ret;
 }
 
-DUContext::SearchItem::SearchItem(const QualifiedIdentifier& id, Ptr nextItem, int start)
+DUContext::SearchItem::SearchItem(const QualifiedIdentifier& id, const Ptr& nextItem, int start)
 : isExplicitlyGlobal(start == 0 ? id.explicitlyGlobal() : false)
 {
   if(!id.isEmpty()) {
@@ -1561,14 +1561,14 @@ DUContext::SearchItem::SearchItem(const QualifiedIdentifier& id, const PtrList& 
     next = nextItems;
 }
 
-DUContext::SearchItem::SearchItem(bool explicitlyGlobal, Identifier id, const PtrList& nextItems)
+DUContext::SearchItem::SearchItem(bool explicitlyGlobal, const Identifier& id, const PtrList& nextItems)
   : isExplicitlyGlobal(explicitlyGlobal)
   , identifier(id)
   , next(nextItems)
 {
 }
 
-DUContext::SearchItem::SearchItem(bool explicitlyGlobal, Identifier id, Ptr nextItem)
+DUContext::SearchItem::SearchItem(bool explicitlyGlobal, const Identifier& id, const Ptr& nextItem)
   : isExplicitlyGlobal(explicitlyGlobal)
   , identifier(id)
 {
@@ -1627,11 +1627,11 @@ QList<QualifiedIdentifier> DUContext::SearchItem::toList(const QualifiedIdentifi
 }
 
 
-void DUContext::SearchItem::addNext(SearchItem::Ptr other) {
+void DUContext::SearchItem::addNext(const SearchItem::Ptr& other) {
   next.append(other);
 }
 
-void DUContext::SearchItem::addToEachNode(SearchItem::Ptr other) {
+void DUContext::SearchItem::addToEachNode(const SearchItem::Ptr& other) {
   if(other->isExplicitlyGlobal)
     return;
 
@@ -1640,7 +1640,7 @@ void DUContext::SearchItem::addToEachNode(SearchItem::Ptr other) {
     next[a]->addToEachNode(other);
 }
 
-void DUContext::SearchItem::addToEachNode(SearchItem::PtrList other) {
+void DUContext::SearchItem::addToEachNode(const SearchItem::PtrList& other) {
   int added = 0;
   FOREACH_ARRAY(const SearchItem::Ptr& o, other) {
     if(!o->isExplicitlyGlobal) {
