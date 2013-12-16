@@ -702,12 +702,6 @@ QualifiedIdentifier::QualifiedIdentifier()
 {
 }
 
-QualifiedIdentifier::~QualifiedIdentifier()
-{
-  if(!m_index)
-    delete dd;
-}
-
 QualifiedIdentifier::QualifiedIdentifier(const QualifiedIdentifier& id)
 {
   if(id.m_index) {
@@ -717,6 +711,52 @@ QualifiedIdentifier::QualifiedIdentifier(const QualifiedIdentifier& id)
     m_index = 0;
     dd = new QualifiedIdentifierPrivate<true>(*id.dd);
   }
+}
+
+QualifiedIdentifier::QualifiedIdentifier(QualifiedIdentifier&& rhs)
+  : m_index(rhs.m_index)
+{
+  if (m_index) {
+    cd = rhs.cd;
+  } else {
+    dd = rhs.dd;
+  }
+  rhs.m_index = emptyConstantQualifiedIdentifierPrivateIndex();
+  rhs.cd = emptyConstantQualifiedIdentifierPrivate();
+}
+
+QualifiedIdentifier& QualifiedIdentifier::operator=(const QualifiedIdentifier& rhs)
+{
+  if(dd == rhs.dd && cd == rhs.cd)
+    return *this;
+
+  if(!m_index)
+    delete dd;
+  rhs.makeConstant();
+  cd = rhs.cd;
+  m_index = rhs.m_index;
+  return *this;
+}
+
+QualifiedIdentifier& QualifiedIdentifier::operator=(QualifiedIdentifier&& rhs)
+{
+  if(!m_index)
+    delete dd;
+  m_index = rhs.m_index;
+  if (m_index) {
+    cd = rhs.cd;
+  } else {
+    dd = rhs.dd;
+  }
+  rhs.cd = emptyConstantQualifiedIdentifierPrivate();
+  rhs.m_index = emptyConstantQualifiedIdentifierPrivateIndex();
+  return *this;
+}
+
+QualifiedIdentifier::~QualifiedIdentifier()
+{
+  if(!m_index)
+    delete dd;
 }
 
 QStringList QualifiedIdentifier::toStringList() const
@@ -859,18 +899,6 @@ bool QualifiedIdentifier::operator==(const QualifiedIdentifier& rhs) const
 bool QualifiedIdentifier::operator!=(const QualifiedIdentifier& rhs) const
 {
   return !operator==(rhs);
-}
-
-QualifiedIdentifier& QualifiedIdentifier::operator=(const QualifiedIdentifier& rhs)
-{
-  if(dd == rhs.dd && cd == rhs.cd)
-    return *this;
-  if(!m_index)
-    delete dd;
-  rhs.makeConstant();
-  cd = rhs.cd;
-  m_index = rhs.m_index;
-  return *this;
 }
 
 bool QualifiedIdentifier::beginsWith(const QualifiedIdentifier& other) const
@@ -1393,6 +1421,12 @@ IndexedQualifiedIdentifier::IndexedQualifiedIdentifier(const IndexedQualifiedIde
   }
 }
 
+IndexedQualifiedIdentifier::IndexedQualifiedIdentifier(IndexedQualifiedIdentifier&& rhs)
+  : index(rhs.index)
+{
+  rhs.index = emptyConstantQualifiedIdentifierPrivateIndex();
+}
+
 IndexedQualifiedIdentifier& IndexedQualifiedIdentifier::operator=(const QualifiedIdentifier& id)
 {
   ifDebug( kDebug() << "(" << ++cnt << ")" << identifier().toString() << index; )
@@ -1431,6 +1465,33 @@ IndexedQualifiedIdentifier& IndexedQualifiedIdentifier::operator=(const IndexedQ
     increase(qualifiedidentifierRepository()->dynamicItemFromIndexSimple(index)->m_refCount, index);
   } else {
     index = rhs.index;
+  }
+
+  return *this;
+}
+
+IndexedQualifiedIdentifier& IndexedQualifiedIdentifier::operator=(IndexedQualifiedIdentifier&& rhs)
+{
+  if(shouldDoDUChainReferenceCounting(this)) {
+    QMutexLocker lock(qualifiedidentifierRepository()->mutex());
+    ifDebug( kDebug() << "decreasing"; )
+
+    decrease(qualifiedidentifierRepository()->dynamicItemFromIndexSimple(index)->m_refCount, index);
+  } else if (shouldDoDUChainReferenceCounting(&rhs)) {
+    QMutexLocker lock(qualifiedidentifierRepository()->mutex());
+    ifDebug( kDebug() << "decreasing"; )
+
+    decrease(qualifiedidentifierRepository()->dynamicItemFromIndexSimple(rhs.index)->m_refCount, rhs.index);
+  }
+
+  index = rhs.index;
+  rhs.index = emptyConstantQualifiedIdentifierPrivateIndex();
+
+  if(shouldDoDUChainReferenceCounting(this) && !(shouldDoDUChainReferenceCounting(&rhs))) {
+    QMutexLocker lock(qualifiedidentifierRepository()->mutex());
+    ifDebug( kDebug() << "increasing"; )
+
+    increase(qualifiedidentifierRepository()->dynamicItemFromIndexSimple(index)->m_refCount, index);
   }
 
   return *this;

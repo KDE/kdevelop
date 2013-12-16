@@ -101,8 +101,10 @@ public:
   IndexedQualifiedIdentifier();
   IndexedQualifiedIdentifier(const QualifiedIdentifier& id);
   IndexedQualifiedIdentifier(const IndexedQualifiedIdentifier& rhs);
+  IndexedQualifiedIdentifier(IndexedQualifiedIdentifier&& rhs) noexcept;
   IndexedQualifiedIdentifier& operator=(const QualifiedIdentifier& id);
   IndexedQualifiedIdentifier& operator=(const IndexedQualifiedIdentifier& id);
+  IndexedQualifiedIdentifier& operator=(IndexedQualifiedIdentifier&& rhs) noexcept;
   ~IndexedQualifiedIdentifier();
   bool operator==(const IndexedQualifiedIdentifier& rhs) const;
   bool operator==(const QualifiedIdentifier& id) const;
@@ -231,7 +233,10 @@ public:
   QualifiedIdentifier(const QualifiedIdentifier& id);
   QualifiedIdentifier(uint index);
   QualifiedIdentifier();
+  QualifiedIdentifier(QualifiedIdentifier&& rhs) noexcept;
   virtual ~QualifiedIdentifier();
+  QualifiedIdentifier& operator=(const QualifiedIdentifier& rhs);
+  QualifiedIdentifier& operator=(QualifiedIdentifier&& rhs) noexcept;
 
   void push(const Identifier& id);
   void push(const QualifiedIdentifier& id);
@@ -301,7 +306,6 @@ public:
    */
   bool operator==(const QualifiedIdentifier& rhs) const;
   bool operator!=(const QualifiedIdentifier& rhs) const;
-  QualifiedIdentifier& operator=(const QualifiedIdentifier& rhs);
 
   bool beginsWith(const QualifiedIdentifier& other) const;
 
