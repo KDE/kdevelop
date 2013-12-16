@@ -46,12 +46,19 @@ template<bool>
 class IdentifierPrivate;
 class IndexedString;
 
-///A helper-class to store an identifier by index in a type-safe way. 
-///The difference to Identifier is that this class only stores the index of an identifier that is in the repository, without any dynamic
-///abilities or access to the contained data.
-///This class does "disk reference counting"
-///@warning Do not use this after QCoreApplication::aboutToQuit() has been emitted, items that are not disk-referenced will be invalid at that point
-struct KDEVPLATFORMLANGUAGE_EXPORT IndexedIdentifier : public ReferenceCountManager {
+/**
+ * A helper-class to store an identifier by index in a type-safe way.
+ *
+ * The difference to Identifier is that this class only stores the index of an identifier that is in the repository, without any dynamic
+ * abilities or access to the contained data.
+ *
+ * This class does "disk reference counting"
+ *
+ * @warning Do not use this after QCoreApplication::aboutToQuit() has been emitted, items that are not disk-referenced will be invalid at that point.
+ */
+class KDEVPLATFORMLANGUAGE_EXPORT IndexedIdentifier : public ReferenceCountManager
+{
+public:
   IndexedIdentifier();
   IndexedIdentifier(const Identifier& id);
   IndexedIdentifier(const IndexedIdentifier& rhs);
@@ -62,28 +69,33 @@ struct KDEVPLATFORMLANGUAGE_EXPORT IndexedIdentifier : public ReferenceCountMana
   bool operator!=(const IndexedIdentifier& rhs) const;
   bool operator==(const Identifier& id) const;
 
-  
   bool isEmpty() const;
 
   Identifier identifier() const;
   operator Identifier() const;
 
-  uint getIndex() const {
+  uint getIndex() const
+  {
     return index;
   }
-  
-  private:
+
+private:
   unsigned int index;
 };
 
-///A helper-class to store an identifier by index in a type-safe way.
-///The difference to QualifiedIdentifier is that this class only stores the index of an identifier that is in the repository, without any dynamic
-///abilities or access to the contained data.
-///This class does "disk reference counting"
-///@warning Do not use this after QCoreApplication::aboutToQuit() has been emitted, items that are not disk-referenced will be invalid at that point
-class KDEVPLATFORMLANGUAGE_EXPORT IndexedQualifiedIdentifier : public ReferenceCountManager {
+/**
+ * A helper-class to store an identifier by index in a type-safe way.
+ *
+ * The difference to QualifiedIdentifier is that this class only stores the index of an identifier that is in the repository, without any dynamic
+ * abilities or access to the contained data.
+ *
+ * This class does "disk reference counting"
+ *
+ * @warning Do not use this after QCoreApplication::aboutToQuit() has been emitted, items that are not disk-referenced will be invalid at that point.
+ */
+class KDEVPLATFORMLANGUAGE_EXPORT IndexedQualifiedIdentifier : public ReferenceCountManager
+{
 public:
-
   IndexedQualifiedIdentifier();
   IndexedQualifiedIdentifier(const QualifiedIdentifier& id);
   IndexedQualifiedIdentifier(const IndexedQualifiedIdentifier& rhs);
@@ -93,7 +105,8 @@ public:
   bool operator==(const IndexedQualifiedIdentifier& rhs) const;
   bool operator==(const QualifiedIdentifier& id) const;
 
-  bool operator<(const IndexedQualifiedIdentifier& rhs) const {
+  bool operator<(const IndexedQualifiedIdentifier& rhs) const
+  {
     return index < rhs.index;
   }
 
@@ -102,27 +115,35 @@ public:
   QualifiedIdentifier identifier() const;
   operator QualifiedIdentifier() const;
 
-  uint getIndex() const {
+  uint getIndex() const
+  {
     return index;
   }
-  
-  private:
+
+private:
   uint index;
 };
 
-/// Represents a single unqualified identifier
+/**
+ * Represents a single unqualified identifier
+ */
 class KDEVPLATFORMLANGUAGE_EXPORT Identifier
 {
   friend class QualifiedIdentifier;
 
 public:
   /**
-   * @param start The position in the given string where to start searching for the identifier(optional).
-   * @param takenRange If this is nonzero, it will be filled with the length of the range from the beginning of the given string, that was used to construct this identifier.(optional)
-   * @warning The identifier is parsed in a C++-similar way, and the result may not be what you expect. If you want to prevent that parsing, use the constructor that takes IndexedString.
-   * */
+   * @param start The position in the given string where to start searching for the identifier. (optional)
+   * @param takenRange If this is nonzero, it will be filled with the length of the range from the beginning
+   *                   of the given string, that was used to construct this identifier. (optional)
+   *
+   * @warning The identifier is parsed in a C++-similar way, and the result may not be what you expect.
+   *          If you want to prevent that parsing, use the constructor that takes IndexedString.
+   */
   explicit Identifier(const QString& str, uint start = 0, uint* takenRange = 0);
-  ///Preferred constructor, ise this if you already have an IndexedString available. This does not decompose the given string.
+  /**
+   * Preferred constructor, use this if you already have an IndexedString available. This does not decompose the given string.
+   */
   explicit Identifier(const IndexedString& str);
   Identifier(const Identifier& rhs);
   Identifier(uint index);
@@ -133,26 +154,32 @@ public:
 
   bool isUnique() const;
   int uniqueToken() const;
-  /// If \a token is non-zero, turns this Identifier into the special per-document
-  /// Unique identifier, used for anonymous namespaces.
-  /// Pass a token which is specific to the document to allow correct equality comparison.
+  /**
+   * If \a token is non-zero, turns this Identifier into the special per-document unique identifier.
+   *
+   * This is used e.g. for anonymous namespaces.
+   *
+   * Pass a token which is specific to the document to allow correct equality comparison.
+   */
   void setUnique(int token);
 
   const IndexedString identifier() const;
   void setIdentifier(const QString& identifier);
-  //Should be preferred over the other version
+  /**
+   * Should be preferred over the other version
+   */
   void setIdentifier(const IndexedString& identifier);
-
-//   QString mangled() const;
 
   uint hash() const;
 
   /**
    * Comparison ignoring the template-identifiers
-   * */
+   */
   bool nameEquals(const Identifier& rhs) const;
 
-  //Expensive
+  /**
+   * @warning This is expensive.
+   */
   IndexedTypeIdentifier templateIdentifier(int num) const;
   uint templateIdentifiersCount() const;
   void appendTemplateIdentifier(const IndexedTypeIdentifier& identifier);
@@ -167,8 +194,11 @@ public:
 
   bool isEmpty() const;
 
-  ///Returns a unique index within the global identifier repository for this identifier.
-  ///If the identifier isn't in the repository yet, it is added to the repository.
+  /**
+   * @return a unique index within the global identifier repository for this identifier.
+   *
+   * If the identifier isn't in the repository yet, it is added to the repository.
+   */
   uint index() const;
 
 private:
@@ -187,7 +217,7 @@ private:
  * Represents a qualified identifier
  *
  * QualifiedIdentifier has it's hash-values stored, so using the hash-values is very efficient.
- * */
+ */
 class KDEVPLATFORMLANGUAGE_EXPORT QualifiedIdentifier
 {
 public:
@@ -212,54 +242,58 @@ public:
   /**
    * @param pos Position where to start the copy.
    * @param len If this is -1, the whole following part will be returned.
-   * */
+   */
   QualifiedIdentifier mid(int pos, int len = -1) const;
 
   /**
    * Copy the leftmost \a len number of identifiers.
    *
    * @param len The number of identifiers to copy, or if negative, the number of identifiers to omit from the right
-   * */
-  inline QualifiedIdentifier left(int len) const { return mid(0, len > 0 ? len : count() + len); }
+   */
+  inline QualifiedIdentifier left(int len) const
+  {
+    return mid(0, len > 0 ? len : count() + len);
+  }
 
   ///@todo Remove this flag
   bool explicitlyGlobal() const;
   void setExplicitlyGlobal(bool eg);
   bool isQualified() const;
 
-  ///A flag that can be set by setIsExpression
+  /**
+   * A flag that can be set by setIsExpression
+   */
   bool isExpression() const;
   /**
    * Set the expression-flag, that can be retrieved by isExpression().
    * This flag is not respected while creating the hash-value and while operator==() comparison.
    * It is respected while isSame(..) comparison.
-   * */
+   */
   void setIsExpression(bool);
 
   QString toString(bool ignoreExplicitlyGlobal = false) const;
   QStringList toStringList() const;
 
-//   QString mangled() const;
-
   QualifiedIdentifier operator+(const QualifiedIdentifier& rhs) const;
   QualifiedIdentifier& operator+=(const QualifiedIdentifier& rhs);
 
-  //Nicer interfaces to merge
+  /**
+   * Nicer interfaces to merge
+   */
   QualifiedIdentifier operator+(const Identifier& rhs) const;
   QualifiedIdentifier& operator+=(const Identifier& rhs);
 
-  //Returns a QualifiedIdentifier with this one appended to the other. It is explicitly global if either this or base is.
+  /**
+   * @return a QualifiedIdentifier with this one appended to the other.
+   *
+   * It is explicitly global if either this or base is.
+   */
   QualifiedIdentifier merge(const QualifiedIdentifier& base) const;
 
   /**
-   * Computes the hash-value that would be created with a qualified identifier with hash-value @param leftHash of size @param leftSize
-   * with @param appendIdentifier appended as an identifier
-   * */
-//   static uint combineHash(uint leftHash, uint leftSize, Identifier appendIdentifier);
-
-  /**The comparison-operators do not respect explicitlyGlobal and isExpression, they only respect the real scope.
+   * The comparison-operators do not respect explicitlyGlobal and isExpression, they only respect the real scope.
    * This is for convenient use in hash-tables etc.
-   * */
+   */
   bool operator==(const QualifiedIdentifier& rhs) const;
   bool operator!=(const QualifiedIdentifier& rhs) const;
   QualifiedIdentifier& operator=(const QualifiedIdentifier& rhs);
@@ -267,19 +301,21 @@ public:
   bool beginsWith(const QualifiedIdentifier& other) const;
 
   uint index() const;
-  
+
   /**
-   * Returns true if this qualified identifier is already in the persistent identifier repository
+   * @return true if this qualified identifier is already in the persistent identifier repository
    */
   bool inRepository() const;
 
-  typedef uint HashType;
+  /**
+   * The hash does not respect explicitlyGlobal, only the real scope.
+   */
+  uint hash() const;
 
-  ///The hash does not respect explicitlyGlobal, only the real scope.
-  HashType hash() const;
-
-  ///Finds all identifiers in the identifier-repository that have the given hash value
-  static void findByHash(HashType hash, KDevVarLengthArray<QualifiedIdentifier>& target);
+  /**
+   * Finds all identifiers in the identifier-repository that have the given hash value
+   */
+  static void findByHash(uint hash, KDevVarLengthArray<QualifiedIdentifier>& target);
 
 protected:
   bool sameIdentifiers(const QualifiedIdentifier& rhs) const;
@@ -299,15 +335,16 @@ protected:
  * - Arbitrary count of pointer-poperators with cv-qualifiers
  * - Reference operator
  * All the properties set here are respected in the hash value.
- *
- * */
+ */
 class KDEVPLATFORMLANGUAGE_EXPORT IndexedTypeIdentifier
 {
 public:
-  ///Variables like pointerDepth, isReference, etc. are not parsed from the string, so this parsing is quite limited.
-  explicit IndexedTypeIdentifier(IndexedQualifiedIdentifier identifier = IndexedQualifiedIdentifier());
+  /**
+   * Variables like pointerDepth, isReference, etc. are not parsed from the string, so this parsing is quite limited.
+   */
+  explicit IndexedTypeIdentifier(const IndexedQualifiedIdentifier& identifier = IndexedQualifiedIdentifier());
   explicit IndexedTypeIdentifier(const QString& identifer, bool isExpression = false);
-  
+
   bool isReference() const;
   void setIsReference(bool);
 
@@ -321,39 +358,49 @@ public:
   void setIsVolatile(bool);
 
   IndexedQualifiedIdentifier identifier() const ;
-  
-  void setIdentifier(IndexedQualifiedIdentifier id);
 
-  ///Returns the pointer depth. Example for C++: "char*" has pointer-depth 1, "char***" has pointer-depth 3
+  void setIdentifier(const IndexedQualifiedIdentifier& id);
+
+  /**
+   * @return the pointer depth. Example for C++: "char*" has pointer-depth 1, "char***" has pointer-depth 3
+   */
   int pointerDepth() const;
-  /**Sets the pointer-depth to the specified count
+  /**
+   * Sets the pointer-depth to the specified count.
+   *
    * When the pointer-depth is increased, the "isConstPointer" values for new depths will be initialized with false.
-   * For efficiency-reasons the maximum currently is 23. */
+   *
+   * For efficiency-reasons the maximum currently is 23.
+   */
   void setPointerDepth(int);
 
-  ///Whether the target of pointer 'depthNumber' is constant
+  /**
+   * Whether the target of pointer 'depthNumber' is constant
+   */
   bool isConstPointer(int depthNumber) const;
   void setIsConstPointer(int depthNumber, bool constant);
 
   QString toString(bool ignoreExplicitlyGlobal = false) const;
 
   uint hash() const;
-  
-  /**The comparison-operators do not respect explicitlyGlobal and isExpression, they only respect the real scope.
+
+  /**
+   * The comparison-operators do not respect explicitlyGlobal and isExpression, they only respect the real scope.
    * This is for convenient use in hash-tables etc.
-   * */
+   */
   bool operator==(const IndexedTypeIdentifier& rhs) const;
   bool operator!=(const IndexedTypeIdentifier& rhs) const;
-  private:
-    IndexedQualifiedIdentifier m_identifier;
-    // The overall number of bits shared by these bit-fields should not exceed 32,
-    // so that we don't waste space. IndexedTypeIdentifer should be as compact as possible.
-    bool m_isConstant : 1;
-    bool m_isReference : 1;
-    bool m_isRValue : 1;
-    bool m_isVolatile : 1;
-    uint m_pointerDepth : 5;
-    uint m_pointerConstMask : 23;
+
+private:
+  IndexedQualifiedIdentifier m_identifier;
+  // The overall number of bits shared by these bit-fields should not exceed 32,
+  // so that we don't waste space. IndexedTypeIdentifer should be as compact as possible.
+  bool m_isConstant : 1;
+  bool m_isReference : 1;
+  bool m_isRValue : 1;
+  bool m_isVolatile : 1;
+  uint m_pointerDepth : 5;
+  uint m_pointerConstMask : 23;
 };
 
 KDEVPLATFORMLANGUAGE_EXPORT uint qHash(const IndexedTypeIdentifier& id);
