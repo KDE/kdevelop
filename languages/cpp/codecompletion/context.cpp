@@ -2267,14 +2267,13 @@ bool  CodeCompletionContext::filterDeclaration(Declaration* decl, DUContext* dec
   if(dynamic_cast<TemplateParameterDeclaration*>(decl) && !visibleFromWithin(decl, m_duContext.data()))
     return false;
   
-  static IndexedIdentifier friendIdentifier(Identifier("friend"));
-  static IndexedIdentifier globalImport(globalImportIdentifier());
+  static const IndexedIdentifier friendIdentifier(Identifier("friend"));
   
   if(decl->indexedIdentifier().isEmpty()) //Filter out nameless declarations
     return false;
 
   if(decl->indexedIdentifier() == friendIdentifier || decl->indexedIdentifier() == Cpp::unnamedNamespaceIdentifier()
-     || decl->indexedIdentifier() == globalImport)
+     || decl->indexedIdentifier() == globalIndexedImportIdentifier())
     return false;
   
   if(excludeReservedIdentifiers)
