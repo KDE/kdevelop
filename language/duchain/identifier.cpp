@@ -503,8 +503,10 @@ int Identifier::uniqueToken() const
 
 void Identifier::setUnique(int token)
 {
-  prepareWrite();
-  dd->m_unique = token;
+  if (token != uniqueToken()) {
+    prepareWrite();
+    dd->m_unique = token;
+  }
 }
 
 const IndexedString Identifier::identifier() const
@@ -517,14 +519,19 @@ const IndexedString Identifier::identifier() const
 
 void Identifier::setIdentifier(const QString& identifier)
 {
-  prepareWrite();
-  dd->m_identifier = IndexedString(identifier);
+  IndexedString id(identifier);
+  if (id != this->identifier()) {
+    prepareWrite();
+    dd->m_identifier = std::move(id);
+  }
 }
 
 void Identifier::setIdentifier(const IndexedString& identifier)
 {
-  prepareWrite();
-  dd->m_identifier = identifier;
+  if (identifier != this->identifier()) {
+    prepareWrite();
+    dd->m_identifier = identifier;
+  }
 }
 
 IndexedTypeIdentifier Identifier::templateIdentifier(int num) const
@@ -858,8 +865,10 @@ bool QualifiedIdentifier::isExpression() const
 
 void QualifiedIdentifier::setIsExpression(bool is)
 {
-  prepareWrite();
-  dd->m_isExpression = is;
+  if (is != isExpression()) {
+    prepareWrite();
+    dd->m_isExpression = is;
+  }
 }
 
 bool QualifiedIdentifier::explicitlyGlobal() const
@@ -873,8 +882,10 @@ bool QualifiedIdentifier::explicitlyGlobal() const
 
 void QualifiedIdentifier::setExplicitlyGlobal(bool eg)
 {
-  prepareWrite();
-  dd->m_explicitlyGlobal = eg;
+  if (eg != explicitlyGlobal()) {
+    prepareWrite();
+    dd->m_explicitlyGlobal = eg;
+  }
 }
 
 bool QualifiedIdentifier::sameIdentifiers(const QualifiedIdentifier& rhs) const
