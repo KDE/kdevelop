@@ -168,6 +168,12 @@ void TestIdentifier::testQualifiedIdentifier()
 
   copy.clear();
   QVERIFY(copy.isEmpty());
+
+  copy.push(moved);
+  QCOMPARE(copy, moved);
+
+  copy.push(Identifier("lalala"));
+  QCOMPARE(copy.count(), moved.count() + 1);
 }
 
 void TestIdentifier::testQualifiedIdentifier_data()
