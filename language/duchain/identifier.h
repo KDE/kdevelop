@@ -234,7 +234,7 @@ public:
   QualifiedIdentifier(uint index);
   QualifiedIdentifier();
   QualifiedIdentifier(QualifiedIdentifier&& rhs) noexcept;
-  virtual ~QualifiedIdentifier();
+  ~QualifiedIdentifier();
   QualifiedIdentifier& operator=(const QualifiedIdentifier& rhs);
   QualifiedIdentifier& operator=(QualifiedIdentifier&& rhs) noexcept;
 
