@@ -79,10 +79,8 @@ extern QMutex cppDuContextInstantiationsMutex;
           Q_ASSERT(m_source);
         }
         void openQualifiedIdentifier( bool isExplicitlyGlobal ) {
-          QualifiedIdentifier i;
-          i.setExplicitlyGlobal( isExplicitlyGlobal );
           StatePtr s(new State);
-          s->identifier = std::move(i);
+          s->identifier.setExplicitlyGlobal( isExplicitlyGlobal );
           m_states << s;
         }
 
