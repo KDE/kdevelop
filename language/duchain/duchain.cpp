@@ -1159,9 +1159,11 @@ void DUChain::initialize()
   initInstantiationInformationRepository();
 
   Importers::self();
- 
+
   globalImportIdentifier();
+  globalIndexedImportIdentifier();
   globalAliasIdentifier();
+  globalIndexedAliasIdentifier();
 }
 
 DUChainLock* DUChain::lock()

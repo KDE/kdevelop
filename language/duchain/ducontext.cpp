@@ -84,9 +84,22 @@ const Identifier& globalImportIdentifier() {
   static const Identifier globalImportIdentifierObject(*new Identifier("{...import...}"));
   return globalImportIdentifierObject;
 }
+
 const Identifier& globalAliasIdentifier() {
   static const Identifier globalAliasIdentifierObject(*new Identifier("{...alias...}"));
   return globalAliasIdentifierObject;
+}
+
+const IndexedIdentifier& globalIndexedImportIdentifier()
+{
+  static const IndexedIdentifier id(globalImportIdentifier());
+  return id;
+}
+
+const IndexedIdentifier& globalIndexedAliasIdentifier()
+{
+  static const IndexedIdentifier id(globalAliasIdentifier());
+  return id;
 }
 
 void DUContext::rebuildDynamicData(DUContext* parent, uint ownIndex) {

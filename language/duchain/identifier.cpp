@@ -855,6 +855,19 @@ QualifiedIdentifier& QualifiedIdentifier::operator+=(const Identifier& rhs)
   return *this;
 }
 
+QualifiedIdentifier QualifiedIdentifier::operator+(const IndexedIdentifier& rhs) const
+{
+  QualifiedIdentifier ret(*this);
+  ret.push(rhs);
+  return ret;
+}
+
+QualifiedIdentifier& QualifiedIdentifier::operator+=(const IndexedIdentifier& rhs)
+{
+  push(rhs);
+  return *this;
+}
+
 bool QualifiedIdentifier::isExpression() const
 {
   if(m_index)
@@ -985,9 +998,18 @@ void QualifiedIdentifier::push(const Identifier& id)
   if(id.isEmpty())
     return;
 
+  push(IndexedIdentifier(id));
+}
+
+void QualifiedIdentifier::push(const IndexedIdentifier& id)
+{
+  if (id.isEmpty()) {
+    return;
+  }
+
   prepareWrite();
 
-  dd->identifiersList.append(IndexedIdentifier(id));
+  dd->identifiersList.append(id);
 }
 
 void QualifiedIdentifier::push(const QualifiedIdentifier& id)

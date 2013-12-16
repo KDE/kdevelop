@@ -238,9 +238,24 @@ public:
   QualifiedIdentifier& operator=(const QualifiedIdentifier& rhs);
   QualifiedIdentifier& operator=(QualifiedIdentifier&& rhs) noexcept;
 
+  /**
+   * Append @p id to this qualified identifier.
+   */
+  void push(const IndexedIdentifier& id);
+  /**
+   * Append @p id to this qualified identifier.
+   *
+   * NOTE: If you have an indexed identifier available, use the above method instead.
+   */
   void push(const Identifier& id);
+  /**
+   * Append all identifiers of @p id to this qualified identifier.
+   */
   void push(const QualifiedIdentifier& id);
-  //Pops one identifier from back:
+
+  /**
+   * Pops one identifier from back:
+   */
   void pop();
   void clear();
   bool isEmpty() const;
@@ -292,6 +307,9 @@ public:
    */
   QualifiedIdentifier operator+(const Identifier& rhs) const;
   QualifiedIdentifier& operator+=(const Identifier& rhs);
+
+  QualifiedIdentifier operator+(const IndexedIdentifier& rhs) const;
+  QualifiedIdentifier& operator+=(const IndexedIdentifier& rhs);
 
   /**
    * @return a QualifiedIdentifier with this one appended to the other.
