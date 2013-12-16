@@ -165,6 +165,9 @@ void TestIdentifier::testQualifiedIdentifier()
   IndexedQualifiedIdentifier movedIndexed = std::move(indexedId);
   QVERIFY(!indexedId.isValid());
   QCOMPARE(movedIndexed, indexedCopy);
+
+  copy.clear();
+  QVERIFY(copy.isEmpty());
 }
 
 void TestIdentifier::testQualifiedIdentifier_data()
