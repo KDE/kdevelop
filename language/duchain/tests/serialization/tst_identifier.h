@@ -34,6 +34,9 @@ private slots:
   void testIdentifier();
   void testIdentifier_data();
 
+  void testQualifiedIdentifier();
+  void testQualifiedIdentifier_data();
+
   void benchIdentifierCopyConstant();
   void benchIdentifierCopyDynamic();
   void benchQidCopyPush();

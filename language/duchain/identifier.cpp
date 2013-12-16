@@ -360,16 +360,28 @@ Identifier::Identifier(uint index)
 }
 
 Identifier::Identifier(const IndexedString& str)
-  : m_index(0)
-  , dd(new IdentifierPrivate<true>)
 {
-  dd->m_identifier = str;
+  if (str.isEmpty()) {
+    m_index = emptyConstantIdentifierPrivateIndex();
+    cd = emptyConstantIdentifierPrivate();
+  } else {
+    m_index = 0;
+    dd = new IdentifierPrivate<true>;
+    dd->m_identifier = str;
+  }
 }
 
 Identifier::Identifier(const QString& id, uint start, uint* takenRange)
-  : m_index(0)
-  , dd(new IdentifierPrivate<true>)
 {
+  if (id.isEmpty()) {
+    m_index = emptyConstantIdentifierPrivateIndex();
+    cd = emptyConstantIdentifierPrivate();
+    return;
+  }
+
+  m_index = 0;
+  dd = new IdentifierPrivate<true>;
+
   ///Extract template-parameters
   ParamIterator paramIt("<>:", id, start);
   dd->m_identifier = IndexedString(paramIt.prefix().trimmed());
@@ -550,6 +562,11 @@ uint Identifier::index() const
   return m_index;
 }
 
+bool Identifier::inRepository() const
+{
+  return m_index;
+}
+
 void Identifier::setTemplateIdentifiers(const QList<IndexedTypeIdentifier>& templateIdentifiers)
 {
   prepareWrite();
@@ -631,9 +648,16 @@ QualifiedIdentifier::QualifiedIdentifier(uint index)
 }
 
 QualifiedIdentifier::QualifiedIdentifier(const QString& id, bool isExpression)
-  : m_index(0)
-  , dd(new DynamicQualifiedIdentifierPrivate)
 {
+  if (id.isEmpty()) {
+    m_index = emptyConstantQualifiedIdentifierPrivateIndex();
+    cd = emptyConstantQualifiedIdentifierPrivate();
+    return;
+  }
+
+  m_index = 0;
+  dd = new DynamicQualifiedIdentifierPrivate;
+
   if(isExpression) {
     setIsExpression(true);
     if(!id.isEmpty()) {
@@ -654,9 +678,16 @@ QualifiedIdentifier::QualifiedIdentifier(const QString& id, bool isExpression)
 }
 
 QualifiedIdentifier::QualifiedIdentifier(const Identifier& id)
-  : m_index(0)
-  , dd(new DynamicQualifiedIdentifierPrivate)
 {
+  if (id.isEmpty()) {
+    m_index = emptyConstantQualifiedIdentifierPrivateIndex();
+    cd = emptyConstantQualifiedIdentifierPrivate();
+    return;
+  }
+
+  m_index = 0;
+  dd = new DynamicQualifiedIdentifierPrivate;
+
   if (id.dd->m_identifier.str().isEmpty()) {
     dd->m_explicitlyGlobal = true;
   } else {
@@ -832,6 +863,8 @@ bool QualifiedIdentifier::operator!=(const QualifiedIdentifier& rhs) const
 
 QualifiedIdentifier& QualifiedIdentifier::operator=(const QualifiedIdentifier& rhs)
 {
+  if(dd == rhs.dd && cd == rhs.cd)
+    return *this;
   if(!m_index)
     delete dd;
   rhs.makeConstant();

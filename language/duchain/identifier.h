@@ -205,6 +205,7 @@ public:
    */
   uint index() const;
 
+  bool inRepository() const;
 private:
   void makeConstant() const;
   void prepareWrite();
