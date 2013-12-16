@@ -96,7 +96,7 @@ public:
     KDevHash kdevhash;
     kdevhash << m_identifier.hash() << m_unique;
     FOREACH_FUNCTION_STATIC(const IndexedTypeIdentifier& templateIdentifier, templateIdentifiers)
-      kdevhash << IndexedTypeIdentifier(templateIdentifier).hash();
+      kdevhash << templateIdentifier.hash();
     m_hash = kdevhash;
   }
 
