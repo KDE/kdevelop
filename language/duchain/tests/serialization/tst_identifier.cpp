@@ -20,8 +20,8 @@
 
 #include "tst_identifier.h"
 
-#include <language/duchain/duchainlock.h>
 #include <language/duchain/identifier.h>
+#include <language/duchain/indexedstring.h>
 
 #include <qtest_kde.h>
 
@@ -41,6 +41,55 @@ void TestIdentifier::initTestCase()
 void TestIdentifier::cleanupTestCase()
 {
   TestCore::shutdown();
+}
+
+void TestIdentifier::testIdentifier()
+{
+  QFETCH(QString, stringId);
+  const IndexedString indexedStringId(stringId);
+
+  Identifier id(stringId);
+  QCOMPARE(id.isEmpty(), stringId.isEmpty());
+  QCOMPARE(id, Identifier(stringId));
+  QVERIFY(!(id != Identifier(stringId)));
+  QCOMPARE(id, Identifier(stringId));
+  QCOMPARE(id, Identifier(IndexedString(indexedStringId)));
+  QCOMPARE(id.identifier(), indexedStringId);
+  QCOMPARE(id.toString(), stringId);
+  QVERIFY(id.nameEquals(Identifier(stringId)));
+  QVERIFY(!id.isUnique());
+  Identifier copy = id;
+  QCOMPARE(copy, id);
+  copy = copy;
+  QCOMPARE(copy, id);
+  copy = Identifier();
+  QVERIFY(copy.isEmpty());
+  copy = id;
+  QCOMPARE(copy, id);
+
+  IndexedIdentifier indexedId(id);
+  QVERIFY(indexedId == id);
+  QCOMPARE(indexedId, IndexedIdentifier(id));
+  QCOMPARE(indexedId.isEmpty(), stringId.isEmpty());
+  QCOMPARE(indexedId.identifier(), id);
+  IndexedIdentifier indexedCopy = indexedId;
+  QCOMPARE(indexedCopy, indexedId);
+  indexedCopy = indexedCopy;
+  QCOMPARE(indexedCopy, indexedId);
+  indexedCopy = IndexedIdentifier();
+  QVERIFY(indexedCopy.isEmpty());
+  indexedCopy = indexedId;
+  QCOMPARE(indexedCopy, indexedId);
+}
+
+void TestIdentifier::testIdentifier_data()
+{
+  QTest::addColumn<QString>("stringId");
+
+  QTest::newRow("empty") << QString();
+  QTest::newRow("foo") << QString("foo");
+  QTest::newRow("bar") << QString("bar");
+  //TODO: test template identifiers
 }
 
 void TestIdentifier::benchIdentifierCopyConstant()
