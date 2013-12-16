@@ -404,6 +404,41 @@ Identifier& Identifier::operator=(const Identifier& rhs)
   return *this;
 }
 
+Identifier::Identifier(Identifier&& rhs)
+  : m_index(rhs.m_index)
+{
+  if (m_index) {
+    cd = rhs.cd;
+  } else {
+    dd = rhs.dd;
+  }
+  rhs.cd = emptyConstantIdentifierPrivate();
+  rhs.m_index = emptyConstantIdentifierPrivateIndex();
+}
+
+Identifier& Identifier::operator=(Identifier&& rhs)
+{
+  if(dd == rhs.dd && cd == rhs.cd)
+    return *this;
+
+  if (!m_index) {
+    delete dd;
+    dd = 0;
+  }
+
+  m_index = rhs.m_index;
+
+  if (m_index) {
+    cd = rhs.cd;
+  } else {
+    dd = rhs.dd;
+  }
+  rhs.cd = emptyConstantIdentifierPrivate();
+  rhs.m_index = emptyConstantIdentifierPrivateIndex();
+
+  return *this;
+}
+
 Identifier::~Identifier()
 {
   if(!m_index)
@@ -1170,6 +1205,12 @@ IndexedIdentifier::IndexedIdentifier(const IndexedIdentifier& rhs)
   }
 }
 
+IndexedIdentifier::IndexedIdentifier(IndexedIdentifier&& rhs)
+  : index(rhs.index)
+{
+  rhs.index = emptyConstantIdentifierPrivateIndex();
+}
+
 IndexedIdentifier::~IndexedIdentifier()
 {
   if(shouldDoDUChainReferenceCounting(this)) {
@@ -1191,6 +1232,33 @@ IndexedIdentifier& IndexedIdentifier::operator=(const Identifier& id)
     QMutexLocker lock(identifierRepository()->mutex());
     increase(identifierRepository()->dynamicItemFromIndexSimple(index)->m_refCount, index);
   }
+  return *this;
+}
+
+IndexedIdentifier& IndexedIdentifier::operator=(IndexedIdentifier&& rhs)
+{
+  if(shouldDoDUChainReferenceCounting(this)) {
+    QMutexLocker lock(identifierRepository()->mutex());
+    ifDebug( kDebug() << "decreasing"; )
+
+    decrease(identifierRepository()->dynamicItemFromIndexSimple(index)->m_refCount, index);
+  } else if (shouldDoDUChainReferenceCounting(&rhs)) {
+    QMutexLocker lock(identifierRepository()->mutex());
+    ifDebug( kDebug() << "decreasing"; )
+
+    decrease(identifierRepository()->dynamicItemFromIndexSimple(rhs.index)->m_refCount, rhs.index);
+  }
+
+  index = rhs.index;
+  rhs.index = emptyConstantIdentifierPrivateIndex();
+
+  if(shouldDoDUChainReferenceCounting(this) && !(shouldDoDUChainReferenceCounting(&rhs))) {
+    QMutexLocker lock(identifierRepository()->mutex());
+    ifDebug( kDebug() << "increasing"; )
+
+    increase(identifierRepository()->dynamicItemFromIndexSimple(index)->m_refCount, index);
+  }
+
   return *this;
 }
 

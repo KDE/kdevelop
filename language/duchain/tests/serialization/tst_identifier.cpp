@@ -80,6 +80,14 @@ void TestIdentifier::testIdentifier()
   QVERIFY(indexedCopy.isEmpty());
   indexedCopy = indexedId;
   QCOMPARE(indexedCopy, indexedId);
+
+  Identifier moved = std::move(id);
+  QVERIFY(id.isEmpty());
+  QCOMPARE(moved, copy);
+
+  IndexedIdentifier movedIndexed = std::move(indexedId);
+  QVERIFY(indexedId.isEmpty());
+  QCOMPARE(movedIndexed, indexedCopy);
 }
 
 void TestIdentifier::testIdentifier_data()

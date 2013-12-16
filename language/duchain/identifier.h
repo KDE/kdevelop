@@ -62,8 +62,10 @@ public:
   IndexedIdentifier();
   IndexedIdentifier(const Identifier& id);
   IndexedIdentifier(const IndexedIdentifier& rhs);
+  IndexedIdentifier(IndexedIdentifier&& rhs) noexcept;
   IndexedIdentifier& operator=(const Identifier& id);
   IndexedIdentifier& operator=(const IndexedIdentifier& rhs);
+  IndexedIdentifier& operator=(IndexedIdentifier&& rhs) noexcept;
   ~IndexedIdentifier();
   bool operator==(const IndexedIdentifier& rhs) const;
   bool operator!=(const IndexedIdentifier& rhs) const;
@@ -148,7 +150,10 @@ public:
   Identifier(const Identifier& rhs);
   Identifier(uint index);
   Identifier();
+  Identifier(Identifier&& rhs) noexcept;
   ~Identifier();
+  Identifier& operator=(const Identifier& rhs);
+  Identifier& operator=(Identifier&& rhs) noexcept;
 
   static Identifier unique(int token);
 
@@ -190,7 +195,6 @@ public:
 
   bool operator==(const Identifier& rhs) const;
   bool operator!=(const Identifier& rhs) const;
-  Identifier& operator=(const Identifier& rhs);
 
   bool isEmpty() const;
 
