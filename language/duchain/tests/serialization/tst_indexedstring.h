@@ -1,6 +1,6 @@
 /*
  * This file is part of KDevelop
- * Copyright 2012 Milian Wolff <mail@milianw.de>
+ * Copyright 2012-2013 Milian Wolff <mail@milianw.de>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -19,23 +19,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef BENCHITEMREPOSITORY_H
-#define BENCHITEMREPOSITORY_H
+#ifndef TESTINDEXEDSTRING_H
+#define TESTINDEXEDSTRING_H
 
 #include <QObject>
 
-class BenchItemRepository : public QObject
+class TestIndexedString : public QObject
 {
     Q_OBJECT
 private slots:
     void initTestCase();
     void cleanupTestCase();
 
-    void insert();
-    void remove();
-    void removeDisk();
-    void lookupKey();
-    void lookupValue();
+    void index();
+    void length();
+    void qstring();
+    void kurl();
+    void hashString();
+    void hashIndexed();
+    void qSet();
+
+    void test();
+    void test_data();
 };
 
-#endif // BENCHITEMREPOSITORY_H
+#endif // TESTINDEXEDSTRING_H

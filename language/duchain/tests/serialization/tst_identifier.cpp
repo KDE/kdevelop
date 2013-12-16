@@ -1,6 +1,6 @@
 /*
  * This file is part of KDevelop
- * Copyright 2012 Milian Wolff <mail@milianw.de>
+ * Copyright 2012-2013 Milian Wolff <mail@milianw.de>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -18,7 +18,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "benchmarks.h"
+#include "tst_identifier.h"
 
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/identifier.h>
@@ -28,36 +28,22 @@
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
 
-QTEST_KDEMAIN(Benchmarks, NoGUI);
+QTEST_KDEMAIN(TestIdentifier, NoGUI);
 
 using namespace KDevelop;
 
-void Benchmarks::initTestCase()
+void TestIdentifier::initTestCase()
 {
   AutoTestShell::init();
   TestCore::initialize(Core::NoUi);
 }
 
-void Benchmarks::cleanupTestCase()
+void TestIdentifier::cleanupTestCase()
 {
   TestCore::shutdown();
 }
 
-void Benchmarks::duchainReadLocker()
-{
-  QBENCHMARK {
-    DUChainReadLocker lock;
-  }
-}
-
-void Benchmarks::duchainWriteLocker()
-{
-  QBENCHMARK {
-    DUChainWriteLocker lock;
-  }
-}
-
-void Benchmarks::identifierCopyConstant()
+void TestIdentifier::benchIdentifierCopyConstant()
 {
   QBENCHMARK {
     Identifier identifier("Asdf");
@@ -66,7 +52,7 @@ void Benchmarks::identifierCopyConstant()
   }
 }
 
-void Benchmarks::identifierCopyDynamic()
+void TestIdentifier::benchIdentifierCopyDynamic()
 {
   QBENCHMARK {
     Identifier identifier("Asdf");
@@ -74,7 +60,7 @@ void Benchmarks::identifierCopyDynamic()
   }
 }
 
-void Benchmarks::qidCopyPush()
+void TestIdentifier::benchQidCopyPush()
 {
   QBENCHMARK {
     Identifier id("foo");

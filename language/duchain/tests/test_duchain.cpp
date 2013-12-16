@@ -1,7 +1,7 @@
 /*
  * This file is part of KDevelop
  *
- * Copyright 2011 Milian Wolff <mail@milianw.de>
+ * Copyright 2011-2013 Milian Wolff <mail@milianw.de>
  * Copyright 2006 Hamish Rodda <rodda@kde.org>
  * Copyright 2007-2009 David Nolden <david.nolden.kdevelop@art-master.de>
  *
@@ -804,6 +804,20 @@ void TestDUChain::benchTypeRegistry_data()
   QTest::newRow("copy") << 4;
   QTest::newRow("copyNonDynamic") << 5;
   QTest::newRow("callDestructor") << 6;
+}
+
+void TestDUChain::benchDuchainReadLocker()
+{
+  QBENCHMARK {
+    DUChainReadLocker lock;
+  }
+}
+
+void TestDUChain::benchDuchainWriteLocker()
+{
+  QBENCHMARK {
+    DUChainWriteLocker lock;
+  }
 }
 
 #include "test_duchain.moc"

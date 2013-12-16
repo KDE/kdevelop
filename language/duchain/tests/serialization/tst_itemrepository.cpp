@@ -1,6 +1,6 @@
 /*
  * This file is part of KDevelop
- * Copyright 2012 Milian Wolff <mail@milianw.de>
+ * Copyright 2012-2013 Milian Wolff <mail@milianw.de>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "benchitemrepository.h"
+#include "tst_itemrepository.h"
 
 
 #include <qtest_kde.h>
@@ -32,7 +32,7 @@
 
 #include <algorithm>
 
-QTEST_KDEMAIN(BenchItemRepository, NoGUI);
+QTEST_KDEMAIN(TestItemRepository, NoGUI);
 
 using namespace KDevelop;
 
@@ -110,18 +110,18 @@ struct TestDataRepositoryItemRequest
 
 typedef ItemRepository<TestData, TestDataRepositoryItemRequest, false, true> TestDataRepository;
 
-void BenchItemRepository::initTestCase()
+void TestItemRepository::initTestCase()
 {
   AutoTestShell::init();
   TestCore::initialize(Core::NoUi);
 }
 
-void BenchItemRepository::cleanupTestCase()
+void TestItemRepository::cleanupTestCase()
 {
   TestCore::shutdown();
 }
 
-QVector<QString> generateData()
+static QVector<QString> generateData()
 {
   QVector<QString> data;
   static const int NUM_ITEMS = 100000;
@@ -132,7 +132,7 @@ QVector<QString> generateData()
   return data;
 }
 
-QVector<uint> insertData(const QVector<QString>& data, TestDataRepository& repo)
+static QVector<uint> insertData(const QVector<QString>& data, TestDataRepository& repo)
 {
   QVector<uint> indices;
   indices.reserve(data.size());
@@ -143,7 +143,7 @@ QVector<uint> insertData(const QVector<QString>& data, TestDataRepository& repo)
   return indices;
 }
 
-void BenchItemRepository::insert()
+void TestItemRepository::insert()
 {
   TestDataRepository repo("TestDataRepositoryInsert");
   QVector<QString> data = generateData();
@@ -156,7 +156,7 @@ void BenchItemRepository::insert()
   QCOMPARE(repo.statistics().totalItems, uint(data.size()));
 }
 
-void BenchItemRepository::remove()
+void TestItemRepository::remove()
 {
   TestDataRepository repo("TestDataRepositoryRemove");
   QVector<QString> data = generateData();
@@ -173,7 +173,7 @@ void BenchItemRepository::remove()
   QCOMPARE(repo.statistics().totalItems, 0u);
 }
 
-void BenchItemRepository::removeDisk()
+void TestItemRepository::removeDisk()
 {
   QVector<QString> data = generateData();
   QVector<uint> indices;
@@ -193,7 +193,7 @@ void BenchItemRepository::removeDisk()
   QCOMPARE(repo.statistics().totalItems, 0u);
 }
 
-void BenchItemRepository::lookupKey()
+void TestItemRepository::lookupKey()
 {
   TestDataRepository repo("TestDataRepositoryLookupKey");
   QVector<QString> data = generateData();
@@ -207,7 +207,7 @@ void BenchItemRepository::lookupKey()
   }
 }
 
-void BenchItemRepository::lookupValue()
+void TestItemRepository::lookupValue()
 {
   TestDataRepository repo("TestDataRepositoryLookupValue");
   QVector<QString> data = generateData();
@@ -222,4 +222,4 @@ void BenchItemRepository::lookupValue()
   }
 }
 
-#include "benchitemrepository.moc"
+#include "tst_itemrepository.moc"

@@ -1,6 +1,6 @@
 /*
  * This file is part of KDevelop
- * Copyright 2012 Milian Wolff <mail@milianw.de>
+ * Copyright 2012-2013 Milian Wolff <mail@milianw.de>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "benchindexedstring.h"
+#include "tst_indexedstring.h"
 
 #include <qtest_kde.h>
 
@@ -30,17 +30,17 @@
 
 #include <utility>
 
-QTEST_KDEMAIN(BenchIndexedString, NoGUI);
+QTEST_KDEMAIN(TestIndexedString, NoGUI);
 
 using namespace KDevelop;
 
-void BenchIndexedString::initTestCase()
+void TestIndexedString::initTestCase()
 {
   AutoTestShell::init();
   TestCore::initialize(Core::NoUi);
 }
 
-void BenchIndexedString::cleanupTestCase()
+void TestIndexedString::cleanupTestCase()
 {
   TestCore::shutdown();
 }
@@ -56,7 +56,7 @@ static QVector<QString> generateData()
   return data;
 }
 
-void BenchIndexedString::index()
+void TestIndexedString::index()
 {
   QVector<QString> data = generateData();
   QBENCHMARK {
@@ -79,7 +79,7 @@ static QVector<uint> setupTest()
   return indices;
 }
 
-void BenchIndexedString::length()
+void TestIndexedString::length()
 {
   QVector<uint> indices = setupTest();
   QBENCHMARK {
@@ -90,7 +90,7 @@ void BenchIndexedString::length()
   }
 }
 
-void BenchIndexedString::qstring()
+void TestIndexedString::qstring()
 {
   QVector<uint> indices = setupTest();
   QBENCHMARK {
@@ -101,7 +101,7 @@ void BenchIndexedString::qstring()
   }
 }
 
-void BenchIndexedString::kurl()
+void TestIndexedString::kurl()
 {
   QVector<uint> indices = setupTest();
   QBENCHMARK {
@@ -112,7 +112,7 @@ void BenchIndexedString::kurl()
   }
 }
 
-void BenchIndexedString::hashString()
+void TestIndexedString::hashString()
 {
   QVector<QString> data = generateData();
   QBENCHMARK {
@@ -122,7 +122,7 @@ void BenchIndexedString::hashString()
   }
 }
 
-void BenchIndexedString::hashIndexed()
+void TestIndexedString::hashIndexed()
 {
   QVector<uint> indices = setupTest();
   QBENCHMARK {
@@ -132,7 +132,7 @@ void BenchIndexedString::hashIndexed()
   }
 }
 
-void BenchIndexedString::qSet()
+void TestIndexedString::qSet()
 {
   QVector<uint> indices = setupTest();
   QSet<IndexedString> set;
@@ -143,7 +143,7 @@ void BenchIndexedString::qSet()
   }
 }
 
-void BenchIndexedString::test()
+void TestIndexedString::test()
 {
   QFETCH(QString, data);
 
@@ -161,7 +161,7 @@ void BenchIndexedString::test()
   QCOMPARE(moved.str(), data);
 }
 
-void BenchIndexedString::test_data()
+void TestIndexedString::test_data()
 {
   QTest::addColumn<QString>("data");
 
@@ -172,4 +172,4 @@ void BenchIndexedString::test_data()
   QTest::newRow("string-utf8") << QString::fromUtf8("æſðđäöü");
 }
 
-#include "benchindexedstring.moc"
+#include "tst_indexedstring.moc"

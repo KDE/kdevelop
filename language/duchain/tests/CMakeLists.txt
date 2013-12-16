@@ -22,14 +22,6 @@ target_link_libraries(itemrepositorytest ${KDE4_KDECORE_LIBS} ${KDE4_KTEXTEDITOR
 
 ########### next target ###############
 
-set(benchmarks_SRCS benchmarks.cpp)
-
-kde4_add_unit_test(benchmarks ${benchmarks_SRCS})
-target_link_libraries(benchmarks ${KDE4_KDECORE_LIBS} ${KDE4_KTEXTEDITOR_LIBRARY}
-    ${QT_QTTEST_LIBRARY} kdevplatformlanguage ${KDEVPLATFORM_TESTS_LIBRARIES})
-
-########### next target ###############
-
 set(itemrepositoryregistry_automatic_test_SRCS test_itemrepositoryregistry_automatic.cpp)
 kde4_add_unit_test(itemrepositoryregistry_automatic_test ${itemrepositoryregistry_automatic_test_SRCS})
 target_link_libraries(itemrepositoryregistry_automatic_test ${QT_QTTEST_LIBRARY}
