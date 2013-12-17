@@ -106,10 +106,9 @@ CMakeFileContent CMakeListsParser::readCMakeFile(const QString & _fileName)
     }
 
     CMakeFileContent ret;
-    KUrl u = KUrl::fromLocalFile(_fileName);
+    KUrl u = KUrl::fromPath(_fileName);
     u.cleanPath();
     QString fileName = u.toLocalFile();
-
 
     bool readError = false, haveNewline = true;
     cmListFileLexer_Token* token;
