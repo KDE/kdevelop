@@ -3820,7 +3820,7 @@ void CMakeAstTest::testWriteFileGoodParse_data()
     {
         funcs[i].name = "WRITE_FILE";
         if ( i % 2 == 0 )
-            funcs[i].name.toLower();
+            funcs[i].name = funcs[i].name.toLower();
     }
     
     args[0] << "myfile.txt" << "\"this is my message\"";
