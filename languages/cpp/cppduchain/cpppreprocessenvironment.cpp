@@ -45,7 +45,7 @@ void CppPreprocessEnvironment::finishEnvironment(bool leaveEnvironmentFile) {
     }
 }
 
-void CppPreprocessEnvironment::removeMacro(KDevelop::IndexedString macroName) {
+void CppPreprocessEnvironment::removeMacro(const KDevelop::IndexedString& macroName) {
   m_macroNameSet.remove(macroName);
   rpp::pp_macro* m = new rpp::pp_macro;
   m->name = macroName;
@@ -53,7 +53,7 @@ void CppPreprocessEnvironment::removeMacro(KDevelop::IndexedString macroName) {
   rpp::Environment::setMacro(m);
 }
 
-void CppPreprocessEnvironment::removeString(KDevelop::IndexedString str) {
+void CppPreprocessEnvironment::removeString(const KDevelop::IndexedString& str) {
   m_strings.erase(str.index());
 }
 
