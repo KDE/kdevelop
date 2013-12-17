@@ -36,7 +36,7 @@ const bool enableIncludePathResolution = true;
 QList<KUrl> convertToUrls(const QList<IndexedString>& stringList) {
   QList<KUrl> ret;
   foreach(const IndexedString& str, stringList)
-    ret << KUrl(str.str());
+    ret << str.toUrl();
   return ret;
 }
 
@@ -56,7 +56,7 @@ void IncludePathComputer::computeForeground() {
     foreach( const QString& path, CppUtils::standardIncludePaths()) {
         KUrl u(path);
         if(!m_hasPath.contains(u)) {
-          m_ret << KUrl(path);
+          m_ret << u;
           m_hasPath.insert(u);
         }
     }
@@ -125,7 +125,7 @@ void IncludePathComputer::computeBackground() {
     foreach( const QString& path, standardPaths) {
       KUrl u(path);
       if(!m_hasPath.contains(u))
-        m_ret << KUrl(path);
+        m_ret << u;
       m_hasPath.insert(u);
     }
 
