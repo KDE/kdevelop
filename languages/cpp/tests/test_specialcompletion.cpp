@@ -95,7 +95,6 @@ void TestSpecialCompletion::testMissingInclude()
     QVERIFY(include.topContext());
     TopDUContext* includeTop = DUChainUtils::contentContextFromProxyContext(include.topContext().data());
     QVERIFY(includeTop);
-    QEXPECT_FAIL("", "include path resolver complains", Continue);
     QVERIFY(includeTop->problems().isEmpty());
     QCOMPARE(includeTop->localDeclarations().size(), 1);
     QCOMPARE(includeTop->childContexts().size(), 1);
@@ -103,7 +102,6 @@ void TestSpecialCompletion::testMissingInclude()
     QVERIFY(workingFile.topContext());
     TopDUContext* top = DUChainUtils::contentContextFromProxyContext(workingFile.topContext());
     QVERIFY(top);
-    QEXPECT_FAIL("", "include path resolver complains", Continue);
     QVERIFY(top->problems().isEmpty());
     QCOMPARE(top->childContexts().size(), 2);
 
@@ -141,7 +139,6 @@ void TestSpecialCompletion::testIncludeDefine()
     QVERIFY(include.topContext());
     TopDUContext* includeTop = DUChainUtils::contentContextFromProxyContext(include.topContext().data());
     QVERIFY(includeTop);
-    QEXPECT_FAIL("", "include path resolver complains", Continue);
     QVERIFY(includeTop->problems().isEmpty());
     QCOMPARE(includeTop->localDeclarations().size(), 1);
     QCOMPARE(includeTop->childContexts().size(), 1);
@@ -283,7 +280,6 @@ void TestSpecialCompletion::testIncludeComment()
     QVERIFY(include.topContext());
     TopDUContext* includeTop = DUChainUtils::contentContextFromProxyContext(include.topContext().data());
     QVERIFY(includeTop);
-    QEXPECT_FAIL("", "include path resolver complains", Continue);
     QVERIFY(includeTop->problems().isEmpty());
     QCOMPARE(includeTop->localDeclarations().size(), 1);
     QCOMPARE(includeTop->childContexts().size(), 1);

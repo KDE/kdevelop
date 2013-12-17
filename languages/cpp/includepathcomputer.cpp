@@ -97,7 +97,7 @@ void IncludePathComputer::computeForeground() {
 
         m_defines = buildManager->defines(file);
         
-        m_gotPathsFromManager = true;
+        m_gotPathsFromManager = !dirs.isEmpty();
 
         kDebug(9007) << "Got " << dirs.count() << " include-paths from build-manager";
 
@@ -110,7 +110,7 @@ void IncludePathComputer::computeForeground() {
     }
 
     if(!m_gotPathsFromManager)
-      kDebug(9007) << "Did not find a build-manager for" << m_source;
+      kDebug(9007) << "Did not find any include paths from project manager for" << m_source;
 }
 
 
@@ -119,11 +119,24 @@ void IncludePathComputer::computeBackground() {
     if(m_ready)
       return;
     
+    const QList<QString>& standardPaths = CppUtils::standardIncludePaths();
+
+    //Insert standard-paths
+    foreach( const QString& path, standardPaths) {
+      KUrl u(path);
+      if(!m_hasPath.contains(u))
+        m_ret << KUrl(path);
+      m_hasPath.insert(u);
+    }
+
+    if (m_gotPathsFromManager) {
+      // return early and trust the include paths returned by the project manager
+      return;
+    }
+
     if(!m_effectiveBuildDirectory.isEmpty())
         m_includeResolver.setOutOfSourceBuildSystem(m_projectDirectory.toLocalFile(), m_effectiveBuildDirectory.toLocalFile());
-    
-    QList<QString> standardPaths = CppUtils::standardIncludePaths();
-    
+
     m_includePathDependency = m_includeResolver.findIncludePathDependency(m_source.toLocalFile());
     kDebug() << "current include path dependency state:" << m_includePathDependency.toString();
     
@@ -189,45 +202,15 @@ void IncludePathComputer::computeBackground() {
         CppTools::PathResolutionResult result = m_includeResolver.resolveIncludePath(m_source.toLocalFile());
         m_includePathDependency = result.includePathDependency;
         kDebug() << "new include path dependency:" << m_includePathDependency.toString();
-        
-//         if (result) {
-          bool hadMissingPath = false;
-          if( !m_gotPathsFromManager ) {
-              foreach( const QString &res, result.paths ) {
-                  KUrl r(res);
-                  r.adjustPath(KUrl::AddTrailingSlash);
-                  if(!m_hasPath.contains(r))
-                    m_ret << r;
-                  m_hasPath.insert(r);
-              }
-          } else {
-              //Compare the includes found by the includepathresolver to the ones returned by the project-manager, and complain eaach missing path.
-              foreach( const QString& res, result.paths ) {
 
-                  KUrl r(res);
-                  r.adjustPath(KUrl::AddTrailingSlash);
+        foreach( const QString &res, result.paths ) {
+            KUrl r(res);
+            r.adjustPath(KUrl::AddTrailingSlash);
+            if(!m_hasPath.contains(r))
+              m_ret << r;
+            m_hasPath.insert(r);
+        }
 
-                  KUrl r2(res);
-                  r2.adjustPath(KUrl::RemoveTrailingSlash);
-
-                  if( !m_hasPath.contains(r) && !m_hasPath.contains(r2) ) {
-                      hadMissingPath = true;
-                      if(!m_hasPath.contains(r))
-                        m_ret << r;
-                      m_hasPath.insert(r);
-
-                      kDebug(9007) << "Include-path was missing in list returned by build-manager, adding it now. file was:" << m_source << "missing path:" << r.pathOrUrl();
-                  }
-              }
-
-              if( hadMissingPath ) {
-                  QString paths;
-                  foreach( const KUrl& u, m_ret )
-                      paths += u.pathOrUrl() + "\n";
-
-                  kDebug(9007) << "Total list of include-paths:\n" << paths << "\nEnd of list";
-              }
-          }
         if(!result) {
             kDebug(9007) << "Failed to resolve include-path for \"" << m_source << "\":" << result.errorMessage << "\n" << result.longErrorMessage << "\n";
             problem->setSource(KDevelop::ProblemData::Preprocessor);
@@ -257,14 +240,6 @@ void IncludePathComputer::computeBackground() {
               kWarning() << "Missing cpp environment-file for" << m_source;
             }
         }
-    }
-
-    //Insert the standard-paths at the end
-    foreach( const QString& path, standardPaths) {
-      KUrl u(path);
-      if(!m_hasPath.contains(u))
-        m_ret << KUrl(path);
-      m_hasPath.insert(u);
     }
 
     m_ready = true;

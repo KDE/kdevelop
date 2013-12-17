@@ -116,13 +116,10 @@ void TestCppCodegen::testAssistants()
 
   DUChainReadLocker lock;
 
-  // There is one problem from the include-path resolver as it couldn't
-  // resolve include paths for the artificial code
-  // The second problem is the missing-declaration assistant problem
-  QCOMPARE(code->problems().size(), 2);
-  QVERIFY(code->problems()[1]->solutionAssistant());
-  QCOMPARE(code->problems()[1]->solutionAssistant()->actions().size(), numAssistants);
-  code->problems()[1]->solutionAssistant()->actions()[executeAssistant]->execute();
+  QCOMPARE(code->problems().size(), 1);
+  QVERIFY(code->problems().first()->solutionAssistant());
+  QCOMPARE(code->problems().first()->solutionAssistant()->actions().size(), numAssistants);
+  code->problems().first()->solutionAssistant()->actions()[executeAssistant]->execute();
 
   //Make sure the assistant has inserted the correct solution
   QVERIFY(code.m_insertedCode.text().contains(insertionText));
