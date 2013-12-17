@@ -58,7 +58,7 @@ public:
   virtual int type() const;
 
   ///Does not include the names of undef macros
-  const Cpp::ReferenceCountedStringSet& macroNameSet() const;
+  QSet<KDevelop::IndexedString> macroNameSet() const;
 
   void removeString(const KDevelop::IndexedString& str);
   
@@ -86,7 +86,7 @@ private:
     uint m_identityOffsetRestriction;
     bool m_identityOffsetRestrictionEnabled;
     bool m_finished;
-    Cpp::ReferenceCountedStringSet m_macroNameSet;
+    QSet<KDevelop::IndexedString> m_macroNameSet;
     mutable std::set<Utils::BasicSetRepository::Index> m_strings;
     mutable KSharedPtr<Cpp::EnvironmentFile> m_environmentFile;
 };

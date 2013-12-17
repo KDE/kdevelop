@@ -147,20 +147,16 @@ void PreprocessJob::run()
 
     //Eventually initialize the environment with the parent-environment to get its macros
     m_currentEnvironment = new CppPreprocessEnvironment( m_firstEnvironmentFile );
-
     //If we are included from another preprocessor, copy its macros
     if( parentJob()->parentPreprocessor() ) {
         m_currentEnvironment->swapMacros( parentJob()->parentPreprocessor()->m_currentEnvironment );
     } else {
         //Insert standard-macros
-        KDevelop::ParsingEnvironment* standardEnv = createStandardEnvironment();
-        parentJob()->mergeDefines(static_cast<CppPreprocessEnvironment&>(*standardEnv));
-        
-        m_currentEnvironment->swapMacros( dynamic_cast<CppPreprocessEnvironment*>(standardEnv) );
-        delete standardEnv;
+        m_currentEnvironment->merge( CppUtils::standardMacros() );
+        parentJob()->mergeDefines(static_cast<CppPreprocessEnvironment&>(*m_currentEnvironment));
     }
     
-    Cpp::ReferenceCountedStringSet macroNamesAtBeginning = m_currentEnvironment->macroNameSet();
+    const auto& macroNamesAtBeginning = m_currentEnvironment->macroNameSet();
     
     KDevelop::ParsingEnvironmentFilePointer updatingEnvironmentFile;
     

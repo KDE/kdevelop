@@ -226,12 +226,15 @@ bool EnvironmentFile::matchEnvironment(const ParsingEnvironment* _environment) c
 #endif
       return true;
     }
-  
-  ReferenceCountedStringSet environmentMacroNames = cppEnvironment->macroNameSet();
-  
-  ReferenceCountedStringSet conflicts = (environmentMacroNames & strings()) - d_func()->m_usedMacroNames;
+
+  const auto& environmentMacroNames = cppEnvironment->macroNameSet();
+
+  const ReferenceCountedStringSet& conflicts = strings() - d_func()->m_usedMacroNames;
 
   for( ReferenceCountedStringSet::Iterator it(conflicts.iterator()); it; ++it ) {
+    if (!environmentMacroNames.contains(it.ref())) {
+      continue;
+    }
     rpp::pp_macro* m = cppEnvironment->retrieveStoredMacro( *it );
     if(m && !m->isUndef()) {
       
