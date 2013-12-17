@@ -26,6 +26,8 @@
 #include "repositories/itemrepository.h"
 #include "util/kdevhash.h"
 
+#include <utility>
+
 #define ifDebug(x)
 
 namespace KDevelop
@@ -416,7 +418,7 @@ Identifier& Identifier::operator=(const Identifier& rhs)
   return *this;
 }
 
-Identifier::Identifier(Identifier&& rhs)
+Identifier::Identifier(Identifier&& rhs) noexcept
   : m_index(rhs.m_index)
 {
   if (m_index) {
@@ -428,7 +430,7 @@ Identifier::Identifier(Identifier&& rhs)
   rhs.m_index = emptyConstantIdentifierPrivateIndex();
 }
 
-Identifier& Identifier::operator=(Identifier&& rhs)
+Identifier& Identifier::operator=(Identifier&& rhs) noexcept
 {
   if(dd == rhs.dd && cd == rhs.cd)
     return *this;
@@ -720,7 +722,7 @@ QualifiedIdentifier::QualifiedIdentifier(const QualifiedIdentifier& id)
   }
 }
 
-QualifiedIdentifier::QualifiedIdentifier(QualifiedIdentifier&& rhs)
+QualifiedIdentifier::QualifiedIdentifier(QualifiedIdentifier&& rhs) noexcept
   : m_index(rhs.m_index)
 {
   if (m_index) {
@@ -745,7 +747,7 @@ QualifiedIdentifier& QualifiedIdentifier::operator=(const QualifiedIdentifier& r
   return *this;
 }
 
-QualifiedIdentifier& QualifiedIdentifier::operator=(QualifiedIdentifier&& rhs)
+QualifiedIdentifier& QualifiedIdentifier::operator=(QualifiedIdentifier&& rhs) noexcept
 {
   if(!m_index)
     delete dd;
@@ -1299,7 +1301,7 @@ IndexedIdentifier::IndexedIdentifier(const IndexedIdentifier& rhs)
   }
 }
 
-IndexedIdentifier::IndexedIdentifier(IndexedIdentifier&& rhs)
+IndexedIdentifier::IndexedIdentifier(IndexedIdentifier&& rhs) noexcept
   : index(rhs.index)
 {
   rhs.index = emptyConstantIdentifierPrivateIndex();
@@ -1329,7 +1331,7 @@ IndexedIdentifier& IndexedIdentifier::operator=(const Identifier& id)
   return *this;
 }
 
-IndexedIdentifier& IndexedIdentifier::operator=(IndexedIdentifier&& rhs)
+IndexedIdentifier& IndexedIdentifier::operator=(IndexedIdentifier&& rhs) noexcept
 {
   if(shouldDoDUChainReferenceCounting(this)) {
     QMutexLocker lock(identifierRepository()->mutex());
@@ -1459,7 +1461,7 @@ IndexedQualifiedIdentifier::IndexedQualifiedIdentifier(const IndexedQualifiedIde
   }
 }
 
-IndexedQualifiedIdentifier::IndexedQualifiedIdentifier(IndexedQualifiedIdentifier&& rhs)
+IndexedQualifiedIdentifier::IndexedQualifiedIdentifier(IndexedQualifiedIdentifier&& rhs) noexcept
   : index(rhs.index)
 {
   rhs.index = emptyConstantQualifiedIdentifierPrivateIndex();
@@ -1508,7 +1510,7 @@ IndexedQualifiedIdentifier& IndexedQualifiedIdentifier::operator=(const IndexedQ
   return *this;
 }
 
-IndexedQualifiedIdentifier& IndexedQualifiedIdentifier::operator=(IndexedQualifiedIdentifier&& rhs)
+IndexedQualifiedIdentifier& IndexedQualifiedIdentifier::operator=(IndexedQualifiedIdentifier&& rhs) noexcept
 {
   if(shouldDoDUChainReferenceCounting(this)) {
     QMutexLocker lock(qualifiedidentifierRepository()->mutex());

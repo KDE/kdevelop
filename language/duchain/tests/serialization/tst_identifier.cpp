@@ -28,6 +28,8 @@
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
 
+#include <utility>
+
 QTEST_KDEMAIN(TestIdentifier, NoGUI);
 
 using namespace KDevelop;
