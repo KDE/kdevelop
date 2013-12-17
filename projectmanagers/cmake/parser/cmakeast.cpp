@@ -3286,20 +3286,34 @@ bool TargetLinkLibrariesAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 
     m_target = func.arguments[0].value;
 
-    QList<CMakeFunctionArgument>::const_iterator it, itEnd;
-    it = func.arguments.begin() + 1;
-    itEnd = func.arguments.end();
+    Dependencies* current = &m_publicDependencies;
 
-    for ( ; it != itEnd; ++it )
+    QList<CMakeFunctionArgument>::const_iterator it, itEnd;
+    for (it = func.arguments.begin() + 1, itEnd = func.arguments.end(); it != itEnd; ++it )
     {
         CMakeFunctionArgument arg = ( *it );
-        if ( arg.value == "debug" )
+        if ( arg.value == "LINK_PUBLIC")
+        {
+            current = &m_publicDependencies;
+            continue;
+        }
+        else if ( arg.value == "LINK_PRIVATE")
+        {
+            current = &m_privateDependencies;
+            continue;
+        }
+        else if ( arg.value == "LINK_INTERFACE_LIBRARIES")
+        {
+            current = &m_interfaceOnlyDependencies;
+            continue;
+        }
+        else if ( arg.value == "debug" )
         {
             ++it;
             if ( it == itEnd )
                 return false;
             else
-                m_debugLibs.append( it->value );
+                current->debug.append( it->value );
         }
         else if ( arg.value == "optimized" )
         {
@@ -3307,13 +3321,18 @@ bool TargetLinkLibrariesAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             if ( it == itEnd )
                 return false;
             else
-                m_optimizedLibs.append( it->value );
+                current->optimized.append( it->value );
         }
         else
-            m_otherLibs.append( arg.value );
+            current->other.append( arg.value );
     }
 
     return true;
+}
+
+QStringList TargetLinkLibrariesAst::Dependencies::retrieveTargets() const
+{
+    return debug + optimized + other;
 }
 
 TryCompileAst::TryCompileAst()

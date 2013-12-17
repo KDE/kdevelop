@@ -3267,24 +3267,13 @@ void CMakeAstTest::testTargetLinkLibrariesGoodParse()
 
 void CMakeAstTest::testTargetLinkLibrariesGoodParse_data()
 {
-    CMakeFunctionDesc func1, func2, func3;
-    func1.name = "target_link_libraries";
-    func2.name = func3.name = func1.name;
-
-    QStringList argList1, argList2, argList3;
-
-    argList1 << "MYTARGET" << "somelib";
-    argList2 << "MYTARGET" << "debug" << "onlydebuglib";
-    argList3 << "MYTARGET" << "optimized" << "onlyoptimizedlib";
-
-    func1.addArguments( argList1 );
-    func2.addArguments( argList2 );
-    func3.addArguments( argList3 );
-
     QTest::addColumn<CMakeFunctionDesc>( "function" );
-    QTest::newRow( "simple" ) << func1;
-    QTest::newRow( "debug only" ) << func2;
-    QTest::newRow( "optimized only" ) << func3;
+    QTest::newRow( "simple" ) << CMakeFunctionDesc("target_link_libraries", QStringList("MYTARGET") << "somelib");
+    QTest::newRow( "debug only" ) << CMakeFunctionDesc("target_link_libraries", QStringList("MYTARGET") << "debug" << "onlydebuglib");
+    QTest::newRow( "optimized only" ) << CMakeFunctionDesc("target_link_libraries", QStringList("MYTARGET") << "optimized" << "onlyoptimizedlib");
+
+    QTest::newRow( "public" ) << CMakeFunctionDesc("target_link_libraries", QStringList("MYTARGET") << "LINK_PUBLIC" << "onlyoptimizedlib");
+    QTest::newRow( "private" ) << CMakeFunctionDesc("target_link_libraries", QStringList("MYTARGET") << "LINK_PUBLIC" << "onlyoptimizedlib");
 
 }
 
@@ -3334,7 +3323,7 @@ void CMakeAstTest::testTargetLinkLibrariesMembers()
     TargetLinkLibrariesAst* targetLinkAst = static_cast<TargetLinkLibrariesAst*>(ast);
 
     QCOMPARE(targetLinkAst->target(), QString("mytarget"));
-    QCOMPARE(targetLinkAst->otherLibs(), QStringList() << "mylibrary");
+    QCOMPARE(targetLinkAst->publicDependencies().other, QStringList("mylibrary"));
     delete ast;
 }
 

@@ -197,16 +197,19 @@ void CMakeManagerTest::testQt5App()
     QList< ProjectBaseItem* > items = project->itemsForUrl(mainCpp);
     QCOMPARE(items.size(), 2); // once the plain file, once the target
 
-    bool foundCore = false;
+    bool foundCore = false, foundGui = false, foundWidgets = false;
     foreach(ProjectBaseItem* mainCppItem, items) {
         KUrl::List includeDirs = project->buildSystemManager()->includeDirectories(mainCppItem);
         foreach(const KUrl& include, includeDirs) {
-            foundCore = include.fileName(KUrl::IgnoreTrailingSlash) == "QtCore";
-            if(foundCore)
-                break;
+            QString filename = include.fileName(KUrl::IgnoreTrailingSlash);
+            foundCore |= filename == "QtCore";
+            foundGui |= filename == "QtGui";
+            foundWidgets |= filename == "QtWidgets";
         }
     }
     QVERIFY(foundCore);
+    QVERIFY(foundGui);
+    QVERIFY(foundWidgets);
 }
 
 void CMakeManagerTest::testDefines()
