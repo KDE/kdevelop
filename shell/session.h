@@ -45,7 +45,7 @@ class KDEVPLATFORMSHELL_EXPORT Session : public ISession
     Q_OBJECT
 public:
     static const QString cfgSessionNameEntry;
-
+    static const QString cfgSessionDescriptionEntry;
     static const QString cfgSessionProjectsEntry;
     static const QString cfgSessionOptionsGroup;
 

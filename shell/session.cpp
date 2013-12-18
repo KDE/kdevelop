@@ -42,6 +42,7 @@ namespace KDevelop
 {
 
 const QString Session::cfgSessionNameEntry = "SessionName";
+const QString Session::cfgSessionDescriptionEntry = "SessionPrettyContents";
 const QString Session::cfgSessionProjectsEntry = "Open Projects";
 const QString Session::cfgSessionOptionsGroup = "General Options";
 
@@ -72,13 +73,13 @@ public:
 
     void updateDescription()
     {
-        info.description = generateDescription( info );
-
+        buildDescription( info );
         emit q->sessionUpdated( q );
     }
 
     static QString generatePrettyContents( const SessionInfo& info );
     static QString generateDescription( const SessionInfo& info );
+    static void buildDescription( SessionInfo& info );
 };
 
 Session::Session( const QString& id, QObject* parent )
@@ -201,6 +202,15 @@ QString SessionPrivate::generateDescription( const SessionInfo& info )
     return description;
 }
 
+void SessionPrivate::buildDescription( SessionInfo& info )
+{
+    QString description = generateDescription( info );
+
+    info.description = description;
+    info.config->group( QString() ).writeEntry( Session::cfgSessionDescriptionEntry, description );
+    info.config->sync();
+}
+
 SessionInfo Session::parse( const QString& id, bool mkdir )
 {
     SessionInfo ret;
@@ -223,12 +233,9 @@ SessionInfo Session::parse( const QString& id, bool mkdir )
     KConfigGroup cfgRootGroup = ret.config->group( QString() );
     KConfigGroup cfgOptionsGroup = ret.config->group( cfgSessionOptionsGroup );
 
-    // cruft cleaning
-    cfgRootGroup.deleteEntry( "SessionPrettyContents" );
-
     ret.name = cfgRootGroup.readEntry( cfgSessionNameEntry, QString() );
     ret.projects = cfgOptionsGroup.readEntry( cfgSessionProjectsEntry, QStringList() );
-    ret.description = SessionPrivate::generateDescription( ret );
+    SessionPrivate::buildDescription( ret );
 
     return ret;
 }
