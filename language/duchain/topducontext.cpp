@@ -98,8 +98,6 @@ void removeFromVector(QVector<T>& vec, const T& t) {
   }
 }
 
-QMutex importStructureMutex(QMutex::Recursive);
-
 //Contains data that is not shared among top-contexts that share their duchain entries
 class TopDUContextLocalPrivate {
 public:
@@ -119,9 +117,9 @@ public:
   }
 
   ~TopDUContextLocalPrivate() {
-    //Either we use some other contexts data and have no users, or we own the data and have users that share it.
-    QMutexLocker lock(&importStructureMutex);
+    ENSURE_CHAIN_WRITE_LOCKED
 
+    //Either we use some other contexts data and have no users, or we own the data and have users that share it.
     Q_ASSERT(!m_sharedDataOwner || m_dataUsers.isEmpty());
 
     if(m_sharedDataOwner) {
@@ -188,7 +186,7 @@ public:
 
 
   void clearImportedContextsRecursively() {
-    QMutexLocker lock(&importStructureMutex);
+    ENSURE_CAN_WRITE
 
 //     Q_ASSERT(m_recursiveImports.size() == m_indexedRecursiveImports.count()-1);
 
@@ -224,7 +222,7 @@ public:
 
   //Adds the context to this and all contexts that import this, and manages m_recursiveImports
   void addImportedContextRecursively(TopDUContext* context, bool temporary, bool local) {
-    QMutexLocker lock(&importStructureMutex);
+    ENSURE_CAN_WRITE
 
     context->m_local->m_directImporters.insert(m_ctxt);
 
@@ -247,7 +245,7 @@ public:
 
   //Removes the context from this and all contexts that import this, and manages m_recursiveImports
   void removeImportedContextRecursively(TopDUContext* context, bool local) {
-    QMutexLocker lock(&importStructureMutex);
+    ENSURE_CAN_WRITE
 
     context->m_local->m_directImporters.remove(m_ctxt);
 
@@ -273,7 +271,7 @@ public:
   }
 
   void removeImportedContextsRecursively(const QList<TopDUContext*>& contexts, bool local) {
-    QMutexLocker lock(&importStructureMutex);
+    ENSURE_CAN_WRITE
 
 
     foreach(TopDUContext* user, m_dataUsers)
@@ -413,6 +411,12 @@ public:
       it->first->m_local->rebuildStructure(it->second);
     }
   }
+
+  // helper to get ENSURE_CAN_* work in private methods as well
+  bool inDUChain() const
+  {
+    return m_ctxt->inDUChain();
+  }
 };
 
 ///Takes a set of conditions in the constructors, and checks with each call to operator() whether these conditions are fulfilled on the given declaration.
@@ -459,8 +463,7 @@ bool TopDUContext::DeclarationChecker::operator()(const Declaration* decl) const
 
 const TopDUContext::IndexedRecursiveImports& TopDUContext::recursiveImportIndices() const
 {
-//   No lock-check for performance reasons
-  QMutexLocker lock(&importStructureMutex);
+  ENSURE_CAN_READ
   if(!d_func()->m_importsCache.isEmpty())
     return d_func()->m_importsCache;
 
@@ -516,8 +519,7 @@ void TopDUContextData::updateImportCacheRecursion(IndexedTopDUContext currentCon
 
 
 void TopDUContext::updateImportsCache() {
-  QMutexLocker lock(&importStructureMutex);
-
+  ENSURE_CAN_WRITE
 
   const bool use_fully_recursive_import_cache_computation = false;
 
@@ -1078,9 +1080,9 @@ bool TopDUContext::imports(const DUContext * origin, const CursorInRevision& pos
 bool TopDUContext::importsPrivate(const DUContext * origin, const CursorInRevision& position) const
 {
   Q_UNUSED(position);
+  ENSURE_CAN_READ
 
   if( const TopDUContext* top = dynamic_cast<const TopDUContext*>(origin) ) {
-    QMutexLocker lock(&importStructureMutex);
     bool ret = recursiveImportIndices().contains(IndexedTopDUContext(const_cast<TopDUContext*>(top)));
     if(top == this)
       Q_ASSERT(ret);
