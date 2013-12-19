@@ -53,11 +53,15 @@ class DUChainItemFactory : public DUChainBaseFactory {
     Q_ASSERT(from.classId == T::Identity);
 
     bool previousConstant = DUChainBaseData::shouldCreateConstantData();
-    DUChainBaseData::setShouldCreateConstantData(constant);
+    if (previousConstant != constant) {
+      DUChainBaseData::setShouldCreateConstantData(constant);
+    }
     
     new (&to) Data(static_cast<const Data&>(from)); //Call the copy constructor to initialize the target
     
-    DUChainBaseData::setShouldCreateConstantData(previousConstant);
+    if (previousConstant != constant) {
+      DUChainBaseData::setShouldCreateConstantData(previousConstant);
+    }
   }
   
   void callDestructor(DUChainBaseData* data) const {
