@@ -22,8 +22,7 @@
 #include "interfacesexport.h"
 
 #include <QtCore/QStringList>
-#include <QtGui/QWidget>
-#include <kurl.h>
+#include <QWidget>
 
 class QAction;
 

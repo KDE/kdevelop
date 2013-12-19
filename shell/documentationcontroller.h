@@ -21,11 +21,10 @@
 #define KDEVPLATFORM_DOCUMENTATIONCONTROLLER_H
 
 #include <interfaces/idocumentationcontroller.h>
-#include <QObject>
-#include <KAction>
 
 class DocumentationViewFactory;
-class QAction;
+
+class KAction;
 
 namespace KDevelop
 {
