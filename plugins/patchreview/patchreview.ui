@@ -123,9 +123,15 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="finishReview">
+      <widget class="QToolButton" name="finishReview">
        <property name="text">
         <string>Finish Review</string>
+       </property>
+       <property name="toolButtonStyle">
+        <enum>Qt::ToolButtonTextBesideIcon</enum>
+       </property>
+       <property name="autoRaise">
+        <bool>false</bool>
        </property>
       </widget>
      </item>

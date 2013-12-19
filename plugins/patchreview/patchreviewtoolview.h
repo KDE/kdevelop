@@ -94,6 +94,7 @@ private:
     QPointer< QWidget > m_customWidget;
     QAction* m_selectAllAction;
     QAction* m_deselectAllAction;
+    QAction* m_finishReview;
     
     class PatchFilesModel* m_fileModel;
 public slots:
