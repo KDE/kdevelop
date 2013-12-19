@@ -23,8 +23,6 @@
 #include "parsesession.h"
 #include "ast.h"
 #include "astutilities.h"
-//#include "codegen/cppnewclass.h"
-//#include "codegen/makeimplementationprivate.h"
 
 #include <language/backgroundparser/backgroundparser.h>
 #include <language/codegen/coderepresentation.h>
@@ -643,83 +641,6 @@ void TestCppCodegen::testAstDuChainMapping()
     QCOMPARE(AstUtils::parameterAtIndex(AstUtils::childInitDeclarator(func, 0)->declarator, 0),
              session->astNodeFromDeclaration(cont->localDeclarations()[4]->internalContext()->localDeclarations()[0]));
   }
-}
-
-void TestCppCodegen::testClassGeneration()
-{
-  #if 0
-  TopDUContext * top = 0;
-  GET_CONTEXT("AbstractClass.h", top);
-  
-  
-  CppNewClass newClass;
-  newClass.identifier("GeneratedClass");
-  newClass.addBaseClass("AbstractClass");
-  newClass.setHeaderUrl(CodeRepresentation::artificialUrl("GeneratedClass.h"));
-  newClass.setImplementationUrl(CodeRepresentation::artificialUrl("GeneratedClass.cpp"));
-  
-  DocumentChangeSet changes;/* = newClass.generate();
-  changes.applyAllToTemp();
-  QCOMPARE(changes.tempNamesForAll().size(), 2);
-  parseFile(changes.tempNamesForAll()[0].second);
-  parseFile(changes.tempNamesForAll()[1].second);*/
-  #endif
-}
-
-void TestCppCodegen::testPrivateImplementation()
-{
-#if 0
-  TopDUContext * top = 0;
-  GET_CONTEXT("ClassA.h", top);
-  QVERIFY(top);
-  
-  MakeImplementationPrivate generator;
-  DocumentRange range;
-  
-  {
-    DUChainReadLocker lock(DUChain::lock());
-    generator.autoGenerate(top->localDeclarations()[0]->internalContext(), &range);
-  }
-  generator.setStructureName("ClassAPrivate");
-  generator.setPointerName("d");
-  
-  QVERIFY2(generator.execute(), generator.errorText().toAscii());
-  generator.documentChangeSet().setReplacementPolicy(DocumentChangeSet::StopOnFailedChange);
-  
-  //Formatting plugin does not like source code in a single line
-  generator.documentChangeSet().setFormatPolicy(DocumentChangeSet::NoAutoFormat);
-  DocumentChangeSet::ChangeResult result = generator.documentChangeSet().applyAllToTemp();
-  QVERIFY2(result, result.m_failureReason.toAscii());
-  kDebug() << "tempName: " << generator.documentChangeSet().tempNameForFile(IndexedString(CodeRepresentation::artificialUrl("ClassA.h"))).str();
-  kDebug() << "Generated Text:" << createCodeRepresentation(generator.documentChangeSet().tempNameForFile(IndexedString(CodeRepresentation::artificialUrl("ClassA.h"))))->text();
-  kDebug() << "GeneratedText:" << createCodeRepresentation(generator.documentChangeSet().tempNameForFile(IndexedString(CodeRepresentation::artificialUrl("ClassA.cpp"))))->text();
-  
-  QVERIFY(generator.documentChangeSet().tempNameForFile(IndexedString(CodeRepresentation::artificialUrl("ClassA.h"))) != IndexedString(CodeRepresentation::artificialUrl("ClassA.h")));
-  QVERIFY(generator.documentChangeSet().tempNameForFile(IndexedString(CodeRepresentation::artificialUrl("ClassA.cpp"))) != IndexedString(CodeRepresentation::artificialUrl("ClassA.cpp")));
-  
-  IndexedString tempName1 = generator.documentChangeSet().tempNameForFile(IndexedString(CodeRepresentation::artificialUrl("ClassA.h")));
-  IndexedString tempName2 = generator.documentChangeSet().tempNameForFile(IndexedString(CodeRepresentation::artificialUrl("ClassA.cpp")));
-  parseFile(tempName1);
-  parseFile(tempName2);
-  
-  TopDUContext * newHeader = m_contexts[tempName1].data();
-  TopDUContext * newImplementation = m_contexts[tempName2].data();
-  
-  QVERIFY(newHeader);
-  QVERIFY(newImplementation);
-  
-  DUChainReadLocker lock(DUChain::lock());
-  kDebug() << "HeaderProblems: ";
-  foreach(ProblemPointer p, newHeader->problems())
-    kDebug() << p->description();
-  kDebug() << "Implementation Problems: ";
-  foreach(ProblemPointer p, newImplementation->problems())
-    kDebug() << p->description();
-  
-  //There is a problem from include path resolver, we care about semantic problems
-  QCOMPARE(newHeader->problems().size(), 1);
-  QCOMPARE(newImplementation->problems().size(), 1);
-#endif
 }
 
 void TestCppCodegen::testMacroDeclarationOrder()

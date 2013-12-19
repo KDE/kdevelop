@@ -39,8 +39,6 @@ class TestCppCodegen : public QObject
     void testUpdateIndices();
     
     void testAstDuChainMapping();
-    void testClassGeneration();
-    void testPrivateImplementation();
 
     void testMacroDeclarationOrder();
 
