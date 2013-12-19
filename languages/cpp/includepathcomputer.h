@@ -13,44 +13,52 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#include <kurl.h>
-#include <language/interfaces/iproblem.h>
-#include "includepathresolver.h"
 
 #ifndef INCLUDEPATHCOMPUTER_H
 #define INCLUDEPATHCOMPUTER_H
 
-class IncludePathComputer  {
-  public:
-    IncludePathComputer(const KUrl& file, QList<KDevelop::ProblemPointer>* problems);
-    ///Must be called in the foreground thread, before calling computeBackground().
-    void computeForeground();
-    ///Can be called from within background thread, but does not have to. May lock for a long time.
-    void computeBackground();
-    
-    KUrl::List result() const {
-      return m_ret;
-    }
-    
-    const QHash<QString,QString>& defines() const {
-      return m_defines;
-    }
-    
-    KDevelop::ModificationRevisionSet m_includePathDependency;
-    
-  private:
-    QHash<QString,QString> m_defines;
-    KUrl m_source;
-    QList<KDevelop::ProblemPointer>* m_problems;
-    KUrl::List m_ret;
-    QSet<KUrl> m_hasPath;
-    bool m_ready;
-    
-    KUrl m_effectiveBuildDirectory;
-    KUrl m_buildDirectory;
-    KUrl m_projectDirectory;
-    QString m_projectName;
-    bool m_gotPathsFromManager;
-    CppTools::IncludePathResolver m_includeResolver;
+#include <KUrl>
+
+#include <language/interfaces/iproblem.h>
+
+#include "includepathresolver.h"
+
+class IncludePathComputer
+{
+public:
+  IncludePathComputer(const KUrl& file, QList<KDevelop::ProblemPointer>* problems);
+  ///Must be called in the foreground thread, before calling computeBackground().
+  void computeForeground();
+  ///Can be called from within background thread, but does not have to. May lock for a long time.
+  void computeBackground();
+
+  KUrl::List result() const
+  {
+    return m_ret;
+  }
+
+  QHash<QString,QString> defines() const
+  {
+    return m_defines;
+  }
+
+  KDevelop::ModificationRevisionSet m_includePathDependency;
+
+private:
+  void addInclude(KUrl url);
+
+  QHash<QString,QString> m_defines;
+  KUrl m_source;
+  QList<KDevelop::ProblemPointer>* m_problems;
+  KUrl::List m_ret;
+  QSet<KUrl> m_hasPath;
+  bool m_ready;
+
+  KUrl m_effectiveBuildDirectory;
+  KUrl m_buildDirectory;
+  KUrl m_projectDirectory;
+  QString m_projectName;
+  bool m_gotPathsFromManager;
+  CppTools::IncludePathResolver m_includeResolver;
 };
 #endif // INCLUDEPATHCOMPUTER_H
