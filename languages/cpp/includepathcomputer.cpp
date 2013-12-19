@@ -32,9 +32,8 @@ using namespace KDevelop;
 
 const bool enableIncludePathResolution = true;
 
-IncludePathComputer::IncludePathComputer(const KUrl& file, QList<ProblemPointer>* problems)
+IncludePathComputer::IncludePathComputer(const KUrl& file)
   : m_source(file)
-  , m_problems(problems)
   , m_ready(false)
   , m_gotPathsFromManager(false)
 {
@@ -125,15 +124,9 @@ void IncludePathComputer::computeBackground()
   if (!m_effectiveBuildDirectory.isEmpty()) {
     m_includeResolver.setOutOfSourceBuildSystem(m_projectDirectory.toLocalFile(), m_effectiveBuildDirectory.toLocalFile());
   } else {
-    if (!m_projectDirectory.isEmpty() && m_problems) {
+    if (!m_projectDirectory.isEmpty()) {
       //Report that the build-manager did not return the build-directory, for debugging
-      Problem* newProblem = new Problem;
-      newProblem->setSource(ProblemData::Preprocessor);
-      newProblem->setDescription(i18n("Build manager for project %1 did not return a build directory", m_projectName));
-      newProblem->setExplanation(i18n("The include path resolver needs the build directory to resolve additional include paths. "
-                                      "Consider setting up a build directory in the project manager if you have not done so yet."));
-      newProblem->setFinalLocation(DocumentRange(IndexedString(m_source), SimpleRange::invalid()));
-      (*m_problems) << ProblemPointer(newProblem);
+      kDebug(9007) << "Build manager for project %1 did not return a build directory" << m_projectName;
     }
     m_includeResolver.resetOutOfSourceBuild();
   }
@@ -152,16 +145,9 @@ void IncludePathComputer::computeBackground()
     addInclude(KUrl(res));
   }
 
-  if (!result && m_problems) {
+  if (!result) {
     kDebug(9007) << "Failed to resolve include-path for \"" << m_source << "\":"
                   << result.errorMessage << "\n" << result.longErrorMessage << "\n";
-    ProblemPointer problem(new Problem);
-    problem->setSource(ProblemData::Preprocessor);
-    problem->setDescription(i18n("Include path resolver: %1", result.errorMessage));
-    problem->setExplanation(i18n("Used build directory: \"%1\"\nInclude path resolver: %2",
-                                  m_effectiveBuildDirectory.pathOrUrl(), result.longErrorMessage));
-    problem->setFinalLocation(DocumentRange(IndexedString(m_source), SimpleRange::invalid()));
-    *m_problems << problem;
   }
 
   m_ready = true;

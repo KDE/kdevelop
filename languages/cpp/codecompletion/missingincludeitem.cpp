@@ -216,7 +216,7 @@ KSharedPtr<MissingIncludeCompletionItem> includeDirectiveFromUrl(const KUrl& fro
 
     QList<KDevelop::CompletionTreeItemPointer> items;
     foreach(const QString& file, candidateFiles)
-      items += itemsForFile(QString(), file, CppUtils::findIncludePaths(fromUrl, 0), fromUrl, decl, 0, temp);
+      items += itemsForFile(QString(), file, CppUtils::findIncludePaths(fromUrl), fromUrl, decl, 0, temp);
 
     qSort<QList<KDevelop::CompletionTreeItemPointer>::iterator, DirectiveShorterThan>(items.begin(), items.end(), DirectiveShorterThan());
     if(!items.isEmpty()) {

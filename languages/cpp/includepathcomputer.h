@@ -19,14 +19,12 @@
 
 #include <KUrl>
 
-#include <language/interfaces/iproblem.h>
-
 #include "includepathresolver.h"
 
 class IncludePathComputer
 {
 public:
-  IncludePathComputer(const KUrl& file, QList<KDevelop::ProblemPointer>* problems);
+  IncludePathComputer(const KUrl& file);
   ///Must be called in the foreground thread, before calling computeBackground().
   void computeForeground();
   ///Can be called from within background thread, but does not have to. May lock for a long time.
@@ -49,7 +47,6 @@ private:
 
   QHash<QString,QString> m_defines;
   KUrl m_source;
-  QList<KDevelop::ProblemPointer>* m_problems;
   KUrl::List m_ret;
   QSet<KUrl> m_hasPath;
   bool m_ready;
