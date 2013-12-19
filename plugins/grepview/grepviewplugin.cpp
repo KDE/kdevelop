@@ -19,6 +19,8 @@
 #include "grepoutputview.h"
 
 #include <QWhatsThis>
+#include <QDBusConnection>
+#include <QKeySequence>
 
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
@@ -42,7 +44,6 @@
 #include <project/projectmodel.h>
 #include <language/interfaces/editorcontext.h>
 #include <outputview/ioutputview.h>
-#include <QDBusConnection>
 
 K_PLUGIN_FACTORY(GrepViewFactory, registerPlugin<GrepViewPlugin>(); )
 K_EXPORT_PLUGIN(GrepViewFactory(KAboutData("kdevgrepview","kdevgrepview", ki18n("Find/Replace in Files"), "0.1", ki18n("Allows fast searching of multiple files using patterns or regular expressions. And allow to replace it too."), KAboutData::License_GPL)))
@@ -86,7 +87,7 @@ GrepViewPlugin::GrepViewPlugin( QObject *parent, const QVariantList & )
 
     KAction *action = actionCollection()->addAction("edit_grep");
     action->setText(i18n("Find/Replace in Fi&les..."));
-    action->setShortcut( i18n("Ctrl+Alt+f") );
+    action->setShortcut( QKeySequence("Ctrl+Alt+F") );
     connect(action, SIGNAL(triggered(bool)), this, SLOT(showDialogFromMenu()));
     action->setToolTip( i18n("Search for expressions over several files") );
     action->setWhatsThis( i18n("Opens the 'Find/Replace in files' dialog. There you "
