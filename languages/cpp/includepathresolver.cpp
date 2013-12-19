@@ -359,12 +359,12 @@ QString CppTools::CustomIncludePathsSettings::storageFile() const
 CppTools::CustomIncludePathsSettings CppTools::CustomIncludePathsSettings::findAndReadAbsolute(const QString& startPath)
 {
   CppTools::CustomIncludePathsSettings settings(findAndRead(startPath));
-  QDir sourceDir(settings.storagePath);
 
+  QDir sourceDir(settings.storagePath);
   // Turn relative paths into absolute paths from the storage path
   for (int i = 0; i < settings.paths.size(); i++) {
-    QString& path = settings.paths[i];
-    if (!path.startsWith("/"))
+    const QString& path = settings.paths[i];
+    if (!path.startsWith('/'))
       settings.paths[i] = sourceDir.absoluteFilePath(path);
   }
 
