@@ -87,7 +87,7 @@ private:
     QStackedWidget* stackwidget;
     const ToolViewData* data;
     QToolButton* m_closeButton;
-    QToolButton* m_closeAllButton;
+    QAction* m_closeOthersAction;
     KAction* nextAction;
     KAction* previousAction;
     KToggleAction* activateOnSelect;

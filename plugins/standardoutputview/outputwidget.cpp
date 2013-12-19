@@ -56,7 +56,7 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
     , stackwidget(0)
     , data(tvdata)
     , m_closeButton(0)
-    , m_closeAllButton(0)
+    , m_closeOthersAction(0)
     , nextAction(0)
     , previousAction(0)
     , activateOnSelect(0)
@@ -73,25 +73,17 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
         tabwidget = new KTabWidget(this);
         layout->addWidget( tabwidget );
         m_closeButton = new QToolButton( this );
-        connect( m_closeButton, SIGNAL(clicked()),
-                 this, SLOT(closeActiveView()) );
+        connect( m_closeButton, SIGNAL(clicked()), SLOT(closeActiveView()) );
         m_closeButton->setIcon( KIcon("tab-close") );
-        m_closeButton->adjustSize();
         m_closeButton->setToolTip( i18n( "Close the currently active output view") );
-        m_closeAllButton = new QToolButton( this );
-        connect(m_closeAllButton, SIGNAL(clicked()),
-                this, SLOT(closeOtherViews()));
-        m_closeAllButton->setIcon(KIcon("tab-close-other"));
-        m_closeAllButton->adjustSize();
-        m_closeAllButton->setToolTip( i18n( "Close all other output views" ) );
 
-        QWidget* toolbar = new QWidget(this);
-        QBoxLayout* toolbarLayout =  new QBoxLayout(QBoxLayout::LeftToRight);
-        toolbarLayout->setMargin(0);
-        toolbar->setLayout(toolbarLayout);
-        toolbarLayout->addWidget(m_closeButton);
-        toolbarLayout->addWidget(m_closeAllButton);
-        tabwidget->setCornerWidget(toolbar, Qt::TopRightCorner);
+        m_closeOthersAction = new QAction( this );
+        connect(m_closeOthersAction, SIGNAL(triggered(bool)), SLOT(closeOtherViews()));
+        m_closeOthersAction->setIcon(KIcon("tab-close-other"));
+        m_closeOthersAction->setToolTip( i18n( "Close all other output views" ) );
+        addAction(m_closeOthersAction);
+
+        tabwidget->setCornerWidget(m_closeButton, Qt::TopRightCorner);
     } else if ( data->type == KDevelop::IOutputView::HistoryView )
     {
         stackwidget = new QStackedWidget( this );
