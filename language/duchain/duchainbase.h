@@ -99,8 +99,7 @@ public:
     ///Used to decide whether a constructed item should create constant data.
     ///The default is "false", so dynamic data is created by default.
     ///This is stored thread-locally.
-    static bool shouldCreateConstantData();
-    static void setShouldCreateConstantData(bool);
+    static bool& shouldCreateConstantData();
     
     ///Returns whether initialized objects should be created as dynamic objects
     static bool appendedListDynamicDefault() {
