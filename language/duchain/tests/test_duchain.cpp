@@ -36,6 +36,8 @@
 #include <language/duchain/types/typesystemdata.h>
 #include <language/duchain/types/integraltype.h>
 #include <language/duchain/types/typeregister.h>
+#include <language/duchain/declarationdata.h>
+#include <language/duchain/duchainregister.h>
 
 #include <language/codegen/coderepresentation.h>
 
@@ -818,6 +820,32 @@ void TestDUChain::benchDuchainWriteLocker()
   QBENCHMARK {
     DUChainWriteLocker lock;
   }
+}
+
+void TestDUChain::benchDUChainItemFactory_copy()
+{
+  DUChainItemFactory<Declaration, DeclarationData> factory;
+  DeclarationData from, to;
+  from.classId = Declaration::Identity;
+
+  QFETCH(int, constant);
+
+  bool c = constant;
+
+  QBENCHMARK {
+    factory.copy(from, to, c);
+    if (constant == 2) {
+      c = !c;
+    }
+  }
+}
+
+void TestDUChain::benchDUChainItemFactory_copy_data()
+{
+  QTest::addColumn<int>("constant");
+  QTest::newRow("non-const") << 0;
+  QTest::newRow("const") << 1;
+  QTest::newRow("flip") << 2;
 }
 
 #include "test_duchain.moc"

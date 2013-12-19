@@ -49,6 +49,8 @@ private slots:
     void benchTypeRegistry_data();
     void benchDuchainWriteLocker();
     void benchDuchainReadLocker();
+    void benchDUChainItemFactory_copy();
+    void benchDUChainItemFactory_copy_data();
 };
 
 #endif // KDEVPLATFORM_TEST_DUCHAIN_H
