@@ -103,9 +103,12 @@ class IncludePathResolver
 
     KDevelop::ModificationRevisionSet findIncludePathDependency(const QString& file);
 
+    void enableMakeResolution(bool enable);
+
   private:
     bool m_isResolving;
     bool m_outOfSource;
+    bool m_enableMakeResolution;
 
     KUrl mapToBuild(const KUrl& url);
 

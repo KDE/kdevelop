@@ -15,32 +15,22 @@
 */
 
 #include "includepathcomputer.h"
-#include "cpplanguagesupport.h"
 #include "cpputils.h"
+
 #include <interfaces/iproject.h>
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
+
 #include <project/projectmodel.h>
 #include <project/interfaces/ibuildsystemmanager.h>
-#include <klocalizedstring.h>
-#include <language/duchain/duchainlock.h>
-#include <language/duchain/duchain.h>
-#include <QDirIterator>
-#include <language/duchain/duchainutils.h>
+
+#include <KLocalizedString>
+
+#include <iostream>
 
 using namespace KDevelop;
 
-#define DEBUG_INCLUDE_PATHS 1
 const bool enableIncludePathResolution = true;
-
-static QList<KUrl> convertToUrls(const QList<IndexedString>& stringList)
-{
-  QList<KUrl> ret;
-  foreach (const IndexedString& str, stringList) {
-    ret << str.toUrl();
-  }
-  return ret;
-}
 
 IncludePathComputer::IncludePathComputer(const KUrl& file, QList<ProblemPointer>* problems)
   : m_source(file)
@@ -122,124 +112,56 @@ void IncludePathComputer::computeBackground()
     return;
   }
 
-  const QList<QString>& standardPaths = CppUtils::standardIncludePaths();
-
   //Insert standard-paths
-  foreach (const QString& path, standardPaths) {
+  foreach (const QString& path, CppUtils::standardIncludePaths()) {
     addInclude(KUrl(path));
   }
 
-  if (m_gotPathsFromManager) {
-    // return early and trust the include paths returned by the project manager
+  if (!enableIncludePathResolution) {
+    m_ready = true;
     return;
   }
 
   if (!m_effectiveBuildDirectory.isEmpty()) {
     m_includeResolver.setOutOfSourceBuildSystem(m_projectDirectory.toLocalFile(), m_effectiveBuildDirectory.toLocalFile());
+  } else {
+    if (!m_projectDirectory.isEmpty() && m_problems) {
+      //Report that the build-manager did not return the build-directory, for debugging
+      Problem* newProblem = new Problem;
+      newProblem->setSource(ProblemData::Preprocessor);
+      newProblem->setDescription(i18n("Build manager for project %1 did not return a build directory", m_projectName));
+      newProblem->setExplanation(i18n("The include path resolver needs the build directory to resolve additional include paths. "
+                                      "Consider setting up a build directory in the project manager if you have not done so yet."));
+      newProblem->setFinalLocation(DocumentRange(IndexedString(m_source), SimpleRange::invalid()));
+      (*m_problems) << ProblemPointer(newProblem);
+    }
+    m_includeResolver.resetOutOfSourceBuild();
   }
 
   m_includePathDependency = m_includeResolver.findIncludePathDependency(m_source.toLocalFile());
   kDebug() << "current include path dependency state:" << m_includePathDependency.toString();
 
-  ///@todo Resolve include-paths either once per directory, or once per target. Do not iterate over the duchain.
+  // only look at make when we did not get any paths from the build manager
+  m_includeResolver.enableMakeResolution(!m_gotPathsFromManager);
+  CppTools::PathResolutionResult result = m_includeResolver.resolveIncludePath(m_source.toLocalFile());
 
-  if (!m_ready) {
-    static const IndexedString cpp("C++");
-    //Try taking the include-paths from another file in the directory
-    kDebug(9007) << "Did not get any include-paths for" << m_source;
-    QFileInfo fileInfo(m_source.toLocalFile());
-    QDirIterator it(fileInfo.dir().path());
-    while(it.hasNext()) {
-      QString file = it.next();
-      foreach (const QString& ext, CppUtils::sourceExtensions()) {
-        if (file != fileInfo.fileName() && file.endsWith(ext)) {
-          DUChainReadLocker lock(DUChain::lock(), 300);
-          if (lock.locked()) {
-            TopDUContext* context = DUChainUtils::standardContextForUrl(KUrl(fileInfo.dir().absoluteFilePath(file)), true);
-            if (context && context->parsingEnvironmentFile() && context->parsingEnvironmentFile()->language() == cpp
-              && !context->parsingEnvironmentFile()->needsUpdate())
-            {
-              Cpp::EnvironmentFile* envFile = dynamic_cast<Cpp::EnvironmentFile*>(context->parsingEnvironmentFile().data());
-              Q_ASSERT(envFile);
-              if (!envFile->missingIncludeFiles().isEmpty() || envFile->includePathDependencies() != m_includePathDependency) {
-                continue;
-              }
-              if (envFile->includePaths().size() <= standardPaths.size()) {
-                continue;
-              }
-              foreach (const IndexedString& str, envFile->includePaths()) {
-                m_ret << str.toUrl();
-              }
-              kDebug(9007) << "took include-paths for" <<  m_source << "from duchain of" <<  file;
-              m_ready = true;
-              return;
-            }
-          } else {
-            return;
-          }
-        }
-      }
-    }
+  m_includePathDependency = result.includePathDependency;
+  kDebug() << "new include path dependency:" << m_includePathDependency.toString();
+
+  foreach (const QString &res, result.paths) {
+    addInclude(KUrl(res));
   }
 
-  if (m_ready) {
-    return;
-  }
-
-  if ((m_ret.isEmpty() || DEBUG_INCLUDE_PATHS) && enableIncludePathResolution) {
-    //Fallback-search using include-path resolver
-
-    if (!m_effectiveBuildDirectory.isEmpty()) {
-        m_includeResolver.setOutOfSourceBuildSystem(m_projectDirectory.toLocalFile(), m_effectiveBuildDirectory.toLocalFile());
-    } else {
-      if (!m_projectDirectory.isEmpty() && m_problems) {
-        //Report that the build-manager did not return the build-directory, for debugging
-        Problem* newProblem = new Problem;
-        newProblem->setSource(ProblemData::Preprocessor);
-        newProblem->setDescription(i18n("Build manager for project %1 did not return a build directory", m_projectName));
-        newProblem->setExplanation(i18n("The include path resolver needs the build directory to resolve additional include paths. "
-                                        "Consider setting up a build directory in the project manager if you have not done so yet."));
-        newProblem->setFinalLocation(DocumentRange(IndexedString(m_source), SimpleRange::invalid()));
-        (*m_problems) << ProblemPointer(newProblem);
-      }
-      m_includeResolver.resetOutOfSourceBuild();
-    }
-    CppTools::PathResolutionResult result = m_includeResolver.resolveIncludePath(m_source.toLocalFile());
-    m_includePathDependency = result.includePathDependency;
-    kDebug() << "new include path dependency:" << m_includePathDependency.toString();
-
-    foreach (const QString &res, result.paths) {
-      addInclude(KUrl(res));
-    }
-
-    if (!result && m_problems) {
-      kDebug(9007) << "Failed to resolve include-path for \"" << m_source << "\":"
-                   << result.errorMessage << "\n" << result.longErrorMessage << "\n";
-      ProblemPointer problem(new Problem);
-      problem->setSource(ProblemData::Preprocessor);
-      problem->setDescription(i18n("Include path resolver: %1", result.errorMessage));
-      problem->setExplanation(i18n("Used build directory: \"%1\"\nInclude path resolver: %2",
-                                    m_effectiveBuildDirectory.pathOrUrl(), result.longErrorMessage));
-      problem->setFinalLocation(DocumentRange(IndexedString(m_source), SimpleRange::invalid()));
-      *m_problems << problem;
-    }
-  }
-
-  if (m_ret.isEmpty()) {
-    // Last chance: Take a parsed version of the file from the du-chain, and get its include-paths
-    // We will then get the include-path that some time was used to parse the file
-    DUChainReadLocker readLock;
-    TopDUContext* ctx = DUChain::self()->chainForDocument(m_source);
-    if (ctx && ctx->parsingEnvironmentFile()) {
-      Cpp::EnvironmentFile* envFile = dynamic_cast<Cpp::EnvironmentFile*>(ctx->parsingEnvironmentFile().data());
-      if (envFile) {
-        m_ret = convertToUrls(envFile->includePaths());
-        m_hasPath += QSet<KUrl>::fromList(m_ret);
-        kDebug(9007) << "Took include-path for" << m_source << "from a random parsed duchain-version of it";
-      } else {
-        kWarning() << "Missing cpp environment-file for" << m_source;
-      }
-    }
+  if (!result && m_problems) {
+    kDebug(9007) << "Failed to resolve include-path for \"" << m_source << "\":"
+                  << result.errorMessage << "\n" << result.longErrorMessage << "\n";
+    ProblemPointer problem(new Problem);
+    problem->setSource(ProblemData::Preprocessor);
+    problem->setDescription(i18n("Include path resolver: %1", result.errorMessage));
+    problem->setExplanation(i18n("Used build directory: \"%1\"\nInclude path resolver: %2",
+                                  m_effectiveBuildDirectory.pathOrUrl(), result.longErrorMessage));
+    problem->setFinalLocation(DocumentRange(IndexedString(m_source), SimpleRange::invalid()));
+    *m_problems << problem;
   }
 
   m_ready = true;

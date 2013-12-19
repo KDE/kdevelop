@@ -468,7 +468,13 @@ bool IncludePathResolver::executeCommand(const QString& command, const QString& 
 IncludePathResolver::IncludePathResolver()
   : m_isResolving(false)
   , m_outOfSource(false)
+  , m_enableMakeResolution(true)
 {
+}
+
+void IncludePathResolver::enableMakeResolution(bool enable)
+{
+  m_enableMakeResolution = enable;
 }
 
 ///More efficient solution: Only do exactly one call for each directory. During that call, mark all source-files as changed, and make all targets for those files.
@@ -571,10 +577,14 @@ PathResolutionResult IncludePathResolver::resolveIncludePath(const QString& file
     }
     result.paths += customPaths.paths;
 
+    const IndexedString storageFile(customPaths.storageFile());
     ModificationRevisionSet rev;
-    IndexedString storageFile = IndexedString(customPaths.storageFile());
     rev.addModificationRevision(storageFile, ModificationRevision::revisionForFile(storageFile));
     result.includePathDependency = rev;
+
+    if (!m_enableMakeResolution) {
+      return result;
+    }
 
     resultOnFail = result;
   }
