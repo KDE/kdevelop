@@ -257,6 +257,8 @@ KUrl::List QMakeProjectFile::includeDirectories() const
                 url.setPath(m_qtIncludeDir + "/QtBluetooth");
             else if ( module == "core-private" )
                 url.setPath(m_qtIncludeDir + "/QtCore/" + m_qtVersion + "/QtCore/private/");
+            else if ( module == "webchannel" )
+                url.setPath(m_qtIncludeDir + "/QtWebChannel");
             else {
                 kWarning() << "unhandled QT module:" << module;
                 continue;
