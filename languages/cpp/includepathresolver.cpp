@@ -323,17 +323,15 @@ ModificationRevisionSet IncludePathResolver::findIncludePathDependency(const QSt
 
 QString CppTools::CustomIncludePathsSettings::find(const QString& startPath)
 {
-  KUrl current(startPath);
-  while (!current.path().isEmpty()) {
-    QString path = current.toLocalFile();
-    QFileInfo customIncludePaths(QDir(path), ".kdev_include_paths");
+  QDir dir(startPath);
+  static const QString pathFile(".kdev_include_paths");
+  while (dir.exists()) {
+    QFileInfo customIncludePaths(dir, pathFile);
     if (customIncludePaths.exists())
-      return customIncludePaths.filePath();
+      return customIncludePaths.absoluteFilePath();
 
-    if (current == current.upUrl())
-      return QString();
-
-    current = current.upUrl();
+    if (!dir.cdUp())
+      break;
   }
   return QString();
 }
