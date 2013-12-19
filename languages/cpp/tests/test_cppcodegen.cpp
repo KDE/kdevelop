@@ -24,12 +24,6 @@
 #include "ast.h"
 #include "astutilities.h"
 
-#include <language/backgroundparser/backgroundparser.h>
-#include <language/codegen/coderepresentation.h>
-#include <language/codegen/documentchangeset.h>
-#include <language/duchain/duchain.h>  
-#include <language/duchain/duchainlock.h>
-
 #include <interfaces/ilanguagecontroller.h>
 
 #include <QtTest/QTest>
@@ -37,22 +31,23 @@
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 #include <tests/testfile.h>
-#include <tests/testproject.h>
 #include <qtest_kde.h>
 #include <language/codecompletion/codecompletiontesthelper.h>
 #include <dumpchain.h>
+#include <templatedeclaration.h>
+#include <language/backgroundparser/backgroundparser.h>
+#include <language/codegen/coderepresentation.h>
+#include <language/duchain/duchain.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/duchainutils.h>
 #include <language/duchain/dumpchain.h>
 #include <language/duchain/parsingenvironment.h>
 #include <language/duchain/codemodel.h>
-#include <typeinfo>
-#include <KTempDir>
 #include <language/duchain/classdeclaration.h>
-#include <cppducontext.h>
+#include <language/duchain/types/structuretype.h>
 #include <interfaces/iassistant.h>
 #include <interfaces/foregroundlock.h>
 #include <interfaces/isourceformattercontroller.h>
-#include <language/duchain/use.h>
-#include <language/duchain/duchainutils.h>
 
 #include "codegen/simplerefactoring.h"
 
