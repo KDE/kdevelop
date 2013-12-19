@@ -183,11 +183,6 @@ namespace Cpp {
     START_APPENDED_LISTS_BASE(SpecialTemplateDeclarationData, Base);
     APPENDED_LIST_FIRST(SpecialTemplateDeclarationData, IndexedDeclaration, m_specializations);
     END_APPENDED_LISTS(SpecialTemplateDeclarationData, m_specializations);
-
-    //Just for visibility
-    static bool appendedListDynamicDefault() {
-      return Base::appendedListDynamicDefault();
-    }
     };
 
   /**
