@@ -26,6 +26,10 @@ Boston, MA 02110-1301, USA.
 
 #include "shellexport.h"
 
+namespace Sublime {
+    class Area;
+}
+
 namespace KIO {
     class Job;
 }
@@ -136,6 +140,7 @@ private:
     Q_PRIVATE_SLOT(d, void updateActionStates( KDevelop::Context* ) )
     Q_PRIVATE_SLOT(d, void closeSelectedProjects() )
     Q_PRIVATE_SLOT(d, void openProjectConfig() )
+    Q_PRIVATE_SLOT(d, void areaChanged(Sublime::Area*) )
     class ProjectControllerPrivate* const d;
     friend class ProjectControllerPrivate;
 };

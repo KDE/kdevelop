@@ -308,6 +308,12 @@ public:
             project->deleteLater();
         }
     }
+
+    void areaChanged(Sublime::Area* area) {
+        KActionCollection* ac = m_core->uiControllerInternal()->defaultMainWindow()->actionCollection();
+        ac->action("commit_current_project")->setEnabled(area->objectName() == "code");
+        ac->action("commit_current_project")->setVisible(area->objectName() == "code");
+    }
 };
 
 IProjectDialogProvider::IProjectDialogProvider()
@@ -525,6 +531,8 @@ void ProjectController::setupActions()
     action->setText( i18n( "Commit Current Project..." ) );
     action->setIconText( i18n( "Commit..." ) );
     action->setIcon( KIcon("svn-commit") );
+    connect(d->m_core->uiControllerInternal()->defaultMainWindow(), SIGNAL(areaChanged(Sublime::Area*)),
+            SLOT(areaChanged(Sublime::Area*)));
     d->m_core->uiControllerInternal()->area(0, "code")->addAction(action);
 
     KSharedConfig * config = KGlobal::config().data();
