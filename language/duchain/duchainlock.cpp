@@ -109,15 +109,19 @@ bool DUChainLock::lockForRead(unsigned int timeout)
     ///Step 2: Start spinning until there is no writer any more
 
     timeval startTime;
-    gettimeofday(&startTime, 0);
+    if (timeout) {
+      gettimeofday(&startTime, 0);
+    }
 
     while(d->m_writer)
     {
-      timeval currentTime;
-      gettimeofday(&currentTime, 0);
       timeval waited;
-      timersub(&currentTime, &startTime, &waited);
-      
+      if (timeout) {
+        timeval currentTime;
+        gettimeofday(&currentTime, 0);
+        timersub(&currentTime, &startTime, &waited);
+      }
+
       if(!timeout || toMilliSeconds(waited) < timeout) {
         usleep(uSleepTime);
       } else {
@@ -161,7 +165,9 @@ bool DUChainLock::lockForWrite(uint timeout)
   }
   
   timeval startTime;
-  gettimeofday(&startTime, 0);
+  if (timeout) {
+    gettimeofday(&startTime, 0);
+  }
 
   while(1)
   {
@@ -181,10 +187,12 @@ bool DUChainLock::lockForWrite(uint timeout)
       }
     }
     
-    timeval currentTime;
-    gettimeofday(&currentTime, 0);
     timeval waited;
-    timersub(&currentTime, &startTime, &waited);
+    if (timeout) {
+      timeval currentTime;
+      gettimeofday(&currentTime, 0);
+      timersub(&currentTime, &startTime, &waited);
+    }
     
     if(!timeout || toMilliSeconds(waited) < timeout) {
       usleep(uSleepTime);
