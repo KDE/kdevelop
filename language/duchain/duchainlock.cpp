@@ -19,21 +19,21 @@
 */
 
 #include "duchainlock.h"
-
+#include "duchain.h"
 
 #include <unistd.h>
-#include <QtCore/QThread>
+#include <sys/time.h>
+
+#include <QThread>
+#include <QThreadStorage>
+
+#include <KDebug>
 
 ///@todo Always prefer exactly that lock that is requested by the thread that has the foreground mutex,
 ///           to reduce the amount of UI blocking.
 
 //Nanoseconds to sleep when waiting for a lock
 const uint uSleepTime = 500;
-
-#include <kdebug.h>
-#include <sys/time.h>
-#include "duchain.h"
-#include <QThreadStorage>
 
 namespace KDevelop
 {
@@ -46,33 +46,18 @@ public:
     m_totalReaderRecursion = 0;
   }
 
-  /**
-   * Returns true if there is no reader that is not this thread.
-   * */
-  bool haveOtherReaders() const {
-    ///Since m_totalReaderRecursion is the sum of all reader-recursions, it will be same if either there is no reader at all, or if this thread is the only reader.
-    return m_totalReaderRecursion != ownReaderRecursion();
-  }
-
   int ownReaderRecursion() const {
-    if(m_readerRecursion.hasLocalData())
-      return *m_readerRecursion.localData();
-    else
-      return 0;
+    return m_readerRecursion.localData();
   }
   
   void changeOwnReaderRecursion(int difference) {
-    if(m_readerRecursion.hasLocalData()) {
-      *m_readerRecursion.localData() += difference;
-    }else{
-      m_readerRecursion.setLocalData(new int(difference));
-    }
-    Q_ASSERT(*m_readerRecursion.localData() >= 0);
+    m_readerRecursion.localData() += difference;
+    Q_ASSERT(m_readerRecursion.localData() >= 0);
     m_totalReaderRecursion.fetchAndAddOrdered(difference);
   }
 
   ///Holds the writer that currently has the write-lock, or zero. Is protected by m_writerRecursion.
-  volatile QThread* m_writer;
+  QAtomicPointer<QThread> m_writer;
 
   ///How often is the chain write-locked by the writer? This value protects m_writer,
   ///m_writer may only be changed by the thread that successfully increases this value from 0 to 1
@@ -80,7 +65,7 @@ public:
   ///How often is the chain read-locked recursively by all readers? Should be sum of all m_readerRecursion values
   QAtomicInt m_totalReaderRecursion;
 
-  QThreadStorage<int*> m_readerRecursion;
+  QThreadStorage<int> m_readerRecursion;
 };
 
 DUChainLock::DUChainLock()
@@ -133,12 +118,6 @@ bool DUChainLock::lockForRead(unsigned int timeout)
   }
   
   return true;
-}
-
-bool DUChainLock::lockForRead() {
-  bool ret = lockForRead(0);
-  Q_ASSERT(currentThreadHasReadLock());
-  return ret;
 }
 
 void DUChainLock::releaseReadLock()
