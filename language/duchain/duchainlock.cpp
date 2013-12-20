@@ -23,10 +23,10 @@
 #include "duchain.h"
 
 #include <unistd.h>
-#include <sys/time.h>
 
 #include <QThread>
 #include <QThreadStorage>
+#include <QElapsedTimer>
 
 #include <KDebug>
 
@@ -96,20 +96,13 @@ bool DUChainLock::lockForRead(unsigned int timeout)
   } else {
     ///Step 2: Start spinning until there is no writer any more
 
-    timeval startTime;
+    QElapsedTimer t;
     if (timeout) {
-      gettimeofday(&startTime, 0);
+      t.start();
     }
 
     while (d->m_writer) {
-      timeval waited;
-      if (timeout) {
-        timeval currentTime;
-        gettimeofday(&currentTime, 0);
-        timersub(&currentTime, &startTime, &waited);
-      }
-
-      if (!timeout || toMilliSeconds(waited) < timeout) {
+      if (!timeout || t.elapsed() < timeout) {
         usleep(uSleepTime);
       } else {
         //Fail!
@@ -144,9 +137,9 @@ bool DUChainLock::lockForWrite(uint timeout)
     return true;
   }
 
-  timeval startTime;
+  QElapsedTimer t;
   if (timeout) {
-    gettimeofday(&startTime, 0);
+    t.start();
   }
 
   while (1) {
@@ -164,14 +157,7 @@ bool DUChainLock::lockForWrite(uint timeout)
       }
     }
 
-    timeval waited;
-    if (timeout) {
-      timeval currentTime;
-      gettimeofday(&currentTime, 0);
-      timersub(&currentTime, &startTime, &waited);
-    }
-
-    if (!timeout || toMilliSeconds(waited) < timeout) {
+    if (!timeout || t.elapsed() < timeout) {
       usleep(uSleepTime);
     } else {
       //Fail!
