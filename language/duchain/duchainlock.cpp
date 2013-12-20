@@ -2,6 +2,7 @@
     Copyright 2007 Kris Wong <kris.p.wong@gmail.com>
     Copyright 2007 Hamish Rodda <rodda@kde.org>
    Copyright 2007-2009 David Nolden <david.nolden.kdevelop@art-master.de>
+   Copyright 2013 Milian Wolff <mail@milianw.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -37,20 +38,23 @@ const uint uSleepTime = 500;
 
 namespace KDevelop
 {
+
 class DUChainLockPrivate
 {
 public:
-  DUChainLockPrivate() {
-    m_writer = 0;
-    m_writerRecursion = 0;
-    m_totalReaderRecursion = 0;
-  }
+  DUChainLockPrivate()
+    : m_writer(0)
+    , m_writerRecursion(0)
+    , m_totalReaderRecursion(0)
+  { }
 
-  int ownReaderRecursion() const {
+  int ownReaderRecursion() const
+  {
     return m_readerRecursion.localData();
   }
-  
-  void changeOwnReaderRecursion(int difference) {
+
+  void changeOwnReaderRecursion(int difference)
+  {
     m_readerRecursion.localData() += difference;
     Q_ASSERT(m_readerRecursion.localData() >= 0);
     m_totalReaderRecursion.fetchAndAddOrdered(difference);
@@ -86,11 +90,10 @@ bool DUChainLock::lockForRead(unsigned int timeout)
 {
   ///Step 1: Increase the own reader-recursion. This will make sure no further write-locks will succeed
   d->changeOwnReaderRecursion(1);
-  
-  if(d->m_writer == 0 || d->m_writer == QThread::currentThread())
-  {
+
+  if (d->m_writer == 0 || d->m_writer == QThread::currentThread()) {
     //Successful lock: Either there is no writer, or we hold the write-lock by ourselves
-  }else{
+  } else {
     ///Step 2: Start spinning until there is no writer any more
 
     timeval startTime;
@@ -98,8 +101,7 @@ bool DUChainLock::lockForRead(unsigned int timeout)
       gettimeofday(&startTime, 0);
     }
 
-    while(d->m_writer)
-    {
+    while (d->m_writer) {
       timeval waited;
       if (timeout) {
         timeval currentTime;
@@ -107,7 +109,7 @@ bool DUChainLock::lockForRead(unsigned int timeout)
         timersub(&currentTime, &startTime, &waited);
       }
 
-      if(!timeout || toMilliSeconds(waited) < timeout) {
+      if (!timeout || toMilliSeconds(waited) < timeout) {
         usleep(uSleepTime);
       } else {
         //Fail!
@@ -116,7 +118,7 @@ bool DUChainLock::lockForRead(unsigned int timeout)
       }
     }
   }
-  
+
   return true;
 }
 
@@ -136,51 +138,47 @@ bool DUChainLock::lockForWrite(uint timeout)
 
   Q_ASSERT(d->ownReaderRecursion() == 0);
 
-  if(d->m_writer == QThread::currentThread())
-  {
+  if (d->m_writer == QThread::currentThread()) {
     //We already hold the write lock, just increase the recursion count and return
     d->m_writerRecursion.fetchAndAddRelaxed(1);
     return true;
   }
-  
+
   timeval startTime;
   if (timeout) {
     gettimeofday(&startTime, 0);
   }
 
-  while(1)
-  {
+  while (1) {
     //Try acquiring the write-lcok
-    if(d->m_totalReaderRecursion == 0 && d->m_writerRecursion.testAndSetOrdered(0, 1))
-    {
+    if (d->m_totalReaderRecursion == 0 && d->m_writerRecursion.testAndSetOrdered(0, 1)) {
       //Now we can be sure that there is no other writer, as we have increased m_writerRecursion from 0 to 1
       d->m_writer = QThread::currentThread();
-      if(d->m_totalReaderRecursion == 0)
-      {
+      if (d->m_totalReaderRecursion == 0) {
         //There is still no readers, we have successfully acquired a write-lock
         return true;
-      }else{
+      } else {
         //There may be readers.. we have to continue spinning
         d->m_writer = 0;
         d->m_writerRecursion = 0;
       }
     }
-    
+
     timeval waited;
     if (timeout) {
       timeval currentTime;
       gettimeofday(&currentTime, 0);
       timersub(&currentTime, &startTime, &waited);
     }
-    
-    if(!timeout || toMilliSeconds(waited) < timeout) {
+
+    if (!timeout || toMilliSeconds(waited) < timeout) {
       usleep(uSleepTime);
     } else {
       //Fail!
       return false;
     }
   }
-  
+
   return false;
 }
 
@@ -189,12 +187,11 @@ void DUChainLock::releaseWriteLock()
   Q_ASSERT(currentThreadHasWriteLock());
 
   //The order is important here, m_writerRecursion protects m_writer
-  
-  if(d->m_writerRecursion == 1)
-  {
+
+  if (d->m_writerRecursion == 1) {
     d->m_writer = 0;
     d->m_writerRecursion = 0;
-  }else{
+  } else {
     d->m_writerRecursion.fetchAndAddOrdered(-1);
   }
 }
@@ -204,12 +201,14 @@ bool DUChainLock::currentThreadHasWriteLock()
   return d->m_writer == QThread::currentThread();
 }
 
-
-DUChainReadLocker::DUChainReadLocker(DUChainLock* duChainLock, uint timeout) : m_locked(false), m_timeout(timeout)
+DUChainReadLocker::DUChainReadLocker(DUChainLock* duChainLock, uint timeout)
+  : m_locked(false)
+  , m_timeout(timeout)
 {
   m_lock = duChainLock;
-  if(!m_lock)
-    m_lock =  DUChain::lock();
+  if (!m_lock) {
+    m_lock = DUChain::lock();
+  }
   m_timeout = timeout;
   lock();
 }
@@ -219,15 +218,17 @@ DUChainReadLocker::~DUChainReadLocker()
   unlock();
 }
 
-bool DUChainReadLocker::locked() const {
+bool DUChainReadLocker::locked() const
+{
   return m_locked;
 }
 
 bool DUChainReadLocker::lock()
 {
-  if( m_locked )
+  if (m_locked) {
     return true;
-  
+  }
+
   bool l = false;
   if (m_lock) {
     l = m_lock->lockForRead(m_timeout);
@@ -235,7 +236,7 @@ bool DUChainReadLocker::lock()
   };
 
   m_locked = l;
-  
+
   return l;
 }
 
@@ -246,7 +247,6 @@ void DUChainReadLocker::unlock()
     m_locked = false;
   }
 }
-
 
 DUChainWriteLocker::DUChainWriteLocker(DUChainLock* duChainLock, uint timeout)
   : m_lock(duChainLock ? duChainLock : DUChain::lock())
@@ -263,9 +263,10 @@ DUChainWriteLocker::~DUChainWriteLocker()
 
 bool DUChainWriteLocker::lock()
 {
-  if( m_locked )
+  if (m_locked) {
     return true;
-  
+  }
+
   bool l = false;
   if (m_lock) {
     l = m_lock->lockForWrite(m_timeout);
@@ -273,11 +274,12 @@ bool DUChainWriteLocker::lock()
   };
 
   m_locked = l;
-  
+
   return l;
 }
 
-bool DUChainWriteLocker::locked() const {
+bool DUChainWriteLocker::locked() const
+{
   return m_locked;
 }
 
@@ -288,7 +290,7 @@ void DUChainWriteLocker::unlock()
     m_locked = false;
   }
 }
-}
 
+}
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on
