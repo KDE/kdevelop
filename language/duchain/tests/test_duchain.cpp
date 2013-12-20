@@ -608,14 +608,12 @@ public slots:
     for(int i = 0; i < 10000; ++i) {
       DUChainWriteLocker lock;
     }
-    qDebug() << "FINISHED lockForWrite";
   }
   void lockForRead()
   {
     for(int i = 0; i < 10000; ++i) {
       DUChainReadLocker lock;
     }
-    qDebug() << "FINISHED lockForRead";
   }
   void lockForReadWrite()
   {
@@ -627,7 +625,6 @@ public slots:
         DUChainWriteLocker lock;
       }
     }
-    qDebug() << "FINISHED lockForReadWrite";
   }
   static QSharedPointer<QThread> createWorkerThread(const char* workerSlot)
   {
@@ -645,7 +642,6 @@ class ThreadList : public QVector< QSharedPointer<QThread> >
 public:
   bool join(int timeout)
   {
-    qDebug() << "joining" << size() << "threads" << timeout;
     foreach(const QSharedPointer<QThread>& thread, *this) {
       // quit event loop
       Q_ASSERT(thread->isRunning());
@@ -673,6 +669,14 @@ void TestDUChain::testLockForWrite()
     threads << TestWorker::createWorkerThread(SLOT(lockForWrite()));
   }
   threads.start();
+  QBENCHMARK {
+    {
+      DUChainWriteLocker lock;
+    }
+    {
+      DUChainReadLocker lock;
+    }
+  }
   QVERIFY(threads.join(1000));
 }
 
@@ -683,6 +687,9 @@ void TestDUChain::testLockForRead()
     threads << TestWorker::createWorkerThread(SLOT(lockForRead()));
   }
   threads.start();
+  QBENCHMARK {
+    DUChainReadLocker lock;
+  }
   QVERIFY(threads.join(1000));
 }
 
@@ -693,6 +700,9 @@ void TestDUChain::testLockForReadWrite()
     threads << TestWorker::createWorkerThread(SLOT(lockForReadWrite()));
   }
   threads.start();
+  QBENCHMARK {
+    DUChainWriteLocker lock;
+  }
   QVERIFY(threads.join(1000));
 }
 
