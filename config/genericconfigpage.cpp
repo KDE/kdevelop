@@ -41,8 +41,9 @@ GenericConfigPage::GenericConfigPage(QWidget* parent, const QVariantList& args)
     ui = new Ui::GenericConfig();
     ui->setupUi(this);
     connect(ui->SavePushButton , SIGNAL(clicked()), this, SLOT(save()));
+    ui->OutputViewModeComboBox->addItem(tr("Flat list"));
+    ui->OutputViewModeComboBox->addItem(tr("Grouped by file"));
 }
-
 GenericConfigPage::~GenericConfigPage(void)
 {
     disconnect(ui->SavePushButton , SIGNAL(clicked()), this, SLOT(save()));
@@ -63,6 +64,7 @@ void GenericConfigPage::load()
     KConfigGroup cfg = config.group("cppcheck");
     ui->cppcheckExecutable->setUrl(cfg.readEntry("CppcheckExecutable", KUrl("/usr/bin/cppcheck")));
     ui->cppcheckParameters->setText(cfg.readEntry("cppcheckParameters", QString("")));
+    ui->OutputViewModeComboBox->setCurrentIndex(cfg.readEntry("OutputViewMode", "0").toInt());
     ui->styleCheckBox->setChecked(cfg.readEntry("AdditionalCheckStyle", false));
     ui->performanceCheckBox->setChecked(cfg.readEntry("AdditionalCheckPerformance", false));
     ui->portabilityCheckBox->setChecked(cfg.readEntry("AdditionalCheckPortability", false));
@@ -80,6 +82,7 @@ void GenericConfigPage::save()
     KConfigGroup cfg = config.group("cppcheck");
     cfg.writeEntry("CppcheckExecutable", ui->cppcheckExecutable->url());
     cfg.writeEntry("cppcheckParameters", ui->cppcheckParameters->text());
+    cfg.writeEntry("OutputViewMode", ui->OutputViewModeComboBox->currentIndex());
     cfg.writeEntry("AdditionalCheckStyle", ui->styleCheckBox->isChecked());
     cfg.writeEntry("AdditionalCheckPerformance", ui->performanceCheckBox->isChecked());
     cfg.writeEntry("AdditionalCheckPortability", ui->portabilityCheckBox->isChecked());

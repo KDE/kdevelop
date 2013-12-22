@@ -17,7 +17,6 @@
    along with this program; see the file COPYING.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-
  */
 
 #include "widget.h"
@@ -31,6 +30,7 @@
 #include "imodel.h"
 #include "cppcheckview.h"
 #include "cppcheckmodel.h"
+#include "cppcheck_file_model.h"
 
 #include <QResizeEvent>
 
@@ -47,7 +47,8 @@ cppcheck::IView * ViewFactoryPrivate::make(cppcheck::Model * m)
 {
     if (dynamic_cast<cppcheck::CppcheckModel *>(m))
         return new cppcheck::CppcheckView();
-
+    if (dynamic_cast<cppcheck::CppcheckFileModel *>(m))
+        return new cppcheck::CppcheckView();
     kDebug() << "view not yet implemented";
     return 0;
 }

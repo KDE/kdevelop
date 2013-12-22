@@ -26,16 +26,17 @@
 
 #include "cppcheckparser.h"
 
-namespace cppcheck
-{
+namespace cppcheck {
 
-CppcheckParser::CppcheckParser(QObject* parent) :
+
+CppcheckParser::CppcheckParser(cppcheck::Model *m_model, QObject* parent) :
     ErrorLine(0),
     ErrorFile(""),
     Message(""),
     MessageVerbose(""),
     Severity(Unknown),
-    ProjectPath("")
+    ProjectPath(""),
+    m_model(m_model)
 {
     Q_UNUSED(parent)
 }
@@ -94,7 +95,12 @@ bool CppcheckParser::startElement()
             MessageVerbose = attributes().value("verbose").toString();
         if (attributes().hasAttribute("severity"))
             Severity = attributes().value("severity").toString();
-        emit newElement(cppcheck::CppcheckModel::startError);
+        
+        
+        if (dynamic_cast<cppcheck::CppcheckModel *>(m_model))
+            emit newElement(cppcheck::CppcheckModel::startError);
+//         if (dynamic_cast<cppcheck::CppcheckFileModel *>(m_model))
+//             emit newElement(cppcheck::CppcheckFileModel::startError);
     } else {
         m_stateStack.push(m_stateStack.top());
         return true;
@@ -117,7 +123,14 @@ bool CppcheckParser::endElement()
         break;
     case Error:
         kDebug() << "CppcheckParser::endElement: new error elem: line: " << ErrorLine << " at " << ErrorFile << ", msg: " << Message;
-        emit newData(cppcheck::CppcheckModel::error, name().toString(), m_buffer, ErrorLine, ErrorFile, Message, MessageVerbose, ProjectPath, Severity);
+        if (dynamic_cast<cppcheck::CppcheckModel *>(m_model))
+            emit newData(cppcheck::CppcheckModel::error, name().toString(), m_buffer, ErrorLine, ErrorFile, Message, MessageVerbose, ProjectPath, Severity);
+        if (dynamic_cast<cppcheck::CppcheckFileModel *>(m_model)) {
+            //emit newData(cppcheck::CppcheckFileModel::error, name().toString(), m_buffer, ErrorLine, ErrorFile, Message, MessageVerbose, ProjectPath, Severity);
+            CppcheckFileItem *m_item = new CppcheckFileItem();
+            m_item->incomingData(name().toString(), m_buffer, ErrorLine, ErrorFile, Message, MessageVerbose, ProjectPath, Severity);
+            emit newItem(m_item);
+        }
         break;
     case Results:
         // results finished
@@ -156,6 +169,7 @@ void CppcheckParser::parse()
             break;
         }
     }
+    emit newItem(NULL);
     kDebug() << "CppcheckParser::parse: end";
 
     if (hasError()) {

@@ -26,10 +26,15 @@
 #include <QAbstractItemModel>
 #include <QDir>
 
+#include <kconfig.h>
+#include <kconfiggroup.h>
+
 #include "marks.h"
 #include "cppcheckmodel.h"
+#include "cppcheck_file_model.h"
 #include "plugin.h"
 #include "modelwrapper.h"
+#include "cppcheckview.h"
 
 
 
@@ -68,25 +73,47 @@ void Marks::modelChanged()
         if (KTextEditor::MarkInterface *iface = qobject_cast<KTextEditor::MarkInterface*>(docList.at(i)))
             iface->clearMarks();
     // errors
-    QModelIndex parentIndex = QModelIndex();
+
+    KConfig config("kdevcppcheckrc");
+    KConfigGroup grp = config.group("cppcheck");
+
+    int OutputViewMode = grp.readEntry("OutputViewMode", 0);
+
     QAbstractItemModel *itemModel = m_model->getQAbstractItemModel();
     int numRows = itemModel->rowCount();
     for (int row = 0; row < numRows; ++row) {
-        //kDebug() << "row[" << row << "]: " << itemModel->index(row, CppcheckModel::ErrorFile).data().toString() << ":" <<  itemModel->index(row, CppcheckModel::ErrorLine).data().toString();
-        //QString FileName = itemModel->index(row, CppcheckModel::ErrorFile).data().toString();
-        QString FileName = itemModel->index(row, CppcheckModel::ProjectPath).data().toString() + itemModel->index(row, CppcheckModel::ErrorFile).data().toString();
-        int LineNumber = (itemModel->index(row, CppcheckModel::ErrorLine).data()).toInt();
+        int childCount = 1;
+        QString FileName = "";
+        int LineNumber = 0;
+        QModelIndex myIndex = QModelIndex();
+        if (OutputViewMode == cppcheck::CppcheckView::flatOutputMode) {
+         FileName = itemModel->index(row, CppcheckModel::ProjectPath).data().toString() + itemModel->index(row, CppcheckModel::ErrorFile).data().toString();
+         LineNumber = (itemModel->index(row, CppcheckModel::ErrorLine).data()).toInt();
+        }
+        if (OutputViewMode == cppcheck::CppcheckView::groupedByFileOutputMode ) {
+            myIndex = itemModel->index(row, CppcheckModel::ProjectPath);
+            if (itemModel->hasChildren()) {
+                childCount = itemModel->rowCount(myIndex);
+                kDebug() << "child count of " << FileName << ": " << childCount;
+            }
+        }
 
-        //kDebug() << "row[" << row << "]: filename: " << FileName <<  ", line: " << LineNumber;
-        
-        if (FileName.isEmpty() )
-            continue;
-        for (int i = 0; i < docList.size(); ++i) {
-                //kDebug() << "doc: " << docList.at(i)->url() << " <=> " << KUrl(FileName);
-            if (docList.at(i)->url() == KUrl(FileName) ) {
-                if (KTextEditor::MarkInterface *iface = qobject_cast<KTextEditor::MarkInterface*>(docList.at(i))) {
-                    iface->addMark(LineNumber - 1, KTextEditor::MarkInterface::markType07);
-                    kDebug() << "adding mark at: " << docList.at(i)->url() << ":" << LineNumber;
+        for (int x=0; x < childCount; x++) {
+
+            if (OutputViewMode == cppcheck::CppcheckView::groupedByFileOutputMode) {
+                FileName = itemModel->index(x, CppcheckFileItem::ColumnProjectPath, myIndex).data().toString() + itemModel->index(row, CppcheckFileItem::ColumnErrorFile).data().toString();
+                LineNumber = (itemModel->index(x, CppcheckFileItem::ColumnErrorFile, myIndex).data()).toInt();
+            }
+            //kDebug() << "row[" << row << "]: filename: " << FileName <<  ", line: " << LineNumber;
+            if (FileName.isEmpty() )
+                continue;
+            for (int i = 0; i < docList.size(); ++i) {
+                    //kDebug() << "doc: " << docList.at(i)->url() << " <=> " << KUrl(FileName);
+                if (docList.at(i)->url() == KUrl(FileName) ) {
+                    if (KTextEditor::MarkInterface *iface = qobject_cast<KTextEditor::MarkInterface*>(docList.at(i))) {
+                        iface->addMark(LineNumber - 1, KTextEditor::MarkInterface::markType07);
+                        kDebug() << "adding mark at: " << docList.at(i)->url() << ":" << LineNumber;
+                    }
                 }
             }
         }

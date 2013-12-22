@@ -6,6 +6,8 @@ find_package(KDE4 REQUIRED)
 find_package(KDevPlatform 1.5.0 REQUIRED)
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
+
+
 include( MacroLibrary )
 include(KDevPluginVersion)
 
@@ -33,7 +35,10 @@ set(kdevcppcheck_PART_SRCS
     plugin.cpp
     widget.cpp
     models/cppcheckmodel.cpp
+    models/cppcheck_file_model.cpp
     models/cppcheckitemsimpl.cpp
+    models/cppcheck_file_model.cpp
+    models/cppcheck_file_item.cpp
     parsers/cppcheckparser.cpp
     views/cppcheckview.cpp
 )
@@ -62,7 +67,6 @@ target_link_libraries(kdevcppcheck
     ${QT_QTNETWORK_LIBRARY})
 
 install(TARGETS kdevcppcheck DESTINATION ${PLUGIN_INSTALL_DIR} )
-
 ########### install files ###############
 
 configure_file(kdevcppcheck.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevcppcheck.desktop)

@@ -28,6 +28,7 @@
 
 #include "cppcheckitems.h"
 #include "cppcheckmodel.h"
+#include "cppcheck_file_model.h"
 
 #include "iparser.h"
 
@@ -44,7 +45,7 @@ class CppcheckParser : public Parser
 
 public:
 
-    CppcheckParser(QObject* parent = 0);
+    CppcheckParser(cppcheck::Model *m_model, QObject* parent = 0);
     ~CppcheckParser();
 
 
@@ -55,6 +56,7 @@ signals:
      */
     void newElement(cppcheck::Model::eElementType);
     void newData(cppcheck::Model::eElementType, QString name, QString value, int Line, QString SourceFile, QString Message, QString MessageVerbose, QString ProjectPath, QString Severity);
+    void newItem(cppcheck::ModelItem*);
 
     void reset();
 
@@ -90,6 +92,9 @@ private:
     QString MessageVerbose;
     QString Severity;
     QString ProjectPath;
+
+   cppcheck::Model *m_model;
+
 };
 }
 

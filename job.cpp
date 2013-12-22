@@ -55,7 +55,9 @@
 #include <QDir>
 
 #include "cppcheckmodel.h"
+#include "cppcheck_file_model.h"
 #include "cppcheckparser.h"
+#include "cppcheckview.h"
 
 
 #include "plugin.h"
@@ -77,19 +79,35 @@ public:
 
 void ModelParserFactoryPrivate::make(const QString& tool, cppcheck::Model*& m_model, cppcheck::Parser*& m_parser)
 {
+    Q_UNUSED(tool);
     ModelWrapper* modelWrapper = 0;
-    if (tool == "cppcheck") {
-        m_model = new cppcheck::CppcheckModel();
-        modelWrapper = new ModelWrapper(m_model);
-        m_parser = new cppcheck::CppcheckParser();
-        QObject::connect(m_parser, SIGNAL(newElement(cppcheck::Model::eElementType)),
-                         modelWrapper, SLOT(newElement(cppcheck::Model::eElementType)));
-        QObject::connect(m_parser, SIGNAL(newData(cppcheck::Model::eElementType, QString, QString, int, QString, QString, QString, QString, QString)),
-                         modelWrapper, SLOT(newData(cppcheck::Model::eElementType, QString, QString, int, QString, QString, QString, QString, QString)));
-    }
+    KConfig config("kdevcppcheckrc");
+    KConfigGroup grp = config.group("cppcheck");
 
+    int OutputViewMode = grp.readEntry("OutputViewMode", 0);
+    if (OutputViewMode == cppcheck::CppcheckView::flatOutputMode)
+        m_model = new cppcheck::CppcheckModel();
+    else if (OutputViewMode == cppcheck::CppcheckView::groupedByFileOutputMode)
+        m_model = new cppcheck::CppcheckFileModel();
+
+    modelWrapper = new ModelWrapper(m_model);    m_parser = new cppcheck::CppcheckParser(m_model);
+
+    if (OutputViewMode == cppcheck::CppcheckView::flatOutputMode) {
+    QObject::connect(m_parser, SIGNAL(newElement(cppcheck::Model::eElementType)),
+                        modelWrapper, SLOT(newElement(cppcheck::Model::eElementType)));
+    QObject::connect(m_parser, SIGNAL(newData(cppcheck::Model::eElementType, QString, QString, int, QString, QString, QString, QString, QString)),
+                        modelWrapper, SLOT(newData(cppcheck::Model::eElementType, QString, QString, int, QString, QString, QString, QString, QString)));
+    }
+    if (OutputViewMode == cppcheck::CppcheckView::groupedByFileOutputMode) {
+        QObject::connect(m_parser, SIGNAL(newItem(cppcheck::ModelItem*)),
+                        modelWrapper, SLOT(newItem(cppcheck::ModelItem*)));
+    }
+    
     m_model->setModelWrapper(modelWrapper);
     QObject::connect(m_parser, SIGNAL(reset()), modelWrapper, SLOT(reset()));
+
+
+
     m_model->reset();
 }
 

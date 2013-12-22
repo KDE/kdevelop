@@ -21,22 +21,25 @@
 #include "cppcheckview.h"
 
 #include <QApplication>
+#include <QDir>
 
 #include <KIO/NetAccess>
 #include <KTextEditor/Document>
 #include <KTextEditor/MovingInterface>
 
 #include <KDebug>
+#include <kconfiggroup.h>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
 
 #include <QHeaderView>
 
 #include "cppcheckitemsimpl.h"
-#include "cppcheckmodel.h"
+#include "models/cppcheckmodel.h"
+#include "models/cppcheck_file_item.h"
 
 namespace cppcheck
-{
+{       
 CppcheckView::CppcheckView()
 {
     connect(this, SIGNAL(activated(QModelIndex)), SLOT(openDocument(QModelIndex)));
@@ -52,6 +55,7 @@ void CppcheckView::setModel(cppcheck::Model* m)
     QTreeView::setModel(m->getQAbstractItemModel());
     header()->setResizeMode(QHeaderView::ResizeToContents);
 }
+
 
 cppcheck::Model* CppcheckView::model(void)
 {
@@ -74,7 +78,23 @@ void CppcheckView::doubleClicked(const QModelIndex& index)
     QString ClickedCellContent =  index.data().toString();
     QString ProjectPath = index.model()->index(row, CppcheckModel::ProjectPath).data().toString();
     QString FileName = index.model()->index(row, CppcheckModel::ErrorFile).data().toString();
-    int LineNumber = index.model()->index(row, CppcheckModel::ErrorLine).data().toInt();
+    int LineNumber = 0;
+
+    KConfig config("kdevcppcheckrc");
+    KConfigGroup grp = config.group("cppcheck");
+
+    int OutputViewMode = grp.readEntry("OutputViewMode", 0);
+    // FIXME
+    QString ModelName = "CppcheckModel";
+    if (OutputViewMode == cppcheck::CppcheckView::flatOutputMode)
+        LineNumber = index.model()->index(row, CppcheckModel::ErrorLine).data().toInt();
+    else if (OutputViewMode == cppcheck::CppcheckView::groupedByFileOutputMode) {
+        QModelIndex parentIndex = index.parent();
+        FileName = index.model()->index(row, CppcheckFileItem::ColumnProjectPath, parentIndex).data().toString() + QDir::separator() +  parentIndex.model()->index(parentIndex.row(), CppcheckModel::ErrorFile).data().toString();
+        LineNumber = index.model()->index(row, CppcheckFileItem::ColumnErrorFile, parentIndex).data().toInt();
+        kDebug() << "(row: " << row << ") data: " << parentIndex.model()->index(parentIndex.row(), CppcheckModel::ErrorFile).data().toString() << "=> " << index.model()->index(row, CppcheckModel::ProjectPath).data().toString() ;
+        kDebug() << "(row: " << row << ") data: " << index.model()->index(row, CppcheckModel::ErrorFile).data().toString() << "=> " << index.model()->index(row, CppcheckModel::ProjectPath).data().toString() ;
+    }
 
     kDebug() << "double clicked: (row: " << row << ") " << ClickedCellContent << "=> " << ProjectPath + FileName << ":" << LineNumber ;
     if (LineNumber > -1) {

@@ -44,6 +44,11 @@ public:
     void setModel(cppcheck::Model* m);
     cppcheck::Model* model(void);
 
+    enum cppcheckResultMode {
+        flatOutputMode = 0,
+        groupedByFileOutputMode = 1
+    };
+
 private:
     QList<KTextEditor::MovingRange*> ErrorLinesMakerList;
 
