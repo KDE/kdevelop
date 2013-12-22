@@ -65,4 +65,4 @@ public slots:
 };
 }
 
-#endif /* _IMODEL_H_ */
+#endif /* _IPARSER_H_ */
