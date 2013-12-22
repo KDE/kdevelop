@@ -373,7 +373,7 @@ void CppcheckModel::newStartError()
 
 void CppcheckModel::newFrame()
 {
-    m_errors.back()->lastStack()->addFrame();
+    //m_errors.back()->lastStack()->addFrame();
 }
 
 void CppcheckModel::reset()
@@ -392,7 +392,6 @@ void CppcheckModel::newData(CppcheckModel::eElementType e, QString name, QString
     }
     emit static_cast<ModelEvents*>(m_modelWrapper)->modelChanged();
 }
-
 void CppcheckModel::incomingData(QString, QString, int, QString, QString, QString, QString, QString)
 {
 }
