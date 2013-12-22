@@ -168,7 +168,6 @@ KDevelop::ContextMenuExtension Plugin::contextMenuExtension(KDevelop::Context* c
     KDevelop::ContextMenuExtension extension = KDevelop::IPlugin::contextMenuExtension(context);
 
     if ( context->type() == KDevelop::Context::EditorContext ) {
-    KDevelop::EditorContext *econtext = dynamic_cast<KDevelop::EditorContext*>(context);
         QAction* action = new QAction(KIcon("document-new"), i18n("Cppcheck for current file"), this);
         connect(action, SIGNAL(triggered(bool)), this, SLOT(runCppcheckFile()));
         extension.addAction(KDevelop::ContextMenuExtension::ExtensionGroup, action);
