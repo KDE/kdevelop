@@ -297,7 +297,7 @@ void Job::start()
     m_process->start();
     m_pid = m_process->pid();
     //setTitle(QString(i18n("job output (pid=%1)", m_pid)));
-    setTitle(QString(i18n("cppcheck output")));
+    setTitle(QString(i18n("Cppcheck output")));
     startOutput();
     connect(m_applicationOutput, SIGNAL(receivedStdoutLines(QStringList)),
             model(), SLOT(appendLines(QStringList)));

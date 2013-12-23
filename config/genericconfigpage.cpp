@@ -95,7 +95,7 @@ void GenericConfigPage::save()
 
 QString GenericConfigPage::title() const
 {
-    return i18n("Global settings");
+    return i18n("Global Settings");
 }
 
 }
