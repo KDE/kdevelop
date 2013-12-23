@@ -84,18 +84,36 @@ int CppcheckFileItem::childCount() const
 int CppcheckFileItem::columnCount() const
 {
     //return m_values.size()
-    return 5;
+    return 2;
 }
 
 QVariant CppcheckFileItem::data(int column, int role) const
 {
     if (!m_child ) {
-        switch (column) {
-            case ColumnErrorFile:
-                return ErrorFile;
+        switch (role)
+        {
+            case Qt::DisplayRole:
+                switch (column) {
+                    case ColumnErrorFile:
+                        return ErrorFile;
+                        break;
+                }
                 break;
-            return QVariant();
+                case Qt::ToolTipRole: {
+                    switch (column) {
+                        case CppcheckFileItem::ColumnErrorFile:
+                            return QString("<p>" + ProjectPath + ErrorFile + "</p>");
+                            break;
+                        case CppcheckFileItem::ColumnMessage:
+                            break;
+                        case CppcheckFileItem::ColumnProjectPath:
+                            break;
+                        case CppcheckFileItem::ColumnMessageVerbose:
+                            break;
+                    }
+                }
         }
+        return QVariant();
     }
     else {
         switch (role)
@@ -163,6 +181,20 @@ QVariant CppcheckFileItem::data(int column, int role) const
                 }
                 break;
             }
+            case Qt::ToolTipRole: {
+                switch (column) {
+                    case CppcheckFileItem::ColumnErrorFile:
+                        return QString("<p>" + ProjectPath + ErrorFile + "</p>");
+                        break;
+                    case CppcheckFileItem::ColumnMessage:
+                        return QString("<p>" + MessageVerbose + "</p>");
+                        break;
+                    case CppcheckFileItem::ColumnProjectPath:
+                        break;
+                    case CppcheckFileItem::ColumnMessageVerbose:
+                        break;
+                }
+            }
             break;
         }
     }
@@ -202,6 +234,11 @@ int CppcheckFileItem::getLine() const
 void CppcheckFileItem::setIsChild(bool isChild)
 {
     m_child = isChild;
+}
+
+bool CppcheckFileItem::isChild()
+{
+    return m_child;
 }
 
 }

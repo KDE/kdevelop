@@ -31,6 +31,7 @@
 #include "cppcheckview.h"
 #include "cppcheckmodel.h"
 #include "cppcheck_file_model.h"
+#include "cppcheck_severity_model.h"
 
 #include <QResizeEvent>
 
@@ -47,7 +48,9 @@ cppcheck::IView * ViewFactoryPrivate::make(cppcheck::Model * m)
 {
     if (dynamic_cast<cppcheck::CppcheckModel *>(m))
         return new cppcheck::CppcheckView();
-    if (dynamic_cast<cppcheck::CppcheckFileModel *>(m))
+    else if (dynamic_cast<cppcheck::CppcheckFileModel *>(m))
+        return new cppcheck::CppcheckView();
+    if (dynamic_cast<cppcheck::CppcheckSeverityModel *>(m))
         return new cppcheck::CppcheckView();
     kDebug() << "view not yet implemented";
     return 0;

@@ -56,6 +56,7 @@
 
 #include "cppcheckmodel.h"
 #include "cppcheck_file_model.h"
+#include "cppcheck_severity_model.h"
 #include "cppcheckparser.h"
 #include "cppcheckview.h"
 
@@ -89,20 +90,25 @@ void ModelParserFactoryPrivate::make(const QString& tool, cppcheck::Model*& m_mo
         m_model = new cppcheck::CppcheckModel();
     else if (OutputViewMode == cppcheck::CppcheckView::groupedByFileOutputMode)
         m_model = new cppcheck::CppcheckFileModel();
+    else if (OutputViewMode == cppcheck::CppcheckView::groupedBySeverityOutputMode)
+        m_model = new cppcheck::CppcheckSeverityModel();
 
     modelWrapper = new ModelWrapper(m_model);    m_parser = new cppcheck::CppcheckParser(m_model);
 
     if (OutputViewMode == cppcheck::CppcheckView::flatOutputMode) {
-    QObject::connect(m_parser, SIGNAL(newElement(cppcheck::Model::eElementType)),
-                        modelWrapper, SLOT(newElement(cppcheck::Model::eElementType)));
-    QObject::connect(m_parser, SIGNAL(newData(cppcheck::Model::eElementType, QString, QString, int, QString, QString, QString, QString, QString)),
-                        modelWrapper, SLOT(newData(cppcheck::Model::eElementType, QString, QString, int, QString, QString, QString, QString, QString)));
+        QObject::connect(m_parser, SIGNAL(newElement(cppcheck::Model::eElementType)),
+                            modelWrapper, SLOT(newElement(cppcheck::Model::eElementType)));
+        QObject::connect(m_parser, SIGNAL(newData(cppcheck::Model::eElementType, QString, QString, int, QString, QString, QString, QString, QString)),
+                            modelWrapper, SLOT(newData(cppcheck::Model::eElementType, QString, QString, int, QString, QString, QString, QString, QString)));
     }
-    if (OutputViewMode == cppcheck::CppcheckView::groupedByFileOutputMode) {
+    else if (OutputViewMode == cppcheck::CppcheckView::groupedByFileOutputMode) {
         QObject::connect(m_parser, SIGNAL(newItem(cppcheck::ModelItem*)),
                         modelWrapper, SLOT(newItem(cppcheck::ModelItem*)));
     }
-    
+    else if (OutputViewMode == cppcheck::CppcheckView::groupedBySeverityOutputMode) {
+        QObject::connect(m_parser, SIGNAL(newItem(cppcheck::ModelItem*)),
+                        modelWrapper, SLOT(newItem(cppcheck::ModelItem*)));
+    }
     m_model->setModelWrapper(modelWrapper);
     QObject::connect(m_parser, SIGNAL(reset()), modelWrapper, SLOT(reset()));
 

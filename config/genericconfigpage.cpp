@@ -43,6 +43,7 @@ GenericConfigPage::GenericConfigPage(QWidget* parent, const QVariantList& args)
     connect(ui->SavePushButton , SIGNAL(clicked()), this, SLOT(save()));
     ui->OutputViewModeComboBox->addItem(tr("Flat list"));
     ui->OutputViewModeComboBox->addItem(tr("Grouped by file"));
+    ui->OutputViewModeComboBox->addItem(tr("Grouped by severity"));
 }
 GenericConfigPage::~GenericConfigPage(void)
 {

@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef _CPPCHECK_FILEITEM_H_
-#define _CPPCHECK_FILEITEM_H_
+#ifndef _CPPCHECK_SEVERITYITEM_H_
+#define _CPPCHECK_SEVERITYITEM_H_
 
 #include <QString>
 #include <QMap>
@@ -31,21 +31,21 @@
 namespace cppcheck
 {
 
-class CppcheckFileItem : public ModelItem
+class CppcheckSeverityItem : public ModelItem
 {
 
 public:
 
-    CppcheckFileItem();
-    CppcheckFileItem(bool);
-    virtual ~CppcheckFileItem();
+    CppcheckSeverityItem();
+    CppcheckSeverityItem(bool);
+    virtual ~CppcheckSeverityItem();
 
     enum Columns {
-        ColumnErrorFile = 0,
+        ColumnSeverity = 0,
         ColumnMessage = 1,
         ColumnProjectPath = 2,
         ColumnMessageVerbose = 3,
-        ColumnSeverity = 4,
+        ColumnErrorFile = 4,
         ColumnErrorLine = 5,
         ColumnMax = 6
     };
@@ -57,16 +57,16 @@ public:
     void incomingAlloc(const QString &value);
 
     // use by the model
-    void appendChild(CppcheckFileItem *child);
-    void setParent(CppcheckFileItem *parent);
-    CppcheckFileItem *child(int row);
+    void appendChild(CppcheckSeverityItem *child);
+    void setParent(CppcheckSeverityItem *parent);
+    CppcheckSeverityItem *child(int row);
     void setIsChild(bool isChild);
     bool isChild();
     int childCount() const;
     int columnCount() const;
     QVariant data(int column, int role = Qt::DisplayRole) const;
     int row() const;
-    CppcheckFileItem *parent() const;
+    CppcheckSeverityItem *parent() const;
 
     KUrl url() const;
     int getLine() const;
@@ -81,8 +81,8 @@ private:
 
 
     // use by the model
-    QList<CppcheckFileItem*> m_childItems;
-    CppcheckFileItem *m_parentItem;
+    QList<CppcheckSeverityItem*> m_childItems;
+    CppcheckSeverityItem *m_parentItem;
 
 public:
     int ErrorLine;
@@ -95,4 +95,4 @@ public:
 
 }
 
-#endif /* _CPPCHECK_FILEITEM_H_ */
+#endif /* _CPPCHECK_SEVERITYITEM_H_ */

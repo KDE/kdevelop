@@ -19,7 +19,7 @@
  Boston, MA 02110-1301, USA.
 */
 
-#include "cppcheck_file_model.h"
+#include "cppcheck_severity_model.h"
 
 #include <QApplication>
 
@@ -29,27 +29,27 @@
 #include <kglobalsettings.h>
 
 #include <models/cppcheckitemsimpl.h>
-#include <cppcheck_file_item.h>
-#include <cppcheck_file_model.h>
+#include <cppcheck_severity_item.h>
+#include <cppcheck_severity_model.h>
 
 #include "modelwrapper.h"
 
 namespace cppcheck
 {
 
-CppcheckFileModel::CppcheckFileModel(QObject * parent)
+CppcheckSeverityModel::CppcheckSeverityModel(QObject * parent)
 {
     Q_UNUSED(parent)
-    m_rootItem = new CppcheckFileItem();
+    m_rootItem = new CppcheckSeverityItem();
     m_rootItem->incomingData("", "", 0, "", "", "", "", "");
 }
 
-CppcheckFileModel::~ CppcheckFileModel()
+CppcheckSeverityModel::~ CppcheckSeverityModel()
 {
     delete m_rootItem;
 }
 
-void CppcheckFileModel::newItem(ModelItem *i)
+void CppcheckSeverityModel::newItem(ModelItem *i)
 {
     //kDebug() << "start";
     if (!i) {
@@ -57,7 +57,7 @@ void CppcheckFileModel::newItem(ModelItem *i)
         emit static_cast<ModelEvents *>(m_modelWrapper)->modelChanged();
         return;
     }
-    CppcheckFileItem *m = dynamic_cast<CppcheckFileItem *>(i);
+    CppcheckSeverityItem *m = dynamic_cast<CppcheckSeverityItem *>(i);
     Q_ASSERT(m);
 
     //kDebug() << "ErrorLine: " << m->ErrorLine<< ", Message: " << m->Message;
@@ -68,22 +68,22 @@ void CppcheckFileModel::newItem(ModelItem *i)
     QString ProjectPath = m->ProjectPath;
     QString Severity = m->Severity;
 
-    bool fileAlreadyInList = false;
+    bool severityAlreadyInList = false;
     for (int x=0; x < m_rootItem->childCount(); x++) {
-        CppcheckFileItem *current = m_rootItem->child(x) ;
-        //kDebug() << "elem at " << x << ", current->ProjectPath: " << current->ProjectPath << ", ProjectPath: " << ProjectPath << ", current->ErrorFile: " << current->ErrorFile << ", ErrorFile: " << ErrorFile;
-        if (current->ProjectPath == ProjectPath && current->ErrorFile == ErrorFile) {
+        CppcheckSeverityItem *current = m_rootItem->child(x) ;
+        //kDebug() << "elem at " << x << ", current->Severity: " << current->Severity << ", current->ErrorFile: " << current->ErrorFile << ", ErrorFile: " << ErrorFile;
+        if (current->Severity == Severity) {
            kDebug() << "adding at " << x << ", ErrorLine: " << ErrorLine << ", Message: " << Message;
-           fileAlreadyInList = true;
+           severityAlreadyInList = true;
            m->setParent(current);
            m->setIsChild(true);
            current->appendChild(m);
            break;
         }
    }
-    if (!fileAlreadyInList) {
+    if (!severityAlreadyInList) {
         kDebug() << "adding new , ErrorLine: " << m->ErrorLine << ", Message: " << m->Message;
-        CppcheckFileItem *m2 = new CppcheckFileItem(true);
+        CppcheckSeverityItem *m2 = new CppcheckSeverityItem(true);
         m2->ErrorLine = m->ErrorLine;
         m2->ErrorFile = m->ErrorFile;
         m2->Message = m->Message;
@@ -95,120 +95,119 @@ void CppcheckFileModel::newItem(ModelItem *i)
         m->ErrorLine = -1;
         m->Message = "";
         m->MessageVerbose = "";
-        m->Severity = i18n("unknown");
-        if(m->ErrorFile == "")
-            m->ErrorFile = i18n("Global scope");
         m_rootItem->appendChild(m);
         
         m->appendChild(m2);
     }
 }
 
-void CppcheckFileModel::reset()
+void CppcheckSeverityModel::reset()
 {
 }
 
-QVariant CppcheckFileModel::getColumnAtSnapshot(int snap, CppcheckFileItem::Columns col)
+QVariant CppcheckSeverityModel::getColumnAtSnapshot(int snap, CppcheckSeverityItem::Columns col)
 {
     return m_rootItem->child(snap)->data(col);
 }
 
-QModelIndex CppcheckFileModel::index(int row, int column, const QModelIndex &parent) const
+QModelIndex CppcheckSeverityModel::index(int row, int column, const QModelIndex &parent) const
 {
     if (!hasIndex(row, column, parent))
         return QModelIndex();
-    CppcheckFileItem *parentItem;
+    CppcheckSeverityItem *parentItem;
     if (!parent.isValid())
         parentItem = m_rootItem;
     else
-        parentItem = static_cast<CppcheckFileItem*>(parent.internalPointer());
-    CppcheckFileItem *childItem = parentItem->child(row);
+        parentItem = static_cast<CppcheckSeverityItem*>(parent.internalPointer());
+    CppcheckSeverityItem *childItem = parentItem->child(row);
     if (childItem)
         return createIndex(row, column, childItem);
     else
         return QModelIndex();
 }
 
-QModelIndex CppcheckFileModel::parent(const QModelIndex &index) const
+QModelIndex CppcheckSeverityModel::parent(const QModelIndex &index) const
 {
     if (!index.isValid())
         return QModelIndex();
-    CppcheckFileItem *childItem = static_cast<CppcheckFileItem*>(index.internalPointer());
-    CppcheckFileItem *parentItem = childItem->parent();
+    CppcheckSeverityItem *childItem = static_cast<CppcheckSeverityItem*>(index.internalPointer());
+    CppcheckSeverityItem *parentItem = childItem->parent();
     if (parentItem == m_rootItem)
         return QModelIndex();
     return createIndex(parentItem->row(), 0, parentItem);
 }
 
-int CppcheckFileModel::rowCount(const QModelIndex &parent) const
+int CppcheckSeverityModel::rowCount(const QModelIndex &parent) const
 {
-    CppcheckFileItem *parentItem = 0;
+    CppcheckSeverityItem *parentItem;
 //     if (parent.column() > 0)
 //         return 0;
     if (!parent.isValid())
         parentItem = m_rootItem;
     else
-        parentItem = static_cast<CppcheckFileItem*>(parent.internalPointer());
+        parentItem = static_cast<CppcheckSeverityItem*>(parent.internalPointer());
+
     if (parentItem == 0)
         return 0;
+
     return parentItem->childCount();
 }
 
-int CppcheckFileModel::columnCount(const QModelIndex &parent) const
+int CppcheckSeverityModel::columnCount(const QModelIndex &parent) const
 {
     if (parent.isValid())
-        return static_cast<CppcheckFileItem*>(parent.internalPointer())->columnCount();
+        return static_cast<CppcheckSeverityItem*>(parent.internalPointer())->columnCount();
     else
         return m_rootItem->columnCount();
 }
 
-CppcheckItem* CppcheckFileModel::parent() const {
+CppcheckItem* CppcheckSeverityModel::parent() const {
         return 0L;
     }
 
-QVariant CppcheckFileModel::data(const QModelIndex & index, int role) const
+QVariant CppcheckSeverityModel::data(const QModelIndex & index, int role) const
 {
     if (!index.isValid())
         return QVariant();
     switch (role) {
         case Qt::DisplayRole: {
-            CppcheckFileItem *item = static_cast<CppcheckFileItem*>(index.internalPointer());
+            CppcheckSeverityItem *item = static_cast<CppcheckSeverityItem*>(index.internalPointer());
             return item->data(index.column(), role);
         }
         case Qt::DecorationRole: {
-            CppcheckFileItem *item = static_cast<CppcheckFileItem*>(index.internalPointer());
+            CppcheckSeverityItem *item = static_cast<CppcheckSeverityItem*>(index.internalPointer());
             return item->data(index.column(), role);
         }
         case Qt::ToolTipRole: {
-            CppcheckFileItem *item = static_cast<CppcheckFileItem*>(index.internalPointer());
+            CppcheckSeverityItem *item = static_cast<CppcheckSeverityItem*>(index.internalPointer());
             return item->data(index.column(), role);
         }
-    case Qt::FontRole: {
+        case Qt::FontRole: {
             QFont f = KGlobalSettings::generalFont();
-            if ((static_cast<CppcheckFileItem*>(index.internalPointer()))->parent() == m_rootItem)
+            if ((static_cast<CppcheckSeverityItem*>(index.internalPointer()))->parent() == m_rootItem)
                 f.setBold(true);
             return f;
         }
         break;
     case Qt::UserRole:
         switch (index.column()) {
-         case CppcheckFileItem::ColumnSeverity:
-             return static_cast<CppcheckFileItem*>(index.internalPointer())->Severity;
+         case CppcheckSeverityItem::ColumnSeverity:
+             return static_cast<CppcheckSeverityItem*>(index.internalPointer())->Severity;
              break;
-        case CppcheckFileItem::ColumnErrorFile:
-            return static_cast<CppcheckFileItem*>(index.internalPointer())->ErrorFile;
+        case CppcheckSeverityItem::ColumnErrorFile:
+            return static_cast<CppcheckSeverityItem*>(index.internalPointer())->ErrorFile;
             break;
-        case CppcheckFileItem::ColumnErrorLine:
-            return QString().setNum(static_cast<CppcheckFileItem*>(index.internalPointer())->ErrorLine);
+        case CppcheckSeverityItem::ColumnErrorLine:
+            return QString().setNum(static_cast<CppcheckSeverityItem*>(index.internalPointer())->ErrorLine);
             break;
-        case CppcheckFileItem::ColumnMessage:
-            return static_cast<CppcheckFileItem*>(index.internalPointer())->Message;
+        case CppcheckSeverityItem::ColumnMessage:
+            return static_cast<CppcheckSeverityItem*>(index.internalPointer())->Message;
             break;
-        case CppcheckFileItem::ColumnProjectPath:
-            return static_cast<CppcheckFileItem*>(index.internalPointer())->ProjectPath;
+        case CppcheckSeverityItem::ColumnProjectPath:
+            return static_cast<CppcheckSeverityItem*>(index.internalPointer())->ProjectPath;
             break;
-        case CppcheckFileItem::ColumnMessageVerbose:
-            return static_cast<CppcheckFileItem*>(index.internalPointer())->MessageVerbose;
+        case CppcheckSeverityItem::ColumnMessageVerbose:
+            return static_cast<CppcheckSeverityItem*>(index.internalPointer())->MessageVerbose;
             break;
         }
         break;
@@ -216,40 +215,37 @@ QVariant CppcheckFileModel::data(const QModelIndex & index, int role) const
     return QVariant();
 }
 
-QVariant CppcheckFileModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant CppcheckSeverityModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     Q_UNUSED(orientation)
     switch (role) {
     case Qt::DisplayRole:
         switch (section) {
-        case CppcheckFileItem::ColumnErrorFile:
-            return i18n("File / Line");
+        case CppcheckSeverityItem::ColumnSeverity:
+            return i18n("Severity / File");
             break;
-        case CppcheckFileItem::ColumnMessage:
+        case CppcheckSeverityItem::ColumnMessage:
             return i18n("Message");
             break;
-        case CppcheckFileItem::ColumnProjectPath:
+        case CppcheckSeverityItem::ColumnProjectPath:
             return i18n("Project path");
             break;
-        case CppcheckFileItem::ColumnMessageVerbose:
+        case CppcheckSeverityItem::ColumnMessageVerbose:
             return i18n("Message detailed");
-            break;
-
             break;
         }
     }
     return QVariant();
 }
 
-QAbstractItemModel*  CppcheckFileModel::getQAbstractItemModel(int) {
+QAbstractItemModel*  CppcheckSeverityModel::getQAbstractItemModel(int) {
         return this;
     }
 
-
-void CppcheckFileModel::incomingData(QString, QString, int, QString, QString, QString, QString, QString)
+void CppcheckSeverityModel::incomingData(QString, QString, int, QString, QString, QString, QString, QString)
 {
 }
 
 }
 
-#include "cppcheck_file_model.moc"
+#include "cppcheck_severity_model.moc"

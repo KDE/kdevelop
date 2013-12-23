@@ -37,6 +37,7 @@
 #include "cppcheckitemsimpl.h"
 #include "models/cppcheckmodel.h"
 #include "models/cppcheck_file_item.h"
+#include "models/cppcheck_severity_item.h"
 
 namespace cppcheck
 {       
@@ -85,15 +86,25 @@ void CppcheckView::doubleClicked(const QModelIndex& index)
 
     int OutputViewMode = grp.readEntry("OutputViewMode", 0);
     // FIXME
-    QString ModelName = "CppcheckModel";
     if (OutputViewMode == cppcheck::CppcheckView::flatOutputMode)
         LineNumber = index.model()->index(row, CppcheckModel::ErrorLine).data().toInt();
     else if (OutputViewMode == cppcheck::CppcheckView::groupedByFileOutputMode) {
-        QModelIndex parentIndex = index.parent();
-        FileName = index.model()->index(row, CppcheckFileItem::ColumnProjectPath, parentIndex).data().toString() + QDir::separator() +  parentIndex.model()->index(parentIndex.row(), CppcheckModel::ErrorFile).data().toString();
-        LineNumber = index.model()->index(row, CppcheckFileItem::ColumnErrorFile, parentIndex).data().toInt();
-        kDebug() << "(row: " << row << ") data: " << parentIndex.model()->index(parentIndex.row(), CppcheckModel::ErrorFile).data().toString() << "=> " << index.model()->index(row, CppcheckModel::ProjectPath).data().toString() ;
-        kDebug() << "(row: " << row << ") data: " << index.model()->index(row, CppcheckModel::ErrorFile).data().toString() << "=> " << index.model()->index(row, CppcheckModel::ProjectPath).data().toString() ;
+        CppcheckFileItem *item = static_cast<CppcheckFileItem*>(index.internalPointer());
+        if (!item->isChild())
+            return;
+
+        FileName = item->ProjectPath + QDir::separator() +  item->ErrorFile;
+        LineNumber = item->ErrorLine;
+        kDebug() << "(row: " << row << ") data: " << FileName << "=> " << QString().setNum(LineNumber);
+    }
+    else if (OutputViewMode == cppcheck::CppcheckView::groupedBySeverityOutputMode) {
+        CppcheckSeverityItem *item = static_cast<CppcheckSeverityItem*>(index.internalPointer());
+        if (!item->isChild())
+            return;
+
+        FileName = item->ProjectPath + QDir::separator() +  item->ErrorFile;
+        LineNumber = item->ErrorLine;
+        kDebug() << "(row: " << row << ") data: " << FileName << "=> " << QString().setNum(LineNumber);
     }
 
     kDebug() << "double clicked: (row: " << row << ") " << ClickedCellContent << "=> " << ProjectPath + FileName << ":" << LineNumber ;

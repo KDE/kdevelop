@@ -95,7 +95,7 @@ bool CppcheckParser::startElement()
             MessageVerbose = attributes().value("verbose").toString();
         if (attributes().hasAttribute("severity"))
             Severity = attributes().value("severity").toString();
-        
+
         
         if (dynamic_cast<cppcheck::CppcheckModel *>(m_model))
             emit newElement(cppcheck::CppcheckModel::startError);
@@ -125,9 +125,15 @@ bool CppcheckParser::endElement()
         kDebug() << "CppcheckParser::endElement: new error elem: line: " << ErrorLine << " at " << ErrorFile << ", msg: " << Message;
         if (dynamic_cast<cppcheck::CppcheckModel *>(m_model))
             emit newData(cppcheck::CppcheckModel::error, name().toString(), m_buffer, ErrorLine, ErrorFile, Message, MessageVerbose, ProjectPath, Severity);
-        if (dynamic_cast<cppcheck::CppcheckFileModel *>(m_model)) {
+        else if (dynamic_cast<cppcheck::CppcheckFileModel *>(m_model)) {
             //emit newData(cppcheck::CppcheckFileModel::error, name().toString(), m_buffer, ErrorLine, ErrorFile, Message, MessageVerbose, ProjectPath, Severity);
             CppcheckFileItem *m_item = new CppcheckFileItem();
+            m_item->incomingData(name().toString(), m_buffer, ErrorLine, ErrorFile, Message, MessageVerbose, ProjectPath, Severity);
+            emit newItem(m_item);
+        }
+        else if (dynamic_cast<cppcheck::CppcheckSeverityModel *>(m_model)) {
+            //emit newData(cppcheck::CppcheckSeverityModel::error, name().toString(), m_buffer, ErrorLine, ErrorFile, Message, MessageVerbose, ProjectPath, Severity);
+            CppcheckSeverityItem *m_item = new CppcheckSeverityItem();
             m_item->incomingData(name().toString(), m_buffer, ErrorLine, ErrorFile, Message, MessageVerbose, ProjectPath, Severity);
             emit newItem(m_item);
         }

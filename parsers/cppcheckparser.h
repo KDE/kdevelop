@@ -29,6 +29,7 @@
 #include "cppcheckitems.h"
 #include "cppcheckmodel.h"
 #include "cppcheck_file_model.h"
+#include "cppcheck_severity_model.h"
 
 #include "iparser.h"
 

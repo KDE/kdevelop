@@ -46,7 +46,8 @@ public:
 
     enum cppcheckResultMode {
         flatOutputMode = 0,
-        groupedByFileOutputMode = 1
+        groupedByFileOutputMode = 1,
+        groupedBySeverityOutputMode = 2
     };
 
 private:

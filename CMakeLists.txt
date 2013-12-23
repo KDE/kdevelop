@@ -35,10 +35,11 @@ set(kdevcppcheck_PART_SRCS
     plugin.cpp
     widget.cpp
     models/cppcheckmodel.cpp
-    models/cppcheck_file_model.cpp
     models/cppcheckitemsimpl.cpp
     models/cppcheck_file_model.cpp
+    models/cppcheck_severity_model.cpp
     models/cppcheck_file_item.cpp
+    models/cppcheck_severity_item.cpp
     parsers/cppcheckparser.cpp
     views/cppcheckview.cpp
 )

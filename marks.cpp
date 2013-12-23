@@ -32,6 +32,9 @@
 #include "marks.h"
 #include "cppcheckmodel.h"
 #include "cppcheck_file_model.h"
+#include "cppcheck_severity_model.h"
+#include "cppcheck_file_item.h"
+#include "cppcheck_severity_item.h"
 #include "plugin.h"
 #include "modelwrapper.h"
 #include "cppcheckview.h"
@@ -69,7 +72,7 @@ void Marks::modelChanged()
 //     for (int i = 0; i < docList.size(); ++i)
 //         kDebug() << "\t" << docList.at(i)->documentName() << ", (" << docList.at(i)->url() << ")";
     
-    for (int i = 0; i < docList.size(); ++i)
+    for (int i = 0; i < docList.size(); i++)
         if (KTextEditor::MarkInterface *iface = qobject_cast<KTextEditor::MarkInterface*>(docList.at(i)))
             iface->clearMarks();
     // errors
@@ -81,28 +84,50 @@ void Marks::modelChanged()
 
     QAbstractItemModel *itemModel = m_model->getQAbstractItemModel();
     int numRows = itemModel->rowCount();
-    for (int row = 0; row < numRows; ++row) {
+    for (int row = 0; row < numRows; row++) {
         int childCount = 1;
         QString FileName = "";
         int LineNumber = 0;
         QModelIndex myIndex = QModelIndex();
         if (OutputViewMode == cppcheck::CppcheckView::flatOutputMode) {
-         FileName = itemModel->index(row, CppcheckModel::ProjectPath).data().toString() + itemModel->index(row, CppcheckModel::ErrorFile).data().toString();
-         LineNumber = (itemModel->index(row, CppcheckModel::ErrorLine).data()).toInt();
+            FileName = itemModel->index(row, CppcheckModel::ProjectPath).data().toString() + itemModel->index(row, CppcheckModel::ErrorFile).data().toString();
+            LineNumber = (itemModel->index(row, CppcheckModel::ErrorLine).data()).toInt();
         }
-        if (OutputViewMode == cppcheck::CppcheckView::groupedByFileOutputMode ) {
-            myIndex = itemModel->index(row, CppcheckModel::ProjectPath);
+        else if (OutputViewMode == cppcheck::CppcheckView::groupedByFileOutputMode ) {
+            myIndex = itemModel->index(row, 0);
+            CppcheckFileItem *item = static_cast<CppcheckFileItem*>(myIndex.internalPointer());
             if (itemModel->hasChildren()) {
                 childCount = itemModel->rowCount(myIndex);
+                FileName = item->ProjectPath + item->ErrorFile;
                 kDebug() << "child count of " << FileName << ": " << childCount;
+                if (FileName == "")
+                    continue;
+            }
+        }
+        else if (OutputViewMode == cppcheck::CppcheckView::groupedBySeverityOutputMode ) {
+            myIndex = itemModel->index(row, 0);
+            if (itemModel->hasChildren()) {
+                childCount = itemModel->rowCount(myIndex);
+                CppcheckSeverityItem *item = static_cast<CppcheckSeverityItem*>(myIndex.internalPointer());
+                kDebug() << "child count of " << item->Severity << ": " << childCount;
             }
         }
 
         for (int x=0; x < childCount; x++) {
-
             if (OutputViewMode == cppcheck::CppcheckView::groupedByFileOutputMode) {
-                FileName = itemModel->index(x, CppcheckFileItem::ColumnProjectPath, myIndex).data().toString() + itemModel->index(row, CppcheckFileItem::ColumnErrorFile).data().toString();
-                LineNumber = (itemModel->index(x, CppcheckFileItem::ColumnErrorFile, myIndex).data()).toInt();
+                CppcheckFileItem *parentItem = static_cast<CppcheckFileItem*>(myIndex.internalPointer());
+                CppcheckFileItem *childitem = parentItem->child(x);
+                if (childitem)
+                    LineNumber = childitem->ErrorLine;
+            }
+            else if (OutputViewMode == cppcheck::CppcheckView::groupedBySeverityOutputMode) {
+                CppcheckSeverityItem *parentItem = static_cast<CppcheckSeverityItem*>(myIndex.internalPointer());
+                CppcheckSeverityItem *childitem = parentItem->child(x);
+                if (childitem)
+                {
+                    FileName = childitem->ProjectPath + childitem->ErrorFile;
+                    LineNumber = childitem->ErrorLine;
+                }
             }
             //kDebug() << "row[" << row << "]: filename: " << FileName <<  ", line: " << LineNumber;
             if (FileName.isEmpty() )
