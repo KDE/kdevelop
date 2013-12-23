@@ -1271,6 +1271,16 @@ VcsJob* GitPlugin::copy(const KUrl& localLocationSrc, const KUrl& localLocationD
 VcsJob* GitPlugin::move(const KUrl& source, const KUrl& destination)
 {
     QDir dir = urlDir(source);
+
+    QFileInfo fileInfo(source.toLocalFile());
+    if (fileInfo.isDir()) {
+        if (isEmptyDirStructure(QDir(source.toLocalFile()))) {
+            //move empty folder, git doesn't do that
+            kDebug() << "empty folder" << source;
+            return new StandardJob(this, KIO::move(source, destination), KDevelop::OutputJob::Silent);
+        }
+    }
+
     QStringList otherStr = getLsFiles(dir, QStringList() << "--others" << "--" << source.toLocalFile(), KDevelop::OutputJob::Silent);
     if(otherStr.isEmpty()) {
         DVcsJob* job = new DVcsJob(dir, this, KDevelop::OutputJob::Verbose);
