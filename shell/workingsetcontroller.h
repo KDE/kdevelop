@@ -103,6 +103,7 @@ private slots:
 
 private:
     void setupActions();
+    const QString makeSetId(const QString& prefix) const;
 
     QSet<QString> m_usedIcons;
     QMap<QString, WorkingSet*> m_workingSets;
