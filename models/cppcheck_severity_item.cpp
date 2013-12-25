@@ -25,6 +25,7 @@
 
 #include <kglobalsettings.h>
 #include <kiconloader.h>
+#include <klocale.h>
 
 namespace cppcheck
 {
@@ -95,7 +96,7 @@ QVariant CppcheckSeverityItem::data(int column, int role) const
             case Qt::DisplayRole:
                switch (column) {
                     case ColumnSeverity:
-                        return Severity;
+                   return i18n(Severity.toLocal8Bit());
                         break;
                     return QVariant();
                 }
