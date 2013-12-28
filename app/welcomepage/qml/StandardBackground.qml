@@ -39,13 +39,12 @@ Rectangle
             margins: parent.margins
         }
         width: 256
-        height: 100
+        height: toolsLoader.height + 2*20
         Loader {
+            id: toolsLoader
+
+            anchors.centerIn: parent
             sourceComponent: tools
-            anchors {
-                fill: parent
-                margins: 20
-            }
         }
     }
     

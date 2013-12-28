@@ -32,17 +32,14 @@ StandardBackground {
 
     tools: ButtonColumn {
         spacing: 10
-        Link {
-            anchors.margins: 20
-            width: parent.width
 
+        Link {
+            iconSource: "applications-development"
             text: i18n("Starting")
             onClicked: root.state = "starting"
         }
         Link {
-            anchors.margins: 20
-            width: parent.width
-
+            iconSource: "help-contents"
             text: i18n("Learn KDevelop!")
             onClicked: root.state = "learning"
         }
