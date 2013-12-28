@@ -101,7 +101,6 @@ Rectangle {
         color: "white"
         opacity: 0.65
         text: "KDevelop Integrated Development Environment – http://kdevelop.org<br>" + root.progress+"%"
-        font.pixelSize: 12
     }
     // icon in the lower left corner
     Image {
@@ -127,7 +126,7 @@ Rectangle {
         color: "white"
         verticalAlignment: Text.AlignVCenter
         font {
-            pixelSize: 35
+            pointSize: 26
             bold: true
             family: "sans"
         }
