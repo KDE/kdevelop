@@ -34,10 +34,12 @@ StandardBackground {
         spacing: 10
 
         Link {
+            iconSource: "applications-development"
             text: i18n("Starting")
             onClicked: root.state = "starting"
         }
         Link {
+            iconSource: "help-contents"
             text: i18n("Learn KDevelop!")
             onClicked: root.state = "learning"
         }
