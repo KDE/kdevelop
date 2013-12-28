@@ -149,6 +149,7 @@ private slots:
   void testParentConstructor();
   void testOverride_data();
   void testOverride();
+  void testOverrideDeleted();
   void testExecuteKeepWord_data();
   void testExecuteKeepWord();
   void testAfterVisibility_data();

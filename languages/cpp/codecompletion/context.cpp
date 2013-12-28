@@ -1302,7 +1302,7 @@ void getOverridable(DUContext* base, DUContext* current, QMap< QPair<IndexedType
   foreach(Declaration* decl, current->localDeclarations()) {
     ClassFunctionDeclaration* classFun = dynamic_cast<ClassFunctionDeclaration*>(decl);
     // one can only override the direct parent's ctor
-    if(classFun && (classFun->isVirtual() || (depth == 0 && classFun->isConstructor()))) {
+    if(classFun && (classFun->isVirtual() || (depth == 0 && classFun->isConstructor())) && !classFun->isExplicitlyDeleted()) {
       QPair<IndexedType, IndexedString> key = qMakePair(classFun->indexedType(), classFun->identifier().identifier());
       if(base->owner()) {
         if(classFun->isConstructor() || classFun->isDestructor())

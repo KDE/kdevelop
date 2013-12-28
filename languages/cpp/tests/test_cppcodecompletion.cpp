@@ -1179,6 +1179,28 @@ void TestCppCodeCompletion::testOverride()
   release(context);
 }
 
+void TestCppCodeCompletion::testOverrideDeleted()
+{
+  const QByteArray tmpl("class A {public: virtual void foo() = delete; };\n"
+                       "class B : public A { };");
+  TopDUContext* context = parse(tmpl, DumpNone);
+  DUChainWriteLocker lock;
+  DUContext* BCtx = context->childContexts().last();
+  QCOMPARE(BCtx->localScopeIdentifier().toString(), QLatin1String("B"));
+  CompletionItemTester tester(BCtx, "");
+  bool found = false;
+  foreach(CompletionItemTester::Item item, tester.items) {
+    Cpp::ImplementationHelperItem* override = dynamic_cast<Cpp::ImplementationHelperItem*>(item.data());
+    if (!override) {
+      continue;
+    }
+    found = true;
+    break;
+  }
+  QVERIFY(!found);
+  release(context);
+}
+
 void TestCppCodeCompletion::testSignalSlotCompletion() {
     // By processing qobjectdefs.h, we make sure that the qt-specific macros are defined in the duchain through overriding (see setuphelpers.cpp)
     addInclude("/qobjectdefs.h", "#define signals\n#define slots\n#define Q_SIGNALS\n#define Q_SLOTS\n#define Q_PRIVATE_SLOT\n#define SIGNAL\n#define SLOT\n int n;\n");
