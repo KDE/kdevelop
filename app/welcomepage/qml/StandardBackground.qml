@@ -61,7 +61,7 @@ Rectangle
             left: parent.left
             margins: 5
         }
-        width: 256
+        width: 64
         height: width
     }
 }
