@@ -38,7 +38,7 @@ Rectangle
             left: parent.left
             margins: parent.margins
         }
-        width: 256
+        width: toolsLoader.width + 2*toolsLoader.margins
         height: toolsLoader.height + 2*toolsLoader.margins
         Loader {
             id: toolsLoader
