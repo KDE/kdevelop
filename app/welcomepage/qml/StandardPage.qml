@@ -34,7 +34,7 @@ PlasmaCore.FrameSvgItem {
             margins: 5
         }
         opacity: 0.3
-        width: 256
+        width: 128
         height: width
         icon: "kdevelop"
     }
