@@ -223,49 +223,6 @@ void TestParser::testParseMethod()
   QVERIFY(hasKind(ast, AST::Kind_FunctionDefinition));
 }
 
-///@todo reenable
-//   void TestParser::testMethodArgs()
-//   {
-//     QByteArray method("int A::test(int primitive, B* pointer) { return primitive; }");
-//     Parser parser(&control);
-//     TranslationUnitAST* ast = parser.parse(method.constData(),
-// 					   method.size() + 1);
-//     // return type
-//     SimpleTypeSpecifierAST* retType = static_cast<SimpleTypeSpecifierAST*>
-//       (getAST(ast, AST::Kind_SimpleTypeSpecifier));
-//     QCOMPARE((TOKEN_KIND)parser.token_stream.kind(retType->start_token),
-// 	    Token_int);
-//
-//     // first param
-//     ParameterDeclarationAST* param = static_cast<ParameterDeclarationAST*>
-//       (getAST(ast, AST::Kind_ParameterDeclaration));
-//     SimpleTypeSpecifierAST* paramType = static_cast<SimpleTypeSpecifierAST*>
-//       (getAST(param, AST::Kind_SimpleTypeSpecifier));
-//     QCOMPARE((TOKEN_KIND)parser.token_stream.kind(paramType->start_token),
-// 	    Token_int);
-//     UnqualifiedNameAST* argName  = static_cast<UnqualifiedNameAST*>
-//       (getAST(param, AST::Kind_UnqualifiedName));
-//     QCOMPARE(parser.token_stream.symbol(argName->id)->as_string(),
-// 	    QString("primitive"));
-//
-//     // second param
-//     param = static_cast<ParameterDeclarationAST*>
-//       (getAST(ast, AST::Kind_ParameterDeclaration, 1));
-//     UnqualifiedNameAST* argType = static_cast<UnqualifiedNameAST*>
-//       (getAST(param, AST::Kind_UnqualifiedName));
-//     QCOMPARE(parser.token_stream.symbol(argType->id)->as_string(),
-// 	    QString("B"));
-//
-//     // pointer operator
-//     QVERIFY(hasKind(param, AST::Kind_PtrOperator));
-//
-//     argName = static_cast<UnqualifiedNameAST*>
-//       (getAST(param, AST::Kind_UnqualifiedName, 1));
-//     QCOMPARE(parser.token_stream.symbol(argName->id)->as_string(),
-// 	    QString("pointer"));
-//
-//   }
-
 void TestParser::testForStatements()
 {
   QByteArray method("void TestParser::A::t() { for (int i = 0; i < 10; i++) { ; }}");
