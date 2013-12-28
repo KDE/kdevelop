@@ -1,8 +1,8 @@
 <!DOCTYPE RCC><RCC version="1.0">
  <qresource>
     <!-- components  -->
-    <file>qml/Starting.qml</file>
-    <file>qml/UseKDevelop.qml</file>
+    <file>qml/Develop.qml</file>
+    <file>qml/GettingStarted.qml</file>
     <file>qml/Link.qml</file>
     <file>qml/StandardPage.qml</file>
     <file>qml/Heading.qml</file>
