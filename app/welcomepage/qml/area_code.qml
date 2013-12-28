@@ -58,10 +58,10 @@ StandardBackground {
     }
     states: [
         State { name: "learning"
-            PropertyChanges { target: codeContents; source: "qrc:/UseKDevelop.qml"}
+            PropertyChanges { target: codeContents; source: "qrc:/qml/UseKDevelop.qml"}
         },
         State { name: "starting"
-            PropertyChanges { target: codeContents; source: "qrc:/Starting.qml"}
+            PropertyChanges { target: codeContents; source: "qrc:/qml/Starting.qml"}
         }
     ]
 }

@@ -65,7 +65,7 @@ WelcomePageView::WelcomePageView(QWidget* parent)
     rootContext()->setContextProperty("ICore", KDevelop::ICore::self());
     areaChanged(ICore::self()->uiController()->activeArea());
 
-    setSource(QUrl("qrc:/main.qml"));
+    setSource(QUrl("qrc:/qml/main.qml"));
     if(!errors().isEmpty()) {
         kWarning() << "welcomepage errors:" << errors();
     }

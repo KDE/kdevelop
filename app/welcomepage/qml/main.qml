@@ -21,6 +21,6 @@
 import QtQuick 1.0
 
 Loader {
-    source: ":/"+area+".qml"
+    source: "qrc:/qml/area_"+area+".qml"
     anchors.fill: parent
 }
