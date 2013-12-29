@@ -489,11 +489,8 @@ void UiController::saveAllAreas(KSharedConfig::Ptr config)
     uiConfig.writeEntry("Main Windows Count", wc);
     for (int w = 0; w < wc; ++w)
     {
-        Sublime::MainWindow *mw = mainWindows()[w];
-
         KConfigGroup mainWindowConfig(&uiConfig,
                                       QString("Main Window %1").arg(w));
-        mainWindowConfig.writeEntry("currentArea", mw->area()->objectName());
 
         foreach (Sublime::Area* defaultArea, defaultAreas())
         {
@@ -539,10 +536,6 @@ void UiController::loadAllAreas(KSharedConfig::Ptr config)
     {
         KConfigGroup mainWindowConfig(&uiConfig,
                                       QString("Main Window %1").arg(w));
-        QString currentArea = mainWindowConfig.readEntry("currentArea", "");
-        
-        if(currentArea == "test") ///@todo The area was renamed, and it will lead to a crash, so this is a dirty temporary workaround
-            currentArea = "review";
         
         Sublime::MainWindow *mw = mainWindows()[w];
 
@@ -580,12 +573,8 @@ void UiController::loadAllAreas(KSharedConfig::Ptr config)
             }
         }
 
-        // FIXME: check that an area of this name exists.
-        if (!currentArea.isEmpty())
-            showArea(currentArea, mw);
-        else
-            // Force reload of the changes.
-            showAreaInternal(mw->area(), mw);
+        // Force reload of the changes.
+        showAreaInternal(mw->area(), mw);
 
         mw->enableAreaSettingsSave();
     }
