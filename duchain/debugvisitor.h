@@ -28,13 +28,7 @@
 class KDEVCLANGDUCHAIN_EXPORT DebugVisitor
 {
 public:
-    DebugVisitor(ParseSession* session);
-    ~DebugVisitor();
-
-    void startVisiting(CXTranslationUnit unit);
-
-private:
-    ParseSession* m_session;
+    void visit(CXTranslationUnit unit);
 };
 
 #endif // DEBUGVISITOR_H

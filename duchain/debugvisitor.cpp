@@ -48,7 +48,7 @@ struct ClangString
     CXString string;
 };
 
-CXChildVisitResult visit(CXCursor cursor, CXCursor parent, CXClientData d)
+CXChildVisitResult visit(CXCursor cursor, CXCursor /*parent*/, CXClientData d)
 {
     auto data = static_cast<ClientData*>(d);
     const auto kind = clang_getCursorKind(cursor);
@@ -71,21 +71,10 @@ CXChildVisitResult visit(CXCursor cursor, CXCursor parent, CXClientData d)
 
 }
 
-DebugVisitor::DebugVisitor(ParseSession* session)
-    : m_session(session)
-{
-
-}
-
-DebugVisitor::~DebugVisitor()
-{
-
-}
-
-void DebugVisitor::startVisiting(CXTranslationUnit unit)
+void DebugVisitor::visit(CXTranslationUnit unit)
 {
     auto cursor = clang_getTranslationUnitCursor(unit);
     QTextStream out(stdout);
     ClientData data {&out};
-    clang_visitChildren(cursor, visit, &data);
+    clang_visitChildren(cursor, &::visit, &data);
 }
