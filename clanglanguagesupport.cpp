@@ -26,9 +26,6 @@
 #include <KAboutData>
 
 #include <language/codecompletion/codecompletion.h>
-#include <language/duchain/duchain.h>
-#include <interfaces/icore.h>
-#include <interfaces/idocumentcontroller.h>
 
 K_PLUGIN_FACTORY(KDevClangSupportFactory, registerPlugin<ClangLanguageSupport>(); )
 K_EXPORT_PLUGIN(KDevClangSupportFactory(
