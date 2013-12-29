@@ -57,6 +57,8 @@ public:
 
     QList<KDevelop::ProblemPointer> problems() const;
 
+    CXTranslationUnit unit() const;
+
 private:
     KDevelop::IndexedString m_url;
     QList<KDevelop::ProblemPointer> m_problems;

@@ -74,3 +74,8 @@ QList<ProblemPointer> ParseSession::problems() const
 {
     return m_problems;
 }
+
+CXTranslationUnit ParseSession::unit() const
+{
+    return m_unit;
+}
