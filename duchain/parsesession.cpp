@@ -36,9 +36,6 @@ ParseSession::ParseSession(const IndexedString& url, const QByteArray& contents,
     : m_url(url)
     , m_unit(0)
 {
-    // FIXME
-    Q_UNUSED(contents);
-
     static const unsigned int flags
         = CXTranslationUnit_CacheCompletionResults
         | CXTranslationUnit_PrecompiledPreamble
