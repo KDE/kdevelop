@@ -46,14 +46,18 @@ ParseSession::ParseSession(const IndexedString& url, const QByteArray& contents,
         | CXTranslationUnit_CXXChainedPCH
         | CXTranslationUnit_ForSerialization;
 
-    // TODO
-    std::vector<const char *> cxArgsV;
-    std::vector<CXUnsavedFile> cxFilesV;
+    static const int argsSize = 4;
+    static const char* args[argsSize] = { "-std=c++11", "-fsyntax-only", "-x", "c++" };
+
+    CXUnsavedFile file;
+    file.Contents = contents.constData();
+    file.Length = contents.size();
+    file.Filename = url.c_str();
 
     m_unit = clang_parseTranslationUnit(
-        index, url.c_str(),
-        cxArgsV.data(), cxArgsV.size(),
-        cxFilesV.data(), cxFilesV.size(),
+        index, file.Filename,
+        args, argsSize,
+        &file, 1,
         flags
     );
 }
