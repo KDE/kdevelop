@@ -46,6 +46,7 @@ ParseSession::ParseSession(const IndexedString& url, const QByteArray& contents,
     static const int argsSize = 4;
     static const char* args[argsSize] = { "-std=c++11", "-fsyntax-only", "-x", "c++" };
 
+    // TODO: track other open unsaved files and add them here
     CXUnsavedFile file;
     file.Contents = contents.constData();
     file.Length = contents.size();
