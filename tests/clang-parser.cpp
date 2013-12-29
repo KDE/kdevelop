@@ -25,6 +25,7 @@
 
 #include "../duchain/parsesession.h"
 #include "../duchain/clangindex.h"
+#include "../duchain/debugvisitor.h"
 
 using namespace KDevelop;
 using namespace KDevelopUtils;
@@ -70,9 +71,8 @@ private:
         } else {
             qout << "AST tree successfully generated" << endl;
             if (m_printAst) {
-                ///FIXME:
-//                 DebugVisitor visitor(m_session.data());
-//                 visitor.startVisiting(m_session->ast());
+                DebugVisitor visitor(m_session.data());
+                visitor.startVisiting(m_session->unit());
             }
         }
         if (!m_session->problems().isEmpty()) {

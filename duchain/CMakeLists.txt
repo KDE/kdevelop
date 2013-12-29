@@ -11,6 +11,7 @@ include_directories(
 kde4_add_library(kdevclangduchain SHARED
     parsesession.cpp
     clangindex.cpp
+    debugvisitor.cpp
 )
 
 target_link_libraries(kdevclangduchain LINK_PRIVATE
