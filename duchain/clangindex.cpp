@@ -20,43 +20,19 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef PARSESESSION_H
-#define PARSESESSION_H
+#include "clangindex.h"
 
-#include <QList>
-
-#include <language/duchain/indexedstring.h>
-#include <language/interfaces/iproblem.h>
-
-#include "duchainexport.h"
-
-class KDEVCLANGDUCHAIN_EXPORT ParseSession
+ClangIndex::ClangIndex()
+    : m_index(clang_createIndex(1 /*Exclude PCH Decls*/, 1 /*Display diags*/))
 {
-public:
-    /**
-     * @return a unique identifier for Clang documents.
-     */
-    static KDevelop::IndexedString languageString();
+}
 
-    /**
-     * Parse the given @p contents.
-     *
-     * @param url The url for the document you want to parse.
-     * @param contents The contents of the document you want to parse.
-     */
-    ParseSession(const KDevelop::IndexedString& url, const QByteArray& contents);
-    ~ParseSession();
+CXIndex ClangIndex::index() const
+{
+    return m_index;
+}
 
-    /**
-     * @return the URL of this session
-     */
-    KDevelop::IndexedString url() const;
-
-    QList<KDevelop::ProblemPointer> problems() const;
-
-private:
-    KDevelop::IndexedString m_url;
-    QList<KDevelop::ProblemPointer> m_problems;
-};
-
-#endif // PARSESESSION_H
+ClangIndex::~ClangIndex()
+{
+    clang_disposeIndex(m_index);
+}
