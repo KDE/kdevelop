@@ -43,8 +43,8 @@ ParseSession::ParseSession(const IndexedString& url, const QByteArray& contents,
         | CXTranslationUnit_CXXChainedPCH
         | CXTranslationUnit_ForSerialization;
 
-    static const int argsSize = 4;
-    static const char* args[argsSize] = { "-std=c++11", "-fsyntax-only", "-x", "c++" };
+    static const int argsSize = 3;
+    static const char* args[argsSize] = { "-std=c++11", "-x", "c++" };
 
     // TODO: track other open unsaved files and add them here
     CXUnsavedFile file;
