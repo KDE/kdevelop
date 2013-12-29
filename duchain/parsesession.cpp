@@ -53,7 +53,7 @@ ParseSession::ParseSession(const IndexedString& url, const QByteArray& contents,
     file.Filename = url.c_str();
 
     m_unit = clang_parseTranslationUnit(
-        index, file.Filename,
+        index->index(), file.Filename,
         args, argsSize,
         &file, 1,
         flags

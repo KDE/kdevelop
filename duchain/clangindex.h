@@ -33,7 +33,7 @@ public:
     ClangIndex();
     ~ClangIndex();
 
-    operator CXIndex() const;
+    CXIndex index() const;
 
 private:
     CXIndex m_index;
