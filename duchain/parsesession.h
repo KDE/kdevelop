@@ -24,11 +24,14 @@
 #define PARSESESSION_H
 
 #include <QList>
+#include <clang-c/Index.h>
 
 #include <language/duchain/indexedstring.h>
 #include <language/interfaces/iproblem.h>
 
 #include "duchainexport.h"
+
+class ClangIndex;
 
 class KDEVCLANGDUCHAIN_EXPORT ParseSession
 {
@@ -44,7 +47,7 @@ public:
      * @param url The url for the document you want to parse.
      * @param contents The contents of the document you want to parse.
      */
-    ParseSession(const KDevelop::IndexedString& url, const QByteArray& contents);
+    ParseSession(const KDevelop::IndexedString& url, const QByteArray& contents, ClangIndex* index);
     ~ParseSession();
 
     /**
@@ -57,6 +60,7 @@ public:
 private:
     KDevelop::IndexedString m_url;
     QList<KDevelop::ProblemPointer> m_problems;
+    CXTranslationUnit m_unit;
 };
 
 #endif // PARSESESSION_H

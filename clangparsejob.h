@@ -25,11 +25,15 @@
 
 #include <language/backgroundparser/parsejob.h>
 
+class ClangLanguageSupport;
+
 class ClangParseJob : public KDevelop::ParseJob
 {
 public:
     ClangParseJob(const KDevelop::IndexedString& url,
                   KDevelop::ILanguageSupport* languageSupport);
+
+    ClangLanguageSupport* clang() const;
 
 protected:
     virtual void run();

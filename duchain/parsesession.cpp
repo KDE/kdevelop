@@ -21,6 +21,7 @@
 */
 
 #include "parsesession.h"
+#include "clangindex.h"
 #include "debug.h"
 
 using namespace KDevelop;
@@ -31,15 +32,35 @@ IndexedString ParseSession::languageString()
     return lang;
 }
 
-ParseSession::ParseSession(const IndexedString& url, const QByteArray& contents)
+ParseSession::ParseSession(const IndexedString& url, const QByteArray& contents, ClangIndex* index)
     : m_url(url)
+    , m_unit(0)
 {
     // FIXME
     Q_UNUSED(contents);
+
+    static const unsigned int flags
+        = CXTranslationUnit_CacheCompletionResults
+        | CXTranslationUnit_PrecompiledPreamble
+        | CXTranslationUnit_Incomplete
+        | CXTranslationUnit_CXXChainedPCH
+        | CXTranslationUnit_ForSerialization;
+
+    // TODO
+    std::vector<const char *> cxArgsV;
+    std::vector<CXUnsavedFile> cxFilesV;
+
+    m_unit = clang_parseTranslationUnit(
+        index, url.c_str(),
+        cxArgsV.data(), cxArgsV.size(),
+        cxFilesV.data(), cxFilesV.size(),
+        flags
+    );
 }
 
 ParseSession::~ParseSession()
 {
+    clang_disposeTranslationUnit(m_unit);
 }
 
 IndexedString ParseSession::url() const

@@ -25,13 +25,15 @@
 
 #include <clang-c/Index.h>
 
-class ClangIndex
+#include "duchainexport.h"
+
+class KDEVCLANGDUCHAIN_EXPORT ClangIndex
 {
 public:
     ClangIndex();
     ~ClangIndex();
 
-    CXIndex index() const;
+    operator CXIndex() const;
 
 private:
     CXIndex m_index;

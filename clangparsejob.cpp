@@ -33,6 +33,7 @@
 #include "duchain/parsesession.h"
 
 #include "debug.h"
+#include "clanglanguagesupport.h"
 
 #include <QReadLocker>
 
@@ -41,6 +42,11 @@ using namespace KDevelop;
 ClangParseJob::ClangParseJob(const IndexedString& url, ILanguageSupport* languageSupport)
 : ParseJob(url, languageSupport)
 {
+}
+
+ClangLanguageSupport* ClangParseJob::clang() const
+{
+    return static_cast<ClangLanguageSupport*>(languageSupport());
 }
 
 void ClangParseJob::run()
@@ -56,7 +62,7 @@ void ClangParseJob::run()
         return;
     }
 
-    ParseSession session(document(), contents().contents);
+    ParseSession session(document(), contents().contents, clang()->index());
 
     if (abortRequested()) {
         return;

@@ -27,7 +27,7 @@ ClangIndex::ClangIndex()
 {
 }
 
-CXIndex ClangIndex::index() const
+ClangIndex::operator CXIndex() const
 {
     return m_index;
 }

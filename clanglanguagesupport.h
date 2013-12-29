@@ -26,6 +26,8 @@
 #include <interfaces/iplugin.h>
 #include <language/interfaces/ilanguagesupport.h>
 
+class ClangIndex;
+
 class ClangLanguageSupport : public KDevelop::IPlugin, public KDevelop::ILanguageSupport
 {
     Q_OBJECT
@@ -44,8 +46,11 @@ public:
     /** the code highlighter */
     virtual KDevelop::ICodeHighlighting* codeHighlighting() const;
 
+    ClangIndex* index();
+
 private:
     KDevelop::ICodeHighlighting *const m_highlighting;
+    QScopedPointer<ClangIndex> m_index;
 };
 
 #endif

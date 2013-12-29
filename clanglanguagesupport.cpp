@@ -24,6 +24,7 @@
 
 #include "clangparsejob.h"
 #include "clanghighlighting.h"
+#include "duchain/clangindex.h"
 #include "version.h"
 
 #include <KPluginFactory>
@@ -42,6 +43,7 @@ ClangLanguageSupport::ClangLanguageSupport(QObject* parent, const QVariantList& 
 : IPlugin( KDevClangSupportFactory::componentData(), parent )
 , ILanguageSupport()
 , m_highlighting(new ClangHighlighting(this))
+, m_index(new ClangIndex)
 {
     KDEV_USE_EXTENSION_INTERFACE(ILanguageSupport)
 }
@@ -64,6 +66,11 @@ QString ClangLanguageSupport::name() const
 ICodeHighlighting* ClangLanguageSupport::codeHighlighting() const
 {
     return m_highlighting;
+}
+
+ClangIndex* ClangLanguageSupport::index()
+{
+    return m_index.data();
 }
 
 #include "clanglanguagesupport.moc"
