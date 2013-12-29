@@ -1,35 +1,30 @@
-/*****************************************************************************
- * Copyright (c) 2010 Bernhard Beschow <bbeschow@cs.tu-berlin.de>            *
- *                                                                           *
- * This program is free software; you can redistribute it and/or modify      *
- * it under the terms of the GNU General Public License as published by      *
- * the Free Software Foundation; either version 2 of the License, or         *
- * (at your option) any later version.                                       *
- *                                                                           *
- * This program is distributed in the hope that it will be useful,           *
- * but WITHOUT ANY WARRANTY; without even the implied warranty of            *
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             *
- * GNU General Public License for more details.                              *
- *                                                                           *
- * You should have received a copy of the GNU General Public License         *
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.     *
- *****************************************************************************/
+/*
+    This file is part of KDevelop
+
+    Copyright 2013 Olivier de Gaalon <olivier.jg@gmail.com>
+    Copyright 2013 Milian Wolff <mail@milianw.de>
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Library General Public
+    License as published by the Free Software Foundation; either
+    version 2 of the License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Library General Public License for more details.
+
+    You should have received a copy of the GNU Library General Public License
+    along with this library; see the file COPYING.LIB.  If not, write to
+    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+    Boston, MA 02110-1301, USA.
+*/
 
 #ifndef KDEVCLANGLANGUAGESUPPORT_H
 #define KDEVCLANGLANGUAGESUPPORT_H
 
 #include <interfaces/iplugin.h>
 #include <language/interfaces/ilanguagesupport.h>
-
-#include <QtCore/QVariant>
-
-namespace KDevelop
-{
-class ICodeHighlighting;
-class ParseJob;
-}
-
-class FileManager;
 
 class ClangLanguageSupport : public KDevelop::IPlugin, public KDevelop::ILanguageSupport
 {
@@ -51,7 +46,6 @@ public:
 
 private:
     KDevelop::ICodeHighlighting *const m_highlighting;
-    FileManager *const m_fileManager;
 };
 
 #endif

@@ -45,6 +45,7 @@ add_subdirectory(duchain)
 kde4_add_plugin(kdevclanglanguagesupport
     clangparsejob.cpp
     clanglanguagesupport.cpp
+    clanghighlighting.cpp
 )
 target_link_libraries(kdevclanglanguagesupport
     kdevclangduchain

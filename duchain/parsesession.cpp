@@ -1,90 +1,53 @@
+/*
+    This file is part of KDevelop
+
+    Copyright 2013 Olivier de Gaalon <olivier.jg@gmail.com>
+    Copyright 2013 Milian Wolff <mail@milianw.de>
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Library General Public
+    License as published by the Free Software Foundation; either
+    version 2 of the License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Library General Public License for more details.
+
+    You should have received a copy of the GNU Library General Public License
+    along with this library; see the file COPYING.LIB.  If not, write to
+    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+    Boston, MA 02110-1301, USA.
+*/
+
 #include "parsesession.h"
 #include "debug.h"
 
-#include <clang/AST/ASTContext.h>
-#include <clang/AST/Expr.h>
-#include <clang/Lex/HeaderSearchOptions.h>
-#include <clang/Lex/Preprocessor.h>
-#include <clang/Basic/TargetInfo.h>
-#include <clang/Frontend/CompilerInstance.h>
-#include <clang/Parse/ParseAST.h>
-#include <llvm/Support/Host.h>
+using namespace KDevelop;
 
-#include <language/editor/simplerange.h>
-#include <language/interfaces/iproblem.h>
-#include <language/duchain/stringhelpers.h>
-
-static clang::CompilerInstance* compilerInstance()
+IndexedString ParseSession::languageString()
 {
-    clang::CompilerInstance *ci = new clang::CompilerInstance();
-    ci->createDiagnostics(0,NULL);
-
-    llvm::IntrusiveRefCntPtr<clang::TargetOptions> pto( new clang::TargetOptions() );
-    pto->Triple = llvm::sys::getDefaultTargetTriple();
-    clang::TargetInfo *pti = clang::TargetInfo::CreateTargetInfo(ci->getDiagnostics(), *pto.getPtr());
-    ci->setTarget(pti);
-    
-    clang::LangOptions &langOpts = ci->getLangOpts();
-
-    clang::HeaderSearchOptions &hso = ci->getHeaderSearchOpts();
-    hso.AddPath("/usr/include", clang::frontend::Angled, false, false, false);
-    hso.AddPath("/usr/include/c++/4.7.2", clang::frontend::Angled, false, false, false);
-    
-    ci->createFileManager();
-    ci->createSourceManager(ci->getFileManager());
-    ci->createPreprocessor();
-    ci->createASTContext();
-
-    return ci;
+    static const IndexedString lang("Clang");
+    return lang;
 }
 
-KDevelop::IndexedString ParseSession::languageString()
+ParseSession::ParseSession(const IndexedString& url, const QByteArray& contents)
+    : m_url(url)
 {
-    return KDevelop::IndexedString("Clang");
-}
-
-ParseSession::ParseSession(const KDevelop::IndexedString& url, const QByteArray& contents)
-: m_url(url), m_ci(compilerInstance())
-{
-    llvm::MemoryBuffer *b = llvm::MemoryBuffer::getMemBuffer(contents.constData());
-    m_fileID = m_ci->getSourceManager().createMainFileIDForMemBuffer(b);
-    m_ci->getDiagnosticClient().BeginSourceFile(m_ci->getLangOpts(), &m_ci->getPreprocessor());
-    clang::ParseAST(m_ci->getPreprocessor(), this, m_ci->getASTContext());
-    m_ci->getDiagnosticClient().EndSourceFile();
+    // FIXME
+    Q_UNUSED(contents);
 }
 
 ParseSession::~ParseSession()
 {
-    delete m_ci;
 }
 
-KDevelop::IndexedString ParseSession::url() const
+IndexedString ParseSession::url() const
 {
     return m_url;
 }
 
-AST ParseSession::ast() const
+QList<ProblemPointer> ParseSession::problems() const
 {
-    return m_ast;
-}
-
-const clang::SourceManager& ParseSession::sourceManager() const
-{
-    return m_ci->getSourceManager();
-}
-
-clang::Preprocessor& ParseSession::preprocessor() const
-{
-    return m_ci->getPreprocessor();
-}
-
-void ParseSession::HandleTranslationUnit(clang::ASTContext& Ctx)
-{
-    m_ast.decl = Ctx.getTranslationUnitDecl();
-    clang::ASTConsumer::HandleTranslationUnit(Ctx);
-}
-
-const clang::FileID& ParseSession::fileID() const
-{
-    return m_fileID;
+    return m_problems;
 }

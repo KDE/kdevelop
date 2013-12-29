@@ -1,19 +1,37 @@
+/*
+    This file is part of KDevelop
+
+    Copyright 2013 Olivier de Gaalon <olivier.jg@gmail.com>
+    Copyright 2013 Milian Wolff <mail@milianw.de>
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Library General Public
+    License as published by the Free Software Foundation; either
+    version 2 of the License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Library General Public License for more details.
+
+    You should have received a copy of the GNU Library General Public License
+    along with this library; see the file COPYING.LIB.  If not, write to
+    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+    Boston, MA 02110-1301, USA.
+*/
+
 #ifndef PARSESESSION_H
 #define PARSESESSION_H
+
+#include <QList>
+
 
 #include <language/duchain/indexedstring.h>
 #include <language/interfaces/iproblem.h>
 
 #include "duchainexport.h"
-#include "clangduchainhelpers.h"
-#include <clang/AST/ASTConsumer.h>
 
-namespace clang {
-class CompilerInstance;
-class TranslationUnitDecl;
-}
-
-class KDEVCLANGDUCHAIN_EXPORT ParseSession : clang::ASTConsumer
+class KDEVCLANGDUCHAIN_EXPORT ParseSession
 {
 public:
     /**
@@ -35,32 +53,11 @@ public:
      */
     KDevelop::IndexedString url() const;
 
-    /**
-     * @return the root TU decl
-     */
-    AST ast() const;
-
-    /**
-     * @return the clang source manager;
-     */
-    const clang::SourceManager& sourceManager() const;
-
-    /**
-     * @return the clang preprocessor;
-     */
-    clang::Preprocessor& preprocessor() const;
-
-    /**
-     * @return the session's fileID;
-     */
-    const clang::FileID& fileID() const;
+    QList<KDevelop::ProblemPointer> problems() const;
 
 private:
-    virtual void HandleTranslationUnit(clang::ASTContext &Ctx);
     KDevelop::IndexedString m_url;
-    clang::CompilerInstance *m_ci;
-    AST m_ast;
-    clang::FileID m_fileID;
+    QList<KDevelop::ProblemPointer> m_problems;
 };
 
 #endif // PARSESESSION_H

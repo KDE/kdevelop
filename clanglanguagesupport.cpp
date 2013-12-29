@@ -1,20 +1,24 @@
-/*************************************************************************************
- *  Copyright (C) 2013 by Milian Wolff <mail@milianw.de>                             *
- *                                                                                   *
- *  This program is free software; you can redistribute it and/or                    *
- *  modify it under the terms of the GNU General Public License                      *
- *  as published by the Free Software Foundation; either version 2                   *
- *  of the License, or (at your option) any later version.                           *
- *                                                                                   *
- *  This program is distributed in the hope that it will be useful,                  *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of                   *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                    *
- *  GNU General Public License for more details.                                     *
- *                                                                                   *
- *  You should have received a copy of the GNU General Public License                *
- *  along with this program; if not, write to the Free Software                      *
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA   *
- *************************************************************************************/
+/*
+    This file is part of KDevelop
+
+    Copyright 2013 Olivier de Gaalon <olivier.jg@gmail.com>
+    Copyright 2013 Milian Wolff <mail@milianw.de>
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Library General Public
+    License as published by the Free Software Foundation; either
+    version 2 of the License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Library General Public License for more details.
+
+    You should have received a copy of the GNU Library General Public License
+    along with this library; see the file COPYING.LIB.  If not, write to
+    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+    Boston, MA 02110-1301, USA.
+*/
 
 #include "clanglanguagesupport.h"
 
@@ -38,8 +42,6 @@ ClangLanguageSupport::ClangLanguageSupport(QObject* parent, const QVariantList& 
 : IPlugin( KDevClangSupportFactory::componentData(), parent )
 , ILanguageSupport()
 , m_highlighting(new ClangHighlighting(this))
-//FIXME:
-, m_fileManager(0)
 {
     KDEV_USE_EXTENSION_INTERFACE(ILanguageSupport)
 }

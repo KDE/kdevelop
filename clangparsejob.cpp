@@ -1,3 +1,25 @@
+/*
+    This file is part of KDevelop
+
+    Copyright 2013 Olivier de Gaalon <olivier.jg@gmail.com>
+    Copyright 2013 Milian Wolff <mail@milianw.de>
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Library General Public
+    License as published by the Free Software Foundation; either
+    version 2 of the License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Library General Public License for more details.
+
+    You should have received a copy of the GNU Library General Public License
+    along with this library; see the file COPYING.LIB.  If not, write to
+    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+    Boston, MA 02110-1301, USA.
+*/
+
 #include "clangparsejob.h"
 
 #include <language/backgroundparser/urlparselock.h>
@@ -8,9 +30,7 @@
 #include <language/duchain/parsingenvironment.h>
 #include <interfaces/ilanguage.h>
 
-#include "duchain/declarationbuilder.h"
 #include "duchain/parsesession.h"
-#include "duchain/duchainbuilder.h"
 
 #include "debug.h"
 
@@ -35,7 +55,7 @@ void ClangParseJob::run()
         //TODO: associate problem with topducontext
         return;
     }
-    
+
     ParseSession session(document(), contents().contents);
 
     if (abortRequested()) {
@@ -54,31 +74,25 @@ void ClangParseJob::run()
             return abortJob();
         }
 
-        DeclarationBuilder builder(&session);
-        AST ast = session.ast();
-        context = builder.build(document(), &ast, context);
+        // FIXME: build/update DUChain contents
     }
 
     if (abortRequested()) {
         return abortJob();
     }
-    
-    //context = createFileContext(document(), contents().contents);
-    
-    Q_ASSERT(context);
 
-    /*if (!context) {
+    if (!context) {
         DUChainWriteLocker lock;
         ParsingEnvironmentFile *file = new ParsingEnvironmentFile(document());
         file->setLanguage(ParseSession::languageString());
         context = new TopDUContext(document(), RangeInRevision(0, 0, INT_MAX, INT_MAX), file);
         DUChain::self()->addDocumentChain(context);
-    }*/
+    }
 
     setDuChain(context);
     {
         DUChainWriteLocker lock;
-        //context->setProblems(session.problems());
+        context->setProblems(session.problems());
 
         context->setFeatures(minimumFeatures());
         ParsingEnvironmentFilePointer file = context->parsingEnvironmentFile();
