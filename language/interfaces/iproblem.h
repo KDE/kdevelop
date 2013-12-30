@@ -134,7 +134,12 @@ public:
      * Set the severity of this problem.
      */
     void setSeverity(ProblemData::Severity severity);
-    
+
+    /**
+     * Returns a string representation of the severity.
+     */
+    QString severityString() const;
+
      /**
      * If this problem can be solved, this may return an assistant for the solution.
      */

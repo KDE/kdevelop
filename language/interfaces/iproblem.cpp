@@ -125,6 +125,19 @@ void KDevelop::Problem::setSeverity(ProblemData::Severity severity) {
     d_func_dynamic()->severity = severity;
 }
 
+QString Problem::severityString() const
+{
+    switch(severity()) {
+        case ProblemData::Error:
+            return i18n("Error");
+        case ProblemData::Warning:
+            return i18n("Warning");
+        case ProblemData::Hint:
+            return i18n("Hint");
+    }
+    return QString();
+}
+
 QString Problem::sourceString() const
 {
     switch (source()) {
@@ -150,7 +163,7 @@ QString Problem::sourceString() const
 
 QString Problem::toString() const
 {
-    return QString("%1:%2 in %3:[(%4,%5),(%6,%7)] %8")
+    return QString("%9: %1:%2 in %3:[(%4,%5),(%6,%7)] %8")
         .arg(description())
         .arg(sourceString())
         .arg(url().str())
@@ -158,7 +171,8 @@ QString Problem::toString() const
         .arg(range().start.column)
         .arg(range().end.line)
         .arg(range().end.column)
-        .arg(explanation());
+        .arg(explanation())
+        .arg(severityString());
 }
 
 QDebug operator<<(QDebug s, const Problem& problem)
