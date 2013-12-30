@@ -167,8 +167,16 @@ void KDevDocumentView::reloadSelected()
 
 void KDevDocumentView::contextMenuEvent( QContextMenuEvent * event )
 {
+    QModelIndex proxyIndex = indexAt( event->pos() );
+    QModelIndex index = m_proxy->mapToSource( proxyIndex );
+
+    // for now, ignore clicks on empty space or folder items
+    if (!proxyIndex.isValid() || !proxyIndex.parent().isValid()) {
+        return;
+    }
+
     updateSelectedDocs();
-    
+
     if (!m_selectedDocs.isEmpty())
     {
         KMenu* ctxMenu = new KMenu(this);
