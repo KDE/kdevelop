@@ -159,6 +159,9 @@ void VcsEventWidgetPrivate::diffRevisions()
     VcsDiffWidget* widget = new VcsDiffWidget( job );
     widget->setRevisions( ev1.revision(), ev2.revision() );
     KDialog* dlg = new KDialog( q );
+
+    widget->connect(widget, SIGNAL(destroyed(QObject*)), dlg, SLOT(deleteLater()));
+
     dlg->setCaption( i18n("Difference between Revisions") );
     dlg->setButtons( KDialog::Ok );
     dlg->setMainWidget( widget );
