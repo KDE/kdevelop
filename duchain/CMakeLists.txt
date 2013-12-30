@@ -10,7 +10,7 @@ include_directories(
 
 kde4_add_library(kdevclangduchain SHARED
     parsesession.cpp
-    clangindex.cpp
+    clangtypes.cpp
     debugvisitor.cpp
 )
 

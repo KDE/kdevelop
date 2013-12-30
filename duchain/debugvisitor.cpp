@@ -20,6 +20,7 @@
 */
 
 #include "debugvisitor.h"
+#include "clangtypes.h"
 
 namespace {
 
@@ -28,41 +29,21 @@ struct ClientData
     QTextStream* out;
 };
 
-struct ClangString
-{
-    ClangString(CXString string)
-        : string(string)
-    {
-    }
-
-    ~ClangString()
-    {
-        clang_disposeString(string);
-    }
-
-    operator const char*() const
-    {
-        return clang_getCString(string);
-    }
-
-    CXString string;
-};
-
 CXChildVisitResult visit(CXCursor cursor, CXCursor /*parent*/, CXClientData d)
 {
     auto data = static_cast<ClientData*>(d);
     const auto kind = clang_getCursorKind(cursor);
     if (clang_isDeclaration(kind)) {
-        ClangString displayName = clang_getCursorDisplayName(cursor);
+        ClangString displayName(clang_getCursorDisplayName(cursor));
         auto type = clang_getCursorType(cursor);
-        ClangString typeName = clang_getTypeSpelling(type);
+        ClangString typeName(clang_getTypeSpelling(type));
 
         auto location = clang_getCursorLocation(cursor);
         CXFile file;
         uint line;
         uint column;
         clang_getFileLocation(location, &file, &line, &column, 0);
-        ClangString fileName = clang_getFileName(file);
+        ClangString fileName(clang_getFileName(file));
         (*data->out) << typeName << ' ' << displayName << " in " << fileName << '@' << line << ':' << column << endl;
     }
 

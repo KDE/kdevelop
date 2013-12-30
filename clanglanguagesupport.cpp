@@ -24,7 +24,7 @@
 
 #include "clangparsejob.h"
 #include "clanghighlighting.h"
-#include "duchain/clangindex.h"
+#include "duchain/clangtypes.h"
 #include "version.h"
 
 #include <KPluginFactory>

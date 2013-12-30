@@ -24,7 +24,7 @@
 #include <language/util/debuglanguageparserhelper.h>
 
 #include "../duchain/parsesession.h"
-#include "../duchain/clangindex.h"
+#include "../duchain/clangtypes.h"
 #include "../duchain/debugvisitor.h"
 
 using namespace KDevelop;
@@ -78,7 +78,7 @@ private:
         if (!m_session->problems().isEmpty()) {
             qerr << endl << "problems encountered during parsing:" << endl;
             foreach(const ProblemPointer problem, m_session->problems()) {
-                qerr << problem->toString();
+                qerr << problem->toString() << endl;
             }
         } else {
             qout << "no problems encountered during parsing" << endl;

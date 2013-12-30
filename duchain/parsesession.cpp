@@ -21,7 +21,7 @@
 */
 
 #include "parsesession.h"
-#include "clangindex.h"
+#include "clangtypes.h"
 #include "debug.h"
 
 using namespace KDevelop;
@@ -58,6 +58,37 @@ ParseSession::ParseSession(const IndexedString& url, const QByteArray& contents,
         &file, 1,
         flags
     );
+
+    if (m_unit) {
+        const uint diagnostics = clang_getNumDiagnostics(m_unit);
+        m_problems.reserve(diagnostics);
+        for (uint i = 0; i < diagnostics; ++i) {
+            auto diagnostic = clang_getDiagnostic(m_unit, i);
+            ProblemPointer problem(new Problem);
+            switch (clang_getDiagnosticSeverity(diagnostic)) {
+                case CXDiagnostic_Fatal:
+                case CXDiagnostic_Error:
+                    problem->setSeverity(ProblemData::Error);
+                    break;
+                case CXDiagnostic_Warning:
+                    problem->setSeverity(ProblemData::Warning);
+                    break;
+                default:
+                    problem->setSeverity(ProblemData::Hint);
+                    break;
+            }
+            ClangString description(clang_getDiagnosticSpelling(diagnostic));
+            problem->setDescription(QString::fromUtf8(description));
+            const uint ranges = clang_getDiagnosticNumRanges(diagnostic);
+            if (ranges) {
+                ClangRange range = clang_getDiagnosticRange(diagnostic, 0);
+                problem->setFinalLocation(range.toDocumentRange());
+            }
+            problem->setSource(ProblemData::SemanticAnalysis);
+            m_problems << problem;
+            clang_disposeDiagnostic(diagnostic);
+        }
+    }
 }
 
 ParseSession::~ParseSession()

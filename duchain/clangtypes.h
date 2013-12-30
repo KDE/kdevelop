@@ -20,12 +20,20 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef CLANGINDEX_H
-#define CLANGINDEX_H
+#ifndef CLANGTYPES_H
+#define CLANGTYPES_H
 
 #include <clang-c/Index.h>
 
+#include <QSharedPointer>
+
 #include "duchainexport.h"
+
+namespace KDevelop {
+class DocumentRange;
+class SimpleRange;
+class SimpleCursor;
+}
 
 class KDEVCLANGDUCHAIN_EXPORT ClangIndex
 {
@@ -39,4 +47,49 @@ private:
     CXIndex m_index;
 };
 
-#endif // CLANGINDEX_H
+class KDEVCLANGDUCHAIN_EXPORT ClangString
+{
+public:
+    ClangString(CXString string);
+    ~ClangString();
+
+    ClangString(const ClangString&) = delete;
+    ClangString& operator=(const ClangString&) = delete;
+
+    operator const char*() const;
+
+private:
+    CXString string;
+};
+
+class KDEVCLANGDUCHAIN_EXPORT ClangLocation
+{
+public:
+    ClangLocation(CXSourceLocation cursor);
+    ~ClangLocation();
+
+    operator KDevelop::SimpleCursor() const;
+
+private:
+    CXSourceLocation location;
+};
+
+class KDEVCLANGDUCHAIN_EXPORT ClangRange
+{
+public:
+    ClangRange(CXSourceRange range);
+
+    ~ClangRange();
+
+    ClangLocation start() const;
+    ClangLocation end() const;
+
+    KDevelop::DocumentRange toDocumentRange() const;
+
+    KDevelop::SimpleRange toSimpleRange() const;
+
+private:
+    CXSourceRange range;
+};
+
+#endif // CLANGTYPES_H
