@@ -59,10 +59,13 @@ public:
 
     CXTranslationUnit unit() const;
 
+    CXFile file() const;
+
 private:
     KDevelop::IndexedString m_url;
     QList<KDevelop::ProblemPointer> m_problems;
     CXTranslationUnit m_unit;
+    CXFile m_file;
 };
 
 #endif // PARSESESSION_H

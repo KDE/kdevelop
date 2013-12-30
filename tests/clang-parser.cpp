@@ -71,7 +71,7 @@ private:
         } else {
             qout << "AST tree successfully generated" << endl;
             if (m_printAst) {
-                DebugVisitor visitor;
+                DebugVisitor visitor(m_session.data());
                 visitor.visit(m_session->unit());
             }
         }

@@ -27,22 +27,28 @@ namespace {
 struct ClientData
 {
     QTextStream* out;
+    ParseSession* session;
 };
 
 CXChildVisitResult visit(CXCursor cursor, CXCursor /*parent*/, CXClientData d)
 {
     auto data = static_cast<ClientData*>(d);
+
+    auto location = clang_getCursorLocation(cursor);
+    CXFile file;
+    uint line;
+    uint column;
+    clang_getFileLocation(location, &file, &line, &column, 0);
+    if (file != data->session->file()) {
+        return CXChildVisit_Continue;
+    }
+
     const auto kind = clang_getCursorKind(cursor);
     if (clang_isDeclaration(kind)) {
         ClangString displayName(clang_getCursorDisplayName(cursor));
         auto type = clang_getCursorType(cursor);
         ClangString typeName(clang_getTypeSpelling(type));
 
-        auto location = clang_getCursorLocation(cursor);
-        CXFile file;
-        uint line;
-        uint column;
-        clang_getFileLocation(location, &file, &line, &column, 0);
         ClangString fileName(clang_getFileName(file));
         (*data->out) << typeName << ' ' << displayName << " in " << fileName << '@' << line << ':' << column << endl;
     }
@@ -52,10 +58,16 @@ CXChildVisitResult visit(CXCursor cursor, CXCursor /*parent*/, CXClientData d)
 
 }
 
+DebugVisitor::DebugVisitor(ParseSession* session)
+    : m_session(session)
+{
+
+}
+
 void DebugVisitor::visit(CXTranslationUnit unit)
 {
     auto cursor = clang_getTranslationUnitCursor(unit);
     QTextStream out(stdout);
-    ClientData data {&out};
+    ClientData data {&out, m_session};
     clang_visitChildren(cursor, &::visit, &data);
 }
