@@ -54,6 +54,23 @@ static QStringList targetsInFolder(KDevelop::ProjectFolderItem* item)
     return ret;
 }
 
+/**
+ * Returns the first non-empty list of targets in folder @p item
+ * or any of its ancestors if possible
+ */
+static QStringList closestTargetsForFolder(KDevelop::ProjectFolderItem* item)
+{
+    KDevelop::ProjectFolderItem* current = item;
+    while (current) {
+        const QStringList targets = targetsInFolder(current);
+        if (!targets.isEmpty()) {
+            return targets;
+        }
+        current = (current->parent() ? current->parent()->folder() : 0);
+    }
+    return QStringList();
+}
+
 static QStringList argumentsForItem(KDevelop::ProjectBaseItem* item)
 {
     if(!item->parent() &&
@@ -69,7 +86,7 @@ static QStringList argumentsForItem(KDevelop::ProjectBaseItem* item)
           return QStringList(item->target()->text());
         case KDevelop::ProjectBaseItem::Folder:
         case KDevelop::ProjectBaseItem::BuildFolder:
-          return targetsInFolder(item->folder());
+          return closestTargetsForFolder(item->folder());
     }
     return QStringList();
 }
