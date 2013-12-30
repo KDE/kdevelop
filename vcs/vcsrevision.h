@@ -39,8 +39,8 @@ namespace KDevelop
  *
  * <table>
  * <tr><th>Revision type</th><th>QVariant type</th></tr>
- * <tr><td>GlobalNumber</td><td>qlonglong</td></tr>
- * <tr><td>FileNumber</td><td>qlonglong</td></tr>
+ * <tr><td>GlobalNumber</td><td>qlonglong/QString</td></tr>
+ * <tr><td>FileNumber</td><td>qlonglong/QString</td></tr>
  * <tr><td>Date</td><td>QDateTime</td></tr>
  * <tr><td>Special</td><td>KDevelop::VcsRevision::RevisionSpecialType or int, see explanation below</td></tr>
  * </table>
@@ -112,13 +112,8 @@ public:
 
     /**
      * Return the value of this revision.
-     * The actual content depends on the type of this revision, the possible
-     * combinations are:
      *
-     * FileNumber/GlobalNumber -> qlonglong
-     * RevisionSpecialType     -> int that can be used to create a RevisionSpecialType
-     * Date                    -> QDateTime
-     *
+     * See the class documentation for the different QVariant types
      */
     QVariant revisionValue() const;
 
