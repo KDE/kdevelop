@@ -670,7 +670,6 @@ void CPPInternalParseJob::run()
         }
 
         foreach( KDevelop::ProblemPointer p, control.problems() ) {
-          p->setLocationStack(parentJob()->includeStack());
           contentContext->addProblem(p);
         }
       }
@@ -941,16 +940,6 @@ int CPPInternalParseJob::priority() const
 void CPPInternalParseJob::setPriority(int priority)
 {
     m_priority = priority;
-}
-
-const QStack< DocumentCursor > & CPPParseJob::includeStack() const
-{
-  return m_includeStack;
-}
-
-void CPPParseJob::setIncludeStack(const QStack< DocumentCursor > & includeStack)
-{
-  m_includeStack = includeStack;
 }
 
 TopDUContext::Features CPPParseJob::slaveMinimumFeatures() const

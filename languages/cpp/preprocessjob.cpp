@@ -257,7 +257,6 @@ void PreprocessJob::run()
     m_currentEnvironment->finishEnvironment(m_currentEnvironment->environmentFile() == m_updatingEnvironmentFile);
     
     foreach (KDevelop::ProblemPointer p, preprocessor.problems()) {
-      p->setLocationStack(parentJob()->includeStack());
       p->setSource(KDevelop::ProblemData::Preprocessor);
       parentJob()->addPreprocessorProblem(p);
     }
@@ -430,7 +429,6 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
 
     KUrl localPath(parentJob()->document().str());
     localPath.setFileName(QString());
-    QStack<DocumentCursor> includeStack = parentJob()->includeStack();
 
     KUrl from;
     if (skipCurrentPath)
@@ -453,7 +451,6 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
               p->setSource(KDevelop::ProblemData::Preprocessor);
               p->setDescription(i18n("File was included recursively from within itself: %1", fileName ));
               p->setFinalLocation(DocumentRange(parentJob()->document(), SimpleRange(sourceLine,0, sourceLine+1,0)));
-              p->setLocationStack(parentJob()->includeStack());
               parentJob()->addPreprocessorProblem(p);
               return 0;
             }
@@ -569,9 +566,6 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
 
             slaveJob->setIncludedFromPath(included.second);
 
-            includeStack.append(DocumentCursor(parentJob()->document(), SimpleCursor(sourceLine, 0)));
-            slaveJob->setIncludeStack(includeStack);
-
             slaveJob->parseForeground();
 
             // Add the included file.
@@ -600,7 +594,6 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
         p->setDescription(i18n("Included file was not found: %1", fileName ));
         p->setExplanation(i18n("Searched include path:\n%1", urlsToString(parentJob()->includePathUrls())));
         p->setFinalLocation(DocumentRange(parentJob()->document(), SimpleRange(sourceLine,0, sourceLine+1,0)));
-        p->setLocationStack(parentJob()->includeStack());
         p->setSolutionAssistant(KSharedPtr<KDevelop::IAssistant>(new Cpp::MissingIncludePathAssistant(parentJob()->masterJob()->document(), _fileName)));
         parentJob()->addPreprocessorProblem(p);
 
@@ -648,7 +641,6 @@ bool PreprocessJob::readContents()
   
   if(p)
   {
-    p->setLocationStack(parentJob()->includeStack());
     parentJob()->addPreprocessorProblem(p);
     return false;
   }

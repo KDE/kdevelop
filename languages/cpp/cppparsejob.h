@@ -90,9 +90,6 @@ public:
     
     ///When this parse-job is ready, import the result of the given job into the current top-context
     void addDelayedImport(LineJobPair job);
-    
-    const QStack<DocumentCursor>& includeStack() const;
-    void setIncludeStack(const QStack<DocumentCursor>& includeStack);
 
     ///Returns the preprocessor-job that is parent of this job, or 0
     PreprocessJob* parentPreprocessor() const;
@@ -222,7 +219,6 @@ private:
     mutable QList<IndexedString> m_includePaths; //Only a master-job has this set
     mutable KUrl::List m_includePathUrls; //Only a master-job has this set
     bool m_keepDuchain, m_keepEverything;
-    QStack<DocumentCursor> m_includeStack;
     QSet<const KDevelop::DUContext*> m_updated;
     int m_parsedIncludes;
     mutable QMutex m_waitForIncludePathsMutex;
