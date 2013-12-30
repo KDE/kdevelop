@@ -62,8 +62,17 @@ ParseSession::ParseSession(const IndexedString& url, const QByteArray& contents,
     if (m_unit) {
         const uint diagnostics = clang_getNumDiagnostics(m_unit);
         m_problems.reserve(diagnostics);
+        CXFile currentFile = clang_getFile(m_unit, file.Filename);
         for (uint i = 0; i < diagnostics; ++i) {
             auto diagnostic = clang_getDiagnostic(m_unit, i);
+
+            CXSourceLocation location = clang_getDiagnosticLocation(diagnostic);
+            CXFile diagnosticFile;
+            clang_getFileLocation(location, &diagnosticFile, nullptr, nullptr, nullptr);
+            if (diagnosticFile != currentFile) {
+                continue;
+            }
+
             ProblemPointer problem(new Problem);
             switch (clang_getDiagnosticSeverity(diagnostic)) {
                 case CXDiagnostic_Fatal:
