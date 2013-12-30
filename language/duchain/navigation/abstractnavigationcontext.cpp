@@ -18,7 +18,7 @@
 
 #include "abstractnavigationcontext.h"
 
-#include <QtGui/QTextDocument>
+#include <QTextDocument>
 #include <klocale.h>
 
 #include "abstractdeclarationnavigationcontext.h"
@@ -27,17 +27,8 @@
 #include "../../../interfaces/icore.h"
 #include "../../../interfaces/idocumentcontroller.h"
 #include "../functiondeclaration.h"
-#include "../functiondefinition.h"
 #include "../namespacealiasdeclaration.h"
-#include "../classmemberdeclaration.h"
-#include "../classfunctiondeclaration.h"
-#include "../forwarddeclaration.h"
-#include "../duchainutils.h"
 #include "../types/functiontype.h"
-#include "../types/enumeratortype.h"
-#include "../types/enumerationtype.h"
-#include "../types/referencetype.h"
-#include "../types/pointertype.h"
 #include "../types/structuretype.h"
 #include <interfaces/icontextbrowser.h>
 #include <interfaces/idocumentationcontroller.h>

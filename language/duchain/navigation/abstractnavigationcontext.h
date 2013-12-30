@@ -22,7 +22,6 @@
 #include <KDE/KSharedPtr>
 
 #include "../../languageexport.h"
-#include "../duchainpointer.h"
 #include "../indexeddeclaration.h"
 #include "navigationaction.h"
 

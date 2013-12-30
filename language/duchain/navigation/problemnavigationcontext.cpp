@@ -17,11 +17,11 @@
 */
 
 #include "problemnavigationcontext.h"
+
 #include <klocalizedstring.h>
 #include <language/interfaces/iproblem.h>
 #include <qtextdocument.h>
 #include <qboxlayout.h>
-#include <qtoolbutton.h>
 #include <interfaces/iassistant.h>
 #include <qmenu.h>
 #include <kaction.h>

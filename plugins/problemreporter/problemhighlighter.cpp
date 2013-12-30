@@ -27,9 +27,6 @@
 
 #include <language/duchain/indexedstring.h>
 #include <ktexteditor/texthintinterface.h>
-#include <qwidget.h>
-#include <ktextbrowser.h>
-#include <qboxlayout.h>
 #include <language/duchain/navigation/abstractnavigationwidget.h>
 #include <language/duchain/navigation/problemnavigationcontext.h>
 #include <language/util/navigationtooltip.h>
@@ -39,6 +36,7 @@
 #include <interfaces/icompletionsettings.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchainutils.h>
+#include <language/duchain/topducontext.h>
 #include <ktexteditor/movinginterface.h>
 
 using namespace KTextEditor;

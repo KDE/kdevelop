@@ -20,28 +20,17 @@
 #include "abstractnavigationwidget.h"
 
 #include <QtCore/QMap>
-#include <QtCore/QStringList>
 #include <QtCore/QMetaObject>
-#include <QtGui/QScrollBar>
-#include <QtGui/QBoxLayout>
+#include <QScrollBar>
+#include <QBoxLayout>
 
 #include <klocale.h>
+#include <ktextbrowser.h>
 
 #include "../declaration.h"
 #include "../ducontext.h"
+#include "../duchain.h"
 #include "../duchainlock.h"
-#include "../functiondeclaration.h"
-#include "../functiondefinition.h"
-#include "../forwarddeclaration.h"
-#include "../namespacealiasdeclaration.h"
-#include "../classfunctiondeclaration.h"
-#include "../classmemberdeclaration.h"
-#include "../topducontext.h"
-#include "abstractnavigationcontext.h"
-#include "abstractdeclarationnavigationcontext.h"
-#include "navigationaction.h"
-#include "../../../interfaces/icore.h"
-#include "../../../interfaces/idocumentcontroller.h"
 #include <qapplication.h>
 #include <qevent.h>
 
@@ -292,15 +281,12 @@ void AbstractNavigationWidget::embeddedWidgetUp() {
   up();
 }
 
-
 void AbstractNavigationWidget::wheelEvent(QWheelEvent* event )
 {
     QWidget::wheelEvent(event);
     event->accept();
     return;
 }
-
-
 
 }
 
