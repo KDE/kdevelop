@@ -51,9 +51,6 @@ static QStringList targetsInFolder(KDevelop::ProjectFolderItem* item)
     foreach(KDevelop::ProjectTargetItem* target, item->targetList()) {
         ret += target->text();
     }
-    foreach(KDevelop::ProjectFolderItem* folder, item->folderList()) {
-        ret += targetsInFolder(folder);
-    }
     return ret;
 }
 
