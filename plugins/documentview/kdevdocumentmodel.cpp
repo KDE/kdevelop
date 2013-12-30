@@ -35,6 +35,7 @@ KDevDocumentItem::~KDevDocumentItem()
 KDevCategoryItem::KDevCategoryItem( const QString &name )
         : KDevDocumentItem( name )
 {
+    setFlags(Qt::ItemIsEnabled);
     setToolTip( name );
     setIcon( KIcon("folder") );
 }
@@ -69,6 +70,7 @@ KDevFileItem* KDevCategoryItem::file( const KUrl &url ) const
 KDevFileItem::KDevFileItem( const KUrl &url )
         : KDevDocumentItem( url.fileName() )
 {
+    setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
     setUrl( url );
     KFileItem fi = KFileItem( url, QString(), 0 );
     m_fileIcon = fi.iconName();
