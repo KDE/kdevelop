@@ -166,20 +166,15 @@ void ProblemWidget::itemActivated(const QModelIndex& index)
     if (!index.isValid())
         return;
 
-  KTextEditor::Cursor start;
+    KTextEditor::Cursor start;
     KUrl url;
 
     {
-      // TODO: is this really necessary?
-      DUChainReadLocker lock(DUChain::lock());
-      KDevelop::ProblemPointer problem = model()->problemForIndex(index);
-      if (!index.internalPointer()) {
+        // TODO: is this really necessary?
+        DUChainReadLocker lock(DUChain::lock());
+        ProblemPointer problem = model()->problemForIndex(index);
         url = KUrl(problem->finalLocation().document.str());
         start = problem->finalLocation().start.textCursor();
-      }else{
-        url = KUrl(problem->locationStack().at(index.row()).document.str());
-        start = problem->locationStack().at(index.row()).textCursor();
-      }
     }
 
     m_plugin->core()->documentController()->openDocument(url, start);

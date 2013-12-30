@@ -34,13 +34,16 @@ Problem::Problem()
     d_func_dynamic()->setClassId(this);
 }
 
-KDevelop::Problem::Problem(KDevelop::ProblemData& data) : DUChainBase(data) {
+Problem::Problem(ProblemData& data)
+    : DUChainBase(data)
+{
 }
 
-KDevelop::Problem::~Problem() {
+Problem::~Problem()
+{
 }
 
-KDevelop::IndexedString KDevelop::Problem::url() const
+IndexedString Problem::url() const
 {
     return d_func()->url;
 }
@@ -50,33 +53,10 @@ DocumentRange Problem::finalLocation() const
     return DocumentRange(d_func()->url, rangeInCurrentRevision());
 }
 
-void Problem::setFinalLocation(const DocumentRange & location)
+void Problem::setFinalLocation(const DocumentRange& location)
 {
     setRange(transformToLocalRevision(location));
     d_func_dynamic()->url = location.document;
-}
-
-QStack< DocumentCursor > Problem::locationStack() const
-{
-    return QStack< DocumentCursor >();
-//     return d_func()->locationStack;
-}
-
-void Problem::addLocation(const DocumentCursor & cursor)
-{
-    Q_UNUSED(cursor);
-//     d_func()->locationStack.push(DocumentCursor(cursor));
-}
-
-void Problem::clearLocationStack()
-{
-//     d_func()->locationStack.clear();
-}
-
-void Problem::setLocationStack(const QStack< DocumentCursor > & locationStack)
-{
-    Q_UNUSED(locationStack);
-//     d_func()->locationStack = locationStack;
 }
 
 QString Problem::description() const
@@ -84,7 +64,7 @@ QString Problem::description() const
     return d_func()->description.str();
 }
 
-void Problem::setDescription(const QString & description)
+void Problem::setDescription(const QString& description)
 {
     d_func_dynamic()->description = IndexedString(description);
 }
@@ -94,7 +74,7 @@ QString Problem::explanation() const
     return d_func()->explanation.str();
 }
 
-void Problem::setExplanation(const QString & explanation)
+void Problem::setExplanation(const QString& explanation)
 {
     d_func_dynamic()->explanation = IndexedString(explanation);
 }
@@ -109,19 +89,23 @@ void Problem::setSource(ProblemData::Source source)
     d_func_dynamic()->source = source;
 }
 
-KSharedPtr< KDevelop::IAssistant > KDevelop::Problem::solutionAssistant() const {
+KSharedPtr< IAssistant > Problem::solutionAssistant() const
+{
     return m_solution;
 }
 
-void KDevelop::Problem::setSolutionAssistant(KSharedPtr< KDevelop::IAssistant > assistant) {
+void Problem::setSolutionAssistant(KSharedPtr< IAssistant > assistant)
+{
     m_solution = assistant;
 }
 
-KDevelop::ProblemData::Severity KDevelop::Problem::severity() const {
+ProblemData::Severity Problem::severity() const
+{
     return d_func()->severity;
 }
 
-void KDevelop::Problem::setSeverity(ProblemData::Severity severity) {
+void Problem::setSeverity(ProblemData::Severity severity)
+{
     d_func_dynamic()->severity = severity;
 }
 

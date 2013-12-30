@@ -25,7 +25,6 @@ Boston, MA 02110-1301, USA.
 
 #include <ksharedptr.h>
 
-#include "../editor/documentcursor.h"
 #include "../editor/documentrange.h"
 #include "../languageexport.h"
 #include "../duchain/duchainbase.h"
@@ -62,19 +61,18 @@ public:
     }
 
     Source source;
-    KDevelop::IndexedString url;
-//     QStack<DocumentCursor> locationStack;
+    Severity severity;
+    IndexedString url;
     IndexedString description;
     IndexedString explanation;
-    Severity severity;
 };
 
 /**
  * An object representing a problem in preprocessing, parsing, definition-use chain compilation, etc.
- * 
+ *
  * You should always use ProblemPointer, because Problem may be subclassed.
  * The subclass would be lost while copying.
- * 
+ *
  * Warning: Access to problems must be serialized through DUChainLock.
  */
 class KDEVPLATFORMLANGUAGE_EXPORT Problem : public DUChainBase, public KShared
@@ -92,24 +90,15 @@ public:
      */
     QString sourceString() const;
 
-    virtual KDevelop::IndexedString url () const;
-
-    /**
-     * Returns the stack of locations via which the error occurred.
-     * @todo Make the location-stack functional again. Currently these functions don't do anything.
-     */
-    QStack<DocumentCursor> locationStack() const;
-    void addLocation(const DocumentCursor& cursor);
-    void setLocationStack(const QStack<DocumentCursor>& locationStack);
-    void clearLocationStack();
+    KDevelop::IndexedString url() const;
 
     /**
      * Location where this problem occurred
      * @warning Must only be called from the foreground
      * */
     DocumentRange finalLocation() const;
-    void setFinalLocation(const DocumentRange & location);
-    
+    void setFinalLocation(const DocumentRange& location);
+
     /**
      * A brief description of the problem.
      */
@@ -121,15 +110,15 @@ public:
      */
     QString explanation() const;
     void setExplanation(const QString& explanation);
-    
+
     /**
      * Get the severity of this problem.
      * This is used for example to decide for a highlighting color.
-     * 
+     *
      * @see setSeverity()
      */
     ProblemData::Severity severity() const;
-    
+
     /**
      * Set the severity of this problem.
      */
@@ -149,21 +138,21 @@ public:
      * Set an assistant for solving this problem
      */
     void setSolutionAssistant(KSharedPtr<IAssistant> assistant);
-    
+
     enum {
         Identity = 15
     };
-    
+
     /**
      * Returns a string representation of this problem, useful for debugging.
      */
     QString toString() const;
 
-    private:
-    Problem(const Problem& other);
-    Problem& operator=(const Problem& rhs);
+private:
+    Problem(const Problem& other) = delete;
+    Problem& operator=(const Problem& rhs) = delete;
     KSharedPtr< KDevelop::IAssistant > m_solution;
-    
+
     DUCHAIN_DECLARE_DATA(Problem)
 };
 
