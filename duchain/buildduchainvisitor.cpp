@@ -21,11 +21,14 @@
 
 #include <unordered_map>
 
-#include <language/duchain/declaration.h>
 #include <language/duchain/duchainlock.h>
+#include <language/duchain/declaration.h>
+#include <language/duchain/types/delayedtype.h>
 
 #include "buildduchainvisitor.h"
 #include "clangtypes.h"
+
+using namespace KDevelop;
 
 namespace {
     bool isContextKind(CXCursorKind kind)
@@ -54,44 +57,44 @@ namespace {
         }
     }
 
-    KDevelop::DUContext *buildContextForCursor(CXCursor cursor, KDevelop::DUContext *parentContext)
+    DUContext *buildContextForCursor(CXCursor cursor, KDevelop::DUContext *parentContext)
     {
         if (!isContextKind(clang_getCursorKind(cursor)))
             return nullptr;
 
-        KDevelop::DUChainWriteLocker lock;
+        DUChainWriteLocker lock;
         auto range = ClangRange{clang_getCursorExtent(cursor)};
-        //TODO: needless indirection
-        auto rangeInRev = KDevelop::RangeInRevision::castFromSimpleRange(range.toSimpleRange());
-        return new KDevelop::DUContext(rangeInRev, parentContext);
+        return new DUContext(range.toRangeInRevision(), parentContext);
     }
 
-    KDevelop::AbstractType::Ptr buildTypeForCursor(CXCursor cursor)
+    AbstractType::Ptr buildTypeForCursor(CXCursor cursor)
     {
-        //TODO
-        Q_UNUSED(cursor);
-        return KDevelop::AbstractType::Ptr();
+        auto type = clang_getCursorType(cursor);
+        auto identifier = IndexedTypeIdentifier(QString(ClangString(clang_getTypeSpelling(type))));
+
+        DelayedType *delayedType = new DelayedType;
+        delayedType->setIdentifier(identifier);
+        delayedType->setKind(DelayedType::Unresolved);
+        return AbstractType::Ptr(delayedType);
     }
 
-    KDevelop::Declaration *buildDeclarationForCursor(CXCursor cursor, KDevelop::DUContext *parentContext, KDevelop::DUContext *internalContext)
+    Declaration *buildDeclarationForCursor(CXCursor cursor, KDevelop::DUContext *parentContext, KDevelop::DUContext *internalContext)
     {
         if (!clang_isDeclaration(clang_getCursorKind(cursor)))
             return nullptr;
         //TODO: figure out how to use pieceIndex
-        ClangRange range(clang_Cursor_getSpellingNameRange(cursor, 0, 0));
-        //TODO: needless indirection
-        auto rangeInRev = KDevelop::RangeInRevision::castFromSimpleRange(range.toSimpleRange());
-        //TODO: that's a lot of conversion..
-        ClangString identifier(clang_getCursorSpelling(cursor));
-        auto idStr = QString::fromAscii(identifier);
-        ClangString comment(clang_Cursor_getRawCommentText(cursor));
+        auto range = ClangRange(clang_Cursor_getSpellingNameRange(cursor, 0, 0)).toRangeInRevision();
+        auto identifier = Identifier(IndexedString(ClangString(clang_getCursorSpelling(cursor))));
+        auto comment = QByteArray{ClangString(clang_Cursor_getRawCommentText(cursor))};
 
-        KDevelop::DUChainWriteLocker lock;
-        auto decl = new KDevelop::Declaration(rangeInRev, parentContext);
-        decl->setComment(QByteArray(comment));
-        decl->setIdentifier(KDevelop::Identifier(idStr));
+        AbstractType::Ptr type = buildTypeForCursor(cursor);
+
+        DUChainWriteLocker lock;
+        auto decl = new KDevelop::Declaration(range, parentContext);
+        decl->setComment(comment);
+        decl->setIdentifier(identifier);
         decl->setInternalContext(internalContext);
-        decl->setAbstractType(buildTypeForCursor(cursor));
+        decl->setAbstractType(type);
         return decl;
     }
 
@@ -100,7 +103,7 @@ namespace {
         if (isSkipIntoKind(clang_getCursorKind(cursor)))
             return CXChildVisit_Recurse;
 
-        auto parentContext = static_cast<KDevelop::DUContext*>(d);
+        auto parentContext = static_cast<DUContext*>(d);
 
         auto context = buildContextForCursor(cursor, parentContext);
         if (context)
@@ -114,7 +117,7 @@ namespace {
     }
 }
 
-void BuildDUChainVisitor::visit(CXTranslationUnit unit, KDevelop::ReferencedTopDUContext top)
+void BuildDUChainVisitor::visit(CXTranslationUnit unit, ReferencedTopDUContext top)
 {
     auto cursor = clang_getTranslationUnitCursor(unit);
     clang_visitChildren(cursor, &::visit, top.data());

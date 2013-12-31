@@ -33,6 +33,8 @@ namespace KDevelop {
 class DocumentRange;
 class SimpleRange;
 class SimpleCursor;
+class CursorInRevision;
+class RangeInRevision;
 }
 
 class KDEVCLANGDUCHAIN_EXPORT ClangIndex
@@ -70,6 +72,8 @@ public:
 
     operator KDevelop::SimpleCursor() const;
 
+    operator KDevelop::CursorInRevision() const;
+
 private:
     CXSourceLocation location;
 };
@@ -87,6 +91,8 @@ public:
     KDevelop::DocumentRange toDocumentRange() const;
 
     KDevelop::SimpleRange toSimpleRange() const;
+
+    KDevelop::RangeInRevision toRangeInRevision() const;
 
 private:
     CXSourceRange range;

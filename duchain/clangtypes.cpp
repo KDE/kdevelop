@@ -62,12 +62,22 @@ ClangLocation::ClangLocation(CXSourceLocation location)
 
 }
 
-ClangLocation::operator SimpleCursor() const
+template<typename T> T cursorForCXSrcLoc(CXSourceLocation loc)
 {
     uint line = 0;
     uint column = 0;
-    clang_getFileLocation(location, 0, &line, &column, 0);
+    clang_getFileLocation(loc, 0, &line, &column, 0);
     return {static_cast<int>(line-1), static_cast<int>(column-1)};
+}
+
+ClangLocation::operator SimpleCursor() const
+{
+    return cursorForCXSrcLoc<SimpleCursor>(location);
+}
+
+ClangLocation::operator CursorInRevision() const
+{
+    return cursorForCXSrcLoc<CursorInRevision>(location);
 }
 
 ClangLocation::~ClangLocation()
@@ -100,6 +110,11 @@ DocumentRange ClangRange::toDocumentRange() const
 }
 
 SimpleRange ClangRange::toSimpleRange() const
+{
+    return {start(), end()};
+}
+
+RangeInRevision ClangRange::toRangeInRevision() const
 {
     return {start(), end()};
 }
