@@ -31,21 +31,6 @@
 using namespace KDevelop;
 
 namespace {
-    bool isContextKind(CXCursorKind kind)
-    {
-        switch (kind)
-        {
-        case CXCursor_ClassDecl:
-        case CXCursor_Namespace:
-        case CXCursor_FunctionDecl:
-        case CXCursor_StructDecl:
-        case CXCursor_CXXMethod:
-        case CXCursor_ClassTemplatePartialSpecialization:
-            return true;
-        default:
-            return false;
-        }
-    }
     bool isSkipIntoKind(CXCursorKind kind)
     {
         switch (kind) {
@@ -59,12 +44,33 @@ namespace {
 
     DUContext *buildContextForCursor(CXCursor cursor, KDevelop::DUContext *parentContext)
     {
-        if (!isContextKind(clang_getCursorKind(cursor)))
+        auto type = DUContext::Other;
+        switch(clang_getCursorKind(cursor))
+        {
+        case CXCursor_ClassDecl:
+        case CXCursor_StructDecl:
+            type = DUContext::Class;
+            break;
+        case CXCursor_Namespace:
+            type = DUContext::Namespace;
+            break;
+        case CXCursor_EnumDecl:
+            type = DUContext::Enum;
+            break;
+        case CXCursor_FunctionDecl:
+        case CXCursor_CXXMethod:
+            if (clang_isCursorDefinition(cursor))
+                break;
+            //fall-through
+        default:
             return nullptr;
+        }
+        auto range = ClangRange{clang_getCursorExtent(cursor)};
 
         DUChainWriteLocker lock;
-        auto range = ClangRange{clang_getCursorExtent(cursor)};
-        return new DUContext(range.toRangeInRevision(), parentContext);
+        auto context = new DUContext(range.toRangeInRevision(), parentContext);
+        context->setType(type);
+        return context;
     }
 
     AbstractType::Ptr buildTypeForCursor(CXCursor cursor)
