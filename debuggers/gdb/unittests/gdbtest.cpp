@@ -1606,16 +1606,7 @@ void GdbTest::testCatchpoint()
     WAIT_FOR_STATE(session, DebugSession::PausedState);
     QTest::qWait(1000);
 
-    // TODO: Fix API in FrameStackModel? At least introduce FrameStackModel::frames(int)
-    typedef KDevelop::IFrameStackModel::FrameItem FrameItem;
-    QVector<FrameItem> frames;
-    const QModelIndex thread1Index = fsModel->index(0, 0);
-    for (int i = 0; i < fsModel->rowCount(thread1Index); ++i) {
-        FrameItem frame = fsModel->frame(fsModel->index(i, 0, thread1Index));
-        frames << frame;
-        qDebug() << frame.file << frame.line;
-    }
-
+    const QList<KDevelop::FrameStackModel::FrameItem> frames = fsModel->frames(fsModel->currentThread());
     QVERIFY(frames.size() >= 2);
     // frame 0 is somewhere inside libstdc++
     QCOMPARE(frames[1].file, KUrl(findSourceFile("debugeeexception.cpp")));
