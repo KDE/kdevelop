@@ -38,6 +38,7 @@
 #include "../breakpoint/breakpoint.h"
 #include "../breakpoint/breakpointmodel.h"
 #include <interfaces/idebugcontroller.h>
+#include <util/autoorientedsplitter.h>
 
 #define IF_DEBUG(x)
 #include <interfaces/icore.h>
@@ -60,8 +61,9 @@ BreakpointWidget::BreakpointWidget(IDebugController *controller, QWidget *parent
 
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setMargin(0);
-    QSplitter *s = new QSplitter(this);
+    QSplitter *s = new AutoOrientedSplitter(this);
     layout->addWidget(s);
+    m_splitter = s;
 
     m_breakpointsView = new QTableView(s);
     m_breakpointsView->setSelectionBehavior(QAbstractItemView::SelectRows);

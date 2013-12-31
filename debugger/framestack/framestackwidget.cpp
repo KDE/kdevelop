@@ -33,6 +33,7 @@
 #include <QMenu>
 #include <QApplication>
 #include <QClipboard>
+#include <QResizeEvent>
 
 #include <KAction>
 #include <KStandardAction>
@@ -49,7 +50,7 @@
 namespace KDevelop {
 
 FramestackWidget::FramestackWidget(IDebugController* controller, QWidget* parent)
-: QSplitter(Qt::Horizontal, parent), m_session(0)
+    : AutoOrientedSplitter(Qt::Horizontal, parent), m_session(0)
 {
     connect(controller,
             SIGNAL(currentSessionChanged(KDevelop::IDebugSession*)),

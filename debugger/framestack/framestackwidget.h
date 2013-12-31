@@ -24,10 +24,9 @@
 #ifndef KDEVPLATFORM_FRAMESTACKWIDGET_H
 #define KDEVPLATFORM_FRAMESTACKWIDGET_H
 
-#include <QSplitter>
-
 #include "../debuggerexport.h"
 #include <debugger/interfaces/idebugsession.h>
+#include <util/autoorientedsplitter.h>
 
 class QMenu;
 class QTreeView;
@@ -37,7 +36,7 @@ class QListView;
 namespace KDevelop {
 class IDebugController;
 
-class KDEVPLATFORMDEBUGGER_EXPORT FramestackWidget : public QSplitter
+class KDEVPLATFORMDEBUGGER_EXPORT FramestackWidget : public AutoOrientedSplitter
 {
     Q_OBJECT
     public:

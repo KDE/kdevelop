@@ -31,6 +31,7 @@ class QModelIndex;
 class QItemSelection;
 class QTableView;
 class QMenu;
+class QSplitter;
 
 namespace KDevelop {
 class IDebugController;
@@ -69,6 +70,7 @@ private Q_SLOTS:
     void slotPopupMenuAboutToShow();
     
 private:
+    QSplitter* m_splitter;
     QTableView* m_breakpointsView;
     BreakpointDetails* details_;
     QMenu* popup_;
