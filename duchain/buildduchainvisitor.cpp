@@ -34,11 +34,13 @@ namespace {
     bool isSkipIntoKind(CXCursorKind kind)
     {
         switch (kind) {
-            case CXCursor_CompoundStmt:
-            case CXCursor_DeclStmt:
-                return true;
-            default:
-                return false;
+        case CXCursor_CompoundStmt:
+        case CXCursor_DeclStmt:
+        case CXCursor_CallExpr:
+        case CXCursor_UnexposedExpr:
+            return true;
+        default:
+            return false;
         }
     }
 
@@ -101,12 +103,11 @@ namespace {
     {
         if (!clang_isDeclaration(clang_getCursorKind(cursor)))
             return nullptr;
-        //TODO: figure out how to use pieceIndex
+
         auto range = ClangRange(clang_Cursor_getSpellingNameRange(cursor, 0, 0)).toRangeInRevision();
         auto identifier = Identifier(IndexedString(ClangString(clang_getCursorSpelling(cursor))));
         auto comment = buildComment(clang_Cursor_getParsedComment(cursor));
-
-        AbstractType::Ptr type = buildTypeForCursor(cursor);
+        auto type = buildTypeForCursor(cursor);
 
         DUChainWriteLocker lock;
         auto decl = new KDevelop::Declaration(range, parentContext);
@@ -117,6 +118,34 @@ namespace {
         return decl;
     }
 
+    CXChildVisitResult buildUseForCursor(CXCursor cursor, DUContext *parentContext)
+    {
+        auto cursorKind = clang_getCursorKind(cursor);
+        auto isRefExpr = cursorKind == CXCursor_DeclRefExpr || cursorKind == CXCursor_MemberRefExpr;
+        if (!clang_isReference(cursorKind) && !isRefExpr)
+            return CXChildVisit_Break;
+
+        auto referenced = clang_getCursorReferenced(cursor);
+        auto refLoc = clang_getCursorLocation(referenced);
+        CXFile file;
+        clang_getFileLocation(refLoc, &file, nullptr, nullptr, nullptr);
+        auto url = IndexedString(ClangString(clang_getFileName(file)));
+        auto refCursor = CursorInRevision(ClangLocation(refLoc));
+
+        //TODO: handle uses of declarations in other topContexts
+        DUChainWriteLocker lock;
+        TopDUContext *top = parentContext->topContext();
+        if (DUContext *local = top->findContextAt(refCursor)) {
+            if (Declaration *used = local->findDeclarationAt(refCursor)) {
+                auto usedIndex = top->indexForUsedDeclaration(used);
+                auto useRange = ClangRange(clang_getCursorReferenceNameRange(cursor, CXNameRange_WantSinglePiece, 0));
+                parentContext->createUse(usedIndex, useRange.toRangeInRevision());
+            }
+        }
+
+        return isRefExpr ? CXChildVisit_Recurse : CXChildVisit_Continue;
+    }
+
     CXChildVisitResult visit(CXCursor cursor, CXCursor /*parent*/, CXClientData d)
     {
         if (isSkipIntoKind(clang_getCursorKind(cursor)))
@@ -124,15 +153,17 @@ namespace {
 
         auto parentContext = static_cast<DUContext*>(d);
 
+        CXChildVisitResult useResult = buildUseForCursor(cursor, parentContext);
+        if (useResult != CXChildVisit_Break)
+            return useResult;
+
         auto context = buildContextForCursor(cursor, parentContext);
         if (context)
-        {
             clang_visitChildren(cursor, &::visit, context);
-        }
 
         buildDeclarationForCursor(cursor, parentContext, context);
 
-        return CXChildVisit_Continue;
+        return context ? CXChildVisit_Continue : CXChildVisit_Recurse;
     }
 }
 
