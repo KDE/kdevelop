@@ -66,6 +66,7 @@ public:
     void insertFrames(int threadNumber, const QList<FrameItem> &frames);
     void setHasMoreFrames(int threadNumber, bool hasMoreFrames);
     FrameItem frame(const QModelIndex &index);
+    QList<FrameItem> frames(int threadNumber) const;
 
     //ItemModel implementation
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;

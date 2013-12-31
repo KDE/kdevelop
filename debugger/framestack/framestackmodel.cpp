@@ -140,6 +140,11 @@ FrameStackModel::FrameItem FrameStackModel::frame(const QModelIndex& index)
     return m_frames[thread.nr].at(index.row());
 }
 
+QList<FrameStackModel::FrameItem> FrameStackModel::frames(int threadNumber) const
+{
+    return m_frames.value(threadNumber);
+}
+
 QVariant FrameStackModel::data(const QModelIndex& index, int role) const
 {
     if (!index.internalId()) {
