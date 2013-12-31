@@ -131,6 +131,8 @@ QVariant PlaceholderItemProxyModel::data(const QModelIndex& proxyIndex, int role
             const KColorScheme scheme(QPalette::Normal);
             return scheme.foreground(KColorScheme::InactiveText);
         }
+        default:
+            return QVariant();
         }
     }
     return KIdentityProxyModel::data(proxyIndex, role);
