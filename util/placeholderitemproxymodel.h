@@ -92,9 +92,11 @@ public:
      * @return True in case the input was valid, and the filter should notify
      *   external observers via the dataInserted signal.
      *
+     * By default, this method returns true only in case @p value is non-empty
+     *
      * @sa dataInserted()
      */
-    virtual bool validateRow(const QModelIndex& index, const QVariant& value) const = 0;
+    virtual bool validateRow(const QModelIndex& index, const QVariant& value) const;
 
 Q_SIGNALS:
     void dataInserted(const QVariant& values);

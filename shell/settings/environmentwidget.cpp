@@ -42,23 +42,6 @@ Boston, MA 02110-1301, USA.
 namespace KDevelop
 {
 
-class EnvironmentPlaceHolderProxyModel : public PlaceholderItemProxyModel
-{
-    Q_OBJECT
-
-public:
-    explicit EnvironmentPlaceHolderProxyModel(QObject* parent = 0)
-        : PlaceholderItemProxyModel(parent) {}
-
-    virtual bool validateRow(const QModelIndex& index, const QVariant& value) const
-    {
-        Q_UNUSED(index);
-
-        // only return true in case the variable was specified
-        return !value.toString().isEmpty();
-    }
-};
-
 EnvironmentWidget::EnvironmentWidget( QWidget *parent )
         : QWidget( parent ), groupModel( new EnvironmentGroupModel() ), proxyModel( new QSortFilterProxyModel() )
 {
@@ -69,7 +52,7 @@ EnvironmentWidget::EnvironmentWidget( QWidget *parent )
 
     proxyModel->setSourceModel( groupModel );
 
-    EnvironmentPlaceHolderProxyModel* topProxyModel  = new EnvironmentPlaceHolderProxyModel(this);
+    PlaceholderItemProxyModel* topProxyModel  = new PlaceholderItemProxyModel(this);
     topProxyModel->setSourceModel(proxyModel);
     topProxyModel->setHint(i18n("Enter variable ..."));
     connect(topProxyModel, SIGNAL(dataInserted(QVariant)), SLOT(handleVariableInserted(QVariant)));
@@ -236,5 +219,3 @@ void EnvironmentWidget::enableButtons( const QString& txt )
 }
 
 #include "moc_environmentwidget.cpp"
-#include "environmentwidget.moc"
-

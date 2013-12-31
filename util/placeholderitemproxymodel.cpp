@@ -194,4 +194,10 @@ QModelIndex PlaceholderItemProxyModel::index(int row, int column, const QModelIn
     return KIdentityProxyModel::index(row, column, parent);
 }
 
+bool PlaceholderItemProxyModel::validateRow(const QModelIndex& index, const QVariant& value) const
+{
+    Q_UNUSED(index);
+    return !value.toString().isEmpty();
+}
+
 #include "moc_placeholderitemproxymodel.cpp"
