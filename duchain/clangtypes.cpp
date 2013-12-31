@@ -53,7 +53,8 @@ ClangString::~ClangString()
 
 ClangString::operator const char*() const
 {
-    return clang_getCString(string);
+    const char *data = clang_getCString(string);
+    return data ? data : "";
 }
 
 ClangLocation::ClangLocation(CXSourceLocation location)

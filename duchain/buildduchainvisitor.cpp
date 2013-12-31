@@ -30,6 +30,18 @@
 
 using namespace KDevelop;
 
+QDebug &operator<<(QDebug &dbg, CXCursor cursor)
+{
+    if (clang_Cursor_isNull(cursor))
+        dbg << "CXCursor (NULL)";
+    else
+        dbg << "CXCursor"
+            << ClangString(clang_getCursorKindSpelling(clang_getCursorKind(cursor)))
+            << ClangRange(clang_Cursor_getSpellingNameRange(cursor, 0, 0)).toDocumentRange()
+            << ClangString(clang_getCursorSpelling(cursor));
+    return dbg;
+}
+
 namespace {
     bool isSkipIntoKind(CXCursorKind kind)
     {
