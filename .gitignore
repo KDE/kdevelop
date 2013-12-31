@@ -16,3 +16,4 @@ mem.log.*
 massif.*
 callgrind.*
 perf.data*
+.kdev_include_paths

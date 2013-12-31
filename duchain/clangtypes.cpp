@@ -67,7 +67,7 @@ ClangLocation::operator SimpleCursor() const
     uint line = 0;
     uint column = 0;
     clang_getFileLocation(location, 0, &line, &column, 0);
-    return {static_cast<int>(line), static_cast<int>(column)};
+    return {static_cast<int>(line-1), static_cast<int>(column-1)};
 }
 
 ClangLocation::~ClangLocation()

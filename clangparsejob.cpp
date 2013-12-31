@@ -31,6 +31,7 @@
 #include <interfaces/ilanguage.h>
 
 #include "duchain/parsesession.h"
+#include "duchain/buildduchainvisitor.h"
 
 #include "debug.h"
 #include "clanglanguagesupport.h"
@@ -73,6 +74,18 @@ void ClangParseJob::run()
         DUChainReadLocker lock;
         context = DUChainUtils::standardContextForUrl(document().toUrl());
     }
+    if (!context) {
+        DUChainWriteLocker lock;
+        ParsingEnvironmentFile *file = new ParsingEnvironmentFile(document());
+        file->setLanguage(ParseSession::languageString());
+        context = new TopDUContext(document(), RangeInRevision(0, 0, INT_MAX, INT_MAX), file);
+        DUChain::self()->addDocumentChain(context);
+    } else {
+        //TODO: update existing contexts
+        KDevelop::DUChainWriteLocker lock;
+        context->cleanIfNotEncountered({});
+    }
+    setDuChain(context);
     {
         QReadLocker parseLock(languageSupport()->language()->parseLock());
 
@@ -80,22 +93,14 @@ void ClangParseJob::run()
             return abortJob();
         }
 
-        // FIXME: build/update DUChain contents
+        BuildDUChainVisitor visitor;
+        visitor.visit(session.unit(), context);
     }
 
     if (abortRequested()) {
         return abortJob();
     }
 
-    if (!context) {
-        DUChainWriteLocker lock;
-        ParsingEnvironmentFile *file = new ParsingEnvironmentFile(document());
-        file->setLanguage(ParseSession::languageString());
-        context = new TopDUContext(document(), RangeInRevision(0, 0, INT_MAX, INT_MAX), file);
-        DUChain::self()->addDocumentChain(context);
-    }
-
-    setDuChain(context);
     {
         DUChainWriteLocker lock;
         context->setProblems(session.problems());
