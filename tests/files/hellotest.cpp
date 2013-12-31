@@ -23,7 +23,8 @@ class foo
 namespace bar
 {
     /**
-     * "identifier" : "foo"
+     * "identifier" : "foo",
+     * "internalContext" : { "null" : true }
      */
     void foo();
 
@@ -42,7 +43,8 @@ namespace bar
         };
 
         /**
-         * "identifier" : "foomethod"
+         * "identifier" : "foomethod",
+         * "internalContext" : { "null" : true }
          */
         int foomethod();
 
