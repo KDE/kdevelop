@@ -84,6 +84,19 @@ namespace {
         return AbstractType::Ptr(delayedType);
     }
 
+    QByteArray buildComment(const CXComment &comment)
+    {
+        auto kind = clang_Comment_getKind(comment);
+        if (kind == CXComment_Text)
+            return QByteArray(ClangString(clang_TextComment_getText(comment)));
+
+        QByteArray text;
+        int numChildren = clang_Comment_getNumChildren(comment);
+        for (int i = 0; i < numChildren; ++i)
+            text += buildComment(clang_Comment_getChild(comment, i));
+        return text;
+    }
+
     Declaration *buildDeclarationForCursor(CXCursor cursor, KDevelop::DUContext *parentContext, KDevelop::DUContext *internalContext)
     {
         if (!clang_isDeclaration(clang_getCursorKind(cursor)))
@@ -91,7 +104,7 @@ namespace {
         //TODO: figure out how to use pieceIndex
         auto range = ClangRange(clang_Cursor_getSpellingNameRange(cursor, 0, 0)).toRangeInRevision();
         auto identifier = Identifier(IndexedString(ClangString(clang_getCursorSpelling(cursor))));
-        auto comment = QByteArray{ClangString(clang_Cursor_getRawCommentText(cursor))};
+        auto comment = buildComment(clang_Cursor_getParsedComment(cursor));
 
         AbstractType::Ptr type = buildTypeForCursor(cursor);
 
