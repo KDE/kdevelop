@@ -140,24 +140,24 @@ void FramestackWidget::currentSessionChanged(KDevelop::IDebugSession* session)
     }
 }
 
-void KDevelop::FramestackWidget::hideEvent(QHideEvent* e)
+void FramestackWidget::hideEvent(QHideEvent* e)
 {
     QWidget::hideEvent(e);
 }
 
-void KDevelop::FramestackWidget::showEvent(QShowEvent* e)
+void FramestackWidget::showEvent(QShowEvent* e)
 {
     QWidget::showEvent(e);
 }
 
-void KDevelop::FramestackWidget::setThreadShown(const QModelIndex& current)
+void FramestackWidget::setThreadShown(const QModelIndex& current)
 {
     if (!current.isValid())
         return;
     m_session->frameStackModel()->setCurrentThread(current);
 }
 
-void KDevelop::FramestackWidget::checkFetchMoreFrames()
+void FramestackWidget::checkFetchMoreFrames()
 {
     int val = m_frames->verticalScrollBar()->value();
     int max = m_frames->verticalScrollBar()->maximum();
@@ -168,7 +168,7 @@ void KDevelop::FramestackWidget::checkFetchMoreFrames()
     }
 }
 
-void KDevelop::FramestackWidget::currentThreadChanged(int thread)
+void FramestackWidget::currentThreadChanged(int thread)
 {
     if (thread != -1) {
         IFrameStackModel* model = m_session->frameStackModel();
@@ -184,7 +184,7 @@ void KDevelop::FramestackWidget::currentThreadChanged(int thread)
     }
 }
 
-void KDevelop::FramestackWidget::currentFrameChanged(int frame)
+void FramestackWidget::currentFrameChanged(int frame)
 {
     if (frame != -1) {
         IFrameStackModel* model = m_session->frameStackModel();

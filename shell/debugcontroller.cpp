@@ -24,6 +24,7 @@
 
 #include "debugcontroller.h"
 
+#include <QFileInfo>
 #include <QtCore/QMetaEnum>
 
 #include <KDE/KLocale>
@@ -348,10 +349,18 @@ void DebugController::showStepInSource(const KUrl &url, int lineNum)
     kDebug() << url << lineNum;
 
     Q_ASSERT(dynamic_cast<IDebugSession*>(sender()));
-    QPair<KUrl,int> openUrl = static_cast<IDebugSession*>(sender())->convertToLocalUrl(qMakePair<KUrl,int>( url, lineNum ));
+    IDebugSession* session = static_cast<IDebugSession*>(sender());
+    const QPair<KUrl,int> localUrlPair = session->convertToLocalUrl(qMakePair<KUrl,int>(url, lineNum));
+    const KUrl localUrl = localUrlPair.first;
+    const int localLineNum = localUrlPair.second;
+    if (localUrl.isLocalFile() && !QFileInfo(localUrl.toLocalFile()).exists()) {
+        kDebug() << "Not showing source, file does not exist:" << localUrl;
+        return;
+    }
+
     KDevelop::IDocument* document = KDevelop::ICore::self()
         ->documentController()
-        ->openDocument(openUrl.first, KTextEditor::Cursor(openUrl.second, 0), IDocumentController::DoNotFocus);
+        ->openDocument(localUrl, KTextEditor::Cursor(localLineNum, 0), IDocumentController::DoNotFocus);
 
     if( !document )
         return;

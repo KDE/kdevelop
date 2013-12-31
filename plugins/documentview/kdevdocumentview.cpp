@@ -97,22 +97,20 @@ void KDevDocumentView::mousePressEvent( QMouseEvent * event )
     QModelIndex proxyIndex = indexAt( event->pos() );
     QModelIndex index = m_proxy->mapToSource( proxyIndex );
 
-    if ( event->button() == Qt::LeftButton && proxyIndex.parent().isValid() &&
-            event->modifiers() == Qt::NoModifier )
-    {
-        KDevelop::IDocumentController* dc = m_plugin->core()->documentController();
-        KUrl documentUrl = static_cast<KDevDocumentItem*>( m_documentModel->itemFromIndex( index ) )->fileItem()->url();
-        if (dc->documentForUrl(documentUrl) != dc->activeDocument())
-        {
-            dc->openDocument(documentUrl);
+    if (event->button() == Qt::LeftButton && event->modifiers() == Qt::NoModifier) {
+        if (proxyIndex.parent().isValid()) {
+            // this is a document item
+            KDevelop::IDocumentController* dc = m_plugin->core()->documentController();
+            KUrl documentUrl = static_cast<KDevDocumentItem*>(m_documentModel->itemFromIndex(index))->fileItem()->url();
+            if (dc->documentForUrl(documentUrl) != dc->activeDocument()) {
+                dc->openDocument(documentUrl);
+                return;
+            }
+        } else {
+            // this is a folder item
+            setExpanded(proxyIndex, !isExpanded(proxyIndex));
             return;
         }
-    }
-
-    if ( !proxyIndex.parent().isValid() )
-    {
-        setExpanded( proxyIndex, !isExpanded( proxyIndex ) );
-        return;
     }
 
     QTreeView::mousePressEvent( event );
@@ -167,8 +165,16 @@ void KDevDocumentView::reloadSelected()
 
 void KDevDocumentView::contextMenuEvent( QContextMenuEvent * event )
 {
+    QModelIndex proxyIndex = indexAt( event->pos() );
+    QModelIndex index = m_proxy->mapToSource( proxyIndex );
+
+    // for now, ignore clicks on empty space or folder items
+    if (!proxyIndex.isValid() || !proxyIndex.parent().isValid()) {
+        return;
+    }
+
     updateSelectedDocs();
-    
+
     if (!m_selectedDocs.isEmpty())
     {
         KMenu* ctxMenu = new KMenu(this);
