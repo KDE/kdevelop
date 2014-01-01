@@ -22,6 +22,7 @@
 #include "buildduchainvisitor.h"
 #include "declarationbuilder.h"
 #include "contextbuilder.h"
+#include "usebuilder.h"
 #include "clangtypes.h"
 
 QDebug &operator<<(QDebug &dbg, CXCursor cursor)
@@ -71,8 +72,7 @@ template<CXCursorKind kind> struct CursorBuilder<kind, CBT_Context> {
 };
 template<CXCursorKind kind> struct CursorBuilder<kind, CBT_Use> {
     static CXChildVisitResult build(CXCursor cursor, DUContext *parentContext) {
-        //TODO...
-        return CXChildVisit_Continue;
+        return UseBuilder::build<kind>(cursor, parentContext);
     }
 };
 template<CXCursorKind kind> struct CursorBuilder<kind, CBT_CtxtDecl> {
@@ -94,79 +94,82 @@ template<CXCursorKind kind> struct CursorBuilder<kind, CBT_IdCtxtDecl> {
 
 }
 
-static CXChildVisitResult buildUseForCursor(CXCursor cursor, DUContext *parentContext)
-{
-    auto cursorKind = clang_getCursorKind(cursor);
-    auto isRefExpr = cursorKind == CXCursor_DeclRefExpr || cursorKind == CXCursor_MemberRefExpr;
-    if (!clang_isReference(cursorKind) && !isRefExpr)
-        return CXChildVisit_Break;
-
-    auto referenced = clang_getCursorReferenced(cursor);
-    auto refLoc = clang_getCursorLocation(referenced);
-    CXFile file;
-    clang_getFileLocation(refLoc, &file, nullptr, nullptr, nullptr);
-    auto url = IndexedString(ClangString(clang_getFileName(file)));
-    auto refCursor = CursorInRevision(ClangLocation(refLoc));
-
-    //TODO: handle uses of declarations in other topContexts
-    DUChainWriteLocker lock;
-    TopDUContext *top = parentContext->topContext();
-    if (DUContext *local = top->findContextAt(refCursor)) {
-        if (Declaration *used = local->findDeclarationAt(refCursor)) {
-            auto usedIndex = top->indexForUsedDeclaration(used);
-            auto useRange = ClangRange(clang_getCursorReferenceNameRange(cursor, CXNameRange_WantSinglePiece, 0));
-            parentContext->createUse(usedIndex, useRange.toRangeInRevision());
-        }
-    }
-
-    return isRefExpr ? CXChildVisit_Recurse : CXChildVisit_Continue;
-}
-
 CXChildVisitResult visit(CXCursor cursor, CXCursor /*parent*/, CXClientData d)
 {
     auto parentContext = static_cast<DUContext*>(d);
-
-    CXChildVisitResult useResult = buildUseForCursor(cursor, parentContext);
-    if (useResult != CXChildVisit_Break)
-        return useResult;
 
     //Use to map cursor kinds to build profiles
     #define UseCursorKind(CursorKind, CursorBuildType)\
     case CursorKind: return CursorBuilder<CursorKind, CursorBuildType>::build(cursor, parentContext);
 
-    //Use to map cursor kinds that can be either declarations or definitions to alternate profiles
-    #define UseCursorDeclDef(CursorKind, CursorBuildTypeDecl, CursorBuildTypeDef)\
-    case CursorKind: return clang_isCursorDefinition(cursor) ?\
-        CursorBuilder<CursorKind, CursorBuildTypeDef>::build(cursor, parentContext) :\
-        CursorBuilder<CursorKind, CursorBuildTypeDecl>::build(cursor, parentContext);
+    //Use to map cursor kinds conditionally
+    #define UseCursorCond(CursorKind, Cond, TrueCBT, FalseCBT)\
+    case CursorKind: return Cond ?\
+        CursorBuilder<CursorKind, TrueCBT>::build(cursor, parentContext) :\
+        CursorBuilder<CursorKind, FalseCBT>::build(cursor, parentContext);
+
     switch (clang_getCursorKind(cursor))
     {
     UseCursorKind(CXCursor_UnexposedDecl, CBT_Declaration);
-    UseCursorDeclDef(CXCursor_StructDecl, CBT_Declaration, CBT_IdCtxtDecl);
-    UseCursorDeclDef(CXCursor_UnionDecl, CBT_Declaration, CBT_IdCtxtDecl);
-    UseCursorDeclDef(CXCursor_ClassDecl, CBT_Declaration, CBT_IdCtxtDecl);
-    UseCursorDeclDef(CXCursor_EnumDecl, CBT_Declaration, CBT_IdCtxtDecl);
+    UseCursorCond(CXCursor_StructDecl,
+                  clang_isCursorDefinition(cursor),
+                  CBT_IdCtxtDecl, CBT_Declaration);
+    UseCursorCond(CXCursor_UnionDecl,
+                  clang_isCursorDefinition(cursor),
+                  CBT_IdCtxtDecl, CBT_Declaration);
+    UseCursorCond(CXCursor_ClassDecl,
+                  clang_isCursorDefinition(cursor),
+                  CBT_IdCtxtDecl, CBT_Declaration);
+    UseCursorCond(CXCursor_EnumDecl,
+                  clang_isCursorDefinition(cursor),
+                  CBT_IdCtxtDecl, CBT_Declaration);
     UseCursorKind(CXCursor_FieldDecl, CBT_Declaration);
     UseCursorKind(CXCursor_EnumConstantDecl, CBT_Declaration);
-    UseCursorDeclDef(CXCursor_FunctionDecl, CBT_Declaration, CBT_CtxtDecl);
+    UseCursorCond(CXCursor_FunctionDecl,
+                  clang_isCursorDefinition(cursor),
+                  CBT_CtxtDecl, CBT_Declaration);
     UseCursorKind(CXCursor_VarDecl, CBT_Declaration);
     UseCursorKind(CXCursor_ParmDecl, CBT_Declaration);
     UseCursorKind(CXCursor_TypedefDecl, CBT_Declaration);
-    UseCursorDeclDef(CXCursor_CXXMethod, CBT_Declaration, CBT_CtxtDecl);
+    UseCursorCond(CXCursor_CXXMethod,
+                  clang_isCursorDefinition(cursor),
+                  CBT_CtxtDecl, CBT_Declaration);
     UseCursorKind(CXCursor_Namespace, CBT_IdCtxtDecl);
-    UseCursorDeclDef(CXCursor_Constructor, CBT_Declaration, CBT_CtxtDecl);
-    UseCursorDeclDef(CXCursor_Destructor, CBT_Declaration, CBT_CtxtDecl);
-    UseCursorDeclDef(CXCursor_ConversionFunction, CBT_Declaration, CBT_CtxtDecl);
+    UseCursorCond(CXCursor_Constructor,
+                  clang_isCursorDefinition(cursor),
+                  CBT_CtxtDecl, CBT_Declaration);
+    UseCursorCond(CXCursor_Destructor,
+                  clang_isCursorDefinition(cursor),
+                  CBT_CtxtDecl, CBT_Declaration);
+    UseCursorCond(CXCursor_ConversionFunction,
+                  clang_isCursorDefinition(cursor),
+                  CBT_CtxtDecl, CBT_Declaration);
     UseCursorKind(CXCursor_TemplateTypeParameter, CBT_Declaration);
     UseCursorKind(CXCursor_NonTypeTemplateParameter, CBT_Declaration);
     UseCursorKind(CXCursor_TemplateTemplateParameter, CBT_Declaration);
-    UseCursorDeclDef(CXCursor_FunctionTemplate, CBT_Declaration, CBT_CtxtDecl);
-    UseCursorDeclDef(CXCursor_ClassTemplate, CBT_Declaration, CBT_IdCtxtDecl);
-    UseCursorDeclDef(CXCursor_ClassTemplatePartialSpecialization, CBT_Declaration, CBT_IdCtxtDecl);
+    UseCursorCond(CXCursor_FunctionTemplate,
+                  clang_isCursorDefinition(cursor),
+                  CBT_CtxtDecl, CBT_Declaration);
+    UseCursorCond(CXCursor_ClassTemplate,
+                  clang_isCursorDefinition(cursor),
+                  CBT_IdCtxtDecl, CBT_Declaration);
+    UseCursorCond(CXCursor_ClassTemplatePartialSpecialization,
+                  clang_isCursorDefinition(cursor),
+                  CBT_IdCtxtDecl, CBT_Declaration);
     UseCursorKind(CXCursor_NamespaceAlias, CBT_Declaration);
     UseCursorKind(CXCursor_UsingDirective, CBT_Declaration); //Should we make a declaration or just a use?
     UseCursorKind(CXCursor_UsingDeclaration, CBT_Declaration); //Should we make a declaration or just a use?
     UseCursorKind(CXCursor_TypeAliasDecl, CBT_Declaration);
+    UseCursorKind(CXCursor_TypeRef, CBT_Use)
+    UseCursorKind(CXCursor_CXXBaseSpecifier, CBT_Use)
+    UseCursorKind(CXCursor_TemplateRef, CBT_Use)
+    UseCursorKind(CXCursor_NamespaceRef, CBT_Use)
+    UseCursorKind(CXCursor_MemberRef, CBT_Use)
+    UseCursorKind(CXCursor_LabelRef, CBT_Use)
+    UseCursorKind(CXCursor_OverloadedDeclRef, CBT_Use)
+    UseCursorKind(CXCursor_VariableRef, CBT_Use)
+    UseCursorKind(CXCursor_DeclRefExpr, CBT_Use)
+    UseCursorKind(CXCursor_MemberRefExpr, CBT_Use)
     default: return CXChildVisit_Recurse;
     }
 }
