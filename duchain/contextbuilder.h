@@ -8,11 +8,17 @@ namespace ContextBuilder {
 
     using namespace KDevelop;
 
+    inline RangeInRevision makeRange(CXCursor cursor)
+    {
+        auto start = clang_getRangeEnd(clang_Cursor_getSpellingNameRange(cursor, 0, 0));
+        auto end = clang_getRangeEnd(clang_getCursorExtent(cursor));
+        return RangeInRevision(ClangLocation(start), ClangLocation(end));
+    }
+
     template<DUContext::ContextType type>
     DUContext *createContextCommon(CXCursor cursor, DUContext *parentContext)
     {
-        auto range = ClangRange{clang_getCursorExtent(cursor)};
-        auto context = new DUContext(range.toRangeInRevision(), parentContext);
+        auto context = new DUContext(makeRange(cursor), parentContext);
         DUChainWriteLocker lock; //TODO: (..type..) constructor for DUContext?
         context->setType(type);
         clang_visitChildren(cursor, &::visit, context);
@@ -22,8 +28,7 @@ namespace ContextBuilder {
     template<DUContext::ContextType type>
     DUContext *createContextCommon(CXCursor cursor, Identifier id, DUContext *parentContext)
     {
-        auto range = ClangRange{clang_getCursorExtent(cursor)};
-        auto context = new DUContext(range.toRangeInRevision(), parentContext);
+        auto context = new DUContext(makeRange(cursor), parentContext);
         DUChainWriteLocker lock; //TODO: (..type, id..) constructor for DUContext?
         context->setType(type);
         context->setLocalScopeIdentifier(parentContext->localScopeIdentifier() + id);

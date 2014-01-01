@@ -11,12 +11,17 @@ int foo()
 /// "useCount" : 2
 class SomeClass
 {
+public:
+    /// "useCount" : 3
+    int i;
+    /// "useCount" : 0
+    char foo();
 };
 
-/// "useCount" : 2
+/// "useCount" : 4
 namespace SomeNS
 {
-    /// "useCount" : 2
+    /// "useCount" : 3
     SomeClass someClass;
     /// "useCount" : 2
     int i = foo();
@@ -24,7 +29,9 @@ namespace SomeNS
 
 int main()
 {
-    SomeNS::i = i + foo();
+    SomeNS::i = i + foo() + SomeNS::someClass.i;
     using namespace SomeNS;
-    SomeClass user = SomeNS::someClass;
+    /// "useCount" : 1
+    SomeClass user = someClass;
+    user.i = someClass.i = SomeNS::i;
 }

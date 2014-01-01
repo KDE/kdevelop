@@ -1,6 +1,9 @@
 #include "clangtypes.h"
 
 #include <language/duchain/duchainlock.h>
+#include <language/duchain/indexedstring.h>
+#include <language/duchain/ducontext.h>
+#include <language/duchain/topducontext.h>
 
 namespace UseBuilder {
 

@@ -61,7 +61,7 @@ template<CXCursorKind kind> struct CursorBuilder<kind, CBT_Declaration> {
     static CXChildVisitResult build(CXCursor cursor, DUContext *parentContext) {
         Identifier id(IndexedString(ClangString(clang_getCursorSpelling(cursor))));
         DeclarationBuilder::build<kind>(cursor, id, parentContext);
-        return CXChildVisit_Continue; ///Hmm...
+        return CXChildVisit_Recurse;
     }
 };
 template<CXCursorKind kind> struct CursorBuilder<kind, CBT_Context> {
@@ -157,8 +157,9 @@ CXChildVisitResult visit(CXCursor cursor, CXCursor /*parent*/, CXClientData d)
                   clang_isCursorDefinition(cursor),
                   CBT_IdCtxtDecl, CBT_Declaration);
     UseCursorKind(CXCursor_NamespaceAlias, CBT_Declaration);
-    UseCursorKind(CXCursor_UsingDirective, CBT_Declaration); //Should we make a declaration or just a use?
-    UseCursorKind(CXCursor_UsingDeclaration, CBT_Declaration); //Should we make a declaration or just a use?
+    //Should we make a declaration for these, or just a use?
+    //UseCursorKind(CXCursor_UsingDirective, CBT_Declaration);
+    //UseCursorKind(CXCursor_UsingDeclaration, CBT_Declaration);
     UseCursorKind(CXCursor_TypeAliasDecl, CBT_Declaration);
     UseCursorKind(CXCursor_TypeRef, CBT_Use)
     UseCursorKind(CXCursor_CXXBaseSpecifier, CBT_Use)
