@@ -19,16 +19,10 @@
  *    Boston, MA 02110-1301, USA.
  */
 
-#include <unordered_map>
-
-#include <language/duchain/duchainlock.h>
-#include <language/duchain/declaration.h>
-#include <language/duchain/types/delayedtype.h>
-
 #include "buildduchainvisitor.h"
+#include "declarationbuilder.h"
+#include "contextbuilder.h"
 #include "clangtypes.h"
-
-using namespace KDevelop;
 
 QDebug &operator<<(QDebug &dbg, CXCursor cursor)
 {
@@ -42,140 +36,138 @@ QDebug &operator<<(QDebug &dbg, CXCursor cursor)
     return dbg;
 }
 
+
+using namespace KDevelop;
+
 namespace {
-    bool isSkipIntoKind(CXCursorKind kind)
-    {
-        switch (kind) {
-        case CXCursor_CompoundStmt:
-        case CXCursor_DeclStmt:
-        case CXCursor_CallExpr:
-        case CXCursor_UnexposedExpr:
-            return true;
-        default:
-            return false;
+
+enum CursorBuildType
+{
+    CBT_Declaration,
+    CBT_Context,
+    CBT_Use,
+    CBT_CtxtDecl,
+    CBT_IdCtxtDecl
+};
+
+template<CXCursorKind, CursorBuildType> struct CursorBuilder {
+    static CXChildVisitResult build(CXCursor cursor, DUContext *parentContext) {
+        Q_ASSERT(false);
+        return CXChildVisit_Break;
+    }
+};
+template<CXCursorKind kind> struct CursorBuilder<kind, CBT_Declaration> {
+    static CXChildVisitResult build(CXCursor cursor, DUContext *parentContext) {
+        Identifier id(IndexedString(ClangString(clang_getCursorSpelling(cursor))));
+        DeclarationBuilder::build<kind>(cursor, id, parentContext);
+        return CXChildVisit_Continue; ///Hmm...
+    }
+};
+template<CXCursorKind kind> struct CursorBuilder<kind, CBT_Context> {
+    static CXChildVisitResult build(CXCursor cursor, DUContext *parentContext) {
+        ContextBuilder::build<kind>(cursor, parentContext);
+        return CXChildVisit_Continue;
+    }
+};
+template<CXCursorKind kind> struct CursorBuilder<kind, CBT_Use> {
+    static CXChildVisitResult build(CXCursor cursor, DUContext *parentContext) {
+        //TODO...
+        return CXChildVisit_Continue;
+    }
+};
+template<CXCursorKind kind> struct CursorBuilder<kind, CBT_CtxtDecl> {
+    static CXChildVisitResult build(CXCursor cursor, DUContext *parentContext) {
+        Identifier id(IndexedString(ClangString(clang_getCursorSpelling(cursor))));
+        DeclarationBuilder::build<kind>(cursor, id,
+            ContextBuilder::build<kind>(cursor, parentContext), parentContext);
+        return CXChildVisit_Continue;
+    }
+};
+template<CXCursorKind kind> struct CursorBuilder<kind, CBT_IdCtxtDecl> {
+    static CXChildVisitResult build(CXCursor cursor, DUContext *parentContext) {
+        Identifier id(IndexedString(ClangString(clang_getCursorSpelling(cursor))));
+        DeclarationBuilder::build<kind>(cursor, id,
+            ContextBuilder::build<kind>(cursor, id, parentContext), parentContext);
+        return CXChildVisit_Continue;
+    }
+};
+
+}
+
+static CXChildVisitResult buildUseForCursor(CXCursor cursor, DUContext *parentContext)
+{
+    auto cursorKind = clang_getCursorKind(cursor);
+    auto isRefExpr = cursorKind == CXCursor_DeclRefExpr || cursorKind == CXCursor_MemberRefExpr;
+    if (!clang_isReference(cursorKind) && !isRefExpr)
+        return CXChildVisit_Break;
+
+    auto referenced = clang_getCursorReferenced(cursor);
+    auto refLoc = clang_getCursorLocation(referenced);
+    CXFile file;
+    clang_getFileLocation(refLoc, &file, nullptr, nullptr, nullptr);
+    auto url = IndexedString(ClangString(clang_getFileName(file)));
+    auto refCursor = CursorInRevision(ClangLocation(refLoc));
+
+    //TODO: handle uses of declarations in other topContexts
+    DUChainWriteLocker lock;
+    TopDUContext *top = parentContext->topContext();
+    if (DUContext *local = top->findContextAt(refCursor)) {
+        if (Declaration *used = local->findDeclarationAt(refCursor)) {
+            auto usedIndex = top->indexForUsedDeclaration(used);
+            auto useRange = ClangRange(clang_getCursorReferenceNameRange(cursor, CXNameRange_WantSinglePiece, 0));
+            parentContext->createUse(usedIndex, useRange.toRangeInRevision());
         }
     }
 
-    DUContext *buildContextForCursor(CXCursor cursor, KDevelop::DUContext *parentContext)
+    return isRefExpr ? CXChildVisit_Recurse : CXChildVisit_Continue;
+}
+
+CXChildVisitResult visit(CXCursor cursor, CXCursor /*parent*/, CXClientData d)
+{
+    auto parentContext = static_cast<DUContext*>(d);
+
+    CXChildVisitResult useResult = buildUseForCursor(cursor, parentContext);
+    if (useResult != CXChildVisit_Break)
+        return useResult;
+
+    //Use to map cursor kinds to build profiles
+    #define UseCursorKind(CursorKind, CursorBuildType)\
+    case CursorKind: return CursorBuilder<CursorKind, CursorBuildType>::build(cursor, parentContext);
+
+    //Use to map cursor kinds that can be either declarations or definitions to alternate profiles
+    #define UseCursorDeclDef(CursorKind, CursorBuildTypeDecl, CursorBuildTypeDef)\
+    case CursorKind: return clang_isCursorDefinition(cursor) ?\
+        CursorBuilder<CursorKind, CursorBuildTypeDef>::build(cursor, parentContext) :\
+        CursorBuilder<CursorKind, CursorBuildTypeDecl>::build(cursor, parentContext);
+    switch (clang_getCursorKind(cursor))
     {
-        auto type = DUContext::Other;
-        switch(clang_getCursorKind(cursor))
-        {
-        case CXCursor_ClassDecl:
-        case CXCursor_StructDecl:
-            type = DUContext::Class;
-            break;
-        case CXCursor_Namespace:
-            type = DUContext::Namespace;
-            break;
-        case CXCursor_EnumDecl:
-            type = DUContext::Enum;
-            break;
-        case CXCursor_FunctionDecl:
-        case CXCursor_CXXMethod:
-            if (clang_isCursorDefinition(cursor))
-                break;
-            //fall-through
-        default:
-            return nullptr;
-        }
-        auto range = ClangRange{clang_getCursorExtent(cursor)};
-
-        DUChainWriteLocker lock;
-        auto context = new DUContext(range.toRangeInRevision(), parentContext);
-        context->setType(type);
-        return context;
-    }
-
-    AbstractType::Ptr buildTypeForCursor(CXCursor cursor)
-    {
-        auto type = clang_getCursorType(cursor);
-        auto identifier = IndexedTypeIdentifier(QString(ClangString(clang_getTypeSpelling(type))));
-
-        DelayedType *delayedType = new DelayedType;
-        delayedType->setIdentifier(identifier);
-        delayedType->setKind(DelayedType::Unresolved);
-        return AbstractType::Ptr(delayedType);
-    }
-
-    QByteArray buildComment(const CXComment &comment)
-    {
-        auto kind = clang_Comment_getKind(comment);
-        if (kind == CXComment_Text)
-            return QByteArray(ClangString(clang_TextComment_getText(comment)));
-
-        QByteArray text;
-        int numChildren = clang_Comment_getNumChildren(comment);
-        for (int i = 0; i < numChildren; ++i)
-            text += buildComment(clang_Comment_getChild(comment, i));
-        return text;
-    }
-
-    Declaration *buildDeclarationForCursor(CXCursor cursor, KDevelop::DUContext *parentContext, KDevelop::DUContext *internalContext)
-    {
-        if (!clang_isDeclaration(clang_getCursorKind(cursor)))
-            return nullptr;
-
-        auto range = ClangRange(clang_Cursor_getSpellingNameRange(cursor, 0, 0)).toRangeInRevision();
-        auto identifier = Identifier(IndexedString(ClangString(clang_getCursorSpelling(cursor))));
-        auto comment = buildComment(clang_Cursor_getParsedComment(cursor));
-        auto type = buildTypeForCursor(cursor);
-
-        DUChainWriteLocker lock;
-        auto decl = new KDevelop::Declaration(range, parentContext);
-        decl->setComment(comment);
-        decl->setIdentifier(identifier);
-        decl->setInternalContext(internalContext);
-        decl->setAbstractType(type);
-        return decl;
-    }
-
-    CXChildVisitResult buildUseForCursor(CXCursor cursor, DUContext *parentContext)
-    {
-        auto cursorKind = clang_getCursorKind(cursor);
-        auto isRefExpr = cursorKind == CXCursor_DeclRefExpr || cursorKind == CXCursor_MemberRefExpr;
-        if (!clang_isReference(cursorKind) && !isRefExpr)
-            return CXChildVisit_Break;
-
-        auto referenced = clang_getCursorReferenced(cursor);
-        auto refLoc = clang_getCursorLocation(referenced);
-        CXFile file;
-        clang_getFileLocation(refLoc, &file, nullptr, nullptr, nullptr);
-        auto url = IndexedString(ClangString(clang_getFileName(file)));
-        auto refCursor = CursorInRevision(ClangLocation(refLoc));
-
-        //TODO: handle uses of declarations in other topContexts
-        DUChainWriteLocker lock;
-        TopDUContext *top = parentContext->topContext();
-        if (DUContext *local = top->findContextAt(refCursor)) {
-            if (Declaration *used = local->findDeclarationAt(refCursor)) {
-                auto usedIndex = top->indexForUsedDeclaration(used);
-                auto useRange = ClangRange(clang_getCursorReferenceNameRange(cursor, CXNameRange_WantSinglePiece, 0));
-                parentContext->createUse(usedIndex, useRange.toRangeInRevision());
-            }
-        }
-
-        return isRefExpr ? CXChildVisit_Recurse : CXChildVisit_Continue;
-    }
-
-    CXChildVisitResult visit(CXCursor cursor, CXCursor /*parent*/, CXClientData d)
-    {
-        if (isSkipIntoKind(clang_getCursorKind(cursor)))
-            return CXChildVisit_Recurse;
-
-        auto parentContext = static_cast<DUContext*>(d);
-
-        CXChildVisitResult useResult = buildUseForCursor(cursor, parentContext);
-        if (useResult != CXChildVisit_Break)
-            return useResult;
-
-        auto context = buildContextForCursor(cursor, parentContext);
-        if (context)
-            clang_visitChildren(cursor, &::visit, context);
-
-        buildDeclarationForCursor(cursor, parentContext, context);
-
-        return context ? CXChildVisit_Continue : CXChildVisit_Recurse;
+    UseCursorKind(CXCursor_UnexposedDecl, CBT_Declaration);
+    UseCursorDeclDef(CXCursor_StructDecl, CBT_Declaration, CBT_IdCtxtDecl);
+    UseCursorDeclDef(CXCursor_UnionDecl, CBT_Declaration, CBT_IdCtxtDecl);
+    UseCursorDeclDef(CXCursor_ClassDecl, CBT_Declaration, CBT_IdCtxtDecl);
+    UseCursorDeclDef(CXCursor_EnumDecl, CBT_Declaration, CBT_IdCtxtDecl);
+    UseCursorKind(CXCursor_FieldDecl, CBT_Declaration);
+    UseCursorKind(CXCursor_EnumConstantDecl, CBT_Declaration);
+    UseCursorDeclDef(CXCursor_FunctionDecl, CBT_Declaration, CBT_CtxtDecl);
+    UseCursorKind(CXCursor_VarDecl, CBT_Declaration);
+    UseCursorKind(CXCursor_ParmDecl, CBT_Declaration);
+    UseCursorKind(CXCursor_TypedefDecl, CBT_Declaration);
+    UseCursorDeclDef(CXCursor_CXXMethod, CBT_Declaration, CBT_CtxtDecl);
+    UseCursorKind(CXCursor_Namespace, CBT_IdCtxtDecl);
+    UseCursorDeclDef(CXCursor_Constructor, CBT_Declaration, CBT_CtxtDecl);
+    UseCursorDeclDef(CXCursor_Destructor, CBT_Declaration, CBT_CtxtDecl);
+    UseCursorDeclDef(CXCursor_ConversionFunction, CBT_Declaration, CBT_CtxtDecl);
+    UseCursorKind(CXCursor_TemplateTypeParameter, CBT_Declaration);
+    UseCursorKind(CXCursor_NonTypeTemplateParameter, CBT_Declaration);
+    UseCursorKind(CXCursor_TemplateTemplateParameter, CBT_Declaration);
+    UseCursorDeclDef(CXCursor_FunctionTemplate, CBT_Declaration, CBT_CtxtDecl);
+    UseCursorDeclDef(CXCursor_ClassTemplate, CBT_Declaration, CBT_IdCtxtDecl);
+    UseCursorDeclDef(CXCursor_ClassTemplatePartialSpecialization, CBT_Declaration, CBT_IdCtxtDecl);
+    UseCursorKind(CXCursor_NamespaceAlias, CBT_Declaration);
+    UseCursorKind(CXCursor_UsingDirective, CBT_Declaration); //Should we make a declaration or just a use?
+    UseCursorKind(CXCursor_UsingDeclaration, CBT_Declaration); //Should we make a declaration or just a use?
+    UseCursorKind(CXCursor_TypeAliasDecl, CBT_Declaration);
+    default: return CXChildVisit_Recurse;
     }
 }
 
