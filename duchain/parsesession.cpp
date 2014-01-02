@@ -45,7 +45,7 @@ ParseSession::ParseSession(const IndexedString& url, const QByteArray& contents,
         | CXTranslationUnit_CXXChainedPCH
         | CXTranslationUnit_ForSerialization;
 
-    QVector<const char*> args{ "-std=c++11", "-x", "c++" };
+    QVector<const char*> args{ "-std=c++11", "-xc++" };
     // uses QByteArray as smart-pointer for const char* ownership
     QVector<QByteArray> otherArgs;
     otherArgs.reserve(includes.size() + defines.size());
