@@ -228,7 +228,7 @@ bool KDevelop::BreakpointModel::removeRows(int row, int count, const QModelIndex
 int KDevelop::BreakpointModel::rowCount(const QModelIndex& parent) const
 {
     if (!parent.isValid()) {
-        return m_breakpoints.count() + 1;
+        return m_breakpoints.count();
     }
     return 0;
 }
@@ -241,25 +241,6 @@ int KDevelop::BreakpointModel::columnCount(const QModelIndex& parent) const
 
 QVariant BreakpointModel::data(const QModelIndex& index, int role) const
 {
-    if (!index.parent().isValid() && index.row() == m_breakpoints.count()) {
-        if (index.column() != Breakpoint::LocationColumn) {
-            if (role == Qt::DisplayRole) {
-                return QString();
-            } else {
-                return QVariant();
-            }
-        }
-
-        if (role == Qt::DisplayRole)
-            return i18n("Double-click to create new code breakpoint");
-        if (role == Qt::ForegroundRole)
-            // FIXME: returning hardcoded gray is bad,
-            // but we don't have access to any widget, or pallette
-            // thereof, at this point.
-            return QColor(128, 128, 128);
-        if (role == Qt::EditRole)
-            return QString();
-    }
     if (!index.parent().isValid() && index.row() < m_breakpoints.count()) {
         return m_breakpoints.at(index.row())->data(index.column(), role);
     }
@@ -268,21 +249,10 @@ QVariant BreakpointModel::data(const QModelIndex& index, int role) const
 
 bool KDevelop::BreakpointModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
-    if (!index.parent().isValid() && index.row() == m_breakpoints.count()
-        && role == Qt::EditRole
-        && (index.column() == Breakpoint::LocationColumn || index.column() == Breakpoint::ConditionColumn)
-        && !value.toString().isEmpty())
-    {
-        /* Helper breakpoint becomes a real breakpoint only if user types
-        some real location.  */
-        addCodeBreakpoint(); //setData below is called
-    }
-
     if (!index.parent().isValid() && index.row() < m_breakpoints.count() && (role == Qt::EditRole || role == Qt::CheckStateRole)) {
         return m_breakpoints.at(index.row())->setData(index.column(), value);
     }
     return false;
-
 }
 
 void BreakpointModel::markChanged(

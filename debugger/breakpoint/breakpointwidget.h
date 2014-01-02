@@ -26,6 +26,7 @@
 #include <QtGui/QWidget>
 #include "../debuggerexport.h"
 
+class QAbstractProxyModel;
 class QModelIndex;
 class QItemSelection;
 class QTableView;
@@ -58,6 +59,7 @@ private Q_SLOTS:
     void slotAddBlankAccessWatchpoint();
     void slotRemoveBreakpoint();
     void slotUpdateBreakpointDetail();
+    void slotDataInserted(int column, const QVariant& value);
     void slotOpenFile(const QModelIndex& breakpointIdx);
     void breakpointError(KDevelop::Breakpoint *b, const QString& msg, int column);
     void breakpointHit(KDevelop::Breakpoint *b);
@@ -75,6 +77,7 @@ private:
     QAction* breakpointDisableAll_;
     QAction* breakpointEnableAll_;
     QAction* breakpointRemoveAll_;
+    QAbstractProxyModel* m_proxyModel;
 };
 
 }
