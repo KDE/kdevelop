@@ -661,7 +661,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePath(const QString& file
   absoluteFile = u.toLocalFile();
 
   int dot;
-  if ((dot = file.lastIndexOf('.') == -1)) {
+  if ((dot = file.lastIndexOf('.')) == -1) {
     if (!resultOnFail.errorMessage.isEmpty() || !resultOnFail.paths.isEmpty())
       return resultOnFail;
     else
@@ -776,7 +776,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePathInternal(const QStri
   if (!fullOutput.contains(includeRx)) {
     QRegExp makeRx("\\bmake\\s");
     int offset = 0;
-    while ((offset = makeRx.indexIn(firstLine, offset) != -1)) {
+    while ((offset = makeRx.indexIn(firstLine, offset)) != -1) {
       QString prefix = firstLine.left(offset).trimmed();
       if (prefix.endsWith("&&") || prefix.endsWith(';') || prefix.isEmpty()) {
         QString newWorkingDirectory = workingDirectory;
@@ -848,7 +848,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePathInternal(const QStri
 
   int offset = 0;
 
-  while ((offset = includeRx.indexIn(fullOutput, offset) != -1)) {
+  while ((offset = includeRx.indexIn(fullOutput, offset)) != -1) {
     offset += 1; ///The previous white space
     int pathOffset = 2;
     if (fullOutput[offset+1] == '-') {
