@@ -30,7 +30,7 @@
 class KDEVCLANGDUCHAIN_EXPORT BuildDUChainVisitor
 {
 public:
-  void visit(CXTranslationUnit unit, KDevelop::ReferencedTopDUContext top);
+    void visit(CXTranslationUnit unit, KDevelop::ReferencedTopDUContext top);
 };
 
 #endif // BUILDDUCHAINVISITOR_H

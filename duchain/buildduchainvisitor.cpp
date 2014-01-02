@@ -37,7 +37,6 @@ QDebug &operator<<(QDebug &dbg, CXCursor cursor)
     return dbg;
 }
 
-
 using namespace KDevelop;
 
 namespace {
@@ -57,6 +56,7 @@ template<CXCursorKind, CursorBuildType> struct CursorBuilder {
         return CXChildVisit_Break;
     }
 };
+
 template<CXCursorKind kind> struct CursorBuilder<kind, CBT_Declaration> {
     static CXChildVisitResult build(CXCursor cursor, DUContext *parentContext) {
         Identifier id(IndexedString(ClangString(clang_getCursorSpelling(cursor))));
@@ -64,17 +64,20 @@ template<CXCursorKind kind> struct CursorBuilder<kind, CBT_Declaration> {
         return CXChildVisit_Recurse;
     }
 };
+
 template<CXCursorKind kind> struct CursorBuilder<kind, CBT_Context> {
     static CXChildVisitResult build(CXCursor cursor, DUContext *parentContext) {
         ContextBuilder::build<kind>(cursor, parentContext);
         return CXChildVisit_Continue;
     }
 };
+
 template<CXCursorKind kind> struct CursorBuilder<kind, CBT_Use> {
     static CXChildVisitResult build(CXCursor cursor, DUContext *parentContext) {
         return UseBuilder::build<kind>(cursor, parentContext);
     }
 };
+
 template<CXCursorKind kind> struct CursorBuilder<kind, CBT_CtxtDecl> {
     static CXChildVisitResult build(CXCursor cursor, DUContext *parentContext) {
         Identifier id(IndexedString(ClangString(clang_getCursorSpelling(cursor))));
@@ -83,6 +86,7 @@ template<CXCursorKind kind> struct CursorBuilder<kind, CBT_CtxtDecl> {
         return CXChildVisit_Continue;
     }
 };
+
 template<CXCursorKind kind> struct CursorBuilder<kind, CBT_IdCtxtDecl> {
     static CXChildVisitResult build(CXCursor cursor, DUContext *parentContext) {
         Identifier id(IndexedString(ClangString(clang_getCursorSpelling(cursor))));
