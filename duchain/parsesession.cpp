@@ -50,8 +50,7 @@ ParseSession::ParseSession(const IndexedString& url, const QByteArray& contents,
     QVector<QByteArray> otherArgs;
     otherArgs.reserve(includes.size() + defines.size());
     foreach (const KUrl& url, includes) {
-        QByteArray path = url.toLocalFile().toUtf8();
-        path.prepend("-I");
+        QByteArray path = QString("-I" + url.toLocalFile()).toUtf8();
         otherArgs << path;
         args << path.constData();
     }
