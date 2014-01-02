@@ -30,7 +30,8 @@ namespace UseBuilder {
         }
     }
 
-    template<CXCursorKind kind> CXChildVisitResult build(CXCursor, DUContext*) { Q_ASSERT(false); return nullptr; }
+    template<CXCursorKind kind> CXChildVisitResult build(CXCursor, DUContext*) = delete;
+
     #define AddUseBuilder(CursorKind, Ret)\
     template<> CXChildVisitResult build<CursorKind>(CXCursor cursor, DUContext *parentContext)\
     { createUseCommon(cursor, parentContext); return Ret; }

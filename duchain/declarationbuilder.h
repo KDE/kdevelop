@@ -73,12 +73,14 @@ template<class T> T *createCtxtDecl(CXCursor cursor, const Identifier& id, DUCon
     return decl;
 }
 
-template<CXCursorKind> Declaration *build(CXCursor, const Identifier&, DUContext*) { Q_ASSERT(false); return nullptr; }
+template<CXCursorKind> Declaration *build(CXCursor, const Identifier&, DUContext*) = delete;
+
 #define AddDeclarationBuilder(CK, DT) \
 template<> Declaration *build<CK>(CXCursor c, const Identifier& i, DUContext *p)\
 { return createDecl<DT>(c, i, p); }
 
-template<CXCursorKind> Declaration *build(CXCursor, const Identifier&, DUContext*, DUContext *) { Q_ASSERT(false); return nullptr; };
+template<CXCursorKind> Declaration *build(CXCursor, const Identifier&, DUContext*, DUContext *) = delete;
+
 #define AddCtxtDeclBuilder(CK, DT)\
 template<> Declaration *build<CK>(CXCursor c, const Identifier& id, DUContext *ic, DUContext *p)\
 { return createCtxtDecl<DT>(c, id, ic, p); }
