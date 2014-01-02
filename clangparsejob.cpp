@@ -90,6 +90,7 @@ void ClangParseJob::run()
         ParsingEnvironmentFile *file = new ParsingEnvironmentFile(document());
         file->setLanguage(ParseSession::languageString());
         context = new TopDUContext(document(), RangeInRevision(0, 0, INT_MAX, INT_MAX), file);
+        context->setProblems(session.problems());
         DUChain::self()->addDocumentChain(context);
     } else {
         //TODO: update existing contexts
