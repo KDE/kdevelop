@@ -36,7 +36,7 @@ inline RangeInRevision makeRange(CXCursor cursor)
 {
     auto start = clang_getRangeEnd(clang_Cursor_getSpellingNameRange(cursor, 0, 0));
     auto end = clang_getRangeEnd(clang_getCursorExtent(cursor));
-    return RangeInRevision(ClangLocation(start), ClangLocation(end));
+    return {ClangLocation(start), ClangLocation(end)};
 }
 
 template<DUContext::ContextType type>

@@ -37,7 +37,7 @@ inline QByteArray buildComment(CXComment comment)
 {
     auto kind = clang_Comment_getKind(comment);
     if (kind == CXComment_Text)
-        return QByteArray(ClangString(clang_TextComment_getText(comment)));
+        return {ClangString(clang_TextComment_getText(comment))};
 
     QByteArray text;
     int numChildren = clang_Comment_getNumChildren(comment);
