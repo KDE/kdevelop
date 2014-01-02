@@ -21,13 +21,10 @@
 #define KDEVPLATFORM_IDENTIFIER_H
 
 #include <QtCore/QList>
-#include <QtCore/QStack>
 #include <QtCore/QStringList>
 #include <QtCore/QMetaType>
 #include <util/kdevvarlengtharray.h>
 #include <config-kdevplatform.h>
-
-#include <ksharedptr.h>
 
 #include "../languageexport.h"
 #include "referencecounting.h"

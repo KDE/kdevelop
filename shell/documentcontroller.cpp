@@ -65,7 +65,6 @@ Boston, MA 02110-1301, USA.
 #include <vcs/models/vcsannotationmodel.h>
 #include <vcs/vcsjob.h>
 
-#include <config-kdevplatform.h>
 #include <language/backgroundparser/backgroundparser.h>
 
 #define EMPTY_DOCUMENT_URL i18n("Untitled")
