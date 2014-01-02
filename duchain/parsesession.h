@@ -69,6 +69,8 @@ public:
     bool reparse(const QByteArray& contents,
                  const KUrl::List& includes = {}, const QHash<QString, QString>& defines = {});
 
+    QVector<QByteArray> includedFiles() const;
+
     using TopAstNode = CXTranslationUnit;
 
 private:

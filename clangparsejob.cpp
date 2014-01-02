@@ -173,8 +173,14 @@ void ClangParseJob::run()
         Q_ASSERT(session->unit());
     }
 
-    if (abortRequested()) {
+    if (abortRequested() || !session->unit()) {
         return;
+    }
+
+    foreach(const QByteArray& file, session->includedFiles()) {
+        // TODO: ensure we have a DUChain created for this file
+        // otherwise uses will not get reported properly
+        qDebug() << file;
     }
 
     if (!context) {
