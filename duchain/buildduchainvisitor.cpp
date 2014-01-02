@@ -51,75 +51,97 @@ enum CursorBuildType
     CBT_IdCtxtDecl
 };
 
+struct ClientData
+{
+    ParseSession* session;
+    DUContext* parent;
+};
+
+CXChildVisitResult visit(CXCursor cursor, CXCursor /*parent*/, CXClientData d);
+
+CXChildVisitResult recurse(CXCursor cursor, ClientData* data, DUContext* context)
+{
+    ClientData childData{data->session, context};
+    clang_visitChildren(cursor, &::visit, &childData);
+    return CXChildVisit_Continue;
+}
+
 template<CXCursorKind, CursorBuildType> struct CursorBuilder
 {
-    static CXChildVisitResult build(CXCursor cursor, DUContext *parentContext) = delete;
+    static CXChildVisitResult build(CXCursor cursor, ClientData* data) = delete;
 };
 
 template<CXCursorKind kind> struct CursorBuilder<kind, CBT_Declaration>
 {
-    static CXChildVisitResult build(CXCursor cursor, DUContext *parentContext)
+    static CXChildVisitResult build(CXCursor cursor, ClientData* data)
     {
         Identifier id(IndexedString(ClangString(clang_getCursorSpelling(cursor))));
-        DeclarationBuilder::build<kind>(cursor, id, parentContext);
+        DeclarationBuilder::build<kind>(cursor, id, data->parent);
         return CXChildVisit_Recurse;
     }
 };
 
 template<CXCursorKind kind> struct CursorBuilder<kind, CBT_Context>
 {
-    static CXChildVisitResult build(CXCursor cursor, DUContext *parentContext)
+    static CXChildVisitResult build(CXCursor cursor, ClientData* data)
     {
-        ContextBuilder::build<kind>(cursor, parentContext);
-        return CXChildVisit_Continue;
+        auto ctx = ContextBuilder::build<kind>(cursor, data->parent);
+        return recurse(cursor, data, ctx);
     }
 };
 
 template<CXCursorKind kind> struct CursorBuilder<kind, CBT_Use>
 {
-    static CXChildVisitResult build(CXCursor cursor, DUContext *parentContext)
+    static CXChildVisitResult build(CXCursor cursor, ClientData* data)
     {
-        return UseBuilder::build<kind>(cursor, parentContext);
+        return UseBuilder::build<kind>(cursor, data->parent);
     }
 };
 
 template<CXCursorKind kind> struct CursorBuilder<kind, CBT_CtxtDecl>
 {
-    static CXChildVisitResult build(CXCursor cursor, DUContext *parentContext)
+    static CXChildVisitResult build(CXCursor cursor, ClientData* data)
     {
         Identifier id(IndexedString(ClangString(clang_getCursorSpelling(cursor))));
-        DeclarationBuilder::build<kind>(cursor, id,
-            ContextBuilder::build<kind>(cursor, parentContext), parentContext);
-        return CXChildVisit_Continue;
+        auto ctx = ContextBuilder::build<kind>(cursor, data->parent);
+        DeclarationBuilder::build<kind>(cursor, id, ctx, data->parent);
+        return recurse(cursor, data, ctx);
     }
 };
 
 template<CXCursorKind kind> struct CursorBuilder<kind, CBT_IdCtxtDecl>
 {
-    static CXChildVisitResult build(CXCursor cursor, DUContext *parentContext)
+    static CXChildVisitResult build(CXCursor cursor, ClientData* data)
     {
         Identifier id(IndexedString(ClangString(clang_getCursorSpelling(cursor))));
-        DeclarationBuilder::build<kind>(cursor, id,
-            ContextBuilder::build<kind>(cursor, id, parentContext), parentContext);
-        return CXChildVisit_Continue;
+        auto ctx = ContextBuilder::build<kind>(cursor, id, data->parent);
+        DeclarationBuilder::build<kind>(cursor, id, ctx, data->parent);
+        return recurse(cursor, data, ctx);
     }
 };
 
-}
-
 CXChildVisitResult visit(CXCursor cursor, CXCursor /*parent*/, CXClientData d)
 {
-    auto parentContext = static_cast<DUContext*>(d);
+    auto data = static_cast<ClientData*>(d);
+
+    auto location = clang_getCursorLocation(cursor);
+    CXFile file;
+    clang_getFileLocation(location, &file, nullptr, nullptr, nullptr);
+    if (file != data->session->file()) {
+        // TODO properly associate uses for types from included files
+        // TODO maybe build multiple top contexts in one go
+        return CXChildVisit_Continue;
+    }
 
     //Use to map cursor kinds to build profiles
     #define UseCursorKind(CursorKind, CursorBuildType)\
-    case CursorKind: return CursorBuilder<CursorKind, CursorBuildType>::build(cursor, parentContext);
+    case CursorKind: return CursorBuilder<CursorKind, CursorBuildType>::build(cursor, data);
 
     //Use to map cursor kinds conditionally
     #define UseCursorCond(CursorKind, Cond, TrueCBT, FalseCBT)\
     case CursorKind: return Cond ?\
-        CursorBuilder<CursorKind, TrueCBT>::build(cursor, parentContext) :\
-        CursorBuilder<CursorKind, FalseCBT>::build(cursor, parentContext);
+        CursorBuilder<CursorKind, TrueCBT>::build(cursor, data) :\
+        CursorBuilder<CursorKind, FalseCBT>::build(cursor, data);
 
     switch (clang_getCursorKind(cursor))
     {
@@ -188,8 +210,11 @@ CXChildVisitResult visit(CXCursor cursor, CXCursor /*parent*/, CXClientData d)
     }
 }
 
+}
+
 void BuildDUChainVisitor::visit(ParseSession* session, const ReferencedTopDUContext& top)
 {
+    ClientData data{session, top};
     auto cursor = clang_getTranslationUnitCursor(session->unit());
-    clang_visitChildren(cursor, &::visit, top.data());
+    clang_visitChildren(cursor, &::visit, &data);
 }

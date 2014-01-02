@@ -14,6 +14,18 @@ target_link_libraries(clang-parser
 
 ########### next target ###############
 
+kde4_add_unit_test(duchaintest
+    duchaintest.cpp
+)
+
+target_link_libraries(duchaintest
+    ${KDEVPLATFORM_TESTS_LIBRARIES}
+    ${QT_QTTEST_LIBRARY}
+    kdevclangduchain
+)
+
+########### next target ###############
+
 find_package(QJSON)
 if(QJSON_FOUND AND KDEVPLATFORM_JSONTESTS_LIBRARIES)
   set(filestest_SRCS test_files.cpp)

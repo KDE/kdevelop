@@ -26,8 +26,6 @@
 
 #include <language/duchain/duchainlock.h>
 
-extern CXChildVisitResult visit(CXCursor cursor, CXCursor /*parent*/, CXClientData d);
-
 namespace ContextBuilder {
 
 using namespace KDevelop;
@@ -43,11 +41,8 @@ template<DUContext::ContextType type>
 DUContext *createContextCommon(CXCursor cursor, DUContext* parentContext)
 {
     auto context = new DUContext(makeRange(cursor), parentContext);
-    {
-        DUChainWriteLocker lock; //TODO: (..type..) constructor for DUContext?
-        context->setType(type);
-    }
-    clang_visitChildren(cursor, &::visit, context);
+    DUChainWriteLocker lock; //TODO: (..type..) constructor for DUContext?
+    context->setType(type);
     return context;
 }
 
@@ -55,12 +50,9 @@ template<DUContext::ContextType type>
 DUContext *createContextCommon(CXCursor cursor, const Identifier& id, DUContext* parentContext)
 {
     auto context = new DUContext(makeRange(cursor), parentContext);
-    {
-        DUChainWriteLocker lock; //TODO: (..type, id..) constructor for DUContext?
-        context->setType(type);
-        context->setLocalScopeIdentifier(parentContext->localScopeIdentifier() + id);
-    }
-    clang_visitChildren(cursor, &::visit, context);
+    DUChainWriteLocker lock; //TODO: (..type, id..) constructor for DUContext?
+    context->setType(type);
+    context->setLocalScopeIdentifier(parentContext->localScopeIdentifier() + id);
     return context;
 }
 
