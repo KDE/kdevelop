@@ -77,6 +77,8 @@ ParseSession::ParseSession(const IndexedString& url, const QByteArray& contents,
 
     if (m_unit) {
         setUnit(m_unit, file.Filename);
+        m_includes = includes;
+        m_defines = defines;
     }
 }
 
@@ -105,9 +107,11 @@ CXFile ParseSession::file() const
     return m_file;
 }
 
-bool ParseSession::reparse(const QByteArray& contents)
+bool ParseSession::reparse(const QByteArray& contents, const KUrl::List& includes, const QHash<QString, QString>& defines)
 {
-    // TODO: different include paths/defines require a completely new parse
+    if (includes != m_includes || defines != m_defines) {
+        return false;
+    }
 
     // TODO: track other open unsaved files and add them here
     CXUnsavedFile file;

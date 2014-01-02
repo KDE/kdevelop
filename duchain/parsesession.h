@@ -66,7 +66,8 @@ public:
 
     CXFile file() const;
 
-    bool reparse(const QByteArray& contents);
+    bool reparse(const QByteArray& contents,
+                 const KUrl::List& includes = {}, const QHash<QString, QString>& defines = {});
 
     using TopAstNode = CXTranslationUnit;
 
@@ -77,6 +78,9 @@ private:
     QList<KDevelop::ProblemPointer> m_problems;
     CXTranslationUnit m_unit;
     CXFile m_file;
+
+    KUrl::List m_includes;
+    QHash<QString, QString> m_defines;
 };
 
 #endif // PARSESESSION_H
