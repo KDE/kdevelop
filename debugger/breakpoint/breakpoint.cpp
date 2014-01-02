@@ -116,7 +116,7 @@ QVariant Breakpoint::data(int column, int role) const
         if (role == Qt::CheckStateRole)
             return enabled_ ? Qt::Checked : Qt::Unchecked;
         else if (role == Qt::DisplayRole)
-            return "";
+            return QVariant();
         else
             return QVariant();
     }
@@ -139,20 +139,20 @@ QVariant Breakpoint::data(int column, int role) const
             }
         } else if (role == Qt::ToolTipRole) {
             if (!errors().isEmpty()) {
-                return i18nc("@info:tooltip", "error");
+                return i18nc("@info:tooltip", "Error");
             }
             switch (state()) {
                 case NotStartedState:
-                    return "";
+                    return QString();
                 case DirtyState:
-                    return i18nc("@info:tooltip", "dirty");
+                    return i18nc("@info:tooltip", "Dirty");
                 case PendingState:
-                    return i18nc("@info:tooltip", "pending");
+                    return i18nc("@info:tooltip", "Pending");
                 case CleanState:
-                    return i18nc("@info:tooltip", "clean");
+                    return i18nc("@info:tooltip", "Clean");
             }
         } else if (role == Qt::DisplayRole) {
-            return "";
+            return QVariant();
         }
         return QVariant();
     }

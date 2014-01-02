@@ -108,6 +108,7 @@ void BreakpointWidget::setupPopupMenu()
     popup_ = new QMenu(this);
 
     QMenu* newBreakpoint = popup_->addMenu( i18nc("New breakpoint", "&New") );
+    newBreakpoint->setIcon(KIcon("list-add"));
 
     QAction* action = newBreakpoint->addAction(
         i18nc("Code breakpoint", "&Code"),
@@ -119,13 +120,13 @@ void BreakpointWidget::setupPopupMenu()
     addAction(action);
 
     newBreakpoint->addAction(
-        i18nc("Data breakpoint", "Data &write"),
+        i18nc("Data breakpoint", "Data &Write"),
         this, SLOT(slotAddBlankWatchpoint()));
     newBreakpoint->addAction(
-        i18nc("Data read breakpoint", "Data &read"),
+        i18nc("Data read breakpoint", "Data &Read"),
         this, SLOT(slotAddBlankReadWatchpoint()));
     newBreakpoint->addAction(
-        i18nc("Data access breakpoint", "Data &access"),
+        i18nc("Data access breakpoint", "Data &Access"),
         this, SLOT(slotAddBlankAccessWatchpoint()));
 
     QAction* breakpointDelete = popup_->addAction(
@@ -139,9 +140,9 @@ void BreakpointWidget::setupPopupMenu()
 
 
     popup_->addSeparator();
-    breakpointDisableAll_ = popup_->addAction(i18n("Disable &all"), this, SLOT(slotDisableAllBreakpoints()));
-    breakpointEnableAll_ = popup_->addAction(i18n("&Enable all"), this, SLOT(slotEnableAllBreakpoints()));
-    breakpointRemoveAll_ = popup_->addAction(i18n("&Remove all"), this, SLOT(slotRemoveAllBreakpoints()));
+    breakpointDisableAll_ = popup_->addAction(i18n("Disable &All"), this, SLOT(slotDisableAllBreakpoints()));
+    breakpointEnableAll_ = popup_->addAction(i18n("&Enable All"), this, SLOT(slotEnableAllBreakpoints()));
+    breakpointRemoveAll_ = popup_->addAction(i18n("&Remove All"), this, SLOT(slotRemoveAllBreakpoints()));
 
     connect(popup_,SIGNAL(aboutToShow()), this, SLOT(slotPopupMenuAboutToShow()));
 }
