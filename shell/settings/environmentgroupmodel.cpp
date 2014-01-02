@@ -62,7 +62,7 @@ QVariant EnvironmentGroupModel::data( const QModelIndex& idx, int role ) const
 {
     if( !idx.isValid()
         || m_currentGroup.isEmpty()
-        || idx.row() < 0 || idx.row() >= rowCount(QModelIndex())
+        || idx.row() < 0 || idx.row() >= rowCount()
         || idx.column() < 0 || idx.column() >= columnCount(QModelIndex()) )
     {
         return QVariant();
@@ -102,7 +102,7 @@ QVariant EnvironmentGroupModel::headerData( int section, Qt::Orientation orienta
 bool EnvironmentGroupModel::setData( const QModelIndex& idx, const QVariant& data, int role )
 {
     if( !idx.isValid() || m_currentGroup.isEmpty()
-        || idx.row() < 0 || idx.row() >= rowCount(QModelIndex())
+        || idx.row() < 0 || idx.row() >= rowCount()
         || idx.column() < 0 || idx.column() >= columnCount(QModelIndex()) )
     {
         return false;
@@ -130,7 +130,7 @@ QModelIndex EnvironmentGroupModel::addVariable( const QString& var, const QStrin
         return index(pos, 0, QModelIndex()); // No duplicates
     }
 
-    const int insertPos = rowCount( QModelIndex() );
+    const int insertPos = rowCount();
     beginInsertRows( QModelIndex(), insertPos, insertPos );
     m_varsByIndex << var;
     variables( m_currentGroup ).insert( var, value );

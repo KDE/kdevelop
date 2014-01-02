@@ -91,7 +91,7 @@ void EnvironmentWidget::setActiveGroup( const QString& group )
 
 void EnvironmentWidget::enableDeleteButton()
 {
-    ui.deleteButton->setEnabled( groupModel->rowCount( QModelIndex() ) > 0 );
+    ui.deleteButton->setEnabled( groupModel->rowCount() > 0 );
 }
 
 void EnvironmentWidget::setAsDefault()
