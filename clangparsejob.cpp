@@ -106,7 +106,7 @@ void ClangParseJob::run()
         }
 
         BuildDUChainVisitor visitor;
-        visitor.visit(session.unit(), context);
+        visitor.visit(&session, context);
     }
 
     if (abortRequested()) {

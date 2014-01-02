@@ -24,6 +24,7 @@
 #include "contextbuilder.h"
 #include "usebuilder.h"
 #include "clangtypes.h"
+#include "parsesession.h"
 
 QDebug &operator<<(QDebug &dbg, CXCursor cursor)
 {
@@ -187,8 +188,8 @@ CXChildVisitResult visit(CXCursor cursor, CXCursor /*parent*/, CXClientData d)
     }
 }
 
-void BuildDUChainVisitor::visit(CXTranslationUnit unit, const ReferencedTopDUContext& top)
+void BuildDUChainVisitor::visit(ParseSession* session, const ReferencedTopDUContext& top)
 {
-    auto cursor = clang_getTranslationUnitCursor(unit);
+    auto cursor = clang_getTranslationUnitCursor(session->unit());
     clang_visitChildren(cursor, &::visit, top.data());
 }

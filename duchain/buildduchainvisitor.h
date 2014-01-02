@@ -24,16 +24,16 @@
 
 #include "duchainexport.h"
 
-#include <clang-c/Index.h>
-
 namespace KDevelop {
 class ReferencedTopDUContext;
 }
 
+class ParseSession;
+
 class KDEVCLANGDUCHAIN_EXPORT BuildDUChainVisitor
 {
 public:
-    void visit(CXTranslationUnit unit, const KDevelop::ReferencedTopDUContext& top);
+    void visit(ParseSession* session, const KDevelop::ReferencedTopDUContext& top);
 };
 
 #endif // BUILDDUCHAINVISITOR_H
