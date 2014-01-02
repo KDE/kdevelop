@@ -102,6 +102,9 @@ install( FILES
         "${KDevPlatform_BINARY_DIR}/kdevplatformversion.h"
         DESTINATION "${INCLUDE_INSTALL_DIR}/kdevplatform" )
 install( FILES
+        "${KDevPlatform_BINARY_DIR}/config-kdevplatform.h"
+        DESTINATION "${INCLUDE_INSTALL_DIR}/kdevplatform" )
+install( FILES
         "${KDevPlatform_BINARY_DIR}/KDevPlatformConfig.cmake"
         "${KDevPlatform_BINARY_DIR}/KDevPlatformConfigVersion.cmake"
         DESTINATION "${_kdevplatform_CONFIG_DEST}" )
