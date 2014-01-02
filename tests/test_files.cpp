@@ -43,6 +43,7 @@ QTEST_KDEMAIN(TestFiles, GUI)
 
 void TestFiles::initTestCase()
 {
+    QVERIFY(qputenv("KDEV_DISABLE_PLUGINS", "kdevcppsupport"));
     AutoTestShell::init();
     TestCore::initialize(Core::NoUi);
     DUChain::self()->disablePersistentStorage();
