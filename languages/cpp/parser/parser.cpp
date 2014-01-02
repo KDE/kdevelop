@@ -2172,10 +2172,8 @@ bool Parser::parseParameterDeclaration(ParameterDeclarationAST *&node)
   if (session->token_stream->lookAhead() == '=')
     {
       advance();
-      if (!parseLogicalOrExpression(expr,true))
-        {
-          //reportError(("Expression expected"));
-        }
+      //FIXME: this should actually be an InitializerClause as per http://www.nongnu.org/hcb/#parameter-declaration
+      parseLogicalOrExpression(expr, true) || parseBracedInitList(expr);
     }
 
   if( session->token_stream->lookAhead() != ',' && session->token_stream->lookAhead() != ')' && session->token_stream->lookAhead() != '>' )

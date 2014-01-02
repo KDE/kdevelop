@@ -414,6 +414,7 @@ void TestParser::testInitList_data()
   QTest::newRow("condition") << "void f() { if (std::complex<double> foo{1, 2}) {} }";
   QTest::newRow("temporary") << "auto s = std::string{};";
   QTest::newRow("temporary-template") << "auto c = std::complex<double>{1, 2};";
+  QTest::newRow("function-default-arg") << "void foo(bla arg = {}) {}";
 }
 
 void TestParser::testInitList()
