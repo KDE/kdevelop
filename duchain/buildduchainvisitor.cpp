@@ -51,10 +51,7 @@ enum CursorBuildType
 };
 
 template<CXCursorKind, CursorBuildType> struct CursorBuilder {
-    static CXChildVisitResult build(CXCursor cursor, DUContext *parentContext) {
-        Q_ASSERT(false);
-        return CXChildVisit_Break;
-    }
+    static CXChildVisitResult build(CXCursor cursor, DUContext *parentContext) = delete;
 };
 
 template<CXCursorKind kind> struct CursorBuilder<kind, CBT_Declaration> {
