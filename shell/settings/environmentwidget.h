@@ -56,7 +56,7 @@ Q_SIGNALS:
     void changed();
 
 private Q_SLOTS:
-    void handleVariableInserted(const QVariant& value);
+    void handleVariableInserted(int column, const QVariant& value);
     void deleteButtonClicked();
     void newMultipleButtonClicked();
     void addGroupClicked();

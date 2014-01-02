@@ -40,7 +40,7 @@ namespace KDevelop {
  * @code
  * PlaceholderItemProxyModel* proxyModel = new PlaceholderItemProxyModel;
  * proxyModel->setSourceModel(new MyItemModel);
- * proxyModel->setHint("(Add new entry)");
+ * proxyModel->setColumnHint(0, "(Add new entry)");
  * connect(proxyModel, SIGNAL(dataInserted(...), SLOT(handleDataInserted(...));
  * @endcode
  *
@@ -53,7 +53,8 @@ namespace KDevelop {
  *
  * In case the last entry is edited, and a non-empty value is supplied,
  * dataInserted() is emitted to notify the user about newly created rows.
- * The user then makes sure the requested change is handled in the source model.
+ * The user then has to make sure the signal is handled accordingly and
+ * new items are added to the source model.
  *
  * @see dataInserted
  *
@@ -68,11 +69,17 @@ public:
     explicit PlaceholderItemProxyModel(QObject* parent = 0);
     virtual ~PlaceholderItemProxyModel();
 
-    QVariant hint() const;
-    void setHint(const QVariant& hint);
+    QVariant columnHint(int column) const;
 
-    int hintColumn() const;
-    void setHintColumn(int column);
+    /**
+     * Set the hint value for @p column to @p hint
+     *
+     * This text is going to be displayed in the place holder item row
+     *
+     * Only columns with non-empty hints are clickable and editable and
+     * eventually cause the dataInserted() signal to be triggered
+     */
+    void setColumnHint(int column, const QVariant& hint);
 
     virtual void setSourceModel(QAbstractItemModel* sourceModel);
 
@@ -99,7 +106,7 @@ public:
     virtual bool validateRow(const QModelIndex& index, const QVariant& value) const;
 
 Q_SIGNALS:
-    void dataInserted(const QVariant& values);
+    void dataInserted(int column, const QVariant& values);
 
 private:
     struct Private;

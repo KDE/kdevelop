@@ -29,7 +29,6 @@ struct PlaceholderItemProxyModel::Private
 {
     Private(PlaceholderItemProxyModel* qq)
         : q(qq)
-        , m_hintColumn(0)
     {}
 
     inline int sourceRowCount()
@@ -47,8 +46,8 @@ struct PlaceholderItemProxyModel::Private
 
     PlaceholderItemProxyModel* const q;
 
-    QVariant m_hint;
-    int m_hintColumn;
+    /// column -> hint mapping
+    QMap<int, QVariant> m_columnHints;
 };
 
 PlaceholderItemProxyModel::PlaceholderItemProxyModel(QObject* parent)
@@ -60,27 +59,18 @@ PlaceholderItemProxyModel::~PlaceholderItemProxyModel()
 {
 }
 
-QVariant PlaceholderItemProxyModel::hint() const
+QVariant PlaceholderItemProxyModel::columnHint(int column) const
 {
-    return d->m_hint;
+    return d->m_columnHints.value(column);
 }
 
-void PlaceholderItemProxyModel::setHint(const QVariant& hint)
+void PlaceholderItemProxyModel::setColumnHint(int column, const QVariant& hint)
 {
-    d->m_hint = hint;
+    if (column < 0) {
+        return;
+    }
 
-    const int row = d->sourceRowCount();
-    emit dataChanged(index(row, 0), index(row, columnCount()));
-}
-
-int PlaceholderItemProxyModel::hintColumn() const
-{
-    return d->m_hintColumn;
-}
-
-void PlaceholderItemProxyModel::setHintColumn(int column)
-{
-    d->m_hintColumn = column;
+    d->m_columnHints[column] = hint;
 
     const int row = d->sourceRowCount();
     emit dataChanged(index(row, 0), index(row, columnCount()));
@@ -92,7 +82,7 @@ Qt::ItemFlags PlaceholderItemProxyModel::flags(const QModelIndex& index) const
         Qt::ItemFlags flags = Qt::ItemIsSelectable | Qt::ItemIsEnabled;
         const int column = index.column();
         // if the column doesn't provide a hint we assume that we can't edit this field
-        if (column == d->m_hintColumn) {
+        if (d->m_columnHints.contains(column)) {
             flags |= Qt::ItemIsEditable;
         }
         return flags;
@@ -124,9 +114,7 @@ QVariant PlaceholderItemProxyModel::data(const QModelIndex& proxyIndex, int role
     if (d->isPlaceholderRow(proxyIndex)) {
         switch (role) {
         case Qt::DisplayRole:
-            if (column == d->m_hintColumn) {
-                return d->m_hint;
-            }
+            return columnHint(column);
         case Qt::ForegroundRole: {
             const KColorScheme scheme(QPalette::Normal);
             return scheme.foreground(KColorScheme::InactiveText);
@@ -166,7 +154,7 @@ QModelIndex PlaceholderItemProxyModel::mapToSource(const QModelIndex& proxyIndex
 bool PlaceholderItemProxyModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
     const int column = index.column();
-    if (d->isPlaceholderRow(index) && role == Qt::EditRole && column == d->m_hintColumn) {
+    if (d->isPlaceholderRow(index) && role == Qt::EditRole && d->m_columnHints.contains(column)) {
         const bool accept = validateRow(index, value);
         // if validation fails, clear the complete line
         if (!accept) {
@@ -178,7 +166,7 @@ bool PlaceholderItemProxyModel::setData(const QModelIndex& index, const QVariant
         emit dataChanged(index, index);
 
         // notify observers
-        emit dataInserted(value);
+        emit dataInserted(column, value);
         return true;
     }
     return KIdentityProxyModel::setData(index, value, role);

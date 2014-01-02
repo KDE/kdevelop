@@ -54,8 +54,8 @@ EnvironmentWidget::EnvironmentWidget( QWidget *parent )
 
     PlaceholderItemProxyModel* topProxyModel  = new PlaceholderItemProxyModel(this);
     topProxyModel->setSourceModel(proxyModel);
-    topProxyModel->setHint(i18n("Enter variable ..."));
-    connect(topProxyModel, SIGNAL(dataInserted(QVariant)), SLOT(handleVariableInserted(QVariant)));
+    topProxyModel->setColumnHint(0, i18n("Enter variable ..."));
+    connect(topProxyModel, SIGNAL(dataInserted(int, QVariant)), SLOT(handleVariableInserted(int, QVariant)));
 
     ui.variableTable->setModel( topProxyModel );
     ui.variableTable->horizontalHeader()->setResizeMode( 1, QHeaderView::Stretch );
@@ -141,7 +141,7 @@ void EnvironmentWidget::deleteButtonClicked()
     groupModel->removeVariables(variables);
 }
 
-void EnvironmentWidget::handleVariableInserted(const QVariant& value)
+void EnvironmentWidget::handleVariableInserted(int /*column*/, const QVariant& value)
 {
     groupModel->addVariable(value.toString(), QString());
 }
