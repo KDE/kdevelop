@@ -149,8 +149,7 @@ public:
     QString toString() const;
 
 private:
-    Problem(const Problem& other) = delete;
-    Problem& operator=(const Problem& rhs) = delete;
+    Q_DISABLE_COPY(Problem);
     KSharedPtr< KDevelop::IAssistant > m_solution;
 
     DUCHAIN_DECLARE_DATA(Problem)
