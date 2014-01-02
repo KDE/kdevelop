@@ -1,6 +1,7 @@
 /**
  * "identifier" : "main",
- * "internalContext" : { "type" : "Other" }
+ * "internalContext" : { "type" : "Other" },
+ * "range" : "[(5, 4), (5, 8)]"
  */
 int main()
 {
