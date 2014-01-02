@@ -46,6 +46,7 @@ target_link_libraries(kdevclanglanguagesupport
     kdevclangduchain
 
     ${KDE4_THREADWEAVER_LIBS}
+    ${KDEVPLATFORM_PROJECT_LIBRARIES}
 )
 
 configure_file(kdevclangsupport.desktop.cmake ${CMAKE_BINARY_DIR}/kdevclangsupport.desktop)

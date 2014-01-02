@@ -24,7 +24,10 @@
 #define PARSESESSION_H
 
 #include <QList>
+
 #include <clang-c/Index.h>
+
+#include <KUrl>
 
 #include <language/duchain/indexedstring.h>
 #include <language/interfaces/iproblem.h>
@@ -47,7 +50,8 @@ public:
      * @param url The url for the document you want to parse.
      * @param contents The contents of the document you want to parse.
      */
-    ParseSession(const KDevelop::IndexedString& url, const QByteArray& contents, ClangIndex* index);
+    ParseSession(const KDevelop::IndexedString& url, const QByteArray& contents, ClangIndex* index,
+                 const KUrl::List& includes = {}, const QHash<QString, QString>& defines = {});
     ~ParseSession();
 
     /**

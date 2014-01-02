@@ -32,7 +32,8 @@ IndexedString ParseSession::languageString()
     return lang;
 }
 
-ParseSession::ParseSession(const IndexedString& url, const QByteArray& contents, ClangIndex* index)
+ParseSession::ParseSession(const IndexedString& url, const QByteArray& contents, ClangIndex* index,
+                           const KUrl::List& includes, const QHash<QString, QString>& defines)
     : m_url(url)
     , m_unit(0)
 {
@@ -43,18 +44,32 @@ ParseSession::ParseSession(const IndexedString& url, const QByteArray& contents,
         | CXTranslationUnit_CXXChainedPCH
         | CXTranslationUnit_ForSerialization;
 
-    static const int argsSize = 3;
-    static const char* args[argsSize] = { "-std=c++11", "-x", "c++" };
+    QVector<const char*> args{ "-std=c++11", "-x", "c++" };
+    // uses QByteArray as smart-pointer for const char* ownership
+    QVector<QByteArray> otherArgs;
+    otherArgs.reserve(includes.size() + defines.size());
+    foreach (const KUrl& url, includes) {
+        QByteArray path = url.toLocalFile().toUtf8();
+        path.prepend("-I");
+        otherArgs << path;
+        args << path.constData();
+    }
+    for (auto it = defines.begin(); it != defines.end(); ++it) {
+        QByteArray define = QString("-D" + it.key() + '=' + it.value()).toUtf8();
+        otherArgs << define;
+        args << define.constData();
+    }
 
     // TODO: track other open unsaved files and add them here
     CXUnsavedFile file;
     file.Contents = contents.constData();
     file.Length = contents.size();
-    file.Filename = url.c_str();
+    const auto path = url.byteArray();
+    file.Filename = path.constData();
 
     m_unit = clang_parseTranslationUnit(
         index->index(), file.Filename,
-        args, argsSize,
+        args.constData(), args.size(),
         &file, 1,
         flags
     );

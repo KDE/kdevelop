@@ -29,6 +29,11 @@
 #include <language/duchain/duchain.h>
 #include <language/duchain/parsingenvironment.h>
 #include <interfaces/ilanguage.h>
+#include <interfaces/icore.h>
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/iproject.h>
+#include <project/projectmodel.h>
+#include <project/interfaces/ibuildsystemmanager.h>
 
 #include "duchain/parsesession.h"
 #include "duchain/buildduchainvisitor.h"
@@ -43,6 +48,12 @@ using namespace KDevelop;
 ClangParseJob::ClangParseJob(const IndexedString& url, ILanguageSupport* languageSupport)
 : ParseJob(url, languageSupport)
 {
+    auto item = ICore::self()->projectController()->projectModel()->itemForUrl(url);
+    if (item && item->project()->buildSystemManager()) {
+        auto bsm = item->project()->buildSystemManager();
+        m_includes = bsm->includeDirectories(item);
+        m_defines = bsm->defines(item);
+    }
 }
 
 ClangLanguageSupport* ClangParseJob::clang() const
@@ -63,7 +74,7 @@ void ClangParseJob::run()
         return;
     }
 
-    ParseSession session(document(), contents().contents, clang()->index());
+    ParseSession session(document(), contents().contents, clang()->index(), m_includes, m_defines);
 
     if (abortRequested()) {
         return;

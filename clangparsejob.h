@@ -37,6 +37,10 @@ public:
 
 protected:
     virtual void run();
+
+private:
+    KUrl::List m_includes;
+    QHash<QString, QString> m_defines;
 };
 
 #endif // CLANGLANG_CLANGPARSEJOB_H
