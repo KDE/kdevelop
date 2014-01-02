@@ -152,24 +152,14 @@ void ClangParseJob::run()
     }
 
     KSharedPtr<ParseSession> session;
-
     ReferencedTopDUContext context;
+
     {
         DUChainReadLocker lock;
         context = DUChainUtils::standardContextForUrl(document().toUrl());
-    }
-
-    if (!context) {
-        DUChainWriteLocker lock;
-        ParsingEnvironmentFile *file = new ParsingEnvironmentFile(document());
-        file->setLanguage(ParseSession::languageString());
-        context = new TopDUContext(document(), RangeInRevision(0, 0, INT_MAX, INT_MAX), file);
-        DUChain::self()->addDocumentChain(context);
-    } else {
-        //TODO: update existing contexts
-        DUChainWriteLocker lock;
-        context->cleanIfNotEncountered({});
-        session = KSharedPtr<ParseSession>::dynamicCast(context->ast());
+        if (context) {
+            session = KSharedPtr<ParseSession>::dynamicCast(context->ast());
+        }
     }
 
     if (abortRequested()) {
@@ -185,6 +175,18 @@ void ClangParseJob::run()
 
     if (abortRequested()) {
         return;
+    }
+
+    if (!context) {
+        DUChainWriteLocker lock;
+        ParsingEnvironmentFile *file = new ParsingEnvironmentFile(document());
+        file->setLanguage(ParseSession::languageString());
+        context = new TopDUContext(document(), RangeInRevision(0, 0, INT_MAX, INT_MAX), file);
+        DUChain::self()->addDocumentChain(context);
+    } else {
+        //TODO: update existing contexts
+        DUChainWriteLocker lock;
+        context->cleanIfNotEncountered({});
     }
 
     setDuChain(context);
