@@ -43,39 +43,39 @@ QTEST_KDEMAIN(TestFiles, GUI)
 
 void TestFiles::initTestCase()
 {
-  AutoTestShell::init();
-  TestCore::initialize(Core::NoUi);
-  DUChain::self()->disablePersistentStorage();
-  Core::self()->languageController()->backgroundParser()->setDelay(0);
-  CodeRepresentation::setDiskChangesForbidden(true);
+    AutoTestShell::init();
+    TestCore::initialize(Core::NoUi);
+    DUChain::self()->disablePersistentStorage();
+    Core::self()->languageController()->backgroundParser()->setDelay(0);
+    CodeRepresentation::setDiskChangesForbidden(true);
 }
 
 void TestFiles::cleanupTestCase()
 {
-  TestCore::shutdown();
+    TestCore::shutdown();
 }
 
 void TestFiles::testFiles_data()
 {
-  QTest::addColumn<QString>("fileName");
-  const QString testDirPath = TEST_FILES_DIR;
-  const QStringList files = QDir(testDirPath).entryList({"*.h", "*.cpp"}, QDir::Files);
-  foreach (const QString& file, files) {
-    QTest::newRow(file.toUtf8()) << (testDirPath + '/' + file);
-  }
+    QTest::addColumn<QString>("fileName");
+    const QString testDirPath = TEST_FILES_DIR;
+    const QStringList files = QDir(testDirPath).entryList({"*.h", "*.cpp"}, QDir::Files);
+    foreach (const QString& file, files) {
+        QTest::newRow(file.toUtf8()) << (testDirPath + '/' + file);
+    }
 }
 
 void TestFiles::testFiles()
 {
-  QFETCH(QString, fileName);
-  const IndexedString indexedFileName(fileName);
-  ReferencedTopDUContext top =
-      DUChain::self()->waitForUpdate(indexedFileName, TopDUContext::AllDeclarationsContextsAndUses);
-  QVERIFY(top);
-  DUChainReadLocker lock;
-  DeclarationValidator validator;
-  top->visit(validator);
-  QVERIFY(validator.testsPassed());
+    QFETCH(QString, fileName);
+    const IndexedString indexedFileName(fileName);
+    ReferencedTopDUContext top =
+        DUChain::self()->waitForUpdate(indexedFileName, TopDUContext::AllDeclarationsContextsAndUses);
+    QVERIFY(top);
+    DUChainReadLocker lock;
+    DeclarationValidator validator;
+    top->visit(validator);
+    QVERIFY(validator.testsPassed());
 }
 
 #include "test_files.moc"
