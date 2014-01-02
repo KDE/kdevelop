@@ -54,6 +54,7 @@
  *   null : bool
  *   defaultParameter : string
  *   toString : string
+ *   range : string
  */
 
 namespace KDevelop
@@ -216,6 +217,19 @@ DeclarationTest(defaultParameter)
 DeclarationTest(toString)
 {
   return compareValues(decl->toString(), value, "Declaration's toString");
+}
+
+///JSON type: string
+///@returns stringified declaration
+DeclarationTest(range)
+{
+  auto range = decl->range();
+  QString string = QString("[(%1, %2), (%3, %4)]")
+    .arg(range.start.line)
+    .arg(range.start.column)
+    .arg(range.end.line)
+    .arg(range.end.column);
+  return compareValues(string, value, "Declaration's toString");
 }
 
 }
