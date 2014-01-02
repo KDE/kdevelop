@@ -82,7 +82,7 @@ void ClangParseJob::run()
         DUChain::self()->addDocumentChain(context);
     } else {
         //TODO: update existing contexts
-        KDevelop::DUChainWriteLocker lock;
+        DUChainWriteLocker lock;
         context->cleanIfNotEncountered({});
     }
     setDuChain(context);

@@ -44,7 +44,7 @@ QTEST_KDEMAIN(TestFiles, GUI)
 void TestFiles::initTestCase()
 {
   AutoTestShell::init();
-  TestCore::initialize(KDevelop::Core::NoUi);
+  TestCore::initialize(Core::NoUi);
   DUChain::self()->disablePersistentStorage();
   Core::self()->languageController()->backgroundParser()->setDelay(0);
   CodeRepresentation::setDiskChangesForbidden(true);
@@ -70,7 +70,7 @@ void TestFiles::testFiles()
   QFETCH(QString, fileName);
   const IndexedString indexedFileName(fileName);
   ReferencedTopDUContext top =
-      DUChain::self()->waitForUpdate(indexedFileName, KDevelop::TopDUContext::AllDeclarationsContextsAndUses);
+      DUChain::self()->waitForUpdate(indexedFileName, TopDUContext::AllDeclarationsContextsAndUses);
   QVERIFY(top);
   DUChainReadLocker lock;
   DeclarationValidator validator;
