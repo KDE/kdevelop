@@ -16,6 +16,8 @@
 
 //krazy:excludeall=dpointer,inline
 
+#include <config-kdevplatform.h>
+
 #include <QtCore/QMetaType>
 
 #include "../languageexport.h"
@@ -82,7 +84,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedString {
    */
   explicit IndexedString( const QByteArray& str );
 
-  IndexedString( IndexedString&& o ) noexcept
+  IndexedString( IndexedString&& o ) Q_DECL_NOEXCEPT
     : m_index(o.m_index)
   {
     o.m_index = 0;
@@ -166,7 +168,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedString {
 
   IndexedString& operator=(const IndexedString&);
 
-  IndexedString& operator=(IndexedString&& o) noexcept
+  IndexedString& operator=(IndexedString&& o) Q_DECL_NOEXCEPT
   {
     m_index = o.m_index;
     o.m_index = 0;
