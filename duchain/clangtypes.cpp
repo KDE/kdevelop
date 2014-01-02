@@ -81,6 +81,11 @@ ClangLocation::operator CursorInRevision() const
     return cursorForCXSrcLoc<CursorInRevision>(location);
 }
 
+ClangLocation::operator CXSourceLocation() const
+{
+    return location;
+}
+
 ClangLocation::~ClangLocation()
 {
 }

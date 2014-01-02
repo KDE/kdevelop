@@ -74,6 +74,8 @@ public:
 
     operator KDevelop::CursorInRevision() const;
 
+    operator CXSourceLocation() const;
+
 private:
     CXSourceLocation location;
 };

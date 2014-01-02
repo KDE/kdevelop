@@ -140,7 +140,7 @@ void ParseSession::setUnit(CXTranslationUnit unit, const char* fileName)
     for (uint i = 0; i < diagnostics; ++i) {
         auto diagnostic = clang_getDiagnostic(m_unit, i);
 
-        CXSourceLocation location = clang_getDiagnosticLocation(diagnostic);
+        ClangLocation location = clang_getDiagnosticLocation(diagnostic);
         CXFile diagnosticFile;
         clang_getFileLocation(location, &diagnosticFile, nullptr, nullptr, nullptr);
         if (diagnosticFile != m_file) {
@@ -162,11 +162,16 @@ void ParseSession::setUnit(CXTranslationUnit unit, const char* fileName)
         }
         ClangString description(clang_getDiagnosticSpelling(diagnostic));
         problem->setDescription(QString::fromUtf8(description));
-        const uint ranges = clang_getDiagnosticNumRanges(diagnostic);
-        if (ranges) {
-            ClangRange range = clang_getDiagnosticRange(diagnostic, 0);
-            problem->setFinalLocation(range.toDocumentRange());
+        DocumentRange docRange(m_url, SimpleRange(location, location));
+        const uint numRanges = clang_getDiagnosticNumRanges(diagnostic);
+        for (uint j = 0; j < numRanges; ++j) {
+            auto range = ClangRange(clang_getDiagnosticRange(diagnostic, j)).toSimpleRange();
+            if (range.start.line == docRange.start.line) {
+                docRange.start.column = qMin(range.start.column, docRange.start.column);
+                docRange.end.column = qMin(range.end.column, docRange.end.column);
+            }
         }
+        problem->setFinalLocation(docRange);
         problem->setSource(ProblemData::SemanticAnalysis);
         m_problems << problem;
         clang_disposeDiagnostic(diagnostic);
