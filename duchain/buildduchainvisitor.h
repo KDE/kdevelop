@@ -24,8 +24,11 @@
 
 #include "duchainexport.h"
 
-#include <language/duchain/topducontext.h>
 #include <clang-c/Index.h>
+
+namespace KDevelop {
+class ReferencedTopDUContext;
+}
 
 class KDEVCLANGDUCHAIN_EXPORT BuildDUChainVisitor
 {
