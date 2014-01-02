@@ -32,6 +32,7 @@ private slots:
     void cleanupTestCase();
 
     void testInclude();
+    void testReparse();
 };
 
 #endif // DUCHAINTEST_H

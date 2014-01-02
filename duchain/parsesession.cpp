@@ -35,7 +35,8 @@ IndexedString ParseSession::languageString()
 ParseSession::ParseSession(const IndexedString& url, const QByteArray& contents, ClangIndex* index,
                            const KUrl::List& includes, const QHash<QString, QString>& defines)
     : m_url(url)
-    , m_unit(0)
+    , m_unit(nullptr)
+    , m_file(nullptr)
 {
     static const unsigned int flags
         = CXTranslationUnit_CacheCompletionResults
@@ -74,45 +75,8 @@ ParseSession::ParseSession(const IndexedString& url, const QByteArray& contents,
         flags
     );
 
-    m_file = clang_getFile(m_unit, file.Filename);
-
     if (m_unit) {
-        const uint diagnostics = clang_getNumDiagnostics(m_unit);
-        m_problems.reserve(diagnostics);
-        for (uint i = 0; i < diagnostics; ++i) {
-            auto diagnostic = clang_getDiagnostic(m_unit, i);
-
-            CXSourceLocation location = clang_getDiagnosticLocation(diagnostic);
-            CXFile diagnosticFile;
-            clang_getFileLocation(location, &diagnosticFile, nullptr, nullptr, nullptr);
-            if (diagnosticFile != m_file) {
-                continue;
-            }
-
-            ProblemPointer problem(new Problem);
-            switch (clang_getDiagnosticSeverity(diagnostic)) {
-                case CXDiagnostic_Fatal:
-                case CXDiagnostic_Error:
-                    problem->setSeverity(ProblemData::Error);
-                    break;
-                case CXDiagnostic_Warning:
-                    problem->setSeverity(ProblemData::Warning);
-                    break;
-                default:
-                    problem->setSeverity(ProblemData::Hint);
-                    break;
-            }
-            ClangString description(clang_getDiagnosticSpelling(diagnostic));
-            problem->setDescription(QString::fromUtf8(description));
-            const uint ranges = clang_getDiagnosticNumRanges(diagnostic);
-            if (ranges) {
-                ClangRange range = clang_getDiagnosticRange(diagnostic, 0);
-                problem->setFinalLocation(range.toDocumentRange());
-            }
-            problem->setSource(ProblemData::SemanticAnalysis);
-            m_problems << problem;
-            clang_disposeDiagnostic(diagnostic);
-        }
+        setUnit(m_unit, file.Filename);
     }
 }
 
@@ -139,4 +103,69 @@ CXTranslationUnit ParseSession::unit() const
 CXFile ParseSession::file() const
 {
     return m_file;
+}
+
+bool ParseSession::reparse(const QByteArray& contents)
+{
+    // TODO: different include paths/defines require a completely new parse
+
+    // TODO: track other open unsaved files and add them here
+    CXUnsavedFile file;
+    file.Contents = contents.constData();
+    file.Length = contents.size();
+    const auto path = m_url.byteArray();
+    file.Filename = path.constData();
+
+    if (clang_reparseTranslationUnit(m_unit, 1, &file, clang_defaultReparseOptions(m_unit)) == 0) {
+        setUnit(m_unit, file.Filename);
+        return true;
+    } else {
+        return false;
+    }
+}
+
+void ParseSession::setUnit(CXTranslationUnit unit, const char* fileName)
+{
+    Q_ASSERT(!m_unit || unit == m_unit);
+
+    m_unit = unit;
+    m_file = clang_getFile(m_unit, fileName);
+
+    const uint diagnostics = clang_getNumDiagnostics(m_unit);
+    m_problems.clear();
+    m_problems.reserve(diagnostics);
+    for (uint i = 0; i < diagnostics; ++i) {
+        auto diagnostic = clang_getDiagnostic(m_unit, i);
+
+        CXSourceLocation location = clang_getDiagnosticLocation(diagnostic);
+        CXFile diagnosticFile;
+        clang_getFileLocation(location, &diagnosticFile, nullptr, nullptr, nullptr);
+        if (diagnosticFile != m_file) {
+            continue;
+        }
+
+        ProblemPointer problem(new Problem);
+        switch (clang_getDiagnosticSeverity(diagnostic)) {
+            case CXDiagnostic_Fatal:
+            case CXDiagnostic_Error:
+                problem->setSeverity(ProblemData::Error);
+                break;
+            case CXDiagnostic_Warning:
+                problem->setSeverity(ProblemData::Warning);
+                break;
+            default:
+                problem->setSeverity(ProblemData::Hint);
+                break;
+        }
+        ClangString description(clang_getDiagnosticSpelling(diagnostic));
+        problem->setDescription(QString::fromUtf8(description));
+        const uint ranges = clang_getDiagnosticNumRanges(diagnostic);
+        if (ranges) {
+            ClangRange range = clang_getDiagnosticRange(diagnostic, 0);
+            problem->setFinalLocation(range.toDocumentRange());
+        }
+        problem->setSource(ProblemData::SemanticAnalysis);
+        m_problems << problem;
+        clang_disposeDiagnostic(diagnostic);
+    }
 }

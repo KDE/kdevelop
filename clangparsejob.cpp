@@ -74,29 +74,42 @@ void ClangParseJob::run()
         return;
     }
 
-    ParseSession session(document(), contents().contents, clang()->index(), m_includes, m_defines);
-
-    if (abortRequested()) {
-        return;
-    }
+    KSharedPtr<ParseSession> session;
 
     ReferencedTopDUContext context;
     {
         DUChainReadLocker lock;
         context = DUChainUtils::standardContextForUrl(document().toUrl());
     }
+
     if (!context) {
         DUChainWriteLocker lock;
         ParsingEnvironmentFile *file = new ParsingEnvironmentFile(document());
         file->setLanguage(ParseSession::languageString());
         context = new TopDUContext(document(), RangeInRevision(0, 0, INT_MAX, INT_MAX), file);
-        context->setProblems(session.problems());
         DUChain::self()->addDocumentChain(context);
     } else {
         //TODO: update existing contexts
         DUChainWriteLocker lock;
         context->cleanIfNotEncountered({});
+        session = KSharedPtr<ParseSession>::dynamicCast(context->ast());
     }
+
+    if (abortRequested()) {
+        return;
+    }
+
+    if (!session || !session->reparse(contents().contents)) {
+        session = new ParseSession(document(), contents().contents, clang()->index(), m_includes, m_defines);
+    } else {
+        Q_ASSERT(session->url() == document());
+        Q_ASSERT(session->unit());
+    }
+
+    if (abortRequested()) {
+        return;
+    }
+
     setDuChain(context);
     {
         QReadLocker parseLock(languageSupport()->language()->parseLock());
@@ -106,7 +119,7 @@ void ClangParseJob::run()
         }
 
         BuildDUChainVisitor visitor;
-        visitor.visit(&session, context);
+        visitor.visit(session.data(), context);
     }
 
     if (abortRequested()) {
@@ -115,9 +128,9 @@ void ClangParseJob::run()
 
     {
         DUChainWriteLocker lock;
-        context->setProblems(session.problems());
-
+        context->setProblems(session->problems());
         context->setFeatures(minimumFeatures());
+        context->setAst(KSharedPtr<IAstContainer>::staticCast(session));
         ParsingEnvironmentFilePointer file = context->parsingEnvironmentFile();
         Q_ASSERT(file);
         file->setModificationRevision(contents().modification);
@@ -125,4 +138,3 @@ void ClangParseJob::run()
     }
     highlightDUChain();
 }
-

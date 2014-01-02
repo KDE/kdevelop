@@ -31,12 +31,13 @@
 
 #include <language/duchain/indexedstring.h>
 #include <language/interfaces/iproblem.h>
+#include <language/interfaces/iastcontainer.h>
 
 #include "duchainexport.h"
 
 class ClangIndex;
 
-class KDEVCLANGDUCHAIN_EXPORT ParseSession
+class KDEVCLANGDUCHAIN_EXPORT ParseSession : public KDevelop::IAstContainer
 {
 public:
     /**
@@ -65,7 +66,13 @@ public:
 
     CXFile file() const;
 
+    bool reparse(const QByteArray& contents);
+
+    using TopAstNode = CXTranslationUnit;
+
 private:
+    void setUnit(CXTranslationUnit unit, const char* fileName);
+
     KDevelop::IndexedString m_url;
     QList<KDevelop::ProblemPointer> m_problems;
     CXTranslationUnit m_unit;
