@@ -26,6 +26,26 @@
 
 using namespace KDevelop;
 
+namespace {
+CXUnsavedFile fileForContents(const QByteArray& path, const QByteArray& contents)
+{
+    CXUnsavedFile file;
+    file.Contents = contents.constData();
+    file.Length = contents.size();
+    // skip trailing zero-bytes added by KDevplatform which are reported by clang
+    for (uint pos = contents.size() - 1; pos > 0; --pos) {
+        if (file.Contents[pos] == '\0') {
+            --file.Length;
+        } else {
+            break;
+        }
+    }
+    file.Filename = path.constData();
+    return file;
+}
+
+}
+
 IndexedString ParseSession::languageString()
 {
     static const IndexedString lang("Clang");
@@ -61,11 +81,8 @@ ParseSession::ParseSession(const IndexedString& url, const QByteArray& contents,
     }
 
     // TODO: track other open unsaved files and add them here
-    CXUnsavedFile file;
-    file.Contents = contents.constData();
-    file.Length = contents.size();
     const auto path = url.byteArray();
-    file.Filename = path.constData();
+    auto file = fileForContents(path, contents);
 
     m_unit = clang_parseTranslationUnit(
         index->index(), file.Filename,
@@ -113,11 +130,8 @@ bool ParseSession::reparse(const QByteArray& contents, const KUrl::List& include
     }
 
     // TODO: track other open unsaved files and add them here
-    CXUnsavedFile file;
-    file.Contents = contents.constData();
-    file.Length = contents.size();
     const auto path = m_url.byteArray();
-    file.Filename = path.constData();
+    auto file = fileForContents(path, contents);
 
     if (clang_reparseTranslationUnit(m_unit, 1, &file, clang_defaultReparseOptions(m_unit)) == 0) {
         setUnit(m_unit, file.Filename);
