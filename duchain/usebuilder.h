@@ -38,6 +38,7 @@ inline void createUseCommon(CXCursor cursor, DUContext *parentContext)
     clang_getFileLocation(refLoc, &file, nullptr, nullptr, nullptr);
     auto url = IndexedString(ClangString(clang_getFileName(file)));
     auto refCursor = CursorInRevision(ClangLocation(refLoc));
+    auto useRange = ClangRange(clang_getCursorReferenceNameRange(cursor, CXNameRange_WantSinglePiece, 0)).toRangeInRevision();
 
     //TODO: handle uses of declarations in other topContexts
     DUChainWriteLocker lock;
@@ -45,8 +46,7 @@ inline void createUseCommon(CXCursor cursor, DUContext *parentContext)
     if (DUContext *local = top->findContextAt(refCursor)) {
         if (Declaration *used = local->findDeclarationAt(refCursor)) {
             auto usedIndex = top->indexForUsedDeclaration(used);
-            auto useRange = ClangRange(clang_getCursorReferenceNameRange(cursor, CXNameRange_WantSinglePiece, 0));
-            parentContext->createUse(usedIndex, useRange.toRangeInRevision());
+            parentContext->createUse(usedIndex, useRange);
         }
     }
 }

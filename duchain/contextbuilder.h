@@ -43,8 +43,10 @@ template<DUContext::ContextType type>
 DUContext *createContextCommon(CXCursor cursor, DUContext* parentContext)
 {
     auto context = new DUContext(makeRange(cursor), parentContext);
-    DUChainWriteLocker lock; //TODO: (..type..) constructor for DUContext?
-    context->setType(type);
+    {
+        DUChainWriteLocker lock; //TODO: (..type..) constructor for DUContext?
+        context->setType(type);
+    }
     clang_visitChildren(cursor, &::visit, context);
     return context;
 }
@@ -53,9 +55,11 @@ template<DUContext::ContextType type>
 DUContext *createContextCommon(CXCursor cursor, const Identifier& id, DUContext* parentContext)
 {
     auto context = new DUContext(makeRange(cursor), parentContext);
-    DUChainWriteLocker lock; //TODO: (..type, id..) constructor for DUContext?
-    context->setType(type);
-    context->setLocalScopeIdentifier(parentContext->localScopeIdentifier() + id);
+    {
+        DUChainWriteLocker lock; //TODO: (..type, id..) constructor for DUContext?
+        context->setType(type);
+        context->setLocalScopeIdentifier(parentContext->localScopeIdentifier() + id);
+    }
     clang_visitChildren(cursor, &::visit, context);
     return context;
 }
