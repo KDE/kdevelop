@@ -43,7 +43,7 @@ Breakpoint::Breakpoint(BreakpointModel *model, BreakpointKind kind)
 }
 
 Breakpoint::Breakpoint(BreakpointModel *model, const KConfigGroup& config)
-: m_model(model), deleted_(false), m_line(-1), m_movingCursor(0)
+: m_model(model), deleted_(false), m_line(-1), m_movingCursor(0), m_ignoreHits(0)
 {
     QString kindString = config.readEntry("kind", "");
     int i;

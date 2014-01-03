@@ -83,6 +83,7 @@ BreakpointDetails::BreakpointDetails(QWidget *parent)
     hitsLayout->addWidget(l2, 2, 0);
 
     ignore_ = new SmallLineEdit(this);
+    ignore_->setText(QString::number(0));
     hitsLayout->addWidget(ignore_, 2, 1);
     ignore_->setValidator(new QIntValidator(0, 99999, ignore_));
     connect(ignore_, SIGNAL(textEdited(QString)), SLOT(textEdited(QString)));
@@ -112,6 +113,8 @@ void BreakpointDetails::setItem(Breakpoint *b)
         ignore_->setEnabled(false);
         return;
     }
+
+    ignore_->setText(QString::number(b->ignoreHits()));
 
     if (b->state() == Breakpoint::NotStartedState) {
         status_->hide();
