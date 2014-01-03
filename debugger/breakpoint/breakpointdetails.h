@@ -25,7 +25,7 @@
 #include <QtGui/QWidget>
 #include "../debuggerexport.h"
 
-class QLineEdit;
+class QSpinBox;
 class QLabel;
 
 namespace KDevelop {
@@ -41,12 +41,13 @@ public:
 
 private Q_SLOTS:
     void showExplanation(const QString& link);
-    void textEdited(const QString& text);
+
+    void setIgnoreHits(int ignoreHits);
 
 private:
     QLabel* status_;
     QLabel* hits_;
-    QLineEdit* ignore_;
+    QSpinBox* ignore_;
     Breakpoint* m_currentBreakpoint;
 };
 

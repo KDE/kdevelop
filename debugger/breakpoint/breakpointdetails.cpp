@@ -21,12 +21,11 @@
 
 #include "breakpointdetails.h"
 
-#include <QLineEdit>
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QGridLayout>
 #include <QWhatsThis>
-#include <QIntValidator>
+#include <QSpinBox>
 
 #include <KLocalizedString>
 #include <KDebug>
@@ -38,22 +37,6 @@
 #include "../../interfaces/idebugcontroller.h"
 
 using namespace KDevelop;
-
-class SmallLineEdit : public QLineEdit
-{
-public:
-    SmallLineEdit(QWidget *parent)
-    : QLineEdit(parent)
-    {}
-
-    QSize sizeHint() const
-    {
-        QSize s = QLineEdit::sizeHint();
-        int width = QFontMetrics(font()).width("99");
-        return QSize(width, s.height());
-    }
-};
-
 
 BreakpointDetails::BreakpointDetails(QWidget *parent)
     : QWidget(parent), m_currentBreakpoint(0)
@@ -82,11 +65,10 @@ BreakpointDetails::BreakpointDetails(QWidget *parent)
     QLabel *l2 = new QLabel(i18n("Ignore"), this);
     hitsLayout->addWidget(l2, 2, 0);
 
-    ignore_ = new SmallLineEdit(this);
-    ignore_->setText(QString::number(0));
+    ignore_ = new QSpinBox(this);
     hitsLayout->addWidget(ignore_, 2, 1);
-    ignore_->setValidator(new QIntValidator(0, 99999, ignore_));
-    connect(ignore_, SIGNAL(textEdited(QString)), SLOT(textEdited(QString)));
+    ignore_->setRange(0, 99999);
+    connect(ignore_, SIGNAL(valueChanged(int)), SLOT(setIgnoreHits(int)));
 
     QLabel *l3 = new QLabel(i18n("next hits"), this);
     hitsLayout->addWidget(l3, 2, 2);
@@ -96,10 +78,11 @@ BreakpointDetails::BreakpointDetails(QWidget *parent)
     setItem(0); //initialize with no breakpoint active
 }
 
-void KDevelop::BreakpointDetails::textEdited(const QString& text)
+void KDevelop::BreakpointDetails::setIgnoreHits(int ignoreHits)
 {
-    if (!m_currentBreakpoint) return;
-    m_currentBreakpoint->setIgnoreHits(text.toInt());
+    if (!m_currentBreakpoint)
+        return;
+    m_currentBreakpoint->setIgnoreHits(ignoreHits);
 }
 
 
@@ -114,7 +97,7 @@ void BreakpointDetails::setItem(Breakpoint *b)
         return;
     }
 
-    ignore_->setText(QString::number(b->ignoreHits()));
+    ignore_->setValue(b->ignoreHits());
 
     if (b->state() == Breakpoint::NotStartedState) {
         status_->hide();
