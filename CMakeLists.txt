@@ -17,6 +17,11 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_C
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 endif()
 
+if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    # in Qt 4, clang support is lacking...
+    add_definitions("-DQ_COMPILER_INITIALIZER_LISTS=1")
+endif()
+
 configure_file(
   "${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake"
   "${CMAKE_CURRENT_BINARY_DIR}/version.h"
