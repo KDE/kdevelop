@@ -131,6 +131,9 @@ private:
 
 private:
     friend class Breakpoint;
+
+    void registerBreakpoint(Breakpoint* breakpoint);
+
     void reportChange(Breakpoint *breakpoint, Breakpoint::Column column);
     uint breakpointType(Breakpoint *breakpoint);
     Breakpoint *breakpoint(const KUrl& url, int line);

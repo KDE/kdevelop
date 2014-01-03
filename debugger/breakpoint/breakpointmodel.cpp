@@ -333,8 +333,12 @@ void BreakpointModel::toggleBreakpoint(const KUrl& url, const KTextEditor::Curso
 
 void BreakpointModel::reportChange(Breakpoint* breakpoint, Breakpoint::Column column)
 {
-    QModelIndex idx = breakpointIndex(breakpoint, column);
-    emit dataChanged(idx, idx);
+    // note: just a portion of Breakpoint::Column is displayed in this model!
+    if (column >= 0 && column < columnCount()) {
+        QModelIndex idx = breakpointIndex(breakpoint, column);
+        Q_ASSERT(idx.isValid()); // make sure we don't pass invalid indices to dataChanged()
+        emit dataChanged(idx, idx);
+    }
     emit breakpointChanged(breakpoint, column);
 }
 
@@ -426,13 +430,16 @@ void BreakpointModel::load()
 {
     KConfigGroup breakpoints = KGlobal::config()->group("breakpoints");
     int count = breakpoints.readEntry("number", 0);
+    if (count == 0)
+        return;
+
+    beginInsertRows(QModelIndex(), 0, count);
     for (int i = 0; i < count; ++i) {
         if (!breakpoints.group(QString::number(i)).readEntry("kind", "").isEmpty()) {
-            Breakpoint *b = new Breakpoint(this, breakpoints.group(QString::number(i)));
-            m_breakpoints << b;
+            new Breakpoint(this, breakpoints.group(QString::number(i)));
         }
     }
-    reset();
+    endInsertRows();
 }
 
 void BreakpointModel::save()
@@ -462,7 +469,6 @@ Breakpoint* BreakpointModel::addCodeBreakpoint()
 {
     beginInsertRows(QModelIndex(), m_breakpoints.count(), m_breakpoints.count());
     Breakpoint* n = new Breakpoint(this, Breakpoint::CodeBreakpoint);
-    m_breakpoints << n;
     endInsertRows();
     return n;
 }
@@ -485,7 +491,6 @@ Breakpoint* BreakpointModel::addWatchpoint()
 {
     beginInsertRows(QModelIndex(), m_breakpoints.count(), m_breakpoints.count());
     Breakpoint* n = new Breakpoint(this, Breakpoint::WriteBreakpoint);
-    m_breakpoints << n;
     endInsertRows();
     return n;
 }
@@ -501,7 +506,6 @@ Breakpoint* BreakpointModel::addReadWatchpoint()
 {
     beginInsertRows(QModelIndex(), m_breakpoints.count(), m_breakpoints.count());
     Breakpoint* n = new Breakpoint(this, Breakpoint::ReadBreakpoint);
-    m_breakpoints << n;
     endInsertRows();
     return n;
 }
@@ -517,7 +521,6 @@ Breakpoint* BreakpointModel::addAccessWatchpoint()
 {
     beginInsertRows(QModelIndex(), m_breakpoints.count(), m_breakpoints.count());
     Breakpoint* n = new Breakpoint(this, Breakpoint::AccessBreakpoint);
-    m_breakpoints << n;
     endInsertRows();
     return n;
 }
@@ -528,6 +531,12 @@ Breakpoint* BreakpointModel::addAccessWatchpoint(const QString& expression)
     Breakpoint* n = addAccessWatchpoint();
     n->setExpression(expression);
     return n;
+}
+
+void BreakpointModel::registerBreakpoint(Breakpoint* breakpoint)
+{
+    Q_ASSERT(!m_breakpoints.contains(breakpoint));
+    m_breakpoints << breakpoint;
 }
 
 Breakpoint* BreakpointModel::breakpoint(const KUrl& url, int line) {
