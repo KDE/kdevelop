@@ -34,11 +34,28 @@
 
 using namespace KDevelop;
 
+static const char* BREAKPOINT_KINDS[Breakpoint::LastBreakpointKind] = {
+    "Code",
+    "Write",
+    "Read",
+    "Access"
+};
+
+static Breakpoint::BreakpointKind stringToKind(const QString& kindString)
+{
+    for (int i = 0; i < Breakpoint::LastBreakpointKind; ++i) {
+        if (BREAKPOINT_KINDS[i] == kindString) {
+            return (Breakpoint::BreakpointKind)i;
+        }
+    }
+    return Breakpoint::CodeBreakpoint;
+}
+
 Breakpoint::Breakpoint(BreakpointModel *model, BreakpointKind kind)
-: m_model(model), enabled_(true),
-  deleted_(false), kind_(kind),
-  m_line(-1),
-  m_movingCursor(0), m_ignoreHits(0)
+    : m_model(model), m_enabled(true)
+    , m_deleted(false), m_kind(kind)
+    , m_line(-1)
+    , m_movingCursor(0), m_ignoreHits(0)
 {
     if (model) {
         model->registerBreakpoint(this);
@@ -46,24 +63,17 @@ Breakpoint::Breakpoint(BreakpointModel *model, BreakpointKind kind)
 }
 
 Breakpoint::Breakpoint(BreakpointModel *model, const KConfigGroup& config)
-: m_model(model), deleted_(false), m_line(-1), m_movingCursor(0), m_ignoreHits(0)
+    : m_model(model), m_enabled(true)
+    , m_deleted(false)
+    , m_line(-1)
+    , m_movingCursor(0), m_ignoreHits(0)
 {
     if (model) {
         model->registerBreakpoint(this);
     }
 
-    QString kindString = config.readEntry("kind", "");
-    int i;
-    for (i = 0; i < LastBreakpointKind; ++i) {
-        if (string_kinds[i] == kindString)
-        {
-            kind_ = (BreakpointKind)i;
-            break;
-        }
-    }
-    //FIXME: maybe, should silently ignore this breakpoint.
-    Q_ASSERT(i < LastBreakpointKind);
-    enabled_ = config.readEntry("enabled", false);
+    m_kind = stringToKind(config.readEntry("kind", ""));
+    m_enabled = config.readEntry("enabled", false);
     m_url = config.readEntry("url", KUrl());
     m_line = config.readEntry("line", -1);
     m_expression = config.readEntry("expression", QString());
@@ -81,7 +91,7 @@ bool Breakpoint::setData(int index, const QVariant& value)
 {
     if (index == EnableColumn)
     {
-        enabled_ = static_cast<Qt::CheckState>(value.toInt()) == Qt::Checked;
+        m_enabled = static_cast<Qt::CheckState>(value.toInt()) == Qt::Checked;
     }
 
     if (index == LocationColumn || index == ConditionColumn)
@@ -90,7 +100,7 @@ bool Breakpoint::setData(int index, const QVariant& value)
         if (index == LocationColumn) {
             QRegExp rx("^(.+):([0-9]+)$");
             int idx = rx.indexIn(s);
-            if (kind_ == CodeBreakpoint && idx != -1) {
+            if (m_kind == CodeBreakpoint && idx != -1) {
                 m_url = KUrl(rx.cap(1));
                 m_line = rx.cap(2).toInt() - 1;
                 m_expression.clear();
@@ -114,7 +124,7 @@ QVariant Breakpoint::data(int column, int role) const
     if (column == EnableColumn)
     {
         if (role == Qt::CheckStateRole)
-            return enabled_ ? Qt::Checked : Qt::Unchecked;
+            return m_enabled ? Qt::Checked : Qt::Unchecked;
         else if (role == Qt::DisplayRole)
             return QVariant();
         else
@@ -159,7 +169,7 @@ QVariant Breakpoint::data(int column, int role) const
 
     if (column == TypeColumn && role == Qt::DisplayRole)
     {
-        return string_kinds[kind_];
+        return BREAKPOINT_KINDS[m_kind];
     }
 
     if (role == Qt::DecorationRole)
@@ -180,7 +190,7 @@ QVariant Breakpoint::data(int column, int role) const
     if (column == LocationColumn) {
         if (role == LocationRole || role == Qt::EditRole || role == Qt::ToolTipRole || role == Qt::DisplayRole) {
             QString ret;
-            if (kind_ == CodeBreakpoint && m_line != -1) {
+            if (m_kind == CodeBreakpoint && m_line != -1) {
                 if (role == Qt::DisplayRole) {
                     ret = m_url.fileName();
                 } else {
@@ -191,8 +201,8 @@ QVariant Breakpoint::data(int column, int role) const
                 ret = m_expression;
             }
             //FIXME: there should be proper columns for function name and address.
-            if (!address_.isEmpty() && role == Qt::DisplayRole) {
-                ret = QString("%1 (%2)").arg(ret).arg(address_);
+            if (!m_address.isEmpty() && role == Qt::DisplayRole) {
+                ret = QString("%1 (%2)").arg(ret).arg(m_address);
             }
             return ret;
         }
@@ -203,7 +213,7 @@ QVariant Breakpoint::data(int column, int role) const
 
 void Breakpoint::setDeleted()
 {
-    deleted_ = true;
+    m_deleted = true;
     BreakpointModel* m = breakpointModel();
     if (m->breakpointIndex(this, 0).isValid()) {
         m->removeRow(m->breakpointIndex(this, 0).row());
@@ -214,12 +224,12 @@ int Breakpoint::line() const {
     return m_line;
 }
 void Breakpoint::setLine(int line) {
-    Q_ASSERT(kind_ == CodeBreakpoint);
+    Q_ASSERT(m_kind == CodeBreakpoint);
     m_line = line;
     reportChange(LocationColumn);
 }
 void Breakpoint::setUrl(const KUrl& url) {
-    Q_ASSERT(kind_ == CodeBreakpoint);
+    Q_ASSERT(m_kind == CodeBreakpoint);
     m_url = url;
     reportChange(LocationColumn);
 }
@@ -228,7 +238,7 @@ KUrl Breakpoint::url() const {
 }
 void Breakpoint::setLocation(const KUrl& url, int line)
 {
-    Q_ASSERT(kind_ == CodeBreakpoint);
+    Q_ASSERT(m_kind == CodeBreakpoint);
     m_url = url;
     m_line = line;
     reportChange(LocationColumn);
@@ -241,8 +251,8 @@ QString KDevelop::Breakpoint::location() {
 
 void Breakpoint::save(KConfigGroup& config)
 {
-    config.writeEntry("kind", string_kinds[kind_]);
-    config.writeEntry("enabled", enabled_);
+    config.writeEntry("kind", BREAKPOINT_KINDS[m_kind]);
+    config.writeEntry("enabled", m_enabled);
     config.writeEntry("url", m_url);
     config.writeEntry("line", m_line);
     config.writeEntry("expression", m_expression);
@@ -252,18 +262,18 @@ void Breakpoint::save(KConfigGroup& config)
 
 Breakpoint::BreakpointKind Breakpoint::kind() const
 {
-    return kind_;
+    return m_kind;
 }
 
 void Breakpoint::setAddress(const QString& address)
 {
-    address_ = address;
+    m_address = address;
     //reportChange();
 }
 
 QString Breakpoint::address() const
 {
-    return address_;
+    return m_address;
 }
 
 int Breakpoint::hitCount() const
@@ -278,7 +288,7 @@ int Breakpoint::hitCount() const
 
 bool Breakpoint::deleted() const
 {
-    return deleted_;
+    return m_deleted;
 }
 
 bool Breakpoint::enabled() const
@@ -364,10 +374,3 @@ void KDevelop::Breakpoint::reportChange(Column c)
 {
     breakpointModel()->reportChange(this, c);
 }
-
-const char *Breakpoint::string_kinds[LastBreakpointKind] = {
-    "Code",
-    "Write",
-    "Read",
-    "Access"
-};

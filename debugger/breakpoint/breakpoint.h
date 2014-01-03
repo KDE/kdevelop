@@ -118,19 +118,17 @@ protected:
     BreakpointModel *breakpointModel();
 
     BreakpointModel *m_model;
-    bool enabled_;
-    bool deleted_;
-    BreakpointKind kind_;
+    bool m_enabled;
+    bool m_deleted;
+    BreakpointKind m_kind;
     /* For watchpoints, the address it is set at.  */
-    QString address_;
+    QString m_address;
     KUrl m_url;
     int m_line;
     QString m_condition;
     KTextEditor::MovingCursor *m_movingCursor;
     int m_ignoreHits;
     QString m_expression;
-
-    static const char *string_kinds[LastBreakpointKind];
 
     void reportChange(Column c);
 };
