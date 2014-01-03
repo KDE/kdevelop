@@ -56,13 +56,13 @@ DUContext *createContextCommon(CXCursor cursor, const Identifier& id, DUContext*
     return context;
 }
 
-template<CXCursorKind kind> DUContext *build(CXCursor, DUContext *) = delete;
+template<CXCursorKind kind> DUContext *build(CXCursor, DUContext *);
 
 #define AddContextBuilder(CursorKind, ContextType)\
 template<> DUContext* build<CursorKind>(CXCursor cursor, DUContext *parentContext)\
 { return createContextCommon<ContextType>(cursor, parentContext); }
 
-template<CXCursorKind kind> DUContext *build(CXCursor, const Identifier&, DUContext*) = delete;
+template<CXCursorKind kind> DUContext *build(CXCursor, const Identifier&, DUContext*);
 
 #define AddIdContextBuilder(CursorKind, ContextType)\
 template<> DUContext* build<CursorKind>(CXCursor cursor, const Identifier& id, DUContext *parentContext)\

@@ -51,7 +51,7 @@ inline void createUseCommon(CXCursor cursor, DUContext *parentContext)
     }
 }
 
-template<CXCursorKind kind> CXChildVisitResult build(CXCursor, DUContext*) = delete;
+template<CXCursorKind kind> CXChildVisitResult build(CXCursor, DUContext*);
 
 #define AddUseBuilder(CursorKind, Ret)\
 template<> CXChildVisitResult build<CursorKind>(CXCursor cursor, DUContext *parentContext)\
