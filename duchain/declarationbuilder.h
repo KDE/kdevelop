@@ -55,40 +55,53 @@ KDevelop::AbstractType* createType(CXType type)
         case CXType_Bool:
             return new IntegralType(IntegralType::TypeBoolean);
         case CXType_Int:
+        case CXType_LongLong:
+        case CXType_Long:
             return new IntegralType(IntegralType::TypeInt);
         case CXType_Float:
             return new IntegralType(IntegralType::TypeFloat);
+        case CXType_LongDouble:
         case CXType_Double:
             return new IntegralType(IntegralType::TypeDouble);
-        case CXType_LongDouble: {
-            auto type = new IntegralType(IntegralType::TypeDouble);
-            type->setModifiers(AbstractType::LongModifier);
-            return type;
-        }
-        case CXType_Char_S: {
-            auto type = new IntegralType(IntegralType::TypeChar);
-            type->setModifiers(AbstractType::SignedModifier);
-            return type;
-        }
-        case CXType_Char_U: {
-            auto type = new IntegralType(IntegralType::TypeChar);
-            type->setModifiers(AbstractType::UnsignedModifier);
-            return type;
-        }
+        case CXType_Char_U:
+        case CXType_Char_S:
+            return new IntegralType(IntegralType::TypeChar);
         case CXType_Char16:
             return new IntegralType(IntegralType::TypeChar16_t);
         case CXType_Char32:
             return new IntegralType(IntegralType::TypeChar32_t);
-        case CXType_Long:
-            return new IntegralType(IntegralType::TypeLong);
-        case CXType_LongLong: {
-            auto type = new IntegralType(IntegralType::TypeLong);
-            type->setModifiers(AbstractType::LongModifier);
-            return type;
-        }
         default:
             return nullptr;
     }
+}
+
+AbstractType::Ptr type(CXType t)
+{
+    AbstractType::Ptr ret(createType(t));
+    if (!ret) {
+        return ret;
+    }
+    quint64 modifiers = 0;
+    if (clang_isConstQualifiedType(t)) {
+        modifiers |= AbstractType::ConstModifier;
+    }
+    if (clang_isVolatileQualifiedType(t)) {
+        modifiers |= AbstractType::VolatileModifier;
+    }
+    if (t.kind == CXType_Long || t.kind == CXType_LongDouble) {
+        modifiers |= AbstractType::LongModifier;
+    }
+    if (t.kind == CXType_LongLong) {
+        modifiers |= AbstractType::LongLongModifier;
+    }
+    if (t.kind == CXType_Char_S) {
+        modifiers |= AbstractType::SignedModifier;
+    }
+    if (t.kind == CXType_Char_U) {
+        modifiers |= AbstractType::UnsignedModifier;
+    }
+    ret->setModifiers(modifiers);
+    return ret;
 }
 
 template<class T> T *createDeclarationCommon(CXCursor cursor, const Identifier& id)
@@ -98,7 +111,7 @@ template<class T> T *createDeclarationCommon(CXCursor cursor, const Identifier& 
     auto decl = new T(range, nullptr);
     decl->setComment(comment);
     decl->setIdentifier(id);
-    decl->setAbstractType(AbstractType::Ptr(createType(clang_getCursorType(cursor))));
+    decl->setAbstractType(type(clang_getCursorType(cursor)));
     return decl;
 }
 
