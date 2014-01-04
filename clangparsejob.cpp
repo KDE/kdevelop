@@ -37,12 +37,14 @@
 
 #include "duchain/parsesession.h"
 #include "duchain/buildduchainvisitor.h"
+#include "duchain/clangtypes.h"
 
 #include "debug.h"
 #include "clanglanguagesupport.h"
 
 #include <QReadLocker>
 #include <QProcess>
+#include <memory>
 
 using namespace KDevelop;
 
@@ -118,6 +120,59 @@ KUrl::List defaultIncludes()
 
     return includePaths;
 }
+
+ReferencedTopDUContext createTopContext(const IndexedString& path)
+{
+    ParsingEnvironmentFile *file = new ParsingEnvironmentFile(path);
+    file->setLanguage(ParseSession::languageString());
+    file->setModificationRevision(ModificationRevision());
+    ReferencedTopDUContext context = new TopDUContext(path, RangeInRevision(0, 0, INT_MAX, INT_MAX), file);
+    DUChain::self()->addDocumentChain(context);
+    return context;
+}
+
+using IncludeLocks = std::vector<std::unique_ptr<UrlParseLock>>;
+
+struct InclusionClientData
+{
+    IncludeLocks* locks;
+    IncludeFileContexts* contexts;
+};
+
+void visitInclusions(CXFile file, CXSourceLocation* stack, unsigned stackDepth, CXClientData d)
+{
+    auto data = static_cast<InclusionClientData*>(d);
+
+    if (!data->contexts->contains(file)) {
+        IndexedString indexedInclude(ClangString(clang_getFileName(file)));
+        // TODO: only keep parse lock when we actually update this file
+        data->locks->emplace_back(new UrlParseLock(indexedInclude));
+
+        DUChainWriteLocker lock;
+        ReferencedTopDUContext include = DUChain::self()->chainForDocument(indexedInclude);
+        if (!include) {
+            include = createTopContext(indexedInclude);
+        }
+        // TODO: for something like A -> B -> C and C changed, we have to update B and A...
+        data->contexts->insert(file, {include, include->parsingEnvironmentFile()->needsUpdate()});
+    }
+
+    if (stackDepth) {
+        auto included = data->contexts->value(file);
+        Q_ASSERT(included.topContext);
+
+        CXFile parentFile;
+        uint line, column;
+        clang_getFileLocation(stack[0], &parentFile, &line, &column, nullptr);
+        auto importer = data->contexts->value(parentFile);
+        Q_ASSERT(importer.topContext);
+        if (importer.needsUpdate) {
+            DUChainWriteLocker lock;
+            importer.topContext->addImportedParentContext(included.topContext, CursorInRevision(line, column));
+        }
+    }
+}
+
 }
 
 ClangParseJob::ClangParseJob(const IndexedString& url, ILanguageSupport* languageSupport)
@@ -177,22 +232,26 @@ void ClangParseJob::run()
         return;
     }
 
-    foreach(const QByteArray& file, session->includedFiles()) {
-        // TODO: ensure we have a DUChain created for this file
-        // otherwise uses will not get reported properly
-        qDebug() << file;
-    }
-
     if (!context) {
         DUChainWriteLocker lock;
-        ParsingEnvironmentFile *file = new ParsingEnvironmentFile(document());
-        file->setLanguage(ParseSession::languageString());
-        context = new TopDUContext(document(), RangeInRevision(0, 0, INT_MAX, INT_MAX), file);
-        DUChain::self()->addDocumentChain(context);
+        context = createTopContext(document());
     } else {
         //TODO: update existing contexts
         DUChainWriteLocker lock;
         context->cleanIfNotEncountered({});
+    }
+
+    IncludeLocks includeLocks;
+    IncludeFileContexts includedFiles;
+    includedFiles.insert(session->file(), {context, true});
+
+    {
+        InclusionClientData data{&includeLocks, &includedFiles};
+        clang_getInclusions(session->unit(), &::visitInclusions, &data);
+    }
+
+    if (abortRequested() || !session->unit()) {
+        return;
     }
 
     setDuChain(context);
@@ -204,7 +263,7 @@ void ClangParseJob::run()
         }
 
         BuildDUChainVisitor visitor;
-        visitor.visit(session.data(), context);
+        visitor.visit(session.data(), context, includedFiles);
     }
 
     if (abortRequested()) {
@@ -220,6 +279,14 @@ void ClangParseJob::run()
         Q_ASSERT(file);
         file->setModificationRevision(contents().modification);
         DUChain::self()->updateContextEnvironment( context->topContext(), file.data() );
+
+        foreach (const Include& include, includedFiles) {
+            if (!include.needsUpdate || include.topContext == context) {
+                continue;
+            }
+            auto revision = ModificationRevision::revisionForFile(include.topContext->url());
+            include.topContext->parsingEnvironmentFile()->setModificationRevision(revision);
+        }
     }
     highlightDUChain();
 }

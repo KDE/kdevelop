@@ -23,17 +23,14 @@
 #define BUILDDUCHAINVISITOR_H
 
 #include "duchainexport.h"
-
-namespace KDevelop {
-class ReferencedTopDUContext;
-}
+#include "includedfilecontexts.h"
 
 class ParseSession;
 
 class KDEVCLANGDUCHAIN_EXPORT BuildDUChainVisitor
 {
 public:
-    void visit(ParseSession* session, const KDevelop::ReferencedTopDUContext& top);
+    void visit(ParseSession* session, const KDevelop::ReferencedTopDUContext& top, const IncludeFileContexts& includes);
 };
 
 #endif // BUILDDUCHAINVISITOR_H

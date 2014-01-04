@@ -43,15 +43,6 @@ CXUnsavedFile fileForContents(const QByteArray& path, const QByteArray& contents
     file.Filename = path.constData();
     return file;
 }
-
-void visitInclusions(CXFile file, CXSourceLocation* stack, unsigned stackDepth, CXClientData d)
-{
-    if (stackDepth == 1) {
-        auto includes = static_cast<QVector<QByteArray>*>(d);
-        ClangString fileName(clang_getFileName(file));
-        includes->append({fileName});
-    }
-}
 }
 
 IndexedString ParseSession::languageString()
@@ -198,11 +189,4 @@ void ParseSession::setUnit(CXTranslationUnit unit, const char* fileName)
         m_problems << problem;
         clang_disposeDiagnostic(diagnostic);
     }
-}
-
-QVector<QByteArray> ParseSession::includedFiles() const
-{
-    QVector<QByteArray> ret;
-    clang_getInclusions(m_unit, &::visitInclusions, &ret);
-    return ret;
 }

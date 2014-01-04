@@ -26,6 +26,9 @@
 #include <tests/autotestshell.h>
 #include <tests/testfile.h>
 #include <language/duchain/duchainlock.h>
+#include <language/duchain/duchain.h>
+#include <language/duchain/declaration.h>
+#include <language/duchain/parsingenvironment.h>
 
 QTEST_KDEMAIN(DUChainTest, NoGUI);
 
@@ -46,22 +49,30 @@ void DUChainTest::cleanupTestCase()
 void DUChainTest::testInclude()
 {
     TestFile header("int foo() { return 42; }\n", "h");
-    header.parse(TopDUContext::AllDeclarationsContextsAndUses);
+    // NOTE: header is _not_ explictly being parsed, instead the impl job does that
 
     TestFile impl("#include \"" + header.url().byteArray() + "\"\n"
                   "int main() { return foo(); }", "cpp", &header);
     impl.parse(TopDUContext::AllDeclarationsContextsAndUses);
 
-    auto headerCtx = header.topContext();
-    QVERIFY(headerCtx);
-
     auto implCtx = impl.topContext();
     QVERIFY(implCtx);
 
     DUChainReadLocker lock;
-
-    QCOMPARE(headerCtx->localDeclarations().size(), 1);
     QCOMPARE(implCtx->localDeclarations().size(), 1);
+
+    auto headerCtx = DUChain::self()->chainForDocument(header.url());
+    QVERIFY(headerCtx);
+    QVERIFY(!headerCtx->parsingEnvironmentFile()->needsUpdate());
+    QCOMPARE(headerCtx->localDeclarations().size(), 1);
+
+    QVERIFY(implCtx->imports(headerCtx, CursorInRevision(0, 10)));
+
+    Declaration* foo = headerCtx->localDeclarations().first();
+    QCOMPARE(foo->uses().size(), 1);
+    QCOMPARE(foo->uses().begin().key(), impl.url());
+    QCOMPARE(foo->uses().begin()->size(), 1);
+    QCOMPARE(foo->uses().begin()->first(), RangeInRevision(1, 20, 1, 23));
 }
 
 void DUChainTest::testReparse()

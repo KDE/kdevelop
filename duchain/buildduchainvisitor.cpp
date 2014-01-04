@@ -26,6 +26,8 @@
 #include "clangtypes.h"
 #include "parsesession.h"
 
+#include <language/backgroundparser/urlparselock.h>
+
 QDebug &operator<<(QDebug &dbg, CXCursor cursor)
 {
     if (clang_Cursor_isNull(cursor))
@@ -44,15 +46,16 @@ namespace {
 
 struct ClientData
 {
-    ParseSession* session;
     DUContext* parent;
+    const IncludeFileContexts& includeContexts;
+    CXFile file;
 };
 
 CXChildVisitResult visit(CXCursor cursor, CXCursor /*parent*/, CXClientData d);
 
 CXChildVisitResult recurse(CXCursor cursor, ClientData* data, DUContext* context)
 {
-    ClientData childData{data->session, context};
+    ClientData childData{context, data->includeContexts, data->file};
     clang_visitChildren(cursor, &::visit, &childData);
     return CXChildVisit_Continue;
 }
@@ -68,7 +71,7 @@ CXChildVisitResult buildDeclaration(CXCursor cursor, ClientData* data)
 template<CXCursorKind kind>
 CXChildVisitResult buildUse(CXCursor cursor, ClientData* data)
 {
-    return UseBuilder::build<kind>(cursor, data->parent);
+    return UseBuilder::build<kind>(cursor, data->parent, data->includeContexts);
 }
 
 template<CXCursorKind kind>
@@ -112,10 +115,14 @@ CXChildVisitResult visit(CXCursor cursor, CXCursor /*parent*/, CXClientData d)
     auto location = clang_getCursorLocation(cursor);
     CXFile file;
     clang_getFileLocation(location, &file, nullptr, nullptr, nullptr);
-    if (file != data->session->file()) {
-        // TODO properly associate uses for types from included files
-        // TODO maybe build multiple top contexts in one go
-        return CXChildVisit_Continue;
+    if (file != data->file) {
+        const auto& include = data->includeContexts.value(file);
+        if (!include.needsUpdate) {
+            return CXChildVisit_Continue;
+        } else {
+            data->file = file;
+            data->parent = include.topContext;
+        }
     }
 
     //Use to map cursor kinds to build profiles
@@ -164,9 +171,9 @@ CXChildVisitResult visit(CXCursor cursor, CXCursor /*parent*/, CXClientData d)
 
 }
 
-void BuildDUChainVisitor::visit(ParseSession* session, const ReferencedTopDUContext& top)
+void BuildDUChainVisitor::visit(ParseSession* session, const ReferencedTopDUContext& top, const IncludeFileContexts& includes)
 {
-    ClientData data{session, top};
+    ClientData data{top, includes, session->file()};
     auto cursor = clang_getTranslationUnitCursor(session->unit());
     clang_visitChildren(cursor, &::visit, &data);
 }
