@@ -28,6 +28,7 @@
 #include <language/duchain/ducontext.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/duchainlock.h>
+#include <language/duchain/types/integraltype.h>
 
 namespace DeclarationBuilder {
 
@@ -46,6 +47,50 @@ inline QByteArray buildComment(CXComment comment)
     return text;
 }
 
+KDevelop::AbstractType* createType(CXType type)
+{
+    switch (type.kind) {
+        case CXType_Void:
+            return new IntegralType(IntegralType::TypeVoid);
+        case CXType_Bool:
+            return new IntegralType(IntegralType::TypeBoolean);
+        case CXType_Int:
+            return new IntegralType(IntegralType::TypeInt);
+        case CXType_Float:
+            return new IntegralType(IntegralType::TypeFloat);
+        case CXType_Double:
+            return new IntegralType(IntegralType::TypeDouble);
+        case CXType_LongDouble: {
+            auto type = new IntegralType(IntegralType::TypeDouble);
+            type->setModifiers(AbstractType::LongModifier);
+            return type;
+        }
+        case CXType_Char_S: {
+            auto type = new IntegralType(IntegralType::TypeChar);
+            type->setModifiers(AbstractType::SignedModifier);
+            return type;
+        }
+        case CXType_Char_U: {
+            auto type = new IntegralType(IntegralType::TypeChar);
+            type->setModifiers(AbstractType::UnsignedModifier);
+            return type;
+        }
+        case CXType_Char16:
+            return new IntegralType(IntegralType::TypeChar16_t);
+        case CXType_Char32:
+            return new IntegralType(IntegralType::TypeChar32_t);
+        case CXType_Long:
+            return new IntegralType(IntegralType::TypeLong);
+        case CXType_LongLong: {
+            auto type = new IntegralType(IntegralType::TypeLong);
+            type->setModifiers(AbstractType::LongModifier);
+            return type;
+        }
+        default:
+            return nullptr;
+    }
+}
+
 template<class T> T *createDeclarationCommon(CXCursor cursor, const Identifier& id)
 {
     auto range = ClangRange(clang_Cursor_getSpellingNameRange(cursor, 0, 0)).toRangeInRevision();
@@ -53,6 +98,7 @@ template<class T> T *createDeclarationCommon(CXCursor cursor, const Identifier& 
     auto decl = new T(range, nullptr);
     decl->setComment(comment);
     decl->setIdentifier(id);
+    decl->setAbstractType(AbstractType::Ptr(createType(clang_getCursorType(cursor))));
     return decl;
 }
 

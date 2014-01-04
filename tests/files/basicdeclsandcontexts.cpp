@@ -5,6 +5,8 @@
  */
 int main()
 {
+    /// "toString" : "int a"
+    int a = 0;
     return 0;
 }
 
