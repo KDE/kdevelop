@@ -23,8 +23,7 @@ target_link_libraries(kdevclangduchain LINK_PRIVATE
 
 target_link_libraries(kdevclangduchain LINK_PUBLIC
     ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-    # TODO cleanup FindClang.cmake and look for it there
-    ${LLVM_LIBRARY_DIR}/libclang.so
+    ${CLANG_CLANG_LIB}
 )
 
 install(TARGETS kdevclangduchain ${INSTALL_TARGETS_DEFAULT_ARGS})

@@ -4,15 +4,17 @@ if (NOT LLVM_INCLUDE_DIR OR NOT LLVM_LIBRARY_DIR)
 else (NOT LLVM_INCLUDE_DIR OR NOT LLVM_LIBRARY_DIR)
 
 MACRO(FIND_AND_ADD_CLANG_LIB _libname_)
-find_library(CLANG_${_libname_}_LIB ${_libname_} ${LLVM_LIBRARY_DIR} ${CLANG_LIB_DIR})
-if (CLANG_${_libname_}_LIB)
-   set(CLANG_LIBS ${CLANG_LIBS} ${CLANG_${_libname_}_LIB})
-endif(CLANG_${_libname_}_LIB)
+  string(TOUPPER ${_libname_} _prettylibname_)
+  find_library(CLANG_${_prettylibname_}_LIB ${_libname_} ${LLVM_LIBRARY_DIR} ${CLANG_LIB_DIR})
+  if (CLANG_${_prettylibname_}_LIB)
+    set(CLANG_LIBS ${CLANG_LIBS} ${CLANG_${_prettylibname_}_LIB})
+  endif()
 ENDMACRO(FIND_AND_ADD_CLANG_LIB)
 
 set(CLANG_INCLUDE_DIRS ${CLANG_INCLUDE_DIRS} ${LLVM_INCLUDE_DIR})
 set(CLANG_INCLUDE_DIRS ${CLANG_INCLUDE_DIRS} ${CLANG_INCLUDE_DIR})
 
+FIND_AND_ADD_CLANG_LIB(clang) # LibClang: high-level C interface
 FIND_AND_ADD_CLANG_LIB(clangFrontend)
 FIND_AND_ADD_CLANG_LIB(clangDriver)
 FIND_AND_ADD_CLANG_LIB(clangCodeGen)
