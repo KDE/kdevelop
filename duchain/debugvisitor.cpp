@@ -45,13 +45,23 @@ CXChildVisitResult visit(CXCursor cursor, CXCursor /*parent*/, CXClientData d)
 
     const auto kind = clang_getCursorKind(cursor);
     if (clang_isDeclaration(kind)) {
-        ClangString displayName(clang_getCursorDisplayName(cursor));
-        auto type = clang_getCursorType(cursor);
-        ClangString typeName(clang_getTypeSpelling(type));
-
-        ClangString fileName(clang_getFileName(file));
-        (*data->out) << typeName << ' ' << displayName << " in " << fileName << '@' << line << ':' << column << endl;
+        (*data->out) << "decl: ";
+    } else {
+        auto referenced = clang_getCursorReferenced(cursor);
+        if (kind != CXCursor_UnexposedExpr && !clang_equalCursors(clang_getNullCursor(), referenced)) {
+            (*data->out) << "use: ";
+        } else {
+            return CXChildVisit_Recurse;
+        }
     }
+
+    ClangString fileName(clang_getFileName(file));
+    ClangString displayName(clang_getCursorDisplayName(cursor));
+    auto type = clang_getCursorType(cursor);
+    ClangString typeName(clang_getTypeSpelling(type));
+
+    (*data->out) << typeName << ' ' << displayName << ' ' << ClangString(clang_getCursorKindSpelling(kind))
+                 << " in " << fileName << '@' << line << ':' << column << endl;
 
     return CXChildVisit_Recurse;
 }
