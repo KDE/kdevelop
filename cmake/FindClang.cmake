@@ -36,22 +36,17 @@ FIND_AND_ADD_CLANG_LIB(clangStaticAnalyzerFrontend)
 FIND_AND_ADD_CLANG_LIB(clangSema)
 FIND_AND_ADD_CLANG_LIB(clangRewriteCore)
 
-
-
-
-
-MESSAGE(STATUS "Clang libs: " ${CLANG_LIBS})
-
 if(CLANG_LIBS)
+  message(STATUS "Clang libs: ${CLANG_LIBS}")
   set(CLANG_FOUND TRUE)
 endif(CLANG_LIBS)
 
 if(CLANG_FOUND)
   message(STATUS "Found Clang: ${CLANG_INCLUDE_DIRS}")
 else(CLANG_FOUND)
-  if(CLANG_FIND_REQUIRED)
+  if(Clang_FIND_REQUIRED)
     message(FATAL_ERROR "Could NOT find Clang")
-  endif(CLANG_FIND_REQUIRED)
+  endif()
 endif(CLANG_FOUND)
 
 endif (NOT LLVM_INCLUDE_DIR OR NOT LLVM_LIBRARY_DIR)
