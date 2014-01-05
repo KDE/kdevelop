@@ -54,7 +54,8 @@ inline QByteArray buildComment(CXComment comment)
     return text;
 }
 
-template<class T> T *createDeclarationCommon(CXCursor cursor, const Identifier& id)
+template<class T>
+T *createDeclarationCommon(CXCursor cursor, const Identifier& id)
 {
     auto range = ClangRange(clang_Cursor_getSpellingNameRange(cursor, 0, 0)).toRangeInRevision();
     auto comment = buildComment(clang_Cursor_getParsedComment(cursor));
@@ -70,7 +71,8 @@ Identifier getId(CXCursor cursor)
     return Identifier(IndexedString(ClangString(clang_getCursorSpelling(cursor))));
 }
 
-template<class T> T* createDeclOnly(CXCursor cursor, DUContext* parentContext)
+template<class T>
+T* createDeclOnly(CXCursor cursor, DUContext* parentContext)
 {
     auto decl = createDeclarationCommon<T>(cursor, getId(cursor));
     DUChainWriteLocker lock;
@@ -78,7 +80,8 @@ template<class T> T* createDeclOnly(CXCursor cursor, DUContext* parentContext)
     return decl;
 }
 
-template<CXCursorKind CK, class T> T* createDeclAndContext(CXCursor cursor, DUContext* parentContext)
+template<CXCursorKind CK, class T>
+T* createDeclAndContext(CXCursor cursor, DUContext* parentContext)
 {
     auto id = getId(cursor);
     auto decl = createDeclarationCommon<T>(cursor, id);
@@ -226,7 +229,8 @@ struct DeclType<CK, isDefinition, typename std::enable_if<isKDevFunctionDefiniti
 template<CXCursorKind CK, class Enable = void>
 struct DeclBuilder;
 
-template<CXCursorKind CK> struct DeclBuilder<CK, typename std::enable_if<alwaysBuildDecl(CK)>::type>
+template<CXCursorKind CK>
+struct DeclBuilder<CK, typename std::enable_if<alwaysBuildDecl(CK)>::type>
 {
     typedef typename DeclType<CK, false>::Type KDevType;
     static KDevType* build(CXCursor cursor, DUContext* parentContext)
@@ -235,7 +239,8 @@ template<CXCursorKind CK> struct DeclBuilder<CK, typename std::enable_if<alwaysB
     }
 };
 
-template<CXCursorKind CK> struct DeclBuilder<CK, typename std::enable_if<alwaysBuildDeclAndContext(CK)>::type>
+template<CXCursorKind CK>
+struct DeclBuilder<CK, typename std::enable_if<alwaysBuildDeclAndContext(CK)>::type>
 {
     typedef typename DeclType<CK, false>::Type KDevType;
     static KDevType* build(CXCursor cursor, DUContext* parentContext)
@@ -244,7 +249,8 @@ template<CXCursorKind CK> struct DeclBuilder<CK, typename std::enable_if<alwaysB
     }
 };
 
-template<CXCursorKind CK> struct DeclBuilder<CK, typename std::enable_if<mayBuildDeclOrDef(CK)>::type>
+template<CXCursorKind CK>
+struct DeclBuilder<CK, typename std::enable_if<mayBuildDeclOrDef(CK)>::type>
 {
     typedef typename DeclType<CK, false>::Type KDevType;
     static Declaration* build(CXCursor cursor, DUContext* parentContext)
@@ -257,7 +263,8 @@ template<CXCursorKind CK> struct DeclBuilder<CK, typename std::enable_if<mayBuil
 };
 //END DeclBuilder
 
-template<CXCursorKind CK> Declaration *build(CXCursor cursor, DUContext* parentContext)
+template<CXCursorKind CK>
+Declaration *build(CXCursor cursor, DUContext* parentContext)
 {
     return DeclBuilder<CK>::build(cursor, parentContext);
 }
