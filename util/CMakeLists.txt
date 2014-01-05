@@ -37,8 +37,8 @@ add_subdirectory(duchainify)
 
 add_subdirectory(tests)
 
-kde4_add_ui_files(kdevplatformutil_LIB_SRCS ${kdevplatformutil_LIB_US})
-kde4_add_library(kdevplatformutil SHARED ${kdevplatformutil_LIB_SRCS})
+qt5_wrap_ui(kdevplatformutil_LIB_SRCS ${kdevplatformutil_LIB_US})
+add_library(kdevplatformutil SHARED ${kdevplatformutil_LIB_SRCS})
 target_link_libraries(kdevplatformutil LINK_PUBLIC
     ${KDE4_KDEUI_LIBS}
 )

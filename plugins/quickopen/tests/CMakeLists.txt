@@ -3,7 +3,7 @@ set(quickopentestbase_SRCS
     ../projectfilequickopen.cpp
 )
 
-kde4_add_library(quickopentestbase ${quickopentestbase_SRCS})
+add_library(quickopentestbase ${quickopentestbase_SRCS})
 target_link_libraries(quickopentestbase
     ${KDE4_KDECORE_LIBS}
     ${QT_QTTEST_LIBRARY}
@@ -17,7 +17,8 @@ set(quickopentest_SRCS
     ${quickopentestbase_SRCS}
 )
 
-kde4_add_unit_test(quickopentest ${quickopentest_SRCS})
+add_executable(quickopentest ${quickopentest_SRCS})
+ecm_mark_as_test(quickopentest)
 target_link_libraries(quickopentest
     quickopentestbase
     ${KDE4_KDECORE_LIBS}
@@ -34,7 +35,8 @@ set(quickopenbench_SRCS
     quickopenbench.cpp
     ${quickopentestbase_SRCS}
 )
-kde4_add_unit_test(quickopenbench ${quickopenbench_SRCS})
+add_executable(quickopenbench ${quickopenbench_SRCS})
+ecm_mark_as_test(quickopenbench)
 target_link_libraries(quickopenbench
     quickopentestbase
     ${KDE4_KDECORE_LIBS}
@@ -43,4 +45,5 @@ target_link_libraries(quickopenbench
     ${KDEVPLATFORM_PROJECT_LIBRARIES}
     kdevplatformlanguage
 )
-set_tests_properties(quickopenbench PROPERTIES TIMEOUT 240)
+# TODO KF5: Port?
+#set_tests_properties(quickopenbench PROPERTIES TIMEOUT 240)

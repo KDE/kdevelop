@@ -1,21 +1,25 @@
 set(documentchangesettest_SRCS test_documentchangeset.cpp)
 
-kde4_add_unit_test(documentchangesettest ${documentchangesettest_SRCS})
+add_executable(documentchangesettest ${documentchangesettest_SRCS})
+ecm_mark_as_test(documentchangesettest)
 target_link_libraries(documentchangesettest ${QT_QTTEST_LIBRARY} kdevplatformtests kdevplatformlanguage)
 
 set(templaterenderertest_SRCS test_templaterenderer.cpp)
 
-kde4_add_unit_test(templaterenderertest ${templaterenderertest_SRCS})
+add_executable(templaterenderertest ${templaterenderertest_SRCS})
+ecm_mark_as_test(templaterenderertest)
 target_link_libraries(templaterenderertest ${QT_QTTEST_LIBRARY} kdevplatformtests kdevplatformlanguage)
 
 set(templateclassgeneratortest_SRCS test_templateclassgenerator.cpp)
 
-kde4_add_unit_test(templateclassgeneratortest ${templateclassgeneratortest_SRCS})
+add_executable(templateclassgeneratortest ${templateclassgeneratortest_SRCS})
+ecm_mark_as_test(templateclassgeneratortest)
 target_link_libraries(templateclassgeneratortest ${QT_QTTEST_LIBRARY} kdevplatformtests kdevplatformlanguage)
 
 set(templatesmodeltest_SRCS test_templatesmodel.cpp)
 
-kde4_add_unit_test(templatesmodeltest ${templatesmodeltest_SRCS})
+add_executable(templatesmodeltest ${templatesmodeltest_SRCS})
+ecm_mark_as_test(templatesmodeltest)
 target_link_libraries(templatesmodeltest ${QT_QTTEST_LIBRARY} kdevplatformtests kdevplatformlanguage)
 
 configure_file(codegen_tests_config.h.cmake codegen_tests_config.h)

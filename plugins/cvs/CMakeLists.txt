@@ -32,8 +32,8 @@ set(kdevcvs_PART_UI
     checkoutdialog.ui
 )
 
-kde4_add_ui_files(kdevcvs_PART_SRCS ${kdevcvs_PART_UI})
-kde4_add_plugin(kdevcvs ${kdevcvs_PART_SRCS})
+qt5_wrap_ui(kdevcvs_PART_SRCS ${kdevcvs_PART_UI})
+add_library(kdevcvs MODULE ${kdevcvs_PART_SRCS})
 
 target_link_libraries(kdevcvs
     ${KDE4_KIO_LIBS}

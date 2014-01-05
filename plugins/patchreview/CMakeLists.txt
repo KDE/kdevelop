@@ -28,10 +28,10 @@ set(patchreview_PART_SRCS
     libdiff2/stringlistpair.cpp
 )
 
-kde4_add_ui_files(patchreview_PART_SRCS patchreview.ui localpatchwidget.ui)
+qt5_wrap_ui(patchreview_PART_SRCS patchreview.ui localpatchwidget.ui)
 
 
-kde4_add_plugin(kdevpatchreview ${patchreview_PART_SRCS})
+add_library(kdevpatchreview MODULE ${patchreview_PART_SRCS})
 target_link_libraries(kdevpatchreview ${KDE4_KDEUI_LIBS} ${KDE4_KTEXTEDITOR_LIBS} ${KDE4_KPARTS_LIBS} kdevplatforminterfaces kdevplatformutil kdevplatformlanguage ${KDEVPLATFORM_VCS_LIBRARIES} sublime)
 
 install(TARGETS kdevpatchreview DESTINATION ${PLUGIN_INSTALL_DIR})

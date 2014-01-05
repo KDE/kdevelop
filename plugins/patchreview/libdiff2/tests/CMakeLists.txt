@@ -16,7 +16,8 @@ set(interactiveDiffTest_SRCS
     ../stringlistpair.cpp
 )
 
-kde4_add_unit_test(interactiveDiffTest ${interactiveDiffTest_SRCS})
+add_executable(interactiveDiffTest ${interactiveDiffTest_SRCS})
+ecm_mark_as_test(interactiveDiffTest)
 target_link_libraries(interactiveDiffTest
     ${QT_QTTEST_LIBRARY}
     ${KDE4_KDECORE_LIBS}
@@ -29,7 +30,8 @@ set(levenshteinTest_SRCS
     ../stringlistpair.cpp
 )
 
-kde4_add_unit_test(levenshteintest ${levenshteinTest_SRCS})
+add_executable(levenshteintest ${levenshteinTest_SRCS})
+ecm_mark_as_test(levenshteintest)
 target_link_libraries(levenshteintest
     ${QT_QTTEST_LIBRARY}
     ${QT_QTCORE_LIBRARY}

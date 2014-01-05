@@ -7,7 +7,6 @@ add_subdirectory(icons)
 add_definitions( ${KDE4_ENABLE_EXCEPTIONS} -DKDE_DEFAULT_DEBUG_AREA=9510 )
 
 include_directories( ${KDevSubversionPlugin_SOURCE_DIR}
-                     ${KDE4_INCLUDES}
                      ${KDE4_INCLUDE_DIR}/threadweaver
                      ${KDevPlatform_SOURCE_DIR}/interfaces
                      ${SUBVERSION_INCLUDE_DIRS}
@@ -80,8 +79,8 @@ set(kdevsubversion_PART_UI
     ui/checkoutmetadatawidget.ui
 )
 
-kde4_add_ui_files(kdevsubversion_PART_SRCS ${kdevsubversion_PART_UI})
-kde4_add_plugin(kdevsubversion ${kdevsubversion_PART_SRCS} ${kdevsubversion_JOB_SRCS} ${kdevsubversion_WRAPPER_SRCS})
+qt5_wrap_ui(kdevsubversion_PART_SRCS ${kdevsubversion_PART_UI})
+add_library(kdevsubversion MODULE ${kdevsubversion_PART_SRCS} ${kdevsubversion_JOB_SRCS} ${kdevsubversion_WRAPPER_SRCS})
 
 target_link_libraries(kdevsubversion
                     ${SUBVERSION_LIBRARIES}

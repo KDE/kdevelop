@@ -8,7 +8,7 @@ set(kdevswitchtobuddy_PART_SRCS
 
 include_directories(CMAKE_CURRENT_BINARY_DIR)
 
-kde4_add_plugin(kdevswitchtobuddy ${kdevswitchtobuddy_PART_SRCS})
+add_library(kdevswitchtobuddy MODULE ${kdevswitchtobuddy_PART_SRCS})
 
 target_link_libraries(kdevswitchtobuddy
     ${KDEVPLATFORM_INTERFACES_LIBRARIES}

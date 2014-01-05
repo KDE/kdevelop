@@ -27,7 +27,7 @@ set(sublime_LIB_SRCS
     idealbuttonbarwidget.cpp
 )
 
-kde4_add_library(sublime SHARED ${sublime_LIB_SRCS})
+add_library(sublime SHARED ${sublime_LIB_SRCS})
 target_link_libraries(sublime
         LINK_PRIVATE ${KDE4_KDEUI_LIBS}
         LINK_PUBLIC ${KDE4_KPARTS_LIBS})

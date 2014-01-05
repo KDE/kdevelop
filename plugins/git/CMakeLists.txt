@@ -16,8 +16,8 @@ set(kdevgit_PART_SRCS
     gitjob.cpp
 )
 
-kde4_add_ui_files(kdevgit_PART_SRCS stashmanagerdialog.ui)
-kde4_add_plugin(kdevgit ${kdevgit_PART_SRCS})
+qt5_wrap_ui(kdevgit_PART_SRCS stashmanagerdialog.ui)
+add_library(kdevgit MODULE ${kdevgit_PART_SRCS})
 
 target_link_libraries(kdevgit
     ${KDE4_KDEUI_LIBS}

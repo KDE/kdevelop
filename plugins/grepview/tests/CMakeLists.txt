@@ -17,8 +17,9 @@ set(kdevgrepview_PART_UI
     ../grepoutputview.ui
 )
 
-kde4_add_ui_files(findReplaceTest_SRCS ${kdevgrepview_PART_UI})
-kde4_add_unit_test(findreplace-test ${findReplaceTest_SRCS})
+qt5_wrap_ui(findReplaceTest_SRCS ${kdevgrepview_PART_UI})
+add_executable(findreplace-test ${findReplaceTest_SRCS})
+ecm_mark_as_test(findreplace-test)
 target_link_libraries(findreplace-test
     ${QT_QTTEST_LIBRARY}
     ${KDE4_KDECORE_LIBS}

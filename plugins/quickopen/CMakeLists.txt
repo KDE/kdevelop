@@ -24,8 +24,8 @@ set (
     quickopen.ui
 )
 
-kde4_add_ui_files(kdevquickopen_PART_SRCS ${kdevquickopen_UI})
-kde4_add_plugin(kdevquickopen ${kdevquickopen_PART_SRCS})
+qt5_wrap_ui(kdevquickopen_PART_SRCS ${kdevquickopen_UI})
+add_library(kdevquickopen MODULE ${kdevquickopen_PART_SRCS})
 target_link_libraries(kdevquickopen kdevplatformlanguage kdevplatforminterfaces kdevplatformproject ${KDE4_KDEUI_LIBS} ${KDE4_KTEXTEDITOR_LIBS} kdevplatformutil)
 
 install(TARGETS kdevquickopen DESTINATION ${PLUGIN_INSTALL_DIR})

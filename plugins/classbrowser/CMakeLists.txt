@@ -27,7 +27,7 @@ set(kdevclassbrowser_PART_SRCS
     allclassesfolder.cpp
 )
 
-kde4_add_plugin(kdevclassbrowser ${kdevclassbrowser_PART_SRCS})
+add_library(kdevclassbrowser MODULE ${kdevclassbrowser_PART_SRCS})
 target_link_libraries(kdevclassbrowser ${KDE4_KDEUI_LIBS} ${KDE4_KTEXTEDITOR_LIBS} kdevplatformutil kdevplatformlanguage kdevplatforminterfaces kdevplatformproject)
 
 install(TARGETS kdevclassbrowser DESTINATION ${PLUGIN_INSTALL_DIR})

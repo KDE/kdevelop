@@ -12,24 +12,68 @@ set(KDEVPLATFORM_LIB_SOVERSION 8)
 
 ################################################################################
 
-cmake_minimum_required(VERSION 2.8.9)
+cmake_minimum_required(VERSION 2.8.12)
 project(KDevPlatform)
 
 set(KDE4_BUILD_TESTS "ON" CACHE "BOOL" "Enable building of tests" FORCE )
 
-set(CMAKE_MODULE_PATH ${KDevPlatform_SOURCE_DIR}/cmake/modules)
+# we need some parts of the ECM CMake helpers
+find_package (ECM 0.0.9 REQUIRED NO_MODULE)
+set(CMAKE_MODULE_PATH ${KDevPlatform_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
+include(ECMOptionalAddSubdirectory)
+include(ECMInstallIcons)
+include(ECMSetupVersion)
+include(ECMMarkAsTest)
+include(ECMMarkNonGuiExecutable)
+include(ECMGenerateHeaders)
 
-set(KDE_MIN_VERSION "4.7.0")
-find_package(KDE4 4.7.0 REQUIRED)
+include(CMakePackageConfigHelpers)
+include(FeatureSummary)
+include(WriteBasicConfigVersionFile)
+include(CheckFunctionExists)
 
-find_package(Grantlee 0.1.7)
+include(KDEInstallDirs)
+include(KDECMakeSettings)
+include(KDECompilerSettings)
+
+set(QT_MIN_VERSION "5.2.0")
+find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Core DBus Widgets Script Test)
+
+# Load the frameworks we need
+find_package(KF5 CONFIG REQUIRED COMPONENTS
+  Archive
+  Config
+  DocTools
+  Emoticons
+  GuiAddons
+  I18n
+  Init
+  ItemModels
+  JobWidgets
+  KCMUtils
+  KIO
+  NewStuff
+  Parts
+  PrintUtils
+  Sonnet
+  ThreadWeaver
+  WindowSystem
+  XmlGui
+  # TODO KF5: Port away from this
+  KDE4Support
+)
+
+#TODO KF5: Re-enable Grantlee (currently GrantleeConfig.cmake calls find_package(Qt4) internall
+#find_package(Grantlee 0.1.7)
 find_package(QJSON)
-macro_log_feature( Grantlee_FOUND "Grantlee" "Grantlee templating library, needed for file templates" "http://www.grantlee.org/" TRUE "0.1.7")
-macro_log_feature( QJSON_FOUND "QJson" "QJson support for Uploading Patches to reviewboard" "http://qjson.sourceforge.net/" FALSE "0.7.0" "The qjson library is needed to enable uploading patches to reviewboard" )
-
-include (KDE4Defaults)
-include (MacroWriteBasicCMakeVersionFile)
-include (MacroLibrary)
+set_package_properties(Grantlee PROPERTIES
+    PURPOSE "Grantlee templating library, needed for file templates"
+    URL "http://www.grantlee.org/"
+    TYPE REQUIRED)
+set_package_properties(QJSON PROPERTIES
+    PURPOSE "QJson support for Uploading Patches to reviewboard"
+    URL "http://qjson.sourceforge.net/"
+    TYPE OPTIONAL)
 
 # Make sure that we're having RPATH on our installed libs, else using kdevelop
 # from prefixes like $HOME/kdevelop breaks
@@ -51,7 +95,7 @@ endif()
 configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/config-kdevplatform.h.cmake
                 ${CMAKE_CURRENT_BINARY_DIR}/config-kdevplatform.h )
 
-include_directories(${KDevPlatform_SOURCE_DIR} ${KDevPlatform_BINARY_DIR} ${KDE4_INCLUDES})
+include_directories(${KDevPlatform_SOURCE_DIR} ${KDevPlatform_BINARY_DIR})
 include_directories(${Grantlee_INCLUDE_DIRS})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/util/)
 
@@ -78,7 +122,7 @@ add_subdirectory(util)
 add_subdirectory(outputview)
 add_subdirectory(vcs)
 add_subdirectory(pics)
-#macro_optional_add_subdirectory(doc)
+#ecm_optional_add_subdirectory(doc)
 add_subdirectory(debugger)
 add_subdirectory(documentation)
 if (Grantlee_FOUND)
@@ -88,7 +132,9 @@ add_subdirectory(tests)
 
 add_subdirectory(plugins)
 
-macro_write_basic_cmake_version_file( ${KDevPlatform_BINARY_DIR}/KDevPlatformConfigVersion.cmake ${KDEVPLATFORM_VERSION_MAJOR} ${KDEVPLATFORM_VERSION_MINOR} ${KDEVPLATFORM_VERSION_PATCH} )
+write_basic_config_version_file(${KDevPlatform_BINARY_DIR}/KDevPlatformConfigVersion.cmake
+    VERSION ${KDEVPLATFORM_VERSION_MAJOR}.${KDEVPLATFORM_VERSION_MINOR}.${KDEVPLATFORM_VERSION_PATCH}
+    COMPATIBILITY AnyNewerVersion)
 configure_file( "${KDevPlatform_SOURCE_DIR}/KDevPlatformConfig.cmake.in" "${KDevPlatform_BINARY_DIR}/KDevPlatformConfig.cmake" @ONLY )
 configure_file( "${KDevPlatform_SOURCE_DIR}/kdevplatformversion.h.cmake" "${KDevPlatform_BINARY_DIR}/kdevplatformversion.h" @ONLY )
 

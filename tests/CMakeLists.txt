@@ -15,7 +15,7 @@ set(kdevplatformtests_LIB_SRCS
     modeltest.cpp
 )
 
-kde4_add_library(kdevplatformtests SHARED ${kdevplatformtests_LIB_SRCS})
+add_library(kdevplatformtests SHARED ${kdevplatformtests_LIB_SRCS})
 target_link_libraries(kdevplatformtests LINK_PUBLIC
     kdevplatformshell
     kdevplatformlanguage

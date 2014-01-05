@@ -9,7 +9,7 @@ set(kdevtestview_PLUGIN_SRCS
     testviewdebug.cpp
 )
 
-kde4_add_plugin(kdevtestview ${kdevtestview_PLUGIN_SRCS})
+add_library(kdevtestview MODULE ${kdevtestview_PLUGIN_SRCS})
 target_link_libraries(kdevtestview kdevplatforminterfaces kdevplatformproject kdevplatformutil kdevplatformlanguage)
 
 install(TARGETS kdevtestview DESTINATION ${PLUGIN_INSTALL_DIR} )

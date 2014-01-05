@@ -14,9 +14,9 @@ set(kdevexternalscript_PART_UI
     editexternalscript.ui
 )
 
-kde4_add_ui_files(kdevexternalscript_PART_SRCS ${kdevexternalscript_PART_UI})
+qt5_wrap_ui(kdevexternalscript_PART_SRCS ${kdevexternalscript_PART_UI})
 
-kde4_add_plugin(kdevexternalscript ${kdevexternalscript_PART_SRCS})
+add_library(kdevexternalscript MODULE ${kdevexternalscript_PART_SRCS})
 
 target_link_libraries(kdevexternalscript
     ${KDE4_KTEXTEDITOR_LIBS} ${KDE4_KIO_LIBS} ${KDE4_KPARTS_LIBS} ${KDE4_KNEWSTUFF3_LIBS}

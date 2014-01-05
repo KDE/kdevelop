@@ -33,7 +33,8 @@ if (CVS)
         ../cvsstatusjob.cpp
         ../cvsdiffjob.cpp
     )
-	kde4_add_unit_test(kdevcvs-test ${cvstest_SRCS})
+	add_executable(kdevcvs-test ${cvstest_SRCS})
+	ecm_mark_as_test(kdevcvs-test)
 	target_link_libraries(kdevcvs-test
 		${QT_QTTEST_LIBRARY}
 		${KDE4_KDECORE_LIBS}

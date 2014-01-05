@@ -4,6 +4,7 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
 
 set(backgroundparsertest_SRCS test_backgroundparser.cpp testlanguagesupport.cpp testparsejob.cpp)
 
-kde4_add_unit_test(backgroundparsertest ${backgroundparsertest_SRCS})
+add_executable(backgroundparsertest ${backgroundparsertest_SRCS})
+ecm_mark_as_test(backgroundparsertest)
 target_link_libraries(backgroundparsertest ${KDE4_KDECORE_LIBS} ${KDE4_TEXTEDITOR_LIBS}
     ${QT_QTTEST_LIBRARY} ${KDEVPLATFORM_TESTS_LIBRARIES} ${KDE4_THREADWEAVER_LIBRARIES} kdevplatformlanguage)

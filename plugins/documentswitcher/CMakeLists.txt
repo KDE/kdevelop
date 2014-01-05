@@ -8,7 +8,7 @@ set(kdevdocumentswitcher_PART_SRCS
     documentswitchertreeview.cpp
 )
 
-kde4_add_plugin(kdevdocumentswitcher ${kdevdocumentswitcher_PART_SRCS})
+add_library(kdevdocumentswitcher MODULE ${kdevdocumentswitcher_PART_SRCS})
 target_link_libraries(kdevdocumentswitcher kdevplatforminterfaces sublime kdevplatforminterfaces )
 
 install(TARGETS kdevdocumentswitcher DESTINATION ${PLUGIN_INSTALL_DIR} )

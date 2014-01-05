@@ -51,7 +51,7 @@ set(kdevplatforminterfaces_LIB_SRCS
 )
 configure_file(ipluginversion.h.in ${CMAKE_CURRENT_BINARY_DIR}/ipluginversion.h)
 
-kde4_add_library(kdevplatforminterfaces SHARED ${kdevplatforminterfaces_LIB_SRCS})
+add_library(kdevplatforminterfaces SHARED ${kdevplatforminterfaces_LIB_SRCS})
 target_link_libraries(kdevplatforminterfaces LINK_PUBLIC
     ${KDE4_KPARTS_LIBS}
     ${KDE4_KTEXTEDITOR_LIBS}

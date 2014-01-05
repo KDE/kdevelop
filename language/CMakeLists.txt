@@ -136,7 +136,7 @@ set(kdevplatformlanguage_LIB_SRCS
     checks/controlflowgraph.cpp checks/controlflownode.cpp
 )
 
-kde4_add_library(kdevplatformlanguage SHARED ${kdevplatformlanguage_LIB_SRCS})
+add_library(kdevplatformlanguage SHARED ${kdevplatformlanguage_LIB_SRCS})
 target_link_libraries(kdevplatformlanguage LINK_PUBLIC
         kdevplatforminterfaces
 )

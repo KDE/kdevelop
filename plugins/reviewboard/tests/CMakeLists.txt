@@ -6,9 +6,9 @@ set(reviewboardtest_SRCS
     ../reviewboardjobs.cpp
 )
 
-kde4_add_ui_files(reviewboardtest_SRCS ../reviewpatch.ui)
+qt5_wrap_ui(reviewboardtest_SRCS ../reviewpatch.ui)
 
-kde4_add_executable(reviewboardtest ${reviewboardtest_SRCS})
+add_executable(reviewboardtest ${reviewboardtest_SRCS})
 target_link_libraries(reviewboardtest ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${QJSON_LIBRARIES} ${qjson_LIBRARIES})
 
 

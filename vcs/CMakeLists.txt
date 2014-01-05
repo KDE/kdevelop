@@ -45,8 +45,8 @@ set(kdevplatformvcs_LIB_SRCS
     interfaces/icontentawareversioncontrol.cpp
 )
 
-kde4_add_ui_files(kdevplatformvcs_LIB_SRCS ${kdevplatformvcs_UIS})
-kde4_add_library(kdevplatformvcs SHARED ${kdevplatformvcs_LIB_SRCS})
+qt5_wrap_ui(kdevplatformvcs_LIB_SRCS ${kdevplatformvcs_UIS})
+add_library(kdevplatformvcs SHARED ${kdevplatformvcs_LIB_SRCS})
 target_link_libraries(kdevplatformvcs LINK_PUBLIC
     kdevplatformoutputview
     kdevplatforminterfaces

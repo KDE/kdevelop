@@ -87,7 +87,7 @@ set(kdevplatformshell_LIB_SRCS
 
 # Check if KTE is new enough to have the EditVIMode view mode flag
 try_compile( HAVE_EDITVIMODE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/testeditvimode.cpp
-             CMAKE_FLAGS "-DINCLUDE_DIRECTORIES=${KDE4_INCLUDES}"
+             CMAKE_FLAGS "-DINCLUDE_DIRECTORIES=${KDE4_KTEXTEDITOR_INCLUDES}"
              LINK_LIBRARIES ${KDE4_KTEXTEDITOR_LIBS} )
 if(HAVE_EDITVIMODE)
     add_definitions("-DKTEXTEDITOR_HAS_VIMODE=1")
@@ -100,8 +100,8 @@ set(kdevplatformshell_UI
     projectsourcepage.ui
 )
 
-kde4_add_ui_files( kdevplatformshell_LIB_SRCS ${kdevplatformshell_UI} )
-kde4_add_library(kdevplatformshell SHARED ${kdevplatformshell_LIB_SRCS})
+qt5_wrap_ui( kdevplatformshell_LIB_SRCS ${kdevplatformshell_UI} )
+add_library(kdevplatformshell SHARED ${kdevplatformshell_LIB_SRCS})
 target_link_libraries(kdevplatformshell LINK_PUBLIC
     sublime
     kdevplatformoutputview
@@ -157,6 +157,6 @@ install( FILES kdevsessionui.rc DESTINATION ${DATA_INSTALL_DIR}/kdevsession )
 install( FILES kdevsourceformatter.rc DESTINATION ${DATA_INSTALL_DIR}/kdevsourceformatter )
 
 if(NOT WIN32)
-   macro_optional_add_subdirectory(kross)
+   ecm_optional_add_subdirectory(kross)
 endif(NOT WIN32)
 

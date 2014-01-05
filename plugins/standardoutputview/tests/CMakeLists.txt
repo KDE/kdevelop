@@ -4,7 +4,8 @@ set(standardOutputViewTest_SRCS
     ../toolviewdata.cpp
 )
 
-kde4_add_unit_test(standardoutputview-test ${standardOutputViewTest_SRCS})
+add_executable(standardoutputview-test ${standardOutputViewTest_SRCS})
+ecm_mark_as_test(standardoutputview-test)
 target_link_libraries(standardoutputview-test
     ${QT_QTTEST_LIBRARY}
     ${KDEVPLATFORM_TESTS_LIBRARIES}

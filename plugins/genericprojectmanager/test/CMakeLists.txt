@@ -1,4 +1,5 @@
-kde4_add_unit_test( reloadtest reloadtest.cpp )
+add_executable( reloadtest reloadtest.cpp )
+ecm_mark_as_test( reloadtest)
 target_link_libraries(reloadtest
     ${QT_QTTEST_LIBRARY}
     ${KDEVPLATFORM_PROJECT_LIBRARIES}

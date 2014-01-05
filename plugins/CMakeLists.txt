@@ -1,4 +1,4 @@
-macro_optional_add_subdirectory(konsole)
+ecm_optional_add_subdirectory(konsole)
 add_subdirectory(filemanager)
 add_subdirectory(appwizard)
 add_subdirectory(projectmanagerview)
@@ -9,7 +9,7 @@ add_subdirectory(quickopen)
 add_subdirectory(executescript)
 add_subdirectory(contextbrowser)
 add_subdirectory(snippet)
-macro_optional_add_subdirectory(cvs)
+ecm_optional_add_subdirectory(cvs)
 add_subdirectory(problemreporter)
 add_subdirectory(execute)
 add_subdirectory(externalscript)
@@ -27,24 +27,30 @@ add_subdirectory(testview)
 add_subdirectory(switchtobuddy)
 add_subdirectory(projectfilter)
 
-macro_optional_add_subdirectory(dashboard)
+ecm_optional_add_subdirectory(dashboard)
 
 set(Boost_ADDITIONAL_VERSIONS 1.39.0 1.39)
 find_package(Boost 1.35.0)
-macro_log_feature( Boost_FOUND "Boost" "Boost libraries for enabling the classbrowser" "http://www.boost.org" FALSE "1.35.0" "The boost libraries are needed to build the Class Browser" )
+set_package_properties(Boost PROPERTIES
+    PURPOSE "Boost libraries for enabling the classbrowser"
+    URL "http://www.boost.org"
+    TYPE OPTIONAL)
 if(Boost_FOUND)
-    macro_optional_add_subdirectory(classbrowser)
+    ecm_optional_add_subdirectory(classbrowser)
 endif(Boost_FOUND)
 
 find_package(SubversionLibrary)
-macro_log_feature( SUBVERSION_FOUND "Subversion" "Support for Subversion integration" "http://subversion.tigris.org" FALSE "1.3.0" "The subversion libraries are needed for the Subversion support" )
+set_package_properties(SubversionLibrary PROPERTIES
+    PURPOSE "Support for Subversion integration"
+    URL "http://subversion.tigris.org"
+    TYPE OPTIONAL)
 
 if(SUBVERSION_FOUND)
-    macro_optional_add_subdirectory(subversion)
+    ecm_optional_add_subdirectory(subversion)
 endif(SUBVERSION_FOUND)
 
 if(QJSON_FOUND)
-    macro_optional_add_subdirectory(reviewboard)
+    ecm_optional_add_subdirectory(reviewboard)
 endif(QJSON_FOUND)
 
-macro_display_feature_log()
+feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)

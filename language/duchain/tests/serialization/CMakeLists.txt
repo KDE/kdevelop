@@ -6,7 +6,8 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
 
 set(tst_itemrepository_SRCS tst_itemrepository.cpp)
 
-kde4_add_unit_test(tst_itemrepository ${tst_itemrepository_SRCS})
+add_executable(tst_itemrepository ${tst_itemrepository_SRCS})
+ecm_mark_as_test(tst_itemrepository)
 target_link_libraries(tst_itemrepository
   ${KDE4_KDECORE_LIBS}
   ${QT_QTTEST_LIBRARY}
@@ -18,7 +19,8 @@ target_link_libraries(tst_itemrepository
 
 set(tst_indexedstring_SRCS tst_indexedstring.cpp)
 
-kde4_add_unit_test(tst_indexedstring ${tst_indexedstring_SRCS})
+add_executable(tst_indexedstring ${tst_indexedstring_SRCS})
+ecm_mark_as_test(tst_indexedstring)
 target_link_libraries(tst_indexedstring
   ${KDE4_KDECORE_LIBS}
   ${QT_QTTEST_LIBRARY}
@@ -30,7 +32,8 @@ target_link_libraries(tst_indexedstring
 
 set(tst_identifier_SRCS tst_identifier.cpp)
 
-kde4_add_unit_test(tst_identifier ${tst_identifier_SRCS})
+add_executable(tst_identifier ${tst_identifier_SRCS})
+ecm_mark_as_test(tst_identifier)
 target_link_libraries(tst_identifier
   ${KDE4_KDECORE_LIBS}
   ${QT_QTTEST_LIBRARY}

@@ -15,7 +15,7 @@ set(kdevfiletemplates_PART_SRCS
     testcasespage.cpp
 )
 
-kde4_add_ui_files(kdevfiletemplates_PART_SRCS
+qt5_wrap_ui(kdevfiletemplates_PART_SRCS
     templatepreviewtoolview.ui
     ui/licensechooser.ui
     ui/newclass.ui
@@ -25,7 +25,7 @@ kde4_add_ui_files(kdevfiletemplates_PART_SRCS
     ui/testcases.ui
 )
 
-kde4_add_plugin(kdevfiletemplates ${kdevfiletemplates_PART_SRCS})
+add_library(kdevfiletemplates MODULE ${kdevfiletemplates_PART_SRCS})
 
 target_link_libraries(kdevfiletemplates
     ${KDE4_KDECORE_LIBS}
@@ -80,7 +80,7 @@ main.cpp
     testcasespage.cpp
 )
 
-kde4_add_executable(testfiletemplates ${test_srcs})
+add_executable(testfiletemplates ${test_srcs})
 
 target_link_libraries(testfiletemplates
     ${KDE4_KDECORE_LIBS}

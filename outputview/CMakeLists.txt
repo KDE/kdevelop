@@ -12,7 +12,7 @@ set( outputviewinterfaces_LIB_SRCS
     outputjob.cpp
     outputexecutejob.cpp
 )
-kde4_add_library( kdevplatformoutputview SHARED ${outputviewinterfaces_LIB_SRCS} )
+add_library( kdevplatformoutputview SHARED ${outputviewinterfaces_LIB_SRCS} )
 target_link_libraries(kdevplatformoutputview LINK_PUBLIC
     ${KDE4_KDEUI_LIBS}
 )

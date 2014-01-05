@@ -11,7 +11,7 @@ set(standardoutputview_LIB_SRCS
     toolviewdata.cpp
 )
 
-kde4_add_plugin(kdevstandardoutputview ${standardoutputview_LIB_SRCS})
+add_library(kdevstandardoutputview MODULE ${standardoutputview_LIB_SRCS})
 target_link_libraries(kdevstandardoutputview ${KDE4_KDEUI_LIBS}
     kdevplatforminterfaces sublime kdevplatformutil kdevplatformoutputview)
 

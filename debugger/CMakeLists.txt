@@ -22,7 +22,7 @@ set( kdevplatformdebugger_LIB_SRCS
     framestack/framestackmodel.cpp
     framestack/framestackwidget.cpp
 )
-kde4_add_library(kdevplatformdebugger SHARED ${kdevplatformdebugger_LIB_SRCS})
+add_library(kdevplatformdebugger SHARED ${kdevplatformdebugger_LIB_SRCS})
 target_link_libraries(kdevplatformdebugger LINK_PUBLIC
     kdevplatforminterfaces
     kdevplatformutil
