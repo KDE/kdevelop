@@ -211,6 +211,11 @@ protected:
      */
     void highlightDUChain();
 
+    /**
+     * Returns whether there is a tracker for the current document.
+     */
+    bool hasTracker() const;
+
 private:
     class ParseJobPrivate* const d;
 };

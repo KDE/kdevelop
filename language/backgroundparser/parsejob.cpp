@@ -518,6 +518,10 @@ DataAccessRepository* ParseJob::dataAccessInformation()
     return 0;
 }
 
+bool ParseJob::hasTracker() const
+{
+    return d->tracker;
+}
 
 }
 
