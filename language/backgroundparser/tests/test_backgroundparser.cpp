@@ -273,7 +273,7 @@ void TestBackgroundparser::benchmarkDocumentChanges()
     QVERIFY(editor);
     KTextEditor::Document* doc = editor->createDocument(this);
     QVERIFY(doc);
-    doc->saveAs(KUrl("/tmp/__kdevbackgroundparsertest_benchmark.txt"));
+    doc->saveAs(KUrl::fromPath(QDir::tempPath() + "/__kdevbackgroundparsertest_benchmark.txt"));
     
     DocumentChangeTracker tracker(doc);
     
