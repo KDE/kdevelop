@@ -24,13 +24,18 @@
 
 #include "clangtypes.h"
 
+#include "contextbuilder.h"
 #include "typebuilder.h"
 
 #include <language/duchain/identifier.h>
 #include <language/duchain/ducontext.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/duchainlock.h>
-#include <language/duchain/functiondeclaration.h>
+#include <language/duchain/types/integraltype.h>
+#include <language/duchain/classdeclaration.h>
+#include <language/duchain/classfunctiondeclaration.h>
+#include <language/duchain/forwarddeclaration.h>
+#include <language/duchain/functiondefinition.h>
 
 namespace DeclarationBuilder {
 
@@ -60,65 +65,182 @@ template<class T> T *createDeclarationCommon(CXCursor cursor, const Identifier& 
     return decl;
 }
 
-template<class T> T *createDecl(CXCursor cursor, const Identifier& id, DUContext* parentContext)
+Identifier getId(CXCursor cursor)
 {
-    auto decl = createDeclarationCommon<T>(cursor, id);
+    return Identifier(IndexedString(ClangString(clang_getCursorSpelling(cursor))));
+}
+
+template<class T> T* createDeclOnly(CXCursor cursor, DUContext* parentContext)
+{
+    auto decl = createDeclarationCommon<T>(cursor, getId(cursor));
     DUChainWriteLocker lock;
     decl->setContext(parentContext);
     return decl;
 }
 
-template<class T> T *createCtxtDecl(CXCursor cursor, const Identifier& id, DUContext* internalContext, DUContext* parentContext)
+template<CXCursorKind CK, class T> T* createDeclAndContext(CXCursor cursor, DUContext* parentContext)
 {
+    auto id = getId(cursor);
     auto decl = createDeclarationCommon<T>(cursor, id);
+    auto internalContext = ContextBuilder::build<CK>(cursor, id, parentContext);
     DUChainWriteLocker lock;
     decl->setContext(parentContext);
     decl->setInternalContext(internalContext);
     return decl;
 }
 
-template<CXCursorKind> Declaration *build(CXCursor, const Identifier&, DUContext*);
+constexpr bool isClassType(CXCursorKind CK)
+{
+    return CK == CXCursor_StructDecl
+        || CK == CXCursor_ClassDecl
+        || CK == CXCursor_UnionDecl
+        || CK == CXCursor_ClassTemplate
+        || CK == CXCursor_ClassTemplatePartialSpecialization;
+}
 
-#define AddDeclarationBuilder(CK, DT) \
-template<> Declaration* build<CK>(CXCursor c, const Identifier& i, DUContext *p)\
-{ return createDecl<DT>(c, i, p); }
+constexpr bool isFunctionType(CXCursorKind CK)
+{
+    return CK == CXCursor_FunctionDecl
+        || CK == CXCursor_CXXMethod
+        || CK == CXCursor_Constructor
+        || CK == CXCursor_Destructor
+        || CK == CXCursor_ConversionFunction
+        || CK == CXCursor_FunctionTemplate;
+}
 
-template<CXCursorKind> Declaration *build(CXCursor, const Identifier&, DUContext*, DUContext *);
+constexpr bool alwaysBuildDecl(CXCursorKind CK)
+{
+    return CK == CXCursor_UnexposedDecl
+        || CK == CXCursor_FieldDecl
+        || CK == CXCursor_EnumConstantDecl
+        || CK == CXCursor_VarDecl
+        || CK == CXCursor_ParmDecl
+        || CK == CXCursor_TypedefDecl
+        || CK == CXCursor_TemplateTypeParameter
+        || CK == CXCursor_NonTypeTemplateParameter
+        || CK == CXCursor_TemplateTemplateParameter
+        || CK == CXCursor_NamespaceAlias
+        || CK == CXCursor_UsingDirective
+        || CK == CXCursor_UsingDeclaration
+        || CK == CXCursor_TypeAliasDecl;
+}
 
-#define AddCtxtDeclBuilder(CK, DT)\
-template<> Declaration* build<CK>(CXCursor c, const Identifier& id, DUContext *ic, DUContext *p)\
-{ return createCtxtDecl<DT>(c, id, ic, p); }
+constexpr bool alwaysBuildDeclAndContext(CXCursorKind CK)
+{
+    return CK == CXCursor_Namespace;
+}
 
-#define AddBothBuilders(CursorKind, DeclType)\
-AddDeclarationBuilder(CursorKind, DeclType)\
-AddCtxtDeclBuilder(CursorKind, DeclType)
+constexpr bool mayBuildDeclOrDef(CXCursorKind CK)
+{
+    return isClassType(CK)
+        || isFunctionType(CK)
+        || CK == CXCursor_EnumDecl;
+}
 
-AddDeclarationBuilder(CXCursor_UnexposedDecl, Declaration);
-AddBothBuilders(CXCursor_StructDecl, Declaration);
-AddBothBuilders(CXCursor_UnionDecl, Declaration);
-AddBothBuilders(CXCursor_ClassDecl, Declaration);
-AddBothBuilders(CXCursor_EnumDecl, Declaration);
-AddDeclarationBuilder(CXCursor_FieldDecl, Declaration);
-AddDeclarationBuilder(CXCursor_EnumConstantDecl, Declaration);
-AddBothBuilders(CXCursor_FunctionDecl, FunctionDeclaration);
-AddDeclarationBuilder(CXCursor_VarDecl, Declaration);
-AddDeclarationBuilder(CXCursor_ParmDecl, Declaration);
-AddDeclarationBuilder(CXCursor_TypedefDecl, Declaration);
-AddBothBuilders(CXCursor_CXXMethod, Declaration);
-AddCtxtDeclBuilder(CXCursor_Namespace, Declaration);
-AddBothBuilders(CXCursor_Constructor, Declaration);
-AddBothBuilders(CXCursor_Destructor, Declaration);
-AddBothBuilders(CXCursor_ConversionFunction, Declaration);
-AddDeclarationBuilder(CXCursor_TemplateTypeParameter, Declaration);
-AddDeclarationBuilder(CXCursor_NonTypeTemplateParameter, Declaration);
-AddDeclarationBuilder(CXCursor_TemplateTemplateParameter, Declaration);
-AddBothBuilders(CXCursor_FunctionTemplate, Declaration);
-AddBothBuilders(CXCursor_ClassTemplate, Declaration);
-AddBothBuilders(CXCursor_ClassTemplatePartialSpecialization, Declaration);
-AddDeclarationBuilder(CXCursor_NamespaceAlias, Declaration);
-AddDeclarationBuilder(CXCursor_UsingDirective, Declaration);
-AddDeclarationBuilder(CXCursor_UsingDeclaration, Declaration);
-AddDeclarationBuilder(CXCursor_TypeAliasDecl, Declaration);
+constexpr bool isKDevDeclaration(CXCursorKind CK)
+{
+    return CK == CXCursor_UnexposedDecl
+        || CK == CXCursor_FieldDecl
+        || CK == CXCursor_EnumConstantDecl
+        || CK == CXCursor_VarDecl
+        || CK == CXCursor_ParmDecl
+        || CK == CXCursor_TypedefDecl
+        || CK == CXCursor_TemplateTypeParameter
+        || CK == CXCursor_NonTypeTemplateParameter
+        || CK == CXCursor_TemplateTemplateParameter
+        || CK == CXCursor_NamespaceAlias
+        || CK == CXCursor_UsingDirective
+        || CK == CXCursor_UsingDeclaration
+        || CK == CXCursor_TypeAliasDecl
+        || CK == CXCursor_Namespace
+        || CK == CXCursor_EnumDecl;
+}
+
+constexpr bool isKDevClassDeclaration(CXCursorKind CK, bool isDefinition)
+{
+    return isDefinition && isClassType(CK);
+}
+
+constexpr bool isKDevForwardDeclaration(CXCursorKind CK, bool isDefinition)
+{
+    return !isDefinition && isClassType(CK);
+}
+
+constexpr bool isKDevClassFunctionDeclaration(CXCursorKind CK, bool isDefinition)
+{
+    return !isDefinition && CK == CXCursor_CXXMethod;
+}
+
+constexpr bool isKDevFunctionDeclaration(CXCursorKind CK, bool isDefinition)
+{
+    return !isDefinition && isFunctionType(CK) && CK != CXCursor_CXXMethod;
+}
+
+constexpr bool isKDevFunctionDefinition(CXCursorKind CK, bool isDefinition)
+{
+    return isDefinition && isFunctionType(CK);
+}
+
+template<CXCursorKind CK, bool isDefinition, class Enable = void> struct DeclType;
+template<CXCursorKind CK, bool isDefinition> struct DeclType<CK, isDefinition, typename std::enable_if<isKDevDeclaration(CK)>::type>
+{
+    typedef Declaration Type;
+};
+template<CXCursorKind CK, bool isDefinition> struct DeclType<CK, isDefinition, typename std::enable_if<isKDevForwardDeclaration(CK, isDefinition)>::type>
+{
+    typedef ForwardDeclaration Type;
+};
+template<CXCursorKind CK, bool isDefinition> struct DeclType<CK, isDefinition, typename std::enable_if<isKDevClassDeclaration(CK, isDefinition)>::type>
+{
+    typedef ClassDeclaration Type;
+};
+template<CXCursorKind CK, bool isDefinition> struct DeclType<CK, isDefinition, typename std::enable_if<isKDevClassFunctionDeclaration(CK, isDefinition)>::type>
+{
+    typedef ClassFunctionDeclaration Type;
+};
+template<CXCursorKind CK, bool isDefinition> struct DeclType<CK, isDefinition, typename std::enable_if<isKDevFunctionDeclaration(CK, isDefinition)>::type>
+{
+    typedef FunctionDeclaration Type;
+};
+template<CXCursorKind CK, bool isDefinition> struct DeclType<CK, isDefinition, typename std::enable_if<isKDevFunctionDefinition(CK, isDefinition)>::type>
+{
+    typedef FunctionDefinition Type;
+};
+
+template<CXCursorKind CK, class Enable = void>
+struct DeclBuilder;
+
+template<CXCursorKind CK> struct DeclBuilder<CK, typename std::enable_if<alwaysBuildDecl(CK)>::type>
+{
+    typedef typename DeclType<CK, false>::Type KDevType;
+    static KDevType* build(CXCursor cursor, DUContext* parentContext)
+    {
+        return createDeclOnly<KDevType>(cursor, parentContext);
+    }
+};
+template<CXCursorKind CK> struct DeclBuilder<CK, typename std::enable_if<alwaysBuildDeclAndContext(CK)>::type>
+{
+    typedef typename DeclType<CK, false>::Type KDevType;
+    static KDevType* build(CXCursor cursor, DUContext* parentContext)
+    {
+        return createDeclAndContext<CK, KDevType>(cursor, parentContext);
+    }
+};
+template<CXCursorKind CK> struct DeclBuilder<CK, typename std::enable_if<mayBuildDeclOrDef(CK)>::type>
+{
+    static Declaration* build(CXCursor cursor, DUContext* parentContext)
+    {
+        if (clang_isCursorDefinition(cursor))
+            return createDeclAndContext<CK, typename DeclType<CK, true>::Type>(cursor, parentContext);
+        else
+            return createDeclOnly<typename DeclType<CK, false>::Type>(cursor, parentContext);
+    }
+};
+
+template<CXCursorKind CK> Declaration *build(CXCursor cursor, DUContext* parentContext)
+{
+    return DeclBuilder<CK>::build(cursor, parentContext);
+}
 
 }
 

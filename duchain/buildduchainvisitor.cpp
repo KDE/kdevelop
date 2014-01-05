@@ -63,8 +63,7 @@ CXChildVisitResult recurse(CXCursor cursor, ClientData* data, DUContext* context
 template<CXCursorKind kind>
 CXChildVisitResult buildDeclaration(CXCursor cursor, ClientData* data)
 {
-    Identifier id(IndexedString(ClangString(clang_getCursorSpelling(cursor))));
-    DeclarationBuilder::build<kind>(cursor, id, data->parent);
+    DeclarationBuilder::build<kind>(cursor, data->parent);
     return CXChildVisit_Recurse;
 }
 
@@ -72,40 +71,6 @@ template<CXCursorKind kind>
 CXChildVisitResult buildUse(CXCursor cursor, ClientData* data)
 {
     return UseBuilder::build<kind>(cursor, data->parent, data->includeContexts);
-}
-
-template<CXCursorKind kind>
-CXChildVisitResult buildCtxtDecl(CXCursor cursor, ClientData* data)
-{
-    Identifier id(IndexedString(ClangString(clang_getCursorSpelling(cursor))));
-    auto ctx = ContextBuilder::build<kind>(cursor, data->parent);
-    DeclarationBuilder::build<kind>(cursor, id, ctx, data->parent);
-    return recurse(cursor, data, ctx);
-}
-
-template<CXCursorKind kind>
-CXChildVisitResult buildIdCtxtDecl(CXCursor cursor, ClientData* data)
-{
-    Identifier id(IndexedString(ClangString(clang_getCursorSpelling(cursor))));
-    auto ctx = ContextBuilder::build<kind>(cursor, id, data->parent);
-    DeclarationBuilder::build<kind>(cursor, id, ctx, data->parent);
-    return recurse(cursor, data, ctx);
-}
-
-template<CXCursorKind kind>
-CXChildVisitResult buildDeclMaybeCtxt(CXCursor cursor, ClientData* data)
-{
-    return clang_isCursorDefinition(cursor) ?
-        buildCtxtDecl<kind>(cursor, data) :
-        buildDeclaration<kind>(cursor, data);
-}
-
-template<CXCursorKind kind>
-CXChildVisitResult buildDeclMaybeIdCtxt(CXCursor cursor, ClientData* data)
-{
-    return clang_isCursorDefinition(cursor) ?
-        buildIdCtxtDecl<kind>(cursor, data) :
-        buildDeclaration<kind>(cursor, data);
 }
 
 CXChildVisitResult visit(CXCursor cursor, CXCursor /*parent*/, CXClientData d)
@@ -132,27 +97,27 @@ CXChildVisitResult visit(CXCursor cursor, CXCursor /*parent*/, CXClientData d)
     switch (clang_getCursorKind(cursor))
     {
     UseCursorKind(CXCursor_UnexposedDecl, buildDeclaration);
-    UseCursorKind(CXCursor_StructDecl, buildDeclMaybeIdCtxt);
-    UseCursorKind(CXCursor_UnionDecl, buildDeclMaybeIdCtxt);
-    UseCursorKind(CXCursor_ClassDecl, buildDeclMaybeIdCtxt);
-    UseCursorKind(CXCursor_EnumDecl, buildDeclMaybeIdCtxt);
+    UseCursorKind(CXCursor_StructDecl, buildDeclaration);
+    UseCursorKind(CXCursor_UnionDecl, buildDeclaration);
+    UseCursorKind(CXCursor_ClassDecl, buildDeclaration);
+    UseCursorKind(CXCursor_EnumDecl, buildDeclaration);
     UseCursorKind(CXCursor_FieldDecl, buildDeclaration);
     UseCursorKind(CXCursor_EnumConstantDecl, buildDeclaration);
-    UseCursorKind(CXCursor_FunctionDecl, buildDeclMaybeCtxt);
+    UseCursorKind(CXCursor_FunctionDecl, buildDeclaration);
     UseCursorKind(CXCursor_VarDecl, buildDeclaration);
     UseCursorKind(CXCursor_ParmDecl, buildDeclaration);
     UseCursorKind(CXCursor_TypedefDecl, buildDeclaration);
-    UseCursorKind(CXCursor_CXXMethod, buildDeclMaybeCtxt);
-    UseCursorKind(CXCursor_Namespace, buildIdCtxtDecl);
-    UseCursorKind(CXCursor_Constructor, buildDeclMaybeCtxt);
-    UseCursorKind(CXCursor_Destructor, buildDeclMaybeCtxt);
-    UseCursorKind(CXCursor_ConversionFunction, buildDeclMaybeCtxt);
+    UseCursorKind(CXCursor_CXXMethod, buildDeclaration);
+    UseCursorKind(CXCursor_Namespace, buildDeclaration);
+    UseCursorKind(CXCursor_Constructor, buildDeclaration);
+    UseCursorKind(CXCursor_Destructor, buildDeclaration);
+    UseCursorKind(CXCursor_ConversionFunction, buildDeclaration);
     UseCursorKind(CXCursor_TemplateTypeParameter, buildDeclaration);
     UseCursorKind(CXCursor_NonTypeTemplateParameter, buildDeclaration);
     UseCursorKind(CXCursor_TemplateTemplateParameter, buildDeclaration);
-    UseCursorKind(CXCursor_FunctionTemplate, buildDeclMaybeCtxt);
-    UseCursorKind(CXCursor_ClassTemplate, buildDeclMaybeIdCtxt);
-    UseCursorKind(CXCursor_ClassTemplatePartialSpecialization, buildDeclMaybeIdCtxt);
+    UseCursorKind(CXCursor_FunctionTemplate, buildDeclaration);
+    UseCursorKind(CXCursor_ClassTemplate, buildDeclaration);
+    UseCursorKind(CXCursor_ClassTemplatePartialSpecialization, buildDeclaration);
     UseCursorKind(CXCursor_NamespaceAlias, buildDeclaration);
     UseCursorKind(CXCursor_TypeAliasDecl, buildDeclaration);
     UseCursorKind(CXCursor_TypeRef, buildUse)

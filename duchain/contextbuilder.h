@@ -46,41 +46,35 @@ DUContext *createContextCommon(CXCursor cursor, DUContext* parentContext)
     return context;
 }
 
-template<DUContext::ContextType type>
-DUContext *createContextCommon(CXCursor cursor, const Identifier& id, DUContext* parentContext)
+constexpr DUContext::ContextType contextType(CXCursorKind CK)
+{
+    return CK == CXCursor_StructDecl                         ? DUContext::Class
+         : CK == CXCursor_UnionDecl                          ? DUContext::Class
+         : CK == CXCursor_StructDecl                         ? DUContext::Class
+         : CK == CXCursor_UnionDecl                          ? DUContext::Class
+         : CK == CXCursor_ClassDecl                          ? DUContext::Class
+         : CK == CXCursor_EnumDecl                           ? DUContext::Enum
+         : CK == CXCursor_FunctionDecl                       ? DUContext::Other
+         : CK == CXCursor_CXXMethod                          ? DUContext::Other
+         : CK == CXCursor_Namespace                          ? DUContext::Namespace
+         : CK == CXCursor_Constructor                        ? DUContext::Other
+         : CK == CXCursor_Destructor                         ? DUContext::Other
+         : CK == CXCursor_ConversionFunction                 ? DUContext::Other
+         : CK == CXCursor_FunctionTemplate                   ? DUContext::Other
+         : CK == CXCursor_ClassTemplate                      ? DUContext::Class
+         : CK == CXCursor_ClassTemplatePartialSpecialization ? DUContext::Class
+         : static_cast<DUContext::ContextType>(-1);
+}
+
+template<CXCursorKind CK, class Enable = typename std::enable_if<contextType(CK) != -1>::type>
+DUContext *build(CXCursor cursor, const Identifier& id, DUContext* parentContext)
 {
     auto context = new DUContext(makeRange(cursor), parentContext);
     DUChainWriteLocker lock; //TODO: (..type, id..) constructor for DUContext?
-    context->setType(type);
+    context->setType(contextType(CK));
     context->setLocalScopeIdentifier(parentContext->localScopeIdentifier() + id);
     return context;
 }
-
-template<CXCursorKind kind> DUContext *build(CXCursor, DUContext *);
-
-#define AddContextBuilder(CursorKind, ContextType)\
-template<> DUContext* build<CursorKind>(CXCursor cursor, DUContext *parentContext)\
-{ return createContextCommon<ContextType>(cursor, parentContext); }
-
-template<CXCursorKind kind> DUContext *build(CXCursor, const Identifier&, DUContext*);
-
-#define AddIdContextBuilder(CursorKind, ContextType)\
-template<> DUContext* build<CursorKind>(CXCursor cursor, const Identifier& id, DUContext *parentContext)\
-{ return createContextCommon<ContextType>(cursor, id, parentContext); }
-
-AddIdContextBuilder(CXCursor_StructDecl, DUContext::Class);
-AddIdContextBuilder(CXCursor_UnionDecl, DUContext::Class);
-AddIdContextBuilder(CXCursor_ClassDecl, DUContext::Class);
-AddIdContextBuilder(CXCursor_EnumDecl, DUContext::Enum);
-AddContextBuilder(CXCursor_FunctionDecl, DUContext::Other);
-AddContextBuilder(CXCursor_CXXMethod, DUContext::Other);
-AddIdContextBuilder(CXCursor_Namespace, DUContext::Namespace);
-AddContextBuilder(CXCursor_Constructor, DUContext::Other);
-AddContextBuilder(CXCursor_Destructor, DUContext::Other);
-AddContextBuilder(CXCursor_ConversionFunction, DUContext::Other);
-AddContextBuilder(CXCursor_FunctionTemplate, DUContext::Other);
-AddIdContextBuilder(CXCursor_ClassTemplate, DUContext::Class);
-AddIdContextBuilder(CXCursor_ClassTemplatePartialSpecialization, DUContext::Class);
 
 }
 
