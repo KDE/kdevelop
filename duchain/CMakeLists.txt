@@ -14,6 +14,7 @@ kde4_add_library(kdevclangduchain SHARED
     debugvisitor.cpp
     buildduchainvisitor.cpp
     usebuilder.cpp
+    typebuilder.cpp
 )
 
 target_link_libraries(kdevclangduchain LINK_PRIVATE
