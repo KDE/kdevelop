@@ -6,7 +6,7 @@ int main(int argc, char** argv)
     /// "toString" : "int a"
     int a;
     /// "toString" : "const float b"
-    const float b;
+    const float b = 0;
     /// "toString" : "volatile long long int c"
     volatile long long c;
     /// "toString" : "void* v_ptr"

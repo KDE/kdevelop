@@ -107,6 +107,7 @@ AbstractType* createType(CXType t)
             for (int i = 0; i < numArgs; ++i) {
                 func->addArgument(type(clang_getArgType(t, i)));
             }
+            /// TODO: variadic functions
             return func;
         }
         default:
