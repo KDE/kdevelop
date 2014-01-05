@@ -10,8 +10,9 @@ int main(int argc, char** argv)
     volatile long long c = 0;
     /// "toString" : "void* v_ptr"
     void* v_ptr = nullptr;
-    /// "toString" : "void* const* v_ptr"
-    void* const* v_ptr = nullptr;
+    /// "toString" : "void* const* v_ptr2"
+    void* const* v_ptr2 = nullptr;
     /// "toString" : "int[5] arr"
     int arr[5];
+    /// TODO: enums, enumerators, typedefs, ...
 }
