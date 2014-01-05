@@ -49,7 +49,7 @@ public:
     /// parse code directly
     void parseCode( const QString &code )
     {
-        m_session.reset(new ParseSession(IndexedString("-"), code.toUtf8(), &m_index));
+        m_session.reset(new ParseSession(IndexedString("stdin.cpp"), code.toUtf8(), &m_index));
         runSession();
     }
 
