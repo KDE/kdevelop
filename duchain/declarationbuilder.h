@@ -252,13 +252,12 @@ struct DeclBuilder<CK, typename std::enable_if<alwaysBuildDeclAndContext(CK)>::t
 template<CXCursorKind CK>
 struct DeclBuilder<CK, typename std::enable_if<mayBuildDeclOrDef(CK)>::type>
 {
-    typedef typename DeclType<CK, false>::Type KDevType;
     static Declaration* build(CXCursor cursor, DUContext* parentContext)
     {
         if (clang_isCursorDefinition(cursor))
-            return createDeclAndContext<CK, KDevType>(cursor, parentContext);
+            return createDeclAndContext<CK, typename DeclType<CK, true>::Type>(cursor, parentContext);
         else
-            return createDeclOnly<KDevType>(cursor, parentContext);
+            return createDeclOnly<typename DeclType<CK, false>::Type>(cursor, parentContext);
     }
 };
 //END DeclBuilder
