@@ -9,6 +9,17 @@
 #  LLVM_FOUND       - True if llvm found.
 #  LLVM_VERSION     - Version string ("llvm-config --version")
 
+#=============================================================================
+# Copyright 2014 Kevin Funk <kevin@kfunk.org>
+#
+# Distributed under the OSI-approved BSD License (the "License");
+# see accompanying file Copyright.txt for details.
+#
+# This software is distributed WITHOUT ANY WARRANTY; without even the
+# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the License for more information.
+#=============================================================================
+
 # find llvm-config, prefer the one with a version suffix, e.g. llvm-config-3.3
 if (LLVM_FIND_VERSION)
   find_program(LLVM_CONFIG_EXECUTABLE NAMES llvm-config-${LLVM_FIND_VERSION} DOC "llvm-config-VERSION executable")

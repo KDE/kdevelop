@@ -10,6 +10,17 @@
 #
 # See http://clang.llvm.org/docs/InternalsManual.html for full list of libraries
 
+#=============================================================================
+# Copyright 2014 Kevin Funk <kevin@kfunk.org>
+#
+# Distributed under the OSI-approved BSD License (the "License");
+# see accompanying file Copyright.txt for details.
+#
+# This software is distributed WITHOUT ANY WARRANTY; without even the
+# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the License for more information.
+#=============================================================================
+
 if (NOT LLVM_INCLUDE_DIR OR NOT LLVM_LIBRARY_DIR)
   message(FATAL_ERROR "No LLVM and Clang support requires LLVM")
 else()
