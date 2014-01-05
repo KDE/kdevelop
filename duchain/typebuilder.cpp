@@ -55,6 +55,8 @@ AbstractType* createType(CXType t)
             return new IntegralType(IntegralType::TypeDouble);
         case CXType_Char_U:
         case CXType_Char_S:
+        case CXType_UChar:
+        case CXType_SChar:
             return new IntegralType(IntegralType::TypeChar);
         case CXType_Char16:
             return new IntegralType(IntegralType::TypeChar16_t);
@@ -115,12 +117,11 @@ AbstractType::Ptr type(CXType t)
     if (t.kind == CXType_LongLong || t.kind == CXType_ULongLong) {
         modifiers |= AbstractType::LongLongModifier;
     }
-    if (t.kind == CXType_Char_S) {
+    if (t.kind == CXType_SChar) {
         modifiers |= AbstractType::SignedModifier;
     }
-    if (t.kind == CXType_Char_U || t.kind == CXType_UChar || t.kind == CXType_UInt
-        || t.kind == CXType_UInt128 || t.kind == CXType_ULong || t.kind == CXType_ULongLong
-        || t.kind == CXType_UShort)
+    if (t.kind == CXType_UChar || t.kind == CXType_UInt || t.kind == CXType_UShort
+        || t.kind == CXType_UInt128 || t.kind == CXType_ULong || t.kind == CXType_ULongLong)
     {
         modifiers |= AbstractType::UnsignedModifier;
     }

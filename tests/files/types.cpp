@@ -1,4 +1,4 @@
-/// "toString" : "int main (int, signed char**)"
+/// "toString" : "int main (int, char**)"
 int main(int argc, char** argv)
 {
     /// "toString" : "short int s"
@@ -27,5 +27,11 @@ int main(int argc, char** argv)
     const int& a_lref = a;
     /// "toString" : "int&& a_rref"
     int&& a_rref = a + a;
+    /// "toString" : "char c1"
+    char c1;
+    /// "toString" : "unsigned char c2"
+    unsigned char c2;
+    /// "toString" : "signed char c3"
+    signed char c3;
     /// TODO: enums, enumerators, typedefs, ...
 }
