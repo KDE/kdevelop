@@ -1,5 +1,4 @@
-// TODO: make this a proper function declaration
-/// "toString" : "function int (int, signed char**) main"
+/// "toString" : "int main (int, signed char**)"
 int main(int argc, char** argv)
 {
     /// "toString" : "short int s"

@@ -32,6 +32,7 @@
 #include <language/duchain/types/pointertype.h>
 #include <language/duchain/types/arraytype.h>
 #include <language/duchain/types/functiontype.h>
+#include <language/duchain/functiondeclaration.h>
 
 namespace DeclarationBuilder {
 
@@ -191,7 +192,7 @@ AddBothBuilders(CXCursor_ClassDecl, Declaration);
 AddBothBuilders(CXCursor_EnumDecl, Declaration);
 AddDeclarationBuilder(CXCursor_FieldDecl, Declaration);
 AddDeclarationBuilder(CXCursor_EnumConstantDecl, Declaration);
-AddBothBuilders(CXCursor_FunctionDecl, Declaration);
+AddBothBuilders(CXCursor_FunctionDecl, FunctionDeclaration);
 AddDeclarationBuilder(CXCursor_VarDecl, Declaration);
 AddDeclarationBuilder(CXCursor_ParmDecl, Declaration);
 AddDeclarationBuilder(CXCursor_TypedefDecl, Declaration);
