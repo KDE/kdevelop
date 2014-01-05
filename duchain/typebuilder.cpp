@@ -19,6 +19,7 @@
  */
 
 #include "typebuilder.h"
+#include "clangtypes.h"
 
 #include <language/duchain/types/integraltype.h>
 #include <language/duchain/types/pointertype.h>

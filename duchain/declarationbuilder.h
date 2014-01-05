@@ -54,7 +54,23 @@ inline QByteArray buildComment(CXComment comment)
     return text;
 }
 
-template<class T>
+template<CXCursorKind CK>
+void setData(Declaration*)
+{
+    // do nothing
+}
+
+template<CXCursorKind CK>
+void setData(ClassDeclaration* decl)
+{
+    if (CK == CXCursor_UnionDecl) {
+        decl->setClassType(ClassDeclarationData::Union);
+    } else if (CK == CXCursor_StructDecl) {
+        decl->setClassType(ClassDeclarationData::Struct);
+    }
+}
+
+template<CXCursorKind CK, class T>
 T *createDeclarationCommon(CXCursor cursor, const Identifier& id)
 {
     auto range = ClangRange(clang_Cursor_getSpellingNameRange(cursor, 0, 0)).toRangeInRevision();
@@ -63,6 +79,7 @@ T *createDeclarationCommon(CXCursor cursor, const Identifier& id)
     decl->setComment(comment);
     decl->setIdentifier(id);
     decl->setAbstractType(TypeBuilder::build(cursor));
+    setData<CK>(decl);
     return decl;
 }
 
@@ -71,10 +88,10 @@ Identifier getId(CXCursor cursor)
     return Identifier(IndexedString(ClangString(clang_getCursorSpelling(cursor))));
 }
 
-template<class T>
+template<CXCursorKind CK, class T>
 T* createDeclOnly(CXCursor cursor, DUContext* parentContext)
 {
-    auto decl = createDeclarationCommon<T>(cursor, getId(cursor));
+    auto decl = createDeclarationCommon<CK, T>(cursor, getId(cursor));
     DUChainWriteLocker lock;
     decl->setContext(parentContext);
     return decl;
@@ -84,7 +101,7 @@ template<CXCursorKind CK, class T>
 T* createDeclAndContext(CXCursor cursor, DUContext* parentContext)
 {
     auto id = getId(cursor);
-    auto decl = createDeclarationCommon<T>(cursor, id);
+    auto decl = createDeclarationCommon<CK, T>(cursor, id);
     auto internalContext = ContextBuilder::build<CK>(cursor, id, parentContext);
     DUChainWriteLocker lock;
     decl->setContext(parentContext);
@@ -235,7 +252,7 @@ struct DeclBuilder<CK, typename std::enable_if<alwaysBuildDecl(CK)>::type>
     typedef typename DeclType<CK, false>::Type KDevType;
     static KDevType* build(CXCursor cursor, DUContext* parentContext)
     {
-        return createDeclOnly<KDevType>(cursor, parentContext);
+        return createDeclOnly<CK, KDevType>(cursor, parentContext);
     }
 };
 
@@ -257,7 +274,7 @@ struct DeclBuilder<CK, typename std::enable_if<mayBuildDeclOrDef(CK)>::type>
         if (clang_isCursorDefinition(cursor))
             return createDeclAndContext<CK, typename DeclType<CK, true>::Type>(cursor, parentContext);
         else
-            return createDeclOnly<typename DeclType<CK, false>::Type>(cursor, parentContext);
+            return createDeclOnly<CK, typename DeclType<CK, false>::Type>(cursor, parentContext);
     }
 };
 //END DeclBuilder

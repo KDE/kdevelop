@@ -58,3 +58,12 @@ namespace bar
         }
     };
 }
+
+/// "toString" : "struct myStruct"
+struct myStruct {};
+
+/// "toString" : "class myClass"
+class myClass {};
+
+/// "toString" : "union myUnion"
+union myUnion {};
