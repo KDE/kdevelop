@@ -23,5 +23,9 @@ int main(int argc, char** argv)
     unsigned long long ulonglong;
     /// "toString" : "short unsigned int ushort"
     unsigned short ushort;
+    /// "toString" : "const int& a_lref"
+    const int& a_lref = a;
+    /// "toString" : "int&& a_rref"
+    int&& a_rref = a + a;
     /// TODO: enums, enumerators, typedefs, ...
 }

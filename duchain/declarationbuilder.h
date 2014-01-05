@@ -32,6 +32,7 @@
 #include <language/duchain/types/pointertype.h>
 #include <language/duchain/types/arraytype.h>
 #include <language/duchain/types/functiontype.h>
+#include <language/duchain/types/referencetype.h>
 #include <language/duchain/functiondeclaration.h>
 
 namespace DeclarationBuilder {
@@ -91,6 +92,13 @@ AbstractType* createType(CXType t)
             arr->setDimension(clang_getArraySize(t));
             arr->setElementType(type(clang_getArrayElementType(t)));
             return arr;
+        }
+        case CXType_LValueReference:
+        case CXType_RValueReference: {
+            auto ref = new ReferenceType;
+            ref->setIsRValue(t.kind == CXType_RValueReference);
+            ref->setBaseType(type(clang_getPointeeType(t)));
+            return ref;
         }
         case CXType_FunctionProto: {
             auto func = new FunctionType;
