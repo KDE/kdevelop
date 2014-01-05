@@ -27,7 +27,7 @@
 
 #include "dvcsplugin.h"
 
-#include <QtGui/QMenu>
+#include <QMenu>
 #include <QtCore/QFileInfo>
 #include <QtCore/QString>
 

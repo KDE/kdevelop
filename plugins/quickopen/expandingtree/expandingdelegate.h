@@ -22,9 +22,9 @@
 #ifndef KDEVPLATFORM_PLUGIN_EXPANDINGDELEGATE_H
 #define KDEVPLATFORM_PLUGIN_EXPANDINGDELEGATE_H
 
-#include <QtGui/QItemDelegate>
 #include <QItemDelegate>
-#include <QtGui/QTextLine>
+#include <QItemDelegate>
+#include <QTextLine>
 #include <QModelIndex>
 #include <QPoint>
 

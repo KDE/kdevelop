@@ -21,8 +21,8 @@
 #ifndef KDEVPLATFORM_COMMIT_VIEW_H
 #define KDEVPLATFORM_COMMIT_VIEW_H
 
-#include <QtGui/QTreeView>
-#include <QtGui/QItemDelegate>
+#include <QTreeView>
+#include <QItemDelegate>
 
 enum ViewColumns {
     GRAPH_COLUMN = 0,

@@ -23,7 +23,7 @@
 
 #include "classbrowserplugin.h"
 
-#include <QtGui/QAction>
+#include <QAction>
 
 #include <klocale.h>
 #include <kpluginfactory.h>

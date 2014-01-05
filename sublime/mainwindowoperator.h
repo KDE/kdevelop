@@ -23,7 +23,7 @@
 
 #include "sublimeexport.h"
 
-#include <QtGui/QIcon>
+#include <QIcon>
 
 namespace Sublime {
 

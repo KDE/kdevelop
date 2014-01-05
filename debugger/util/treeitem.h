@@ -26,7 +26,7 @@
 #include <QtCore/QVariant>
 #include <QtCore/QTimer>
 #include <QtCore/QVector>
-#include <QtGui/QIcon>
+#include <QIcon>
 
 #include <iostream>
 

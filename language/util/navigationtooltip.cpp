@@ -18,7 +18,7 @@
 
 #include "navigationtooltip.h"
 #include "../duchain/navigation/abstractnavigationwidget.h"
-#include <QtGui/qboxlayout.h>
+#include <qboxlayout.h>
 
 
 namespace KDevelop {

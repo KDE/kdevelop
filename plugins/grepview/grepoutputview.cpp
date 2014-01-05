@@ -18,8 +18,8 @@
 #include "greputil.h"
 #include "grepjob.h"
 
-#include <QtGui/QAction>
-#include <QtGui/QStringListModel>
+#include <QAction>
+#include <QStringListModel>
 #include <KMessageBox>
 #include <kdebug.h>
 #include <QMenu>

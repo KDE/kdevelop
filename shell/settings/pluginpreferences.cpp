@@ -19,7 +19,7 @@
  */
 #include "pluginpreferences.h"
 
-#include <QtGui/QVBoxLayout>
+#include <QVBoxLayout>
 
 #include <kgenericfactory.h>
 #include <kaboutdata.h>

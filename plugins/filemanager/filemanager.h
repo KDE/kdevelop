@@ -20,7 +20,7 @@
 #ifndef KDEVPLATFORM_PLUGIN_FILEMANAGER_H
 #define KDEVPLATFORM_PLUGIN_FILEMANAGER_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 class KActionCollection;
 class KDirOperator;

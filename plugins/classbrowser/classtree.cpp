@@ -23,9 +23,9 @@
 
 #include "classtree.h"
 
-#include <QtGui/QMenu>
-#include <QtGui/QHeaderView>
-#include <QtGui/QContextMenuEvent>
+#include <QMenu>
+#include <QHeaderView>
+#include <QContextMenuEvent>
 
 #include "interfaces/contextmenuextension.h"
 #include "interfaces/icore.h"

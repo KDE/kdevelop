@@ -20,7 +20,7 @@
 #define KDEVPLATFORM_IASSISTANT_H
 
 #include <QtCore/QPointer>
-#include <QtGui/QIcon>
+#include <QIcon>
 #include <KDE/KSharedPtr>
 #include "interfacesexport.h"
 #include <util/ksharedobject.h>

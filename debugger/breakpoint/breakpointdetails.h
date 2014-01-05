@@ -22,7 +22,7 @@
 #ifndef KDEVPLATFORM_BREAKPOINTDETAILS_H
 #define KDEVPLATFORM_BREAKPOINTDETAILS_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include "../debuggerexport.h"
 
 class QSpinBox;

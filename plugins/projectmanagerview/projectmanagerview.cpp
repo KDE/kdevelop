@@ -21,8 +21,8 @@
 
 #include "projectmanagerview.h"
 
-#include <QtGui/QHeaderView>
-#include <QtGui/QKeyEvent>
+#include <QHeaderView>
+#include <QKeyEvent>
 
 #include <kiconloader.h>
 #include <kdebug.h>

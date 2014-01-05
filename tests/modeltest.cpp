@@ -23,7 +23,7 @@
 
 #include "modeltest.h"
 
-#include <QtGui/QtGui>
+#include <QtGui>
 #include <project/tests/projectmodeltest.h>
 
 // always enable assertions here

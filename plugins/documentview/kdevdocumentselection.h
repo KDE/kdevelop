@@ -20,7 +20,7 @@
 #ifndef KDEVPLATFORM_PLUGIN_KDEVDOCUMENTSELECTION_H
 #define KDEVPLATFORM_PLUGIN_KDEVDOCUMENTSELECTION_H
 
-#include <QtGui/QItemSelectionModel>
+#include <QItemSelectionModel>
 
 class KDevDocumentSelection: public QItemSelectionModel
 {

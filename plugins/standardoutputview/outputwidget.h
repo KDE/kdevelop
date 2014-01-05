@@ -22,7 +22,7 @@
 #ifndef KDEVPLATFORM_PLUGIN_OUTPUTWIDGET_H
 #define KDEVPLATFORM_PLUGIN_OUTPUTWIDGET_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include <QtCore/QMap>
 #include <outputview/ioutputviewmodel.h>
 #include <outputview/ioutputview.h>

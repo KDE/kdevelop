@@ -22,7 +22,7 @@ Boston, MA 02110-1301, USA.
 
 #include "environmentgrouplist.h"
 
-#include <QtGui/QStringListModel>
+#include <QStringListModel>
 
 #include <KGlobal>
 #include <KLocalizedString>

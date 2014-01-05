@@ -18,7 +18,7 @@
  ***************************************************************************/
 #include "view.h"
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 #include <kdebug.h>
 

@@ -19,7 +19,7 @@
 #ifndef KDEVPLATFORM_TEXTDOCUMENT_H
 #define KDEVPLATFORM_TEXTDOCUMENT_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include <KDE/KXMLGUIClient>
 
 #include <sublime/view.h>

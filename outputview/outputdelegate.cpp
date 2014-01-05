@@ -24,7 +24,7 @@
 #include "outputmodel.h"
 #include "filtereditem.h"
 
-#include <QtGui/QPainter>
+#include <QPainter>
 
 #include <kdebug.h>
 

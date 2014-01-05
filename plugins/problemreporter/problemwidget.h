@@ -22,7 +22,7 @@
 #ifndef KDEVPLATFORM_PLUGIN_PROBLEMWIDGET_H
 #define KDEVPLATFORM_PLUGIN_PROBLEMWIDGET_H
 
-#include <QtGui/QTreeView>
+#include <QTreeView>
 
 namespace KDevelop {
   class ParseJob;

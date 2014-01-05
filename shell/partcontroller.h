@@ -24,7 +24,7 @@
 
 #include <QtCore/QMap>
 #include <QtCore/QHash>
-#include <QtGui/QWidget>
+#include <QWidget>
 #include <QtCore/QPointer>
 
 #include <kurl.h>

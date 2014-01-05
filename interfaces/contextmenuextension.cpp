@@ -22,7 +22,7 @@
 
 #include <QtCore/QMap>
 
-#include <QtGui/QMenu>
+#include <QMenu>
 
 #include <KAction>
 #include <KLocale>

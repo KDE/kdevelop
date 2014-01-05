@@ -22,7 +22,7 @@
 #ifndef KDEVPLATFORM_SUBLIME_IDEALLAYOUT_H
 #define KDEVPLATFORM_SUBLIME_IDEALLAYOUT_H
 
-#include <QtGui/QLayout>
+#include <QLayout>
 #include <QtCore/QMap>
 #include <QtCore/QHash>
 

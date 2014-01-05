@@ -18,7 +18,7 @@
 
 #include "abstractdeclarationnavigationcontext.h"
 
-#include <QtGui/QTextDocument>
+#include <QTextDocument>
 
 #include <klocale.h>
 

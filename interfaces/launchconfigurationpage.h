@@ -22,7 +22,7 @@
 
 #include "interfacesexport.h"
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 class KConfigGroup;
 class KIcon;

@@ -11,7 +11,7 @@
 #ifndef KDEVPLATFORM_OPENPROJECTPAGE_H
 #define KDEVPLATFORM_OPENPROJECTPAGE_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include <QtCore/QMap>
 
 class KUrl;

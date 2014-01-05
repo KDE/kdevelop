@@ -21,7 +21,7 @@
 #ifndef KDEVPLATFORM_VCSIMPORTMETADATAWIDGET_H
 #define KDEVPLATFORM_VCSIMPORTMETADATAWIDGET_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include "../vcsexport.h"
 #include <vcs/interfaces/ibasicversioncontrol.h>
 

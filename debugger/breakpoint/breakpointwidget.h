@@ -23,7 +23,7 @@
 #ifndef KDEVPLATFORM_BREAKPOINTWIDGET_H
 #define KDEVPLATFORM_BREAKPOINTWIDGET_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include "../debuggerexport.h"
 
 class QAbstractProxyModel;

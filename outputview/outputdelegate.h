@@ -24,7 +24,7 @@
 
 #include "outputviewexport.h"
 
-#include <QtGui/QItemDelegate>
+#include <QItemDelegate>
 #include <kcolorscheme.h>
 
 namespace KDevelop

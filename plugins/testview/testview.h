@@ -20,7 +20,7 @@
 #ifndef KDEVPLATFORM_PLUGIN_TESTVIEW_H
 #define KDEVPLATFORM_PLUGIN_TESTVIEW_H
 
-#include <QtGui/QTreeView>
+#include <QTreeView>
 #include <interfaces/itestcontroller.h>
 #include <KAction>
 

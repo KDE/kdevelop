@@ -10,8 +10,8 @@
 
 #include "cvsplugin.h"
 
-#include <QtGui/QAction>
-#include <QtGui/QMenu>
+#include <QAction>
+#include <QMenu>
 #include <QtCore/QFileInfo>
 #include <QtCore/QDir>
 

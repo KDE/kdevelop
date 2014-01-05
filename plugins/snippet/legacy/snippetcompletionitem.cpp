@@ -23,7 +23,7 @@
 
 #include <KTextEditor/Document>
 #include <KLocalizedString>
-#include <QtGui/QTextEdit>
+#include <QTextEdit>
 
 #include <language/codecompletion/codecompletionmodel.h>
 

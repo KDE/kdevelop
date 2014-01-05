@@ -21,7 +21,7 @@
 #ifndef KDEVPLATFORM_FOCUSEDTREEVIEW_H
 #define KDEVPLATFORM_FOCUSEDTREEVIEW_H
 
-#include <QtGui/QTreeView>
+#include <QTreeView>
 #include "utilexport.h"
 
 namespace KDevelop {

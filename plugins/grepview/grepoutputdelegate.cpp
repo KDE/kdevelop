@@ -22,12 +22,12 @@
 #include "grepoutputdelegate.h"
 #include "grepoutputmodel.h"
 
-#include <QtGui/QPainter>
+#include <QPainter>
 #include <QtCore/QModelIndex>
-#include <QtGui/QTextDocument>
-#include <QtGui/QTextCursor>
-#include <QtGui/QAbstractTextDocumentLayout>
-#include <QtGui/QTextCharFormat>
+#include <QTextDocument>
+#include <QTextCursor>
+#include <QAbstractTextDocumentLayout>
+#include <QTextCharFormat>
 #include <QtCore/QRegExp>
 #include <KLocalizedString>
 #include <cmath>

@@ -23,8 +23,8 @@
 
 #include <cassert>
 #include <typeinfo>
-#include <QtGui/QTreeView>
-#include <QtGui/QHeaderView>
+#include <QTreeView>
+#include <QHeaderView>
 #include <QDialog>
 #include <QKeyEvent>
 #include <QApplication>

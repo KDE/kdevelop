@@ -23,15 +23,15 @@ Boston, MA 02110-1301, USA.
 
 #include <QtCore/QDir>
 #include <QtCore/QSignalMapper>
-#include <QtGui/QAction>
+#include <QAction>
 #include <QtCore/QSet>
 #include <QtCore/QList>
 #include <QtCore/QMap>
-#include <QtGui/QItemSelectionModel>
-#include <QtGui/QGroupBox>
-#include <QtGui/QRadioButton>
-#include <QtGui/QBoxLayout>
-#include <QtGui/QLabel>
+#include <QItemSelectionModel>
+#include <QGroupBox>
+#include <QRadioButton>
+#include <QBoxLayout>
+#include <QLabel>
 
 #include <kaction.h>
 #include <kconfig.h>

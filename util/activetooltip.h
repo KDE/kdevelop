@@ -20,7 +20,7 @@
 #ifndef KDEVPLATFORM_ACTIVE_TOOLTIP_H
 #define KDEVPLATFORM_ACTIVE_TOOLTIP_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include "utilexport.h"
 
 namespace KDevelop {

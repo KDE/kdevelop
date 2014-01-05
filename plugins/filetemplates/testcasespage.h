@@ -21,7 +21,7 @@
 #ifndef KDEVPLATFORM_PLUGIN_TESTCASESWIDGET_H
 #define KDEVPLATFORM_PLUGIN_TESTCASESWIDGET_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 
 

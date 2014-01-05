@@ -24,7 +24,7 @@
 #include "kdevdocumentmodel.h"
 #include "kdevdocumentselection.h"
 
-#include <QtGui/QVBoxLayout>
+#include <QVBoxLayout>
 
 #include <kaction.h>
 #include <klocale.h>

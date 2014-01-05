@@ -21,7 +21,7 @@
 
 #include <qtest_kde.h>
 
-#include <QtGui/QSplitter>
+#include <QSplitter>
 #include <QtTest/QtTest>
 
 #include <kactioncollection.h>

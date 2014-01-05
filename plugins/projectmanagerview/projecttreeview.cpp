@@ -22,9 +22,9 @@
 #include "projecttreeview.h"
 
 
-#include <QtGui/QHeaderView>
+#include <QHeaderView>
 #include <QtCore/QDebug>
-#include <QtGui/QMouseEvent>
+#include <QMouseEvent>
 #include <QApplication>
 #include <QAbstractProxyModel>
 #include <QItemDelegate>

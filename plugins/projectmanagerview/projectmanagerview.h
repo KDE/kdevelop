@@ -21,7 +21,7 @@
 #ifndef KDEVPLATFORM_PLUGIN_PROJECTMANAGERVIEW_H
 #define KDEVPLATFORM_PLUGIN_PROJECTMANAGERVIEW_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include <KAction>
 #include <interfaces/context.h>
 

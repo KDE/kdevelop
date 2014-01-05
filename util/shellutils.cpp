@@ -20,7 +20,7 @@
  */
 
 #include "shellutils.h"
-#include <QtGui/QApplication>
+#include <QApplication>
 #include <QtCore/QTextStream>
 #include <KLocalizedString>
 #include <KMessageBox>

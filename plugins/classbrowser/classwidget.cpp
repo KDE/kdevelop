@@ -23,10 +23,10 @@
 
 #include "classwidget.h"
 
-#include <QtGui/QLabel>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QHeaderView>
+#include <QLabel>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QHeaderView>
 
 #include <KLocalizedString>
 #include <KIconLoader>

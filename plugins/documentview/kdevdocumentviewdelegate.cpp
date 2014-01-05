@@ -20,7 +20,7 @@ Boston, MA 02110-1301, USA.
 
 #include "kdevdocumentviewdelegate.h"
 
-#include <QtGui/QTreeView>
+#include <QTreeView>
 
 #include <kdebug.h>
 

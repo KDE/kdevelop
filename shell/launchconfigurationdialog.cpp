@@ -18,11 +18,11 @@
 */
 
 #include "launchconfigurationdialog.h"
-#include <QtGui/QSplitter>
-#include <QtGui/QTreeView>
-#include <QtGui/QStackedWidget>
-#include <QtGui/QGridLayout>
-#include <QtGui/QToolButton>
+#include <QSplitter>
+#include <QTreeView>
+#include <QStackedWidget>
+#include <QGridLayout>
+#include <QToolButton>
 
 #include <klocale.h>
 #include <klineedit.h>

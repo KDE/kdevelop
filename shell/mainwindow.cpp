@@ -23,10 +23,10 @@ Boston, MA 02110-1301, USA.
 #include "mainwindow_p.h"
 
 #include <QtCore/QHash>
-#include <QtGui/QDockWidget>
-#include <QtGui/QDragEnterEvent>
-#include <QtGui/QDropEvent>
-#include <QtGui/QMenuBar>
+#include <QDockWidget>
+#include <QDragEnterEvent>
+#include <QDropEvent>
+#include <QMenuBar>
 #include <QtDBus/QDBusConnection>
 
 #include <KDE/KApplication>

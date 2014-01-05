@@ -20,7 +20,7 @@
 #include "core.h"
 #include "core_p.h"
 
-#include <QtGui/QApplication>
+#include <QApplication>
 #include <QtCore/QTimer>
 
 #include <kdebug.h>

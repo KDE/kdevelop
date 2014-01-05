@@ -25,8 +25,8 @@ Boston, MA 02110-1301, USA.
 
 #include <QtCore/QFile>
 #include <QtCore/QTimer>
-#include <QtGui/QApplication>
-#include <QtGui/QAction>
+#include <QApplication>
+#include <QAction>
 
 #include <kcmdlineargs.h>
 #include <klibloader.h>

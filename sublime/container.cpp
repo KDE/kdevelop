@@ -19,13 +19,13 @@
 #include "container.h"
 
 #include <QtCore/QMap>
-#include <QtGui/QBoxLayout>
-#include <QtGui/QLabel>
-#include <QtGui/QStylePainter>
-#include <QtGui/QStackedWidget>
-#include <QtGui/QStyleOptionTabBarBase>
-#include <QtGui/QToolButton>
-#include <QtGui/qstyle.h>
+#include <QBoxLayout>
+#include <QLabel>
+#include <QStylePainter>
+#include <QStackedWidget>
+#include <QStyleOptionTabBarBase>
+#include <QToolButton>
+#include <qstyle.h>
 
 #include <kdebug.h>
 #include <klocale.h>

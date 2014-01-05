@@ -21,7 +21,7 @@
 #ifndef KDEVPLATFORM_VCSDIFFWIDGET_H
 #define KDEVPLATFORM_VCSDIFFWIDGET_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include "../vcsexport.h"
 
 namespace KDevelop

@@ -18,15 +18,15 @@
  ***************************************************************************/
 #include "mainwindow_p.h"
 
-#include <QtGui/QMenu>
-#include <QtGui/QLayout>
-#include <QtGui/QSplitter>
-#include <QtGui/QDockWidget>
-#include <QtGui/QWidgetAction>
-#include <QtGui/QComboBox>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QToolButton>
-#include <QtGui/QCommonStyle>
+#include <QMenu>
+#include <QLayout>
+#include <QSplitter>
+#include <QDockWidget>
+#include <QWidgetAction>
+#include <QComboBox>
+#include <QHBoxLayout>
+#include <QToolButton>
+#include <QCommonStyle>
 #include <QTimer>
 
 #include <kdebug.h>

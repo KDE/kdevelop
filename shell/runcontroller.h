@@ -21,7 +21,7 @@ Boston, MA 02110-1301, USA.
 #define KDEVPLATFORM_RUNCONTROLLER_H
 
 #include <QtCore/QPointer>
-#include <QtGui/QItemDelegate>
+#include <QItemDelegate>
 
 #include <kcolorscheme.h>
 

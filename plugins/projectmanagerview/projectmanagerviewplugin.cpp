@@ -21,8 +21,8 @@
 
 #include <QtCore/QList>
 #include <QMimeData>
-#include <QtGui/QInputDialog>
-#include <QtGui/QApplication>
+#include <QInputDialog>
+#include <QApplication>
 #include <QClipboard>
 
 #include <kaction.h>

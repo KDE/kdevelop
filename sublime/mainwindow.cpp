@@ -27,8 +27,8 @@
 #include <KDE/KToolBar>
 #include <KDE/KWindowSystem>
 
-#include <QtGui/QApplication>
-#include <QtGui/QDesktopWidget>
+#include <QApplication>
+#include <QDesktopWidget>
 #include <KDE/KStatusBar>
 #include <KDE/KMenuBar>
 #include <KLocalizedString>

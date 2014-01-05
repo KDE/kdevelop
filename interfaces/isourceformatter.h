@@ -19,7 +19,7 @@
 #ifndef KDEVPLATFORM_ISOURCEFORMATTER_H
 #define KDEVPLATFORM_ISOURCEFORMATTER_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include <QtCore/QStringList>
 #include <KDE/KMimeType>
 

@@ -17,7 +17,7 @@
 
 #include "settingsbase.h"
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 SettingsBase::SettingsBase( QWidget* parent ) : QObject( parent )
 {

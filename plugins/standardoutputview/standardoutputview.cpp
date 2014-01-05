@@ -25,8 +25,8 @@
 
 #include <QtCore/QList>
 #include <QtCore/QAbstractItemModel>
-#include <QtGui/QAction>
-#include <QtGui/QAbstractItemDelegate>
+#include <QAction>
+#include <QAbstractItemDelegate>
 
 #include <kpluginfactory.h>
 #include <kpluginloader.h>

@@ -19,7 +19,7 @@
 #define KDEVPLATFORM_PLUGIN_DIFFSETTINGS_H
 
 #include <QtCore/QStringList>
-#include <QtGui/QWidget>
+#include <QWidget>
 
 #include "../libdiff2/kompare.h"
 #include "settingsbase.h"
