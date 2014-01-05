@@ -13,8 +13,7 @@ cmake_minimum_required(VERSION 2.8.9)
 find_package(KDE4 REQUIRED)
 find_package(KDevPlatform ${KDEVPLATFORM_VERSION} REQUIRED)
 
-find_package(LLVM 3.3 REQUIRED)
-find_package(Clang REQUIRED)
+find_package(Clang 3.3 REQUIRED)
 
 # TODO: Can we make this implicit via set_target_properties magic?
 link_directories(${LLVM_LIBRARY_DIRS})

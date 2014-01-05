@@ -21,8 +21,10 @@
 # See the License for more information.
 #=============================================================================
 
+find_package(LLVM ${Clang_FIND_VERSION} REQUIRED)
+
 if (NOT LLVM_INCLUDE_DIR OR NOT LLVM_LIBRARY_DIR)
-  message(FATAL_ERROR "No LLVM and Clang support requires LLVM")
+  message(FATAL_ERROR "Could not detect LLVM")
 else()
 
 macro(FIND_AND_ADD_CLANG_LIB _libname_)
