@@ -181,32 +181,48 @@ constexpr bool isKDevFunctionDefinition(CXCursorKind CK, bool isDefinition)
     return isDefinition && isFunctionType(CK);
 }
 
-template<CXCursorKind CK, bool isDefinition, class Enable = void> struct DeclType;
-template<CXCursorKind CK, bool isDefinition> struct DeclType<CK, isDefinition, typename std::enable_if<isKDevDeclaration(CK)>::type>
+//BEGIN DeclType
+template<CXCursorKind CK, bool isDefinition, class Enable = void>
+struct DeclType;
+
+template<CXCursorKind CK, bool isDefinition>
+struct DeclType<CK, isDefinition, typename std::enable_if<isKDevDeclaration(CK)>::type>
 {
     typedef Declaration Type;
 };
-template<CXCursorKind CK, bool isDefinition> struct DeclType<CK, isDefinition, typename std::enable_if<isKDevForwardDeclaration(CK, isDefinition)>::type>
+
+template<CXCursorKind CK, bool isDefinition>
+struct DeclType<CK, isDefinition, typename std::enable_if<isKDevForwardDeclaration(CK, isDefinition)>::type>
 {
     typedef ForwardDeclaration Type;
 };
-template<CXCursorKind CK, bool isDefinition> struct DeclType<CK, isDefinition, typename std::enable_if<isKDevClassDeclaration(CK, isDefinition)>::type>
+
+template<CXCursorKind CK, bool isDefinition>
+struct DeclType<CK, isDefinition, typename std::enable_if<isKDevClassDeclaration(CK, isDefinition)>::type>
 {
     typedef ClassDeclaration Type;
 };
-template<CXCursorKind CK, bool isDefinition> struct DeclType<CK, isDefinition, typename std::enable_if<isKDevClassFunctionDeclaration(CK, isDefinition)>::type>
+
+template<CXCursorKind CK, bool isDefinition>
+struct DeclType<CK, isDefinition, typename std::enable_if<isKDevClassFunctionDeclaration(CK, isDefinition)>::type>
 {
     typedef ClassFunctionDeclaration Type;
 };
-template<CXCursorKind CK, bool isDefinition> struct DeclType<CK, isDefinition, typename std::enable_if<isKDevFunctionDeclaration(CK, isDefinition)>::type>
+
+template<CXCursorKind CK, bool isDefinition>
+struct DeclType<CK, isDefinition, typename std::enable_if<isKDevFunctionDeclaration(CK, isDefinition)>::type>
 {
     typedef FunctionDeclaration Type;
 };
-template<CXCursorKind CK, bool isDefinition> struct DeclType<CK, isDefinition, typename std::enable_if<isKDevFunctionDefinition(CK, isDefinition)>::type>
+
+template<CXCursorKind CK, bool isDefinition>
+struct DeclType<CK, isDefinition, typename std::enable_if<isKDevFunctionDefinition(CK, isDefinition)>::type>
 {
     typedef FunctionDefinition Type;
 };
+//END DeclType
 
+//BEGIN DeclBuilder
 template<CXCursorKind CK, class Enable = void>
 struct DeclBuilder;
 
@@ -218,6 +234,7 @@ template<CXCursorKind CK> struct DeclBuilder<CK, typename std::enable_if<alwaysB
         return createDeclOnly<KDevType>(cursor, parentContext);
     }
 };
+
 template<CXCursorKind CK> struct DeclBuilder<CK, typename std::enable_if<alwaysBuildDeclAndContext(CK)>::type>
 {
     typedef typename DeclType<CK, false>::Type KDevType;
@@ -226,16 +243,19 @@ template<CXCursorKind CK> struct DeclBuilder<CK, typename std::enable_if<alwaysB
         return createDeclAndContext<CK, KDevType>(cursor, parentContext);
     }
 };
+
 template<CXCursorKind CK> struct DeclBuilder<CK, typename std::enable_if<mayBuildDeclOrDef(CK)>::type>
 {
+    typedef typename DeclType<CK, false>::Type KDevType;
     static Declaration* build(CXCursor cursor, DUContext* parentContext)
     {
         if (clang_isCursorDefinition(cursor))
-            return createDeclAndContext<CK, typename DeclType<CK, true>::Type>(cursor, parentContext);
+            return createDeclAndContext<CK, KDevType>(cursor, parentContext);
         else
-            return createDeclOnly<typename DeclType<CK, false>::Type>(cursor, parentContext);
+            return createDeclOnly<KDevType>(cursor, parentContext);
     }
 };
+//END DeclBuilder
 
 template<CXCursorKind CK> Declaration *build(CXCursor cursor, DUContext* parentContext)
 {
