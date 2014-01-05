@@ -247,6 +247,9 @@ void ClangParseJob::run()
 
     {
         InclusionClientData data{&includeLocks, &includedFiles};
+        // FIXME: the use of the UrlParseLock here can lead to deadlocks in cases
+        // of include stacks such as this: A -> B -> C; D -> C -> B
+        // There, A will lock B and D locks C, and then they cannot proceed...
         clang_getInclusions(session->unit(), &::visitInclusions, &data);
     }
 
