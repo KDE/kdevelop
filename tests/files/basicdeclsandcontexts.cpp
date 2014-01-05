@@ -5,12 +5,6 @@
  */
 int main()
 {
-    /// "toString" : "int a"
-    int a = 0;
-    /// "toString" : "const float b"
-    const float b = 42;
-    /// "toString" : "volatile long long int c"
-    volatile long long c = 0;
     return 0;
 }
 

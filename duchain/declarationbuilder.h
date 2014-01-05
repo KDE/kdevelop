@@ -29,6 +29,7 @@
 #include <language/duchain/declaration.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/types/integraltype.h>
+#include <language/duchain/types/pointertype.h>
 
 namespace DeclarationBuilder {
 
@@ -47,9 +48,11 @@ inline QByteArray buildComment(CXComment comment)
     return text;
 }
 
-KDevelop::AbstractType* createType(CXType type)
+AbstractType::Ptr type(CXType t);
+
+AbstractType* createType(CXType t)
 {
-    switch (type.kind) {
+    switch (t.kind) {
         case CXType_Void:
             return new IntegralType(IntegralType::TypeVoid);
         case CXType_Bool:
@@ -70,7 +73,11 @@ KDevelop::AbstractType* createType(CXType type)
             return new IntegralType(IntegralType::TypeChar16_t);
         case CXType_Char32:
             return new IntegralType(IntegralType::TypeChar32_t);
-        default:
+        case CXType_Pointer: {
+            auto ptr = new PointerType;
+            ptr->setBaseType(type(clang_getPointeeType(t)));
+            return ptr;
+        } default:
             return nullptr;
     }
 }
