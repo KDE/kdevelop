@@ -1,4 +1,4 @@
-find_package(LLVM REQUIRED)
+find_package(LLVM 3.3 REQUIRED)
 find_package(Clang REQUIRED)
 
 link_directories(${LLVM_LIBRARY_DIRS})

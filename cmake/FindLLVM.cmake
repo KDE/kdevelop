@@ -6,14 +6,31 @@
 #  LLVM_LFLAGS      - llvm linker flags
 #  LLVM_MODULE_LIBS - list of llvm libs for working with modules.
 #  LLVM_FOUND       - True if llvm found.
+#  LLVM_VERSION     - Version string ("llvm-config --version")
 
-find_program(LLVM_CONFIG_EXECUTABLE NAMES llvm-config DOC "llvm-config executable")
+# find llvm-config, prefer the one with a version suffix, e.g. llvm-config-3.3
+if (LLVM_FIND_VERSION)
+  find_program(LLVM_CONFIG_EXECUTABLE NAMES llvm-config-${LLVM_FIND_VERSION} DOC "llvm-config-VERSION executable")
+else()
+  find_program(LLVM_CONFIG_EXECUTABLE NAMES llvm-config DOC "llvm-config executable")
+endif()
 
 if (LLVM_CONFIG_EXECUTABLE)
-  message(STATUS "LLVM llvm-config found at: ${LLVM_CONFIG_EXECUTABLE}")
+  message(STATUS "Found llvm-config: ${LLVM_CONFIG_EXECUTABLE}")
 else (LLVM_CONFIG_EXECUTABLE)
   message(FATAL_ERROR "Could NOT find LLVM executable")
 endif (LLVM_CONFIG_EXECUTABLE)
+
+# verify that we've found the correct version of llvm-config
+execute_process(COMMAND ${LLVM_CONFIG_EXECUTABLE} --version
+  OUTPUT_VARIABLE LLVM_VERSION)
+if (NOT LLVM_VERSION)
+  message(FATAL_ERROR "Failed to parse version from llvm-config")
+endif()
+if (LLVM_FIND_VERSION VERSION_GREATER LLVM_VERSION)
+  message(FATAL_ERROR "LLVM version too old: ${LLVM_VERSION}")
+endif()
+
 
 execute_process(
   COMMAND ${LLVM_CONFIG_EXECUTABLE} --includedir
