@@ -50,7 +50,7 @@ PartDocument::~PartDocument()
     delete d;
 }
 
-QWidget *PartDocument::createViewWidget(QWidget */*parent*/)
+QWidget *PartDocument::createViewWidget(QWidget* /*parent*/)
 {
     KParts::Part *part = Core::self()->partControllerInternal()->createPart(url(), d->preferredPart);
     if( part )
