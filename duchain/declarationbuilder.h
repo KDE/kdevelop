@@ -30,6 +30,7 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/types/integraltype.h>
 #include <language/duchain/types/pointertype.h>
+#include <language/duchain/types/arraytype.h>
 
 namespace DeclarationBuilder {
 
@@ -77,7 +78,14 @@ AbstractType* createType(CXType t)
             auto ptr = new PointerType;
             ptr->setBaseType(type(clang_getPointeeType(t)));
             return ptr;
-        } default:
+        }
+        case CXType_ConstantArray: {
+            auto arr = new ArrayType;
+            arr->setDimension(clang_getArraySize(t));
+            arr->setElementType(type(clang_getArrayElementType(t)));
+            return arr;
+        }
+        default:
             return nullptr;
     }
 }

@@ -10,4 +10,6 @@ int main()
     void* v_ptr = nullptr;
     /// "toString" : "void* const* v_ptr"
     void* const* v_ptr = nullptr;
+    /// "toString" : "int[5] arr"
+    int arr[5];
 }
