@@ -1,5 +1,6 @@
 # Find the native LLVM includes and library
 #
+# Defines the following variables
 #  LLVM_INCLUDE_DIR - where to find llvm include files
 #  LLVM_LIBRARY_DIR - where to find llvm libs
 #  LLVM_CFLAGS      - llvm compiler flags
@@ -17,9 +18,9 @@ endif()
 
 if (LLVM_CONFIG_EXECUTABLE)
   message(STATUS "Found llvm-config: ${LLVM_CONFIG_EXECUTABLE}")
-else (LLVM_CONFIG_EXECUTABLE)
+else()
   message(FATAL_ERROR "Could NOT find LLVM executable")
-endif (LLVM_CONFIG_EXECUTABLE)
+endif()
 
 # verify that we've found the correct version of llvm-config
 execute_process(COMMAND ${LLVM_CONFIG_EXECUTABLE} --version

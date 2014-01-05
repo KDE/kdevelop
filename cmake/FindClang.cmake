@@ -1,18 +1,26 @@
-# Detect CLANG
-if (NOT LLVM_INCLUDE_DIR OR NOT LLVM_LIBRARY_DIR)
-   message(FATAL_ERROR "No LLVM and Clang support requires LLVM")
-else (NOT LLVM_INCLUDE_DIR OR NOT LLVM_LIBRARY_DIR)
+# Detect Clang libraries
+#
+# Defines the following variables:
+#  CLANG_CLANG_LIB             - LibClang library
+#  CLANG_CLANGFRONTEND_LIB     - Clang Frontent Library
+#  CLANG_CLANGDRIVER_LIB       - Clang Driver Library
+#  ...
+#
+# Uses the same include and library paths detected by FindLLVM.cmake
+#
+# See http://clang.llvm.org/docs/InternalsManual.html for full list of libraries
 
-MACRO(FIND_AND_ADD_CLANG_LIB _libname_)
+if (NOT LLVM_INCLUDE_DIR OR NOT LLVM_LIBRARY_DIR)
+  message(FATAL_ERROR "No LLVM and Clang support requires LLVM")
+else()
+
+macro(FIND_AND_ADD_CLANG_LIB _libname_)
   string(TOUPPER ${_libname_} _prettylibname_)
   find_library(CLANG_${_prettylibname_}_LIB ${_libname_} ${LLVM_LIBRARY_DIR} ${CLANG_LIB_DIR})
-  if (CLANG_${_prettylibname_}_LIB)
+  if(CLANG_${_prettylibname_}_LIB)
     set(CLANG_LIBS ${CLANG_LIBS} ${CLANG_${_prettylibname_}_LIB})
   endif()
-ENDMACRO(FIND_AND_ADD_CLANG_LIB)
-
-set(CLANG_INCLUDE_DIRS ${CLANG_INCLUDE_DIRS} ${LLVM_INCLUDE_DIR})
-set(CLANG_INCLUDE_DIRS ${CLANG_INCLUDE_DIRS} ${CLANG_INCLUDE_DIR})
+endmacro(FIND_AND_ADD_CLANG_LIB)
 
 FIND_AND_ADD_CLANG_LIB(clang) # LibClang: high-level C interface
 FIND_AND_ADD_CLANG_LIB(clangFrontend)
@@ -39,16 +47,16 @@ FIND_AND_ADD_CLANG_LIB(clangSema)
 FIND_AND_ADD_CLANG_LIB(clangRewriteCore)
 
 if(CLANG_LIBS)
-  message(STATUS "Clang libs: ${CLANG_LIBS}")
   set(CLANG_FOUND TRUE)
-endif(CLANG_LIBS)
+endif()
 
 if(CLANG_FOUND)
-  message(STATUS "Found Clang: ${CLANG_INCLUDE_DIRS}")
-else(CLANG_FOUND)
+  message(STATUS "Found Clang: ${LLVM_INCLUDE_DIR}")
+  message(STATUS "  Libraries: ${CLANG_LIBS}")
+else()
   if(Clang_FIND_REQUIRED)
     message(FATAL_ERROR "Could NOT find Clang")
   endif()
-endif(CLANG_FOUND)
+endif()
 
-endif (NOT LLVM_INCLUDE_DIR OR NOT LLVM_LIBRARY_DIR)
+endif()
