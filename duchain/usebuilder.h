@@ -23,43 +23,16 @@
 
 #include "includedfilecontexts.h"
 
-#include <language/duchain/duchainlock.h>
-#include <language/duchain/indexedstring.h>
-#include <language/duchain/ducontext.h>
-#include <language/duchain/topducontext.h>
-#include <language/duchain/declaration.h>
+namespace KDevelop {
+class DUContext;
+}
 
 namespace UseBuilder {
 
-using namespace KDevelop;
+void createUseCommon(CXCursor cursor, KDevelop::DUContext *parentContext, const IncludeFileContexts& includes);
 
-inline void createUseCommon(CXCursor cursor, DUContext *parentContext, const IncludeFileContexts& includes)
-{
-    auto referenced = clang_getCursorReferenced(cursor);
-    auto refLoc = clang_getCursorLocation(referenced);
-    CXFile file = nullptr;
-    clang_getFileLocation(refLoc, &file, nullptr, nullptr, nullptr);
-    if (!file) {
-        return;
-    }
-    auto url = IndexedString(ClangString(clang_getFileName(file)));
-    auto refCursor = CursorInRevision(ClangLocation(refLoc));
-    auto useRange = ClangRange(clang_getCursorReferenceNameRange(cursor, CXNameRange_WantSinglePiece, 0)).toRangeInRevision();
-
-    Q_ASSERT(includes.contains(file));
-    const auto& top = includes[file].topContext;
-
-    DUChainWriteLocker lock;
-    Q_ASSERT(top);
-    if (DUContext *local = top->findContextAt(refCursor)) {
-        if (Declaration *used = local->findDeclarationAt(refCursor)) {
-            auto usedIndex = parentContext->topContext()->indexForUsedDeclaration(used);
-            parentContext->createUse(usedIndex, useRange);
-        }
-    }
-}
-
-template<CXCursorKind kind> CXChildVisitResult build(CXCursor cursor, DUContext* parentContext, const IncludeFileContexts& includes)
+template<CXCursorKind kind>
+inline CXChildVisitResult build(CXCursor cursor, KDevelop::DUContext* parentContext, const IncludeFileContexts& includes)
 {
     createUseCommon(cursor, parentContext, includes);
     if (kind == CXCursor_DeclRefExpr || kind == CXCursor_MemberRefExpr) {

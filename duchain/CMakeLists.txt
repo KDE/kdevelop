@@ -13,6 +13,7 @@ kde4_add_library(kdevclangduchain SHARED
     clangtypes.cpp
     debugvisitor.cpp
     buildduchainvisitor.cpp
+    usebuilder.cpp
 )
 
 target_link_libraries(kdevclangduchain LINK_PRIVATE
