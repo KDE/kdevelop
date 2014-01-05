@@ -31,6 +31,7 @@
 #include <language/duchain/types/integraltype.h>
 #include <language/duchain/types/pointertype.h>
 #include <language/duchain/types/arraytype.h>
+#include <language/duchain/types/functiontype.h>
 
 namespace DeclarationBuilder {
 
@@ -84,6 +85,15 @@ AbstractType* createType(CXType t)
             arr->setDimension(clang_getArraySize(t));
             arr->setElementType(type(clang_getArrayElementType(t)));
             return arr;
+        }
+        case CXType_FunctionProto: {
+            auto func = new FunctionType;
+            func->setReturnType(type(clang_getResultType(t)));
+            const int numArgs = clang_getNumArgTypes(t);
+            for (int i = 0; i < numArgs; ++i) {
+                func->addArgument(type(clang_getArgType(t, i)));
+            }
+            return func;
         }
         default:
             return nullptr;
