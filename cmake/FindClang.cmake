@@ -2,7 +2,7 @@
 #
 # Defines the following variables:
 #  CLANG_CLANG_LIB             - LibClang library
-#  CLANG_CLANGFRONTEND_LIB     - Clang Frontent Library
+#  CLANG_CLANGFRONTEND_LIB     - Clang Frontend Library
 #  CLANG_CLANGDRIVER_LIB       - Clang Driver Library
 #  ...
 #
