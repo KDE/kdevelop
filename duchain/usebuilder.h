@@ -59,21 +59,14 @@ inline void createUseCommon(CXCursor cursor, DUContext *parentContext, const Inc
     }
 }
 
-template<CXCursorKind kind> CXChildVisitResult build(CXCursor, DUContext*, const IncludeFileContexts&);
-
-#define AddUseBuilder(CursorKind, Ret)\
-template<> CXChildVisitResult build<CursorKind>(CXCursor cursor, DUContext *parentContext, const IncludeFileContexts& includes)\
-{ createUseCommon(cursor, parentContext, includes); return Ret; }
-
-AddUseBuilder(CXCursor_TypeRef, CXChildVisit_Continue)
-AddUseBuilder(CXCursor_CXXBaseSpecifier, CXChildVisit_Continue)
-AddUseBuilder(CXCursor_TemplateRef, CXChildVisit_Continue)
-AddUseBuilder(CXCursor_NamespaceRef, CXChildVisit_Continue)
-AddUseBuilder(CXCursor_MemberRef, CXChildVisit_Continue)
-AddUseBuilder(CXCursor_LabelRef, CXChildVisit_Continue)
-AddUseBuilder(CXCursor_OverloadedDeclRef, CXChildVisit_Continue)
-AddUseBuilder(CXCursor_VariableRef, CXChildVisit_Continue)
-AddUseBuilder(CXCursor_DeclRefExpr, CXChildVisit_Recurse)
-AddUseBuilder(CXCursor_MemberRefExpr, CXChildVisit_Recurse)
+template<CXCursorKind kind> CXChildVisitResult build(CXCursor cursor, DUContext* parentContext, const IncludeFileContexts& includes)
+{
+    createUseCommon(cursor, parentContext, includes);
+    if (kind == CXCursor_DeclRefExpr || kind == CXCursor_MemberRefExpr) {
+        return CXChildVisit_Recurse;
+    } else {
+        return CXChildVisit_Continue;
+    }
+}
 
 }
