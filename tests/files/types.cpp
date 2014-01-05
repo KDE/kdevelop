@@ -1,3 +1,12 @@
+/// "type" : { "toString" : "myStruct" }
+struct myStruct {};
+
+/// "type" : { "toString" : "myClass" }
+class myClass {};
+
+/// "type" : { "toString" : "myUnion" }
+union myUnion {};
+
 /// "toString" : "int main (int, char**)"
 int main(int argc, char** argv)
 {
@@ -33,5 +42,11 @@ int main(int argc, char** argv)
     unsigned char c2;
     /// "toString" : "signed char c3"
     signed char c3;
+    /// "toString" : "myStruct myS"
+    myStruct myS;
+    /// "toString" : "myClass myC"
+    myClass myC;
+    /// "toString" : "myUnion myU"
+    myUnion myU;
     /// TODO: enums, enumerators, typedefs, ...
 }

@@ -23,6 +23,7 @@
 #include "declarationbuilder.h"
 #include "contextbuilder.h"
 #include "usebuilder.h"
+#include "typebuilder.h"
 #include "clangtypes.h"
 #include "parsesession.h"
 
@@ -64,6 +65,11 @@ template<CXCursorKind kind>
 CXChildVisitResult buildDeclaration(CXCursor cursor, ClientData* data)
 {
     auto decl = DeclarationBuilder::build<kind>(cursor, data->parent);
+    AbstractType::Ptr type = TypeBuilder::build(clang_getCursorType(cursor), data->includeContexts);
+    {
+        DUChainWriteLocker lock;
+        decl->setAbstractType(type);
+    }
     //TODO: This should be done earlier based on the cursorkind and decl/def status
     return decl->internalContext() ?
         recurse(cursor, data, decl->internalContext()) :

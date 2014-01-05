@@ -26,16 +26,20 @@
 #include <language/duchain/types/arraytype.h>
 #include <language/duchain/types/functiontype.h>
 #include <language/duchain/types/referencetype.h>
+#include <language/duchain/types/structuretype.h>
+#include <language/duchain/declaration.h>
+#include <language/duchain/duchainlock.h>
+
+#include "debug.h"
 
 using namespace KDevelop;
+using namespace TypeBuilder;
 
 namespace {
 
-AbstractType::Ptr type(CXType t);
-
-AbstractType* createType(CXType t)
+AbstractType* createType(CXType type, const IncludeFileContexts& includes)
 {
-    switch (t.kind) {
+    switch (type.kind) {
         case CXType_Void:
             return new IntegralType(IntegralType::TypeVoid);
         case CXType_Bool:
@@ -65,78 +69,85 @@ AbstractType* createType(CXType t)
             return new IntegralType(IntegralType::TypeChar32_t);
         case CXType_Pointer: {
             auto ptr = new PointerType;
-            ptr->setBaseType(type(clang_getPointeeType(t)));
+            ptr->setBaseType(build(clang_getPointeeType(type), includes));
             return ptr;
         }
         case CXType_ConstantArray: {
             auto arr = new ArrayType;
-            arr->setDimension(clang_getArraySize(t));
-            arr->setElementType(type(clang_getArrayElementType(t)));
+            arr->setDimension(clang_getArraySize(type));
+            arr->setElementType(build(clang_getArrayElementType(type), includes));
             return arr;
         }
         case CXType_LValueReference:
         case CXType_RValueReference: {
             auto ref = new ReferenceType;
-            ref->setIsRValue(t.kind == CXType_RValueReference);
-            ref->setBaseType(type(clang_getPointeeType(t)));
+            ref->setIsRValue(type.kind == CXType_RValueReference);
+            ref->setBaseType(build(clang_getPointeeType(type), includes));
             return ref;
         }
         case CXType_FunctionProto: {
             auto func = new FunctionType;
-            func->setReturnType(type(clang_getResultType(t)));
-            const int numArgs = clang_getNumArgTypes(t);
+            func->setReturnType(build(clang_getResultType(type), includes));
+            const int numArgs = clang_getNumArgTypes(type);
             for (int i = 0; i < numArgs; ++i) {
-                func->addArgument(type(clang_getArgType(t, i)));
+                func->addArgument(build(clang_getArgType(type, i), includes));
             }
             /// TODO: variadic functions
             return func;
         }
+        case CXType_Record: {
+            auto st = new StructureType;
+            DeclarationPointer decl = findDeclaration(clang_getTypeDeclaration(type), includes);
+            DUChainReadLocker lock;
+            if (decl) {
+                st->setDeclaration(decl.data());
+            }
+            return st;
+        }
+        case CXType_Invalid:
+            return nullptr;
         default:
+            debug() << "Unhandled type: " << type.kind << ClangString(clang_getTypeSpelling(type));
             return nullptr;
     }
-}
-
-AbstractType::Ptr type(CXType t)
-{
-    AbstractType::Ptr ret(createType(t));
-    if (!ret) {
-        return ret;
-    }
-    quint64 modifiers = 0;
-    if (clang_isConstQualifiedType(t)) {
-        modifiers |= AbstractType::ConstModifier;
-    }
-    if (clang_isVolatileQualifiedType(t)) {
-        modifiers |= AbstractType::VolatileModifier;
-    }
-    if (t.kind == CXType_Short || t.kind == CXType_UShort) {
-        modifiers |= AbstractType::ShortModifier;
-    }
-    if (t.kind == CXType_Long || t.kind == CXType_LongDouble || t.kind == CXType_ULong) {
-        modifiers |= AbstractType::LongModifier;
-    }
-    if (t.kind == CXType_LongLong || t.kind == CXType_ULongLong) {
-        modifiers |= AbstractType::LongLongModifier;
-    }
-    if (t.kind == CXType_SChar) {
-        modifiers |= AbstractType::SignedModifier;
-    }
-    if (t.kind == CXType_UChar || t.kind == CXType_UInt || t.kind == CXType_UShort
-        || t.kind == CXType_UInt128 || t.kind == CXType_ULong || t.kind == CXType_ULongLong)
-    {
-        modifiers |= AbstractType::UnsignedModifier;
-    }
-    ret->setModifiers(modifiers);
-    return ret;
 }
 
 }
 
 namespace TypeBuilder {
 
-AbstractType::Ptr build(CXCursor cursor)
+AbstractType::Ptr build(CXType type, const IncludeFileContexts& includes)
 {
-    return type(clang_getCursorType(cursor));
+    AbstractType::Ptr ret(createType(type, includes));
+    if (!ret) {
+        return ret;
+    }
+    quint64 modifiers = 0;
+    if (clang_isConstQualifiedType(type)) {
+        modifiers |= AbstractType::ConstModifier;
+    }
+    if (clang_isVolatileQualifiedType(type)) {
+        modifiers |= AbstractType::VolatileModifier;
+    }
+    if (type.kind == CXType_Short || type.kind == CXType_UShort) {
+        modifiers |= AbstractType::ShortModifier;
+    }
+    if (type.kind == CXType_Long || type.kind == CXType_LongDouble || type.kind == CXType_ULong) {
+        modifiers |= AbstractType::LongModifier;
+    }
+    if (type.kind == CXType_LongLong || type.kind == CXType_ULongLong) {
+        modifiers |= AbstractType::LongLongModifier;
+    }
+    if (type.kind == CXType_SChar) {
+        modifiers |= AbstractType::SignedModifier;
+    }
+    if (type.kind == CXType_UChar || type.kind == CXType_UInt || type.kind == CXType_UShort
+        || type.kind == CXType_UInt128 || type.kind == CXType_ULong || type.kind == CXType_ULongLong)
+    {
+        modifiers |= AbstractType::UnsignedModifier;
+    }
+    ret->setModifiers(modifiers);
+    return ret;
 }
 
 }

@@ -21,12 +21,17 @@
 #ifndef TYPEBUILDER_H
 #define TYPEBUILDER_H
 
-#include <language/duchain/types/abstracttype.h>
 #include <clang-c/Index.h>
+#include <language/duchain/types/abstracttype.h>
+#include "includedfilecontexts.h"
+
+namespace KDevelop {
+class DUContext;
+}
 
 namespace TypeBuilder {
 
-KDevelop::AbstractType::Ptr build(CXCursor cursor);
+KDevelop::AbstractType::Ptr build(CXType type, const IncludeFileContexts& includes);
 
 }
 

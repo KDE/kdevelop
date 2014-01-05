@@ -22,6 +22,7 @@
 #define INCLUDEDFILECONTEXTS_H
 
 #include <language/duchain/topducontext.h>
+#include <language/duchain/duchainpointer.h>
 
 #include <clang-c/Index.h>
 
@@ -34,5 +35,6 @@ struct Include
 };
 using IncludeFileContexts = QHash<CXFile, Include>;
 
+KDevelop::DeclarationPointer findDeclaration(CXCursor cursor, const IncludeFileContexts& includes);
 
 #endif // INCLUDEDFILECONTEXTS_H

@@ -25,7 +25,6 @@
 #include "clangtypes.h"
 
 #include "contextbuilder.h"
-#include "typebuilder.h"
 
 #include <language/duchain/identifier.h>
 #include <language/duchain/ducontext.h>
@@ -78,7 +77,6 @@ T *createDeclarationCommon(CXCursor cursor, const Identifier& id)
     auto decl = new T(range, nullptr);
     decl->setComment(comment);
     decl->setIdentifier(id);
-    decl->setAbstractType(TypeBuilder::build(cursor));
     setData<CK>(decl);
     return decl;
 }
