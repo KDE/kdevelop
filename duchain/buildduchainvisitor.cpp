@@ -63,8 +63,11 @@ CXChildVisitResult recurse(CXCursor cursor, ClientData* data, DUContext* context
 template<CXCursorKind kind>
 CXChildVisitResult buildDeclaration(CXCursor cursor, ClientData* data)
 {
-    DeclarationBuilder::build<kind>(cursor, data->parent);
-    return CXChildVisit_Recurse;
+    auto decl = DeclarationBuilder::build<kind>(cursor, data->parent);
+    //TODO: This should be done earlier based on the cursorkind and decl/def status
+    return decl->internalContext() ?
+        recurse(cursor, data, decl->internalContext()) :
+        CXChildVisit_Recurse;
 }
 
 template<CXCursorKind kind>
