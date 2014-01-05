@@ -59,9 +59,14 @@ AbstractType* createType(CXType t)
             return new IntegralType(IntegralType::TypeVoid);
         case CXType_Bool:
             return new IntegralType(IntegralType::TypeBoolean);
+        case CXType_Short:
+        case CXType_UShort:
         case CXType_Int:
-        case CXType_LongLong:
+        case CXType_UInt:
         case CXType_Long:
+        case CXType_ULong:
+        case CXType_LongLong:
+        case CXType_ULongLong:
             return new IntegralType(IntegralType::TypeInt);
         case CXType_Float:
             return new IntegralType(IntegralType::TypeFloat);
@@ -113,16 +118,22 @@ AbstractType::Ptr type(CXType t)
     if (clang_isVolatileQualifiedType(t)) {
         modifiers |= AbstractType::VolatileModifier;
     }
-    if (t.kind == CXType_Long || t.kind == CXType_LongDouble) {
+    if (t.kind == CXType_Short || t.kind == CXType_UShort) {
+        modifiers |= AbstractType::ShortModifier;
+    }
+    if (t.kind == CXType_Long || t.kind == CXType_LongDouble || t.kind == CXType_ULong) {
         modifiers |= AbstractType::LongModifier;
     }
-    if (t.kind == CXType_LongLong) {
+    if (t.kind == CXType_LongLong || t.kind == CXType_ULongLong) {
         modifiers |= AbstractType::LongLongModifier;
     }
     if (t.kind == CXType_Char_S) {
         modifiers |= AbstractType::SignedModifier;
     }
-    if (t.kind == CXType_Char_U) {
+    if (t.kind == CXType_Char_U || t.kind == CXType_UChar || t.kind == CXType_UInt
+        || t.kind == CXType_UInt128 || t.kind == CXType_ULong || t.kind == CXType_ULongLong
+        || t.kind == CXType_UShort)
+    {
         modifiers |= AbstractType::UnsignedModifier;
     }
     ret->setModifiers(modifiers);
