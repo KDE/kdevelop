@@ -1,13 +1,3 @@
-find_package(LLVM 3.3 REQUIRED)
-find_package(Clang REQUIRED)
-
-link_directories(${LLVM_LIBRARY_DIRS})
-add_definitions(${LLVM_CFLAGS})
-
-include_directories(
-    ${LLVM_INCLUDE_DIRS}
-)
-
 kde4_add_library(kdevclangduchain SHARED
     parsesession.cpp
     clangtypes.cpp

@@ -13,6 +13,16 @@ cmake_minimum_required(VERSION 2.8.9)
 find_package(KDE4 REQUIRED)
 find_package(KDevPlatform ${KDEVPLATFORM_VERSION} REQUIRED)
 
+find_package(LLVM 3.3 REQUIRED)
+find_package(Clang REQUIRED)
+
+# TODO: Can we make this implicit via set_target_properties magic?
+link_directories(${LLVM_LIBRARY_DIRS})
+add_definitions(${LLVM_CFLAGS})
+include_directories(
+    ${LLVM_INCLUDE_DIRS}
+)
+
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 endif()
