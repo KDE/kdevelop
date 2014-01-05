@@ -274,7 +274,16 @@ void ClangParseJob::run()
         DUChainWriteLocker lock;
         context->setProblems(session->problems());
         context->setFeatures(minimumFeatures());
-        context->setAst(KSharedPtr<IAstContainer>::staticCast(session));
+        if (hasTracker()) {
+            // cache the parse session and the contained translation unit for this chain
+            // this then allows us to quickly reparse the document if it is changed by
+            // the user
+            context->setAst(KSharedPtr<IAstContainer>::staticCast(session));
+        } else {
+            // otherwise no editor component is open for this document and we can dispose
+            // the TU to save memory
+            context->setAst({});
+        }
         ParsingEnvironmentFilePointer file = context->parsingEnvironmentFile();
         Q_ASSERT(file);
         file->setModificationRevision(contents().modification);
