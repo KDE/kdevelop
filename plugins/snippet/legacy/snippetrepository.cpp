@@ -319,12 +319,11 @@ void SnippetRepository::slotParseFile()
             delete snippet;
             continue;
         } else {
-            const QStringList shortcuts = config.readEntry("shortcut " + snippet->text(), QStringList());
-            if ( shortcuts.count() >= 2 ) {
-                KShortcut shortcut;
-                shortcut.setPrimary(shortcuts.value(0));
-                shortcut.setAlternate(shortcuts.value(1));
-                snippet->action()->setShortcut(shortcut);
+            QList<QKeySequence> shortcuts;
+            const QStringList shortcutStrings = config.readEntry("shortcut " + snippet->text(), QStringList());
+            if (shortcutStrings.count() >= 2) {
+                shortcuts << QKeySequence::fromString(shortcuts.value(0)) << QKeySequence::fromString(shortcuts.value(1));
+                snippet->action()->setShortcuts(shortcuts);
             }
             appendRow(snippet);
         }

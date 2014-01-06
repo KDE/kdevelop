@@ -103,7 +103,7 @@ ExternalScriptPlugin::ExternalScriptPlugin( QObject* parent, const QVariantList&
       item->setErrorMode( static_cast<ExternalScriptItem::ErrorMode>( script.readEntry( "errorMode", 0u ) ) );
       item->setSaveMode( static_cast<ExternalScriptItem::SaveMode>( script.readEntry( "saveMode", 0u ) ) );
       item->setFilterMode( script.readEntry( "filterMode", 0u ));
-      item->action()->setShortcut( KShortcut( script.readEntry( "shortcuts" ) ) );
+      item->action()->setShortcut( QKeySequence( script.readEntry( "shortcuts" ) ) );
       item->setShowOutput( script.readEntry( "showOutput", true ) );
       m_model->appendRow( item );
     }

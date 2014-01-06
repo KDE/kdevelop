@@ -78,7 +78,7 @@ FramestackWidget::FramestackWidget(IDebugController* controller, QWidget* parent
     m_framesContextMenu = new QMenu(m_frames);
 
     QAction* selectAllAction = KStandardAction::selectAll(m_frames);
-    selectAllAction->setShortcut(KShortcut()); //FIXME: why does CTRL-A conflict with Katepart (while CTRL-Cbelow doesn't) ?
+    selectAllAction->setShortcut(QKeySequence()); //FIXME: why does CTRL-A conflict with Katepart (while CTRL-Cbelow doesn't) ?
     selectAllAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     connect(selectAllAction, SIGNAL(triggered()), SLOT(selectAll()));
     m_framesContextMenu->addAction(selectAllAction);

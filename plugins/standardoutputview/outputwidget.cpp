@@ -111,7 +111,7 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
     separator->setSeparator(true);
 
     QAction* selectAllAction = KStandardAction::selectAll(this, SLOT(selectAll()), this);
-    selectAllAction->setShortcut(KShortcut()); //FIXME: why does CTRL-A conflict with Katepart (while CTRL-Cbelow doesn't) ?
+    selectAllAction->setShortcut(QKeySequence()); //FIXME: why does CTRL-A conflict with Katepart (while CTRL-Cbelow doesn't) ?
     selectAllAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     addAction(selectAllAction);
 

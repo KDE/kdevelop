@@ -158,20 +158,17 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
             dialog->setCaption(i18n("Assign Shortcut For '%1' Tool View", m_view->document()->title()));
             dialog->setButtons( KDialog::Ok | KDialog::Cancel );
             KShortcutWidget *w = new KShortcutWidget(dialog);
-            KShortcut shortcut;
-            shortcut.setPrimary(m_controller->actionForView(m_view)->shortcuts().value(0));
-            shortcut.setAlternate(m_controller->actionForView(m_view)->shortcuts().value(1));
-            w->setShortcut(shortcut);
+            w->setShortcut(m_controller->actionForView(m_view)->shortcuts());
             dialog->setMainWidget(w);
 
             if (dialog->exec() == QDialog::Accepted) {
-                m_controller->actionForView(m_view)->setShortcuts(w->shortcut().toList());
+                m_controller->actionForView(m_view)->setShortcuts(w->shortcut());
 
                 //save shortcut config
                 KConfigGroup config = KGlobal::config()->group("UI");
                 QStringList shortcuts;
-                shortcuts << w->shortcut().primary().toString();
-                shortcuts << w->shortcut().alternate().toString();
+                shortcuts << w->shortcut().value(0).toString();
+                shortcuts << w->shortcut().value(1).toString();
                 config.writeEntry(QString("Shortcut for %1").arg(m_view->document()->title()), shortcuts);
                 config.sync();
             }
