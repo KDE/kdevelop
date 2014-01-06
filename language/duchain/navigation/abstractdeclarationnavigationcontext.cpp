@@ -313,34 +313,34 @@ void AbstractDeclarationNavigationContext::htmlFunction()
 
   modifyHtml() += ' ' + nameHighlight(Qt::escape(prettyIdentifier(m_declaration).toString()));
 
-  if( type->arguments().count() == 0 )
+  if( type->indexedArgumentsSize() == 0 )
   {
     modifyHtml() += "()";
   } else {
     modifyHtml() += "( ";
+
     bool first = true;
+    int firstDefaultParam = type->indexedArgumentsSize() - function->defaultParametersSize();
+    int currentArgNum = 0;
 
-    KDevelop::DUContext* argumentContext = DUChainUtils::getArgumentContext(m_declaration.data());
+    QVector<Declaration*> decls;
+    if (KDevelop::DUContext* argumentContext = DUChainUtils::getArgumentContext(m_declaration.data())) {
+      decls = argumentContext->localDeclarations(m_topContext.data());
+    }
+    foreach(const AbstractType::Ptr& argType, type->arguments()) {
+      if( !first )
+        modifyHtml() += ", ";
+      first = false;
 
-    if(argumentContext) {
-      int firstDefaultParam = argumentContext->localDeclarations(m_topContext.data()).count() - function->defaultParametersSize();
-      int currentArgNum = 0;
-
-      foreach(Declaration* argument, argumentContext->localDeclarations(m_topContext.data())) {
-        if( !first )
-          modifyHtml() += ", ";
-        first = false;
-
-        AbstractType::Ptr argType = argument->abstractType();
-
-        eventuallyMakeTypeLinks( argType );
-        modifyHtml() += ' ' + nameHighlight(Qt::escape(argument->identifier().toString()));
-
-        if( currentArgNum >= firstDefaultParam )
-          modifyHtml() += " = " + Qt::escape(function->defaultParameters()[ currentArgNum - firstDefaultParam ].str());
-
-        ++currentArgNum;
+      eventuallyMakeTypeLinks( argType );
+      if (currentArgNum < decls.size()) {
+        modifyHtml() += ' ' + nameHighlight(Qt::escape(decls[currentArgNum]->identifier().toString()));
       }
+
+      if( currentArgNum >= firstDefaultParam )
+        modifyHtml() += " = " + Qt::escape(function->defaultParameters()[ currentArgNum - firstDefaultParam ].str());
+
+      ++currentArgNum;
     }
 
     modifyHtml() += " )";
