@@ -92,12 +92,34 @@ void setData<CXCursor_Namespace>(CXCursor /*cursor*/, Declaration* decl)
     decl->setKind(Declaration::Namespace);
 }
 
+struct NamespaceClientData
+{
+    CXCursor ref;
+};
+
+CXChildVisitResult visitNamespaceAlias(CXCursor cursor, CXCursor /*parent*/, CXClientData d)
+{
+    auto data = static_cast<NamespaceClientData*>(d);
+    const auto kind = clang_getCursorKind(cursor);
+    if (kind == CXCursor_NamespaceRef) {
+        data->ref = cursor;
+        return CXChildVisit_Break;
+    } else if (kind == CXCursor_NamespaceAlias) {
+        return CXChildVisit_Recurse;
+    } else {
+        return CXChildVisit_Break;
+    }
+}
+
 template<CXCursorKind CK>
-void setData(CXCursor /*cursor*/, NamespaceAliasDeclaration* /*decl*/)
+void setData(CXCursor cursor, NamespaceAliasDeclaration* decl)
 {
     static_assert(CK == CXCursor_NamespaceAlias, "Unexpected cursor kind");
-    // FIXME: how to get the imported identifier from clang?
-//     decl->setImportIdentifier(???);
+    NamespaceClientData data{clang_getNullCursor()};
+    clang_visitChildren(cursor, visitNamespaceAlias, &data);
+    if (clang_getCursorKind(data.ref) == CXCursor_NamespaceRef) {
+        decl->setImportIdentifier(QualifiedIdentifier(QString::fromUtf8(ClangString(clang_getCursorDisplayName(data.ref)))));
+    }
 }
 
 template<CXCursorKind CK, class T>
