@@ -35,6 +35,7 @@
 #include <language/duchain/classfunctiondeclaration.h>
 #include <language/duchain/forwarddeclaration.h>
 #include <language/duchain/functiondefinition.h>
+#include <language/duchain/namespacealiasdeclaration.h>
 
 namespace DeclarationBuilder {
 
@@ -79,6 +80,20 @@ template<>
 void setData<CXCursor_TypedefDecl>(Declaration* decl)
 {
     decl->setIsTypeAlias(true);
+}
+
+template<>
+void setData<CXCursor_Namespace>(Declaration* decl)
+{
+    decl->setKind(Declaration::Namespace);
+}
+
+template<CXCursorKind CK>
+void setData(NamespaceAliasDeclaration* /*decl*/)
+{
+    static_assert(CK == CXCursor_NamespaceAlias, "Unexpected cursor kind");
+    // FIXME: how to get the imported identifier from clang?
+//     decl->setImportIdentifier(???);
 }
 
 template<CXCursorKind CK, class T>
@@ -178,7 +193,6 @@ constexpr bool isKDevDeclaration(CXCursorKind CK)
         || CK == CXCursor_TemplateTypeParameter
         || CK == CXCursor_NonTypeTemplateParameter
         || CK == CXCursor_TemplateTemplateParameter
-        || CK == CXCursor_NamespaceAlias
         || CK == CXCursor_UsingDirective
         || CK == CXCursor_UsingDeclaration
         || CK == CXCursor_TypeAliasDecl
@@ -209,6 +223,11 @@ constexpr bool isKDevFunctionDeclaration(CXCursorKind CK, bool isDefinition)
 constexpr bool isKDevFunctionDefinition(CXCursorKind CK, bool isDefinition)
 {
     return isDefinition && isFunctionType(CK);
+}
+
+constexpr bool isKDevNamespaceAliasDeclaration(CXCursorKind CK, bool isDefinition)
+{
+    return !isDefinition && CK == CXCursor_NamespaceAlias;
 }
 
 //BEGIN DeclType
@@ -249,6 +268,12 @@ template<CXCursorKind CK, bool isDefinition>
 struct DeclType<CK, isDefinition, typename std::enable_if<isKDevFunctionDefinition(CK, isDefinition)>::type>
 {
     typedef FunctionDefinition Type;
+};
+
+template<CXCursorKind CK, bool isDefinition>
+struct DeclType<CK, isDefinition, typename std::enable_if<isKDevNamespaceAliasDeclaration(CK, isDefinition)>::type>
+{
+    typedef NamespaceAliasDeclaration Type;
 };
 //END DeclType
 
