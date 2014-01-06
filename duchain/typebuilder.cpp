@@ -128,6 +128,11 @@ AbstractType* createType(CXType type, const IncludeFileContexts& includes)
         }
         case CXType_WChar:
             return new IntegralType(IntegralType::TypeWchar_t);
+        case CXType_Unexposed: {
+            auto t = new DelayedType;
+            t->setIdentifier(IndexedTypeIdentifier(QString::fromUtf8(ClangString(clang_getTypeSpelling(type)))));
+            return t;
+        }
         case CXType_Invalid:
             return nullptr;
         default:

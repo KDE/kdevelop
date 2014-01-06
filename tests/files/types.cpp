@@ -63,4 +63,7 @@ int main(int argc, char** argv)
     myEnum myE;
     /// "toString" : "myTypedef myT"
     myTypedef myT;
+    // TODO: get the actual type here somehow?
+    /// "toString" : "auto autoVar"
+    auto autoVar = 123;
 }
