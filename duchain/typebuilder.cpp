@@ -126,6 +126,8 @@ AbstractType* createType(CXType type, const IncludeFileContexts& includes)
             }
             return t;
         }
+        case CXType_WChar:
+            return new IntegralType(IntegralType::TypeWchar_t);
         case CXType_Invalid:
             return nullptr;
         default:

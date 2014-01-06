@@ -51,6 +51,8 @@ int main(int argc, char** argv)
     unsigned char c2;
     /// "toString" : "signed char c3"
     signed char c3;
+    /// "toString" : "wchar_t wc"
+    wchar_t wc;
     /// "toString" : "myStruct myS"
     myStruct myS;
     /// "toString" : "myClass myC"
