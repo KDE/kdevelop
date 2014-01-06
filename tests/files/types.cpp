@@ -63,6 +63,10 @@ int main(int argc, char** argv)
     myEnum myE;
     /// "toString" : "myTypedef myT"
     myTypedef myT;
+    /// "toString" : "__int128 i128"
+    __int128 i128;
+    /// "toString" : "unsigned __int128 ui128"
+    unsigned __int128 ui128;
     // TODO: get the actual type here somehow?
     /// "toString" : "auto autoVar"
     auto autoVar = 123;
