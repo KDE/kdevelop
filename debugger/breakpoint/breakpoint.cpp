@@ -135,17 +135,17 @@ QVariant Breakpoint::data(int column, int role) const
     {
         if (role == Qt::DecorationRole) {
             if (!errors().isEmpty()) {
-                return KIcon("dialog-warning");
+                return QIcon::fromTheme("dialog-warning");
             }
             switch (state()) {
                 case NotStartedState:
                     return QVariant();
                 case DirtyState:
-                    return KIcon("system-switch-user");
+                    return QIcon::fromTheme("system-switch-user");
                 case PendingState:
-                    return KIcon("help-contents");
+                    return QIcon::fromTheme("help-contents");
                 case CleanState:
-                    return KIcon("dialog-ok-apply");
+                    return QIcon::fromTheme("dialog-ok-apply");
             }
         } else if (role == Qt::ToolTipRole) {
             if (!errors().isEmpty()) {
@@ -178,7 +178,7 @@ QVariant Breakpoint::data(int column, int role) const
             || (column == ConditionColumn && errors().contains(ConditionColumn)))
         {
             /* FIXME: does this leak? Is this efficient? */
-            return KIcon("dialog-warning");
+            return QIcon::fromTheme("dialog-warning");
         }
         return QVariant();
     }

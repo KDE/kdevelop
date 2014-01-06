@@ -28,7 +28,9 @@
 #include <interfaces/iproject.h>
 #include <interfaces/iplugin.h>
 #include <interfaces/iruncontroller.h>
-#include <KIcon>
+
+#include <QIcon>
+
 #include <KMessageBox>
 #include <KLocalizedString>
 #include <KDebug>
@@ -49,7 +51,7 @@ class BranchItem : public QStandardItem
         void setCurrent(bool current)
         {
             setData(current, BranchesListModel::CurrentRole);
-            setIcon(KIcon( current ? "arrow-right" : ""));
+            setIcon(QIcon::fromTheme( current ? "arrow-right" : ""));
         }
         
         void setData(const QVariant& value, int role = Qt::UserRole + 1)

@@ -71,7 +71,7 @@ void DashboardCorona::loadDefaultLayout()
 
 void DashboardCorona::containmentAddedToCorona(Plasma::Containment* c)
 {
-    QAction* shareAction =  new QAction(KIcon("document-export"), i18nc("@action", "Share"), this);
+    QAction* shareAction =  new QAction(QIcon::fromTheme("document-export"), i18nc("@action", "Share"), this);
     connect(shareAction, SIGNAL(triggered(bool)), SLOT(saveToProject()));
     c->addToolBoxAction(shareAction);
     c->removeToolBoxAction(c->action("expand widgets"));

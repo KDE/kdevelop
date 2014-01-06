@@ -174,7 +174,7 @@ KXMLGUIClient* ContextBrowserPlugin::createGUIForMainWindow( Sublime::MainWindow
     m_previousButton = new QToolButton();
     m_previousButton->setToolTip(i18n("Go back in context history"));
     m_previousButton->setPopupMode(QToolButton::MenuButtonPopup);
-    m_previousButton->setIcon(KIcon("go-previous"));
+    m_previousButton->setIcon(QIcon::fromTheme("go-previous"));
     m_previousButton->setEnabled(false);
     m_previousButton->setFocusPolicy(Qt::NoFocus);
     m_previousMenu = new QMenu();
@@ -185,7 +185,7 @@ KXMLGUIClient* ContextBrowserPlugin::createGUIForMainWindow( Sublime::MainWindow
     m_nextButton = new QToolButton();
     m_nextButton->setToolTip(i18n("Go forward in context history"));
     m_nextButton->setPopupMode(QToolButton::MenuButtonPopup);
-    m_nextButton->setIcon(KIcon("go-next"));
+    m_nextButton->setIcon(QIcon::fromTheme("go-next"));
     m_nextButton->setEnabled(false);
     m_nextButton->setFocusPolicy(Qt::NoFocus);
     m_nextMenu = new QMenu();
@@ -194,7 +194,7 @@ KXMLGUIClient* ContextBrowserPlugin::createGUIForMainWindow( Sublime::MainWindow
     connect(m_nextMenu, SIGNAL(aboutToShow()), this, SLOT(nextMenuAboutToShow()));
 
     m_browseButton = new QToolButton();
-    m_browseButton->setIcon(KIcon("games-hint"));
+    m_browseButton->setIcon(QIcon::fromTheme("games-hint"));
     m_browseButton->setToolTip(i18n("Enable/disable source browse mode"));
     m_browseButton->setWhatsThis(i18n("When this is enabled, you can browse the source-code by clicking in the editor."));
     m_browseButton->setCheckable(true);
@@ -246,25 +246,25 @@ void ContextBrowserPlugin::createActionsForMainWindow(Sublime::MainWindow* windo
 
     QAction* previousContext = actions.addAction("previous_context");
     previousContext->setText( i18n("&Previous Visited Context") );
-    previousContext->setIcon( KIcon("go-previous-context" ) );
+    previousContext->setIcon( QIcon::fromTheme("go-previous-context" ) );
     previousContext->setShortcut( Qt::META | Qt::Key_Left );
     QObject::connect(previousContext, SIGNAL(triggered(bool)), this, SLOT(previousContextShortcut()));
 
     QAction* nextContext = actions.addAction("next_context");
     nextContext->setText( i18n("&Next Visited Context") );
-    nextContext->setIcon( KIcon("go-next-context" ) );
+    nextContext->setIcon( QIcon::fromTheme("go-next-context" ) );
     nextContext->setShortcut( Qt::META | Qt::Key_Right );
     QObject::connect(nextContext, SIGNAL(triggered(bool)), this, SLOT(nextContextShortcut()));
 
     QAction* previousUse = actions.addAction("previous_use");
     previousUse->setText( i18n("&Previous Use") );
-    previousUse->setIcon( KIcon("go-previous-use") );
+    previousUse->setIcon( QIcon::fromTheme("go-previous-use") );
     previousUse->setShortcut( Qt::META | Qt::SHIFT |  Qt::Key_Left );
     QObject::connect(previousUse, SIGNAL(triggered(bool)), this, SLOT(previousUseShortcut()));
 
     QAction* nextUse = actions.addAction("next_use");
     nextUse->setText( i18n("&Next Use") );
-    nextUse->setIcon( KIcon("go-next-use") );
+    nextUse->setIcon( QIcon::fromTheme("go-next-use") );
     nextUse->setShortcut( Qt::META | Qt::SHIFT | Qt::Key_Right );
     QObject::connect(nextUse, SIGNAL(triggered(bool)), this, SLOT(nextUseShortcut()));
 

@@ -20,8 +20,11 @@
     Boston, MA 02110-1301, USA.
 */
 
+#include "vcsfilechangesmodel.h"
+
+#include <QIcon>
+
 #include <KLocale>
-#include <KIcon>
 #include <KMimeType>
 #include <KDebug>
 
@@ -30,7 +33,6 @@
 
 #include <vcs/vcsstatusinfo.h>
 
-#include "vcsfilechangesmodel.h"
 
 namespace KDevelop
 {
@@ -61,20 +63,20 @@ static KIcon stateToIcon(KDevelop::VcsStatusInfo::State state)
     switch(state)
     {
         case KDevelop::VcsStatusInfo::ItemAdded:
-            return KIcon("vcs-added");
+            return QIcon::fromTheme("vcs-added");
         case KDevelop::VcsStatusInfo::ItemDeleted:
-            return KIcon("vcs-removed");
+            return QIcon::fromTheme("vcs-removed");
         case KDevelop::VcsStatusInfo::ItemHasConflicts:
-            return KIcon("vcs-conflicting");
+            return QIcon::fromTheme("vcs-conflicting");
         case KDevelop::VcsStatusInfo::ItemModified:
-            return KIcon("vcs-locally-modified");
+            return QIcon::fromTheme("vcs-locally-modified");
         case KDevelop::VcsStatusInfo::ItemUpToDate:
-            return KIcon("vcs-normal");
+            return QIcon::fromTheme("vcs-normal");
         case KDevelop::VcsStatusInfo::ItemUnknown:
         case KDevelop::VcsStatusInfo::ItemUserState:
-            return KIcon("unknown");
+            return QIcon::fromTheme("unknown");
     }
-    return KIcon("dialog-error");
+    return QIcon::fromTheme("dialog-error");
 }
 
 class VcsFileChangesModelPrivate

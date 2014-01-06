@@ -70,7 +70,7 @@ KSaveSelectDialog::KSaveSelectDialog( const QList<IDocument*>& files, QWidget * 
 //     m_listWidget->header()->hide();
 //     m_listWidget->setResizeMode( QListView::LastColumn );
 
-    setButtonGuiItem( Ok, KGuiItem(i18n("Save &Selected"), KIcon("document-save-all"), i18nc("@info:tooltip", "Saves all selected files")) );
+    setButtonGuiItem( Ok, KGuiItem(i18n("Save &Selected"), QIcon::fromTheme("document-save-all"), i18nc("@info:tooltip", "Saves all selected files")) );
     setButtonText( User1, i18n("Save &None") );
     setButtonToolTip( User1, i18n("Discard all modifications") );
     setDefaultButton( Cancel );

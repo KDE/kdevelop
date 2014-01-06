@@ -125,7 +125,7 @@ void FileManager::updateNav( const KUrl& url )
 
 void FileManager::setupActions()
 {
-    KActionMenu *acmBookmarks = new KActionMenu(KIcon("bookmarks"), i18n("Bookmarks"), this);
+    KActionMenu *acmBookmarks = new KActionMenu(QIcon::fromTheme("bookmarks"), i18n("Bookmarks"), this);
     acmBookmarks->setDelayed(false);
     m_bookmarkHandler = new BookmarkHandler(this, acmBookmarks->menu());
     acmBookmarks->setShortcutContext(Qt::WidgetWithChildrenShortcut);
@@ -133,7 +133,7 @@ void FileManager::setupActions()
     QAction* action = new QAction(this);
     action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     action->setText(i18n("Current Document Directory"));
-    action->setIcon(KIcon("dirsync"));
+    action->setIcon(QIcon::fromTheme("dirsync"));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(syncCurrentDocumentDirectory()));
     tbActions << (dirop->actionCollection()->action("back"));
     tbActions << (dirop->actionCollection()->action("up"));
@@ -147,7 +147,7 @@ void FileManager::setupActions()
 
     newFileAction = new QAction(this);
     newFileAction->setText(i18n("New File..."));
-    newFileAction->setIcon(KIcon("document-new"));
+    newFileAction->setIcon(QIcon::fromTheme("document-new"));
     connect(newFileAction, SIGNAL(triggered()), this, SLOT(createNewFile()));
 }
 

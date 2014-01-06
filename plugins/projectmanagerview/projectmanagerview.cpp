@@ -92,7 +92,7 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
     m_syncAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     m_syncAction->setText(i18n("Locate Current Document"));
     m_syncAction->setToolTip(i18n("Locates the current document in the project tree and selects it."));
-    m_syncAction->setIcon(KIcon("dirsync"));
+    m_syncAction->setIcon(QIcon::fromTheme("dirsync"));
     m_syncAction->setShortcut(Qt::ControlModifier + Qt::Key_Less);
     connect(m_syncAction, SIGNAL(triggered(bool)), this, SLOT(locateCurrentDocument()));
     addAction(m_syncAction);

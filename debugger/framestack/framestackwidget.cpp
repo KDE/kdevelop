@@ -33,13 +33,13 @@
 #include <QMenu>
 #include <QApplication>
 #include <QClipboard>
+#include <QIcon>
 #include <QResizeEvent>
 #include <QAction>
 
 #include <KStandardAction>
 #include <KDebug>
 #include <KLocalizedString>
-#include <KIcon>
 #include <KTextEditor/Cursor>
 
 #include <interfaces/icore.h>
@@ -65,7 +65,7 @@ FramestackWidget::FramestackWidget(IDebugController* controller, QWidget* parent
                       "program. By clicking on an item you "
                       "can see the values in any of the "
                       "previous calling functions."));
-    setWindowIcon(KIcon("view-list-text"));
+    setWindowIcon(QIcon::fromTheme("view-list-text"));
     m_threadsWidget = new QWidget(this);
     m_threads = new QListView(m_threadsWidget);
     m_frames = new QTreeView(this);

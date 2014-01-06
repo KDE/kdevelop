@@ -55,7 +55,7 @@
 
 KIcon NativeAppConfigPage::icon() const
 {
-    return KIcon("system-run");
+    return QIcon::fromTheme("system-run");
 }
 
 static KDevelop::ProjectBaseItem* itemForPath(const QStringList& path, KDevelop::ProjectModel* model)
@@ -102,7 +102,7 @@ void NativeAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelo
         KDevelop::ProjectBaseItem* pitem=itemForPath(deplist, model);
         KIcon icon;
         if(pitem)
-            icon=KIcon(pitem->iconName());
+            icon=QIcon::fromTheme(pitem->iconName());
         
         QListWidgetItem* item = new QListWidgetItem(icon, KDevelop::joinWithEscaping( deplist, '/', '\\' ), dependencies );
         item->setData( Qt::UserRole, dep );
@@ -121,11 +121,11 @@ NativeAppConfigPage::NativeAppConfigPage( QWidget* parent )
     dependencyAction->setItemData(2, "Install" );
     dependencyAction->setItemData(3, "SudoInstall" );
 
-    addDependency->setIcon( KIcon("list-add") );
-    removeDependency->setIcon( KIcon("list-remove") );
-    moveDepUp->setIcon( KIcon("go-up") );
-    moveDepDown->setIcon( KIcon("go-down") );
-    browseProject->setIcon(KIcon("folder-document"));
+    addDependency->setIcon( QIcon::fromTheme("list-add") );
+    removeDependency->setIcon( QIcon::fromTheme("list-remove") );
+    moveDepUp->setIcon( QIcon::fromTheme("go-up") );
+    moveDepDown->setIcon( QIcon::fromTheme("go-down") );
+    browseProject->setIcon(QIcon::fromTheme("folder-document"));
     
     //Set workingdirectory widget to ask for directories rather than files
     workingDirectory->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
@@ -232,7 +232,7 @@ void NativeAppConfigPage::addDep()
     KIcon icon;
     KDevelop::ProjectBaseItem* pitem = targetDependency->currentItem();
     if(pitem)
-        icon= KIcon(pitem->iconName());
+        icon= QIcon::fromTheme(pitem->iconName());
 
     QListWidgetItem* item = new QListWidgetItem(icon, targetDependency->text(), dependencies);
     item->setData( Qt::UserRole, targetDependency->itemPath() );
@@ -380,7 +380,7 @@ QString NativeAppConfigType::id() const
 
 KIcon NativeAppConfigType::icon() const
 {
-    return KIcon("application-x-executable");
+    return QIcon::fromTheme("application-x-executable");
 }
 
 bool NativeAppConfigType::canLaunch ( KDevelop::ProjectBaseItem* item ) const
@@ -446,7 +446,7 @@ QMenu* NativeAppConfigType::launcherSuggestions()
         if(project->projectFileManager()->features() & KDevelop::IProjectFileManager::Targets) {
             QList<KDevelop::ProjectTargetItem*> targets=targetsInFolder(project->projectItem());
             QHash<KDevelop::ProjectBaseItem*, QList<QAction*> > targetsContainer;
-            QMenu* projectMenu = ret->addMenu(KIcon("project-development"), project->name());
+            QMenu* projectMenu = ret->addMenu(QIcon::fromTheme("project-development"), project->name());
             foreach(KDevelop::ProjectTargetItem* target, targets) {
                 if(target->executable()) {
                     QStringList path = model->pathFromIndex(target->index());
@@ -456,7 +456,7 @@ QMenu* NativeAppConfigType::launcherSuggestions()
                         act->setProperty("name", target->text());
                         path.removeFirst();
                         act->setText(path.join("/"));
-                        act->setIcon(KIcon("system-run"));
+                        act->setIcon(QIcon::fromTheme("system-run"));
                         connect(act, SIGNAL(triggered(bool)), SLOT(suggestionTriggered()));
                         targetsContainer[target->parent()].append(act);
                     }

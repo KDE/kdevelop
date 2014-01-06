@@ -741,48 +741,48 @@ void QuickOpenPlugin::createActionsForMainWindow(Sublime::MainWindow* /*window*/
 
     QAction* quickOpen = actions.addAction("quick_open");
     quickOpen->setText( i18n("&Quick Open") );
-    quickOpen->setIcon( KIcon("quickopen") );
+    quickOpen->setIcon( QIcon::fromTheme("quickopen") );
     quickOpen->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_Q );
     connect(quickOpen, SIGNAL(triggered(bool)), this, SLOT(quickOpen()));
 
     QAction* quickOpenFile = actions.addAction("quick_open_file");
     quickOpenFile->setText( i18n("Quick Open &File") );
-    quickOpenFile->setIcon( KIcon("quickopen-file") );
+    quickOpenFile->setIcon( QIcon::fromTheme("quickopen-file") );
     quickOpenFile->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_O );
     connect(quickOpenFile, SIGNAL(triggered(bool)), this, SLOT(quickOpenFile()));
 
     QAction* quickOpenClass = actions.addAction("quick_open_class");
     quickOpenClass->setText( i18n("Quick Open &Class") );
-    quickOpenClass->setIcon( KIcon("quickopen-class") );
+    quickOpenClass->setIcon( QIcon::fromTheme("quickopen-class") );
     quickOpenClass->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_C );
     connect(quickOpenClass, SIGNAL(triggered(bool)), this, SLOT(quickOpenClass()));
 
     QAction* quickOpenFunction = actions.addAction("quick_open_function");
     quickOpenFunction->setText( i18n("Quick Open &Function") );
-    quickOpenFunction->setIcon( KIcon("quickopen-function") );
+    quickOpenFunction->setIcon( QIcon::fromTheme("quickopen-function") );
     quickOpenFunction->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_M );
     connect(quickOpenFunction, SIGNAL(triggered(bool)), this, SLOT(quickOpenFunction()));
 
     QAction* quickOpenAlreadyOpen = actions.addAction("quick_open_already_open");
     quickOpenAlreadyOpen->setText( i18n("Quick Open &Already Open File") );
-    quickOpenAlreadyOpen->setIcon( KIcon("quickopen-file") );
+    quickOpenAlreadyOpen->setIcon( QIcon::fromTheme("quickopen-file") );
     connect(quickOpenAlreadyOpen, SIGNAL(triggered(bool)), this, SLOT(quickOpenOpenFile()));
 
     QAction* quickOpenDocumentation = actions.addAction("quick_open_documentation");
     quickOpenDocumentation->setText( i18n("Quick Open &Documentation") );
-    quickOpenDocumentation->setIcon( KIcon("quickopen-documentation") );
+    quickOpenDocumentation->setIcon( QIcon::fromTheme("quickopen-documentation") );
     quickOpenDocumentation->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_D );
     connect(quickOpenDocumentation, SIGNAL(triggered(bool)), this, SLOT(quickOpenDocumentation()));
 
     m_quickOpenDeclaration = actions.addAction("quick_open_jump_declaration");
     m_quickOpenDeclaration->setText( i18n("Jump to Declaration") );
-    m_quickOpenDeclaration->setIcon( KIcon("go-jump-declaration" ) );
+    m_quickOpenDeclaration->setIcon( QIcon::fromTheme("go-jump-declaration" ) );
     m_quickOpenDeclaration->setShortcut( Qt::CTRL | Qt::Key_Period );
     connect(m_quickOpenDeclaration, SIGNAL(triggered(bool)), this, SLOT(quickOpenDeclaration()), Qt::QueuedConnection);
 
     m_quickOpenDefinition = actions.addAction("quick_open_jump_definition");
     m_quickOpenDefinition->setText( i18n("Jump to Definition") );
-    m_quickOpenDefinition->setIcon( KIcon("go-jump-definition" ) );
+    m_quickOpenDefinition->setIcon( QIcon::fromTheme("go-jump-definition" ) );
     m_quickOpenDefinition->setShortcut( Qt::CTRL | Qt::Key_Comma );
     connect(m_quickOpenDefinition, SIGNAL(triggered(bool)), this, SLOT(quickOpenDefinition()), Qt::QueuedConnection);
 

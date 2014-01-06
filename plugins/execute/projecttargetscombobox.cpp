@@ -18,10 +18,12 @@
 */
 
 #include "projecttargetscombobox.h"
+
+#include <QIcon>
+
 #include <project/projectmodel.h>
 #include <interfaces/iproject.h>
 #include <util/kdevstringhandler.h>
-#include <KIcon>
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
 
@@ -71,7 +73,7 @@ void ProjectTargetsComboBox::setBaseItem(ProjectFolderItem* item, bool exec)
     }
     
     foreach(const QString& item, walker.paths())
-        addItem(KIcon("system-run"), item);
+        addItem(QIcon::fromTheme("system-run"), item);
     
 }
 

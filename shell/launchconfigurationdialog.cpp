@@ -68,10 +68,10 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
     mainWidget()->layout()->setContentsMargins( 0, 0, 0, 0 );
     splitter->setSizes(QList<int>() << 260 << 620);
     
-    addConfig->setIcon( KIcon("list-add") );
+    addConfig->setIcon( QIcon::fromTheme("list-add") );
     addConfig->setEnabled( false );
     addConfig->setToolTip(i18nc("@info:tooltip", "Add a new launch configuration."));
-    deleteConfig->setIcon( KIcon("list-remove") );
+    deleteConfig->setIcon( QIcon::fromTheme("list-remove") );
     deleteConfig->setEnabled( false );
     deleteConfig->setToolTip(i18nc("@info:tooltip", "Delete selected launch configuration."));
     
@@ -198,8 +198,8 @@ void LaunchConfigurationDialog::doTreeContextMenu(QPoint point)
         if ( selected.parent().isValid() && ! selected.parent().parent().isValid() ) {
             // only display the menu if a launch config is clicked
             QMenu menu;
-            QAction* rename = new QAction(KIcon("edit-rename"), i18n("Rename configuration"), &menu);
-            QAction* delete_ = new QAction(KIcon("edit-delete"), i18n("Delete configuration"), &menu);
+            QAction* rename = new QAction(QIcon::fromTheme("edit-rename"), i18n("Rename configuration"), &menu);
+            QAction* delete_ = new QAction(QIcon::fromTheme("edit-delete"), i18n("Delete configuration"), &menu);
             connect(rename, SIGNAL(triggered(bool)), this, SLOT(renameSelected()));
             connect(delete_, SIGNAL(triggered(bool)), this, SLOT(deleteConfiguration()));
             menu.addAction(rename);
@@ -618,10 +618,10 @@ QVariant LaunchConfigurationsModel::data(const QModelIndex& index, int role) con
                 if ( index.column() == 0 && !index.parent().isValid() ) {
                     if (index.row() == 0) {
                         // global item
-                        return KIcon("folder");
+                        return QIcon::fromTheme("folder");
                     } else {
                         // project item
-                        return KIcon("folder-development");
+                        return QIcon::fromTheme("folder-development");
                     }
                 }
             }

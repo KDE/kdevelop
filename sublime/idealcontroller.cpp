@@ -23,9 +23,10 @@
 #include "idealcontroller.h"
 
 #include <QApplication>
+#include <QIcon>
 #include <QMainWindow>
 #include <QStylePainter>
-#include <KIcon>
+
 #include <kdebug.h>
 #include <klocale.h>
 #include <kglobal.h>

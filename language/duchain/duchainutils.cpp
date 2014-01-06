@@ -150,7 +150,7 @@ CodeCompletionModel::CompletionProperties DUChainUtils::completionProperties(con
  * and for some reason will be loaded every time it's used(this function returns a QIcon marked "load on demand"
  * each time this is called). And the loading is very slow. Seems like a bug somewhere, it cannot be ment to be that slow.
  */
-#define RETURN_CACHED_ICON(name) {static QIcon icon(KIcon(name).pixmap(QSize(16, 16))); return icon;}
+#define RETURN_CACHED_ICON(name) {static QIcon icon(QIcon::fromTheme(name).pixmap(QSize(16, 16))); return icon;}
 
 QIcon DUChainUtils::iconForProperties(KTextEditor::CodeCompletionModel::CompletionProperties p)
 {
@@ -230,7 +230,7 @@ QIcon DUChainUtils::iconForProperties(KTextEditor::CodeCompletionModel::Completi
   else
     RETURN_CACHED_ICON("field")
 
-  return KIcon();
+  return QIcon::fromTheme();
 }
 
 QIcon DUChainUtils::iconForDeclaration(const Declaration* dec)

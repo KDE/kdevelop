@@ -350,11 +350,11 @@ void PatchHighlighter::textInserted( KTextEditor::Document* doc, const KTextEdit
 
         KColorScheme scheme( QPalette::Active );
 
-        QImage tintedInsertion = KIcon( "insert-text" ).pixmap( 16, 16 ).toImage();
+        QImage tintedInsertion = QIcon::fromTheme( "insert-text" ).pixmap( 16, 16 ).toImage();
         KIconEffect::colorize( tintedInsertion, scheme.foreground( KColorScheme::NegativeText ).color(), 1.0 );
-        QImage tintedRemoval = KIcon( "edit-delete" ).pixmap( 16, 16 ).toImage();
+        QImage tintedRemoval = QIcon::fromTheme( "edit-delete" ).pixmap( 16, 16 ).toImage();
         KIconEffect::colorize( tintedRemoval, scheme.foreground( KColorScheme::NegativeText ).color(), 1.0 );
-        QImage tintedChange = KIcon( "text-field" ).pixmap( 16, 16 ).toImage();
+        QImage tintedChange = QIcon::fromTheme( "text-field" ).pixmap( 16, 16 ).toImage();
         KIconEffect::colorize( tintedChange, scheme.foreground( KColorScheme::NegativeText ).color(), 1.0 );
 
         markIface->setMarkDescription( KTextEditor::MarkInterface::markType22, i18n( "Insertion" ) );
@@ -365,11 +365,11 @@ void PatchHighlighter::textInserted( KTextEditor::Document* doc, const KTextEdit
         markIface->setMarkPixmap( KTextEditor::MarkInterface::markType24, QPixmap::fromImage( tintedChange ) );
 
         markIface->setMarkDescription( KTextEditor::MarkInterface::markType25, i18n( "Insertion" ) );
-        markIface->setMarkPixmap( KTextEditor::MarkInterface::markType25, KIcon( "insert-text" ).pixmap( 16, 16 ) );
+        markIface->setMarkPixmap( KTextEditor::MarkInterface::markType25, QIcon::fromTheme( "insert-text" ).pixmap( 16, 16 ) );
         markIface->setMarkDescription( KTextEditor::MarkInterface::markType26, i18n( "Removal" ) );
-        markIface->setMarkPixmap( KTextEditor::MarkInterface::markType26, KIcon( "edit-delete" ).pixmap( 16, 16 ) );
+        markIface->setMarkPixmap( KTextEditor::MarkInterface::markType26, QIcon::fromTheme( "edit-delete" ).pixmap( 16, 16 ) );
         markIface->setMarkDescription( KTextEditor::MarkInterface::markType27, i18n( "Change" ) );
-        markIface->setMarkPixmap( KTextEditor::MarkInterface::markType27, KIcon( "text-field" ).pixmap( 16, 16 ) );
+        markIface->setMarkPixmap( KTextEditor::MarkInterface::markType27, QIcon::fromTheme( "text-field" ).pixmap( 16, 16 ) );
 
         for ( Diff2::DifferenceList::const_iterator it = m_model->differences()->constBegin(); it != m_model->differences()->constEnd(); ++it ) {
             Diff2::Difference* diff = *it;

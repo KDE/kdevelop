@@ -117,7 +117,7 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
 
     setButtons( SearchButton | KDialog::Cancel );
     setButtonText( SearchButton, i18n("Search...") );
-    setButtonIcon( SearchButton, KIcon("edit-find") );
+    setButtonIcon( SearchButton, QIcon::fromTheme("edit-find") );
     setCaption( i18n("Find/Replace in Files") );
     setDefaultButton( SearchButton );
 
@@ -157,7 +157,7 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
     searchPaths->addItems(cg.readEntry("SearchPaths", QStringList(!projects.isEmpty() ? allOpenProjectsString : QDir::homePath() ) ));
     searchPaths->setInsertPolicy(QComboBox::InsertAtTop);
 
-    syncButton->setIcon(KIcon("dirsync"));
+    syncButton->setIcon(QIcon::fromTheme("dirsync"));
     syncButton->setMenu(createSyncButtonMenu());
 
     depthSpin->setValue(cg.readEntry("depth", -1));

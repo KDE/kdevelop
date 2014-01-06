@@ -18,9 +18,10 @@
  ***************************************************************************/
 #include "urldocument.h"
 
+#include <QIcon>
 #include <QWidget>
+
 #include <KTextEdit>
-#include <KIcon>
 #include <KMimeType>
 
 #include <kdebug.h>
@@ -79,7 +80,7 @@ QString UrlDocument::documentSpecifier() const
 
 QIcon UrlDocument::defaultIcon() const
 {
-    return KIcon(KMimeType::iconNameForUrl(d->url));
+    return QIcon::fromTheme(KMimeType::iconNameForUrl(d->url));
 }
 
 }

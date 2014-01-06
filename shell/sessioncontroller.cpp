@@ -379,7 +379,7 @@ private slots:
                     ///TODO: user proper runtime locale for date, it might be different
                     ///      from what was used when the recovery file was saved
                     KGuiItem recover = KStandardGuiItem::cont();
-                    recover.setIcon(KIcon("edit-redo"));
+                    recover.setIcon(QIcon::fromTheme("edit-redo"));
                     recover.setText(i18n("Recover"));
                     KGuiItem discard = KStandardGuiItem::discard();
                     int choice = KMessageBox::warningContinueCancelList(qApp->activeWindow(),
@@ -553,20 +553,20 @@ SessionController::SessionController( QObject *parent )
     QAction* action = actionCollection()->addAction( "new_session", this, SLOT(newSession()) );
     action->setText( i18nc("@action:inmenu", "Start New Session") );
     action->setToolTip( i18nc("@info:tooltip", "Start a new KDevelop instance with an empty session") );
-    action->setIcon(KIcon("window-new"));
+    action->setIcon(QIcon::fromTheme("window-new"));
 
     action = actionCollection()->addAction( "rename_session", this, SLOT(renameSession()) );
     action->setText( i18n("Rename Current Session...") );
-    action->setIcon(KIcon("edit-rename"));
+    action->setIcon(QIcon::fromTheme("edit-rename"));
 
     action = actionCollection()->addAction( "delete_session", this, SLOT(deleteCurrentSession()) );
     action->setText( i18n("Delete Current Session...") );
-    action->setIcon(KIcon("edit-delete"));
+    action->setIcon(QIcon::fromTheme("edit-delete"));
 
     action = actionCollection()->addAction( "quit", this, SIGNAL(quitSession()) );
     action->setText( i18n("Quit") );
     action->setShortcut(Qt::CTRL | Qt::Key_Q);
-    action->setIcon(KIcon("application-exit"));
+    action->setIcon(QIcon::fromTheme("application-exit"));
 
     #if 0
     action = actionCollection()->addAction( "configure_sessions", this, SLOT(configureSessions()) );
@@ -882,7 +882,7 @@ QString SessionController::showSessionChooserDialog(QString headerText, bool onl
     int cnsRow = row;
     if(!onlyRunning) {
         model->setItem(row, 0, new QStandardItem);
-        model->setItem(row, 1, new QStandardItem(KIcon("window-new"), i18n("Create New Session")));
+        model->setItem(row, 1, new QStandardItem(QIcon::fromTheme("window-new"), i18n("Create New Session")));
     }
 
     dialog.updateState();

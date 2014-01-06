@@ -80,7 +80,7 @@ KDevelop::ContextMenuExtension KDevProjectDashboard::contextMenuExtension(KDevel
 
     ContextMenuExtension menuExt;
     if(!m_selectedProjects.isEmpty()) {
-        QAction* action = new QAction(KIcon("dashboard-show"), i18n("Show Dashboard"), this);
+        QAction* action = new QAction(QIcon::fromTheme("dashboard-show"), i18n("Show Dashboard"), this);
         connect(action, SIGNAL(triggered()), SLOT(showDashboard()));
         menuExt.addAction(ContextMenuExtension::ProjectGroup, action);
     }

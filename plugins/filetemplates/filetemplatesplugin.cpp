@@ -11,7 +11,6 @@
 #include <interfaces/idocumentcontroller.h>
 #include <project/projectmodel.h>
 
-#include <KIcon>
 #include <KDebug>
 #include <KLocalizedString>
 #include <KPluginFactory>
@@ -21,6 +20,7 @@
 #include <QAction>
 #include <QApplication>
 #include <QDir>
+#include <QIcon>
 
 #define debug() kDebug(debugArea())
 
@@ -74,7 +74,7 @@ FileTemplatesPlugin::FileTemplatesPlugin(QObject* parent, const QVariantList& ar
     setXMLFile("kdevfiletemplates.rc");
     QAction* action = actionCollection()->addAction("new_from_template");
     action->setText( i18n( "New From Template" ) );
-    action->setIcon( KIcon( "code-class" ) );
+    action->setIcon( QIcon::fromTheme( "code-class" ) );
     action->setWhatsThis( i18n( "Allows you to create new source code files, such as classes or unit tests, using templates." ) );
     action->setStatusTip( i18n( "Create new files from a template" ) );
     connect (action, SIGNAL(triggered(bool)), SLOT(createFromTemplate()));
@@ -120,7 +120,7 @@ ContextMenuExtension FileTemplatesPlugin::contextMenuExtension (Context* context
         if (url.isValid())
         {
             QAction* action = new QAction(i18n("Create From Template"), this);
-            action->setIcon(KIcon("code-class"));
+            action->setIcon(QIcon::fromTheme("code-class"));
             action->setData(url);
             connect(action, SIGNAL(triggered(bool)), SLOT(createFromTemplate()));
             ext.addAction(ContextMenuExtension::FileGroup, action);
@@ -140,7 +140,7 @@ ContextMenuExtension FileTemplatesPlugin::contextMenuExtension (Context* context
     if (fileUrl.isValid() && determineTemplateType(fileUrl) != NoTemplate)
     {
         QAction* action = new QAction(i18n("Show Template Preview"), this);
-        action->setIcon(KIcon("document-preview"));
+        action->setIcon(QIcon::fromTheme("document-preview"));
         action->setData(fileUrl);
         connect(action, SIGNAL(triggered(bool)), SLOT(previewTemplate()));
         ext.addAction(ContextMenuExtension::ExtensionGroup, action);
@@ -156,7 +156,7 @@ QString FileTemplatesPlugin::name() const
 
 QIcon FileTemplatesPlugin::icon() const
 {
-    return KIcon("code-class");
+    return QIcon::fromTheme("code-class");
 }
 
 QAbstractItemModel* FileTemplatesPlugin::templatesModel()

@@ -74,7 +74,7 @@ DocumentationController::DocumentationController(Core* core)
 {
     m_showDocumentation = core->uiController()->activeMainWindow()->actionCollection()->addAction("showDocumentation");
     m_showDocumentation->setText(i18n("Show Documentation"));
-    m_showDocumentation->setIcon(KIcon("documentation"));
+    m_showDocumentation->setIcon(QIcon::fromTheme("documentation"));
     connect(m_showDocumentation, SIGNAL(triggered(bool)), SLOT(doShowDocumentation()));
 }
 

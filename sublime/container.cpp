@@ -210,7 +210,7 @@ Container::Container(QWidget *parent)
 
     d->documentListMenu = new QMenu(this);
     d->documentListButton = new QToolButton(this);
-    d->documentListButton->setIcon(KIcon("format-list-unordered"));
+    d->documentListButton->setIcon(QIcon::fromTheme("format-list-unordered"));
     d->documentListButton->setMenu(d->documentListMenu);
     d->documentListButton->setPopupMode(QToolButton::InstantPopup);
     d->documentListButton->setAutoRaise(true);
@@ -512,9 +512,9 @@ void Container::contextMenu( int currentTab, const QPoint& pos )
     emit tabContextMenuRequested(viewForWidget(widget(currentTab)), &menu);
 
     menu.addSeparator();
-    QAction* closeTabAction = menu.addAction( KIcon("document-close"), i18n( "Close File" ) );
-    QAction* closeOtherTabsAction = menu.addAction( KIcon("document-close"), i18n( "Close Other Files" ) );
-    QAction* closeAllTabsAction = menu.addAction( KIcon("document-close"), i18n( "Close All Files" ) );
+    QAction* closeTabAction = menu.addAction( QIcon::fromTheme("document-close"), i18n( "Close File" ) );
+    QAction* closeOtherTabsAction = menu.addAction( QIcon::fromTheme("document-close"), i18n( "Close Other Files" ) );
+    QAction* closeAllTabsAction = menu.addAction( QIcon::fromTheme("document-close"), i18n( "Close All Files" ) );
 
     QAction* triggered = menu.exec(pos);
 

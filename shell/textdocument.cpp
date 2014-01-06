@@ -238,15 +238,15 @@ struct TextDocumentPrivate {
         if (document->isModified())
             if (dirty) {
                 state = IDocument::DirtyAndModified;
-                statusIcon = KIcon("edit-delete");
+                statusIcon = QIcon::fromTheme("edit-delete");
             } else {
                 state = IDocument::Modified;
-                statusIcon = KIcon("document-save");
+                statusIcon = QIcon::fromTheme("document-save");
             }
         else
             if (dirty) {
                 state = IDocument::Dirty;
-                statusIcon = KIcon("document-revert");
+                statusIcon = QIcon::fromTheme("document-revert");
             } else {
                 state = IDocument::Clean;
             }

@@ -69,18 +69,18 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
     setWindowTitle(i18nc("@title:window", "Find/Replace Output View"));
     setWindowIcon(SmallIcon("edit-find"));
     
-    m_prev = new QAction(KIcon("go-previous"), i18n("&Previous Item"), this);
+    m_prev = new QAction(QIcon::fromTheme("go-previous"), i18n("&Previous Item"), this);
     m_prev->setEnabled(false);
-    m_next = new QAction(KIcon("go-next"), i18n("&Next Item"), this);
+    m_next = new QAction(QIcon::fromTheme("go-next"), i18n("&Next Item"), this);
     m_next->setEnabled(false);
-    m_collapseAll = new QAction(KIcon("arrow-left-double"), i18n("C&ollapse All"), this); // TODO change icon
+    m_collapseAll = new QAction(QIcon::fromTheme("arrow-left-double"), i18n("C&ollapse All"), this); // TODO change icon
     m_collapseAll->setEnabled(false);
-    m_expandAll = new QAction(KIcon("arrow-right-double"), i18n("&Expand All"), this); // TODO change icon
+    m_expandAll = new QAction(QIcon::fromTheme("arrow-right-double"), i18n("&Expand All"), this); // TODO change icon
     m_expandAll->setEnabled(false);
     QAction *separator = new QAction(this);
     separator->setSeparator(true);
-    QAction *newSearchAction = new QAction(KIcon("edit-find"), i18n("New &Search"), this);
-    m_clearSearchHistory = new QAction(KIcon("edit-clear-list"), i18n("Clear Search History"), this);
+    QAction *newSearchAction = new QAction(QIcon::fromTheme("edit-find"), i18n("New &Search"), this);
+    m_clearSearchHistory = new QAction(QIcon::fromTheme("edit-clear-list"), i18n("Clear Search History"), this);
     
     addAction(m_prev);
     addAction(m_next);
@@ -125,7 +125,7 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
     KConfigGroup cg = ICore::self()->activeSession()->config()->group( "GrepDialog" );
     replacementCombo->addItems( cg.readEntry("LastReplacementItems", QStringList()) );
     replacementCombo->setInsertPolicy(QComboBox::InsertAtTop);
-    applyButton->setIcon(KIcon("dialog-ok-apply"));
+    applyButton->setIcon(QIcon::fromTheme("dialog-ok-apply"));
     
     connect(replacementCombo, SIGNAL(editTextChanged(QString)), SLOT(replacementTextChanged(QString)));
     

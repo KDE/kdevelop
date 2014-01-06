@@ -105,39 +105,39 @@ ProjectManagerViewPlugin::ProjectManagerViewPlugin( QObject *parent, const QVari
         : IPlugin( ProjectManagerFactory::componentData(), parent ), d(new ProjectManagerViewPluginPrivate)
 {
     d->m_buildAll = new QAction( i18n("Build all Projects"), this );
-    d->m_buildAll->setIcon(KIcon("run-build"));
+    d->m_buildAll->setIcon(QIcon::fromTheme("run-build"));
     connect( d->m_buildAll, SIGNAL(triggered()), this, SLOT(buildAllProjects()) );
     actionCollection()->addAction( "project_buildall", d->m_buildAll );
 
     d->m_build = new QAction( i18n("Build Selection"), this );
     d->m_build->setIconText( i18n("Build") );
     d->m_build->setShortcut( Qt::Key_F8 );
-    d->m_build->setIcon(KIcon("run-build"));
+    d->m_build->setIcon(QIcon::fromTheme("run-build"));
     d->m_build->setEnabled( false );
     connect( d->m_build, SIGNAL(triggered()), this, SLOT(buildProjectItems()) );
     actionCollection()->addAction( "project_build", d->m_build );
     d->m_install = new QAction( i18n("Install Selection"), this );
     d->m_install->setIconText( i18n("Install") );
-    d->m_install->setIcon(KIcon("run-build-install"));
+    d->m_install->setIcon(QIcon::fromTheme("run-build-install"));
     d->m_install->setShortcut( Qt::SHIFT + Qt::Key_F8 );
     d->m_install->setEnabled( false );
     connect( d->m_install, SIGNAL(triggered()), this, SLOT(installProjectItems()) );
     actionCollection()->addAction( "project_install", d->m_install );
     d->m_clean = new QAction( i18n("Clean Selection"), this );
     d->m_clean->setIconText( i18n("Clean") );
-    d->m_clean->setIcon(KIcon("run-build-clean"));
+    d->m_clean->setIcon(QIcon::fromTheme("run-build-clean"));
     d->m_clean->setEnabled( false );
     connect( d->m_clean, SIGNAL(triggered()), this, SLOT(cleanProjectItems()) );
     actionCollection()->addAction( "project_clean", d->m_clean );
     d->m_configure = new QAction( i18n("Configure Selection"), this );
     d->m_configure->setIconText( i18n("Configure") );
-    d->m_configure->setIcon(KIcon("run-build-configure"));
+    d->m_configure->setIcon(QIcon::fromTheme("run-build-configure"));
     d->m_configure->setEnabled( false );
     connect( d->m_configure, SIGNAL(triggered()), this, SLOT(configureProjectItems()) );
     actionCollection()->addAction( "project_configure", d->m_configure );
     d->m_prune = new QAction( i18n("Prune Selection"), this );
     d->m_prune->setIconText( i18n("Prune") );
-    d->m_prune->setIcon(KIcon("run-build-prune"));
+    d->m_prune->setIcon(QIcon::fromTheme("run-build-prune"));
     d->m_prune->setEnabled( false );
     connect( d->m_prune, SIGNAL(triggered()), this, SLOT(pruneProjectItems()) );
     actionCollection()->addAction( "project_prune", d->m_prune );
@@ -238,61 +238,61 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
 
     if ( needsCreateFile ) {
         QAction* action = new QAction( i18n( "Create File" ), this );
-        action->setIcon(KIcon("document-new"));
+        action->setIcon(QIcon::fromTheme("document-new"));
         connect( action, SIGNAL(triggered()), this, SLOT(createFileFromContextMenu()) );
         menuExt.addAction( ContextMenuExtension::FileGroup, action );
     }
     if ( needsCreateFolder ) {
         QAction* action = new QAction( i18n( "Create Folder" ), this );
-        action->setIcon(KIcon("folder-new"));
+        action->setIcon(QIcon::fromTheme("folder-new"));
         connect( action, SIGNAL(triggered()), this, SLOT(createFolderFromContextMenu()) );
         menuExt.addAction( ContextMenuExtension::FileGroup, action );
     }
 
     if ( needsBuildItems ) {
         QAction* action = new QAction( i18nc( "@action", "Build" ), this );
-        action->setIcon(KIcon("run-build"));
+        action->setIcon(QIcon::fromTheme("run-build"));
         connect( action, SIGNAL(triggered()), this, SLOT(buildItemsFromContextMenu()) );
         menuExt.addAction( ContextMenuExtension::BuildGroup, action );
         action = new QAction( i18nc( "@action", "Install" ), this );
-        action->setIcon(KIcon("run-install"));
+        action->setIcon(QIcon::fromTheme("run-install"));
         connect( action, SIGNAL(triggered()), this, SLOT(installItemsFromContextMenu()) );
         menuExt.addAction( ContextMenuExtension::BuildGroup, action );
         action = new QAction( i18nc( "@action", "Clean" ), this );
-        action->setIcon(KIcon("run-clean"));
+        action->setIcon(QIcon::fromTheme("run-clean"));
         connect( action, SIGNAL(triggered()), this, SLOT(cleanItemsFromContextMenu()) );
         menuExt.addAction( ContextMenuExtension::BuildGroup, action );
         action = new QAction( i18n( "Add to Build Set" ), this );
-        action->setIcon(KIcon("list-add"));
+        action->setIcon(QIcon::fromTheme("list-add"));
         connect( action, SIGNAL(triggered()), this, SLOT(addItemsFromContextMenuToBuildset()) );
         menuExt.addAction( ContextMenuExtension::BuildGroup, action );
     }
 
     if ( needsCloseProjects ) {
         QAction* close = new QAction( i18np( "Close Project", "Close Projects", items.count() ), this );
-        close->setIcon(KIcon("project-development-close"));
+        close->setIcon(QIcon::fromTheme("project-development-close"));
         connect( close, SIGNAL(triggered()), this, SLOT(closeProjects()) );
         menuExt.addAction( ContextMenuExtension::ProjectGroup, close );
     }
     if ( needsFolderItems ) {
         QAction* action = new QAction( i18n( "Reload" ), this );
-        action->setIcon(KIcon("view-refresh"));
+        action->setIcon(QIcon::fromTheme("view-refresh"));
         connect( action, SIGNAL(triggered()), this, SLOT(reloadFromContextMenu()) );
         menuExt.addAction( ContextMenuExtension::FileGroup, action );
     }
     if ( needsRemoveAndRename ) {
         QAction* remove = new QAction( i18n( "Remove" ), this );
-        remove->setIcon(KIcon("user-trash"));
+        remove->setIcon(QIcon::fromTheme("user-trash"));
         connect( remove, SIGNAL(triggered()), this, SLOT(removeFromContextMenu()) );
         menuExt.addAction( ContextMenuExtension::FileGroup, remove );
         QAction* rename = new QAction( i18n( "Rename" ), this );
-        rename->setIcon(KIcon("edit-rename"));
+        rename->setIcon(QIcon::fromTheme("edit-rename"));
         connect( rename, SIGNAL(triggered()), this, SLOT(renameItemFromContextMenu()) );
         menuExt.addAction( ContextMenuExtension::FileGroup, rename );
     }
     if ( needsRemoveTargetFiles ) {
         QAction* remove = new QAction( i18n( "Remove From Target" ), this );
-        remove->setIcon(KIcon("user-trash"));
+        remove->setIcon(QIcon::fromTheme("user-trash"));
         connect( remove, SIGNAL(triggered()), this, SLOT(removeTargetFilesFromContextMenu()) );
         menuExt.addAction( ContextMenuExtension::FileGroup, remove );
     }

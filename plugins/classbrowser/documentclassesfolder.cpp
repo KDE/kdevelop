@@ -27,8 +27,9 @@
 #include <language/duchain/duchain.h>
 #include <language/duchain/persistentsymboltable.h>
 #include <language/duchain/codemodel.h>
+
+#include <QIcon>
 #include <QTimer>
-#include <KIcon>
 
 #include <boost/foreach.hpp>
 

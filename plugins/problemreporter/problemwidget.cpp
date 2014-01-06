@@ -53,7 +53,7 @@ ProblemWidget::ProblemWidget(QWidget* parent, ProblemReporterPlugin* plugin)
 {
     setObjectName("Problem Reporter Tree");
     setWindowTitle(i18n("Problems"));
-    setWindowIcon( KIcon("dialog-information") ); ///@todo Use a proper icon
+    setWindowIcon( QIcon::fromTheme("dialog-information") ); ///@todo Use a proper icon
     setRootIsDecorated(true);
     setWhatsThis( i18n( "Problems" ) );
 
@@ -64,7 +64,7 @@ ProblemWidget::ProblemWidget(QWidget* parent, ProblemReporterPlugin* plugin)
     fullUpdateAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     fullUpdateAction->setText(i18n("Force Full Update"));
     fullUpdateAction->setToolTip(i18nc("@info:tooltip", "Re-parse all watched documents"));
-    fullUpdateAction->setIcon(KIcon("view-refresh"));
+    fullUpdateAction->setIcon(QIcon::fromTheme("view-refresh"));
     connect(fullUpdateAction, SIGNAL(triggered(bool)), model(), SLOT(forceFullUpdate()));
     addAction(fullUpdateAction);
 

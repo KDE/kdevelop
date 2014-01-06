@@ -200,12 +200,12 @@ void KDevDocumentView::contextMenuEvent( QContextMenuEvent * event )
         QAction* save = KStandardAction::save(this, SLOT(saveSelected()), ctxMenu);
         save->setEnabled(selectedDocHasChanges());
         ctxMenu->addAction(save);
-        ctxMenu->addAction(KIcon("view-refresh"), i18n( "Reload" ), this, SLOT(reloadSelected()));
+        ctxMenu->addAction(QIcon::fromTheme("view-refresh"), i18n( "Reload" ), this, SLOT(reloadSelected()));
         
         appendActions(ctxMenu, editActions);
         
         ctxMenu->addAction(KStandardAction::close(this, SLOT(closeSelected()), ctxMenu));
-        QAction* closeUnselected = ctxMenu->addAction(KIcon("document-close"), i18n( "Close Other Files" ), this, SLOT(closeUnselected()));
+        QAction* closeUnselected = ctxMenu->addAction(QIcon::fromTheme("document-close"), i18n( "Close Other Files" ), this, SLOT(closeUnselected()));
         closeUnselected->setEnabled(!m_unselectedDocs.isEmpty());
 
         appendActions(ctxMenu, vcsActions);

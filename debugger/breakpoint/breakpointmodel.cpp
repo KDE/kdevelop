@@ -22,8 +22,9 @@
 
 #include "breakpointmodel.h"
 
+#include <QIcon>
 #include <QPixmap>
-#include <KIcon>
+
 #include <KParts/PartManager>
 #include <KDebug>
 #include <KLocale>
@@ -128,9 +129,9 @@ void BreakpointModel::markContextMenuRequested(Document* document, Mark mark, co
     if (!b) return;
 
     QMenu menu;
-    QAction deleteAction(KIcon("edit-delete"), i18n("&Delete Breakpoint"), 0);
-    QAction disableAction(KIcon("dialog-cancel"), i18n("&Disable Breakpoint"), 0);
-    QAction enableAction(KIcon("dialog-ok-apply"), i18n("&Enable Breakpoint"), 0);
+    QAction deleteAction(QIcon::fromTheme("edit-delete"), i18n("&Delete Breakpoint"), 0);
+    QAction disableAction(QIcon::fromTheme("dialog-cancel"), i18n("&Disable Breakpoint"), 0);
+    QAction enableAction(QIcon::fromTheme("dialog-ok-apply"), i18n("&Enable Breakpoint"), 0);
     menu.addAction(&deleteAction);
     if (b->enabled()) {
         menu.addAction(&disableAction);
@@ -159,9 +160,9 @@ BreakpointModel::headerData(int section, Qt::Orientation orientation,
     
     if (role == Qt::DecorationRole ) {
         if (section == 0)
-            return KIcon("dialog-ok-apply");
+            return QIcon::fromTheme("dialog-ok-apply");
         else if (section == 1)
-            return KIcon("system-switch-user");
+            return QIcon::fromTheme("system-switch-user");
     }
 
     if (role == Qt::DisplayRole) {
@@ -299,25 +300,25 @@ void BreakpointModel::markChanged(
 
 const QPixmap* BreakpointModel::breakpointPixmap()
 {
-  static QPixmap pixmap=KIcon("script-error").pixmap(QSize(22,22), QIcon::Active, QIcon::Off);
+  static QPixmap pixmap=QIcon::fromTheme("script-error").pixmap(QSize(22,22), QIcon::Active, QIcon::Off);
   return &pixmap;
 }
 
 const QPixmap* BreakpointModel::pendingBreakpointPixmap()
 {
-  static QPixmap pixmap=KIcon("script-error").pixmap(QSize(22,22), QIcon::Normal, QIcon::Off);
+  static QPixmap pixmap=QIcon::fromTheme("script-error").pixmap(QSize(22,22), QIcon::Normal, QIcon::Off);
   return &pixmap;
 }
 
 const QPixmap* BreakpointModel::reachedBreakpointPixmap()
 {
-  static QPixmap pixmap=KIcon("script-error").pixmap(QSize(22,22), QIcon::Selected, QIcon::Off);
+  static QPixmap pixmap=QIcon::fromTheme("script-error").pixmap(QSize(22,22), QIcon::Selected, QIcon::Off);
   return &pixmap;
 }
 
 const QPixmap* BreakpointModel::disabledBreakpointPixmap()
 {
-  static QPixmap pixmap=KIcon("script-error").pixmap(QSize(22,22), QIcon::Disabled, QIcon::Off);
+  static QPixmap pixmap=QIcon::fromTheme("script-error").pixmap(QSize(22,22), QIcon::Disabled, QIcon::Off);
   return &pixmap;
 }
 

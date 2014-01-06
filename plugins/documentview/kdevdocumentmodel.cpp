@@ -37,7 +37,7 @@ KDevCategoryItem::KDevCategoryItem( const QString &name )
 {
     setFlags(Qt::ItemIsEnabled);
     setToolTip( name );
-    setIcon( KIcon("folder") );
+    setIcon( QIcon::fromTheme("folder") );
 }
 
 KDevCategoryItem::~KDevCategoryItem()
@@ -74,7 +74,7 @@ KDevFileItem::KDevFileItem( const KUrl &url )
     setUrl( url );
     KFileItem fi = KFileItem( url, QString(), 0 );
     m_fileIcon = fi.iconName();
-    setIcon( KIcon( m_fileIcon ) );
+    setIcon( QIcon::fromTheme( m_fileIcon ) );
 }
 
 KDevFileItem::~KDevFileItem()

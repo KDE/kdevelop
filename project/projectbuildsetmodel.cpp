@@ -255,7 +255,7 @@ QVariant ProjectBuildSetModel::data( const QModelIndex& idx, int role ) const
     } else if(role == Qt::DecorationRole && idx.column()==0) {
         KDevelop::ProjectBaseItem* item = m_items.at( idx.row() ).findItem();
         if( item ) {
-            return KIcon( item->iconName() );
+            return QIcon::fromTheme( item->iconName() );
         }
     }
     return QVariant();

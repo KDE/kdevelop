@@ -82,8 +82,8 @@ VariableCollection *variableCollection()
 VariableWidget::VariableWidget(IDebugController* controller, QWidget *parent)
 : QWidget(parent), variablesRoot_(controller->variableCollection()->root())
 {
-  //setWindowIcon(KIcon("math_brace"));
-    setWindowIcon(KIcon("debugger"));
+  //setWindowIcon(QIcon::fromTheme("math_brace"));
+    setWindowIcon(QIcon::fromTheme("debugger"));
     setWindowTitle(i18n("Debugger Variables"));
 
     varTree_ = new VariableTree(controller, this);
@@ -240,7 +240,7 @@ void VariableTree::setupActions()
     connect(m_signalMapper, SIGNAL(mapped(int)), SLOT(changeVariableFormat(int)));
     
     m_watchDelete = new QAction(
-        KIcon("edit-delete"), i18n( "Remove Watch Variable" ), this);
+        QIcon::fromTheme("edit-delete"), i18n( "Remove Watch Variable" ), this);
 
     m_watchDelete->setShortcut(Qt::Key_Delete);
     m_watchDelete->setShortcutContext(Qt::WidgetWithChildrenShortcut);
@@ -333,8 +333,8 @@ void VariableTree::contextMenuEvent(QContextMenuEvent* event)
     {
         KMenu popup(this);
         popup.addTitle(i18n("Recent Expressions"));
-        QAction* remove = popup.addAction(KIcon("editdelete"), i18n("Remove All"));
-        QAction* reevaluate = popup.addAction(KIcon("reload"), i18n("Re-evaluate All"));
+        QAction* remove = popup.addAction(QIcon::fromTheme("editdelete"), i18n("Remove All"));
+        QAction* reevaluate = popup.addAction(QIcon::fromTheme("reload"), i18n("Re-evaluate All"));
 
         if (controller()->stateIsOn(s_dbgNotStarted))
             reevaluate->setEnabled(false);
@@ -380,7 +380,7 @@ void VariableTree::contextMenuEvent(QContextMenuEvent* event)
 
         if (!recentRoot)
         {
-            remember = activePopup_->addAction(KIcon("draw-freehand"), i18n("Remember Value"));
+            remember = activePopup_->addAction(QIcon::fromTheme("draw-freehand"), i18n("Remember Value"));
             MAYBE_DISABLE(remember);
         }
 
@@ -390,9 +390,9 @@ void VariableTree::contextMenuEvent(QContextMenuEvent* event)
         }
 
         if (recentRoot) {
-            reevaluate = activePopup_->addAction(KIcon("reload"), i18n("Reevaluate Expression"));
+            reevaluate = activePopup_->addAction(QIcon::fromTheme("reload"), i18n("Reevaluate Expression"));
             MAYBE_DISABLE(reevaluate);
-            remove = activePopup_->addAction(KIcon("editdelete"), i18n("Remove Expression"));
+            remove = activePopup_->addAction(QIcon::fromTheme("editdelete"), i18n("Remove Expression"));
             remove->setShortcut(Qt::Key_Delete);
         }
 

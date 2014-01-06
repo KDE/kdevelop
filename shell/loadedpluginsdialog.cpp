@@ -112,7 +112,7 @@ public:
         : KWidgetItemDelegate(itemView, parent)
         , pushButton(new KPushButton)
     {
-        pushButton->setIcon(KIcon("dialog-information")); // only for getting size matters
+        pushButton->setIcon(QIcon::fromTheme("dialog-information")); // only for getting size matters
     }
 
     ~LoadedPluginsDelegate()
@@ -184,7 +184,7 @@ public:
     QList<QWidget*> createItemWidgets() const
     {
         KPushButton *button = new KPushButton();
-        button->setIcon(KIcon("dialog-information"));
+        button->setIcon(QIcon::fromTheme("dialog-information"));
         setBlockedEventTypes(button, QList<QEvent::Type>() << QEvent::MouseButtonPress
                              << QEvent::MouseButtonRelease << QEvent::MouseButtonDblClick);
 
@@ -275,7 +275,7 @@ LoadedPluginsDialog::LoadedPluginsDialog( QWidget* parent )
     QVBoxLayout* vbox = new QVBoxLayout(mainWidget());
     
     KTitleWidget* title = new KTitleWidget(this);
-    title->setPixmap(KIcon(KGlobal::mainComponent().aboutData()->programIconName()), KTitleWidget::ImageLeft);
+    title->setPixmap(QIcon::fromTheme(KGlobal::mainComponent().aboutData()->programIconName()), KTitleWidget::ImageLeft);
     title->setText(i18n("<html><font size=\"4\">Plugins loaded for <b>%1</b></font></html>", KGlobal::mainComponent().aboutData()->programName()));
     vbox->addWidget(title);
     vbox->addWidget(new PluginsView());

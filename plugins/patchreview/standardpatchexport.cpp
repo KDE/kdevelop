@@ -49,7 +49,7 @@ class KIOExport : public StandardExporter
         }
     }
 
-    virtual KIcon icon() const { return KIcon( "document-save" ); }
+    virtual KIcon icon() const { return QIcon::fromTheme( "document-save" ); }
     virtual QString name() const { return i18n( "Save As..." ); }
 };
 
@@ -59,7 +59,7 @@ class EMailExport : public StandardExporter
         KToolInvocation::invokeMailer( QString(), QString(), QString(), QString(), QString(), QString(), QStringList() << source->file().toLocalFile() );
     }
 
-    virtual KIcon icon() const { return KIcon( "internet-mail" ); }
+    virtual KIcon icon() const { return QIcon::fromTheme( "internet-mail" ); }
     virtual QString name() const { return i18n( "Send..." ); }
 };
 
@@ -71,7 +71,7 @@ public:
     }
 
     static bool isAvailable() { return !KStandardDirs::findExe( "ktp-send-file" ).isEmpty(); }
-    virtual KIcon icon() const { return KIcon( "telepathy-kde" ); }
+    virtual KIcon icon() const { return QIcon::fromTheme( "telepathy-kde" ); }
     virtual QString name() const { return i18n( "Send to contact..." ); }
 };
 
@@ -85,7 +85,7 @@ public:
     }
 
     static bool isAvailable() { return !KStandardDirs::findExe( "kompare" ).isEmpty(); }
-    virtual KIcon icon() const { return KIcon( "kompare" ); }
+    virtual KIcon icon() const { return QIcon::fromTheme( "kompare" ); }
     virtual QString name() const { return i18n( "Side view (Kompare)..." ); }
 
 };

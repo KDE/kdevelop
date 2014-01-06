@@ -22,9 +22,9 @@
 #define KDEVPLATFORM_PLUGIN_TOOLVIEWDATA_H
 
 #include <outputview/ioutputview.h>
+
 #include <QObject>
 #include <QMap>
-#include <KIcon>
 
 namespace Sublime
 {

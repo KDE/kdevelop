@@ -108,7 +108,7 @@ void StandardOutputViewTest::testRegisterAndRemoveToolView()
 
 void StandardOutputViewTest::testActions()
 {
-    toolviewId = m_stdOutputView->registerToolView(toolviewTitle, KDevelop::IOutputView::MultipleView, KIcon());
+    toolviewId = m_stdOutputView->registerToolView(toolviewTitle, KDevelop::IOutputView::MultipleView, QIcon::fromTheme());
     OutputWidget* outputWidget = toolviewPointer(toolviewTitle);
     QVERIFY(outputWidget);
 
@@ -125,7 +125,7 @@ void StandardOutputViewTest::testActions()
     addedActions.append(new QAction("Action1", 0));
     addedActions.append(new QAction("Action2", 0));
     toolviewId = m_stdOutputView->registerToolView(toolviewTitle, KDevelop::IOutputView::HistoryView,
-                                                   KIcon(),
+                                                   QIcon::fromTheme(),
                                                    KDevelop::IOutputView::ShowItemsButton | KDevelop::IOutputView::AddFilterAction,
                                                    addedActions);
     outputWidget = toolviewPointer(toolviewTitle);
@@ -149,7 +149,7 @@ void StandardOutputViewTest::testActions()
 
 void StandardOutputViewTest::testRegisterAndRemoveOutput()
 {
-    toolviewId = m_stdOutputView->registerToolView(toolviewTitle, KDevelop::IOutputView::MultipleView, KIcon());
+    toolviewId = m_stdOutputView->registerToolView(toolviewTitle, KDevelop::IOutputView::MultipleView, QIcon::fromTheme());
     OutputWidget* outputWidget = toolviewPointer(toolviewTitle);
     QVERIFY(outputWidget);
 
@@ -173,7 +173,7 @@ void StandardOutputViewTest::testRegisterAndRemoveOutput()
     QVERIFY(!toolviewPointer(toolviewTitle));
 
     toolviewId = m_stdOutputView->registerToolView(toolviewTitle, KDevelop::IOutputView::HistoryView,
-                                                    KIcon(), KDevelop::IOutputView::ShowItemsButton | KDevelop::IOutputView::AddFilterAction);
+                                                    QIcon::fromTheme(), KDevelop::IOutputView::ShowItemsButton | KDevelop::IOutputView::AddFilterAction);
     outputWidget = toolviewPointer(toolviewTitle);
     QVERIFY(outputWidget);
 
@@ -198,7 +198,7 @@ void StandardOutputViewTest::testRegisterAndRemoveOutput()
 
 void StandardOutputViewTest::testSetModelAndDelegate()
 {
-    toolviewId = m_stdOutputView->registerToolView(toolviewTitle, KDevelop::IOutputView::MultipleView, KIcon());
+    toolviewId = m_stdOutputView->registerToolView(toolviewTitle, KDevelop::IOutputView::MultipleView, QIcon::fromTheme());
     OutputWidget* outputWidget = toolviewPointer(toolviewTitle);
     QVERIFY(outputWidget);
 

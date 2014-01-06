@@ -13,11 +13,11 @@
 #include "snippet.h"
 
 #include <QAction>
+#include <QIcon>
 #include <QTimer>
 #include <QFile>
 #include <QFileInfo>
 
-#include <KIcon>
 #include <KDebug>
 
 #include <QDomDocument>
@@ -37,7 +37,7 @@
 SnippetRepository::SnippetRepository(const QString& file)
  : QStandardItem(i18n("<empty repository>")), m_file(file), m_registeredScript(0)
 {
-    setIcon( KIcon("folder") );
+    setIcon( QIcon::fromTheme("folder") );
     bool activated = SnippetStore::self()->getConfig().readEntry<QStringList>("enabledRepositories", QStringList()).contains(file);
     setCheckState(activated ? Qt::Checked : Qt::Unchecked);
 

@@ -18,9 +18,10 @@
 */
 
 #include "projectchangesmodel.h"
-#include <KIcon>
+
 #include <KPluginInfo>
 #include <KLocalizedString>
+
 #include <vcs/interfaces/ibasicversioncontrol.h>
 #include <interfaces/ibranchingversioncontrol.h>
 #include <interfaces/iplugin.h>
@@ -33,7 +34,9 @@
 #include <interfaces/iruncontroller.h>
 #include <interfaces/idocumentcontroller.h>
 #include <project/projectmodel.h>
+
 #include <QDir>
+#include <QIcon>
 
 Q_DECLARE_METATYPE(KDevelop::IProject*);
 
@@ -71,7 +74,7 @@ void ProjectChangesModel::addProject(IProject* p)
 
         KPluginInfo info = ICore::self()->pluginController()->pluginInfo(plugin);
         
-        it->setIcon(KIcon(info.icon()));
+        it->setIcon(QIcon::fromTheme(info.icon()));
         it->setToolTip(vcs->name());
         reload(QList<IProject*>() << p);
         

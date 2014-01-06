@@ -126,13 +126,13 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
 
     action = new QAction(i18n("Next Tool View"), this);
     action->setShortcut(Qt::META | Qt::CTRL | Qt::Key_N);
-    action->setIcon(KIcon("go-next"));
+    action->setIcon(QIcon::fromTheme("go-next"));
     connect(action, SIGNAL(triggered(bool)), SLOT(selectNextDock()));
     ac->addAction("select_next_dock", action);
 
     action = new QAction(i18n("Previous Tool View"), this);
     action->setShortcut(Qt::META | Qt::CTRL | Qt::Key_P);
-    action->setIcon(KIcon("go-previous"));
+    action->setIcon(QIcon::fromTheme("go-previous"));
     connect(action, SIGNAL(triggered(bool)), SLOT(selectPreviousDock()));
     ac->addAction("select_previous_dock", action);
 

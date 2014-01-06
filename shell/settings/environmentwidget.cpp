@@ -59,8 +59,8 @@ EnvironmentWidget::EnvironmentWidget( QWidget *parent )
 
     ui.variableTable->setModel( topProxyModel );
     ui.variableTable->horizontalHeader()->setResizeMode( 1, QHeaderView::Stretch );
-    ui.deleteButton->setIcon(KIcon("list-remove"));
-    ui.newMultipleButton->setIcon(KIcon("format-list-unordered"));
+    ui.deleteButton->setIcon(QIcon::fromTheme("list-remove"));
+    ui.newMultipleButton->setIcon(QIcon::fromTheme("format-list-unordered"));
 
     connect( ui.deleteButton, SIGNAL(clicked()),
              SLOT(deleteButtonClicked()) );

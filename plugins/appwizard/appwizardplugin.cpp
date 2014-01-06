@@ -77,7 +77,7 @@ AppWizardPlugin::AppWizardPlugin(QObject *parent, const QVariantList &)
     setXMLFile("kdevappwizard.rc");
 
     m_newFromTemplate = actionCollection()->addAction("project_new");
-    m_newFromTemplate->setIcon(KIcon("project-development-new-template"));
+    m_newFromTemplate->setIcon(QIcon::fromTheme("project-development-new-template"));
     m_newFromTemplate->setText(i18n("New From Template..."));
     connect(m_newFromTemplate, SIGNAL(triggered(bool)), this, SLOT(slotNewProject()));
     m_newFromTemplate->setToolTip( i18n("Generate a new project from a template") );
@@ -485,7 +485,7 @@ QStringList AppWizardPlugin::supportedMimeTypes() const
 
 QIcon AppWizardPlugin::icon() const
 {
-    return KIcon("project-development-new-template");
+    return QIcon::fromTheme("project-development-new-template");
 }
 
 QString AppWizardPlugin::name() const

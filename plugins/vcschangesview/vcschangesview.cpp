@@ -29,9 +29,12 @@
 #include <vcs/vcsstatusinfo.h>
 #include <vcs/models/projectchangesmodel.h>
 #include <project/projectmodel.h>
-#include <KIcon>
+
+#include <QIcon>
+
 #include <KActionCollection>
 #include <KMenu>
+
 #include "vcschangesviewplugin.h"
 
 using namespace KDevelop;
@@ -81,7 +84,7 @@ void VcsChangesView::popupContextMenu( const QPoint &pos )
     }
 
     QPointer<KMenu> menu = new KMenu;
-    QAction* refreshAction = menu->addAction(KIcon("view-refresh"), i18n("Refresh"));    
+    QAction* refreshAction = menu->addAction(QIcon::fromTheme("view-refresh"), i18n("Refresh"));
     QList<ContextMenuExtension> extensions;
     if(!urls.isEmpty()) {
         KDevelop::FileContext context(urls);

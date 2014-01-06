@@ -22,6 +22,7 @@
 
 #include "breakpointwidget.h"
 
+#include <QIcon>
 #include <QHBoxLayout>
 #include <QSplitter>
 #include <QTableView>
@@ -29,7 +30,6 @@
 #include <QMenu>
 #include <QContextMenuEvent>
 
-#include <KIcon>
 #include <KLocalizedString>
 #include <KPassivePopup>
 #include <KDebug>
@@ -57,7 +57,7 @@ BreakpointWidget::BreakpointWidget(IDebugController *controller, QWidget *parent
                                           "breakpoint item allows you to change "
                                           "the breakpoint and will take you "
                                           "to the source in the editor window."));
-    setWindowIcon( KIcon("process-stop") );
+    setWindowIcon( QIcon::fromTheme("process-stop") );
 
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setMargin(0);
@@ -110,7 +110,7 @@ void BreakpointWidget::setupPopupMenu()
     popup_ = new QMenu(this);
 
     QMenu* newBreakpoint = popup_->addMenu( i18nc("New breakpoint", "&New") );
-    newBreakpoint->setIcon(KIcon("list-add"));
+    newBreakpoint->setIcon(QIcon::fromTheme("list-add"));
 
     QAction* action = newBreakpoint->addAction(
         i18nc("Code breakpoint", "&Code"),
@@ -132,7 +132,7 @@ void BreakpointWidget::setupPopupMenu()
         this, SLOT(slotAddBlankAccessWatchpoint()));
 
     QAction* breakpointDelete = popup_->addAction(
-        KIcon("edit-delete"),
+        QIcon::fromTheme("edit-delete"),
         i18n( "&Delete" ),
         this,
         SLOT(slotRemoveBreakpoint()));

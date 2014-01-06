@@ -74,12 +74,12 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
         layout->addWidget( tabwidget );
         m_closeButton = new QToolButton( this );
         connect( m_closeButton, SIGNAL(clicked()), SLOT(closeActiveView()) );
-        m_closeButton->setIcon( KIcon("tab-close") );
+        m_closeButton->setIcon( QIcon::fromTheme("tab-close") );
         m_closeButton->setToolTip( i18n( "Close the currently active output view") );
 
         m_closeOthersAction = new QAction( this );
         connect(m_closeOthersAction, SIGNAL(triggered(bool)), SLOT(closeOtherViews()));
-        m_closeOthersAction->setIcon(KIcon("tab-close-other"));
+        m_closeOthersAction->setIcon(QIcon::fromTheme("tab-close-other"));
         m_closeOthersAction->setToolTip( i18n( "Close all other output views" ) );
         addAction(m_closeOthersAction);
 
@@ -89,17 +89,17 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
         stackwidget = new QStackedWidget( this );
         layout->addWidget( stackwidget );
 
-        previousAction = new QAction( KIcon( "go-previous" ), i18n("Previous"), this );
+        previousAction = new QAction( QIcon::fromTheme( "go-previous" ), i18n("Previous"), this );
         connect(previousAction, SIGNAL(triggered()), this, SLOT(previousOutput()));
         addAction(previousAction);
-        nextAction = new QAction( KIcon( "go-next" ), i18n("Next"), this );
+        nextAction = new QAction( QIcon::fromTheme( "go-next" ), i18n("Next"), this );
         connect(nextAction, SIGNAL(triggered()), this, SLOT(nextOutput()));
         addAction(nextAction);
     }
 
-    activateOnSelect = new KToggleAction( KIcon(), i18n("Select activated Item"), this );
+    activateOnSelect = new KToggleAction( QIcon::fromTheme(), i18n("Select activated Item"), this );
     activateOnSelect->setChecked( true );
-    focusOnSelect = new KToggleAction( KIcon(), i18n("Focus when selecting Item"), this );
+    focusOnSelect = new KToggleAction( QIcon::fromTheme(), i18n("Focus when selecting Item"), this );
     focusOnSelect->setChecked( false );
     if( data->option & KDevelop::IOutputView::ShowItemsButton )
     {

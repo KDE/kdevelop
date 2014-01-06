@@ -159,19 +159,19 @@ void ProjectTreeView::dropEvent(QDropEvent* event)
             QString seq = QKeySequence( Qt::ShiftModifier ).toString();
             seq.chop(1); // chop superfluous '+'
             QAction* move = new QAction(i18n( "&Move Here" ) + '\t' + seq, &dropMenu);
-            move->setIcon(KIcon("go-jump"));
+            move->setIcon(QIcon::fromTheme("go-jump"));
             dropMenu.addAction(move);
 
             seq = QKeySequence( Qt::ControlModifier ).toString();
             seq.chop(1);
             QAction* copy = new QAction(i18n( "&Copy Here" ) + '\t' + seq, &dropMenu);
-            copy->setIcon(KIcon("edit-copy"));
+            copy->setIcon(QIcon::fromTheme("edit-copy"));
             dropMenu.addAction(copy);
 
             dropMenu.addSeparator();
 
             QAction* cancel = new QAction(i18n( "C&ancel" ) + '\t' + QKeySequence( Qt::Key_Escape ).toString(), &dropMenu);
-            cancel->setIcon(KIcon("process-stop"));
+            cancel->setIcon(QIcon::fromTheme("process-stop"));
             dropMenu.addAction(cancel);
 
             QAction *executedAction = 0;
@@ -225,13 +225,13 @@ void ProjectTreeView::dropEvent(QDropEvent* event)
             QString seq = QKeySequence( Qt::ControlModifier ).toString();
             seq.chop(1);
             QAction* addToTarget = new QAction(i18n( "&Add to Target" ) + '\t' + seq, &dropMenu);
-            addToTarget->setIcon(KIcon("edit-link"));
+            addToTarget->setIcon(QIcon::fromTheme("edit-link"));
             dropMenu.addAction(addToTarget);
 
             dropMenu.addSeparator();
 
             QAction* cancel = new QAction(i18n( "C&ancel" ) + '\t' + QKeySequence( Qt::Key_Escape ).toString(), &dropMenu);
-            cancel->setIcon(KIcon("process-stop"));
+            cancel->setIcon(QIcon::fromTheme("process-stop"));
             dropMenu.addAction(cancel);
 
             QAction *executedAction = 0;
@@ -345,7 +345,7 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
     if ( !itemlist.isEmpty() && itemlist.size() == 1 && itemlist[0]->folder() && !itemlist[0]->folder()->parent() )
     {
         QAction* projectConfig = new QAction(i18n("Open Configuration..."), this);
-        projectConfig->setIcon(KIcon("configure"));
+        projectConfig->setIcon(QIcon::fromTheme("configure"));
         connect( projectConfig, SIGNAL(triggered()), this, SLOT(openProjectConfig()) );
         projectActions << projectConfig;
     }

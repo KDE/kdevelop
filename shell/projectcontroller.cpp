@@ -414,11 +414,11 @@ KUrl ProjectDialogProvider::askProjectConfigLocation(bool fetch, const KUrl& sta
             KGuiItem yes = KStandardGuiItem::yes();
             yes.setText(i18n("Override"));
             yes.setToolTip(i18nc("@info:tooltip", "Continue to open the project and use the just provided project configuration."));
-            yes.setIcon(KIcon());
+            yes.setIcon(QIcon::fromTheme());
             KGuiItem no = KStandardGuiItem::no();
             no.setText(i18n("Open Existing File"));
             no.setToolTip(i18nc("@info:tooltip", "Continue to open the project but use the existing project configuration."));
-            no.setIcon(KIcon());
+            no.setIcon(QIcon::fromTheme());
             KGuiItem cancel = KStandardGuiItem::cancel();
             cancel.setToolTip(i18nc("@info:tooltip", "Cancel and do not open the project."));
             int ret = KMessageBox::questionYesNoCancel(qApp->activeWindow(),
@@ -494,16 +494,16 @@ void ProjectController::setupActions()
                                                     "When opening an existing directory that does "
                                                     "not yet have a KDevelop4 project file, the file "
                                                     "will be created." ) );
-    action->setIcon(KIcon("project-open"));
+    action->setIcon(QIcon::fromTheme("project-open"));
     connect( action, SIGNAL(triggered(bool)), SLOT(openProject()) );
     
     d->m_fetchProject = action = ac->addAction( "project_fetch" );
     action->setText(i18nc( "@action", "Fetch Project..." ) );
-    action->setIcon( KIcon( "download" ) );
+    action->setIcon( QIcon::fromTheme( "download" ) );
     action->setToolTip( i18nc( "@info:tooltip", "Fetch project" ) );
     action->setWhatsThis( i18nc( "@info:whatsthis", "Guides the user through the project fetch "
                                                     "and then imports it into KDevelop 4." ) );
-//     action->setIcon(KIcon("project-open"));
+//     action->setIcon(QIcon::fromTheme("project-open"));
     connect( action, SIGNAL(triggered(bool)), SLOT(fetchProject()) );
 
 //    action = ac->addAction( "project_close" );
@@ -516,21 +516,21 @@ void ProjectController::setupActions()
     d->m_closeProject = action = ac->addAction( "project_close" );
     connect( action, SIGNAL(triggered(bool)), SLOT(closeSelectedProjects()) );
     action->setText( i18nc( "@action", "Close Project(s)" ) );
-    action->setIcon( KIcon( "project-development-close" ) );
+    action->setIcon( QIcon::fromTheme( "project-development-close" ) );
     action->setToolTip( i18nc( "@info:tooltip", "Closes all currently selected projects" ) );
     action->setEnabled( false );
 
     d->m_openConfig = action = ac->addAction( "project_open_config" );
     connect( action, SIGNAL(triggered(bool)), SLOT(openProjectConfig()) );
     action->setText( i18n( "Open Configuration..." ) );
-    action->setIcon( KIcon("configure") );
+    action->setIcon( QIcon::fromTheme("configure") );
     action->setEnabled( false );
     
     action = ac->addAction( "commit_current_project" );
     connect( action, SIGNAL(triggered(bool)), SLOT(commitCurrentProject()) );
     action->setText( i18n( "Commit Current Project..." ) );
     action->setIconText( i18n( "Commit..." ) );
-    action->setIcon( KIcon("svn-commit") );
+    action->setIcon( QIcon::fromTheme("svn-commit") );
     connect(d->m_core->uiControllerInternal()->defaultMainWindow(), SIGNAL(areaChanged(Sublime::Area*)),
             SLOT(areaChanged(Sublime::Area*)));
     d->m_core->uiControllerInternal()->area(0, "code")->addAction(action);

@@ -616,7 +616,7 @@ void DocumentController::setupActions()
     QAction* action;
 
     action = ac->addAction( "file_open" );
-    action->setIcon(KIcon("document-open"));
+    action->setIcon(QIcon::fromTheme("document-open"));
     action->setShortcut( Qt::CTRL + Qt::Key_O );
     action->setText(i18n( "&Open..." ) );
     connect( action, SIGNAL(triggered(bool)), SLOT(chooseDocument()) );
@@ -629,7 +629,7 @@ void DocumentController::setupActions()
     d->fileOpenRecent->loadEntries( KConfigGroup(KGlobal::config(), "Recent Files" ) );
 
     action = d->saveAll = ac->addAction( "file_save_all" );
-    action->setIcon(KIcon("document-save"));
+    action->setIcon(QIcon::fromTheme("document-save"));
     action->setText(i18n( "Save Al&l" ) );
     connect( action, SIGNAL(triggered(bool)), SLOT(slotSaveAllDocuments()) );
     action->setToolTip( i18n( "Save all open documents" ) );
@@ -638,7 +638,7 @@ void DocumentController::setupActions()
     action->setEnabled(false);
 
     action = d->revertAll = ac->addAction( "file_revert_all" );
-    action->setIcon(KIcon("document-revert"));
+    action->setIcon(QIcon::fromTheme("document-revert"));
     action->setText(i18n( "Reload All" ) );
     connect( action, SIGNAL(triggered(bool)), SLOT(reloadAllDocuments()) );
     action->setToolTip( i18n( "Revert all open documents" ) );
@@ -646,7 +646,7 @@ void DocumentController::setupActions()
     action->setEnabled(false);
 
     action = d->close = ac->addAction( "file_close" );
-    action->setIcon(KIcon("window-close"));
+    action->setIcon(QIcon::fromTheme("window-close"));
     action->setShortcut( Qt::CTRL + Qt::Key_W );
     action->setText( i18n( "&Close" ) );
     connect( action, SIGNAL(triggered(bool)), SLOT(fileClose()) );
@@ -655,7 +655,7 @@ void DocumentController::setupActions()
     action->setEnabled(false);
 
     action = d->closeAll = ac->addAction( "file_close_all" );
-    action->setIcon(KIcon("window-close"));
+    action->setIcon(QIcon::fromTheme("window-close"));
     action->setText(i18n( "Clos&e All" ) );
     connect( action, SIGNAL(triggered(bool)), SLOT(closeAllDocuments()) );
     action->setToolTip( i18n( "Close all open documents" ) );
@@ -663,7 +663,7 @@ void DocumentController::setupActions()
     action->setEnabled(false);
 
     action = d->closeAllOthers = ac->addAction( "file_closeother" );
-    action->setIcon(KIcon("window-close"));
+    action->setIcon(QIcon::fromTheme("window-close"));
     action->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_W );
     action->setText(i18n( "Close All Ot&hers" ) );
     connect( action, SIGNAL(triggered(bool)), SLOT(closeAllOtherDocuments()) );
@@ -675,7 +675,7 @@ void DocumentController::setupActions()
     connect( action, SIGNAL(triggered(bool)), SLOT(vcsAnnotateCurrentDocument()) );
     action->setText( i18n( "Show Annotate on current document") );
     action->setIconText( i18n( "Annotate" ) );
-    action->setIcon( KIcon("user-properties") );
+    action->setIcon( QIcon::fromTheme("user-properties") );
 }
 
 void DocumentController::setEncoding( const QString &encoding )

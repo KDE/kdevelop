@@ -56,11 +56,11 @@ public:
         case KDevelop::IDocument::Clean:
             return  KIcon ( m_fileIcon );
         case KDevelop::IDocument::Modified:
-            return KIcon( "document-save" );
+            return QIcon::fromTheme( "document-save" );
         case KDevelop::IDocument::Dirty:
-            return KIcon( "document-revert" );
+            return QIcon::fromTheme( "document-revert" );
         case KDevelop::IDocument::DirtyAndModified:
-            return KIcon( "edit-delete" );
+            return QIcon::fromTheme( "edit-delete" );
         default:
             return QIcon();
         }

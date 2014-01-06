@@ -28,11 +28,11 @@
 #include <QHeaderView>
 #include <QAction>
 #include <QFile>
+#include <QIcon>
 
 #include <KLocalizedString>
 #include <KDebug>
 #include <KConfigGroup>
-#include <KIcon>
 
 namespace KDevelop {
 
@@ -236,7 +236,7 @@ PathMappingsWidget::PathMappingsWidget(QWidget* parent): QWidget(parent)
     connect(m_pathMappingTable->model(), SIGNAL(rowsInserted(QModelIndex,int,int)), SIGNAL(changed()));
 
     QAction* deletePath = new QAction(
-        KIcon("edit-delete"),
+        QIcon::fromTheme("edit-delete"),
         i18n( "Delete" ),
         this
     );

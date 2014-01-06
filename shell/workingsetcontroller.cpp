@@ -162,7 +162,7 @@ void WorkingSetController::setupActions()
 
     action = ac->addAction ( "view_next_window" );
     action->setText( i18n( "Next Document" ) );
-    action->setIcon( KIcon("go-next") );
+    action->setIcon( QIcon::fromTheme("go-next") );
     action->setShortcut( Qt::ALT + Qt::SHIFT + Qt::Key_Right );
     action->setWhatsThis( i18n( "Switch the focus to the next open document." ) );
     action->setStatusTip( i18n( "Switch the focus to the next open document." ) );
@@ -170,7 +170,7 @@ void WorkingSetController::setupActions()
 
     action = ac->addAction ( "view_previous_window" );
     action->setText( i18n( "Previous Document" ) );
-    action->setIcon( KIcon("go-previous") );
+    action->setIcon( QIcon::fromTheme("go-previous") );
     action->setShortcut( Qt::ALT + Qt::SHIFT + Qt::Key_Left );
     action->setWhatsThis( i18n( "Switch the focus to the previous open document." ) );
     action->setStatusTip( i18n( "Switch the focus to the previous open document." ) );

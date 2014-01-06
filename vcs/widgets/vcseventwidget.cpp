@@ -55,7 +55,7 @@ public:
     VcsEventWidgetPrivate( VcsEventWidget* w )
         : q( w )
     {
-        m_copyAction = new QAction(KIcon("edit-copy"), i18n("Copy revision number"), q);
+        m_copyAction = new QAction(QIcon::fromTheme("edit-copy"), i18n("Copy revision number"), q);
         m_copyAction->setShortcut(Qt::ControlModifier+Qt::Key_C);
         QObject::connect(m_copyAction, SIGNAL(triggered(bool)), q, SLOT(copyRevision()));
     }

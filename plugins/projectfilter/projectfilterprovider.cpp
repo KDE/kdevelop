@@ -25,10 +25,11 @@
 #include <KPluginFactory>
 #include <KAboutData>
 #include <KSettings/Dispatcher>
-#include <KIcon>
 #include <KMessageBox>
 #include <KParts/MainWindow>
+
 #include <QAction>
+#include <QIcon>
 
 #include <interfaces/iproject.h>
 #include <interfaces/icore.h>
@@ -91,7 +92,7 @@ ContextMenuExtension ProjectFilterProvider::contextMenuExtension(Context* contex
         return ret;
     }
 
-    QAction* action = new QAction(KIcon("view-filter"),
+    QAction* action = new QAction(QIcon::fromTheme("view-filter"),
                                   i18np("Exclude Item From Project",
                                         "Exclude Items From Project",
                                         items.size()), this);

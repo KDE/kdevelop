@@ -1018,7 +1018,7 @@ QVariant ProjectModel::data( const QModelIndex& index, int role ) const
         if( item ) {
             switch(role) {
                 case Qt::DecorationRole:
-                    return KIcon(item->iconName());
+                    return QIcon::fromTheme(item->iconName());
                 case Qt::ToolTipRole:
                     return item->url().prettyUrl();
                 case Qt::DisplayRole:

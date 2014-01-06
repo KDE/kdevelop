@@ -86,12 +86,12 @@ VcsProjectIntegrationPlugin::VcsProjectIntegrationPlugin(QObject* parent, const 
     
     QAction* synaction = actionCollection()->addAction( "locate_document" );
     synaction->setText(i18n("Locate Current Document"));
-    synaction->setIcon(KIcon("dirsync"));
+    synaction->setIcon(QIcon::fromTheme("dirsync"));
     synaction->setToolTip(i18n("Locates the current document and selects it."));
     
     QAction* reloadaction = actionCollection()->addAction( "reload_view" );
     reloadaction->setText(i18n("Reload View"));
-    reloadaction->setIcon(KIcon("view-refresh"));
+    reloadaction->setIcon(QIcon::fromTheme("view-refresh"));
     reloadaction->setToolTip(i18n("Refreshes the view for all projects, in case anything changed."));
 }
 

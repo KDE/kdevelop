@@ -111,7 +111,7 @@ OneUseWidget::OneUseWidget(IndexedDeclaration declaration, IndexedString documen
 
   m_label = new QLabel(this);
   m_icon = new QLabel(this);
-  m_icon->setPixmap(KIcon("code-function").pixmap(16));
+  m_icon->setPixmap(QIcon::fromTheme("code-function").pixmap(16));
 
   connect(m_label, SIGNAL(linkActivated(QString)), this, SLOT(jumpTo()));
 
@@ -218,10 +218,10 @@ NavigatableWidgetList::NavigatableWidgetList(bool allowScrolling, uint maxHeight
 
   if(m_useArrows) {
     m_previousButton = new QToolButton();
-    m_previousButton->setIcon(KIcon("go-previous"));
+    m_previousButton->setIcon(QIcon::fromTheme("go-previous"));
 
     m_nextButton = new QToolButton();
-    m_nextButton->setIcon(KIcon("go-next"));
+    m_nextButton->setIcon(QIcon::fromTheme("go-next"));
 
     m_headerLayout->addWidget(m_previousButton);
     m_headerLayout->addWidget(m_nextButton);
@@ -414,7 +414,7 @@ TopContextUsesWidget::TopContextUsesWidget(IndexedDeclaration declaration, QList
     QLabel* label = new QLabel(this);
     m_icon = new QLabel(this);
     m_toggleButton = new QLabel(this);
-    m_icon->setPixmap(KIcon("code-class").pixmap(16));
+    m_icon->setPixmap(QIcon::fromTheme("code-class").pixmap(16));
     labelLayout->addWidget(m_icon);
     labelLayout->addWidget(label);
     labelLayout->addWidget(m_toggleButton);

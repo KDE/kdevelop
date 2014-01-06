@@ -33,7 +33,7 @@ AppletSelector::AppletSelector(const QString& parentApp, const QStringList& whit
     m_ui->setupUi(w);
     
     m_ui->plugins->header()->setSortIndicator(0, Qt::AscendingOrder);
-    m_ui->addButton->setIcon(KIcon("list-add"));
+    m_ui->addButton->setIcon(QIcon::fromTheme("list-add"));
     
     setMainWidget(w);
     
@@ -57,7 +57,7 @@ AppletSelector::~AppletSelector()
 void AppletSelector::addPlugins(QStandardItemModel* model, const KPluginInfo::List& list)
 {
     foreach(const KPluginInfo& info, list) {
-        QStandardItem* item = new QStandardItem(KIcon(info.icon()), info.name());
+        QStandardItem* item = new QStandardItem(QIcon::fromTheme(info.icon()), info.name());
         item->setEditable(false);
         item->setToolTip(info.comment());
         item->setData(info.pluginName(), Qt::UserRole+1);

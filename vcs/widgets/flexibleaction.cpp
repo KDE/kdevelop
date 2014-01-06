@@ -11,7 +11,7 @@
 #include "flexibleaction.h"
 #include <QApplication>
 #include <QClipboard>
-#include <KIcon>
+#include <QIcon>
 
 using namespace KDevelop;
 

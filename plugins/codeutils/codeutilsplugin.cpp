@@ -80,7 +80,7 @@ CodeUtilsPlugin::CodeUtilsPlugin ( QObject* parent, const QVariantList& )
     action->setWhatsThis( i18n( "Adds a basic Doxygen comment skeleton in front of "
                                 "the declaration under the cursor, e.g. with all the "
                                 "parameter of a function." ) );
-    action->setIcon( KIcon( "documentinfo" ) );
+    action->setIcon( QIcon::fromTheme( "documentinfo" ) );
 }
 
 void CodeUtilsPlugin::documentDeclaration()

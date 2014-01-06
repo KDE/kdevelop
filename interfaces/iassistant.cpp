@@ -51,7 +51,7 @@ QAction* IAssistantAction::toKAction() const
     Q_ASSERT(QThread::currentThread() == ICore::self()->thread() && "Actions must be created in the application main thread"
                                                     "(implement createActions() to create your actions)");
 
-    QAction* ret = new QAction(KIcon(icon()), removeHtmlFromString(description()), 0);
+    QAction* ret = new QAction(icon(), removeHtmlFromString(description()), 0);
     ret->setToolTip(toolTip());
 
     //Add the data as a KSharedPtr to the action, so this assistant stays alive at least as long as the KAction
