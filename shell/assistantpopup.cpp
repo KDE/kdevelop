@@ -19,12 +19,12 @@
 
 #include "assistantpopup.h"
 
+#include <QAction>
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QDebug>
 
 #include <KLocalizedString>
-#include <KAction>
 #include <KParts/MainWindow>
 
 #include <util/richtexttoolbutton.h>
@@ -116,7 +116,7 @@ void AssistantPopup::updateActions()
 
 QWidget* AssistantPopup::widgetForAction(const IAssistantAction::Ptr& action, int& mnemonic)
 {
-    KAction* realAction = action ? action->toKAction() : 0;
+    QAction* realAction = action ? action->toKAction() : 0;
     RichTextToolButton* button = new RichTextToolButton;
 
     if (action && !realAction) {
@@ -129,7 +129,7 @@ QWidget* AssistantPopup::widgetForAction(const IAssistantAction::Ptr& action, in
     QString buttonText;
     int index = m_assistantActions.indexOf(action);
     if (index == -1) {
-        realAction = new KAction(button);
+        realAction = new QAction(button);
         buttonText = i18n("Hide");
     } else {
         realAction = action->toKAction();

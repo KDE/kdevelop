@@ -220,7 +220,7 @@ void MainWindowPrivate::setupActions()
 {
     connect(Core::self()->sessionController(), SIGNAL(quitSession()), SLOT(quitAll()));
 
-    KAction *action;
+    QAction* action;
 
     QString app = qApp->applicationName();
     QString text = i18nc( "%1 = application name", "Configure %1", app );
@@ -320,7 +320,7 @@ void MainWindowPrivate::setupActions()
 void MainWindowPrivate::toggleArea(bool b)
 {
     if (!b) return;
-    KAction *action = qobject_cast<KAction*>(sender());
+    QAction* action = qobject_cast<QAction*>(sender());
     if (!action) return;
     m_mainWindow->controller()->showArea(action->data().toString(), m_mainWindow);
 }

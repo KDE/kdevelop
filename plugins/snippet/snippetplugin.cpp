@@ -17,10 +17,11 @@
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/codecompletioninterface.h>
+
+#include <QAction>
 #include <QMenu>
 
 #include <KActionCollection>
-#include <KAction>
 
 #include <KTextEditor/HighlightInterface>
 #include <KTextEditor/Editor>
@@ -139,7 +140,7 @@ void SnippetPlugin::insertSnippet(Snippet* snippet)
 
 void SnippetPlugin::insertSnippetFromActionData()
 {
-    KAction* action = dynamic_cast<KAction*>(sender());
+    QAction* action = dynamic_cast<QAction*>(sender());
     Q_ASSERT(action);
     Snippet* snippet = action->data().value<Snippet*>();
     Q_ASSERT(snippet);
@@ -148,7 +149,7 @@ void SnippetPlugin::insertSnippetFromActionData()
 
 void SnippetPlugin::viewCreated( KTextEditor::Document*, KTextEditor::View* view )
 {
-    KAction* selectionAction = view->actionCollection()->addAction("edit_selection_snippet", this, SLOT(createSnippetFromSelection()));
+    QAction* selectionAction = view->actionCollection()->addAction("edit_selection_snippet", this, SLOT(createSnippetFromSelection()));
     selectionAction->setData(QVariant::fromValue<void *>(view));
 }
 

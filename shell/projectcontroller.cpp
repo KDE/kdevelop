@@ -482,7 +482,7 @@ void ProjectController::setupActions()
     KActionCollection * ac =
         d->m_core->uiControllerInternal()->defaultMainWindow()->actionCollection();
 
-    KAction *action;
+    QAction*action;
 
     d->m_openProject = action = ac->addAction( "project_open" );
     action->setText(i18nc( "@action", "Open / Import Project..." ) );
@@ -544,7 +544,7 @@ void ProjectController::setupActions()
     d->m_recentAction->setWhatsThis( i18nc( "@info:whatsthis", "Opens recently opened project." ) );
     d->m_recentAction->loadEntries( KConfigGroup(config, "RecentProjects") );
     
-    KAction* openProjectForFileAction = new KAction( this );
+    QAction* openProjectForFileAction = new QAction( this );
     ac->addAction("project_open_for_file", openProjectForFileAction);
     openProjectForFileAction->setText(i18n("Open Project for Current File"));
     connect( openProjectForFileAction, SIGNAL(triggered(bool)), SLOT(openProjectForUrlSlot(bool)));

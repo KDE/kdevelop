@@ -35,11 +35,11 @@
 #include <vcs/vcsstatusinfo.h>
 #include <vcs/vcsjob.h>
 #include <project/projectmodel.h>
+#include <QAction>
 #include <QTreeView>
 #include <interfaces/iplugincontroller.h>
 #include "vcschangesview.h"
 #include <KActionCollection>
-#include <KAction>
 #include <vcs/models/projectchangesmodel.h>
 
 K_PLUGIN_FACTORY(VcsProjectIntegrationFactory, registerPlugin<VcsProjectIntegrationPlugin>(); )

@@ -20,13 +20,13 @@
 
 #include "codeutilsplugin.h"
 
+#include <QAction>
 #include <QVariantList>
 
 #include <KLocale>
 #include <KPluginFactory>
 #include <KPluginLoader>
 #include <KAboutData>
-#include <KAction>
 #include <KActionCollection>
 
 #include <KTextEditor/Document>
@@ -70,7 +70,7 @@ CodeUtilsPlugin::CodeUtilsPlugin ( QObject* parent, const QVariantList& )
 {
     setXMLFile( "kdevcodeutils.rc" );
 
-    KAction *action = actionCollection()->addAction( "document_declaration" );
+    QAction* action = actionCollection()->addAction( "document_declaration" );
     // i18n: action name; 'Document' is a verb
     action->setText( i18n( "Document Declaration" ) );
     action->setShortcut( i18n( "Alt+Shift+d" ) );

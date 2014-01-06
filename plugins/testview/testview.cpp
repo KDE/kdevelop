@@ -39,13 +39,13 @@
 
 #include <KIcon>
 #include <KActionCollection>
-#include <KAction>
 #include <KLocalizedString>
 #include <KJob>
 #include <krecursivefilterproxymodel.h>
 #include <KLineEdit>
 #include <KConfigGroup>
 
+#include <QAction>
 #include <QStandardItemModel>
 #include <QStandardItem>
 #include <QHeaderView>
@@ -117,11 +117,11 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent)
     m_filter->setSourceModel(m_model);
     m_tree->setModel(m_filter);
 
-    KAction* showSource = new KAction( KIcon("code-context"), i18n("Show Source"), this );
+    QAction* showSource = new QAction( KIcon("code-context"), i18n("Show Source"), this );
     connect (showSource, SIGNAL(triggered(bool)), SLOT(showSource()));
     m_contextMenuActions << showSource;
 
-    KAction* runSelected = new KAction( KIcon("system-run"), i18n("Run Selected Tests"), this );
+    QAction* runSelected = new QAction( KIcon("system-run"), i18n("Run Selected Tests"), this );
     connect (runSelected, SIGNAL(triggered(bool)), SLOT(runSelectedTests()));
     m_contextMenuActions << runSelected;
 

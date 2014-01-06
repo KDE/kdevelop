@@ -35,8 +35,9 @@
 #include <KPluginFactory>
 #include <KAboutData>
 #include <KLocalizedString>
-#include <KAction>
 #include <KActionCollection>
+
+#include <QAction>
 
 K_PLUGIN_FACTORY(TestViewFactory, registerPlugin<TestViewPlugin>(); )
 K_EXPORT_PLUGIN(TestViewFactory(KAboutData("kdevtestview","kdevtestview", ki18n("Unit Test View"), "0.1", ki18n("Lets you see and run unit tests"), KAboutData::License_GPL)))
@@ -72,7 +73,7 @@ TestViewPlugin::TestViewPlugin(QObject* parent, const QVariantList& args): IPlug
 {
     Q_UNUSED(args)
 
-    KAction* runAll = new KAction( KIcon("system-run"), i18n("Run All Tests"), this );
+    QAction* runAll = new QAction( KIcon("system-run"), i18n("Run All Tests"), this );
     connect(runAll, SIGNAL(triggered(bool)), SLOT(runAllTests()));
     actionCollection()->addAction("run_all_tests", runAll);
 

@@ -17,7 +17,8 @@
 #include <KPluginFactory>
 #include <KAboutData>
 #include <KActionCollection>
-#include <KAction>
+
+#include <QAction>
 #include <QApplication>
 #include <QDir>
 
@@ -71,7 +72,7 @@ FileTemplatesPlugin::FileTemplatesPlugin(QObject* parent, const QVariantList& ar
     KDEV_USE_EXTENSION_INTERFACE(ITemplateProvider)
 
     setXMLFile("kdevfiletemplates.rc");
-    KAction* action = actionCollection()->addAction("new_from_template");
+    QAction* action = actionCollection()->addAction("new_from_template");
     action->setText( i18n( "New From Template" ) );
     action->setIcon( KIcon( "code-class" ) );
     action->setWhatsThis( i18n( "Allows you to create new source code files, such as classes or unit tests, using templates." ) );
@@ -118,7 +119,7 @@ ContextMenuExtension FileTemplatesPlugin::contextMenuExtension (Context* context
         }
         if (url.isValid())
         {
-            KAction* action = new KAction(i18n("Create From Template"), this);
+            QAction* action = new QAction(i18n("Create From Template"), this);
             action->setIcon(KIcon("code-class"));
             action->setData(url);
             connect(action, SIGNAL(triggered(bool)), SLOT(createFromTemplate()));
@@ -138,7 +139,7 @@ ContextMenuExtension FileTemplatesPlugin::contextMenuExtension (Context* context
 
     if (fileUrl.isValid() && determineTemplateType(fileUrl) != NoTemplate)
     {
-        KAction* action = new KAction(i18n("Show Template Preview"), this);
+        QAction* action = new QAction(i18n("Show Template Preview"), this);
         action->setIcon(KIcon("document-preview"));
         action->setData(fileUrl);
         connect(action, SIGNAL(triggered(bool)), SLOT(previewTemplate()));

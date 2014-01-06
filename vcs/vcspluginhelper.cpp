@@ -83,30 +83,30 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
     IBasicVersionControl * vcs;
 
     KUrl::List ctxUrls;
-    KAction * commitAction;
-    KAction * addAction;
-    KAction * updateAction;
-    KAction * historyAction;
-    KAction * annotationAction;
-    KAction * diffToBaseAction;
-    KAction * revertAction;
-    KAction * diffForRevAction;
-    KAction * diffForRevGlobalAction;
-    KAction * pushAction;
-    KAction * pullAction;
+    QAction* commitAction;
+    QAction* addAction;
+    QAction* updateAction;
+    QAction* historyAction;
+    QAction* annotationAction;
+    QAction* diffToBaseAction;
+    QAction* revertAction;
+    QAction* diffForRevAction;
+    QAction* diffForRevGlobalAction;
+    QAction* pushAction;
+    QAction* pullAction;
     
     void createActions(VcsPluginHelper* parent) {
-        commitAction = new KAction(KIcon("svn-commit"), i18n("Commit..."), parent);
-        updateAction = new KAction(KIcon("svn-update"), i18n("Update"), parent);
-        addAction = new KAction(KIcon("list-add"), i18n("Add"), parent);
-        diffToBaseAction = new KAction(KIcon("text-x-patch"), i18n("Show Differences..."), parent);
-        revertAction = new KAction(KIcon("archive-remove"), i18n("Revert"), parent);
-        historyAction = new KAction(KIcon("view-history"), i18n("History..."), parent);
-        annotationAction = new KAction(KIcon("user-properties"), i18n("Annotation..."), parent);
-        diffForRevAction = new KAction(KIcon("text-x-patch"), i18n("Show Diff..."), parent);
-        diffForRevGlobalAction = new KAction(KIcon("text-x-patch"), i18n("Show Diff (all files)..."), parent);
-        pushAction = new KAction(KIcon("arrow-up-double"), i18n("Push"), parent);
-        pullAction = new KAction(KIcon("arrow-down-double"), i18n("Pull"), parent);
+        commitAction = new QAction(KIcon("svn-commit"), i18n("Commit..."), parent);
+        updateAction = new QAction(KIcon("svn-update"), i18n("Update"), parent);
+        addAction = new QAction(KIcon("list-add"), i18n("Add"), parent);
+        diffToBaseAction = new QAction(KIcon("text-x-patch"), i18n("Show Differences..."), parent);
+        revertAction = new QAction(KIcon("archive-remove"), i18n("Revert"), parent);
+        historyAction = new QAction(KIcon("view-history"), i18n("History..."), parent);
+        annotationAction = new QAction(KIcon("user-properties"), i18n("Annotation..."), parent);
+        diffForRevAction = new QAction(KIcon("text-x-patch"), i18n("Show Diff..."), parent);
+        diffForRevGlobalAction = new QAction(KIcon("text-x-patch"), i18n("Show Diff (all files)..."), parent);
+        pushAction = new QAction(KIcon("arrow-up-double"), i18n("Push"), parent);
+        pullAction = new QAction(KIcon("arrow-down-double"), i18n("Pull"), parent);
         
         connect(commitAction, SIGNAL(triggered()), parent, SLOT(commit()));
         connect(addAction, SIGNAL(triggered()), parent, SLOT(add()));

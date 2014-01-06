@@ -739,36 +739,36 @@ void QuickOpenPlugin::createActionsForMainWindow(Sublime::MainWindow* /*window*/
 {
     xmlFile ="kdevquickopen.rc";
 
-    KAction* quickOpen = actions.addAction("quick_open");
+    QAction* quickOpen = actions.addAction("quick_open");
     quickOpen->setText( i18n("&Quick Open") );
     quickOpen->setIcon( KIcon("quickopen") );
     quickOpen->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_Q );
     connect(quickOpen, SIGNAL(triggered(bool)), this, SLOT(quickOpen()));
 
-    KAction* quickOpenFile = actions.addAction("quick_open_file");
+    QAction* quickOpenFile = actions.addAction("quick_open_file");
     quickOpenFile->setText( i18n("Quick Open &File") );
     quickOpenFile->setIcon( KIcon("quickopen-file") );
     quickOpenFile->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_O );
     connect(quickOpenFile, SIGNAL(triggered(bool)), this, SLOT(quickOpenFile()));
 
-    KAction* quickOpenClass = actions.addAction("quick_open_class");
+    QAction* quickOpenClass = actions.addAction("quick_open_class");
     quickOpenClass->setText( i18n("Quick Open &Class") );
     quickOpenClass->setIcon( KIcon("quickopen-class") );
     quickOpenClass->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_C );
     connect(quickOpenClass, SIGNAL(triggered(bool)), this, SLOT(quickOpenClass()));
 
-    KAction* quickOpenFunction = actions.addAction("quick_open_function");
+    QAction* quickOpenFunction = actions.addAction("quick_open_function");
     quickOpenFunction->setText( i18n("Quick Open &Function") );
     quickOpenFunction->setIcon( KIcon("quickopen-function") );
     quickOpenFunction->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_M );
     connect(quickOpenFunction, SIGNAL(triggered(bool)), this, SLOT(quickOpenFunction()));
 
-    KAction* quickOpenAlreadyOpen = actions.addAction("quick_open_already_open");
+    QAction* quickOpenAlreadyOpen = actions.addAction("quick_open_already_open");
     quickOpenAlreadyOpen->setText( i18n("Quick Open &Already Open File") );
     quickOpenAlreadyOpen->setIcon( KIcon("quickopen-file") );
     connect(quickOpenAlreadyOpen, SIGNAL(triggered(bool)), this, SLOT(quickOpenOpenFile()));
 
-    KAction* quickOpenDocumentation = actions.addAction("quick_open_documentation");
+    QAction* quickOpenDocumentation = actions.addAction("quick_open_documentation");
     quickOpenDocumentation->setText( i18n("Quick Open &Documentation") );
     quickOpenDocumentation->setIcon( KIcon("quickopen-documentation") );
     quickOpenDocumentation->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_D );
@@ -786,27 +786,27 @@ void QuickOpenPlugin::createActionsForMainWindow(Sublime::MainWindow* /*window*/
     m_quickOpenDefinition->setShortcut( Qt::CTRL | Qt::Key_Comma );
     connect(m_quickOpenDefinition, SIGNAL(triggered(bool)), this, SLOT(quickOpenDefinition()), Qt::QueuedConnection);
 
-    KAction* quickOpenLine = actions.addAction("quick_open_line");
+    QAction* quickOpenLine = actions.addAction("quick_open_line");
     quickOpenLine->setText( i18n("Embedded Quick Open") );
 //     quickOpenLine->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_E );
 //     connect(quickOpenLine, SIGNAL(triggered(bool)), this, SLOT(quickOpenLine(bool)));
     quickOpenLine->setDefaultWidget(createQuickOpenLineWidget());
-//     KAction* quickOpenNavigate = actions.addAction("quick_open_navigate");
+//     QAction* quickOpenNavigate = actions.addAction("quick_open_navigate");
 //     quickOpenNavigate->setText( i18n("Navigate Declaration") );
 //     quickOpenNavigate->setShortcut( Qt::ALT | Qt::Key_Space );
 //     connect(quickOpenNavigate, SIGNAL(triggered(bool)), this, SLOT(quickOpenNavigate()));
 
-    KAction* quickOpenNextFunction = actions.addAction("quick_open_next_function");
+    QAction* quickOpenNextFunction = actions.addAction("quick_open_next_function");
     quickOpenNextFunction->setText( i18n("Next Function") );
     quickOpenNextFunction->setShortcut( Qt::CTRL| Qt::ALT | Qt::Key_PageDown );
     connect(quickOpenNextFunction, SIGNAL(triggered(bool)), this, SLOT(nextFunction()));
 
-    KAction* quickOpenPrevFunction = actions.addAction("quick_open_prev_function");
+    QAction* quickOpenPrevFunction = actions.addAction("quick_open_prev_function");
     quickOpenPrevFunction->setText( i18n("Previous Function") );
     quickOpenPrevFunction->setShortcut( Qt::CTRL| Qt::ALT | Qt::Key_PageUp );
     connect(quickOpenPrevFunction, SIGNAL(triggered(bool)), this, SLOT(previousFunction()));
 
-    KAction* quickOpenNavigateFunctions = actions.addAction("quick_open_outline");
+    QAction* quickOpenNavigateFunctions = actions.addAction("quick_open_outline");
     quickOpenNavigateFunctions->setText( i18n("Outline") );
     quickOpenNavigateFunctions->setShortcut( Qt::CTRL| Qt::ALT | Qt::Key_N );
     connect(quickOpenNavigateFunctions, SIGNAL(triggered(bool)), this, SLOT(quickOpenNavigateFunctions()));   

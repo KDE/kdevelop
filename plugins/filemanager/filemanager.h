@@ -26,7 +26,7 @@ class KActionCollection;
 class KDirOperator;
 class KUrlNavigator;
 class KFileItem;
-class KAction;
+class QAction;
 class QString;
 class QMenu;
 class KUrl;
@@ -53,7 +53,7 @@ private slots:
 private:
     void setupActions();
     QList<QAction*> tbActions;
-    KAction *newFileAction;
+    QAction* newFileAction;
     QList<QAction*> contextActions;
     KDirOperator* dirop;
     KUrlNavigator* urlnav;

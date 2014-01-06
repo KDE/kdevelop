@@ -344,7 +344,7 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
 
     if ( !itemlist.isEmpty() && itemlist.size() == 1 && itemlist[0]->folder() && !itemlist[0]->folder()->parent() )
     {
-        KAction* projectConfig = new KAction(i18n("Open Configuration..."), this);
+        QAction* projectConfig = new QAction(i18n("Open Configuration..."), this);
         projectConfig->setIcon(KIcon("configure"));
         connect( projectConfig, SIGNAL(triggered()), this, SLOT(openProjectConfig()) );
         projectActions << projectConfig;

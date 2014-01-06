@@ -43,9 +43,9 @@
 
 #include <KPluginFactory>
 #include <KAboutData>
-#include <KAction>
 #include <KProcess>
 
+#include <QAction>
 #include <QStandardItemModel>
 #include <QDBusConnection>
 #include <QMenu>
@@ -212,7 +212,7 @@ KDevelop::ContextMenuExtension ExternalScriptPlugin::contextMenuExtension( KDeve
         }
       }
 
-      KAction* scriptAction = new KAction( item->text(), this );
+      QAction* scriptAction = new QAction( item->text(), this );
       scriptAction->setData( QVariant::fromValue<ExternalScriptItem*>( item ));
       connect( scriptAction, SIGNAL( triggered() ), SLOT( executeScriptFromContextMenu() ) );
       menu->addAction( scriptAction );
@@ -293,7 +293,7 @@ QString ExternalScriptPlugin::executeCommandSync ( QString command, QString work
 
 void ExternalScriptPlugin::executeScriptFromActionData() const
 {
-  KAction* action = dynamic_cast<KAction*>( sender() );
+  QAction* action = dynamic_cast<QAction*>( sender() );
   Q_ASSERT( action );
 
   ExternalScriptItem* item = action->data().value<ExternalScriptItem*>();
@@ -304,7 +304,7 @@ void ExternalScriptPlugin::executeScriptFromActionData() const
 
 void ExternalScriptPlugin::executeScriptFromContextMenu() const
 {
-  KAction* action = dynamic_cast<KAction*>( sender() );
+  QAction* action = dynamic_cast<QAction*>( sender() );
   Q_ASSERT( action );
 
   ExternalScriptItem* item = action->data().value<ExternalScriptItem*>();

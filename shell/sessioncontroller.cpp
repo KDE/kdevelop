@@ -273,7 +273,7 @@ public:
             return;
         }
 
-        KAction* a = new KAction( grp );
+        QAction* a = new QAction( grp );
         a->setText( s->description() );
         a->setCheckable( false );
         a->setData( s->id().toString() );
@@ -550,7 +550,7 @@ SessionController::SessionController( QObject *parent )
 
     if (Core::self()->setupFlags() & Core::NoUi) return;
 
-    KAction* action = actionCollection()->addAction( "new_session", this, SLOT(newSession()) );
+    QAction* action = actionCollection()->addAction( "new_session", this, SLOT(newSession()) );
     action->setText( i18nc("@action:inmenu", "Start New Session") );
     action->setToolTip( i18nc("@info:tooltip", "Start a new KDevelop instance with an empty session") );
     action->setIcon(KIcon("window-new"));

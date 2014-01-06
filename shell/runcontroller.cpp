@@ -109,11 +109,11 @@ public:
 
     RunController* q;
 
-    QHash<KJob*, KAction*> jobs;
-    KAction* stopAction;
+    QHash<KJob*, QAction*> jobs;
+    QAction* stopAction;
     KActionMenu* stopJobsMenu;
-    KAction* runAction;
-    KAction* dbgAction;
+    QAction* runAction;
+    QAction* dbgAction;
     KSelectAction* currentTargetAction;
     QMap<QString,LaunchConfigurationType*> launchConfigurationTypes;
     QList<LaunchConfiguration*> launchConfigurations;
@@ -257,7 +257,7 @@ public:
     {
         if (!currentTargetAction) return;
 
-        KAction* action = currentTargetAction->addAction(launchActionText( l ));
+        QAction* action = currentTargetAction->addAction(launchActionText( l ));
         action->setData(qVariantFromValue<void*>(l));
     }
     void readLaunchConfigs( KSharedConfigPtr cfg, IProject* prj )
@@ -410,7 +410,7 @@ KJob* RunController::execute(const QString& runMode, ILaunchConfiguration* launc
 
 void RunController::setupActions()
 {
-    KAction *action;
+    QAction* action;
 
     // TODO not multi-window friendly, FIXME
     KActionCollection* ac = Core::self()->uiControllerInternal()->defaultMainWindow()->actionCollection();
@@ -422,7 +422,7 @@ void RunController::setupActions()
     action->setWhatsThis(i18nc("@info:whatsthis", "Opens a dialog to setup new launch configurations, or to change the existing ones."));
     connect(action, SIGNAL(triggered(bool)), SLOT(configureLaunches()));
 
-    d->runAction = new KAction( KIcon("system-run"), i18n("Execute Launch"), this);
+    d->runAction = new QAction( KIcon("system-run"), i18n("Execute Launch"), this);
     d->runAction->setIconText( i18nc("Short text for 'Execute launch' used in the toolbar", "Execute") );
     d->runAction->setShortcut(Qt::SHIFT + Qt::Key_F9);
     d->runAction->setToolTip(i18nc("@info:tooltip", "Execute current launch"));
@@ -431,7 +431,7 @@ void RunController::setupActions()
     ac->addAction("run_execute", d->runAction);
     connect(d->runAction, SIGNAL(triggered(bool)), this, SLOT(slotExecute()));
 
-    d->dbgAction = new KAction( KIcon("debug-run"), i18n("Debug Launch"), this);
+    d->dbgAction = new QAction( KIcon("debug-run"), i18n("Debug Launch"), this);
     d->dbgAction->setShortcut(Qt::Key_F9);
     d->dbgAction->setIconText( i18nc("Short text for 'Debug launch' used in the toolbar", "Debug") );
     d->dbgAction->setToolTip(i18nc("@info:tooltip", "Debug current launch"));
@@ -442,14 +442,14 @@ void RunController::setupActions()
     Core::self()->uiControllerInternal()->area(0, "code")->addAction(d->dbgAction);
 
 //     TODO: at least get a profile target, it's sad to have the menu entry without a profiler
-//     KAction* profileAction = new KAction( KIcon(""), i18n("Profile Launch"), this);
+//     QAction* profileAction = new QAction( KIcon(""), i18n("Profile Launch"), this);
 //     profileAction->setToolTip(i18nc("@info:tooltip", "Profile current launch"));
 //     profileAction->setStatusTip(i18n("Profile current launch"));
 //     profileAction->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in currently active launch configuration inside a Profiler."));
 //     ac->addAction("run_profile", profileAction);
 //     connect(profileAction, SIGNAL(triggered(bool)), this, SLOT(slotProfile()));
 
-    action = d->stopAction = new KAction( KIcon("process-stop"), i18n("Stop All Jobs"), this);
+    action = d->stopAction = new QAction( KIcon("process-stop"), i18n("Stop All Jobs"), this);
     action->setIconText(i18nc("Short text for 'Stop All Jobs' used in the toolbar", "Stop All"));
     // Ctrl+Escape would be nicer, but thats taken by the ksysguard desktop shortcut
     action->setShortcut(QKeySequence("Ctrl+Shift+Escape"));
@@ -562,9 +562,9 @@ void KDevelop::RunController::registerJob(KJob * job)
     }
 
     if (!d->jobs.contains(job)) {
-        KAction* stopJobAction = 0;
+        QAction* stopJobAction = 0;
         if (Core::self()->setupFlags() != Core::NoUi) {
-            stopJobAction = new KAction(job->objectName().isEmpty() ? i18n("<%1> Unnamed job", job->staticMetaObject.className()) : job->objectName(), this);
+            stopJobAction = new QAction(job->objectName().isEmpty() ? i18n("<%1> Unnamed job", job->staticMetaObject.className()) : job->objectName(), this);
             stopJobAction->setData(QVariant::fromValue(static_cast<void*>(job)));
             d->stopJobsMenu->addAction(stopJobAction);
             connect (stopJobAction, SIGNAL(triggered(bool)), SLOT(slotKillJob()));
@@ -644,7 +644,7 @@ void KDevelop::RunController::stopAllProcesses()
 
 void KDevelop::RunController::slotKillJob()
 {
-    KAction* action = dynamic_cast<KAction*>(sender());
+    QAction* action = dynamic_cast<QAction*>(sender());
     Q_ASSERT(action);
 
     KJob* job = static_cast<KJob*>(qvariant_cast<void*>(action->data()));
@@ -946,7 +946,7 @@ ContextMenuExtension RunController::contextMenuExtension ( Context* ctx )
                     if( hasLauncher && type->canLaunch(itm) )
                     {
                         d->launchAsInfo[i] = qMakePair( type->id(), mode->id() );
-                        KAction* act = new KAction( d->launchAsMapper );
+                        QAction* act = new QAction( d->launchAsMapper );
                         act->setText( type->name() );
                         kDebug() << "Setting up mapping for:" << i << "for action" << act->text() << "in mode" << mode->name();
                         d->launchAsMapper->setMapping( act, i );

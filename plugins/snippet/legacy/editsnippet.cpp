@@ -15,11 +15,11 @@
 
 #include "snippetrepository.h"
 
+#include <QAction>
 #include <QToolButton>
 
 #include <KLocalizedString>
 #include <KPushButton>
-#include <KAction>
 #include <KMimeTypeTrader>
 #include <KTextEditor/Document>
 #include <KTextEditor/View>

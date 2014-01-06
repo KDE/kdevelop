@@ -23,10 +23,10 @@
 #include <interfaces/iproject.h>
 #include "dashboarddataengine.h"
 #include "dashboardpluginloader.h"
+#include <QAction>
 #include <QFile>
 #include <QDir>
 #include <project/projectmodel.h>
-#include <KAction>
 
 DashboardCorona::DashboardCorona(KDevelop::IProject *project, QObject* parent)
 	: Plasma::Corona(parent), m_project(project)

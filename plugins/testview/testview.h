@@ -20,9 +20,9 @@
 #ifndef KDEVPLATFORM_PLUGIN_TESTVIEW_H
 #define KDEVPLATFORM_PLUGIN_TESTVIEW_H
 
+
 #include <QTreeView>
 #include <interfaces/itestcontroller.h>
-#include <KAction>
 
 class QSortFilterProxyModel;
 class QStandardItem;

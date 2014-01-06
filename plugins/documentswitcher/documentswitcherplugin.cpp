@@ -42,6 +42,7 @@
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/idocument.h>
 
+#include <QAction>
 #include <QScrollBar>
 #include <QApplication>
 #include <QDir>

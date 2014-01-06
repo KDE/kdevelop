@@ -23,7 +23,7 @@
 
 #include <QStandardItemModel>
 
-class KAction;
+class QAction;
 
 /**
  * NOTE: use @c text() and @c setText() to define the label/name of the external script.
@@ -177,7 +177,7 @@ public:
   /**
    * Action to trigger insertion of this snippet.
    */
-  KAction* action();
+  QAction* action();
 
   /**
    * @return True when this command should have its output shown, false otherwise.
@@ -204,7 +204,7 @@ private:
   OutputMode m_outputMode;
   ErrorMode m_errorMode;
   InputMode m_inputMode;
-  KAction* m_action;
+  QAction* m_action;
   bool m_showOutput;
   int m_filterMode;
   bool m_performReplacements;

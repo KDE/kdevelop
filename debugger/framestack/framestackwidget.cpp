@@ -34,8 +34,8 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QResizeEvent>
+#include <QAction>
 
-#include <KAction>
 #include <KStandardAction>
 #include <KDebug>
 #include <KLocalizedString>
@@ -77,13 +77,13 @@ FramestackWidget::FramestackWidget(IDebugController* controller, QWidget* parent
 
     m_framesContextMenu = new QMenu(m_frames);
 
-    KAction *selectAllAction = KStandardAction::selectAll(m_frames);
+    QAction* selectAllAction = KStandardAction::selectAll(m_frames);
     selectAllAction->setShortcut(KShortcut()); //FIXME: why does CTRL-A conflict with Katepart (while CTRL-Cbelow doesn't) ?
     selectAllAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     connect(selectAllAction, SIGNAL(triggered()), SLOT(selectAll()));
     m_framesContextMenu->addAction(selectAllAction);
 
-    KAction *copyAction = KStandardAction::copy(m_frames);
+    QAction* copyAction = KStandardAction::copy(m_frames);
     copyAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     connect(copyAction, SIGNAL(triggered()), SLOT(copySelection()));
     m_framesContextMenu->addAction(copyAction);

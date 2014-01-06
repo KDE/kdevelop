@@ -22,9 +22,12 @@
 #define KDEVPLATFORM_PLUGIN_PROJECTMANAGERVIEW_H
 
 #include <QWidget>
+
 #include <KAction>
+
 #include <interfaces/context.h>
 
+class QAction;
 class QModelIndex;
 
 class KUrl;

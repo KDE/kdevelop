@@ -27,7 +27,7 @@
 #include "diff2export.h"
 
 
-class KAction;
+class QAction;
 class KTemporaryFile;
 
 class DiffSettings;
@@ -185,16 +185,16 @@ private:
 
 	struct Kompare::Info* m_info;
 
-	KAction*              m_applyDifference;
-	KAction*              m_unApplyDifference;
-	KAction*              m_applyAll;
-	KAction*              m_unapplyAll;
-	KAction*              m_previousFile;
-	KAction*              m_nextFile;
-	KAction*              m_previousDifference;
-	KAction*              m_nextDifference;
+	QAction*              m_applyDifference;
+	QAction*              m_unApplyDifference;
+	QAction*              m_applyAll;
+	QAction*              m_unapplyAll;
+	QAction*              m_previousFile;
+	QAction*              m_nextFile;
+	QAction*              m_previousDifference;
+	QAction*              m_nextDifference;
 
-	KAction*              m_save;
+	QAction*              m_save;
 
 	QString               m_encoding;
 	QTextCodec*           m_textCodec;

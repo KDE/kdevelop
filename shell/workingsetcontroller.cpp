@@ -158,7 +158,7 @@ void WorkingSetController::setupActions()
     KActionCollection * ac =
         Core::self()->uiControllerInternal()->defaultMainWindow()->actionCollection();
 
-    KAction *action;
+    QAction* action;
 
     action = ac->addAction ( "view_next_window" );
     action->setText( i18n( "Next Document" ) );

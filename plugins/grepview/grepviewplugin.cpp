@@ -85,7 +85,7 @@ GrepViewPlugin::GrepViewPlugin( QObject *parent, const QVariantList & )
     QDBusConnection::sessionBus().registerObject( "/org/kdevelop/GrepViewPlugin",
         this, QDBusConnection::ExportScriptableSlots );
 
-    KAction *action = actionCollection()->addAction("edit_grep");
+    QAction*action = actionCollection()->addAction("edit_grep");
     action->setText(i18n("Find/Replace in Fi&les..."));
     action->setShortcut( QKeySequence("Ctrl+Alt+F") );
     connect(action, SIGNAL(triggered(bool)), this, SLOT(showDialogFromMenu()));
@@ -130,7 +130,7 @@ KDevelop::ContextMenuExtension GrepViewPlugin::contextMenuExtension(KDevelop::Co
         QList<KDevelop::ProjectBaseItem*> items = ctx->items();
         // verify if there is only one folder selected
         if ((items.count() == 1) && (items.first()->folder())) {
-            KAction* action = new KAction( i18n( "Find/Replace in This Folder" ), this );
+            QAction* action = new QAction( i18n( "Find/Replace in This Folder" ), this );
             action->setIcon(KIcon("edit-find"));
             m_contextMenuDirectory = items.at(0)->folder()->url().toLocalFile();
             connect( action, SIGNAL(triggered()), this, SLOT(showDialogFromProject()));
@@ -151,7 +151,7 @@ KDevelop::ContextMenuExtension GrepViewPlugin::contextMenuExtension(KDevelop::Co
         KDevelop::FileContext *fcontext = dynamic_cast<KDevelop::FileContext*>(context);
         KMimeType::Ptr mimetype = KMimeType::findByUrl( fcontext->urls().first() );
         if(mimetype->is("inode/directory")) {
-            KAction* action = new KAction( i18n( "Find/Replace in This Folder" ), this );
+            QAction* action = new QAction( i18n( "Find/Replace in This Folder" ), this );
             action->setIcon(KIcon("edit-find"));
             m_contextMenuDirectory = fcontext->urls().first().toLocalFile();
             connect( action, SIGNAL(triggered()), this, SLOT(showDialogFromProject()));

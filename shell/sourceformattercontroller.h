@@ -33,7 +33,7 @@ Boston, MA 02110-1301, USA.
 
 #include "shellexport.h"
 
-class KAction;
+class QAction;
 namespace KDevelop
 {
 
@@ -108,9 +108,9 @@ class KDEVPLATFORMSHELL_EXPORT SourceFormatterController : public ISourceFormatt
 		void adaptEditorIndentationMode(KDevelop::IDocument* doc, KDevelop::ISourceFormatter* formatter, bool ignoreModeline = false);
 		void formatFiles(KUrl::List &list);
 		// GUI actions
-		KAction* m_formatTextAction;
-		KAction* m_formatFilesAction;
-		KAction* m_formatLine;
+		QAction* m_formatTextAction;
+		QAction* m_formatFilesAction;
+		QAction* m_formatLine;
 		QList<KDevelop::ProjectBaseItem*> m_prjItems;
 		KUrl::List m_urls;
 		bool m_enabled;

@@ -21,14 +21,13 @@
 
 #include "vcseventwidget.h"
 
+#include <QAction>
 #include <QHeaderView>
 #include <QAction>
 #include <QClipboard>
 
 #include <kdebug.h>
 #include <kmenu.h>
-#include <KAction>
-
 
 #include <interfaces/iplugin.h>
 #include <interfaces/icore.h>
@@ -56,7 +55,7 @@ public:
     VcsEventWidgetPrivate( VcsEventWidget* w )
         : q( w )
     {
-        m_copyAction = new KAction(KIcon("edit-copy"), i18n("Copy revision number"), q);
+        m_copyAction = new QAction(KIcon("edit-copy"), i18n("Copy revision number"), q);
         m_copyAction->setShortcut(Qt::ControlModifier+Qt::Key_C);
         QObject::connect(m_copyAction, SIGNAL(triggered(bool)), q, SLOT(copyRevision()));
     }
@@ -67,7 +66,7 @@ public:
     KUrl m_url;
     QModelIndex m_contextIndex;
     VcsEventWidget* q;
-    KAction* m_copyAction;
+    QAction* m_copyAction;
     IBasicVersionControl* m_iface;
     void eventViewCustomContextMenuRequested( const QPoint &point );
     void eventViewClicked( const QModelIndex &index );

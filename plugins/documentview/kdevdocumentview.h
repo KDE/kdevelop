@@ -24,7 +24,7 @@
 #include <QTreeView>
 
 class QSortFilterProxyModel;
-class KAction;
+class QAction;
 class KUrl;
 class KDevDocumentViewPlugin;
 class KDevDocumentModel;

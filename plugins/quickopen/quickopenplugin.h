@@ -33,7 +33,7 @@
 
 #include "ui_quickopen.h"
 
-class KAction;
+class QAction;
 
 namespace KDevelop {
   class SimpleCursor;
@@ -130,8 +130,8 @@ private:
   
     //We can only have one widget at a time, because we manipulate the model.
     QPointer<QObject> m_currentWidgetHandler;
-    KAction* m_quickOpenDeclaration;
-    KAction* m_quickOpenDefinition;
+    QAction* m_quickOpenDeclaration;
+    QAction* m_quickOpenDefinition;
 };
 
 ///Will delete itself once the dialog is closed, so use QPointer when referencing it permanently

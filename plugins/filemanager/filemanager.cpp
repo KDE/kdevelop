@@ -130,7 +130,7 @@ void FileManager::setupActions()
     m_bookmarkHandler = new BookmarkHandler(this, acmBookmarks->menu());
     acmBookmarks->setShortcutContext(Qt::WidgetWithChildrenShortcut);
 
-    KAction* action = new KAction(this);
+    QAction* action = new QAction(this);
     action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     action->setText(i18n("Current Document Directory"));
     action->setIcon(KIcon("dirsync"));
@@ -145,7 +145,7 @@ void FileManager::setupActions()
     tbActions << (dirop->actionCollection()->action("sorting menu"));
     tbActions << (dirop->actionCollection()->action("show hidden"));
 
-    newFileAction = new KAction(this);
+    newFileAction = new QAction(this);
     newFileAction->setText(i18n("New File..."));
     newFileAction->setIcon(KIcon("document-new"));
     connect(newFileAction, SIGNAL(triggered()), this, SLOT(createNewFile()));

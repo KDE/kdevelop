@@ -12,6 +12,7 @@
 
 #include "snippet.h"
 
+#include <QAction>
 #include <QTimer>
 #include <QFile>
 #include <QFileInfo>
@@ -28,10 +29,7 @@
 #include <QApplication>
 
 #include <KColorScheme>
-
 #include <KUser>
-
-#include <KAction>
 #include <KShortcut>
 
 #include "snippetstore.h"

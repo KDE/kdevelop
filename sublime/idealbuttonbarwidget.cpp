@@ -66,10 +66,10 @@ IdealButtonBarWidget::IdealButtonBarWidget(Qt::DockWidgetArea area,
         (void) new IdealButtonBarLayout(orientation(), this);
 }
 
-KAction *IdealButtonBarWidget::addWidget(const QString& title, IdealDockWidget *dock,
+QAction* IdealButtonBarWidget::addWidget(const QString& title, IdealDockWidget *dock,
                                          Area *area, View *view)
 {
-    KAction *action = new KAction(this);
+    QAction* action = new QAction(this);
     action->setCheckable(true);
     action->setText(title);
     action->setIcon(dock->windowIcon());

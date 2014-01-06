@@ -72,10 +72,10 @@ IdealController::IdealController(Sublime::MainWindow* mainWindow):
 
     m_docks = qobject_cast<KActionMenu*>(mainWindow->action("docks_submenu"));
 
-    m_showLeftDock = qobject_cast<KAction*>(m_mainWindow->action("show_left_dock"));
-    m_showRightDock = qobject_cast<KAction*>(m_mainWindow->action("show_right_dock"));
-    m_showBottomDock = qobject_cast<KAction*>(m_mainWindow->action("show_bottom_dock"));
-    m_showTopDock = qobject_cast<KAction*>(m_mainWindow->action("show_top_dock"));
+    m_showLeftDock = qobject_cast<QAction*>(m_mainWindow->action("show_left_dock"));
+    m_showRightDock = qobject_cast<QAction*>(m_mainWindow->action("show_right_dock"));
+    m_showBottomDock = qobject_cast<QAction*>(m_mainWindow->action("show_bottom_dock"));
+    m_showTopDock = qobject_cast<QAction*>(m_mainWindow->action("show_top_dock"));
 
     connect(m_mainWindow, SIGNAL(settingsLoaded()), this, SLOT(loadSettings()));
 
@@ -125,7 +125,7 @@ void IdealController::addView(Qt::DockWidgetArea area, View* view)
     dock->setFocusProxy(dock->widget());
 
     if (IdealButtonBarWidget* bar = barForDockArea(area)) {
-        KAction* action = bar->addWidget(
+        QAction* action = bar->addWidget(
             view->document()->title(), dock,
             static_cast<MainWindow*>(parent())->area(), view);
         m_dockwidget_to_action[dock] = m_view_to_action[view] = action;
@@ -169,7 +169,7 @@ void IdealController::dockLocationChanged(Qt::DockWidgetArea area)
     docks.insert(dock);
 
     if (IdealButtonBarWidget* bar = barForDockArea(area)) {
-        KAction* action = bar->addWidget(
+        QAction* action = bar->addWidget(
             view->document()->title(), dock,
             static_cast<MainWindow*>(parent())->area(), view);
         m_dockwidget_to_action[dock] = m_view_to_action[view] = action;
@@ -299,7 +299,7 @@ QAction* IdealController::actionForView(View* view) const
 
 void IdealController::setShowDockStatus(Qt::DockWidgetArea area, bool checked)
 {
-    KAction* action = actionForArea(area);
+    QAction* action = actionForArea(area);
     if (action->isChecked() != checked) {
         bool blocked = action->blockSignals(true);
         action->setChecked(checked);
@@ -307,7 +307,7 @@ void IdealController::setShowDockStatus(Qt::DockWidgetArea area, bool checked)
     }
 }
 
-KAction* IdealController::actionForArea(Qt::DockWidgetArea area) const
+QAction* IdealController::actionForArea(Qt::DockWidgetArea area) const
 {
     switch (area) {
         case Qt::LeftDockWidgetArea:
@@ -384,7 +384,7 @@ void IdealController::showDock(Qt::DockWidgetArea area, bool show)
     if (lastDock && lastDock->isVisible() && !lastDock->hasFocus()) {
         lastDock->setFocus(Qt::ShortcutFocusReason);
         // re-sync action state given we may have asked for the dock to be hidden
-        KAction* action = actionForArea(area);
+        QAction* action = actionForArea(area);
         if (!action->isChecked()) {
             action->blockSignals(true);
             action->setChecked(true);

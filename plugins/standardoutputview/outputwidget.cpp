@@ -89,10 +89,10 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
         stackwidget = new QStackedWidget( this );
         layout->addWidget( stackwidget );
 
-        previousAction = new KAction( KIcon( "go-previous" ), i18n("Previous"), this );
+        previousAction = new QAction( KIcon( "go-previous" ), i18n("Previous"), this );
         connect(previousAction, SIGNAL(triggered()), this, SLOT(previousOutput()));
         addAction(previousAction);
-        nextAction = new KAction( KIcon( "go-next" ), i18n("Next"), this );
+        nextAction = new QAction( KIcon( "go-next" ), i18n("Next"), this );
         connect(nextAction, SIGNAL(triggered()), this, SLOT(nextOutput()));
         addAction(nextAction);
     }
@@ -110,12 +110,12 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
     QAction *separator = new QAction(this);
     separator->setSeparator(true);
 
-    KAction *selectAllAction = KStandardAction::selectAll(this, SLOT(selectAll()), this);
+    QAction* selectAllAction = KStandardAction::selectAll(this, SLOT(selectAll()), this);
     selectAllAction->setShortcut(KShortcut()); //FIXME: why does CTRL-A conflict with Katepart (while CTRL-Cbelow doesn't) ?
     selectAllAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     addAction(selectAllAction);
 
-    KAction *copyAction = KStandardAction::copy(this, SLOT(copySelection()), this);
+    QAction* copyAction = KStandardAction::copy(this, SLOT(copySelection()), this);
     copyAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     addAction(copyAction);
 

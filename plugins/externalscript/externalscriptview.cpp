@@ -25,8 +25,8 @@
 #include "editexternalscript.h"
 
 #include <KLocalizedString>
-#include <KAction>
 
+#include <QAction>
 #include <QStandardItemModel>
 #include <QSortFilterProxyModel>
 #include <QMouseEvent>
@@ -54,13 +54,13 @@ ExternalScriptView::ExternalScriptView( ExternalScriptPlugin* plugin, QWidget* p
   connect(scriptTree, SIGNAL(customContextMenuRequested(QPoint)),
           this, SLOT(contextMenu(QPoint)));
 
-  m_addScriptAction = new KAction(KIcon("document-new"), i18n("Add External Script"), this);
+  m_addScriptAction = new QAction(KIcon("document-new"), i18n("Add External Script"), this);
   connect(m_addScriptAction, SIGNAL(triggered()), this, SLOT(addScript()));
   addAction(m_addScriptAction);
-  m_editScriptAction = new KAction(KIcon("document-edit"), i18n("Edit External Script"), this);
+  m_editScriptAction = new QAction(KIcon("document-edit"), i18n("Edit External Script"), this);
   connect(m_editScriptAction, SIGNAL(triggered()), this, SLOT(editScript()));
   addAction(m_editScriptAction);
-  m_removeScriptAction = new KAction(KIcon("document-close"), i18n("Remove External Script"), this);
+  m_removeScriptAction = new QAction(KIcon("document-close"), i18n("Remove External Script"), this);
   connect(m_removeScriptAction, SIGNAL(triggered()), this, SLOT(removeScript()));
   addAction(m_removeScriptAction);
 

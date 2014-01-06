@@ -19,9 +19,11 @@
  */
 
 #include "krossdistributedversioncontrol.h"
+
 #include <KDebug>
-#include <KAction>
 #include <KLocale>
+
+#include <QAction>
 #include <QMenu>
 
 #include <interfaces/iplugin.h>

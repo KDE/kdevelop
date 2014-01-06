@@ -60,7 +60,7 @@ ProblemWidget::ProblemWidget(QWidget* parent, ProblemReporterPlugin* plugin)
     setModel(m_plugin->getModel());
     header()->setStretchLastSection(false);
 
-    KAction* fullUpdateAction = new KAction(this);
+    QAction* fullUpdateAction = new QAction(this);
     fullUpdateAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     fullUpdateAction->setText(i18n("Force Full Update"));
     fullUpdateAction->setToolTip(i18nc("@info:tooltip", "Re-parse all watched documents"));
@@ -68,7 +68,7 @@ ProblemWidget::ProblemWidget(QWidget* parent, ProblemReporterPlugin* plugin)
     connect(fullUpdateAction, SIGNAL(triggered(bool)), model(), SLOT(forceFullUpdate()));
     addAction(fullUpdateAction);
 
-    KAction* showImportsAction = new KAction(this);
+    QAction* showImportsAction = new QAction(this);
     addAction(showImportsAction);
     showImportsAction->setCheckable(true);
     showImportsAction->setChecked(false);
@@ -84,23 +84,23 @@ ProblemWidget::ProblemWidget(QWidget* parent, ProblemReporterPlugin* plugin)
 
     QActionGroup* scopeActions = new QActionGroup(this);
 
-    KAction* currentDocumentAction = new KAction(this);
+    QAction* currentDocumentAction = new QAction(this);
     currentDocumentAction->setText(i18n("Current Document"));
     currentDocumentAction->setToolTip(i18nc("@info:tooltip", "Display problems in current document"));
 
-    KAction* openDocumentsAction = new KAction(this);
+    QAction* openDocumentsAction = new QAction(this);
     openDocumentsAction->setText(i18n("Open Documents"));
     openDocumentsAction->setToolTip(i18nc("@info:tooltip", "Display problems in all open documents"));
 
-    KAction* currentProjectAction = new KAction(this);
+    QAction* currentProjectAction = new QAction(this);
     currentProjectAction->setText(i18n("Current Project"));
     currentProjectAction->setToolTip(i18nc("@info:tooltip", "Display problems in current project"));
 
-    KAction* allProjectAction = new KAction(this);
+    QAction* allProjectAction = new QAction(this);
     allProjectAction->setText(i18n("All Projects"));
     allProjectAction->setToolTip(i18nc("@info:tooltip", "Display problems in all projects"));
 
-    KAction* scopeActionArray[] = {currentDocumentAction, openDocumentsAction, currentProjectAction, allProjectAction};
+    QAction* scopeActionArray[] = {currentDocumentAction, openDocumentsAction, currentProjectAction, allProjectAction};
     for (int i = 0; i < 4; ++i) {
         scopeActionArray[i]->setCheckable(true);
         scopeActions->addAction(scopeActionArray[i]);
@@ -126,16 +126,16 @@ ProblemWidget::ProblemWidget(QWidget* parent, ProblemReporterPlugin* plugin)
     severityMenu->setToolTip(i18nc("@info:tooltip", "Select the lowest level of problem severity to be displayed"));
     QActionGroup* severityActions = new QActionGroup(this);
 
-    KAction* errorSeverityAction = new KAction(i18n("Error"), this);
+    QAction* errorSeverityAction = new QAction(i18n("Error"), this);
     errorSeverityAction->setToolTip(i18nc("@info:tooltip", "Display only errors"));
 
-    KAction* warningSeverityAction = new KAction(i18n("Warning"), this);
+    QAction* warningSeverityAction = new QAction(i18n("Warning"), this);
     warningSeverityAction->setToolTip(i18nc("@info:tooltip", "Display errors and warnings"));
 
-    KAction* hintSeverityAction = new KAction(i18n("Hint"), this);
+    QAction* hintSeverityAction = new QAction(i18n("Hint"), this);
     hintSeverityAction->setToolTip(i18nc("@info:tooltip", "Display errors, warnings and hints"));
 
-    KAction* severityActionArray[] = {errorSeverityAction, warningSeverityAction, hintSeverityAction};
+    QAction* severityActionArray[] = {errorSeverityAction, warningSeverityAction, hintSeverityAction};
     for (int i = 0; i < 3; ++i) {
         severityActionArray[i]->setCheckable(true);
         severityActions->addAction(severityActionArray[i]);

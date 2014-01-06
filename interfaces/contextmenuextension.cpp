@@ -23,8 +23,8 @@
 #include <QtCore/QMap>
 
 #include <QMenu>
+#include <QAction>
 
-#include <KAction>
 #include <KLocale>
 
 namespace KDevelop

@@ -24,7 +24,7 @@
 
 class DocumentationViewFactory;
 
-class KAction;
+class QAction;
 
 namespace KDevelop
 {
@@ -54,7 +54,7 @@ class DocumentationController : public KDevelop::IDocumentationController
     private:
         DocumentationViewFactory* m_factory;
 
-        KAction* m_showDocumentation;
+        QAction* m_showDocumentation;
 };
 
 }

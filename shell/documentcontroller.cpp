@@ -613,7 +613,7 @@ void DocumentController::setupActions()
     KActionCollection * ac =
         Core::self()->uiControllerInternal()->defaultMainWindow()->actionCollection();
 
-    KAction *action;
+    QAction* action;
 
     action = ac->addAction( "file_open" );
     action->setIcon(KIcon("document-open"));

@@ -120,7 +120,7 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension( KDevelop::C
     menu->addTitle(i18n("External Applications"));
     menu->addActions( appActions );
 
-    KAction* openAction = new KAction( i18n( "Open" ), this );
+    QAction* openAction = new QAction( i18n( "Open" ), this );
     openAction->setIcon( SmallIcon( "document-open" ) );
     connect( openAction, SIGNAL(triggered()), SLOT(openDefault()) );
 
@@ -162,7 +162,7 @@ QList<QAction*> OpenWithPlugin::actionsForServiceType( const QString& serviceTyp
     QAction* standardAction = 0;
     const QString defaultId = defaultForMimeType(m_mimeType);
     foreach( KService::Ptr svc, list ) {
-        KAction* act = new KAction( isTextEditor(svc) ? i18n("Default Editor") : svc->name(), this );
+        QAction* act = new QAction( isTextEditor(svc) ? i18n("Default Editor") : svc->name(), this );
         act->setIcon( SmallIcon( svc->icon() ) );
         if (svc->storageId() == defaultId || (defaultId.isEmpty() && isTextEditor(svc))) {
             QFont font = act->font();

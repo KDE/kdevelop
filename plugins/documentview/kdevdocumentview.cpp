@@ -197,7 +197,7 @@ void KDevDocumentView::contextMenuEvent( QContextMenuEvent * event )
         
         appendActions(ctxMenu, fileActions);
         
-        KAction* save = KStandardAction::save(this, SLOT(saveSelected()), ctxMenu);
+        QAction* save = KStandardAction::save(this, SLOT(saveSelected()), ctxMenu);
         save->setEnabled(selectedDocHasChanges());
         ctxMenu->addAction(save);
         ctxMenu->addAction(KIcon("view-refresh"), i18n( "Reload" ), this, SLOT(reloadSelected()));

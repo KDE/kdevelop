@@ -80,7 +80,7 @@ StandardOutputView::StandardOutputView(QObject *parent, const QVariantList &)
 
     setXMLFile("kdevstandardoutputview.rc");
     // setup actions
-    KAction *action;
+    QAction* action;
 
     action = actionCollection()->addAction("next_error");
     action->setText(i18n("Jump to Next Outputmark"));

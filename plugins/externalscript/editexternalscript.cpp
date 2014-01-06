@@ -25,9 +25,9 @@
 
 #include <KLocalizedString>
 #include <KPushButton>
-
 #include <KShell>
-#include <KAction>
+
+#include <QAction>
 
 EditExternalScript::EditExternalScript( ExternalScriptItem* item, QWidget* parent, Qt::WFlags flags )
     : KDialog( parent, flags ), m_item( item )
