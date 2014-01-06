@@ -166,13 +166,13 @@ void KDevelop::ForegroundLock::relock()
                 public:
                 virtual void doInternal() {
                     // By locking the mutex, we make sure that the requester is actually waiting for the condition
-                    waitMutex.lockInline();
+                    waitMutex.lock();
                     // Now we release the foreground lock
                     TemporarilyReleaseForegroundLock release;
                     // And signalize to the requester that we've released it
                     condition.wakeAll();
                     // Allow the requester to actually wake up, by unlocking m_waitMutex
-                    waitMutex.unlockInline();
+                    waitMutex.unlock();
                     // Now wait until the requester is ready
                     QMutexLocker lock(&finishMutex);
                 }

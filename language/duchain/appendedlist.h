@@ -94,7 +94,7 @@ class TemporaryDataManager {
     uint alloc() {
 
       if(threadSafe)
-        m_mutex.lockInline();
+        m_mutex.lock();
 
       uint ret;
       if(!m_freeIndicesWithData.isEmpty()) {
@@ -141,7 +141,7 @@ class TemporaryDataManager {
       }
 
       if(threadSafe)
-        m_mutex.unlockInline();
+        m_mutex.unlock();
 
       Q_ASSERT(!(ret & DynamicAppendedListMask));
 
@@ -153,7 +153,7 @@ class TemporaryDataManager {
       index &= KDevelop::DynamicAppendedListRevertMask;
 
       if(threadSafe)
-        m_mutex.lockInline();
+        m_mutex.lock();
 
       freeItem(m_items[index]);
 
@@ -170,7 +170,7 @@ class TemporaryDataManager {
       }
 
       if(threadSafe)
-        m_mutex.unlockInline();
+        m_mutex.unlock();
     }
 
     uint usedItemCount() const {
