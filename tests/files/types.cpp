@@ -7,6 +7,12 @@ class myClass {};
 /// "type" : { "toString" : "myUnion" }
 union myUnion {};
 
+/// "type" : { "toString" : "myEnum" }
+enum myEnum {
+    /// "type" : { "toString" : "myEnum" }
+    myEnumerator
+};
+
 /// "toString" : "int main (int, char**)"
 int main(int argc, char** argv)
 {
@@ -48,5 +54,7 @@ int main(int argc, char** argv)
     myClass myC;
     /// "toString" : "myUnion myU"
     myUnion myU;
+    /// "toString" : "myEnum myE"
+    myEnum myE;
     /// TODO: enums, enumerators, typedefs, ...
 }

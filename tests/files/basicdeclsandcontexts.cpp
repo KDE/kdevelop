@@ -67,3 +67,9 @@ class myClass {};
 
 /// "toString" : "union myUnion"
 union myUnion {};
+
+/// "toString" : "myEnum myEnum"
+enum myEnum {
+    /// "toString" : "myEnum myEnumerator"
+    myEnumerator
+};
