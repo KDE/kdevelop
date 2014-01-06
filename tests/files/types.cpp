@@ -13,6 +13,9 @@ enum myEnum {
     myEnumerator
 };
 
+/// "type" : { "toString" : "myTypedef" }
+typedef int myTypedef;
+
 /// "toString" : "int main (int, char**)"
 int main(int argc, char** argv)
 {
@@ -56,5 +59,6 @@ int main(int argc, char** argv)
     myUnion myU;
     /// "toString" : "myEnum myE"
     myEnum myE;
-    /// TODO: enums, enumerators, typedefs, ...
+    /// "toString" : "myTypedef myT"
+    myTypedef myT;
 }

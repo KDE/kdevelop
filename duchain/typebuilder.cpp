@@ -28,6 +28,7 @@
 #include <language/duchain/types/referencetype.h>
 #include <language/duchain/types/structuretype.h>
 #include <language/duchain/types/enumerationtype.h>
+#include <language/duchain/types/typealiastype.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/duchainlock.h>
 
@@ -108,6 +109,17 @@ AbstractType* createType(CXType type, const IncludeFileContexts& includes)
         case CXType_Enum: {
             auto t = new EnumerationType;
             DeclarationPointer decl = findDeclaration(clang_getTypeDeclaration(type), includes);
+            DUChainReadLocker lock;
+            if (decl) {
+                t->setDeclaration(decl.data());
+            }
+            return t;
+        }
+        case CXType_Typedef: {
+            auto t = new TypeAliasType;
+            CXCursor location = clang_getTypeDeclaration(type);
+            t->setType(build(clang_getTypedefDeclUnderlyingType(location), includes));
+            DeclarationPointer decl = findDeclaration(location, includes);
             DUChainReadLocker lock;
             if (decl) {
                 t->setDeclaration(decl.data());

@@ -69,6 +69,18 @@ void setData(ClassDeclaration* decl)
     }
 }
 
+template<>
+void setData<CXCursor_TypeAliasDecl>(Declaration* decl)
+{
+    decl->setIsTypeAlias(true);
+}
+
+template<>
+void setData<CXCursor_TypedefDecl>(Declaration* decl)
+{
+    decl->setIsTypeAlias(true);
+}
+
 template<CXCursorKind CK, class T>
 T *createDeclarationCommon(CXCursor cursor, const Identifier& id)
 {
