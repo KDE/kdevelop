@@ -80,3 +80,7 @@ using namespace bar;
 /// "EXPECT_FAIL" : { "toString" : "imported identifier is not set properly " },
 /// "toString" : "Import bar as blub"
 namespace blub = bar;
+
+/// "toString" : "struct myTemplate"
+template<class T>
+struct myTemplate {};

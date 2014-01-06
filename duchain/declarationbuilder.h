@@ -55,41 +55,45 @@ inline QByteArray buildComment(CXComment comment)
 }
 
 template<CXCursorKind CK>
-void setData(Declaration*)
+void setData(CXCursor, Declaration*)
 {
     // do nothing
 }
 
 template<CXCursorKind CK>
-void setData(ClassDeclaration* decl)
+void setData(CXCursor cursor, ClassDeclaration* decl)
 {
-    if (CK == CXCursor_UnionDecl) {
+    CXCursorKind kind = CK;
+    if (CK == CXCursor_ClassTemplate || CK == CXCursor_ClassTemplatePartialSpecialization) {
+        kind = clang_getTemplateCursorKind(cursor);
+    }
+    if (kind == CXCursor_UnionDecl) {
         decl->setClassType(ClassDeclarationData::Union);
-    } else if (CK == CXCursor_StructDecl) {
+    } else if (kind == CXCursor_StructDecl) {
         decl->setClassType(ClassDeclarationData::Struct);
     }
 }
 
 template<>
-void setData<CXCursor_TypeAliasDecl>(Declaration* decl)
+void setData<CXCursor_TypeAliasDecl>(CXCursor /*cursor*/, Declaration* decl)
 {
     decl->setIsTypeAlias(true);
 }
 
 template<>
-void setData<CXCursor_TypedefDecl>(Declaration* decl)
+void setData<CXCursor_TypedefDecl>(CXCursor /*cursor*/, Declaration* decl)
 {
     decl->setIsTypeAlias(true);
 }
 
 template<>
-void setData<CXCursor_Namespace>(Declaration* decl)
+void setData<CXCursor_Namespace>(CXCursor /*cursor*/, Declaration* decl)
 {
     decl->setKind(Declaration::Namespace);
 }
 
 template<CXCursorKind CK>
-void setData(NamespaceAliasDeclaration* /*decl*/)
+void setData(CXCursor /*cursor*/, NamespaceAliasDeclaration* /*decl*/)
 {
     static_assert(CK == CXCursor_NamespaceAlias, "Unexpected cursor kind");
     // FIXME: how to get the imported identifier from clang?
@@ -104,7 +108,7 @@ T *createDeclarationCommon(CXCursor cursor, const Identifier& id)
     auto decl = new T(range, nullptr);
     decl->setComment(comment);
     decl->setIdentifier(id);
-    setData<CK>(decl);
+    setData<CK>(cursor, decl);
     return decl;
 }
 
