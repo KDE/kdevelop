@@ -21,6 +21,7 @@
 
 #include <QMap>
 #include <QObject>
+#include <QPointer>
 #include <QSet>
 #include <QTabBar>
 #include <QHBoxLayout>

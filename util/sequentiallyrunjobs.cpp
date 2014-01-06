@@ -25,7 +25,9 @@
 #include <interfaces/iruncontroller.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/idocument.h>
-#include <KLocalizedString>
+
+#include <KDebug>
+#include <KLocale>
 
 SequentiallyRunJobs::SequentiallyRunJobs( KJob* a, KJob* b )
 {

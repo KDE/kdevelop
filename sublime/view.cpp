@@ -138,4 +138,4 @@ void View::notifyPositionChanged(int newPositionInArea)
 
 }
 
-#include "view.moc"
+#include "moc_view.cpp"

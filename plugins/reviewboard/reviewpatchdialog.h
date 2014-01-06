@@ -20,12 +20,14 @@
 
 #ifndef KDEVPLATFORM_PLUGIN_REVIEWPATCHDIALOG_H
 #define KDEVPLATFORM_PLUGIN_REVIEWPATCHDIALOG_H
+
 #include <KDialog>
 
 class QItemSelection;
 class QModelIndex;
 
 class KJob;
+class KUrl;
 
 namespace Ui {
     class ReviewPatch;

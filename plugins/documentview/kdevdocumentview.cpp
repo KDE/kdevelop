@@ -28,6 +28,7 @@ Boston, MA 02110-1301, USA.
 #include <QSortFilterProxyModel>
 
 #include <kaction.h>
+#include <klocale.h>
 #include <kurl.h>
 #include <kmenu.h>
 //#include <klocale.h>

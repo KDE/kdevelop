@@ -29,6 +29,7 @@
 #include <KMessageBox>
 #include <KDebug>
 #include <KIO/Job>
+#include <KUrl>
 #include <QFile>
 #include <interfaces/icore.h>
 #include <interfaces/ipatchsource.h>
@@ -64,7 +65,7 @@ void ReviewBoardPlugin::exportPatch(IPatchSource::Ptr source)
     if(p) {
         KConfigGroup versionedConfig = p->projectConfiguration()->group("ReviewBoard");
 
-        d.setServer(versionedConfig.readEntry<KUrl>("server", KUrl("https://git.reviewboard.kde.org")));
+        d.setServer(versionedConfig.readEntry<QUrl>("server", QUrl("https://git.reviewboard.kde.org")));
         d.setUsername(versionedConfig.readEntry("username", QString()));
         d.setBaseDir(versionedConfig.readEntry("baseDir", "/"));
         d.setRepository(versionedConfig.readEntry("repository", QString()));
@@ -88,7 +89,7 @@ void ReviewBoardPlugin::exportPatch(IPatchSource::Ptr source)
             KConfigGroup versionedConfig = p->projectConfiguration()->group("ReviewBoard");
 
             // We store username in a diferent field. Unset it from server.
-            KUrl storeServer(d.server());
+            QUrl storeServer(d.server());
             storeServer.setUserName(QString());
             // Don't store password in plaintext inside .kdev4
             storeServer.setPassword(QString());

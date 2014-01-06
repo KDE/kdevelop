@@ -25,6 +25,8 @@
 
 #include "interfacesexport.h"
 
+class KUrl;
+
 namespace KDevelop
 {
 

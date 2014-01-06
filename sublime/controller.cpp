@@ -25,6 +25,7 @@
 #include <QApplication>
 
 #include <kdebug.h>
+#include <KGlobal>
 #include <KSharedConfig>
 
 #include "area.h"
@@ -414,4 +415,4 @@ bool Controller::arrangeBuddies() const
 
 }
 
-#include "controller.moc"
+#include "moc_controller.cpp"

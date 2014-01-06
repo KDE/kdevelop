@@ -24,11 +24,14 @@
 
 #include "../languageexport.h"
 #include <QPair>
+#include <QPointer>
 #include <language/editor/simplerange.h>
 #include <ktexteditor/movingrange.h>
 #include <language/editor/rangeinrevision.h>
 #include <language/duchain/indexedstring.h>
 #include <language/interfaces/ilanguagesupport.h>
+
+#include <ksharedptr.h>
 
 namespace KTextEditor
 {
@@ -51,7 +54,7 @@ class RevisionLockerAndClearerPrivate;
  * Helper class that locks a revision, and clears it on its destruction within the foreground thread.
  * Just delete it using deleteLater().
  * */
-class KDEVPLATFORMLANGUAGE_EXPORT RevisionLockerAndClearer : public KShared {
+class KDEVPLATFORMLANGUAGE_EXPORT RevisionLockerAndClearer : public QSharedData {
 public:
     typedef KSharedPtr<RevisionLockerAndClearer> Ptr;
 

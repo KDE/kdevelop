@@ -140,7 +140,7 @@ void OutputJob::setToolTitle(const QString& title)
     m_toolTitle = title;
 }
 
-void OutputJob::setToolIcon(const KIcon& icon)
+void OutputJob::setToolIcon(const QIcon& icon)
 {
     m_toolIcon = icon;
 }

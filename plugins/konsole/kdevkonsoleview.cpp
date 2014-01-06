@@ -148,5 +148,4 @@ bool KDevKonsoleView::eventFilter( QObject* obj, QEvent *e )
     return QWidget::eventFilter( obj, e );
 }
 
-#include "kdevkonsoleview.moc"
-
+#include "moc_kdevkonsoleview.cpp"

@@ -605,6 +605,6 @@ class TestEmbeddedFreeTree : public QObject {
     }
 };
 
-#include "test_itemrepository.moc"
+#include "test_embeddedfreetree.moc"
 
 QTEST_MAIN(TestEmbeddedFreeTree)

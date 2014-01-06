@@ -215,6 +215,4 @@ QString KDevelop::IPlugin::errorDescription() const
     return QString();
 }
 
-#include "iplugin.moc"
-
-
+#include "moc_iplugin.cpp"

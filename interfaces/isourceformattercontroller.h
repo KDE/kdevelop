@@ -25,6 +25,8 @@ Boston, MA 02110-1301, USA.
 
 #include "interfacesexport.h"
 
+class KUrl;
+
 namespace KDevelop
 {
 class ISourceFormatter;

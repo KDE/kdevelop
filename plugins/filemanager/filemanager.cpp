@@ -24,6 +24,7 @@
 #include <QLayout>
 #include <QAbstractItemView>
 
+#include <kdebug.h>
 #include <kurl.h>
 #include <kurlnavigator.h>
 #include <kfileplacesmodel.h>
@@ -31,6 +32,7 @@
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kdiroperator.h>
+#include <kiconloader.h>
 #include <kfileitem.h>
 #include <klineedit.h>
 #include <kinputdialog.h>
@@ -98,7 +100,7 @@ void FileManager::fillContextMenu(KFileItem item, QMenu* menu)
     contextActions.append(menu->addSeparator());
     menu->addAction(newFileAction);
     contextActions.append(newFileAction);
-    KDevelop::FileContext context(item.url());
+    KDevelop::FileContext context(KUrl(item.url()));
     QList<KDevelop::ContextMenuExtension> extensions = KDevelop::ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( &context );
     KDevelop::ContextMenuExtension::populateMenu(menu, extensions);
     QMenu* tmpMenu = new QMenu();
@@ -203,7 +205,4 @@ KDevFileManagerPlugin* FileManager::plugin() const
     return m_plugin;
 }
 
-
-
-
-#include "filemanager.moc"
+#include "moc_filemanager.cpp"

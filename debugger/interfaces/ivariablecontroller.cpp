@@ -26,6 +26,8 @@
 #include "../variable/variablecollection.h"
 #include "iframestackmodel.h"
 
+#include <KDebug>
+
 namespace KDevelop {
 
     

@@ -92,4 +92,4 @@ void EnvironmentConfigureButton::setSelectionWidget(EnvironmentSelectionWidget* 
 
 }
 
-#include "environmentconfigurebutton.moc"
+#include "moc_environmentconfigurebutton.cpp"

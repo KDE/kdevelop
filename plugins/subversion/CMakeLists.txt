@@ -86,7 +86,7 @@ target_link_libraries(kdevsubversion
                     ${SUBVERSION_LIBRARIES}
                     ${KDE4_KDEUI_LIBS}
                     ${KDE4_KIO_LIBS}
-                    ${KDE4_KTEXTEDITOR_LIBS}
+                    KF5::TextEditor
                     kdevplatforminterfaces
                     kdevplatformvcs
                     kdevplatformoutputview

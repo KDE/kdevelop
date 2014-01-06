@@ -25,9 +25,11 @@
 #include "area.h"
 #include "document.h"
 #include "view.h"
+
 #include <KMenu>
 #include <KLocalizedString>
 #include <KDialog>
+#include <KGlobal>
 #include <KShortcutWidget>
 #include <KSharedConfig>
 

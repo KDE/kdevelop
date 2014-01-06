@@ -190,5 +190,3 @@ void SvnStatusJob::addToStats( const KDevelop::VcsStatusInfo& info )
 }
 
 #include "svnstatusjob.moc"
-#include "svnstatusjob_p.moc"
-

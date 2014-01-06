@@ -135,4 +135,4 @@ void ProcessLineMaker::flushBuffers()
 
 }
 
-#include "processlinemaker.moc"
+#include "moc_processlinemaker.cpp"

@@ -497,4 +497,4 @@ QString OutputExecuteJobPrivate::getJobName()
 
 } // namespace KDevelop
 
-#include "outputexecutejob.moc"
+#include "moc_outputexecutejob.cpp"

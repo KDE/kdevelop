@@ -27,6 +27,7 @@
 #include "idealtoolbutton.h"
 #include "document.h"
 #include "view.h"
+#include <KGlobal>
 #include <KLocalizedString>
 #include <KSharedConfig>
 #include <KConfigGroup>

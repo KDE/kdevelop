@@ -123,4 +123,4 @@ ProjectTestResult ProjectTestJob::testResult()
     return d->m_result;
 }
 
-#include "projecttestjob.moc"
+#include "moc_projecttestjob.cpp"
