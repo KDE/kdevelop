@@ -24,8 +24,7 @@
 
 #include "utilexport.h"
 
-#include <kidentityproxymodel.h>
-
+#include <QIdentityProxyModel>
 #include <QScopedPointer>
 
 namespace KDevelop {
@@ -33,7 +32,7 @@ namespace KDevelop {
 /**
  * Proxy model adding a placeholder item for new entries
  *
- * This is mostly a KIdentityProxyModel, with one additional row added at the end
+ * This is mostly a QIdentityProxyModel, with one additional row added at the end
  *
  * Example use:
  *
@@ -61,7 +60,7 @@ namespace KDevelop {
  * @note WARNING: This implementation is only suitable for flat models
  * It will fall apart when you use a tree model as source
  */
-class KDEVPLATFORMUTIL_EXPORT PlaceholderItemProxyModel : public KIdentityProxyModel
+class KDEVPLATFORMUTIL_EXPORT PlaceholderItemProxyModel : public QIdentityProxyModel
 {
     Q_OBJECT
 

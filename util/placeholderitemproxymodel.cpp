@@ -51,7 +51,7 @@ struct PlaceholderItemProxyModel::Private
 };
 
 PlaceholderItemProxyModel::PlaceholderItemProxyModel(QObject* parent)
-    : KIdentityProxyModel(parent)
+    : QIdentityProxyModel(parent)
     , d(new Private(this))
 {}
 
@@ -88,12 +88,12 @@ Qt::ItemFlags PlaceholderItemProxyModel::flags(const QModelIndex& index) const
         return flags;
     }
 
-    return KIdentityProxyModel::flags(index);
+    return QIdentityProxyModel::flags(index);
 }
 
 void PlaceholderItemProxyModel::setSourceModel(QAbstractItemModel* sourceModel)
 {
-    KIdentityProxyModel::setSourceModel(sourceModel);
+    QIdentityProxyModel::setSourceModel(sourceModel);
     // TODO: Listen to layoutDataChanged signals?
 }
 
@@ -123,7 +123,7 @@ QVariant PlaceholderItemProxyModel::data(const QModelIndex& proxyIndex, int role
             return QVariant();
         }
     }
-    return KIdentityProxyModel::data(proxyIndex, role);
+    return QIdentityProxyModel::data(proxyIndex, role);
 }
 
 QModelIndex PlaceholderItemProxyModel::parent(const QModelIndex& child) const
@@ -132,7 +132,7 @@ QModelIndex PlaceholderItemProxyModel::parent(const QModelIndex& child) const
         return QModelIndex();
     }
 
-    return KIdentityProxyModel::parent(child);
+    return QIdentityProxyModel::parent(child);
 }
 
 QModelIndex PlaceholderItemProxyModel::buddy(const QModelIndex& index) const
@@ -140,7 +140,7 @@ QModelIndex PlaceholderItemProxyModel::buddy(const QModelIndex& index) const
     if (d->isPlaceholderRow(index)) {
         return index;
     }
-    return KIdentityProxyModel::buddy(index);
+    return QIdentityProxyModel::buddy(index);
 }
 
 QModelIndex PlaceholderItemProxyModel::mapToSource(const QModelIndex& proxyIndex) const
@@ -148,7 +148,7 @@ QModelIndex PlaceholderItemProxyModel::mapToSource(const QModelIndex& proxyIndex
     if (d->isPlaceholderRow(proxyIndex)) {
         return QModelIndex();
     }
-    return KIdentityProxyModel::mapToSource(proxyIndex);
+    return QIdentityProxyModel::mapToSource(proxyIndex);
 }
 
 bool PlaceholderItemProxyModel::setData(const QModelIndex& index, const QVariant& value, int role)
@@ -169,7 +169,7 @@ bool PlaceholderItemProxyModel::setData(const QModelIndex& index, const QVariant
         emit dataInserted(column, value);
         return true;
     }
-    return KIdentityProxyModel::setData(index, value, role);
+    return QIdentityProxyModel::setData(index, value, role);
 }
 
 QModelIndex PlaceholderItemProxyModel::index(int row, int column, const QModelIndex& parent) const
@@ -181,7 +181,7 @@ QModelIndex PlaceholderItemProxyModel::index(int row, int column, const QModelIn
     if (isPlaceHolderRow) {
         return createIndex(row, column);
     }
-    return KIdentityProxyModel::index(row, column, parent);
+    return QIdentityProxyModel::index(row, column, parent);
 }
 
 bool PlaceholderItemProxyModel::validateRow(const QModelIndex& index, const QVariant& value) const
