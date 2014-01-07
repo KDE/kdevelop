@@ -53,7 +53,7 @@ set( ccsettings_cfg_UI
 qt5_wrap_ui( ccsettings_cfg_SRCS ${ccsettings_cfg_UI} )
 kconfig_add_kcfg_files( ccsettings_cfg_SRCS ccconfig.kcfgc )
 add_library( kcm_kdev_ccsettings MODULE ${ccsettings_cfg_SRCS} )
-target_link_libraries( kcm_kdev_ccsettings ${KDE4_KCMUTILS_LIBS} ${KDE4_KDEUI_LIBS} kdevplatforminterfaces kdevplatformshell ${KDE4_KTEXTEDITOR_LIBS})
+target_link_libraries( kcm_kdev_ccsettings ${KDE4_KCMUTILS_LIBS} ${KDE4_KDEUI_LIBS} kdevplatforminterfaces kdevplatformshell KF5::TextEditor)
 
 ########### Project Configuration
 
@@ -100,7 +100,7 @@ set(kcm_kdevsourceformattersettings_UI
 qt5_wrap_ui(kcm_kdevsourceformattersettings_SRCS ${kcm_kdevsourceformattersettings_UI} )
 add_library(kcm_kdevsourceformattersettings MODULE ${kcm_kdevsourceformattersettings_SRCS})
 target_link_libraries(kcm_kdevsourceformattersettings
-    ${KDE4_KDEUI_LIBS} ${KDE4_KTEXTEDITOR_LIBS}
+    ${KDE4_KDEUI_LIBS} KF5::TextEditor
     ${KDE4_KPARTS_LIBS} kdevplatformshell kdevplatformutil kdevplatformlanguage)
 
 install(TARGETS  DESTINATION ${PLUGIN_INSTALL_DIR})

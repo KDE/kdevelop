@@ -143,7 +143,7 @@ target_link_libraries(kdevplatformlanguage LINK_PUBLIC
 target_link_libraries(kdevplatformlanguage LINK_PRIVATE
         ${KDE4_KDE4SUPPORT_LIBS}
         ${KDE4_KPARTS_LIBS}
-        ${KDE4_KTEXTEDITOR_LIBS}
+        KF5::TextEditor
         ${KDE4_THREADWEAVER_LIBRARIES}
         ${KDE4_KNEWSTUFF3_LIBS}
         kdevplatformutil

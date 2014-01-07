@@ -53,6 +53,6 @@ class TestItemRepositoryRegistryDeferredDeletion : public QObject {
     }
 };
 
-#include "test_itemrepositorymanagement_deferred.moc"
+#include "test_itemrepositoryregistry_deferred.moc"
 
 QTEST_MAIN(TestItemRepositoryRegistryDeferredDeletion)

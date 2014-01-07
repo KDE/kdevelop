@@ -19,7 +19,7 @@ qt5_wrap_ui(kdevexternalscript_PART_SRCS ${kdevexternalscript_PART_UI})
 add_library(kdevexternalscript MODULE ${kdevexternalscript_PART_SRCS})
 
 target_link_libraries(kdevexternalscript
-    ${KDE4_KTEXTEDITOR_LIBS} ${KDE4_KIO_LIBS} ${KDE4_KPARTS_LIBS} ${KDE4_KNEWSTUFF3_LIBS}
+    KF5::TextEditor ${KDE4_KIO_LIBS} ${KDE4_KPARTS_LIBS} ${KDE4_KNEWSTUFF3_LIBS}
     kdevplatformlanguage kdevplatforminterfaces kdevplatformproject
     kdevplatformutil kdevplatformoutputview
 )

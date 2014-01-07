@@ -450,4 +450,4 @@ QString CodeCompletionModel::filterString(KTextEditor::View* view, const KTextEd
 
 }
 
-#include "codecompletionmodel.moc"
+#include "moc_codecompletionmodel.cpp"

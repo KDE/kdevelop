@@ -46,6 +46,6 @@ class TestItemRepositoryRegistryAutomaticDeletion : public QObject {
     }
 };
 
-#include "test_itemrepositorymanagement_automatic.moc"
+#include "test_itemrepositoryregistry_automatic.moc"
 
 QTEST_MAIN(TestItemRepositoryRegistryAutomaticDeletion)

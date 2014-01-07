@@ -19,7 +19,7 @@ set(itemrepositorytest_SRCS test_itemrepository.cpp)
 
 add_executable(itemrepositorytest ${itemrepositorytest_SRCS})
 ecm_mark_as_test(itemrepositorytest)
-target_link_libraries(itemrepositorytest ${KDE4_KDECORE_LIBS} ${KDE4_KTEXTEDITOR_LIBRARY}
+target_link_libraries(itemrepositorytest ${KDE4_KDECORE_LIBS} KF5::TextEditor
     ${QT_QTTEST_LIBRARY} kdevplatformlanguage ${KDEVPLATFORM_TESTS_LIBRARIES})
 
 ########### next target ###############

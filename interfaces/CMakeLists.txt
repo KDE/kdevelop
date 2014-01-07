@@ -54,7 +54,7 @@ configure_file(ipluginversion.h.in ${CMAKE_CURRENT_BINARY_DIR}/ipluginversion.h)
 add_library(kdevplatforminterfaces SHARED ${kdevplatforminterfaces_LIB_SRCS})
 target_link_libraries(kdevplatforminterfaces LINK_PUBLIC
     ${KDE4_KPARTS_LIBS}
-    ${KDE4_KTEXTEDITOR_LIBS}
+    KF5::TextEditor
 )
 target_link_libraries(kdevplatforminterfaces LINK_PRIVATE
     ${KDE4_KNOTIFYCONFIG_LIBS}

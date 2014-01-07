@@ -88,7 +88,7 @@ set(kdevplatformshell_LIB_SRCS
 # Check if KTE is new enough to have the EditVIMode view mode flag
 try_compile( HAVE_EDITVIMODE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/testeditvimode.cpp
              CMAKE_FLAGS "-DINCLUDE_DIRECTORIES=${KDE4_KTEXTEDITOR_INCLUDES}"
-             LINK_LIBRARIES ${KDE4_KTEXTEDITOR_LIBS} )
+             LINK_LIBRARIES KF5::TextEditor )
 if(HAVE_EDITVIMODE)
     add_definitions("-DKTEXTEDITOR_HAS_VIMODE=1")
 endif(HAVE_EDITVIMODE)
@@ -113,7 +113,7 @@ target_link_libraries(kdevplatformshell LINK_PRIVATE
     ${KDE4_KCMUTILS_LIBS}
     ${KDE4_KPARTS_LIBS}
     ${KDE4_KNOTIFYCONFIG_LIBS}
-    ${KDE4_KTEXTEDITOR_LIBS}
+    KF5::TextEditor
     ${KDE4_THREADWEAVER_LIBRARIES}
     ${KDE4_KROSSCORE_LIBS}
     kdevplatforminterfaces

@@ -29,7 +29,6 @@
 
 #include <kurl.h>
 #include <kmimetype.h>
-#include <KTextEditor/ContainerInterface>
 #include <KSharedConfig>
 
 #include "core.h"
@@ -53,11 +52,10 @@ Q_DECLARE_METATYPE(KSharedConfig::Ptr)
 namespace KDevelop
 {
 
-class KDEVPLATFORMSHELL_EXPORT PartController : public IPartController, public KTextEditor::MdiContainer
+class KDEVPLATFORMSHELL_EXPORT PartController : public IPartController
 {
     friend class CorePrivate;
     Q_OBJECT
-    Q_INTERFACES( KTextEditor::MdiContainer )
 
 public:
     PartController(Core *core, QWidget *toplevel);
@@ -84,7 +82,6 @@ public:
     bool isTextType( KMimeType::Ptr mimeType );
 
 
-    //KTextEditor::MdiContainer implementation
     virtual void setActiveView( KTextEditor::View * view );
     virtual KTextEditor::View * activeView();
     virtual KTextEditor::Document * createDocument();

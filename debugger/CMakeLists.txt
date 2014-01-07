@@ -30,7 +30,7 @@ target_link_libraries(kdevplatformdebugger LINK_PUBLIC
 target_link_libraries(kdevplatformdebugger LINK_PRIVATE
     ${QT_QTCORE_LIBRARY}
     ${KDE4_KDEUI_LIBS}
-    ${KDE4_KTEXTEDITOR_LIBS}
+    KF5::TextEditor
 )
 
 set_target_properties(kdevplatformdebugger PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})

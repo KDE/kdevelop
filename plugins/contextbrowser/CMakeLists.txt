@@ -11,7 +11,7 @@ set(kdevcontextbrowser_PART_SRCS
 )
 
 add_library(kdevcontextbrowser MODULE ${kdevcontextbrowser_PART_SRCS})
-target_link_libraries(kdevcontextbrowser kdevplatforminterfaces kdevplatformutil kdevplatformlanguage ${KDE4_KDEUI_LIBS} ${KDE4_KTEXTEDITOR_LIBS} ${KDE4_KPARTS_LIBS})
+target_link_libraries(kdevcontextbrowser kdevplatforminterfaces kdevplatformutil kdevplatformlanguage ${KDE4_KDEUI_LIBS} KF5::TextEditor ${KDE4_KPARTS_LIBS})
 
 install(TARGETS kdevcontextbrowser DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES kdevcontextbrowser.rc DESTINATION ${DATA_INSTALL_DIR}/kdevcontextbrowser)

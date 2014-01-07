@@ -26,7 +26,6 @@
 #include <QtCore/QPair>
 #include <QtCore/QMap>
 #include <QtCore/QPointer>
-#include <KDE/KTextEditor/CodeCompletionModel>
 #include <KDE/KSharedPtr>
 
 #include "../duchain/duchainpointer.h"
@@ -34,6 +33,7 @@
 #include "codecompletioncontext.h"
 #include "codecompletionitem.h"
 #include <interfaces/icompletionsettings.h>
+#include <ktexteditor/codecompletionmodel.h>
 #include <ktexteditor/codecompletionmodelcontrollerinterface.h>
 #include <kdeversion.h>
 
@@ -49,10 +49,10 @@ class CodeCompletionWorker;
 class CompletionWorkerThread;
 
 class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::CodeCompletionModel2
-, public KTextEditor::CodeCompletionModelControllerInterface3
+, public KTextEditor::CodeCompletionModelControllerInterface
 {
   Q_OBJECT
-  Q_INTERFACES(KTextEditor::CodeCompletionModelControllerInterface3)
+  Q_INTERFACES(KTextEditor::CodeCompletionModelControllerInterface)
 
   public:
     CodeCompletionModel(QObject* parent);
