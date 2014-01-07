@@ -124,7 +124,15 @@ add_subdirectory(vcs)
 add_subdirectory(pics)
 #ecm_optional_add_subdirectory(doc)
 add_subdirectory(debugger)
+
+find_package(Qt5WebKitWidgets)
+set_package_properties(Qt5WebKitWidgets PROPERTIES
+    PURPOSE "Qt5 WebkitWidgets libraries for enabling the documentation view"
+    URL "http://www.qt-project.org"
+    TYPE OPTIONAL)
+if (Qt5WebkitWidgets_FOUND)
 add_subdirectory(documentation)
+endif()
 if (Grantlee_FOUND)
 add_subdirectory(template)
 endif()
