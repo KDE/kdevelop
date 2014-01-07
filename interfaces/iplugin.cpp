@@ -81,6 +81,8 @@ public:
     ICore *core;
     KIconLoader* iconLoader;
     QStringList m_extensions;
+    // TODO KF5: Get rid off KComponentData
+    KComponentData m_componentData;
 };
 
 IPlugin::IPlugin( const KComponentData &instance, QObject *parent )
@@ -94,7 +96,10 @@ IPlugin::IPlugin( const KComponentData &instance, QObject *parent )
     // This is the only way to pass the Core pointer to the plugin during its
     // creation so plugins have access to ICore during their creation.
     d->core = static_cast<KDevelop::ICore*>(parent);
-    setComponentData( instance );
+
+    // TODO KF5: Get rid off this, port away from KComponentData
+    setComponentName(instance.componentName(), instance.componentName());
+    d->m_componentData = instance;
 
     foreach (KMainWindow* mw, KMainWindow::memberList()) {
         KXmlGuiWindow* guiWindow = qobject_cast<KXmlGuiWindow*>(mw);
@@ -127,7 +132,7 @@ void IPlugin::unload()
 KIconLoader *IPlugin::iconLoader() const
 {
     if ( d->iconLoader == 0 ) {
-        d->iconLoader = new KIconLoader( componentData().componentName(), componentData().dirs() );
+        d->iconLoader = new KIconLoader(d->m_componentData.componentName());
         d->iconLoader->addAppDir( "kdevelop" );
         connect(KGlobalSettings::self(), SIGNAL(iconChanged(int)),
                 this, SLOT(newIconLoader()));
@@ -139,7 +144,7 @@ KIconLoader *IPlugin::iconLoader() const
 void IPlugin::newIconLoader() const
 {
     if (d->iconLoader) {
-        d->iconLoader->reconfigure( componentData().componentName(), componentData().dirs() );
+        d->iconLoader->reconfigure(d->m_componentData.componentName());
     }
 }
 
@@ -172,7 +177,8 @@ void KDevelop::IPlugin::initializeGuiState()
 class CustomXmlGUIClient : public KXMLGUIClient {
     public:
         CustomXmlGUIClient(const KComponentData& data) {
-            setComponentData(data);
+            // TODO KF5: Get rid off this
+            setComponentName(data.componentName(), data.componentName());
         }
         void setXmlFile(QString file) {
             KXMLGUIClient::setXMLFile(file);
@@ -181,7 +187,7 @@ class CustomXmlGUIClient : public KXMLGUIClient {
 
 KXMLGUIClient* KDevelop::IPlugin::createGUIForMainWindow(Sublime::MainWindow* window)
 {
-    CustomXmlGUIClient* ret = new CustomXmlGUIClient(componentData());
+    CustomXmlGUIClient* ret = new CustomXmlGUIClient(d->m_componentData);
     QString file;
     createActionsForMainWindow(window, file, *ret->actionCollection());
 

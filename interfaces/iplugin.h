@@ -30,6 +30,7 @@
 #include <QtCore/QPair>
 #include "interfacesexport.h"
 
+class KComponentData;
 class KIconLoader;
 class QAction;
 
