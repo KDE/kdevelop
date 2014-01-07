@@ -22,7 +22,7 @@
 #include <QWidget>
 
 #include <KTextEdit>
-#include <KMimeType>
+#include <kio/global.h>
 
 #include <kdebug.h>
 
@@ -80,7 +80,7 @@ QString UrlDocument::documentSpecifier() const
 
 QIcon UrlDocument::defaultIcon() const
 {
-    return QIcon::fromTheme(KMimeType::iconNameForUrl(d->url));
+    return QIcon::fromTheme(KIO::iconNameForUrl(d->url));
 }
 
 }
