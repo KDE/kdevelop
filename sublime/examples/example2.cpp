@@ -16,7 +16,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#include <kaboutdata.h>
+#include <k4aboutdata.h>
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
@@ -31,8 +31,8 @@
 int main(int argc, char **argv)
 {
     static const char description[] = "Sublime UI Library: Splitting Example";
-    KAboutData aboutData("example2", 0, ki18n("Example 2"),
-                         "1.0", ki18n(description), KAboutData::License_LGPL,
+    K4AboutData aboutData("example2", 0, ki18n("Example 2"),
+                         "1.0", ki18n(description), K4AboutData::License_LGPL,
                          ki18n("(c) 2007, Alexander Dymo"), KLocalizedString(), "http://www.kdevelop.org" );
 
     KCmdLineArgs::init(argc, argv, &aboutData);
