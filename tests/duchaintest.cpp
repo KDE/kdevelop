@@ -29,6 +29,8 @@
 #include <language/duchain/duchain.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/parsingenvironment.h>
+#include <language/backgroundparser/backgroundparser.h>
+#include <interfaces/ilanguagecontroller.h>
 
 QTEST_KDEMAIN(DUChainTest, NoGUI);
 
@@ -73,6 +75,56 @@ void DUChainTest::testInclude()
     QCOMPARE(foo->uses().begin().key(), impl.url());
     QCOMPARE(foo->uses().begin()->size(), 1);
     QCOMPARE(foo->uses().begin()->first(), RangeInRevision(1, 20, 1, 23));
+}
+
+QByteArray createCode(const QByteArray& prefix, const int functions)
+{
+    QByteArray code;
+    code += "#ifndef " + prefix + "_H\n";
+    code += "#define " + prefix + "_H\n";
+    for (int i = 0; i < functions; ++i) {
+        code += "void myFunc_" + prefix + "(int arg1, char arg2, const char* arg3);\n";
+    }
+    code += "#endif\n";
+    return code;
+}
+
+void DUChainTest::testIncludeLocking()
+{
+    TestFile header1(createCode("Header1", 1000), "h");
+    TestFile header2(createCode("Header2", 1000), "h");
+    TestFile header3(createCode("Header3", 1000), "h");
+
+    ICore::self()->languageController()->backgroundParser()->setThreadCount(3);
+
+    TestFile impl1("#include \"" + header1.url().byteArray() + "\"\n"
+                   "#include \"" + header2.url().byteArray() + "\"\n"
+                   "#include \"" + header3.url().byteArray() + "\"\n"
+                   "int main() { return 0; }", "cpp");
+
+    TestFile impl2("#include \"" + header2.url().byteArray() + "\"\n"
+                   "#include \"" + header1.url().byteArray() + "\"\n"
+                   "#include \"" + header3.url().byteArray() + "\"\n"
+                   "int main() { return 0; }", "cpp");
+
+    TestFile impl3("#include \"" + header3.url().byteArray() + "\"\n"
+                   "#include \"" + header1.url().byteArray() + "\"\n"
+                   "#include \"" + header2.url().byteArray() + "\"\n"
+                   "int main() { return 0; }", "cpp");
+
+    impl1.parse(TopDUContext::AllDeclarationsContextsAndUses);
+    impl2.parse(TopDUContext::AllDeclarationsContextsAndUses);
+    impl3.parse(TopDUContext::AllDeclarationsContextsAndUses);
+
+    QEXPECT_FAIL("", "parse job deadlocks due to UrlParseLock usage", Abort);
+    QVERIFY(impl1.waitForParsed(5000));
+    QVERIFY(impl2.waitForParsed(5000));
+    QVERIFY(impl3.waitForParsed(5000));
+
+    DUChainReadLocker lock;
+    QVERIFY(DUChain::self()->chainForDocument(header1.url()));
+    QVERIFY(DUChain::self()->chainForDocument(header2.url()));
+    QVERIFY(DUChain::self()->chainForDocument(header3.url()));
 }
 
 void DUChainTest::testReparse()
