@@ -43,6 +43,8 @@
 
 #include <klocale.h>
 
+#include <util/autoorientedsplitter.h>
+
 #include <interfaces/icore.h>
 #include <interfaces/idebugcontroller.h>
 #include <debugger/interfaces/idebugsession.h>
@@ -134,7 +136,7 @@ DisassembleWidget::DisassembleWidget(CppDebuggerPlugin* plugin, QWidget *parent)
         lower_(0),
         upper_(0),
         address_(0),
-        m_splitter(new QSplitter(this))
+        m_splitter(new KDevelop::AutoOrientedSplitter(this))
 {
         QVBoxLayout* topLayout = new QVBoxLayout(this);
     
