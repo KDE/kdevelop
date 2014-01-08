@@ -54,7 +54,7 @@ class PatchReviewPlugin : public KDevelop::IPlugin, public KDevelop::IPatchRevie
     Q_INTERFACES( KDevelop::IPatchReview )
 
 public :
-        PatchReviewPlugin( QObject *parent, const QVariantList & = QVariantList() );
+    PatchReviewPlugin( QObject *parent, const QVariantList & = QVariantList() );
     ~PatchReviewPlugin();
     virtual void unload();
 
@@ -77,6 +77,7 @@ public :
     void finishReview( QList< KUrl > selection );
 
     KUrl urlForFileModel( const Diff2::DiffModel* model );
+    QAction* finishReviewAction() const { return m_finishReview; }
 
 Q_SIGNALS:
     void startingNewReview();
@@ -120,6 +121,7 @@ private:
     QTimer* m_updateKompareTimer;
 
     PatchReviewToolViewFactory* m_factory;
+    QAction* m_finishReview;
 
     #if 0
     void determineState();

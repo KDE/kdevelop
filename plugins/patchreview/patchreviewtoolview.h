@@ -64,7 +64,6 @@ private slots:
     void deselectAll();
     
     void fileItemChanged( QStandardItem* item );
-    void onAreaChange(Sublime::Area* area);
 
 private:
     virtual void resizeEvent(QResizeEvent*);
@@ -94,7 +93,6 @@ private:
     QPointer< QWidget > m_customWidget;
     QAction* m_selectAllAction;
     QAction* m_deselectAllAction;
-    QAction* m_finishReview;
     
     class PatchFilesModel* m_fileModel;
 public slots:

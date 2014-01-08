@@ -35,7 +35,6 @@
 #include <sublime/mainwindow.h>
 #include <KLineEdit>
 #include <KTextEditor/Document>
-#include <KActionCollection>
 #include <QMenu>
 #include <QFileInfo>
 
@@ -81,12 +80,7 @@ PatchReviewToolView::PatchReviewToolView( QWidget* parent, PatchReviewPlugin* pl
     m_resetCheckedUrls( true ),
     m_plugin( plugin )
 {
-    m_finishReview = new QAction(this);
-    m_finishReview->setIcon( KIcon( "dialog-ok" ) );
-    m_finishReview->setShortcut( Qt::CTRL|Qt::Key_Return );
-    connect( m_finishReview, SIGNAL(triggered(bool)), this, SLOT( finishReview() ) );
-    plugin->actionCollection()->addAction("commit_or_finish_review", m_finishReview);
-    ICore::self()->uiController()->activeArea()->addAction(m_finishReview);
+    connect( m_plugin->finishReviewAction(), SIGNAL(triggered(bool)), this, SLOT( finishReview() ) );
 
     connect( plugin, SIGNAL( patchChanged() ), SLOT( patchChanged() ) );
     connect( plugin, SIGNAL( startingNewReview() ), SLOT( startingNewReview() ) );
@@ -100,10 +94,8 @@ PatchReviewToolView::PatchReviewToolView( QWidget* parent, PatchReviewPlugin* pl
     patchChanged();
 }
 
-void PatchReviewToolView::onAreaChange(Sublime::Area* area)
 void PatchReviewToolView::resizeEvent(QResizeEvent* ev)
 {
-    m_finishReview->setEnabled(area->objectName() == "review");
     bool vertical = (width() < height());
     m_editPatch.buttonsLayout->setDirection(vertical ? QBoxLayout::TopToBottom : QBoxLayout::LeftToRight);
     m_editPatch.contentLayout->setDirection(vertical ? QBoxLayout::TopToBottom : QBoxLayout::LeftToRight);
@@ -125,7 +117,8 @@ void PatchReviewToolView::patchChanged() {
     kompareModelChanged();
 }
 
-PatchReviewToolView::~PatchReviewToolView() {
+PatchReviewToolView::~PatchReviewToolView()
+{
 }
 
 LocalPatchSource* PatchReviewToolView::GetLocalPatchSource() {
@@ -143,11 +136,6 @@ void PatchReviewToolView::fillEditFromPatch() {
 
     m_editPatch.cancelReview->setVisible( ipatch->canCancel() );
 
-    QString finishText = i18n( "Finish Review" );
-    if( !ipatch->finishReviewCustomText().isEmpty() )
-        finishText = ipatch->finishReviewCustomText();
-    kDebug() << "finish-text: " << finishText;
-    m_finishReview->setText( finishText );
     m_fileModel->setIsCheckbable( m_plugin->patch()->canSelectFiles() );
 
     if( m_customWidget ) {
@@ -206,7 +194,7 @@ void PatchReviewToolView::showEditDialog() {
     m_editPatch.cancelReview->setIcon( KIcon( "dialog-cancel" ) );
     m_editPatch.updateButton->setIcon( KIcon( "view-refresh" ) );
     m_editPatch.testsButton->setIcon( KIcon( "preflight-verifier" ) );
-    m_editPatch.finishReview->setDefaultAction(m_finishReview);
+    m_editPatch.finishReview->setDefaultAction(m_plugin->finishReviewAction());
 
     QMenu* exportMenu = new QMenu( m_editPatch.exportReview );
     StandardPatchExport* stdactions = new StandardPatchExport( m_plugin, this );

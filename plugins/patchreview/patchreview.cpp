@@ -57,6 +57,7 @@
 #include <shell/core.h>
 #include <ktexteditor/modificationinterface.h>
 #include <KIO/NetAccess>
+#include <KActionCollection>
 
 using namespace KDevelop;
 
@@ -488,6 +489,10 @@ void PatchReviewPlugin::setPatch( IPatchSource* patch ) {
 
         connect( m_patch, SIGNAL( patchChanged() ), this, SLOT( notifyPatchChanged() ) );
     }
+    QString finishText = i18n( "Finish Review" );
+    if( m_patch && !m_patch->finishReviewCustomText().isEmpty() )
+      finishText = m_patch->finishReviewCustomText();
+    m_finishReview->setText( finishText );
 
     notifyPatchChanged();
 }
@@ -509,7 +514,14 @@ PatchReviewPlugin::PatchReviewPlugin( QObject *parent, const QVariantList & )
     m_updateKompareTimer->setSingleShot( true );
     connect( m_updateKompareTimer, SIGNAL( timeout() ), this, SLOT( updateKompareModel() ) );
 
+    m_finishReview = new QAction(this);
+    m_finishReview->setIcon( KIcon( "dialog-ok" ) );
+    m_finishReview->setShortcut( Qt::CTRL|Qt::Key_Return );
+    actionCollection()->addAction("commit_or_finish_review", m_finishReview);
+    ICore::self()->uiController()->activeArea()->addAction(m_finishReview);
+
     setPatch( IPatchSource::Ptr( new LocalPatchSource ) );
+    areaChanged(ICore::self()->uiController()->activeArea());
 }
 
 void PatchReviewPlugin::documentClosed( IDocument* doc ) {
@@ -549,7 +561,9 @@ void PatchReviewPlugin::exporterSelected( QAction* action ) {
 
 void PatchReviewPlugin::areaChanged(Sublime::Area* area)
 {
-    if(area->objectName() != "review") {
+    bool reviewing = area->objectName() == "review";
+    m_finishReview->setEnabled(reviewing);
+    if(!reviewing) {
         closeReview();
     }
 }
