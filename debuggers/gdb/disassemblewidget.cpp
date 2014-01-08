@@ -236,7 +236,7 @@ void DisassembleWidget::currentSessionChanged(KDevelop::IDebugSession* s)
     if (session) {
         connect(session, SIGNAL(showStepInSource(KUrl,int,QString)),
                 SLOT(slotShowStepInSource(KUrl,int,QString)));
-        connect(session,SIGNAL(showStepInDisassemble(QString)),SLOT(update(QString)));
+        connect(session,SIGNAL(showStepInDisassemble(QString)),SLOT(updateState(QString)));
     }
 }
 
@@ -296,7 +296,7 @@ void DisassembleWidget::slotActivate(bool activate)
 void DisassembleWidget::slotShowStepInSource(const KUrl&, int,
         const QString& currentAddress)
 {
-    update(currentAddress);
+    updateState(currentAddress, false);
 }
 
 void DisassembleWidget::updateExecutionAddressHandler(const GDBMI::ResultRecord& r)
@@ -425,9 +425,11 @@ void SelectAddrDialog::setAddress ( const QString& address )
      m_ui.comboBox->setCurrentItem ( address, true );
 }
 
-void DisassembleWidget::update(const QString &address)
+void DisassembleWidget::updateState(const QString &address, bool activate)
 {
-    if (!active_) {
+    if (activate) {
+        emit requestRaise();
+    } else if (!active_) {
         return;
     }
 
