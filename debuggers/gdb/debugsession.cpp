@@ -754,21 +754,19 @@ void DebugSession::slotProgramStopped(const GDBMI::ResultRecord& r)
         // is implemented, we can't change thread id until we refresh
         // the entire list of threads -- otherwise we might set a thread
         // id that is not already in the list, and it will be upset.
-        
+
         if (r.hasField("frame")) {
             const GDBMI::Value& frame = r["frame"];
             QString file, line, addr;
-            
+
             if (frame.hasField("fullname")) file = frame["fullname"].literal();;
             if (frame.hasField("line"))     line = frame["line"].literal();
             if (frame.hasField("addr"))     addr = frame["addr"].literal();
-            
-            if (!file.isEmpty()) {
-                // gdb counts lines from 1 and we don't
-                setCurrentPosition(KUrl::fromLocalFile(file), line.toInt()-1, addr);
-                
-                updateState = true;
-            }
+
+            // gdb counts lines from 1 and we don't
+            setCurrentPosition(KUrl::fromLocalFile(file), line.toInt() - 1, addr);
+
+            updateState = true;
         }
    
         if (updateState) {
