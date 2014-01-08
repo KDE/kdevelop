@@ -91,12 +91,18 @@ PatchReviewToolView::PatchReviewToolView( QWidget* parent, PatchReviewPlugin* pl
     connect( plugin, SIGNAL( patchChanged() ), SLOT( patchChanged() ) );
     connect( plugin, SIGNAL( startingNewReview() ), SLOT( startingNewReview() ) );
     connect( ICore::self()->documentController(), SIGNAL( documentActivated( KDevelop::IDocument* ) ), this, SLOT( documentActivated( KDevelop::IDocument* ) ) );
+    connect(ICore::self()->uiController()->activeMainWindow(), SIGNAL(areaChanged(Sublime::Area*)), SLOT(onAreaChange(Sublime::Area*)));
 
     Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>( ICore::self()->uiController()->activeMainWindow() );
     connect(w, SIGNAL(areaChanged(Sublime::Area*)), m_plugin, SLOT(areaChanged(Sublime::Area*)));
 
     showEditDialog();
     patchChanged();
+}
+
+void PatchReviewToolView::onAreaChange(Sublime::Area* area)
+{
+    m_finishReview->setEnabled(area->objectName() == "review");
 }
 
 void PatchReviewToolView::startingNewReview()

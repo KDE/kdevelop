@@ -20,6 +20,7 @@
 #include <ui_patchreview.h>
 #include <interfaces/ipatchsource.h>
 
+namespace Sublime { class Area; }
 class QStandardItem;
 class KJob;
 namespace KDevelop {
@@ -65,6 +66,7 @@ private slots:
     void deselectAll();
     
     void fileItemChanged( QStandardItem* item );
+    void onAreaChange(Sublime::Area* area);
 
 private:
     void activate( const KUrl& url, KDevelop::IDocument* buddy = 0 ) const;
