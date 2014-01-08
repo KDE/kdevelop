@@ -255,6 +255,10 @@ struct DocumentControllerPrivate {
             }
             else if (!KIO::NetAccess::exists( url, KIO::NetAccess::SourceSide, ICore::self()->uiController()->activeMainWindow() ))
             {
+                //Don't create a new file if we are not in the code mode.
+                if (static_cast<KDevelop::MainWindow*>(ICore::self()->uiController()->activeMainWindow())->area()->objectName() != "code") {
+                    return 0;
+                }
                 // enfore text mime type in order to create a kate part editor which then can be used to create the file
                 // otherwise we could end up opening e.g. okteta which then crashes, see: https://bugs.kde.org/id=326434
                 mimeType = KMimeType::mimeType("text/plain");
