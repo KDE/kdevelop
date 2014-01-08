@@ -21,16 +21,14 @@
 #include <interfaces/ipatchsource.h>
 
 namespace Sublime { class Area; }
+namespace KDevelop { class IDocument; }
+namespace KParts { class Part; }
+
 class QStandardItem;
 class KJob;
-namespace KDevelop {
-class IDocument;
-}
-
+class PatchReviewPlugin;
 class LocalPatchSource;
 class QModelIndex;
-class PatchReviewPlugin;
-namespace KParts { class Part; }
 
 class PatchReviewToolView : public QWidget
 {
@@ -69,6 +67,8 @@ private slots:
     void onAreaChange(Sublime::Area* area);
 
 private:
+    virtual void resizeEvent(QResizeEvent*);
+
     void activate( const KUrl& url, KDevelop::IDocument* buddy = 0 ) const;
     
     void kompareModelChanged();

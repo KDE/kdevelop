@@ -101,8 +101,18 @@ PatchReviewToolView::PatchReviewToolView( QWidget* parent, PatchReviewPlugin* pl
 }
 
 void PatchReviewToolView::onAreaChange(Sublime::Area* area)
+void PatchReviewToolView::resizeEvent(QResizeEvent* ev)
 {
     m_finishReview->setEnabled(area->objectName() == "review");
+    bool vertical = (width() < height());
+    m_editPatch.buttonsLayout->setDirection(vertical ? QBoxLayout::TopToBottom : QBoxLayout::LeftToRight);
+    m_editPatch.contentLayout->setDirection(vertical ? QBoxLayout::TopToBottom : QBoxLayout::LeftToRight);
+    m_editPatch.buttonsSpacer->changeSize(vertical ? 0 : 40, 0, QSizePolicy::Fixed, QSizePolicy::Fixed);
+    QWidget::resizeEvent(ev);
+    if(m_customWidget) {
+        m_editPatch.contentLayout->removeWidget( m_customWidget );
+        m_editPatch.contentLayout->insertWidget(0, m_customWidget );
+    }
 }
 
 void PatchReviewToolView::startingNewReview()
@@ -143,12 +153,12 @@ void PatchReviewToolView::fillEditFromPatch() {
     if( m_customWidget ) {
         kDebug() << "removing custom widget";
         m_customWidget->hide();
-        m_editPatch.customWidgetsLayout->removeWidget( m_customWidget );
+        m_editPatch.contentLayout->removeWidget( m_customWidget );
     }
 
     m_customWidget = ipatch->customWidget();
     if( m_customWidget ) {
-        m_editPatch.customWidgetsLayout->insertWidget( 0, m_customWidget );
+        m_editPatch.contentLayout->insertWidget( 0, m_customWidget );
         m_customWidget->show();
         kDebug() << "got custom widget";
     }
