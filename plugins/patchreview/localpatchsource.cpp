@@ -18,11 +18,16 @@
 #include <klocale.h>
 #include <kprocess.h>
 #include <KIcon>
+#include <KLineEdit>
 #include <kshell.h>
+#include <QWidget>
+
+#include "ui_localpatchwidget.h"
 
 LocalPatchSource::LocalPatchSource()
     : m_applied(false)
     , m_depth(0)
+    , m_widget(new LocalPatchWidget(this, 0))
 {
 }
 
@@ -69,7 +74,7 @@ void LocalPatchSource::update()
             if ( !m_filename.isEmpty() ) {
                 QFile::remove( m_filename.toLocalFile() );
             }
-            m_filename = KUrl( filename );
+            m_filename = KUrl::fromLocalFile( filename );
             kDebug() << "success, diff: " << m_filename;
         }else{
             kWarning() << "PROBLEM";
@@ -78,5 +83,53 @@ void LocalPatchSource::update()
     }
 }
 
-#include "localpatchsource.moc"
+QWidget* LocalPatchSource::customWidget() const
+{
+    return m_widget;
+}
 
+LocalPatchWidget::LocalPatchWidget(LocalPatchSource* lpatch, QWidget* parent)
+    : QWidget(parent)
+    , m_lpatch(lpatch)
+    , m_ui(new Ui::LocalPatchWidget)
+{
+    m_ui->setupUi(this);
+    connect( m_ui->applied, SIGNAL( stateChanged( int ) ), SLOT( updatePatchFromEdit() ) );
+    connect( m_ui->filename, SIGNAL( textChanged( QString ) ), SLOT( updatePatchFromEdit() ) );
+
+    m_ui->baseDir->setMode( KFile::Directory );
+
+    connect( m_ui->command, SIGNAL( textChanged( QString ) ), this, SLOT( updatePatchFromEdit() ) );
+    //   connect( commandToFile, SIGNAL(clicked(bool)), this, SLOT(slotToFile()) );
+
+    connect( m_ui->filename->lineEdit(), SIGNAL( returnPressed() ), this, SLOT( updatePatchFromEdit() ) );
+    connect( m_ui->filename->lineEdit(), SIGNAL( editingFinished() ), this, SLOT( updatePatchFromEdit() ) );
+    connect( m_ui->filename, SIGNAL( urlSelected( KUrl ) ), this, SLOT( updatePatchFromEdit() ) );
+    connect( m_ui->command, SIGNAL( textChanged( QString ) ), this, SLOT( updatePatchFromEdit() ) );
+    //     connect( commandToFile, SIGNAL(clicked(bool)), m_plugin, SLOT(commandToFile()) );
+
+    connect(m_lpatch, SIGNAL(patchChanged()), SLOT(syncPatch()));
+}
+
+void LocalPatchWidget::syncPatch()
+{
+    m_ui->command->setText( m_lpatch->command());
+    m_ui->filename->setUrl( m_lpatch->file() );
+    m_ui->baseDir->setUrl( m_lpatch->baseDir() );
+    m_ui->applied->setCheckState( m_lpatch->isAlreadyApplied() ? Qt::Checked : Qt::Unchecked );
+
+    if ( m_lpatch->command().isEmpty() )
+        m_ui->tabWidget->setCurrentIndex( m_ui->tabWidget->indexOf( m_ui->fileTab ) );
+    else
+        m_ui->tabWidget->setCurrentIndex( m_ui->tabWidget->indexOf( m_ui->commandTab ) );
+}
+
+void LocalPatchWidget::updatePatchFromEdit()
+{
+    m_lpatch->setCommand(m_ui->command->text());
+    m_lpatch->setFilename(m_ui->filename->url());
+    m_lpatch->setBaseDir(m_ui->baseDir->url());
+    m_lpatch->setAlreadyApplied(m_ui->applied->checkState() == Qt::Checked );
+
+    emit m_lpatch->patchChanged();
+}

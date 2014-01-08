@@ -28,10 +28,7 @@ set(patchreview_PART_SRCS
     libdiff2/stringlistpair.cpp
 )
 
-set (patchreview_UI
-    patchreview.ui)
-
-kde4_add_ui_files(patchreview_PART_SRCS ${patchreview_UI} )
+kde4_add_ui_files(patchreview_PART_SRCS patchreview.ui localpatchwidget.ui)
 
 
 kde4_add_plugin(kdevpatchreview ${patchreview_PART_SRCS})

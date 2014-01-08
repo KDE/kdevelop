@@ -37,6 +37,7 @@
 #include <KTextEditor/Document>
 #include <KActionCollection>
 #include <QMenu>
+#include <QFileInfo>
 
 using namespace KDevelop;
 
@@ -119,37 +120,10 @@ LocalPatchSource* PatchReviewToolView::GetLocalPatchSource() {
     return dynamic_cast<LocalPatchSource*>( ips.data() );
 }
 
-void PatchReviewToolView::updatePatchFromEdit() {
-    LocalPatchSource* lpatch = GetLocalPatchSource();
-    if( !lpatch )
-        return;
-
-    lpatch->setCommand(m_editPatch.command->text());
-    lpatch->setFilename(m_editPatch.filename->url());
-    lpatch->setBaseDir(m_editPatch.baseDir->url());
-    lpatch->setAlreadyApplied( m_editPatch.applied->checkState() == Qt::Checked );
-
-    m_plugin->notifyPatchChanged();
-}
-
 void PatchReviewToolView::fillEditFromPatch() {
     IPatchSource::Ptr ipatch = m_plugin->patch();
     if ( !ipatch )
         return;
-
-    disconnect( m_editPatch.patchSelection, SIGNAL( currentIndexChanged( int ) ), this, SLOT( patchSelectionChanged( int ) ) );
-
-    m_editPatch.patchSelection->clear();
-    foreach( IPatchSource::Ptr patch, m_plugin->knownPatches() )
-    {
-        if( !patch )
-            continue;
-        m_editPatch.patchSelection->addItem( patch->icon(), patch->name() );
-        if( patch == ipatch )
-            m_editPatch.patchSelection->setCurrentIndex( m_editPatch.patchSelection->count()-1 );
-    }
-
-    connect( m_editPatch.patchSelection, SIGNAL( currentIndexChanged( int ) ), this, SLOT( patchSelectionChanged( int ) ) );
 
     m_editPatch.cancelReview->setVisible( ipatch->canCancel() );
 
@@ -188,28 +162,6 @@ void PatchReviewToolView::fillEditFromPatch() {
 
     m_editPatch.testsButton->setVisible(showTests);
     m_editPatch.testProgressBar->hide();
-
-    LocalPatchSource* lpatch = dynamic_cast<LocalPatchSource*>( ipatch.data() );
-    m_editPatch.localPatchOptions->setVisible( lpatch );
-    if( !lpatch )
-        return;
-
-    m_editPatch.command->setText( lpatch->command());
-    m_editPatch.filename->setUrl( lpatch->file() );
-    m_editPatch.baseDir->setUrl( lpatch->baseDir() );
-    m_editPatch.applied->setCheckState( lpatch->isAlreadyApplied() ? Qt::Checked : Qt::Unchecked );
-
-    if ( lpatch->command().isEmpty() )
-        m_editPatch.tabWidget->setCurrentIndex( m_editPatch.tabWidget->indexOf( m_editPatch.fileTab ) );
-    else
-        m_editPatch.tabWidget->setCurrentIndex( m_editPatch.tabWidget->indexOf( m_editPatch.commandTab ) );
-}
-
-void PatchReviewToolView::patchSelectionChanged( int selection ) {
-    m_fileModel->removeRows( 0, m_fileModel->rowCount() );
-    if( selection >= 0 && selection < m_plugin->knownPatches().size() ) {
-        m_plugin->setPatch( m_plugin->knownPatches()[selection] );
-    }
 }
 
 void PatchReviewToolView::slotAppliedChanged( int newState ) {
@@ -266,25 +218,7 @@ void PatchReviewToolView::showEditDialog() {
 
     //connect( this, SIGNAL(finished(int)), this, SLOT(slotEditDialogFinished(int)) );
 
-    connect( m_editPatch.applied, SIGNAL( stateChanged( int ) ), SLOT( updatePatchFromEdit() ) );
-    connect( m_editPatch.filename, SIGNAL( textChanged( QString ) ), SLOT( updatePatchFromEdit() ) );
-
-    m_editPatch.baseDir->setMode( KFile::Directory );
-
-    connect( m_editPatch.command, SIGNAL( textChanged( QString ) ), this, SLOT( updatePatchFromEdit() ) );
-//   connect( m_editPatch.commandToFile, SIGNAL(clicked(bool)), this, SLOT(slotToFile()) );
-
-    connect( m_editPatch.filename->lineEdit(), SIGNAL( returnPressed() ), this, SLOT( updatePatchFromEdit() ) );
-    connect( m_editPatch.filename->lineEdit(), SIGNAL( editingFinished() ), this, SLOT( updatePatchFromEdit() ) );
-    connect( m_editPatch.filename, SIGNAL( urlSelected( KUrl ) ), this, SLOT( updatePatchFromEdit() ) );
-    connect( m_editPatch.command, SIGNAL( textChanged( QString ) ), this, SLOT( updatePatchFromEdit() ) );
-//     connect( m_editPatch.commandToFile, SIGNAL(clicked(bool)), m_plugin, SLOT(commandToFile()) );
-
-    connect( m_editPatch.patchSelection, SIGNAL( currentIndexChanged( int ) ), this, SLOT( patchSelectionChanged( int ) ) );
-
     connect( m_editPatch.updateButton, SIGNAL( clicked( bool ) ), m_plugin, SLOT( forceUpdate() ) );
-
-    connect( m_editPatch.showButton, SIGNAL( clicked( bool ) ), m_plugin, SLOT( updateReview()) );
 
     connect( m_editPatch.testsButton, SIGNAL( clicked( bool ) ), this, SLOT( runTests() ) );
     

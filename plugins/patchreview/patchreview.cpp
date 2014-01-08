@@ -309,25 +309,13 @@ PatchReviewPlugin::~PatchReviewPlugin() {
     delete m_patch;
 }
 
-void PatchReviewPlugin::registerPatch( IPatchSource::Ptr patch ) {
-    if( !m_knownPatches.contains( patch ) ) {
-        m_knownPatches << patch;
-        connect( patch, SIGNAL( destroyed( QObject* ) ), SLOT( clearPatch( QObject* ) ) );
-    }
-}
-
 void PatchReviewPlugin::clearPatch( QObject* _patch ) {
     kDebug() << "clearing patch" << _patch << "current:" << ( QObject* )m_patch;
     IPatchSource::Ptr patch( ( IPatchSource* )_patch );
-    m_knownPatches.removeAll( patch );
-    m_knownPatches.removeAll( 0 );
 
     if( patch == m_patch ) {
         kDebug() << "is current patch";
-        if( !m_knownPatches.empty() )
-            setPatch( m_knownPatches.first() );
-        else
-            setPatch( IPatchSource::Ptr( new LocalPatchSource ) );
+        setPatch( IPatchSource::Ptr( new LocalPatchSource ) );
     }
 }
 
@@ -497,7 +485,6 @@ void PatchReviewPlugin::setPatch( IPatchSource* patch ) {
 
     if( m_patch ) {
         kDebug() << "setting new patch" << patch->name() << "with file" << patch->file() << "basedir" << patch->baseDir();
-        registerPatch( patch );
 
         connect( m_patch, SIGNAL( patchChanged() ), this, SLOT( notifyPatchChanged() ) );
     }

@@ -55,8 +55,6 @@ private slots:
 
     void patchChanged();
 
-    void updatePatchFromEdit();
-
     void slotAppliedChanged( int newState );
 
     void finishReview();
@@ -99,7 +97,6 @@ private:
     class PatchFilesModel* m_fileModel;
 public slots:
     void documentActivated( KDevelop::IDocument* );
-    void patchSelectionChanged( int );
     void customContextMenuRequested(const QPoint& p);
     void testJobResult(KJob* job);
     void testJobPercent(KJob* job, ulong percent);

@@ -15,12 +15,16 @@
 #define KDEVPLATFORM_PLUGIN_LOCALPATCHSOURCE_H
 
 #include <QString>
+#include <QWidget>
 #include <KUrl>
 #include <interfaces/ipatchsource.h>
+
+namespace Ui { class LocalPatchWidget; }
 
 class LocalPatchSource : public KDevelop::IPatchSource
 {
     Q_OBJECT
+    friend class LocalPatchWidget;
 public:
     LocalPatchSource();
     virtual ~LocalPatchSource();
@@ -52,12 +56,30 @@ public:
 
     void setAlreadyApplied( bool applied ) { m_applied = applied; }
 
+    virtual QWidget* customWidget() const;
+
 private:
     KUrl m_filename;
     KUrl m_baseDir;
     QString m_command;
     bool m_applied;
     uint m_depth;
+    class LocalPatchWidget* m_widget;
+};
+
+class LocalPatchWidget : public QWidget
+{
+    Q_OBJECT
+public:
+    LocalPatchWidget(LocalPatchSource* lpatch, QWidget* parent);
+
+public slots:
+    void updatePatchFromEdit();
+    void syncPatch();
+
+private:
+    LocalPatchSource* m_lpatch;
+    Ui::LocalPatchWidget* m_ui;
 };
 
 #endif // KDEVPLATFORM_PLUGIN_LOCALPATCHSOURCE_H

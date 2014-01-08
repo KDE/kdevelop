@@ -64,10 +64,6 @@ public :
         return m_patch;
     }
 
-    QList< KDevelop::IPatchSource::Ptr > knownPatches() const {
-        return m_knownPatches;
-    }
-
     Diff2::KompareModelList* modelList() const {
         return m_modelList.get();
     }
@@ -75,8 +71,6 @@ public :
     void seekHunk( bool forwards, const KUrl& file = KUrl() );
 
     void setPatch( KDevelop::IPatchSource* patch );
-
-    void registerPatch( KDevelop::IPatchSource::Ptr patch );
 
     virtual void startReview( KDevelop::IPatchSource* patch, ReviewMode mode );
 
@@ -117,8 +111,6 @@ private:
     // Makes sure that this working set is active only in this area, and that its name starts with "review".
     // Returns false on failure (if the user disagreed).
     bool setUniqueEmptyWorkingSet();
-
-    QList< KDevelop::IPatchSource::Ptr > m_knownPatches;
 
     void addHighlighting( const KUrl& file, KDevelop::IDocument* document = 0 );
     void removeHighlighting( const KUrl& file = KUrl() );
