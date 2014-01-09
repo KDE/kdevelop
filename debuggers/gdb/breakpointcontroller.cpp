@@ -453,7 +453,7 @@ void BreakpointController::update(KDevelop::Breakpoint *breakpoint, const GDBMI:
                     if(b.hasField("fullname") && b.hasField("line")){
                         breakpoint->setLocation(KUrl(unquoteExpression(b["fullname"].literal())), b["line"].toInt()-1);
                     }else{
-                        kWarning() << "can't parse location" << location;
+                        breakpoint->setData(KDevelop::Breakpoint::LocationColumn, unquoteExpression(location));
                     }
                 }
             } else {

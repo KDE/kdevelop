@@ -1612,6 +1612,10 @@ void GdbTest::testCatchpoint()
     QCOMPARE(frames[1].file, KUrl(findSourceFile("debugeeexception.cpp")));
     QCOMPARE(frames[1].line, 22);
 
+    QCOMPARE(breakpoints()->rowCount(),2);
+    QVERIFY(!breakpoints()->breakpoint(0)->location().isEmpty());
+    QVERIFY(!breakpoints()->breakpoint(1)->location().isEmpty());
+
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
