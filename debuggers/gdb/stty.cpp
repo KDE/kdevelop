@@ -314,8 +314,11 @@ bool STTY::findExternalTTY(const QString& termApp)
         return false;
     }
 
-    for (int i = 0; i < 500; i++) {
+    for (int i = 0; i < 800; i++) {
         if (!file.bytesAvailable()) {
+            if (m_externalTerminal->state() == QProcess::NotRunning && m_externalTerminal->exitCode()) {
+                break;
+            }
             QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
             usleep(8000);
         } else {
@@ -330,7 +333,7 @@ bool STTY::findExternalTTY(const QString& termApp)
     file.close();
 
     if (ttySlave.isEmpty()) {
-        m_lastError = i18n("Can't get %1 tty/pty. Check that %1 is actually a terminal and that it accepts these arguments: -e sh -c \"tty> %2 ;exec<&-;exec>&-;while :;do sleep 3600;done\"", appName, file.fileName());
+        m_lastError = i18n("Can't receive %1 tty/pty. Check that %1 is actually a terminal and that it accepts these arguments: -e sh -c \"tty> %2 ;exec<&-;exec>&-;while :;do sleep 3600;done\"", appName, file.fileName());
     }
     return true;
 }
