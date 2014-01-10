@@ -1434,6 +1434,7 @@ void GdbTest::testRemoteDebugInsertBreakpoint()
 
     TestDebugSession *session = new TestDebugSession;
 
+    breakpoints()->addCodeBreakpoint(debugeeFileName, 29);
     breakpoints()->addCodeBreakpoint(debugeeFileName, 35);
 
     QTemporaryFile shellScript(QDir::currentPath()+"/shellscript");
