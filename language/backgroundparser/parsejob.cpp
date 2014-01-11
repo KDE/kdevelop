@@ -69,8 +69,8 @@ public:
     ParseJobPrivate(const IndexedString& url_, ILanguageSupport* languageSupport_) :
           url( url_ )
         , languageSupport( languageSupport_ )
+        , abortRequested( 0 )
         , hasReadContents( false )
-        , abortRequested( false )
         , aborted( false )
         , features( TopDUContext::VisibleDeclarationsAndContexts )
         , parsePriority( 0 )
@@ -87,12 +87,11 @@ public:
     IndexedString url;
     ILanguageSupport* languageSupport;
 
-    QMutex abortMutex;
-
     ParseJob::Contents contents;
 
+    QAtomicInt abortRequested;
+
     bool hasReadContents : 1;
-    volatile bool abortRequested : 1;
     bool aborted : 1;
     TopDUContext::Features features;
     QList<QWeakPointer<QObject> > notify;
@@ -201,16 +200,12 @@ ReferencedTopDUContext ParseJob::duChain() const
 
 bool ParseJob::abortRequested() const
 {
-    QMutexLocker lock(&d->abortMutex);
-
     return d->abortRequested;
 }
 
 void ParseJob::requestAbort()
 {
-    QMutexLocker lock(&d->abortMutex);
-
-    d->abortRequested = true;
+    d->abortRequested = 1;
 }
 
 void ParseJob::abortJob()
