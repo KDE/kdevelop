@@ -51,7 +51,7 @@ namespace {
 // TODO: investigate why this is required to find e.g. stddef.h
 KUrl::List defaultIncludes()
 {
-    static KUrl::List includePaths;
+    KUrl::List includePaths;
 
     if (!includePaths.isEmpty()) {
         return includePaths;
@@ -160,7 +160,8 @@ ClangParseJob::ClangParseJob(const IndexedString& url, ILanguageSupport* languag
         m_defines = bsm->defines(item);
     }
 
-    m_includes += defaultIncludes();
+    static const auto defaultIncludePaths = defaultIncludes();
+    m_includes += defaultIncludePaths;
 }
 
 ClangLanguageSupport* ClangParseJob::clang() const
