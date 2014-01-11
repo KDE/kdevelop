@@ -128,13 +128,15 @@ void DUChainTest::testIncludeLocking()
 
 void DUChainTest::testReparse()
 {
-    TestFile file("int main() { return 42; }", "cpp");
+    TestFile file("int main() { int i = 42; return i; }", "cpp");
     file.parse(TopDUContext::AllDeclarationsContextsAndUses);
 
     for (int i = 0; i < 2; ++i) {
         QVERIFY(file.waitForParsed(500));
         DUChainReadLocker lock;
         QCOMPARE(file.topContext()->localDeclarations().size(), 1);
+        QCOMPARE(file.topContext()->childContexts().size(), 1);
+        QCOMPARE(file.topContext()->childContexts().first()->localDeclarations().size(), 1);
         file.parse(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdateRecursive));
     }
 }
