@@ -332,11 +332,6 @@ bool Declaration::isAnonymous() const
 void Declaration::setContext(DUContext* context, bool anonymous)
 {
   Q_ASSERT(!context || context->topContext());
-  ///@todo re-enable. In C++ support we need a short window to put visible declarations into template contexts
-  if(!specialization().index()) {
-    //problem: specialization() doesn't work during destructor
-//     ENSURE_CAN_WRITE
-  }
 
   setInSymbolTable(false);
 
