@@ -28,6 +28,7 @@ struct ClientData
 {
     QTextStream* out;
     ParseSession* session;
+    uint depth;
 };
 
 CXChildVisitResult visit(CXCursor cursor, CXCursor /*parent*/, CXClientData d)
@@ -43,6 +44,8 @@ CXChildVisitResult visit(CXCursor cursor, CXCursor /*parent*/, CXClientData d)
         return CXChildVisit_Continue;
     }
 
+    (*data->out) << QByteArray(data->depth * 2, ' ');
+
     const auto kind = clang_getCursorKind(cursor);
     if (clang_isDeclaration(kind)) {
         (*data->out) << "decl: ";
@@ -50,20 +53,29 @@ CXChildVisitResult visit(CXCursor cursor, CXCursor /*parent*/, CXClientData d)
         auto referenced = clang_getCursorReferenced(cursor);
         if (kind != CXCursor_UnexposedExpr && !clang_equalCursors(clang_getNullCursor(), referenced)) {
             (*data->out) << "use: ";
-        } else {
-            return CXChildVisit_Recurse;
         }
     }
 
-    ClangString fileName(clang_getFileName(file));
-    ClangString displayName(clang_getCursorDisplayName(cursor));
     auto type = clang_getCursorType(cursor);
-    ClangString typeName(clang_getTypeSpelling(type));
+    if (type.kind != CXType_Invalid) {
+        ClangString typeName(clang_getTypeSpelling(type));
+        (*data->out) << typeName << ' ';
+    }
 
-    (*data->out) << typeName << ' ' << displayName << ' ' << ClangString(clang_getCursorKindSpelling(kind))
-                 << " in " << fileName << '@' << line << ':' << column << endl;
+    ClangString displayName(clang_getCursorDisplayName(cursor));
+    if (strlen(displayName)) {
+        (*data->out) << displayName << ' ';
+    }
 
-    return CXChildVisit_Recurse;
+    ClangString fileName(clang_getFileName(file));
+    ClangString kindName(clang_getCursorKindSpelling(kind));
+
+    (*data->out) << kindName << " in " << fileName << '@' << line << ':' << column << endl;
+
+    ClientData childData{data->out, data->session, data->depth + 1};
+    clang_visitChildren(cursor, &::visit, &childData);
+
+    return CXChildVisit_Continue;
 }
 
 }
@@ -78,6 +90,6 @@ void DebugVisitor::visit(CXTranslationUnit unit)
 {
     auto cursor = clang_getTranslationUnitCursor(unit);
     QTextStream out(stdout);
-    ClientData data {&out, m_session};
+    ClientData data {&out, m_session, 0};
     clang_visitChildren(cursor, &::visit, &data);
 }
