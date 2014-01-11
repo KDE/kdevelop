@@ -35,7 +35,6 @@
 #include <project/projectmodel.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 
-#include "duchain/parsesession.h"
 #include "duchain/buildduchainvisitor.h"
 #include "duchain/clangtypes.h"
 
@@ -121,18 +120,10 @@ KUrl::List defaultIncludes()
     return includePaths;
 }
 
-struct Import
-{
-    CXFile file;
-    CursorInRevision location;
-};
-
-using Imports = QMultiHash<CXFile, Import>;
-
 struct InclusionClientData
 {
     QMultiMap<unsigned, CXFile> includesByDepth;
-    Imports imports;
+    Imports* imports;
 };
 
 void visitInclusions(CXFile file, CXSourceLocation* stack, unsigned stackDepth, CXClientData d)
@@ -144,7 +135,7 @@ void visitInclusions(CXFile file, CXSourceLocation* stack, unsigned stackDepth, 
         CXFile parentFile;
         uint line, column;
         clang_getFileLocation(stack[0], &parentFile, &line, &column, nullptr);
-        data->imports.insert(parentFile, {file, CursorInRevision(line, column)});
+        data->imports->insert(parentFile, {file, CursorInRevision(line, column)});
     }
 }
 
@@ -155,55 +146,6 @@ ReferencedTopDUContext createTopContext(const IndexedString& path)
     ReferencedTopDUContext context = new TopDUContext(path, RangeInRevision(0, 0, INT_MAX, INT_MAX), file);
     DUChain::self()->addDocumentChain(context);
     return context;
-}
-
-void buildDUChain(CXTranslationUnit unit, CXFile file, IncludeFileContexts* includedFiles, const Imports& imports)
-{
-    if (includedFiles->contains(file)) {
-        return;
-    }
-
-    // prevent recursion
-    includedFiles->insert(file, {});
-
-    // ensure DUChain for imports are build properly
-    foreach(const auto& import, imports.values(file)) {
-        buildDUChain(unit, import.file, includedFiles, imports);
-    }
-
-    const IndexedString path(QDir::cleanPath(QString::fromUtf8(ClangString(clang_getFileName(file)))));
-
-    UrlParseLock urlLock(path);
-    ReferencedTopDUContext context;
-    {
-        DUChainWriteLocker lock;
-        bool created = false;
-        context = DUChain::self()->chainForDocument(path);
-        if (!context) {
-            context = createTopContext(path);
-            created = true;
-        }
-        includedFiles->insert(file, context);
-        if (!created && !context->parsingEnvironmentFile()->needsUpdate()) {
-            return;
-        }
-    }
-
-    {
-        DUChainWriteLocker lock;
-        foreach(const auto& import, imports.values(file)) {
-            Q_ASSERT(includedFiles->contains(import.file));
-            auto ctx = includedFiles->value(import.file);
-            if (!ctx) {
-                // happens for cyclic imports
-                continue;
-            }
-            context->addImportedParentContext(ctx, import.location);
-        }
-    }
-
-    BuildDUChainVisitor visitor;
-    visitor.visit(unit, file, *includedFiles);
 }
 
 }
@@ -230,7 +172,6 @@ void ClangParseJob::run()
 {
     QReadLocker parseLock(languageSupport()->language()->parseLock());
 
-    KSharedPtr<ParseSession> session;
     {
         UrlParseLock urlLock(document());
         if (abortRequested() || !isUpdateRequired(ParseSession::languageString())) {
@@ -240,7 +181,7 @@ void ClangParseJob::run()
             DUChainWriteLocker lock;
             const auto& context = DUChainUtils::standardContextForUrl(document().toUrl());
             if (context) {
-                session = KSharedPtr<ParseSession>::dynamicCast(context->ast());
+                m_session = KSharedPtr<ParseSession>::dynamicCast(context->ast());
                 // ensure that other threads don't access the TU while we parse it
                 context->setAst({});
             }
@@ -257,25 +198,24 @@ void ClangParseJob::run()
         return;
     }
 
-    if (!session || !session->reparse(contents().contents)) {
-        session = new ParseSession(document(), contents().contents, clang()->index(), m_includes, m_defines);
+    if (!m_session || !m_session->reparse(contents().contents)) {
+        m_session = new ParseSession(document(), contents().contents, clang()->index(), m_includes, m_defines);
     } else {
-        Q_ASSERT(session->url() == document());
-        Q_ASSERT(session->unit());
+        Q_ASSERT(m_session->url() == document());
+        Q_ASSERT(m_session->unit());
     }
 
-    if (abortRequested() || !session->unit()) {
+    if (abortRequested() || !m_session->unit()) {
         return;
     }
 
-    InclusionClientData includes;
-    clang_getInclusions(session->unit(), &::visitInclusions, &includes);
+    InclusionClientData includes{{}, &m_imports};
+    clang_getInclusions(m_session->unit(), &::visitInclusions, &includes);
 
     if (abortRequested()) {
         return;
     }
 
-    IncludeFileContexts includedFiles;
     auto it = includes.includesByDepth.constEnd();
     auto end = includes.includesByDepth.constBegin();
 
@@ -284,15 +224,15 @@ void ClangParseJob::run()
         if (abortRequested()) {
             return;
         }
-        buildDUChain(session->unit(), *it, &includedFiles, includes.imports);
+        buildDUChain(*it);
     }
 
     if (abortRequested()) {
         return;
     }
 
-    Q_ASSERT(includedFiles.contains(session->file()));
-    auto context = includedFiles[session->file()];
+    Q_ASSERT(m_includedFiles.contains(m_session->file()));
+    auto context = m_includedFiles[m_session->file()];
     setDuChain(context);
 
     {
@@ -303,9 +243,8 @@ void ClangParseJob::run()
             // the user
             // otherwise no editor component is open for this document and we can dispose
             // the TU to save memory
-            context->setAst(KSharedPtr<IAstContainer>::staticCast(session));
+            context->setAst(KSharedPtr<IAstContainer>::staticCast(m_session));
         }
-        context->setProblems(session->problems());
         context->setFeatures(minimumFeatures());
         ParsingEnvironmentFilePointer file = context->parsingEnvironmentFile();
         Q_ASSERT(file);
@@ -313,4 +252,54 @@ void ClangParseJob::run()
     }
 
     highlightDUChain();
+}
+
+void ClangParseJob::buildDUChain(CXFile file)
+{
+    if (m_includedFiles.contains(file)) {
+        return;
+    }
+
+    // prevent recursion
+    m_includedFiles.insert(file, {});
+
+    // ensure DUChain for imports are build properly
+    foreach(const auto& import, m_imports.values(file)) {
+        buildDUChain(import.file);
+    }
+
+    const IndexedString path(QDir::cleanPath(QString::fromUtf8(ClangString(clang_getFileName(file)))));
+
+    UrlParseLock urlLock(path);
+    ReferencedTopDUContext context;
+    {
+        DUChainWriteLocker lock;
+        bool created = false;
+        context = DUChain::self()->chainForDocument(path);
+        if (!context) {
+            context = createTopContext(path);
+            context->setProblems(m_session->problemsForFile(file));
+            created = true;
+        }
+        m_includedFiles.insert(file, context);
+        if (!created && !context->parsingEnvironmentFile()->needsUpdate()) {
+            return;
+        }
+    }
+
+    {
+        DUChainWriteLocker lock;
+        foreach(const auto& import, m_imports.values(file)) {
+            Q_ASSERT(m_includedFiles.contains(import.file));
+            auto ctx = m_includedFiles.value(import.file);
+            if (!ctx) {
+                // happens for cyclic imports
+                continue;
+            }
+            context->addImportedParentContext(ctx, import.location);
+        }
+    }
+
+    BuildDUChainVisitor visitor;
+    visitor.visit(m_session->unit(), file, m_includedFiles);
 }

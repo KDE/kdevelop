@@ -107,9 +107,51 @@ IndexedString ParseSession::url() const
     return m_url;
 }
 
-QList<ProblemPointer> ParseSession::problems() const
+QList<ProblemPointer> ParseSession::problemsForFile(CXFile file) const
 {
-    return m_problems;
+    QList<ProblemPointer> problems;
+    const uint diagnostics = clang_getNumDiagnostics(m_unit);
+    problems.reserve(diagnostics);
+    for (uint i = 0; i < diagnostics; ++i) {
+        auto diagnostic = clang_getDiagnostic(m_unit, i);
+
+        ClangLocation location = clang_getDiagnosticLocation(diagnostic);
+        CXFile diagnosticFile;
+        clang_getFileLocation(location, &diagnosticFile, nullptr, nullptr, nullptr);
+        if (diagnosticFile != file) {
+            continue;
+        }
+
+        ProblemPointer problem(new Problem);
+        switch (clang_getDiagnosticSeverity(diagnostic)) {
+            case CXDiagnostic_Fatal:
+            case CXDiagnostic_Error:
+                problem->setSeverity(ProblemData::Error);
+                break;
+            case CXDiagnostic_Warning:
+                problem->setSeverity(ProblemData::Warning);
+                break;
+            default:
+                problem->setSeverity(ProblemData::Hint);
+                break;
+        }
+        ClangString description(clang_getDiagnosticSpelling(diagnostic));
+        problem->setDescription(QString::fromUtf8(description));
+        DocumentRange docRange(m_url, SimpleRange(location, location));
+        const uint numRanges = clang_getDiagnosticNumRanges(diagnostic);
+        for (uint j = 0; j < numRanges; ++j) {
+            auto range = ClangRange(clang_getDiagnosticRange(diagnostic, j)).toSimpleRange();
+            if (range.start.line == docRange.start.line) {
+                docRange.start.column = qMin(range.start.column, docRange.start.column);
+                docRange.end.column = qMin(range.end.column, docRange.end.column);
+            }
+        }
+        problem->setFinalLocation(docRange);
+        problem->setSource(ProblemData::SemanticAnalysis);
+        problems << problem;
+        clang_disposeDiagnostic(diagnostic);
+    }
+    return problems;
 }
 
 CXTranslationUnit ParseSession::unit() const
@@ -146,47 +188,4 @@ void ParseSession::setUnit(CXTranslationUnit unit, const char* fileName)
 
     m_unit = unit;
     m_file = clang_getFile(m_unit, fileName);
-
-    const uint diagnostics = clang_getNumDiagnostics(m_unit);
-    m_problems.clear();
-    m_problems.reserve(diagnostics);
-    for (uint i = 0; i < diagnostics; ++i) {
-        auto diagnostic = clang_getDiagnostic(m_unit, i);
-
-        ClangLocation location = clang_getDiagnosticLocation(diagnostic);
-        CXFile diagnosticFile;
-        clang_getFileLocation(location, &diagnosticFile, nullptr, nullptr, nullptr);
-        if (diagnosticFile != m_file) {
-            continue;
-        }
-
-        ProblemPointer problem(new Problem);
-        switch (clang_getDiagnosticSeverity(diagnostic)) {
-            case CXDiagnostic_Fatal:
-            case CXDiagnostic_Error:
-                problem->setSeverity(ProblemData::Error);
-                break;
-            case CXDiagnostic_Warning:
-                problem->setSeverity(ProblemData::Warning);
-                break;
-            default:
-                problem->setSeverity(ProblemData::Hint);
-                break;
-        }
-        ClangString description(clang_getDiagnosticSpelling(diagnostic));
-        problem->setDescription(QString::fromUtf8(description));
-        DocumentRange docRange(m_url, SimpleRange(location, location));
-        const uint numRanges = clang_getDiagnosticNumRanges(diagnostic);
-        for (uint j = 0; j < numRanges; ++j) {
-            auto range = ClangRange(clang_getDiagnosticRange(diagnostic, j)).toSimpleRange();
-            if (range.start.line == docRange.start.line) {
-                docRange.start.column = qMin(range.start.column, docRange.start.column);
-                docRange.end.column = qMin(range.end.column, docRange.end.column);
-            }
-        }
-        problem->setFinalLocation(docRange);
-        problem->setSource(ProblemData::SemanticAnalysis);
-        m_problems << problem;
-        clang_disposeDiagnostic(diagnostic);
-    }
 }

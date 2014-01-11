@@ -60,7 +60,7 @@ public:
      */
     KDevelop::IndexedString url() const;
 
-    QList<KDevelop::ProblemPointer> problems() const;
+    QList<KDevelop::ProblemPointer> problemsForFile(CXFile file) const;
 
     CXTranslationUnit unit() const;
 
@@ -75,7 +75,6 @@ private:
     void setUnit(CXTranslationUnit unit, const char* fileName);
 
     KDevelop::IndexedString m_url;
-    QList<KDevelop::ProblemPointer> m_problems;
     CXTranslationUnit m_unit;
     CXFile m_file;
 

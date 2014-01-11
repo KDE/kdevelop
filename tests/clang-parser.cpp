@@ -75,9 +75,10 @@ private:
                 visitor.visit(m_session->unit());
             }
         }
-        if (!m_session->problems().isEmpty()) {
+        const auto problems = m_session->problemsForFile(m_session->file());
+        if (!problems.isEmpty()) {
             qerr << endl << "problems encountered during parsing:" << endl;
-            foreach(const ProblemPointer problem, m_session->problems()) {
+            foreach(const ProblemPointer problem, problems) {
                 qerr << problem->toString() << endl;
             }
         } else {

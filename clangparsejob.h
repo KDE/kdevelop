@@ -24,8 +24,20 @@
 #define CLANGLANG_CLANGPARSEJOB_H
 
 #include <language/backgroundparser/parsejob.h>
+#include <clang-c/Index.h>
+
+#include "duchain/parsesession.h"
+#include "duchain/includedfilecontexts.h"
 
 class ClangLanguageSupport;
+
+struct Import
+{
+    CXFile file;
+    KDevelop::CursorInRevision location;
+};
+
+using Imports = QMultiHash<CXFile, Import>;
 
 class ClangParseJob : public KDevelop::ParseJob
 {
@@ -39,8 +51,13 @@ protected:
     virtual void run();
 
 private:
+    void buildDUChain(CXFile file);
+
     KUrl::List m_includes;
     QHash<QString, QString> m_defines;
+    KSharedPtr<ParseSession> m_session;
+    IncludeFileContexts m_includedFiles;
+    Imports m_imports;
 };
 
 #endif // CLANGLANG_CLANGPARSEJOB_H
