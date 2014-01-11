@@ -116,7 +116,6 @@ void DUChainTest::testIncludeLocking()
     impl2.parse(TopDUContext::AllDeclarationsContextsAndUses);
     impl3.parse(TopDUContext::AllDeclarationsContextsAndUses);
 
-    QEXPECT_FAIL("", "parse job deadlocks due to UrlParseLock usage", Abort);
     QVERIFY(impl1.waitForParsed(5000));
     QVERIFY(impl2.waitForParsed(5000));
     QVERIFY(impl3.waitForParsed(5000));

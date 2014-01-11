@@ -25,12 +25,10 @@
 #include "duchainexport.h"
 #include "includedfilecontexts.h"
 
-class ParseSession;
-
 class KDEVCLANGDUCHAIN_EXPORT BuildDUChainVisitor
 {
 public:
-    void visit(ParseSession* session, const KDevelop::ReferencedTopDUContext& top, const IncludeFileContexts& includes);
+    void visit(CXTranslationUnit unit, CXFile file, const IncludeFileContexts& includes);
 };
 
 #endif // BUILDDUCHAINVISITOR_H

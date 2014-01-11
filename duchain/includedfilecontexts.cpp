@@ -37,8 +37,11 @@ DeclarationPointer findDeclaration(CXCursor cursor, const IncludeFileContexts& i
     }
     auto refCursor = CursorInRevision(ClangLocation(refLoc));
 
-    Q_ASSERT(includes.contains(file));
-    const auto& top = includes[file].topContext;
+    const auto& top = includes.value(file);
+    if (!top) {
+        // may happen for cyclic includes
+        return {};
+    }
 
     DUChainReadLocker lock;
     Q_ASSERT(top);

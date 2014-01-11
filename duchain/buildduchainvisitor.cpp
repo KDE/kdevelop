@@ -25,9 +25,6 @@
 #include "usebuilder.h"
 #include "typebuilder.h"
 #include "clangtypes.h"
-#include "parsesession.h"
-
-#include <language/backgroundparser/urlparselock.h>
 
 QDebug &operator<<(QDebug &dbg, CXCursor cursor)
 {
@@ -90,13 +87,7 @@ CXChildVisitResult visit(CXCursor cursor, CXCursor /*parent*/, CXClientData d)
     CXFile file;
     clang_getFileLocation(location, &file, nullptr, nullptr, nullptr);
     if (file != data->file) {
-        const auto& include = data->includeContexts.value(file);
-        if (!include.needsUpdate) {
-            return CXChildVisit_Continue;
-        } else {
-            data->file = file;
-            data->parent = include.topContext;
-        }
+        return CXChildVisit_Continue;
     }
 
     //Use to map cursor kinds to build profiles
@@ -145,9 +136,10 @@ CXChildVisitResult visit(CXCursor cursor, CXCursor /*parent*/, CXClientData d)
 
 }
 
-void BuildDUChainVisitor::visit(ParseSession* session, const ReferencedTopDUContext& top, const IncludeFileContexts& includes)
+void BuildDUChainVisitor::visit(CXTranslationUnit unit, CXFile file, const IncludeFileContexts& includes)
 {
-    ClientData data{top, includes, session->file()};
-    auto cursor = clang_getTranslationUnitCursor(session->unit());
+    Q_ASSERT(includes.contains(file));
+    ClientData data{includes[file], includes, file};
+    auto cursor = clang_getTranslationUnitCursor(unit);
     clang_visitChildren(cursor, &::visit, &data);
 }

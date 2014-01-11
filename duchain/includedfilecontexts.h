@@ -28,12 +28,7 @@
 
 #include <QHash>
 
-struct Include
-{
-    KDevelop::ReferencedTopDUContext topContext;
-    bool needsUpdate;
-};
-using IncludeFileContexts = QHash<CXFile, Include>;
+using IncludeFileContexts = QHash<CXFile, KDevelop::ReferencedTopDUContext>;
 
 KDevelop::DeclarationPointer findDeclaration(CXCursor cursor, const IncludeFileContexts& includes);
 
