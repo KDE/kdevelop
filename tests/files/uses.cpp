@@ -35,3 +35,18 @@ int main()
     SomeClass user = someClass;
     user.i = someClass.i = SomeNS::i;
 }
+
+class myClass
+{
+    /// "useCount" : 1
+    int pre_foo;
+
+    void foo()
+    {
+        pre_foo = 1;
+        post_foo = 1;
+    }
+
+    /// "useCount" : 1
+    int post_foo;
+};

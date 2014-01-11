@@ -47,14 +47,35 @@ struct ClientData
     DUContext* parent;
     const IncludeFileContexts& includeContexts;
     CXFile file;
+    QVector<CXCursor>* delayed;
 };
 
 CXChildVisitResult visit(CXCursor cursor, CXCursor /*parent*/, CXClientData d);
 
 CXChildVisitResult recurse(CXCursor cursor, ClientData* data, DUContext* context)
 {
-    ClientData childData{context, data->includeContexts, data->file};
-    clang_visitChildren(cursor, &::visit, &childData);
+    if (data->delayed) {
+        data->delayed->append(cursor);
+        return CXChildVisit_Continue;
+    }
+    if (context->type() == DUContext::Class) {
+        QVector<CXCursor> delayed;
+        ClientData delayedData{context, data->includeContexts, data->file, &delayed};
+        clang_visitChildren(cursor, &::visit, &delayedData);
+
+        ClientData childData{context, data->includeContexts, data->file, nullptr};
+        foreach(CXCursor child, delayed) {
+            auto v = visit(child, cursor, &childData);
+            if (v == CXChildVisit_Recurse) {
+                clang_visitChildren(child, &::visit, &childData);
+            } else if (v == CXChildVisit_Break) {
+                break;
+            }
+        }
+    } else {
+        ClientData childData{context, data->includeContexts, data->file, nullptr};
+        clang_visitChildren(cursor, &::visit, &childData);
+    }
     return CXChildVisit_Continue;
 }
 
@@ -139,7 +160,7 @@ CXChildVisitResult visit(CXCursor cursor, CXCursor /*parent*/, CXClientData d)
 void BuildDUChainVisitor::visit(CXTranslationUnit unit, CXFile file, const IncludeFileContexts& includes)
 {
     Q_ASSERT(includes.contains(file));
-    ClientData data{includes[file], includes, file};
+    ClientData data{includes[file], includes, file, nullptr};
     auto cursor = clang_getTranslationUnitCursor(unit);
     clang_visitChildren(cursor, &::visit, &data);
 }
