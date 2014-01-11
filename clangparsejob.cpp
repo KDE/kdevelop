@@ -171,7 +171,7 @@ void buildDUChain(CXTranslationUnit unit, CXFile file, IncludeFileContexts* incl
         buildDUChain(unit, import.file, includedFiles, imports);
     }
 
-    const IndexedString path(ClangString(clang_getFileName(file)));
+    const IndexedString path(QDir::cleanPath(QString::fromUtf8(ClangString(clang_getFileName(file)))));
 
     UrlParseLock urlLock(path);
     ReferencedTopDUContext context;
