@@ -178,7 +178,7 @@ void buildDUChain(CXTranslationUnit unit, CXFile file, IncludeFileContexts* incl
     {
         DUChainWriteLocker lock;
         bool created = false;
-        DUChain::self()->chainForDocument(path);
+        context = DUChain::self()->chainForDocument(path);
         if (!context) {
             context = createTopContext(path);
             created = true;
