@@ -278,12 +278,19 @@ void ClangParseJob::buildDUChain(CXFile file)
         context = DUChain::self()->chainForDocument(path);
         if (!context) {
             context = createTopContext(path);
+            context->setFeatures(minimumFeatures());
             context->setProblems(m_session->problemsForFile(file));
             created = true;
         }
         m_includedFiles.insert(file, context);
-        if (!created && !context->parsingEnvironmentFile()->needsUpdate()) {
-            return;
+        if (!created) {
+            if (!context->parsingEnvironmentFile()->needsUpdate()
+                && context->parsingEnvironmentFile()->featuresSatisfied(minimumFeatures()))
+            {
+                return;
+            }
+            /// FIXME: update existing data instead of killing it and adding it anew
+            context->cleanIfNotEncountered({});
         }
     }
 
