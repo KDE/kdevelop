@@ -9,6 +9,7 @@ Comment[fr]=Cppcheck est un outil qui vous aide à trouver des problèmes de syn
 Comment[nl]=Cppcheck is een hulpmiddel dat helpt u bij het vinden van problemen in de syntaxis in programma's. http://cppcheck.sf.net/
 Comment[pt]=O CppCheck é uma ferramenta que o ajuda a detectar problemas de sintaxe nos programas. http://cppcheck.sf.net/
 Comment[pt_BR]=O Cppcheck é uma ferramenta que auxilia a detecção de problemas de sintaxe nos programas. http://cppcheck.sf.net/
+Comment[sk]=CPPCheck je nástroj, ktorý vám pomôže nájsť problémy so syntaxou v programoch. http://cppcheck.sf.net/
 Comment[sv]=Cppcheck är ett verktyg som hjälper till att hitta syntaxproblem i program. http://cppcheck.sf.net/
 Comment[uk]=Cppcheck — це інструмент, що допомагатиме вам знаходити проблеми з синтаксичними конструкціями, що виникають у програмах. http://cppcheck.sf.net/
 Comment[x-test]=xxCppcheck is a tool that helps you find syntax problems in programs. http://cppcheck.sf.net/xx
