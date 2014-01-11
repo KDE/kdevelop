@@ -200,7 +200,8 @@ void ClangParseJob::run()
     }
 
     if (!m_session || !m_session->reparse(contents().contents)) {
-        m_session = new ParseSession(document(), contents().contents, clang()->index(), m_includes, m_defines);
+        m_session = new ParseSession(document(), contents().contents, clang()->index(), m_includes, m_defines,
+                                     (minimumFeatures() <= TopDUContext::VisibleDeclarationsAndContexts));
     } else {
         Q_ASSERT(m_session->url() == document());
         Q_ASSERT(m_session->unit());

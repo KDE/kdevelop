@@ -52,17 +52,21 @@ IndexedString ParseSession::languageString()
 }
 
 ParseSession::ParseSession(const IndexedString& url, const QByteArray& contents, ClangIndex* index,
-                           const KUrl::List& includes, const QHash<QString, QString>& defines)
+                           const KUrl::List& includes, const QHash<QString, QString>& defines,
+                           const bool skipFunctionBodies)
     : m_url(url)
     , m_unit(nullptr)
     , m_file(nullptr)
 {
-    static const unsigned int flags
+    unsigned int flags
         = CXTranslationUnit_CacheCompletionResults
         | CXTranslationUnit_PrecompiledPreamble
         | CXTranslationUnit_Incomplete
         | CXTranslationUnit_CXXChainedPCH
         | CXTranslationUnit_ForSerialization;
+    if (skipFunctionBodies) {
+        flags |= CXTranslationUnit_SkipFunctionBodies;
+    }
 
     QVector<const char*> args{ "-std=c++11", "-xc++" };
     // uses QByteArray as smart-pointer for const char* ownership

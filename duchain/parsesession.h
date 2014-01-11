@@ -52,7 +52,8 @@ public:
      * @param contents The contents of the document you want to parse.
      */
     ParseSession(const KDevelop::IndexedString& url, const QByteArray& contents, ClangIndex* index,
-                 const KUrl::List& includes = {}, const QHash<QString, QString>& defines = {});
+                 const KUrl::List& includes = {}, const QHash<QString, QString>& defines = {},
+                 bool skipFunctionBodies = false );
     ~ParseSession();
 
     /**
