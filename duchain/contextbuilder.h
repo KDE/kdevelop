@@ -43,6 +43,9 @@ DUContext *createContextCommon(CXCursor cursor, DUContext* parentContext)
     auto context = new DUContext(makeRange(cursor), parentContext);
     DUChainWriteLocker lock; //TODO: (..type..) constructor for DUContext?
     context->setType(type);
+    if (type == DUContext::Other) {
+        context->setInSymbolTable(false);
+    }
     return context;
 }
 
@@ -73,6 +76,9 @@ DUContext *build(CXCursor cursor, const Identifier& id, DUContext* parentContext
     DUChainWriteLocker lock; //TODO: (..type, id..) constructor for DUContext?
     context->setType(contextType(CK));
     context->setLocalScopeIdentifier(parentContext->localScopeIdentifier() + id);
+    if (context->type() == DUContext::Other) {
+        context->setInSymbolTable(false);
+    }
     return context;
 }
 
