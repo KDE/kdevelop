@@ -187,7 +187,9 @@ DeclarationTest(definition)
 DeclarationTest(declaration)
 {
   FunctionDefinition *def = dynamic_cast<FunctionDefinition*>(decl);
-  Declaration *defDecl = def->declaration(decl->topContext());
+  Declaration *defDecl = nullptr;
+  if (def)
+    defDecl = def->declaration(decl->topContext());
   return testObject(defDecl, value, "Definition's declaration");
 }
 ///JSON type: bool
@@ -216,6 +218,9 @@ DeclarationTest(defaultParameter)
 ///@returns stringified declaration
 DeclarationTest(toString)
 {
+  if (!decl) {
+    return "Invalid Declaration";
+  }
   return compareValues(decl->toString(), value, "Declaration's toString");
 }
 
@@ -223,6 +228,9 @@ DeclarationTest(toString)
 ///@returns stringified declaration
 DeclarationTest(range)
 {
+  if (!decl) {
+    return "Invalid Declaration";
+  }
   auto range = decl->range();
   QString string = QString("[(%1, %2), (%3, %4)]")
     .arg(range.start.line)
