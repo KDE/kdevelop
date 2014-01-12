@@ -14,7 +14,28 @@ int main()
  */
 class foo
 {
-
+    /// "EXPECT_FAIL" : { "isStatic" : "not a class-member-declaration yet" },
+    /// "isStatic" : true
+    static int m;
+    /// "EXPECT_FAIL" : { "isStatic" : "not a class-member-declaration yet" },
+    /// "isStatic" : false
+    int b;
+    /// "EXPECT_FAIL" : { "isStatic" : "not a class-member-declaration yet", "isVirtual" : "not a class-function yet" },
+    /// "isStatic" : false,
+    /// "isVirtual" : true
+    virtual void bla() {}
+    /// "EXPECT_FAIL" : { "isVirtual" : "not a class-function yet" },
+    /// "isStatic" : false,
+    /// "isVirtual" : true
+    virtual void bar();
+    /// "EXPECT_FAIL" : { "isStatic" : "not a class-member-declaration yet" },
+    /// "isStatic" : true,
+    /// "isVirtual" : false
+    static void bla2() {}
+    /// "EXPECT_FAIL" : { "isStatic" : "not a class-member-declaration yet" },
+    /// "isStatic" : true,
+    /// "isVirtual" : false
+    static void bar2();
 };
 
 /**
