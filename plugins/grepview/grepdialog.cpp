@@ -176,6 +176,7 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
     
     connect(searchPaths, SIGNAL(activated(QString)), this, SLOT(setSearchLocations(QString)));
 
+    directorySelector->setIcon(KIcon("document-open"));
     connect(directorySelector, SIGNAL(clicked(bool)), this, SLOT(selectDirectoryDialog()) );
 }
 

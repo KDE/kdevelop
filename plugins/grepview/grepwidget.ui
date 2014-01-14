@@ -432,7 +432,7 @@ p, li { white-space: pre-wrap; }
       <string>Select a directory to search in.</string>
      </property>
      <property name="text">
-      <string>...</string>
+      <string/>
      </property>
     </widget>
    </item>
