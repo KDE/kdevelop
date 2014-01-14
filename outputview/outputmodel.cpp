@@ -138,7 +138,7 @@ class ParsingThread
 public:
     ParsingThread()
     {
-        m_thread.setObjectName("ParsingThread");
+        m_thread.setObjectName("OutputFilterThread");
     }
     virtual ~ParsingThread()
     {
