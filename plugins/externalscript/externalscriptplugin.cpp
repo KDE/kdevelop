@@ -158,6 +158,8 @@ KDevelop::ContextMenuExtension ExternalScriptPlugin::contextMenuExtension( KDeve
 {
   m_urls.clear();
 
+  int folderCount = 0;
+
   if ( context->type() == KDevelop::Context::FileContext ) {
     KDevelop::FileContext* filectx = dynamic_cast<KDevelop::FileContext*>( context );
     m_urls = filectx->urls();
@@ -166,6 +168,9 @@ KDevelop::ContextMenuExtension ExternalScriptPlugin::contextMenuExtension( KDeve
     foreach( KDevelop::ProjectBaseItem* item, projctx->items() ) {
       if ( item->file() ) {
         m_urls << item->file()->url();
+      } else if ( item->folder() ) {
+        m_urls << item->folder()->url();
+        folderCount++;
       }
     }
   } else if ( context->type() == KDevelop::Context::EditorContext ) {
@@ -188,6 +193,21 @@ KDevelop::ContextMenuExtension ExternalScriptPlugin::contextMenuExtension( KDeve
         if (item->performParameterReplacement() && item->command().contains("%s")) {
           continue;
         } else if (item->inputMode() == ExternalScriptItem::InputSelectionOrNone) {
+          continue;
+        }
+      }
+
+      if ( folderCount == m_urls.count() ) {
+        // when only folders filter items that don't have %d parameter (or another parameter)
+        if (item->performParameterReplacement() &&
+          (!item->command().contains("%d") ||
+            item->command().contains("%s") ||
+            item->command().contains("%u") ||
+            item->command().contains("%f") ||
+            item->command().contains("%b") ||
+            item->command().contains("%n")
+          )
+        ) {
           continue;
         }
       }
@@ -222,11 +242,16 @@ QStandardItemModel* ExternalScriptPlugin::model() const
   return m_model;
 }
 
-void ExternalScriptPlugin::execute( ExternalScriptItem* item ) const
+void ExternalScriptPlugin::execute( ExternalScriptItem* item, const KUrl& url ) const
 {
-  ExternalScriptJob* job = new ExternalScriptJob( item, const_cast<ExternalScriptPlugin*>(this) );
+  ExternalScriptJob* job = new ExternalScriptJob( item, url, const_cast<ExternalScriptPlugin*>(this) );
 
   KDevelop::ICore::self()->runController()->registerJob( job );
+}
+
+void ExternalScriptPlugin::execute(ExternalScriptItem* item) const
+{
+  execute( item, KDevelop::ICore::self()->documentController()->activeDocument()->url() );
 }
 
 bool ExternalScriptPlugin::executeCommand ( QString command, QString workingDirectory ) const
@@ -234,7 +259,7 @@ bool ExternalScriptPlugin::executeCommand ( QString command, QString workingDire
   // We extend ExternalScriptJob so that it deletes the temporarily created item on destruction
   class ExternalScriptJobOwningItem : public ExternalScriptJob {
   public:
-    ExternalScriptJobOwningItem( ExternalScriptItem* item, ExternalScriptPlugin* parent ) : ExternalScriptJob(item, parent), m_item(item) {
+    ExternalScriptJobOwningItem( ExternalScriptItem* item, const KUrl &url, ExternalScriptPlugin* parent ) : ExternalScriptJob(item, url, parent), m_item(item) {
     }
     ~ExternalScriptJobOwningItem() {
       delete m_item;
@@ -247,7 +272,7 @@ bool ExternalScriptPlugin::executeCommand ( QString command, QString workingDire
   item->setWorkingDirectory(workingDirectory);
   item->setPerformParameterReplacement(false);
   debug() << "executing command " << command << " in dir " << workingDirectory << " as external script";
-  ExternalScriptJobOwningItem* job = new ExternalScriptJobOwningItem( item, const_cast<ExternalScriptPlugin*>(this) );
+  ExternalScriptJobOwningItem* job = new ExternalScriptJobOwningItem( item, KUrl(), const_cast<ExternalScriptPlugin*>(this) );
   // When a command is executed, for example through the terminal, we don't want the command output to be risen
   job->setVerbosity(KDevelop::OutputJob::Silent);
   
@@ -287,7 +312,7 @@ void ExternalScriptPlugin::executeScriptFromContextMenu() const
 
   foreach( const KUrl& url, m_urls) {
     KDevelop::ICore::self()->documentController()->openDocument( url );
-    execute( item );
+    execute( item, url );
   }
 }
 

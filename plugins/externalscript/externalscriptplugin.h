@@ -55,6 +55,11 @@ public:
   /**
    * Executes @p script.
    */
+  void execute(ExternalScriptItem* item, const KUrl &url) const;
+
+  /**
+   * Executes @p script.
+   */
   void execute(ExternalScriptItem* item) const;
 
   /**

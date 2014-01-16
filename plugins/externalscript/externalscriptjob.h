@@ -27,6 +27,7 @@
 #include "externalscriptitem.h"
 
 #include <KTextEditor/Range>
+#include <KUrl>
 
 namespace KDevelop
 {
@@ -48,7 +49,7 @@ class ExternalScriptJob : public KDevelop::OutputJob
   Q_OBJECT
 
 public:
-  ExternalScriptJob( ExternalScriptItem* item, ExternalScriptPlugin* parent );
+  ExternalScriptJob( ExternalScriptItem* item, const KUrl &url, ExternalScriptPlugin* parent );
   virtual void start();
   KDevelop::OutputModel* model();
 
@@ -71,6 +72,7 @@ private:
   ExternalScriptItem::ErrorMode m_errorMode;
   int m_filterMode;
   KTextEditor::Document* m_document;
+  KUrl m_url;
   /// invalid when whole doc should be replaced
   KTextEditor::Range m_selectionRange;
   KTextEditor::Cursor m_cursorPosition;
