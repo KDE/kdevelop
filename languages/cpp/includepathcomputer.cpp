@@ -64,20 +64,26 @@ void IncludePathComputer::computeForeground()
       continue;
     }
 
-    ProjectFileItem* file = 0;
-    //A file might be defined in different targets.
-    //Prefer file items defined inside a target, at least
-    foreach (ProjectFileItem* f, files) {
-      file = f;
-      if (dynamic_cast<ProjectTargetItem*>(f->parent()))
-        break;
-    }
-
     IBuildSystemManager* buildManager = project->buildSystemManager();
     if (!buildManager) {
       // We found the project, but no build manager!!
       kDebug() << "didn't get build manager for project:" << project->name();
       continue;
+    }
+
+    ProjectFileItem* file = files.last();
+    KUrl::List dirs;
+    // A file might be defined in different targets.
+    // Prefer file items defined inside a target with non-empty includes.
+    foreach (ProjectFileItem* f, files) {
+      if (!dynamic_cast<ProjectTargetItem*>(f->parent())) {
+        continue;
+      }
+      file = f;
+      dirs = buildManager->includeDirectories(f);
+      if (!dirs.isEmpty()) {
+        break;
+      }
     }
 
     m_projectName = project->name();
@@ -90,7 +96,6 @@ void IncludePathComputer::computeForeground()
       m_effectiveBuildDirectory.clear();
     }
 
-    KUrl::List dirs = buildManager->includeDirectories(file);
     m_gotPathsFromManager = !dirs.isEmpty();
     kDebug(9007) << "Got " << dirs.count() << " include-paths from build-manager";
     foreach (KUrl dir, dirs) {
