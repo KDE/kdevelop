@@ -69,10 +69,10 @@ void QtHelpPlugin::readConfig()
 
 void QtHelpPlugin::loadQtDocumentation(bool loadQtDoc)
 {
-    if(m_qtDoc&&!loadQtDoc){
+    if(m_qtDoc && !loadQtDoc){
         delete m_qtDoc;
         m_qtDoc = 0;
-    } else if(!m_qtDoc&&loadQtDoc) {
+    } else if(!m_qtDoc && loadQtDoc) {
         m_qtDoc = new QtHelpQtDoc(this, QVariantList());
     }
 }
