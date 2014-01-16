@@ -31,6 +31,7 @@
 #include <language/duchain/duchain.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/duchainlock.h>
+#include <language/duchain/parsingenvironment.h>
 
 #include "qthelpdocumentation.h"
 
@@ -74,7 +75,7 @@ KSharedPtr< KDevelop::IDocumentation > QtHelpProviderAbstract::documentationForD
 
             kDebug() << "doc_found" << id << links;
             if(!links.isEmpty())
-                return KSharedPtr<KDevelop::IDocumentation>(new QtHelpDocumentation(id, m_engine.linksForIdentifier(id)));
+                return KDevelop::IDocumentation::Ptr(new QtHelpDocumentation(id, links));
         }
     }
 
