@@ -35,8 +35,8 @@
 #include <project/projectmodel.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 
-#include "duchain/buildduchainvisitor.h"
 #include "duchain/clangtypes.h"
+#include "duchain/tuduchain.h"
 
 #include "debug.h"
 #include "clanglanguagesupport.h"
@@ -309,6 +309,5 @@ void ClangParseJob::buildDUChain(CXFile file)
         }
     }
 
-    BuildDUChainVisitor visitor;
-    visitor.visit(m_session->unit(), file, m_includedFiles);
+    TUDUChain(m_session->unit(), file, m_includedFiles);
 }
