@@ -127,9 +127,9 @@ OneUseWidget::OneUseWidget(IndexedDeclaration declaration, IndexedString documen
 
     QString toolTipText;
     for(int a = start; a < end; ++a) {
-      QString lineText = code.line(a);
+      QString lineText = Qt::escape(code.line(a));
       if (m_range->range().start.line <= a && m_range->range().end.line >= a) {
-        lineText = QString("<b>") + Qt::escape(lineText) + QString("</b>");
+        lineText = QString("<b>") + lineText + QString("</b>");
       }
       if(!lineText.trimmed().isEmpty()) {
         toolTipText += lineText + "<br>";
