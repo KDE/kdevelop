@@ -64,6 +64,7 @@ Boston, MA 02110-1301, USA.
 #include <vcs/interfaces/ibasicversioncontrol.h>
 #include <vcs/models/vcsannotationmodel.h>
 #include <vcs/vcsjob.h>
+#include <vcs/vcspluginhelper.h>
 
 #include <language/backgroundparser/backgroundparser.h>
 
@@ -1216,36 +1217,16 @@ void DocumentController::vcsAnnotateCurrentDocument()
     IDocument* doc = activeDocument();
     KUrl url = doc->url();
     IProject* project = KDevelop::ICore::self()->projectController()->findProjectForUrl(url);
-    IBasicVersionControl* iface = 0;
     if(project && project->versionControlPlugin()) {
+        IBasicVersionControl* iface = 0;
         iface = project->versionControlPlugin()->extension<IBasicVersionControl>();
+        VcsPluginHelper helper(project->versionControlPlugin(), iface);
+        helper.addContextDocument(url);
+        helper.annotation();
     }
-
-    if (iface && doc && doc->textDocument() && iface->isVersionControlled(url)) {
-        KTextEditor::AnnotationViewInterface* viewiface = qobject_cast<KTextEditor::AnnotationViewInterface*>(doc->textDocument()->activeView());
-        if(viewiface && viewiface->isAnnotationBorderVisible()) {
-            viewiface->setAnnotationBorderVisible(false);
-            return;
-        }
-        KDevelop::VcsJob* job = iface->annotate(url);
-        if( !job )
-        {
-            kWarning() << "Couldn't create annotate job for:" << url << "with iface:" << iface << dynamic_cast<KDevelop::IPlugin*>( iface );
-            return;
-        }
-        KTextEditor::AnnotationInterface* annotateiface = qobject_cast<KTextEditor::AnnotationInterface*>(doc->textDocument());
-
-        if (annotateiface && viewiface) {
-            KDevelop::VcsAnnotationModel* model = new KDevelop::VcsAnnotationModel(job, url, doc->textDocument());
-            annotateiface->setAnnotationModel(model);
-            viewiface->setAnnotationBorderVisible(true);
-        } else {
-            KMessageBox::error(0, i18n("Cannot display annotations, missing interface KTextEditor::AnnotationInterface for the editor."));
-            delete job;
-        }
-    } else {
-        KMessageBox::error(0, i18n("Cannot execute annotate action because the "
-                                   "document was not found, it was not versioned or it was not a text document:\n%1", url.pathOrUrl()));
+    else {
+        KMessageBox::error(0, i18n("Could not annotate the document because it is not "
+                                   "part of a version-controlled project."));
     }
 }
 

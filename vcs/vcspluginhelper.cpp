@@ -183,6 +183,11 @@ VcsPluginHelper::VcsPluginHelper(KDevelop::IPlugin* parent, KDevelop::IBasicVers
 VcsPluginHelper::~VcsPluginHelper()
 {}
 
+void VcsPluginHelper::addContextDocument(const KUrl &url)
+{
+    d->ctxUrls.append(url);
+}
+
 void VcsPluginHelper::setupFromContext(Context* context)
 {
     d->ctxUrls.clear();
@@ -370,15 +375,20 @@ void VcsPluginHelper::annotation()
     if (!doc)
         doc = ICore::self()->documentController()->openDocument(url);
 
-    if (doc && doc->textDocument()) {
+    KTextEditor::AnnotationInterface* annotateiface = qobject_cast<KTextEditor::AnnotationInterface*>(doc->textDocument());
+    KTextEditor::AnnotationViewInterface* viewiface = qobject_cast<KTextEditor::AnnotationViewInterface*>(doc->textDocument()->activeView());
+    if (viewiface && viewiface->isAnnotationBorderVisible()) {
+        viewiface->setAnnotationBorderVisible(false);
+        return;
+    }
+
+    if (doc && doc->textDocument() && iface) {
         KDevelop::VcsJob* job = iface->annotate(url);
-        if( !job ) 
+        if( !job )
         {
             kWarning() << "Couldn't create annotate job for:" << url << "with iface:" << iface << dynamic_cast<KDevelop::IPlugin*>( iface );
             return;
         }
-        KTextEditor::AnnotationInterface* annotateiface = qobject_cast<KTextEditor::AnnotationInterface*>(doc->textDocument());
-        KTextEditor::AnnotationViewInterface* viewiface = qobject_cast<KTextEditor::AnnotationViewInterface*>(doc->textDocument()->activeView());
 
         if (annotateiface && viewiface) {
             KDevelop::VcsAnnotationModel* model = new KDevelop::VcsAnnotationModel(job, url, doc->textDocument());
