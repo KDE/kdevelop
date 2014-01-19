@@ -69,6 +69,7 @@
 #include <interfaces/isession.h>
 #include "vcsevent.h"
 #include <KCompositeJob>
+#include <KTextEditor/HighlightInterface>
 #include <QClipboard>
 #include <QApplication>
 #include <ktexteditor/modificationinterface.h>
@@ -390,8 +391,19 @@ void VcsPluginHelper::annotation()
             return;
         }
 
+        QColor foreground(Qt::black);
+        QColor background(Qt::white);
+        if ( KTextEditor::HighlightInterface* iface = qobject_cast<KTextEditor::HighlightInterface*>(doc->textDocument()) ) {
+            KTextEditor::Attribute::Ptr style = iface->defaultStyle(KTextEditor::HighlightInterface::dsNormal);
+            foreground = style->foreground().color();
+            if (style->hasProperty(QTextFormat::BackgroundBrush)) {
+                background = style->background().color();
+            }
+        }
+
         if (annotateiface && viewiface) {
-            KDevelop::VcsAnnotationModel* model = new KDevelop::VcsAnnotationModel(job, url, doc->textDocument());
+            KDevelop::VcsAnnotationModel* model = new KDevelop::VcsAnnotationModel(job, url, doc->textDocument(),
+                                                                                   foreground, background);
             annotateiface->setAnnotationModel(model);
             viewiface->setAnnotationBorderVisible(true);
             connect(doc->textDocument()->activeView(),

@@ -25,6 +25,8 @@
 #include "../vcsexport.h"
 #include "../vcsrevision.h"
 
+#include <QColor>
+
 class QModelIndex;
 template<typename T> class QList;
 class KUrl;
@@ -40,7 +42,8 @@ class KDEVPLATFORMVCS_EXPORT VcsAnnotationModel : public KTextEditor::Annotation
 {
 Q_OBJECT
 public:
-    VcsAnnotationModel( VcsJob* job, const KUrl&, QObject* );
+    VcsAnnotationModel( VcsJob* job, const KUrl&, QObject*,
+                        const QColor& foreground = QColor(Qt::black), const QColor& background = QColor(Qt::white) );
     virtual ~VcsAnnotationModel();
 
     VcsRevision revisionForLine(int line) const;
@@ -51,6 +54,9 @@ private:
     Q_PRIVATE_SLOT( d, void addLines( KDevelop::VcsJob*) )
     class VcsAnnotationModelPrivate* const d;
     friend class VcsAnnotationModelPrivate;
+
+    QColor foreground;
+    QColor background;
 };
 
 }
