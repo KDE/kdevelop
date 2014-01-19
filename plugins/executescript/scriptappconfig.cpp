@@ -41,11 +41,26 @@
 #include <KFileDialog>
 #include <KShell>
 #include <interfaces/iplugincontroller.h>
+#include <interfaces/idocumentcontroller.h>
 
 #include "executescriptplugin.h"
 #include <util/kdevstringhandler.h>
 #include <util/environmentgrouplist.h>
 #include <project/projectitemlineedit.h>
+
+static const QString interpreterForUrl(const KUrl& url) {
+    auto mimetype = KMimeType::findByUrl(url);
+    static QHash<QString, QString> knownMimetypes;
+    if ( knownMimetypes.isEmpty() ) {
+        knownMimetypes["text/x-python"] = "python";
+        knownMimetypes["application/x-php"] = "php -e";
+        knownMimetypes["application/x-ruby"] = "ruby";
+        knownMimetypes["application/x-shellscript"] = "bash";
+        knownMimetypes["application/x-perl"] = "perl -e";
+    }
+    const QString& interp = knownMimetypes.value(mimetype->name());
+    return interp;
+}
 
 KIcon ScriptAppConfigPage::icon() const
 {
@@ -60,7 +75,9 @@ void ScriptAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelo
         executablePath->setStartDir( project->folder() );
     }
     
-    interpreter->lineEdit()->setText( cfg.readEntry( ExecuteScriptPlugin::interpreterEntry, "" ) );
+    auto doc = KDevelop::ICore::self()->documentController()->activeDocument();
+    interpreter->lineEdit()->setText( cfg.readEntry( ExecuteScriptPlugin::interpreterEntry,
+                                                     doc ? interpreterForUrl(doc->url()) : "" ) );
     executablePath->setUrl( cfg.readEntry( ExecuteScriptPlugin::executableEntry, "" ) );
     remoteHostCheckbox->setChecked( cfg.readEntry( ExecuteScriptPlugin::executeOnRemoteHostEntry, false ) );
     remoteHost->setText( cfg.readEntry( ExecuteScriptPlugin::remoteHostEntry, "" ) );
@@ -73,7 +90,7 @@ void ScriptAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelo
     arguments->setText( cfg.readEntry( ExecuteScriptPlugin::argumentsEntry, "" ) );
     workingDirectory->setUrl( cfg.readEntry( ExecuteScriptPlugin::workingDirEntry, KUrl() ) );
     environment->setCurrentProfile( cfg.readEntry( ExecuteScriptPlugin::environmentGroupEntry, QString() ) );
-    outputFilteringMode->setCurrentIndex( cfg.readEntry( ExecuteScriptPlugin::outputFilteringEntry, 0u ));
+    outputFilteringMode->setCurrentIndex( cfg.readEntry( ExecuteScriptPlugin::outputFilteringEntry, 2u ));
     //runInTerminal->setChecked( cfg.readEntry( ExecuteScriptPlugin::useTerminalEntry, false ) );
     blockSignals( b );
 }
