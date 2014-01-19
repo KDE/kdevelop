@@ -136,10 +136,10 @@ bool ProjectManagerView::eventFilter(QObject* obj, QEvent* event)
     if (obj == m_ui->projectTreeView) {
         if (event->type() == QEvent::KeyRelease) {
             QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
-            if (keyEvent->key() == Qt::Key_Delete) {
+            if (keyEvent->key() == Qt::Key_Delete && keyEvent->modifiers() == Qt::NoModifier) {
                 m_plugin->removeItems(selectedItems());
                 return true;
-            } else if (keyEvent->key() == Qt::Key_F2) {
+            } else if (keyEvent->key() == Qt::Key_F2 && keyEvent->modifiers() == Qt::NoModifier) {
                 m_plugin->renameItems(selectedItems());
                 return true;
             } else if (keyEvent->key() == Qt::Key_C && keyEvent->modifiers() == Qt::ControlModifier) {
