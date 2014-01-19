@@ -221,18 +221,20 @@ KIcon ScriptAppConfigType::icon() const
     return KIcon("preferences-plugin-script");
 }
 
-bool ScriptAppConfigType::canLaunch(const KUrl& /*file*/) const
+bool ScriptAppConfigType::canLaunch(const KUrl& file) const
 {
-    return false;
+    return ! interpreterForUrl(file).isEmpty();
 }
 
-bool ScriptAppConfigType::canLaunch(KDevelop::ProjectBaseItem* /*item*/) const
+bool ScriptAppConfigType::canLaunch(KDevelop::ProjectBaseItem* item) const
 {
-    return false;
+    return ! interpreterForUrl(item->url()).isEmpty();
 }
 
-void ScriptAppConfigType::configureLaunchFromItem(KConfigGroup /*config*/, KDevelop::ProjectBaseItem* /*item*/) const
+void ScriptAppConfigType::configureLaunchFromItem(KConfigGroup config, KDevelop::ProjectBaseItem* item) const
 {
+    config.writeEntry(ExecuteScriptPlugin::executableEntry, item->url());
+    config.writeEntry(ExecuteScriptPlugin::interpreterEntry, interpreterForUrl(item->url()));
 }
 
 void ScriptAppConfigType::configureLaunchFromCmdLineArguments(KConfigGroup cfg, const QStringList &args) const
