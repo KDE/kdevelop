@@ -111,7 +111,7 @@ ScriptAppConfigPage::ScriptAppConfigPage( QWidget* parent )
     connect( arguments, SIGNAL(textEdited(QString)), SIGNAL(changed()) );
     connect( workingDirectory, SIGNAL(urlSelected(KUrl)), SIGNAL(changed()) );
     connect( workingDirectory->lineEdit(), SIGNAL(textEdited(QString)), SIGNAL(changed()) );
-    connect( environment, SIGNAL(currentIndexChanged(int)), SIGNAL(changed()) );
+    connect( environment, SIGNAL(currentProfileChanged(QString)), SIGNAL(changed()) );
     //connect( runInTerminal, SIGNAL(toggled(bool)), SIGNAL(changed()) );
 }
 
