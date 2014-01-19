@@ -235,6 +235,8 @@ void ScriptAppConfigType::configureLaunchFromItem(KConfigGroup config, KDevelop:
 {
     config.writeEntry(ExecuteScriptPlugin::executableEntry, item->url());
     config.writeEntry(ExecuteScriptPlugin::interpreterEntry, interpreterForUrl(item->url()));
+    config.writeEntry(ExecuteScriptPlugin::runCurrentFileEntry, false);
+    config.sync();
 }
 
 void ScriptAppConfigType::configureLaunchFromCmdLineArguments(KConfigGroup cfg, const QStringList &args) const
