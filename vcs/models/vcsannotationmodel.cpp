@@ -34,9 +34,18 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kdebug.h>
+#include <KTextEditor/View>
+#include <KTextEditor/Document>
 
+#include <widgets/vcsdiffwidget.h>
+
+#include <interfaces/ibasicversioncontrol.h>
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
+#include <interfaces/idocumentcontroller.h>
+#include <interfaces/iproject.h>
+#include <interfaces/iplugin.h>
+#include <interfaces/iprojectcontroller.h>
 
 namespace KDevelop
 {
@@ -74,6 +83,21 @@ public:
                 }
             }
         }
+    }
+
+    void itemActivated(KTextEditor::View* view, int index) {
+        IProject* project = KDevelop::ICore::self()->projectController()->findProjectForUrl(view->document()->url());
+        if( !project )
+            return;
+        auto vcs = qobject_cast<IBasicVersionControl*>(project->versionControlPlugin());
+        if( !vcs )
+            return;
+        KDevelop::VcsAnnotationLine aline = m_annotation.line(index);
+        auto start = aline.revision();
+        auto end = start.createSpecialRevision(VcsRevision::Previous);
+        auto job = vcs->diff(project->folder(), start, end,
+                             VcsDiff::DiffDontCare, IBasicVersionControl::Recursive);
+        auto widget = new VcsDiffWidget(job);
     }
 };
 

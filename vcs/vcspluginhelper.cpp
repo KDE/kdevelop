@@ -404,6 +404,8 @@ void VcsPluginHelper::annotation()
         if (annotateiface && viewiface) {
             KDevelop::VcsAnnotationModel* model = new KDevelop::VcsAnnotationModel(job, url, doc->textDocument(),
                                                                                    foreground, background);
+            connect(doc->textDocument()->activeView(), SIGNAL(annotationActivated(KTextEditor::View*, int)),
+                    model, SLOT(itemActivated(KTextEditor::View*, int)) );
             annotateiface->setAnnotationModel(model);
             viewiface->setAnnotationBorderVisible(true);
             connect(doc->textDocument()->activeView(),
