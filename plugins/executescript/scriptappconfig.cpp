@@ -235,6 +235,7 @@ void ScriptAppConfigType::configureLaunchFromItem(KConfigGroup config, KDevelop:
 {
     config.writeEntry(ExecuteScriptPlugin::executableEntry, item->url());
     config.writeEntry(ExecuteScriptPlugin::interpreterEntry, interpreterForUrl(item->url()));
+    config.writeEntry(ExecuteScriptPlugin::outputFilteringEntry, 2u);
     config.writeEntry(ExecuteScriptPlugin::runCurrentFileEntry, false);
     config.sync();
 }
