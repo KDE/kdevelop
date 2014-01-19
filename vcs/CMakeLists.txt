@@ -76,7 +76,6 @@ install(FILES
 
 install(FILES
     widgets/vcsimportmetadatawidget.h
-    widgets/vcsannotationwidget.h
     widgets/vcseventwidget.h
     widgets/vcsdiffwidget.h
     widgets/vcscommitdialog.h
