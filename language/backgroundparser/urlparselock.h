@@ -34,10 +34,13 @@ namespace KDevelop
  *
  * @warning No other mutex must be locked when this lock is acquired, to prevent deadlocks
  */
-class KDEVPLATFORMLANGUAGE_EXPORT UrlParseLock {
+class KDEVPLATFORMLANGUAGE_EXPORT UrlParseLock
+{
 public:
-  UrlParseLock(IndexedString url);
+  UrlParseLock(const IndexedString& url);
   ~UrlParseLock();
+
+private:
   IndexedString m_url;
 };
 

@@ -27,15 +27,25 @@
 #include <QDateTime>
 #include <QtGlobal>
 #include <QBrush>
+#include <QPen>
 #include <QHash>
 
 #include <kurl.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kdebug.h>
+#include <KTextEditor/View>
+#include <KTextEditor/Document>
 
+#include <widgets/vcsdiffwidget.h>
+
+#include <interfaces/ibasicversioncontrol.h>
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
+#include <interfaces/idocumentcontroller.h>
+#include <interfaces/iproject.h>
+#include <interfaces/iplugin.h>
+#include <interfaces/iprojectcontroller.h>
 
 namespace KDevelop
 {
@@ -59,10 +69,14 @@ public:
                     VcsAnnotationLine l = v.value<KDevelop::VcsAnnotationLine>();
                     if( !m_brushes.contains( l.revision() ) )
                     {
-                        int r = ( float(qrand()) / RAND_MAX ) * 255;
-                        int g = ( float(qrand()) / RAND_MAX ) * 255;
-                        int b = ( float(qrand()) / RAND_MAX ) * 255;
-                        m_brushes.insert( l.revision(), QBrush( QColor( r, g, b, 80 ) ) );
+                        const int background_y = q->background.red()*0.299 + 0.587*q->background.green()
+                                                                           + 0.114*q->background.blue();
+                        int u = ( float(qrand()) / RAND_MAX ) * 255;
+                        int v = ( float(qrand()) / RAND_MAX ) * 255;
+                        float r = qMin(255.0, qMax(0.0, background_y + 1.402*(v-128)));
+                        float g = qMin(255.0, qMax(0.0, background_y - 0.344*(u-128) - 0.714*(v-128)));
+                        float b = qMin(255.0, qMax(0.0, background_y + 1.772*(u-128)));
+                        m_brushes.insert( l.revision(), QBrush( QColor( r, g, b ) ) );
                     }
                     m_annotation.insertLine( l.lineNumber(), l );
                     emit q->lineChanged( l.lineNumber() );
@@ -70,10 +84,28 @@ public:
             }
         }
     }
+
+    void itemActivated(KTextEditor::View* view, int index) {
+        IProject* project = KDevelop::ICore::self()->projectController()->findProjectForUrl(view->document()->url());
+        if( !project )
+            return;
+        auto vcs = qobject_cast<IBasicVersionControl*>(project->versionControlPlugin());
+        if( !vcs )
+            return;
+        KDevelop::VcsAnnotationLine aline = m_annotation.line(index);
+        auto start = aline.revision();
+        auto end = start.createSpecialRevision(VcsRevision::Previous);
+        auto job = vcs->diff(project->folder(), start, end,
+                             VcsDiff::DiffDontCare, IBasicVersionControl::Recursive);
+        auto widget = new VcsDiffWidget(job);
+    }
 };
 
-VcsAnnotationModel::VcsAnnotationModel( VcsJob* job, const KUrl& url, QObject* parent )
+VcsAnnotationModel::VcsAnnotationModel(VcsJob *job, const KUrl& url, QObject* parent,
+                                       const QColor &foreground, const QColor &background)
     : d( new VcsAnnotationModelPrivate( this ) )
+    , foreground(foreground)
+    , background(background)
 {
     setParent( parent );
     d->m_annotation.setLocation( url );
@@ -82,6 +114,7 @@ VcsAnnotationModel::VcsAnnotationModel( VcsJob* job, const KUrl& url, QObject* p
     connect( d->job, SIGNAL(resultsReady(KDevelop::VcsJob*)),SLOT(addLines(KDevelop::VcsJob*)) );
     ICore::self()->runController()->registerJob( d->job );
 }
+
 VcsAnnotationModel::~VcsAnnotationModel()
 {
     delete d;
@@ -95,6 +128,10 @@ QVariant VcsAnnotationModel::data( int line, Qt::ItemDataRole role ) const
     }
 
     KDevelop::VcsAnnotationLine aline = d->m_annotation.line( line );
+    if( role == Qt::ForegroundRole )
+    {
+        return QVariant( QPen( foreground ) );
+    }
     if( role == Qt::BackgroundRole )
     {
         return QVariant( d->m_brushes[aline.revision()] );

@@ -100,14 +100,11 @@ p, li { white-space: pre-wrap; }
    </item>
    <item row="5" column="5">
     <widget class="KPushButton" name="syncButton">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
      <property name="toolTip">
-      <string>Synchronize with current document directory.</string>
+      <string>Quickly select location from a set of directories</string>
+     </property>
+     <property name="text">
+      <string>Quick Select</string>
      </property>
     </widget>
    </item>
@@ -205,6 +202,9 @@ p, li { white-space: pre-wrap; }
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buddy">
+      <cstring>searchPaths</cstring>
      </property>
     </widget>
    </item>
@@ -432,7 +432,7 @@ p, li { white-space: pre-wrap; }
       <string>Select a directory to search in.</string>
      </property>
      <property name="text">
-      <string>...</string>
+      <string/>
      </property>
     </widget>
    </item>
@@ -457,7 +457,10 @@ p, li { white-space: pre-wrap; }
   <tabstop>replacementTemplateEdit</tabstop>
   <tabstop>regexCheck</tabstop>
   <tabstop>caseSensitiveCheck</tabstop>
+  <tabstop>searchPaths</tabstop>
+  <tabstop>directorySelector</tabstop>
   <tabstop>syncButton</tabstop>
+  <tabstop>depthSpin</tabstop>
   <tabstop>limitToProjectCheck</tabstop>
   <tabstop>filesCombo</tabstop>
   <tabstop>excludeCombo</tabstop>

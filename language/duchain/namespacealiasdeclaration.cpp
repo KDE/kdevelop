@@ -74,20 +74,20 @@ void NamespaceAliasDeclaration::setInSymbolTable(bool inSymbolTable)
 
 void NamespaceAliasDeclaration::unregisterAliasIdentifier()
 {
-  if(indexedIdentifier() != globalImportIdentifier())
+  if(indexedIdentifier() != globalIndexedImportIdentifier())
   {
     QualifiedIdentifier aliasId = qualifiedIdentifier();
-    aliasId.push(globalAliasIdentifier());
+    aliasId.push(globalIndexedAliasIdentifier());
     KDevelop::PersistentSymbolTable::self().removeDeclaration(aliasId, this);
   }
 }
 
 void NamespaceAliasDeclaration::registerAliasIdentifier()
 {
-  if(indexedIdentifier() != globalImportIdentifier())
+  if(indexedIdentifier() != globalIndexedImportIdentifier())
   {
     QualifiedIdentifier aliasId = qualifiedIdentifier();
-    aliasId.push(globalAliasIdentifier());
+    aliasId.push(globalIndexedAliasIdentifier());
     KDevelop::PersistentSymbolTable::self().addDeclaration(aliasId, this);
   }
 }
@@ -103,7 +103,7 @@ void NamespaceAliasDeclaration::setAbstractType(AbstractType::Ptr type) {
 
 QString NamespaceAliasDeclaration::toString() const {
   DUCHAIN_D(NamespaceAliasDeclaration);
-  if( identifier() != globalImportIdentifier() )
+  if( indexedIdentifier() != globalIndexedImportIdentifier() )
     return QString("Import %1 as %2").arg(d->m_importIdentifier.identifier().toString()).arg(identifier().toString());
   else
     return QString("Import %1").arg(d->m_importIdentifier.identifier().toString());

@@ -48,9 +48,6 @@ BreakpointModel::BreakpointModel(QObject* parent)
     : QAbstractTableModel(parent),
       m_dontUpdateMarks(false)
 {
-    connect(this, SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(save()));
-    connect(this, SIGNAL(rowsRemoved(QModelIndex,int,int)), SLOT(save()));
-    connect(this, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(save()));
     connect(this, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(updateMarks()));
 
     if (KDevelop::ICore::self()->partController()) { //TODO remove if
@@ -73,7 +70,10 @@ BreakpointModel::BreakpointModel(QObject* parent)
     load();
 }
 
-BreakpointModel::~BreakpointModel() {
+BreakpointModel::~BreakpointModel()
+{
+    save();
+
     qDeleteAll(m_breakpoints);
 }
 
@@ -228,7 +228,7 @@ bool KDevelop::BreakpointModel::removeRows(int row, int count, const QModelIndex
 int KDevelop::BreakpointModel::rowCount(const QModelIndex& parent) const
 {
     if (!parent.isValid()) {
-        return m_breakpoints.count() + 1;
+        return m_breakpoints.count();
     }
     return 0;
 }
@@ -241,25 +241,6 @@ int KDevelop::BreakpointModel::columnCount(const QModelIndex& parent) const
 
 QVariant BreakpointModel::data(const QModelIndex& index, int role) const
 {
-    if (!index.parent().isValid() && index.row() == m_breakpoints.count()) {
-        if (index.column() != Breakpoint::LocationColumn) {
-            if (role == Qt::DisplayRole) {
-                return QString();
-            } else {
-                return QVariant();
-            }
-        }
-
-        if (role == Qt::DisplayRole)
-            return i18n("Double-click to create new code breakpoint");
-        if (role == Qt::ForegroundRole)
-            // FIXME: returning hardcoded gray is bad,
-            // but we don't have access to any widget, or pallette
-            // thereof, at this point.
-            return QColor(128, 128, 128);
-        if (role == Qt::EditRole)
-            return QString();
-    }
     if (!index.parent().isValid() && index.row() < m_breakpoints.count()) {
         return m_breakpoints.at(index.row())->data(index.column(), role);
     }
@@ -268,21 +249,10 @@ QVariant BreakpointModel::data(const QModelIndex& index, int role) const
 
 bool KDevelop::BreakpointModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
-    if (!index.parent().isValid() && index.row() == m_breakpoints.count()
-        && role == Qt::EditRole
-        && (index.column() == Breakpoint::LocationColumn || index.column() == Breakpoint::ConditionColumn)
-        && !value.toString().isEmpty())
-    {
-        /* Helper breakpoint becomes a real breakpoint only if user types
-        some real location.  */
-        addCodeBreakpoint(); //setData below is called
-    }
-
     if (!index.parent().isValid() && index.row() < m_breakpoints.count() && (role == Qt::EditRole || role == Qt::CheckStateRole)) {
         return m_breakpoints.at(index.row())->setData(index.column(), value);
     }
     return false;
-
 }
 
 void BreakpointModel::markChanged(
@@ -363,8 +333,12 @@ void BreakpointModel::toggleBreakpoint(const KUrl& url, const KTextEditor::Curso
 
 void BreakpointModel::reportChange(Breakpoint* breakpoint, Breakpoint::Column column)
 {
-    QModelIndex idx = breakpointIndex(breakpoint, column);
-    emit dataChanged(idx, idx);
+    // note: just a portion of Breakpoint::Column is displayed in this model!
+    if (column >= 0 && column < columnCount()) {
+        QModelIndex idx = breakpointIndex(breakpoint, column);
+        Q_ASSERT(idx.isValid()); // make sure we don't pass invalid indices to dataChanged()
+        emit dataChanged(idx, idx);
+    }
     emit breakpointChanged(breakpoint, column);
 }
 
@@ -456,13 +430,16 @@ void BreakpointModel::load()
 {
     KConfigGroup breakpoints = KGlobal::config()->group("breakpoints");
     int count = breakpoints.readEntry("number", 0);
+    if (count == 0)
+        return;
+
+    beginInsertRows(QModelIndex(), 0, count);
     for (int i = 0; i < count; ++i) {
         if (!breakpoints.group(QString::number(i)).readEntry("kind", "").isEmpty()) {
-            Breakpoint *b = new Breakpoint(this, breakpoints.group(QString::number(i)));
-            m_breakpoints << b;
+            new Breakpoint(this, breakpoints.group(QString::number(i)));
         }
     }
-    reset();
+    endInsertRows();
 }
 
 void BreakpointModel::save()
@@ -475,6 +452,7 @@ void BreakpointModel::save()
         b->save(g);
         ++i;
     }
+    breakpoints.sync();
 }
 
 QList<Breakpoint*> KDevelop::BreakpointModel::breakpoints() const
@@ -492,7 +470,6 @@ Breakpoint* BreakpointModel::addCodeBreakpoint()
 {
     beginInsertRows(QModelIndex(), m_breakpoints.count(), m_breakpoints.count());
     Breakpoint* n = new Breakpoint(this, Breakpoint::CodeBreakpoint);
-    m_breakpoints << n;
     endInsertRows();
     return n;
 }
@@ -515,7 +492,6 @@ Breakpoint* BreakpointModel::addWatchpoint()
 {
     beginInsertRows(QModelIndex(), m_breakpoints.count(), m_breakpoints.count());
     Breakpoint* n = new Breakpoint(this, Breakpoint::WriteBreakpoint);
-    m_breakpoints << n;
     endInsertRows();
     return n;
 }
@@ -531,7 +507,6 @@ Breakpoint* BreakpointModel::addReadWatchpoint()
 {
     beginInsertRows(QModelIndex(), m_breakpoints.count(), m_breakpoints.count());
     Breakpoint* n = new Breakpoint(this, Breakpoint::ReadBreakpoint);
-    m_breakpoints << n;
     endInsertRows();
     return n;
 }
@@ -547,7 +522,6 @@ Breakpoint* BreakpointModel::addAccessWatchpoint()
 {
     beginInsertRows(QModelIndex(), m_breakpoints.count(), m_breakpoints.count());
     Breakpoint* n = new Breakpoint(this, Breakpoint::AccessBreakpoint);
-    m_breakpoints << n;
     endInsertRows();
     return n;
 }
@@ -558,6 +532,12 @@ Breakpoint* BreakpointModel::addAccessWatchpoint(const QString& expression)
     Breakpoint* n = addAccessWatchpoint();
     n->setExpression(expression);
     return n;
+}
+
+void BreakpointModel::registerBreakpoint(Breakpoint* breakpoint)
+{
+    Q_ASSERT(!m_breakpoints.contains(breakpoint));
+    m_breakpoints << breakpoint;
 }
 
 Breakpoint* BreakpointModel::breakpoint(const KUrl& url, int line) {

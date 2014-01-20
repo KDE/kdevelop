@@ -22,7 +22,7 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QPointer>
-#include <ktextbrowser.h>
+#include <QWidget>
 
 #include "../../interfaces/quickopendataprovider.h"
 #include "../../languageexport.h"

@@ -60,22 +60,27 @@ Qt::ItemFlags EnvironmentGroupModel::flags( const QModelIndex& idx ) const
 
 QVariant EnvironmentGroupModel::data( const QModelIndex& idx, int role ) const
 {
-    if( !idx.isValid() || ( role != Qt::DisplayRole && role != Qt::EditRole )
+    if( !idx.isValid()
         || m_currentGroup.isEmpty()
-        || idx.row() < 0 || idx.row() >= rowCount(QModelIndex())
+        || idx.row() < 0 || idx.row() >= rowCount()
         || idx.column() < 0 || idx.column() >= columnCount(QModelIndex()) )
     {
         return QVariant();
     }
 
-    if( idx.column() == 0 )
-    {
-        return m_varsByIndex[idx.row()];
-    } else
-    {
-        QString var = m_varsByIndex[idx.row()];
-        return variables( m_currentGroup ).value( var );
+    const QString variable = m_varsByIndex[idx.row()];
+    if (role == VariableRole) {
+        return variable;
+    } else if (role == ValueRole) {
+        return variables( m_currentGroup ).value(variable);
+    } else if (role == Qt::DisplayRole || role == Qt::EditRole) {
+        if(idx.column() == 0) {
+            return variable;
+        } else {
+            return variables( m_currentGroup ).value(variable);
+        }
     }
+    return QVariant();
 }
 
 QVariant EnvironmentGroupModel::headerData( int section, Qt::Orientation orientation, int role ) const
@@ -96,27 +101,25 @@ QVariant EnvironmentGroupModel::headerData( int section, Qt::Orientation orienta
 
 bool EnvironmentGroupModel::setData( const QModelIndex& idx, const QVariant& data, int role )
 {
-    if( !idx.isValid() || role != Qt::EditRole || m_currentGroup.isEmpty()
-        || idx.row() < 0 || idx.row() >= rowCount(QModelIndex())
+    if( !idx.isValid() || m_currentGroup.isEmpty()
+        || idx.row() < 0 || idx.row() >= rowCount()
         || idx.column() < 0 || idx.column() >= columnCount(QModelIndex()) )
     {
         return false;
     }
 
-    if( idx.column() == 0 )
-    {
-        QString var = m_varsByIndex[idx.row()];
-        QString value = variables( m_currentGroup ).value( var );
-        variables( m_currentGroup ).remove( var );
-        variables( m_currentGroup ).insert( data.toString(), value );
-        m_varsByIndex[idx.row()] = data.toString();
+    if (role == Qt::EditRole) {
+        if (idx.column() == 0) {
+            const QString oldVariable = m_varsByIndex[idx.row()];
+            const QString value = variables(m_currentGroup).take(oldVariable);
+            const QString newVariable = data.toString();
+            variables(m_currentGroup).insert(newVariable, value);
+            m_varsByIndex[idx.row()] = newVariable;
+        } else {
+            variables(m_currentGroup).insert(m_varsByIndex[idx.row()], data.toString());
+        }
+        emit dataChanged(idx, idx);
     }
-    else
-    {
-        variables( m_currentGroup ).insert( m_varsByIndex[idx.row()], data.toString() );
-    }
-    
-    emit dataChanged(idx, idx);
     return true;
 }
 
@@ -127,7 +130,7 @@ QModelIndex EnvironmentGroupModel::addVariable( const QString& var, const QStrin
         return index(pos, 0, QModelIndex()); // No duplicates
     }
 
-    const int insertPos = rowCount( QModelIndex() );
+    const int insertPos = rowCount();
     beginInsertRows( QModelIndex(), insertPos, insertPos );
     m_varsByIndex << var;
     variables( m_currentGroup ).insert( var, value );
@@ -144,25 +147,26 @@ void EnvironmentGroupModel::removeGroup( const QString& grp )
     }
 }
 
-void EnvironmentGroupModel::removeVariables( QModelIndexList indexes )
+void EnvironmentGroupModel::removeVariables(const QStringList& variables)
+{
+    foreach (const QString& variable, variables) {
+        removeVariable(variable);
+    }
+}
+
+void EnvironmentGroupModel::removeVariable(const QString& variable)
 {
     if (m_currentGroup.isEmpty())
         return;
-    
-    //Need to have the indexes in order for reverse removal
-    qSort<QModelIndexList>(indexes);
-    
-    for (int i = indexes.size() - 1; i >= 0; --i)
-    {
-        if (!indexes[i].isValid())
-            continue;
-        
-        beginRemoveRows( QModelIndex(), indexes[i].row(), indexes[i].row() );
-        QString var = m_varsByIndex[indexes[i].row()];
-        m_varsByIndex.removeAt(indexes[i].row());
-        variables( m_currentGroup ).remove( var );
-        endRemoveRows();
-    }
+
+    const int pos = m_varsByIndex.indexOf(variable);
+    if (pos == -1)
+        return;
+
+    beginRemoveRows(QModelIndex(), pos, pos);
+    m_varsByIndex.removeAt(pos);
+    variables(m_currentGroup).remove(variable);
+    endRemoveRows();
 }
 
 void EnvironmentGroupModel::setCurrentGroup( const QString& group )

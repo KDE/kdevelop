@@ -45,38 +45,30 @@ class KDEVPLATFORMSHELL_EXPORT Session : public ISession
     Q_OBJECT
 public:
     static const QString cfgSessionNameEntry;
-    static const QString cfgSessionPrettyContentsEntry;
+    static const QString cfgSessionDescriptionEntry;
+    static const QString cfgSessionProjectsEntry;
+    static const QString cfgSessionOptionsGroup;
+
     Session( const QString& id, QObject * parent = 0 );
     virtual ~Session();
 
     virtual KUrl pluginDataArea( const IPlugin* );
     virtual KSharedConfig::Ptr config();
 
-    KUrl::List containedProjects() const;
-    
-    void updateDescription();
-    
-    virtual QString description() const;    
+    virtual KUrl::List containedProjects() const;
+    virtual void setContainedProjects( const KUrl::List& projects );
+
     virtual QString name() const;
     void setName( const QString& );
-    QUuid id() const;
 
-    virtual void setTemporary(bool temp);
+    virtual QUuid id() const;
+
+    virtual QString description() const;
+
     virtual bool isTemporary() const;
+    virtual void setTemporary(bool temp);
 
     QString path() const;
-
-    /**
-     * Generates session's pretty contents from project list in @p info.
-     * @return session's pretty contents
-     */
-    static QString generatePrettyContents( const SessionInfo& info );
-
-    /**
-     * Generates session's description field using provided pretty contents.
-     * @return session's description field
-     */
-    static QString generateDescription( const KDevelop::SessionInfo& info, const QString& prettyContents );
 
     /**
      * Generates a @ref SessionInfo by a session @p id.
@@ -84,15 +76,14 @@ public:
      */
     static SessionInfo parse( const QString& id, bool mkdir = false );
 
-Q_SIGNALS:
-    void nameChanged( const QString& newname, const QString& oldname );
-public slots:
-    virtual void updateContainedProjects();
 private:
     class SessionPrivate* const d;
-
+    friend class SessionPrivate;
 };
 
 }
+
+Q_DECLARE_METATYPE( KDevelop::Session* )
+
 #endif
 

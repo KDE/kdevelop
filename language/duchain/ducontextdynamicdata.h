@@ -24,12 +24,6 @@
 
 #include "ducontextdata.h"
 
-#ifdef Q_OS_WIN
-#include <hash_map>
-#else
-#include <util/google/dense_hash_map>
-#endif
-
 namespace KDevelop {
 
 ///This class contains data that is only runtime-dependant and does not need to be stored to disk
@@ -205,24 +199,8 @@ public:
   /**
    * Returns true if this context is imported by the given one, on any level.
    * */
-  bool imports(const DUContext* context, const TopDUContext* source, int maxDepth) const;
-
-  /**
-   * This can deal with endless recursion
-   */
-#ifdef Q_OS_WIN
-  typedef std::hash_map<const DUContextDynamicData*, bool> ImportsHash;
-#else
-  struct ImportsHash_Op {
-    size_t operator() (const DUContextDynamicData* data) const {
-      return (size_t)data;
-    }
-  };
-  
-  typedef google::dense_hash_map<const DUContextDynamicData*, bool, ImportsHash_Op> ImportsHash;
-#endif
-  
-  bool importsSafeButSlow(const DUContext* context, const TopDUContext* source, ImportsHash& checked) const;
+  bool imports(const DUContext* context, const TopDUContext* source,
+               QSet<const DUContextDynamicData*>* recursionGuard) const;
 };
 
 }

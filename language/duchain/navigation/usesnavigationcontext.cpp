@@ -17,8 +17,10 @@
 */
 
 #include "usesnavigationcontext.h"
+
 #include "useswidget.h"
 #include <klocale.h>
+#include <language/duchain/declaration.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
 

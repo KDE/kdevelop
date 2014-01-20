@@ -37,15 +37,27 @@ class QIcon;
  */
 struct ProjectFile
 {
+    ProjectFile()
+    : outsideOfProject(false)
+    {}
     KDevelop::Path path;
     // project root folder url
     KDevelop::Path projectPath;
-    // project name
-    QString project;
     // indexed url - only set for project files
     // currently open documents don't use this!
-    KDevelop::IndexedString indexedUrl;
+    KDevelop::IndexedString indexedPath;
+    // true for files which reside outside of the project root
+    // this happens e.g. for generated files in out-of-source build folders
+    bool outsideOfProject;
 };
+
+inline bool operator<(const ProjectFile& left, const ProjectFile& right)
+{
+    if (left.outsideOfProject != right.outsideOfProject) {
+        return !left.outsideOfProject;
+    }
+    return left.path < right.path;
+}
 
 Q_DECLARE_TYPEINFO(ProjectFile, Q_MOVABLE_TYPE);
 
@@ -68,6 +80,8 @@ public:
     virtual QIcon icon() const;
 
     QList<QVariant> highlighting() const;
+
+    QString project() const;
 
 private:
     ProjectFile m_file;
@@ -112,7 +126,7 @@ private:
     // project files sorted by their url
     // this is done so we can limit ourselves to a relatively fast
     // filtering without any expensive sorting in reset().
-    QMap<KDevelop::Path, ProjectFile> m_projectFiles;
+    QList<ProjectFile> m_projectFiles;
 };
 
 /**

@@ -37,6 +37,7 @@ Boston, MA 02110-1301, USA.
 #include <kconfigdialogmanager.h>
 
 #include "environmentgroupmodel.h"
+#include "placeholderitemproxymodel.h"
 
 namespace KDevelop
 {
@@ -48,15 +49,19 @@ EnvironmentWidget::EnvironmentWidget( QWidget *parent )
     // setup ui
     ui.setupUi( this );
     ui.variableTable->verticalHeader()->hide();
+
     proxyModel->setSourceModel( groupModel );
-    ui.variableTable->setModel( proxyModel );
+
+    PlaceholderItemProxyModel* topProxyModel  = new PlaceholderItemProxyModel(this);
+    topProxyModel->setSourceModel(proxyModel);
+    topProxyModel->setColumnHint(0, i18n("Enter variable ..."));
+    connect(topProxyModel, SIGNAL(dataInserted(int, QVariant)), SLOT(handleVariableInserted(int, QVariant)));
+
+    ui.variableTable->setModel( topProxyModel );
     ui.variableTable->horizontalHeader()->setResizeMode( 1, QHeaderView::Stretch );
-    ui.newButton->setIcon(KIcon("list-add"));
     ui.deleteButton->setIcon(KIcon("list-remove"));
     ui.newMultipleButton->setIcon(KIcon("format-list-unordered"));
 
-    connect( ui.newButton, SIGNAL(clicked()),
-             SLOT(newButtonClicked()) );
     connect( ui.deleteButton, SIGNAL(clicked()),
              SLOT(deleteButtonClicked()) );
     connect( ui.newMultipleButton, SIGNAL(clicked()),
@@ -86,7 +91,7 @@ void EnvironmentWidget::setActiveGroup( const QString& group )
 
 void EnvironmentWidget::enableDeleteButton()
 {
-    ui.deleteButton->setEnabled( groupModel->rowCount( QModelIndex() ) > 0 );
+    ui.deleteButton->setEnabled( groupModel->rowCount() > 0 );
 }
 
 void EnvironmentWidget::setAsDefault()
@@ -120,53 +125,25 @@ void EnvironmentWidget::defaults( KConfig* config )
     loadSettings( config );
 }
 
-void EnvironmentWidget::newButtonClicked()
-{
-    KDialog * dialog = new KDialog( this );
-    dialog->setCaption( i18n( "New Environment Variable" ) );
-    dialog->setButtons( KDialog::Ok | KDialog::Cancel );
-    dialog->setDefaultButton( KDialog::Ok );
-
-    QWidget *main = new QWidget( dialog );
-    QGridLayout *layout = new QGridLayout( main );
-
-    QLabel* l = new QLabel( i18nc( "Name of an environment variable", "Variable Name:" ), main );
-    l->setAlignment( Qt::AlignRight | Qt::AlignTop );
-    layout->addWidget( l, 0, 0 );
-    KLineEdit *nameEdit = new KLineEdit( main );
-    layout->addWidget( nameEdit, 0, 1 );
-    l = new QLabel( i18nc( "Value of an environment variable", "Variable Value:" ), main );
-    l->setAlignment( Qt::AlignRight | Qt::AlignTop );
-    layout->addWidget( l, 1, 0 );
-    KTextEdit *valueEdit = new KTextEdit( main );
-    layout->addWidget( valueEdit, 1, 1 );
-    nameEdit->setFocus();
-    dialog->setMainWidget( main );
-
-    if ( dialog->exec() == QDialog::Accepted )
-    {
-        QString _name = nameEdit->text();
-        QString _value = valueEdit->toPlainText();
-        if ( _name.isEmpty() )
-            return;
-
-        groupModel->addVariable( _name, _value );
-    }
-}
-
 void EnvironmentWidget::deleteButtonClicked()
 {
     QModelIndexList selected = ui.variableTable->selectionModel()->selectedRows();
     if( selected.isEmpty() )
         return;
-    
-    QModelIndexList mapped;
+
+    QStringList variables;
     foreach( const QModelIndex &idx, selected )
     {
-        mapped << proxyModel->mapToSource( idx );
+        const QString variable = idx.data(EnvironmentGroupModel::VariableRole).toString();
+        variables << variable;
     }
-    
-    groupModel->removeVariables( mapped );
+
+    groupModel->removeVariables(variables);
+}
+
+void EnvironmentWidget::handleVariableInserted(int /*column*/, const QVariant& value)
+{
+    groupModel->addVariable(value.toString(), QString());
 }
 
 void EnvironmentWidget::newMultipleButtonClicked()
@@ -241,5 +218,4 @@ void EnvironmentWidget::enableButtons( const QString& txt )
 
 }
 
-#include "environmentwidget.moc"
-
+#include "moc_environmentwidget.cpp"

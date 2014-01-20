@@ -27,7 +27,6 @@
 #include "indexedstring.h"
 #include "topducontext.h"
 #include "duchainregister.h"
-#include <qthread.h>
 #include <editor/simplerange.h>
 #include <interfaces/foregroundlock.h>
 #include <interfaces/icore.h>
@@ -231,22 +230,11 @@ void DUChainBase::setRange(const RangeInRevision& range)
     d_func_dynamic()->m_range = range;
 }
 
-QMutex shouldCreateConstantDataStorageMutex;
-QSet<QThread*> shouldCreateConstantDataStorage;
+QThreadStorage<bool> shouldCreateConstantDataStorage;
 
-bool DUChainBaseData::shouldCreateConstantData() {
-  QMutexLocker lock(&shouldCreateConstantDataStorageMutex);
-  bool ret = shouldCreateConstantDataStorage.contains( QThread::currentThread() );
-  return ret;
-}
-
-void DUChainBaseData::setShouldCreateConstantData(bool should) {
-  QMutexLocker lock(&shouldCreateConstantDataStorageMutex);
-  
-  if(should)
-    shouldCreateConstantDataStorage.insert(QThread::currentThread());
-  else
-    shouldCreateConstantDataStorage.remove(QThread::currentThread());
+bool& DUChainBaseData::shouldCreateConstantData()
+{
+  return shouldCreateConstantDataStorage.localData();
 }
 
 }

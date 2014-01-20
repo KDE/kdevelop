@@ -206,6 +206,11 @@ IPlugin* PluginController::loadPlugin( const QString& pluginName )
 
 bool PluginController::isEnabled( const KPluginInfo& info )
 {
+    static const QStringList disabledPlugins = QString(qgetenv("KDEV_DISABLE_PLUGINS")).split(';');
+    if (disabledPlugins.contains(info.pluginName())) {
+        return false;
+    }
+
     KConfigGroup grp = Core::self()->activeSession()->config()->group( pluginControllerGrp );
     bool isEnabled = grp.readEntry( info.pluginName()+"Enabled", ShellExtension::getInstance()->defaultPlugins().isEmpty() || ShellExtension::getInstance()->defaultPlugins().contains( info.pluginName() ) );
     //kDebug() << "read config:" << isEnabled << "is global plugin:" << isGlobalPlugin( info ) << "default:" << ShellExtension::getInstance()->defaultPlugins().isEmpty()  << ShellExtension::getInstance()->defaultPlugins().contains( info.pluginName() );

@@ -30,6 +30,7 @@
 #include <kdiroperator.h>
 #include <kstandarddirs.h>
 #include <KDebug>
+#include <KActionCollection>
 
 
 BookmarkHandler::BookmarkHandler( FileManager *parent, KMenu* kpopupmenu )
@@ -48,6 +49,11 @@ BookmarkHandler::BookmarkHandler( FileManager *parent, KMenu* kpopupmenu )
     manager->setUpdate( true );
 
     m_bookmarkMenu = new KBookmarkMenu( manager, this, m_menu, parent->actionCollection() );
+
+     //remove shortcuts as they might conflict with others (eg. Ctrl+B)
+    foreach (QAction *action, parent->actionCollection()->actions()) {
+        action->setShortcut(QKeySequence());
+    }
 }
 
 BookmarkHandler::~BookmarkHandler()

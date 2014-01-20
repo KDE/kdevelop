@@ -137,17 +137,17 @@ set(kdevplatformlanguage_LIB_SRCS
 )
 
 kde4_add_library(kdevplatformlanguage SHARED ${kdevplatformlanguage_LIB_SRCS})
-target_link_libraries(kdevplatformlanguage
+target_link_libraries(kdevplatformlanguage LINK_PUBLIC
+        kdevplatforminterfaces
+)
+target_link_libraries(kdevplatformlanguage LINK_PRIVATE
         ${KDE4_KPARTS_LIBS}
         ${KDE4_KTEXTEDITOR_LIBS}
         ${KDE4_THREADWEAVER_LIBRARIES}
         ${KDE4_KNEWSTUFF3_LIBS}
-        kdevplatforminterfaces
         kdevplatformutil
-        ${Grantlee_CORE_LIBRARIES})
-# Need to add kdevplatforminterfaces and kdevplatformutil when those are exported targets
-target_link_libraries(kdevplatformlanguage LINK_INTERFACE_LIBRARIES
-        kdevplatforminterfaces)
+        ${Grantlee_CORE_LIBRARIES}
+)
 set_target_properties(kdevplatformlanguage PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
 install(TARGETS kdevplatformlanguage EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
@@ -354,5 +354,3 @@ install(FILES
     checks/controlflownode.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/checks COMPONENT Devel
 )
-
-

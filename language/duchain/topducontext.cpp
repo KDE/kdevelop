@@ -860,7 +860,7 @@ bool TopDUContext::applyAliases( const QualifiedIdentifier& previous, const Sear
 
     //Search for namespace-aliases, by using globalAliasIdentifier, which is inserted into the symbol-table by NamespaceAliasDeclaration
     QualifiedIdentifier aliasId(id);
-    aliasId.push(globalAliasIdentifier());
+    aliasId.push(globalIndexedAliasIdentifier());
     
 #ifdef DEBUG_SEARCH
   kDebug() << "checking" << id.toString();
@@ -941,7 +941,7 @@ bool TopDUContext::applyAliases( const QualifiedIdentifier& previous, const Sear
 
   {
     QualifiedIdentifier importId(previous);
-    importId.push(globalImportIdentifier());
+    importId.push(globalIndexedImportIdentifier());
 
 #ifdef DEBUG_SEARCH
 //   kDebug() << "checking imports in" << (backPointer ? id.toString() : QString("global"));

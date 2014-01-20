@@ -38,10 +38,12 @@
 #include "../breakpoint/breakpoint.h"
 #include "../breakpoint/breakpointmodel.h"
 #include <interfaces/idebugcontroller.h>
+#include <util/autoorientedsplitter.h>
 
 #define IF_DEBUG(x)
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
+#include <util/placeholderitemproxymodel.h>
 
 using namespace KDevelop;
 
@@ -59,8 +61,9 @@ BreakpointWidget::BreakpointWidget(IDebugController *controller, QWidget *parent
 
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setMargin(0);
-    QSplitter *s = new QSplitter(this);
+    QSplitter *s = new AutoOrientedSplitter(this);
     layout->addWidget(s);
+    m_splitter = s;
 
     m_breakpointsView = new QTableView(s);
     m_breakpointsView->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -73,7 +76,13 @@ BreakpointWidget::BreakpointWidget(IDebugController *controller, QWidget *parent
 
     m_breakpointsView->verticalHeader()->hide();
 
-    m_breakpointsView->setModel(m_debugController->breakpointModel());
+    PlaceholderItemProxyModel* proxyModel = new PlaceholderItemProxyModel(this);
+    proxyModel->setSourceModel(m_debugController->breakpointModel());
+    proxyModel->setColumnHint(Breakpoint::LocationColumn, i18n("New code breakpoint ..."));
+    proxyModel->setColumnHint(Breakpoint::ConditionColumn, i18n("Enter condition ..."));
+    m_breakpointsView->setModel(proxyModel);
+    connect(proxyModel, SIGNAL(dataInserted(int, QVariant)), SLOT(slotDataInserted(int, QVariant)));
+    m_proxyModel = proxyModel;
 
     connect(m_breakpointsView, SIGNAL(clicked(QModelIndex)), this, SLOT(slotOpenFile(QModelIndex)));
     connect(m_breakpointsView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(slotOpenFile(QModelIndex)));
@@ -101,6 +110,7 @@ void BreakpointWidget::setupPopupMenu()
     popup_ = new QMenu(this);
 
     QMenu* newBreakpoint = popup_->addMenu( i18nc("New breakpoint", "&New") );
+    newBreakpoint->setIcon(KIcon("list-add"));
 
     QAction* action = newBreakpoint->addAction(
         i18nc("Code breakpoint", "&Code"),
@@ -112,13 +122,13 @@ void BreakpointWidget::setupPopupMenu()
     addAction(action);
 
     newBreakpoint->addAction(
-        i18nc("Data breakpoint", "Data &write"),
+        i18nc("Data breakpoint", "Data &Write"),
         this, SLOT(slotAddBlankWatchpoint()));
     newBreakpoint->addAction(
-        i18nc("Data read breakpoint", "Data &read"),
+        i18nc("Data read breakpoint", "Data &Read"),
         this, SLOT(slotAddBlankReadWatchpoint()));
     newBreakpoint->addAction(
-        i18nc("Data access breakpoint", "Data &access"),
+        i18nc("Data access breakpoint", "Data &Access"),
         this, SLOT(slotAddBlankAccessWatchpoint()));
 
     QAction* breakpointDelete = popup_->addAction(
@@ -132,9 +142,9 @@ void BreakpointWidget::setupPopupMenu()
 
 
     popup_->addSeparator();
-    breakpointDisableAll_ = popup_->addAction(i18n("Disable &all"), this, SLOT(slotDisableAllBreakpoints()));
-    breakpointEnableAll_ = popup_->addAction(i18n("&Enable all"), this, SLOT(slotEnableAllBreakpoints()));
-    breakpointRemoveAll_ = popup_->addAction(i18n("&Remove all"), this, SLOT(slotRemoveAllBreakpoints()));
+    breakpointDisableAll_ = popup_->addAction(i18n("Disable &All"), this, SLOT(slotDisableAllBreakpoints()));
+    breakpointEnableAll_ = popup_->addAction(i18n("&Enable All"), this, SLOT(slotEnableAllBreakpoints()));
+    breakpointRemoveAll_ = popup_->addAction(i18n("&Remove All"), this, SLOT(slotRemoveAllBreakpoints()));
 
     connect(popup_,SIGNAL(aboutToShow()), this, SLOT(slotPopupMenuAboutToShow()));
 }
@@ -189,11 +199,16 @@ void BreakpointWidget::showEvent(QShowEvent *)
 
 void BreakpointWidget::edit(KDevelop::Breakpoint *n)
 {
-    QModelIndex index = m_debugController->breakpointModel()->breakpointIndex(n, Breakpoint::LocationColumn);
+    QModelIndex index = m_proxyModel->mapFromSource(m_debugController->breakpointModel()->breakpointIndex(n, Breakpoint::LocationColumn));
     m_breakpointsView->setCurrentIndex(index);
     m_breakpointsView->edit(index);
 }
 
+void BreakpointWidget::slotDataInserted(int column, const QVariant& value)
+{
+    Breakpoint* breakpoint = m_debugController->breakpointModel()->addCodeBreakpoint();
+    breakpoint->setData(column, value);
+}
 
 void BreakpointWidget::slotAddBlankBreakpoint()
 {
@@ -247,7 +262,7 @@ void BreakpointWidget::slotUpdateBreakpointDetail()
 void BreakpointWidget::breakpointHit(KDevelop::Breakpoint* b)
 {
     IF_DEBUG( kDebug() << b; )
-    QModelIndex index = m_debugController->breakpointModel()->breakpointIndex(b, 0);
+    const QModelIndex index = m_proxyModel->mapFromSource(m_debugController->breakpointModel()->breakpointIndex(b, 0));
     m_breakpointsView->selectionModel()->select(
         index,
         QItemSelectionModel::Rows
@@ -263,7 +278,7 @@ void BreakpointWidget::breakpointError(KDevelop::Breakpoint* b, const QString& m
     if (!m_breakpointsView->isVisible())
         return;
 
-    QModelIndex index = m_debugController->breakpointModel()->breakpointIndex(b, column);
+    const QModelIndex index = m_proxyModel->mapFromSource(m_debugController->breakpointModel()->breakpointIndex(b, column));
     QPoint p = m_breakpointsView->visualRect(index).topLeft();
     p = m_breakpointsView->mapToGlobal(p);
 

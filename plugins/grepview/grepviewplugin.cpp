@@ -19,6 +19,8 @@
 #include "grepoutputview.h"
 
 #include <QWhatsThis>
+#include <QDBusConnection>
+#include <QKeySequence>
 
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
@@ -43,10 +45,38 @@
 #include <project/path.h>
 #include <language/interfaces/editorcontext.h>
 #include <outputview/ioutputview.h>
-#include <QDBusConnection>
 
 K_PLUGIN_FACTORY(GrepViewFactory, registerPlugin<GrepViewPlugin>(); )
 K_EXPORT_PLUGIN(GrepViewFactory(KAboutData("kdevgrepview","kdevgrepview", ki18n("Find/Replace in Files"), "0.1", ki18n("Allows fast searching of multiple files using patterns or regular expressions. And allow to replace it too."), KAboutData::License_GPL)))
+
+static QString patternFromSelection(const KDevelop::IDocument* doc)
+{
+    if (!doc)
+        return QString();
+
+    QString pattern;
+    KTextEditor::Range range = doc->textSelection();
+    if( range.isValid() )
+    {
+        pattern = doc->textDocument()->text( range );
+    }
+    if( pattern.isEmpty() )
+    {
+        pattern = doc->textWord();
+    }
+
+    // Before anything, this removes line feeds from the
+    // beginning and the end.
+    int len = pattern.length();
+    if (len > 0 && pattern[0] == '\n')
+    {
+        pattern.remove(0, 1);
+        len--;
+    }
+    if (len > 0 && pattern[len-1] == '\n')
+        pattern.truncate(len-1);
+    return pattern;
+}
 
 GrepViewPlugin::GrepViewPlugin( QObject *parent, const QVariantList & )
     : KDevelop::IPlugin( GrepViewFactory::componentData(), parent ), m_currentJob(0)
@@ -58,7 +88,7 @@ GrepViewPlugin::GrepViewPlugin( QObject *parent, const QVariantList & )
 
     KAction *action = actionCollection()->addAction("edit_grep");
     action->setText(i18n("Find/Replace in Fi&les..."));
-    action->setShortcut( i18n("Ctrl+Alt+f") );
+    action->setShortcut( QKeySequence("Ctrl+Alt+F") );
     connect(action, SIGNAL(triggered(bool)), this, SLOT(showDialogFromMenu()));
     action->setToolTip( i18n("Search for expressions over several files") );
     action->setWhatsThis( i18n("Opens the 'Find/Replace in files' dialog. There you "
@@ -134,7 +164,7 @@ KDevelop::ContextMenuExtension GrepViewPlugin::contextMenuExtension(KDevelop::Co
 
 void GrepViewPlugin::showDialog(bool setLastUsed, QString pattern, bool showOptions)
 {
-    GrepDialog* dlg = new GrepDialog( this, core()->uiController()->activeMainWindow(), setLastUsed );
+    GrepDialog* dlg = new GrepDialog( this, core()->uiController()->activeMainWindow() );
     KDevelop::IDocument* doc = core()->documentController()->activeDocument();
     
     if(!pattern.isEmpty())
@@ -143,30 +173,7 @@ void GrepViewPlugin::showDialog(bool setLastUsed, QString pattern, bool showOpti
     }
     else if(!setLastUsed)
     {
-        QString pattern;
-        if( doc )
-        {
-            KTextEditor::Range range = doc->textSelection();
-            if( range.isValid() )
-            {
-                pattern = doc->textDocument()->text( range );
-            }
-            if( pattern.isEmpty() )
-            {
-                pattern = doc->textWord();
-            }
-        }
-
-        // Before anything, this removes line feeds from the
-        // beginning and the end.
-        int len = pattern.length();
-        if (len > 0 && pattern[0] == '\n')
-        {
-            pattern.remove(0, 1);
-            len--;
-        }
-        if (len > 0 && pattern[len-1] == '\n')
-            pattern.truncate(len-1);
+        QString pattern = patternFromSelection(doc);
         if (!pattern.isEmpty()) {
             dlg->setPattern( pattern );
         }

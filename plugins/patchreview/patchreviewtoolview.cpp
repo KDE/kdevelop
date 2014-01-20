@@ -36,6 +36,7 @@
 #include <KLineEdit>
 #include <KTextEditor/Document>
 #include <QMenu>
+#include <QFileInfo>
 
 using namespace KDevelop;
 
@@ -77,16 +78,33 @@ private:
 PatchReviewToolView::PatchReviewToolView( QWidget* parent, PatchReviewPlugin* plugin )
     : QWidget( parent ),
     m_resetCheckedUrls( true ),
-    m_plugin( plugin ) {
+    m_plugin( plugin )
+{
+    connect( m_plugin->finishReviewAction(), SIGNAL(triggered(bool)), this, SLOT( finishReview() ) );
+
     connect( plugin, SIGNAL( patchChanged() ), SLOT( patchChanged() ) );
     connect( plugin, SIGNAL( startingNewReview() ), SLOT( startingNewReview() ) );
     connect( ICore::self()->documentController(), SIGNAL( documentActivated( KDevelop::IDocument* ) ), this, SLOT( documentActivated( KDevelop::IDocument* ) ) );
+    connect(ICore::self()->uiController()->activeMainWindow(), SIGNAL(areaChanged(Sublime::Area*)), SLOT(onAreaChange(Sublime::Area*)));
 
     Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>( ICore::self()->uiController()->activeMainWindow() );
     connect(w, SIGNAL(areaChanged(Sublime::Area*)), m_plugin, SLOT(areaChanged(Sublime::Area*)));
 
     showEditDialog();
     patchChanged();
+}
+
+void PatchReviewToolView::resizeEvent(QResizeEvent* ev)
+{
+    bool vertical = (width() < height());
+    m_editPatch.buttonsLayout->setDirection(vertical ? QBoxLayout::TopToBottom : QBoxLayout::LeftToRight);
+    m_editPatch.contentLayout->setDirection(vertical ? QBoxLayout::TopToBottom : QBoxLayout::LeftToRight);
+    m_editPatch.buttonsSpacer->changeSize(vertical ? 0 : 40, 0, QSizePolicy::Fixed, QSizePolicy::Fixed);
+    QWidget::resizeEvent(ev);
+    if(m_customWidget) {
+        m_editPatch.contentLayout->removeWidget( m_customWidget );
+        m_editPatch.contentLayout->insertWidget(0, m_customWidget );
+    }
 }
 
 void PatchReviewToolView::startingNewReview()
@@ -99,7 +117,8 @@ void PatchReviewToolView::patchChanged() {
     kompareModelChanged();
 }
 
-PatchReviewToolView::~PatchReviewToolView() {
+PatchReviewToolView::~PatchReviewToolView()
+{
 }
 
 LocalPatchSource* PatchReviewToolView::GetLocalPatchSource() {
@@ -110,56 +129,24 @@ LocalPatchSource* PatchReviewToolView::GetLocalPatchSource() {
     return dynamic_cast<LocalPatchSource*>( ips.data() );
 }
 
-void PatchReviewToolView::updatePatchFromEdit() {
-    LocalPatchSource* lpatch = GetLocalPatchSource();
-    if( !lpatch )
-        return;
-
-    lpatch->setCommand(m_editPatch.command->text());
-    lpatch->setFilename(m_editPatch.filename->url());
-    lpatch->setBaseDir(m_editPatch.baseDir->url());
-    lpatch->setAlreadyApplied( m_editPatch.applied->checkState() == Qt::Checked );
-
-    m_plugin->notifyPatchChanged();
-}
-
 void PatchReviewToolView::fillEditFromPatch() {
     IPatchSource::Ptr ipatch = m_plugin->patch();
     if ( !ipatch )
         return;
 
-    disconnect( m_editPatch.patchSelection, SIGNAL( currentIndexChanged( int ) ), this, SLOT( patchSelectionChanged( int ) ) );
-
-    m_editPatch.patchSelection->clear();
-    foreach( IPatchSource::Ptr patch, m_plugin->knownPatches() )
-    {
-        if( !patch )
-            continue;
-        m_editPatch.patchSelection->addItem( patch->icon(), patch->name() );
-        if( patch == ipatch )
-            m_editPatch.patchSelection->setCurrentIndex( m_editPatch.patchSelection->count()-1 );
-    }
-
-    connect( m_editPatch.patchSelection, SIGNAL( currentIndexChanged( int ) ), this, SLOT( patchSelectionChanged( int ) ) );
-
     m_editPatch.cancelReview->setVisible( ipatch->canCancel() );
 
-    QString finishText = i18n( "Finish Review" );
-    if( !ipatch->finishReviewCustomText().isEmpty() )
-        finishText = ipatch->finishReviewCustomText();
-    kDebug() << "finish-text: " << finishText;
-    m_editPatch.finishReview->setText( finishText );
     m_fileModel->setIsCheckbable( m_plugin->patch()->canSelectFiles() );
 
     if( m_customWidget ) {
         kDebug() << "removing custom widget";
         m_customWidget->hide();
-        m_editPatch.customWidgetsLayout->removeWidget( m_customWidget );
+        m_editPatch.contentLayout->removeWidget( m_customWidget );
     }
 
     m_customWidget = ipatch->customWidget();
     if( m_customWidget ) {
-        m_editPatch.customWidgetsLayout->insertWidget( 0, m_customWidget );
+        m_editPatch.contentLayout->insertWidget( 0, m_customWidget );
         m_customWidget->show();
         kDebug() << "got custom widget";
     }
@@ -179,28 +166,6 @@ void PatchReviewToolView::fillEditFromPatch() {
 
     m_editPatch.testsButton->setVisible(showTests);
     m_editPatch.testProgressBar->hide();
-
-    LocalPatchSource* lpatch = dynamic_cast<LocalPatchSource*>( ipatch.data() );
-    m_editPatch.localPatchOptions->setVisible( lpatch );
-    if( !lpatch )
-        return;
-
-    m_editPatch.command->setText( lpatch->command());
-    m_editPatch.filename->setUrl( lpatch->file() );
-    m_editPatch.baseDir->setUrl( lpatch->baseDir() );
-    m_editPatch.applied->setCheckState( lpatch->isAlreadyApplied() ? Qt::Checked : Qt::Unchecked );
-
-    if ( lpatch->command().isEmpty() )
-        m_editPatch.tabWidget->setCurrentIndex( m_editPatch.tabWidget->indexOf( m_editPatch.fileTab ) );
-    else
-        m_editPatch.tabWidget->setCurrentIndex( m_editPatch.tabWidget->indexOf( m_editPatch.commandTab ) );
-}
-
-void PatchReviewToolView::patchSelectionChanged( int selection ) {
-    m_fileModel->removeRows( 0, m_fileModel->rowCount() );
-    if( selection >= 0 && selection < m_plugin->knownPatches().size() ) {
-        m_plugin->setPatch( m_plugin->knownPatches()[selection] );
-    }
 }
 
 void PatchReviewToolView::slotAppliedChanged( int newState ) {
@@ -227,9 +192,9 @@ void PatchReviewToolView::showEditDialog() {
     m_editPatch.nextHunk->setIcon( KIcon( "arrow-down" ) );
     m_editPatch.nextFile->setIcon( KIcon( "arrow-right" ) );
     m_editPatch.cancelReview->setIcon( KIcon( "dialog-cancel" ) );
-    m_editPatch.finishReview->setIcon( KIcon( "dialog-ok" ) );
     m_editPatch.updateButton->setIcon( KIcon( "view-refresh" ) );
     m_editPatch.testsButton->setIcon( KIcon( "preflight-verifier" ) );
+    m_editPatch.finishReview->setDefaultAction(m_plugin->finishReviewAction());
 
     QMenu* exportMenu = new QMenu( m_editPatch.exportReview );
     StandardPatchExport* stdactions = new StandardPatchExport( m_plugin, this );
@@ -253,30 +218,11 @@ void PatchReviewToolView::showEditDialog() {
     connect( m_editPatch.filesList, SIGNAL( activated ( QModelIndex ) ), this, SLOT( fileDoubleClicked( QModelIndex ) ) );
 
     connect( m_editPatch.cancelReview, SIGNAL( clicked( bool ) ), m_plugin, SLOT( cancelReview() ) );
-    connect( m_editPatch.finishReview, SIGNAL( clicked( bool ) ), this, SLOT( finishReview() ) );
     //connect( m_editPatch.cancelButton, SIGNAL(pressed()), this, SLOT(slotEditCancel()) );
 
     //connect( this, SIGNAL(finished(int)), this, SLOT(slotEditDialogFinished(int)) );
 
-    connect( m_editPatch.applied, SIGNAL( stateChanged( int ) ), SLOT( updatePatchFromEdit() ) );
-    connect( m_editPatch.filename, SIGNAL( textChanged( QString ) ), SLOT( updatePatchFromEdit() ) );
-
-    m_editPatch.baseDir->setMode( KFile::Directory );
-
-    connect( m_editPatch.command, SIGNAL( textChanged( QString ) ), this, SLOT( updatePatchFromEdit() ) );
-//   connect( m_editPatch.commandToFile, SIGNAL(clicked(bool)), this, SLOT(slotToFile()) );
-
-    connect( m_editPatch.filename->lineEdit(), SIGNAL( returnPressed() ), this, SLOT( updatePatchFromEdit() ) );
-    connect( m_editPatch.filename->lineEdit(), SIGNAL( editingFinished() ), this, SLOT( updatePatchFromEdit() ) );
-    connect( m_editPatch.filename, SIGNAL( urlSelected( KUrl ) ), this, SLOT( updatePatchFromEdit() ) );
-    connect( m_editPatch.command, SIGNAL( textChanged( QString ) ), this, SLOT( updatePatchFromEdit() ) );
-//     connect( m_editPatch.commandToFile, SIGNAL(clicked(bool)), m_plugin, SLOT(commandToFile()) );
-
-    connect( m_editPatch.patchSelection, SIGNAL( currentIndexChanged( int ) ), this, SLOT( patchSelectionChanged( int ) ) );
-
     connect( m_editPatch.updateButton, SIGNAL( clicked( bool ) ), m_plugin, SLOT( forceUpdate() ) );
-
-    connect( m_editPatch.showButton, SIGNAL( clicked( bool ) ), m_plugin, SLOT( updateReview()) );
 
     connect( m_editPatch.testsButton, SIGNAL( clicked( bool ) ), this, SLOT( runTests() ) );
     

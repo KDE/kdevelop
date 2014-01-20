@@ -121,6 +121,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDUContext
     uint m_contextIndex;
 };
 
+inline uint qHash(const IndexedDUContext& ctx)
+{
+  return ctx.hash();
+}
+
 }
 
 Q_DECLARE_TYPEINFO(KDevelop::IndexedDUContext, Q_MOVABLE_TYPE);

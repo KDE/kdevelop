@@ -152,15 +152,15 @@ public:
   void setIsTypeAlias(bool typeAlias);
 
   /**
-   * Determine whether the declaration is final, ie, it can only be written to once.
+   * Determine whether the declaration is deprecated.
    */
-  bool isFinal() const;
+  bool isDeprecated() const;
   /**
-   * Set whether the declaration is final.
+   * Set whether the declaration is deprecated.
    *
-   * \param final true if the declaration is final, otherwise false.
+   * \param final true if the declaration is deprecated, otherwise false.
    */
-  void setFinal(bool final);
+  void setDeprecated(bool deprecated);
 
   /**
    * Changes whether this declaration must be direct in all cases or not.

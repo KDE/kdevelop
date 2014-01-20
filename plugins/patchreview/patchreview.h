@@ -54,7 +54,7 @@ class PatchReviewPlugin : public KDevelop::IPlugin, public KDevelop::IPatchRevie
     Q_INTERFACES( KDevelop::IPatchReview )
 
 public :
-        PatchReviewPlugin( QObject *parent, const QVariantList & = QVariantList() );
+    PatchReviewPlugin( QObject *parent, const QVariantList & = QVariantList() );
     ~PatchReviewPlugin();
     virtual void unload();
 
@@ -62,10 +62,6 @@ public :
 
     KDevelop::IPatchSource::Ptr patch() const {
         return m_patch;
-    }
-
-    QList< KDevelop::IPatchSource::Ptr > knownPatches() const {
-        return m_knownPatches;
     }
 
     Diff2::KompareModelList* modelList() const {
@@ -76,13 +72,12 @@ public :
 
     void setPatch( KDevelop::IPatchSource* patch );
 
-    void registerPatch( KDevelop::IPatchSource::Ptr patch );
-
     virtual void startReview( KDevelop::IPatchSource* patch, ReviewMode mode );
 
     void finishReview( QList< KUrl > selection );
 
     KUrl urlForFileModel( const Diff2::DiffModel* model );
+    QAction* finishReviewAction() const { return m_finishReview; }
 
 Q_SIGNALS:
     void startingNewReview();
@@ -118,8 +113,6 @@ private:
     // Returns false on failure (if the user disagreed).
     bool setUniqueEmptyWorkingSet();
 
-    QList< KDevelop::IPatchSource::Ptr > m_knownPatches;
-
     void addHighlighting( const KUrl& file, KDevelop::IDocument* document = 0 );
     void removeHighlighting( const KUrl& file = KUrl() );
 
@@ -128,6 +121,7 @@ private:
     QTimer* m_updateKompareTimer;
 
     PatchReviewToolViewFactory* m_factory;
+    QAction* m_finishReview;
 
     #if 0
     void determineState();

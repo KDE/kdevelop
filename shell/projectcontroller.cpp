@@ -152,19 +152,17 @@ public:
         proj->projectConfiguration()->sync();
         m_configuringProject = 0;
     }
+
     void saveListOfOpenedProjects()
     {
-        KSharedConfig::Ptr config = Core::self()->activeSession()->config();
-        KConfigGroup group = config->group( "General Options" );
-    
-        QStringList openProjects;
-    
+        KUrl::List openProjects;
+        openProjects.reserve( m_projects.size() );
+
         foreach( IProject* project, m_projects ) {
-            openProjects.append(project->projectFile().pathOrUrl());
+            openProjects.append(project->projectFile().toUrl());
         }
-    
-        group.writeEntry( "Open Projects", openProjects );
-        group.sync();
+
+        Core::self()->activeSession()->setContainedProjects( openProjects );
     }
 
     // Recursively collects builder dependencies for a project.
@@ -309,6 +307,12 @@ public:
             q->abortOpeningProject(project);
             project->deleteLater();
         }
+    }
+
+    void areaChanged(Sublime::Area* area) {
+        KActionCollection* ac = m_core->uiControllerInternal()->defaultMainWindow()->actionCollection();
+        ac->action("commit_current_project")->setEnabled(area->objectName() == "code");
+        ac->action("commit_current_project")->setVisible(area->objectName() == "code");
     }
 };
 
@@ -527,6 +531,8 @@ void ProjectController::setupActions()
     action->setText( i18n( "Commit Current Project..." ) );
     action->setIconText( i18n( "Commit..." ) );
     action->setIcon( KIcon("svn-commit") );
+    connect(d->m_core->uiControllerInternal()->defaultMainWindow(), SIGNAL(areaChanged(Sublime::Area*)),
+            SLOT(areaChanged(Sublime::Area*)));
     d->m_core->uiControllerInternal()->area(0, "code")->addAction(action);
 
     KSharedConfig * config = KGlobal::config().data();
@@ -796,14 +802,7 @@ void ProjectController::projectImportingFinished( IProject* project )
     d->m_projectPlugins.insert( project, pluglist );
     d->m_projects.append( project );
 
-    if(!Core::self()->sessionController()->activeSession()->containedProjects().contains(project->projectFileUrl()))
-        d->saveListOfOpenedProjects();
-    
-//     KActionCollection * ac = d->m_core->uiController()->defaultMainWindow()->actionCollection();
-//     QAction * action;
-
-    //action = ac->action( "project_close" );
-    //action->setEnabled( true );
+    d->saveListOfOpenedProjects();
 
     if (Core::self()->setupFlags() != Core::NoUi)
     {

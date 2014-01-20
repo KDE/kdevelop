@@ -3,6 +3,7 @@ add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9508 )
 ########### next target ###############
 
 set(kdevplatformutil_LIB_SRCS
+    autoorientedsplitter.cpp
     formattinghelpers.cpp
     richtextpushbutton.cpp
     richtexttoolbutton.cpp
@@ -12,6 +13,7 @@ set(kdevplatformutil_LIB_SRCS
     commandexecutor.cpp
     environmentconfigurebutton.cpp
     environmentselectionwidget.cpp
+    environmentselectionmodel.cpp
     environmentgrouplist.cpp
     activetooltip.cpp
     executecompositejob.cpp
@@ -19,6 +21,7 @@ set(kdevplatformutil_LIB_SRCS
     shellutils.cpp
     sequentiallyrunjobs.cpp
     multilevellistview.cpp
+    placeholderitemproxymodel.cpp
     projecttestjob.cpp
 )
 
@@ -36,14 +39,13 @@ add_subdirectory(tests)
 
 kde4_add_ui_files(kdevplatformutil_LIB_SRCS ${kdevplatformutil_LIB_US})
 kde4_add_library(kdevplatformutil SHARED ${kdevplatformutil_LIB_SRCS})
-target_link_libraries(kdevplatformutil 
-        ${KDE4_KDEUI_LIBS} 
-        ${KDE4_KCMUTILS_LIBRARY} 
-        kdevplatforminterfaces
-    )
-# Might want to add kdevplatform* when they're exported targets
-target_link_libraries(kdevplatformutil LINK_INTERFACE_LIBRARIES 
-        ${KDE4_KDEUI_LIBS})
+target_link_libraries(kdevplatformutil LINK_PUBLIC
+    ${KDE4_KDEUI_LIBS}
+)
+target_link_libraries(kdevplatformutil LINK_PRIVATE
+    ${KDE4_KCMUTILS_LIBRARY}
+    kdevplatforminterfaces
+)
 set_target_properties(kdevplatformutil PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
 install(TARGETS kdevplatformutil EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
@@ -54,6 +56,7 @@ install( FILES kdev_format_source DESTINATION bin PERMISSIONS OWNER_EXECUTE OWNE
 ########### install files ###############
 
 install( FILES
+    autoorientedsplitter.h
     formattinghelpers.h
     richtextpushbutton.h
     richtexttoolbutton.h
@@ -76,5 +79,6 @@ install( FILES
     fileutils.h
     sequentiallyrunjobs.h
     multilevellistview.h
+    placeholderitemproxymodel.h
     projecttestjob.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/util COMPONENT Devel)

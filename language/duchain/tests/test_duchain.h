@@ -1,7 +1,7 @@
 /*
  * This file is part of KDevelop
  *
- * Copyright 2011 Milian Wolff <mail@milianw.de>
+ * Copyright 2011-2013 Milian Wolff <mail@milianw.de>
  * Copyright 2006 Hamish Rodda <rodda@kde.org>
  * Copyright 2007-2009 David Nolden <david.nolden.kdevelop@art-master.de>
  *
@@ -47,6 +47,10 @@ private slots:
     void benchCodeModel();
     void benchTypeRegistry();
     void benchTypeRegistry_data();
+    void benchDuchainWriteLocker();
+    void benchDuchainReadLocker();
+    void benchDUChainItemFactory_copy();
+    void benchDUChainItemFactory_copy_data();
 };
 
 #endif // KDEVPLATFORM_TEST_DUCHAIN_H

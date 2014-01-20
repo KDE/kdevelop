@@ -1,3 +1,0 @@
-- Change KDEVELOP_PLUGIN_VERSION in interfaces/iplugin.h to the next greate number
-- Run the following shell script in kdevplatform and kdevelop, inserting the apropriate new number instead of <NUMBER>:
-find -name "*.desktop" | xargs grep -l -- KDevelop-Version  | xargs sed -i 's/X-KDevelop-Version=[0-9]\+/X-KDevelop-Version=<NUMBER>/'

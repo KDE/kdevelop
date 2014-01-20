@@ -46,6 +46,7 @@ public:
     virtual ~VcsPluginHelper();
 
     void setupFromContext(KDevelop::Context*);
+    void addContextDocument(const KUrl& url);
     KUrl::List const & contextUrlList();
     QMenu* commonActions();
 

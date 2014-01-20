@@ -19,6 +19,7 @@
 
 #include "testcontroller.h"
 #include "interfaces/itestsuite.h"
+#include <interfaces/icore.h>
 
 #include <KUrl>
 #include <KLocalizedString>
@@ -75,7 +76,8 @@ void TestController::addTestSuite(ITestSuite* suite)
         delete existingSuite;
     }
     d->suites.append(suite);
-    emit testSuiteAdded(suite);
+    if(!ICore::self()->shuttingDown())
+        emit testSuiteAdded(suite);
 }
 
 ITestSuite* TestController::findTestSuite(IProject* project, const QString& name) const

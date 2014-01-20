@@ -42,21 +42,16 @@ bool WorkingSet::m_loading = false;
 
 namespace {
 
-QIcon generateIcon(const QString& id)
+QIcon generateIcon(const WorkingSetIconParameters& params)
 {
     QImage pixmap(16, 16, QImage::Format_ARGB32);
     // fill the background with a transparent color
     pixmap.fill(QColor::fromRgba(qRgba(0, 0, 0, 0)));
-    // calculate layout and colors depending on the working set ID
-    // modulo it so it's around 2^28, leaving some space before uint overflows
-    const uint setId = qHash(id) % 268435459;
-    // amount of colored squares in this icon (the rest is grey or whatever you set as default color)
-    // use 4-6-4-1 weighting for 1, 2, 3, 4 squares, because that's the number of arrangements for each
-    const uint coloredCount = (setId % 15 < 4) ? 1 : (setId % 15 < 10) ? 2 : (setId % 15 == 14) ? 4 : 3;
+    const uint coloredCount = params.coloredCount;
     // coordinates of the rectangles to draw, for 16x16 icons specifically
     QList<QRect> rects;
     rects << QRect(1, 1, 5, 5) << QRect(1, 9, 5, 5) << QRect(9, 1, 5, 5) << QRect(9, 9, 5, 5);
-    if ( setId % 31 < 16 ) {
+    if ( params.swapDiagonal ) {
         rects.swap(1, 2);
     }
 
@@ -67,31 +62,31 @@ QIcon generateIcon(const QString& id)
     // color for colored squares
     // this code is not fragile, you can just tune the magic formulas at random and see what looks good.
     // just make sure to keep it within the 0-360 / 0-255 / 0-255 space of the HSV model
-    QColor brightColor = QColor::fromHsv((setId % 273 * 81) % 360, qMin<uint>(255, 215 + (setId*5) % 150),
-                                         205 + (setId*11) % 50);
+    QColor brightColor = QColor::fromHsv(params.hue, qMin<uint>(255, 215 + (params.setId*5) % 150),
+                                         205 + (params.setId*11) % 50);
     // Y'UV "Y" value, the approximate "lightness" of the color
     // If it is above 0.6, then making the color darker a bit is okay,
     // if it is below 0.35, then the color should be a bit brighter.
     float brightY = 0.299 * brightColor.redF() + 0.587 * brightColor.greenF() + 0.114 * brightColor.blueF();
     if ( brightY > 0.6 ) {
-        if ( setId % 7 < 2 ) {
+        if ( params.setId % 7 < 2 ) {
             // 2/7 chance to make the color significantly darker
-            brightColor = brightColor.darker(120 + (setId*7) % 35);
+            brightColor = brightColor.darker(120 + (params.setId*7) % 35);
         }
-        else if ( setId % 5 == 0 ) {
+        else if ( params.setId % 5 == 0 ) {
             // 1/5 chance to make it a bit darker
-            brightColor = brightColor.darker(110 + (setId*3) % 10);
+            brightColor = brightColor.darker(110 + (params.setId*3) % 10);
         }
     }
     if ( brightY < 0.35 ) {
         // always make the color brighter to avoid very dark colors (like rgb(0, 0, 255))
-        brightColor = brightColor.lighter(120 + (setId*13) % 55);
+        brightColor = brightColor.lighter(120 + (params.setId*13) % 55);
     }
     int at = 0;
     foreach ( const QRect& rect, rects ) {
         QColor currentColor;
         // pick the colored squares; you can get different patterns by re-ordering the "rects" list
-        if ( (at + setId*7) % 4 < coloredCount ) {
+        if ( (at + params.setId*7) % 4 < coloredCount ) {
             currentColor = brightColor;
         }
         else {

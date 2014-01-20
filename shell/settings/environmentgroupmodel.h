@@ -35,6 +35,11 @@ class EnvironmentGroupModel : public QAbstractTableModel, public EnvironmentGrou
 {
     Q_OBJECT
 public:
+    enum Role {
+        VariableRole = Qt::UserRole + 1,
+        ValueRole
+    };
+
     EnvironmentGroupModel();
     int rowCount( const QModelIndex &parent = QModelIndex() ) const;
     int columnCount( const QModelIndex &parent = QModelIndex()  ) const;
@@ -46,7 +51,8 @@ public:
     void loadFromConfig( KConfig* );
     void saveToConfig( KConfig* );
     QModelIndex addVariable( const QString& var, const QString& value );
-    void removeVariables( QModelIndexList variables );
+    void removeVariable(const QString& variable);
+    void removeVariables(const QStringList& variables);
     void removeGroup( const QString& grp );
     void changeDefaultGroup( const QString& grp );
 

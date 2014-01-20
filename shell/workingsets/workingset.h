@@ -23,6 +23,7 @@
 #include <QIcon>
 #include <KConfigGroup>
 #include <QPointer>
+#include <QDebug>
 
 namespace Sublime {
 class Area;
@@ -31,6 +32,40 @@ class View;
 }
 
 namespace KDevelop {
+
+/// Contains all significant parameters which control the appearance of a working set icon
+struct WorkingSetIconParameters {
+    WorkingSetIconParameters(const QString& id)
+        : setId(qHash(id) % 268435459)
+        , coloredCount((setId % 15 < 4) ? 1 : (setId % 15 < 10) ? 2 : (setId % 15 == 14) ? 4 : 3)
+        , hue((setId % 273 * 83) % 360)
+        , swapDiagonal(setId % 31 < 16)
+    { };
+    // calculate layout and colors depending on the working set ID
+    // modulo it so it's around 2^28, leaving some space before uint overflows
+    const uint setId;
+    // amount of colored squares in this icon (the rest is grey or whatever you set as default color)
+    // use 4-6-4-1 weighting for 1, 2, 3, 4 squares, because that's the number of arrangements for each
+    const uint coloredCount;
+    const uint hue;
+    bool swapDiagonal;
+    // between 0 and 100, 100 = very similar, 0 = very different
+    // 20 points should make a significantly different icon.
+    uint similarity(const WorkingSetIconParameters& other) const {
+        int sim = 100;
+        uint hueDiff = qAbs<int>(hue - other.hue);
+        hueDiff = hueDiff > 180 ? 360 - hueDiff : hueDiff;
+        sim -= hueDiff > 35 ? 50 : (hueDiff * 50) / 180;
+        if ( coloredCount != other.coloredCount ) {
+            sim -= 50;
+        }
+        else if ( coloredCount == 2 && swapDiagonal != other.swapDiagonal ) {
+            sim -= 35;
+        }
+        return sim;
+    };
+};
+
 
 class WorkingSet : public QObject {
     Q_OBJECT

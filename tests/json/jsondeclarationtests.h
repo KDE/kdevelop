@@ -30,6 +30,7 @@
 #include "language/duchain/duchain.h"
 #include "language/duchain/functiondefinition.h"
 #include "language/duchain/definitions.h"
+#include <language/duchain/classmemberdeclaration.h>
 #include "jsontesthelpers.h"
 
 /**
@@ -49,11 +50,13 @@
  *   targetType : TypeTestObject
  *   identifiedTypeQid : string
  *   isVirtual : bool
+ *   isStatic : bool
  *   declaration : DeclTestObject
  *   definition : DeclTestObject
  *   null : bool
  *   defaultParameter : string
  *   toString : string
+ *   range : string
  */
 
 namespace KDevelop
@@ -171,6 +174,17 @@ DeclarationTest(isVirtual)
 
   return compareValues(absFuncDecl->isVirtual(), value, "Declaration's isVirtual");
 }
+///JSON type: bool
+///@returns whether the (class-member) declaration's isStatic matches the given value
+DeclarationTest(isStatic)
+{
+  const QString NOT_A_MEMBER = "Non-class-member declaration cannot be static.";
+  auto memberDecl = dynamic_cast<ClassMemberDeclaration*>(decl);
+  if (!memberDecl)
+      return NOT_A_MEMBER;
+
+  return compareValues(memberDecl->isStatic(), value, "Declaration's isStatic");
+}
 ///JSON type: DeclTestObject
 ///@returns whether the tests for the function declaration's definition pass
 DeclarationTest(definition)
@@ -186,7 +200,9 @@ DeclarationTest(definition)
 DeclarationTest(declaration)
 {
   FunctionDefinition *def = dynamic_cast<FunctionDefinition*>(decl);
-  Declaration *defDecl = def->declaration(decl->topContext());
+  Declaration *defDecl = nullptr;
+  if (def)
+    defDecl = def->declaration(decl->topContext());
   return testObject(defDecl, value, "Definition's declaration");
 }
 ///JSON type: bool
@@ -215,7 +231,26 @@ DeclarationTest(defaultParameter)
 ///@returns stringified declaration
 DeclarationTest(toString)
 {
+  if (!decl) {
+    return "Invalid Declaration";
+  }
   return compareValues(decl->toString(), value, "Declaration's toString");
+}
+
+///JSON type: string
+///@returns stringified declaration
+DeclarationTest(range)
+{
+  if (!decl) {
+    return "Invalid Declaration";
+  }
+  auto range = decl->range();
+  QString string = QString("[(%1, %2), (%3, %4)]")
+    .arg(range.start.line)
+    .arg(range.start.column)
+    .arg(range.end.line)
+    .arg(range.end.column);
+  return compareValues(string, value, "Declaration's toString");
 }
 
 }

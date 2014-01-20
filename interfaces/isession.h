@@ -53,7 +53,7 @@ public:
     virtual QString description() const = 0;
     virtual QString name() const = 0;
     virtual KUrl::List containedProjects() const = 0;
-    virtual void updateContainedProjects() = 0;
+    virtual void setContainedProjects( const KUrl::List& projects ) = 0;
     virtual KUrl pluginDataArea( const IPlugin* ) = 0;
     virtual KSharedConfig::Ptr config() = 0;
     virtual QUuid id() const = 0;
@@ -65,9 +65,14 @@ public:
      */
     virtual void setTemporary(bool temp) = 0;
     virtual bool isTemporary() const = 0;
+
+Q_SIGNALS:
+    void sessionUpdated( KDevelop::ISession* session );
 };
 
 }
+
+Q_DECLARE_METATYPE( KDevelop::ISession* )
 
 #endif
 

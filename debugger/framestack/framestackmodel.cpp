@@ -92,19 +92,8 @@ void FrameStackModel::setFrames(int threadNumber, QList<FrameItem> frames)
         endInsertRows();
     }
 
-    //if first frame doesn't contain debug ifnormation (no line numbers) set
-    //currentFrame to the first frame with debug information
     if (m_currentThread == threadNumber && m_updateCurrentFrameOnNextFetch) {
         m_currentFrame = 0;
-        foreach (const FrameItem &frame, frames) {
-            if (!frame.file.isEmpty() && frame.line != -1) {
-                if (session()->currentUrl() != frame.file || session()->currentLine() != frame.line) {
-                    session()->setCurrentPosition(frame.file, frame.line, QString());
-                }
-                m_currentFrame = frame.nr;
-                break;
-            }
-        }
         m_updateCurrentFrameOnNextFetch = false;
     }
 
@@ -138,6 +127,11 @@ FrameStackModel::FrameItem FrameStackModel::frame(const QModelIndex& index)
     Q_ASSERT(m_threads.count() >= index.internalId());
     const ThreadItem &thread = m_threads.at(index.internalId()-1);
     return m_frames[thread.nr].at(index.row());
+}
+
+QList<FrameStackModel::FrameItem> FrameStackModel::frames(int threadNumber) const
+{
+    return m_frames.value(threadNumber);
 }
 
 QVariant FrameStackModel::data(const QModelIndex& index, int role) const

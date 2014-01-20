@@ -25,7 +25,6 @@
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iuicontroller.h>
 #include <shell/core.h>
-#include <sublime/view.h>
 
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>

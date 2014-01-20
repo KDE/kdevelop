@@ -191,12 +191,13 @@ void ProjectManagerViewPlugin::unload()
 
 ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::Context* context )
 {
-    d->ctxProjectItemList.clear();
     if( context->type() != KDevelop::Context::ProjectItemContext )
         return IPlugin::contextMenuExtension( context );
 
     KDevelop::ProjectItemContext* ctx = dynamic_cast<KDevelop::ProjectItemContext*>( context );
     QList<KDevelop::ProjectBaseItem*> items = ctx->items();
+
+    d->ctxProjectItemList.clear();
 
     if( items.isEmpty() )
         return IPlugin::contextMenuExtension( context );

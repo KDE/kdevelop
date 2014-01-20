@@ -12,8 +12,7 @@ set(KDEVPLATFORM_LIB_SOVERSION 8)
 
 ################################################################################
 
-cmake_minimum_required(VERSION 2.8)
-
+cmake_minimum_required(VERSION 2.8.9)
 project(KDevPlatform)
 
 set(KDE4_BUILD_TESTS "ON" CACHE "BOOL" "Enable building of tests" FORCE )
@@ -44,6 +43,10 @@ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS -DQURL_NO_CAST_FROM_QSTRING)
+
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+endif()
 
 configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/config-kdevplatform.h.cmake
                 ${CMAKE_CURRENT_BINARY_DIR}/config-kdevplatform.h )
@@ -97,6 +100,9 @@ endif(KDE4_USE_COMMON_CMAKE_PACKAGE_CONFIG_DIR)
 
 install( FILES
         "${KDevPlatform_BINARY_DIR}/kdevplatformversion.h"
+        DESTINATION "${INCLUDE_INSTALL_DIR}/kdevplatform" )
+install( FILES
+        "${KDevPlatform_BINARY_DIR}/config-kdevplatform.h"
         DESTINATION "${INCLUDE_INSTALL_DIR}/kdevplatform" )
 install( FILES
         "${KDevPlatform_BINARY_DIR}/KDevPlatformConfig.cmake"

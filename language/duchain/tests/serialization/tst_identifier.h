@@ -1,6 +1,6 @@
 /*
  * This file is part of KDevelop
- * Copyright 2012 Milian Wolff <mail@milianw.de>
+ * Copyright 2012-2013 Milian Wolff <mail@milianw.de>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -18,12 +18,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KDEVPLATFORM_BENCHMARKS_H
-#define KDEVPLATFORM_BENCHMARKS_H
+#ifndef KDEVPLATFORM_TESTIDENTIFIER_H
+#define KDEVPLATFORM_TESTIDENTIFIER_H
 
 #include <QObject>
 
-class Benchmarks : public QObject
+class TestIdentifier : public QObject
 {
   Q_OBJECT
 
@@ -31,12 +31,16 @@ private slots:
   void initTestCase();
   void cleanupTestCase();
 
-  void duchainWriteLocker();
-  void duchainReadLocker();
-  void identifierCopyConstant();
-  void identifierCopyDynamic();
-  void qidCopyPush();
+  void testIdentifier();
+  void testIdentifier_data();
+
+  void testQualifiedIdentifier();
+  void testQualifiedIdentifier_data();
+
+  void benchIdentifierCopyConstant();
+  void benchIdentifierCopyDynamic();
+  void benchQidCopyPush();
 };
 
 
-#endif // KDEVPLATFORM_BENCHMARKS_H
+#endif // KDEVPLATFORM_TESTIDENTIFIER_H

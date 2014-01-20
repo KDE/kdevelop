@@ -673,7 +673,7 @@ public:
      *
      * @param nextItem is set as next item to the last item in the chain
      */
-    SearchItem(const QualifiedIdentifier& id, Ptr nextItem = Ptr(), int start = 0);
+    SearchItem(const QualifiedIdentifier& id, const Ptr& nextItem = Ptr(), int start = 0);
 
     /**
      * Constructs a representation of the given @param id qualified identifier,
@@ -683,8 +683,8 @@ public:
      */
     SearchItem(const QualifiedIdentifier& id, const PtrList& nextItems, int start = 0);
 
-    SearchItem(bool explicitlyGlobal, Identifier id, const PtrList& nextItems);
-    SearchItem(bool explicitlyGlobal, Identifier id, Ptr nextItem);
+    SearchItem(bool explicitlyGlobal, const Identifier& id, const PtrList& nextItems);
+    SearchItem(bool explicitlyGlobal, const Identifier& id, const Ptr& nextItem);
 
     bool isEmpty() const;
     bool hasNext() const;
@@ -702,8 +702,8 @@ public:
      *
      * @note These functions ignore explicitly global items.
      */
-    void addToEachNode(Ptr item);
-    void addToEachNode(PtrList items);
+    void addToEachNode(const Ptr& item);
+    void addToEachNode(const PtrList& items);
 
     /**
      * Returns true if the given identifier matches one of the identifiers
@@ -716,7 +716,7 @@ public:
      */
     QList<QualifiedIdentifier> toList(const QualifiedIdentifier& prefix = QualifiedIdentifier()) const;
 
-    void addNext(Ptr other);
+    void addNext(const Ptr& other);
 
     bool isExplicitlyGlobal;
     Identifier identifier;
@@ -882,7 +882,7 @@ private:
  *
  * @see NamespaceAliasDeclaration.
  */
-KDEVPLATFORMLANGUAGE_EXPORT Identifier& globalImportIdentifier();
+KDEVPLATFORMLANGUAGE_EXPORT const Identifier& globalImportIdentifier();
 
 /**
  * This is the identifier that can be used to search namespace-alias declarations.
@@ -892,7 +892,28 @@ KDEVPLATFORMLANGUAGE_EXPORT Identifier& globalImportIdentifier();
  *
  * @see NamespaceAliasDeclaration.
  */
-KDEVPLATFORMLANGUAGE_EXPORT Identifier& globalAliasIdentifier();
+KDEVPLATFORMLANGUAGE_EXPORT const Identifier& globalAliasIdentifier();
+
+/**
+ * This is the identifier that can be used to search namespace-import declarations,
+ * and should be used to store namespace-imports.
+ *
+ * It is stored statically for performance-reasons, so it doesn't need to be
+ * constructed every time it is used.
+ *
+ * @see NamespaceAliasDeclaration.
+ */
+KDEVPLATFORMLANGUAGE_EXPORT const IndexedIdentifier& globalIndexedImportIdentifier();
+
+/**
+ * This is the identifier that can be used to search namespace-alias declarations.
+ *
+ * It is stored statically for performance-reasons, so it doesn't need to be
+ * constructed every time it is used.
+ *
+ * @see NamespaceAliasDeclaration.
+ */
+KDEVPLATFORMLANGUAGE_EXPORT const IndexedIdentifier& globalIndexedAliasIdentifier();
 
 /**
  * Collects all uses of the given @param declarationIndex

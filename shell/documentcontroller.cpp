@@ -65,8 +65,8 @@ Boston, MA 02110-1301, USA.
 #include <vcs/interfaces/ibasicversioncontrol.h>
 #include <vcs/models/vcsannotationmodel.h>
 #include <vcs/vcsjob.h>
+#include <vcs/vcspluginhelper.h>
 
-#include <config-kdevplatform.h>
 #include <language/backgroundparser/backgroundparser.h>
 
 #define EMPTY_DOCUMENT_URL i18n("Untitled")
@@ -257,6 +257,10 @@ struct DocumentControllerPrivate {
             }
             else if (!KIO::NetAccess::exists( url, KIO::NetAccess::SourceSide, ICore::self()->uiController()->activeMainWindow() ))
             {
+                //Don't create a new file if we are not in the code mode.
+                if (static_cast<KDevelop::MainWindow*>(ICore::self()->uiController()->activeMainWindow())->area()->objectName() != "code") {
+                    return 0;
+                }
                 // enfore text mime type in order to create a kate part editor which then can be used to create the file
                 // otherwise we could end up opening e.g. okteta which then crashes, see: https://bugs.kde.org/id=326434
                 mimeType = KMimeType::mimeType("text/plain");
@@ -1214,36 +1218,16 @@ void DocumentController::vcsAnnotateCurrentDocument()
     IDocument* doc = activeDocument();
     KUrl url = doc->url();
     IProject* project = KDevelop::ICore::self()->projectController()->findProjectForUrl(url);
-    IBasicVersionControl* iface = 0;
     if(project && project->versionControlPlugin()) {
+        IBasicVersionControl* iface = 0;
         iface = project->versionControlPlugin()->extension<IBasicVersionControl>();
+        VcsPluginHelper helper(project->versionControlPlugin(), iface);
+        helper.addContextDocument(url);
+        helper.annotation();
     }
-
-    if (iface && doc && doc->textDocument() && iface->isVersionControlled(url)) {
-        KTextEditor::AnnotationViewInterface* viewiface = qobject_cast<KTextEditor::AnnotationViewInterface*>(doc->textDocument()->activeView());
-        if(viewiface && viewiface->isAnnotationBorderVisible()) {
-            viewiface->setAnnotationBorderVisible(false);
-            return;
-        }
-        KDevelop::VcsJob* job = iface->annotate(url);
-        if( !job )
-        {
-            kWarning() << "Couldn't create annotate job for:" << url << "with iface:" << iface << dynamic_cast<KDevelop::IPlugin*>( iface );
-            return;
-        }
-        KTextEditor::AnnotationInterface* annotateiface = qobject_cast<KTextEditor::AnnotationInterface*>(doc->textDocument());
-
-        if (annotateiface && viewiface) {
-            KDevelop::VcsAnnotationModel* model = new KDevelop::VcsAnnotationModel(job, url, doc->textDocument());
-            annotateiface->setAnnotationModel(model);
-            viewiface->setAnnotationBorderVisible(true);
-        } else {
-            KMessageBox::error(0, i18n("Cannot display annotations, missing interface KTextEditor::AnnotationInterface for the editor."));
-            delete job;
-        }
-    } else {
-        KMessageBox::error(0, i18n("Cannot execute annotate action because the "
-                                   "document was not found, it was not versioned or it was not a text document:\n%1", url.pathOrUrl()));
+    else {
+        KMessageBox::error(0, i18n("Could not annotate the document because it is not "
+                                   "part of a version-controlled project."));
     }
 }
 

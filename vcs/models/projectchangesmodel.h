@@ -38,7 +38,6 @@ class KDEVPLATFORMVCS_EXPORT ProjectChangesModel : public VcsFileChangesModel
         ProjectChangesModel(QObject* parent);
         virtual ~ProjectChangesModel();
         
-        void addStates(const QVariantList& states);
         void updateState(KDevelop::IProject* p, const KDevelop::VcsStatusInfo& status);
         
         QStandardItem* projectItem(KDevelop::IProject* p) const;

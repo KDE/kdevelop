@@ -73,8 +73,8 @@ uint ExpandingWidgetModel::matchColor(const QModelIndex& index) const {
     if(alternate)
       totalColor = doAlternate(totalColor);
     
-    const float dynamicTint = 0.2;
-    const float minimumTint = 0.2;
+    const float dynamicTint = 0.2f;
+    const float minimumTint = 0.2f;
     double tintStrength = (dynamicTint*matchQuality)/10;
     if(tintStrength)
       tintStrength += minimumTint; //Some minimum tinting strength, else it's not visible any more

@@ -24,6 +24,11 @@
 
 #include <QtGui/QWidget>
 #include <QtCore/QMap>
+#include <outputview/ioutputviewmodel.h>
+#include <outputview/ioutputview.h>
+
+class QAbstractProxyModel;
+class QAbstractItemView;
 class QString;
 class StandardOutputView;
 class QSignalMapper;
@@ -76,8 +81,13 @@ private slots:
 private:
     QTreeView* createListView(int id);
     void setCurrentWidget( QTreeView* view );
-    QWidget* currentWidget();
+    QWidget* currentWidget() const;
     void enableActions();
+    KDevelop::IOutputViewModel* outputViewModel() const;
+    QAbstractItemView* outputView() const;
+    void activateIndex(const QModelIndex& index, QAbstractItemView* view, KDevelop::IOutputViewModel* iface);
+    void eventuallyDoFocus();
+    int currentOutputIndex();
 
     QMap<int, QTreeView*> views;
     QMap<int, QTimer*> scrollTimers;
@@ -87,7 +97,7 @@ private:
     QStackedWidget* stackwidget;
     const ToolViewData* data;
     QToolButton* m_closeButton;
-    QToolButton* m_closeAllButton;
+    QAction* m_closeOthersAction;
     KAction* nextAction;
     KAction* previousAction;
     KToggleAction* activateOnSelect;

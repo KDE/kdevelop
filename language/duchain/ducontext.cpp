@@ -80,13 +80,26 @@ DUChainVisitor::~DUChainVisitor()
  * We leak here, to prevent a possible crash during destruction, as the destructor
  * of Identifier is not safe to be called after the duchain has been destroyed
  */
-Identifier& globalImportIdentifier() {
-  static Identifier globalImportIdentifierObject(*new Identifier("{...import...}"));
+const Identifier& globalImportIdentifier() {
+  static const Identifier globalImportIdentifierObject(*new Identifier("{...import...}"));
   return globalImportIdentifierObject;
 }
-Identifier& globalAliasIdentifier() {
-  static Identifier globalAliasIdentifierObject(*new Identifier("{...alias...}"));
+
+const Identifier& globalAliasIdentifier() {
+  static const Identifier globalAliasIdentifierObject(*new Identifier("{...alias...}"));
   return globalAliasIdentifierObject;
+}
+
+const IndexedIdentifier& globalIndexedImportIdentifier()
+{
+  static const IndexedIdentifier id(globalImportIdentifier());
+  return id;
+}
+
+const IndexedIdentifier& globalIndexedAliasIdentifier()
+{
+  static const IndexedIdentifier id(globalAliasIdentifier());
+  return id;
 }
 
 void DUContext::rebuildDynamicData(DUContext* parent, uint ownIndex) {
@@ -142,42 +155,20 @@ void DUContextDynamicData::scopeIdentifier(bool includeClasses, QualifiedIdentif
     target += m_context->d_func()->m_scopeIdentifier;
 }
 
-bool DUContextDynamicData::importsSafeButSlow(const DUContext* context, const TopDUContext* source,
-                                              ImportsHash& checked) const
-{
-  if( this == context->m_dynamicData )
-    return true;
-
-  if(checked.find(this) != checked.end())
-    return false;
-  checked.insert(std::make_pair(this, true));
-
-  FOREACH_FUNCTION( const DUContext::Import& ctx, m_context->d_func()->m_importedContexts ) {
-    DUContext* import = ctx.context(source);
-    if(import == context || (import && import->m_dynamicData->importsSafeButSlow(context, source, checked)))
-      return true;
-  }
-
-  return false;
-}
-
 bool DUContextDynamicData::imports(const DUContext* context, const TopDUContext* source,
-                                   int maxDepth) const
+                                   QSet<const DUContextDynamicData*>* recursionGuard) const
 {
   if( this == context->m_dynamicData )
     return true;
 
-  if(maxDepth == 0) {
-    ImportsHash checked;//(500);
-#ifndef Q_OS_WIN
-    checked.set_empty_key(0);
-#endif
-    return importsSafeButSlow(context, source, checked);
+  if (recursionGuard->contains(this)) {
+    return false;
   }
+  recursionGuard->insert(this);
 
   FOREACH_FUNCTION( const DUContext::Import& ctx, m_context->d_func()->m_importedContexts ) {
     DUContext* import = ctx.context(source);
-    if(import == context || (import && import->m_dynamicData->imports(context, source, maxDepth-1)))
+    if(import == context || (import && import->m_dynamicData->imports(context, source, recursionGuard)))
       return true;
   }
 
@@ -681,7 +672,7 @@ void DUContext::findLocalDeclarationsInternal( const Identifier& identifier,
         if(checked)
             ret.append(checked);
       }
-    }else if(d_func()->m_inSymbolTable && !this->localScopeIdentifier().isEmpty() && !identifier.isEmpty()) {
+    }else if(d_func()->m_inSymbolTable && !indexedLocalScopeIdentifier().isEmpty() && !identifier.isEmpty()) {
        //This context is in the symbol table, use the symbol-table to speed up the search
        QualifiedIdentifier id(scopeIdentifier(true) + identifier);
 
@@ -843,7 +834,9 @@ bool DUContext::imports(const DUContext* origin, const CursorInRevision& /*posit
 {
   ENSURE_CAN_READ
 
-  return m_dynamicData->imports(origin, topContext(), 4);
+  QSet<const DUContextDynamicData*> recursionGuard;
+  recursionGuard.reserve(8);
+  return m_dynamicData->imports(origin, topContext(), &recursionGuard);
 }
 
 bool DUContext::addIndirectImport(const DUContext::Import& import) {
@@ -1305,13 +1298,12 @@ void DUContext::applyAliases(const SearchItem::PtrList& baseIdentifiers, SearchI
 void DUContext::applyUpwardsAliases(SearchItem::PtrList& identifiers, const TopDUContext* /*source*/) const {
 
   if(type() == Namespace) {
-    QualifiedIdentifier localId = d_func()->m_scopeIdentifier;
-    if(localId.isEmpty())
+    if(d_func()->m_scopeIdentifier.isEmpty())
       return;
 
     //Make sure we search for the items in all namespaces of the same name, by duplicating each one with the namespace-identifier prepended.
     //We do this by prepending items to the current identifiers that equal the local scope identifier.
-    SearchItem::Ptr newItem( new SearchItem(localId) );
+    SearchItem::Ptr newItem( new SearchItem(d_func()->m_scopeIdentifier.identifier()) );
 
     //This will exclude explictly global identifiers
     newItem->addToEachNode( identifiers );
@@ -1550,7 +1542,7 @@ QList<RangeInRevision> allUses(DUContext* context, int declarationIndex, bool no
   return ret;
 }
 
-DUContext::SearchItem::SearchItem(const QualifiedIdentifier& id, Ptr nextItem, int start)
+DUContext::SearchItem::SearchItem(const QualifiedIdentifier& id, const Ptr& nextItem, int start)
 : isExplicitlyGlobal(start == 0 ? id.explicitlyGlobal() : false)
 {
   if(!id.isEmpty()) {
@@ -1581,14 +1573,14 @@ DUContext::SearchItem::SearchItem(const QualifiedIdentifier& id, const PtrList& 
     next = nextItems;
 }
 
-DUContext::SearchItem::SearchItem(bool explicitlyGlobal, Identifier id, const PtrList& nextItems)
+DUContext::SearchItem::SearchItem(bool explicitlyGlobal, const Identifier& id, const PtrList& nextItems)
   : isExplicitlyGlobal(explicitlyGlobal)
   , identifier(id)
   , next(nextItems)
 {
 }
 
-DUContext::SearchItem::SearchItem(bool explicitlyGlobal, Identifier id, Ptr nextItem)
+DUContext::SearchItem::SearchItem(bool explicitlyGlobal, const Identifier& id, const Ptr& nextItem)
   : isExplicitlyGlobal(explicitlyGlobal)
   , identifier(id)
 {
@@ -1647,11 +1639,11 @@ QList<QualifiedIdentifier> DUContext::SearchItem::toList(const QualifiedIdentifi
 }
 
 
-void DUContext::SearchItem::addNext(SearchItem::Ptr other) {
+void DUContext::SearchItem::addNext(const SearchItem::Ptr& other) {
   next.append(other);
 }
 
-void DUContext::SearchItem::addToEachNode(SearchItem::Ptr other) {
+void DUContext::SearchItem::addToEachNode(const SearchItem::Ptr& other) {
   if(other->isExplicitlyGlobal)
     return;
 
@@ -1660,7 +1652,7 @@ void DUContext::SearchItem::addToEachNode(SearchItem::Ptr other) {
     next[a]->addToEachNode(other);
 }
 
-void DUContext::SearchItem::addToEachNode(SearchItem::PtrList other) {
+void DUContext::SearchItem::addToEachNode(const SearchItem::PtrList& other) {
   int added = 0;
   FOREACH_ARRAY(const SearchItem::Ptr& o, other) {
     if(!o->isExplicitlyGlobal) {

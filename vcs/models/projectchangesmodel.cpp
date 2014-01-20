@@ -35,6 +35,10 @@
 #include <project/projectmodel.h>
 #include <project/path.h>
 
+#include <QDir>
+
+Q_DECLARE_METATYPE(KDevelop::IProject*);
+
 using namespace KDevelop;
 
 ProjectChangesModel::ProjectChangesModel(QObject* parent)
@@ -63,9 +67,8 @@ void ProjectChangesModel::addProject(IProject* p)
 {
     QStandardItem* it = new QStandardItem(p->name());
     it->setData(p->name(), ProjectChangesModel::ProjectNameRole);
-    if(p->versionControlPlugin()) {
-        IPlugin* plugin = p->versionControlPlugin();
-        
+    IPlugin* plugin = p->versionControlPlugin();
+    if(plugin) {
         IBasicVersionControl* vcs = plugin->extension<IBasicVersionControl>();
 
         KPluginInfo info = ICore::self()->pluginController()->pluginInfo(plugin);
@@ -110,20 +113,6 @@ QStandardItem* ProjectChangesModel::projectItem(IProject* p) const
     return findItemChild(invisibleRootItem(), p->name(), ProjectChangesModel::ProjectNameRole);
 }
 
-void ProjectChangesModel::addStates(const QVariantList& states)
-{
-    IProjectController* projectController = ICore::self()->projectController();
-        
-    foreach(const QVariant& state, states) {
-        VcsStatusInfo st = state.value<VcsStatusInfo>();
-        
-        IProject* project = projectController->findProjectForUrl(st.url());
-        
-        if(project)
-            updateState(project, st);
-    }
-}
-
 void ProjectChangesModel::updateState(IProject* p, const KDevelop::VcsStatusInfo& status)
 {
     QStandardItem* pItem = projectItem(p);
@@ -139,6 +128,9 @@ void ProjectChangesModel::changes(IProject* project, const KUrl::List& urls, IBa
     
     if(vcs && vcs->isVersionControlled(urls.first())) { //TODO: filter?
         VcsJob* job=vcs->status(urls, mode);
+        job->setProperty("urls", qVariantFromValue<KUrl::List>(urls));
+        job->setProperty("mode", qVariantFromValue<int>(mode));
+        job->setProperty("project", qVariantFromValue(project));
         connect(job, SIGNAL(finished(KJob*)), SLOT(statusReady(KJob*)));
         
         ICore::self()->runController()->registerJob(job);
@@ -148,8 +140,37 @@ void ProjectChangesModel::changes(IProject* project, const KUrl::List& urls, IBa
 void ProjectChangesModel::statusReady(KJob* job)
 {
     VcsJob* status=static_cast<VcsJob*>(job);
-    
-    addStates(status->fetchResults().toList());
+
+    QList<QVariant> states = status->fetchResults().toList();
+    IProject* project = job->property("project").value<KDevelop::IProject*>();
+    if(!project)
+        return;
+
+    QSet<KUrl> foundUrls;
+    foreach(const QVariant& state, states) {
+        VcsStatusInfo st = state.value<VcsStatusInfo>();
+        foundUrls += st.url();
+
+        updateState(project, st);
+    }
+
+    QStandardItem* itProject = projectItem(project);
+
+    IBasicVersionControl::RecursionMode mode = IBasicVersionControl::RecursionMode(job->property("mode").toInt());
+    QSet<KUrl> uncertainUrls = urls(itProject).toSet().subtract(foundUrls);
+    QList<KUrl> sourceUrls = job->property("urls").value<KUrl::List>();
+    foreach(const KUrl& url, sourceUrls) {
+        if(url.isLocalFile() && QDir(url.toLocalFile()).exists()) {
+            foreach(const KUrl& currentUrl, uncertainUrls) {
+                if((mode == IBasicVersionControl::NonRecursive && currentUrl.upUrl().equals(url, KUrl::CompareWithoutTrailingSlash))
+                    || (mode == IBasicVersionControl::Recursive && url.isParentOf(currentUrl))
+                ) {
+                    QStandardItem* fileItem = fileItemForUrl(itProject, currentUrl);
+                    itProject->removeRow(fileItem->row());
+                }
+            }
+        }
+    }
 }
 
 void ProjectChangesModel::documentSaved(KDevelop::IDocument* document)
@@ -248,4 +269,6 @@ void ProjectChangesModel::branchNameReady(VcsJob* job)
     } else {
         projectItem(project)->setText(project->name());
     }
+
+    reload(QList<IProject*>() << project);
 }

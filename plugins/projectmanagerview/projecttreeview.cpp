@@ -283,6 +283,7 @@ void ProjectTreeView::slotActivated( const QModelIndex &index )
     {
         emit activate( item->file()->path() );
     }
+    setFocus();
 }
 //TODO test whether this could be replaced by projectbuildsetwidget.cpp::showContextMenu_appendActions
 void popupContextMenu_appendActions(QMenu& menu, const QList<QAction*>& actions)

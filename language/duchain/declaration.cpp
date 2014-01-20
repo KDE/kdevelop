@@ -53,8 +53,15 @@ namespace KDevelop
 REGISTER_DUCHAIN_ITEM(Declaration);
 
 DeclarationData::DeclarationData()
-  : m_comment(0), m_isDefinition(false), m_inSymbolTable(false), m_isTypeAlias(false),
-    m_anonymousInContext(false), m_isFinal(false), m_alwaysForceDirect(false), m_isAutoDeclaration(false), m_isExplicitlyDeleted(false)
+  : m_comment(0)
+  , m_isDefinition(false)
+  , m_inSymbolTable(false)
+  , m_isTypeAlias(false)
+  , m_anonymousInContext(false)
+  , m_isDeprecated(false)
+  , m_alwaysForceDirect(false)
+  , m_isAutoDeclaration(false)
+  , m_isExplicitlyDeleted(false)
 {
   m_kind = Declaration::Instance;
 }
@@ -70,7 +77,7 @@ m_isDefinition(rhs.m_isDefinition),
 m_inSymbolTable(rhs.m_inSymbolTable),
 m_isTypeAlias(rhs.m_isTypeAlias),
 m_anonymousInContext(rhs.m_anonymousInContext),
-m_isFinal(rhs.m_isFinal),
+m_isDeprecated(rhs.m_isDeprecated),
 m_alwaysForceDirect(rhs.m_alwaysForceDirect),
 m_isAutoDeclaration(rhs.m_isAutoDeclaration),
 m_isExplicitlyDeleted(rhs.m_isExplicitlyDeleted)
@@ -325,11 +332,6 @@ bool Declaration::isAnonymous() const
 void Declaration::setContext(DUContext* context, bool anonymous)
 {
   Q_ASSERT(!context || context->topContext());
-  ///@todo re-enable. In C++ support we need a short window to put visible declarations into template contexts
-  if(!specialization().index()) {
-    //problem: specialization() doesn't work during destructor
-//     ENSURE_CAN_WRITE
-  }
 
   setInSymbolTable(false);
 
@@ -532,14 +534,14 @@ void Declaration::setAutoDeclaration(bool _auto)
   d_func_dynamic()->m_isAutoDeclaration = _auto;
 }
 
-bool Declaration::isFinal() const
+bool Declaration::isDeprecated() const
 {
-  return d_func()->m_isFinal;
+  return d_func()->m_isDeprecated;
 }
 
-void Declaration::setFinal(bool final)
+void Declaration::setDeprecated(bool deprecated)
 {
-  d_func_dynamic()->m_isFinal = final;
+  d_func_dynamic()->m_isDeprecated = deprecated;
 }
 
 bool Declaration::alwaysForceDirect() const

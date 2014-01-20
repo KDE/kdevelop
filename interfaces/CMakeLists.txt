@@ -52,26 +52,25 @@ set(kdevplatforminterfaces_LIB_SRCS
 configure_file(ipluginversion.h.in ${CMAKE_CURRENT_BINARY_DIR}/ipluginversion.h)
 
 kde4_add_library(kdevplatforminterfaces SHARED ${kdevplatforminterfaces_LIB_SRCS})
-target_link_libraries(kdevplatforminterfaces 
-        ${KDE4_KIO_LIBS} 
-        ${KDE4_KCMUTILS_LIBS} 
-        ${KDE4_KPARTS_LIBS} 
-        ${KDE4_KNOTIFYCONFIG_LIBS} 
-        ${KDE4_KTEXTEDITOR_LIBS} 
-        ${KDE4_THREADWEAVER_LIBRARIES} 
-        ${KDE4_KROSSCORE_LIBS})
-
+target_link_libraries(kdevplatforminterfaces LINK_PUBLIC
+    ${KDE4_KPARTS_LIBS}
+    ${KDE4_KTEXTEDITOR_LIBS}
+)
+target_link_libraries(kdevplatforminterfaces LINK_PRIVATE
+    ${KDE4_KNOTIFYCONFIG_LIBS}
+    ${KDE4_KIO_LIBS}
+    ${KDE4_KCMUTILS_LIBS}
+    ${KDE4_THREADWEAVER_LIBRARIES}
+    ${KDE4_KROSSCORE_LIBS}
+)
 if( RT_LIBRARY )
-    target_link_libraries( kdevplatforminterfaces ${RT_LIBRARY} )
+    target_link_libraries( kdevplatforminterfaces LINK_PRIVATE ${RT_LIBRARY} )
 endif( RT_LIBRARY )
 
 if( Threads_FOUND )
-    target_link_libraries( kdevplatforminterfaces ${CMAKE_THREAD_LIBS_INIT} )
+    target_link_libraries( kdevplatforminterfaces LINK_PRIVATE ${CMAKE_THREAD_LIBS_INIT} )
 endif( Threads_FOUND )
 
-target_link_libraries(kdevplatforminterfaces LINK_INTERFACE_LIBRARIES 
-        ${KDE4_KPARTS_LIBS} 
-        ${KDE4_KTEXTEDITOR_LIBS})
 set_target_properties(kdevplatforminterfaces PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
 install(TARGETS kdevplatforminterfaces EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
 

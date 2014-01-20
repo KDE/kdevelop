@@ -97,10 +97,35 @@ void WorkingSetController::cleanup()
     m_emptyWorkingSet = 0;
 }
 
+const QString WorkingSetController::makeSetId(const QString& prefix) const
+{
+    QString newId;
+    const int maxRetries = 10;
+    for(unsigned int retry = 2; retry <= maxRetries; retry++) {
+        newId = QString("%1_%2").arg(prefix).arg(qrand() % 10000000);
+        WorkingSetIconParameters params(newId);
+        foreach(WorkingSet* set, m_workingSets) {
+            if(set->isEmpty()) {
+                continue;
+            }
+            // The last retry will always generate a valid set
+            const int maxSimilarity = retry > maxRetries / 2 ? 55 : 35;
+            if(retry != maxRetries && WorkingSetIconParameters(set->id()).similarity(params) >= retry*8) {
+                newId = QString();
+                break;
+            }
+        }
+        if(! newId.isEmpty()) {
+            break;
+        }
+    }
+    return newId;
+}
+
 WorkingSet* WorkingSetController::newWorkingSet(const QString& prefix)
 {
-    QString newId = QString("%1_%2").arg(prefix).arg(qrand() % 10000000);
-    return getWorkingSet(newId);
+
+    return getWorkingSet(makeSetId(prefix));
 }
 
 WorkingSet* WorkingSetController::getWorkingSet(const QString& id)

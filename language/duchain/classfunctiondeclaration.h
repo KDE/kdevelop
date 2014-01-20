@@ -97,8 +97,6 @@ public:
 
   bool isFunctionDeclaration() const;
 
-  void setIsExternalDefinition(bool);
-
   virtual QString toString() const;
 
   virtual void setAbstractType(AbstractType::Ptr type);

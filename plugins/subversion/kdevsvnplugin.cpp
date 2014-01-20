@@ -46,7 +46,6 @@
 #include <vcs/vcsevent.h>
 #include <vcs/vcsstatusinfo.h>
 #include <vcs/vcsannotation.h>
-#include <vcs/widgets/vcsannotationwidget.h>
 #include <vcs/widgets/vcseventwidget.h>
 #include <vcs/widgets/vcsdiffwidget.h>
 #include <vcs/widgets/vcscommitdialog.h>

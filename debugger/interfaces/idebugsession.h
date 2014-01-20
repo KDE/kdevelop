@@ -126,6 +126,7 @@ public Q_SLOTS:
 Q_SIGNALS:
     void stateChanged(KDevelop::IDebugSession::DebuggerState state);
     void showStepInSource(const KUrl& file, int line, const QString &addr);
+    void showStepInDisassemble(const QString &addr);
     void clearExecutionPoint();
     void finished();
 
@@ -150,7 +151,7 @@ protected:
 
     // Clear the position before running code
     void clearCurrentPosition();
-    // Set new position and emit showStepInSource signal
+    /// Sets new position and emits showStepInSource or showStepInDisassemble (if source file is unavailable) signal
     void setCurrentPosition(const KUrl& url, int line, const QString& addr);
 
     /** Raises the specified event. Should be used instead of

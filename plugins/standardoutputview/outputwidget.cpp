@@ -56,7 +56,7 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
     , stackwidget(0)
     , data(tvdata)
     , m_closeButton(0)
-    , m_closeAllButton(0)
+    , m_closeOthersAction(0)
     , nextAction(0)
     , previousAction(0)
     , activateOnSelect(0)
@@ -73,25 +73,17 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
         tabwidget = new KTabWidget(this);
         layout->addWidget( tabwidget );
         m_closeButton = new QToolButton( this );
-        connect( m_closeButton, SIGNAL(clicked()),
-                 this, SLOT(closeActiveView()) );
+        connect( m_closeButton, SIGNAL(clicked()), SLOT(closeActiveView()) );
         m_closeButton->setIcon( KIcon("tab-close") );
-        m_closeButton->adjustSize();
         m_closeButton->setToolTip( i18n( "Close the currently active output view") );
-        m_closeAllButton = new QToolButton( this );
-        connect(m_closeAllButton, SIGNAL(clicked()),
-                this, SLOT(closeOtherViews()));
-        m_closeAllButton->setIcon(KIcon("tab-close-other"));
-        m_closeAllButton->adjustSize();
-        m_closeAllButton->setToolTip( i18n( "Close all other output views" ) );
 
-        QWidget* toolbar = new QWidget(this);
-        QBoxLayout* toolbarLayout =  new QBoxLayout(QBoxLayout::LeftToRight);
-        toolbarLayout->setMargin(0);
-        toolbar->setLayout(toolbarLayout);
-        toolbarLayout->addWidget(m_closeButton);
-        toolbarLayout->addWidget(m_closeAllButton);
-        tabwidget->setCornerWidget(toolbar, Qt::TopRightCorner);
+        m_closeOthersAction = new QAction( this );
+        connect(m_closeOthersAction, SIGNAL(triggered(bool)), SLOT(closeOtherViews()));
+        m_closeOthersAction->setIcon(KIcon("tab-close-other"));
+        m_closeOthersAction->setToolTip( i18n( "Close all other output views" ) );
+        addAction(m_closeOthersAction);
+
+        tabwidget->setCornerWidget(m_closeButton, Qt::TopRightCorner);
     } else if ( data->type == KDevelop::IOutputView::HistoryView )
     {
         stackwidget = new QStackedWidget( this );
@@ -313,7 +305,7 @@ void OutputWidget::closeOtherViews()
     enableActions();
 }
 
-QWidget* OutputWidget::currentWidget()
+QWidget* OutputWidget::currentWidget() const
 {
     QWidget* widget;
     if( data->type & KDevelop::IOutputView::MultipleView )
@@ -329,87 +321,94 @@ QWidget* OutputWidget::currentWidget()
     return widget;
 }
 
-void OutputWidget::selectNextItem()
+KDevelop::IOutputViewModel *OutputWidget::outputViewModel() const
 {
     QWidget* widget = currentWidget();
 
     if( !widget || !widget->isVisible() )
-        return;
+        return nullptr;
 
-    if( focusOnSelect->isChecked() && !widget->hasFocus() )
-    {
-        widget->setFocus( Qt::OtherFocusReason );
-    }
-
-    QAbstractItemView *view = dynamic_cast<QAbstractItemView*>(widget);
+    auto view = qobject_cast<QAbstractItemView*>(widget);
     if( !view )
-        return;
+        return nullptr;
 
     QAbstractItemModel *absmodel = view->model();
     KDevelop::IOutputViewModel *iface = dynamic_cast<KDevelop::IOutputViewModel*>(absmodel);
-    if( iface )
+    if ( ! iface )
     {
-        kDebug() << "selecting next item";
-        QModelIndex index = iface->nextHighlightIndex( view->currentIndex() );
-        if( index.isValid() )
+        // try if it's a proxy model?
+        if ( QAbstractProxyModel* proxy = qobject_cast<QAbstractProxyModel*>(absmodel) )
         {
-            view->setCurrentIndex( index );
-            view->scrollTo( index );
-            if( activateOnSelect->isChecked() )
-            {
-                iface->activate( index );
-            }
+            iface = dynamic_cast<KDevelop::IOutputViewModel*>(proxy->sourceModel());
         }
     }
+    return iface;
+}
+
+void OutputWidget::eventuallyDoFocus()
+{
+    QWidget* widget = currentWidget();
+    if( focusOnSelect->isChecked() && !widget->hasFocus() ) {
+        widget->setFocus( Qt::OtherFocusReason );
+    }
+}
+
+QAbstractItemView *OutputWidget::outputView() const
+{
+    auto widget = currentWidget();
+    return qobject_cast<QAbstractItemView*>(widget);
+}
+
+void OutputWidget::activateIndex(const QModelIndex &index, QAbstractItemView *view, KDevelop::IOutputViewModel *iface)
+{
+    if( ! index.isValid() )
+        return;
+    view->setCurrentIndex( index );
+    view->scrollTo( index );
+    int tabIndex = currentOutputIndex();
+    QModelIndex mapped = index;
+    if( QAbstractProxyModel* proxy = proxyModels.value(tabIndex) ) {
+        if ( index.model() == proxy ) {
+            mapped = proxy->mapToSource(index);
+        }
+    }
+    if( activateOnSelect->isChecked() )
+    {
+        iface->activate( mapped );
+    }
+}
+
+void OutputWidget::selectNextItem()
+{
+    auto view = outputView();
+    auto iface = outputViewModel();
+    if ( ! view || ! iface )
+        return;
+    eventuallyDoFocus();
+    kDebug() << "selecting next item";
+    QModelIndex index = iface->nextHighlightIndex( view->currentIndex() );
+    activateIndex(index, view, iface);
 }
 
 void OutputWidget::selectPrevItem()
 {
-    QWidget* widget = currentWidget();
-    if( !widget || !widget->isVisible() )
+    auto view = outputView();
+    auto iface = outputViewModel();
+    if ( ! view || ! iface )
         return;
-    QAbstractItemView *view = dynamic_cast<QAbstractItemView*>(widget);
-    if( !view )
-        return;
-
-    if( focusOnSelect->isChecked() && !widget->hasFocus() )
-    {
-        widget->setFocus( Qt::OtherFocusReason );
-    }
-
-    QAbstractItemModel *absmodel = view->model();
-    KDevelop::IOutputViewModel *iface = dynamic_cast<KDevelop::IOutputViewModel*>(absmodel);
-    if( iface )
-    {
-        kDebug() << "activating previous item";
-        QModelIndex index = iface->previousHighlightIndex( view->currentIndex() );
-        if( index.isValid() )
-        {
-            view->setCurrentIndex( index );
-            view->scrollTo( index );
-            if( activateOnSelect->isChecked() )
-            {
-                iface->activate( index );
-            }
-        }
-    }
+    eventuallyDoFocus();
+    kDebug() << "activating previous item";
+    QModelIndex index = iface->previousHighlightIndex( view->currentIndex() );
+    activateIndex(index, view, iface);
 }
 
 void OutputWidget::activate(const QModelIndex& index)
 {
-    QWidget* widget = currentWidget();
-    if( !widget )
+    auto iface = outputViewModel();
+    auto view = outputView();
+    if( ! view || ! iface )
         return;
-    QAbstractItemView *view = dynamic_cast<QAbstractItemView*>(widget);
-    if( !view )
-        return;
-
-    QAbstractItemModel *absmodel = view->model();
-    KDevelop::IOutputViewModel *iface = dynamic_cast<KDevelop::IOutputViewModel*>(absmodel);
-    if( iface )
-    {
-        iface->activate( index );
-    }
+    activateIndex(index, view, iface);
 }
 
 static QTreeView* createFocusedTreeView( QWidget* parent )
@@ -580,14 +579,8 @@ void OutputWidget::selectAll()
     view->selectAll();
 }
 
-void OutputWidget::outputFilter(const QString filter)
+int OutputWidget::currentOutputIndex()
 {
-    QWidget* widget = currentWidget();
-    if( !widget )
-        return;
-    QAbstractItemView *view = dynamic_cast<QAbstractItemView*>(widget);
-    if( !view )
-        return;
     int index = 0;
     if( data->type & KDevelop::IOutputView::MultipleView )
     {
@@ -596,9 +589,21 @@ void OutputWidget::outputFilter(const QString filter)
     {
         index = stackwidget->currentIndex();
     }
+    return index;
+}
+
+void OutputWidget::outputFilter(const QString filter)
+{
+    QWidget* widget = currentWidget();
+    if( !widget )
+        return;
+    QAbstractItemView *view = dynamic_cast<QAbstractItemView*>(widget);
+    if( !view )
+        return;
+    int index = currentOutputIndex();
     if( !dynamic_cast<QSortFilterProxyModel*>(view->model()) )
     {
-        QSortFilterProxyModel* _proxyModel = new QSortFilterProxyModel(view->model());
+         QSortFilterProxyModel* _proxyModel = new QSortFilterProxyModel(view->model());
         _proxyModel->setDynamicSortFilter(true);
         _proxyModel->setSourceModel(view->model());
         proxyModels.insert(index, _proxyModel);

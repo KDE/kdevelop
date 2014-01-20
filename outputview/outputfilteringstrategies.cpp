@@ -99,6 +99,9 @@ const QList<ErrorFormat> ERROR_FILTERS = QList<ErrorFormat>()
     << ErrorFormat( "^([^: \\t]+):([0-9]+):", 1, 2, 0, "cmake" )
     // cmake
     << ErrorFormat( "CMake (Error|Warning) (|\\([a-zA-Z]+\\) )(in|at) ([^:]+):($|[0-9]+)", 4, 5, 1, "cmake" )
+    // cmake/automoc
+    // example: AUTOMOC: error: /home/krf/devel/src/foo/src/quick/quickpathitem.cpp The file includes (...)
+    << ErrorFormat( "^AUTOMOC: error: (.*) (The file includes .*)$", 1, 0, 2 )
     // Fortran
     << ErrorFormat( "\"(.*)\", line ([0-9]+):(.*)", 1, 2, 3 )
     // GFortran
@@ -284,8 +287,8 @@ FilteredItem CompilerFilterStrategy::errorInLine(const QString& line)
                 }
             }
 
-            // Make the item clickable if it comes with the necessary file & line number information
-            if (curErrFilter.fileGroup > 0 && curErrFilter.lineGroup > 0) {
+            // Make the item clickable if it comes with the necessary file information
+            if (item.url.isValid()) {
                 item.isActivatable = true;
                 if(item.type == FilteredItem::InvalidItem) {
                     // If there are no error indicators in the line

@@ -76,9 +76,6 @@ int ProblemModel::rowCount(const QModelIndex & parent) const
     if (!parent.isValid())
         return m_problems.count();
 
-    if (parent.internalId() && parent.column() == 0)
-        return m_problems.at(parent.row())->locationStack().count();
-
     return 0;
 }
 
@@ -148,7 +145,7 @@ QVariant ProblemModel::data(const QModelIndex & index, int role) const
                     case Error:
                         return i18n("In file included from:");
                     case File: {
-                        return getDisplayUrl(p->locationStack().at(index.row()).document.str(), baseDirectory);
+                        return getDisplayUrl(p->url().str(), baseDirectory);
                     } case Line:
                         if (p->finalLocation().isValid())
                             return QString::number(p->finalLocation().start.line + 1);
@@ -184,18 +181,7 @@ QModelIndex ProblemModel::index(int row, int column, const QModelIndex & parent)
         return QModelIndex();
 
     if (parent.isValid()) {
-        if (parent.internalId())
-            return QModelIndex();
-
-        if (parent.column() != 0)
-            return QModelIndex();
-
-        ProblemPointer problem = problemForIndex(parent);
-        if (row >= problem->locationStack().count())
-            return QModelIndex();
-        ///@todo Make location-stack work again
-
-        return createIndex(row, column, row);
+        return QModelIndex();
     }
 
     if (row < m_problems.count())

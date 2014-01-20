@@ -24,6 +24,7 @@
 
 #include <QApplication>
 #include <QWidget>
+#include <QFileInfo>
 
 #include <KWindowSystem>
 #include <KDebug>
@@ -101,8 +102,11 @@ void IDebugSession::clearCurrentPosition()
 void IDebugSession::setCurrentPosition(const KUrl& url, int line, const QString& addr)
 {
     kDebug() << url << line << addr;
-    if (url.isEmpty()) { // if source file is unknown there's not much we can do in debugger
+
+    if (url.isEmpty() || !QFileInfo(convertToLocalUrl(qMakePair(url,line)).first.path()).exists()) {
         clearCurrentPosition();
+        m_addr = addr;
+        emit showStepInDisassemble(addr);
     } else {
         m_url = url;
         m_line = line;

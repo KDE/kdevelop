@@ -408,10 +408,6 @@ inline uint qHash(const ReferencedTopDUContext& ctx) {
   return ctx.hash();
 }
 
-inline uint qHash(const IndexedTopDUContext& ctx) {
-  return ctx.index();
-}
-
 }
 Q_DECLARE_METATYPE(KDevelop::ReferencedTopDUContext);
 

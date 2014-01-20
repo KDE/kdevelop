@@ -91,7 +91,7 @@ void NativeAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelo
     arguments->setClearButtonShown( true );
     arguments->setText( cfg.readEntry( ExecutePlugin::argumentsEntry, "" ) );
     workingDirectory->setUrl( cfg.readEntry( ExecutePlugin::workingDirEntry, KUrl() ) );
-    environment->setCurrentProfile( cfg.readEntry( ExecutePlugin::environmentGroupEntry, "default" ) );
+    environment->setCurrentProfile( cfg.readEntry( ExecutePlugin::environmentGroupEntry, QString() ) );
     runInTerminal->setChecked( cfg.readEntry( ExecutePlugin::useTerminalEntry, false ) );
     terminal->setEditText( cfg.readEntry( ExecutePlugin::terminalEntry, terminal->itemText(0) ) );
     QVariantList deps = KDevelop::stringToQVariant( cfg.readEntry( ExecutePlugin::dependencyEntry, QString() ) ).toList();
@@ -130,9 +130,6 @@ NativeAppConfigPage::NativeAppConfigPage( QWidget* parent )
     //Set workingdirectory widget to ask for directories rather than files
     workingDirectory->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
 
-    KDevelop::EnvironmentGroupList env( KGlobal::config() );
-    environment->addItems( env.groups() );
-
     configureEnvironment->setSelectionWidget(environment);
 
     //connect signals to changed signal
@@ -144,7 +141,7 @@ NativeAppConfigPage::NativeAppConfigPage( QWidget* parent )
     connect( arguments, SIGNAL(textEdited(QString)), SIGNAL(changed()) );
     connect( workingDirectory, SIGNAL(urlSelected(KUrl)), SIGNAL(changed()) );
     connect( workingDirectory->lineEdit(), SIGNAL(textEdited(QString)), SIGNAL(changed()) );
-    connect( environment, SIGNAL(currentIndexChanged(int)), SIGNAL(changed()) );
+    connect( environment, SIGNAL(currentProfileChanged(QString)), SIGNAL(changed()) );
     connect( addDependency, SIGNAL(clicked(bool)), SLOT(addDep()) );
     connect( addDependency, SIGNAL(clicked(bool)), SIGNAL(changed()) );
     connect( removeDependency, SIGNAL(clicked(bool)), SIGNAL(changed()) );

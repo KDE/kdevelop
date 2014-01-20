@@ -89,6 +89,8 @@ void FilteringStrategyTest::testCompilerFilterstrategy_data()
     << buildCmakeConfigureMultiLine() << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
     QTest::newRow("cmake-warning-line")
     << "CMake Warning (dev) in CMakeLists.txt:" << FilteredItem::WarningItem << FilteredItem::InvalidItem;
+    QTest::newRow("cmake-automoc-error")
+    << "AUTOMOC: error: /home/krf/devel/src/foo/src/quick/quickpathitem.cpp The file includes the moc file \"moc_QuickPathItem.cpp\"" << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
     QTest::newRow("linker-action-line")
     << "linking testCustombuild (g++)" << FilteredItem::InvalidItem << FilteredItem::ActionItem;
     QTest::newRow("linker-error-line")

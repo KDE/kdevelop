@@ -35,7 +35,7 @@
 namespace {
 
 //If KDevelop crashed this many times consicutively, clean up the repository
-const int crashesBeforeCleanup = 2;
+const int crashesBeforeCleanup = 1;
 
 void setCrashCounter(QFile& crashesFile, int count)
 {
@@ -259,7 +259,7 @@ bool ItemRepositoryRegistryPrivate::open(const QString& path)
       kDebug() << "current count of crashes: " << count;
 
       if(count >= crashesBeforeCleanup && !getenv("DONT_CLEAR_DUCHAIN_DIR")) {
-        bool userAnswer = askUser(i18np("Session crashed %1 time in a row", "Session crashed %1 times in a row", count),
+        bool userAnswer = askUser(i18np("The previous session crashed", "Session crashed %1 times in a row", count),
                                   i18nc("@action", "Clear cache"),
                                   i18nc("@title", "Session crashed"),
                                   i18n("The crash may be caused by a corruption of cached data.\n\n"

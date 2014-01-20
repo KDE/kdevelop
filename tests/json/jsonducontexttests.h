@@ -33,6 +33,7 @@
  *   childCount : int
  *   localDeclarationCount : int
  *   type : string
+ *   null : bool
  */
 
 namespace KDevelop
@@ -118,6 +119,12 @@ ContextTest(type)
   case DUContext::Other: contextTypeString = "Other"; break;
   }
   return compareValues(contextTypeString, value, "Context's type");
+}
+///JSON type: bool
+///@returns whether the context's nullity matches the given value
+ContextTest(null)
+{
+  return compareValues(ctxt == 0, value, "Context's nullity");
 }
 
 }

@@ -13,11 +13,8 @@ kde4_add_library(kdevplatformdocumentation SHARED ${kdevplatformdocumentation_LI
 install(TARGETS kdevplatformdocumentation EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 target_link_libraries(kdevplatformdocumentation
-        ${QT_QTWEBKIT_LIBRARY}
-        kdevplatforminterfaces)
-
-target_link_libraries(kdevplatformdocumentation LINK_INTERFACE_LIBRARIES
-        kdevplatforminterfaces)
+        LINK_PRIVATE ${QT_QTWEBKIT_LIBRARY}
+        LINK_PUBLIC kdevplatforminterfaces)
 
 set_target_properties(kdevplatformdocumentation PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
 

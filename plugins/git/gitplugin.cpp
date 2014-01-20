@@ -147,7 +147,7 @@ QString revisionInterval(const KDevelop::VcsRevision& rev, const KDevelop::VcsRe
                 rev.revisionValue().value<VcsRevision::RevisionSpecialType>()==VcsRevision::Start) //if we want it to the beginning just put the revisionInterval
         ret = toRevisionName(limit, QString());
     else {
-        QString dst = toRevisionName(limit);
+        QString dst = toRevisionName(limit, toRevisionName(rev));
         if(dst.isEmpty())
             ret = dst;
         else {
@@ -656,7 +656,8 @@ VcsJob* GitPlugin::renameBranch(const KUrl& repository, const QString& oldBranch
 VcsJob* GitPlugin::currentBranch(const KUrl& repository)
 {
     DVcsJob* job = new DVcsJob(urlDir(repository), this, OutputJob::Silent);
-    *job << "git" << "rev-parse" << "--abbrev-ref" << "HEAD";
+    job->ignoreError();
+    *job << "git" << "symbolic-ref" << "-q" << "--short" << "HEAD";
     connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), SLOT(parseGitCurrentBranch(KDevelop::DVcsJob*)));
     return job;
 }
@@ -664,11 +665,6 @@ VcsJob* GitPlugin::currentBranch(const KUrl& repository)
 void GitPlugin::parseGitCurrentBranch(DVcsJob* job)
 {
     QString out = job->output().trimmed();
-
-    // in detached state, we'd like to return an empty string
-    if (out == "HEAD") {
-        out.clear();
-    }
 
     job->setResults(out);
 }
@@ -1271,6 +1267,16 @@ VcsJob* GitPlugin::copy(const KUrl& localLocationSrc, const KUrl& localLocationD
 VcsJob* GitPlugin::move(const KUrl& source, const KUrl& destination)
 {
     QDir dir = urlDir(source);
+
+    QFileInfo fileInfo(source.toLocalFile());
+    if (fileInfo.isDir()) {
+        if (isEmptyDirStructure(QDir(source.toLocalFile()))) {
+            //move empty folder, git doesn't do that
+            kDebug() << "empty folder" << source;
+            return new StandardJob(this, KIO::move(source, destination), KDevelop::OutputJob::Silent);
+        }
+    }
+
     QStringList otherStr = getLsFiles(dir, QStringList() << "--others" << "--" << source.toLocalFile(), KDevelop::OutputJob::Silent);
     if(otherStr.isEmpty()) {
         DVcsJob* job = new DVcsJob(dir, this, KDevelop::OutputJob::Verbose);

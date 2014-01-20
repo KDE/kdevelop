@@ -46,7 +46,7 @@ public:
         KDialog dlg(qApp->activeWindow());
         QStringList selected;
         if (selectionWidget) {
-            selected << selectionWidget->currentProfile();
+            selected << selectionWidget->effectiveProfileName();
         }
 
         KCModuleProxy proxy("kcm_kdev_envsettings", 0, selected);
@@ -56,17 +56,6 @@ public:
         dlg.resize(480, 320);
         if (dlg.exec() == KDialog::Accepted) {
             proxy.save();
-            if (selectionWidget) {
-                const QString wasSelected = selectionWidget->currentProfile();
-                KDevelop::EnvironmentGroupList env( KGlobal::config() );
-                selectionWidget->clear();
-                selectionWidget->addItems(env.groups());
-                if (env.groups().contains(wasSelected)) {
-                    selectionWidget->setCurrentProfile(wasSelected);
-                } else {
-                    selectionWidget->setCurrentProfile(env.defaultGroup());
-                }
-            }
             emit q->environmentConfigured();
         }
     }
@@ -95,6 +84,8 @@ EnvironmentConfigureButton::~EnvironmentConfigureButton()
 
 void EnvironmentConfigureButton::setSelectionWidget(EnvironmentSelectionWidget* widget)
 {
+    connect(this, SIGNAL(environmentConfigured()),
+            widget, SLOT(reconfigure()));
     d->selectionWidget = widget;
 }
 

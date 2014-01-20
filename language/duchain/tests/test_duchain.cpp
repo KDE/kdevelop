@@ -1,7 +1,7 @@
 /*
  * This file is part of KDevelop
  *
- * Copyright 2011 Milian Wolff <mail@milianw.de>
+ * Copyright 2011-2013 Milian Wolff <mail@milianw.de>
  * Copyright 2006 Hamish Rodda <rodda@kde.org>
  * Copyright 2007-2009 David Nolden <david.nolden.kdevelop@art-master.de>
  *
@@ -36,6 +36,8 @@
 #include <language/duchain/types/typesystemdata.h>
 #include <language/duchain/types/integraltype.h>
 #include <language/duchain/types/typeregister.h>
+#include <language/duchain/declarationdata.h>
+#include <language/duchain/duchainregister.h>
 
 #include <language/codegen/coderepresentation.h>
 
@@ -606,14 +608,12 @@ public slots:
     for(int i = 0; i < 10000; ++i) {
       DUChainWriteLocker lock;
     }
-    qDebug() << "FINISHED lockForWrite";
   }
   void lockForRead()
   {
     for(int i = 0; i < 10000; ++i) {
       DUChainReadLocker lock;
     }
-    qDebug() << "FINISHED lockForRead";
   }
   void lockForReadWrite()
   {
@@ -625,7 +625,6 @@ public slots:
         DUChainWriteLocker lock;
       }
     }
-    qDebug() << "FINISHED lockForReadWrite";
   }
   static QSharedPointer<QThread> createWorkerThread(const char* workerSlot)
   {
@@ -643,7 +642,6 @@ class ThreadList : public QVector< QSharedPointer<QThread> >
 public:
   bool join(int timeout)
   {
-    qDebug() << "joining" << size() << "threads" << timeout;
     foreach(const QSharedPointer<QThread>& thread, *this) {
       // quit event loop
       Q_ASSERT(thread->isRunning());
@@ -671,6 +669,14 @@ void TestDUChain::testLockForWrite()
     threads << TestWorker::createWorkerThread(SLOT(lockForWrite()));
   }
   threads.start();
+  QBENCHMARK {
+    {
+      DUChainWriteLocker lock;
+    }
+    {
+      DUChainReadLocker lock;
+    }
+  }
   QVERIFY(threads.join(1000));
 }
 
@@ -681,6 +687,9 @@ void TestDUChain::testLockForRead()
     threads << TestWorker::createWorkerThread(SLOT(lockForRead()));
   }
   threads.start();
+  QBENCHMARK {
+    DUChainReadLocker lock;
+  }
   QVERIFY(threads.join(1000));
 }
 
@@ -691,6 +700,9 @@ void TestDUChain::testLockForReadWrite()
     threads << TestWorker::createWorkerThread(SLOT(lockForReadWrite()));
   }
   threads.start();
+  QBENCHMARK {
+    DUChainWriteLocker lock;
+  }
   QVERIFY(threads.join(1000));
 }
 
@@ -804,6 +816,46 @@ void TestDUChain::benchTypeRegistry_data()
   QTest::newRow("copy") << 4;
   QTest::newRow("copyNonDynamic") << 5;
   QTest::newRow("callDestructor") << 6;
+}
+
+void TestDUChain::benchDuchainReadLocker()
+{
+  QBENCHMARK {
+    DUChainReadLocker lock;
+  }
+}
+
+void TestDUChain::benchDuchainWriteLocker()
+{
+  QBENCHMARK {
+    DUChainWriteLocker lock;
+  }
+}
+
+void TestDUChain::benchDUChainItemFactory_copy()
+{
+  DUChainItemFactory<Declaration, DeclarationData> factory;
+  DeclarationData from, to;
+  from.classId = Declaration::Identity;
+
+  QFETCH(int, constant);
+
+  bool c = constant;
+
+  QBENCHMARK {
+    factory.copy(from, to, c);
+    if (constant == 2) {
+      c = !c;
+    }
+  }
+}
+
+void TestDUChain::benchDUChainItemFactory_copy_data()
+{
+  QTest::addColumn<int>("constant");
+  QTest::newRow("non-const") << 0;
+  QTest::newRow("const") << 1;
+  QTest::newRow("flip") << 2;
 }
 
 #include "test_duchain.moc"

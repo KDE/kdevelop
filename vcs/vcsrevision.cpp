@@ -141,7 +141,7 @@ QString VcsRevision::prettyValue() const
     {
         case GlobalNumber:
         case FileNumber:
-            return QString::number( revisionValue().toLongLong() );
+            return (revisionValue().type() == QVariant::String ? revisionValue().toString() : QString::number(revisionValue().toLongLong()));
             break;
         case Special:
             switch( revisionValue().value<KDevelop::VcsRevision::RevisionSpecialType>(  ) )

@@ -20,16 +20,15 @@
 #include <ui_patchreview.h>
 #include <interfaces/ipatchsource.h>
 
+namespace Sublime { class Area; }
+namespace KDevelop { class IDocument; }
+namespace KParts { class Part; }
+
 class QStandardItem;
 class KJob;
-namespace KDevelop {
-class IDocument;
-}
-
+class PatchReviewPlugin;
 class LocalPatchSource;
 class QModelIndex;
-class PatchReviewPlugin;
-namespace KParts { class Part; }
 
 class PatchReviewToolView : public QWidget
 {
@@ -55,8 +54,6 @@ private slots:
 
     void patchChanged();
 
-    void updatePatchFromEdit();
-
     void slotAppliedChanged( int newState );
 
     void finishReview();
@@ -69,6 +66,8 @@ private slots:
     void fileItemChanged( QStandardItem* item );
 
 private:
+    virtual void resizeEvent(QResizeEvent*);
+
     void activate( const KUrl& url, KDevelop::IDocument* buddy = 0 ) const;
     
     void kompareModelChanged();
@@ -98,7 +97,6 @@ private:
     class PatchFilesModel* m_fileModel;
 public slots:
     void documentActivated( KDevelop::IDocument* );
-    void patchSelectionChanged( int );
     void customContextMenuRequested(const QPoint& p);
     void testJobResult(KJob* job);
     void testJobPercent(KJob* job, ulong percent);

@@ -1,0 +1,11 @@
+// Provide wrapper for noexcept: Q_DECL_NOEXCEPT (also part of Qt5's qglobal.h)
+// TODO: Just use qglobal.h when porting to KF5
+#include <qglobal.h>
+
+#ifndef Q_DECL_NOEXCEPT
+#ifdef Q_OS_WIN
+#define Q_DECL_NOEXCEPT
+#else
+#define Q_DECL_NOEXCEPT noexcept
+#endif
+#endif

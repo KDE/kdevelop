@@ -17,34 +17,25 @@
 */
 
 #include "useswidget.h"
+
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/uses.h>
 #include <QVBoxLayout>
 #include <QLabel>
-#include <QCompleter>
 #include <QProgressBar>
-#include <KComboBox>
-#include <qpushbutton.h>
-#include <limits>
 #include <klocalizedstring.h>
-#include <qabstractitemview.h>
 #include <QToolButton>
+#include <language/duchain/declaration.h>
 #include <language/duchain/use.h>
 #include <kicon.h>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
-#include <ktexteditor/document.h>
-#include <QFile>
 #include <interfaces/iprojectcontroller.h>
 #include <qtextdocument.h>
-#include <qevent.h>
-#include <qtextlayout.h>
+#include <QResizeEvent>
 #include <language/duchain/duchainutils.h>
-#include "language/duchain/parsingenvironment.h"
-#include "language/duchain/types/indexedtype.h"
 #include <language/codegen/coderepresentation.h>
-#include <language/backgroundparser/parsejob.h>
 #include <interfaces/iproject.h>
 #include <interfaces/foregroundlock.h>
 
@@ -136,9 +127,9 @@ OneUseWidget::OneUseWidget(IndexedDeclaration declaration, IndexedString documen
 
     QString toolTipText;
     for(int a = start; a < end; ++a) {
-      QString lineText = code.line(a);
+      QString lineText = Qt::escape(code.line(a));
       if (m_range->range().start.line <= a && m_range->range().end.line >= a) {
-        lineText = QString("<b>") + Qt::escape(lineText) + QString("</b>");
+        lineText = QString("<b>") + lineText + QString("</b>");
       }
       if(!lineText.trimmed().isEmpty()) {
         toolTipText += lineText + "<br>";
