@@ -432,7 +432,7 @@ ICreateClassHelper* CppLanguageSupport::createClassHelper() const
 
 void CppLanguageSupport::findIncludePathsForJob(CPPParseJob* job)
 {
-  IncludePathComputer* comp = new IncludePathComputer(job->document().str(), job->preprocessorProblemsPointer());
+  IncludePathComputer* comp = new IncludePathComputer(job->document().str());
   comp->computeForeground();
   job->gotIncludePaths(comp);
 }

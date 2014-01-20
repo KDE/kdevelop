@@ -721,10 +721,16 @@ CMAKE_ADD_AST_MEMBER( QList<Item>, items )
 CMAKE_END_AST_CLASS( TargetLinkLibrariesAst )
 
 CMAKE_BEGIN_AST_CLASS( TargetLinkLibrariesAst )
+struct Dependencies {
+    QStringList other;
+    QStringList debug;
+    QStringList optimized;
+    QStringList retrieveTargets() const;
+};
 CMAKE_ADD_AST_MEMBER( QString, target )
-CMAKE_ADD_AST_MEMBER( QStringList, otherLibs )
-CMAKE_ADD_AST_MEMBER( QStringList, debugLibs )
-CMAKE_ADD_AST_MEMBER( QStringList, optimizedLibs )
+CMAKE_ADD_AST_MEMBER( Dependencies, publicDependencies )
+CMAKE_ADD_AST_MEMBER( Dependencies, privateDependencies )
+CMAKE_ADD_AST_MEMBER( Dependencies, interfaceOnlyDependencies )
 CMAKE_END_AST_CLASS( TargetLinkLibrariesAst )
 
 
@@ -852,3 +858,5 @@ CMAKE_END_AST_CLASS( ReturnAst )
 
 #endif
 
+
+struct D;

@@ -59,7 +59,6 @@ class AStylePreferences : public KDevelop::SettingsWidget, public Ui::AStylePref
 
     private:
         AStyleFormatter *m_formatter;
-        Language m_lang;
         bool m_enableWidgetSignals;
 };
 

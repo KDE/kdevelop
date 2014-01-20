@@ -18,9 +18,8 @@
  * 02110-1301, USA.
  */
 
-import QtQuick 1.0
+import org.kde.plasma.components 0.1
 
-Loader {
-    source: ":/"+area+".qml"
-    anchors.fill: parent
+Label {
+    font.pointSize: theme.defaultFont.pointSize*1.5
 }

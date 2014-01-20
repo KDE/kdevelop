@@ -28,23 +28,20 @@ StandardBackground {
          GradientStop { position: 1.0; color: "#A3D69B" }
     }
     
-    state: "starting"
+    state: "develop"
 
     tools: ButtonColumn {
         spacing: 10
-        Link {
-            anchors.margins: 20
-            width: parent.width
 
-            text: i18n("Starting")
-            onClicked: root.state = "starting"
+        Link {
+            iconSource: "applications-development"
+            text: i18n("Develop")
+            onClicked: root.state = "develop"
         }
         Link {
-            anchors.margins: 20
-            width: parent.width
-
-            text: i18n("Learn KDevelop!")
-            onClicked: root.state = "learning"
+            iconSource: "help-contents"
+            text: i18n("Getting Started")
+            onClicked: root.state = "gettingstarted"
         }
     }
 
@@ -57,11 +54,11 @@ StandardBackground {
         }
     }
     states: [
-        State { name: "learning"
-            PropertyChanges { target: codeContents; source: "qrc:/UseKDevelop.qml"}
+        State { name: "gettingstarted"
+            PropertyChanges { target: codeContents; source: "qrc:/qml/GettingStarted.qml"}
         },
-        State { name: "starting"
-            PropertyChanges { target: codeContents; source: "qrc:/Starting.qml"}
+        State { name: "develop"
+            PropertyChanges { target: codeContents; source: "qrc:/qml/Develop.qml"}
         }
     ]
 }

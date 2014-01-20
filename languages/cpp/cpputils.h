@@ -59,7 +59,8 @@ bool needsUpdate(const Cpp::EnvironmentFilePointer& file, const KUrl& localPath,
 
 ///Returns the include-path. Each dir has a trailing slash. Search should be iterated forward through the list
 ///@param problems If this is nonzero, eventual problems will be added to the list
-QStringList findIncludePaths(const QString& source, QList<KDevelop::ProblemPointer>* problems);
+///TODO: use strings instead of urls everywhere!
+KUrl::List findIncludePaths(const KUrl& source);
 
 /**
   * Returns a list of all files within the include-path of the given file

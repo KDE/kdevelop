@@ -23,14 +23,6 @@
 #include "parsesession.h"
 #include "ast.h"
 #include "astutilities.h"
-//#include "codegen/cppnewclass.h"
-//#include "codegen/makeimplementationprivate.h"
-
-#include <language/backgroundparser/backgroundparser.h>
-#include <language/codegen/coderepresentation.h>
-#include <language/codegen/documentchangeset.h>
-#include <language/duchain/duchain.h>  
-#include <language/duchain/duchainlock.h>
 
 #include <interfaces/ilanguagecontroller.h>
 
@@ -39,22 +31,23 @@
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 #include <tests/testfile.h>
-#include <tests/testproject.h>
 #include <qtest_kde.h>
 #include <language/codecompletion/codecompletiontesthelper.h>
 #include <dumpchain.h>
+#include <templatedeclaration.h>
+#include <language/backgroundparser/backgroundparser.h>
+#include <language/codegen/coderepresentation.h>
+#include <language/duchain/duchain.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/duchainutils.h>
 #include <language/duchain/dumpchain.h>
 #include <language/duchain/parsingenvironment.h>
 #include <language/duchain/codemodel.h>
-#include <typeinfo>
-#include <KTempDir>
 #include <language/duchain/classdeclaration.h>
-#include <cppducontext.h>
+#include <language/duchain/types/structuretype.h>
 #include <interfaces/iassistant.h>
 #include <interfaces/foregroundlock.h>
 #include <interfaces/isourceformattercontroller.h>
-#include <language/duchain/use.h>
-#include <language/duchain/duchainutils.h>
 
 #include "codegen/simplerefactoring.h"
 
@@ -116,13 +109,10 @@ void TestCppCodegen::testAssistants()
 
   DUChainReadLocker lock;
 
-  // There is one problem from the include-path resolver as it couldn't
-  // resolve include paths for the artificial code
-  // The second problem is the missing-declaration assistant problem
-  QCOMPARE(code->problems().size(), 2);
-  QVERIFY(code->problems()[1]->solutionAssistant());
-  QCOMPARE(code->problems()[1]->solutionAssistant()->actions().size(), numAssistants);
-  code->problems()[1]->solutionAssistant()->actions()[executeAssistant]->execute();
+  QCOMPARE(code->problems().size(), 1);
+  QVERIFY(code->problems().first()->solutionAssistant());
+  QCOMPARE(code->problems().first()->solutionAssistant()->actions().size(), numAssistants);
+  code->problems().first()->solutionAssistant()->actions()[executeAssistant]->execute();
 
   //Make sure the assistant has inserted the correct solution
   QVERIFY(code.m_insertedCode.text().contains(insertionText));
@@ -648,83 +638,6 @@ void TestCppCodegen::testAstDuChainMapping()
   }
 }
 
-void TestCppCodegen::testClassGeneration()
-{
-  #if 0
-  TopDUContext * top = 0;
-  GET_CONTEXT("AbstractClass.h", top);
-  
-  
-  CppNewClass newClass;
-  newClass.identifier("GeneratedClass");
-  newClass.addBaseClass("AbstractClass");
-  newClass.setHeaderUrl(CodeRepresentation::artificialUrl("GeneratedClass.h"));
-  newClass.setImplementationUrl(CodeRepresentation::artificialUrl("GeneratedClass.cpp"));
-  
-  DocumentChangeSet changes;/* = newClass.generate();
-  changes.applyAllToTemp();
-  QCOMPARE(changes.tempNamesForAll().size(), 2);
-  parseFile(changes.tempNamesForAll()[0].second);
-  parseFile(changes.tempNamesForAll()[1].second);*/
-  #endif
-}
-
-void TestCppCodegen::testPrivateImplementation()
-{
-#if 0
-  TopDUContext * top = 0;
-  GET_CONTEXT("ClassA.h", top);
-  QVERIFY(top);
-  
-  MakeImplementationPrivate generator;
-  DocumentRange range;
-  
-  {
-    DUChainReadLocker lock(DUChain::lock());
-    generator.autoGenerate(top->localDeclarations()[0]->internalContext(), &range);
-  }
-  generator.setStructureName("ClassAPrivate");
-  generator.setPointerName("d");
-  
-  QVERIFY2(generator.execute(), generator.errorText().toAscii());
-  generator.documentChangeSet().setReplacementPolicy(DocumentChangeSet::StopOnFailedChange);
-  
-  //Formatting plugin does not like source code in a single line
-  generator.documentChangeSet().setFormatPolicy(DocumentChangeSet::NoAutoFormat);
-  DocumentChangeSet::ChangeResult result = generator.documentChangeSet().applyAllToTemp();
-  QVERIFY2(result, result.m_failureReason.toAscii());
-  kDebug() << "tempName: " << generator.documentChangeSet().tempNameForFile(IndexedString(CodeRepresentation::artificialUrl("ClassA.h"))).str();
-  kDebug() << "Generated Text:" << createCodeRepresentation(generator.documentChangeSet().tempNameForFile(IndexedString(CodeRepresentation::artificialUrl("ClassA.h"))))->text();
-  kDebug() << "GeneratedText:" << createCodeRepresentation(generator.documentChangeSet().tempNameForFile(IndexedString(CodeRepresentation::artificialUrl("ClassA.cpp"))))->text();
-  
-  QVERIFY(generator.documentChangeSet().tempNameForFile(IndexedString(CodeRepresentation::artificialUrl("ClassA.h"))) != IndexedString(CodeRepresentation::artificialUrl("ClassA.h")));
-  QVERIFY(generator.documentChangeSet().tempNameForFile(IndexedString(CodeRepresentation::artificialUrl("ClassA.cpp"))) != IndexedString(CodeRepresentation::artificialUrl("ClassA.cpp")));
-  
-  IndexedString tempName1 = generator.documentChangeSet().tempNameForFile(IndexedString(CodeRepresentation::artificialUrl("ClassA.h")));
-  IndexedString tempName2 = generator.documentChangeSet().tempNameForFile(IndexedString(CodeRepresentation::artificialUrl("ClassA.cpp")));
-  parseFile(tempName1);
-  parseFile(tempName2);
-  
-  TopDUContext * newHeader = m_contexts[tempName1].data();
-  TopDUContext * newImplementation = m_contexts[tempName2].data();
-  
-  QVERIFY(newHeader);
-  QVERIFY(newImplementation);
-  
-  DUChainReadLocker lock(DUChain::lock());
-  kDebug() << "HeaderProblems: ";
-  foreach(ProblemPointer p, newHeader->problems())
-    kDebug() << p->description();
-  kDebug() << "Implementation Problems: ";
-  foreach(ProblemPointer p, newImplementation->problems())
-    kDebug() << p->description();
-  
-  //There is a problem from include path resolver, we care about semantic problems
-  QCOMPARE(newHeader->problems().size(), 1);
-  QCOMPARE(newImplementation->problems().size(), 1);
-#endif
-}
-
 void TestCppCodegen::testMacroDeclarationOrder()
 {
   InsertIntoDUChain source("thefile.h",
@@ -753,6 +666,9 @@ void TestCppCodegen::testMoveIntoSource()
   QFETCH(QString, newImpl);
   QFETCH(QualifiedIdentifier, id);
 
+  // make sure there aren't any stale queued documents to be parsed
+  QCOMPARE(ICore::self()->languageController()->backgroundParser()->queuedCount(), 0);
+
   TestFile header(origHeader, "h");
   TestFile impl(origImpl, "cpp", &header);
 
@@ -776,6 +692,11 @@ void TestCppCodegen::testMoveIntoSource()
 
   QCOMPARE(header.fileContents(), newHeader);
   QCOMPARE(impl.fileContents(), newImpl);
+
+  // SimpleRefactoring::moveIntoSource re-adds the documents to the BackgroundParser
+  // make sure we don't leave any stale requests for the next tests in the BackgroundParser
+  ICore::self()->languageController()->backgroundParser()->revertAllRequests(0);
+  QCOMPARE(ICore::self()->languageController()->backgroundParser()->queuedCount(), 0);
 }
 
 void TestCppCodegen::testMoveIntoSource_data()

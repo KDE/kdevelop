@@ -1,18 +1,18 @@
 <!DOCTYPE RCC><RCC version="1.0">
  <qresource>
     <!-- components  -->
-    <file>Starting.qml</file>
-    <file>UseKDevelop.qml</file>
-    <file>Link.qml</file>
-    <file>StandardPage.qml</file>
-    <file>Heading.qml</file>
-    <file>StandardBackground.qml</file>
+    <file>qml/Develop.qml</file>
+    <file>qml/GettingStarted.qml</file>
+    <file>qml/Link.qml</file>
+    <file>qml/StandardPage.qml</file>
+    <file>qml/Heading.qml</file>
+    <file>qml/StandardBackground.qml</file>
 
     <!-- areas  -->
-    <file>code.qml</file>
-    <file>debug.qml</file>
-    <file>review.qml</file>
+    <file>qml/area_code.qml</file>
+    <file>qml/area_debug.qml</file>
+    <file>qml/area_review.qml</file>
 
-    <file>main.qml</file>
+    <file>qml/main.qml</file>
  </qresource>
 </RCC>

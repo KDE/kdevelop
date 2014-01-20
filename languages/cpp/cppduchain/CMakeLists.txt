@@ -61,7 +61,7 @@ set(kdevcppduchain_LIB_SRCS
 #       to the plugin target
 
 kde4_add_library(kdev4cppduchain SHARED ${kdevcppduchain_LIB_SRCS})
-target_link_libraries(kdev4cppduchain 
+target_link_libraries(kdev4cppduchain LINK_PRIVATE
 		${KDEVPLATFORM_LANGUAGE_LIBRARIES} 
 		${KDEVPLATFORM_INTERFACES_LIBRARIES} 
 		${KDEVPLATFORM_UTIL_LIBRARIES} 

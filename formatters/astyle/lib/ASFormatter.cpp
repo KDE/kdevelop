@@ -5513,10 +5513,10 @@ bool ASFormatter::isArrayOperator() const
 	// find next word
 	size_t nextNum = currentLine.find_first_not_of(" \t", charNum + 1);
 	if (nextNum == string::npos)
-		return NULL;
+		return false;
 
 	if (!isLegalNameChar(currentLine[nextNum]))
-		return NULL;
+		return false;
 
 	// bypass next word and following spaces
 	while (nextNum < currentLine.length())

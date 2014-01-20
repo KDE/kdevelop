@@ -31,6 +31,7 @@
 #include <language/duchain/duchain.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/duchainlock.h>
+#include <language/duchain/parsingenvironment.h>
 
 #include "qthelpdocumentation.h"
 
@@ -48,21 +49,33 @@ KSharedPtr< KDevelop::IDocumentation > QtHelpProviderAbstract::documentationForD
 {
     QtHelpDocumentation::s_provider = const_cast<QtHelpProviderAbstract*>(this);
     if(dec) {
-        QStringList idList;
-        {
-        KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
-        KDevelop::QualifiedIdentifier qid = dec->qualifiedIdentifier();
-        for(int a = 0; a < qid.count(); ++a)
-            idList << qid.at(a).identifier().str(); //Copy over the identifier components, without the template-parameters
+        bool isQML = dec->topContext()->parsingEnvironmentFile()->language().str() == "QML/JS";
+        QString id;
+        if(isQML) {
+            KDevelop::DUChainReadLocker lock;
+            QString ns;
+            bool isClass = dec->abstractType()->whichType() == KDevelop::AbstractType::TypeStructure;
+            if(!isClass) {
+                ns = dec->context()->owner()->abstractType()->toString();
+                ns += "::" + dec->identifier().toString();
+            } else {
+                ns = dec->abstractType()->toString();
+            }
+
+            id = "QML." + ns;
+        } else {
+            KDevelop::DUChainReadLocker lock;
+            KDevelop::QualifiedIdentifier qid = dec->qualifiedIdentifier();
+            lock.unlock();
+            id = qid.toStringList().join("::");
         }
 
-        QString id = idList.join("::");
         if(!id.isEmpty()) {
             QMap<QString, QUrl> links=m_engine.linksForIdentifier(id);
 
             kDebug() << "doc_found" << id << links;
             if(!links.isEmpty())
-                return KSharedPtr<KDevelop::IDocumentation>(new QtHelpDocumentation(id, m_engine.linksForIdentifier(id)));
+                return KDevelop::IDocumentation::Ptr(new QtHelpDocumentation(id, links));
         }
     }
 

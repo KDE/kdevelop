@@ -79,10 +79,8 @@ extern QMutex cppDuContextInstantiationsMutex;
           Q_ASSERT(m_source);
         }
         void openQualifiedIdentifier( bool isExplicitlyGlobal ) {
-          QualifiedIdentifier i;
-          i.setExplicitlyGlobal( isExplicitlyGlobal );
           StatePtr s(new State);
-          s->identifier = i;
+          s->identifier.setExplicitlyGlobal( isExplicitlyGlobal );
           m_states << s;
         }
 
@@ -660,6 +658,8 @@ class CppDUContext : public BaseContext {
         first = *m_instatiations.begin();
         
         Q_ASSERT(first != oldFirst);
+        Q_UNUSED(oldFirst);
+        oldFirst = first;
         
         l.unlock();
         
@@ -669,8 +669,6 @@ class CppDUContext : public BaseContext {
         Q_ASSERT(first->m_instantiatedFrom == this);
         first->setInstantiatedFrom(0, InstantiationInformation());
         Q_ASSERT(first->m_instantiatedFrom == 0);
-        
-        oldFirst = first;
         
         l.relock();
       }      

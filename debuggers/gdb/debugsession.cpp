@@ -220,8 +220,7 @@ void DebugSession::_gdbStateChanged(DBGStateFlags oldState, DBGStateFlags newSta
     }
 
     // And now? :-)
-    kDebug(9012) << "Debugger state: " << newState << ": ";
-    kDebug(9012) << "   " << message;
+    kDebug(9012) << "state: " << newState << message;
 
     if (!message.isEmpty())
         emit showMessage(message, 3000);
@@ -755,21 +754,19 @@ void DebugSession::slotProgramStopped(const GDBMI::ResultRecord& r)
         // is implemented, we can't change thread id until we refresh
         // the entire list of threads -- otherwise we might set a thread
         // id that is not already in the list, and it will be upset.
-        
+
         if (r.hasField("frame")) {
             const GDBMI::Value& frame = r["frame"];
             QString file, line, addr;
-            
+
             if (frame.hasField("fullname")) file = frame["fullname"].literal();;
             if (frame.hasField("line"))     line = frame["line"].literal();
             if (frame.hasField("addr"))     addr = frame["addr"].literal();
-            
-            if (!file.isEmpty()) {
-                // gdb counts lines from 1 and we don't
-                setCurrentPosition(KUrl::fromLocalFile(file), line.toInt()-1, addr);
-                
-                updateState = true;
-            }
+
+            // gdb counts lines from 1 and we don't
+            setCurrentPosition(KUrl::fromLocalFile(file), line.toInt() - 1, addr);
+
+            updateState = true;
         }
    
         if (updateState) {
@@ -984,14 +981,12 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg, IExecutePlu
 
 
     // Configuration values
-    bool    config_forceBPSet_ = grp.readEntry( GDBDebugger::allowForcedBPEntry, true );
     bool    config_displayStaticMembers_ = grp.readEntry( GDBDebugger::staticMembersEntry, false );
     bool    config_asmDemangle_ = grp.readEntry( GDBDebugger::demangleNamesEntry, true );
     KUrl config_dbgShell_ = grp.readEntry( GDBDebugger::debuggerShellEntry, KUrl() );
     KUrl config_configGdbScript_ = grp.readEntry( GDBDebugger::remoteGdbConfigEntry, KUrl() );
     KUrl config_runShellScript_ = grp.readEntry( GDBDebugger::remoteGdbShellEntry, KUrl() );
     KUrl config_runGdbScript_ = grp.readEntry( GDBDebugger::remoteGdbRunEntry, KUrl() );
-    int config_outputRadix_ = 10;
     
     Q_ASSERT(iface);
     bool config_useExternalTerminal = iface->useTerminal( cfg );

@@ -68,8 +68,9 @@ void TestEnvironment::benchMerge()
     f1.addDefinedMacro(rpp::pp_macro(IndexedString(QString("my1UntouchedMacro%1").arg(i))), 0);
     f2.addDefinedMacro(rpp::pp_macro(IndexedString(QString("my2UntouchedMacro%1").arg(i))), 0);
   }
+  const IndexedString file(QLatin1String("f3"));
   QBENCHMARK {
-    EnvironmentFile f3(IndexedString(QLatin1String("f3")), 0);
+    EnvironmentFile f3(file, 0);
     f3.merge(f1);
     f3.merge(f2);
   }

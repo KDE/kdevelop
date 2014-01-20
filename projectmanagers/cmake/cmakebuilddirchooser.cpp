@@ -95,7 +95,8 @@ QString CMakeBuildDirChooser::buildDirProject(const KUrl& srcDir)
     const QString pLine="CMAKE_HOME_DIRECTORY:INTERNAL=";
     while (!correct && !file.atEnd())
     {
-        QString line = file.readLine().trimmed();
+        // note: CMakeCache.txt is UTF8-encoded, also see bug 329305
+        QString line = QString::fromUtf8(file.readLine().trimmed());
         if(line.startsWith(pLine))
         {
             correct=true;

@@ -26,8 +26,7 @@ struct Session
 {
     QString hash;
     QString name;
-    QString contents;
-    QString sessionString;
+    QString description;
 };
 
 class KDirWatch;
@@ -47,8 +46,6 @@ public:
         void updateSessions();
 
 private:
-    QString makeSessionString(const Session& session);
-
     QHash<QString, Session> m_currentSessions;
 
     KDirWatch *m_dirWatch;

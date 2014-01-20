@@ -41,6 +41,8 @@ QString generateToolGroupName( CustomBuildSystemTool::ActionType type )
     };
 
     Q_ASSERT( type >= 0 && type < toolTypeCount );
+    Q_UNUSED( toolTypeCount );
+
     return ConfigConstants::toolGroupPrefix + toolTypes[type];
 }
 
@@ -91,7 +93,7 @@ void CustomBuildSystemConfigWidget::loadFrom( KConfig* cfg )
                 CustomBuildSystemTool tool;
                 tool.arguments = toolgrp.readEntry( ConfigConstants::toolArguments, "" );
                 tool.executable = toolgrp.readEntry( ConfigConstants::toolExecutable, KUrl() );
-                tool.envGrp = toolgrp.readEntry( ConfigConstants::toolEnvironment, "default" );
+                tool.envGrp = toolgrp.readEntry( ConfigConstants::toolEnvironment, QString() );
                 tool.enabled = toolgrp.readEntry( ConfigConstants::toolEnabled, false );
                 tool.type = CustomBuildSystemTool::ActionType( toolgrp.readEntry( ConfigConstants::toolType, 0 ) );
                 config.tools[tool.type] = tool;
@@ -170,7 +172,7 @@ void CustomBuildSystemConfigWidget::saveConfig( KConfigGroup& grp, CustomBuildSy
     }
 }
 
-void CustomBuildSystemConfigWidget::saveTo( KConfig* cfg, KDevelop::IProject* project )
+void CustomBuildSystemConfigWidget::saveTo( KConfig* cfg, KDevelop::IProject* /*project*/ )
 {
     KConfigGroup subgrp = cfg->group( ConfigConstants::customBuildSystemGroup );
     subgrp.deleteGroup();
@@ -232,9 +234,10 @@ void CustomBuildSystemConfigWidget::removeConfig()
 void CustomBuildSystemConfigWidget::verify() {
     Q_ASSERT( ui->currentConfig->count() == configs.count() );
 
-    bool hasAnyConfigurations = (configs.count() != 0);
-    bool configurationSelected = (ui->currentConfig->currentIndex() >= 0);
-    Q_ASSERT( !hasAnyConfigurations || configurationSelected );
+
+    const bool hasAnyConfigurations = (configs.count() != 0);
+
+    Q_ASSERT( !hasAnyConfigurations || (ui->currentConfig->currentIndex() >= 0) );
 
     ui->configWidget->setEnabled( hasAnyConfigurations );
     ui->removeConfig->setEnabled( hasAnyConfigurations );

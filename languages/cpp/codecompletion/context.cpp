@@ -1307,7 +1307,7 @@ void getOverridable(DUContext* base, DUContext* current, QMap< QPair<IndexedType
   foreach(Declaration* decl, current->localDeclarations()) {
     ClassFunctionDeclaration* classFun = dynamic_cast<ClassFunctionDeclaration*>(decl);
     // one can only override the direct parent's ctor
-    if(classFun && (classFun->isVirtual() || (depth == 0 && classFun->isConstructor()))) {
+    if(classFun && (classFun->isVirtual() || (depth == 0 && classFun->isConstructor())) && !classFun->isExplicitlyDeleted()) {
       QPair<IndexedType, IndexedString> key = qMakePair(classFun->indexedType(), classFun->identifier().identifier());
       if(base->owner()) {
         if(classFun->isConstructor() || classFun->isDestructor())
@@ -1360,7 +1360,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::memberAccessCompletionIt
     ifDebug( kDebug() << "container:" << ctx->scopeIdentifier(true).toString(); )
 
     QList<DeclarationDepthPair> decls = ctx->allDeclarations(ctx->range().end, m_duContext->topContext(), false );
-    decls += namespaceItems(ctx, ctx->range().end, false);
+    decls += namespaceItems(ctx, ctx->range().end, false, containers);
 
     foreach( const DeclarationDepthPair& decl, Cpp::hideOverloadedDeclarations(decls, typeIsConst ) )
     {
@@ -1818,7 +1818,8 @@ QList<DeclAccessPair> CodeCompletionContext::getLookaheadMatches(Declaration* fo
   return ret;
 }
 
-QList<DeclarationDepthPair> CodeCompletionContext::namespaceItems(DUContext* duContext, const CursorInRevision& position, bool global) const
+QList<DeclarationDepthPair> CodeCompletionContext::namespaceItems(DUContext* duContext, const CursorInRevision& position,
+                                                                  bool global, const QSet<DUContext*>& skipContexts) const
 {
   QList<DeclarationDepthPair> decls;
   QList<Declaration*> foundDecls;
@@ -1862,6 +1863,9 @@ QList<DeclarationDepthPair> CodeCompletionContext::namespaceItems(DUContext* duC
       if(contextDecl->kind() != Declaration::Namespace || !contextDecl->internalContext())
         continue;
       DUContext* context = contextDecl->internalContext();
+      if (skipContexts.contains(context)) {
+        continue;
+      }
 
       if(context->range().contains(duContext->range()) && context->url() == duContext->url())
         continue; //If the context surrounds the current one, the declarations are visible through allDeclarations(..).
@@ -2263,14 +2267,13 @@ bool  CodeCompletionContext::filterDeclaration(Declaration* decl, DUContext* dec
   if(dynamic_cast<TemplateParameterDeclaration*>(decl) && !visibleFromWithin(decl, m_duContext.data()))
     return false;
   
-  static IndexedIdentifier friendIdentifier(Identifier("friend"));
-  static IndexedIdentifier globalImport(globalImportIdentifier());
+  static const IndexedIdentifier friendIdentifier(Identifier("friend"));
   
   if(decl->indexedIdentifier().isEmpty()) //Filter out nameless declarations
     return false;
 
   if(decl->indexedIdentifier() == friendIdentifier || decl->indexedIdentifier() == Cpp::unnamedNamespaceIdentifier()
-     || decl->indexedIdentifier() == globalImport)
+     || decl->indexedIdentifier() == globalIndexedImportIdentifier())
     return false;
   
   if(excludeReservedIdentifiers)

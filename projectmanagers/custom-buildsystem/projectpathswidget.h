@@ -25,7 +25,6 @@
 #include "custombuildsystemconfig.h"
 #include <qabstractitemmodel.h>
 
-class KFileDialog;
 class KUrlRequester;
 namespace Ui
 {
@@ -66,7 +65,6 @@ private slots:
 private:
     Ui::ProjectPathsWidget* ui;
     ProjectPathsModel* pathsModel;
-    KFileDialog* m_projectPathFileDialog;
     // Enables/Disables widgets based on UI state/selection
     void updateEnablements();
     void updatePathsModel( const QVariant& newData, int role );

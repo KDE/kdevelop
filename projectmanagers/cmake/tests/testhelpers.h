@@ -48,12 +48,6 @@ struct TestProjectPaths {
     KUrl configFile;
 };
 
-#define WAIT_FOR_OPEN_SIGNAL \
-{\
-    bool gotSignal = QTest::kWaitForSignal(KDevelop::ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), 30000);\
-    Q_ASSERT(gotSignal && "Timeout while waiting for opened signal");\
-} void(0)
-
 TestProjectPaths projectPaths(const QString& project, QString name = QString())
 {
     TestProjectPaths paths;
@@ -126,7 +120,13 @@ KDevelop::IProject* loadProject(const QString& name, const QString& relative = Q
     defaultConfigure(paths);
 
     KDevelop::ICore::self()->projectController()->openProject(paths.projectFile);
-    WAIT_FOR_OPEN_SIGNAL;
+
+    const bool gotSignal = QTest::kWaitForSignal(
+            KDevelop::ICore::self()->projectController(),
+            SIGNAL(projectOpened(KDevelop::IProject*)),
+            30000);
+    if( !gotSignal ) qFatal( "Timeout while waiting for opened signal" );
+
 
     KDevelop::IProject* project = KDevelop::ICore::self()->projectController()->findProjectByName(name);
     Q_ASSERT(project);

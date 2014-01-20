@@ -45,7 +45,7 @@ void CppPreprocessEnvironment::finishEnvironment(bool leaveEnvironmentFile) {
     }
 }
 
-void CppPreprocessEnvironment::removeMacro(KDevelop::IndexedString macroName) {
+void CppPreprocessEnvironment::removeMacro(const KDevelop::IndexedString& macroName) {
   m_macroNameSet.remove(macroName);
   rpp::pp_macro* m = new rpp::pp_macro;
   m->name = macroName;
@@ -53,7 +53,7 @@ void CppPreprocessEnvironment::removeMacro(KDevelop::IndexedString macroName) {
   rpp::Environment::setMacro(m);
 }
 
-void CppPreprocessEnvironment::removeString(KDevelop::IndexedString str) {
+void CppPreprocessEnvironment::removeString(const KDevelop::IndexedString& str) {
   m_strings.erase(str.index());
 }
 
@@ -116,16 +116,18 @@ void CppPreprocessEnvironment::merge( const Cpp::EnvironmentFile* file, bool mer
     for( Cpp::ReferenceCountedMacroSet::Iterator it(addedMacros.iterator()); it; ++it )
       rpp::Environment::setMacro(const_cast<rpp::pp_macro*>(&it.ref())); //Do not use our overridden setMacro(..), because addDefinedMacro(..) is not needed(macro-sets should be merged separately)
 
+    for( Cpp::ReferenceCountedStringSet::Iterator it = file->definedMacroNames().iterator(); it; ++it ) {
+      m_macroNameSet.insert(it.ref());
+    }
+
     //We don't have to care about efficiency too much here, unDefinedMacros should be a rather small set
     for( Cpp::ReferenceCountedStringSet::Iterator it = file->unDefinedMacroNames().iterator(); it; ++it ) {
         rpp::pp_macro* m = new rpp::pp_macro(*it);
         m->defined = false;
         m->m_valueHashValid = false;
         rpp::Environment::setMacro(m); //Do not use our overridden setMacro(..), because addDefinedMacro(..) is not needed(macro-sets should be merged separately)
+        m_macroNameSet.remove(it.ref());
     }
-
-    m_macroNameSet += file->definedMacroNames();
-    m_macroNameSet -= file->unDefinedMacroNames();
 }
 
 void CppPreprocessEnvironment::setMacro(rpp::pp_macro* macro) {
@@ -169,8 +171,8 @@ int CppPreprocessEnvironment::type() const {
     return KDevelop::CppParsingEnvironment;
 }
 
-const Cpp::ReferenceCountedStringSet& CppPreprocessEnvironment::macroNameSet() const {
-    return m_macroNameSet;
+QSet<KDevelop::IndexedString> CppPreprocessEnvironment::macroNameSet() const {
+  return m_macroNameSet;
 }
 
 void CppPreprocessEnvironment::setIdentityOffsetRestriction(uint value) {

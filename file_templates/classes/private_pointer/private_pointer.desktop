@@ -158,9 +158,6 @@ Name[uk]=Закритий (private) заголовок
 Name[x-test]=xxPrivate Headerxx
 Name[zh_CN]=私有头文件
 Name[zh_TW]=私密標頭
-<<<<<<< HEAD
-=======
->>>>>>> 4.5
 File=class_p.h
 OutputFile={{ name }}_p.h
 

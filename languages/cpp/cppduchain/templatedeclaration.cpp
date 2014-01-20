@@ -111,14 +111,17 @@ struct DelayedTypeSearcher : public KDevelop::SimpleTypeVisitor {
   DelayedTypeSearcher() : found(false) {
   }
 
-  virtual bool visit ( const AbstractType* type ) {
+  // We want to use SimpleTypeVisitor implementations
+  using SimpleTypeVisitor::visit;
+
+  virtual bool visit ( const AbstractType* type ) override {
     if( found ) return false;
     if( dynamic_cast<const DelayedType*>(type) )
       found = true;
     return !found;
   }
 
-  virtual bool visit (const StructureType *) {
+  virtual bool visit (const StructureType *) override {
     ///We do not want to visit member-types, so return false here
     return false;
   }

@@ -16,7 +16,6 @@
 #include "memviewdlg.h"
 #include "gdbcommand.h"
 #include "gdbglobal.h"
-#include "debuggerplugin.h"
 
 #include <kaction.h>
 #include <klineedit.h>
@@ -115,9 +114,8 @@ namespace GDBDebugger
 
 
 
-    MemoryView::MemoryView(GDBController* controller, QWidget* parent)
+    MemoryView::MemoryView(QWidget* parent)
     : QWidget(parent),
-      controller_(controller),
       // New memory view can be created only when debugger is active,
       // so don't set s_appNotStarted here.
       khexedit2_widget(0),
@@ -473,9 +471,8 @@ namespace GDBDebugger
     }
 
 
-    MemoryViewerWidget::MemoryViewerWidget(CppDebuggerPlugin* plugin, QWidget* parent)
-    : QWidget(parent),
-      m_plugin(plugin)
+    MemoryViewerWidget::MemoryViewerWidget(CppDebuggerPlugin* /*plugin*/, QWidget* parent)
+    : QWidget(parent)
     {
         setWindowIcon(KIcon("debugger"));
         setWindowTitle(i18n("Memory viewer"));
@@ -499,7 +496,7 @@ namespace GDBDebugger
 
     void MemoryViewerWidget::slotAddMemoryView()
     {
-        MemoryView* widget = new MemoryView(controller_, this);
+        MemoryView* widget = new MemoryView(this);
         toolBox_->addItem(widget, widget->windowTitle());
         toolBox_->setCurrentIndex(toolBox_->indexOf(widget));
         memoryViews_.push_back(widget);

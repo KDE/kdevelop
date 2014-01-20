@@ -25,28 +25,8 @@
      <property name="title">
       <string>Debugger</string>
      </property>
-     <layout class="QFormLayout" name="formLayout_2">
-      <item row="1" column="1">
-       <widget class="KUrlRequester" name="kcfg_gdbPath">
-        <property name="toolTip">
-         <string>Gdb executable</string>
-        </property>
-        <property name="whatsThis">
-         <string>To run &quot;gdb&quot; binary from $PATH, leave this field empty. To run custom gdb, for example, for a different architecture, enter the executable name here. You can either run gdb from $PATH, but with a different name (say, &quot;arm-gdb&quot;), by typing the name here, or specify full path to the gdb executable.</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="KUrlRequester" name="kcfg_debuggingShell">
-        <property name="toolTip">
-         <string>Run gdb in a special shell (mainly for automake projects)</string>
-        </property>
-        <property name="whatsThis">
-         <string>If you want gdb to be executed by a special shell or tool insert it here. The main use-case is for Automake based projects where the application is actually only a script and &lt;b&gt;libtool&lt;/b&gt; is needed to get it to run inside gdb.</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
        <widget class="QLabel" name="gdbPath_label">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
@@ -65,7 +45,17 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
+      <item row="0" column="1">
+       <widget class="KUrlRequester" name="kcfg_gdbPath">
+        <property name="toolTip">
+         <string>Gdb executable</string>
+        </property>
+        <property name="whatsThis">
+         <string>To run &quot;gdb&quot; binary from $PATH, leave this field empty. To run custom gdb, for example, for a different architecture, enter the executable name here. You can either run gdb from $PATH, but with a different name (say, &quot;arm-gdb&quot;), by typing the name here, or specify full path to the gdb executable.</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
        <widget class="QLabel" name="debuggingShell_label">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
@@ -74,19 +64,29 @@
          </sizepolicy>
         </property>
         <property name="toolTip">
-         <string>Run gdb in a special shell (mainly for automake projects)</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If you want gdb to be executed by a special shell script, which for example properly sets the library path, insert it here e.g.: /path/to/script.sh --scriptArguments&lt;/p&gt;&lt;p&gt;Note: your script'll be invoked like this: /path/to/script.sh --scriptArguments debbuger --debuggerArguments. So script.sh &lt;span style=&quot; font-weight:600;&quot;&gt;must&lt;/span&gt; invoke &amp;quot;debugger&amp;quot; executable manually.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="whatsThis">
-         <string>If you want gdb to be executed by a special shell or tool insert it here. The main use-case is for Automake based projects where the application is actually only a script and libtool is needed to get it to run inside gdb.</string>
+         <string/>
         </property>
         <property name="text">
-         <string>Debugging &amp;shell:</string>
+         <string>&amp;Shell script:</string>
         </property>
         <property name="wordWrap">
          <bool>false</bool>
         </property>
         <property name="buddy">
          <cstring>kcfg_debuggingShell</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="KUrlRequester" name="kcfg_debuggingShell">
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If you want gdb to be executed by a special shell script, which for example properly sets the library path, insert it here e.g.: /path/to/script.sh --scriptArguments&lt;/p&gt;&lt;p&gt;Note: your script'll be invoked like this: /path/to/script.sh --scriptArguments debbuger --debuggerArguments. So script.sh &lt;span style=&quot; font-weight:600;&quot;&gt;must&lt;/span&gt; invoke &amp;quot;debugger&amp;quot; executable manually.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="whatsThis">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
       </item>
@@ -196,7 +196,7 @@ However, non-mangled names are easier to read.</string>
       <item row="1" column="0">
        <widget class="QLabel" name="runShellScript_label">
         <property name="toolTip">
-         <string/>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Script to start remote application&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;This shell script is run after the Gdb Config script has been sourced by gdb.&lt;/p&gt;&lt;p&gt;It's purpose is to actually start the remote process.&lt;/p&gt;&lt;p&gt;1) Find a way to execute a command remotely - rsh, ssh, telnet, ...&lt;/p&gt;&lt;p&gt;2a) Execute &amp;quot;gdbserver ... application&amp;quot; on target.&lt;/p&gt;&lt;p&gt;or if your executable contains the gdb stub:&lt;/p&gt;&lt;p&gt;2b) Execute &amp;quot;application&amp;quot; on target.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="text">
          <string comment="Shell script to be executed at run time">R&amp;un shell script:</string>
@@ -212,23 +212,20 @@ However, non-mangled names are easier to read.</string>
       <item row="1" column="1">
        <widget class="KUrlRequester" name="kcfg_runShellScript">
         <property name="toolTip">
-         <string>Script to start remote application</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Script to start remote application&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;This shell script is run after the Gdb Config script has been sourced by gdb.&lt;/p&gt;&lt;p&gt;It's purpose is to actually start the remote process.&lt;/p&gt;&lt;p&gt;1) Find a way to execute a command remotely - rsh, ssh, telnet, ...&lt;/p&gt;&lt;p&gt;2a) Execute &amp;quot;gdbserver ... application&amp;quot; on target.&lt;/p&gt;&lt;p&gt;or if your executable contains the gdb stub:&lt;/p&gt;&lt;p&gt;2b) Execute &amp;quot;application&amp;quot; on target.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="whatsThis">
-         <string>This shell script is run after the Config gdb script has been sourced by gdb.
-When debugging remotely this script is intended to actually start the remote process.
-[It is expected that the debug executable can be reached on the target, maybe by downloading it as a final build step]
-1) Find a way to execute a command remotely - rsh, ssh, telnet, ...
-2a) Execute &quot;gdbserver ... application&quot; on target.
-or if your executable contains the gdb stub
-2b) Execute &quot;application&quot; on target.</string>
+         <string/>
         </property>
        </widget>
       </item>
       <item row="0" column="0">
        <widget class="QLabel" name="configGdbScript_label">
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This script is sourced by gdb when the debugging starts.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
         <property name="text">
-         <string>&amp;Config gdb script:</string>
+         <string>Gdb &amp;config script:</string>
         </property>
         <property name="wordWrap">
          <bool>false</bool>
@@ -241,19 +238,18 @@ or if your executable contains the gdb stub
       <item row="2" column="1">
        <widget class="KUrlRequester" name="kcfg_runGdbScript">
         <property name="toolTip">
-         <string>Script to connect with remote application</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Script to connect with remote application&lt;/p&gt;&lt;p&gt;For example:&lt;/p&gt;&lt;p&gt;	shell sleep 5	 #wait for remote program to start&lt;/p&gt;&lt;p&gt;	target remote ...	#connect to the remote debugger&lt;/p&gt;&lt;p&gt;	continue	#[optional] run debugging to the first breakpoint.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="whatsThis">
-         <string>This script is sourced by gdb after the two preceding scripts have been executed.
-This script is intended for the actual commands needed to connect to a remotely running executable.
-	shell sleep 5	wait for remote program to start
-	target remote ...	connect to the remote debugger
-	continue	[optional] run debugging to the first breakpoint.</string>
+         <string/>
         </property>
        </widget>
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="runGdbScript_label">
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Script to connect with remote application&lt;/p&gt;&lt;p&gt;For example:&lt;/p&gt;&lt;p&gt;	shell sleep 5	 #wait for remote program to start&lt;/p&gt;&lt;p&gt;	target remote ...	#connect to the remote debugger&lt;/p&gt;&lt;p&gt;	continue	#[optional] run debugging to the first breakpoint.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
         <property name="text">
          <string comment="Gdb script to be executed at run time.">Run &amp;gdb script:</string>
         </property>
@@ -268,10 +264,10 @@ This script is intended for the actual commands needed to connect to a remotely 
       <item row="0" column="1">
        <widget class="KUrlRequester" name="kcfg_configGdbScript">
         <property name="toolTip">
-         <string>Gdb configure script</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This script is sourced by gdb when the debugging starts.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="whatsThis">
-         <string>This script is sourced by gdb when the debugging starts.</string>
+         <string/>
         </property>
        </widget>
       </item>

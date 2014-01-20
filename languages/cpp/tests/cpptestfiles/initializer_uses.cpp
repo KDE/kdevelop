@@ -19,10 +19,10 @@
 // "useCount" : 7
 struct Blub
 {
-  // "useCount" : 1
+  // "useCount" : 2
   Blub(Blub * = 0);
   // "useCount" : 1
-  Blub& operator=(const Blub&) = delete;
+  Blub& operator=(const Blub&) {};
 };
 
 void foo()

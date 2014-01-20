@@ -321,12 +321,12 @@ void GdbTest::testDeleteBreakpoint()
 
     TestLaunchConfiguration cfg;
 
-    QCOMPARE(KDevelop::ICore::self()->debugController()->breakpointModel()->rowCount(), 1); //one for the "insert here" entry
+    QCOMPARE(breakpoints()->rowCount(), 0);
     //add breakpoint before startProgram
     breakpoints()->addCodeBreakpoint(debugeeFileName, 21);
-    QCOMPARE(KDevelop::ICore::self()->debugController()->breakpointModel()->rowCount(), 2);
+    QCOMPARE(breakpoints()->rowCount(), 1);
     breakpoints()->removeRow(0);
-    QCOMPARE(KDevelop::ICore::self()->debugController()->breakpointModel()->rowCount(), 1);
+    QCOMPARE(breakpoints()->rowCount(), 0);
 
     breakpoints()->addCodeBreakpoint(debugeeFileName, 22);
 
@@ -362,7 +362,7 @@ void GdbTest::testUpdateBreakpoint()
     TestLaunchConfiguration cfg;
 
     KDevelop::Breakpoint * b = breakpoints()->addCodeBreakpoint(debugeeFileName, 28);
-    QCOMPARE(KDevelop::ICore::self()->debugController()->breakpointModel()->rowCount(), 2);
+    QCOMPARE(breakpoints()->rowCount(), 1);
 
     session->startProgram(&cfg, m_iface);
 
@@ -373,7 +373,7 @@ void GdbTest::testUpdateBreakpoint()
     QTest::qWait(100);
     session->stepInto();
     WAIT_FOR_STATE(session, DebugSession::PausedState);
-    QCOMPARE(KDevelop::ICore::self()->debugController()->breakpointModel()->rowCount(), 3);
+    QCOMPARE(breakpoints()->rowCount(), 2);
     b = breakpoints()->breakpoint(1);
     QCOMPARE(b->url(), KUrl(debugeeFileName));
     QCOMPARE(b->line(), 27);
@@ -1318,7 +1318,7 @@ void GdbTest::testPickupManuallyInsertedBreakpoint()
     WAIT_FOR_STATE(session, DebugSession::PausedState);
     QTest::qWait(1000); //wait for breakpoints update
     QCOMPARE(breakpoints()->breakpoints().count(), 2);
-    QCOMPARE(breakpoints()->rowCount(), 2+1);
+    QCOMPARE(breakpoints()->rowCount(), 2);
     KDevelop::Breakpoint *b = breakpoints()->breakpoint(1);
     QVERIFY(b);
     QCOMPARE(b->line(), 31); //we start with 0, gdb with 1
@@ -1434,6 +1434,7 @@ void GdbTest::testRemoteDebugInsertBreakpoint()
 
     TestDebugSession *session = new TestDebugSession;
 
+    breakpoints()->addCodeBreakpoint(debugeeFileName, 29);
     breakpoints()->addCodeBreakpoint(debugeeFileName, 35);
 
     QTemporaryFile shellScript(QDir::currentPath()+"/shellscript");
@@ -1606,20 +1607,15 @@ void GdbTest::testCatchpoint()
     WAIT_FOR_STATE(session, DebugSession::PausedState);
     QTest::qWait(1000);
 
-    // TODO: Fix API in FrameStackModel? At least introduce FrameStackModel::frames(int)
-    typedef KDevelop::IFrameStackModel::FrameItem FrameItem;
-    QVector<FrameItem> frames;
-    const QModelIndex thread1Index = fsModel->index(0, 0);
-    for (int i = 0; i < fsModel->rowCount(thread1Index); ++i) {
-        FrameItem frame = fsModel->frame(fsModel->index(i, 0, thread1Index));
-        frames << frame;
-        qDebug() << frame.file << frame.line;
-    }
-
+    const QList<KDevelop::FrameStackModel::FrameItem> frames = fsModel->frames(fsModel->currentThread());
     QVERIFY(frames.size() >= 2);
     // frame 0 is somewhere inside libstdc++
     QCOMPARE(frames[1].file, KUrl(findSourceFile("debugeeexception.cpp")));
     QCOMPARE(frames[1].line, 22);
+
+    QCOMPARE(breakpoints()->rowCount(),2);
+    QVERIFY(!breakpoints()->breakpoint(0)->location().isEmpty());
+    QVERIFY(!breakpoints()->breakpoint(1)->location().isEmpty());
 
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);

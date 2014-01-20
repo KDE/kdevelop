@@ -65,10 +65,21 @@ Boston, MA 02110-1301, USA.
 #define POINTERALIGN_TYPE 3
 
 AStylePreferences::AStylePreferences(Language lang, QWidget *parent)
-    : KDevelop::SettingsWidget(parent), m_lang(lang)
+    : KDevelop::SettingsWidget(parent)
 {
     setupUi(this);
     m_formatter = new AStyleFormatter();
+    switch(lang) {
+        case AStylePreferences::CPP:
+            m_formatter->setCStyle();
+            break;
+        case AStylePreferences::Java:
+            m_formatter->setJavaStyle();
+            break;
+        case AStylePreferences::CSharp:
+            m_formatter->setSharpStyle();
+            break;
+    }
     m_enableWidgetSignals = true;
     init();
 }

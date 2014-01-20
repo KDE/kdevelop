@@ -149,6 +149,7 @@ private slots:
   void testParentConstructor();
   void testOverride_data();
   void testOverride();
+  void testOverrideDeleted();
   void testExecuteKeepWord_data();
   void testExecuteKeepWord();
   void testAfterVisibility_data();
@@ -158,6 +159,7 @@ private slots:
   void testLookaheadMatches();
   void testMemberAccessInstance();
   void testNestedInlineNamespace();
+  void testDuplicatedNamespace();
 public:
   enum DumpArea {
     DumpNone = 0,

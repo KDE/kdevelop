@@ -119,12 +119,17 @@ protected:
                                                           const KDevelop::Path& path,
                                                           KDevelop::ProjectBaseItem* parent = 0);
 
+private slots:
+    void reloadMakefile(KDevelop::ProjectFileItem *item);
+
 private:
     /**
      * Initialize targets by reading Makefile in @arg dir
      * @return Target lists in Makefile at @arg dir.
      */
     QStringList parseCustomMakeFile( const KDevelop::Path &makefile );
+
+    void createTargetItems(KDevelop::IProject* project, const KDevelop::Path& path, KDevelop::ProjectBaseItem* parent);
 
 private:
     class Private;

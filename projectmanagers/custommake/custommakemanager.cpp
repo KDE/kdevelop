@@ -62,6 +62,9 @@ CustomMakeManager::CustomMakeManager( QObject *parent, const QVariantList& args 
     Q_ASSERT(i);
     d->m_builder = i->extension<IMakeBuilder>();
     Q_ASSERT(d->m_builder);
+
+    connect(this, SIGNAL(reloadedFileItem(KDevelop::ProjectFileItem*)),
+            this, SLOT(reloadMakefile(KDevelop::ProjectFileItem*)));
 }
 
 CustomMakeManager::~CustomMakeManager()
@@ -131,23 +134,50 @@ QList<ProjectTargetItem*> CustomMakeManager::targets(KDevelop::ProjectFolderItem
     return ret;
 }
 
-ProjectFileItem* CustomMakeManager::createFileItem(IProject* project, const Path& path, ProjectBaseItem* parent)
+static bool isMakefile(const QString& fileName)
 {
-    KDevelop::ProjectFileItem *item = new KDevelop::ProjectFileItem( project, path, parent );
-    const QString fileName = path.lastPathSegment();
-    if( fileName == QLatin1String("Makefile")
+    return  ( fileName == QLatin1String("Makefile")
         || fileName == QLatin1String("makefile")
         || fileName == QLatin1String("GNUmakefile")
-        || fileName == QLatin1String("BSDmakefile") )
+        || fileName == QLatin1String("BSDmakefile") );
+}
+
+void CustomMakeManager::createTargetItems(IProject* project, const Path& path, ProjectBaseItem* parent)
+{
+    Q_ASSERT(isMakefile(path.lastPathSegment()));
+    foreach(const QString& target, parseCustomMakeFile( path ))
     {
-        QStringList targetlist = parseCustomMakeFile( path );
-        foreach( const QString &target, targetlist )
-        {
-            new CustomMakeTargetItem( project, target, parent );
-//             d->m_testItems.append( targetItem ); // debug
+        if (!isValid(Path(parent->path(), target), false, project)) {
+            continue;
         }
+        new CustomMakeTargetItem( project, target, parent );
+//         d->m_testItems.append( targetItem ); // debug
+    }
+}
+
+ProjectFileItem* CustomMakeManager::createFileItem(IProject* project, const Path& path, ProjectBaseItem* parent)
+{
+    ProjectFileItem* item = new ProjectFileItem(project, path, parent);
+    if (isMakefile(path.lastPathSegment())){
+        createTargetItems(project, path, parent);
     }
     return item;
+}
+
+void CustomMakeManager::reloadMakefile(ProjectFileItem* file)
+{
+    if( !isMakefile(file->path().lastPathSegment())){
+        return;
+    }
+    ProjectBaseItem* parent = file->parent();
+    // remove the items that are Makefile targets
+    foreach(ProjectBaseItem* item, parent->children()){
+        if (item->target()){
+            delete item;
+        }
+    }
+    // Recreate the targets.
+    createTargetItems(parent->project(), file->path(), parent);
 }
 
 ProjectFolderItem* CustomMakeManager::createFolderItem(IProject* project, const Path& path, ProjectBaseItem* parent)

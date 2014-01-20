@@ -230,11 +230,26 @@ void BreakpointController::handleBreakpointListInitial(const GDBMI::ResultRecord
                 if (condition != b->condition())
                     continue;
 
-                QString location = mi_b["original-location"].literal();
+                QString location;
+                QString line;
+                if (mi_b.hasField("fullname") && mi_b.hasField("line")) {
+                    location = unquoteExpression(mi_b["fullname"].literal());
+                    line = mi_b["line"].literal();
+                    if (location == b->url().pathOrUrl(KUrl::RemoveTrailingSlash) && line.toInt() - 1  == b->line()) {
+                        updateBreakpoint = b;
+                    } else {
+                        kDebug() << location << ":" << line << "!=" << b->location();
+                    }
+                }
+                if (updateBreakpoint) {
+                    break;
+                }
+
+                location = mi_b["original-location"].literal();
                 kDebug() << "location" << location;
                 QRegExp rx("^(.+):(\\d+)$");
                 if (rx.indexIn(location) != -1) {
-                    if (unquoteExpression(rx.cap(1)) == b->url().pathOrUrl(KUrl::RemoveTrailingSlash) && rx.cap(2).toInt()-1 == b->line()) {
+                    if (unquoteExpression(rx.cap(1)) == b->url().pathOrUrl(KUrl::RemoveTrailingSlash) && rx.cap(2).toInt() - 1 == b->line()) {
                         updateBreakpoint = b;
                     } else {
                         kDebug() << "!=" << b->location();
@@ -453,7 +468,7 @@ void BreakpointController::update(KDevelop::Breakpoint *breakpoint, const GDBMI:
                     if(b.hasField("fullname") && b.hasField("line")){
                         breakpoint->setLocation(KUrl(unquoteExpression(b["fullname"].literal())), b["line"].toInt()-1);
                     }else{
-                        kWarning() << "can't parse location" << location;
+                        breakpoint->setData(KDevelop::Breakpoint::LocationColumn, unquoteExpression(location));
                     }
                 }
             } else {

@@ -167,7 +167,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         static message_callback s_msgcallback;
         
         static KDevelop::ReferencedTopDUContext
-            createContext(const KUrl& path, KDevelop::ReferencedTopDUContext aux, int endl ,int endc, bool isClean);
+            createContext(const KDevelop::IndexedString& path, KDevelop::ReferencedTopDUContext aux, int endl ,int endc, bool isClean);
         
         void macroDeclaration(const CMakeFunctionDesc& def, const CMakeFunctionDesc& end, const QStringList& args);
         CMakeFunctionDesc resolveVariables(const CMakeFunctionDesc &exp);
@@ -175,7 +175,6 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         QStringList theValue(const QString& exp, const IntPair& p) const;
         
         void defineTarget(const QString& id, const QStringList& sources, Target::Type t);
-        int notImplemented(const QString& n) const;
         bool haveToFind(const QString &varName);
         void createDefinitions(const CMakeAst* ast);
         void createUses(const CMakeFunctionDesc& ast);

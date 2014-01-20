@@ -49,7 +49,8 @@ CMakeAstFactoryTest::~CMakeAstFactoryTest()
 void CMakeAstFactoryTest::testNonRegisteredObject()
 {
     CMakeAst* a = AstFactory::self()->createAst( "foo" );
-    QVERIFY( a == 0 );
+    QVERIFY(a); //It's a MacroCallAst
+    delete a;
 }
 
 void CMakeAstFactoryTest::testRegisteredObject()

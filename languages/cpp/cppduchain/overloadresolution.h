@@ -218,11 +218,11 @@ class KDEVCPPDUCHAIN_EXPORT OverloadResolver {
 /**
  * {q,k}Debug() stream operator: Writes the parameter to the debug output.
  */
-KDEVPLATFORMLANGUAGE_EXPORT QDebug operator<<(QDebug s, const Cpp::OverloadResolver::Parameter& param);
+KDEVCPPDUCHAIN_EXPORT QDebug operator<<(QDebug s, const Cpp::OverloadResolver::Parameter& param);
 
 /**
  * {q,k}Debug() stream operator: Writes the parameters to the debug output.
  */
-KDEVPLATFORMLANGUAGE_EXPORT QDebug operator<<(QDebug s, const Cpp::OverloadResolver::ParameterList& params);
+KDEVCPPDUCHAIN_EXPORT QDebug operator<<(QDebug s, const Cpp::OverloadResolver::ParameterList& params);
 
 #endif

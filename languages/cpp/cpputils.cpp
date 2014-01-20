@@ -291,8 +291,9 @@ bool needsUpdate(const Cpp::EnvironmentFilePointer& file, const KUrl& localPath,
   return false;
 }
 
-QStringList findIncludePaths(const QString& source, QList<KDevelop::ProblemPointer>* problems) {
-  IncludePathComputer comp(source, problems);
+KUrl::List findIncludePaths(const KUrl& source)
+{
+  IncludePathComputer comp(source);
   comp.computeForeground();
   comp.computeBackground();
   return comp.result();
@@ -310,7 +311,9 @@ QList<KDevelop::IncludeItem> allFilesInIncludePath(const QString& source, bool l
     } else {
       paths = addIncludePaths;
       if(!onlyAddedIncludePaths) {
-        paths += findIncludePaths(source, 0);
+        foreach(const KUrl& path, findIncludePaths(source)) {
+          paths += path.toLocalFile();
+        }
 
         if(local) {
             KUrl localPath(source);

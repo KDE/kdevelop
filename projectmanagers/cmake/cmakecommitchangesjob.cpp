@@ -157,6 +157,10 @@ Path::List CMakeCommitChangesJob::addProjectData(const CMakeProjectData& data)
         if(targetProps["FOLDER"]==QStringList("CTestDashboardTargets"))
             continue; //filter some annoying targets
 
+        if (!m_manager->filterManager()->isValid(Path(m_path, t.name), false, m_project)) {
+            continue;
+        }
+
         ProcessedTarget target;
         target.target = t;
         target.defines = targetProps["COMPILE_DEFINITIONS"];

@@ -43,6 +43,8 @@
 
 #include <klocale.h>
 
+#include <util/autoorientedsplitter.h>
+
 #include <interfaces/icore.h>
 #include <interfaces/idebugcontroller.h>
 #include <debugger/interfaces/idebugsession.h>
@@ -134,7 +136,7 @@ DisassembleWidget::DisassembleWidget(CppDebuggerPlugin* plugin, QWidget *parent)
         lower_(0),
         upper_(0),
         address_(0),
-        m_splitter(new QSplitter(this))
+        m_splitter(new KDevelop::AutoOrientedSplitter(this))
 {
         QVBoxLayout* topLayout = new QVBoxLayout(this);
     
@@ -234,6 +236,7 @@ void DisassembleWidget::currentSessionChanged(KDevelop::IDebugSession* s)
     if (session) {
         connect(session, SIGNAL(showStepInSource(KUrl,int,QString)),
                 SLOT(slotShowStepInSource(KUrl,int,QString)));
+        connect(session,SIGNAL(showStepInDisassemble(QString)),SLOT(updateState(QString)));
     }
 }
 
@@ -290,17 +293,10 @@ void DisassembleWidget::slotActivate(bool activate)
 
 /***************************************************************************/
 
-void DisassembleWidget::slotShowStepInSource(   const KUrl &, int,
-                                                const QString &currentAddress)
+void DisassembleWidget::slotShowStepInSource(const KUrl&, int,
+        const QString& currentAddress)
 {
-    address_ = currentAddress.toULong(&ok,16);
-    if (!active_)
-        return;
-
-    if (!displayCurrent())
-        disassembleMemoryRegion();
-
-    m_registersManager->updateRegisters();
+    updateState(currentAddress, false);
 }
 
 void DisassembleWidget::updateExecutionAddressHandler(const GDBMI::ResultRecord& r)
@@ -427,6 +423,21 @@ void DisassembleWidget::slotChangeAddress()
 void SelectAddrDialog::setAddress ( const QString& address )
 {
      m_ui.comboBox->setCurrentItem ( address, true );
+}
+
+void DisassembleWidget::updateState(const QString &address, bool activate)
+{
+    if (activate) {
+        emit requestRaise();
+    } else if (!active_) {
+        return;
+    }
+
+    address_ = address.toULong(&ok, 16);
+    if (!displayCurrent()) {
+        disassembleMemoryRegion();
+    }
+    m_registersManager->updateRegisters();
 }
 
 }

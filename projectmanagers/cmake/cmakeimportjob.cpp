@@ -109,12 +109,14 @@ void CMakeImportJob::importFinished()
 void CMakeImportJob::initialize()
 {
     ReferencedTopDUContext ctx;
-    if(m_dom->path() == m_project->path()) {
-        ctx = initializeProject(dynamic_cast<CMakeFolderItem*>(m_dom));
-    } else {
+    ProjectBaseItem* parent = m_dom->parent();
+    while (parent && !ctx) {
         DUChainReadLocker lock;
-        ctx = DUChain::self()->chainForDocument(Path(m_dom->parent()->path(), "CMakeLists.txt").toIndexed());
-        Q_ASSERT(ctx);
+        ctx = DUChain::self()->chainForDocument(Path(parent->path(), "CMakeLists.txt").toIndexed());
+        parent = parent->parent();
+    }
+    if (!ctx) {
+        ctx = initializeProject(dynamic_cast<CMakeFolderItem*>(m_dom));
     }
     importDirectory(m_project, m_dom->path(), ctx);
 }
@@ -207,7 +209,6 @@ CMakeCommitChangesJob* CMakeImportJob::importDirectory(IProject* project, const 
 {
     Q_ASSERT(thread() == m_project->thread());
     Path cmakeListsPath(path, "CMakeLists.txt");
-    
     CMakeCommitChangesJob* commitJob = new CMakeCommitChangesJob(path, m_manager, project);
     commitJob->moveToThread(thread());
     m_jobs += commitJob;

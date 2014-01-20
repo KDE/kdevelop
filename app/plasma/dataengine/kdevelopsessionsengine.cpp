@@ -73,8 +73,7 @@ void KDevelopSessionsEngine::updateSessions()
             Session session;
             session.hash = QFileInfo( *it ).dir().dirName();
             session.name = cfg.group( "" ).readEntry( "SessionName", "" );
-            session.contents = cfg.group( "" ).readEntry( "SessionPrettyContents", "" );
-            session.sessionString = makeSessionString( session );
+            session.description = cfg.group( "" ).readEntry( "SessionPrettyContents", "" );
 
             sessions.insert(session.hash, session);
         }
@@ -92,8 +91,7 @@ void KDevelopSessionsEngine::updateSessions()
 
             m_currentSessions.insert( session.hash, session );
             setData( session.hash, "sessionName", session.name );
-            setData( session.hash, "sessionContents", session.contents );
-            setData( session.hash, "sessionString", session.sessionString );
+            setData( session.hash, "sessionString", session.description );
         }
         else
         {
@@ -110,20 +108,15 @@ void KDevelopSessionsEngine::updateSessions()
                 setData( session.hash, "sessionName", session.name );
             }
 
-            if ( session.contents != oldSession.contents )
+            if ( session.description != oldSession.description )
             {
-                oldSession.contents = session.contents;
+                oldSession.description = session.description;
                 modified = true;
-                setData( session.hash, "sessionContents", session.contents );
+                setData( session.hash, "sessionString", session.description );
             }
 
             if ( modified )
-            {
-                oldSession.sessionString = makeSessionString( session );
-                setData( session.hash, "sessionString", oldSession.sessionString );
-
                 m_currentSessions.insert( oldSession.hash, oldSession );
-            }
         }
     }
 
@@ -141,14 +134,6 @@ void KDevelopSessionsEngine::updateSessions()
         else
             ++it3;
     }
-}
-
-QString KDevelopSessionsEngine::makeSessionString(const Session& session)
-{
-    if ( !session.name.isEmpty() )
-        return QString( "%1: %2" ).arg( session.name ).arg( session.contents );
-    else
-        return session.contents;
 }
 
 K_EXPORT_PLASMA_DATAENGINE(kdevelopsessionsengine, KDevelopSessionsEngine)

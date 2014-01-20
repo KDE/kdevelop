@@ -69,7 +69,7 @@ CMakeAst* AstFactory::createAst( const QString& astId )
 {
     CallbackMap::const_iterator it = d->callbacks.constFind( astId.toLower() );
     if ( it == d->callbacks.constEnd() )
-        return 0;
+        return new MacroCallAst;
 
     return ( it.value() )();
 

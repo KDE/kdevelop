@@ -20,7 +20,6 @@
 #include "ninjajob.h"
 #include <KAboutData>
 #include <KPluginFactory>
-#include <KStandardDirs>
 #include <KDebug>
 #include <KConfigGroup>
 #include <KShell>
@@ -43,7 +42,7 @@ KDevNinjaBuilderPlugin::KDevNinjaBuilderPlugin(QObject* parent, const QVariantLi
 
 bool KDevNinjaBuilderPlugin::hasError() const
 {
-    return KStandardDirs::findExe("ninja").isEmpty();
+    return NinjaJob::ninjaBinary().isEmpty();
 }
 
 static QStringList targetsInFolder(KDevelop::ProjectFolderItem* item)
@@ -52,10 +51,24 @@ static QStringList targetsInFolder(KDevelop::ProjectFolderItem* item)
     foreach(KDevelop::ProjectTargetItem* target, item->targetList()) {
         ret += target->text();
     }
-    foreach(KDevelop::ProjectFolderItem* folder, item->folderList()) {
-        ret += targetsInFolder(folder);
-    }
     return ret;
+}
+
+/**
+ * Returns the first non-empty list of targets in folder @p item
+ * or any of its ancestors if possible
+ */
+static QStringList closestTargetsForFolder(KDevelop::ProjectFolderItem* item)
+{
+    KDevelop::ProjectFolderItem* current = item;
+    while (current) {
+        const QStringList targets = targetsInFolder(current);
+        if (!targets.isEmpty()) {
+            return targets;
+        }
+        current = (current->parent() ? current->parent()->folder() : 0);
+    }
+    return QStringList();
 }
 
 static QStringList argumentsForItem(KDevelop::ProjectBaseItem* item)
@@ -73,7 +86,7 @@ static QStringList argumentsForItem(KDevelop::ProjectBaseItem* item)
           return QStringList(item->target()->text());
         case KDevelop::ProjectBaseItem::Folder:
         case KDevelop::ProjectBaseItem::BuildFolder:
-          return targetsInFolder(item->folder());
+          return closestTargetsForFolder(item->folder());
     }
     return QStringList();
 }

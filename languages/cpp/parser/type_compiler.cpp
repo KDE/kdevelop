@@ -102,8 +102,7 @@ void TypeCompiler::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
 void TypeCompiler::visitName(NameAST *node)
 {
   NameCompiler name_cc(m_session);
-  name_cc.run(node);
-  _M_type = name_cc.identifier();
+  name_cc.run(node, &_M_type);
 }
 
 QStringList TypeCompiler::cvString() const

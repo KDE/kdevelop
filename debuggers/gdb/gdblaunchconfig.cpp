@@ -94,9 +94,6 @@ void GdbConfigPage::loadFromConfiguration( const KConfigGroup& cfg, KDevelop::IP
     ui->kcfg_displayStaticMembers->setChecked( cfg.readEntry(GDBDebugger::staticMembersEntry, false) );
     ui->kcfg_asmDemangle->setChecked( cfg.readEntry( GDBDebugger::demangleNamesEntry, true) );
     ui->kcfg_startWith->setCurrentIndex( ui->kcfg_startWith->findData( cfg.readEntry( GDBDebugger::startWithEntry, "ApplicationOutput" ) ) );
-    //TODO: add ui for this
-    //ui->kcfg_allowForceBP->setChecked( cfg.readEtnry( GDBDebugger::allowForcedBPEntry, true ) );
-    //ui->kcfg_dbgTerminal->setChecked( cfg.readEntry( GDBDebugger::separateTerminalEntry, false) );
     blockSignals( block );
 }
 
@@ -110,7 +107,6 @@ void GdbConfigPage::saveToConfiguration( KConfigGroup cfg, KDevelop::IProject* )
     cfg.writeEntry(GDBDebugger::staticMembersEntry, ui->kcfg_displayStaticMembers->isChecked() );
     cfg.writeEntry(GDBDebugger::demangleNamesEntry, ui->kcfg_asmDemangle->isChecked() );
     cfg.writeEntry(GDBDebugger::startWithEntry, ui->kcfg_startWith->itemData( ui->kcfg_startWith->currentIndex() ).toString() );
-    //cfg.writeEntry(GDBDebugger::separateTerminalEntry, ui->kcfg_dbgTerminal->isChecked() );
 }
 
 QString GdbConfigPage::title() const

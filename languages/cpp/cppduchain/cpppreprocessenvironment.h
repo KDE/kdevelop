@@ -58,13 +58,13 @@ public:
   virtual int type() const;
 
   ///Does not include the names of undef macros
-  const Cpp::ReferenceCountedStringSet& macroNameSet() const;
+  QSet<KDevelop::IndexedString> macroNameSet() const;
 
-  void removeString(KDevelop::IndexedString str);
+  void removeString(const KDevelop::IndexedString& str);
   
   ///Effectively removes the macro from the environment, without noting the change in the environment-file
   ///and other bookkeeping data. This for example allows 'temporarily' shadowing header-guards to enforce the non-empty processing of a file.
-  void removeMacro(KDevelop::IndexedString macroName);
+  void removeMacro(const KDevelop::IndexedString& macroName);
   
   ///Restricts the header branching hash of searched contexts to the given number
   ///(Is only stored here, it is used in the environment-manager)
@@ -86,7 +86,7 @@ private:
     uint m_identityOffsetRestriction;
     bool m_identityOffsetRestrictionEnabled;
     bool m_finished;
-    Cpp::ReferenceCountedStringSet m_macroNameSet;
+    QSet<KDevelop::IndexedString> m_macroNameSet;
     mutable std::set<Utils::BasicSetRepository::Index> m_strings;
     mutable KSharedPtr<Cpp::EnvironmentFile> m_environmentFile;
 };

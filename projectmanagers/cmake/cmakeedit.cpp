@@ -188,7 +188,9 @@ bool itemAffected(const ProjectBaseItem *item, const KUrl &changeUrl)
     if (listsPath.isEmpty())
         return false;
     
-    KUrl listsFolder(listsPath.toLocalFile(KUrl::AddTrailingSlash));
+    KUrl listsFolder(listsPath);
+    listsFolder = listsFolder.upUrl();
+
     //Who thought it was a good idea to have KUrl::isParentOf return true if the urls are equal?
     return listsFolder.QUrl::isParentOf(changeUrl);
 }
@@ -287,7 +289,7 @@ bool changesWidgetRemoveFileFromTarget(const ProjectBaseItem *item, ApplyChanges
     return followUses(widget->document(), targetRange, relative, lists, false, QString());
 }
 
-bool changesWidgetRemoveItems(const QList<ProjectBaseItem*> &items, ApplyChangesWidget *widget)
+bool changesWidgetRemoveItems(const QSet<ProjectBaseItem*> &items, ApplyChangesWidget *widget)
 {
     foreach(ProjectBaseItem *item, items)
     {

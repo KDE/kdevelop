@@ -38,14 +38,19 @@ Rectangle
             left: parent.left
             margins: parent.margins
         }
-        width: 256
-        height: 100
+        width: toolsLoader.width + 2*toolsLoader.margins
+        height: toolsLoader.height + 2*toolsLoader.margins
         Loader {
-            sourceComponent: tools
+            id: toolsLoader
+
+            property int margins: 20
+
             anchors {
-                fill: parent
-                margins: 20
+                top: parent.top
+                left: parent.left
+                margins: toolsLoader.margins
             }
+            sourceComponent: tools
         }
     }
     
@@ -56,7 +61,7 @@ Rectangle
             left: parent.left
             margins: 5
         }
-        width: 256
+        width: 64
         height: width
     }
 }

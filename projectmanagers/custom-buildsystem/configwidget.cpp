@@ -36,8 +36,6 @@ ConfigWidget::ConfigWidget( QWidget* parent )
     : QWidget ( parent ), ui( new Ui::ConfigWidget )
 {
     ui->setupUi( this );
-    KDevelop::EnvironmentGroupList l( KGlobal::config() );
-    ui->actionEnvironment->addItems( l.groups() );
 
     ui->buildAction->insertItem( CustomBuildSystemTool::Build, i18n("Build"), QVariant() );
     ui->buildAction->insertItem( CustomBuildSystemTool::Configure, i18n("Configure"), QVariant() );
