@@ -367,9 +367,8 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectExecutableTargetItem: public ProjectTarg
 
         virtual ProjectExecutableTargetItem *executable() const;
         virtual int type() const;
-        KDE_DEPRECATED virtual KUrl builtUrl() const=0;
-        KDE_DEPRECATED virtual KUrl installedUrl() const=0;
-        ///TODO: create new Path versions
+        virtual KUrl builtUrl() const=0;
+        virtual KUrl installedUrl() const=0;
 };
 
 
