@@ -47,7 +47,7 @@ K_PLUGIN_FACTORY(PreferencesFactory, registerPlugin<EnvironmentPreferences>(); )
 K_EXPORT_PLUGIN(PreferencesFactory(KAboutData("kcm_kdev_envsettings", "kdevplatform", ki18n("Environment Settings"), "0.1")))
 
 EnvironmentPreferences::EnvironmentPreferences( QWidget *parent, const QVariantList &args )
-    : KCModule( PreferencesFactory::componentData(), parent, args )
+    : KCModule( KAboutData::pluginData("kcm_kdev_envsettings"), parent, args )
     , d( new EnvironmentPreferencesPrivate )
 {
     QVBoxLayout * l = new QVBoxLayout( this );

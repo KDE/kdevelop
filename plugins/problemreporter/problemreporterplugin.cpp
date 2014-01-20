@@ -54,7 +54,7 @@
 #include <kaction.h>
 
 K_PLUGIN_FACTORY(KDevProblemReporterFactory, registerPlugin<ProblemReporterPlugin>(); )
-K_EXPORT_PLUGIN(KDevProblemReporterFactory(KAboutData("kdevproblemreporter","kdevproblemreporter", ki18n("Problem Reporter"), "0.1", ki18n("Shows errors in source code"), KAboutData::License_GPL)))
+// K_EXPORT_PLUGIN(KDevProblemReporterFactory(KAboutData("kdevproblemreporter","kdevproblemreporter", ki18n("Problem Reporter"), "0.1", ki18n("Shows errors in source code"), KAboutData::License_GPL)))
 
 using namespace KDevelop;
 
@@ -86,7 +86,7 @@ private:
 };
 
 ProblemReporterPlugin::ProblemReporterPlugin(QObject *parent, const QVariantList&)
-    : KDevelop::IPlugin(KDevProblemReporterFactory::componentData(), parent)
+: KDevelop::IPlugin("kdevproblemreporter", parent)
     , m_factory(new ProblemReporterFactory(this)), m_model(new ProblemModel(this))
 {
   core()->uiController()->addToolView(i18n("Problems"), m_factory);

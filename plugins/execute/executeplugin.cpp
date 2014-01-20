@@ -62,10 +62,10 @@ QString ExecutePlugin::projectTargetEntry = "Project Target";
 using namespace KDevelop;
 
 K_PLUGIN_FACTORY(KDevExecuteFactory, registerPlugin<ExecutePlugin>(); )
-K_EXPORT_PLUGIN(KDevExecuteFactory(KAboutData("kdevexecute", "kdevexecute", ki18n("Execute support"), "0.1", ki18n("This plugin allows running of programs with no instrumentor, ie. natively by the current host."), KAboutData::License_GPL)))
+// K_EXPORT_PLUGIN(KDevExecuteFactory(KAboutData("kdevexecute", "kdevexecute", ki18n("Execute support"), "0.1", ki18n("This plugin allows running of programs with no instrumentor, ie. natively by the current host."), KAboutData::License_GPL)))
 
 ExecutePlugin::ExecutePlugin(QObject *parent, const QVariantList&)
-    : KDevelop::IPlugin(KDevExecuteFactory::componentData(), parent)
+    : KDevelop::IPlugin("kdevexecute", parent)
 {
     KDEV_USE_EXTENSION_INTERFACE( IExecutePlugin )
     m_configType = new NativeAppConfigType();

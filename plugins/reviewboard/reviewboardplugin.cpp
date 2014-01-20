@@ -43,11 +43,11 @@
 
 using namespace KDevelop;
 
-K_PLUGIN_FACTORY(KDevReviewBoardFactory, registerPlugin<ReviewBoardPlugin>(); )
-K_EXPORT_PLUGIN(KDevReviewBoardFactory(KAboutData("kdevreviewboard","kdevreviewboard", ki18n("ReviewBoard Support"), "0.1", ki18n("Deal with the ReviewBoard Patches"), KAboutData::License_GPL)))
+// K_PLUGIN_FACTORY(KDevReviewBoardFactory, registerPlugin<ReviewBoardPlugin>(); )
+// K_EXPORT_PLUGIN(KDevReviewBoardFactory(KAboutData("kdevreviewboard","kdevreviewboard", ki18n("ReviewBoard Support"), "0.1", ki18n("Deal with the ReviewBoard Patches"), KAboutData::License_GPL)))
 
 ReviewBoardPlugin::ReviewBoardPlugin ( QObject* parent, const QVariantList& )
-    : IPlugin ( KDevReviewBoardFactory::componentData(), parent )
+    : IPlugin ( "kdevreviewboard", parent )
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IPatchExporter )
 }

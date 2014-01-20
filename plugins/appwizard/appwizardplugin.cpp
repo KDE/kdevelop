@@ -68,10 +68,10 @@ using KDevelop::VcsLocation;
 using KDevelop::ICore;
 
 K_PLUGIN_FACTORY(AppWizardFactory, registerPlugin<AppWizardPlugin>();)
-K_EXPORT_PLUGIN(AppWizardFactory(KAboutData("kdevappwizard","kdevappwizard", ki18n("Project Wizard"), "0.1", ki18n("Support for creating and importing projects"), KAboutData::License_GPL)))
+// K_EXPORT_PLUGIN(AppWizardFactory(KAboutData("kdevappwizard","kdevappwizard", ki18n("Project Wizard"), "0.1", ki18n("Support for creating and importing projects"), KAboutData::License_GPL)))
 
 AppWizardPlugin::AppWizardPlugin(QObject *parent, const QVariantList &)
-    : KDevelop::IPlugin(AppWizardFactory::componentData(), parent)
+    : KDevelop::IPlugin("kdevappwizard", parent)
     , m_templatesModel(0)
 {
     KDEV_USE_EXTENSION_INTERFACE(KDevelop::ITemplateProvider);

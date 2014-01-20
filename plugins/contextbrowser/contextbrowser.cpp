@@ -291,11 +291,11 @@ void ContextBrowserPlugin::previousContextShortcut()
   historyPrevious();
 }
 
-K_PLUGIN_FACTORY(ContextBrowserFactory, registerPlugin<ContextBrowserPlugin>(); )
-K_EXPORT_PLUGIN(ContextBrowserFactory(KAboutData("kdevcontextbrowser","kdevcontextbrowser",ki18n("Context Browser"), "0.1", ki18n("This plugin shows information about the current language context in a side view, and highlights relevant declarations and uses."), KAboutData::License_GPL)))
+// K_PLUGIN_FACTORY(ContextBrowserFactory, registerPlugin<ContextBrowserPlugin>(); )
+// K_EXPORT_PLUGIN(ContextBrowserFactory(KAboutData("kdevcontextbrowser","kdevcontextbrowser",ki18n("Context Browser"), "0.1", ki18n("This plugin shows information about the current language context in a side view, and highlights relevant declarations and uses."), KAboutData::License_GPL)))
 
 ContextBrowserPlugin::ContextBrowserPlugin(QObject *parent, const QVariantList&)
-    : KDevelop::IPlugin(ContextBrowserFactory::componentData(), parent)
+    : KDevelop::IPlugin("kdevcontextbrowser", parent)
     , m_viewFactory(new ContextBrowserViewFactory(this))
     , m_nextHistoryIndex(0)
 {

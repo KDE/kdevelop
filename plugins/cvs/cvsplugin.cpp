@@ -51,7 +51,7 @@
 #include <vcs/widgets/standardvcslocationwidget.h>
 
 K_PLUGIN_FACTORY(KDevCvsFactory, registerPlugin<CvsPlugin>();)
-K_EXPORT_PLUGIN(KDevCvsFactory(KAboutData("kdevcvs", "kdevcvs", ki18n("CVS"), "0.1", ki18n("Support for CVS version control system"), KAboutData::License_GPL)))
+// K_EXPORT_PLUGIN(KDevCvsFactory(KAboutData("kdevcvs", "kdevcvs", ki18n("CVS"), "0.1", ki18n("Support for CVS version control system"), KAboutData::License_GPL)))
 
 class KDevCvsViewFactory: public KDevelop::IToolViewFactory
 {
@@ -85,7 +85,7 @@ public:
 };
 
 CvsPlugin::CvsPlugin(QObject *parent, const QVariantList &)
-        : KDevelop::IPlugin(KDevCvsFactory::componentData(), parent)
+        : KDevelop::IPlugin("kdevcvs", parent)
         , d(new CvsPluginPrivate(this))
 {
     KDEV_USE_EXTENSION_INTERFACE(KDevelop::IBasicVersionControl)

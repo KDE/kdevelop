@@ -52,9 +52,9 @@
 
 
 K_PLUGIN_FACTORY( ExternalScriptFactory, registerPlugin<ExternalScriptPlugin>(); )
-K_EXPORT_PLUGIN( ExternalScriptFactory( KAboutData( "kdevexternalscript", "kdevexternalscript", ki18n( "External Scripts" ),
-                                        "0.1", ki18n( "Run external scripts or applications to manipulate the editor contents or do other arbitrary actions." ),
-                                        KAboutData::License_GPL ) ) )
+// K_EXPORT_PLUGIN( ExternalScriptFactory( KAboutData( "kdevexternalscript", "kdevexternalscript", ki18n( "External Scripts" ),
+//                                         "0.1", ki18n( "Run external scripts or applications to manipulate the editor contents or do other arbitrary actions." ),
+//                                         KAboutData::License_GPL ) ) )
 
 class ExternalScriptViewFactory: public KDevelop::IToolViewFactory
 {
@@ -80,7 +80,7 @@ private:
 ExternalScriptPlugin* ExternalScriptPlugin::m_self = 0;
 
 ExternalScriptPlugin::ExternalScriptPlugin( QObject* parent, const QVariantList& /*args*/ )
-    : IPlugin( ExternalScriptFactory::componentData(), parent ),
+    : IPlugin( "kdevexternalscript", parent ),
     m_model( new QStandardItemModel( this ) ), m_factory( new ExternalScriptViewFactory( this ) )
 {
   Q_ASSERT( !m_self );

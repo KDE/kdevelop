@@ -32,7 +32,7 @@ QObject* createKonsoleView( QWidget*, QObject* op, const QVariantList& args)
 }
 
 K_PLUGIN_FACTORY(KonsoleViewFactory, registerPlugin<KDevKonsoleViewPlugin>( QString(), &createKonsoleView ); )
-K_EXPORT_PLUGIN(KonsoleViewFactory(KAboutData("kdevkonsoleview","kdevkonsole", ki18n("Konsole"), "0.1", ki18n("This plugin provides KDevelop with an embedded konsole for quick and easy command line access."), KAboutData::License_GPL)))
+// K_EXPORT_PLUGIN(KonsoleViewFactory(KAboutData("kdevkonsoleview","kdevkonsole", ki18n("Konsole"), "0.1", ki18n("This plugin provides KDevelop with an embedded konsole for quick and easy command line access."), KAboutData::License_GPL)))
 
 class KDevKonsoleViewFactory: public KDevelop::IToolViewFactory{
 public:
@@ -55,7 +55,7 @@ private:
 };
 
 KDevKonsoleViewPlugin::KDevKonsoleViewPlugin( KPluginFactory* konsolefactory, QObject *parent, const QVariantList & )
-    : KDevelop::IPlugin( KonsoleViewFactory::componentData(), parent ), m_konsoleFactory( konsolefactory )
+    : KDevelop::IPlugin( QStringLiteral("kdevkonsoleview"), parent ), m_konsoleFactory( konsolefactory )
 {
     m_factory = new KDevKonsoleViewFactory(this);
     core()->uiController()->addToolView("Konsole", m_factory);

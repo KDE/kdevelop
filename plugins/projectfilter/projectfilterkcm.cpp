@@ -44,10 +44,10 @@
 using namespace KDevelop;
 
 K_PLUGIN_FACTORY(ProjectFilterKCMFactory, registerPlugin<ProjectFilterKCM>();)
-K_EXPORT_PLUGIN(ProjectFilterKCMFactory("kcm_kdevprojectfilter"))
+// K_EXPORT_PLUGIN(ProjectFilterKCMFactory("kcm_kdevprojectfilter"))
 
 ProjectFilterKCM::ProjectFilterKCM(QWidget* parent, const QVariantList& args)
-    : ProjectKCModule<ProjectFilterSettings>(ProjectFilterKCMFactory::componentData(), parent, args)
+    : ProjectKCModule<ProjectFilterSettings>(KAboutData::pluginData("kcm_kdevprojectfilter"), parent, args)
     , m_model(new FilterModel(this))
     , m_ui(new Ui::ProjectFilterSettings)
 {

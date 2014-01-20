@@ -59,8 +59,8 @@
 #include "gitjob.h"
 #include "gitmessagehighlighter.h"
 
-K_PLUGIN_FACTORY(KDevGitFactory, registerPlugin<GitPlugin>(); )
-K_EXPORT_PLUGIN(KDevGitFactory(KAboutData("kdevgit","kdevgit",ki18n("Git"),"0.1",ki18n("A plugin to support git version control systems"), KAboutData::License_GPL)))
+// K_PLUGIN_FACTORY(KDevGitFactory, registerPlugin<GitPlugin>(); )
+// K_EXPORT_PLUGIN(KDevGitFactory(KAboutData("kdevgit","kdevgit",ki18n("Git"),"0.1",ki18n("A plugin to support git version control systems"), KAboutData::License_GPL)))
 
 using namespace KDevelop;
 
@@ -174,7 +174,7 @@ QDir urlDir(const KUrl::List& urls) { return urlDir(urls.first()); } //TODO: cou
 }
 
 GitPlugin::GitPlugin( QObject *parent, const QVariantList & )
-    : DistributedVersionControlPlugin(parent, KDevGitFactory::componentData()), m_oldVersion(false)
+    : DistributedVersionControlPlugin(parent, "kdevgit"), m_oldVersion(false)
 {
     if (KStandardDirs::findExe("git").isEmpty()) {
         m_hasError = true;

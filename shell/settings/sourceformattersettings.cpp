@@ -46,7 +46,7 @@ Boston, MA 02110-1301, USA.
 #define STYLE_ROLE (Qt::UserRole+1)
 
 K_PLUGIN_FACTORY(SourceFormatterSettingsFactory, registerPlugin<SourceFormatterSettings>();)
-K_EXPORT_PLUGIN(SourceFormatterSettingsFactory("kcm_kdevsourceformattersettings"))
+// K_EXPORT_PLUGIN(SourceFormatterSettingsFactory("kcm_kdevsourceformattersettings"))
 
 using KDevelop::Core;
 using KDevelop::ISourceFormatter;
@@ -66,7 +66,7 @@ LanguageSettings::LanguageSettings()
 }
 
 SourceFormatterSettings::SourceFormatterSettings(QWidget *parent, const QVariantList &args)
-    : KCModule(SourceFormatterSettingsFactory::componentData(), parent, args)
+    : KCModule(KAboutData::pluginData("kcm_kdevsourceformattersettings"), parent, args)
 {
     setupUi(this);
     connect( cbLanguages, SIGNAL(currentIndexChanged(int)), SLOT(selectLanguage(int)) );

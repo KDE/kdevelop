@@ -43,10 +43,10 @@
 #include <KLocalizedString>
 #include <vcs/models/projectchangesmodel.h>
 
-K_PLUGIN_FACTORY(VcsProjectIntegrationFactory, registerPlugin<VcsProjectIntegrationPlugin>(); )
-K_EXPORT_PLUGIN(VcsProjectIntegrationFactory(
-    KAboutData("kdevvcsprojectintegration","kdevvcsprojectintegration",
-               ki18n("VCS Project Integration"), "0.1", ki18n("This plugin provides integration between the projects and their VCS infrastructure"), KAboutData::License_GPL)))
+// K_PLUGIN_FACTORY(VcsProjectIntegrationFactory, registerPlugin<VcsProjectIntegrationPlugin>(); )
+// K_EXPORT_PLUGIN(VcsProjectIntegrationFactory(
+//     KAboutData("kdevvcsprojectintegration","kdevvcsprojectintegration",
+//                ki18n("VCS Project Integration"), "0.1", ki18n("This plugin provides integration between the projects and their VCS infrastructure"), KAboutData::License_GPL)))
 
 using namespace KDevelop;
 
@@ -80,7 +80,7 @@ private:
 };
 
 VcsProjectIntegrationPlugin::VcsProjectIntegrationPlugin(QObject* parent, const QVariantList&)
-    : KDevelop::IPlugin(VcsProjectIntegrationFactory::componentData(), parent)
+    : KDevelop::IPlugin("kdevvcsprojectintegration", parent)
     , m_model(0)
 {
     ICore::self()->uiController()->addToolView(i18n("VCS Changes"), new VCSProjectToolViewFactory(this));

@@ -53,7 +53,7 @@
 #include <interfaces/iprojectcontroller.h>
 
 K_PLUGIN_FACTORY(KDevClassBrowserFactory, registerPlugin<ClassBrowserPlugin>(); )
-K_EXPORT_PLUGIN(KDevClassBrowserFactory(KAboutData("kdevclassbrowser","kdevclassbrowser",ki18n("Class Browser"), "0.1", ki18n("This plugin provides a browsable model of the currently parsed classes and other items."), KAboutData::License_GPL)))
+// K_EXPORT_PLUGIN(KDevClassBrowserFactory(KAboutData("kdevclassbrowser","kdevclassbrowser",ki18n("Class Browser"), "0.1", ki18n("This plugin provides a browsable model of the currently parsed classes and other items."), KAboutData::License_GPL)))
 
 using namespace KDevelop;
 
@@ -82,7 +82,7 @@ private:
 };
 
 ClassBrowserPlugin::ClassBrowserPlugin(QObject *parent, const QVariantList&)
-    : KDevelop::IPlugin(KDevClassBrowserFactory::componentData(), parent)
+    : KDevelop::IPlugin("kdevclassbrowser", parent)
     , m_factory(new ClassBrowserFactory(this))
     , m_activeClassTree(0)
 {

@@ -35,22 +35,22 @@
 
 using namespace KDevelop;
 
-K_PLUGIN_FACTORY(SwitchToBuddyPluginFactory, registerPlugin<SwitchToBuddyPlugin>(); )
-K_EXPORT_PLUGIN(SwitchToBuddyPluginFactory(KAboutData(
-                                            "kdevswitchtobuddy"
-                                           ,"kdevswitchtobuddy"
-                                           , ki18n("Switch to Buddy")
-                                           , "0.1"
-                                           , ki18n("Allows switching between buddy documents like implementation and header file.")
-                                           , KAboutData::License_GPL)
-                                           .addAuthor(ki18n("André Stein")
-                                           , ki18n("Author")
-                                           , "andre.stein@rwth-aachen.de"
-                                           , "http://steinsoft.net")
-))
+// K_PLUGIN_FACTORY(SwitchToBuddyPluginFactory, registerPlugin<SwitchToBuddyPlugin>(); )
+// K_EXPORT_PLUGIN(SwitchToBuddyPluginFactory(KAboutData(
+//                                             "kdevswitchtobuddy"
+//                                            ,"kdevswitchtobuddy"
+//                                            , ki18n("Switch to Buddy")
+//                                            , "0.1"
+//                                            , ki18n("Allows switching between buddy documents like implementation and header file.")
+//                                            , KAboutData::License_GPL)
+//                                            .addAuthor(ki18n("André Stein")
+//                                            , ki18n("Author")
+//                                            , "andre.stein@rwth-aachen.de"
+//                                            , "http://steinsoft.net")
+// ))
 
 SwitchToBuddyPlugin::SwitchToBuddyPlugin ( QObject* parent, const QVariantList& )
-    : IPlugin ( SwitchToBuddyPluginFactory::componentData(), parent )
+    : IPlugin ( "kdevswitchtobuddy", parent )
     , m_signalMapper(0)
 {
 }

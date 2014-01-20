@@ -172,7 +172,7 @@ public:
 };
 
 K_PLUGIN_FACTORY(KDevQuickOpenFactory, registerPlugin<QuickOpenPlugin>(); )
-K_EXPORT_PLUGIN(KDevQuickOpenFactory(KAboutData("kdevquickopen","kdevquickopen", ki18n("Quick Open"), "0.1", ki18n("This plugin allows quick access to project files and language-items like classes/functions."), KAboutData::License_GPL)))
+// K_EXPORT_PLUGIN(KDevQuickOpenFactory(KAboutData("kdevquickopen","kdevquickopen", ki18n("Quick Open"), "0.1", ki18n("This plugin allows quick access to project files and language-items like classes/functions."), KAboutData::License_GPL)))
 
 Declaration* cursorDeclaration() {
   IDocument* doc = ICore::self()->documentController()->activeDocument();
@@ -818,7 +818,7 @@ void QuickOpenPlugin::createActionsForMainWindow(Sublime::MainWindow* /*window*/
 
 QuickOpenPlugin::QuickOpenPlugin(QObject *parent,
                                  const QVariantList&)
-    : KDevelop::IPlugin(KDevQuickOpenFactory::componentData(), parent)
+    : KDevelop::IPlugin("kdevquickopen", parent)
 {
     staticQuickOpenPlugin = this;
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IQuickOpen )
