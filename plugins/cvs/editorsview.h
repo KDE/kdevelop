@@ -43,7 +43,7 @@ class EditorsView : public QWidget, private Ui::EditorsViewBase
 {
 Q_OBJECT
 public:
-    explicit EditorsView(CvsPlugin* plugin, CvsJob* job=0, QWidget *parent = 0);
+    explicit EditorsView(CvsJob* job=0, QWidget *parent = 0);
     virtual ~EditorsView();
 
     /**
@@ -71,7 +71,6 @@ private slots:
     void slotJobFinished(KJob* job);
 
 private:
-    CvsPlugin* m_plugin;
     QString m_output;
 };
 

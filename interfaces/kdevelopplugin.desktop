@@ -66,11 +66,6 @@ Type=QString
 [PropertyDef::X-KDevelop-Args]
 Type=QString
 
-# optional, Plugin type, might be set to Kross
-# to indicate a Kross plugin
-[PropertyDef::X-KDevelop-PluginType]
-Type=QString
-
 # optional, Interfaces that a plugin implements
 # usually values start with org.kdevelop
 [PropertyDef::X-KDevelop-Interfaces]

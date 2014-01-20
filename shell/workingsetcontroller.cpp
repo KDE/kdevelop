@@ -109,7 +109,6 @@ const QString WorkingSetController::makeSetId(const QString& prefix) const
                 continue;
             }
             // The last retry will always generate a valid set
-            const int maxSimilarity = retry > maxRetries / 2 ? 55 : 35;
             if(retry != maxRetries && WorkingSetIconParameters(set->id()).similarity(params) >= retry*8) {
                 newId = QString();
                 break;
