@@ -73,11 +73,10 @@ find_package(KF5 CONFIG REQUIRED COMPONENTS
 
 #TODO KF5: Re-enable Grantlee (currently GrantleeConfig.cmake calls find_package(Qt4) internall
 #find_package(Grantlee 0.1.7)
-set_package_properties(Grantlee PROPERTIES
-    PURPOSE "Grantlee templating library, needed for file templates"
-    URL "http://www.grantlee.org/"
-    TYPE REQUIRED)
-
+# set_package_properties(Grantlee PROPERTIES
+#     PURPOSE "Grantlee templating library, needed for file templates"
+#     URL "http://www.grantlee.org/"
+#     TYPE REQUIRED)
 # Make sure that we're having RPATH on our installed libs, else using kdevelop
 # from prefixes like $HOME/kdevelop breaks
 # Code taken from FindKDE4Internal.cmake for KDE 4.5
@@ -98,7 +97,7 @@ configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/config-kdevplatform.h.cmake
                 ${CMAKE_CURRENT_BINARY_DIR}/config-kdevplatform.h )
 
 include_directories(${KDevPlatform_SOURCE_DIR} ${KDevPlatform_BINARY_DIR})
-include_directories(${Grantlee_INCLUDE_DIRS})
+# include_directories(${Grantlee_INCLUDE_DIRS})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/util/)
 
 # Now set the usual KDEVPLATFORM_XXX_LIBRARIES variable so we can more easily move plugins around
