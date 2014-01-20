@@ -52,7 +52,6 @@ public:
 
 private:
     Q_PRIVATE_SLOT( d, void addLines( KDevelop::VcsJob*) )
-    Q_PRIVATE_SLOT( d, void itemActivated(KTextEditor::View*, int) )
     class VcsAnnotationModelPrivate* const d;
     friend class VcsAnnotationModelPrivate;
 

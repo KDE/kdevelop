@@ -66,6 +66,7 @@ public Q_SLOTS:
     void diffJobFinished(KJob* job);
     
     void revertDone(KJob* job);
+    void disposeEventually(bool);
 
 private Q_SLOTS:
     void delayedModificationWarningOn();
