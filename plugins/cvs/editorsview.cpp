@@ -21,8 +21,8 @@
 #include "cvsproxy.h"
 
 
-EditorsView::EditorsView(CvsPlugin* plugin, CvsJob* job, QWidget *parent)
-    : QWidget(parent), Ui::EditorsViewBase(), m_plugin(plugin)
+EditorsView::EditorsView(CvsJob* job, QWidget *parent)
+    : QWidget(parent), Ui::EditorsViewBase()
 {
     Ui::EditorsViewBase::setupUi(this);
 
