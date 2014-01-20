@@ -464,7 +464,7 @@ ProjectFolderItem *AbstractFileManagerPlugin::import( IProject *project )
     kDebug(9517) << "imported new project" << project->name() << "at" << projectRoot->path();
 
     ///TODO: check if this works for remote files when something gets changed through another KDE app
-    if ( project->folder().isLocalFile() ) {
+    if ( project->path().isLocalFile() ) {
         d->m_watchers[project] = new KDirWatch( project );
 
         connect(d->m_watchers[project], SIGNAL(created(QString)),
@@ -472,7 +472,7 @@ ProjectFolderItem *AbstractFileManagerPlugin::import( IProject *project )
         connect(d->m_watchers[project], SIGNAL(deleted(QString)),
                 this, SLOT(deleted(QString)));
 
-        d->m_watchers[project]->addDir(project->folder().toLocalFile(), KDirWatch::WatchSubDirs | KDirWatch:: WatchFiles );
+        d->m_watchers[project]->addDir(project->path().toLocalFile(), KDirWatch::WatchSubDirs | KDirWatch:: WatchFiles );
     }
 
     d->m_filters.add(project);
