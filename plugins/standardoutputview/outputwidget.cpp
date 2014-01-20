@@ -81,6 +81,7 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
         connect(m_closeOthersAction, SIGNAL(triggered(bool)), SLOT(closeOtherViews()));
         m_closeOthersAction->setIcon(KIcon("tab-close-other"));
         m_closeOthersAction->setToolTip( i18n( "Close all other output views" ) );
+        m_closeOthersAction->setText( m_closeOthersAction->toolTip() );
         addAction(m_closeOthersAction);
 
         tabwidget->setCornerWidget(m_closeButton, Qt::TopRightCorner);
