@@ -8,7 +8,6 @@ find_program(GIT_FOUND NAMES git)
 
 if (GIT_FOUND)
 
-    set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
     set(gitInitTest_SRCS
         initTest.cpp
         ../gitplugin.cpp

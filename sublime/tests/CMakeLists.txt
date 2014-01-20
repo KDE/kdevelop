@@ -1,5 +1,3 @@
-set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
-
 set( areaoperationtest_SRCS areaoperationtest.cpp areaprinter.cpp )
 add_executable(sublime-areaoperationtest ${areaoperationtest_SRCS})
 ecm_mark_as_test(sublime-areaoperationtest)

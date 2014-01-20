@@ -1,6 +1,3 @@
-
-set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
-
 set(findReplaceTest_SRCS 
     findreplacetest.cpp 
     ../grepviewplugin.cpp

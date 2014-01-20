@@ -1,5 +1,3 @@
-set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
-
 set(embeddedfreetreetest_SRCS test_embeddedfreetree.cpp)
 
 add_executable(embeddedfreetreetest ${embeddedfreetreetest_SRCS})

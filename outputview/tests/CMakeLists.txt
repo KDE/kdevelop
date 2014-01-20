@@ -1,5 +1,3 @@
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
-
 macro(OUTPUTVIEW_CREATE_TEST name)
     add_executable(${name} ${ARGN})
     ecm_mark_as_test(${name})

@@ -12,4 +12,4 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 #                       kdevplatformvcs
 #                       kdevplatformtests
 #                      )
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
+

@@ -1,5 +1,3 @@
-set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
-
 add_definitions(-DKDEVPLATFORMINTERFACES_EXPORT=)
 
 set(foregroundlock_SRC test_foregroundlock.cpp ../foregroundlock.cpp)
