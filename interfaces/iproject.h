@@ -183,7 +183,6 @@ public:
      * @return true if the path @a path is a part of the project.
      */
     virtual Q_SCRIPTABLE bool inProject(const IndexedString &path) const = 0;
-    KDE_DEPRECATED virtual Q_SCRIPTABLE bool inProject(const KUrl &url) const = 0;
 
 Q_SIGNALS:
     /**

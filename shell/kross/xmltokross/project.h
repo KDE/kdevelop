@@ -124,17 +124,6 @@ public Q_SLOTS:
      **/
     KUrl relativeUrl(const KUrl& absoluteUrl) const;
 
-    /**
-     * Check if the url specified by @a url is part of the project.
-     * @a url can be either a relative url (to the project directory) or
-     * an absolute url.
-     *
-     * @param url the url to check
-     *
-     * @return true if the url @a url is a part of the project.
-     */
-    bool inProject(const KUrl &url) const;
-
 private:
     class DumbProjectPrivate* const d;
 };

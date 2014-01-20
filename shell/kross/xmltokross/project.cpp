@@ -184,11 +184,6 @@ bool DumbProject::open( const KUrl& projectFileUrl_ )
 void DumbProject::close()
 {}
 
-bool DumbProject::inProject( const KUrl& url ) const
-{
-    return ( !filesForUrl( url ).isEmpty() || url.equals( d->topItem->path().toUrl(), KUrl::CompareWithoutTrailingSlash ) );
-}
-
 ProjectFileItem* DumbProject::fileAt( int num ) const
 {
     QList<ProjectFileItem*> files;

@@ -177,7 +177,6 @@ public Q_SLOTS:
      * @return true if the url @a url is a part of the project.
      */
     KDE_DEPRECATED bool inProject(const IndexedString &url) const;
-    KDE_DEPRECATED bool inProject(const KUrl &url) const;
 
 signals:
     /**

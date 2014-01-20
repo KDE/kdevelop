@@ -565,11 +565,6 @@ void Project::close()
     }
 }
 
-bool Project::inProject(const KUrl& url) const
-{
-    return inProject(IndexedString(url));
-}
-
 bool Project::inProject( const IndexedString& path ) const
 {
     if (d->fileSet.contains( path )) {
