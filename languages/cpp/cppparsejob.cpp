@@ -158,7 +158,7 @@ void CPPParseJob::includedFileParsed() {
   const int estimateIncludes = 450;
   float _progress = ((float)m_parsedIncludes) / estimateIncludes;
   if(_progress > 0.8)
-    _progress = 0.8;
+    _progress = 0.8f;
 
   emit progress(this, _progress, i18n("Parsing included files"));
 }
