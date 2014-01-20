@@ -43,6 +43,7 @@ Boston, MA 02110-1301, USA.
 #include <ktexteditor/commandinterface.h>
 #include <kactioncollection.h>
 #include <kaction.h>
+#include <KLocalizedString>
 #include <interfaces/idocument.h>
 #include <interfaces/idocumentcontroller.h>
 #include <ktexteditor/document.h>

@@ -34,7 +34,10 @@ void TestGenerationTest::initTestCase()
     AutoTestShell::init();
     TestCore::initialize (Core::NoUi);
 
-    bool addedDir = ICore::self()->componentData().dirs()->addResourceDir("data", CODEUTILS_TESTS_DATA_DIR, true);
+//     bool addedDir = ICore::self()->componentData().dirs()->addResourceDir("data", CODEUTILS_TESTS_DATA_DIR, true);
+//     From KF5 port, unsure if that makes sense
+    QByteArray xdgData = qgetenv("XDG_DATA_DIRS");
+    bool addedDir = qputenv("XDG_DATA_DIRS", CODEUTILS_TESTS_DATA_DIR+':'+xdgData);
     QVERIFY(addedDir);
 
     TemplatesModel model("testgenerationtest");
@@ -68,7 +71,8 @@ void TestGenerationTest::init()
 
 void TestGenerationTest::yamlTemplate()
 {
-    QString description = ICore::self()->componentData().dirs()->findResource("data", "testgenerationtest/template_descriptions/test_yaml2.desktop");
+
+    QString description = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "testgenerationtest/template_descriptions/test_yaml2.desktop");
     QVERIFY(!description.isEmpty());
     SourceFileTemplate file;
     file.setTemplateDescription(description, "testgenerationtest");
@@ -82,7 +86,7 @@ void TestGenerationTest::yamlTemplate()
 
 void TestGenerationTest::cppTemplate()
 {
-    QString description = ICore::self()->componentData().dirs()->findResource("data", "testgenerationtest/template_descriptions/test_qtestlib.desktop");
+    QString description = QStandardPaths::locate(QStandardPaths::DataLocation, "testgenerationtest/template_descriptions/test_qtestlib.desktop");
     QVERIFY(!description.isEmpty());
     SourceFileTemplate file;
     file.setTemplateDescription(description, "testgenerationtest");

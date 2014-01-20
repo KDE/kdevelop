@@ -27,6 +27,7 @@
 #include <cstdlib>
 
 #include <QAction>
+#include <QWidgetAction>
 #include <QTimer>
 #include <QToolButton>
 #include <QLayout>
@@ -268,11 +269,12 @@ void ContextBrowserPlugin::createActionsForMainWindow(Sublime::MainWindow* windo
     nextUse->setShortcut( Qt::META | Qt::SHIFT | Qt::Key_Right );
     QObject::connect(nextUse, SIGNAL(triggered(bool)), this, SLOT(nextUseShortcut()));
 
-    QAction* outline = actions.addAction("outline_line");
+    QWidgetAction* outline = new QWidgetAction(this);
     outline->setText(i18n("Context Browser"));
     QWidget* w = toolbarWidgetForMainWindow(window);
     w->setHidden(false);
     outline->setDefaultWidget(w);
+    actions.addAction("outline_line", outline);
     // Add to the actioncollection so one can set global shortcuts for the action
     actions.addAction("find_uses", m_findUses);
 }

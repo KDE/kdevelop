@@ -25,7 +25,7 @@ AppWizardDialog::AppWizardDialog(KDevelop::IPluginController* pluginController, 
     :KAssistantDialog(parent, flags)
 {
     setWindowTitle(i18n("Create New Project"));
-    KDialog::showButton(Help, false);
+//     KDialog::showButton(Help, false);
 
     m_selectionPage = new ProjectSelectionPage(templatesModel, this);
     m_vcsPage = new ProjectVcsPage( pluginController, this );

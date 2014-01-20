@@ -70,8 +70,7 @@ struct LicensePagePrivate
 void LicensePagePrivate::initializeLicenses()
 {
     kDebug() << "Searching for available licenses";
-    KStandardDirs * dirs = KGlobal::dirs();
-    QStringList licenseDirs = dirs->findDirs("data", "kdevcodegen/licenses");
+    QStringList licenseDirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "kdevcodegen/licenses", QStandardPaths::LocateDirectory);
 
     //Iterate through the possible directories that contain licenses, and load their names
     foreach(const QString& currentDir, licenseDirs)

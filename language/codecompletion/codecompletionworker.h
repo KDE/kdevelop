@@ -32,6 +32,7 @@
 #include "../languageexport.h"
 #include "../duchain/duchainpointer.h"
 #include "../codecompletion/codecompletioncontext.h"
+#include "codecompletionitem.h"
 
 class QMutex;
 

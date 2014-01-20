@@ -21,9 +21,10 @@
 #ifndef KDEVPLATFORM_PLATFORM_CORE_P_H
 #define KDEVPLATFORM_PLATFORM_CORE_P_H
 
-#include <kcomponentdata.h>
+#include <kaboutdata.h>
 #include <core.h>
 #include <QWeakPointer>
+#include <KComponentData>
 
 namespace KDevelop
 {

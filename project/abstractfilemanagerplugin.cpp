@@ -639,4 +639,4 @@ KDirWatch* AbstractFileManagerPlugin::projectWatcher( IProject* project ) const
 
 //END Plugin
 
-#include "abstractfilemanagerplugin.moc"
+#include "moc_abstractfilemanagerplugin.cpp"

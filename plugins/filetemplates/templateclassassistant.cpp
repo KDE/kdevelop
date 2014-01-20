@@ -46,6 +46,7 @@
 #include <project/projectmodel.h>
 #include <project/interfaces/iprojectfilemanager.h>
 #include <project/interfaces/ibuildsystemmanager.h>
+#include <KDE4Support/KDE/KDialog>
 
 #include <KLocalizedString>
 #include <KConfig>
@@ -297,7 +298,7 @@ void TemplateClassAssistant::setup()
     d->templateSelectionPage->setIcon(QIcon::fromTheme("project-development-new-template"));
 
     d->dummyPage = addPage(new QWidget(this), QLatin1String("Dummy Page"));
-    showButton(KDialog::Help, false);
+//     showButton(KDialog::Help, false);
 }
 
 void TemplateClassAssistant::templateChosen(const QString& templateDescription)

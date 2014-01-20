@@ -19,9 +19,10 @@ set(interactiveDiffTest_SRCS
 add_executable(interactiveDiffTest ${interactiveDiffTest_SRCS})
 ecm_mark_as_test(interactiveDiffTest)
 target_link_libraries(interactiveDiffTest
-    ${QT_QTTEST_LIBRARY}
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KPARTS_LIBS}
+    Qt5::Test
+    
+    KF5::Parts
+    KF5::KDE4Support
 )
 
 set(levenshteinTest_SRCS
@@ -33,6 +34,7 @@ set(levenshteinTest_SRCS
 add_executable(levenshteintest ${levenshteinTest_SRCS})
 ecm_mark_as_test(levenshteintest)
 target_link_libraries(levenshteintest
-    ${QT_QTTEST_LIBRARY}
-    ${QT_QTCORE_LIBRARY}
+    Qt5::Test
+    Qt5::Core
+    KF5::KDE4Support
 )

@@ -22,7 +22,7 @@
 #include <qstring.h>
 #include <qobject.h>
 
-#include <kdebug.h>
+// #include <kdebug.h>
 #include "diff2export.h"
 #include "marker.h"
 

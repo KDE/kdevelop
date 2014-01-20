@@ -23,6 +23,7 @@
 #include <QtCore/QObject>
 
 #include "topducontext.h"
+#include "parsingenvironment.h"
 
 class KUrl;
 

@@ -189,7 +189,7 @@ void OutputPage::prepareForm(const SourceFileTemplate& fileTemplate)
         d->labels << label;
         KUrlRequester* requester = new KUrlRequester(this);
         requester->setMode( KFile::File | KFile::LocalOnly );
-        requester->fileDialog()->setOperationMode( KFileDialog::Saving );
+        requester->fileDialog()->setOperationMode( QFileDialog::AcceptSave );
 
         d->urlChangedMapper.setMapping(requester, file.identifier);
         connect(requester, SIGNAL(textChanged(QString)), &d->urlChangedMapper, SLOT(map()));

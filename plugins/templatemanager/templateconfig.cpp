@@ -28,6 +28,8 @@
 #include <interfaces/itemplateprovider.h>
 
 #include <KPluginFactory>
+#include <KCoreAddons/KAboutData>
+#include <KLocalizedString>
 
 K_PLUGIN_FACTORY(TemplateConfigFactory, registerPlugin<TemplateConfig>();)
 K_EXPORT_PLUGIN(TemplateConfigFactory("kdevtemplates_config"))
