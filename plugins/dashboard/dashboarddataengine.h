@@ -33,6 +33,9 @@ class ProjectFiles : public QObject
 public:
     ProjectFiles(KDevelop::IProject* project, QObject* parent) : QObject(parent), m_project(project) {}
 
+public slots:
+    QString fileContents(const QString& fileName);
+
 private:
     KDevelop::IProject* m_project;
 };

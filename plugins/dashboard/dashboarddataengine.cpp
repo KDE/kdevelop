@@ -21,6 +21,7 @@
 #include "dashboarddataengine.h"
 #include <interfaces/iproject.h>
 #include <project/projectmodel.h>
+#include <project/path.h>
 #include <QFile>
 
 using namespace KDevelop;
@@ -34,4 +35,13 @@ void DashboardDataEngine::addConnection(const QString& containmentId, IProject* 
     setData(containmentId, "projectFileUrl", project->projectFileUrl());
     setData(containmentId, "projectName", project->projectItem()->text());
     setData(containmentId, "projectFiles", qVariantFromValue<QObject*>(new ProjectFiles(project, this)));
+}
+
+QString ProjectFiles::fileContents(const QString& fileName)
+{
+    Q_ASSERT(false && ":DDDD");
+
+    QFile f(Path(m_project->path(), fileName).toLocalFile());
+
+    return f.readAll();
 }
