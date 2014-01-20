@@ -9,8 +9,8 @@ set(tst_itemrepository_SRCS tst_itemrepository.cpp)
 add_executable(tst_itemrepository ${tst_itemrepository_SRCS})
 ecm_mark_as_test(tst_itemrepository)
 target_link_libraries(tst_itemrepository
-  ${KDE4_KDECORE_LIBS}
-  ${QT_QTTEST_LIBRARY}
+  
+  Qt5::Test
   ${KDEVPLATFORM_TESTS_LIBRARIES}
   ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
 )
@@ -22,8 +22,8 @@ set(tst_indexedstring_SRCS tst_indexedstring.cpp)
 add_executable(tst_indexedstring ${tst_indexedstring_SRCS})
 ecm_mark_as_test(tst_indexedstring)
 target_link_libraries(tst_indexedstring
-  ${KDE4_KDECORE_LIBS}
-  ${QT_QTTEST_LIBRARY}
+  
+  Qt5::Test
   ${KDEVPLATFORM_TESTS_LIBRARIES}
   ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
 )
@@ -35,8 +35,8 @@ set(tst_identifier_SRCS tst_identifier.cpp)
 add_executable(tst_identifier ${tst_identifier_SRCS})
 ecm_mark_as_test(tst_identifier)
 target_link_libraries(tst_identifier
-  ${KDE4_KDECORE_LIBS}
-  ${QT_QTTEST_LIBRARY}
+  
+  Qt5::Test
   ${KDEVPLATFORM_TESTS_LIBRARIES}
   ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
 )

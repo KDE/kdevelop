@@ -28,7 +28,8 @@ target_link_libraries(kdevplatformproject LINK_PRIVATE
     kdevplatforminterfaces
     kdevplatformutil
     kdevplatformlanguage
-    ${KDE4_KIO_LIBS}
+    KF5::KIOWidgets
+    Qt5::Concurrent
 )
 set_target_properties(kdevplatformproject PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
 install(TARGETS kdevplatformproject EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )

@@ -7,7 +7,6 @@ add_subdirectory(icons)
 add_definitions( ${KDE4_ENABLE_EXCEPTIONS} -DKDE_DEFAULT_DEBUG_AREA=9510 )
 
 include_directories( ${KDevSubversionPlugin_SOURCE_DIR}
-                     ${KDE4_INCLUDE_DIR}/threadweaver
                      ${KDevPlatform_SOURCE_DIR}/interfaces
                      ${SUBVERSION_INCLUDE_DIRS}
                      ${KDevSubversionPlugin_BINARY_DIR}
@@ -84,16 +83,15 @@ add_library(kdevsubversion MODULE ${kdevsubversion_PART_SRCS} ${kdevsubversion_J
 
 target_link_libraries(kdevsubversion
                     ${SUBVERSION_LIBRARIES}
-                    ${KDE4_KDEUI_LIBS}
-                    ${KDE4_KIO_LIBS}
+                    KF5::KIOCore
                     KF5::TextEditor
+                    KF5::ThreadWeaver
+                    KF5::Parts
                     kdevplatforminterfaces
                     kdevplatformvcs
                     kdevplatformoutputview
                     kdevplatformproject
                     kdevplatformlanguage
-                    ${KDE4_THREADWEAVER_LIBRARIES}
-                    ${KDE4_KPARTS_LIBRARY}
                     )
 
 install(TARGETS kdevsubversion DESTINATION ${PLUGIN_INSTALL_DIR} )

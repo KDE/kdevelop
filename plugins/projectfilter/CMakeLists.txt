@@ -11,7 +11,7 @@ set( projectfilter_SRCS
 
 add_library( kdevprojectfilter MODULE ${projectfilter_SRCS} )
 target_link_libraries( kdevprojectfilter
-    ${KDE4_KCMUTILS_LIBS} ${KDE4_KDEUI_LIBS}
+    KF5::KCMUtils
     kdevplatformproject kdevplatformutil kdevplatforminterfaces)
 
 install( TARGETS kdevprojectfilter DESTINATION ${PLUGIN_INSTALL_DIR} )
@@ -39,7 +39,7 @@ qt5_wrap_ui( projectfilterkcm_SRCS ${projectfilterkcm_UI} )
 kconfig_add_kcfg_files( projectfilterkcm_SRCS projectfiltersettings.kcfgc )
 add_library( kcm_kdevprojectfilter MODULE ${projectfilterkcm_SRCS} )
 target_link_libraries( kcm_kdevprojectfilter
-    ${KDE4_KCMUTILS_LIBS} ${KDE4_KDEUI_LIBS}
+    KF5::KCMUtils
     kdevplatformproject kdevplatformutil kdevplatforminterfaces)
 
 install( TARGETS kcm_kdevprojectfilter DESTINATION ${PLUGIN_INSTALL_DIR} )

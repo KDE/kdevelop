@@ -103,25 +103,31 @@ set(kdevplatformshell_UI
 qt5_wrap_ui( kdevplatformshell_LIB_SRCS ${kdevplatformshell_UI} )
 add_library(kdevplatformshell SHARED ${kdevplatformshell_LIB_SRCS})
 target_link_libraries(kdevplatformshell LINK_PUBLIC
+    KF5::XmlGui
+
     sublime
     kdevplatformoutputview
     kdevplatformdebugger
 )
 target_link_libraries(kdevplatformshell LINK_PRIVATE
-    ${KDE4_KIO_LIBS}
-    ${KDE4_KFILE_LIBS}
-    ${KDE4_KCMUTILS_LIBS}
-    ${KDE4_KPARTS_LIBS}
-    ${KDE4_KNOTIFYCONFIG_LIBS}
+    KF5::KIOWidgets
+    KF5::KCMUtils
+    KF5::Parts
+    KF5::NotifyConfig
     KF5::TextEditor
-    ${KDE4_THREADWEAVER_LIBRARIES}
-    ${KDE4_KROSSCORE_LIBS}
+    KF5::ThreadWeaver
+    KF5::JobWidgets
+    KF5::ItemViews
+
     kdevplatforminterfaces
     kdevplatformproject
     kdevplatformvcs
     kdevplatformlanguage
     kdevplatformutil
     kdevplatformdocumentation
+
+LINK_PUBLIC
+    KF5::KDE4Support
 )
 set_target_properties(kdevplatformshell PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
 

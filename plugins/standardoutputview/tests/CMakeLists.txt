@@ -7,6 +7,6 @@ set(standardOutputViewTest_SRCS
 add_executable(standardoutputview-test ${standardOutputViewTest_SRCS})
 ecm_mark_as_test(standardoutputview-test)
 target_link_libraries(standardoutputview-test
-    ${QT_QTTEST_LIBRARY}
+    Qt5::Test
     ${KDEVPLATFORM_TESTS_LIBRARIES}
 )

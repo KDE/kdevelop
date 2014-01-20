@@ -10,8 +10,8 @@ set(duchaintest_SRCS test_duchain.cpp)
 
 add_executable(duchaintest ${duchaintest_SRCS})
 ecm_mark_as_test(duchaintest)
-target_link_libraries(duchaintest ${KDE4_KDECORE_LIBS} ${KDE4_TEXTEDITOR_LIBS}
-    ${QT_QTTEST_LIBRARY} ${KDEVPLATFORM_TESTS_LIBRARIES} kdevplatformlanguage)
+target_link_libraries(duchaintest KF5::TextEditor
+    Qt5::Test ${KDEVPLATFORM_TESTS_LIBRARIES} kdevplatformlanguage)
 
 ########### next target ###############
 
@@ -19,8 +19,8 @@ set(itemrepositorytest_SRCS test_itemrepository.cpp)
 
 add_executable(itemrepositorytest ${itemrepositorytest_SRCS})
 ecm_mark_as_test(itemrepositorytest)
-target_link_libraries(itemrepositorytest ${KDE4_KDECORE_LIBS} KF5::TextEditor
-    ${QT_QTTEST_LIBRARY} kdevplatformlanguage ${KDEVPLATFORM_TESTS_LIBRARIES})
+target_link_libraries(itemrepositorytest KF5::TextEditor
+    Qt5::Test kdevplatformlanguage ${KDEVPLATFORM_TESTS_LIBRARIES})
 
 ########### next target ###############
 
@@ -35,18 +35,16 @@ target_link_libraries(itemrepositoryregistry_automatic_test ${QT_QTTEST_LIBRARY}
 set(itemrepositoryregistry_deferred_test_SRCS test_itemrepositoryregistry_deferred.cpp)
 add_executable(itemrepositoryregistry_deferred_test ${itemrepositoryregistry_deferred_test_SRCS})
 ecm_mark_as_test(itemrepositoryregistry_deferred_test)
-target_link_libraries(itemrepositoryregistry_deferred_test ${QT_QTTEST_LIBRARY}
+target_link_libraries(itemrepositoryregistry_deferred_test Qt5::Test
     kdevplatformlanguage ${KDEVPLATFORM_TESTS_LIBRARIES})
 
 ########### next target ###############
 
-set(benchhashes_SRCS benchhashes.cpp)
-
-add_executable(benchhashes ${benchhashes_SRCS})
+add_executable(benchhashes benchhashes.cpp)
 ecm_mark_as_test(benchhashes)
 target_link_libraries(benchhashes
-  ${KDE4_KDECORE_LIBS}
-  ${QT_QTTEST_LIBRARY}
+  
+  Qt5::Test
   ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
   ${KDEVPLATFORM_TESTS_LIBRARIES}
 )

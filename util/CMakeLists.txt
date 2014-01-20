@@ -39,11 +39,11 @@ add_subdirectory(tests)
 
 qt5_wrap_ui(kdevplatformutil_LIB_SRCS ${kdevplatformutil_LIB_US})
 add_library(kdevplatformutil SHARED ${kdevplatformutil_LIB_SRCS})
-target_link_libraries(kdevplatformutil LINK_PUBLIC
+target_link_libraries(kdevplatformutil
+LINK_PUBLIC
     KF5::ConfigWidgets
-)
-target_link_libraries(kdevplatformutil LINK_PRIVATE
-    ${KDE4_KDECORE_LIBS}
+    KF5::ItemModels
+LINK_PRIVATE
     KF5::KCMUtils
     kdevplatforminterfaces
 )

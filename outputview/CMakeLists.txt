@@ -13,11 +13,8 @@ set( outputviewinterfaces_LIB_SRCS
     outputexecutejob.cpp
 )
 add_library( kdevplatformoutputview SHARED ${outputviewinterfaces_LIB_SRCS} )
-target_link_libraries(kdevplatformoutputview LINK_PUBLIC
-    ${KDE4_KDEUI_LIBS}
-)
-target_link_libraries(kdevplatformoutputview LINK_PRIVATE
-    ${QT_QTCORE_LIBRARY}
+target_link_libraries(kdevplatformoutputview PRIVATE
+    Qt5::Core
     kdevplatforminterfaces
     kdevplatformutil
 )

@@ -16,7 +16,7 @@ set( projectmodeltest_SRCS
 add_executable(projectmodeltest ${projectmodeltest_SRCS})
 ecm_mark_as_test(projectmodeltest)
 target_link_libraries(projectmodeltest
-    ${QT_QTTEST_LIBRARY}
+    Qt5::Test
     kdevplatforminterfaces
     kdevplatformproject
     kdevplatformlanguage
@@ -28,8 +28,8 @@ set( projectmodelperformancetest_SRCS
 )
 add_executable(projectmodelperformancetest ${projectmodelperformancetest_SRCS})
 target_link_libraries(projectmodelperformancetest
-    ${QT_QTTEST_LIBRARY}
-    ${QT_QTGUI_LIBRARY}
+    Qt5::Test
+    Qt5::Gui
     kdevplatforminterfaces
     kdevplatformproject
     kdevplatformlanguage

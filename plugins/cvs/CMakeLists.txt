@@ -36,7 +36,7 @@ qt5_wrap_ui(kdevcvs_PART_SRCS ${kdevcvs_PART_UI})
 add_library(kdevcvs MODULE ${kdevcvs_PART_SRCS})
 
 target_link_libraries(kdevcvs
-    ${KDE4_KIO_LIBS}
+    KF5::KIOWidgets
     ${KDE4_KPARTS_LIBS}
     kdevplatformutil
     kdevplatforminterfaces

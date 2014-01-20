@@ -52,8 +52,8 @@ target_link_libraries(kdevplatformvcs LINK_PUBLIC
     kdevplatforminterfaces
 )
 target_link_libraries(kdevplatformvcs LINK_PRIVATE
-    ${KDE4_KIO_LIBS}
-    ${KDE4_KPARTS_LIBS}
+    KF5::KIOWidgets
+    KF5::Parts
     kdevplatformutil
     kdevplatformproject
     kdevplatformlanguage

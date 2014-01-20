@@ -4,9 +4,8 @@ macro(SVN_CREATE_TEST name)
     add_executable(${name} ${ARGN})
     ecm_mark_as_test(${name})
     target_link_libraries(${name}
-                              ${QT_QTTEST_LIBRARY}
-                              ${QT_QTGUI_LIBRARY}
-                              ${KDE4_KDECORE_LIBS}
+                              Qt5::Test
+                              Qt5::Gui
                               kdevplatformtests
                               kdevplatformutil
                               kdevplatformvcs

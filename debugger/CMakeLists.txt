@@ -28,8 +28,8 @@ target_link_libraries(kdevplatformdebugger LINK_PUBLIC
     kdevplatformutil
 )
 target_link_libraries(kdevplatformdebugger LINK_PRIVATE
-    ${QT_QTCORE_LIBRARY}
-    ${KDE4_KDEUI_LIBS}
+    Qt5::Core
+
     KF5::TextEditor
 )
 

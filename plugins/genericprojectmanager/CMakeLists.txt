@@ -11,7 +11,7 @@ set(kdevgenericmanager_PART_SRCS
 
 add_library(kdevgenericmanager MODULE ${kdevgenericmanager_PART_SRCS})
 target_link_libraries(kdevgenericmanager
-    ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS}
+    KF5::KIOWidgets
     kdevplatforminterfaces kdevplatformproject
 )
 

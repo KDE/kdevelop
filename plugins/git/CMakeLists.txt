@@ -20,7 +20,6 @@ qt5_wrap_ui(kdevgit_PART_SRCS stashmanagerdialog.ui)
 add_library(kdevgit MODULE ${kdevgit_PART_SRCS})
 
 target_link_libraries(kdevgit
-    ${KDE4_KDEUI_LIBS}
     ${KDEVPLATFORM_UTIL_LIBRARIES}
     ${KDEVPLATFORM_INTERFACES_LIBRARIES}
     ${KDEVPLATFORM_VCS_LIBRARIES}

@@ -5,8 +5,8 @@ include_directories( ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} )
 add_library(kdevelopdashboarddeclarativeplugin SHARED kdevelopdashboarddeclarativeplugin.cpp icoreobject.cpp)
 
 target_link_libraries(kdevelopdashboarddeclarativeplugin
-    ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY}
-    ${KDE4_KDECORE_LIBS}
+    Qt5::Core Qt5::Gui Qt5::Declarative
+    
     ${KDEVPLATFORM_VCS_LIBRARIES}
 )
 

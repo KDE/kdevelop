@@ -15,7 +15,7 @@ set(kdevprojectdasboard_SRCS
 
 qt5_wrap_ui(kdevprojectdasboard_SRCS appletselector.ui)
 add_library(kdevprojectdashboard MODULE ${kdevprojectdasboard_SRCS})
-target_link_libraries(kdevprojectdashboard ${KDE4_KDECORE_LIBS} ${KDE4_PLASMA_LIBS}
+target_link_libraries(kdevprojectdashboard  KF5::Plasma
                         ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_SUBLIME_LIBRARIES})
 
 install(TARGETS kdevprojectdashboard DESTINATION ${PLUGIN_INSTALL_DIR} )

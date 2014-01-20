@@ -28,12 +28,14 @@ qt5_wrap_ui(kdevfiletemplates_PART_SRCS
 add_library(kdevfiletemplates MODULE ${kdevfiletemplates_PART_SRCS})
 
 target_link_libraries(kdevfiletemplates
-    ${KDE4_KDECORE_LIBS}
+    
     ${KDEVPLATFORM_INTERFACES_LIBRARIES}
     ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
     ${KDEVPLATFORM_PROJECT_LIBRARIES}
     ${KDEVPLATFORM_UTIL_LIBRARIES}
-    ${KDE4_KNEWSTUFF3_LIBS}
+    KF5::NewStuff
+    KF5::TextEditor
+    KF5::ItemModels
 )
 
 install(TARGETS kdevfiletemplates DESTINATION ${PLUGIN_INSTALL_DIR} )
@@ -83,11 +85,11 @@ main.cpp
 add_executable(testfiletemplates ${test_srcs})
 
 target_link_libraries(testfiletemplates
-    ${KDE4_KDECORE_LIBS}
+    
     ${KDEVPLATFORM_INTERFACES_LIBRARIES}
     ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
     ${KDEVPLATFORM_PROJECT_LIBRARIES}
     ${KDEVPLATFORM_UTIL_LIBRARIES}
     ${KDEVPLATFORM_TESTS_LIBRARIES}
-    ${KDE4_KNEWSTUFF3_LIBS}
+    KF5::NewStuff
 )

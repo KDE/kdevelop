@@ -137,14 +137,16 @@ set(kdevplatformlanguage_LIB_SRCS
 
 add_library(kdevplatformlanguage SHARED ${kdevplatformlanguage_LIB_SRCS})
 target_link_libraries(kdevplatformlanguage LINK_PUBLIC
+        KF5::ThreadWeaver
         kdevplatforminterfaces
 )
 target_link_libraries(kdevplatformlanguage LINK_PRIVATE
-        ${KDE4_KDE4SUPPORT_LIBS}
-        ${KDE4_KPARTS_LIBS}
         KF5::TextEditor
-        ${KDE4_THREADWEAVER_LIBRARIES}
-        ${KDE4_KNEWSTUFF3_LIBS}
+        KF5::Parts
+        KF5::TextEditor
+        KF5::NewStuff
+        KF5::Archive
+        KF5::KDE4Support
         kdevplatformutil
         ${Grantlee_CORE_LIBRARIES}
 )

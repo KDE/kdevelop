@@ -23,9 +23,9 @@ set(kdevgrepview_PART_UI
 qt5_wrap_ui(kdevgrepview_PART_SRCS ${kdevgrepview_PART_UI})
 add_library(kdevgrepview MODULE ${kdevgrepview_PART_SRCS})
 target_link_libraries(kdevgrepview
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KPARTS_LIBS}
+    KF5::Parts
+    KF5::TextEditor
+    KF5::Completion
     KF5::TextEditor
     ${KDEVPLATFORM_INTERFACES_LIBRARIES}
     ${KDEVPLATFORM_OUTPUTVIEW_LIBRARIES}

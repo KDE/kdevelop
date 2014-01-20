@@ -22,8 +22,7 @@ if (GIT_FOUND)
     add_executable(kdevgit-test ${gitInitTest_SRCS})
     ecm_mark_as_test(kdevgit-test)
     target_link_libraries(kdevgit-test
-        ${QT_QTTEST_LIBRARY}
-        ${KDE4_KDECORE_LIBS}
+        Qt5::Test
         ${KDEVPLATFORM_VCS_LIBRARIES}
         ${KDEVPLATFORM_UTIL_LIBRARIES}
         ${KDEVPLATFORM_TESTS_LIBRARIES}

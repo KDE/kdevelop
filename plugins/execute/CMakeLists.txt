@@ -18,8 +18,7 @@ set(kdevexecute_PART_SRCS
 qt5_wrap_ui( kdevexecute_PART_SRCS ${kdevexecute_PART_UIS} )
 add_library(kdevexecute MODULE ${kdevexecute_PART_SRCS})
 target_link_libraries(kdevexecute 
-    ${KDE4_KDEUI_LIBS} 
-    ${KDE4_KCMUTILS_LIBS}
+    KF5::KCMUtils
     kdevplatforminterfaces 
     kdevplatformutil 
     kdevplatformproject 

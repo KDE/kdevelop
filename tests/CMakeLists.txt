@@ -22,8 +22,8 @@ target_link_libraries(kdevplatformtests LINK_PUBLIC
     kdevplatformproject
 )
 target_link_libraries(kdevplatformtests LINK_PRIVATE
-    ${QT_QTCORE_LIBRARY}
-    ${QT_QTTEST_LIBRARY}
+    Qt5::Core
+    Qt5::Test
 )
 
 set_target_properties(kdevplatformtests PROPERTIES

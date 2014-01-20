@@ -35,16 +35,16 @@ include(CheckFunctionExists)
 include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(KDECompilerSettings)
+include(KDevPlatformMacros)
 
 set(QT_MIN_VERSION "5.2.0")
-find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Core DBus Widgets Script Test)
+find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Core DBus Widgets Script WebKitWidgets Concurrent Test)
 
 # Load the frameworks we need
 find_package(KF5 CONFIG REQUIRED COMPONENTS
   Archive
   Config
   DocTools
-  Emoticons
   GuiAddons
   I18n
   Init
@@ -60,6 +60,15 @@ find_package(KF5 CONFIG REQUIRED COMPONENTS
   ThreadWeaver
   WindowSystem
   XmlGui
+  TextEditor
+  NotifyConfig
+  ThreadWeaver
+  ItemModels
+  Service
+  Emoticons
+  KCMUtils
+  ItemViews
+
   # TODO KF5: Port away from this
   KDE4Support
 )
@@ -125,15 +134,7 @@ add_subdirectory(vcs)
 add_subdirectory(pics)
 #ecm_optional_add_subdirectory(doc)
 add_subdirectory(debugger)
-
-find_package(Qt5WebKitWidgets)
-set_package_properties(Qt5WebKitWidgets PROPERTIES
-    PURPOSE "Qt5 WebkitWidgets libraries for enabling the documentation view"
-    URL "http://www.qt-project.org"
-    TYPE OPTIONAL)
-if (Qt5WebkitWidgets_FOUND)
 add_subdirectory(documentation)
-endif()
 if (Grantlee_FOUND)
 add_subdirectory(template)
 endif()

@@ -36,8 +36,8 @@ if (CVS)
 	add_executable(kdevcvs-test ${cvstest_SRCS})
 	ecm_mark_as_test(kdevcvs-test)
 	target_link_libraries(kdevcvs-test
-		${QT_QTTEST_LIBRARY}
-		${KDE4_KDECORE_LIBS}
+		Qt5::Test
+		
         kdevplatformutil
         kdevplatformvcs
         kdevplatformtests

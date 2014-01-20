@@ -5,9 +5,9 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 # add_executable(vcsBlackBoxTest ${vcsBlackboxTest_SRCS})
 # ecm_mark_as_test(vcsBlackBoxTest)
 # target_link_libraries(vcsBlackBoxTest
-#                       ${QT_QTTEST_LIBRARY}
-#                       ${QT_QTGUI_LIBRARY}
-#                       ${KDE4_KDECORE_LIBS}
+#                       Qt5::Test
+#                       Qt5::Gui
+#                       
 #                       kdevplatformutil
 #                       kdevplatformvcs
 #                       kdevplatformtests

@@ -15,7 +15,7 @@ add_library(kdevplatformdocumentation SHARED ${kdevplatformdocumentation_LIB_SRC
 install(TARGETS kdevplatformdocumentation EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 target_link_libraries(kdevplatformdocumentation
-        LINK_PRIVATE ${QT_QTWEBKIT_LIBRARY} ${KDE4_KDECORE_LIBS}
+        LINK_PRIVATE Qt5::WebKitWidgets
         LINK_PUBLIC kdevplatforminterfaces)
 
 set_target_properties(kdevplatformdocumentation PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})

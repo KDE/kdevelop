@@ -9,6 +9,6 @@ set(reviewboardtest_SRCS
 qt5_wrap_ui(reviewboardtest_SRCS ../reviewpatch.ui)
 
 add_executable(reviewboardtest ${reviewboardtest_SRCS})
-target_link_libraries(reviewboardtest ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${QJSON_LIBRARIES} ${qjson_LIBRARIES})
+target_link_libraries(reviewboardtest ${KDEVPLATFORM_INTERFACES_LIBRARIES} KF5::KIOWidgets KF5::KDE4Support)
 
 
