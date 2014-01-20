@@ -190,6 +190,13 @@ void VcsPluginHelper::addContextDocument(const KUrl &url)
     d->ctxUrls.append(url);
 }
 
+void VcsPluginHelper::disposeEventually(bool dont)
+{
+    if ( ! dont ) {
+        deleteLater();
+    }
+}
+
 void VcsPluginHelper::setupFromContext(Context* context)
 {
     d->ctxUrls.clear();

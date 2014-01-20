@@ -1221,9 +1221,13 @@ void DocumentController::vcsAnnotateCurrentDocument()
     if(project && project->versionControlPlugin()) {
         IBasicVersionControl* iface = 0;
         iface = project->versionControlPlugin()->extension<IBasicVersionControl>();
-        VcsPluginHelper helper(project->versionControlPlugin(), iface);
-        helper.addContextDocument(url);
-        helper.annotation();
+        auto helper = new VcsPluginHelper(project->versionControlPlugin(), iface);
+        connect(doc->textDocument(), SIGNAL(aboutToClose(KTextEditor::Document*)),
+                helper, SLOT(disposeEventually(bool)));
+        connect(doc->textDocument(), SIGNAL(annotationBorderVisibilityChanged(KTextEditor::View*, bool)),
+                helper, SLOT(disposeEventually(bool)));
+        helper->addContextDocument(url);
+        helper->annotation();
     }
     else {
         KMessageBox::error(0, i18n("Could not annotate the document because it is not "
