@@ -82,7 +82,7 @@ static const QVector<Indicator> INDICATORS = QVector<Indicator>()
     << Indicator("note", FilteredItem::InformationItem);
 
 // A list of filters for possible compiler, linker, and make errors
-const QList<ErrorFormat> ERROR_FILTERS = QList<ErrorFormat>()
+static const QList<ErrorFormat> ERROR_FILTERS = QList<ErrorFormat>()
     // GCC - another case, eg. for #include "pixmap.xpm" which does not exists
     << ErrorFormat( "^([^:\t]+):([0-9]+):([0-9]+):([^0-9]+)", 1, 2, 4, 3 )
     // GCC
@@ -116,7 +116,7 @@ const QList<ErrorFormat> ERROR_FILTERS = QList<ErrorFormat>()
     << ErrorFormat( "PGF9(.*)-(.*)-(.*)-Symbol, (.*) \\((.*)\\)", 5, 5, 4, "pgi" );
 
 // A list of filters for possible compiler, linker, and make actions
-QList<ActionFormat> ACTION_FILTERS = QList<ActionFormat>()
+static const QList<ActionFormat> ACTION_FILTERS = QList<ActionFormat>()
     << ActionFormat( I18N_NOOP2_NOSTRIP("", "compiling"), 1, 2, "(?:^|[^=])\\b(gcc|CC|cc|distcc|c\\+\\+|"
                      "g\\+\\+|clang|clang\\+\\+|mpicc|icc|icpc)\\s+.*-c.*[/ '\\\\]+(\\w+\\.(?:cpp|CPP|c|C|cxx|CXX|cs|"
                      "java|hpf|f|F|f90|F90|f95|F95))")
