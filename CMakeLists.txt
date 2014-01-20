@@ -1,10 +1,10 @@
 # kdevplatform version
 set(KDEVPLATFORM_VERSION_MAJOR 1)
-set(KDEVPLATFORM_VERSION_MINOR 6)
+set(KDEVPLATFORM_VERSION_MINOR 90)
 set(KDEVPLATFORM_VERSION_PATCH 60)
 
 # plugin versions listed in the .desktop files
-set(KDEV_PLUGIN_VERSION 17)
+set(KDEV_PLUGIN_VERSION 19)
 
 # library version / SO version
 set(KDEVPLATFORM_LIB_VERSION 8.0.0)
