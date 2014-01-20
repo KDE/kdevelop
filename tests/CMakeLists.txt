@@ -46,6 +46,4 @@ install(FILES
     COMPONENT Devel
 )
 
-if(QJSON_FOUND)
-    add_subdirectory(json)
-endif()
+add_subdirectory(json)

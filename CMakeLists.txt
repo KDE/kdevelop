@@ -73,15 +73,10 @@ find_package(KF5 CONFIG REQUIRED COMPONENTS
 
 #TODO KF5: Re-enable Grantlee (currently GrantleeConfig.cmake calls find_package(Qt4) internall
 #find_package(Grantlee 0.1.7)
-find_package(QJSON)
 set_package_properties(Grantlee PROPERTIES
     PURPOSE "Grantlee templating library, needed for file templates"
     URL "http://www.grantlee.org/"
     TYPE REQUIRED)
-set_package_properties(QJSON PROPERTIES
-    PURPOSE "QJson support for Uploading Patches to reviewboard"
-    URL "http://qjson.sourceforge.net/"
-    TYPE OPTIONAL)
 
 # Make sure that we're having RPATH on our installed libs, else using kdevelop
 # from prefixes like $HOME/kdevelop breaks

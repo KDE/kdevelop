@@ -1,5 +1,3 @@
-include_directories(${QJSON_INCLUDE_DIR})
-
 add_subdirectory(icons)
 add_subdirectory(tests)
 
