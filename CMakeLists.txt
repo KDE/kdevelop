@@ -15,8 +15,6 @@ set(KDEVPLATFORM_LIB_SOVERSION 8)
 cmake_minimum_required(VERSION 2.8.12)
 project(KDevPlatform)
 
-set(KDE4_BUILD_TESTS "ON" CACHE "BOOL" "Enable building of tests" FORCE )
-
 # we need some parts of the ECM CMake helpers
 find_package (ECM 0.0.9 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${KDevPlatform_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
@@ -92,10 +90,9 @@ list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${LIB_INSTALL_DIR}"
   _isSystemLibDir)
 if("${_isSystemLibDir}" STREQUAL "-1")
   set(CMAKE_INSTALL_RPATH "${LIB_INSTALL_DIR}")
-endif("${_isSystemLibDir}" STREQUAL "-1")
+endif()
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
-add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS -DQURL_NO_CAST_FROM_QSTRING)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
@@ -151,9 +148,9 @@ configure_file( "${KDevPlatform_SOURCE_DIR}/kdevplatformversion.h.cmake" "${KDev
 
 if(KDE4_USE_COMMON_CMAKE_PACKAGE_CONFIG_DIR)
     set(_kdevplatform_CONFIG_DEST "${LIB_INSTALL_DIR}/cmake/kdevplatform")
-else(KDE4_USE_COMMON_CMAKE_PACKAGE_CONFIG_DIR)
+else()
     set(_kdevplatform_CONFIG_DEST "${LIB_INSTALL_DIR}/kdevplatform")
-endif(KDE4_USE_COMMON_CMAKE_PACKAGE_CONFIG_DIR)
+endif()
 
 install( FILES
         "${KDevPlatform_BINARY_DIR}/kdevplatformversion.h"
