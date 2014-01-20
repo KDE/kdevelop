@@ -29,9 +29,11 @@
 #include <KConfigGroup>
 #include <KLocale>
 #include <KMimeType>
+#include <KUrl>
 
 #include <QFileInfo>
 #include <QDir>
+#include <QStandardPaths>
 
 using namespace KDevelop;
 
@@ -110,12 +112,15 @@ void TemplatesModel::refresh()
 {
     clear();
     d->templateItems.clear();
-    d->templateItems[""] = invisibleRootItem();
+    d->templateItems[QString()] = invisibleRootItem();
     d->extractTemplateDescriptions();
 
-    KStandardDirs *dirs = ICore::self()->componentData().dirs();
-    const QStringList templateDescriptions = dirs->findAllResources("data", d->resourceFilter(TemplatesModelPrivate::Description));
-    const QStringList templateArchives = dirs->findAllResources("data", d->resourceFilter(TemplatesModelPrivate::Template));
+    const QStringList templateDescriptions = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
+                                                                       d->resourceFilter(TemplatesModelPrivate::Description),
+                                                                       QStandardPaths::LocateDirectory);
+    const QStringList templateArchives = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
+                                                                   d->resourceFilter(TemplatesModelPrivate::Template),
+                                                                   QStandardPaths::LocateDirectory);
     foreach (const QString &templateDescription, templateDescriptions)
     {
         QFileInfo fi(templateDescription);
@@ -139,7 +144,8 @@ void TemplatesModel::refresh()
 
                 if (general.hasKey("Icon"))
                 {
-                    QString icon = dirs->findResource("data", d->resourceFilter(TemplatesModelPrivate::Preview, general.readEntry("Icon")));
+                    QString icon = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                                             d->resourceFilter(TemplatesModelPrivate::Preview, general.readEntry("Icon")));
                     if (QFile::exists(icon)) {
                         templateItem->setData(icon, IconNameRole);
                     }
@@ -183,10 +189,9 @@ QStandardItem *TemplatesModelPrivate::createItem(const QString& name, const QStr
 
 void TemplatesModelPrivate::extractTemplateDescriptions()
 {
-    KStandardDirs *dirs = ICore::self()->componentData().dirs();
-    QStringList templateArchives = dirs->findAllResources("data", resourceFilter(Template));
+    const QStringList templateArchives = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, resourceFilter(Template), QStandardPaths::LocateFile);
 
-    QString localDescriptionsDir = dirs->saveLocation("data", resourceFilter(Description));
+    QString localDescriptionsDir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) +'/'+ resourceFilter(Description);
 
     foreach (const QString &archName, templateArchives)
     {
@@ -279,7 +284,7 @@ void TemplatesModelPrivate::extractTemplateDescriptions()
                 if (iconEntry && iconEntry->isFile())
                 {
                     const KArchiveFile* iconFile = static_cast<const KArchiveFile*>(iconEntry);
-                    QString saveDir = dirs->saveLocation("data", resourceFilter(Preview));
+                    const QString saveDir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) +'/'+ resourceFilter(Preview);
                     iconFile->copyTo(saveDir);
                     QFileInfo iconInfo(saveDir + templateEntry->name());
                     QFile::rename(iconInfo.absoluteFilePath(), saveDir + templateInfo.baseName() + '.' + iconInfo.suffix());
@@ -296,11 +301,10 @@ void TemplatesModelPrivate::extractTemplateDescriptions()
 QModelIndexList TemplatesModel::templateIndexes(const QString& fileName) const
 {
     QFileInfo info(fileName);
-    KStandardDirs* dirs = ICore::self()->componentData().dirs();
-    QString description = dirs->findResource("data", d->resourceFilter(TemplatesModelPrivate::Description, info.baseName() + ".kdevtemplate"));
+    QString description = QStandardPaths::locate(QStandardPaths::GenericDataLocation, d->resourceFilter(TemplatesModelPrivate::Description, info.baseName() + ".kdevtemplate"));
     if (description.isEmpty())
     {
-        description = dirs->findResource("data", d->resourceFilter(TemplatesModelPrivate::Description, info.baseName() + ".desktop"));
+        description = QStandardPaths::locate(QStandardPaths::GenericDataLocation, d->resourceFilter(TemplatesModelPrivate::Description, info.baseName() + ".desktop"));
     }
 
     QModelIndexList indexes;
@@ -344,8 +348,7 @@ QString TemplatesModel::typePrefix() const
 
 QString TemplatesModel::loadTemplateFile(const QString& fileName)
 {
-    KStandardDirs* dirs = ICore::self()->componentData().dirs();
-    QString saveLocation = dirs->saveLocation("data", d->resourceFilter(TemplatesModelPrivate::Template));
+    QString saveLocation = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) +'/'+ d->resourceFilter(TemplatesModelPrivate::Template);
     QFileInfo info(fileName);
     QString destination = saveLocation + info.baseName();
 

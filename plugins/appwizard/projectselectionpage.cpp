@@ -30,6 +30,8 @@
 #include <KNS3/KNewStuffButton>
 #include <KTar>
 #include <KZip>
+#include <KI18n/KLocalizedString>
+#include <KDE4Support/kpushbutton.h>
 
 ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel, QWidget *parent)
     : AppWizardPageWidget(parent), m_templatesModel(templatesModel)

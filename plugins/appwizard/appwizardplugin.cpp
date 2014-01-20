@@ -19,6 +19,7 @@
 #include <QTextCodec>
 #include <QTextStream>
 #include <QDirIterator>
+#include <QStandardPaths>
 
 #include <ktar.h>
 #include <kzip.h>
@@ -217,10 +218,18 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
     QString templateName = templateInfo.baseName();
     kDebug() << "creating project for template:" << templateName << " with VCS:" << info.vcsPluginName;
 
-    QStringList matches = ICore::self()->componentData().dirs()->findAllResources("data", QString("kdevappwizard/templates/%1*").arg(templateName));
-    if (matches.isEmpty()) {
+    QStringList entries;
+    QStringList matches = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QStringLiteral("kdevappwizard/templates/"));
+    foreach(const QString& match, matches) {
+        QDir d(match);
+        QStringList foundEntries = d.entryList(QStringList(templateName+'*'));
+        foreach(const QString& entry, foundEntries) {
+            entries += d.absoluteFilePath(entry);
+        }
+    }
+    if (entries.isEmpty()) {
         kWarning() << "Could not find project template" << templateName;
-        return QString();;
+        return QString();
     }
     QString templateArchive = matches.first();
 

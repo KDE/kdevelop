@@ -135,9 +135,10 @@ add_subdirectory(pics)
 #ecm_optional_add_subdirectory(doc)
 add_subdirectory(debugger)
 add_subdirectory(documentation)
-if (Grantlee_FOUND)
-add_subdirectory(template)
-endif()
+
+# if (Grantlee_FOUND)
+#     add_subdirectory(template)
+# endif()
 add_subdirectory(tests)
 
 add_subdirectory(plugins)

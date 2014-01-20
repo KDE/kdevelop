@@ -27,9 +27,10 @@
 #include "codedescriptionmetatypes.h"
 #include "archivetemplateloader.h"
 
-#include <grantlee/metatype.h>
+// #include <grantlee/metatype.h>
 
 #include <interfaces/icore.h>
+#include <QStandardPaths>
 
 #include <KComponentData>
 #include <KStandardDirs>
@@ -50,7 +51,7 @@ TemplateEngine::TemplateEngine()
     d->engine.setSmartTrimEnabled(true);
 #endif
 
-    addTemplateDirectories(ICore::self()->componentData().dirs()->findDirs("data", "kdevcodegen/templates"));
+    addTemplateDirectories(QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "kdevcodegen/templates"));
 
     foreach (const QString& path, ICore::self()->componentData().dirs()->resourceDirs("lib"))
     {

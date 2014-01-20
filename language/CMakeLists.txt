@@ -115,13 +115,13 @@ set(kdevplatformlanguage_LIB_SRCS
     codegen/documentchangeset.cpp
     codegen/duchainchangeset.cpp
     codegen/utilities.cpp
-    codegen/templatesmodel.cpp
-    codegen/templateclassgenerator.cpp
+#     codegen/templatesmodel.cpp
+#     codegen/templateclassgenerator.cpp
     codegen/codedescription.cpp
-    codegen/sourcefiletemplate.cpp
-    codegen/templaterenderer.cpp
-    codegen/templateengine.cpp
-    codegen/archivetemplateloader.cpp
+#     codegen/sourcefiletemplate.cpp
+#     codegen/templaterenderer.cpp
+#     codegen/templateengine.cpp
+#     codegen/archivetemplateloader.cpp
 
     util/setrepository.cpp
     util/includeitem.cpp
@@ -148,7 +148,7 @@ target_link_libraries(kdevplatformlanguage LINK_PRIVATE
         KF5::Archive
         KF5::KDE4Support
         kdevplatformutil
-        ${Grantlee_CORE_LIBRARIES}
+#         ${Grantlee_CORE_LIBRARIES}
 )
 set_target_properties(kdevplatformlanguage PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
 install(TARGETS kdevplatformlanguage EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )

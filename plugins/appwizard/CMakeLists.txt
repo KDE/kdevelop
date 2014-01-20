@@ -8,7 +8,7 @@ set(kdevappwizard_PART_SRCS
     appwizarddialog.cpp
     appwizardpagewidget.cpp
     projectselectionpage.cpp
-    projecttemplatesmodel.cpp
+#     projecttemplatesmodel.cpp
     projectvcspage.cpp
 )
 
@@ -21,10 +21,10 @@ qt5_wrap_ui(kdevappwizard_PART_SRCS ${kdevappwizard_PART_UI})
 
 add_library(kdevappwizard MODULE ${kdevappwizard_PART_SRCS})
 target_link_libraries(kdevappwizard
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KIO_LIBS}
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KNEWSTUFF3_LIBS}
+    
+    KF5::KIOWidgets
+    KF5::NewStuff
+    KF5::Archive
     kdevplatforminterfaces kdevplatformvcs kdevplatformlanguage kdevplatformutil)
 
 install(TARGETS kdevappwizard DESTINATION ${PLUGIN_INSTALL_DIR} )
