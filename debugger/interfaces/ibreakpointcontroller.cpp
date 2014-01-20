@@ -36,6 +36,7 @@
 #include "../../interfaces/idebugcontroller.h"
 #include "../breakpoint/breakpoint.h"
 #include "../../interfaces/iuicontroller.h"
+#include <KComponentData>
 
 namespace KDevelop {
 
@@ -194,7 +195,7 @@ void IBreakpointController::hit(KDevelop::Breakpoint* breakpoint, const QString 
     }
     if (ev) {
         ev->setPixmap(QIcon::fromTheme("script-error").pixmap(QSize(22,22)));
-        ev->setComponentData(KGlobal::mainComponent());
+        ev->setComponentName(ICore::self()->componentData().componentName());
         ev->sendEvent();
     }
 }

@@ -82,10 +82,10 @@ public:
     KIconLoader* iconLoader;
     QStringList m_extensions;
     // TODO KF5: Get rid off KComponentData
-    KComponentData m_componentData;
+    QString m_componentData;
 };
 
-IPlugin::IPlugin( const KComponentData &instance, QObject *parent )
+IPlugin::IPlugin( const QString &componentName, QObject *parent )
         : QObject( parent ),
 	  KXMLGUIClient(), d( new IPluginPrivate(this) )
 {
@@ -97,9 +97,8 @@ IPlugin::IPlugin( const KComponentData &instance, QObject *parent )
     // creation so plugins have access to ICore during their creation.
     d->core = static_cast<KDevelop::ICore*>(parent);
 
-    // TODO KF5: Get rid off this, port away from KComponentData
-    setComponentName(instance.componentName(), instance.componentName());
-    d->m_componentData = instance;
+    setComponentName(componentName, componentName);
+    d->m_componentData = componentName;
 
     foreach (KMainWindow* mw, KMainWindow::memberList()) {
         KXmlGuiWindow* guiWindow = qobject_cast<KXmlGuiWindow*>(mw);
@@ -132,7 +131,7 @@ void IPlugin::unload()
 KIconLoader *IPlugin::iconLoader() const
 {
     if ( d->iconLoader == 0 ) {
-        d->iconLoader = new KIconLoader(d->m_componentData.componentName());
+        d->iconLoader = new KIconLoader(d->m_componentData);
         d->iconLoader->addAppDir( "kdevelop" );
         connect(KGlobalSettings::self(), SIGNAL(iconChanged(int)),
                 this, SLOT(newIconLoader()));
@@ -144,7 +143,7 @@ KIconLoader *IPlugin::iconLoader() const
 void IPlugin::newIconLoader() const
 {
     if (d->iconLoader) {
-        d->iconLoader->reconfigure(d->m_componentData.componentName());
+        d->iconLoader->reconfigure(d->m_componentData);
     }
 }
 
@@ -176,9 +175,9 @@ void KDevelop::IPlugin::initializeGuiState()
 
 class CustomXmlGUIClient : public KXMLGUIClient {
     public:
-        CustomXmlGUIClient(const KComponentData& data) {
+        CustomXmlGUIClient(const QString& componentName) {
             // TODO KF5: Get rid off this
-            setComponentName(data.componentName(), data.componentName());
+            setComponentName(componentName, componentName);
         }
         void setXmlFile(QString file) {
             KXMLGUIClient::setXMLFile(file);
@@ -214,5 +213,11 @@ QString KDevelop::IPlugin::errorDescription() const
 {
     return QString();
 }
+
+KComponentData KDevelop::IPlugin::componentData() const
+{
+    return KComponentData(componentName().toLatin1());
+}
+
 
 #include "moc_iplugin.cpp"
