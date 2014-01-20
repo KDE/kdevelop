@@ -22,7 +22,6 @@
 #include "breakpoint.h"
 
 #include <KDE/KLocale>
-#include <KDE/KIcon>
 #include <KDE/KConfigGroup>
 #include <KDE/KDebug>
 

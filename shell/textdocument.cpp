@@ -34,7 +34,6 @@
 #include <kstandarddirs.h>
 #include <kxmlguifactory.h>
 #include <kdeversion.h>
-#include <KIcon>
 #include <KComponentData>
 
 #include <ktexteditor/view.h>
@@ -802,7 +801,7 @@ QIcon KDevelop::TextDocument::defaultIcon() const
 {
     if (d->document) {
         KMimeType::Ptr mime = KMimeType::mimeType(d->document->mimeType());
-        KIcon icon(mime->iconName());
+        QIcon icon = QIcon::fromTheme(mime->iconName());
         if (!icon.isNull()) {
             return icon;
         }

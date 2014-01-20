@@ -25,7 +25,6 @@
 #include <QIcon>
 
 #include <KLocalizedString>
-#include <KIcon>
 
 using namespace KDevelop;
 

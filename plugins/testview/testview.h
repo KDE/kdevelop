@@ -28,7 +28,6 @@ class QSortFilterProxyModel;
 class QStandardItem;
 class TestViewPlugin;
 class QStandardItemModel;
-class KIcon;
 
 namespace KDevelop {
 class ITestSuite;

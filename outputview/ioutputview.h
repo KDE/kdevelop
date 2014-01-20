@@ -23,7 +23,7 @@
 
 #include <QtCore/QMetaType>
 #include <QtCore/QFlags>
-#include <KDE/KIcon>
+#include <QIcon>
 
 #include "outputviewexport.h"
 
@@ -97,7 +97,7 @@ public:
      *          methods
      */
     virtual int registerToolView( const QString& title, ViewType type = OneView,
-                                  const KIcon& icon = KIcon(), Options option = ShowItemsButton,
+                                  const QIcon& icon = QIcon(), Options option = ShowItemsButton,
                                   const QList<QAction*>& actionList = QList<QAction*>()) = 0;
 
     /**

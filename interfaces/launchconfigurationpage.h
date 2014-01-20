@@ -25,7 +25,6 @@
 #include <QWidget>
 
 class KConfigGroup;
-class KIcon;
 
 namespace KDevelop
 {

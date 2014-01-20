@@ -54,7 +54,7 @@ public:
         switch ( m_documentState )
         {
         case KDevelop::IDocument::Clean:
-            return  KIcon ( m_fileIcon );
+            return QIcon::fromTheme( m_fileIcon );
         case KDevelop::IDocument::Modified:
             return QIcon::fromTheme( "document-save" );
         case KDevelop::IDocument::Dirty:
