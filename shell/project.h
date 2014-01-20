@@ -85,7 +85,7 @@ public:
     Path developerFile() const;
     virtual void reloadModel();
     virtual KDE_DEPRECATED KUrl projectFileUrl() const;
-    virtual KDE_DEPRECATED Path projectFile() const;
+    virtual Path projectFile() const;
     virtual KSharedConfig::Ptr projectConfiguration() const;
 
     virtual void addToFileSet( ProjectFileItem* file );
@@ -176,7 +176,7 @@ public Q_SLOTS:
      *
      * @return true if the url @a url is a part of the project.
      */
-    KDE_DEPRECATED bool inProject(const IndexedString &url) const;
+    bool inProject(const IndexedString &url) const;
 
 signals:
     /**
