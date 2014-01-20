@@ -124,7 +124,6 @@ const QSet<QString> ACCESS_STRINGS = KEYWORD_ACCESS_STRINGS + PARENT_ACCESS_STRI
 ///Pass these to getEndingFromSet in order to specify longest valid match for above sets
 const int ACCESS_STR_MATCH = 17; //reinterpret_cast<
 const int MEMBER_ACCESS_STR_MATCH = 2; //::
-const int PARENT_ACCESS_STR_MATCH = 6; //return
 const int BINARY_OPERATOR_MATCH = 3; //>>=
 const int UNARY_OPERATOR_MATCH = 2; //++
 

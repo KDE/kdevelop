@@ -115,7 +115,7 @@ QString CustomScriptPlugin::formatSourceWithStyle(SourceFormatterStyle style, co
 	KProcess proc;
 	QTextStream ios(&proc);
 	
-	std::auto_ptr<QTemporaryFile> tmpFile;
+	std::unique_ptr<QTemporaryFile> tmpFile;
 
 	if (style.content().isEmpty())
 	{
@@ -142,7 +142,7 @@ QString CustomScriptPlugin::formatSourceWithStyle(SourceFormatterStyle style, co
 	
 	if(command.contains("$TMPFILE"))
 	{
-		tmpFile = std::auto_ptr<QTemporaryFile>(new QTemporaryFile(QDir::tempPath() + "/code"));
+		tmpFile.reset(new QTemporaryFile(QDir::tempPath() + "/code"));
 		tmpFile->setAutoRemove(false);
 		if(tmpFile->open())
 		{
