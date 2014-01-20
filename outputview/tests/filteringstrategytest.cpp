@@ -48,6 +48,7 @@ inline char* toString(const KDevelop::FilteredItem::FilteredOutputItemType& type
         case KDevelop::FilteredItem::WarningItem:
             return qstrdup("WarningItem");
     }
+    return qstrdup("unknown");
 }
 
 }
