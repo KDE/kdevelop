@@ -57,6 +57,7 @@
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <language/interfaces/iquickopen.h>
 #include <interfaces/iplugincontroller.h>
+#include <language/interfaces/editorcontext.h>
 #include <project/projectmodel.h>
 #include <language/backgroundparser/backgroundparser.h>
 #include <language/duchain/duchain.h>
@@ -121,9 +122,14 @@ CppLanguageSupport* CppLanguageSupport::m_self = 0;
 
 KDevelop::ContextMenuExtension CppLanguageSupport::contextMenuExtension(KDevelop::Context* context)
 {
-    ContextMenuExtension cm;
+  ContextMenuExtension cm;
+  EditorContext *ec = dynamic_cast<KDevelop::EditorContext *>(context);
+
+  if (ec && ICore::self()->languageController()->languagesForUrl(ec->url()).contains(language())) {
+    // It's a C++ file, let's add our context menu.
     SimpleRefactoring::self().doContextMenu(cm, context);
-    return cm;
+  }
+  return cm;
 }
 
 ///Tries to find a definition for the declaration at given cursor-position and document-url. DUChain must be locked.
