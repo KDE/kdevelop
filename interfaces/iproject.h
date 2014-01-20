@@ -165,17 +165,6 @@ public:
     virtual Q_SCRIPTABLE QString name() const = 0;
 
     /**
-     * Find the url relative to the project directory equivalent to @a absoluteUrl.
-     * This function does not check to see if the file is contained within the
-     * project; for that, use inProject().
-     *
-     * @param absoluteUrl Absolute url to convert
-     * @deprecated use project->path().relativePath instead if really required
-     * @returns absoluteUrl relative to projectDirectory()
-     **/
-    KDE_DEPRECATED virtual Q_SCRIPTABLE KUrl relativeUrl(const KUrl& absoluteUrl) const = 0;
-
-    /**
      * @brief Check if the project contains an item with the given @p path.
      *
      * @param path the path to check

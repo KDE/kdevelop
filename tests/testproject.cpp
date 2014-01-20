@@ -110,11 +110,6 @@ Path TestProject::path() const
     return m_path;
 }
 
-bool TestProject::inProject(const KUrl& url) const
-{
-    return folder().isParentOf(url);
-}
-
 bool TestProject::inProject(const IndexedString& path) const
 {
     return m_path.isParentOf(Path(path.str()));

@@ -233,7 +233,7 @@ bool ScriptAppConfigType::canLaunch(KDevelop::ProjectBaseItem* item) const
 
 void ScriptAppConfigType::configureLaunchFromItem(KConfigGroup config, KDevelop::ProjectBaseItem* item) const
 {
-    config.writeEntry(ExecuteScriptPlugin::executableEntry, item->url());
+    config.writeEntry(ExecuteScriptPlugin::executableEntry, item->path().toUrl());
     config.writeEntry(ExecuteScriptPlugin::interpreterEntry, interpreterForUrl(item->path().toUrl()));
     config.writeEntry(ExecuteScriptPlugin::outputFilteringEntry, 2u);
     config.writeEntry(ExecuteScriptPlugin::runCurrentFileEntry, false);

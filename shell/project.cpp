@@ -642,11 +642,6 @@ int Project::fileCount() const
     return files.count();
 }
 
-KUrl Project::relativeUrl( const KUrl& absolute ) const
-{
-    return KUrl::relativeUrl( folder(), absolute );
-}
-
 IProjectFileManager* Project::projectFileManager() const
 {
     return d->manager->extension<IProjectFileManager>();

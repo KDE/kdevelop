@@ -78,9 +78,7 @@ public:
     KDE_DEPRECATED const KUrl folder() const;
     Path path() const;
     QString name() const { return "Test Project"; }
-    KDE_DEPRECATED KUrl relativeUrl(const KUrl& ) const { return KUrl(); }
     virtual bool inProject(const IndexedString& path) const;
-    KDE_DEPRECATED bool inProject(const KUrl &) const;
 private:
     QSet<IndexedString> m_fileSet;
     Path m_path;

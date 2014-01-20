@@ -103,7 +103,7 @@ public:
      * The returned path always has a training slash.
      * @param format formatting used for the string
      */
-    Q_SCRIPTABLE virtual QString prettyFilePath(KUrl url, FormattingOptions format = FormatHtml) const = 0;
+    Q_SCRIPTABLE virtual QString prettyFilePath(const KUrl& url, FormattingOptions format = FormatHtml) const = 0;
     
     /**
      * Returns a pretty short representation of the given url, considering the currently loaded projects:
@@ -111,7 +111,7 @@ public:
      * the full file path.
      * @param format formatting used for the string
      */
-    Q_SCRIPTABLE virtual QString prettyFileName(KUrl url, FormattingOptions format = FormatHtml) const = 0;
+    Q_SCRIPTABLE virtual QString prettyFileName(const KUrl& url, FormattingOptions format = FormatHtml) const = 0;
 
     /**
      * @returns whether project files should be parsed or not

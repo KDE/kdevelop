@@ -157,17 +157,6 @@ public Q_SLOTS:
     ProjectFolderItem* projectItem() const;
 
     /**
-     * Find the url relative to the project directory equivalent to @a absoluteUrl.
-     * This function does not check to see if the file is contained within the
-     * project; for that, use inProject().
-     *
-     * @param absoluteUrl Absolute url to convert
-     * @deprecated use KUrl::relativeUrl instead
-     * @returns absoluteUrl relative to projectDirectory()
-     **/
-    KDE_DEPRECATED KUrl relativeUrl(const KUrl& absoluteUrl) const;
-
-    /**
      * Check if the url specified by @a url is part of the project.
      * @a url can be either a relative url (to the project directory) or
      * an absolute url.

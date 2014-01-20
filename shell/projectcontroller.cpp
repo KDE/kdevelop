@@ -990,7 +990,7 @@ KUrl ProjectController::projectsBaseDirectory() const
                                      KUrl( QDir::homePath()+"/projects" ) );
 }
 
-QString ProjectController::prettyFilePath(KUrl url, FormattingOptions format) const
+QString ProjectController::prettyFilePath(const KUrl& url, FormattingOptions format) const
 {
     IProject* project = Core::self()->projectController()->findProjectForUrl(url);
     
@@ -1014,7 +1014,7 @@ QString ProjectController::prettyFilePath(KUrl url, FormattingOptions format) co
         } else {
             prefixText = project->name() + '/';
         }
-        QString relativePath = project->relativeUrl(url.upUrl()).path(KUrl::AddTrailingSlash);
+        QString relativePath = KUrl::relativeUrl(project->folder(), url.upUrl());
         if(relativePath.startsWith("./"))
             relativePath = relativePath.mid(2);
         prefixText += relativePath;
@@ -1022,7 +1022,7 @@ QString ProjectController::prettyFilePath(KUrl url, FormattingOptions format) co
     return prefixText;
 }
 
-QString ProjectController::prettyFileName(KUrl url, FormattingOptions format) const
+QString ProjectController::prettyFileName(const KUrl& url, FormattingOptions format) const
 {
     IProject* project = Core::self()->projectController()->findProjectForUrl(url);
     if(project && project->folder().equals(url, KUrl::CompareWithoutTrailingSlash))
