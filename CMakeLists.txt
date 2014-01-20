@@ -77,15 +77,6 @@ find_package(KF5 CONFIG REQUIRED COMPONENTS
 #     PURPOSE "Grantlee templating library, needed for file templates"
 #     URL "http://www.grantlee.org/"
 #     TYPE REQUIRED)
-# Make sure that we're having RPATH on our installed libs, else using kdevelop
-# from prefixes like $HOME/kdevelop breaks
-# Code taken from FindKDE4Internal.cmake for KDE 4.5
-list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${LIB_INSTALL_DIR}"
-  _isSystemLibDir)
-if("${_isSystemLibDir}" STREQUAL "-1")
-  set(CMAKE_INSTALL_RPATH "${LIB_INSTALL_DIR}")
-endif()
-set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS -DQURL_NO_CAST_FROM_QSTRING)
 
