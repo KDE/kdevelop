@@ -9,4 +9,4 @@ target_link_libraries(modelsTest
                       ${KDEVPLATFORM_TESTS_LIBRARIES}
                       kdevplatformutil
                       kdevplatformvcs
-                      )
+)

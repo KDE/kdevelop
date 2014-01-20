@@ -9,7 +9,7 @@ include_directories(
 # see https://svn.boost.org/trac/boost/ticket/2947 for details
 if( ${Boost_MAJOR_VERSION}.${Boost_MINOR_VERSION}.${Boost_PATCH_VERSION} VERSION_GREATER 1.36.1 )
     add_definitions( ${KDE4_ENABLE_EXCEPTIONS} )
-endif( ${Boost_MAJOR_VERSION}.${Boost_MINOR_VERSION}.${Boost_PATCH_VERSION} VERSION_GREATER 1.36.1 )
+endif()
 
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9512 )
 
@@ -28,7 +28,7 @@ set(kdevclassbrowser_PART_SRCS
 )
 
 add_library(kdevclassbrowser MODULE ${kdevclassbrowser_PART_SRCS})
-target_link_libraries(kdevclassbrowser ${KDE4_KDEUI_LIBS} KF5::TextEditor kdevplatformutil kdevplatformlanguage kdevplatforminterfaces kdevplatformproject)
+target_link_libraries(kdevclassbrowser KF5::TextEditor kdevplatformutil kdevplatformlanguage kdevplatforminterfaces kdevplatformproject)
 
 install(TARGETS kdevclassbrowser DESTINATION ${PLUGIN_INSTALL_DIR})
 

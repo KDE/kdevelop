@@ -8,7 +8,7 @@ if (UNIX)
 
 # Running the test only makes sense if the cvs command line client
 # is present. So check for it before adding the test ...
-FIND_PROGRAM(CVS NAMES cvs
+find_program(CVS NAMES cvs
 	PATHS
 	/bin
 	/usr/bin
@@ -43,7 +43,7 @@ if (CVS)
         kdevplatformtests
 	)
 
-endif (CVS)
+endif ()
 
-endif (UNIX)
+endif ()
 

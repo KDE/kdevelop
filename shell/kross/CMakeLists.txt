@@ -18,9 +18,9 @@ macro(kdev_create_kross_iface wantImpl interface includes)
     if(${wantImpl} STREQUAL "TRUE")
 #             message(STATUS "${weFile} has impl")
         set(theImpl "-impl")
-    else(${wantImpl} STREQUAL "TRUE")
+    else()
         set(theImpl)
-    endif(${wantImpl} STREQUAL "TRUE")
+    endif()
     
     add_custom_target(${weFile}
 	    		    rm -rf ~/.kdevduchain && ${CMAKE_CURRENT_BINARY_DIR}/xmltokross/duchaintokross ${theImpl} ${interface}

@@ -9,8 +9,8 @@ target_link_libraries(foregroundlocktest  Qt5::Test KF5::KDE4Support)
 
 if( RT_LIBRARY )
     target_link_libraries( foregroundlocktest ${RT_LIBRARY} )
-endif( RT_LIBRARY )
+endif()
 
 if( Threads_FOUND )
     target_link_libraries( foregroundlocktest ${CMAKE_THREAD_LIBS_INIT} )
-endif( Threads_FOUND )
+endif()

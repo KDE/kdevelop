@@ -1,4 +1,4 @@
-PROJECT(git)
+project(git)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${git_SOURCE_DIR}/cmake)
 

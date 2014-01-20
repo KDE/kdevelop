@@ -13,7 +13,7 @@ set(kdevdocumentview_PART_SRCS
 
 
 add_library(kdevdocumentview MODULE ${kdevdocumentview_PART_SRCS})
-target_link_libraries(kdevdocumentview ${KDE4_KDECORE_LIBS} ${KDEVPLATFORM_INTERFACES_LIBRARIES} KF5::TextEditor)
+target_link_libraries(kdevdocumentview ${KDEVPLATFORM_INTERFACES_LIBRARIES} KF5::TextEditor)
 
 install(TARGETS kdevdocumentview DESTINATION ${PLUGIN_INSTALL_DIR} )
 

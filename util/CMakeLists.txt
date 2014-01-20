@@ -31,7 +31,7 @@ set (kdevplatformutil_LIB_UI
 
 if(NOT WIN32)
     add_subdirectory(dbus_socket_transformer)
-endif(NOT WIN32)
+endif()
 
 add_subdirectory(duchainify)
 

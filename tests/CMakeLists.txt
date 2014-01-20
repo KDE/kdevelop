@@ -48,4 +48,4 @@ install(FILES
 
 if(QJSON_FOUND)
     add_subdirectory(json)
-endif(QJSON_FOUND)
+endif()

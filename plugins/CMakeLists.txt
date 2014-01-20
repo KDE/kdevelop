@@ -33,7 +33,7 @@ set_package_properties(KF5Plasma PROPERTIES
     URL "http://www.kde.org"
     TYPE OPTIONAL)
 if(KF5Plasma_FOUND)
-    ecm_optional_add_subdirectory(dashboard)
+#     ecm_optional_add_subdirectory(dashboard)
 endif()
 
 set(Boost_ADDITIONAL_VERSIONS 1.39.0 1.39)
@@ -44,20 +44,18 @@ set_package_properties(Boost PROPERTIES
     TYPE OPTIONAL)
 if(Boost_FOUND)
     ecm_optional_add_subdirectory(classbrowser)
-endif(Boost_FOUND)
+endif()
 
-find_package(SubversionLibrary)
-set_package_properties(SubversionLibrary PROPERTIES
-    PURPOSE "Support for Subversion integration"
-    URL "http://subversion.tigris.org"
-    TYPE OPTIONAL)
+# find_package(SubversionLibrary)
+# set_package_properties(SubversionLibrary PROPERTIES
+#     PURPOSE "Support for Subversion integration"
+#     URL "http://subversion.tigris.org"
+#     TYPE OPTIONAL)
+#
+# if(SUBVERSION_FOUND)
+#     ecm_optional_add_subdirectory(subversion)
+# endif()
 
-if(SUBVERSION_FOUND)
-    ecm_optional_add_subdirectory(subversion)
-endif(SUBVERSION_FOUND)
-
-if(QJSON_FOUND)
-    ecm_optional_add_subdirectory(reviewboard)
-endif(QJSON_FOUND)
+ecm_optional_add_subdirectory(reviewboard)
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)

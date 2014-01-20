@@ -1,7 +1,3 @@
-#add_subdirectory(libdiff2)
-
-########### next target ###############
-
 add_definitions( ${KDE4_ENABLE_EXCEPTIONS})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/settings)
 

@@ -9,7 +9,7 @@ set( pluginsettings_cfg_SRCS
 )
 
 add_library( kcm_kdev_pluginsettings MODULE ${pluginsettings_cfg_SRCS} )
-target_link_libraries( kcm_kdev_pluginsettings ${KDE4_KCMUTILS_LIBS} ${KDE4_KDEUI_LIBS} kdevplatformshell )
+target_link_libraries( kcm_kdev_pluginsettings KF5::KCMUtils kdevplatformshell )
 
 ########### UI settings
 set( uisettings_cfg_SRCS
@@ -23,7 +23,7 @@ set( uisettings_cfg_UI
 qt5_wrap_ui( uisettings_cfg_SRCS ${uisettings_cfg_UI} )
 kconfig_add_kcfg_files( uisettings_cfg_SRCS uiconfig.kcfgc )
 add_library( kcm_kdev_uisettings MODULE ${uisettings_cfg_SRCS} )
-target_link_libraries( kcm_kdev_uisettings ${KDE4_KCMUTILS_LIBS} ${KDE4_KDEUI_LIBS} kdevplatformshell sublime )
+target_link_libraries( kcm_kdev_uisettings KF5::KCMUtils kdevplatformshell sublime )
 
 ########### Background Parser
 
@@ -38,7 +38,7 @@ set( bgsettings_cfg_UI
 qt5_wrap_ui( bgsettings_cfg_SRCS ${bgsettings_cfg_UI} )
 kconfig_add_kcfg_files( bgsettings_cfg_SRCS bgconfig.kcfgc )
 add_library( kcm_kdev_bgsettings MODULE ${bgsettings_cfg_SRCS} )
-target_link_libraries( kcm_kdev_bgsettings ${KDE4_KCMUTILS_LIBS} ${KDE4_KDEUI_LIBS} kdevplatformshell kdevplatformlanguage)
+target_link_libraries( kcm_kdev_bgsettings KF5::KCMUtils kdevplatformshell kdevplatformlanguage)
 
 ########### Background Parser
 
@@ -53,7 +53,7 @@ set( ccsettings_cfg_UI
 qt5_wrap_ui( ccsettings_cfg_SRCS ${ccsettings_cfg_UI} )
 kconfig_add_kcfg_files( ccsettings_cfg_SRCS ccconfig.kcfgc )
 add_library( kcm_kdev_ccsettings MODULE ${ccsettings_cfg_SRCS} )
-target_link_libraries( kcm_kdev_ccsettings ${KDE4_KCMUTILS_LIBS} ${KDE4_KDEUI_LIBS} kdevplatforminterfaces kdevplatformshell KF5::TextEditor)
+target_link_libraries( kcm_kdev_ccsettings KF5::KCMUtils kdevplatforminterfaces kdevplatformshell KF5::TextEditor)
 
 ########### Project Configuration
 
@@ -68,7 +68,7 @@ set( projectsettings_cfg_UI
 qt5_wrap_ui( projectsettings_cfg_SRCS ${projectsettings_cfg_UI} )
 kconfig_add_kcfg_files( projectsettings_cfg_SRCS projectconfig.kcfgc )
 add_library( kcm_kdev_projectsettings MODULE ${projectsettings_cfg_SRCS} )
-target_link_libraries( kcm_kdev_projectsettings ${KDE4_KCMUTILS_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} kdevplatformshell)
+target_link_libraries( kcm_kdev_projectsettings KF5::KCMUtils KF5::KIOWidgets kdevplatformshell)
 
 ########### Environment widget
 
@@ -84,7 +84,7 @@ set( envsettings_cfg_UI
 
 qt5_wrap_ui( envsettings_cfg_SRCS ${envsettings_cfg_UI} )
 add_library( kcm_kdev_envsettings MODULE ${envsettings_cfg_SRCS} )
-target_link_libraries( kcm_kdev_envsettings ${KDE4_KCMUTILS_LIBS} ${KDE4_KDEUI_LIBS} kdevplatformshell kdevplatformutil)
+target_link_libraries( kcm_kdev_envsettings KF5::KCMUtils kdevplatformshell kdevplatformutil)
 
 ########## Formatter Settings
 set(kcm_kdevsourceformattersettings_SRCS
@@ -100,8 +100,8 @@ set(kcm_kdevsourceformattersettings_UI
 qt5_wrap_ui(kcm_kdevsourceformattersettings_SRCS ${kcm_kdevsourceformattersettings_UI} )
 add_library(kcm_kdevsourceformattersettings MODULE ${kcm_kdevsourceformattersettings_SRCS})
 target_link_libraries(kcm_kdevsourceformattersettings
-    ${KDE4_KDEUI_LIBS} KF5::TextEditor
-    ${KDE4_KPARTS_LIBS} kdevplatformshell kdevplatformutil kdevplatformlanguage)
+    KF5::TextEditor KF5::Parts
+    kdevplatformshell kdevplatformutil kdevplatformlanguage)
 
 install(TARGETS  DESTINATION ${PLUGIN_INSTALL_DIR})
 

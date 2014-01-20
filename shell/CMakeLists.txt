@@ -91,7 +91,7 @@ try_compile( HAVE_EDITVIMODE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_
              LINK_LIBRARIES KF5::TextEditor )
 if(HAVE_EDITVIMODE)
     add_definitions("-DKTEXTEDITOR_HAS_VIMODE=1")
-endif(HAVE_EDITVIMODE)
+endif()
 
 set(kdevplatformshell_UI
     sessiondialog.ui
@@ -162,7 +162,7 @@ install( FILES debugger/kdevdebuggershellui.rc DESTINATION ${DATA_INSTALL_DIR}/k
 install( FILES kdevsessionui.rc DESTINATION ${DATA_INSTALL_DIR}/kdevsession )
 install( FILES kdevsourceformatter.rc DESTINATION ${DATA_INSTALL_DIR}/kdevsourceformatter )
 
-if(NOT WIN32)
-   ecm_optional_add_subdirectory(kross)
-endif(NOT WIN32)
+# if(NOT WIN32)
+#    ecm_optional_add_subdirectory(kross)
+# endif()
 

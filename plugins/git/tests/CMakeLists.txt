@@ -4,7 +4,7 @@
 
 # Running the test only makes sense if the git command line client
 # is present. So check for it before adding the test...
-FIND_PROGRAM(GIT_FOUND NAMES git)
+find_program(GIT_FOUND NAMES git)
 
 if (GIT_FOUND)
 
@@ -23,8 +23,9 @@ if (GIT_FOUND)
     ecm_mark_as_test(kdevgit-test)
     target_link_libraries(kdevgit-test
         Qt5::Test
+        
         ${KDEVPLATFORM_VCS_LIBRARIES}
         ${KDEVPLATFORM_UTIL_LIBRARIES}
         ${KDEVPLATFORM_TESTS_LIBRARIES}
     )
-endif (GIT_FOUND)
+endif ()
