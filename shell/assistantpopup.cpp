@@ -23,6 +23,7 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QDebug>
+#include <QEvent>
 
 #include <KLocalizedString>
 #include <KParts/MainWindow>

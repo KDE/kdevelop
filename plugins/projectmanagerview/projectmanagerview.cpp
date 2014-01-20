@@ -76,7 +76,7 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
 
     m_ui->projectTreeView->installEventFilter(this);
 
-    setWindowIcon( SmallIcon( "project-development" ) );
+    setWindowIcon( QIcon::fromTheme( "project-development" ) );
 
     KConfigGroup pmviewConfig(ICore::self()->activeSession()->config(), sessionConfigGroup);
     if (pmviewConfig.hasKey(splitterStateConfigKey)) {

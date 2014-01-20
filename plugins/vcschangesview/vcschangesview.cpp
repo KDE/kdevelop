@@ -34,6 +34,7 @@
 
 #include <KActionCollection>
 #include <KMenu>
+#include <KLocalizedString>
 
 #include "vcschangesviewplugin.h"
 

@@ -163,7 +163,7 @@ int StandardOutputView::standardToolView( KDevelop::IOutputView::StandardToolVie
 
 int StandardOutputView::registerToolView( const QString& title,
                                           KDevelop::IOutputView::ViewType type,
-                                          const KIcon& icon, Options option,
+                                          const QIcon& icon, Options option,
                                           const QList<QAction*>& actionList )
 {
     // try to reuse existing toolview

@@ -22,6 +22,7 @@
 
 #include <kconfiggroup.h>
 #include <KLocalizedString>
+#include <KDebug>
 
 #include <interfaces/iproject.h>
 #include <interfaces/icore.h>

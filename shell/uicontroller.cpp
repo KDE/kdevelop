@@ -29,6 +29,8 @@
 #include <kdialog.h>
 #include <klocale.h>
 #include <kmenubar.h>
+#include <kcomponentdata.h>
+#include <KCMUtils/ksettings/dispatcher.h>
 #include <ksettings/dialog.h>
 #include <ksettings/dispatcher.h>
 #include <kcmultidialog.h>
@@ -248,10 +250,8 @@ void UiController::switchToArea(const QString &areaName, SwitchMode switchMode)
     // FIXME: what this is supposed to do?
     // Answer: Its notifying the mainwindow to reload its settings when one of
     // the KCM's changes its settings and it works
-    KSettings::Dispatcher::registerComponent( KGlobal::mainComponent(),
-                                    main, "loadSettings" );
-    KSettings::Dispatcher::registerComponent( Core::self()->componentData(),
-                                    main, "loadSettings" );
+    KSettings::Dispatcher::registerComponent( KComponentData::mainComponent().componentName(), main, "loadSettings" );
+    KSettings::Dispatcher::registerComponent( Core::self()->componentData().componentName(), main, "loadSettings" );
 
     addMainWindow(main);
     showArea(areaName, main);
@@ -388,7 +388,7 @@ void UiController::cleanup()
 {
     foreach (Sublime::MainWindow* w, mainWindows())
         w->saveSettings();
-    saveAllAreas(KGlobal::config());
+    saveAllAreas(KSharedConfig::openConfig());
 }
 
 void UiController::selectNewToolViewToAdd(MainWindow *mw)

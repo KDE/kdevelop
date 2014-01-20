@@ -11,9 +11,7 @@ include_directories(CMAKE_CURRENT_BINARY_DIR)
 add_library(kdevcodeutils MODULE ${kdevcodeutils_PART_SRCS})
 
 target_link_libraries(kdevcodeutils
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KPARTS_LIBS}
+    KF5::Parts
     KF5::TextEditor
     ${KDEVPLATFORM_INTERFACES_LIBRARIES}
     ${KDEVPLATFORM_PROJECT_LIBRARIES}

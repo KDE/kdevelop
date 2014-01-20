@@ -113,7 +113,7 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension( KDevelop::C
 
     // Now setup a menu with actions for each part and app
     KMenu* menu = new KMenu( i18n("Open With" ) );
-    menu->setIcon( SmallIcon( "document-open" ) );
+    menu->setIcon( QIcon::fromTheme( "document-open" ) );
 
     menu->addTitle(i18n("Embedded Editors"));
     menu->addActions( partActions );
@@ -121,7 +121,7 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension( KDevelop::C
     menu->addActions( appActions );
 
     QAction* openAction = new QAction( i18n( "Open" ), this );
-    openAction->setIcon( SmallIcon( "document-open" ) );
+    openAction->setIcon( QIcon::fromTheme( "document-open" ) );
     connect( openAction, SIGNAL(triggered()), SLOT(openDefault()) );
 
     KDevelop::ContextMenuExtension ext;
@@ -142,7 +142,7 @@ bool isTextEditor(const KService::Ptr& service)
 
 QString defaultForMimeType(const QString& mimeType)
 {
-    KConfigGroup config = KGlobal::config()->group("Open With Defaults");
+    KConfigGroup config = KSharedConfig::openConfig()->group("Open With Defaults");
     if (config.hasKey(mimeType)) {
         QString storageId = config.readEntry(mimeType, QString());
         if (!storageId.isEmpty() && KService::serviceByStorageId(storageId)) {
@@ -163,7 +163,7 @@ QList<QAction*> OpenWithPlugin::actionsForServiceType( const QString& serviceTyp
     const QString defaultId = defaultForMimeType(m_mimeType);
     foreach( KService::Ptr svc, list ) {
         QAction* act = new QAction( isTextEditor(svc) ? i18n("Default Editor") : svc->name(), this );
-        act->setIcon( SmallIcon( svc->icon() ) );
+        act->setIcon( QIcon::fromTheme( svc->icon() ) );
         if (svc->storageId() == defaultId || (defaultId.isEmpty() && isTextEditor(svc))) {
             QFont font = act->font();
             font.setBold(true);
@@ -216,7 +216,7 @@ void OpenWithPlugin::open( const QString& storageid )
         }
     }
 
-    KConfigGroup config = KGlobal::config()->group("Open With Defaults");
+    KConfigGroup config = KSharedConfig::openConfig()->group("Open With Defaults");
     if (storageid != config.readEntry(m_mimeType, QString())) {
         int setDefault = KMessageBox::questionYesNo(
             qApp->activeWindow(),

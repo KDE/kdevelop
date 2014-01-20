@@ -51,7 +51,7 @@ public:
     virtual void openBookmark( const KBookmark &, Qt::MouseButtons, Qt::KeyboardModifiers );
 
 Q_SIGNALS:
-    void openUrl( const KUrl& url );
+    void openUrl( const QUrl& url );
 
 private:
     FileManager *m_parent;

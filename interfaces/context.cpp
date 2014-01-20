@@ -59,7 +59,7 @@ public:
     KUrl::List m_urls;
 };
 
-FileContext::FileContext( const KUrl::List &urls )
+FileContext::FileContext( const QList<QUrl> &urls )
         : Context(), d( new FileContextPrivate( urls ) )
 {}
 
@@ -73,7 +73,7 @@ int FileContext::type() const
     return Context::FileContext;
 }
 
-KUrl::List FileContext::urls() const
+QList<QUrl> FileContext::urls() const
 {
     return d->m_urls;
 }

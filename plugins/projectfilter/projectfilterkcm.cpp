@@ -25,6 +25,7 @@
 #include <kgenericfactory.h>
 #include <KConfigDialogManager>
 #include <KSettings/Dispatcher>
+#include <KCoreAddons/KAboutData>
 #include <KMessageWidget>
 
 #include <interfaces/icore.h>

@@ -34,6 +34,8 @@
 #include <kstandarddirs.h>
 #include <kxmlguifactory.h>
 #include <kdeversion.h>
+#include <KIcon>
+#include <KComponentData>
 
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
@@ -285,7 +287,7 @@ struct TextDocumentPrivate {
 
     inline QString docConfigGroupName() const
     {
-        return document->url().pathOrUrl();
+        return document->url().toDisplayString(QUrl::PreferLocalFile);
     }
 
     inline KConfigGroup docConfigGroup() const
@@ -481,8 +483,8 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
 
         //in KDE >= 4.4 we can use KXMLGuiClient::replaceXMLFile to provide
         //katepart with our own restructured UI configuration
-        const QString uiFile = KGlobal::mainComponent().componentName() + "/katepartui.rc";
-        QStringList katePartUIs = KGlobal::mainComponent().dirs()->findAllResources("data", uiFile);
+        const QString uiFile = KComponentData::mainComponent().componentName() + "/katepartui.rc";
+        QStringList katePartUIs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, uiFile);
         if (!katePartUIs.isEmpty()) {
             const QString katePartUI = katePartUIs.last();
             const QString katePartLocalUI = KStandardDirs::locateLocal("data", uiFile);
@@ -913,4 +915,4 @@ void KDevelop::TextEditorWidget::showEvent(QShowEvent* event)
     QWidget::showEvent(event);
 }
 
-#include "textdocument.moc"
+#include "moc_textdocument.cpp"

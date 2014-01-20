@@ -21,6 +21,7 @@
 #include <QDebug>
 #include <KMessageBox>
 #include <KColorScheme>
+#include <KLocalizedString>
 #include <interfaces/iprojectprovider.h>
 
 using namespace KDevelop;

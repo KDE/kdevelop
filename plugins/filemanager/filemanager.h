@@ -21,11 +21,11 @@
 #define KDEVPLATFORM_PLUGIN_FILEMANAGER_H
 
 #include <QWidget>
+#include <KFileItem>
 
 class KActionCollection;
 class KDirOperator;
 class KUrlNavigator;
-class KFileItem;
 class QAction;
 class QString;
 class QMenu;

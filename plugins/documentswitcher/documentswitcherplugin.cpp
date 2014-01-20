@@ -46,6 +46,7 @@
 #include <QScrollBar>
 #include <QApplication>
 #include <QDir>
+#include <QAction>
 
 #include <algorithm>
 

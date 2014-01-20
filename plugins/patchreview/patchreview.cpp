@@ -26,6 +26,8 @@
 #include <kde_terminal_interface.h>
 #include <kparts/part.h>
 #include <kparts/factory.h>
+#include <KDebug>
+#include <KLocalizedString>
 
 #include "libdiff2/komparemodellist.h"
 #include "libdiff2/kompare.h"
@@ -515,7 +517,7 @@ PatchReviewPlugin::PatchReviewPlugin( QObject *parent, const QVariantList & )
     connect( m_updateKompareTimer, SIGNAL( timeout() ), this, SLOT( updateKompareModel() ) );
 
     m_finishReview = new QAction(this);
-    m_finishReview->setIcon( KIcon( "dialog-ok" ) );
+    m_finishReview->setIcon( QIcon::fromTheme( "dialog-ok" ) );
     m_finishReview->setShortcut( Qt::CTRL|Qt::Key_Return );
     actionCollection()->addAction("commit_or_finish_review", m_finishReview);
     ICore::self()->uiController()->activeArea()->addAction(m_finishReview);

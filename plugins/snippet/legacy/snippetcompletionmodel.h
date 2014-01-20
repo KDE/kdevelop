@@ -32,7 +32,7 @@ class View;
 
 class SnippetCompletionItem;
 
-class SnippetCompletionModel : public KTextEditor::CodeCompletionModel2,
+class SnippetCompletionModel : public KTextEditor::CodeCompletionModel,
                                public KTextEditor::CodeCompletionModelControllerInterface
 {
     Q_OBJECT

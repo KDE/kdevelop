@@ -24,6 +24,7 @@
 #include <QStackedWidget>
 
 #include <kcombobox.h>
+#include <KI18n/KLocalizedString>
 #include <kplugininfo.h>
 
 #include <interfaces/iplugincontroller.h>

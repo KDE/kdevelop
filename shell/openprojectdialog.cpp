@@ -24,8 +24,10 @@
 #include <kio/udsentry.h>
 #include <kio/job.h>
 #include <kio/jobuidelegate.h>
+#include <KJobWidgets/KJobWidgets>
 
 #include <kdebug.h>
+#include <KDialog>
 
 #include "core.h"
 #include "uicontroller.h"
@@ -72,7 +74,7 @@ OpenProjectDialog::OpenProjectDialog( bool fetch, const KUrl& startUrl, QWidget*
     setValid( openPage, false );
     setValid( projectInfoPage, false);
     setAppropriate( projectInfoPage, false );
-    showButton( KDialog::Help, false );
+//     showButton( KDialog::Help, false );
     
     setCurrentPage( currentPage );
     setWindowTitle(i18n("Open Project"));
@@ -101,7 +103,7 @@ void OpenProjectDialog::validateOpenUrl( const KUrl& url )
     } else
     {
         KIO::StatJob* statJob = KIO::stat( url, KIO::HideProgressInfo );
-        statJob->ui()->setWindow( Core::self()->uiControllerInternal()->defaultMainWindow() );
+        KJobWidgets::setWindow(statJob, Core::self()->uiControllerInternal()->defaultMainWindow() );
         isValid = statJob->exec(); // TODO: do this asynchronously so that the user isn't blocked while typing every letter of the hostname in sftp://hostname
         if ( isValid ) {
             KIO::UDSEntry entry = statJob->statResult();

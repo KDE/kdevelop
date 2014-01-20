@@ -111,7 +111,7 @@ DebugController::DebugController(QObject *parent)
       m_variableCollection(new VariableCollection(this)),
       m_uiInitialized(false)
 {
-    setComponentData(KComponentData("kdevdebugger"));
+    setComponentName("kdevdebugger", "kdevdebugger");
     setXMLFile("kdevdebuggershellui.rc");
 }
 

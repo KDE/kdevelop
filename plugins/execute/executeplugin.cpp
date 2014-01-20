@@ -26,6 +26,7 @@
 #include <klocale.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
+#include <KConfigCore/KConfigGroup>
 #include <kdebug.h>
 #include <kjob.h>
 #include <kparts/mainwindow.h>
@@ -171,7 +172,7 @@ KUrl ExecutePlugin::executable( KDevelop::ILaunchConfiguration* cfg, QString& er
     KConfigGroup grp = cfg->config();
     if( grp.readEntry(ExecutePlugin::isExecutableEntry, false ) )
     {
-        executable = grp.readEntry( ExecutePlugin::executableEntry, KUrl("") );
+        executable = grp.readEntry( ExecutePlugin::executableEntry, QUrl() );
     } else 
     {
         QStringList prjitem = grp.readEntry( ExecutePlugin::projectTargetEntry, QStringList() );
@@ -240,7 +241,7 @@ KUrl ExecutePlugin::workingDirectory( KDevelop::ILaunchConfiguration* cfg ) cons
         return KUrl();
     }
     
-    return cfg->config().readEntry( ExecutePlugin::workingDirEntry, KUrl() );
+    return cfg->config().readEntry( ExecutePlugin::workingDirEntry, QUrl() );
 }
 
 

@@ -24,7 +24,8 @@
 
 #include <QMutexLocker>
 
-#include <ThreadWeaver.h>
+#include <ThreadWeaver/ThreadWeaver>
+#include <ThreadWeaver/Weaver>
 #include <QStandardItemModel>
 #include <kparts/mainwindow.h>
 #include <kdebug.h>

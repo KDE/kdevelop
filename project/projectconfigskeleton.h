@@ -23,6 +23,7 @@ Boston, MA 02110-1301, USA.
 
 #include "projectexport.h"
 #include <kconfigskeleton.h>
+#include <kurl.h>
 
 namespace KDevelop
 {
@@ -49,7 +50,7 @@ public:
     void setDeveloperFileUrl( const QString& );
     void setDefaults();
     bool useDefaults( bool b );
-    void writeConfig();
+    bool writeConfig();
 
     KUrl projectFileUrl() const;
     KUrl developerFileUrl() const;

@@ -115,7 +115,7 @@ CvsProxy* CvsPlugin::proxy()
 
 void CvsPlugin::setupActions()
 {
-    KAction *action;
+    QAction *action;
 
     action = actionCollection()->addAction("cvs_import");
     action->setText(i18n("Import Directory..."));

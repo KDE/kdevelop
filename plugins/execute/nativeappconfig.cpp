@@ -53,7 +53,7 @@
 #include <KShell>
 #include <kcmoduleinfo.h>
 
-KIcon NativeAppConfigPage::icon() const
+QIcon NativeAppConfigPage::icon() const
 {
     return QIcon::fromTheme("system-run");
 }
@@ -71,7 +71,7 @@ void NativeAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelo
     projectTarget->setBaseItem( project ? project->projectItem() : 0, true);
     projectTarget->setCurrentItemPath( cfg.readEntry( ExecutePlugin::projectTargetEntry, QStringList() ) );
 
-    KUrl exe = cfg.readEntry( ExecutePlugin::executableEntry, KUrl());
+    KUrl exe = cfg.readEntry( ExecutePlugin::executableEntry, QUrl());
     if( !exe.isEmpty() || project ){
         executablePath->setUrl( !exe.isEmpty() ? exe : project->folder() );
     }else{
@@ -90,7 +90,7 @@ void NativeAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelo
 
     arguments->setClearButtonShown( true );
     arguments->setText( cfg.readEntry( ExecutePlugin::argumentsEntry, "" ) );
-    workingDirectory->setUrl( cfg.readEntry( ExecutePlugin::workingDirEntry, KUrl() ) );
+    workingDirectory->setUrl( cfg.readEntry( ExecutePlugin::workingDirEntry, QUrl() ) );
     environment->setCurrentProfile( cfg.readEntry( ExecutePlugin::environmentGroupEntry, QString() ) );
     runInTerminal->setChecked( cfg.readEntry( ExecutePlugin::useTerminalEntry, false ) );
     terminal->setEditText( cfg.readEntry( ExecutePlugin::terminalEntry, terminal->itemText(0) ) );
@@ -100,7 +100,7 @@ void NativeAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelo
         QStringList deplist = dep.toStringList();
         KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
         KDevelop::ProjectBaseItem* pitem=itemForPath(deplist, model);
-        KIcon icon;
+        QIcon icon;
         if(pitem)
             icon=QIcon::fromTheme(pitem->iconName());
         
@@ -229,10 +229,10 @@ void NativeAppConfigPage::moveDependencyUp()
 
 void NativeAppConfigPage::addDep()
 {
-    KIcon icon;
+    QIcon icon;
     KDevelop::ProjectBaseItem* pitem = targetDependency->currentItem();
     if(pitem)
-        icon= QIcon::fromTheme(pitem->iconName());
+        icon = QIcon::fromTheme(pitem->iconName());
 
     QListWidgetItem* item = new QListWidgetItem(icon, targetDependency->text(), dependencies);
     item->setData( Qt::UserRole, targetDependency->itemPath() );
@@ -378,7 +378,7 @@ QString NativeAppConfigType::id() const
     return ExecutePlugin::_nativeAppConfigTypeId;
 }
 
-KIcon NativeAppConfigType::icon() const
+QIcon NativeAppConfigType::icon() const
 {
     return QIcon::fromTheme("application-x-executable");
 }
@@ -401,7 +401,7 @@ void NativeAppConfigType::configureLaunchFromItem ( KConfigGroup cfg, KDevelop::
     cfg.writeEntry( ExecutePlugin::isExecutableEntry, false );
     KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
     cfg.writeEntry( ExecutePlugin::projectTargetEntry, model->pathFromIndex( model->indexFromItem( item ) ) );
-    cfg.writeEntry( ExecutePlugin::workingDirEntry, item->executable()->builtUrl().upUrl() );
+    cfg.writeEntry( ExecutePlugin::workingDirEntry, QUrl(item->executable()->builtUrl().upUrl()) );
     cfg.sync();
 }
 

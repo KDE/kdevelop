@@ -25,11 +25,13 @@ Boston, MA 02110-1301, USA.
 #include <QInputDialog>
 #include <KMessageBox>
 #include <KIconLoader>
+#include <KDebug>
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/editor.h>
-#include <ktexteditor/editorchooser.h>
 #include <ktexteditor/configinterface.h>
+#include <KCoreAddons/KAboutData>
+#include <KI18n/KLocalizedString>
 
 #include <interfaces/iplugin.h>
 #include <interfaces/ilanguage.h>
@@ -77,12 +79,7 @@ SourceFormatterSettings::SourceFormatterSettings(QWidget *parent, const QVariant
     connect( btnEditStyle, SIGNAL(clicked()), SLOT(editStyle()) );
     connect( styleList, SIGNAL(itemChanged(QListWidgetItem*)), SLOT(styleNameChanged(QListWidgetItem*)) );
 
-    KTextEditor::Editor *editor = KTextEditor::EditorChooser::editor();
-    if (!editor)
-        KMessageBox::error(this, i18n("A KDE text-editor component could not be found.\n"
-        "Please check your KDE installation."));
-
-    m_document = editor->createDocument(this);
+    m_document = KTextEditor::Editor::instance()->createDocument(this);
     m_document->setReadWrite(false);
 
     KTextEditor::View* view = qobject_cast<KTextEditor::View*>(m_document->createView(textEditor));

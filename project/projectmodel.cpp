@@ -812,7 +812,7 @@ public:
     QHash<QString, QString> fileExtensionToIcon;
 };
 
-K_GLOBAL_STATIC(IconNameCache, s_cache);
+Q_GLOBAL_STATIC(IconNameCache, s_cache);
 
 QString ProjectFileItem::iconName() const
 {

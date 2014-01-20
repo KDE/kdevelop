@@ -16,6 +16,7 @@
 #include <KPluginFactory>
 #include <KAboutData>
 #include <KActionCollection>
+#include <KConfigGroup>
 
 #include <QAction>
 #include <QApplication>

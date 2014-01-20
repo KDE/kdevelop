@@ -70,7 +70,7 @@ public:
     QMap<int, OutputData*> outputdata;
     KDevelop::IOutputView::ViewType type;
     QString title;
-    KIcon icon;
+    QIcon icon;
     int toolViewId;
     KDevelop::IOutputView::Options option;
     QList<QAction*> actionList;

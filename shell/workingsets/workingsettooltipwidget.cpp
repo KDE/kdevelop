@@ -19,6 +19,7 @@
 #include "workingsettooltipwidget.h"
 
 #include <KLocalizedString>
+#include <KDebug>
 
 #include <QPushButton>
 #include <QVBoxLayout>

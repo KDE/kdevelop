@@ -834,9 +834,9 @@ public:
         QMutexLocker lock(&m_chainsMutex);
         //Do this atomically, since we must be sure that _everything_ is already saved
         for(QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator it = m_fileEnvironmentInformations.begin(); it != m_fileEnvironmentInformations.end(); ) {
-          ParsingEnvironmentFile* f = (*it).data();
+          ParsingEnvironmentFile* f = it->data();
           Q_ASSERT(f->d_func()->classId);
-          if(f->ref == 1) {
+          if(f->ref.load() == 1) {
             Q_ASSERT(!f->d_func()->isDynamic()); //It cannot be dynamic, since we have stored before
             //The ParsingEnvironmentFilePointer is only referenced once. This means that it does not belong to any
             //loaded top-context, so just remove it to save some memory and processing time.
@@ -1679,7 +1679,7 @@ KDevelop::ReferencedTopDUContext DUChain::waitForUpdate(const KDevelop::IndexedS
 
   WaitForUpdate waiter;
   
-  waiter.m_dataMutex.lockInline();
+  waiter.m_dataMutex.lock();
   
   {
     DUChainReadLocker readLock(DUChain::lock());

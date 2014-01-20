@@ -25,6 +25,7 @@
 #include <QModelIndex>
 #include <QVariant>
 #include <QList>
+#include <QUrl>
 
 #include <klocale.h>
 #include <KMimeType>
@@ -66,7 +67,7 @@ void VcsItemEventModel::addItemEvents( const QList<KDevelop::VcsItemEvent>& list
             actionStrings << i18n("Copied");
         else if( act & KDevelop::VcsItemEvent::Replaced )
             actionStrings << i18n("Replaced");
-        KMimeType::Ptr mime = KMimeType::findByUrl( ev.repositoryLocation(), 0, false, true );
+        KMimeType::Ptr mime = KMimeType::findByUrl( QUrl(ev.repositoryLocation()), 0, false, true );
         QList<QStandardItem*> rowItems = QList<QStandardItem*>()
             << new QStandardItem(QIcon::fromTheme(mime->iconName()), ev.repositoryLocation())
             << new QStandardItem(actionStrings.join(i18nc("separes an action list", ", ")));

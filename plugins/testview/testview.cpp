@@ -40,7 +40,7 @@
 #include <KActionCollection>
 #include <KLocalizedString>
 #include <KJob>
-#include <krecursivefilterproxymodel.h>
+#include <KRecursiveFilterProxyModel>
 #include <KLineEdit>
 #include <KConfigGroup>
 
@@ -62,7 +62,7 @@ enum CustomRoles {
 //BEGIN TestViewFilterAction
 
 TestViewFilterAction::TestViewFilterAction(  const QString &initialFilter, QObject* parent )
-    : KAction( parent )
+    : QAction( parent )
     , m_intialFilter(initialFilter)
 {
     setIcon(QIcon::fromTheme("view-filter"));
@@ -185,7 +185,7 @@ void TestView::updateTestSuite(ITestSuite* suite, const TestResult& result)
     }
 }
 
-KIcon TestView::iconForTestResult(TestResult::TestCaseResult result)
+QIcon TestView::iconForTestResult(TestResult::TestCaseResult result)
 {
     debug() << result;
     switch (result)

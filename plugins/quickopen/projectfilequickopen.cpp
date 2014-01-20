@@ -38,6 +38,7 @@
 #include <project/projectmodel.h>
 
 #include "../openwith/iopenwith.h"
+#include <KIconThemes/KIconLoader>
 
 using namespace KDevelop;
 

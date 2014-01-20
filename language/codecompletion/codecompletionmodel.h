@@ -36,6 +36,7 @@
 #include <ktexteditor/codecompletionmodel.h>
 #include <ktexteditor/codecompletionmodelcontrollerinterface.h>
 #include <kdeversion.h>
+#include <KUrl>
 
 class QIcon;
 class QString;
@@ -48,8 +49,8 @@ class Declaration;
 class CodeCompletionWorker;
 class CompletionWorkerThread;
 
-class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::CodeCompletionModel2
-, public KTextEditor::CodeCompletionModelControllerInterface
+class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::CodeCompletionModel
+                                                      , public KTextEditor::CodeCompletionModelControllerInterface
 {
   Q_OBJECT
   Q_INTERFACES(KTextEditor::CodeCompletionModelControllerInterface)
@@ -63,7 +64,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
     virtual void initialize();
     
     ///Entry-point for code-completion. This determines ome settings, clears the model, and then calls completionInvokedInternal for further processing.
-    virtual void completionInvoked(KTextEditor::View* view, const KTextEditor::Range& range, InvocationType invocationType);
+    virtual void completionInvoked(KTextEditor::View* view, const KTextEditor::Range& range, KTextEditor::CodeCompletionModel::InvocationType invocationType);
 
     virtual QModelIndex index ( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
 
@@ -118,7 +119,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
   protected:
     ///Eventually override this, determine the context or whatever, and then emit completionsNeeded(..) to continue processing in the background tread.
     ///The default-implementation does this completely, so if you don't need to do anything special, you can just leave it.
-    virtual void completionInvokedInternal(KTextEditor::View* view, const KTextEditor::Range& range, InvocationType invocationType, const KUrl& url);
+    virtual void completionInvokedInternal(KTextEditor::View* view, const KTextEditor::Range& range, KTextEditor::CodeCompletionModel::InvocationType invocationType, const KUrl& url);
 
     virtual void executeCompletionItem2(KTextEditor::Document* document, const KTextEditor::Range& word, const QModelIndex& index) const;
     KSharedPtr<CodeCompletionContext> m_completionContext;

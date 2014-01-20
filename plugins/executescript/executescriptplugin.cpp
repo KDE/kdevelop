@@ -24,6 +24,7 @@
 
 #include <QApplication>
 
+#include <kconfiggroup.h>
 #include <klocale.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
@@ -100,7 +101,7 @@ KUrl ExecuteScriptPlugin::script( KDevelop::ILaunchConfiguration* cfg, QString& 
     }
     KConfigGroup grp = cfg->config();
 
-    script = grp.readEntry( ExecuteScriptPlugin::executableEntry, KUrl("") );
+    script = grp.readEntry( ExecuteScriptPlugin::executableEntry, QUrl() );
     if( !script.isLocalFile() || script.isEmpty() )
     {
         err_ = i18n("No valid executable specified");
@@ -259,7 +260,7 @@ KUrl ExecuteScriptPlugin::workingDirectory( KDevelop::ILaunchConfiguration* cfg 
         return KUrl();
     }
     
-    return cfg->config().readEntry( ExecuteScriptPlugin::workingDirEntry, KUrl() );
+    return cfg->config().readEntry( ExecuteScriptPlugin::workingDirEntry, QUrl() );
 }
 
 

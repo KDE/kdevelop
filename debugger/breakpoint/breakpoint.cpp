@@ -74,7 +74,7 @@ Breakpoint::Breakpoint(BreakpointModel *model, const KConfigGroup& config)
 
     m_kind = stringToKind(config.readEntry("kind", ""));
     m_enabled = config.readEntry("enabled", false);
-    m_url = config.readEntry("url", KUrl());
+    m_url = config.readEntry("url", QUrl());
     m_line = config.readEntry("line", -1);
     m_expression = config.readEntry("expression", QString());
     setCondition(config.readEntry("condition", ""));
@@ -101,7 +101,7 @@ bool Breakpoint::setData(int index, const QVariant& value)
             QRegExp rx("^(.+):([0-9]+)$");
             int idx = rx.indexIn(s);
             if (m_kind == CodeBreakpoint && idx != -1) {
-                m_url = KUrl(rx.cap(1));
+                m_url = QUrl(rx.cap(1));
                 m_line = rx.cap(2).toInt() - 1;
                 m_expression.clear();
             } else {
@@ -194,7 +194,7 @@ QVariant Breakpoint::data(int column, int role) const
                 if (role == Qt::DisplayRole) {
                     ret = m_url.fileName();
                 } else {
-                    ret = m_url.pathOrUrl(KUrl::RemoveTrailingSlash);
+                    ret = m_url.toDisplayString(QUrl::PreferLocalFile | QUrl::StripTrailingSlash);
                 }
                 ret += ':' + QString::number(m_line+1);
             } else {

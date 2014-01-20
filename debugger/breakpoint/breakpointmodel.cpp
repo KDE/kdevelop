@@ -36,6 +36,7 @@
 #include "../interfaces/idocument.h"
 #include "../interfaces/ipartcontroller.h"
 #include "breakpoint.h"
+#include <KConfigCore/KSharedConfig>
 #include <KConfigGroup>
 #include <QAction>
 #include <QMenu>
@@ -429,7 +430,7 @@ void BreakpointModel::aboutToDeleteMovingInterfaceContent(KTextEditor::Document*
 
 void BreakpointModel::load()
 {
-    KConfigGroup breakpoints = KGlobal::config()->group("breakpoints");
+    KConfigGroup breakpoints = KSharedConfig::openConfig()->group("breakpoints");
     int count = breakpoints.readEntry("number", 0);
     if (count == 0)
         return;
@@ -445,7 +446,7 @@ void BreakpointModel::load()
 
 void BreakpointModel::save()
 {
-    KConfigGroup breakpoints = KGlobal::config()->group("breakpoints");
+    KConfigGroup breakpoints = KSharedConfig::openConfig()->group("breakpoints");
     breakpoints.writeEntry("number", m_breakpoints.count());
     int i = 0;
     foreach (Breakpoint *b, m_breakpoints) {

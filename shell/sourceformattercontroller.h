@@ -30,6 +30,7 @@ Boston, MA 02110-1301, USA.
 #include <KDE/KMimeType>
 #include <KDE/KConfigGroup>
 #include <KDE/KPluginInfo>
+#include <KUrl>
 
 #include "shellexport.h"
 

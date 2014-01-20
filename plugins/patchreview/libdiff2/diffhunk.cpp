@@ -104,10 +104,10 @@ QString DiffHunk::recreateHunk() const
 	if ( !m_function.isEmpty() )
 		hunk += ' ' + m_function;
 
-	hunk += QString::fromLatin1( "\n" );
+    hunk += QLatin1Char( '\n' );
 
 	hunk += differences;
 
-	kDebug( 8101 ) << hunk << endl;
+// 	kDebug( 8101 ) << hunk << endl;
 	return hunk;
 }

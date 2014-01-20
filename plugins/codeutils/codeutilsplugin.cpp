@@ -34,6 +34,7 @@
 #include <KTextEditor/TemplateInterface>
 #include <KStandardDirs>
 #include <QApplication>
+#include <QStandardPaths>
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
@@ -116,6 +117,7 @@ void CodeUtilsPlugin::documentDeclaration()
     int line = dec->range().start.line;
     Cursor insertPos( line, 0 );
 
+#if 0 //FIXME: KF5 porting, template does weird things
     TemplateRenderer renderer;
     renderer.addVariable("brief", i18n( "..." ));
 
@@ -157,7 +159,7 @@ void CodeUtilsPlugin::documentDeclaration()
         }
     }
 
-    QString fileName = core()->componentData().dirs()->findResource("data", "kdevcodeutils/templates/" + templateName + ".txt");
+    QString fileName = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "kdevcodeutils/templates/" + templateName + ".txt");
     if (fileName.isEmpty())
     {
         kWarning() << "No suitable template found" << fileName;
@@ -166,6 +168,7 @@ void CodeUtilsPlugin::documentDeclaration()
 
     const QString comment = renderer.renderFile(KUrl(fileName));
     tplIface->insertTemplateText(insertPos, comment, QMap<QString, QString>());
+#endif
 }
 
 CodeUtilsPlugin::~CodeUtilsPlugin()

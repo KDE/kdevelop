@@ -47,7 +47,7 @@ QString dBusServiceNameForSession( const QString& id )
 }
 
 /// Tries to own the lock-file and returns result
-KLockFile::LockResult attemptRelock(KLockFile::Ptr lockFile)
+KLockFile::LockResult attemptRelock(QSharedPointer<KLockFile> lockFile)
 {
     return lockFile->lock( KLockFile::ForceFlag | KLockFile::NoBlockFlag );
 }
@@ -83,7 +83,7 @@ TryLockSessionResult SessionLock::tryLockSession(const QString& sessionId, bool 
     QDBusConnectionInterface* connectionInterface = connection.interface();
 
     const QString lockFilename = lockFileForSession( sessionId );
-    KLockFile::Ptr lockFile(new KLockFile( lockFilename ));
+    QSharedPointer<KLockFile> lockFile(new KLockFile( lockFilename ));
 
     bool canLockDBus = !connectionInterface->isServiceRegistered( service );
     bool lockedDBus = false;
@@ -128,7 +128,7 @@ QString SessionLock::id()
     return m_sessionId;
 }
 
-SessionLock::SessionLock(const QString& sessionId, const KLockFile::Ptr& lockFile)
+SessionLock::SessionLock(const QString& sessionId, const QSharedPointer<KLockFile>& lockFile)
 : m_sessionId(sessionId)
 , m_lockFile(lockFile)
 {

@@ -126,7 +126,7 @@ struct DocumentControllerPrivate {
             dir.setFileName(QString());
         }else
         {
-            dir = KGlobal::config()->group("Open File").readEntry( "Last Open File Directory", Core::self()->projectController()->projectsBaseDirectory() );
+            dir = KGlobal::config()->group("Open File").readEntry( "Last Open File Directory", QUrl(Core::self()->projectController()->projectsBaseDirectory()) );
         }
 
         KEncodingFileDialog::Result res = KEncodingFileDialog::getOpenUrlsAndEncoding( controller->encoding(), dir.url(), i18n( "*|Text File\n" ),
@@ -209,10 +209,10 @@ struct DocumentControllerPrivate {
                 dir = controller->activeDocument()->url().upUrl();
             }else
             {
-                dir = KGlobal::config()->group("Open File").readEntry( "Last Open File Directory", Core::self()->projectController()->projectsBaseDirectory() );
+                dir = KGlobal::config()->group("Open File").readEntry( "Last Open File Directory", QUrl(Core::self()->projectController()->projectsBaseDirectory()) );
             }
 
-            KEncodingFileDialog::Result res = KEncodingFileDialog::getOpenUrlAndEncoding( "", dir.url(), i18n( "*|Text File\n" ),
+            KEncodingFileDialog::Result res = KEncodingFileDialog::getOpenUrlAndEncoding( QString(), dir.url(), i18n( "*|Text File\n" ),
                                         Core::self()->uiControllerInternal()->defaultMainWindow(),
                                         i18n( "Open File" ) );
             if( !res.URLs.isEmpty() )
@@ -223,7 +223,7 @@ struct DocumentControllerPrivate {
             //still no url
             return 0;
 
-        KGlobal::config()->group("Open File").writeEntry( "Last Open File Directory", url.upUrl() );
+        KSharedConfig::openConfig()->group("Open File").writeEntry( "Last Open File Directory", QUrl(url.upUrl()) );
 
         // clean it and resolve possible symlink
         url.cleanPath( KUrl::SimplifyDirSeparators );
@@ -559,11 +559,11 @@ struct DocumentControllerPrivate {
     QList<HistoryEntry> forwardHistory;
     bool isJumping;
 
-    QPointer<KAction> saveAll;
-    QPointer<KAction> revertAll;
-    QPointer<KAction> close;
-    QPointer<KAction> closeAll;
-    QPointer<KAction> closeAllOthers;
+    QPointer<QAction> saveAll;
+    QPointer<QAction> revertAll;
+    QPointer<QAction> close;
+    QPointer<QAction> closeAll;
+    QPointer<QAction> closeAllOthers;
     KRecentFilesAction* fileOpenRecent;
     KTextEditor::Document* globalTextEditorInstance;
 };
@@ -610,8 +610,7 @@ DocumentController::~DocumentController()
 
 void DocumentController::setupActions()
 {
-    KActionCollection * ac =
-        Core::self()->uiControllerInternal()->defaultMainWindow()->actionCollection();
+    KActionCollection* ac = Core::self()->uiControllerInternal()->defaultMainWindow()->actionCollection();
 
     QAction* action;
 
@@ -1232,4 +1231,4 @@ void DocumentController::vcsAnnotateCurrentDocument()
 
 }
 
-#include "documentcontroller.moc"
+#include "moc_documentcontroller.cpp"

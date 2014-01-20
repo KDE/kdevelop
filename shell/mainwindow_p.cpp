@@ -86,7 +86,7 @@ void MainWindowPrivate::setupStatusBar()
 
 void MainWindowPrivate::addPlugin( IPlugin *plugin )
 {
-    kDebug() << "add plugin" << plugin << plugin->componentData().componentName();
+    kDebug() << "add plugin" << plugin << plugin->componentName();
     Q_ASSERT( plugin );
 
     //The direct plugin client can only be added to the first mainwindow

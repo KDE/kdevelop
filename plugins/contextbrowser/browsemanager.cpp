@@ -173,7 +173,7 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
     
     QMouseEvent* mouseEvent = dynamic_cast<QMouseEvent*>(event);
     if(mouseEvent) {
-        KTextEditor::CoordinatesToCursorInterface* iface = dynamic_cast<KTextEditor::CoordinatesToCursorInterface*>(view);
+        KTextEditor::View* iface = dynamic_cast<KTextEditor::View*>(view);
         if(!iface) {
             kDebug() << "Update kdelibs for the browsing-mode to work";
             return false;

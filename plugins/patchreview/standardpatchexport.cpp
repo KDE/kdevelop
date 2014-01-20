@@ -31,12 +31,13 @@
 #include "patchreview.h"
 #include <KStandardDirs>
 #include <KProcess>
+#include <QIcon>
 
 class StandardExporter : public KDevelop::IPatchExporter
 {
 public:
     virtual QString name() const = 0;
-    virtual KIcon icon() const = 0;
+    virtual QIcon icon() const = 0;
 };
 
 class KIOExport : public StandardExporter
@@ -49,7 +50,7 @@ class KIOExport : public StandardExporter
         }
     }
 
-    virtual KIcon icon() const { return QIcon::fromTheme( "document-save" ); }
+    virtual QIcon icon() const { return QIcon::fromTheme( "document-save" ); }
     virtual QString name() const { return i18n( "Save As..." ); }
 };
 
@@ -59,7 +60,7 @@ class EMailExport : public StandardExporter
         KToolInvocation::invokeMailer( QString(), QString(), QString(), QString(), QString(), QString(), QStringList() << source->file().toLocalFile() );
     }
 
-    virtual KIcon icon() const { return QIcon::fromTheme( "internet-mail" ); }
+    virtual QIcon icon() const { return QIcon::fromTheme( "internet-mail" ); }
     virtual QString name() const { return i18n( "Send..." ); }
 };
 
@@ -71,7 +72,7 @@ public:
     }
 
     static bool isAvailable() { return !KStandardDirs::findExe( "ktp-send-file" ).isEmpty(); }
-    virtual KIcon icon() const { return QIcon::fromTheme( "telepathy-kde" ); }
+    virtual QIcon icon() const { return QIcon::fromTheme( "telepathy-kde" ); }
     virtual QString name() const { return i18n( "Send to contact..." ); }
 };
 
@@ -85,7 +86,7 @@ public:
     }
 
     static bool isAvailable() { return !KStandardDirs::findExe( "kompare" ).isEmpty(); }
-    virtual KIcon icon() const { return QIcon::fromTheme( "kompare" ); }
+    virtual QIcon icon() const { return QIcon::fromTheme( "kompare" ); }
     virtual QString name() const { return i18n( "Side view (Kompare)..." ); }
 
 };

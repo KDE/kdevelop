@@ -92,7 +92,7 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
 
   document->replaceText(word, newText);
   KTextEditor::Range newRange = word;
-  newRange.end().setColumn(newRange.start().column() + newText.length());
+  newRange.setEnd(KTextEditor::Cursor(newRange.end().line(), newRange.start().column() + newText.length()));
   
   executed(document, newRange);
 }

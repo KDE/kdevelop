@@ -23,7 +23,7 @@
 #include "interfacesexport.h"
 
 class QString;
-class KIcon;
+class QIcon;
 
 namespace KDevelop
 {
@@ -43,7 +43,7 @@ public:
      * Provide an icon for this launch mode for the GUI.
      * @returns an icon for menus/toolbars
      */
-    virtual KIcon icon() const = 0;
+    virtual QIcon icon() const = 0;
     
     /**
      * Provide a unique ID for this launch mode.

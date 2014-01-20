@@ -32,7 +32,10 @@
 #include <KConfigGroup>
 
 #include <QFileInfo>
+#include <KDE4Support/kcomponentdata.h>
 #include <QDomDocument>
+#include <QStandardPaths>
+#include <QDir>
 
 using namespace KDevelop;
 typedef SourceFileTemplate::ConfigOption ConfigOption;
@@ -144,7 +147,12 @@ void SourceFileTemplate::setTemplateDescription(const QString& templateDescripti
     QString archiveFileName;
 
     const QString templateBaseName = QFileInfo(templateDescription).baseName();
-    foreach (const QString& file, ICore::self()->componentData().dirs()->findAllResources("data", resourcePrefix + "/templates/"))
+    QStringList templateFiles;
+    foreach(const QString& dir, QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, resourcePrefix + "/templates/")) {
+        templateFiles += QDir(dir).entryList(QDir::Files);
+    }
+
+    foreach (const QString& file, templateFiles)
     {
         kDebug() << "Found template archive" << file;
         if (QFileInfo(file).baseName() == templateBaseName)

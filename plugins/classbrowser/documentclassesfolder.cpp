@@ -66,7 +66,7 @@ StaticNamespaceFolderNode::StaticNamespaceFolderNode(const KDevelop::QualifiedId
 
 bool StaticNamespaceFolderNode::getIcon(QIcon& a_resultIcon)
 {
-  static KIcon folderIcon("namespace");
+  static QIcon folderIcon = QIcon::fromTheme("namespace");
   a_resultIcon = folderIcon;
   return true;
 }

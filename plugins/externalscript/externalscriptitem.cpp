@@ -118,7 +118,6 @@ QAction* ExternalScriptItem::action()
       m_action, SIGNAL(triggered()),
       ExternalScriptPlugin::self(), SLOT(executeScriptFromActionData())
     );
-    m_action->setShortcutConfigurable( true );
     m_action->setShortcut( QKeySequence() );
     // action needs to be added to a widget before it can work...
     KDevelop::ICore::self()->uiController()->activeMainWindow()->addAction(m_action);

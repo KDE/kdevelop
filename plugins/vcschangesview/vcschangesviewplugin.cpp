@@ -40,6 +40,7 @@
 #include <interfaces/iplugincontroller.h>
 #include "vcschangesview.h"
 #include <KActionCollection>
+#include <KLocalizedString>
 #include <vcs/models/projectchangesmodel.h>
 
 K_PLUGIN_FACTORY(VcsProjectIntegrationFactory, registerPlugin<VcsProjectIntegrationPlugin>(); )

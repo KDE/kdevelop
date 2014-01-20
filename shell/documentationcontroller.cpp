@@ -40,6 +40,7 @@
 #include <documentation/documentationview.h>
 #include <KParts/MainWindow>
 #include <KActionCollection>
+#include <QAction>
 
 using namespace KDevelop;
 

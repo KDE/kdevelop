@@ -37,8 +37,8 @@
 
 #include <KDE/KApplication>
 #include <KDE/KCmdLineArgs>
-#include <KDE/KAboutData>
 #include <KDE/KDebug>
+#include <k4aboutdata.h>
 
 #include <QtCore/QStringList>
 #include <QtCore/QFile>
@@ -224,8 +224,8 @@ void Manager::finish()
 using namespace KDevelop;
 int main(int argc, char** argv)
 {
-    KAboutData aboutData( "duchainify", 0, ki18n( "duchainify" ),
-                          "1", ki18n("Duchain builder application"), KAboutData::License_GPL,
+    K4AboutData aboutData( "duchainify", 0, ki18n( "duchainify" ),
+                          "1", ki18n("Duchain builder application"), K4AboutData::License_GPL,
                           ki18n( "(c) 2009 David Nolden" ), KLocalizedString(), "http://www.kdevelop.org" );
     KCmdLineArgs::init( argc, argv, &aboutData, KCmdLineArgs::CmdLineArgNone );
     KCmdLineOptions options;
@@ -260,5 +260,3 @@ int main(int argc, char** argv)
 
     return ret;
 }
-
-#include "main.moc"

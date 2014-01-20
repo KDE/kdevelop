@@ -125,7 +125,7 @@ EditExternalScript::EditExternalScript( ExternalScriptItem* item, QWidget* paren
   stdoutCombo->setCurrentIndex( item->outputMode() );
   stderrCombo->setCurrentIndex( item->errorMode() );
   saveCombo->setCurrentIndex( item->saveMode() );
-  shortcutWidget->setShortcut( item->action()->shortcut() );
+  shortcutWidget->setShortcut( item->action()->shortcuts() );
   showOutputBox->setChecked( item->showOutput() );
   outputFilterCombo->setCurrentIndex( item->filterMode() );
   //END item to UI copying
@@ -174,7 +174,7 @@ void EditExternalScript::save()
   m_item->setShowOutput( showOutputBox->isChecked() );
 
   m_item->setFilterMode( outputFilterCombo->currentIndex() );
-  m_item->action()->setShortcut( shortcutWidget->shortcut() );
+  m_item->action()->setShortcuts( shortcutWidget->shortcut() );
 }
 
 void EditExternalScript::validate()

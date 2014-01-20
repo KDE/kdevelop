@@ -24,8 +24,9 @@ Boston, MA 02110-1301, USA.
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/editor.h>
-#include <ktexteditor/editorchooser.h>
 #include <ktexteditor/configinterface.h>
+#include <KI18n/KLocalizedString>
+#include <KUrl>
 
 #include <interfaces/isourceformatter.h>
 
@@ -63,13 +64,7 @@ void EditStyleDialog::init()
 			this, SLOT(updatePreviewText(QString)));
 	}
 
-	// add texteditor preview
-	KTextEditor::Editor *editor = KTextEditor::EditorChooser::editor();
-	if (!editor)
-		KMessageBox::error(this, i18n("A KDE text-editor component could not be found.\n"
-		        "Please check your KDE installation."));
-
-	m_document = editor->createDocument(this);
+	m_document = KTextEditor::Editor::instance()->createDocument(this);
 	m_document->setReadWrite(false);
 	QString mode = m_sourceFormatter->highlightModeForMime(m_mimeType);
 	m_document->setHighlightingMode(mode);

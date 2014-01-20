@@ -430,7 +430,7 @@ Set::Iterator& Set::Iterator::operator++() {
   Q_ASSERT(d->nodeStackSize);
   
   if(d->repository->m_mutex)
-    d->repository->m_mutex->lockInline();
+    d->repository->m_mutex->lock();
   
   ++d->currentIndex;
   
@@ -457,7 +457,7 @@ Set::Iterator& Set::Iterator::operator++() {
   Q_ASSERT(d->nodeStackSize == 0 || d->currentIndex < d->nodeStack[0]->end());
   
   if(d->repository->m_mutex)
-    d->repository->m_mutex->unlockInline();
+    d->repository->m_mutex->unlock();
   
   return *this;
 }

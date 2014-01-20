@@ -26,6 +26,7 @@
 #include <kpluginselector.h>
 #include <kplugininfo.h>
 #include <ksettings/dispatcher.h>
+#include <KDE4Support/kcomponentdata.h>
 
 #include <interfaces/isession.h>
 

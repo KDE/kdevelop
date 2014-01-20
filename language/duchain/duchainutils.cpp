@@ -230,7 +230,7 @@ QIcon DUChainUtils::iconForProperties(KTextEditor::CodeCompletionModel::Completi
   else
     RETURN_CACHED_ICON("field")
 
-  return QIcon::fromTheme();
+  return QIcon();
 }
 
 QIcon DUChainUtils::iconForDeclaration(const Declaration* dec)

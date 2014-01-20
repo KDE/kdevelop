@@ -85,7 +85,7 @@ void SessionControllerTest::cleanupTestCase()
 {
     foreach( const Session* session, m_sessionCtrl->sessions() )
     {
-        TryLockSessionResult lock = m_sessionCtrl->tryLockSession(session->id());
+        TryLockSessionResult lock = m_sessionCtrl->tryLockSession(session->id().toString());
         if (lock.lock)
             m_sessionCtrl->deleteSession( lock.lock );
     }

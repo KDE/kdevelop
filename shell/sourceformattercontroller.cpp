@@ -64,7 +64,7 @@ SourceFormatterController::SourceFormatterController(QObject *parent)
 		: ISourceFormatterController(parent), m_enabled(true)
 {
 	setObjectName("SourceFormatterController");
-	setComponentData(KComponentData("kdevsourceformatter"));
+	setComponentName("kdevsourceformatter", "kdevsourceformatter");
 	setXMLFile("kdevsourceformatter.rc");
 
 	if (Core::self()->setupFlags() & Core::NoUi) return;

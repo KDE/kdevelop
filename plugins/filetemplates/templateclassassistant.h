@@ -21,6 +21,7 @@
 #define KDEVPLATFORM_PLUGIN_TEMPLATECLASSASSISTANT_H
 
 #include <KAssistantDialog>
+#include <KUrl>
 
 namespace KDevelop
 {

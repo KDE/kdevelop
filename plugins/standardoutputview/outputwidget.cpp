@@ -97,9 +97,9 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
         addAction(nextAction);
     }
 
-    activateOnSelect = new KToggleAction( QIcon::fromTheme(), i18n("Select activated Item"), this );
+    activateOnSelect = new KToggleAction( QIcon(), i18n("Select activated Item"), this );
     activateOnSelect->setChecked( true );
-    focusOnSelect = new KToggleAction( QIcon::fromTheme(), i18n("Focus when selecting Item"), this );
+    focusOnSelect = new KToggleAction( QIcon(), i18n("Focus when selecting Item"), this );
     focusOnSelect->setChecked( false );
     if( data->option & KDevelop::IOutputView::ShowItemsButton )
     {

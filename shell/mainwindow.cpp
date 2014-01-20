@@ -25,6 +25,7 @@ Boston, MA 02110-1301, USA.
 #include <QtCore/QHash>
 #include <QDockWidget>
 #include <QDragEnterEvent>
+#include <QDomDocument>
 #include <QDropEvent>
 #include <QMenuBar>
 #include <QtDBus/QDBusConnection>

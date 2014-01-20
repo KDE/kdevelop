@@ -94,7 +94,7 @@ void ReviewBoardPlugin::exportPatch(IPatchSource::Ptr source)
             // Don't store password in plaintext inside .kdev4
             storeServer.setPassword(QString());
 
-            versionedConfig.writeEntry("server", storeServer);
+            versionedConfig.writeEntry<QUrl>("server", storeServer);
             versionedConfig.writeEntry("username", d.username());
             versionedConfig.writeEntry("baseDir", d.baseDir());
             versionedConfig.writeEntry("repository", d.repository());

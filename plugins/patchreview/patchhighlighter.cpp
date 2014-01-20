@@ -209,10 +209,9 @@ void PatchHighlighter::markClicked( KTextEditor::Document* doc, KTextEditor::Mar
 
         KTextEditor::Cursor start = range->start().toCursor();
         range->document()->replaceText( range->toRange(), replaceWith );
-        KTextEditor::Range newRange( start, start );
-
         uint replaceWithLines = replaceWith.count( '\n' );
-        newRange.end().setLine( newRange.end().line() +  replaceWithLines );
+        KTextEditor::Range newRange( start, KTextEditor::Cursor(start.line() +  replaceWithLines, start.column()) );
+
         range->setRange( newRange );
 
         addLineMarker( range, diff );
@@ -484,7 +483,7 @@ void PatchHighlighter::addLineMarker( KTextEditor::MovingRange* range, Diff2::Di
     if( !markIface )
         return;
 
-    KSharedPtr<KTextEditor::Attribute> t( new KTextEditor::Attribute() );
+    KTextEditor::Attribute::Ptr t( new KTextEditor::Attribute() );
 
     bool isOriginalState = diff->applied() == m_plugin->patch()->isAlreadyApplied();
 
@@ -537,7 +536,7 @@ void PatchHighlighter::addLineMarker( KTextEditor::MovingRange* range, Diff2::Di
                     KTextEditor::MovingRange * r2 = moving->newMovingRange( KTextEditor::Range( KTextEditor::Cursor( a + range->start().line(), currentPos ), KTextEditor::Cursor( a + range->start().line(), markers[b]->offset() ) ) );
                     m_ranges << r2;
 
-                    KSharedPtr<KTextEditor::Attribute> t( new KTextEditor::Attribute() );
+                    KTextEditor::Attribute::Ptr t( new KTextEditor::Attribute() );
 
                     t->setProperty( QTextFormat::BackgroundBrush, QBrush( ColorCache::self()->blendBackground( QColor( 255, 0, 0 ), 70 ) ) );
                     r2->setAttribute( t );

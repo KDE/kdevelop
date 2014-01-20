@@ -11,6 +11,7 @@
 #include "cvsgenericoutputview.h"
 
 #include "cvsjob.h"
+#include <KI18n/KLocalizedString>
 
 CvsGenericOutputView::CvsGenericOutputView(CvsJob* job, QWidget* parent)
     : QWidget(parent), Ui::CvsGenericOutputViewBase()

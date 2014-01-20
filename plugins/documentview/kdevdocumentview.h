@@ -22,6 +22,7 @@
 #define KDEVPLATFORM_PLUGIN_KDEVDOCUMENTVIEW_H
 
 #include <QTreeView>
+#include <QUrl>
 
 class QSortFilterProxyModel;
 class QAction;
@@ -89,8 +90,8 @@ private:
     QSortFilterProxyModel* m_proxy;
     KDevDocumentViewDelegate* m_delegate;
     QHash< KDevelop::IDocument*, KDevFileItem* > m_doc2index;
-    QList<KUrl> m_selectedDocs; // used for ctx menu
-    QList<KUrl> m_unselectedDocs; // used for ctx menu
+    QList<QUrl> m_selectedDocs; // used for ctx menu
+    QList<QUrl> m_unselectedDocs; // used for ctx menu
 };
 
 #endif // KDEVPLATFORM_PLUGIN_KDEVDOCUMENTVIEW_H

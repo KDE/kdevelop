@@ -21,6 +21,7 @@
 #include <qtest_kde.h>
 
 #include <QtTest/QtTest>
+#include <QAction>
 
 #include <kactioncollection.h>
 #include <kxmlguifactory.h>

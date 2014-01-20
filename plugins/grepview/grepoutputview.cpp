@@ -21,6 +21,7 @@
 #include <QAction>
 #include <QStringListModel>
 #include <KMessageBox>
+#include <KLocalizedString>
 #include <kdebug.h>
 #include <QMenu>
 
@@ -67,7 +68,7 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
     Ui::GrepOutputView::setupUi(this);
 
     setWindowTitle(i18nc("@title:window", "Find/Replace Output View"));
-    setWindowIcon(SmallIcon("edit-find"));
+    setWindowIcon(QIcon::fromTheme("edit-find"));
     
     m_prev = new QAction(QIcon::fromTheme("go-previous"), i18n("&Previous Item"), this);
     m_prev->setEnabled(false);

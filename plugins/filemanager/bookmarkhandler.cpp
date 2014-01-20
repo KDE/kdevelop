@@ -63,7 +63,7 @@ BookmarkHandler::~BookmarkHandler()
 
 QUrl BookmarkHandler::currentUrl() const
 {
-    return m_parent->dirOperator()->url().url();
+    return m_parent->dirOperator()->url();
 }
 
 QString BookmarkHandler::currentTitle() const

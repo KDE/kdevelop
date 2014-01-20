@@ -41,6 +41,7 @@
 #include <kparts/mainwindow.h>
 #include <kmessagebox.h>
 #include <KActionMenu>
+#include <KDebug>
 
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
@@ -58,7 +59,7 @@ FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
     : QWidget(parent), m_plugin(plugin)
 {
     setObjectName("FileManager");
-    setWindowIcon(SmallIcon("system-file-manager"));
+    setWindowIcon(QIcon::fromTheme("system-file-manager"));
     setWindowTitle(i18n("Filesystem"));
 
     QVBoxLayout *l = new QVBoxLayout(this);
@@ -100,7 +101,7 @@ void FileManager::fillContextMenu(KFileItem item, QMenu* menu)
     contextActions.append(menu->addSeparator());
     menu->addAction(newFileAction);
     contextActions.append(newFileAction);
-    KDevelop::FileContext context(KUrl(item.url()));
+    KDevelop::FileContext context(QList<QUrl>() << item.url());
     QList<KDevelop::ContextMenuExtension> extensions = KDevelop::ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( &context );
     KDevelop::ContextMenuExtension::populateMenu(menu, extensions);
     QMenu* tmpMenu = new QMenu();

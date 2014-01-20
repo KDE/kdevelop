@@ -16,6 +16,7 @@
 
 #include <KMenu>
 #include <KMessageBox>
+#include <KLocalizedString>
 #include <KDebug>
 
 #include "snippet.h"
@@ -305,7 +306,7 @@ void SnippetView::slotSnippetToGHNS()
         return;
 
     KNS3::UploadDialog dialog("ktexteditor_codesnippets_core.knsrc", this);
-    dialog.setUploadFile(KUrl::fromPath(repo->file()));
+    dialog.setUploadFile(QUrl::fromLocalFile(repo->file()));
     dialog.setUploadName(repo->text());
     dialog.exec();
 }

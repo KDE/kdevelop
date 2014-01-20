@@ -41,11 +41,11 @@ class ReviewPatchDialog : public KDialog
         virtual ~ReviewPatchDialog();
 
         void setBaseDir(const QString& dir);
-        void setServer(const KUrl& server);
+        void setServer(const QUrl& server);
         void setUsername(const QString& user);
 
         /** @returns the server url with the username and password */
-        KUrl server() const;
+        QUrl server() const;
 
         /** @returns the selected base directory for the patch */
         QString baseDir() const;

@@ -31,6 +31,7 @@
 #include <QScrollBar>
 #include <QCheckBox>
 #include <QMetaObject>
+#include <QWidgetAction>
 
 #include <kbuttongroup.h>
 #include <klocale.h>
@@ -40,6 +41,8 @@
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
 #include <kparts/mainwindow.h>
+#include <KConfigCore/ksharedconfig.h>
+#include <KConfigCore/KConfigGroup>
 #include <kactioncollection.h>
 #include <kaction.h>
 #include <kshortcut.h>
@@ -786,11 +789,12 @@ void QuickOpenPlugin::createActionsForMainWindow(Sublime::MainWindow* /*window*/
     m_quickOpenDefinition->setShortcut( Qt::CTRL | Qt::Key_Comma );
     connect(m_quickOpenDefinition, SIGNAL(triggered(bool)), this, SLOT(quickOpenDefinition()), Qt::QueuedConnection);
 
-    QAction* quickOpenLine = actions.addAction("quick_open_line");
+    QWidgetAction* quickOpenLine = new QWidgetAction(this);
     quickOpenLine->setText( i18n("Embedded Quick Open") );
 //     quickOpenLine->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_E );
 //     connect(quickOpenLine, SIGNAL(triggered(bool)), this, SLOT(quickOpenLine(bool)));
     quickOpenLine->setDefaultWidget(createQuickOpenLineWidget());
+    actions.addAction("quick_open_line", quickOpenLine);
 //     QAction* quickOpenNavigate = actions.addAction("quick_open_navigate");
 //     quickOpenNavigate->setText( i18n("Navigate Declaration") );
 //     quickOpenNavigate->setShortcut( Qt::ALT | Qt::Key_Space );
@@ -820,7 +824,7 @@ QuickOpenPlugin::QuickOpenPlugin(QObject *parent,
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IQuickOpen )
     m_model = new QuickOpenModel( 0 );
 
-    KConfigGroup quickopengrp = KGlobal::config()->group("QuickOpen");
+    KConfigGroup quickopengrp = KSharedConfig::openConfig()->group("QuickOpen");
     lastUsedScopes = quickopengrp.readEntry("SelectedScopes", QStringList() << i18n("Project") << i18n("Includes") << i18n("Includers") << i18n("Currently Open") );
     lastUsedItems = quickopengrp.readEntry("SelectedItems", QStringList() );
 

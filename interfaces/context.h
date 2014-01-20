@@ -127,7 +127,7 @@ class KDEVPLATFORMINTERFACES_EXPORT FileContext : public Context
 public:
     /**Builds the file context using a @ref KUrl::List
         @param urls The list of selected url.*/
-    FileContext( const KUrl::List &urls );
+    FileContext( const QList<QUrl> &urls );
 
     /**Destructor.*/
     virtual ~FileContext();
@@ -135,7 +135,7 @@ public:
     virtual int type() const;
 
     /**@return A reference to the selected URLs.*/
-    KUrl::List urls() const;
+    QList<QUrl> urls() const;
 
 private:
     class FileContextPrivate* const d;

@@ -25,7 +25,8 @@
 
 #include <kdebug.h>
 #include <kglobal.h>
-#include <klocale.h>
+#include <KLocalizedString>
+#include <KComponentData>
 #include <ksplashscreen.h>
 
 #include <language/duchain/duchain.h>
@@ -95,32 +96,32 @@ Core *Core::m_self = 0;
 KAboutData aboutData()
 {
     KAboutData aboutData( "kdevplatform", "kdevplatform", 
-                          ki18n("KDevelop Platform"), KDEVPLATFORM_VERSION_STR, 
-                          ki18n("Development Platform for IDE-like Applications"), 
-                          KAboutData::License_LGPL_V2, ki18n( "Copyright 2004-2013, The KDevelop developers" ),
-                          KLocalizedString(), "http://www.kdevelop.org" );
-    aboutData.addAuthor( ki18n("Andreas Pakulat"), ki18n( "Architecture, VCS Support, Project Management Support, QMake Projectmanager" ), "apaku@gmx.de" );
-    aboutData.addAuthor( ki18n("Alexander Dymo"), ki18n( "Architecture, Sublime UI, Ruby support" ), "adymo@kdevelop.org" );
-    aboutData.addAuthor( ki18n("David Nolden"), ki18n( "Definition-Use Chain, C++ Support" ), "david.nolden.kdevelop@art-master.de" );
-    aboutData.addAuthor( ki18n("Aleix Pol Gonzalez"), ki18n( "Co-Maintainer, CMake Support, Run Support, Kross Support" ), "aleixpol@kde.org" );
-    aboutData.addAuthor( ki18n("Vladimir Prus"), ki18n( "GDB integration" ), "ghost@cs.msu.su" );
-    aboutData.addAuthor( ki18n("Hamish Rodda"), ki18n( "Text editor integration, definition-use chain" ), "rodda@kde.org" );
+                          i18n("KDevelop Platform"), KDEVPLATFORM_VERSION_STR,
+                          i18n("Development Platform for IDE-like Applications"),
+                          KAboutData::License_LGPL_V2, i18n( "Copyright 2004-2013, The KDevelop developers" ),
+                          QString(), "http://www.kdevelop.org" );
+    aboutData.addAuthor( i18n("Andreas Pakulat"), i18n( "Architecture, VCS Support, Project Management Support, QMake Projectmanager" ), "apaku@gmx.de" );
+    aboutData.addAuthor( i18n("Alexander Dymo"), i18n( "Architecture, Sublime UI, Ruby support" ), "adymo@kdevelop.org" );
+    aboutData.addAuthor( i18n("David Nolden"), i18n( "Definition-Use Chain, C++ Support" ), "david.nolden.kdevelop@art-master.de" );
+    aboutData.addAuthor( i18n("Aleix Pol Gonzalez"), i18n( "Co-Maintainer, CMake Support, Run Support, Kross Support" ), "aleixpol@kde.org" );
+    aboutData.addAuthor( i18n("Vladimir Prus"), i18n( "GDB integration" ), "ghost@cs.msu.su" );
+    aboutData.addAuthor( i18n("Hamish Rodda"), i18n( "Text editor integration, definition-use chain" ), "rodda@kde.org" );
     
-    aboutData.addCredit( ki18n("Matt Rogers"), KLocalizedString(), "mattr@kde.org");
-    aboutData.addCredit( ki18n("Cédric Pasteur"), ki18n("astyle and indent support"), "cedric.pasteur@free.fr" );
-    aboutData.addCredit( ki18n("Evgeniy Ivanov"), ki18n("Distributed VCS, Git, Mercurial"), "powerfox@kde.ru" );
+    aboutData.addCredit( i18n("Matt Rogers"), QString(), "mattr@kde.org");
+    aboutData.addCredit( i18n("Cédric Pasteur"), i18n("astyle and indent support"), "cedric.pasteur@free.fr" );
+    aboutData.addCredit( i18n("Evgeniy Ivanov"), i18n("Distributed VCS, Git, Mercurial"), "powerfox@kde.ru" );
     //Veritas is outside in playground currently.
-    //aboutData.addCredit( ki18n("Manuel Breugelmanns"), ki18n( "Veritas, QTest integraton"), "mbr.nxi@gmail.com" );
-    aboutData.addCredit( ki18n("Robert Gruber") , ki18n( "SnippetPart, debugger and usability patches" ), "rgruber@users.sourceforge.net" );
-    aboutData.addCredit( ki18n("Dukju Ahn"), ki18n( "Subversion plugin, Custom Make Manager, Overall improvements" ), "dukjuahn@gmail.com" );
-    aboutData.addAuthor( ki18n("Niko Sams"), ki18n( "GDB integration, Webdevelopment Plugins" ), "niko.sams@gmail.com" );
-    aboutData.addAuthor( ki18n("Milian Wolff"), ki18n( "Co-Maintainer, Generic manager, Webdevelopment Plugins, Snippets, Performance" ), "mail@milianw.de" );
+    //aboutData.addCredit( i18n("Manuel Breugelmanns"), i18n( "Veritas, QTest integraton"), "mbr.nxi@gmail.com" );
+    aboutData.addCredit( i18n("Robert Gruber") , i18n( "SnippetPart, debugger and usability patches" ), "rgruber@users.sourceforge.net" );
+    aboutData.addCredit( i18n("Dukju Ahn"), i18n( "Subversion plugin, Custom Make Manager, Overall improvements" ), "dukjuahn@gmail.com" );
+    aboutData.addAuthor( i18n("Niko Sams"), i18n( "GDB integration, Webdevelopment Plugins" ), "niko.sams@gmail.com" );
+    aboutData.addAuthor( i18n("Milian Wolff"), i18n( "Co-Maintainer, Generic manager, Webdevelopment Plugins, Snippets, Performance" ), "mail@milianw.de" );
 
     return aboutData;
 }
 
 CorePrivate::CorePrivate(Core *core):
-    m_componentData( aboutData() ), m_core(core), m_cleanedUp(false), m_shuttingDown(false)
+    m_componentData( aboutData().componentName().toLatin1() ), m_core(core), m_cleanedUp(false), m_shuttingDown(false)
 {
 }
 

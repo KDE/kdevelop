@@ -30,8 +30,10 @@
 #include <kdebug.h>
 #include <kcombobox.h>
 #include <kurlcompletion.h>
+#include <kurlcompletion.h>
 #include <kstandarddirs.h>
 #include <klineedit.h>
+#include <KCompletion/kcompletion.h>
 
 #include <interfaces/icore.h>
 #include <interfaces/idocument.h>
@@ -132,14 +134,14 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
     templateTypeCombo->setCurrentIndex( cg.readEntry("LastUsedTemplateIndex", 0) );
     templateEdit->addItems( cg.readEntry("LastUsedTemplateString", template_str) );
     templateEdit->setEditable(true);
-    templateEdit->setCompletionMode(KGlobalSettings::CompletionPopup);
+    templateEdit->setCompletionMode(KCompletion::CompletionPopup);
     KCompletion* comp = templateEdit->completionObject();
     connect(templateEdit, SIGNAL(returnPressed(QString)), comp, SLOT(addItem(QString)));
     for(int i=0; i<templateEdit->count(); i++)
         comp->addItem(templateEdit->itemText(i));
     replacementTemplateEdit->addItems( cg.readEntry("LastUsedReplacementTemplateString", repl_template) );
     replacementTemplateEdit->setEditable(true);
-    replacementTemplateEdit->setCompletionMode(KGlobalSettings::CompletionPopup);
+    replacementTemplateEdit->setCompletionMode(KCompletion::CompletionPopup);
     comp = replacementTemplateEdit->completionObject();
     connect(replacementTemplateEdit, SIGNAL(returnPressed(QString)), comp, SLOT(addItem(QString)));
     for(int i=0; i<replacementTemplateEdit->count(); i++)
@@ -176,7 +178,7 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
     
     connect(searchPaths, SIGNAL(activated(QString)), this, SLOT(setSearchLocations(QString)));
 
-    directorySelector->setIcon(KIcon("document-open"));
+    directorySelector->setIcon(QIcon::fromTheme("document-open"));
     connect(directorySelector, SIGNAL(clicked(bool)), this, SLOT(selectDirectoryDialog()) );
 }
 
@@ -189,7 +191,7 @@ void GrepDialog::selectDirectoryDialog()
     }
 }
 
-void GrepDialog::addUrlToMenu(QMenu* menu, KUrl url)
+void GrepDialog::addUrlToMenu(QMenu* menu, const KUrl& url)
 {
     QAction* action = menu->addAction(m_plugin->core()->projectController()->prettyFileName(url, KDevelop::IProjectController::FormatPlain));
     action->setData(QVariant(url.pathOrUrl()));

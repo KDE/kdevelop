@@ -33,7 +33,7 @@
 #include <KLocalizedString>
 
 SnippetCompletionModel::SnippetCompletionModel()
-    : KTextEditor::CodeCompletionModel2(0)
+    : KTextEditor::CodeCompletionModel(0)
 {
     setHasGroups(false);
 }
@@ -116,7 +116,7 @@ void SnippetCompletionModel::initData(KTextEditor::View* view)
 
 QModelIndex SnippetCompletionModel::parent(const QModelIndex& index) const {
     if (index.internalId()) {
-        return createIndex(0, 0, 0);
+        return createIndex(0, 0);
     } else {
         return QModelIndex();
     }
@@ -125,7 +125,7 @@ QModelIndex SnippetCompletionModel::parent(const QModelIndex& index) const {
 QModelIndex SnippetCompletionModel::index(int row, int column, const QModelIndex& parent) const {
     if (!parent.isValid()) {
         if (row == 0) {
-            return createIndex(row, column, 0); //header  index
+            return createIndex(row, column); //header  index
         } else {
             return QModelIndex();
         }
@@ -158,7 +158,7 @@ KTextEditor::Range SnippetCompletionModel::completionRange(KTextEditor::View* vi
         if ( line.at(i).isSpace() ) {
             break;
         } else {
-            range.start().setColumn(i);
+            range.setStart(KTextEditor::Cursor(range.start().line(), i));
         }
     }
     // include everything non-space after
@@ -166,7 +166,7 @@ KTextEditor::Range SnippetCompletionModel::completionRange(KTextEditor::View* vi
         if ( line.at(i).isSpace() ) {
             break;
         } else {
-            range.end().setColumn(i);
+            range.setEnd(KTextEditor::Cursor(range.end().line(), i));
         }
     }
     return range;

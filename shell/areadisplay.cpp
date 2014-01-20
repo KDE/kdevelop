@@ -33,6 +33,7 @@
 #include <QToolButton>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QEvent>
 
 using namespace KDevelop;
 

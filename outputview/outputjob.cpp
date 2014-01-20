@@ -52,7 +52,7 @@ void OutputJob::startOutput()
             if (m_standardToolView != -1) {
                 tvid = view->standardToolView( static_cast<IOutputView::StandardToolView>(m_standardToolView) );
             } else {
-                tvid = view->registerToolView(m_toolTitle, m_type, m_toolIcon);
+                tvid = view->registerToolView(m_toolTitle, m_type, KIcon(m_toolIcon));
             }
 
             if (m_title.isEmpty())

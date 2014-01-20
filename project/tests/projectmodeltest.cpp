@@ -21,6 +21,8 @@
 #include <QtTest/QTest>
 #include <QSortFilterProxyModel>
 #include <QtCore/QThread>
+#include <QMimeType>
+#include <QMimeDatabase>
 #include <qtest_kde.h>
 #include <KMimeType>
 
@@ -539,11 +541,13 @@ void ProjectModelTest::testProjectFileSet()
 
 void ProjectModelTest::testProjectFileIcon()
 {
+    QMimeDatabase db;
+
     ProjectFileItem* item = new ProjectFileItem(0, KUrl("/tmp/foo.txt"));
-    const QString txtIcon = KMimeType::iconNameForUrl(item->url());
+    const QString txtIcon = db.mimeTypeForUrl(item->url()).iconName();
     QCOMPARE(item->iconName(), txtIcon);
     item->setUrl(KUrl("/tmp/bar.cpp"));
-    QCOMPARE(item->iconName(), KMimeType::iconNameForUrl(item->url()));
+    QCOMPARE(item->iconName(), db.mimeTypeForUrl(item->url()).iconName());
     QVERIFY(item->iconName() != txtIcon);
 }
 

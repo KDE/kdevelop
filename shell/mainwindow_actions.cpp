@@ -22,9 +22,10 @@ Boston, MA 02110-1301, USA.
 
 #include <kconfiggroup.h>
 #include <kapplication.h>
-#include <kaboutapplicationdialog.h>
+#include <KXmlGui/kaboutapplicationdialog.h>
 #include <knotifyconfigwidget.h>
 #include <ktogglefullscreenaction.h>
+#include <kcomponentdata.h>
 
 #include <ktexteditor/editor.h>
 
@@ -195,8 +196,9 @@ void MainWindowPrivate::configureNotifications()
 
 void MainWindowPrivate::showAboutPlatform()
 {
-    KAboutApplicationDialog dlg(Core::self()->componentData().aboutData(), m_mainWindow );
-    dlg.exec();
+    //TODO: port
+//     KAboutApplicationDialog dlg(Core::self()->componentData().aboutData(), m_mainWindow );
+//     dlg.exec();
 }
 
 void MainWindowPrivate::showLoadedPlugins()
@@ -208,10 +210,8 @@ void MainWindowPrivate::showLoadedPlugins()
 void MainWindowPrivate::showEditorConfig()
 {
     KTextEditor::Editor* editor = Core::self()->partController()->editorPart();
-    if (editor->configDialogSupported()) {
-        editor->configDialog(m_mainWindow);
-        editor->writeConfig();
-    }
+    editor->configDialog(m_mainWindow);
+    editor->writeConfig();
 }
 
 void MainWindowPrivate::contextMenuFileNew()

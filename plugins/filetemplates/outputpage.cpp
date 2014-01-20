@@ -21,6 +21,9 @@
 
 #include <language/codegen/sourcefiletemplate.h>
 #include <language/codegen/templaterenderer.h>
+#include <KConfigCore/KConfigGroup>
+#include <KConfigCore/ksharedconfig.h>
+#include <KI18n/KLocalizedString>
 
 #include <KUrlRequester>
 #include <KIntNumInput>
@@ -94,8 +97,7 @@ void OutputPagePrivate::updateFileNames()
     }
 
     //Save the setting for next time
-    KSharedConfigPtr config = KGlobal::config();
-    KConfigGroup codegenGroup( config, "CodeGeneration" );
+    KConfigGroup codegenGroup( KSharedConfig::openConfig(), "CodeGeneration" );
     codegenGroup.writeEntry( "LowerCaseFilenames", output->lowerFilenameCheckBox->isChecked() );
 
     validate();
@@ -109,7 +111,7 @@ void OutputPagePrivate::validate()
     {
         if (!it.value()->url().isValid()) {
             invalidFiles << it.key();
-        } else if (it.value()->url().isLocalFile() && !QFileInfo(it.value()->url().upUrl().toLocalFile()).isWritable()) {
+        } else if (it.value()->url().isLocalFile() && !QFileInfo(KUrl(it.value()->url()).upUrl().toLocalFile()).isWritable()) {
             invalidFiles << it.key();
         }
     }
@@ -221,8 +223,7 @@ void OutputPage::loadFileTemplate(const SourceFileTemplate& fileTemplate,
                                    const KUrl& baseUrl,
                                    TemplateRenderer* renderer)
 {
-    KSharedConfigPtr config = KGlobal::config();
-    KConfigGroup codegenGroup( config, "CodeGeneration" );
+    KConfigGroup codegenGroup( KSharedConfig::openConfig(), "CodeGeneration" );
     bool lower = codegenGroup.readEntry( "LowerCaseFilenames", true );
     d->output->lowerFilenameCheckBox->setChecked(lower);
 
@@ -264,4 +265,4 @@ QHash< QString, SimpleCursor > OutputPage::filePositions() const
 
 }
 
-#include "outputpage.moc"
+#include "moc_outputpage.cpp"

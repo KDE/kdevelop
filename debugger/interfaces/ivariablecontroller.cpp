@@ -25,6 +25,7 @@
 #include "../../interfaces/idebugcontroller.h"
 #include "../variable/variablecollection.h"
 #include "iframestackmodel.h"
+#include <KDebug>
 
 #include <KDebug>
 

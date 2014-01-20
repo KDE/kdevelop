@@ -31,9 +31,9 @@ Boston, MA 02110-1301, USA.
 #include <klocale.h>
 #include <kurl.h>
 #include <kmenu.h>
-//#include <klocale.h>
 #include <kiconloader.h>
 #include <kstandardaction.h>
+#include <klocalizedstring.h>
 
 #include "kdevdocumentselection.h"
 #include "kdevdocumentviewdelegate.h"
@@ -74,7 +74,7 @@ KDevDocumentView::KDevDocumentView( KDevDocumentViewPlugin *plugin, QWidget *par
 
     setObjectName( i18n( "Documents" ) );
 
-    setWindowIcon( SmallIcon( "document-multiple" ) );
+    setWindowIcon( QIcon::fromTheme( "document-multiple" ) );
     setWindowTitle( i18n( "Documents" ) );
 
     setFocusPolicy( Qt::NoFocus );
@@ -120,9 +120,9 @@ void KDevDocumentView::mousePressEvent( QMouseEvent * event )
 template<typename F> void KDevDocumentView::visitItems(F f, bool selectedItems)
 {
     KDevelop::IDocumentController* dc = m_plugin->core()->documentController();
-    QList<KUrl> docs = selectedItems ? m_selectedDocs : m_unselectedDocs;
+    QList<QUrl> docs = selectedItems ? m_selectedDocs : m_unselectedDocs;
     
-    foreach(const KUrl& url, docs) {
+    foreach(const QUrl& url, docs) {
        KDevelop::IDocument* doc = dc->documentForUrl(url);
        if (doc) f(doc);
     }

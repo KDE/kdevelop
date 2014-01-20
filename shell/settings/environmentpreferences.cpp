@@ -22,6 +22,7 @@ Boston, MA 02110-1301, USA.
 
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
+#include <KConfigCore/KSharedConfig>
 #include <kconfiggroup.h>
 #include <kaboutdata.h>
 #include <kconfig.h>
@@ -57,7 +58,7 @@ EnvironmentPreferences::EnvironmentPreferences( QWidget *parent, const QVariantL
              this, SLOT(settingsChanged()) );
 
 
-    d->skel = new KConfigSkeleton(KGlobal::config());
+    d->skel = new KConfigSkeleton(KSharedConfig::openConfig());
     addConfig( d->skel, d->preferencesDialog );
 
     if (!args.isEmpty() && args.first().canConvert<QString>()) {

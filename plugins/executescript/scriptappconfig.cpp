@@ -23,6 +23,8 @@
 #include <kdebug.h>
 #include <kicon.h>
 
+#include <QIcon>
+
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/ilaunchconfiguration.h>
@@ -62,7 +64,7 @@ static const QString interpreterForUrl(const KUrl& url) {
     return interp;
 }
 
-KIcon ScriptAppConfigPage::icon() const
+QIcon ScriptAppConfigPage::icon() const
 {
     return QIcon::fromTheme("system-run");
 }
@@ -88,7 +90,7 @@ void ScriptAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelo
         runFixedFile->setChecked( true );
     }
     arguments->setText( cfg.readEntry( ExecuteScriptPlugin::argumentsEntry, "" ) );
-    workingDirectory->setUrl( cfg.readEntry( ExecuteScriptPlugin::workingDirEntry, KUrl() ) );
+    workingDirectory->setUrl( cfg.readEntry( ExecuteScriptPlugin::workingDirEntry, QUrl() ) );
     environment->setCurrentProfile( cfg.readEntry( ExecuteScriptPlugin::environmentGroupEntry, QString() ) );
     outputFilteringMode->setCurrentIndex( cfg.readEntry( ExecuteScriptPlugin::outputFilteringEntry, 2u ));
     //runInTerminal->setChecked( cfg.readEntry( ExecuteScriptPlugin::useTerminalEntry, false ) );
@@ -216,7 +218,7 @@ QString ScriptAppConfigType::id() const
     return ExecuteScriptPlugin::_scriptAppConfigTypeId;
 }
 
-KIcon ScriptAppConfigType::icon() const
+QIcon ScriptAppConfigType::icon() const
 {
     return QIcon::fromTheme("preferences-plugin-script");
 }
@@ -233,7 +235,7 @@ bool ScriptAppConfigType::canLaunch(KDevelop::ProjectBaseItem* item) const
 
 void ScriptAppConfigType::configureLaunchFromItem(KConfigGroup config, KDevelop::ProjectBaseItem* item) const
 {
-    config.writeEntry(ExecuteScriptPlugin::executableEntry, item->url());
+    config.writeEntry(ExecuteScriptPlugin::executableEntry, QUrl(item->url()));
     config.writeEntry(ExecuteScriptPlugin::interpreterEntry, interpreterForUrl(item->url()));
     config.writeEntry(ExecuteScriptPlugin::outputFilteringEntry, 2u);
     config.writeEntry(ExecuteScriptPlugin::runCurrentFileEntry, false);

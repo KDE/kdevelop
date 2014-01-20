@@ -84,24 +84,24 @@ bool EnumNode::getIcon(QIcon& a_resultIcon)
   ClassMemberDeclaration* decl = dynamic_cast<ClassMemberDeclaration*>(getDeclaration());
   if ( decl == 0 )
   {
-    static KIcon Icon("enum");
+    static QIcon Icon = QIcon::fromTheme("enum");
     a_resultIcon = Icon;
   }
   else
   {
     if ( decl->accessPolicy() == Declaration::Protected )
     {
-      static KIcon Icon("protected_enum");
+      static QIcon Icon = QIcon::fromTheme("protected_enum");
       a_resultIcon = Icon;
     }
     else if ( decl->accessPolicy() == Declaration::Private )
     {
-      static KIcon Icon("private_enum");
+      static QIcon Icon = QIcon::fromTheme("private_enum");
       a_resultIcon = Icon;
     }
     else
     {
-      static KIcon Icon("enum");
+      static QIcon Icon = QIcon::fromTheme("enum");
       a_resultIcon = Icon;
     }
   }
@@ -320,22 +320,22 @@ bool ClassMemberNode::getIcon(QIcon& a_resultIcon)
 
   if ( decl->isTypeAlias() )
   {
-    static KIcon Icon("typedef");
+    static QIcon Icon = QIcon::fromTheme("typedef");
     a_resultIcon = Icon;
   }
   else if ( decl->accessPolicy() == Declaration::Protected )
   {
-    static KIcon Icon("protected_field");
+    static QIcon Icon = QIcon::fromTheme("protected_field");
     a_resultIcon = Icon;
   }
   else if ( decl->accessPolicy() == Declaration::Private )
   {
-    static KIcon Icon("private_field");
+    static QIcon Icon = QIcon::fromTheme("private_field");
     a_resultIcon = Icon;
   }
   else
   {
-    static KIcon Icon("field");
+    static QIcon Icon = QIcon::fromTheme("field");
     a_resultIcon = Icon;
   }
 
@@ -352,7 +352,7 @@ DynamicFolderNode::DynamicFolderNode(const QString& a_displayName, NodesModelInt
 
 bool DynamicFolderNode::getIcon(QIcon& a_resultIcon)
 {
-  static KIcon folderIcon("folder");
+  static QIcon folderIcon = QIcon::fromTheme("folder");
   a_resultIcon = folderIcon;
   return true;
 }
@@ -367,7 +367,7 @@ FolderNode::FolderNode(const QString& a_displayName, NodesModelInterface* a_mode
 
 bool FolderNode::getIcon(QIcon& a_resultIcon)
 {
-  static KIcon folderIcon("folder");
+  static QIcon folderIcon = QIcon::fromTheme("folder");
   a_resultIcon = folderIcon;
   return true;
 }

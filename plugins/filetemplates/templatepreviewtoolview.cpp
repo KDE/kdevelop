@@ -30,6 +30,7 @@
 #include <language/codegen/templaterenderer.h>
 
 #include <KTextEditor/Document>
+#include <KLocalizedString>
 
 #include <QLabel>
 #include <QVBoxLayout>

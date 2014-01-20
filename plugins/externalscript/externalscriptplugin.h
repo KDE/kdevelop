@@ -26,6 +26,7 @@
 #include <QVariantList>
 #include <KConfigGroup>
 #include <QModelIndex>
+#include <KUrl>
 
 class ExternalScriptItem;
 

@@ -168,7 +168,7 @@ QVariant ProblemModel::data(const QModelIndex & index, int role) const
 QModelIndex ProblemModel::parent(const QModelIndex & index) const
 {
     if (index.internalId())
-        return createIndex(m_problems.indexOf(problemForIndex(index)), 0, 0);
+        return createIndex(m_problems.indexOf(problemForIndex(index)), 0);
 
     return QModelIndex();
 }
@@ -185,7 +185,7 @@ QModelIndex ProblemModel::index(int row, int column, const QModelIndex & parent)
     }
 
     if (row < m_problems.count())
-        return createIndex(row, column, 0);
+        return createIndex(row, column);
 
     return QModelIndex();
 }

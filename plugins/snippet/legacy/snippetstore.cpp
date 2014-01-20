@@ -23,6 +23,7 @@
 #include <ktexteditor/editor.h>
 #include <interfaces/ipartcontroller.h>
 #include <ktexteditor/templateinterface2.h>
+#include <QtCore/QDir>
 
 SnippetStore* SnippetStore::m_self = 0;
 
@@ -31,14 +32,16 @@ SnippetStore::SnippetStore(SnippetPlugin* plugin)
 {
     m_self = this;
 
-    const QStringList list = KGlobal::dirs()->findAllResources("data",
-        "ktexteditor_snippets/data/*.xml", KStandardDirs::NoDuplicates)
-                        << KGlobal::dirs()->findAllResources("data",
-        "ktexteditor_snippets/ghns/*.xml", KStandardDirs::NoDuplicates);
+    QStringList pathList;
+    pathList << QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "ktexteditor_snippets/data", QStandardPaths::LocateDirectory);
+    pathList << QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "ktexteditor_snippets/ghns", QStandardPaths::LocateDirectory);
 
-    foreach(const QString& file, list ) {
-        SnippetRepository* repo = new SnippetRepository(file);
-        appendRow(repo);
+    foreach(const QString& path, pathList) {
+        QDir d(path);
+        foreach(const QString& file, d.entryList(QStringList("*.xml"))) {
+            SnippetRepository* repo = new SnippetRepository(d.absoluteFilePath(file));
+            appendRow(repo);
+        }
     }
 
     m_scriptregistrar = qobject_cast<KTextEditor::TemplateScriptRegistrar*>(KDevelop::ICore::self()->partController()->editorPart());

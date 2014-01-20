@@ -20,8 +20,8 @@
 #ifndef KDEVPLATFORM_PLUGIN_TESTVIEW_H
 #define KDEVPLATFORM_PLUGIN_TESTVIEW_H
 
-
 #include <QTreeView>
+#include <QAction>
 #include <interfaces/itestcontroller.h>
 
 class QSortFilterProxyModel;
@@ -35,7 +35,7 @@ class ITestSuite;
 }
 
 
-class TestViewFilterAction : public KAction {
+class TestViewFilterAction : public QAction {
     Q_OBJECT
 
 public:
@@ -76,7 +76,7 @@ private:
     QSortFilterProxyModel* m_filter;
     QList<QAction*> m_contextMenuActions;
 
-    KIcon iconForTestResult(KDevelop::TestResult::TestCaseResult result);
+    QIcon iconForTestResult(KDevelop::TestResult::TestCaseResult result);
     QStandardItem* itemForSuite(KDevelop::ITestSuite* suite);
     QStandardItem* itemForProject(KDevelop::IProject* project);
 };

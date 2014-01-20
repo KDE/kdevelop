@@ -26,11 +26,12 @@
 
 #include <QDir>
 #include <QVBoxLayout>
+#include <QTextStream>
 
 #include <KTextEditor/Editor>
-#include <KTextEditor/EditorChooser>
 #include <KTextEditor/View>
 #include <KTextEditor/ConfigInterface>
+#include <KTextEditor/Document>
 
 #include <KLocalizedString>
 #include <kmacroexpander.h>
@@ -93,8 +94,8 @@ TemplatePreview::TemplatePreview(QWidget* parent, Qt::WindowFlags f)
     m_variables["PROJECTDIRNAME"] = "ExampleProjectDir";
     m_variables["VERSIONCONTROLPLUGIN"] = "kdevgit";
 
-    KTextEditor::Editor* editor = KTextEditor::EditorChooser::editor();
-    m_preview.reset(editor->createDocument(this));
+    KTextEditor::Document* doc = KTextEditor::Editor::instance()->createDocument(this);
+    m_preview.reset(doc);
     m_preview->setReadWrite(false);
 
     QVBoxLayout* layout = new QVBoxLayout;

@@ -34,6 +34,7 @@ Boston, MA 02110-1301, USA.
 #include <kparts/mainwindow.h>
 #include <kactioncollection.h>
 #include <kpushbutton.h>
+#include <kdebug.h>
 
 #include "session.h"
 #include "core.h"
@@ -62,16 +63,11 @@ Boston, MA 02110-1301, USA.
 #include <language/duchain/repositories/itemrepositoryregistry.h>
 #include <ktexteditor/document.h>
 #include <QLabel>
+#include <QAction>
 #include <QSortFilterProxyModel>
 #include <QDBusConnectionInterface>
 
-
-#include <kdeversion.h>
-
-#if KDE_IS_VERSION(4,5,60)
-    #define HAVE_RECOVERY_INTERFACE
-    #include <ktexteditor/recoveryinterface.h>
-#endif
+#include <ktexteditor/recoveryinterface.h>
 
 const int recoveryStorageInterval = 10; ///@todo Make this configurable
 
@@ -166,7 +162,7 @@ public:
     void newSession()
     {
         qsrand(QDateTime::currentDateTime().toTime_t());
-        Session* session = new Session( QUuid::createUuid() );
+        Session* session = new Session( QUuid::createUuid().toString() );
         
         KProcess::startDetached(ShellExtension::getInstance()->binaryPath(), QStringList() << "-s" << session->id().toString() << standardArguments());
         delete session;
@@ -303,7 +299,7 @@ public:
 
     static QString sessionBaseDirectory()
     {
-        return KGlobal::mainComponent().dirs()->saveLocation( "data", KGlobal::mainComponent().componentName() + "/sessions/", true );
+        return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) +'/'+ KGlobal::mainComponent().componentName() + "/sessions/";
     }
 
     QString ownSessionDirectory() const
@@ -417,7 +413,6 @@ private slots:
                                 kWarning() << "The document " << originalFile.prettyUrl() << " could not be opened as a text-document, creating a new document with the recovered contents";
                                 doc = ICore::self()->documentController()->openDocumentFromText(text);
                             }else{
-                                #ifdef HAVE_RECOVERY_INTERFACE
                                 KTextEditor::RecoveryInterface* recovery = qobject_cast<KTextEditor::RecoveryInterface*>(doc->textDocument());
                                 
                                 if(recovery && recovery->isDataRecoveryAvailable())
@@ -426,10 +421,6 @@ private slots:
                                 else
                                     // Use a simple recovery through "replace text"
                                     doc->textDocument()->setText(text);
-                                #else
-                                    // Use a simple recovery through "replace text"
-                                    doc->textDocument()->setText(text);
-                                #endif
                             }
                         }
                     }
@@ -541,7 +532,7 @@ SessionController::SessionController( QObject *parent )
         : QObject( parent ), d(new SessionControllerPrivate(this))
 {
     setObjectName("SessionController");
-    setComponentData(KComponentData("kdevsession"));
+    setComponentName(QStringLiteral("kdevsession"), QStringLiteral("KDevSession"));
     
     setXMLFile("kdevsessionui.rc");
 
@@ -615,7 +606,7 @@ void SessionController::initialize( const QString& session )
         if( id.isNull() )
             continue;
         // Only create sessions for directories that represent proper uuid's
-        Session* ses = new Session( id, this );
+        Session* ses = new Session( id.toString(), this );
 
         //Delete sessions that have no name and are empty
         if( ses->containedProjects().isEmpty() && ses->name().isEmpty()
@@ -674,10 +665,10 @@ Session* SessionController::createSession( const QString& name )
     Session* s;
     if(name.startsWith('{'))
     {
-        s = new Session( QUuid(name) );
+        s = new Session( QUuid(name).toString() );
     }else{
         qsrand(QDateTime::currentDateTime().toTime_t());
-        s = new Session( QUuid::createUuid() );
+        s = new Session( QUuid::createUuid().toString() );
         s->setName( name );
     }
     d->addSession( s );
@@ -755,7 +746,7 @@ QString SessionController::cloneSession( const QString& nameOrid )
     KIO::NetAccess::dircopy( sessionDirectory( origSession->id().toString() ),
                              sessionDirectory( id.toString() ),
                              Core::self()->uiController()->activeMainWindow() );
-    Session* newSession = new Session( id );
+    Session* newSession = new Session( id.toString() );
     newSession->setName( i18n( "Copy of %1", origSession->name() ) );
     d->addSession(newSession);
     return newSession->name();

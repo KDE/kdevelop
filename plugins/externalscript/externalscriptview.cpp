@@ -112,7 +112,8 @@ bool ExternalScriptView::eventFilter( QObject* obj, QEvent* e )
   // no, listening to activated() is not enough since that would also trigger the edit mode which we _dont_ want here
   // users may still rename stuff via select + F2 though
   if ( obj == scriptTree->viewport() ) {
-    const bool singleClick = KGlobalSettings::singleClick();
+//     const bool singleClick = KGlobalSettings::singleClick();
+    const bool singleClick = true; //FIXME: enable singleClick for the sake of porting, should find a proper way
     if ( ( !singleClick && e->type() == QEvent::MouseButtonDblClick ) || ( singleClick && e->type() == QEvent::MouseButtonRelease ) ) {
       QMouseEvent* mouseEvent = dynamic_cast<QMouseEvent*>(e);
       Q_ASSERT( mouseEvent );

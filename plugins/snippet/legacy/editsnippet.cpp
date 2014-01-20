@@ -23,9 +23,10 @@
 #include <KMimeTypeTrader>
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
-#include <KToolInvocation>
+#include <ktoolinvocation.h>
 #include <KMessageBox>
 #include <KMessageWidget>
+#include "KHelpClient"
 
 #include "snippetstore.h"
 #include "snippet.h"
@@ -108,7 +109,7 @@ EditSnippet::EditSnippet(SnippetRepository* repository, Snippet* snippet, QWidge
         m_ui->snippetNameEdit->setText(m_snippet->text());
         m_ui->snippetPostfixEdit->setText(m_snippet->postfix());
         m_ui->snippetPrefixEdit->setText(m_snippet->prefix());
-        m_ui->snippetShortcutWidget->setShortcut(m_snippet->action()->shortcut());
+        m_ui->snippetShortcutWidget->setShortcut(m_snippet->action()->shortcuts());
 
         // unset modified flags
         m_snippetView->document()->setModified(false);
@@ -175,7 +176,7 @@ void EditSnippet::save()
     m_snippet->setText(m_ui->snippetNameEdit->text());
     m_snippet->setPostfix(m_ui->snippetPostfixEdit->text());
     m_snippet->setPrefix(m_ui->snippetPrefixEdit->text());
-    m_snippet->action()->setShortcut(m_ui->snippetShortcutWidget->shortcut());
+    m_snippet->action()->setShortcuts(m_ui->snippetShortcutWidget->shortcut());
     m_repo->setScript(m_scriptsView->document()->text());
     m_scriptsView->document()->setModified(false);
     m_topBoxModified = false;
@@ -186,12 +187,12 @@ void EditSnippet::save()
 
 void EditSnippet::slotSnippetDocumentation()
 {
-    KToolInvocation::invokeHelp("katefiletemplates-format", "kate");
+    KHelpClient::invokeHelp("katefiletemplates-format", "kate");
 }
 
 void EditSnippet::slotScriptDocumentation()
 {
-    KToolInvocation::invokeHelp("advanced-editing-tools-scripting-api", "kate");
+    KHelpClient::invokeHelp("advanced-editing-tools-scripting-api", "kate");
 }
 
 void EditSnippet::reject()

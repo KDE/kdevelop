@@ -79,6 +79,7 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/iruncontroller.h>
 #include <language/backgroundparser/parseprojectjob.h>
 #include <kio/job.h>
+#include <KCMUtils/KSettings/Dispatcher>
 #include "sessioncontroller.h"
 #include "session.h"
 #include <QDBusConnection>
@@ -100,10 +101,10 @@ public:
 //     IProject* m_currentProject;
     ProjectModel* model;
     QItemSelectionModel* selectionModel;
-    QPointer<KAction> m_openProject;
-    QPointer<KAction> m_fetchProject;
-    QPointer<KAction> m_closeProject;
-    QPointer<KAction> m_openConfig;
+    QPointer<QAction> m_openProject;
+    QPointer<QAction> m_fetchProject;
+    QPointer<QAction> m_closeProject;
+    QPointer<QAction> m_openConfig;
     IProjectDialogProvider* dialog;
     QList<KUrl> m_currentlyOpening; // project-file urls that are being opened
     IProject* m_configuringProject;
@@ -414,11 +415,11 @@ KUrl ProjectDialogProvider::askProjectConfigLocation(bool fetch, const KUrl& sta
             KGuiItem yes = KStandardGuiItem::yes();
             yes.setText(i18n("Override"));
             yes.setToolTip(i18nc("@info:tooltip", "Continue to open the project and use the just provided project configuration."));
-            yes.setIcon(QIcon::fromTheme());
+            yes.setIcon(QIcon());
             KGuiItem no = KStandardGuiItem::no();
             no.setText(i18n("Open Existing File"));
             no.setToolTip(i18nc("@info:tooltip", "Continue to open the project but use the existing project configuration."));
-            no.setIcon(QIcon::fromTheme());
+            no.setIcon(QIcon());
             KGuiItem cancel = KStandardGuiItem::cancel();
             cancel.setToolTip(i18nc("@info:tooltip", "Cancel and do not open the project."));
             int ret = KMessageBox::questionYesNoCancel(qApp->activeWindow(),
@@ -588,7 +589,7 @@ void ProjectController::initialize()
 
     loadSettings(false);
     d->dialog = new ProjectDialogProvider(d);
-    KSettings::Dispatcher::registerComponent( KComponentData("kdevplatformproject"),
+    KSettings::Dispatcher::registerComponent( QStringLiteral("kdevplatformproject"),
                                               this,
                                               "notifyProjectConfigurationChanged" );
 
@@ -983,7 +984,7 @@ KUrl ProjectController::projectsBaseDirectory() const
 {
     KConfigGroup group = KGlobal::config()->group( "Project Manager" );
     return group.readEntry( "Projects Base Directory",
-                                     KUrl( QDir::homePath()+"/projects" ) );
+                                     QUrl( QDir::homePath()+"/projects" ) );
 }
 
 QString ProjectController::prettyFilePath(KUrl url, FormattingOptions format) const
@@ -1151,4 +1152,4 @@ QString ProjectController::mapSourceBuild( const QString& path, bool reverse, bo
 
 }
 
-#include "projectcontroller.moc"
+#include "moc_projectcontroller.cpp"

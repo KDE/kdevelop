@@ -19,6 +19,8 @@
 #define KDEVPLATFORM_PLUGIN_DIFFERENCE_H
 
 #include <qvector.h>
+#include <qstring.h>
+#include <qobject.h>
 
 #include <kdebug.h>
 #include "diff2export.h"

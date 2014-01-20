@@ -35,6 +35,7 @@ Boston, MA 02110-1301, USA.
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
 #include <kconfigdialogmanager.h>
+#include <KLocalizedString>
 
 #include "environmentgroupmodel.h"
 #include "placeholderitemproxymodel.h"

@@ -42,6 +42,7 @@
 #include <KLocalizedString>
 #include <KComponentData>
 #include <KFileDialog>
+#include <KConfigGroup>
 #include <KTempDir>
 #include <KTextEditor/Document>
 
@@ -229,7 +230,7 @@ TemplateSelectionPage::TemplateSelectionPage(TemplateClassAssistant* parent, Qt:
     connect (getMoreButton, SIGNAL(dialogFinished(KNS3::Entry::List)), SLOT(getMoreClicked()));
     d->ui->view->addWidget(0, getMoreButton);
 
-    KPushButton* loadButton = new KPushButton(QIcon::fromTheme("application-x-archive"), i18n("Load Template From File"), d->ui->view);
+    QPushButton* loadButton = new QPushButton(QIcon::fromTheme("application-x-archive"), i18n("Load Template From File"), d->ui->view);
     connect (loadButton, SIGNAL(clicked(bool)), SLOT(loadFileClicked()));
     d->ui->view->addWidget(0, loadButton);
 
@@ -252,4 +253,4 @@ QString TemplateSelectionPage::selectedTemplate() const
     return d->selectedTemplate;
 }
 
-#include "templateselectionpage.moc"
+#include "moc_templateselectionpage.cpp"

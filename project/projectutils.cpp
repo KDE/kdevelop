@@ -23,7 +23,7 @@
 #include <QMenu>
 #include <QIcon>
 
-#include <KMenu>
+#include <KLocalizedString>
 
 #include <project/projectmodel.h>
 #include <interfaces/icore.h>
@@ -50,7 +50,7 @@ public:
 public Q_SLOTS:
     void populate()
     {
-        KMenu* menu = new KMenu(m_text);
+        QMenu* menu = new QMenu(m_text);
         connect(menu, SIGNAL(aboutToHide()), menu, SLOT(deleteLater()));
         menu->addAction(QIcon::fromTheme(m_item->iconName()), m_text)->setEnabled(false);
         ProjectItemContext context(QList< ProjectBaseItem* >() << m_item);

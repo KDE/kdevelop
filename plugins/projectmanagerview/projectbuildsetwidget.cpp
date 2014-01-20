@@ -28,6 +28,7 @@
 #include <QStringListModel>
 #include <QModelIndex>
 #include <QStandardItemModel>
+#include <KLocalizedString>
 
 #include <kdebug.h>
 #include <kicon.h>

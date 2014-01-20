@@ -23,6 +23,7 @@
 
 #include <KTextEditor/Document>
 #include <KColorUtils>
+#include <KDebug>
 
 #include <QApplication>
 

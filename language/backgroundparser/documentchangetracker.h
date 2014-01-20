@@ -23,6 +23,8 @@
 #define KDEVPLATFORM_DOCUMENTCHANGETRACKER_H
 
 #include "../languageexport.h"
+#include <KSharedPtr>
+#include <QPointer>
 #include <QPair>
 #include <QPointer>
 #include <language/editor/simplerange.h>

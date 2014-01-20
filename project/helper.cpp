@@ -26,6 +26,7 @@
 #include <KMessageBox>
 #include <KLocalizedString>
 #include <KTextEditor/Document>
+#include <KDebug>
 #include <kparts/mainwindow.h>
 
 #include <QApplication>

@@ -434,7 +434,7 @@ void KDevSvnPlugin::ctxMove()
 
         KUrlRequesterDialog dlg(dir, i18n("Destination file/directory"), 0);
 
-        dlg.fileDialog()->setOperationMode( KFileDialog::Saving );
+        dlg.fileDialog()->setAcceptMode(QFileDialog::AcceptSave);
         if (isFile) {
             dlg.urlRequester()->setMode(KFile::File | KFile::Directory | KFile::LocalOnly);
         } else {

@@ -27,7 +27,7 @@
 #include <QApplication>
 
 #include <qtest_kde.h>
-#include <KTextEditor/EditorChooser>
+#include <KTextEditor/Editor>
 #include <KTextEditor/View>
 
 #include <tests/autotestshell.h>
@@ -269,7 +269,7 @@ void TestBackgroundparser::benchmark()
 
 void TestBackgroundparser::benchmarkDocumentChanges()
 {
-    KTextEditor::Editor* editor = KTextEditor::EditorChooser::editor();
+    KTextEditor::Editor* editor = KTextEditor::Editor::instance();
     QVERIFY(editor);
     KTextEditor::Document* doc = editor->createDocument(this);
     QVERIFY(doc);

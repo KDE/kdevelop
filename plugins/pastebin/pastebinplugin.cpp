@@ -93,7 +93,7 @@ void PastebinPlugin::data(KIO::Job* job, const QByteArray &data)
         } else if (it->isEmpty() || it->startsWith("ERROR")) {
             KMessageBox::error(0, *it);
         } else {
-            QString htmlLink=QString("<a href='%1'>%1</a>").arg(*it);
+            QString htmlLink=QStringLiteral("<a href='%1'>%1</a>").arg(*it);
             KMessageBox::information(0, i18nc("The parameter is the link where the patch is stored", "<qt>You can find your patch at:<br/>%1</qt>", htmlLink), QString(), QString(), KMessageBox::AllowLink | KMessageBox::Notify);
         }
         m_result.erase(it);

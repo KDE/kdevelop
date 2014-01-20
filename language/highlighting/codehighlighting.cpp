@@ -521,8 +521,8 @@ void CodeHighlighting::applyHighlighting(void* _highlighting)
       ++movingIt;
     }
 
-    tempRange.start().setPosition(transformedRange.start.line, transformedRange.start.column);
-    tempRange.end().setPosition(transformedRange.end.line, transformedRange.end.column);
+
+    tempRange = transformedRange.textRange();
 
     if(movingIt == oldHighlightedRanges.end() ||
       transformedRange.start.line != (*movingIt)->start().line() ||

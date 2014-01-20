@@ -31,8 +31,10 @@
 #include <kcomponentdata.h>
 #include <kaboutdata.h>
 #include <kdebug.h>
-#include <kwidgetitemdelegate.h>
+#include <KWidgetItemDelegate>
 #include <KPushButton>
+#include <KIconLoader>
+#include <k4aboutdata.h>
 #include <kaboutapplicationdialog.h>
 
 #include "core.h"
@@ -118,6 +120,11 @@ public:
     ~LoadedPluginsDelegate()
     {
         delete pushButton;
+    }
+
+    virtual QList<QWidget *> createItemWidgets(const QModelIndex &index) const
+    {
+        return QList<QWidget *>();
     }
 
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
@@ -225,12 +232,13 @@ private Q_SLOTS:
         PluginsModel *m = static_cast<PluginsModel*>(itemView()->model());
         KDevelop::IPlugin *p = m->plugin(focusedIndex());
         if (p) {
-            const KAboutData *aboutData = p->componentData().aboutData();
-            if (!aboutData->programName().isEmpty()) { // Be sure the about data is not completely empty
-                KAboutApplicationDialog aboutPlugin(aboutData, itemView());
-                aboutPlugin.exec();
-                return;
-            }
+//             TODO KF5: Port
+//             const K4AboutData *aboutData = p->componentData().aboutData();
+//             if (!aboutData->programName().isEmpty()) { // Be sure the about data is not completely empty
+//                 KAboutApplicationDialog aboutPlugin(aboutData, itemView());
+//                 aboutPlugin.exec();
+//                 return;
+//             }
         }
     }
 private:
@@ -275,8 +283,8 @@ LoadedPluginsDialog::LoadedPluginsDialog( QWidget* parent )
     QVBoxLayout* vbox = new QVBoxLayout(mainWidget());
     
     KTitleWidget* title = new KTitleWidget(this);
-    title->setPixmap(QIcon::fromTheme(KGlobal::mainComponent().aboutData()->programIconName()), KTitleWidget::ImageLeft);
-    title->setText(i18n("<html><font size=\"4\">Plugins loaded for <b>%1</b></font></html>", KGlobal::mainComponent().aboutData()->programName()));
+    title->setPixmap(QIcon::fromTheme(KComponentData::mainComponent().aboutData()->programIconName()), KTitleWidget::ImageLeft);
+    title->setText(i18n("<html><font size=\"4\">Plugins loaded for <b>%1</b></font></html>", KComponentData::mainComponent().aboutData()->programName()));
     vbox->addWidget(title);
     vbox->addWidget(new PluginsView());
 }

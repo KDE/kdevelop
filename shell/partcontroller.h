@@ -45,6 +45,7 @@ namespace KTextEditor
 {
 class Document;
 class Editor;
+class View;
 }
 
 Q_DECLARE_METATYPE(KSharedConfig::Ptr)

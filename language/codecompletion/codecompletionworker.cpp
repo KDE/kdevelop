@@ -221,5 +221,3 @@ void CodeCompletionWorker::updateContextRange(Range& contextRange, View* view, D
   Q_UNUSED(view);
   Q_UNUSED(context);
 }
-
-#include "codecompletionworker.moc"

@@ -26,8 +26,10 @@
 #include <QAction>
 #include <QClipboard>
 
+#include <KLocalizedString>
 #include <kdebug.h>
 #include <kmenu.h>
+#include <kdialog.h>
 
 #include <interfaces/iplugin.h>
 #include <interfaces/icore.h>

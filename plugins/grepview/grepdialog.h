@@ -17,6 +17,7 @@
 #include <kdialog.h>
 #include "ui_grepwidget.h"
 
+class KUrl;
 class KConfig;
 class KUrlRequester;
 class QPushButton;
@@ -61,7 +62,7 @@ private Q_SLOTS:
     void patternComboEditTextChanged( const QString& );
     void directoryChanged(const QString &dir);
     QMenu* createSyncButtonMenu();
-    void addUrlToMenu(QMenu* ret, KUrl url);
+    void addUrlToMenu(QMenu* ret, const KUrl& url);
     void addStringToMenu(QMenu* ret, QString string);
     void synchronizeDirActionTriggered(bool);
 

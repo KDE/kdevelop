@@ -20,6 +20,7 @@
 #define KDEVPLATFORM_DUCHAINPOINTER_H
 
 #include <QtCore/QMetaType>
+#include <QtCore/QList>
 #include <ksharedptr.h>
 #include "../languageexport.h"
 

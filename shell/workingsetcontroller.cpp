@@ -32,6 +32,7 @@
 #include <sublime/area.h>
 
 #include <util/activetooltip.h>
+#include <kdebug.h>
 
 #include "workingsets/workingset.h"
 #include "workingsets/workingsettooltipwidget.h"

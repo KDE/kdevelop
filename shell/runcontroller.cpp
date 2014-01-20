@@ -77,7 +77,7 @@ class DebugMode : public ILaunchMode
 {
 public:
     DebugMode() {}
-    virtual KIcon icon() const { return QIcon::fromTheme("tools-report-bug"); }
+    virtual QIcon icon() const { return QIcon::fromTheme("tools-report-bug"); }
     virtual QString id() const { return "debug"; }
     virtual QString name() const { return i18n("Debug"); }
 };
@@ -86,7 +86,7 @@ class ProfileMode : public ILaunchMode
 {
 public:
     ProfileMode() {}
-    virtual KIcon icon() const { return QIcon::fromTheme("office-chart-area"); }
+    virtual QIcon icon() const { return QIcon::fromTheme("office-chart-area"); }
     virtual QString id() const { return "profile"; }
     virtual QString name() const { return i18n("Profile"); }
 };
@@ -95,7 +95,7 @@ class ExecuteMode : public ILaunchMode
 {
 public:
     ExecuteMode() {}
-    virtual KIcon icon() const { return QIcon::fromTheme("system-run"); }
+    virtual QIcon icon() const { return QIcon::fromTheme("system-run"); }
     virtual QString id() const { return "execute"; }
     virtual QString name() const { return i18n("Execute"); }
 };
@@ -415,7 +415,7 @@ void RunController::setupActions()
     // TODO not multi-window friendly, FIXME
     KActionCollection* ac = Core::self()->uiControllerInternal()->defaultMainWindow()->actionCollection();
 
-    action = new KAction (i18n("Configure Launches..."), this);
+    action = new QAction(i18n("Configure Launches..."), this);
     ac->addAction("configure_launches", action);
     action->setStatusTip(i18n("Open Launch Configuration Dialog"));
     action->setToolTip(i18nc("@info:tooltip", "Open Launch Configuration Dialog"));
@@ -671,10 +671,9 @@ void KDevelop::RunController::finished(KJob * job)
             dialog->setAttribute(Qt::WA_DeleteOnClose);
             dialog->setWindowTitle(i18n("Process Error"));
             dialog->setButtons(KDialog::Close);
-            KMessageBox::createKMessageBox(dialog, QMessageBox::Warning,
+            KMessageBox::createKMessageBox(dialog, 0, QMessageBox::Warning,
                                            job->errorString(), QStringList(),
-                                           QString(), 0, KMessageBox::NoExec
-            );
+                                           QString(), 0, KMessageBox::NoExec);
             dialog->show();
         }
     }
@@ -996,4 +995,4 @@ void RunDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
 }
 
 
-#include "runcontroller.moc"
+#include "moc_runcontroller.cpp"

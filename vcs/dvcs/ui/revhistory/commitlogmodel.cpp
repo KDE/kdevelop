@@ -60,7 +60,7 @@ QModelIndex CommitLogModel::index(int row, int column, const QModelIndex&) const
     if (row < 0 || row >= rowCount())
         return QModelIndex();
 
-    return createIndex(row, column, 0);
+    return createIndex(row, column);
 }
 
 QVariant CommitLogModel::data(const QModelIndex& index, int role) const 

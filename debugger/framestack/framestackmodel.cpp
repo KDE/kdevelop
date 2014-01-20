@@ -212,7 +212,7 @@ QModelIndex FrameStackModel::index(int row, int column, const QModelIndex& paren
         Q_ASSERT(parent.row() < m_threads.count());
         return createIndex(row, column, parent.row()+1);
     } else {
-        return createIndex(row, column, 0);
+        return createIndex(row, column);
     }
 }
 
