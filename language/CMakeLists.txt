@@ -12,7 +12,6 @@ set(kdevplatformlanguage_LIB_SRCS
     editor/modificationrevision.cpp
     backgroundparser/backgroundparser.cpp
     backgroundparser/parsejob.cpp
-    backgroundparser/parserdependencypolicy.cpp
     backgroundparser/documentchangetracker.cpp
     backgroundparser/parseprojectjob.cpp
     backgroundparser/urlparselock.cpp
