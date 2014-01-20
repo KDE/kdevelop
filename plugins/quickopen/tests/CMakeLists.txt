@@ -18,6 +18,7 @@ set(quickopentest_SRCS
 )
 
 add_executable(quickopentest ${quickopentest_SRCS})
+add_test(quickopentest quickopentest)
 ecm_mark_as_test(quickopentest)
 target_link_libraries(quickopentest
     quickopentestbase
@@ -36,6 +37,7 @@ set(quickopenbench_SRCS
     ${quickopentestbase_SRCS}
 )
 add_executable(quickopenbench ${quickopenbench_SRCS})
+add_test(quickopenbench quickopenbench)
 ecm_mark_as_test(quickopenbench)
 target_link_libraries(quickopenbench
     quickopentestbase

@@ -15,6 +15,7 @@ set(interactiveDiffTest_SRCS
 )
 
 add_executable(interactiveDiffTest ${interactiveDiffTest_SRCS})
+add_test(interactiveDiffTest interactiveDiffTest)
 ecm_mark_as_test(interactiveDiffTest)
 target_link_libraries(interactiveDiffTest
     Qt5::Test
@@ -30,6 +31,7 @@ set(levenshteinTest_SRCS
 )
 
 add_executable(levenshteintest ${levenshteinTest_SRCS})
+add_test(levenshteintest levenshteintest)
 ecm_mark_as_test(levenshteintest)
 target_link_libraries(levenshteintest
     Qt5::Test

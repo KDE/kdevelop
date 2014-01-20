@@ -34,7 +34,8 @@ if (CVS)
         ../cvsdiffjob.cpp
     )
 	add_executable(kdevcvs-test ${cvstest_SRCS})
-	ecm_mark_as_test(kdevcvs-test)
+	add_test(kdevcvs-test kdevcvs-test)
+ecm_mark_as_test(kdevcvs-test)
 	target_link_libraries(kdevcvs-test
 		Qt5::Test
 		

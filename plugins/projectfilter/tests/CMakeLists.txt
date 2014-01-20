@@ -3,6 +3,7 @@ add_executable(testprojectfilter
     ../projectfilter.cpp
     ../filter.cpp
 )
+add_test(testprojectfilter testprojectfilter)
 ecm_mark_as_test(testprojectfilter)
 
 target_link_libraries(testprojectfilter

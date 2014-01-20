@@ -1,5 +1,6 @@
 set(modelsTest_SRCS modelstest.cpp)
 add_executable(modelsTest ${modelsTest_SRCS})
+add_test(modelsTest modelsTest)
 ecm_mark_as_test(modelsTest)
 target_link_libraries(modelsTest
                       Qt5::Test

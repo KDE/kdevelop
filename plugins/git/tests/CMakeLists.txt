@@ -19,7 +19,8 @@ if (GIT_FOUND)
     )
     qt5_wrap_ui(gitInitTest_SRCS ../stashmanagerdialog.ui)
     add_executable(kdevgit-test ${gitInitTest_SRCS})
-    ecm_mark_as_test(kdevgit-test)
+    add_test(kdevgit-test kdevgit-test)
+ecm_mark_as_test(kdevgit-test)
     target_link_libraries(kdevgit-test
         Qt5::Test
         

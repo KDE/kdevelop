@@ -11,6 +11,7 @@ set( projectmodeltest_SRCS
 )
 
 add_executable(projectmodeltest ${projectmodeltest_SRCS})
+add_test(projectmodeltest projectmodeltest)
 ecm_mark_as_test(projectmodeltest)
 target_link_libraries(projectmodeltest
     Qt5::Test

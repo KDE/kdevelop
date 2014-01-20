@@ -7,6 +7,7 @@ add_subdirectory(serialization)
 set(duchaintest_SRCS test_duchain.cpp)
 
 add_executable(duchaintest ${duchaintest_SRCS})
+add_test(duchaintest duchaintest)
 ecm_mark_as_test(duchaintest)
 target_link_libraries(duchaintest KF5::TextEditor
     Qt5::Test ${KDEVPLATFORM_TESTS_LIBRARIES} kdevplatformlanguage)
@@ -16,6 +17,7 @@ target_link_libraries(duchaintest KF5::TextEditor
 set(itemrepositorytest_SRCS test_itemrepository.cpp)
 
 add_executable(itemrepositorytest ${itemrepositorytest_SRCS})
+add_test(itemrepositorytest itemrepositorytest)
 ecm_mark_as_test(itemrepositorytest)
 target_link_libraries(itemrepositorytest KF5::TextEditor
     Qt5::Test kdevplatformlanguage ${KDEVPLATFORM_TESTS_LIBRARIES})
@@ -39,6 +41,7 @@ target_link_libraries(itemrepositoryregistry_deferred_test Qt5::Test
 ########### next target ###############
 
 add_executable(benchhashes benchhashes.cpp)
+add_test(benchhashes benchhashes)
 ecm_mark_as_test(benchhashes)
 target_link_libraries(benchhashes
   

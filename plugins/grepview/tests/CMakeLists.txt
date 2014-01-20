@@ -16,6 +16,7 @@ set(kdevgrepview_PART_UI
 
 qt5_wrap_ui(findReplaceTest_SRCS ${kdevgrepview_PART_UI})
 add_executable(findreplace-test ${findReplaceTest_SRCS})
+add_test(findreplace-test findreplace-test)
 ecm_mark_as_test(findreplace-test)
 target_link_libraries(findreplace-test
     Qt5::Test
