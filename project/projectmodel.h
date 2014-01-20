@@ -150,10 +150,6 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem
 
         virtual bool lessThan( const KDevelop::ProjectBaseItem* ) const;
         static bool pathLessThan(KDevelop::ProjectBaseItem* item1, KDevelop::ProjectBaseItem* item2);
-        KDE_DEPRECATED static bool urlLessThan(KDevelop::ProjectBaseItem* item1, KDevelop::ProjectBaseItem* item2)
-        {
-            return pathLessThan(item1, item2);
-        }
 
         /** @returns the @p row item in the list of children of this item or 0 if there is no such child. */
         ProjectBaseItem* child( int row ) const;
@@ -200,14 +196,7 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem
         /** @returns a string to pass to KIcon as icon-name suitable to represent this item. */
         virtual QString iconName() const;
 
-        /**
-         * Set the url of this item.
-         * Note this function never renames the item in the project manager or on the filesystem,
-         * it only changes the url and possibly the text nothing else.
-         */
-        KDE_DEPRECATED void setUrl( const KUrl& );
-
-        /** Get the url of this item (if any) */
+        /** Get the path of this item (if any) converted to a url */
         KDE_DEPRECATED KUrl url() const;
 
         /**
@@ -424,7 +413,6 @@ public:
      * lookups or memory efficient storage.
      */
     IndexedString indexedPath() const;
-    KDE_DEPRECATED IndexedString indexedUrl() const;
 };
 
 /**

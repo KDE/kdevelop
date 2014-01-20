@@ -473,16 +473,6 @@ QString ProjectBaseItem::baseName() const
     return text();
 }
 
-void ProjectBaseItem::setUrl(const KUrl& url)
-{
-    Path path(url);
-    if (parent() && parent()->path().isDirectParentOf(path)) {
-        // leverage implicit sharing
-        path = Path(parent()->path(), path.lastPathSegment());
-    }
-    setPath(path);
-}
-
 void ProjectBaseItem::setPath( const Path& path)
 {
     Q_D(ProjectBaseItem);
@@ -743,11 +733,6 @@ ProjectFileItem::~ProjectFileItem()
 IndexedString ProjectFileItem::indexedPath() const
 {
     return IndexedString::fromIndex( d_ptr->m_pathIndex );
-}
-
-IndexedString ProjectFileItem::indexedUrl() const
-{
-    return indexedPath();
 }
 
 ProjectBaseItem::RenameStatus ProjectFileItem::rename(const QString& newName)
