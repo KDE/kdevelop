@@ -19,7 +19,7 @@
  */
 
 #include "reviewboardjobs.h"
-#include <qjson/parser.h>
+#include <QJsonDocument>
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
 #include <KLocalizedString>
@@ -143,15 +143,16 @@ QVariant HttpCall::result() const
 
 void HttpCall::finished()
 {
-    QJson::Parser parser;
     QByteArray receivedData = m_reply->readAll();
+    QJsonParseError error;
+    QJsonDocument parser = QJsonDocument::fromJson(receivedData, &error);
 
 //     qDebug() << "parsing..." << receivedData;
-    bool ok;
-    m_result = parser.parse(receivedData, &ok);
-    if (!ok) {
+    if (error.error == 0) {
+        m_result = parser.toVariant();
+    } else {
         setError(1);
-        setErrorText(i18n("JSON error: %1: %2", parser.errorLine(), parser.errorString()));
+        setErrorText(i18n("JSON error: %1: %2", error.errorString()));
     }
 
     if (m_result.toMap().value("stat").toString()!="ok") {

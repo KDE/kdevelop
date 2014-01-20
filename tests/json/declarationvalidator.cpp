@@ -19,6 +19,7 @@
 #include "language/duchain/declaration.h"
 #include "declarationvalidator.h"
 #include "testsuite.h"
+#include <QJsonDocument>
 
 namespace KDevelop {
 
@@ -63,18 +64,22 @@ bool DeclarationValidator::testsPassed()
 void DeclarationValidator::visit(DUContext*) { }
 void DeclarationValidator::visit(Declaration* declaration)
 {
-  bool testDataOk;
-  QJson::Parser parser;
-  QVariantMap testData = parser.parse(preprocess(declaration->comment()), &testDataOk).toMap();
-  if (!testDataOk)
+  QJsonParseError error;
+  QJsonDocument doc = QJsonDocument::fromJson(preprocess(declaration->comment()), &error);
+
+  if (error.error == 0)
+  {
+      QVariantMap testData = doc.toVariant().toMap();
+
+      if (!KDevelop::runTests(testData, declaration))
+          d->testsPassed = false;
+  }
+  else
   {
     d->testsPassed = false;
     qDebug() << "Error parsing test data for declaration on line" << declaration->range().start.line + 1;
-    qDebug() << "Parser error on comment line" << parser.errorLine() << "was" << parser.errorString();
-    return;
+    qDebug() << "Parser error on comment line" << error.errorString();
   }
-  if (!KDevelop::runTests(testData, declaration))
-    d->testsPassed = false;
 }
 
 }
