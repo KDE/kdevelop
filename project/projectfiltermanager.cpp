@@ -194,4 +194,4 @@ QVector< QSharedPointer< IProjectFilter > > ProjectFilterManager::filtersForProj
 }
 //END
 
-#include "projectfiltermanager.moc"
+#include "moc_projectfiltermanager.cpp"

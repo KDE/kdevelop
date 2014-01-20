@@ -207,4 +207,4 @@ VcsEventWidget::~VcsEventWidget()
 }
 
 
-#include "vcseventwidget.moc"
+#include "moc_vcseventwidget.cpp"

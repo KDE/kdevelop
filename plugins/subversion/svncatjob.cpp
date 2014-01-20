@@ -166,8 +166,3 @@ void SvnCatJob::setContent( const QString& content )
     m_content = content;
     emit resultsReady( this );
 }
-
-
-#include "svncatjob.moc"
-#include "svncatjob_p.moc"
-

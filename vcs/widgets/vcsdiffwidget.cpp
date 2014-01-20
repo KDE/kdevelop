@@ -107,4 +107,4 @@ void VcsDiffWidget::setRevisions( const KDevelop::VcsRevision& first,
 
 }
 
-#include "vcsdiffwidget.moc"
+#include "moc_vcsdiffwidget.cpp"

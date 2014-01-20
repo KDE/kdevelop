@@ -473,8 +473,3 @@ void SvnDiffJob::setDiffType( KDevelop::VcsDiff::Type type )
 {
     m_diffType = type;
 }
-
-#include "svndiffjob.moc"
-#include "svndiffjob_p.moc"
-
-

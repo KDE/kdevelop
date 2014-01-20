@@ -131,8 +131,3 @@ void SvnRemoveJob::setForce( bool force )
     if( status() == KDevelop::VcsJob::JobNotStarted )
         m_job->setForce( force );
 }
-
-#include "svnremovejob.moc"
-#include "svnremovejob_p.moc"
-
-
