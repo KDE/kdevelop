@@ -732,7 +732,8 @@ bool CMakeManager::renameFileOrFolder(ProjectBaseItem *item, const Path &newPath
     
     bool cmakeSuccessful = true, changedCMakeLists=false;
     IProject* project=item->project();
-    KUrl oldUrl=item->url();
+    const Path oldPath=item->path();
+    KUrl oldUrl=oldPath.toUrl();
     if (item->file())
     {
         QList<ProjectBaseItem*> targetFiles = cmakeListedItemsAffectedByUrlChange(project, oldUrl);
@@ -760,7 +761,7 @@ bool CMakeManager::renameFileOrFolder(ProjectBaseItem *item, const Path &newPath
 
     bool ret = KDevelop::renameUrl(project, oldUrl, newPath.toUrl());
     if(!ret) {
-        item->setUrl(oldUrl);
+        item->setPath(oldPath);
     }
     return ret;
 }

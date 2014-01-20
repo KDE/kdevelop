@@ -322,9 +322,9 @@ QMenu* PlasmoidExecutionConfigType::launcherSuggestions()
             KUrl url = file.toUrl();
             if(url.fileName()=="metadata.desktop" && canLaunchMetadataFile(url)) {
                 url = url.upUrl();
-                KUrl relUrl = p->relativeUrl(url);
-                QAction* action = new QAction(relUrl.prettyUrl(KUrl::RemoveTrailingSlash), this);
-                action->setProperty("url", relUrl.toLocalFile(KUrl::RemoveTrailingSlash));
+                QString relUrl = KUrl::relativeUrl(p->folder(), url);
+                QAction* action = new QAction(relUrl, this);
+                action->setProperty("url", relUrl);
                 action->setProperty("project", qVariantFromValue<KDevelop::IProject*>(p));
                 connect(action, SIGNAL(triggered(bool)), SLOT(suggestionTriggered()));
                 found.append(action);
