@@ -228,13 +228,13 @@ bool ScriptAppConfigType::canLaunch(const KUrl& file) const
 
 bool ScriptAppConfigType::canLaunch(KDevelop::ProjectBaseItem* item) const
 {
-    return ! interpreterForUrl(item->url()).isEmpty();
+    return ! interpreterForUrl(item->path().toUrl()).isEmpty();
 }
 
 void ScriptAppConfigType::configureLaunchFromItem(KConfigGroup config, KDevelop::ProjectBaseItem* item) const
 {
     config.writeEntry(ExecuteScriptPlugin::executableEntry, item->url());
-    config.writeEntry(ExecuteScriptPlugin::interpreterEntry, interpreterForUrl(item->url()));
+    config.writeEntry(ExecuteScriptPlugin::interpreterEntry, interpreterForUrl(item->path().toUrl()));
     config.writeEntry(ExecuteScriptPlugin::outputFilteringEntry, 2u);
     config.writeEntry(ExecuteScriptPlugin::runCurrentFileEntry, false);
     config.sync();
