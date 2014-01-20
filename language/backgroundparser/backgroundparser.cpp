@@ -40,10 +40,9 @@
 
 #include <ktexteditor/document.h>
 
-#include <threadweaver/State.h>
-#include <threadweaver/ThreadWeaver.h>
-#include <threadweaver/JobCollection.h>
-#include <threadweaver/DebuggingAids.h>
+#include <ThreadWeaver/State>
+#include <ThreadWeaver/ThreadWeaver>
+#include <ThreadWeaver/DebuggingAids>
 
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/ilanguage.h>
@@ -51,7 +50,6 @@
 #include "../interfaces/ilanguagesupport.h"
 
 #include "parsejob.h"
-#include "parserdependencypolicy.h"
 #include <editor/modificationrevisionset.h>
 #include <interfaces/icore.h>
 #include <qcoreapplication.h>
@@ -162,7 +160,7 @@ public:
             return;
         // Create delayed jobs, that is, jobs for documents which have been changed
         // by the user.
-        QList<ParseJob*> jobs;
+        QList<ThreadWeaver::JobPointer> jobs;
 
         // Before starting a new job, first wait for all higher-priority ones to finish.
         // That way, parse job priorities can be used for dependency handling.
@@ -211,13 +209,13 @@ public:
                 const QString elidedPathString = elidedPathLeft(it->toUrl().toLocalFile(), 70);
                 emit m_parser->showMessage(m_parser, i18n("Parsing: %1", elidedPathString));
 
-                ParseJob* job = createParseJob(*it, parsePlan.features(), parsePlan.notifyWhenReady(), parsePlan.priority());
+                ThreadWeaver::JobPointer job = createParseJob(*it, parsePlan.features(), parsePlan.notifyWhenReady(), parsePlan.priority());
 
                 if(m_parseJobs.count() == m_threads+1 && !specialParseJob)
                     specialParseJob = job; //This parse-job is allocated into the reserved thread
 
                 if(job) {
-                    job->setSequentialProcessingFlags(parsePlan.sequentialProcessingFlags());
+                    static_cast<ParseJob*>(job.data())->setSequentialProcessingFlags(parsePlan.sequentialProcessingFlags());
                     jobs.append(job);
                     // update the currently best processed priority, if the created job respects sequential processing
                     if (   parsePlan.sequentialProcessingFlags() & ParseJob::RespectsSequentialProcessing
@@ -252,7 +250,7 @@ public:
 
         // Ok, enqueueing is fine because m_parseJobs contains all of the jobs now
 
-        foreach (ParseJob* job, jobs)
+        foreach (ThreadWeaver::JobPointer job, jobs)
             m_weaver.enqueue(job);
 
         m_parser->updateProgressBar();
@@ -265,7 +263,7 @@ public:
         }
     }
 
-    ParseJob* createParseJob(const IndexedString& url, TopDUContext::Features features, const QList<QWeakPointer<QObject> >& notifyWhenReady, int priority = 0)
+    ThreadWeaver::JobPointer createParseJob(const IndexedString& url, TopDUContext::Features features, const QList<QWeakPointer<QObject> >& notifyWhenReady, int priority = 0)
     {
         ///FIXME: use IndexedString in the other APIs as well! Esp. for createParseJob!
         KUrl kUrl = url.toUrl();
@@ -288,11 +286,11 @@ public:
             job->setMinimumFeatures(features);
             job->setNotifyWhenReady(notifyWhenReady);
 
-            QObject::connect(job, SIGNAL(done(ThreadWeaver::Job*)),
+            QObject::connect(job->decorator(), SIGNAL(done(ThreadWeaver::Job*)),
                                 m_parser, SLOT(parseComplete(ThreadWeaver::Job*)));
-            QObject::connect(job, SIGNAL(failed(ThreadWeaver::Job*)),
+            QObject::connect(job->decorator(), SIGNAL(failed(ThreadWeaver::Job*)),
                                 m_parser, SLOT(parseComplete(ThreadWeaver::Job*)));
-            QObject::connect(job, SIGNAL(progress(KDevelop::ParseJob*,float,QString)),
+            QObject::connect(job->decorator(), SIGNAL(progress(KDevelop::ParseJob*,float,QString)),
                                 m_parser, SLOT(parseProgress(KDevelop::ParseJob*,float,QString)), Qt::QueuedConnection);
 
             m_parseJobs.insert(url, job);
@@ -300,7 +298,7 @@ public:
             ++m_maxParseJobs;
 
             // TODO more thinking required here to support multiple parse jobs per url (where multiple language plugins want to parse)
-            return job;
+            return ThreadWeaver::JobPointer(job);
         }
 
         if(languages.isEmpty())
@@ -314,7 +312,7 @@ public:
             if(n)
                 QMetaObject::invokeMethod(n.data(), "updateReady", Qt::QueuedConnection, Q_ARG(KDevelop::IndexedString, url), Q_ARG(KDevelop::ReferencedTopDUContext, ReferencedTopDUContext()));
 
-        return 0;
+        return ThreadWeaver::JobPointer();
     }
 
 
@@ -345,8 +343,8 @@ config.readEntry(entry, oldConfig.readEntry(entry, default))
 
     void suspend()
     {
-        bool s = m_weaver.state().stateId() == ThreadWeaver::Suspended ||
-                 m_weaver.state().stateId() == ThreadWeaver::Suspending;
+        bool s = m_weaver.state()->stateId() == ThreadWeaver::Suspended ||
+                 m_weaver.state()->stateId() == ThreadWeaver::Suspending;
 
         if (s) { // Already suspending
             return;
@@ -358,8 +356,8 @@ config.readEntry(entry, oldConfig.readEntry(entry, default))
 
     void resume()
     {
-        bool s = m_weaver.state().stateId() == ThreadWeaver::Suspended ||
-                 m_weaver.state().stateId() == ThreadWeaver::Suspending;
+        bool s = m_weaver.state()->stateId() == ThreadWeaver::Suspended ||
+                 m_weaver.state()->stateId() == ThreadWeaver::Suspending;
 
         if (m_timer.isActive() && !s) { // Not suspending
             return;
@@ -373,7 +371,7 @@ config.readEntry(entry, oldConfig.readEntry(entry, default))
     ILanguageController* m_languageController;
 
     //Current parse-job that is executed in the additional thread
-    QWeakPointer<ParseJob> specialParseJob;
+    QWeakPointer<ThreadWeaver::JobInterface> specialParseJob;
 
     QTimer m_timer;
     int m_delay;
@@ -446,8 +444,7 @@ config.readEntry(entry, oldConfig.readEntry(entry, default))
     // Projects currently in progress of loading
     QSet<IProject*> m_loadingProjects;
 
-    ThreadWeaver::Weaver m_weaver;
-    ParserDependencyPolicy m_dependencyPolicy;
+    ThreadWeaver::Queue m_weaver;
 
     QMutex m_mutex;
 
@@ -499,19 +496,6 @@ BackgroundParser::~BackgroundParser()
 QString BackgroundParser::statusName() const
 {
     return i18n("Background Parser");
-}
-
-void BackgroundParser::clear(QObject* parent)
-{
-    QMutexLocker lock(&d->m_mutex);
-
-    QHashIterator<IndexedString, ParseJob*> it = d->m_parseJobs;
-    while (it.hasNext()) {
-        it.next();
-        if (it.value()->parent() == parent) {
-            it.value()->requestAbort();
-        }
-    }
 }
 
 void BackgroundParser::loadSettings()
@@ -621,7 +605,7 @@ void BackgroundParser::parseDocuments()
 
 void BackgroundParser::parseComplete(ThreadWeaver::Job* job)
 {
-    if (ParseJob* parseJob = qobject_cast<ParseJob*>(job)) {
+    if (ParseJob* parseJob = dynamic_cast<ParseJob*>(job)) {
 
         emit parseJobFinished(parseJob);
 
@@ -711,11 +695,6 @@ void BackgroundParser::updateProgressBar()
 
         emit showProgress(this, 0, d->m_maxParseJobs*1000, (additionalProgress + d->m_doneParseJobs)*1000);
     }
-}
-
-ParserDependencyPolicy* BackgroundParser::dependencyPolicy() const
-{
-    return &d->m_dependencyPolicy;
 }
 
 ParseJob* BackgroundParser::parseJobForDocument(const IndexedString& document) const

@@ -31,6 +31,7 @@
 #include <QByteArray>
 #include <QMutex>
 #include <QMutexLocker>
+#include <threadweaver/qobjectdecorator.h>
 #include <QApplication>
 
 #include <kdebug.h>
@@ -101,12 +102,15 @@ public:
 
     int parsePriority;
     ParseJob::SequentialProcessingFlags sequentialProcessingFlags;
+    ThreadWeaver::QObjectDecorator* decorator;
 };
 
 ParseJob::ParseJob( const IndexedString& url, KDevelop::ILanguageSupport* languageSupport )
-        : ThreadWeaver::JobSequence(),
+        : ThreadWeaver::Sequence(),
         d(new ParseJobPrivate(url, languageSupport))
-{}
+{
+    d->decorator = new ThreadWeaver::QObjectDecorator(this);
+}
 
 ParseJob::~ParseJob()
 {
@@ -200,7 +204,7 @@ ReferencedTopDUContext ParseJob::duChain() const
 
 bool ParseJob::abortRequested() const
 {
-    return d->abortRequested;
+    return d->abortRequested.load();
 }
 
 void ParseJob::requestAbort()
@@ -211,7 +215,7 @@ void ParseJob::requestAbort()
 void ParseJob::abortJob()
 {
     d->aborted = true;
-    setFinished(true);
+    setStatus(Status_Aborted);
 }
 
 void ParseJob::setNotifyWhenReady(const QList< QWeakPointer< QObject > >& notify
@@ -516,6 +520,11 @@ DataAccessRepository* ParseJob::dataAccessInformation()
 bool ParseJob::hasTracker() const
 {
     return d->tracker;
+}
+
+ThreadWeaver::QObjectDecorator* ParseJob::decorator() const
+{
+    return d->decorator;
 }
 
 }

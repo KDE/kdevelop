@@ -26,11 +26,15 @@
 #include <QtCore/QWeakPointer>
 #include <KDE/KUrl>
 
-#include <threadweaver/JobSequence.h>
+#include <ThreadWeaver/Sequence>
 
 #include "../duchain/indexedstring.h"
 #include <language/duchain/topducontext.h>
 #include <language/editor/modificationrevision.h>
+
+namespace ThreadWeaver {
+class QObjectDecorator;
+}
 
 namespace KDevelop
 {
@@ -45,7 +49,7 @@ class ReferencedTopDUContext;
  *
  * In your language plugin, don't forget to use acquire an UrlParseLock before starting to the actual parsing.
  */
-class KDEVPLATFORMLANGUAGE_EXPORT ParseJob : public ThreadWeaver::JobSequence
+class KDEVPLATFORMLANGUAGE_EXPORT ParseJob : public QObject, public ThreadWeaver::Sequence
 {
     Q_OBJECT
 
@@ -178,6 +182,8 @@ public:
     /// It's up to the caller to remove the returned instance
     virtual KDevelop::ControlFlowGraph* controlFlowGraph();
 
+    ThreadWeaver::QObjectDecorator* decorator() const;
+
 Q_SIGNALS:
     /**Can be used to give progress feedback to the background-parser. @param value should be between 0 and 1, where 0 = 0% and 1 = 100%
      * @param text may be a text that describes the current state of parsing
@@ -223,4 +229,6 @@ private:
 Q_DECLARE_OPERATORS_FOR_FLAGS(ParseJob::SequentialProcessingFlags);
 
 }
+Q_DECLARE_METATYPE(KDevelop::ParseJob*);
+
 #endif
