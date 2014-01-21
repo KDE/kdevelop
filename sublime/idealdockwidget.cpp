@@ -181,7 +181,6 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
 
         if (isFloating()) {
             setFloating(false);
-
         }
 
         Sublime::Position pos;
