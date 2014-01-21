@@ -86,7 +86,7 @@ void MainWindowPrivate::gotoPreviousWindow()
 
 void MainWindowPrivate::newToolbarConfig()
 {
-    m_mainWindow->applyMainWindowSettings( KConfigGroup(KGlobal::config(), "MainWindow") );
+    m_mainWindow->applyMainWindowSettings( KConfigGroup(KSharedConfig::openConfig(), "MainWindow") );
 }
 
 void MainWindowPrivate::settingsDialog()

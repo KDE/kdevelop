@@ -63,7 +63,7 @@ void BGPreferences::load()
     // stay backwards compatible
     Q_ASSERT(ICore::self()->activeSession());
     KConfigGroup config(ICore::self()->activeSession()->config(), "Background Parser");
-    KConfigGroup oldConfig(KGlobal::config(), "Background Parser");
+    KConfigGroup oldConfig(KSharedConfig::openConfig(), "Background Parser");
 #define BACKWARDS_COMPATIBLE_ENTRY(entry, default) \
 config.readEntry(entry, oldConfig.readEntry(entry, default))
 

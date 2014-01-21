@@ -281,7 +281,7 @@ struct TextDocumentPrivate {
 
     inline KConfigGroup katePartSettingsGroup() const
     {
-        return KGlobal::config()->group("KatePart Settings");
+        return KSharedConfig::openConfig()->group("KatePart Settings");
     }
 
     inline QString docConfigGroupName() const

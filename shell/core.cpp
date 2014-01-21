@@ -251,7 +251,7 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
         /* Need to do this after everything else is loaded.  It's too
             hard to restore position of views, and toolbars, and whatever
             that are not created yet.  */
-        uiController.data()->loadAllAreas(KGlobal::config());
+        uiController.data()->loadAllAreas(KSharedConfig::openConfig());
         uiController.data()->defaultMainWindow()->show();
     }
     emit m_core->startupProgress(90);

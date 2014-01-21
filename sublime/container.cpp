@@ -240,7 +240,7 @@ Container::Container(QWidget *parent)
     connect(d->tabBar, SIGNAL(mouseMiddleClick(int)), this, SLOT(requestClose(int)));
     connect(d->documentListMenu, SIGNAL(triggered(QAction*)), this, SLOT(documentListActionTriggered(QAction*)));
 
-    KConfigGroup group = KGlobal::config()->group("UiSettings");
+    KConfigGroup group = KSharedConfig::openConfig()->group("UiSettings");
     setTabBarHidden(group.readEntry("TabBarVisibility", 1) == 0);
     d->tabBar->setTabsClosable(true);
     d->tabBar->setMovable(true);

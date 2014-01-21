@@ -495,7 +495,7 @@ void IdealController::toggleDocksShown(IdealButtonBarWidget* bar, bool show)
 
 void IdealController::loadSettings()
 {
-    KConfigGroup cg(KGlobal::config(), "UiSettings");
+    KConfigGroup cg(KSharedConfig::openConfig(), "UiSettings");
 
     int bottomOwnsBottomLeft = cg.readEntry("BottomLeftCornerOwner", 0);
     if (bottomOwnsBottomLeft)

@@ -80,7 +80,7 @@ MainWindow::MainWindow( Sublime::Controller *parent, Qt::WFlags flags )
         this, QDBusConnection::ExportScriptableSlots );
 
     setAcceptDrops( true );
-    KConfigGroup cg = KGlobal::config()->group( "UiSettings" );
+    KConfigGroup cg = KSharedConfig::openConfig()->group( "UiSettings" );
     int bottomleft = cg.readEntry( "BottomLeftCornerOwner", 0 );
     int bottomright = cg.readEntry( "BottomRightCornerOwner", 0 );
     kDebug() << "Bottom Left:" << bottomleft;
@@ -181,7 +181,7 @@ void MainWindow::dropEvent( QDropEvent* ev )
 void MainWindow::loadSettings()
 {
     kDebug() << "Loading Settings";
-    KConfigGroup cg = KGlobal::config()->group( "UiSettings" );
+    KConfigGroup cg = KSharedConfig::openConfig()->group( "UiSettings" );
 
     // dock widget corner layout
     int bottomleft = cg.readEntry( "BottomLeftCornerOwner", 0 );

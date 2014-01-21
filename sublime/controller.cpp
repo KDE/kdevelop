@@ -398,7 +398,7 @@ void Controller::setStatusIcon(Document * document, const QIcon & icon)
 
 void Controller::loadSettings()
 {
-    KConfigGroup uiGroup = KGlobal::config()->group("UiSettings");
+    KConfigGroup uiGroup = KSharedConfig::openConfig()->group("UiSettings");
     d->openAfterCurrent = (uiGroup.readEntry("TabBarOpenAfterCurrent", 1) == 1);
     d->arrangeBuddies = (uiGroup.readEntry("TabBarArrangeBuddies", 1) == 1);
 }

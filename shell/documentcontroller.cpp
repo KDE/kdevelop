@@ -127,7 +127,7 @@ struct DocumentControllerPrivate {
             dir.setFileName(QString());
         }else
         {
-            dir = KGlobal::config()->group("Open File").readEntry( "Last Open File Directory", QUrl(Core::self()->projectController()->projectsBaseDirectory()) );
+            dir = KSharedConfig::openConfig()->group("Open File").readEntry( "Last Open File Directory", QUrl(Core::self()->projectController()->projectsBaseDirectory()) );
         }
 
         KEncodingFileDialog::Result res = KEncodingFileDialog::getOpenUrlsAndEncoding( controller->encoding(), dir.url(), i18n( "*|Text File\n" ),
@@ -210,7 +210,7 @@ struct DocumentControllerPrivate {
                 dir = controller->activeDocument()->url().upUrl();
             }else
             {
-                dir = KGlobal::config()->group("Open File").readEntry( "Last Open File Directory", QUrl(Core::self()->projectController()->projectsBaseDirectory()) );
+                dir = KSharedConfig::openConfig()->group("Open File").readEntry( "Last Open File Directory", QUrl(Core::self()->projectController()->projectsBaseDirectory()) );
             }
 
             KEncodingFileDialog::Result res = KEncodingFileDialog::getOpenUrlAndEncoding( QString(), dir.url(), i18n( "*|Text File\n" ),
@@ -596,7 +596,7 @@ void DocumentController::initialize()
 void DocumentController::cleanup()
 {
     if (d->fileOpenRecent)
-        d->fileOpenRecent->saveEntries( KConfigGroup(KGlobal::config(), "Recent Files" ) );
+        d->fileOpenRecent->saveEntries( KConfigGroup(KSharedConfig::openConfig(), "Recent Files" ) );
 
     // Close all documents without checking if they should be saved.
     // This is because the user gets a chance to save them during MainWindow::queryClose.
@@ -626,7 +626,7 @@ void DocumentController::setupActions()
     d->fileOpenRecent = KStandardAction::openRecent(this,
                     SLOT(slotOpenDocument(KUrl)), ac);
     d->fileOpenRecent->setWhatsThis(i18n("This lists files which you have opened recently, and allows you to easily open them again."));
-    d->fileOpenRecent->loadEntries( KConfigGroup(KGlobal::config(), "Recent Files" ) );
+    d->fileOpenRecent->loadEntries( KConfigGroup(KSharedConfig::openConfig(), "Recent Files" ) );
 
     action = d->saveAll = ac->addAction( "file_save_all" );
     action->setIcon(QIcon::fromTheme("document-save"));

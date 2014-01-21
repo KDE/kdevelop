@@ -232,7 +232,7 @@ public:
         Q_ASSERT(s->id().toString() == result.lock->id());
         sessionLock = result.lock;
 
-        KConfigGroup grp = KGlobal::config()->group( SessionController::cfgSessionGroup() );
+        KConfigGroup grp = KSharedConfig::openConfig()->group( SessionController::cfgSessionGroup() );
         grp.writeEntry( SessionController::cfgActiveSessionEntry(), s->id().toString() );
         grp.sync();
         if (Core::self()->setupFlags() & Core::NoUi) return result;
@@ -706,7 +706,7 @@ void SessionController::loadDefaultSession( const QString& session )
 {
     QString load = session;
     if (load.isEmpty()) {
-        KConfigGroup grp = KGlobal::config()->group( cfgSessionGroup() );
+        KConfigGroup grp = KSharedConfig::openConfig()->group( cfgSessionGroup() );
         load = grp.readEntry( cfgActiveSessionEntry(), "default" );
     }
 
@@ -842,7 +842,7 @@ QString SessionController::showSessionChooserDialog(QString headerText, bool onl
     int row = 0;
     int defaultRow = 0;
 
-    QString defaultSession = KGlobal::config()->group( cfgSessionGroup() ).readEntry( cfgActiveSessionEntry(), "default" );
+    QString defaultSession = KSharedConfig::openConfig()->group( cfgSessionGroup() ).readEntry( cfgActiveSessionEntry(), "default" );
 
 
     foreach(const KDevelop::SessionInfo& si, KDevelop::SessionController::availableSessionInfo())

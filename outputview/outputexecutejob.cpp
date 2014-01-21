@@ -450,7 +450,7 @@ void OutputExecuteJobPrivate::mergeEnvironment( QProcessEnvironment& dest, const
 QProcessEnvironment OutputExecuteJobPrivate::effectiveEnvironment() const
 {
     QProcessEnvironment environment = QProcessEnvironment::systemEnvironment();
-    const EnvironmentGroupList environmentGroup( KGlobal::config() );
+    const EnvironmentGroupList environmentGroup( KSharedConfig::openConfig() );
     QString environmentProfile = m_owner->environmentProfile();
     if( environmentProfile.isEmpty() ) {
         environmentProfile = environmentGroup.defaultGroup();

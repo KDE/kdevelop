@@ -536,7 +536,7 @@ void ProjectController::setupActions()
             SLOT(areaChanged(Sublime::Area*)));
     d->m_core->uiControllerInternal()->area(0, "code")->addAction(action);
 
-    KSharedConfig * config = KGlobal::config().data();
+    KSharedConfig * config = KSharedConfig::openConfig().data();
 //     KConfigGroup group = config->group( "General Options" );
 
     d->m_recentAction = KStandardAction::openRecent(this, SLOT(openProject(KUrl)), this);
@@ -808,7 +808,7 @@ void ProjectController::projectImportingFinished( IProject* project )
     if (Core::self()->setupFlags() != Core::NoUi)
     {
         d->m_recentAction->addUrl( project->projectFileUrl() );
-        KSharedConfig * config = KGlobal::config().data();
+        KSharedConfig * config = KSharedConfig::openConfig().data();
         KConfigGroup recentGroup = config->group("RecentProjects");
         d->m_recentAction->saveEntries( recentGroup );
 
@@ -986,7 +986,7 @@ bool ProjectController::isProjectNameUsed( const QString& name ) const
 
 KUrl ProjectController::projectsBaseDirectory() const
 {
-    KConfigGroup group = KGlobal::config()->group( "Project Manager" );
+    KConfigGroup group = KSharedConfig::openConfig()->group( "Project Manager" );
     return group.readEntry( "Projects Base Directory",
                                      QUrl( QDir::homePath()+"/projects" ) );
 }

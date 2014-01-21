@@ -968,14 +968,14 @@ void QuickOpenPlugin::showQuickOpenWidget(const QStringList& items, const QStrin
 void QuickOpenPlugin::storeScopes( const QStringList& scopes )
 {
   lastUsedScopes = scopes;
-  KConfigGroup grp = KGlobal::config()->group("QuickOpen");
+  KConfigGroup grp = KSharedConfig::openConfig()->group("QuickOpen");
   grp.writeEntry( "SelectedScopes", scopes );
 }
 
 void QuickOpenPlugin::storeItems( const QStringList& items )
 {
   lastUsedItems = items;
-  KConfigGroup grp = KGlobal::config()->group("QuickOpen");
+  KConfigGroup grp = KSharedConfig::openConfig()->group("QuickOpen");
   grp.writeEntry( "SelectedItems", items );
 }
 
