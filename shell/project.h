@@ -119,7 +119,6 @@ public Q_SLOTS:
      * the 'General' group
      */
     bool open(const Path &projectFile);
-    KDE_DEPRECATED bool open(const KUrl &projectFileUrl);
 
     /** This method is invoked when the project needs to be closed. */
     void close();

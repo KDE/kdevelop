@@ -508,11 +508,6 @@ void Project::reloadModel()
     Core::self()->runController()->registerJob( importJob );
 }
 
-bool Project::open( const KUrl& projectFileUrl )
-{
-    return open(Path(projectFileUrl));
-}
-
 bool Project::open( const Path& projectFile )
 {
     d->initProject(projectFile);
