@@ -21,7 +21,7 @@ SET( kdevokteta_PART_SRCS
     oktetawidget.cpp
 )
 
-kde4_add_plugin( kdevokteta ${kdevokteta_PART_SRCS} )
+add_library(kdevokteta MODULE ${kdevokteta_PART_SRCS} )
 
 TARGET_LINK_LIBRARIES( kdevokteta
     ${LIBOKTETAKASTEN_LIBRARIES}

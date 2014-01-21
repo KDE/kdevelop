@@ -20,11 +20,11 @@ set(kdevcpprpp_LIB_SRCS
 # Note: This library doesn't follow API/ABI/BC rules and shouldn't have a SOVERSION
 #       Its only purpose is to support the plugin without needing to add all source files
 #       to the plugin target
-kde4_add_library(kdev4cpprpp SHARED ${kdevcpprpp_LIB_SRCS})
+add_library(kdev4cpprpp SHARED ${kdevcpprpp_LIB_SRCS})
 target_link_libraries(kdev4cpprpp LINK_PRIVATE
-  ${KDE4_KDECORE_LIBS}
+  
   ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-  ${KDE4_KTEXTEDITOR_LIBS}
+  KF5::TextEditor
 )
 install(TARGETS kdev4cpprpp ${INSTALL_TARGETS_DEFAULT_ARGS} )
 

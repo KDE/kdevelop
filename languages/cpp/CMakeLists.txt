@@ -1,5 +1,4 @@
 project(cpp)
-kde4_no_enable_final(cpp)
 include(CppBuildConfig.cmake)
 
 include_directories(
@@ -58,7 +57,7 @@ set(kdevcpplanguagesupport_LIB_UI
 #     codegen/ui/privateimplementation.ui
 )
 
-kde4_add_ui_files(kdevcpplanguagesupport_PART_SRCS ${kdevcpplanguagesupport_LIB_UI})
+qt5_wrap_ui(kdevcpplanguagesupport_PART_SRCS ${kdevcpplanguagesupport_LIB_UI})
 
 option(BUILD_kdev_includepathresolver "Build the includepath resolver debugging tool" OFF)
 if(BUILD_kdev_includepathresolver)
@@ -66,7 +65,7 @@ if(BUILD_kdev_includepathresolver)
   set_target_properties( kdev_includepathresolver PROPERTIES COMPILE_FLAGS -DTEST )
   target_link_libraries( kdev_includepathresolver
   ${KDEVPLATFORM_INTERFACES_LIBRARIES}  ${KDEVPLATFORM_PROJECT_LIBRARIES}
-  ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${KDE4_KDECORE_LIBS} ${KDEVPLATFORM_LANGUAGE_LIBRARIES} )
+  Qt5::Core Qt5::Gui  ${KDEVPLATFORM_LANGUAGE_LIBRARIES} )
   install(TARGETS kdev_includepathresolver ${INSTALL_TARGETS_DEFAULT_ARGS} )
 endif(BUILD_kdev_includepathresolver)
 
@@ -75,7 +74,7 @@ if(BUILD_uiblocktester)
   add_definitions(-DDEBUG_UI_LOCKUP)
 endif(BUILD_uiblocktester)
 
-kde4_add_plugin(kdevcpplanguagesupport ${kdevcpplanguagesupport_PART_SRCS})
+add_library(kdevcpplanguagesupport MODULE ${kdevcpplanguagesupport_PART_SRCS})
 target_link_libraries(kdevcpplanguagesupport
     kdev4cpprpp
     kdev4cppduchain
@@ -84,8 +83,8 @@ target_link_libraries(kdevcpplanguagesupport
     ${KDEVPLATFORM_PROJECT_LIBRARIES}
     ${KDE4_THREADWEAVER_LIBRARIES}
     ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KTEXTEDITOR_LIBS}
+    
+    KF5::TextEditor
 )
 
 install(TARGETS kdevcpplanguagesupport DESTINATION ${PLUGIN_INSTALL_DIR})

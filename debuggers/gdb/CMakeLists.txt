@@ -1,11 +1,12 @@
 project(gdb)
 
-macro_optional_find_package( KDE4Workspace 4.2.0 )
+# TODO KF5 figure out how to get the process selection widget (ksysguardprocesslist.h)
+# macro_optional_find_package( KDE4Workspace 4.2.0 )
 
-macro_log_feature( KDE4WORKSPACE_FOUND
-"KDE 4 Workspace" "KDE 4 Workspace libraries" "kdebase/workspace" FALSE
-"" "Required for building the process selection dialog for attaching GDB to a running process."
-)
+# macro_log_feature( KDE4WORKSPACE_FOUND
+# "KDE 4 Workspace" "KDE 4 Workspace libraries" "kdebase/workspace" FALSE
+# "" "Required for building the process selection dialog for attaching GDB to a running process."
+# )
 
 if(KDE4WORKSPACE_FOUND)
     include_directories(
@@ -14,16 +15,14 @@ if(KDE4WORKSPACE_FOUND)
     add_definitions(
         -DKDEV_ENABLE_GDB_ATTACH_DIALOG
     )
-endif(KDE4WORKSPACE_FOUND)
+endif()
 
 add_subdirectory(unittests)
 add_subdirectory(printers)
 
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9012 )
 
-include_directories(
-    ${CMAKE_CURRENT_BINARY_DIR}
-    )
+include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
 
 #add_subdirectory(tests)
 
@@ -78,8 +77,8 @@ set(kdevgdb_PART_UI
     registers/registersview.ui
 )
 
-kde4_add_ui_files(kdevgdb_PART_SRCS ${kdevgdb_PART_UI})
-kde4_add_plugin(kdevgdb ${kdevgdb_PART_SRCS})
+qt5_wrap_ui(kdevgdb_PART_SRCS ${kdevgdb_PART_UI})
+add_library(kdevgdb MODULE ${kdevgdb_PART_SRCS})
 target_link_libraries(kdevgdb sublime
     ${KDEVPLATFORM_INTERFACES_LIBRARIES}
     ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
@@ -88,7 +87,7 @@ target_link_libraries(kdevgdb sublime
     ${KDEVPLATFORM_PROJECT_LIBRARIES}
     ${KDE4_KDEUI_LIBS}
     ${KDEVPLATFORM_UTIL_LIBRARIES}
-    ${KDE4_KTEXTEDITOR_LIBS}
+    KF5::TextEditor
     ${KDE4WORKSPACE_PROCESSUI_LIBS}
 )
 
@@ -133,22 +132,26 @@ if(KDE4WORKSPACE_FOUND)
     )
 endif(KDE4WORKSPACE_FOUND)
 
-kde4_add_ui_files(gdbtest_PART_SRCS
+qt5_wrap_ui(gdbtest_PART_SRCS
     debuggertracingdialog.ui
     selectaddress.ui
     registers/registersview.ui
 )
-kde4_add_unit_test(gdbtest ${gdbtest_PART_SRCS})
+
+add_executable(gdbtest ${gdbtest_PART_SRCS})
+ecm_mark_as_test(gdbtest)
+add_test(gdbtest gdbtest)
+
 target_link_libraries(gdbtest
-    ${QT_QTTEST_LIBRARY}
+    Qt5::Test
     ${KDEVPLATFORM_SHELL_LIBRARIES}
     ${KDEVPLATFORM_INTERFACES_LIBRARIES}
     ${KDEVPLATFORM_PROJECT_LIBRARIES}
     ${KDEVPLATFORM_DEBUGGER_LIBRARIES}
     ${KDEVPLATFORM_TESTS_LIBRARIES}
     ${KDEVPLATFORM_UTIL_LIBRARIES}
-    ${KDE4_KIO_LIBS}
-    ${KDE4_KTEXTEDITOR_LIBS}
+    KF5::KIOWidgets
+    KF5::TextEditor
     ${KDE4_KPARTS_LIBRARY}
     ${KDE4WORKSPACE_PROCESSUI_LIBS}
 )

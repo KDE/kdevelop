@@ -1,7 +1,7 @@
 
 #This is the proper cmake macro for installing kde4 icons, but it needs 
 #proper naming of the icons: hi<size>_<category>_<name>.png
-kde4_install_icons(${DATA_INSTALL_DIR}/kdevelop/icons)
+ecm_install_icons(${DATA_INSTALL_DIR}/kdevelop/icons)
 
 ########### install files ###############
 

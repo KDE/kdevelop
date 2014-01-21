@@ -14,12 +14,12 @@ set(cmakebuilder_LIB_SRCS
     prunejob.cpp
 )
 
-kde4_add_kcfg_files( cmakebuilder_LIB_SRCS cmakebuilderconfig.kcfgc )
-kde4_add_plugin(kdevcmakebuilder ${cmakebuilder_LIB_SRCS})
+kconfig_add_kcfg_files( cmakebuilder_LIB_SRCS cmakebuilderconfig.kcfgc )
+add_library(kdevcmakebuilder MODULE ${cmakebuilder_LIB_SRCS})
 target_link_libraries(
     kdevcmakebuilder
     kdev4cmakecommon
-        ${KDE4_KIO_LIBS}
+        KF5::KIOWidgets
         ${KDE4_KDEUI_LIBS}
         ${KDEVPLATFORM_INTERFACES_LIBRARIES}
         ${KDEVPLATFORM_OUTPUTVIEW_LIBRARIES}
@@ -41,11 +41,11 @@ set( cmakebuilder_cfg_UI
 )
 
 
-kde4_add_ui_files( cmakebuilder_cfg_SRCS ${cmakebuilder_cfg_UI} )
-kde4_add_kcfg_files( cmakebuilder_cfg_SRCS cmakebuilderconfig.kcfgc )
+qt5_wrap_ui( cmakebuilder_cfg_SRCS ${cmakebuilder_cfg_UI} )
+kconfig_add_kcfg_files( cmakebuilder_cfg_SRCS cmakebuilderconfig.kcfgc )
 
-kde4_add_plugin( kcm_kdev_cmakebuilder ${cmakebuilder_cfg_SRCS} )
-target_link_libraries( kcm_kdev_cmakebuilder ${KDE4_KIO_LIBS} ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_UTIL_LIBRARIES} )
+add_library(kcm_kdev_cmakebuilder MODULE ${cmakebuilder_cfg_SRCS} )
+target_link_libraries( kcm_kdev_cmakebuilder KF5::KIOWidgets ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_UTIL_LIBRARIES} )
 install( TARGETS kcm_kdev_cmakebuilder DESTINATION ${PLUGIN_INSTALL_DIR} )
 install( FILES kcm_kdev_cmakebuilder.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 

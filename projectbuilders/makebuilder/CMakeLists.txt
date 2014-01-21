@@ -11,10 +11,10 @@ set(kdevmakebuilder_LIB_SRCS
 )
 
 
-kde4_add_plugin(kdevmakebuilder ${kdevmakebuilder_LIB_SRCS})
+add_library(kdevmakebuilder MODULE ${kdevmakebuilder_LIB_SRCS})
 target_link_libraries(kdevmakebuilder
         ${KDE4_KDEUI_LIBS}
-        ${KDE4_KTEXTEDITOR_LIBS}
+        KF5::TextEditor
         ${KDEVPLATFORM_INTERFACES_LIBRARIES}
         ${KDEVPLATFORM_PROJECT_LIBRARIES}
         ${KDEVPLATFORM_OUTPUTVIEW_LIBRARIES}
@@ -33,10 +33,10 @@ set( makebuilder_cfg_UI
 )
 
 
-kde4_add_ui_files( makebuilder_cfg_SRCS ${makebuilder_cfg_UI} )
-kde4_add_kcfg_files( makebuilder_cfg_SRCS makebuilderconfig.kcfgc )
-kde4_add_plugin( kcm_kdev_makebuilder ${makebuilder_cfg_SRCS} )
-target_link_libraries( kcm_kdev_makebuilder ${KDE4_KIO_LIBS} ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_UTIL_LIBRARIES} )
+qt5_wrap_ui( makebuilder_cfg_SRCS ${makebuilder_cfg_UI} )
+kconfig_add_kcfg_files( makebuilder_cfg_SRCS makebuilderconfig.kcfgc )
+add_library(kcm_kdev_makebuilder MODULE ${makebuilder_cfg_SRCS} )
+target_link_libraries( kcm_kdev_makebuilder KF5::KIOWidgets ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_UTIL_LIBRARIES} )
 
 install( TARGETS kcm_kdev_makebuilder DESTINATION ${PLUGIN_INSTALL_DIR} )
 

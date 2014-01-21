@@ -1,20 +1,6 @@
-
 project(ghprovider)
 
-find_package(KDE4 REQUIRED)
-include (KDE4Defaults)
-find_package(KDevPlatform REQUIRED)
-
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
-find_package(QJson REQUIRED)
-
-include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_BINARY_DIR}
-    ${KDE4_INCLUDES}
-    ${KDEVPLATFORM_INCLUDE_DIR}
-    ${QJSON_INCLUDE_DIR}
-)
 
 add_subdirectory(icons)
 
@@ -30,16 +16,14 @@ set(kdevghprovider_PART_SRCS
     ghdialog.cpp
 )
 
-kde4_add_plugin(kdevghprovider ${kdevghprovider_PART_SRCS})
+add_library(kdevghprovider MODULE ${kdevghprovider_PART_SRCS})
 target_link_libraries(kdevghprovider
-  ${KDE4_KDEUI_LIBS} 
-  ${KDEVPLATFORM_INTERFACES_LIBRARIES} 
-  ${KDEVPLATFORM_VCS_LIBRARIES} 
-  ${KDE4_KIO_LIBS}
+  KF5::KIOWidgets
+  ${KDEVPLATFORM_INTERFACES_LIBRARIES}
+  ${KDEVPLATFORM_VCS_LIBRARIES}
   ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
   ${KDEVPLATFORM_OUTPUTVIEW_LIBRARIES}
   ${KDEVPLATFORM_UTIL_LIBRARIES}
-  ${QJSON_LIBRARY}
 )
 
 install(TARGETS kdevghprovider DESTINATION ${PLUGIN_INSTALL_DIR})

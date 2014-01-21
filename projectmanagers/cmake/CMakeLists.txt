@@ -1,5 +1,4 @@
 project(cmakemanager)
-kde4_no_enable_final(cmakemanager)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/parser)
 
 add_subdirectory(tests)
@@ -74,30 +73,30 @@ remove_definitions( -DQT_NO_STL )
 #       Its only purpose is to support the plugin without needing to add all source files
 #       to the plugin target
 
-kde4_add_ui_files( cmakecommon_SRCS ${cmakecommon_UI} )
-kde4_add_library( kdev4cmakecommon SHARED ${cmakecommon_SRCS} )
+qt5_wrap_ui( cmakecommon_SRCS ${cmakecommon_UI} )
+add_library( kdev4cmakecommon SHARED ${cmakecommon_SRCS} )
 target_link_libraries( kdev4cmakecommon LINK_PRIVATE ${KDE4_KDEUI_LIBS}
-                        ${KDE4_KTEXTEDITOR_LIBS} ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES}
+                        KF5::TextEditor ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES}
                         ${QT_QTSCRIPT_LIBRARY} ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
                         )
 
-kde4_add_ui_files( cmakemanager_SRCS ${cmakemanager_UI} )
-kde4_add_plugin( kdevcmakemanager ${cmakemanager_SRCS} )
-target_link_libraries( kdevcmakemanager ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${KDEVPLATFORM_UTIL_LIBRARIES}
+qt5_wrap_ui( cmakemanager_SRCS ${cmakemanager_UI} )
+add_library(kdevcmakemanager MODULE ${cmakemanager_SRCS} )
+target_link_libraries( kdevcmakemanager ${KDE4_KDEUI_LIBS} KF5::KIOWidgets ${KDEVPLATFORM_UTIL_LIBRARIES}
                         ${KDEVPLATFORM_INTERFACES_LIBRARIES} kdev4cmakecommon
                         ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-                        ${KDEVPLATFORM_OUTPUTVIEW_LIBRARIES} ${KDE4_KTEXTEDITOR_LIBS})
+                        ${KDEVPLATFORM_OUTPUTVIEW_LIBRARIES} KF5::TextEditor)
                         
-kde4_add_plugin( kdevcmakedocumentation ${cmakedoc_SRCS} )
+add_library(kdevcmakedocumentation MODULE ${cmakedoc_SRCS} )
 target_link_libraries( kdevcmakedocumentation
                         ${KDEVPLATFORM_INTERFACES_LIBRARIES} kdev4cmakecommon
                         ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
                         ${KDEVPLATFORM_DOCUMENTATION_LIBRARIES}
-                        ${KDE4_KTEXTEDITOR_LIBS} ${QT_QTWEBKIT_LIBRARY})
+                        KF5::TextEditor ${QT_QTWEBKIT_LIBRARY})
 
-kde4_add_ui_files( cmakesettings_SRCS ${cmakesettings_UI} )
-kde4_add_plugin( kcm_kdevcmake_settings ${cmakesettings_SRCS} )
-target_link_libraries( kcm_kdevcmake_settings ${KDE4_KIO_LIBS}
+qt5_wrap_ui( cmakesettings_SRCS ${cmakesettings_UI} )
+add_library(kcm_kdevcmake_settings MODULE ${cmakesettings_SRCS} )
+target_link_libraries( kcm_kdevcmake_settings KF5::KIOWidgets
                        ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_UTIL_LIBRARIES}
                        ${KDE4_KIO_LIBRARY} kdev4cmakecommon )
 

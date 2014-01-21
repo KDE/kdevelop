@@ -15,9 +15,9 @@ set(kdevcustommakemanager_PART_SRCS
 )
 
 
-kde4_add_plugin(kdevcustommakemanager ${kdevcustommakemanager_PART_SRCS})
+add_library(kdevcustommakemanager MODULE ${kdevcustommakemanager_PART_SRCS})
 target_link_libraries( kdevcustommakemanager
-                    ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
+                    ${KDE4_KDEUI_LIBS} KF5::KIOWidgets ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
 )
 
 install(TARGETS kdevcustommakemanager DESTINATION ${PLUGIN_INSTALL_DIR} )

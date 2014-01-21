@@ -13,11 +13,11 @@ project(KDevelop)
 
 # we need some parts of the ECM CMake helpers
 find_package (ECM 0.0.9 REQUIRED NO_MODULE)
-set(CMAKE_MODULE_PATH ${KDevPlatform_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
+set(CMAKE_MODULE_PATH ${KDevelop_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
 include(ECMOptionalAddSubdirectory)
 include(ECMInstallIcons)
 include(ECMSetupVersion)
-include(ECMMarkAsTest)
+include(ECMAddTests)
 include(ECMMarkNonGuiExecutable)
 include(ECMGenerateHeaders)
 
@@ -30,6 +30,39 @@ include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(KDECompilerSettings)
 
+find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Widgets Concurrent Declarative Test)
+find_package(KF5 CONFIG REQUIRED COMPONENTS
+  Archive
+  Config
+  DocTools
+  GuiAddons
+  I18n
+  Init
+  ItemModels
+  JobWidgets
+  KCMUtils
+  KIO
+  NewStuff
+  Parts
+  PrintUtils
+  Sonnet
+  TextEditor
+  ThreadWeaver
+  WindowSystem
+  XmlGui
+  TextEditor
+  NotifyConfig
+  ThreadWeaver
+  ItemModels
+  Service
+  Emoticons
+  KCMUtils
+  ItemViews
+  Plasma
+
+  # TODO KF5: Port away from this
+  KDE4Support
+)
 find_package(KDevPlatform ${KDEVPLATFORM_VERSION} REQUIRED)
 
 add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)

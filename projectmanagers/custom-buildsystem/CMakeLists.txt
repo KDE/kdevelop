@@ -1,17 +1,11 @@
 project(kdevelop4-custom-buildsystem)
 
-include(MacroLibrary)
-
-include_directories( ${KDE4_INCLUDES} ${KDEVPLATFORM_INCLUDE_DIR})
-
-add_definitions( ${QT_DEFINITIONS} ${KDE4_DEFINITIONS} )
-
 ## Unittests
 add_subdirectory( tests )
 
 ## KDevelop Plugin
 set( custom_SRCS custombuildsystemplugin.cpp custombuildjob.cpp )
-kde4_add_plugin( kdevcustombuildsystem ${custom_SRCS} )
+add_library(kdevcustombuildsystem MODULE ${custom_SRCS} )
 target_link_libraries( kdevcustombuildsystem
         ${KDEVPLATFORM_PROJECT_LIBRARIES}
         ${KDEVPLATFORM_INTERFACES_LIBRARIES}
@@ -32,16 +26,16 @@ set( custom_kcm_SRCS
         kcm_custombuildsystem.cpp
         debugarea.cpp
    )
-kde4_add_ui_files( custom_kcm_SRCS 
+qt5_wrap_ui( custom_kcm_SRCS 
                         includeswidget.ui
                         defineswidget.ui
                         projectpathswidget.ui
                         configwidget.ui
                         custombuildsystemconfigwidget.ui 
                  )
-kde4_add_kcfg_files( custom_kcm_SRCS kcfg_custombuildsystemconfig.kcfgc )
-kde4_add_plugin( kcm_kdevcustombuildsystem ${custom_kcm_SRCS} )
-target_link_libraries( kcm_kdevcustombuildsystem ${KDE4_KIO_LIBS} ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_UTIL_LIBRARIES} )
+kconfig_add_kcfg_files( custom_kcm_SRCS kcfg_custombuildsystemconfig.kcfgc )
+add_library(kcm_kdevcustombuildsystem MODULE ${custom_kcm_SRCS} )
+target_link_libraries( kcm_kdevcustombuildsystem KF5::KIOWidgets ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_UTIL_LIBRARIES} )
 
 ## Installation
 install( TARGETS kcm_kdevcustombuildsystem
