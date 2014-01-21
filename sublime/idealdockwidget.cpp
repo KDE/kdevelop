@@ -57,7 +57,7 @@ IdealDockWidget::IdealDockWidget(IdealController *controller, Sublime::MainWindo
     connect(closeButton, SIGNAL(clicked(bool)), SIGNAL(closeRequested()));
     }
 
-    setFeatures(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable);
+    setFeatures(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
     // do not allow to move docks to the top dock area (no buttonbar there in our current UI)
     setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
 }
@@ -117,29 +117,24 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
     QAction *left = new QAction(i18nc("toolview position", "Left"), g);
     QAction *bottom = new QAction(i18nc("toolview position", "Bottom"), g);
     QAction *right = new QAction(i18nc("toolview position", "Right"), g);
-    QAction *top = new QAction(i18nc("toolview position", "Top"), g);
+    QAction *detach = new QAction(i18nc("toolview position", "Detached"), g);
 
-    QAction* actions[] = {left, bottom, right, top};
-    for (int i = 0; i < 4; ++i)
-    {
-        // do not show "move to top" toolview position
-        // we never show the top buttonbar and we shouldn't allow docks to go there
-        if (top == actions[i])
-            continue;
-        positionMenu->addAction(actions[i]);
-        actions[i]->setCheckable(true);
+    for (auto action : {left, bottom, right, detach}) {
+        positionMenu->addAction(action);
+        action->setCheckable(true);
     }
-    if (m_docking_area == Qt::TopDockWidgetArea)
-        top->setChecked(true);
-    else if (m_docking_area == Qt::BottomDockWidgetArea)
+    if (isFloating()) {
+        detach->setChecked(true);
+    } else if (m_docking_area == Qt::BottomDockWidgetArea)
         bottom->setChecked(true);
     else if (m_docking_area == Qt::LeftDockWidgetArea)
         left->setChecked(true);
-    else
+    else if (m_docking_area == Qt::RightDockWidgetArea)
         right->setChecked(true);
     /// end position menu
 
     menu.addSeparator();
+
     QAction *setShortcut = menu.addAction(KIcon("configure-shortcuts"), i18n("Assign Shortcut..."));
     setShortcut->setToolTip(i18n("Use this shortcut to trigger visibility of the toolview."));
 
@@ -178,6 +173,15 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
 
             delete dialog;
             return;
+        } else if ( triggered == detach ) {
+            setFloating(true);
+            m_area->raiseToolView(m_view);
+            return;
+        }
+
+        if (isFloating()) {
+            setFloating(false);
+
         }
 
         Sublime::Position pos;
@@ -187,8 +191,6 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
             pos = Sublime::Bottom;
         else if (triggered == right)
             pos = Sublime::Right;
-        else if (triggered == top)
-            pos = Sublime::Top;
         else
             return;
 
