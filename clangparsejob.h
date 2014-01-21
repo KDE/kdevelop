@@ -24,6 +24,7 @@
 #define CLANGLANG_CLANGPARSEJOB_H
 
 #include <language/backgroundparser/parsejob.h>
+#include <project/path.h>
 #include <clang-c/Index.h>
 
 #include "duchain/parsesession.h"
@@ -53,7 +54,7 @@ protected:
 private:
     void buildDUChain(CXFile file);
 
-    KUrl::List m_includes;
+    KDevelop::Path::List m_includes;
     QHash<QString, QString> m_defines;
     KSharedPtr<ParseSession> m_session;
     IncludeFileContexts m_includedFiles;

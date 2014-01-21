@@ -14,6 +14,7 @@ target_link_libraries(kdevclangduchain LINK_PRIVATE
 
 target_link_libraries(kdevclangduchain LINK_PUBLIC
     ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
+    ${KDEVPLATFORM_PROJECT_LIBRARIES}
     ${CLANG_CLANG_LIB}
 )
 

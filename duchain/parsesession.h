@@ -32,6 +32,7 @@
 #include <language/duchain/indexedstring.h>
 #include <language/interfaces/iproblem.h>
 #include <language/interfaces/iastcontainer.h>
+#include <project/path.h>
 
 #include "duchainexport.h"
 
@@ -52,7 +53,7 @@ public:
      * @param contents The contents of the document you want to parse.
      */
     ParseSession(const KDevelop::IndexedString& url, const QByteArray& contents, ClangIndex* index,
-                 const KUrl::List& includes = {}, const QHash<QString, QString>& defines = {},
+                 const KDevelop::Path::List& includes = {}, const QHash<QString, QString>& defines = {},
                  bool skipFunctionBodies = false );
     ~ParseSession();
 
@@ -68,7 +69,7 @@ public:
     CXFile file() const;
 
     bool reparse(const QByteArray& contents,
-                 const KUrl::List& includes = {}, const QHash<QString, QString>& defines = {});
+                 const KDevelop::Path::List& includes = {}, const QHash<QString, QString>& defines = {});
 
     using TopAstNode = CXTranslationUnit;
 
@@ -79,7 +80,7 @@ private:
     CXTranslationUnit m_unit;
     CXFile m_file;
 
-    KUrl::List m_includes;
+    KDevelop::Path::List m_includes;
     QHash<QString, QString> m_defines;
 };
 

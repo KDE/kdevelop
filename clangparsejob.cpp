@@ -49,9 +49,9 @@ using namespace KDevelop;
 
 namespace {
 // TODO: investigate why this is required to find e.g. stddef.h
-KUrl::List defaultIncludes()
+Path::List defaultIncludes()
 {
-    KUrl::List includePaths;
+    Path::List includePaths;
 
     if (!includePaths.isEmpty()) {
         return includePaths;
@@ -106,7 +106,7 @@ KUrl::List defaultIncludes()
                     mode = Finished;
                 } else {
                     // This is an include path, add it to the list.
-                    includePaths << QDir::cleanPath(line.trimmed());
+                    includePaths << Path(QDir::cleanPath(line.trimmed()));
                 }
                 break;
             default:
@@ -153,7 +153,7 @@ ReferencedTopDUContext createTopContext(const IndexedString& path)
 ClangParseJob::ClangParseJob(const IndexedString& url, ILanguageSupport* languageSupport)
 : ParseJob(url, languageSupport)
 {
-    auto item = ICore::self()->projectController()->projectModel()->itemForUrl(url);
+    auto item = ICore::self()->projectController()->projectModel()->itemForPath(url);
     if (item && item->project()->buildSystemManager()) {
         auto bsm = item->project()->buildSystemManager();
         m_includes = bsm->includeDirectories(item);

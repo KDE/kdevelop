@@ -52,7 +52,7 @@ IndexedString ParseSession::languageString()
 }
 
 ParseSession::ParseSession(const IndexedString& url, const QByteArray& contents, ClangIndex* index,
-                           const KUrl::List& includes, const QHash<QString, QString>& defines,
+                           const Path::List& includes, const QHash<QString, QString>& defines,
                            const bool skipFunctionBodies)
     : m_url(url)
     , m_unit(nullptr)
@@ -72,7 +72,7 @@ ParseSession::ParseSession(const IndexedString& url, const QByteArray& contents,
     // uses QByteArray as smart-pointer for const char* ownership
     QVector<QByteArray> otherArgs;
     otherArgs.reserve(includes.size() + defines.size());
-    foreach (const KUrl& url, includes) {
+    foreach (const Path& url, includes) {
         QByteArray path = QString("-I" + url.toLocalFile()).toUtf8();
         otherArgs << path;
         args << path.constData();
@@ -168,7 +168,7 @@ CXFile ParseSession::file() const
     return m_file;
 }
 
-bool ParseSession::reparse(const QByteArray& contents, const KUrl::List& includes, const QHash<QString, QString>& defines)
+bool ParseSession::reparse(const QByteArray& contents, const Path::List& includes, const QHash<QString, QString>& defines)
 {
     if (includes != m_includes || defines != m_defines) {
         return false;
