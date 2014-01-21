@@ -60,6 +60,8 @@ public:
 
     operator const char*() const;
 
+    QString toString() const;
+
 private:
     CXString string;
 };

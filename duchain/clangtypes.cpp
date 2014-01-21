@@ -57,6 +57,11 @@ ClangString::operator const char*() const
     return data ? data : "";
 }
 
+QString ClangString::toString() const
+{
+    return QString::fromUtf8(clang_getCString(string));
+}
+
 ClangLocation::ClangLocation(CXSourceLocation location)
     : location(location)
 {

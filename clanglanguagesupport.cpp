@@ -24,8 +24,11 @@
 
 #include "clangparsejob.h"
 #include "clanghighlighting.h"
-#include "duchain/clangtypes.h"
 #include "version.h"
+
+#include "duchain/clangtypes.h"
+
+#include "codecompletion/model.h"
 
 #include <KPluginFactory>
 #include <KAboutData>
@@ -46,6 +49,8 @@ ClangLanguageSupport::ClangLanguageSupport(QObject* parent, const QVariantList& 
 , m_index(new ClangIndex)
 {
     KDEV_USE_EXTENSION_INTERFACE(ILanguageSupport)
+
+    new KDevelop::CodeCompletion( this, new ClangCodeCompletionModel(this), name() );
 }
 
 ClangLanguageSupport::~ClangLanguageSupport()

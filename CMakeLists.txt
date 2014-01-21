@@ -49,6 +49,7 @@ include_directories(
 )
 
 add_subdirectory(duchain)
+add_subdirectory(codecompletion)
 add_subdirectory(tests)
 
 kde4_add_plugin(kdevclanglanguagesupport
@@ -58,6 +59,7 @@ kde4_add_plugin(kdevclanglanguagesupport
 )
 target_link_libraries(kdevclanglanguagesupport
     kdevclangduchain
+    kdevclangcodecompletion
 
     ${KDE4_THREADWEAVER_LIBS}
     ${KDEVPLATFORM_PROJECT_LIBRARIES}
