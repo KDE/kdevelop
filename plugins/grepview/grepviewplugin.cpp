@@ -42,6 +42,7 @@
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
 #include <project/projectmodel.h>
+#include <project/path.h>
 #include <language/interfaces/editorcontext.h>
 #include <outputview/ioutputview.h>
 
@@ -132,7 +133,7 @@ KDevelop::ContextMenuExtension GrepViewPlugin::contextMenuExtension(KDevelop::Co
         if ((items.count() == 1) && (items.first()->folder())) {
             QAction* action = new QAction( i18n( "Find/Replace in This Folder" ), this );
             action->setIcon(QIcon::fromTheme("edit-find"));
-            m_contextMenuDirectory = items.at(0)->folder()->url().toLocalFile();
+            m_contextMenuDirectory = items.at(0)->folder()->path().toLocalFile();
             connect( action, SIGNAL(triggered()), this, SLOT(showDialogFromProject()));
             extension.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, action );
         }

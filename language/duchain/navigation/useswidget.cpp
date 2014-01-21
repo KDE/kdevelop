@@ -43,7 +43,6 @@ using namespace KDevelop;
 
 
 const int tooltipContextSize = 2; //How many lines around the use are shown in the tooltip
-const bool showUsesHeader = false;
 
 ///The returned text is fully escaped
 ///@param cutOff The total count of characters that should be cut of, all in all on both sides together.

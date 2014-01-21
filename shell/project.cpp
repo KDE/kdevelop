@@ -50,6 +50,7 @@
 #include <interfaces/iruncontroller.h>
 #include <interfaces/isession.h>
 #include <project/projectmodel.h>
+#include <project/path.h>
 #include <language/duchain/indexedstring.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>
 
@@ -65,36 +66,36 @@ class ProjectProgress : public QObject, public IStatus
 {
     Q_OBJECT
     Q_INTERFACES(KDevelop::IStatus)
-    
+
     public:
         ProjectProgress();
         virtual ~ProjectProgress();
         virtual QString statusName() const;
-        
+
         /*! Show indeterminate mode progress bar */
         void setBuzzy();
-        
+
         /*! Hide progress bar */
         void setDone();
-        
+
         QString projectName;
-        
+
     private Q_SLOTS:
         void slotClean();
-        
+
     Q_SIGNALS:
         void clearMessage(KDevelop::IStatus*);
         void showMessage(KDevelop::IStatus*,const QString & message, int timeout = 0);
         void showErrorMessage(const QString & message, int timeout = 0);
         void hideProgress(KDevelop::IStatus*);
         void showProgress(KDevelop::IStatus*,int minimum, int maximum, int value);
-        
+
     private:
         QTimer* m_timer;
 };
-    
-    
-    
+
+
+
 ProjectProgress::ProjectProgress()
 {
     m_timer = new QTimer(this);
@@ -138,9 +139,9 @@ void ProjectProgress::slotClean()
 class ProjectPrivate
 {
 public:
-    KUrl folder;
-    KUrl projectFileUrl;
-    KUrl developerFileUrl;
+    Path projectPath;
+    Path projectFile;
+    Path developerFile;
     QString developerTempFile;
     QString projectTempFile;
     IPlugin* manager;
@@ -202,44 +203,22 @@ public:
         return files;
     }
 
-    QList<ProjectBaseItem*> itemsForUrlInternal( const KUrl& url, ProjectBaseItem* folder ) const
+    QList<ProjectBaseItem*> itemsForPath( const IndexedString& path ) const
     {
-        QList<ProjectBaseItem*> ret;
-        if( !folder )
-            return ret;
-
-        if( folder->url().equals( url, KUrl::CompareWithoutTrailingSlash ) )
-            ret << folder;
-
-        for(int i=0; i<folder->rowCount(); i++) {
-            ProjectBaseItem* item=folder->child(i);
-
-            if(item->type()!=ProjectBaseItem::File)
-                ret << itemsForUrlInternal(url, item);
-            else if( item->url() == url )
-                ret << item;
-            
-        }
-        return ret;
-    }
-    
-    QList<ProjectBaseItem*> itemsForUrl( const KUrl& url ) const
-    {
-        if( !url.isValid() ) {
+        if ( path.isEmpty() ) {
             return QList<ProjectBaseItem*>();
         }
-        if ( folder.protocol() != url.protocol() || folder.host() != url.host() )
-            return QList<ProjectBaseItem*>();
 
         if (!topItem->model()) {
             // this gets hit when the project has not yet been added to the model
             // i.e. during import phase
             // TODO: should we handle this somehow?
+            // possible idea: make the item<->path hash per-project
             return QList<ProjectBaseItem*>();
         }
 
         Q_ASSERT(topItem->model());
-        QList<ProjectBaseItem*> items = topItem->model()->itemsForUrl(url);
+        QList<ProjectBaseItem*> items = topItem->model()->itemsForPath(path);
 
         QList<ProjectBaseItem*>::iterator it = items.begin();
         while(it != items.end()) {
@@ -268,34 +247,35 @@ public:
         }
     }
 
-    void initProjectUrl(const KUrl& projectFileUrl_)
+    void initProject(const Path& projectFile_)
     {
         // helper method for open()
-        projectFileUrl = projectFileUrl_;
+        projectFile = projectFile_;
     }
 
     bool initProjectFiles()
     {
-        KIO::StatJob* statJob = KIO::stat( projectFileUrl, KIO::HideProgressInfo );
+        KIO::StatJob* statJob = KIO::stat( projectFile.toUrl(), KIO::HideProgressInfo );
         if ( !statJob->exec() ) //be sync for right now
         {
             KMessageBox::sorry( Core::self()->uiControllerInternal()->defaultMainWindow(),
                             i18n( "Unable to load the project file %1.<br>"
                                   "The project has been removed from the session.",
-                                  projectFileUrl.pathOrUrl() ) );
+                                  projectFile.pathOrUrl() ) );
             return false;
         }
 
         // developerfile == dirname(projectFileUrl) ."/.kdev4/". basename(projectfileUrl)
-        developerFileUrl = projectFileUrl.upUrl();
-        developerFileUrl.addPath( ".kdev4/" + projectFileUrl.fileName() );
+        developerFile = projectFile;
+        developerFile.setLastPathSegment( ".kdev4" );
+        developerFile.addPath( projectFile.lastPathSegment() );
 
-        statJob = KIO::stat( developerFileUrl, KIO::HideProgressInfo );
+        statJob = KIO::stat( developerFile.toUrl(), KIO::HideProgressInfo );
         if( !statJob->exec() )
         {
             // the developerfile does not exist yet, check if its folder exists
             // the developerfile itself will get created below
-            KUrl dir = developerFileUrl.upUrl();
+            KUrl dir = developerFile.parent().toUrl();
             statJob = KIO::stat( dir, KIO::HideProgressInfo );
             if( !statJob->exec() )
             {
@@ -312,22 +292,22 @@ public:
             }
         }
 
-        if( !KIO::NetAccess::download( projectFileUrl, projectTempFile,
+        if( !KIO::NetAccess::download( projectFile.toUrl(), projectTempFile,
                         Core::self()->uiController()->activeMainWindow() ) )
         {
             KMessageBox::sorry( Core::self()->uiController()->activeMainWindow(),
                             i18n("Unable to get project file: %1",
-                            projectFileUrl.pathOrUrl() ) );
+                            projectFile.pathOrUrl() ) );
             return false;
         }
 
-        if(developerFileUrl.isLocalFile())
+        if(developerFile.isLocalFile())
         {
-            developerTempFile = developerFileUrl.toLocalFile();
+            developerTempFile = developerFile.toLocalFile();
         }
         else {
-            statJob = KIO::stat( developerFileUrl, KIO::HideProgressInfo );
-            if( !statJob->exec() || !KIO::NetAccess::download( developerFileUrl, developerTempFile,
+            statJob = KIO::stat( developerFile.toUrl(), KIO::HideProgressInfo );
+            if( !statJob->exec() || !KIO::NetAccess::download( developerFile.toUrl(), developerTempFile,
                 Core::self()->uiController()->activeMainWindow() ) )
             {
                 KTemporaryFile tmp;
@@ -351,14 +331,14 @@ public:
     bool projectNameUsed(const KConfigGroup& projectGroup)
     {
         // helper method for open()
-        name = projectGroup.readEntry( "Name", projectFileUrl.fileName() );
+        name = projectGroup.readEntry( "Name", projectFile.lastPathSegment() );
         progress->projectName = name;
-        if( Core::self()->projectController()->isProjectNameUsed( name ) ) 
+        if( Core::self()->projectController()->isProjectNameUsed( name ) )
         {
             KMessageBox::sorry( Core::self()->uiControllerInternal()->defaultMainWindow(),
                                 i18n( "Could not load %1, a project with the same name '%2' is already open.",
-                                projectFileUrl.prettyUrl(), name ) );
-                                
+                                projectFile.pathOrUrl(), name ) );
+
             kWarning() << "Trying to open a project with a name thats already used by another open project";
             return true;
         }
@@ -412,12 +392,12 @@ public:
             {
                 vcsPlugin = pluginManager->pluginForExtension( "org.kdevelop.IBasicVersionControl", vcsPluginName );
             }
-        } else 
+        } else
         {
             foreach( IPlugin* p, pluginManager->allPluginsForExtension( "org.kdevelop.IBasicVersionControl" ) )
             {
                 IBasicVersionControl* iface = p->extension<KDevelop::IBasicVersionControl>();
-                if( iface && iface->isVersionControlled( topItem->url() ) )
+                if( iface && iface->isVersionControlled( topItem->path().toUrl() ) )
                 {
                     vcsPlugin = p;
                     projectGroup.writeEntry("VersionControlSupport", pluginManager->pluginInfo( p ).pluginName() );
@@ -441,7 +421,7 @@ public:
                                 i18n("Could not open project") );
             return false;
         }
-        
+
         return true;
     }
 
@@ -490,7 +470,14 @@ KSharedConfig::Ptr Project::projectConfiguration() const
 
 const KUrl Project::folder() const
 {
-    return d->folder;
+    KUrl url = d->projectPath.toUrl();
+    url.adjustPath(KUrl::AddTrailingSlash);
+    return url;
+}
+
+Path Project::path() const
+{
+    return d->projectPath;
 }
 
 void Project::reloadModel()
@@ -521,9 +508,9 @@ void Project::reloadModel()
     Core::self()->runController()->registerJob( importJob );
 }
 
-bool Project::open( const KUrl& projectFileUrl_ )
+bool Project::open( const Path& projectFile )
 {
-    d->initProjectUrl(projectFileUrl_);
+    d->initProject(projectFile);
     if (!d->initProjectFiles())
         return false;
 
@@ -531,7 +518,7 @@ bool Project::open( const KUrl& projectFileUrl_ )
     if (d->projectNameUsed(projectGroup))
         return false;
 
-    d->folder = d->projectFileUrl.upUrl();
+    d->projectPath = d->projectFile.parent();
 
     IProjectFileManager* iface = d->fetchFileManager(projectGroup);
     if (!iface)
@@ -563,7 +550,7 @@ void Project::close()
 
     Core::self()->projectController()->projectModel()->removeRow( d->topItem->row() );
 
-    if( !d->developerFileUrl.isLocalFile() && !KIO::NetAccess::upload( d->developerTempFile, d->developerFileUrl,
+    if( !d->developerFile.isLocalFile() && !KIO::NetAccess::upload( d->developerTempFile, d->developerFile.toUrl(),
                 Core::self()->uiController()->activeMainWindow() ) )
     {
         KMessageBox::sorry( Core::self()->uiController()->activeMainWindow(),
@@ -573,11 +560,12 @@ void Project::close()
     }
 }
 
-bool Project::inProject( const KUrl& url ) const
+bool Project::inProject( const IndexedString& path ) const
 {
-    if( url.isLocalFile() && QFileInfo( url.toLocalFile() ).isFile() )
-        return d->fileSet.contains( IndexedString( url ) );
-    return ( !d->itemsForUrl( url ).isEmpty() );
+    if (d->fileSet.contains( path )) {
+        return true;
+    }
+    return !d->itemsForPath( path ).isEmpty();
 }
 
 ProjectFileItem* Project::fileAt( int num ) const
@@ -591,7 +579,7 @@ ProjectFileItem* Project::fileAt( int num ) const
     return 0;
 }
 
-QList<ProjectFileItem *> KDevelop::Project::files() const
+QList<ProjectFileItem *> Project::files() const
 {
     QList<ProjectFileItem *> files;
     if ( d->topItem )
@@ -601,13 +589,23 @@ QList<ProjectFileItem *> KDevelop::Project::files() const
 
 QList< ProjectBaseItem* > Project::itemsForUrl(const KUrl& url) const
 {
-    return d->itemsForUrl(url);
+    return d->itemsForPath(IndexedString(url));
+}
+
+QList< ProjectBaseItem* > Project::itemsForPath(const IndexedString& path) const
+{
+    return d->itemsForPath(path);
 }
 
 QList<ProjectFileItem*> Project::filesForUrl(const KUrl& url) const
 {
+    return filesForPath(IndexedString(url));
+}
+
+QList< ProjectFileItem* > Project::filesForPath(const IndexedString& file) const
+{
     QList<ProjectFileItem*> items;
-    foreach(ProjectBaseItem* item,  d->itemsForUrl( url ) )
+    foreach(ProjectBaseItem* item,  d->itemsForPath( file ) )
     {
         if( item->type() == ProjectBaseItem::File )
             items << dynamic_cast<ProjectFileItem*>( item );
@@ -615,10 +613,15 @@ QList<ProjectFileItem*> Project::filesForUrl(const KUrl& url) const
     return items;
 }
 
-QList<ProjectFolderItem*> Project::foldersForUrl(const KUrl& url) const
+QList< ProjectFolderItem* > Project::foldersForUrl(const KUrl& url) const
+{
+    return foldersForPath(IndexedString(url));
+}
+
+QList<ProjectFolderItem*> Project::foldersForPath(const IndexedString& folder) const
 {
     QList<ProjectFolderItem*> items;
-    foreach(ProjectBaseItem* item,  d->itemsForUrl( url ) )
+    foreach(ProjectBaseItem* item,  d->itemsForPath( folder ) )
     {
         if( item->type() == ProjectBaseItem::Folder || item->type() == ProjectBaseItem::BuildFolder )
             items << dynamic_cast<ProjectFolderItem*>( item );
@@ -632,11 +635,6 @@ int Project::fileCount() const
     if ( d->topItem )
         files = d->recurseFiles( d->topItem );
     return files.count();
-}
-
-KUrl Project::relativeUrl( const KUrl& absolute ) const
-{
-    return KUrl::relativeUrl( folder(), absolute );
 }
 
 IProjectFileManager* Project::projectFileManager() const
@@ -659,14 +657,24 @@ void Project::setManagerPlugin( IPlugin* manager )
     d->manager = manager;
 }
 
+Path Project::projectFile() const
+{
+    return d->projectFile;
+}
+
 KUrl Project::projectFileUrl() const
 {
-    return d->projectFileUrl;
+    return d->projectFile.toUrl();
+}
+
+Path Project::developerFile() const
+{
+    return d->developerFile;
 }
 
 KUrl Project::developerFileUrl() const
 {
-    return d->developerFileUrl;
+    return d->developerFile.toUrl();
 }
 
 ProjectFolderItem* Project::projectItem() const
@@ -679,25 +687,25 @@ IPlugin* Project::versionControlPlugin() const
     return d->vcsPlugin.data();
 }
 
-void Project::addToFileSet( const IndexedString& file )
+void Project::addToFileSet( ProjectFileItem* file )
 {
-    if (d->fileSet.contains(file)) {
+    if (d->fileSet.contains(file->indexedPath())) {
         return;
     }
 
-    d->fileSet.insert( file );
-    emit fileAddedToSet( this, file );
+    d->fileSet.insert( file->indexedPath() );
+    emit fileAddedToSet( file );
 }
 
-void Project::removeFromFileSet( const IndexedString& file )
+void Project::removeFromFileSet( ProjectFileItem* file )
 {
-    QSet<IndexedString>::iterator it = d->fileSet.find(file);
+    QSet<IndexedString>::iterator it = d->fileSet.find(file->indexedPath());
     if (it == d->fileSet.end()) {
         return;
     }
 
     d->fileSet.erase( it );
-    emit fileRemovedFromSet( this, file );
+    emit fileRemovedFromSet( file );
 }
 
 QSet<IndexedString> Project::fileSet() const

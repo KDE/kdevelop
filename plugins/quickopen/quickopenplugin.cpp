@@ -81,8 +81,6 @@
 
 using namespace KDevelop;
 
-const int rowCountForDisablingScrollBar = 5000;
-
 const bool noHtmlDestriptionInOutline = true;
 
 class QuickOpenWidgetCreator {

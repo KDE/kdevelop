@@ -51,6 +51,7 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/context.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <project/projectmodel.h>
+#include <project/path.h>
 
 #include "core.h"
 #include "mainwindow.h"
@@ -981,7 +982,7 @@ QString DocumentController::activeDocumentPath( QString target ) const
         Context* selection = ICore::self()->selectionController()->currentSelection();
         if(selection && selection->type() == Context::ProjectItemContext && static_cast<ProjectItemContext*>(selection)->items().size())
         {
-            QString ret = static_cast<ProjectItemContext*>(selection)->items()[0]->url().pathOrUrl();
+            QString ret = static_cast<ProjectItemContext*>(selection)->items()[0]->path().pathOrUrl();
             if(static_cast<ProjectItemContext*>(selection)->items()[0]->folder())
                 ret += "/.";
             return  ret;
@@ -1219,9 +1220,13 @@ void DocumentController::vcsAnnotateCurrentDocument()
     if(project && project->versionControlPlugin()) {
         IBasicVersionControl* iface = 0;
         iface = project->versionControlPlugin()->extension<IBasicVersionControl>();
-        VcsPluginHelper helper(project->versionControlPlugin(), iface);
-        helper.addContextDocument(url);
-        helper.annotation();
+        auto helper = new VcsPluginHelper(project->versionControlPlugin(), iface);
+        connect(doc->textDocument(), SIGNAL(aboutToClose(KTextEditor::Document*)),
+                helper, SLOT(disposeEventually(bool)));
+        connect(doc->textDocument(), SIGNAL(annotationBorderVisibilityChanged(KTextEditor::View*, bool)),
+                helper, SLOT(disposeEventually(bool)));
+        helper->addContextDocument(url);
+        helper->annotation();
     }
     else {
         KMessageBox::error(0, i18n("Could not annotate the document because it is not "

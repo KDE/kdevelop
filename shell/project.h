@@ -71,45 +71,57 @@ public:
 
     virtual QList<ProjectFileItem*> files() const;
 
-    virtual QList< ProjectBaseItem* > itemsForUrl(const KUrl& url) const;
-    virtual QList<ProjectFileItem*> filesForUrl( const KUrl& ) const;
-    virtual QList<ProjectFolderItem*> foldersForUrl(const KUrl& ) const;
+    virtual QList< ProjectBaseItem* > itemsForPath(const IndexedString& path) const;
+    virtual QList< ProjectFileItem* > filesForPath(const IndexedString& file) const;
+    virtual QList< ProjectFolderItem* > foldersForPath(const IndexedString& folder) const;
+
+    KDE_DEPRECATED virtual QList< ProjectBaseItem* > itemsForUrl(const KUrl& url) const;
+    KDE_DEPRECATED virtual QList<ProjectFileItem*> filesForUrl( const KUrl& ) const;
+    KDE_DEPRECATED virtual QList<ProjectFolderItem*> foldersForUrl(const KUrl& ) const;
 
     QString projectTempFile() const;
     QString developerTempFile() const;
-    KUrl developerFileUrl() const;
+    KDE_DEPRECATED KUrl developerFileUrl() const;
+    Path developerFile() const;
     virtual void reloadModel();
-    virtual KUrl projectFileUrl() const;
+    virtual KDE_DEPRECATED KUrl projectFileUrl() const;
+    virtual Path projectFile() const;
     virtual KSharedConfig::Ptr projectConfiguration() const;
 
-    virtual void addToFileSet( const IndexedString& );
-    virtual void removeFromFileSet( const IndexedString& );
+    virtual void addToFileSet( ProjectFileItem* file );
+    virtual void removeFromFileSet( ProjectFileItem* file );
     virtual QSet<IndexedString> fileSet() const;
-    
-    virtual bool isReady() const;
-public Q_SLOTS:
-    /**
-     * @brief Open a project
-     * This method opens a project and starts the process of loading the
-     * data for the project from disk.
-     * @param projectFileUrl The url pointing to the location of the project
-     * file to load
-     * The project name is taken from the Name key in the project file in
-     * the 'General' group
-     */
-    bool open(const KUrl &projectFileUrl);
 
-    /** This method is invoked when the project needs to be closed. */
-    void close();
+    virtual bool isReady() const;
 
     /**
      * @brief Get the project folder
      * @return The canonical absolute directory of the project.
      */
-    virtual Q_SCRIPTABLE const KUrl folder() const;
+    virtual KDE_DEPRECATED const KUrl folder() const;
+
+    virtual Path path() const;
 
     /** Returns the name of the project. */
     virtual Q_SCRIPTABLE QString name() const;
+
+public Q_SLOTS:
+    /**
+     * @brief Open a project
+     *
+     * This method opens a project and starts the process of loading the
+     * data for the project from disk.
+     *
+     * @param projectFile The path pointing to the location of the project
+     *                    file to load
+     *
+     * The project name is taken from the Name key in the project file in
+     * the 'General' group
+     */
+    bool open(const Path &projectFile);
+
+    /** This method is invoked when the project needs to be closed. */
+    void close();
 
     /**
      * Get the file manager for the project
@@ -144,17 +156,6 @@ public Q_SLOTS:
     ProjectFolderItem* projectItem() const;
 
     /**
-     * Find the url relative to the project directory equivalent to @a absoluteUrl.
-     * This function does not check to see if the file is contained within the
-     * project; for that, use inProject().
-     *
-     * @param absoluteUrl Absolute url to convert
-     * @deprecated use KUrl::relativeUrl instead
-     * @returns absoluteUrl relative to projectDirectory()
-     **/
-    KUrl relativeUrl(const KUrl& absoluteUrl) const;
-
-    /**
      * Check if the url specified by @a url is part of the project.
      * @a url can be either a relative url (to the project directory) or
      * an absolute url.
@@ -163,7 +164,7 @@ public Q_SLOTS:
      *
      * @return true if the url @a url is a part of the project.
      */
-    bool inProject(const KUrl &url) const;
+    bool inProject(const IndexedString &url) const;
 
 signals:
     /**

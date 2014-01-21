@@ -26,10 +26,10 @@
 
 #include <QObject>
 
-class KUrl;
-
 namespace KDevelop
 {
+
+class Path;
 
 /**
  * @short The actual project filter object.
@@ -52,7 +52,7 @@ public:
      * @return true when the given path should be included in the project,
      *         false otherwise, i.e. when the path should be hidden.
      */
-    virtual bool isValid(const KUrl& path, bool isFolder) const = 0;
+    virtual bool isValid(const Path& path, bool isFolder) const = 0;
 };
 
 }

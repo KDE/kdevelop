@@ -45,7 +45,7 @@
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
 #include <project/projectmodel.h>
-
+#include <project/path.h>
 
 ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, const KUrl& url, ExternalScriptPlugin* parent )
     : KDevelop::OutputJob( parent ),
@@ -134,9 +134,9 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, const KUrl& url,
     }
 
     if ( folder ) {
-      if ( folder->url().isLocalFile() && workingDir.isEmpty() ) {
+      if ( folder->path().isLocalFile() && workingDir.isEmpty() ) {
         ///TODO: make configurable, use fallback to project dir
-        workingDir = folder->url().toLocalFile();
+        workingDir = folder->path().toLocalFile();
       }
 
       ///TODO: make those placeholders escapeable

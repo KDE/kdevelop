@@ -90,8 +90,8 @@ public:
     void setDialogProvider(IProjectDialogProvider*);
 
     KUrl projectsBaseDirectory() const;
-    QString prettyFileName(KUrl url, FormattingOptions format = FormatHtml) const;
-    QString prettyFilePath(KUrl url, FormattingOptions format = FormatHtml) const;
+    QString prettyFileName(const KUrl& url, FormattingOptions format = FormatHtml) const override;
+    QString prettyFilePath(const KUrl& url, FormattingOptions format = FormatHtml) const override;
 
     ContextMenuExtension contextMenuExtension( KDevelop::Context* ctx );
 

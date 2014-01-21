@@ -107,21 +107,21 @@ ProjectSet::ProjectSet(ProblemModel* parent)
 
 void ProjectSet::fileAdded(ProjectFileItem* file)
 {
-    m_documents.insert(IndexedString(file->url()));
+    m_documents.insert(file->indexedPath());
     emit changed();
 }
 
 void ProjectSet::fileRemoved(ProjectFileItem* file)
 {
-    if (m_documents.remove(IndexedString(file->url()))) {
+    if (m_documents.remove(file->indexedPath())) {
         emit changed();
     }
 }
 
-void ProjectSet::fileRenamed(const KUrl& oldFile, ProjectFileItem* newFile)
+void ProjectSet::fileRenamed(const Path& oldFile, ProjectFileItem* newFile)
 {
-    if (m_documents.remove(IndexedString(oldFile))) {
-        m_documents.insert(IndexedString(newFile->url()));
+    if (m_documents.remove(oldFile.toIndexed())) {
+        m_documents.insert(newFile->indexedPath());
     }
 }
 
@@ -131,9 +131,12 @@ void ProjectSet::trackProjectFiles(const IProject* project)
         // The implementation should derive from QObject somehow
         QObject* fileManager = dynamic_cast<QObject*>(project->projectFileManager());
         if (fileManager) {
-            connect(fileManager, SIGNAL(fileAdded(ProjectFileItem*)), this, SLOT(fileAdded(ProjectFileItem*)));
-            connect(fileManager, SIGNAL(fileRemoved(ProjectFileItem*)), this, SLOT(fileRemoved(ProjectFileItem*)));
-            connect(fileManager, SIGNAL(fileRenamed(KUrl,ProjectFileItem*)), this, SLOT(fileRenamed(KUrl,ProjectFileItem*)));
+            connect(fileManager, SIGNAL(fileAdded(KDevelop::ProjectFileItem*)),
+                    this, SLOT(fileAdded(KDevelop::ProjectFileItem*)));
+            connect(fileManager, SIGNAL(fileRemoved(KDevelop::ProjectFileItem*)),
+                    this, SLOT(fileRemoved(KDevelop::ProjectFileItem*)));
+            connect(fileManager, SIGNAL(fileRenamed(KDevelop::Path,KDevelop::ProjectFileItem*)),
+                    this, SLOT(fileRenamed(KDevelop::Path,KDevelop::ProjectFileItem*)));
         }
     }
 }
@@ -158,7 +161,7 @@ void CurrentProjectSet::setCurrentDocumentInternal(const KDevelop::IndexedString
         m_currentProject = projectForUrl;
         QList<ProjectFileItem*> files = m_currentProject->files();
         foreach (ProjectFileItem* file, files) {
-            m_documents.insert(IndexedString(file->url()));
+            m_documents.insert(file->path().toIndexed());
         }
         emit changed();
     }
@@ -174,7 +177,7 @@ AllProjectSet::AllProjectSet(ProblemModel* parent)
 {
     foreach(const IProject* project, model()->plugin()->core()->projectController()->projects()) {
         foreach (ProjectFileItem* file, project->files()) {
-            m_documents.insert(IndexedString(file->url()));
+            m_documents.insert(file->path().toIndexed());
         }
         trackProjectFiles(project);
     }

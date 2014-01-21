@@ -11,10 +11,6 @@
 #    Use this to get packaged template archives for the given file templates.
 #    Parameters should be the directories containing the templates.
 #
-#  KDEVPLATFORM_INSTALL_KROSSPLUGIN( desktopfile subdir )
-#    Use this macro to install a kross plugin contained within subdir and
-#    the desktopfile for loading it
-#
 # Copyright 2007 Andreas Pakulat <apaku@gmx.de>
 # Redistribution and use is allowed according to the terms of the BSD license.
 
@@ -92,10 +88,3 @@ macro(kdevplatform_add_file_templates _templateNames)
         kdevplatform_add_template(${DATA_INSTALL_DIR}/kdevfiletemplates/templates ${_templateName})
     endforeach(_templateName ${ARGV}) 
 endmacro(kdevplatform_add_file_templates _templateNames)
-
-# This needs to be reworked once we really support kross plugins
-#macro(kdevplatform_install_kross_plugin desktopfile subdir)
-#    install( FILES ${desktopfile} DESTINATION ${SERVICES_INSTALL_DIR} )
-#    install( DIRECTORY ${subdir} DESTINATION ${DATA_INSTALL_DIR}/kdevkrossplugins )
-#endmacro(kdevplatform_install_kross_plugin)
-

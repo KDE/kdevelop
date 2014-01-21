@@ -25,6 +25,7 @@
 #include <QApplication>
 
 #include <projectmodel.h>
+#include <path.h>
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
 #include <tests/testplugincontroller.h>
@@ -45,17 +46,16 @@ using KDevelop::ProjectModel;
 using KDevelop::ProjectFolderItem;
 using KDevelop::ProjectBaseItem;
 using KDevelop::ProjectFileItem;
+using KDevelop::Path;
 
 void generateChilds( ProjectBaseItem* parent, int count, int depth )
 {
     for( int i = 0; i < 10; i++ ) {
-        KUrl url = parent->url();
-        url.addPath( QString( "file:///f%1" ).arg( i ) );
         if( depth > 0 ) {
-            ProjectFolderItem* item = new ProjectFolderItem( 0, url, parent );
+            ProjectFolderItem* item = new ProjectFolderItem( QString( "f%1" ).arg( i ), parent );
             generateChilds( item, count, depth - 1 );
         } else {
-            new ProjectFileItem( 0, url, parent );
+            new ProjectFileItem( QString( "f%1" ).arg( i ), parent );
         }
     }
 }
@@ -106,7 +106,7 @@ void ProjectModelPerformanceTest::init()
     timer.start();
 
     for( int i = 0; i < INIT_WIDTH; i++ ) {
-        ProjectFolderItem* item = new ProjectFolderItem( 0, KUrl( QString( "file:///f%1" ).arg( i ) ), 0 );
+        ProjectFolderItem* item = new ProjectFolderItem( 0, Path( KUrl::fromPath( QString( "/f%1" ).arg( i ) ) ) );
         generateChilds( item, INIT_WIDTH, INIT_DEPTH );
         model->appendRow( item );
     }
@@ -131,7 +131,7 @@ void ProjectModelPerformanceTest::addBigTree()
     QElapsedTimer timer;
     timer.start();
     for( int i = 0; i < BIG_WIDTH; i++ ) {
-        ProjectFolderItem* item = new ProjectFolderItem( 0, KUrl( QString( "file:///f%1" ).arg( i ) ), 0 );
+        ProjectFolderItem* item = new ProjectFolderItem( 0, Path( KUrl::fromPath( QString( "/f%1" ).arg( i ) ) ) );
         generateChilds( item, BIG_WIDTH, BIG_DEPTH );
         model->appendRow( item );
     }
@@ -148,29 +148,24 @@ void ProjectModelPerformanceTest::addItemDelayed()
 {
     QElapsedTimer timer;
     timer.start();
-    KUrl url;
+    ProjectBaseItem* parent = 0;
+    Path path;
     if( !currentParent.isEmpty() ) {
-        url = currentParent.top()->url();
-        url.addPath(QString("f%1").arg(currentParent.top()->rowCount()));
+        parent = currentParent.top();
+        path = Path(parent->path(), QString("f%1").arg(parent->rowCount()));
     } else {
-        url = KUrl( QString( "file:///f%1" ) .arg( model->rowCount() ) );
+        path = Path(KUrl::fromPath(QString("/f%1").arg(model->rowCount())));
     }
-    ProjectBaseItem* item;
+    ProjectBaseItem* item = 0;
     if( currentParent.size() < BIG_DEPTH ) {
-        ProjectBaseItem* parent;
-        if( currentParent.isEmpty() ) {
-            parent = 0;
-        } else {
-            parent = currentParent.top();
-        }
-        item = new ProjectFolderItem( 0, url, parent );
+        item = new ProjectFolderItem(0, path, parent);
     } else {
-        item = new ProjectFileItem( 0, url, currentParent.top() );
+        item = new ProjectFileItem( 0, path, parent );
     }
     if( currentParent.isEmpty() ) {
         model->appendRow( item );
     }
-    
+
     // Abort/Continue conditions are:
     // Go one level deeper (by pushing item on stack) as long as we haven't reached the max depth or the max width
     // else if we've reached the max width then pop, i.e go one level up
@@ -191,7 +186,7 @@ void ProjectModelPerformanceTest::addSmallTree()
     QElapsedTimer timer;
     timer.start();
     for( int i = 0; i < SMALL_WIDTH; i++ ) {
-        ProjectFolderItem* item = new ProjectFolderItem( 0, KUrl( QString( "file:///f%1" ).arg( i ) ), 0 );
+        ProjectFolderItem* item = new ProjectFolderItem( 0, Path(KUrl::fromPath( QString( "/f%1" ).arg( i ) )) );
         generateChilds( item, SMALL_WIDTH, SMALL_DEPTH );
         model->appendRow( item );
     }

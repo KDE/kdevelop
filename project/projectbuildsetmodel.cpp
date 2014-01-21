@@ -64,7 +64,7 @@ void BuildItem::initializeFromItem( KDevelop::ProjectBaseItem* item )
 {
     Q_ASSERT(item);
     KDevelop::ProjectModel* model=KDevelop::ICore::self()->projectController()->projectModel();
-        
+
     m_itemPath = model->pathFromIndex(item->index());
 }
 

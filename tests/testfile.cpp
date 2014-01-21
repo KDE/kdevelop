@@ -31,6 +31,7 @@
 #include <language/backgroundparser/backgroundparser.h>
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
+#include <project/projectmodel.h>
 
 using namespace KDevelop;
 
@@ -62,7 +63,7 @@ struct TestFile::TestFilePrivate
 
         project = _project;
         if (project) {
-            project->addToFileSet(url);
+            fileItem.reset(new ProjectFileItem(_project, Path(file), _project->projectItem()));
         }
     }
 
@@ -82,6 +83,7 @@ struct TestFile::TestFilePrivate
     ReferencedTopDUContext topContext;
     IndexedString url;
     TestProject* project;
+    QScopedPointer<ProjectFileItem> fileItem;
 };
 
 TestFile::TestFile(const QString& contents, const QString& fileExtension,
@@ -113,9 +115,6 @@ TestFile::~TestFile()
     if (d->topContext) {
         DUChainWriteLocker lock;
         DUChain::self()->removeDocumentChain(d->topContext.data());
-    }
-    if (d->project) {
-        d->project->removeFromFileSet(d->url);
     }
     QFile::remove(d->file);
     delete d;

@@ -322,14 +322,6 @@ void KDevDocumentView::updateCategoryItem( KDevCategoryItem *item )
     item->setText(text);
 }
 
-bool projectPathlongerThan( const KDevelop::IProject* prj1, const KDevelop::IProject* prj2 )
-{
-    // compare path depth of two project folders
-    const int c1 = prj1->folder().pathOrUrl().split( QDir::separator() ).count();
-    const int c2 = prj2->folder().pathOrUrl().split( QDir::separator() ).count();
-    return c1 > c2;
-}
-
 void KDevDocumentView::updateProjectPaths()
 {
     foreach ( KDevCategoryItem *it, m_documentModel->categoryList() )

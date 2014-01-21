@@ -32,8 +32,6 @@
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
 
-const int SPACING_FROM_PARENT_BOTTOM = 5;
-
 using namespace KDevelop;
 
 AssistantPopup::AssistantPopup(QWidget* parent, const IAssistant::Ptr& assistant)

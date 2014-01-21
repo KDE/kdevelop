@@ -34,3 +34,18 @@ target_link_libraries(projectmodelperformancetest
     kdevplatformtests
 )
 
+###########
+
+set( pathtest_SRCS
+    testpath.cpp
+)
+
+kde4_add_unit_test(pathtest ${pathtest_SRCS})
+target_link_libraries(pathtest
+    ${QT_QTTEST_LIBRARY}
+    ${QT_QTCORE_LIBRARY}
+    ${KDE4_KDECORE_LIBS}
+    kdevplatformtests
+    kdevplatformlanguage
+    kdevplatformproject
+)

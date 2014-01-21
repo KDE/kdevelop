@@ -34,6 +34,7 @@
 #include <interfaces/iruncontroller.h>
 #include <interfaces/idocumentcontroller.h>
 #include <project/projectmodel.h>
+#include <project/path.h>
 
 #include <QDir>
 #include <QIcon>
@@ -199,7 +200,7 @@ void ProjectChangesModel::itemsAdded(const QModelIndex& parent, int start, int e
         item=model->itemFromIndex(idx);
         
         if(item->type()==ProjectBaseItem::File || item->type()==ProjectBaseItem::Folder || item->type()==ProjectBaseItem::BuildFolder)
-            urls += item->url();
+            urls += item->path().toUrl();
     }
         
     if(!urls.isEmpty())

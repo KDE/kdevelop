@@ -233,7 +233,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges()
         KUrl url = it.key().toUrl();
         IProject* p = ICore::self()->projectController()->findProjectForUrl(url);
         if(p) {
-            QList<ProjectFileItem*> files = p->filesForUrl(url);
+            QList<ProjectFileItem*> files = p->filesForPath(it.key());
             if(!files.isEmpty()) {
                 ProjectBaseItem::RenameStatus renamed = files.first()->rename(it.value().str());
                 if(renamed == ProjectBaseItem::RenameOk) {

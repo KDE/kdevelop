@@ -46,8 +46,6 @@ private:
     KDevelop::VcsLocation m_source;
     KDevelop::VcsRevision m_srcRevision;
     KDevelop::VcsRevision m_pegRevision;
-    bool m_recursive;
-    bool m_ignoreExternals;
 };
 
 

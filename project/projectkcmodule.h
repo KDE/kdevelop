@@ -22,9 +22,13 @@
 #define KDEVPLATFORM_PROJECTKCMODULE_H
 
 #include <kcmodule.h>
+
 #include <QtCore/QVariant>
+
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
+
+#include <project/path.h>
 
 class KComponentData;
 class QWidget;
@@ -40,8 +44,8 @@ template <typename T> class ProjectKCModule : public KCModule
             T::instance( args.at(0).toString() );
             T::self()->setDeveloperTempFile( args.at(0).toString() );
             T::self()->setProjectTempFile( args.at(1).toString() );
-            T::self()->setProjectFileUrl( args.at(2).toString() );
-            T::self()->setDeveloperFileUrl( args.at(3).toString() );
+            T::self()->setProjectFile( KDevelop::Path(args.at(2).toString()) );
+            T::self()->setDeveloperFile( KDevelop::Path(args.at(3).toString()) );
             projectName = args.at(4).toString();
         }
         virtual ~ProjectKCModule() {}

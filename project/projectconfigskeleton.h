@@ -28,6 +28,8 @@ Boston, MA 02110-1301, USA.
 namespace KDevelop
 {
 
+class Path;
+
 class KDEVPLATFORMPROJECT_EXPORT ProjectConfigSkeleton: public KConfigSkeleton
 {
     Q_OBJECT
@@ -46,14 +48,14 @@ public:
 
     void setDeveloperTempFile( const QString& );
     void setProjectTempFile( const QString& );
-    void setProjectFileUrl( const QString& );
-    void setDeveloperFileUrl( const QString& );
+    void setProjectFile( const Path& );
+    void setDeveloperFile( const Path& );
     void setDefaults();
     bool useDefaults( bool b );
     bool writeConfig();
 
-    KUrl projectFileUrl() const;
-    KUrl developerFileUrl() const;
+    Path projectFile() const;
+    Path developerFile() const;
 private:
     /**
      * There's no way in KDE4 API to find out the file that the config object

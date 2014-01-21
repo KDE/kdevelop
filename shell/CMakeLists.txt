@@ -56,33 +56,6 @@ set(kdevplatformshell_LIB_SRCS
     progresswidget/progressdialog.cpp
 
     areadisplay.cpp
-
-# TODO: Re-Enable after generating new kross bindings for project model
-#     kross/krossplugin.cpp
-#     kross/krossbuildsystemmanager.cpp
-#     kross/krossdistributedversioncontrol.cpp
-#     kross/krosstoolviewfactory.cpp
-#     kross/krossvcsjob.cpp
-#     kross/wrappers/krosscontext.cpp
-#     kross/wrappers/krosscontextmenuextension.cpp
-#     kross/wrappers/krossvcsrevision.cpp
-#     kross/wrappers/krossvcslocation.cpp
-#     kross/wrappers/krossprojectmodel.cpp
-# #    kross/wrappers/krossiuicontroller.cpp
-#     kross/wrappers/krossidocument.cpp
-# #    kross/wrappers/krosstopducontext.cpp
-# #    kross/wrappers/krossducontext.cpp
-#     kross/wrappers/krossilanguage.cpp
-# #     kross/wrappers/krossdeclaration.cpp
-# #     kross/wrappers/krossuse.cpp
-#     kross/wrappers/krossidentifier.cpp
-#     kross/wrappers/krossduchainlock.cpp
-#     kross/wrappers/krossiproblem.cpp
-#     kross/wrappers/krossibuildsystemmanager.cpp
-#     kross/wrappers/krossiprojectfilemanager.cpp
-#     kross/wrappers/krossiprojectbuilder.cpp
-#     kross/wrappers/krosseditorcontext.cpp
-#     kross/wrappers/krossqtoolbar.cpp
 )
 
 # Check if KTE is new enough to have the EditVIMode view mode flag
@@ -109,7 +82,8 @@ target_link_libraries(kdevplatformshell LINK_PUBLIC
     kdevplatformoutputview
     kdevplatformdebugger
 )
-target_link_libraries(kdevplatformshell LINK_PRIVATE
+target_link_libraries(kdevplatformshell
+LINK_PRIVATE
     KF5::KIOWidgets
     KF5::KCMUtils
     KF5::Parts
@@ -161,8 +135,4 @@ install(TARGETS kdevplatformshell EXPORT KDevPlatformTargets ${INSTALL_TARGETS_D
 install( FILES debugger/kdevdebuggershellui.rc DESTINATION ${DATA_INSTALL_DIR}/kdevdebugger )
 install( FILES kdevsessionui.rc DESTINATION ${DATA_INSTALL_DIR}/kdevsession )
 install( FILES kdevsourceformatter.rc DESTINATION ${DATA_INSTALL_DIR}/kdevsourceformatter )
-
-# if(NOT WIN32)
-#    ecm_optional_add_subdirectory(kross)
-# endif()
 

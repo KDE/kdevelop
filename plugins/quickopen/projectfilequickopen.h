@@ -23,8 +23,11 @@
 #include <language/interfaces/quickopenfilter.h>
 #include <language/duchain/indexedstring.h>
 
+#include <project/path.h>
+
 namespace KDevelop {
 class IProject;
+class ProjectFileItem;
 }
 
 class QIcon;
@@ -37,17 +40,12 @@ struct ProjectFile
     ProjectFile()
     : outsideOfProject(false)
     {}
-    // string representation of the url
-    QString pathOrUrl;
+    KDevelop::Path path;
     // project root folder url
-    // NOTE: this is using a QUrl to save memory
-    //       if you want a string representation of
-    //       this url, use the non-broken KUrl api via:
-    //       KUrl(QUrl).pathOrUrl() or similar.
-    QUrl projectUrl;
+    KDevelop::Path projectPath;
     // indexed url - only set for project files
     // currently open documents don't use this!
-    KDevelop::IndexedString indexedUrl;
+    KDevelop::IndexedString indexedPath;
     // true for files which reside outside of the project root
     // this happens e.g. for generated files in out-of-source build folders
     bool outsideOfProject;
@@ -58,7 +56,7 @@ inline bool operator<(const ProjectFile& left, const ProjectFile& right)
     if (left.outsideOfProject != right.outsideOfProject) {
         return !left.outsideOfProject;
     }
-    return left.pathOrUrl < right.pathOrUrl;
+    return left.path < right.path;
 }
 
 Q_DECLARE_TYPEINFO(ProjectFile, Q_MOVABLE_TYPE);
@@ -89,9 +87,7 @@ private:
     ProjectFile m_file;
 };
 
-typedef KDevelop::FilterWithSeparator<ProjectFile> Base;
-
-class BaseFileDataProvider : public KDevelop::QuickOpenDataProviderBase, public Base, public KDevelop::QuickOpenFileSetInterface
+class BaseFileDataProvider : public KDevelop::QuickOpenDataProviderBase, public KDevelop::PathFilter<ProjectFile, BaseFileDataProvider>, public KDevelop::QuickOpenFileSetInterface
 {
     Q_OBJECT
 public:
@@ -101,8 +97,10 @@ public:
     virtual uint unfilteredItemCount() const;
     virtual KDevelop::QuickOpenDataPointer data( uint row ) const;
 
-    //Reimplemented from Base<..>
-    virtual QString itemText( const ProjectFile& data ) const;
+    inline KDevelop::Path itemPath( const ProjectFile& data ) const
+    {
+        return data.path;
+    }
 };
 
 /**
@@ -121,8 +119,8 @@ public:
 private slots:
     void projectClosing( KDevelop::IProject* );
     void projectOpened( KDevelop::IProject* );
-    void fileAddedToSet( KDevelop::IProject*, const KDevelop::IndexedString& );
-    void fileRemovedFromSet( KDevelop::IProject*, const KDevelop::IndexedString& );
+    void fileAddedToSet( KDevelop::ProjectFileItem* );
+    void fileRemovedFromSet( KDevelop::ProjectFileItem* );
 
 private:
     // project files sorted by their url

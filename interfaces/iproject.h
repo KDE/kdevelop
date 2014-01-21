@@ -31,6 +31,7 @@
 
 #include <kurl.h>
 #include <ksharedconfig.h>
+#include <project/path.h>
 
 #include "interfacesexport.h"
 
@@ -113,24 +114,34 @@ public:
     /** Get a list of all files in the project */
     Q_SCRIPTABLE virtual QList<ProjectFileItem*> files() const = 0;
 
-    /** Get all items corresponding to the @p folder url */
-    Q_SCRIPTABLE virtual QList<ProjectBaseItem*> itemsForUrl( const KUrl& url ) const = 0;
-    
-    /** Get all file items corresponding to the @p file url */
-    Q_SCRIPTABLE virtual QList<ProjectFileItem*> filesForUrl( const KUrl& file ) const = 0;
+    /**
+     * @return all items with the corresponding @p path
+     */
+    Q_SCRIPTABLE virtual QList<ProjectBaseItem*> itemsForPath( const IndexedString& path ) const = 0;
+    KDE_DEPRECATED Q_SCRIPTABLE virtual QList<ProjectBaseItem*> itemsForUrl( const KUrl& url ) const = 0;
 
-    /** Get all folder items corresponding to the @p folder url */
-    Q_SCRIPTABLE virtual QList<ProjectFolderItem*> foldersForUrl( const KUrl& folder ) const = 0;
+    /**
+     * @return all file items with the corresponding @p file path
+     */
+    Q_SCRIPTABLE virtual QList<ProjectFileItem*> filesForPath( const IndexedString& file ) const = 0;
+    KDE_DEPRECATED Q_SCRIPTABLE virtual QList<ProjectFileItem*> filesForUrl( const KUrl& file ) const = 0;
 
-//     virtual KUrl projectConfigFile() const = 0;
-//     virtual KUrl projectDefaultsConfigFile() const = 0;
+    /**
+     * @return all folder items with the corresponding @p folder path
+     */
+    Q_SCRIPTABLE virtual QList<ProjectFolderItem*> foldersForPath( const IndexedString& folder ) const = 0;
+    KDE_DEPRECATED Q_SCRIPTABLE virtual QList<ProjectFolderItem*> foldersForUrl( const KUrl& folder ) const = 0;
 
+    /**
+     * @return the path to the project file
+     */
+    Q_SCRIPTABLE virtual Path projectFile() const = 0;
     /** Get the url of the project file.*/
-    Q_SCRIPTABLE virtual KUrl projectFileUrl() const = 0;
+    KDE_DEPRECATED Q_SCRIPTABLE virtual KUrl projectFileUrl() const = 0;
     virtual KSharedConfig::Ptr projectConfiguration() const = 0;
 
-    virtual void addToFileSet( const IndexedString& ) = 0;
-    virtual void removeFromFileSet( const IndexedString& ) = 0;
+    virtual void addToFileSet( ProjectFileItem* item ) = 0;
+    virtual void removeFromFileSet( ProjectFileItem* item ) = 0;
     virtual QSet<IndexedString> fileSet() const = 0;
 
     /** Returns whether the project is ready to be used or not.
@@ -138,42 +149,41 @@ public:
     */
     virtual bool isReady() const=0;
 
-Q_SIGNALS:
-    void fileAddedToSet( KDevelop::IProject* project, const KDevelop::IndexedString& file);
-    void fileRemovedFromSet( KDevelop::IProject* project, const KDevelop::IndexedString& file);
-
-public Q_SLOTS:
     /**
      * @brief Get the project folder
      * @return The canonical absolute directory of the project.
      */
-    virtual Q_SCRIPTABLE const KUrl folder() const = 0;
+    KDE_DEPRECATED virtual Q_SCRIPTABLE const KUrl folder() const = 0;
+
+    /**
+     * @brief Get the project path
+     * @return The canonical absolute directory of the project.
+     */
+    virtual Q_SCRIPTABLE Path path() const = 0;
 
     /** Returns the name of the project. */
-    virtual QString name() const = 0;
+    virtual Q_SCRIPTABLE QString name() const = 0;
 
     /**
-     * Find the url relative to the project directory equivalent to @a absoluteUrl.
-     * This function does not check to see if the file is contained within the
-     * project; for that, use inProject().
+     * @brief Check if the project contains an item with the given @p path.
      *
-     * @param absoluteUrl Absolute url to convert
-     * @deprecated use KUrl::relativeUrl instead
-     * @returns absoluteUrl relative to projectDirectory()
-     **/
-    virtual KUrl relativeUrl(const KUrl& absoluteUrl) const = 0;
-
-    /**
-     * Check if the url specified by @a url is part of the project.
-     * @a url can be either a relative url (to the project directory) or
-     * an absolute url.
+     * @param path the path to check
      *
-     * @param url the url to check
-     *
-     * @return true if the url @a url is a part of the project.
+     * @return true if the path @a path is a part of the project.
      */
-    virtual bool inProject(const KUrl &url) const = 0;
+    virtual Q_SCRIPTABLE bool inProject(const IndexedString &path) const = 0;
 
+Q_SIGNALS:
+    /**
+     * Gets emitted whenever a file was added to the project.
+     */
+    void fileAddedToSet( KDevelop::ProjectFileItem* item );
+    /**
+     * Gets emitted whenever a file was removed from the project.
+     */
+    void fileRemovedFromSet( KDevelop::ProjectFileItem* item );
+
+public Q_SLOTS:
     /** Make the model to reload */
     virtual void reloadModel() = 0;
 };

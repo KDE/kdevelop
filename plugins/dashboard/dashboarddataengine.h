@@ -30,24 +30,23 @@ class IProject;
 class ProjectFiles : public QObject
 {
     Q_OBJECT
-    public:
-        ProjectFiles(KDevelop::IProject* project, QObject* parent) : QObject(parent), m_project(project) {}
-        
-    public slots:
-        QString fileContents(const QString& fileName);
-        
-    private:
-        KDevelop::IProject* m_project;
+public:
+    ProjectFiles(KDevelop::IProject* project, QObject* parent) : QObject(parent), m_project(project) {}
+
+public slots:
+    QString fileContents(const QString& fileName);
+
+private:
+    KDevelop::IProject* m_project;
 };
 
 class DashboardDataEngine : public Plasma::DataEngine
 {
     Q_OBJECT
-    public:
-        explicit DashboardDataEngine(QObject *parent = 0, KService::Ptr service = KService::Ptr());
-        
-        void addConnection(const QString& containmentId, KDevelop::IProject* project);
-        
+public:
+    explicit DashboardDataEngine(QObject *parent = 0, KService::Ptr service = KService::Ptr());
+
+    void addConnection(const QString& containmentId, KDevelop::IProject* project);
 };
 
 #endif

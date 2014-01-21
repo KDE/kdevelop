@@ -49,8 +49,8 @@ private slots:
     void testChangeWithProxyModel();
     void testWithProject();
     void testTakeRow();
-    void testItemsForUrl();
-    void testItemsForUrl_data();
+    void testItemsForPath();
+    void testItemsForPath_data();
     void testProjectProxyModel();
     void testProjectFileSet();
     void testProjectFileIcon();

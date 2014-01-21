@@ -114,13 +114,13 @@ void ProjectFilterProvider::addFilterFromContextMenu()
             changedProjectFilters[item->project()] = readFilters(item->project()->projectConfiguration());
         }
         SerializedFilters& filters = changedProjectFilters[item->project()];
-        KUrl url;
+        Path path;
         if (item->target()) {
-            url = KUrl(item->parent()->url(), item->text());
+            path = Path(item->parent()->path(), item->text());
         } else {
-            url = item->url();
+            path = item->path();
         }
-        filters << SerializedFilter('/' + KUrl::relativeUrl(item->project()->folder(), url),
+        filters << SerializedFilter('/' + item->project()->path().relativePath(path),
                                     item->folder() ? Filter::Folders : Filter::Files);
     }
     QHash< IProject*, SerializedFilters >::const_iterator it = changedProjectFilters.constBegin();

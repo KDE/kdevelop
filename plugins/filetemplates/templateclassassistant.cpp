@@ -246,7 +246,8 @@ void TemplateClassAssistantPrivate::addFilesToTarget (const QHash< QString, KUrl
         {
             if (ProjectFolderItem* folder = item->folder())
             {
-                if (ProjectFileItem* file = project->projectFileManager()->addFile(fileUrl, folder)) {
+                ///FIXME: use Path instead of KUrl in the template class assistant
+                if (ProjectFileItem* file = project->projectFileManager()->addFile(Path(fileUrl), folder)) {
                     fileItems << file;
                     break;
                 }

@@ -43,6 +43,7 @@
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/iproject.h>
 #include <project/projectmodel.h>
+#include <project/path.h>
 #include <language/interfaces/codecontext.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>
 #include "interfaces/idistributedversioncontrol.h"
@@ -189,6 +190,13 @@ void VcsPluginHelper::addContextDocument(const KUrl &url)
     d->ctxUrls.append(url);
 }
 
+void VcsPluginHelper::disposeEventually(bool dont)
+{
+    if ( ! dont ) {
+        deleteLater();
+    }
+}
+
 void VcsPluginHelper::setupFromContext(Context* context)
 {
     d->ctxUrls.clear();
@@ -198,7 +206,7 @@ void VcsPluginHelper::setupFromContext(Context* context)
         if (prjctx) {
             foreach(KDevelop::ProjectBaseItem* item, prjctx->items()) {
                 if(!item->target())
-                    d->ctxUrls.append(item->url());
+                    d->ctxUrls.append(item->path().toUrl());
             }
         }
     }

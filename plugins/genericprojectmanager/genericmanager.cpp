@@ -36,5 +36,4 @@ GenericProjectManager::GenericProjectManager( QObject* parent, const QVariantLis
 {
 }
 
-
 #include "genericmanager.moc"

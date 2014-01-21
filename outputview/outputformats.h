@@ -18,29 +18,29 @@
 namespace KDevelop
 {
 
-class ActionFormat
+struct ActionFormat
 {
-    public:
-        ActionFormat( const char* context, const char* _action, const QString& _tool, const QString& regExp, int file );
-        ActionFormat( const char* context, const char* _action, int tool, int file, const QString& regExp );
-        const char* context; // translation context for action
-        const char* action;  // translated string
-        QRegExp expression;
-        QString tool;
-        int toolGroup;
-        int fileGroup;
+    ActionFormat() = default;
+    ActionFormat( const char* context, const char* _action, const QString& _tool, const QString& regExp, int file );
+    ActionFormat( const char* context, const char* _action, int tool, int file, const QString& regExp );
+    const char* context; // translation context for action
+    const char* action;  // translated string
+    QRegExp expression;
+    QString tool;
+    int toolGroup;
+    int fileGroup;
 };
 
-class ErrorFormat
+struct ErrorFormat
 {
-    public:
-        ErrorFormat( const QString& regExp, int file, int line, int text, int column=-1 );
-        ErrorFormat( const QString& regExp, int file, int line, int text, const QString& comp, int column=-1 );
-        QRegExp expression;
-        int fileGroup;
-        int lineGroup, columnGroup;
-        int textGroup;
-        QString compiler;
+    ErrorFormat() = default;
+    ErrorFormat( const QString& regExp, int file, int line, int text, int column=-1 );
+    ErrorFormat( const QString& regExp, int file, int line, int text, const QString& comp, int column=-1 );
+    QRegExp expression;
+    int fileGroup;
+    int lineGroup, columnGroup;
+    int textGroup;
+    QString compiler;
 };
 
 }

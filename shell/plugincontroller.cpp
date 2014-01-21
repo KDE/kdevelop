@@ -51,8 +51,6 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/idocumentationcontroller.h>
 #include <interfaces/ipluginversion.h>
 
-//#include <kross/krossplugin.h>
-
 #include "mainwindow.h"
 #include "core.h"
 #include "shellextension.h"
@@ -376,20 +374,6 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
         return 0;
     }
 
-    bool isKrossPlugin = false;
-    //TODO: Re-Enable after generating new kross bindings for project model
-//     QString krossScriptFile;
-//     if( info.property("X-KDevelop-PluginType").toString() == "Kross" )
-//     {
-//         isKrossPlugin = true;
-//         krossScriptFile = KStandardDirs::locate( "appdata", info.service()->library(), KComponentData("kdevkrossplugins"));
-//         if( krossScriptFile.isEmpty() || !QFileInfo( krossScriptFile ).exists() || !QFileInfo( krossScriptFile ).isReadable() )
-//         {
-//             kWarning() << "Unable to load kross plugin" << pluginId << ". Script file" << krossScriptFile << "not found or not readable";
-//             return 0;
-//         }
-//     }
-
     kDebug() << "Attempting to load '" << pluginId << "'";
     emit loadingPlugin( info.pluginName() );
     QString str_error;
@@ -398,8 +382,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
     kDebug() << "Checking... " << info.name();
     if ( checkForDependencies( info, missingInterfaces ) )
     {
-        QVariant prop = info.property( "X-KDevelop-PluginType" );
-        kDebug() << "Checked... starting to load:" << info.name() << "type:" << prop;
+        kDebug() << "Checked... starting to load:" << info.name();
 
         QString failedPlugin;
         if( !loadDependencies( info, failedPlugin ) )
@@ -409,33 +392,8 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
         }
         loadOptionalDependencies( info );
 
-        if( isKrossPlugin )
-        {
-    //TODO: Re-Enable after generating new kross bindings for project model
-            // Kross is special, we create always the same "plugin" which hooks up
-            // the script and makes the connection between C++ and script side
-//             kDebug() << "it is a kross plugin!!";
-//             // Workaround for KAboutData constructor needing a KLocalizedString and
-//             // KLocalized string storing the char* for later usage
-//             QString tmp = info.name();
-//             int len = tmp.toUtf8().size();
-//             char* name = new char[len+1];
-//             memcpy( name, tmp.toUtf8().data(), len );
-//             name[len] = '\0';
-//             tmp = info.comment();
-//             len = tmp.toUtf8().size();
-//             char* comment = new char[len+1];
-//             memcpy( comment, tmp.toUtf8().data(), len );
-//             comment[len] = '\0';
-//             // Create the kross plugin instance from the desktop file data.
-//             plugin = new KrossPlugin( krossScriptFile, KAboutData( info.pluginName().toUtf8(), info.pluginName().toUtf8(),
-//                               ki18n( name ), info.version().toUtf8(), ki18n( comment ), KAboutLicense::byKeyword( info.license() ).key() ), d->core );
-        }
-        else
-        {
-            plugin = KServiceTypeTrader::createInstanceFromQuery<IPlugin>( QLatin1String( "KDevelop/Plugin" ),
-                    QString::fromLatin1( "[X-KDE-PluginInfo-Name]=='%1'" ).arg( pluginId ), d->core, QVariantList(), &str_error );
-        }
+        plugin = KServiceTypeTrader::createInstanceFromQuery<IPlugin>( QLatin1String( "KDevelop/Plugin" ),
+                QString::fromLatin1( "[X-KDE-PluginInfo-Name]=='%1'" ).arg( pluginId ), d->core, QVariantList(), &str_error );
     }
 
     if ( plugin )

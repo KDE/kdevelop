@@ -28,14 +28,13 @@
 #include <QVector>
 #include <QSharedPointer>
 
-class KUrl;
-
 namespace KDevelop {
 
 class IProjectFilter;
 class IProjectFilterProvider;
 class IPlugin;
 class IProject;
+class Path;
 
 /**
  * @short A helper class to manage project filtering in file managers.
@@ -60,7 +59,7 @@ public:
     /**
      * @copydoc IProjectFilter::isValid
      */
-    bool isValid(const KUrl& path, bool isFolder, IProject* project) const;
+    bool isValid(const Path& path, bool isFolder, IProject* project) const;
 
     /**
      * Manage the filters of the given project.

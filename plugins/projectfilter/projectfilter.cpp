@@ -31,8 +31,8 @@ using namespace KDevelop;
 
 ProjectFilter::ProjectFilter( const IProject* const project, const QVector<Filter>& filters )
     : m_filters( filters )
-    , m_projectFile( project->projectFileUrl() )
-    , m_project( project->folder() )
+    , m_projectFile( project->projectFile() )
+    , m_project( project->path() )
 {
 
 }
@@ -42,27 +42,27 @@ ProjectFilter::~ProjectFilter()
 
 }
 
-bool ProjectFilter::isValid( const KUrl &url, const bool isFolder ) const
+bool ProjectFilter::isValid( const Path &path, const bool isFolder ) const
 {
-    if (!isFolder && url == m_projectFile) {
+    if (!isFolder && path == m_projectFile) {
         // do not show the project file
         ///TODO: enable egain once the project page is ready for consumption
         return false;
-    } else if (isFolder && url == m_project) {
+    } else if (isFolder && path == m_project) {
         // always show the project root
         return true;
     }
 
-    if (isFolder && url.isLocalFile() && QFile::exists(url.toLocalFile() + "/.kdev_ignore")) {
+    if (isFolder && path.isLocalFile() && QFile::exists(path.toLocalFile() + "/.kdev_ignore")) {
         return false;
     }
 
     // from here on the user can configure what he wants to see or not.
 
-    // we operate on the path of this url relative to the project base
+    // we operate on the path relative to the project base
     // by prepending a slash we can filter hidden files with the pattern "*/.*"
 
-    const QString relativePath = makeRelative(url, isFolder);
+    const QString relativePath = makeRelative(path);
 
     if (isFolder && relativePath.endsWith(QLatin1String("/.kdev4"))) {
         return false;
@@ -87,16 +87,11 @@ bool ProjectFilter::isValid( const KUrl &url, const bool isFolder ) const
     return isValid;
 }
 
-QString ProjectFilter::makeRelative(const KUrl& url, bool isFolder) const
+QString ProjectFilter::makeRelative(const Path& path) const
 {
-    if (!m_project.isParentOf(url)) {
-        return url.path(KUrl::RemoveTrailingSlash);
+    if (!m_project.isParentOf(path)) {
+        return path.path();
     }
 
-    QString ret = '/' + KUrl::relativeUrl( m_project, url );
-    if (isFolder && ret.endsWith('/')) {
-        ret.chop(1);
-    }
-
-    return ret;
+    return '/' + m_project.relativePath(path);
 }

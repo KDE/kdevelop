@@ -44,6 +44,7 @@
 #include <interfaces/iruncontroller.h>
 #include <interfaces/idocumentcontroller.h>
 #include <project/interfaces/iprojectbuilder.h>
+#include <project/path.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
@@ -459,11 +460,11 @@ void ProjectManagerViewPlugin::reloadFromContextMenu( )
             // since reloading should be recursive, only pass the upper-most items
             bool found = false;
             foreach ( KDevelop::ProjectFolderItem* existing, folders ) {
-                if ( existing->url().isParentOf(item->folder()->url()) ) {
+                if ( existing->path().isParentOf(item->folder()->path()) ) {
                     // simply skip this child
                     found = true;
                     break;
-                } else if ( item->folder()->url().isParentOf(existing->url()) ) {
+                } else if ( item->folder()->path().isParentOf(existing->path()) ) {
                     // remove the child in the list and add the current item instead
                     folders.removeOne(existing);
                     // continue since there could be more than one existing child
@@ -486,11 +487,9 @@ void ProjectManagerViewPlugin::createFolderFromContextMenu( )
         if ( item->folder() ) {
             QWidget* window(ICore::self()->uiController()->activeMainWindow()->window());
             QString name = QInputDialog::getText ( window,
-                                i18n ( "Create Folder in %1", item->folder()->url().prettyUrl() ), i18n ( "Folder Name" ) );
+                                i18n ( "Create Folder in %1", item->folder()->path().pathOrUrl() ), i18n ( "Folder Name" ) );
             if (!name.isEmpty()) {
-                KUrl url = item->folder()->url();
-                url.addPath( name );
-                item->project()->projectFileManager()->addFolder( url, item->folder() );
+                item->project()->projectFileManager()->addFolder( Path(item->path(), name), item->folder() );
             }
         }
     }
@@ -509,9 +508,9 @@ void ProjectManagerViewPlugin::removeItems(const QList< ProjectBaseItem* >& item
 
     //copy the list of selected items and sort it to guarantee parents will come before children
     QList<KDevelop::ProjectBaseItem*> sortedItems = items;
-    qSort(sortedItems.begin(), sortedItems.end(), ProjectBaseItem::urlLessThan);
+    qSort(sortedItems.begin(), sortedItems.end(), ProjectBaseItem::pathLessThan);
 
-    KUrl lastFolder;
+    Path lastFolder;
     QMap< IProjectFileManager*, QList<KDevelop::ProjectBaseItem*> > filteredItems;
     QStringList itemPaths;
     foreach( KDevelop::ProjectBaseItem* item, sortedItems )
@@ -520,16 +519,16 @@ void ProjectManagerViewPlugin::removeItems(const QList< ProjectBaseItem* >& item
             continue;
         } else if (item->folder() || item->file()) {
             //make sure no children of folders that will be deleted are listed
-            if (lastFolder.isParentOf(item->url())) {
+            if (lastFolder.isParentOf(item->path())) {
                 continue;
             } else if (item->folder()) {
-                lastFolder = item->url();
+                lastFolder = item->path();
             }
 
             IProjectFileManager* manager = item->project()->projectFileManager();
             if (manager) {
                 filteredItems[manager] << item;
-                itemPaths << item->url().path();
+                itemPaths << item->path().pathOrUrl();
             }
         }
     }
@@ -624,16 +623,15 @@ void ProjectManagerViewPlugin::renameItems(const QList< ProjectBaseItem* >& item
 ProjectFileItem* createFile(const ProjectFolderItem* item)
 {
     QWidget* window = ICore::self()->uiController()->activeMainWindow()->window();
-    QString name = QInputDialog::getText(window, i18n("Create File in %1", item->url().prettyUrl()), i18n("File Name"));
+    QString name = QInputDialog::getText(window, i18n("Create File in %1", item->path().pathOrUrl()), i18n("File Name"));
 
     if(name.isEmpty())
         return 0;
 
-    KUrl url=item->url();
-    url.addPath( name );
-
-    ProjectFileItem* ret=item->project()->projectFileManager()->addFile( url, item->folder() );
-    ICore::self()->documentController()->openDocument( url );
+    ProjectFileItem* ret = item->project()->projectFileManager()->addFile( Path(item->path(), name), item->folder() );
+    if (ret) {
+        ICore::self()->documentController()->openDocument( ret->path().toUrl() );
+    }
     return ret;
 }
 
@@ -661,7 +659,7 @@ void ProjectManagerViewPlugin::copyFromContextMenu()
     KUrl::List urls;
     foreach (ProjectBaseItem* item, ctx->items()) {
         if (item->folder() || item->file()) {
-            urls << item->url();
+            urls << item->path().toUrl();
         }
     }
     kDebug() << urls;
@@ -684,8 +682,8 @@ void ProjectManagerViewPlugin::pasteFromContextMenu()
 
     const QMimeData* data = qApp->clipboard()->mimeData();
     kDebug() << data->urls();
-    KUrl::List urls(data->urls());
-    bool success = destItem->project()->projectFileManager()->copyFilesAndFolders(urls, destItem->folder());
+    const Path::List paths = toPathList(data->urls());
+    bool success = destItem->project()->projectFileManager()->copyFilesAndFolders(paths, destItem->folder());
 
     if (success) {
         ProjectManagerViewItemContext* viewCtx = dynamic_cast<ProjectManagerViewItemContext*>(ICore::self()->selectionController()->currentSelection());
@@ -696,13 +694,10 @@ void ProjectManagerViewPlugin::pasteFromContextMenu()
 
             //and select new items
             QList<ProjectBaseItem*> newItems;
-            foreach (const KUrl &url, urls) {
-                KUrl targetUrl = destItem->url();
-                targetUrl.addPath(url.fileName());
+            foreach (const Path &path, paths) {
+                const Path targetPath(destItem->path(), path.lastPathSegment());
                 foreach (ProjectBaseItem *item, destItem->children()) {
-                    KUrl itemUrl = item->url();
-                    itemUrl.adjustPath(KUrl::RemoveTrailingSlash); //required to correctly compare urls
-                    if (itemUrl == targetUrl) {
+                    if (item->path() == targetPath) {
                         newItems << item;
                     }
                 }

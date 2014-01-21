@@ -19,7 +19,8 @@
 
 
 #include "projectutils.h"
-
+#include <project/projectmodel.h>
+#include "path.h"
 #include <QMenu>
 #include <QIcon>
 
@@ -74,7 +75,7 @@ void populateParentItemsMenu( ProjectBaseItem* item, QMenu* menu )
     bool hasSeparator = false;
     while(parent)
     {
-        if(!parent->url().isEmpty())
+        if(!parent->path().isValid())
         {
             if(!hasSeparator)
             {
@@ -82,7 +83,7 @@ void populateParentItemsMenu( ProjectBaseItem* item, QMenu* menu )
                 menu->addSeparator();
             }
 
-            QString prettyName = ICore::self()->projectController()->prettyFileName(parent->url(), KDevelop::IProjectController::FormatPlain);
+            QString prettyName = ICore::self()->projectController()->prettyFileName(parent->path().toUrl(), IProjectController::FormatPlain);
 
             QString text;
             if(parent->parent())

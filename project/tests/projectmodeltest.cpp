@@ -42,6 +42,7 @@ using KDevelop::ProjectExecutableTargetItem;
 using KDevelop::ProjectLibraryTargetItem;
 using KDevelop::ProjectTargetItem;
 using KDevelop::ProjectBuildFolderItem;
+using KDevelop::Path;
 
 using KDevelop::TestProject;
 
@@ -80,22 +81,22 @@ void ProjectModelTest::cleanupTestCase()
 void ProjectModelTest::testCreateFileSystemItems()
 {
     QFETCH( int, itemType );
-    QFETCH( KUrl, itemUrl );
-    QFETCH( KUrl, expectedItemUrl );
+    QFETCH( Path, itemPath );
+    QFETCH( Path, expectedItemPath );
     QFETCH( QString, expectedItemText );
-    QFETCH( QStringList, expectedItemPath );
+    QFETCH( QStringList, expectedRelativeItemPath );
     QFETCH( int, expectedItemRow );
 
     ProjectBaseItem* newitem = 0;
     switch( itemType ) {
         case ProjectBaseItem::Folder:
-            newitem = new ProjectFolderItem( 0, itemUrl );
+            newitem = new ProjectFolderItem( 0, itemPath );
             break;
         case ProjectBaseItem::BuildFolder:
-            newitem = new ProjectBuildFolderItem( 0, itemUrl );
+            newitem = new ProjectBuildFolderItem( 0, itemPath );
             break;
         case ProjectBaseItem::File:
-            newitem = new ProjectFileItem( 0, itemUrl );
+            newitem = new ProjectFileItem( 0, itemPath );
             break;
     }
     int origRowCount = model->rowCount();
@@ -106,7 +107,7 @@ void ProjectModelTest::testCreateFileSystemItems()
     QVERIFY( model->itemFromIndex( idx ) );
     QCOMPARE( model->itemFromIndex( idx ), newitem );
     QCOMPARE( newitem->text(), expectedItemText );
-    QCOMPARE( newitem->url(), expectedItemUrl );
+    QCOMPARE( newitem->path(), expectedItemPath );
     if( itemType == ProjectBaseItem::File ) {
         QCOMPARE( dynamic_cast<ProjectFileItem*>( newitem )->fileName(), expectedItemText );
     }
@@ -116,39 +117,39 @@ void ProjectModelTest::testCreateFileSystemItems()
     QCOMPARE( newitem->type(), itemType );
     QCOMPARE( model->data( idx ).toString(), expectedItemText );
     QCOMPARE( model->indexFromItem( newitem ), idx );
-    QCOMPARE( model->pathFromIndex( idx ), expectedItemPath );
-    QCOMPARE( model->pathToIndex( expectedItemPath ), idx );
+    QCOMPARE( model->pathFromIndex( idx ), expectedRelativeItemPath );
+    QCOMPARE( model->pathToIndex( expectedRelativeItemPath ), idx );
 }
 
 void ProjectModelTest::testCreateFileSystemItems_data()
 {
     QTest::addColumn<int>( "itemType" );
-    QTest::addColumn<KUrl>( "itemUrl" );
-    QTest::addColumn<KUrl>( "expectedItemUrl" );
+    QTest::addColumn<Path>( "itemPath" );
+    QTest::addColumn<Path>( "expectedItemPath" );
     QTest::addColumn<QString>( "expectedItemText" );
-    QTest::addColumn<QStringList>( "expectedItemPath" );
+    QTest::addColumn<QStringList>( "expectedRelativeItemPath" );
     QTest::addColumn<int>( "expectedItemRow" );
 
     QTest::newRow("RootFolder")
         << (int)ProjectBaseItem::Folder
-        << KUrl("file:///rootdir")
-        << KUrl("file:///rootdir/")
+        << Path(KUrl::fromPath("/rootdir"))
+        << Path(KUrl::fromPath("/rootdir/"))
         << QString::fromLatin1("rootdir")
         << ( QStringList() << "rootdir" )
         << 0;
 
     QTest::newRow("RootBuildFolder")
         << (int)ProjectBaseItem::BuildFolder
-        << KUrl("file:///rootdir")
-        << KUrl("file:///rootdir/")
+        << Path(KUrl::fromPath("/rootdir"))
+        << Path(KUrl::fromPath("/rootdir/"))
         << QString::fromLatin1("rootdir")
         << ( QStringList() << "rootdir" )
         << 0;
 
     QTest::newRow("RootFile")
         << (int)ProjectBaseItem::File
-        << KUrl("file:///rootfile")
-        << KUrl("file:///rootfile")
+        << Path(KUrl::fromPath("/rootfile"))
+        << Path(KUrl::fromPath("/rootfile"))
         << QString::fromLatin1("rootfile")
         << ( QStringList() << "rootfile" )
         << 0;
@@ -214,8 +215,8 @@ void ProjectModelTest::testChangeWithProxyModel()
 {
     QSortFilterProxyModel* proxy = new QSortFilterProxyModel( this );
     proxy->setSourceModel( model );
-    ProjectFolderItem* root = new ProjectFolderItem( 0, KUrl("file:///folder1") );
-    root->appendRow( new ProjectFileItem( 0, KUrl("file:///folder1/file1") ) );
+    ProjectFolderItem* root = new ProjectFolderItem( 0, Path(KUrl::fromPath("/folder1")) );
+    root->appendRow( new ProjectFileItem( 0, Path(KUrl::fromPath("/folder1/file1")) ) );
     model->appendRow( root );
 
     QCOMPARE( model->rowCount(), 1 );
@@ -233,13 +234,13 @@ void ProjectModelTest::testCreateSimpleHierarchy()
     QString fileName = "file";
     QString targetName = "testtarged";
     QString cppFileName = "file.cpp";
-    ProjectFolderItem* rootFolder = new ProjectFolderItem( 0, KUrl("file:///"+folderName) );
+    ProjectFolderItem* rootFolder = new ProjectFolderItem( 0, Path(KUrl::fromPath("/"+folderName)) );
     QCOMPARE(rootFolder->baseName(), folderName);
-    ProjectFileItem* file = new ProjectFileItem( 0, KUrl("file:///"+folderName+"/"+fileName), rootFolder );
+    ProjectFileItem* file = new ProjectFileItem( fileName, rootFolder );
     QCOMPARE(file->baseName(), fileName);
     ProjectTargetItem* target = new ProjectTargetItem( 0, targetName );
     rootFolder->appendRow( target );
-    ProjectFileItem* targetfile = new ProjectFileItem( 0, KUrl("file:///"+folderName+"/"+cppFileName), target );
+    ProjectFileItem* targetfile = new ProjectFileItem( 0, Path(rootFolder->path(), cppFileName), target );
 
     model->appendRow( rootFolder );
 
@@ -271,7 +272,7 @@ void ProjectModelTest::testCreateSimpleHierarchy()
     file = 0;
 
     // Check that we also find a folder with the fileName
-    new ProjectFolderItem( 0, fileName, rootFolder );
+    new ProjectFolderItem( fileName, rootFolder );
     QVERIFY( rootFolder->hasFileOrFolder( fileName ) );
 
     delete rootFolder;
@@ -283,8 +284,8 @@ void ProjectModelTest::testItemSanity()
     ProjectBaseItem* parent = new ProjectBaseItem( 0, "test" );
     ProjectBaseItem* child = new ProjectBaseItem( 0, "test", parent );
     ProjectBaseItem* child2 = new ProjectBaseItem( 0, "ztest", parent );
-    ProjectFileItem* child3 = new ProjectFileItem( 0, KUrl("file:///bcd"), parent );
-    ProjectFileItem* child4 = new ProjectFileItem(  0, KUrl("file:///abcd"), parent  );
+    ProjectFileItem* child3 = new ProjectFileItem( 0, Path(KUrl::fromPath("file:///bcd")), parent );
+    ProjectFileItem* child4 = new ProjectFileItem(  0, Path(KUrl::fromPath("file:///abcd")), parent  );
 
     // Just some basic santiy checks on the API
     QCOMPARE( parent->child( 0 ), child );
@@ -306,7 +307,7 @@ void ProjectModelTest::testItemSanity()
     model->appendRow( parent );
     QCOMPARE( parent->index(), model->index(0, 0, QModelIndex()) );
     QSignalSpy s( model, SIGNAL(dataChanged(QModelIndex,QModelIndex)) );
-    parent->setUrl( KUrl("file:///newtest") );
+    parent->setPath( Path("/newtest") );
     QCOMPARE( s.count(), 1 );
     QCOMPARE( model->data( parent->index() ).toString(), QString("newtest") );
 
@@ -340,22 +341,22 @@ void ProjectModelTest::testRename()
     QFETCH( QString, expectedItemText );
     QFETCH( int, expectedRenameCode );
 
-    const KUrl projectFolder = KUrl("file:///dummyprojectfolder");
+    const Path projectFolder = Path(KUrl::fromPath("/dummyprojectfolder"));
     TestProject* proj = new TestProject;
     ProjectFolderItem* rootItem = new ProjectFolderItem( proj, projectFolder, 0);
     proj->setProjectItem( rootItem );
 
-    new ProjectFileItem(proj, KUrl("existing"), rootItem);
+    new ProjectFileItem("existing", rootItem);
 
     ProjectBaseItem* item = 0;
     if( itemType == ProjectBaseItem::Target ) {
         item = new ProjectTargetItem( proj, itemText, rootItem );
     } else if( itemType == ProjectBaseItem::File ) {
-        item = new ProjectFileItem( proj, KUrl(projectFolder, itemText), rootItem );
+        item = new ProjectFileItem( itemText, rootItem );
     } else if( itemType == ProjectBaseItem::Folder ) {
-        item = new ProjectFolderItem( proj, KUrl(projectFolder, itemText), rootItem );
+        item = new ProjectFolderItem( itemText, rootItem );
     } else if( itemType == ProjectBaseItem::BuildFolder ) {
-        item = new ProjectBuildFolderItem( proj, KUrl(projectFolder, itemText), rootItem );
+        item = new ProjectBuildFolderItem( itemText, rootItem );
     }
     Q_ASSERT( item );
 
@@ -457,61 +458,61 @@ void ProjectModelTest::testRename_data()
 void ProjectModelTest::testWithProject()
 {
     TestProject* proj = new TestProject();
-    ProjectFolderItem* rootItem = new ProjectFolderItem( proj, KUrl("file:///dummyprojectfolder"), 0);
+    ProjectFolderItem* rootItem = new ProjectFolderItem( proj, Path(KUrl::fromPath("/dummyprojectfolder")), 0);
     proj->setProjectItem( rootItem );
     ProjectBaseItem* item = model->itemFromIndex( model->index( 0, 0 ) );
     QCOMPARE( item, rootItem );
     QCOMPARE( item->text(), proj->name() );
-    QCOMPARE( item->url(), proj->folder() );
+    QCOMPARE( item->path(), proj->path() );
 }
 
-void ProjectModelTest::testItemsForUrl()
+void ProjectModelTest::testItemsForPath()
 {
-    QFETCH(KUrl, url);
+    QFETCH(Path, path);
     QFETCH(ProjectBaseItem*, root);
     QFETCH(int, matches);
 
     model->appendRow(root);
 
-    QList< ProjectBaseItem* > items = model->itemsForUrl(url);
+    QList< ProjectBaseItem* > items = model->itemsForPath(path.toIndexed());
     QCOMPARE(items.size(), matches);
     foreach(ProjectBaseItem* item, items) {
-        QVERIFY(item->url().equals(url, KUrl::CompareWithoutTrailingSlash));
+        QVERIFY(item->path() == path);
     }
 
     model->clear();
 }
 
-void ProjectModelTest::testItemsForUrl_data()
+void ProjectModelTest::testItemsForPath_data()
 {
-    QTest::addColumn<KUrl>("url");
+    QTest::addColumn<Path>("path");
     QTest::addColumn<ProjectBaseItem*>("root");
     QTest::addColumn<int>("matches");
 
     {
-        ProjectFolderItem* root = new ProjectFolderItem(0, KUrl("file:///tmp/"));
-        ProjectFileItem* file = new ProjectFileItem(0, KUrl(root->url(), "a"), root);
-        QTest::newRow("find one") << file->url() << static_cast<ProjectBaseItem*>(root) << 1;
+        ProjectFolderItem* root = new ProjectFolderItem(0, Path(KUrl::fromPath("/tmp/")));
+        ProjectFileItem* file = new ProjectFileItem("a", root);
+        QTest::newRow("find one") << file->path() << static_cast<ProjectBaseItem*>(root) << 1;
     }
 
     {
-        ProjectFolderItem* root = new ProjectFolderItem(0, KUrl("file:///tmp/"));
-        ProjectFolderItem* folder = new ProjectFolderItem(0, KUrl(root->url(), "a"), root);
-        ProjectFileItem* file = new ProjectFileItem(0, KUrl(folder->url(), "foo"), folder);
+        ProjectFolderItem* root = new ProjectFolderItem(0, Path(KUrl::fromPath("/tmp/")));
+        ProjectFolderItem* folder = new ProjectFolderItem("a", root);
+        ProjectFileItem* file = new ProjectFileItem("foo", folder);
         ProjectTargetItem* target = new ProjectTargetItem(0, "b", root);
-        ProjectFileItem* file2 = new ProjectFileItem(0, file->url(), target);
+        ProjectFileItem* file2 = new ProjectFileItem(0, file->path(), target);
         Q_UNUSED(file2);
-        QTest::newRow("find two") << file->url() << static_cast<ProjectBaseItem*>(root) << 2;
+        QTest::newRow("find two") << file->path() << static_cast<ProjectBaseItem*>(root) << 2;
     }
 }
 
 void ProjectModelTest::testProjectProxyModel()
 {
-    ProjectFolderItem* root = new ProjectFolderItem(0, KUrl("file:///tmp/"));
-    new ProjectFileItem(0, KUrl("file:///tmp/b1/"), root);
-    new ProjectFileItem(0, KUrl("file:///tmp/a1/"), root);
-    new ProjectFileItem(0, KUrl("file:///tmp/d1/"), root);
-    new ProjectFileItem(0, KUrl("file:///tmp/c1/"), root);
+    ProjectFolderItem* root = new ProjectFolderItem(0, Path(KUrl::fromPath("/tmp/")));
+    new ProjectFileItem("b1", root);
+    new ProjectFileItem("a1", root);
+    new ProjectFileItem("d1", root);
+    new ProjectFileItem("c1", root);
     model->appendRow(root);
 
     QModelIndex proxyRoot = proxy->mapFromSource(root->index());
@@ -530,11 +531,11 @@ void ProjectModelTest::testProjectFileSet()
     TestProject* project = new TestProject;
 
     QVERIFY(project->fileSet().isEmpty());
-    KUrl url("file:///tmp/a");
-    ProjectFileItem* item = new ProjectFileItem(project, url, project->projectItem());
+    Path path(KUrl::fromPath("/tmp/a"));
+    ProjectFileItem* item = new ProjectFileItem(project, path, project->projectItem());
     QCOMPARE(project->fileSet().size(), 1);
-    qDebug() << url << project->fileSet().begin()->toUrl();
-    QCOMPARE(project->fileSet().begin()->toUrl(), url);
+    qDebug() << path << project->fileSet().begin()->toUrl();
+    QCOMPARE(Path(project->fileSet().begin()->toUrl()), path);
     delete item;
     QVERIFY(project->fileSet().isEmpty());
 }
@@ -543,11 +544,11 @@ void ProjectModelTest::testProjectFileIcon()
 {
     QMimeDatabase db;
 
-    ProjectFileItem* item = new ProjectFileItem(0, KUrl("/tmp/foo.txt"));
-    const QString txtIcon = db.mimeTypeForUrl(item->url()).iconName();
+    ProjectFileItem* item = new ProjectFileItem(0, Path("/tmp/foo.txt"));
+    const QString txtIcon = db.mimeTypeForUrl(item->path().toUrl()).iconName();
     QCOMPARE(item->iconName(), txtIcon);
-    item->setUrl(KUrl("/tmp/bar.cpp"));
-    QCOMPARE(item->iconName(), db.mimeTypeForUrl(item->url()).iconName());
+    item->setPath(Path("/tmp/bar.cpp"));
+    QCOMPARE(item->iconName(), db.mimeTypeForUrl(item->path().toUrl()).iconName());
     QVERIFY(item->iconName() != txtIcon);
 }
 

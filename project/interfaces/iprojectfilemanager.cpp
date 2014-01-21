@@ -36,4 +36,3 @@ KJob* IProjectFileManager::createImportJob(ProjectFolderItem* item)
 
 
 }
-

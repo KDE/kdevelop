@@ -10,6 +10,7 @@
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/idocumentcontroller.h>
 #include <project/projectmodel.h>
+#include <project/path.h>
 
 #include <KDebug>
 #include <KLocalizedString>
@@ -112,11 +113,11 @@ ContextMenuExtension FileTemplatesPlugin::contextMenuExtension (Context* context
         ProjectBaseItem* item = items.first();
         if (item->folder())
         {
-            url = item->url();
+            url = item->path().toUrl();
         }
         else if (item->target())
         {
-            url = item->parent()->url();
+            url = item->parent()->path().toUrl();
         }
         if (url.isValid())
         {
@@ -129,7 +130,7 @@ ContextMenuExtension FileTemplatesPlugin::contextMenuExtension (Context* context
 
         if (item->file())
         {
-            fileUrl = item->url();
+            fileUrl = item->path().toUrl();
         }
     }
     else if (context->type() == Context::EditorContext)

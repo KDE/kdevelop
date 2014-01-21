@@ -60,7 +60,7 @@ void addTests(const QString& tag, const TestProject& project, const TestFilter& 
         const MatchTest& test = tests[i];
         QTest::newRow(qstrdup(qPrintable(tag + ':' + test.path)))
             << filter
-            << KUrl(project.folder(), test.path)
+            << Path(project.path(), test.path)
             << test.isFolder
             << test.shouldMatch;
 
@@ -68,7 +68,7 @@ void addTests(const QString& tag, const TestProject& project, const TestFilter& 
             // also test folder with trailing slash - should not make a difference
             QTest::newRow(qstrdup(qPrintable(tag + ':' + test.path + '/')))
                 << filter
-                << KUrl(project.folder(), test.path + '/')
+                << Path(project.path(), test.path)
                 << test.isFolder
                 << test.shouldMatch;
         }
@@ -78,13 +78,28 @@ void addTests(const QString& tag, const TestProject& project, const TestFilter& 
 ///FIXME: remove once we can use c++11
 #define ADD_TESTS(tag, project, filter, tests) addTests(tag, project, filter, tests, sizeof(tests) / sizeof(tests[0]))
 
+struct BenchData
+{
+    BenchData(const Path &path = Path(), bool isFolder = false)
+    : path(path)
+    , isFolder(isFolder)
+    {}
+
+    Path path;
+    bool isFolder;
+};
+
 }
+
+Q_DECLARE_METATYPE(QVector<BenchData>);
 
 void TestProjectFilter::initTestCase()
 {
     AutoTestShell::init();
     TestCore::initialize(Core::NoUi);
     qRegisterMetaType<TestFilter>();
+    qRegisterMetaType<Path>();
+    qRegisterMetaType<QVector<BenchData> >();
 }
 
 void TestProjectFilter::cleanupTestCase()
@@ -95,7 +110,7 @@ void TestProjectFilter::cleanupTestCase()
 void TestProjectFilter::match()
 {
     QFETCH(TestFilter, filter);
-    QFETCH(KUrl, path);
+    QFETCH(KDevelop::Path, path);
     QFETCH(bool, isFolder);
     QFETCH(bool, expectedIsValid);
 
@@ -105,7 +120,7 @@ void TestProjectFilter::match()
 void TestProjectFilter::match_data()
 {
     QTest::addColumn<TestFilter>("filter");
-    QTest::addColumn<KUrl>("path");
+    QTest::addColumn<Path>("path");
     QTest::addColumn<bool>("isFolder");
     QTest::addColumn<bool>("expectedIsValid");
 
@@ -114,8 +129,8 @@ void TestProjectFilter::match_data()
         const TestProject project;
         TestFilter filter(new ProjectFilter(&project, deserialize(defaultFilters())));
 
-        QTest::newRow("projectRoot") << filter << project.folder() << Folder << Valid;
-        QTest::newRow("project.kdev4") << filter << project.projectFileUrl() << File << Invalid;
+        QTest::newRow("projectRoot") << filter << project.path() << Folder << Valid;
+        QTest::newRow("project.kdev4") << filter << project.projectFile() << File << Invalid;
 
         MatchTest tests[] = {
             //{path, isFolder, isValid}
@@ -160,8 +175,8 @@ void TestProjectFilter::match_data()
             << Filter(SerializedFilter("*.cpp", Filter::Files));
         TestFilter filter(new ProjectFilter(&project, filters));
 
-        QTest::newRow("projectRoot") << filter << project.folder() << Folder << Valid;
-        QTest::newRow("project.kdev4") << filter << project.projectFileUrl() << File << Invalid;
+        QTest::newRow("projectRoot") << filter << project.path() << Folder << Valid;
+        QTest::newRow("project.kdev4") << filter << project.projectFile() << File << Invalid;
 
         MatchTest tests[] = {
             //{path, isFolder, isValid}
@@ -183,8 +198,8 @@ void TestProjectFilter::match_data()
             << Filter(SerializedFilter("foo", Filter::Folders));
         TestFilter filter(new ProjectFilter(&project, filters));
 
-        QTest::newRow("projectRoot") << filter << project.folder() << Folder << Valid;
-        QTest::newRow("project.kdev4") << filter << project.projectFileUrl() << File << Invalid;
+        QTest::newRow("projectRoot") << filter << project.path() << Folder << Valid;
+        QTest::newRow("project.kdev4") << filter << project.projectFile() << File << Invalid;
 
         MatchTest tests[] = {
             //{path, isFolder, isValid}
@@ -207,8 +222,8 @@ void TestProjectFilter::match_data()
             << Filter(SerializedFilter("*.cpp", Filter::Files, Filter::Inclusive));
         TestFilter filter(new ProjectFilter(&project, filters));
 
-        QTest::newRow("projectRoot") << filter << project.folder() << Folder << Valid;
-        QTest::newRow("project.kdev4") << filter << project.projectFileUrl() << File << Invalid;
+        QTest::newRow("projectRoot") << filter << project.path() << Folder << Valid;
+        QTest::newRow("project.kdev4") << filter << project.projectFile() << File << Invalid;
 
         MatchTest tests[] = {
             //{path, isFolder, isValid}
@@ -234,8 +249,8 @@ void TestProjectFilter::match_data()
             << Filter(SerializedFilter("bar", Filter::Folders, Filter::Exclusive));
         TestFilter filter(new ProjectFilter(&project, filters));
 
-        QTest::newRow("projectRoot") << filter << project.folder() << Folder << Valid;
-        QTest::newRow("project.kdev4") << filter << project.projectFileUrl() << File << Invalid;
+        QTest::newRow("projectRoot") << filter << project.path() << Folder << Valid;
+        QTest::newRow("project.kdev4") << filter << project.projectFile() << File << Invalid;
 
         MatchTest tests[] = {
             //{path, isFolder, isValid}
@@ -259,8 +274,8 @@ void TestProjectFilter::match_data()
             << Filter(SerializedFilter("/foo/*bar", Filter::Targets(Filter::Files | Filter::Folders)));
         TestFilter filter(new ProjectFilter(&project, filters));
 
-        QTest::newRow("projectRoot") << filter << project.folder() << Folder << Valid;
-        QTest::newRow("project.kdev4") << filter << project.projectFileUrl() << File << Invalid;
+        QTest::newRow("projectRoot") << filter << project.path() << Folder << Valid;
+        QTest::newRow("project.kdev4") << filter << project.projectFile() << File << Invalid;
 
         MatchTest tests[] = {
             //{path, isFolder, isValid}
@@ -286,8 +301,8 @@ void TestProjectFilter::match_data()
             << Filter(SerializedFilter("bar/", Filter::Targets(Filter::Files | Filter::Folders)));
         TestFilter filter(new ProjectFilter(&project, filters));
 
-        QTest::newRow("projectRoot") << filter << project.folder() << Folder << Valid;
-        QTest::newRow("project.kdev4") << filter << project.projectFileUrl() << File << Invalid;
+        QTest::newRow("projectRoot") << filter << project.path() << Folder << Valid;
+        QTest::newRow("project.kdev4") << filter << project.projectFile() << File << Invalid;
 
         MatchTest tests[] = {
             //{path, isFolder, isValid}
@@ -308,8 +323,8 @@ void TestProjectFilter::match_data()
             << Filter(SerializedFilter("foo\\*bar", Filter::Files));
         TestFilter filter(new ProjectFilter(&project, filters));
 
-        QTest::newRow("projectRoot") << filter << project.folder() << Folder << Valid;
-        QTest::newRow("project.kdev4") << filter << project.projectFileUrl() << File << Invalid;
+        QTest::newRow("projectRoot") << filter << project.path() << Folder << Valid;
+        QTest::newRow("project.kdev4") << filter << project.projectFile() << File << Invalid;
 
         MatchTest tests[] = {
             //{path, isFolder, isValid}
@@ -324,33 +339,32 @@ void TestProjectFilter::match_data()
     }
 }
 
-static KUrl::List createUrls(KUrl base, int folderDepth, int foldersPerFolder, int filesPerFolder)
+static QVector<BenchData> createBenchData(const Path& base, int folderDepth, int foldersPerFolder, int filesPerFolder)
 {
-    KUrl::List urls;
-    base.adjustPath(KUrl::AddTrailingSlash);
-    urls << base;
+    QVector<BenchData> data;
+    data << BenchData(base, true);
 
     for(int i = 0; i < filesPerFolder; ++i) {
         if (i % 2) {
-            urls << KUrl(base, QString("file%1.cpp").arg(i));
+            data << BenchData(Path(base, QString("file%1.cpp").arg(i)), false);
         } else {
-            urls << KUrl(base, QString("file%1.h").arg(i));
+            data << BenchData(Path(base, QString("file%1.h").arg(i)), true);
         }
     }
     for(int i = 0; i < foldersPerFolder && folderDepth > 0; ++i) {
-        urls += createUrls(KUrl(base, QString("folder%1").arg(i)), folderDepth - 1, foldersPerFolder, filesPerFolder);
+        data += createBenchData(Path(base, QString("folder%1").arg(i)), folderDepth - 1, foldersPerFolder, filesPerFolder);
     }
-    return urls;
+    return data;
 }
 
 void TestProjectFilter::bench()
 {
     QFETCH(TestFilter, filter);
-    QFETCH(KUrl::List, urls);
+    QFETCH(QVector<BenchData>, data);
 
     QBENCHMARK {
-        foreach(const KUrl& url, urls) {
-            filter->isValid(url, url.path().endsWith('/'));
+        foreach(const BenchData& bench, data) {
+            filter->isValid(bench.path, bench.isFolder);
         }
     }
 }
@@ -358,27 +372,27 @@ void TestProjectFilter::bench()
 void TestProjectFilter::bench_data()
 {
     QTest::addColumn<TestFilter>("filter");
-    QTest::addColumn<KUrl::List>("urls");
+    QTest::addColumn<QVector<BenchData> >("data");
 
     const TestProject project;
 
-    QVector<KUrl::List> urlSets = QVector<KUrl::List>()
-        << createUrls(project.folder(), 3, 5, 10)
-        << createUrls(project.folder(), 3, 5, 20)
-        << createUrls(project.folder(), 4, 5, 10)
-        << createUrls(project.folder(), 3, 10, 10);
+    QVector<QVector<BenchData> > dataSets = QVector<QVector<BenchData> >()
+        << createBenchData(project.path(), 3, 5, 10)
+        << createBenchData(project.path(), 3, 5, 20)
+        << createBenchData(project.path(), 4, 5, 10)
+        << createBenchData(project.path(), 3, 10, 10);
 
     {
         TestFilter filter(new ProjectFilter(&project, Filters()));
-        foreach(const KUrl::List& urls, urlSets) {
-            QTest::newRow(qstrdup(QByteArray("baseline-") + QByteArray::number(urls.size()))) << filter << urls;
+        foreach(const QVector<BenchData>& data, dataSets) {
+            QTest::newRow(qstrdup(QByteArray("baseline-") + QByteArray::number(data.size()))) << filter << data;
         }
     }
 
     {
         TestFilter filter(new ProjectFilter(&project, deserialize(defaultFilters())));
-        foreach(const KUrl::List& urls, urlSets) {
-            QTest::newRow(qstrdup(QByteArray("defaults-") + QByteArray::number(urls.size()))) << filter << urls;
+        foreach(const QVector<BenchData>& data, dataSets) {
+            QTest::newRow(qstrdup(QByteArray("defaults-") + QByteArray::number(data.size()))) << filter << data;
         }
     }
 }

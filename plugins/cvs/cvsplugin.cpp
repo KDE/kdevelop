@@ -254,7 +254,7 @@ void CvsPlugin::ctxEditors()
                                       urls);
     if (job) {
         KDevelop::ICore::self()->runController()->registerJob(job);
-        EditorsView* view = new EditorsView(this, job);
+        EditorsView* view = new EditorsView(job);
         emit addNewTabToMainView(view, i18n("Editors"));
     }
 }

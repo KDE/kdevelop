@@ -164,6 +164,11 @@ public:
      */
     QByteArray errorOutput() const;
 
+    /**
+     * Ignore a non-zero exit code.
+     */
+    void ignoreError();
+
     // Begin:  KDevelop::VcsJob
 
     /** 

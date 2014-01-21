@@ -27,6 +27,7 @@
 #include <QFile>
 #include <QDir>
 #include <project/projectmodel.h>
+#include <project/path.h>
 
 DashboardCorona::DashboardCorona(KDevelop::IProject *project, QObject* parent)
 	: Plasma::Corona(parent), m_project(project)
@@ -58,8 +59,8 @@ void DashboardCorona::loadDefaultLayout()
     
     emit containmentAdded(c);
     
-    if(m_project->projectFileUrl().isLocalFile()) {
-        QDir d(m_project->projectItem()->url().toLocalFile());
+    if(m_project->projectFile().isLocalFile()) {
+        QDir d(m_project->projectItem()->path().toLocalFile());
         
         if(d.exists("README"))
             c->addApplet("plasma_kdev_projectfileelement", QVariantList() << "README");
@@ -79,5 +80,5 @@ void DashboardCorona::containmentAddedToCorona(Plasma::Containment* c)
 
 void DashboardCorona::saveToProject()
 {
-    saveLayout(m_project->projectFileUrl().toLocalFile());
+    saveLayout(m_project->projectFile().toLocalFile());
 }

@@ -35,8 +35,7 @@
 #include "svnclient.h"
 
 SvnInternalCatJob::SvnInternalCatJob( SvnJobBase* parent )
-    : SvnInternalJobBase( parent ), m_recursive( true ),
-      m_ignoreExternals( false )
+    : SvnInternalJobBase( parent )
 {
     m_pegRevision.setRevisionValue( KDevelop::VcsRevision::Head,
                                     KDevelop::VcsRevision::Special );

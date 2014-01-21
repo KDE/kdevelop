@@ -1,6 +1,6 @@
 /***************************************************************************
  *   This file is part of KDevelop                                         *
- *   Copyright 2010 Milian Wolff <mail@milianw.de>                         *
+ *   Copyright 2010-2012 Milian Wolff <mail@milianw.de>                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -38,6 +38,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
 #include <interfaces/iprojectcontroller.h>
+#include <language/duchain/indexedstring.h>
 
 #include "projectfiltermanager.h"
 
@@ -94,7 +95,7 @@ struct AbstractFileManagerPlugin::Private {
     /// Continues watching the given folder for changes.
     void continueWatcher(ProjectFolderItem* folder);
     /// Common renaming function.
-    bool rename( ProjectBaseItem* item, const KUrl& destination);
+    bool rename(ProjectBaseItem* item, const Path& newPath);
 
     void removeFolder(ProjectFolderItem* folder);
 
@@ -124,7 +125,7 @@ KIO::Job* AbstractFileManagerPlugin::Private::eventuallyReadFolder( ProjectFolde
 {
     FileManagerListJob* listJob = new FileManagerListJob( item, forceRecursion );
     m_projectJobs[ item->project() ] << listJob;
-    kDebug(9517) << "adding job" << listJob << item << item->url() << "for project" << item->project();
+    kDebug(9517) << "adding job" << listJob << item << item->path() << "for project" << item->project();
 
     ICore::self()->runController()->registerJob( listJob );
 
@@ -154,41 +155,36 @@ void AbstractFileManagerPlugin::Private::addJobItems(FileManagerListJob* job,
         return;
     }
 
-    kDebug(9517) << "reading entries of" << baseItem->url();
+    kDebug(9517) << "reading entries of" << baseItem->path();
 
-    // build lists of valid files and folders with relative urls to the project folder
-    KUrl::List files;
-    KUrl::List folders;
+    // build lists of valid files and folders with paths relative to the project folder
+    Path::List files;
+    Path::List folders;
     foreach ( const KIO::UDSEntry& entry, entries ) {
         QString name = entry.stringValue( KIO::UDSEntry::UDS_NAME );
         if (name == "." || name == "..") {
             continue;
         }
 
-        KUrl url = baseItem->url();
-        url.addPath( name );
-        if (entry.isDir()) {
-            url.adjustPath(KUrl::AddTrailingSlash);
-        }
+        Path path(baseItem->path(), name);
 
-        if ( !q->isValid( url, entry.isDir(), baseItem->project() ) ) {
+        if ( !q->isValid( path, entry.isDir(), baseItem->project() ) ) {
             continue;
         } else {
             if ( entry.isDir() ) {
                 if( entry.isLink() ) {
-                    KUrl linkedUrl = baseItem->url();
-                    linkedUrl.cd(entry.stringValue( KIO::UDSEntry::UDS_LINK_DEST ));
+                    const Path linkedPath = baseItem->path().cd(entry.stringValue( KIO::UDSEntry::UDS_LINK_DEST ));
                     // make sure we don't end in an infinite loop
-                    if( linkedUrl.isParentOf( baseItem->project()->folder() ) ||
-                        baseItem->project()->folder().isParentOf( linkedUrl ) ||
-                        linkedUrl == baseItem->project()->folder() )
+                    if( linkedPath.isParentOf( baseItem->project()->path() ) ||
+                        baseItem->project()->path().isParentOf( linkedPath ) ||
+                        linkedPath == baseItem->project()->path() )
                     {
                         continue;
                     }
                 }
-                folders << url;
+                folders << path;
             } else {
-                files << url;
+                files << path;
             }
         }
     }
@@ -200,14 +196,14 @@ void AbstractFileManagerPlugin::Private::addJobItems(FileManagerListJob* job,
     for ( int j = 0; j < baseItem->rowCount(); ++j ) {
         if ( ProjectFolderItem* f = baseItem->child(j)->folder() ) {
             // check if this is still a valid folder
-            int index = folders.indexOf( f->url() );
+            int index = folders.indexOf( f->path() );
             if ( index == -1 ) {
                 // folder got removed or is now invalid
                 removeFolder(f);
                 --j;
             } else {
                 // this folder already exists in the view
-                folders.removeAt( index );
+                folders.remove( index );
                 if ( forceRecursion ) {
                     //no need to add this item, but we still want to recurse into it
                     job->addSubDir( f );
@@ -216,42 +212,45 @@ void AbstractFileManagerPlugin::Private::addJobItems(FileManagerListJob* job,
             }
         } else if ( ProjectFileItem* f =  baseItem->child(j)->file() ) {
             // check if this is still a valid file
-            int index = files.indexOf( f->url() );
+            int index = files.indexOf( f->path() );
             if ( index == -1 ) {
                 // file got removed or is now invalid
-                ifDebug(kDebug(9517) << "removing file:" << f << f->url();)
+                ifDebug(kDebug(9517) << "removing file:" << f << f->path();)
                 baseItem->removeRow( j );
                 --j;
             } else {
                 // this file already exists in the view
-                files.removeAt( index );
+                files.remove( index );
                 emit q->reloadedFileItem( f );
             }
         }
     }
 
     // add new rows
-    foreach ( const KUrl& url, files ) {
-        ProjectFileItem* file = q->createFileItem( baseItem->project(), url, baseItem );
-        emit q->fileAdded( file );
+    foreach ( const Path& path, files ) {
+        ProjectFileItem* file = q->createFileItem( baseItem->project(), path, baseItem );
+        if (file) {
+            emit q->fileAdded( file );
+        }
     }
-    foreach ( const KUrl& url, folders ) {
-        ProjectFolderItem* folder = q->createFolderItem( baseItem->project(), url, baseItem );
-        emit q->folderAdded( folder );
-        job->addSubDir( folder );
+    foreach ( const Path& path, folders ) {
+        ProjectFolderItem* folder = q->createFolderItem( baseItem->project(), path, baseItem );
+        if (folder) {
+            emit q->folderAdded( folder );
+            job->addSubDir( folder );
+        }
     }
 }
 
-void AbstractFileManagerPlugin::Private::created(const QString &path)
+void AbstractFileManagerPlugin::Private::created(const QString &path_)
 {
-    kDebug(9517) << "created:" << path;
-    QFileInfo info(path);
+    kDebug(9517) << "created:" << path_;
+    QFileInfo info(path_);
 
-    KUrl url = KUrl(path);
-    if (info.isDir()) {
-        url.adjustPath(KUrl::AddTrailingSlash);
-    }
-    KUrl parent = url.upUrl();
+    ///FIXME: share memory with parent
+    const Path path(KUrl::fromPath(path_));
+    const IndexedString indexedPath = path.toIndexed();
+    const IndexedString indexedParent = path.parent().toIndexed();
 
     foreach ( IProject* p, m_watchers.keys() ) {
         if ( !p->projectItem()->model() ) {
@@ -259,55 +258,60 @@ void AbstractFileManagerPlugin::Private::created(const QString &path)
             // FIXME: how should this be handled? see unit test
             continue;
         }
-        if ( !q->isValid(url, info.isDir(), p) ) {
+        if ( !q->isValid(path, info.isDir(), p) ) {
             continue;
         }
         if ( info.isDir() ) {
             bool found = false;
-            foreach ( ProjectFolderItem* folder, p->foldersForUrl(url) ) {
+            foreach ( ProjectFolderItem* folder, p->foldersForPath(indexedPath) ) {
                 // exists already in this project, happens e.g. when we restart the dirwatcher
                 // or if we delete and remove folders consecutively https://bugs.kde.org/show_bug.cgi?id=260741
-                kDebug(9517) << "force reload of" << url << folder;
+                kDebug(9517) << "force reload of" << path << folder;
                 eventuallyReadFolder( folder, true );
                 found = true;
             }
             if ( found ) {
                 continue;
             }
-        } else if (!p->filesForUrl(url).isEmpty()) {
+        } else if (!p->filesForPath(indexedPath).isEmpty()) {
             // also gets triggered for kate's backup files
             continue;
         }
-        foreach ( ProjectFolderItem* parentItem, p->foldersForUrl(parent) ) {
+        foreach ( ProjectFolderItem* parentItem, p->foldersForPath(indexedParent) ) {
             if ( info.isDir() ) {
-                ProjectFolderItem* folder = q->createFolderItem( p, url, parentItem );
-                emit q->folderAdded( folder );
-                eventuallyReadFolder( folder );
+                ProjectFolderItem* folder = q->createFolderItem( p, path, parentItem );
+                if (folder) {
+                    emit q->folderAdded( folder );
+                    eventuallyReadFolder( folder );
+                }
             } else {
-                ProjectFileItem* file = q->createFileItem( p, url, parentItem );
-                emit q->fileAdded( file );
+                ProjectFileItem* file = q->createFileItem( p, path, parentItem );
+                if (file) {
+                    emit q->fileAdded( file );
+                }
             }
         }
     }
 }
 
-void AbstractFileManagerPlugin::Private::deleted(const QString &path)
+void AbstractFileManagerPlugin::Private::deleted(const QString &path_)
 {
-    if ( QFile::exists(path) ) {
+    if ( QFile::exists(path_) ) {
         // stopDirScan...
         return;
     }
     // ensure that the path is not inside a stopped folder
     foreach(const QString& folder, m_stoppedFolders) {
-        if (path.startsWith(folder)) {
+        if (path_.startsWith(folder)) {
             return;
         }
     }
-    kDebug(9517) << "deleted:" << path;
+    kDebug(9517) << "deleted:" << path_;
 
-    KUrl url = KUrl(path);
+    const Path path(path_);
+    const IndexedString indexed = path.toIndexed();
     foreach ( IProject* p, m_watchers.keys() ) {
-        if ( url.equals(p->folder(), KUrl::CompareWithoutTrailingSlash) ) {
+        if (path == p->path()) {
             KMessageBox::error(qApp->activeWindow(),
                                i18n("The base folder of project <b>%1</b>"
                                     " got deleted or moved outside of KDevelop.\n"
@@ -321,10 +325,10 @@ void AbstractFileManagerPlugin::Private::deleted(const QString &path)
             // FIXME: how should this be handled? see unit test
             continue;
         }
-        foreach ( ProjectFolderItem* item, p->foldersForUrl(url) ) {
+        foreach ( ProjectFolderItem* item, p->foldersForPath(indexed) ) {
             removeFolder(item);
         }
-        foreach ( ProjectFileItem* item, p->filesForUrl(url) ) {
+        foreach ( ProjectFileItem* item, p->filesForPath(indexed) ) {
             emit q->fileRemoved(item);
             ifDebug(kDebug(9517) << "removing file" << item;)
             item->parent()->removeRow(item->row());
@@ -332,25 +336,25 @@ void AbstractFileManagerPlugin::Private::deleted(const QString &path)
     }
 }
 
-bool AbstractFileManagerPlugin::Private::rename(ProjectBaseItem* item, const KUrl& destination)
+bool AbstractFileManagerPlugin::Private::rename(ProjectBaseItem* item, const Path& newPath)
 {
-    if ( !q->isValid(destination, true, item->project()) ) {
+    if ( !q->isValid(newPath, true, item->project()) ) {
         int cancel = KMessageBox::warningContinueCancel( qApp->activeWindow(),
             i18n("You tried to rename '%1' to '%2', but the latter is filtered and will be hidden.\n"
-                 "Do you want to continue?", item->text(), destination.fileName()),
+                 "Do you want to continue?", item->text(), newPath.lastPathSegment()),
             QString(), KStandardGuiItem::cont(), KStandardGuiItem::cancel(), "GenericManagerRenameToFiltered"
         );
         if ( cancel == KMessageBox::Cancel ) {
             return false;
         }
     }
-    foreach ( ProjectFolderItem* parent, item->project()->foldersForUrl(destination.upUrl()) ) {
+    foreach ( ProjectFolderItem* parent, item->project()->foldersForPath(newPath.parent().toIndexed()) ) {
         if ( parent->folder() ) {
             stopWatcher(parent);
-            const KUrl source = item->url();
-            bool success = renameUrl( item->project(), source, destination );
+            const Path source = item->path();
+            bool success = renameUrl( item->project(), source.toUrl(), newPath.toUrl() );
             if ( success ) {
-                item->setUrl( destination );
+                item->setPath( newPath );
                 item->parent()->takeRow( item->row() );
                 parent->appendRow( item );
                 if (item->file()) {
@@ -369,22 +373,22 @@ bool AbstractFileManagerPlugin::Private::rename(ProjectBaseItem* item, const KUr
 
 void AbstractFileManagerPlugin::Private::stopWatcher(ProjectFolderItem* folder)
 {
-    if ( !folder->url().isLocalFile() ) {
+    if ( !folder->path().isLocalFile() ) {
         return;
     }
     Q_ASSERT(m_watchers.contains(folder->project()));
-    const QString path = folder->url().toLocalFile();
+    const QString path = folder->path().toLocalFile();
     m_watchers[folder->project()]->stopDirScan(path);
     m_stoppedFolders.append(path);
 }
 
 void AbstractFileManagerPlugin::Private::continueWatcher(ProjectFolderItem* folder)
 {
-    if ( !folder->url().isLocalFile() ) {
+    if ( !folder->path().isLocalFile() ) {
         return;
     }
     Q_ASSERT(m_watchers.contains(folder->project()));
-    const QString path = folder->url().toLocalFile();
+    const QString path = folder->path().toLocalFile();
     m_watchers[folder->project()]->restartDirScan(path);
     const int idx = m_stoppedFolders.indexOf(path);
     if (idx != -1) {
@@ -405,10 +409,10 @@ bool isChildItem(ProjectBaseItem* parent, ProjectBaseItem* child)
 
 void AbstractFileManagerPlugin::Private::removeFolder(ProjectFolderItem* folder)
 {
-    ifDebug(kDebug(9517) << "removing folder:" << folder << folder->url();)
+    ifDebug(kDebug(9517) << "removing folder:" << folder << folder->path();)
     foreach(FileManagerListJob* job, m_projectJobs[folder->project()]) {
         if (isChildItem(folder, job->item())) {
-            kDebug(9517) << "killing list job for removed folder" << job << folder->url();
+            kDebug(9517) << "killing list job for removed folder" << job << folder->path();
             job->abort();
             Q_ASSERT(!m_projectJobs.value(folder->project()).contains(job));
         } else {
@@ -455,12 +459,12 @@ QList<ProjectFolderItem*> AbstractFileManagerPlugin::parse( ProjectFolderItem *i
 
 ProjectFolderItem *AbstractFileManagerPlugin::import( IProject *project )
 {
-    ProjectFolderItem *projectRoot = createFolderItem( project, project->folder(), 0 );
+    ProjectFolderItem *projectRoot = createFolderItem( project, project->path(), 0 );
     emit folderAdded( projectRoot );
-    kDebug(9517) << "imported new project" << project->name() << "at" << projectRoot->url();
+    kDebug(9517) << "imported new project" << project->name() << "at" << projectRoot->path();
 
     ///TODO: check if this works for remote files when something gets changed through another KDE app
-    if ( project->folder().isLocalFile() ) {
+    if ( project->path().isLocalFile() ) {
         d->m_watchers[project] = new KDirWatch( project );
 
         connect(d->m_watchers[project], SIGNAL(created(QString)),
@@ -468,7 +472,7 @@ ProjectFolderItem *AbstractFileManagerPlugin::import( IProject *project )
         connect(d->m_watchers[project], SIGNAL(deleted(QString)),
                 this, SLOT(deleted(QString)));
 
-        d->m_watchers[project]->addDir(project->folder().toLocalFile(), KDirWatch::WatchSubDirs | KDirWatch:: WatchFiles );
+        d->m_watchers[project]->addDir(project->path().toLocalFile(), KDirWatch::WatchSubDirs | KDirWatch:: WatchFiles );
     }
 
     d->m_filters.add(project);
@@ -483,50 +487,54 @@ KJob* AbstractFileManagerPlugin::createImportJob(ProjectFolderItem* item)
 
 bool AbstractFileManagerPlugin::reload( ProjectFolderItem* item )
 {
-    kDebug(9517) << "reloading item" << item->url();
+    kDebug(9517) << "reloading item" << item->path();
     d->eventuallyReadFolder( item->folder(), true );
     return true;
 }
 
-ProjectFolderItem* AbstractFileManagerPlugin::addFolder( const KUrl& url,
+ProjectFolderItem* AbstractFileManagerPlugin::addFolder( const Path& folder,
         ProjectFolderItem * parent )
 {
-    kDebug(9517) << "adding folder" << url << "to" << parent->url();
+    kDebug(9517) << "adding folder" << folder << "to" << parent->path();
     ProjectFolderItem* created = 0;
     d->stopWatcher(parent);
-    if ( createFolder(url) ) {
-        created = createFolderItem( parent->project(), url, parent );
-        emit folderAdded(created);
+    if ( createFolder(folder.toUrl()) ) {
+        created = createFolderItem( parent->project(), folder, parent );
+        if (created) {
+            emit folderAdded(created);
+        }
     }
     d->continueWatcher(parent);
     return created;
 }
 
 
-ProjectFileItem* AbstractFileManagerPlugin::addFile( const KUrl& url,
+ProjectFileItem* AbstractFileManagerPlugin::addFile( const Path& file,
         ProjectFolderItem * parent )
 {
-    kDebug(9517) << "adding file" << url << "to" << parent->url();
+    kDebug(9517) << "adding file" << file << "to" << parent->path();
     ProjectFileItem* created = 0;
     d->stopWatcher(parent);
-    if ( createFile(url) ) {
-        created = createFileItem( parent->project(), url, parent );
-        emit fileAdded(created);
+    if ( createFile(file.toUrl()) ) {
+        created = createFileItem( parent->project(), file, parent );
+        if (created) {
+            emit fileAdded(created);
+        }
     }
     d->continueWatcher(parent);
     return created;
 }
 
-bool AbstractFileManagerPlugin::renameFolder( ProjectFolderItem * folder, const KUrl& url )
+bool AbstractFileManagerPlugin::renameFolder(ProjectFolderItem* folder, const Path& newPath)
 {
-    kDebug(9517) << "trying to rename a folder:" << folder->url() << url;
-    return d->rename(folder, url);
+    kDebug(9517) << "trying to rename a folder:" << folder->path() << newPath;
+    return d->rename(folder, newPath);
 }
 
-bool AbstractFileManagerPlugin::renameFile( ProjectFileItem * file, const KUrl& url )
+bool AbstractFileManagerPlugin::renameFile(ProjectFileItem* file, const Path& newPath)
 {
-    kDebug(9517) << "trying to rename a file:" << file->url() << url;
-    return d->rename(file, url);
+    kDebug(9517) << "trying to rename a file:" << file->path() << newPath;
+    return d->rename(file, newPath);
 }
 
 bool AbstractFileManagerPlugin::removeFilesAndFolders(const QList<ProjectBaseItem*> &items)
@@ -539,7 +547,7 @@ bool AbstractFileManagerPlugin::removeFilesAndFolders(const QList<ProjectBaseIte
         ProjectFolderItem* parent = getParentFolder(item);
         d->stopWatcher(parent);
 
-        success &= removeUrl(parent->project(), item->url(), true);
+        success &= removeUrl(parent->project(), item->path().toUrl(), true);
         if ( success ) {
             if (item->file()) {
                 emit fileRemoved(item->file());
@@ -568,11 +576,10 @@ bool AbstractFileManagerPlugin::moveFilesAndFolders(const QList< ProjectBaseItem
         d->stopWatcher(oldParent);
         d->stopWatcher(newParent);
 
-        KUrl oldUrl = item->url();
-        KUrl newUrl = newParent->url();
-        newUrl.addPath(item->baseName());
+        const Path oldPath = item->path();
+        const Path newPath(newParent->path(), item->baseName());
 
-        success &= renameUrl(oldParent->project(), oldUrl, newUrl);
+        success &= renameUrl(oldParent->project(), oldPath.toUrl(), newPath. toUrl());
         if ( success ) {
             if (item->file()) {
                 emit fileRemoved(item->file());
@@ -581,7 +588,10 @@ bool AbstractFileManagerPlugin::moveFilesAndFolders(const QList< ProjectBaseItem
             }
             oldParent->removeRow( item->row() );
             KIO::Job *readJob = d->eventuallyReadFolder(newParent);
-            KIO::NetAccess::synchronousRun(readJob, 0); //reload first level synchronously, deeper levels will run async (required for code that expects the new item to exist after this method finished)
+            // reload first level synchronously, deeper levels will run async
+            // this is required for code that expects the new item to exist after
+            // this method finished
+            KIO::NetAccess::synchronousRun(readJob, 0);
         }
 
         d->continueWatcher(oldParent);
@@ -592,19 +602,20 @@ bool AbstractFileManagerPlugin::moveFilesAndFolders(const QList< ProjectBaseItem
     return success;
 }
 
-bool AbstractFileManagerPlugin::copyFilesAndFolders(const KUrl::List& items, ProjectFolderItem* newParent)
+bool AbstractFileManagerPlugin::copyFilesAndFolders(const Path::List& items, ProjectFolderItem* newParent)
 {
     bool success = true;
-    foreach(KUrl item, items)
+    foreach(const Path& item, items)
     {
         d->stopWatcher(newParent);
 
-        KUrl newUrl = newParent->url();
-
-        success &= copyUrl(newParent->project(), item, newUrl);
+        success &= copyUrl(newParent->project(), item.toUrl(), newParent->path().toUrl());
         if ( success ) {
             KIO::Job *readJob = d->eventuallyReadFolder(newParent);
-            KIO::NetAccess::synchronousRun(readJob, 0); //reload first level synchronously, deeper levels will run async (required for code that expects the new item to exist after this method finished)
+            // reload first level synchronously, deeper levels will run async
+            // this is required for code that expects the new item to exist after
+            // this method finished
+            KIO::NetAccess::synchronousRun(readJob, 0);
         }
 
         d->continueWatcher(newParent);
@@ -614,22 +625,22 @@ bool AbstractFileManagerPlugin::copyFilesAndFolders(const KUrl::List& items, Pro
     return success;
 }
 
-bool AbstractFileManagerPlugin::isValid( const KUrl& url, const bool isFolder,
+bool AbstractFileManagerPlugin::isValid( const Path& path, const bool isFolder,
                                          IProject* project ) const
 {
-    return d->m_filters.isValid(url, isFolder, project);
+    return d->m_filters.isValid( path, isFolder, project );
 }
 
-ProjectFileItem* AbstractFileManagerPlugin::createFileItem( IProject* project, const KUrl& url,
+ProjectFileItem* AbstractFileManagerPlugin::createFileItem( IProject* project, const Path& path,
                                                             ProjectBaseItem* parent )
 {
-    return new ProjectFileItem( project, url, parent );
+    return new ProjectFileItem( project, path, parent );
 }
 
-ProjectFolderItem* AbstractFileManagerPlugin::createFolderItem( IProject* project, const KUrl& url,
+ProjectFolderItem* AbstractFileManagerPlugin::createFolderItem( IProject* project, const Path& path,
                                                                 ProjectBaseItem* parent )
 {
-    return new ProjectFolderItem( project, url, parent );
+    return new ProjectFolderItem( project, path, parent );
 }
 
 KDirWatch* AbstractFileManagerPlugin::projectWatcher( IProject* project ) const

@@ -42,22 +42,10 @@
 #include <QMetaClassInfo>
 #include <QThread>
 
+#include "path.h"
+
 namespace KDevelop
 {
-
-/**
- * Return true if @p url contains a clean path
- */
-inline bool isValidPath(const KUrl& url)
-{
-    if (!url.isValid()) {
-        return false;
-    }
-
-    KUrl cleaned = url;
-    cleaned.cleanPath();
-    return url == cleaned;
-}
 
 QStringList removeProjectBasePath( const QStringList& fullpath, KDevelop::ProjectBaseItem* item )
 {
@@ -89,9 +77,9 @@ QStringList joinProjectBasePath( const QStringList& partialpath, KDevelop::Proje
     return basePath + partialpath;
 }
 
-inline uint indexForUrl(const KUrl& url)
+inline uint indexForPath( const Path& path )
 {
-    return IndexedString::indexForString(url.pathOrUrl(KUrl::RemoveTrailingSlash));
+    return IndexedString::indexForString(path.pathOrUrl());
 }
 
 class ProjectModelPrivate
@@ -112,14 +100,14 @@ public:
         return model->itemFromIndex( idx );
     }
 
-    // a hash of IndexedString::indexForString(url) <-> ProjectBaseItem for fast lookup
-    QMultiHash<uint, ProjectBaseItem*> urlLookupTable;
+    // a hash of IndexedString::indexForString(path) <-> ProjectBaseItem for fast lookup
+    QMultiHash<uint, ProjectBaseItem*> pathLookupTable;
 };
 
 class ProjectBaseItemPrivate
 {
 public:
-    ProjectBaseItemPrivate() : project(0), parent(0), row(-1), model(0), m_urlIndex(0) {}
+    ProjectBaseItemPrivate() : project(0), parent(0), row(-1), model(0), m_pathIndex(0) {}
     IProject* project;
     ProjectBaseItem* parent;
     int row;
@@ -128,9 +116,54 @@ public:
     ProjectBaseItem::ProjectItemType type;
     Qt::ItemFlags flags;
     ProjectModel* model;
-    KUrl m_url;
-    uint m_urlIndex;
+    Path m_path;
+    uint m_pathIndex;
     QString iconName;
+
+    ProjectBaseItem::RenameStatus renameBaseItem(ProjectBaseItem* item, const QString& newName)
+    {
+        if (item->parent()) {
+            foreach(ProjectBaseItem* sibling, item->parent()->children()) {
+                if (sibling->text() == newName) {
+                    return ProjectBaseItem::ExistingItemSameName;
+                }
+            }
+        }
+        item->setText( newName );
+        return ProjectBaseItem::RenameOk;
+    }
+
+    ProjectBaseItem::RenameStatus renameFileOrFolder(ProjectBaseItem* item, const QString& newName)
+    {
+        Q_ASSERT(item->file() || item->folder());
+
+        if (newName.contains('/')) {
+            return ProjectBaseItem::InvalidNewName;
+        }
+
+        if (item->text() == newName) {
+            return ProjectBaseItem::RenameOk;
+        }
+
+        Path newPath = item->path();
+        newPath.setLastPathSegment(newName);
+
+        KIO::UDSEntry entry;
+        if( KIO::NetAccess::stat(newPath.toUrl(), entry, 0) ) {
+            // file/folder exists already
+            return ProjectBaseItem::ExistingItemSameName;
+        }
+
+        if( !item->project() || !item->project()->projectFileManager() ) {
+            return renameBaseItem(item, newName);
+        } else if( item->folder() && item->project()->projectFileManager()->renameFolder(item->folder(), newPath) ) {
+            return ProjectBaseItem::RenameOk;
+        } else if ( item->file() && item->project()->projectFileManager()->renameFile(item->file(), newPath) ) {
+            return ProjectBaseItem::RenameOk;
+        } else {
+            return ProjectBaseItem::ProjectManagerRenameFailed;
+        }
+    }
 };
 
 
@@ -151,8 +184,8 @@ ProjectBaseItem::~ProjectBaseItem()
 {
     Q_D(ProjectBaseItem);
 
-    if (model() && d->m_urlIndex) {
-        model()->d->urlLookupTable.remove(d->m_urlIndex, this);
+    if (model() && d->m_pathIndex) {
+        model()->d->pathLookupTable.remove(d->m_pathIndex, this);
     }
 
     if( parent() ) {
@@ -308,14 +341,14 @@ void ProjectBaseItem::setModel( ProjectModel* model )
         return;
     }
 
-    if (d->model && d->m_urlIndex) {
-        d->model->d->urlLookupTable.remove(d->m_urlIndex, this);
+    if (d->model && d->m_pathIndex) {
+        d->model->d->pathLookupTable.remove(d->m_pathIndex, this);
     }
 
     d->model = model;
 
-    if (model && d->m_urlIndex) {
-        model->d->urlLookupTable.insert(d->m_urlIndex, this);
+    if (model && d->m_pathIndex) {
+        model->d->pathLookupTable.insert(d->m_pathIndex, this);
     }
 
     foreach( ProjectBaseItem* item, d->children ) {
@@ -340,17 +373,10 @@ void ProjectBaseItem::setText( const QString& text )
     }
 }
 
-ProjectBaseItem::RenameStatus ProjectBaseItem::rename(const QString& newname)
+ProjectBaseItem::RenameStatus ProjectBaseItem::rename(const QString& newName)
 {
-    if (parent()) {
-        foreach(ProjectBaseItem* sibling, parent()->children()) {
-            if (sibling->text() == newname) {
-                return ExistingItemSameName;
-            }
-        }
-    }
-    setText( newname );
-    return RenameOk;
+    Q_D(ProjectBaseItem);
+    return d->renameBaseItem(this, newName);
 }
 
 KDevelop::ProjectBaseItem::ProjectItemType baseType( int type )
@@ -388,9 +414,9 @@ bool ProjectBaseItem::lessThan( const KDevelop::ProjectBaseItem* item ) const
     return false;
 }
 
-bool ProjectBaseItem::urlLessThan(ProjectBaseItem* item1, ProjectBaseItem* item2)
+bool ProjectBaseItem::pathLessThan(ProjectBaseItem* item1, ProjectBaseItem* item2)
 {
-    return item1->url().path() < item2->url().path();
+    return item1->path() < item2->path();
 }
 
 IProject* ProjectBaseItem::project() const
@@ -429,7 +455,17 @@ void ProjectBaseItem::appendRow( ProjectBaseItem* item )
 KUrl ProjectBaseItem::url( ) const
 {
     Q_D(const ProjectBaseItem);
-    return d->m_url;
+    KUrl url = d->m_path.toUrl();
+    if (folder()) {
+        url.adjustPath(KUrl::AddTrailingSlash);
+    }
+    return url;
+}
+
+Path ProjectBaseItem::path() const
+{
+    Q_D(const ProjectBaseItem);
+    return d->m_path;
 }
 
 QString ProjectBaseItem::baseName() const
@@ -437,21 +473,20 @@ QString ProjectBaseItem::baseName() const
     return text();
 }
 
-void ProjectBaseItem::setUrl( const KUrl& url )
+void ProjectBaseItem::setPath( const Path& path)
 {
     Q_D(ProjectBaseItem);
 
-    if (model() && d->m_urlIndex) {
-        model()->d->urlLookupTable.remove(d->m_urlIndex, this);
+    if (model() && d->m_pathIndex) {
+        model()->d->pathLookupTable.remove(d->m_pathIndex, this);
     }
 
-    d->m_url = url;
-    d->m_urlIndex = indexForUrl(url);
-    const QString baseName = url.fileName();
-    setText( baseName );
+    d->m_path = path;
+    d->m_pathIndex = indexForPath(path);
+    setText( path.lastPathSegment() );
 
-    if (model() && d->m_urlIndex) {
-        model()->d->urlLookupTable.insert(d->m_urlIndex, this);
+    if (model() && d->m_pathIndex) {
+        model()->d->pathLookupTable.insert(d->m_pathIndex, this);
     }
 }
 
@@ -563,26 +598,35 @@ void ProjectModel::clear()
 }
 
 
-ProjectFolderItem::ProjectFolderItem( IProject* project, const KUrl & dir, ProjectBaseItem * parent )
-        : ProjectBaseItem( project, dir.fileName(), parent )
+ProjectFolderItem::ProjectFolderItem(IProject* project, const Path& path, ProjectBaseItem* parent)
+    : ProjectBaseItem( project, path.lastPathSegment(), parent )
 {
+    setPath( path );
+
     setFlags(flags() | Qt::ItemIsDropEnabled);
-    if (project && project->folder() != dir)
+    if (project && project->path() != path)
         setFlags(flags() | Qt::ItemIsDragEnabled);
-    setUrl( dir );
+}
+
+ProjectFolderItem::ProjectFolderItem( const QString & name, ProjectBaseItem * parent )
+        : ProjectBaseItem( parent->project(), name, parent )
+{
+    setPath( Path(parent->path(), name) );
+
+    setFlags(flags() | Qt::ItemIsDropEnabled);
+    if (project() && project()->path() != path())
+        setFlags(flags() | Qt::ItemIsDragEnabled);
 }
 
 ProjectFolderItem::~ProjectFolderItem()
 {
 }
 
-void ProjectFolderItem::setUrl( const KUrl& url )
+void ProjectFolderItem::setPath( const Path& path )
 {
-    KUrl copy(url);
-    copy.adjustPath(KUrl::AddTrailingSlash);
-    ProjectBaseItem::setUrl(copy);
-    
-    propagateRename(url);
+    ProjectBaseItem::setPath(path);
+
+    propagateRename(path);
 }
 
 ProjectFolderItem *ProjectFolderItem::folder() const
@@ -600,57 +644,25 @@ QString ProjectFolderItem::folderName() const
     return baseName();
 }
 
-void ProjectFolderItem::propagateRename(const KUrl& newBase) const
+void ProjectFolderItem::propagateRename( const Path& newBase ) const
 {
-    KUrl url = newBase;
-    url.addPath("dummy");
+    Path path = newBase;
+    path.addPath("dummy");
     foreach( KDevelop::ProjectBaseItem* child, children() )
     {
-        url.setFileName( child->text() );
-        child->setUrl( url );
-        
+        path.setLastPathSegment( child->text() );
+        child->setPath( path );
+
         const ProjectFolderItem* folder = child->folder();
         if ( folder ) {
-            folder->propagateRename( url );
+            folder->propagateRename( path );
         }
     }
 }
 
-ProjectBaseItem::RenameStatus ProjectFolderItem::rename(const QString& newname)
+ProjectBaseItem::RenameStatus ProjectFolderItem::rename(const QString& newName)
 {
-    if (newname.contains('/'))
-        return ProjectBaseItem::InvalidNewName;
-
-    //TODO: Same as ProjectFileItem, so should be shared somehow
-    KUrl dest = url().upUrl();
-    dest.addPath(newname);
-
-    // url() may contain a trailing slash, try to ignore that
-    if (url().equals(dest, KUrl::CompareWithoutTrailingSlash)) {
-        kDebug() << "Source and destination folder equal, no rename needed";
-        return ProjectBaseItem::RenameOk;
-    }
-
-    KIO::UDSEntry entry;
-    //There exists a file with that name?
-    if( !KIO::NetAccess::stat(dest, entry, 0) )
-    {
-        if( !project() || !project()->projectFileManager() )
-        {
-            return ProjectBaseItem::rename(newname);
-        }
-        else if( project()->projectFileManager()->renameFolder(this, dest) )
-        {
-            return ProjectBaseItem::RenameOk;
-        }
-        else
-        {
-            return ProjectBaseItem::ProjectManagerRenameFailed;
-        }
-    } else
-    {
-        return ProjectBaseItem::ExistingItemSameName;
-    }
+    return d_ptr->renameFileOrFolder(this, newName);
 }
 
 bool ProjectFolderItem::hasFileOrFolder(const QString& name) const
@@ -671,9 +683,15 @@ bool ProjectBaseItem::isProjectRoot() const
     return parent()==0;
 }
 
-ProjectBuildFolderItem::ProjectBuildFolderItem( IProject* project, const KUrl &dir, ProjectBaseItem *parent)
-    : ProjectFolderItem( project, dir, parent )
+ProjectBuildFolderItem::ProjectBuildFolderItem(IProject* project, const Path& path, ProjectBaseItem *parent)
+    : ProjectFolderItem( project, path, parent )
 {
+}
+
+ProjectBuildFolderItem::ProjectBuildFolderItem( const QString& name, ProjectBaseItem* parent )
+    : ProjectFolderItem( name, parent )
+{
+
 }
 
 QString ProjectFolderItem::iconName() const
@@ -691,61 +709,35 @@ QString ProjectBuildFolderItem::iconName() const
     return "folder-development";
 }
 
-ProjectFileItem::ProjectFileItem( IProject* project, const KUrl & file, ProjectBaseItem * parent )
-        : ProjectBaseItem( project, file.fileName(), parent )
+ProjectFileItem::ProjectFileItem( IProject* project, const Path& path, ProjectBaseItem* parent )
+    : ProjectBaseItem( project, path.lastPathSegment(), parent )
 {
-    Q_ASSERT(isValidPath(file));
-
     setFlags(flags() | Qt::ItemIsDragEnabled);
-    setUrl( file );
+    setPath( path );
+}
+
+ProjectFileItem::ProjectFileItem( const QString& name, ProjectBaseItem* parent )
+    : ProjectBaseItem( parent->project(), name, parent )
+{
+    setFlags(flags() | Qt::ItemIsDragEnabled);
+    setPath( Path(parent->path(), name) );
 }
 
 ProjectFileItem::~ProjectFileItem()
 {
-    if( project() && d_ptr->m_urlIndex ) {
-        project()->removeFromFileSet( indexedUrl() );
+    if( project() && d_ptr->m_pathIndex ) {
+        project()->removeFromFileSet( this );
     }
 }
 
-IndexedString ProjectFileItem::indexedUrl() const
+IndexedString ProjectFileItem::indexedPath() const
 {
-    return IndexedString::fromIndex( d_ptr->m_urlIndex );
+    return IndexedString::fromIndex( d_ptr->m_pathIndex );
 }
 
-ProjectBaseItem::RenameStatus ProjectFileItem::rename(const QString& newname)
+ProjectBaseItem::RenameStatus ProjectFileItem::rename(const QString& newName)
 {
-    if (newname.contains('/'))
-        return ProjectBaseItem::InvalidNewName;
-
-    KUrl dest = url().upUrl();
-    dest.addPath(newname);
-
-    if (url() == dest) {
-        kDebug() << "Source and destination file equal, no rename needed:" << dest;
-        // it's fine to just say the rename succeeded here, std::rename has the same behavior
-        return ProjectBaseItem::RenameOk;
-    }
-
-    KIO::UDSEntry entry;
-    //There exists a file with that name?
-    if( !KIO::NetAccess::stat(dest, entry, 0) )
-    {
-        if( !project() || !project()->projectFileManager() )
-        {
-            return ProjectBaseItem::rename(newname);
-        }
-        else if( project()->projectFileManager()->renameFile(this, dest) )
-        {
-            return ProjectBaseItem::RenameOk;
-        }
-        else
-        {
-            return ProjectBaseItem::ProjectManagerRenameFailed;
-        }
-    } else
-    {
-        return ProjectBaseItem::ExistingItemSameName;
-    }
+    return d_ptr->renameFileOrFolder(this, newName);
 }
 
 QString ProjectFileItem::fileName() const
@@ -771,7 +763,7 @@ bool isNumeric(const QStringRef& str)
 class IconNameCache
 {
 public:
-    QString iconNameForUrl(const KUrl& url, const QString& fileName)
+    QString iconNameForPath(const Path& path, const QString& fileName)
     {
         // find icon name based on file extension, if possible
         QString extension;
@@ -792,7 +784,7 @@ public:
             }
         }
 
-        KMimeType::Ptr mime = KMimeType::findByUrl( url, 0, false, true );
+        KMimeType::Ptr mime = KMimeType::findByUrl( KUrl::fromPath(path.lastPathSegment()), 0, false, true );
         QMutexLocker lock(&mutex);
         QHash< QString, QString >::const_iterator it = mimeToIcon.constFind( mime->name() );
         QString iconName;
@@ -819,29 +811,29 @@ QString ProjectFileItem::iconName() const
     // think of d_ptr->iconName as mutable, possible since d_ptr is not const
     if (d_ptr->iconName.isEmpty()) {
         // lazy load implementation of icon lookup
-        d_ptr->iconName = s_cache->iconNameForUrl( d_ptr->m_url, d_ptr->text );
+        d_ptr->iconName = s_cache->iconNameForPath( d_ptr->m_path, d_ptr->text );
         // we should always get *some* icon name back
         Q_ASSERT(!d_ptr->iconName.isEmpty());
     }
     return d_ptr->iconName;
 }
 
-void ProjectFileItem::setUrl( const KUrl& url )
+void ProjectFileItem::setPath( const Path& path )
 {
-    if (url == d_ptr->m_url) {
+    if (path == d_ptr->m_path) {
         return;
     }
 
-    if( project() && d_ptr->m_urlIndex ) {
+    if( project() && d_ptr->m_pathIndex ) {
         // remove from fileset if we are in there
-        project()->removeFromFileSet( indexedUrl() );
+        project()->removeFromFileSet( this );
     }
 
-    ProjectBaseItem::setUrl( url );
+    ProjectBaseItem::setPath( path );
 
-    if( project() && d_ptr->m_urlIndex ) {
-        // add to fileset with new url index
-        project()->addToFileSet( indexedUrl() );
+    if( project() && d_ptr->m_pathIndex ) {
+        // add to fileset with new path
+        project()->addToFileSet( this );
     }
 
     // invalidate icon name for future lazy-loaded updated
@@ -869,9 +861,11 @@ QString ProjectTargetItem::iconName() const
     return "system-run";
 }
 
-void ProjectTargetItem::setUrl(const KUrl& url)
+void ProjectTargetItem::setPath( const Path& path )
 {
-    d_ptr->m_url=url;
+    // don't call base class, it calls setText with the new path's filename
+    // which we do not want for target items
+    d_ptr->m_path = path;
 }
 
 int ProjectTargetItem::type() const
@@ -1014,13 +1008,12 @@ QVariant ProjectModel::data( const QModelIndex& index, int role ) const
     static QSet<int> allowedRoles = supportedRoles();
     if( allowedRoles.contains(role) && index.isValid() ) {
         ProjectBaseItem* item = itemFromIndex( index );
-        
         if( item ) {
             switch(role) {
                 case Qt::DecorationRole:
                     return QIcon::fromTheme(item->iconName());
                 case Qt::ToolTipRole:
-                    return item->url().prettyUrl();
+                    return item->path().pathOrUrl();
                 case Qt::DisplayRole:
                     return item->text();
                 case ProjectItemRole:
@@ -1111,18 +1104,14 @@ bool ProjectModel::setData(const QModelIndex&, const QVariant&, int)
     return false;
 }
 
-QList< ProjectBaseItem* > ProjectModel::itemsForUrl ( const KUrl& url ) const
+QList<ProjectBaseItem*> ProjectModel::itemsForPath(const IndexedString& path) const
 {
-    if (!url.isValid()) {
-        return QList<ProjectBaseItem*>();
-    }
-
-    return d->urlLookupTable.values(indexForUrl(url));
+    return d->pathLookupTable.values(path.index());
 }
 
-ProjectBaseItem* ProjectModel::itemForUrl(const IndexedString& url) const
+ProjectBaseItem* ProjectModel::itemForPath(const IndexedString& path) const
 {
-    return d->urlLookupTable.value(url.index());
+    return d->pathLookupTable.value(path.index());
 }
 
 void ProjectVisitor::visit( ProjectModel* model )
@@ -1166,7 +1155,6 @@ void ProjectVisitor::visit ( ProjectBuildFolderItem* folder )
     }
 }
 
-
 void ProjectVisitor::visit ( ProjectExecutableTargetItem* exec )
 {
     foreach( ProjectFileItem* item, exec->fileList() )
@@ -1174,7 +1162,6 @@ void ProjectVisitor::visit ( ProjectExecutableTargetItem* exec )
         visit( item );
     }
 }
-
 
 void ProjectVisitor::visit ( ProjectFolderItem* folder )
 {

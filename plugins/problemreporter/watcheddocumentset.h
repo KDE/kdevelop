@@ -33,6 +33,7 @@ namespace KDevelop {
     class IDocument;
     class IProject;
     class ProjectFileItem;
+class Path;
 }
 
 /**
@@ -102,7 +103,7 @@ protected:
 protected slots:
     void fileAdded(KDevelop::ProjectFileItem*);
     void fileRemoved(KDevelop::ProjectFileItem* file);
-    void fileRenamed(const KUrl& oldFile, KDevelop::ProjectFileItem* newFile);
+    void fileRenamed(const KDevelop::Path& oldFile, KDevelop::ProjectFileItem* newFile);
 };
 
 /**

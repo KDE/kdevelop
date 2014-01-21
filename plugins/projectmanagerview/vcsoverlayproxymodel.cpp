@@ -26,6 +26,7 @@
 #include <vcs/interfaces/ibranchingversioncontrol.h>
 #include <vcs/vcsjob.h>
 #include <project/projectmodel.h>
+#include <project/path.h>
 
 #include <KLocale>
 
@@ -58,9 +59,10 @@ void VcsOverlayProxyModel::addProject(IProject* p)
     
     IBranchingVersionControl* branchingExtension = plugin->extension<KDevelop::IBranchingVersionControl>();
     if(branchingExtension) {
-        branchingExtension->registerRepositoryForCurrentBranchChanges(p->folder());
+        const KUrl url = p->path().toUrl();
+        branchingExtension->registerRepositoryForCurrentBranchChanges(url);
         connect(plugin, SIGNAL(repositoryBranchChanged(KUrl)), SLOT(repositoryBranchChanged(KUrl)));
-        repositoryBranchChanged(p->folder());
+        repositoryBranchChanged(url);
     }
 }
 

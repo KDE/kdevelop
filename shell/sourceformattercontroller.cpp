@@ -35,6 +35,7 @@ Boston, MA 02110-1301, USA.
 #include "core.h"
 #include <ktexteditor/view.h>
 #include <project/projectmodel.h>
+#include <project/path.h>
 #include <kio/netaccess.h>
 #include <kmessagebox.h>
 #include <qfile.h>
@@ -458,10 +459,10 @@ void SourceFormatterController::formatFiles()
 		if (item->folder())
 			folders.append(item->folder());
 		else if (item->file())
-			m_urls.append(item->file()->url());
+			m_urls.append(item->file()->path().toUrl());
 		else if (item->target()) {
 			foreach(KDevelop::ProjectFileItem *f, item->fileList())
-			m_urls.append(f->url());
+			m_urls.append(f->path().toUrl());
 		}
 	}
 
@@ -471,10 +472,10 @@ void SourceFormatterController::formatFiles()
 		folders.append(f);
 		foreach(KDevelop::ProjectTargetItem *f, item->targetList()) {
 			foreach(KDevelop::ProjectFileItem *child, f->fileList())
-			m_urls.append(child->url());
+			m_urls.append(child->path().toUrl());
 		}
 		foreach(KDevelop::ProjectFileItem *f, item->fileList())
-		m_urls.append(f->url());
+		m_urls.append(f->path().toUrl());
 	}
 
 	formatFiles(m_urls);

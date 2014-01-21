@@ -3,6 +3,7 @@
     Copyright 2006 Matt Rogers <mattr@kde.org>
     Copyright 2006 Hamish Rodda <rodda@kde.org>
     Copyright 2007 Andreas Pakulat <apaku@gmx.de
+    Copyright 2012 Milian Wolff <mail@milianw.de>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -24,12 +25,11 @@
 
 #include <QtCore/QStringList>
 
-#include <kurl.h>
-
 #include "../projectexport.h"
 
-class KJob;
+#include "../path.h"
 
+class KJob;
 
 namespace KDevelop
 {
@@ -50,7 +50,7 @@ class ProjectFileItem;
  * or removed on disk.  They simply read from and write to the file(s)
  * which describe the structure (eg. CMakeLists.txt for cmake, Makefile.am for automake, etc).
  *
- * @author Roberto Raggi, Matt Rogers, Hamish Rodda
+ * @author Roberto Raggi, Matt Rogers, Hamish Rodda, Milian Wolff
  */
 class KDEVPLATFORMPROJECT_EXPORT IProjectFileManager
 {
@@ -83,7 +83,7 @@ public:
      * @return The created item
      */
     virtual ProjectFolderItem *import(IProject *project) = 0;
-    
+
     /**
      * This method creates an import job for the given @arg item
      *
@@ -100,8 +100,7 @@ public:
      * Adds the folder specified by @p folder to @p parent and modifies the
      * underlying build system if needed
      */
-    virtual ProjectFolderItem* addFolder(const KUrl& folder, ProjectFolderItem *parent) = 0;
-
+    virtual ProjectFolderItem* addFolder(const Path& folder, ProjectFolderItem* parent) = 0;
 
     /**
      * Add a file to a folder and create it on disk.
@@ -109,7 +108,7 @@ public:
      * Adds the file specified by @p file to the folder @p parent and modifies
      * the underlying build system if needed. The file is not added to a target
      */
-    virtual ProjectFileItem* addFile(const KUrl& file, ProjectFolderItem *parent) = 0;
+    virtual ProjectFileItem* addFile(const Path& file, ProjectFolderItem *parent) = 0;
 
     /**
      * Remove files or folders from the project and delete them from disk
@@ -139,23 +138,21 @@ public:
      *
      * Note: Do not attempt to copy subitems along with their parents
      */
-    virtual bool copyFilesAndFolders(const KUrl::List &items, KDevelop::ProjectFolderItem* newParent) = 0;
+    virtual bool copyFilesAndFolders(const Path::List &items, KDevelop::ProjectFolderItem* newParent) = 0;
 
     /**
      * Rename a file in the project
      *
-     * Renames the file specified by @p oldFile to @p newFile
-     *
+     * Renames the file specified by @p oldFile to @p newPath
      */
-    virtual bool renameFile(ProjectFileItem* oldFile,
-                            const KUrl& newFile) = 0;
+    virtual bool renameFile(ProjectFileItem* file, const Path& newPath) = 0;
+
     /**
      * Rename a folder in the project
      *
-     * Renames the folder specified by @p oldFile to @p newFile
+     * Renames the folder specified by @p oldFile to @p newPath
      */
-    virtual bool renameFolder(ProjectFolderItem* oldFolder,
-                              const KUrl& newFolder ) = 0;
+    virtual bool renameFolder(ProjectFolderItem* oldFolder, const Path& newPath) = 0;
 
     /**
      * Reload an item in the project
@@ -165,16 +162,13 @@ public:
     virtual bool reload(ProjectFolderItem* item) = 0;
 
 Q_SIGNALS:
-    void folderAdded( ProjectFolderItem* folder );
-    void folderRemoved( ProjectFolderItem* folder );
-    void folderRenamed( const KUrl& oldFolder,
-                        ProjectFolderItem* newFolder );
+    void folderAdded(KDevelop::ProjectFolderItem* folder);
+    void folderRemoved(KDevelop::ProjectFolderItem* folder);
+    void folderRenamed(const KDevelop::Path& oldFolder, KDevelop::ProjectFolderItem* newFolder);
 
-    void fileAdded(ProjectFileItem* file);
-    void fileRemoved(ProjectFileItem* file);
-    void fileRenamed(const KUrl& oldFile,
-                     ProjectFileItem* newFile);
-
+    void fileAdded(KDevelop::ProjectFileItem* file);
+    void fileRemoved(KDevelop::ProjectFileItem* file);
+    void fileRenamed(const KDevelop::Path& oldFile, KDevelop::ProjectFileItem* newFile);
 };
 
 }

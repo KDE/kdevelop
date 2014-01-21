@@ -112,14 +112,14 @@ QList<ProjectFileItem*> fileItemsWithin(const QList<ProjectBaseItem*> items)
 
 QList<ProjectBaseItem*> topLevelItemsWithin(QList<ProjectBaseItem*> items)
 {
-    qSort(items.begin(), items.end(), ProjectBaseItem::urlLessThan);
-    KUrl lastFolder;
+    qSort(items.begin(), items.end(), ProjectBaseItem::pathLessThan);
+    Path lastFolder;
     for (int i = items.size() - 1; i >= 0; --i)
     {
-        if (lastFolder.isParentOf(items[i]->url()))
+        if (lastFolder.isParentOf(items[i]->path()))
             items.removeAt(i);
         else if (items[i]->folder())
-            lastFolder = items[i]->url();
+            lastFolder = items[i]->path();
     }
     return items;
 }
@@ -187,13 +187,13 @@ void ProjectTreeView::dropEvent(QDropEvent* event)
 
             QList<ProjectBaseItem*> usefulItems = topLevelItemsWithin(selectionCtxt->items());
             filterDroppedItems(usefulItems, destItem);
-            QList<KUrl> urls;
+            Path::List paths;
             foreach (ProjectBaseItem* i, usefulItems) {
-                urls << i->url();
+                paths << i->path();
             }
             bool success = false;
             if (executedAction == copy) {
-                success =~ destItem->project()->projectFileManager()->copyFilesAndFolders(urls, folder);
+                success =~ destItem->project()->projectFileManager()->copyFilesAndFolders(paths, folder);
             } else if (executedAction == move) {
                 success =~ destItem->project()->projectFileManager()->moveFilesAndFolders(usefulItems, folder);
             }
@@ -204,11 +204,10 @@ void ProjectTreeView::dropEvent(QDropEvent* event)
 
                 //and select new items
                 QItemSelection selection;
-                foreach (const KUrl &url, urls) {
-                    KUrl targetUrl = folder->url();
-                    targetUrl.addPath(url.fileName());
+                foreach (const Path &path, paths) {
+                    const Path targetPath(folder->path(), path.lastPathSegment());
                     foreach (ProjectBaseItem *item, folder->children()) {
-                        if (item->url().equals(targetUrl, KUrl::CompareWithoutTrailingSlash)) {
+                        if (item->path() == targetPath) {
                             QModelIndex indx = mapFromItem( item );
                             selection.append(QItemSelectionRange(indx, indx));
                             setCurrentIndex(indx);
@@ -282,7 +281,7 @@ void ProjectTreeView::slotActivated( const QModelIndex &index )
     KDevelop::ProjectBaseItem *item = index.data(ProjectModel::ProjectItemRole).value<ProjectBaseItem*>();
     if ( item && item->file() )
     {
-        emit activateUrl( item->file()->url() );
+        emit activate( item->file()->path() );
     }
     setFocus();
 }
@@ -413,7 +412,7 @@ bool ProjectTreeView::event(QEvent* event)
             m_idx=idx;
             ProjectFileItem* file=it->file();
             KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
-            TopDUContext* top= DUChainUtils::standardContextForUrl(file->url());
+            TopDUContext* top= DUChainUtils::standardContextForUrl(file->path().toUrl());
             
             if(m_tooltip)
                 m_tooltip->close();

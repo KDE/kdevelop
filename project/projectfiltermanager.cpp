@@ -172,7 +172,7 @@ bool ProjectFilterManager::isManaged(IProject* project) const
     return d->m_filters.contains(project);
 }
 
-bool ProjectFilterManager::isValid(const KUrl& path, bool isFolder, IProject* project) const
+bool ProjectFilterManager::isValid(const Path& path, bool isFolder, IProject* project) const
 {
     foreach(const Filter& filter, d->m_filters[project]) {
         if (!filter.filter->isValid(path, isFolder)) {

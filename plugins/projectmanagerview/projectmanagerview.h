@@ -30,8 +30,6 @@
 class QAction;
 class QModelIndex;
 
-class KUrl;
-
 namespace Ui
 {
 class ProjectManagerView;
@@ -43,6 +41,7 @@ class VcsOverlayProxyModel;
 namespace KDevelop
 {
 class ProjectBaseItem;
+class Path;
 }
 
 class ProjectManagerView;
@@ -77,7 +76,7 @@ private slots:
     void selectionChanged();
     void locateCurrentDocument();
     void updateSyncAction();
-    void openUrl( const KUrl& );
+    void open( const KDevelop::Path& );
 
 private:
     QModelIndex indexFromView(const QModelIndex& index) const;

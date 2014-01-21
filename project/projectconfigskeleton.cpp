@@ -19,7 +19,10 @@ Boston, MA 02110-1301, USA.
 */
 
 #include "projectconfigskeleton.h"
+
 #include <interfaces/iproject.h>
+
+#include <project/path.h>
 
 #include <kdebug.h>
 #include <kio/netaccess.h>
@@ -31,8 +34,8 @@ struct ProjectConfigSkeletonPrivate
 {
     QString m_developerTempFile;
     QString m_projectTempFile;
-    KUrl m_projectFileUrl;
-    KUrl m_developerFileUrl;
+    Path m_projectFile;
+    Path m_developerFile;
     bool mUseDefaults;
 };
 
@@ -60,24 +63,24 @@ void ProjectConfigSkeleton::setProjectTempFile( const QString& cfg )
     readConfig();
 }
 
-void ProjectConfigSkeleton::setProjectFileUrl( const QString& cfg )
+void ProjectConfigSkeleton::setProjectFile( const Path& cfg )
 {
-    d->m_projectFileUrl = KUrl(cfg);
+    d->m_projectFile = cfg;
 }
 
-void ProjectConfigSkeleton::setDeveloperFileUrl( const QString& cfg )
+void ProjectConfigSkeleton::setDeveloperFile( const Path& cfg )
 {
-    d->m_developerFileUrl = KUrl(cfg);
+    d->m_developerFile = cfg;
 }
 
-KUrl ProjectConfigSkeleton::projectFileUrl() const
+Path ProjectConfigSkeleton::projectFile() const
 {
-    return d->m_projectFileUrl;
+    return d->m_projectFile;
 }
 
-KUrl ProjectConfigSkeleton::developerFileUrl() const
+Path ProjectConfigSkeleton::developerFile() const
 {
-    return d->m_developerFileUrl;
+    return d->m_developerFile;
 }
 
 void ProjectConfigSkeleton::setDefaults()
@@ -155,7 +158,7 @@ bool ProjectConfigSkeleton::writeConfig()
 
     readConfig();
 
-    KIO::NetAccess::upload( d->m_developerTempFile, d->m_developerFileUrl, 0 );
+    KIO::NetAccess::upload( d->m_developerTempFile, d->m_developerFile.toUrl(), 0 );
 
     emit configChanged();
     return true;

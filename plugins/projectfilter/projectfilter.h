@@ -25,9 +25,8 @@
 #include <QRegExp>
 #include <QVector>
 
-#include <KUrl>
-
 #include <project/interfaces/iprojectfilter.h>
+#include <project/path.h>
 
 #include "filter.h"
 
@@ -41,14 +40,14 @@ public:
     ProjectFilter(const IProject* const project, const Filters& filters);
     virtual ~ProjectFilter();
 
-    virtual bool isValid(const KUrl& path, bool isFolder) const;
+    virtual bool isValid(const Path& path, bool isFolder) const;
 
 private:
-    QString makeRelative(const KUrl& url, bool isFolder) const;
+    QString makeRelative(const Path& path) const;
 
     Filters m_filters;
-    KUrl m_projectFile;
-    KUrl m_project;
+    Path m_projectFile;
+    Path m_project;
 };
 
 }

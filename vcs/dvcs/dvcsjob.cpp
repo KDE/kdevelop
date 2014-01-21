@@ -59,6 +59,8 @@ struct DVcsJobPrivate
     
     QVariant results;
     OutputModel* model;
+
+    bool ignoreError;
 };
 
 DVcsJob::DVcsJob(const QDir& workingDir, IPlugin* parent, OutputJob::OutputJobVerbosity verbosity)
@@ -69,6 +71,7 @@ DVcsJob::DVcsJob(const QDir& workingDir, IPlugin* parent, OutputJob::OutputJobVe
     d->vcsplugin = parent;
     d->childproc->setWorkingDirectory(workingDir.absolutePath());
     d->model = new OutputModel;
+    d->ignoreError = false;
     setModel(d->model);
     setCapabilities(Killable);
     
@@ -134,6 +137,11 @@ QByteArray DVcsJob::rawOutput() const
 QByteArray DVcsJob::errorOutput() const
 {
     return d->errorOutput;
+}
+
+void DVcsJob::ignoreError()
+{
+    d->ignoreError = true;
 }
 
 void DVcsJob::setResults(const QVariant &res)
@@ -246,7 +254,7 @@ void DVcsJob::slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
     if (exitStatus == QProcess::CrashExit)
         slotProcessError(QProcess::Crashed);
 
-    else if (exitCode != 0)
+    else if (exitCode != 0 && !d->ignoreError)
         slotProcessError(QProcess::UnknownError);
 
     d->model->appendLine(i18n("Command exited with value %1.", exitCode));

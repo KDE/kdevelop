@@ -21,6 +21,7 @@
 #include "dashboarddataengine.h"
 #include <interfaces/iproject.h>
 #include <project/projectmodel.h>
+#include <project/path.h>
 #include <QFile>
 
 using namespace KDevelop;
@@ -39,10 +40,8 @@ void DashboardDataEngine::addConnection(const QString& containmentId, IProject* 
 QString ProjectFiles::fileContents(const QString& fileName)
 {
     Q_ASSERT(false && ":DDDD");
-    
-    KUrl url=m_project->projectItem()->url();
-    url.addPath(fileName);
-    QFile f(url.toLocalFile());
+
+    QFile f(Path(m_project->path(), fileName).toLocalFile());
 
     return f.readAll();
 }

@@ -271,12 +271,12 @@ KDevelop::QuickOpenDataPointer ProjectItemDataProvider::data( uint pos ) const
 
 void ProjectItemDataProvider::reset()
 {
-    m_usingFiles = m_quickopen->fileSet();
+    const QSet<IndexedString> files = m_quickopen->fileSet();
     m_currentItems.clear();
     m_addedItems.clear();
 
     KDevelop::DUChainReadLocker lock( DUChain::lock() );
-    foreach( const IndexedString& u, m_usingFiles ) {
+    foreach( const IndexedString& u, files ) {
         uint count;
         const KDevelop::CodeModelItem* items;
         CodeModel::self().items( u, count, items );

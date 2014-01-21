@@ -27,6 +27,32 @@
 
 QTEST_KDEMAIN(KDevelop::FilteringStrategyTest, NoGUI)
 
+namespace QTest {
+
+template<>
+inline char* toString(const KDevelop::FilteredItem::FilteredOutputItemType& type)
+{
+    switch (type) {
+        case KDevelop::FilteredItem::ActionItem:
+            return qstrdup("ActionItem");
+        case KDevelop::FilteredItem::CustomItem:
+            return qstrdup("CustomItem");
+        case KDevelop::FilteredItem::ErrorItem:
+            return qstrdup("ErrorItem");
+        case KDevelop::FilteredItem::InformationItem:
+            return qstrdup("InformationItem");
+        case KDevelop::FilteredItem::InvalidItem:
+            return qstrdup("InvalidItem");
+        case KDevelop::FilteredItem::StandardItem:
+            return qstrdup("StandardItem");
+        case KDevelop::FilteredItem::WarningItem:
+            return qstrdup("WarningItem");
+    }
+    return qstrdup("unknown");
+}
+
+}
+
 namespace KDevelop
 {
 void FilteringStrategyTest::testNoFilterstrategy_data()
@@ -56,9 +82,9 @@ void FilteringStrategyTest::testNoFilterstrategy()
     QFETCH(FilteredItem::FilteredOutputItemType, expected);
     NoFilterStrategy testee;
     FilteredItem item1 = testee.errorInLine(line);
-    QVERIFY(item1.type == expected);
+    QCOMPARE(item1.type, expected);
     item1 = testee.actionInLine(line);
-    QVERIFY(item1.type == expected);
+    QCOMPARE(item1.type, expected);
 }
 
 void FilteringStrategyTest::testCompilerFilterstrategy_data()
@@ -107,9 +133,9 @@ void FilteringStrategyTest::testCompilerFilterstrategy()
     KUrl projecturl( PROJECTS_SOURCE_DIR"/onefileproject/" );
     CompilerFilterStrategy testee(projecturl);
     FilteredItem item1 = testee.errorInLine(line);
-    QVERIFY(item1.type == expectedError);
+    QCOMPARE(item1.type, expectedError);
     item1 = testee.actionInLine(line);
-    QVERIFY(item1.type == expectedAction);
+    QCOMPARE(item1.type, expectedAction);
 }
 
 void FilteringStrategyTest::testCompilerFilterstrategyMultipleKeywords_data()
@@ -140,9 +166,9 @@ void FilteringStrategyTest::testCompilerFilterstrategyMultipleKeywords()
     KUrl projecturl( PROJECTS_SOURCE_DIR"/onefileproject/" );
     CompilerFilterStrategy testee(projecturl);
     FilteredItem item1 = testee.errorInLine(line);
-    QVERIFY(item1.type == expectedError);
+    QCOMPARE(item1.type, expectedError);
     item1 = testee.actionInLine(line);
-    QVERIFY(item1.type == expectedAction);
+    QCOMPARE(item1.type, expectedAction);
 }
 
 void FilteringStrategyTest::testCompilerFilterStrategyShortenedText_data()
@@ -204,9 +230,9 @@ void FilteringStrategyTest::testScriptErrorFilterstrategy()
     QFETCH(FilteredItem::FilteredOutputItemType, expectedAction);
     ScriptErrorFilterStrategy testee;
     FilteredItem item1 = testee.errorInLine(line);
-    QVERIFY(item1.type == expectedError);
+    QCOMPARE(item1.type, expectedError);
     item1 = testee.actionInLine(line);
-    QVERIFY(item1.type == expectedAction);
+    QCOMPARE(item1.type, expectedAction);
 }
 
 void FilteringStrategyTest::testStaticAnalysisFilterStrategy_data()
@@ -249,9 +275,9 @@ void FilteringStrategyTest::testStaticAnalysisFilterStrategy()
     FilteredItem item1 = testee.errorInLine(line);
     QString extractedPath = item1.url.toLocalFile();
     QVERIFY((item1.type != FilteredItem::ErrorItem) || ( extractedPath == referencePath));
-    QVERIFY(item1.type == expectedError);
+    QCOMPARE(item1.type, expectedError);
     item1 = testee.actionInLine(line);
-    QVERIFY(item1.type == expectedAction);
+    QCOMPARE(item1.type, expectedAction);
 }
 
 void FilteringStrategyTest::testCompilerFilterstrategyUrlFromAction_data()

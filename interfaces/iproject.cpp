@@ -28,6 +28,7 @@
 
 #include <QtDBus/QtDBus>
 #include <language/duchain/indexedstring.h>
+#include <project/path.h>
 
 namespace KDevelop
 {

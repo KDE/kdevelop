@@ -113,10 +113,12 @@ void StandardOutputViewTest::testActions()
     QVERIFY(outputWidget);
 
     QList<QAction*> actions = outputWidget->actions();
-    QCOMPARE(actions.takeFirst()->text(), QString("Select activated Item"));
-    QCOMPARE(actions.takeFirst()->text(), QString("Focus when selecting Item"));
-    QCOMPARE(actions.takeFirst()->text(), QString("Select &All"));
-    QCOMPARE(actions.takeFirst()->text(), QString("&Copy"));
+    QCOMPARE(actions.size(), 5);
+    QCOMPARE(actions.takeFirst()->text(), i18n( "Close all other output views" ));
+    QCOMPARE(actions.takeFirst()->text(), i18n("Select activated Item"));
+    QCOMPARE(actions.takeFirst()->text(), i18n("Focus when selecting Item"));
+    QCOMPARE(actions.takeFirst()->text(), i18n("Select &All"));
+    QCOMPARE(actions.takeFirst()->text(), i18n("&Copy"));
 
     m_stdOutputView->removeToolView(toolviewId);
     QVERIFY(!toolviewPointer(toolviewTitle));
@@ -132,14 +134,15 @@ void StandardOutputViewTest::testActions()
     QVERIFY(outputWidget);
 
     actions = outputWidget->actions();
-    QCOMPARE(actions.takeFirst()->text(), QString("Previous"));
-    QCOMPARE(actions.takeFirst()->text(), QString("Next"));
-    QCOMPARE(actions.takeFirst()->text(), QString("Select activated Item"));
-    QCOMPARE(actions.takeFirst()->text(), QString("Focus when selecting Item"));
-    QCOMPARE(actions.takeFirst()->text(), QString("Select &All"));
-    QCOMPARE(actions.takeFirst()->text(), QString("&Copy"));
-    QCOMPARE(actions.takeFirst()->text(), QString("")); // separator
-    QCOMPARE(actions.takeFirst()->text(), QString("")); // filter
+    QCOMPARE(actions.size(), 10);
+    QCOMPARE(actions.takeFirst()->text(), i18n("Previous"));
+    QCOMPARE(actions.takeFirst()->text(), i18n("Next"));
+    QCOMPARE(actions.takeFirst()->text(), i18n("Select activated Item"));
+    QCOMPARE(actions.takeFirst()->text(), i18n("Focus when selecting Item"));
+    QCOMPARE(actions.takeFirst()->text(), i18n("Select &All"));
+    QCOMPARE(actions.takeFirst()->text(), i18n("&Copy"));
+    QVERIFY(actions.takeFirst()->isSeparator()); // separator
+    QCOMPARE(actions.takeFirst()->text(), QString()); // filter
     QCOMPARE(actions.takeFirst()->text(), addedActions[0]->text());
     QCOMPARE(actions.takeFirst()->text(), addedActions[1]->text());
 

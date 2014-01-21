@@ -25,6 +25,8 @@
 #include <QtCore/QRegExp>
 #include <QtCore/QStringList>
 
+#include <project/path.h>
+
 namespace KDevelop {
 
 /**
@@ -125,26 +127,10 @@ private:
 
 namespace KDevelop {
 
-///Return the length of the separator
-template<class SeparatorType>
-inline int separatorLength(const SeparatorType& separator)
-{
-    return separator.length();
-}
-///Specialization for QChar (always length of 1)
-template<>
-inline int separatorLength(const QChar& /*separator*/)
-{
-    return 1;
-}
-
-template<class Item>
-class FilterWithSeparator
+template<class Item, class Parent>
+class PathFilter
 {
 public:
-    virtual ~FilterWithSeparator()
-    {
-    }
     ///Clears the filter, but not the data.
     void clearFilter()
     {
@@ -171,9 +157,7 @@ public:
     }
 
     ///Changes the filter-text and refilters the data
-    ///@param separator Should be a QChar, or if needed a QString
-    template<class SeparatorType>
-    void setFilter( const QStringList& text, const SeparatorType& separator )
+    void setFilter( const QStringList& text )
     {
         if (m_oldFilterText == text) {
             return;
@@ -185,7 +169,7 @@ public:
 
         QList<Item> filterBase = m_filtered;
 
-        if (text.isEmpty() || m_oldFilterText.isEmpty()) {
+        if ( m_oldFilterText.isEmpty()) {
             filterBase = m_items;
         } else if (m_oldFilterText.mid(0, m_oldFilterText.count() - 1) == text.mid(0, text.count() - 1)
                    && text.last().startsWith(m_oldFilterText.last())) {
@@ -197,11 +181,6 @@ public:
             filterBase = m_items;
         }
 
-        QString exactNeedle;
-        if (!text.isEmpty()) {
-            exactNeedle = separator + text.join(separator);
-        }
-
         // filterBase is correctly sorted, to keep it that way we add
         // exact matches to this list in sorted way and then prepend the whole list in one go.
         QList<Item> exactMatches;
@@ -210,39 +189,54 @@ public:
         // all other matches
         QList<Item> otherMatches;
         foreach( const Item& data, filterBase ) {
-            QString toFilter = itemText(data);
+            const Path toFilter = static_cast<Parent*>(this)->itemPath(data);
+            const QVector<QString>& segments = toFilter.segments();
 
-            if (!exactNeedle.isEmpty() && toFilter.endsWith(exactNeedle)) {
-                // put exact matches up front
-                exactMatches << data;
+            if (text.count() > segments.count()) {
+                // number of segments mismatches, thus item cannot match
                 continue;
             }
-
-            int searchStart = 0;
-            for(QStringList::const_iterator it = text.constBegin(); it != text.constEnd(); ++it) {
-                if (searchStart != 0) {
-                    searchStart = toFilter.indexOf(separator, searchStart);
-                    if (searchStart == -1) {
+            {
+                bool allMatched = true;
+                // try to put exact matches up front
+                for(int i = segments.count() - 1, j = text.count() - 1;
+                    i >= 0 && j >= 0; --i, --j)
+                {
+                    if (segments.at(i) != text.at(j)) {
+                        allMatched = false;
                         break;
                     }
-                    ++searchStart;
                 }
-
-                searchStart = toFilter.indexOf(*it, searchStart, Qt::CaseInsensitive);
-                if (searchStart == -1) {
-                    break;
+                if (allMatched) {
+                    exactMatches << data;
+                    continue;
                 }
-
-                ++searchStart;
             }
 
-            if (searchStart == -1) {
+            int searchIndex = 0;
+            int pathIndex = 0;
+            int lastMatchIndex = -1;
+            // stop early if more search fragments remain than available after path index
+            while (pathIndex < segments.size() && searchIndex < text.size()
+                    && (pathIndex + text.size() - searchIndex - 1) < segments.size() )
+            {
+                lastMatchIndex = segments.at(pathIndex).indexOf(text.at(searchIndex), 0, Qt::CaseInsensitive);
+                if (lastMatchIndex == -1) {
+                    // no match, try with next path segment
+                    ++pathIndex;
+                    continue;
+                }
+                // else we matched
+                ++searchIndex;
+                ++pathIndex;
+            }
+
+            if (searchIndex != text.size()) {
                 continue;
             }
 
             // prefer matches whose last element starts with the filter
-            int lastSeparator = toFilter.lastIndexOf(separator);
-            if (lastSeparator + 1 + separatorLength(separator) == searchStart) {
+            if (pathIndex == segments.size() && lastMatchIndex == 0) {
                 startMatches << data;
             } else {
                 otherMatches << data;
@@ -252,10 +246,6 @@ public:
         m_filtered = exactMatches + startMatches + otherMatches;
         m_oldFilterText = text;
     }
-
-protected:
-    ///Should return the text an item should be filtered by.
-    virtual QString itemText( const Item& data ) const = 0;
 
 private:
     QStringList m_oldFilterText;
