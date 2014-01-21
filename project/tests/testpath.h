@@ -37,6 +37,7 @@ private slots:
     void bench_path();
     void bench_fromLocalPath();
     void bench_fromLocalPath_data();
+    void bench_hash();
 
     void testPath();
     void testPath_data();

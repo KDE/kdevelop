@@ -196,6 +196,15 @@ void TestPath::bench_fromLocalPath_data()
     QTest::newRow("QUrl::fromLocalFile") << 3;
 }
 
+void TestPath::bench_hash()
+{
+    const Path path("/my/very/long/path/to/a/file.cpp");
+    QBENCHMARK {
+        auto hash = qHash(path);
+        Q_UNUSED(hash);
+    }
+}
+
 KUrl comparableUpUrl(const KUrl& url)
 {
     KUrl ret = url.upUrl();
