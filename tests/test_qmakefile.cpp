@@ -75,40 +75,9 @@ char *toString(const QMakeFile::VariableMap &variables)
 
 }
 
-QHash<QString,QString> queryQMake( const QString& path )
-{
-    QHash<QString,QString> hash;
-    KProcess p;
-    QStringList queryVariables;
-    queryVariables << "QMAKE_MKSPECS" << "QMAKE_VERSION" <<
-            "QT_INSTALL_BINS" << "QT_INSTALL_CONFIGURATION" <<
-            "QT_INSTALL_DATA" << "QT_INSTALL_DEMOS" << "QT_INSTALL_DOCS" <<
-            "QT_INSTALL_EXAMPLES" << "QT_INSTALL_HEADERS" <<
-            "QT_INSTALL_LIBS" << "QT_INSTALL_PLUGINS" << "QT_INSTALL_PREFIX" <<
-            "QT_INSTALL_TRANSLATIONS" << "QT_VERSION";
-
-    QFileInfo info(path);
-    Q_ASSERT(info.exists());
-    foreach( const QString& var, queryVariables)
-    {
-        p.clearProgram();
-        p.setOutputChannelMode( KProcess::OnlyStdoutChannel );
-        p.setWorkingDirectory( info.absolutePath() );
-        //To be implemented when there's an API to fetch Env from Project
-        //p.setEnv();
-        p << QMakeConfig::qmakeBinary(nullptr) << "-query" << var;
-        p.execute();
-        QString result = QString::fromLocal8Bit( p.readAllStandardOutput() ).trimmed();
-        if( result != "**Unknown**")
-            hash[var] = result;
-    }
-    qDebug() << "Ran qmake, found:" << hash;
-    return hash;
-}
-
 QHash<QString,QString> setDefaultMKSpec(QMakeProjectFile& file)
 {
-    QHash<QString,QString> qmvars = queryQMake( file.absoluteFile() );
+    static const QHash<QString,QString> qmvars = QMakeConfig::queryQMake( QMakeConfig::qmakeBinary(nullptr) );
     QString specFile = qmvars["QMAKE_MKSPECS"] + "/default/qmake.conf";
     Q_ASSERT(QFile::exists(specFile));
     QMakeMkSpecs* mkspecs = new QMakeMkSpecs( specFile, qmvars );
