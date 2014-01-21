@@ -323,34 +323,34 @@ class StringCodeRepresentation : public CodeRepresentation {
 static QHash<IndexedString, KSharedPtr<ArtificialStringData> > artificialStrings;
 
 //Return the representation for the given URL if it exists, or an empty pointer otherwise
-KSharedPtr<ArtificialStringData> representationForUrl(const IndexedString& url)
+static KSharedPtr<ArtificialStringData> representationForPath(const IndexedString& path)
 {
-    if(artificialStrings.contains(url))
-        return artificialStrings[url];
+    if(artificialStrings.contains(path))
+        return artificialStrings[path];
     else
     {
-        IndexedString constructedUrl(CodeRepresentation::artificialUrl(url.str()));
-        if(artificialStrings.contains(constructedUrl))
-            return artificialStrings[constructedUrl];
+        IndexedString constructedPath(CodeRepresentation::artificialPath(path.str()));
+        if(artificialStrings.contains(constructedPath))
+            return artificialStrings[constructedPath];
         else
             return KSharedPtr<ArtificialStringData>();
     }
 }
 
-bool artificialCodeRepresentationExists(const IndexedString& url)
+bool artificialCodeRepresentationExists(const IndexedString& path)
 {
-    return !representationForUrl(url).isNull();
+    return !representationForPath(path).isNull();
 }
 
-CodeRepresentation::Ptr createCodeRepresentation(const IndexedString& url) {
-    if(artificialCodeRepresentationExists(url))
-        return CodeRepresentation::Ptr(new StringCodeRepresentation(representationForUrl(url)));
+CodeRepresentation::Ptr createCodeRepresentation(const IndexedString& path) {
+    if(artificialCodeRepresentationExists(path))
+        return CodeRepresentation::Ptr(new StringCodeRepresentation(representationForPath(path)));
 
-    IDocument* document = ICore::self()->documentController()->documentForUrl(url.toUrl());
+    IDocument* document = ICore::self()->documentController()->documentForUrl(path.toUrl());
     if(document && document->textDocument())
         return CodeRepresentation::Ptr(new EditorCodeRepresentation(document->textDocument()));
     else
-        return CodeRepresentation::Ptr(new FileCodeRepresentation(url));
+        return CodeRepresentation::Ptr(new FileCodeRepresentation(path));
 }
 
 void CodeRepresentation::setDiskChangesForbidden(bool changesForbidden)
@@ -358,13 +358,12 @@ void CodeRepresentation::setDiskChangesForbidden(bool changesForbidden)
     onDiskChangesForbidden = changesForbidden;
 }
 
-KUrl CodeRepresentation::artificialUrl(const QString& name)
+QString CodeRepresentation::artificialPath(const QString& name)
 {
-    KUrl url(name);
-    url.setScheme("artificial");
+    KUrl url = KUrl::fromPath(name);
     url.cleanPath();
-    
-    return url;
+
+    return "/kdev-artificial/" + url.path();
 }
 
 InsertArtificialCodeRepresentation::InsertArtificialCodeRepresentation(const IndexedString& file,
@@ -373,13 +372,13 @@ InsertArtificialCodeRepresentation::InsertArtificialCodeRepresentation(const Ind
 {
     if(m_file.toUrl().isRelative())
     {
-        m_file = IndexedString(CodeRepresentation::artificialUrl(file.str()));
+        m_file = IndexedString(CodeRepresentation::artificialPath(file.str()));
         
         int idx = 0;
         while(artificialStrings.contains(m_file))
         {
             ++idx;
-            m_file = IndexedString(CodeRepresentation::artificialUrl(QString("%1_%2").arg(idx).arg(file.str())));
+            m_file = IndexedString(CodeRepresentation::artificialPath(QString("%1_%2").arg(idx).arg(file.str())));
         }
     }
     
