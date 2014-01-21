@@ -208,9 +208,9 @@ void GDB::processLine(const QByteArray& line)
     FileSymbol file;
     file.contents = line;
 
-    std::auto_ptr<GDBMI::Record> r(mi_parser_.parse(&file));
+    std::unique_ptr<GDBMI::Record> r(mi_parser_.parse(&file));
 
-    if (r.get() == 0)
+    if (!r)
     {
         // FIXME: Issue an error!
         kDebug(9012) << "Invalid MI message:" << line;
