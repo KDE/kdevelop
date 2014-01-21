@@ -371,9 +371,10 @@ void Path::clear()
 
 Path Path::cd(const QString& dir) const
 {
-    KUrl url = toUrl();
-    url.cd(dir);
-    return Path(url);
+    if (!isValid()) {
+        return Path();
+    }
+    return Path(*this, dir);
 }
 
 namespace KDevelop {
