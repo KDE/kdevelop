@@ -69,8 +69,9 @@ if( RT_LIBRARY )
 endif()
 
 if( Threads_FOUND )
-    target_link_libraries( kdevplatforminterfaces LINK_PRIVATE ${CMAKE_THREAD_LIBS_INIT} )
+    target_link_libraries(kdevplatforminterfaces LINK_PRIVATE ${CMAKE_THREAD_LIBS_INIT} )
 endif()
+target_include_directories(kdevplatforminterfaces INTERFACE "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}/kdevplatform>")
 
 set_target_properties(kdevplatforminterfaces PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
 install(TARGETS kdevplatforminterfaces EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )

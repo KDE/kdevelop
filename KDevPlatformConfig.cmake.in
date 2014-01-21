@@ -25,15 +25,13 @@ get_filename_component(_KDEVPLATFORM_CURRENT_DIR  "${CMAKE_CURRENT_LIST_FILE}" P
 set( KDEV_PLUGIN_VERSION @KDEV_PLUGIN_VERSION@ )
 
 if(NOT WIN32)
-# This is needed on non-win32 platforms, as lib-install-dir might be in a 
-# totally different prefix than include-install-dir. So instead hardcode the
-# absolute path during buildtime
-set( KDEVPLATFORM_INCLUDE_DIR "@INCLUDE_INSTALL_DIR@/kdevplatform" )
+    # This is needed on non-win32 platforms, as lib-install-dir might be in a
+    # totally different prefix than include-install-dir. So instead hardcode the
+    # absolute path during buildtime
+    set( KDEVPLATFORM_INCLUDE_DIR "@INCLUDE_INSTALL_DIR@/kdevplatform" )
 
 else(NOT WIN32)
-
-set( KDEVPLATFORM_INCLUDE_DIR "${_KDEVPLATFORM_CURRENT_DIR}/../../../include/kdevplatform" )
-
+    set( KDEVPLATFORM_INCLUDE_DIR "${_KDEVPLATFORM_CURRENT_DIR}/../../../include/kdevplatform" )
 endif(NOT WIN32)
 
 if( NOT TARGET KDevPlatformImport__kdevplatforminterfaces )

@@ -76,7 +76,9 @@ macro(kdevplatform_add_template _installDirectory _templateName)
     endif(WIN32)
 
     install( FILES ${_template} DESTINATION ${_installDirectory})
-    macro_additional_clean_files(${_template})
+    GET_DIRECTORY_PROPERTY(_tmp_DIR_PROPS ADDITIONAL_MAKE_CLEAN_FILES )
+    list(APPEND _tmp_DIR_PROPS ${_template})
+    SET_DIRECTORY_PROPERTIES(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "${_tmp_DIR_PROPS}")
 endmacro(kdevplatform_add_template _installDirectory _templateName)
 
 macro(kdevplatform_add_app_templates _templateNames)

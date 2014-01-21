@@ -38,7 +38,6 @@ include(KDevPlatformMacros)
 set(QT_MIN_VERSION "5.2.0")
 find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Core DBus Widgets Script WebKitWidgets Concurrent Test)
 
-# Load the frameworks we need
 find_package(KF5 CONFIG REQUIRED COMPONENTS
   Archive
   Config
@@ -131,11 +130,12 @@ write_basic_config_version_file(${KDevPlatform_BINARY_DIR}/KDevPlatformConfigVer
 configure_file( "${KDevPlatform_SOURCE_DIR}/KDevPlatformConfig.cmake.in" "${KDevPlatform_BINARY_DIR}/KDevPlatformConfig.cmake" @ONLY )
 configure_file( "${KDevPlatform_SOURCE_DIR}/kdevplatformversion.h.cmake" "${KDevPlatform_BINARY_DIR}/kdevplatformversion.h" @ONLY )
 
-if(KDE4_USE_COMMON_CMAKE_PACKAGE_CONFIG_DIR)
-    set(_kdevplatform_CONFIG_DEST "${LIB_INSTALL_DIR}/cmake/kdevplatform")
-else()
-    set(_kdevplatform_CONFIG_DEST "${LIB_INSTALL_DIR}/kdevplatform")
-endif()
+set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/KDevPlatform")
+
+configure_package_config_file("${CMAKE_CURRENT_SOURCE_DIR}/KDevPlatformConfig.cmake.in"
+                              "${CMAKE_CURRENT_BINARY_DIR}/KDevPlatformConfig.cmake"
+                              INSTALL_DESTINATION  ${CMAKECONFIG_INSTALL_DIR}
+)
 
 install( FILES
         "${KDevPlatform_BINARY_DIR}/kdevplatformversion.h"
@@ -146,17 +146,17 @@ install( FILES
 install( FILES
         "${KDevPlatform_BINARY_DIR}/KDevPlatformConfig.cmake"
         "${KDevPlatform_BINARY_DIR}/KDevPlatformConfigVersion.cmake"
-        DESTINATION "${_kdevplatform_CONFIG_DEST}" )
+        cmake/modules/KDevPlatformMacros.cmake
+        DESTINATION "${CMAKECONFIG_INSTALL_DIR}" )
 install( EXPORT KDevPlatformTargets
-         DESTINATION "${_kdevplatform_CONFIG_DEST}"
+         DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
          NAMESPACE KDevPlatformImport__
          FILE KDevPlatformTargets.cmake )
-
-# Put this last, so it can use _kdevplatform_CONFIG_DEST
-add_subdirectory(cmake)
 
 include(CTest)
 
 # CTestCustom.cmake has to be in the CTEST_BINARY_DIR.
 # in the KDE build system, this is the same as CMAKE_BINARY_DIR.
 configure_file(${CMAKE_SOURCE_DIR}/CTestCustom.cmake ${CMAKE_BINARY_DIR}/CTestCustom.cmake)
+
+feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)

@@ -119,7 +119,6 @@ target_link_libraries(kdevplatformshell LINK_PRIVATE
     KF5::JobWidgets
     KF5::ItemViews
 
-    kdevplatforminterfaces
     kdevplatformproject
     kdevplatformvcs
     kdevplatformlanguage
@@ -127,6 +126,7 @@ target_link_libraries(kdevplatformshell LINK_PRIVATE
     kdevplatformdocumentation
 
 LINK_PUBLIC
+    kdevplatforminterfaces
     KF5::KDE4Support
 )
 set_target_properties(kdevplatformshell PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
