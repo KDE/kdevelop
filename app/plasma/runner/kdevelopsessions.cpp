@@ -47,7 +47,7 @@ KDevelopSessions::KDevelopSessions(QObject *parent, const QVariantList& args)
 
     // listen for changes to the list of kdevelop sessions
     KDirWatch *historyWatch = new KDirWatch(this);
-    const QStringList sessiondirs = KGlobal::dirs()->findDirs("data", QLatin1String("kdevelop/sessions/"));
+    const QStringList sessiondirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QLatin1String("kdevelop/sessions"));
     foreach (const QString &dir, sessiondirs) {
         historyWatch->addDir(dir);
     }
@@ -66,15 +66,31 @@ KDevelopSessions::~KDevelopSessions()
 {
 }
 
+QStringList findSessions()
+{
+    QStringList sessionDirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "kdevelop/sessions", QStandardPaths::LocateDirectory);
+    QStringList sessionrcs;
+    Q_FOREACH(const QString& dir, sessionDirs) {
+        QDir d(dir);
+        Q_FOREACH(const QString& sessionDir, d.entryList(QDir::Dirs)) {
+            QDir sd(d.absoluteFilePath(sessionDir));
+            QString path(sd.filePath("sessionrc"));
+            if(QFile::exists(path)) {
+                sessionrcs += path;
+            }
+        }
+    }
+    return sessionrcs;
+}
+
 void KDevelopSessions::loadSessions()
 {
     m_sessions.clear();
     // Switch kdevelop session: -u
     // Should we add a match for this option or would that clutter the matches too much?
-    const QStringList list = KGlobal::dirs()->findAllResources( "data", QLatin1String("kdevelop/sessions/*/sessionrc"), KStandardDirs::Recursive );
+    const QStringList list = findSessions();
     foreach (const QString &sessionfile, list)
     {
-        kWarning() << "NEW SESSION:" << sessionfile;
         Session session;
         session.id = sessionfile.section('/', -2, -2);
         KConfig cfg(sessionfile, KConfig::SimpleConfig);

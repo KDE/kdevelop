@@ -19,6 +19,8 @@
 
 #include "kdevelopsessionsengine.h"
 #include "kdevelopsessionsservice.h"
+#include <QtCore/QStandardPaths>
+#include <QtCore/QDir>
 
 #include <KStandardDirs>
 #include <KDirWatch>
@@ -40,7 +42,7 @@ void KDevelopSessionsEngine::init()
 {
     m_dirWatch = new KDirWatch( this );
 
-    const QStringList sessionDirs = KGlobal::dirs()->findDirs( "data", "kdevelop/sessions/" );
+    const QStringList sessionDirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "kdevelop/sessions", QStandardPaths::LocateDirectory );
 
     for ( int i = 0; i < sessionDirs.count(); ++i )
         m_dirWatch->addDir( sessionDirs[i], KDirWatch::WatchSubDirs );
@@ -55,9 +57,26 @@ Plasma::Service *KDevelopSessionsEngine::serviceForSource(const QString &source)
     return new KDevelopSessionsService( this, source );
 }
 
+QStringList findSessions()
+{
+    QStringList sessionDirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "kdevelop/sessions", QStandardPaths::LocateDirectory);
+    QStringList sessionrcs;
+    Q_FOREACH(const QString& dir, sessionDirs) {
+        QDir d(dir);
+        Q_FOREACH(const QString& sessionDir, d.entryList(QDir::Dirs)) {
+            QDir sd(d.absoluteFilePath(sessionDir));
+            QString path(sd.filePath("sessionrc"));
+            if(QFile::exists(path)) {
+                sessionrcs += path;
+            }
+        }
+    }
+    return sessionrcs;
+}
+
 void KDevelopSessionsEngine::updateSessions()
 {
-   const QStringList sessionrcs = KGlobal::dirs()->findAllResources( "data", "kdevelop/sessions/*/sessionrc", KStandardDirs::NoDuplicates );
+    QStringList sessionrcs = findSessions();
 
     QHash<QString, Session> sessions;
 
