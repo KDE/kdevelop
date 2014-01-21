@@ -127,7 +127,7 @@ KDevelop::ContextMenuExtension CppLanguageSupport::contextMenuExtension(KDevelop
 
   if (ec && ICore::self()->languageController()->languagesForUrl(ec->url()).contains(language())) {
     // It's a C++ file, let's add our context menu.
-    SimpleRefactoring::self().doContextMenu(cm, context);
+    m_refactoring->fillContextMenu(cm, context);
   }
   return cm;
 }
@@ -176,6 +176,7 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
     setXMLFile( "kdevcppsupport.rc" );
 
     m_highlights = new CppHighlighting( this );
+    m_refactoring = new SimpleRefactoring(this);
     m_cc = new KDevelop::CodeCompletion( this, new Cpp::CodeCompletionModel(0), name() );
     m_missingIncludeCompletion = new KDevelop::CodeCompletion( this, new Cpp::MissingIncludeCompletionModel(0), name() );
 
@@ -227,12 +228,12 @@ void CppLanguageSupport::createActionsForMainWindow (Sublime::MainWindow* /*wind
     renameDeclarationAction->setText( i18n("Rename Declaration") );
     renameDeclarationAction->setIcon(KIcon("edit-rename"));
     renameDeclarationAction->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_R);
-    connect(renameDeclarationAction, SIGNAL(triggered(bool)), &SimpleRefactoring::self(), SLOT(executeRenameAction()));
+    connect(renameDeclarationAction, SIGNAL(triggered(bool)), m_refactoring, SLOT(executeRenameAction()));
 
     KAction* moveIntoSourceAction = actions.addAction("code_move_definition");
     moveIntoSourceAction->setText( i18n("Move into Source") );
     moveIntoSourceAction->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_S);
-    connect(moveIntoSourceAction, SIGNAL(triggered(bool)), &SimpleRefactoring::self(), SLOT(executeMoveIntoSourceAction()));
+    connect(moveIntoSourceAction, SIGNAL(triggered(bool)), m_refactoring, SLOT(executeMoveIntoSourceAction()));
 }
 
 void CppLanguageSupport::switchDefinitionDeclaration()

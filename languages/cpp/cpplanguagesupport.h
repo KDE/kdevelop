@@ -40,6 +40,7 @@ class pp_macro;
 class CppHighlighting;
 class CPPParseJob;
 class IncludeFileDataProvider;
+class SimpleRefactoring;
 
 namespace KDevelop {
   class ICodeHighlighting;
@@ -159,6 +160,7 @@ private:
     static CppLanguageSupport* m_self;
 
     CppHighlighting *m_highlights;
+    SimpleRefactoring *m_refactoring;
     KDevelop::CodeCompletion *m_cc, *m_missingIncludeCompletion;
     
     CppTools::IncludePathResolver *m_includeResolver;

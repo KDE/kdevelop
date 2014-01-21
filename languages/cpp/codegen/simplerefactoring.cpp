@@ -58,52 +58,19 @@
 #include <interfaces/iselectioncontroller.h>
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/ilanguagecontroller.h>
+#include <language/codegen/basicrefactoring.h>
 
 using namespace KDevelop;
 
-// #define WARN_BEFORE_REFACTORING
 
-// static Identifier destructorForName(Identifier name) {
-//   QString str = name.identifier().str();
-//   if(str.startsWith("~"))
-//     return Identifier(str);
-//   return Identifier("~"+str);
-// }
 
-bool doRefactoringWarning() {
-#ifndef WARN_BEFORE_REFACTORING
-  return true;
-#else
-   return KMessageBox::Continue == KMessageBox::warningContinueCancel(0, i18n("Refactoring is an experimental feature, it may damage your code. Before using it, make sure to make a backup."));
-#endif
-}
-
-KUrl folderFromSelection()
+SimpleRefactoring::SimpleRefactoring(QObject *parent)
+  : BasicRefactoring(parent)
 {
-    KUrl u;
-
-    KDevelop::Context * sel = ICore::self()->selectionController()->currentSelection();
-    KDevelop::FileContext * fc = dynamic_cast<FileContext*>(sel);
-    KDevelop::ProjectItemContext * pc = dynamic_cast<ProjectItemContext*>(sel);
-    if(fc && !fc->urls().isEmpty())
-      u = fc->urls()[0].upUrl();
-    else if(pc && !pc->items().isEmpty() && pc->items()[0]->folder())
-      ;//TODO check how to solve cyclic dependancy
-      //u = pc->items()[0]->folder()->url();
-    else if(ICore::self()->documentController()->activeDocument())
-      u = ICore::self()->documentController()->activeDocument()->url().upUrl();
-    else if(!ICore::self()->projectController()->projects().isEmpty())
-      u = ICore::self()->projectController()->projects()[0]->folder();
-
-    return u;
+  /* There's nothing to do here. */
 }
 
-SimpleRefactoring& SimpleRefactoring::self() {
-  static SimpleRefactoring ret;
-  return ret;
-}
-
-void SimpleRefactoring::doContextMenu(KDevelop::ContextMenuExtension& extension, KDevelop::Context* context) {
+void SimpleRefactoring::fillContextMenu(KDevelop::ContextMenuExtension& extension, KDevelop::Context* context) {
 
   if(DeclarationContext* declContext = dynamic_cast<DeclarationContext*>(context)){
     //Actions on declarations
@@ -269,33 +236,7 @@ void SimpleRefactoring::executeMoveIntoSourceAction() {
 
 }
 
-void SimpleRefactoring::executeRenameAction() {
-  QAction* action = qobject_cast<QAction*>(sender());
-  if(action) {
-    IndexedDeclaration decl = action->data().value<IndexedDeclaration>();
-    if(!decl.isValid())
-      decl = declarationUnderCursor();
-    startInteractiveRename(decl);
-  }else{
-    kWarning() << "strange problem";
-  }
-}
 
-class SimpleRefactoringCollector : public KDevelop::UsesWidget::UsesWidgetCollector {
-  public:
-  SimpleRefactoringCollector(IndexedDeclaration decl) : UsesWidgetCollector(decl) {
-    setCollectConstructors(true);
-    setCollectDefinitions(true);
-    setCollectOverloads(true);
-  }
-
-  virtual void processUses(KDevelop::ReferencedTopDUContext topContext) {
-    m_allUsingContexts << IndexedTopDUContext(topContext.data());
-    UsesWidgetCollector::processUses(topContext);
-  }
-
-  QVector<IndexedTopDUContext> m_allUsingContexts;
-};
 
 QPair<QString, QString> splitFileAtExtension(const QString& fileName)
 {
@@ -353,64 +294,8 @@ DocumentChangeSet::ChangeResult SimpleRefactoring::addRenameFileChanges(const KU
   return true;
 }
 
-DocumentChangeSet::ChangeResult applyChangesToDeclarations(const QString& oldName,
-                                                           const QString& newName,
-                                                           DocumentChangeSet& changes,
-                                                           const QList<IndexedDeclaration>& declarations)
+void SimpleRefactoring::startInteractiveRename(const KDevelop::IndexedDeclaration &decl)
 {
-  foreach(const IndexedDeclaration &decl, declarations) {
-    Declaration* declaration = decl.data();
-    if(!declaration) {
-      continue;
-    }
-    if (declaration->range().isEmpty()) {
-      kDebug() << "found empty declaration";
-    }
-    TopDUContext* top = declaration->topContext();
-    DocumentChangeSet::ChangeResult result = changes.addChange(DocumentChange(top->url(), declaration->rangeInCurrentRevision(), oldName, newName));
-    if (!result) {
-      return result;
-    }
-
-    if (SimpleRefactoring::shouldRenameFile(declaration)) {
-      result = SimpleRefactoring::addRenameFileChanges(top->url().toUrl(), newName, &changes);
-      if (!result) {
-        return result;
-      }
-    }
-  }
-  return DocumentChangeSet::ChangeResult(true);
-}
-
-DocumentChangeSet::ChangeResult applyChanges(QString oldName, QString newName, DocumentChangeSet& changes, DUContext* context, int usedDeclarationIndex) {
-   if(usedDeclarationIndex == std::numeric_limits<int>::max())
-     return DocumentChangeSet::ChangeResult(true);
-
-   for(int a = 0; a < context->usesCount(); ++a) {
-     const Use& use(context->uses()[a]);
-     if(use.m_declarationIndex != usedDeclarationIndex)
-       continue;
-     if(use.m_range.isEmpty()) {
-       kDebug() << "found empty use";
-       continue;
-     }
-     DocumentChangeSet::ChangeResult result = changes.addChange(DocumentChange(context->url(), context->transformFromLocalRevision(use.m_range), oldName, newName));
-     if(!result)
-       return result;
-   }
-
-   foreach(DUContext* child, context->childContexts()) {
-     DocumentChangeSet::ChangeResult result = applyChanges(oldName, newName, changes, child, usedDeclarationIndex);
-     if(!result)
-       return result;
-   }
-   return DocumentChangeSet::ChangeResult(true);
-}
-
-void SimpleRefactoring::startInteractiveRename(KDevelop::IndexedDeclaration decl) {
-//   if(!doRefactoringWarning())
-//     return;
-
   DUChainReadLocker lock(DUChain::lock());
 
   Declaration* declaration = decl.data();
@@ -450,7 +335,7 @@ void SimpleRefactoring::startInteractiveRename(KDevelop::IndexedDeclaration decl
   QString replacementName;
 
   //Since we don't yet know what the text should be replaced with, we just collect the top-contexts to process
-  SimpleRefactoringCollector* collector = new SimpleRefactoringCollector(declaration);
+  BasicRefactoringCollector* collector = new BasicRefactoringCollector(declaration);
   UsesWidget* uses = new UsesWidget(declaration, collector);
 
   QWidget* navigationWidget = declaration->context()->createNavigationWidget(declaration);
@@ -529,7 +414,7 @@ void SimpleRefactoring::startInteractiveRename(KDevelop::IndexedDeclaration decl
 
   DocumentChangeSet changes;
   lock.lock();
-  foreach(const KDevelop::IndexedTopDUContext &collected, collector->m_allUsingContexts) {
+  foreach(const KDevelop::IndexedTopDUContext &collected, collector->allUsingContexts()) {
     QSet<int> hadIndices;
     foreach(const IndexedDeclaration &decl, collector->declarations()) {
       uint usedDeclarationIndex = collected.data()->indexForUsedDeclaration(decl.data(), false);
@@ -560,6 +445,36 @@ void SimpleRefactoring::startInteractiveRename(KDevelop::IndexedDeclaration decl
   QMetaObject::invokeMethod(this, "applyChangesDelayed", Qt::QueuedConnection);
 }
 
+DocumentChangeSet::ChangeResult SimpleRefactoring::applyChangesToDeclarations(const QString& oldName,
+                                                                              const QString& newName,
+                                                                              DocumentChangeSet& changes,
+                                                                              const QList<IndexedDeclaration>& declarations)
+{
+  foreach(const IndexedDeclaration &decl, declarations) {
+    Declaration* declaration = decl.data();
+    if(!declaration) {
+      continue;
+    }
+    if (declaration->range().isEmpty()) {
+      kDebug() << "found empty declaration";
+    }
+    TopDUContext* top = declaration->topContext();
+    DocumentChangeSet::ChangeResult result = changes.addChange(DocumentChange(top->url(), declaration->rangeInCurrentRevision(), oldName, newName));
+    if (!result) {
+      return result;
+    }
+
+    if (SimpleRefactoring::shouldRenameFile(declaration)) {
+      result = SimpleRefactoring::addRenameFileChanges(top->url().toUrl(), newName, &changes);
+      if (!result) {
+        return result;
+      }
+    }
+  }
+  return DocumentChangeSet::ChangeResult(true);
+}
+
+
 void SimpleRefactoring::applyChangesDelayed()
 {
   DocumentChangeSet::ChangeResult result = m_pendingChanges.applyAllChanges();
@@ -567,19 +482,6 @@ void SimpleRefactoring::applyChangesDelayed()
   if(!result) {
       KMessageBox::error(0, i18n("Applying changes failed: %1", result.m_failureReason));
   }
-}
-
-KDevelop::IndexedDeclaration SimpleRefactoring::declarationUnderCursor(bool allowUse) {
-  KDevelop::IDocument* doc = ICore::self()->documentController()->activeDocument();
-  if(doc && doc->textDocument() && doc->textDocument()->activeView()) {
-    DUChainReadLocker lock(DUChain::lock());
-    if(allowUse)
-      return DUChainUtils::itemUnderCursor(doc->url(), SimpleCursor(doc->textDocument()->activeView()->cursorPosition()));
-    else
-      return DUChainUtils::declarationInLine(SimpleCursor(doc->textDocument()->activeView()->cursorPosition()), DUChainUtils::standardContextForUrl(doc->url()));
-  }
-  
-  return KDevelop::IndexedDeclaration();
 }
 
 // #include "simplerefactoring.moc"
