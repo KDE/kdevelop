@@ -19,10 +19,9 @@
  ***************************************************************************/
 #include "test_buddies.h"
 
-#include <qtest_kde.h>
-
 #include <QSplitter>
 #include <QtTest/QtTest>
+#include <KSharedConfig>
 
 #include <KDebug>
 #include <KTempDir>
@@ -441,6 +440,6 @@ void TestBuddies::testsplitViewBuddies()
 }
 
 
-QTEST_KDEMAIN(TestBuddies, GUI)
+QTEST_MAIN(TestBuddies)
 
 #include "test_buddies.moc"

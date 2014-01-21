@@ -31,7 +31,6 @@
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 #include <tests/testfile.h>
-#include <qtest_kde.h>
 #include <language/codecompletion/codecompletiontesthelper.h>
 #include <dumpchain.h>
 #include <templatedeclaration.h>
@@ -51,7 +50,7 @@
 
 #include "codegen/simplerefactoring.h"
 
-QTEST_KDEMAIN(TestCppCodegen, NoGUI )
+QTEST_GUILESS_MAIN(TestCppCodegen)
 
 using namespace KDevelop;
 

@@ -25,7 +25,6 @@
 #include "cmakeprojectvisitor.h"
 #include "cmakelistsparser.h"
 #include <QString>
-#include <qtest_kde.h>
 #include <language/duchain/indexedstring.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
@@ -38,7 +37,7 @@
 #include <KTempDir>
 #include <KTemporaryFile>
 
-QTEST_KDEMAIN_CORE(CMakeProjectVisitorTest)
+QTEST_GUILESS_MAIN(CMakeProjectVisitorTest)
 
 using namespace KDevelop;
 

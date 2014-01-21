@@ -24,7 +24,6 @@
 
 #include <QtTest/QtTest>
 #include <KTempDir>
-#include <qtest_kde.h>
 
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
@@ -46,7 +45,7 @@
 using namespace KDevelop;
 using namespace KTextEditor;
 
-QTEST_KDEMAIN(TestCppAssistants, GUI)
+QTEST_MAIN(TestCppAssistants)
 
 ForegroundLock *globalTestLock = 0;
 Cpp::StaticCodeAssistant *staticCodeAssistant = 0;

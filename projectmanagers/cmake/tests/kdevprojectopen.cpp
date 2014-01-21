@@ -28,6 +28,7 @@
 #include "kdevprojectopen.h"
 #include "testhelpers.h"
 #include <QDebug>
+#include <k4aboutdata.h>
 
 using namespace KDevelop;
 

@@ -20,7 +20,6 @@
 #ifndef TESTQTHELPPLUGIN_H
 #define TESTQTHELPPLUGIN_H
 
-#include <qtest_kde.h>
 #include <tests/testcore.h>
 
 class QtHelpPlugin;

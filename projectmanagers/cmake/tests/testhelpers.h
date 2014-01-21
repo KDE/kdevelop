@@ -26,10 +26,10 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QDebug>
-#include <qtest_kde.h>
 #include <interfaces/iproject.h>
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
+#include <QSignalSpy>
 
 static QString currentBuildDirKey = "CurrentBuildDir";
 static QString currentCMakeBinaryKey = "Current CMake Binary";
@@ -121,11 +121,11 @@ KDevelop::IProject* loadProject(const QString& name, const QString& relative = Q
 
     KDevelop::ICore::self()->projectController()->openProject(paths.projectFile);
 
-    const bool gotSignal = QTest::kWaitForSignal(
+    const bool gotSignal = QSignalSpy(
             KDevelop::ICore::self()->projectController(),
-            SIGNAL(projectOpened(KDevelop::IProject*)),
-            30000);
-    if( !gotSignal ) qFatal( "Timeout while waiting for opened signal" );
+            SIGNAL(projectOpened(KDevelop::IProject*))).wait(30000);
+    if( !gotSignal )
+        qFatal( "Timeout while waiting for opened signal" );
 
 
     KDevelop::IProject* project = KDevelop::ICore::self()->projectController()->findProjectByName(name);

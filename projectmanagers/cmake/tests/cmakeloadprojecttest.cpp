@@ -21,7 +21,6 @@
 #include "cmakeloadprojecttest.h"
 #include "cmake-test-paths.h"
 
-#include <qtest_kde.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/topducontext.h>
@@ -40,7 +39,7 @@
 inline QDebug &operator<<(QDebug debug, const Target &target)
 { debug << target.name; return debug.maybeSpace(); }
 
-QTEST_KDEMAIN( CMakeLoadProjectTest, GUI )
+QTEST_MAIN( CMakeLoadProjectTest )
 
 using namespace KDevelop;
 

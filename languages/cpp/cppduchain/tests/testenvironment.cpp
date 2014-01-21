@@ -25,12 +25,12 @@
 #include <environmentmanager.h>
 #include <cpputils.h>
 
-#include <qtest_kde.h>
-
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
 
-QTEST_KDEMAIN(TestEnvironment, NoGUI);
+#include <QTest>
+
+QTEST_GUILESS_MAIN(TestEnvironment);
 
 using namespace KDevelop;
 using namespace Cpp;

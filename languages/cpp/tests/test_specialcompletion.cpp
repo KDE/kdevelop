@@ -38,19 +38,23 @@
 #include "codecompletion/helpers.h"
 
 #include <QTest>
-#include <qtest_kde.h>
+#include <KComponentData>
+#include <k4aboutdata.h>
 #include <KTextEditor/Editor>
 #include <KTempDir>
 
 using namespace KDevelop;
 using namespace Cpp;
 
-QTEST_KDEMAIN_WITH_COMPONENTNAME(TestSpecialCompletion, GUI, "test_specialcompletion")
+QTEST_MAIN(TestSpecialCompletion)
 
 typedef CodeCompletionItemTester<Cpp::CodeCompletionContext> CompletionItemTester;
 
 void TestSpecialCompletion::initTestCase()
 {
+    K4AboutData aboutData( QByteArray("test_specialcompletion"), QByteArray(), ki18n("KDE Test Program"), QByteArray("version") );
+    KComponentData cData(&aboutData);
+
     AutoTestShell::init(QStringList() << "kdevcppsupport");
     TestCore::initialize(Core::NoUi);
     TestCore* core = dynamic_cast<TestCore*>(TestCore::self());

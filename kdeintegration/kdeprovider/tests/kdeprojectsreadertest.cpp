@@ -19,14 +19,14 @@
 #include "kdeprojectsreadertest.h"
 #include <QTest>
 #include <QDebug>
-#include <qtest_kde.h>
+#include <QSignalSpy>
 #include "../kdeprojectsreader.h"
 
 QTEST_MAIN( KDEProjectsReaderTest )
 
 #define WAIT_FOR_SIGNAL(a,b) \
 {\
-    bool gotSignal = QTest::kWaitForSignal((a), SIGNAL(b), 30000);\
+    bool gotSignal = QSignalSpy((a), SIGNAL(b)).wait(30000);\
     QVERIFY2(gotSignal, "Timeout while waiting for opened signal");\
 } void(0)
 

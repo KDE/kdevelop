@@ -21,8 +21,6 @@
 
 #include <QtTest/QtTest>
 
-#include <qtest_kde.h>
-
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 #include <tests/kdevsignalspy.h>
@@ -45,6 +43,8 @@ using KDevelop::TestCore;
 using KDevelop::AutoTestShell;
 using KDevelop::KDevSignalSpy;
 using KDevelop::Path;
+
+QTEST_MAIN(CustomBuildSystemPluginTest)
 
 void CustomBuildSystemPluginTest::cleanupTestCase()
 {
@@ -124,7 +124,5 @@ void CustomBuildSystemPluginTest::loadMultiPathProject()
     QCOMPARE( project->buildSystemManager()->buildDirectory( mainfile ),
               Path( "file:///home/andreas/projects/testcustom/build2/src" ) );
 }
-
-QTEST_KDEMAIN(CustomBuildSystemPluginTest, GUI)
 
 #include "custombuildsystemplugintest.moc"

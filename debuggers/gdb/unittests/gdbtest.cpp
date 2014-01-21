@@ -25,13 +25,13 @@
 #include <QApplication>
 #include <QFileInfo>
 #include <QDir>
+#include <QTemporaryFile>
 
 #include <KGlobal>
 #include <KSharedConfig>
 #include <KDebug>
 #include <KProcess>
 #include <KStandardDirs>
-#include <qtest_kde.h>
 
 #include <tests/testcore.h>
 #include <shell/shellextension.h>
@@ -1857,7 +1857,7 @@ void GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::Deb
 
 }
 
-QTEST_KDEMAIN(GDBDebugger::GdbTest, GUI)
+QTEST_MAIN(GDBDebugger::GdbTest)
 
 
 #include "gdbtest.moc"

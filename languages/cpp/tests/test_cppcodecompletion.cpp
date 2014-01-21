@@ -66,13 +66,12 @@
 #include <KTempDir>
 #include <KTextEditor/Editor>
 #include <KTextEditor/View>
-#include <qtest_kde.h>
 
 using namespace KTextEditor;
 
 using namespace KDevelop;
 
-QTEST_KDEMAIN(TestCppCodeCompletion, GUI)
+QTEST_MAIN(TestCppCodeCompletion)
 
 QString testFile1 = "class Erna; struct Honk { int a,b; enum Enum { Number1, Number2 }; Erna& erna; operator int() {}; }; struct Pointer { Honk* operator ->() const {}; Honk& operator * () {}; }; Honk globalHonk; Honk honky; \n#define HONK Honk\n";
 
