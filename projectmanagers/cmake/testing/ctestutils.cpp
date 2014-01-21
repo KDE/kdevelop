@@ -41,9 +41,9 @@ void CTestUtils::createTestSuites(const QVector<Test>& testSuites, ProjectFolder
 {
     IProject* project = folder->project();
     IBuildSystemManager* bsm = project->buildSystemManager();
-    const QString binDir = bsm->buildDirectory(project->projectItem()).toLocalFile();
-    const KUrl currentBinDir = bsm->buildDirectory(folder);
-    const KUrl currentSourceDir = folder->url();
+    const QString binDir = bsm->buildDirectory(folder->project()->projectItem()).toLocalFile();
+    const Path currentBinDir = bsm->buildDirectory(folder);
+    const Path currentSourceDir = folder->path();
 
     foreach (const Test& test, testSuites)
     {
@@ -65,7 +65,7 @@ void CTestUtils::createTestSuites(const QVector<Test>& testSuites, ProjectFolder
             }
         }
         exe.replace("#[bin_dir]", binDir);
-        const KUrl exeUrl(currentBinDir, exe);
+        const Path exePath(currentBinDir, exe);
 
         QStringList args = test.arguments;
         for (QStringList::iterator it = args.begin(), end = args.end(); it != end; ++it)
@@ -73,7 +73,7 @@ void CTestUtils::createTestSuites(const QVector<Test>& testSuites, ProjectFolder
             it->replace("#[bin_dir]", binDir);
         }
 
-        CTestSuite* suite = new CTestSuite(test.name, exeUrl, files, project, args, test.properties.value("WILL_FAIL", "FALSE") == "TRUE");
+        CTestSuite* suite = new CTestSuite(test.name, exePath.toUrl(), files, project, args, test.properties.value("WILL_FAIL", "FALSE") == "TRUE");
         ICore::self()->runController()->registerJob(new CTestFindJob(suite));
     }
 }

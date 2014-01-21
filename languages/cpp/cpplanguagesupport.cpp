@@ -257,9 +257,9 @@ void CppLanguageSupport::switchDefinitionDeclaration()
     cursor = SimpleCursor(doc->textDocument()->activeView()->cursorPosition()); 
   }
   
-  KUrl switchCandidate = CppUtils::sourceOrHeaderCandidate(docUrl);
+  const QString switchCandidate = CppUtils::sourceOrHeaderCandidate(docUrl.toLocalFile());
   
-  if(switchCandidate.isValid())
+  if(!switchCandidate.isEmpty())
   {
     
     DUChainReadLocker lock;
@@ -382,8 +382,8 @@ void CppLanguageSupport::switchDefinitionDeclaration()
   lock.unlock();
   ///- If no definition/declaration could be found to switch to, just switch the document using normal header/source heuristic by file-extension
 
-  if(switchCandidate.isValid()) {
-    core()->documentController()->openDocument(switchCandidate);
+  if(!switchCandidate.isEmpty()) {
+    core()->documentController()->openDocument(KUrl(switchCandidate));
   }else{
     kDebug(9007) << "Found no source/header candidate to switch";
   }
@@ -438,7 +438,7 @@ ICreateClassHelper* CppLanguageSupport::createClassHelper() const
 
 void CppLanguageSupport::findIncludePathsForJob(CPPParseJob* job)
 {
-  IncludePathComputer* comp = new IncludePathComputer(KUrl(job->document().str()));
+  IncludePathComputer* comp = new IncludePathComputer(job->document().str());
   comp->computeForeground();
   job->gotIncludePaths(comp);
 }

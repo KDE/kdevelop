@@ -26,8 +26,6 @@
 
 #include <KLocalizedString>
 
-#include <iostream>
-
 using namespace KDevelop;
 
 const bool enableIncludePathResolution = true;
@@ -44,16 +42,13 @@ void IncludePathComputer::computeForeground()
   if (CppUtils::headerExtensions().contains(QFileInfo(m_source.toLocalFile()).suffix())) {
     // This file is a header. Since a header doesn't represent a target, we just try to get
     // the include-paths for the corresponding source-file, if there is one.
-    KUrl newSource = CppUtils::sourceOrHeaderCandidate(m_source, true);
+    KUrl newSource = CppUtils::sourceOrHeaderCandidate(m_source.toLocalFile(), true);
     if (newSource.isValid()) {
       m_source = newSource;
     }
   }
 
   if (m_source.isEmpty()) {
-    foreach (const QString& path, CppUtils::standardIncludePaths()) {
-      addInclude(KUrl(path));
-    }
     kDebug() << "cannot compute include-paths without source-file";
     return;
   }
@@ -72,7 +67,8 @@ void IncludePathComputer::computeForeground()
     }
 
     ProjectFileItem* file = files.last();
-    KUrl::List dirs;
+    /// TODO: port this mess to Path API
+    Path::List dirs;
     // A file might be defined in different targets.
     // Prefer file items defined inside a target with non-empty includes.
     foreach (ProjectFileItem* f, files) {
@@ -88,7 +84,7 @@ void IncludePathComputer::computeForeground()
 
     m_projectName = project->name();
     m_projectDirectory = project->folder();
-    m_effectiveBuildDirectory = m_buildDirectory = buildManager->buildDirectory(project->projectItem());
+    m_effectiveBuildDirectory = m_buildDirectory = buildManager->buildDirectory(project->projectItem()).toUrl();
     kDebug(9007) << "Got build-directory from project manager:" << m_effectiveBuildDirectory;
 
     if (m_projectDirectory == m_effectiveBuildDirectory) {
@@ -98,8 +94,8 @@ void IncludePathComputer::computeForeground()
 
     m_gotPathsFromManager = !dirs.isEmpty();
     kDebug(9007) << "Got " << dirs.count() << " include-paths from build-manager";
-    foreach (KUrl dir, dirs) {
-      addInclude(dir);
+    foreach (const Path& dir, dirs) {
+      addInclude(dir.toUrl());
     }
 
     m_defines = buildManager->defines(file);

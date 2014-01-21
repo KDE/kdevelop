@@ -53,7 +53,7 @@ public:
     /**
      * Provide a list of include directories.
      */
-    virtual KUrl::List includeDirectories(KDevelop::ProjectBaseItem*) const;
+    virtual KDevelop::Path::List includeDirectories(KDevelop::ProjectBaseItem*) const;
 
     /**
      * Provide a list of files that contain the preprocessor defines for the
@@ -98,7 +98,7 @@ public:
     /**
      * Get the toplevel build directory for the project
      */
-    virtual KUrl buildDirectory(KDevelop::ProjectBaseItem*) const;
+    virtual KDevelop::Path buildDirectory(KDevelop::ProjectBaseItem*) const;
 
     /**
      * Get a list of all the targets in this project
@@ -112,8 +112,12 @@ public:
     virtual QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectFolderItem*) const;
 
 protected:
-    virtual KDevelop::ProjectFileItem* createFileItem(KDevelop::IProject* project, const KUrl& url, KDevelop::ProjectBaseItem* parent);
-    virtual KDevelop::ProjectFolderItem* createFolderItem(KDevelop::IProject* project, const KUrl& url, KDevelop::ProjectBaseItem* parent = 0);
+    virtual KDevelop::ProjectFileItem* createFileItem(KDevelop::IProject* project,
+                                                      const KDevelop::Path& path,
+                                                      KDevelop::ProjectBaseItem* parent);
+    virtual KDevelop::ProjectFolderItem* createFolderItem(KDevelop::IProject* project,
+                                                          const KDevelop::Path& path,
+                                                          KDevelop::ProjectBaseItem* parent = 0);
 
 private slots:
     void reloadMakefile(KDevelop::ProjectFileItem *item);
@@ -123,8 +127,10 @@ private:
      * Initialize targets by reading Makefile in @arg dir
      * @return Target lists in Makefile at @arg dir.
      */
-    QStringList parseCustomMakeFile( const KUrl &makefile );
-    void createTargetItems(KDevelop::IProject* project, const KUrl& url, KDevelop::ProjectBaseItem* parent);
+    QStringList parseCustomMakeFile( const KDevelop::Path &makefile );
+
+    void createTargetItems(KDevelop::IProject* project, const KDevelop::Path& path, KDevelop::ProjectBaseItem* parent);
+
 private:
     class Private;
     Private *d;

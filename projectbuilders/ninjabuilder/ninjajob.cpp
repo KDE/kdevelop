@@ -84,15 +84,15 @@ KUrl NinjaJob::workingDirectory() const
     if(!it)
         return KUrl();
     KDevelop::IBuildSystemManager* bsm = it->project()->buildSystemManager();
-    KUrl workingDir = bsm->buildDirectory( it );
-    while( !QFile::exists( workingDir.toLocalFile( KUrl::AddTrailingSlash ) + "build.ninja" ) ) {
-        KUrl upWorkingDir = workingDir.upUrl();
-        if( upWorkingDir.isEmpty() || upWorkingDir == workingDir ) {
-            return bsm->buildDirectory( it->project()->projectItem() );
+    KDevelop::Path workingDir = bsm->buildDirectory( it );
+    while( !QFile::exists( workingDir.toLocalFile() + "build.ninja" ) ) {
+        KDevelop::Path upWorkingDir = workingDir.parent();
+        if( !upWorkingDir.isValid() || upWorkingDir == workingDir ) {
+            return bsm->buildDirectory( it->project()->projectItem() ).toUrl();
         }
         workingDir = upWorkingDir;
     }
-    return workingDir;
+    return workingDir.toUrl();
 }
 
 QStringList NinjaJob::privilegedExecutionCommand() const

@@ -3659,7 +3659,7 @@ void TestCppCodeCompletion::testCompletedIncludeFilePath()
   QString filename = "xxxxx.h";
   QFile file(innerDir.absoluteFilePath(filename));
   QVERIFY(file.open(QIODevice::ReadWrite));
-  QList<IncludeItem> includeItems = CppUtils::allFilesInIncludePath(QString(tempDir.name() + "source.cpp"), true, innerDirName, KUrl::List() << tempDir.name());
+  QList<IncludeItem> includeItems = CppUtils::allFilesInIncludePath(QString(tempDir.name() + "source.cpp"), true, innerDirName, QStringList() << tempDir.name());
   QCOMPARE(includeItems.size(), 1);
   QCOMPARE(includeItems[0].basePath, KUrl(innerDir.absolutePath()));
 }
@@ -3679,7 +3679,7 @@ void TestCppCodeCompletion::testMultipleIncludeCompletionItems()
   QString filename = "xxxxx.h";
   QFile file(innerDir1.absoluteFilePath(filename));
   QVERIFY(file.open(QIODevice::ReadWrite));
-  QList<IncludeItem> includeItems = CppUtils::allFilesInIncludePath(innerDir1.absoluteFilePath("source.cpp"), true, QString("../" + innerDirName1), KUrl::List() << QString(tempDir.name() + innerDirName1) << QString(tempDir.name() + innerDirName2));
+  QList<IncludeItem> includeItems = CppUtils::allFilesInIncludePath(innerDir1.absoluteFilePath("source.cpp"), true, QString("../" + innerDirName1), QStringList() << QString(tempDir.name() + innerDirName1) << QString(tempDir.name() + innerDirName2));
   QCOMPARE(includeItems.size(), 1);
   QCOMPARE(includeItems[0].basePath, KUrl(innerDir1.absolutePath()));
 }

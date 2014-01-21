@@ -30,6 +30,7 @@
 #include "cmakeprojectvisitor.h"
 #include "cmakeprojectdata.h"
 #include "cmakecachereader.h"
+#include <project/path.h>
 #include <ktempdir.h>
 
 namespace CMakeParserUtils
@@ -209,7 +210,7 @@ namespace CMakeParserUtils
         return v.context();
     }
     
-    CacheValues readCache(const KUrl &path)
+    CacheValues readCache(const KDevelop::Path &path)
     {
         QFile file(path.toLocalFile());
         if (!file.open(QIODevice::ReadOnly | QIODevice::Text))

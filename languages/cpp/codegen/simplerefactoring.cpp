@@ -148,26 +148,26 @@ QString SimpleRefactoring::moveIntoSource(const IndexedDeclaration& iDecl)
     return i18n("No declaration under cursor");
   }
 
-  KDevelop::IndexedString url = decl->url();
-  KUrl targetUrl = decl->url().toUrl();
-  if(CppUtils::headerExtensions().contains(QFileInfo(targetUrl.toLocalFile()).suffix())) {
+  const KDevelop::IndexedString url = decl->url();
+  QString targetUrl = url.str();
+  if(CppUtils::headerExtensions().contains(QFileInfo(targetUrl).suffix())) {
     targetUrl = CppUtils::sourceOrHeaderCandidate(targetUrl);
   }
-  if(!targetUrl.isValid()) {
+  if(targetUrl.isEmpty()) {
     ///@todo Create source file if it doesn't exist yet
-    return i18n("No source file available for %1.", targetUrl.prettyUrl());
+    return i18n("No source file available for %1.", url.str());
   }
 
-  const IndexedString indexedTargetUrl(targetUrl);
-
   lock.unlock();
+
+  const IndexedString indexedTargetUrl(targetUrl);
   KDevelop::ReferencedTopDUContext top = DUChain::self()->waitForUpdate(url, KDevelop::TopDUContext::AllDeclarationsAndContexts);
   KDevelop::ReferencedTopDUContext targetTopContext = DUChain::self()->waitForUpdate(indexedTargetUrl, KDevelop::TopDUContext::AllDeclarationsAndContexts);
   lock.lock();
 
   if(!targetTopContext) {
     ///@todo Eventually create source file if it doesn't exist yet
-    return i18n("Failed to update DUChain for %1.", targetUrl.prettyUrl());
+    return i18n("Failed to update DUChain for %1.", targetUrl);
   }
 
   if(!top || !iDecl.data() || iDecl.data() != decl) {
@@ -341,7 +341,7 @@ DocumentChangeSet::ChangeResult SimpleRefactoring::addRenameFileChanges(const KU
   }
 
   // check for implementation file
-  const KUrl otherFile = CppUtils::sourceOrHeaderCandidate(current);
+  const KUrl otherFile = CppUtils::sourceOrHeaderCandidate(current.toLocalFile());
   if (otherFile.isValid()) {
     // also rename this other file
     result = changes->addDocumentRenameChange(

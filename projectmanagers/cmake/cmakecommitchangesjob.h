@@ -22,8 +22,8 @@
 #define CMAKECOMMITCHANGESJOB_H
 
 #include <KJob>
-#include <KUrl>
 #include <cmaketypes.h>
+#include <project/path.h>
 
 namespace KDevelop {
     class IProject;
@@ -40,7 +40,7 @@ struct ProcessedTarget
     QStringList includes;
     QStringList defines;
     QString outputName;
-    KUrl location;
+    KDevelop::Path location;
 };
 Q_DECLARE_TYPEINFO(ProcessedTarget, Q_MOVABLE_TYPE);
 
@@ -48,9 +48,9 @@ class CMakeCommitChangesJob : public KJob
 {
 Q_OBJECT
 public:
-    explicit CMakeCommitChangesJob(const KUrl& url, CMakeManager* manager, KDevelop::IProject* project);
+    explicit CMakeCommitChangesJob(const KDevelop::Path& url, CMakeManager* manager, KDevelop::IProject* project);
 
-    KUrl::List addProjectData(const CMakeProjectData& data);
+    KDevelop::Path::List addProjectData(const CMakeProjectData& data);
     void setFindParentItem(bool find);
     virtual void start();
 
@@ -66,9 +66,9 @@ private slots:
 
 private:
     void reloadFiles(KDevelop::ProjectFolderItem* item);
-    void setTargetFiles(KDevelop::ProjectTargetItem* target, const KUrl::List& files);
+    void setTargetFiles(KDevelop::ProjectTargetItem* target, const KDevelop::Path::List& files);
 
-    KUrl m_url;
+    KDevelop::Path m_path;
     QVector<Subdirectory> m_subdirectories;
     QVector<ProcessedTarget> m_targets;
     QVector<Test> m_tests;

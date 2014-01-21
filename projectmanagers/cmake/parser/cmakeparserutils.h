@@ -34,6 +34,7 @@ class VariableMap;
 
 namespace KDevelop {
     class IProject;
+    class Path;
 }
 
 namespace CMakeParserUtils
@@ -60,7 +61,7 @@ namespace CMakeParserUtils
     
     KDEVCMAKECOMMON_EXPORT KDevelop::ReferencedTopDUContext includeScript( const QString& file, const KDevelop::ReferencedTopDUContext& parent, CMakeProjectData* data, const QString& sourcedir, const QMap< QString, QString >& env);
     
-    KDEVCMAKECOMMON_EXPORT CacheValues readCache(const KUrl &path);
+    KDEVCMAKECOMMON_EXPORT CacheValues readCache(const KDevelop::Path& path);
 
     KDEVCMAKECOMMON_EXPORT QString binaryPath(const QString& sourcedir, const QString& projectSourceDir, const QString projectBinDir);
 

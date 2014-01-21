@@ -121,15 +121,15 @@ QString CMakeManager::errorDescription() const
 CMakeManager::~CMakeManager()
 {}
 
-KUrl CMakeManager::buildDirectory(KDevelop::ProjectBaseItem *item) const
+Path CMakeManager::buildDirectory(KDevelop::ProjectBaseItem *item) const
 {
     CMakeFolderItem *fi=dynamic_cast<CMakeFolderItem*>(item);
-    KUrl ret;
+    Path ret;
     ProjectBaseItem* parent = fi ? fi->formerParent() : item->parent();
     if (parent)
         ret=buildDirectory(parent);
     else
-        ret=CMake::currentBuildDir(item->project());
+        ret=Path(CMake::currentBuildDir(item->project()));
     
     if(fi)
         ret.addPath(fi->buildDir());
@@ -148,11 +148,9 @@ KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
         CMake::updateConfig( project, i );
     kDebug(9042) << "== completed updating cmake settings";
 
-    KUrl cmakeInfoFile(project->projectFileUrl());
-    cmakeInfoFile = cmakeInfoFile.upUrl();
-    cmakeInfoFile.addPath("CMakeLists.txt");
+    const Path cmakeInfoFile(project->projectFile().parent(), "CMakeLists.txt");
 
-    KUrl folderUrl=project->folder();
+    Path folderPath = project->path();
     kDebug(9042) << "file is" << cmakeInfoFile.toLocalFile();
 
     if ( !cmakeInfoFile.isLocalFile() )
@@ -164,7 +162,7 @@ KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
     if(CMake::hasProjectRootRelative(project))
     {
         QString relative=CMake::projectRootRelative(project);
-        folderUrl.cd(relative);
+        folderPath.cd(relative);
     }
     else
     {
@@ -173,7 +171,7 @@ KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
         Ui::CMakePossibleRoots ui;
         ui.setupUi(e);
         chooseRoot.setMainWidget(e);
-        for(KUrl aux=folderUrl; QFile::exists(aux.toLocalFile()+"/CMakeLists.txt"); aux=aux.upUrl())
+        for(Path aux = folderPath; QFile::exists(aux.toLocalFile()+"/CMakeLists.txt"); aux = aux.parent())
             ui.candidates->addItem(aux.toLocalFile());
 
         if(ui.candidates->count()>1)
@@ -185,9 +183,9 @@ KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
             {
                 return 0;
             }
-            KUrl choice=KUrl(ui.candidates->currentItem()->text());
-            CMake::setProjectRootRelative(project, KUrl::relativeUrl(folderUrl, choice));
-            folderUrl=choice;
+            const Path choice(ui.candidates->currentItem()->text());
+            CMake::setProjectRootRelative(project, folderPath.relativePath(choice));
+            folderPath = choice;
         }
         else
         {
@@ -195,7 +193,7 @@ KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
         }
     }
 
-    CMakeFolderItem* rootItem = new CMakeFolderItem(project, project->folder(), QString(), 0 );
+    CMakeFolderItem* rootItem = new CMakeFolderItem(project, project->path(), QString(), 0 );
     QFileSystemWatcher* w = new QFileSystemWatcher(project);
     w->setObjectName(project->name()+"_ProjectWatcher");
     connect(w, SIGNAL(fileChanged(QString)), SLOT(dirtyFile(QString)));
@@ -237,7 +235,7 @@ QList<KDevelop::ProjectTargetItem*> CMakeManager::targets() const
     return ret;
 }
 
-KUrl::List CMakeManager::includeDirectories(KDevelop::ProjectBaseItem *item) const
+Path::List CMakeManager::includeDirectories(KDevelop::ProjectBaseItem *item) const
 {
     IProject* project = item->project();
 //     kDebug(9042) << "Querying inc dirs for " << item;
@@ -247,15 +245,15 @@ KUrl::List CMakeManager::includeDirectories(KDevelop::ProjectBaseItem *item) con
             QStringList dirs = includer->includeDirectories(item);
             //Here there's the possibility that it might not be a target. We should make sure that's not the case
             ProjectTargetItem* tItem = dynamic_cast<ProjectTargetItem*>(item);
-            return CMake::resolveSystemDirs(project, processGeneratorExpression(dirs,
+            return toPathList(CMake::resolveSystemDirs(project, processGeneratorExpression(dirs,
                                                                                 project,
-                                                                                tItem), KUrl::AddTrailingSlash);
+                                                                                tItem), KUrl::AddTrailingSlash));
         }
         item = item->parent();
 //         kDebug(9042) << "Looking for an includer: " << item;
     }
     // No includer found, so no include-directories to be returned;
-    return KUrl::List();
+    return Path::List();
 }
 
 QHash< QString, QString > CMakeManager::defines(KDevelop::ProjectBaseItem *item ) const
@@ -292,7 +290,7 @@ KDevelop::IProjectBuilder * CMakeManager::builder() const
 
 bool CMakeManager::reload(KDevelop::ProjectFolderItem* folder)
 {
-    kDebug(9032) << "reloading" << folder->url();
+    kDebug(9032) << "reloading" << folder->path();
     if(isReloading(folder->project()))
         return false;
     
@@ -401,11 +399,11 @@ void CMakeManager::dirtyFile(const QString & dirty)
         }
         else if(QFileInfo(dirty).isDir() && !isReloading(p))
         {
-            QList<ProjectFolderItem*> folders=p->foldersForUrl(dirty);
+            QList<ProjectFolderItem*> folders=p->foldersForPath(IndexedString(dirty));
             Q_ASSERT(folders.isEmpty() || folders.size()==1);
             
             if(!folders.isEmpty()) {
-                CMakeCommitChangesJob* job = new CMakeCommitChangesJob(dirtyFile, this, p);
+                CMakeCommitChangesJob* job = new CMakeCommitChangesJob(Path(dirtyFile), this, p);
                 job->start();
             }
         }
@@ -498,6 +496,7 @@ void CMakeManager::jumpToDeclaration()
     }
 }
 
+// TODO: Port to Path API
 bool CMakeManager::moveFilesAndFolders(const QList< ProjectBaseItem* > &items, ProjectFolderItem* toFolder)
 {
     using namespace CMakeEdit;
@@ -560,20 +559,20 @@ bool CMakeManager::moveFilesAndFolders(const QList< ProjectBaseItem* > &items, P
         bool dir = QFileInfo(it2->toLocalFile()).isDir();
         foreach(ProjectBaseItem* item, renamedItems) {
             if(dir)
-                emit folderRenamed(*it1, item->folder());
+                emit folderRenamed(Path(*it1), item->folder());
             else
-                emit fileRenamed(*it1, item->file());
+                emit fileRenamed(Path(*it1), item->file());
         }
     }
 
     return true;
 }
 
-bool CMakeManager::copyFilesAndFolders(const KUrl::List &items, KDevelop::ProjectFolderItem* toFolder)
+bool CMakeManager::copyFilesAndFolders(const KDevelop::Path::List &items, KDevelop::ProjectFolderItem* toFolder)
 {
     IProject* project = toFolder->project();
-    foreach(const KUrl& url, items) {
-        if (!KDevelop::copyUrl(project, url, toFolder->url()))
+    foreach(const Path& path, items) {
+        if (!KDevelop::copyUrl(project, path.toUrl(), toFolder->url()))
             return false;
     }
 
@@ -640,7 +639,7 @@ bool CMakeManager::removeFilesFromTargets(const QList<ProjectFileItem*> &files)
     return false;
 }
 
-ProjectFolderItem* CMakeManager::addFolder(const KUrl& folder, ProjectFolderItem* parent)
+ProjectFolderItem* CMakeManager::addFolder(const Path& folder, ProjectFolderItem* parent)
 {
     using namespace CMakeEdit;
 
@@ -650,17 +649,16 @@ ProjectFolderItem* CMakeManager::addFolder(const KUrl& folder, ProjectFolderItem
 
     ApplyChangesWidget changesWidget;
     changesWidget.setCaption(DIALOG_CAPTION);
-    changesWidget.setInformation(i18n("Create folder '%1':",
-                                      folder.fileName(KUrl::IgnoreTrailingSlash)));
+    changesWidget.setInformation(i18n("Create folder '%1':", folder.lastPathSegment()));
 
-    changesWidgetAddFolder(folder, cmakeParent, &changesWidget);
+    ///FIXME: use path in changes widget
+    changesWidgetAddFolder(folder.toUrl(), cmakeParent, &changesWidget);
 
     if(changesWidget.exec() && changesWidget.applyAllChanges())
     {
-        if(KDevelop::createFolder(folder)) { //If saved we create the folder then the CMakeLists.txt file
-            KUrl newCMakeLists(folder);
-            newCMakeLists.addPath("CMakeLists.txt");
-            KDevelop::createFile( newCMakeLists );
+        if(KDevelop::createFolder(folder.toUrl())) { //If saved we create the folder then the CMakeLists.txt file
+            Path newCMakeLists(folder, "CMakeLists.txt");
+            KDevelop::createFile( newCMakeLists.toUrl() );
         } else
             KMessageBox::error(0, i18n("Could not save the change."),
                                   DIALOG_CAPTION);
@@ -669,15 +667,15 @@ ProjectFolderItem* CMakeManager::addFolder(const KUrl& folder, ProjectFolderItem
     return 0;
 }
 
-KDevelop::ProjectFileItem* CMakeManager::addFile( const KUrl& url, KDevelop::ProjectFolderItem* parent)
+KDevelop::ProjectFileItem* CMakeManager::addFile( const Path& file, KDevelop::ProjectFolderItem* parent)
 {
     KDevelop::ProjectFileItem* created = 0;
-    if ( KDevelop::createFile(url) ) {
-        QList< ProjectFileItem* > files = parent->project()->filesForUrl(url);
+    if ( KDevelop::createFile(file.toUrl()) ) {
+        QList< ProjectFileItem* > files = parent->project()->filesForPath(file.toIndexed());
         if(!files.isEmpty())
             created = files.first();
         else
-            created = new KDevelop::ProjectFileItem( parent->project(), url, parent );
+            created = new KDevelop::ProjectFileItem( parent->project(), file, parent );
     }
     return created;
 }
@@ -722,28 +720,32 @@ bool CMakeManager::addFilesToTarget(const QList< ProjectFileItem* > &_files, Pro
     return success;
 }
 
-bool CMakeManager::renameFileOrFolder(ProjectBaseItem *item, const KUrl &newUrl)
+//TODO: port to Path API
+bool CMakeManager::renameFileOrFolder(ProjectBaseItem *item, const Path &newPath)
 {
     using namespace CMakeEdit;
 
     ApplyChangesWidget changesWidget;
     changesWidget.setCaption(DIALOG_CAPTION);
     changesWidget.setInformation(i18n("Rename '%1' to '%2':", item->text(),
-                                      newUrl.fileName(KUrl::IgnoreTrailingSlash)));
+                                      newPath.lastPathSegment()));
     
     bool cmakeSuccessful = true, changedCMakeLists=false;
     IProject* project=item->project();
-    KUrl oldUrl=item->url();
+    const Path oldPath=item->path();
+    KUrl oldUrl=oldPath.toUrl();
     if (item->file())
     {
         QList<ProjectBaseItem*> targetFiles = cmakeListedItemsAffectedByUrlChange(project, oldUrl);
         foreach(ProjectBaseItem* targetFile, targetFiles)
-            cmakeSuccessful &= changesWidgetMoveTargetFile(targetFile, newUrl, &changesWidget);
+            ///FIXME: use path in changes widget
+            cmakeSuccessful &= changesWidgetMoveTargetFile(targetFile, newPath.toUrl(), &changesWidget);
     }
     else if (CMakeFolderItem *folder = dynamic_cast<CMakeFolderItem*>(item))
-        cmakeSuccessful &= changesWidgetRenameFolder(folder, newUrl, &changesWidget);
+            ///FIXME: use path in changes widget
+        cmakeSuccessful &= changesWidgetRenameFolder(folder, newPath.toUrl(), &changesWidget);
     
-    item->setUrl(newUrl);
+    item->setPath(newPath);
     if (changesWidget.hasDocuments() && cmakeSuccessful) {
         changedCMakeLists = changesWidget.exec() && changesWidget.applyAllChanges();
         cmakeSuccessful &= changedCMakeLists;
@@ -757,21 +759,21 @@ bool CMakeManager::renameFileOrFolder(ProjectBaseItem *item, const KUrl &newUrl)
             return false;
     }
 
-    bool ret = KDevelop::renameUrl(project, oldUrl, newUrl);
+    bool ret = KDevelop::renameUrl(project, oldUrl, newPath.toUrl());
     if(!ret) {
-        item->setUrl(oldUrl);
+        item->setPath(oldPath);
     }
     return ret;
 }
 
-bool CMakeManager::renameFile(ProjectFileItem *item, const KUrl &newUrl)
+bool CMakeManager::renameFile(ProjectFileItem *item, const Path &newPath)
 {
-    return renameFileOrFolder(item, newUrl);
+    return renameFileOrFolder(item, newPath);
 }
 
-bool CMakeManager::renameFolder(ProjectFolderItem* item, const KUrl &newUrl)
+bool CMakeManager::renameFolder(ProjectFolderItem* item, const Path &newPath)
 {
-    return renameFileOrFolder(item, newUrl);
+    return renameFileOrFolder(item, newPath);
 }
 
 QWidget* CMakeManager::specialLanguageObjectNavigationWidget(const KUrl& url, const KDevelop::SimpleCursor& position)
@@ -865,14 +867,14 @@ QStringList CMakeManager::processGeneratorExpression(const QStringList& expr, IP
     return ret;
 }
 
-void CMakeManager::addPending(const KUrl& url, CMakeFolderItem* folder)
+void CMakeManager::addPending(const Path& path, CMakeFolderItem* folder)
 {
-    m_pending.insert(url, folder);
+    m_pending.insert(path, folder);
 }
 
-CMakeFolderItem* CMakeManager::takePending(const KUrl& url)
+CMakeFolderItem* CMakeManager::takePending(const Path& path)
 {
-    return m_pending.take(url);
+    return m_pending.take(path);
 }
 
 void CMakeManager::addWatcher(IProject* p, const QString& path)

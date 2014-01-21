@@ -47,6 +47,7 @@ using KDevelop::IGenericProjectManager;
 using KDevelop::IProjectFileManager;
 using KDevelop::IProjectBuilder;
 using KDevelop::IProject;
+using KDevelop::Path;
 
 K_PLUGIN_FACTORY(CustomBuildSystemFactory, registerPlugin<CustomBuildSystem>(); )
 K_EXPORT_PLUGIN(CustomBuildSystemFactory(KAboutData("kdevcustombuildsystem","kdevcustombuildsystem", ki18n("Custom Build System"), VERSION, ki18n("Support for building and managing custom build systems"), KAboutData::License_GPL, ki18n("Copyright 2010 Andreas Pakulat <apaku@gmx.de>"), KLocalizedString(), "", "apaku@gmx.de" )))
@@ -74,31 +75,30 @@ KJob* CustomBuildSystem::build( ProjectBaseItem* dom )
     return new CustomBuildJob( this, dom, CustomBuildSystemTool::Build );
 }
 
-KUrl CustomBuildSystem::buildDirectory( ProjectBaseItem*  item ) const
+Path CustomBuildSystem::buildDirectory( ProjectBaseItem*  item ) const
 {
-    KUrl u;
+    Path p;
     if( item->folder() ) {
-        u = item->url();
+        p = item->path();
     } else {
         ProjectBaseItem* parent = item;
         while( !parent->folder() ) {
             parent = parent->parent();
         }
-        u = parent->url();
+        p = parent->path();
     }
-    KUrl projecturl = item->project()->projectItem()->url();
-    QString relative = KUrl::relativeUrl( projecturl, u );
-    KUrl builddir;
+    const QString relative = item->project()->path().relativePath(p);
     KConfigGroup grp = configuration( item->project() );
-    if(grp.isValid()) {
-        builddir = grp.readEntry( ConfigConstants::buildDirKey, projecturl );
-        if(!builddir.isValid() )  // set builddir to default if project contains a buildDirKey that does not have a value 
-        {
-            builddir = projecturl;
-        }
-        builddir.addPath( relative );
-        builddir.cleanPath();
+    if(!grp.isValid()) {
+        return Path();
     }
+
+    Path builddir(grp.readEntry( ConfigConstants::buildDirKey, KUrl() ));
+    if(!builddir.isValid() )  // set builddir to default if project contains a buildDirKey that does not have a value
+    {
+        builddir = item->project()->path();
+    }
+    builddir.addPath( relative );
     return builddir;
 }
 
@@ -149,18 +149,18 @@ IProjectFileManager::Features CustomBuildSystem::features() const
     return IProjectFileManager::Files | IProjectFileManager::Folders;
 }
 
-ProjectFolderItem* CustomBuildSystem::createFolderItem( KDevelop::IProject* project, 
-                    const KUrl& url, KDevelop::ProjectBaseItem* parent )
+ProjectFolderItem* CustomBuildSystem::createFolderItem( IProject* project,
+                    const Path& path, ProjectBaseItem* parent )
 {
-    return new ProjectBuildFolderItem( project, url, parent );
+    return new ProjectBuildFolderItem( project, path, parent );
 }
 
-KUrl::List CustomBuildSystem::includeDirectories( ProjectBaseItem* item ) const
+Path::List CustomBuildSystem::includeDirectories( ProjectBaseItem* item ) const
 {
     QStringList includes;
     KConfigGroup cfg = configuration( item->project() );
     if(!cfg.isValid())
-        return KUrl::List();
+        return Path::List();
 
     KConfigGroup groupForItem = findMatchingPathGroup( cfg, item );
     if( groupForItem.isValid() ) {
@@ -169,7 +169,7 @@ KUrl::List CustomBuildSystem::includeDirectories( ProjectBaseItem* item ) const
         ds.setVersion( QDataStream::Qt_4_5 );
         ds >> includes;
     }
-    return KUrl::List( includes );
+    return KDevelop::toPathList(KUrl::List( includes ));
 }
 
 KJob* CustomBuildSystem::install( ProjectBaseItem* item )
@@ -209,24 +209,24 @@ KConfigGroup CustomBuildSystem::configuration( IProject* project ) const
 KConfigGroup CustomBuildSystem::findMatchingPathGroup(const KConfigGroup& cfg, ProjectBaseItem* item) const
 {
     KConfigGroup candidateGroup;
-    KUrl candidateTargetDirectory;
+    Path candidateTargetDirectory;
 
-    KUrl itemUrl = item->url();
-    KUrl rootDirectory = item->project()->folder();
+    const Path itemPath = item->path();
+    const Path rootDirectory = item->project()->path();
 
     foreach( const QString& groupName, cfg.groupList() ) {
         if( groupName.startsWith( ConfigConstants::projectPathPrefix ) ) {
             KConfigGroup pathGroup = cfg.group(groupName);
 
             QString targetDirectoryRelative = pathGroup.readEntry( ConfigConstants::projectPathKey, "" );
-            KUrl targetDirectory = rootDirectory;
+            Path targetDirectory = rootDirectory;
             // note: a dot represents the project root
             if (targetDirectoryRelative != ".") {
                 targetDirectory.addPath( targetDirectoryRelative );
             }
 
-            if( targetDirectory.isParentOf(itemUrl) ) {
-                if( candidateTargetDirectory.isEmpty() || candidateTargetDirectory.isParentOf(targetDirectory) ) {
+            if( targetDirectory == itemPath || targetDirectory.isParentOf(itemPath) ) {
+                if( !candidateTargetDirectory.isValid() || candidateTargetDirectory.isParentOf(targetDirectory) ) {
                   candidateGroup = pathGroup;
                   candidateTargetDirectory = targetDirectory;
                 }

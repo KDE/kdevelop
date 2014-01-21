@@ -59,7 +59,7 @@ class IncludeFileData : public KDevelop::QuickOpenDataBase {
  * also searches sub-directories if the typed text wants it.
  * */
 
-class IncludeFileDataProvider: public KDevelop::QuickOpenDataProviderBase, public KDevelop::FilterWithSeparator<KDevelop::IncludeItem>, public KDevelop::QuickOpenFileSetInterface {
+class IncludeFileDataProvider: public KDevelop::QuickOpenDataProviderBase, public KDevelop::PathFilter<KDevelop::IncludeItem, IncludeFileDataProvider>, public KDevelop::QuickOpenFileSetInterface {
   public:
     IncludeFileDataProvider();
     virtual void setFilterText( const QString& text );
@@ -73,12 +73,15 @@ class IncludeFileDataProvider: public KDevelop::QuickOpenDataProviderBase, publi
     static QStringList scopes();
     
     virtual QSet<KDevelop::IndexedString> files() const;
+
+    //For PathFilter<..>
+    //FIXME: port this properly
+    KDevelop::Path itemPath( const KDevelop::IncludeItem& data ) const;
+
   private slots:
     void documentDestroyed( QObject* obl );
+
   private:
-  
-    //Reimplemented from Filter<..>
-    virtual QString itemText( const KDevelop::IncludeItem& data ) const;
 
     KUrl m_baseUrl;
     QString m_lastSearchedPrefix;

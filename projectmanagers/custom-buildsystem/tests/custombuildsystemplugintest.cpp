@@ -44,6 +44,7 @@ using KDevelop::IProject;
 using KDevelop::TestCore;
 using KDevelop::AutoTestShell;
 using KDevelop::KDevSignalSpy;
+using KDevelop::Path;
 
 void CustomBuildSystemPluginTest::cleanupTestCase()
 {
@@ -66,14 +67,15 @@ void CustomBuildSystemPluginTest::loadSimpleProject()
     }
     IProject* project = ICore::self()->projectController()->findProjectByName( "SimpleProject" );
     QVERIFY( project );
-    KUrl::List includes = project->buildSystemManager()->includeDirectories( project->projectItem() );
+    Path::List includes = project->buildSystemManager()->includeDirectories( project->projectItem() );
     
     QHash<QString,QString> defines;
     defines.insert( "_DEBUG", "" );
     defines.insert( "VARIABLE", "VALUE" );
-    QCOMPARE( includes, KUrl::List( QStringList() << "/usr/include/mydir" ) );
+    QCOMPARE( includes, Path::List() << Path( "/usr/include/mydir") );
     QCOMPARE( project->buildSystemManager()->defines( project->projectItem() ), defines );
-    QCOMPARE( project->buildSystemManager()->buildDirectory( project->projectItem() ), KUrl( "file:///home/andreas/projects/testcustom/build/" ) );
+    QCOMPARE( project->buildSystemManager()->buildDirectory( project->projectItem() ),
+              Path( "file:///home/andreas/projects/testcustom/build/" ) );
 }
 
 void CustomBuildSystemPluginTest::buildDirProject()
@@ -88,9 +90,9 @@ void CustomBuildSystemPluginTest::buildDirProject()
     IProject* project = ICore::self()->projectController()->findProjectByName( "BuilddirProject" );
     QVERIFY( project );
    
-    KUrl currentBuilddir = project->buildSystemManager()->buildDirectory( project->projectItem() );
+    Path currentBuilddir = project->buildSystemManager()->buildDirectory( project->projectItem() );
 
-    QCOMPARE( currentBuilddir, KUrl( projecturl.directory(KUrl::AppendTrailingSlash) ) );
+    QCOMPARE( currentBuilddir, Path( projecturl ).parent() );
 }
 
 
@@ -113,13 +115,14 @@ void CustomBuildSystemPluginTest::loadMultiPathProject()
         }
     }
     QVERIFY(mainfile);
-    KUrl::List includes = project->buildSystemManager()->includeDirectories( mainfile );
+    Path::List includes = project->buildSystemManager()->includeDirectories( mainfile );
 
     QHash<QString,QString> defines;
     defines.insert( "BUILD", "debug" );
-    QCOMPARE( includes, KUrl::List( QStringList() << "/usr/local/include/mydir" ) );
+    QCOMPARE( includes, Path::List() << Path("/usr/local/include/mydir") );
     QCOMPARE( project->buildSystemManager()->defines( mainfile ), defines );
-    QCOMPARE( project->buildSystemManager()->buildDirectory( mainfile ).url(KUrl::RemoveTrailingSlash), KUrl( "file:///home/andreas/projects/testcustom/build2/src" ).url() );
+    QCOMPARE( project->buildSystemManager()->buildDirectory( mainfile ),
+              Path( "file:///home/andreas/projects/testcustom/build2/src" ) );
 }
 
 QTEST_KDEMAIN(CustomBuildSystemPluginTest, GUI)
