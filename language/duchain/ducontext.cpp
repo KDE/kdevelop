@@ -865,6 +865,10 @@ void DUContext::addImportedParentContext( DUContext * context, const CursorInRev
     kDebug() << "Tried to import self";
     return;
   }
+  if(!context) {
+    kDebug() << "Tried to import invalid context";
+    return;
+  }
 
   Import import(context, this, position);
   if(addIndirectImport(import))
