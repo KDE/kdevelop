@@ -488,4 +488,44 @@ void TestPath::testPathBaseCtor_data()
     QTest::newRow("remote-path-relative") << "http://foo.com/foo/bar" << "bar/foo";
 }
 
+void TestPath::testPathCd()
+{
+    QFETCH(QString, base);
+    QFETCH(QString, change);
+
+    Path path = base.isEmpty() ? Path() : Path(base);
+    KUrl url(base);
+
+    Path changed = path.cd(change);
+    if (url.cd(change)) {
+        QVERIFY(changed.isValid());
+    }
+    url.cleanPath();
+
+    QCOMPARE(changed.pathOrUrl(), url.pathOrUrl(KUrl::RemoveTrailingSlash));
+}
+
+void TestPath::testPathCd_data()
+{
+    QTest::addColumn<QString>("base");
+    QTest::addColumn<QString>("change");
+
+    const QVector<QString> bases{"", "/foo", "/foo/bar/asdf", "http://foo.com/", "http://foo.com/foo", "http://foo.com/foo/bar/asdf"};
+    foreach (const QString& base, bases) {
+        QTest::newRow(qstrdup(qPrintable(base + "-"))) << base << "";
+        QTest::newRow(qstrdup(qPrintable(base + "-.."))) << base << "..";
+        QTest::newRow(qstrdup(qPrintable(base + "-../"))) << base << "../";
+        QTest::newRow(qstrdup(qPrintable(base + "v../foo"))) << base << "../foo";
+        QTest::newRow(qstrdup(qPrintable(base + "-."))) << base << ".";
+        QTest::newRow(qstrdup(qPrintable(base + "-./"))) << base << "./";
+        QTest::newRow(qstrdup(qPrintable(base + "-./foo"))) << base << "./foo";
+        QTest::newRow(qstrdup(qPrintable(base + "-./foo/bar"))) << base << "./foo/bar";
+        QTest::newRow(qstrdup(qPrintable(base + "-foo/.."))) << base << "foo/..";
+        QTest::newRow(qstrdup(qPrintable(base + "-foo/"))) << base << "foo/";
+        QTest::newRow(qstrdup(qPrintable(base + "-foo/../bar"))) << base << "foo/../bar";
+        QTest::newRow(qstrdup(qPrintable(base + "-/foo"))) << base << "/foo";
+        QTest::newRow(qstrdup(qPrintable(base + "-/foo/../bar"))) << base << "/foo/../bar";
+    }
+}
+
 #include "testpath.moc"
