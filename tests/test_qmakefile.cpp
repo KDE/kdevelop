@@ -23,6 +23,7 @@
 #include "variablereferenceparser.h"
 #include "qmakeprojectfile.h"
 #include "qmakemkspecs.h"
+#include <qmakeconfig.h>
 
 #include <QTest>
 
@@ -95,7 +96,7 @@ QHash<QString,QString> queryQMake( const QString& path )
         p.setWorkingDirectory( info.absolutePath() );
         //To be implemented when there's an API to fetch Env from Project
         //p.setEnv();
-        p << "qmake" << "-query" << var;
+        p << QMakeConfig::qmakeBinary(nullptr) << "-query" << var;
         p.execute();
         QString result = QString::fromLocal8Bit( p.readAllStandardOutput() ).trimmed();
         if( result != "**Unknown**")

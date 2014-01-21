@@ -72,10 +72,13 @@ QString QMakeConfig::qmakeBinary(const IProject* project)
         }
     }
     if (exe.isEmpty()) {
-        exe = KStandardDirs::findExe("qmake");
+        exe = KStandardDirs::findExe("qmake-qt4");
     }
     if (exe.isEmpty()) {
-        exe = KStandardDirs::findExe("qmake-qt4");
+        exe = KStandardDirs::findExe("qmake-qt5");
+    }
+    if (exe.isEmpty()) {
+        exe = KStandardDirs::findExe("qmake");
     }
     Q_ASSERT(!exe.isEmpty());
     return exe;
