@@ -50,7 +50,7 @@ void generateChilds( ProjectBaseItem* parent, int count, int depth )
 {
     for( int i = 0; i < 10; i++ ) {
         KUrl url = parent->url();
-        url.addPath( QString( "file:///f%1" ).arg( i ) );
+        url.addPath( QString( "f%1" ).arg( i ) );
         if( depth > 0 ) {
             ProjectFolderItem* item = new ProjectFolderItem( 0, url, parent );
             generateChilds( item, count, depth - 1 );
