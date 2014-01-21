@@ -123,6 +123,7 @@ set(kdevplatformlanguage_LIB_SRCS
     codegen/templaterenderer.cpp
     codegen/templateengine.cpp
     codegen/archivetemplateloader.cpp
+    codegen/basicrefactoring.cpp
 
     util/setrepository.cpp
     util/includeitem.cpp
@@ -325,6 +326,7 @@ install(FILES
     codegen/sourcefiletemplate.h
     codegen/templateclassgenerator.h
     codegen/codedescription.h
+    codegen/basicrefactoring.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/codegen COMPONENT Devel
 )
 
