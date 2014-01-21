@@ -19,7 +19,6 @@
 ***************************************************************************/
 
 #include "svnrecursiveadd.h"
-#include <memory>
 #include <QtTest/QtTest>
 #include <qtest_kde.h>
 #include <KTempDir>

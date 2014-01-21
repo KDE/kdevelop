@@ -16,7 +16,6 @@
 #include <vcs/vcsdiff.h>
 #include <vcs/vcslocation.h>
 #include <interfaces/iplugin.h>
-#include <memory>
 
 class QMenu;
 class KUrl;
@@ -144,7 +143,7 @@ public Q_SLOTS:
     void ctxImport();
     void ctxCheckout();
 private:
-    std::auto_ptr<KDevelop::VcsPluginHelper> m_common;
+    QScopedPointer<KDevelop::VcsPluginHelper> m_common;
     QAction* copy_action;
     QAction* move_action;
 };

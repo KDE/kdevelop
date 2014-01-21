@@ -72,7 +72,7 @@ Q_DECLARE_METATYPE( const Diff2::DiffModel* )
 void PatchReviewPlugin::seekHunk( bool forwards, const KUrl& fileName ) {
     try {
         kDebug() << forwards << fileName << fileName.isEmpty();
-        if ( !m_modelList.get() )
+        if ( !m_modelList )
             throw "no model";
 
         for ( int a = 0; a < m_modelList->modelCount(); ++a ) {
@@ -246,7 +246,7 @@ void PatchReviewPlugin::updateKompareModel() {
         m_kompareInfo->applied = m_patch->isAlreadyApplied();
 
         m_modelList.reset( new Diff2::KompareModelList( m_diffSettings.data(), new QWidget, this ) );
-        m_modelList->slotKompareInfo( m_kompareInfo.get() );
+        m_modelList->slotKompareInfo( m_kompareInfo.data() );
 
         try {
             m_modelList->openDirAndDiff();
@@ -404,7 +404,7 @@ void PatchReviewPlugin::updateReview() {
 
     switchAreaAndMakeWorkingSetUique();
 
-    if( !m_modelList.get() )
+    if( !m_modelList )
         return;
 
     // list of opened documents to prevent flicker

@@ -18,7 +18,6 @@
 #include <vcs/vcslocation.h>
 #include <interfaces/iplugin.h>
 #include <qobject.h>
-#include <memory>
 
 class CvsProxy;
 namespace KDevelop
@@ -133,7 +132,7 @@ signals:
 
 private:
     void setupActions();
-    std::auto_ptr<CvsPluginPrivate> d;
+    QScopedPointer<CvsPluginPrivate> d;
     QString findWorkingDir(const KUrl& location);
 };
 

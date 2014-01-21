@@ -14,7 +14,6 @@
 #include "vcsexport.h"
 
 #include <kurl.h>
-#include <memory>
 #include "vcsrevision.h"
 
 class KJob;
@@ -73,7 +72,7 @@ private Q_SLOTS:
 
 private:
     struct VcsPluginHelperPrivate;
-    std::auto_ptr<VcsPluginHelperPrivate> d;
+    QScopedPointer<VcsPluginHelperPrivate> d;
 };
 
 } // namespace KDevelop
