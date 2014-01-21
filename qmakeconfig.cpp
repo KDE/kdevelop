@@ -28,6 +28,7 @@
 #include <KProcess>
 
 #include <interfaces/iproject.h>
+#include <project/path.h>
 
 const char *QMakeConfig::CONFIG_GROUP = "QMake_Builder";
 
@@ -43,17 +44,15 @@ using namespace KDevelop;
 ///NOTE: KConfig is not thread safe
 QMutex s_buildDirMutex;
 
-KUrl QMakeConfig::buildDirFromSrc(const IProject* project, const KUrl& srcDir)
+Path QMakeConfig::buildDirFromSrc(const IProject* project, const Path& srcDir)
 {
     QMutexLocker lock(&s_buildDirMutex);
     KConfigGroup cg(project->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
-    KUrl buildDir = cg.readEntry(QMakeConfig::BUILD_FOLDER, project->folder());
+    Path buildDir = Path(cg.readEntry(QMakeConfig::BUILD_FOLDER, project->path().toLocalFile()));
     lock.unlock();
 
-    QString relative = KUrl::relativeUrl(project->folder(), srcDir);
     if(buildDir.isValid()) {
-        buildDir.addPath(relative);
-        buildDir.cleanPath();
+        buildDir.addPath(project->path().relativePath(srcDir));
     }
     return buildDir;
 }
@@ -65,7 +64,7 @@ QString QMakeConfig::qmakeBinary(const IProject* project)
     if (project) {
         KSharedConfig::Ptr cfg = project->projectConfiguration();
         KConfigGroup group(cfg.data(), CONFIG_GROUP);
-        exe = group.readEntry(QMAKE_BINARY, KUrl() ).toLocalFile();
+        exe = group.readEntry(QMAKE_BINARY, QString() );
         QFileInfo info(exe);
         if (!info.exists() || !info.isExecutable()) {
             kWarning() << "bad QMake configured for project " << project->folder() << ":" << exe;

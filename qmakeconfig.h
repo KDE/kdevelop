@@ -19,10 +19,11 @@
 #ifndef QMAKECONFIG_H
 #define QMAKECONFIG_H
 
-#include <KUrl>
+#include <QHash>
 
 namespace KDevelop {
 class IProject;
+class Path;
 }
 
 class QMakeConfig
@@ -42,7 +43,7 @@ public:
      * Returns the directory where srcDir will be built.
      * srcDir must contain a *.pro file !
      */
-    static KUrl buildDirFromSrc(const KDevelop::IProject* project, const KUrl& srcDir);
+    static KDevelop::Path buildDirFromSrc(const KDevelop::IProject* project, const KDevelop::Path& srcDir);
 
     /**
      * Returns the QMake binary configured for the given @p project.

@@ -98,16 +98,14 @@ void TestQMakeProject::testBuildDirectory()
     IProject* project = ICore::self()->projectController()->findProjectByName(projectName);
     
     // adds expected directory to our base path
-    KUrl expectedUrl(BASE_DIR);
-    expectedUrl.addPath(expected);
+    Path expectedPath(Path(BASE_DIR), expected);
     
     // path for files to build
     KUrl buildUrl(QString("%1/%2/%3").arg(QMAKE_TESTS_PROJECTS_DIR).arg(projectName).arg(target));
     QList<ProjectFolderItem*> buidItem = project->foldersForUrl(buildUrl);
     QCOMPARE(buidItem.size(), 1);
     IBuildSystemManager *buildManager = project->buildSystemManager();
-    KUrl actual = buildManager->buildDirectory(buidItem.first());
+    const Path actual = buildManager->buildDirectory(buidItem.first());
 
-    // trailing slash mess with KUrl's == operator
-    QCOMPARE(actual.toLocalFile(KUrl::RemoveTrailingSlash), expectedUrl.toLocalFile(KUrl::RemoveTrailingSlash));
+    QCOMPARE(actual, expectedPath);
 }

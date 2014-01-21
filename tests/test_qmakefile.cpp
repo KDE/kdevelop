@@ -400,7 +400,7 @@ void TestQMakeFile::qtIncludeDirs()
 
     QVERIFY(file.read());
 
-    const KUrl::List includes = file.includeDirectories();
+    const QStringList includes = file.includeDirectories();
     qDebug() << includes;
 
     // should always be there
@@ -507,10 +507,9 @@ void TestQMakeFile::testInclude()
     QCOMPARE(file.variableValues("DEFINES"), QStringList() << "SOME_DEF" << "SOME_INCLUDE_DEF");
     QCOMPARE(file.variableValues("SOURCES"), QStringList() << "file.cpp" << "includedFile.cpp");
     QCOMPARE(file.variableValues("QT"), QStringList() << "core" << "gui" << "network" << "webkit");
-    // verify that include path was properly propagated (but does not contain trailing slash)
-    KUrl includePath = KUrl::fromPath(tempDir.name());
-    includePath.adjustPath(KUrl::RemoveTrailingSlash);
-    QVERIFY(file.includeDirectories().contains(includePath));
+    // verify that include path was properly propagated
+    QVERIFY(tempDir.name().endsWith('/'));
+    QVERIFY(file.includeDirectories().contains(tempDir.name().left(tempDir.name().size() - 1)));
 }
 
 void TestQMakeFile::globbing_data()

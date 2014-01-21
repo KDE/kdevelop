@@ -55,8 +55,8 @@ public:
     //BEGIN IBuildSystemManager
     //TODO
     virtual KDevelop::IProjectBuilder*  builder() const;
-    virtual KUrl buildDirectory(KDevelop::ProjectBaseItem*) const;
-    virtual KUrl::List includeDirectories(KDevelop::ProjectBaseItem*) const;
+    virtual KDevelop::Path buildDirectory(KDevelop::ProjectBaseItem*) const;
+    virtual KDevelop::Path::List includeDirectories(KDevelop::ProjectBaseItem*) const;
     virtual QHash<QString,QString> defines(KDevelop::ProjectBaseItem*) const;
     virtual QHash<QString,QString> environment(KDevelop::ProjectBaseItem*) const { return QHash<QString,QString>(); }
 
@@ -82,8 +82,7 @@ private:
     KDevelop::ProjectFolderItem* buildFolderItem( KDevelop::IProject* project, const KDevelop::Path& path,
                                                   KDevelop::ProjectBaseItem* parent );
     QHash<QString,QString> queryQMake( KDevelop::IProject* ) const;
-    ///FIXME: use Path
-    QMakeCache* findQMakeCache( KDevelop::IProject* project, const KUrl &path = KUrl() ) const;
+    QMakeCache* findQMakeCache( KDevelop::IProject* project, const KDevelop::Path &path = {} ) const;
     bool projectNeedsConfiguration(KDevelop::IProject* project);
     
     IQMakeBuilder* m_builder;

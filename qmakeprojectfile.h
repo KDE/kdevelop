@@ -48,9 +48,9 @@ public:
     QStringList subProjects() const;
     bool hasSubProject(const QString& file) const;
 
-    KUrl::List files() const;
-    KUrl::List filesForTarget( const QString& ) const;
-    KUrl::List includeDirectories() const;
+    QStringList files() const;
+    QStringList filesForTarget( const QString& ) const;
+    QStringList includeDirectories() const;
 
     QStringList targets() const;
 
@@ -73,7 +73,7 @@ public:
     virtual QString proFile() const;
 
 private:
-    void addUrlsForVariable(const QString& variable, KUrl::List* list) const;
+    void addPathsForVariable(const QString& variable, QStringList* list) const;
 
     QMakeMkSpecs* m_mkspecs;
     QMakeCache* m_cache;

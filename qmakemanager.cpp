@@ -129,29 +129,29 @@ bool QMakeProjectManager::isValid( const Path& path, const bool isFolder, IProje
     return AbstractFileManagerPlugin::isValid(path, isFolder, project);
 }
 
-KUrl QMakeProjectManager::buildDirectory(ProjectBaseItem* item) const
+Path QMakeProjectManager::buildDirectory(ProjectBaseItem* item) const
 {
     ///TODO: support includes by some other parent or sibling in a different file-tree-branch
     QMakeFolderItem* qmakeItem = findQMakeFolderParent(item);
-    KUrl dir;
+    Path dir;
     if ( qmakeItem ) {
         if (!qmakeItem->parent()) {
             // build root item
-            dir = QMakeConfig::buildDirFromSrc(qmakeItem->project(), qmakeItem->url());
+            dir = QMakeConfig::buildDirFromSrc(qmakeItem->project(), qmakeItem->path());
         } else {
             // build sub-item
             foreach ( QMakeProjectFile* pro, qmakeItem->projectFiles() ) {
                 if ( QDir(pro->absoluteDir()) == QFileInfo(qmakeItem->url().toLocalFile()).absoluteDir() ||
                     pro->hasSubProject( qmakeItem->url().toLocalFile() ) ) {
                     // get path from project root and it to buildDir
-                    dir = QMakeConfig::buildDirFromSrc( qmakeItem->project(), pro->absoluteDir() );
+                    dir = QMakeConfig::buildDirFromSrc( qmakeItem->project(), Path(pro->absoluteDir()) );
                     break;
                 }
             }
         }
     }
 
-    kDebug(9204) << "build dir for" << item->text() << item->url() << "is:" << dir.toLocalFile();
+    kDebug(9204) << "build dir for" << item->text() << item->path() << "is:" << dir;
     return dir;
 }
 
@@ -260,8 +260,7 @@ ProjectFolderItem* QMakeProjectManager::buildFolderItem( IProject* project, cons
         ///TODO: cleanup
         if ( parentPro) {
             // subdir
-            ///FIXME: use Path
-            if( QMakeCache* cache = findQMakeCache(project, KUrl::fromPath(d.canonicalPath())) ) {
+            if( QMakeCache* cache = findQMakeCache(project, Path(d.canonicalPath())) ) {
                 cache->setMkSpecs( parentPro->mkSpecs() );
                 cache->read();
                 qmscope->setQMakeCache( cache );
@@ -302,15 +301,14 @@ void QMakeProjectManager::slotFolderAdded( ProjectFolderItem* folder )
     kDebug(9024) << "adding targets for" << folder->path();
     foreach( QMakeProjectFile* pro, qmakeParent->projectFiles() ) {
         foreach( const QString& s, pro->targets() ) {
-            if (!isValid(KUrl(folder->url(), s), false, folder->project())) {
+            if (!isValid(Path(folder->path(), s), false, folder->project())) {
                 continue;
             }
             kDebug(9024) << "adding target:" << s;
             Q_ASSERT(!s.isEmpty());
             QMakeTargetItem* target = new QMakeTargetItem( pro, folder->project(), s, folder );
-            ///FIXME: use Path
-            foreach( const KUrl& u, pro->filesForTarget(s) ) {
-                new ProjectFileItem( folder->project(), Path(u), target );
+            foreach( const QString& path, pro->filesForTarget(s) ) {
+                new ProjectFileItem( folder->project(), Path(path), target );
                 ///TODO: signal?
             }
         }
@@ -416,17 +414,17 @@ IProjectBuilder* QMakeProjectManager::builder() const
     return m_builder;
 }
 
-KUrl::List QMakeProjectManager::includeDirectories(ProjectBaseItem* item) const
+Path::List QMakeProjectManager::includeDirectories(ProjectBaseItem* item) const
 {
-    KUrl::List list;
+    Path::List list;
     QMakeFolderItem* folder = findQMakeFolderParent(item);
     if ( folder ) {
         foreach( QMakeProjectFile* pro, folder->projectFiles() ) {
-            if (pro->files().contains(item->url())) {
-                foreach(const KUrl& url, pro->includeDirectories()) {
-                    Q_ASSERT(url.isValid());
-                    if (!list.contains(url)) {
-                        list << url;
+            if (pro->files().contains(item->path().toLocalFile())) {
+                foreach(const QString& dir, pro->includeDirectories()) {
+                    Path path(dir);
+                    if (!list.contains(path)) {
+                        list << path;
                     }
                 }
             }
@@ -434,19 +432,19 @@ KUrl::List QMakeProjectManager::includeDirectories(ProjectBaseItem* item) const
         if (list.isEmpty()) {
             // fallback for new files, use all possible include dirs
             foreach( QMakeProjectFile* pro, folder->projectFiles() ) {
-                foreach(const KUrl& url, pro->includeDirectories()) {
-                    Q_ASSERT(url.isValid());
-                    if (!list.contains(url)) {
-                        list << url;
+                foreach(const QString& dir, pro->includeDirectories()) {
+                    Path path(dir);
+                    if (!list.contains(path)) {
+                        list << path;
                     }
                 }
             }
         }
         // make sure the base dir is included
-        if (!list.contains(folder->url())) {
-            list << folder->url();
+        if (!list.contains(folder->path())) {
+            list << folder->path();
         }
-//         kDebug(9024) << "include dirs for" << item->url() << ":" << list;
+//         kDebug(9024) << "include dirs for" << item->path() << ":" << list;
     }
     return list;
 }
@@ -475,9 +473,9 @@ QHash<QString,QString> QMakeProjectManager::queryQMake( IProject* project ) cons
     return QMakeConfig::queryQMake(QMakeConfig::qmakeBinary( project ));
 }
 
-QMakeCache* QMakeProjectManager::findQMakeCache( IProject* project, const KUrl& path ) const
+QMakeCache* QMakeProjectManager::findQMakeCache( IProject* project, const Path& path ) const
 {
-    QDir curdir( QMakeConfig::buildDirFromSrc(project, path.isEmpty() ? project->folder() : path).toLocalFile() );
+    QDir curdir( QMakeConfig::buildDirFromSrc(project, !path.isValid() ? project->path() : path).toLocalFile() );
     curdir.makeAbsolute();
     while( !curdir.exists(".qmake.cache") && !curdir.isRoot() && curdir.cdUp() )
     {
@@ -516,18 +514,18 @@ void QMakeProjectManager::slotRunQMake()
 {
     Q_ASSERT(m_actionItem);
 
-    KUrl srcDir = m_actionItem->url();
-    KUrl buildDir = QMakeConfig::buildDirFromSrc(m_actionItem->project(), srcDir);
+    Path srcDir = m_actionItem->path();
+    Path buildDir = QMakeConfig::buildDirFromSrc(m_actionItem->project(), srcDir);
     QMakeJob* job = new QMakeJob( srcDir.toLocalFile(), buildDir.toLocalFile(), this );
 
     job->setQMakePath(QMakeConfig::qmakeBinary(m_actionItem->project()));
 
     KConfigGroup cg(m_actionItem->project()->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
-    KUrl installPrefix = cg.readEntry<KUrl>(QMakeConfig::INSTALL_PREFIX, KUrl(""));
+    QString installPrefix = cg.readEntry(QMakeConfig::INSTALL_PREFIX, QString());
     if(!installPrefix.isEmpty())
-        job->setInstallPrefix(installPrefix.path());
+        job->setInstallPrefix(installPrefix);
     job->setBuildType( cg.readEntry<int>(QMakeConfig::BUILD_TYPE, 0) );
-    job->setExtraArguments( cg.readEntry(QMakeConfig::EXTRA_ARGUMENTS, "") );
+    job->setExtraArguments( cg.readEntry(QMakeConfig::EXTRA_ARGUMENTS, QString()) );
 
     KDevelop::ICore::self()->runController()->registerJob( job );
 }
@@ -545,7 +543,7 @@ bool QMakeProjectManager::projectNeedsConfiguration(IProject* project)
     if (QMakeConfig::findBasicMkSpec(vars).isEmpty()) {
         return true;
     }
-    if (QMakeConfig::buildDirFromSrc(project, project->folder()).isEmpty()) {
+    if (!QMakeConfig::buildDirFromSrc(project, project->path()).isValid()) {
         return true;
     }
     return false;
