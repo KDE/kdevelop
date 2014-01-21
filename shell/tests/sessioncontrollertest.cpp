@@ -19,7 +19,6 @@
 
 #include "sessioncontrollertest.h"
 
-#include <qtest_kde.h>
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 
@@ -32,10 +31,11 @@
 #include "../sessioncontroller.h"
 #include "../session.h"
 #include "../uicontroller.h"
+#include <QFileInfo>
+#include <QtTest/QTest>
+#include <QSignalSpy>
 
 using namespace KDevelop;
-
-using QTest::kWaitForSignal;
 
 //////////////////// Helper Functions ////////////////////////////////////////
 
@@ -267,5 +267,6 @@ void SessionControllerTest::tryLockSession()
     QCOMPARE(final.runInfo, SessionRunInfo());
 }
 
-QTEST_KDEMAIN( SessionControllerTest, GUI)
+QTEST_MAIN(SessionControllerTest)
+
 #include "sessioncontrollertest.moc"

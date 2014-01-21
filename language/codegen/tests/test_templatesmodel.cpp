@@ -27,7 +27,6 @@
 
 #include <KComponentData>
 #include <KStandardDirs>
-#include <qtest_kde.h>
 
 using namespace KDevelop;
 
@@ -89,4 +88,4 @@ void TestTemplatesModel::templateIndexes()
 }
 
 
-QTEST_KDEMAIN(TestTemplatesModel, NoGUI)
+QTEST_GUILESS_MAIN(TestTemplatesModel)

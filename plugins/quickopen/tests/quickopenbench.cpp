@@ -21,10 +21,9 @@
 #include "quickopenbench.h"
 
 #include <QIcon>
+#include <QtTest/QTest>
 
-#include <qtest_kde.h>
-
-QTEST_KDEMAIN(QuickOpenBench, GUI);
+QTEST_MAIN(QuickOpenBench);
 
 using namespace KDevelop;
 

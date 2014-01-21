@@ -25,7 +25,6 @@
 #include <kpluginloader.h>
 #include <kdebug.h>
 
-#include <qtest_kde.h>
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 
@@ -505,6 +504,6 @@ FakeFileManager* ProjectControllerTest::createFileManager()
     return fileMng;
 }
 
-QTEST_KDEMAIN( ProjectControllerTest, GUI)
+QTEST_MAIN( ProjectControllerTest)
 #include "moc_projectcontrollertest.cpp"
 #include "projectcontrollertest.moc"

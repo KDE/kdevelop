@@ -32,7 +32,6 @@
 #include <sublime/container.h>
 #include <sublime/tooldocument.h>
 
-#include <qtest_kde.h>
 #include "kdebug.h"
 
 using namespace Sublime;
@@ -227,5 +226,5 @@ void ViewActivationTest::activationAfterRemovalSimplestCase()
     QCOMPARE(mw.activeView(), v1);
 }
 
-QTEST_KDEMAIN(ViewActivationTest, GUI)
+QTEST_MAIN(ViewActivationTest)
 #include "viewactivationtest.moc"

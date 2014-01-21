@@ -19,8 +19,6 @@
  ***************************************************************************/
 #include "shellbuddytest.h"
 
-#include <qtest_kde.h>
-
 #include <QSplitter>
 #include <QtTest/QtTest>
 
@@ -123,7 +121,7 @@ void ShellBuddyTest::createFile(const KTempDir& dir, const QString& filename)
 void ShellBuddyTest::enableBuddies(bool enable)
 {
     {
-        KConfigGroup uiGroup = KGlobal::config()->group("UiSettings");
+        KConfigGroup uiGroup = KSharedConfig::openConfig()->group("UiSettings");
         uiGroup.writeEntry("TabBarArrangeBuddies", (enable ? 1 : 0));
         uiGroup.sync();
     }
@@ -135,7 +133,7 @@ void ShellBuddyTest::enableBuddies(bool enable)
 void ShellBuddyTest::enableOpenAfterCurrent(bool enable)
 {
     {
-        KConfigGroup uiGroup = KGlobal::config()->group("UiSettings");
+        KConfigGroup uiGroup = KSharedConfig::openConfig()->group("UiSettings");
         uiGroup.writeEntry("TabBarOpenAfterCurrent", (enable ? 1 : 0));
         uiGroup.sync();
     }
@@ -423,6 +421,6 @@ void ShellBuddyTest::testsplitViewBuddies()
 }
 
 
-QTEST_KDEMAIN(ShellBuddyTest, GUI)
+QTEST_MAIN(ShellBuddyTest)
 
 #include "shellbuddytest.moc"

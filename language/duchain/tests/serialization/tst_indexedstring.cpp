@@ -21,16 +21,16 @@
 
 #include "tst_indexedstring.h"
 
-#include <qtest_kde.h>
-
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
 
 #include <language/duchain/indexedstring.h>
+#include <QtTest/QTest>
+#include <kurl.h>
 
 #include <utility>
 
-QTEST_KDEMAIN(TestIndexedString, NoGUI);
+QTEST_GUILESS_MAIN(TestIndexedString);
 
 using namespace KDevelop;
 

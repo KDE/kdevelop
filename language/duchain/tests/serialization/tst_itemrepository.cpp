@@ -22,8 +22,6 @@
 #include "tst_itemrepository.h"
 
 
-#include <qtest_kde.h>
-
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
 
@@ -31,8 +29,9 @@
 #include <language/duchain/indexedstring.h>
 
 #include <algorithm>
+#include <QtTest/QTest>
 
-QTEST_KDEMAIN(TestItemRepository, NoGUI);
+QTEST_GUILESS_MAIN(TestItemRepository);
 
 using namespace KDevelop;
 

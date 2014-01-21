@@ -12,7 +12,6 @@
 #include <language/codegen/templaterenderer.h>
 
 #include <KStandardDirs>
-#include <qtest_kde.h>
 
 using namespace KDevelop;
 
@@ -113,4 +112,4 @@ QHash< QString, KUrl > TestGenerationTest::urls (const SourceFileTemplate& file)
 }
 
 
-QTEST_KDEMAIN (TestGenerationTest, NoGUI);
+QTEST_GUILESS_MAIN(TestGenerationTest);

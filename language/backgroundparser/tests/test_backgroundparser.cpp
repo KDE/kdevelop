@@ -26,7 +26,6 @@
 #include <QElapsedTimer>
 #include <QApplication>
 
-#include <qtest_kde.h>
 #include <KTextEditor/Editor>
 #include <KTextEditor/View>
 
@@ -43,7 +42,7 @@
 #include "testlanguagesupport.h"
 #include "testparsejob.h"
 
-QTEST_KDEMAIN(TestBackgroundparser, GUI)
+QTEST_MAIN(TestBackgroundparser)
 
 #define QVERIFY_RETURN(statement, retval) \
 do { if (!QTest::qVerify((statement), #statement, "", __FILE__, __LINE__)) return retval; } while (0)

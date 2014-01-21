@@ -23,9 +23,7 @@
 #include <outputview/filtereditem.h>
 #include <language/interfaces/quickopenfilter.h>
 
-#include <qtest_kde.h>
-
-QTEST_KDEMAIN(KDevelop::FilteringStrategyTest, NoGUI)
+QTEST_GUILESS_MAIN(KDevelop::FilteringStrategyTest)
 
 namespace QTest {
 

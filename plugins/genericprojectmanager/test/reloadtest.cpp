@@ -19,7 +19,9 @@
 
 #include "reloadtest.h"
 
-#include <qtest_kde.h>
+#include <QtTest/QTest>
+#include <QSignalSpy>
+#include <QProcess>
 #include <KDebug>
 #include <KTempDir>
 
@@ -35,7 +37,7 @@
 #include <project/projectmodel.h>
 #include <language/backgroundparser/backgroundparser.h>
 
-QTEST_KDEMAIN(ProjectLoadTest, GUI)
+QTEST_MAIN(ProjectLoadTest)
 
 Q_DECLARE_METATYPE(KDevelop::IProject*);
 
@@ -126,7 +128,8 @@ void ProjectLoadTest::addRemoveFiles()
     f.close();
 
     KDevelop::ICore::self()->projectController()->openProject(p.file);
-    QVERIFY(QTest::kWaitForSignal(KDevelop::ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), 2000));
+    QSignalSpy spy(KDevelop::ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)));
+    QVERIFY(spy.wait(2000));
     KDevelop::IProject* project = KDevelop::ICore::self()->projectController()->projects().first();
     QCOMPARE(project->projectFileUrl(), p.file);
 
@@ -184,7 +187,8 @@ void ProjectLoadTest::removeDirRecursive()
     QVERIFY(KDevelop::ICore::self()->projectController()->projects().isEmpty());
 
     KDevelop::ICore::self()->projectController()->openProject(p.file);
-    QVERIFY(QTest::kWaitForSignal(KDevelop::ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), 20000));
+    QSignalSpy spy(KDevelop::ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)));
+    QVERIFY(spy.wait(20000));
     KDevelop::IProject* project = KDevelop::ICore::self()->projectController()->projects().first();
     QCOMPARE(project->projectFileUrl(), p.file);
 
@@ -247,7 +251,7 @@ void ProjectLoadTest::addLotsOfFiles()
     TestProject p = makeProject();
 
     KDevelop::ICore::self()->projectController()->openProject(p.file);
-    QVERIFY(QTest::kWaitForSignal(KDevelop::ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), 2000));
+    QVERIFY(QSignalSpy(KDevelop::ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*))).wait(2000));
     QCOMPARE(KDevelop::ICore::self()->projectController()->projects().size(), 1);
     KDevelop::IProject* project = KDevelop::ICore::self()->projectController()->projects().first();
     QCOMPARE(project->projectFileUrl(), p.file);
@@ -294,7 +298,7 @@ void ProjectLoadTest::raceJob()
     }
 
     KDevelop::ICore::self()->projectController()->openProject(p.file);
-    QVERIFY(QTest::kWaitForSignal(KDevelop::ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), 2000));
+    QVERIFY(QSignalSpy(KDevelop::ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*))).wait(2000));
 
     QCOMPARE(KDevelop::ICore::self()->projectController()->projectCount(), 1);
     KDevelop::IProject *project = KDevelop::ICore::self()->projectController()->projectAt(0);
@@ -356,7 +360,7 @@ void ProjectLoadTest::addDuringImport()
     createFile(file2.toLocalFile());
     QVERIFY(!project->isReady());
     // now wait for finish
-    QVERIFY(QTest::kWaitForSignal(KDevelop::ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), 2000));
+    QVERIFY(QSignalSpy(KDevelop::ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*))).wait(2000));
     QVERIFY(project->isReady());
     // make sure our file removal + addition was properly tracked
     QCOMPARE(project->filesForUrl(file).size(), 0);

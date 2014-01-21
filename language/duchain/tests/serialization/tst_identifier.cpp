@@ -23,14 +23,13 @@
 #include <language/duchain/identifier.h>
 #include <language/duchain/indexedstring.h>
 
-#include <qtest_kde.h>
-
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
 
 #include <utility>
+#include <QtTest/QTest>
 
-QTEST_KDEMAIN(TestIdentifier, NoGUI);
+QTEST_GUILESS_MAIN(TestIdentifier);
 
 using namespace KDevelop;
 

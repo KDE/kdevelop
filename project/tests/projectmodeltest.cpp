@@ -23,8 +23,9 @@
 #include <QtCore/QThread>
 #include <QMimeType>
 #include <QMimeDatabase>
-#include <qtest_kde.h>
 #include <KMimeType>
+#include <QtTest/QTest>
+#include <QSignalSpy>
 
 #include <projectmodel.h>
 #include <projectproxymodel.h>
@@ -552,4 +553,4 @@ void ProjectModelTest::testProjectFileIcon()
     QVERIFY(item->iconName() != txtIcon);
 }
 
-QTEST_KDEMAIN( ProjectModelTest, GUI)
+QTEST_MAIN( ProjectModelTest)

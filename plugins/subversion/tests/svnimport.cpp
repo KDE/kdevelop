@@ -20,7 +20,6 @@
 
 #include "svnimport.h"
 #include <QtTest/QtTest>
-#include <qtest_kde.h>
 #include <KTempDir>
 #include <KProcess>
 #include <kdebug.h>
@@ -161,4 +160,4 @@ void SvnImport::validateImport( const QString& repourl, KTempDir& checkoutdir, c
     QCOMPARE(QString::fromUtf8( newfile.readAll() ), origcontent);
 }
 
-QTEST_KDEMAIN(SvnImport, GUI)
+QTEST_MAIN(SvnImport)

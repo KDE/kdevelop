@@ -28,8 +28,6 @@
 #include <sublime/tooldocument.h>
 #include <sublime/view.h>
 
-#include <qtest_kde.h>
-
 using namespace Sublime;
 
 void ViewTest::widgetDeletion()
@@ -72,5 +70,4 @@ void ViewTest::viewReimplementation()
 }
 
 #include "viewtest.moc"
-QTEST_KDEMAIN(ViewTest, GUI)
-
+QTEST_MAIN(ViewTest)

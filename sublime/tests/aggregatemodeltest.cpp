@@ -25,8 +25,6 @@
 #include <sublime/aggregatemodel.h>
 #include <tests/modeltest.h>
 
-#include <qtest_kde.h>
-
 using namespace Sublime;
 
 void AggregateModelTest::modelAggregationInASingleView()
@@ -68,5 +66,5 @@ QStandardItemModel * AggregateModelTest::newModel()
 
 #include "aggregatemodeltest.moc"
 
-QTEST_KDEMAIN(AggregateModelTest, GUI)
+QTEST_MAIN(AggregateModelTest)
 

@@ -24,7 +24,6 @@
 #include <QDBusConnection>
 #include <QDBusMessage>
 
-#include <qtest_kde.h>
 #include <kprocess.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
@@ -122,5 +121,5 @@ void PluginControllerTest::loadFromExtension()
     QCOMPARE( plugin->extensions(), QStringList() << "org.kdevelop.ITestNonGuiInterface" );
 }
 
-QTEST_KDEMAIN( PluginControllerTest, GUI)
+QTEST_MAIN( PluginControllerTest)
 #include "plugincontrollertest.moc"

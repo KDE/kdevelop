@@ -22,10 +22,12 @@
 
 #include <language/duchain/indexedstring.h>
 
-#include <qtest_kde.h>
-
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
+#include <QDateTime>
+#include <QTextCodec>
+#include <QVector>
+#include <QtTest/QTest>
 
 #include <unordered_map>
 
@@ -64,7 +66,7 @@ inline void insertData(QStringHash& hash, const InputData& data)
   }
 }
 
-QTEST_KDEMAIN(BenchHashes, NoGUI);
+QTEST_GUILESS_MAIN(BenchHashes);
 
 using namespace KDevelop;
 

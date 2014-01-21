@@ -21,9 +21,8 @@
 
 #include "test_projectfilter.h"
 
-#include <qtest_kde.h>
-
 #include <QDebug>
+#include <QtTest/QTest>
 #include <KConfigGroup>
 
 #include <tests/testcore.h>
@@ -32,7 +31,7 @@
 
 #include "../projectfilter.h"
 
-QTEST_KDEMAIN(TestProjectFilter, NoGUI);
+QTEST_GUILESS_MAIN(TestProjectFilter);
 
 using namespace KDevelop;
 

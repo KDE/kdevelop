@@ -21,10 +21,11 @@
 #include <QStandardItem>
 #include <QItemDelegate>
 #include <QTreeView>
+#include <QtTest/QTest>
 
-#include <qtest_kde.h>
 #include <kdebug.h>
 #include <ktabwidget.h>
+#include <KLocalizedString>
 
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
@@ -47,7 +48,7 @@ namespace KDevelop
 class QAbstractItemDelegate;
 class QStandardItemModel;
 
-QTEST_KDEMAIN(StandardOutputViewTest, GUI)
+QTEST_MAIN(StandardOutputViewTest)
 
 const QString StandardOutputViewTest::toolviewTitle = "my_toolview";
 

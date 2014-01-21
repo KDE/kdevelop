@@ -19,6 +19,8 @@
 
 #include "testcontrollertest.h"
 #include <testcontroller.h>
+#include <QtTest/QTest>
+#include <QSignalSpy>
 
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
@@ -27,8 +29,6 @@
 #include <iproject.h>
 #include <iprojectcontroller.h>
 #include <language/duchain/indexeddeclaration.h>
-
-#include <qtest_kde.h>
 
 using namespace KDevelop;
 
@@ -241,4 +241,4 @@ void TestControllerTest::testResults()
 }
 
 
-QTEST_KDEMAIN(TestControllerTest, NoGUI)
+QTEST_GUILESS_MAIN(TestControllerTest)

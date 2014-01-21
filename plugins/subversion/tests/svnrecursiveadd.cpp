@@ -21,7 +21,6 @@
 #include "svnrecursiveadd.h"
 #include <memory>
 #include <QtTest/QtTest>
-#include <qtest_kde.h>
 #include <KTempDir>
 #include <KProcess>
 #include <kdebug.h>
@@ -159,4 +158,4 @@ void SvnRecursiveAdd::test()
     validatingExecJob(vcs->revert(KUrl(addUrl), IBasicVersionControl::Recursive));
 }
 
-QTEST_KDEMAIN(SvnRecursiveAdd, GUI)
+QTEST_MAIN(SvnRecursiveAdd)

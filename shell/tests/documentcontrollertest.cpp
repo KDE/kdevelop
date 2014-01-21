@@ -21,7 +21,6 @@
 
 #include <QString>
 
-#include <qtest_kde.h>
 #include <KTextEditor/Document>
 #include <KTextEditor/Cursor>
 
@@ -34,6 +33,9 @@
 #include <languagecontroller.h>
 #include <documentcontroller.h>
 #include <tests/testcore.h>
+
+#include <QtTest/QTest>
+#include <QSignalSpy>
 
 using namespace KDevelop;
 
@@ -185,5 +187,5 @@ KUrl DocumentControllerTest::createFile(const KTempDir& dir, const QString& file
     return KUrl(dir.name() + filename);
 }
 
-QTEST_KDEMAIN(DocumentControllerTest, GUI);
+QTEST_MAIN(DocumentControllerTest);
 

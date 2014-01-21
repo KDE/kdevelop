@@ -90,5 +90,5 @@ void ControllerTest::namedAreas()
 }
 
 #include "controllertest.moc"
-QTEST_KDEMAIN(ControllerTest, GUI)
+QTEST_MAIN(ControllerTest)
 

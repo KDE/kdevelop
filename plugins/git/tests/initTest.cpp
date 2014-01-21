@@ -469,6 +469,6 @@ void GitInitTest::removeTempDirs()
             qDebug() << "KIO::NetAccess::del(" << gitTest_BaseDir2 << ") returned false";
 }
 
-QTEST_KDEMAIN(GitInitTest, GUI)
+QTEST_MAIN(GitInitTest)
 
 // #include "gittest.moc"

@@ -22,15 +22,13 @@
 #include "uicontrollertest.h"
 
 #include <QTest>
-#include <qtest_kde.h>
-
 #include <KParts/MainWindow>
 
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
 #include <interfaces/iuicontroller.h>
 
-QTEST_KDEMAIN(UiControllerTest, GUI)
+QTEST_MAIN(UiControllerTest)
 
 using namespace KDevelop;
 

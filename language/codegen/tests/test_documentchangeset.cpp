@@ -23,13 +23,12 @@
 
 #include <language/codegen/documentchangeset.h>
 
-#include <qtest_kde.h>
-
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
 #include <tests/testfile.h>
+#include <QtTest/QTest>
 
-QTEST_KDEMAIN(TestDocumentchangeset, NoGUI);
+QTEST_GUILESS_MAIN(TestDocumentchangeset);
 
 using namespace KDevelop;
 

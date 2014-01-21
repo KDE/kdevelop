@@ -21,7 +21,6 @@
 #include "modelstest.h"
 
 #include <QtTest/QtTest>
-#include <qtest_kde.h>
 
 #include <vcs/models/vcsfilechangesmodel.h>
 #include <tests/autotestshell.h>
@@ -132,4 +131,4 @@ void ModelsTest::testVcsFileChangesModel()
     QVERIFY(model->rowCount() == 2);
 }
 
-QTEST_KDEMAIN(ModelsTest, GUI);
+QTEST_MAIN(ModelsTest);

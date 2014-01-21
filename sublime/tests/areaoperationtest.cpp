@@ -36,7 +36,6 @@
 #include <sublime/mainwindow.h>
 #include <sublime/container.h>
 
-#include <qtest_kde.h>
 #include "areaprinter.h"
 
 using namespace Sublime;
@@ -363,7 +362,7 @@ void AreaOperationTest::simpleViewAdditionAndDeletion()
     // set TabBarOpenAfterCurrent=0, otherwise we'd have a different order of tabs
     int oldTabBarOpenAfterCurrent;
     {
-        KConfigGroup uiGroup = KGlobal::config()->group("UiSettings");
+        KConfigGroup uiGroup = KSharedConfig::openConfig()->group("UiSettings");
         oldTabBarOpenAfterCurrent = uiGroup.readEntry("TabBarOpenAfterCurrent", 1);
         uiGroup.writeEntry("TabBarOpenAfterCurrent", 0);
         uiGroup.sync();
@@ -411,7 +410,7 @@ void AreaOperationTest::simpleViewAdditionAndDeletion()
         1, 1, "Added a single view to previously emptied mainwindow.");
 
     {
-        KConfigGroup uiGroup = KGlobal::config()->group("UiSettings");
+        KConfigGroup uiGroup = KSharedConfig::openConfig()->group("UiSettings");
         uiGroup.writeEntry("TabBarOpenAfterCurrent", oldTabBarOpenAfterCurrent);
         uiGroup.sync();
     }
@@ -725,6 +724,6 @@ View *AreaOperationTest::findNamedView(Area *area, const QString &name)
 }
 
 ///////////
-QTEST_KDEMAIN(AreaOperationTest, GUI)
+QTEST_MAIN(AreaOperationTest)
 #include "areaoperationtest.moc"
 

@@ -34,8 +34,6 @@
 #include <KStandardDirs>
 #include <KUrl>
 
-#include <qtest_kde.h>
-
 #define CHECK_TEMPLATE_VARIABLE(name, type, val)            \
 QVERIFY(variables.contains(#name));                         \
 QCOMPARE(variables.value(#name).value<type>(), val)
@@ -296,4 +294,4 @@ void TestTemplateClassGenerator::setLowercaseFileNames(TemplateClassGenerator* g
 }
 
 
-QTEST_KDEMAIN(TestTemplateClassGenerator, NoGUI)
+QTEST_GUILESS_MAIN(TestTemplateClassGenerator)
