@@ -64,11 +64,13 @@ QString QMakeConfig::qmakeBinary(const IProject* project)
     if (project) {
         KSharedConfig::Ptr cfg = project->projectConfiguration();
         KConfigGroup group(cfg.data(), CONFIG_GROUP);
-        exe = group.readEntry(QMAKE_BINARY, QString() );
-        QFileInfo info(exe);
-        if (!info.exists() || !info.isExecutable()) {
-            kWarning() << "bad QMake configured for project " << project->folder() << ":" << exe;
-            exe.clear();
+        if (group.hasKey(QMAKE_BINARY)) {
+            exe = group.readEntry(QMAKE_BINARY, QString() );
+            QFileInfo info(exe);
+            if (!info.exists() || !info.isExecutable()) {
+                kWarning() << "bad QMake configured for project " << project->folder() << ":" << exe;
+                exe.clear();
+            }
         }
     }
     if (exe.isEmpty()) {
