@@ -24,13 +24,13 @@
 class IncludePathComputer
 {
 public:
-  IncludePathComputer(const KUrl& file);
+  IncludePathComputer(const QString& file);
   ///Must be called in the foreground thread, before calling computeBackground().
   void computeForeground();
   ///Can be called from within background thread, but does not have to. May lock for a long time.
   void computeBackground();
 
-  KUrl::List result() const
+  KDevelop::Path::List result() const
   {
     return m_ret;
   }
@@ -43,17 +43,17 @@ public:
   KDevelop::ModificationRevisionSet m_includePathDependency;
 
 private:
-  void addInclude(KUrl url);
+  void addInclude(const KDevelop::Path& path);
 
   QHash<QString,QString> m_defines;
-  KUrl m_source;
-  KUrl::List m_ret;
-  QSet<KUrl> m_hasPath;
+  QString m_source;
+  KDevelop::Path::List m_ret;
+  QSet<KDevelop::Path> m_hasPath;
   bool m_ready;
 
-  KUrl m_effectiveBuildDirectory;
-  KUrl m_buildDirectory;
-  KUrl m_projectDirectory;
+  KDevelop::Path m_effectiveBuildDirectory;
+  KDevelop::Path m_buildDirectory;
+  KDevelop::Path m_projectDirectory;
   QString m_projectName;
   bool m_gotPathsFromManager;
   CppTools::IncludePathResolver m_includeResolver;

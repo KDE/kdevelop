@@ -132,7 +132,7 @@ QualifiedIdentifier removeTemplateParameters(const QualifiedIdentifier& baseIden
 }
 
 QList<KDevelop::CompletionTreeItemPointer> itemsForFile(const QString& displayTextPrefix, const QString& file,
-                                                        const KUrl::List& includePaths, const KUrl& currentPath,
+                                                        const Path::List& includePaths, const Path& currentPath,
                                                         const IndexedDeclaration& decl,
                                                         uint argumentHintDepth,
                                                         QSet<QString>& directives)
@@ -145,17 +145,17 @@ QList<KDevelop::CompletionTreeItemPointer> itemsForFile(const QString& displayTe
   if(isSource(file))
     return ret;
 
-  const QString canonicalFile = QFileInfo(file).canonicalFilePath();
+  const Path canonicalFile(QFileInfo(file).canonicalFilePath());
 
-  foreach(const KUrl& includePath, includePaths) {
-    QString relative = KUrl::relativePath( QFileInfo(includePath.toLocalFile()).canonicalFilePath(), canonicalFile );
+  foreach(const Path& includePath, includePaths) {
+    QString relative = includePath.relativePath( canonicalFile );
     if(relative.startsWith("./"))
       relative = relative.mid(2);
     
     if(shortestDirective.isEmpty() || (relative.length() < shortestDirective.length() && (allowDotDot || !relative.startsWith(".."))) || (shortestDirective.startsWith("..") && !relative.startsWith(".."))) {
       shortestDirective = relative;
       
-      isRelativeToCurrentDir = includePath.equals( currentPath );
+      isRelativeToCurrentDir = includePath == currentPath;
     }
   }
   if(!shortestDirective.isEmpty()) {
@@ -215,9 +215,10 @@ KSharedPtr<MissingIncludeCompletionItem> includeDirectiveFromUrl(const KUrl& fro
     QStringList candidateFiles = candidateIncludeFiles(decl.data());
 
     QList<KDevelop::CompletionTreeItemPointer> items;
-    const auto &includePaths = CppUtils::findIncludePaths(fromUrl.toLocalFile());
+    const Path fromPath(fromUrl);
+    const auto &includePaths = CppUtils::findIncludePaths(fromPath.toLocalFile());
     foreach(const QString& file, candidateFiles)
-      items += itemsForFile(QString(), file, includePaths, fromUrl, decl, 0, temp);
+      items += itemsForFile(QString(), file, includePaths, fromPath, decl, 0, temp);
 
     qSort<QList<KDevelop::CompletionTreeItemPointer>::iterator, DirectiveShorterThan>(items.begin(), items.end(), DirectiveShorterThan());
     if(!items.isEmpty()) {
@@ -288,18 +289,17 @@ QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(const Q
   }
   
   KUrl currentUrl(context->topContext()->url().str());
-  KUrl currentPath(context->topContext()->url().str());
-  currentPath.setFileName(QString());
+  const auto currentPath = Path(currentUrl).parent();
   
   Cpp::EnvironmentFilePointer env(dynamic_cast<Cpp::EnvironmentFile*>(context->topContext()->parsingEnvironmentFile().data()));
   if(!env)
     return ret;
   
   
-  KUrl::List includePaths;
+  Path::List includePaths;
   
   foreach(const IndexedString& path, env->includePaths())
-    includePaths << path.toUrl();
+    includePaths << Path(path.toUrl());
   
   includePaths.prepend(currentPath);
   

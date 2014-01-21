@@ -86,10 +86,12 @@ bool importsContext(const QVector<DUContext::Import>& contexts, const DUContext*
   return false;
 }
 
-QList<IndexedString> convertFromUrls(const QList<KUrl>& urlList) {
+QList<IndexedString> convertFromPaths(const Path::List& paths) {
   QList<IndexedString> ret;
-  foreach(const KUrl& url, urlList)
-    ret << IndexedString(url.pathOrUrl());
+  ret.reserve(paths.size());
+  foreach(const Path& path, paths) {
+    ret << path.toIndexed();
+  }
   return ret;
 }
 
@@ -185,11 +187,11 @@ void CPPParseJob::parseForeground() {
     m_parseJob->run();
 }
 
-KUrl CPPParseJob::includedFromPath() const {
+Path CPPParseJob::includedFromPath() const {
     return m_includedFromPath;
 }
 
-void CPPParseJob::setIncludedFromPath( const KUrl& path ) {
+void CPPParseJob::setIncludedFromPath( const Path& path ) {
     m_includedFromPath = path;
 }
 
@@ -205,15 +207,15 @@ void CPPParseJob::gotIncludePaths(IncludePathComputer* comp) {
 }
 
 
-const KUrl::List& CPPParseJob::includePathUrls() const {
-  includePaths();
+const Path::List& CPPParseJob::includePathUrls() const {
+  indexedIncludePaths();
   return masterJob()->m_includePathUrls;
 }
 
 void CPPParseJob::mergeDefines(CppPreprocessEnvironment& env) const
 {
   //m_includePathsComputed is filled when includePaths() is called
-  masterJob()->includePaths();
+  masterJob()->indexedIncludePaths();
   
   if(ICore::self()->shuttingDown())
     return; //If the system is shutting down, include-paths were not computed properly
@@ -238,7 +240,7 @@ void CPPParseJob::mergeDefines(CppPreprocessEnvironment& env) const
   }
 }
 
-const QList<IndexedString>& CPPParseJob::includePaths() const {
+const QList<IndexedString>& CPPParseJob::indexedIncludePaths() const {
     //If a lock was held here, we would get deadlocks
     if( ICore::self()->shuttingDown() )
       return m_includePaths;
@@ -261,12 +263,12 @@ const QList<IndexedString>& CPPParseJob::includePaths() const {
             Q_ASSERT(m_includePathsComputed);
             m_includePathsComputed->computeBackground();
             m_includePathUrls = m_includePathsComputed->result();
-            m_includePaths = convertFromUrls(m_includePathUrls);
+            m_includePaths = convertFromPaths(m_includePathUrls);
 
         }
         return m_includePaths;
     } else {
-        return masterJob()->includePaths();
+        return masterJob()->indexedIncludePaths();
     }
 }
 

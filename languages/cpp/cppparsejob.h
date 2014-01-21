@@ -24,6 +24,7 @@
 #define CPPPARSEJOB_H
 
 #include <language/backgroundparser/parsejob.h>
+#include <project/path.h>
 
 #include <QStringList>
 #include <QWaitCondition>
@@ -145,8 +146,8 @@ public:
     KDevelop::ReferencedTopDUContext updatingContentContext() const;
 
     ///If this file was included from another, this contains the path within the search-paths that this file was found through
-    KUrl includedFromPath() const;
-    void setIncludedFromPath( const KUrl& path );
+    KDevelop::Path includedFromPath() const;
+    void setIncludedFromPath( const KDevelop::Path& path );
 
     //Returns the master parse-job, which means the one that was not issued as an include-file
     const CPPParseJob* masterJob() const;
@@ -190,9 +191,9 @@ private:
     
     friend class PreprocessJob; //So it can access includePaths()
     //Only use from within the background thread, and make sure no mutexes are locked when calling it
-    const QList<IndexedString>& includePaths() const;
+    const QList<IndexedString>& indexedIncludePaths() const;
     //Only use from within the background thread, and make sure no mutexes are locked when calling it
-    const KUrl::List& includePathUrls() const;
+    const KDevelop::Path::List& includePathUrls() const;
 
     //Merges the macro-definitions into the given environment
     void mergeDefines(CppPreprocessEnvironment& env) const;
@@ -214,10 +215,10 @@ private:
 
     mutable QList<ProblemPointer> m_preprocessorProblems;
   
-    KUrl m_includedFromPath;
+    KDevelop::Path m_includedFromPath;
     mutable IncludePathComputer* m_includePathsComputed;
     mutable QList<IndexedString> m_includePaths; //Only a master-job has this set
-    mutable KUrl::List m_includePathUrls; //Only a master-job has this set
+    mutable KDevelop::Path::List m_includePathUrls; //Only a master-job has this set
     bool m_keepDuchain, m_keepEverything;
     QSet<const KDevelop::DUContext*> m_updated;
     int m_parsedIncludes;

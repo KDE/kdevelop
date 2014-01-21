@@ -20,6 +20,7 @@
 #define CPPUTILS_H
 
 #include "environmentmanager.h"
+#include <project/path.h>
 
 namespace KDevelop
 {
@@ -52,15 +53,16 @@ const Cpp::ReferenceCountedMacroSet& standardMacros();
 /// @param skipPath this path will be skipped while searching, as needed for gcc extension #include_next
 /// @return first: The found file(not a canonical path, starts with the directory it was found in)
 ///         second: The include-path the file was found in(can be used to skip that path on #include_next)
-QPair<KUrl, KUrl> findInclude(const KUrl::List& includePaths, const KUrl& localPath, const QString& includeName, int includeType, const KUrl& skipPath, bool quiet=false);
+QPair<KDevelop::Path, KDevelop::Path> findInclude(const KDevelop::Path::List& includePaths, const KDevelop::Path& localPath,
+                                                  const QString& includeName, int includeType, const KDevelop::Path& skipPath,
+                                                  bool quiet=false);
     
 ///Thread-safe
-bool needsUpdate(const Cpp::EnvironmentFilePointer& file, const KUrl& localPath, const KUrl::List& includePaths );
+bool needsUpdate(const Cpp::EnvironmentFilePointer& file, const KDevelop::Path& localPath, const KDevelop::Path::List& includePaths );
 
 ///Returns the include-path. Each dir has a trailing slash. Search should be iterated forward through the list
 ///@param problems If this is nonzero, eventual problems will be added to the list
-///TODO: use strings instead of urls everywhere!
-KUrl::List findIncludePaths(const KUrl& source);
+KDevelop::Path::List findIncludePaths(const QString& source);
 
 /**
   * Returns a list of all files within the include-path of the given file
