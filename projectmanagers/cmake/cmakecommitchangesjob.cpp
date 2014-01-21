@@ -166,8 +166,7 @@ Path::List CMakeCommitChangesJob::addProjectData(const CMakeProjectData& data)
         target.defines = targetProps["COMPILE_DEFINITIONS"];
         target.includes = targetProps["INCLUDE_DIRECTORIES"];
         target.outputName = targetProps.value("OUTPUT_NAME", QStringList(t.name)).join(QString());
-        target.location =
-            Path(CMake::resolveSystemDirs(m_project, targetProps["LOCATION"]).first());
+        target.location = CMake::resolveSystemDirs(m_project, targetProps["LOCATION"]).first();
         
         foreach(const QString& dep, t.libraries) {
             const QMap<QString, QStringList>& depData = data.properties.value(TargetProperty).value(dep);
