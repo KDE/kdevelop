@@ -426,14 +426,12 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
 
     ifDebug( kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << ": searching for include" << fileName; )
 
-    Path localPath = Path(parentJob()->document().str()).parent();
-
     Path from;
     if (skipCurrentPath)
       from = parentJob()->includedFromPath();
 
 
-    QPair<Path, Path> included = CppUtils::findInclude( parentJob()->includePathUrls(), localPath, fileName, type, from );
+    QPair<Path, Path> included = CppUtils::findInclude( parentJob()->includePathUrls(), parentJob()->localPath(), fileName, type, from );
     Path includedFile = included.first;
     if (includedFile.isValid()) {
         const IndexedString indexedFile = includedFile.toIndexed();
@@ -496,7 +494,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
             if(includedContext) {
               Cpp::EnvironmentFilePointer includedEnvironment(dynamic_cast<Cpp::EnvironmentFile*>(includedContext->parsingEnvironmentFile().data()));
               if( includedEnvironment ) {
-                updateNeeded = CppUtils::needsUpdate(includedEnvironment, localPath, parentJob()->includePathUrls());
+                updateNeeded = CppUtils::needsUpdate(includedEnvironment, parentJob()->localPath(), parentJob()->includePathUrls());
                 //The ForceUpdateRecursive flag is removed before checking for satisfied features, so we can prevent double-updating through "wasUpdated()" below (see *1)
                 updateNeeded |= !includedEnvironment->featuresSatisfied((TopDUContext::Features)(slaveMinimumFeatures & (~TopDUContext::ForceUpdateRecursive)));
                 //(*1) Do not update again if ForceUpdate is given and the context was already updated during this run

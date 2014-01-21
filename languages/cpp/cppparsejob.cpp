@@ -124,6 +124,7 @@ CPPParseJob::CPPParseJob( const IndexedString& url, ILanguageSupport* languageSu
         m_needUpdateEverything( false ),
         m_parentPreprocessor( parentPreprocessor ),
         m_session( new ParseSession ),
+        m_localPath( url.str() ),
         m_includePathsComputed( 0 ),
         m_keepDuchain( false ),
         m_parsedIncludes( 0 ),
@@ -193,6 +194,11 @@ Path CPPParseJob::includedFromPath() const {
 
 void CPPParseJob::setIncludedFromPath( const Path& path ) {
     m_includedFromPath = path;
+}
+
+Path CPPParseJob::localPath() const
+{
+    return m_localPath;
 }
 
 PreprocessJob* CPPParseJob::parentPreprocessor() const {

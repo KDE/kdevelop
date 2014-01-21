@@ -149,6 +149,8 @@ public:
     KDevelop::Path includedFromPath() const;
     void setIncludedFromPath( const KDevelop::Path& path );
 
+    KDevelop::Path localPath() const;
+
     //Returns the master parse-job, which means the one that was not issued as an include-file
     const CPPParseJob* masterJob() const;
     CPPParseJob* masterJob();
@@ -216,6 +218,7 @@ private:
     mutable QList<ProblemPointer> m_preprocessorProblems;
   
     KDevelop::Path m_includedFromPath;
+    KDevelop::Path m_localPath;
     mutable IncludePathComputer* m_includePathsComputed;
     mutable QList<IndexedString> m_includePaths; //Only a master-job has this set
     mutable KDevelop::Path::List m_includePathUrls; //Only a master-job has this set
