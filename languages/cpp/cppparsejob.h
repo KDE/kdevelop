@@ -99,7 +99,7 @@ public:
     
     void requestDependancies();
 
-    CPPInternalParseJob* parseJob() const;
+    QSharedPointer<CPPInternalParseJob> parseJob() const;
 
     const KTextEditor::Range& textRangeToParse() const;
 
@@ -201,8 +201,8 @@ private:
     KSharedPtr<Cpp::EnvironmentFile> m_proxyEnvironmentFile;
     PreprocessJob* m_parentPreprocessor;
     ParseSession::Ptr m_session;
-    PreprocessJob* m_preprocessJob;
-    CPPInternalParseJob* m_parseJob;
+    ThreadWeaver::JobPointer m_preprocessJob;
+    ThreadWeaver::JobPointer m_parseJob;
     KTextEditor::Range m_textRangeToParse;
     IncludeFileList m_includedFiles;
 
@@ -226,9 +226,8 @@ private:
     bool m_needsUpdate;
 };
 
-class CPPInternalParseJob : public ThreadWeaver::Job
+class CPPInternalParseJob : public QObject, public ThreadWeaver::Job
 {
-    Q_OBJECT
 public:
     CPPInternalParseJob(CPPParseJob* parent);
 
@@ -238,7 +237,7 @@ public:
     void setPriority(int priority);
 
     //Must only be called for direct parsing when the job is not queued
-    virtual void run();
+    virtual void run(ThreadWeaver::JobPointer pointer, ThreadWeaver::Thread* thread);
 
     //Called as soon as the first updated context has been set
     void initialize();

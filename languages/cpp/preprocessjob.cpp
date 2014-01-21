@@ -38,7 +38,7 @@
 #include <language/duchain/topducontext.h>
 #include <language/interfaces/iproblem.h>
 
-#include <threadweaver/Thread.h>
+#include <threadweaver/thread.h>
 
 #include <interfaces/ilanguage.h>
 #include <interfaces/icore.h>
@@ -72,7 +72,7 @@ QString urlsToString(const QList<KUrl>& urlList) {
 }
 
 PreprocessJob::PreprocessJob(CPPParseJob * parent)
-    : ThreadWeaver::Job(parent)
+    : QObject(parent)
     , m_currentEnvironment(0)
     , m_firstEnvironmentFile( new Cpp::EnvironmentFile( parent->document(), 0 ) )
     , m_success(true)
@@ -110,7 +110,7 @@ void PreprocessJob::foundHeaderGuard(rpp::Stream& stream, KDevelop::IndexedStrin
     m_currentEnvironment->removeString(guardName);
 }
 
-void PreprocessJob::run()
+void PreprocessJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread)
 {
     if(!ICore::self()->languageController()->language("C++")->languageSupport())
       return;
@@ -620,7 +620,7 @@ bool PreprocessJob::checkAbort()
         if (parent->abortRequested()) {
             parent->abortJob();
             m_success = false;
-            setFinished(true);
+            setStatus(Status_Failed);
             return true;
         }
 
@@ -628,7 +628,7 @@ bool PreprocessJob::checkAbort()
         // What... the parent job got deleted??
         kWarning(9007) << "Parent job disappeared!!" ;
         m_success = false;
-        setFinished(true);
+        setStatus(Status_Success);
         return true;
     }
 

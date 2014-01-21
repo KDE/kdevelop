@@ -24,7 +24,7 @@
 #define PREPROCESSJOB_H
 
 #include <ksharedptr.h>
-#include <threadweaver/Job.h>
+#include <threadweaver/job.h>
 
 #include "parser/rpp/preprocessor.h"
 
@@ -53,7 +53,7 @@ class CppPreprocessEnvironment;
  * and updatingContentContext will be filled.
  * */
 
-class PreprocessJob : public ThreadWeaver::Job, public rpp::Preprocessor
+class PreprocessJob : public QObject, public ThreadWeaver::Job, public rpp::Preprocessor
 {
     Q_OBJECT
 public:
@@ -67,7 +67,7 @@ public:
     virtual bool success() const;
 
     //Must only be called for direct parsing when the job is not queued
-    virtual void run();
+    virtual void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread);
 
     virtual void headerSectionEnded(rpp::Stream& stream);
     
