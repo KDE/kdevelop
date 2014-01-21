@@ -46,7 +46,7 @@ private:
     template<CXCursorKind> void setDeclData(CXCursor, KDevelop::ClassDeclaration*) const;
 
 //BEGIN dispatchCursor
-    template<CXCursorKind CK, EnableIf<CursorKindTraits::isUse(CK)>...>
+    template<CXCursorKind CK, EnableIf<CursorKindTraits::isUse(CK)> = dummy>
     CXChildVisitResult dispatchCursor(CXCursor cursor)
     {
         return buildUse<CK>(cursor);
@@ -56,7 +56,7 @@ private:
         CXCursorKind CK,
         Decision IsClassMember = CursorKindTraits::isClassMember(CK),
         Decision IsDefinition = CursorKindTraits::isDefinition(CK),
-        EnableIf<IsClassMember == Decision::Maybe || IsDefinition == Decision::Maybe>...>
+        EnableIf<IsClassMember == Decision::Maybe || IsDefinition == Decision::Maybe> = dummy>
     CXChildVisitResult dispatchCursor(CXCursor cursor, CXCursor parent)
     {
         if (IsDefinition == Decision::Maybe) {
@@ -79,7 +79,7 @@ private:
         CXCursorKind CK,
         Decision IsClassMember = CursorKindTraits::isClassMember(CK),
         Decision IsDefinition = CursorKindTraits::isDefinition(CK),
-        EnableIf<IsClassMember != Decision::Maybe && IsDefinition != Decision::Maybe>...>
+        EnableIf<IsClassMember != Decision::Maybe && IsDefinition != Decision::Maybe> = dummy>
     CXChildVisitResult dispatchCursor(CXCursor cursor, CXCursor /*parent*/)
     {
         constexpr bool isClassMember = IsClassMember == Decision::True;

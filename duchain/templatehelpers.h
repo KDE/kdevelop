@@ -29,7 +29,10 @@ enum class Decision
     Maybe
 };
 
+// see also: http://flamingdangerzone.com/cxx11/2012/06/01/almost-static-if.html
+namespace detail { enum class enabler {}; }
+constexpr detail::enabler dummy = {};
 template <bool Condition>
-using EnableIf = typename std::enable_if<Condition, Decision>::type;
+using EnableIf = typename std::enable_if<Condition, detail::enabler>::type;
 
 #endif //TEMPLATEHELPERS_H
