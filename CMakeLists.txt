@@ -91,7 +91,7 @@ add_subdirectory(utils)
 add_subdirectory(file_templates)
 add_subdirectory(providers)
 
-add_subdirectory(doc)
+# add_subdirectory(doc)
 
 include(CTest)
 
