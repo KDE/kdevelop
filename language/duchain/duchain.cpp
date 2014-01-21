@@ -1681,11 +1681,7 @@ KDevelop::ReferencedTopDUContext DUChain::waitForUpdate(const KDevelop::IndexedS
   
   waiter.m_dataMutex.lockInline();
   
-  {
-    DUChainReadLocker readLock(DUChain::lock());
-  
-    updateContextForUrl(document, minFeatures, &waiter);
-  }
+  updateContextForUrl(document, minFeatures, &waiter);
   
 //   waiter.m_waitMutex.lock();
 //   waiter.m_dataMutex.unlock();
