@@ -24,7 +24,7 @@
 
 #include <QtCore/QMap>
 #include <QtCore/QUrl>
-#include <QtGui/QAction>
+#include <QAction>
 #include <interfaces/idocumentation.h>
 
 class QModelIndex;

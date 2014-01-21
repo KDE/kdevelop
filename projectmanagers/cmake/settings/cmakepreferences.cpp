@@ -45,14 +45,16 @@
 #include <project/interfaces/iprojectbuilder.h>
 #include <interfaces/iruncontroller.h>
 #include <KStandardDirs>
+#include <KAboutData>
 #include <util/environmentgrouplist.h>
+#include <KLocalizedString>
 
-K_PLUGIN_FACTORY(CMakePreferencesFactory, registerPlugin<CMakePreferences>(); )
-K_EXPORT_PLUGIN(CMakePreferencesFactory("kcm_kdevcmake_settings"))
+// K_PLUGIN_FACTORY(CMakePreferencesFactory, registerPlugin<CMakePreferences>(); )
+// K_EXPORT_PLUGIN(CMakePreferencesFactory("kcm_kdevcmake_settings"))
 
 
 CMakePreferences::CMakePreferences(QWidget* parent, const QVariantList& args)
-    : KCModule(CMakePreferencesFactory::componentData(), parent, args), m_currentModel(0)
+    : KCModule(KAboutData::pluginData("kcm_kdevcmake_settings"), parent, args), m_currentModel(0)
 {
     Q_ASSERT( args.count() > 3 );
 
@@ -65,8 +67,8 @@ CMakePreferences::CMakePreferences(QWidget* parent, const QVariantList& args)
     m_prefsUi->setupUi( w );
     l->addWidget( w );
 
-    m_prefsUi->addBuildDir->setIcon(KIcon( "list-add" ));
-    m_prefsUi->removeBuildDir->setIcon(KIcon( "list-remove" ));
+    m_prefsUi->addBuildDir->setIcon(QIcon::fromTheme( "list-add" ));
+    m_prefsUi->removeBuildDir->setIcon(QIcon::fromTheme( "list-remove" ));
     
     m_prefsUi->addBuildDir->setText(QString());
     m_prefsUi->removeBuildDir->setText(QString());

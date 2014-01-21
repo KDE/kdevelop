@@ -52,8 +52,7 @@ void eatLeadingWhitespace(KTextEditor::Document* doc, KTextEditor::Range& eater,
     int lastNewLinePos = text.lastIndexOf('\n', pos - 1);
     int newStartCol = lastNewLinePos == -1 ? eater.start().column() + pos :
     pos - lastNewLinePos - 1;
-    eater.start().setLine(newStartLine);
-    eater.start().setColumn(newStartCol);
+    eater.setStart(KTextEditor::Cursor(newStartLine, newStartCol));
 }
 
 KTextEditor::Range rangeForText(KTextEditor::Document* doc, const KTextEditor::Range& r, const QString& name)

@@ -26,18 +26,19 @@
 #include <kpluginfactory.h>
 #include <KDebug>
 #include <KAboutData>
+#include <KUrl>
 #include <interfaces/icore.h>
 
 using namespace KDevelop;
 
-K_PLUGIN_FACTORY(KDevExecutePlasmoidFactory, registerPlugin<ExecutePlasmoidPlugin>(); )
-K_EXPORT_PLUGIN(KDevExecutePlasmoidFactory(KAboutData("kdevexecuteplasmoid", "kdevexecuteplasmoid", ki18n("Execute plasmoid support"), "55.2",
-                                                      ki18n("Allows running of plasmoids"), KAboutData::License_GPL)
-    .addAuthor(ki18n("Aleix Pol Gonzalez"), ki18n("Author"), "aleixpol@kde.org", "http://kdevelop.org")
-))
+// K_PLUGIN_FACTORY(KDevExecutePlasmoidFactory, registerPlugin<ExecutePlasmoidPlugin>(); )
+// K_EXPORT_PLUGIN(KDevExecutePlasmoidFactory(KAboutData("kdevexecuteplasmoid", "kdevexecuteplasmoid", ki18n("Execute plasmoid support"), "55.2",
+//                                                       ki18n("Allows running of plasmoids"), KAboutData::License_GPL)
+//     .addAuthor(ki18n("Aleix Pol Gonzalez"), ki18n("Author"), "aleixpol@kde.org", "http://kdevelop.org")
+// ))
 
 ExecutePlasmoidPlugin::ExecutePlasmoidPlugin(QObject *parent, const QVariantList&)
-    : KDevelop::IPlugin(KDevExecutePlasmoidFactory::componentData(), parent)
+    : KDevelop::IPlugin("kdevexecuteplasmoid", parent)
 {
     KDEV_USE_EXTENSION_INTERFACE( IExecutePlugin )
     m_configType = new PlasmoidExecutionConfigType();

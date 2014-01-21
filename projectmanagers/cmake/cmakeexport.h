@@ -22,14 +22,13 @@
 #ifndef CMAKEEXPORT_H
 #define CMAKEEXPORT_H
 
-/* needed for KDE_EXPORT macros */
-#include <kdemacros.h>
+#include <QtGlobal>
 
 #ifndef KDEVCMAKECOMMON_EXPORT
 # ifdef MAKE_KDEV4CMAKECOMMON_LIB
-#  define KDEVCMAKECOMMON_EXPORT KDE_EXPORT
+#  define KDEVCMAKECOMMON_EXPORT Q_DECL_EXPORT
 # else
-#  define KDEVCMAKECOMMON_EXPORT KDE_IMPORT
+#  define KDEVCMAKECOMMON_EXPORT Q_DECL_IMPORT
 # endif
 #endif
 

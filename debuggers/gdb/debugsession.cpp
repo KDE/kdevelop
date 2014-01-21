@@ -28,9 +28,10 @@
 #include <typeinfo>
 
 #include <QtCore/QFileInfo>
-#include <QtGui/QApplication>
+#include <QApplication>
 #include <QRegExp>
 
+#include <KDebug>
 #include <KMessageBox>
 #include <KLocalizedString>
 #include <KToolBar>
@@ -66,7 +67,7 @@ DebugSession::DebugSession()
     : KDevelop::IDebugSession(),
       m_sessionState(NotStartedState),
       justRestarted_(false),
-      m_config(KGlobal::config(), "GDB Debugger"),
+      m_config(KSharedConfig::openConfig(), "GDB Debugger"),
       commandQueue_(new CommandQueue),
       m_tty(0),
       state_(s_dbgNotStarted|s_appNotStarted),
@@ -433,7 +434,7 @@ bool DebugSession::restartAvaliable() const
 }
 void DebugSession::configure()
 {
-//     KConfigGroup config(KGlobal::config(), "GDB Debugger");
+//     KConfigGroup config(KSharedConfig::openConfig(), "GDB Debugger");
 //
 //     // A a configure.gdb script will prevent these from uncontrolled growth...
 //     config_configGdbScript_       = config.readEntry("Remote GDB Configure Script", "");
@@ -909,7 +910,7 @@ bool DebugSession::startDebugger(KDevelop::ILaunchConfiguration* cfg)
     {
         // FIXME: this is hack, I am not sure there's any way presently
         // to edit this via GUI.
-        KConfigGroup config(KGlobal::config(), "GDB Debugger");
+        KConfigGroup config(KSharedConfig::openConfig(), "GDB Debugger");
         m_gdb.data()->start(config);
     }
 
@@ -963,7 +964,7 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg, IExecutePlu
 
 
     KConfigGroup grp = cfg->config();
-    KDevelop::EnvironmentGroupList l(KGlobal::config());
+    KDevelop::EnvironmentGroupList l(KSharedConfig::openConfig());
 
     if (grp.readEntry("Break on Start", false)) {
         BreakpointModel* m = KDevelop::ICore::self()->debugController()->breakpointModel();
@@ -983,10 +984,10 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg, IExecutePlu
     // Configuration values
     bool    config_displayStaticMembers_ = grp.readEntry( GDBDebugger::staticMembersEntry, false );
     bool    config_asmDemangle_ = grp.readEntry( GDBDebugger::demangleNamesEntry, true );
-    KUrl config_dbgShell_ = grp.readEntry( GDBDebugger::debuggerShellEntry, KUrl() );
-    KUrl config_configGdbScript_ = grp.readEntry( GDBDebugger::remoteGdbConfigEntry, KUrl() );
-    KUrl config_runShellScript_ = grp.readEntry( GDBDebugger::remoteGdbShellEntry, KUrl() );
-    KUrl config_runGdbScript_ = grp.readEntry( GDBDebugger::remoteGdbRunEntry, KUrl() );
+    KUrl config_dbgShell_ = grp.readEntry( GDBDebugger::debuggerShellEntry, QUrl() );
+    KUrl config_configGdbScript_ = grp.readEntry( GDBDebugger::remoteGdbConfigEntry, QUrl() );
+    KUrl config_runShellScript_ = grp.readEntry( GDBDebugger::remoteGdbShellEntry, QUrl() );
+    KUrl config_runGdbScript_ = grp.readEntry( GDBDebugger::remoteGdbRunEntry, QUrl() );
     
     Q_ASSERT(iface);
     bool config_useExternalTerminal = iface->useTerminal( cfg );
@@ -1430,12 +1431,12 @@ void DebugSession::handleVersion(const QStringList& s)
     rx.indexIn(s.first());
     if (rx.cap(1).toInt() < minVersion1
         || (rx.cap(1).toInt() == minVersion1 && (rx.cap(2).toInt() < minVersion2
-            || ( rx.cap(2).toInt() == minVersion2 && minVersion3 > 0 && rx.numCaptures() == 3
+            || ( rx.cap(2).toInt() == minVersion2 && minVersion3 > 0 && rx.captureCount() == 3
                 && rx.cap(3).toInt() < minVersion3))))
     {
-        if (qApp->type() == QApplication::Tty)  {
+        if (qobject_cast<QGuiApplication*>(qApp))  {
             //for unittest
-            qFatal("You need gdb 7.0.0 or higher.");
+            qFatal("You need a graphical application.");
         }
         KMessageBox::error(
             qApp->activeWindow(),

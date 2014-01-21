@@ -24,6 +24,8 @@
 #include <KProcess>
 #include <KMessageBox>
 #include <KStandardDirs>
+#include <KLocalizedString>
+#include <KSharedConfig>
 #include "ui_cmakebuilddirchooser.h"
 
 #include <KColorScheme>
@@ -45,13 +47,13 @@ CMakeBuildDirChooser::CMakeBuildDirChooser(QWidget* parent)
     QString cmakeBin=KStandardDirs::findExe( "cmake" );
     setCMakeBinary(KUrl(cmakeBin));
 
-    KConfigGroup config = KGlobal::config()->group("CMakeBuildDirChooser");
+    KConfigGroup config = KSharedConfig::openConfig()->group("CMakeBuildDirChooser");
     QStringList lastExtraArguments = config.readEntry("LastExtraArguments", QStringList());;
     m_chooserUi->extraArguments->addItem("");
     m_chooserUi->extraArguments->addItems(lastExtraArguments);
     m_chooserUi->extraArguments->setInsertPolicy(QComboBox::InsertAtTop);
     KCompletion *comp = m_chooserUi->extraArguments->completionObject();
-    connect(m_chooserUi->extraArguments, SIGNAL(returnPressed(const QString&)), comp, SLOT(addItem(QString)));
+    connect(m_chooserUi->extraArguments, SIGNAL(returnPressed(QString)), comp, SLOT(addItem(QString)));
     comp->insertItems(lastExtraArguments);
 
     connect(m_chooserUi->cmakeBin, SIGNAL(textChanged(QString)), this, SLOT(updated()));
@@ -63,7 +65,7 @@ CMakeBuildDirChooser::CMakeBuildDirChooser(QWidget* parent)
 
 CMakeBuildDirChooser::~CMakeBuildDirChooser()
 {
-    KConfigGroup config = KGlobal::config()->group("CMakeBuildDirChooser");
+    KConfigGroup config = KSharedConfig::openConfig()->group("CMakeBuildDirChooser");
     config.writeEntry("LastExtraArguments", extraArgumentsHistory());
     config.sync();
 

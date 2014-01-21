@@ -32,6 +32,7 @@
 #include "projectpathsmodel.h"
 #include <util/environmentgrouplist.h>
 #include <interfaces/iproject.h>
+#include <KLocalizedString>
 
 extern int cbsDebugArea(); // from debugarea.cpp
 
@@ -42,10 +43,10 @@ ProjectPathsWidget::ProjectPathsWidget( QWidget* parent )
     ui->setupUi( this );
 
     // Hack to workaround broken setIcon(QIcon) overload in KPushButton, the function does not set the icon at all
-    // So need to explicitly use the KIcon overload
-    ui->addPath->setIcon(KIcon("list-add"));
-    ui->replacePath->setIcon(KIcon("document-edit"));
-    ui->removePath->setIcon(KIcon("list-remove"));
+    // So need to explicitly use the QIcon overload
+    ui->addPath->setIcon(QIcon::fromTheme("list-add"));
+    ui->replacePath->setIcon(QIcon::fromTheme("document-edit"));
+    ui->removePath->setIcon(QIcon::fromTheme("list-remove"));
 
     // hack taken from kurlrequester, make the buttons a bit less in height so they better match the url-requester
     ui->addPath->setFixedHeight( ui->projectPaths->sizeHint().height() );

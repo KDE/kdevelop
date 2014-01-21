@@ -4,8 +4,6 @@ set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 
 add_subdirectory(icons)
 
-add_definitions( ${QT_DEFINITIONS} ${KDE4_DEFINITIONS} )
-
 set(kdevghprovider_PART_SRCS
     ghlineedit.cpp
     ghprovidermodel.cpp

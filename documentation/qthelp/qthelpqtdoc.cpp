@@ -26,7 +26,6 @@
 #include <KLocale>
 #include <KStandardDirs>
 #include <KProcess>
-#include <KIcon>
 #include <KDebug>
 
 QtHelpQtDoc::QtHelpQtDoc(QObject *parent, const QVariantList &args)
@@ -86,7 +85,7 @@ void QtHelpQtDoc::loadDirectory(const QString& path)
 
 QIcon QtHelpQtDoc::icon() const
 {
-    return KIcon("qtlogo");
+    return QIcon::fromTheme("qtlogo");
 }
 
 QString QtHelpQtDoc::name() const

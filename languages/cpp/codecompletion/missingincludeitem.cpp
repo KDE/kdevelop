@@ -411,7 +411,7 @@ MissingIncludeCompletionItem::MissingIncludeCompletionItem(const QString& addedI
 {
 }
 
-#define RETURN_CACHED_ICON(name) {static QIcon icon(KIcon(name).pixmap(QSize(16, 16))); return icon;}
+#define RETURN_CACHED_ICON(name) {static QIcon icon(QIcon::fromTheme(name).pixmap(QSize(16, 16))); return icon;}
 
 QVariant MissingIncludeCompletionItem::data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const {
   DUChainReadLocker lock(DUChain::lock(), 500);

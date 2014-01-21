@@ -19,8 +19,11 @@
 
 
 #include <KDebug>
+#include <KUrl>
 #include <kio/scheduler.h>
-#include <qjson/parser.h>
+#include <kio/transferjob.h>
+#include <kio/storedtransferjob.h>
+#include <QtCore/QJsonDocument>
 
 #include <ghresource.h>
 #include <ghprovidermodel.h>
@@ -29,7 +32,7 @@
 namespace gh
 {
 /// Base url for the Github API v3.
-const static KUrl baseUrl("https://api.github.com");
+const static QUrl baseUrl("https://api.github.com");
 
 Resource::Resource(QObject *parent, ProviderModel *model)
     : QObject(parent), m_model(model)
@@ -84,11 +87,11 @@ KIO::TransferJob * Resource::getTransferJob(const QString &uri, const QString &t
 
 void Resource::retrieveRepos(const QByteArray &data)
 {
-    bool ok;
-    QJson::Parser parser;
-    QVariantList map = parser.parse(data, &ok).toList();
+    QJsonParseError error;
+    QJsonDocument doc = QJsonDocument::fromJson(data, &error);
 
-    if (ok) {
+    if (error.error == 0) {
+        QVariantList map = doc.toVariant().toList();
         m_model->clear();
         foreach (QVariant it, map) {
             QVariantMap map = it.toMap();
@@ -109,12 +112,12 @@ void Resource::retrieveRepos(const QByteArray &data)
 
 void Resource::retrieveOrgs(const QByteArray &data)
 {
-    bool ok;
     QStringList res;
-    QJson::Parser parser;
-    QVariantList json = parser.parse(data, &ok).toList();
+    QJsonParseError error;
+    QJsonDocument doc = QJsonDocument::fromJson(data, &error);
 
-    if (ok) {
+    if (error.error == 0) {
+        QVariantList json = doc.toVariant().toList();
         foreach (QVariant it, json) {
             QVariantMap map = it.toMap();
             res << map.value("login").toString();
@@ -130,11 +133,10 @@ void Resource::slotAuthenticate(KJob *job)
         return;
     }
 
-    bool ok;
-    QJson::Parser p;
-    QVariant res = p.parse(qobject_cast<KIO::StoredTransferJob *>(job)->data(), &ok);
-    if (ok) {
-        QVariantMap map = res.toMap();
+    QJsonParseError error;
+    QJsonDocument doc = QJsonDocument::fromJson(qobject_cast<KIO::StoredTransferJob *>(job)->data(), &error);
+    if (error.error == 0) {
+        QVariantMap map = doc.toVariant().toMap();
         emit authenticated(map.value("id").toByteArray(),
                            map.value("token").toByteArray());
     } else

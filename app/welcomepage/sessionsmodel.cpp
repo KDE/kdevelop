@@ -18,6 +18,7 @@
 
 #include "sessionsmodel.h"
 #include <shell/core.h>
+#include <shell/sessioncontroller.h>
 
 SessionsModel::SessionsModel(QObject* parent)
     : QAbstractListModel(parent)

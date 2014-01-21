@@ -20,6 +20,7 @@
 #include "custombuildsystemconfigwidget.h"
 
 #include <KConfig>
+#include <KConfigGroup>
 
 #include "ui_custombuildsystemconfigwidget.h"
 #include "configconstants.h"
@@ -54,8 +55,8 @@ CustomBuildSystemConfigWidget::CustomBuildSystemConfigWidget( QWidget* parent, K
     ui->setupUi( this );
     ui->configWidget->setProject(project);
 
-    ui->addConfig->setIcon(KIcon( "list-add" ));
-    ui->removeConfig->setIcon(KIcon( "list-remove" ));
+    ui->addConfig->setIcon(QIcon::fromTheme( "list-add" ));
+    ui->removeConfig->setIcon(QIcon::fromTheme( "list-remove" ));
 
     // hack taken from kurlrequester, make the buttons a bit less in height so they better match the url-requester
     ui->addConfig->setFixedHeight( ui->currentConfig->sizeHint().height() );
@@ -84,15 +85,15 @@ void CustomBuildSystemConfigWidget::loadFrom( KConfig* cfg )
         KConfigGroup subgrp = grp.group( grpName );
         CustomBuildSystemConfig config;
 
-        config.title = subgrp.readEntry( ConfigConstants::configTitleKey, "" );
-        config.buildDir = subgrp.readEntry( ConfigConstants::buildDirKey, "" );
+        config.title = subgrp.readEntry( ConfigConstants::configTitleKey, QString() );
+        config.buildDir = subgrp.readEntry( ConfigConstants::buildDirKey, QUrl() );
 
         foreach( const QString& subgrpName, subgrp.groupList() ) {
             if( subgrpName.startsWith( ConfigConstants::toolGroupPrefix ) ) {
                 KConfigGroup toolgrp = subgrp.group( subgrpName );
                 CustomBuildSystemTool tool;
                 tool.arguments = toolgrp.readEntry( ConfigConstants::toolArguments, "" );
-                tool.executable = toolgrp.readEntry( ConfigConstants::toolExecutable, KUrl() );
+                tool.executable = toolgrp.readEntry( ConfigConstants::toolExecutable, QUrl() );
                 tool.envGrp = toolgrp.readEntry( ConfigConstants::toolEnvironment, QString() );
                 tool.enabled = toolgrp.readEntry( ConfigConstants::toolEnabled, false );
                 tool.type = CustomBuildSystemTool::ActionType( toolgrp.readEntry( ConfigConstants::toolType, 0 ) );
@@ -140,13 +141,13 @@ void CustomBuildSystemConfigWidget::saveConfig( KConfigGroup& grp, CustomBuildSy
         grp.writeEntry( ConfigConstants::currentConfigKey, subgrp.name() );
 
     subgrp.writeEntry( ConfigConstants::configTitleKey, c.title );
-    subgrp.writeEntry( ConfigConstants::buildDirKey, c.buildDir );
+    subgrp.writeEntry<QUrl>( ConfigConstants::buildDirKey, c.buildDir );
     foreach( const CustomBuildSystemTool& tool, c.tools ) {
         KConfigGroup toolgrp = subgrp.group( generateToolGroupName( tool.type ) );
         toolgrp.writeEntry( ConfigConstants::toolType, int(tool.type) );
         toolgrp.writeEntry( ConfigConstants::toolEnvironment , tool.envGrp );
         toolgrp.writeEntry( ConfigConstants::toolEnabled, tool.enabled );
-        toolgrp.writeEntry( ConfigConstants::toolExecutable, tool.executable );
+        toolgrp.writeEntry<QUrl>( ConfigConstants::toolExecutable, tool.executable );
         toolgrp.writeEntry( ConfigConstants::toolArguments, tool.arguments );
     }
 

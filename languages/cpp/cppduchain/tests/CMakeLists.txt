@@ -6,7 +6,7 @@ include_directories(
 
 ecm_add_test(test_expressionparser.cpp testhelper.cpp TEST_NAME cppexpressionparsertest
 LINK_LIBRARIES
-    kdev4cppparser kdev4cpprpp ${KDEVPLATFORM_LANGUAGE_LIBRARIES} kdev4cppduchain ${KDEVPLATFORM_TESTS_LIBRARIES}  )
+    kdev4cppparser kdev4cpprpp Qt5::Test ${KDEVPLATFORM_LANGUAGE_LIBRARIES} kdev4cppduchain ${KDEVPLATFORM_TESTS_LIBRARIES}  )
 
 
 include_directories(

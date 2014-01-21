@@ -122,7 +122,7 @@ ContextMenuExtension OktetaPlugin::contextMenuExtension( Context* context )
     if( openWithContext && !openWithContext->mimeType()->is("inode/directory"))
     {
         KAction* openAction = new KAction( i18n("Hex Editor"), this );
-        openAction->setIcon( KIcon("document-open") );
+        openAction->setIcon( QIcon::fromTheme("document-open") );
         openAction->setData( openWithContext->urls() );
         connect( openAction, SIGNAL(triggered()), SLOT(onOpenTriggered()) );
 

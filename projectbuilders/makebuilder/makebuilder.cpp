@@ -34,11 +34,11 @@
 #include <KDebug>
 #include <KCompositeJob>
 
-K_PLUGIN_FACTORY(MakeBuilderFactory, registerPlugin<MakeBuilder>(); )
-K_EXPORT_PLUGIN(MakeBuilderFactory(KAboutData("kdevmakebuilder","kdevmakebuilder", ki18n("Make Builder"), "0.1", ki18n("Support for building Make projects"), KAboutData::License_GPL)))
+// K_PLUGIN_FACTORY(MakeBuilderFactory, registerPlugin<MakeBuilder>(); )
+// K_EXPORT_PLUGIN(MakeBuilderFactory(KAboutData("kdevmakebuilder","kdevmakebuilder", ki18n("Make Builder"), "0.1", ki18n("Support for building Make projects"), KAboutData::License_GPL)))
 
 MakeBuilder::MakeBuilder(QObject *parent, const QVariantList &)
-    : KDevelop::IPlugin(MakeBuilderFactory::componentData(), parent)
+    : KDevelop::IPlugin("kdevmakebuilder", parent)
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectBuilder )
     KDEV_USE_EXTENSION_INTERFACE( IMakeBuilder )

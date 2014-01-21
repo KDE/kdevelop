@@ -7,8 +7,8 @@ set(kdevmanpage_SRCS
 )
 
 add_library(kdevmanpage MODULE ${kdevmanpage_SRCS})
-target_link_libraries(kdevmanpage ${KDE4_KDEUI_LIBS} KF5::TextEditor ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-${KDEVPLATFORM_DOCUMENTATION_LIBRARIES} ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${QT_QTWEBKIT_LIBRARY} Qt5::Gui)
+target_link_libraries(kdevmanpage KF5::TextEditor ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
+${KDEVPLATFORM_DOCUMENTATION_LIBRARIES} ${KDEVPLATFORM_INTERFACES_LIBRARIES} KF5::KCMUtils Qt5::WebKitWidgets)
 
 install(TARGETS kdevmanpage DESTINATION ${PLUGIN_INSTALL_DIR})
 configure_file(kdevmanpage.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevmanpage.desktop)

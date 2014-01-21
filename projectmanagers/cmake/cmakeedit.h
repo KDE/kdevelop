@@ -35,7 +35,7 @@ class CMakeFolderItem;
 
 namespace CMakeEdit {
     CMakeFolderItem* nearestCMakeFolder(KDevelop::ProjectBaseItem* item);
-    QList<KDevelop::ProjectBaseItem*> cmakeListedItemsAffectedByUrlChange(const KDevelop::IProject *proj, const KUrl &url, KUrl rootUrl = KUrl());
+    QList<KDevelop::ProjectBaseItem*> cmakeListedItemsAffectedByUrlChange(const KDevelop::IProject *proj, const KUrl &url, KUrl rootUrl = QUrl());
     QList<KDevelop::ProjectBaseItem*> cmakeListedItemsAffectedByItemsChanged(const QList<KDevelop::ProjectBaseItem*> &items);
 
     bool changesWidgetRemoveFilesFromTargets(const QList<KDevelop::ProjectFileItem*> &files, KDevelop::ApplyChangesWidget *widget);

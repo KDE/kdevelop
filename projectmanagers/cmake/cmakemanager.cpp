@@ -78,13 +78,13 @@ Q_DECLARE_METATYPE(KDevelop::IProject*);
 
 using namespace KDevelop;
 
-K_PLUGIN_FACTORY(CMakeSupportFactory, registerPlugin<CMakeManager>(); )
-K_EXPORT_PLUGIN(CMakeSupportFactory(KAboutData("kdevcmakemanager","kdevcmake", ki18n("CMake Manager"), "0.1", ki18n("Support for managing CMake projects"), KAboutData::License_GPL)))
+// K_PLUGIN_FACTORY(CMakeSupportFactory, registerPlugin<CMakeManager>(); )
+// K_EXPORT_PLUGIN(CMakeSupportFactory(KAboutData("kdevcmakemanager","kdevcmake", ki18n("CMake Manager"), "0.1", ki18n("Support for managing CMake projects"), KAboutData::License_GPL)))
 
 const QString DIALOG_CAPTION = i18n("KDevelop - CMake Support");
 
 CMakeManager::CMakeManager( QObject* parent, const QVariantList& )
-    : KDevelop::IPlugin( CMakeSupportFactory::componentData(), parent )
+    : KDevelop::IPlugin( "kdevcmakemanager", parent )
     , m_filter( new ProjectFilterManager( this ) )
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBuildSystemManager )
@@ -800,11 +800,11 @@ QWidget* CMakeManager::specialLanguageObjectNavigationWidget(const KUrl& url, co
         const IDocument* d=ICore::self()->documentController()->documentForUrl(url);
         const KTextEditor::Document* e=d->textDocument();
         KTextEditor::Cursor start=position.textCursor(), end=position.textCursor(), step(0,1);
-        for(QChar i=e->character(start); i.isLetter() || i=='_'; i=e->character(start-=step))
+        for(QChar i=e->characterAt(start); i.isLetter() || i=='_'; i=e->characterAt(start-=step))
         {}
         start+=step;
         
-        for(QChar i=e->character(end); i.isLetter() || i=='_'; i=e->character(end+=step))
+        for(QChar i=e->characterAt(end); i.isLetter() || i=='_'; i=e->characterAt(end+=step))
         {}
         
         QString id=e->text(KTextEditor::Range(start, end));

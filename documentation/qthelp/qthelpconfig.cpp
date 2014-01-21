@@ -45,15 +45,15 @@ QtHelpConfig::QtHelpConfig(QWidget *parent, const QVariantList &args)
     m_configWidget = new Ui::QtHelpConfigUI;
     m_configWidget->setupUi( w );
     m_configWidget->qchIcon->setIcon("qtlogo");
-    m_configWidget->addButton->setIcon(KIcon("list-add"));
+    m_configWidget->addButton->setIcon(QIcon::fromTheme("list-add"));
     connect(m_configWidget->addButton, SIGNAL(clicked(bool)), this, SLOT(add()));
-    m_configWidget->editButton->setIcon(KIcon("document-edit"));
+    m_configWidget->editButton->setIcon(QIcon::fromTheme("document-edit"));
     connect(m_configWidget->editButton, SIGNAL(clicked(bool)), this, SLOT(modify()));
-    m_configWidget->removeButton->setIcon(KIcon("list-remove"));
+    m_configWidget->removeButton->setIcon(QIcon::fromTheme("list-remove"));
     connect(m_configWidget->removeButton, SIGNAL(clicked(bool)), this, SLOT(remove()));
-    m_configWidget->upButton->setIcon(KIcon("arrow-up"));
+    m_configWidget->upButton->setIcon(QIcon::fromTheme("arrow-up"));
     connect(m_configWidget->upButton, SIGNAL(clicked(bool)), this, SLOT(up()));
-    m_configWidget->downButton->setIcon(KIcon("arrow-down"));
+    m_configWidget->downButton->setIcon(QIcon::fromTheme("arrow-down"));
     connect(m_configWidget->downButton, SIGNAL(clicked(bool)), this, SLOT(down()));
     // Table
     connect(m_configWidget->qchTable, SIGNAL(itemSelectionChanged()), this, SLOT(selectionChanged()));
@@ -110,7 +110,7 @@ void QtHelpConfig::load()
     const int size = qMin(qMin(iconList.size(), nameList.size()), pathList.size());
     for(int i = 0; i < size; ++i) {
         m_configWidget->qchTable->insertRow(i);
-        QTableWidgetItem *itemName = new QTableWidgetItem(KIcon(iconList.at(i)), nameList.at(i));
+        QTableWidgetItem *itemName = new QTableWidgetItem(QIcon::fromTheme(iconList.at(i)), nameList.at(i));
         m_configWidget->qchTable->setItem(i, 0, itemName);
         QTableWidgetItem *itemPath = new QTableWidgetItem(pathList.at(i));
         m_configWidget->qchTable->setItem(i, 1, itemPath);
@@ -181,7 +181,7 @@ void QtHelpConfig::add()
     }
     int row = m_configWidget->qchTable->rowCount();
     m_configWidget->qchTable->insertRow(row);
-    QTableWidgetItem *itemName = new QTableWidgetItem(KIcon(m_configWidget->qchIcon->icon()), m_configWidget->qchName->text());
+    QTableWidgetItem *itemName = new QTableWidgetItem(QIcon::fromTheme(m_configWidget->qchIcon->icon()), m_configWidget->qchName->text());
     m_configWidget->qchTable->setItem(row, 0, itemName);
     QTableWidgetItem *itemPath = new QTableWidgetItem(m_configWidget->qchRequester->text());
     m_configWidget->qchTable->setItem(row, 1, itemPath);
@@ -202,14 +202,14 @@ void QtHelpConfig::modify()
             if(!checkQtHelpFile(true)){
                 return;
             }
-            m_configWidget->qchTable->item(row, 0)->setIcon(KIcon(m_configWidget->qchIcon->icon()));
+            m_configWidget->qchTable->item(row, 0)->setIcon(QIcon::fromTheme(m_configWidget->qchIcon->icon()));
             m_configWidget->qchTable->item(row, 0)->setText(m_configWidget->qchName->text());
             m_configWidget->qchTable->item(row, 1)->setText(m_configWidget->qchRequester->text());
             m_configWidget->qchTable->item(row, 2)->setText(m_configWidget->qchIcon->icon());
             emit changed(true);
         } else {
             // From GHNS
-            m_configWidget->qchTable->item(row, 0)->setIcon(KIcon(m_configWidget->qchIcon->icon()));
+            m_configWidget->qchTable->item(row, 0)->setIcon(QIcon::fromTheme(m_configWidget->qchIcon->icon()));
             m_configWidget->qchTable->item(row, 0)->setText(m_configWidget->qchName->text());
             m_configWidget->qchTable->item(row, 2)->setText(m_configWidget->qchIcon->icon());
             emit changed(true);
@@ -324,7 +324,7 @@ void QtHelpConfig::knsUpdate(KNS3::Entry::List list)
                 if(checkNamespace(filename, -1)){
                     int row = m_configWidget->qchTable->rowCount();
                     m_configWidget->qchTable->insertRow(row);
-                    QTableWidgetItem *itemName = new QTableWidgetItem(KIcon("documentation"), e.name());
+                    QTableWidgetItem *itemName = new QTableWidgetItem(QIcon::fromTheme("documentation"), e.name());
                     m_configWidget->qchTable->setItem(row, 0, itemName);
                     QTableWidgetItem *itemPath = new QTableWidgetItem(filename);
                     m_configWidget->qchTable->setItem(row, 1, itemPath);

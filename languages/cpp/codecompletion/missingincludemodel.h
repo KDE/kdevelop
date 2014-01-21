@@ -58,7 +58,7 @@ protected:
   MissingIncludeCompletionWorker* worker() const;
   virtual void completionInvokedInternal(KTextEditor::View* view, const KTextEditor::Range& range, KTextEditor::CodeCompletionModel::InvocationType invocationType, const KUrl& url);
   virtual KDevelop::CodeCompletionWorker* createCompletionWorker ();
-  virtual KTextEditor::CodeCompletionModelControllerInterface3::MatchReaction matchingItem(const QModelIndex& matched);
+  virtual KTextEditor::CodeCompletionModelControllerInterface::MatchReaction matchingItem(const QModelIndex& matched);
 };
 
 class MissingIncludeCompletionWorker : public KDevelop::CodeCompletionWorker {

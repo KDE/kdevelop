@@ -70,7 +70,7 @@ void KDevProjectOpen::projectDone(IProject* )
 
 int main(int argc, char** argv)
 {
-    KAboutData aboutData( "kdevprojectopen", 0, ki18n( "KDevelop" ), "0.99", ki18n("opens a project then closes it, debugging tool"), KAboutData::License_GPL,
+    K4AboutData aboutData( "kdevprojectopen", 0, ki18n( "KDevelop" ), "0.99", ki18n("opens a project then closes it, debugging tool"), K4AboutData::License_GPL,
                           ki18n( "Copyright 1999-2012, The KDevelop developers" ), KLocalizedString(), "http://www.kdevelop.org/" );
     aboutData.addAuthor( ki18n("Aleix Pol Gonzalez"), ki18n( "" ), "aleixpol@kde.org" );
     KCmdLineArgs::init( argc, argv, &aboutData );

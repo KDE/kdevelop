@@ -82,7 +82,7 @@ KUrl NinjaJob::workingDirectory() const
 {
     KDevelop::ProjectBaseItem* it = item();
     if(!it)
-        return KUrl();
+        return QUrl();
     KDevelop::IBuildSystemManager* bsm = it->project()->buildSystemManager();
     KDevelop::Path workingDir = bsm->buildDirectory( it );
     while( !QFile::exists( workingDir.toLocalFile() + "build.ninja" ) ) {

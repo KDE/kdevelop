@@ -24,6 +24,8 @@
 
 #include <KLocalizedString>
 #include <KMessageBox>
+#include <KDialog>
+#include <KDebug>
 
 using namespace KDevelop;
 using namespace Cpp;

@@ -26,7 +26,7 @@
 // Plugin
 #include "oktetaglobal.h"
 // Qt
-#include <QtGui/QWidget>
+#include <QWidget>
 
 namespace KASTEN_NAMESPACE {
 class AbstractToolView;

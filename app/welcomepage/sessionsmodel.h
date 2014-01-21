@@ -20,7 +20,6 @@
 #define SESSIONSMODEL_H
 
 #include <QModelIndex>
-#include <shell/sessioncontroller.h>
 
 class SessionsModel : public QAbstractListModel
 {

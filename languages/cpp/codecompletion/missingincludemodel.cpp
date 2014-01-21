@@ -114,7 +114,7 @@ void MissingIncludeCompletionModel::completionInvokedInternal(KTextEditor::View*
   clear();
 }
 
-KTextEditor::CodeCompletionModelControllerInterface3::MatchReaction MissingIncludeCompletionModel::matchingItem(const QModelIndex& matched) {
+KTextEditor::CodeCompletionModelControllerInterface::MatchReaction MissingIncludeCompletionModel::matchingItem(const QModelIndex& matched) {
   Q_UNUSED(matched);
   //When something in this model matches, don't hide the completion-list
   kDebug() << "checking reaction";

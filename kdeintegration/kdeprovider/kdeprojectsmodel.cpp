@@ -17,7 +17,7 @@
 */
 
 #include "kdeprojectsmodel.h"
-#include <KIcon>
+#include <QIcon>
 #include <KUrl>
 #include <QDebug>
 #include <vcs/vcslocation.h>
@@ -25,7 +25,7 @@
 using namespace KDevelop;
 
 SourceItem::SourceItem(const Source& s)
-    : QStandardItem(KIcon(s.icon), s.name), m_s(s)
+    : QStandardItem(QIcon::fromTheme(s.icon), s.name), m_s(s)
 {
     Q_ASSERT(!m_s.name.isEmpty());
 }

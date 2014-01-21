@@ -24,6 +24,7 @@
 #include <interfaces/iuicontroller.h>
 #include <kparts/mainwindow.h>
 #include <kmessagebox.h>
+#include <kdialog.h>
 #include <includepathresolver.h>
 #include <language/backgroundparser/backgroundparser.h>
 #include <interfaces/ilanguagecontroller.h>

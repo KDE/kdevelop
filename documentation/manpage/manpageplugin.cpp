@@ -24,7 +24,6 @@
 #include <KMimeType>
 #include <KSettings/Dispatcher>
 #include <KUrl>
-#include <KIcon>
 
 #include <interfaces/idocumentation.h>
 
@@ -54,12 +53,10 @@
 using namespace KDevelop;
 
 K_PLUGIN_FACTORY(ManPageFactory, registerPlugin<ManPagePlugin>(); )
-K_EXPORT_PLUGIN(ManPageFactory(KAboutData("kdevmanpage","kdevmanpage", ki18n("ManPage"),
-                                          "1", ki18n("Check Man Page documentation"),
-                               KAboutData::License_GPL)))
+// K_EXPORT_PLUGIN(ManPageFactory(KAboutData("kdevmanpage","kdevmanpage", ki18n("ManPage"), "1", ki18n("Check Man Page documentation"), KAboutData::License_GPL)))
 
 ManPagePlugin::ManPagePlugin(QObject* parent, const QVariantList& args)
-    : IPlugin(ManPageFactory::componentData(), parent)
+    : IPlugin("kdevmanpage", parent)
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IDocumentationProvider )
     Q_UNUSED(args);
@@ -79,7 +76,7 @@ QString ManPagePlugin::name() const
 
 QIcon ManPagePlugin::icon() const
 {
-    static KIcon icon("x-office-address-book");
+    static QIcon icon = QIcon::fromTheme("x-office-address-book");
     return icon;
 }
 

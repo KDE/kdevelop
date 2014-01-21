@@ -90,7 +90,7 @@
 #include "quickopen.h"
 #include "cppdebughelper.h"
 #include "codegen/simplerefactoring.h"
-#include "codegen/cppclasshelper.h"
+// #include "codegen/cppclasshelper.h"
 #include "includepathcomputer.h"
 #include "codecompletion/missingincludemodel.h"
 
@@ -146,8 +146,8 @@ Declaration* definitionForCursorDeclaration(const KDevelop::SimpleCursor& cursor
 // For unit-tests that compile cpplanguagesupport.cpp into their executable
 // don't create the factories as that means 2 instances of the factory
 #ifndef BUILD_TESTS
-K_PLUGIN_FACTORY(KDevCppSupportFactory, registerPlugin<CppLanguageSupport>(); )
-K_EXPORT_PLUGIN(KDevCppSupportFactory(KAboutData("kdevcppsupport","kdevcpp", ki18n("C++ Support"), "0.1", ki18n("Support for C++ Language"), KAboutData::License_GPL)))
+// K_PLUGIN_FACTORY(KDevCppSupportFactory, registerPlugin<CppLanguageSupport>(); )
+// K_EXPORT_PLUGIN(KDevCppSupportFactory(KAboutData("kdevcppsupport","kdevcpp", ki18n("C++ Support"), "0.1", ki18n("Support for C++ Language"), KAboutData::License_GPL)))
 #else
 class KDevCppSupportFactory : public KPluginFactory
 {
@@ -159,14 +159,14 @@ public:
 
 static QStringList mimeTypesList()
 {
-    KDesktopFile desktopFile("services", QString("kdevcppsupport.desktop"));
+    KDesktopFile desktopFile(QStandardPaths::GenericDataLocation, QString("kde5/services/kdevcppsupport.desktop"));
     const KConfigGroup& desktopGroup = desktopFile.desktopGroup();
     QString mimeTypesStr = desktopGroup.readEntry("X-KDevelop-SupportedMimeTypes", "");
     return mimeTypesStr.split(QChar(','), QString::SkipEmptyParts);
 }
 
 CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*args*/ )
-    : KDevelop::IPlugin( KDevCppSupportFactory::componentData(), parent ),
+    : KDevelop::IPlugin( "kdevcppsupport", parent ),
       KDevelop::ILanguageSupport(),
       m_mimeTypes(mimeTypesList())
 {
@@ -213,23 +213,23 @@ void CppLanguageSupport::createActionsForMainWindow (Sublime::MainWindow* /*wind
 {
     _xmlFile = xmlFile();
 
-    KAction* switchDefinitionDeclaration = actions.addAction("switch_definition_declaration");
+    QAction* switchDefinitionDeclaration = actions.addAction("switch_definition_declaration");
     switchDefinitionDeclaration->setText( i18n("&Switch Definition/Declaration") );
     switchDefinitionDeclaration->setShortcut( Qt::CTRL | Qt::SHIFT | Qt::Key_C );
     connect(switchDefinitionDeclaration, SIGNAL(triggered(bool)), this, SLOT(switchDefinitionDeclaration()));
 
-//    KAction* pimplAction = actions->addAction("code_private_implementation");
+//    QAction* pimplAction = actions->addAction("code_private_implementation");
 //    pimplAction->setText( i18n("Make Class Implementation Private") );
 //    pimplAction->setShortcut(Qt::ALT | Qt::META | Qt::Key_P);
 //    connect(pimplAction, SIGNAL(triggered(bool)), &SimpleRefactoring::self(), SLOT(executePrivateImplementationAction()));
 
-    KAction* renameDeclarationAction = actions.addAction("code_rename_declaration");
+    QAction* renameDeclarationAction = actions.addAction("code_rename_declaration");
     renameDeclarationAction->setText( i18n("Rename Declaration") );
-    renameDeclarationAction->setIcon(KIcon("edit-rename"));
+    renameDeclarationAction->setIcon(QIcon::fromTheme("edit-rename"));
     renameDeclarationAction->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_R);
     connect(renameDeclarationAction, SIGNAL(triggered(bool)), &SimpleRefactoring::self(), SLOT(executeRenameAction()));
 
-    KAction* moveIntoSourceAction = actions.addAction("code_move_definition");
+    QAction* moveIntoSourceAction = actions.addAction("code_move_definition");
     moveIntoSourceAction->setText( i18n("Move into Source") );
     moveIntoSourceAction->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_S);
     connect(moveIntoSourceAction, SIGNAL(triggered(bool)), &SimpleRefactoring::self(), SLOT(executeMoveIntoSourceAction()));
@@ -358,7 +358,7 @@ void CppLanguageSupport::switchDefinitionDeclaration()
     KTextEditor::Range targetRange = def->rangeInCurrentRevision().textRange();
 
     if(def->internalContext()) {
-      targetRange.end() = def->internalContext()->rangeInCurrentRevision().end.textCursor();
+      targetRange.setEnd(def->internalContext()->rangeInCurrentRevision().end.textCursor());
     }else{
       kDebug(9007) << "Declaration does not have internal context";
     }
@@ -400,11 +400,6 @@ CppLanguageSupport::~CppLanguageSupport()
     }
 
     delete m_quickOpenDataProvider;
-
-    // Remove any documents waiting to be parsed from the background parser.
-    core()->languageController()->backgroundParser()->clear(this);
-
-
     delete m_includeResolver;
 #ifdef DEBUG_UI_LOCKUP
     delete m_blockTester;
@@ -432,7 +427,9 @@ KDevelop::ICodeHighlighting *CppLanguageSupport::codeHighlighting() const
 
 ICreateClassHelper* CppLanguageSupport::createClassHelper() const
 {
-    return new CppClassHelper;
+#warning waiting for Grantlee port
+//     return new CppClassHelper;
+    return 0;
 }
 
 
@@ -765,7 +762,7 @@ QPair<KUrl, KDevelop::SimpleCursor> CppLanguageSupport::specialLanguageObjectJum
     QPair<SimpleRange, const rpp::pp_macro*> m = usedMacroForPosition(url, position);
 
     if(!m.first.isValid())
-      return qMakePair(KUrl(), SimpleCursor::invalid());
+      return qMakePair(QUrl(), SimpleCursor::invalid());
 
     return qMakePair(KUrl(m.second->file.str()), SimpleCursor(m.second->sourceLine, 0));
 }

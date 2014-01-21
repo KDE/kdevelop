@@ -31,7 +31,6 @@
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
 #include <KLocalizedString>
-#include <KIcon>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentationcontroller.h>
 #include "astfactory.h"
@@ -101,14 +100,14 @@ void CMakeCodeCompletionModel::completionInvoked(View* view, const Range& range,
     int numRows = 0;
     if(m_inside) {
         Cursor start=range.start();
-        for(; isPathChar(d->character(start)); start-=Cursor(0,1))
+        for(; isPathChar(d->characterAt(start)); start-=Cursor(0,1))
         {}
         start+=Cursor(0,1);
         
         QString tocomplete=d->text(Range(start, range.end()-Cursor(0,1)));
         
         int lastdir=tocomplete.lastIndexOf('/');
-        QString path=d->url().upUrl().path(KUrl::AddTrailingSlash);
+        QString path = KUrl(d->url()).upUrl().path(KUrl::AddTrailingSlash);
         QString basePath;
         if(lastdir>=0) {
             basePath=tocomplete.mid(0, lastdir);
@@ -210,13 +209,13 @@ QVariant CMakeCodeCompletionModel::data (const QModelIndex & index, int role) co
     {
         switch(type)
         {
-            case Command:   return KIcon("code-block");
-            case Variable:  return KIcon("code-variable");
-            case Macro:     return KIcon("code-function");
-            case Target:    return KIcon("system-run");
+            case Command:   return QIcon::fromTheme("code-block");
+            case Variable:  return QIcon::fromTheme("code-variable");
+            case Macro:     return QIcon::fromTheme("code-function");
+            case Target:    return QIcon::fromTheme("system-run");
             case Path: {
                 QString url = m_paths[index.row()-m_declarations.size()];
-                return KIcon(KMimeType::findByUrl(url, 0, false, true)->iconName(url));
+                return QIcon::fromTheme(KMimeType::findByUrl(url, 0, false, true)->iconName());
             }
         }
     }
@@ -261,8 +260,8 @@ void CMakeCodeCompletionModel::executeCompletionItem(Document* document, const R
     {
         case Path: {
             Range r=word;
-            for(QChar c=document->character(r.end()); c.isLetterOrNumber() || c=='.'; c=document->character(r.end())) {
-                r.end().setColumn(r.end().column()+1);
+            for(QChar c=document->characterAt(r.end()); c.isLetterOrNumber() || c=='.'; c=document->characterAt(r.end())) {
+                r.setEnd(KTextEditor::Cursor(r.end().line(), r.end().column()+1));
             }
             document->replaceText(r, data(index(row, Name, QModelIndex())).toString());
         }   break;
@@ -278,9 +277,9 @@ void CMakeCodeCompletionModel::executeCompletionItem(Document* document, const R
             Range r=word, prefix(word.start()-Cursor(0,2), word.start());
             QString bef=document->text(prefix);
             if(r.start().column()>=2 && bef=="${")
-                r.start().setColumn( r.start().column()-2 );
+                r.setStart(KTextEditor::Cursor(r.start().line(), r.start().column()-2));
             QString code="${"+data(index(row, Name, QModelIndex())).toString();
-            if(document->character(word.end())!='}')
+            if(document->characterAt(word.end())!='}')
                 code+='}';
             
             document->replaceText(r, code);

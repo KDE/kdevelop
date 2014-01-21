@@ -27,7 +27,7 @@
 void qtHelpReadConfig(QStringList& iconList, QStringList& nameList,
                       QStringList& pathList, QStringList& ghnsList, bool& loadQtDoc)
 {
-    KConfigGroup cg(KGlobal::config(), "QtHelp Documentation");
+    KConfigGroup cg(KSharedConfig::openConfig(), "QtHelp Documentation");
     iconList = cg.readEntry("iconList", QStringList());
     nameList = cg.readEntry("nameList", QStringList());
     pathList = cg.readEntry("pathList", QStringList());
@@ -39,7 +39,7 @@ void qtHelpReadConfig(QStringList& iconList, QStringList& nameList,
 void qtHelpWriteConfig(const QStringList& iconList, const QStringList& nameList,
                        const QStringList& pathList, const QStringList& ghnsList, const bool loadQtDoc)
 {
-    KConfigGroup cg(KGlobal::config(), "QtHelp Documentation");
+    KConfigGroup cg(KSharedConfig::openConfig(), "QtHelp Documentation");
     cg.writeEntry("iconList", iconList);
     cg.writeEntry("nameList", nameList);
     cg.writeEntry("pathList", pathList);

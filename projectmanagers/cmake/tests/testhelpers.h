@@ -104,9 +104,9 @@ void defaultConfigure(const TestProjectPaths& paths)
         }
     }
 
-    cmakeGrp.writeEntry( currentBuildDirKey, bd.buildFolder() );
-    cmakeGrp.writeEntry( currentCMakeBinaryKey, bd.cmakeBinary() );
-    cmakeGrp.writeEntry( currentInstallDirKey, bd.installPrefix() );
+    cmakeGrp.writeEntry<QUrl>( currentBuildDirKey, bd.buildFolder() );
+    cmakeGrp.writeEntry<QUrl>( currentCMakeBinaryKey, bd.cmakeBinary() );
+    cmakeGrp.writeEntry<QUrl>( currentInstallDirKey, bd.installPrefix() );
     cmakeGrp.writeEntry( currentExtraArgumentsKey, bd.extraArguments() );
     cmakeGrp.writeEntry( currentBuildTypeKey, bd.buildType() );
     cmakeGrp.writeEntry( projectBuildDirs, QStringList() << bd.buildFolder().toLocalFile());

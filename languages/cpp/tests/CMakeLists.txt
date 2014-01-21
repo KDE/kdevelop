@@ -37,7 +37,7 @@ set(test_common_SRCS
 ecm_add_test(test_buddies.cpp TEST_NAME buddiestest
 LINK_LIBRARIES
     Qt5::Test
-    Qt5::Core
+    Qt5::Widgets
     ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
     ${KDEVPLATFORM_PROJECT_LIBRARIES}
     ${KDEVPLATFORM_TESTS_LIBRARIES}
@@ -149,4 +149,4 @@ add_executable( cpp-parser cpp-parser.cpp )
 ecm_mark_as_test(cpp-parser)
 target_link_libraries(cpp-parser
     Qt5::Core ${KDEVPLATFORM_TESTS_LIBRARIES} ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-    kdev4cppparser kdev4cppduchain kdev4cpprpp)
+    kdev4cppparser kdev4cppduchain kdev4cpprpp KF5::KDE4Support)

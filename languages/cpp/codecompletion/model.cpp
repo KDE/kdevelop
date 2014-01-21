@@ -162,9 +162,9 @@ Range CodeCompletionModel::updateCompletionRange(View* view, const KTextEditor::
     while(newRange.start().column() > 0) {
       KTextEditor::Cursor newStart = newRange.start();
       newStart.setColumn(newStart.column()-1);
-      QChar character = view->document()->character(newStart);
+      QChar character = view->document()->characterAt(newStart);
       if(isValidIncludeDirectiveCharacter(character)) {
-        newRange.start() = newStart; //Skip
+        newRange.setStart(newStart); //Skip
       }else{
         break;
       }

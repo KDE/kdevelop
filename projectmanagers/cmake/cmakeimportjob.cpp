@@ -201,7 +201,7 @@ KDevelop::ReferencedTopDUContext CMakeImportJob::includeScript(const QString& fi
 {
     m_manager->addWatcher(m_project, file);
     QString profile = CMake::currentEnvironment(m_project);
-    const KDevelop::EnvironmentGroupList env( KGlobal::config() );
+    const KDevelop::EnvironmentGroupList env( KSharedConfig::openConfig() );
     return CMakeParserUtils::includeScript( file, parent, &m_data, dir, env.variables(profile));
 }
 

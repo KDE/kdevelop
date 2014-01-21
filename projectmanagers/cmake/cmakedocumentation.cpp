@@ -26,7 +26,6 @@
 #include <QStringListModel>
 #include <interfaces/iproject.h>
 #include <KStandardDirs>
-#include <KIcon>
 #include <KGlobalSettings>
 #include <KMimeType>
 #include <documentation/standarddocumentationview.h>
@@ -39,14 +38,14 @@
 #include "cmakehelpdocumentation.h"
 #include "cmakedoc.h"
 
-K_PLUGIN_FACTORY(CMakeSupportDocFactory, registerPlugin<CMakeDocumentation>(); )
-K_EXPORT_PLUGIN(CMakeSupportDocFactory(KAboutData("kdevcmakedocumentation","kdevcmake", ki18n("CMake Documentation"), "1.0", ki18n("Support for CMake documentation"), KAboutData::License_GPL)))
+// K_PLUGIN_FACTORY(CMakeSupportDocFactory, registerPlugin<CMakeDocumentation>(); )
+// K_EXPORT_PLUGIN(CMakeSupportDocFactory(KAboutData("kdevcmakedocumentation","kdevcmake", ki18n("CMake Documentation"), "1.0", ki18n("Support for CMake documentation"), KAboutData::License_GPL)))
 
 CMakeDocumentation* CMakeDoc::s_provider=0;
 KDevelop::IDocumentationProvider* CMakeDoc::provider() const { return s_provider; }
 
 CMakeDocumentation::CMakeDocumentation(QObject* parent, const QVariantList&)
-    : KDevelop::IPlugin( CMakeSupportDocFactory::componentData(), parent )
+    : KDevelop::IPlugin( "kdevcmakedocumentation", parent )
     , mCMakeCmd(KStandardDirs::findExe("cmake"))
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IDocumentationProvider )
@@ -168,7 +167,7 @@ QAbstractListModel* CMakeDocumentation::indexModel() const
 
 QIcon CMakeDocumentation::icon() const
 {
-    return KIcon("cmake");
+    return QIcon::fromTheme("cmake");
 }
 
 QString CMakeDocumentation::name() const

@@ -21,7 +21,7 @@
 
 #include <qtest_kde.h>
 
-#include <QtGui/QSplitter>
+#include <QSplitter>
 #include <QtTest/QtTest>
 
 #include <KDebug>
@@ -93,7 +93,7 @@ void TestBuddies::createFile(const KTempDir& dir, const QString& filename)
 void TestBuddies::enableBuddies(bool enable)
 {
     {
-        KConfigGroup uiGroup = KGlobal::config()->group("UiSettings");
+        KConfigGroup uiGroup = KSharedConfig::openConfig()->group("UiSettings");
         uiGroup.writeEntry("TabBarArrangeBuddies", (enable ? 1 : 0));
         uiGroup.sync();
     }
@@ -105,7 +105,7 @@ void TestBuddies::enableBuddies(bool enable)
 void TestBuddies::enableOpenAfterCurrent(bool enable)
 {
     {
-        KConfigGroup uiGroup = KGlobal::config()->group("UiSettings");
+        KConfigGroup uiGroup = KSharedConfig::openConfig()->group("UiSettings");
         uiGroup.writeEntry("TabBarOpenAfterCurrent", (enable ? 1 : 0));
         uiGroup.sync();
     }

@@ -65,7 +65,6 @@
 
 #include <KTempDir>
 #include <KTextEditor/Editor>
-#include <KTextEditor/EditorChooser>
 #include <KTextEditor/View>
 #include <qtest_kde.h>
 
@@ -1251,7 +1250,7 @@ void TestCppCodeCompletion::testSignalSlotExecution()
 
     DUContext* context = top->childContexts()[0]->childContexts()[5];
 
-    KTextEditor::Editor* editor = KTextEditor::EditorChooser::editor();
+    KTextEditor::Editor* editor = KTextEditor::Editor::instance();
     QVERIFY(editor);
     KTextEditor::Document* doc = editor->createDocument(this);
     QVERIFY(doc);
@@ -1784,7 +1783,7 @@ void TestCppCodeCompletion::testTemplateMemberAccess() {
     QCOMPARE(TypeUtils::unAliasedType(top->localDeclarations()[3]->abstractType())->toString().remove(' '), QString("I<int>"));
     
     lock.unlock();
-    parse(method, DumpNone, 0, KUrl(), top);
+    parse(method, DumpNone, 0, QUrl(), top);
     lock.lock();
 
     QCOMPARE(top->localDeclarations().count(), 4);
@@ -1801,7 +1800,7 @@ void TestCppCodeCompletion::testTemplateMemberAccess() {
     QCOMPARE(CompletionItemTester(top->childContexts()[3], "Test<int>::").names.toSet(), QSet<QString>() << "Data" << "Value" << "member");
 
     lock.unlock();
-    parse(method, DumpNone, 0, KUrl(), top);
+    parse(method, DumpNone, 0, QUrl(), top);
     lock.lock();
 
     QCOMPARE(top->childContexts().count(), 4);
@@ -2430,7 +2429,7 @@ void TestCppCodeCompletion::testUpdateChain() {
     QVERIFY(decl.data());
     QCOMPARE(decl.data()->identifier().toString(), QString("i"));
     
-    parse(text, DumpNone, 0, KUrl(), top);
+    parse(text, DumpNone, 0, QUrl(), top);
     QVERIFY(decl.data()); //Make sure the declaration has been updated, and not deleted
     
     release(top);
@@ -3434,7 +3433,7 @@ void TestCppCodeCompletion::testExecuteKeepWord()
   QFETCH(QString, code);
   TopDUContext* top = parse(code.toAscii(), DumpAll);
 
-  KTextEditor::Editor* editor = KTextEditor::EditorChooser::editor();
+  KTextEditor::Editor* editor = KTextEditor::Editor::instance();
   QVERIFY(editor);
 
   KTextEditor::Document* doc = editor->createDocument(this);
@@ -3728,7 +3727,7 @@ void TestCppCodeCompletion::testNoQuadrupleColon()
   }
   QVERIFY( !item.isNull() );
   
-  KTextEditor::Editor* editor = KTextEditor::EditorChooser::editor();
+  KTextEditor::Editor* editor = KTextEditor::Editor::instance();
   QVERIFY(editor);
   KTextEditor::Document* doc = editor->createDocument(this);
   QVERIFY(doc);

@@ -23,6 +23,7 @@
 #include <QLayout>
 
 #include <KDebug>
+#include <KLocalizedString>
 #include <KLineEdit>
 #include <KAction>
 

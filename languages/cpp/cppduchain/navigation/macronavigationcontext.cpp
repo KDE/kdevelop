@@ -18,7 +18,7 @@
 
 #include "macronavigationcontext.h"
 
-#include <QtGui/QTextDocument>
+#include <QTextDocument>
 
 #include <KLocale>
 

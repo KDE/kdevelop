@@ -34,6 +34,8 @@
 #include "stringhelpers.h"
 #include "gdbvariable.h"
 
+#include <KDebug>
+
 using namespace GDBDebugger;
 using namespace KDevelop;
 

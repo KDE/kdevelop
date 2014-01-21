@@ -20,7 +20,6 @@
 */
 
 #include "qthelpprovider.h"
-#include <KIcon>
 
 QtHelpProvider::QtHelpProvider(QObject *parent, const QString &fileName, const QString &name, const QString &iconName, const QVariantList &args)
     : QtHelpProviderAbstract(parent, QHelpEngineCore::namespaceName(fileName) + ".qhc", args)
@@ -33,7 +32,7 @@ QtHelpProvider::QtHelpProvider(QObject *parent, const QString &fileName, const Q
 
 QIcon QtHelpProvider::icon() const
 {
-    return KIcon(m_iconName);
+    return QIcon::fromTheme(m_iconName);
 }
 
 QString QtHelpProvider::name() const

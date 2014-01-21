@@ -18,7 +18,7 @@
  */
 
 
-#include <QtGui/QLabel>
+#include <QLabel>
 
 #include <KLocale>
 #include <KMessageBox>
@@ -50,16 +50,16 @@ Dialog::Dialog(QWidget *parent, Account *account) : KDialog(parent)
         m_text = new QLabel(i18n(str.toUtf8()), this);
         setButtons(KDialog::User2 | KDialog::User3);
         setButtonText(KDialog::User2, i18n("Log out"));
-        setButtonIcon(KDialog::User2, KIcon("dialog-cancel"));
+        setButtonIcon(KDialog::User2, QIcon::fromTheme("dialog-cancel"));
         connect(this, SIGNAL(user2Clicked()), SLOT(revokeAccess()));
-        setButtonIcon(KDialog::User3, KIcon("view-refresh"));
+        setButtonIcon(KDialog::User3, QIcon::fromTheme("view-refresh"));
         setButtonText(KDialog::User3, i18n("Force sync"));
         connect(this, SIGNAL(user3Clicked()), SLOT(syncUser()));
     } else {
         m_text = new QLabel(i18n(INVALID_ACCOUNT), this);
         setButtons(KDialog::User1 | KDialog::Cancel);
         setButtonText(KDialog::User1, i18n("Authorize"));
-        setButtonIcon(KDialog::User1, KIcon("dialog-ok"));
+        setButtonIcon(KDialog::User1, QIcon::fromTheme("dialog-ok"));
         connect(this, SIGNAL(user1Clicked()), SLOT(authorizeClicked()));
     }
 

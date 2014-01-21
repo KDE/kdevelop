@@ -25,11 +25,11 @@
 #include "gdblaunchconfig.h"
 
 #include <kconfiggroup.h>
-#include <kicon.h>
 #include <klocale.h>
 #include <kshell.h>
 #include <kmessagebox.h>
 #include <kparts/mainwindow.h>
+#include <KDebug>
 
 #include <outputview/outputmodel.h>
 #include <interfaces/ilaunchconfiguration.h>
@@ -78,19 +78,19 @@ GdbConfigPage::~GdbConfigPage()
     delete ui;
 }
 
-KIcon GdbConfigPage::icon() const
+QIcon GdbConfigPage::icon() const
 {
-    return KIcon();
+    return QIcon();
 }
 
 void GdbConfigPage::loadFromConfiguration( const KConfigGroup& cfg, KDevelop::IProject*  )
 {
     bool block = blockSignals( true );
-    ui->kcfg_gdbPath->setUrl( cfg.readEntry( GDBDebugger::gdbPathEntry, KUrl() ) );
-    ui->kcfg_debuggingShell->setUrl( cfg.readEntry( GDBDebugger::debuggerShellEntry, KUrl() ) );
-    ui->kcfg_configGdbScript->setUrl( cfg.readEntry( GDBDebugger::remoteGdbConfigEntry, KUrl() ) );
-    ui->kcfg_runShellScript->setUrl( cfg.readEntry( GDBDebugger::remoteGdbShellEntry, KUrl() ) );
-    ui->kcfg_runGdbScript->setUrl( cfg.readEntry( GDBDebugger::remoteGdbRunEntry, KUrl() ) );
+    ui->kcfg_gdbPath->setUrl( cfg.readEntry( GDBDebugger::gdbPathEntry, QUrl() ) );
+    ui->kcfg_debuggingShell->setUrl( cfg.readEntry( GDBDebugger::debuggerShellEntry, QUrl() ) );
+    ui->kcfg_configGdbScript->setUrl( cfg.readEntry( GDBDebugger::remoteGdbConfigEntry, QUrl() ) );
+    ui->kcfg_runShellScript->setUrl( cfg.readEntry( GDBDebugger::remoteGdbShellEntry, QUrl() ) );
+    ui->kcfg_runGdbScript->setUrl( cfg.readEntry( GDBDebugger::remoteGdbRunEntry, QUrl() ) );
     ui->kcfg_displayStaticMembers->setChecked( cfg.readEntry(GDBDebugger::staticMembersEntry, false) );
     ui->kcfg_asmDemangle->setChecked( cfg.readEntry( GDBDebugger::demangleNamesEntry, true) );
     ui->kcfg_startWith->setCurrentIndex( ui->kcfg_startWith->findData( cfg.readEntry( GDBDebugger::startWithEntry, "ApplicationOutput" ) ) );

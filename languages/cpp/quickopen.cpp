@@ -304,7 +304,7 @@ void IncludeFileDataProvider::reset()
 {
   m_lastSearchedPrefix = QString();
   m_duContext = TopDUContextPointer();
-  m_baseUrl = KUrl();
+  m_baseUrl = QUrl();
   m_importers.clear();
   
   IDocument* doc = ICore::self()->documentController()->activeDocument();

@@ -25,7 +25,7 @@
 #include "ast.h"
 #include "tokens.h"
 
-#include <KAboutData>
+#include <k4aboutdata.h>
 
 #include <language/util/debuglanguageparserhelper.h>
 
@@ -239,8 +239,8 @@ private:
 
 int main(int argc, char* argv[])
 {
-    KAboutData aboutData( "cpp-parser", 0, ki18n( "cpp-parser" ),
-                          "1", ki18n("KDevelop CPP parser debugging utility"), KAboutData::License_GPL,
+    K4AboutData aboutData( "cpp-parser", 0, ki18n( "cpp-parser" ),
+                          "1", ki18n("KDevelop CPP parser debugging utility"), K4AboutData::License_GPL,
                           ki18n( "2011 Milian Wolff" ), KLocalizedString(), "http://www.kdevelop.org" );
 
     return KDevelopUtils::initAndRunParser<CppParser>(aboutData, argc, argv);

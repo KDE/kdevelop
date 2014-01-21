@@ -30,14 +30,16 @@
 #include "astyle_formatter.h"
 #include "astyle_stringiterator.h"
 #include "astyle_preferences.h"
+#include <KLocalizedString>
+#include <KUrl>
 
 using namespace KDevelop;
 
-K_PLUGIN_FACTORY(AStyleFactory, registerPlugin<AStylePlugin>();)
-K_EXPORT_PLUGIN(AStyleFactory(KAboutData("kdevastyle","kdevformatters", ki18n("Astyle Formatter"), "0.1", ki18n("A formatting tool using astyle"), KAboutData::License_GPL)))
+// K_PLUGIN_FACTORY(AStyleFactory, registerPlugin<AStylePlugin>();)
+// K_EXPORT_PLUGIN(AStyleFactory(KAboutData("kdevastyle","kdevformatters", ki18n("Astyle Formatter"), "0.1", ki18n("A formatting tool using astyle"), KAboutData::License_GPL)))
 
 AStylePlugin::AStylePlugin(QObject *parent, const QVariantList&)
-		: IPlugin(AStyleFactory::componentData(), parent)
+    : IPlugin("kdevastyle", parent)
 {
     KDEV_USE_EXTENSION_INTERFACE(ISourceFormatter)
     m_formatter = new AStyleFormatter();

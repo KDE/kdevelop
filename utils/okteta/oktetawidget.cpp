@@ -63,7 +63,7 @@
 #include <KStandardAction>
 #include <KActionCollection>
 // Qt
-#include <QtGui/QVBoxLayout>
+#include <QVBoxLayout>
 
 #include <kdebug.h>
 

@@ -283,7 +283,7 @@ bool needsUpdate(const Cpp::EnvironmentFilePointer& file, const KUrl& localPath,
   for( Cpp::ReferenceCountedStringSet::Iterator it = file->missingIncludeFiles().iterator(); it; ++it ) {
 
     ///@todo store IncludeLocal/IncludeGlobal somewhere
-    QPair<KUrl, KUrl> included = findInclude( includePaths, localPath, (*it).str(), rpp::Preprocessor::IncludeLocal, KUrl(), true );
+    QPair<KUrl, KUrl> included = findInclude( includePaths, localPath, (*it).str(), rpp::Preprocessor::IncludeLocal, QUrl(), true );
     if(!included.first.isEmpty())
       return true;
   }

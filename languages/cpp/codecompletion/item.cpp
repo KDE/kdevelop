@@ -150,7 +150,7 @@ void executeSignalSlotCompletionItem( KTextEditor::Document* document, const KTe
     QRegExp signalSlotRegExp( "(SIGNAL|SLOT)\\s*(\\(\\s*)$" );
     int signalSlotAt = signalSlotRegExp.lastIndexIn( prefixText );
     if( signalSlotAt >= 0 ) {
-      word.start().setColumn( signalSlotAt );
+      word.setStart(KTextEditor::Cursor(word.start().line(), signalSlotAt));
     }
   }
 
@@ -210,7 +210,7 @@ void executeSignalSlotCompletionItem( KTextEditor::Document* document, const KTe
     int lastLineLength = document->lineLength( word.end().line() );
     int distanceToTextEnd = suffixText.length() - position;
     int characterColumn = lastLineLength - distanceToTextEnd;
-    word.end().setColumn( characterColumn );
+    word.setEnd(KTextEditor::Cursor(word.end().line(), characterColumn ));
   }
 
   document->replaceText( word, newText );
@@ -267,7 +267,7 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
     Q_ASSERT(moving);
     removeInSecondStep =  std::auto_ptr<KTextEditor::MovingRange>(
       moving->newMovingRange(KTextEditor::Range(cursor, word.end()), KTextEditor::MovingRange::DoNotExpand));
-    word.end() = cursor;
+    word.setEnd(cursor);
   }
   
   KTextEditor::Range nextToken = KTextEditor::Range(_word.end(), KTextEditor::Cursor(_word.end().line(), _word.end().column() + 2));
@@ -788,7 +788,7 @@ void IncludeFileCompletionItem::execute(KTextEditor::Document* document, const K
        newText += '>';
     }
 
-    word.end().setColumn( document->lineLength(word.end().line()) );
+    word.setEnd(KTextEditor::Cursor(word.end().line(), document->lineLength(word.end().line()) ));
   }
 
   document->replaceText(word, newText);

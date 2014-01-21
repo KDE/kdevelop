@@ -85,7 +85,7 @@ add_library(kdevcmakemanager MODULE ${cmakemanager_SRCS} )
 target_link_libraries( kdevcmakemanager ${KDE4_KDEUI_LIBS} KF5::KIOWidgets ${KDEVPLATFORM_UTIL_LIBRARIES}
                         ${KDEVPLATFORM_INTERFACES_LIBRARIES} kdev4cmakecommon
                         ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-                        ${KDEVPLATFORM_OUTPUTVIEW_LIBRARIES} KF5::TextEditor)
+                        ${KDEVPLATFORM_OUTPUTVIEW_LIBRARIES} KF5::TextEditor Qt5::Concurrent)
                         
 add_library(kdevcmakedocumentation MODULE ${cmakedoc_SRCS} )
 target_link_libraries( kdevcmakedocumentation

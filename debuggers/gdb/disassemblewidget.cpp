@@ -107,11 +107,11 @@ DisassembleWindow::DisassembleWindow(QWidget *parent, DisassembleWidget* widget)
     m_selectAddrAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     connect(m_selectAddrAction, SIGNAL(triggered()), widget, SLOT(slotChangeAddress()));
 
-    m_jumpToLocation = new QAction(KIcon("debug-execute-to-cursor"), i18n("&Jump to Cursor"), this);
+    m_jumpToLocation = new QAction(QIcon::fromTheme("debug-execute-to-cursor"), i18n("&Jump to Cursor"), this);
     m_jumpToLocation->setWhatsThis(i18n("Sets the execution pointer to the current cursor position."));
     connect(m_jumpToLocation,SIGNAL(triggered()), widget, SLOT(jumpToCursor()));
 
-    m_runUntilCursor = new QAction(KIcon("debug-run-cursor"), i18n("&Run to Cursor"), this);
+    m_runUntilCursor = new QAction(QIcon::fromTheme("debug-run-cursor"), i18n("&Run to Cursor"), this);
     m_runUntilCursor->setWhatsThis(i18n("Continues execution until the cursor position is reached."));
     connect(m_runUntilCursor,SIGNAL(triggered()), widget, SLOT(runToCursor()));
     }
@@ -128,7 +128,7 @@ void DisassembleWindow::contextMenuEvent(QContextMenuEvent *e)
 /***************************************************************************/
 /***************************************************************************/
 /***************************************************************************/
-const KIcon DisassembleWidget::icon_=KIcon("go-next");
+const QIcon DisassembleWidget::icon_ = QIcon::fromTheme("go-next");
 
 DisassembleWidget::DisassembleWidget(CppDebuggerPlugin* plugin, QWidget *parent)
         : QWidget(parent),
@@ -173,7 +173,7 @@ DisassembleWidget::DisassembleWidget(CppDebuggerPlugin* plugin, QWidget *parent)
 
         m_registersManager = new RegistersManager(m_splitter);
 
-        m_config = KGlobal::config()->group("Disassemble/Registers View");
+        m_config = KSharedConfig::openConfig()->group("Disassemble/Registers View");
 
         QByteArray state = m_config.readEntry<QByteArray>("splitterState", QByteArray());
         if (!state.isEmpty()) {
@@ -184,7 +184,7 @@ DisassembleWidget::DisassembleWidget(CppDebuggerPlugin* plugin, QWidget *parent)
     
     setLayout(topLayout);
     
-    setWindowIcon( KIcon("system-run") );
+    setWindowIcon( QIcon::fromTheme("system-run") );
     setWindowTitle(i18n("Disassemble/Registers View"));
     
     KDevelop::IDebugController* pDC=KDevelop::ICore::self()->debugController();

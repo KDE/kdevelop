@@ -22,7 +22,7 @@
 #ifndef MANPAGEMODEL_H
 #define MANPAGEMODEL_H
 
-#include <QtGui/QStringListModel>
+#include <QStringListModel>
 
 #include <language/duchain/indexedstring.h>
 #include <language/duchain/declaration.h>

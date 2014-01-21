@@ -90,7 +90,7 @@ namespace GDBDebugger
 {
 
 K_PLUGIN_FACTORY(CppDebuggerFactory, registerPlugin<CppDebuggerPlugin>(); )
-K_EXPORT_PLUGIN(CppDebuggerFactory(KAboutData("kdevgdb","kdevgdb", ki18n("GDB Support"), "0.1", ki18n("This plugin provides a frontend for GDB, a source-level debugger for C, C++ and more."), KAboutData::License_GPL)))
+// K_EXPORT_PLUGIN(CppDebuggerFactory(KAboutData("kdevgdb","kdevgdb", ki18n("GDB Support"), "0.1", ki18n("This plugin provides a frontend for GDB, a source-level debugger for C, C++ and more."), KAboutData::License_GPL)))
 
 template<class T>
 class DebuggerToolFactory : public KDevelop::IToolViewFactory
@@ -136,8 +136,8 @@ private:
 };
 
 CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
-    KDevelop::IPlugin( CppDebuggerFactory::componentData(), parent ),
-    m_config(KGlobal::config(), "GDB Debugger"), m_session(0)
+    KDevelop::IPlugin( "kdevgdb", parent ),
+    m_config(KSharedConfig::openConfig(), "GDB Debugger"), m_session(0)
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IStatus )
     
@@ -159,11 +159,13 @@ CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
         i18n("GDB"),
         gdbfactory);
 
-    memoryviewerfactory = new DebuggerToolFactory<MemoryViewerWidget>(
-    this, "org.kdevelop.debugger.MemoryView", Qt::BottomDockWidgetArea);
-    core()->uiController()->addToolView(
-        i18n("Memory"),
-        memoryviewerfactory);
+#warning port MemoryViewerWidget to KF5
+    memoryviewerfactory = 0;
+//     memoryviewerfactory = new DebuggerToolFactory<MemoryViewerWidget>(
+//     this, "org.kdevelop.debugger.MemoryView", Qt::BottomDockWidgetArea);
+//     core()->uiController()->addToolView(
+//         i18n("Memory"),
+//         memoryviewerfactory);
 
     setupActions();
 
@@ -197,7 +199,7 @@ void CppDebuggerPlugin::setupActions()
 {
     KActionCollection* ac = actionCollection();
 
-    KAction* action = new KAction(KIcon("core"), i18n("Examine Core File..."), this);
+    KAction* action = new KAction(QIcon::fromTheme("core"), i18n("Examine Core File..."), this);
     action->setToolTip( i18n("Examine core file") );
     action->setWhatsThis( i18n("<b>Examine core file</b><p>"
                                "This loads a core file, which is typically created "
@@ -209,7 +211,7 @@ void CppDebuggerPlugin::setupActions()
     ac->addAction("debug_core", action);
 
     #ifdef KDEV_ENABLE_GDB_ATTACH_DIALOG
-    action = new KAction(KIcon("connect_creating"), i18n("Attach to Process"), this);
+    action = new KAction(QIcon::fromTheme("connect_creating"), i18n("Attach to Process"), this);
     action->setToolTip( i18n("Attach to process...") );
     action->setWhatsThis(i18n("<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotAttachProcess()));

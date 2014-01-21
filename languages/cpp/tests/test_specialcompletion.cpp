@@ -40,7 +40,6 @@
 #include <QTest>
 #include <qtest_kde.h>
 #include <KTextEditor/Editor>
-#include <KTextEditor/EditorChooser>
 #include <KTempDir>
 
 using namespace KDevelop;
@@ -155,7 +154,7 @@ void TestSpecialCompletion::testIncludeDefine()
 
     QCOMPARE(item->lineToInsert(), QString("#include \"" + include.url().toUrl().fileName() + "\""));
 
-    KTextEditor::Editor* editor = KTextEditor::EditorChooser::editor();
+    KTextEditor::Editor* editor = KTextEditor::Editor::instance();
     QVERIFY(editor);
 
     KTextEditor::Document* doc = editor->createDocument(this);
@@ -230,7 +229,7 @@ void TestSpecialCompletion::testIncludeGrouping()
 
     QCOMPARE(item->lineToInsert(), QString("#include \"" + dir1Name + includeC.url().toUrl().fileName() + "\""));
 
-    KTextEditor::Editor* editor = KTextEditor::EditorChooser::editor();
+    KTextEditor::Editor* editor = KTextEditor::Editor::instance();
     QVERIFY(editor);
 
     KTextEditor::Document* doc = editor->createDocument(this);
@@ -296,7 +295,7 @@ void TestSpecialCompletion::testIncludeComment()
 
     QCOMPARE(item->lineToInsert(), QString("#include \"" + include.url().toUrl().fileName() + "\""));
 
-    KTextEditor::Editor* editor = KTextEditor::EditorChooser::editor();
+    KTextEditor::Editor* editor = KTextEditor::Editor::instance();
     QVERIFY(editor);
 
     KTextEditor::Document* doc = editor->createDocument(this);

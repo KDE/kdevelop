@@ -24,7 +24,6 @@
 #include <language/duchain/duchain.h>
 #include <qaction.h>
 #include <klocalizedstring.h>
-#include <kicon.h>
 #include <kmessagebox.h>
 #include <qdialog.h>
 #include <qboxlayout.h>
@@ -86,7 +85,7 @@ KUrl folderFromSelection()
     KDevelop::FileContext * fc = dynamic_cast<FileContext*>(sel);
     KDevelop::ProjectItemContext * pc = dynamic_cast<ProjectItemContext*>(sel);
     if(fc && !fc->urls().isEmpty())
-      u = fc->urls()[0].upUrl();
+      u = KUrl(fc->urls()[0]).upUrl();
     else if(pc && !pc->items().isEmpty() && pc->items()[0]->folder())
       ;//TODO check how to solve cyclic dependancy
       //u = pc->items()[0]->folder()->url();
@@ -118,7 +117,7 @@ void SimpleRefactoring::doContextMenu(KDevelop::ContextMenuExtension& extension,
       if (finfo.isWritable()) {
         QAction* action = new QAction(i18n("Rename %1", declaration->qualifiedIdentifier().toString()), this);
         action->setData(QVariant::fromValue(IndexedDeclaration(declaration)));
-        action->setIcon(KIcon("edit-rename"));
+        action->setIcon(QIcon::fromTheme("edit-rename"));
         connect(action, SIGNAL(triggered(bool)), this, SLOT(executeRenameAction()));
 
         extension.addAction(ContextMenuExtension::RefactorGroup, action);
@@ -130,7 +129,7 @@ void SimpleRefactoring::doContextMenu(KDevelop::ContextMenuExtension& extension,
             //Is a candidate for moving into source
             QAction* action = new QAction(i18n("Create separate definition for %1", declaration->qualifiedIdentifier().toString()), this);
             action->setData(QVariant::fromValue(IndexedDeclaration(declaration)));
-//           action->setIcon(KIcon("arrow-right"));
+//           action->setIcon(QIcon::fromTheme("arrow-right"));
             connect(action, SIGNAL(triggered(bool)), this, SLOT(executeMoveIntoSourceAction()));
             extension.addAction(ContextMenuExtension::RefactorGroup, action);
           }

@@ -73,7 +73,7 @@
 #include <KMessageBox>
 #include <KLocale>
 // Qt
-#include <QtGui/QApplication>
+#include <QApplication>
 
 
 namespace KDevelop
