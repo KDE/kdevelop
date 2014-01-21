@@ -302,6 +302,9 @@ void QMakeProjectManager::slotFolderAdded( ProjectFolderItem* folder )
     kDebug(9024) << "adding targets for" << folder->path();
     foreach( QMakeProjectFile* pro, qmakeParent->projectFiles() ) {
         foreach( const QString& s, pro->targets() ) {
+            if (!isValid(KUrl(folder->url(), s), false, folder->project())) {
+                continue;
+            }
             kDebug(9024) << "adding target:" << s;
             Q_ASSERT(!s.isEmpty());
             QMakeTargetItem* target = new QMakeTargetItem( pro, folder->project(), s, folder );
@@ -542,7 +545,6 @@ bool QMakeProjectManager::projectNeedsConfiguration(IProject* project)
     if (QMakeConfig::findBasicMkSpec(vars).isEmpty()) {
         return true;
     }
-    ;
     if (QMakeConfig::buildDirFromSrc(project, project->folder()).isEmpty()) {
         return true;
     }

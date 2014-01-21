@@ -115,9 +115,17 @@ QString QMakeConfig::findBasicMkSpec( const QHash<QString,QString>& qmakeVars )
         path = qmakeVars["QMAKE_MKSPECS"] + "/default";
     } else if (!qmakeVars.contains("QMAKE_MKSPECS") && qmakeVars.contains("QMAKE_SPEC")) {
         // qt5 doesn't have the MKSPECS nor default anymore
-        if (qmakeVars.contains("QT_HOST_PREFIX")) {
+        // let's try to look up the mkspec path ourselves,
+        // see QMakeEvaluator::updateMkspecPaths() in QMake source code as reference
+        if (qmakeVars.contains("QT_HOST_DATA/src")) {
+            // >=qt5.2: since 0d463c05fc4f2e79e5a4e5a5382a1e6ed5d2615e (in Qt5 qtbase repository)
+            // mkspecs are no longer copied to the build directory.
+            // instead, we have to look them up in the source directory.
+            // this commit also introduced the key 'QT_HOST_DATA/src' which we use here
+            path = qmakeVars["QT_HOST_DATA/src"];
+        } else if (qmakeVars.contains("QT_HOST_DATA")) {
             // cross compilation
-            path = qmakeVars["QT_HOST_PREFIX"];
+            path = qmakeVars["QT_HOST_DATA"];
         } else {
             Q_ASSERT(qmakeVars.contains("QT_INSTALL_PREFIX"));
             path = qmakeVars["QT_INSTALL_PREFIX"];

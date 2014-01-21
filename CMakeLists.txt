@@ -1,13 +1,19 @@
 project(QMakeManager)
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${QMakeManager_SOURCE_DIR}/cmake/)
-
-find_package(KDE4 REQUIRED)
-find_package(KDevPlatform 1.5.60 REQUIRED)
-find_package(KDevelop REQUIRED)
 
 set(VERSION_MAJOR 1)
-set(VERSION_MINOR 5)
+set(VERSION_MINOR 6)
 set(VERSION_PATCH 60)
+# KDevplatform dependency version
+set( KDEVPLATFORM_VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}" )
+
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${QMakeManager_SOURCE_DIR}/cmake/)
+
+cmake_minimum_required(VERSION 2.8.9)
+
+find_package(KDE4 REQUIRED)
+find_package(KDevPlatform ${KDEVPLATFORM_VERSION} REQUIRED)
+find_package(KDevelop REQUIRED)
+
 
 configure_file(
   "${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake"
@@ -17,6 +23,10 @@ configure_file(
 enable_testing()
 
 include_directories( ${KDE4_INCLUDES} ${KDEVPLATFORM_INCLUDE_DIR} ${KDEVELOP_INCLUDE_DIR} )
+
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+endif()
 
 add_subdirectory(qmakebuilder)
 add_subdirectory(app_templates)
@@ -72,7 +82,8 @@ target_link_libraries( kdevqmakemanager
 
 ########### install files ###############
 
-install( FILES kdevqmakemanager.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+configure_file(kdevqmakemanager.desktop.cmake ${CMAKE_BINARY_DIR}/kdevqmakemanager.desktop)
+install( FILES ${CMAKE_BINARY_DIR}/kdevqmakemanager.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install(TARGETS kdevqmakemanager DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 ########### cdash / unit tests ###############
