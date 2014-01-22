@@ -51,6 +51,11 @@ ClangString::~ClangString()
     clang_disposeString(string);
 }
 
+const char* ClangString::c_str() const
+{
+    return clang_getCString(string);
+}
+
 ClangString::operator const char*() const
 {
     const char *data = clang_getCString(string);

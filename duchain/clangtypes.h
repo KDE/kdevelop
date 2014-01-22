@@ -60,6 +60,11 @@ public:
 
     operator const char*() const;
 
+    /**
+     * Might return nullptr for invalid strings
+     */
+    const char* c_str() const;
+
     QString toString() const;
 
 private:

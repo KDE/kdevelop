@@ -24,12 +24,16 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/ducontext.h>
 #include <language/duchain/topducontext.h>
+#include <language/duchain/declaration.h>
 #include <language/interfaces/iastcontainer.h>
 #include <language/codecompletion/codecompletionitem.h>
 #include <language/codecompletion/codecompletionmodel.h>
+#include <language/codecompletion/normaldeclarationcompletionitem.h>
 
 #include "../duchain/parsesession.h"
 #include "../duchain/clangtypes.h"
+
+#include "../debug.h"
 
 #include <memory>
 #include <KTextEditor/Document>
@@ -38,51 +42,37 @@ using namespace KDevelop;
 
 namespace {
 
-class Item : public CompletionTreeItem
+class SimpleItem : public CompletionTreeItem
 {
 public:
-    Item(const CXCompletionResult& result);
-    virtual ~Item() = default;
+    SimpleItem(const QString& typed, const QString& result, const QString& text,
+               CodeCompletionModel::CompletionProperties properties);
+    virtual ~SimpleItem() = default;
 
     virtual QVariant data(const QModelIndex& index, int role, const CodeCompletionModel* model) const;
 
     virtual void execute(KTextEditor::Document* document, const KTextEditor::Range& word);
 
+    virtual CodeCompletionModel::CompletionProperties completionProperties() const;
+
 private:
     QString m_typed;
-    QString m_text;
     QString m_result;
-    QString m_currParam;
+    QString m_text;
+    CodeCompletionModel::CompletionProperties m_properties;
 };
 
-Item::Item(const CXCompletionResult& result)
+SimpleItem::SimpleItem(const QString& typed, const QString& result, const QString& text,
+                       CodeCompletionModel::CompletionProperties properties)
+    : m_typed(typed)
+    , m_result(result)
+    , m_text(text)
+    , m_properties(properties)
 {
-    const uint chunks = clang_getNumCompletionChunks(result.CompletionString);
-    for (uint i = 0; i < chunks; ++i) {
-        const auto kind = clang_getCompletionChunkKind(result.CompletionString, i);
-        const QString string = ClangString(clang_getCompletionChunkText(result.CompletionString, i)).toString();
-        switch (kind) {
-            case CXCompletionChunk_TypedText:
-                m_typed = string;
-                break;
-            case CXCompletionChunk_CurrentParameter:
-                m_currParam = string;
-                continue;
-            case CXCompletionChunk_ResultType:
-                m_result = string;
-                continue;
-            case CXCompletionChunk_Informative:
-            case CXCompletionChunk_Optional:
-                continue;
-            case CXCompletionChunk_Placeholder:
-                m_text += "/*" + string + "*/";
-                continue;
-        }
-        m_text += string;
-    }
+
 }
 
-QVariant Item::data(const QModelIndex& index, int role, const CodeCompletionModel* /*model*/) const
+QVariant SimpleItem::data(const QModelIndex& index, int role, const CodeCompletionModel* /*model*/) const
 {
     if (role != Qt::DisplayRole) {
         return {};
@@ -96,9 +86,14 @@ QVariant Item::data(const QModelIndex& index, int role, const CodeCompletionMode
     return {};
 }
 
-void Item::execute(KTextEditor::Document* document, const KTextEditor::Range& word)
+void SimpleItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word)
 {
     document->replaceText(word, m_text);
+}
+
+CodeCompletionModel::CompletionProperties SimpleItem::completionProperties() const
+{
+    return m_properties;
 }
 
 }
@@ -117,7 +112,7 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
 {
     // FIXME: ensure we don't access the TU from this thread and the parse thread simultaneously!
     DUChainReadLocker lock;
-    if (abort) {
+    if (abort || !m_duContext) {
         return {};
     }
     const auto session = KSharedPtr<ParseSession>::dynamicCast(m_duContext->topContext()->ast());
@@ -143,8 +138,67 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
 
     QList<CompletionTreeItemPointer> ret;
     ret.reserve(results->NumResults);
+
+    QSet<QualifiedIdentifier> handled;
+
     for (uint i = 0; i < results->NumResults; ++i) {
-        ret.append(CompletionTreeItemPointer(new Item(results->Results[i])));
+        auto result = results->Results[i];
+        const uint chunks = clang_getNumCompletionChunks(result.CompletionString);
+
+        QString typed;
+        QString resultType;
+        QString text;
+        for (uint j = 0; j < chunks; ++j) {
+            const auto kind = clang_getCompletionChunkKind(result.CompletionString, j);
+            const QString string = ClangString(clang_getCompletionChunkText(result.CompletionString, j)).toString();
+            switch (kind) {
+                case CXCompletionChunk_TypedText:
+                    typed = string;
+                    break;
+                case CXCompletionChunk_ResultType:
+                    resultType = string;
+                    continue;
+                case CXCompletionChunk_CurrentParameter:
+                case CXCompletionChunk_Informative:
+                case CXCompletionChunk_Optional:
+                    continue;
+                case CXCompletionChunk_Placeholder:
+                    text += "/*" + string + "*/";
+                    continue;
+                default:
+                    break;
+            }
+            text += string;
+        }
+        if (result.CursorKind != CXCursor_MacroDefinition && result.CursorKind != CXCursor_NotImplemented) {
+            const Identifier id(typed);
+            QualifiedIdentifier qid;
+            ClangString parent(clang_getCompletionParent(result.CompletionString, nullptr));
+            if (parent.c_str() != nullptr) {
+                qid = QualifiedIdentifier(parent.toString());
+            }
+            qid.push(id);
+
+            if (handled.contains(qid)) {
+                // TODO: support overload items - for now, just skip them
+                continue;
+            }
+            handled.insert(qid);
+            Declaration* found = 0;
+            foreach(Declaration* dec, m_duContext->findDeclarations(qid, m_position)) {
+                found = dec;
+                break;
+            }
+            if (found) {
+                ret.append(CompletionTreeItemPointer(new NormalDeclarationCompletionItem(DeclarationPointer(found))));
+                continue;
+            } else {
+                debug() << "Could not find declaration for" << qid;
+            }
+        }
+
+        // TODO: grouping of macros and built-in stuff
+        ret.append(CompletionTreeItemPointer(new SimpleItem(typed, resultType, text, CodeCompletionModel::GlobalScope)));
     }
 
     return ret;
