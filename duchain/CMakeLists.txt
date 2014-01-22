@@ -2,7 +2,6 @@ kde4_add_library(kdevclangduchain SHARED
     parsesession.cpp
     clangtypes.cpp
     debugvisitor.cpp
-    usebuilder.cpp
     typebuilder.cpp
     includedfilecontexts.cpp
     tuduchain.cpp
