@@ -17,7 +17,6 @@ class foo
     /// "EXPECT_FAIL" : { "isStatic" : "not a class-member-declaration yet" },
     /// "isStatic" : true
     static int m;
-    /// "EXPECT_FAIL" : { "isStatic" : "not a class-member-declaration yet" },
     /// "isStatic" : false
     int b;
     /// "EXPECT_FAIL" : { "isStatic" : "not a class-member-declaration yet", "isVirtual" : "not a class-function yet" },
