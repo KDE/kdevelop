@@ -96,6 +96,9 @@ void QuickOpenModel::enableProviders( const QStringList& _items, const QStringLi
 {
   QSet<QString> items = QSet<QString>::fromList( _items );
   QSet<QString> scopes = QSet<QString>::fromList( _scopes );
+  if (m_enabledItems == items && m_enabledScopes == scopes && !items.isEmpty() && !scopes.isEmpty()) {
+    return;
+  }
   m_enabledItems = items;
   m_enabledScopes  = scopes;
   kDebug() << "params " << items << " " << scopes;
