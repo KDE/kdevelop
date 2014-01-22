@@ -416,8 +416,10 @@ void QuickOpenWidget::prepareShow()
   
   applyFilter();
   
-  connect( o.list->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)), this, SLOT(currentChanged(QModelIndex,QModelIndex)) );
-  connect( o.list->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this, SLOT(currentChanged(QItemSelection,QItemSelection)) );
+  connect( o.list->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
+           SLOT(callRowSelected()) );
+  connect( o.list->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+           SLOT(callRowSelected()) );
 }
 
 void QuickOpenWidgetDialog::run() {
@@ -526,14 +528,6 @@ void QuickOpenWidget::callRowSelected() {
     m_model->rowSelected( currentIndex );
   else
     kDebug() << "current index is not valid";
-}
-
-void QuickOpenWidget::currentChanged( const QModelIndex& /*current*/, const QModelIndex& /*previous */) {
-  callRowSelected();
-}
-
-void QuickOpenWidget::currentChanged( const QItemSelection& /*current*/, const QItemSelection& /*previous */) {
-  callRowSelected();
 }
 
 void QuickOpenWidget::accept() {

@@ -161,9 +161,8 @@ class QuickOpenWidget : public QMenu {
   void ready();
 
   private slots:
-  void currentChanged( const QModelIndex& current, const QModelIndex& previous );
-  void currentChanged( const QItemSelection& current, const QItemSelection& previous );
-  
+  void callRowSelected();
+
   void updateTimerInterval( bool cheapFilterChange );
 
   void accept();
@@ -175,7 +174,6 @@ class QuickOpenWidget : public QMenu {
 
   private:
   virtual void showEvent(QShowEvent *);
-  void callRowSelected();
   
   virtual bool eventFilter ( QObject * watched, QEvent * event );
 
