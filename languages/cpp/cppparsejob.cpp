@@ -124,7 +124,7 @@ CPPParseJob::CPPParseJob( const IndexedString& url, ILanguageSupport* languageSu
         m_needUpdateEverything( false ),
         m_parentPreprocessor( parentPreprocessor ),
         m_session( new ParseSession ),
-        m_localPath( url.str() ),
+        m_localPath( Path(url.str()).parent() ),
         m_includePathsComputed( 0 ),
         m_keepDuchain( false ),
         m_parsedIncludes( 0 ),
