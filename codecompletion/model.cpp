@@ -62,6 +62,7 @@ public slots:
         if (!session) {
             // TODO: trigger reparse and re-request code completion
             kWarning() << "No parse session / AST attached to context for url" << url;
+            return;
         }
 
         ClangCodeCompletionContext completionContext( session.data(), position, contents );
