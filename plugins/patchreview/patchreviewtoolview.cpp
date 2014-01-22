@@ -355,7 +355,7 @@ void PatchReviewToolView::activate( const KUrl& url, IDocument* buddy ) const
 void PatchReviewToolView::fileItemChanged( QStandardItem* item )
 {
     KUrl url = m_fileModel->statusInfo(item).url();
-    if(!m_fileModel->checkedUrls().contains(url))
+    if(item->checkState() != Qt::Checked)
     {
         // Eventually close the document
         if(KDevelop::IDocument* doc = ICore::self()->documentController()->documentForUrl(url)) {
@@ -365,13 +365,14 @@ void PatchReviewToolView::fileItemChanged( QStandardItem* item )
                 {
                     if(view->document() == dynamic_cast<Sublime::Document*>(doc))
                     {
-                        kDebug() << "closing view of" << url << "because the item was unchecked";
                         ICore::self()->uiController()->activeArea()->closeView(view);
                         return;
                     }
                 }
             }
         }
+    } else {
+        ICore::self()->documentController()->openDocument(url, KTextEditor::Range::invalid(), IDocumentController::DoNotActivate);
     }
 }
 
