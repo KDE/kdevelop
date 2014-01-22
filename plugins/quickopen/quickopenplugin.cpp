@@ -414,7 +414,7 @@ void QuickOpenWidget::prepareShow()
     o.searchLine->selectAll();
   }
   
-  applyFilter();
+  m_model->restart(false);
   
   connect( o.list->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
            SLOT(callRowSelected()) );
