@@ -65,7 +65,6 @@
 #include "projectfilequickopen.h"
 #include "projectitemquickopen.h"
 #include "declarationlistquickopen.h"
-#include "customlistquickopen.h"
 #include "documentationquickopenprovider.h"
 #include <language/duchain/functiondefinition.h>
 #include <qmenu.h>
@@ -783,10 +782,6 @@ void QuickOpenPlugin::createActionsForMainWindow(Sublime::MainWindow* /*window*/
 //     quickOpenLine->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_E );
 //     connect(quickOpenLine, SIGNAL(triggered(bool)), this, SLOT(quickOpenLine(bool)));
     quickOpenLine->setDefaultWidget(createQuickOpenLineWidget());
-//     KAction* quickOpenNavigate = actions.addAction("quick_open_navigate");
-//     quickOpenNavigate->setText( i18n("Navigate Declaration") );
-//     quickOpenNavigate->setShortcut( Qt::ALT | Qt::Key_Space );
-//     connect(quickOpenNavigate, SIGNAL(triggered(bool)), this, SLOT(quickOpenNavigate()));
 
     KAction* quickOpenNextFunction = actions.addAction("quick_open_next_function");
     quickOpenNextFunction->setText( i18n("Next Function") );
@@ -1135,60 +1130,6 @@ void QuickOpenPlugin::quickOpenDefinition()
 
   lock.unlock();
   core()->documentController()->openDocument(KUrl(u.str()), c.textCursor());
-}
-
-
-void QuickOpenPlugin::quickOpenNavigate()
-{
-  if(!freeModel())
-    return;
-  KDevelop::DUChainReadLocker lock( DUChain::lock() );
-
-  QWidget* widget = specialObjectNavigationWidget();
-  Declaration* decl = cursorDeclaration();
-
-  if(widget || decl) {
-
-    QuickOpenModel* model = new QuickOpenModel(0);
-    model->setExpandingWidgetHeightIncrease(200); //Make the widget higher, since it's the only visible item
-
-    if(widget) {
-      QPair<KUrl, SimpleCursor> jumpPos = specialObjectJumpPosition();
-
-      CustomItem item;
-      item.m_widget = widget;
-      item.m_executeTargetPosition = jumpPos.second;
-      item.m_executeTargetUrl = jumpPos.first;
-
-      QList<CustomItem> items;
-      items << item;
-
-      model->registerProvider( QStringList(), QStringList(), new CustomItemDataProvider(items) );
-    }else{
-      DUChainItem item;
-
-      item.m_item = IndexedDeclaration(decl);
-      item.m_text = decl->qualifiedIdentifier().toString();
-
-      QList<DUChainItem> items;
-      items << item;
-
-      model->registerProvider( QStringList(), QStringList(), new DeclarationListDataProvider(this, items) );
-    }
-
-    //Change the parent so there are no conflicts in destruction order
-    QuickOpenWidgetDialog* dialog = new QuickOpenWidgetDialog( i18n("Navigate"), model, QStringList(), QStringList(), true, true );
-    m_currentWidgetHandler = dialog;
-    model->setParent(m_currentWidgetHandler);
-    model->setExpanded(model->index(0,0, QModelIndex()), true);
-
-    dialog->run();
-  }
-
-  if(!decl) {
-    kDebug() << "Found no declaration for cursor, cannot navigate";
-    return;
-  }
 }
 
 bool QuickOpenPlugin::freeModel()
