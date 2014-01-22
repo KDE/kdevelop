@@ -34,8 +34,14 @@ public:
     explicit ClangCodeCompletionModel(QObject* parent);
     virtual ~ClangCodeCompletionModel();
 
+signals:
+    void requestCompletion(const KUrl& url, const KDevelop::SimpleCursor& cursor, const QStringList& contents);
+
 protected:
-    virtual KDevelop::CodeCompletionWorker* createCompletionWorker();
+    KDevelop::CodeCompletionWorker* createCompletionWorker() override;
+
+    void completionInvokedInternal(KTextEditor::View* view, const KTextEditor::Range& range,
+                                   InvocationType invocationType, const KUrl& url) override;
 };
 
 #endif // CLANGCODECOMPLETIONMODEL_H

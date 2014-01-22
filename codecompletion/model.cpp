@@ -21,8 +21,14 @@
 
 #include "model.h"
 #include "context.h"
+#include <duchain/parsesession.h>
 
 #include <language/codecompletion/codecompletionworker.h>
+#include <language/duchain/topducontext.h>
+#include <language/duchain/duchainutils.h>
+#include <language/duchain/duchainlock.h>
+#include <KTextEditor/View>
+#include <KTextEditor/Document>
 
 using namespace KDevelop;
 
@@ -34,13 +40,57 @@ public:
     ClangCodeCompletionWorker(CodeCompletionModel* model)
         : CodeCompletionWorker(model)
     {}
-    virtual ~ClangCodeCompletionWorker()
-    {}
+    virtual ~ClangCodeCompletionWorker() = default;
 
-    CodeCompletionContext* createCompletionContext(DUContextPointer context, const QString& contextText,
-                                                   const QString& /*followingText*/, const CursorInRevision& position) const override
+public slots:
+    void completionRequested(const KUrl& url, const KDevelop::SimpleCursor& position, const QStringList& contents)
     {
-        return new ClangCodeCompletionContext(context, contextText, position);
+        aborting() = false;
+
+        DUChainReadLocker lock;
+        if (aborting()) {
+            failed();
+            return;
+        }
+
+        auto top = DUChainUtils::standardContextForUrl(url);
+        if (!top) {
+            kWarning() << "No context found for" << url;
+            return;
+        }
+        const auto session = KSharedPtr<ParseSession>::dynamicCast(top->ast());
+        if (!session) {
+            // TODO: trigger reparse and re-request code completion
+            kWarning() << "No parse session / AST attached to context for url" << url;
+        }
+
+        ClangCodeCompletionContext completionContext( session.data(), position, contents );
+
+        if (aborting()) {
+            failed();
+            return;
+        }
+
+        // NOTE: cursor might be wrong here, but shouldn't matter much I hope...
+        //       when the document changed significantly, then the cache is off anyways and we don't get anything sensible
+        //       the position here is just a "optimization" to only search up to that position
+        const auto& items = completionContext.completionItems(top, CursorInRevision::castFromSimpleCursor(position));
+
+        if (aborting()) {
+            failed();
+            return;
+        }
+
+        auto tree = computeGroups( items, {} );
+
+        if (aborting()) {
+            failed();
+            return;
+        }
+
+        tree += completionContext.ungroupedElements();
+
+        foundDeclarations( tree, {} );
     }
 };
 }
@@ -48,6 +98,7 @@ public:
 ClangCodeCompletionModel::ClangCodeCompletionModel(QObject* parent)
     : CodeCompletionModel(parent)
 {
+    qRegisterMetaType<KDevelop::SimpleCursor>();
 }
 
 ClangCodeCompletionModel::~ClangCodeCompletionModel()
@@ -57,7 +108,19 @@ ClangCodeCompletionModel::~ClangCodeCompletionModel()
 
 CodeCompletionWorker* ClangCodeCompletionModel::createCompletionWorker()
 {
-    return new ClangCodeCompletionWorker(this);
+    auto worker = new ClangCodeCompletionWorker(this);
+    connect(this, SIGNAL(requestCompletion(KUrl,KDevelop::SimpleCursor,QStringList)),
+            worker, SLOT(completionRequested(KUrl,KDevelop::SimpleCursor,QStringList)));
+    return worker;
+}
+
+void ClangCodeCompletionModel::completionInvokedInternal(KTextEditor::View* view, const KTextEditor::Range& range,
+                                                         CodeCompletionModel::InvocationType /*invocationType*/, const KUrl& url)
+{
+    // get text before this range so we can parse this version with clang
+    const QStringList lines = view->document()->textLines({0, 0, range.start().line(), range.start().column()});
+
+    emit requestCompletion(url, SimpleCursor(range.start()), lines);
 }
 
 #include "model.moc"

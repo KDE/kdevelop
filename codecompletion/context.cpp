@@ -96,53 +96,57 @@ CodeCompletionModel::CompletionProperties SimpleItem::completionProperties() con
     return m_properties;
 }
 
+QByteArray concatenate(const QStringList& contents)
+{
+    QByteArray ret;
+    int sizeGuess = 0;
+    foreach(const QString& line, contents) {
+        sizeGuess += line.size() + 1;
+    }
+    ret.reserve(sizeGuess);
+    foreach(const QString& line, contents) {
+        ret += line.toUtf8() + '\n';
+    }
+    return ret;
 }
 
-ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& context, const QString& text,
-                                                       const CursorInRevision& position, int depth)
-    : CodeCompletionContext(context, text, position, depth)
+}
+
+ClangCodeCompletionContext::ClangCodeCompletionContext(const ParseSession* const session,
+                                                       const SimpleCursor& position,
+                                                       const QStringList& contents
+                                                      )
+    : CodeCompletionContext({}, QString(), {}, 0)
+    , m_results(nullptr, clang_disposeCodeCompleteResults)
 {
+    ClangString file(clang_getFileName(session->file()));
+
+    CXUnsavedFile unsaved;
+    const QByteArray fileContents = concatenate(contents);
+    unsaved.Contents = fileContents.constData();
+    unsaved.Length = fileContents.size();
+    unsaved.Filename = file;
+
+    m_results.reset( clang_codeCompleteAt(session->unit(), file,
+                        position.line + 1, position.column + 1,
+                        &unsaved, 1,
+                        clang_defaultCodeCompleteOptions()) );
 }
 
 ClangCodeCompletionContext::~ClangCodeCompletionContext()
 {
 }
 
-QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(bool& abort, bool /*fullCompletion*/)
+QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(const TopDUContext* const top,
+                                                                             const CursorInRevision& position)
 {
-    // FIXME: ensure we don't access the TU from this thread and the parse thread simultaneously!
-    DUChainReadLocker lock;
-    if (abort || !m_duContext) {
-        return {};
-    }
-    const auto session = KSharedPtr<ParseSession>::dynamicCast(m_duContext->topContext()->ast());
-    if (!session) {
-        qDebug() << "no session found for file" << m_duContext->url();
-        return {};
-    }
-
-    ClangString file(clang_getFileName(session->file()));
-
-    /* FIXME: m_text only contains the part of the current context which is not enough for the clang use-case
-    CXUnsavedFile unsaved;
-    const auto contents = m_text.toUtf8();
-    unsaved.Contents = contents.constData();
-    unsaved.Length = contents.size();
-    unsaved.Filename = file;
-    */
-
-    const auto results = std::unique_ptr<CXCodeCompleteResults, void(*)(CXCodeCompleteResults*)>(
-        clang_codeCompleteAt(session->unit(), file, m_position.line + 1, m_position.column + 1, nullptr, 0,
-                             clang_defaultCodeCompleteOptions()),
-        clang_disposeCodeCompleteResults);
-
-    QList<CompletionTreeItemPointer> ret;
-    ret.reserve(results->NumResults);
+    QList<CompletionTreeItemPointer> items;
+    items.reserve(m_results->NumResults);
 
     QSet<QualifiedIdentifier> handled;
 
-    for (uint i = 0; i < results->NumResults; ++i) {
-        auto result = results->Results[i];
+    for (uint i = 0; i < m_results->NumResults; ++i) {
+        auto result = m_results->Results[i];
         const uint chunks = clang_getNumCompletionChunks(result.CompletionString);
 
         QString typed;
@@ -185,12 +189,12 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
             }
             handled.insert(qid);
             Declaration* found = 0;
-            foreach(Declaration* dec, m_duContext->findDeclarations(qid, m_position)) {
+            foreach(Declaration* dec, top->findDeclarations(qid, position)) {
                 found = dec;
                 break;
             }
             if (found) {
-                ret.append(CompletionTreeItemPointer(new NormalDeclarationCompletionItem(DeclarationPointer(found))));
+                items.append(CompletionTreeItemPointer(new NormalDeclarationCompletionItem(DeclarationPointer(found))));
                 continue;
             } else {
                 debug() << "Could not find declaration for" << qid;
@@ -198,8 +202,7 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
         }
 
         // TODO: grouping of macros and built-in stuff
-        ret.append(CompletionTreeItemPointer(new SimpleItem(typed, resultType, text, CodeCompletionModel::GlobalScope)));
+        items.append(CompletionTreeItemPointer(new SimpleItem(typed, resultType, text, CodeCompletionModel::GlobalScope)));
     }
-
-    return ret;
+    return items;
 }

@@ -24,14 +24,29 @@
 
 #include <language/codecompletion/codecompletioncontext.h>
 
+#include <clang-c/Index.h>
+
+#include <memory>
+
+class ParseSession;
 class ClangCodeCompletionContext : public KDevelop::CodeCompletionContext
 {
 public:
-    ClangCodeCompletionContext(const KDevelop::DUContextPointer& context, const QString& text,
-                               const KDevelop::CursorInRevision& position, int depth = 0);
+    ClangCodeCompletionContext(const ParseSession* const session,
+                               const KDevelop::SimpleCursor& position,
+                               const QStringList& contents);
     ~ClangCodeCompletionContext();
 
-    QList< KDevelop::CompletionTreeItemPointer > completionItems(bool& abort, bool fullCompletion) override;
+    QList<KDevelop::CompletionTreeItemPointer> completionItems(const KDevelop::TopDUContext* const top,
+                                                               const KDevelop::CursorInRevision& position);
+
+    QList< KDevelop::CompletionTreeItemPointer > completionItems(bool& /*abort*/, bool /*fullCompletion*/ = true) override
+    {
+        // not used, see above
+        return {};
+    }
+private:
+    std::unique_ptr<CXCodeCompleteResults, void(*)(CXCodeCompleteResults*)> m_results;
 };
 
 #endif // CLANGCODECOMPLETIONCONTEXT_H
