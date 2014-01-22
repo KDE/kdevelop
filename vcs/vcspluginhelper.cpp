@@ -190,11 +190,16 @@ void VcsPluginHelper::addContextDocument(const KUrl &url)
     d->ctxUrls.append(url);
 }
 
-void VcsPluginHelper::disposeEventually(bool dont)
+void VcsPluginHelper::disposeEventually(KTextEditor::View *, bool dont)
 {
     if ( ! dont ) {
         deleteLater();
     }
+}
+
+void VcsPluginHelper::disposeEventually(KTextEditor::Document *)
+{
+    deleteLater();
 }
 
 void VcsPluginHelper::setupFromContext(Context* context)
@@ -412,8 +417,6 @@ void VcsPluginHelper::annotation()
         if (annotateiface && viewiface) {
             KDevelop::VcsAnnotationModel* model = new KDevelop::VcsAnnotationModel(job, url, doc->textDocument(),
                                                                                    foreground, background);
-            connect(doc->textDocument()->activeView(), SIGNAL(annotationActivated(KTextEditor::View*, int)),
-                    model, SLOT(itemActivated(KTextEditor::View*, int)) );
             annotateiface->setAnnotationModel(model);
             viewiface->setAnnotationBorderVisible(true);
             connect(doc->textDocument()->activeView(),

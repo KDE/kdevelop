@@ -24,7 +24,10 @@ class QMenu;
 namespace KTextEditor
 {
 class View;
+class Document;
 }
+
+using KTextEditor::View;
 
 namespace KDevelop
 {
@@ -65,7 +68,8 @@ public Q_SLOTS:
     void diffJobFinished(KJob* job);
     
     void revertDone(KJob* job);
-    void disposeEventually(bool);
+    void disposeEventually(KTextEditor::Document*);
+    void disposeEventually(View*, bool);
 
 private Q_SLOTS:
     void delayedModificationWarningOn();
