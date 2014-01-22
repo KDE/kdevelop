@@ -656,7 +656,7 @@ VcsJob* GitPlugin::renameBranch(const KUrl& repository, const QString& oldBranch
 VcsJob* GitPlugin::currentBranch(const KUrl& repository)
 {
     DVcsJob* job = new DVcsJob(urlDir(repository), this, OutputJob::Silent);
-    job->ignoreError();
+    job->setIgnoreError(true);
     *job << "git" << "symbolic-ref" << "-q" << "--short" << "HEAD";
     connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), SLOT(parseGitCurrentBranch(KDevelop::DVcsJob*)));
     return job;
