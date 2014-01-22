@@ -76,33 +76,35 @@ void PatchHighlighter::showToolTipForMark( QPoint pos, KTextEditor::MovingRange*
 
     Diff2::DifferenceStringList lines;
 
-    if( m_plugin->patch()->isAlreadyApplied() && !diff->applied() )
-        html += i18n( "<b>Reverted.</b><br/>" );
-    else if( !m_plugin->patch()->isAlreadyApplied() && diff->applied() )
-        html += i18n( "<b>Applied.</b><br/>" );
-
+    html += "<b>";
     if( diff->applied() ) {
-        if( isInsertion( diff ) )
-        {
-            html += i18n( "<b>Insertion</b><br/>" );
-        }else{
+        if( !m_plugin->patch()->isAlreadyApplied() )
+            html += i18n( "Applied.<br/>" );
+
+        if( isInsertion( diff ) ) {
+            html += i18n( "Insertion<br/>" );
+        } else {
             if( isRemoval( diff ) )
-                html += i18n( "<b>Removal</b><br/>" );
-            html += i18n( "<b>Previous:</b><br/>" );
+                html += i18n( "Removal<br/>" );
+            html += i18n( "Previous:<br/>" );
             lines = diff->sourceLines();
         }
-    }else{
-        if( isRemoval( diff ) ) {
-            html += i18n( "<b>Removal</b><br/>" );
-        }else{
-            if( isInsertion( diff ) )
-                html += i18n( "<b>Insertion</b><br/>" );
+    } else {
+        if( m_plugin->patch()->isAlreadyApplied() )
+            html += i18n( "Reverted.<br/>" );
 
-            html += i18n( "<b>Alternative:</b><br/>" );
+        if( isRemoval( diff ) ) {
+            html += i18n( "Removal<br/>" );
+        } else {
+            if( isInsertion( diff ) )
+                html += i18n( "Insertion<br/>" );
+
+            html += i18n( "Alternative:<br/>" );
 
             lines = diff->destinationLines();
         }
     }
+    html += "</b>";
 
     for( int a = 0; a < lines.size(); ++a ) {
         Diff2::DifferenceString* line = lines[a];
@@ -179,14 +181,14 @@ void PatchHighlighter::markClicked( KTextEditor::Document* doc, KTextEditor::Mar
 
         for( int a = 0; a < diff->sourceLineCount(); ++a ) {
             sourceText += diff->sourceLineAt( a )->string();
-            if( !sourceText.endsWith( "\n" ) )
-                sourceText += "\n";
+            if( !sourceText.endsWith( '\n' ) )
+                sourceText += '\n';
         }
 
         for( int a = 0; a < diff->destinationLineCount(); ++a ) {
             targetText += diff->destinationLineAt( a )->string();
-            if( !targetText.endsWith( "\n" ) )
-                targetText += "\n";
+            if( !targetText.endsWith( '\n' ) )
+                targetText += '\n';
         }
 
         QString replace;
