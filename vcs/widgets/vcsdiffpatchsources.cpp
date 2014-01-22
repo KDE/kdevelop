@@ -50,7 +50,7 @@ VCSCommitDiffPatchSource::VCSCommitDiffPatchSource(VCSDiffUpdater* updater)
     QHBoxLayout* titleLayout = new QHBoxLayout;
     titleLayout->addWidget(new QLabel(i18n("Commit Message:")));
     
-    m_oldMessages = new KComboBox;
+    m_oldMessages = new KComboBox(m_commitMessageWidget.data());
     
     m_oldMessages->addItem(i18n("Old Messages"));
     foreach(QString message, oldMessages())
