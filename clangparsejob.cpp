@@ -280,11 +280,13 @@ void ClangParseJob::buildDUChain(CXFile file)
         context = DUChain::self()->chainForDocument(path);
         if (!context) {
             context = createTopContext(path);
-            context->setFeatures(minimumFeatures());
-            context->setProblems(m_session->problemsForFile(file));
         } else {
             update = true;
         }
+
+        context->setFeatures(minimumFeatures());
+        context->setProblems(m_session->problemsForFile(file));
+
         m_includedFiles.insert(file, context);
         if (update) {
             if (!context->parsingEnvironmentFile()->needsUpdate()

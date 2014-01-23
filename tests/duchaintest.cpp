@@ -30,6 +30,7 @@
 #include <language/duchain/declaration.h>
 #include <language/duchain/parsingenvironment.h>
 #include <language/backgroundparser/backgroundparser.h>
+#include <language/interfaces/iproblem.h>
 #include <interfaces/ilanguagecontroller.h>
 
 QTEST_KDEMAIN(DUChainTest, NoGUI);
@@ -156,6 +157,26 @@ void DUChainTest::testReparse()
 
         if (i == 1) {
             file.setFileContents("int main()\n{\nfloat i = 13; return i - 5;\n}\n");
+        }
+
+        file.parse(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdateRecursive));
+    }
+}
+
+void DUChainTest::testReparseError()
+{
+    TestFile file("int i = 1 / 0;\n", "cpp");
+    file.parse(TopDUContext::AllDeclarationsContextsAndUses);
+
+    for (int i = 0; i < 2; ++i) {
+        QVERIFY(file.waitForParsed(500));
+        DUChainReadLocker lock;
+        QVERIFY(file.topContext());
+        if (!i) {
+            QCOMPARE(file.topContext()->problems().size(), 1);
+            file.setFileContents("int i = 0;\n");
+        } else {
+            QCOMPARE(file.topContext()->problems().size(), 0);
         }
 
         file.parse(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdateRecursive));
