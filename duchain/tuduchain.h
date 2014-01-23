@@ -30,10 +30,12 @@
 #include "typebuilder.h"
 #include <unordered_map>
 
+#include <util/pushvalue.h>
+
 class KDEVCLANGDUCHAIN_EXPORT TUDUChain
 {
 public:
-    TUDUChain(CXTranslationUnit tu, CXFile file, const IncludeFileContexts& includes);
+    TUDUChain(CXTranslationUnit tu, CXFile file, const IncludeFileContexts& includes, const bool update);
 
 private:
     static CXChildVisitResult visitCursor(CXCursor cursor, CXCursor parent, CXClientData data);
@@ -103,9 +105,9 @@ private:
                 DUChainWriteLocker lock;
                 decl->setAbstractType(type);
             }
-            std::swap(context, m_parentContext);
+            CurrentContext newParent(context);
+            PushValue<CurrentContext*> pushCurrent(m_parentContext, &newParent);
             clang_visitChildren(cursor, &visitCursor, this);
-            std::swap(context, m_parentContext);
             return CXChildVisit_Continue;
         }
         auto decl = createDeclaration<CK, DeclType>(cursor, id);
@@ -120,7 +122,7 @@ private:
     template<CXCursorKind CK>
     CXChildVisitResult buildUse(CXCursor cursor)
     {
-        m_uses[m_parentContext].push_back(cursor);
+        m_uses[m_parentContext->context].push_back(cursor);
         return CK == CXCursor_DeclRefExpr || CK == CXCursor_MemberRefExpr ?
             CXChildVisit_Recurse : CXChildVisit_Continue;
     }
@@ -132,6 +134,23 @@ private:
     {
         auto range = ClangRange(clang_Cursor_getSpellingNameRange(cursor, 0, 0)).toRangeInRevision();
         auto comment = makeComment(clang_Cursor_getParsedComment(cursor));
+        if (m_update) {
+            const IndexedIdentifier indexedId(id);
+            DUChainWriteLocker lock;
+            auto it = m_parentContext->previousChildDeclarations.begin();
+            while (it != m_parentContext->previousChildDeclarations.end()) {
+                auto decl = *it;
+                if (dynamic_cast<DeclType*>(decl) && decl->indexedIdentifier() == indexedId) {
+                    decl->setRange(range);
+                    decl->setComment(comment);
+                    setDeclData<CK>(cursor, decl);
+                    m_parentContext->previousChildDeclarations.erase(it);
+                    return decl;
+                }
+                ++it;
+            }
+        }
+        // when we create a new declaration, we don't need a lock and can just set stuff directly
         auto decl = new DeclType(range, nullptr);
         decl->setComment(comment);
         decl->setIdentifier(id);
@@ -144,7 +163,7 @@ private:
     {
         auto decl = createDeclarationCommon<CK, DeclType>(cursor, id);
         DUChainWriteLocker lock;
-        decl->setContext(m_parentContext);
+        decl->setContext(m_parentContext->context);
         return decl;
     }
 
@@ -153,7 +172,7 @@ private:
     {
         auto decl = createDeclarationCommon<CK, DeclType>(cursor, id);
         DUChainWriteLocker lock;
-        decl->setContext(m_parentContext);
+        decl->setContext(m_parentContext->context);
         decl->setInternalContext(context);
         return decl;
     }
@@ -161,10 +180,25 @@ private:
     template<CXCursorKind CK, KDevelop::DUContext::ContextType Type>
     KDevelop::DUContext* createContext(CXCursor cursor, const KDevelop::Identifier& id)
     {
-        auto context = new KDevelop::DUContext(makeContextRange(cursor), m_parentContext);
-        DUChainWriteLocker lock; //TODO: (..type, id..) constructor for DUContext?
+        DUChainWriteLocker lock;
+        const auto scopeId = m_parentContext->context->localScopeIdentifier() + id;
+        if (m_update) {
+            const KDevelop::IndexedQualifiedIdentifier indexedScopeId(scopeId);
+            auto it = m_parentContext->previousChildContexts.begin();
+            while (it != m_parentContext->previousChildContexts.end()) {
+                auto ctx = *it;
+                if (ctx->type() == Type && ctx->indexedLocalScopeIdentifier() == indexedScopeId) {
+                    ctx->setRange(makeContextRange(cursor));
+                    m_parentContext->previousChildContexts.erase(it);
+                    return ctx;
+                }
+                ++it;
+            }
+        }
+        //TODO: (..type, id..) constructor for DUContext?
+        auto context = new KDevelop::DUContext(makeContextRange(cursor), m_parentContext->context);
         context->setType(Type);
-        context->setLocalScopeIdentifier(m_parentContext->localScopeIdentifier() + id);
+        context->setLocalScopeIdentifier(scopeId);
         if (Type == KDevelop::DUContext::Other)
             context->setInSymbolTable(false);
         return context;
@@ -172,11 +206,37 @@ private:
 //END create*
 
 private:
+    struct CurrentContext
+    {
+        CurrentContext(KDevelop::DUContext* context)
+            : context(context)
+        {
+            DUChainReadLocker lock;
+            previousChildContexts = context->childContexts();
+            previousChildDeclarations = context->localDeclarations();
+        }
+        ~CurrentContext()
+        {
+            DUChainWriteLocker lock;
+            qDeleteAll(previousChildContexts);
+            qDeleteAll(previousChildDeclarations);
+        }
+
+        KDevelop::DUContext* context;
+        // when updatig, this contains child contexts of the current parent context
+        QVector<KDevelop::DUContext*> previousChildContexts;
+        // when updatig, this contains child declarations of the current parent context
+        QVector<KDevelop::Declaration*> previousChildDeclarations;
+    };
+    friend CurrentContext;
+
     const CXFile m_file;
     const IncludeFileContexts &m_includes;
 
     std::unordered_map<DUContext*, std::vector<CXCursor>> m_uses;
-    KDevelop::DUContext *m_parentContext;
+    CurrentContext *m_parentContext;
+
+    const bool m_update;
 };
 
 #endif //TUDUCHAIN_H

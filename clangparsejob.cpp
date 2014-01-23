@@ -272,32 +272,34 @@ void ClangParseJob::buildDUChain(CXFile file)
 
     const IndexedString path(QDir::cleanPath(QString::fromUtf8(ClangString(clang_getFileName(file)))));
 
+    bool update = false;
     UrlParseLock urlLock(path);
     ReferencedTopDUContext context;
     {
         DUChainWriteLocker lock;
-        bool created = false;
         context = DUChain::self()->chainForDocument(path);
         if (!context) {
             context = createTopContext(path);
             context->setFeatures(minimumFeatures());
             context->setProblems(m_session->problemsForFile(file));
-            created = true;
+        } else {
+            update = true;
         }
         m_includedFiles.insert(file, context);
-        if (!created) {
+        if (update) {
             if (!context->parsingEnvironmentFile()->needsUpdate()
                 && context->parsingEnvironmentFile()->featuresSatisfied(minimumFeatures()))
             {
                 return;
             }
-            /// FIXME: update existing data instead of killing it and adding it anew
-            context->cleanIfNotEncountered({});
         }
     }
 
     {
         DUChainWriteLocker lock;
+        if (update) {
+            context->clearImportedParentContexts();
+        }
         foreach(const auto& import, m_imports.values(file)) {
             Q_ASSERT(m_includedFiles.contains(import.file));
             auto ctx = m_includedFiles.value(import.file);
@@ -309,5 +311,5 @@ void ClangParseJob::buildDUChain(CXFile file)
         }
     }
 
-    TUDUChain(m_session->unit(), file, m_includedFiles);
+    TUDUChain(m_session->unit(), file, m_includedFiles, update);
 }

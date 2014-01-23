@@ -131,12 +131,33 @@ void DUChainTest::testReparse()
     TestFile file("int main() { int i = 42; return i; }", "cpp");
     file.parse(TopDUContext::AllDeclarationsContextsAndUses);
 
-    for (int i = 0; i < 2; ++i) {
+    DeclarationPointer mainDecl;
+    DeclarationPointer iDecl;
+    for (int i = 0; i < 3; ++i) {
         QVERIFY(file.waitForParsed(500));
         DUChainReadLocker lock;
-        QCOMPARE(file.topContext()->localDeclarations().size(), 1);
         QCOMPARE(file.topContext()->childContexts().size(), 1);
+        QCOMPARE(file.topContext()->localDeclarations().size(), 1);
         QCOMPARE(file.topContext()->childContexts().first()->localDeclarations().size(), 1);
+
+        if (i) {
+            QVERIFY(mainDecl);
+            QCOMPARE(mainDecl.data(), file.topContext()->localDeclarations().first());
+
+            QVERIFY(iDecl);
+            QCOMPARE(iDecl.data(), file.topContext()->childContexts().first()->localDeclarations().first());
+        }
+        mainDecl = file.topContext()->localDeclarations().first();
+        iDecl = file.topContext()->childContexts().first()->localDeclarations().first();
+
+        QVERIFY(mainDecl->uses().isEmpty());
+        QCOMPARE(iDecl->uses().size(), 1);
+        QCOMPARE(iDecl->uses().begin()->size(), 1);
+
+        if (i == 1) {
+            file.setFileContents("int main()\n{\nfloat i = 13; return i - 5;\n}\n");
+        }
+
         file.parse(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdateRecursive));
     }
 }

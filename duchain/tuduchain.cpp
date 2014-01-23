@@ -61,15 +61,22 @@ void TUDUChain::setDeclData(CXCursor cursor, ClassDeclaration* decl) const
 }
 //END setDeclData
 
-TUDUChain::TUDUChain(CXTranslationUnit tu, CXFile file, const IncludeFileContexts& includes)
+TUDUChain::TUDUChain(CXTranslationUnit tu, CXFile file, const IncludeFileContexts& includes, const bool update)
 : m_file(file)
 , m_includes(includes)
+, m_parentContext(nullptr)
+, m_update(update)
 {
     CXCursor tuCursor = clang_getTranslationUnitCursor(tu);
-    m_parentContext = includes[file];
+    CurrentContext parent(includes[file]);
+    m_parentContext = &parent;
     clang_visitChildren(tuCursor, &visitCursor, this);
 
-    TopDUContext *top = m_parentContext->topContext();
+    TopDUContext *top = m_parentContext->context->topContext();
+    if (m_update) {
+        DUChainWriteLocker lock;
+        top->deleteUsesRecursively();
+    }
     for (const auto &contextUses : m_uses) {
         for (const auto &cursor : contextUses.second) {
             auto referenced = clang_getCursorReferenced(cursor);
