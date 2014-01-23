@@ -81,6 +81,10 @@ void IncludePathComputer::computeForeground()
         break;
       }
     }
+    // otherwise we did not find a target, so just use any include paths provided by the manager
+    if (dirs.isEmpty()) {
+      dirs = buildManager->includeDirectories(file);
+    }
 
     m_projectName = project->name();
     m_projectDirectory = project->path();
