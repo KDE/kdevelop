@@ -25,6 +25,7 @@
 #include <language/duchain/ducontext.h>
 #include <language/duchain/topducontext.h>
 #include <language/duchain/declaration.h>
+#include <language/duchain/duchainutils.h>
 #include <language/interfaces/iastcontainer.h>
 #include <language/codecompletion/codecompletionitem.h>
 #include <language/codecompletion/codecompletionmodel.h>
@@ -45,20 +46,36 @@ namespace {
 class DeclarationItem : public NormalDeclarationCompletionItem
 {
 public:
-    DeclarationItem(Declaration* decl, const QString &replacement);
+    DeclarationItem(Declaration* decl, const QString& display, const QString& prefix, const QString &replacement);
     virtual ~DeclarationItem() = default;
 
-    virtual void execute(KTextEditor::Document* document, const KTextEditor::Range& word);
+    QVariant data(const QModelIndex& index, int role, const CodeCompletionModel* model) const override;
+    void execute(KTextEditor::Document* document, const KTextEditor::Range& word) override;
 
 private:
+    QString m_display;
+    QString m_prefix;
     QString m_replacement;
 };
 
-DeclarationItem::DeclarationItem(Declaration* decl, const QString& replacement)
+DeclarationItem::DeclarationItem(Declaration* decl, const QString& display, const QString& prefix, const QString& replacement)
     : NormalDeclarationCompletionItem(DeclarationPointer(decl))
+    , m_display(display)
+    , m_prefix(prefix)
     , m_replacement(replacement)
 {
+}
 
+QVariant DeclarationItem::data(const QModelIndex& index, int role, const CodeCompletionModel* model) const
+{
+    if (role == Qt::DisplayRole) {
+        if (index.column() == CodeCompletionModel::Prefix) {
+            return m_prefix;
+        } else if (index.column() == CodeCompletionModel::Name) {
+            return m_display;
+        }
+    }
+    return NormalDeclarationCompletionItem::data(index, role, model);
 }
 
 void DeclarationItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word)
@@ -69,31 +86,24 @@ void DeclarationItem::execute(KTextEditor::Document* document, const KTextEditor
 class SimpleItem : public CompletionTreeItem
 {
 public:
-    SimpleItem(const QString& typed, const QString& result, const QString& text,
-               CodeCompletionModel::CompletionProperties properties);
+    SimpleItem(const QString& display, const QString& prefix, const QString& replacement);
     virtual ~SimpleItem() = default;
 
     QVariant data(const QModelIndex& index, int role, const CodeCompletionModel* model) const override;
 
     void execute(KTextEditor::Document* document, const KTextEditor::Range& word)  override;
 
-    CodeCompletionModel::CompletionProperties completionProperties() const override;
-
 private:
-    QString m_typed;
-    QString m_result;
-    QString m_text;
-    CodeCompletionModel::CompletionProperties m_properties;
+    QString m_display;
+    QString m_prefix;
+    QString m_replacement;
 };
 
-SimpleItem::SimpleItem(const QString& typed, const QString& result, const QString& text,
-                       CodeCompletionModel::CompletionProperties properties)
-    : m_typed(typed)
-    , m_result(result)
-    , m_text(text)
-    , m_properties(properties)
+SimpleItem::SimpleItem(const QString& display, const QString& prefix, const QString& replacement)
+    : m_display(display)
+    , m_prefix(prefix)
+    , m_replacement(replacement)
 {
-
 }
 
 QVariant SimpleItem::data(const QModelIndex& index, int role, const CodeCompletionModel* /*model*/) const
@@ -103,21 +113,16 @@ QVariant SimpleItem::data(const QModelIndex& index, int role, const CodeCompleti
     }
     switch (index.column()) {
         case CodeCompletionModel::Name:
-            return m_typed;
+            return m_display;
         case CodeCompletionModel::Prefix:
-            return m_result;
+            return m_prefix;
     }
     return {};
 }
 
 void SimpleItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word)
 {
-    document->replaceText(word, m_text);
-}
-
-CodeCompletionModel::CompletionProperties SimpleItem::completionProperties() const
-{
-    return m_properties;
+    document->replaceText(word, m_replacement);
 }
 
 QByteArray concatenate(const QStringList& contents)
@@ -177,29 +182,58 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(con
         const uint chunks = clang_getNumCompletionChunks(result.CompletionString);
 
         QString typed;
+        QString display;
         QString resultType;
-        QString text;
+        QString replacement;
+        int parenDepth = 0;
+        enum FunctionSignatureState {
+            Before,
+            Inside,
+            After
+        };
+        FunctionSignatureState signatureState = Before;
         for (uint j = 0; j < chunks; ++j) {
             const auto kind = clang_getCompletionChunkKind(result.CompletionString, j);
+            if (kind == CXCompletionChunk_CurrentParameter || kind == CXCompletionChunk_Informative
+                || kind == CXCompletionChunk_Optional)
+            {
+                continue;
+            }
             const QString string = ClangString(clang_getCompletionChunkText(result.CompletionString, j)).toString();
             switch (kind) {
                 case CXCompletionChunk_TypedText:
+                    display += string;
                     typed = string;
                     break;
                 case CXCompletionChunk_ResultType:
                     resultType = string;
                     continue;
-                case CXCompletionChunk_CurrentParameter:
-                case CXCompletionChunk_Informative:
-                case CXCompletionChunk_Optional:
-                    continue;
                 case CXCompletionChunk_Placeholder:
-                    text += "/*" + string + "*/";
+                    replacement += "/*" + string + "*/";
+                    if (signatureState == Inside) {
+                        display += string;
+                    }
                     continue;
+                case CXCompletionChunk_LeftParen:
+                    if (signatureState == Before && !parenDepth) {
+                        signatureState = Inside;
+                    }
+                    parenDepth++;
+                    break;
+                case CXCompletionChunk_RightParen:
+                    --parenDepth;
+                    if (signatureState == Inside && !parenDepth) {
+                        display += ')';
+                        signatureState = After;
+                    }
+                    break;
                 default:
                     break;
             }
-            text += string;
+            replacement += string;
+            if (signatureState == Inside) {
+                display += string;
+            }
         }
         if (result.CursorKind != CXCursor_MacroDefinition && result.CursorKind != CXCursor_NotImplemented) {
             const Identifier id(typed);
@@ -221,14 +255,14 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(con
                 break;
             }
             if (found) {
-                items.append(CompletionTreeItemPointer(new DeclarationItem(found, text)));
+                items.append(CompletionTreeItemPointer(new DeclarationItem(found, display, resultType, replacement)));
                 continue;
             } else {
                 debug() << "Could not find declaration for" << qid;
             }
         }
 
-        CompletionTreeItemPointer item(new SimpleItem(typed, resultType, text, CodeCompletionModel::GlobalScope));
+        CompletionTreeItemPointer item(new SimpleItem(display, resultType, replacement));
         if (result.CursorKind == CXCursor_MacroDefinition) {
             // TODO: grouping of macros and built-in stuff
             macros.append(item);
