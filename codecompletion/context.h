@@ -45,8 +45,11 @@ public:
         // not used, see above
         return {};
     }
+
+    QList<KDevelop::CompletionTreeElementPointer> ungroupedElements() override;
 private:
     std::unique_ptr<CXCodeCompleteResults, void(*)(CXCodeCompleteResults*)> m_results;
+    QList<KDevelop::CompletionTreeElementPointer> m_ungrouped;
 };
 
 #endif // CLANGCODECOMPLETIONCONTEXT_H

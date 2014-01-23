@@ -165,7 +165,8 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(con
                                                                              const CursorInRevision& position)
 {
     QList<CompletionTreeItemPointer> items;
-    items.reserve(m_results->NumResults);
+    QList<CompletionTreeItemPointer> macros;
+    QList<CompletionTreeItemPointer> builtin;
 
     QSet<QualifiedIdentifier> handled;
 
@@ -225,8 +226,29 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(con
             }
         }
 
-        // TODO: grouping of macros and built-in stuff
-        items.append(CompletionTreeItemPointer(new SimpleItem(typed, resultType, text, CodeCompletionModel::GlobalScope)));
+        CompletionTreeItemPointer item(new SimpleItem(typed, resultType, text, CodeCompletionModel::GlobalScope));
+        if (result.CursorKind == CXCursor_MacroDefinition) {
+            // TODO: grouping of macros and built-in stuff
+            macros.append(item);
+        } else {
+            builtin.append(item);
+        }
+    }
+
+    if (!macros.isEmpty()) {
+        KDevelop::CompletionCustomGroupNode* node = new KDevelop::CompletionCustomGroupNode(i18n("Macros"), 900);
+        node->appendChildren(macros);
+        m_ungrouped << CompletionTreeElementPointer(node);
+    }
+    if (!builtin.isEmpty()) {
+        KDevelop::CompletionCustomGroupNode* node = new KDevelop::CompletionCustomGroupNode(i18n("Builtin"), 800);
+        node->appendChildren(builtin);
+        m_ungrouped << CompletionTreeElementPointer(node);
     }
     return items;
+}
+
+QList<CompletionTreeElementPointer> ClangCodeCompletionContext::ungroupedElements()
+{
+    return m_ungrouped;
 }
