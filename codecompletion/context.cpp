@@ -181,17 +181,28 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(con
         auto result = m_results->Results[i];
         const uint chunks = clang_getNumCompletionChunks(result.CompletionString);
 
+        // the string that would be neede to type, usually the identifier of something
         QString typed;
+        // the display string we use in the code completion items, including the function signature
         QString display;
+        // the return type of a function e.g.
         QString resultType;
+        // the replacement text when an item gets executed
         QString replacement;
+        //BEGIN function signature parsing
+        // nesting depth of parentheses
         int parenDepth = 0;
         enum FunctionSignatureState {
+            // not yet inside the function signature
             Before,
+            // any token is part of the function signature now
             Inside,
+            // finished parsing the function signature
             After
         };
+        // current state
         FunctionSignatureState signatureState = Before;
+        //END function signature parsing
         for (uint j = 0; j < chunks; ++j) {
             const auto kind = clang_getCompletionChunkKind(result.CompletionString, j);
             if (kind == CXCompletionChunk_CurrentParameter || kind == CXCompletionChunk_Informative
