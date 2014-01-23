@@ -42,6 +42,30 @@ using namespace KDevelop;
 
 namespace {
 
+class DeclarationItem : public NormalDeclarationCompletionItem
+{
+public:
+    DeclarationItem(Declaration* decl, const QString &replacement);
+    virtual ~DeclarationItem() = default;
+
+    virtual void execute(KTextEditor::Document* document, const KTextEditor::Range& word);
+
+private:
+    QString m_replacement;
+};
+
+DeclarationItem::DeclarationItem(Declaration* decl, const QString& replacement)
+    : NormalDeclarationCompletionItem(DeclarationPointer(decl))
+    , m_replacement(replacement)
+{
+
+}
+
+void DeclarationItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word)
+{
+    document->replaceText(word, m_replacement);
+}
+
 class SimpleItem : public CompletionTreeItem
 {
 public:
@@ -49,11 +73,11 @@ public:
                CodeCompletionModel::CompletionProperties properties);
     virtual ~SimpleItem() = default;
 
-    virtual QVariant data(const QModelIndex& index, int role, const CodeCompletionModel* model) const;
+    QVariant data(const QModelIndex& index, int role, const CodeCompletionModel* model) const override;
 
-    virtual void execute(KTextEditor::Document* document, const KTextEditor::Range& word);
+    void execute(KTextEditor::Document* document, const KTextEditor::Range& word)  override;
 
-    virtual CodeCompletionModel::CompletionProperties completionProperties() const;
+    CodeCompletionModel::CompletionProperties completionProperties() const override;
 
 private:
     QString m_typed;
@@ -194,7 +218,7 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(con
                 break;
             }
             if (found) {
-                items.append(CompletionTreeItemPointer(new NormalDeclarationCompletionItem(DeclarationPointer(found))));
+                items.append(CompletionTreeItemPointer(new DeclarationItem(found, text)));
                 continue;
             } else {
                 debug() << "Could not find declaration for" << qid;
