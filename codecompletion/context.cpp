@@ -205,13 +205,14 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(con
         //END function signature parsing
         for (uint j = 0; j < chunks; ++j) {
             const auto kind = clang_getCompletionChunkKind(result.CompletionString, j);
-            if (kind == CXCompletionChunk_CurrentParameter || kind == CXCompletionChunk_Informative
-                || kind == CXCompletionChunk_Optional)
-            {
+            if (kind == CXCompletionChunk_CurrentParameter || kind == CXCompletionChunk_Optional) {
                 continue;
             }
             const QString string = ClangString(clang_getCompletionChunkText(result.CompletionString, j)).toString();
             switch (kind) {
+                case CXCompletionChunk_Informative:
+                    display += string;
+                    break;
                 case CXCompletionChunk_TypedText:
                     display += string;
                     typed = string;
