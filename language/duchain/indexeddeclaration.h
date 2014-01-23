@@ -33,7 +33,7 @@ class Declaration;
  */
 class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclaration {
   public:
-    IndexedDeclaration(Declaration* decl = 0);
+    IndexedDeclaration(const Declaration* decl = 0);
     IndexedDeclaration(uint topContext, uint declarationIndex);
 
     /**
