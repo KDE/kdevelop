@@ -10,7 +10,8 @@ int main()
 
 /**
  * "identifier" : "foo",
- * "internalContext" : { "type" : "Class" }
+ * "internalContext" : { "type" : "Class" },
+ * "kind" : "Type"
  */
 class foo
 {
@@ -39,7 +40,8 @@ class foo
 
 /**
  * "identifier" : "bar",
- * "internalContext" : { "type" : "Namespace" }
+ * "internalContext" : { "type" : "Namespace" },
+ * "kind" : "Namespace"
  */
 namespace bar
 {
@@ -79,27 +81,35 @@ namespace bar
     };
 }
 
-/// "toString" : "struct myStruct"
+/// "toString" : "struct myStruct",
+/// "kind" : "Type"
 struct myStruct {};
 
-/// "toString" : "class myClass"
+/// "toString" : "class myClass",
+/// "kind" : "Type"
 class myClass {};
 
-/// "toString" : "union myUnion"
+/// "toString" : "union myUnion",
+/// "kind" : "Type"
 union myUnion {};
 
-/// "toString" : "myEnum myEnum"
+/// "toString" : "myEnum myEnum",
+/// "kind" : "Type"
 enum myEnum {
-    /// "toString" : "myEnum myEnumerator"
+    /// "toString" : "myEnum myEnumerator",
+    /// "kind" : "Type"
     myEnumerator
 };
 
-/// "toString" : "Import of bar"
+/// "toString" : "Import of bar",
+/// "kind" : "NamespaceAlias"
 using namespace bar;
 
-/// "toString" : "Import bar as blub"
+/// "toString" : "Import bar as blub",
+/// "kind" : "NamespaceAlias"
 namespace blub = bar;
 
-/// "toString" : "struct myTemplate"
+/// "toString" : "struct myTemplate",
+/// "kind" : "Type"
 template<class T>
 struct myTemplate {};

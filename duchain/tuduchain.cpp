@@ -46,6 +46,18 @@ void TUDUChain::setDeclData<CXCursor_Namespace>(CXCursor /*cursor*/, Declaration
     decl->setKind(Declaration::Namespace);
 }
 
+template<>
+void TUDUChain::setDeclData<CXCursor_EnumDecl>(CXCursor /*cursor*/, Declaration* decl) const
+{
+    decl->setKind(Declaration::Type);
+}
+
+template<>
+void TUDUChain::setDeclData<CXCursor_EnumConstantDecl>(CXCursor /*cursor*/, Declaration* decl) const
+{
+    decl->setKind(Declaration::Type);
+}
+
 template<CXCursorKind CK>
 void TUDUChain::setDeclData(CXCursor cursor, ClassDeclaration* decl) const
 {
