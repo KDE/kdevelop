@@ -109,27 +109,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT TopDUContext : public DUContext
 public:
   explicit TopDUContext(const IndexedString& url, const RangeInRevision& range, ParsingEnvironmentFile* file = 0);
   explicit TopDUContext(TopDUContextData& data);
-  
-  /**This creates a top-context that shares most of its data with @param sharedDataFrom. The given context must be the owner of the data
-   * (it must not have been created with this constructor).
-   * 
-   * When creating a context like this, all the data is shared among the context, except:
-   * parsingEnvironmentFile, ownIndex, problems, imports and importers.
-   * 
-   * When you change any other attributes(including duchain data etc.), that data is changed within all contexts that also share the data of the
-   * given one.
-   * 
-   * Special thing to consider: The imported contexts will be merged with the imported contexts of the data owner, and the problems will be merged
-   * with the problems of the data owner. When one of these things changes in the data owner, it will automatically also change in this context.
-   * 
-   * @warning When creating context with shared data, the shared ones always have to be deleted before the owner is deleted.
-   * */
-  explicit TopDUContext(TopDUContext* shareDataFrom, ParsingEnvironmentFile* file = 0);
 
-  ///If this top-context uses the data from another top-context, this returns that one.
-  TopDUContext* sharedDataOwner() const;
-  
-  TopDUContext* topContext() const;
+  TopDUContext* topContext() const override;
 
   ///Returns an indexed representation of this top-context. Indexed representations stay valid even if the top-context is unloaded.
   IndexedTopDUContext indexed() const;
