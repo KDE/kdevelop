@@ -124,6 +124,20 @@ CMakeCommitChangesJob::CMakeCommitChangesJob(const Path& path, CMakeManager* man
     setObjectName(path.pathOrUrl());
 }
 
+void processDependencies(ProcessedTarget &target, const QString& dep, const CMakeProjectData& data)
+{
+    const QMap<QString, QStringList>& depData = data.properties.value(TargetProperty).value(dep);
+    if(depData.isEmpty()) {
+        kDebug() << "error: couldn't find dependency " << dep << data.properties.value(TargetProperty).keys();
+        return;
+    }
+
+    target.includes += depData["INTERFACE_INCLUDE_DIRECTORIES"];
+    target.defines += depData["INTERFACE_COMPILE_DEFINITIONS"];
+    foreach(const QString& d, depData["INTERFACE_LINK_LIBRARIES"])
+        processDependencies(target, d, data);
+}
+
 Path::List CMakeCommitChangesJob::addProjectData(const CMakeProjectData& data)
 {
     m_projectDataAdded = true;
@@ -169,13 +183,7 @@ Path::List CMakeCommitChangesJob::addProjectData(const CMakeProjectData& data)
         target.location = CMake::resolveSystemDirs(m_project, targetProps["LOCATION"]).first();
         
         foreach(const QString& dep, t.libraries) {
-            const QMap<QString, QStringList>& depData = data.properties.value(TargetProperty).value(dep);
-            if(!depData.isEmpty()) {
-                target.includes += depData["INTERFACE_INCLUDE_DIRECTORIES"];
-                target.defines += depData["INTERFACE_COMPILE_DEFINITIONS"];
-            } else {
-                kDebug() << "error: couldn't find dependency " << dep << data.properties.value(TargetProperty).keys();
-            }
+            processDependencies(target, dep, data);
         }
         m_targets += target;
     }

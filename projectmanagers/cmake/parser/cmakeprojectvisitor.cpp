@@ -1124,16 +1124,6 @@ int CMakeProjectVisitor::visit(const TargetLinkLibrariesAst *tll)
     //TODO: we can add a problem if the target is not found
     if(target != m_targetForId.end()) {
         target->libraries << tll->interfaceOnlyDependencies().retrieveTargets() << tll->publicDependencies().retrieveTargets();
-        foreach(const QString& dep, target->libraries) {
-            QHash<QString, QMap< QString, QStringList> >::const_iterator depTarget = m_props[TargetProperty].constFind(dep);
-
-            if(depTarget!=m_props[TargetProperty].constEnd()) {
-                foreach(const QString& depdep, depTarget->value("INTERFACE_LINK_LIBRARIES")) {
-                    if(!target->libraries.contains(depdep))
-                        target->libraries.append(depdep);
-                }
-            }
-        }
     }
     return 1;
 }

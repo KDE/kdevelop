@@ -178,6 +178,37 @@ void CMakeManagerTest::testQt5App()
     QVERIFY(foundWidgets);
 }
 
+void CMakeManagerTest::testKF5App()
+{
+    if (!qgetenv("KDEV_CMAKE_TEST_QT5").toInt()) {
+        QSKIP("Test only passes if Qt5 is available, define KDEV_CMAKE_TEST_QT5 to enable this test.", SkipAll);
+    }
+
+    IProject* project = loadProject("kf5_app");
+
+    Path mainCpp(project->path(), "main.cpp");
+    QVERIFY(QFile::exists(mainCpp.toLocalFile()));
+    QList< ProjectBaseItem* > items = project->itemsForPath(mainCpp.toIndexed());
+    QCOMPARE(items.size(), 2); // once the plain file, once the target
+
+    bool foundCore = false, foundGui = false, foundWidgets = false, foundWidgetsAddons = false;
+    foreach(ProjectBaseItem* mainCppItem, items) {
+        Path::List includeDirs = project->buildSystemManager()->includeDirectories(mainCppItem);
+        qDebug() << "xxxxxxxxxx" << includeDirs;
+        foreach(const Path& include, includeDirs) {
+            QString filename = include.lastPathSegment();
+            foundCore |= filename == "QtCore";
+            foundGui |= filename == "QtGui";
+            foundWidgets |= filename == "QtWidgets";
+            foundWidgetsAddons |= filename == "KWidgetsAddons";
+        }
+    }
+    QVERIFY(foundCore);
+    QVERIFY(foundGui);
+    QVERIFY(foundWidgets);
+    QVERIFY(foundWidgetsAddons);
+}
+
 void CMakeManagerTest::testDefines()
 {
     IProject* project = loadProject("defines");
