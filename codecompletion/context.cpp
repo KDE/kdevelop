@@ -43,87 +43,72 @@ using namespace KDevelop;
 
 namespace {
 
-class DeclarationItem : public NormalDeclarationCompletionItem
+/**
+ * Common base class for Clang code completion items.
+ */
+template<class Base>
+class CompletionItem : public Base
 {
 public:
-    DeclarationItem(Declaration* decl, const QString& display, const QString& prefix, const QString &replacement);
-    virtual ~DeclarationItem() = default;
-
-    QVariant data(const QModelIndex& index, int role, const CodeCompletionModel* model) const override;
-    void execute(KTextEditor::Document* document, const KTextEditor::Range& word) override;
-
-private:
-    QString m_display;
-    QString m_prefix;
-    QString m_replacement;
-};
-
-DeclarationItem::DeclarationItem(Declaration* decl, const QString& display, const QString& prefix, const QString& replacement)
-    : NormalDeclarationCompletionItem(DeclarationPointer(decl))
-    , m_display(display)
-    , m_prefix(prefix)
-    , m_replacement(replacement)
-{
-}
-
-QVariant DeclarationItem::data(const QModelIndex& index, int role, const CodeCompletionModel* model) const
-{
-    if (role == Qt::DisplayRole) {
-        if (index.column() == CodeCompletionModel::Prefix) {
-            return m_prefix;
-        } else if (index.column() == CodeCompletionModel::Name) {
-            return m_display;
-        }
+    CompletionItem(const QString& display, const QString& prefix, const QString& replacement)
+        : Base()
+        , m_display(display)
+        , m_prefix(prefix)
+        , m_replacement(replacement)
+    {
     }
-    return NormalDeclarationCompletionItem::data(index, role, model);
-}
 
-void DeclarationItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word)
-{
-    document->replaceText(word, m_replacement);
-}
+    virtual ~CompletionItem() = default;
 
-class SimpleItem : public CompletionTreeItem
-{
-public:
-    SimpleItem(const QString& display, const QString& prefix, const QString& replacement);
-    virtual ~SimpleItem() = default;
-
-    QVariant data(const QModelIndex& index, int role, const CodeCompletionModel* model) const override;
-
-    void execute(KTextEditor::Document* document, const KTextEditor::Range& word)  override;
-
-private:
-    QString m_display;
-    QString m_prefix;
-    QString m_replacement;
-};
-
-SimpleItem::SimpleItem(const QString& display, const QString& prefix, const QString& replacement)
-    : m_display(display)
-    , m_prefix(prefix)
-    , m_replacement(replacement)
-{
-}
-
-QVariant SimpleItem::data(const QModelIndex& index, int role, const CodeCompletionModel* /*model*/) const
-{
-    if (role != Qt::DisplayRole) {
+    QVariant data(const QModelIndex& index, int role, const CodeCompletionModel* /*model*/) const override
+    {
+        if (role == Qt::DisplayRole) {
+            if (index.column() == CodeCompletionModel::Prefix) {
+                return m_prefix;
+            } else if (index.column() == CodeCompletionModel::Name) {
+                return m_display;
+            }
+        }
         return {};
     }
-    switch (index.column()) {
-        case CodeCompletionModel::Name:
-            return m_display;
-        case CodeCompletionModel::Prefix:
-            return m_prefix;
-    }
-    return {};
-}
 
-void SimpleItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word)
+    void execute(KTextEditor::Document* document, const KTextEditor::Range& word) override
+    {
+        document->replaceText(word, m_replacement);
+    }
+
+private:
+    QString m_display;
+    QString m_prefix;
+    QString m_replacement;
+};
+
+/**
+ * Specialized completion item class for items which are represented by a Declaration
+ */
+class DeclarationItem : public CompletionItem<NormalDeclarationCompletionItem>
 {
-    document->replaceText(word, m_replacement);
-}
+public:
+    DeclarationItem(Declaration* dec, const QString& display, const QString& prefix, const QString& replacement)
+        : CompletionItem<NormalDeclarationCompletionItem>(display, prefix, replacement)
+    {
+        m_declaration = dec;
+    }
+
+    QVariant data(const QModelIndex& index, int role, const CodeCompletionModel* model) const override
+    {
+        auto ret = CompletionItem<NormalDeclarationCompletionItem>::data(index, role, model);
+        if (ret.isValid()) {
+            return ret;
+        }
+        return NormalDeclarationCompletionItem::data(index, role, model);
+    }
+};
+
+/**
+ * A minimalistic completion item for macros and such
+ */
+using SimpleItem = CompletionItem<CompletionTreeItem>;
 
 QByteArray concatenate(const QStringList& contents)
 {
@@ -280,7 +265,7 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(con
             }
         }
 
-        CompletionTreeItemPointer item(new SimpleItem(display, resultType, replacement));
+        auto item = CompletionTreeItemPointer(new SimpleItem(display, resultType, replacement));
         if (result.CursorKind == CXCursor_MacroDefinition) {
             // TODO: grouping of macros and built-in stuff
             macros.append(item);
