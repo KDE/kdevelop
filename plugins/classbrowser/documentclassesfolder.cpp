@@ -23,7 +23,6 @@
 
 #include <typeinfo>
 #include <language/duchain/duchainlock.h>
-#include <language/duchain/duchainobserver.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/persistentsymboltable.h>
 #include <language/duchain/codemodel.h>
@@ -87,30 +86,6 @@ DocumentClassesFolder::DocumentClassesFolder(const QString& a_displayName, Nodes
   connect( m_updateTimer, SIGNAL(timeout()), this, SLOT(updateChangedFiles()));
 }
 
-void DocumentClassesFolder::branchModified(KDevelop::DUContextPointer context)
-{
-  DUChainReadLocker readLock(DUChain::lock());
-
-  if ( !context )
-    return;
-
-  // Queue the changed file.
-  m_updatedFiles.insert(context->url());
-}
-
-void DocumentClassesFolder::branchRemoved(KDevelop::DUContextPointer context)
-{
-  Q_UNUSED(context);
-  //Getting a read-lock may lead to UI lockups when the background-parser is writing the duchain
-/*  DUChainReadLocker readLock(DUChain::lock());
-
-  if ( !context )
-    return;
-
-  /// @todo
-  kDebug() << "Del: " << context->url().toUrl() << " " << context->range().start.line << "-" << context->range().end.line;*/
-}
-
 void DocumentClassesFolder::updateChangedFiles()
 {
   bool hadChanges = false;
@@ -133,9 +108,6 @@ void DocumentClassesFolder::updateChangedFiles()
 
 void DocumentClassesFolder::nodeCleared()
 {
-  disconnect(DUChain::self()->notifier(), SIGNAL(branchModified(KDevelop::DUContextPointer)), this, SLOT(branchModified(KDevelop::DUContextPointer)));
-//   disconnect(DUChain::self()->notifier(), SIGNAL(branchRemoved(KDevelop::DUContextPointer)), this, SLOT(branchRemoved(KDevelop::DUContextPointer)));
-
   // Clear cached namespaces list (node was cleared).
   m_namespaces.clear();
 
@@ -149,10 +121,6 @@ void DocumentClassesFolder::nodeCleared()
 
 void DocumentClassesFolder::populateNode()
 {
-  // Get notification for file changes.
-  connect(DUChain::self()->notifier(), SIGNAL(branchModified(KDevelop::DUContextPointer)), this, SLOT(branchModified(KDevelop::DUContextPointer)), Qt::QueuedConnection);
-//   connect(DUChain::self()->notifier(), SIGNAL(branchRemoved(KDevelop::DUContextPointer)), this, SLOT(branchRemoved(KDevelop::DUContextPointer)), Qt::QueuedConnection);
-
   // Start updates timer - this is the required delay.
   m_updateTimer->start(2000);
 }

@@ -56,7 +56,6 @@ public:
 
 private Q_SLOTS:
   // Files update.
-  void branchModified(KDevelop::DUContextPointer context);
   void updateChangedFiles();
 
 private: // File updates related.

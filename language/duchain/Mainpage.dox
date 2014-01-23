@@ -75,7 +75,7 @@ Also, when manipulating text editor ranges, the \ref KTextEditor::SmartInterface
 
 \section plugin-interface Interface for plugins
 
-As plugins will be accessing the \ref KDevelop::DUChain from the main thread, they will need to hold a read lock.  In order to be notified of changes to the \ref KDevelop::DUChain, an observer interface is offered.  See \ref KDevelop::DUChainObserver.
+As plugins will be accessing the \ref KDevelop::DUChain from the main thread, they will need to hold a read lock.
 
 
 \section text-editor-integration Text editor integration
@@ -292,11 +292,6 @@ The completed duchain should allow for code refactoring, intelligent navigation,
  * Declarations may have a type, which can be retrieved through KDevelop::Declaration::abstractType().  Types can then
  * be visited using KDevelop::TypeVisitor, or manually with the corresponding calls in the type subclasses.  Types can be
  * compared for equality using KDevelop::AbstractType::equals().
- *
- * \section changes Monitoring chains for changes
- * KDevelop::DUChain::notifier() provides support for monitoring chains for changes.  It emits three signals, notifying
- * that a branch of a chain has been added, modified, or removed.  It is up to your code to iterate the chain and react
- * to any changes that have occurred, if desired.
  *
  * \section efficiency DUChain efficiency issues
  * It was confirmed during the implementation of the DUChain that there is too much information to store the duchain for

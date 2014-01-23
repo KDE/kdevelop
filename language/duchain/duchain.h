@@ -32,7 +32,6 @@ namespace KDevelop
 class IDocument;
 class TopDUContext;
 class DUChainLock;
-class DUChainObserver;
 
 class ParsingEnvironmentManager;
 class ParsingEnvironment;
@@ -224,22 +223,6 @@ public:
    * \threadsafe
    */
   Q_SCRIPTABLE static DUChainLock* lock();
-
-  /// Returns the object which emits signals regarding duchain changes
-  Q_SCRIPTABLE static DUChainObserver* notifier();
-
-  // Distribute the notifications
-  /*static void contextChanged(DUContext* context, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBase* relatedObject = 0);
-  static void declarationChanged(Declaration* declaration, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBase* relatedObject = 0);
-  static void definitionChanged(Definition* definition, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBase* relatedObject = 0);
-  static void useChanged(Use* use, DUChainObserver::Modification change, DUChainObserver::Relationship relationship, DUChainBase* relatedObject = 0);*/
-
-  /// Notify that a branch was added to \a context
-  Q_SCRIPTABLE static void branchAdded(DUContext* context);
-  /// Notify that a branch was modified within \a context
-  Q_SCRIPTABLE static void branchModified(DUContext* context);
-  /// Notify that a branch was removed from \a context
-  Q_SCRIPTABLE static void branchRemoved(DUContext* context);
 
   /// Returns whether the top-context with the given index is currently loaded in memory
   Q_SCRIPTABLE bool isInMemory(uint topContextIndex) const;

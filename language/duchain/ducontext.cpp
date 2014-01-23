@@ -289,8 +289,6 @@ void DUContextDynamicData::addDeclaration( Declaration * newDeclaration )
     m_context->d_func_dynamic()->m_localDeclarationsList().insert(0, newDeclaration);
 
   addDeclarationToHash(newDeclaration->identifier(), newDeclaration);
-
-  //DUChain::contextChanged(m_context, DUChainObserver::Addition, DUChainObserver::LocalDeclarations, newDeclaration);
 }
 
 bool DUContextDynamicData::removeDeclaration(Declaration* declaration)
@@ -299,7 +297,6 @@ bool DUContextDynamicData::removeDeclaration(Declaration* declaration)
     removeDeclarationFromHash(declaration->identifier(), declaration);
 
   if( m_context->d_func_dynamic()->m_localDeclarationsList().removeOne(LocalIndexedDeclaration(declaration)) ) {
-    //DUChain::contextChanged(m_context, DUChainObserver::Removal, DUChainObserver::LocalDeclarations, declaration);
     return true;
   }else {
     return false;
@@ -349,8 +346,6 @@ void DUContextDynamicData::addChildContext( DUContext * context )
     if(needsLocalDeclarationsHash())
       enableLocalDeclarationsHash(m_context);
   }
-
-  //DUChain::contextChanged(m_context, DUChainObserver::Addition, DUChainObserver::ChildContexts, context);
 }
 
 bool DUContextDynamicData::removeChildContext( DUContext* context ) {
@@ -379,8 +374,6 @@ void DUContextDynamicData::addImportedChildContext( DUContext * context )
     //Indirect importers are registered separately
     Importers::self().addImporter(import.indirectDeclarationId(), IndexedDUContext(context));
   }
-
-  //DUChain::contextChanged(m_context, DUChainObserver::Addition, DUChainObserver::ImportedChildContexts, context);
 }
 
 //Can also be called with a context that is not in the list
@@ -509,7 +502,6 @@ DUContext::~DUContext( )
   if(!top->deleting() || !top->isOnDisk()) {
     if (m_dynamicData->m_parentContext)
       m_dynamicData->m_parentContext->m_dynamicData->removeChildContext(this);
-    //DUChain::contextChanged(this, DUChainObserver::Deletion, DUChainObserver::NotApplicable);
   }
 
   top->m_dynamicData->clearContextIndex(this);
@@ -878,7 +870,6 @@ void DUContext::addImportedParentContext( DUContext * context, const CursorInRev
     ENSURE_CAN_WRITE_(context)
     context->m_dynamicData->addImportedChildContext(this);
   }
-  //DUChain::contextChanged(this, DUChainObserver::Addition, DUChainObserver::ImportedParentContexts, context);
 }
 
 void DUContext::removeImportedParentContext( DUContext * context )
@@ -899,8 +890,6 @@ void DUContext::removeImportedParentContext( DUContext * context )
     return;
 
   context->m_dynamicData->removeImportedChildContext(this);
-
-  //DUChain::contextChanged(this, DUChainObserver::Removal, DUChainObserver::ImportedParentContexts, context);
 }
 
 KDevVarLengthArray<IndexedDUContext> DUContext::indexedImporters() const
@@ -1138,7 +1127,6 @@ void DUContext::setLocalScopeIdentifier(const QualifiedIdentifier & identifier)
   setInSymbolTable(false);
   d_func_dynamic()->m_scopeIdentifier = identifier;
   setInSymbolTable(wasInSymbolTable);
-  //DUChain::contextChanged(this, DUChainObserver::Change, DUChainObserver::Identifier);
 }
 
 QualifiedIdentifier DUContext::localScopeIdentifier() const
@@ -1164,8 +1152,6 @@ void DUContext::setType(ContextType type)
   ENSURE_CAN_WRITE
 
   d_func_dynamic()->m_contextType = type;
-
-  //DUChain::contextChanged(this, DUChainObserver::Change, DUChainObserver::ContextType);
 }
 
 QList<Declaration*> DUContext::findDeclarations(const Identifier& identifier, const CursorInRevision& position,

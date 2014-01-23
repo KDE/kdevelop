@@ -199,7 +199,6 @@ Declaration::~Declaration()
   }
   Q_ASSERT(d_func()->isDynamic() == (!topContext->deleting() || !topContext->isOnDisk() || topContext->m_dynamicData->isTemporaryDeclarationIndex(oldOwnIndex)));
   Q_UNUSED(oldOwnIndex);
-  //DUChain::declarationChanged(this, DUChainObserver::Deletion, DUChainObserver::NotApplicable);
 }
 
 QByteArray Declaration::comment() const {
@@ -259,7 +258,6 @@ void Declaration::setIdentifier(const Identifier& identifier)
   d->m_identifier = identifier;
 
   setInSymbolTable(wasInSymbolTable);
-  //DUChain::declarationChanged(this, DUChainObserver::Change, DUChainObserver::Identifier);
 }
 
 IndexedType Declaration::indexedType() const
@@ -278,14 +276,9 @@ void Declaration::setAbstractType(AbstractType::Ptr type)
   ENSURE_CAN_WRITE
   DUCHAIN_D_DYNAMIC(Declaration);
 
-  //if (d->m_type)
-    //DUChain::declarationChanged(this, DUChainObserver::Removal, DUChainObserver::DataType);
-
   d->m_type = type->indexed();
 
   updateCodeModel();
-  //if (d->m_type)
-    //DUChain::declarationChanged(this, DUChainObserver::Addition, DUChainObserver::DataType);
 }
 
 Declaration* Declaration::specialize(const IndexedInstantiationInformation& /*specialization*/, const TopDUContext* topContext, int /*upDistance*/)
@@ -347,7 +340,6 @@ void Declaration::setContext(DUContext* context, bool anonymous)
   if (m_context) {
     if( !d->m_anonymousInContext ) {
       m_context->m_dynamicData->removeDeclaration(this);
-        //DUChain::declarationChanged(this, DUChainObserver::Removal, DUChainObserver::Context, m_context);
     }
   }
 
@@ -365,7 +357,6 @@ void Declaration::setContext(DUContext* context, bool anonymous)
 
     if(!d->m_anonymousInContext) {
       context->m_dynamicData->addDeclaration(this);
-      //DUChain::declarationChanged(this, DUChainObserver::Addition, DUChainObserver::Context, m_context);
     }
 
     if(context->inSymbolTable() && !anonymous)

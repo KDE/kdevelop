@@ -48,7 +48,6 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/namespacealiasdeclaration.cpp
     duchain/aliasdeclaration.cpp
     duchain/dumpdotgraph.cpp
-    duchain/duchainobserver.cpp
     duchain/duchainutils.cpp
     duchain/declarationid.cpp
     duchain/definitions.cpp
@@ -227,7 +226,6 @@ install(FILES
     duchain/forwarddeclaration.h
     duchain/duchainbase.h
     duchain/duchainpointer.h
-    duchain/duchainobserver.h
     duchain/duchainlock.h
     duchain/identifier.h
     duchain/abstractfunctiondeclaration.h
