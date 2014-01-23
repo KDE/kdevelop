@@ -129,12 +129,8 @@ class TopDUContextDynamicData {
     TopDUContext* m_topContext;
     //May contain zero contexts if they were deleted
     mutable QVector<DUContext*> m_contexts;
-    mutable DUContext** m_fastContexts;
-    mutable int m_fastContextsSize;
     //May contain zero declarations if they were deleted
     mutable QVector<Declaration*> m_declarations;
-    mutable Declaration** m_fastDeclarations;
-    mutable int m_fastDeclarationsSize;
     
     mutable QVector<ItemDataInfo> m_contextDataOffsets;
     

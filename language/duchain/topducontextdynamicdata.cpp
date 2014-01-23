@@ -139,7 +139,16 @@ TopDUContextDynamicData::ItemDataInfo TopDUContextDynamicData::writeDataInfo(con
   return ret;
 }
 
-TopDUContextDynamicData::TopDUContextDynamicData(TopDUContext* topContext) : m_deleting(false), m_topContext(topContext), m_fastContexts(0), m_fastContextsSize(0), m_fastDeclarations(0), m_fastDeclarationsSize(0), m_onDisk(false), m_dataLoaded(true), m_mappedFile(0), m_mappedData(0), m_mappedDataSize(0), m_itemRetrievalForbidden(false) {
+TopDUContextDynamicData::TopDUContextDynamicData(TopDUContext* topContext)
+  : m_deleting(false)
+  , m_topContext(topContext)
+  , m_onDisk(false)
+  , m_dataLoaded(true)
+  , m_mappedFile(0)
+  , m_mappedData(0)
+  , m_mappedDataSize(0)
+  , m_itemRetrievalForbidden(false)
+{
 }
 
 void KDevelop::TopDUContextDynamicData::clearContextsAndDeclarations() {
@@ -291,12 +300,8 @@ void TopDUContextDynamicData::loadData() const {
 
   //Fill with zeroes for now, will be initialized on-demand
   m_contexts.resize(m_contextDataOffsets.size());
-  m_fastContexts = m_contexts.data();
-  m_fastContextsSize = m_contexts.size();
 
   m_declarations.resize(m_declarationDataOffsets.size());
-  m_fastDeclarations = m_declarations.data();
-  m_fastDeclarationsSize = m_declarations.size();
 
   m_dataLoaded = true;
   
@@ -365,13 +370,13 @@ void TopDUContextDynamicData::deleteOnDisk() {
   if(!m_dataLoaded)
     loadData();
 
-  for(int a = 0; a < m_fastContextsSize; ++a)
-    if(m_fastContexts[a])
-      m_fastContexts[a]->makeDynamic();
+  for(int a = 0; a < m_contexts.size(); ++a)
+    if(m_contexts[a])
+      m_contexts[a]->makeDynamic();
 
-  for(int a = 0; a < m_fastDeclarationsSize; ++a)
-    if(m_fastDeclarations[a])
-      m_fastDeclarations[a]->makeDynamic();
+  for(int a = 0; a < m_declarations.size(); ++a)
+    if(m_declarations[a])
+      m_declarations[a]->makeDynamic();
 
   m_topContext->makeDynamic();
 
@@ -400,8 +405,8 @@ void TopDUContextDynamicData::store() {
     if(m_topContext->d_ptr->m_dynamic)
       someThingChanged = true;
 
-    for(int a = 0; a < m_fastContextsSize; ++a) {
-      if(m_fastContexts[a] && m_fastContexts[a]->d_ptr->m_dynamic) {
+    for(int a = 0; a < m_contexts.size(); ++a) {
+      if(m_contexts[a] && m_contexts[a]->d_ptr->m_dynamic) {
         someThingChanged = true;
         contentDataChanged = true;
       }
@@ -410,8 +415,8 @@ void TopDUContextDynamicData::store() {
         break;
     }
 
-    for(int a = 0; a < m_fastDeclarationsSize; ++a) {
-      if(m_fastDeclarations[a] && m_fastDeclarations[a]->d_ptr->m_dynamic) {
+    for(int a = 0; a < m_declarations.size(); ++a) {
+      if(m_declarations[a] && m_declarations[a]->d_ptr->m_dynamic) {
         someThingChanged = true;
         contentDataChanged = true;
       }
@@ -473,8 +478,8 @@ void TopDUContextDynamicData::store() {
 
     m_itemRetrievalForbidden = true;
     
-    for(int a = 0; a < m_fastContextsSize; ++a) {
-      if(!m_fastContexts[a]) {
+    for(int a = 0; a < m_contexts.size(); ++a) {
+      if(!m_contexts[a]) {
         if(oldContextDataOffsets.size() > a && oldContextDataOffsets[a].dataOffset) {
           //Directly copy the old data range into the new data
           if(m_mappedData) {
@@ -489,19 +494,19 @@ void TopDUContextDynamicData::store() {
           m_contextDataOffsets << ItemDataInfo();
         }
       } else {
-        m_contextDataOffsets << ItemDataInfo(currentDataOffset, LocalIndexedDUContext(m_fastContexts[a]->parentContext()).localIndex());
-        saveDUChainItem(m_data, *m_fastContexts[a], currentDataOffset);
+        m_contextDataOffsets << ItemDataInfo(currentDataOffset, LocalIndexedDUContext(m_contexts[a]->parentContext()).localIndex());
+        saveDUChainItem(m_data, *m_contexts[a], currentDataOffset);
         verifyDataInfo(m_contextDataOffsets.back(), m_data);
-        Q_ASSERT(!m_fastContexts[a]->d_func()->isDynamic());
+        Q_ASSERT(!m_contexts[a]->d_func()->isDynamic());
         if(m_mappedData) {
-          Q_ASSERT(((size_t)m_fastContexts[a]->d_func()) < ((size_t)m_mappedData) || ((size_t)m_fastContexts[a]->d_func()) > ((size_t)m_mappedData) + m_mappedDataSize);
+          Q_ASSERT(((size_t)m_contexts[a]->d_func()) < ((size_t)m_mappedData) || ((size_t)m_contexts[a]->d_func()) > ((size_t)m_mappedData) + m_mappedDataSize);
         }
       }
     }
 
-    for(int a = 0; a < m_fastDeclarationsSize; ++a) {
+    for(int a = 0; a < m_declarations.size(); ++a) {
 
-      if(!m_fastDeclarations[a]) {
+      if(!m_declarations[a]) {
         if(oldDeclarationDataOffsets.size() > a && oldDeclarationDataOffsets[a].dataOffset) {
           //Directly copy the old data range into the new data
           if(m_mappedData) {
@@ -517,31 +522,31 @@ void TopDUContextDynamicData::store() {
           m_declarationDataOffsets << ItemDataInfo();
         }
       } else {
-        m_declarationDataOffsets << ItemDataInfo(currentDataOffset, LocalIndexedDUContext(m_fastDeclarations[a]->context()).localIndex());
-        saveDUChainItem(m_data, *m_fastDeclarations[a], currentDataOffset);
+        m_declarationDataOffsets << ItemDataInfo(currentDataOffset, LocalIndexedDUContext(m_declarations[a]->context()).localIndex());
+        saveDUChainItem(m_data, *m_declarations[a], currentDataOffset);
         verifyDataInfo(m_declarationDataOffsets.back(), m_data);
-        Q_ASSERT(!m_fastDeclarations[a]->d_func()->isDynamic());
+        Q_ASSERT(!m_declarations[a]->d_func()->isDynamic());
         if(m_mappedData) {
-          Q_ASSERT(((size_t)m_fastDeclarations[a]->d_func()) < ((size_t)m_mappedData) || ((size_t)m_fastDeclarations[a]->d_func()) > ((size_t)m_mappedData) + m_mappedDataSize);
+          Q_ASSERT(((size_t)m_declarations[a]->d_func()) < ((size_t)m_mappedData) || ((size_t)m_declarations[a]->d_func()) > ((size_t)m_mappedData) + m_mappedDataSize);
         }
       }
     }
 
     m_itemRetrievalForbidden = false;
 
-    for(int a = 0; a < m_fastContextsSize; ++a)
-      if(m_fastContexts[a]) {
-        Q_ASSERT(!m_fastContexts[a]->d_func()->isDynamic());
+    for(int a = 0; a < m_contexts.size(); ++a)
+      if(m_contexts[a]) {
+        Q_ASSERT(!m_contexts[a]->d_func()->isDynamic());
         if(m_mappedData) {
-          Q_ASSERT(((size_t)m_fastContexts[a]->d_func()) < ((size_t)m_mappedData) || ((size_t)m_fastContexts[a]->d_func()) > ((size_t)m_mappedData) + m_mappedDataSize);
+          Q_ASSERT(((size_t)m_contexts[a]->d_func()) < ((size_t)m_mappedData) || ((size_t)m_contexts[a]->d_func()) > ((size_t)m_mappedData) + m_mappedDataSize);
         }
       }
 
-    for(int a = 0; a < m_fastDeclarationsSize; ++a)
-      if(m_fastDeclarations[a]) {
-        Q_ASSERT(!m_fastDeclarations[a]->d_func()->isDynamic());
+    for(int a = 0; a < m_declarations.size(); ++a)
+      if(m_declarations[a]) {
+        Q_ASSERT(!m_declarations[a]->d_func()->isDynamic());
         if(m_mappedData) {
-          Q_ASSERT(((size_t)m_fastDeclarations[a]->d_func()) < ((size_t)m_mappedData) || ((size_t)m_fastDeclarations[a]->d_func()) > ((size_t)m_mappedData) + m_mappedDataSize);
+          Q_ASSERT(((size_t)m_declarations[a]->d_func()) < ((size_t)m_mappedData) || ((size_t)m_declarations[a]->d_func()) > ((size_t)m_mappedData) + m_mappedDataSize);
         }
       }
     }
@@ -590,9 +595,7 @@ uint TopDUContextDynamicData::allocateDeclarationIndex(Declaration* decl, bool t
     loadData();
   if(!temporary) {
     m_declarations.append(decl);
-    m_fastDeclarations = m_declarations.data();
-    m_fastDeclarationsSize = m_declarations.size();
-    return m_fastDeclarationsSize;
+    return m_declarations.size();
   }else{
     QMutexLocker lock(&m_temporaryDataMutex);
     m_temporaryDeclarations.append(decl);
@@ -604,9 +607,9 @@ bool TopDUContextDynamicData::isDeclarationForIndexLoaded(uint index) const {
   if(!m_dataLoaded)
     return false;
   if(index < (0x0fffffff/2)) {
-    if(index == 0 || index > uint(m_fastDeclarationsSize))
+    if(index == 0 || index > uint(m_declarations.size()))
       return false;
-    return (bool)m_fastDeclarations[index-1];
+    return (bool)m_declarations[index-1];
   }else{
     return true;
   }
@@ -618,9 +621,9 @@ bool TopDUContextDynamicData::isContextForIndexLoaded(uint index) const {
   if(index < (0x0fffffff/2)) {
     if(index == 0)
       return true;
-    if(index > uint(m_fastContextsSize))
+    if(index > uint(m_contexts.size()))
       return false;
-    return (bool)m_fastContexts[index-1];
+    return (bool)m_contexts[index-1];
   }else{
     return true;
   }
@@ -631,22 +634,22 @@ Declaration* TopDUContextDynamicData::getDeclarationForIndex(uint index) const {
     loadData();
 
   if(index < (0x0fffffff/2)) {
-    if(index == 0 || index > uint(m_fastDeclarationsSize)) {
-      kWarning() << "declaration index out of bounds:" << index << "count:" << m_fastDeclarationsSize;
+    if(index == 0 || index > uint(m_declarations.size())) {
+      kWarning() << "declaration index out of bounds:" << index << "count:" << m_declarations.size();
       return 0;
     }
     else {
       uint realIndex = index-1;
-      if(!m_fastDeclarations[realIndex] && realIndex < (uint)m_declarationDataOffsets.size() && m_declarationDataOffsets[realIndex].dataOffset) {
+      if(!m_declarations[realIndex] && realIndex < (uint)m_declarationDataOffsets.size() && m_declarationDataOffsets[realIndex].dataOffset) {
         
         Q_ASSERT(!m_itemRetrievalForbidden);
         
         const DUChainBaseData* data = reinterpret_cast<const DUChainBaseData*>(
           pointerInData(m_declarationDataOffsets[realIndex].dataOffset));
         ///FIXME: ugly, remove const_cast
-        m_fastDeclarations[realIndex] = static_cast<Declaration*>(DUChainItemSystem::self().create(
+        m_declarations[realIndex] = static_cast<Declaration*>(DUChainItemSystem::self().create(
           const_cast<DUChainBaseData*>(data)));
-        if(!m_fastDeclarations[realIndex]) {
+        if(!m_declarations[realIndex]) {
           //When this happens, the declaration has not been registered correctly.
           //We can stop here, because else we will get crashes later.
           kError() << "Failed to load declaration with identity" << data->classId;
@@ -654,11 +657,11 @@ Declaration* TopDUContextDynamicData::getDeclarationForIndex(uint index) const {
         }else{
           DUContext* context = getContextForIndex(m_declarationDataOffsets[realIndex].parentContext);
           Q_ASSERT(context); //If this triggers, the context has been deleted without deleting its contained declarations
-          m_fastDeclarations[realIndex]->rebuildDynamicData(context, index);
+          m_declarations[realIndex]->rebuildDynamicData(context, index);
         }
       }
 
-      return m_fastDeclarations[realIndex];
+      return m_declarations[realIndex];
     }
   }else{
     QMutexLocker lock(&m_temporaryDataMutex);
@@ -676,11 +679,11 @@ void TopDUContextDynamicData::clearDeclarationIndex(Declaration* decl) {
 
   uint index = decl->m_indexInTopContext;
   if(index < (0x0fffffff/2)) {
-    if(index == 0 || index > uint(m_fastDeclarationsSize))
+    if(index == 0 || index > uint(m_declarations.size()))
       return;
     else {
-      Q_ASSERT(m_fastDeclarations[index-1] == decl);
-      m_fastDeclarations[index-1] = 0;
+      Q_ASSERT(m_declarations[index-1] == decl);
+      m_declarations[index-1] = 0;
 
       if(index-1 < (uint)m_declarationDataOffsets.size())
         m_declarationDataOffsets[index-1] = ItemDataInfo();
@@ -703,9 +706,7 @@ uint TopDUContextDynamicData::allocateContextIndex(DUContext* decl, bool tempora
 
   if(!temporary) {
     m_contexts.append(decl);
-    m_fastContexts = m_contexts.data();
-    m_fastContextsSize = m_contexts.size();
-    return m_fastContextsSize;
+    return m_contexts.size();
   }else{
     QMutexLocker lock(&m_temporaryDataMutex);
     m_temporaryContexts.append(decl);
@@ -729,12 +730,12 @@ DUContext* TopDUContextDynamicData::getContextForIndex(uint index) const {
   if(index < (0x0fffffff/2)) {
     if(index == 0)
       return m_topContext;
-    if(index > uint(m_fastContextsSize)) {
-      kWarning() << "declaration index out of bounds:" << index << "count:" << m_fastDeclarationsSize;
+    if(index > uint(m_contexts.size())) {
+      kWarning() << "declaration index out of bounds:" << index << "count:" << m_declarations.size();
       return 0;
     } else {
       uint realIndex = index-1;
-      DUContext** fastContextsPos = (m_fastContexts + realIndex);
+      DUContext** fastContextsPos = (m_contexts.data() + realIndex);
       if(*fastContextsPos) //Shortcut, because this is the most common case
         return *fastContextsPos;
 
@@ -776,11 +777,11 @@ void TopDUContextDynamicData::clearContextIndex(DUContext* decl) {
   uint index = decl->m_dynamicData->m_indexInTopContext;
   if(index < (0x0fffffff/2)) {
 
-    if(index == 0 || index > uint(m_fastContextsSize))
+    if(index == 0 || index > uint(m_contexts.size()))
       return;
     else {
-      Q_ASSERT(m_fastContexts[index-1] == decl);
-      m_fastContexts[index-1] = 0;
+      Q_ASSERT(m_contexts[index-1] == decl);
+      m_contexts[index-1] = 0;
 
       if(index-1 < (uint)m_contextDataOffsets.size())
         m_contextDataOffsets[index-1] = ItemDataInfo();
