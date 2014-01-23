@@ -42,6 +42,19 @@
 
 using namespace KDevelop;
 
+/// @param base String such as 'public QObject' or 'QObject'
+InheritanceDescription descriptionFromString(const QString& base)
+{
+    QStringList splitBase = base.split(' ');
+    QString identifier = splitBase.takeLast();
+    QString inheritanceMode = splitBase.join(" ");
+
+    InheritanceDescription desc;
+    desc.baseType = identifier;
+    desc.inheritanceMode = inheritanceMode;
+    return desc;
+}
+
 class KDevelop::TemplateClassGeneratorPrivate
 {
 public:
@@ -268,13 +281,7 @@ ClassDescription TemplateClassGenerator::description() const
 
 void TemplateClassGenerator::addBaseClass(const QString& base)
 {
-    QStringList splitBase = base.split(' ');
-    QString identifier = splitBase.takeLast();
-    QString inheritanceMode = splitBase.join(" ");
-
-    InheritanceDescription desc;
-    desc.baseType = identifier;
-    desc.inheritanceMode = inheritanceMode;
+    const InheritanceDescription desc = descriptionFromString(base);
 
     ClassDescription cd = description();
     cd.baseClasses << desc;
@@ -282,7 +289,7 @@ void TemplateClassGenerator::addBaseClass(const QString& base)
 
     DUChainReadLocker lock;
 
-    PersistentSymbolTable::Declarations decl = PersistentSymbolTable::self().getDeclarations(IndexedQualifiedIdentifier(QualifiedIdentifier(identifier)));
+    PersistentSymbolTable::Declarations decl = PersistentSymbolTable::self().getDeclarations(IndexedQualifiedIdentifier(QualifiedIdentifier(desc.baseType)));
 
     //Search for all super classes
     for(PersistentSymbolTable::Declarations::Iterator it = decl.iterator(); it; ++it)
@@ -300,6 +307,22 @@ void TemplateClassGenerator::addBaseClass(const QString& base)
             d->directBaseClasses << declaration;
             break;
         }
+    }
+}
+
+void TemplateClassGenerator::setBaseClasses(const QList<QString>& bases)
+{
+    // clear
+    ClassDescription cd = description();
+    cd.baseClasses.clear();
+    setDescription(cd);
+
+    d->directBaseClasses.clear();
+    d->allBaseClasses.clear();
+
+    // add all bases
+    foreach (const QString& base, bases) {
+        addBaseClass(base);
     }
 }
 
