@@ -170,6 +170,8 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(con
 
     QSet<QualifiedIdentifier> handled;
 
+    DUContext* ctx = top->findContextAt(position);
+
     for (uint i = 0; i < m_results->NumResults; ++i) {
         auto result = m_results->Results[i];
         const uint chunks = clang_getNumCompletionChunks(result.CompletionString);
@@ -214,7 +216,7 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(con
             }
             handled.insert(qid);
             Declaration* found = 0;
-            foreach(Declaration* dec, top->findDeclarations(qid, position)) {
+            foreach(Declaration* dec, ctx->findDeclarations(qid, position)) {
                 found = dec;
                 break;
             }
