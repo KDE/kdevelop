@@ -23,7 +23,6 @@
 #include "clanglanguagesupport.h"
 
 #include "clangparsejob.h"
-#include "clanghighlighting.h"
 #include "version.h"
 
 #include "duchain/clangtypes.h"
@@ -34,6 +33,7 @@
 #include <KAboutData>
 
 #include <language/codecompletion/codecompletion.h>
+#include <language/highlighting/codehighlighting.h>
 
 K_PLUGIN_FACTORY(KDevClangSupportFactory, registerPlugin<ClangLanguageSupport>(); )
 K_EXPORT_PLUGIN(KDevClangSupportFactory(
@@ -45,7 +45,7 @@ using namespace KDevelop;
 ClangLanguageSupport::ClangLanguageSupport(QObject* parent, const QVariantList& )
 : IPlugin( KDevClangSupportFactory::componentData(), parent )
 , ILanguageSupport()
-, m_highlighting(new ClangHighlighting(this))
+, m_highlighting(new KDevelop::CodeHighlighting(this))
 , m_index(new ClangIndex)
 {
     KDEV_USE_EXTENSION_INTERFACE(ILanguageSupport)
