@@ -58,6 +58,7 @@ void TUDUChain::setDeclData(CXCursor cursor, ClassDeclaration* decl) const
     } else if (kind == CXCursor_StructDecl) {
         decl->setClassType(ClassDeclarationData::Struct);
     }
+    decl->setKind(Declaration::Type);
 }
 //END setDeclData
 
