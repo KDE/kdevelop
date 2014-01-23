@@ -29,6 +29,7 @@
 #include <language/duchain/duchain.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/parsingenvironment.h>
+#include <language/duchain/dumpchain.h>
 #include <language/backgroundparser/backgroundparser.h>
 #include <language/interfaces/iproblem.h>
 #include <interfaces/ilanguagecontroller.h>
@@ -180,6 +181,66 @@ void DUChainTest::testReparseError()
         }
 
         file.parse(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdateRecursive));
+    }
+}
+
+void DUChainTest::testTemplate()
+{
+    TestFile file("template<typename T> struct foo { T bar; };\n"
+                  "int main() { foo<int> myFoo; return myFoo.bar; }\n", "cpp");
+    file.parse(TopDUContext::AllDeclarationsContextsAndUses);
+    QVERIFY(file.waitForParsed(500));
+
+    DUChainReadLocker lock;
+
+    QCOMPARE(file.topContext()->localDeclarations().size(), 2);
+    auto fooDecl = file.topContext()->localDeclarations().first();
+    QVERIFY(fooDecl->internalContext());
+    QCOMPARE(fooDecl->internalContext()->localDeclarations().size(), 2);
+
+    QCOMPARE(file.topContext()->findDeclarations(QualifiedIdentifier("foo")).size(), 1);
+    QCOMPARE(file.topContext()->findDeclarations(QualifiedIdentifier("foo::bar")).size(), 1);
+}
+
+void DUChainTest::testNamespace()
+{
+    TestFile file("namespace foo { struct bar { int baz; }; }\n"
+                  "int main() { foo::bar myBar; }\n", "cpp");
+    file.parse(TopDUContext::AllDeclarationsContextsAndUses);
+    QVERIFY(file.waitForParsed(500));
+
+    DUChainReadLocker lock;
+
+    QCOMPARE(file.topContext()->localDeclarations().size(), 2);
+    auto fooDecl = file.topContext()->localDeclarations().first();
+    QVERIFY(fooDecl->internalContext());
+    QCOMPARE(fooDecl->internalContext()->localDeclarations().size(), 1);
+
+    DUContext* top = file.topContext().data();
+    DUContext* mainCtx = file.topContext()->childContexts().last();
+
+    auto foo = top->localDeclarations().first();
+    QCOMPARE(foo->qualifiedIdentifier().toString(), QString("foo"));
+
+    DUContext* fooCtx = file.topContext()->childContexts().first();
+    QCOMPARE(fooCtx->localScopeIdentifier().toString(), QString("foo"));
+    QCOMPARE(fooCtx->scopeIdentifier(true).toString(), QString("foo"));
+    QCOMPARE(fooCtx->localDeclarations().size(), 1);
+    auto bar = fooCtx->localDeclarations().first();
+    QCOMPARE(bar->qualifiedIdentifier().toString(), QString("foo::bar"));
+    QCOMPARE(fooCtx->childContexts().size(), 1);
+
+    DUContext* barCtx = fooCtx->childContexts().first();
+    QCOMPARE(barCtx->localScopeIdentifier().toString(), QString("bar"));
+    QCOMPARE(barCtx->scopeIdentifier(true).toString(), QString("foo::bar"));
+    QCOMPARE(barCtx->localDeclarations().size(), 1);
+    auto baz = barCtx->localDeclarations().first();
+    QCOMPARE(baz->qualifiedIdentifier().toString(), QString("foo::bar::baz"));
+
+    for (auto ctx : {top, mainCtx}) {
+        QCOMPARE(ctx->findDeclarations(QualifiedIdentifier("foo")).size(), 1);
+        QCOMPARE(ctx->findDeclarations(QualifiedIdentifier("foo::bar")).size(), 1);
+        QCOMPARE(ctx->findDeclarations(QualifiedIdentifier("foo::bar::baz")).size(), 1);
     }
 }
 

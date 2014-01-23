@@ -35,6 +35,8 @@ private slots:
     void testIncludeLocking();
     void testReparse();
     void testReparseError();
+    void testTemplate();
+    void testNamespace();
 };
 
 #endif // DUCHAINTEST_H

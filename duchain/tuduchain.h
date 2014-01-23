@@ -181,7 +181,9 @@ private:
     KDevelop::DUContext* createContext(CXCursor cursor, const KDevelop::Identifier& id)
     {
         DUChainWriteLocker lock;
-        const auto scopeId = m_parentContext->context->localScopeIdentifier() + id;
+        // wtf: why is the DUContext API requesting a QID when it needs a plain Id?!
+        // see: testNamespace
+        const QualifiedIdentifier scopeId(id);
         if (m_update) {
             const KDevelop::IndexedQualifiedIdentifier indexedScopeId(scopeId);
             auto it = m_parentContext->previousChildContexts.begin();
