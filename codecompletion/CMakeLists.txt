@@ -6,6 +6,7 @@ include_directories(
 kde4_add_library(kdevclangcodecompletion SHARED
     model.cpp
     context.cpp
+    navigationwidget.cpp
 )
 
 target_link_libraries(kdevclangcodecompletion LINK_PRIVATE

@@ -21,6 +21,8 @@
 
 #include "context.h"
 
+#include "navigationwidget.h"
+
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/ducontext.h>
 #include <language/duchain/topducontext.h>
@@ -102,6 +104,16 @@ public:
             return ret;
         }
         return NormalDeclarationCompletionItem::data(index, role, model);
+    }
+
+    bool createsExpandingWidget() const override
+    {
+        return true;
+    }
+
+    QWidget* createExpandingWidget(const CodeCompletionModel* /*model*/) const override
+    {
+        return new ClangNavigationWidget(m_declaration);
     }
 };
 
