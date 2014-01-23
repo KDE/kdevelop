@@ -235,6 +235,12 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(con
                 display += string;
             }
         }
+
+        if (resultType.size() > 23) {
+            // ellide text to the right for overly long result types (templates especially)
+            resultType.replace(20, resultType.size() - 20, "...");
+        }
+
         if (result.CursorKind != CXCursor_MacroDefinition && result.CursorKind != CXCursor_NotImplemented) {
             const Identifier id(typed);
             QualifiedIdentifier qid;
