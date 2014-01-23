@@ -68,7 +68,7 @@ ParseSession::ParseSession(const IndexedString& url, const QByteArray& contents,
         flags |= CXTranslationUnit_SkipFunctionBodies;
     }
 
-    QVector<const char*> args{ "-std=c++11", "-xc++" };
+    QVector<const char*> args{ "-std=c++11", "-xc++", "-Wall" };
     // uses QByteArray as smart-pointer for const char* ownership
     QVector<QByteArray> otherArgs;
     otherArgs.reserve(includes.size() + defines.size());
