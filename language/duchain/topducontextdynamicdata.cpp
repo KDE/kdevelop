@@ -591,30 +591,27 @@ uint TopDUContextDynamicData::allocateDeclarationIndex(Declaration* decl, bool t
   return allocateItemIndex(decl, temporary, m_declarations, m_temporaryDeclarations);
 }
 
-bool TopDUContextDynamicData::isDeclarationForIndexLoaded(uint index) const {
-  if(!m_dataLoaded)
-    return false;
-  if(index < (0x0fffffff/2)) {
-    if(index == 0 || index > uint(m_declarations.size()))
+template<class Item>
+static bool isItemForIndexLoaded(uint index, const QVector<Item*>& items)
+{
+  if (index < (0x0fffffff/2)) {
+    if (index == 0 || index > uint(items.size())) {
       return false;
-    return (bool)m_declarations[index-1];
-  }else{
+    }
+    return items[index-1];
+  } else {
+    // temporary item
     return true;
   }
 }
 
+bool TopDUContextDynamicData::isDeclarationForIndexLoaded(uint index) const
+{
+  return m_dataLoaded && isItemForIndexLoaded(index, m_declarations);
+}
+
 bool TopDUContextDynamicData::isContextForIndexLoaded(uint index) const {
-  if(!m_dataLoaded)
-    return false;
-  if(index < (0x0fffffff/2)) {
-    if(index == 0)
-      return true;
-    if(index > uint(m_contexts.size()))
-      return false;
-    return (bool)m_contexts[index-1];
-  }else{
-    return true;
-  }
+  return m_dataLoaded && isItemForIndexLoaded(index, m_contexts);
 }
 
 uint TopDUContextDynamicData::allocateContextIndex(DUContext* context, bool temporary)
