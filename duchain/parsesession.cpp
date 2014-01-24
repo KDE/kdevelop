@@ -34,7 +34,7 @@ CXUnsavedFile fileForContents(const QByteArray& path, const QByteArray& contents
     file.Contents = contents.constData();
     file.Length = contents.size();
     // skip trailing zero-bytes added by KDevplatform which are reported by clang
-    for (uint pos = contents.size() - 1; pos > 0; --pos) {
+    for (int pos = contents.size() - 1; pos > 0; --pos) {
         if (file.Contents[pos] == '\0') {
             --file.Length;
         } else {
