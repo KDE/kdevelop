@@ -88,6 +88,7 @@ target_link_libraries(kdevplatformshell LINK_PRIVATE
     ${KDE4_KNOTIFYCONFIG_LIBS}
     ${KDE4_KTEXTEDITOR_LIBS}
     ${KDE4_THREADWEAVER_LIBRARIES}
+    ${QT_QTDECLARATIVE_LIBRARIES}
     kdevplatforminterfaces
     kdevplatformproject
     kdevplatformvcs
@@ -127,3 +128,4 @@ install(TARGETS kdevplatformshell EXPORT KDevPlatformTargets ${INSTALL_TARGETS_D
 install( FILES debugger/kdevdebuggershellui.rc DESTINATION ${DATA_INSTALL_DIR}/kdevdebugger )
 install( FILES kdevsessionui.rc DESTINATION ${DATA_INSTALL_DIR}/kdevsession )
 install( FILES kdevsourceformatter.rc DESTINATION ${DATA_INSTALL_DIR}/kdevsourceformatter )
+install( FILES AssistantButton.qml assistantpopup.qml DESTINATION ${DATA_INSTALL_DIR}/kdevelop )

@@ -6,7 +6,6 @@ set(kdevplatformutil_LIB_SRCS
     autoorientedsplitter.cpp
     formattinghelpers.cpp
     richtextpushbutton.cpp
-    richtexttoolbutton.cpp
     kdevstringhandler.cpp
     focusedtreeview.cpp
     processlinemaker.cpp
@@ -59,7 +58,6 @@ install( FILES
     autoorientedsplitter.h
     formattinghelpers.h
     richtextpushbutton.h
-    richtexttoolbutton.h
     kdevstringhandler.h
     ksharedobject.h
     focusedtreeview.h
