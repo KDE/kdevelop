@@ -82,14 +82,14 @@ SourceFormatterSettings::SourceFormatterSettings(QWidget *parent, const QVariant
     m_document = KTextEditor::Editor::instance()->createDocument(this);
     m_document->setReadWrite(false);
 
-    KTextEditor::View* view = qobject_cast<KTextEditor::View*>(m_document->createView(textEditor));
+    m_view = m_document->createView(textEditor);
     QVBoxLayout *layout2 = new QVBoxLayout(textEditor);
-    layout2->addWidget(view);
+    layout2->addWidget(m_view);
     textEditor->setLayout(layout2);
-    view->show();
+    m_view->show();
 
     KTextEditor::ConfigInterface *iface =
-    qobject_cast<KTextEditor::ConfigInterface*>(view);
+    qobject_cast<KTextEditor::ConfigInterface*>(m_view);
     if (iface) {
         iface->setConfigValue("dynamic-word-wrap", false);
         iface->setConfigValue("icon-bar", false);
@@ -514,7 +514,7 @@ void SourceFormatterSettings::updatePreview()
     {
         m_document->setText( i18n( "No Language selected" ) );
     }
-    m_document->activeView()->setCursorPosition( KTextEditor::Cursor( 0, 0 ) );
+    m_view->setCursorPosition( KTextEditor::Cursor( 0, 0 ) );
     m_document->setReadWrite( false );
 }
 

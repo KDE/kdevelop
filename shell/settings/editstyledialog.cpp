@@ -69,8 +69,7 @@ void EditStyleDialog::init()
 	QString mode = m_sourceFormatter->highlightModeForMime(m_mimeType);
 	m_document->setHighlightingMode(mode);
 
-	m_view = qobject_cast<KTextEditor::View*>(
-	            m_document->createView(m_ui.textEditor));
+	m_view = m_document->createView(m_ui.textEditor);
 	QVBoxLayout *layout2 = new QVBoxLayout(m_ui.textEditor);
 	layout2->addWidget(m_view);
 	m_ui.textEditor->setLayout(layout2);
@@ -97,7 +96,7 @@ void EditStyleDialog::updatePreviewText(const QString &text)
 		m_document->setText( i18n( "No Source Formatter available" ) );
 	}
 
-	m_document->activeView()->setCursorPosition( KTextEditor::Cursor( 0, 0 ) );
+	m_view->setCursorPosition( KTextEditor::Cursor( 0, 0 ) );
 	m_document->setReadWrite(false);
 }
 

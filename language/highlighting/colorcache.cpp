@@ -109,13 +109,10 @@ ColorCache::ColorCache(QObject* parent)
 
 bool ColorCache::tryActiveDocument()
 {
-  ifDebug(kDebug() << "active doc" << ICore::self()->documentController()->activeDocument() << ICore::self()->documentController()->openDocuments();)
-  if ( IDocument* doc = ICore::self()->documentController()->activeDocument() ) {
-    ifDebug(kDebug() << "has text doc:" << doc->textDocument();)
-    if ( doc->textDocument() ) {
-      updateColorsFromDocument(doc->textDocument());
-      return true;
-    }
+  KTextEditor::View* view = ICore::self()->documentController()->activeTextDocumentView();
+  if ( view ) {
+    updateColorsFromView(view);
+    return true;
   }
   return false;
 }
@@ -158,9 +155,11 @@ void ColorCache::generateColors()
 
 void ColorCache::slotDocumentActivated(IDocument* doc)
 {
+  KTextEditor::View* view = ICore::self()->documentController()->activeTextDocumentView();
+  Q_ASSERT(doc && view && doc->textDocument() == view->document());
   ifDebug(kDebug() << "doc activated:" << doc << doc->textDocument();)
-  if ( doc->textDocument() ) {
-    updateColorsFromDocument(doc->textDocument());
+  if ( view ) {
+    updateColorsFromView(view);
   }
 }
 
@@ -170,17 +169,17 @@ void ColorCache::slotViewSettingsChanged()
   Q_ASSERT(view);
 
   ifDebug(kDebug() << "settings changed" << view;)
-  updateColorsFromDocument(view->document());
+  updateColorsFromView(view);
 }
 
-void ColorCache::updateColorsFromDocument(KTextEditor::Document* doc)
+void ColorCache::updateColorsFromView(KTextEditor::View* view)
 {
-  ifDebug(kDebug() << "has view:" << doc->activeView() << doc->views().size();)
-  if ( !doc->activeView() ) {
+  if ( !view ) {
     // yeah, the HighlightInterface methods returning an Attribute
     // require a View... kill me for that mess
     return;
   }
+  KTextEditor::Document* doc = view->document();
 
   QColor foreground(QColor::Invalid);
   QColor background(QColor::Invalid);
@@ -199,8 +198,8 @@ void ColorCache::updateColorsFromDocument(KTextEditor::Document* doc)
       // we only listen to a single view, i.e. the active one
       disconnect(view, SIGNAL(configChanged()), this, SLOT(slotViewSettingsChanged()));
     }
-    connect(doc->activeView(), SIGNAL(configChanged()), this, SLOT(slotViewSettingsChanged()));
-    m_view = doc->activeView();
+    connect(view, SIGNAL(configChanged()), this, SLOT(slotViewSettingsChanged()));
+    m_view = view;
 
     if(!background.isValid()) {
       // fallback for Kate < 4.5.2 where the background was never set in styles returned by defaultStyle()

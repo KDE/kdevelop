@@ -127,7 +127,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ColorCache : public QObject
     /// try to access the KatePart settings for the given doc or fallback to the global KDE scheme
     /// and update the colors if necessary
     /// @see generateColors(), updateColorsFromScheme()
-    void updateColorsFromDocument(KTextEditor::Document* doc);
+    void updateColorsFromView(KTextEditor::View* view);
 
     /// the default colors for the different types
     CodeHighlightingColors* m_defaultColors;

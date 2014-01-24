@@ -1,3 +1,4 @@
+
 /***************************************************************************
  *   Copyright 2007 Alexander Dymo  <adymo@kdevelop.org>            *
  *                                                                         *
@@ -53,7 +54,7 @@ public:
     virtual bool save(DocumentSaveMode mode = Default);
     virtual DocumentState state() const;
 
-    virtual KTextEditor::Cursor cursorPosition() const;
+    virtual KTextEditor::Cursor cursorPosition() const override;
     virtual void setCursorPosition(const KTextEditor::Cursor &cursor);
 
     virtual KTextEditor::Range textSelection() const;

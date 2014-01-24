@@ -67,11 +67,11 @@ QVariant SnippetCompletionModel::data( const QModelIndex& idx, int role ) const
     }
 }
 
-void SnippetCompletionModel::executeCompletionItem2(KTextEditor::Document* document, const KTextEditor::Range& word,
+void SnippetCompletionModel::executeCompletionItem(KTextEditor::View* view, const KTextEditor::Range& word,
                                                     const QModelIndex& index) const
 {
     if ( index.parent().isValid() ) {
-        m_snippets[index.row()]->execute(document, word);
+        m_snippets[index.row()]->execute(view, word);
     }
 }
 
@@ -84,10 +84,7 @@ void SnippetCompletionModel::completionInvoked(KTextEditor::View *view, const KT
 
 void SnippetCompletionModel::initData(KTextEditor::View* view)
 {
-    QString mode;
-    if ( KTextEditor::HighlightInterface* iface = qobject_cast<KTextEditor::HighlightInterface*>(view->document()) ) {
-            mode = iface->highlightingModeAt(view->cursorPosition());
-    }
+    QString mode = view->document()->highlightingModeAt(view->cursorPosition());
 
     if ( mode.isEmpty() ) {
         mode = view->document()->highlightingMode();

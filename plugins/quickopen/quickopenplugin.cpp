@@ -173,40 +173,25 @@ K_PLUGIN_FACTORY(KDevQuickOpenFactory, registerPlugin<QuickOpenPlugin>(); )
 // K_EXPORT_PLUGIN(KDevQuickOpenFactory(KAboutData("kdevquickopen","kdevquickopen", ki18n("Quick Open"), "0.1", ki18n("This plugin allows quick access to project files and language-items like classes/functions."), KAboutData::License_GPL)))
 
 Declaration* cursorDeclaration() {
-  IDocument* doc = ICore::self()->documentController()->activeDocument();
-  if(!doc)
-    return 0;
 
-  KTextEditor::Document* textDoc = doc->textDocument();
-  if(!textDoc)
-    return 0;
-
-  KTextEditor::View* view = textDoc->activeView();
+  KTextEditor::View* view = ICore::self()->documentController()->activeTextDocumentView();
   if(!view)
     return 0;
 
   KDevelop::DUChainReadLocker lock( DUChain::lock() );
 
-  return DUChainUtils::declarationForDefinition( DUChainUtils::itemUnderCursor( doc->url(), SimpleCursor(view->cursorPosition()) ) );
+  return DUChainUtils::declarationForDefinition( DUChainUtils::itemUnderCursor( view->document()->url(), SimpleCursor(view->cursorPosition()) ) );
 }
 
 ///The first definition that belongs to a context that surrounds the current cursor
 Declaration* cursorContextDeclaration() {
-  IDocument* doc = ICore::self()->documentController()->activeDocument();
-  if(!doc)
-    return 0;
-
-  KTextEditor::Document* textDoc = doc->textDocument();
-  if(!textDoc)
-    return 0;
-
-  KTextEditor::View* view = textDoc->activeView();
+  KTextEditor::View* view = ICore::self()->documentController()->activeTextDocumentView();
   if(!view)
     return 0;
 
   KDevelop::DUChainReadLocker lock( DUChain::lock() );
 
-  TopDUContext* ctx = DUChainUtils::standardContextForUrl(doc->url());
+  TopDUContext* ctx = DUChainUtils::standardContextForUrl(view->document()->url());
   if(!ctx)
     return 0;
 
@@ -1069,13 +1054,14 @@ QList<KDevelop::ILanguage*> languagesWithSupportForUrl(KUrl url) {
 
 QWidget* QuickOpenPlugin::specialObjectNavigationWidget() const
 {
-  if( !ICore::self()->documentController()->activeDocument() || !ICore::self()->documentController()->activeDocument()->textDocument() || !ICore::self()->documentController()->activeDocument()->textDocument()->activeView() )
+  KTextEditor::View* view = ICore::self()->documentController()->activeTextDocumentView();
+  if( !view )
     return 0;
 
   KUrl url = ICore::self()->documentController()->activeDocument()->url();
 
   foreach( KDevelop::ILanguage* language, languagesWithSupportForUrl(url) ) {
-    QWidget* w = language->languageSupport()->specialLanguageObjectNavigationWidget(url, SimpleCursor(ICore::self()->documentController()->activeDocument()->textDocument()->activeView()->cursorPosition()) );
+    QWidget* w = language->languageSupport()->specialLanguageObjectNavigationWidget(url, SimpleCursor(view->cursorPosition()) );
     if(w)
       return w;
   }
@@ -1083,14 +1069,16 @@ QWidget* QuickOpenPlugin::specialObjectNavigationWidget() const
   return 0;
 }
 
-QPair<KUrl, SimpleCursor> QuickOpenPlugin::specialObjectJumpPosition() const {
-  if( !ICore::self()->documentController()->activeDocument() || !ICore::self()->documentController()->activeDocument()->textDocument() || !ICore::self()->documentController()->activeDocument()->textDocument()->activeView() )
+QPair<KUrl, SimpleCursor> QuickOpenPlugin::specialObjectJumpPosition() const
+{
+  KTextEditor::View* view = ICore::self()->documentController()->activeTextDocumentView();
+  if( !view )
     return qMakePair(KUrl(), SimpleCursor());
 
   KUrl url = ICore::self()->documentController()->activeDocument()->url();
 
   foreach( KDevelop::ILanguage* language, languagesWithSupportForUrl(url) ) {
-    QPair<KUrl, SimpleCursor> pos = language->languageSupport()->specialLanguageObjectJumpCursor(url, SimpleCursor(ICore::self()->documentController()->activeDocument()->textDocument()->activeView()->cursorPosition()) );
+    QPair<KUrl, SimpleCursor> pos = language->languageSupport()->specialLanguageObjectJumpCursor(url, SimpleCursor(view->cursorPosition()) );
     if(pos.second.isValid()) {
       return pos;
     }

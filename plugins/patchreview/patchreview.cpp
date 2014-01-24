@@ -93,7 +93,7 @@ void PatchReviewPlugin::seekHunk( bool forwards, const KUrl& fileName ) {
                 if ( doc->textDocument() ) {
                     const QList<KTextEditor::MovingRange*> ranges = m_highlighters[doc->url()]->ranges();
 
-                    KTextEditor::View * v = doc->textDocument()->activeView();
+                    KTextEditor::View * v = doc->activeTextView();
                     int bestLine = -1;
                     if ( v ) {
                         KTextEditor::Cursor c = v->cursorPosition();

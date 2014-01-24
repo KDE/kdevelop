@@ -116,24 +116,14 @@ DUContext* getContextAt(const KUrl& url, KTextEditor::Cursor cursor)
 
 DeclarationPointer cursorDeclaration()
 {
-  IDocument* doc = ICore::self()->documentController()->activeDocument();
-  if (!doc) {
-    return DeclarationPointer();
-  }
-
-  KTextEditor::Document* textDoc = doc->textDocument();
-  if (!textDoc) {
-    return DeclarationPointer();
-  }
-
-  KTextEditor::View* view = textDoc->activeView();
+  KTextEditor::View* view = ICore::self()->documentController()->activeTextDocumentView();
   if (!view) {
     return DeclarationPointer();
   }
 
   DUChainReadLocker lock;
 
-  Declaration *decl = DUChainUtils::declarationForDefinition(DUChainUtils::itemUnderCursor(doc->url(), SimpleCursor(view->cursorPosition())));
+  Declaration *decl = DUChainUtils::declarationForDefinition(DUChainUtils::itemUnderCursor(view->document()->url(), SimpleCursor(view->cursorPosition())));
   return DeclarationPointer(decl);
 }
 
@@ -650,7 +640,7 @@ void ContextBrowserPlugin::updateForView(View* view)
     IDocument* activeDoc = core()->documentController()->activeDocument();
     
     bool mouseHighlight = (url == m_mouseHoverDocument) && (m_mouseHoverCursor.isValid());
-    bool shouldUpdateBrowser = (mouseHighlight || (view->isActiveView() && activeDoc && activeDoc->textDocument() == view->document()));
+    bool shouldUpdateBrowser = (mouseHighlight || (view == ICore::self()->documentController()->activeTextDocumentView() && activeDoc && activeDoc->textDocument() == view->document()));
     
     SimpleCursor highlightPosition;
     if (mouseHighlight)
@@ -732,18 +722,18 @@ void ContextBrowserPlugin::updateViews()
 void ContextBrowserPlugin::declarationSelectedInUI(const DeclarationPointer& decl)
 {
   m_useDeclaration = IndexedDeclaration(decl.data());
-  if(core()->documentController()->activeDocument() && core()->documentController()->activeDocument()->textDocument() && core()->documentController()->activeDocument()->textDocument()->activeView())
-    m_updateViews << core()->documentController()->activeDocument()->textDocument()->activeView();
+  KTextEditor::View* view = core()->documentController()->activeTextDocumentView();
+  if(view)
+    m_updateViews << view;
 
-  m_updateTimer->start(highlightingTimeout); // triggers updateViews()
+  if(!m_updateViews.isEmpty())
+    m_updateTimer->start(highlightingTimeout); // triggers updateViews()
 }
 
 void ContextBrowserPlugin::parseJobFinished(KDevelop::ParseJob* job)
 {
   for(QMap< View*, ViewHighlights >::iterator it = m_highlightedRanges.begin(); it != m_highlightedRanges.end(); ++it) {
     if(it.key()->document()->url() == job->document().toUrl()) {
-      if(m_updateViews.isEmpty())
-        m_updateTimer->start(highlightingTimeout);
       
       if(!m_updateViews.contains(it.key())) {
         kDebug() << "adding view for update";
@@ -754,6 +744,8 @@ void ContextBrowserPlugin::parseJobFinished(KDevelop::ParseJob* job)
       }
     }
   }
+  if(!m_updateViews.isEmpty())
+        m_updateTimer->start(highlightingTimeout);
 }
 
 void ContextBrowserPlugin::textDocumentCreated( KDevelop::IDocument* document )
@@ -769,9 +761,9 @@ void ContextBrowserPlugin::textDocumentCreated( KDevelop::IDocument* document )
 void ContextBrowserPlugin::documentActivated( IDocument* doc )
 {
   m_outlineLine->clear();
-  if (doc->textDocument() && doc->textDocument()->activeView())
+  if (View* view = doc->activeTextView())
   {
-    cursorPositionChanged(doc->textDocument()->activeView(), doc->textDocument()->activeView()->cursorPosition());
+    cursorPositionChanged(view, view->cursorPosition());
   }
 }
 
@@ -851,16 +843,15 @@ KTextEditor::Range cursorToRange(SimpleCursor cursor) {
 
 void ContextBrowserPlugin::switchUse(bool forward)
 {
-  if(core()->documentController()->activeDocument() && core()->documentController()->activeDocument()->textDocument() && core()->documentController()->activeDocument()->textDocument()->activeView()) {
-    KTextEditor::Document* doc = core()->documentController()->activeDocument()->textDocument();
-
-
+  View* view = core()->documentController()->activeTextDocumentView();
+  if(view) {
+    KTextEditor::Document* doc = view->document();
     KDevelop::DUChainReadLocker lock( DUChain::lock() );
     KDevelop::TopDUContext* chosen = DUChainUtils::standardContextForUrl(doc->url());
 
     if( chosen )
     {
-      SimpleCursor cCurrent(doc->activeView()->cursorPosition());
+      SimpleCursor cCurrent(view->cursorPosition());
       KDevelop::CursorInRevision c = chosen->transformToLocalRevision(cCurrent);
       
       Declaration* decl = 0;

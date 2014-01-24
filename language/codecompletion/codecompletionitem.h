@@ -30,7 +30,6 @@
 
 namespace KTextEditor {
   class CodeCompletionModel;
-  class Document;
   class Range;
   class Cursor;
 }
@@ -106,7 +105,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CompletionTreeItem : public CompletionTreeElem
 public:
 
   ///Execute the completion item. The default implementation does nothing.
-  virtual void execute(KTextEditor::Document* document, const KTextEditor::Range& word);
+  virtual void execute(KTextEditor::View* view, const KTextEditor::Range& word);
 
   ///Should return normal completion data, @see KTextEditor::CodeCompletionModel
   ///The default implementation returns "unimplemented", so re-implement it!

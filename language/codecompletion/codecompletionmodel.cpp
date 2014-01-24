@@ -298,14 +298,14 @@ KSharedPtr<CodeCompletionContext> CodeCompletionModel::completionContext() const
   return m_completionContext;
 }
 
-void CodeCompletionModel::executeCompletionItem2(Document* document, const Range& word, const QModelIndex& index) const
+void CodeCompletionModel::executeCompletionItem(View* view, const KTextEditor::Range& word, const QModelIndex& index) const
 {
   //We must not lock the duchain at this place, because the items might rely on that
   CompletionTreeElement* element = (CompletionTreeElement*)index.internalPointer();
   if( !element || !element->asItem() )
     return;
 
-  element->asItem()->execute(document, word);
+  element->asItem()->execute(view, word);
 }
 
 KSharedPtr< KDevelop::CompletionTreeElement > CodeCompletionModel::itemForIndex(QModelIndex index) const {

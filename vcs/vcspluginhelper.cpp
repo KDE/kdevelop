@@ -385,7 +385,7 @@ void VcsPluginHelper::annotation()
         doc = ICore::self()->documentController()->openDocument(url);
 
     KTextEditor::AnnotationInterface* annotateiface = qobject_cast<KTextEditor::AnnotationInterface*>(doc->textDocument());
-    KTextEditor::AnnotationViewInterface* viewiface = qobject_cast<KTextEditor::AnnotationViewInterface*>(doc->textDocument()->activeView());
+    KTextEditor::AnnotationViewInterface* viewiface = qobject_cast<KTextEditor::AnnotationViewInterface*>(doc->activeTextView());
     if (viewiface && viewiface->isAnnotationBorderVisible()) {
         viewiface->setAnnotationBorderVisible(false);
         return;
@@ -412,11 +412,11 @@ void VcsPluginHelper::annotation()
         if (annotateiface && viewiface) {
             KDevelop::VcsAnnotationModel* model = new KDevelop::VcsAnnotationModel(job, url, doc->textDocument(),
                                                                                    foreground, background);
-            connect(doc->textDocument()->activeView(), SIGNAL(annotationActivated(KTextEditor::View*, int)),
+            connect(doc->activeTextView(), SIGNAL(annotationActivated(KTextEditor::View*, int)),
                     model, SLOT(itemActivated(KTextEditor::View*, int)) );
             annotateiface->setAnnotationModel(model);
             viewiface->setAnnotationBorderVisible(true);
-            connect(doc->textDocument()->activeView(),
+            connect(doc->activeTextView(),
                     SIGNAL(annotationContextMenuAboutToShow(KTextEditor::View*,QMenu*,int)),
                     this, SLOT(annotationContextMenuAboutToShow(KTextEditor::View*,QMenu*,int)));
         } else {

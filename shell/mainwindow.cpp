@@ -253,13 +253,9 @@ void MainWindow::configureShortcuts()
 
 void MainWindow::shortcutsChanged()
 {
-    //propagate shortcut changes to all the opened text documents by reloading the UI XML file
-    IDocument* activeDoc = Core::self()->documentController()->activeDocument();
-    if (!activeDoc || !activeDoc->textDocument()) {
+    KTextEditor::View *activeClient = Core::self()->documentController()->activeTextDocumentView();
+    if(!activeClient)
         return;
-    }
-
-    KTextEditor::View *activeClient = activeDoc->textDocument()->activeView();
 
     foreach(IDocument * doc, Core::self()->documentController()->openDocuments()) {
         KTextEditor::Document *textDocument = doc->textDocument();

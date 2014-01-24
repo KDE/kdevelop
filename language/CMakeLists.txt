@@ -139,11 +139,9 @@ add_library(kdevplatformlanguage SHARED ${kdevplatformlanguage_LIB_SRCS})
 target_link_libraries(kdevplatformlanguage LINK_PUBLIC
         KF5::ThreadWeaver
         kdevplatforminterfaces
-)
-target_link_libraries(kdevplatformlanguage LINK_PRIVATE
+LINK_PRIVATE
         KF5::TextEditor
         KF5::Parts
-        KF5::TextEditor
         KF5::NewStuff
         KF5::Archive
         KF5::KDE4Support

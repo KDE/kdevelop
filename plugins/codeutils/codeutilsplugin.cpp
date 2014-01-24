@@ -86,15 +86,7 @@ CodeUtilsPlugin::CodeUtilsPlugin ( QObject* parent, const QVariantList& )
 
 void CodeUtilsPlugin::documentDeclaration()
 {
-    IDocument* doc = ICore::self()->documentController()->activeDocument();
-    if ( !doc ) {
-        return;
-    }
-    Document* textDoc = doc->textDocument();
-    if ( !textDoc ) {
-        return;
-    }
-    View* view =  textDoc->activeView();
+    View* view =  ICore::self()->documentController()->activeTextDocumentView();
     if ( !view ) {
         return;
     }
@@ -104,7 +96,7 @@ void CodeUtilsPlugin::documentDeclaration()
     }
 
     DUChainReadLocker lock;
-    TopDUContext* topCtx = DUChainUtils::standardContextForUrl(doc->url());
+    TopDUContext* topCtx = DUChainUtils::standardContextForUrl(view->document()->url());
     if ( !topCtx ) {
         return;
     }

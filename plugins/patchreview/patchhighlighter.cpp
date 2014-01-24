@@ -163,8 +163,9 @@ void PatchHighlighter::markClicked( KTextEditor::Document* doc, KTextEditor::Mar
 
     handled = true;
 
-    if( doc->activeView() ) ///This is a workaround, if the cursor is somewhere else, the editor will always jump there when a mark was clicked
-        doc->activeView()->setCursorPosition( KTextEditor::Cursor( mark.line, 0 ) );
+//     TODO: reconsider workaround
+//     if( doc->activeView() ) ///This is a workaround, if the cursor is somewhere else, the editor will always jump there when a mark was clicked
+//         doc->activeView()->setCursorPosition( KTextEditor::Cursor( mark.line, 0 ) );
 
     KTextEditor::MovingRange* range = rangeForMark( mark );
 

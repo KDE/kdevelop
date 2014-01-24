@@ -111,7 +111,7 @@ void SourceFormatterController::documentLoaded( IDocument* doc )
 		return;
 	}
 	KMimeType::Ptr mime = KMimeType::findByUrl(doc->url());
-	adaptEditorIndentationMode( doc, formatterForMimeType(mime) );
+	adaptEditorIndentationMode( doc->textDocument(), formatterForMimeType(mime) );
 }
 
 void SourceFormatterController::initialize()
@@ -285,10 +285,11 @@ void SourceFormatterController::activeDocumentChanged(IDocument* doc)
 
 void SourceFormatterController::beautifySource()
 {
-	KDevelop::IDocumentController *docController = KDevelop::ICore::self()->documentController();
-	KDevelop::IDocument *doc = docController->activeDocument();
-	if (!doc)
+	IDocument* idoc = KDevelop::ICore::self()->documentController()->activeDocument();
+	KTextEditor::View* view = idoc->activeTextView();
+	if (!view)
 		return;
+	KTextEditor::Document* doc = view->document();
 	// load the appropriate formatter
 	KMimeType::Ptr mime = KMimeType::findByUrl(doc->url());
 	ISourceFormatter *formatter = formatterForMimeType(mime);
@@ -300,17 +301,14 @@ void SourceFormatterController::beautifySource()
 	// Ignore the modeline, as the modeline will be changed anyway
 	adaptEditorIndentationMode( doc, formatter, true );
 
-	bool has_selection = false;
-	KTextEditor::View *view = doc->textDocument()->activeView();
-	if (view && view->selection())
-		has_selection = true;
+	bool has_selection = view->selection();
 
 	if (has_selection) {
 		QString original = view->selectionText();
 
 		QString output = formatter->formatSource(view->selectionText(), doc->url(), mime,
-												  view->document()->text(KTextEditor::Range(KTextEditor::Cursor(0,0),view->selectionRange().start())),
-												  view->document()->text(KTextEditor::Range(view->selectionRange().end(), view->document()->documentRange().end())));
+												  doc->text(KTextEditor::Range(KTextEditor::Cursor(0,0),view->selectionRange().start())),
+												  doc->text(KTextEditor::Range(view->selectionRange().end(), doc->documentRange().end())));
 
 		//remove the final newline character, unless it should be there
 		if (!original.endsWith('\n')  && output.endsWith('\n'))
@@ -323,7 +321,7 @@ void SourceFormatterController::beautifySource()
 		Q_ASSERT( code );
 		code->replace( view->selectionRange(), original, output );
 	} else {
-		formatDocument(doc, formatter, mime);
+		formatDocument(idoc, formatter, mime);
 	}
 }
 
@@ -334,7 +332,8 @@ void SourceFormatterController::beautifyLine()
 	if (!doc || !doc->isTextDocument())
 		return;
 	KTextEditor::Document *tDoc = doc->textDocument();
-	if (!tDoc->activeView())
+	KTextEditor::View* view = doc->activeTextView();
+	if (!view)
 		return;
 	// load the appropriate formatter
 	KMimeType::Ptr mime = KMimeType::findByUrl(doc->url());
@@ -344,7 +343,7 @@ void SourceFormatterController::beautifyLine()
 		return;
 	}
 
-	const KTextEditor::Cursor cursor = tDoc->activeView()->cursorPosition();
+	const KTextEditor::Cursor cursor = view->cursorPosition();
 	const QString line = tDoc->line(cursor.line());
 	const QString prev = tDoc->text(KTextEditor::Range(0, 0, cursor.line(), 0));
 	const QString post = '\n' + tDoc->text(KTextEditor::Range(KTextEditor::Cursor(cursor.line() + 1, 0), tDoc->documentEnd()));
@@ -358,7 +357,7 @@ void SourceFormatterController::beautifyLine()
 	code->replace( KTextEditor::Range(cursor.line(), 0, cursor.line(), line.length()), line, formatted );
 	
 	// advance cursor one line
-	tDoc->activeView()->setCursorPosition(KTextEditor::Cursor(cursor.line() + 1, 0));
+	view->setCursorPosition(KTextEditor::Cursor(cursor.line() + 1, 0));
 }
 
 void SourceFormatterController::formatDocument(KDevelop::IDocument *doc, ISourceFormatter *formatter, const KMimeType::Ptr &mime)
@@ -379,7 +378,7 @@ void SourceFormatterController::settingsChanged()
 {
 	if( configuration().readEntry( SourceFormatterController::kateOverrideIndentationConfigKey, false ) )
 		foreach( KDevelop::IDocument* doc, ICore::self()->documentController()->openDocuments() )
-			adaptEditorIndentationMode( doc, formatterForUrl(doc->url()) );
+			adaptEditorIndentationMode( doc->textDocument(), formatterForUrl(doc->url()) );
 }
 
 /**
@@ -394,19 +393,17 @@ void SourceFormatterController::settingsChanged()
  *   "set-tab-width X"
  * */
 
-void SourceFormatterController::adaptEditorIndentationMode(KDevelop::IDocument *doc, ISourceFormatter *formatter, bool ignoreModeline )
+void SourceFormatterController::adaptEditorIndentationMode(KTextEditor::Document *doc, ISourceFormatter *formatter, bool ignoreModeline )
 {
-	if( !formatter  || !configuration().readEntry( SourceFormatterController::kateOverrideIndentationConfigKey, false ) || !doc->isTextDocument() )
+	if( !formatter  || !configuration().readEntry( SourceFormatterController::kateOverrideIndentationConfigKey, false ) || !doc )
 		return;
 
-	KTextEditor::Document *textDoc = doc->textDocument();
 	kDebug() << "adapting mode for" << doc->url();
-	Q_ASSERT(textDoc);
 	
 	QRegExp kateModelineWithNewline("\\s*\\n//\\s*kate:(.*)$");
 	
 	// modelines should always take precedence
-	if( !ignoreModeline && kateModelineWithNewline.indexIn( textDoc->text() ) != -1 )
+	if( !ignoreModeline && kateModelineWithNewline.indexIn( doc->text() ) != -1 )
 	{
 		kDebug() << "ignoring because a kate modeline was found";
 		return;
@@ -416,7 +413,7 @@ void SourceFormatterController::adaptEditorIndentationMode(KDevelop::IDocument *
 	if(indentation.isValid())
 	{
 		struct CommandCaller {
-			CommandCaller(KTextEditor::Document* _doc) : doc(_doc), ci(qobject_cast<KTextEditor::CommandInterface*>(doc->editor())) {
+			CommandCaller(KTextEditor::Document* _doc) : doc(_doc), ci(qobject_cast<KTextEditor::CommandInterface*>(KTextEditor::Editor::instance())) {
 				Q_ASSERT(ci);
 			}
 			void operator()(QString cmd) {
@@ -424,13 +421,14 @@ void SourceFormatterController::adaptEditorIndentationMode(KDevelop::IDocument *
 				Q_ASSERT(command);
 				QString msg;
 				kDebug() << "calling" << cmd;
-				if( !command->exec( doc->activeView(), cmd, msg ) )
-					kWarning() << "setting indentation width failed: " << msg;
+				foreach(KTextEditor::View* view, doc->views())
+					if( !command->exec( view, cmd, msg ) )
+						kWarning() << "setting indentation width failed: " << msg;
 			}
 			
 			KTextEditor::Document* doc;
 			KTextEditor::CommandInterface* ci;
-		} call(textDoc);
+		} call(doc);
 		
 		if( indentation.indentWidth ) // We know something about indentation-width
 			call( QString("set-indent-width %1").arg(indentation.indentWidth ) );

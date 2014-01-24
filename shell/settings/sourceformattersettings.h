@@ -31,6 +31,7 @@ class QListWidgetItem;
 namespace KTextEditor
 {
 class Document;
+class View;
 }
 
 namespace KDevelop
@@ -93,6 +94,7 @@ private:
     typedef QMap<QString, SourceFormatter*> FormatterMap;
     FormatterMap formatters;
     KTextEditor::Document* m_document;
+    KTextEditor::View* m_view;
 };
 
 #endif // KDEVPLATFORM_SOURCEFORMATTERSETTINGS_H

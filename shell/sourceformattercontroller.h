@@ -34,6 +34,10 @@ Boston, MA 02110-1301, USA.
 
 #include "shellexport.h"
 
+namespace KTextEditor {
+class Document;
+}
+
 class QAction;
 namespace KDevelop
 {
@@ -106,7 +110,7 @@ class KDEVPLATFORMSHELL_EXPORT SourceFormatterController : public ISourceFormatt
 		QString indentationMode(const KMimeType::Ptr &mime);
 		void formatDocument(KDevelop::IDocument *doc, ISourceFormatter *formatter, const KMimeType::Ptr &mime);
 		// Adapts the mode of the editor regarding indentation-style
-		void adaptEditorIndentationMode(KDevelop::IDocument* doc, KDevelop::ISourceFormatter* formatter, bool ignoreModeline = false);
+		void adaptEditorIndentationMode(KTextEditor::Document* doc, KDevelop::ISourceFormatter* formatter, bool ignoreModeline = false);
 		void formatFiles(KUrl::List &list);
 		// GUI actions
 		QAction* m_formatTextAction;

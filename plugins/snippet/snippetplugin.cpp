@@ -123,18 +123,17 @@ void SnippetPlugin::unload()
 
 void SnippetPlugin::insertSnippet(Snippet* snippet)
 {
-    KDevelop::IDocument* doc = core()->documentController()->activeDocument();
-    if (!doc) return;
-    if (doc->isTextDocument()) {
-        SnippetCompletionItem item(snippet, static_cast<SnippetRepository*>(snippet->parent()));
-        KTextEditor::Range range = doc->textSelection();
-        if ( !range.isValid() ) {
-            range = KTextEditor::Range(doc->cursorPosition(), doc->cursorPosition());
-        }
-        item.execute(doc->textDocument(), range);
-        if ( doc->textDocument()->activeView() ) {
-            doc->textDocument()->activeView()->setFocus();
-        }
+    KTextEditor::View* view = core()->documentController()->activeTextDocumentView();
+    if (!view)
+        return;
+    SnippetCompletionItem item(snippet, static_cast<SnippetRepository*>(snippet->parent()));
+    KTextEditor::Range range = view->selectionRange();
+    if ( !range.isValid() ) {
+        range = KTextEditor::Range(view->cursorPosition(), view->cursorPosition());
+    }
+    item.execute(view, range);
+    if ( view ) {
+        view->setFocus();
     }
 }
 
@@ -195,13 +194,7 @@ void SnippetPlugin::createSnippetFromSelection()
     KTextEditor::View* view = static_cast<KTextEditor::View*>(action->data().value<void *>());
     Q_ASSERT(view);
 
-    QString mode;
-    if ( KTextEditor::HighlightInterface* iface = qobject_cast<KTextEditor::HighlightInterface*>(view->document()) ) {
-            mode = iface->highlightingModeAt(view->selectionRange().start());
-    }
-    if ( mode.isEmpty() ) {
-        mode = view->document()->mode();
-    }
+    QString mode = view->document()->highlightingModeAt(view->selectionRange().start());;
 
     // try to look for a fitting repo
     SnippetRepository* match = 0;

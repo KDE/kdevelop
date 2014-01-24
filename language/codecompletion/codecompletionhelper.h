@@ -25,11 +25,12 @@
 namespace KTextEditor {
   class Document;
   class Range;
+  class View;
 }
 namespace KDevelop {
   class Declaration;
 
-  void KDEVPLATFORMLANGUAGE_EXPORT insertFunctionParenText(KTextEditor::Document* document, const KTextEditor::Cursor& pos, KDevelop::DeclarationPointer declaration, bool jumpForbidden = false);
+  void KDEVPLATFORMLANGUAGE_EXPORT insertFunctionParenText(KTextEditor::View* view, const KTextEditor::Cursor& pos, KDevelop::DeclarationPointer declaration, bool jumpForbidden = false);
 
 }
 #endif

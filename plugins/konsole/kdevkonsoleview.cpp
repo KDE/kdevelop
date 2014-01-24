@@ -27,6 +27,7 @@
 #include <klibloader.h>
 #include <kde_terminal_interface.h>
 #include <kparts/part.h>
+#include <kparts/readonlypart.h>
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>

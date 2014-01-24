@@ -351,7 +351,11 @@ void PatchReviewToolView::activate( const KUrl& url, IDocument* buddy ) const
     
     // If the document is not open yet, open it in the correct order
     IDocument* newDoc = ICore::self()->documentController()->openDocument(url, KTextEditor::Range(), IDocumentController::DefaultMode, "", buddy);
-    if(newDoc && newDoc->textDocument() && newDoc->textDocument()->activeView() && newDoc->textDocument()->activeView()->cursorPosition().line() == 0)
+    KTextEditor::View* view = 0;
+    if(newDoc)
+        view= newDoc->activeTextView();
+
+    if(view && view->cursorPosition().line() == 0)
         m_plugin->seekHunk( true, url );
 }
 

@@ -17,6 +17,7 @@
 
 #include <KParts/PartManager>
 #include <KParts/Part>
+#include <kparts/readonlypart.h>
 #include <KPluginFactory>
 #include <KPluginLoader>
 #include <KActionCollection>

@@ -595,7 +595,7 @@ KTextEditor::Cursor KDevelop::TextDocument::cursorPosition() const
         return KTextEditor::Cursor::invalid();
     }
 
-    KTextEditor::View *view = d->document->activeView();
+    KTextEditor::View *view = activeTextView();
 
     if (view)
         return view->cursorPosition();
@@ -608,7 +608,7 @@ void TextDocument::setCursorPosition(const KTextEditor::Cursor &cursor)
     if (!cursor.isValid() || !d->document)
         return;
 
-    KTextEditor::View *view = d->document->activeView();
+    KTextEditor::View *view = activeTextView();
 
     // Rodda: Cursor must be accurate here, to the definition of accurate for KTextEditor::Cursor.
     // ie, starting from 0,0
@@ -623,7 +623,7 @@ KTextEditor::Range TextDocument::textSelection() const
         return KTextEditor::Range::invalid();
     }
 
-    KTextEditor::View *view = d->document->activeView();
+    KTextEditor::View *view = activeTextView();
 
     if (view && view->selection()) {
         return view->selectionRange();
@@ -638,7 +638,7 @@ QString TextDocument::textLine() const
         return QString();
     }
 
-    KTextEditor::View *view = d->document->activeView();
+    KTextEditor::View *view = activeTextView();
 
     if (view) {
         return d->document->line( view->cursorPosition().line() );
@@ -653,7 +653,7 @@ QString TextDocument::textWord() const
         return QString();
     }
 
-    KTextEditor::View *view = d->document->activeView();
+    KTextEditor::View *view = activeTextView();
 
     if (view) {
         KTextEditor::Cursor start = view->cursorPosition();
@@ -686,7 +686,7 @@ void TextDocument::setTextSelection(const KTextEditor::Range &range)
     if (!range.isValid() || !d->document)
         return;
 
-    KTextEditor::View *view = d->document->activeView();
+    KTextEditor::View *view = activeTextView();
 
     if (view) {
         selectAndReveal(view, range);

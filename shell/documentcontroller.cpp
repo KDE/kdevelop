@@ -193,9 +193,10 @@ struct DocumentControllerPrivate {
         IDocument* buddy = 0)
     {
         IDocument* previousActiveDocument = controller->activeDocument();
+        KTextEditor::View* previousActiveTextView = controller->activeTextDocumentView();
         KTextEditor::Cursor previousActivePosition;
-        if(previousActiveDocument && previousActiveDocument->textDocument() && previousActiveDocument->textDocument()->activeView())
-            previousActivePosition = previousActiveDocument->textDocument()->activeView()->cursorPosition();
+        if(previousActiveTextView)
+            previousActivePosition = previousActiveTextView->cursorPosition();
         
 
         QString _encoding = encoding;
@@ -343,9 +344,10 @@ struct DocumentControllerPrivate {
                                 IDocument* buddy = 0)
     {
         IDocument* previousActiveDocument = controller->activeDocument();
+        KTextEditor::View* previousActiveTextView = ICore::self()->documentController()->activeTextDocumentView();
         KTextEditor::Cursor previousActivePosition;
-        if(previousActiveDocument && previousActiveDocument->textDocument() && previousActiveDocument->textDocument()->activeView())
-            previousActivePosition = previousActiveDocument->textDocument()->activeView()->cursorPosition();
+        if(previousActiveTextView)
+            previousActivePosition = previousActiveTextView->cursorPosition();
         
         KUrl url=doc->url();
         UiController *uiController = Core::self()->uiControllerInternal();
@@ -535,16 +537,14 @@ struct DocumentControllerPrivate {
         closeAll->setEnabled(true);
         closeAllOthers->setEnabled(true);
 
-        if(doc) {
-            KTextEditor::Cursor activePosition;
-            if(range.isValid())
-                activePosition = range.start();
-            else if(doc->textDocument() && doc->textDocument()->activeView())
-                activePosition = doc->textDocument()->activeView()->cursorPosition();
+        KTextEditor::Cursor activePosition;
+        if(range.isValid())
+            activePosition = range.start();
+        else if(KTextEditor::View* v = doc->activeTextView())
+            activePosition = v->cursorPosition();
 
-            if (doc != previousActiveDocument || activePosition != previousActivePosition)
-                emit controller->documentJumpPerformed(doc, activePosition, previousActiveDocument, previousActivePosition);
-        }
+        if (doc != previousActiveDocument || activePosition != previousActivePosition)
+            emit controller->documentJumpPerformed(doc, activePosition, previousActiveDocument, previousActivePosition);
 
         if ( doc->textDocument() ) {
             QObject::connect(doc->textDocument(), SIGNAL(reloaded(KTextEditor::Document*)), controller,
@@ -963,8 +963,22 @@ void DocumentController::closeAllOtherDocuments()
 IDocument* DocumentController::activeDocument() const
 {
     UiController *uiController = Core::self()->uiControllerInternal();
-    if( !uiController->activeSublimeWindow() || !uiController->activeSublimeWindow()->activeView() ) return 0;
-    return dynamic_cast<IDocument*>(uiController->activeSublimeWindow()->activeView()->document());
+    Sublime::MainWindow* mw = uiController->activeSublimeWindow();
+    if( !mw || !mw->activeView() ) return 0;
+    return dynamic_cast<IDocument*>(mw->activeView()->document());
+}
+
+KTextEditor::View* DocumentController::activeTextDocumentView() const
+{
+    UiController *uiController = Core::self()->uiControllerInternal();
+    Sublime::MainWindow* mw = uiController->activeSublimeWindow();
+    if( !mw || !mw->activeView() )
+        return 0;
+
+    TextView* view = qobject_cast<TextView*>(mw->activeView());
+    if(!view)
+        return 0;
+    return view->textView();
 }
 
 QString DocumentController::activeDocumentPath( QString target ) const

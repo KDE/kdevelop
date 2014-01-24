@@ -35,7 +35,7 @@ public:
     SnippetCompletionItem(Snippet* snippet, SnippetRepository* repo);
     ~SnippetCompletionItem();
 
-    virtual void execute( KTextEditor::Document* document, const KTextEditor::Range& word );
+    virtual void execute(KTextEditor::View* view, const KTextEditor::Range& word);
     virtual QVariant data( const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model ) const;
 
 private:

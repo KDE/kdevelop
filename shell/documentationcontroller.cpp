@@ -89,21 +89,13 @@ void DocumentationController::initialize()
 
 void KDevelop::DocumentationController::doShowDocumentation()
 {
-    IDocument* doc = ICore::self()->documentController()->activeDocument();
-    if(!doc)
-      return;
-    
-    KTextEditor::Document* textDoc = doc->textDocument();
-    if(!textDoc)
-      return;
-    
-    KTextEditor::View* view = textDoc->activeView();
+    KTextEditor::View* view = ICore::self()->documentController()->activeTextDocumentView();
     if(!view)
       return;
     
     KDevelop::DUChainReadLocker lock( DUChain::lock() );
     
-    Declaration *dec = DUChainUtils::declarationForDefinition( DUChainUtils::itemUnderCursor( doc->url(), SimpleCursor(view->cursorPosition()) ) );
+    Declaration *dec = DUChainUtils::declarationForDefinition( DUChainUtils::itemUnderCursor( view->document()->url(), SimpleCursor(view->cursorPosition()) ) );
     
     if(dec) {
         KSharedPtr< IDocumentation > documentation = documentationForDeclaration(dec);

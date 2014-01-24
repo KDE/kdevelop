@@ -28,7 +28,7 @@
 
 namespace KDevelop {
 
-void insertFunctionParenText(KTextEditor::Document* document, const KTextEditor::Cursor& pos, DeclarationPointer declaration, bool jumpForbidden)
+void insertFunctionParenText(KTextEditor::View* view, const KTextEditor::Cursor& pos, DeclarationPointer declaration, bool jumpForbidden)
 {
   bool spaceBeforeParen = false; ///@todo Take this from some astyle config or something
   bool spaceBetweenParens = false;
@@ -50,11 +50,11 @@ void insertFunctionParenText(KTextEditor::Document* document, const KTextEditor:
     haveArguments = true; //probably a constructor initializer
   
   //Need to have a paren behind
-  QString suffix = document->text( KTextEditor::Range( pos, pos + KTextEditor::Cursor(1, 0) ) );
+  QString suffix = view->document()->text( KTextEditor::Range( pos, pos + KTextEditor::Cursor(1, 0) ) );
   if( suffix.trimmed().startsWith('(') ) {
     //Move the cursor behind the opening paren
-    if( document->activeView() )
-      document->activeView()->setCursorPosition( pos + KTextEditor::Cursor( 0, suffix.indexOf('(')+1 ) );
+    if( view )
+      view->setCursorPosition( pos + KTextEditor::Cursor( 0, suffix.indexOf('(')+1 ) );
   }else{
     //We need to insert an opening paren
     QString openingParen;
@@ -78,7 +78,7 @@ void insertFunctionParenText(KTextEditor::Document* document, const KTextEditor:
     if (funcType) {
       if (IntegralType::Ptr type = funcType->returnType().cast<IntegralType>()) {
         if (type->dataType() == IntegralType::TypeVoid) {
-          const QChar nextChar = document->characterAt(pos);
+          const QChar nextChar = view->document()->characterAt(pos);
           if (nextChar != ';' && nextChar != ')' && nextChar != ',') {
             closingParen += ';';
           }
@@ -92,10 +92,10 @@ void insertFunctionParenText(KTextEditor::Document* document, const KTextEditor:
 
 
     lock.unlock();
-    document->insertText( pos, openingParen + closingParen );
+    view->document()->insertText( pos, openingParen + closingParen );
     if(!jumpForbidden) {
-      if( document->activeView() )
-        document->activeView()->setCursorPosition( jumpPos );
+      if( view )
+        view->setCursorPosition( jumpPos );
     }
   }
 

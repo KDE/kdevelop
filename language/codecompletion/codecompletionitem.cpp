@@ -114,8 +114,8 @@ int CompletionTreeElement::rowInParent() const {
   return m_parent->asNode()->children.indexOf( KSharedPtr<CompletionTreeElement>(const_cast<CompletionTreeElement*>(this)) );*/
 }
 
-void CompletionTreeItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word) {
-  Q_UNUSED(document)
+void CompletionTreeItem::execute(KTextEditor::View* view, const KTextEditor::Range& word) {
+  Q_UNUSED(view)
   Q_UNUSED(word)
   kDebug(9700) << "doing nothing";
 }

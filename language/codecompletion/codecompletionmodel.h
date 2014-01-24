@@ -121,7 +121,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
     ///The default-implementation does this completely, so if you don't need to do anything special, you can just leave it.
     virtual void completionInvokedInternal(KTextEditor::View* view, const KTextEditor::Range& range, KTextEditor::CodeCompletionModel::InvocationType invocationType, const KUrl& url);
 
-    virtual void executeCompletionItem2(KTextEditor::Document* document, const KTextEditor::Range& word, const QModelIndex& index) const;
+    virtual void executeCompletionItem(KTextEditor::View* view, const KTextEditor::Range& word, const QModelIndex& index) const;
+
     KSharedPtr<CodeCompletionContext> m_completionContext;
     typedef QPair<KDevelop::DeclarationPointer, KSharedPtr<CodeCompletionContext> > DeclarationContextPair;
 
