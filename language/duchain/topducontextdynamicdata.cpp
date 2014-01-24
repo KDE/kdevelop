@@ -570,17 +570,25 @@ void TopDUContextDynamicData::store() {
 //   kDebug() << "stored" << m_topContext->url().str() << m_topContext->ownIndex() << "import-count:" << m_topContext->importedParentContexts().size();
 }
 
-uint TopDUContextDynamicData::allocateDeclarationIndex(Declaration* decl, bool temporary) {
-  if(!m_dataLoaded)
+template<class Item>
+uint TopDUContextDynamicData::allocateItemIndex(Item* item, const bool temporary, QVector<Item*>& items, QVector<Item*>& temporaryItems)
+{
+  if (!m_dataLoaded) {
     loadData();
-  if(!temporary) {
-    m_declarations.append(decl);
-    return m_declarations.size();
-  }else{
-    QMutexLocker lock(&m_temporaryDataMutex);
-    m_temporaryDeclarations.append(decl);
-    return 0x0fffffff - m_temporaryDeclarations.size(); //We always keep the highest bit at zero
   }
+  if (!temporary) {
+    items.append(item);
+    return items.size();
+  } else {
+    QMutexLocker lock(&m_temporaryDataMutex);
+    temporaryItems.append(item);
+    return 0x0fffffff - temporaryItems.size(); //We always keep the highest bit at zero
+  }
+}
+
+uint TopDUContextDynamicData::allocateDeclarationIndex(Declaration* decl, bool temporary)
+{
+  return allocateItemIndex(decl, temporary, m_declarations, m_temporaryDeclarations);
 }
 
 bool TopDUContextDynamicData::isDeclarationForIndexLoaded(uint index) const {
@@ -609,18 +617,9 @@ bool TopDUContextDynamicData::isContextForIndexLoaded(uint index) const {
   }
 }
 
-uint TopDUContextDynamicData::allocateContextIndex(DUContext* decl, bool temporary) {
-  if(!m_dataLoaded)
-    loadData();
-
-  if(!temporary) {
-    m_contexts.append(decl);
-    return m_contexts.size();
-  }else{
-    QMutexLocker lock(&m_temporaryDataMutex);
-    m_temporaryContexts.append(decl);
-    return 0x0fffffff - m_temporaryContexts.size(); //We always keep the highest bit at zero
-  }
+uint TopDUContextDynamicData::allocateContextIndex(DUContext* context, bool temporary)
+{
+  return allocateItemIndex(context, temporary, m_contexts, m_temporaryContexts);
 }
 
 bool TopDUContextDynamicData::isTemporaryContextIndex(uint index) const {
