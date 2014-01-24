@@ -21,7 +21,7 @@
 
 #include <language/duchain/types/abstracttype.h>
 #include <language/duchain/declaration.h>
-#include <language/interfaces/iproblem.h>
+#include <language/duchain/problem.h>
 #include "default_visitor.h"
 #include "cppduchainexport.h"
 #include "overloadresolution.h" /* needed for OverloadResover::Parameter */

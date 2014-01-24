@@ -31,7 +31,7 @@
 #include <language/codegen/coderepresentation.h>
 #include <language/codecompletion/codecompletiontesthelper.h>
 #include <language/duchain/duchainutils.h>
-#include <language/interfaces/iproblem.h>
+#include <language/duchain/problem.h>
 
 #include "codecompletion/missingincludeitem.h"
 #include "codecompletion/context.h"

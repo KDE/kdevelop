@@ -20,7 +20,7 @@
 #define CONTROL_H
 
 #include "symbol.h"
-#include <language/interfaces/iproblem.h>
+#include <language/duchain/problem.h>
 #include <cppparserexport.h>
 
 #include <QtCore/QHash>

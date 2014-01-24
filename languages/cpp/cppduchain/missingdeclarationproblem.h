@@ -19,7 +19,7 @@
 #ifndef CPP_MISSINGDECLARATIONPROBLEM_H
 #define CPP_MISSINGDECLARATIONPROBLEM_H
 
-#include <language/interfaces/iproblem.h>
+#include <language/duchain/problem.h>
 #include <language/duchain/types/abstracttype.h>
 #include "missingdeclarationtype.h"
 #include "cppduchainexport.h"

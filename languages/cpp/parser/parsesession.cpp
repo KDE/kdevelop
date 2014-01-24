@@ -23,7 +23,7 @@
 
 #include "lexer.h"
 #include "memorypool.h"
-#include <language/interfaces/iproblem.h>
+#include <language/duchain/problem.h>
 #include <language/duchain/indexedstring.h>
 #include <language/duchain/declaration.h>
 

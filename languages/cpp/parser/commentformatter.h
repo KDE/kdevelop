@@ -22,7 +22,7 @@
 #include <QString>
 #include <QList>
 #include <cppparserexport.h>
-#include <language/interfaces/iproblem.h>
+#include <language/duchain/problem.h>
 
 class Control;
 template<class Tp>

@@ -47,7 +47,7 @@
 #include <language/codecompletion/codecompletion.h>
 
 #include <interfaces/icore.h>
-#include <language/interfaces/iproblem.h>
+#include <language/duchain/problem.h>
 #include <interfaces/iproject.h>
 #include <interfaces/idocument.h>
 #include <interfaces/idocumentcontroller.h>

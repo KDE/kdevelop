@@ -35,7 +35,7 @@
 
 #include <language/backgroundparser/backgroundparser.h>
 #include <language/backgroundparser/parsejob.h>
-#include <language/interfaces/iproblem.h>
+#include <language/duchain/problem.h>
 
 #include "signatureassistant.h"
 

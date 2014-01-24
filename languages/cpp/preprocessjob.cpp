@@ -36,7 +36,7 @@
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/topducontext.h>
-#include <language/interfaces/iproblem.h>
+#include <language/duchain/problem.h>
 
 #include <threadweaver/Thread.h>
 
