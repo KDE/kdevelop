@@ -3292,12 +3292,12 @@ bool TargetLinkLibrariesAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     for (it = func.arguments.begin() + 1, itEnd = func.arguments.end(); it != itEnd; ++it )
     {
         CMakeFunctionArgument arg = ( *it );
-        if ( arg.value == "LINK_PUBLIC")
+        if ( arg.value == "LINK_PUBLIC" || arg.value == "PUBLIC" )
         {
             current = &m_publicDependencies;
             continue;
         }
-        else if ( arg.value == "LINK_PRIVATE")
+        else if ( arg.value == "LINK_PRIVATE" || arg.value == "PRIVATE" )
         {
             current = &m_privateDependencies;
             continue;
