@@ -21,58 +21,64 @@
 
 #include "tuduchain.h"
 
-//BEGIN setDeclData
-template<CXCursorKind CK>
-void TUDUChain::setDeclData(CXCursor, Declaration*) const
-{
-    // do nothing
-}
+//BEGIN DeclType
 
-template<>
-void TUDUChain::setDeclData<CXCursor_TypeAliasDecl>(CXCursor /*cursor*/, Declaration* decl) const
+template<CXCursorKind CK, bool isDefinition, bool isClassMember>
+struct DeclType<CK, isDefinition, isClassMember,
+    typename std::enable_if<CursorKindTraits::isKDevDeclaration(CK, isClassMember)>::type>
 {
-    decl->setIsTypeAlias(true);
-}
+    typedef Declaration Type;
+};
 
-template<>
-void TUDUChain::setDeclData<CXCursor_TypedefDecl>(CXCursor /*cursor*/, Declaration* decl) const
+template<CXCursorKind CK, bool isDefinition, bool isClassMember>
+struct DeclType<CK, isDefinition, isClassMember,
+    typename std::enable_if<CursorKindTraits::isKDevForwardDeclaration(CK, isDefinition)>::type>
 {
-    decl->setIsTypeAlias(true);
-}
+    typedef ForwardDeclaration Type;
+};
 
-template<>
-void TUDUChain::setDeclData<CXCursor_Namespace>(CXCursor /*cursor*/, Declaration* decl) const
+template<CXCursorKind CK, bool isDefinition, bool isClassMember>
+struct DeclType<CK, isDefinition, isClassMember,
+    typename std::enable_if<CursorKindTraits::isKDevClassDeclaration(CK, isDefinition)>::type>
 {
-    decl->setKind(Declaration::Namespace);
-}
+    typedef ClassDeclaration Type;
+};
 
-template<>
-void TUDUChain::setDeclData<CXCursor_EnumDecl>(CXCursor /*cursor*/, Declaration* decl) const
+template<CXCursorKind CK, bool isDefinition, bool isClassMember>
+struct DeclType<CK, isDefinition, isClassMember,
+    typename std::enable_if<CursorKindTraits::isKDevClassFunctionDeclaration(CK, isDefinition)>::type>
 {
-    decl->setKind(Declaration::Type);
-}
+    typedef ClassFunctionDeclaration Type;
+};
 
-template<>
-void TUDUChain::setDeclData<CXCursor_EnumConstantDecl>(CXCursor /*cursor*/, Declaration* decl) const
+template<CXCursorKind CK, bool isDefinition, bool isClassMember>
+struct DeclType<CK, isDefinition, isClassMember,
+    typename std::enable_if<CursorKindTraits::isKDevFunctionDeclaration(CK, isDefinition)>::type>
 {
-    decl->setKind(Declaration::Type);
-}
+    typedef FunctionDeclaration Type;
+};
 
-template<CXCursorKind CK>
-void TUDUChain::setDeclData(CXCursor cursor, ClassDeclaration* decl) const
+template<CXCursorKind CK, bool isDefinition, bool isClassMember>
+struct DeclType<CK, isDefinition, isClassMember,
+    typename std::enable_if<CursorKindTraits::isKDevFunctionDefinition(CK, isDefinition)>::type>
 {
-    CXCursorKind kind = CK;
-    if (CK == CXCursor_ClassTemplate || CK == CXCursor_ClassTemplatePartialSpecialization) {
-        kind = clang_getTemplateCursorKind(cursor);
-    }
-    if (kind == CXCursor_UnionDecl) {
-        decl->setClassType(ClassDeclarationData::Union);
-    } else if (kind == CXCursor_StructDecl) {
-        decl->setClassType(ClassDeclarationData::Struct);
-    }
-    decl->setKind(Declaration::Type);
-}
-//END setDeclData
+    typedef FunctionDefinition Type;
+};
+
+template<CXCursorKind CK, bool isDefinition, bool isClassMember>
+struct DeclType<CK, isDefinition, isClassMember,
+    typename std::enable_if<CursorKindTraits::isKDevNamespaceAliasDeclaration(CK, isDefinition)>::type>
+{
+    typedef NamespaceAliasDeclaration Type;
+};
+
+template<CXCursorKind CK, bool isDefinition, bool isClassMember>
+struct DeclType<CK, isDefinition, isClassMember,
+    typename std::enable_if<CursorKindTraits::isKDevClassMemberDeclaration(CK, isClassMember)>::type>
+{
+    typedef ClassMemberDeclaration Type;
+};
+//END DeclType
 
 TUDUChain::TUDUChain(CXTranslationUnit tu, CXFile file, const IncludeFileContexts& includes, const bool update)
 : m_file(file)

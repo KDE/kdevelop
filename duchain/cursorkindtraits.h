@@ -51,13 +51,17 @@ constexpr bool isUse(CXCursorKind CK)
     || CK == CXCursor_MemberRefExpr;
 }
 
+constexpr bool isClassTemplate(CXCursorKind CK)
+{
+    return CK == CXCursor_ClassTemplate || CK == CXCursor_ClassTemplatePartialSpecialization;
+}
+
 constexpr bool isClass(CXCursorKind CK)
 {
-    return CK == CXCursor_StructDecl
+    return isClassTemplate(CK)
+    || CK == CXCursor_StructDecl
     || CK == CXCursor_ClassDecl
-    || CK == CXCursor_UnionDecl
-    || CK == CXCursor_ClassTemplate
-    || CK == CXCursor_ClassTemplatePartialSpecialization;
+    || CK == CXCursor_UnionDecl;
 }
 
 constexpr bool isFunction(CXCursorKind CK)
@@ -181,59 +185,6 @@ constexpr bool isKDevClassMemberDeclaration(CXCursorKind CK, bool isClassMember)
 {
     return isClassMember && isKDevDeclaration(CK, false);
 }
-
-//BEGIN DeclType
-template<CXCursorKind CK, bool isDefinition, bool isClassMember, class Enable = void>
-struct DeclType;
-
-template<CXCursorKind CK, bool isDefinition, bool isClassMember>
-struct DeclType<CK, isDefinition, isClassMember, typename std::enable_if<isKDevDeclaration(CK, isClassMember)>::type>
-{
-    typedef Declaration Type;
-};
-
-template<CXCursorKind CK, bool isDefinition, bool isClassMember>
-struct DeclType<CK, isDefinition, isClassMember, typename std::enable_if<isKDevForwardDeclaration(CK, isDefinition)>::type>
-{
-    typedef ForwardDeclaration Type;
-};
-
-template<CXCursorKind CK, bool isDefinition, bool isClassMember>
-struct DeclType<CK, isDefinition, isClassMember, typename std::enable_if<isKDevClassDeclaration(CK, isDefinition)>::type>
-{
-    typedef ClassDeclaration Type;
-};
-
-template<CXCursorKind CK, bool isDefinition, bool isClassMember>
-struct DeclType<CK, isDefinition, isClassMember, typename std::enable_if<isKDevClassFunctionDeclaration(CK, isDefinition)>::type>
-{
-    typedef ClassFunctionDeclaration Type;
-};
-
-template<CXCursorKind CK, bool isDefinition, bool isClassMember>
-struct DeclType<CK, isDefinition, isClassMember, typename std::enable_if<isKDevFunctionDeclaration(CK, isDefinition)>::type>
-{
-    typedef FunctionDeclaration Type;
-};
-
-template<CXCursorKind CK, bool isDefinition, bool isClassMember>
-struct DeclType<CK, isDefinition, isClassMember, typename std::enable_if<isKDevFunctionDefinition(CK, isDefinition)>::type>
-{
-    typedef FunctionDefinition Type;
-};
-
-template<CXCursorKind CK, bool isDefinition, bool isClassMember>
-struct DeclType<CK, isDefinition, isClassMember, typename std::enable_if<isKDevNamespaceAliasDeclaration(CK, isDefinition)>::type>
-{
-    typedef NamespaceAliasDeclaration Type;
-};
-
-template<CXCursorKind CK, bool isDefinition, bool isClassMember>
-struct DeclType<CK, isDefinition, isClassMember, typename std::enable_if<isKDevClassMemberDeclaration(CK, isClassMember)>::type>
-{
-    typedef ClassMemberDeclaration Type;
-};
-//END DeclType
 
 }
 

@@ -32,6 +32,9 @@
 
 #include <util/pushvalue.h>
 
+template<CXCursorKind CK, bool isDefinition, bool isClassMember, class Enable = void>
+struct DeclType;
+
 class KDEVCLANGDUCHAIN_EXPORT TUDUChain
 {
 public:
@@ -44,8 +47,40 @@ private:
     KDevelop::Identifier makeId(CXCursor cursor) const;
     QByteArray makeComment(CXComment comment) const;
 
-    template<CXCursorKind> void setDeclData(CXCursor, KDevelop::Declaration*) const;
-    template<CXCursorKind> void setDeclData(CXCursor, KDevelop::ClassDeclaration*) const;
+//BEGIN setDeclData
+    template<CXCursorKind CK>
+    void setDeclData(CXCursor, Declaration *decl) const
+    {
+        if (CK == CXCursor_TypeAliasDecl || CXCursor_TypedefDecl)
+            decl->setIsTypeAlias(true);
+        if (CK == CXCursor_Namespace)
+            decl->setKind(Declaration::Namespace);
+        if (CK == CXCursor_EnumDecl || CK == CXCursor_EnumConstantDecl || CursorKindTraits::isClass(CK))
+            decl->setKind(Declaration::Type);
+    }
+
+    template<CXCursorKind CK, EnableIf<CursorKindTraits::isClassTemplate(CK)> = dummy>
+    void setDeclData(CXCursor cursor, ClassDeclaration* decl) const
+    {
+        CXCursorKind kind = clang_getTemplateCursorKind(cursor);
+        switch (kind) {
+        case CXCursor_UnionDecl: setDeclData<CXCursor_UnionDecl>(cursor, decl); break;
+        case CXCursor_StructDecl: setDeclData<CXCursor_StructDecl>(cursor, decl); break;
+        case CXCursor_ClassDecl: setDeclData<CXCursor_ClassDecl>(cursor, decl); break;
+        default: Q_ASSERT(false); break;
+        }
+    }
+
+    template<CXCursorKind CK, EnableIf<!CursorKindTraits::isClassTemplate(CK)> = dummy>
+    void setDeclData(CXCursor cursor, ClassDeclaration* decl) const
+    {
+        setDeclData<CK>(cursor, static_cast<Declaration*>(decl));
+        if (CK == CXCursor_UnionDecl)
+            decl->setClassType(ClassDeclarationData::Union);
+        if (CK == CXCursor_StructDecl)
+            decl->setClassType(ClassDeclarationData::Struct);
+    }
+//END setDeclData
 
 //BEGIN dispatchCursor
     template<CXCursorKind CK, EnableIf<CursorKindTraits::isUse(CK)> = dummy>
@@ -88,7 +123,7 @@ private:
         constexpr bool isDefinition = IsDefinition == Decision::True;
         //Currently, but not technically, hasContext and IsDefinition are synonyms
         constexpr bool hasContext = IsDefinition == Decision::True;
-        return buildDeclaration<CK, typename CursorKindTraits::DeclType<CK, isDefinition, isClassMember>::Type, hasContext>(cursor);
+        return buildDeclaration<CK, typename DeclType<CK, isDefinition, isClassMember>::Type, hasContext>(cursor);
     }
 //BEGIN dispatchCursor
 
@@ -150,10 +185,9 @@ private:
                 ++it;
             }
         }
-        // when we create a new declaration, we don't need a lock and can just set stuff directly
         auto decl = new DeclType(range, nullptr);
-        decl->setComment(comment);
         decl->setIdentifier(id);
+        decl->setComment(comment);
         setDeclData<CK>(cursor, decl);
         return decl;
     }
