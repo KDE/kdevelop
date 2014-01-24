@@ -28,7 +28,10 @@
 
 #include "interfacesexport.h"
 namespace KParts { class Part; class MainWindow; }
-namespace KTextEditor { class Document; }
+namespace KTextEditor {
+    class Document;
+    class View;
+}
 namespace Sublime{ class View; }
 
 namespace KDevelop {
@@ -180,6 +183,11 @@ public:
      * This needs to call notifyActivated()
      */
     virtual void activate(Sublime::View *activeView, KParts::MainWindow *mainWindow) = 0;
+
+    /**
+     * @returns the active text view in case it's a text document and it has one.
+     */
+    virtual KTextEditor::View* activeTextView() const;
 
 protected:
     ICore* core();

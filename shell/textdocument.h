@@ -69,6 +69,8 @@ public:
 
     virtual QIcon defaultIcon() const;
 
+    virtual KTextEditor::View* activeTextView() const override;
+
 public Q_SLOTS:
     virtual void reload();
 

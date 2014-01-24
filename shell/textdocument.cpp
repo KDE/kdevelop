@@ -914,4 +914,10 @@ void KDevelop::TextEditorWidget::showEvent(QShowEvent* event)
     QWidget::showEvent(event);
 }
 
+KTextEditor::View* KDevelop::TextDocument::activeTextView() const
+{
+    QList<Sublime::View*> textViews = views();
+    return textViews.isEmpty() ? 0 : qobject_cast<TextView*>(textViews.first())->textView();
+}
+
 #include "moc_textdocument.cpp"
