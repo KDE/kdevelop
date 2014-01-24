@@ -92,6 +92,7 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/navigation/useswidget.cpp
     duchain/navigation/usescollector.cpp
 
+    interfaces/abbreviations.cpp
     interfaces/iastcontainer.cpp
     interfaces/ilanguagesupport.cpp
     interfaces/quickopendataprovider.cpp
@@ -169,6 +170,7 @@ install(FILES
     interfaces/iastcontainer.h
     interfaces/icreateclasshelper.h
     interfaces/icontextbrowser.h
+    interfaces/abbreviations.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/interfaces COMPONENT Devel
 )
 
