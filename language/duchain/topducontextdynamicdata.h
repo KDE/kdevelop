@@ -44,7 +44,7 @@ class TopDUContextDynamicData {
   ~TopDUContextDynamicData();
 
   void clearContextsAndDeclarations();
-  
+
   /**
    * Allocates an index for the given declaration in this top-context.
    * The returned index is never zero.
@@ -110,24 +110,7 @@ class TopDUContextDynamicData {
   };
 
   private:
-    template<typename T>
-    bool itemsHaveChanged(const QVector<T*>& items) const;
     bool hasChanged() const;
-
-    template<class Item>
-    void storeData(QVector<ItemDataInfo>& offsets, const QVector<Item*>& items,
-                   uint& currentDataOffset, const QList<ArrayWithPosition>& oldData);
-
-    template<class Item>
-    Item* getItemForIndex(uint index, QVector<Item*>& items, const QVector<ItemDataInfo>& offsets,
-                          const QVector<Item*>& temporaryItems) const;
-
-    template<class Item>
-    void clearItemIndex(Item* item, const uint index, QVector<Item*>& items, QVector<ItemDataInfo>& offsets,
-                        QVector<Item*>& temporaryItems);
-
-    template<class Item>
-    uint allocateItemIndex(Item* item, const bool temporary, QVector<Item*>& items, QVector<Item*>& temporaryItems);
 
     void unmap();
     //Converts away from an mmap opened file to a data array
@@ -136,31 +119,45 @@ class TopDUContextDynamicData {
 
     void loadData() const;
 
-    
-    static void verifyDataInfo(const ItemDataInfo& info, const QList<ArrayWithPosition>& data);
-
-    static const char* pointerInData(const QList<ArrayWithPosition>& data, uint totalOffset);
-    
     const char* pointerInData(uint offset) const;
 
     ItemDataInfo writeDataInfo(const ItemDataInfo& info, const DUChainBaseData* data, uint& totalDataOffset);
 
     TopDUContext* m_topContext;
-    //May contain zero contexts if they were deleted
-    mutable QVector<DUContext*> m_contexts;
-    //May contain zero declarations if they were deleted
-    mutable QVector<Declaration*> m_declarations;
-    
-    mutable QVector<ItemDataInfo> m_contextDataOffsets;
-    
-    mutable QVector<ItemDataInfo> m_declarationDataOffsets;
-    
-    //Protects m_temporaryDeclarations, must be locked before accessing that vector
-    static QMutex m_temporaryDataMutex;
+
+    template<class Item>
+    struct DUChainItemStorage
+    {
+      DUChainItemStorage(TopDUContextDynamicData* data);
+      ~DUChainItemStorage();
+
+      void clearItems();
+      bool itemsHaveChanged() const;
+
+      void storeData(uint& currentDataOffset, const QList<ArrayWithPosition>& oldData);
+      Item* getItemForIndex(uint index) const;
+
+      void clearItemIndex(Item* item, const uint index);
+
+      uint allocateItemIndex(Item* item, const bool temporary);
+
+      void deleteOnDisk();
+      bool isItemForIndexLoaded(uint index) const;
+
+      void loadData(QFile* file) const;
+
+      //May contain zero items if they were deleted
+      mutable QVector<Item*> items;
+      mutable QVector<ItemDataInfo> offsets;
+      QVector<Item*> temporaryItems;
+      TopDUContextDynamicData* const data;
+    };
+
+    DUChainItemStorage<DUContext> m_contexts;
+    DUChainItemStorage<Declaration> m_declarations;
+
     //For temporary declarations that will not be stored to disk, like template instantiations
-    QVector<Declaration*> m_temporaryDeclarations;
-    QVector<DUContext*> m_temporaryContexts;
-    
+
     mutable QList<ArrayWithPosition> m_data;
     mutable QList<ArrayWithPosition> m_topContextData;
     bool m_onDisk;
