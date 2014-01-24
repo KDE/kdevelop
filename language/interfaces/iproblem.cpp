@@ -147,16 +147,16 @@ QString Problem::sourceString() const
 
 QString Problem::toString() const
 {
-    return QString("%9: %1:%2 in %3:[(%4,%5),(%6,%7)] %8")
+    return QString("%1: %2 in %3:[(%4,%5),(%6,%7)]: %8 (found by %9)")
+        .arg(severityString())
         .arg(description())
-        .arg(sourceString())
         .arg(url().str())
         .arg(range().start.line)
         .arg(range().start.column)
         .arg(range().end.line)
         .arg(range().end.column)
-        .arg(explanation())
-        .arg(severityString());
+        .arg((explanation().isEmpty() ? QString("<no explanation>") : explanation()))
+        .arg(sourceString());
 }
 
 QDebug operator<<(QDebug s, const Problem& problem)
