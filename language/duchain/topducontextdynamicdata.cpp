@@ -1,5 +1,7 @@
 /* This  is part of KDevelop
-    Copyright 2008 David Nolden <david.nolden.kdevelop@art-master.de>
+
+   Copyright 2014 Milian Wolff <mail@milianw.de>
+   Copyright 2008 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -41,6 +43,8 @@ using namespace KDevelop;
 
 QMutex KDevelop::TopDUContextDynamicData::m_temporaryDataMutex(QMutex::Recursive);
 
+namespace {
+
 void saveDUChainItem(QList<ArrayWithPosition>& data, DUChainBase& item, uint& totalDataOffset) {
 
   if(!item.d_func()->classId) {
@@ -77,6 +81,8 @@ void saveDUChainItem(QList<ArrayWithPosition>& data, DUChainBase& item, uint& to
   Q_ASSERT(item.d_func() == &target);
 
   Q_ASSERT(!item.d_func()->isDynamic());
+}
+
 }
 
 const char* KDevelop::TopDUContextDynamicData::pointerInData(const QList<ArrayWithPosition>& data, uint totalOffset) {
@@ -394,40 +400,87 @@ QString KDevelop::TopDUContextDynamicData::filePath() const {
   return baseDir + '/' + QString("%1").arg(m_topContext->ownIndex());
 }
 
+static uint indexForParentContext(DUContext* context)
+{
+  return LocalIndexedDUContext(context->parentContext()).localIndex();
+}
+
+static uint indexForParentContext(Declaration* declaration)
+{
+  return LocalIndexedDUContext(declaration->context()).localIndex();
+}
+
+void validateItem(const DUChainBase* const item, const uchar* const mappedData, const size_t mappedDataSize)
+{
+  Q_ASSERT(!item->d_func()->isDynamic());
+  if (mappedData) {
+    Q_ASSERT(((size_t)item->d_func()) < ((size_t)mappedData)
+          || ((size_t)item->d_func()) > ((size_t)mappedData) + mappedDataSize);
+  }
+}
+
+template<class Item>
+void TopDUContextDynamicData::storeData(QVector<ItemDataInfo>& offsets, const QVector<Item*>& items,
+                                        uint& currentDataOffset, const QList<ArrayWithPosition>& oldData)
+{
+  auto const oldOffsets = offsets;
+  offsets.clear();
+  for (int a = 0; a < items.size(); ++a) {
+    auto item = items[a];
+    if (!item) {
+      if (oldOffsets.size() > a && oldOffsets[a].dataOffset) {
+        //Directly copy the old data range into the new data
+        const DUChainBaseData* data = nullptr;
+        if (m_mappedData) {
+          data = reinterpret_cast<const DUChainBaseData*>(m_mappedData + oldOffsets[a].dataOffset);
+        } else {
+          data = reinterpret_cast<const DUChainBaseData*>(pointerInData(oldData, oldOffsets[a].dataOffset));
+        }
+        offsets << writeDataInfo(oldOffsets[a], data, currentDataOffset);
+      } else {
+        offsets << ItemDataInfo();
+      }
+    } else {
+      offsets << ItemDataInfo(currentDataOffset, indexForParentContext(item));
+      saveDUChainItem(m_data, *item, currentDataOffset);
+      verifyDataInfo(offsets.back(), m_data);
+
+      validateItem(item, m_mappedData, m_mappedDataSize);
+    }
+  }
+
+#ifndef QT_NO_DEBUG
+  for (auto item : items) {
+    if (item) {
+      validateItem(item, m_mappedData, m_mappedDataSize);
+    }
+  }
+#endif
+}
+
+template<typename T>
+bool TopDUContextDynamicData::itemsHaveChanged(const QVector<T*>& items) const
+{
+  for (auto item : items) {
+    if (item && item->d_ptr->m_dynamic) {
+      return true;
+    }
+  }
+  return false;
+}
+
+bool TopDUContextDynamicData::hasChanged() const
+{
+  return !m_onDisk || m_topContext->d_ptr->m_dynamic || itemsHaveChanged(m_contexts) || itemsHaveChanged(m_declarations);
+}
+
 void TopDUContextDynamicData::store() {
 //   kDebug() << "storing" << m_topContext->url().str() << m_topContext->ownIndex() << "import-count:" << m_topContext->importedParentContexts().size();
 
-  bool contentDataChanged = false;
-
-  if(m_onDisk) {
-    //Check if something has changed. If nothing has changed, don't store to disk.
-    bool someThingChanged = false;
-    if(m_topContext->d_ptr->m_dynamic)
-      someThingChanged = true;
-
-    for(int a = 0; a < m_contexts.size(); ++a) {
-      if(m_contexts[a] && m_contexts[a]->d_ptr->m_dynamic) {
-        someThingChanged = true;
-        contentDataChanged = true;
-      }
-
-      if(contentDataChanged)
-        break;
-    }
-
-    for(int a = 0; a < m_declarations.size(); ++a) {
-      if(m_declarations[a] && m_declarations[a]->d_ptr->m_dynamic) {
-        someThingChanged = true;
-        contentDataChanged = true;
-      }
-
-      if(contentDataChanged)
-        break;
-    }
-    if(!someThingChanged)
-      return;
-  }else{
-    contentDataChanged = true;
+  //Check if something has changed. If nothing has changed, don't store to disk.
+  bool contentDataChanged = hasChanged();
+  if (!contentDataChanged) {
+    return;
   }
 
     ///@todo Save the meta-data into a repository, and only the actual content data into a file.
@@ -450,12 +503,12 @@ void TopDUContextDynamicData::store() {
   m_topContextData.append( qMakePair(QByteArray(DUChainItemSystem::self().dynamicSize(*m_topContext->d_func()), topContextDataSize), (uint)0) );
   uint actualTopContextDataSize = 0;
 
-  if(contentDataChanged) {
+  if (contentDataChanged) {
     //We don't need these structures any more, since we have loaded all the declarations/contexts, and m_data
     //will be reset which these structures pointed into
     //Load all lazy declarations/contexts
 
-    QList<ArrayWithPosition> oldData = m_data; //Keep the old data alive until everything is stored into a new data structure
+    const auto oldData = m_data; //Keep the old data alive until everything is stored into a new data structure
 
     m_data.clear();
 
@@ -470,86 +523,13 @@ void TopDUContextDynamicData::store() {
     uint currentDataOffset = 1;
     m_data.append( qMakePair(QByteArray(newDataSize, 0), currentDataOffset) );
 
-    QVector<ItemDataInfo> oldContextDataOffsets = m_contextDataOffsets;
-    QVector<ItemDataInfo> oldDeclarationDataOffsets = m_declarationDataOffsets;
-
-    m_contextDataOffsets.clear();
-    m_declarationDataOffsets.clear();
-
     m_itemRetrievalForbidden = true;
-    
-    for(int a = 0; a < m_contexts.size(); ++a) {
-      if(!m_contexts[a]) {
-        if(oldContextDataOffsets.size() > a && oldContextDataOffsets[a].dataOffset) {
-          //Directly copy the old data range into the new data
-          if(m_mappedData) {
-            m_contextDataOffsets << writeDataInfo(oldContextDataOffsets[a],
-              reinterpret_cast<const DUChainBaseData*>(m_mappedData + oldContextDataOffsets[a].dataOffset), currentDataOffset);
-          } else {
-            m_contextDataOffsets << writeDataInfo(oldContextDataOffsets[a],
-              reinterpret_cast<const DUChainBaseData*>(pointerInData(oldData, oldContextDataOffsets[a].dataOffset)),
-              currentDataOffset);
-          }
-        }else{
-          m_contextDataOffsets << ItemDataInfo();
-        }
-      } else {
-        m_contextDataOffsets << ItemDataInfo(currentDataOffset, LocalIndexedDUContext(m_contexts[a]->parentContext()).localIndex());
-        saveDUChainItem(m_data, *m_contexts[a], currentDataOffset);
-        verifyDataInfo(m_contextDataOffsets.back(), m_data);
-        Q_ASSERT(!m_contexts[a]->d_func()->isDynamic());
-        if(m_mappedData) {
-          Q_ASSERT(((size_t)m_contexts[a]->d_func()) < ((size_t)m_mappedData) || ((size_t)m_contexts[a]->d_func()) > ((size_t)m_mappedData) + m_mappedDataSize);
-        }
-      }
-    }
 
-    for(int a = 0; a < m_declarations.size(); ++a) {
-
-      if(!m_declarations[a]) {
-        if(oldDeclarationDataOffsets.size() > a && oldDeclarationDataOffsets[a].dataOffset) {
-          //Directly copy the old data range into the new data
-          if(m_mappedData) {
-            m_declarationDataOffsets << writeDataInfo(oldDeclarationDataOffsets[a],
-              reinterpret_cast<const DUChainBaseData*>(m_mappedData + oldDeclarationDataOffsets[a].dataOffset),
-              currentDataOffset);
-          } else {
-            m_declarationDataOffsets << writeDataInfo(oldDeclarationDataOffsets[a],
-              reinterpret_cast<const DUChainBaseData*>(pointerInData(oldData, oldDeclarationDataOffsets[a].dataOffset)),
-              currentDataOffset);
-          }
-        }else{
-          m_declarationDataOffsets << ItemDataInfo();
-        }
-      } else {
-        m_declarationDataOffsets << ItemDataInfo(currentDataOffset, LocalIndexedDUContext(m_declarations[a]->context()).localIndex());
-        saveDUChainItem(m_data, *m_declarations[a], currentDataOffset);
-        verifyDataInfo(m_declarationDataOffsets.back(), m_data);
-        Q_ASSERT(!m_declarations[a]->d_func()->isDynamic());
-        if(m_mappedData) {
-          Q_ASSERT(((size_t)m_declarations[a]->d_func()) < ((size_t)m_mappedData) || ((size_t)m_declarations[a]->d_func()) > ((size_t)m_mappedData) + m_mappedDataSize);
-        }
-      }
-    }
+    storeData(m_contextDataOffsets, m_contexts, currentDataOffset, oldData);
+    storeData(m_declarationDataOffsets, m_declarations, currentDataOffset, oldData);
 
     m_itemRetrievalForbidden = false;
-
-    for(int a = 0; a < m_contexts.size(); ++a)
-      if(m_contexts[a]) {
-        Q_ASSERT(!m_contexts[a]->d_func()->isDynamic());
-        if(m_mappedData) {
-          Q_ASSERT(((size_t)m_contexts[a]->d_func()) < ((size_t)m_mappedData) || ((size_t)m_contexts[a]->d_func()) > ((size_t)m_mappedData) + m_mappedDataSize);
-        }
-      }
-
-    for(int a = 0; a < m_declarations.size(); ++a)
-      if(m_declarations[a]) {
-        Q_ASSERT(!m_declarations[a]->d_func()->isDynamic());
-        if(m_mappedData) {
-          Q_ASSERT(((size_t)m_declarations[a]->d_func()) < ((size_t)m_mappedData) || ((size_t)m_declarations[a]->d_func()) > ((size_t)m_mappedData) + m_mappedDataSize);
-        }
-      }
-    }
+  }
 
     saveDUChainItem(m_topContextData, *m_topContext, actualTopContextDataSize);
     Q_ASSERT(actualTopContextDataSize == topContextDataSize);

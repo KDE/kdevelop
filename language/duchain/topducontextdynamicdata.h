@@ -110,6 +110,14 @@ class TopDUContextDynamicData {
   };
 
   private:
+    template<typename T>
+    bool itemsHaveChanged(const QVector<T*>& items) const;
+    bool hasChanged() const;
+
+    template<class Item>
+    void storeData(QVector<ItemDataInfo>& offsets, const QVector<Item*>& items,
+                   uint& currentDataOffset, const QList<ArrayWithPosition>& oldData);
+
     void unmap();
     //Converts away from an mmap opened file to a data array
     
