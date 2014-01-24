@@ -88,8 +88,6 @@ install(TARGETS kdevqmakemanager DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 ########### cdash / unit tests ###############
 
-set(KDE4_BUILD_TESTS "ON" CACHE "BOOL" "Enable building of tests" FORCE )
-
 include(CTest)
 
 # CTestCustom.cmake has to be in the CTEST_BINARY_DIR.
