@@ -21,7 +21,6 @@
 #include <qmljs/parser/qmljsast_p.h>
 
 #include <language/editor/simplerange.h>
-#include <language/interfaces/iproblem.h>
 #include <language/duchain/stringhelpers.h>
 
 using namespace KDevelop;

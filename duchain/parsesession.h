@@ -22,7 +22,7 @@
 #include <qmljs/qmljsdocument.h>
 
 #include <language/duchain/indexedstring.h>
-#include <language/interfaces/iproblem.h>
+#include <language/duchain/problem.h>
 
 #include "duchainexport.h"
 
