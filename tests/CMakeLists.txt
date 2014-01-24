@@ -25,6 +25,17 @@ target_link_libraries(duchaintest
 )
 
 ########### next target ###############
+kde4_add_unit_test(problemstest
+    test_problems.cpp
+)
+
+target_link_libraries(problemstest
+    ${KDEVPLATFORM_TESTS_LIBRARIES}
+    ${QT_QTTEST_LIBRARY}
+    kdevclangduchain
+)
+
+########### next target ###############
 
 find_package(QJSON)
 if(QJSON_FOUND AND KDEVPLATFORM_JSONTESTS_LIBRARIES)

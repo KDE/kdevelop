@@ -3,6 +3,7 @@
 
     Copyright 2013 Olivier de Gaalon <olivier.jg@gmail.com>
     Copyright 2013 Milian Wolff <mail@milianw.de>
+    Copyright 2013 Kevin Funk <kevin@kfunk.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -42,6 +43,44 @@ CXUnsavedFile fileForContents(const QByteArray& path, const QByteArray& contents
     }
     file.Filename = path.constData();
     return file;
+}
+
+static ProblemPointer problemForDiagnostic(CXDiagnostic diagnostic)
+{
+    ProblemPointer problem(new Problem);
+    switch (clang_getDiagnosticSeverity(diagnostic)) {
+        case CXDiagnostic_Fatal:
+        case CXDiagnostic_Error:
+            problem->setSeverity(ProblemData::Error);
+            break;
+        case CXDiagnostic_Warning:
+            problem->setSeverity(ProblemData::Warning);
+            break;
+        default:
+            problem->setSeverity(ProblemData::Hint);
+            break;
+    }
+
+    ClangLocation location(clang_getDiagnosticLocation(diagnostic));
+    CXFile diagnosticFile;
+    clang_getFileLocation(location, &diagnosticFile, nullptr, nullptr, nullptr);
+
+    ClangString description(clang_getDiagnosticSpelling(diagnostic));
+    problem->setDescription(QString::fromUtf8(description));
+    DocumentRange docRange(IndexedString(ClangString(clang_getFileName(diagnosticFile))), SimpleRange(location, location));
+    const uint numRanges = clang_getDiagnosticNumRanges(diagnostic);
+
+    for (uint i = 0; i < numRanges; ++i) {
+        auto range = ClangRange(clang_getDiagnosticRange(diagnostic, i)).toSimpleRange();
+        if (range.start.line == docRange.start.line) {
+            docRange.start.column = qMin(range.start.column, docRange.start.column);
+            docRange.end.column = qMin(range.end.column, docRange.end.column);
+        }
+    }
+
+    problem->setFinalLocation(docRange);
+    problem->setSource(ProblemData::SemanticAnalysis);
+    return problem;
 }
 }
 
@@ -114,44 +153,29 @@ IndexedString ParseSession::url() const
 QList<ProblemPointer> ParseSession::problemsForFile(CXFile file) const
 {
     QList<ProblemPointer> problems;
-    const uint diagnostics = clang_getNumDiagnostics(m_unit);
-    problems.reserve(diagnostics);
-    for (uint i = 0; i < diagnostics; ++i) {
+    const uint numDiagnostics = clang_getNumDiagnostics(m_unit);
+    problems.reserve(numDiagnostics);
+    for (uint i = 0; i < numDiagnostics; ++i) {
         auto diagnostic = clang_getDiagnostic(m_unit, i);
 
-        ClangLocation location = clang_getDiagnosticLocation(diagnostic);
+        CXSourceLocation location = clang_getDiagnosticLocation(diagnostic);
         CXFile diagnosticFile;
         clang_getFileLocation(location, &diagnosticFile, nullptr, nullptr, nullptr);
         if (diagnosticFile != file) {
             continue;
         }
 
-        ProblemPointer problem(new Problem);
-        switch (clang_getDiagnosticSeverity(diagnostic)) {
-            case CXDiagnostic_Fatal:
-            case CXDiagnostic_Error:
-                problem->setSeverity(ProblemData::Error);
-                break;
-            case CXDiagnostic_Warning:
-                problem->setSeverity(ProblemData::Warning);
-                break;
-            default:
-                problem->setSeverity(ProblemData::Hint);
-                break;
+        ProblemPointer problem = problemForDiagnostic(diagnostic);
+
+        QList<ProblemPointer> diagnostics;
+        auto childDiagnostics = clang_getChildDiagnostics(diagnostic);
+        auto numChildDiagnostics = clang_getNumDiagnosticsInSet(childDiagnostics);
+        for (uint j = 0; j < numChildDiagnostics; ++j) {
+            auto childDiagnostic = clang_getDiagnosticInSet(childDiagnostics, j);
+            diagnostics << problemForDiagnostic(childDiagnostic);
         }
-        ClangString description(clang_getDiagnosticSpelling(diagnostic));
-        problem->setDescription(QString::fromUtf8(description));
-        DocumentRange docRange(m_url, SimpleRange(location, location));
-        const uint numRanges = clang_getDiagnosticNumRanges(diagnostic);
-        for (uint j = 0; j < numRanges; ++j) {
-            auto range = ClangRange(clang_getDiagnosticRange(diagnostic, j)).toSimpleRange();
-            if (range.start.line == docRange.start.line) {
-                docRange.start.column = qMin(range.start.column, docRange.start.column);
-                docRange.end.column = qMin(range.end.column, docRange.end.column);
-            }
-        }
-        problem->setFinalLocation(docRange);
-        problem->setSource(ProblemData::SemanticAnalysis);
+        problem->setDiagnostics(diagnostics);
+
         problems << problem;
         clang_disposeDiagnostic(diagnostic);
     }
