@@ -27,8 +27,6 @@
 #include "templatehelpers.h"
 #include "cursorkindtraits.h"
 #include "clangtypes.h"
-#include "typebuilder.h"
-#include <unordered_map>
 
 #include <util/pushvalue.h>
 #include <language/duchain/types/pointertype.h>
@@ -38,6 +36,8 @@
 #include <language/duchain/types/structuretype.h>
 #include <language/duchain/types/enumerationtype.h>
 #include <language/duchain/types/typealiastype.h>
+
+#include <unordered_map>
 
 template<CXCursorKind CK, bool isDefinition, bool isClassMember, class Enable = void>
 struct DeclType;
