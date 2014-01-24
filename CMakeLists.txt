@@ -11,8 +11,6 @@ cmake_minimum_required(VERSION 2.8.9)
 
 project(KDevelop)
 
-set(KDE4_BUILD_TESTS "ON" CACHE "BOOL" "Enable building of tests" FORCE )
-
 set(CMAKE_MODULE_PATH ${KDevelop_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH})
 
 set(KDE_MIN_VERSION "4.7.0")
