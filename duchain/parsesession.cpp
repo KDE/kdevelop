@@ -74,7 +74,7 @@ static ProblemPointer problemForDiagnostic(CXDiagnostic diagnostic)
         auto range = ClangRange(clang_getDiagnosticRange(diagnostic, i)).toSimpleRange();
         if (range.start.line == docRange.start.line) {
             docRange.start.column = qMin(range.start.column, docRange.start.column);
-            docRange.end.column = qMin(range.end.column, docRange.end.column);
+            docRange.end.column = qMax(range.end.column, docRange.end.column);
         }
     }
 

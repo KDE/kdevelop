@@ -33,6 +33,7 @@ private slots:
 
     void testNoProblems();
     void testBasicProblems();
+    void testBasicRangeSupport();
     void testChildDiagnostics();
 
 private:

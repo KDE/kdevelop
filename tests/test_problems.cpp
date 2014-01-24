@@ -67,21 +67,55 @@ void TestProblems::testNoProblems()
 
 void TestProblems::testBasicProblems()
 {
-    // missing ';' after class declaration
+    // expected:
+    // <stdin>:1:13: error: expected ';' after class
+    // class Foo {}
+    //             ^
+    //             ;
     const QByteArray code = "class Foo {}";
     auto problems = parse(code);
     QCOMPARE(problems.size(), 1);
     QCOMPARE(problems[0]->diagnostics().size(), 0);
+    auto range = problems[0]->rangeInCurrentRevision();
+    QCOMPARE(range.start, SimpleCursor(0, 12));
+    QCOMPARE(range.end, SimpleCursor(0, 12));
+}
+
+void TestProblems::testBasicRangeSupport()
+{
+    // expected:
+    // <stdin>:1:17: warning: expression result unused [-Wunused-value]
+    // int main() { (1 + 1); }
+    //               ~ ^ ~
+    const QByteArray code = "int main() { (1 + 1); }";
+    auto problems = parse(code);
+    QCOMPARE(problems.size(), 1);
+    QCOMPARE(problems[0]->diagnostics().size(), 0);
+    auto range = problems[0]->rangeInCurrentRevision();
+    QCOMPARE(range.start, SimpleCursor(0, 14));
+    QCOMPARE(range.end, SimpleCursor(0, 19));
 }
 
 void TestProblems::testChildDiagnostics()
 {
-    // ambiguous overload for 'foo(0)'
+    // expected:
+    // test.cpp:3:14: error: call to 'foo' is ambiguous
+    // int main() { foo(0); }
+    //              ^~~
+    // test.cpp:1:6: note: candidate function
+    // void foo(unsigned int);
+    //      ^
+    // test.cpp:2:6: note: candidate function
+    // void foo(const char*);
+    //      ^
     const QByteArray code = "void foo(unsigned int);\n"
                             "void foo(const char*);\n"
                             "int main() { foo(0); }";
     auto problems = parse(code);
     QCOMPARE(problems.size(), 1);
+    auto range = problems[0]->rangeInCurrentRevision();
+    QCOMPARE(range.start, SimpleCursor(2, 13));
+    QCOMPARE(range.end, SimpleCursor(2, 16));
     QCOMPARE(problems[0]->diagnostics().size(), 2);
     const ProblemPointer d1 = problems[0]->diagnostics()[0];
     QCOMPARE(d1->url().str(), QString("/tmp/stdin.cpp"));
