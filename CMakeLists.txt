@@ -15,8 +15,6 @@ set(KDEVPLATFORM_LIB_SOVERSION 8)
 cmake_minimum_required(VERSION 2.8.9)
 project(KDevPlatform)
 
-set(KDE4_BUILD_TESTS "ON" CACHE "BOOL" "Enable building of tests" FORCE )
-
 set(CMAKE_MODULE_PATH ${KDevPlatform_SOURCE_DIR}/cmake/modules)
 
 set(KDE_MIN_VERSION "4.7.0")
