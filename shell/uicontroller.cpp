@@ -460,7 +460,7 @@ Sublime::Controller* UiController::controller()
 
 KParts::MainWindow *UiController::activeMainWindow()
 {
-    return (KParts::MainWindow*)(activeSublimeWindow());
+    return activeSublimeWindow();
 }
 
 void UiController::saveArea(Sublime::Area * area, KConfigGroup & group)
