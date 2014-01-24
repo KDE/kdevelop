@@ -19,6 +19,9 @@
 #include "problemnavigationcontext.h"
 
 #include <klocalizedstring.h>
+#include <language/duchain/declaration.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/duchainutils.h>
 #include <language/interfaces/iproblem.h>
 #include <qtextdocument.h>
 #include <qboxlayout.h>
@@ -83,15 +86,36 @@ QString ProblemNavigationContext::html(bool shorten)
 {
   clear();
   m_shorten = shorten;
-  modifyHtml() += "<html><body><p><small><small>";
+  modifyHtml() += "<html><body><p>";
 
   modifyHtml() += i18n("Problem in <b>%1</b>:<br/>", m_problem->sourceString());
   modifyHtml() += Qt::escape(m_problem->description());
   modifyHtml() += "<br/>";
   modifyHtml() += "<i style=\"white-space:pre-wrap\">" + Qt::escape(m_problem->explanation()) + "</i>";
 
-  modifyHtml() += "</small></small></p></body></html>";
+  const QList<ProblemPointer> diagnostics = m_problem->diagnostics();
+  if (!diagnostics.isEmpty()) {
+    modifyHtml() += "<br/>";
 
+    DUChainReadLocker lock;
+    for (auto diagnostic : diagnostics) {
+      const DocumentRange range = diagnostic->finalLocation();
+      Declaration* declaration = DUChainUtils::itemUnderCursor(range.document.toUrl(), range.start);
+
+      modifyHtml() += labelHighlight(QString("%1: ").arg(diagnostic->severityString()));
+      modifyHtml() += diagnostic->description();
+
+      if (declaration) {
+        modifyHtml() += "<br/>";
+        makeLink(declaration->toString(), KDevelop::DeclarationPointer(declaration), NavigationAction::NavigateDeclaration);
+        modifyHtml() += i18n(" in ");
+        makeLink(QString("%1 :%2").arg(declaration->url().toUrl().fileName()).arg(declaration->rangeInCurrentRevision().textRange().start().line()+1), KDevelop::DeclarationPointer(declaration), NavigationAction::NavigateDeclaration);
+      }
+      modifyHtml() += "<br/>";
+    }
+  }
+
+  modifyHtml() += "</p></body></html>";
   return currentHtml();
 }
 

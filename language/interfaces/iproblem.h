@@ -30,9 +30,11 @@ Boston, MA 02110-1301, USA.
 #include "../duchain/duchainbase.h"
 #include <language/duchain/indexedstring.h>
 
+
 namespace KDevelop
 {
 class IAssistant;
+class Problem;
 
 class ProblemData : public DUChainBaseData
 {
@@ -65,6 +67,10 @@ public:
     IndexedString url;
     IndexedString description;
     IndexedString explanation;
+
+    // Currently ProblemData is not persisted at all -> bug!
+    // TODO: Make this member persistable. E.g. by introducing IndexedProblem and storing it here
+    QList<KSharedPtr<Problem>> diagnostics;
 };
 
 /**
@@ -98,6 +104,24 @@ public:
      * */
     DocumentRange finalLocation() const;
     void setFinalLocation(const DocumentRange& location);
+
+    /**
+     * Returns child diagnostics of this particular problem
+     *
+     * Example:
+     * @code
+     * void foo(unsigned int);
+     * void foo(const char*);
+     * int main() { foo(0); }
+     * @endcode
+     *
+     * => foo(0) is ambigous. This will give us a ProblemPointer pointing to 'foo(0)'.
+     *
+     * Additionally, @p diagnostics may return the two locations to the ambiguous overloads,
+     * with descriptions such as 'test.cpp:1: candidate : ...'
+     */
+    QList<KSharedPtr<Problem>> diagnostics() const;
+    void setDiagnostics(const QList<KSharedPtr<Problem>>& diagnostics);
 
     /**
      * A brief description of the problem.

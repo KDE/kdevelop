@@ -59,6 +59,16 @@ void Problem::setFinalLocation(const DocumentRange& location)
     d_func_dynamic()->url = location.document;
 }
 
+QList<KSharedPtr<Problem>> Problem::diagnostics() const
+{
+    return d_func()->diagnostics;
+}
+
+void Problem::setDiagnostics(const QList<KSharedPtr<Problem>>& diagnostics)
+{
+    d_func_dynamic()->diagnostics = diagnostics;
+}
+
 QString Problem::description() const
 {
     return d_func()->description.str();
