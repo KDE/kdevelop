@@ -47,11 +47,14 @@ void MissingIncludeCompletionModel::parseJobFinished(KDevelop::ParseJob* job) {
   if(job->document() == startCompletionAfterParsingUrl && !KDevelop::ICore::self()->languageController()->backgroundParser()->isQueued(job->document())) {
     startCompletionAfterParsingUrl = KDevelop::IndexedString();
     KDevelop::IDocument* doc = KDevelop::ICore::self()->documentController()->documentForUrl(job->document().toUrl());
-    if(doc && doc->textDocument() && doc->textDocument()->activeView() && doc->textDocument()->activeView()->hasFocus()) {
-      KTextEditor::CodeCompletionInterface* iface = dynamic_cast<KTextEditor::CodeCompletionInterface*>(doc->textDocument()->activeView());
+    if(!doc)
+      return;
+
+    if(KTextEditor::View* view = doc->activeTextView()) {
+      KTextEditor::CodeCompletionInterface* iface = dynamic_cast<KTextEditor::CodeCompletionInterface*>(view);
       if(iface) {
         ///@todo 1. This is a non-public interface, and 2. Completion should be started in "automatic invocation" mode
-        QMetaObject::invokeMethod(doc->textDocument()->activeView(), "userInvokedCompletion");
+        QMetaObject::invokeMethod(view, "userInvokedCompletion");
       }
     }
   }

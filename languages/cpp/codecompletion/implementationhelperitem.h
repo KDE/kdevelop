@@ -42,7 +42,7 @@ public:
   ImplementationHelperItem(HelperType type, KDevelop::DeclarationPointer decl = KDevelop::DeclarationPointer(), KSharedPtr<Cpp::CodeCompletionContext> context=KSharedPtr<Cpp::CodeCompletionContext>(), int _inheritanceDepth = 0, int _listOffset=0);
   
   virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const;
-  virtual void execute(KTextEditor::Document* document, const KTextEditor::Range& word);
+  virtual void execute(KTextEditor::View* view, const KTextEditor::Range& word) override;
   //Arguments + "const"
   QString signaturePart(bool includeDefaultParams);
   HelperType m_type;

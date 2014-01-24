@@ -145,10 +145,10 @@ void MainThreadHelper::replaceCurrentAccess(const KUrl& url, const QString& oldA
 {
   IDocument* document = ICore::self()->documentController()->documentForUrl(url);
   if(document) {
-    KTextEditor::Document* textDocument = document->textDocument();
-    if(textDocument) {
-      KTextEditor::View* activeView = textDocument->activeView();
-      if(activeView) {
+    KTextEditor::View* activeView = document->activeTextView();
+    if(activeView) {
+      KTextEditor::Document* textDocument = activeView->document();
+      if(textDocument) {
         KTextEditor::Cursor cursor = activeView->cursorPosition();
 
         static KUrl lastUrl;

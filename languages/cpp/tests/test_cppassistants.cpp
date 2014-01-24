@@ -95,10 +95,12 @@ public:
   Testbed(const QString& headerContents, const QString& cppContents)
   {
     m_headerDocument.url = createFile(headerContents);
-    m_headerDocument.textDoc = openDocument(m_headerDocument.url);
+    m_headerDocument.textView = openDocument(m_headerDocument.url);
+    m_headerDocument.textDoc = m_headerDocument.textView->document();
 
     m_cppDocument.url = createFile(QString("#include \"%1\"\n").arg(m_headerDocument.url) + cppContents);
-    m_cppDocument.textDoc = openDocument(m_cppDocument.url);
+    m_cppDocument.textView = openDocument(m_cppDocument.url);
+    m_cppDocument.textDoc = m_cppDocument.textView->document();
   }
   ~Testbed()
   {
@@ -117,10 +119,10 @@ public:
     }
     else
       document = m_headerDocument;
-    document.textDoc->activeView()->setSelection(where);
-    document.textDoc->activeView()->removeSelectionText();
-    document.textDoc->activeView()->setCursorPosition(where.start());
-    document.textDoc->activeView()->insertText(what);
+    document.textView->setSelection(where);
+    document.textView->removeSelectionText();
+    document.textView->setCursorPosition(where.start());
+    document.textView->insertText(what);
     QCoreApplication::processEvents();
     if (waitForUpdate)
       DUChain::self()->waitForUpdate(IndexedString(document.url), KDevelop::TopDUContext::AllDeclarationsAndContexts);
@@ -140,14 +142,15 @@ public:
 private:
   struct TestDocument {
     QString url;
+    View *textView;
     Document *textDoc;
   };
 
-  Document* openDocument(const QString& url)
+  View* openDocument(const QString& url)
   {
     Core::self()->documentController()->openDocument(url);
     DUChain::self()->waitForUpdate(IndexedString(url), KDevelop::TopDUContext::AllDeclarationsAndContexts);
-    return Core::self()->documentController()->documentForUrl(url)->textDocument();
+    return Core::self()->documentController()->documentForUrl(url)->activeTextView();
   }
 
   TestDocument m_headerDocument;

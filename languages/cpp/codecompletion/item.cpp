@@ -131,7 +131,7 @@ int getMatchQuality(CodeCompletionContext *context, const Declaration* decl, Top
   return bestQuality;
 }
 
-void executeSignalSlotCompletionItem( KTextEditor::Document* document, const KTextEditor::Range& enteredWord,
+void executeSignalSlotCompletionItem( KTextEditor::View* view, const KTextEditor::Range& enteredWord,
                                       bool isSignal, const QString& name, const QString& signature )
 {
   QString newText;
@@ -143,7 +143,7 @@ void executeSignalSlotCompletionItem( KTextEditor::Document* document, const KTe
   // NOTE: we do not scan for Q_SIGNAL or Q_SLOT, as these words (with "Q_" in beginning)
   // also match ones without "Q_"; thus we keep the user's preference of typing "Q_" or not.
   {
-    QString prefixText = linePrefix( document, word );
+    QString prefixText = linePrefix( view->document(), word );
     // We match SIGNAL or SLOT, followed by spaces, then (maybe) an opening bracket and spaces, then EOL.
     // Thus we ensure that cursor is positioned like "SIGNAL( <here>", not "SIGNAL( something <here>".
     // That is, we match only those SIGNAL/SLOT statements, for which we shall suggest a complete method signature.
@@ -174,7 +174,7 @@ void executeSignalSlotCompletionItem( KTextEditor::Document* document, const KTe
   // skip all characters when "nesting > 0" (they are arguments) and stop when "nesting < 0"
   // (i. e., when we encounter connect()'s closing bracket).
   {
-    QString suffixText = lineSuffixAndWord( document, word );
+    QString suffixText = lineSuffixAndWord( view->document(), word );
     int nesting = 0, position = 0;
     for( ; position < suffixText.size(); ++position ) {
       QChar c = suffixText.at( position );
@@ -207,17 +207,17 @@ void executeSignalSlotCompletionItem( KTextEditor::Document* document, const KTe
     // NOTE: a word can span multiple lines. As the suffix text is by definition at the last line of word,
     // the found char is at the last line of the range.
     // Now translate position to column, but using distance from position to suffix text end (rather than to its beginning).
-    int lastLineLength = document->lineLength( word.end().line() );
+    int lastLineLength = view->document()->lineLength( word.end().line() );
     int distanceToTextEnd = suffixText.length() - position;
     int characterColumn = lastLineLength - distanceToTextEnd;
     word.setEnd(KTextEditor::Cursor(word.end().line(), characterColumn ));
   }
 
-  document->replaceText( word, newText );
+  view->document()->replaceText( word, newText );
   return;
 }
 
-void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, const KTextEditor::Range& _word) {
+void NormalDeclarationCompletionItem::execute(KTextEditor::View* view, const KTextEditor::Range& _word) {
   if( completionContext() && completionContext()->depth() != 0 )
     return; //Do not replace any text when it is an argument-hint
 
@@ -228,7 +228,7 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
       kWarning() << "Signal/slot completion declaration is not a QtFunctionDeclaration";
       return;
     }
-    executeSignalSlotCompletionItem( document, _word, classFun->isSignal(),
+    executeSignalSlotCompletionItem( view, _word, classFun->isSignal(),
                                      classFun->identifier().toString(), classFun->normalizedSignature().str() );
     return;
   }
@@ -260,7 +260,8 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
   // Text that will be removed in a separate editing step (so the user can undo it)
   std::auto_ptr<KTextEditor::MovingRange> removeInSecondStep;
   
-  KTextEditor::Cursor cursor = document->activeView()->cursorPosition();
+  KTextEditor::Cursor cursor = view->cursorPosition();
+  KTextEditor::Document* document = view->document();
   if(cursor != word.end())
   {
     KTextEditor::MovingInterface* moving = dynamic_cast<KTextEditor::MovingInterface*>(document);
@@ -289,7 +290,7 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
       lock.unlock();
       document->insertText( end, "<>" );
       end.setColumn(end.column() + 2);
-      document->activeView()->setCursorPosition( end - KTextEditor::Cursor(0, 1) );
+      view->setCursorPosition( end - KTextEditor::Cursor(0, 1) );
       lock.lock();
     }
     
@@ -318,7 +319,7 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
         KTextEditor::Range removeRange = removeInSecondStep->toRange();
         insertionPosition += removeRange.end() - removeRange.start();
       }
-      insertFunctionParenText(document, insertionPosition, m_declaration, jumpForbidden);
+      insertFunctionParenText(view, insertionPosition, m_declaration, jumpForbidden);
     }
     
     if (removeInSecondStep.get()) {
@@ -771,7 +772,9 @@ KSharedPtr<CodeCompletionContext> NormalDeclarationCompletionItem::completionCon
   return KSharedPtr<CodeCompletionContext>::staticCast(m_completionContext);
 }
 
-void IncludeFileCompletionItem::execute(KTextEditor::Document* document, const KTextEditor::Range& _word) {
+void IncludeFileCompletionItem::execute(KTextEditor::View* view, const KTextEditor::Range& _word)
+{
+  KTextEditor::Document* document = view->document();
 
   KTextEditor::Range word(_word);
 
@@ -855,16 +858,16 @@ uint MoreArgumentHintsCompletionItem::resetMaxArgumentHints(bool isAutomaticComp
   return ret;
 }
 
-void MoreArgumentHintsCompletionItem::execute(KTextEditor::Document* document, const KTextEditor::Range& /*word*/)
+void MoreArgumentHintsCompletionItem::execute(KTextEditor::View* view, const KTextEditor::Range& word)
 {
   currentMaxArgumentHints = m_oldNumber + maxArgumentHintsExtensionSteps;
   
   // Restart code-completion
-  KTextEditor::CodeCompletionInterface* iface = dynamic_cast<KTextEditor::CodeCompletionInterface*>(document->activeView());
+  KTextEditor::CodeCompletionInterface* iface = dynamic_cast<KTextEditor::CodeCompletionInterface*>(view);
   Q_ASSERT(iface);
   iface->abortCompletion();
     ///@todo 1. This is a non-public interface, and 2. Completion should be started in "automatic invocation" mode
-  QMetaObject::invokeMethod(document->activeView(), "userInvokedCompletion", Qt::QueuedConnection);
+  QMetaObject::invokeMethod(view, "userInvokedCompletion", Qt::QueuedConnection);
 }
 
 }

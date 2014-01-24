@@ -94,7 +94,7 @@ void StaticCodeAssistant::textInserted(Document* document, const Range& range)
   QMetaObject::invokeMethod(this, "eventuallyStartAssistant", Qt::QueuedConnection);
 }
 
-void StaticCodeAssistant::textRemoved(Document* document, const Range& range,
+void StaticCodeAssistant::textRemoved(KTextEditor::Document* document, const Range& range,
                                       const QString& removedText)
 {
   m_eventualDocument = document;
@@ -108,7 +108,8 @@ void StaticCodeAssistant::eventuallyStartAssistant()
   if(!m_eventualDocument)
     return;
 
-  View* view = m_eventualDocument.data()->activeView();
+  IDocument* doc = ICore::self()->documentController()->documentForUrl(m_eventualDocument.data()->url());
+  View* view = doc->activeTextView();
   //Eventually pop up an assistant
   if(!view)
     return;
@@ -216,7 +217,7 @@ void StaticCodeAssistant::documentActivated(IDocument* doc)
   }
 
   if(doc->textDocument()) {
-    m_currentView = doc->textDocument()->activeView();
+    m_currentView = doc->activeTextView();
     if(m_currentView) {
       connect(m_currentView.data(),
               SIGNAL(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)),

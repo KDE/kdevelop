@@ -246,16 +246,15 @@ void CppLanguageSupport::switchDefinitionDeclaration()
   ///-- If it belongs to a function-declaration or definition, it can be retrieved through owner(), and we are in a definition.
   ///-- If no such context could be found, search for a declaration on the same line as the cursor, and switch to the according definition
   
-  {
-    KDevelop::IDocument* doc = core()->documentController()->activeDocument();
-    if(!doc || !doc->textDocument() || !doc->textDocument()->activeView()) {
-      kDebug(9007) << "No active document";
-      return;
-    }
-    
-    docUrl = doc->textDocument()->url();
-    cursor = SimpleCursor(doc->textDocument()->activeView()->cursorPosition()); 
+  KDevelop::IDocument* doc = core()->documentController()->activeDocument();
+  if(!doc || !doc->activeTextView()) {
+    kDebug(9007) << "No active document";
+    return;
   }
+  KTextEditor::View* view = doc->activeTextView();
+
+  docUrl = doc->url();
+  cursor = SimpleCursor(view->cursorPosition());
   
   const QString switchCandidate = CppUtils::sourceOrHeaderCandidate(docUrl.toLocalFile());
   
@@ -332,8 +331,7 @@ void CppLanguageSupport::switchDefinitionDeclaration()
 
       KDevelop::IDocument* document = core()->documentController()->documentForUrl(url);
       
-      if(!document || 
-          (document && document->textDocument() && document->textDocument()->activeView() && !targetRange.contains(document->textDocument()->activeView()->cursorPosition()))) {
+      if(!document || (view && !targetRange.contains(view->cursorPosition()))) {
         KTextEditor::Cursor pos(normalizeCursor(targetRange.start()));
         core()->documentController()->openDocument(url, KTextEditor::Range(pos, pos));
       }else if(document)
@@ -366,8 +364,7 @@ void CppLanguageSupport::switchDefinitionDeclaration()
 
     KDevelop::IDocument* document = core()->documentController()->documentForUrl(url);
     
-    if(!document || 
-        (document && document->textDocument() && (!document->textDocument()->activeView() || !targetRange.contains(document->textDocument()->activeView()->cursorPosition())))) {
+    if(!document || (!document->activeTextView() || !targetRange.contains(document->activeTextView()->cursorPosition()))) {
       KTextEditor::Cursor pos(normalizeCursor(targetRange.start()));
       core()->documentController()->openDocument(url, KTextEditor::Range(pos, pos));
     }else if(document) {
@@ -600,7 +597,7 @@ QVector< KUrl > CppLanguageSupport::getPotentialBuddies(const KUrl& url) const
 
 QPair<QPair<QString, SimpleRange>, QString> CppLanguageSupport::cursorIdentifier(const KUrl& url, const SimpleCursor& position) const {
   KDevelop::IDocument* doc = core()->documentController()->documentForUrl(url);
-  if(!doc || !doc->textDocument() || !doc->textDocument()->activeView())
+  if(!doc || !doc->activeTextView())
     return qMakePair(qMakePair(QString(), SimpleRange::invalid()), QString());
 
   int lineNumber = position.line;
@@ -800,7 +797,7 @@ QWidget* CppLanguageSupport::specialLanguageObjectNavigationWidget(const KUrl& u
       //properly support macro expansions when arguments contain newlines
       int foundClosingBrace = findClose( tail, 0 );
       KDevelop::IDocument* doc = core()->documentController()->documentForUrl(url);
-      if(doc && doc->textDocument() && doc->textDocument()->activeView() && foundClosingBrace < 0) {
+      if(doc && doc->activeTextView() && foundClosingBrace < 0) {
         const int lines = doc->textDocument()->lines();
         for (int lineNumber = position.line + 1; foundClosingBrace < 0 && lineNumber < lines; lineNumber++) {
           tail += doc->textDocument()->line(lineNumber).trimmed();

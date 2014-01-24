@@ -569,13 +569,13 @@ void SimpleRefactoring::applyChangesDelayed()
 }
 
 KDevelop::IndexedDeclaration SimpleRefactoring::declarationUnderCursor(bool allowUse) {
-  KDevelop::IDocument* doc = ICore::self()->documentController()->activeDocument();
-  if(doc && doc->textDocument() && doc->textDocument()->activeView()) {
+  KTextEditor::View* view = ICore::self()->documentController()->activeTextDocumentView();
+  if(view) {
     DUChainReadLocker lock(DUChain::lock());
     if(allowUse)
-      return DUChainUtils::itemUnderCursor(doc->url(), SimpleCursor(doc->textDocument()->activeView()->cursorPosition()));
+      return DUChainUtils::itemUnderCursor(view->document()->url(), SimpleCursor(view->cursorPosition()));
     else
-      return DUChainUtils::declarationInLine(SimpleCursor(doc->textDocument()->activeView()->cursorPosition()), DUChainUtils::standardContextForUrl(doc->url()));
+      return DUChainUtils::declarationInLine(SimpleCursor(view->cursorPosition()), DUChainUtils::standardContextForUrl(view->document()->url()));
   }
   
   return KDevelop::IndexedDeclaration();

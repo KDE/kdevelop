@@ -1272,7 +1272,7 @@ void TestCppCodeCompletion::testSignalSlotExecution()
         }
         QVERIFY( !item.isNull() );
 
-        item->execute( doc, Range( c, 0 ) );
+        item->execute( v, Range( c, 0 ) );
         QCOMPARE( doc->line( 2 ), QString("void test() { connect( this, SIGNAL(signal1(void*,char)), SLOT() ); } };") );
 
         doc->endEditing();
@@ -1293,7 +1293,7 @@ void TestCppCodeCompletion::testSignalSlotExecution()
         }
         QVERIFY( !item.isNull() );
 
-        item->execute( doc, Range( c, 0 ) );
+        item->execute( v, Range( c, 0 ) );
         QCOMPARE( doc->line( 2 ), QString("void test() { connect( this, SIGNAL(signal1(void*,char)), SLOT(slot2(void*)) ); } };") );
 
         doc->endEditing();
@@ -1315,7 +1315,7 @@ void TestCppCodeCompletion::testSignalSlotExecution()
         }
         QVERIFY( !item.isNull() );
 
-        item->execute( doc, Range( c, 0 ) );
+        item->execute( v, Range( c, 0 ) );
         lock.lock();
         QEXPECT_FAIL("", "Slot is not replaced because the engine fails to create the declaration.", Continue);
         QCOMPARE( doc->line( 2 ), QString("void test() { connect( this, SIGNAL(signal1(void*,char)), SLOT(slot3(void*)) ); } };") );
@@ -3455,7 +3455,7 @@ void TestCppCodeCompletion::testExecuteKeepWord()
     }
   }
   QVERIFY(!item.isNull());
-  item->execute(doc, KTextEditor::Range(3, 0, 3, 4));
+  item->execute(v, KTextEditor::Range(3, 0, 3, 4));
 
   QFETCH(QString, expectedCode);
   QCOMPARE(doc->line(3), expectedCode);
@@ -3739,14 +3739,14 @@ void TestCppCodeCompletion::testNoQuadrupleColon()
   KTextEditor::Cursor c( 0, 0 );
   v->setCursorPosition( c );
 
-  item->execute( doc, Range( c, 0 ) );
+  item->execute( v, Range( c, 0 ) );
   QCOMPARE( doc->line( 0 ), QString("Foobar::") );
 
   // verify it doesn't when there's already a "::"
   doc->setText("::var;");
   v->setCursorPosition( c );
 
-  item->execute( doc, Range( c, 0 ) );
+  item->execute( v, Range( c, 0 ) );
   QCOMPARE( doc->line( 0 ), QString("Foobar::var;") );
 
   doc->endEditing();

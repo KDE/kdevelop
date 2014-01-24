@@ -92,13 +92,13 @@ target_link_libraries( kdevcmakedocumentation
                         ${KDEVPLATFORM_INTERFACES_LIBRARIES} kdev4cmakecommon
                         ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
                         ${KDEVPLATFORM_DOCUMENTATION_LIBRARIES}
-                        KF5::TextEditor ${QT_QTWEBKIT_LIBRARY})
+                        KF5::TextEditor Qt5::WebKitWidgets)
 
 qt5_wrap_ui( cmakesettings_SRCS ${cmakesettings_UI} )
 add_library(kcm_kdevcmake_settings MODULE ${cmakesettings_SRCS} )
 target_link_libraries( kcm_kdevcmake_settings KF5::KIOWidgets
                        ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_UTIL_LIBRARIES}
-                       ${KDE4_KIO_LIBRARY} kdev4cmakecommon )
+                       kdev4cmakecommon )
 
 install(TARGETS kdevcmakemanager DESTINATION ${PLUGIN_INSTALL_DIR} )
 install(TARGETS kdevcmakedocumentation DESTINATION ${PLUGIN_INSTALL_DIR} )

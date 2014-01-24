@@ -55,8 +55,7 @@ namespace Cpp {
 
 void setStaticMatchContext(QList<KDevelop::IndexedType> types);
 
-void executeSignalSlotCompletionItem( KTextEditor::Document* document, const KTextEditor::Range& enteredWord,
-                                      bool isSignal, const QString& name, const QString& signature );
+void executeSignalSlotCompletionItem( KTextEditor::View* view, const KTextEditor::Range& enteredWord, bool isSignal, const QString& name, const QString& signature );
 
 //A completion item used for completion of normal declarations while normal code-completion
 class NormalDeclarationCompletionItem : public KDevelop::NormalDeclarationCompletionItem {
@@ -65,7 +64,7 @@ public:
     : KDevelop::NormalDeclarationCompletionItem(decl, context, _inheritanceDepth), useAlternativeText(false), prependScopePrefix(false), listOffset(_listOffset), m_isQtSignalSlotCompletion(false), m_isTemplateCompletion(false), m_fixedMatchQuality(-1) {
   }
   
-  virtual void execute(KTextEditor::Document* document, const KTextEditor::Range& word);
+  virtual void execute(KTextEditor::View* view, const KTextEditor::Range& word);
 
   virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const;
   
@@ -124,7 +123,7 @@ class MoreArgumentHintsCompletionItem : public NormalDeclarationCompletionItem {
 public:
   MoreArgumentHintsCompletionItem(KSharedPtr<KDevelop::CodeCompletionContext> context, QString text, uint oldNumber);
   
-  virtual void execute(KTextEditor::Document* document, const KTextEditor::Range& word);
+  virtual void execute(KTextEditor::View* view, const KTextEditor::Range& word) override;
   
   // Maximum number of argument-hints that should be shown by code completion
   // Whenever this is called, the maximum number of arguments is reset afterwards,
@@ -141,7 +140,7 @@ public:
     IncludeFileCompletionItem(const KDevelop::IncludeItem& include)
       : BaseIncludeFileCompletionItem(include) {}
 
-    virtual void execute(KTextEditor::Document* document, const KTextEditor::Range& word);
+    virtual void execute(KTextEditor::View* view, const KTextEditor::Range& word) override;
 };
 
 class TypeConversionCompletionItem : public KDevelop::CompletionTreeItem {

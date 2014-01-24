@@ -16,6 +16,7 @@
 
 #include "implementationhelperitem.h"
 #include <ktexteditor/document.h>
+#include <KTextEditor/View>
 #include <klocalizedstring.h>
 #include <language/duchain/duchainutils.h>
 #include "context.h"
@@ -389,7 +390,7 @@ QString ImplementationHelperItem::insertionText(KUrl url, KDevelop::SimpleCursor
   return newText;
 }
 
-void ImplementationHelperItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word) {
+void ImplementationHelperItem::execute(KTextEditor::View* view, const KTextEditor::Range& word) {
 
   if(m_type == CreateSignalSlot) {
     //Step 1: Decide where to put the declaration
@@ -445,12 +446,12 @@ void ImplementationHelperItem::execute(KTextEditor::Document* document, const KT
     }
 
     ICore::self()->languageController()->backgroundParser()->addDocument(doc);
-    executeSignalSlotCompletionItem( document, word, false, slotName, slotSignature );
+    executeSignalSlotCompletionItem( view, word, false, slotName, slotSignature );
   }else{
     //this code assumes (safely for now) that the "word" range is on one line
     KTextEditor::Range rangeToReplace(word.start().line(), 0, word.end().line(), word.end().column());
-    QString rangeToReplaceText = document->text(rangeToReplace);
-    QString replacementText = insertionText(document->url(), SimpleCursor(rangeToReplace.end()));
+    QString rangeToReplaceText = view->document()->text(rangeToReplace);
+    QString replacementText = insertionText(view->document()->url(), SimpleCursor(rangeToReplace.end()));
     //Don't replace anything before end of comment, open or closing bracket, or semicolon
     QRegExp replaceAfter = QRegExp("inline|[{}/;]");
     int noReplace = replaceAfter.lastIndexIn(rangeToReplaceText) + replaceAfter.matchedLength() - 1;
@@ -460,7 +461,7 @@ void ImplementationHelperItem::execute(KTextEditor::Document* document, const KT
       replacementText.prepend(" ");
     }
     DocumentChangeSet changes;
-    changes.addChange(DocumentChange(IndexedString(document->url()), rangeToReplace, document->text(rangeToReplace), replacementText));
+    changes.addChange(DocumentChange(IndexedString(view->document()->url()), rangeToReplace, view->document()->text(rangeToReplace), replacementText));
     changes.applyAllChanges();
    }
 }
