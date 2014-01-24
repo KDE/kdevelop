@@ -186,6 +186,14 @@ constexpr bool isKDevClassMemberDeclaration(CXCursorKind CK, bool isClassMember)
     return isClassMember && isKDevDeclaration(CK, false);
 }
 
+constexpr Declaration::AccessPolicy kdevAccessPolicy(CX_CXXAccessSpecifier access)
+{
+    return access == CX_CXXPrivate ? Declaration::Private
+    : access == CX_CXXProtected ?    Declaration::Protected
+    : access == CX_CXXPublic ?       Declaration::Public
+    :                                Declaration::DefaultAccess;
+}
+
 }
 
 #endif //CURSORKINDTRAITS_H

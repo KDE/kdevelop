@@ -47,41 +47,6 @@ private:
     KDevelop::Identifier makeId(CXCursor cursor) const;
     QByteArray makeComment(CXComment comment) const;
 
-//BEGIN setDeclData
-    template<CXCursorKind CK>
-    void setDeclData(CXCursor, Declaration *decl) const
-    {
-        if (CK == CXCursor_TypeAliasDecl || CXCursor_TypedefDecl)
-            decl->setIsTypeAlias(true);
-        if (CK == CXCursor_Namespace)
-            decl->setKind(Declaration::Namespace);
-        if (CK == CXCursor_EnumDecl || CK == CXCursor_EnumConstantDecl || CursorKindTraits::isClass(CK))
-            decl->setKind(Declaration::Type);
-    }
-
-    template<CXCursorKind CK, EnableIf<CursorKindTraits::isClassTemplate(CK)> = dummy>
-    void setDeclData(CXCursor cursor, ClassDeclaration* decl) const
-    {
-        CXCursorKind kind = clang_getTemplateCursorKind(cursor);
-        switch (kind) {
-        case CXCursor_UnionDecl: setDeclData<CXCursor_UnionDecl>(cursor, decl); break;
-        case CXCursor_StructDecl: setDeclData<CXCursor_StructDecl>(cursor, decl); break;
-        case CXCursor_ClassDecl: setDeclData<CXCursor_ClassDecl>(cursor, decl); break;
-        default: Q_ASSERT(false); break;
-        }
-    }
-
-    template<CXCursorKind CK, EnableIf<!CursorKindTraits::isClassTemplate(CK)> = dummy>
-    void setDeclData(CXCursor cursor, ClassDeclaration* decl) const
-    {
-        setDeclData<CK>(cursor, static_cast<Declaration*>(decl));
-        if (CK == CXCursor_UnionDecl)
-            decl->setClassType(ClassDeclarationData::Union);
-        if (CK == CXCursor_StructDecl)
-            decl->setClassType(ClassDeclarationData::Struct);
-    }
-//END setDeclData
-
 //BEGIN dispatchCursor
     template<CXCursorKind CK, EnableIf<CursorKindTraits::isUse(CK)> = dummy>
     CXChildVisitResult dispatchCursor(CXCursor cursor)
@@ -240,6 +205,60 @@ private:
         return context;
     }
 //END create*
+
+//BEGIN setDeclData
+template<CXCursorKind CK>
+void setDeclData(CXCursor, Declaration *decl) const
+{
+    if (CK == CXCursor_TypeAliasDecl || CXCursor_TypedefDecl)
+        decl->setIsTypeAlias(true);
+    if (CK == CXCursor_Namespace)
+        decl->setKind(Declaration::Namespace);
+    if (CK == CXCursor_EnumDecl || CK == CXCursor_EnumConstantDecl || CursorKindTraits::isClass(CK))
+        decl->setKind(Declaration::Type);
+}
+
+template<CXCursorKind CK>
+void setDeclData(CXCursor cursor, ClassMemberDeclaration *decl) const
+{
+    setDeclData<CK>(cursor, static_cast<Declaration*>(decl));
+    //A CXCursor_VarDecl in a class is static (otherwise it'd be a CXCursor_FieldDecl)
+    if (CK == CXCursor_VarDecl)
+        decl->setStatic(true);
+    decl->setAccessPolicy(CursorKindTraits::kdevAccessPolicy(clang_getCXXAccessSpecifier(cursor)));
+}
+
+template<CXCursorKind CK, EnableIf<CursorKindTraits::isClassTemplate(CK)> = dummy>
+void setDeclData(CXCursor cursor, ClassDeclaration* decl) const
+{
+    CXCursorKind kind = clang_getTemplateCursorKind(cursor);
+    switch (kind) {
+        case CXCursor_UnionDecl: setDeclData<CXCursor_UnionDecl>(cursor, decl); break;
+        case CXCursor_StructDecl: setDeclData<CXCursor_StructDecl>(cursor, decl); break;
+        case CXCursor_ClassDecl: setDeclData<CXCursor_ClassDecl>(cursor, decl); break;
+        default: Q_ASSERT(false); break;
+    }
+}
+
+template<CXCursorKind CK, EnableIf<!CursorKindTraits::isClassTemplate(CK)> = dummy>
+void setDeclData(CXCursor cursor, ClassDeclaration* decl) const
+{
+    setDeclData<CK>(cursor, static_cast<ClassMemberDeclaration*>(decl));
+    if (CK == CXCursor_UnionDecl)
+        decl->setClassType(ClassDeclarationData::Union);
+    if (CK == CXCursor_StructDecl)
+        decl->setClassType(ClassDeclarationData::Struct);
+}
+
+template<CXCursorKind CK>
+void setDeclData(CXCursor cursor, ClassFunctionDeclaration* decl) const
+{
+    setDeclData<CK>(cursor, static_cast<ClassMemberDeclaration*>(decl));
+    decl->setStatic(clang_CXXMethod_isStatic(cursor));
+    decl->setVirtual(clang_CXXMethod_isVirtual(cursor));
+}
+
+//END setDeclData
 
 private:
     struct CurrentContext

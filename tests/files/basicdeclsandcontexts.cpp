@@ -15,24 +15,23 @@ int main()
  */
 class foo
 {
-    /// "EXPECT_FAIL" : { "isStatic" : "not a class-member-declaration yet" },
     /// "isStatic" : true
     static int m;
     /// "isStatic" : false
     int b;
-    /// "EXPECT_FAIL" : { "isStatic" : "not a class-member-declaration yet", "isVirtual" : "not a class-function yet" },
+    //TODO: millian! help! should this be a ClassFunctionDeclaration or a FunctionDefinition?
+    //If a FunctionDefinition then the jsondeclarationtest needs to be modified to accept AbstractFunctionDeclaration (ugly, but that's where isVirtual is)
+    //If a ClassFunctionDeclaration, the traits need to be modified accordingly
     /// "isStatic" : false,
     /// "isVirtual" : true
     virtual void bla() {}
-    /// "EXPECT_FAIL" : { "isVirtual" : "not a class-function yet" },
     /// "isStatic" : false,
     /// "isVirtual" : true
     virtual void bar();
-    /// "EXPECT_FAIL" : { "isStatic" : "not a class-member-declaration yet" },
+    //TODO: as above
     /// "isStatic" : true,
     /// "isVirtual" : false
     static void bla2() {}
-    /// "EXPECT_FAIL" : { "isStatic" : "not a class-member-declaration yet" },
     /// "isStatic" : true,
     /// "isVirtual" : false
     static void bar2();
