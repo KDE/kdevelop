@@ -21,11 +21,8 @@
 #=============================================================================
 
 # find llvm-config, prefer the one with a version suffix, e.g. llvm-config-3.3
-if (LLVM_FIND_VERSION)
-  find_program(LLVM_CONFIG_EXECUTABLE NAMES llvm-config-${LLVM_FIND_VERSION} DOC "llvm-config-VERSION executable")
-else()
-  find_program(LLVM_CONFIG_EXECUTABLE NAMES llvm-config DOC "llvm-config executable")
-endif()
+# note: on some distributions, only 'llvm-config' is shipped, so let's always try to fallback on that
+find_program(LLVM_CONFIG_EXECUTABLE NAMES llvm-config-${LLVM_FIND_VERSION} llvm-config DOC "llvm-config executable")
 
 if (LLVM_CONFIG_EXECUTABLE)
   message(STATUS "Found llvm-config: ${LLVM_CONFIG_EXECUTABLE}")
