@@ -103,15 +103,6 @@ public:
 
     bool toolViewPresent(Sublime::ToolDocument* doc, Sublime::Area* area);
 
-private:
-    void addToolViewIfWanted(IToolViewFactory* factory,
-                           Sublime::ToolDocument* doc,
-                           Sublime::Area* area);
-    Sublime::View* addToolViewToArea(IToolViewFactory* factory,
-                           Sublime::ToolDocument* doc,
-                           Sublime::Area* area, Sublime::Position p=Sublime::AllPositions);
-    void setupActions();
-
 public Q_SLOTS:
     void raiseToolView(Sublime::View * view);
 
@@ -121,6 +112,13 @@ private Q_SLOTS:
     void addNewToolView(MainWindow* mw, QListWidgetItem* item);
 
 private:
+    void addToolViewIfWanted(IToolViewFactory* factory,
+                           Sublime::ToolDocument* doc,
+                           Sublime::Area* area);
+    Sublime::View* addToolViewToArea(IToolViewFactory* factory,
+                           Sublime::ToolDocument* doc,
+                           Sublime::Area* area, Sublime::Position p=Sublime::AllPositions);
+    void setupActions();
     class UiControllerPrivate* const d;
     friend class UiControllerPrivate;
     Q_PRIVATE_SLOT(d, void widgetChanged(QWidget*,QWidget*))

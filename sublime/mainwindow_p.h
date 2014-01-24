@@ -119,7 +119,7 @@ public:
 
     IdealController *idealController;
     int ignoreDockShown;
-    bool autoAreaSettingsSave;                       
+    bool autoAreaSettingsSave;
 
 public slots:
     void viewAdded(Sublime::AreaIndex *index, Sublime::View *view);
