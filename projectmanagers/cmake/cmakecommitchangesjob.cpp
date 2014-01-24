@@ -182,9 +182,10 @@ Path::List CMakeCommitChangesJob::addProjectData(const CMakeProjectData& data)
         target.outputName = targetProps.value("OUTPUT_NAME", QStringList(t.name)).join(QString());
         target.location = CMake::resolveSystemDirs(m_project, targetProps["LOCATION"]).first();
         
-        foreach(const QString& dep, t.libraries) {
+        foreach(const QString& dep, targetProps["PRIVATE_LINK_LIBRARIES"]) {
             processDependencies(target, dep, data);
         }
+        processDependencies(target, t.name, data);
         m_targets += target;
     }
     return ret;

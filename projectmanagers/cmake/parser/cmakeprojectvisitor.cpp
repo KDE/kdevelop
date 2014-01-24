@@ -1123,7 +1123,12 @@ int CMakeProjectVisitor::visit(const TargetLinkLibrariesAst *tll)
     QHash<QString, Target>::iterator target = m_targetForId.find(tll->target());
     //TODO: we can add a problem if the target is not found
     if(target != m_targetForId.end()) {
-        target->libraries << tll->interfaceOnlyDependencies().retrieveTargets() << tll->publicDependencies().retrieveTargets();
+        CategoryType& targetProps = m_props[TargetProperty];
+        CategoryType::iterator it = targetProps.find(m_targetAlias.value(tll->target(), tll->target()));
+
+        (*it)["INTERFACE_LINK_LIBRARIES"] += tll->interfaceOnlyDependencies().retrieveTargets()
+                                          << tll->publicDependencies().retrieveTargets();
+        (*it)["PRIVATE_LINK_LIBRARIES"] += tll->privateDependencies().retrieveTargets();
     }
     return 1;
 }
