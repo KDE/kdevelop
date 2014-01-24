@@ -24,6 +24,11 @@
 #include <project/projectmodel.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/duchain.h>
+#include <language/duchain/topducontext.h>
+#include "cppduchain/environmentmanager.h"
+
 #include <KLocalizedString>
 
 using namespace KDevelop;
@@ -164,6 +169,22 @@ void IncludePathComputer::computeBackground()
   if (!result) {
     kDebug(9007) << "Failed to resolve include-path for \"" << m_source << "\":"
                   << result.errorMessage << "\n" << result.longErrorMessage << "\n";
+
+    // Last chance: Take a parsed version of the file from the du-chain, and get its include-paths
+    // We will then get the include-path that some time was used to parse the file
+    // NOTE: this is important for library headers, as when we open them they are not opened in any project
+    // nor do they have a build folder which we could use
+    DUChainReadLocker readLock;
+    foreach(const ParsingEnvironmentFilePointer& file, DUChain::self()->allEnvironmentFiles(IndexedString(m_source))) {
+      auto envFile = dynamic_cast<const Cpp::EnvironmentFile*>(file.data());
+      if (envFile && !envFile->includePaths().isEmpty()) {
+        foreach(const IndexedString& path, envFile->includePaths()) {
+          addInclude(Path(path.toUrl()));
+        }
+        kDebug(9007) << "Took include-path for" << m_source << "from a random parsed duchain-version of it";
+        break;
+      }
+    }
   }
 
   m_ready = true;
