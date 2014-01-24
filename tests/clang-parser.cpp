@@ -41,6 +41,11 @@ public:
     void parseFile( const QString &fileName )
     {
         QFile file(fileName);
+        if (!file.exists()) {
+            qerr << "file does not exist:" << file.fileName() << endl;
+            return;
+        }
+
         file.open(QIODevice::ReadOnly);
         m_session.reset(new ParseSession(IndexedString(fileName), file.readAll(), &m_index));
         runSession();
