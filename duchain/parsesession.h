@@ -30,7 +30,7 @@
 #include <KUrl>
 
 #include <language/duchain/indexedstring.h>
-#include <language/interfaces/iproblem.h>
+#include <language/duchain/problem.h>
 #include <language/interfaces/iastcontainer.h>
 #include <project/path.h>
 
