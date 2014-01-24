@@ -609,33 +609,6 @@ bool TopDUContextDynamicData::isContextForIndexLoaded(uint index) const {
   }
 }
 
-void TopDUContextDynamicData::clearDeclarationIndex(Declaration* decl) {
-  if(!m_dataLoaded)
-    loadData();
-
-  uint index = decl->m_indexInTopContext;
-  if(index < (0x0fffffff/2)) {
-    if(index == 0 || index > uint(m_declarations.size()))
-      return;
-    else {
-      Q_ASSERT(m_declarations[index-1] == decl);
-      m_declarations[index-1] = 0;
-
-      if(index-1 < (uint)m_declarationDataOffsets.size())
-        m_declarationDataOffsets[index-1] = ItemDataInfo();
-    }
-  }else{
-    QMutexLocker lock(&m_temporaryDataMutex);
-    index = 0x0fffffff - index; //We always keep the highest bit at zero
-    if(index == 0 || index > uint(m_temporaryDeclarations.size()))
-      return;
-    else {
-      Q_ASSERT(m_temporaryDeclarations[index-1] == decl);
-      m_temporaryDeclarations[index-1] = 0;
-    }
-  }
-}
-
 uint TopDUContextDynamicData::allocateContextIndex(DUContext* decl, bool temporary) {
   if(!m_dataLoaded)
     loadData();
@@ -727,31 +700,43 @@ Declaration* TopDUContextDynamicData::getDeclarationForIndex(uint index) const
   return getItemForIndex<Declaration>(index, m_declarations, m_declarationDataOffsets, m_temporaryDeclarations);
 }
 
-void TopDUContextDynamicData::clearContextIndex(DUContext* decl) {
-
+template<class Item>
+void TopDUContextDynamicData::clearItemIndex(Item* item, const uint index, QVector<Item*>& items,
+                                             QVector<ItemDataInfo>& offsets, QVector<Item*>& temporaryItems)
+{
   if(!m_dataLoaded)
     loadData();
 
-  uint index = decl->m_dynamicData->m_indexInTopContext;
-  if(index < (0x0fffffff/2)) {
-
-    if(index == 0 || index > uint(m_contexts.size()))
+  if (index < (0x0fffffff/2)) {
+    if (index == 0 || index > uint(items.size())) {
       return;
-    else {
-      Q_ASSERT(m_contexts[index-1] == decl);
-      m_contexts[index-1] = 0;
+    } else {
+      const uint realIndex = index - 1;
+      Q_ASSERT(items[realIndex] == item);
+      items[realIndex] = nullptr;
 
-      if(index-1 < (uint)m_contextDataOffsets.size())
-        m_contextDataOffsets[index-1] = ItemDataInfo();
+      if (realIndex < (uint)offsets.size()) {
+        offsets[realIndex] = ItemDataInfo();
+      }
     }
-  }else{
+  } else {
     QMutexLocker lock(&m_temporaryDataMutex);
-    index = 0x0fffffff - index; //We always keep the highest bit at zero
-    if(index == 0 || index > uint(m_temporaryContexts.size()))
+    const uint realIndex = 0x0fffffff - index; //We always keep the highest bit at zero
+    if (realIndex == 0 || realIndex > uint(temporaryItems.size())) {
       return;
-    else {
-      Q_ASSERT(m_temporaryContexts[index-1] == decl);
-      m_temporaryContexts[index-1] = 0;
+    } else {
+      Q_ASSERT(temporaryItems[realIndex-1] == item);
+      temporaryItems[realIndex-1] = nullptr;
     }
   }
+}
+
+void TopDUContextDynamicData::clearDeclarationIndex(Declaration* decl)
+{
+  clearItemIndex(decl, decl->m_indexInTopContext, m_declarations, m_declarationDataOffsets, m_temporaryDeclarations);
+}
+
+void TopDUContextDynamicData::clearContextIndex(DUContext* context)
+{
+  clearItemIndex(context, context->m_dynamicData->m_indexInTopContext, m_contexts, m_contextDataOffsets, m_temporaryContexts);
 }

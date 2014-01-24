@@ -122,6 +122,10 @@ class TopDUContextDynamicData {
     Item* getItemForIndex(uint index, QVector<Item*>& items, const QVector<ItemDataInfo>& offsets,
                           const QVector<Item*>& temporaryItems) const;
 
+    template<class Item>
+    void clearItemIndex(Item* item, const uint index, QVector<Item*>& items, QVector<ItemDataInfo>& offsets,
+                        QVector<Item*>& temporaryItems);
+
     void unmap();
     //Converts away from an mmap opened file to a data array
     
