@@ -27,7 +27,7 @@
 using namespace KDevelop;
 
 ClangIndex::ClangIndex()
-    : m_index(clang_createIndex(1 /*Exclude PCH Decls*/, 1 /*Display diags*/))
+    : m_index(clang_createIndex(1 /*Exclude PCH Decls*/, 0 /*Display diags*/))
 {
 }
 
