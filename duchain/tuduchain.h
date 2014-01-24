@@ -31,6 +31,13 @@
 #include <unordered_map>
 
 #include <util/pushvalue.h>
+#include <language/duchain/types/pointertype.h>
+#include <language/duchain/types/arraytype.h>
+#include <language/duchain/types/referencetype.h>
+#include <language/duchain/types/functiontype.h>
+#include <language/duchain/types/structuretype.h>
+#include <language/duchain/types/enumerationtype.h>
+#include <language/duchain/types/typealiastype.h>
 
 template<CXCursorKind CK, bool isDefinition, bool isClassMember, class Enable = void>
 struct DeclType;
@@ -46,8 +53,9 @@ private:
     KDevelop::RangeInRevision makeContextRange(CXCursor cursor) const;
     KDevelop::Identifier makeId(CXCursor cursor) const;
     QByteArray makeComment(CXComment comment) const;
+    AbstractType::Ptr makeType(CXType type) const;
 
-//BEGIN dispatchCursor
+//BEGIN dispatch*
     template<CXCursorKind CK, EnableIf<CursorKindTraits::isUse(CK)> = dummy>
     CXChildVisitResult dispatchCursor(CXCursor cursor)
     {
@@ -90,32 +98,31 @@ private:
         constexpr bool hasContext = IsDefinition == Decision::True;
         return buildDeclaration<CK, typename DeclType<CK, isDefinition, isClassMember>::Type, hasContext>(cursor);
     }
-//BEGIN dispatchCursor
+
+    template<CXTypeKind TK>
+    AbstractType *dispatchType(CXType type)  const
+    {
+        auto kdevType = createType<TK>(type);
+        setTypeModifiers<TK>(type, kdevType);
+        return kdevType;
+    }
+//BEGIN dispatch*
 
 //BEGIN build*
     template<CXCursorKind CK, class DeclType, bool hasContext>
     CXChildVisitResult buildDeclaration(CXCursor cursor)
     {
         auto id = makeId(cursor);
+        auto type = makeType(clang_getCursorType(cursor));
         if (hasContext) {
             auto context = createContext<CK, CursorKindTraits::contextType(CK)>(cursor, id);
-            auto decl = createDeclaration<CK, DeclType>(cursor, id, context);
-            AbstractType::Ptr type = TypeBuilder::build(clang_getCursorType(cursor), m_includes);
-            {
-                DUChainWriteLocker lock;
-                decl->setAbstractType(type);
-            }
+            createDeclaration<CK, DeclType>(cursor, type, id, context);
             CurrentContext newParent(context);
             PushValue<CurrentContext*> pushCurrent(m_parentContext, &newParent);
             clang_visitChildren(cursor, &visitCursor, this);
             return CXChildVisit_Continue;
         }
-        auto decl = createDeclaration<CK, DeclType>(cursor, id);
-        AbstractType::Ptr type = TypeBuilder::build(clang_getCursorType(cursor), m_includes);
-        {
-            DUChainWriteLocker lock;
-            decl->setAbstractType(type);
-        }
+        createDeclaration<CK, DeclType>(cursor, type, id);
         return CXChildVisit_Recurse;
     }
 
@@ -158,21 +165,26 @@ private:
     }
 
     template<CXCursorKind CK, class DeclType>
-    KDevelop::Declaration* createDeclaration(CXCursor cursor, const KDevelop::Identifier& id)
+    KDevelop::Declaration* createDeclaration(CXCursor cursor, AbstractType::Ptr type, const KDevelop::Identifier& id)
     {
         auto decl = createDeclarationCommon<CK, DeclType>(cursor, id);
         DUChainWriteLocker lock;
         decl->setContext(m_parentContext->context);
+        decl->setAbstractType(type);
         return decl;
     }
 
     template<CXCursorKind CK, class DeclType>
-    KDevelop::Declaration* createDeclaration(CXCursor cursor, const KDevelop::Identifier& id, KDevelop::DUContext *context)
+    KDevelop::Declaration* createDeclaration(CXCursor cursor, AbstractType::Ptr type, const KDevelop::Identifier& id, KDevelop::DUContext *context)
     {
         auto decl = createDeclarationCommon<CK, DeclType>(cursor, id);
         DUChainWriteLocker lock;
         decl->setContext(m_parentContext->context);
         decl->setInternalContext(context);
+        //TODO: if (DeclType::hasIdentifiedType)
+        if (IdentifiedType *id = dynamic_cast<IdentifiedType*>(type.unsafeData()))
+            id->setDeclaration(decl);
+        decl->setAbstractType(type);
         return decl;
     }
 
@@ -203,6 +215,85 @@ private:
         if (Type == KDevelop::DUContext::Other)
             context->setInSymbolTable(false);
         return context;
+    }
+
+    template<CXTypeKind TK, EnableIf<CursorKindTraits::integralType(TK) != -1> = dummy>
+    AbstractType *createType(CXType) const
+    {
+        return new IntegralType(CursorKindTraits::integralType(TK));
+    }
+
+    template<CXTypeKind TK, EnableIf<TK == CXType_Pointer> = dummy>
+    AbstractType *createType(CXType type) const
+    {
+        auto ptr = new PointerType;
+        ptr->setBaseType(makeType(clang_getPointeeType(type)));
+        return ptr;
+    }
+
+    template<CXTypeKind TK, EnableIf<TK == CXType_ConstantArray> = dummy>
+    AbstractType *createType(CXType type) const
+    {
+        auto arr = new ArrayType;
+        arr->setDimension(clang_getArraySize(type));
+        arr->setElementType(makeType(clang_getArrayElementType(type)));
+        return arr;
+    }
+
+    template<CXTypeKind TK, EnableIf<TK == CXType_RValueReference || TK == CXType_LValueReference> = dummy>
+    AbstractType *createType(CXType type) const
+    {
+        auto ref = new ReferenceType;
+        ref->setIsRValue(type.kind == CXType_RValueReference);
+        ref->setBaseType(makeType(clang_getPointeeType(type)));
+        return ref;
+    }
+
+    template<CXTypeKind TK, EnableIf<TK == CXType_FunctionProto> = dummy>
+    AbstractType *createType(CXType type) const
+    {
+        auto func = new FunctionType;
+        func->setReturnType(makeType(clang_getResultType(type)));
+        const int numArgs = clang_getNumArgTypes(type);
+        for (int i = 0; i < numArgs; ++i) {
+            func->addArgument(makeType(clang_getArgType(type, i)));
+        }
+        /// TODO: variadic functions
+        return func;
+    }
+
+    template<CXTypeKind TK, EnableIf<TK == CXType_Record> = dummy>
+    AbstractType *createType(CXType) const
+    {
+        return new StructureType;
+    }
+
+    template<CXTypeKind TK, EnableIf<TK == CXType_Enum> = dummy>
+    AbstractType *createType(CXType) const
+    {
+        return new EnumerationType;
+    }
+
+    template<CXTypeKind TK, EnableIf<TK == CXType_Typedef> = dummy>
+    AbstractType *createType(CXType type) const
+    {
+        auto t = new TypeAliasType;
+        CXCursor location = clang_getTypeDeclaration(type);
+        t->setType(makeType(clang_getTypedefDeclUnderlyingType(location)));
+        DeclarationPointer decl = findDeclaration(location, m_includes);
+        DUChainReadLocker lock;
+        if (decl) {
+            t->setDeclaration(decl.data());
+        }
+        return t;
+    }
+
+    template<CXTypeKind TK, EnableIf<TK == CXType_Int128 || TK == CXType_UInt128 || TK == CXType_Vector || TK == CXType_Unexposed> = dummy>
+    AbstractType *createType(CXType type) const
+    {
+        auto t = new DelayedType;
+        t->setIdentifier(IndexedTypeIdentifier(QString::fromUtf8(ClangString(clang_getTypeSpelling(type)))));
+        return t;
     }
 //END create*
 
@@ -259,6 +350,9 @@ void setDeclData(CXCursor cursor, ClassFunctionDeclaration* decl) const
 }
 
 //END setDeclData
+
+template<CXTypeKind TK>
+void setTypeModifiers(CXType type, AbstractType* kdevType) const;
 
 private:
     struct CurrentContext

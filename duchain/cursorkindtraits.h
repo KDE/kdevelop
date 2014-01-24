@@ -30,6 +30,7 @@
 #include <language/duchain/functiondeclaration.h>
 #include <language/duchain/functiondefinition.h>
 #include <language/duchain/namespacealiasdeclaration.h>
+#include <language/duchain/types/integraltype.h>
 
 #include "templatehelpers.h"
 
@@ -192,6 +193,31 @@ constexpr Declaration::AccessPolicy kdevAccessPolicy(CX_CXXAccessSpecifier acces
     : access == CX_CXXProtected ?    Declaration::Protected
     : access == CX_CXXPublic ?       Declaration::Public
     :                                Declaration::DefaultAccess;
+}
+
+constexpr IntegralType::CommonIntegralTypes integralType(CXTypeKind TK)
+{
+    return TK == CXType_Void    ? IntegralType::TypeVoid
+    : TK == CXType_Bool         ? IntegralType::TypeBoolean
+    : TK == CXType_Float        ? IntegralType::TypeFloat
+    : TK == CXType_Char16       ? IntegralType::TypeChar16_t
+    : TK == CXType_Char32       ? IntegralType::TypeChar32_t
+    : TK == CXType_WChar        ? IntegralType::TypeWchar_t
+    : ( TK == CXType_LongDouble
+      ||TK == CXType_Double)    ? IntegralType::TypeDouble
+    : ( TK == CXType_Short
+      ||TK == CXType_UShort
+      ||TK == CXType_Int
+      ||TK == CXType_UInt
+      ||TK == CXType_Long
+      ||TK == CXType_ULong
+      ||TK == CXType_LongLong
+      ||TK == CXType_ULongLong) ? IntegralType::TypeInt
+    : ( TK == CXType_Char_U
+      ||TK == CXType_Char_S
+      ||TK == CXType_UChar
+      ||TK == CXType_SChar)     ?  IntegralType::TypeChar
+    : static_cast<IntegralType::CommonIntegralTypes>(-1);
 }
 
 }

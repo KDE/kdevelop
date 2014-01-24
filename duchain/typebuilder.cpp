@@ -20,6 +20,8 @@
 
 #include "typebuilder.h"
 #include "clangtypes.h"
+#include "templatehelpers.h"
+#include "cursorkindtraits.h"
 
 #include <language/duchain/types/integraltype.h>
 #include <language/duchain/types/pointertype.h>
@@ -39,108 +41,151 @@ using namespace TypeBuilder;
 
 namespace {
 
+template<CXTypeKind TK>
+void setTypeModifiers(AbstractType *type)
+{
+    
+}
+
+template<CXTypeKind TK, EnableIf<CursorKindTraits::integralType(TK) != -1> = dummy>
+AbstractType *makeType(CXType type)
+{
+    return new IntegralType(CursorKindTraits::integralType(TK));
+}
+
+template<CXTypeKind TK, EnableIf<TK == CXType_Pointer> = dummy>
+AbstractType *makeType(CXType type)
+{
+    auto ptr = new PointerType;
+    ptr->setBaseType(build(clang_getPointeeType(type), includes));
+    return ptr;
+}
+
+template<CXTypeKind TK, EnableIf<TK == CXType_ConstantArray> = dummy>
+AbstractType *makeType(CXType type)
+{
+    auto arr = new ArrayType;
+    arr->setDimension(clang_getArraySize(type));
+    arr->setElementType(build(clang_getArrayElementType(type), includes));
+    return arr;
+}
+
+template<CXTypeKind TK, EnableIf<TK == CXType_RValueReference || TK == CXType_LValueReference> = dummy>
+AbstractType *makeType(CXType type)
+{
+    auto ref = new ReferenceType;
+    ref->setIsRValue(type.kind == CXType_RValueReference);
+    ref->setBaseType(build(clang_getPointeeType(type), includes));
+    return ref;
+}
+
+template<CXTypeKind TK, EnableIf<TK == CXType_FunctionProto> = dummy>
+AbstractType *makeType(CXType type)
+{
+    auto func = new FunctionType;
+    func->setReturnType(build(clang_getResultType(type), includes));
+    const int numArgs = clang_getNumArgTypes(type);
+    for (int i = 0; i < numArgs; ++i) {
+        func->addArgument(build(clang_getArgType(type, i), includes));
+    }
+    /// TODO: variadic functions
+    return func;
+}
+
+template<CXTypeKind TK, EnableIf<TK == CXType_Record> = dummy>
+AbstractType *makeType(CXType type)
+{
+    auto st = new StructureType;
+    DeclarationPointer decl = findDeclaration(clang_getTypeDeclaration(type), includes);
+    DUChainReadLocker lock;
+    if (decl) {
+        st->setDeclaration(decl.data());
+    }
+    return st;
+}
+
+template<CXTypeKind TK, EnableIf<TK == CXType_Enum> = dummy>
+AbstractType *makeType(CXType type)
+{
+    auto t = new EnumerationType;
+    DeclarationPointer decl = findDeclaration(clang_getTypeDeclaration(type), includes);
+    DUChainReadLocker lock;
+    if (decl) {
+        t->setDeclaration(decl.data());
+    }
+    return t;
+}
+
+template<CXTypeKind TK, EnableIf<TK == CXType_Typedef> = dummy>
+AbstractType *makeType(CXType type)
+{
+    auto t = new TypeAliasType;
+    CXCursor location = clang_getTypeDeclaration(type);
+    t->setType(build(clang_getTypedefDeclUnderlyingType(location), includes));
+    DeclarationPointer decl = findDeclaration(location, includes);
+    DUChainReadLocker lock;
+    if (decl) {
+        t->setDeclaration(decl.data());
+    }
+    return t;
+}
+
+template<CXTypeKind TK, EnableIf<TK == CXType_Int128 || TK == CXType_UInt128 || TK == CXType_Vector || TK == CXType_Unexposed> = dummy>
+AbstractType *makeType(CXType type)
+{
+    auto t = new DelayedType;
+    t->setIdentifier(IndexedTypeIdentifier(QString::fromUtf8(ClangString(clang_getTypeSpelling(type)))));
+    return t;
+}
+
+template<CXTypeKind TK>
+AbstractType *dispatchType(CXType type, const IncludeFileContexts& includes)
+{
+    auto type = makeType<TK>(type);
+    setTypeModifiers<TK>(type);
+    return type;
+}
+
 AbstractType* createType(CXType type, const IncludeFileContexts& includes)
 {
+    #define UseKind(TypeKind) case TypeKind: return dispatchType<TypeKind>()
     switch (type.kind) {
-        case CXType_Void:
-            return new IntegralType(IntegralType::TypeVoid);
-        case CXType_Bool:
-            return new IntegralType(IntegralType::TypeBoolean);
-        case CXType_Short:
-        case CXType_UShort:
-        case CXType_Int:
-        case CXType_UInt:
-        case CXType_Long:
-        case CXType_ULong:
-        case CXType_LongLong:
-        case CXType_ULongLong:
-            return new IntegralType(IntegralType::TypeInt);
-        case CXType_Float:
-            return new IntegralType(IntegralType::TypeFloat);
-        case CXType_LongDouble:
-        case CXType_Double:
-            return new IntegralType(IntegralType::TypeDouble);
-        case CXType_Char_U:
-        case CXType_Char_S:
-        case CXType_UChar:
-        case CXType_SChar:
-            return new IntegralType(IntegralType::TypeChar);
-        case CXType_Char16:
-            return new IntegralType(IntegralType::TypeChar16_t);
-        case CXType_Char32:
-            return new IntegralType(IntegralType::TypeChar32_t);
-        case CXType_Pointer: {
-            auto ptr = new PointerType;
-            ptr->setBaseType(build(clang_getPointeeType(type), includes));
-            return ptr;
-        }
-        case CXType_ConstantArray: {
-            auto arr = new ArrayType;
-            arr->setDimension(clang_getArraySize(type));
-            arr->setElementType(build(clang_getArrayElementType(type), includes));
-            return arr;
-        }
-        case CXType_LValueReference:
-        case CXType_RValueReference: {
-            auto ref = new ReferenceType;
-            ref->setIsRValue(type.kind == CXType_RValueReference);
-            ref->setBaseType(build(clang_getPointeeType(type), includes));
-            return ref;
-        }
-        case CXType_FunctionProto: {
-            auto func = new FunctionType;
-            func->setReturnType(build(clang_getResultType(type), includes));
-            const int numArgs = clang_getNumArgTypes(type);
-            for (int i = 0; i < numArgs; ++i) {
-                func->addArgument(build(clang_getArgType(type, i), includes));
-            }
-            /// TODO: variadic functions
-            return func;
-        }
-        case CXType_Record: {
-            auto st = new StructureType;
-            DeclarationPointer decl = findDeclaration(clang_getTypeDeclaration(type), includes);
-            DUChainReadLocker lock;
-            if (decl) {
-                st->setDeclaration(decl.data());
-            }
-            return st;
-        }
-        case CXType_Enum: {
-            auto t = new EnumerationType;
-            DeclarationPointer decl = findDeclaration(clang_getTypeDeclaration(type), includes);
-            DUChainReadLocker lock;
-            if (decl) {
-                t->setDeclaration(decl.data());
-            }
-            return t;
-        }
-        case CXType_Typedef: {
-            auto t = new TypeAliasType;
-            CXCursor location = clang_getTypeDeclaration(type);
-            t->setType(build(clang_getTypedefDeclUnderlyingType(location), includes));
-            DeclarationPointer decl = findDeclaration(location, includes);
-            DUChainReadLocker lock;
-            if (decl) {
-                t->setDeclaration(decl.data());
-            }
-            return t;
-        }
-        case CXType_WChar:
-            return new IntegralType(IntegralType::TypeWchar_t);
-        case CXType_Int128:
-        case CXType_UInt128:
-        case CXType_Vector:
-        case CXType_Unexposed: {
-            auto t = new DelayedType;
-            t->setIdentifier(IndexedTypeIdentifier(QString::fromUtf8(ClangString(clang_getTypeSpelling(type)))));
-            return t;
-        }
-        case CXType_Invalid:
-            return nullptr;
-        default:
-            debug() << "Unhandled type: " << type.kind << ClangString(clang_getTypeSpelling(type));
-            return nullptr;
+    UseKind(CXType_Void);
+    UseKind(CXType_Bool);
+    UseKind(CXType_Short);
+    UseKind(CXType_UShort);
+    UseKind(CXType_Int);
+    UseKind(CXType_UInt);
+    UseKind(CXType_Long);
+    UseKind(CXType_ULong);
+    UseKind(CXType_LongLong);
+    UseKind(CXType_ULongLong);
+    UseKind(CXType_Float);
+    UseKind(CXType_LongDouble);
+    UseKind(CXType_Double);
+    UseKind(CXType_Char_U);
+    UseKind(CXType_Char_S);
+    UseKind(CXType_UChar);
+    UseKind(CXType_SChar);
+    UseKind(CXType_Char16);
+    UseKind(CXType_Char32);
+    UseKind(CXType_Pointer);
+    UseKind(CXType_ConstantArray);
+    UseKind(CXType_LValueReference);
+    UseKind(CXType_RValueReference);
+    UseKind(CXType_FunctionProto);
+    UseKind(CXType_Record);
+    UseKind(CXType_Enum);
+    UseKind(CXType_Typedef);
+    UseKind(CXType_Int128);
+    UseKind(CXType_UInt128);
+    UseKind(CXType_Vector);
+    UseKind(CXType_Unexposed);
+    case CXType_Invalid:
+        return nullptr;
+    default:
+        debug() << "Unhandled type: " << type.kind << ClangString(clang_getTypeSpelling(type));
+        return nullptr;
     }
 }
 
@@ -150,36 +195,8 @@ namespace TypeBuilder {
 
 AbstractType::Ptr build(CXType type, const IncludeFileContexts& includes)
 {
-    AbstractType::Ptr ret(createType(type, includes));
-    if (!ret) {
-        return ret;
-    }
-    quint64 modifiers = 0;
-    if (clang_isConstQualifiedType(type)) {
-        modifiers |= AbstractType::ConstModifier;
-    }
-    if (clang_isVolatileQualifiedType(type)) {
-        modifiers |= AbstractType::VolatileModifier;
-    }
-    if (type.kind == CXType_Short || type.kind == CXType_UShort) {
-        modifiers |= AbstractType::ShortModifier;
-    }
-    if (type.kind == CXType_Long || type.kind == CXType_LongDouble || type.kind == CXType_ULong) {
-        modifiers |= AbstractType::LongModifier;
-    }
-    if (type.kind == CXType_LongLong || type.kind == CXType_ULongLong) {
-        modifiers |= AbstractType::LongLongModifier;
-    }
-    if (type.kind == CXType_SChar) {
-        modifiers |= AbstractType::SignedModifier;
-    }
-    if (type.kind == CXType_UChar || type.kind == CXType_UInt || type.kind == CXType_UShort
-        || type.kind == CXType_UInt128 || type.kind == CXType_ULong || type.kind == CXType_ULongLong)
-    {
-        modifiers |= AbstractType::UnsignedModifier;
-    }
-    ret->setModifiers(modifiers);
-    return ret;
+    auto kdevType = createType(type, includes);
+    return AbstractType::Ptr(kdevType);
 }
 
 }

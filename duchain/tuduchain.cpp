@@ -20,6 +20,7 @@
  */
 
 #include "tuduchain.h"
+#include "debug.h"
 
 //BEGIN DeclType
 
@@ -79,6 +80,39 @@ struct DeclType<CK, isDefinition, isClassMember,
     typedef ClassMemberDeclaration Type;
 };
 //END DeclType
+
+//BEGIN CreateType
+
+template<CXTypeKind TK>
+void TUDUChain::setTypeModifiers(CXType type, AbstractType* kdevType) const
+{
+    quint64 modifiers = 0;
+    if (clang_isConstQualifiedType(type)) {
+        modifiers |= AbstractType::ConstModifier;
+    }
+    if (clang_isVolatileQualifiedType(type)) {
+        modifiers |= AbstractType::VolatileModifier;
+    }
+    if (TK == CXType_Short || TK == CXType_UShort) {
+        modifiers |= AbstractType::ShortModifier;
+    }
+    if (TK == CXType_Long || TK == CXType_LongDouble || TK == CXType_ULong) {
+        modifiers |= AbstractType::LongModifier;
+    }
+    if (TK == CXType_LongLong || TK == CXType_ULongLong) {
+        modifiers |= AbstractType::LongLongModifier;
+    }
+    if (TK == CXType_SChar) {
+        modifiers |= AbstractType::SignedModifier;
+    }
+    if (TK == CXType_UChar || TK == CXType_UInt || TK == CXType_UShort
+        || TK == CXType_UInt128 || TK == CXType_ULong || TK == CXType_ULongLong)
+    {
+        modifiers |= AbstractType::UnsignedModifier;
+    }
+    kdevType->setModifiers(modifiers);
+}
+//END CreateType
 
 TUDUChain::TUDUChain(CXTranslationUnit tu, CXFile file, const IncludeFileContexts& includes, const bool update)
 : m_file(file)
@@ -184,4 +218,47 @@ QByteArray TUDUChain::makeComment(CXComment comment) const
     for (int i = 0; i < numChildren; ++i)
         text += makeComment(clang_Comment_getChild(comment, i));
     return text;
+}
+
+AbstractType::Ptr TUDUChain::makeType(CXType type) const
+{
+    #define UseKind(TypeKind) case TypeKind: return AbstractType::Ptr(dispatchType<TypeKind>(type))
+    switch (type.kind) {
+    UseKind(CXType_Void);
+    UseKind(CXType_Bool);
+    UseKind(CXType_Short);
+    UseKind(CXType_UShort);
+    UseKind(CXType_Int);
+    UseKind(CXType_UInt);
+    UseKind(CXType_Long);
+    UseKind(CXType_ULong);
+    UseKind(CXType_LongLong);
+    UseKind(CXType_ULongLong);
+    UseKind(CXType_Float);
+    UseKind(CXType_LongDouble);
+    UseKind(CXType_Double);
+    UseKind(CXType_Char_U);
+    UseKind(CXType_Char_S);
+    UseKind(CXType_UChar);
+    UseKind(CXType_SChar);
+    UseKind(CXType_Char16);
+    UseKind(CXType_Char32);
+    UseKind(CXType_Pointer);
+    UseKind(CXType_ConstantArray);
+    UseKind(CXType_LValueReference);
+    UseKind(CXType_RValueReference);
+    UseKind(CXType_FunctionProto);
+    UseKind(CXType_Record);
+    UseKind(CXType_Enum);
+    UseKind(CXType_Typedef);
+    UseKind(CXType_Int128);
+    UseKind(CXType_UInt128);
+    UseKind(CXType_Vector);
+    UseKind(CXType_Unexposed);
+    case CXType_Invalid:
+        return AbstractType::Ptr();
+    default:
+        debug() << "Unhandled type: " << type.kind << ClangString(clang_getTypeSpelling(type));
+        return AbstractType::Ptr();
+    }
 }
