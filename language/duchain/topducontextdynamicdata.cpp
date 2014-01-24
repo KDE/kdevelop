@@ -609,50 +609,6 @@ bool TopDUContextDynamicData::isContextForIndexLoaded(uint index) const {
   }
 }
 
-Declaration* TopDUContextDynamicData::getDeclarationForIndex(uint index) const {
-  if(!m_dataLoaded)
-    loadData();
-
-  if(index < (0x0fffffff/2)) {
-    if(index == 0 || index > uint(m_declarations.size())) {
-      kWarning() << "declaration index out of bounds:" << index << "count:" << m_declarations.size();
-      return 0;
-    }
-    else {
-      uint realIndex = index-1;
-      if(!m_declarations[realIndex] && realIndex < (uint)m_declarationDataOffsets.size() && m_declarationDataOffsets[realIndex].dataOffset) {
-        
-        Q_ASSERT(!m_itemRetrievalForbidden);
-        
-        const DUChainBaseData* data = reinterpret_cast<const DUChainBaseData*>(
-          pointerInData(m_declarationDataOffsets[realIndex].dataOffset));
-        ///FIXME: ugly, remove const_cast
-        m_declarations[realIndex] = static_cast<Declaration*>(DUChainItemSystem::self().create(
-          const_cast<DUChainBaseData*>(data)));
-        if(!m_declarations[realIndex]) {
-          //When this happens, the declaration has not been registered correctly.
-          //We can stop here, because else we will get crashes later.
-          kError() << "Failed to load declaration with identity" << data->classId;
-          Q_ASSERT(0);
-        }else{
-          DUContext* context = getContextForIndex(m_declarationDataOffsets[realIndex].parentContext);
-          Q_ASSERT(context); //If this triggers, the context has been deleted without deleting its contained declarations
-          m_declarations[realIndex]->rebuildDynamicData(context, index);
-        }
-      }
-
-      return m_declarations[realIndex];
-    }
-  }else{
-    QMutexLocker lock(&m_temporaryDataMutex);
-    index = 0x0fffffff - index; //We always keep the highest bit at zero
-    if(index == 0 || index > uint(m_temporaryDeclarations.size()))
-      return 0;
-    else
-      return m_temporaryDeclarations[index-1];
-  }
-}
-
 void TopDUContextDynamicData::clearDeclarationIndex(Declaration* decl) {
   if(!m_dataLoaded)
     loadData();
@@ -702,51 +658,73 @@ bool TopDUContextDynamicData::isTemporaryDeclarationIndex(uint index) const {
   return !(index < (0x0fffffff/2));
 }
 
-DUContext* TopDUContextDynamicData::getContextForIndex(uint index) const {
+template<class Item>
+Item* TopDUContextDynamicData::getItemForIndex(uint index, QVector<Item*>& items, const QVector<ItemDataInfo>& offsets,
+                                               const QVector<Item*>& temporaryItems) const
+{
+  if (index >= (0x0fffffff/2)) {
+    QMutexLocker lock(&m_temporaryDataMutex);
+    index = 0x0fffffff - index; //We always keep the highest bit at zero
+    if(index == 0 || index > uint(temporaryItems.size()))
+      return 0;
+    else
+      return temporaryItems[index-1];
+  }
 
+  if (index == 0 || index > static_cast<uint>(items.size())) {
+    kWarning() << "item index out of bounds:" << index << "count:" << items.size();
+    return nullptr;
+  }
+  const uint realIndex = index - 1;
+  Item*& item = items[realIndex];
+  if (item) {
+    //Shortcut, because this is the most common case
+    return item;
+  }
+
+  if (realIndex < (uint)offsets.size() && offsets[realIndex].dataOffset) {
+    Q_ASSERT(!m_itemRetrievalForbidden);
+
+    //Construct the context, and eventuall its parent first
+    ///TODO: ugly, remove need for const_cast
+    auto data = const_cast<DUChainBaseData*>(
+      reinterpret_cast<const DUChainBaseData*>(pointerInData(offsets[realIndex].dataOffset))
+    );
+
+    item = dynamic_cast<Item*>(DUChainItemSystem::self().create(data));
+    if (!item) {
+      //When this happens, the item has not been registered correctly.
+      //We can stop here, because else we will get crashes later.
+      kError() << "Failed to load item with identity" << data->classId;
+    }
+
+    auto parent = getContextForIndex(offsets[realIndex].parentContext);
+    Q_ASSERT_X(parent, Q_FUNC_INFO, "Could not find parent context for loaded item.\n"
+                                    "Potentially, the context has been deleted without deleting its children.");
+    item->rebuildDynamicData(parent, index);
+  }
+
+  return item;
+}
+
+DUContext* TopDUContextDynamicData::getContextForIndex(uint index) const
+{
   if(!m_dataLoaded)
     loadData();
 
-  if(index < (0x0fffffff/2)) {
-    if(index == 0)
-      return m_topContext;
-    if(index > uint(m_contexts.size())) {
-      kWarning() << "declaration index out of bounds:" << index << "count:" << m_declarations.size();
-      return 0;
-    } else {
-      uint realIndex = index-1;
-      DUContext** fastContextsPos = (m_contexts.data() + realIndex);
-      if(*fastContextsPos) //Shortcut, because this is the most common case
-        return *fastContextsPos;
-
-      if(!*fastContextsPos && realIndex < (uint)m_contextDataOffsets.size() && m_contextDataOffsets[realIndex].dataOffset) {
-
-        Q_ASSERT(!m_itemRetrievalForbidden);
-        
-        //Construct the context, and eventuall its parent first
-        ///TODO: ugly, remove const_cast
-        const DUChainBaseData* data = reinterpret_cast<const DUChainBaseData*>(
-          pointerInData(m_contextDataOffsets[realIndex].dataOffset));
-        *fastContextsPos = dynamic_cast<DUContext*>(DUChainItemSystem::self().create(const_cast<DUChainBaseData*>(data)));
-        if(!*fastContextsPos) {
-          //When this happens, the declaration has not been registered correctly.
-          //We can stop here, because else we will get crashes later.
-          kError() << "Failed to load declaration with identity" << data->classId;
-        }else{
-          (*fastContextsPos)->rebuildDynamicData(getContextForIndex(m_contextDataOffsets[realIndex].parentContext), index);
-        }
-      }
-
-      return *fastContextsPos;
-    }
-  }else{
-    QMutexLocker lock(&m_temporaryDataMutex);
-    index = 0x0fffffff - index; //We always keep the highest bit at zero
-    if(index == 0 || index > uint(m_temporaryContexts.size()))
-      return 0;
-    else
-      return m_temporaryContexts[index-1];
+  if (index == 0) {
+    return m_topContext;
   }
+
+  return getItemForIndex<DUContext>(index, m_contexts, m_contextDataOffsets, m_temporaryContexts);
+}
+
+Declaration* TopDUContextDynamicData::getDeclarationForIndex(uint index) const
+{
+  if(!m_dataLoaded)
+    loadData();
+
+  return getItemForIndex<Declaration>(index, m_declarations, m_declarationDataOffsets, m_temporaryDeclarations);
 }
 
 void TopDUContextDynamicData::clearContextIndex(DUContext* decl) {
