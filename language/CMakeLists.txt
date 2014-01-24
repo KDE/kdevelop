@@ -58,6 +58,7 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/duchainregister.cpp
     duchain/persistentsymboltable.cpp
     duchain/instantiationinformation.cpp
+    duchain/problem.cpp
 
     duchain/types/typesystem.cpp
     duchain/types/typeregister.cpp
@@ -94,7 +95,6 @@ set(kdevplatformlanguage_LIB_SRCS
     interfaces/iastcontainer.cpp
     interfaces/ilanguagesupport.cpp
     interfaces/quickopendataprovider.cpp
-    interfaces/iproblem.cpp
     interfaces/iquickopen.cpp
     interfaces/editorcontext.cpp
     interfaces/codecontext.cpp
@@ -164,7 +164,6 @@ install(FILES
     interfaces/quickopendataprovider.h
     interfaces/quickopenfilter.h
     interfaces/iquickopen.h
-    interfaces/iproblem.h
     interfaces/codecontext.h
     interfaces/editorcontext.h
     interfaces/iastcontainer.h
@@ -251,6 +250,7 @@ install(FILES
     duchain/indexeddeclaration.h
     duchain/localindexeddeclaration.h
     duchain/definitions.h
+    duchain/problem.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain COMPONENT Devel
 )
 

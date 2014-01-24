@@ -27,7 +27,7 @@
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/dumpchain.h>
-#include <language/interfaces/iproblem.h>
+#include <language/duchain/problem.h>
 
 #include <interfaces/ilanguage.h>
 #include <interfaces/iplugincontroller.h>

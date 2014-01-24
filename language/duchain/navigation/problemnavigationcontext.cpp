@@ -22,7 +22,7 @@
 #include <language/duchain/declaration.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchainutils.h>
-#include <language/interfaces/iproblem.h>
+#include <language/duchain/problem.h>
 #include <qtextdocument.h>
 #include <qboxlayout.h>
 #include <interfaces/iassistant.h>

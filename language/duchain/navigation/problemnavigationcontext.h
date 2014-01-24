@@ -20,7 +20,7 @@
 #define KDEVPLATFORM_PROBLEMNAVIGATIONCONTEXT_H
 
 #include <language/duchain/navigation/abstractnavigationcontext.h>
-#include <language/interfaces/iproblem.h>
+#include <language/duchain/problem.h>
 #include "../../languageexport.h"
 #include <qpointer.h>
 

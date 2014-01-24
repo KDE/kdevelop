@@ -31,11 +31,11 @@
 #include "duchainpointer.h"
 #include "identifier.h"
 #include "use.h"
+#include "problem.h"
 #include "indexedstring.h"
 #include "functiondefinition.h"
 
 #include <editor/rangeinrevision.h>
-#include <interfaces/iproblem.h>
 
 using namespace KDevelop;
 

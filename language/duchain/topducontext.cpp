@@ -24,11 +24,10 @@
 
 #include <QtCore/QThread>
 
-#include "../interfaces/iproblem.h"
-
 #include <util/kdevvarlengtharray.h>
 
 #include "persistentsymboltable.h"
+#include "problem.h"
 #include "declaration.h"
 #include "duchain.h"
 #include "duchainlock.h"

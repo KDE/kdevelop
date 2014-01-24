@@ -17,7 +17,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#include "iproblem.h"
+#include "problem.h"
+
 #include <duchain/duchainregister.h>
 #include <interfaces/iassistant.h>
 #include <klocalizedstring.h>

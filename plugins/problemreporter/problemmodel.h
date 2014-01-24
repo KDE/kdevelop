@@ -25,7 +25,7 @@
 #include <QtCore/QAbstractItemModel>
 #include <QReadWriteLock>
 
-#include <language/interfaces/iproblem.h>
+#include <language/duchain/problem.h>
 #include <KUrl>
 
 namespace KDevelop {
