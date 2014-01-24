@@ -31,6 +31,7 @@
 #include <language/duchain/declaration.h>
 #include <language/duchain/parsingenvironment.h>
 #include <language/duchain/problem.h>
+#include <language/duchain/types/integraltype.h>
 #include <language/backgroundparser/backgroundparser.h>
 #include <interfaces/ilanguagecontroller.h>
 
@@ -242,6 +243,61 @@ void DUChainTest::testNamespace()
         QCOMPARE(ctx->findDeclarations(QualifiedIdentifier("foo::bar")).size(), 1);
         QCOMPARE(ctx->findDeclarations(QualifiedIdentifier("foo::bar::baz")).size(), 1);
     }
+}
+
+void DUChainTest::testAutoTypeDeduction()
+{
+    TestFile file("auto foo = 5;\n", "cpp");
+    file.parse(TopDUContext::AllDeclarationsContextsAndUses);
+    QVERIFY(file.waitForParsed(500));
+
+    DUChainReadLocker lock;
+
+    DUContext* ctx = file.topContext().data();
+    QVERIFY(ctx);
+    QCOMPARE(ctx->localDeclarations().size(), 1);
+    QCOMPARE(ctx->findDeclarations(QualifiedIdentifier("foo")).size(), 1);
+    Declaration* decl = ctx->findDeclarations(QualifiedIdentifier("foo"))[0];
+    QCOMPARE(decl->identifier(), Identifier("foo"));
+    QEXPECT_FAIL("", "No type deduction here unfortunately, missing API in Clang", Continue);
+    QVERIFY(decl->type<IntegralType>());
+}
+
+void DUChainTest::testTypeDeductionInTemplateInstantiation()
+{
+    // see: http://clang-developers.42468.n3.nabble.com/RFC-missing-libclang-query-functions-features-td2504253.html
+    TestFile file("template<typename T> struct foo { T member; } foo<int> f; auto i = f.member;", "cpp");
+    file.parse(TopDUContext::AllDeclarationsContextsAndUses);
+    QVERIFY(file.waitForParsed(500));
+
+    DUChainReadLocker lock;
+
+    DUContext* ctx = file.topContext().data();
+    QCOMPARE(ctx->localDeclarations().size(), 3);
+    QVERIFY(ctx);
+    Declaration* decl = 0;
+
+    // check 'foo' declaration
+    decl = ctx->localDeclarations()[0];
+    QVERIFY(decl);
+    QCOMPARE(decl->identifier(), Identifier("foo"));
+
+    // check type of 'member' inside declaration-scope
+    QCOMPARE(ctx->childContexts().size(), 1);
+    DUContext* fooCtx = ctx->childContexts().first();
+    QVERIFY(fooCtx);
+    // Should there really be two declarations?
+    QCOMPARE(fooCtx->localDeclarations().size(), 2);
+    decl = fooCtx->localDeclarations()[1];
+    QCOMPARE(decl->identifier(), Identifier("member"));
+
+    // check type of 'member' in definition of 'f'
+    decl = ctx->localDeclarations()[1];
+    QCOMPARE(decl->identifier(), Identifier("f"));
+    decl = ctx->localDeclarations()[2];
+    QCOMPARE(decl->identifier(), Identifier("i"));
+    QEXPECT_FAIL("", "No type deduction here unfortunately, missing API in Clang", Continue);
+    QVERIFY(decl->type<IntegralType>());
 }
 
 #include "duchaintest.moc"

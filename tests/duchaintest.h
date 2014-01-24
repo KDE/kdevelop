@@ -37,6 +37,8 @@ private slots:
     void testReparseError();
     void testTemplate();
     void testNamespace();
+    void testAutoTypeDeduction();
+    void testTypeDeductionInTemplateInstantiation();
 };
 
 #endif // DUCHAINTEST_H
