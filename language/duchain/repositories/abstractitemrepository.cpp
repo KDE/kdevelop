@@ -23,7 +23,7 @@ namespace KDevelop {
 uint staticItemRepositoryVersion()
 {
   //Increase this to reset incompatible item-repositories
-  return 75;
+  return 76;
 }
 
 AbstractItemRepository::~AbstractItemRepository()

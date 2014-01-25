@@ -34,6 +34,7 @@ class Declaration;
 class IndexedString;
 class IndexedDUContext;
 class DUChainBaseData;
+class Problem;
 
 typedef QPair<QByteArray, uint> ArrayWithPosition;
 
@@ -43,7 +44,7 @@ class TopDUContextDynamicData {
   TopDUContextDynamicData(TopDUContext* topContext);
   ~TopDUContextDynamicData();
 
-  void clearContextsAndDeclarations();
+  void clear();
 
   /**
    * Allocates an index for the given declaration in this top-context.
@@ -66,13 +67,23 @@ class TopDUContextDynamicData {
    *                   and a duchain write-lock is not needed. Else, you need a write-lock when calling this.
   */
   uint allocateContextIndex(DUContext* ctx, bool temporary);
-  
+
   DUContext* getContextForIndex(uint index) const;
-  
+
   bool isContextForIndexLoaded(uint index) const;
-  
+
   void clearContextIndex(DUContext* ctx);
-  
+
+
+  /**
+   * Allocates an index for the given problem in this top-context.
+   * The returned index is never zero.
+   */
+  uint allocateProblemIndex(Problem* problem);
+  Problem* getProblemForIndex(uint index) const;
+  bool isProblemForIndexLoaded(uint index) const;
+  void clearProblemIndex(Problem* problem);
+
   ///Stores this top-context to disk
   void store();
   
@@ -145,6 +156,7 @@ class TopDUContextDynamicData {
       bool isItemForIndexLoaded(uint index) const;
 
       void loadData(QFile* file) const;
+      void writeData(QFile* file);
 
       //May contain zero items if they were deleted
       mutable QVector<Item*> items;
@@ -155,6 +167,7 @@ class TopDUContextDynamicData {
 
     DUChainItemStorage<DUContext> m_contexts;
     DUChainItemStorage<Declaration> m_declarations;
+    DUChainItemStorage<Problem> m_problems;
 
     //For temporary declarations that will not be stored to disk, like template instantiations
 

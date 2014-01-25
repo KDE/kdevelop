@@ -368,10 +368,12 @@ protected:
   friend class TopDUContextDynamicData;
   friend class Declaration;
   friend class DUContext;
+  friend class Problem;
   friend class IndexedDeclaration;
   friend class IndexedDUContext;
   friend class LocalIndexedDeclaration;
   friend class LocalIndexedDUContext;
+  friend class LocalIndexedProblem;
   friend class DeclarationId;
   friend class ParsingEnvironmentFile;
   

@@ -84,6 +84,7 @@ ReferencedTopDUContext& ReferencedTopDUContext::operator=(const ReferencedTopDUC
 }
 
 DEFINE_LIST_MEMBER_HASH(TopDUContextData, m_usedDeclarationIds, DeclarationId)
+DEFINE_LIST_MEMBER_HASH(TopDUContextData, m_problems, LocalIndexedProblem)
 REGISTER_DUCHAIN_ITEM(TopDUContext);
 
 template <class T>
@@ -149,9 +150,10 @@ public:
   TopDUContext* m_ctxt;
 
   QSet<DUContext*> m_directImporters;
+  // used to keep problems alive while the topducontext is alive
+  QList<ProblemPointer> m_problems;
 
   ParsingEnvironmentFilePointer m_file;
-  QList<ProblemPointer> m_problems;
 
   KSharedPtr<IAstContainer> m_ast;
   
@@ -558,6 +560,7 @@ void TopDUContext::rebuildDynamicImportStructure() {
 void TopDUContext::rebuildDynamicData(DUContext* parent, uint ownIndex) {
   Q_ASSERT(parent == 0 && ownIndex != 0);
   m_local->m_ownIndex = ownIndex;
+
   DUContext::rebuildDynamicData(parent, 0);
 }
 
@@ -609,7 +612,7 @@ TopDUContext::~TopDUContext( )
 
   deleteChildContextsRecursively();
   deleteLocalDeclarations();
-  m_dynamicData->clearContextsAndDeclarations();
+  m_dynamicData->clear();
 }
 
 void TopDUContext::deleteSelf() {
@@ -618,6 +621,9 @@ void TopDUContext::deleteSelf() {
   TopDUContextDynamicData* dynamicData = m_dynamicData;
 
   m_dynamicData->m_deleting = true;
+  // ugly hack: if we don't clear the problems here we'll end up with double deletions as the shared ptrs
+  // will potentially try to delete mmapped, serialized data :-/
+  m_local->m_problems.clear();
 
   delete this;
 
@@ -966,31 +972,64 @@ bool TopDUContext::deleting() const
 QList<ProblemPointer> TopDUContext::problems() const
 {
   ENSURE_CAN_READ
+
+  const auto data = d_func();
+  if (m_local->m_problems.isEmpty() && data->m_problemsSize()) {
+    // deserialize problems into shared ptrs when not done so already
+    m_local->m_problems.reserve(data->m_problemsSize());
+    for (uint i = 0; i < data->m_problemsSize(); ++i) {
+      m_local->m_problems << ProblemPointer(data->m_problems()[i].data(this));
+    }
+  }
   return m_local->m_problems;
 }
 
 void TopDUContext::setProblems(const QList<ProblemPointer>& problems)
 {
   ENSURE_CAN_WRITE
-  m_local->m_problems = problems;
+  clearProblems();
+  for (const auto& problem : problems) {
+    addProblem(problem);
+  }
 }
 
 void TopDUContext::addProblem(const ProblemPointer& problem)
 {
   ENSURE_CAN_WRITE
-  m_local->m_problems << problem;
+
+  Q_ASSERT(problem);
+
+  auto data = d_func_dynamic();
+
+  // ensure we deserialized problems already to keep m_local->m_problems in sync
+  problems();
+
+  auto serializableProblem = ProblemPointer(problem)->prepareStorage(this);
+
+  // store for indexing
+  LocalIndexedProblem indexedProblem(serializableProblem.constData());
+  Q_ASSERT(indexedProblem.isValid());
+  data->m_problemsList().append(indexedProblem);
+  Q_ASSERT(indexedProblem.data(this) == serializableProblem.data());
+
+  // and also for dynamic, shared retrieval during the lifetime of this topcontext
+  m_local->m_problems << serializableProblem;
 }
 
 void TopDUContext::removeProblem(const ProblemPointer& problem)
 {
   ENSURE_CAN_WRITE
+  Q_ASSERT(problem);
+  Q_ASSERT(problem->m_topContext == this);
   m_local->m_problems.removeOne(problem);
+  d_func_dynamic()->m_problemsList().removeOne({problem.data()});
 }
 
 void TopDUContext::clearProblems()
 {
   ENSURE_CAN_WRITE
   m_local->m_problems.clear();
+  d_func_dynamic()->m_problemsList().clear();
 }
 
 QVector<DUContext*> TopDUContext::importers() const

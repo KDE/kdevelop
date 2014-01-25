@@ -25,10 +25,12 @@
 #include "topducontext.h"
 #include "indexedstring.h"
 #include "declarationid.h"
+#include "problem.h"
 
 namespace KDevelop {
 
 KDEVPLATFORMLANGUAGE_EXPORT DECLARE_LIST_MEMBER_HASH(TopDUContextData, m_usedDeclarationIds, DeclarationId)
+KDEVPLATFORMLANGUAGE_EXPORT DECLARE_LIST_MEMBER_HASH(TopDUContextData, m_problems, LocalIndexedProblem)
 
 class KDEVPLATFORMLANGUAGE_EXPORT TopDUContextData : public DUContextData
 {
@@ -38,6 +40,7 @@ public:
   {
     initializeAppendedLists();
   }
+
   TopDUContextData(const TopDUContextData& rhs) :DUContextData(rhs), m_deleting(false) {
     initializeAppendedLists();
     copyListsFrom(rhs);
@@ -70,7 +73,8 @@ public:
   START_APPENDED_LISTS_BASE(TopDUContextData, DUContextData);
   ///Maps a declarationIndex to a DeclarationId, which is used when the entry in m_usedDeclaration is zero.
   APPENDED_LIST_FIRST(TopDUContextData, DeclarationId, m_usedDeclarationIds);
-  END_APPENDED_LISTS(TopDUContextData, m_usedDeclarationIds);
+  APPENDED_LIST(TopDUContextData, LocalIndexedProblem, m_problems, m_usedDeclarationIds);
+  END_APPENDED_LISTS(TopDUContextData, m_problems);
   
   private:
   static void updateImportCacheRecursion(IndexedTopDUContext currentContext, std::set<uint>& visited);

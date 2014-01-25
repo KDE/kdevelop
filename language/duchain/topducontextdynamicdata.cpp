@@ -34,6 +34,7 @@
 #include "ducontextdynamicdata.h"
 #include "duchainregister.h"
 #include "repositories/itemrepository.h"
+#include "problem.h"
 
 //#define DEBUG_DATA_INFO
 
@@ -91,6 +92,12 @@ uint indexForParentContext(DUContext* context)
 uint indexForParentContext(Declaration* declaration)
 {
   return LocalIndexedDUContext(declaration->context()).localIndex();
+}
+
+uint indexForParentContext(Problem* /*problem*/)
+{
+  // always stored in the top context
+  return 0;
 }
 
 void validateItem(const DUChainBase* const item, const uchar* const mappedData, const size_t mappedDataSize)
@@ -249,6 +256,9 @@ uint TopDUContextDynamicData::DUChainItemStorage<Item>::allocateItemIndex(Item* 
 template<class Item>
 bool TopDUContextDynamicData::DUChainItemStorage<Item>::isItemForIndexLoaded(uint index) const
 {
+  if (!data->m_dataLoaded) {
+    return false;
+  }
   if (index < (0x0fffffff/2)) {
     if (index == 0 || index > uint(items.size())) {
       return false;
@@ -303,6 +313,8 @@ Item* TopDUContextDynamicData::DUChainItemStorage<Item>::getItemForIndex(uint in
     Q_ASSERT_X(parent, Q_FUNC_INFO, "Could not find parent context for loaded item.\n"
                                     "Potentially, the context has been deleted without deleting its children.");
     item->rebuildDynamicData(parent, index);
+  } else {
+    kWarning() << "invalid item for index" << index << offsets.size() << offsets.value(realIndex).dataOffset;
   }
 
   return item;
@@ -334,6 +346,14 @@ void TopDUContextDynamicData::DUChainItemStorage<Item>::loadData(QFile* file) co
   items.resize(offsets.size());
 }
 
+template<class Item>
+void TopDUContextDynamicData::DUChainItemStorage<Item>::writeData(QFile* file)
+{
+  uint writeValue = offsets.size();
+  file->write((char*)&writeValue, sizeof(uint));
+  file->write((char*)offsets.data(), sizeof(ItemDataInfo) * offsets.size());
+}
+
 //END DUChainItemStorage
 
 const char* KDevelop::TopDUContextDynamicData::pointerInData(uint totalOffset) const {
@@ -356,6 +376,7 @@ TopDUContextDynamicData::TopDUContextDynamicData(TopDUContext* topContext)
   , m_topContext(topContext)
   , m_contexts(this)
   , m_declarations(this)
+  , m_problems(this)
   , m_onDisk(false)
   , m_dataLoaded(true)
   , m_mappedFile(0)
@@ -365,10 +386,11 @@ TopDUContextDynamicData::TopDUContextDynamicData(TopDUContext* topContext)
 {
 }
 
-void KDevelop::TopDUContextDynamicData::clearContextsAndDeclarations()
+void KDevelop::TopDUContextDynamicData::clear()
 {
   m_contexts.clearItems();
   m_declarations.clearItems();
+  m_problems.clearItems();
 }
 
 TopDUContextDynamicData::~TopDUContextDynamicData()
@@ -481,6 +503,7 @@ void TopDUContextDynamicData::loadData() const {
 
   m_contexts.loadData(file);
   m_declarations.loadData(file);
+  m_problems.loadData(file);
 
 #ifdef USE_MMAP
   
@@ -546,7 +569,6 @@ TopDUContext* TopDUContextDynamicData::load(uint topContextIndex) {
     target.m_onDisk = true;
     ret->rebuildDynamicData(0, topContextIndex);
     target.m_topContextData.append(qMakePair(topContextData, (uint)0));
-
 //     kDebug() << "loaded" << ret->url().str() << ret->ownIndex() << "import-count:" << ret->importedParentContexts().size() << ret->d_func()->m_importedContextsSize();
 
     return ret;
@@ -569,6 +591,7 @@ void TopDUContextDynamicData::deleteOnDisk() {
 
   m_contexts.deleteOnDisk();
   m_declarations.deleteOnDisk();
+  m_problems.deleteOnDisk();
 
   m_topContext->makeDynamic();
 
@@ -588,7 +611,9 @@ QString KDevelop::TopDUContextDynamicData::filePath() const {
 
 bool TopDUContextDynamicData::hasChanged() const
 {
-  return !m_onDisk || m_topContext->d_ptr->m_dynamic || m_contexts.itemsHaveChanged() || m_declarations.itemsHaveChanged();
+  return !m_onDisk || m_topContext->d_ptr->m_dynamic
+        || m_contexts.itemsHaveChanged() || m_declarations.itemsHaveChanged()
+        || m_problems.itemsHaveChanged();
 }
 
 void TopDUContextDynamicData::store() {
@@ -644,6 +669,7 @@ void TopDUContextDynamicData::store() {
 
     m_contexts.storeData(currentDataOffset, oldData);
     m_declarations.storeData(currentDataOffset, oldData);
+    m_problems.storeData(currentDataOffset, oldData);
 
     m_itemRetrievalForbidden = false;
   }
@@ -664,13 +690,9 @@ void TopDUContextDynamicData::store() {
       foreach(const ArrayWithPosition& pos, m_topContextData)
         file.write(pos.first.constData(), pos.second);
 
-      uint writeValue = m_contexts.offsets.size();
-      file.write((char*)&writeValue, sizeof(uint));
-      file.write((char*)m_contexts.offsets.data(), sizeof(ItemDataInfo) * m_contexts.offsets.size());
-
-      writeValue = m_declarations.offsets.size();
-      file.write((char*)&writeValue, sizeof(uint));
-      file.write((char*)m_declarations.offsets.data(), sizeof(ItemDataInfo) * m_declarations.offsets.size());
+      m_contexts.writeData(&file);
+      m_declarations.writeData(&file);
+      m_problems.writeData(&file);
 
       foreach(const ArrayWithPosition& pos, m_data)
         file.write(pos.first.constData(), pos.second);
@@ -716,18 +738,28 @@ uint TopDUContextDynamicData::allocateDeclarationIndex(Declaration* decl, bool t
   return m_declarations.allocateItemIndex(decl, temporary);
 }
 
-bool TopDUContextDynamicData::isDeclarationForIndexLoaded(uint index) const
-{
-  return m_dataLoaded && m_declarations.isItemForIndexLoaded(index);
-}
-
-bool TopDUContextDynamicData::isContextForIndexLoaded(uint index) const {
-  return m_dataLoaded && m_contexts.isItemForIndexLoaded(index);
-}
-
 uint TopDUContextDynamicData::allocateContextIndex(DUContext* context, bool temporary)
 {
   return m_contexts.allocateItemIndex(context, temporary);
+}
+
+uint TopDUContextDynamicData::allocateProblemIndex(Problem* problem)
+{
+  return m_problems.allocateItemIndex(problem, false);
+}
+
+bool TopDUContextDynamicData::isDeclarationForIndexLoaded(uint index) const
+{
+  return m_declarations.isItemForIndexLoaded(index);
+}
+
+bool TopDUContextDynamicData::isContextForIndexLoaded(uint index) const {
+  return m_contexts.isItemForIndexLoaded(index);
+}
+
+bool TopDUContextDynamicData::isProblemForIndexLoaded(uint index) const
+{
+  return m_contexts.isItemForIndexLoaded(index);
 }
 
 bool TopDUContextDynamicData::isTemporaryContextIndex(uint index) const {
@@ -758,6 +790,14 @@ Declaration* TopDUContextDynamicData::getDeclarationForIndex(uint index) const
   return m_declarations.getItemForIndex(index);
 }
 
+Problem* TopDUContextDynamicData::getProblemForIndex(uint index) const
+{
+  if(!m_dataLoaded)
+    loadData();
+
+  return m_problems.getItemForIndex(index);
+}
+
 void TopDUContextDynamicData::clearDeclarationIndex(Declaration* decl)
 {
   m_declarations.clearItemIndex(decl, decl->m_indexInTopContext);
@@ -766,4 +806,9 @@ void TopDUContextDynamicData::clearDeclarationIndex(Declaration* decl)
 void TopDUContextDynamicData::clearContextIndex(DUContext* context)
 {
   m_contexts.clearItemIndex(context, context->m_dynamicData->m_indexInTopContext);
+}
+
+void TopDUContextDynamicData::clearProblemIndex(Problem* problem)
+{
+  m_problems.clearItemIndex(problem, problem->m_indexInTopContext);
 }

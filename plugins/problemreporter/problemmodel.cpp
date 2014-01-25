@@ -101,8 +101,7 @@ QVariant ProblemModel::data(const QModelIndex & index, int role) const
     if (!index.isValid())
         return QVariant();
 
-//     Locking the duchain here leads to a deadlock, because kate triggers some paint to the outside while holding the smart-lock
-//     DUChainReadLocker lock(DUChain::lock());
+    DUChainReadLocker lock;
 
     ProblemPointer p = problemForIndex(index);
     KUrl baseDirectory = m_currentDocument.upUrl();
@@ -244,7 +243,7 @@ void ProblemModel::getProblemsInternal(TopDUContext* context, bool showImports, 
         return;
     }
     foreach(ProblemPointer p, context->problems()) {
-        if (p->severity() <= m_severity) {
+        if (p && p->severity() <= m_severity) {
             result.append(p);
         }
     }
