@@ -56,6 +56,8 @@ CXChildVisitResult visit(CXCursor cursor, CXCursor /*parent*/, CXClientData d)
         }
     }
 
+    (*data->out) << '"';
+
     auto type = clang_getCursorType(cursor);
     if (type.kind != CXType_Invalid) {
         ClangString typeName(clang_getTypeSpelling(type));
@@ -67,10 +69,15 @@ CXChildVisitResult visit(CXCursor cursor, CXCursor /*parent*/, CXClientData d)
         (*data->out) << displayName << ' ';
     }
 
-    ClangString fileName(clang_getFileName(file));
-    ClangString kindName(clang_getCursorKindSpelling(kind));
+    (*data->out) << '"';
 
-    (*data->out) << kindName << " in " << fileName << '@' << line << ':' << column << endl;
+    ClangString kindName(clang_getCursorKindSpelling(kind));
+    (*data->out) << " of kind "  << kindName << " (" << kind << ")";
+
+    ClangString fileName(clang_getFileName(file));
+    (*data->out) << " in " << fileName << '@' << line << ':' << column;
+
+    (*data->out) << endl;
 
     ClientData childData{data->out, data->session, data->depth + 1};
     clang_visitChildren(cursor, &::visit, &childData);
