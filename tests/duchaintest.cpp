@@ -192,8 +192,7 @@ void DUChainTest::testTemplate()
 {
     TestFile file("template<typename T> struct foo { T bar; };\n"
                   "int main() { foo<int> myFoo; return myFoo.bar; }\n", "cpp");
-    file.parse(TopDUContext::AllDeclarationsContextsAndUses);
-    QVERIFY(file.waitForParsed(500));
+    QVERIFY(file.parseAndWait());
 
     DUChainReadLocker lock;
 
@@ -210,8 +209,7 @@ void DUChainTest::testNamespace()
 {
     TestFile file("namespace foo { struct bar { int baz; }; }\n"
                   "int main() { foo::bar myBar; }\n", "cpp");
-    file.parse(TopDUContext::AllDeclarationsContextsAndUses);
-    QVERIFY(file.waitForParsed(500));
+    QVERIFY(file.parseAndWait());
 
     DUChainReadLocker lock;
 
@@ -251,8 +249,7 @@ void DUChainTest::testNamespace()
 void DUChainTest::testAutoTypeDeduction()
 {
     TestFile file("auto foo = 5;\n", "cpp");
-    file.parse(TopDUContext::AllDeclarationsContextsAndUses);
-    QVERIFY(file.waitForParsed(500));
+    QVERIFY(file.parseAndWait());
 
     DUChainReadLocker lock;
 
@@ -270,8 +267,7 @@ void DUChainTest::testTypeDeductionInTemplateInstantiation()
 {
     // see: http://clang-developers.42468.n3.nabble.com/RFC-missing-libclang-query-functions-features-td2504253.html
     TestFile file("template<typename T> struct foo { T member; } foo<int> f; auto i = f.member;", "cpp");
-    file.parse(TopDUContext::AllDeclarationsContextsAndUses);
-    QVERIFY(file.waitForParsed(500));
+    QVERIFY(file.parseAndWait());
 
     DUChainReadLocker lock;
 
@@ -307,8 +303,7 @@ void DUChainTest::testVirtualMemberFunction()
 {
     //Forward-declarations with "struct" or "class" are considered equal, so make sure the override is detected correctly.
     TestFile file("struct S {}; struct A { virtual S* ret(); }; struct B : public A { virtual S* ret(); };", "cpp");
-    file.parse(TopDUContext::AllDeclarationsContextsAndUses);
-    QVERIFY(file.waitForParsed(500));
+    QVERIFY(file.parseAndWait());
 
     DUChainReadLocker lock;
     DUContext* top = file.topContext().data();
@@ -325,8 +320,7 @@ void DUChainTest::testVirtualMemberFunction()
 void DUChainTest::testBaseClasses()
 {
     TestFile file("class Base {}; class Inherited : public Base {};", "cpp");
-    file.parse(TopDUContext::AllDeclarationsContextsAndUses);
-    QVERIFY(file.waitForParsed(500));
+    QVERIFY(file.parseAndWait());
 
     DUChainReadLocker lock;
     DUContext* top = file.topContext().data();
