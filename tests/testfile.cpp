@@ -131,6 +131,12 @@ void TestFile::parse(TopDUContext::Features features, int priority)
     DUChain::self()->updateContextForUrl(d->url, features, this, priority);
 }
 
+bool TestFile::parseAndWait(TopDUContext::Features features, int priority, int timeout)
+{
+    parse(features, priority);
+    return waitForParsed(timeout);
+}
+
 bool TestFile::waitForParsed(int timeout)
 {
     if (!d->ready) {
