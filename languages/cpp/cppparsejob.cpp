@@ -830,7 +830,7 @@ void CPPInternalParseJob::run()
 
         //Put the problems into the proxy-context
         foreach( const ProblemPointer& problem, parentJob()->preprocessorProblems() ) {
-          if(problem->finalLocation().start.line < proxyEnvironmentFile->contentStartLine())
+          if(problem->range().start.line < proxyEnvironmentFile->contentStartLine())
             proxyContext->addProblem(problem);
         }
 

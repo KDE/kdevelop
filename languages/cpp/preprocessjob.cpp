@@ -583,13 +583,13 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
     
     } else {
         kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << ": include not found:" << fileName;
-        KDevelop::ProblemPointer p(new Problem()); ///@todo create special include-problem
+        Cpp::MissingIncludePathProblem::Ptr p(new Cpp::MissingIncludePathProblem); ///@todo create special include-problem
         p->setSource(KDevelop::ProblemData::Preprocessor);
         p->setDescription(i18n("Included file was not found: %1", fileName ));
         p->setExplanation(i18n("Searched include path:\n%1", pathsToString(parentJob()->includePathUrls())));
         p->setFinalLocation(DocumentRange(parentJob()->document(), SimpleRange(sourceLine,0, sourceLine+1,0)));
         p->setSolutionAssistant(KSharedPtr<KDevelop::IAssistant>(new Cpp::MissingIncludePathAssistant(parentJob()->masterJob()->document(), _fileName)));
-        parentJob()->addPreprocessorProblem(p);
+        parentJob()->addPreprocessorProblem(KSharedPtr<Problem>::staticCast(p));
 
         ///@todo respect all the specialties like starting search at a specific path
         ///Before doing that, model findInclude(..) exactly after the standard
