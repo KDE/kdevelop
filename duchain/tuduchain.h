@@ -307,7 +307,7 @@ private:
 template<CXCursorKind CK>
 void setDeclData(CXCursor, Declaration *decl) const
 {
-    if (CK == CXCursor_TypeAliasDecl || CXCursor_TypedefDecl)
+    if (CK == CXCursor_TypeAliasDecl || CK == CXCursor_TypedefDecl)
         decl->setIsTypeAlias(true);
     if (CK == CXCursor_Namespace)
         decl->setKind(Declaration::Namespace);
