@@ -43,7 +43,7 @@
 
 using namespace KDevelop;
 
-// K_PLUGIN_FACTORY(KDevReviewBoardFactory, registerPlugin<ReviewBoardPlugin>(); )
+K_PLUGIN_FACTORY(KDevReviewBoardFactory, registerPlugin<ReviewBoardPlugin>(); )
 // K_EXPORT_PLUGIN(KDevReviewBoardFactory(KAboutData("kdevreviewboard","kdevreviewboard", ki18n("ReviewBoard Support"), "0.1", ki18n("Deal with the ReviewBoard Patches"), KAboutData::License_GPL)))
 
 ReviewBoardPlugin::ReviewBoardPlugin ( QObject* parent, const QVariantList& )
@@ -128,3 +128,5 @@ void ReviewBoardPlugin::reviewCreated(KJob* j)
         KMessageBox::error(0, j->errorText());
     }
 }
+
+#include "reviewboardplugin.moc"

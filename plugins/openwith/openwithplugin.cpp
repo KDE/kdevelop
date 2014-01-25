@@ -48,7 +48,7 @@
 #include <KConfigGroup>
 using namespace KDevelop;
 
-// K_PLUGIN_FACTORY(KDevOpenWithFactory, registerPlugin<OpenWithPlugin>(); )
+K_PLUGIN_FACTORY(KDevOpenWithFactory, registerPlugin<OpenWithPlugin>(); )
 // K_EXPORT_PLUGIN(KDevOpenWithFactory(KAboutData("kdevopenwith","kdevopenwith", ki18n("Open With"), "0.1", ki18n("This plugin allows to open files with associated external applications."), KAboutData::License_GPL)))
 
 
@@ -243,3 +243,5 @@ void OpenWithPlugin::openFilesInternal( const KUrl::List& files )
     m_mimeType = KMimeType::findByUrl( m_urls.first() )->name();
     openDefault();
 }
+
+#include "openwithplugin.moc"

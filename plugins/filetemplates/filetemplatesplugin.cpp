@@ -34,7 +34,7 @@ int debugArea()
     return area;
 }
 
-// K_PLUGIN_FACTORY(FileTemplatesFactory, registerPlugin<FileTemplatesPlugin>();)
+K_PLUGIN_FACTORY(FileTemplatesFactory, registerPlugin<FileTemplatesPlugin>();)
 // K_EXPORT_PLUGIN(FileTemplatesFactory(KAboutData("kdevfiletemplates", "kdevfiletemplates", ki18n("File Templates Configuration"), "0.1", ki18n("Manages templates for source files"), KAboutData::License_GPL)))
 
 class TemplatePreviewFactory : public KDevelop::IToolViewFactory

@@ -281,7 +281,7 @@ void ContextBrowserPlugin::previousContextShortcut()
   historyPrevious();
 }
 
-// K_PLUGIN_FACTORY(ContextBrowserFactory, registerPlugin<ContextBrowserPlugin>(); )
+K_PLUGIN_FACTORY(ContextBrowserFactory, registerPlugin<ContextBrowserPlugin>(); )
 // K_EXPORT_PLUGIN(ContextBrowserFactory(KAboutData("kdevcontextbrowser","kdevcontextbrowser",ki18n("Context Browser"), "0.1", ki18n("This plugin shows information about the current language context in a side view, and highlights relevant declarations and uses."), KAboutData::License_GPL)))
 
 ContextBrowserPlugin::ContextBrowserPlugin(QObject *parent, const QVariantList&)
@@ -1369,3 +1369,5 @@ void ContextBrowserPlugin::HistoryEntry::setCursorPosition(const KDevelop::Simpl
 }
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on
+
+#include "contextbrowser.moc"

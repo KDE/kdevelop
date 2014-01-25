@@ -45,7 +45,7 @@
 #include <sublime/document.h>
 
 
-// K_PLUGIN_FACTORY(StandardOutputViewFactory, registerPlugin<StandardOutputView>(); )
+K_PLUGIN_FACTORY(StandardOutputViewFactory, registerPlugin<StandardOutputView>(); )
 // K_EXPORT_PLUGIN(StandardOutputViewFactory(KAboutData("kdevstandardoutputview","kdevstandardoutputview",ki18n("Output View"), "0.1", ki18n("Provides toolviews for presenting the output of running apps"), KAboutData::License_GPL)))
 
 

@@ -31,7 +31,7 @@
 #include <KCoreAddons/KAboutData>
 #include <KLocalizedString>
 
-// K_PLUGIN_FACTORY(TemplateConfigFactory, registerPlugin<TemplateConfig>();)
+K_PLUGIN_FACTORY(TemplateConfigFactory, registerPlugin<TemplateConfig>();)
 // K_EXPORT_PLUGIN(TemplateConfigFactory("kdevtemplates_config"))
 
 TemplateConfig::TemplateConfig(QWidget* parent, const QVariantList& args)
@@ -55,3 +55,4 @@ TemplateConfig::~TemplateConfig()
     delete ui;
 }
 
+#include "templateconfig.moc"

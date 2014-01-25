@@ -59,7 +59,7 @@
 #include "gitjob.h"
 #include "gitmessagehighlighter.h"
 
-// K_PLUGIN_FACTORY(KDevGitFactory, registerPlugin<GitPlugin>(); )
+K_PLUGIN_FACTORY(KDevGitFactory, registerPlugin<GitPlugin>(); )
 // K_EXPORT_PLUGIN(KDevGitFactory(KAboutData("kdevgit","kdevgit",ki18n("Git"),"0.1",ki18n("A plugin to support git version control systems"), KAboutData::License_GPL)))
 
 using namespace KDevelop;
@@ -1481,3 +1481,5 @@ void GitPluginCheckInRepositoryJob::repositoryQueryFinished(int)
     bool requestSucceeded = output.contains(" blob ");
     emit finished(requestSucceeded);
 }
+
+#include "gitplugin.moc"

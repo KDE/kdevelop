@@ -43,7 +43,7 @@
 #include <KLocalizedString>
 #include <vcs/models/projectchangesmodel.h>
 
-// K_PLUGIN_FACTORY(VcsProjectIntegrationFactory, registerPlugin<VcsProjectIntegrationPlugin>(); )
+K_PLUGIN_FACTORY(VcsProjectIntegrationFactory, registerPlugin<VcsProjectIntegrationPlugin>(); )
 // K_EXPORT_PLUGIN(VcsProjectIntegrationFactory(
 //     KAboutData("kdevvcsprojectintegration","kdevvcsprojectintegration",
 //                ki18n("VCS Project Integration"), "0.1", ki18n("This plugin provides integration between the projects and their VCS infrastructure"), KAboutData::License_GPL)))
@@ -110,3 +110,5 @@ ProjectChangesModel* VcsProjectIntegrationPlugin::model()
     
     return m_model;
 }
+
+#include "vcschangesviewplugin.moc"

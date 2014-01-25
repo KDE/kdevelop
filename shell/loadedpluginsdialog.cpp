@@ -205,6 +205,7 @@ public:
                            const QPersistentModelIndex &index) const
     {
         Q_UNUSED(index);
+        Q_ASSERT(!widgets.isEmpty());
         KPushButton *aboutPushButton = static_cast<KPushButton*>(widgets[0]);
         QSize aboutPushButtonSizeHint = aboutPushButton->sizeHint();
         aboutPushButton->resize(aboutPushButtonSizeHint);

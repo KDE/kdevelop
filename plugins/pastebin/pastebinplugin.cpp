@@ -34,7 +34,7 @@
 
 using namespace KDevelop;
 
-// K_PLUGIN_FACTORY(KDevPastebinFactory, registerPlugin<PastebinPlugin>(); )
+K_PLUGIN_FACTORY(KDevPastebinFactory, registerPlugin<PastebinPlugin>(); )
 // K_EXPORT_PLUGIN(KDevPastebinFactory(KAboutData("kdevpastebin","kdevpastebin", ki18n("Pastebin Plugin"), "0.1", ki18n("Easily export patches to the Pastebin service"), KAboutData::License_GPL)))
 
 PastebinPlugin::PastebinPlugin ( QObject* parent, const QVariantList& ) 
@@ -101,3 +101,5 @@ void PastebinPlugin::data(KIO::Job* job, const QByteArray &data)
         *it += data;
     }
 }
+
+#include "pastebinplugin.moc"

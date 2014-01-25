@@ -73,6 +73,7 @@ KDevFileItem::KDevFileItem( const KUrl &url )
     setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
     setUrl( url );
     KFileItem fi = KFileItem( url, QString(), 0 );
+    qDebug() << "craaaaaaaaaaaap" << url;
     m_fileIcon = fi.iconName();
     setIcon( QIcon::fromTheme( m_fileIcon ) );
 }

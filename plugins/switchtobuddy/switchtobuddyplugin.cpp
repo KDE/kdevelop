@@ -35,7 +35,7 @@
 
 using namespace KDevelop;
 
-// K_PLUGIN_FACTORY(SwitchToBuddyPluginFactory, registerPlugin<SwitchToBuddyPlugin>(); )
+K_PLUGIN_FACTORY(SwitchToBuddyPluginFactory, registerPlugin<SwitchToBuddyPlugin>(); )
 // K_EXPORT_PLUGIN(SwitchToBuddyPluginFactory(KAboutData(
 //                                             "kdevswitchtobuddy"
 //                                            ,"kdevswitchtobuddy"
@@ -103,3 +103,4 @@ void SwitchToBuddyPlugin::switchToBuddy(const QString& url)
     KDevelop::ICore::self()->documentController()->openDocument(url);
 }
 
+#include "switchtobuddyplugin.moc"
