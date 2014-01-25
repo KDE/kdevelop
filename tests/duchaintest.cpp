@@ -1,5 +1,6 @@
 /*
  * Copyright 2014  Milian Wolff <mail@milianw.de>
+ * Copyright 2014  Kevin Funk <kevin@kfunk.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -32,6 +33,8 @@
 #include <language/duchain/parsingenvironment.h>
 #include <language/duchain/problem.h>
 #include <language/duchain/types/integraltype.h>
+#include <language/duchain/duchainutils.h>
+#include <language/duchain/classdeclaration.h>
 #include <language/backgroundparser/backgroundparser.h>
 #include <interfaces/ilanguagecontroller.h>
 
@@ -298,6 +301,48 @@ void DUChainTest::testTypeDeductionInTemplateInstantiation()
     QCOMPARE(decl->identifier(), Identifier("i"));
     QEXPECT_FAIL("", "No type deduction here unfortunately, missing API in Clang", Continue);
     QVERIFY(decl->type<IntegralType>());
+}
+
+void DUChainTest::testVirtualMemberFunction()
+{
+    //Forward-declarations with "struct" or "class" are considered equal, so make sure the override is detected correctly.
+    TestFile file("struct S {}; struct A { virtual S* ret(); }; struct B : public A { virtual S* ret(); };", "cpp");
+    file.parse(TopDUContext::AllDeclarationsContextsAndUses);
+    QVERIFY(file.waitForParsed(500));
+
+    DUChainReadLocker lock;
+    DUContext* top = file.topContext().data();
+    QVERIFY(top);
+
+    QCOMPARE(top->childContexts().count(), 3);
+    QCOMPARE(top->localDeclarations().count(), 3);
+    QCOMPARE(top->childContexts()[2]->localDeclarations().count(), 1);
+    Declaration* decl = top->childContexts()[2]->localDeclarations()[0];
+    QCOMPARE(decl->identifier(), Identifier("ret"));
+    QEXPECT_FAIL("", "NYI", Continue);
+    QVERIFY(DUChainUtils::getOverridden(decl));
+}
+
+void DUChainTest::testBaseClasses()
+{
+    TestFile file("class Base {}; class Inherited : public Base {};", "cpp");
+    file.parse(TopDUContext::AllDeclarationsContextsAndUses);
+    QVERIFY(file.waitForParsed(500));
+
+    DUChainReadLocker lock;
+    DUContext* top = file.topContext().data();
+    QVERIFY(top);
+
+    QCOMPARE(top->localDeclarations().count(), 2);
+    Declaration* baseDecl = top->localDeclarations().first();
+    QCOMPARE(baseDecl->identifier(), Identifier("Base"));
+
+    ClassDeclaration* inheritedDecl = dynamic_cast<ClassDeclaration*>(top->localDeclarations()[1]);
+    QCOMPARE(inheritedDecl->identifier(), Identifier("Inherited"));
+
+    QVERIFY(inheritedDecl);
+    QEXPECT_FAIL("", "NYI", Continue);
+    QCOMPARE(inheritedDecl->baseClassesSize(), 1u);
 }
 
 #include "duchaintest.moc"

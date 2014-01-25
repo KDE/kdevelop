@@ -39,6 +39,8 @@ private slots:
     void testNamespace();
     void testAutoTypeDeduction();
     void testTypeDeductionInTemplateInstantiation();
+    void testVirtualMemberFunction();
+    void testBaseClasses();
 };
 
 #endif // DUCHAINTEST_H
