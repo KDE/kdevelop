@@ -34,7 +34,7 @@ class KDEVCPPDUCHAIN_EXPORT PtrToMemberTypeData : public KDevelop::PointerTypeDa
 public:
 /// Constructor
   PtrToMemberTypeData()
-      : m_classType ( 0 ) {}
+  {}
 /// Copy constructor. \param rhs data to copy
   PtrToMemberTypeData ( const PtrToMemberTypeData& rhs )
       : PointerTypeData ( rhs )
