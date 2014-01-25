@@ -22,6 +22,8 @@
 #include "tuduchain.h"
 #include "debug.h"
 
+#include <language/duchain/types/indexedtype.h>
+
 //BEGIN DeclType
 
 template<CXCursorKind CK, bool isDefinition, bool isClassMember>
@@ -261,4 +263,50 @@ AbstractType::Ptr TUDUChain::makeType(CXType type) const
         debug() << "Unhandled type: " << type.kind << ClangString(clang_getTypeSpelling(type));
         return AbstractType::Ptr();
     }
+}
+
+AbstractType::Ptr TUDUChain::makeType(CXCursor cursor) const
+{
+    auto clangType = clang_getCursorType(cursor);
+    auto type = makeType(clangType);
+    if (auto idType = dynamic_cast<IdentifiedType*>(type.unsafeData())) {
+        DeclarationPointer decl = findDeclaration(clang_getTypeDeclaration(clangType), m_includes);
+        DUChainReadLocker lock;
+        if (decl) {
+            idType->setDeclaration(decl.data());
+        }
+    }
+    return type;
+}
+
+template<>
+CXChildVisitResult TUDUChain::buildUse<CXCursor_CXXBaseSpecifier>(CXCursor cursor)
+{
+    m_uses[m_parentContext->context].push_back(cursor);
+
+    // TODO: get access policy and virtual bits
+    bool virtualInherited = false;
+    Declaration::AccessPolicy access = Declaration::Public;
+    auto type = makeType(cursor);
+    auto idType = dynamic_cast<const IdentifiedType*>(type.constData());
+
+    if (!idType) {
+        kWarning() << "Failed to get identified type for base class" << ClangString(clang_getCursorDisplayName(cursor));
+        return CXChildVisit_Continue;
+    }
+
+    DUChainWriteLocker lock;
+    auto currentContext = m_parentContext->context;
+    auto top = currentContext->topContext();
+    auto idDecl = idType->declaration(top);
+    if (!idDecl) {
+        kWarning() << "failed to find declaration for id:" << type->toString();
+    } else if (auto import = idDecl->logicalInternalContext(top)) {
+        currentContext->addImportedParentContext(import);
+    }
+    auto classDecl = dynamic_cast<KDevelop::ClassDeclaration*>(currentContext->owner());
+    Q_ASSERT(classDecl);
+
+    classDecl->addBaseClass({type->indexed(), access, virtualInherited});
+    return CXChildVisit_Continue;
 }

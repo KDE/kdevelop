@@ -29,6 +29,10 @@
 #include "clangtypes.h"
 
 #include <util/pushvalue.h>
+
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/classdeclaration.h>
+
 #include <language/duchain/types/pointertype.h>
 #include <language/duchain/types/arraytype.h>
 #include <language/duchain/types/referencetype.h>
@@ -53,6 +57,7 @@ private:
     KDevelop::RangeInRevision makeContextRange(CXCursor cursor) const;
     KDevelop::Identifier makeId(CXCursor cursor) const;
     QByteArray makeComment(CXComment comment) const;
+    AbstractType::Ptr makeType(CXCursor cursor) const;
     AbstractType::Ptr makeType(CXType type) const;
 
 //BEGIN dispatch*
@@ -113,7 +118,7 @@ private:
     CXChildVisitResult buildDeclaration(CXCursor cursor)
     {
         auto id = makeId(cursor);
-        auto type = makeType(clang_getCursorType(cursor));
+        auto type = makeType(cursor);
         if (hasContext) {
             auto context = createContext<CK, CursorKindTraits::contextType(CK)>(cursor, id);
             createDeclaration<CK, DeclType>(cursor, type, id, context);
@@ -146,8 +151,8 @@ private:
             DUChainWriteLocker lock;
             auto it = m_parentContext->previousChildDeclarations.begin();
             while (it != m_parentContext->previousChildDeclarations.end()) {
-                auto decl = *it;
-                if (dynamic_cast<DeclType*>(decl) && decl->indexedIdentifier() == indexedId) {
+                auto decl = dynamic_cast<DeclType*>(*it);
+                if (decl && decl->indexedIdentifier() == indexedId) {
                     decl->setRange(range);
                     decl->setComment(comment);
                     setDeclData<CK>(cursor, decl);
@@ -334,6 +339,9 @@ void setDeclData(CXCursor cursor, ClassDeclaration* decl) const
 template<CXCursorKind CK, EnableIf<!CursorKindTraits::isClassTemplate(CK)> = dummy>
 void setDeclData(CXCursor cursor, ClassDeclaration* decl) const
 {
+    if (m_update) {
+        decl->clearBaseClasses();
+    }
     setDeclData<CK>(cursor, static_cast<ClassMemberDeclaration*>(decl));
     if (CK == CXCursor_UnionDecl)
         decl->setClassType(ClassDeclarationData::Union);
@@ -387,5 +395,8 @@ private:
 
     const bool m_update;
 };
+
+template<>
+CXChildVisitResult TUDUChain::buildUse<CXCursor_CXXBaseSpecifier>(CXCursor cursor);
 
 #endif //TUDUCHAIN_H

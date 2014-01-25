@@ -319,7 +319,6 @@ void DUChainTest::testVirtualMemberFunction()
     QCOMPARE(top->childContexts()[2]->localDeclarations().count(), 1);
     Declaration* decl = top->childContexts()[2]->localDeclarations()[0];
     QCOMPARE(decl->identifier(), Identifier("ret"));
-    QEXPECT_FAIL("", "NYI", Continue);
     QVERIFY(DUChainUtils::getOverridden(decl));
 }
 
@@ -341,8 +340,36 @@ void DUChainTest::testBaseClasses()
     QCOMPARE(inheritedDecl->identifier(), Identifier("Inherited"));
 
     QVERIFY(inheritedDecl);
-    QEXPECT_FAIL("", "NYI", Continue);
     QCOMPARE(inheritedDecl->baseClassesSize(), 1u);
+}
+
+void DUChainTest::testReparseBaseClasses()
+{
+    TestFile file("struct a{}; struct b : a {};\n", "cpp");
+    file.parse(TopDUContext::AllDeclarationsContextsAndUses);
+
+    for (int i = 0; i < 2; ++i) {
+        qDebug() << "run: " << i;
+        QVERIFY(file.waitForParsed(500));
+        DUChainWriteLocker lock;
+        QVERIFY(file.topContext());
+        QCOMPARE(file.topContext()->childContexts().size(), 2);
+        QCOMPARE(file.topContext()->childContexts().first()->importers().size(), 1);
+        QCOMPARE(file.topContext()->childContexts().last()->importedParentContexts().size(), 1);
+
+        QCOMPARE(file.topContext()->localDeclarations().size(), 2);
+        auto aDecl = dynamic_cast<ClassDeclaration*>(file.topContext()->localDeclarations().first());
+        QVERIFY(aDecl);
+        QCOMPARE(aDecl->baseClassesSize(), 0u);
+        auto bDecl = dynamic_cast<ClassDeclaration*>(file.topContext()->localDeclarations().last());
+        QVERIFY(bDecl);
+        QCOMPARE(bDecl->baseClassesSize(), 1u);
+        int distance = 0;
+        QVERIFY(bDecl->isPublicBaseClass(aDecl, file.topContext(), &distance));
+        QCOMPARE(distance, 1);
+
+        file.parse(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdateRecursive));
+    }
 }
 
 #include "duchaintest.moc"
