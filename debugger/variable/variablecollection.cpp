@@ -464,7 +464,7 @@ void VariableCollection::viewCreated(KTextEditor::Document* doc,
     if( !iface )
         return;
 
-    iface->enableTextHints(500);
+    iface->setTextHintDelay(-1);
 
     connect(view,
             SIGNAL(needTextHint(KTextEditor::Cursor,QString&)),

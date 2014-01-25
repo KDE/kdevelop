@@ -817,7 +817,7 @@ void ContextBrowserPlugin::viewCreated( KTextEditor::Document* , View* v )
   if( !iface )
       return;
 
-  iface->enableTextHints(highlightingTimeout);
+  iface->setTextHintDelay(highlightingTimeout);
 
   connect(v, SIGNAL(needTextHint(KTextEditor::Cursor,QString&)), this, SLOT(textHintRequested(KTextEditor::Cursor,QString&)));
 }
