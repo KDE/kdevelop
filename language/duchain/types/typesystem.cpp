@@ -79,7 +79,7 @@ IntegralTypeData::IntegralTypeData( const IntegralTypeData& rhs )
 {
 }
 
-PointerTypeData::PointerTypeData() : m_baseType(0)
+PointerTypeData::PointerTypeData()
 {
 }
 
@@ -88,7 +88,7 @@ PointerTypeData::PointerTypeData( const PointerTypeData& rhs )
 {
 }
 
-ReferenceTypeData::ReferenceTypeData() : m_baseType(0), m_isRValue( false )
+ReferenceTypeData::ReferenceTypeData() : m_isRValue( false )
 {
 }
 
