@@ -29,7 +29,7 @@
 
 using namespace KDevelop;
 
-// K_PLUGIN_FACTORY(KDevKDEProviderFactory, registerPlugin<KDEProviderPlugin>(); )
+K_PLUGIN_FACTORY(KDevKDEProviderFactory, registerPlugin<KDEProviderPlugin>(); )
 // K_EXPORT_PLUGIN(KDevKDEProviderFactory(KAboutData("kdevkdeprovider","kdevkdeprovider", ki18n("KDE Provider"), "0.1", ki18n("Easily import KDE projects"), KAboutData::License_GPL)))
 
 KDEProviderPlugin::KDEProviderPlugin ( QObject* parent, const QVariantList& ) 
@@ -50,3 +50,5 @@ KDevelop::IProjectProviderWidget* KDEProviderPlugin::providerWidget(QWidget* par
 {
     return new KDEProviderWidget(parent);
 }
+
+#include "kdeproviderplugin.moc"

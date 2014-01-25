@@ -146,7 +146,7 @@ Declaration* definitionForCursorDeclaration(const KDevelop::SimpleCursor& cursor
 // For unit-tests that compile cpplanguagesupport.cpp into their executable
 // don't create the factories as that means 2 instances of the factory
 #ifndef BUILD_TESTS
-// K_PLUGIN_FACTORY(KDevCppSupportFactory, registerPlugin<CppLanguageSupport>(); )
+K_PLUGIN_FACTORY(KDevCppSupportFactory, registerPlugin<CppLanguageSupport>(); )
 // K_EXPORT_PLUGIN(KDevCppSupportFactory(KAboutData("kdevcppsupport","kdevcpp", ki18n("C++ Support"), "0.1", ki18n("Support for C++ Language"), KAboutData::License_GPL)))
 #else
 class KDevCppSupportFactory : public KPluginFactory

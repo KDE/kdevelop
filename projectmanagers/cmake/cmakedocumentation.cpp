@@ -38,7 +38,7 @@
 #include "cmakehelpdocumentation.h"
 #include "cmakedoc.h"
 
-// K_PLUGIN_FACTORY(CMakeSupportDocFactory, registerPlugin<CMakeDocumentation>(); )
+K_PLUGIN_FACTORY(CMakeSupportDocFactory, registerPlugin<CMakeDocumentation>(); )
 // K_EXPORT_PLUGIN(CMakeSupportDocFactory(KAboutData("kdevcmakedocumentation","kdevcmake", ki18n("CMake Documentation"), "1.0", ki18n("Support for CMake documentation"), KAboutData::License_GPL)))
 
 CMakeDocumentation* CMakeDoc::s_provider=0;
@@ -200,3 +200,5 @@ QWidget* CMakeDoc::documentationWidget(KDevelop::DocumentationFindWidget* findWi
     view->setHtml("<html><body style='background:#fff'><code>"+description()+"</code></body></html>");
     return view;
 }
+
+#include "cmakedocumentation.moc"

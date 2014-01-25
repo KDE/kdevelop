@@ -30,7 +30,7 @@
 #include "ui_cmakebuildersettings.h"
 #include "cmakebuilderconfig.h"
 
-// K_PLUGIN_FACTORY(CMakeBuilderPreferencesFactory, registerPlugin<CMakeBuilderPreferences>(); )
+K_PLUGIN_FACTORY(CMakeBuilderPreferencesFactory, registerPlugin<CMakeBuilderPreferences>(); )
 // K_EXPORT_PLUGIN(CMakeBuilderPreferencesFactory("kcm_kdev_cmakebuilder"))
 
 CMakeBuilderPreferences::CMakeBuilderPreferences(QWidget* parent, const QVariantList& args)
@@ -85,3 +85,5 @@ void CMakeBuilderPreferences::generatorChanged(const QString& generator)
 {
     emit changed(CMakeBuilderSettings::self()->generator()!=generator);
 }
+
+#include "cmakebuilderpreferences.moc"

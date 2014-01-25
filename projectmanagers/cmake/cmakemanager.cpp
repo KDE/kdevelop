@@ -78,7 +78,7 @@ Q_DECLARE_METATYPE(KDevelop::IProject*);
 
 using namespace KDevelop;
 
-// K_PLUGIN_FACTORY(CMakeSupportFactory, registerPlugin<CMakeManager>(); )
+K_PLUGIN_FACTORY(CMakeSupportFactory, registerPlugin<CMakeManager>(); )
 // K_EXPORT_PLUGIN(CMakeSupportFactory(KAboutData("kdevcmakemanager","kdevcmake", ki18n("CMake Manager"), "0.1", ki18n("Support for managing CMake projects"), KAboutData::License_GPL)))
 
 const QString DIALOG_CAPTION = i18n("KDevelop - CMake Support");
@@ -902,3 +902,5 @@ ProjectFilterManager* CMakeManager::filterManager() const
 {
     return m_filter;
 }
+
+#include "cmakemanager.moc"

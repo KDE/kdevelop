@@ -31,7 +31,7 @@
 
 using namespace KDevelop;
 
-// K_PLUGIN_FACTORY(KDevExecutePlasmoidFactory, registerPlugin<ExecutePlasmoidPlugin>(); )
+K_PLUGIN_FACTORY(KDevExecutePlasmoidFactory, registerPlugin<ExecutePlasmoidPlugin>(); )
 // K_EXPORT_PLUGIN(KDevExecutePlasmoidFactory(KAboutData("kdevexecuteplasmoid", "kdevexecuteplasmoid", ki18n("Execute plasmoid support"), "55.2",
 //                                                       ki18n("Allows running of plasmoids"), KAboutData::License_GPL)
 //     .addAuthor(ki18n("Aleix Pol Gonzalez"), ki18n("Author"), "aleixpol@kde.org", "http://kdevelop.org")
@@ -96,3 +96,5 @@ QString ExecutePlasmoidPlugin::terminal(ILaunchConfiguration* /*config*/) const
 {
     return QString();
 }
+
+#include "executeplasmoidplugin.moc"

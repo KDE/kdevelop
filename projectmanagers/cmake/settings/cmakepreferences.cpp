@@ -49,7 +49,7 @@
 #include <util/environmentgrouplist.h>
 #include <KLocalizedString>
 
-// K_PLUGIN_FACTORY(CMakePreferencesFactory, registerPlugin<CMakePreferences>(); )
+K_PLUGIN_FACTORY(CMakePreferencesFactory, registerPlugin<CMakePreferences>(); )
 // K_EXPORT_PLUGIN(CMakePreferencesFactory("kcm_kdevcmake_settings"))
 
 
