@@ -196,17 +196,18 @@ private:
     template<CXCursorKind CK, KDevelop::DUContext::ContextType Type>
     KDevelop::DUContext* createContext(CXCursor cursor, const KDevelop::Identifier& id)
     {
-        DUChainWriteLocker lock;
         // wtf: why is the DUContext API requesting a QID when it needs a plain Id?!
         // see: testNamespace
         const QualifiedIdentifier scopeId(id);
+        auto range = makeContextRange(cursor);
+        DUChainWriteLocker lock;
         if (m_update) {
             const KDevelop::IndexedQualifiedIdentifier indexedScopeId(scopeId);
             auto it = m_parentContext->previousChildContexts.begin();
             while (it != m_parentContext->previousChildContexts.end()) {
                 auto ctx = *it;
                 if (ctx->type() == Type && ctx->indexedLocalScopeIdentifier() == indexedScopeId) {
-                    ctx->setRange(makeContextRange(cursor));
+                    ctx->setRange(range);
                     m_parentContext->previousChildContexts.erase(it);
                     return ctx;
                 }
@@ -214,7 +215,7 @@ private:
             }
         }
         //TODO: (..type, id..) constructor for DUContext?
-        auto context = new KDevelop::DUContext(makeContextRange(cursor), m_parentContext->context);
+        auto context = new KDevelop::DUContext(range, m_parentContext->context);
         context->setType(Type);
         context->setLocalScopeIdentifier(scopeId);
         if (Type == KDevelop::DUContext::Other)
