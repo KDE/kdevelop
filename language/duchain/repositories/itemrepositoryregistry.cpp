@@ -32,6 +32,8 @@
 
 #include "abstractitemrepository.h"
 
+using namespace KDevelop;
+
 namespace {
 
 //If KDevelop crashed this many times consicutively, clean up the repository
@@ -50,8 +52,62 @@ QString repositoryPathForSession(const KDevelop::ISessionLock::Ptr& session)
   QString xdgCacheDir = QProcessEnvironment::systemEnvironment().value("XDG_CACHE_HOME", QDir::homePath() + "/.cache") + "/kdevduchain";
   QString baseDir = QProcessEnvironment::systemEnvironment().value("KDEV_DUCHAIN_DIR", xdgCacheDir);
   baseDir += QString("/%1-%2").arg(qAppName()).arg(session->id());
-  KStandardDirs::makeDir(baseDir);
   return baseDir;
+}
+
+bool shouldClear(const QString& path)
+{
+  QDir dir(path);
+
+  if (!dir.exists()) {
+    return false;
+  }
+
+  if (getenv("CLEAR_DUCHAIN_DIR")) {
+    kDebug() << "clearing duchain directory because CLEAR_DUCHAIN_DIR is set";
+    return true;
+  }
+
+  if (dir.exists("is_writing")) {
+    kWarning() << "repository" << path << "was write-locked, it probably is inconsistent";
+    return true;
+  }
+
+  if (!dir.exists(QString("version_%1").arg(staticItemRepositoryVersion()))) {
+    kWarning() << "version-hint not found, seems to be an old version";
+    return true;
+  }
+
+  QFile crashesFile(dir.filePath(QString("crash_counter")));
+  if (crashesFile.open(QIODevice::ReadOnly)) {
+    int count;
+    QDataStream stream(&crashesFile);
+    stream >> count;
+
+    kDebug() << "current count of crashes: " << count;
+
+    if (count >= crashesBeforeCleanup && !getenv("DONT_CLEAR_DUCHAIN_DIR")) {
+      bool userAnswer = askUser(i18np("The previous session crashed", "Session crashed %1 times in a row", count),
+                                i18nc("@action", "Clear cache"),
+                                i18nc("@title", "Session crashed"),
+                                i18n("The crash may be caused by a corruption of cached data.\n\n"
+                                      "Press OK if you want KDevelop to clear the cache, otherwise press Cancel if you are sure the crash has another origin."));
+      if (userAnswer) {
+        kDebug() << "User chose to clean repository";
+        return true;
+      } else {
+        setCrashCounter(crashesFile, 1);
+        kDebug() << "User chose to reset crash counter";
+      }
+    } else {
+      ///Increase the crash-count. It will be reset if kdevelop is shut down cleanly.
+      setCrashCounter(crashesFile, ++count);
+    }
+  } else {
+    setCrashCounter(crashesFile, 1);
+  }
+
+  return false;
 }
 
 }
@@ -229,62 +285,12 @@ bool ItemRepositoryRegistryPrivate::open(const QString& path)
   m_path = path;
 
   // Check if the repository shall be cleared
-  // do-while is here for breaks
-  bool clear = false;
-  do {
-    if(QFile::exists(m_path + "/is_writing")) {
-      kWarning() << "repository" << m_path << "was write-locked, it probably is inconsistent";
-      clear = true;
-      break;
-    }
-
-    if(!QFile::exists(m_path + QString("/version_%1").arg(staticItemRepositoryVersion()))) {
-      kWarning() << "version-hint not found, seems to be an old version";
-      clear = true;
-      break;
-    }
-
-    if(getenv("CLEAR_DUCHAIN_DIR")) {
-      kWarning() << "clearing duchain directory because CLEAR_DUCHAIN_DIR is set";
-      clear = true;
-      break;
-    }
-
-    QFile crashesFile(m_path + QString("/crash_counter"));
-    if(crashesFile.open(QIODevice::ReadOnly)) {
-      int count;
-      QDataStream stream(&crashesFile);
-      stream >> count;
-
-      kDebug() << "current count of crashes: " << count;
-
-      if(count >= crashesBeforeCleanup && !getenv("DONT_CLEAR_DUCHAIN_DIR")) {
-        bool userAnswer = askUser(i18np("The previous session crashed", "Session crashed %1 times in a row", count),
-                                  i18nc("@action", "Clear cache"),
-                                  i18nc("@title", "Session crashed"),
-                                  i18n("The crash may be caused by a corruption of cached data.\n\n"
-                                       "Press OK if you want KDevelop to clear the cache, otherwise press Cancel if you are sure the crash has another origin."));
-        if(userAnswer) {
-          clear = true;
-          kDebug() << "User chose to clean repository";
-          break;
-        } else {
-          setCrashCounter(crashesFile, 1);
-          kDebug() << "User chose to reset crash counter";
-        }
-      } else {
-        ///Increase the crash-count. It will be reset if kdevelop is shut down cleanly.
-        setCrashCounter(crashesFile, ++count);
-      }
-    } else {
-      setCrashCounter(crashesFile, 1);
-    }
-  } while(false);
-
-  if(clear) {
+  if (shouldClear(path)) {
     kWarning() << QString("The data-repository at %1 has to be cleared.").arg(m_path);
     deleteDataDirectory();
   }
+
+  KStandardDirs::makeDir(path);
 
   foreach(AbstractItemRepository* repository, m_repositories.keys()) {
     if(!repository->open(path)) {
