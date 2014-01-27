@@ -124,6 +124,7 @@ public:
     virtual QStringList namespaces() const;
 
     void addBaseClass(const QString& base);
+    void setBaseClasses(const QList<QString>& bases);
     QList<DeclarationPointer> directBaseClasses() const;
     QList<DeclarationPointer> allBaseClasses() const;
 

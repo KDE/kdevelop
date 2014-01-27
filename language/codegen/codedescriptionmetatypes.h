@@ -46,6 +46,9 @@ GRANTLEE_BEGIN_LOOKUP(KDevelop::FunctionDescription)
     GRANTLEE_LOOKUP_PROPERTY(isDestructor)
     GRANTLEE_LOOKUP_PROPERTY(isVirtual)
     GRANTLEE_LOOKUP_PROPERTY(isStatic)
+    GRANTLEE_LOOKUP_PROPERTY(isConst)
+    GRANTLEE_LOOKUP_PROPERTY(isSignal)
+    GRANTLEE_LOOKUP_PROPERTY(isSlot)
     if (property == "returnType")
     {
         return object.returnType();
