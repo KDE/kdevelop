@@ -30,7 +30,7 @@ IndexedDeclaration::IndexedDeclaration(uint topContext, uint declarationIndex)
 {
 }
 
-IndexedDeclaration::IndexedDeclaration(Declaration* decl)
+IndexedDeclaration::IndexedDeclaration(const Declaration* decl)
 {
   if(decl) {
     m_topContext = decl->topContext()->ownIndex();

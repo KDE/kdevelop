@@ -101,65 +101,36 @@ QVariant ProblemModel::data(const QModelIndex & index, int role) const
     if (!index.isValid())
         return QVariant();
 
-//     Locking the duchain here leads to a deadlock, because kate triggers some paint to the outside while holding the smart-lock
-//     DUChainReadLocker lock(DUChain::lock());
+    DUChainReadLocker lock;
 
     ProblemPointer p = problemForIndex(index);
     KUrl baseDirectory = m_currentDocument.upUrl();
 
-    if (!index.internalId()) {
-        // Top level
-        switch (role) {
-            case Qt::DisplayRole:
-                switch (index.column()) {
-                    case Source:
-                        return p->sourceString();
-                        break;
-                    case Error:
-                        return p->description();
-                    case File: {
-                        return getDisplayUrl(p->finalLocation().document.str(), baseDirectory);
-                    }
-                    case Line:
-                        if (p->finalLocation().isValid())
-                            return QString::number(p->finalLocation().start.line + 1);
-                        break;
-                    case Column:
-                        if (p->finalLocation().isValid())
-                            return QString::number(p->finalLocation().start.column + 1);
-                        break;
-                }
-                break;
-
-            case Qt::ToolTipRole:
-                return p->explanation();
-
-            default:
-                break;
+    switch (role) {
+    case Qt::DisplayRole:
+        switch (index.column()) {
+        case Source:
+            return p->sourceString();
+        case Error:
+            return p->description();
+        case File:
+            return getDisplayUrl(p->finalLocation().document.str(), baseDirectory);
+        case Line:
+            if (p->finalLocation().isValid())
+                return QString::number(p->finalLocation().start.line + 1);
+            break;
+        case Column:
+            if (p->finalLocation().isValid())
+                return QString::number(p->finalLocation().start.column + 1);
+            break;
         }
+        break;
 
-    } else {
-        switch (role) {
-            case Qt::DisplayRole:
-                switch (index.column()) {
-                    case Error:
-                        return i18n("In file included from:");
-                    case File: {
-                        return getDisplayUrl(p->url().str(), baseDirectory);
-                    } case Line:
-                        if (p->finalLocation().isValid())
-                            return QString::number(p->finalLocation().start.line + 1);
-                        break;
-                    case Column:
-                        if (p->finalLocation().isValid())
-                            return QString::number(p->finalLocation().start.column + 1);
-                        break;
-                }
-                break;
+    case Qt::ToolTipRole:
+        return p->explanation();
 
-            default:
-                break;
-        }
+    default:
+        break;
     }
 
     return QVariant();
@@ -167,9 +138,6 @@ QVariant ProblemModel::data(const QModelIndex & index, int role) const
 
 QModelIndex ProblemModel::parent(const QModelIndex & index) const
 {
-    if (index.internalId())
-        return createIndex(m_problems.indexOf(problemForIndex(index)), 0);
-
     return QModelIndex();
 }
 
@@ -198,10 +166,7 @@ int ProblemModel::columnCount(const QModelIndex & parent) const
 
 KDevelop::ProblemPointer ProblemModel::problemForIndex(const QModelIndex & index) const
 {
-    if (index.internalId())
-        return m_problems.at(index.internalId());
-    else
-        return m_problems.at(index.row());
+    return m_problems.at(index.row());
 }
 
 ProblemReporterPlugin* ProblemModel::plugin()
@@ -278,7 +243,7 @@ void ProblemModel::getProblemsInternal(TopDUContext* context, bool showImports, 
         return;
     }
     foreach(ProblemPointer p, context->problems()) {
-        if (p->severity() <= m_severity) {
+        if (p && p->severity() <= m_severity) {
             result.append(p);
         }
     }

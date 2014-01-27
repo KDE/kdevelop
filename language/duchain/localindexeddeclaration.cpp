@@ -38,13 +38,15 @@ Declaration* LocalIndexedDeclaration::data(TopDUContext* top) const
 {
   if(!m_declarationIndex)
     return 0;
+  Q_ASSERT(top);
   return top->m_dynamicData->getDeclarationForIndex(m_declarationIndex);
 }
 
 bool LocalIndexedDeclaration::isLoaded(TopDUContext* top) const
 {
-  if(m_declarationIndex)
-    return top->m_dynamicData->isDeclarationForIndexLoaded(m_declarationIndex);
-  else
+  if(!m_declarationIndex)
     return false;
+
+  Q_ASSERT(top);
+  return top->m_dynamicData->isDeclarationForIndexLoaded(m_declarationIndex);
 }

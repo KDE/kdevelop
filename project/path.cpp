@@ -25,6 +25,7 @@
 #include <QDebug>
 
 #include <language/duchain/indexedstring.h>
+#include <language/util/kdevhash.h>
 
 using namespace KDevelop;
 
@@ -371,16 +372,20 @@ void Path::clear()
 
 Path Path::cd(const QString& dir) const
 {
-    KUrl url = toUrl();
-    url.cd(dir);
-    return Path(url);
+    if (!isValid()) {
+        return Path();
+    }
+    return Path(*this, dir);
 }
 
 namespace KDevelop {
 uint qHash(const Path& path)
 {
-    // TODO: optimize using RunningHash
-    return qHash(path.pathOrUrl());
+    KDevHash hash;
+    foreach (const QString& segment, path.segments()) {
+        hash << qHash(segment);
+    }
+    return hash;
 }
 
 Path::List toPathList(const KUrl::List& list)

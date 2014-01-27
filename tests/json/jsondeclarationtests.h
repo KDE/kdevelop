@@ -57,6 +57,7 @@
  *   defaultParameter : string
  *   toString : string
  *   range : string
+ *   kind : string
  */
 
 namespace KDevelop
@@ -251,6 +252,37 @@ DeclarationTest(range)
     .arg(range.end.line)
     .arg(range.end.column);
   return compareValues(string, value, "Declaration's toString");
+}
+
+///JSON type: string
+///@returns stringified declaration kind
+DeclarationTest(kind)
+{
+  if (!decl) {
+    return "Invalid Declaration";
+  }
+  QString kind;
+  switch (decl->kind()) {
+    case KDevelop::Declaration::Alias:
+      kind = "Alias";
+      break;
+    case KDevelop::Declaration::Import:
+      kind = "Import";
+      break;
+    case KDevelop::Declaration::Instance:
+      kind = "Instance";
+      break;
+    case KDevelop::Declaration::Namespace:
+      kind = "Namespace";
+      break;
+    case KDevelop::Declaration::NamespaceAlias:
+      kind = "NamespaceAlias";
+      break;
+    case KDevelop::Declaration::Type:
+      kind = "Type";
+      break;
+  }
+  return compareValues(kind, value, "Declaration's kind");
 }
 
 }

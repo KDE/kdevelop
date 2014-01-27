@@ -47,7 +47,6 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/namespacealiasdeclaration.cpp
     duchain/aliasdeclaration.cpp
     duchain/dumpdotgraph.cpp
-    duchain/duchainobserver.cpp
     duchain/duchainutils.cpp
     duchain/declarationid.cpp
     duchain/definitions.cpp
@@ -58,6 +57,7 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/duchainregister.cpp
     duchain/persistentsymboltable.cpp
     duchain/instantiationinformation.cpp
+    duchain/problem.cpp
 
     duchain/types/typesystem.cpp
     duchain/types/typeregister.cpp
@@ -91,10 +91,10 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/navigation/useswidget.cpp
     duchain/navigation/usescollector.cpp
 
+    interfaces/abbreviations.cpp
     interfaces/iastcontainer.cpp
     interfaces/ilanguagesupport.cpp
     interfaces/quickopendataprovider.cpp
-    interfaces/iproblem.cpp
     interfaces/iquickopen.cpp
     interfaces/editorcontext.cpp
     interfaces/codecontext.cpp
@@ -122,6 +122,7 @@ set(kdevplatformlanguage_LIB_SRCS
 #     codegen/templaterenderer.cpp
 #     codegen/templateengine.cpp
 #     codegen/archivetemplateloader.cpp
+    codegen/basicrefactoring.cpp
 
     util/setrepository.cpp
     util/includeitem.cpp
@@ -164,12 +165,12 @@ install(FILES
     interfaces/quickopendataprovider.h
     interfaces/quickopenfilter.h
     interfaces/iquickopen.h
-    interfaces/iproblem.h
     interfaces/codecontext.h
     interfaces/editorcontext.h
     interfaces/iastcontainer.h
     interfaces/icreateclasshelper.h
     interfaces/icontextbrowser.h
+    interfaces/abbreviations.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/interfaces COMPONENT Devel
 )
 
@@ -226,7 +227,6 @@ install(FILES
     duchain/forwarddeclaration.h
     duchain/duchainbase.h
     duchain/duchainpointer.h
-    duchain/duchainobserver.h
     duchain/duchainlock.h
     duchain/identifier.h
     duchain/abstractfunctiondeclaration.h
@@ -252,6 +252,7 @@ install(FILES
     duchain/indexeddeclaration.h
     duchain/localindexeddeclaration.h
     duchain/definitions.h
+    duchain/problem.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain COMPONENT Devel
 )
 
@@ -325,6 +326,7 @@ install(FILES
     codegen/sourcefiletemplate.h
     codegen/templateclassgenerator.h
     codegen/codedescription.h
+    codegen/basicrefactoring.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/codegen COMPONENT Devel
 )
 

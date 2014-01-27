@@ -40,24 +40,6 @@ namespace KDevelop
     class VcsRevision;
 }
 
-class GitPluginCheckInRepositoryJob : public KDevelop::CheckInRepositoryJob
-{
-    Q_OBJECT
-public:
-    GitPluginCheckInRepositoryJob(KTextEditor::Document* document, const QString& rootDirectory);
-    virtual ~GitPluginCheckInRepositoryJob();
-    virtual void start();
-
-private slots:
-    void repositoryQueryFinished(int);
-    void processFailed(QProcess::ProcessError);
-
-private:
-    QProcess* m_hashjob;
-    QProcess* m_findjob;
-    QString m_rootDirectory;
-};
-
 class StandardJob : public KDevelop::VcsJob
 {
     Q_OBJECT

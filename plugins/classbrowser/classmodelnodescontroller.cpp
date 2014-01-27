@@ -23,7 +23,6 @@
 #include "classmodelnode.h"
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
-#include <language/duchain/duchainobserver.h>
 #include <language/duchain/classdeclaration.h>
 #include <QTimer>
 
@@ -38,9 +37,6 @@ ClassModelNodesController::ClassModelNodesController()
 {
   m_updateTimer->setSingleShot(true);
   connect( m_updateTimer, SIGNAL(timeout()), this, SLOT(updateChangedFiles()));
-
-  // Get notification for file changes.
-  connect(DUChain::self()->notifier(), SIGNAL(branchModified(KDevelop::DUContextPointer)), this, SLOT(branchModified(KDevelop::DUContextPointer)), Qt::QueuedConnection);
 }
 
 ClassModelNodesController::~ClassModelNodesController()
@@ -62,23 +58,6 @@ void ClassModelNodesController::registerForChanges(const KDevelop::IndexedString
 void ClassModelNodesController::unregisterForChanges(const KDevelop::IndexedString& a_file, ClassModelNodeDocumentChangedInterface* a_node)
 {
   m_filesMap.remove(a_file, a_node);
-}
-
-void ClassModelNodesController::branchModified(KDevelop::DUContextPointer context)
-{
-  DUChainReadLocker readLock(DUChain::lock());
-
-  if ( !context )
-    return;
-
-  // Queue the changed file.
-  m_updatedFiles.insert(context->url());
-
-  if ( !m_updateTimer->isActive() )
-  {
-    // Start a delayed update timer.
-    m_updateTimer->start(2000);
-  }
 }
 
 void ClassModelNodesController::updateChangedFiles()

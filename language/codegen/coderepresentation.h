@@ -74,7 +74,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeRepresentation : public QSharedData {
       * Returns the specified name as a url for aritificial source code
       * suitable for code being inserted into the parser
       */
-    static KUrl artificialUrl(const QString & name);
+    static QString artificialPath(const QString & name);
  
     typedef KSharedPtr<CodeRepresentation> Ptr;
 };

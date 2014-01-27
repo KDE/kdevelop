@@ -62,7 +62,6 @@
 #include "waitforupdate.h"
 #include "referencecounting.h"
 #include "importers.h"
-#include "duchainobserver.h"
 
 namespace {
 //Additional "soft" cleanup steps that are done before the actual cleanup.
@@ -316,7 +315,6 @@ public:
     qRegisterMetaType<KDevelop::IndexedTopDUContext>("KDevelop::IndexedTopDUContext");
     qRegisterMetaType<KDevelop::ReferencedTopDUContext>("KDevelop::ReferencedTopDUContext");
 
-    notifier = new DUChainObserver();
     instance = new DUChain();
     m_cleanup = new CleanupThread(this);
     m_cleanup->start();
@@ -359,7 +357,6 @@ public:
     m_cleanup->stopThread();
     delete m_cleanup;
     delete instance;
-    delete notifier;
   }
 
   void clear() {
@@ -432,7 +429,6 @@ public:
   QMutex m_referenceCountsMutex;
   QHash<TopDUContext*, uint> m_referenceCounts;
 
-  DUChainObserver* notifier;
   Definitions m_definitions;
   Uses m_uses;
   QSet<uint> m_loading;
@@ -1186,8 +1182,6 @@ void DUChain::updateContextEnvironment( TopDUContext* context, ParsingEnvironmen
   context->setParsingEnvironmentFile( file );
 
   addToEnvironmentManager( context );
-
-  branchModified(context);
 }
 
 void DUChain::removeDocumentChain( TopDUContext* context )
@@ -1195,7 +1189,6 @@ void DUChain::removeDocumentChain( TopDUContext* context )
   ENSURE_CHAIN_WRITE_LOCKED;
   IndexedTopDUContext indexed(context->indexed());
   Q_ASSERT(indexed.data() == context); ///This assertion fails if you call removeDocumentChain(..) on a document that has not been added to the du-chain
-  branchRemoved(context);
   context->m_dynamicData->deleteOnDisk();
   Q_ASSERT(indexed.data() == context);
   sdDUChainPrivate->removeDocumentChainFromMemory(context);
@@ -1237,16 +1230,12 @@ void DUChain::addDocumentChain( TopDUContext * chain )
   
   addToEnvironmentManager(chain);
 
-  //contextChanged(0L, DUChainObserver::Addition, DUChainObserver::ChildContexts, chain);
-
   if(ICore::self() && ICore::self()->languageController()->backgroundParser()->trackerForUrl(chain->url()))
   {
     //Make sure the context stays alive at least as long as the context is open
     ReferencedTopDUContext ctx(chain);
     sdDUChainPrivate->m_openDocumentContexts.insert(ctx);
   }
-
-  branchAdded(chain);
 }
 
 void DUChain::addToEnvironmentManager( TopDUContext * chain ) {
@@ -1433,26 +1422,6 @@ TopDUContext* DUChain::chainForDocument( const IndexedString& document, const Pa
   }
 }
 
-DUChainObserver* DUChain::notifier()
-{
-  return sdDUChainPrivate->notifier;
-}
-
-void DUChain::branchAdded(DUContext* context)
-{
-  emit sdDUChainPrivate->notifier->branchAdded(DUContextPointer(context));
-}
-
-void DUChain::branchModified(DUContext* context)
-{
-  emit sdDUChainPrivate->notifier->branchModified(DUContextPointer(context));
-}
-
-void DUChain::branchRemoved(DUContext* context)
-{
-  emit sdDUChainPrivate->notifier->branchRemoved(DUContextPointer(context));
-}
-
 QList<KUrl> DUChain::documents() const
 {
   QMutexLocker l(&sdDUChainPrivate->m_chainsMutex);
@@ -1476,17 +1445,6 @@ QList<IndexedString> DUChain::indexedDocuments() const
 
   return ret;
 }
-
-/*Q_SCRIPTABLE bool DUChain::updateContext(TopDUContext* topContext, TopDUContext::Features minFeatures, QObject* notifyReady) const
-{
-  if( (topContext->features() & minFeatures) != minFeatures || (topContext->parsingEnvironmentFile() && topContext->parsingEnvironmentFile()->needsUpdate()) ) {
-    ICore::self()->languageController()->backgroundParser()->addUpdateJob(topContext, minFeatures, notifyReady);
-    return true;
-  }else{
-    //No update needed, or we don't know since there's no ParsingEnvironmentFile attached
-    return false;
-  }
-}*/
 
 void DUChain::documentActivated(KDevelop::IDocument* doc)
 {
@@ -1681,11 +1639,7 @@ KDevelop::ReferencedTopDUContext DUChain::waitForUpdate(const KDevelop::IndexedS
   
   waiter.m_dataMutex.lock();
   
-  {
-    DUChainReadLocker readLock(DUChain::lock());
-  
-    updateContextForUrl(document, minFeatures, &waiter);
-  }
+  updateContextForUrl(document, minFeatures, &waiter);
   
 //   waiter.m_waitMutex.lock();
 //   waiter.m_dataMutex.unlock();

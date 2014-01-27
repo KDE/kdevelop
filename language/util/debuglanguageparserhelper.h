@@ -21,8 +21,6 @@
 
 #include <QTextStream>
 
-#include <language/interfaces/iproblem.h>
-
 #include <cstdlib>
 #include <cstdio>
 #include <KAboutData>
@@ -31,6 +29,7 @@
 
 #include <tests/autotestshell.h>
 #include <language/duchain/duchain.h>
+#include <language/duchain/problem.h>
 #include <language/codegen/coderepresentation.h>
 #include <tests/testcore.h>
 

@@ -315,6 +315,9 @@ KSharedPtr< KDevelop::CompletionTreeElement > CodeCompletionModel::itemForIndex(
 
 QVariant CodeCompletionModel::data(const QModelIndex& index, int role) const
 {
+  if ( role == Qt::TextAlignmentRole && index.column() == 0 ) {
+    return Qt::AlignRight;
+  }
   CompletionTreeElement* element = (CompletionTreeElement*)index.internalPointer();
   if( !element )
     return QVariant();

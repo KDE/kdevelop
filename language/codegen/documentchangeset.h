@@ -131,10 +131,6 @@ public:
     ///@param policy Whether the affected documents should be activated when the change is applied
     void setActivationPolicy(ActivationPolicy policy);
 
-    ///Applies all changes to temporary code representations, and returns a map from each file-name to
-    ///the respective inserted artificial code-representation.
-    QHash<IndexedString, InsertArtificialCodeRepresentationPointer> temporaryCodeRepresentations() const;
-
     /// Apply all the changes registered in this changeset to the actual files
     ChangeResult applyAllChanges();
 

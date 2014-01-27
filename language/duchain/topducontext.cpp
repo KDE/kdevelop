@@ -24,11 +24,10 @@
 
 #include <QtCore/QThread>
 
-#include "../interfaces/iproblem.h"
-
 #include <util/kdevvarlengtharray.h>
 
 #include "persistentsymboltable.h"
+#include "problem.h"
 #include "declaration.h"
 #include "duchain.h"
 #include "duchainlock.h"
@@ -85,6 +84,7 @@ ReferencedTopDUContext& ReferencedTopDUContext::operator=(const ReferencedTopDUC
 }
 
 DEFINE_LIST_MEMBER_HASH(TopDUContextData, m_usedDeclarationIds, DeclarationId)
+DEFINE_LIST_MEMBER_HASH(TopDUContextData, m_problems, LocalIndexedProblem)
 REGISTER_DUCHAIN_ITEM(TopDUContext);
 
 template <class T>
@@ -103,40 +103,16 @@ QMutex importStructureMutex(QMutex::Recursive);
 //Contains data that is not shared among top-contexts that share their duchain entries
 class TopDUContextLocalPrivate {
 public:
-  TopDUContextLocalPrivate (TopDUContext* ctxt, TopDUContext* sharedDataOwner, uint index) :
-    m_ctxt(ctxt), m_sharedDataOwner(sharedDataOwner), m_ownIndex(index), m_inDuChain(false)
+  TopDUContextLocalPrivate (TopDUContext* ctxt, uint index) :
+    m_ctxt(ctxt), m_ownIndex(index), m_inDuChain(false)
   {
     m_indexedRecursiveImports.insert(index);
-    if(sharedDataOwner) {
-      Q_ASSERT(0); //Not supported and to be removed
-      Q_ASSERT(!sharedDataOwner->m_local->m_sharedDataOwner);
-      sharedDataOwner->m_local->m_dataUsers.insert(m_ctxt);
-
-      foreach(const DUContext::Import& import, m_sharedDataOwner->m_local->m_importedContexts)
-        if(dynamic_cast<TopDUContext*>(import.context(0)))
-          dynamic_cast<TopDUContext*>(import.context(0))->m_local->m_directImporters.insert(m_ctxt);
-    }
   }
 
   ~TopDUContextLocalPrivate() {
     //Either we use some other contexts data and have no users, or we own the data and have users that share it.
     QMutexLocker lock(&importStructureMutex);
 
-    Q_ASSERT(!m_sharedDataOwner || m_dataUsers.isEmpty());
-
-    if(m_sharedDataOwner) {
-      Q_ASSERT(m_sharedDataOwner->m_local->m_dataUsers.contains(m_ctxt));
-      m_sharedDataOwner->m_local->m_dataUsers.remove(m_ctxt);
-
-      if(!m_sharedDataOwner->m_local->m_dataUsers.isEmpty()) {
-        //this should not happen, because the users should always be deleted before the owner itself is deleted.
-        Q_ASSERT(0);
-      }
-
-      foreach(const DUContext::Import& import, m_sharedDataOwner->m_local->m_importedContexts)
-        if(DUChain::self()->isInMemory(import.topContextIndex()) && dynamic_cast<TopDUContext*>(import.context(0)))
-          dynamic_cast<TopDUContext*>(import.context(0))->m_local->m_directImporters.remove(m_ctxt);
-    }
     foreach(const DUContext::Import& import, m_importedContexts)
       if(DUChain::self()->isInMemory(import.topContextIndex()) && dynamic_cast<TopDUContext*>(import.context(0)))
         dynamic_cast<TopDUContext*>(import.context(0))->m_local->m_directImporters.remove(m_ctxt);
@@ -172,13 +148,12 @@ public:
   QVector<DUContext::Import> m_importedContexts;
 //   mutable bool m_haveImportStructure : 1;
   TopDUContext* m_ctxt;
-  TopDUContext* m_sharedDataOwner; //Either the owner of the shared data, or zero if this context owns the data
-  QSet<TopDUContext*> m_dataUsers; //Set of all context that use the data of this context.
 
   QSet<DUContext*> m_directImporters;
+  // used to keep problems alive while the topducontext is alive
+  QList<ProblemPointer> m_problems;
 
   ParsingEnvironmentFilePointer m_file;
-  QList<ProblemPointer> m_problems;
 
   KSharedPtr<IAstContainer> m_ast;
   
@@ -198,9 +173,6 @@ public:
       TopDUContext* top = dynamic_cast<TopDUContext*>(import.context(0));
       if(top) {
         top->m_local->m_directImporters.remove(m_ctxt);
-
-        foreach(TopDUContext* user, m_dataUsers)
-          user->m_local->removeImportedContextRecursively(top, false);
 
         if(!m_ctxt->usingImportsCache()) {
           removeImportedContextRecursion(top, top, 1, rebuild);
@@ -231,11 +203,6 @@ public:
     if(local)
       m_importedContexts << DUContext::Import(context, m_ctxt);
 
-    foreach(TopDUContext* user, m_dataUsers)
-      user->m_local->addImportedContextRecursively(context, temporary, false);
-
-//     context->m_local->needImportStructure();
-
     if(!m_ctxt->usingImportsCache()) {
       addImportedContextRecursion(context, context, 1, temporary);
 
@@ -253,9 +220,6 @@ public:
 
     if(local)
       removeFromVector(m_importedContexts, DUContext::Import(context, m_ctxt));
-
-    foreach(TopDUContext* user, m_dataUsers)
-      user->m_local->removeImportedContextRecursively(context, false);
 
     QSet<QPair<TopDUContext*, const TopDUContext*> > rebuild;
     if(!m_ctxt->usingImportsCache()) {
@@ -275,9 +239,6 @@ public:
   void removeImportedContextsRecursively(const QList<TopDUContext*>& contexts, bool local) {
     QMutexLocker lock(&importStructureMutex);
 
-
-    foreach(TopDUContext* user, m_dataUsers)
-      user->m_local->removeImportedContextsRecursively(contexts, false);
 
     QSet<QPair<TopDUContext*, const TopDUContext*> > rebuild;
     foreach(TopDUContext* context, contexts) {
@@ -599,6 +560,7 @@ void TopDUContext::rebuildDynamicImportStructure() {
 void TopDUContext::rebuildDynamicData(DUContext* parent, uint ownIndex) {
   Q_ASSERT(parent == 0 && ownIndex != 0);
   m_local->m_ownIndex = ownIndex;
+
   DUContext::rebuildDynamicData(parent, 0);
 }
 
@@ -611,12 +573,12 @@ uint TopDUContext::ownIndex() const
   return m_local->m_ownIndex;
 }
 
-TopDUContext::TopDUContext(TopDUContextData& data) : DUContext(data), m_local(new TopDUContextLocalPrivate(this, 0, data.m_ownIndex)), m_dynamicData(new TopDUContextDynamicData(this)) {
+TopDUContext::TopDUContext(TopDUContextData& data) : DUContext(data), m_local(new TopDUContextLocalPrivate(this, data.m_ownIndex)), m_dynamicData(new TopDUContextDynamicData(this)) {
 }
 
 TopDUContext::TopDUContext(const IndexedString& url, const RangeInRevision& range, ParsingEnvironmentFile* file)
 : DUContext(*new TopDUContextData(url), range)
-, m_local(new TopDUContextLocalPrivate(this, 0, DUChain::newTopContextIndex()))
+, m_local(new TopDUContextLocalPrivate(this, DUChain::newTopContextIndex()))
 , m_dynamicData(new TopDUContextDynamicData(this))
 {
   d_func_dynamic()->setClassId(this);
@@ -629,37 +591,28 @@ TopDUContext::TopDUContext(const IndexedString& url, const RangeInRevision& rang
   setInSymbolTable(true);
 }
 
-TopDUContext::TopDUContext(TopDUContext* sharedDataOwner, ParsingEnvironmentFile* file)
-  : DUContext(*sharedDataOwner), m_local(new TopDUContextLocalPrivate(this, sharedDataOwner, DUChain::newTopContextIndex())), m_dynamicData(sharedDataOwner->m_dynamicData)
-{
-  m_local->m_file = ParsingEnvironmentFilePointer(file);
-  ///@todo this is incompatible with data-sharing, remove that option again.
-  d_func_dynamic()->m_ownIndex = m_local->m_ownIndex;
-}
-
 KSharedPtr<ParsingEnvironmentFile> TopDUContext::parsingEnvironmentFile() const {
   return m_local->m_file;
 }
 
 TopDUContext::~TopDUContext( )
 {
-  if(!m_local->m_sharedDataOwner) {
-    m_dynamicData->m_deleting = true;
-    
-    //Clear the AST, so that the 'feature satisfaction' cache is eventually updated
-    clearAst();
-    
-    if(!isOnDisk())
-    {
-      //Clear the 'feature satisfaction' cache which is managed in ParsingEnvironmentFile
-      setFeatures(Empty);
-      
-      clearUsedDeclarationIndices();
-    }
+  m_dynamicData->m_deleting = true;
+
+  //Clear the AST, so that the 'feature satisfaction' cache is eventually updated
+  clearAst();
+
+  if(!isOnDisk())
+  {
+    //Clear the 'feature satisfaction' cache which is managed in ParsingEnvironmentFile
+    setFeatures(Empty);
+
+    clearUsedDeclarationIndices();
   }
+
   deleteChildContextsRecursively();
   deleteLocalDeclarations();
-  m_dynamicData->clearContextsAndDeclarations();
+  m_dynamicData->clear();
 }
 
 void TopDUContext::deleteSelf() {
@@ -667,8 +620,10 @@ void TopDUContext::deleteSelf() {
   TopDUContextLocalPrivate* local = m_local;
   TopDUContextDynamicData* dynamicData = m_dynamicData;
 
-  if(!m_local->m_sharedDataOwner)
-    m_dynamicData->m_deleting = true;
+  m_dynamicData->m_deleting = true;
+  // ugly hack: if we don't clear the problems here we'll end up with double deletions as the shared ptrs
+  // will potentially try to delete mmapped, serialized data :-/
+  m_local->m_problems.clear();
 
   delete this;
 
@@ -1003,11 +958,6 @@ void TopDUContext::applyAliases( const SearchItem::PtrList& identifiers, Accepto
     applyAliases(emptyId, item, acceptor, position, canBeNamespace, 0, 0);
 }
 
-TopDUContext* TopDUContext::sharedDataOwner() const
-{
-  return m_local->m_sharedDataOwner;
-}
-
 TopDUContext * TopDUContext::topContext() const
 {
   return const_cast<TopDUContext*>(this);
@@ -1022,34 +972,64 @@ bool TopDUContext::deleting() const
 QList<ProblemPointer> TopDUContext::problems() const
 {
   ENSURE_CAN_READ
-  if(m_local->m_sharedDataOwner)
-    return m_local->m_problems + m_local->m_sharedDataOwner->m_local->m_problems;
-  else
-    return m_local->m_problems;
+
+  const auto data = d_func();
+  if (m_local->m_problems.isEmpty() && data->m_problemsSize()) {
+    // deserialize problems into shared ptrs when not done so already
+    m_local->m_problems.reserve(data->m_problemsSize());
+    for (uint i = 0; i < data->m_problemsSize(); ++i) {
+      m_local->m_problems << ProblemPointer(data->m_problems()[i].data(this));
+    }
+  }
+  return m_local->m_problems;
 }
 
 void TopDUContext::setProblems(const QList<ProblemPointer>& problems)
 {
   ENSURE_CAN_WRITE
-  m_local->m_problems = problems;
+  clearProblems();
+  for (const auto& problem : problems) {
+    addProblem(problem);
+  }
 }
 
 void TopDUContext::addProblem(const ProblemPointer& problem)
 {
   ENSURE_CAN_WRITE
-  m_local->m_problems << problem;
+
+  Q_ASSERT(problem);
+
+  auto data = d_func_dynamic();
+
+  // ensure we deserialized problems already to keep m_local->m_problems in sync
+  problems();
+
+  auto serializableProblem = ProblemPointer(problem)->prepareStorage(this);
+
+  // store for indexing
+  LocalIndexedProblem indexedProblem(serializableProblem.constData());
+  Q_ASSERT(indexedProblem.isValid());
+  data->m_problemsList().append(indexedProblem);
+  Q_ASSERT(indexedProblem.data(this) == serializableProblem.data());
+
+  // and also for dynamic, shared retrieval during the lifetime of this topcontext
+  m_local->m_problems << serializableProblem;
 }
 
 void TopDUContext::removeProblem(const ProblemPointer& problem)
 {
   ENSURE_CAN_WRITE
+  Q_ASSERT(problem);
+  Q_ASSERT(problem->m_topContext == this);
   m_local->m_problems.removeOne(problem);
+  d_func_dynamic()->m_problemsList().removeOne({problem.data()});
 }
 
 void TopDUContext::clearProblems()
 {
   ENSURE_CAN_WRITE
   m_local->m_problems.clear();
+  d_func_dynamic()->m_problemsList().clear();
 }
 
 QVector<DUContext*> TopDUContext::importers() const
@@ -1097,14 +1077,7 @@ void TopDUContext::clearImportedParentContexts() {
     d_func_dynamic()->m_importsCache.insert(IndexedTopDUContext(this));
   }
 
-  if(!m_local->m_sharedDataOwner)
-    DUContext::clearImportedParentContexts();
-  else {
-    foreach (const Import &parent, m_local->m_importedContexts)
-      if( parent.context(0) )
-        removeImportedParentContext(parent.context(0));
-    Q_ASSERT(m_local->m_importedContexts.isEmpty());
-  }
+  DUContext::clearImportedParentContexts();
 
   m_local->clearImportedContextsRecursively();
 
@@ -1125,15 +1098,14 @@ void TopDUContext::addImportedParentContext(DUContext* context, const CursorInRe
     return;
   }
 
-  if(!m_local->m_sharedDataOwner) //Always make the contexts anonymous, because we care about importers in TopDUContextLocalPrivate
-    DUContext::addImportedParentContext(context, position, anonymous, temporary);
+  //Always make the contexts anonymous, because we care about importers in TopDUContextLocalPrivate
+  DUContext::addImportedParentContext(context, position, anonymous, temporary);
 
   m_local->addImportedContextRecursively(static_cast<TopDUContext*>(context), temporary, true);
 }
 
 void TopDUContext::removeImportedParentContext(DUContext* context) {
-  if(!m_local->m_sharedDataOwner)
-    DUContext::removeImportedParentContext(context);
+  DUContext::removeImportedParentContext(context);
 
   m_local->removeImportedContextRecursively(static_cast<TopDUContext*>(context), true);
 }
@@ -1149,8 +1121,7 @@ void TopDUContext::removeImportedParentContexts(const QList<TopDUContext*>& cont
   foreach(TopDUContext* context, contexts)
     DUContext::removeImportedParentContext(context);
 
-  if(!m_local->m_sharedDataOwner)
-    m_local->removeImportedContextsRecursively(contexts, true);
+  m_local->removeImportedContextsRecursively(contexts, true);
 }
 
 /// Returns true if this object is registered in the du-chain. If it is not, all sub-objects(context, declarations, etc.)

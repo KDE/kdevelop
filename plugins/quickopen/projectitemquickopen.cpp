@@ -27,6 +27,7 @@
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/codemodel.h>
 #include <language/interfaces/iquickopen.h>
+#include <language/interfaces/abbreviations.h>
 
 #include <interfaces/iproject.h>
 #include <interfaces/icore.h>
@@ -55,6 +56,10 @@ struct SubstringCache
         const QString idStr = id.identifier().str();
 
         int result = idStr.lastIndexOf(substring, -1, Qt::CaseInsensitive);
+        if (result < 0 && !idStr.isEmpty() && !substring.isEmpty()) {
+            // no match; try abbreviations
+            result = matchesAbbreviation(idStr.midRef(0), substring) ? 0 : -1;
+        }
 
         //here we shift the values if the matched string is bigger than the substring,
         //so closer matches will appear first

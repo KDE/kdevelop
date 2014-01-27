@@ -16,6 +16,7 @@ if (GIT_FOUND)
         ../stashpatchsource.cpp
         ../gitjob.cpp
         ../gitmessagehighlighter.cpp
+        ../gitplugincheckinrepositoryjob.cpp
     )
     qt5_wrap_ui(gitInitTest_SRCS ../stashmanagerdialog.ui)
     add_executable(kdevgit-test ${gitInitTest_SRCS})

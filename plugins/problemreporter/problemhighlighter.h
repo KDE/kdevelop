@@ -24,7 +24,7 @@
 #define KDEVPLATFORM_PLUGIN_PROBLEM_HIGHLIGHT_H
 
 
-#include <language/interfaces/iproblem.h>
+#include <language/duchain/problem.h>
 #include <qpointer.h>
 #include <ktexteditor/movingrange.h>
 

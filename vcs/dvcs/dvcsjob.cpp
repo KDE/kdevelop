@@ -44,7 +44,7 @@ using namespace KDevelop;
 
 struct DVcsJobPrivate
 {
-    DVcsJobPrivate() : childproc(new KProcess), vcsplugin(0)
+    DVcsJobPrivate() : childproc(new KProcess), vcsplugin(0), ignoreError(false)
     {}
 
     ~DVcsJobPrivate() {
@@ -139,9 +139,9 @@ QByteArray DVcsJob::errorOutput() const
     return d->errorOutput;
 }
 
-void DVcsJob::ignoreError()
+void DVcsJob::setIgnoreError(bool ignore)
 {
-    d->ignoreError = true;
+    d->ignoreError = ignore;
 }
 
 void DVcsJob::setResults(const QVariant &res)

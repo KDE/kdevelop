@@ -67,8 +67,6 @@ public: // Node overrides
 
 private Q_SLOTS:
   // Files update.
-  void branchRemoved(KDevelop::DUContextPointer context);
-  void branchModified(KDevelop::DUContextPointer context);
   void updateChangedFiles();
 
 private: // File updates related.

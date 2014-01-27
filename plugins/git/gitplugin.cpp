@@ -58,6 +58,7 @@
 #include <KTextEditor/Document>
 #include "gitjob.h"
 #include "gitmessagehighlighter.h"
+#include "gitplugincheckinrepositoryjob.h"
 
 K_PLUGIN_FACTORY(KDevGitFactory, registerPlugin<GitPlugin>(); )
 // K_EXPORT_PLUGIN(KDevGitFactory(KAboutData("kdevgit","kdevgit",ki18n("Git"),"0.1",ki18n("A plugin to support git version control systems"), KAboutData::License_GPL)))
@@ -333,6 +334,7 @@ KDevelop::VcsJob* GitPlugin::status(const KUrl::List& localLocations, KDevelop::
         connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), SLOT(parseGitStatusOutput_old(KDevelop::DVcsJob*)));
     } else {
         *job << "git" << "status" << "--porcelain";
+        job->setIgnoreError(true);
         connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), SLOT(parseGitStatusOutput(KDevelop::DVcsJob*)));
     }
     *job << "--" << (recursion == IBasicVersionControl::Recursive ? localLocations : preventRecursion(localLocations));
@@ -656,7 +658,7 @@ VcsJob* GitPlugin::renameBranch(const KUrl& repository, const QString& oldBranch
 VcsJob* GitPlugin::currentBranch(const KUrl& repository)
 {
     DVcsJob* job = new DVcsJob(urlDir(repository), this, OutputJob::Silent);
-    job->ignoreError();
+    job->setIgnoreError(true);
     *job << "git" << "symbolic-ref" << "-q" << "--short" << "HEAD";
     connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), SLOT(parseGitCurrentBranch(KDevelop::DVcsJob*)));
     return job;
@@ -1415,71 +1417,6 @@ CheckInRepositoryJob* GitPlugin::isInRepository(KTextEditor::Document* document)
     return job;
 }
 
-GitPluginCheckInRepositoryJob::GitPluginCheckInRepositoryJob(KTextEditor::Document* document,
-                                                             const QString& rootDirectory)
-    : CheckInRepositoryJob(document)
-    , m_hashjob(0)
-    , m_findjob(0)
-    , m_rootDirectory(rootDirectory)
-{
 
-}
-
-void GitPluginCheckInRepositoryJob::start()
-{
-    const QTextCodec* codec = QTextCodec::codecForName(document()->encoding().toAscii());
-
-    const QDir workingDirectory(m_rootDirectory);
-    if ( ! workingDirectory.exists() ) {
-        emit finished(false);
-        return;
-    }
-
-    m_findjob = new QProcess(this);
-    m_findjob->setWorkingDirectory(m_rootDirectory);
-
-    m_hashjob = new QProcess(this);
-    m_hashjob->setWorkingDirectory(m_rootDirectory);
-    m_hashjob->setStandardOutputProcess(m_findjob);
-
-    connect(m_findjob, SIGNAL(finished(int)), SLOT(repositoryQueryFinished(int)));
-    connect(m_hashjob, SIGNAL(error(QProcess::ProcessError)), SLOT(processFailed(QProcess::ProcessError)));
-    connect(m_findjob, SIGNAL(error(QProcess::ProcessError)), SLOT(processFailed(QProcess::ProcessError)));
-
-    m_hashjob->start("git", QStringList() << "hash-object" << "--stdin");
-    m_findjob->start("git", QStringList() << "cat-file" << "--batch-check");
-
-    for ( int i = 0; i < document()->lines(); i++ ) {
-        m_hashjob->write(codec->fromUnicode(document()->line(i)));
-        if ( i != document()->lines() - 1 ) {
-            m_hashjob->write("\n");
-        }
-    }
-    m_hashjob->closeWriteChannel();
-
-}
-
-GitPluginCheckInRepositoryJob::~GitPluginCheckInRepositoryJob()
-{
-    if ( m_findjob && m_findjob->state() == QProcess::Running ) {
-        m_findjob->kill();
-    }
-    if ( m_hashjob && m_hashjob->state() == QProcess::Running ) {
-        m_hashjob->kill();
-    }
-}
-
-void GitPluginCheckInRepositoryJob::processFailed(QProcess::ProcessError err)
-{
-    kDebug() << "calling git failed with error:" << err;
-    emit finished(false);
-}
-
-void GitPluginCheckInRepositoryJob::repositoryQueryFinished(int)
-{
-    const QByteArray output = m_findjob->readAllStandardOutput();
-    bool requestSucceeded = output.contains(" blob ");
-    emit finished(requestSucceeded);
-}
 
 #include "gitplugin.moc"

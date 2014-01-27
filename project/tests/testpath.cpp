@@ -196,6 +196,15 @@ void TestPath::bench_fromLocalPath_data()
     QTest::newRow("QUrl::fromLocalFile") << 3;
 }
 
+void TestPath::bench_hash()
+{
+    const Path path("/my/very/long/path/to/a/file.cpp");
+    QBENCHMARK {
+        auto hash = qHash(path);
+        Q_UNUSED(hash);
+    }
+}
+
 KUrl comparableUpUrl(const KUrl& url)
 {
     KUrl ret = url.upUrl();
@@ -486,6 +495,46 @@ void TestPath::testPathBaseCtor_data()
     QTest::newRow("path-absolute") << "/foo/bar" << "/bar/foo";
     QTest::newRow("remote-path-absolute") << "http://foo.com/foo/bar" << "/bar/foo";
     QTest::newRow("remote-path-relative") << "http://foo.com/foo/bar" << "bar/foo";
+}
+
+void TestPath::testPathCd()
+{
+    QFETCH(QString, base);
+    QFETCH(QString, change);
+
+    Path path = base.isEmpty() ? Path() : Path(base);
+    KUrl url(base);
+
+    Path changed = path.cd(change);
+    if (url.cd(change)) {
+        QVERIFY(changed.isValid());
+    }
+    url.cleanPath();
+
+    QCOMPARE(changed.pathOrUrl(), url.pathOrUrl(KUrl::RemoveTrailingSlash));
+}
+
+void TestPath::testPathCd_data()
+{
+    QTest::addColumn<QString>("base");
+    QTest::addColumn<QString>("change");
+
+    const QVector<QString> bases{"", "/foo", "/foo/bar/asdf", "http://foo.com/", "http://foo.com/foo", "http://foo.com/foo/bar/asdf"};
+    foreach (const QString& base, bases) {
+        QTest::newRow(qstrdup(qPrintable(base + "-"))) << base << "";
+        QTest::newRow(qstrdup(qPrintable(base + "-.."))) << base << "..";
+        QTest::newRow(qstrdup(qPrintable(base + "-../"))) << base << "../";
+        QTest::newRow(qstrdup(qPrintable(base + "v../foo"))) << base << "../foo";
+        QTest::newRow(qstrdup(qPrintable(base + "-."))) << base << ".";
+        QTest::newRow(qstrdup(qPrintable(base + "-./"))) << base << "./";
+        QTest::newRow(qstrdup(qPrintable(base + "-./foo"))) << base << "./foo";
+        QTest::newRow(qstrdup(qPrintable(base + "-./foo/bar"))) << base << "./foo/bar";
+        QTest::newRow(qstrdup(qPrintable(base + "-foo/.."))) << base << "foo/..";
+        QTest::newRow(qstrdup(qPrintable(base + "-foo/"))) << base << "foo/";
+        QTest::newRow(qstrdup(qPrintable(base + "-foo/../bar"))) << base << "foo/../bar";
+        QTest::newRow(qstrdup(qPrintable(base + "-/foo"))) << base << "/foo";
+        QTest::newRow(qstrdup(qPrintable(base + "-/foo/../bar"))) << base << "/foo/../bar";
+    }
 }
 
 #include "testpath.moc"

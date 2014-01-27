@@ -16,7 +16,6 @@
 
 #include <QObject>
 #include <QPointer>
-#include <memory>
 #include <qstandarditemmodel.h>
 #include <interfaces/iplugin.h>
 #include "localpatchsource.h"
@@ -65,7 +64,7 @@ public :
     }
 
     Diff2::KompareModelList* modelList() const {
-        return m_modelList.get();
+        return m_modelList.data();
     }
 
     void seekHunk( bool forwards, const KUrl& file = KUrl() );
@@ -128,8 +127,8 @@ private:
     #endif
 
     QPointer< DiffSettings > m_diffSettings;
-    std::auto_ptr< Kompare::Info > m_kompareInfo;
-    std::auto_ptr< Diff2::KompareModelList > m_modelList;
+    QScopedPointer< Kompare::Info > m_kompareInfo;
+    QScopedPointer< Diff2::KompareModelList > m_modelList;
     typedef QMap< KUrl, QPointer< PatchHighlighter > > HighlightMap;
     HighlightMap m_highlighters;
 };

@@ -84,6 +84,8 @@ target_link_libraries(kdevplatformshell LINK_PUBLIC
 )
 target_link_libraries(kdevplatformshell
 LINK_PRIVATE
+    Qt5::Declarative
+
     KF5::KIOWidgets
     KF5::KCMUtils
     KF5::Parts
@@ -135,4 +137,4 @@ install(TARGETS kdevplatformshell EXPORT KDevPlatformTargets ${INSTALL_TARGETS_D
 install( FILES debugger/kdevdebuggershellui.rc DESTINATION ${DATA_INSTALL_DIR}/kdevdebugger )
 install( FILES kdevsessionui.rc DESTINATION ${DATA_INSTALL_DIR}/kdevsession )
 install( FILES kdevsourceformatter.rc DESTINATION ${DATA_INSTALL_DIR}/kdevsourceformatter )
-
+install( FILES AssistantButton.qml assistantpopup.qml DESTINATION ${DATA_INSTALL_DIR}/kdevelop )

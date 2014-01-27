@@ -25,6 +25,8 @@
 #include <QtCore/QRegExp>
 #include <QtCore/QStringList>
 
+#include "abbreviations.h"
+
 #include <project/path.h>
 
 namespace KDevelop {
@@ -105,8 +107,15 @@ public:
 
         m_filtered.clear();
 
+        QStringList typedFragments = text.split("::", QString::SkipEmptyParts);
+        if ( typedFragments.last().endsWith(':') ) {
+            // remove the trailing colon if there's only one; otherwise,
+            // this breaks incremental filtering
+            typedFragments.last().chop(1);
+        }
         foreach( const Item& data, filterBase ) {
-            if( itemText( data ).contains(text, Qt::CaseInsensitive) ) {
+            const QString& itemData = itemText( data );
+            if( itemData.contains(text, Qt::CaseInsensitive) || matchesAbbreviationMulti(itemData, typedFragments) ) {
                 m_filtered << data;
             }
         }
@@ -167,6 +176,8 @@ public:
             return;
         }
 
+        const QString joinedText = text.join(QString());
+
         QList<Item> filterBase = m_filtered;
 
         if ( m_oldFilterText.isEmpty()) {
@@ -220,8 +231,10 @@ public:
             while (pathIndex < segments.size() && searchIndex < text.size()
                     && (pathIndex + text.size() - searchIndex - 1) < segments.size() )
             {
-                lastMatchIndex = segments.at(pathIndex).indexOf(text.at(searchIndex), 0, Qt::CaseInsensitive);
-                if (lastMatchIndex == -1) {
+                const QString& segment = segments.at(pathIndex);
+                const QString& typedSegment = text.at(searchIndex);
+                lastMatchIndex = segment.indexOf(typedSegment, 0, Qt::CaseInsensitive);
+                if (lastMatchIndex == -1 && !matchesAbbreviation(segment.midRef(0), typedSegment)) {
                     // no match, try with next path segment
                     ++pathIndex;
                     continue;
@@ -231,12 +244,15 @@ public:
                 ++pathIndex;
             }
 
+            AbbreviationMatchQuality fuzzyMatch = NoMatch;
             if (searchIndex != text.size()) {
-                continue;
+                if ( (fuzzyMatch = matchesPath(segments, joinedText)) == NoMatch ) {
+                    continue;
+                }
             }
 
             // prefer matches whose last element starts with the filter
-            if (pathIndex == segments.size() && lastMatchIndex == 0) {
+            if ((pathIndex == segments.size() && lastMatchIndex == 0) || fuzzyMatch == MatchesSequentially) {
                 startMatches << data;
             } else {
                 otherMatches << data;

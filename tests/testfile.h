@@ -101,7 +101,17 @@ public:
      * 
      * @see KDevelop::DUChain::updateContextForUrl
      */
-    void parse(KDevelop::TopDUContext::Features features, int priority = 1);
+    void parse(TopDUContext::Features features = TopDUContext::AllDeclarationsContextsAndUses, int priority = 1);
+
+    /**
+     * Convenience method:
+     * Trigger parse and wait for the file to be parsed. Internally calls waitForParsed()
+     *
+     * @see waitForParsed()
+     * @see parse()
+     */
+    bool parseAndWait(TopDUContext::Features features = TopDUContext::AllDeclarationsContextsAndUses,
+                      int priority = 1, int timeout = 1000);
 
     /**
      * Blocks current thread and waits until the file has been parsed.
@@ -112,7 +122,7 @@ public:
      * Otherwise true is returned, indicating parsing finished
      * within the timeout interval.
      */
-    bool waitForParsed(int timeout = 60000);
+    bool waitForParsed(int timeout = 1000);
 
     /**
      * Check whether the file has been processed after the last call to @c parse().

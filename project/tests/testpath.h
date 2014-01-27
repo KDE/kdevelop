@@ -37,6 +37,7 @@ private slots:
     void bench_path();
     void bench_fromLocalPath();
     void bench_fromLocalPath_data();
+    void bench_hash();
 
     void testPath();
     void testPath_data();
@@ -48,6 +49,8 @@ private slots:
     void testPathAddData_data();
     void testPathBaseCtor();
     void testPathBaseCtor_data();
+    void testPathCd();
+    void testPathCd_data();
 };
 
 #endif // TESTPATH_H

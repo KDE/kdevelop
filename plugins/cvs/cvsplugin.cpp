@@ -26,8 +26,6 @@
 #include <KAction>
 #include <KAboutData>
 
-#include <memory>
-
 #include <interfaces/iproject.h>
 #include <project/projectmodel.h>
 #include <interfaces/iuicontroller.h>
@@ -82,7 +80,7 @@ public:
 
     KDevCvsViewFactory* m_factory;
     QPointer<CvsProxy> m_proxy;
-    std::auto_ptr<KDevelop::VcsPluginHelper> m_common;
+    QScopedPointer<KDevelop::VcsPluginHelper> m_common;
 };
 
 CvsPlugin::CvsPlugin(QObject *parent, const QVariantList &)

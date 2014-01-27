@@ -39,6 +39,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedType : public ReferenceCountManager {
     /// Constructor.
     IndexedType(const IndexedType& rhs);
     explicit IndexedType(uint index = 0);
+    // prevent upcasting
+    IndexedType(bool) = delete;
     
     ~IndexedType();
     

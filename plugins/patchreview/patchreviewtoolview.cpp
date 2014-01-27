@@ -87,7 +87,6 @@ PatchReviewToolView::PatchReviewToolView( QWidget* parent, PatchReviewPlugin* pl
     connect( plugin, SIGNAL( patchChanged() ), SLOT( patchChanged() ) );
     connect( plugin, SIGNAL( startingNewReview() ), SLOT( startingNewReview() ) );
     connect( ICore::self()->documentController(), SIGNAL( documentActivated( KDevelop::IDocument* ) ), this, SLOT( documentActivated( KDevelop::IDocument* ) ) );
-    connect(ICore::self()->uiController()->activeMainWindow(), SIGNAL(areaChanged(Sublime::Area*)), SLOT(onAreaChange(Sublime::Area*)));
 
     Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>( ICore::self()->uiController()->activeMainWindow() );
     connect(w, SIGNAL(areaChanged(Sublime::Area*)), m_plugin, SLOT(areaChanged(Sublime::Area*)));
@@ -362,7 +361,7 @@ void PatchReviewToolView::activate( const KUrl& url, IDocument* buddy ) const
 void PatchReviewToolView::fileItemChanged( QStandardItem* item )
 {
     KUrl url = m_fileModel->statusInfo(item).url();
-    if(!m_fileModel->checkedUrls().contains(url))
+    if(item->checkState() != Qt::Checked)
     {
         // Eventually close the document
         if(KDevelop::IDocument* doc = ICore::self()->documentController()->documentForUrl(url)) {
@@ -372,13 +371,14 @@ void PatchReviewToolView::fileItemChanged( QStandardItem* item )
                 {
                     if(view->document() == dynamic_cast<Sublime::Document*>(doc))
                     {
-                        kDebug() << "closing view of" << url << "because the item was unchecked";
                         ICore::self()->uiController()->activeArea()->closeView(view);
                         return;
                     }
                 }
             }
         }
+    } else {
+        ICore::self()->documentController()->openDocument(url, KTextEditor::Range::invalid(), IDocumentController::DoNotActivate);
     }
 }
 

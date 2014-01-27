@@ -186,40 +186,6 @@ void DocumentChangeSet::setActivationPolicy(DocumentChangeSet::ActivationPolicy 
     d->activationPolicy = policy;
 }
 
-QHash<IndexedString, InsertArtificialCodeRepresentationPointer> DocumentChangeSet::temporaryCodeRepresentations() const
-{
-    QHash<IndexedString, InsertArtificialCodeRepresentationPointer> ret;
-
-    ChangeResult result(true);
-
-    foreach(const IndexedString &file, d->changes.keys()) {
-        CodeRepresentation::Ptr repr = createCodeRepresentation(file);
-
-        if(!repr) {
-            continue;
-        }
-
-        ChangesList sortedChangesList;
-        result = d->removeDuplicates(file, sortedChangesList);
-        if (!result) {
-            continue;
-        }
-
-        QString newText;
-
-        result = d->generateNewText(file, sortedChangesList, repr.data(), newText);
-        if (!result) {
-            continue;
-        }
-
-        InsertArtificialCodeRepresentationPointer code(
-            new InsertArtificialCodeRepresentation(IndexedString(file.toUrl().fileName()), newText) );
-        ret.insert(file, code);
-    }
-
-    return ret;
-}
-
 DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges()
 {
     KUrl oldActiveDoc;

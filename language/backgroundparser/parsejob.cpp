@@ -52,7 +52,7 @@
 #include <duchain/declaration.h>
 #include <duchain/use.h>
 #include <interfaces/icodehighlighting.h>
-#include <interfaces/iproblem.h>
+#include <duchain/problem.h>
 
 
 using namespace KTextEditor;

@@ -27,14 +27,71 @@ Boston, MA 02110-1301, USA.
 
 #include "../editor/documentrange.h"
 #include "../languageexport.h"
-#include "../duchain/duchainbase.h"
-#include <language/duchain/indexedstring.h>
+
+#include "duchainbase.h"
+#include "indexedstring.h"
+#include "indexedtopducontext.h"
 
 namespace KDevelop
 {
 class IAssistant;
+class Problem;
 
-class ProblemData : public DUChainBaseData
+/**
+ * Represents a problem only by its index within the top-context
+ *
+ * Fixme: share code with the other LocalIndexed* classes
+ */
+class KDEVPLATFORMLANGUAGE_EXPORT LocalIndexedProblem
+{
+  public:
+    LocalIndexedProblem(const Problem* problem = 0);
+    LocalIndexedProblem(uint index)
+      : m_index(index)
+    {}
+
+    /**
+     * \note Duchain must be read locked
+     */
+    Problem* data(const TopDUContext* top) const;
+
+    bool operator==(const LocalIndexedProblem& rhs) const
+    {
+      return m_index == rhs.m_index;
+    }
+
+    uint hash() const
+    {
+      return m_index;
+    }
+
+    bool isValid() const
+    {
+      return m_index;
+    }
+
+    bool operator<(const LocalIndexedProblem& rhs) const
+    {
+      return m_index < rhs.m_index;
+    }
+
+    /**
+     * Index of the Declaration within the top context
+     */
+    uint localIndex() const
+    {
+      return m_index;
+    }
+
+    bool isLoaded(TopDUContext* top) const;
+
+  private:
+    uint m_index;
+};
+
+KDEVPLATFORMLANGUAGE_EXPORT DECLARE_LIST_MEMBER_HASH(ProblemData, diagnostics, LocalIndexedProblem)
+
+class KDEVPLATFORMLANGUAGE_EXPORT ProblemData : public DUChainBaseData
 {
 public:
     enum Source {
@@ -58,6 +115,24 @@ public:
         : source(Unknown)
         , severity(Error)
     {
+      initializeAppendedLists();
+    }
+
+    ProblemData(const ProblemData& rhs)
+      : DUChainBaseData(rhs)
+      , source(rhs.source)
+      , severity(rhs.severity)
+      , url(rhs.url)
+      , description(rhs.description)
+      , explanation(rhs.explanation)
+    {
+      initializeAppendedLists();
+      copyListsFrom(rhs);
+    }
+
+    ~ProblemData()
+    {
+      freeAppendedLists();
     }
 
     Source source;
@@ -65,6 +140,10 @@ public:
     IndexedString url;
     IndexedString description;
     IndexedString explanation;
+
+    START_APPENDED_LISTS_BASE(ProblemData, DUChainBaseData);
+    APPENDED_LIST_FIRST(ProblemData, LocalIndexedProblem, diagnostics);
+    END_APPENDED_LISTS(ProblemData, diagnostics);
 };
 
 /**
@@ -73,11 +152,13 @@ public:
  * You should always use ProblemPointer, because Problem may be subclassed.
  * The subclass would be lost while copying.
  *
- * Warning: Access to problems must be serialized through DUChainLock.
+ * @warning Access to problems must be serialized through DUChainLock.
  */
 class KDEVPLATFORMLANGUAGE_EXPORT Problem : public DUChainBase, public KShared
 {
 public:
+    using Ptr = KSharedPtr<Problem>;
+
     Problem();
     Problem(ProblemData& data);
     ~Problem();
@@ -90,7 +171,9 @@ public:
      */
     QString sourceString() const;
 
-    KDevelop::IndexedString url() const;
+    void setContext(TopDUContext* context);
+    TopDUContext* topContext() const override;
+    KDevelop::IndexedString url() const override;
 
     /**
      * Location where this problem occurred
@@ -98,6 +181,26 @@ public:
      * */
     DocumentRange finalLocation() const;
     void setFinalLocation(const DocumentRange& location);
+
+    /**
+     * Returns child diagnostics of this particular problem
+     *
+     * Example:
+     * @code
+     * void foo(unsigned int);
+     * void foo(const char*);
+     * int main() { foo(0); }
+     * @endcode
+     *
+     * => foo(0) is ambigous. This will give us a ProblemPointer pointing to 'foo(0)'.
+     *
+     * Additionally, @p diagnostics may return the two locations to the ambiguous overloads,
+     * with descriptions such as 'test.cpp:1: candidate : ...'
+     */
+    QList<Ptr> diagnostics() const;
+    void setDiagnostics(const QList<Ptr>& diagnostics);
+    void addDiagnostic(const Ptr& diagnostic);
+    void clearDiagnostics();
 
     /**
      * A brief description of the problem.
@@ -134,11 +237,6 @@ public:
      */
     virtual KSharedPtr<IAssistant> solutionAssistant() const;
 
-    /**
-     * Set an assistant for solving this problem
-     */
-    void setSolutionAssistant(KSharedPtr<IAssistant> assistant);
-
     enum {
         Identity = 15
     };
@@ -146,16 +244,34 @@ public:
     /**
      * Returns a string representation of this problem, useful for debugging.
      */
-    QString toString() const;
+    virtual QString toString() const;
 
 private:
+    void rebuildDynamicData(DUContext* parent, uint ownIndex) override;
+    /**
+     * Return a problem equivalent to this one for serialization in @p context.
+     *
+     * If this problem is not yet associated with a context, we set the context
+     * of it to @p context. If this problem is associated with a different context,
+     * the problem is cloned and a copy is returned which can be serialized.
+     */
+    Ptr prepareStorage(TopDUContext* context);
+
     Q_DISABLE_COPY(Problem);
-    KSharedPtr< KDevelop::IAssistant > m_solution;
 
     DUCHAIN_DECLARE_DATA(Problem)
+    friend class TopDUContext;
+    friend class TopDUContextDynamicData;
+    friend class LocalIndexedProblem;
+
+    //BEGIN dynamic data
+    TopDUContext* m_topContext;
+    mutable QList<Ptr> m_diagnostics;
+    uint m_indexInTopContext;
+    //END dynamic data
 };
 
-typedef KSharedPtr<Problem> ProblemPointer;
+using ProblemPointer = KSharedPtr<Problem>;
 
 }
 

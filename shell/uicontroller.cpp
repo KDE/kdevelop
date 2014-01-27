@@ -21,6 +21,7 @@
 #include <QMap>
 #include <QAction>
 #include <QPointer>
+#include <QTimer>
 #include <QApplication>
 #include <QListWidget>
 #include <QToolBar>
@@ -40,6 +41,7 @@
 #include <sublime/area.h>
 #include <sublime/view.h>
 #include <sublime/tooldocument.h>
+#include <sublime/holdupdates.h>
 
 #include "core.h"
 #include "shellextension.h"
@@ -113,6 +115,9 @@ public:
         {
             activeSublimeWindow = defaultMainWindow = 0;
         }
+
+        m_assistantTimer.setSingleShot(true);
+        m_assistantTimer.setInterval(100);
     }
 
     void widgetChanged(QWidget*, QWidget* now)
@@ -136,6 +141,7 @@ public:
 
     //Currently shown assistant popup.
     QPointer<AssistantPopup> currentShownAssistant;
+    QTimer m_assistantTimer;
 
 private:
     UiController *m_controller;
@@ -648,6 +654,9 @@ void UiController::hideAssistant(const KDevelop::IAssistant::Ptr& assistant)
         
         AssistantPopup* oldPopup = d->currentShownAssistant;
         d->currentShownAssistant = 0;
+        // avoid flickering when the assistant hides by not updating the window until it's
+        // completely removed
+        Sublime::HoldUpdates hold(ICore::self()->uiController()->activeMainWindow());
         oldPopup->hide();
         oldPopup->deleteLater(); //We have to do deleteLater, so we don't get problems when an assistant hides itself
     }
@@ -675,6 +684,12 @@ void UiController::popUpAssistant(const KDevelop::IAssistant::Ptr& assistant)
         connect(assistant.data(), SIGNAL(hide()), SLOT(assistantHide()), Qt::DirectConnection);
         connect(assistant.data(), SIGNAL(actionsChanged()), SLOT(assistantActionsChanged()), Qt::DirectConnection);
     }
+    if(d->m_assistantTimer.isActive() && d->currentShownAssistant) {
+        // when the assistant was closed very recently (few ms),
+        // avoid flickering
+        d->currentShownAssistant->notifyReopened();
+    }
+    d->m_assistantTimer.start();
 }
 
 const QMap< IToolViewFactory*, Sublime::ToolDocument* >& UiController::factoryDocuments() const
@@ -688,8 +703,9 @@ void UiController::assistantHide() {
 }
 
 void UiController::assistantActionsChanged() {
-    if(d->currentShownAssistant)
+    if(d->currentShownAssistant) {
         popUpAssistant(d->currentShownAssistant->assistant());
+    }
 }
 
 }

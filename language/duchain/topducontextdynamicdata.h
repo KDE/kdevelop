@@ -34,6 +34,7 @@ class Declaration;
 class IndexedString;
 class IndexedDUContext;
 class DUChainBaseData;
+class Problem;
 
 typedef QPair<QByteArray, uint> ArrayWithPosition;
 
@@ -43,8 +44,8 @@ class TopDUContextDynamicData {
   TopDUContextDynamicData(TopDUContext* topContext);
   ~TopDUContextDynamicData();
 
-  void clearContextsAndDeclarations();
-  
+  void clear();
+
   /**
    * Allocates an index for the given declaration in this top-context.
    * The returned index is never zero.
@@ -66,13 +67,23 @@ class TopDUContextDynamicData {
    *                   and a duchain write-lock is not needed. Else, you need a write-lock when calling this.
   */
   uint allocateContextIndex(DUContext* ctx, bool temporary);
-  
+
   DUContext* getContextForIndex(uint index) const;
-  
+
   bool isContextForIndexLoaded(uint index) const;
-  
+
   void clearContextIndex(DUContext* ctx);
-  
+
+
+  /**
+   * Allocates an index for the given problem in this top-context.
+   * The returned index is never zero.
+   */
+  uint allocateProblemIndex(Problem* problem);
+  Problem* getProblemForIndex(uint index) const;
+  bool isProblemForIndexLoaded(uint index) const;
+  void clearProblemIndex(Problem* problem);
+
   ///Stores this top-context to disk
   void store();
   
@@ -110,6 +121,8 @@ class TopDUContextDynamicData {
   };
 
   private:
+    bool hasChanged() const;
+
     void unmap();
     //Converts away from an mmap opened file to a data array
     
@@ -117,35 +130,47 @@ class TopDUContextDynamicData {
 
     void loadData() const;
 
-    
-    static void verifyDataInfo(const ItemDataInfo& info, const QList<ArrayWithPosition>& data);
-
-    static const char* pointerInData(const QList<ArrayWithPosition>& data, uint totalOffset);
-    
     const char* pointerInData(uint offset) const;
 
     ItemDataInfo writeDataInfo(const ItemDataInfo& info, const DUChainBaseData* data, uint& totalDataOffset);
 
     TopDUContext* m_topContext;
-    //May contain zero contexts if they were deleted
-    mutable QVector<DUContext*> m_contexts;
-    mutable DUContext** m_fastContexts;
-    mutable int m_fastContextsSize;
-    //May contain zero declarations if they were deleted
-    mutable QVector<Declaration*> m_declarations;
-    mutable Declaration** m_fastDeclarations;
-    mutable int m_fastDeclarationsSize;
-    
-    mutable QVector<ItemDataInfo> m_contextDataOffsets;
-    
-    mutable QVector<ItemDataInfo> m_declarationDataOffsets;
-    
-    //Protects m_temporaryDeclarations, must be locked before accessing that vector
-    static QMutex m_temporaryDataMutex;
+
+    template<class Item>
+    struct DUChainItemStorage
+    {
+      DUChainItemStorage(TopDUContextDynamicData* data);
+      ~DUChainItemStorage();
+
+      void clearItems();
+      bool itemsHaveChanged() const;
+
+      void storeData(uint& currentDataOffset, const QList<ArrayWithPosition>& oldData);
+      Item* getItemForIndex(uint index) const;
+
+      void clearItemIndex(Item* item, const uint index);
+
+      uint allocateItemIndex(Item* item, const bool temporary);
+
+      void deleteOnDisk();
+      bool isItemForIndexLoaded(uint index) const;
+
+      void loadData(QFile* file) const;
+      void writeData(QFile* file);
+
+      //May contain zero items if they were deleted
+      mutable QVector<Item*> items;
+      mutable QVector<ItemDataInfo> offsets;
+      QVector<Item*> temporaryItems;
+      TopDUContextDynamicData* const data;
+    };
+
+    DUChainItemStorage<DUContext> m_contexts;
+    DUChainItemStorage<Declaration> m_declarations;
+    DUChainItemStorage<Problem> m_problems;
+
     //For temporary declarations that will not be stored to disk, like template instantiations
-    QVector<Declaration*> m_temporaryDeclarations;
-    QVector<DUContext*> m_temporaryContexts;
-    
+
     mutable QList<ArrayWithPosition> m_data;
     mutable QList<ArrayWithPosition> m_topContextData;
     bool m_onDisk;
