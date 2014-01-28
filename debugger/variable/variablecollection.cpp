@@ -464,44 +464,39 @@ void VariableCollection::viewCreated(KTextEditor::Document* doc,
     if( !iface )
         return;
 
-    iface->setTextHintDelay(-1);
-
-    connect(view,
-            SIGNAL(needTextHint(KTextEditor::Cursor,QString&)),
-            this,
-            SLOT(textHintRequested(KTextEditor::Cursor,QString&)));
+    iface->registerTextHintProvider(new VariableProvider(this));
 }
 
-void VariableCollection::
-textHintRequested(const KTextEditor::Cursor& cursor, QString&)
+VariableProvider::VariableProvider(VariableCollection* collection)
+    : KTextEditor::TextHintProvider()
+    , m_collection(collection)
+{
+}
+
+QString VariableProvider::needTextHint(KTextEditor::View* view, const KTextEditor::Cursor& cursor)
 {
     // Don't do anything if there's already an open tooltip.
-    if (activeTooltip_)
-        return;
+    if (m_collection->activeTooltip_)
+        return QString();
 
     if (!hasStartedSession())
-        return;
+        return QString();
 
     if (ICore::self()->uiController()->activeArea()->objectName() != "debug")
-        return;
+        return QString();
 
     //TODO: These keyboardModifiers should also hide already opened tooltip, and show another one for code area.
     if (QApplication::keyboardModifiers() == Qt::ControlModifier ||
         QApplication::keyboardModifiers() == Qt::AltModifier){
-        return;
+        return QString();
     }
-    
-    // Figure what is the parent widget and what is the text to show
-    KTextEditor::View* view = dynamic_cast<KTextEditor::View*>(sender());
-    if (!view)
-        return;
 
     KTextEditor::Document* doc = view->document();
 
     QString expression = currentSession()->variableController()->expressionUnderCursor(doc, cursor);
 
     if (expression.isEmpty())
-        return;
+        return QString();
 
     QPoint local = view->cursorToCoordinate(cursor);
     QPoint global = view->mapToGlobal(local);
@@ -509,7 +504,8 @@ textHintRequested(const KTextEditor::Cursor& cursor, QString&)
     if (!w)
         w = view;
 
-    activeTooltip_ = new VariableToolTip(w, global+QPoint(30,30), expression);
+    m_collection->activeTooltip_ = new VariableToolTip(w, global+QPoint(30,30), expression);
+    return QString();
 }
 
 }

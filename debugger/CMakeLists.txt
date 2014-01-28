@@ -26,8 +26,7 @@ add_library(kdevplatformdebugger SHARED ${kdevplatformdebugger_LIB_SRCS})
 target_link_libraries(kdevplatformdebugger LINK_PUBLIC
     kdevplatforminterfaces
     kdevplatformutil
-)
-target_link_libraries(kdevplatformdebugger LINK_PRIVATE
+LINK_PRIVATE
     Qt5::Core
 
     KF5::TextEditor

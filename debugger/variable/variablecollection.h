@@ -30,6 +30,7 @@
 #include <KDE/KTextEditor/Document>
 #include <KDE/KTextEditor/View>
 #include <KLocalizedString>
+#include <KTextEditor/TextHintInterface>
 
 #include "../util/treemodel.h"
 #include "../util/treeitem.h"
@@ -195,6 +196,16 @@ private:
     QHash<QString, Locals*> locals_;
 };
 
+class VariableProvider : public KTextEditor::TextHintProvider
+{
+public:
+    VariableProvider(VariableCollection* collection);
+    virtual QString needTextHint(KTextEditor::View* view, const KTextEditor::Cursor& position);
+
+private:
+    VariableCollection* m_collection;
+};
+
 class KDEVPLATFORMDEBUGGER_EXPORT VariableCollection : public TreeModel
 {
     Q_OBJECT
@@ -215,15 +226,15 @@ public Q_SLOTS:
 private Q_SLOTS:
     void updateAutoUpdate(KDevelop::IDebugSession* session = 0);
 
-private Q_SLOTS:
     void textDocumentCreated( KDevelop::IDocument*);
     void viewCreated(KTextEditor::Document*, KTextEditor::View*);
-    void textHintRequested(const KTextEditor::Cursor&, QString&);
 
 private:
     VariablesRoot* universe_;
     QWeakPointer<VariableToolTip> activeTooltip_;
     bool m_widgetVisible;
+
+    friend class VariableProvider;
 };
 
 }

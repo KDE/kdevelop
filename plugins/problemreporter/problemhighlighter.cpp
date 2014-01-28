@@ -72,22 +72,24 @@ void ProblemHighlighter::viewCreated(Document* , View* view)
     if( !iface )
         return;
 
-    connect(view, SIGNAL(needTextHint(KTextEditor::Cursor,QString&)), this, SLOT(textHintRequested(KTextEditor::Cursor,QString&)));
+    iface->registerTextHintProvider(new ProblemTextHintProvider(this));
 }
 
-void ProblemHighlighter::textHintRequested(const KTextEditor::Cursor& pos, QString& )
+ProblemTextHintProvider::ProblemTextHintProvider(ProblemHighlighter* highlighter)
+    : m_highlighter(highlighter)
 {
-    KTextEditor::View* view = qobject_cast<KTextEditor::View*>(sender());
-    Q_ASSERT(view);
+}
 
-    KTextEditor::MovingInterface* moving = dynamic_cast<KTextEditor::MovingInterface*>(m_document.data());
+QString ProblemTextHintProvider::needTextHint(View* view, const Cursor& pos)
+{
+    KTextEditor::MovingInterface* moving = dynamic_cast<KTextEditor::MovingInterface*>(view->document());
     if(moving) {
         ///@todo Sort the ranges when writing them, and do binary search instead of linear
-        foreach(MovingRange* range, m_topHLRanges) {
-            if(m_problemsForRanges.contains(range) && range->contains(pos))
+        foreach(MovingRange* range, m_highlighter->m_topHLRanges) {
+            if(m_highlighter->m_problemsForRanges.contains(range) && range->contains(pos))
             {
                 //There is a problem which's range contains the cursor
-                ProblemPointer problem = m_problemsForRanges[range];
+                ProblemPointer problem = m_highlighter->m_problemsForRanges[range];
                 if (problem->source() == ProblemData::ToDo) {
                     continue;
                 }
@@ -99,10 +101,11 @@ void ProblemHighlighter::textHintRequested(const KTextEditor::Cursor& pos, QStri
 
                 tooltip->resize( widget->sizeHint() + QSize(10, 10) );
                 ActiveToolTip::showToolTip(tooltip, 99, "problem-tooltip");
-                return;
+                return QString();
             }
         }
     }
+    return QString();
 }
 
 ProblemHighlighter::~ProblemHighlighter()

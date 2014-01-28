@@ -30,6 +30,7 @@
 
 #include <KUrl>
 
+#include <KTextEditor/TextHintInterface>
 #include <interfaces/iplugin.h>
 #include <language/duchain/duchainpointer.h>
 #include <language/editor/simplecursor.h>
@@ -129,8 +130,6 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContext
     void cursorPositionChanged( KTextEditor::View* view, const KTextEditor::Cursor& newPosition );
     void viewCreated( KTextEditor::Document* , KTextEditor::View* );
     void updateViews();
-
-    void textHintRequested(const KTextEditor::Cursor&, QString&);
 
     void hideToolTip();
     void findUses();
@@ -254,6 +253,18 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContext
     //Used to not record jumps triggered by the context-browser as history entries
     QPointer<QWidget> m_focusBackWidget;
     int m_nextHistoryIndex;
+
+    friend class ContextBrowserHintProvider;
+};
+
+class ContextBrowserHintProvider : public KTextEditor::TextHintProvider
+{
+public:
+  explicit ContextBrowserHintProvider(ContextBrowserPlugin* plugin);
+  virtual QString needTextHint(KTextEditor::View* view, const KTextEditor::Cursor& position);
+
+private:
+  ContextBrowserPlugin* m_plugin;
 };
 
 #endif // KDEVPLATFORM_PLUGIN_CONTEXTBROWSERPLUGIN_H

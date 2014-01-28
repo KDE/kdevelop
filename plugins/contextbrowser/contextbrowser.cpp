@@ -386,18 +386,24 @@ void ContextBrowserPlugin::findUses()
   showUses(cursorDeclaration());
 }
 
-void ContextBrowserPlugin::textHintRequested(const KTextEditor::Cursor& cursor, QString&) {
-  m_mouseHoverCursor = SimpleCursor(cursor);
-  View* view = dynamic_cast<View*>(sender());
+ContextBrowserHintProvider::ContextBrowserHintProvider(ContextBrowserPlugin* plugin)
+  : m_plugin(plugin)
+{
+}
+
+QString ContextBrowserHintProvider::needTextHint(View* view, const KTextEditor::Cursor& cursor)
+{
+  m_plugin->m_mouseHoverCursor = SimpleCursor(cursor);
   if(!view) {
     kWarning() << "could not cast to view";
   }else{
-    m_mouseHoverDocument = view->document()->url();
-    m_updateViews << view;
+    m_plugin->m_mouseHoverDocument = view->document()->url();
+    m_plugin->m_updateViews << view;
   }
-  m_updateTimer->start(1); // triggers updateViews()
+  m_plugin->m_updateTimer->start(1); // triggers updateViews()
   
-  showToolTip(view, cursor);
+  m_plugin->showToolTip(view, cursor);
+  return QString();
 }
 
 void ContextBrowserPlugin::stopDelayedBrowsing() {
@@ -817,9 +823,7 @@ void ContextBrowserPlugin::viewCreated( KTextEditor::Document* , View* v )
   if( !iface )
       return;
 
-  iface->setTextHintDelay(highlightingTimeout);
-
-  connect(v, SIGNAL(needTextHint(KTextEditor::Cursor,QString&)), this, SLOT(textHintRequested(KTextEditor::Cursor,QString&)));
+  iface->registerTextHintProvider(new ContextBrowserHintProvider(this));
 }
 
 void ContextBrowserPlugin::registerToolView(ContextBrowserView* view)
