@@ -220,6 +220,11 @@ constexpr IntegralType::CommonIntegralTypes integralType(CXTypeKind TK)
     : static_cast<IntegralType::CommonIntegralTypes>(-1);
 }
 
+constexpr bool isIdentifiedType(CXCursorKind CK)
+{
+    return isClass(CK) || CK == CXCursor_TypedefDecl || CK == CXCursor_EnumDecl;
+}
+
 }
 
 #endif //CURSORKINDTRAITS_H

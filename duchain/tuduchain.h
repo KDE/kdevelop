@@ -175,13 +175,7 @@ private:
         auto decl = createDeclarationCommon<CK, DeclType>(cursor, id);
         DUChainWriteLocker lock;
         decl->setContext(m_parentContext->context);
-        //TODO: if (DeclType::hasIdentifiedType)
-        if (IdentifiedType *id = dynamic_cast<IdentifiedType*>(type.unsafeData())) {
-            if (!id->declarationId().isValid()) {
-                id->setDeclaration(decl);
-            }
-        }
-        decl->setAbstractType(type);
+        setType<CK>(decl, type);
         return decl;
     }
 
@@ -192,10 +186,7 @@ private:
         DUChainWriteLocker lock;
         decl->setContext(m_parentContext->context);
         decl->setInternalContext(context);
-        //TODO: if (DeclType::hasIdentifiedType)
-        if (IdentifiedType *id = dynamic_cast<IdentifiedType*>(type.unsafeData()))
-            id->setDeclaration(decl);
-        decl->setAbstractType(type);
+        setType<CK>(decl, type);
         return decl;
     }
 
@@ -383,6 +374,24 @@ void setDeclData(CXCursor cursor, ClassFunctionDeclaration* decl) const
 }
 
 //END setDeclData
+
+//BEGIN setType
+    template<CXCursorKind CK, EnableIf<!CursorKindTraits::isIdentifiedType(CK)> = dummy>
+    void setType(Declaration* decl, AbstractType::Ptr type) const
+    {
+        decl->setAbstractType(type);
+    }
+
+    template<CXCursorKind CK, EnableIf<CursorKindTraits::isIdentifiedType(CK)> = dummy>
+    void setType(Declaration* decl, AbstractType::Ptr type) const
+    {
+        IdentifiedType *id = dynamic_cast<IdentifiedType*>(type.unsafeData());
+        Q_ASSERT(id);
+        Q_ASSERT(!id->declarationId().isValid());
+        id->setDeclaration(decl);
+        decl->setAbstractType(type);
+    }
+//END setType
 
 template<CXTypeKind TK>
 void setTypeModifiers(CXType type, AbstractType* kdevType) const;
