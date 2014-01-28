@@ -257,6 +257,7 @@ AbstractType::Ptr TUDUChain::makeType(CXType type) const
     UseKind(CXType_UInt128);
     UseKind(CXType_Vector);
     UseKind(CXType_Unexposed);
+    UseKind(CXType_WChar);
     case CXType_Invalid:
         return AbstractType::Ptr();
     default:
