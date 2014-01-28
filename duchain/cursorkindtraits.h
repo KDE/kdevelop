@@ -162,9 +162,9 @@ constexpr bool isKDevForwardDeclaration(CXCursorKind CK, bool isDefinition)
     return !isDefinition && isClass(CK);
 }
 
-constexpr bool isKDevClassFunctionDeclaration(CXCursorKind CK, bool isDefinition)
+constexpr bool isKDevClassFunctionDeclaration(CXCursorKind CK, bool /*isDefinition*/)
 {
-    return !isDefinition && CK == CXCursor_CXXMethod;
+    return CK == CXCursor_CXXMethod;
 }
 
 constexpr bool isKDevFunctionDeclaration(CXCursorKind CK, bool isDefinition)
@@ -174,7 +174,7 @@ constexpr bool isKDevFunctionDeclaration(CXCursorKind CK, bool isDefinition)
 
 constexpr bool isKDevFunctionDefinition(CXCursorKind CK, bool isDefinition)
 {
-    return isDefinition && isFunction(CK);
+    return isDefinition && isFunction(CK) && CK != CXCursor_CXXMethod;
 }
 
 constexpr bool isKDevNamespaceAliasDeclaration(CXCursorKind CK, bool isDefinition)

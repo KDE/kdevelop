@@ -19,16 +19,12 @@ class foo
     static int m;
     /// "isStatic" : false
     int b;
-    //TODO: millian! help! should this be a ClassFunctionDeclaration or a FunctionDefinition?
-    //If a FunctionDefinition then the jsondeclarationtest needs to be modified to accept AbstractFunctionDeclaration (ugly, but that's where isVirtual is)
-    //If a ClassFunctionDeclaration, the traits need to be modified accordingly
     /// "isStatic" : false,
     /// "isVirtual" : true
     virtual void bla() {}
     /// "isStatic" : false,
     /// "isVirtual" : true
     virtual void bar();
-    //TODO: as above
     /// "isStatic" : true,
     /// "isVirtual" : false
     static void bla2() {}
