@@ -39,6 +39,7 @@ namespace KTextEditor {
   class CodeCompletionModel;
   class Document;
   class Range;
+  class View;
   class Cursor;
 }
 
@@ -150,7 +151,7 @@ class TypeConversionCompletionItem : public KDevelop::CompletionTreeItem {
     virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const;
     QList<KDevelop::IndexedType> type() const;
     void setPrefix(QString s);
-    virtual void execute(KTextEditor::Document* document, const KTextEditor::Range& word);
+    virtual void execute(KTextEditor::View*, const KTextEditor::Range& word) override;
   private:
     QString m_prefix;
     QString m_text;

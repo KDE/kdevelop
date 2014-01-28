@@ -804,9 +804,9 @@ QList<KDevelop::IndexedType> TypeConversionCompletionItem::type() const {
   return QList<KDevelop::IndexedType>() << m_type;
 }
 
-void TypeConversionCompletionItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word) {
+void TypeConversionCompletionItem::execute(KTextEditor::View* view, const KTextEditor::Range& word) {
   if(argumentHintDepth() == 0)
-    document->replaceText( word, m_text );
+    view->document()->replaceText( word, m_text );
 }
 
 QVariant TypeConversionCompletionItem::data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* /*model*/) const
