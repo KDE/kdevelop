@@ -29,6 +29,7 @@
 namespace KTextEditor
 {
 class View;
+class Cursor;
 }
 
 class AssistantButton : public QObject
@@ -108,7 +109,7 @@ public slots:
     void notifyReopened();
 
 private slots:
-    void updatePosition();
+    void updatePosition(KTextEditor::View* view, const KTextEditor::Cursor& newPos);
 
 private:
     virtual bool eventFilter(QObject* object, QEvent* event);
@@ -124,6 +125,7 @@ private:
     QList<KDevelop::IAssistantAction::Ptr> m_assistantActions;
     KTextEditor::View* m_view;
     AssistantPopupConfig* m_config;
+    bool m_shownAtBottom;
 };
 
 #endif // KDEVPLATFORM_ASSISTANTPOPUP_H
