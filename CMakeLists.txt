@@ -58,7 +58,6 @@ find_package(KF5 CONFIG REQUIRED COMPONENTS
   Emoticons
   KCMUtils
   ItemViews
-  Plasma
 
   # TODO KF5: Port away from this
   KDE4Support

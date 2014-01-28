@@ -1,4 +1,11 @@
-add_subdirectory(plasma)
+find_package(KF5Plasma)
+set_package_properties(KF5Plasma PROPERTIES
+    PURPOSE "Plasma libraries for enabling the dashboard"
+    URL "http://www.kde.org"
+    TYPE OPTIONAL)
+if(KF5Plasma_FOUND)
+    add_subdirectory(plasma)
+endif()
 
 find_package(SharedMimeInfo REQUIRED)
 #     find_package(KF5Declarative)
