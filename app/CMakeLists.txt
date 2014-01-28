@@ -1,6 +1,6 @@
 find_package(KF5Plasma)
 set_package_properties(KF5Plasma PROPERTIES
-    PURPOSE "Plasma libraries for enabling the dashboard"
+    PURPOSE "Plasma libraries for enabling the welcome page"
     URL "http://www.kde.org"
     TYPE OPTIONAL)
 if(KF5Plasma_FOUND)
