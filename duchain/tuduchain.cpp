@@ -269,7 +269,13 @@ AbstractType::Ptr TUDUChain::makeType(CXType type) const
 AbstractType::Ptr TUDUChain::makeType(CXCursor cursor) const
 {
     auto clangType = clang_getCursorType(cursor);
-    auto type = makeType(clangType);
+    AbstractType::Ptr type;
+    if (clangType.kind == CXType_Invalid && CursorKindTraits::isClassTemplate(clang_getCursorKind(cursor))) {
+        // class templates should also have some type associated with them
+        type = new StructureType;
+    } else {
+        type = makeType(clangType);
+    }
     if (auto idType = dynamic_cast<IdentifiedType*>(type.unsafeData())) {
         DeclarationPointer decl = findDeclaration(clang_getTypeDeclaration(clangType), m_includes);
         DUChainReadLocker lock;
