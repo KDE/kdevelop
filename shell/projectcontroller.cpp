@@ -79,7 +79,6 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/iruncontroller.h>
 #include <language/backgroundparser/parseprojectjob.h>
 #include <kio/job.h>
-#include <KCMUtils/KSettings/Dispatcher>
 #include "sessioncontroller.h"
 #include "session.h"
 #include <QDBusConnection>

@@ -20,9 +20,9 @@
 
 
 // Qt
-#include <QtGui/QAction>
-#include <QtGui/QTabWidget>
-#include <QtGui/QLabel>
+#include <QAction>
+#include <QTabWidget>
+#include <QLabel>
 #include <QLineEdit>
 #include <QHBoxLayout>
 #include <QPushButton>
@@ -92,7 +92,7 @@ void BasicRefactoring::fillContextMenu(ContextMenuExtension &extension, Context 
         if (finfo.isWritable()) {
             QAction *action = new QAction(i18n("Rename \"%1\"...", declaration->qualifiedIdentifier().toString()), 0);
             action->setData(QVariant::fromValue(IndexedDeclaration(declaration)));
-            action->setIcon(KIcon("edit-rename"));
+            action->setIcon(QIcon::fromTheme("edit-rename"));
             connect(action, SIGNAL(triggered(bool)), this, SLOT(executeRenameAction()));
             extension.addAction(ContextMenuExtension::RefactorGroup, action);
         }
@@ -149,13 +149,14 @@ DocumentChangeSet::ChangeResult BasicRefactoring::applyChangesToDeclarations(con
 
 KDevelop::IndexedDeclaration BasicRefactoring::declarationUnderCursor(bool allowUse)
 {
-    KDevelop::IDocument *doc = ICore::self()->documentController()->activeDocument();
-    if (doc && doc->textDocument() && doc->textDocument()->activeView()) {
+    KTextEditor::View* view = ICore::self()->documentController()->activeTextDocumentView();
+    KTextEditor::Document* doc = view->document();
+    if (doc && view) {
         DUChainReadLocker lock;
         if (allowUse)
-            return DUChainUtils::itemUnderCursor(doc->url(), SimpleCursor(doc->textDocument()->activeView()->cursorPosition()));
+            return DUChainUtils::itemUnderCursor(doc->url(), SimpleCursor(view->cursorPosition()));
         else
-            return DUChainUtils::declarationInLine(SimpleCursor(doc->textDocument()->activeView()->cursorPosition()), DUChainUtils::standardContextForUrl(doc->url()));
+            return DUChainUtils::declarationInLine(SimpleCursor(view->cursorPosition()), DUChainUtils::standardContextForUrl(doc->url()));
     }
 
     return KDevelop::IndexedDeclaration();

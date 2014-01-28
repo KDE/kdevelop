@@ -21,6 +21,8 @@
  ***************************************************************************/
 
 #include "gitplugincheckinrepositoryjob.h"
+
+#include <KDebug>
 #include <KTextEditor/Document>
 #include <qtextcodec.h>
 #include <QDir>

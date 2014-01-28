@@ -20,7 +20,7 @@
 #ifndef KDEVPLATFORM_ASSISTANTPOPUP_H
 #define KDEVPLATFORM_ASSISTANTPOPUP_H
 
-#include <QDeclarativeView>
+#include <QQuickView>
 #include <interfaces/iassistant.h>
 #include <ksharedptr.h>
 #include <QDebug>
@@ -37,7 +37,7 @@ class AssistantButton : public QObject
     Q_PROPERTY(QString name READ name CONSTANT)
 
 public:
-    AssistantButton(KAction* action, const QString& text, QObject* parent)
+    AssistantButton(QAction* action, const QString& text, QObject* parent)
         : QObject(parent)
         , m_name(text)
         , m_action(action)
@@ -48,7 +48,7 @@ public:
 
 private:
     QString m_name;
-    KAction* m_action;
+    QAction* m_action;
 };
 
 class AssistantPopupConfig : public QObject
@@ -88,7 +88,7 @@ private:
 
 Q_DECLARE_METATYPE(AssistantPopupConfig*)
 
-class AssistantPopup : public QDeclarativeView
+class AssistantPopup : public QQuickView
 {
     Q_OBJECT
 

@@ -40,7 +40,9 @@ set( pathtest_SRCS
     testpath.cpp
 )
 
-kde4_add_unit_test(pathtest ${pathtest_SRCS})
+add_executable(pathtest ${pathtest_SRCS})
+add_test(pathtest pathtest)
+ecm_mark_as_test(pathtest)
 target_link_libraries(pathtest
     ${QT_QTTEST_LIBRARY}
     ${QT_QTCORE_LIBRARY}

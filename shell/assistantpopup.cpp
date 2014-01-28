@@ -30,7 +30,9 @@
 #include <QStyle>
 #include <QDebug>
 #include <QEvent>
+#include <QQmlContext>
 
+#include <KDebug>
 #include <KLocalizedString>
 #include <KParts/MainWindow>
 #include <KStandardDirs>
@@ -47,21 +49,21 @@
 using namespace KDevelop;
 
 AssistantPopup::AssistantPopup(KTextEditor::View* parent, const IAssistant::Ptr& assistant)
-// main window as parent to use maximal space available in worst case
-    : QDeclarativeView(ICore::self()->uiController()->activeMainWindow())
-    , m_assistant(assistant)
+    : m_assistant(assistant)
     , m_view(parent)
 {
+#if 0 // TODO KF5: Port me
     QPalette p = palette();
     p.setColor(QPalette::Window, Qt::transparent);
     setPalette(p);
     setBackgroundRole(QPalette::Window);
     setBackgroundBrush(QBrush(QColor(0, 0, 0, 0)));
-    setResizeMode(QDeclarativeView::SizeViewToRootObject);
+#endif
+    setResizeMode(QQuickView::SizeViewToRootObject);
 
     m_config = new AssistantPopupConfig(this);
-    auto doc = ICore::self()->documentController()->activeDocument();
-    m_config->setColorsFromView(doc->textDocument()->activeView());
+    auto view = ICore::self()->documentController()->activeTextDocumentView();
+    m_config->setColorsFromView(view);
     updateActions();
     rootContext()->setContextProperty("config", QVariant::fromValue<QObject*>(m_config));
     setSource(QUrl(KStandardDirs::locate("data", "kdevelop/assistantpopup.qml")));
@@ -140,7 +142,7 @@ void AssistantPopup::keyReleaseEvent(QKeyEvent *event)
         m_view->setFocus();
         emit m_config->shouldShowHighlight(false);
     }
-    QGraphicsView::keyReleaseEvent(event);
+    QQuickView::keyReleaseEvent(event);
 }
 
 bool AssistantPopup::eventFilter(QObject* object, QEvent* event)
@@ -156,7 +158,9 @@ bool AssistantPopup::eventFilter(QObject* object, QEvent* event)
         // and notify it about that.
         auto modifiers = static_cast<QKeyEvent*>(event)->modifiers();
         if (modifiers == Qt::AltModifier) {
+#if 0 // TODO KF5 Needed?
             setFocus();
+#endif
             emit m_config->shouldShowHighlight(true);
             return true;
         }
@@ -172,6 +176,7 @@ void AssistantPopup::updatePosition()
     auto editorGeometry = textWidgetGeometry(m_view);
     auto cursor = m_view->cursorToCoordinate(KTextEditor::Cursor(0, 0));
     const int margin = 12;
+#if 0 // TODO KF5: Port
     Sublime::HoldUpdates hold(ICore::self()->uiController()->activeMainWindow());
     if ( cursor.y() < 0 ) {
         // Only when the view is not scrolled to the top, place the widget there; otherwise it easily gets
@@ -183,6 +188,7 @@ void AssistantPopup::updatePosition()
         move(parentWidget()->mapFromGlobal(m_view->mapToGlobal(editorGeometry.bottomRight()
              + QPoint(-width() - margin, -margin - height()))));
     }
+#endif
 }
 
 IAssistant::Ptr AssistantPopup::assistant() const
@@ -211,7 +217,7 @@ void AssistantPopup::updateActions()
     {
         items << new AssistantButton(action->toKAction(), action->description(), this);
     }
-    auto hideAction = new KAction(i18n("Hide"), this);
+    auto hideAction = new QAction(i18n("Hide"), this);
     connect(hideAction, SIGNAL(triggered()), this, SLOT(executeHideAction()));
     items << new AssistantButton(hideAction, hideAction->text(), this);
     m_config->setModel(items);

@@ -1237,7 +1237,7 @@ void DocumentController::vcsAnnotateCurrentDocument()
         auto helper = new VcsPluginHelper(project->versionControlPlugin(), iface);
         connect(doc->textDocument(), SIGNAL(aboutToClose(KTextEditor::Document*)),
                 helper, SLOT(disposeEventually(KTextEditor::Document*)));
-        connect(doc->textDocument()->activeView(), SIGNAL(annotationBorderVisibilityChanged(View*,bool)),
+        connect(doc->activeTextView(), SIGNAL(annotationBorderVisibilityChanged(View*,bool)),
                 helper, SLOT(disposeEventually(View*, bool)));
         helper->addContextDocument(url);
         helper->annotation();
