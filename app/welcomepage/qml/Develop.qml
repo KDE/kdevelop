@@ -63,6 +63,7 @@ StandardPage
     ListView {
         id: sessionsView
         clip: true
+        boundsBehavior: Flickable.StopAtBounds
         anchors {
             left: parent.left
             top: toolBar.bottom

@@ -16,7 +16,7 @@
 #include <kdebug.h>
 #include "rpp/pp-macro.h"
 #include "rpp/pp-environment.h"
-#include <language/interfaces/iproblem.h>
+#include <language/duchain/problem.h>
 #include "cpppreprocessenvironment.h"
 #include <language/duchain/repositories/itemrepository.h>
 #include <language/editor/modificationrevision.h>

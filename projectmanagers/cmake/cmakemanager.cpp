@@ -162,7 +162,7 @@ KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
     if(CMake::hasProjectRootRelative(project))
     {
         QString relative=CMake::projectRootRelative(project);
-        folderPath.cd(relative);
+        folderPath = folderPath.cd(relative);
     }
     else
     {
@@ -245,9 +245,7 @@ Path::List CMakeManager::includeDirectories(KDevelop::ProjectBaseItem *item) con
             QStringList dirs = includer->includeDirectories(item);
             //Here there's the possibility that it might not be a target. We should make sure that's not the case
             ProjectTargetItem* tItem = dynamic_cast<ProjectTargetItem*>(item);
-            return toPathList(CMake::resolveSystemDirs(project, processGeneratorExpression(dirs,
-                                                                                project,
-                                                                                tItem), KUrl::AddTrailingSlash));
+            return CMake::resolveSystemDirs(project, processGeneratorExpression(dirs, project, tItem));
         }
         item = item->parent();
 //         kDebug(9042) << "Looking for an includer: " << item;

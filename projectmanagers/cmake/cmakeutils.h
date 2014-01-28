@@ -24,11 +24,13 @@
 #include "cmakeexport.h"
 #include <KUrl>
 #include <QStringList>
+#include <project/path.h>
 
 namespace KDevelop
 {
     class ProjectBaseItem;
     class IProject;
+    class Path;
 }
 
 class KUrl;
@@ -192,9 +194,7 @@ namespace CMake
      */
     KDEVCMAKECOMMON_EXPORT void removeBuildDirConfig( KDevelop::IProject* project );
 
-    KDEVCMAKECOMMON_EXPORT KUrl::List resolveSystemDirs(KDevelop::IProject* project,
-                                                        const QStringList& dirs,
-                                                        KUrl::AdjustPathOption option = KUrl::LeaveTrailingSlash);
+    KDEVCMAKECOMMON_EXPORT KDevelop::Path::List resolveSystemDirs(KDevelop::IProject* project, const QStringList& dirs);
 }
 
 #endif

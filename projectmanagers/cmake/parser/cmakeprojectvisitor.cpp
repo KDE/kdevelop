@@ -33,7 +33,7 @@
 #include <language/duchain/declaration.h>
 #include <language/duchain/types/functiontype.h>
 #include <language/duchain/types/delayedtype.h>
-#include <language/interfaces/iproblem.h>
+#include <language/duchain/problem.h>
 
 #include <KProcess>
 #include <KLocale>
@@ -1123,17 +1123,12 @@ int CMakeProjectVisitor::visit(const TargetLinkLibrariesAst *tll)
     QHash<QString, Target>::iterator target = m_targetForId.find(tll->target());
     //TODO: we can add a problem if the target is not found
     if(target != m_targetForId.end()) {
-        target->libraries << tll->interfaceOnlyDependencies().retrieveTargets() << tll->publicDependencies().retrieveTargets();
-        foreach(const QString& dep, target->libraries) {
-            QHash<QString, QMap< QString, QStringList> >::const_iterator depTarget = m_props[TargetProperty].constFind(dep);
+        CategoryType& targetProps = m_props[TargetProperty];
+        CategoryType::iterator it = targetProps.find(m_targetAlias.value(tll->target(), tll->target()));
 
-            if(depTarget!=m_props[TargetProperty].constEnd()) {
-                foreach(const QString& depdep, depTarget->value("INTERFACE_LINK_LIBRARIES")) {
-                    if(!target->libraries.contains(depdep))
-                        target->libraries.append(depdep);
-                }
-            }
-        }
+        (*it)["INTERFACE_LINK_LIBRARIES"] += tll->interfaceOnlyDependencies().retrieveTargets()
+                                          << tll->publicDependencies().retrieveTargets();
+        (*it)["PRIVATE_LINK_LIBRARIES"] += tll->privateDependencies().retrieveTargets();
     }
     return 1;
 }

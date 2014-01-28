@@ -29,7 +29,7 @@
 #include <QtCore/QStack>
 #include <cppparserexport.h>
 
-#include <language/interfaces/iproblem.h>
+#include <language/duchain/problem.h>
 
 #include "pp-macro.h"
 #include "pp-macro-expander.h"

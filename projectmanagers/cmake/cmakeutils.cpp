@@ -150,31 +150,34 @@ inline  QString replaceInstallDir(QString in, QString installDir)
 namespace CMake
 {
 
-KUrl::List resolveSystemDirs(KDevelop::IProject* project, const QStringList& dirs, KUrl::AdjustPathOption option)
+KDevelop::Path::List resolveSystemDirs(KDevelop::IProject* project, const QStringList& dirs)
 {
-    QString buildDir = CMake::currentBuildDir(project).toLocalFile(KUrl::AddTrailingSlash);
-    QString installDir = CMake::currentInstallDir(project).toLocalFile(KUrl::AddTrailingSlash);
+    const KDevelop::Path buildDir(CMake::currentBuildDir(project));
+    const KDevelop::Path installDir(CMake::currentInstallDir(project));
 
-    KUrl::List newList;
-    foreach(const QString& _s, dirs)
+    KDevelop::Path::List newList;
+    newList.reserve(dirs.size());
+    foreach(const QString& s, dirs)
     {
-        QString s=_s;
+        KDevelop::Path dir;
         if(s.startsWith(QString::fromUtf8("#[bin_dir]")))
         {
-            s= replaceBuildDir(s, buildDir);
+            dir = KDevelop::Path(buildDir, s);
         }
         else if(s.startsWith(QString::fromUtf8("#[install_dir]")))
         {
-            s= replaceInstallDir(s, installDir);
+            dir = KDevelop::Path(installDir, s);
         }
-        KUrl d(s);
-        d.cleanPath();
-        d.adjustPath(option);
-//         kDebug(9042) << "resolved" << _s << "to" << d;
-
-        if (!newList.contains(d))
+        else
         {
-            newList.append(d);
+            dir = KDevelop::Path(s);
+        }
+
+//         kDebug(9042) << "resolved" << s << "to" << d;
+
+        if (!newList.contains(dir))
+        {
+            newList.append(dir);
         }
     }
     return newList;

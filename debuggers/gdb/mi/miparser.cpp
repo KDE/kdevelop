@@ -100,7 +100,7 @@ bool MIParser::parsePrompt(Record *&record)
 
 bool MIParser::parseStreamRecord(Record *&record)
 {
-    std::auto_ptr<StreamRecord> stream(new StreamRecord);
+    std::unique_ptr<StreamRecord> stream(new StreamRecord);
 
     switch (m_lex->lookAhead()) {
         case '~':
@@ -132,7 +132,7 @@ bool MIParser::parseResultRecord(Record *&record)
     QString reason = m_lex->currentTokenText();
     m_lex->nextToken();
 
-    std::auto_ptr<ResultRecord> res(new ResultRecord);
+    std::unique_ptr<ResultRecord> res(new ResultRecord);
     res->reason = reason;
     if (c == '^')
         res->subkind = ResultRecord::CommandResult;
@@ -165,7 +165,7 @@ bool MIParser::parseResult(Result *&result)
     // https://bugs.kde.org/show_bug.cgi?id=304730
     // http://sourceware.org/bugzilla/show_bug.cgi?id=9659
 
-    std::auto_ptr<Result> res(new Result);
+    std::unique_ptr<Result> res(new Result);
 
     if (m_lex->lookAhead() == Token_identifier) {
         res->variable = m_lex->currentTokenText();
@@ -227,7 +227,7 @@ bool MIParser::parseList(Value *&value)
 {
     ADVANCE('[');
 
-    std::auto_ptr<ListValue> lst(new ListValue);
+    std::unique_ptr<ListValue> lst(new ListValue);
 
     // Note: can't use parseCSV here because of nested
     // "is this Value or Result" guessing. Too lazy to factor
@@ -268,7 +268,7 @@ bool MIParser::parseList(Value *&value)
 bool MIParser::parseCSV(TupleValue** value,
                         char start, char end)
 {
-    std::auto_ptr<TupleValue> tuple(new TupleValue);
+    std::unique_ptr<TupleValue> tuple(new TupleValue);
 
     if (!parseCSV(*tuple, start, end))
         return false;

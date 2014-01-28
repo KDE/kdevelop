@@ -124,6 +124,20 @@ CMakeCommitChangesJob::CMakeCommitChangesJob(const Path& path, CMakeManager* man
     setObjectName(path.pathOrUrl());
 }
 
+void processDependencies(ProcessedTarget &target, const QString& dep, const CMakeProjectData& data)
+{
+    const QMap<QString, QStringList>& depData = data.properties.value(TargetProperty).value(dep);
+    if(depData.isEmpty()) {
+        kDebug() << "error: couldn't find dependency " << dep << data.properties.value(TargetProperty).keys();
+        return;
+    }
+
+    target.includes += depData["INTERFACE_INCLUDE_DIRECTORIES"];
+    target.defines += depData["INTERFACE_COMPILE_DEFINITIONS"];
+    foreach(const QString& d, depData["INTERFACE_LINK_LIBRARIES"])
+        processDependencies(target, d, data);
+}
+
 Path::List CMakeCommitChangesJob::addProjectData(const CMakeProjectData& data)
 {
     m_projectDataAdded = true;
@@ -166,18 +180,12 @@ Path::List CMakeCommitChangesJob::addProjectData(const CMakeProjectData& data)
         target.defines = targetProps["COMPILE_DEFINITIONS"];
         target.includes = targetProps["INCLUDE_DIRECTORIES"];
         target.outputName = targetProps.value("OUTPUT_NAME", QStringList(t.name)).join(QString());
-        target.location =
-            Path(CMake::resolveSystemDirs(m_project, targetProps["LOCATION"]).first());
+        target.location = CMake::resolveSystemDirs(m_project, targetProps["LOCATION"]).first();
         
-        foreach(const QString& dep, t.libraries) {
-            const QMap<QString, QStringList>& depData = data.properties.value(TargetProperty).value(dep);
-            if(!depData.isEmpty()) {
-                target.includes += depData["INTERFACE_INCLUDE_DIRECTORIES"];
-                target.defines += depData["INTERFACE_COMPILE_DEFINITIONS"];
-            } else {
-                kDebug() << "error: couldn't find dependency " << dep << data.properties.value(TargetProperty).keys();
-            }
+        foreach(const QString& dep, targetProps["PRIVATE_LINK_LIBRARIES"]) {
+            processDependencies(target, dep, data);
         }
+        processDependencies(target, t.name, data);
         m_targets += target;
     }
     return ret;

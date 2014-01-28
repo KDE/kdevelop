@@ -258,7 +258,7 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::View* view, const KTe
   newText.prepend(prefixText);
   
   // Text that will be removed in a separate editing step (so the user can undo it)
-  std::auto_ptr<KTextEditor::MovingRange> removeInSecondStep;
+  QScopedPointer<KTextEditor::MovingRange> removeInSecondStep;
   
   KTextEditor::Cursor cursor = view->cursorPosition();
   KTextEditor::Document* document = view->document();
@@ -266,8 +266,7 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::View* view, const KTe
   {
     KTextEditor::MovingInterface* moving = dynamic_cast<KTextEditor::MovingInterface*>(document);
     Q_ASSERT(moving);
-    removeInSecondStep =  std::auto_ptr<KTextEditor::MovingRange>(
-      moving->newMovingRange(KTextEditor::Range(cursor, word.end()), KTextEditor::MovingRange::DoNotExpand));
+    removeInSecondStep.reset(moving->newMovingRange(KTextEditor::Range(cursor, word.end()), KTextEditor::MovingRange::DoNotExpand));
     word.setEnd(cursor);
   }
   
@@ -315,26 +314,26 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::View* view, const KTe
       //Do some intelligent stuff for functions with the parens:
       lock.unlock();
       KTextEditor::Cursor insertionPosition = end;
-      if (removeInSecondStep.get()) {
+      if (removeInSecondStep) {
         KTextEditor::Range removeRange = removeInSecondStep->toRange();
         insertionPosition += removeRange.end() - removeRange.start();
       }
       insertFunctionParenText(view, insertionPosition, m_declaration, jumpForbidden);
     }
     
-    if (removeInSecondStep.get()) {
+    if (removeInSecondStep) {
       //if we would remove text after the inserted text, skip that if it is a property
       //of the executed item and additionally insert a . or ->
       Identifier id(document->text(removeInSecondStep->toRange()));
       QString insertAccessor = keepRemainingWord(id);
       if (!insertAccessor.isEmpty()) {
         document->insertText(removeInSecondStep->toRange().start(), insertAccessor);
-        removeInSecondStep.release();
+        removeInSecondStep.reset(nullptr);
       }
     }
   }
   
-  if(removeInSecondStep.get())
+  if(removeInSecondStep)
   {
     KTextEditor::Range removeRange = removeInSecondStep->toRange();
     if(!removeRange.isEmpty() && removeRange.end() > end && removeRange.end().line() == end.line() && removeRange.end().column() <= document->lineLength(removeRange.end().line()))

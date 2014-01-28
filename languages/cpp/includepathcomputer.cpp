@@ -24,13 +24,18 @@
 #include <project/projectmodel.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/duchain.h>
+#include <language/duchain/topducontext.h>
+#include "cppduchain/environmentmanager.h"
+
 #include <KLocalizedString>
 
 using namespace KDevelop;
 
 const bool enableIncludePathResolution = true;
 
-IncludePathComputer::IncludePathComputer(const KUrl& file)
+IncludePathComputer::IncludePathComputer(const QString& file)
   : m_source(file)
   , m_ready(false)
   , m_gotPathsFromManager(false)
@@ -39,11 +44,11 @@ IncludePathComputer::IncludePathComputer(const KUrl& file)
 
 void IncludePathComputer::computeForeground()
 {
-  if (CppUtils::headerExtensions().contains(QFileInfo(m_source.toLocalFile()).suffix())) {
+  if (CppUtils::headerExtensions().contains(QFileInfo(m_source).suffix())) {
     // This file is a header. Since a header doesn't represent a target, we just try to get
     // the include-paths for the corresponding source-file, if there is one.
-    KUrl newSource = CppUtils::sourceOrHeaderCandidate(m_source.toLocalFile(), true);
-    if (newSource.isValid()) {
+    QString newSource = CppUtils::sourceOrHeaderCandidate(m_source, true);
+    if (!newSource.isEmpty()) {
       m_source = newSource;
     }
   }
@@ -53,8 +58,9 @@ void IncludePathComputer::computeForeground()
     return;
   }
 
+  const IndexedString indexedSource(m_source);
   foreach (IProject *project, ICore::self()->projectController()->projects()) {
-    QList<ProjectFileItem*> files = project->filesForUrl(m_source);
+    QList<ProjectFileItem*> files = project->filesForPath(indexedSource);
     if (files.isEmpty()) {
       continue;
     }
@@ -67,7 +73,6 @@ void IncludePathComputer::computeForeground()
     }
 
     ProjectFileItem* file = files.last();
-    /// TODO: port this mess to Path API
     Path::List dirs;
     // A file might be defined in different targets.
     // Prefer file items defined inside a target with non-empty includes.
@@ -81,10 +86,14 @@ void IncludePathComputer::computeForeground()
         break;
       }
     }
+    // otherwise we did not find a target, so just use any include paths provided by the manager
+    if (dirs.isEmpty()) {
+      dirs = buildManager->includeDirectories(file);
+    }
 
     m_projectName = project->name();
-    m_projectDirectory = project->folder();
-    m_effectiveBuildDirectory = m_buildDirectory = buildManager->buildDirectory(project->projectItem()).toUrl();
+    m_projectDirectory = project->path();
+    m_effectiveBuildDirectory = m_buildDirectory = buildManager->buildDirectory(project->projectItem());
     kDebug(9007) << "Got build-directory from project manager:" << m_effectiveBuildDirectory;
 
     if (m_projectDirectory == m_effectiveBuildDirectory) {
@@ -95,7 +104,7 @@ void IncludePathComputer::computeForeground()
     m_gotPathsFromManager = !dirs.isEmpty();
     kDebug(9007) << "Got " << dirs.count() << " include-paths from build-manager";
     foreach (const Path& dir, dirs) {
-      addInclude(dir.toUrl());
+      addInclude(dir);
     }
 
     m_defines = buildManager->defines(file);
@@ -106,6 +115,16 @@ void IncludePathComputer::computeForeground()
   }
 }
 
+static Path::List toPaths(const QStringList& paths)
+{
+  Path::List ret;
+  ret.reserve(paths.size());
+  foreach (const QString& path, paths) {
+    ret << Path(path);
+  }
+  return ret;
+}
+
 void IncludePathComputer::computeBackground()
 {
   if (m_ready) {
@@ -113,8 +132,9 @@ void IncludePathComputer::computeBackground()
   }
 
   //Insert standard-paths
-  foreach (const QString& path, CppUtils::standardIncludePaths()) {
-    addInclude(KUrl(path));
+  static const Path::List standardIncludePaths = toPaths(CppUtils::standardIncludePaths());
+  foreach (const Path& path, standardIncludePaths) {
+    addInclude(path);
   }
 
   if (!enableIncludePathResolution) {
@@ -122,44 +142,58 @@ void IncludePathComputer::computeBackground()
     return;
   }
 
-  if (!m_effectiveBuildDirectory.isEmpty()) {
+  if (m_effectiveBuildDirectory.isValid()) {
     m_includeResolver.setOutOfSourceBuildSystem(m_projectDirectory.toLocalFile(), m_effectiveBuildDirectory.toLocalFile());
   } else {
-    if (!m_projectDirectory.isEmpty()) {
+    if (m_projectDirectory.isValid()) {
       //Report that the build-manager did not return the build-directory, for debugging
       kDebug(9007) << "Build manager for project %1 did not return a build directory" << m_projectName;
     }
     m_includeResolver.resetOutOfSourceBuild();
   }
 
-  m_includePathDependency = m_includeResolver.findIncludePathDependency(m_source.toLocalFile());
+  m_includePathDependency = m_includeResolver.findIncludePathDependency(m_source);
   kDebug() << "current include path dependency state:" << m_includePathDependency.toString();
 
   // only look at make when we did not get any paths from the build manager
   m_includeResolver.enableMakeResolution(!m_gotPathsFromManager);
-  CppTools::PathResolutionResult result = m_includeResolver.resolveIncludePath(m_source.toLocalFile());
+  CppTools::PathResolutionResult result = m_includeResolver.resolveIncludePath(m_source);
 
   m_includePathDependency = result.includePathDependency;
   kDebug() << "new include path dependency:" << m_includePathDependency.toString();
 
   foreach (const QString &res, result.paths) {
-    addInclude(KUrl(res));
+    addInclude(Path(res));
   }
 
   if (!result) {
     kDebug(9007) << "Failed to resolve include-path for \"" << m_source << "\":"
                   << result.errorMessage << "\n" << result.longErrorMessage << "\n";
+
+    // Last chance: Take a parsed version of the file from the du-chain, and get its include-paths
+    // We will then get the include-path that some time was used to parse the file
+    // NOTE: this is important for library headers, as when we open them they are not opened in any project
+    // nor do they have a build folder which we could use
+    DUChainReadLocker readLock;
+    foreach(const ParsingEnvironmentFilePointer& file, DUChain::self()->allEnvironmentFiles(IndexedString(m_source))) {
+      auto envFile = dynamic_cast<const Cpp::EnvironmentFile*>(file.data());
+      if (envFile && !envFile->includePaths().isEmpty()) {
+        foreach(const IndexedString& path, envFile->includePaths()) {
+          addInclude(Path(path.toUrl()));
+        }
+        kDebug(9007) << "Took include-path for" << m_source << "from a random parsed duchain-version of it";
+        break;
+      }
+    }
   }
 
   m_ready = true;
 }
 
-void IncludePathComputer::addInclude(KUrl url)
+void IncludePathComputer::addInclude(const Path& path)
 {
-  url.cleanPath();
-  url.adjustPath(KUrl::AddTrailingSlash);
-  if (!m_hasPath.contains(url)) {
-    m_ret << url;
-    m_hasPath.insert(url);
+  if (!m_hasPath.contains(path)) {
+    m_ret << path;
+    m_hasPath.insert(path);
   }
 }

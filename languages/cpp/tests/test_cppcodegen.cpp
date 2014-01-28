@@ -686,7 +686,9 @@ void TestCppCodegen::testMoveIntoSource()
     QVERIFY(declaration.isValid());
   }
   CodeRepresentation::setDiskChangesForbidden(false);
-  QCOMPARE(SimpleRefactoring::self().moveIntoSource(declaration), QString());
+  SimpleRefactoring *refactoring = new SimpleRefactoring();
+  QCOMPARE(refactoring->moveIntoSource(declaration), QString());
+  delete refactoring;
   CodeRepresentation::setDiskChangesForbidden(true);
 
   QCOMPARE(header.fileContents(), newHeader);

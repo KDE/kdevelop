@@ -36,7 +36,7 @@
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/topducontext.h>
-#include <language/interfaces/iproblem.h>
+#include <language/duchain/problem.h>
 
 #include <threadweaver/thread.h>
 
@@ -63,12 +63,13 @@
 
 const uint maxIncludeDepth = 50;
 
-QString urlsToString(const QList<KUrl>& urlList) {
-  QString paths;
-  foreach( const KUrl& u, urlList )
-      paths += u.pathOrUrl() + "\n";
-
-  return paths;
+static QString pathsToString(const Path::List& paths)
+{
+  QString str;
+  foreach( const Path& p, paths ) {
+    str += p.pathOrUrl() + "\n";
+  }
+  return str;
 }
 
 PreprocessJob::PreprocessJob(CPPParseJob * parent)
@@ -174,8 +175,7 @@ void PreprocessJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thr
           bool fileFeaturesSatisfied = updatingEnvironmentFile->featuresSatisfied(parentJob()->minimumFeatures());
           bool slaveFeaturesSatisfied = updatingEnvironmentFile->featuresSatisfied(parentJob()->slaveMinimumFeatures());
           if(fileFeaturesSatisfied && slaveFeaturesSatisfied) {
-            KUrl localPath(parentJob()->document().toUrl());
-            localPath.setFileName(QString());
+            Path localPath = Path(parentJob()->document().str()).parent();
             Cpp::EnvironmentFile* cppEnv = dynamic_cast<Cpp::EnvironmentFile*>(updatingEnvironmentFile.data());
             Q_ASSERT(cppEnv);
             //When possible, we determine whether an update is needed without getting the include-paths, because that's very expensive
@@ -185,7 +185,7 @@ void PreprocessJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thr
                   kDebug(9007) << updatingEnvironmentFile->url().str() << "has missing include:" << (*it).str();
                 
                 readLock.unlock();
-                KUrl::List includePaths = parentJob()->includePathUrls();
+                Path::List includePaths = parentJob()->includePathUrls();
                 readLock.lock();
                 
                 needsUpdate = CppUtils::needsUpdate(Cpp::EnvironmentFilePointer(cppEnv), localPath, includePaths);
@@ -203,7 +203,7 @@ void PreprocessJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thr
     }
     
     //We do this down here, so we eventually can prevent determining the include-paths if nothing needs to be updated
-    m_firstEnvironmentFile->setIncludePaths( parentJob()->masterJob()->includePaths() );
+    m_firstEnvironmentFile->setIncludePaths( parentJob()->masterJob()->indexedIncludePaths() );
     
     if(m_secondEnvironmentFile)
       m_secondEnvironmentFile->setIncludePaths(m_firstEnvironmentFile->includePaths());
@@ -360,8 +360,7 @@ void PreprocessJob::headerSectionEndedInternal(rpp::Stream* stream)
             Q_ASSERT(m_updatingEnvironmentFile || contentEnvironment->identityOffset() == m_secondEnvironmentFile->identityOffset());            
 
             ///@todo think whether localPath is needed
-            KUrl localPath(parentJob()->document().str());
-            localPath.setFileName(QString());
+            Path localPath = Path(parentJob()->document().str()).parent();
             
             if(contentEnvironment->matchEnvironment(m_currentEnvironment) && !CppUtils::needsUpdate(contentEnvironment, localPath, parentJob()->includePathUrls()) && (!parentJob()->masterJob()->needUpdateEverything() || parentJob()->masterJob()->wasUpdated(content)) && (content->parsingEnvironmentFile()->featuresSatisfied(parentJob()->minimumFeatures()) && content->parsingEnvironmentFile()->featuresSatisfied(parentJob()->slaveMinimumFeatures())) 
               && Cpp::EnvironmentManager::self()->matchingLevel() != Cpp::EnvironmentManager::Disabled) {
@@ -427,20 +426,15 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
 
     ifDebug( kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << ": searching for include" << fileName; )
 
-    KUrl localPath(parentJob()->document().str());
-    localPath.setFileName(QString());
-
-    KUrl from;
+    Path from;
     if (skipCurrentPath)
       from = parentJob()->includedFromPath();
 
 
-    ///FIXME: use IndexedStrings
-    QPair<KUrl, KUrl> included = CppUtils::findInclude( parentJob()->includePathUrls(), localPath, fileName, type, from );
-    KUrl includedFile = included.first;
+    QPair<Path, Path> included = CppUtils::findInclude( parentJob()->includePathUrls(), parentJob()->localPath(), fileName, type, from );
+    Path includedFile = included.first;
     if (includedFile.isValid()) {
-      
-        IndexedString indexedFile(includedFile);
+        const IndexedString indexedFile = includedFile.toIndexed();
         
         {
           //Prevent recursion that may cause a crash
@@ -466,7 +460,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
 
         {
             KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
-            includedContext = KDevelop::DUChain::self()->chainForDocument(includedFile, m_currentEnvironment, (bool)m_secondEnvironmentFile);
+            includedContext = KDevelop::DUChain::self()->chainForDocument(indexedFile, m_currentEnvironment, (bool)m_secondEnvironmentFile);
             
             //Check if the same file _is_ one of the parents, and if it is, import it later on
             if(Cpp::EnvironmentManager::self()->matchingLevel() <= Cpp::EnvironmentManager::Naive) {
@@ -500,7 +494,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
             if(includedContext) {
               Cpp::EnvironmentFilePointer includedEnvironment(dynamic_cast<Cpp::EnvironmentFile*>(includedContext->parsingEnvironmentFile().data()));
               if( includedEnvironment ) {
-                updateNeeded = CppUtils::needsUpdate(includedEnvironment, localPath, parentJob()->includePathUrls());
+                updateNeeded = CppUtils::needsUpdate(includedEnvironment, parentJob()->localPath(), parentJob()->includePathUrls());
                 //The ForceUpdateRecursive flag is removed before checking for satisfied features, so we can prevent double-updating through "wasUpdated()" below (see *1)
                 updateNeeded |= !includedEnvironment->featuresSatisfied((TopDUContext::Features)(slaveMinimumFeatures & (~TopDUContext::ForceUpdateRecursive)));
                 //(*1) Do not update again if ForceUpdate is given and the context was already updated during this run
@@ -560,7 +554,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
 
             ///The second parameter is zero because we are in a background-thread and we here
             ///cannot create a slave of the foreground cpp-support-part.
-            CPPParseJob* slaveJob = new CPPParseJob(IndexedString(includedFile), parentJob()->cpp(), this);
+            CPPParseJob* slaveJob = new CPPParseJob(indexedFile, parentJob()->cpp(), this);
             
             slaveJob->setMinimumFeatures(slaveMinimumFeatures);
 
@@ -589,13 +583,13 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
     
     } else {
         kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << ": include not found:" << fileName;
-        KDevelop::ProblemPointer p(new Problem()); ///@todo create special include-problem
+        Cpp::MissingIncludePathProblem::Ptr p(new Cpp::MissingIncludePathProblem); ///@todo create special include-problem
         p->setSource(KDevelop::ProblemData::Preprocessor);
         p->setDescription(i18n("Included file was not found: %1", fileName ));
-        p->setExplanation(i18n("Searched include path:\n%1", urlsToString(parentJob()->includePathUrls())));
+        p->setExplanation(i18n("Searched include path:\n%1", pathsToString(parentJob()->includePathUrls())));
         p->setFinalLocation(DocumentRange(parentJob()->document(), SimpleRange(sourceLine,0, sourceLine+1,0)));
         p->setSolutionAssistant(KSharedPtr<KDevelop::IAssistant>(new Cpp::MissingIncludePathAssistant(parentJob()->masterJob()->document(), _fileName)));
-        parentJob()->addPreprocessorProblem(p);
+        parentJob()->addPreprocessorProblem(KSharedPtr<Problem>::staticCast(p));
 
         ///@todo respect all the specialties like starting search at a specific path
         ///Before doing that, model findInclude(..) exactly after the standard
@@ -638,13 +632,11 @@ bool PreprocessJob::checkAbort()
 bool PreprocessJob::readContents()
 {
   KDevelop::ProblemPointer p = parentJob()->readContents();
-  
   if(p)
   {
     parentJob()->addPreprocessorProblem(p);
     return false;
   }
-  
   m_firstEnvironmentFile->setModificationRevision( parentJob()->contents().modification );
 
   m_contents = parentJob()->contents().contents;

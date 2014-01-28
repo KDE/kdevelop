@@ -195,8 +195,10 @@ const Cpp::ReferenceCountedMacroSet& standardMacros()
   return macros;
 }
 
-QPair<KUrl, KUrl> findInclude(const KUrl::List& includePaths, const KUrl& localPath, const QString& includeName, int includeType, const KUrl& skipPath, bool quiet){
-    QPair<KUrl, KUrl> ret;
+QPair<Path, Path> findInclude(const Path::List& includePaths, const Path& localPath,
+                              const QString& includeName, int includeType,
+                              const Path& skipPath, bool quiet){
+    QPair<Path, Path> ret;
 #ifdef DEBUG
     kDebug(9007) << "searching for include-file" << includeName;
     if( !skipPath.isEmpty() )
@@ -207,30 +209,28 @@ QPair<KUrl, KUrl> findInclude(const KUrl::List& includePaths, const KUrl& localP
         QFileInfo info(includeName);
         if (info.exists() && info.isReadable() && info.isFile()) {
             //kDebug(9007) << "found include file:" << info.absoluteFilePath();
-            ret.first = KUrl(info.canonicalFilePath());
-            ret.first.cleanPath();
-            ret.second = KUrl("/");
+            ret.first = Path(info.canonicalFilePath());
+            ret.second = Path("/");
             return ret;
         }
     }
 
     if (includeType == rpp::Preprocessor::IncludeLocal && localPath != skipPath) {
-      QString check = localPath.toLocalFile(KUrl::AddTrailingSlash) + includeName;
-        QFileInfo info(check);
+        Path check(localPath, includeName);
+        QFileInfo info(check.toLocalFile());
         if (info.exists() && info.isReadable() && info.isFile()) {
             //kDebug(9007) << "found include file:" << info.absoluteFilePath();
-            ret.first = KUrl(info.canonicalFilePath());
-            ret.first.cleanPath();
+            ret.first = check;
             ret.second = localPath;
             return ret;
         }
     }
 
     //When a path is skipped, we will start searching exactly after that path
-    bool needSkip = !skipPath.isEmpty();
+    bool needSkip = skipPath.isValid();
 
 restart:
-    foreach( const KUrl& path, includePaths ) {
+    foreach( const Path& path, includePaths ) {
         if( needSkip ) {
             if( path == skipPath ) {
                 needSkip = false;
@@ -238,14 +238,13 @@ restart:
             }
         }
 
-        QString check = path.toLocalFile(KUrl::AddTrailingSlash) + includeName;
-        QFileInfo info(check);
+        Path check(path, includeName);
+        QFileInfo info(check.toLocalFile());
 
         if (info.exists() && info.isReadable() && info.isFile()) {
             //kDebug(9007) << "found include file:" << info.absoluteFilePath();
-            ret.first = KUrl(info.canonicalFilePath());
-            ret.first.cleanPath();
-            ret.second = path.toLocalFile();
+            ret.first = check;
+            ret.second = path;
             return ret;
         }
     }
@@ -256,25 +255,23 @@ restart:
         goto restart;
     }
 
-    if( ret.first.isEmpty())
+    if( !ret.first.isValid())
     {
         //Check if there is an available artificial representation
         if(!includeName.isNull() && artificialCodeRepresentationExists(IndexedString(includeName)))
         {
-            ret.first = CodeRepresentation::artificialUrl(includeName);
+            ret.first = Path(CodeRepresentation::artificialPath(includeName));
             kDebug() << "Utilizing Artificial code for include: " << includeName;
         }
         else if(!quiet ) {
-            kDebug(9007) << "FAILED to find include-file" << includeName << "in paths:";
-            foreach( const KUrl& path, includePaths )
-                kDebug(9007) << path;
+            kDebug() << "FAILED to find include-file" << includeName << "in paths:" << includePaths;
         }
     }
     
     return ret;
 }
 
-bool needsUpdate(const Cpp::EnvironmentFilePointer& file, const KUrl& localPath, const KUrl::List& includePaths)
+bool needsUpdate(const Cpp::EnvironmentFilePointer& file, const Path& localPath, const Path::List& includePaths)
 {
   if(file->needsUpdate())
     return true;
@@ -283,15 +280,15 @@ bool needsUpdate(const Cpp::EnvironmentFilePointer& file, const KUrl& localPath,
   for( Cpp::ReferenceCountedStringSet::Iterator it = file->missingIncludeFiles().iterator(); it; ++it ) {
 
     ///@todo store IncludeLocal/IncludeGlobal somewhere
-    QPair<KUrl, KUrl> included = findInclude( includePaths, localPath, (*it).str(), rpp::Preprocessor::IncludeLocal, QUrl(), true );
-    if(!included.first.isEmpty())
+    auto included = findInclude( includePaths, localPath, (*it).str(), rpp::Preprocessor::IncludeLocal, Path(), true );
+    if(included.first.isValid())
       return true;
   }
 
   return false;
 }
 
-KUrl::List findIncludePaths(const KUrl& source)
+Path::List findIncludePaths(const QString& source)
 {
   IncludePathComputer comp(source);
   comp.computeForeground();
@@ -311,7 +308,7 @@ QList<KDevelop::IncludeItem> allFilesInIncludePath(const QString& source, bool l
     } else {
       paths = addIncludePaths;
       if(!onlyAddedIncludePaths) {
-        foreach(const KUrl& path, findIncludePaths(source)) {
+        foreach(const Path& path, findIncludePaths(source)) {
           paths += path.toLocalFile();
         }
 

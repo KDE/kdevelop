@@ -31,7 +31,7 @@
 #include <language/codegen/coderepresentation.h>
 #include <language/codecompletion/codecompletiontesthelper.h>
 #include <language/duchain/duchainutils.h>
-#include <language/interfaces/iproblem.h>
+#include <language/duchain/problem.h>
 
 #include "codecompletion/missingincludeitem.h"
 #include "codecompletion/context.h"
@@ -181,8 +181,10 @@ void TestSpecialCompletion::testIncludeGrouping()
     m_projects->addProject(project);
 
     KTempDir dir1;
+    QVERIFY(dir1.exists());
     const QString dir1Name = QFileInfo(dir1.name()).dir().dirName() + "/";
     KTempDir dir2;
+    QVERIFY(dir2.exists());
     const QString dir2Name = QFileInfo(dir2.name()).dir().dirName() + "/";
 
     TestFile includeA("class A {};", "h", project, dir1Name);
@@ -193,6 +195,10 @@ void TestSpecialCompletion::testIncludeGrouping()
     includeD.parse(TopDUContext::AllDeclarationsAndContexts);
     TestFile includeC("class C {};", "h", project, dir1Name);
     includeC.parse(TopDUContext::AllDeclarationsAndContexts);
+
+    QVERIFY(QFile::exists(dir1.name() + includeA.url().toUrl().fileName()));
+    QVERIFY(QFile::exists(dir2.name() + includeB.url().toUrl().fileName()));
+    QVERIFY(QFile::exists(dir2.name() + includeD.url().toUrl().fileName()));
 
     TestFile active("#include \"" + dir1Name + includeA.url().toUrl().fileName() + "\"\n"
                     "#include \"" + dir2Name + includeB.url().toUrl().fileName() + "\"\n"
@@ -222,8 +228,10 @@ void TestSpecialCompletion::testIncludeGrouping()
     DUChainReadLocker lock;
 
     QVERIFY(active.topContext());
+    QVERIFY(active.topContext()->problems().isEmpty());
     TopDUContext* top = DUChainUtils::contentContextFromProxyContext(active.topContext());
     QVERIFY(top);
+    QCOMPARE(top->importedParentContexts().size(), 3);
 
     CompletionItemTester tester(top->childContexts().last(), "C::");
     QVERIFY(tester.completionContext->isValid());

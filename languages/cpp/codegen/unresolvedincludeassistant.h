@@ -21,6 +21,7 @@
 
 #include <interfaces/iassistant.h>
 #include <language/duchain/indexedstring.h>
+#include <language/duchain/problem.h>
 #include <kurl.h>
 
 
@@ -57,6 +58,31 @@ public:
 private:
   KDevelop::IndexedString m_url;
   QString m_directive;
+};
+
+class MissingIncludePathProblem : public KDevelop::Problem
+{
+public:
+    using Ptr = KSharedPtr<MissingIncludePathProblem>;
+
+    MissingIncludePathProblem() = default;
+    MissingIncludePathProblem(KDevelop::ProblemData& data)
+      : KDevelop::Problem(data)
+    {}
+
+    virtual KSharedPtr<KDevelop::IAssistant> solutionAssistant() const
+    {
+      return m_solution;
+    }
+
+    void setSolutionAssistant(const KSharedPtr<KDevelop::IAssistant>& assistant)
+    {
+      m_solution = assistant;
+    }
+
+private:
+    /// FIXME: persist the data for the MissingIncludePathAssistant!
+    KSharedPtr<KDevelop::IAssistant> m_solution;
 };
 
 }

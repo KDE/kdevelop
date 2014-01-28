@@ -23,6 +23,7 @@
 
 #include <interfaces/context.h>
 #include <language/codegen/documentchangeset.h>
+#include <language/codegen/basicrefactoring.h>
 
 namespace KDevelop {
 class ContextMenuExtension;
@@ -30,14 +31,19 @@ class IndexedDeclaration;
 class Declaration;
 }
 
-class SimpleRefactoring : public QObject {
+class SimpleRefactoring : public KDevelop::BasicRefactoring {
   Q_OBJECT
 
 public:
-  static SimpleRefactoring& self();
-  void doContextMenu(KDevelop::ContextMenuExtension& extension, KDevelop::Context* context);
+  explicit SimpleRefactoring(QObject* parent = 0);
+  void fillContextMenu(KDevelop::ContextMenuExtension& extension, KDevelop::Context* context);
 
-  void startInteractiveRename(KDevelop::IndexedDeclaration decl);
+  void startInteractiveRename(const KDevelop::IndexedDeclaration &decl);
+
+  KDevelop::DocumentChangeSet::ChangeResult applyChangesToDeclarations(const QString& oldName,
+                                                                       const QString& newName,
+                                                                       KDevelop::DocumentChangeSet& changes,
+                                                                       const QList<KDevelop::IndexedDeclaration>& declarations);
 
   /**
    * @return true if the declaration's file should be renamed if the declaration
@@ -66,17 +72,12 @@ public:
   static QString moveIntoSource(const KDevelop::IndexedDeclaration& decl);
 
 public slots:
-  void executeRenameAction();
   void executeMoveIntoSourceAction();
 
 private slots:
   void applyChangesDelayed();
 
 private:
-  ///Duchain does not need to be read-locked
-  ///If @p allowUse is false, a declaration that is declared in the current line is returned(if one exists)
-  KDevelop::IndexedDeclaration declarationUnderCursor(bool allowUse = true);
-
   KDevelop::DocumentChangeSet m_pendingChanges;
 };
 
