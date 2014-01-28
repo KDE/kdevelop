@@ -294,7 +294,25 @@ private:
         return t;
     }
 
-    template<CXTypeKind TK, EnableIf<TK == CXType_Int128 || TK == CXType_UInt128 || TK == CXType_Vector || TK == CXType_Unexposed> = dummy>
+    template<CXTypeKind TK, EnableIf<TK == CXType_Int128> = dummy>
+    AbstractType *createType(CXType) const
+    {
+        auto t = new DelayedType;
+        static const IndexedTypeIdentifier id("__int128");
+        t->setIdentifier(id);
+        return t;
+    }
+
+    template<CXTypeKind TK, EnableIf<TK == CXType_UInt128> = dummy>
+    AbstractType *createType(CXType) const
+    {
+        auto t = new DelayedType;
+        static const IndexedTypeIdentifier id("unsigned __int128");
+        t->setIdentifier(id);
+        return t;
+    }
+
+    template<CXTypeKind TK, EnableIf<TK == CXType_Vector || TK == CXType_Unexposed> = dummy>
     AbstractType *createType(CXType type) const
     {
         auto t = new DelayedType;
