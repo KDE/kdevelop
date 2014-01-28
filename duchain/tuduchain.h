@@ -175,6 +175,12 @@ private:
         auto decl = createDeclarationCommon<CK, DeclType>(cursor, id);
         DUChainWriteLocker lock;
         decl->setContext(m_parentContext->context);
+        //TODO: if (DeclType::hasIdentifiedType)
+        if (IdentifiedType *id = dynamic_cast<IdentifiedType*>(type.unsafeData())) {
+            if (!id->declarationId().isValid()) {
+                id->setDeclaration(decl);
+            }
+        }
         decl->setAbstractType(type);
         return decl;
     }
