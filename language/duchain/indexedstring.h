@@ -16,8 +16,6 @@
 
 //krazy:excludeall=dpointer,inline
 
-#include <config-kdevplatform.h>
-
 #include <QtCore/QMetaType>
 
 #include "../languageexport.h"

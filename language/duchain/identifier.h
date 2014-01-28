@@ -24,7 +24,6 @@
 #include <QtCore/QStringList>
 #include <QtCore/QMetaType>
 #include <util/kdevvarlengtharray.h>
-#include <config-kdevplatform.h>
 
 #include "../languageexport.h"
 #include "referencecounting.h"
