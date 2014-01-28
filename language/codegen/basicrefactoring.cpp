@@ -150,16 +150,14 @@ DocumentChangeSet::ChangeResult BasicRefactoring::applyChangesToDeclarations(con
 KDevelop::IndexedDeclaration BasicRefactoring::declarationUnderCursor(bool allowUse)
 {
     KTextEditor::View* view = ICore::self()->documentController()->activeTextDocumentView();
+    Q_ASSERT(view);
     KTextEditor::Document* doc = view->document();
-    if (doc && view) {
-        DUChainReadLocker lock;
-        if (allowUse)
-            return DUChainUtils::itemUnderCursor(doc->url(), SimpleCursor(view->cursorPosition()));
-        else
-            return DUChainUtils::declarationInLine(SimpleCursor(view->cursorPosition()), DUChainUtils::standardContextForUrl(doc->url()));
-    }
 
-    return KDevelop::IndexedDeclaration();
+    DUChainReadLocker lock;
+    if (allowUse)
+        return DUChainUtils::itemUnderCursor(doc->url(), SimpleCursor(view->cursorPosition()));
+    else
+        return DUChainUtils::declarationInLine(SimpleCursor(view->cursorPosition()), DUChainUtils::standardContextForUrl(doc->url()));
 }
 
 void BasicRefactoring::startInteractiveRename(const KDevelop::IndexedDeclaration &decl)
