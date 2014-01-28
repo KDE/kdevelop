@@ -79,7 +79,7 @@ public:
     return QVariant();
   }
 
-  virtual void execute(KTextEditor::Document* document, const KTextEditor::Range& word) = 0;
+  virtual void execute(KTextEditor::View* view, const KTextEditor::Range& word) = 0;
 
   virtual int inheritanceDepth() const {
     return includeItem.pathNumber;
