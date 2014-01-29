@@ -274,26 +274,24 @@ CXChildVisitResult TUDUChain::buildUse<CXCursor_CXXBaseSpecifier>(CXCursor curso
     // TODO: get access policy and virtual bits
     bool virtualInherited = false;
     Declaration::AccessPolicy access = Declaration::Public;
-    auto type = makeType<CXCursor_CXXBaseSpecifier>(cursor);
-    auto idType = dynamic_cast<const IdentifiedType*>(type.constData());
 
-    if (!idType) {
-        kWarning() << "Failed to get identified type for base class" << ClangString(clang_getCursorDisplayName(cursor));
+    auto type = clang_getCursorType(cursor);
+    auto decl = findDeclaration(clang_getTypeDeclaration(type), m_includes);
+    if (!decl) {
+        // this happens for templates with template-dependent base classes e.g. - dunno whether we can/should do more here
+        debug() << "failed to find declaration for base specifier:" << ClangString(clang_getCursorDisplayName(cursor));
         return CXChildVisit_Continue;
     }
 
     DUChainWriteLocker lock;
     auto currentContext = m_parentContext->context;
     auto top = currentContext->topContext();
-    auto idDecl = idType->declaration(top);
-    if (!idDecl) {
-        kWarning() << "failed to find declaration for id:" << type->toString();
-    } else if (auto import = idDecl->logicalInternalContext(top)) {
+    if (auto import = decl->logicalInternalContext(top)) {
         currentContext->addImportedParentContext(import);
     }
     auto classDecl = dynamic_cast<KDevelop::ClassDeclaration*>(currentContext->owner());
     Q_ASSERT(classDecl);
 
-    classDecl->addBaseClass({type->indexed(), access, virtualInherited});
+    classDecl->addBaseClass({decl->indexedType(), access, virtualInherited});
     return CXChildVisit_Continue;
 }

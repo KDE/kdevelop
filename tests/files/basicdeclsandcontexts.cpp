@@ -108,3 +108,7 @@ namespace blub = bar;
 /// "kind" : "Type"
 template<class T>
 struct myTemplate {};
+
+/// "toString" : "struct myTemplateChild",
+/// "kind" : "Type"
+struct myTemplateChild : myTemplate<int> { };
