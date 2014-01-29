@@ -417,10 +417,7 @@ void setDeclData(CXCursor cursor, ClassFunctionDeclaration* decl) const
     {
         IdentifiedType *id = dynamic_cast<IdentifiedType*>(type.unsafeData());
         Q_ASSERT(id);
-        if (!m_update || id->declaration(decl->topContext()) != decl) {
-            Q_ASSERT(!id->declarationId().isValid());
-            id->setDeclaration(decl);
-        }
+        id->setDeclaration(decl);
         decl->setAbstractType(type);
     }
 //END setType
