@@ -20,12 +20,7 @@
 
 
 // Qt
-#include <QtGui/QAction>
-#include <QtGui/QTabWidget>
-#include <QtGui/QLabel>
-#include <QLineEdit>
-#include <QHBoxLayout>
-#include <QPushButton>
+#include <QAction>
 
 // KDE / KDevelop
 #include <KParts/MainWindow>
@@ -44,6 +39,7 @@
 #include <language/interfaces/codecontext.h>
 #include <duchain/use.h>
 
+#include "ui_basicrefactoring.h"
 
 namespace KDevelop
 {
@@ -181,8 +177,11 @@ void BasicRefactoring::startInteractiveRename(const KDevelop::IndexedDeclaration
     QString replacementName;
 
     BasicRefactoringCollector *collector = new BasicRefactoringCollector(decl);
-    QPointer<QDialog> dialog = new QDialog();
-    QTabWidget tabWidget;
+
+    Ui::RenameDialog renameDialog;
+    QDialog dialog;
+    renameDialog.setupUi(&dialog);
+
     UsesWidget uses(declaration, collector);
 
     //So the context-links work
@@ -191,44 +190,19 @@ void BasicRefactoring::startInteractiveRename(const KDevelop::IndexedDeclaration
     if (abstractNavigationWidget)
         connect(&uses, SIGNAL(navigateDeclaration(KDevelop::IndexedDeclaration)), abstractNavigationWidget, SLOT(navigateDeclaration(KDevelop::IndexedDeclaration)));
 
-    QVBoxLayout verticalLayout;
-    QHBoxLayout actionsLayout;
-    dialog->setLayout(&verticalLayout);
-    dialog->setWindowTitle(i18n("Rename %1", declaration->toString()));
+    dialog.setWindowTitle(i18n("Rename %1", declaration->toString()));
+    renameDialog.edit->selectAll();
 
-    QLabel newNameLabel(i18n("New name:"));
-    actionsLayout.addWidget(&newNameLabel);
-
-    QLineEdit edit(declaration->identifier().identifier().str());
-    newNameLabel.setBuddy(&edit);
-
-    actionsLayout.addWidget(&edit);
-    edit.setText(originalName);
-    edit.setFocus();
-    edit.selectAll();
-    QPushButton goButton(i18n("Rename"));
-    goButton.setToolTip(i18n("Note: All overloaded functions, overloads, forward-declarations, etc. will be renamed too"));
-    actionsLayout.addWidget(&goButton);
-    connect(&goButton, SIGNAL(clicked(bool)), dialog, SLOT(accept()));
-
-    QPushButton cancelButton(i18n("Cancel"));
-    actionsLayout.addWidget(&cancelButton);
-    verticalLayout.addLayout(&actionsLayout);
-
-    tabWidget.addTab(&uses, i18n("Uses"));
+    renameDialog.tabWidget->addTab(&uses, i18n("Uses"));
     if (navigationWidget)
-        tabWidget.addTab(navigationWidget, i18n("Declaration Info"));
-
-    verticalLayout.addWidget(&tabWidget);
-
-    connect(&cancelButton, SIGNAL(clicked(bool)), dialog, SLOT(reject()));
+        renameDialog.tabWidget->addTab(navigationWidget, i18n("Declaration Info"));
 
     lock.unlock();
-    dialog->resize(750, 550);
-    if (dialog->exec() != QDialog::Accepted)
+
+    if (dialog.exec() != QDialog::Accepted)
         return;
 
-    replacementName = edit.text();
+    replacementName = renameDialog.edit->text();
     if (replacementName == originalName || replacementName.isEmpty())
         return;
 
