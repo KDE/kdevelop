@@ -25,8 +25,6 @@
 
 #include <clang-c/Index.h>
 
-#include <QSharedPointer>
-
 #include "duchainexport.h"
 
 namespace KDevelop {
