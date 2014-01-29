@@ -266,26 +266,6 @@ AbstractType::Ptr TUDUChain::makeType(CXType type) const
     }
 }
 
-AbstractType::Ptr TUDUChain::makeType(CXCursor cursor) const
-{
-    auto clangType = clang_getCursorType(cursor);
-    AbstractType::Ptr type;
-    if (clangType.kind == CXType_Invalid && CursorKindTraits::isClassTemplate(clang_getCursorKind(cursor))) {
-        // class templates should also have some type associated with them
-        type = new StructureType;
-    } else {
-        type = makeType(clangType);
-    }
-    if (auto idType = dynamic_cast<IdentifiedType*>(type.unsafeData())) {
-        DeclarationPointer decl = findDeclaration(clang_getTypeDeclaration(clangType), m_includes);
-        DUChainReadLocker lock;
-        if (decl) {
-            idType->setDeclaration(decl.data());
-        }
-    }
-    return type;
-}
-
 template<>
 CXChildVisitResult TUDUChain::buildUse<CXCursor_CXXBaseSpecifier>(CXCursor cursor)
 {
@@ -294,7 +274,7 @@ CXChildVisitResult TUDUChain::buildUse<CXCursor_CXXBaseSpecifier>(CXCursor curso
     // TODO: get access policy and virtual bits
     bool virtualInherited = false;
     Declaration::AccessPolicy access = Declaration::Public;
-    auto type = makeType(cursor);
+    auto type = makeType<CXCursor_CXXBaseSpecifier>(cursor);
     auto idType = dynamic_cast<const IdentifiedType*>(type.constData());
 
     if (!idType) {

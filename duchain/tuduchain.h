@@ -57,8 +57,6 @@ private:
     KDevelop::RangeInRevision makeContextRange(CXCursor cursor) const;
     KDevelop::Identifier makeId(CXCursor cursor) const;
     QByteArray makeComment(CXComment comment) const;
-    AbstractType::Ptr makeType(CXCursor cursor) const;
-    AbstractType::Ptr makeType(CXType type) const;
 
 //BEGIN dispatch*
     template<CXCursorKind CK, EnableIf<CursorKindTraits::isUse(CK)> = dummy>
@@ -118,7 +116,7 @@ private:
     CXChildVisitResult buildDeclaration(CXCursor cursor)
     {
         auto id = makeId(cursor);
-        auto type = makeType(cursor);
+        auto type = makeType<CK>(cursor);
         if (hasContext) {
             auto context = createContext<CK, CursorKindTraits::contextType(CK)>(cursor, id);
             createDeclaration<CK, DeclType>(cursor, type, id, context);
@@ -374,6 +372,38 @@ void setDeclData(CXCursor cursor, ClassFunctionDeclaration* decl) const
 }
 
 //END setDeclData
+
+//BEGIN makeType
+    template<CXCursorKind CK, EnableIf<!CursorKindTraits::isIdentifiedType(CK)> = dummy>
+    AbstractType::Ptr makeType(CXCursor cursor) const
+    {
+        auto clangType = clang_getCursorType(cursor);
+        auto type = makeType(clangType);
+        if ( auto idType = dynamic_cast<IdentifiedType*>(type.unsafeData())) {
+            if (!idType->declarationId().isValid()) {
+                DeclarationPointer decl = findDeclaration(clang_getTypeDeclaration(clangType), m_includes);
+                DUChainReadLocker lock;
+                if (decl) {
+                    idType->setDeclaration(decl.data());
+                }
+            }
+        }
+        return type;
+    }
+
+    template<CXCursorKind CK, EnableIf<CursorKindTraits::isIdentifiedType(CK)> = dummy>
+    AbstractType::Ptr makeType(CXCursor cursor) const
+    {
+        if (CursorKindTraits::isClassTemplate(CK)) {
+            // class templates should also have some type associated with them
+            return AbstractType::Ptr(new StructureType);
+        } else {
+            return makeType(clang_getCursorType(cursor));
+        }
+    }
+
+    AbstractType::Ptr makeType(CXType type) const;
+//END makeType
 
 //BEGIN setType
     template<CXCursorKind CK, EnableIf<!CursorKindTraits::isIdentifiedType(CK)> = dummy>
