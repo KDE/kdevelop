@@ -19,8 +19,6 @@
 #ifndef KDEVPLATFORM_DECLARATION_ID_H
 #define KDEVPLATFORM_DECLARATION_ID_H
 
-#include "../editor/cursorinrevision.h"
-
 #include "indexeddeclaration.h"
 #include "identifier.h"
 #include "instantiationinformation.h"
