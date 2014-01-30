@@ -140,6 +140,22 @@ QString pathForTopContext(const uint topContextIndex)
   return basePath() + QString::number(topContextIndex);
 }
 
+template<typename F>
+void loadPartialData(const uint topContextIndex, F callback)
+{
+  QFile file(pathForTopContext(topContextIndex));
+  if (file.open(QIODevice::ReadOnly)) {
+     uint readValue;
+     file.read((char*)&readValue, sizeof(uint));
+     // now readValue is filled with the top-context data size
+
+     // We only read the most needed stuff, not the whole top-context data
+     QByteArray data = file.read(sizeof(TopDUContextData));
+     const TopDUContextData* topData = reinterpret_cast<const TopDUContextData*>(data.constData());
+     callback(topData);
+  }
+}
+
 }
 
 //BEGIN DUChainItemStorage
@@ -410,64 +426,38 @@ void KDevelop::TopDUContextDynamicData::unmap() {
   m_mappedDataSize = 0;
 }
 
-QList<IndexedDUContext> TopDUContextDynamicData::loadImporters(uint topContextIndex) {
-  QList<IndexedDUContext> ret;
-
-  QFile file(pathForTopContext(topContextIndex));
-  if(file.open(QIODevice::ReadOnly)) {
-     uint readValue;
-     file.read((char*)&readValue, sizeof(uint));
-     //now readValue is filled with the top-context data size
-
-     //We only read the most needed stuff, not the whole top-context data
-     QByteArray data = file.read(readValue);
-     const TopDUContextData* topData = reinterpret_cast<const TopDUContextData*>(data.constData());
-     FOREACH_FUNCTION(const IndexedDUContext& importer, topData->m_importers)
-      ret << importer;
-  }
-
-  return ret;
-}
-
-QList<IndexedDUContext> TopDUContextDynamicData::loadImports(uint topContextIndex) {
-  QList<IndexedDUContext> ret;
-
-  QFile file(pathForTopContext(topContextIndex));
-  if(file.open(QIODevice::ReadOnly)) {
-     uint readValue;
-     file.read((char*)&readValue, sizeof(uint));
-     //now readValue is filled with the top-context data size
-
-     //We only read the most needed stuff, not the whole top-context data
-     QByteArray data = file.read(readValue);
-     const TopDUContextData* topData = reinterpret_cast<const TopDUContextData*>(data.constData());
-     FOREACH_FUNCTION(const DUContext::Import& import, topData->m_importedContexts)
-      ret << import.indexedContext();
-  }
-
-  return ret;
-}
-
 bool TopDUContextDynamicData::fileExists(uint topContextIndex)
 {
   return QFile::exists(pathForTopContext(topContextIndex));
 }
 
+QList<IndexedDUContext> TopDUContextDynamicData::loadImporters(uint topContextIndex) {
+  QList<IndexedDUContext> ret;
+  loadPartialData(topContextIndex, [&ret] (const TopDUContextData* topData) {
+    ret.reserve(topData->m_importersSize());
+    FOREACH_FUNCTION(const IndexedDUContext& importer, topData->m_importers)
+      ret << importer;
+  });
+  return ret;
+}
+
+QList<IndexedDUContext> TopDUContextDynamicData::loadImports(uint topContextIndex) {
+  QList<IndexedDUContext> ret;
+  loadPartialData(topContextIndex, [&ret] (const TopDUContextData* topData) {
+    ret.reserve(topData->m_importedContextsSize());
+    FOREACH_FUNCTION(const DUContext::Import& import, topData->m_importedContexts)
+      ret << import.indexedContext();
+  });
+  return ret;
+}
+
 IndexedString TopDUContextDynamicData::loadUrl(uint topContextIndex) {
-  QFile file(pathForTopContext(topContextIndex));
-  if(file.open(QIODevice::ReadOnly)) {
-     uint readValue;
-     file.read((char*)&readValue, sizeof(uint));
-     //now readValue is filled with the top-context data size
-
-     //We only read the most needed stuff, not the whole top-context data
-     QByteArray data = file.read(sizeof(TopDUContextData));
-     const TopDUContextData* topData = reinterpret_cast<const TopDUContextData*>(data.constData());
-     Q_ASSERT(topData->m_url.isEmpty() || topData->m_url.index() >> 16);
-     return topData->m_url;
-  }
-
-  return IndexedString();
+  IndexedString url;
+  loadPartialData(topContextIndex, [&url] (const TopDUContextData* topData) {
+    Q_ASSERT(topData->m_url.isEmpty() || topData->m_url.index() >> 16);
+    url = topData->m_url;
+  });
+  return url;
 }
 
 void TopDUContextDynamicData::loadData() const {
