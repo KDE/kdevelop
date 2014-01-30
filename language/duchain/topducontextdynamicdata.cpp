@@ -42,8 +42,6 @@
 #define USE_MMAP
 using namespace KDevelop;
 
-static QMutex s_temporaryDataMutex(QMutex::Recursive);
-
 namespace {
 
 void saveDUChainItem(QList<ArrayWithPosition>& data, DUChainBase& item, uint& totalDataOffset) {
@@ -187,7 +185,6 @@ void TopDUContextDynamicData::DUChainItemStorage<Item>::clearItemIndex(Item* ite
       }
     }
   } else {
-    QMutexLocker lock(&s_temporaryDataMutex);
     const uint realIndex = 0x0fffffff - index; //We always keep the highest bit at zero
     if (realIndex == 0 || realIndex > uint(temporaryItems.size())) {
       return;
@@ -257,7 +254,6 @@ uint TopDUContextDynamicData::DUChainItemStorage<Item>::allocateItemIndex(Item* 
     items.append(item);
     return items.size();
   } else {
-    QMutexLocker lock(&s_temporaryDataMutex);
     temporaryItems.append(item);
     return 0x0fffffff - temporaryItems.size(); //We always keep the highest bit at zero
   }
@@ -284,7 +280,6 @@ template<class Item>
 Item* TopDUContextDynamicData::DUChainItemStorage<Item>::getItemForIndex(uint index) const
 {
   if (index >= (0x0fffffff/2)) {
-    QMutexLocker lock(&s_temporaryDataMutex);
     index = 0x0fffffff - index; //We always keep the highest bit at zero
     if(index == 0 || index > uint(temporaryItems.size()))
       return 0;
