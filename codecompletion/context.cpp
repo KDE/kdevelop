@@ -44,6 +44,8 @@
 using namespace KDevelop;
 
 namespace {
+///Completion results with priority below this value will be shown in "Best Matches" group
+const int MAX_PRIORITY_FOR_BEST_MATCHES = 15;
 
 /**
  * Common base class for Clang code completion items.
@@ -169,6 +171,7 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(con
     QList<CompletionTreeItemPointer> items;
     QList<CompletionTreeItemPointer> macros;
     QList<CompletionTreeItemPointer> builtin;
+    QList<CompletionTreeItemPointer> bestMatches;
 
     QSet<QualifiedIdentifier> handled;
 
@@ -270,7 +273,12 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(con
                 break;
             }
             if (found) {
-                items.append(CompletionTreeItemPointer(new DeclarationItem(found, display, resultType, replacement)));
+                auto item = CompletionTreeItemPointer(new DeclarationItem(found, display, resultType, replacement));
+                if ( clang_getCompletionPriority(result.CompletionString) < MAX_PRIORITY_FOR_BEST_MATCHES) {
+                    bestMatches << item;
+                } else {
+                    items << item;
+                }
                 continue;
             } else {
                 debug() << "Could not find declaration for" << qid;
@@ -294,6 +302,11 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(con
     if (!builtin.isEmpty()) {
         KDevelop::CompletionCustomGroupNode* node = new KDevelop::CompletionCustomGroupNode(i18n("Builtin"), 800);
         node->appendChildren(builtin);
+        m_ungrouped << CompletionTreeElementPointer(node);
+    }
+    if (!bestMatches.isEmpty()) {
+        KDevelop::CompletionCustomGroupNode* node = new KDevelop::CompletionCustomGroupNode(i18n("Best Matches"), 0);
+        node->appendChildren(bestMatches);
         m_ungrouped << CompletionTreeElementPointer(node);
     }
     return items;
