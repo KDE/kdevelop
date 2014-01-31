@@ -78,7 +78,6 @@ AssistantPopup::AssistantPopup(KTextEditor::View* parent, const IAssistant::Ptr&
     connect(m_view, SIGNAL(destroyed(QObject*)),
             this, SLOT(deleteLater()));
     m_view->installEventFilter(this);
-    m_view->setFocus();
 }
 
 AssistantPopupConfig::AssistantPopupConfig(QObject *parent): QObject(parent)
