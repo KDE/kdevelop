@@ -215,6 +215,8 @@ QStringList candidateIncludeFiles(Declaration* decl) {
  * Example: We have 'QState' in our source file, it is unknown
  * This method then looks through the include paths used by @p source and returns all
  * files matching the file name 'QState'
+ *
+ * @note DUChain must be locked
  */
 QStringList candidateIncludeFilesFromNameMatcher(const QString& source, const QualifiedIdentifier& id)
 {
@@ -222,6 +224,11 @@ QStringList candidateIncludeFilesFromNameMatcher(const QString& source, const Qu
   QStringList result;
   for (const IncludeItem& item : includeItems) {
     if (item.name == id.toString() && !isBlacklistedInclude(item.url())) {
+      TopDUContext* top = DUChainUtils::standardContextForUrl(item.url());
+      // if this file was already parsed, and we don't find a declaration for id => discard
+      if (top && top->findDeclarations(id).isEmpty()) {
+        continue;
+      }
       result << item.url().toLocalFile();
     }
   }
