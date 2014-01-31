@@ -18,7 +18,9 @@
 
 #include "includeitem.h"
 
-namespace KDevelop {
+#include <QDebug>
+
+using namespace KDevelop;
 
 IncludeItem::IncludeItem()
     : pathNumber(0)
@@ -39,4 +41,7 @@ KUrl IncludeItem::url() const
   return u;
 }
 
+QDebug operator<<(QDebug dbg, const IncludeItem& item)
+{
+    return dbg << item.url();
 }
