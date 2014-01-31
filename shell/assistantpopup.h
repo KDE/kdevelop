@@ -103,6 +103,7 @@ public:
      */
     AssistantPopup(KTextEditor::View* widget, const KDevelop::IAssistant::Ptr& assistant);
     KDevelop::IAssistant::Ptr assistant() const;
+    virtual bool viewportEvent(QEvent *event);
 
 public slots:
     void executeHideAction();
