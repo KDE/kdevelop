@@ -102,27 +102,19 @@ bool matchesAbbreviation(const QStringRef &word, const QString &typed)
   return matchesAbbreviationHelper(word, typed, offsets, depth);
 }
 
-AbbreviationMatchQuality matchesPath(const QVector< QString > &path, const QString &typed)
+bool matchesPath(const QString &path, const QString &typed)
 {
   int consumed = 0;
-  bool sequential = true;
-  for ( const QString& item: path ) {
-    int pos = 0;
-    // try to find all the characters in typed in the right order in the path;
-    // jumps are allowed everywhere
-    bool componentHasMatch = false;
-    while ( consumed < typed.size() && pos < item.size() ) {
-      if ( typed.at(consumed).toLower() == item.at(pos).toLower() ) {
-        consumed++;
-        componentHasMatch = true;
-      }
-      else if ( componentHasMatch ) {
-        sequential = false;
-      }
-      pos++;
+  int pos = 0;
+  // try to find all the characters in typed in the right order in the path;
+  // jumps are allowed everywhere
+  while ( consumed < typed.size() && pos < path.size() ) {
+    if ( typed.at(consumed).toLower() == path.at(pos).toLower() ) {
+      consumed++;
     }
+    pos++;
   }
-  return consumed == typed.size() ? (sequential ? MatchesSequentially : MatchesSomewhere) : NoMatch;
+  return consumed == typed.size();
 }
 
 bool matchesAbbreviationMulti(const QString &word, const QStringList &typedFragments)
@@ -156,3 +148,5 @@ bool matchesAbbreviationMulti(const QString &word, const QStringList &typedFragm
   }
   return matchedFragments == typedFragments.size();
 }
+
+// kate: space-indent on; indent-width 2

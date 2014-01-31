@@ -244,15 +244,14 @@ public:
                 ++pathIndex;
             }
 
-            AbbreviationMatchQuality fuzzyMatch = NoMatch;
             if (searchIndex != text.size()) {
-                if ( (fuzzyMatch = matchesPath(segments, joinedText)) == NoMatch ) {
+                if ( ! matchesPath(segments.last(), joinedText) ) {
                     continue;
                 }
             }
 
             // prefer matches whose last element starts with the filter
-            if ((pathIndex == segments.size() && lastMatchIndex == 0) || fuzzyMatch == MatchesSequentially) {
+            if (pathIndex == segments.size() && lastMatchIndex == 0) {
                 startMatches << data;
             } else {
                 otherMatches << data;
