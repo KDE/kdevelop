@@ -51,16 +51,6 @@ void RichTextPushButton::setText(const QString &text)
     QPushButton::setText(text);
 }
 
-QString RichTextPushButton::text() const
-{
-    if (isRichText) {
-        QTextDocument richText;
-        richText.setHtml(htmlText);
-        return richText.toPlainText();
-    } else
-        return QPushButton::text();
-}
-
 QSize RichTextPushButton::sizeHint() const
 {
     if(!isRichText) {
