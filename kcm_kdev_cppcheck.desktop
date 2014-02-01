@@ -11,6 +11,7 @@ X-KDE-ParentComponents=kdevplatformproject,kdevcppcheck
 X-KDE-CfgDlgHierarchy=GENERAL
 
 Name=Cppcheck
+Name[bs]=Cppcheck
 Name[cs]=Cppcheck
 Name[de]=Cppcheck
 Name[es]=Cppcheck
@@ -23,6 +24,7 @@ Name[sv]=Cppcheck
 Name[uk]=Cppcheck
 Name[x-test]=xxCppcheckxx
 Comment=Configure Cppcheck
+Comment[bs]=Konfiguriši Cppcheck
 Comment[cs]=Nastavit Cppcheck
 Comment[de]=Cppcheck einrichten
 Comment[es]=Configurar Cppcheck
