@@ -246,6 +246,7 @@ void ScriptAppConfigType::configureLaunchFromCmdLineArguments(KConfigGroup cfg, 
     cfg.writeEntry( ExecuteScriptPlugin::interpreterEntry, a.takeFirst() );
     cfg.writeEntry( ExecuteScriptPlugin::executableEntry, a.takeFirst() );
     cfg.writeEntry( ExecuteScriptPlugin::argumentsEntry, KShell::joinArgs(a) );
+    cfg.writeEntry( ExecuteScriptPlugin::runCurrentFileEntry, false );
     cfg.sync();
 }
 
