@@ -20,7 +20,6 @@
 
 #include "simplerefactoring.h"
 
-#include "progressdialogs.h"
 #include "../cpputils.h"
 
 #include <QAction>
@@ -329,16 +328,6 @@ void SimpleRefactoring::startInteractiveRename(const KDevelop::IndexedDeclaratio
     NameAndCollector nc = newNameForDeclaration(DeclarationPointer(declaration));
     if (nc.newName == originalName || nc.newName.isEmpty())
         return;
-
-    //Now just start doing the actual changes, no matter whether the collector is ready or not
-    CollectorProgressDialog collectorProgress(i18n("Renaming \"%1\" to \"%2\"", originalName, nc.newName), *nc.collector);
-    if (!nc.collector->isReady()) {
-        collectorProgress.exec();
-        if (collectorProgress.result() != QDialog::Accepted) {
-            kDebug() << "searching aborted";
-            return;
-        }
-    }
 
     DocumentChangeSet changes = BasicRefactoring::renameCollectedDeclarations(nc.collector.data(), nc.newName, originalName, false);
 
