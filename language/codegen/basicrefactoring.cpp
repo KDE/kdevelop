@@ -39,6 +39,8 @@
 #include <language/interfaces/codecontext.h>
 #include <duchain/use.h>
 
+#include "progressdialogs/refactoringdialog.h"
+
 #include "ui_basicrefactoring.h"
 
 namespace KDevelop
@@ -235,6 +237,14 @@ BasicRefactoring::NameAndCollector BasicRefactoring::newNameForDeclaration(const
 
     if (dialog.exec() != QDialog::Accepted)
         return {};
+
+    RefactoringProgressDialog refactoringProgress(i18n("Renaming \"%1\" to \"%2\"", declaration->toString(), renameDialog.edit->text()), collector.data());
+    if (!collector->isReady()) {
+        refactoringProgress.exec();
+        if (refactoringProgress.result() != QDialog::Accepted) {
+            return {};
+        }
+    }
 
     //TODO: input validation
     return {renameDialog.edit->text(),collector};
