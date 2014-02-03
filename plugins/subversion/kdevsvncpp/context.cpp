@@ -210,6 +210,14 @@ public:
       // get the config based on the configDir passed in
       svn_config_get_config(&ctx->config, c_configDir, pool);
 
+      // disable external diff and diff3 commands
+      svn_config_t *config = (svn_config_t *)apr_hash_get(
+        ctx->config, SVN_CONFIG_CATEGORY_CONFIG, APR_HASH_KEY_STRING);
+      svn_config_set(config, SVN_CONFIG_SECTION_HELPERS,
+                     SVN_CONFIG_OPTION_DIFF_CMD, NULL);
+      svn_config_set(config, SVN_CONFIG_SECTION_HELPERS,
+                     SVN_CONFIG_OPTION_DIFF3_CMD, NULL);
+
       // tell the auth functions where the config is
       svn_auth_set_parameter(ab, SVN_AUTH_PARAM_CONFIG_DIR,
                              c_configDir);
