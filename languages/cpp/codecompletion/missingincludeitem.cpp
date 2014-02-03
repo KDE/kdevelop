@@ -223,6 +223,10 @@ QStringList candidateIncludeFilesFromNameMatcher(const QString& source, const Qu
   const QList<IncludeItem> includeItems = CppUtils::allFilesInIncludePath(source, false, QString());
   QStringList result;
   for (const IncludeItem& item : includeItems) {
+    // we never want to have directories in the result set
+    if (item.isDirectory)
+      continue;
+
     if (item.name == id.toString() && !isBlacklistedInclude(item.url())) {
       TopDUContext* top = DUChainUtils::standardContextForUrl(item.url());
       // if this file was already parsed, and we don't find a declaration for id => discard
