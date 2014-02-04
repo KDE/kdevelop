@@ -126,9 +126,12 @@ public:
 
     static QList< SessionInfo > availableSessionInfo();
     
-    /// Shows a dialog where the user can choose the session
-    /// @param headerText an additional text that will be shown at the top in a label
-    /// @param onlyRunning whether only currently running sessions should be shown
+    /**
+     * Shows a dialog where the user can choose the session
+     * @param headerText an additional text that will be shown at the top in a label
+     * @param onlyRunning whether only currently running sessions should be shown
+     * @return UUID on success, empty string in any other case
+     */
     static QString showSessionChooserDialog(QString headerText = QString(), bool onlyRunning = false);
 
     /// Should be called if session to be opened is locked.
