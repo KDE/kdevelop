@@ -103,6 +103,10 @@ public:
 
     QVariant data(const QModelIndex& index, int role, const CodeCompletionModel* model) const override
     {
+        if (role == CodeCompletionModel::MatchQuality && m_bestMatchQuality) {
+            return m_bestMatchQuality;
+        }
+
         auto ret = CompletionItem<NormalDeclarationCompletionItem>::data(index, role, model);
         if (ret.isValid()) {
             return ret;
@@ -140,6 +144,15 @@ public:
     {
         return new ClangNavigationWidget(m_declaration);
     }
+
+    ///Sets match quality from 0 to 10. 10 is the best fit.
+    void setBestMatchQuality(int value)
+    {
+        m_bestMatchQuality = value;
+    }
+
+private:
+    int m_bestMatchQuality = 0;
 };
 
 /**
@@ -194,7 +207,6 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(con
     QList<CompletionTreeItemPointer> items;
     QList<CompletionTreeItemPointer> macros;
     QList<CompletionTreeItemPointer> builtin;
-    QList<CompletionTreeItemPointer> bestMatches;
 
     QSet<Declaration*> handled;
 
@@ -297,12 +309,16 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(con
             }
 
             if (found) {
-                auto item = CompletionTreeItemPointer(new DeclarationItem(found, display, resultType, replacement));
-                if ( clang_getCompletionPriority(result.CompletionString) < MAX_PRIORITY_FOR_BEST_MATCHES) {
-                    bestMatches << item;
-                } else {
-                    items << item;
+                auto item = new DeclarationItem(found, display, resultType, replacement);
+
+                bool bestMatch = clang_getCompletionPriority(result.CompletionString) < MAX_PRIORITY_FOR_BEST_MATCHES;
+
+                //don't set best match property for internal identifiers, also prefer declarations from current file
+                if (bestMatch && !found->indexedIdentifier().identifier().toString().startsWith("__") ) {
+                    item->setBestMatchQuality(found->context()->url() == ctx->url() ? 10 : 9 );
                 }
+
+                items << CompletionTreeItemPointer(item);
                 continue;
             } else {
                 debug() << "Could not find declaration for" << qid;
@@ -326,11 +342,6 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(con
     if (!builtin.isEmpty()) {
         KDevelop::CompletionCustomGroupNode* node = new KDevelop::CompletionCustomGroupNode(i18n("Builtin"), 800);
         node->appendChildren(builtin);
-        m_ungrouped << CompletionTreeElementPointer(node);
-    }
-    if (!bestMatches.isEmpty()) {
-        KDevelop::CompletionCustomGroupNode* node = new KDevelop::CompletionCustomGroupNode(i18n("Best Matches"), 0);
-        node->appendChildren(bestMatches);
         m_ungrouped << CompletionTreeElementPointer(node);
     }
     return items;
