@@ -252,7 +252,7 @@ void VariableTree::setupActions()
     m_copyVariableValue->setShortcut(QKeySequence::Copy);
     connect(m_copyVariableValue, SIGNAL(triggered(bool)), SLOT(copyVariableValue()));
 
-    m_stopOnChange = new QAction(i18n("&Stop on change"), this);
+    m_stopOnChange = new QAction(i18n("&Stop on Change"), this);
     connect(m_stopOnChange, SIGNAL(triggered(bool)), SLOT(stopOnChange()));
 }
 

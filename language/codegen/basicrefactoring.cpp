@@ -226,7 +226,7 @@ BasicRefactoring::NameAndCollector BasicRefactoring::newNameForDeclaration(const
     if (abstractNavigationWidget)
         connect(&uses, SIGNAL(navigateDeclaration(KDevelop::IndexedDeclaration)), abstractNavigationWidget, SLOT(navigateDeclaration(KDevelop::IndexedDeclaration)));
 
-    dialog.setWindowTitle(i18n("Rename %1", declaration->toString()));
+    dialog.setWindowTitle(i18nc("Renaming some declaration", "Rename \"%1\"", declaration->toString()));
     renameDialog.edit->setText(declaration->identifier().identifier().str());
     renameDialog.edit->selectAll();
 
