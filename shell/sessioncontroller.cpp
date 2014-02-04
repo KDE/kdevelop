@@ -849,10 +849,8 @@ QString SessionController::showSessionChooserDialog(QString headerText, bool onl
     filter->setFocus();
 
     int row = 0;
-    int defaultRow = 0;
 
     QString defaultSession = KGlobal::config()->group( cfgSessionGroup() ).readEntry( cfgActiveSessionEntry(), "default" );
-
 
     foreach(const KDevelop::SessionInfo& si, KDevelop::SessionController::availableSessionInfo())
     {
@@ -865,21 +863,14 @@ QString SessionController::showSessionChooserDialog(QString headerText, bool onl
         if(onlyRunning && !running)
             continue;
 
-        if(si.uuid.toString() == defaultSession)
-            defaultRow = row;
-
         model->setItem(row, 0, new QStandardItem(si.uuid.toString()));
         model->setItem(row, 1, new QStandardItem(si.description));
         model->setItem(row, 2, new QStandardItem);
-
-        if(defaultRow == row && running)
-            ++defaultRow;
 
         ++row;
     }
     model->sort(1);
 
-    int cnsRow = row;
     if(!onlyRunning) {
         model->setItem(row, 0, new QStandardItem);
         model->setItem(row, 1, new QStandardItem(KIcon("window-new"), i18n("Create New Session")));
@@ -888,7 +879,8 @@ QString SessionController::showSessionChooserDialog(QString headerText, bool onl
     dialog.updateState();
     dialog.mainWidget()->layout()->setContentsMargins(0,0,0,0);
 
-    view->selectionModel()->setCurrentIndex(proxy->mapFromSource(model->index(defaultRow, 0)), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
+    const QModelIndex defaultSessionIndex = model->match(model->index(0, 0), Qt::DisplayRole, defaultSession, 1, Qt::MatchExactly).value(0);
+    view->selectionModel()->setCurrentIndex(proxy->mapFromSource(defaultSessionIndex), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
     view->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     ///@todo We need a way to get a proper size-hint from the view, but unfortunately, that only seems possible after the view was shown.
     dialog.setInitialSize(QSize(900, 600));
@@ -899,20 +891,16 @@ QString SessionController::showSessionChooserDialog(QString headerText, bool onl
     }
 
     QModelIndex selected = view->selectionModel()->currentIndex();
-    if(selected.isValid())
-    {
-        QString ret;
-        if( selected.row() == cnsRow ) {
-            qsrand(QDateTime::currentDateTime().toTime_t());
-            ret = QUuid::createUuid().toString();
-        } else {
-            selected = selected.sibling(selected.row(), 0);
-            ret = selected.data().toString();
-        }
-        return ret;
-    }
+    if (!selected.isValid())
+        return QString();
 
-    return QString();
+    const QString selectedSessionId = selected.sibling(selected.row(), 0).data().toString();
+    if (selectedSessionId.isEmpty()) {
+        // "Create New Session" item selected, return a fresh UUID
+        qsrand(QDateTime::currentDateTime().toTime_t());
+        return QUuid::createUuid().toString();
+    }
+    return selectedSessionId;
 }
 
 QString SessionController::handleLockedSession( const QString& sessionName, const QString& sessionId,
