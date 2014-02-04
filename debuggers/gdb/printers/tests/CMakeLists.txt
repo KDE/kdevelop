@@ -57,6 +57,9 @@ target_link_libraries(qlistpod ${QT_QTCORE_LIBRARY})
 add_executable(ktexteditortypes ktexteditortypes.cpp)
 target_link_libraries(ktexteditortypes ${QT_QTCORE_LIBRARY} ${KDE4_KTEXTEDITOR_LIBS})
 
+add_executable(kdeveloptypes kdeveloptypes.cpp)
+target_link_libraries(kdeveloptypes ${QT_QTCORE_LIBRARY} ${KDE4_KTEXTEDITOR_LIBS} ${KDEVPLATFORM_PROJECT_LIBRARIES})
+
 kde4_add_unit_test(qtprinters qtprinters.cpp)
 target_link_libraries(qtprinters
     ${QT_QTCORE_LIBRARY}

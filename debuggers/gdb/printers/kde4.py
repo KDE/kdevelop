@@ -20,7 +20,18 @@ import gdb
 import itertools
 import re
 
+import qt4
+
 from helper import *
+
+class KDevelop_Path:
+    def __init__(self, val):
+        self.val = val
+
+    def to_string(self):
+        iterator = qt4.QVectorPrinter(self.val['m_data'], 'QVector').children()
+        pathSegments = [str(it[1]) for it in iterator]
+        return "(" + ", ".join(pathSegments) + ")" if pathSegments else None
 
 class CursorPrinter:
     "Pretty Printer for KTextEditor::Cursor"
@@ -50,6 +61,8 @@ def register_kde4_printers (obj):
     obj.pretty_printers.append(FunctionLookup(gdb, pretty_printers_dict))
 
 def build_dictionary ():
+    pretty_printers_dict[re.compile('^KDevelop::Path$')] = lambda val: KDevelop_Path(val)
+
     pretty_printers_dict[re.compile('^KTextEditor::Cursor$')] = lambda val: CursorPrinter(val)
     pretty_printers_dict[re.compile('^KTextEditor::Range$')] = lambda val: RangePrinter(val)
 
