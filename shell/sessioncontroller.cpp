@@ -869,7 +869,6 @@ QString SessionController::showSessionChooserDialog(QString headerText, bool onl
 
     QString defaultSession = KGlobal::config()->group( cfgSessionGroup() ).readEntry( cfgActiveSessionEntry(), "default" );
 
-
     foreach(const KDevelop::SessionInfo& si, KDevelop::SessionController::availableSessionInfo())
     {
         if ( si.name.isEmpty() && si.projects.isEmpty() ) {
@@ -895,7 +894,6 @@ QString SessionController::showSessionChooserDialog(QString headerText, bool onl
     }
     model->sort(1);
 
-    int cnsRow = row;
     if(!onlyRunning) {
         model->setItem(row, 0, new QStandardItem);
         model->setItem(row, 1, new QStandardItem(KIcon("window-new"), i18n("Create New Session")));
@@ -915,20 +913,16 @@ QString SessionController::showSessionChooserDialog(QString headerText, bool onl
     }
 
     QModelIndex selected = view->selectionModel()->currentIndex();
-    if(selected.isValid())
-    {
-        QString ret;
-        if( selected.row() == cnsRow ) {
-            qsrand(QDateTime::currentDateTime().toTime_t());
-            ret = QUuid::createUuid().toString();
-        } else {
-            selected = selected.sibling(selected.row(), 0);
-            ret = selected.data().toString();
-        }
-        return ret;
-    }
+    if (!selected.isValid())
+        return QString();
 
-    return QString();
+    const QString selectedSessionId = selected.sibling(selected.row(), 0).data().toString();
+    if (selectedSessionId.isEmpty()) {
+        // "Create New Session" item selected, return a fresh UUID
+        qsrand(QDateTime::currentDateTime().toTime_t());
+        return QUuid::createUuid().toString();
+    }
+    return selectedSessionId;
 }
 
 QString SessionController::handleLockedSession( const QString& sessionName, const QString& sessionId,
