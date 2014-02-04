@@ -206,7 +206,8 @@ public:
                     GdbVariable* var = static_cast<GdbVariable*>(xvar);
                     var->setTopLevel(false);
                     var->setVarobj(child["name"].literal());
-                    var->setHasMoreInitial(child["numchild"].toInt());
+                    bool hasMore = child["numchild"].toInt() != 0 || ( child.hasField("dynamic") && child["dynamic"].toInt()!=0 );
+                    var->setHasMoreInitial(hasMore);
                     variable->appendChild(var);
                     var->setValue(child["value"].literal());
                 }
@@ -306,7 +307,8 @@ void GdbVariable::handleUpdate(const GDBMI::Value& var)
                 GdbVariable* var = static_cast<GdbVariable*>(xvar);
                 var->setTopLevel(false);
                 var->setVarobj(child["name"].literal());
-                var->setHasMoreInitial(child["numchild"].toInt() != 0);
+                bool hasMore = child["numchild"].toInt() != 0 || ( child.hasField("dynamic") && child["dynamic"].toInt()!=0 );
+                var->setHasMoreInitial(hasMore);
                 appendChild(var);
                 var->setValue(child["value"].literal());
                 var->setChanged(true);
