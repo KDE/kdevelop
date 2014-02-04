@@ -28,7 +28,32 @@
 
 #include <KColorScheme>
 
-static const int maxExtraArgumentsInHistory = 15;
+namespace {
+
+const int maxExtraArgumentsInHistory = 15;
+
+/// Return the proposed build folder URL for given @p srcFolder
+KUrl proposedBuildUrl(const KUrl& srcFolder)
+{
+    KUrl proposedBuildUrl;
+    if (srcFolder.path().contains("/src/"))
+    {
+        const QString srcBuildPath = srcFolder.path().replace("/src/", "/build/");
+        if (QDir(srcBuildPath).exists())
+        {
+            proposedBuildUrl = KUrl(srcBuildPath);
+        }
+    }
+    if (proposedBuildUrl.isEmpty())
+    {
+        proposedBuildUrl = KUrl( srcFolder.toLocalFile() + "/build" );
+    }
+
+    proposedBuildUrl.cleanPath();
+    return proposedBuildUrl;
+}
+
+}
 
 CMakeBuildDirChooser::CMakeBuildDirChooser(QWidget* parent)
     : KDialog(parent)
@@ -74,22 +99,7 @@ void CMakeBuildDirChooser::setSourceFolder( const KUrl& srcFolder )
 {
     m_srcFolder = srcFolder;
 
-    KUrl proposedBuildUrl;
-    if (srcFolder.path().contains("/src/"))
-    {
-        const QString srcBuildPath = srcFolder.path().replace("/src/", "/build/");
-        if (QDir(srcBuildPath).exists())
-        {
-            proposedBuildUrl = KUrl(srcBuildPath);
-        }
-    }
-    if (proposedBuildUrl.isEmpty())
-    {
-        proposedBuildUrl = KUrl( srcFolder.toLocalFile() + "/build" );
-    }
-
-    proposedBuildUrl.cleanPath();
-    m_chooserUi->buildFolder->setUrl(proposedBuildUrl);
+    m_chooserUi->buildFolder->setUrl(proposedBuildUrl(srcFolder));
     setCaption(i18n("Configure a build directory for %1", srcFolder.toLocalFile()));
     update();
 }
