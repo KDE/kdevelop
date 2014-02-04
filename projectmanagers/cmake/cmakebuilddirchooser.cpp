@@ -73,7 +73,21 @@ CMakeBuildDirChooser::~CMakeBuildDirChooser()
 void CMakeBuildDirChooser::setSourceFolder( const KUrl& srcFolder )
 {
     m_srcFolder = srcFolder;
-    KUrl proposedBuildUrl = KUrl( srcFolder.toLocalFile() + "/build" );
+
+    KUrl proposedBuildUrl;
+    if (srcFolder.path().contains("/src/"))
+    {
+        const QString srcBuildPath = srcFolder.path().replace("/src/", "/build/");
+        if (QDir(srcBuildPath).exists())
+        {
+            proposedBuildUrl = KUrl(srcBuildPath);
+        }
+    }
+    if (proposedBuildUrl.isEmpty())
+    {
+        proposedBuildUrl = KUrl( srcFolder.toLocalFile() + "/build" );
+    }
+
     proposedBuildUrl.cleanPath();
     m_chooserUi->buildFolder->setUrl(proposedBuildUrl);
     setCaption(i18n("Configure a build directory for %1", srcFolder.toLocalFile()));
