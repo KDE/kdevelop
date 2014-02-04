@@ -28,6 +28,7 @@
 #include <language/duchain/topducontext.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/duchainutils.h>
+#include <language/duchain/types/functiontype.h>
 #include <language/interfaces/iastcontainer.h>
 #include <language/codecompletion/codecompletionitem.h>
 #include <language/codecompletion/codecompletionmodel.h>
@@ -40,6 +41,7 @@
 
 #include <memory>
 #include <KTextEditor/Document>
+#include <KTextEditor/View>
 
 using namespace KDevelop;
 
@@ -81,7 +83,7 @@ public:
         document->replaceText(word, m_replacement);
     }
 
-private:
+protected:
     QString m_display;
     QString m_prefix;
     QString m_replacement;
@@ -106,6 +108,27 @@ public:
             return ret;
         }
         return NormalDeclarationCompletionItem::data(index, role, model);
+    }
+
+    void execute(KTextEditor::Document* document, const KTextEditor::Range& word) override
+    {
+        QString repl = m_replacement;
+        DUChainReadLocker lock;
+
+        if(!m_declaration){
+            return;
+        }
+
+        if(m_declaration->isFunctionDeclaration()) {
+            repl += "()";
+            document->replaceText(word, repl);
+            auto f = m_declaration->type<FunctionType>();
+            if (f && f->indexedArgumentsSize()) {
+                document->activeView()->setCursorPosition(word.start() + KTextEditor::Cursor(0, repl.size() - 1));
+            }
+        } else {
+            document->replaceText(word, repl);
+        }
     }
 
     bool createsExpandingWidget() const override
@@ -216,12 +239,14 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(con
                 case CXCompletionChunk_TypedText:
                     display += string;
                     typed = string;
+                    replacement = string;
                     break;
                 case CXCompletionChunk_ResultType:
                     resultType = string;
                     continue;
                 case CXCompletionChunk_Placeholder:
-                    replacement += "/*" + string + "*/";
+                    //TODO:consider KTextEditor::TemplateInterface possibility
+                    //replacement += "/*" + string + "*/";
                     if (signatureState == Inside) {
                         display += string;
                     }
@@ -242,7 +267,7 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(con
                 default:
                     break;
             }
-            replacement += string;
+            //replacement += string;
             if (signatureState == Inside) {
                 display += string;
             }
