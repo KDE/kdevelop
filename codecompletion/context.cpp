@@ -196,7 +196,7 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(con
     QList<CompletionTreeItemPointer> builtin;
     QList<CompletionTreeItemPointer> bestMatches;
 
-    QSet<QualifiedIdentifier> handled;
+    QSet<Declaration*> handled;
 
     DUContext* ctx = top->findContextAt(position);
 
@@ -287,16 +287,15 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(con
             }
             qid.push(id);
 
-            if (handled.contains(qid)) {
-                // TODO: support overload items - for now, just skip them
-                continue;
-            }
-            handled.insert(qid);
             Declaration* found = 0;
             foreach(Declaration* dec, ctx->findDeclarations(qid, position)) {
-                found = dec;
-                break;
+                if (!handled.contains(dec)) {
+                    found = dec;
+                    handled.insert(dec);
+                    break;
+                }
             }
+
             if (found) {
                 auto item = CompletionTreeItemPointer(new DeclarationItem(found, display, resultType, replacement));
                 if ( clang_getCompletionPriority(result.CompletionString) < MAX_PRIORITY_FOR_BEST_MATCHES) {
