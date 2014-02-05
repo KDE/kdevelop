@@ -21,6 +21,7 @@
 #include <QtGui/QAction>
 #include <QtGui/QStringListModel>
 #include <KMessageBox>
+#include <KColorScheme>
 #include <kdebug.h>
 #include <QMenu>
 
@@ -227,21 +228,26 @@ void GrepOutputView::changeModel(int index)
     updateApplyState(model()->index(0, 0), model()->index(0, 0));
 }
 
-void GrepOutputView::setMessage(const QString& msg)
+void GrepOutputView::setMessage(const QString& msg, MessageType type)
 {
+    if (type == Error) {
+        QPalette palette = m_statusLabel->palette();
+        KColorScheme::adjustForeground(palette, KColorScheme::NegativeText, QPalette::WindowText);
+        m_statusLabel->setPalette(palette);
+    } else {
+        m_statusLabel->setPalette(QPalette());
+    }
     m_statusLabel->setText(msg);
 }
 
 void GrepOutputView::showErrorMessage( const QString& errorMessage )
 {
-    setStyleSheet("QLabel { color : red; }");
-    setMessage(errorMessage);
+    setMessage(errorMessage, Error);
 }
 
 void GrepOutputView::showMessage( KDevelop::IStatus* , const QString& message )
 {
-    setStyleSheet("");
-    setMessage(message);
+    setMessage(message, Information);
 }
 
 void GrepOutputView::onApply()
