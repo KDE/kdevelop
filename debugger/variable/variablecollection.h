@@ -66,6 +66,8 @@ public:
     void setInScope(bool v);
     void setValue(const QString &v);
     QString value() const;
+    void setType(const QString& type);
+    QString type() const;
     void setTopLevel(bool v);
     void setShowError(bool v);
     bool showError();
@@ -200,6 +202,12 @@ class KDEVPLATFORMDEBUGGER_EXPORT VariableCollection : public TreeModel
     Q_OBJECT
 
 public:
+    enum Column {
+        NameColumn,
+        ValueColumn,
+        TypeColumn
+    };
+
     VariableCollection(IDebugController* parent);
     virtual ~VariableCollection();
 
