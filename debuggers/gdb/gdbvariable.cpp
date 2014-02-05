@@ -122,6 +122,7 @@ public:
 
             variable->setHasMore(hasMore);
 
+            variable->setType(r["type"].literal());
             variable->setValue(r["value"].literal());
             hasValue = !r["value"].literal().isEmpty();
             if (variable->isExpanded() && r["numchild"].toInt()) {
@@ -209,6 +210,7 @@ public:
                     bool hasMore = child["numchild"].toInt() != 0 || ( child.hasField("dynamic") && child["dynamic"].toInt()!=0 );
                     var->setHasMoreInitial(hasMore);
                     variable->appendChild(var);
+                    var->setType(child["type"].literal());
                     var->setValue(child["value"].literal());
                 }
             }
@@ -310,11 +312,13 @@ void GdbVariable::handleUpdate(const GDBMI::Value& var)
                 bool hasMore = child["numchild"].toInt() != 0 || ( child.hasField("dynamic") && child["dynamic"].toInt()!=0 );
                 var->setHasMoreInitial(hasMore);
                 appendChild(var);
+                var->setType(child["type"].literal());
                 var->setValue(child["value"].literal());
                 var->setChanged(true);
             }
         }
 
+        setType(var["type"].literal());
         setValue(var["value"].literal());
         setChanged(true);
         setHasMore(var.hasField("has_more") && var["has_more"].toInt());
