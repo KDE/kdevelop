@@ -138,6 +138,9 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContext
     void textInserted(KTextEditor::Document*, KTextEditor::Range);
     void selectionChanged(KTextEditor::View*);
 
+    void historyNext();
+    void historyPrevious();
+
   private slots:
     // history browsing
     void documentJumpPerformed( KDevelop::IDocument* newDocument,
@@ -145,8 +148,6 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContext
                                 KDevelop::IDocument* previousDocument,
                                 const KTextEditor::Cursor& previousCursor);
 
-    void historyNext();
-    void historyPrevious();
     void nextMenuAboutToShow();
     void previousMenuAboutToShow();
     void actionTriggered();
