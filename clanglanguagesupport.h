@@ -25,10 +25,13 @@
 
 #include <interfaces/iplugin.h>
 #include <language/interfaces/ilanguagesupport.h>
+#include <interfaces/ibuddydocumentfinder.h>
+
+#include <QStringList>
 
 class ClangIndex;
 
-class ClangLanguageSupport : public KDevelop::IPlugin, public KDevelop::ILanguageSupport
+class ClangLanguageSupport : public KDevelop::IPlugin, public KDevelop::ILanguageSupport, public KDevelop::IBuddyDocumentFinder
 {
     Q_OBJECT
     Q_INTERFACES(KDevelop::ILanguageSupport)
@@ -47,6 +50,14 @@ public:
     virtual KDevelop::ICodeHighlighting* codeHighlighting() const;
 
     ClangIndex* index();
+
+    //BEGIN IBuddyDocumentFinder
+
+    virtual bool areBuddies(const KUrl& url1, const KUrl& url2);
+    virtual bool buddyOrder(const KUrl& url1, const KUrl& url2);
+    virtual QVector< KUrl > getPotentialBuddies(const KUrl& url) const;
+
+    //END IBuddyDocumentFinder
 
 private:
     KDevelop::ICodeHighlighting *const m_highlighting;

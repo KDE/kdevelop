@@ -29,6 +29,8 @@
 
 #include "codecompletion/model.h"
 
+#include "documentfinderhelpers.h"
+
 #include <KPluginFactory>
 #include <KAboutData>
 
@@ -51,11 +53,16 @@ ClangLanguageSupport::ClangLanguageSupport(QObject* parent, const QVariantList& 
     KDEV_USE_EXTENSION_INTERFACE(ILanguageSupport)
 
     new KDevelop::CodeCompletion( this, new ClangCodeCompletionModel(this), name() );
+    for(const auto& type : DocumentFinderHelpers::mimeTypesList()){
+        KDevelop::IBuddyDocumentFinder::addFinder(type, this);
+    }
 }
 
 ClangLanguageSupport::~ClangLanguageSupport()
 {
-
+    for(const auto& type : DocumentFinderHelpers::mimeTypesList()) {
+        KDevelop::IBuddyDocumentFinder::removeFinder(type);
+    }
 }
 
 ParseJob* ClangLanguageSupport::createParseJob(const IndexedString& url)
@@ -76,6 +83,21 @@ ICodeHighlighting* ClangLanguageSupport::codeHighlighting() const
 ClangIndex* ClangLanguageSupport::index()
 {
     return m_index.data();
+}
+
+bool ClangLanguageSupport::areBuddies(const KUrl& url1, const KUrl& url2)
+{
+    return DocumentFinderHelpers::areBuddies(url1, url2);
+}
+
+bool ClangLanguageSupport::buddyOrder(const KUrl& url1, const KUrl& url2)
+{
+    return DocumentFinderHelpers::buddyOrder(url1, url2);
+}
+
+QVector< KUrl > ClangLanguageSupport::getPotentialBuddies(const KUrl& url) const
+{
+    return DocumentFinderHelpers::getPotentialBuddies(url);
 }
 
 #include "clanglanguagesupport.moc"
