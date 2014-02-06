@@ -25,9 +25,33 @@
 #include "clangtypes.h"
 #include "debug.h"
 
+#include <KMimeType>
+
 using namespace KDevelop;
 
 namespace {
+static std::map<QString, QVector<const char*>> mimeToArgs = {
+    {
+        "text/x-csrc", { "-std=c11", "-Wall" }
+    },
+    {
+        "text/x-c++src", { "-std=c++11", "-xc++", "-Wall" }
+    }
+};
+
+static QVector<const char*> defaultArgs = {"-std=c++11", "-xc++", "-Wall"};
+
+QVector<const char*> argsForPath(const QString& path)
+{
+    QString mimeType = KMimeType::findByPath(path)->name();
+    auto res = mimeToArgs.find(mimeType);
+
+    if (res != mimeToArgs.end()) {
+      return res->second;
+    }
+    return defaultArgs;
+}
+
 CXUnsavedFile fileForContents(const QByteArray& path, const QByteArray& contents)
 {
     CXUnsavedFile file;
@@ -107,7 +131,7 @@ ParseSession::ParseSession(const IndexedString& url, const QByteArray& contents,
         flags |= CXTranslationUnit_SkipFunctionBodies;
     }
 
-    QVector<const char*> args{ "-std=c++11", "-xc++", "-Wall" };
+    QVector<const char*> args = argsForPath(url.str());
     // uses QByteArray as smart-pointer for const char* ownership
     QVector<QByteArray> otherArgs;
     otherArgs.reserve(includes.size() + defines.size());
