@@ -367,6 +367,26 @@ FilteredItem ScriptErrorFilterStrategy::errorInLine(const QString& line)
     return FilteringStrategyUtils::match(SCRIPT_ERROR_FILTERS, line);
 }
 
+/// --- Native application error filter strategy ---
+
+const QList<ErrorFormat> QT_APPLICATION_ERROR_FILTERS = QList<ErrorFormat>()
+    // ASSERT: "errors().isEmpty()" in file /foo/bar.cpp, line 49
+    << ErrorFormat("^ASSERT: \"(.*)\" in file (.*), line ([0-9]+)$", 2, 3, -1);
+
+NativeAppErrorFilterStrategy::NativeAppErrorFilterStrategy()
+{
+}
+
+FilteredItem NativeAppErrorFilterStrategy::actionInLine(const QString& line)
+{
+    return FilteredItem(line);
+}
+
+FilteredItem NativeAppErrorFilterStrategy::errorInLine(const QString& line)
+{
+    return FilteringStrategyUtils::match(QT_APPLICATION_ERROR_FILTERS, line);
+}
+
 /// --- Static Analysis filter strategy ---
 
 // A list of filters for static analysis tools (krazy2, cppcheck)

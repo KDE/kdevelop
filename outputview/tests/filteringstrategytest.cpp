@@ -235,6 +235,35 @@ void FilteringStrategyTest::testScriptErrorFilterStrategy()
     QCOMPARE(item1.type, expectedAction);
 }
 
+void FilteringStrategyTest::testNativeAppErrorFilterStrategy_data()
+{
+    QTest::addColumn<QString>("line");
+    QTest::addColumn<QString>("file");
+    QTest::addColumn<int>("lineNo");
+    QTest::addColumn<int>("column");
+    QTest::addColumn<FilteredItem::FilteredOutputItemType>("itemtype");
+
+    QTest::newRow("qt-assert")
+        << "ASSERT: \"errors().isEmpty()\" in file /tmp/foo/bar.cpp, line 49"
+        << "/tmp/foo/bar.cpp"
+        << 48 << 0 << FilteredItem::ErrorItem;
+}
+
+void FilteringStrategyTest::testNativeAppErrorFilterStrategy()
+{
+    QFETCH(QString, line);
+    QFETCH(QString, file);
+    QFETCH(int, lineNo);
+    QFETCH(int, column);
+    QFETCH(FilteredItem::FilteredOutputItemType, itemtype);
+    NativeAppErrorFilterStrategy testee;
+    FilteredItem item = testee.errorInLine(line);
+    QCOMPARE(item.url.path(), file);
+    QCOMPARE(item.lineNo , lineNo);
+    QCOMPARE(item.columnNo , column);
+    QCOMPARE(item.type , itemtype);
+}
+
 void FilteringStrategyTest::testStaticAnalysisFilterStrategy_data()
 {
     QTest::addColumn<QString>("line");

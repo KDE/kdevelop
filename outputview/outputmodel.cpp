@@ -346,6 +346,7 @@ QModelIndex OutputModel::previousHighlightIndex( const QModelIndex &currentIdx )
 
 void OutputModel::setFilteringStrategy(const OutputFilterStrategy& currentStrategy)
 {
+    // TODO: Turn into factory, decouple from OutputModel
     IFilterStrategy* filter = 0;
     switch( currentStrategy )
     {
@@ -357,6 +358,9 @@ void OutputModel::setFilteringStrategy(const OutputFilterStrategy& currentStrate
             break;
         case ScriptErrorFilter:
             filter = new ScriptErrorFilterStrategy;
+            break;
+        case NativeAppErrorFilter:
+            filter = new NativeAppErrorFilterStrategy;
             break;
         case StaticAnalysisFilter:
             filter = new StaticAnalysisFilterStrategy;

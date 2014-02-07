@@ -39,6 +39,8 @@ private slots:
     void testCompilerFilterstrategyUrlFromAction();
     void testScriptErrorFilterStrategy_data();
     void testScriptErrorFilterStrategy();
+    void testNativeAppErrorFilterStrategy_data();
+    void testNativeAppErrorFilterStrategy();
     void testStaticAnalysisFilterStrategy_data();
     void testStaticAnalysisFilterStrategy();
     void testExtractionOfLineAndColumn_data();

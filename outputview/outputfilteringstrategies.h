@@ -102,6 +102,21 @@ public:
 };
 
 /**
+ * This filter strategy filters out errors (no actions) from runtime debug output of native applications
+ *
+ * This is especially useful for runtime output of Qt applications, for example lines such as:
+ * "ASSERT: "errors().isEmpty()" in file /tmp/foo/bar.cpp", line 49"
+ */
+class KDEVPLATFORMOUTPUTVIEW_EXPORT NativeAppErrorFilterStrategy : public IFilterStrategy
+{
+public:
+    NativeAppErrorFilterStrategy();
+
+    virtual FilteredItem errorInLine(const QString& line);
+    virtual FilteredItem actionInLine(const QString& line);
+};
+
+/**
  * This filter stategy filters out errors (no actions) from Static code analysis tools (Cppcheck,)
  **/
 class KDEVPLATFORMOUTPUTVIEW_EXPORT StaticAnalysisFilterStrategy : public IFilterStrategy
