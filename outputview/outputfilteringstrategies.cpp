@@ -31,6 +31,35 @@
 namespace KDevelop
 {
 
+FilteredItem FilteringStrategyUtils::match(const QList<ErrorFormat>& errorFormats, const QString& line)
+{
+    FilteredItem item(line);
+    foreach( const ErrorFormat& curErrFilter, errorFormats ) {
+        QRegExp regEx = curErrFilter.expression;
+        if( regEx.indexIn( line ) != -1 )
+        {
+            item.url = regEx.cap( curErrFilter.fileGroup );
+            item.lineNo = regEx.cap( curErrFilter.lineGroup ).toInt() - 1;
+            if(curErrFilter.columnGroup >= 0) {
+                item.columnNo = regEx.cap( curErrFilter.columnGroup ).toInt() - 1;
+            } else {
+                item.columnNo = 0;
+            }
+
+            QString txt = regEx.cap(curErrFilter.textGroup);
+
+            item.type = FilteredItem::ErrorItem;
+
+            // Make the item clickable if it comes with the necessary file & line number information
+            if (curErrFilter.fileGroup > 0 && curErrFilter.lineGroup > 0) {
+                item.isActivatable = true;
+            }
+            break;
+        }
+    }
+    return item;
+}
+
 /// --- No filter strategy ---
 
 NoFilterStrategy::NoFilterStrategy()
@@ -335,31 +364,7 @@ FilteredItem ScriptErrorFilterStrategy::actionInLine(const QString& line)
 
 FilteredItem ScriptErrorFilterStrategy::errorInLine(const QString& line)
 {
-    FilteredItem item(line);
-    foreach( const ErrorFormat& curErrFilter, SCRIPT_ERROR_FILTERS ) {
-        QRegExp regEx = curErrFilter.expression;
-        if( regEx.indexIn( line ) != -1 )
-        {
-            item.url = regEx.cap( curErrFilter.fileGroup );
-            item.lineNo = regEx.cap( curErrFilter.lineGroup ).toInt() - 1;
-            if(curErrFilter.columnGroup >= 0) {
-                item.columnNo = regEx.cap( curErrFilter.columnGroup ).toInt() - 1;
-            } else {
-                item.columnNo = 0;
-            }
-
-            QString txt = regEx.cap(curErrFilter.textGroup);
-
-            item.type = FilteredItem::ErrorItem;
-
-            // Make the item clickable if it comes with the necessary file & line number information
-            if (curErrFilter.fileGroup > 0 && curErrFilter.lineGroup > 0)
-                item.isActivatable = true;
-
-            break;
-        }
-    }
-    return item;
+    return FilteringStrategyUtils::match(SCRIPT_ERROR_FILTERS, line);
 }
 
 /// --- Static Analysis filter strategy ---
@@ -384,33 +389,7 @@ FilteredItem StaticAnalysisFilterStrategy::actionInLine(const QString& line)
 
 FilteredItem StaticAnalysisFilterStrategy::errorInLine(const QString& line)
 {
-    FilteredItem item(line);
-    foreach( const ErrorFormat& curErrFilter, STATIC_ANALYSIS_FILTERS ) {
-        QRegExp regEx = curErrFilter.expression;
-        if( regEx.indexIn( line ) != -1 )
-        {
-            item.url = regEx.cap( curErrFilter.fileGroup );
-            item.lineNo = regEx.cap( curErrFilter.lineGroup ).toInt() - 1;
-            if(curErrFilter.columnGroup >= 0) {
-                item.columnNo = regEx.cap( curErrFilter.columnGroup ).toInt() - 1;
-            } else {
-                item.columnNo = 0;
-            }
-
-            QString txt = regEx.cap(curErrFilter.textGroup);
-
-            item.type = FilteredItem::ErrorItem;
-
-            // Make the item clickable if it comes with the necessary file & line number information
-            if (curErrFilter.fileGroup > 0 && curErrFilter.lineGroup > 0) {
-                item.isActivatable = true;
-            }
-            break;
-        }
-    }
-    return item;
+    return FilteringStrategyUtils::match(STATIC_ANALYSIS_FILTERS, line);
 }
 
-
-} // namespace KDevelop
-
+}

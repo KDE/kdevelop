@@ -26,15 +26,26 @@
 
 
 #include "ifilterstrategy.h"
+#include "outputformats.h"
 #include <outputview/outputviewexport.h>
 
-
-#include <KUrl>
-
+#include <QList>
 #include <QVector>
+
+class KUrl;
 
 namespace KDevelop
 {
+
+namespace FilteringStrategyUtils
+{
+    /**
+     * Looks through @p errorFormats and matches each item against @p line
+     *
+     * @return A FilteredItem object for the first match encountered
+     */
+    FilteredItem match(const QList<KDevelop::ErrorFormat>& errorFormats, const QString& line);
+}
 
 struct CompilerFilterStrategyPrivate;
 
