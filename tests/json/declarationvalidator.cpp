@@ -15,7 +15,6 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#include <qjson/parser.h>
 #include "language/duchain/declaration.h"
 #include "declarationvalidator.h"
 #include "testsuite.h"
