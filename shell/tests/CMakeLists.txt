@@ -39,7 +39,7 @@ target_link_libraries(shell-documentoperationtest Qt5::Test kdevplatformtests kd
 # creating a factory is not enough to inject a new project plugin, we also need a KPluginInfo
 set( projectcontrollertest_SRCS projectcontrollertest.cpp )
 #add_executable(shell-projectcontrollertest ${projectcontrollertest_SRCS})\nadd_test(shell-projectcontrollertest shell-projectcontrollertest)
-ecm_mark_as_test(shell-projectcontrollertest)
+#ecm_mark_as_test(shell-projectcontrollertest)
 #target_link_libraries(shell-projectcontrollertest Qt5::Test kdevplatformshell sublime kdevplatformproject kdevplatforminterfaces )
 
 set( sessioncontrollertest_SRCS sessioncontrollertest.cpp )
@@ -51,7 +51,7 @@ target_link_libraries(shell-sessioncontrollertest Qt5::Test KF5::KIOWidgets kdev
 # Disabled for now, until I find a way of loading plugins from builddir/sourcedir
 #set( plugincontrollertest_SRCS plugincontrollertest.cpp )
 #add_executable(shell-plugincontrollertest ${plugincontrollertest_SRCS})\nadd_test(shell-plugincontrollertest shell-plugincontrollertest)
-ecm_mark_as_test(shell-plugincontrollertest)
+#ecm_mark_as_test(shell-plugincontrollertest)
 #target_link_libraries(shell-plugincontrollertest Qt5::Test kdevplatformshell kdevplatforminterfaces sublime )
 
 set( testcontrollertest_SRCS testcontrollertest.cpp )
