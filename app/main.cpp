@@ -136,19 +136,20 @@ static int openFilesInRunningInstance(const QVector<File>& files, int pid)
     QDBusInterface iface(service, "/org/kdevelop/DocumentController", "org.kdevelop.DocumentController");
 
     QStringList urls;
+    bool errors_occured = false;
     foreach ( const File& file, files ) {
-        urls << file.first;
-    }
-    QDBusReply<bool> result = iface.call("openDocumentsSimple", QVariant(urls));
-    if ( ! result.value() ) {
-        KMessageBox::sorry(0, i18n("Some of the requested files could not be opened."));
-        return 1;
+        QDBusReply<bool> result = iface.call("openDocumentSimple", file.first);
+        if ( ! result.value() ) {
+            QTextStream err(stderr);
+            err << i18n("Could not open file %1.", file.first) << "\n";
+            errors_occured = true;
+        }
     }
     // make the window visible
     QDBusMessage makeVisible = QDBusMessage::createMethodCall( service, "/kdevelop/MainWindow", "org.kdevelop.MainWindow",
-                                                           "ensureVisible" );
+                                                               "ensureVisible" );
     QDBusConnection::sessionBus().asyncCall( makeVisible );
-    return 0;
+    return errors_occured ? 1 : 0;
 }
 
 /// Gets the PID of a running KDevelop instance, eventually asking the user if there is more than one.
@@ -239,6 +240,7 @@ int main( int argc, char *argv[] )
     aboutData.addCredit( ki18n("Andreas Koepfle") , ki18n( "QMake project manager patches" ), "koepfle@ti.uni-mannheim.de" );
     aboutData.addCredit( ki18n("Sascha Cunz") , ki18n( "Cleanup and bugfixes for qEditor, AutoMake and much other stuff" ), "mail@sacu.de" );
     aboutData.addCredit( ki18n("Zoran Karavla"), ki18n( "Artwork for the ruby language" ), "webmaster@the-error.net", "http://the-error.net" );
+
 
     //we can't use KCmdLineArgs as it doesn't allow arguments for the debugee
     //so lookup the --debug switch and eat everything behind by decrementing argc
