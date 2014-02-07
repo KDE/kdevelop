@@ -27,24 +27,24 @@ class FilteringStrategyTest : public QObject
 {
     Q_OBJECT
 private slots:
-    void testNoFilterstrategy_data();
-    void testNoFilterstrategy();
-    void testCompilerFilterstrategy_data();
-    void testCompilerFilterstrategy();
+    void testNoFilterStrategy_data();
+    void testNoFilterStrategy();
+    void testCompilerFilterStrategy_data();
+    void testCompilerFilterStrategy();
     void testCompilerFilterstrategyMultipleKeywords_data();
     void testCompilerFilterstrategyMultipleKeywords();
     void testCompilerFilterStrategyShortenedText();
     void testCompilerFilterStrategyShortenedText_data();
     void testCompilerFilterstrategyUrlFromAction_data();
     void testCompilerFilterstrategyUrlFromAction();
-    void testScriptErrorFilterstrategy_data();
-    void testScriptErrorFilterstrategy();
+    void testScriptErrorFilterStrategy_data();
+    void testScriptErrorFilterStrategy();
     void testStaticAnalysisFilterStrategy_data();
     void testStaticAnalysisFilterStrategy();
-    void benchMarkCompilerFilterAction();
-    void testExtractionOfLineAndCulmn_data();
-    void testExtractionOfLineAndCulmn();
+    void testExtractionOfLineAndColumn_data();
+    void testExtractionOfLineAndColumn();
 
+    void benchMarkCompilerFilterAction();
 };
 
 }

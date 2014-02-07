@@ -55,7 +55,7 @@ inline char* toString(const KDevelop::FilteredItem::FilteredOutputItemType& type
 
 namespace KDevelop
 {
-void FilteringStrategyTest::testNoFilterstrategy_data()
+void FilteringStrategyTest::testNoFilterStrategy_data()
 {
     QTest::addColumn<QString>("line");
     QTest::addColumn<FilteredItem::FilteredOutputItemType>("expected");
@@ -76,7 +76,7 @@ void FilteringStrategyTest::testNoFilterstrategy_data()
     << buildPythonErrorLine() << FilteredItem::InvalidItem;
 }
 
-void FilteringStrategyTest::testNoFilterstrategy()
+void FilteringStrategyTest::testNoFilterStrategy()
 {
     QFETCH(QString, line);
     QFETCH(FilteredItem::FilteredOutputItemType, expected);
@@ -87,7 +87,7 @@ void FilteringStrategyTest::testNoFilterstrategy()
     QCOMPARE(item1.type, expected);
 }
 
-void FilteringStrategyTest::testCompilerFilterstrategy_data()
+void FilteringStrategyTest::testCompilerFilterStrategy_data()
 {
     QTest::addColumn<QString>("line");
     QTest::addColumn<FilteredItem::FilteredOutputItemType>("expectedError");
@@ -125,7 +125,7 @@ void FilteringStrategyTest::testCompilerFilterstrategy_data()
     << buildPythonErrorLine() << FilteredItem::InvalidItem << FilteredItem::InvalidItem;
 }
 
-void FilteringStrategyTest::testCompilerFilterstrategy()
+void FilteringStrategyTest::testCompilerFilterStrategy()
 {
     QFETCH(QString, line);
     QFETCH(FilteredItem::FilteredOutputItemType, expectedError);
@@ -203,7 +203,7 @@ void FilteringStrategyTest::testCompilerFilterStrategyShortenedText()
     QCOMPARE(item.shortenedText, expectedShortenedText);
 }
 
-void FilteringStrategyTest::testScriptErrorFilterstrategy_data()
+void FilteringStrategyTest::testScriptErrorFilterStrategy_data()
 {
     QTest::addColumn<QString>("line");
     QTest::addColumn<FilteredItem::FilteredOutputItemType>("expectedError");
@@ -223,7 +223,7 @@ void FilteringStrategyTest::testScriptErrorFilterstrategy_data()
     << buildPythonErrorLine() << FilteredItem::InvalidItem << FilteredItem::InvalidItem;
 }
 
-void FilteringStrategyTest::testScriptErrorFilterstrategy()
+void FilteringStrategyTest::testScriptErrorFilterStrategy()
 {
     QFETCH(QString, line);
     QFETCH(FilteredItem::FilteredOutputItemType, expectedError);
@@ -361,7 +361,7 @@ void FilteringStrategyTest::benchMarkCompilerFilterAction()
     QVERIFY(avgDirectoryInsertion < 2);
 }
 
-void FilteringStrategyTest::testExtractionOfLineAndCulmn_data()
+void FilteringStrategyTest::testExtractionOfLineAndColumn_data()
 {
     QTest::addColumn<QString>("line");
     QTest::addColumn<QString>("file");
@@ -398,7 +398,7 @@ void FilteringStrategyTest::testExtractionOfLineAndCulmn_data()
         << "/path/flib.f90" << 3566 << 21 << FilteredItem::ErrorItem;
 }
 
-void FilteringStrategyTest::testExtractionOfLineAndCulmn()
+void FilteringStrategyTest::testExtractionOfLineAndColumn()
 {
     QFETCH(QString, line);
     QFETCH(QString, file);
