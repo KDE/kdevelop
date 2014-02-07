@@ -61,7 +61,7 @@ class ProblemTextHintProvider : public KTextEditor::TextHintProvider
 public:
     ProblemTextHintProvider(ProblemHighlighter* highlighter);
 
-    virtual QString needTextHint(KTextEditor::View* view, const KTextEditor::Cursor& position);
+    virtual QString textHint(KTextEditor::View* view, const KTextEditor::Cursor& position) Q_DECL_OVERRIDE;
 
 private:
     ProblemHighlighter* m_highlighter;

@@ -200,7 +200,7 @@ class VariableProvider : public KTextEditor::TextHintProvider
 {
 public:
     VariableProvider(VariableCollection* collection);
-    virtual QString needTextHint(KTextEditor::View* view, const KTextEditor::Cursor& position);
+    virtual QString textHint(KTextEditor::View* view, const KTextEditor::Cursor& position) Q_DECL_OVERRIDE;
 
 private:
     VariableCollection* m_collection;

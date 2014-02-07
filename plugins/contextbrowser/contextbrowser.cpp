@@ -391,7 +391,7 @@ ContextBrowserHintProvider::ContextBrowserHintProvider(ContextBrowserPlugin* plu
 {
 }
 
-QString ContextBrowserHintProvider::needTextHint(View* view, const KTextEditor::Cursor& cursor)
+QString ContextBrowserHintProvider::textHint(View* view, const KTextEditor::Cursor& cursor)
 {
   m_plugin->m_mouseHoverCursor = SimpleCursor(cursor);
   if(!view) {

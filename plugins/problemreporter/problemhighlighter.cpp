@@ -80,7 +80,7 @@ ProblemTextHintProvider::ProblemTextHintProvider(ProblemHighlighter* highlighter
 {
 }
 
-QString ProblemTextHintProvider::needTextHint(View* view, const Cursor& pos)
+QString ProblemTextHintProvider::textHint(View* view, const Cursor& pos)
 {
     KTextEditor::MovingInterface* moving = dynamic_cast<KTextEditor::MovingInterface*>(view->document());
     if(moving) {

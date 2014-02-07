@@ -473,7 +473,7 @@ VariableProvider::VariableProvider(VariableCollection* collection)
 {
 }
 
-QString VariableProvider::needTextHint(KTextEditor::View* view, const KTextEditor::Cursor& cursor)
+QString VariableProvider::textHint(KTextEditor::View* view, const KTextEditor::Cursor& cursor)
 {
     // Don't do anything if there's already an open tooltip.
     if (m_collection->activeTooltip_)
