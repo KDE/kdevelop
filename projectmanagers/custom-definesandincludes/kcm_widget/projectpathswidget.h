@@ -1,5 +1,4 @@
 /************************************************************************
- * KDevelop4 Custom Buildsystem Support                                 *
  *                                                                      *
  * Copyright 2010 Andreas Pakulat <apaku@gmx.de>                        *
  *                                                                      *
@@ -22,7 +21,7 @@
 
 #include <QWidget>
 
-#include "custombuildsystemconfig.h"
+#include "configentry.h"
 #include <qabstractitemmodel.h>
 
 class KUrlRequester;
@@ -45,8 +44,8 @@ Q_OBJECT
 public:
     ProjectPathsWidget( QWidget* parent = 0 );
     void setProject(KDevelop::IProject* w_project);
-    void setPaths( const QList<CustomBuildSystemProjectPathConfig>& );
-    QList<CustomBuildSystemProjectPathConfig> paths() const;
+    void setPaths( const QList<ConfigEntry>& );
+    QList<ConfigEntry> paths() const;
     void clear();
 signals:
     void changed();

@@ -1,5 +1,4 @@
 /************************************************************************
- * KDevelop4 Custom Buildsystem Support                                 *
  *                                                                      *
  * Copyright 2010 Andreas Pakulat <apaku@gmx.de>                        *
  *                                                                      *
@@ -17,30 +16,21 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>. *
  ************************************************************************/
 
-#ifndef INCLUDESMODEL_H
-#define INCLUDESMODEL_H
+#ifndef PROJECTPATHCONFIGENTRY_H
+#define PROJECTPATHCONFIGENTRY_H
 
-#include <QAbstractListModel>
-#include <QList>
+#include <QHash>
+#include <QStringList>
 
-#include "custombuildsystemconfig.h"
+typedef QHash<QString, QVariant> Defines;
 
-class IncludesModel : public QAbstractListModel
+struct ConfigEntry
 {
-Q_OBJECT
-public:
-    IncludesModel( QObject* parent = 0 );
-    void setIncludes( const QStringList&  );
-    QStringList includes() const;
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
-    virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
-    virtual Qt::ItemFlags flags(const QModelIndex& index) const;
-    virtual bool removeRows( int row, int count, const QModelIndex& parent = QModelIndex() );
-    void addInclude( const QString& );
-private:
-    QStringList m_includes;
-    void addIncludeInternal( const QString& includePath );
+    QString path;
+    QStringList includes;
+    Defines defines;
+
+    ConfigEntry( const QString& c_path = QString() ) : path (c_path) {}
 };
 
-#endif // INCLUDESMODEL_H
+#endif

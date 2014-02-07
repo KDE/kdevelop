@@ -1,5 +1,4 @@
 /************************************************************************
- * KDevelop4 Custom Buildsystem Support                                 *
  *                                                                      *
  * Copyright 2010 Andreas Pakulat <apaku@gmx.de>                        *
  *                                                                      *
@@ -17,57 +16,47 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>. *
  ************************************************************************/
 
-#ifndef KDEVELOP_PROJECTMANAGERS_CUSTOM_BUILDSYSTEM_INCLUDESWIDGET_H
-#define KDEVELOP_PROJECTMANAGERS_CUSTOM_BUILDSYSTEM_INCLUDESWIDGET_H
+#ifndef KDEVELOP_PROJECTMANAGERS_CUSTOM_BUILDSYSTEM_DEFINESWIDGET_H
+#define KDEVELOP_PROJECTMANAGERS_CUSTOM_BUILDSYSTEM_DEFINESWIDGET_H
 
 #include <QWidget>
 
 #include <qabstractitemmodel.h>
+#include "configentry.h"
 
 class KFileDialog;
 class KUrlRequester;
 namespace Ui
 {
-class IncludesWidget;
+class DefinesWidget;
 }
 
 namespace KDevelop
 {
     class IProject;
 }
-class KUrl;
-class ProjectPathsModel;
-class IncludesModel;
+
+class DefinesModel;
 class QItemSelection;
 
-class IncludesWidget : public QWidget
+class DefinesWidget : public QWidget
 {
 Q_OBJECT
 public:
-    IncludesWidget( QWidget* parent = 0 );
-    void setProject(KDevelop::IProject* w_project);
-    void setIncludes( const QStringList& );
+    DefinesWidget( QWidget* parent = 0 );
+    void setDefines( const Defines& );
     void clear();
 signals:
-    void includesChanged( const QStringList& );
+    void definesChanged( const Defines& );
 private slots:
-    // Handling of include-path url-requester, add and remove buttons
-    void includePathSelected( const QModelIndex& selected );
-    void includePathEdited();
-    void includePathUrlSelected(const KUrl&);
-    void addIncludePath();
-    // Handles action and also Del-key in list
-    void deleteIncludePath();
+    // Forward defines model changes
+    void definesChanged();
 
-    // Forward includes model changes
-    void includesChanged();
+    // Handle Del key in defines list
+    void deleteDefine();
 private:
-    Ui::IncludesWidget* ui;
-    IncludesModel* includesModel;
-    QString makeIncludeDirAbsolute( const KUrl& url ) const;
-    // Enables/Disables widgets based on UI state/selection
-    void updateEnablements();
-    void updatePathsModel( const QVariant& newData, int role );
+    Ui::DefinesWidget* ui;
+    DefinesModel* definesModel;
 };
 
 #endif

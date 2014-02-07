@@ -1,5 +1,4 @@
 /************************************************************************
- * KDevelop4 Custom Buildsystem Support                                 *
  *                                                                      *
  * Copyright 2010 Andreas Pakulat <apaku@gmx.de>                        *
  *                                                                      *
@@ -17,30 +16,29 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>. *
  ************************************************************************/
 
-#ifndef DEFINESMODEL_H
-#define DEFINESMODEL_H
+#ifndef KCM_CUSTOMBUILDSYSTEM_H
+#define KCM_CUSTOMBUILDSYSTEM_H
 
-#include <QAbstractTableModel>
-#include <QHash>
+#include <project/projectkcmodule.h>
 
-#include "custombuildsystemconfig.h"
+class CustomDefinesAndIncludes;
 
-class DefinesModel : public QAbstractTableModel
+class DefinesAndIncludes : public ProjectKCModule<CustomDefinesAndIncludes>
 {
 Q_OBJECT
 public:
-    DefinesModel( QObject* parent = 0 );
-    void setDefines( const Defines&  );
-    Defines defines() const;
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
-    virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
-    virtual Qt::ItemFlags flags(const QModelIndex& index) const;
-    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
-    virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-    virtual bool removeRows( int row, int count, const QModelIndex& parent = QModelIndex() );
+    DefinesAndIncludes( QWidget* parent, const QVariantList& args = QVariantList() );
+    virtual ~DefinesAndIncludes();
+
+    virtual void defaults();
+    virtual void load();
+    virtual void save();
 private:
-    QList<QPair<QString,QVariant> > m_defines;
+    class ProjectPathsWidget* configWidget;
+    void loadFrom( KConfig* cfg );
+    void saveTo(KConfig* cfg, KDevelop::IProject*);
+public slots:
+    void dataChanged();
 };
 
-#endif // DEFINESMODEL_H
+#endif

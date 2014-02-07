@@ -1,5 +1,4 @@
 /************************************************************************
- * KDevelop4 Custom Buildsystem Support                                 *
  *                                                                      *
  * Copyright 2010 Andreas Pakulat <apaku@gmx.de>                        *
  *                                                                      *
@@ -24,8 +23,6 @@
 #include <language/duchain/indexedstring.h>
 #include <project/path.h>
 
-#include "custombuildsystemconfig.h"
-
 ProjectPathsModel::ProjectPathsModel( QObject* parent )
     : QAbstractListModel( parent ), project( 0 )
 {
@@ -42,7 +39,7 @@ QVariant ProjectPathsModel::data( const QModelIndex& index, int role ) const
         return QVariant();
     }
 
-    const CustomBuildSystemProjectPathConfig& pathConfig = projectPaths.at( index.row() );
+    const ConfigEntry& pathConfig = projectPaths.at( index.row() );
     switch( role ) {
     case IncludesDataRole:
         return pathConfig.includes;
@@ -86,7 +83,7 @@ bool ProjectPathsModel::setData( const QModelIndex& index, const QVariant& value
         QString addedPath = sanitizePath( value.toString(), false );
 
         // Do not allow duplicates
-        foreach( const CustomBuildSystemProjectPathConfig & existingConfig, projectPaths ) {
+        foreach( const ConfigEntry& existingConfig, projectPaths ) {
             if( addedPath == existingConfig.path ) {
                 return false;
             }
@@ -96,7 +93,7 @@ bool ProjectPathsModel::setData( const QModelIndex& index, const QVariant& value
         return true;
     }
 
-    CustomBuildSystemProjectPathConfig& pathConfig = projectPaths[ index.row() ];
+    ConfigEntry& pathConfig = projectPaths[ index.row() ];
     switch( role ) {
     case IncludesDataRole:
         pathConfig.includes = value.toStringList();
@@ -134,19 +131,19 @@ Qt::ItemFlags ProjectPathsModel::flags( const QModelIndex& index ) const
     return Qt::ItemFlags( Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled );
 }
 
-QList< CustomBuildSystemProjectPathConfig > ProjectPathsModel::paths() const
+QList< ConfigEntry > ProjectPathsModel::paths() const
 {
     return projectPaths;
 }
 
-void ProjectPathsModel::setPaths(const QList< CustomBuildSystemProjectPathConfig >& paths )
+void ProjectPathsModel::setPaths(const QList< ConfigEntry >& paths )
 {
     beginResetModel();
     projectPaths.clear();
-    foreach( const CustomBuildSystemProjectPathConfig& existingPathConfig, paths ) {
+    foreach( const ConfigEntry& existingPathConfig, paths ) {
         // Sanitize the path of loaded config
-        CustomBuildSystemProjectPathConfig config = existingPathConfig;
-        config.path = sanitizePath( config.path );
+        ConfigEntry config = existingPathConfig;
+        config.path = sanitizePath( config.path == "." ? QString() : config.path );
         addPathInternal( config, false );
     }
     addPathInternal( sanitizePath( QString() ), true ); // add an empty "root" config entry if one does not exist
@@ -173,7 +170,7 @@ bool ProjectPathsModel::removeRows( int row, int count, const QModelIndex& paren
 
 void ProjectPathsModel::addPath( const KUrl& url )
 {
-    if( !project->inProject(KDevelop::IndexedString(url))) {
+    if( !project->folder().isParentOf(url) ) {
         return;
     }
 
@@ -182,10 +179,10 @@ void ProjectPathsModel::addPath( const KUrl& url )
     endInsertRows();
 }
 
-void ProjectPathsModel::addPathInternal( const CustomBuildSystemProjectPathConfig& config, bool prepend )
+void ProjectPathsModel::addPathInternal( const ConfigEntry& config, bool prepend )
 {
     // Do not allow duplicates
-    foreach( const CustomBuildSystemProjectPathConfig& existingConfig, projectPaths ) {
+    foreach( const ConfigEntry& existingConfig, projectPaths ) {
         if( config.path == existingConfig.path ) {
             return;
         }
@@ -203,7 +200,7 @@ QString ProjectPathsModel::sanitizeUrl( KUrl url, bool needRelative ) const
 
     url.cleanPath();
     if( needRelative )
-        url = KUrl::relativeUrl( project->path().toUrl(), url );
+        url = KUrl::relativeUrl( project->folder(), url );
     return url.pathOrUrl( KUrl::RemoveTrailingSlash );
 }
 
@@ -214,7 +211,7 @@ QString ProjectPathsModel::sanitizePath( const QString& path, bool expectRelativ
 
     KUrl url;
     if( expectRelative ) {
-        url = project->path().toUrl();
+        url = project->folder();
         url.addPath(path);
     } else {
         url = path;

@@ -1,5 +1,4 @@
 /************************************************************************
- * KDevelop4 Custom Buildsystem Support                                 *
  *                                                                      *
  * Copyright 2010 Andreas Pakulat <apaku@gmx.de>                        *
  *                                                                      *
@@ -17,47 +16,30 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>. *
  ************************************************************************/
 
-#ifndef KDEVELOP_PROJECTMANAGERS_CUSTOM_BUILDSYSTEM_DEFINESWIDGET_H
-#define KDEVELOP_PROJECTMANAGERS_CUSTOM_BUILDSYSTEM_DEFINESWIDGET_H
+#ifndef DEFINESMODEL_H
+#define DEFINESMODEL_H
 
-#include <QWidget>
+#include <QAbstractTableModel>
+#include <QHash>
 
-#include <qabstractitemmodel.h>
-#include "custombuildsystemconfig.h"
+#include "configentry.h"
 
-class KFileDialog;
-class KUrlRequester;
-namespace Ui
-{
-class DefinesWidget;
-}
-
-namespace KDevelop
-{
-    class IProject;
-}
-
-class DefinesModel;
-class QItemSelection;
-
-class DefinesWidget : public QWidget
+class DefinesModel : public QAbstractTableModel
 {
 Q_OBJECT
 public:
-    DefinesWidget( QWidget* parent = 0 );
-    void setDefines( const Defines& );
-    void clear();
-signals:
-    void definesChanged( const Defines& );
-private slots:
-    // Forward defines model changes
-    void definesChanged();
-
-    // Handle Del key in defines list
-    void deleteDefine();
+    DefinesModel( QObject* parent = 0 );
+    void setDefines( const Defines&  );
+    Defines defines() const;
+    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+    virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
+    virtual Qt::ItemFlags flags(const QModelIndex& index) const;
+    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
+    virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+    virtual bool removeRows( int row, int count, const QModelIndex& parent = QModelIndex() );
 private:
-    Ui::DefinesWidget* ui;
-    DefinesModel* definesModel;
+    QList<QPair<QString,QVariant> > m_defines;
 };
 
-#endif
+#endif // DEFINESMODEL_H

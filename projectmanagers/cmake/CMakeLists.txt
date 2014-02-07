@@ -1,6 +1,6 @@
 project(cmakemanager)
 kde4_no_enable_final(cmakemanager)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/parser)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/parser ${customDefinesAndIncludes_INCLUDE_DIR})
 
 add_subdirectory(tests)
 add_subdirectory(icons)
@@ -86,7 +86,8 @@ kde4_add_plugin( kdevcmakemanager ${cmakemanager_SRCS} )
 target_link_libraries( kdevcmakemanager ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${KDEVPLATFORM_UTIL_LIBRARIES}
                         ${KDEVPLATFORM_INTERFACES_LIBRARIES} kdev4cmakecommon
                         ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-                        ${KDEVPLATFORM_OUTPUTVIEW_LIBRARIES} ${KDE4_KTEXTEDITOR_LIBS})
+                        ${KDEVPLATFORM_OUTPUTVIEW_LIBRARIES} ${KDE4_KTEXTEDITOR_LIBS}
+                        kdevcustomdefinesandincludesmanager)
                         
 kde4_add_plugin( kdevcmakedocumentation ${cmakedoc_SRCS} )
 target_link_libraries( kdevcmakedocumentation

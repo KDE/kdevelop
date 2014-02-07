@@ -27,8 +27,6 @@ namespace ConfigConstants
     const QString buildConfigPrefix("BuildConfig");
     const QString buildDirKey("BuildDir");
     const QString currentConfigKey("CurrentConfiguration");
-    const QString definesKey("Defines");
-    const QString includesKey("Includes");
     const QString toolGroupPrefix("Tool");
     const QString toolArguments("Arguments");
     const QString toolExecutable("Executable");

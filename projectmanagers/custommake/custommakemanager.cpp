@@ -33,6 +33,8 @@
 #include <kdebug.h>
 #include <KDirWatch>
 
+#include "customdefinesandincludesmanager.h"
+
 using namespace KDevelop;
 
 K_PLUGIN_FACTORY(CustomMakeSupportFactory, registerPlugin<CustomMakeManager>(); )
@@ -78,14 +80,14 @@ IProjectBuilder* CustomMakeManager::builder() const
     return d->m_builder;
 }
 
-Path::List CustomMakeManager::includeDirectories(KDevelop::ProjectBaseItem*) const
+Path::List CustomMakeManager::includeDirectories(KDevelop::ProjectBaseItem* item) const
 {
-    return Path::List();
+    return CustomDefinesAndIncludesManager::self()->includes(item);
 }
 
-QHash<QString,QString> CustomMakeManager::defines(KDevelop::ProjectBaseItem*) const
+QHash<QString,QString> CustomMakeManager::defines(KDevelop::ProjectBaseItem* item) const
 {
-    return QHash<QString,QString>();
+    return CustomDefinesAndIncludesManager::self()->defines(item);
 }
 
 ProjectTargetItem* CustomMakeManager::createTarget(const QString& target, KDevelop::ProjectFolderItem *parent)

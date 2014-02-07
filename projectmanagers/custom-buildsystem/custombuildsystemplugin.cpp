@@ -30,6 +30,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
 #include "configconstants.h"
+#include "customdefinesandincludesmanager.h"
 
 #include "config.h"
 
@@ -124,24 +125,7 @@ ProjectTargetItem* CustomBuildSystem::createTarget( const QString&, ProjectFolde
 
 QHash< QString, QString > CustomBuildSystem::defines( ProjectBaseItem* item ) const
 {
-    QHash<QString,QVariant> hash;
-    KConfigGroup cfg = configuration( item->project() );
-    if(!cfg.isValid())
-        return QHash<QString, QString>();
-
-    KConfigGroup groupForItem = findMatchingPathGroup( cfg, item );
-    if( groupForItem.isValid() ) {
-        QByteArray data = groupForItem.readEntry( ConfigConstants::definesKey, QByteArray() );
-        QDataStream ds( data );
-        ds.setVersion( QDataStream::Qt_4_5 );
-        ds >> hash;
-    }
-    QHash<QString,QString> defines;
-    foreach( const QString& k, hash.keys() )
-    {
-        defines.insert( k, hash[k].toString() );
-    }
-    return defines;
+    return CustomDefinesAndIncludesManager::self()->defines(item);
 }
 
 IProjectFileManager::Features CustomBuildSystem::features() const
@@ -157,19 +141,7 @@ ProjectFolderItem* CustomBuildSystem::createFolderItem( IProject* project,
 
 Path::List CustomBuildSystem::includeDirectories( ProjectBaseItem* item ) const
 {
-    QStringList includes;
-    KConfigGroup cfg = configuration( item->project() );
-    if(!cfg.isValid())
-        return Path::List();
-
-    KConfigGroup groupForItem = findMatchingPathGroup( cfg, item );
-    if( groupForItem.isValid() ) {
-        QByteArray data = groupForItem.readEntry( ConfigConstants::includesKey, QByteArray() );
-        QDataStream ds( data );
-        ds.setVersion( QDataStream::Qt_4_5 );
-        ds >> includes;
-    }
-    return KDevelop::toPathList(KUrl::List( includes ));
+    return CustomDefinesAndIncludesManager::self()->includes(item);
 }
 
 KJob* CustomBuildSystem::install( ProjectBaseItem* item )
@@ -204,36 +176,6 @@ KConfigGroup CustomBuildSystem::configuration( IProject* project ) const
         return grp.group( grp.readEntry( ConfigConstants::currentConfigKey ) );
     else
         return KConfigGroup();
-}
-
-KConfigGroup CustomBuildSystem::findMatchingPathGroup(const KConfigGroup& cfg, ProjectBaseItem* item) const
-{
-    KConfigGroup candidateGroup;
-    Path candidateTargetDirectory;
-
-    const Path itemPath = item->path();
-    const Path rootDirectory = item->project()->path();
-
-    foreach( const QString& groupName, cfg.groupList() ) {
-        if( groupName.startsWith( ConfigConstants::projectPathPrefix ) ) {
-            KConfigGroup pathGroup = cfg.group(groupName);
-
-            QString targetDirectoryRelative = pathGroup.readEntry( ConfigConstants::projectPathKey, "" );
-            Path targetDirectory = rootDirectory;
-            // note: a dot represents the project root
-            if (targetDirectoryRelative != ".") {
-                targetDirectory.addPath( targetDirectoryRelative );
-            }
-
-            if( targetDirectory == itemPath || targetDirectory.isParentOf(itemPath) ) {
-                if( !candidateTargetDirectory.isValid() || candidateTargetDirectory.isParentOf(targetDirectory) ) {
-                  candidateGroup = pathGroup;
-                  candidateTargetDirectory = targetDirectory;
-                }
-            }
-        }
-    }
-    return candidateGroup;
 }
 
 #include "custombuildsystemplugin.moc"
