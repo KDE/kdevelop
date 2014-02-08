@@ -1,6 +1,7 @@
 /*  This file is part of KDevelop
 
     Copyright 2010 Benjamin Port <port.benjamin@gmail.com>
+    Copyright 2014 Kevin Funk <kfunk@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -36,6 +37,14 @@
 K_PLUGIN_FACTORY(QtHelpConfigFactory, registerPlugin<QtHelpConfig>();)
 K_EXPORT_PLUGIN(QtHelpConfigFactory("kdevqthelp_config"))
 
+enum Column
+{
+    NameColumn,
+    PathColumn,
+    IconColumn,
+    GhnsColumn
+};
+
 QtHelpConfig::QtHelpConfig(QWidget *parent, const QVariantList &args)
     : KCModule(QtHelpConfigFactory::componentData(), parent, args)
 {
@@ -57,12 +66,9 @@ QtHelpConfig::QtHelpConfig(QWidget *parent, const QVariantList &args)
     connect(m_configWidget->downButton, SIGNAL(clicked(bool)), this, SLOT(down()));
     // Table
     connect(m_configWidget->qchTable, SIGNAL(itemSelectionChanged()), this, SLOT(selectionChanged()));
-    m_configWidget->qchTable->setSelectionMode(QAbstractItemView::SingleSelection);
-    m_configWidget->qchTable->setSelectionBehavior(QAbstractItemView::SelectRows);
-    m_configWidget->qchTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    m_configWidget->qchTable->setColumnHidden(2, true);
-    m_configWidget->qchTable->setColumnHidden(3, true);
-    m_configWidget->qchTable->horizontalHeader()->setStretchLastSection(true);
+    m_configWidget->qchTable->setColumnHidden(IconColumn, true);
+    m_configWidget->qchTable->setColumnHidden(GhnsColumn, true);
+    m_configWidget->qchTable->header()->setStretchLastSection(true);
 
     // Add GHNS button
     KNS3::Button *knsButton = new KNS3::Button(i18nc("Allow user to get some API documentation with GHNS", "Get New Documentation"), "kdevelop-qthelp.knsrc", m_configWidget->qchManage);
@@ -82,11 +88,12 @@ QtHelpConfig::~QtHelpConfig()
 void QtHelpConfig::save()
 {
     QStringList iconList, nameList, pathList, ghnsList;
-    for(int i=0; i < m_configWidget->qchTable->rowCount(); i++) {
-        nameList << m_configWidget->qchTable->item(i,0)->text();
-        pathList << m_configWidget->qchTable->item(i,1)->text();
-        iconList << m_configWidget->qchTable->item(i,2)->text();
-        ghnsList << m_configWidget->qchTable->item(i,3)->text();
+    for (int i = 0; i < m_configWidget->qchTable->topLevelItemCount(); i++) {
+        const QTreeWidgetItem* item = m_configWidget->qchTable->topLevelItem(i);
+        nameList << item->text(0);
+        pathList << item->text(1);
+        iconList << item->text(2);
+        ghnsList << item->text(3);
     }
     bool loadQtDoc = m_configWidget->loadQtDocsCheckBox->isChecked();
 
@@ -99,9 +106,7 @@ void QtHelpConfig::save()
 
 void QtHelpConfig::load()
 {
-    while(m_configWidget->qchTable->rowCount()) {
-        m_configWidget->qchTable->removeRow(0);
-    }
+    m_configWidget->qchTable->clear();;
 
     QStringList iconList, nameList, pathList, ghnsList;
     bool loadQtDoc;
@@ -109,15 +114,12 @@ void QtHelpConfig::load()
 
     const int size = qMin(qMin(iconList.size(), nameList.size()), pathList.size());
     for(int i = 0; i < size; ++i) {
-        m_configWidget->qchTable->insertRow(i);
-        QTableWidgetItem *itemName = new QTableWidgetItem(KIcon(iconList.at(i)), nameList.at(i));
-        m_configWidget->qchTable->setItem(i, 0, itemName);
-        QTableWidgetItem *itemPath = new QTableWidgetItem(pathList.at(i));
-        m_configWidget->qchTable->setItem(i, 1, itemPath);
-        QTableWidgetItem *itemIconName = new QTableWidgetItem(iconList.at(i));
-        m_configWidget->qchTable->setItem(i, 2, itemIconName);
-        QTableWidgetItem *itemGhns = new QTableWidgetItem(ghnsList.size()>i?ghnsList.at(i):"0");
-        m_configWidget->qchTable->setItem(i, 3, itemGhns);
+        QTreeWidgetItem* item = new QTreeWidgetItem(m_configWidget->qchTable);
+        item->setIcon(NameColumn, KIcon(iconList.at(i)));
+        item->setText(NameColumn, nameList.at(i));
+        item->setText(PathColumn, pathList.at(i));
+        item->setText(IconColumn, iconList.at(i));
+        item->setText(GhnsColumn, ghnsList.size()>i ? ghnsList.at(i) : "0");
     }
 
     m_configWidget->loadQtDocsCheckBox->setChecked(loadQtDoc);
@@ -128,10 +130,8 @@ void QtHelpConfig::load()
 void QtHelpConfig::defaults()
 {
     bool change=false;
-    if(m_configWidget->qchTable->rowCount() > 0) {
-        while(m_configWidget->qchTable->rowCount()) {
-            m_configWidget->qchTable->removeRow(0);
-        }
+    if(m_configWidget->qchTable->topLevelItemCount() > 0) {
+        m_configWidget->qchTable->clear();
         change = true;
     }
     if(!m_configWidget->loadQtDocsCheckBox->isChecked()){
@@ -149,24 +149,25 @@ void QtHelpConfig::selectionChanged()
         m_configWidget->upButton->setEnabled(false);
         m_configWidget->downButton->setEnabled(false);
     } else {
-        int row = m_configWidget->qchTable->selectedItems().at(0)->row();
-        int nbRow = m_configWidget->qchTable->rowCount();
-        if (m_configWidget->qchTable->item(row, 3)->text() != "0") {
+        QTreeWidgetItem* selectedItem = m_configWidget->qchTable->selectedItems().at(0);
+        const int selectedRow = m_configWidget->qchTable->indexOfTopLevelItem(selectedItem);
+        int rowCount = m_configWidget->qchTable->topLevelItemCount();
+        if (selectedItem->text(GhnsColumn) != "0") {
             m_configWidget->removeButton->setEnabled(false);
             m_configWidget->qchRequester->setText(i18n("Documentation provided by GHNS"));
         } else {
             m_configWidget->removeButton->setEnabled(true);
-            m_configWidget->qchRequester->setText(m_configWidget->qchTable->item(row, 1)->text());
+            m_configWidget->qchRequester->setText(selectedItem->text(PathColumn));
         }
         m_configWidget->editButton->setEnabled(true);
-        m_configWidget->qchName->setText(m_configWidget->qchTable->item(row, 0)->text());
-        m_configWidget->qchIcon->setIcon(m_configWidget->qchTable->item(row, 2)->text());
-        if (row==0) {
+        m_configWidget->qchName->setText(selectedItem->text(NameColumn));
+        m_configWidget->qchIcon->setIcon(selectedItem->text(IconColumn));
+        if (selectedRow == 0) {
             m_configWidget->upButton->setEnabled(false);
         } else {
             m_configWidget->upButton->setEnabled(true);
         }
-        if (nbRow > row + 1) {
+        if (rowCount > selectedRow + 1) {
             m_configWidget->downButton->setEnabled(true);
         } else {
             m_configWidget->downButton->setEnabled(false);
@@ -179,42 +180,39 @@ void QtHelpConfig::add()
     if(!checkQtHelpFile(false)){
         return;
     }
-    int row = m_configWidget->qchTable->rowCount();
-    m_configWidget->qchTable->insertRow(row);
-    QTableWidgetItem *itemName = new QTableWidgetItem(KIcon(m_configWidget->qchIcon->icon()), m_configWidget->qchName->text());
-    m_configWidget->qchTable->setItem(row, 0, itemName);
-    QTableWidgetItem *itemPath = new QTableWidgetItem(m_configWidget->qchRequester->text());
-    m_configWidget->qchTable->setItem(row, 1, itemPath);
-    QTableWidgetItem *itemIconName = new QTableWidgetItem(m_configWidget->qchIcon->icon());
-    m_configWidget->qchTable->setItem(row, 2, itemIconName);
-    QTableWidgetItem *itemGhns = new QTableWidgetItem("0");
-    m_configWidget->qchTable->setItem(row, 3, itemGhns);
-    m_configWidget->qchTable->setCurrentCell(row, 0);
+
+    QTreeWidgetItem* item = new QTreeWidgetItem(m_configWidget->qchTable);
+    item->setIcon(NameColumn, KIcon(m_configWidget->qchIcon->icon()));
+    item->setText(NameColumn, m_configWidget->qchName->text());
+    item->setText(PathColumn, m_configWidget->qchRequester->text());
+    item->setText(IconColumn, m_configWidget->qchIcon->icon());
+    item->setText(GhnsColumn, "0");
+    m_configWidget->qchTable->setCurrentItem(item);
     emit changed(true);
 }
 
 void QtHelpConfig::modify()
 {
-    if (!m_configWidget->qchTable->selectedItems().isEmpty()) {
-        int row = m_configWidget->qchTable->selectedItems().at(0)->row();
-        if(m_configWidget->qchTable->item(row, 3)->text() == "0") {
-            // Not from GHNS
-            if(!checkQtHelpFile(true)){
-                return;
-            }
-            m_configWidget->qchTable->item(row, 0)->setIcon(KIcon(m_configWidget->qchIcon->icon()));
-            m_configWidget->qchTable->item(row, 0)->setText(m_configWidget->qchName->text());
-            m_configWidget->qchTable->item(row, 1)->setText(m_configWidget->qchRequester->text());
-            m_configWidget->qchTable->item(row, 2)->setText(m_configWidget->qchIcon->icon());
-            emit changed(true);
-        } else {
-            // From GHNS
-            m_configWidget->qchTable->item(row, 0)->setIcon(KIcon(m_configWidget->qchIcon->icon()));
-            m_configWidget->qchTable->item(row, 0)->setText(m_configWidget->qchName->text());
-            m_configWidget->qchTable->item(row, 2)->setText(m_configWidget->qchIcon->icon());
-            emit changed(true);
+    QTreeWidgetItem* item = m_configWidget->qchTable->currentItem();
+    if (!item)
+        return;
+
+    if(item->text(GhnsColumn) == "0") {
+        // Not from GHNS
+        if(!checkQtHelpFile(true)){
+            return;
         }
+        item->setIcon(NameColumn, KIcon(m_configWidget->qchIcon->icon()));
+        item->setText(NameColumn, m_configWidget->qchName->text());
+        item->setText(PathColumn, m_configWidget->qchRequester->text());
+        item->setText(IconColumn, m_configWidget->qchIcon->icon());
+    } else {
+        // From GHNS
+        item->setIcon(NameColumn, KIcon(m_configWidget->qchIcon->icon()));
+        item->setText(NameColumn, m_configWidget->qchName->text());
+        item->setText(IconColumn, m_configWidget->qchIcon->icon());
     }
+    emit changed(true);
 }
 
 bool QtHelpConfig::checkQtHelpFile(bool modify)
@@ -224,14 +222,14 @@ bool QtHelpConfig::checkQtHelpFile(bool modify)
         KMessageBox::error(this, i18n("Name cannot be empty."));
         return false;
     }
-    int modifyIndex = -1;
+    QTreeWidgetItem* modifiedItem = nullptr;
     if(modify){
-        modifyIndex = m_configWidget->qchTable->currentRow();
+        modifiedItem = m_configWidget->qchTable->selectedItems().value(0);
     }
-    return checkNamespace(m_configWidget->qchRequester->text(), modifyIndex);
+    return checkNamespace(m_configWidget->qchRequester->text(), modifiedItem);
 }
 
-bool QtHelpConfig::checkNamespace(const QString &filename, int modifiedIndex)
+bool QtHelpConfig::checkNamespace(const QString& filename, QTreeWidgetItem* modifiedItem)
 {
     QString qtHelpNamespace = QHelpEngineCore::namespaceName(filename);
     if (qtHelpNamespace.isEmpty()) {
@@ -240,9 +238,10 @@ bool QtHelpConfig::checkNamespace(const QString &filename, int modifiedIndex)
         return false;
     }
     // verify if it's the namespace it's not already in the list
-    for(int i=0; i < m_configWidget->qchTable->rowCount(); i++) {
-        if(i != modifiedIndex){
-            if(qtHelpNamespace == QHelpEngineCore::namespaceName(m_configWidget->qchTable->item(i,1)->text())){
+    for(int i=0; i < m_configWidget->qchTable->topLevelItemCount(); i++) {
+        const QTreeWidgetItem* item = m_configWidget->qchTable->topLevelItem(i);
+        if (item != modifiedItem){
+            if (qtHelpNamespace == QHelpEngineCore::namespaceName(item->text(PathColumn))) {
                 // Open error message, documentation already imported
                 KMessageBox::error(this, i18n("Documentation already imported"));
                 return false;
@@ -254,65 +253,42 @@ bool QtHelpConfig::checkNamespace(const QString &filename, int modifiedIndex)
 
 void QtHelpConfig::remove()
 {
-    if (!m_configWidget->qchTable->selectedItems().isEmpty()) {
-        int row = m_configWidget->qchTable->selectedItems().at(0)->row();
-        m_configWidget->qchTable->removeRow(row);
-        emit changed(true);
-    }
+    QTreeWidgetItem* selectedItem = m_configWidget->qchTable->currentItem();
+    if (!selectedItem)
+        return;
+
+    delete selectedItem;
+    emit changed(true);
 }
 
 void QtHelpConfig::up()
 {
-    if (!m_configWidget->qchTable->selectedItems().isEmpty()) {
-        int row = m_configWidget->qchTable->selectedItems().at(0)->row();
-        if (row > 0) {
-            QTableWidgetItem *currentItemName = m_configWidget->qchTable->takeItem(row, 0);
-            QTableWidgetItem *currentItemPath = m_configWidget->qchTable->takeItem(row, 1);
-            QTableWidgetItem *currentItemIconName = m_configWidget->qchTable->takeItem(row, 2);
-            QTableWidgetItem *currentItemGhns = m_configWidget->qchTable->takeItem(row, 3);
-            QTableWidgetItem *previousItemName = m_configWidget->qchTable->takeItem(row-1, 0);
-            QTableWidgetItem *previousItemPath = m_configWidget->qchTable->takeItem(row-1, 1);
-            QTableWidgetItem *previousItemIconName = m_configWidget->qchTable->takeItem(row-1, 2);
-            QTableWidgetItem *previousItemGhns = m_configWidget->qchTable->takeItem(row-1, 3);
-            m_configWidget->qchTable->setItem(row, 0, previousItemName);
-            m_configWidget->qchTable->setItem(row, 1, previousItemPath);
-            m_configWidget->qchTable->setItem(row, 2, previousItemIconName);
-            m_configWidget->qchTable->setItem(row, 3, previousItemGhns);
-            m_configWidget->qchTable->setItem(row-1, 0, currentItemName);
-            m_configWidget->qchTable->setItem(row-1, 1, currentItemPath);
-            m_configWidget->qchTable->setItem(row-1, 2, currentItemIconName);
-            m_configWidget->qchTable->setItem(row-1, 3, currentItemGhns);
-            m_configWidget->qchTable->setCurrentCell(row-1, 0);
-            emit changed(true);
-        }
-    }
+    QTreeWidgetItem* item = m_configWidget->qchTable->currentItem();
+    if (!item)
+        return;
+    const int row = m_configWidget->qchTable->indexOfTopLevelItem(item);
+    if (row == 0)
+        return;
+
+    m_configWidget->qchTable->takeTopLevelItem(row);
+    m_configWidget->qchTable->insertTopLevelItem(row - 1, item);
+    m_configWidget->qchTable->setCurrentItem(item);
+    emit changed();
 }
 
 void QtHelpConfig::down()
 {
-    if (!m_configWidget->qchTable->selectedItems().isEmpty()) {
-        int row = m_configWidget->qchTable->selectedItems().at(0)->row();
-        if (row + 1 < m_configWidget->qchTable->rowCount()) {
-            QTableWidgetItem *currentItemName = m_configWidget->qchTable->takeItem(row, 0);
-            QTableWidgetItem *currentItemPath = m_configWidget->qchTable->takeItem(row, 1);
-            QTableWidgetItem *currentItemIconName = m_configWidget->qchTable->takeItem(row, 2);
-            QTableWidgetItem *currentItemGhns = m_configWidget->qchTable->takeItem(row, 3);
-            QTableWidgetItem *nextItemName = m_configWidget->qchTable->takeItem(row+1, 0);
-            QTableWidgetItem *nextItemPath = m_configWidget->qchTable->takeItem(row+1, 1);
-            QTableWidgetItem *nextItemIconName = m_configWidget->qchTable->takeItem(row+1, 2);
-            QTableWidgetItem *nextItemGhns = m_configWidget->qchTable->takeItem(row+1, 3);
-            m_configWidget->qchTable->setItem(row, 0, nextItemName);
-            m_configWidget->qchTable->setItem(row, 1, nextItemPath);
-            m_configWidget->qchTable->setItem(row, 2, nextItemIconName);
-            m_configWidget->qchTable->setItem(row, 3, nextItemGhns);
-            m_configWidget->qchTable->setItem(row+1, 0, currentItemName);
-            m_configWidget->qchTable->setItem(row+1, 1, currentItemPath);
-            m_configWidget->qchTable->setItem(row+1, 2, currentItemIconName);
-            m_configWidget->qchTable->setItem(row+1, 3, currentItemGhns);
-            m_configWidget->qchTable->setCurrentCell(row+1, 0);
-            emit changed(true);
-        }
-    }
+    QTreeWidgetItem* item = m_configWidget->qchTable->currentItem();
+    if (!item)
+        return;
+    const int row = m_configWidget->qchTable->indexOfTopLevelItem(item);
+    if (row + 1 >= m_configWidget->qchTable->topLevelItemCount())
+        return;
+
+    m_configWidget->qchTable->takeTopLevelItem(row);
+    m_configWidget->qchTable->insertTopLevelItem(row + 1, item);
+    m_configWidget->qchTable->setCurrentItem(item);
+    emit changed();
 }
 
 void QtHelpConfig::knsUpdate(KNS3::Entry::List list)
@@ -321,33 +297,26 @@ void QtHelpConfig::knsUpdate(KNS3::Entry::List list)
         if(e.status() == KNS3::Entry::Installed) {
             if(e.installedFiles().size() == 1) {
                 QString filename = e.installedFiles().at(0);
-                if(checkNamespace(filename, -1)){
-                    int row = m_configWidget->qchTable->rowCount();
-                    m_configWidget->qchTable->insertRow(row);
-                    QTableWidgetItem *itemName = new QTableWidgetItem(KIcon("documentation"), e.name());
-                    m_configWidget->qchTable->setItem(row, 0, itemName);
-                    QTableWidgetItem *itemPath = new QTableWidgetItem(filename);
-                    m_configWidget->qchTable->setItem(row, 1, itemPath);
-                    QTableWidgetItem *itemIconName = new QTableWidgetItem("documentation");
-                    m_configWidget->qchTable->setItem(row, 2, itemIconName);
-                    QTableWidgetItem *itemGhns = new QTableWidgetItem("1");
-                    m_configWidget->qchTable->setItem(row, 3, itemGhns);
-                    m_configWidget->qchTable->setCurrentCell(row, 0);
+                if(checkNamespace(filename, nullptr)){
+                    QTreeWidgetItem* item = new QTreeWidgetItem(m_configWidget->qchTable);
+                    item->setIcon(NameColumn, KIcon("documentation"));
+                    item->setText(NameColumn, e.name());
+                    item->setText(PathColumn, filename);
+                    item->setText(IconColumn, "documentation");
+                    item->setText(GhnsColumn, "1");
+                    m_configWidget->qchTable->setCurrentItem(item);
                 } else {
                     kDebug() << "namespace error";
                 }
             }
         } else if(e.status() ==  KNS3::Entry::Deleted) {
             if(e.uninstalledFiles().size() == 1) {
-                int row = -1;
-                for(int i=0; i < m_configWidget->qchTable->rowCount(); i++) {
-                    if(e.uninstalledFiles().at(0) == m_configWidget->qchTable->item(i,1)->text()){
-                        row = i;
+                for(int i=0; i < m_configWidget->qchTable->topLevelItemCount(); i++) {
+                    QTreeWidgetItem* item = m_configWidget->qchTable->topLevelItem(i);
+                    if (e.uninstalledFiles().at(0) == item->text(PathColumn)) {
+                        delete item;
                         break;
                     }
-                }
-                if(row != -1) {
-                    m_configWidget->qchTable->removeRow(row);
                 }
             }
         }
