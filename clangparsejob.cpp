@@ -41,6 +41,9 @@
 #include "debug.h"
 #include "clanglanguagesupport.h"
 
+#include <QFile>
+#include <QStringList>
+#include <QFileInfo>
 #include <QReadLocker>
 #include <QProcess>
 #include <memory>
@@ -148,6 +151,45 @@ ReferencedTopDUContext createTopContext(const IndexedString& path)
     return context;
 }
 
+static const QLatin1String customIncludePathsFilename(".kdev_include_paths");
+
+QString findCustomIncludePathsFile(const QString& startPath)
+{
+    QDir dir(startPath);
+    while (dir.exists()) {
+        QFileInfo customIncludePaths(dir, customIncludePathsFilename);
+        if (customIncludePaths.exists())
+            return customIncludePaths.absoluteFilePath();
+
+        if (!dir.cdUp())
+            break;
+    }
+
+    return QString();
+}
+
+Path::List readCustomIncludePathsFile(const QString& filepath)
+{
+    QFile f(filepath);
+    if (!f.open(QIODevice::ReadOnly | QIODevice::Text))
+        return Path::List();
+
+    QString text = QString::fromLocal8Bit(f.readAll());
+    QStringList lines = text.split('\n', QString::SkipEmptyParts);
+    Path::List paths(lines.length());
+    std::transform(lines.begin(), lines.end(), paths.begin(), [] (const QString& line) { return Path(line); });
+    return paths;
+}
+
+Path::List getUserDefinedIncludePathsForFile(const QString& sourcefile)
+{
+    QString filepath = findCustomIncludePathsFile(Path(sourcefile).parent().path());
+    if (filepath.isEmpty())
+        return Path::List();
+
+    return readCustomIncludePathsFile(filepath);
+}
+
 }
 
 ClangParseJob::ClangParseJob(const IndexedString& url, ILanguageSupport* languageSupport)
@@ -157,6 +199,7 @@ ClangParseJob::ClangParseJob(const IndexedString& url, ILanguageSupport* languag
     if (item && item->project()->buildSystemManager()) {
         auto bsm = item->project()->buildSystemManager();
         m_includes = bsm->includeDirectories(item);
+        m_includes += getUserDefinedIncludePathsForFile(url.str());
         m_defines = bsm->defines(item);
     }
 
