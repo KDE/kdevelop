@@ -136,7 +136,7 @@ QVariant ProblemModel::data(const QModelIndex & index, int role) const
     return QVariant();
 }
 
-QModelIndex ProblemModel::parent(const QModelIndex & index) const
+QModelIndex ProblemModel::parent(const QModelIndex& /*index*/) const
 {
     return QModelIndex();
 }
