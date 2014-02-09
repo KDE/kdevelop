@@ -31,6 +31,12 @@ namespace KDevelop
 class KDEVPLATFORMINTERFACES_EXPORT SourceFormatterStyle
 {
 public:
+	struct MimeHighlightPair {
+		QString mimeType;
+		QString highlightMode;
+	};
+	typedef QVector<MimeHighlightPair> MimeList;
+
 	SourceFormatterStyle();
 	SourceFormatterStyle( const QString& name );
 	void setContent( const QString& content );
@@ -42,13 +48,46 @@ public:
 	void setDescription( const QString& desc );
 	bool usePreview() const;
 	void setUsePreview(bool use);
+
+	void setMimeTypes( const MimeList& types );
+	void setMimeTypes( const QStringList& types );
+
+	/// Provides the possibility to the item to return a better-suited
+	/// code sample. If empty, the default is used.
+	QString overrideSample() const;
+	void setOverrideSample( const QString& sample );
+
+	MimeList mimeTypes() const;
+	/// mime types as a QVariantList, type and mode separated by | in strings
+	QVariant mimeTypesVariant() const;
+	bool supportsLanguage(const QString& language) const;
+
+	/// get the language / highlight mode for a given @p mime
+	QString modeForMimetype(const KMimeType::Ptr& mime) const;
+
+	/// Copy content, mime types and code sample from @p other.
+    void copyDataFrom(SourceFormatterStyle *other);
+
 private:
 	bool m_usePreview;
 	QString m_name;
 	QString m_caption;
 	QString m_content;
 	QString m_description;
+	QString m_overrideSample;
+	MimeList m_mimeTypes;
 };
+
+/**
+ * @brief An object describing a style associated with a plugin
+ *        which can deal with this style.
+ */
+struct SourceFormatterStyleItem {
+	QString engine;
+	SourceFormatterStyle style;
+};
+
+typedef QVector<SourceFormatterStyleItem> SourceFormatterItemList;
 
 /**
 * @short A widget to edit a style
@@ -110,10 +149,6 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatter
 		*/
 		virtual QString description() = 0;
 
-		/** \return The highlighting mode for Kate corresponding to this mime.
-		*/
-		virtual QString highlightModeForMime(const KMimeType::Ptr &mime) = 0;
-		
 		/** Formats using the current style.
 		 * @param text The text to format
 		 * @param url The URL to which the text belongs (its contents must not be changed).
@@ -146,7 +181,7 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatter
 
 		/** \return The text used in the config dialog to preview the current style.
 		*/
-		virtual QString previewText(const KMimeType::Ptr &mime) = 0;
+		virtual QString previewText(const SourceFormatterStyle* style, const KMimeType::Ptr &mime) = 0;
 
 		struct Indentation {
 			Indentation() : indentationTabWidth(0), indentWidth(0) {
@@ -188,6 +223,7 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatter
 }
 
 Q_DECLARE_INTERFACE(KDevelop::ISourceFormatter, "org.kdevelop.ISourceFormatter")
+Q_DECLARE_TYPEINFO(KDevelop::SourceFormatterStyle::MimeHighlightPair, Q_MOVABLE_TYPE);
 
 #endif // KDEVPLATFORM_ISOURCEFORMATTER_H
 // kate: indent-mode cstyle; space-indent off; tab-width 4;

@@ -26,6 +26,8 @@ Boston, MA 02110-1301, USA.
 
 #include <QtCore/QHash>
 #include <QtCore/QList>
+#include <QtCore/QSet>
+
 #include <kxmlguiclient.h>
 #include <KDE/KMimeType>
 #include <KDE/KConfigGroup>
@@ -47,6 +49,29 @@ class IDocument;
 class ISourceFormatter;
 class IPlugin;
 
+struct SourceFormatter
+{
+	KDevelop::ISourceFormatter* formatter;
+	// style name -> style. style objects owned by this
+	typedef QMap<QString,KDevelop::SourceFormatterStyle*> StyleMap;
+	StyleMap styles;
+	// Get a list of supported mime types from the style map.
+	QSet<QString> supportedMimeTypes() const
+	{
+		QSet<QString> supported;
+		for ( auto style: styles ) {
+			for ( auto item: style->mimeTypes() ) {
+				supported.insert(item.mimeType);
+			}
+		}
+		return supported;
+	}
+	~SourceFormatter()
+	{
+		qDeleteAll(styles);
+	};
+};
+
 /** \short A singleton class managing all source formatter plugins
  */
 class KDEVPLATFORMSHELL_EXPORT SourceFormatterController : public ISourceFormatterController, public KXMLGUIClient
@@ -57,7 +82,8 @@ class KDEVPLATFORMSHELL_EXPORT SourceFormatterController : public ISourceFormatt
 		static const QString kateOverrideIndentationConfigKey;
 		static const QString styleCaptionKey;
 		static const QString styleContentKey;
-		static const QString supportedMimeTypesKey;
+		static const QString styleMimeTypesKey;
+		static const QString styleSampleKey;
 		
 		SourceFormatterController(QObject *parent = 0);
 		virtual ~SourceFormatterController();
@@ -77,11 +103,24 @@ class KDEVPLATFORMSHELL_EXPORT SourceFormatterController : public ISourceFormatt
 		*/
 		bool isMimeTypeSupported(const KMimeType::Ptr &mime);
 
+		/**
+		 * @brief Instantiate a Formatter for the given plugin and load its configuration.
+		 *
+		 * @param ifmt The ISourceFormatter interface of the plugin
+		 * @return KDevelop::SourceFormatter* the SourceFormatter instance for the plugin, including config items
+		 */
+		SourceFormatter* createFormatterForPlugin(KDevelop::ISourceFormatter* ifmt) const;
+
+		/**
+		 * @brief Find the first formatter which supports a given mime type.
+		 */
+		ISourceFormatter* findFirstFormatterForMimeType( const KMimeType::Ptr& mime ) const;
+
 		KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
 
 		virtual KDevelop::SourceFormatterStyle styleForMimeType( const KMimeType::Ptr& mime );
 		
-		KConfigGroup configuration();
+		KConfigGroup configuration() const;
 
 		void settingsChanged();
 		

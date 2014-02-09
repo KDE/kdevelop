@@ -71,8 +71,7 @@ void EditStyleDialog::init()
 
 	m_document = editor->createDocument(this);
 	m_document->setReadWrite(false);
-	QString mode = m_sourceFormatter->highlightModeForMime(m_mimeType);
-	m_document->setHighlightingMode(mode);
+	m_document->setHighlightingMode(m_style.modeForMimetype(m_mimeType));
 
 	m_view = qobject_cast<KTextEditor::View*>(
 	            m_document->createView(m_ui.textEditor));
@@ -88,8 +87,10 @@ void EditStyleDialog::init()
 		iface->setConfigValue("icon-bar", false);
 	}
 
-	if (m_sourceFormatter)
-		updatePreviewText(m_sourceFormatter->previewText(m_mimeType));
+	if (m_sourceFormatter) {
+		QString text = m_sourceFormatter->previewText(&m_style, m_mimeType);
+		updatePreviewText(text);
+	}
 }
 
 void EditStyleDialog::updatePreviewText(const QString &text)

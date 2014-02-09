@@ -59,7 +59,8 @@ const QString SourceFormatterController::kateModeLineConfigKey = "ModelinesEnabl
 const QString SourceFormatterController::kateOverrideIndentationConfigKey = "OverrideKateIndentation";
 const QString SourceFormatterController::styleCaptionKey = "Caption";
 const QString SourceFormatterController::styleContentKey = "Content";
-const QString SourceFormatterController::supportedMimeTypesKey = "X-KDevelop-SupportedMimeTypes";
+const QString SourceFormatterController::styleMimeTypesKey = "MimeTypes";
+const QString SourceFormatterController::styleSampleKey = "StyleSample";
 
 SourceFormatterController::SourceFormatterController(QObject *parent)
 		: ISourceFormatterController(parent), m_enabled(true)
@@ -126,12 +127,12 @@ ISourceFormatter* SourceFormatterController::formatterForUrl(const KUrl &url)
 	KMimeType::Ptr mime = KMimeType::findByUrl(url);
 	return formatterForMimeType(mime);
 }
-KConfigGroup SourceFormatterController::configuration()
+KConfigGroup SourceFormatterController::configuration() const
 {
 	return Core::self()->activeSession()->config()->group( "SourceFormatter" );
 }
 
-static ISourceFormatter* findFirstFormatterForMimeType( const KMimeType::Ptr& mime )
+ISourceFormatter* SourceFormatterController::findFirstFormatterForMimeType( const KMimeType::Ptr& mime ) const
 {
 	static QHash<QString, ISourceFormatter*> knownFormatters;
 	if (knownFormatters.contains(mime->name()))
@@ -139,14 +140,45 @@ static ISourceFormatter* findFirstFormatterForMimeType( const KMimeType::Ptr& mi
 	
 	foreach( IPlugin* p, Core::self()->pluginController()->allPluginsForExtension( "org.kdevelop.ISourceFormatter" ) ) {
 		KPluginInfo info = Core::self()->pluginController()->pluginInfo( p );
-		if( info.property( SourceFormatterController::supportedMimeTypesKey ).toStringList().contains( mime->name() ) ) {
-			ISourceFormatter *formatter = p->extension<ISourceFormatter>();
-			knownFormatters[mime->name()] = formatter;
-			return formatter;
+		ISourceFormatter *iformatter = p->extension<ISourceFormatter>();
+		QSharedPointer<SourceFormatter> formatter(createFormatterForPlugin(iformatter));
+		if( formatter->supportedMimeTypes().contains(mime->name()) ) {
+			knownFormatters[mime->name()] = iformatter;
+			return iformatter;
 		}
 	}
 	knownFormatters[mime->name()] = 0;
 	return 0;
+}
+
+static void populateStyleFromConfigGroup(SourceFormatterStyle* s, const KConfigGroup& stylegrp)
+{
+	s->setCaption( stylegrp.readEntry( SourceFormatterController::styleCaptionKey, QString() ) );
+	s->setContent( stylegrp.readEntry( SourceFormatterController::styleContentKey, QString() ) );
+	s->setMimeTypes( stylegrp.readEntry<QStringList>( SourceFormatterController::styleMimeTypesKey, QStringList() ) );
+	s->setOverrideSample( stylegrp.readEntry( SourceFormatterController::styleSampleKey, QString() ) );
+}
+
+SourceFormatter* SourceFormatterController::createFormatterForPlugin(ISourceFormatter *ifmt) const
+{
+	SourceFormatter* formatter = new SourceFormatter();
+	formatter->formatter = ifmt;
+
+	// Inserted a new formatter. Now fill it with styles
+	foreach( const KDevelop::SourceFormatterStyle& style, ifmt->predefinedStyles() ) {
+		formatter->styles[ style.name() ] = new SourceFormatterStyle(style);
+	}
+	KConfigGroup grp = configuration();
+	if( grp.hasGroup( ifmt->name() ) ) {
+		KConfigGroup fmtgrp = grp.group( ifmt->name() );
+		foreach( const QString& subgroup, fmtgrp.groupList() ) {
+			SourceFormatterStyle* s = new SourceFormatterStyle( subgroup );
+			KConfigGroup stylegrp = fmtgrp.group( subgroup );
+			populateStyleFromConfigGroup(s, stylegrp);
+			formatter->styles[ s->name() ] = s;
+		}
+	}
+	return formatter;
 }
 
 ISourceFormatter* SourceFormatterController::formatterForMimeType(const KMimeType::Ptr &mime)
@@ -563,8 +595,7 @@ SourceFormatterStyle SourceFormatterController::styleForMimeType( const KMimeTyp
 		KConfigGroup fmtgrp = configuration().group( formatter.at(0) );
 		if( fmtgrp.hasGroup( formatter.at(1) ) ) {
 			KConfigGroup stylegrp = fmtgrp.group( formatter.at(1) );
-			s.setCaption( stylegrp.readEntry( styleCaptionKey, "" ) );
-			s.setContent( stylegrp.readEntry( styleContentKey, "" ) );
+			populateStyleFromConfigGroup(&s, stylegrp);
 		}
 		return s;
 	}

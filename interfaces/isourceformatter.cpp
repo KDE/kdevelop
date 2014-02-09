@@ -91,6 +91,73 @@ void SourceFormatterStyle::setUsePreview(bool use)
 	m_usePreview = use;
 }
 
+void SourceFormatterStyle::setMimeTypes(const SourceFormatterStyle::MimeList& types)
+{
+	m_mimeTypes = types;
+}
+
+void SourceFormatterStyle::setMimeTypes(const QStringList& types)
+{
+	for ( auto t: types ) {
+		auto items = t.split('|');
+		if ( items.size() != 2 ) {
+			continue;
+		}
+		m_mimeTypes << MimeHighlightPair{items.at(0), items.at(1)};
+	}
+}
+
+void SourceFormatterStyle::setOverrideSample(const QString &sample)
+{
+	m_overrideSample = sample;
+}
+
+QString SourceFormatterStyle::overrideSample() const
+{
+	return m_overrideSample;
+}
+
+SourceFormatterStyle::MimeList SourceFormatterStyle::mimeTypes() const
+{
+	return m_mimeTypes;
+}
+
+QVariant SourceFormatterStyle::mimeTypesVariant() const
+{
+	QStringList result;
+	for ( const auto& item: m_mimeTypes ) {
+		result << item.mimeType + "|" + item.highlightMode;
+	}
+	return QVariant::fromValue(result);
+}
+
+bool SourceFormatterStyle::supportsLanguage(const QString &language) const
+{
+	for ( const auto& item: m_mimeTypes ) {
+		if ( item.highlightMode == language ) {
+			return true;
+		}
+	}
+	return false;
+}
+
+QString SourceFormatterStyle::modeForMimetype(const KMimeType::Ptr& mime) const
+{
+	for ( const auto& item: mimeTypes() ) {
+		if ( mime->is(item.mimeType) ) {
+			return item.highlightMode;
+		}
+	}
+	return QString();
+}
+
+void SourceFormatterStyle::copyDataFrom(SourceFormatterStyle *other)
+{
+	m_content = other->content();
+	m_mimeTypes = other->mimeTypes();
+	m_overrideSample = other->overrideSample();
+}
+
 QString ISourceFormatter::optionMapToString(const QMap<QString, QVariant> &map)
 {
 	QString options;

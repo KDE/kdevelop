@@ -73,6 +73,11 @@ ILanguageSupport::WhitespaceSensitivity ILanguageSupport::whitespaceSensititivy(
     return ILanguageSupport::Insensitive;
 }
 
+SourceFormatterItemList ILanguageSupport::sourceFormatterItems() const
+{
+    return SourceFormatterItemList();
+}
+
 QString ILanguageSupport::indentationSample() const
 {
     return "";
