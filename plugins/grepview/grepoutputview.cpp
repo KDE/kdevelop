@@ -109,6 +109,7 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
     resultsTreeView->setItemDelegate(GrepOutputDelegate::self());
     resultsTreeView->setHeaderHidden(true);
     resultsTreeView->setUniformRowHeights(false);
+    resultsTreeView->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
     connect(m_prev, SIGNAL(triggered(bool)), this, SLOT(selectPreviousItem()));
     connect(m_next, SIGNAL(triggered(bool)), this, SLOT(selectNextItem()));
@@ -282,6 +283,8 @@ void GrepOutputView::expandElements(const QModelIndex&)
     m_expandAll->setEnabled(true);
     
     resultsTreeView->expandAll();
+    for (int col = 0; col < model()->columnCount(); ++col)
+        resultsTreeView->resizeColumnToContents(col);
 }
 
 void GrepOutputView::selectPreviousItem()
