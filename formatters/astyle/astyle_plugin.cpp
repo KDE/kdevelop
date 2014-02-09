@@ -67,15 +67,6 @@ QString AStylePlugin::description()
         "Home Page: <a href=\"http://astyle.sourceforge.net/\">http://astyle.sourceforge.net</a>");
 }
 
-QString AStylePlugin::highlightModeForMime(const KMimeType::Ptr &mime)
-{
-    if(mime->is("text/x-java"))
-        return "Java";
-    else if(mime->is("text/x-csharp"))
-        return "C#";
-    return "C++";
-}
-
 QString AStylePlugin::formatSourceWithStyle( SourceFormatterStyle s, const QString& text, const KUrl& /*url*/, const KMimeType::Ptr &mime, const QString& leftContext, const QString& rightContext )
 {
     if(mime->is("text/x-java"))
@@ -101,6 +92,14 @@ QString AStylePlugin::formatSource(const QString& text, const KUrl& url, const K
     return formatSourceWithStyle( KDevelop::ICore::self()->sourceFormatterController()->styleForMimeType( mime ), text, url, mime, leftContext, rightContext );
 }
 
+static SourceFormatterStyle::MimeList supportedMimeTypes()
+{
+    using P = SourceFormatterStyle::MimeHighlightPair;
+    return SourceFormatterStyle::MimeList() << P{"text/x-c++src", "C++"} << P{"text/x-chdr", "C"}
+                                            << P{"text/x-c++hdr", "C++"} << P{"text/x-csrc", "C"}
+                                            << P{"text/x-java", "Java"} << P{"text/x-csharp", "C#"};
+}
+
 KDevelop::SourceFormatterStyle predefinedStyle(const QString& name, const QString& caption = QString())
 {
     KDevelop::SourceFormatterStyle st = KDevelop::SourceFormatterStyle( name );
@@ -108,6 +107,7 @@ KDevelop::SourceFormatterStyle predefinedStyle(const QString& name, const QStrin
     AStyleFormatter fmt;
     fmt.predefinedStyle( name );
     st.setContent( fmt.saveStyle() );
+    st.setMimeTypes(supportedMimeTypes());
     return st;
 }
 
@@ -141,7 +141,7 @@ KDevelop::SettingsWidget* AStylePlugin::editStyleWidget(const KMimeType::Ptr &mi
     return new AStylePreferences(lang);
 }
 
-QString AStylePlugin::previewText(const KMimeType::Ptr &)
+QString AStylePlugin::previewText(const SourceFormatterStyle*, const KMimeType::Ptr&)
 {
     return "// Indentation\n" + indentingSample() + "\t// Formatting\n"
         + formattingSample();

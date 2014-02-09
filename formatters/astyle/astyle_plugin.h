@@ -40,8 +40,6 @@ class AStylePlugin : public KDevelop::IPlugin, public KDevelop::ISourceFormatter
         virtual QString caption();
         virtual QString description();
 
-        virtual QString highlightModeForMime(const KMimeType::Ptr &mime);
-
         /** Formats using the current style.
         */
         virtual QString formatSource(const QString &text, const KUrl& url, const KMimeType::Ptr &mime, const QString& leftContext, const QString& rightContext);
@@ -59,10 +57,10 @@ class AStylePlugin : public KDevelop::IPlugin, public KDevelop::ISourceFormatter
                                               const KMimeType::Ptr &mime,
                                               const QString& leftContext = QString(),
                                               const QString& rightContext = QString() );
-        
+
         /** \return The text used in the config dialog to preview the current style.
         */
-        virtual QString previewText(const KMimeType::Ptr &mime);
+        virtual QString previewText(const KDevelop::SourceFormatterStyle* style, const KMimeType::Ptr &mime);
         
         /** \return The indentation type of the currently selected style.
         */
