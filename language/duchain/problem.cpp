@@ -35,7 +35,7 @@ DEFINE_LIST_MEMBER_HASH(ProblemData, diagnostics, LocalIndexedProblem)
 using namespace KDevelop;
 
 LocalIndexedProblem::LocalIndexedProblem(const Problem* problem)
-  : m_index(problem ? problem->m_indexInTopContext : 0)
+  : m_index(problem->m_indexInTopContext)
 {
 }
 
@@ -45,11 +45,6 @@ Problem* LocalIndexedProblem::data(const TopDUContext* top) const
     return nullptr;
   }
   return top->m_dynamicData->getProblemForIndex(m_index);
-}
-
-bool LocalIndexedProblem::isLoaded(TopDUContext* top) const
-{
-  return m_index && top->m_dynamicData->isProblemForIndexLoaded(m_index);
 }
 
 Problem::Problem()

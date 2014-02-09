@@ -45,8 +45,8 @@ class Problem;
 class KDEVPLATFORMLANGUAGE_EXPORT LocalIndexedProblem
 {
   public:
-    LocalIndexedProblem(const Problem* problem = 0);
-    LocalIndexedProblem(uint index)
+    LocalIndexedProblem(const Problem* problem);
+    LocalIndexedProblem(uint index = 0)
       : m_index(index)
     {}
 
@@ -60,19 +60,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT LocalIndexedProblem
       return m_index == rhs.m_index;
     }
 
-    uint hash() const
-    {
-      return m_index;
-    }
-
     bool isValid() const
     {
       return m_index;
-    }
-
-    bool operator<(const LocalIndexedProblem& rhs) const
-    {
-      return m_index < rhs.m_index;
     }
 
     /**
@@ -82,8 +72,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT LocalIndexedProblem
     {
       return m_index;
     }
-
-    bool isLoaded(TopDUContext* top) const;
 
   private:
     uint m_index;
@@ -274,6 +262,8 @@ private:
 using ProblemPointer = KSharedPtr<Problem>;
 
 }
+
+Q_DECLARE_TYPEINFO(KDevelop::LocalIndexedProblem, Q_MOVABLE_TYPE);
 
 KDEVPLATFORMLANGUAGE_EXPORT QDebug operator<<(QDebug s, const KDevelop::Problem& problem);
 KDEVPLATFORMLANGUAGE_EXPORT QDebug operator<<(QDebug s, const KDevelop::ProblemPointer& problem);
