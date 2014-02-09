@@ -31,17 +31,17 @@ namespace KDevelop
 class KDEVPLATFORMINTERFACES_EXPORT SourceFormatterStyle
 {
 public:
-	SourceFormatterStyle() : m_usePreview(false) {};
-	SourceFormatterStyle( const QString& name ) : m_name(name) {}
-	void setContent( const QString& content ) { m_content = content; }
-	void setCaption( const QString& caption ) { m_caption = caption; }
-	QString content() const { return m_content; }
-	QString caption() const { return m_caption; }
-	QString name() const { return m_name; }
-	QString description() const { return m_description; }
-	void setDescription( const QString& desc ) { m_description = desc; }
-	bool usePreview() const { return m_usePreview; }
-	void setUsePreview(bool use) { m_usePreview = use; }
+	SourceFormatterStyle();
+	SourceFormatterStyle( const QString& name );
+	void setContent( const QString& content );
+	void setCaption( const QString& caption );
+	QString content() const;
+	QString caption() const;
+	QString name() const;
+	QString description() const;
+	void setDescription( const QString& desc );
+	bool usePreview() const;
+	void setUsePreview(bool use);
 private:
 	bool m_usePreview;
 	QString m_name;

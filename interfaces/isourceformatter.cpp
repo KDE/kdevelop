@@ -36,6 +36,61 @@ ISourceFormatter::~ISourceFormatter()
 {
 }
 
+SourceFormatterStyle::SourceFormatterStyle()
+	: m_usePreview(false)
+{
+};
+
+SourceFormatterStyle::SourceFormatterStyle(const QString &name)
+	: m_name(name)
+{
+}
+
+void SourceFormatterStyle::setContent(const QString &content)
+{
+	m_content = content;
+}
+
+void SourceFormatterStyle::setCaption(const QString &caption)
+{
+	m_caption = caption;
+}
+
+QString SourceFormatterStyle::content() const
+{
+	return m_content;
+}
+
+QString SourceFormatterStyle::caption() const
+{
+	return m_caption;
+}
+
+QString SourceFormatterStyle::name() const
+{
+	return m_name;
+}
+
+QString SourceFormatterStyle::description() const
+{
+	return m_description;
+}
+
+void SourceFormatterStyle::setDescription(const QString &desc)
+{
+	m_description = desc;
+}
+
+bool SourceFormatterStyle::usePreview() const
+{
+	return m_usePreview;
+}
+
+void SourceFormatterStyle::setUsePreview(bool use)
+{
+	m_usePreview = use;
+}
+
 QString ISourceFormatter::optionMapToString(const QMap<QString, QVariant> &map)
 {
 	QString options;
