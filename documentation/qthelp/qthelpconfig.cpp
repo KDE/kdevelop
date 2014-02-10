@@ -317,6 +317,9 @@ void QtHelpConfig::down()
 
 void QtHelpConfig::knsUpdate(KNS3::Entry::List list)
 {
+    if (list.isEmpty())
+        return;
+
     foreach (const KNS3::Entry& e, list) {
         if(e.status() == KNS3::Entry::Installed) {
             if(e.installedFiles().size() == 1) {
