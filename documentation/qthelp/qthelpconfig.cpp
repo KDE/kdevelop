@@ -257,16 +257,11 @@ void QtHelpConfig::modify()
         return;
     }
 
+    item->setIcon(NameColumn, KIcon(dialog.qchIcon->icon()));
+    item->setText(NameColumn, dialog.qchName->text());
+    item->setText(IconColumn, dialog.qchIcon->icon());
     if(item->text(GhnsColumn) == "0") {
-        item->setIcon(NameColumn, KIcon(dialog.qchIcon->icon()));
-        item->setText(NameColumn, dialog.qchName->text());
         item->setText(PathColumn, dialog.qchRequester->text());
-        item->setText(IconColumn, dialog.qchIcon->icon());
-    } else {
-        // From GHNS
-        item->setIcon(NameColumn, KIcon(dialog.qchIcon->icon()));
-        item->setText(NameColumn, dialog.qchName->text());
-        item->setText(IconColumn, dialog.qchIcon->icon());
     }
     emit changed(true);
 }
