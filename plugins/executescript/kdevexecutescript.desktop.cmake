@@ -1,5 +1,6 @@
 [Desktop Entry]
 Type=Service
+Icon=application-x-executable-script
 Exec=blubb
 Comment=This plugin allows running of scripts.
 Comment[bs]=Ovaj dodatak dopušta pogretanje skripti
