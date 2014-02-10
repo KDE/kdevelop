@@ -32,6 +32,7 @@
 #include <qhelpenginecore.h>
 
 #include "ui_qthelpconfig.h"
+#include "ui_qthelpconfigeditdialog.h"
 #include "qthelp_config_shared.h"
 
 K_PLUGIN_FACTORY(QtHelpConfigFactory, registerPlugin<QtHelpConfig>();)
@@ -45,6 +46,53 @@ enum Column
     GhnsColumn
 };
 
+class QtHelpConfigEditDialog : public QDialog, public Ui_QtHelpConfigEditDialog
+{
+public:
+    explicit QtHelpConfigEditDialog(QTreeWidgetItem* modifiedItem, QtHelpConfig* parent = 0,
+                                    Qt::WindowFlags f = 0)
+        : QDialog(parent, f)
+        , m_modifiedItem(modifiedItem)
+        , m_config(parent)
+    {
+        setupUi(this);
+
+        if (modifiedItem) {
+            setWindowTitle(i18n("Modify Entry"));
+        } else {
+            setWindowTitle(i18n("Add New Entry"));
+        }
+        qchIcon->setIcon("qtlogo");
+    }
+
+    bool checkQtHelpFile();
+
+    virtual void accept() override;
+
+private:
+    QTreeWidgetItem* m_modifiedItem;
+    QtHelpConfig* m_config;
+};
+
+bool QtHelpConfigEditDialog::checkQtHelpFile()
+{
+    //verify if the file is valid and if there is a name
+    if(qchName->text().isEmpty()){
+        KMessageBox::error(this, i18n("Name cannot be empty."));
+        return false;
+    }
+
+    return m_config->checkNamespace(qchRequester->text(), m_modifiedItem);
+}
+
+void QtHelpConfigEditDialog::accept()
+{
+    if (!checkQtHelpFile())
+        return;
+
+    QDialog::accept();
+}
+
 QtHelpConfig::QtHelpConfig(QWidget *parent, const QVariantList &args)
     : KCModule(QtHelpConfigFactory::componentData(), parent, args)
 {
@@ -53,7 +101,6 @@ QtHelpConfig::QtHelpConfig(QWidget *parent, const QVariantList &args)
     QWidget* w = new QWidget;
     m_configWidget = new Ui::QtHelpConfigUI;
     m_configWidget->setupUi( w );
-    m_configWidget->qchIcon->setIcon("qtlogo");
     m_configWidget->addButton->setIcon(KIcon("list-add"));
     connect(m_configWidget->addButton, SIGNAL(clicked(bool)), this, SLOT(add()));
     m_configWidget->editButton->setIcon(KIcon("document-edit"));
@@ -153,15 +200,14 @@ void QtHelpConfig::selectionChanged()
         const int selectedRow = m_configWidget->qchTable->indexOfTopLevelItem(selectedItem);
         int rowCount = m_configWidget->qchTable->topLevelItemCount();
         if (selectedItem->text(GhnsColumn) != "0") {
+            // TODO: Can't we just remove the file even if it has been installed via GHNS?
             m_configWidget->removeButton->setEnabled(false);
-            m_configWidget->qchRequester->setText(i18n("Documentation provided by GHNS"));
+            m_configWidget->removeButton->setToolTip(tr("Please uninstall this via GHNS"));
         } else {
             m_configWidget->removeButton->setEnabled(true);
-            m_configWidget->qchRequester->setText(selectedItem->text(PathColumn));
+            m_configWidget->removeButton->setToolTip(QString());
         }
         m_configWidget->editButton->setEnabled(true);
-        m_configWidget->qchName->setText(selectedItem->text(NameColumn));
-        m_configWidget->qchIcon->setIcon(selectedItem->text(IconColumn));
         if (selectedRow == 0) {
             m_configWidget->upButton->setEnabled(false);
         } else {
@@ -177,15 +223,15 @@ void QtHelpConfig::selectionChanged()
 
 void QtHelpConfig::add()
 {
-    if(!checkQtHelpFile(false)){
+    QtHelpConfigEditDialog dialog(0, this);
+    if (!dialog.exec())
         return;
-    }
 
     QTreeWidgetItem* item = new QTreeWidgetItem(m_configWidget->qchTable);
-    item->setIcon(NameColumn, KIcon(m_configWidget->qchIcon->icon()));
-    item->setText(NameColumn, m_configWidget->qchName->text());
-    item->setText(PathColumn, m_configWidget->qchRequester->text());
-    item->setText(IconColumn, m_configWidget->qchIcon->icon());
+    item->setIcon(NameColumn, KIcon(dialog.qchIcon->icon()));
+    item->setText(NameColumn, dialog.qchName->text());
+    item->setText(PathColumn, dialog.qchRequester->text());
+    item->setText(IconColumn, dialog.qchIcon->icon());
     item->setText(GhnsColumn, "0");
     m_configWidget->qchTable->setCurrentItem(item);
     emit changed(true);
@@ -197,36 +243,32 @@ void QtHelpConfig::modify()
     if (!item)
         return;
 
+    QtHelpConfigEditDialog dialog(item, this);
+    if (item->text(GhnsColumn) != "0") {
+        dialog.qchRequester->setText(i18n("Documentation provided by GHNS"));
+        dialog.qchRequester->setEnabled(false);
+    } else {
+        dialog.qchRequester->setText(item->text(PathColumn));
+        dialog.qchRequester->setEnabled(true);
+    }
+    dialog.qchName->setText(item->text(NameColumn));
+    dialog.qchIcon->setIcon(item->text(IconColumn));
+    if (!dialog.exec()) {
+        return;
+    }
+
     if(item->text(GhnsColumn) == "0") {
-        // Not from GHNS
-        if(!checkQtHelpFile(true)){
-            return;
-        }
-        item->setIcon(NameColumn, KIcon(m_configWidget->qchIcon->icon()));
-        item->setText(NameColumn, m_configWidget->qchName->text());
-        item->setText(PathColumn, m_configWidget->qchRequester->text());
-        item->setText(IconColumn, m_configWidget->qchIcon->icon());
+        item->setIcon(NameColumn, KIcon(dialog.qchIcon->icon()));
+        item->setText(NameColumn, dialog.qchName->text());
+        item->setText(PathColumn, dialog.qchRequester->text());
+        item->setText(IconColumn, dialog.qchIcon->icon());
     } else {
         // From GHNS
-        item->setIcon(NameColumn, KIcon(m_configWidget->qchIcon->icon()));
-        item->setText(NameColumn, m_configWidget->qchName->text());
-        item->setText(IconColumn, m_configWidget->qchIcon->icon());
+        item->setIcon(NameColumn, KIcon(dialog.qchIcon->icon()));
+        item->setText(NameColumn, dialog.qchName->text());
+        item->setText(IconColumn, dialog.qchIcon->icon());
     }
     emit changed(true);
-}
-
-bool QtHelpConfig::checkQtHelpFile(bool modify)
-{
-    //verify if the file is valid and if there is a name
-    if(m_configWidget->qchName->text().isEmpty()){
-        KMessageBox::error(this, i18n("Name cannot be empty."));
-        return false;
-    }
-    QTreeWidgetItem* modifiedItem = nullptr;
-    if(modify){
-        modifiedItem = m_configWidget->qchTable->selectedItems().value(0);
-    }
-    return checkNamespace(m_configWidget->qchRequester->text(), modifiedItem);
 }
 
 bool QtHelpConfig::checkNamespace(const QString& filename, QTreeWidgetItem* modifiedItem)

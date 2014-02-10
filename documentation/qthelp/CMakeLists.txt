@@ -26,7 +26,10 @@ set(kdevqthelp_config_SRCS
     qthelp_config_shared.cpp
 )
 
-kde4_add_ui_files(kdevqthelp_config_SRCS qthelpconfig.ui)
+kde4_add_ui_files(kdevqthelp_config_SRCS
+    qthelpconfig.ui
+    qthelpconfigeditdialog.ui
+)
 
 kde4_add_plugin( kdevqthelp_config ${kdevqthelp_config_SRCS} )
 

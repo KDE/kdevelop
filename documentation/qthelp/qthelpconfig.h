@@ -45,6 +45,8 @@ public:
       virtual void load();
       virtual void defaults();
 
+      bool checkNamespace(const QString &filename, QTreeWidgetItem* modifiedItem);
+
     private slots:
       void add();
       void remove();
@@ -53,9 +55,8 @@ public:
       void modify();
       void selectionChanged();
       void knsUpdate(KNS3::Entry::List list);
+
     private:
-      bool checkQtHelpFile(bool modify);
-      bool checkNamespace(const QString &filename, QTreeWidgetItem* modifiedItem);
       Ui::QtHelpConfigUI* m_configWidget;
 };
 
