@@ -226,7 +226,8 @@ BasicRefactoring::NameAndCollector BasicRefactoring::newNameForDeclaration(const
     if (abstractNavigationWidget)
         connect(&uses, SIGNAL(navigateDeclaration(KDevelop::IndexedDeclaration)), abstractNavigationWidget, SLOT(navigateDeclaration(KDevelop::IndexedDeclaration)));
 
-    dialog.setWindowTitle(i18nc("Renaming some declaration", "Rename \"%1\"", declaration->toString()));
+    QString declarationName = declaration->toString();
+    dialog.setWindowTitle(i18nc("Renaming some declaration", "Rename \"%1\"", declarationName));
     renameDialog.edit->setText(declaration->identifier().identifier().str());
     renameDialog.edit->selectAll();
 
@@ -238,7 +239,7 @@ BasicRefactoring::NameAndCollector BasicRefactoring::newNameForDeclaration(const
     if (dialog.exec() != QDialog::Accepted)
         return {};
 
-    RefactoringProgressDialog refactoringProgress(i18n("Renaming \"%1\" to \"%2\"", declaration->toString(), renameDialog.edit->text()), collector.data());
+    RefactoringProgressDialog refactoringProgress(i18n("Renaming \"%1\" to \"%2\"", declarationName, renameDialog.edit->text()), collector.data());
     if (!collector->isReady()) {
         refactoringProgress.exec();
         if (refactoringProgress.result() != QDialog::Accepted) {
