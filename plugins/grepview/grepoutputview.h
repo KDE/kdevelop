@@ -43,6 +43,11 @@ class GrepOutputView : public QWidget, Ui::GrepOutputView
   Q_OBJECT
 
 public:
+    enum MessageType {
+        Information,
+        Error
+    };
+
     GrepOutputView(QWidget* parent, GrepViewPlugin* plugin);
     ~GrepOutputView();
     GrepOutputModel* model();
@@ -54,7 +59,7 @@ public:
      */
     GrepOutputModel* renewModel(QString name, QString descriptionOrUrl);
     
-    void setMessage(const QString& msg);
+    void setMessage(const QString& msg, MessageType type = Information);
 
 public Q_SLOTS:
     void showErrorMessage( const QString& errorMessage );

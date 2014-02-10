@@ -150,13 +150,17 @@ QSize GrepOutputDelegate::sizeHint(const QStyleOptionViewItem& option, const QMo
     if(item && item->isText())
     {
         QFont font = option.font;
+        QFontMetrics metrics(font);
         font.setBold(true);
         QFontMetrics bMetrics(font);
 
-        //TODO: calculate width with more accuracy: here the whole text is considerated as bold
-        int width =  bMetrics.width(item->text()) +
-                     option.fontMetrics.width(i18n("Line %1: ",item->lineNumber())) +
-                     std::max(option.decorationSize.width(), 0);
+        const KDevelop::SimpleRange rng = item->change()->m_range;
+
+        int width = metrics.width(item->text().left(rng.start.column)) +
+                    metrics.width(item->text().right(item->text().length() - rng.end.column)) +
+                    bMetrics.width(item->text().mid(rng.start.column, rng.end.column - rng.start.column)) +
+                    option.fontMetrics.width(i18n("Line %1: ",item->lineNumber())) +
+                    std::max(option.decorationSize.width(), 0);
         ret.setWidth(width);
     }else{
         // This is only used for titles, so not very performance critical
