@@ -68,7 +68,19 @@ private:
             qerr << "failed to parse code" << endl;
         }
         if (m_printTokens) {
-            qerr << "token cannot be printed for qml/js source..." << endl;
+            CXTranslationUnit TU = m_session->unit();
+            auto cursor = clang_getTranslationUnitCursor(TU);
+            CXSourceRange range = clang_getCursorExtent(cursor);
+            CXToken *tokens = 0;
+            unsigned int nTokens = 0;
+            clang_tokenize(TU, range, &tokens, &nTokens);
+            for (unsigned int i = 0; i < nTokens; i++)
+            {
+                CXString spelling = clang_getTokenSpelling(TU, tokens[i]);
+                qout << "token= " << clang_getCString(spelling) << endl;
+                clang_disposeString(spelling);
+            }
+            clang_disposeTokens(TU, tokens, nTokens);
         }
 
         if (!m_session->unit()) {
