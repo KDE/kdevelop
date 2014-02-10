@@ -183,6 +183,7 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent, bool setLastUs
     connect(searchPaths, SIGNAL(activated(QString)), this, SLOT(setSearchLocations(QString)));
 
     connect(directorySelector, SIGNAL(clicked(bool)), this, SLOT(selectDirectoryDialog()) );
+    directoryChanged(directorySelector->text());
 }
 
 void GrepDialog::selectDirectoryDialog()
