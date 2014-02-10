@@ -198,10 +198,12 @@ GrepOutputModel* GrepOutputView::model()
 
 void GrepOutputView::changeModel(int index)
 {
-    disconnect(model(), SIGNAL(showMessage(KDevelop::IStatus*,QString)), 
-               this, SLOT(showMessage(KDevelop::IStatus*,QString)));
-    disconnect(model(), SIGNAL(dataChanged(QModelIndex,QModelIndex)), 
-               this, SLOT(updateApplyState(QModelIndex,QModelIndex)));
+    if (model()) {
+        disconnect(model(), SIGNAL(showMessage(KDevelop::IStatus*,QString)),
+                   this, SLOT(showMessage(KDevelop::IStatus*,QString)));
+        disconnect(model(), SIGNAL(dataChanged(QModelIndex,QModelIndex)),
+                   this, SLOT(updateApplyState(QModelIndex,QModelIndex)));
+    }
 
     replacementCombo->clearEditText();
     
