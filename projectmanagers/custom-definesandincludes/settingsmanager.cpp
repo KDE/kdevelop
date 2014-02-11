@@ -37,9 +37,37 @@ SettingsManager::SettingsManager()
 {
 }
 
+/// Reads and converts paths from old (Custom Build System's) format to the current one.
+void addConvertedPaths(const SettingsManager* sm, KConfig* cfg, QList<ConfigEntry>& paths)
+{
+    SettingsConverter sc{sm};
+    auto convertedPaths = sc.readSettings(cfg);
+
+    bool contains = false;
+    for (auto cPath : convertedPaths) {
+        for (auto path : paths) {
+            if (path.path == cPath.path) {
+                path.includes += cPath.includes;
+                path.includes.removeDuplicates();
+
+                for (auto it = cPath.defines.constBegin(); it != cPath.defines.constEnd(); it++) {
+                    if (!path.defines.contains(it.key())) {
+                        path.defines[it.key()] = it.value();
+                    }
+                }
+                contains = true;
+            }
+        }
+        if (!contains) {
+            paths << cPath;
+        }
+        contains = false;
+    }
+}
+
 void SettingsManager::writeSettings( KConfig* cfg, const QList<ConfigEntry>& paths ) const
 {
-       KConfigGroup grp = cfg->group( ConfigConstants::configKey );
+    KConfigGroup grp = cfg->group( ConfigConstants::configKey );
     if ( !grp.isValid() )
         return;
 
@@ -97,30 +125,7 @@ QList<ConfigEntry> SettingsManager::readSettings( KConfig* cfg ) const
             paths << path;
         }
     }
-    SettingsConverter sc{this};
-    //sc.manager = this;
-    auto convertedPaths = sc.readSettings(cfg);
-
-    bool contains = false;
-    for (auto cPath : convertedPaths) {
-        for (auto path : paths) {
-            if (path.path == cPath.path) {
-                path.includes += cPath.includes;
-                path.includes.removeDuplicates();
-
-                for (auto it = cPath.defines.constBegin(); it != cPath.defines.constEnd(); it++) {
-                    if (!path.defines.contains(it.key())) {
-                        path.defines[it.key()] = it.value();
-                    }
-                }
-                contains = true;
-            }
-        }
-        if (!contains) {
-            paths << cPath;
-        }
-        contains = false;
-    }
+    addConvertedPaths(this, cfg, paths);
 
     return paths;
 }

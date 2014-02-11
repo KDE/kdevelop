@@ -38,6 +38,7 @@ class ProjectBaseItem;
 using KDevelop::ProjectBaseItem;
 using KDevelop::Path;
 
+/// @brief: Class for retrieving custom defines and includes.
 class KDE_EXPORT CustomDefinesAndIncludesManager
 {
 private:

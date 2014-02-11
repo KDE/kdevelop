@@ -34,7 +34,7 @@ const QString projectPathKey("Path");
 const QString customBuildSystemGroup("CustomBuildSystem");
 }
 
-QList< ConfigEntry > SettingsConverter::readSettings(KConfig* cfg)
+QList< ConfigEntry > SettingsConverter::readSettings(KConfig* cfg) const
 {
     KConfigGroup grp = cfg->group(ConfigConstants::customBuildSystemGroup);
     if (!grp.isValid())

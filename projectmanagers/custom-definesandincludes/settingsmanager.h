@@ -32,6 +32,7 @@ namespace KDevelop
 class IProject;
 }
 
+/// @brief: Class responsible for reading/writing custom defines and includes from/to the disk.
 class KDE_EXPORT SettingsManager
 {
 private:

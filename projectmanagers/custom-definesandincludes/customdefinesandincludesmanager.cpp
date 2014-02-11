@@ -42,7 +42,7 @@ public:
         auto itemPath = item->path().toUrl();
         KUrl rootDirectory = item->project()->folder();
 
-        foreach (const ConfigEntry& entry, paths) {
+        for (const ConfigEntry& entry: paths) {
             KUrl targetDirectory = rootDirectory;
             // note: a dot represents the project root
             if (entry.path != ".") {

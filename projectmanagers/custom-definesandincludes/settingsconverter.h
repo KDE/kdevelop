@@ -29,7 +29,7 @@ class SettingsManager;
 struct SettingsConverter
 {
 public:
-    QList <ConfigEntry> readSettings( KConfig* cfg );
+    QList <ConfigEntry> readSettings( KConfig* cfg ) const;
     const SettingsManager* manager;
 };
 
