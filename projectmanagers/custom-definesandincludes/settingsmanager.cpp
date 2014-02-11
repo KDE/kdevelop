@@ -37,7 +37,7 @@ SettingsManager::SettingsManager()
 {
 }
 
-void SettingsManager::writeSettings( KConfig* cfg, const QList<ConfigEntry>& paths )
+void SettingsManager::writeSettings( KConfig* cfg, const QList<ConfigEntry>& paths ) const
 {
        KConfigGroup grp = cfg->group( ConfigConstants::configKey );
     if ( !grp.isValid() )
@@ -97,7 +97,8 @@ QList<ConfigEntry> SettingsManager::readSettings( KConfig* cfg ) const
             paths << path;
         }
     }
-    static SettingsConverter sc;
+    SettingsConverter sc{this};
+    //sc.manager = this;
     auto convertedPaths = sc.readSettings(cfg);
 
     bool contains = false;

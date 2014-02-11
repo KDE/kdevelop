@@ -41,7 +41,7 @@ public:
 
     QList<ConfigEntry> readSettings(KConfig* cfg) const;
 
-    void writeSettings(KConfig* cfg, const QList<ConfigEntry>& paths);
+    void writeSettings(KConfig* cfg, const QList<ConfigEntry>& paths) const;
 };
 
 #endif // SETTINGSMANAGER_H

@@ -24,11 +24,13 @@
 #include <QList>
 
 class KConfig;
+class SettingsManager;
 
-class SettingsConverter
+struct SettingsConverter
 {
 public:
     QList <ConfigEntry> readSettings( KConfig* cfg );
+    const SettingsManager* manager;
 };
 
 #endif // SETTINGSCONVERTER_H

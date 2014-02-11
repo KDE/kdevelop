@@ -23,6 +23,7 @@
 #include <QDataStream>
 
 #include "configentry.h"
+#include "settingsmanager.h"
 
 namespace ConfigConstants
 {
@@ -67,6 +68,9 @@ QList< ConfigEntry > SettingsConverter::readSettings(KConfig* cfg)
                 pathgrp.deleteGroup();
             }
         }
+    }
+    if (!paths.isEmpty() && manager) {
+        manager->writeSettings(cfg, paths);
     }
     return paths;
 }
