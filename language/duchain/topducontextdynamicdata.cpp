@@ -44,8 +44,19 @@ using namespace KDevelop;
 
 namespace {
 
-void saveDUChainItem(QList<ArrayWithPosition>& data, DUChainBase& item, uint& totalDataOffset) {
-
+/**
+ * Serialize @p item into @p data and update @p totalDataOffset.
+ *
+ * If @p isSharedDataItem is true, then the item's internal data pointer is not updated
+ * to point to the serialized data. Otherwise the dynamic data is deleted and the items
+ * data will point to the constant serialized data.
+ *
+ * NOTE: The above is required to support serialization of shared-data such as from ProblemPointer.
+ * If we'd set the data to point to the constant region, we'd get crashes due to use-after-free when
+ * we unmap the data and a shared pointer outlives that.
+ */
+void saveDUChainItem(QList<ArrayWithPosition>& data, DUChainBase& item, uint& totalDataOffset, bool isSharedDataItem)
+{
   if(!item.d_func()->classId) {
     //If this triggers, you have probably created an own DUChainBase based class, but haven't called setClassId(this) in the constructor.
     kError() << QString("no class-id set for data attached to a declaration of type %1").arg(typeid(item).name());
@@ -70,16 +81,23 @@ void saveDUChainItem(QList<ArrayWithPosition>& data, DUChainBase& item, uint& to
     enableDUChainReferenceCounting(data.back().first.data(), data.back().first.size());
     DUChainItemSystem::self().copy(*item.d_func(), target, true);
     Q_ASSERT(!target.isDynamic());
-    item.setData(&target);
+    if (!isSharedDataItem) {
+      item.setData(&target);
+    }
     disableDUChainReferenceCounting(data.back().first.data());
   }else{
     //Just copy the data into another place, expensive copy constructors are not needed
     memcpy(&target, item.d_func(), size);
-    item.setData(&target, false);
+    if (!isSharedDataItem) {
+      item.setData(&target, false);
+    }
   }
-  Q_ASSERT(item.d_func() == &target);
 
-  Q_ASSERT(!item.d_func()->isDynamic());
+  if (!isSharedDataItem) {
+    Q_ASSERT(item.d_func() == &target);
+
+    Q_ASSERT(!item.d_func()->isDynamic());
+  }
 }
 
 uint indexForParentContext(DUContext* context)
@@ -92,18 +110,18 @@ uint indexForParentContext(Declaration* declaration)
   return LocalIndexedDUContext(declaration->context()).localIndex();
 }
 
-uint indexForParentContext(Problem* /*problem*/)
+uint indexForParentContext(const ProblemPointer& /*problem*/)
 {
   // always stored in the top context
   return 0;
 }
 
-void validateItem(const DUChainBase* const item, const uchar* const mappedData, const size_t mappedDataSize)
+void validateItem(const DUChainBaseData* const data, const uchar* const mappedData, const size_t mappedDataSize)
 {
-  Q_ASSERT(!item->d_func()->isDynamic());
+  Q_ASSERT(!data->isDynamic());
   if (mappedData) {
-    Q_ASSERT(((size_t)item->d_func()) < ((size_t)mappedData)
-          || ((size_t)item->d_func()) > ((size_t)mappedData) + mappedDataSize);
+    Q_ASSERT(((size_t)data) < ((size_t)mappedData)
+          || ((size_t)data) > ((size_t)mappedData) + mappedDataSize);
   }
 }
 
@@ -156,6 +174,33 @@ void loadPartialData(const uint topContextIndex, F callback)
   }
 }
 
+template<typename T>
+struct PtrType;
+
+template<typename T>
+struct PtrType<T*>
+{
+  using value = T*;
+};
+
+template<typename T>
+struct PtrType<KSharedPtr<T>>
+{
+  using value = T*;
+};
+
+template<typename T>
+constexpr bool isSharedDataItem()
+{
+  return false;
+}
+
+template<>
+constexpr bool isSharedDataItem<ProblemPointer>()
+{
+  return true;
+}
+
 }
 
 //BEGIN DUChainItemStorage
@@ -178,12 +223,20 @@ void TopDUContextDynamicData::DUChainItemStorage<Item>::clearItems()
   //Due to template specialization it's possible that a declaration is not reachable through the normal context structure.
   //For that reason we have to check here, and delete all remaining declarations.
   qDeleteAll(temporaryItems);
+  temporaryItems.clear();
   qDeleteAll(items);
-  //NOTE: not clearing, is called oly from the dtor anyways
+  items.clear();
+}
+
+template<>
+void TopDUContextDynamicData::DUChainItemStorage<ProblemPointer>::clearItems()
+{
+  // don't delete anything - the problem is shared
+  items.clear();
 }
 
 template<class Item>
-void TopDUContextDynamicData::DUChainItemStorage<Item>::clearItemIndex(Item* item, const uint index)
+void TopDUContextDynamicData::DUChainItemStorage<Item>::clearItemIndex(const Item& item, const uint index)
 {
   if(!data->m_dataLoaded)
     data->loadData();
@@ -233,17 +286,16 @@ void TopDUContextDynamicData::DUChainItemStorage<Item>::storeData(uint& currentD
       }
     } else {
       offsets << ItemDataInfo(currentDataOffset, indexForParentContext(item));
-      saveDUChainItem(data->m_data, *item, currentDataOffset);
-      verifyDataInfo(offsets.back(), data->m_data);
-
-      validateItem(item, data->m_mappedData, data->m_mappedDataSize);
+      saveDUChainItem(data->m_data, *item, currentDataOffset, isSharedDataItem<Item>());
     }
   }
 
 #ifndef QT_NO_DEBUG
-  for (auto item : items) {
-    if (item) {
-      validateItem(item, data->m_mappedData, data->m_mappedDataSize);
+  if (!isSharedDataItem<Item>()) {
+    for (auto item : items) {
+      if (item) {
+        validateItem(item->d_func(), data->m_mappedData, data->m_mappedDataSize);
+      }
     }
   }
 #endif
@@ -261,7 +313,7 @@ bool TopDUContextDynamicData::DUChainItemStorage<Item>::itemsHaveChanged() const
 }
 
 template<class Item>
-uint TopDUContextDynamicData::DUChainItemStorage<Item>::allocateItemIndex(Item* item, const bool temporary)
+uint TopDUContextDynamicData::DUChainItemStorage<Item>::allocateItemIndex(const Item& item, const bool temporary)
 {
   if (!data->m_dataLoaded) {
     data->loadData();
@@ -293,22 +345,22 @@ bool TopDUContextDynamicData::DUChainItemStorage<Item>::isItemForIndexLoaded(uin
 }
 
 template<class Item>
-Item* TopDUContextDynamicData::DUChainItemStorage<Item>::getItemForIndex(uint index) const
+Item TopDUContextDynamicData::DUChainItemStorage<Item>::getItemForIndex(uint index) const
 {
   if (index >= (0x0fffffff/2)) {
     index = 0x0fffffff - index; //We always keep the highest bit at zero
     if(index == 0 || index > uint(temporaryItems.size()))
-      return 0;
+      return {};
     else
       return temporaryItems[index-1];
   }
 
   if (index == 0 || index > static_cast<uint>(items.size())) {
     kWarning() << "item index out of bounds:" << index << "count:" << items.size();
-    return nullptr;
+    return {};
   }
   const uint realIndex = index - 1;
-  Item*& item = items[realIndex];
+  Item& item = items[realIndex];
   if (item) {
     //Shortcut, because this is the most common case
     return item;
@@ -323,11 +375,18 @@ Item* TopDUContextDynamicData::DUChainItemStorage<Item>::getItemForIndex(uint in
       reinterpret_cast<const DUChainBaseData*>(data->pointerInData(offsets[realIndex].dataOffset))
     );
 
-    item = dynamic_cast<Item*>(DUChainItemSystem::self().create(itemData));
+    item = dynamic_cast<typename PtrType<Item>::value>(DUChainItemSystem::self().create(itemData));
     if (!item) {
       //When this happens, the item has not been registered correctly.
       //We can stop here, because else we will get crashes later.
       kError() << "Failed to load item with identity" << itemData->classId;
+    }
+
+    if (isSharedDataItem<Item>()) {
+      // NOTE: shared data must never point to mmapped data regions as otherwise we might end up with
+      // use-after-free or double-deletions etc. pp.
+      // thus, make the item always dynamic after deserialization
+      item->makeDynamic();
     }
 
     auto parent = data->getContextForIndex(offsets[realIndex].parentContext);
@@ -344,7 +403,7 @@ Item* TopDUContextDynamicData::DUChainItemStorage<Item>::getItemForIndex(uint in
 template<class Item>
 void TopDUContextDynamicData::DUChainItemStorage<Item>::deleteOnDisk()
 {
-  for (Item* item : items) {
+  for (auto& item : items) {
     if (item) {
       item->makeDynamic();
     }
@@ -649,7 +708,7 @@ void TopDUContextDynamicData::store() {
     m_itemRetrievalForbidden = false;
   }
 
-    saveDUChainItem(m_topContextData, *m_topContext, actualTopContextDataSize);
+    saveDUChainItem(m_topContextData, *m_topContext, actualTopContextDataSize, false);
     Q_ASSERT(actualTopContextDataSize == topContextDataSize);
     Q_ASSERT(m_topContextData.size() == 1);
     Q_ASSERT(!m_topContext->d_func()->isDynamic());
@@ -720,7 +779,7 @@ uint TopDUContextDynamicData::allocateContextIndex(DUContext* context, bool temp
   return m_contexts.allocateItemIndex(context, temporary);
 }
 
-uint TopDUContextDynamicData::allocateProblemIndex(Problem* problem)
+uint TopDUContextDynamicData::allocateProblemIndex(ProblemPointer problem)
 {
   return m_problems.allocateItemIndex(problem, false);
 }
@@ -731,11 +790,6 @@ bool TopDUContextDynamicData::isDeclarationForIndexLoaded(uint index) const
 }
 
 bool TopDUContextDynamicData::isContextForIndexLoaded(uint index) const {
-  return m_contexts.isItemForIndexLoaded(index);
-}
-
-bool TopDUContextDynamicData::isProblemForIndexLoaded(uint index) const
-{
   return m_contexts.isItemForIndexLoaded(index);
 }
 
@@ -767,7 +821,7 @@ Declaration* TopDUContextDynamicData::getDeclarationForIndex(uint index) const
   return m_declarations.getItemForIndex(index);
 }
 
-Problem* TopDUContextDynamicData::getProblemForIndex(uint index) const
+ProblemPointer TopDUContextDynamicData::getProblemForIndex(uint index) const
 {
   if(!m_dataLoaded)
     loadData();
@@ -785,7 +839,7 @@ void TopDUContextDynamicData::clearContextIndex(DUContext* context)
   m_contexts.clearItemIndex(context, context->m_dynamicData->m_indexInTopContext);
 }
 
-void TopDUContextDynamicData::clearProblemIndex(Problem* problem)
+void TopDUContextDynamicData::clearProblems()
 {
-  m_problems.clearItemIndex(problem, problem->m_indexInTopContext);
+  m_problems.clearItems();
 }
