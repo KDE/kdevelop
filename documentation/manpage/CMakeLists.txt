@@ -13,3 +13,8 @@ ${KDEVPLATFORM_DOCUMENTATION_LIBRARIES} ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${Q
 install(TARGETS kdevmanpage DESTINATION ${PLUGIN_INSTALL_DIR})
 configure_file(kdevmanpage.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevmanpage.desktop)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevmanpage.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+
+install(FILES
+    manpagedocumentation.css
+    DESTINATION ${DATA_INSTALL_DIR}/kdevmanpage
+)
