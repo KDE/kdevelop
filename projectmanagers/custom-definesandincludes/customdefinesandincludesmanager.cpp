@@ -27,6 +27,7 @@
 #include <project/projectmodel.h>
 
 #include <QList>
+#include <QStringList>
 
 using KDevelop::IProject;
 using KDevelop::ProjectBaseItem;
@@ -34,12 +35,11 @@ using KDevelop::ProjectBaseItem;
 class CustomDefinesAndIncludesManager::ManagerPrivate
 {
 public:
-    ///@return: The best fitted ConfigEntry, based on path of @p item
+    ///@return: The ConfigEntry, with includes/defines from @p paths for all parent folders of @p item.
     ConfigEntry findConfigForItem(const QList<ConfigEntry>& paths, const ProjectBaseItem* item) const {
-        ConfigEntry candidateEntry;
-        KUrl candidateTargetDirectory;
+        ConfigEntry ret;
 
-        auto itemPath = item->path();
+        auto itemPath = item->path().toUrl();
         KUrl rootDirectory = item->project()->folder();
 
         foreach (const ConfigEntry& entry, paths) {
@@ -49,15 +49,13 @@ public:
                 targetDirectory.addPath(entry.path);
             }
 
-            //TODO: maybe merge all parent includes too?
-            if (targetDirectory.isParentOf(itemPath.toUrl())) {
-                if (candidateTargetDirectory.isEmpty() || candidateTargetDirectory.isParentOf(targetDirectory)) {
-                    candidateEntry = entry;
-                    candidateTargetDirectory = targetDirectory;
-                }
+            if (targetDirectory.isParentOf(itemPath)) {
+                 ret.includes += entry.includes;
+                 ret.defines.unite(entry.defines);
             }
         }
-        return candidateEntry;
+        ret.includes.removeDuplicates();
+        return ret;
     }
 
     Path::List includeDirectories(const ProjectBaseItem* item) const {
