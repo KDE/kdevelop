@@ -108,7 +108,11 @@ QList<ConfigEntry> SettingsManager::readSettings( KConfig* cfg ) const
                 path.includes += cPath.includes;
                 path.includes.removeDuplicates();
 
-                path.defines.unite(cPath.defines);
+                for (auto it = cPath.defines.constBegin(); it != cPath.defines.constEnd(); it++) {
+                    if (!path.defines.contains(it.key())) {
+                        path.defines[it.key()] = it.value();
+                    }
+                }
                 contains = true;
             }
         }

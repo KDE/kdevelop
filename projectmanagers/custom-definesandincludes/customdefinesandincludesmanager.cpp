@@ -51,7 +51,12 @@ public:
 
             if (targetDirectory.isParentOf(itemPath)) {
                  ret.includes += entry.includes;
-                 ret.defines.unite(entry.defines);
+
+                for (auto it = entry.defines.constBegin(); it != entry.defines.constEnd(); it++) {
+                    if (!ret.defines.contains(it.key())) {
+                        ret.defines[it.key()] = it.value();
+                    }
+                }
             }
         }
         ret.includes.removeDuplicates();
