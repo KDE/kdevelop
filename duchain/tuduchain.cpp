@@ -24,6 +24,28 @@
 
 #include <language/duchain/types/indexedtype.h>
 
+//BEGIN IdType
+
+template<CXCursorKind CK>
+struct IdType<CK, typename std::enable_if<CursorKindTraits::isClass(CK)>::type>
+{
+    typedef StructureType Type;
+};
+
+template<CXCursorKind CK>
+struct IdType<CK, typename std::enable_if<CK == CXCursor_TypedefDecl>::type>
+{
+    typedef TypeAliasType Type;
+};
+
+template<CXCursorKind CK>
+struct IdType<CK, typename std::enable_if<CK == CXCursor_EnumDecl>::type>
+{
+    typedef EnumerationType Type;
+};
+
+//END IdType
+
 //BEGIN DeclType
 
 template<CXCursorKind CK, bool isDefinition, bool isClassMember>
@@ -197,6 +219,15 @@ CXChildVisitResult TUDUChain::visitCursor(CXCursor cursor, CXCursor parent, CXCl
     }
 }
 
+void TUDUChain::setIdTypeDecl(CXCursor typeCursor, IdentifiedType* idType) const
+{
+    DeclarationPointer decl = findDeclaration(typeCursor, m_includes);
+    DUChainReadLocker lock;
+    if (decl) {
+        idType->setDeclaration(decl.data());
+    }
+}
+
 KDevelop::RangeInRevision TUDUChain::makeContextRange(CXCursor cursor) const
 {
     auto start = clang_getRangeEnd(clang_Cursor_getSpellingNameRange(cursor, 0, 0));
@@ -222,9 +253,9 @@ QByteArray TUDUChain::makeComment(CXComment comment) const
     return text;
 }
 
-AbstractType::Ptr TUDUChain::makeType(CXType type) const
+AbstractType *TUDUChain::makeType(CXType type) const
 {
-    #define UseKind(TypeKind) case TypeKind: return AbstractType::Ptr(dispatchType<TypeKind>(type))
+    #define UseKind(TypeKind) case TypeKind: return dispatchType<TypeKind>(type)
     switch (type.kind) {
     UseKind(CXType_Void);
     UseKind(CXType_Bool);
@@ -259,10 +290,10 @@ AbstractType::Ptr TUDUChain::makeType(CXType type) const
     UseKind(CXType_Unexposed);
     UseKind(CXType_WChar);
     case CXType_Invalid:
-        return AbstractType::Ptr();
+        return nullptr;
     default:
         debug() << "Unhandled type: " << type.kind << ClangString(clang_getTypeSpelling(type));
-        return AbstractType::Ptr();
+        return nullptr;
     }
 }
 
