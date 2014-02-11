@@ -228,11 +228,13 @@ void TopDUContextDynamicData::DUChainItemStorage<Item>::clearItems()
   items.clear();
 }
 
+namespace KDevelop {
 template<>
 void TopDUContextDynamicData::DUChainItemStorage<ProblemPointer>::clearItems()
 {
   // don't delete anything - the problem is shared
   items.clear();
+}
 }
 
 template<class Item>
