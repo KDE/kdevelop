@@ -1675,8 +1675,8 @@ void DUChain::updateContextForUrl(const IndexedString& document, TopDUContext::F
   }
 }
 
-void DUChain::disablePersistentStorage() {
-  sdDUChainPrivate->m_cleanupDisabled = true;
+void DUChain::disablePersistentStorage(bool disable) {
+  sdDUChainPrivate->m_cleanupDisabled = disable;
 }
 
 void DUChain::storeToDisk() {

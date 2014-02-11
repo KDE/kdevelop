@@ -237,7 +237,7 @@ public:
   
   ///If you call this, the persistent disk-storage structure will stay unaffected, and no duchain cleanup will be done.
   ///Call this from within tests.
-  void disablePersistentStorage();
+  void disablePersistentStorage(bool disable = true);
   
   ///Stores the whole duchain and all its repositories in the current state to disk
   ///The duchain must not be locked in any way
