@@ -318,7 +318,9 @@ void GdbVariable::handleUpdate(const GDBMI::Value& var)
             }
         }
 
-        setType(var["type"].literal());
+        if (var.hasField("type_changed") && var["type_changed"].literal() == "true") {
+            setType(var["new_type"].literal());
+        }
         setValue(var["value"].literal());
         setChanged(true);
         setHasMore(var.hasField("has_more") && var["has_more"].toInt());
