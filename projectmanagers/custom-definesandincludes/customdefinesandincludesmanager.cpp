@@ -28,6 +28,8 @@
 
 #include <QList>
 #include <QStringList>
+#include <QMutex>
+#include <QMutexLocker>
 
 using KDevelop::IProject;
 using KDevelop::ProjectBaseItem;
@@ -87,6 +89,8 @@ public:
         }
         return defines;
     }
+
+    QMutex m_locker;
 };
 
 CustomDefinesAndIncludesManager::CustomDefinesAndIncludesManager(): d(new ManagerPrivate())
@@ -94,11 +98,13 @@ CustomDefinesAndIncludesManager::CustomDefinesAndIncludesManager(): d(new Manage
 
 QHash< QString, QString > CustomDefinesAndIncludesManager::defines(const ProjectBaseItem* item) const
 {
+    QMutexLocker lock(&d->m_locker);
     return d->defines(item);
 }
 
 Path::List CustomDefinesAndIncludesManager::includes(const ProjectBaseItem* item) const
 {
+    QMutexLocker lock(&d->m_locker);
     return d->includeDirectories(item);
 }
 
