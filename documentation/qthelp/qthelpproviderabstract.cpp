@@ -56,7 +56,7 @@ KSharedPtr< KDevelop::IDocumentation > QtHelpProviderAbstract::documentationForD
             KDevelop::DUChainReadLocker lock;
             QString ns;
             bool isClass = dec->abstractType()->whichType() == KDevelop::AbstractType::TypeStructure;
-            if(!isClass) {
+            if(!isClass && dec->context() && dec->context()->owner()) {
                 ns = dec->context()->owner()->abstractType()->toString();
                 ns += "::" + dec->identifier().toString();
             } else {
