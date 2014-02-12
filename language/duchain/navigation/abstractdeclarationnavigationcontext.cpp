@@ -108,12 +108,12 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
         htmlClass();
       }
       if ( m_declaration->kind() == Declaration::Namespace ) {
-        modifyHtml() += i18n("namespace %1 <br />", nameHighlight(Qt::escape(m_declaration->qualifiedIdentifier().toString())));
+        modifyHtml() += i18n("namespace %1 ", nameHighlight(Qt::escape(m_declaration->qualifiedIdentifier().toString())));
       }
 
       if(m_declaration->type<EnumerationType>()) {
         EnumerationType::Ptr enumeration = m_declaration->type<EnumerationType>();
-        modifyHtml() += i18n("enumeration %1 <br/>", Qt::escape(m_declaration->identifier().toString()) );
+        modifyHtml() += i18n("enumeration %1 ", Qt::escape(m_declaration->identifier().toString()) );
       }
 
       if(m_declaration->isForwardDeclaration()) {
@@ -129,19 +129,16 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
           uint count;
           const IndexedDeclaration* decls;
           PersistentSymbolTable::self().declarations(id, count, decls);
-          bool had = false;
           for(uint a = 0; a < count; ++a) {
             if(decls[a].isValid() && !decls[a].data()->isForwardDeclaration()) {
               modifyHtml() += "<br />";
               makeLink(i18n("possible resolution from"), KDevelop::DeclarationPointer(decls[a].data()), NavigationAction::NavigateDeclaration);
               modifyHtml() += ' ' + decls[a].data()->url().str();
-              had = true;
             }
           }
-          if(had)
-            modifyHtml() += "<br />";
         }
       }
+      modifyHtml() += "<br />";
     }
   }else{
     AbstractType::Ptr showType = m_declaration->abstractType();
@@ -496,12 +493,12 @@ void AbstractDeclarationNavigationContext::htmlClass()
       modifyHtml() += ", " + stringFromAccess(base.access) + " " + (base.virtualInheritance ? QString("virtual") : QString()) + " ";
       eventuallyMakeTypeLinks(base.baseClass.abstractType());
     }
-    modifyHtml() += " ";
   } else {
     /// @todo How can we get here? and should this really be a class?
     modifyHtml() += "class ";
     eventuallyMakeTypeLinks( klass.cast<AbstractType>() );
   }
+  modifyHtml() += " ";
 }
 
 void AbstractDeclarationNavigationContext::htmlIdentifiedType(AbstractType::Ptr type, const IdentifiedType* idType)
