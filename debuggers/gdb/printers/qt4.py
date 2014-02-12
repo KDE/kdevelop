@@ -30,20 +30,15 @@ class QStringPrinter:
     def to_string(self):
         size = self.val['d']['size']
         ret = ""
-        qt5 = 0
-        try:
-            # Qt4 has d->data, Qt5 doesn't.
-            self.val['d']['data']
-        except Exception:
-            qt5 = 1
 
         # The QString object might be not yet initialized. In this case size is a bogus value
         # and the following 2 lines might throw memory access error. Hence the try/catch.
         try:
-            if qt5:
-                dataAsCharPointer = (self.val['d'] + 1).cast(gdb.lookup_type("char").pointer())
-            else:
+            isQt4 = has_field(self.val['d'], 'data') # Qt4 has d->data, Qt5 doesn't.
+            if isQt4:
                 dataAsCharPointer = self.val['d']['data'].cast(gdb.lookup_type("char").pointer())
+            else:
+                dataAsCharPointer = (self.val['d'] + 1).cast(gdb.lookup_type("char").pointer())
             ret = dataAsCharPointer.string(encoding = 'UTF-16', length = size * 2)
         except Exception:
             # swallow the exception and return empty string
