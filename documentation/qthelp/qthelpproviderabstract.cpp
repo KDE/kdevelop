@@ -49,7 +49,8 @@ KSharedPtr< KDevelop::IDocumentation > QtHelpProviderAbstract::documentationForD
 {
     QtHelpDocumentation::s_provider = const_cast<QtHelpProviderAbstract*>(this);
     if(dec) {
-        bool isQML = dec->topContext()->parsingEnvironmentFile()->language().str() == "QML/JS";
+        static const KDevelop::IndexedString qmlJs("QML/JS");
+        bool isQML = dec->topContext()->parsingEnvironmentFile()->language() == qmlJs;
         QString id;
         if(isQML) {
             KDevelop::DUChainReadLocker lock;
