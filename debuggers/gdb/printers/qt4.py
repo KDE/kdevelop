@@ -288,7 +288,12 @@ class QMapPrinter:
         self.container = container
 
     def children(self):
-        return self._iterator(self.val)
+        isQt4 = has_field(self.val, 'e') # Qt4 has 'e', Qt5 doesn't
+        if isQt4:
+            return self._iterator(self.val)
+        else:
+            # TODO: Add proper iterator for Qt5-based QMap
+            return default_iterator(self.val)
 
     def to_string(self):
         if self.val['d']['size'] == 0:
