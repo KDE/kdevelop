@@ -17,10 +17,10 @@
 */
 
 #include "unresolvedincludeassistant.h"
+#include "customincludepaths.h"
 #include <klocalizedstring.h>
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
-#include "ui_custom_include_paths.h"
 #include <interfaces/iuicontroller.h>
 #include <kparts/mainwindow.h>
 #include <kmessagebox.h>
@@ -36,60 +36,50 @@ Cpp::AddCustomIncludePathAction::AddCustomIncludePathAction(KDevelop::IndexedStr
 }
 
 void Cpp::AddCustomIncludePathAction::execute() {
-  Ui::CustomIncludePaths o;
   KDialog dialog(KDevelop::ICore::self()->uiController()->activeMainWindow());
-  dialog.setInitialSize(QSize(600, 600));
   dialog.setButtons(KDialog::Ok | KDialog::Cancel);
-  o.setupUi(dialog.mainWidget());
-  
+  dialog.setInitialSize(QSize(600, 600));
+  CustomIncludePaths includePaths;
+  dialog.setMainWidget(&includePaths);
+
   KUrl current = m_url.toUrl().upUrl();
-  
-  o.storageDirectory->setUrl(current);
+
+  includePaths.setStorageDirectoryUrl(current);
 //   o.sourceDirectory->setUrl(current);
 //   o.buildDirectory->setUrl(current);
-  o.storageDirectory->setMode(KFile::Directory);
-  o.sourceDirectory->setMode(KFile::Directory);
-  o.buildDirectory->setMode(KFile::Directory);
 
   //Find old settings
   CppTools::CustomIncludePathsSettings oldSettings = CppTools::CustomIncludePathsSettings::findAndRead(current.toLocalFile());
-  
+
   ///@todo Integrate with project manager, to only show useful options, and maybe merge them
 
   if(oldSettings.isValid()) {
     current = KUrl(oldSettings.storagePath);
-    o.storageDirectory->setUrl(current);
-    o.sourceDirectory->setUrl(KUrl(oldSettings.sourceDir));
-    o.buildDirectory->setUrl(KUrl(oldSettings.buildDir));
-    foreach(const QString& customPath, oldSettings.paths)
-      if(!customPath.isEmpty())
-        o.customIncludePaths->appendPlainText(customPath);
-    if(!oldSettings.paths.isEmpty())
-      o.customIncludePaths->appendPlainText("\n");
+    includePaths.setStorageDirectoryUrl(current);
+    includePaths.setSourceDirectoryUrl(KUrl(oldSettings.sourceDir));
+    includePaths.setBuildDirectoryUrl(KUrl(oldSettings.buildDir));
+    includePaths.setCustomIncludePaths(oldSettings.paths);
   }
 
-  dialog.setWindowTitle(i18n("Setup Custom Include Paths"));
-  int result = dialog.exec();
-  if(result == QDialog::Accepted) {
+  if(dialog.exec() == QDialog::Accepted) {
     kDebug() << "storing settings";
-    if((o.storageDirectory->text().isEmpty() || 
-       (o.customIncludePaths->document()->toPlainText().trimmed().isEmpty() && (o.sourceDirectory->text().trimmed().isEmpty() ||o.buildDirectory->text().trimmed().isEmpty() || o.sourceDirectory->text().trimmed() == o.buildDirectory->text().trimmed())))  
-      && oldSettings.isValid()) {
+    if(( !includePaths.storageDirectoryUrl().isValid() ||
+        (includePaths.customIncludePaths().isEmpty() &&
+        (!includePaths.sourceDirectoryUrl().isValid() || !includePaths.buildDirectoryUrl().isValid() ||
+        includePaths.sourceDirectoryUrl() == includePaths.buildDirectoryUrl() )))
+        && oldSettings.isValid()) {
       kDebug() << "deleting settings";
       oldSettings.delete_();
     }else{
-      if(oldSettings.isValid() && o.storageDirectory->url().isParentOf(KUrl(oldSettings.storagePath)))
+      if(oldSettings.isValid() && includePaths.storageDirectoryUrl().isParentOf(KUrl(oldSettings.storagePath)))
         oldSettings.delete_(); //Delete old settings, when the settings are moved up in the hierarchy, so old settings won't shadow new ones
-      oldSettings.sourceDir = o.sourceDirectory->url().toLocalFile();
-      oldSettings.buildDir = o.buildDirectory->url().toLocalFile();
-      oldSettings.paths.clear();
-      foreach(const QString& customPath, o.customIncludePaths->document()->toPlainText().split("\n", QString::SkipEmptyParts))
-        if(!customPath.isEmpty())
-          oldSettings.paths << customPath;
+      oldSettings.sourceDir = includePaths.sourceDirectoryUrl().toLocalFile();
+      oldSettings.buildDir = includePaths.buildDirectoryUrl().toLocalFile();
+      oldSettings.paths = includePaths.customIncludePaths();
       kDebug() << "saving, paths" << oldSettings.paths;
       kDebug() << "dirs" << oldSettings.sourceDir << oldSettings.buildDir;
-        
-      oldSettings.storagePath = o.storageDirectory->url().toLocalFile();
+
+      oldSettings.storagePath = includePaths.storageDirectoryUrl().toLocalFile();
       if(!oldSettings.write()) {
         KMessageBox::error(KDevelop::ICore::self()->uiController()->activeMainWindow(), i18n("Failed to save custom include paths in directory: %1", oldSettings.storagePath));
       } else {

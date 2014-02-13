@@ -44,6 +44,7 @@ set(kdevcpplanguagesupport_PART_SRCS
     codegen/renameaction.cpp
     codegen/renamefileaction.cpp
     codegen/unresolvedincludeassistant.cpp
+    codegen/customincludepaths.cpp
     codegen/cppclasshelper.cpp
 #     codegen/makeimplementationprivate.cpp
 )
