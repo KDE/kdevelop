@@ -216,7 +216,7 @@ bool KDevelop::BreakpointModel::removeRows(int row, int count, const QModelIndex
         Breakpoint *b = m_breakpoints.at(row);
         m_breakpoints.removeAt(row);
         IF_DEBUG ( kDebug() << m_breakpoints; )
-        if (!b->deleted()) b->setDeleted();
+        b->setDeleted();
         emit breakpointDeleted(b);
     }
     endRemoveRows();
