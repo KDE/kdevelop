@@ -41,6 +41,16 @@ static std::map<QString, QVector<const char*>> mimeToArgs = {
 
 static QVector<const char*> defaultArgs = {"-std=c++11", "-xc++", "-Wall"};
 
+/**
+ * Clang diagnostic messages always start with a lowercase character
+ *
+ * @return Prettified version, starting with uppercase character
+ */
+static inline QString prettyDiagnosticSpelling(const QString& str)
+{
+    return (!str.isEmpty() ? str.left(1).toUpper() + str.mid(1) : QString());
+}
+
 QVector<const char*> argsForPath(const QString& path)
 {
     QString mimeType = KMimeType::findByPath(path)->name();
@@ -90,7 +100,7 @@ static ProblemPointer problemForDiagnostic(CXDiagnostic diagnostic)
     clang_getFileLocation(location, &diagnosticFile, nullptr, nullptr, nullptr);
 
     ClangString description(clang_getDiagnosticSpelling(diagnostic));
-    problem->setDescription(QString::fromUtf8(description));
+    problem->setDescription(prettyDiagnosticSpelling(QString::fromUtf8(description)));
     DocumentRange docRange(IndexedString(ClangString(clang_getFileName(diagnosticFile))), SimpleRange(location, location));
     const uint numRanges = clang_getDiagnosticNumRanges(diagnostic);
 
