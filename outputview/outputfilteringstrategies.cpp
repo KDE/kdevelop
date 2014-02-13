@@ -145,9 +145,9 @@ QList<ActionFormat> ACTION_FILTERS = QList<ActionFormat>()
     << ActionFormat( I18N_NOOP2_NOSTRIP("", "generating"), "dcopidl", "dcopidl .* > ([^\\s;]+)", 1 )
     << ActionFormat( I18N_NOOP2_NOSTRIP("", "compiling"), "dcopidl2cpp", "dcopidl2cpp (?:\\S* )*([^\\s;]+)", 1 )
     // match against Entering directory to update current build dir
-    << ActionFormat( "", "cd", "", "make\\[\\d+\\]: Entering directory (\\`|\\')(.+)'", 2);
+    << ActionFormat( "", "cd", "", "make\\[\\d+\\]: Entering directory (\\`|\\')(.+)'", 2)
     // waf and scons use the same basic convention as make
-    ActionFormat( "", "cd", "", "(Waf|scons): Entering directory (\\`|\\')(.+)'", 3),
+    << ActionFormat( "", "cd", "", "(Waf|scons): Entering directory (\\`|\\')(.+)'", 3);
 
 
 CompilerFilterStrategyPrivate::CompilerFilterStrategyPrivate(const KUrl& buildDir)
