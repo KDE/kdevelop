@@ -115,6 +115,11 @@ public:
 protected:
     friend class IBreakpointController;
     
+    /**
+     * Return the model this breakpoint is attached to
+     *
+     * @note This might be null, e.g. after the breakpoint has been marked as deleted
+     */
     BreakpointModel *breakpointModel();
 
     BreakpointModel *m_model;
