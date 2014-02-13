@@ -243,8 +243,9 @@ void ClangParseJob::run()
     }
 
     if (!m_session || !m_session->reparse(contents().contents)) {
+        const bool skipFunctionBodies = (minimumFeatures() <= TopDUContext::VisibleDeclarationsAndContexts);
         m_session = new ParseSession(document(), contents().contents, clang()->index(), m_includes, m_defines,
-                                     (minimumFeatures() <= TopDUContext::VisibleDeclarationsAndContexts));
+                                     (skipFunctionBodies ? ParseSession::SkipFunctionBodies : ParseSession::NoOption));
     } else {
         Q_ASSERT(m_session->url() == document());
         Q_ASSERT(m_session->unit());

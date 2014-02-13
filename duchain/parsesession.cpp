@@ -116,7 +116,7 @@ IndexedString ParseSession::languageString()
 
 ParseSession::ParseSession(const IndexedString& url, const QByteArray& contents, ClangIndex* index,
                            const Path::List& includes, const QHash<QString, QString>& defines,
-                           const bool skipFunctionBodies)
+                           Options options)
     : m_url(url)
     , m_unit(nullptr)
     , m_file(nullptr)
@@ -127,11 +127,16 @@ ParseSession::ParseSession(const IndexedString& url, const QByteArray& contents,
         | CXTranslationUnit_Incomplete
         | CXTranslationUnit_CXXChainedPCH
         | CXTranslationUnit_ForSerialization;
-    if (skipFunctionBodies) {
+    if (options.testFlag(SkipFunctionBodies)) {
         flags |= CXTranslationUnit_SkipFunctionBodies;
     }
 
     QVector<const char*> args = argsForPath(url.str());
+    if (!options.testFlag(DisableSpellChecking)) {
+        // TODO: Check whether this slows down parsing noticably
+        // also see http://lists.cs.uiuc.edu/pipermail/cfe-commits/Week-of-Mon-20100705/032025.html
+        args << "-fspell-checking"; // note: disabled by default in CIndex
+    }
     // uses QByteArray as smart-pointer for const char* ownership
     QVector<QByteArray> otherArgs;
     otherArgs.reserve(includes.size() + defines.size());

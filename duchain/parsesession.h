@@ -41,6 +41,13 @@ class ClangIndex;
 class KDEVCLANGDUCHAIN_EXPORT ParseSession : public KDevelop::IAstContainer
 {
 public:
+    enum Option {
+        NoOption,
+        DisableSpellChecking,
+        SkipFunctionBodies
+    };
+    Q_DECLARE_FLAGS(Options, Option)
+
     /**
      * @return a unique identifier for Clang documents.
      */
@@ -54,7 +61,7 @@ public:
      */
     ParseSession(const KDevelop::IndexedString& url, const QByteArray& contents, ClangIndex* index,
                  const KDevelop::Path::List& includes = {}, const QHash<QString, QString>& defines = {},
-                 bool skipFunctionBodies = false );
+                 Options options = Options());
     ~ParseSession();
 
     /**
