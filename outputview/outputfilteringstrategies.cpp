@@ -180,6 +180,8 @@ const QVector<ActionFormat> ACTION_FILTERS {
     ActionFormat( I18N_NOOP2_NOSTRIP("", "compiling"), "dcopidl2cpp", "dcopidl2cpp (?:\\S* )*([^\\s;]+)", 1 ),
     // match against Entering directory to update current build dir
     ActionFormat( "", "cd", "", "make\\[\\d+\\]: Entering directory (\\`|\\')(.+)'", 2),
+    // waf and scons use the same basic convention as make
+    ActionFormat( "", "cd", "", "(Waf|scons): Entering directory (\\`|\\')(.+)'", 3)
 };
 
 }

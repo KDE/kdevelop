@@ -332,6 +332,8 @@ void FilteringStrategyTest::testCompilerFilterstrategyUrlFromAction_data()
     << "[ 26%] Building CXX object /path/to/two/CMakeFiles/file.o" << QString( basepath + "path/to/two/");
     QTest::newRow("cd-line6")
     << QString("make[4]: Entering directory '" + basepath + "path/to/one/'") << QString( basepath + "path/to/one/");
+    QTest::newRow("waf-cd")
+    << QString("Waf: Entering directory `" + basepath + "path/to/two/'") << QString( basepath + "path/to/two/");
     QTest::newRow("cmake-line7")
     << QString("[ 50%] Building CXX object CMakeFiles/testdeque.dir/RingBuffer.cpp.o") << QString( basepath);
 }
