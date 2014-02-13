@@ -35,6 +35,8 @@ private slots:
     void testBasicProblems();
     void testBasicRangeSupport();
     void testChildDiagnostics();
+    void testFixits();
+    void testFixits_data();
 
 private:
     QList<KDevelop::ProblemPointer> parse(const QByteArray& code);

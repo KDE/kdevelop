@@ -18,6 +18,7 @@
 
 #include "test_problems.h"
 
+#include "../duchain/clangproblem.h"
 #include "../duchain/clangtypes.h"
 #include "../duchain/parsesession.h"
 
@@ -123,6 +124,68 @@ void TestProblems::testChildDiagnostics()
     const ProblemPointer d2 = problems[0]->diagnostics()[1];
     QCOMPARE(d2->url().str(), QString("/tmp/stdin.cpp"));
     QCOMPARE(d2->rangeInCurrentRevision().start, SimpleCursor(1, 5));
+}
+
+Q_DECLARE_METATYPE(QVector<ClangFixit>);
+
+/**
+ * Provides a list of possible fixits: http://blog.llvm.org/2010/04/amazing-feats-of-clang-error-recovery.html
+ */
+void TestProblems::testFixits()
+{
+    QFETCH(QString, code);
+    QFETCH(QVector<ClangFixit>, fixits);
+
+    auto problems = parse(code.toAscii());
+    QCOMPARE(problems.size(), 1);
+
+    const ClangProblem* p1 = dynamic_cast<ClangProblem*>(problems[0].data());
+    QVERIFY(p1);
+    ClangFixitAssistant* a1 = qobject_cast<ClangFixitAssistant*>(p1->solutionAssistant().data());
+    QVERIFY(a1);
+
+    auto allFixits = p1->allFixits();
+    for (auto it = allFixits.constBegin(); it != allFixits.constEnd(); ++it) {
+        QCOMPARE(it.value(), fixits);
+    }
+}
+
+void TestProblems::testFixits_data()
+{
+    QTest::addColumn<QString>("code"); // input
+    QTest::addColumn<QVector<ClangFixit>>("fixits");
+
+    // expected:
+    // test -Wextra-tokens
+    // /home/krf/test.cpp:2:8: warning: extra tokens at end of #endif directive [-Wextra-tokens]
+    // #endif FOO
+    //        ^
+    //        //
+    QTest::newRow("extra-tokens test")
+        << "#ifdef FOO\n#endif FOO\n"
+        << QVector<ClangFixit>{ ClangFixit{"//", SimpleRange(1, 7, 1, 7)} };
+
+    // expected:
+    // test.cpp:1:19: warning: empty parentheses interpreted as a function declaration [-Wvexing-parse]
+    //     int a();
+    //          ^~
+    // test.cpp:1:19: note: replace parentheses with an initializer to declare a variable
+    //     int a();
+    //          ^~
+    //           = 0
+    QTest::newRow("vexing-parse test")
+        << "int main() { int a(); }\n"
+        << QVector<ClangFixit>{ ClangFixit{" = 0", SimpleRange(0, 18, 0, 20)} };
+
+    // expected:
+    // test.cpp:2:21: error: no member named 'someVariablf' in 'C'; did you mean 'someVariable'?
+    // int main() { C c; c.someVariablf = 1; }
+    //                     ^~~~~~~~~~~~
+    //                     someVariable
+    QTest::newRow("spell-check test")
+        << "class C{ int someVariable; };\n"
+           "int main() { C c; c.someVariablf = 1; }\n"
+        << QVector<ClangFixit>{ ClangFixit{"someVariable", SimpleRange(1, 20, 1, 32)} };
 }
 
 #include "test_problems.moc"

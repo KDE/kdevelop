@@ -1,10 +1,15 @@
 kde4_add_library(kdevclangduchain SHARED
     parsesession.cpp
+    clangproblem.cpp
     clangtypes.cpp
     debugvisitor.cpp
     tuduchain.cpp
     clangpch.cpp
     clanghelpers.cpp
+)
+
+include_directories(
+    ${CMAKE_CURRENT_BINARY_DIR}
 )
 
 target_link_libraries(kdevclangduchain LINK_PRIVATE

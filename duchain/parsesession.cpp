@@ -22,6 +22,7 @@
 */
 
 #include "parsesession.h"
+#include "clangproblem.h"
 #include "clangtypes.h"
 #include "debug.h"
 
@@ -85,9 +86,29 @@ CXUnsavedFile fileForContents(const QByteArray& path, const QByteArray& contents
     return file;
 }
 
-static ProblemPointer problemForDiagnostic(CXDiagnostic diagnostic)
+static ClangFixits fixitsForDiagnostic(CXDiagnostic diagnostic)
 {
-    ProblemPointer problem(new Problem);
+    ClangFixits fixits;
+    auto numFixits = clang_getDiagnosticNumFixIts(diagnostic);
+    for (uint i = 0; i < numFixits; ++i) {
+        CXSourceRange range;
+        const QString replacementText = ClangString(clang_getDiagnosticFixIt(diagnostic, i, &range)).toString();
+        // TODO: Apparently there's no way to find out the raw text via the C API given a source range
+        // Could be useful to pass that into ClangFixit to be sure to replace the correct text
+        // cf. DocumentChangeSet.m_oldText
+        fixits << ClangFixit{replacementText, ClangRange(range).toSimpleRange()};
+    }
+    return fixits;
+}
+
+/**
+ * Import @p diagnostic into a Problem object
+ *
+ * @param[in] diagnostic To-be-imported clang diagnostic
+ */
+static ClangProblem::Ptr problemForDiagnostic(CXDiagnostic diagnostic)
+{
+    ClangProblem::Ptr problem(new ClangProblem);
     switch (clang_getDiagnosticSeverity(diagnostic)) {
         case CXDiagnostic_Fatal:
         case CXDiagnostic_Error:
@@ -118,6 +139,7 @@ static ProblemPointer problemForDiagnostic(CXDiagnostic diagnostic)
         }
     }
 
+    problem->setFixits(fixitsForDiagnostic(diagnostic));
     problem->setFinalLocation(docRange);
     problem->setSource(ProblemData::SemanticAnalysis);
     return problem;
@@ -225,18 +247,19 @@ QList<ProblemPointer> ParseSession::problemsForFile(CXFile file) const
             continue;
         }
 
-        ProblemPointer problem = problemForDiagnostic(diagnostic);
+        ClangProblem::Ptr problem = problemForDiagnostic(diagnostic);
 
         QList<ProblemPointer> diagnostics;
         auto childDiagnostics = clang_getChildDiagnostics(diagnostic);
         auto numChildDiagnostics = clang_getNumDiagnosticsInSet(childDiagnostics);
         for (uint j = 0; j < numChildDiagnostics; ++j) {
             auto childDiagnostic = clang_getDiagnosticInSet(childDiagnostics, j);
-            diagnostics << problemForDiagnostic(childDiagnostic);
+            ClangProblem::Ptr problem = problemForDiagnostic(childDiagnostic);
+            diagnostics << ProblemPointer::staticCast(problem);
         }
         problem->setDiagnostics(diagnostics);
+        problems << ProblemPointer::staticCast(problem);
 
-        problems << problem;
         clang_disposeDiagnostic(diagnostic);
     }
     return problems;
