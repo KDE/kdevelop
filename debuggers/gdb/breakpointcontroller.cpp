@@ -245,17 +245,19 @@ void BreakpointController::handleBreakpointListInitial(const GDBMI::ResultRecord
                     break;
                 }
 
-                location = mi_b["original-location"].literal();
-                kDebug() << "location" << location;
-                QRegExp rx("^(.+):(\\d+)$");
-                if (rx.indexIn(location) != -1) {
-                    if (unquoteExpression(rx.cap(1)) == b->url().pathOrUrl(KUrl::RemoveTrailingSlash) && rx.cap(2).toInt() - 1 == b->line()) {
+                if (mi_b.hasField("original-location")) {
+                    location = mi_b["original-location"].literal();
+                    kDebug() << "location" << location;
+                    QRegExp rx("^(.+):(\\d+)$");
+                    if (rx.indexIn(location) != -1) {
+                        if (unquoteExpression(rx.cap(1)) == b->url().pathOrUrl(KUrl::RemoveTrailingSlash) && rx.cap(2).toInt() - 1 == b->line()) {
+                            updateBreakpoint = b;
+                        } else {
+                            kDebug() << "!=" << b->location();
+                        }
+                    } else if (location == b->location()) {
                         updateBreakpoint = b;
-                    } else {
-                        kDebug() << "!=" << b->location();
                     }
-                } else if (location == b->location()) {
-                    updateBreakpoint = b;
                 }
             }
             if (updateBreakpoint) break;
@@ -475,8 +477,6 @@ void BreakpointController::update(KDevelop::Breakpoint *breakpoint, const GDBMI:
                 breakpoint->setData(KDevelop::Breakpoint::LocationColumn, unquoteExpression(location));
             }
         }
-    } else {
-        breakpoint->setData(KDevelop::Breakpoint::LocationColumn, "Your GDB is too old");
     }
 
 
