@@ -247,6 +247,10 @@ void FilteringStrategyTest::testNativeAppErrorFilterStrategy_data()
         << "ASSERT: \"errors().isEmpty()\" in file /tmp/foo/bar.cpp, line 49"
         << "/tmp/foo/bar.cpp"
         << 48 << 0 << FilteredItem::ErrorItem;
+    QTest::newRow("qttest-loc")
+        << "   Loc: [/foo/bar.cpp(33)]"
+        << "/foo/bar.cpp"
+        << 32 << 0 << FilteredItem::ErrorItem;
 }
 
 void FilteringStrategyTest::testNativeAppErrorFilterStrategy()
