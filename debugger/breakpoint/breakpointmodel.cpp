@@ -208,10 +208,9 @@ QModelIndex BreakpointModel::breakpointIndex(KDevelop::Breakpoint* b, int column
 
 bool KDevelop::BreakpointModel::removeRows(int row, int count, const QModelIndex& parent)
 {
-    if (row + count > m_breakpoints.count()) {
-        count = m_breakpoints.count() - row;
-        if (count <= 0) return false;
-    }
+    if (count < 1 || (row < 0) || (row + count) > rowCount(parent))
+        return false;
+
     beginRemoveRows(parent, row, row+count-1);
     for (int i=0; i < count; ++i) {
         Breakpoint *b = m_breakpoints.at(row);
