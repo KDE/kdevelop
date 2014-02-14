@@ -1,39 +1,37 @@
-# - Try to find the QJson library
-# Once done this will define
+# Find QJSON - JSON handling library for Qt
 #
-#  QJSON_FOUND - system has the QJson library
-#  QJSON_INCLUDE_DIR - the QJson include directory
-#  QJSON_LIBRARY - Link this to use the QJson library
+# This module defines
+#  QJSON_FOUND - whether the qsjon library was found
+#  QJSON_LIBRARIES - the qjson library
+#  QJSON_INCLUDE_DIR - the include path of the qjson library
 #
-# Copyright (c) 2010, Pino Toscano, <toscano.pino@tiscali.it>
+# Copyright (C) 2012 Raphael Kubo da Costa <rakuco@FreeBSD.org>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-if (QJSON_INCLUDE_DIR AND QJSON_LIBRARY)
+# QJSON v0.7.2+ provides a QJSONConfig.cmake, which should be used if found.
+find_package(QJSON QUIET NO_MODULE)
 
-  # in cache already
-  set(QJSON_FOUND TRUE)
-
-else (QJSON_INCLUDE_DIR AND QJSON_LIBRARY)
-  if (NOT WIN32)
+if (QJSON_FOUND)
+    set(REQUIRED_LIBS QJSON_CONFIG)
+else (QJSON_FOUND)
     find_package(PkgConfig)
-    pkg_check_modules(PC_QJSON QJson)
-  endif(NOT WIN32)
+    pkg_check_modules(PC_QJSON QJson>=0.5)
 
-  find_path(QJSON_INCLUDE_DIR qjson/parser.h
-    HINTS
-    ${PC_QJSON_INCLUDE_DIRS}
-  )
+    find_library(QJSON_LIBRARIES
+        NAMES qjson
+        HINTS ${PC_QJSON_LIBDIR} ${PC_QJSON_LIBRARY_DIRS}
+    )
 
-  find_library(QJSON_LIBRARY NAMES qjson
-    HINTS
-    ${PC_QJSON_LIBRARY_DIRS}
-  )
+    find_path(QJSON_INCLUDE_DIR
+        NAMES qjson/parser.h
+        HINTS ${PC_QJSON_INCLUDEDIR} ${PC_QJSON_INCLUDE_DIRS}
+    )
 
-  include(FindPackageHandleStandardArgs)
-  find_package_handle_standard_args(QJson DEFAULT_MSG QJSON_LIBRARY QJSON_INCLUDE_DIR)
+    set(REQUIRED_LIBS QJSON_LIBRARIES QJSON_INCLUDE_DIR)
+endif (QJSON_FOUND)
 
-  mark_as_advanced(QJSON_INCLUDE_DIR QJSON_LIBRARY)
+include(FindPackageHandleStandardArgs)
+find_package_handle_standard_args(QJSON DEFAULT_MSG ${REQUIRED_LIBS})
 
-endif (QJSON_INCLUDE_DIR AND QJSON_LIBRARY)
