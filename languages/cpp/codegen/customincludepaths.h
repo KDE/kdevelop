@@ -26,6 +26,8 @@
 
 #include <QWidget>
 
+class KUrl;
+
 class CustomIncludePaths : public QWidget
 {
     Q_OBJECT

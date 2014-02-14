@@ -23,6 +23,7 @@
 
 #include <kfiledialog.h>
 #include <klocalizedstring.h>
+#include <kurl.h>
 
 CustomIncludePaths::CustomIncludePaths(QWidget* parent)
     : QWidget(parent)
