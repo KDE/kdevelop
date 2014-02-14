@@ -49,6 +49,7 @@ public:
         NoFilter,
         CompilerFilter,
         ScriptErrorFilter,
+        NativeAppErrorFilter,
         StaticAnalysisFilter
     };
 

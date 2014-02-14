@@ -26,15 +26,26 @@
 
 
 #include "ifilterstrategy.h"
+#include "outputformats.h"
 #include <outputview/outputviewexport.h>
 
-
-#include <KUrl>
-
+#include <QList>
 #include <QVector>
+
+class KUrl;
 
 namespace KDevelop
 {
+
+namespace FilteringStrategyUtils
+{
+    /**
+     * Looks through @p errorFormats and matches each item against @p line
+     *
+     * @return A FilteredItem object for the first match encountered
+     */
+    FilteredItem match(const QList<KDevelop::ErrorFormat>& errorFormats, const QString& line);
+}
 
 struct CompilerFilterStrategyPrivate;
 
@@ -88,6 +99,21 @@ public:
 
     virtual FilteredItem actionInLine(QString const& line);
 
+};
+
+/**
+ * This filter strategy filters out errors (no actions) from runtime debug output of native applications
+ *
+ * This is especially useful for runtime output of Qt applications, for example lines such as:
+ * "ASSERT: "errors().isEmpty()" in file /tmp/foo/bar.cpp", line 49"
+ */
+class KDEVPLATFORMOUTPUTVIEW_EXPORT NativeAppErrorFilterStrategy : public IFilterStrategy
+{
+public:
+    NativeAppErrorFilterStrategy();
+
+    virtual FilteredItem errorInLine(const QString& line);
+    virtual FilteredItem actionInLine(const QString& line);
 };
 
 /**

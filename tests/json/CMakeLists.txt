@@ -1,4 +1,4 @@
-include_directories( ${KDevPlatform_SOURCE_DIR}/shell )
+include_directories(${KDevPlatform_SOURCE_DIR}/shell ${QJSON_INCLUDE_DIR})
 
 set(kdevplatformjsontests_LIB_SRCS
     delayedoutput.cpp

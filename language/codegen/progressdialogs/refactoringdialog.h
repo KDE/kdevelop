@@ -1,5 +1,6 @@
 /***************************************************************************
- *   Copyright 2013 Kevin Funk <kfunk@kde.org                              *
+ *   This file is part of KDevelop                                         *
+ *   Copyright 2008 David Nolden <david.nolden.kdevelop@art-master.de>     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -17,14 +18,33 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#include "autotestshell.h"
+#ifndef PROGRESSDIALOGS_H
+#define PROGRESSDIALOGS_H
 
-KDevelop::AutoTestShell::AutoTestShell(const QStringList& plugins)
-    : m_plugins(plugins)
-{
-}
+#include <QDialog>
+#include <language/duchain/topducontext.h>
 
-void KDevelop::AutoTestShell::init(const QStringList& plugins)
+#include "ui_refactoringdialog.h"
+
+namespace KDevelop
 {
-    s_instance = new AutoTestShell(plugins);
+class UsesCollector;
+
+class RefactoringProgressDialog : public QDialog
+{
+    Q_OBJECT
+public:
+    RefactoringProgressDialog(const QString& action, UsesCollector* collector);
+
+private slots:
+    void progress(uint done, uint max);
+    void maximumProgress(uint max);
+    void processUses(const KDevelop::ReferencedTopDUContext& context);
+
+private:
+    UsesCollector* m_collector;
+    Ui::RefactoringDialog m_rd;
+};
+
 }
+#endif

@@ -37,7 +37,6 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/ilanguage.h>
 #include <interfaces/isourceformatter.h>
 #include <shell/core.h>
-#include <shell/sourceformattercontroller.h>
 #include <shell/plugincontroller.h>
 #include <shell/languagecontroller.h>
 
@@ -52,14 +51,9 @@ using KDevelop::Core;
 using KDevelop::ISourceFormatter;
 using KDevelop::SourceFormatterStyle;
 using KDevelop::SourceFormatterController;
-
+using KDevelop::SourceFormatter;
 
 const QString SourceFormatterSettings::userStylePrefix( "User" );
-
-SourceFormatter::~SourceFormatter()
-{
-    qDeleteAll(styles);
-}
 
 LanguageSettings::LanguageSettings()
     : selectedFormatter(0), selectedStyle(0) {
@@ -113,43 +107,26 @@ void SourceFormatterSettings::load()
     {
         KDevelop::ISourceFormatter* ifmt = plugin->extension<ISourceFormatter>();
         KPluginInfo info = KDevelop::Core::self()->pluginControllerInternal()->pluginInfo( plugin );
-        SourceFormatter* formatter;
+        KDevelop::SourceFormatter* formatter;
         FormatterMap::const_iterator iter = formatters.constFind(ifmt->name());
         if (iter == formatters.constEnd()) {
-            formatter = new SourceFormatter();
-            formatter->formatter = ifmt;
+            formatter = fmtctrl->createFormatterForPlugin(ifmt);
             formatters[ifmt->name()] = formatter;
-            // Inserted a new formatter. Now fill it with styles
-            foreach( const KDevelop::SourceFormatterStyle& style, ifmt->predefinedStyles() )
-            {
-                formatter->styles[ style.name() ] = new SourceFormatterStyle(style);
-            }
-            KConfigGroup grp = fmtctrl->configuration();
-            if( grp.hasGroup( ifmt->name() ) )
-            {
-                KConfigGroup fmtgrp = grp.group( ifmt->name() );
-                foreach( const QString& subgroup, fmtgrp.groupList() ) {
-                    SourceFormatterStyle* s = new SourceFormatterStyle( subgroup );
-                    KConfigGroup stylegrp = fmtgrp.group( subgroup );
-                    s->setCaption( stylegrp.readEntry( SourceFormatterController::styleCaptionKey, "" ) );
-                    s->setContent( stylegrp.readEntry( SourceFormatterController::styleContentKey, "" ) );
-                    formatter->styles[ s->name() ] = s;
-                }
-            }
         } else {
             formatter = iter.value();
         }
-        foreach( const QString& mime, info.property( SourceFormatterController::supportedMimeTypesKey ).toStringList() )
-        {
-            KMimeType::Ptr mimePtr = KMimeType::mimeType(mime);
-            if (!mimePtr) {
-                kWarning() << "plugin" << info.name() << "supports unknown mimetype entry" << mime;
-                continue;
+        for( const SourceFormatterStyle* style: formatter->styles ) {
+            for ( const SourceFormatterStyle::MimeHighlightPair& item: style->mimeTypes() ) {
+                KMimeType::Ptr mimePtr = KMimeType::mimeType(item.mimeType);
+                if (!mimePtr) {
+                    kWarning() << "plugin" << info.name() << "supports unknown mimetype entry" << item.mimeType;
+                    continue;
+                }
+                QString languageName = item.highlightMode;
+                LanguageSettings& l = languages[languageName];
+                l.mimetypes.append( mimePtr );
+                l.formatters.insert( formatter );
             }
-            QString languageName = formatter->formatter->highlightModeForMime(mimePtr);
-            LanguageSettings& l = languages[languageName];
-            l.mimetypes.append( mimePtr );
-            l.formatters.insert( formatter );
         }
     }
     
@@ -159,8 +136,11 @@ void SourceFormatterSettings::load()
     foreach( KDevelop::ILanguage* language, 
                 KDevelop::ICore::self()->languageController()->activeLanguages() +
                 KDevelop::ICore::self()->languageController()->loadedLanguages() )
-        if( languages.contains( language->name() ) && !sortedLanguages.contains(language->name()) )
+    {
+        if( languages.contains( language->name() ) && !sortedLanguages.contains(language->name()) ) {
             sortedLanguages.push_back( language->name() );
+        }
+    }
 
     foreach( const QString& name, languages.keys() )
         if( !sortedLanguages.contains( name ) )
@@ -259,6 +239,8 @@ void SourceFormatterSettings::save()
                 KConfigGroup stylegrp = fmtgrp.group( style->name() );
                 stylegrp.writeEntry( SourceFormatterController::styleCaptionKey, style->caption() );
                 stylegrp.writeEntry( SourceFormatterController::styleContentKey, style->content() );
+                stylegrp.writeEntry( SourceFormatterController::styleMimeTypesKey, style->mimeTypesVariant() );
+                stylegrp.writeEntry( SourceFormatterController::styleSampleKey, style->overrideSample() );
             }
         }
     }
@@ -331,6 +313,10 @@ void SourceFormatterSettings::selectFormatter( int idx )
         l.selectedStyle = 0;    // will hold 0 until a style is picked
     }
     foreach( const SourceFormatterStyle* style, formatterIter.value()->styles ) {
+        if ( ! style->supportsLanguage(cbLanguages->currentText())) {
+            // do not list items which do not support the selected language
+            continue;
+        }
         QListWidgetItem* item = addStyle( *style );
         if (style == l.selectedStyle) {
             styleList->setCurrentItem(item);
@@ -431,7 +417,7 @@ void SourceFormatterSettings::newStyle()
     if( item ) {
         SourceFormatterStyle* existstyle = fmt->styles[ item->data( STYLE_ROLE ).toString() ];
         s->setCaption( i18n( "New %1", existstyle->caption() ) );
-        s->setContent( existstyle->content() );
+        s->copyDataFrom( existstyle );
     } else {
         s->setCaption( i18n( "New Style" ) );
     }
@@ -487,7 +473,7 @@ void SourceFormatterSettings::updatePreview()
         {
             ISourceFormatter* ifmt = fmt->formatter;
             KMimeType::Ptr mime = l.mimetypes.first();
-            m_document->setHighlightingMode( ifmt->highlightModeForMime( mime ) );
+            m_document->setHighlightingMode( style->modeForMimetype( mime ) );
 
             //NOTE: this is ugly, but otherwise kate might remove tabs again :-/
             // see also: https://bugs.kde.org/show_bug.cgi?id=291074
@@ -498,7 +484,7 @@ void SourceFormatterSettings::updatePreview()
                 iface->setConfigValue("replace-tabs", false);
             }
 
-            m_document->setText( ifmt->formatSourceWithStyle( *style, ifmt->previewText( mime ), KUrl(), mime ) );
+            m_document->setText( ifmt->formatSourceWithStyle( *style, ifmt->previewText( style, mime ), KUrl(), mime ) );
 
             if (iface) {
                 iface->setConfigValue("replace-tabs", oldReplaceTabs);

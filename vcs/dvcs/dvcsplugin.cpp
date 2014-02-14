@@ -123,7 +123,8 @@ void DistributedVersionControlPlugin::additionalMenuEntries(QMenu* /*menu*/, con
 
 static QString stripPathToDir(const QString &path)
 {
-    return QFileInfo(path).absolutePath();
+    QFileInfo info = QFileInfo(path);
+    return info.isDir() ? info.absoluteFilePath() : info.absolutePath();
 }
 
 void DistributedVersionControlPlugin::ctxBranchManager()

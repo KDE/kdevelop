@@ -150,13 +150,6 @@ public:
   void addProblem(const ProblemPointer& problem);
 
   /**
-   * Remove a parsing-problem from this context.
-   *
-   * \note you must be holding a write lock when you access this function.
-   * */
-  void removeProblem(const ProblemPointer& problem);
-
-  /**
    * Clear the list of problems
    *
    * \note you must be holding a write lock when you access this function.

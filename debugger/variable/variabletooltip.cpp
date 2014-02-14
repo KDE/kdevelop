@@ -95,7 +95,7 @@ VariableToolTip::VariableToolTip(QWidget* parent, QPoint position,
 {
     setPalette( QApplication::palette() );
 
-    model_ = new TreeModel(QVector<QString>() << i18n("Name") << i18n("Value"),
+    model_ = new TreeModel(QVector<QString>() << i18n("Name") << i18n("Value") << i18n("Type"),
                            this);
 
     TooltipRoot* tr = new TooltipRoot(model_);
@@ -132,7 +132,7 @@ VariableToolTip::VariableToolTip(QWidget* parent, QPoint position,
     labelL->setContentsMargins(11, 0, 11, 6);
     QLabel* label = new QLabel(i18n("<a href=\"add_watch\">Watch this</a>"), this);
     labelL->addWidget(label);
-    QLabel* label2 = new QLabel(i18n("<a href=\"watchpoint\">Stop on change</a>"), 
+    QLabel* label2 = new QLabel(i18n("<a href=\"watchpoint\">Stop on change</a>"),
                                 this);
     labelL->addWidget(label2);
     connect(label, SIGNAL(linkActivated(QString)),

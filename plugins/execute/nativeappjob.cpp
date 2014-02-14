@@ -30,6 +30,7 @@
 
 #include <interfaces/ilaunchconfiguration.h>
 #include <outputview/outputmodel.h>
+#include <outputview/outputdelegate.h>
 #include <util/processlinemaker.h>
 #include <util/environmentgrouplist.h>
 
@@ -41,6 +42,8 @@
 
 #include "iexecuteplugin.h"
 #include <KConfigCore/ksharedconfig.h>
+
+using namespace KDevelop;
 
 NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg) 
     : KDevelop::OutputJob( parent ), proc(0)
@@ -91,8 +94,11 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
     
     setStandardToolView(KDevelop::IOutputView::RunView);
     setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll);
-    setModel( new KDevelop::OutputModel );
-    
+    OutputModel* m = new OutputModel;
+    m->setFilteringStrategy(OutputModel::NativeAppErrorFilter);
+    setModel(m);
+    setDelegate( new KDevelop::OutputDelegate );
+
     connect( lineMaker, SIGNAL(receivedStdoutLines(QStringList)), model(), SLOT(appendLines(QStringList)) );
     connect( proc, SIGNAL(error(QProcess::ProcessError)), SLOT(processError(QProcess::ProcessError)) );
     connect( proc, SIGNAL(finished(int,QProcess::ExitStatus)), SLOT(processFinished(int,QProcess::ExitStatus)) );

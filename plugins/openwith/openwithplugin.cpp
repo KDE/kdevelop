@@ -79,9 +79,13 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension( KDevelop::C
     if ( filectx && filectx->urls().count() > 0 ) {
         m_urls = filectx->urls();
     } else if ( projctx && projctx->items().count() > 0 ) {
+        // For now, let's handle *either* files only *or* directories only
+        const int wantedType = projctx->items().first()->type();
         foreach( ProjectBaseItem* item, projctx->items() ) {
-            if( item->file() ) {
+            if (wantedType == ProjectBaseItem::File && item->file()) {
                 m_urls << item->file()->path().toUrl();
+            } else if ((wantedType == ProjectBaseItem::Folder || wantedType == ProjectBaseItem::BuildFolder) && item->folder()) {
+                m_urls << item->folder()->path().toUrl();
             }
         }
     }
@@ -96,10 +100,6 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension( KDevelop::C
     // Ok, lets fetch the mimetype for the !!first!! url and the relevant services
     // TODO: Think about possible alternatives to using the mimetype of the first url.
     KMimeType::Ptr mimetype = KMimeType::findByUrl( m_urls.first() );
-    if (mimetype->is("inode/directory")) {
-        return KDevelop::ContextMenuExtension();
-    }
-
     m_mimeType = mimetype->name();
 
     QList<QAction*> partActions = actionsForServiceType("KParts/ReadOnlyPart");
@@ -116,10 +116,14 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension( KDevelop::C
     KMenu* menu = new KMenu( i18n("Open With" ) );
     menu->setIcon( QIcon::fromTheme( "document-open" ) );
 
-    menu->addTitle(i18n("Embedded Editors"));
-    menu->addActions( partActions );
-    menu->addTitle(i18n("External Applications"));
-    menu->addActions( appActions );
+    if (!partActions.isEmpty()) {
+        menu->addTitle(i18n("Embedded Editors"));
+        menu->addActions( partActions );
+    }
+    if (!appActions.isEmpty()) {
+        menu->addTitle(i18n("External Applications"));
+        menu->addActions( appActions );
+    }
 
     QAction* openAction = new QAction( i18n( "Open" ), this );
     openAction->setIcon( QIcon::fromTheme( "document-open" ) );
@@ -127,7 +131,11 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension( KDevelop::C
 
     KDevelop::ContextMenuExtension ext;
     ext.addAction( KDevelop::ContextMenuExtension::FileGroup, openAction );
-    ext.addAction( KDevelop::ContextMenuExtension::FileGroup, menu->menuAction() );
+    if (!menu->isEmpty()) {
+        ext.addAction(KDevelop::ContextMenuExtension::FileGroup, menu->menuAction());
+    } else {
+        delete menu;
+    }
     return ext;
 }
 
@@ -189,13 +197,21 @@ QList<QAction*> OpenWithPlugin::actionsForServiceType( const QString& serviceTyp
 
 void OpenWithPlugin::openDefault()
 {
+    //  check preferred handler
     const QString defaultId = defaultForMimeType(m_mimeType);
     if (!defaultId.isEmpty()) {
         open(defaultId);
         return;
     }
-    foreach( const KUrl& u, m_urls ) {
-        ICore::self()->documentController()->openDocument( u );
+
+    // default handlers
+    if (m_mimeType == "inode/directory") {
+        KService::Ptr service = KMimeTypeTrader::self()->preferredService(m_mimeType);
+        KRun::run(*service, m_urls, ICore::self()->uiController()->activeMainWindow());
+    } else {
+        foreach( const KUrl& u, m_urls ) {
+            ICore::self()->documentController()->openDocument( u );
+        }
     }
 }
 

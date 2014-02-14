@@ -48,6 +48,7 @@
  *   type : TypeTestObject
  *   unaliasedType : TypeTestObject
  *   targetType : TypeTestObject
+ *   returnType : TypeTestObject
  *   identifiedTypeQid : string
  *   isVirtual : bool
  *   isStatic : bool

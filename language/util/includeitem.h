@@ -23,6 +23,8 @@
 
 #include "../languageexport.h"
 
+class QDebug;
+
 namespace KDevelop {
 
 class KDEVPLATFORMLANGUAGE_EXPORT IncludeItem
@@ -44,5 +46,7 @@ public:
 };
 
 }
+
+KDEVPLATFORMLANGUAGE_EXPORT QDebug operator<<(QDebug dbg, const KDevelop::IncludeItem& item);
 
 #endif // KDEVPLATFORM_INCLUDEITEM_H

@@ -170,7 +170,6 @@ void SvnInternalDiffJob::run()
             {
                 throw svn::ClientException( "Not enough information for a diff");
             }
-            //@TODO: Make sure there's no diff-cmd set via the users configuration file, can be done only via C api
             diff = cli.diff( svn::Path( srcba.data() ), pegRev, srcRev,
                              dstRev, recursive(), ignoreAncestry(),
                              noDiffOnDelete(), ignoreContentType() );

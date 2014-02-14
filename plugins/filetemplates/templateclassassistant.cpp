@@ -419,10 +419,7 @@ void TemplateClassAssistant::next()
     else if (currentPage() == d->classIdentifierPage)
     {
         d->generator->setIdentifier(d->classIdentifierPageWidget->identifier());
-        foreach (const QString& base, d->classIdentifierPageWidget->inheritanceList())
-        {
-            d->generator->addBaseClass(base);
-        }
+        d->generator->setBaseClasses(d->classIdentifierPageWidget->inheritanceList());
     }
     else if (currentPage() == d->overridesPage)
     {

@@ -123,6 +123,7 @@ set(kdevplatformlanguage_LIB_SRCS
 #     codegen/templateengine.cpp
 #     codegen/archivetemplateloader.cpp
     codegen/basicrefactoring.cpp
+    codegen/progressdialogs/refactoringdialog.cpp
 
     util/setrepository.cpp
     util/includeitem.cpp
@@ -135,6 +136,10 @@ set(kdevplatformlanguage_LIB_SRCS
     checks/dataaccessrepository.cpp checks/dataaccess.cpp
     checks/controlflowgraph.cpp checks/controlflownode.cpp
 )
+
+kde4_add_ui_files(kdevplatformlanguage_LIB_SRCS
+    codegen/basicrefactoring.ui
+    codegen/progressdialogs/refactoringdialog.ui)
 
 add_library(kdevplatformlanguage SHARED ${kdevplatformlanguage_LIB_SRCS})
 target_link_libraries(kdevplatformlanguage LINK_PUBLIC

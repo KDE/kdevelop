@@ -24,6 +24,8 @@
 #include "../editor/simplerange.h"
 #include "../languageexport.h"
 
+#include "interfaces/isourceformatter.h"
+
 namespace KDevelop {
 
 class IndexedString;
@@ -108,6 +110,17 @@ public:
       *and it must contain at least 4 indentation levels!
       *The default implementation returns an empty string.*/
     virtual QString indentationSample() const;
+
+    /**
+     * Can return a list of source formatting items for this language.
+     * For example, if your language wants to use the CustomScript engine with
+     * a specific executable, return an item with "customscript" as the engine
+     * and a style describing your options as the style (in this case, especially
+     * the command to execute in the "content" member).
+     * Multiple items can be returned. Make sure to set the mime type(s) of your language
+     * on the returned items.
+     */
+    virtual SourceFormatterItemList sourceFormatterItems() const;
     
     enum WhitespaceSensitivity {
         Insensitive = 0,

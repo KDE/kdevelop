@@ -72,9 +72,9 @@ Variable::Variable(TreeModel* model, TreeItem* parent,
     // FIXME: should not duplicate the data, instead overload 'data'
     // and return expression_ directly.
     if (display.isEmpty())
-        setData(QVector<QVariant>() << expression << QString());
+        setData(QVector<QVariant>() << expression << QString() << QString());
     else
-        setData(QVector<QVariant>() << display << QString());
+        setData(QVector<QVariant>() << display << QString() << QString());
 }
 
 QString Variable::expression() const
@@ -89,13 +89,24 @@ bool Variable::inScope() const
 
 void Variable::setValue(const QString& v)
 {
-    itemData[1] = v;
+    itemData[VariableCollection::ValueColumn] = v;
     reportChange();
 }
 
 QString Variable::value() const
 {
-    return itemData[1].toString();
+    return itemData[VariableCollection::ValueColumn].toString();
+}
+
+void Variable::setType(const QString& type)
+{
+    itemData[VariableCollection::TypeColumn] = type;
+    reportChange();
+}
+
+QString Variable::type() const
+{
+    return itemData[VariableCollection::TypeColumn].toString();
 }
 
 void Variable::setTopLevel(bool v)
@@ -392,7 +403,7 @@ void VariablesRoot::resetChanged()
 }
 
 VariableCollection::VariableCollection(IDebugController* controller)
-: TreeModel(QVector<QString>() << i18n( "Name" ) << i18n( "Value" ), controller), m_widgetVisible(false)
+: TreeModel(QVector<QString>() << i18n( "Name" ) << i18n( "Value" ) << i18n("Type"), controller), m_widgetVisible(false)
 {
     universe_ = new VariablesRoot(this);
     setRootItem(universe_);

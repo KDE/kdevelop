@@ -87,26 +87,21 @@ DeclarationContext::DeclarationContext( const IndexedDeclaration& declaration, c
 
 DeclarationContext::DeclarationContext(KTextEditor::View* view, KTextEditor::Cursor position) : DUContextContext(IndexedDUContext())
 {
-    DUChainReadLocker lock(DUChain::lock());
-    DocumentRange useRange = DocumentRange::invalid();
-    IndexedDeclaration declaration;
+    const KUrl& url = view->document()->url();
+    const SimpleCursor pos = SimpleCursor(position);
+    DUChainReadLocker lock;
+    DocumentRange useRange = DocumentRange(IndexedString(url), DUChainUtils::itemRangeUnderCursor(url, pos));
+    Declaration* declaration = DUChainUtils::itemUnderCursor(url, pos);
+    IndexedDeclaration indexed;
+    if ( declaration ) {
+        indexed = IndexedDeclaration(declaration);
+    }
     IndexedDUContext context;
     TopDUContext* topContext = DUChainUtils::standardContextForUrl(view->document()->url());
     if(topContext) {
-        CursorInRevision localRevisionCursor = topContext->transformToLocalRevision(SimpleCursor(position));
-        
-        DUContext* specific = topContext->findContextAt(localRevisionCursor);
-        context = IndexedDUContext(specific);
-        if(specific) {
-            int use = specific->findUseAt(localRevisionCursor);
-            if(use != -1) {
-                //Found a use under the cursor:
-                useRange = DocumentRange(IndexedString(specific->url().str()), topContext->transformFromLocalRevision(specific->uses()[use].m_range));
-                declaration = IndexedDeclaration(specific->topContext()->usedDeclarationForIndex( specific->uses()[use].m_declarationIndex ));
-            }else{
-                declaration = IndexedDeclaration(specific->findDeclarationAt(localRevisionCursor));
-            }
-        }
+        DUContext* specific = topContext->findContextAt(CursorInRevision(pos.line, pos.column));
+        if(specific)
+            context = IndexedDUContext(specific);
     }
     d = new Private(declaration, useRange);
     setContext(context);

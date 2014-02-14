@@ -29,6 +29,8 @@
  * a more efficient version of KTextEditor::Range.
  * In KDevelop, this object is used when referencing the most current document revision
  * (the document in its current version)
+ *
+ * TODO KF5: Just use KTextEditor::Range here? Cursors are now simple members just like here
  */
 
 namespace KDevelop {

@@ -114,7 +114,7 @@ void StashManagerDialog::dropClicked()
 
 void StashManagerDialog::branchClicked()
 {
-    QString branchName = QInputDialog::getText(this, i18n("KDevelop - Git Stash"), i18n("Select a name for the new branch"));
+    QString branchName = QInputDialog::getText(this, i18n("KDevelop - Git Stash"), i18n("Select a name for the new branch:"));
     
     if(!branchName.isEmpty())
         runStash(QStringList("branch") << branchName << selection());

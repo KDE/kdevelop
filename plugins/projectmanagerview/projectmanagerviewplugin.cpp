@@ -596,7 +596,7 @@ void ProjectManagerViewPlugin::renameItems(const QList< ProjectBaseItem* >& item
         //Change QInputDialog->KFileSaveDialog?
         QString name = QInputDialog::getText(
             window, i18n("Rename..."),
-            i18n("New name for '%1'", item->text()),
+            i18n("New name for '%1':", item->text()),
             QLineEdit::Normal, item->text()
         );
 
@@ -623,7 +623,7 @@ void ProjectManagerViewPlugin::renameItems(const QList< ProjectBaseItem* >& item
 ProjectFileItem* createFile(const ProjectFolderItem* item)
 {
     QWidget* window = ICore::self()->uiController()->activeMainWindow()->window();
-    QString name = QInputDialog::getText(window, i18n("Create File in %1", item->path().pathOrUrl()), i18n("File Name"));
+    QString name = QInputDialog::getText(window, i18n("Create File in %1", item->path().pathOrUrl()), i18n("File name:"));
 
     if(name.isEmpty())
         return 0;

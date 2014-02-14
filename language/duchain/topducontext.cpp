@@ -150,8 +150,6 @@ public:
   TopDUContext* m_ctxt;
 
   QSet<DUContext*> m_directImporters;
-  // used to keep problems alive while the topducontext is alive
-  QList<ProblemPointer> m_problems;
 
   ParsingEnvironmentFilePointer m_file;
 
@@ -621,9 +619,6 @@ void TopDUContext::deleteSelf() {
   TopDUContextDynamicData* dynamicData = m_dynamicData;
 
   m_dynamicData->m_deleting = true;
-  // ugly hack: if we don't clear the problems here we'll end up with double deletions as the shared ptrs
-  // will potentially try to delete mmapped, serialized data :-/
-  m_local->m_problems.clear();
 
   delete this;
 
@@ -974,14 +969,12 @@ QList<ProblemPointer> TopDUContext::problems() const
   ENSURE_CAN_READ
 
   const auto data = d_func();
-  if (m_local->m_problems.isEmpty() && data->m_problemsSize()) {
-    // deserialize problems into shared ptrs when not done so already
-    m_local->m_problems.reserve(data->m_problemsSize());
-    for (uint i = 0; i < data->m_problemsSize(); ++i) {
-      m_local->m_problems << ProblemPointer(data->m_problems()[i].data(this));
-    }
+  QList<ProblemPointer> ret;
+  ret.reserve(data->m_problemsSize());
+  for (uint i = 0; i < data->m_problemsSize(); ++i) {
+    ret << ProblemPointer(data->m_problems()[i].data(this));
   }
-  return m_local->m_problems;
+  return ret;
 }
 
 void TopDUContext::setProblems(const QList<ProblemPointer>& problems)
@@ -1000,36 +993,18 @@ void TopDUContext::addProblem(const ProblemPointer& problem)
   Q_ASSERT(problem);
 
   auto data = d_func_dynamic();
-
-  // ensure we deserialized problems already to keep m_local->m_problems in sync
-  problems();
-
-  auto serializableProblem = ProblemPointer(problem)->prepareStorage(this);
-
   // store for indexing
-  LocalIndexedProblem indexedProblem(serializableProblem.constData());
+  LocalIndexedProblem indexedProblem(problem, this);
   Q_ASSERT(indexedProblem.isValid());
   data->m_problemsList().append(indexedProblem);
-  Q_ASSERT(indexedProblem.data(this) == serializableProblem.data());
-
-  // and also for dynamic, shared retrieval during the lifetime of this topcontext
-  m_local->m_problems << serializableProblem;
-}
-
-void TopDUContext::removeProblem(const ProblemPointer& problem)
-{
-  ENSURE_CAN_WRITE
-  Q_ASSERT(problem);
-  Q_ASSERT(problem->m_topContext == this);
-  m_local->m_problems.removeOne(problem);
-  d_func_dynamic()->m_problemsList().removeOne({problem.data()});
+  Q_ASSERT(indexedProblem.data(this));
 }
 
 void TopDUContext::clearProblems()
 {
   ENSURE_CAN_WRITE
-  m_local->m_problems.clear();
   d_func_dynamic()->m_problemsList().clear();
+  m_dynamicData->clearProblems();
 }
 
 QVector<DUContext*> TopDUContext::importers() const

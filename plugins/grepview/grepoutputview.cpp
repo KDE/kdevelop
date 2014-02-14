@@ -21,7 +21,7 @@
 #include <QAction>
 #include <QStringListModel>
 #include <KMessageBox>
-#include <KLocalizedString>
+#include <KColorScheme>
 #include <kdebug.h>
 #include <QMenu>
 
@@ -109,6 +109,7 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
     resultsTreeView->setItemDelegate(GrepOutputDelegate::self());
     resultsTreeView->setHeaderHidden(true);
     resultsTreeView->setUniformRowHeights(false);
+    resultsTreeView->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
     connect(m_prev, SIGNAL(triggered(bool)), this, SLOT(selectPreviousItem()));
     connect(m_next, SIGNAL(triggered(bool)), this, SLOT(selectNextItem()));
@@ -197,10 +198,12 @@ GrepOutputModel* GrepOutputView::model()
 
 void GrepOutputView::changeModel(int index)
 {
-    disconnect(model(), SIGNAL(showMessage(KDevelop::IStatus*,QString)), 
-               this, SLOT(showMessage(KDevelop::IStatus*,QString)));
-    disconnect(model(), SIGNAL(dataChanged(QModelIndex,QModelIndex)), 
-               this, SLOT(updateApplyState(QModelIndex,QModelIndex)));
+    if (model()) {
+        disconnect(model(), SIGNAL(showMessage(KDevelop::IStatus*,QString)),
+                   this, SLOT(showMessage(KDevelop::IStatus*,QString)));
+        disconnect(model(), SIGNAL(dataChanged(QModelIndex,QModelIndex)),
+                   this, SLOT(updateApplyState(QModelIndex,QModelIndex)));
+    }
 
     replacementCombo->clearEditText();
     
@@ -228,21 +231,26 @@ void GrepOutputView::changeModel(int index)
     updateApplyState(model()->index(0, 0), model()->index(0, 0));
 }
 
-void GrepOutputView::setMessage(const QString& msg)
+void GrepOutputView::setMessage(const QString& msg, MessageType type)
 {
+    if (type == Error) {
+        QPalette palette = m_statusLabel->palette();
+        KColorScheme::adjustForeground(palette, KColorScheme::NegativeText, QPalette::WindowText);
+        m_statusLabel->setPalette(palette);
+    } else {
+        m_statusLabel->setPalette(QPalette());
+    }
     m_statusLabel->setText(msg);
 }
 
 void GrepOutputView::showErrorMessage( const QString& errorMessage )
 {
-    setStyleSheet("QLabel { color : red; }");
-    setMessage(errorMessage);
+    setMessage(errorMessage, Error);
 }
 
 void GrepOutputView::showMessage( KDevelop::IStatus* , const QString& message )
 {
-    setStyleSheet("");
-    setMessage(message);
+    setMessage(message, Information);
 }
 
 void GrepOutputView::onApply()
@@ -277,6 +285,8 @@ void GrepOutputView::expandElements(const QModelIndex&)
     m_expandAll->setEnabled(true);
     
     resultsTreeView->expandAll();
+    for (int col = 0; col < model()->columnCount(); ++col)
+        resultsTreeView->resizeColumnToContents(col);
 }
 
 void GrepOutputView::selectPreviousItem()

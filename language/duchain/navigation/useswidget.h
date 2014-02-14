@@ -21,6 +21,7 @@
 
 #include <QWidget>
 #include <QScrollArea>
+#include <QSharedPointer>
 
 #include <language/duchain/indexeddeclaration.h>
 #include <language/duchain/indexedtopducontext.h>
@@ -140,10 +141,8 @@ namespace KDevelop {
               UsesWidget* m_widget;
             };
             virtual QSize sizeHint () const;
-            ///@param customCollector allows specifying an own subclass of UsesWidgetCollector. The object will be owned
-            ///@param showDeclarations whether all declarations used for the search should be shown as well in the list
-            ///by this widget, and will be deleted on destruction.
-            UsesWidget(IndexedDeclaration declaration, UsesWidgetCollector* customCollector = 0);
+            ///@param customCollector allows specifying an own subclass of UsesWidgetCollector.
+            UsesWidget(const IndexedDeclaration& declaration, QSharedPointer<UsesWidgetCollector> customCollector = {});
             ~UsesWidget();
             void setAllExpanded(bool expanded);
             unsigned int countAllUses() const;
@@ -152,7 +151,7 @@ namespace KDevelop {
         private:
             const QString headerLineText() const;
             QLabel* m_headerLine;
-            UsesWidgetCollector* m_collector;
+            QSharedPointer<UsesWidgetCollector> m_collector;
             QProgressBar* m_progressBar;
         public slots:
             void headerLinkActivated(QString linkName);

@@ -41,6 +41,7 @@ private slots:
     void testLockForWrite();
     void testLockForRead();
     void testLockForReadWrite();
+    void testProblemSerialization();
     ///NOTE: these are not "automated"!
 //     void testImportCache();
 

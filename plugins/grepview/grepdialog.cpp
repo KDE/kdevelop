@@ -180,6 +180,7 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
 
     directorySelector->setIcon(QIcon::fromTheme("document-open"));
     connect(directorySelector, SIGNAL(clicked(bool)), this, SLOT(selectDirectoryDialog()) );
+    directoryChanged(directorySelector->text());
 }
 
 void GrepDialog::selectDirectoryDialog()

@@ -21,11 +21,6 @@
 
 // Qt
 #include <QAction>
-#include <QTabWidget>
-#include <QLabel>
-#include <QLineEdit>
-#include <QHBoxLayout>
-#include <QPushButton>
 
 // KDE / KDevelop
 #include <KParts/MainWindow>
@@ -44,6 +39,9 @@
 #include <language/interfaces/codecontext.h>
 #include <duchain/use.h>
 
+#include "progressdialogs/refactoringdialog.h"
+
+#include "ui_basicrefactoring.h"
 
 namespace KDevelop
 {
@@ -177,90 +175,14 @@ void BasicRefactoring::startInteractiveRename(const KDevelop::IndexedDeclaration
     }
 
     QString originalName = declaration->identifier().identifier().str();
-    QString replacementName;
-
-    BasicRefactoringCollector *collector = new BasicRefactoringCollector(decl);
-    QPointer<QDialog> dialog = new QDialog();
-    QTabWidget tabWidget;
-    UsesWidget uses(declaration, collector);
-
-    //So the context-links work
-    QWidget *navigationWidget = declaration->context()->createNavigationWidget(declaration);
-    AbstractNavigationWidget* abstractNavigationWidget = dynamic_cast<AbstractNavigationWidget*>(navigationWidget);
-    if (abstractNavigationWidget)
-        connect(&uses, SIGNAL(navigateDeclaration(KDevelop::IndexedDeclaration)), abstractNavigationWidget, SLOT(navigateDeclaration(KDevelop::IndexedDeclaration)));
-
-    QVBoxLayout verticalLayout;
-    QHBoxLayout actionsLayout;
-    dialog->setLayout(&verticalLayout);
-    dialog->setWindowTitle(i18n("Rename %1", declaration->toString()));
-
-    QLabel newNameLabel(i18n("New name:"));
-    actionsLayout.addWidget(&newNameLabel);
-
-    QLineEdit edit(declaration->identifier().identifier().str());
-    newNameLabel.setBuddy(&edit);
-
-    actionsLayout.addWidget(&edit);
-    edit.setText(originalName);
-    edit.setFocus();
-    edit.selectAll();
-    QPushButton goButton(i18n("Rename"));
-    goButton.setToolTip(i18n("Note: All overloaded functions, overloads, forward-declarations, etc. will be renamed too"));
-    actionsLayout.addWidget(&goButton);
-    connect(&goButton, SIGNAL(clicked(bool)), dialog, SLOT(accept()));
-
-    QPushButton cancelButton(i18n("Cancel"));
-    actionsLayout.addWidget(&cancelButton);
-    verticalLayout.addLayout(&actionsLayout);
-
-    tabWidget.addTab(&uses, i18n("Uses"));
-    if (navigationWidget)
-        tabWidget.addTab(navigationWidget, i18n("Declaration Info"));
-
-    verticalLayout.addWidget(&tabWidget);
-
-    connect(&cancelButton, SIGNAL(clicked(bool)), dialog, SLOT(reject()));
-
     lock.unlock();
-    dialog->resize(750, 550);
-    if (dialog->exec() != QDialog::Accepted)
+
+    NameAndCollector nc = newNameForDeclaration(DeclarationPointer(declaration));
+
+    if (nc.newName == originalName || nc.newName.isEmpty())
         return;
 
-    replacementName = edit.text();
-    if (replacementName == originalName || replacementName.isEmpty())
-        return;
-
-    DocumentChangeSet changes;
-    lock.lock();
-    foreach (const KDevelop::IndexedTopDUContext &collected, collector->allUsingContexts()) {
-        QSet<int> hadIndices;
-        foreach (const IndexedDeclaration &decl, collector->declarations()) {
-            uint usedDeclarationIndex = collected.data()->indexForUsedDeclaration(decl.data(), false);
-            if (hadIndices.contains(usedDeclarationIndex))
-                continue;
-            hadIndices.insert(usedDeclarationIndex);
-            DocumentChangeSet::ChangeResult result = applyChanges(originalName, replacementName, changes, collected.data(), usedDeclarationIndex);
-            if (!result) {
-                KMessageBox::error(0, i18n("Applying changes failed: %1", result.m_failureReason));
-                return;
-            }
-        }
-    }
-
-    DocumentChangeSet::ChangeResult result = applyChangesToDeclarations(originalName, replacementName, changes, collector->declarations());
-    if(!result) {
-        KMessageBox::error(0, i18n("Applying changes failed: %1", result.m_failureReason));
-        return;
-    }
-
-    ///We have to ignore failed changes for now, since uses of a constructor or of operator() may be created on "(" parens
-    changes.setReplacementPolicy(DocumentChangeSet::IgnoreFailedChange);
-    result = changes.applyAllChanges();
-    if(!result) {
-        KMessageBox::error(0, i18n("Applying changes failed: %1", result.m_failureReason));
-        return;
-    }
+    renameCollectedDeclarations(nc.collector.data(), nc.newName, originalName);
 }
 
 bool BasicRefactoring::acceptForContextMenu(const Declaration *decl)
@@ -280,6 +202,93 @@ void BasicRefactoring::executeRenameAction()
             decl = declarationUnderCursor();
         startInteractiveRename(decl);
     }
+}
+
+BasicRefactoring::NameAndCollector BasicRefactoring::newNameForDeclaration(const KDevelop::DeclarationPointer& declaration)
+{
+    DUChainReadLocker lock;
+    if (!declaration) {
+        return {};
+    }
+
+    QSharedPointer<BasicRefactoringCollector> collector(new BasicRefactoringCollector(declaration.data()));
+
+    Ui::RenameDialog renameDialog;
+    QDialog dialog;
+    renameDialog.setupUi(&dialog);
+
+    UsesWidget uses(declaration.data(), collector);
+
+    //So the context-links work
+    QWidget *navigationWidget = declaration->context()->createNavigationWidget(declaration.data());
+    AbstractNavigationWidget* abstractNavigationWidget = dynamic_cast<AbstractNavigationWidget*>(navigationWidget);
+    if (abstractNavigationWidget)
+        connect(&uses, SIGNAL(navigateDeclaration(KDevelop::IndexedDeclaration)), abstractNavigationWidget, SLOT(navigateDeclaration(KDevelop::IndexedDeclaration)));
+
+    QString declarationName = declaration->toString();
+    dialog.setWindowTitle(i18nc("Renaming some declaration", "Rename \"%1\"", declarationName));
+    renameDialog.edit->setText(declaration->identifier().identifier().str());
+    renameDialog.edit->selectAll();
+
+    renameDialog.tabWidget->addTab(&uses, i18n("Uses"));
+    if (navigationWidget)
+        renameDialog.tabWidget->addTab(navigationWidget, i18n("Declaration Info"));
+    lock.unlock();
+
+    if (dialog.exec() != QDialog::Accepted)
+        return {};
+
+    RefactoringProgressDialog refactoringProgress(i18n("Renaming \"%1\" to \"%2\"", declarationName, renameDialog.edit->text()), collector.data());
+    if (!collector->isReady()) {
+        refactoringProgress.exec();
+        if (refactoringProgress.result() != QDialog::Accepted) {
+            return {};
+        }
+    }
+
+    //TODO: input validation
+    return {renameDialog.edit->text(),collector};
+}
+
+DocumentChangeSet BasicRefactoring::renameCollectedDeclarations(KDevelop::BasicRefactoringCollector* collector, const QString& replacementName, const QString& originalName, bool apply)
+{
+    DocumentChangeSet changes;
+    DUChainReadLocker lock;
+
+    foreach (const KDevelop::IndexedTopDUContext& collected, collector->allUsingContexts()) {
+        QSet<int> hadIndices;
+        foreach (const IndexedDeclaration& decl, collector->declarations()) {
+            uint usedDeclarationIndex = collected.data()->indexForUsedDeclaration(decl.data(), false);
+            if (hadIndices.contains(usedDeclarationIndex))
+                continue;
+            hadIndices.insert(usedDeclarationIndex);
+            DocumentChangeSet::ChangeResult result = applyChanges(originalName, replacementName, changes, collected.data(), usedDeclarationIndex);
+            if (!result) {
+                KMessageBox::error(0, i18n("Applying changes failed: %1", result.m_failureReason));
+                return {};
+            }
+        }
+    }
+
+    DocumentChangeSet::ChangeResult result = applyChangesToDeclarations(originalName, replacementName, changes, collector->declarations());
+    if (!result) {
+        KMessageBox::error(0, i18n("Applying changes failed: %1", result.m_failureReason));
+        return {};
+    }
+
+    ///We have to ignore failed changes for now, since uses of a constructor or of operator() may be created on "(" parens
+    changes.setReplacementPolicy(DocumentChangeSet::IgnoreFailedChange);
+
+    if (!apply) {
+        return changes;
+    }
+
+    result = changes.applyAllChanges();
+    if (!result) {
+        KMessageBox::error(0, i18n("Applying changes failed: %1", result.m_failureReason));
+    }
+
+    return {};
 }
 
 //END: BasicRefactoring

@@ -37,6 +37,8 @@ namespace KDevelop
 class IAssistant;
 class Problem;
 
+using ProblemPointer = KSharedPtr<Problem>;
+
 /**
  * Represents a problem only by its index within the top-context
  *
@@ -45,34 +47,24 @@ class Problem;
 class KDEVPLATFORMLANGUAGE_EXPORT LocalIndexedProblem
 {
   public:
-    LocalIndexedProblem(const Problem* problem = 0);
-    LocalIndexedProblem(uint index)
+    LocalIndexedProblem(const ProblemPointer& problem, const TopDUContext* top);
+    LocalIndexedProblem(uint index = 0)
       : m_index(index)
     {}
 
     /**
      * \note Duchain must be read locked
      */
-    Problem* data(const TopDUContext* top) const;
+    ProblemPointer data(const TopDUContext* top) const;
 
     bool operator==(const LocalIndexedProblem& rhs) const
     {
       return m_index == rhs.m_index;
     }
 
-    uint hash() const
-    {
-      return m_index;
-    }
-
     bool isValid() const
     {
       return m_index;
-    }
-
-    bool operator<(const LocalIndexedProblem& rhs) const
-    {
-      return m_index < rhs.m_index;
     }
 
     /**
@@ -82,8 +74,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT LocalIndexedProblem
     {
       return m_index;
     }
-
-    bool isLoaded(TopDUContext* top) const;
 
   private:
     uint m_index;
@@ -171,7 +161,6 @@ public:
      */
     QString sourceString() const;
 
-    void setContext(TopDUContext* context);
     TopDUContext* topContext() const override;
     KDevelop::IndexedString url() const override;
 
@@ -248,14 +237,6 @@ public:
 
 private:
     void rebuildDynamicData(DUContext* parent, uint ownIndex) override;
-    /**
-     * Return a problem equivalent to this one for serialization in @p context.
-     *
-     * If this problem is not yet associated with a context, we set the context
-     * of it to @p context. If this problem is associated with a different context,
-     * the problem is cloned and a copy is returned which can be serialized.
-     */
-    Ptr prepareStorage(TopDUContext* context);
 
     Q_DISABLE_COPY(Problem);
 
@@ -265,15 +246,15 @@ private:
     friend class LocalIndexedProblem;
 
     //BEGIN dynamic data
-    TopDUContext* m_topContext;
+    TopDUContextPointer m_topContext;
     mutable QList<Ptr> m_diagnostics;
     uint m_indexInTopContext;
     //END dynamic data
 };
 
-using ProblemPointer = KSharedPtr<Problem>;
-
 }
+
+Q_DECLARE_TYPEINFO(KDevelop::LocalIndexedProblem, Q_MOVABLE_TYPE);
 
 KDEVPLATFORMLANGUAGE_EXPORT QDebug operator<<(QDebug s, const KDevelop::Problem& problem);
 KDEVPLATFORMLANGUAGE_EXPORT QDebug operator<<(QDebug s, const KDevelop::ProblemPointer& problem);

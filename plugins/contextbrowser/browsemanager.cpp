@@ -165,13 +165,25 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
         m_browsingByKey = 0;
         emit stopDelayedBrowsing();
     }
-    
+
+    QMouseEvent* mouseEvent = dynamic_cast<QMouseEvent*>(event);
+
+    if(mouseEvent) {
+        if (mouseEvent->type() == QEvent::MouseButtonPress && mouseEvent->button() == Qt::XButton1) {
+            m_plugin->historyPrevious();
+            return true;
+        }
+        if (mouseEvent->type() == QEvent::MouseButtonPress && mouseEvent->button() == Qt::XButton2) {
+            m_plugin->historyNext();
+            return true;
+        }
+    }
+
     if(!m_browsing && !m_browsingByKey) {
         resetChangedCursor();
         return false;
     }
-    
-    QMouseEvent* mouseEvent = dynamic_cast<QMouseEvent*>(event);
+
     if(mouseEvent) {
         KTextEditor::View* iface = dynamic_cast<KTextEditor::View*>(view);
         if(!iface) {

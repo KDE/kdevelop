@@ -55,7 +55,7 @@ static const QString interpreterForUrl(const KUrl& url) {
     static QHash<QString, QString> knownMimetypes;
     if ( knownMimetypes.isEmpty() ) {
         knownMimetypes["text/x-python"] = "python";
-        knownMimetypes["application/x-php"] = "php -e";
+        knownMimetypes["application/x-php"] = "php";
         knownMimetypes["application/x-ruby"] = "ruby";
         knownMimetypes["application/x-shellscript"] = "bash";
         knownMimetypes["application/x-perl"] = "perl -e";
@@ -248,6 +248,7 @@ void ScriptAppConfigType::configureLaunchFromCmdLineArguments(KConfigGroup cfg, 
     cfg.writeEntry( ExecuteScriptPlugin::interpreterEntry, a.takeFirst() );
     cfg.writeEntry( ExecuteScriptPlugin::executableEntry, a.takeFirst() );
     cfg.writeEntry( ExecuteScriptPlugin::argumentsEntry, KShell::joinArgs(a) );
+    cfg.writeEntry( ExecuteScriptPlugin::runCurrentFileEntry, false );
     cfg.sync();
 }
 

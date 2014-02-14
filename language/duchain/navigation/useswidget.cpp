@@ -494,11 +494,16 @@ void TopContextUsesWidget::labelClicked() {
   }
 }
 
-UsesWidget::~UsesWidget() {
-  delete m_collector;
+UsesWidget::~UsesWidget()
+{
+    if (m_collector) {
+        m_collector->setWidget(0);
+    }
 }
 
-UsesWidget::UsesWidget(IndexedDeclaration declaration, UsesWidgetCollector* customCollector) : NavigatableWidgetList(true) {
+UsesWidget::UsesWidget(const IndexedDeclaration& declaration, QSharedPointer<UsesWidgetCollector> customCollector)
+    : NavigatableWidgetList(true)
+{
     DUChainReadLocker lock(DUChain::lock());
     setUpdatesEnabled(false);
 
@@ -513,10 +518,10 @@ UsesWidget::UsesWidget(IndexedDeclaration declaration, UsesWidgetCollector* cust
     m_progressBar = new QProgressBar;
     addHeaderItem(m_progressBar);
 
-    if(!customCollector) {
-      m_collector = new UsesWidgetCollector(declaration);
-    }else{
-      m_collector = customCollector;
+    if (!customCollector) {
+        m_collector = QSharedPointer<UsesWidgetCollector>(new UsesWidgetCollector(declaration));
+    } else {
+        m_collector = customCollector;
     }
 
     m_collector->setProcessDeclarations(true);
@@ -578,6 +583,10 @@ void UsesWidget::UsesWidgetCollector::setWidget(UsesWidget* widget ) {
 
 
 void UsesWidget::UsesWidgetCollector::maximumProgress(uint max) {
+  if (!m_widget) {
+    return;
+  }
+
   if(m_widget->m_progressBar) {
     m_widget->m_progressBar->setMaximum(max);
     m_widget->m_progressBar->setMinimum(0);
@@ -588,6 +597,10 @@ void UsesWidget::UsesWidgetCollector::maximumProgress(uint max) {
 }
 
 void UsesWidget::UsesWidgetCollector::progress(uint processed, uint total) {
+  if (!m_widget) {
+    return;
+  }
+
   m_widget->redrawHeaderLine();
 
   if(m_widget->m_progressBar) {
@@ -606,7 +619,12 @@ void UsesWidget::UsesWidgetCollector::progress(uint processed, uint total) {
 }
 
 void UsesWidget::UsesWidgetCollector::processUses( KDevelop::ReferencedTopDUContext topContext ) {
-  DUChainReadLocker lock(DUChain::lock());
+  if (!m_widget) {
+    return;
+  }
+
+  DUChainReadLocker lock;
+
   kDebug() << "processing" << topContext->url().str();
   TopContextUsesWidget* widget = new TopContextUsesWidget(declaration(), declarations(), topContext.data());
   

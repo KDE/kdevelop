@@ -51,6 +51,7 @@ using namespace KDevelop;
 AssistantPopup::AssistantPopup(KTextEditor::View* parent, const IAssistant::Ptr& assistant)
     : m_assistant(assistant)
     , m_view(parent)
+    , m_shownAtBottom(false)
 {
 #if 0 // TODO KF5: Port me
     QPalette p = palette();
@@ -73,15 +74,24 @@ AssistantPopup::AssistantPopup(KTextEditor::View* parent, const IAssistant::Ptr&
         return;
     }
     connect(m_view, SIGNAL(verticalScrollPositionChanged(KTextEditor::View*,KTextEditor::Cursor)),
-            this, SLOT(updatePosition()));
+            this, SLOT(updatePosition(KTextEditor::View*,KTextEditor::Cursor)));
 
-    updatePosition();
-    connect(this, SIGNAL(sceneResized(QSize)),
-            this, SLOT(updatePosition()));
+    updatePosition(m_view, KTextEditor::Cursor::invalid());
     connect(m_view, SIGNAL(destroyed(QObject*)),
             this, SLOT(deleteLater()));
     m_view->installEventFilter(this);
-    m_view->setFocus();
+}
+
+bool AssistantPopup::viewportEvent(QEvent *event)
+{
+    // For some reason, QGraphicsView posts a WindowActivate event
+    // when it is shown, even if disabled through setting the WA_ShowWithoutActivate
+    // attribute. This causes all focus-driven popups (QuickOpen, tooltips, ...)
+    // to hide when the assistant opens. Thus, prevent it from processing the Show event here.
+    if ( event->type() == QEvent::Show ) {
+        return true;
+    }
+    return QGraphicsView::viewportEvent(event);
 }
 
 AssistantPopupConfig::AssistantPopupConfig(QObject *parent): QObject(parent)
@@ -150,7 +160,7 @@ bool AssistantPopup::eventFilter(QObject* object, QEvent* event)
     Q_ASSERT(object == m_view);
     Q_UNUSED(object);
     if (event->type() == QEvent::Resize) {
-        updatePosition();
+        updatePosition(m_view, KTextEditor::Cursor::invalid());
     } else if (event->type() == QEvent::Hide) {
         executeHideAction();
     } else if (event->type() == QEvent::KeyPress) {
@@ -171,22 +181,32 @@ bool AssistantPopup::eventFilter(QObject* object, QEvent* event)
     return false;
 }
 
-void AssistantPopup::updatePosition()
+void AssistantPopup::updatePosition(KTextEditor::View* view, const KTextEditor::Cursor& newPos)
 {
-    auto editorGeometry = textWidgetGeometry(m_view);
-    auto cursor = m_view->cursorToCoordinate(KTextEditor::Cursor(0, 0));
+    if ( newPos.isValid() && newPos.line() != 0 && ! m_shownAtBottom ) {
+        // the position is not going to change; don't waste time
+        return;
+    }
+    auto editorGeometry = textWidgetGeometry(view);
+    auto cursor = view->cursorToCoordinate(KTextEditor::Cursor(0, 0));
     const int margin = 12;
 #if 0 // TODO KF5: Port
     Sublime::HoldUpdates hold(ICore::self()->uiController()->activeMainWindow());
+    QPoint targetLocation;
     if ( cursor.y() < 0 ) {
         // Only when the view is not scrolled to the top, place the widget there; otherwise it easily gets
         // in the way.
-        move(parentWidget()->mapFromGlobal(m_view->mapToGlobal(editorGeometry.topRight()
-             + QPoint(-width() - margin, margin))));
+        targetLocation = parentWidget()->mapFromGlobal(view->mapToGlobal(editorGeometry.topRight()
+                         + QPoint(-width() - margin, margin)));
+        m_shownAtBottom = false;
     }
     else {
-        move(parentWidget()->mapFromGlobal(m_view->mapToGlobal(editorGeometry.bottomRight()
-             + QPoint(-width() - margin, -margin - height()))));
+        targetLocation = parentWidget()->mapFromGlobal(view->mapToGlobal(editorGeometry.bottomRight()
+                         + QPoint(-width() - margin, -margin - height())));
+        m_shownAtBottom = true;
+    }
+    if ( pos() != targetLocation ) {
+        move(targetLocation);
     }
 #endif
 }

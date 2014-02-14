@@ -21,7 +21,6 @@
 #include "dashboardpluginloader.h"
 #include <interfaces/icore.h>
 #include <plasma/dataengine.h>
-#include <KServiceTypeTrader>
 #include <interfaces/iproject.h>
 #include <project/projectmodel.h>
 #include "dashboarddataengine.h"

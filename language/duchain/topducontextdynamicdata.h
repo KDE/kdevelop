@@ -25,6 +25,7 @@ class QFile;
 #include <QtCore/QByteArray>
 #include <QtCore/QPair>
 #include <interfaces/iastcontainer.h>
+#include "problem.h"
 
 namespace KDevelop {
 
@@ -34,7 +35,6 @@ class Declaration;
 class IndexedString;
 class IndexedDUContext;
 class DUChainBaseData;
-class Problem;
 
 typedef QPair<QByteArray, uint> ArrayWithPosition;
 
@@ -79,10 +79,9 @@ class TopDUContextDynamicData {
    * Allocates an index for the given problem in this top-context.
    * The returned index is never zero.
    */
-  uint allocateProblemIndex(Problem* problem);
-  Problem* getProblemForIndex(uint index) const;
-  bool isProblemForIndexLoaded(uint index) const;
-  void clearProblemIndex(Problem* problem);
+  uint allocateProblemIndex(ProblemPointer problem);
+  ProblemPointer getProblemForIndex(uint index) const;
+  void clearProblems();
 
   ///Stores this top-context to disk
   void store();
@@ -146,11 +145,11 @@ class TopDUContextDynamicData {
       bool itemsHaveChanged() const;
 
       void storeData(uint& currentDataOffset, const QList<ArrayWithPosition>& oldData);
-      Item* getItemForIndex(uint index) const;
+      Item getItemForIndex(uint index) const;
 
-      void clearItemIndex(Item* item, const uint index);
+      void clearItemIndex(const Item& item, const uint index);
 
-      uint allocateItemIndex(Item* item, const bool temporary);
+      uint allocateItemIndex(const Item& item, const bool temporary);
 
       void deleteOnDisk();
       bool isItemForIndexLoaded(uint index) const;
@@ -159,15 +158,15 @@ class TopDUContextDynamicData {
       void writeData(QFile* file);
 
       //May contain zero items if they were deleted
-      mutable QVector<Item*> items;
+      mutable QVector<Item> items;
       mutable QVector<ItemDataInfo> offsets;
-      QVector<Item*> temporaryItems;
+      QVector<Item> temporaryItems;
       TopDUContextDynamicData* const data;
     };
 
-    DUChainItemStorage<DUContext> m_contexts;
-    DUChainItemStorage<Declaration> m_declarations;
-    DUChainItemStorage<Problem> m_problems;
+    DUChainItemStorage<DUContext*> m_contexts;
+    DUChainItemStorage<Declaration*> m_declarations;
+    DUChainItemStorage<ProblemPointer> m_problems;
 
     //For temporary declarations that will not be stored to disk, like template instantiations
 

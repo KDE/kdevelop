@@ -38,6 +38,8 @@
 #include <language/duchain/types/typeregister.h>
 #include <language/duchain/declarationdata.h>
 #include <language/duchain/duchainregister.h>
+#include <language/duchain/problem.h>
+#include <language/duchain/parsingenvironment.h>
 
 #include <language/codegen/coderepresentation.h>
 
@@ -704,6 +706,83 @@ void TestDUChain::testLockForReadWrite()
     DUChainWriteLocker lock;
   }
   QVERIFY(threads.join(1000));
+}
+
+void TestDUChain::testProblemSerialization()
+{
+  DUChain::self()->disablePersistentStorage(false);
+
+  auto parent = ProblemPointer{new Problem};
+  parent->setDescription("parent");
+
+  auto child = ProblemPointer{new Problem};
+  child->setDescription("child");
+  parent->addDiagnostic(child);
+
+  const IndexedString url("/my/test/file");
+
+  TopDUContextPointer smartTop;
+
+  { // serialize
+    DUChainWriteLocker lock;
+    auto file = new ParsingEnvironmentFile(url);
+    auto top = new TopDUContext(url, {}, file);
+
+    top->addProblem(parent);
+    QCOMPARE(top->problems().size(), 1);
+    auto p = top->problems().first();
+    QCOMPARE(p->description(), QString("parent"));
+    QCOMPARE(p->diagnostics().size(), 1);
+    auto c = p->diagnostics().first();
+    QCOMPARE(c->description(), QString("child"));
+
+    DUChain::self()->addDocumentChain(top);
+    QVERIFY(DUChain::self()->chainForDocument(url));
+    smartTop = top;
+  }
+
+  DUChain::self()->storeToDisk();
+
+  ProblemPointer parent_deserialized;
+  ProblemPointer child_deserialized;
+
+  { // deserialize
+    DUChainWriteLocker lock;
+    QVERIFY(!smartTop);
+    auto top = DUChain::self()->chainForDocument(url);
+    QVERIFY(top);
+    smartTop = top;
+    QCOMPARE(top->problems().size(), 1);
+    parent_deserialized = top->problems().first();
+    QCOMPARE(parent_deserialized->diagnostics().size(), 1);
+    child_deserialized = parent_deserialized->diagnostics().first();
+
+    QCOMPARE(parent_deserialized->description(), QString("parent"));
+    QCOMPARE(child_deserialized->description(), QString("child"));
+
+    top->clearProblems();
+    QVERIFY(top->problems().isEmpty());
+
+    QCOMPARE(parent_deserialized->description(), QString("parent"));
+    QCOMPARE(child_deserialized->description(), QString("child"));
+
+    DUChain::self()->removeDocumentChain(top);
+
+    QCOMPARE(parent_deserialized->description(), QString("parent"));
+    QCOMPARE(child_deserialized->description(), QString("child"));
+
+    QVERIFY(!smartTop);
+  }
+
+  DUChain::self()->disablePersistentStorage(true);
+
+  QCOMPARE(parent->description(), QString("parent"));
+  QCOMPARE(child->description(), QString("child"));
+  QCOMPARE(parent_deserialized->description(), QString("parent"));
+  QCOMPARE(child_deserialized->description(), QString("child"));
+
+  parent->clearDiagnostics();
+  QVERIFY(parent->diagnostics().isEmpty());
 }
 
 #if 0

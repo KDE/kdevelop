@@ -33,13 +33,7 @@ KDEVPLATFORMLANGUAGE_EXPORT bool matchesAbbreviationHelper(const QStringRef& wor
 
 KDEVPLATFORMLANGUAGE_EXPORT bool matchesAbbreviation(const QStringRef& word, const QString& typed);
 
-enum AbbreviationMatchQuality {
-  NoMatch,
-  MatchesSomewhere,
-  MatchesSequentially
-};
-
-KDEVPLATFORMLANGUAGE_EXPORT AbbreviationMatchQuality matchesPath(const QVector<QString>& path, const QString& typed);
+KDEVPLATFORMLANGUAGE_EXPORT bool matchesPath(const QString& path, const QString& typed);
 
 /**
  * @brief Matches a word against a list of search fragments.

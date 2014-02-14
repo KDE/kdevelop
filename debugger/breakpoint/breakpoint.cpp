@@ -214,9 +214,13 @@ void Breakpoint::setDeleted()
 {
     m_deleted = true;
     BreakpointModel* m = breakpointModel();
+    if (!m)
+        return; // already removed
+
     if (m->breakpointIndex(this, 0).isValid()) {
         m->removeRow(m->breakpointIndex(this, 0).row());
     }
+    m_model = 0; // invalidate
 }
 
 int Breakpoint::line() const {
@@ -371,5 +375,8 @@ QString Breakpoint::errorText() const
 
 void KDevelop::Breakpoint::reportChange(Column c)
 {
+    if (!breakpointModel())
+        return;
+
     breakpointModel()->reportChange(this, c);
 }

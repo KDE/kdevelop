@@ -24,7 +24,7 @@
 
 
 #include <QtCore/QObject>
-#include <QPointer>
+#include <QSharedPointer>
 #include <language/languageexport.h>
 #include <language/codegen/documentchangeset.h>
 #include <language/duchain/navigation/useswidget.h>
@@ -37,7 +37,6 @@ class IndexedDeclaration;
 class Context;
 class Declaration;
 class DUContext;
-
 
 /**
  * A widget that show the uses that it has collected for
@@ -57,6 +56,7 @@ private:
     QVector<IndexedTopDUContext> m_allUsingContexts;
 };
 
+
 /// The base class for Refactoring classes from Language plugins.
 class KDEVPLATFORMLANGUAGE_EXPORT BasicRefactoring : public QObject
 {
@@ -67,6 +67,11 @@ public:
 
     /// Update the context menu with the "Rename" action.
     virtual void fillContextMenu(KDevelop::ContextMenuExtension &extension, KDevelop::Context *context);
+
+    struct NameAndCollector {
+        QString newName;
+        QSharedPointer<BasicRefactoringCollector> collector;
+    };
 
 protected:
     /**
@@ -94,8 +99,25 @@ protected:
      */
     virtual IndexedDeclaration declarationUnderCursor(bool allowUse = true);
 
-    /// Start the renaming of a declaration.
+    /**
+     * Start the renaming of a declaration.
+     * This function retrieves the new name for declaration @p decl and if approved renames all instances of it.
+     */
     virtual void startInteractiveRename(const KDevelop::IndexedDeclaration &decl);
+
+    /**
+     * Asks user to input a new name for @p declaration
+     * @return new name or empty string if user changed his mind or new name contains inappropriate symbols (e.g. spaces, points, braces e.t.c) and the collector used for collecting information about @p declaration.
+     * NOTE: unlock the DUChain before calling this.
+     */
+    virtual BasicRefactoring::NameAndCollector newNameForDeclaration(const KDevelop::DeclarationPointer& declaration);
+
+    /**
+    * Renames all declarations collected by @p collector from @p oldName to @p newName
+    * @param apply - if changes should be applied immediately
+    * @return all changes if @p apply is false and empty set otherwise.
+    */
+    DocumentChangeSet renameCollectedDeclarations(KDevelop::BasicRefactoringCollector* collector, const QString& replacementName, const QString& originalName, bool apply = true);
 
     /**
      * @returns true if we can show the interactive rename widget for the
