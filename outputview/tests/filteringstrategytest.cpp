@@ -247,10 +247,18 @@ void FilteringStrategyTest::testNativeAppErrorFilterStrategy_data()
         << "ASSERT: \"errors().isEmpty()\" in file /tmp/foo/bar.cpp, line 49"
         << "/tmp/foo/bar.cpp"
         << 48 << 0 << FilteredItem::ErrorItem;
+    QTest::newRow("qttest-assert")
+        << "QFATAL : FooTest::testBar() ASSERT: \"index.isValid()\" in file /foo/bar.cpp, line 32"
+        << "/foo/bar.cpp"
+        << 31 << 0 << FilteredItem::ErrorItem;
     QTest::newRow("qttest-loc")
         << "   Loc: [/foo/bar.cpp(33)]"
         << "/foo/bar.cpp"
         << 32 << 0 << FilteredItem::ErrorItem;
+    QTest::newRow("qttest-loc-nocatch")
+        << "   Loc: [Unknown file(0)]"
+        << ""
+        << -1 << -1 << FilteredItem::InvalidItem;
 }
 
 void FilteringStrategyTest::testNativeAppErrorFilterStrategy()
