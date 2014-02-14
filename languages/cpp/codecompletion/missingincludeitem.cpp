@@ -17,6 +17,7 @@
 */
 
 #include "missingincludeitem.h"
+
 #include <language/duchain/namespacealiasdeclaration.h>
 #include <language/duchain/persistentsymboltable.h>
 #include <language/duchain/types/abstracttype.h>
@@ -208,6 +209,36 @@ QStringList candidateIncludeFiles(Declaration* decl) {
   return ret;
 }
 
+/**
+ * Try to find include candidates based solely on the string of the unknown id @p id
+ *
+ * Example: We have 'QState' in our source file, it is unknown
+ * This method then looks through the include paths used by @p source and returns all
+ * files matching the file name 'QState'
+ *
+ * @note DUChain must be locked
+ */
+QStringList candidateIncludeFilesFromNameMatcher(const QString& source, const QualifiedIdentifier& id)
+{
+  const QList<IncludeItem> includeItems = CppUtils::allFilesInIncludePath(source, false, QString());
+  QStringList result;
+  for (const IncludeItem& item : includeItems) {
+    // we never want to have directories in the result set
+    if (item.isDirectory)
+      continue;
+
+    if (item.name == id.toString() && !isBlacklistedInclude(item.url())) {
+      TopDUContext* top = DUChainUtils::standardContextForUrl(item.url());
+      // if this file was already parsed, and we don't find a declaration for id => discard
+      if (top && top->findDeclarations(id).isEmpty()) {
+        continue;
+      }
+      result << item.url().toLocalFile();
+    }
+  }
+  return result;
+}
+
 KSharedPtr<MissingIncludeCompletionItem> includeDirectiveFromUrl(const KUrl& fromUrl, const IndexedDeclaration& decl) {
   KSharedPtr<MissingIncludeCompletionItem> item;
   if(decl.data()) {
@@ -290,7 +321,7 @@ QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(const Q
   
   KUrl currentUrl(context->topContext()->url().str());
   const auto currentPath = Path(currentUrl).parent();
-  
+
   Cpp::EnvironmentFilePointer env(dynamic_cast<Cpp::EnvironmentFile*>(context->topContext()->parsingEnvironmentFile().data()));
   if(!env)
     return ret;
@@ -346,28 +377,23 @@ QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(const Q
         QString file(decl->url().toUrl().toLocalFile());
         
         bool inBlacklistDir = isBlacklistedInclude(decl->url().toUrl());
-        
-        foreach(KDevelop::ParsingEnvironmentFilePointer ptr, decl->topContext()->parsingEnvironmentFile()->importers()) {
-          if(ptr->imports().count() == 1 || inBlacklistDir) {
-            if(isBlacklistedInclude(ptr->url().toUrl()))
-              continue;
-            //This file is a forwader, add it to the list
-
-            //Forwarders must be completely empty
-            if(ptr->topContext()->localDeclarations().count())
-              continue;
-            
-            QString file(ptr->url().toUrl().toLocalFile());
-            ret += itemsForFile(displayTextPrefix, file, includePaths, currentPath, decl, argumentHintDepth, directives);
-          }
-        }
-        
-        if(inBlacklistDir)
-          blacklistRet += itemsForFile(displayTextPrefix, file, includePaths, currentPath, decl, argumentHintDepth, directives);
-        else
+        auto candidateFiles = candidateIncludeFiles(decl);
+        kDebug() << "candidates from DUChain:" << candidateFiles;
+        for (const QString& file : candidateFiles) {
           ret += itemsForFile(displayTextPrefix, file, includePaths, currentPath, decl, argumentHintDepth, directives);
+        }
+
+        if (inBlacklistDir) {
+          blacklistRet += itemsForFile(displayTextPrefix, file, includePaths, currentPath, decl, argumentHintDepth, directives);
+        }
       }
     }
+  }
+
+  auto candidateFiles = candidateIncludeFilesFromNameMatcher(currentUrl.toLocalFile(), identifier);
+  kDebug() << "candidates from name matching:" << candidateFiles;
+  for (const QString& file : candidateFiles) {
+    ret += itemsForFile(displayTextPrefix, file, includePaths, currentPath, IndexedDeclaration(), argumentHintDepth, directives);
   }
 
   if(ret.isEmpty())
@@ -442,13 +468,15 @@ QVariant MissingIncludeCompletionItem::data(const QModelIndex& index, int role, 
         case KTextEditor::CodeCompletionModel::Prefix:
             return i18n("Add include directive");
         case KTextEditor::CodeCompletionModel::Name: {
-          QString suffix = ", #include " + m_addedInclude;
+          const QString suffix = "#include " + m_addedInclude;
+          // note: m_displayTextPrefix already contains the spaces on the right
           if(!m_decl.data())
-            return QString(m_displayTextPrefix + suffix);
+            return i18nc("file content unknown", "%1<unknown contents>, %2", m_displayTextPrefix, suffix);
           else if(m_decl.data()->kind() == Declaration::Namespace)
-            return QString(m_displayTextPrefix + " namespace " + m_decl.data()->identifier().toString()  + suffix);
-          else
-            return QString(m_displayTextPrefix + m_decl.data()->toString() + suffix);
+            return QString("%1namespace %2, %3").arg(m_displayTextPrefix, m_decl.data()->identifier().toString(), suffix);
+          else {
+            return QString("%1%2, %3").arg(m_displayTextPrefix, m_decl.data()->toString()).arg(suffix);
+          }
         }
       }
       break;

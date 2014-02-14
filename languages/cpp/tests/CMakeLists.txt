@@ -22,9 +22,9 @@ set(test_common_SRCS
   ../codecompletion/missingincludemodel.cpp
   ../codecompletion/model.cpp
   ../codecompletion/worker.cpp
-  ../codegen/progressdialogs.cpp
   ../codegen/simplerefactoring.cpp
   ../codegen/unresolvedincludeassistant.cpp
+  ../codegen/customincludepaths.cpp
   ../cpphighlighting.cpp
   ../cpputils.cpp
   ../includepathcomputer.cpp
@@ -106,9 +106,9 @@ set(cppcodecompletiontest_SRCS
 set(cppcodegentest_SRCS
   test_cppcodegen.cpp
 
-  ../codegen/progressdialogs.cpp
   ../codegen/simplerefactoring.cpp
   ../codegen/unresolvedincludeassistant.cpp
+  ../codegen/customincludepaths.cpp
   ../cpputils.cpp
   ../includepathcomputer.cpp
   ../includepathresolver.cpp

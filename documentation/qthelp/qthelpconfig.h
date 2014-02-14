@@ -1,6 +1,7 @@
 /*  This file is part of KDevelop
 
     Copyright 2010 Benjamin Port <port.benjamin@gmail.com>
+    Copyright 2014 Kevin Funk <kfunk@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -23,6 +24,9 @@
 
 #include <KCModule>
 #include <knewstuff3/entry.h>
+
+class QTreeWidgetItem;
+
 namespace Ui
 {
     class QtHelpConfigUI;
@@ -41,6 +45,8 @@ public:
       virtual void load();
       virtual void defaults();
 
+      bool checkNamespace(const QString &filename, QTreeWidgetItem* modifiedItem);
+
     private slots:
       void add();
       void remove();
@@ -49,9 +55,8 @@ public:
       void modify();
       void selectionChanged();
       void knsUpdate(KNS3::Entry::List list);
+
     private:
-      bool checkQtHelpFile(bool modify);
-      bool checkNamespace(const QString &filename, int modifiedIndex);
       Ui::QtHelpConfigUI* m_configWidget;
 };
 

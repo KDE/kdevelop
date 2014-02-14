@@ -2,7 +2,7 @@
 * This file is part of KDevelop
 *
 * Copyright 2010 Patrick Spendrin <ps_ml@gmx.de>
-* Copyright 2013 Kevin Funk <kevin@kfunk.org>
+* Copyright 2013 Kevin Funk <kfunk@kde.org>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU Library General Public License as

@@ -47,6 +47,7 @@ private Q_SLOTS:
     void testQListPOD();
     void testQUuid();
     void testKTextEditorTypes();
+    void testKDevelopTypes();
 };
 
 }

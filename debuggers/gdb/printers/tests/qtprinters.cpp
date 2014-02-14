@@ -429,6 +429,16 @@ void QtPrintersTest::testKTextEditorTypes()
     QCOMPARE(data, QByteArray("$2 = [(1, 1) -> (2, 2)]"));
 }
 
+void QtPrintersTest::testKDevelopTypes()
+{
+    GdbProcess gdb("kdeveloptypes");
+    gdb.execute("break kdeveloptypes.cpp:12");
+    gdb.execute("run");
+
+    QVERIFY(gdb.execute("print path1").contains("(\"tmp\", \"foo\")"));
+    QVERIFY(gdb.execute("print path2").contains("(\"http://www.test.com\", \"tmp\", \"asdf.txt\")"));
+}
+
 }
 QTEST_MAIN(GDBDebugger::QtPrintersTest)
 

@@ -93,9 +93,9 @@ void CTestSuite::loadDeclarations(const IndexedString& document, const KDevelop:
         }
     }
 
-    if (!testClass)
+    if (!testClass || !testClass->internalContext())
     {
-        kDebug() << "No test class found in " << document.str();
+        kDebug() << "No test class found or internal context missing in " << document.str();
         return;
     }
 

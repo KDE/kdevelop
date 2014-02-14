@@ -36,7 +36,6 @@ set(kdevcpplanguagesupport_PART_SRCS
 
 #    codegen/cppnewclass.cpp
     codegen/simplerefactoring.cpp
-    codegen/progressdialogs.cpp
     codegen/codeassistant.cpp
     codegen/signatureassistant.cpp
     codegen/adaptsignatureaction.cpp
@@ -44,6 +43,7 @@ set(kdevcpplanguagesupport_PART_SRCS
     codegen/renameaction.cpp
     codegen/renamefileaction.cpp
     codegen/unresolvedincludeassistant.cpp
+    codegen/customincludepaths.cpp
 #     codegen/cppclasshelper.cpp #TODO reenable when grantlee is ported
 #     codegen/makeimplementationprivate.cpp
 )

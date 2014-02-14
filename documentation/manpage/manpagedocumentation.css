@@ -1,0 +1,10 @@
+/* Remove top banner */
+#header {
+    display: none
+}
+
+/* Remove extra margins from both sides */
+body div[style] {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}

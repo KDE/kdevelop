@@ -2,6 +2,7 @@
 # Pretty-printers for KDE4.
 
 # Copyright (C) 2009 Milian Wolff <mail@milianw.de>
+# Copyright (C) 2014 Kevin Funk <kfunk@kde.org>
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,9 +21,20 @@ import gdb
 import itertools
 import re
 
+import qt4
+
 from helper import *
 
-class CursorPrinter:
+class KDevelop_Path:
+    def __init__(self, val):
+        self.val = val
+
+    def to_string(self):
+        iterator = qt4.QVectorPrinter(self.val['m_data'], 'QVector').children()
+        pathSegments = [str(it[1]) for it in iterator]
+        return "(" + ", ".join(pathSegments) + ")" if pathSegments else None
+
+class KTextEditor_CursorPrinter:
     "Pretty Printer for KTextEditor::Cursor"
 
     def __init__(self, val):
@@ -31,7 +43,7 @@ class CursorPrinter:
     def to_string(self):
         return "[%d, %d]" % (self.val['m_line'], self.val['m_column'])
 
-class RangePrinter:
+class KTextEditor_RangePrinter:
     "Pretty Printer for KTextEditor::Range"
 
     def __init__(self, val):
@@ -50,7 +62,9 @@ def register_kde4_printers (obj):
     obj.pretty_printers.append(FunctionLookup(gdb, pretty_printers_dict))
 
 def build_dictionary ():
-    pretty_printers_dict[re.compile('^KTextEditor::Cursor$')] = lambda val: CursorPrinter(val)
-    pretty_printers_dict[re.compile('^KTextEditor::Range$')] = lambda val: RangePrinter(val)
+    pretty_printers_dict[re.compile('^KDevelop::Path$')] = lambda val: KDevelop_Path(val)
+
+    pretty_printers_dict[re.compile('^KTextEditor::Cursor$')] = lambda val: KTextEditor_CursorPrinter(val)
+    pretty_printers_dict[re.compile('^KTextEditor::Range$')] = lambda val: KTextEditor_RangePrinter(val)
 
 build_dictionary ()

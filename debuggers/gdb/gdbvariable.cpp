@@ -122,6 +122,7 @@ public:
 
             variable->setHasMore(hasMore);
 
+            variable->setType(r["type"].literal());
             variable->setValue(r["value"].literal());
             hasValue = !r["value"].literal().isEmpty();
             if (variable->isExpanded() && r["numchild"].toInt()) {
@@ -206,8 +207,10 @@ public:
                     GdbVariable* var = static_cast<GdbVariable*>(xvar);
                     var->setTopLevel(false);
                     var->setVarobj(child["name"].literal());
-                    var->setHasMoreInitial(child["numchild"].toInt());
+                    bool hasMore = child["numchild"].toInt() != 0 || ( child.hasField("dynamic") && child["dynamic"].toInt()!=0 );
+                    var->setHasMoreInitial(hasMore);
                     variable->appendChild(var);
+                    var->setType(child["type"].literal());
                     var->setValue(child["value"].literal());
                 }
             }
@@ -306,13 +309,18 @@ void GdbVariable::handleUpdate(const GDBMI::Value& var)
                 GdbVariable* var = static_cast<GdbVariable*>(xvar);
                 var->setTopLevel(false);
                 var->setVarobj(child["name"].literal());
-                var->setHasMoreInitial(child["numchild"].toInt() != 0);
+                bool hasMore = child["numchild"].toInt() != 0 || ( child.hasField("dynamic") && child["dynamic"].toInt()!=0 );
+                var->setHasMoreInitial(hasMore);
                 appendChild(var);
+                var->setType(child["type"].literal());
                 var->setValue(child["value"].literal());
                 var->setChanged(true);
             }
         }
 
+        if (var.hasField("type_changed") && var["type_changed"].literal() == "true") {
+            setType(var["new_type"].literal());
+        }
         setValue(var["value"].literal());
         setChanged(true);
         setHasMore(var.hasField("has_more") && var["has_more"].toInt());

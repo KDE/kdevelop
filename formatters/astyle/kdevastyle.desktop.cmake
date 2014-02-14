@@ -115,6 +115,5 @@ X-KDE-PluginInfo-License=LGPL
 X-KDE-PluginInfo-Category=Utilities
 X-KDevelop-Category=Global
 X-KDevelop-Interfaces=org.kdevelop.ISourceFormatter
-X-KDevelop-SupportedMimeTypes=text/x-c++src,text/x-chdr,text/x-c++hdr,text/x-csrc,text/x-java,text/x-csharp
 X-KDevelop-Mode=NoGUI
 X-KDevelop-LoadMode=AlwaysOn

@@ -19,45 +19,36 @@
  ***************************************************************************/
 
 #include "simplerefactoring.h"
-#include <language/interfaces/codecontext.h>
-#include <language/duchain/duchainlock.h>
-#include <language/duchain/duchain.h>
-#include <qaction.h>
-#include <klocalizedstring.h>
-#include <kmessagebox.h>
-#include <qdialog.h>
-#include <qboxlayout.h>
-#include <language/duchain/navigation/useswidget.h>
-#include <qlineedit.h>
-#include <qpushbutton.h>
-#include <QTabWidget>
-#include <QLabel>
-#include <language/codegen/documentchangeset.h>
-#include "progressdialogs.h"
-#include <language/duchain/navigation/abstractnavigationwidget.h>
-#include <language/duchain/use.h>
-#include <language/duchain/classmemberdeclaration.h>
-#include <language/duchain/classfunctiondeclaration.h>
-#include <project/projectmodel.h>
-#include <language/duchain/functiondefinition.h>
-#include <interfaces/icore.h>
-#include <interfaces/iproject.h>
-#include <templatedeclaration.h>
+
 #include "../cpputils.h"
-#include <interfaces/iuicontroller.h>
-#include <interfaces/idocumentcontroller.h>
+
+#include <QAction>
+#include <KMessageBox>
 #include <ktexteditor/document.h>
-#include <sourcemanipulation.h>
-#include <language/duchain/types/functiontype.h>
 #include <kparts/mainwindow.h>
-#include <language/duchain/duchainutils.h>
-#include <language/duchain/classdeclaration.h>
+
 #include <language/backgroundparser/backgroundparser.h>
-#include <interfaces/iprojectcontroller.h>
-#include <interfaces/iselectioncontroller.h>
+#include <language/codegen/documentchangeset.h>
+#include <language/duchain/classdeclaration.h>
+#include <language/duchain/classfunctiondeclaration.h>
+#include <language/duchain/classmemberdeclaration.h>
+#include <language/duchain/duchain.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/duchainutils.h>
+#include <language/duchain/functiondefinition.h>
+#include <language/duchain/types/functiontype.h>
+#include <language/duchain/use.h>
+#include <language/interfaces/codecontext.h>
+
 #include <interfaces/contextmenuextension.h>
+#include <interfaces/icore.h>
+#include <interfaces/idocumentcontroller.h>
 #include <interfaces/ilanguagecontroller.h>
-#include <language/codegen/basicrefactoring.h>
+#include <interfaces/iproject.h>
+#include <interfaces/iuicontroller.h>
+
+#include <templatedeclaration.h>
+#include <sourcemanipulation.h>
 
 using namespace KDevelop;
 
@@ -295,184 +286,83 @@ DocumentChangeSet::ChangeResult SimpleRefactoring::addRenameFileChanges(const KU
 
 void SimpleRefactoring::startInteractiveRename(const KDevelop::IndexedDeclaration &decl)
 {
-  DUChainReadLocker lock(DUChain::lock());
+    QString originalName;
+    Declaration* declaration = nullptr;
+    {
+        DUChainReadLocker lock;
 
-  Declaration* declaration = decl.data();
-  if(!declaration) {
-    KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("No declaration under cursor"));
-    return;
-  }
-  QFileInfo info(declaration->topContext()->url().str());
-  if (!info.isWritable()) {
-    KMessageBox::error(ICore::self()->uiController()->activeMainWindow(),
-                       i18n("Declaration is located in non-writeable file %1.", declaration->topContext()->url().str()));
-    return;
-  }
+        declaration = decl.data();
+        if (!declaration) {
+            KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("No declaration under cursor"));
+            return;
+        }
 
-  if(FunctionDefinition* definition = dynamic_cast<FunctionDefinition*>(declaration))
-  {
-    // If this is a function-definition, and there is a separate declaration
-    // available, rename that declaration instead
-    Declaration* realDeclaration = definition->declaration(declaration->topContext());
-    if(realDeclaration)
-      declaration = realDeclaration;
-  }
+        QFileInfo info(declaration->topContext()->url().str());
+        if (!info.isWritable()) {
+            KMessageBox::error(ICore::self()->uiController()->activeMainWindow(),
+                               i18n("Declaration is located in non-writeable file %1.", declaration->topContext()->url().str()));
+            return;
+        }
 
-  // if renaming a ctor, use the class instead which will trigger renaming of all ctors as well
-  if(ClassFunctionDeclaration* cFunc = dynamic_cast<ClassFunctionDeclaration*>(declaration)) {
-    if ((cFunc->isConstructor() || cFunc->isDestructor()) && cFunc->context() && cFunc->context()->type() == DUContext::Class && cFunc->context()->owner()) {
-      declaration = cFunc->context()->owner();
+        if (FunctionDefinition* definition = dynamic_cast<FunctionDefinition*>(declaration)) {
+            // If this is a function-definition, and there is a separate declaration
+            // available, rename that declaration instead
+            Declaration* realDeclaration = definition->declaration(declaration->topContext());
+            if (realDeclaration)
+                declaration = realDeclaration;
+        }
+
+        // if renaming a ctor, use the class instead which will trigger renaming of all ctors as well
+        if (ClassFunctionDeclaration* cFunc = dynamic_cast<ClassFunctionDeclaration*>(declaration)) {
+            if ((cFunc->isConstructor() || cFunc->isDestructor()) && cFunc->context() && cFunc->context()->type() == DUContext::Class && cFunc->context()->owner()) {
+                declaration = cFunc->context()->owner();
+            }
+        }
+
+        if (!declaration)
+            return;
+
+        originalName = declaration->identifier().identifier().str();
     }
-  }
 
-  if(!declaration)
-    return;
-
-  ///Step 1: Allow the user to specify a replacement name, and allow him to see all uses
-
-  QString originalName = declaration->identifier().identifier().str();
-  QString replacementName;
-
-  //Since we don't yet know what the text should be replaced with, we just collect the top-contexts to process
-  BasicRefactoringCollector* collector = new BasicRefactoringCollector(declaration);
-  UsesWidget* uses = new UsesWidget(declaration, collector);
-
-  QWidget* navigationWidget = declaration->context()->createNavigationWidget(declaration);
-  AbstractNavigationWidget* abstractNavigationWidget = dynamic_cast<AbstractNavigationWidget*>(navigationWidget);
-
-  if(abstractNavigationWidget) { //So the context-links work
-    connect(uses, SIGNAL(navigateDeclaration(KDevelop::IndexedDeclaration)),
-            abstractNavigationWidget, SLOT(navigateDeclaration(KDevelop::IndexedDeclaration)));
-//     connect(uses, SIGNAL(navigateDeclaration(IndexedDeclaration)), tabWidget, SLOT(setCurrentIndex(...)));
-///@todo Switch the tab in the tab-widget, so the user will notice that the declaration is being shown
-  }
-
-  QScopedPointer<QDialog> dialog(new QDialog);
-  dialog->setWindowTitle(i18n("Rename %1", declaration->toString()));
-
-  QVBoxLayout* verticalLayout = new QVBoxLayout;
-  dialog->setLayout(verticalLayout);
-
-  QHBoxLayout* actionsLayout = new QHBoxLayout;
-
-  QLabel* newNameLabel = new QLabel(i18n("New name:"));
-  actionsLayout->addWidget(newNameLabel);
-
-  QLineEdit* edit = new QLineEdit(declaration->identifier().toString());
-
-  lock.unlock();
-  ///NOTE: do not access declaration anymore now!
-
-  newNameLabel->setBuddy(edit);
-  edit->setText(originalName);
-  edit->setFocus();
-  edit->selectAll();
-  actionsLayout->addWidget(edit);
-
-  QPushButton* goButton = new QPushButton(i18n("Rename"));
-  goButton->setToolTip(i18n("Note: All overloaded functions, overloads, forward-declarations, etc. will be renamed too"));
-  actionsLayout->addWidget(goButton);
-  connect(goButton, SIGNAL(clicked(bool)), dialog.data(), SLOT(accept()));
-
-  QPushButton* cancelButton = new QPushButton(i18n("Cancel"));
-  actionsLayout->addWidget(cancelButton);
-  verticalLayout->addLayout(actionsLayout);
-
-  QTabWidget* tabWidget = new QTabWidget;
-  verticalLayout->addWidget(tabWidget);
-  tabWidget->addTab(uses, i18n("Uses"));
-  if (navigationWidget) {
-    tabWidget->addTab(navigationWidget, i18n("Declaration Info"));
-  }
-
-  connect(cancelButton, SIGNAL(clicked(bool)), dialog.data(), SLOT(reject()));
-
-  dialog->resize( 750, 550 );
-
-  if(dialog->exec() != QDialog::Accepted) {
-    kDebug() << "stopped";
-    return;
-  }
-  //It would be nicer to scope this, but then "uses" would not survive
-
-  replacementName = edit->text();
-
-
-  if(replacementName == originalName || replacementName.isEmpty())
-    return;
-
-  //Now just start doing the actual changes, no matter whether the collector is ready or not
-  CollectorProgressDialog collectorProgress(i18n("Renaming \"%1\" to \"%2\"", originalName, replacementName), *collector);
-  if(!collector->isReady()) {
-    collectorProgress.exec();
-    if(collectorProgress.result() != QDialog::Accepted) {
-      kDebug() << "searching aborted";
-      return;
-    }
-  }
-
-  DocumentChangeSet changes;
-  lock.lock();
-  foreach(const KDevelop::IndexedTopDUContext &collected, collector->allUsingContexts()) {
-    QSet<int> hadIndices;
-    foreach(const IndexedDeclaration &decl, collector->declarations()) {
-      uint usedDeclarationIndex = collected.data()->indexForUsedDeclaration(decl.data(), false);
-      if(hadIndices.contains(usedDeclarationIndex))
-        continue;
-      hadIndices.insert(usedDeclarationIndex);
-      DocumentChangeSet::ChangeResult result = applyChanges(originalName, replacementName, changes, collected.data(), usedDeclarationIndex);
-      if(!result) {
-        KMessageBox::error(0, i18n("Applying changes failed: %1", result.m_failureReason));
+    NameAndCollector nc = newNameForDeclaration(DeclarationPointer(declaration));
+    if (nc.newName == originalName || nc.newName.isEmpty())
         return;
-      }
-    }
-  }
 
-  DocumentChangeSet::ChangeResult result = applyChangesToDeclarations(originalName, replacementName, changes, collector->declarations());
-  if(!result) {
-    KMessageBox::error(0, i18n("Applying changes failed: %1", result.m_failureReason));
-    return;
-  }
+    DocumentChangeSet changes = BasicRefactoring::renameCollectedDeclarations(nc.collector.data(), nc.newName, originalName, false);
 
-  lock.unlock();
-  ///We have to ignore failed changes for now, since uses of a constructor or of operator() may be created on "(" parens
-  changes.setReplacementPolicy(DocumentChangeSet::IgnoreFailedChange);
-  changes.setFormatPolicy(KDevelop::DocumentChangeSet::NoAutoFormat);
+    changes.setFormatPolicy(KDevelop::DocumentChangeSet::NoAutoFormat);
 
-  m_pendingChanges = changes;
-  ///NOTE: this is required, otherwise, if you rename a file it will crash...
-  QMetaObject::invokeMethod(this, "applyChangesDelayed", Qt::QueuedConnection);
+    m_pendingChanges = changes;
+    ///NOTE: this is required, otherwise, if you rename a file it will crash...
+    QMetaObject::invokeMethod(this, "applyChangesDelayed", Qt::QueuedConnection);
 }
 
-DocumentChangeSet::ChangeResult SimpleRefactoring::applyChangesToDeclarations(const QString& oldName,
-                                                                              const QString& newName,
-                                                                              DocumentChangeSet& changes,
-                                                                              const QList<IndexedDeclaration>& declarations)
+DocumentChangeSet::ChangeResult SimpleRefactoring::applyChangesToDeclarations(
+        const QString& oldName,
+        const QString& newName,
+        DocumentChangeSet& changes,
+        const QList<IndexedDeclaration>& declarations)
 {
-  foreach(const IndexedDeclaration &decl, declarations) {
-    Declaration* declaration = decl.data();
-    if(!declaration) {
-      continue;
-    }
-    if (declaration->range().isEmpty()) {
-      kDebug() << "found empty declaration";
-    }
-    TopDUContext* top = declaration->topContext();
-    DocumentChangeSet::ChangeResult result = changes.addChange(DocumentChange(top->url(), declaration->rangeInCurrentRevision(), oldName, newName));
+    auto result = BasicRefactoring::applyChangesToDeclarations(oldName, newName, changes, declarations);
     if (!result) {
-      return result;
-    }
-
-    if (SimpleRefactoring::shouldRenameFile(declaration)) {
-      result = SimpleRefactoring::addRenameFileChanges(top->url().toUrl(), newName, &changes);
-      if (!result) {
         return result;
-      }
     }
-  }
-  return DocumentChangeSet::ChangeResult(true);
-}
 
+    for (const auto & decl : declarations) {
+        Declaration* declaration = decl.data();
+        if (!declaration) {
+            continue;
+        }
+        if (shouldRenameFile(declaration)) {
+            result = addRenameFileChanges(declaration->topContext()->url().toUrl(), newName, &changes);
+            if (!result) {
+                return result;
+            }
+        }
+    }
+    return DocumentChangeSet::ChangeResult(true);
+}
 
 void SimpleRefactoring::applyChangesDelayed()
 {

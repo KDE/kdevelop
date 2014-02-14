@@ -57,6 +57,9 @@ target_link_libraries(qlistpod Qt5::Core)
 add_executable(ktexteditortypes ktexteditortypes.cpp)
 target_link_libraries(ktexteditortypes Qt5::Core KF5::TextEditor)
 
+add_executable(kdeveloptypes kdeveloptypes.cpp)
+target_link_libraries(kdeveloptypes ${QT_QTCORE_LIBRARY} ${KDE4_KTEXTEDITOR_LIBS} ${KDEVPLATFORM_PROJECT_LIBRARIES})
+
 ecm_add_test(qtprinters
 LINK_LIBRARIES
     Qt5::Core

@@ -126,7 +126,8 @@ CMakeCommitChangesJob::CMakeCommitChangesJob(const Path& path, CMakeManager* man
 
 void processDependencies(ProcessedTarget &target, const QString& dep, const CMakeProjectData& data)
 {
-    const QMap<QString, QStringList>& depData = data.properties.value(TargetProperty).value(dep);
+//     kDebug() << "processing..." << target.target.name << dep;
+    QMap<QString, QStringList> depData = data.properties.value(TargetProperty).value(dep);
     if(depData.isEmpty()) {
         kDebug() << "error: couldn't find dependency " << dep << data.properties.value(TargetProperty).keys();
         return;

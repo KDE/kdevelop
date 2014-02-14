@@ -117,8 +117,8 @@ public Q_SLOTS:
     void slotDeactivate();
     void slotShowStepInSource(const KUrl &fileName, int lineNum, const QString &address);
     void slotChangeAddress();
-    ///Disassembles code at @p address, updates registers and shows the widget if @p activate is true
-    void updateState(const QString &address, bool activate = true);
+    ///Disassembles code at @p address and updates registers
+    void update(const QString &address);
 
 private Q_SLOTS:
     void currentSessionChanged(KDevelop::IDebugSession* session);

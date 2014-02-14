@@ -49,13 +49,14 @@ KSharedPtr< KDevelop::IDocumentation > QtHelpProviderAbstract::documentationForD
 {
     QtHelpDocumentation::s_provider = const_cast<QtHelpProviderAbstract*>(this);
     if(dec) {
-        bool isQML = dec->topContext()->parsingEnvironmentFile()->language().str() == "QML/JS";
+        static const KDevelop::IndexedString qmlJs("QML/JS");
+        bool isQML = dec->topContext()->parsingEnvironmentFile()->language() == qmlJs;
         QString id;
         if(isQML) {
             KDevelop::DUChainReadLocker lock;
             QString ns;
             bool isClass = dec->abstractType()->whichType() == KDevelop::AbstractType::TypeStructure;
-            if(!isClass) {
+            if(!isClass && dec->context() && dec->context()->owner()) {
                 ns = dec->context()->owner()->abstractType()->toString();
                 ns += "::" + dec->identifier().toString();
             } else {

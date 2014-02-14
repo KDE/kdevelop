@@ -29,6 +29,7 @@
 #include <KProcess>
 #include <interfaces/icore.h>
 #include <interfaces/isourceformattercontroller.h>
+#include <interfaces/isourceformatter.h>
 #include <memory>
 #include <QDir>
 #include <util/formattinghelpers.h>
@@ -103,12 +104,6 @@ QString CustomScriptPlugin::description()
 				"formatters can be used.<br />"
 				"The advantage of command-line formatters is that formatting configurations "
 				"can be easily shared by all team members, independent of their preferred IDE.");
-}
-
-QString CustomScriptPlugin::highlightModeForMime(const KMimeType::Ptr &mime)
-{
-	Q_UNUSED(mime);
-	return "C++";
 }
 
 QString CustomScriptPlugin::formatSourceWithStyle(SourceFormatterStyle style, const QString& text, const KUrl& url, const KMimeType::Ptr& /*mime*/, const QString& leftContext, const QString& rightContext)
@@ -221,8 +216,27 @@ QString CustomScriptPlugin::formatSource(const QString& text, const KUrl& url, c
 	return formatSourceWithStyle( KDevelop::ICore::self()->sourceFormatterController()->styleForMimeType( mime ), text, url, mime, leftContext, rightContext );
 }
 
+static QList<SourceFormatterStyle> stylesFromLanguagePlugins() {
+	QList<KDevelop::SourceFormatterStyle> styles;
+	for ( ILanguage* lang: ICore::self()->languageController()->loadedLanguages() ) {
+		SourceFormatterItemList languageStyles = lang->languageSupport()->sourceFormatterItems();
+		for ( const SourceFormatterStyleItem& item: languageStyles ) {
+			if ( item.engine == "customscript" ) {
+				styles << item.style;
+			}
+		}
+	}
+	return styles;
+};
+
 KDevelop::SourceFormatterStyle CustomScriptPlugin::predefinedStyle(const QString& name)
 {
+	for ( auto langStyle: stylesFromLanguagePlugins() ) {
+		qDebug() << "looking at style from language with custom sample" << langStyle.description() << langStyle.overrideSample();
+		if ( langStyle.name() == name ) {
+			return langStyle;
+		}
+	}
 	SourceFormatterStyle result(name);
 	if (name == "GNU_indent_GNU")
 	{
@@ -255,12 +269,14 @@ KDevelop::SourceFormatterStyle CustomScriptPlugin::predefinedStyle(const QString
 									"This will reformat all files in subdirectory <b>subdir</b> using the <b>uncrustify</b> "
 									"tool with the config-file <b>uncrustify.config</b>." ));
 	}
+	using P = SourceFormatterStyle::MimeHighlightPair;
+	result.setMimeTypes(SourceFormatterStyle::MimeList() << P{"text/x-c++src", "C++"} << P{"text/x-c++hdr", "C++"});
 	return result;
 }
 
 QList<KDevelop::SourceFormatterStyle> CustomScriptPlugin::predefinedStyles()
 {
-    QList<KDevelop::SourceFormatterStyle> styles;
+	QList<KDevelop::SourceFormatterStyle> styles = stylesFromLanguagePlugins();
 	styles << predefinedStyle("kdev_format_source");
 	styles << predefinedStyle("GNU_indent_GNU");
 	styles << predefinedStyle("GNU_indent_KR");
@@ -364,8 +380,11 @@ static QString indentingSample()
     "\tbarArg3);\n";
 }
 
-QString CustomScriptPlugin::previewText(const KMimeType::Ptr &)
+QString CustomScriptPlugin::previewText(const SourceFormatterStyle *style, const KMimeType::Ptr &mime)
 {
+	if ( ! style->overrideSample().isEmpty() ) {
+		return style->overrideSample();
+	}
 	return formattingSample() + "\n\n" + indentingSample();
 }
 
@@ -460,7 +479,8 @@ CustomScriptPlugin::Indentation CustomScriptPlugin::indentation( const KUrl& url
 
 void CustomScriptPreferences::updateTimeout()
 {
-    QString formatted = indentPluginSingleton.data()->formatSourceWithStyle ( m_style, indentPluginSingleton.data()->previewText ( KMimeType::Ptr() ), QUrl(), KMimeType::Ptr() );
+	const QString& text = indentPluginSingleton.data()->previewText ( &m_style, KMimeType::Ptr() );
+    QString formatted = indentPluginSingleton.data()->formatSourceWithStyle ( m_style, text, KUrl(), KMimeType::Ptr() );
     emit previewTextChanged ( formatted );
 }
 

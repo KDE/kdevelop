@@ -26,7 +26,10 @@ set(kdevqthelp_config_SRCS
     qthelp_config_shared.cpp
 )
 
-qt5_wrap_ui(kdevqthelp_config_SRCS qthelpconfig.ui)
+qt5_wrap_ui(kdevqthelp_config_SRCS
+    qthelpconfig.ui
+    qthelpconfigeditdialog.ui
+)
 
 add_library(kdevqthelp_config MODULE ${kdevqthelp_config_SRCS} )
 

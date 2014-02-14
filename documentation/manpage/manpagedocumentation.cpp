@@ -33,6 +33,7 @@
 #include <KIO/TransferJob>
 #include <KIO/Job>
 #include <kio/jobclasses.h>
+#include <KStandardDirs>
 #include <documentation/standarddocumentationview.h>
 
 ManPagePlugin* ManPageDocumentation::s_provider=0;
@@ -71,6 +72,12 @@ QWidget* ManPageDocumentation::documentationWidget(KDevelop::DocumentationFindWi
 {
     KDevelop::StandardDocumentationView* view = new KDevelop::StandardDocumentationView(findWidget, parent);
     view->setDocumentation(KSharedPtr<IDocumentation>(this));
+
+    // apply custom style-sheet to normalize look of the page
+    const QString cssFile = KStandardDirs::locate("data", "kdevmanpage/manpagedocumentation.css");
+    QWebSettings* settings = view->settings();
+    settings->setUserStyleSheetUrl(QUrl::fromLocalFile(cssFile));
+
     view->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
     QObject::connect(view, SIGNAL(linkClicked(QUrl)), ManPageDocumentation::s_provider->model(), SLOT(showItemFromUrl(QUrl)));
     return view;
