@@ -244,6 +244,12 @@ void BreakpointController::handleBreakpointListInitial(const GDBMI::ResultRecord
                     } else if (location == b->location()) {
                         updateBreakpoint = b;
                     }
+                }else if (mi_b.hasField("what") && mi_b["what"].literal() == "exception throw") {
+                    if (b->expression() == "catch throw") {
+                        updateBreakpoint = b;
+                    }
+                }else{
+                    kWarning() << "That's too bad, breakpoint doesn't contain \"original-location\" field ";
                 }
             }
             if (updateBreakpoint) break;
@@ -312,10 +318,17 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
                 } else {
                     location = breakpoint->location();
                 }
-                debugSession()->addCommandToFront(
+                if (breakpoint->expression() == "catch throw") {
+                    debugSession()->addCommand(
+                    new GDBCommand(GDBMI::NonMI,
+                                location));
+                    breakpoint->setDeleted();
+                }else{
+                   debugSession()->addCommandToFront(
                     new GDBCommand(BreakInsert,
                                 quoteExpression(location),
                                 new InsertedHandler(this, breakpoint)));
+                }
                 addedCommand = true;
             } else {
                 QString opt;
@@ -463,8 +476,11 @@ void BreakpointController::update(KDevelop::Breakpoint *breakpoint, const GDBMI:
                 breakpoint->setData(KDevelop::Breakpoint::LocationColumn, unquoteExpression(location));
             }
         }
+    } else if (b.hasField("what") && b["what"].literal() == "exception throw") {
+        breakpoint->setExpression("catch throw");
+    } else {
+        kWarning() << "That's too bad, breakpoint doesn't contain \"original-location\" field ";
     }
-
 
     if (!m_dirty[breakpoint].contains(KDevelop::Breakpoint::ConditionColumn)
         && !m_errors[breakpoint].contains(KDevelop::Breakpoint::ConditionColumn))
