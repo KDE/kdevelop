@@ -133,7 +133,9 @@ const QVector<ErrorFormat> ERROR_FILTERS {
     // example: AUTOMOC: error: /foo/bar.cpp The file includes (...),
     // example: AUTOMOC: error: /foo/bar.cpp: The file includes (...)
     // note: ':' after file name isn't always appended, see http://cmake.org/gitweb?p=cmake.git;a=commitdiff;h=317d8498aa02c9f486bf5071963bb2034777cdd6
-    ErrorFormat( "^AUTOMOC: error: ([^:]+):? (The file includes .*)$", 1, 0, 0 ),
+    // example: AUTOGEN: error: /foo/bar.cpp: The file includes (...)
+    // note: AUTOMOC got renamed to AUTOGEN at some point
+    ErrorFormat( "^(AUTOMOC|AUTOGEN): error: ([^:]+):? (The file .*)$", 2, 0, 0 ),
     // Fortran
     ErrorFormat( "\"(.*)\", line ([0-9]+):(.*)", 1, 2, 3 ),
     // GFortran
