@@ -1,0 +1,9 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="KDevClangLanguageSupport" version="1">
+<MenuBar>
+  <Menu name="code">
+    <text context="@title:menu">Code</text>
+    <Action name="code_rename_declaration"/>
+  </Menu>
+</MenuBar>
+</kpartgui>

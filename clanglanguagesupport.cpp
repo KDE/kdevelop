@@ -31,11 +31,20 @@
 
 #include "documentfinderhelpers.h"
 
-#include <KPluginFactory>
-#include <KAboutData>
+#include <interfaces/icore.h>
+#include <interfaces/ilanguage.h>
+#include <interfaces/ilanguagecontroller.h>
+#include <interfaces/iplugincontroller.h>
+#include <interfaces/contextmenuextension.h>
+
+#include "codegen/simplerefactoring.h"
 
 #include <language/codecompletion/codecompletion.h>
 #include <language/highlighting/codehighlighting.h>
+#include <language/interfaces/editorcontext.h>
+
+#include <KAction>
+#include <KActionCollection>
 
 K_PLUGIN_FACTORY(KDevClangSupportFactory, registerPlugin<ClangLanguageSupport>(); )
 K_EXPORT_PLUGIN(KDevClangSupportFactory(
@@ -50,8 +59,10 @@ ClangLanguageSupport::ClangLanguageSupport(QObject* parent, const QVariantList& 
 , m_highlighting(new KDevelop::CodeHighlighting(this))
 , m_index(new ClangIndex)
 {
-    KDEV_USE_EXTENSION_INTERFACE(ILanguageSupport)
+    KDEV_USE_EXTENSION_INTERFACE( KDevelop::ILanguageSupport )
+    setXMLFile( "kdevclangsupport.rc" );
 
+    m_refactoring = new SimpleRefactoring(this);
     new KDevelop::CodeCompletion( this, new ClangCodeCompletionModel(this), name() );
     for(const auto& type : DocumentFinderHelpers::mimeTypesList()){
         KDevelop::IBuddyDocumentFinder::addFinder(type, this);
@@ -98,6 +109,29 @@ bool ClangLanguageSupport::buddyOrder(const KUrl& url1, const KUrl& url2)
 QVector< KUrl > ClangLanguageSupport::getPotentialBuddies(const KUrl& url) const
 {
     return DocumentFinderHelpers::getPotentialBuddies(url);
+}
+
+void ClangLanguageSupport::createActionsForMainWindow (Sublime::MainWindow* /*window*/, QString& _xmlFile, KActionCollection& actions)
+{
+    _xmlFile = xmlFile();
+
+    KAction* renameDeclarationAction = actions.addAction("code_rename_declaration");
+    renameDeclarationAction->setText( i18n("Rename Declaration") );
+    renameDeclarationAction->setIcon(KIcon("edit-rename"));
+    renameDeclarationAction->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_R);
+    connect(renameDeclarationAction, SIGNAL(triggered(bool)), m_refactoring, SLOT(executeRenameAction()));
+}
+
+KDevelop::ContextMenuExtension ClangLanguageSupport::contextMenuExtension(KDevelop::Context* context)
+{
+  ContextMenuExtension cm;
+  EditorContext *ec = dynamic_cast<KDevelop::EditorContext *>(context);
+
+  if (ec && ICore::self()->languageController()->languagesForUrl(ec->url()).contains(language())) {
+    // It's a C++ file, let's add our context menu.
+    m_refactoring->fillContextMenu(cm, context);
+  }
+  return cm;
 }
 
 #include "clanglanguagesupport.moc"

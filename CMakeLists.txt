@@ -49,6 +49,7 @@ include_directories(
 
 add_subdirectory(duchain)
 add_subdirectory(codecompletion)
+add_subdirectory(codegen)
 add_subdirectory(tests)
 
 kde4_add_plugin(kdevclanglanguagesupport
@@ -59,11 +60,15 @@ kde4_add_plugin(kdevclanglanguagesupport
 target_link_libraries(kdevclanglanguagesupport
     kdevclangduchain
     kdevclangcodecompletion
+    kdevclangcodegen
 
     ${KDE4_THREADWEAVER_LIBS}
     ${KDEVPLATFORM_PROJECT_LIBRARIES}
 )
 
-configure_file(kdevclangsupport.desktop.cmake ${CMAKE_BINARY_DIR}/kdevclangsupport.desktop)
-install( FILES ${CMAKE_BINARY_DIR}/kdevclangsupport.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+
+configure_file(kdevclangsupport.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevclanglanguagesupport.desktop)
+install( FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevclangsupport.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install(TARGETS kdevclanglanguagesupport DESTINATION ${PLUGIN_INSTALL_DIR})
+
+install(FILES kdevclangsupport.rc DESTINATION ${DATA_INSTALL_DIR}/kdevclanglanguagesupport)
