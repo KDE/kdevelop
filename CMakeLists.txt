@@ -24,7 +24,7 @@ include(ECMSetupVersion)
 include(ECMMarkAsTest)
 include(ECMMarkNonGuiExecutable)
 include(ECMGenerateHeaders)
-include(CMakePackageConfigHelpers)
+include(ECMPackageConfigHelpers)
 include(FeatureSummary)
 include(WriteBasicConfigVersionFile)
 include(CheckFunctionExists)
@@ -143,7 +143,7 @@ configure_file( "${KDevPlatform_SOURCE_DIR}/kdevplatformversion.h.cmake" "${KDev
 
 set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/KDevPlatform")
 
-configure_package_config_file("${CMAKE_CURRENT_SOURCE_DIR}/KDevPlatformConfig.cmake.in"
+ecm_configure_package_config_file("${CMAKE_CURRENT_SOURCE_DIR}/KDevPlatformConfig.cmake.in"
                               "${CMAKE_CURRENT_BINARY_DIR}/KDevPlatformConfig.cmake"
                               INSTALL_DESTINATION  ${CMAKECONFIG_INSTALL_DIR}
 )
