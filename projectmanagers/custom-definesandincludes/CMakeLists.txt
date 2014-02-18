@@ -20,3 +20,5 @@ target_link_libraries( kdevcustomdefinesandincludesmanager LINK_PRIVATE
 
 install( TARGETS kdevcustomdefinesandincludesmanager
         ${INSTALL_TARGETS_DEFAULT_ARGS} )
+
+install( FILES idefinesandincludesmanager.h DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/projectmanagers COMPONENT Devel)
