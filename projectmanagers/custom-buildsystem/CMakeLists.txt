@@ -17,7 +17,6 @@ target_link_libraries( kdevcustombuildsystem
         ${KDEVPLATFORM_INTERFACES_LIBRARIES}
         ${KDEVPLATFORM_UTIL_LIBRARIES}
         ${KDEVPLATFORM_OUTPUTVIEW_LIBRARIES}
-        kdevcustomdefinesandincludesmanager
     )
 
 ## KCM for the Plugin

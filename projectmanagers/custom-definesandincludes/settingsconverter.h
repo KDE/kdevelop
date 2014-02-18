@@ -20,11 +20,14 @@
 #ifndef SETTINGSCONVERTER_H
 #define SETTINGSCONVERTER_H
 
-#include "configentry.h"
 #include <QList>
+
+#include <language/interfaces/idefinesandincludesmanager.h>
 
 class KConfig;
 class SettingsManager;
+
+using KDevelop::ConfigEntry;
 
 struct SettingsConverter
 {

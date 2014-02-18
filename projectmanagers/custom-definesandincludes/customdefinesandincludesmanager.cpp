@@ -19,8 +19,6 @@
 
 #include "customdefinesandincludesmanager.h"
 
-#include "configentry.h"
-
 #include "settingsmanager.h"
 
 #include <interfaces/iproject.h>
@@ -31,31 +29,35 @@
 #include <QMutex>
 #include <QMutexLocker>
 
-using KDevelop::IProject;
-using KDevelop::ProjectBaseItem;
+#include <KPluginFactory>
+#include <KAboutData>
 
-class CustomDefinesAndIncludesManager::ManagerPrivate
+namespace KDevelop
+{
+
+class ManagerPrivate
 {
 public:
     ///@return: The ConfigEntry, with includes/defines from @p paths for all parent folders of @p item.
-    ConfigEntry findConfigForItem(const QList<ConfigEntry>& paths, const ProjectBaseItem* item) const {
+    static ConfigEntry findConfigForItem( const QList<ConfigEntry>& paths, const ProjectBaseItem* item )
+    {
         ConfigEntry ret;
 
         auto itemPath = item->path().toUrl();
         KUrl rootDirectory = item->project()->folder();
 
-        for (const ConfigEntry& entry: paths) {
+        for ( const ConfigEntry& entry : paths ) {
             KUrl targetDirectory = rootDirectory;
             // note: a dot represents the project root
-            if (entry.path != ".") {
-                targetDirectory.addPath(entry.path);
+            if ( entry.path != "." ) {
+                targetDirectory.addPath( entry.path );
             }
 
-            if (targetDirectory.isParentOf(itemPath)) {
-                 ret.includes += entry.includes;
+            if ( targetDirectory.isParentOf( itemPath ) ) {
+                ret.includes += entry.includes;
 
-                for (auto it = entry.defines.constBegin(); it != entry.defines.constEnd(); it++) {
-                    if (!ret.defines.contains(it.key())) {
+                for ( auto it = entry.defines.constBegin(); it != entry.defines.constEnd(); it++ ) {
+                    if ( !ret.defines.contains( it.key() ) ) {
                         ret.defines[it.key()] = it.value();
                     }
                 }
@@ -65,54 +67,68 @@ public:
         return ret;
     }
 
-    Path::List includeDirectories(const ProjectBaseItem* item) const {
-        if (!item) {
+    static Path::List includeDirectories( const ProjectBaseItem* item )
+    {
+        if ( !item ) {
             return {};
         }
 
         KConfig* cfg = item->project()->projectConfiguration().data();
 
-        return KDevelop::toPathList(findConfigForItem(SettingsManager::self()->readSettings(cfg), item).includes);
+        return KDevelop::toPathList( findConfigForItem( m_manager->readSettings( cfg ), item ).includes );
     }
 
-    QHash< QString, QString > defines(const ProjectBaseItem* item) const {
-        if (!item) {
+    static QHash<QString, QString> defines( const ProjectBaseItem* item )
+    {
+        if ( !item ) {
             return {};
         }
 
         KConfig* cfg = item->project()->projectConfiguration().data();
 
-        const auto result = findConfigForItem(SettingsManager::self()->readSettings(cfg), item).defines;
+        const auto result = findConfigForItem( m_manager->readSettings( cfg ), item ).defines;
         QHash<QString, QString> defines;
-        for (auto it = result.constBegin(); it != result.constEnd(); it++) {
+        for ( auto it = result.constBegin(); it != result.constEnd(); it++ ) {
             defines[it.key()] = it.value().toString();
         }
         return defines;
     }
 
-    QMutex m_locker;
+    static CustomDefinesAndIncludesManager* m_manager;
+    static QMutex m_locker;
 };
+CustomDefinesAndIncludesManager* ManagerPrivate::m_manager = nullptr;
+QMutex ManagerPrivate::m_locker;
 
-CustomDefinesAndIncludesManager::CustomDefinesAndIncludesManager(): d(new ManagerPrivate())
-{}
+K_PLUGIN_FACTORY(CustomDefinesAndIncludesManagerFactory, registerPlugin<CustomDefinesAndIncludesManager>(); )
+K_EXPORT_PLUGIN(CustomDefinesAndIncludesManagerFactory(KAboutData("kdevcustomdefinesandincludesmanager","kdevcustomdefinesandincludesmanager", ki18n("Custom Defines and Includes Manager"), "0.1", ki18n(""), KAboutData::License_GPL)))
 
-QHash< QString, QString > CustomDefinesAndIncludesManager::defines(const ProjectBaseItem* item) const
+CustomDefinesAndIncludesManager::CustomDefinesAndIncludesManager( QObject* parent, const QVariantList& )
+    : IPlugin( CustomDefinesAndIncludesManagerFactory::componentData(), parent )
 {
-    QMutexLocker lock(&d->m_locker);
-    return d->defines(item);
+    KDEV_USE_EXTENSION_INTERFACE(IDefinesAndIncludesManager);
+    ManagerPrivate::m_manager = this;
 }
 
-Path::List CustomDefinesAndIncludesManager::includes(const ProjectBaseItem* item) const
+QHash<QString, QString> CustomDefinesAndIncludesManager::defines( const ProjectBaseItem* item ) const
 {
-    QMutexLocker lock(&d->m_locker);
-    return d->includeDirectories(item);
+    QMutexLocker lock( &ManagerPrivate::m_locker );
+    return ManagerPrivate::defines( item );
 }
 
-CustomDefinesAndIncludesManager* CustomDefinesAndIncludesManager::self()
+Path::List CustomDefinesAndIncludesManager::includes( const ProjectBaseItem* item ) const
 {
-    static CustomDefinesAndIncludesManager instance;
-    return &instance;
+    QMutexLocker lock( &ManagerPrivate::m_locker );
+    return ManagerPrivate::includeDirectories( item );
 }
 
-CustomDefinesAndIncludesManager::~CustomDefinesAndIncludesManager()
-{}
+QList<ConfigEntry> CustomDefinesAndIncludesManager::readSettings( KConfig* cfg ) const
+{
+    return SettingsManager::readSettings( cfg );
+}
+
+void CustomDefinesAndIncludesManager::writeSettings( KConfig* cfg, const QList<ConfigEntry>& paths ) const
+{
+    SettingsManager::writeSettings( cfg, paths );
+}
+}

@@ -20,9 +20,9 @@
 #include <QVBoxLayout>
 
 #include "projectpathswidget.h"
-#include "settingsmanager.h"
-
 #include "customdefinesandincludes.h"
+
+#include <language/interfaces/idefinesandincludesmanager.h>
 
 #include <interfaces/iruncontroller.h>
 
@@ -56,12 +56,18 @@ DefinesAndIncludes::~DefinesAndIncludes()
 void DefinesAndIncludes::loadFrom(KConfig* cfg)
 {
     configWidget->clear();
-    configWidget->setPaths(SettingsManager::self()->readSettings(cfg));
+    auto manager = KDevelop::IDefinesAndIncludesManager::manager();
+    if ( manager ) {
+        configWidget->setPaths( manager->readSettings( cfg ) );
+    }
 }
 
 void DefinesAndIncludes::saveTo(KConfig* cfg, KDevelop::IProject*)
 {
-    SettingsManager::self()->writeSettings(cfg, configWidget->paths());
+    auto manager = KDevelop::IDefinesAndIncludesManager::manager();
+    if ( manager ) {
+        manager->writeSettings( cfg, configWidget->paths() );
+    }
 }
 
 void DefinesAndIncludes::load()

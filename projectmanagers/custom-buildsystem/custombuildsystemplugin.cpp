@@ -30,7 +30,6 @@
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
 #include "configconstants.h"
-#include "customdefinesandincludesmanager.h"
 
 #include "config.h"
 
@@ -123,9 +122,9 @@ ProjectTargetItem* CustomBuildSystem::createTarget( const QString&, ProjectFolde
     return 0;
 }
 
-QHash< QString, QString > CustomBuildSystem::defines( ProjectBaseItem* item ) const
+QHash<QString, QString> CustomBuildSystem::defines( ProjectBaseItem* ) const
 {
-    return CustomDefinesAndIncludesManager::self()->defines(item);
+    return {};
 }
 
 IProjectFileManager::Features CustomBuildSystem::features() const
@@ -141,7 +140,7 @@ ProjectFolderItem* CustomBuildSystem::createFolderItem( IProject* project,
 
 Path::List CustomBuildSystem::includeDirectories( ProjectBaseItem* item ) const
 {
-    return CustomDefinesAndIncludesManager::self()->includes(item);
+    return {};
 }
 
 KJob* CustomBuildSystem::install( ProjectBaseItem* item )

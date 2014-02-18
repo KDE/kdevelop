@@ -19,12 +19,12 @@
 #ifndef SETTINGSMANAGER_H
 #define SETTINGSMANAGER_H
 
-#include "configentry.h"
-
 #include <QList>
 #include <KConfigGroup>
 
 #include <kdemacros.h>
+
+#include <language/interfaces/idefinesandincludesmanager.h>
 
 class KConfig;
 namespace KDevelop
@@ -32,17 +32,18 @@ namespace KDevelop
 class IProject;
 }
 
+using KDevelop::ConfigEntry;
 /// @brief: Class responsible for reading/writing custom defines and includes from/to the disk.
 class KDE_EXPORT SettingsManager
 {
-private:
-    SettingsManager();
 public:
-    static SettingsManager* self();
+    SettingsManager();
 
-    QList<ConfigEntry> readSettings(KConfig* cfg) const;
+    virtual QList<ConfigEntry> readSettings(KConfig* cfg) const;
 
-    void writeSettings(KConfig* cfg, const QList<ConfigEntry>& paths) const;
+    virtual void writeSettings(KConfig* cfg, const QList<ConfigEntry>& paths) const;
+
+    virtual ~SettingsManager(){}
 };
 
 #endif // SETTINGSMANAGER_H

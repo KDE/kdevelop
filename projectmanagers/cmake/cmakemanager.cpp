@@ -74,8 +74,6 @@
 #include "cmakeimportjob.h"
 #include "cmakeutils.h"
 
-#include "customdefinesandincludesmanager.h"
-
 Q_DECLARE_METATYPE(KDevelop::IProject*);
 
 using namespace KDevelop;
@@ -240,7 +238,6 @@ QList<KDevelop::ProjectTargetItem*> CMakeManager::targets() const
 Path::List CMakeManager::includeDirectories(KDevelop::ProjectBaseItem *item) const
 {
     IProject* project = item->project();
-    auto customIncludes = CustomDefinesAndIncludesManager::self()->includes(item);
 //     kDebug(9042) << "Querying inc dirs for " << item;
     while(item)
     {
@@ -248,26 +245,19 @@ Path::List CMakeManager::includeDirectories(KDevelop::ProjectBaseItem *item) con
             QStringList dirs = includer->includeDirectories(item);
             //Here there's the possibility that it might not be a target. We should make sure that's not the case
             ProjectTargetItem* tItem = dynamic_cast<ProjectTargetItem*>(item);
-            auto includes = CMake::resolveSystemDirs(project, processGeneratorExpression(dirs, project, tItem));
-            for (auto& path : includes) {
-                if (!customIncludes.contains(Path(path))) {
-                    customIncludes << Path(path);
-                }
-            }
-            break;
+            return CMake::resolveSystemDirs(project, processGeneratorExpression(dirs, project, tItem));
         }
         item = item->parent();
 //         kDebug(9042) << "Looking for an includer: " << item;
     }
-
-    return customIncludes;
+    // No includer found, so no include-directories to be returned;
+    return Path::List();
 }
 
 QHash< QString, QString > CMakeManager::defines(KDevelop::ProjectBaseItem *item ) const
 {
     CompilationDataAttached* att=0;
     ProjectBaseItem* it=item;
-    auto customDefines = CustomDefinesAndIncludesManager::self()->defines(item);
 //     kDebug(9042) << "Querying defines for " << item << dynamic_cast<ProjectTargetItem*>(item);
     while(!att && item)
     {
@@ -278,19 +268,12 @@ QHash< QString, QString > CMakeManager::defines(KDevelop::ProjectBaseItem *item 
     }
     if( !att ) {
         // Not a CMake folder, so no defines to be returned;
-        return customDefines;
+        return QHash<QString,QString>();
     }
 
     CMakeFolderItem* folder = dynamic_cast<CMakeFolderItem*>(it);
     CMakeDefinitions defs = att->definitions(folder ? folder->formerParent() : dynamic_cast<CMakeFolderItem*>(item));
     //qDebug() << "lalala" << defs << it->url();
-
-    for (auto it = customDefines.constBegin(); it != customDefines.constEnd(); it++) {
-        if (!defs.contains(it.key())) {
-            defs[it.key()] = it.value();
-        }
-    }
-
     return defs;
 }
 

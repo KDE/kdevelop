@@ -24,7 +24,9 @@
 
 #include <KUrl>
 
-#include "configentry.h"
+#include <language/interfaces/idefinesandincludesmanager.h>
+
+using KDevelop::ConfigEntry;
 
 namespace KDevelop
 {

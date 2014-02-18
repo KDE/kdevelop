@@ -129,9 +129,3 @@ QList<ConfigEntry> SettingsManager::readSettings( KConfig* cfg ) const
 
     return paths;
 }
-
-SettingsManager* SettingsManager::self()
-{
-    static SettingsManager sm;
-    return &sm;
-}

@@ -22,7 +22,6 @@
 #include <QString>
 #include <QDataStream>
 
-#include "configentry.h"
 #include "settingsmanager.h"
 
 namespace ConfigConstants

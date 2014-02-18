@@ -22,7 +22,10 @@
 #include <QWidget>
 
 #include <qabstractitemmodel.h>
-#include "configentry.h"
+#include <language/interfaces/idefinesandincludesmanager.h>
+
+using KDevelop::ConfigEntry;
+using KDevelop::Defines;
 
 class KFileDialog;
 class KUrlRequester;

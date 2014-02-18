@@ -20,41 +20,39 @@
 #ifndef CUSTOMDEFINESANDINCLUDESMANAGER_H
 #define CUSTOMDEFINESANDINCLUDESMANAGER_H
 
-#include <QScopedPointer>
 #include <QHash>
 #include <QString>
 #include <QList>
+#include <QVariantList>
+
 #include <KUrl>
 
 #include <kdemacros.h>
 
-#include <project/path.h>
+#include <interfaces/iplugin.h>
+
+#include <language/interfaces/idefinesandincludesmanager.h>
+
+#include "settingsmanager.h"
 
 namespace KDevelop
 {
-class ProjectBaseItem;
-}
-
-using KDevelop::ProjectBaseItem;
-using KDevelop::Path;
-
 /// @brief: Class for retrieving custom defines and includes.
-class KDE_EXPORT CustomDefinesAndIncludesManager
+class KDE_EXPORT CustomDefinesAndIncludesManager : public IPlugin, public IDefinesAndIncludesManager, public SettingsManager
 {
-private:
-    CustomDefinesAndIncludesManager();
-public:
-    ~CustomDefinesAndIncludesManager();
-    static CustomDefinesAndIncludesManager* self();
-
+    Q_OBJECT
+    Q_INTERFACES( KDevelop::IDefinesAndIncludesManager )
+public :
+    explicit CustomDefinesAndIncludesManager( QObject* parent, const QVariantList& args = QVariantList() );
     ///@return list of all custom defines for @p item
-    QHash< QString, QString > defines(const ProjectBaseItem* item) const;
+    QHash<QString, QString> defines( const ProjectBaseItem* item ) const override;
 
     ///@return list of all custom includes for @p item
-    Path::List includes(const ProjectBaseItem* item) const;
-private:
-    class ManagerPrivate;
-    const QScopedPointer<ManagerPrivate> d;
-};
+    Path::List includes( const ProjectBaseItem* item ) const override;
 
+    QList<ConfigEntry> readSettings( KConfig* cfg ) const override;
+
+    void writeSettings( KConfig* cfg, const QList<ConfigEntry>& paths ) const override;
+};
+}
 #endif // CUSTOMDEFINESANDINCLUDESMANAGER_H

@@ -21,8 +21,12 @@
 
 #include <QWidget>
 
-#include "configentry.h"
 #include <qabstractitemmodel.h>
+
+#include <language/interfaces/idefinesandincludesmanager.h>
+
+using KDevelop::ConfigEntry;
+using KDevelop::Defines;
 
 class KUrlRequester;
 namespace Ui
