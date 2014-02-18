@@ -82,6 +82,7 @@ AssistantPopup::AssistantPopup(KTextEditor::View* parent, const IAssistant::Ptr&
     m_view->installEventFilter(this);
 }
 
+#if 0
 bool AssistantPopup::viewportEvent(QEvent *event)
 {
     // For some reason, QGraphicsView posts a WindowActivate event
@@ -93,6 +94,7 @@ bool AssistantPopup::viewportEvent(QEvent *event)
     }
     return QGraphicsView::viewportEvent(event);
 }
+#endif
 
 AssistantPopupConfig::AssistantPopupConfig(QObject *parent): QObject(parent)
 {

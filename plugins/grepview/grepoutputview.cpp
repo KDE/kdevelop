@@ -23,6 +23,7 @@
 #include <KMessageBox>
 #include <KColorScheme>
 #include <kdebug.h>
+#include <klocalizedstring.h>
 #include <QMenu>
 
 #include <interfaces/icore.h>
