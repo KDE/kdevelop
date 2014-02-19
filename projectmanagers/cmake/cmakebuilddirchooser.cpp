@@ -33,6 +33,7 @@ static const int maxExtraArgumentsInHistory = 15;
 CMakeBuildDirChooser::CMakeBuildDirChooser(QWidget* parent)
     : KDialog(parent)
 {
+    setDefaultButton(KDialog::Ok);
     setCaption(i18n("Configure a build directory"));
     
 //     QWidget* w= new QWidget(this);
