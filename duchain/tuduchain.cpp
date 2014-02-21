@@ -48,58 +48,58 @@ struct IdType<CK, typename std::enable_if<CK == CXCursor_EnumDecl>::type>
 
 //BEGIN DeclType
 
-template<CXCursorKind CK, bool isDefinition, bool isClassMember>
-struct DeclType<CK, isDefinition, isClassMember,
-    typename std::enable_if<CursorKindTraits::isKDevDeclaration(CK, isClassMember)>::type>
+template<CXCursorKind CK, bool isDefinition, bool isInClass>
+struct DeclType<CK, isDefinition, isInClass,
+    typename std::enable_if<CursorKindTraits::isKDevDeclaration(CK, isInClass)>::type>
 {
     typedef Declaration Type;
 };
 
-template<CXCursorKind CK, bool isDefinition, bool isClassMember>
-struct DeclType<CK, isDefinition, isClassMember,
+template<CXCursorKind CK, bool isDefinition, bool isInClass>
+struct DeclType<CK, isDefinition, isInClass,
     typename std::enable_if<CursorKindTraits::isKDevForwardDeclaration(CK, isDefinition)>::type>
 {
     typedef ForwardDeclaration Type;
 };
 
-template<CXCursorKind CK, bool isDefinition, bool isClassMember>
-struct DeclType<CK, isDefinition, isClassMember,
+template<CXCursorKind CK, bool isDefinition, bool isInClass>
+struct DeclType<CK, isDefinition, isInClass,
     typename std::enable_if<CursorKindTraits::isKDevClassDeclaration(CK, isDefinition)>::type>
 {
     typedef ClassDeclaration Type;
 };
 
-template<CXCursorKind CK, bool isDefinition, bool isClassMember>
-struct DeclType<CK, isDefinition, isClassMember,
-    typename std::enable_if<CursorKindTraits::isKDevClassFunctionDeclaration(CK, isDefinition)>::type>
+template<CXCursorKind CK, bool isDefinition, bool isInClass>
+struct DeclType<CK, isDefinition, isInClass,
+    typename std::enable_if<CursorKindTraits::isKDevClassFunctionDeclaration(CK, isInClass)>::type>
 {
     typedef ClassFunctionDeclaration Type;
 };
 
-template<CXCursorKind CK, bool isDefinition, bool isClassMember>
-struct DeclType<CK, isDefinition, isClassMember,
-    typename std::enable_if<CursorKindTraits::isKDevFunctionDeclaration(CK, isDefinition)>::type>
+template<CXCursorKind CK, bool isDefinition, bool isInClass>
+struct DeclType<CK, isDefinition, isInClass,
+    typename std::enable_if<CursorKindTraits::isKDevFunctionDeclaration(CK, isDefinition, isInClass)>::type>
 {
     typedef FunctionDeclaration Type;
 };
 
-template<CXCursorKind CK, bool isDefinition, bool isClassMember>
-struct DeclType<CK, isDefinition, isClassMember,
-    typename std::enable_if<CursorKindTraits::isKDevFunctionDefinition(CK, isDefinition)>::type>
+template<CXCursorKind CK, bool isDefinition, bool isInClass>
+struct DeclType<CK, isDefinition, isInClass,
+    typename std::enable_if<CursorKindTraits::isKDevFunctionDefinition(CK, isDefinition, isInClass)>::type>
 {
     typedef FunctionDefinition Type;
 };
 
-template<CXCursorKind CK, bool isDefinition, bool isClassMember>
-struct DeclType<CK, isDefinition, isClassMember,
+template<CXCursorKind CK, bool isDefinition, bool isInClass>
+struct DeclType<CK, isDefinition, isInClass,
     typename std::enable_if<CursorKindTraits::isKDevNamespaceAliasDeclaration(CK, isDefinition)>::type>
 {
     typedef NamespaceAliasDeclaration Type;
 };
 
-template<CXCursorKind CK, bool isDefinition, bool isClassMember>
-struct DeclType<CK, isDefinition, isClassMember,
-    typename std::enable_if<CursorKindTraits::isKDevClassMemberDeclaration(CK, isClassMember)>::type>
+template<CXCursorKind CK, bool isDefinition, bool isInClass>
+struct DeclType<CK, isDefinition, isInClass,
+    typename std::enable_if<CursorKindTraits::isKDevClassMemberDeclaration(CK, isInClass)>::type>
 {
     typedef ClassMemberDeclaration Type;
 };
@@ -228,6 +228,13 @@ void TUDUChain::setIdTypeDecl(CXCursor typeCursor, IdentifiedType* idType) const
     }
 }
 
+void TUDUChain::contextImportDecl(DUContext* context, const DeclarationPointer& decl) const
+{
+    auto top = context->topContext();
+    if (auto import = decl->logicalInternalContext(top))
+        context->addImportedParentContext(import);
+}
+
 KDevelop::RangeInRevision TUDUChain::makeContextRange(CXCursor cursor) const
 {
     auto start = clang_getRangeEnd(clang_Cursor_getSpellingNameRange(cursor, 0, 0));
@@ -300,14 +307,13 @@ AbstractType *TUDUChain::makeType(CXType type) const
 template<>
 CXChildVisitResult TUDUChain::buildUse<CXCursor_CXXBaseSpecifier>(CXCursor cursor)
 {
-    m_uses[m_parentContext->context].push_back(cursor);
+    auto currentContext = m_parentContext->context;
+    m_uses[currentContext].push_back(cursor);
 
-    // TODO: get access policy and virtual bits
-    bool virtualInherited = false;
-    Declaration::AccessPolicy access = Declaration::Public;
+    bool virtualInherited = clang_isVirtualBase(cursor);
+    Declaration::AccessPolicy access = CursorKindTraits::kdevAccessPolicy(clang_getCXXAccessSpecifier(cursor));
 
-    auto type = clang_getCursorType(cursor);
-    auto decl = findDeclaration(clang_getTypeDeclaration(type), m_includes);
+    auto decl = findDeclaration(clang_getCursorType(cursor), m_includes);
     if (!decl) {
         // this happens for templates with template-dependent base classes e.g. - dunno whether we can/should do more here
         debug() << "failed to find declaration for base specifier:" << ClangString(clang_getCursorDisplayName(cursor));
@@ -315,11 +321,7 @@ CXChildVisitResult TUDUChain::buildUse<CXCursor_CXXBaseSpecifier>(CXCursor curso
     }
 
     DUChainWriteLocker lock;
-    auto currentContext = m_parentContext->context;
-    auto top = currentContext->topContext();
-    if (auto import = decl->logicalInternalContext(top)) {
-        currentContext->addImportedParentContext(import);
-    }
+    contextImportDecl(currentContext, decl);
     auto classDecl = dynamic_cast<KDevelop::ClassDeclaration*>(currentContext->owner());
     Q_ASSERT(classDecl);
 

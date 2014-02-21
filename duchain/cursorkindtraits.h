@@ -93,20 +93,22 @@ constexpr bool isDeclaration(CXCursorKind CK)
     || CK == CXCursor_TypeAliasDecl;
 }
 
-constexpr Decision isDefinition(CXCursorKind CK)
+constexpr Decision isDefinition(CXCursorKind CK, Decision isInClass)
 {
-    return CK == CXCursor_Namespace ? Decision::True :
-        isClass(CK) || isFunction(CK) || CK == CXCursor_EnumDecl ? Decision::Maybe :
+    return CK == CXCursor_Namespace || (isInClass == Decision::False && CK == CXCursor_CXXMethod) ?
+        Decision::True :
+        isClass(CK) || isFunction(CK) || CK == CXCursor_EnumDecl ?
+        Decision::Maybe :
         Decision::False;
 }
 
-constexpr Decision isClassMember(CXCursorKind CK)
+constexpr Decision isInClass(CXCursorKind CK)
 {
-    return CK == CXCursor_FieldDecl
-        || CK == CXCursor_CXXMethod ?
+    return CK == CXCursor_FieldDecl ?
         Decision::True :
            CK == CXCursor_Namespace
         || CK == CXCursor_TemplateTypeParameter
+        || CK == CXCursor_FunctionDecl
         || CK == CXCursor_TemplateTemplateParameter
         || CK == CXCursor_NonTypeTemplateParameter ?
         Decision::False :
@@ -162,19 +164,19 @@ constexpr bool isKDevForwardDeclaration(CXCursorKind CK, bool isDefinition)
     return !isDefinition && isClass(CK);
 }
 
-constexpr bool isKDevClassFunctionDeclaration(CXCursorKind CK, bool /*isDefinition*/)
+constexpr bool isKDevClassFunctionDeclaration(CXCursorKind CK, bool isInClass)
 {
-    return CK == CXCursor_CXXMethod;
+    return isInClass && isFunction(CK);
 }
 
-constexpr bool isKDevFunctionDeclaration(CXCursorKind CK, bool isDefinition)
+constexpr bool isKDevFunctionDeclaration(CXCursorKind CK, bool isDefinition, bool isInClass)
 {
-    return !isDefinition && isFunction(CK) && CK != CXCursor_CXXMethod;
+    return !isDefinition && !isInClass && isFunction(CK);
 }
 
-constexpr bool isKDevFunctionDefinition(CXCursorKind CK, bool isDefinition)
+constexpr bool isKDevFunctionDefinition(CXCursorKind CK, bool isDefinition, bool isInClass)
 {
-    return isDefinition && isFunction(CK) && CK != CXCursor_CXXMethod;
+    return isDefinition && !isInClass && isFunction(CK);
 }
 
 constexpr bool isKDevNamespaceAliasDeclaration(CXCursorKind CK, bool isDefinition)
@@ -182,9 +184,9 @@ constexpr bool isKDevNamespaceAliasDeclaration(CXCursorKind CK, bool isDefinitio
     return !isDefinition && CK == CXCursor_NamespaceAlias;
 }
 
-constexpr bool isKDevClassMemberDeclaration(CXCursorKind CK, bool isClassMember)
+constexpr bool isKDevClassMemberDeclaration(CXCursorKind CK, bool isInClass)
 {
-    return isClassMember && isKDevDeclaration(CK, false);
+    return isInClass && isKDevDeclaration(CK, false);
 }
 
 constexpr Declaration::AccessPolicy kdevAccessPolicy(CX_CXXAccessSpecifier access)

@@ -57,6 +57,7 @@ private:
     static CXChildVisitResult visitCursor(CXCursor cursor, CXCursor parent, CXClientData data);
 
     void setIdTypeDecl(CXCursor typeCursor, IdentifiedType *idType) const;
+    void contextImportDecl(DUContext *context, const DeclarationPointer &decl) const;
 
     KDevelop::RangeInRevision makeContextRange(CXCursor cursor) const;
     KDevelop::Identifier makeId(CXCursor cursor) const;
@@ -72,36 +73,38 @@ private:
     }
 
     template<
-        CXCursorKind CK,
-        Decision IsClassMember = CursorKindTraits::isClassMember(CK),
-        Decision IsDefinition = CursorKindTraits::isDefinition(CK),
-        EnableIf<IsClassMember == Decision::Maybe || IsDefinition == Decision::Maybe> = dummy>
+      CXCursorKind CK,
+      Decision IsInClass = CursorKindTraits::isInClass(CK),
+      EnableIf<IsInClass == Decision::Maybe> = dummy>
     CXChildVisitResult dispatchCursor(CXCursor cursor, CXCursor parent)
     {
-        if (IsDefinition == Decision::Maybe) {
-            const bool decision = clang_isCursorDefinition(cursor);
-            return decision ?
-                dispatchCursor<CK, IsClassMember, Decision::True>(cursor, parent) :
-                dispatchCursor<CK, IsClassMember, Decision::False>(cursor, parent);
-        }
-        if (IsClassMember == Decision::Maybe) {
-            const bool decision = CursorKindTraits::isClass(clang_getCursorKind(parent));
-            return decision ?
-                dispatchCursor<CK, Decision::True, IsDefinition>(cursor, parent) :
-                dispatchCursor<CK, Decision::False, IsDefinition>(cursor, parent);
-        }
-        Q_ASSERT(false);
-        return CXChildVisit_Break;
+      const bool decision = CursorKindTraits::isClass(clang_getCursorKind(parent));
+      return decision ?
+        dispatchCursor<CK, Decision::True, CursorKindTraits::isDefinition(CK, Decision::True)>(cursor, parent) :
+        dispatchCursor<CK, Decision::False, CursorKindTraits::isDefinition(CK, Decision::False)>(cursor, parent);
     }
 
     template<
         CXCursorKind CK,
-        Decision IsClassMember = CursorKindTraits::isClassMember(CK),
-        Decision IsDefinition = CursorKindTraits::isDefinition(CK),
-        EnableIf<IsClassMember != Decision::Maybe && IsDefinition != Decision::Maybe> = dummy>
+        Decision IsInClass = CursorKindTraits::isInClass(CK),
+        Decision IsDefinition = CursorKindTraits::isDefinition(CK, IsInClass),
+        EnableIf<IsDefinition == Decision::Maybe && IsInClass != Decision::Maybe> = dummy>
+    CXChildVisitResult dispatchCursor(CXCursor cursor, CXCursor parent)
+    {
+        const bool decision = clang_isCursorDefinition(cursor);
+        return decision ?
+          dispatchCursor<CK, IsInClass, Decision::True>(cursor, parent) :
+          dispatchCursor<CK, IsInClass, Decision::False>(cursor, parent);
+    }
+
+    template<
+        CXCursorKind CK,
+        Decision IsInClass = CursorKindTraits::isInClass(CK),
+        Decision IsDefinition = CursorKindTraits::isDefinition(CK, IsInClass),
+        EnableIf<IsInClass != Decision::Maybe && IsDefinition != Decision::Maybe> = dummy>
     CXChildVisitResult dispatchCursor(CXCursor cursor, CXCursor /*parent*/)
     {
-        constexpr bool isClassMember = IsClassMember == Decision::True;
+        constexpr bool isClassMember = IsInClass == Decision::True;
         constexpr bool isDefinition = IsDefinition == Decision::True;
         //Currently, but not technically, hasContext and IsDefinition are synonyms
         constexpr bool hasContext = IsDefinition == Decision::True;
@@ -212,6 +215,15 @@ private:
         context->setLocalScopeIdentifier(scopeId);
         if (Type == KDevelop::DUContext::Other)
             context->setInSymbolTable(false);
+        if (CK == CXCursor_CXXMethod) {
+            CXCursor semParent = clang_getCursorSemanticParent(cursor);
+            if (!clang_Cursor_isNull(semParent)) {
+                DeclarationPointer semParentDecl = findDeclaration(semParent, m_includes);
+                if (semParentDecl) {
+                    contextImportDecl(context, semParentDecl);
+                }
+            }
+        }
         return context;
     }
 
@@ -387,6 +399,17 @@ void setDeclData(CXCursor cursor, ClassFunctionDeclaration* decl) const
     setDeclData<CK>(cursor, static_cast<ClassMemberDeclaration*>(decl));
     decl->setStatic(clang_CXXMethod_isStatic(cursor));
     decl->setVirtual(clang_CXXMethod_isVirtual(cursor));
+}
+
+template<CXCursorKind CK>
+void setDeclData(CXCursor cursor, FunctionDefinition *decl) const
+{
+    setDeclData<CK>(cursor, static_cast<FunctionDeclaration*>(decl));
+    if (CK == CXCursor_CXXMethod) {
+        //TODO: setDeclaration
+        //Note that this is only for CXXMethod, because unlike the DUChain might have you believe,
+        //there can be any number of declarations for a non-member function
+    }
 }
 
 //END setDeclData

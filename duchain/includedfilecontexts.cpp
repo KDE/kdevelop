@@ -50,3 +50,9 @@ DeclarationPointer findDeclaration(CXCursor cursor, const IncludeFileContexts& i
     }
     return {};
 }
+
+DeclarationPointer findDeclaration(CXType type, const IncludeFileContexts& includes)
+{
+    CXCursor cursor = clang_getTypeDeclaration(type);
+    return findDeclaration(cursor, includes);
+}

@@ -31,5 +31,6 @@
 using IncludeFileContexts = QHash<CXFile, KDevelop::ReferencedTopDUContext>;
 
 KDevelop::DeclarationPointer findDeclaration(CXCursor cursor, const IncludeFileContexts& includes);
+KDevelop::DeclarationPointer findDeclaration(CXType type, const IncludeFileContexts& includes);
 
 #endif // INCLUDEDFILECONTEXTS_H
