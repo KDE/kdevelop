@@ -54,7 +54,6 @@ target_link_libraries(buddiestest
 
 ########### next target ###############
 
-find_package(QJSON)
 # Also check that kdevplatform is built with JSON support
 # see: https://bugs.kde.org/show_bug.cgi?id=327095
 if(QJSON_FOUND AND KDEVPLATFORM_JSONTESTS_LIBRARIES)

@@ -20,6 +20,8 @@ include (KDE4Defaults)
 include (MacroLibrary)
 include (MacroOptionalAddSubdirectory)
 
+find_package(QJSON)
+
 # Make sure that we're having RPATH on our installed libs, else using kdevelop
 # from prefixes like $HOME/kdevelop breaks
 # Code taken from FindKDE4Internal.cmake from KDE 4.5

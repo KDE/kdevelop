@@ -6,7 +6,9 @@ include (KDE4Defaults)
 find_package(KDevPlatform REQUIRED)
 
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
-find_package(QJSON REQUIRED)
+if(NOT QJSON_FOUND)
+    message("Could not find QJson" FATAL_ERROR)
+endif()
 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
