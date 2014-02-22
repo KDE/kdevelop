@@ -151,7 +151,6 @@ private:
     DeclType* createDeclarationCommon(CXCursor cursor, const Identifier& id)
     {
         auto range = ClangRange(clang_Cursor_getSpellingNameRange(cursor, 0, 0)).toRangeInRevision();
-        auto comment = makeComment(clang_Cursor_getParsedComment(cursor));
         if (m_update) {
             const IndexedIdentifier indexedId(id);
             DUChainWriteLocker lock;
@@ -160,7 +159,6 @@ private:
                 auto decl = dynamic_cast<DeclType*>(*it);
                 if (decl && decl->indexedIdentifier() == indexedId) {
                     decl->setRange(range);
-                    decl->setComment(comment);
                     setDeclData<CK>(cursor, decl);
                     m_parentContext->previousChildDeclarations.erase(it);
                     return decl;
@@ -170,7 +168,6 @@ private:
         }
         auto decl = new DeclType(range, nullptr);
         decl->setIdentifier(id);
-        decl->setComment(comment);
         setDeclData<CK>(cursor, decl);
         return decl;
     }
@@ -349,8 +346,10 @@ private:
 
 //BEGIN setDeclData
 template<CXCursorKind CK>
-void setDeclData(CXCursor, Declaration *decl) const
+void setDeclData(CXCursor cursor, Declaration *decl, bool setComment = true) const
 {
+    if (setComment)
+        decl->setComment(makeComment(clang_Cursor_getParsedComment(cursor)));
     if (CK == CXCursor_TypeAliasDecl || CK == CXCursor_TypedefDecl)
         decl->setIsTypeAlias(true);
     if (CK == CXCursor_Namespace)
@@ -405,7 +404,8 @@ void setDeclData(CXCursor cursor, ClassFunctionDeclaration* decl) const
 template<CXCursorKind CK>
 void setDeclData(CXCursor cursor, FunctionDefinition *decl) const
 {
-    setDeclData<CK>(cursor, static_cast<FunctionDeclaration*>(decl));
+    bool setComment = clang_equalCursors(clang_getCanonicalCursor(cursor), cursor);
+    setDeclData<CK>(cursor, static_cast<FunctionDeclaration*>(decl), setComment);
 }
 
 //END setDeclData
