@@ -12,3 +12,4 @@ X-KDevelop-Version=@KDEV_PLUGIN_VERSION@
 X-KDevelop-Category=Project
 X-KDevelop-Interfaces=org.kdevelop.IDefinesAndIncludesManager
 X-KDevelop-Mode=NoGUI
+X-KDevelop-Language=C++

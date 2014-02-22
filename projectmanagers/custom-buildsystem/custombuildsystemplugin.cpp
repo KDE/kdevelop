@@ -138,7 +138,7 @@ ProjectFolderItem* CustomBuildSystem::createFolderItem( IProject* project,
     return new ProjectBuildFolderItem( project, path, parent );
 }
 
-Path::List CustomBuildSystem::includeDirectories( ProjectBaseItem* item ) const
+Path::List CustomBuildSystem::includeDirectories( ProjectBaseItem* ) const
 {
     return {};
 }

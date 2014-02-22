@@ -26,4 +26,4 @@ kde4_add_ui_files( kcm_uitest_SRCS
                         ../custombuildsystemconfigwidget.ui
                  )
 kde4_add_executable( kcm_uitest ${kcm_uitest_SRCS} )
-target_link_libraries( kcm_uitest ${KDE4_KDEUI_LIBS} ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES})
+target_link_libraries( kcm_uitest ${KDE4_KDEUI_LIBS} ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES} )

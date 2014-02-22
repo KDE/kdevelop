@@ -1,7 +1,5 @@
 include_directories( ${KDE4_INCLUDES} ${KDEVPLATFORM_INCLUDE_DIR} ../)
 
-add_definitions( ${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
-
 set( kcm_customdefinesandincludes_SRCS
         projectpathsmodel.cpp
         definesmodel.cpp

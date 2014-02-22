@@ -2,7 +2,7 @@ project(kdevelop4-custom-buildsystem)
 
 include(MacroLibrary)
 
-include_directories( ${KDE4_INCLUDES} ${KDEVPLATFORM_INCLUDE_DIR} ${customDefinesAndIncludes_INCLUDE_DIR})
+include_directories( ${KDE4_INCLUDES} ${KDEVPLATFORM_INCLUDE_DIR})
 
 add_definitions( ${QT_DEFINITIONS} ${KDE4_DEFINITIONS} )
 

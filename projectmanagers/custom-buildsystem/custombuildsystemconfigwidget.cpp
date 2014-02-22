@@ -48,12 +48,10 @@ QString generateToolGroupName( CustomBuildSystemTool::ActionType type )
 
 }
 
-CustomBuildSystemConfigWidget::CustomBuildSystemConfigWidget( QWidget* parent, KDevelop::IProject* w_project = 0 )
-    : QWidget( parent ), ui( new Ui::CustomBuildSystemConfigWidget ), project( w_project )
+CustomBuildSystemConfigWidget::CustomBuildSystemConfigWidget( QWidget* parent, KDevelop::IProject* )
+    : QWidget( parent ), ui( new Ui::CustomBuildSystemConfigWidget )
 {
     ui->setupUi( this );
-
-    (void)project;
 
     ui->addConfig->setIcon(KIcon( "list-add" ));
     ui->removeConfig->setIcon(KIcon( "list-remove" ));
