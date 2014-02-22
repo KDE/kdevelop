@@ -106,7 +106,7 @@ int main(int argc, char **argv)
     KDevelop::TestProject proj;
     proj.setPath( KDevelop::Path(projkcfg.name()));
     
-    CustomBuildSystemConfigWidget widget(0, &proj);
+    CustomBuildSystemConfigWidget widget(nullptr);
     widget.loadFrom(&projkcfg);
     dlg.setMainWidget(&widget);
 

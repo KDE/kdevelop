@@ -32,6 +32,7 @@ Q_OBJECT
 private slots:
     void initTestCase();
     void cleanupTestCase();
+    void cleanup();
     void loadSimpleProject();
     void loadMultiPathProject();
 };

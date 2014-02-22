@@ -1,6 +1,7 @@
 /************************************************************************
  *                                                                      *
  * Copyright 2010 Andreas Pakulat <apaku@gmx.de>                        *
+ * Copyright 2014 Sergey Kalinichev <kalinichev.so.0@gmail.com>         *
  *                                                                      *
  * This program is free software; you can redistribute it and/or modify *
  * it under the terms of the GNU General Public License as published by *
@@ -36,53 +37,82 @@
 #include "testconfig.h"
 
 using KDevelop::ICore;
+using KDevelop::IDefinesAndIncludesManager;
 using KDevelop::IProject;
 using KDevelop::TestCore;
 using KDevelop::AutoTestShell;
 using KDevelop::KDevSignalSpy;
 using KDevelop::Path;
 
+enum projectType
+{
+    simpleProject = 0,
+    multiPathProject
+};
+
+static IProject* s_currentProject = nullptr;
+
+IProject* loadProject( projectType type )
+{
+    const static QString projects[2] = {
+        "SimpleProject",
+        "MultiPathProject"
+    };
+
+    const static QString projectsPaths[2] = {
+        PROJECTS_SOURCE_DIR"/simpleproject/simpleproject.kdev4",
+        PROJECTS_SOURCE_DIR"/multipathproject/multipathproject.kdev4"
+    };
+
+    KDevSignalSpy* projectSpy = new KDevSignalSpy( ICore::self()->projectController(), SIGNAL( projectOpened( KDevelop::IProject* ) ) );
+    ICore::self()->projectController()->openProject( projectsPaths[type] );
+
+    if( !projectSpy->wait( 5000 ) ) {
+        kFatal() << "Expected project to be loaded within 20 seconds, but this didn't happen";
+    }
+    IProject* project = ICore::self()->projectController()->findProjectByName( projects[type] );
+
+    s_currentProject = project;
+    return project;
+}
+
 void PluginTest::cleanupTestCase()
 {
     TestCore::shutdown();
 }
+
 void PluginTest::initTestCase()
 {
     AutoTestShell::init();
     TestCore::initialize();
 }
 
+void PluginTest::cleanup()
+{
+    ICore::self()->projectController()->closeProject( s_currentProject );
+}
+
 void PluginTest::loadSimpleProject()
 {
-    KUrl projecturl( PROJECTS_SOURCE_DIR"/simpleproject/simpleproject.kdev4" );
-    KDevSignalSpy* projectSpy = new KDevSignalSpy( ICore::self()->projectController(), SIGNAL( projectOpened( KDevelop::IProject* ) ) );
-    ICore::self()->projectController()->openProject( projecturl );
-    // Wait for the project to be opened
-    if( !projectSpy->wait( 20000 ) ) {
-        kFatal() << "Expected project to be loaded within 20 seconds, but this didn't happen";
-    }
-    IProject* project = ICore::self()->projectController()->findProjectByName( "SimpleProject" );
+    auto project = loadProject(simpleProject);
     QVERIFY( project );
-    Path::List includes = KDevelop::IDefinesAndIncludesManager::manager()->includes( project->projectItem() );
+
+    auto manager = KDevelop::IDefinesAndIncludesManager::manager();
+    QVERIFY( manager );
+    Path::List includes = manager->includes( project->projectItem() );
 
     QHash<QString,QString> defines;
     defines.insert( "_DEBUG", "" );
     defines.insert( "VARIABLE", "VALUE" );
     QCOMPARE( includes, Path::List() << Path( "/usr/include/mydir") );
-    QCOMPARE( KDevelop::IDefinesAndIncludesManager::manager()->defines( project->projectItem() ), defines );
+    QCOMPARE( manager->defines( project->projectItem() ), defines );
 }
 
 void PluginTest::loadMultiPathProject()
 {
-    KUrl projecturl( PROJECTS_SOURCE_DIR"/multipathproject/multipathproject.kdev4" );
-    KDevSignalSpy* projectSpy = new KDevSignalSpy( ICore::self()->projectController(), SIGNAL( projectOpened( KDevelop::IProject* ) ) );
-    ICore::self()->projectController()->openProject( projecturl );
-    // Wait for the project to be opened
-    if( !projectSpy->wait( 20000 ) ) {
-        kFatal() << "Expected project to be loaded within 20 seconds, but this didn't happen";
-    }
-    IProject* project = ICore::self()->projectController()->findProjectByName( "MultiPathProject" );
+    auto project = loadProject(multiPathProject);
     QVERIFY( project );
+
     KDevelop::ProjectBaseItem* mainfile = 0;
     foreach( KDevelop::ProjectBaseItem* i, project->files() ) {
         if( i->text() == "main.cpp" ) {
@@ -91,7 +121,10 @@ void PluginTest::loadMultiPathProject()
         }
     }
     QVERIFY(mainfile);
-    Path::List includes = KDevelop::IDefinesAndIncludesManager::manager()->includes( mainfile );
+
+    auto manager = KDevelop::IDefinesAndIncludesManager::manager();
+    QVERIFY( manager );
+    Path::List includes = manager->includes( mainfile );
 
     QHash<QString,QString> defines;
     defines.insert( "BUILD", "debug" );
@@ -99,9 +132,10 @@ void PluginTest::loadMultiPathProject()
     defines.insert("_COPY", "");
 
     QCOMPARE( includes, Path::List() << Path("/usr/include/otherdir") << Path("/usr/local/include/mydir") );
-    QCOMPARE( KDevelop::IDefinesAndIncludesManager::manager()->defines( mainfile ), defines );
+    QCOMPARE( manager->defines( mainfile ), defines );
 }
 
 QTEST_KDEMAIN(PluginTest, GUI)
+
 
 #include "plugintest.moc"

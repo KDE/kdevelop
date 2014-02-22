@@ -23,6 +23,7 @@
 #include <language/duchain/indexedstring.h>
 #include <project/path.h>
 
+//TODO: Port the model to the Path api.
 KUrl projectFolder( KDevelop::IProject* project )
 {
     auto url = project->path().toUrl();

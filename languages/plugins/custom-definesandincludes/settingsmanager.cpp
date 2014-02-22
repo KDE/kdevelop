@@ -1,4 +1,8 @@
 /*
+ * This file is part of KDevelop
+ *
+ * Copyright 2010 Andreas Pakulat <apaku@gmx.de>
+ * Copyright 2014 Sergey Kalinichev <kalinichev.so.0@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

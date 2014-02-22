@@ -1,4 +1,7 @@
 /*
+ * This file is part of KDevelop
+ *
+ * Copyright 2014 Sergey Kalinichev <kalinichev.so.0@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,8 +25,6 @@
 #include <QList>
 #include <KConfigGroup>
 
-#include <kdemacros.h>
-
 #include <language/interfaces/idefinesandincludesmanager.h>
 
 class KConfig;
@@ -34,7 +35,7 @@ class IProject;
 
 using KDevelop::ConfigEntry;
 /// @brief: Class responsible for reading/writing custom defines and includes from/to the disk.
-class KDE_EXPORT SettingsManager
+class SettingsManager
 {
 public:
     SettingsManager();

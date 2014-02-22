@@ -1,5 +1,7 @@
 /*
- * Copyright 2010 Andreas Pakulat <apaku@gmx.de>
+ * This file is part of KDevelop
+ *
+ * Copyright 2014 Sergey Kalinichev <kalinichev.so.0@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,8 +28,6 @@
 
 #include <QList>
 #include <QStringList>
-#include <QMutex>
-#include <QMutexLocker>
 
 #include <KPluginFactory>
 #include <KAboutData>
@@ -95,10 +95,8 @@ public:
     }
 
     static CustomDefinesAndIncludesManager* m_manager;
-    static QMutex m_locker;
 };
 CustomDefinesAndIncludesManager* ManagerPrivate::m_manager = nullptr;
-QMutex ManagerPrivate::m_locker;
 
 K_PLUGIN_FACTORY(CustomDefinesAndIncludesManagerFactory, registerPlugin<CustomDefinesAndIncludesManager>(); )
 K_EXPORT_PLUGIN(CustomDefinesAndIncludesManagerFactory(KAboutData("kdevcustomdefinesandincludesmanager","kdevcustomdefinesandincludesmanager", ki18n("Custom Defines and Includes Manager"), "0.1", ki18n(""), KAboutData::License_GPL)))
@@ -112,13 +110,11 @@ CustomDefinesAndIncludesManager::CustomDefinesAndIncludesManager( QObject* paren
 
 QHash<QString, QString> CustomDefinesAndIncludesManager::defines( const ProjectBaseItem* item ) const
 {
-    QMutexLocker lock( &ManagerPrivate::m_locker );
     return ManagerPrivate::defines( item );
 }
 
 Path::List CustomDefinesAndIncludesManager::includes( const ProjectBaseItem* item ) const
 {
-    QMutexLocker lock( &ManagerPrivate::m_locker );
     return ManagerPrivate::includeDirectories( item );
 }
 

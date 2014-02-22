@@ -48,7 +48,7 @@ QString generateToolGroupName( CustomBuildSystemTool::ActionType type )
 
 }
 
-CustomBuildSystemConfigWidget::CustomBuildSystemConfigWidget( QWidget* parent, KDevelop::IProject* )
+CustomBuildSystemConfigWidget::CustomBuildSystemConfigWidget( QWidget* parent )
     : QWidget( parent ), ui( new Ui::CustomBuildSystemConfigWidget )
 {
     ui->setupUi( this );
