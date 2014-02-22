@@ -1,5 +1,4 @@
 /************************************************************************
- * KDevelop4 Custom Buildsystem Support                                 *
  *                                                                      *
  * Copyright 2010 Andreas Pakulat <apaku@gmx.de>                        *
  *                                                                      *
@@ -17,28 +16,25 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>. *
  ************************************************************************/
 
-#include "custombuildsystemplugintest.h"
+#include "plugintest.h"
 
 #include <QtTest/QtTest>
 
 #include <qtest_kde.h>
 
-#include <tests/autotestshell.h>
-#include <tests/testcore.h>
-#include <tests/kdevsignalspy.h>
-#include <shell/sessioncontroller.h>
-#include <kio/netaccess.h>
-#include <interfaces/iprojectcontroller.h>
-#include <interfaces/isession.h>
 #include <KDebug>
+
+#include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
-#include <project/interfaces/ibuildsystemmanager.h>
 #include <project/projectmodel.h>
-#include <kconfiggroup.h>
+#include <tests/autotestshell.h>
+#include <tests/kdevsignalspy.h>
+#include <tests/testcore.h>
+
+#include <language/interfaces/idefinesandincludesmanager.h>
 
 #include "testconfig.h"
 
-using KDevelop::Core;
 using KDevelop::ICore;
 using KDevelop::IProject;
 using KDevelop::TestCore;
@@ -46,17 +42,17 @@ using KDevelop::AutoTestShell;
 using KDevelop::KDevSignalSpy;
 using KDevelop::Path;
 
-void CustomBuildSystemPluginTest::cleanupTestCase()
+void PluginTest::cleanupTestCase()
 {
     TestCore::shutdown();
 }
-void CustomBuildSystemPluginTest::initTestCase()
+void PluginTest::initTestCase()
 {
     AutoTestShell::init();
     TestCore::initialize();
 }
 
-void CustomBuildSystemPluginTest::loadSimpleProject()
+void PluginTest::loadSimpleProject()
 {
     KUrl projecturl( PROJECTS_SOURCE_DIR"/simpleproject/simpleproject.kdev4" );
     KDevSignalSpy* projectSpy = new KDevSignalSpy( ICore::self()->projectController(), SIGNAL( projectOpened( KDevelop::IProject* ) ) );
@@ -67,30 +63,16 @@ void CustomBuildSystemPluginTest::loadSimpleProject()
     }
     IProject* project = ICore::self()->projectController()->findProjectByName( "SimpleProject" );
     QVERIFY( project );
+    Path::List includes = KDevelop::IDefinesAndIncludesManager::manager()->includes( project->projectItem() );
 
-    QCOMPARE( project->buildSystemManager()->buildDirectory( project->projectItem() ),
-              Path( "file:///home/andreas/projects/testcustom/build/" ) );
+    QHash<QString,QString> defines;
+    defines.insert( "_DEBUG", "" );
+    defines.insert( "VARIABLE", "VALUE" );
+    QCOMPARE( includes, Path::List() << Path( "/usr/include/mydir") );
+    QCOMPARE( KDevelop::IDefinesAndIncludesManager::manager()->defines( project->projectItem() ), defines );
 }
 
-void CustomBuildSystemPluginTest::buildDirProject()
-{
-    KUrl projecturl( PROJECTS_SOURCE_DIR"/builddirproject/builddirproject.kdev4" );
-    KDevSignalSpy* projectSpy = new KDevSignalSpy( ICore::self()->projectController(), SIGNAL( projectOpened( KDevelop::IProject* ) ) );
-    ICore::self()->projectController()->openProject( projecturl );
-    // Wait for the project to be opened
-    if( !projectSpy->wait( 20000 ) ) {
-        kFatal() << "Expected project to be loaded within 20 seconds, but this didn't happen";
-    }
-    IProject* project = ICore::self()->projectController()->findProjectByName( "BuilddirProject" );
-    QVERIFY( project );
-   
-    Path currentBuilddir = project->buildSystemManager()->buildDirectory( project->projectItem() );
-
-    QCOMPARE( currentBuilddir, Path( projecturl ).parent() );
-}
-
-
-void CustomBuildSystemPluginTest::loadMultiPathProject()
+void PluginTest::loadMultiPathProject()
 {
     KUrl projecturl( PROJECTS_SOURCE_DIR"/multipathproject/multipathproject.kdev4" );
     KDevSignalSpy* projectSpy = new KDevSignalSpy( ICore::self()->projectController(), SIGNAL( projectOpened( KDevelop::IProject* ) ) );
@@ -109,11 +91,17 @@ void CustomBuildSystemPluginTest::loadMultiPathProject()
         }
     }
     QVERIFY(mainfile);
+    Path::List includes = KDevelop::IDefinesAndIncludesManager::manager()->includes( mainfile );
 
-    QCOMPARE( project->buildSystemManager()->buildDirectory( mainfile ),
-              Path( "file:///home/andreas/projects/testcustom/build2/src" ) );
+    QHash<QString,QString> defines;
+    defines.insert( "BUILD", "debug" );
+    defines.insert("SOURCE", "CONTENT");
+    defines.insert("_COPY", "");
+
+    QCOMPARE( includes, Path::List() << Path("/usr/include/otherdir") << Path("/usr/local/include/mydir") );
+    QCOMPARE( KDevelop::IDefinesAndIncludesManager::manager()->defines( mainfile ), defines );
 }
 
-QTEST_KDEMAIN(CustomBuildSystemPluginTest, GUI)
+QTEST_KDEMAIN(PluginTest, GUI)
 
-#include "custombuildsystemplugintest.moc"
+#include "plugintest.moc"

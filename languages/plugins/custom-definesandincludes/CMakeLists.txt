@@ -1,4 +1,5 @@
 add_subdirectory(kcm_widget)
+add_subdirectory(tests)
 
 include_directories( ${KDE4_INCLUDES} ${KDEVPLATFORM_INCLUDE_DIR} )
 
