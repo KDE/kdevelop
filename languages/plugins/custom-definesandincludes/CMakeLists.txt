@@ -9,6 +9,7 @@ set( kdevcustomdefinesandincludesmanager_SRCS
         customdefinesandincludesmanager.cpp
         settingsmanager.cpp
         settingsconverter.cpp
+        debugarea.cpp
     )
 kde4_add_plugin( kdevcustomdefinesandincludesmanager
         ${kdevcustomdefinesandincludesmanager_SRCS})

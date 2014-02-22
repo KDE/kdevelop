@@ -20,17 +20,18 @@
 
 #include <QToolButton>
 
-#include <KDebug>
 #include <KLineEdit>
 #include <KAction>
 #include <kfiledialog.h>
 #include <kmessagebox.h>
 #include <assert.h>
 
-#include "ui_projectpathswidget.h"
-#include "projectpathsmodel.h"
 #include <util/environmentgrouplist.h>
 #include <interfaces/iproject.h>
+
+#include "ui_projectpathswidget.h"
+#include "projectpathsmodel.h"
+#include "debugarea.h"
 
 ProjectPathsWidget::ProjectPathsWidget( QWidget* parent )
     : QWidget ( parent ), ui( new Ui::ProjectPathsWidget )
@@ -82,11 +83,13 @@ void ProjectPathsWidget::setPaths( const QList<ConfigEntry>& paths )
 
 void ProjectPathsWidget::definesChanged( const Defines& defines )
 {
+    definesAndIncludesDebug() << "defines changed";
     updatePathsModel( defines, ProjectPathsModel::DefinesDataRole );
 }
 
 void ProjectPathsWidget::includesChanged( const QStringList& includes )
 {
+    definesAndIncludesDebug() << "includes changed";
     updatePathsModel( includes, ProjectPathsModel::IncludesDataRole );
 }
 
@@ -138,9 +141,10 @@ void ProjectPathsWidget::replaceProjectPath()
     KFileDialog dlg(pathsModel->data(pathsModel->index(0, 0), ProjectPathsModel::FullUrlDataRole).value<KUrl>(), "", this);
     dlg.setMode( KFile::LocalOnly | KFile::ExistingOnly | KFile::File | KFile::Directory );
     dlg.exec();
+    definesAndIncludesDebug() << "adding url:" << dlg.selectedUrl();
 
     pathsModel->setData( pathsModel->index( ui->projectPaths->currentIndex(), 0 ), QVariant::fromValue<KUrl>(dlg.selectedUrl()), ProjectPathsModel::FullUrlDataRole );
-
+    definesAndIncludesDebug() << "added url:" << pathsModel->rowCount();
     updateEnablements();
 }
 

@@ -20,13 +20,13 @@
 
 #include <QToolButton>
 
-#include <KDebug>
 #include <KLineEdit>
 #include <KAction>
 #include <kfiledialog.h>
 
 #include "ui_defineswidget.h"
 #include "definesmodel.h"
+#include "debugarea.h"
 
 DefinesWidget::DefinesWidget( QWidget* parent )
     : QWidget ( parent ), ui( new Ui::DefinesWidget )
@@ -58,6 +58,7 @@ void DefinesWidget::setDefines( const Defines& defines )
 
 void DefinesWidget::definesChanged()
 {
+    definesAndIncludesDebug() << "defines changed";
     emit definesChanged( definesModel->defines() );
 }
 
@@ -68,6 +69,7 @@ void DefinesWidget::clear()
 
 void DefinesWidget::deleteDefine()
 {
+    definesAndIncludesDebug() << "Deleting defines";
     QModelIndexList selection = ui->defines->selectionModel()->selectedRows();
     foreach( const QModelIndex& row, selection ) {
         definesModel->removeRow( row.row() );

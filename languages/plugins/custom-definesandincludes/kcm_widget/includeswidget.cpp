@@ -20,15 +20,17 @@
 
 #include <QToolButton>
 
-#include <KDebug>
 #include <KLineEdit>
 #include <KAction>
 #include <kfiledialog.h>
 #include <kmessagebox.h>
 
+#include <interfaces/iproject.h>
+
 #include "ui_includeswidget.h"
 #include "includesmodel.h"
-#include <interfaces/iproject.h>
+#include "debugarea.h"
+
 
 IncludesWidget::IncludesWidget( QWidget* parent )
     : QWidget ( parent ), ui( new Ui::IncludesWidget )
@@ -75,6 +77,7 @@ void IncludesWidget::setIncludes( const QStringList& paths )
 }
 void IncludesWidget::includesChanged()
 {
+    definesAndIncludesDebug() << "includes changed";
     emit includesChanged( includesModel->includes() );
 }
 
@@ -103,6 +106,7 @@ void IncludesWidget::addIncludePath()
 
 void IncludesWidget::deleteIncludePath()
 {
+    definesAndIncludesDebug() << "deleting include path" << ui->includePaths->currentIndex();
     const QModelIndex curidx = ui->includePaths->currentIndex();
     if( curidx.isValid() ) {
         if( KMessageBox::questionYesNo( this, i18n("Are you sure you want to remove the selected include path '%1'?", includesModel->data(curidx, Qt::DisplayRole).toString() ), i18n("Delete Include Path") ) == KMessageBox::Yes ) {

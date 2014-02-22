@@ -48,7 +48,6 @@ void DefinesAndIncludes::dataChanged()
     emit changed(true);
 }
 
-
 DefinesAndIncludes::~DefinesAndIncludes()
 {
 }
