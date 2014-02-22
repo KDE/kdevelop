@@ -148,7 +148,7 @@ private:
 
 //BEGIN create*
     template<CXCursorKind CK, class DeclType>
-    KDevelop::Declaration* createDeclarationCommon(CXCursor cursor, const Identifier& id)
+    DeclType* createDeclarationCommon(CXCursor cursor, const Identifier& id)
     {
         auto range = ClangRange(clang_Cursor_getSpellingNameRange(cursor, 0, 0)).toRangeInRevision();
         auto comment = makeComment(clang_Cursor_getParsedComment(cursor));
@@ -185,6 +185,7 @@ private:
         if (context)
             decl->setInternalContext(context);
         setDeclType<CK>(decl, type);
+        setDeclInCtxtData<CK>(cursor, decl);
         return decl;
     }
 
@@ -405,14 +406,31 @@ template<CXCursorKind CK>
 void setDeclData(CXCursor cursor, FunctionDefinition *decl) const
 {
     setDeclData<CK>(cursor, static_cast<FunctionDeclaration*>(decl));
-    if (CK == CXCursor_CXXMethod) {
-        //TODO: setDeclaration
-        //Note that this is only for CXXMethod, because unlike the DUChain might have you believe,
-        //there can be any number of declarations for a non-member function
-    }
 }
 
 //END setDeclData
+
+//BEGIN setDeclInCtxtData
+template<CXCursorKind CK>
+void setDeclInCtxtData(CXCursor, Declaration*)
+{
+    //No-op
+}
+
+template<CXCursorKind CK>
+void setDeclInCtxtData(CXCursor cursor, FunctionDefinition *def)
+{
+    setDeclInCtxtData<CK>(cursor, static_cast<FunctionDeclaration*>(def));
+
+    CXCursor canon = clang_getCanonicalCursor(cursor);
+    if (clang_equalCursors(canon, cursor)) {
+        def->setDeclarationIsDefinition(true);
+    }
+    else if (auto decl = findDeclaration(canon, m_includes)) {
+        def->setDeclaration(decl.data());
+    }
+}
+//END setDeclInCtxtData
 
 //BEGIN setDeclType
     template<CXCursorKind CK>
