@@ -26,6 +26,7 @@
  * JSON Object Specification:
  * FindDeclObject: Mapping of (string) search ids to DeclTestObjects
  * IndexDeclObject: Mapping of (string) declaration position indexes to DeclTestObjects
+ * IndexCtxtObject: Mapping of (string) context position indexes to CtxtTestObjects
  *
  * Quick Reference:
  *   findDeclarations : FindDeclObject
@@ -34,6 +35,8 @@
  *   localDeclarationCount : int
  *   type : string
  *   null : bool
+ *   owner : DeclTestObject
+ *   importedParents : IndexCtxtObject
  */
 
 namespace KDevelop
@@ -125,6 +128,37 @@ ContextTest(type)
 ContextTest(null)
 {
   return compareValues(ctxt == 0, value, "Context's nullity");
+}
+
+//JSON type: DeclTestObject
+///@returns the context's owner
+ContextTest(owner)
+{
+    return testObject(ctxt->owner(), value, "Context's owner");
+}
+
+///JSON type: IndexCtxtObject
+///@returns whether a context exists at each index and each context passes its tests
+ContextTest(importedParents)
+{
+    VERIFY_TYPE(QVariantMap);
+    QString INVALID_ERROR = "Attempted to test invalid context.";
+    QString NOT_FOUND_ERROR = "No imported context at index \"%1\".";
+    QString CONTEXT_ERROR = "Context at index \"%1\" did not pass tests.";
+    if (!ctxt)
+        return INVALID_ERROR;
+    QVariantMap findDecls = value.toMap();
+    for (QVariantMap::iterator it = findDecls.begin(); it != findDecls.end(); ++it)
+    {
+        int index = it.key().toInt();
+        QVector<DUContext::Import> imports = ctxt->importedParentContexts();
+        if (imports.size() <= index)
+            return NOT_FOUND_ERROR;
+
+        if (!runTests(it.value().toMap(), imports.at(index).context(ctxt->topContext())))
+            return CONTEXT_ERROR.arg(it.key());
+    }
+    return SUCCESS;
 }
 
 }
