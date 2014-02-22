@@ -1,4 +1,3 @@
-add_subdirectory(custom-definesandincludes)
 macro_optional_add_subdirectory(cmake)
 macro_optional_add_subdirectory(custommake)
 macro_optional_add_subdirectory(custom-buildsystem)
