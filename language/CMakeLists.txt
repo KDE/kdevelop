@@ -101,6 +101,7 @@ set(kdevplatformlanguage_LIB_SRCS
     interfaces/codecontext.cpp
     interfaces/icreateclasshelper.cpp
     interfaces/icontextbrowser.cpp
+    interfaces/idefinesandincludesmanager.cpp
 
     codecompletion/codecompletion.cpp
     codecompletion/codecompletionworker.cpp
@@ -176,6 +177,7 @@ install(FILES
     interfaces/icreateclasshelper.h
     interfaces/icontextbrowser.h
     interfaces/abbreviations.h
+    interfaces/idefinesandincludesmanager.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/interfaces COMPONENT Devel
 )
 
