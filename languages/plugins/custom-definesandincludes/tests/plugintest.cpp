@@ -113,6 +113,17 @@ void PluginTest::loadMultiPathProject()
     auto project = loadProject(multiPathProject);
     QVERIFY( project );
 
+    auto manager = KDevelop::IDefinesAndIncludesManager::manager();
+    QVERIFY( manager );
+    Path::List includes = Path::List() << Path("/usr/include/otherdir");
+
+    QHash<QString,QString> defines;
+    defines.insert("SOURCE", "CONTENT");
+    defines.insert("_COPY", "");
+
+    QCOMPARE( manager->includes( project->projectItem()), includes );
+    QCOMPARE( manager->defines( project->projectItem()), defines );
+
     KDevelop::ProjectBaseItem* mainfile = 0;
     foreach( KDevelop::ProjectBaseItem* i, project->files() ) {
         if( i->text() == "main.cpp" ) {
@@ -122,17 +133,10 @@ void PluginTest::loadMultiPathProject()
     }
     QVERIFY(mainfile);
 
-    auto manager = KDevelop::IDefinesAndIncludesManager::manager();
-    QVERIFY( manager );
-    Path::List includes = manager->includes( mainfile );
-
-    QHash<QString,QString> defines;
-    defines.insert( "BUILD", "debug" );
-    defines.insert("SOURCE", "CONTENT");
-    defines.insert("_COPY", "");
-
-    QCOMPARE( includes, Path::List() << Path("/usr/include/otherdir") << Path("/usr/local/include/mydir") );
-    QCOMPARE( manager->defines( mainfile ), defines );
+    includes << Path("/usr/local/include/mydir");
+    defines.insert("BUILD", "debug");
+    QCOMPARE(manager->includes( mainfile ), includes);
+    QCOMPARE(defines, manager->defines( mainfile ));
 }
 
 QTEST_KDEMAIN(PluginTest, GUI)
