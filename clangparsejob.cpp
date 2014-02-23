@@ -39,7 +39,7 @@
 #include "duchain/tuduchain.h"
 
 #include "debug.h"
-#include "clanglanguagesupport.h"
+#include "clangsupport.h"
 
 #include <QFile>
 #include <QStringList>
@@ -199,9 +199,9 @@ ClangParseJob::ClangParseJob(const IndexedString& url, ILanguageSupport* languag
     m_includes += defaultIncludePaths;
 }
 
-ClangLanguageSupport* ClangParseJob::clang() const
+ClangSupport* ClangParseJob::clang() const
 {
-    return static_cast<ClangLanguageSupport*>(languageSupport());
+    return static_cast<ClangSupport*>(languageSupport());
 }
 
 void ClangParseJob::run()

@@ -20,7 +20,7 @@
     Boston, MA 02110-1301, USA.
 */
 
-#include "clanglanguagesupport.h"
+#include "clangsupport.h"
 
 #include "clangparsejob.h"
 #include "version.h"
@@ -46,14 +46,14 @@
 #include <KAction>
 #include <KActionCollection>
 
-K_PLUGIN_FACTORY(KDevClangSupportFactory, registerPlugin<ClangLanguageSupport>(); )
+K_PLUGIN_FACTORY(KDevClangSupportFactory, registerPlugin<ClangSupport>(); )
 K_EXPORT_PLUGIN(KDevClangSupportFactory(
-    KAboutData("kdevclanglanguagesupport", 0, ki18n("Clang Language Plugin"), "0.1",
+    KAboutData("kdevclangsupport", 0, ki18n("Clang Plugin"), "0.1",
     ki18n("Support for C, C++ and Objective-C languages."), KAboutData::License_GPL)))
 
 using namespace KDevelop;
 
-ClangLanguageSupport::ClangLanguageSupport(QObject* parent, const QVariantList& )
+ClangSupport::ClangSupport(QObject* parent, const QVariantList& )
 : IPlugin( KDevClangSupportFactory::componentData(), parent )
 , ILanguageSupport()
 , m_highlighting(new KDevelop::CodeHighlighting(this))
@@ -69,49 +69,49 @@ ClangLanguageSupport::ClangLanguageSupport(QObject* parent, const QVariantList& 
     }
 }
 
-ClangLanguageSupport::~ClangLanguageSupport()
+ClangSupport::~ClangSupport()
 {
     for(const auto& type : DocumentFinderHelpers::mimeTypesList()) {
         KDevelop::IBuddyDocumentFinder::removeFinder(type);
     }
 }
 
-ParseJob* ClangLanguageSupport::createParseJob(const IndexedString& url)
+ParseJob* ClangSupport::createParseJob(const IndexedString& url)
 {
     return new ClangParseJob(url, this);
 }
 
-QString ClangLanguageSupport::name() const
+QString ClangSupport::name() const
 {
     return "clang";
 }
 
-ICodeHighlighting* ClangLanguageSupport::codeHighlighting() const
+ICodeHighlighting* ClangSupport::codeHighlighting() const
 {
     return m_highlighting;
 }
 
-ClangIndex* ClangLanguageSupport::index()
+ClangIndex* ClangSupport::index()
 {
     return m_index.data();
 }
 
-bool ClangLanguageSupport::areBuddies(const KUrl& url1, const KUrl& url2)
+bool ClangSupport::areBuddies(const KUrl& url1, const KUrl& url2)
 {
     return DocumentFinderHelpers::areBuddies(url1, url2);
 }
 
-bool ClangLanguageSupport::buddyOrder(const KUrl& url1, const KUrl& url2)
+bool ClangSupport::buddyOrder(const KUrl& url1, const KUrl& url2)
 {
     return DocumentFinderHelpers::buddyOrder(url1, url2);
 }
 
-QVector< KUrl > ClangLanguageSupport::getPotentialBuddies(const KUrl& url) const
+QVector< KUrl > ClangSupport::getPotentialBuddies(const KUrl& url) const
 {
     return DocumentFinderHelpers::getPotentialBuddies(url);
 }
 
-void ClangLanguageSupport::createActionsForMainWindow (Sublime::MainWindow* /*window*/, QString& _xmlFile, KActionCollection& actions)
+void ClangSupport::createActionsForMainWindow (Sublime::MainWindow* /*window*/, QString& _xmlFile, KActionCollection& actions)
 {
     _xmlFile = xmlFile();
 
@@ -122,7 +122,7 @@ void ClangLanguageSupport::createActionsForMainWindow (Sublime::MainWindow* /*wi
     connect(renameDeclarationAction, SIGNAL(triggered(bool)), m_refactoring, SLOT(executeRenameAction()));
 }
 
-KDevelop::ContextMenuExtension ClangLanguageSupport::contextMenuExtension(KDevelop::Context* context)
+KDevelop::ContextMenuExtension ClangSupport::contextMenuExtension(KDevelop::Context* context)
 {
   ContextMenuExtension cm;
   EditorContext *ec = dynamic_cast<KDevelop::EditorContext *>(context);
@@ -134,4 +134,4 @@ KDevelop::ContextMenuExtension ClangLanguageSupport::contextMenuExtension(KDevel
   return cm;
 }
 
-#include "clanglanguagesupport.moc"
+#include "clangsupport.moc"

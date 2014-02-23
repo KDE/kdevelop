@@ -20,8 +20,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVCLANGLANGUAGESUPPORT_H
-#define KDEVCLANGLANGUAGESUPPORT_H
+#ifndef KDEVCLANGSUPPORT_H
+#define KDEVCLANGSUPPORT_H
 
 #include <interfaces/iplugin.h>
 #include <language/interfaces/ilanguagesupport.h>
@@ -32,14 +32,14 @@
 class ClangIndex;
 class SimpleRefactoring;
 
-class ClangLanguageSupport : public KDevelop::IPlugin, public KDevelop::ILanguageSupport, public KDevelop::IBuddyDocumentFinder
+class ClangSupport : public KDevelop::IPlugin, public KDevelop::ILanguageSupport, public KDevelop::IBuddyDocumentFinder
 {
     Q_OBJECT
     Q_INTERFACES(KDevelop::ILanguageSupport)
 
 public:
-    explicit ClangLanguageSupport(QObject *parent, const QVariantList& args = QVariantList());
-    virtual ~ClangLanguageSupport();
+    explicit ClangSupport(QObject *parent, const QVariantList& args = QVariantList());
+    virtual ~ClangSupport();
 
     /** Name Of the Language */
     virtual QString name() const;

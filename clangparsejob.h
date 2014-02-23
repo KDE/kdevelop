@@ -20,8 +20,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef CLANGLANG_CLANGPARSEJOB_H
-#define CLANGLANG_CLANGPARSEJOB_H
+#ifndef CLANGPARSEJOB_H
+#define CLANGPARSEJOB_H
 
 #include <language/backgroundparser/parsejob.h>
 #include <project/path.h>
@@ -30,7 +30,7 @@
 #include "duchain/parsesession.h"
 #include "duchain/includedfilecontexts.h"
 
-class ClangLanguageSupport;
+class ClangSupport;
 
 struct Import
 {
@@ -46,7 +46,7 @@ public:
     ClangParseJob(const KDevelop::IndexedString& url,
                   KDevelop::ILanguageSupport* languageSupport);
 
-    ClangLanguageSupport* clang() const;
+    ClangSupport* clang() const;
 
 protected:
     virtual void run();
@@ -60,4 +60,4 @@ private:
     Imports m_imports;
 };
 
-#endif // CLANGLANG_CLANGPARSEJOB_H
+#endif // CLANGPARSEJOB_H
