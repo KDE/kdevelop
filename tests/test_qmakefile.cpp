@@ -380,16 +380,16 @@ void TestQMakeFile::qtIncludeDirs()
         it != moduleMap.constEnd(); ++it)
     {
         QFileInfo include(qmvars["QT_INSTALL_HEADERS"] + "/" + it.value());
-//         NOTE: disabled since not all modules are always present.
-//         TODO: think about this some more
-//         QVERIFY(include.exists() && include.isDir());
 
-        bool shouldBeIncluded = modules.contains(it.key());
-        if (!shouldBeIncluded) {
-            foreach(const QString& module, modules) {
-                if (module != it.key() && moduleMap.value(module) == it.value()) {
-                    shouldBeIncluded = true;
-                    break;
+        bool shouldBeIncluded = include.exists();
+        if (shouldBeIncluded) {
+            shouldBeIncluded = modules.contains(it.key());
+            if (!shouldBeIncluded) {
+                foreach(const QString& module, modules) {
+                    if (module != it.key() && moduleMap.value(module) == it.value()) {
+                        shouldBeIncluded = true;
+                        break;
+                    }
                 }
             }
         }

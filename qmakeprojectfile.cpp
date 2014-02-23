@@ -194,79 +194,35 @@ QStringList QMakeProjectFile::includeDirectories() const
         if( !list.contains( m_qtIncludeDir ) )
             list << m_qtIncludeDir;
 
+        QDir incDir(m_qtIncludeDir);
         foreach( const QString& module, variableValues("QT") )
         {
-            QString path;
-            if ( module == "core" )
-                path = "QtCore";
-            else if ( module == "gui" )
-                path = "QtGui";
-            else if ( module == "network" )
-                path = "QtNetwork";
-            else if ( module == "opengl" )
-                path = "QtOpenGL";
-            else if ( module == "phonon" )
-                path = "Phonon";
-            else if ( module == "script" )
-                path = "QtScript";
-            else if ( module == "scripttools" )
-                path = "QtScriptTools";
-            else if ( module == "sql" )
-                path = "QtSql";
-            else if ( module == "svg" )
-                path = "QtSvg";
-            else if ( module == "webkit" )
-                path = "QtWebKit";
-            else if ( module == "xml" )
-                path = "QtXml";
-            else if ( module == "xmlpatterns" )
-                path = "QtXmlPatterns";
-            else if ( module == "qt3support" )
-                path = "Qt3Support";
-            else if ( module == "designer" )
-                path = "QtDesigner";
-            else if ( module == "uitools" )
-                path = "QtUiTools";
-            else if ( module == "help" )
-                path = "QtHelp";
-            else if ( module == "assistant" )
-                path = "QtAssistant";
-            else if ( module == "qtestlib" || module == "testlib" )
-                path = "QtTest";
-            else if ( module == "qaxcontainer" )
-                path = "ActiveQt";
-            else if ( module == "qaxserver" )
-                path = "ActiveQt";
-            else if ( module == "dbus" )
-                path = "QtDBus";
-            else if ( module == "declarative" )
-                path = "QtDeclarative";
-            else if ( module == "widgets" )
-                path = "QtWidgets";
-            else if ( module == "webkitwidgets" )
-                path = "QtWebKitWidgets";
-            else if ( module == "quick" )
-                path = "QtQuick";
-            else if ( module == "concurrent" )
-                path = "QtConcurrent";
-            else if ( module == "location" )
-                path = "QtLocation";
-            else if ( module == "qml" )
-                path = "QtQml";
-            else if ( module == "bluetooth" )
-                path = "QtBluetooth";
-            else if ( module == "core-private" )
-                path = "QtCore/" + m_qtVersion + "/QtCore/private/";
-            else if ( module == "webchannel" )
-                path = "QtWebChannel";
-            else {
-                kWarning() << "unhandled QT module:" << module;
+            QString pattern = module;
+            const bool isPrivate = module.endsWith("-private");
+            if (isPrivate) {
+                pattern.chop(strlen("-private"));
+            }
+            if (pattern == "qtestlib" || pattern == "testlib") {
+                pattern = "QtTest";
+            } else if ( pattern == "qaxcontainer" ) {
+                pattern = "ActiveQt";
+            } else if ( pattern == "qaxserver" ) {
+                pattern = "ActiveQt";
+            } else if ( pattern != "phonon" && pattern != "qt3support" ) {
+                pattern.prepend("Qt");
+            }
+            const QFileInfoList match = incDir.entryInfoList(QStringList(pattern), QDir::Dirs);
+            if (match.isEmpty()) {
+                qWarning() << "unhandled Qt module:" << module << pattern;
                 continue;
             }
-
-            path = m_qtIncludeDir + '/' + path;
-            if( !list.contains( path ) )
+            QString path = match.first().canonicalFilePath();
+            if (isPrivate) {
+                path += '/' + m_qtVersion + '/' + match.first().fileName() + "/private/";
+            }
+            if ( !list.contains(path) ) {
                 list << path;
+            }
         }
     }
 
