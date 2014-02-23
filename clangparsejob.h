@@ -52,12 +52,11 @@ protected:
     virtual void run();
 
 private:
-    void buildDUChain(CXFile file);
+    KDevelop::ReferencedTopDUContext buildDUChain(CXFile file, IncludeFileContexts &includedFiles);
 
     KDevelop::Path::List m_includes;
     QHash<QString, QString> m_defines;
     KSharedPtr<ParseSession> m_session;
-    IncludeFileContexts m_includedFiles;
     Imports m_imports;
 };
 
