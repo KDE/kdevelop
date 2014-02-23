@@ -37,11 +37,51 @@
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchainutils.h>
+#include <language/duchain/types/identifiedtype.h>
+#include <language/duchain/types/typeutils.h>
 #include <documentation/documentationview.h>
 #include <KParts/MainWindow>
 #include <KActionCollection>
 
 using namespace KDevelop;
+
+namespace {
+
+/**
+ * Return a "more useful" declaration that documentation providers can look-up
+ *
+ * @code
+ *   QPoint point;
+ *            ^-- cursor here
+ * @endcode
+ *
+ * In this case, this method returns a Declaration pointer to the *type*
+ * instead of a pointer to the instance, which is more useful when looking for help
+ *
+ * @return A more appropriate Declaration pointer or the given parameter @p decl
+ */
+Declaration* usefulDeclaration(Declaration* decl)
+{
+    if (!decl)
+        return nullptr;
+
+    // First: Attempt to find the declaration of a definition
+    decl = DUChainUtils::declarationForDefinition(decl);
+
+    // Convenience feature: Retrieve the type declaration of instances,
+    // it makes no sense to pass the declaration pointer of instances of types
+    if (decl->kind() == Declaration::Instance) {
+        AbstractType::Ptr type = TypeUtils::targetTypeKeepAliases(decl->abstractType(), decl->topContext());
+        IdentifiedType* idType = dynamic_cast<IdentifiedType*>(type.unsafeData());
+        Declaration* idDecl = idType ? idType->declaration(decl->topContext()) : 0;
+        if (idDecl) {
+            decl = idDecl;
+        }
+    }
+    return decl;
+}
+
+}
 
 class DocumentationViewFactory: public KDevelop::IToolViewFactory
 {
@@ -102,13 +142,10 @@ void KDevelop::DocumentationController::doShowDocumentation()
     
     KDevelop::DUChainReadLocker lock( DUChain::lock() );
     
-    Declaration *dec = DUChainUtils::declarationForDefinition( DUChainUtils::itemUnderCursor( doc->url(), SimpleCursor(view->cursorPosition()) ) );
-    
-    if(dec) {
-        KSharedPtr< IDocumentation > documentation = documentationForDeclaration(dec);
-        if(documentation) {
-            showDocumentation(documentation);
-        }
+    Declaration* decl = usefulDeclaration(DUChainUtils::itemUnderCursor(doc->url(), SimpleCursor(view->cursorPosition())));
+    KSharedPtr<IDocumentation> documentation = documentationForDeclaration(decl);
+    if(documentation) {
+        showDocumentation(documentation);
     }
 }
 
@@ -138,8 +175,10 @@ KDevelop::ContextMenuExtension KDevelop::DocumentationController::contextMenuExt
 
 KSharedPtr< KDevelop::IDocumentation > DocumentationController::documentationForDeclaration(Declaration* decl)
 {
+    if (!decl)
+        return KSharedPtr<IDocumentation>();
+
     KSharedPtr<KDevelop::IDocumentation> ret;
-    
     foreach(IDocumentationProvider* doc, documentationProviders())
     {
         kDebug(9529) << "Documentation provider found:" << doc;
@@ -149,7 +188,6 @@ KSharedPtr< KDevelop::IDocumentation > DocumentationController::documentationFor
         if(ret)
             break;
     }
-    
     return ret;
 }
 
