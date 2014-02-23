@@ -554,8 +554,8 @@ void TestQMakeFile::globbing()
     QVERIFY(pro.read());
 
     QStringList actual;
-    foreach(const KUrl& url, pro.files()) {
-        actual << url.pathOrUrl().remove(tempDir.name());
+    foreach(QString path, pro.files()) {
+        actual << path.remove(tempDir.name());
     }
     qSort(actual);
     qSort(matches);

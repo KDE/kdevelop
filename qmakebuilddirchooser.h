@@ -47,9 +47,14 @@ public:
     bool isValid(QString *message=0);
 
     /**
-     * Saves current date to builds hash (not to current values).
+     * Saves current data to this build dir's config group (not to current values).
      */
     virtual void saveConfig();
+
+    /**
+     * Saves current data to the given config group.
+     */
+    void saveConfig(KConfigGroup& config);
 
     /**
      * Loads current config (or a new one) into fields.
@@ -61,15 +66,15 @@ public:
      */
     void loadConfig(const QString &config);
 
-    KUrl qmakeBin() const;
-    KUrl buildDir() const;
-    KUrl installPrefix() const;
+    QString qmakeBin() const;
+    QString buildDir() const;
+    QString installPrefix() const;
     int buildType() const;
     QString extraArgs() const;
 
-    void setQmakeBin(const KUrl &url);
-    void setBuildDir(const KUrl &url);
-    void setInstallPrefix(const KUrl &url);
+    void setQmakeBin(const QString &binary);
+    void setBuildDir(const QString &buildDir);
+    void setInstallPrefix(const QString &prefix);
     void setBuildType(int type);
     void setExtraArgs(const QString &args);
 

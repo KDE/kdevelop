@@ -2,11 +2,5 @@
 <!DOCTYPE kcfg SYSTEM "http://www.kde.org/standards/kcfg/1.0/kcfg.dtd">
 <kcfg>
   <kcfgfile arg="true"/>
-  <group name="QMake_Builder">
-	  <entry name="qmakeBin"      key="QMake_Binary"    type="Url"    />
-	  <entry name="buildDir"      key="Build_Folder"    type="Url"    />
-	  <entry name="installPrefix" key="Install_Prefix"  type="Url"    />
-	  <entry name="buildType"     key="Build_Type"      type="Int"    />
-	  <entry name="extraArgs"     key="Extra_Arguments" type="String" />
-  </group>
+  <!-- save/restore is handled manually -->
 </kcfg>

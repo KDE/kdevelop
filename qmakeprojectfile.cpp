@@ -25,7 +25,6 @@
 #include <QtCore/QDir>
 
 #include <kprocess.h>
-#include <kurl.h>
 #include <kdebug.h>
 
 #include "parser/ast.h"

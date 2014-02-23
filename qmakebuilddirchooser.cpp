@@ -26,12 +26,16 @@
 #include <KDebug>
 #include <KMessageWidget>
 
+#include <project/path.h>
+
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/interfaces/iprojectbuilder.h>
 
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
 #include <interfaces/iproject.h>
+
+using namespace KDevelop;
 
 QMakeBuildDirChooser::QMakeBuildDirChooser(QWidget *parent, KDevelop::IProject* project)
     :  Ui::QMakeBuildDirChooser(), m_project(project)
@@ -43,7 +47,7 @@ QMakeBuildDirChooser::QMakeBuildDirChooser(QWidget *parent, KDevelop::IProject* 
     status->setMessageType(KMessageWidget::Error);
     status->setWordWrap(true);
     kcfg_buildDir->setMode(KFile::Directory | KFile::LocalOnly);
-    kcfg_installPrefix->setMode(KFile::Directory);
+    kcfg_installPrefix->setMode(KFile::Directory | KFile::LocalOnly);
     kcfg_qmakeBin->setMode(KFile::File | KFile::ExistingOnly | KFile::LocalOnly);
 }
 
@@ -53,29 +57,28 @@ QMakeBuildDirChooser::~QMakeBuildDirChooser()
     //saveConfig();
 }
 
-
 void QMakeBuildDirChooser::saveConfig()
 {
-    kDebug() << "Writing config";
-    KConfigGroup cg(m_project->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
+    KConfigGroup config = KConfigGroup(m_project->projectConfiguration(), QMakeConfig::CONFIG_GROUP).group(buildDir());
+    saveConfig(config);
+}
 
-    // Write entries to builds group
-    // current entries are handled by KConfig in config dialog, import dialog handles it itself
-    KConfigGroup currentBuild = cg.group(buildDir().toLocalFile());
-    currentBuild.writeEntry(QMakeConfig::QMAKE_BINARY, qmakeBin().toLocalFile());
-    currentBuild.writeEntry(QMakeConfig::INSTALL_PREFIX, installPrefix().toLocalFile());
-    currentBuild.writeEntry(QMakeConfig::EXTRA_ARGUMENTS, extraArgs());
-    currentBuild.writeEntry(QMakeConfig::BUILD_TYPE, buildType());
-    currentBuild.sync();
-    cg.sync();
+void QMakeBuildDirChooser::saveConfig(KConfigGroup& config)
+{
+    kDebug() << "Writing config for" << buildDir() << "to config" << config.name();
+
+    config.writeEntry(QMakeConfig::QMAKE_BINARY, qmakeBin());
+    config.writeEntry(QMakeConfig::INSTALL_PREFIX, installPrefix());
+    config.writeEntry(QMakeConfig::EXTRA_ARGUMENTS, extraArgs());
+    config.writeEntry(QMakeConfig::BUILD_TYPE, buildType());
+    config.sync();
 }
 
 void QMakeBuildDirChooser::loadConfig()
 {
-    KUrl proposedBuildUrl( m_project->folder().toLocalFile() + "/build" );
-    proposedBuildUrl.cleanPath();
+    Path proposedBuildPath( m_project->path(), "build" );
     KConfigGroup cg(m_project->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
-    loadConfig(cg.readEntry(QMakeConfig::BUILD_FOLDER, proposedBuildUrl.toLocalFile()));
+    loadConfig(cg.readEntry(QMakeConfig::BUILD_FOLDER, proposedBuildPath.toLocalFile()));
 }
 
 void QMakeBuildDirChooser::loadConfig(const QString& config)
@@ -85,10 +88,10 @@ void QMakeBuildDirChooser::loadConfig(const QString& config)
     const KConfigGroup build = cg.group(config);
 
     // sets values into fields
-    setQmakeBin( KUrl(QMakeConfig::qmakeBinary(m_project)) );
-    setBuildDir( KUrl(config) );
-    setInstallPrefix( KUrl(build.readEntry(QMakeConfig::INSTALL_PREFIX, QString())) );
-    setExtraArgs( build.readEntry(QMakeConfig::EXTRA_ARGUMENTS, QString()));
+    setQmakeBin( QMakeConfig::qmakeBinary(m_project) );
+    setBuildDir( config );
+    setInstallPrefix( build.readEntry(QMakeConfig::INSTALL_PREFIX, QString()) );
+    setExtraArgs( build.readEntry(QMakeConfig::EXTRA_ARGUMENTS, QString()) );
     setBuildType( build.readEntry(QMakeConfig::BUILD_TYPE, 0) );
 }
 
@@ -96,31 +99,18 @@ bool QMakeBuildDirChooser::isValid(QString *message)
 {
     bool valid = true;
     QString msg;
-    if(qmakeBin().isEmpty())
-    {
+    if(qmakeBin().isEmpty()) {
         msg = i18n("Please specify path to QMake binary.");
         valid = false;
-    }
-    else if(!qmakeBin().isValid())
-    {
-        msg =  i18n("QMake binary path is invalid.");
-        valid = false;
-    }
-    else if(!qmakeBin().isLocalFile())
-    {
-        msg = i18n("QMake binary must be a local path.");
-        valid = false;
-    }
-    else
-    {
-        QFileInfo info(qmakeBin().toLocalFile());
-        if(!info.isFile())
-        {
+    } else {
+        QFileInfo info(qmakeBin());
+        if(!info.exists()) {
+            msg = i18n("Qmake binary \"%1\" does not exist.", qmakeBin());
+            valid = false;
+        } else if(!info.isFile()) {
             msg = i18n("QMake binary is not a file.");
             valid = false;
-        }
-        else if(!info.isExecutable())
-        {
+        } else if(!info.isExecutable()) {
             msg = i18n("QMake binary is not executable.");
             valid = false;
         } else {
@@ -140,27 +130,6 @@ bool QMakeBuildDirChooser::isValid(QString *message)
         msg = i18n("Please specify a build folder.");
         valid = false;
     }
-    else if(!buildDir().isValid())
-    {
-        msg = i18n("Build folder is invalid.");
-        valid = false;
-    }
-    else if(!buildDir().isLocalFile())
-    {
-        msg = i18n("Build folder must be a local path.");
-        valid = false;
-    }
-
-    if(!installPrefix().isEmpty() && !installPrefix().isValid())
-    {
-        msg = i18n("Install prefix is invalid (may also be left empty).");
-        valid = false;
-    }
-    if(!installPrefix().isEmpty() && !installPrefix().isLocalFile())
-    {
-        msg = i18n("Install prefix must be a local path (may also be left empty).");
-        valid = false;
-    }
 
     if (message)
     {
@@ -176,43 +145,44 @@ bool QMakeBuildDirChooser::isValid(QString *message)
     return valid;
 }
 
-KUrl QMakeBuildDirChooser::qmakeBin() const
+QString QMakeBuildDirChooser::qmakeBin() const
 {
-    return kcfg_qmakeBin->url();
+    return kcfg_qmakeBin->url().toLocalFile();
 }
 
-KUrl QMakeBuildDirChooser::buildDir() const
+QString QMakeBuildDirChooser::buildDir() const
 {
-    return kcfg_buildDir->url();
+    return kcfg_buildDir->url().toLocalFile();
 }
 
-KUrl QMakeBuildDirChooser::installPrefix() const
+QString QMakeBuildDirChooser::installPrefix() const
 {
-    return kcfg_installPrefix->url();
+    return kcfg_installPrefix->url().toLocalFile();
 }
 
 int QMakeBuildDirChooser::buildType() const
 {
     return kcfg_buildType->currentIndex();
 }
+
 QString QMakeBuildDirChooser::extraArgs() const
 {
     return kcfg_extraArgs->text();
 }
 
-void QMakeBuildDirChooser::setQmakeBin(const KUrl& url)
+void QMakeBuildDirChooser::setQmakeBin(const QString& binary)
 {
-    kcfg_qmakeBin->setUrl(url);
+    kcfg_qmakeBin->setUrl(KUrl::fromPath(binary));
 }
 
-void QMakeBuildDirChooser::setBuildDir(const KUrl& url)
+void QMakeBuildDirChooser::setBuildDir(const QString& buildDir)
 {
-    kcfg_buildDir->setUrl(url);
+    kcfg_buildDir->setUrl(KUrl::fromPath(buildDir));
 }
 
-void QMakeBuildDirChooser::setInstallPrefix(const KUrl& url)
+void QMakeBuildDirChooser::setInstallPrefix(const QString& prefix)
 {
-    kcfg_installPrefix->setUrl(url);
+    kcfg_installPrefix->setUrl(KUrl::fromPath(prefix));
 }
 
 void QMakeBuildDirChooser::setBuildType(int type)

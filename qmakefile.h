@@ -25,8 +25,6 @@
 #include <QtCore/QStack>
 #include <QtCore/QStringList>
 
-#include <KUrl>
-
 #include "qmakefilevisitor.h"
 
 namespace KDevelop

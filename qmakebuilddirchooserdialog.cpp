@@ -53,14 +53,13 @@ QMakeBuildDirChooserDialog::~QMakeBuildDirChooserDialog()
 
 void QMakeBuildDirChooserDialog::saveConfig()
 {
-    KConfigGroup cg(m_project->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
-    cg.writeEntry(QMakeConfig::QMAKE_BINARY, qmakeBin().toLocalFile());
-    cg.writeEntry(QMakeConfig::BUILD_FOLDER, buildDir().toLocalFile());
-    cg.writeEntry(QMakeConfig::INSTALL_PREFIX, installPrefix().toLocalFile());
-    cg.writeEntry(QMakeConfig::EXTRA_ARGUMENTS, extraArgs());
-    cg.writeEntry(QMakeConfig::BUILD_TYPE, buildType());
-    cg.sync();
+    // store this builds config
     QMakeBuildDirChooser::saveConfig();
+
+    // also save as current values
+    KConfigGroup config(m_project->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
+    QMakeBuildDirChooser::saveConfig(config);
+    config.writeEntry(QMakeConfig::BUILD_FOLDER, buildDir());
 }
 
 

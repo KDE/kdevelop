@@ -59,13 +59,16 @@ QMakeBuilderPreferences::QMakeBuilderPreferences(QWidget* parent, const QVariant
 
     m_chooserUi = new QMakeBuildDirChooser(m_prefsUi->groupBox, project());
     m_chooserUi->kcfg_buildDir->setEnabled(false);  // build directory MUST NOT be changed here
-    connect(m_chooserUi->kcfg_qmakeBin, SIGNAL(textChanged(QString)), this, SLOT(validate()));
-    connect(m_chooserUi->kcfg_buildDir, SIGNAL(textChanged(QString)), this, SLOT(validate()));
-    connect(m_chooserUi->kcfg_installPrefix, SIGNAL(textChanged(QString)), this, SLOT(validate()));
+    connect(m_chooserUi->kcfg_qmakeBin, SIGNAL(textChanged(QString)), this, SLOT(changed()));
+    connect(m_chooserUi->kcfg_buildDir, SIGNAL(textChanged(QString)), this, SLOT(changed()));
+    connect(m_chooserUi->kcfg_installPrefix, SIGNAL(textChanged(QString)), this, SLOT(changed()));
+    connect(m_chooserUi->kcfg_buildType, SIGNAL(currentIndexChanged(int)), this, SLOT(changed()));
+    connect(m_chooserUi->kcfg_extraArgs, SIGNAL(textChanged(QString)), this, SLOT(changed()));
     l->addWidget( w );
     addConfig( QMakeBuilderSettings::self(), w );
 
     connect(m_prefsUi->buildDirCombo, SIGNAL(currentIndexChanged(QString)), this, SLOT(loadOtherConfig(QString)));
+    connect(m_prefsUi->buildDirCombo, SIGNAL(currentIndexChanged(QString)), this, SLOT(changed()));
     connect(m_prefsUi->addButton, SIGNAL(pressed()), this, SLOT(addBuildConfig()));
     connect(m_prefsUi->removeButton, SIGNAL(pressed()), this, SLOT(removeBuildConfig()));
     connect(this, SIGNAL(changed(bool)), this, SLOT(validate()));
@@ -83,17 +86,19 @@ QMakeBuilderPreferences::~QMakeBuilderPreferences()
 void QMakeBuilderPreferences::load()
 {
     kDebug() << "loading data";
-    KCModule::load();
     // refresh combobox
     KConfigGroup cg(project()->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
-    KUrl buildPath = cg.readEntry(QMakeConfig::BUILD_FOLDER, KUrl());
+    const QString buildPath = cg.readEntry(QMakeConfig::BUILD_FOLDER, QString());
 
     // update build list (this will trigger loadOtherConfig if signals are still connected)
     disconnect(m_prefsUi->buildDirCombo, SIGNAL(currentIndexChanged(QString)), this, SLOT(loadOtherConfig(QString)));
     m_prefsUi->buildDirCombo->clear();
     m_prefsUi->buildDirCombo->insertItems(0, cg.groupList());
-    m_prefsUi->buildDirCombo->setCurrentItem(buildPath.toLocalFile());
-    kDebug() << "Loaded" << m_prefsUi->buildDirCombo->count() << (m_prefsUi->buildDirCombo->count() > 1);
+    if (m_prefsUi->buildDirCombo->contains(buildPath)) {
+        m_prefsUi->buildDirCombo->setCurrentItem(buildPath);
+        m_chooserUi->loadConfig(buildPath);
+    }
+    kDebug() << "Loaded" << cg.groupList() << buildPath;
     m_prefsUi->removeButton->setEnabled(m_prefsUi->buildDirCombo->count() > 1);
     connect(m_prefsUi->buildDirCombo, SIGNAL(currentIndexChanged(QString)), this, SLOT(loadOtherConfig(QString)));
 
@@ -108,9 +113,11 @@ void QMakeBuilderPreferences::save()
 
     if(m_chooserUi->isValid(&errormsg))
     {
-        // data is valid: save
-        KCModule::save();
+        // data is valid: save, once in the build dir's data and also as current data
         m_chooserUi->saveConfig();
+        KConfigGroup config(project()->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
+        m_chooserUi->saveConfig(config);
+        config.writeEntry(QMakeConfig::BUILD_FOLDER, m_chooserUi->buildDir());
     }
     else
     {
@@ -129,33 +136,38 @@ void QMakeBuilderPreferences::loadOtherConfig(const QString& config)
 {
     kDebug() << "Loding config "<<config;
     kDebug() << "Change state " << managedWidgetChangeState();
-    // changes must be saved before switch
-    if(managedWidgetChangeState())
-    {
-        int ret = KMessageBox::questionYesNoCancel(this,
-                      i18n("Current changes will be lost. Would you want to save them?"));
-        if(ret == KMessageBox::Yes)
-        {
-            save();
-        }
-        else if (ret == KMessageBox::Cancel)
-        {
-            return;
-        }
+    if (!verifyChanges()) {
+        return;
     }
     m_chooserUi->loadConfig(config);
     save();  // since current config has changed, it must be saved immediateley
-    load();  // cause the combobox to be recalculated
 }
 
+bool QMakeBuilderPreferences::verifyChanges()
+{
+    // changes must be saved before switch
+    if (managedWidgetChangeState()) {
+        int ret = KMessageBox::questionYesNoCancel(this, i18n("Current changes will be lost. Would you want to save them?"));
+        if (ret == KMessageBox::Yes) {
+            save();
+        } else if (ret == KMessageBox::Cancel) {
+            return false;
+        }
+    }
+    return true;
+}
 
 void QMakeBuilderPreferences::addBuildConfig()
 {
+    if (!verifyChanges()) {
+        return;
+    }
     kDebug() << "Adding a new config.";
     // for more simpicity, just launch regular dialog
     QMakeBuildDirChooserDialog *dlg = new QMakeBuildDirChooserDialog(project());
     if(dlg->exec() == QDialog::Accepted) {
-        loadOtherConfig(dlg->buildDir().toLocalFile());
+        m_prefsUi->buildDirCombo->setCurrentItem(dlg->buildDir(), true);
+        m_prefsUi->removeButton->setEnabled(m_prefsUi->buildDirCombo->count() > 1);
         //TODO run qmake
     }
 }
@@ -167,6 +179,7 @@ void QMakeBuilderPreferences::removeBuildConfig()
     KConfigGroup cg(project()->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
 
     m_prefsUi->buildDirCombo->removeItem(m_prefsUi->buildDirCombo->currentIndex());
+    m_prefsUi->removeButton->setEnabled(m_prefsUi->buildDirCombo->count() > 1);
     cg.group(removed).deleteGroup(KConfigBase::Persistent);
 
     if(QDir(removed).exists())

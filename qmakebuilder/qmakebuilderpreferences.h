@@ -51,6 +51,8 @@ public slots:
     void validate();
 
 private:
+    bool verifyChanges();
+
     Ui::QMakeConfig* m_prefsUi;
     QMakeBuildDirChooser* m_chooserUi;
 };
