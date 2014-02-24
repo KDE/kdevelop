@@ -15,7 +15,6 @@ find_package(KDevPlatform ${KDEVPLATFORM_VERSION} REQUIRED)
 
 find_package(Clang 3.3 REQUIRED)
 
-# TODO: Can we make this implicit via set_target_properties magic?
 add_definitions(${LLVM_CFLAGS})
 include_directories(
     ${LLVM_INCLUDE_DIR}
