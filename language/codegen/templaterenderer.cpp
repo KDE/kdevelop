@@ -79,7 +79,7 @@ class TemplateRendererPrivate
 {
 public:
     Engine* engine;
-    Context context;
+    Grantlee::Context context;
     TemplateRenderer::EmptyLinesPolicy emptyLinesPolicy;
     QString errorString;
 };
