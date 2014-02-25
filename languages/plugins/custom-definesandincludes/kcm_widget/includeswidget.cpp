@@ -50,7 +50,7 @@ IncludesWidget::IncludesWidget( QWidget* parent )
     connect( ui->addIncludePath, SIGNAL(clicked(bool)), SLOT(addIncludePath()) );
     connect( ui->removeIncludePath, SIGNAL(clicked(bool)), SLOT(deleteIncludePath()) );
 
-    ui->includePathRequester->setMode( KFile::Directory | KFile::LocalOnly | KFile::ExistingOnly );
+    ui->includePathRequester->setMode( KFile::File | KFile::Directory | KFile::LocalOnly | KFile::ExistingOnly );
 
     ui->includePaths->setModel( includesModel );
     connect( ui->includePaths->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(includePathSelected(QModelIndex)) );
