@@ -38,7 +38,10 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Replacement Text:</string>
+           <string>Replacement &amp;Text:</string>
+          </property>
+          <property name="buddy">
+           <cstring>replacementCombo</cstring>
           </property>
          </widget>
         </item>
@@ -70,7 +73,7 @@
            <string>Apply replacement on selected items.</string>
           </property>
           <property name="text">
-           <string>Replace</string>
+           <string>&amp;Replace</string>
           </property>
          </widget>
         </item>

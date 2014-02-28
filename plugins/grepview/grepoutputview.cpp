@@ -130,6 +130,7 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
     applyButton->setIcon(KIcon("dialog-ok-apply"));
     
     connect(replacementCombo, SIGNAL(editTextChanged(QString)), SLOT(replacementTextChanged(QString)));
+    connect(replacementCombo, SIGNAL(returnPressed()), SLOT(onApply()));
     
     connect(newSearchAction, SIGNAL(triggered(bool)), this, SLOT(showDialog()));
     
