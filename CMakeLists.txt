@@ -44,7 +44,6 @@ find_package(KF5 CONFIG REQUIRED COMPONENTS
   KIO
   NewStuff
   Parts
-  PrintUtils
   Sonnet
   TextEditor
   ThreadWeaver
