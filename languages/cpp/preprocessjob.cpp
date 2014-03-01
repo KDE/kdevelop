@@ -23,6 +23,7 @@
 #include "preprocessjob.h"
 
 #include <QFile>
+#include <QFileInfo>
 #include <QByteArray>
 #include <QMutexLocker>
 #include <QReadWriteLock>
@@ -236,6 +237,15 @@ void PreprocessJob::run()
     
     preprocessor.setEnvironment( m_currentEnvironment );
 
+    // Process files in include paths as #include "file"
+    // this is analogous to -include command line option of clang/cc
+    for (auto i: parentJob()->masterJob()->indexedIncludePaths()) {
+        auto include = i.toUrl().toLocalFile();
+        QFileInfo info(include);
+        if (info.isFile() && CppUtils::isHeader(include)) {
+            sourceNeeded(include, IncludeLocal, -1, false);
+        }
+    }
     PreprocessedContents result = preprocessor.processFile(parentJob()->document().str(), m_contents);
 
     if(Cpp::EnvironmentManager::self()->matchingLevel() <= Cpp::EnvironmentManager::Naive && !m_headerSectionEnded && !m_firstEnvironmentFile->headerGuard().isEmpty()) {
@@ -430,8 +440,16 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
     if (skipCurrentPath)
       from = parentJob()->includedFromPath();
 
+    QPair<Path, Path> included;
+    QFileInfo info(fileName);
+    if (info.isFile()) {
+        //this is an auto included file i.e. there is no #include directive in the source file for it
+        included.first = Path(fileNameUrl.toLocalFile());
+        included.second = Path(fileNameUrl.directory());
+    } else {
+        included = CppUtils::findInclude(parentJob()->includePathUrls(), parentJob()->localPath(), fileName, type, from);
+    }
 
-    QPair<Path, Path> included = CppUtils::findInclude( parentJob()->includePathUrls(), parentJob()->localPath(), fileName, type, from );
     Path includedFile = included.first;
     if (includedFile.isValid()) {
         const IndexedString indexedFile = includedFile.toIndexed();
