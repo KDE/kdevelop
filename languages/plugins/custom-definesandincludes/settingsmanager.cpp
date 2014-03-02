@@ -29,11 +29,11 @@
 
 namespace ConfigConstants
 {
-const QString configKey( "CustomDefinesAndIncludes" );
-const QString definesKey( "Defines" );
-const QString includesKey( "Includes" );
-const QString projectPathPrefix( "ProjectPath" );
-const QString projectPathKey( "Path" );
+const QString configKey = QLatin1String( "CustomDefinesAndIncludes" );
+const QString definesKey = QLatin1String( "Defines" );
+const QString includesKey = QLatin1String( "Includes" );
+const QString projectPathPrefix = QLatin1String( "ProjectPath" );
+const QString projectPathKey = QLatin1String( "Path" );
 }
 
 SettingsManager::SettingsManager()

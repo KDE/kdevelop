@@ -27,11 +27,11 @@
 
 namespace ConfigConstants
 {
-const QString definesKey("Defines");
-const QString includesKey("Includes");
-const QString projectPathPrefix("ProjectPath");
-const QString projectPathKey("Path");
-const QString customBuildSystemGroup("CustomBuildSystem");
+const QString definesKey = QLatin1String("Defines");
+const QString includesKey = QLatin1String("Includes");
+const QString projectPathPrefix = QLatin1String("ProjectPath");
+const QString projectPathKey = QLatin1String("Path");
+const QString customBuildSystemGroup = QLatin1String("CustomBuildSystem");
 }
 
 QList< ConfigEntry > SettingsConverter::readSettings(KConfig* cfg) const
