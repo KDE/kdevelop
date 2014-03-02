@@ -21,7 +21,6 @@
  */
 
 #include "settingsmanager.h"
-#include "settingsconverter.h"
 
 #include <KConfig>
 
@@ -34,44 +33,94 @@ const QString definesKey = QLatin1String( "Defines" );
 const QString includesKey = QLatin1String( "Includes" );
 const QString projectPathPrefix = QLatin1String( "ProjectPath" );
 const QString projectPathKey = QLatin1String( "Path" );
+
+const QString customBuildSystemGroup = QLatin1String( "CustomBuildSystem" );
 }
 
 SettingsManager::SettingsManager()
 {
 }
 
+namespace
+{
+void doWriteSettings( KConfigGroup grp, const QList<ConfigEntry>& paths )
+{
+    int pathIndex = 0;
+    for ( const auto& path : paths ) {
+        KConfigGroup pathgrp = grp.group( ConfigConstants::projectPathPrefix + QString::number( pathIndex++ ) );
+        pathgrp.writeEntry( ConfigConstants::projectPathKey, path.path );
+        {
+            QByteArray tmp;
+            QDataStream s( &tmp, QIODevice::WriteOnly );
+            s.setVersion( QDataStream::Qt_4_5 );
+            s << path.includes;
+            pathgrp.writeEntry( ConfigConstants::includesKey, tmp );
+        }
+        {
+            QByteArray tmp;
+            QDataStream s( &tmp, QIODevice::WriteOnly );
+            s.setVersion( QDataStream::Qt_4_5 );
+            s << path.defines;
+            pathgrp.writeEntry( ConfigConstants::definesKey, tmp );
+        }
+    }
+}
+
+/// @param remove if true all read entries will be removed from the config file
+QList<ConfigEntry> doReadSettings( KConfigGroup grp, bool remove = false )
+{
+    QList<ConfigEntry> paths;
+    for( const QString &grpName : grp.groupList() ) {
+        if ( grpName.startsWith( ConfigConstants::projectPathPrefix ) ) {
+            KConfigGroup pathgrp = grp.group( grpName );
+
+            ConfigEntry path;
+            path.path = pathgrp.readEntry( ConfigConstants::projectPathKey, "" );
+
+            {
+                QByteArray tmp = pathgrp.readEntry( ConfigConstants::definesKey, QByteArray() );
+                QDataStream s( tmp );
+                s.setVersion( QDataStream::Qt_4_5 );
+                s >> path.defines;
+            }
+
+            {
+                QByteArray tmp = pathgrp.readEntry( ConfigConstants::includesKey, QByteArray() );
+                QDataStream s( tmp );
+                s.setVersion( QDataStream::Qt_4_5 );
+                s >> path.includes;
+            }
+            if ( remove ) {
+                pathgrp.deleteGroup();
+            }
+            paths << path;
+        }
+    }
+
+    return paths;
+}
+
 /**
  * Reads and converts paths from old (Custom Build System's) format to the current one.
- * @return all paths including converted (if any)
+ * @return all converted paths (if any)
  */
-QList<ConfigEntry> addConvertedPaths(const SettingsManager* sm, KConfig* cfg, const QList<ConfigEntry>& currentPaths)
+QList<ConfigEntry> convertedPaths( KConfig* cfg )
 {
-    SettingsConverter sc{sm};
-    auto convertedPaths = sc.readSettings(cfg);
+    KConfigGroup group = cfg->group( ConfigConstants::customBuildSystemGroup );
+    if ( !group.isValid() )
+        return {};
 
-    QList<ConfigEntry> paths = currentPaths;
-    bool contains = false;
-    // Copy converted paths to current paths, removing duplicates
-    for (auto& cPath : convertedPaths) {
-        for (auto& path : paths) {
-            if (path.path == cPath.path) {
-                path.includes += cPath.includes;
-                path.includes.removeDuplicates();
+    QList<ConfigEntry> paths;
+    foreach( const QString &grpName, group.groupList() ) {
+        KConfigGroup subgroup = group.group( grpName );
+        if ( !subgroup.isValid() )
+            continue;
 
-                for (auto it = cPath.defines.constBegin(); it != cPath.defines.constEnd(); it++) {
-                    if (!path.defines.contains(it.key())) {
-                        path.defines[it.key()] = it.value();
-                    }
-                }
-                contains = true;
-            }
-        }
-        if (!contains) {
-            paths << cPath;
-        }
-        contains = false;
+        paths += doReadSettings( subgroup, true );
     }
+
     return paths;
+}
 }
 
 void SettingsManager::writeSettings( KConfig* cfg, const QList<ConfigEntry>& paths ) const
@@ -82,59 +131,21 @@ void SettingsManager::writeSettings( KConfig* cfg, const QList<ConfigEntry>& pat
 
     grp.deleteGroup();
 
-    int pathIndex = 0;
-    for ( const auto& path : paths ) {
-        KConfigGroup pathgrp = grp.group( ConfigConstants::projectPathPrefix + QString::number( pathIndex++ ) );
-        pathgrp.writeEntry( ConfigConstants::projectPathKey, path.path );
-        {
-            QByteArray tmp;
-            QDataStream s(&tmp, QIODevice::WriteOnly);
-            s.setVersion( QDataStream::Qt_4_5 );
-            s << path.includes;
-            pathgrp.writeEntry( ConfigConstants::includesKey, tmp );
-        }
-        {
-            QByteArray tmp;
-            QDataStream s(&tmp, QIODevice::WriteOnly);
-            s.setVersion( QDataStream::Qt_4_5 );
-            s << path.defines;
-            pathgrp.writeEntry( ConfigConstants::definesKey, tmp );
-        }
-    }
+    doWriteSettings( grp, paths );
 }
 
 QList<ConfigEntry> SettingsManager::readSettings( KConfig* cfg ) const
 {
-    KConfigGroup grp = cfg->group( ConfigConstants::configKey );
-    if ( !grp.isValid() )
-        return {};
-
-    QList<ConfigEntry> paths;
-    for( const QString &grpName: grp.groupList() ) {
-        if ( grpName.startsWith( ConfigConstants::projectPathPrefix ) ) {
-            KConfigGroup pathgrp = grp.group( grpName );
-
-            ConfigEntry path;
-            path.path = pathgrp.readEntry( ConfigConstants::projectPathKey, "" );
-
-            {
-                QByteArray tmp = pathgrp.readEntry(ConfigConstants::definesKey, QByteArray());
-                QDataStream s(tmp);
-                s.setVersion(QDataStream::Qt_4_5);
-                s >> path.defines;
-            }
-
-            {
-                QByteArray tmp = pathgrp.readEntry(ConfigConstants::includesKey, QByteArray());
-                QDataStream s(tmp);
-                s.setVersion(QDataStream::Qt_4_5);
-                s >> path.includes;
-            }
-
-            paths << path;
-        }
+    auto converted = convertedPaths( cfg );
+    if ( !converted.isEmpty() ) {
+        writeSettings( cfg, converted );
+        return converted;
     }
-    paths = addConvertedPaths(this, cfg, paths);
 
-    return paths;
+    KConfigGroup grp = cfg->group( ConfigConstants::configKey );
+    if ( !grp.isValid() ) {
+        return {};
+    }
+
+    return doReadSettings( grp );
 }

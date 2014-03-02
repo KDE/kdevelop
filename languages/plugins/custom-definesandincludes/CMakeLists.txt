@@ -8,7 +8,6 @@ add_definitions( ${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 set( kdevcustomdefinesandincludesmanager_SRCS
         customdefinesandincludesmanager.cpp
         settingsmanager.cpp
-        settingsconverter.cpp
         debugarea.cpp
     )
 kde4_add_plugin( kdevcustomdefinesandincludesmanager
