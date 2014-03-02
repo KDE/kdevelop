@@ -96,6 +96,12 @@ VcsAnnotationModel::~VcsAnnotationModel()
     delete d;
 }
 
+static QString abbreviateLastName(const QString& author) {
+    auto parts = author.split(' ');
+    bool onlyOneFragment = parts.size() == 1 || ( parts.size() == 2 && parts.at(1).isEmpty() );
+    return onlyOneFragment ? parts.first() : parts.first() + QString(" %1.").arg(parts.last()[0]);
+}
+
 QVariant VcsAnnotationModel::data( int line, Qt::ItemDataRole role ) const
 {
     if( line < 0 || !d->m_annotation.containsLine( line ) )
@@ -113,7 +119,10 @@ QVariant VcsAnnotationModel::data( int line, Qt::ItemDataRole role ) const
         return QVariant( d->m_brushes[aline.revision()] );
     } else if( role == Qt::DisplayRole )
     {
-        return QVariant( aline.revision().revisionValue() );
+        return QVariant( QString("%1 ").arg(aline.date().date().year()) + abbreviateLastName(aline.author()) );
+    } else if( role == Qt::UserRole ) // TODO KDE5: replace by KTextEditor::AnnotationModel::GroupIdentifierRole
+    {
+        return aline.revision().revisionValue();
     } else if( role == Qt::ToolTipRole )
     {
         return QVariant( i18n("Author: %1\nDate: %2\nCommit Message: %3",
