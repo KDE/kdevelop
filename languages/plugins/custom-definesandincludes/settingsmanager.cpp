@@ -23,10 +23,9 @@
 #include "settingsmanager.h"
 #include "settingsconverter.h"
 
-#include <interfaces/iproject.h>
-
 #include <KConfig>
-#include <QStringList>
+
+#include <interfaces/iproject.h>
 
 namespace ConfigConstants
 {

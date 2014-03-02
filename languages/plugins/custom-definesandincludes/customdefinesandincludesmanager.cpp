@@ -26,9 +26,6 @@
 #include <interfaces/iproject.h>
 #include <project/projectmodel.h>
 
-#include <QList>
-#include <QStringList>
-
 #include <KPluginFactory>
 #include <KAboutData>
 

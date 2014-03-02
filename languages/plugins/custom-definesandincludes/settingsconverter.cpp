@@ -19,13 +19,11 @@
 * along with this program; if not, see <http://www.gnu.org/licenses/>. *
 ************************************************************************/
 #include "settingsconverter.h"
+#include "settingsmanager.h"
 
-#include <KConfig>
-#include <KConfigGroup>
-#include <QString>
 #include <QDataStream>
 
-#include "settingsmanager.h"
+#include <KConfig>
 
 namespace ConfigConstants
 {

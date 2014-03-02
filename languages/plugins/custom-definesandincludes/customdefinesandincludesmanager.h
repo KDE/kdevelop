@@ -22,14 +22,7 @@
 #ifndef CUSTOMDEFINESANDINCLUDESMANAGER_H
 #define CUSTOMDEFINESANDINCLUDESMANAGER_H
 
-#include <QHash>
-#include <QString>
-#include <QList>
 #include <QVariantList>
-
-#include <KUrl>
-
-#include <kdemacros.h>
 
 #include <interfaces/iplugin.h>
 
@@ -40,7 +33,7 @@
 namespace KDevelop
 {
 /// @brief: Class for retrieving custom defines and includes.
-class KDE_EXPORT CustomDefinesAndIncludesManager : public IPlugin, public IDefinesAndIncludesManager, public SettingsManager
+class CustomDefinesAndIncludesManager : public IPlugin, public IDefinesAndIncludesManager, public SettingsManager
 {
     Q_OBJECT
     Q_INTERFACES( KDevelop::IDefinesAndIncludesManager )

@@ -22,9 +22,6 @@
 #ifndef SETTINGSMANAGER_H
 #define SETTINGSMANAGER_H
 
-#include <QList>
-#include <KConfigGroup>
-
 #include <language/interfaces/idefinesandincludesmanager.h>
 
 class KConfig;

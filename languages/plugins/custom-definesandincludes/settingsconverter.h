@@ -22,8 +22,6 @@
 #ifndef SETTINGSCONVERTER_H
 #define SETTINGSCONVERTER_H
 
-#include <QList>
-
 #include <language/interfaces/idefinesandincludesmanager.h>
 
 class KConfig;
