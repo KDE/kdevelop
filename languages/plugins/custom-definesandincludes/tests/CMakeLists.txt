@@ -1,5 +1,6 @@
 set( plugintest_SRCS
      plugintest.cpp
+     projectsgenerator.cpp
    )
 
 kde4_add_unit_test( plugintest ${plugintest_SRCS} )
@@ -9,4 +10,3 @@ target_link_libraries( plugintest
         ${KDEVPLATFORM_PROJECT_LIBRARIES}
     )
 
-configure_file(testconfig.h.in testconfig.h)
