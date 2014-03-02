@@ -23,6 +23,7 @@
 #include <cmath>
 
 #include <QAction>
+#include <QDeclarativeContext>
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QKeyEvent>
@@ -30,7 +31,6 @@
 #include <QStyle>
 #include <QDebug>
 #include <QEvent>
-#include <QQmlContext>
 
 #include <KDebug>
 #include <KLocalizedString>
@@ -53,14 +53,12 @@ AssistantPopup::AssistantPopup(KTextEditor::View* parent, const IAssistant::Ptr&
     , m_view(parent)
     , m_shownAtBottom(false)
 {
-#if 0 // TODO KF5: Port me
     QPalette p = palette();
     p.setColor(QPalette::Window, Qt::transparent);
     setPalette(p);
     setBackgroundRole(QPalette::Window);
     setBackgroundBrush(QBrush(QColor(0, 0, 0, 0)));
-#endif
-    setResizeMode(QQuickView::SizeViewToRootObject);
+    setResizeMode(QDeclarativeView::SizeViewToRootObject);
 
     m_config = new AssistantPopupConfig(this);
     auto view = ICore::self()->documentController()->activeTextDocumentView();
@@ -82,7 +80,6 @@ AssistantPopup::AssistantPopup(KTextEditor::View* parent, const IAssistant::Ptr&
     m_view->installEventFilter(this);
 }
 
-#if 0
 bool AssistantPopup::viewportEvent(QEvent *event)
 {
     // For some reason, QGraphicsView posts a WindowActivate event
@@ -94,7 +91,6 @@ bool AssistantPopup::viewportEvent(QEvent *event)
     }
     return QGraphicsView::viewportEvent(event);
 }
-#endif
 
 AssistantPopupConfig::AssistantPopupConfig(QObject *parent): QObject(parent)
 {
@@ -154,7 +150,7 @@ void AssistantPopup::keyReleaseEvent(QKeyEvent *event)
         m_view->setFocus();
         emit m_config->shouldShowHighlight(false);
     }
-    QQuickView::keyReleaseEvent(event);
+    QDeclarativeView::keyReleaseEvent(event);
 }
 
 bool AssistantPopup::eventFilter(QObject* object, QEvent* event)
@@ -170,9 +166,7 @@ bool AssistantPopup::eventFilter(QObject* object, QEvent* event)
         // and notify it about that.
         auto modifiers = static_cast<QKeyEvent*>(event)->modifiers();
         if (modifiers == Qt::AltModifier) {
-#if 0 // TODO KF5 Needed?
             setFocus();
-#endif
             emit m_config->shouldShowHighlight(true);
             return true;
         }
@@ -192,7 +186,6 @@ void AssistantPopup::updatePosition(KTextEditor::View* view, const KTextEditor::
     auto editorGeometry = textWidgetGeometry(view);
     auto cursor = view->cursorToCoordinate(KTextEditor::Cursor(0, 0));
     const int margin = 12;
-#if 0 // TODO KF5: Port
     Sublime::HoldUpdates hold(ICore::self()->uiController()->activeMainWindow());
     QPoint targetLocation;
     if ( cursor.y() < 0 ) {
@@ -210,7 +203,6 @@ void AssistantPopup::updatePosition(KTextEditor::View* view, const KTextEditor::
     if ( pos() != targetLocation ) {
         move(targetLocation);
     }
-#endif
 }
 
 IAssistant::Ptr AssistantPopup::assistant() const

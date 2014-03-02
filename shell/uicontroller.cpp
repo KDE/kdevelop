@@ -678,7 +678,6 @@ void UiController::popUpAssistant(const KDevelop::IAssistant::Ptr& assistant)
     if(textWidget && textWidget->editorView()) {
 
         d->currentShownAssistant = new AssistantPopup(textWidget->editorView(), assistant);
-        QWidget::createWindowContainer(d->currentShownAssistant, textWidget->editorView());
         if(assistant->actions().count())
             d->currentShownAssistant->show();
 

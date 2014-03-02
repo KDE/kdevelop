@@ -20,7 +20,7 @@
 #ifndef KDEVPLATFORM_ASSISTANTPOPUP_H
 #define KDEVPLATFORM_ASSISTANTPOPUP_H
 
-#include <QQuickView>
+#include <QDeclarativeView>
 #include <interfaces/iassistant.h>
 #include <ksharedptr.h>
 #include <QDebug>
@@ -89,7 +89,7 @@ private:
 
 Q_DECLARE_METATYPE(AssistantPopupConfig*)
 
-class AssistantPopup : public QQuickView
+class AssistantPopup : public QDeclarativeView
 {
     Q_OBJECT
 
@@ -103,9 +103,7 @@ public:
      */
     AssistantPopup(KTextEditor::View* widget, const KDevelop::IAssistant::Ptr& assistant);
     KDevelop::IAssistant::Ptr assistant() const;
-#if 0
     virtual bool viewportEvent(QEvent *event);
-#endif
 
 public slots:
     void executeHideAction();
