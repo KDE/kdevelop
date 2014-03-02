@@ -40,15 +40,20 @@ SettingsManager::SettingsManager()
 {
 }
 
-/// Reads and converts paths from old (Custom Build System's) format to the current one.
-void addConvertedPaths(const SettingsManager* sm, KConfig* cfg, QList<ConfigEntry>& paths)
+/**
+ * Reads and converts paths from old (Custom Build System's) format to the current one.
+ * @return all paths including converted (if any)
+ */
+QList<ConfigEntry> addConvertedPaths(const SettingsManager* sm, KConfig* cfg, const QList<ConfigEntry>& currentPaths)
 {
     SettingsConverter sc{sm};
     auto convertedPaths = sc.readSettings(cfg);
 
+    QList<ConfigEntry> paths = currentPaths;
     bool contains = false;
-    for (auto cPath : convertedPaths) {
-        for (auto path : paths) {
+    // Copy converted paths to current paths, removing duplicates
+    for (auto& cPath : convertedPaths) {
+        for (auto& path : paths) {
             if (path.path == cPath.path) {
                 path.includes += cPath.includes;
                 path.includes.removeDuplicates();
@@ -66,6 +71,7 @@ void addConvertedPaths(const SettingsManager* sm, KConfig* cfg, QList<ConfigEntr
         }
         contains = false;
     }
+    return paths;
 }
 
 void SettingsManager::writeSettings( KConfig* cfg, const QList<ConfigEntry>& paths ) const
@@ -128,7 +134,7 @@ QList<ConfigEntry> SettingsManager::readSettings( KConfig* cfg ) const
             paths << path;
         }
     }
-    addConvertedPaths(this, cfg, paths);
+    paths = addConvertedPaths(this, cfg, paths);
 
     return paths;
 }

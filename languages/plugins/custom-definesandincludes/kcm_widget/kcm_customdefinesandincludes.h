@@ -25,18 +25,17 @@ class CustomDefinesAndIncludes;
 
 class DefinesAndIncludes : public ProjectKCModule<CustomDefinesAndIncludes>
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     DefinesAndIncludes( QWidget* parent, const QVariantList& args = QVariantList() );
     virtual ~DefinesAndIncludes();
 
-    virtual void defaults();
-    virtual void load();
-    virtual void save();
+    virtual void load() override;
+    virtual void save() override;
 private:
     class ProjectPathsWidget* configWidget;
     void loadFrom( KConfig* cfg );
-    void saveTo(KConfig* cfg, KDevelop::IProject*);
+    void saveTo( KConfig* cfg, KDevelop::IProject* );
 public slots:
     void dataChanged();
 };

@@ -23,12 +23,14 @@
 #include <language/duchain/indexedstring.h>
 #include <project/path.h>
 
+namespace{
 //TODO: Port the model to the Path api.
 KUrl projectFolder( KDevelop::IProject* project )
 {
     auto url = project->path().toUrl();
     url.adjustPath( KUrl::AddTrailingSlash );
     return url;
+}
 }
 
 ProjectPathsModel::ProjectPathsModel( QObject* parent )

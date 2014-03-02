@@ -81,10 +81,4 @@ void DefinesAndIncludes::save()
     KCModule::save();
 }
 
-void DefinesAndIncludes::defaults()
-{
-    KCModule::defaults();
-    //configWidget->loadDefaults();
-}
-
 #include "kcm_customdefinesandincludes.moc"

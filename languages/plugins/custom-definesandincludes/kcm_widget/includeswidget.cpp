@@ -50,6 +50,7 @@ IncludesWidget::IncludesWidget( QWidget* parent )
     connect( ui->addIncludePath, SIGNAL(clicked(bool)), SLOT(addIncludePath()) );
     connect( ui->removeIncludePath, SIGNAL(clicked(bool)), SLOT(deleteIncludePath()) );
 
+    // also let user choose a file as include path. This file will be "automatically included" in all files. See also -include command line option of clang/gcc
     ui->includePathRequester->setMode( KFile::File | KFile::Directory | KFile::LocalOnly | KFile::ExistingOnly );
 
     ui->includePaths->setModel( includesModel );

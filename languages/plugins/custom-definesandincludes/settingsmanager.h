@@ -37,11 +37,11 @@ class SettingsManager
 public:
     SettingsManager();
 
-    virtual QList<ConfigEntry> readSettings(KConfig* cfg) const;
+    QList<ConfigEntry> readSettings(KConfig* cfg) const;
 
-    virtual void writeSettings(KConfig* cfg, const QList<ConfigEntry>& paths) const;
+    void writeSettings(KConfig* cfg, const QList<ConfigEntry>& paths) const;
 
-    virtual ~SettingsManager(){}
+    ~SettingsManager(){}
 };
 
 #endif // SETTINGSMANAGER_H
