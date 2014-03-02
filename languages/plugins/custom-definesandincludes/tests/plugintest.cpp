@@ -5,8 +5,8 @@
  *                                                                      *
  * This program is free software; you can redistribute it and/or modify *
  * it under the terms of the GNU General Public License as published by *
- * the Free Software Foundation; either version 2 or version 3 of the License, or    *
- * (at your option) any later version.                                  *
+ * the Free Software Foundation; either version 2 or version 3 of the   *
+ * License, or (at your option) any later version.                      *
  *                                                                      *
  * This program is distributed in the hope that it will be useful, but  *
  * WITHOUT ANY WARRANTY; without even the implied warranty of           *
@@ -44,15 +44,15 @@ using KDevelop::AutoTestShell;
 using KDevelop::KDevSignalSpy;
 using KDevelop::Path;
 
-enum projectType
+enum ProjectType
 {
-    simpleProject = 0,
-    multiPathProject
+    SimpleProject = 0,
+    MultiPathProject
 };
 
 static IProject* s_currentProject = nullptr;
 
-IProject* loadProject( projectType type )
+IProject* loadProject( ProjectType type )
 {
     const static QString projects[2] = {
         "SimpleProject",
@@ -94,7 +94,7 @@ void PluginTest::cleanup()
 
 void PluginTest::loadSimpleProject()
 {
-    auto project = loadProject(simpleProject);
+    auto project = loadProject(SimpleProject);
     QVERIFY( project );
 
     auto manager = KDevelop::IDefinesAndIncludesManager::manager();
@@ -110,7 +110,7 @@ void PluginTest::loadSimpleProject()
 
 void PluginTest::loadMultiPathProject()
 {
-    auto project = loadProject(multiPathProject);
+    auto project = loadProject(MultiPathProject);
     QVERIFY( project );
 
     auto manager = KDevelop::IDefinesAndIncludesManager::manager();
