@@ -1,4 +1,5 @@
 /*
+ * Copyright 2014  Olivier de Gaalon <olivier.jg@gmail.com>
  * Copyright 2014  Milian Wolff <mail@milianw.de>
  *
  * This program is free software; you can redistribute it and/or
@@ -18,19 +19,42 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDEDFILECONTEXTS_H
-#define INCLUDEDFILECONTEXTS_H
-
-#include <language/duchain/topducontext.h>
-#include <language/duchain/duchainpointer.h>
+#ifndef CLANGHELPERS_H
+#define CLANGHELPERS_H
 
 #include <clang-c/Index.h>
+#include <language/duchain/duchainpointer.h>
+#include <language/duchain/topducontext.h>
 
-#include <QHash>
+#include "duchainexport.h"
 
+class ParseSession;
+
+struct Import
+{
+    CXFile file;
+    KDevelop::CursorInRevision location;
+};
+
+using Imports = QMultiHash<CXFile, Import>;
 using IncludeFileContexts = QHash<CXFile, KDevelop::ReferencedTopDUContext>;
 
 KDevelop::DeclarationPointer findDeclaration(CXCursor cursor, const IncludeFileContexts& includes);
 KDevelop::DeclarationPointer findDeclaration(CXType type, const IncludeFileContexts& includes);
 
-#endif // INCLUDEDFILECONTEXTS_H
+/**
+ * @returns all the Imports for each file in the @param tu
+ */
+KDEVCLANGDUCHAIN_EXPORT Imports tuImports(CXTranslationUnit tu);
+
+/**
+ * Recursively builds a duchain with the specified @param features for the
+ * @param file and each of its @param imports using the TU from @param session.
+ * The resulting contexts are placed in @param includedFiles.
+ * @returns the context created for @param file
+ */
+KDEVCLANGDUCHAIN_EXPORT KDevelop::ReferencedTopDUContext buildDUChain(
+    CXFile file, const Imports& imports, const ParseSession* session,
+    KDevelop::TopDUContext::Features features, IncludeFileContexts& includedFiles);
+
+#endif //CLANGHELPERS_H

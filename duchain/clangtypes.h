@@ -24,6 +24,11 @@
 #define CLANGTYPES_H
 
 #include <clang-c/Index.h>
+#include <QHash>
+#include <QSharedPointer>
+#include <QReadWriteLock>
+
+#include <project/path.h>
 
 #include "duchainexport.h"
 
@@ -35,6 +40,8 @@ class CursorInRevision;
 class RangeInRevision;
 }
 
+class ClangPCH;
+
 class KDEVCLANGDUCHAIN_EXPORT ClangIndex
 {
 public:
@@ -43,8 +50,20 @@ public:
 
     CXIndex index() const;
 
+    /**
+     * @returns the existing ClangPCH for the @param pchInclude
+     * The PCH is created using @param includePaths and @param defines if it doesn't exist
+     * This function is thread safe.
+     */
+    QSharedPointer<const ClangPCH> pch(const KDevelop::Path& pchInclude,
+                                       const KDevelop::Path::List& includePaths,
+                                       const QHash<QString, QString>& defines);
+
 private:
     CXIndex m_index;
+
+    QReadWriteLock m_pchLock;
+    QHash<KDevelop::Path, QSharedPointer<const ClangPCH>> m_pch;
 };
 
 class KDEVCLANGDUCHAIN_EXPORT ClangString

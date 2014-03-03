@@ -23,9 +23,9 @@
 #define TUDUCHAIN_H
 
 #include "duchainexport.h"
-#include "includedfilecontexts.h"
 #include "templatehelpers.h"
 #include "cursorkindtraits.h"
+#include "clanghelpers.h"
 #include "clangtypes.h"
 
 #include <util/pushvalue.h>

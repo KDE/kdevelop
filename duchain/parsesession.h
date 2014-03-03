@@ -44,7 +44,8 @@ public:
     enum Option {
         NoOption,
         DisableSpellChecking,
-        SkipFunctionBodies
+        SkipFunctionBodies,
+        PrecompiledHeader
     };
     Q_DECLARE_FLAGS(Options, Option)
 
@@ -60,8 +61,8 @@ public:
      * @param contents The contents of the document you want to parse.
      */
     ParseSession(const KDevelop::IndexedString& url, const QByteArray& contents, ClangIndex* index,
-                 const KDevelop::Path::List& includes = {}, const QHash<QString, QString>& defines = {},
-                 Options options = Options());
+                 const KDevelop::Path::List& includes = {}, const KDevelop::Path& pchInclude = {},
+                 const QHash<QString, QString>& defines = {}, Options options = Options());
     ~ParseSession();
 
     /**

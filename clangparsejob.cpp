@@ -35,6 +35,8 @@
 #include <project/projectmodel.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 
+#include "duchain/clanghelpers.h"
+#include "duchain/clangpch.h"
 #include "duchain/clangtypes.h"
 #include "duchain/tuduchain.h"
 
@@ -123,63 +125,63 @@ Path::List defaultIncludes()
     return includePaths;
 }
 
-void visitInclusions(CXFile file, CXSourceLocation* stack, unsigned stackDepth, CXClientData d)
-{
-    if (stackDepth) {
-        auto imports = static_cast<Imports*>(d);
-        CXFile parentFile;
-        uint line, column;
-        clang_getFileLocation(stack[0], &parentFile, &line, &column, nullptr);
-        imports->insert(parentFile, {file, CursorInRevision(line, column)});
-    }
-}
+static const QString customIncludePathsFilename = QString::fromLatin1(".kdev_include_paths");
+static const QString pchIncludeFilename = QString::fromLatin1(".kdev_pch_include");
 
-ReferencedTopDUContext createTopContext(const IndexedString& path)
+QString findConfigFile(const QString& forFile, const QString& configFileName)
 {
-    ParsingEnvironmentFile *file = new ParsingEnvironmentFile(path);
-    file->setLanguage(ParseSession::languageString());
-    ReferencedTopDUContext context = new TopDUContext(path, RangeInRevision(0, 0, INT_MAX, INT_MAX), file);
-    DUChain::self()->addDocumentChain(context);
-    return context;
-}
-
-static const QLatin1String customIncludePathsFilename(".kdev_include_paths");
-
-QString findCustomIncludePathsFile(const QString& startPath)
-{
-    QDir dir(startPath);
+    QDir dir = QFileInfo(forFile).dir();
     while (dir.exists()) {
-        QFileInfo customIncludePaths(dir, customIncludePathsFilename);
-        if (customIncludePaths.exists())
+        const QFileInfo customIncludePaths(dir, configFileName);
+        if (customIncludePaths.exists()) {
             return customIncludePaths.absoluteFilePath();
+        }
 
-        if (!dir.cdUp())
+        if (!dir.cdUp()) {
             break;
+        }
     }
 
     return QString();
 }
 
-Path::List readCustomIncludePathsFile(const QString& filepath)
+Path::List readPathListFile(const QString& filepath)
 {
     QFile f(filepath);
-    if (!f.open(QIODevice::ReadOnly | QIODevice::Text))
+    if (!f.open(QIODevice::ReadOnly | QIODevice::Text)) {
         return Path::List();
+    }
 
-    QString text = QString::fromLocal8Bit(f.readAll());
-    QStringList lines = text.split('\n', QString::SkipEmptyParts);
+    const QString text = QString::fromLocal8Bit(f.readAll());
+    const QStringList lines = text.split('\n', QString::SkipEmptyParts);
     Path::List paths(lines.length());
     std::transform(lines.begin(), lines.end(), paths.begin(), [] (const QString& line) { return Path(line); });
     return paths;
 }
 
-Path::List getUserDefinedIncludePathsForFile(const QString& sourcefile)
+Path::List userDefinedIncludePathsForFile(const QString& sourcefile)
 {
-    QString filepath = findCustomIncludePathsFile(Path(sourcefile).parent().path());
-    if (filepath.isEmpty())
+    const QString filepath = findConfigFile(sourcefile, customIncludePathsFilename);
+    if (filepath.isEmpty()) {
         return Path::List();
+    }
 
-    return readCustomIncludePathsFile(filepath);
+    return readPathListFile(filepath);
+}
+
+/**
+ * File should contain the header to precompile and use while parsing
+ * @returns the first path in the file
+ */
+Path userDefinedPchIncludeForFile(const QString& sourcefile)
+{
+    const QString configfile = findConfigFile(sourcefile, pchIncludeFilename);
+    if (configfile.isEmpty()) {
+        return {};
+    }
+
+    const auto paths = readPathListFile(configfile);
+    return paths.isEmpty() ? Path() : paths.first();
 }
 
 }
@@ -191,7 +193,7 @@ ClangParseJob::ClangParseJob(const IndexedString& url, ILanguageSupport* languag
     if (item && item->project()->buildSystemManager()) {
         auto bsm = item->project()->buildSystemManager();
         m_includes = bsm->includeDirectories(item);
-        m_includes += getUserDefinedIncludePathsForFile(url.str());
+        m_includes += userDefinedIncludePathsForFile(url.str());
         m_defines = bsm->defines(item);
     }
 
@@ -207,6 +209,13 @@ ClangSupport* ClangParseJob::clang() const
 void ClangParseJob::run()
 {
     QReadLocker parseLock(languageSupport()->language()->parseLock());
+
+    auto pchInclude = userDefinedPchIncludeForFile(document().str());
+    auto pch = clang()->index()->pch(pchInclude, m_includes, m_defines);
+
+    if (abortRequested()) {
+        return;
+    }
 
     {
         UrlParseLock urlLock(document());
@@ -236,7 +245,7 @@ void ClangParseJob::run()
 
     if (!m_session || !m_session->reparse(contents().contents)) {
         const bool skipFunctionBodies = (minimumFeatures() <= TopDUContext::VisibleDeclarationsAndContexts);
-        m_session = new ParseSession(document(), contents().contents, clang()->index(), m_includes, m_defines,
+        m_session = new ParseSession(document(), contents().contents, clang()->index(), m_includes, pchInclude, m_defines,
                                      (skipFunctionBodies ? ParseSession::SkipFunctionBodies : ParseSession::NoOption));
     } else {
         Q_ASSERT(m_session->url() == document());
@@ -247,14 +256,21 @@ void ClangParseJob::run()
         return;
     }
 
-    clang_getInclusions(m_session->unit(), &::visitInclusions, &m_imports);
+    Imports imports = tuImports(m_session->unit());
+
+    IncludeFileContexts includedFiles;
+    if (pch) {
+        auto pchFile = pch->mapFile(m_session->unit());
+        includedFiles = pch->mapIncludes(m_session->unit());
+        includedFiles.insert(pchFile, pch->context());
+        imports.insert(m_session->file(), { pchFile, CursorInRevision(0, 0) } );
+    }
 
     if (abortRequested()) {
         return;
     }
 
-    IncludeFileContexts includeFiles;
-    auto context = buildDUChain(m_session->file(), includeFiles);
+    auto context = buildDUChain(m_session->file(), imports, m_session.data(), minimumFeatures(), includedFiles);
     setDuChain(context);
 
     if (abortRequested()) {
@@ -278,66 +294,4 @@ void ClangParseJob::run()
     }
 
     highlightDUChain();
-}
-
-ReferencedTopDUContext ClangParseJob::buildDUChain(CXFile file, IncludeFileContexts& includedFiles)
-{
-    if (includedFiles.contains(file)) {
-        return {};
-    }
-
-    // prevent recursion
-    includedFiles.insert(file, {});
-
-    // ensure DUChain for imports are build properly
-    foreach(const auto& import, m_imports.values(file)) {
-        buildDUChain(import.file, includedFiles);
-    }
-
-    const IndexedString path(QDir::cleanPath(QString::fromUtf8(ClangString(clang_getFileName(file)))));
-
-    bool update = false;
-    UrlParseLock urlLock(path);
-    ReferencedTopDUContext context;
-    {
-        DUChainWriteLocker lock;
-        context = DUChain::self()->chainForDocument(path);
-        if (!context) {
-            context = createTopContext(path);
-        } else {
-            update = true;
-        }
-
-        context->setFeatures(minimumFeatures());
-        context->setProblems(m_session->problemsForFile(file));
-
-        includedFiles.insert(file, context);
-        if (update) {
-            if (!context->parsingEnvironmentFile()->needsUpdate()
-                && context->parsingEnvironmentFile()->featuresSatisfied(minimumFeatures()))
-            {
-                return context;
-            }
-        }
-    }
-
-    {
-        DUChainWriteLocker lock;
-        if (update) {
-            context->clearImportedParentContexts();
-        }
-        foreach(const auto& import, m_imports.values(file)) {
-            Q_ASSERT(includedFiles.contains(import.file));
-            auto ctx = includedFiles.value(import.file);
-            if (!ctx) {
-                // happens for cyclic imports
-                continue;
-            }
-            context->addImportedParentContext(ctx, import.location);
-        }
-    }
-
-    TUDUChain tuduchain(m_session->unit(), file, includedFiles, update);
-
-    return context;
 }

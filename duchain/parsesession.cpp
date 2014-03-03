@@ -41,6 +41,8 @@ static std::map<QString, QVector<const char*>> mimeToArgs = {
 
 static QVector<const char*> defaultArgs = {"-std=c++11", "-xc++", "-Wall"};
 
+static QVector<const char*> pchArgs = {"-std=c++11", "-xc++-header", "-Wall"};
+
 /**
  * Clang diagnostic messages always start with a lowercase character
  *
@@ -51,8 +53,12 @@ static inline QString prettyDiagnosticSpelling(const QString& str)
     return (!str.isEmpty() ? str.left(1).toUpper() + str.mid(1) : QString());
 }
 
-QVector<const char*> argsForPath(const QString& path)
+QVector<const char*> argsForSession(const QString& path, ParseSession::Options options)
 {
+    if (options & ParseSession::PrecompiledHeader) {
+        return pchArgs;
+    }
+
     QString mimeType = KMimeType::findByPath(path)->name();
     auto res = mimeToArgs.find(mimeType);
 
@@ -125,23 +131,25 @@ IndexedString ParseSession::languageString()
 }
 
 ParseSession::ParseSession(const IndexedString& url, const QByteArray& contents, ClangIndex* index,
-                           const Path::List& includes, const QHash<QString, QString>& defines,
-                           Options options)
+                           const Path::List& includes, const Path& pchInclude,
+                           const QHash<QString, QString>& defines, Options options)
     : m_url(url)
     , m_unit(nullptr)
     , m_file(nullptr)
 {
-    unsigned int flags
-        = CXTranslationUnit_CacheCompletionResults
-        | CXTranslationUnit_PrecompiledPreamble
-        | CXTranslationUnit_Incomplete
-        | CXTranslationUnit_CXXChainedPCH
-        | CXTranslationUnit_ForSerialization;
+    unsigned int flags = CXTranslationUnit_CXXChainedPCH;
     if (options.testFlag(SkipFunctionBodies)) {
         flags |= CXTranslationUnit_SkipFunctionBodies;
     }
+    if (options.testFlag(PrecompiledHeader)) {
+        flags |= CXTranslationUnit_ForSerialization;
+    } else {
+        flags |= CXTranslationUnit_CacheCompletionResults
+              |  CXTranslationUnit_PrecompiledPreamble
+              |  CXTranslationUnit_Incomplete;
+    }
 
-    QVector<const char*> args = argsForPath(url.str());
+    QVector<const char*> args = argsForSession(url.str(), options);
     if (!options.testFlag(DisableSpellChecking)) {
         // TODO: Check whether this slows down parsing noticably
         // also see http://lists.cs.uiuc.edu/pipermail/cfe-commits/Week-of-Mon-20100705/032025.html
@@ -149,7 +157,7 @@ ParseSession::ParseSession(const IndexedString& url, const QByteArray& contents,
     }
     // uses QByteArray as smart-pointer for const char* ownership
     QVector<QByteArray> otherArgs;
-    otherArgs.reserve(includes.size() + defines.size());
+    otherArgs.reserve(includes.size() + defines.size() + pchInclude.isValid());
     foreach (const Path& url, includes) {
         QByteArray path = QString("-I" + url.toLocalFile()).toUtf8();
         otherArgs << path;
@@ -160,15 +168,24 @@ ParseSession::ParseSession(const IndexedString& url, const QByteArray& contents,
         otherArgs << define;
         args << define.constData();
     }
+    if (pchInclude.isValid()) {
+        static const QByteArray includePch = "-include";
+        args << includePch;
+        QByteArray pchFile = pchInclude.toLocalFile().toLocal8Bit();
+        otherArgs << pchFile;
+        args << pchFile;
+    }
 
     // TODO: track other open unsaved files and add them here
     const auto path = url.byteArray();
     auto file = fileForContents(path, contents);
+    //For PrecompiledHeader, we don't want unsaved contents (and contents.isEmpty())
+    const auto fileCount = options.testFlag(PrecompiledHeader) ? 0 : 1;
 
     m_unit = clang_parseTranslationUnit(
         index->index(), file.Filename,
         args.constData(), args.size(),
-        &file, 1,
+        &file, fileCount,
         flags
     );
 
@@ -176,6 +193,10 @@ ParseSession::ParseSession(const IndexedString& url, const QByteArray& contents,
         setUnit(m_unit, file.Filename);
         m_includes = includes;
         m_defines = defines;
+
+        if (options.testFlag(PrecompiledHeader)) {
+            clang_saveTranslationUnit(m_unit, path + ".pch", CXSaveTranslationUnit_None);
+        }
     }
 }
 

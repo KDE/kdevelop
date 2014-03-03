@@ -22,7 +22,14 @@
 
 #include "clangtypes.h"
 
+#include <QFileInfo>
+#include <QReadLocker>
+
 #include <language/editor/documentrange.h>
+#include <language/backgroundparser/urlparselock.h>
+#include <project/path.h>
+
+#include "clangpch.h"
 
 using namespace KDevelop;
 
@@ -34,6 +41,30 @@ ClangIndex::ClangIndex()
 CXIndex ClangIndex::index() const
 {
     return m_index;
+}
+
+QSharedPointer<const ClangPCH> ClangIndex::pch(const Path& pchInclude, const Path::List& includePaths, const QHash<QString, QString>& defines)
+{
+    if (!pchInclude.isValid()) {
+        return {};
+    }
+
+    UrlParseLock pchLock(pchInclude.toIndexed());
+
+    static const QString pchExt = QString::fromLatin1(".pch");
+
+    if (QFile::exists(pchInclude.toLocalFile() + pchExt)) {
+        QReadLocker lock(&m_pchLock);
+        auto pch = m_pch.constFind(pchInclude);
+        if (pch != m_pch.constEnd()) {
+            return pch.value();
+        }
+    }
+
+    QSharedPointer<const ClangPCH> pch(new ClangPCH(pchInclude, includePaths, defines, this));
+    QWriteLocker lock(&m_pchLock);
+    m_pch.insert(pchInclude, pch);
+    return pch;
 }
 
 ClangIndex::~ClangIndex()

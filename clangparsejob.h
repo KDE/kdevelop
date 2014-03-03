@@ -28,17 +28,8 @@
 #include <clang-c/Index.h>
 
 #include "duchain/parsesession.h"
-#include "duchain/includedfilecontexts.h"
 
 class ClangSupport;
-
-struct Import
-{
-    CXFile file;
-    KDevelop::CursorInRevision location;
-};
-
-using Imports = QMultiHash<CXFile, Import>;
 
 class ClangParseJob : public KDevelop::ParseJob
 {
@@ -52,12 +43,9 @@ protected:
     virtual void run();
 
 private:
-    KDevelop::ReferencedTopDUContext buildDUChain(CXFile file, IncludeFileContexts &includedFiles);
-
     KDevelop::Path::List m_includes;
     QHash<QString, QString> m_defines;
     KSharedPtr<ParseSession> m_session;
-    Imports m_imports;
 };
 
 #endif // CLANGPARSEJOB_H
