@@ -85,13 +85,13 @@ StandardOutputView::StandardOutputView(QObject *parent, const QVariantList &)
     action = actionCollection()->addAction("next_error");
     action->setText(i18n("Jump to Next Outputmark"));
     action->setShortcut( QKeySequence(Qt::Key_F4) );
-    action->setIcon(KIcon("arrow-right"));
+    action->setIcon(QIcon::fromTheme("arrow-right"));
     connect(action, SIGNAL(triggered(bool)), this, SIGNAL(selectNextItem()));
 
     action = actionCollection()->addAction("prev_error");
     action->setText(i18n("Jump to Previous Outputmark"));
     action->setShortcut( QKeySequence(Qt::SHIFT | Qt::Key_F4) );
-    action->setIcon(KIcon("arrow-left"));
+    action->setIcon(QIcon::fromTheme("arrow-left"));
     connect(action, SIGNAL(triggered(bool)), this, SIGNAL(selectPrevItem()));
 
     connect(KDevelop::ICore::self()->uiController()->controller(), SIGNAL(aboutToRemoveView(Sublime::View*)),

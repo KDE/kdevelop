@@ -42,6 +42,7 @@ class ToolViewData;
 class KTabWidget;
 class KToggleAction;
 class QAction;
+class KAction;
 class KLineEdit;
 class StandardOutputViewTest;
 
