@@ -114,7 +114,9 @@ void FilteringStrategyTest::testCompilerFilterStrategy_data()
     QTest::newRow("cmake-warning-line")
     << "CMake Warning (dev) in CMakeLists.txt:" << FilteredItem::WarningItem << FilteredItem::InvalidItem;
     QTest::newRow("cmake-automoc-error")
-    << "AUTOMOC: error: /home/krf/devel/src/foo/src/quick/quickpathitem.cpp The file includes the moc file \"moc_QuickPathItem.cpp\"" << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
+    << "AUTOMOC: error: /foo/bar.cpp The file includes the moc file \"moc_bar1.cpp\"" << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
+    QTest::newRow("cmake-autogen-error")
+    << "AUTOGEN: error: /foo/bar.cpp The file includes the moc file \"moc_bar1.cpp\"" << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
     QTest::newRow("linker-action-line")
     << "linking testCustombuild (g++)" << FilteredItem::InvalidItem << FilteredItem::ActionItem;
     QTest::newRow("linker-error-line")
@@ -245,10 +247,18 @@ void FilteringStrategyTest::testNativeAppErrorFilterStrategy_data()
         << "ASSERT: \"errors().isEmpty()\" in file /tmp/foo/bar.cpp, line 49"
         << "/tmp/foo/bar.cpp"
         << 48 << 0 << FilteredItem::ErrorItem;
+    QTest::newRow("qttest-assert")
+        << "QFATAL : FooTest::testBar() ASSERT: \"index.isValid()\" in file /foo/bar.cpp, line 32"
+        << "/foo/bar.cpp"
+        << 31 << 0 << FilteredItem::ErrorItem;
     QTest::newRow("qttest-loc")
         << "   Loc: [/foo/bar.cpp(33)]"
         << "/foo/bar.cpp"
         << 32 << 0 << FilteredItem::ErrorItem;
+    QTest::newRow("qttest-loc-nocatch")
+        << "   Loc: [Unknown file(0)]"
+        << ""
+        << -1 << -1 << FilteredItem::InvalidItem;
 }
 
 void FilteringStrategyTest::testNativeAppErrorFilterStrategy()

@@ -104,6 +104,8 @@ private:
     KToggleAction* focusOnSelect;
     KLineEdit *filterInput;
     QWidgetAction* filterAction;
+    KAction* prevmarkAction;
+    KAction* nextmarkAction;
 };
 
 #endif

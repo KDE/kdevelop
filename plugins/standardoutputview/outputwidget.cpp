@@ -44,6 +44,7 @@
 #include <ktabwidget.h>
 #include <kstandardaction.h>
 #include <klineedit.h>
+#include <kactioncollection.h>
 
 #include <outputview/ioutputviewmodel.h>
 #include <util/focusedtreeview.h>
@@ -97,6 +98,13 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
         connect(nextAction, SIGNAL(triggered()), this, SLOT(nextOutput()));
         addAction(nextAction);
     }
+
+    prevmarkAction = dynamic_cast<KAction*>(data->plugin->actionCollection()->action("prev_error"));
+    connect(prevmarkAction, SIGNAL(triggered()), this, SLOT(selectPrevItem()));
+    addAction(prevmarkAction);
+    nextmarkAction = dynamic_cast<KAction*>(data->plugin->actionCollection()->action("next_error"));
+    connect(nextmarkAction, SIGNAL(triggered()), this, SLOT(selectNextItem()));
+    addAction(nextmarkAction);
 
     activateOnSelect = new KToggleAction( QIcon(), i18n("Select activated Item"), this );
     activateOnSelect->setChecked( true );

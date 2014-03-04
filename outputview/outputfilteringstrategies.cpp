@@ -130,8 +130,12 @@ const QVector<ErrorFormat> ERROR_FILTERS {
     // cmake
     ErrorFormat( "CMake (Error|Warning) (|\\([a-zA-Z]+\\) )(in|at) ([^:]+):($|[0-9]+)", 4, 5, 1, "cmake" ),
     // cmake/automoc
-    // example: AUTOMOC: error: /home/krf/devel/src/foo/src/quick/quickpathitem.cpp The file includes (...),
-    ErrorFormat( "^AUTOMOC: error: (.*) (The file includes .*)$", 1, 0, 0 ),
+    // example: AUTOMOC: error: /foo/bar.cpp The file includes (...),
+    // example: AUTOMOC: error: /foo/bar.cpp: The file includes (...)
+    // note: ':' after file name isn't always appended, see http://cmake.org/gitweb?p=cmake.git;a=commitdiff;h=317d8498aa02c9f486bf5071963bb2034777cdd6
+    // example: AUTOGEN: error: /foo/bar.cpp: The file includes (...)
+    // note: AUTOMOC got renamed to AUTOGEN at some point
+    ErrorFormat( "^(AUTOMOC|AUTOGEN): error: ([^:]+):? (The file .*)$", 2, 0, 0 ),
     // Fortran
     ErrorFormat( "\"(.*)\", line ([0-9]+):(.*)", 1, 2, 3 ),
     // GFortran
@@ -374,11 +378,18 @@ FilteredItem ScriptErrorFilterStrategy::errorInLine(const QString& line)
 const QList<ErrorFormat> QT_APPLICATION_ERROR_FILTERS = QList<ErrorFormat>()
     // ASSERT: "errors().isEmpty()" in file /foo/bar.cpp, line 49
     << ErrorFormat("^ASSERT: \"(.*)\" in file (.*), line ([0-9]+)$", 2, 3, -1)
-    // FAIL!  : Foo::testBar() Compared pointers are not the same
+    // QFATAL : FooTest::testBar() ASSERT: "index.isValid()" in file /foo/bar.cpp, line 32
+    << ErrorFormat("^QFATAL : (.*) ASSERT: \"(.*)\" in file (.*), line ([0-9]+)$", 3, 4, -1)
+    // Catch:
+    // FAIL!  : FooTest::testBar() Compared pointers are not the same
     //    Actual   ...
     //    Expected ...
     //    Loc: [/foo/bar.cpp(33)]
-    << ErrorFormat("^   Loc: \\[(.*)\\(([0-9]+)\\)\\]$", 1, 2, -1);
+    //
+    // Do *not* catch:
+    //    ...
+    //    Loc: [Unknown file(0)]
+    << ErrorFormat("^   Loc: \\[(.*)\\(([1-9][0-9]*)\\)\\]$", 1, 2, -1);
 
 NativeAppErrorFilterStrategy::NativeAppErrorFilterStrategy()
 {

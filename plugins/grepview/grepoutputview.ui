@@ -38,7 +38,10 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Replacement Text:</string>
+           <string>Replacement &amp;Text:</string>
+          </property>
+          <property name="buddy">
+           <cstring>replacementCombo</cstring>
           </property>
          </widget>
         </item>
@@ -60,6 +63,9 @@
         </item>
         <item>
          <widget class="QPushButton" name="applyButton">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
             <horstretch>1</horstretch>
@@ -70,7 +76,7 @@
            <string>Apply replacement on selected items.</string>
           </property>
           <property name="text">
-           <string>Replace</string>
+           <string>&amp;Replace</string>
           </property>
          </widget>
         </item>
