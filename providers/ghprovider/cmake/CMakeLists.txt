@@ -1,2 +1,0 @@
-
-set(cmakeFiles FindQJson.cmake)
