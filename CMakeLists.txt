@@ -14,6 +14,7 @@ find_package(KDE4 REQUIRED)
 find_package(KDevPlatform ${KDEVPLATFORM_VERSION} REQUIRED)
 
 find_package(Clang 3.3 REQUIRED)
+macro_log_feature(CLANG_FOUND "libclang" "LibClang is a high level C interface to clang" REQUIRED "" "${Clang_FIND_VERSION}" "")
 
 add_definitions(${LLVM_CFLAGS})
 include_directories(
@@ -64,9 +65,10 @@ target_link_libraries(kdevclangsupport
     ${KDEVPLATFORM_PROJECT_LIBRARIES}
 )
 
-
 configure_file(kdevclangsupport.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevclangsupport.desktop)
 install( FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevclangsupport.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install(TARGETS kdevclangsupport DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install(FILES kdevclangsupport.rc DESTINATION ${DATA_INSTALL_DIR}/kdevclangsupport)
+
+macro_display_feature_log()
