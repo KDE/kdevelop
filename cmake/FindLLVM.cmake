@@ -38,46 +38,58 @@ endif()
 if (LLVM_CONFIG_EXECUTABLE)
   message(STATUS "Found llvm-config: ${LLVM_CONFIG_EXECUTABLE}")
 else()
-  message(FATAL_ERROR "Could NOT find 'llvm-config' executable")
+  set(_LLVM_ERROR_MESSAGE "Could NOT find 'llvm-config' executable")
 endif()
 
-# verify that we've found the correct version of llvm-config
-execute_process(COMMAND ${LLVM_CONFIG_EXECUTABLE} --version
-  OUTPUT_VARIABLE LLVM_VERSION)
-if (NOT LLVM_VERSION)
-  message(FATAL_ERROR "Failed to parse version from llvm-config")
+set(LLVM_FOUND FALSE)
+
+if (LLVM_CONFIG_EXECUTABLE)
+  # verify that we've found the correct version of llvm-config
+  execute_process(COMMAND ${LLVM_CONFIG_EXECUTABLE} --version
+    OUTPUT_VARIABLE LLVM_VERSION)
+  if (NOT LLVM_VERSION)
+    set(_LLVM_ERROR_MESSAGE "Failed to parse version from llvm-config")
+  elseif (LLVM_FIND_VERSION VERSION_GREATER LLVM_VERSION)
+    set(_LLVM_ERROR_MESSAGE "LLVM version too old: ${LLVM_VERSION}")
+  else()
+    set(LLVM_FOUND TRUE)
+  endif()
 endif()
-if (LLVM_FIND_VERSION VERSION_GREATER LLVM_VERSION)
-  message(FATAL_ERROR "LLVM version too old: ${LLVM_VERSION}")
+
+if (LLVM_FOUND)
+  execute_process(
+    COMMAND ${LLVM_CONFIG_EXECUTABLE} --includedir
+    OUTPUT_VARIABLE LLVM_INCLUDE_DIR
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+
+  execute_process(
+    COMMAND ${LLVM_CONFIG_EXECUTABLE} --libdir
+    OUTPUT_VARIABLE LLVM_LIBRARY_DIR
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+
+  execute_process(
+    COMMAND ${LLVM_CONFIG_EXECUTABLE} --cppflags
+    OUTPUT_VARIABLE LLVM_CFLAGS
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+
+  execute_process(
+    COMMAND ${LLVM_CONFIG_EXECUTABLE} --ldflags
+    OUTPUT_VARIABLE LLVM_LFLAGS
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+
+  execute_process(
+    COMMAND ${LLVM_CONFIG_EXECUTABLE} --libs core bitreader asmparser analysis
+    OUTPUT_VARIABLE LLVM_MODULE_LIBS
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
 endif()
 
-
-execute_process(
-  COMMAND ${LLVM_CONFIG_EXECUTABLE} --includedir
-  OUTPUT_VARIABLE LLVM_INCLUDE_DIR
-  OUTPUT_STRIP_TRAILING_WHITESPACE
-)
-
-execute_process(
-  COMMAND ${LLVM_CONFIG_EXECUTABLE} --libdir
-  OUTPUT_VARIABLE LLVM_LIBRARY_DIR
-  OUTPUT_STRIP_TRAILING_WHITESPACE
-)
-
-execute_process(
-  COMMAND ${LLVM_CONFIG_EXECUTABLE} --cppflags
-  OUTPUT_VARIABLE LLVM_CFLAGS
-  OUTPUT_STRIP_TRAILING_WHITESPACE
-)
-
-execute_process(
-  COMMAND ${LLVM_CONFIG_EXECUTABLE} --ldflags
-  OUTPUT_VARIABLE LLVM_LFLAGS
-  OUTPUT_STRIP_TRAILING_WHITESPACE
-)
-
-execute_process(
-  COMMAND ${LLVM_CONFIG_EXECUTABLE} --libs core bitreader asmparser analysis
-  OUTPUT_VARIABLE LLVM_MODULE_LIBS
-  OUTPUT_STRIP_TRAILING_WHITESPACE
-)
+if (LLVM_FIND_REQUIRED AND NOT LLVM_FOUND)
+  message(FATAL_ERROR "Could not find LLVM: ${_LLVM_ERROR_MESSAGE}")
+elseif(_LLVM_ERROR_MESSAGE)
+  message(STATUS "Could not find LLVM: ${_LLVM_ERROR_MESSAGE}")
+endif()
