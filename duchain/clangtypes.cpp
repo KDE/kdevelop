@@ -34,7 +34,7 @@
 using namespace KDevelop;
 
 ClangIndex::ClangIndex()
-    : m_index(clang_createIndex(1 /*Exclude PCH Decls*/, 0 /*Display diags*/))
+    : m_index(clang_createIndex(1 /*Exclude PCH Decls*/, qgetenv("KDEV_CLANG_DISPLAY_DIAGS") == "1" /*Display diags*/))
 {
 }
 
