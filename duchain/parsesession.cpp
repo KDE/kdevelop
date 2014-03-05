@@ -49,9 +49,14 @@ static QVector<const char*> pchArgs = {"-std=c++11", "-xc++-header", "-Wall"};
  *
  * @return Prettified version, starting with uppercase character
  */
-static inline QString prettyDiagnosticSpelling(const QString& str)
+static inline QString prettyDiagnosticSpelling(const ClangString& str)
 {
-    return (!str.isEmpty() ? str.left(1).toUpper() + str.mid(1) : QString());
+    auto ret = str.toString();
+    if (ret.isEmpty()) {
+      return {};
+    }
+    ret[0] = ret[0].toUpper();
+    return ret;
 }
 
 QVector<const char*> argsForSession(const QString& path, ParseSession::Options options)
@@ -127,7 +132,7 @@ static ClangProblem::Ptr problemForDiagnostic(CXDiagnostic diagnostic)
     clang_getFileLocation(location, &diagnosticFile, nullptr, nullptr, nullptr);
 
     ClangString description(clang_getDiagnosticSpelling(diagnostic));
-    problem->setDescription(prettyDiagnosticSpelling(QString::fromUtf8(description)));
+    problem->setDescription(prettyDiagnosticSpelling(description));
     DocumentRange docRange(IndexedString(ClangString(clang_getFileName(diagnosticFile))), SimpleRange(location, location));
     const uint numRanges = clang_getDiagnosticNumRanges(diagnostic);
 
