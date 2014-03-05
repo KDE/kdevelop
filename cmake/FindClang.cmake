@@ -23,6 +23,8 @@
 
 find_package(LLVM ${Clang_FIND_VERSION} ${Clang_FIND_REQUIRED})
 
+set(CLANG_FOUND FALSE)
+
 if (LLVM_FOUND AND LLVM_LIBRARY_DIR)
   macro(FIND_AND_ADD_CLANG_LIB _libname_)
     string(TOUPPER ${_libname_} _prettylibname_)
@@ -59,6 +61,8 @@ endif()
 
 if(CLANG_LIBS)
   set(CLANG_FOUND TRUE)
+else()
+  message(STATUS "Could not find any Clang libraries in ${LLVM_LIBRARY_DIR}")
 endif()
 
 if(CLANG_FOUND)

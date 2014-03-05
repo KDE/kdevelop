@@ -8,6 +8,12 @@
 #  LLVM_MODULE_LIBS - list of llvm libs for working with modules.
 #  LLVM_FOUND       - True if llvm found.
 #  LLVM_VERSION     - Version string ("llvm-config --version")
+#
+# This module reads hints about search locations from variables
+#  LLVM_ROOT        - Preferred LLVM installation prefix (containing bin/, lib/, ...)
+#
+#  Note: One may specify these as environment variables if they are not specified as
+#   CMake variables or cache entries.
 
 #=============================================================================
 # Copyright 2014 Kevin Funk <kevin@kfunk.org>
@@ -20,18 +26,27 @@
 # See the License for more information.
 #=============================================================================
 
-# find llvm-config, prefer the one with a version suffix, e.g. llvm-config-3.3
-# note: on some distributions, only 'llvm-config' is shipped, so let's always try to fallback on that
-find_program(LLVM_CONFIG_EXECUTABLE NAMES llvm-config-${LLVM_FIND_VERSION} llvm-config DOC "llvm-config executable")
+if (NOT LLVM_ROOT AND DEFINED ENV{LLVM_ROOT})
+    file(TO_CMAKE_PATH "$ENV{LLVM_ROOT}" LLVM_ROOT)
+endif()
 
-# other distributions don't ship llvm-config, but only some llvm-config-VERSION binary
-# try to deduce installed LLVM version by looking up llvm-nm in PATH and *then* find llvm-config-VERSION via that
-if (NOT LLVM_CONFIG_EXECUTABLE)
-  find_program(_llvmNmExecutable llvm-nm)
-  if (_llvmNmExecutable)
-    execute_process(COMMAND ${_llvmNmExecutable} --version OUTPUT_VARIABLE _out)
-    string(REGEX REPLACE ".*LLVM version ([^ \n]+).*" "\\1" _versionString "${_out}")
-    find_program(LLVM_CONFIG_EXECUTABLE NAMES llvm-config-${_versionString} DOC "llvm-config executable")
+# if the user specified LLVM_ROOT, use that and fail otherwise
+if (LLVM_ROOT)
+  find_program(LLVM_CONFIG_EXECUTABLE NAMES llvm-config HINTS ${LLVM_ROOT}/bin DOC "llvm-config executable" NO_DEFAULT_PATH)
+else()
+  # find llvm-config, prefer the one with a version suffix, e.g. llvm-config-3.3
+  # note: on some distributions, only 'llvm-config' is shipped, so let's always try to fallback on that
+  find_program(LLVM_CONFIG_EXECUTABLE NAMES llvm-config-${LLVM_FIND_VERSION} llvm-config DOC "llvm-config executable")
+
+  # other distributions don't ship llvm-config, but only some llvm-config-VERSION binary
+  # try to deduce installed LLVM version by looking up llvm-nm in PATH and *then* find llvm-config-VERSION via that
+  if (NOT LLVM_CONFIG_EXECUTABLE)
+    find_program(_llvmNmExecutable llvm-nm)
+    if (_llvmNmExecutable)
+      execute_process(COMMAND ${_llvmNmExecutable} --version OUTPUT_VARIABLE _out)
+      string(REGEX REPLACE ".*LLVM version ([^ \n]+).*" "\\1" _versionString "${_out}")
+      find_program(LLVM_CONFIG_EXECUTABLE NAMES llvm-config-${_versionString} DOC "llvm-config executable")
+    endif()
   endif()
 endif()
 
@@ -46,7 +61,9 @@ set(LLVM_FOUND FALSE)
 if (LLVM_CONFIG_EXECUTABLE)
   # verify that we've found the correct version of llvm-config
   execute_process(COMMAND ${LLVM_CONFIG_EXECUTABLE} --version
-    OUTPUT_VARIABLE LLVM_VERSION)
+    OUTPUT_VARIABLE LLVM_VERSION
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
+
   if (NOT LLVM_VERSION)
     set(_LLVM_ERROR_MESSAGE "Failed to parse version from llvm-config")
   elseif (LLVM_FIND_VERSION VERSION_GREATER LLVM_VERSION)
