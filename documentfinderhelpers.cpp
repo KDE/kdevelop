@@ -70,8 +70,8 @@ enum FileType {
 QPair<QString,FileType> basePathAndTypeForUrl(const KUrl& url)
 {
     QString path = url.toLocalFile();
-    int idxSlash = path.lastIndexOf("/");
-    int idxDot = path.lastIndexOf(".");
+    int idxSlash = path.lastIndexOf('/');
+    int idxDot = path.lastIndexOf('.');
     FileType fileType = Unknown;
     QString basePath;
     if (idxSlash >= 0 && idxDot >= 0 && idxDot > idxSlash) {
@@ -128,7 +128,7 @@ QVector< KUrl > DocumentFinderHelpers::getPotentialBuddies(const KUrl& url)
     const auto& extensions = ( type.second == Header ? getSourceFileExtensions() : getHeaderFileExtensions() );
     QVector< KUrl > buddies;
     for(const QString& extension : extensions) {
-        buddies.append(KUrl(type.first + "." + extension));
+        buddies.append(KUrl(type.first + '.' + extension));
     }
 
     return buddies;

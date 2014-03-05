@@ -106,7 +106,7 @@ Path::List defaultIncludes()
             case Includes:
                 //if (!line.indexOf(QDir::separator()) == -1 && line != "." ) {
                 //Detect the include-paths by the first space that is prepended. Reason: The list may contain relative paths like "."
-                if (!line.startsWith(" ") ) {
+                if (!line.startsWith(' ') ) {
                     // We've reached the end of the list.
                     mode = Finished;
                 } else {
