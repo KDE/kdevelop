@@ -196,11 +196,10 @@ ParseSession::ParseSession(const IndexedString& url, const QByteArray& contents,
         args << define.constData();
     }
     if (pchInclude.isValid()) {
-        static const QByteArray includePch = "-include";
-        args << includePch;
-        QByteArray pchFile = pchInclude.toLocalFile().toLocal8Bit();
+        args << "-include";
+        QByteArray pchFile = pchInclude.toLocalFile().toUtf8();
         otherArgs << pchFile;
-        args << pchFile;
+        args << pchFile.constData();
     }
 
     // TODO: track other open unsaved files and add them here
