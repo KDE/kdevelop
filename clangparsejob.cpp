@@ -142,14 +142,18 @@ QString findConfigFile(const QString& forFile, const QString& configFileName)
         }
     }
 
-    return QString();
+    return {};
 }
 
 Path::List readPathListFile(const QString& filepath)
 {
+    if (filepath.isEmpty()) {
+        return {};
+    }
+
     QFile f(filepath);
     if (!f.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        return Path::List();
+        return {};
     }
 
     const QString text = QString::fromLocal8Bit(f.readAll());
@@ -161,12 +165,7 @@ Path::List readPathListFile(const QString& filepath)
 
 Path::List userDefinedIncludePathsForFile(const QString& sourcefile)
 {
-    const QString filepath = findConfigFile(sourcefile, customIncludePathsFilename);
-    if (filepath.isEmpty()) {
-        return Path::List();
-    }
-
-    return readPathListFile(filepath);
+    return readPathListFile(findConfigFile(sourcefile, customIncludePathsFilename));
 }
 
 /**
@@ -175,12 +174,7 @@ Path::List userDefinedIncludePathsForFile(const QString& sourcefile)
  */
 Path userDefinedPchIncludeForFile(const QString& sourcefile)
 {
-    const QString configfile = findConfigFile(sourcefile, pchIncludeFilename);
-    if (configfile.isEmpty()) {
-        return {};
-    }
-
-    const auto paths = readPathListFile(configfile);
+    const auto paths = readPathListFile(findConfigFile(sourcefile, pchIncludeFilename));
     return paths.isEmpty() ? Path() : paths.first();
 }
 
@@ -189,16 +183,13 @@ Path userDefinedPchIncludeForFile(const QString& sourcefile)
 ClangParseJob::ClangParseJob(const IndexedString& url, ILanguageSupport* languageSupport)
 : ParseJob(url, languageSupport)
 {
+    // get defines and include paths from build system manager in foreground thread
     auto item = ICore::self()->projectController()->projectModel()->itemForPath(url);
     if (item && item->project()->buildSystemManager()) {
         auto bsm = item->project()->buildSystemManager();
         m_includes = bsm->includeDirectories(item);
-        m_includes += userDefinedIncludePathsForFile(url.str());
         m_defines = bsm->defines(item);
     }
-
-    static const auto defaultIncludePaths = defaultIncludes();
-    m_includes += defaultIncludePaths;
 }
 
 ClangSupport* ClangParseJob::clang() const
@@ -209,6 +200,15 @@ ClangSupport* ClangParseJob::clang() const
 void ClangParseJob::run()
 {
     QReadLocker parseLock(languageSupport()->language()->parseLock());
+
+    // get user defined and default include paths in background thread
+    m_includes += userDefinedIncludePathsForFile(document().str());
+    static const auto defaultIncludePaths = defaultIncludes();
+    m_includes += defaultIncludePaths;
+
+    if (abortRequested()) {
+        return;
+    }
 
     auto pchInclude = userDefinedPchIncludeForFile(document().str());
     auto pch = clang()->index()->pch(pchInclude, m_includes, m_defines);
