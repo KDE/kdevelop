@@ -132,9 +132,14 @@ ICentralizedVersionControl* toCVCS(IPlugin* plugin)
 }
 
 /*! Trouble while initializing version control. Show failure message to user. */
-void vcsError(const QString &errorMsg, KTempDir &tmpdir, const KUrl &dest)
+void vcsError(const QString &errorMsg, KTempDir &tmpdir, const KUrl &dest, const QString &details = QString())
 {
-    KMessageBox::error(0, errorMsg);
+    QString displayDetails = details;
+    if (displayDetails.isEmpty())
+    {
+        displayDetails = i18n("Please see the Version Control toolview");
+    }
+    KMessageBox::detailedError(0, errorMsg, displayDetails, i18n("Version Control System Error"));
     KIO::NetAccess::del(dest, 0);
     tmpdir.unlink();
 }
@@ -165,7 +170,7 @@ bool initializeDVCS(IDistributedVersionControl* dvcs, const ApplicationInfo& inf
                             KDevelop::IBasicVersionControl::Recursive);
     if (!job || !job->exec() || job->status() != VcsJob::JobSucceeded)
     {
-        vcsError(i18n("Could not import project into %1.", dvcs->name()), scratchArea, dest);
+        vcsError(i18n("Could not import project into %1.", dvcs->name()), scratchArea, dest, job ? job->errorString() : QString());
         return false;
     }
 
@@ -182,7 +187,7 @@ bool initializeCVCS(ICentralizedVersionControl* cvcs, const ApplicationInfo& inf
     VcsJob* job = cvcs->import( info.importCommitMessage, scratchArea.name(), info.repository);
     if (!job || !job->exec() || job->status() != VcsJob::JobSucceeded )
     {
-    vcsError(i18n("Could not import project"), scratchArea, info.repository.repositoryServer());
+        vcsError(i18n("Could not import project"), scratchArea, info.repository.repositoryServer());
         return false;
     }
 
