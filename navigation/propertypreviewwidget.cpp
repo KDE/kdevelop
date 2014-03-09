@@ -48,15 +48,29 @@ QWidget* PropertyPreviewWidget::constructIfPossible(KTextEditor::Document* doc, 
         supportedProperties["spacing"] = SupportedProperty(QUrl(base + "Spacing.qml"));
         supportedProperties["x"] = SupportedProperty(QUrl(base + "Distance.qml"));
         supportedProperties["y"] = SupportedProperty(QUrl(base + "Distance.qml"));
-        // TODO support the other margins
-        supportedProperties["anchors.margins"] = SupportedProperty(QUrl(base + "Distance.qml"));
+
+        supportedProperties["margins"] = SupportedProperty(QUrl(base + "Distance.qml"));    // matches anchors.margins and anchors { margins: }
+        supportedProperties["leftMargin"] = SupportedProperty(QUrl(base + "Distance.qml"));
+        supportedProperties["rightMargin"] = SupportedProperty(QUrl(base + "Distance.qml"));
+        supportedProperties["topMargin"] = SupportedProperty(QUrl(base + "Distance.qml"));
+        supportedProperties["bottomMargin"] = SupportedProperty(QUrl(base + "Distance.qml"));
+
         supportedProperties["opacity"] = SupportedProperty(QUrl(base + "Opacity.qml"));
         supportedProperties["duration"] = SupportedProperty(QUrl(base + "Duration.qml"));
         supportedProperties["font.family"] = SupportedProperty(QUrl(base + "FontFamily.qml"));
         supportedProperties["font.pointSize"] = SupportedProperty(QUrl(base + "FontSize.qml"));
         supportedProperties["model"] = SupportedProperty(QUrl(base + "Repeat.qml"));
     }
+
     QHash<QString, SupportedProperty>::iterator item = supportedProperties.find(key);
+
+    if ( item == supportedProperties.end() && key.contains(QLatin1Char('.')) ) {
+        // When a property name is explicit enough (like "margins"), the name itself
+        // is put in supportedProperties, so that the user can enter "anchors.margins"
+        // or "anchors { margins }". Change "anchors.margins" to "margins"
+        item = supportedProperties.find(key.section(QLatin1Char('.'), -1, -1));
+    }
+
     if ( item != supportedProperties.end() ) {
         return new PropertyPreviewWidget(doc, keyRange, valueRange, *item, value);
     }
