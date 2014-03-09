@@ -72,8 +72,19 @@ ICodeHighlighting* KDevQmlJsPlugin::codeHighlighting() const
 const QColor stringToColor(const QString& text) {
     if ( text.size() < 20 ) {
         QColor color;
-        // TODO handle alpha colors, this can't
-        color.setNamedColor(text);
+
+        if (text.startsWith(QLatin1Char('#')) && text.length() == 9) {
+            // #AARRGGBB color, not supported by QColor::setNamedColor
+            QByteArray values = QByteArray::fromHex(text.mid(1).toAscii());
+
+            if (values.length() == 4) {
+                color.setRgba(qRgba(values[1], values[2], values[3], values[0]));
+            }
+        } else {
+            // Named color, #RRGGBB or #RGB, supported by QColor::setNamedColor
+            color.setNamedColor(text);
+        }
+
         if ( color.isValid() ) {
             qDebug() << color;
             return color;
