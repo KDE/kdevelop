@@ -70,17 +70,6 @@ using namespace Utils;
 
 QTEST_MAIN(TestDUChain)
 
-Declaration* getDeclaration( AbstractType::Ptr base, TopDUContext* top ) {
-  if( !base ) return 0;
-
-  IdentifiedType* idType = dynamic_cast<IdentifiedType*>(base.unsafeData());
-  if( idType ) {
-    return idType->declaration(top);
-  } else {
-    return 0;
-  }
-}
-
 #define TEST_FILE_PARSE_ONLY if (testFileParseOnly) QSKIP("Skip", SkipSingle);
 TestDUChain::TestDUChain()
 {
