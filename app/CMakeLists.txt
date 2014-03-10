@@ -23,12 +23,6 @@ target_link_libraries(kdevelop
     
     ${KDEVPLATFORM_INTERFACES_LIBRARIES}
     ${KDEVPLATFORM_SHELL_LIBRARIES}
-    KF5::KIOWidgets
-    KF5::KCMUtils
-    KF5::Parts
-    KF5::NotifyConfig
-    KF5::TextEditor
-    KF5::ThreadWeaver
 
     Qt5::Declarative
 )

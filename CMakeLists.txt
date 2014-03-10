@@ -32,31 +32,21 @@ include(KDECompilerSettings)
 
 find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Widgets Concurrent Declarative WebKitWidgets Test)
 find_package(KF5 CONFIG REQUIRED COMPONENTS
-  Archive
   Config
-  DocTools
-  GuiAddons
   I18n
-  Init
   ItemModels
+  ItemViews
   JobWidgets
   KCMUtils
   KIO
   NewStuff
+  NotifyConfig
   Parts
-  Sonnet
+  Service
   TextEditor
   ThreadWeaver
   WindowSystem
   XmlGui
-  TextEditor
-  NotifyConfig
-  ThreadWeaver
-  ItemModels
-  Service
-  Emoticons
-  KCMUtils
-  ItemViews
 
   # TODO KF5: Port away from this
   KDE4Support
