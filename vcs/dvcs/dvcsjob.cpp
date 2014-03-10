@@ -56,7 +56,7 @@ struct DVcsJobPrivate
     QByteArray  output;
     QByteArray  errorOutput;
     IPlugin* vcsplugin;
-    
+
     QVariant results;
     OutputModel* model;
 
@@ -74,7 +74,7 @@ DVcsJob::DVcsJob(const QDir& workingDir, IPlugin* parent, OutputJob::OutputJobVe
     d->ignoreError = false;
     setModel(d->model);
     setCapabilities(Killable);
-    
+
     connect(d->childproc, SIGNAL(finished(int,QProcess::ExitStatus)),
             SLOT(slotProcessExited(int,QProcess::ExitStatus)));
     connect(d->childproc, SIGNAL(error(QProcess::ProcessError)),
@@ -82,7 +82,7 @@ DVcsJob::DVcsJob(const QDir& workingDir, IPlugin* parent, OutputJob::OutputJobVe
 
     connect(d->childproc, SIGNAL(readyReadStandardOutput()),
                 SLOT(slotReceivedStdout()));
-    
+
 }
 
 DVcsJob::~DVcsJob()
@@ -184,12 +184,12 @@ void DVcsJob::start()
     if(d->vcsplugin)
         service = d->vcsplugin->objectName();
     setObjectName(service+": "+dvcsCommand().join(" "));
-    
+
     d->status = JobRunning;
     d->childproc->setOutputChannelMode(KProcess::SeparateChannels);
     //the started() and error() signals may be delayed! It causes crash with deferred deletion!!!
     d->childproc->start();
-    
+
     d->model->appendLine(directory().path() + "> " + dvcsCommand().join(" "));
 }
 
@@ -208,8 +208,12 @@ void DVcsJob::slotProcessError( QProcess::ProcessError err )
     d->status = JobFailed;
 
     setError(OutputJob::FailedShownError); //we don't want to trigger a message box
-    setErrorText( i18n("Process '%1' exited with status %2", d->childproc->program().join(" "), d->childproc->exitCode() ) );
-    
+
+    d->errorOutput = d->childproc->readAllStandardError();
+
+    QString completeErrorText = i18n("Process '%1' exited with status %2\n%3", d->childproc->program().join(" "), d->childproc->exitCode(), QString::fromLocal8Bit(d->errorOutput) );
+    setErrorText( completeErrorText );
+
     QString errorValue;
     //if trolls add Q_ENUMS for QProcess, then we can use better solution than switch:
     //QMetaObject::indexOfEnumerator(char*), QLatin1String(QMetaEnum::valueToKey())...
@@ -234,17 +238,15 @@ void DVcsJob::slotProcessError( QProcess::ProcessError err )
         errorValue = "UnknownError";
         break;
     }
-    kDebug() << "oops, found an error while running" << dvcsCommand() << ":" << errorValue 
+    kDebug() << "oops, found an error while running" << dvcsCommand() << ":" << errorValue
                                                      << "Exit code is:" << d->childproc->exitCode();
-    d->errorOutput = d->childproc->readAllStandardError();
     displayOutput(QString::fromLocal8Bit(d->errorOutput));
     d->model->appendLine(i18n("Command finished with error %1.", errorValue));
-    
+
     if(verbosity()==Silent) {
         setVerbosity(Verbose);
         startOutput();
     }
-    emitResult();
 }
 
 void DVcsJob::slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
@@ -269,10 +271,10 @@ void DVcsJob::displayOutput(const QString& data)
 void DVcsJob::slotReceivedStdout()
 {
     QByteArray output = d->childproc->readAllStandardOutput();
-    
+
     // accumulate output
     d->output.append(output);
-    
+
     displayOutput(QString::fromLocal8Bit(output));
 }
 

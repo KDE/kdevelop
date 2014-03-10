@@ -99,6 +99,20 @@ void VCSCommitDiffPatchSource::oldMessageChanged(QString text)
     }
 }
 
+void VCSCommitDiffPatchSource::jobFinished(KJob *job)
+{
+    if (!job || job->error() != 0 )
+    {
+        QString details = job ? job->errorText() : QString();
+        if (details.isEmpty()) {    //errorText may be empty
+            details = i18n("For more detailed information please see the Version Control toolview");
+        }
+        KMessageBox::detailedError(0, i18n("Unable to commit"), details, i18n("Commit unsuccessful"));
+    }
+
+    deleteLater();
+}
+
 VCSDiffPatchSource::VCSDiffPatchSource(VCSDiffUpdater* updater)
     : m_updater(updater)
 {
@@ -243,12 +257,14 @@ bool VCSCommitDiffPatchSource::finishReview(QList< KUrl > selection) {
     }
 
     emit reviewFinished(message, selection);
-    
+
     VcsJob* job=m_vcs->commit(message, selection, KDevelop::IBasicVersionControl::NonRecursive);
+
+    connect (job, SIGNAL(finished(KJob*)),
+             this, SLOT(jobFinished(KJob*)));
     ICore::self()->runController()->registerJob(job);
 
-    deleteLater();
-    
+
     return true;
 }
 

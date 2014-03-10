@@ -1,6 +1,6 @@
 /*
     Copyright 2009 David Nolden <david.nolden.kdevelop@art-master.de>
-    
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License version 2 as published by the Free Software Foundation.
@@ -29,6 +29,7 @@
 #include <kdebug.h>
 #include <interfaces/ipatchsource.h>
 #include "vcs/vcsstatusinfo.h"
+#include "vcs/vcsjob.h"
 
 #include "../vcsexport.h"
 
@@ -69,19 +70,19 @@ class KDEVPLATFORMVCS_EXPORT VCSDiffPatchSource : public KDevelop::IPatchSource 
     VCSDiffPatchSource(VCSDiffUpdater* updater);
     VCSDiffPatchSource(const KDevelop::VcsDiff& diff);
     virtual ~VCSDiffPatchSource();
-        
+
     virtual KUrl baseDir() const ;
-    
+
     virtual KUrl file() const ;
-    
+
     virtual QString name() const ;
-    
+
     virtual void update() ;
-    
+
     virtual bool isAlreadyApplied() const { return true; }
-    
+
     QMap<KUrl, KDevelop::VcsStatusInfo::State> additionalSelectableFiles() const ;
-    
+
     KUrl m_base, m_file;
     QString m_name;
     VCSDiffUpdater* m_updater;
@@ -97,19 +98,19 @@ class KDEVPLATFORMVCS_EXPORT VCSCommitDiffPatchSource : public VCSDiffPatchSourc
     /// The ownership of the updater is taken
     VCSCommitDiffPatchSource(VCSDiffUpdater* updater);
     ~VCSCommitDiffPatchSource() ;
-    
+
     QStringList oldMessages() const;
-    
+
     virtual bool canSelectFiles() const ;
-    
+
     virtual QWidget* customWidget() const ;
-    
+
     virtual QString finishReviewCustomText() const ;
-    
+
     virtual bool canCancel() const;
-    
+
     virtual void cancelReview();
-    
+
     virtual bool finishReview(QList< KUrl > selection) ;
     QList<KDevelop::VcsStatusInfo> infos() const { return m_infos; }
 Q_SIGNALS:
@@ -123,6 +124,7 @@ public:
 public slots:
     void addMessageToHistory(const QString& message);
     void oldMessageChanged(QString);
+    void jobFinished(KJob*);
 };
 
 ///Sends the diff to the patch-review plugin.
