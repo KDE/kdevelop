@@ -26,7 +26,6 @@
 #include <QWidget>
 #include <QFileInfo>
 
-#include <KWindowSystem>
 #include <KDebug>
 
 namespace KDevelop {

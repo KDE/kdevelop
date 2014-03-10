@@ -25,7 +25,6 @@
 #include <KDE/KSharedConfig>
 #include <KDE/KConfigGroup>
 #include <KDE/KToolBar>
-#include <KDE/KWindowSystem>
 
 #include <QApplication>
 #include <QDesktopWidget>

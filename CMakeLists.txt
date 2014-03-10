@@ -40,29 +40,22 @@ find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Core Declarative DBus Widgets
 find_package(KF5 CONFIG REQUIRED COMPONENTS
   Archive
   Config
-  DocTools
   GuiAddons
   I18n
-  Init
   ItemModels
+  ItemViews
   JobWidgets
   KCMUtils
   KIO
   NewStuff
+  NotifyConfig
   Parts
+  Service
   Sonnet
   TextEditor
   ThreadWeaver
   WindowSystem
   XmlGui
-  TextEditor
-  NotifyConfig
-  ThreadWeaver
-  ItemModels
-  Service
-  Emoticons
-  KCMUtils
-  ItemViews
 
   # TODO KF5: Port away from this
   KDE4Support
