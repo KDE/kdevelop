@@ -12,6 +12,7 @@ X-KDE-CfgDlgHierarchy=GENERAL
 
 Name=Cppcheck
 Name[bs]=Cppcheck
+Name[ca]=Cppcheck
 Name[cs]=Cppcheck
 Name[de]=Cppcheck
 Name[es]=Cppcheck
@@ -26,6 +27,7 @@ Name[uk]=Cppcheck
 Name[x-test]=xxCppcheckxx
 Comment=Configure Cppcheck
 Comment[bs]=Konfiguriši Cppcheck
+Comment[ca]=Configura Cppcheck
 Comment[cs]=Nastavit Cppcheck
 Comment[de]=Cppcheck einrichten
 Comment[es]=Configurar Cppcheck
