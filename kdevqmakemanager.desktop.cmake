@@ -27,6 +27,7 @@ Name[uk]=Керування проектами QMake
 Name[x-test]=xxQMake Project Managerxx
 Comment=Imports and edits QMake projects
 Comment[bs]=Uvozi i uređuje QMake projekte
+Comment[ca]=Importa i edita projectes de QMake
 Comment[de]=Importiert und bearbeitet QMake-Projekte
 Comment[en_GB]=Imports and edits QMake projects
 Comment[es]=Importa y edita proyectos de QMake
