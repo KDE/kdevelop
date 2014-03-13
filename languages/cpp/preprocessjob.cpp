@@ -442,7 +442,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
 
     QPair<Path, Path> included;
     QFileInfo info(fileName);
-    if (info.isFile()) {
+    if (info.isFile() && info.isAbsolute()) {
         //this is an auto included file i.e. there is no #include directive in the source file for it
         included.first = Path(fileNameUrl.toLocalFile());
         included.second = Path(fileNameUrl.directory());
