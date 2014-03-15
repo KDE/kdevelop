@@ -27,6 +27,7 @@
 #include <QKeyEvent>
 #include <QScrollBar>
 #include <QStyle>
+#include <QGraphicsObject>
 #include <QDebug>
 #include <QDeclarativeContext>
 
@@ -49,10 +50,12 @@ using namespace KDevelop;
 AssistantPopup::AssistantPopup(KTextEditor::View* parent, const IAssistant::Ptr& assistant)
 // main window as parent to use maximal space available in worst case
     : QDeclarativeView(ICore::self()->uiController()->activeMainWindow())
-    , m_assistant(assistant)
-    , m_view(parent)
+    , m_view(nullptr)
     , m_shownAtBottom(false)
+    , m_reopening(false)
 {
+    Q_ASSERT(assistant);
+
     QPalette p = palette();
     p.setColor(QPalette::Window, Qt::transparent);
     setPalette(p);
@@ -60,24 +63,41 @@ AssistantPopup::AssistantPopup(KTextEditor::View* parent, const IAssistant::Ptr&
     setBackgroundBrush(QBrush(QColor(0, 0, 0, 0)));
     setResizeMode(QDeclarativeView::SizeViewToRootObject);
 
-    m_config = new AssistantPopupConfig(this);
+    reset(parent, assistant);
+}
+
+void AssistantPopup::reset(KTextEditor::View* widget, const IAssistant::Ptr& assistant)
+{
+    disconnect(this);
+    if ( m_view ) {
+        m_view->removeEventFilter(this);
+    }
+    m_view = widget;
+    m_view->installEventFilter(this);
+    m_assistant = assistant;
+
+    m_config = std::unique_ptr<AssistantPopupConfig>(new AssistantPopupConfig);
     auto doc = ICore::self()->documentController()->activeDocument();
     m_config->setColorsFromView(doc->textDocument()->activeView());
     updateActions();
-    rootContext()->setContextProperty("config", QVariant::fromValue<QObject*>(m_config));
-    setSource(QUrl(KStandardDirs::locate("data", "kdevelop/assistantpopup.qml")));
-    Q_ASSERT(assistant);
-    if ( ! rootObject() ) {
-        kWarning() << "Failed to load assistant markup! The assistant will not work.";
-        return;
+    rootContext()->setContextProperty("config", QVariant::fromValue<QObject*>(m_config.get()));
+
+    if ( source() == QUrl() ) {
+        setSource(QUrl(KStandardDirs::locate("data", "kdevelop/assistantpopup.qml")));
+        if ( ! rootObject() ) {
+            kWarning() << "Failed to load assistant markup! The assistant will not work.";
+            return;
+        }
     }
+
     connect(m_view, SIGNAL(verticalScrollPositionChanged(KTextEditor::View*,KTextEditor::Cursor)),
             this, SLOT(updatePosition(KTextEditor::View*,KTextEditor::Cursor)));
 
+    // force recomputing the size hint
+    resize(sizeHint());
     updatePosition(m_view, KTextEditor::Cursor::invalid());
-    connect(m_view, SIGNAL(destroyed(QObject*)),
-            this, SLOT(deleteLater()));
-    m_view->installEventFilter(this);
+    // For some reason the object loses focus after a reset, so fix that
+    rootObject()->findChild<QObject*>("items")->setProperty("focus", true);
 }
 
 bool AssistantPopup::viewportEvent(QEvent *event)
@@ -186,7 +206,6 @@ void AssistantPopup::updatePosition(KTextEditor::View* view, const KTextEditor::
     auto editorGeometry = textWidgetGeometry(view);
     auto cursor = view->cursorToCoordinate(KTextEditor::Cursor(0, 0));
     const int margin = 12;
-    Sublime::HoldUpdates hold(ICore::self()->uiController()->activeMainWindow());
     QPoint targetLocation;
     if ( cursor.y() < 0 ) {
         // Only when the view is not scrolled to the top, place the widget there; otherwise it easily gets
@@ -201,7 +220,15 @@ void AssistantPopup::updatePosition(KTextEditor::View* view, const KTextEditor::
         m_shownAtBottom = true;
     }
     if ( pos() != targetLocation ) {
-        move(targetLocation);
+        if ( m_reopening ) {
+            // When the assistant is already visible, close to no flickering will occur anyways,
+            // so we can avoid the full repaint of the window.
+            move(targetLocation);
+        }
+        else {
+            Sublime::HoldUpdates hold(ICore::self()->uiController()->activeMainWindow());
+            move(targetLocation);
+        }
     }
 }
 
@@ -218,9 +245,12 @@ void AssistantPopup::executeHideAction()
     }
 }
 
-void AssistantPopup::notifyReopened()
+void AssistantPopup::notifyReopened(bool reopened)
 {
-    emit m_config->shouldCancelAnimation();
+    if ( reopened ) {
+        emit m_config->shouldCancelAnimation();
+    }
+    m_reopening = reopened;
 }
 
 void AssistantPopup::updateActions()
@@ -229,11 +259,11 @@ void AssistantPopup::updateActions()
     QList<QObject*> items;
     foreach(IAssistantAction::Ptr action, m_assistantActions)
     {
-        items << new AssistantButton(action->toKAction(), action->description(), this);
+        items << new AssistantButton(action->toKAction(), action->description(), m_assistant.data());
     }
-    auto hideAction = new KAction(i18n("Hide"), this);
+    auto hideAction = new KAction(i18n("Hide"), m_assistant.data());
     connect(hideAction, SIGNAL(triggered()), this, SLOT(executeHideAction()));
-    items << new AssistantButton(hideAction, hideAction->text(), this);
+    items << new AssistantButton(hideAction, hideAction->text(), m_assistant.data());
     m_config->setModel(items);
     m_config->setTitle(m_assistant->title());
 }

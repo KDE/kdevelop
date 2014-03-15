@@ -26,6 +26,8 @@
 #include <QDebug>
 #include <KAction>
 
+#include <memory>
+
 namespace KTextEditor
 {
 class View;
@@ -101,13 +103,17 @@ public:
      * This is to make use of the maximal space available and prevent any lines
      * in e.g. the editor to be hidden by the popup.
      */
-    AssistantPopup(KTextEditor::View* widget, const KDevelop::IAssistant::Ptr& assistant);
+    AssistantPopup(KTextEditor::View *widget, const KDevelop::IAssistant::Ptr &assistant);
+    /**
+     * @brief Like creating a new assistant, but faster.
+     */
+    void reset(KTextEditor::View *widget, const KDevelop::IAssistant::Ptr &assistant);
     KDevelop::IAssistant::Ptr assistant() const;
     virtual bool viewportEvent(QEvent *event);
 
 public slots:
     void executeHideAction();
-    void notifyReopened();
+    void notifyReopened(bool reopened=true);
 
 private slots:
     void updatePosition(KTextEditor::View* view, const KTextEditor::Cursor& newPos);
@@ -125,8 +131,9 @@ private:
     KDevelop::IAssistant::Ptr m_assistant;
     QList<KDevelop::IAssistantAction::Ptr> m_assistantActions;
     KTextEditor::View* m_view;
-    AssistantPopupConfig* m_config;
+    std::unique_ptr<AssistantPopupConfig> m_config;
     bool m_shownAtBottom;
+    bool m_reopening;
 };
 
 #endif // KDEVPLATFORM_ASSISTANTPOPUP_H

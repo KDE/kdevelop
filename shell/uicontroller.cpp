@@ -646,28 +646,25 @@ void UiController::showErrorMessage(const QString& message, int timeout)
     QMetaObject::invokeMethod(mw, "showErrorMessage", Q_ARG(QString, message), Q_ARG(int, timeout));
 }
 
-void UiController::hideAssistant(const KDevelop::IAssistant::Ptr& assistant)
+void UiController::hideAssistant()
 {
-    if(d->currentShownAssistant && d->currentShownAssistant->assistant() == assistant) {
+    if(d->currentShownAssistant) {
         disconnect(d->currentShownAssistant->assistant().data(), SIGNAL(hide()), this, SLOT(assistantHide()));
         disconnect(d->currentShownAssistant->assistant().data(), SIGNAL(actionsChanged()), this, SLOT(assistantActionsChanged()));
         
-        AssistantPopup* oldPopup = d->currentShownAssistant;
-        d->currentShownAssistant = 0;
-        // avoid flickering when the assistant hides by not updating the window until it's
-        // completely removed
         Sublime::HoldUpdates hold(ICore::self()->uiController()->activeMainWindow());
-        oldPopup->hide();
-        oldPopup->deleteLater(); //We have to do deleteLater, so we don't get problems when an assistant hides itself
+        d->currentShownAssistant->hide();
     }
 }
 
 void UiController::popUpAssistant(const KDevelop::IAssistant::Ptr& assistant)
 {
-    assistantHide();
     if(!assistant)
         return;
-    
+
+    // stop any pending hide actions
+    d->m_assistantTimer.stop();
+
     Sublime::View* view = d->activeSublimeWindow->activeView();
     if( !view )
     {
@@ -675,21 +672,25 @@ void UiController::popUpAssistant(const KDevelop::IAssistant::Ptr& assistant)
         return;
     }
     TextEditorWidget* textWidget = dynamic_cast<TextEditorWidget*>(view->widget());
+    bool wasVisible = d->currentShownAssistant && d->currentShownAssistant->isVisible();
     if(textWidget && textWidget->editorView()) {
-
-        d->currentShownAssistant = new AssistantPopup(textWidget->editorView(), assistant);
-        if(assistant->actions().count())
+        if ( ! d->currentShownAssistant ) {
+            d->currentShownAssistant = new AssistantPopup(textWidget->editorView(), assistant);
+        } else {
+            d->currentShownAssistant->reset(textWidget->editorView(), assistant);
+        }
+        if(assistant->actions().count() && !wasVisible) {
+            Sublime::HoldUpdates hold(ICore::self()->uiController()->activeMainWindow());
             d->currentShownAssistant->show();
+        }
 
-        connect(assistant.data(), SIGNAL(hide()), SLOT(assistantHide()), Qt::DirectConnection);
-        connect(assistant.data(), SIGNAL(actionsChanged()), SLOT(assistantActionsChanged()), Qt::DirectConnection);
+        connect(assistant.data(), SIGNAL(hide()), SLOT(assistantHide()), Qt::UniqueConnection);
+        connect(assistant.data(), SIGNAL(actionsChanged()), SLOT(assistantActionsChanged()), Qt::UniqueConnection);
     }
-    if(d->m_assistantTimer.isActive() && d->currentShownAssistant) {
-        // when the assistant was closed very recently (few ms),
-        // avoid flickering
-        d->currentShownAssistant->notifyReopened();
+    if( d->currentShownAssistant ) {
+        // when the assistant was still open, avoid flickering
+        d->currentShownAssistant->notifyReopened(wasVisible);
     }
-    d->m_assistantTimer.start();
 }
 
 const QMap< IToolViewFactory*, Sublime::ToolDocument* >& UiController::factoryDocuments() const
@@ -698,8 +699,10 @@ const QMap< IToolViewFactory*, Sublime::ToolDocument* >& UiController::factoryDo
 }
 
 void UiController::assistantHide() {
-    if(d->currentShownAssistant)
-        hideAssistant(d->currentShownAssistant->assistant());
+    if(d->currentShownAssistant) {
+        connect(&d->m_assistantTimer, SIGNAL(timeout()), SLOT(hideAssistant()), Qt::UniqueConnection);
+        d->m_assistantTimer.start();
+    }
 }
 
 void UiController::assistantActionsChanged() {
