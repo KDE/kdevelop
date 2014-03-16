@@ -307,7 +307,7 @@ void MainWindow::loadSettings()
         group += (toolbar->objectName().isEmpty() ? QString::number(n) : QString(" ")+toolbar->objectName());
 
         KConfigGroup toolbarGroup(&cg, group);
-        toolbar->applySettings(toolbarGroup, false);
+        toolbar->applySettings(toolbarGroup);
 
         if (toolbar->objectName() == "debugToolBar") {
             //debugToolBar visibility is stored separately to allow a area dependent default value

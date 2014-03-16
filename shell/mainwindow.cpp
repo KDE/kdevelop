@@ -67,10 +67,10 @@ Boston, MA 02110-1301, USA.
 namespace KDevelop
 {
 
-void MainWindow::applyMainWindowSettings(const KConfigGroup& config, bool force)
+void MainWindow::applyMainWindowSettings(const KConfigGroup& config)
 {
     if(!d->changingActiveView())
-        KXmlGuiWindow::applyMainWindowSettings(config, force);
+        KXmlGuiWindow::applyMainWindowSettings(config);
 }
 
 MainWindow::MainWindow( Sublime::Controller *parent, Qt::WFlags flags )

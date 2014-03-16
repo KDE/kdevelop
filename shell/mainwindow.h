@@ -81,7 +81,7 @@ protected:
     virtual void initializeStatusBar();
     void dragEnterEvent( QDragEnterEvent* );
     void dropEvent( QDropEvent* );
-    virtual void applyMainWindowSettings ( const KConfigGroup& config, bool force = false );
+    void applyMainWindowSettings(const KConfigGroup& config) Q_DECL_OVERRIDE;
 
 
 protected Q_SLOTS:
