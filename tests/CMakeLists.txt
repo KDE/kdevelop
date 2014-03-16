@@ -21,6 +21,18 @@ target_link_libraries(clang-standalone-parser
 
 ########### next target ###############
 
+kde4_add_unit_test(codecompletiontest
+    codecompletiontest.cpp
+)
+
+target_link_libraries(codecompletiontest
+    ${KDEVPLATFORM_TESTS_LIBRARIES}
+    ${QT_QTTEST_LIBRARY}
+    kdevclangcodecompletion
+)
+
+########### next target ###############
+
 kde4_add_unit_test(duchaintest
     duchaintest.cpp
 )

@@ -28,6 +28,8 @@
 
 #include <memory>
 
+#include "overridecompletionhelper.h"
+
 class ParseSession;
 class ClangCodeCompletionContext : public KDevelop::CodeCompletionContext
 {
@@ -50,6 +52,7 @@ public:
 private:
     std::unique_ptr<CXCodeCompleteResults, void(*)(CXCodeCompleteResults*)> m_results;
     QList<KDevelop::CompletionTreeElementPointer> m_ungrouped;
+    OverrideCompletionHelper m_overrides;
 };
 
 #endif // CLANGCODECOMPLETIONCONTEXT_H

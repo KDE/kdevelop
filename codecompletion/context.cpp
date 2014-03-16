@@ -89,6 +89,30 @@ protected:
     QString m_replacement;
 };
 
+class OverrideItem : public CompletionItem<CompletionTreeItem>
+{
+public:
+    OverrideItem(QString& nameAndParams, QString& returnType)
+        : CompletionItem<KDevelop::CompletionTreeItem>(
+              nameAndParams,
+              i18n("Override %1", returnType),
+              "virtual " + returnType + ' ' + nameAndParams
+          )
+    {
+    }
+
+    QVariant data(const QModelIndex& index, int role, const CodeCompletionModel* model) const override
+    {
+        if (role == Qt::DecorationRole) {
+            if (index.column() == KTextEditor::CodeCompletionModel::Icon) {
+                static QIcon icon(KIcon("CTparents"));
+                return icon;
+            }
+        }
+        return CompletionItem<CompletionTreeItem>::data(index, role, model);
+    }
+};
+
 /**
  * Specialized completion item class for items which are represented by a Declaration
  */
@@ -182,6 +206,7 @@ ClangCodeCompletionContext::ClangCodeCompletionContext(const ParseSession* const
                                                       )
     : CodeCompletionContext({}, QString(), {}, 0)
     , m_results(nullptr, clang_disposeCodeCompleteResults)
+    , m_overrides(session->unit(), position, ClangString(clang_getFileName(session->file())).c_str())
 {
     ClangString file(clang_getFileName(session->file()));
 
@@ -205,6 +230,7 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(con
                                                                              const CursorInRevision& position)
 {
     QList<CompletionTreeItemPointer> items;
+    QList<CompletionTreeItemPointer> overrides;
     QList<CompletionTreeItemPointer> macros;
     QList<CompletionTreeItemPointer> builtin;
 
@@ -332,6 +358,21 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(con
         } else {
             builtin.append(item);
         }
+    }
+
+    auto overrideList = m_overrides.getOverrides();
+
+    if (!overrideList.isEmpty()) {
+        for (int i = 0; i < overrideList.count(); i++) {
+            FunctionInfo info = overrideList.at(i);
+            QString nameAndParams = info.name + '(' + info.params.join(", ") + ')';
+            if(info.isVirtual)
+                nameAndParams = nameAndParams + " = 0";
+            overrides << CompletionTreeItemPointer(new OverrideItem(nameAndParams, info.returnType));
+        }
+        KDevelop::CompletionCustomGroupNode* node = new KDevelop::CompletionCustomGroupNode(i18n("Virtual Override"), 600);
+        node->appendChildren(overrides);
+        m_ungrouped << CompletionTreeElementPointer(node);
     }
 
     if (!macros.isEmpty()) {

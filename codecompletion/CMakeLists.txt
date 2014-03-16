@@ -7,6 +7,7 @@ kde4_add_library(kdevclangcodecompletion SHARED
     model.cpp
     context.cpp
     navigationwidget.cpp
+    overridecompletionhelper.cpp
 )
 
 target_link_libraries(kdevclangcodecompletion LINK_PRIVATE
