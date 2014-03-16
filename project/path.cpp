@@ -302,7 +302,7 @@ static void cleanPath(QVector<QString>* data, const bool isRemote)
     if (data->isEmpty()) {
         return;
     }
-    QString* it = data->begin();
+    QVector<QString>::iterator it = data->begin();
     const int startOffset = isRemote ? 1 : 0;
     it += startOffset;
     while(it != data->end()) {
