@@ -662,9 +662,6 @@ void UiController::popUpAssistant(const KDevelop::IAssistant::Ptr& assistant)
     if(!assistant)
         return;
 
-    // stop any pending hide actions
-    d->m_assistantTimer.stop();
-
     Sublime::View* view = d->activeSublimeWindow->activeView();
     if( !view )
     {
@@ -681,6 +678,8 @@ void UiController::popUpAssistant(const KDevelop::IAssistant::Ptr& assistant)
         }
         if(assistant->actions().count() && !wasVisible) {
             Sublime::HoldUpdates hold(ICore::self()->uiController()->activeMainWindow());
+            // stop any pending hide actions
+            d->m_assistantTimer.stop();
             d->currentShownAssistant->show();
         }
 
