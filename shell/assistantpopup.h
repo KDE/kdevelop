@@ -130,7 +130,7 @@ private:
     QWidget* widgetForAction(const KDevelop::IAssistantAction::Ptr& action, int& mnemonic);
     KDevelop::IAssistant::Ptr m_assistant;
     QList<KDevelop::IAssistantAction::Ptr> m_assistantActions;
-    KTextEditor::View* m_view;
+    QWeakPointer<KTextEditor::View> m_view;
     std::unique_ptr<AssistantPopupConfig> m_config;
     bool m_shownAtBottom;
     bool m_reopening;

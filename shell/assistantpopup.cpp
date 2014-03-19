@@ -50,7 +50,7 @@ using namespace KDevelop;
 AssistantPopup::AssistantPopup(KTextEditor::View* parent, const IAssistant::Ptr& assistant)
 // main window as parent to use maximal space available in worst case
     : QDeclarativeView(ICore::self()->uiController()->activeMainWindow())
-    , m_view(nullptr)
+    , m_view()
     , m_shownAtBottom(false)
     , m_reopening(false)
 {
@@ -69,11 +69,11 @@ AssistantPopup::AssistantPopup(KTextEditor::View* parent, const IAssistant::Ptr&
 void AssistantPopup::reset(KTextEditor::View* widget, const IAssistant::Ptr& assistant)
 {
     disconnect(this);
-    if ( m_view ) {
-        m_view->removeEventFilter(this);
+    if ( auto view = m_view.toStrongRef() ) {
+        view->removeEventFilter(this);
     }
     m_view = widget;
-    m_view->installEventFilter(this);
+    widget->installEventFilter(this);
     m_assistant = assistant;
 
     m_config = std::unique_ptr<AssistantPopupConfig>(new AssistantPopupConfig);
@@ -90,12 +90,12 @@ void AssistantPopup::reset(KTextEditor::View* widget, const IAssistant::Ptr& ass
         }
     }
 
-    connect(m_view, SIGNAL(verticalScrollPositionChanged(KTextEditor::View*,KTextEditor::Cursor)),
+    connect(widget, SIGNAL(verticalScrollPositionChanged(KTextEditor::View*,KTextEditor::Cursor)),
             this, SLOT(updatePosition(KTextEditor::View*,KTextEditor::Cursor)));
 
     // force recomputing the size hint
     resize(sizeHint());
-    updatePosition(m_view, KTextEditor::Cursor::invalid());
+    updatePosition(widget, KTextEditor::Cursor::invalid());
     // For some reason the object loses focus after a reset, so fix that
     rootObject()->findChild<QObject*>("items")->setProperty("focus", true);
 }
@@ -167,7 +167,10 @@ QRect AssistantPopup::textWidgetGeometry(KTextEditor::View *view) const
 void AssistantPopup::keyReleaseEvent(QKeyEvent *event)
 {
     if ( event->key() == Qt::Key_Alt ) {
-        m_view->setFocus();
+        auto view = m_view.toStrongRef();
+        if ( view ) {
+            view->setFocus();
+        }
         emit m_config->shouldShowHighlight(false);
     }
     QGraphicsView::keyReleaseEvent(event);
@@ -175,10 +178,15 @@ void AssistantPopup::keyReleaseEvent(QKeyEvent *event)
 
 bool AssistantPopup::eventFilter(QObject* object, QEvent* event)
 {
-    Q_ASSERT(object == m_view);
+    auto view = m_view.toStrongRef();
+    if ( ! view ) {
+        // should never happen
+        return false;
+    }
+    Q_ASSERT(object == view);
     Q_UNUSED(object);
     if (event->type() == QEvent::Resize) {
-        updatePosition(m_view, KTextEditor::Cursor::invalid());
+        updatePosition(view.data(), KTextEditor::Cursor::invalid());
     } else if (event->type() == QEvent::Hide) {
         executeHideAction();
     } else if (event->type() == QEvent::KeyPress) {
@@ -241,7 +249,10 @@ void AssistantPopup::executeHideAction()
 {
     if ( isVisible() ) {
         m_assistant->doHide();
-        m_view->setFocus();
+        auto view = m_view.toStrongRef();
+        if ( view ) {
+            view->setFocus();
+        }
     }
 }
 
