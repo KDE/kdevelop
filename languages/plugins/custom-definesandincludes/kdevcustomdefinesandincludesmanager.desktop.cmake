@@ -2,7 +2,7 @@
 Type=Service
 Name=Custom Defines And Includes Manager
 GenericName=Custom Defines And Includes Manager
-Comment=Configures which defines and includes will be added to the parser during parsing.
+Comment=Configure which defines and includes will be added to the parser during project parsing.
 Icon=kdevelop
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevcustomdefinesandincludesmanager

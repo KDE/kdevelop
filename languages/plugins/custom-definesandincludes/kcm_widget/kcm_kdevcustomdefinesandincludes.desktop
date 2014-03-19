@@ -10,4 +10,4 @@ X-KDE-ParentComponents=KDevCustomDefinesAndIncludesManager
 
 Name=Custom Defines And Includes
 
-Comment=Configures which defines and includes will be added to the parser during parsing.
+Comment=Configure which defines and includes will be added to the parser during project parsing.
