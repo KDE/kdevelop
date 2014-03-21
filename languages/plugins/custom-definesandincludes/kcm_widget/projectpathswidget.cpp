@@ -1,5 +1,4 @@
 /************************************************************************
- * KDevelop4 Custom Buildsystem Support                                 *
  *                                                                      *
  * Copyright 2010 Andreas Pakulat <apaku@gmx.de>                        *
  *                                                                      *
@@ -21,19 +20,18 @@
 
 #include <QToolButton>
 
-#include <KDebug>
 #include <KLineEdit>
 #include <KAction>
 #include <kfiledialog.h>
 #include <kmessagebox.h>
 #include <assert.h>
 
-#include "ui_projectpathswidget.h"
-#include "projectpathsmodel.h"
 #include <util/environmentgrouplist.h>
 #include <interfaces/iproject.h>
 
-extern int cbsDebugArea(); // from debugarea.cpp
+#include "ui_projectpathswidget.h"
+#include "projectpathsmodel.h"
+#include "debugarea.h"
 
 ProjectPathsWidget::ProjectPathsWidget( QWidget* parent )
     : QWidget ( parent ), ui( new Ui::ProjectPathsWidget )
@@ -66,12 +64,12 @@ ProjectPathsWidget::ProjectPathsWidget( QWidget* parent )
     connect( ui->definesWidget, SIGNAL(definesChanged(Defines)), SLOT(definesChanged(Defines)) );
 }
 
-QList<CustomBuildSystemProjectPathConfig> ProjectPathsWidget::paths() const
+QList<ConfigEntry> ProjectPathsWidget::paths() const
 {
     return pathsModel->paths();
 }
 
-void ProjectPathsWidget::setPaths( const QList<CustomBuildSystemProjectPathConfig>& paths )
+void ProjectPathsWidget::setPaths( const QList<ConfigEntry>& paths )
 {
     bool b = blockSignals( true );
     clear();
@@ -85,13 +83,13 @@ void ProjectPathsWidget::setPaths( const QList<CustomBuildSystemProjectPathConfi
 
 void ProjectPathsWidget::definesChanged( const Defines& defines )
 {
-    kDebug(cbsDebugArea()) << "defines changed";
+    definesAndIncludesDebug() << "defines changed";
     updatePathsModel( defines, ProjectPathsModel::DefinesDataRole );
 }
 
 void ProjectPathsWidget::includesChanged( const QStringList& includes )
 {
-    kDebug(cbsDebugArea()) << "includes changed";
+    definesAndIncludesDebug() << "includes changed";
     updatePathsModel( includes, ProjectPathsModel::IncludesDataRole );
 }
 
@@ -118,10 +116,10 @@ void ProjectPathsWidget::projectPathSelected( int index )
     updateEnablements();
 }
 
-void ProjectPathsWidget::clear()  
+void ProjectPathsWidget::clear()
 {
     bool sigDisabled = ui->projectPaths->blockSignals( true );
-    pathsModel->setPaths( QList<CustomBuildSystemProjectPathConfig>() );
+    pathsModel->setPaths( QList<ConfigEntry>() );
     ui->includesWidget->clear();
     ui->definesWidget->clear();
     updateEnablements();
@@ -143,9 +141,10 @@ void ProjectPathsWidget::replaceProjectPath()
     KFileDialog dlg(pathsModel->data(pathsModel->index(0, 0), ProjectPathsModel::FullUrlDataRole).value<KUrl>(), "", this);
     dlg.setMode( KFile::LocalOnly | KFile::ExistingOnly | KFile::File | KFile::Directory );
     dlg.exec();
-    kDebug(cbsDebugArea()) << "adding url:" << dlg.selectedUrl();
+    definesAndIncludesDebug() << "adding url:" << dlg.selectedUrl();
+
     pathsModel->setData( pathsModel->index( ui->projectPaths->currentIndex(), 0 ), QVariant::fromValue<KUrl>(dlg.selectedUrl()), ProjectPathsModel::FullUrlDataRole );
-    kDebug(cbsDebugArea()) << "added url:" << pathsModel->rowCount();
+    definesAndIncludesDebug() << "added url:" << pathsModel->rowCount();
     updateEnablements();
 }
 
@@ -170,4 +169,3 @@ void ProjectPathsWidget::updateEnablements() {
 }
 
 #include "projectpathswidget.moc"
-

@@ -18,20 +18,11 @@ target_link_libraries( custombuildsystemplugintest
 set( kcm_uitest_SRCS kcmuitestmain.cpp
                      ../custombuildsystemconfigwidget.cpp
                      ../configwidget.cpp
-                     ../projectpathswidget.cpp
-                     ../includesmodel.cpp
-                     ../definesmodel.cpp
-                     ../includeswidget.cpp
-                     ../defineswidget.cpp
-                     ../projectpathsmodel.cpp
                      ../debugarea.cpp
    )
 include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../)
 kde4_add_ui_files( kcm_uitest_SRCS
-                        ../projectpathswidget.ui
                         ../configwidget.ui
-                        ../includeswidget.ui
-                        ../defineswidget.ui
                         ../custombuildsystemconfigwidget.ui
                  )
 kde4_add_executable( kcm_uitest ${kcm_uitest_SRCS} )

@@ -48,11 +48,10 @@ QString generateToolGroupName( CustomBuildSystemTool::ActionType type )
 
 }
 
-CustomBuildSystemConfigWidget::CustomBuildSystemConfigWidget( QWidget* parent, KDevelop::IProject* w_project = 0 )
-    : QWidget( parent ), ui( new Ui::CustomBuildSystemConfigWidget ), project( w_project )
+CustomBuildSystemConfigWidget::CustomBuildSystemConfigWidget( QWidget* parent )
+    : QWidget( parent ), ui( new Ui::CustomBuildSystemConfigWidget )
 {
     ui->setupUi( this );
-    ui->configWidget->setProject(project);
 
     ui->addConfig->setIcon(KIcon( "list-add" ));
     ui->removeConfig->setIcon(KIcon( "list-remove" ));
@@ -97,24 +96,6 @@ void CustomBuildSystemConfigWidget::loadFrom( KConfig* cfg )
                 tool.enabled = toolgrp.readEntry( ConfigConstants::toolEnabled, false );
                 tool.type = CustomBuildSystemTool::ActionType( toolgrp.readEntry( ConfigConstants::toolType, 0 ) );
                 config.tools[tool.type] = tool;
-            } else if( subgrpName.startsWith( ConfigConstants::projectPathPrefix ) ) {
-                KConfigGroup pathgrp = subgrp.group( subgrpName );
-                CustomBuildSystemProjectPathConfig path;
-                path.path = pathgrp.readEntry( ConfigConstants::projectPathKey, "" );
-                {
-                    QByteArray tmp = pathgrp.readEntry( ConfigConstants::definesKey, QByteArray() );
-                    QDataStream s(tmp);
-                    s.setVersion( QDataStream::Qt_4_5 );
-                    s >> path.defines;
-                }
-
-                {
-                    QByteArray tmp = pathgrp.readEntry( ConfigConstants::includesKey, QByteArray() );
-                    QDataStream s(tmp);
-                    s.setVersion( QDataStream::Qt_4_5 );
-                    s >> path.includes;
-                }
-                config.projectPaths << path;
             }
         }
         configs << config;
@@ -148,27 +129,6 @@ void CustomBuildSystemConfigWidget::saveConfig( KConfigGroup& grp, CustomBuildSy
         toolgrp.writeEntry( ConfigConstants::toolEnabled, tool.enabled );
         toolgrp.writeEntry( ConfigConstants::toolExecutable, tool.executable );
         toolgrp.writeEntry( ConfigConstants::toolArguments, tool.arguments );
-    }
-
-    // Write paths
-    int pathIndex = 0;
-    foreach (const CustomBuildSystemProjectPathConfig& path, c.projectPaths) {
-        KConfigGroup pathgrp = subgrp.group( ConfigConstants::projectPathPrefix + QString::number(pathIndex++) );
-        pathgrp.writeEntry( ConfigConstants::projectPathKey, path.path );
-        {
-            QByteArray tmp;
-            QDataStream s(&tmp, QIODevice::WriteOnly);
-            s.setVersion( QDataStream::Qt_4_5 );
-            s << path.includes;
-            pathgrp.writeEntry( ConfigConstants::includesKey, tmp );
-        }
-        {
-            QByteArray tmp;
-            QDataStream s(&tmp, QIODevice::WriteOnly);
-            s.setVersion( QDataStream::Qt_4_5 );
-            s << path.defines;
-            pathgrp.writeEntry( ConfigConstants::definesKey, tmp );
-        }
     }
 }
 

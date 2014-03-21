@@ -6,20 +6,11 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>685</width>
-    <height>627</height>
+    <width>363</width>
+    <height>236</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <property name="leftMargin">
-    <number>6</number>
-   </property>
-   <property name="topMargin">
-    <number>6</number>
-   </property>
-   <property name="rightMargin">
-    <number>6</number>
-   </property>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
@@ -142,23 +133,17 @@ If this is the same as the source directory you can leave it empty.</string>
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox_2">
-     <property name="title">
-      <string>Path-specific language parameters</string>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
      </property>
-     <layout class="QGridLayout" name="gridLayout_3">
-      <item row="1" column="0">
-       <widget class="ProjectPathsWidget" name="projectPaths" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>76</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>
@@ -177,12 +162,6 @@ If this is the same as the source directory you can leave it empty.</string>
    <class>KDevelop::EnvironmentSelectionWidget</class>
    <extends>QComboBox</extends>
    <header>util/environmentselectionwidget.h</header>
-  </customwidget>
-  <customwidget>
-   <class>ProjectPathsWidget</class>
-   <extends>QWidget</extends>
-   <header>projectpathswidget.h</header>
-   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

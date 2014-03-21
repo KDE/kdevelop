@@ -1,5 +1,4 @@
 /************************************************************************
- * KDevelop4 Custom Buildsystem Support                                 *
  *                                                                      *
  * Copyright 2010 Andreas Pakulat <apaku@gmx.de>                        *
  *                                                                      *
@@ -17,44 +16,57 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>. *
  ************************************************************************/
 
-#ifndef CONFIGWIDGET_H
-#define CONFIGWIDGET_H
+#ifndef KDEVELOP_PROJECTMANAGERS_CUSTOM_BUILDSYSTEM_INCLUDESWIDGET_H
+#define KDEVELOP_PROJECTMANAGERS_CUSTOM_BUILDSYSTEM_INCLUDESWIDGET_H
 
 #include <QWidget>
 
-#include "custombuildsystemconfig.h"
+#include <qabstractitemmodel.h>
 
+class KFileDialog;
+class KUrlRequester;
 namespace Ui
 {
-class ConfigWidget;
+class IncludesWidget;
 }
 
 namespace KDevelop
 {
     class IProject;
 }
+class KUrl;
+class ProjectPathsModel;
+class IncludesModel;
+class QItemSelection;
 
-class ConfigWidget : public QWidget
+class IncludesWidget : public QWidget
 {
 Q_OBJECT
 public:
-    ConfigWidget( QWidget* parent = 0 );
-    void loadConfig( CustomBuildSystemConfig cfg );
-    CustomBuildSystemConfig config() const;
+    IncludesWidget( QWidget* parent = 0 );
+    void setProject(KDevelop::IProject* w_project);
+    void setIncludes( const QStringList& );
     void clear();
 signals:
-    void changed();
+    void includesChanged( const QStringList& );
 private slots:
-    void changeAction( int );
-    void toggleActionEnablement( bool );
-    void actionArgumentsEdited( const QString& );
-    void actionEnvironmentChanged( int );
-    void actionExecutableChanged( const KUrl& );
-    void actionExecutableChanged( const QString& );
+    // Handling of include-path url-requester, add and remove buttons
+    void includePathSelected( const QModelIndex& selected );
+    void includePathEdited();
+    void includePathUrlSelected(const KUrl&);
+    void addIncludePath();
+    // Handles action and also Del-key in list
+    void deleteIncludePath();
+
+    // Forward includes model changes
+    void includesChanged();
 private:
-    Ui::ConfigWidget* ui;
-    QVector<CustomBuildSystemTool> m_tools;
-    void setTool( const CustomBuildSystemTool& tool );
+    Ui::IncludesWidget* ui;
+    IncludesModel* includesModel;
+    QString makeIncludeDirAbsolute( const KUrl& url ) const;
+    // Enables/Disables widgets based on UI state/selection
+    void updateEnablements();
+    void updatePathsModel( const QVariant& newData, int role );
 };
 
 #endif

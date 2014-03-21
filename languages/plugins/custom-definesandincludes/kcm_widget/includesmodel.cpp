@@ -1,5 +1,4 @@
 /************************************************************************
- * KDevelop4 Custom Buildsystem Support                                 *
  *                                                                      *
  * Copyright 2010 Andreas Pakulat <apaku@gmx.de>                        *
  *                                                                      *
@@ -20,8 +19,6 @@
 #include "includesmodel.h"
 
 #include <klocale.h>
-
-#include "custombuildsystemconfig.h"
 
 IncludesModel::IncludesModel( QObject* parent )
     : QAbstractListModel( parent )

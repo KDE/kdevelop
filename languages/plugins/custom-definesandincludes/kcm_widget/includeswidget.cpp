@@ -1,5 +1,4 @@
 /************************************************************************
- * KDevelop4 Custom Buildsystem Support                                 *
  *                                                                      *
  * Copyright 2010 Andreas Pakulat <apaku@gmx.de>                        *
  *                                                                      *
@@ -21,17 +20,17 @@
 
 #include <QToolButton>
 
-#include <KDebug>
 #include <KLineEdit>
 #include <KAction>
 #include <kfiledialog.h>
 #include <kmessagebox.h>
 
-#include "ui_includeswidget.h"
-#include "includesmodel.h"
 #include <interfaces/iproject.h>
 
-extern int cbsDebugArea(); // from debugarea.cpp
+#include "ui_includeswidget.h"
+#include "includesmodel.h"
+#include "debugarea.h"
+
 
 IncludesWidget::IncludesWidget( QWidget* parent )
     : QWidget ( parent ), ui( new Ui::IncludesWidget )
@@ -51,7 +50,8 @@ IncludesWidget::IncludesWidget( QWidget* parent )
     connect( ui->addIncludePath, SIGNAL(clicked(bool)), SLOT(addIncludePath()) );
     connect( ui->removeIncludePath, SIGNAL(clicked(bool)), SLOT(deleteIncludePath()) );
 
-    ui->includePathRequester->setMode( KFile::Directory | KFile::LocalOnly | KFile::ExistingOnly );
+    // also let user choose a file as include path. This file will be "automatically included" in all files. See also -include command line option of clang/gcc
+    ui->includePathRequester->setMode( KFile::File | KFile::Directory | KFile::LocalOnly | KFile::ExistingOnly );
 
     ui->includePaths->setModel( includesModel );
     connect( ui->includePaths->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(includePathSelected(QModelIndex)) );
@@ -78,19 +78,17 @@ void IncludesWidget::setIncludes( const QStringList& paths )
 }
 void IncludesWidget::includesChanged()
 {
-    kDebug(cbsDebugArea()) << "includes changed";
+    definesAndIncludesDebug() << "includes changed";
     emit includesChanged( includesModel->includes() );
 }
 
-void IncludesWidget::includePathSelected( const QModelIndex& selected )
+void IncludesWidget::includePathSelected( const QModelIndex& /*selected*/ )
 {
-    kDebug(cbsDebugArea()) << "include path list entry selected:" << selected;
     updateEnablements();
 }
 
 void IncludesWidget::includePathEdited()
 {
-    kDebug(cbsDebugArea()) << "include path edited:" << ui->includePathRequester->url();
     updateEnablements();
 }
 
@@ -102,7 +100,6 @@ void IncludesWidget::clear()
 
 void IncludesWidget::addIncludePath()
 {
-    kDebug(cbsDebugArea()) << "adding include path" << ui->includePathRequester->url();
     includesModel->addInclude( makeIncludeDirAbsolute(ui->includePathRequester->url()) );
     ui->includePathRequester->clear();
     updateEnablements();
@@ -110,7 +107,7 @@ void IncludesWidget::addIncludePath()
 
 void IncludesWidget::deleteIncludePath()
 {
-    kDebug(cbsDebugArea()) << "deleting include path" << ui->includePaths->currentIndex();
+    definesAndIncludesDebug() << "deleting include path" << ui->includePaths->currentIndex();
     const QModelIndex curidx = ui->includePaths->currentIndex();
     if( curidx.isValid() ) {
         if( KMessageBox::questionYesNo( this, i18n("Are you sure you want to remove the selected include path '%1'?", includesModel->data(curidx, Qt::DisplayRole).toString() ), i18n("Delete Include Path") ) == KMessageBox::Yes ) {
@@ -148,4 +145,3 @@ QString IncludesWidget::makeIncludeDirAbsolute(const KUrl& url) const
 }
 
 #include "includeswidget.moc"
-

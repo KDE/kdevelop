@@ -41,7 +41,7 @@ class CustomBuildSystemConfigWidget : public QWidget
 {
 Q_OBJECT
 public:
-    CustomBuildSystemConfigWidget( QWidget* parent, KDevelop::IProject* w_project );
+    CustomBuildSystemConfigWidget( QWidget* parent );
     void loadFrom( KConfig* );
     void saveTo( KConfig*, KDevelop::IProject* project );
     void loadDefaults();
@@ -58,7 +58,6 @@ private:
     void saveConfig( KConfigGroup& grp, CustomBuildSystemConfig& c, int index );
     Ui::CustomBuildSystemConfigWidget* ui;
     QList<CustomBuildSystemConfig> configs;
-    KDevelop::IProject* project;
 };
 
 #endif

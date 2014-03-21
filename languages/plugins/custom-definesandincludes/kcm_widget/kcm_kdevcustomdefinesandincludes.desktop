@@ -1,0 +1,13 @@
+[Desktop Entry]
+Icon=kdevelop
+Type=Service
+ServiceTypes=KCModule
+
+X-KDE-ModuleType=Library
+X-KDE-Library=kcm_kdevcustomdefinesandincludes
+X-KDE-ParentApp=kdevplatformproject
+X-KDE-ParentComponents=KDevDefinesAndIncludesManager
+
+Name=Custom Defines And Includes
+
+Comment=Configure which macros and include directories/files will be added to the parser during project parsing.
