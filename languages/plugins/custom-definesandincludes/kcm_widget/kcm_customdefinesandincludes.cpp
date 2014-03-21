@@ -22,7 +22,7 @@
 #include "projectpathswidget.h"
 #include "customdefinesandincludes.h"
 
-#include <language/interfaces/idefinesandincludesmanager.h>
+#include "definesandincludesmanager.h"
 
 #include <interfaces/iruncontroller.h>
 
@@ -55,16 +55,18 @@ DefinesAndIncludes::~DefinesAndIncludes()
 void DefinesAndIncludes::loadFrom(KConfig* cfg)
 {
     configWidget->clear();
-    auto manager = KDevelop::IDefinesAndIncludesManager::manager();
-    if ( manager ) {
+    auto IManager = KDevelop::IDefinesAndIncludesManager::manager();
+    if ( IManager ) {
+        auto manager = static_cast<KDevelop::DefinesAndIncludesManager*>(IManager);
         configWidget->setPaths( manager->readSettings( cfg ) );
     }
 }
 
 void DefinesAndIncludes::saveTo(KConfig* cfg, KDevelop::IProject*)
 {
-    auto manager = KDevelop::IDefinesAndIncludesManager::manager();
-    if ( manager ) {
+    auto IManager = KDevelop::IDefinesAndIncludesManager::manager();
+    if ( IManager ) {
+        auto manager = static_cast<KDevelop::DefinesAndIncludesManager*>(IManager);
         manager->writeSettings( cfg, configWidget->paths() );
     }
 }

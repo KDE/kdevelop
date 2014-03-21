@@ -6,8 +6,8 @@ ServiceTypes=KCModule
 X-KDE-ModuleType=Library
 X-KDE-Library=kcm_kdevcustomdefinesandincludes
 X-KDE-ParentApp=kdevplatformproject
-X-KDE-ParentComponents=KDevCustomDefinesAndIncludesManager
+X-KDE-ParentComponents=KDevDefinesAndIncludesManager
 
 Name=Custom Defines And Includes
 
-Comment=Configure which defines and includes will be added to the parser during project parsing.
+Comment=Configure which macros and include directories/files will be added to the parser during project parsing.

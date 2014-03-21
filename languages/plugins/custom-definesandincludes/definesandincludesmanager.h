@@ -33,21 +33,21 @@
 namespace KDevelop
 {
 /// @brief: Class for retrieving custom defines and includes.
-class CustomDefinesAndIncludesManager : public IPlugin, public IDefinesAndIncludesManager, public SettingsManager
+class DefinesAndIncludesManager : public IPlugin, public IDefinesAndIncludesManager, public SettingsManager
 {
     Q_OBJECT
     Q_INTERFACES( KDevelop::IDefinesAndIncludesManager )
 public :
-    explicit CustomDefinesAndIncludesManager( QObject* parent, const QVariantList& args = QVariantList() );
+    explicit DefinesAndIncludesManager( QObject* parent, const QVariantList& args = QVariantList() );
     ///@return list of all custom defines for @p item
     QHash<QString, QString> defines( const ProjectBaseItem* item ) const override;
 
     ///@return list of all custom includes for @p item
     Path::List includes( const ProjectBaseItem* item ) const override;
 
-    QList<ConfigEntry> readSettings( KConfig* cfg ) const override;
+    virtual QList<ConfigEntry> readSettings( KConfig* cfg ) const;
 
-    void writeSettings( KConfig* cfg, const QList<ConfigEntry>& paths ) const override;
+    virtual void writeSettings( KConfig* cfg, const QList<ConfigEntry>& paths ) const;
 };
 }
 #endif // CUSTOMDEFINESANDINCLUDESMANAGER_H

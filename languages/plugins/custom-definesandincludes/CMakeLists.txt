@@ -5,19 +5,19 @@ include_directories( ${KDE4_INCLUDES} ${KDEVPLATFORM_INCLUDE_DIR} )
 
 add_definitions( ${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 
-set( kdevcustomdefinesandincludesmanager_SRCS
-        customdefinesandincludesmanager.cpp
+set( kdevdefinesandincludesmanager_SRCS
+        definesandincludesmanager.cpp
         settingsmanager.cpp
         debugarea.cpp
     )
-kde4_add_plugin( kdevcustomdefinesandincludesmanager
-        ${kdevcustomdefinesandincludesmanager_SRCS})
-target_link_libraries( kdevcustomdefinesandincludesmanager LINK_PRIVATE
+kde4_add_plugin( kdevdefinesandincludesmanager
+        ${kdevdefinesandincludesmanager_SRCS})
+target_link_libraries( kdevdefinesandincludesmanager LINK_PRIVATE
         ${KDEVPLATFORM_PROJECT_LIBRARIES}
         ${KDEVPLATFORM_LANGUAGE_LIBRARIES} )
 
-install( TARGETS kdevcustomdefinesandincludesmanager
+install( TARGETS kdevdefinesandincludesmanager
          DESTINATION ${PLUGIN_INSTALL_DIR} )
 
-configure_file(kdevcustomdefinesandincludesmanager.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevcustomdefinesandincludesmanager.desktop)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevcustomdefinesandincludesmanager.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+configure_file(kdevdefinesandincludesmanager.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevdefinesandincludesmanager.desktop)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevdefinesandincludesmanager.desktop DESTINATION ${SERVICES_INSTALL_DIR} )

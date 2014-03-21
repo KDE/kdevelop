@@ -19,7 +19,7 @@
  *
  */
 
-#include "customdefinesandincludesmanager.h"
+#include "definesandincludesmanager.h"
 
 #include "settingsmanager.h"
 
@@ -64,18 +64,18 @@ static ConfigEntry findConfigForItem(const QList<ConfigEntry>& paths, const KDev
 namespace KDevelop
 {
 
-K_PLUGIN_FACTORY(CustomDefinesAndIncludesManagerFactory, registerPlugin<CustomDefinesAndIncludesManager>(); )
-K_EXPORT_PLUGIN(CustomDefinesAndIncludesManagerFactory(KAboutData("kdevcustomdefinesandincludesmanager",
-"kdevcustomdefinesandincludesmanager", ki18n("Custom Defines and Includes Manager"), "0.1", ki18n(""),
+K_PLUGIN_FACTORY(DefinesAndIncludesManagerFactory, registerPlugin<DefinesAndIncludesManager>(); )
+K_EXPORT_PLUGIN(DefinesAndIncludesManagerFactory(KAboutData("kdevdefinesandincludesmanager",
+"kdevdefinesandincludesmanager", ki18n("Custom Defines and Includes Manager"), "0.1", ki18n(""),
 KAboutData::License_GPL)))
 
-CustomDefinesAndIncludesManager::CustomDefinesAndIncludesManager( QObject* parent, const QVariantList& )
-    : IPlugin( CustomDefinesAndIncludesManagerFactory::componentData(), parent )
+DefinesAndIncludesManager::DefinesAndIncludesManager( QObject* parent, const QVariantList& )
+    : IPlugin( DefinesAndIncludesManagerFactory::componentData(), parent )
 {
     KDEV_USE_EXTENSION_INTERFACE(IDefinesAndIncludesManager);
 }
 
-QHash<QString, QString> CustomDefinesAndIncludesManager::defines( const ProjectBaseItem* item ) const
+QHash<QString, QString> DefinesAndIncludesManager::defines( const ProjectBaseItem* item ) const
 {
     if (!item) {
         return {};
@@ -91,7 +91,7 @@ QHash<QString, QString> CustomDefinesAndIncludesManager::defines( const ProjectB
     return defines;
 }
 
-Path::List CustomDefinesAndIncludesManager::includes(const ProjectBaseItem* item) const
+Path::List DefinesAndIncludesManager::includes(const ProjectBaseItem* item) const
 {
     if (!item) {
         return {};
@@ -102,12 +102,12 @@ Path::List CustomDefinesAndIncludesManager::includes(const ProjectBaseItem* item
     return KDevelop::toPathList(findConfigForItem(readSettings(cfg), item).includes);
 }
 
-QList<ConfigEntry> CustomDefinesAndIncludesManager::readSettings( KConfig* cfg ) const
+QList<ConfigEntry> DefinesAndIncludesManager::readSettings( KConfig* cfg ) const
 {
     return SettingsManager::readSettings( cfg );
 }
 
-void CustomDefinesAndIncludesManager::writeSettings( KConfig* cfg, const QList<ConfigEntry>& paths ) const
+void DefinesAndIncludesManager::writeSettings( KConfig* cfg, const QList<ConfigEntry>& paths ) const
 {
     SettingsManager::writeSettings( cfg, paths );
 }
