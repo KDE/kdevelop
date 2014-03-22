@@ -24,6 +24,7 @@
 #include "appendedlist.h"
 #include "duchainpointer.h"
 #include <language/editor/persistentmovingrange.h>
+#include <language/editor/rangeinrevision.h>
 
 namespace KDevelop
 {

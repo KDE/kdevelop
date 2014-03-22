@@ -23,11 +23,11 @@
 
 #include <KSharedPtr>
 #include <ktexteditor/attribute.h>
-#include <language/duchain/indexedstring.h>
-#include "documentrange.h"
+#include "simplerange.h"
 
 namespace KDevelop {
 
+class IndexedString;
 class PersistentMovingRangePrivate;
 
 /**

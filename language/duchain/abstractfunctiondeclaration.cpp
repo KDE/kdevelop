@@ -22,6 +22,7 @@
 #include "types/functiontype.h"
 #include "declaration.h"
 #include "ducontext.h"
+#include "indexedstring.h"
 
 namespace KDevelop {
 
