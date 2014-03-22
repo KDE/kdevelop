@@ -22,7 +22,7 @@ include (MacroOptionalAddSubdirectory)
 
 find_package(QJSON)
 # QJSON <=0.7.1 provides variables with lower case prefix, see bug 331426
-if (${QJSON_VERSION} VERSION_LESS "0.7.2")
+if (QJSON_VERSION VERSION_LESS "0.7.2")
     set(QJSON_LIBRARIES   ${qjson_LIBRARIES})
     set(QJSON_INCLUDE_DIR ${qjson_INCLUDE_DIR})
 endif()
