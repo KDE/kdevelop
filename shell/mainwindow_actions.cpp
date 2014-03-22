@@ -211,7 +211,6 @@ void MainWindowPrivate::showEditorConfig()
 {
     KTextEditor::Editor* editor = Core::self()->partController()->editorPart();
     editor->configDialog(m_mainWindow);
-    editor->writeConfig();
 }
 
 void MainWindowPrivate::contextMenuFileNew()

@@ -144,7 +144,7 @@ private:
     void setEditorView(KTextEditor::View* view);
     class TextEditorWidgetPrivate* const d;
 
-    Q_PRIVATE_SLOT(d, void viewEditModeChanged(KTextEditor::View*, KTextEditor::View::EditMode));
+    Q_PRIVATE_SLOT(d, void viewInputModeChanged(KTextEditor::View*, KTextEditor::View::InputMode));
 
 };
 

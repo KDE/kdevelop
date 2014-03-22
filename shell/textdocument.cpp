@@ -299,8 +299,7 @@ struct TextDocumentPrivate {
         if(!document->url().isValid()) {
             return;
         }
-        if (KTextEditor::ParameterizedSessionConfigInterface *sessionConfigIface =
-            qobject_cast<KTextEditor::ParameterizedSessionConfigInterface*>(document))
+
         {
             // make sure only MAX_DOC_SETTINGS entries are stored
             KConfigGroup katePartSettings = katePartSettingsGroup();
@@ -318,8 +317,7 @@ struct TextDocumentPrivate {
 
             // actually save session config
             KConfigGroup group = docConfigGroup();
-            sessionConfigIface->writeParameterizedSessionConfig(group,
-                KTextEditor::ParameterizedSessionConfigInterface::SkipUrl);
+            document->writeSessionConfig(group);
         }
     }
 
@@ -328,12 +326,8 @@ struct TextDocumentPrivate {
         if (!document || !katePartSettingsGroup().hasGroup(docConfigGroupName())) {
             return;
         }
-        if (KTextEditor::ParameterizedSessionConfigInterface *sessionConfigIface =
-            qobject_cast<KTextEditor::ParameterizedSessionConfigInterface*>(document))
-        {
-            sessionConfigIface->readParameterizedSessionConfig(docConfigGroup(),
-                KTextEditor::ParameterizedSessionConfigInterface::SkipUrl);
-        }
+
+        document->readSessionConfig(docConfigGroup(), {"SkipUrl"});
     }
 
 
@@ -363,7 +357,7 @@ public:
         statusLabel = 0;
     }
 
-    void viewEditModeChanged(KTextEditor::View* view, KTextEditor::View::EditMode mode)
+    void viewInputModeChanged(KTextEditor::View* view, KTextEditor::View::InputMode mode)
     {
 #ifdef KTEXTEDITOR_HAS_VIMODE
         if ( ! statusLabel ) {
@@ -883,8 +877,8 @@ void KDevelop::TextEditorWidget::setEditorView(KTextEditor::View* view)
     
     viewStatusChanged(view, view->cursorPosition());
 
-    connect(view, SIGNAL(viewEditModeChanged(KTextEditor::View*,KTextEditor::View::EditMode)),
-            this, SLOT(viewEditModeChanged(KTextEditor::View*,KTextEditor::View::EditMode)));
+    connect(view, SIGNAL(viewInputModeChanged(KTextEditor::View*,KTextEditor::View::InputMode)),
+            this, SLOT(viewInputModeChanged(KTextEditor::View*,KTextEditor::View::InputMode)));
 
     d->widgetLayout->insertWidget(0, d->view);
     setFocusProxy(view);

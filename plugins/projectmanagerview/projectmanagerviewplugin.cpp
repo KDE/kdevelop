@@ -32,7 +32,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kparts/mainwindow.h>
-#include <kparts/componentfactory.h>
+#include <kpluginfactory.h>
 
 #include <project/projectmodel.h>
 #include <project/projectbuildsetmodel.h>

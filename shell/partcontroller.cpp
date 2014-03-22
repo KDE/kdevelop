@@ -116,7 +116,6 @@ KTextEditor::Document* PartController::createTextPart(const QString &encoding)
         args.setMimeType( QString::fromLatin1( "text/plain;" ) + encoding );
         doc->setArguments( args );
     }
-    KTextEditor::Editor::instance()->readConfig();
 
     return doc;
 }
