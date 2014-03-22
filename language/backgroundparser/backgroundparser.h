@@ -38,8 +38,9 @@ class QMutex;
 
 namespace ThreadWeaver
 {
-class Weaver;
 class Job;
+class QObjectDecorator;
+class Weaver;
 }
 
 namespace KDevelop
@@ -202,7 +203,7 @@ public Q_SLOTS:
     void loadSettings();
 
 protected Q_SLOTS:
-    void parseComplete(ThreadWeaver::Job *job);
+    void parseComplete(const ThreadWeaver::JobPointer& job);
     void parseProgress(KDevelop::ParseJob*, float value, QString text);
     void startTimer();
     void aboutToQuit();
