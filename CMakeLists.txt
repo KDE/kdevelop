@@ -26,7 +26,7 @@ macro_log_feature( Grantlee_FOUND "Grantlee" "Grantlee templating library, neede
 macro_log_feature( QJSON_FOUND "QJson" "QJson support for Uploading Patches to reviewboard" "http://qjson.sourceforge.net/" FALSE "0.7.0" "The qjson library is needed to enable uploading patches to reviewboard" )
 
 # QJSON <=0.7.1 provides variables with lower case prefix, see bug 331426
-if (${QJSON_VERSION} VERSION_LESS "0.7.2")
+if (QJSON_VERSION VERSION_LESS "0.7.2")
     set(QJSON_LIBRARIES   ${qjson_LIBRARIES})
     set(QJSON_INCLUDE_DIR ${qjson_INCLUDE_DIR})
 endif()
