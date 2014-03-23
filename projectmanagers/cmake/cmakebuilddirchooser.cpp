@@ -272,7 +272,14 @@ void CMakeBuildDirChooser::setStatus(const QString& message, bool canApply)
         role = KColorScheme::NegativeText;
     }
     m_chooserUi->status->setText(QString("<i><font color='%1'>%2</font></i>").arg(scheme.foreground(role).color().name()).arg(message));
-    button(Ok)->setEnabled(canApply);
+
+    enableButtonOk(canApply);
+    if (canApply) {
+        KPushButton* cancelbutton = button(Cancel);
+        if (cancelbutton) {
+            cancelbutton->clearFocus();
+        }
+    }
 }
 
 KUrl CMakeBuildDirChooser::cmakeBinary() const { return m_chooserUi->cmakeBin->url(); }
