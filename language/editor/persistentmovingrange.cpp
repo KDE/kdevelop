@@ -24,7 +24,6 @@
 #include "persistentmovingrangeprivate.h"
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
-#include <backgroundparser/backgroundparser.h>
 
 KDevelop::PersistentMovingRange::PersistentMovingRange(const SimpleRange& range, const IndexedString& document, bool shouldExpand)
 : m_p(new PersistentMovingRangePrivate)

@@ -247,11 +247,13 @@ void DVcsJob::slotProcessError( QProcess::ProcessError err )
         setVerbosity(Verbose);
         startOutput();
     }
+    emitResult();
 }
 
 void DVcsJob::slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
 {
     d->status = JobSucceeded;
+    d->model->appendLine(i18n("Command exited with value %1.", exitCode));
 
     if (exitStatus == QProcess::CrashExit)
         slotProcessError(QProcess::Crashed);
@@ -259,8 +261,8 @@ void DVcsJob::slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
     else if (exitCode != 0 && !d->ignoreError)
         slotProcessError(QProcess::UnknownError);
 
-    d->model->appendLine(i18n("Command exited with value %1.", exitCode));
-    jobIsReady();
+    else
+        jobIsReady();
 }
 
 void DVcsJob::displayOutput(const QString& data)

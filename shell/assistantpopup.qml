@@ -94,6 +94,11 @@ Rectangle {
             objectName: "items"
             // config.model contains a list of buttons to be displayed, set from C++
             model: config.model
+            onModelChanged: {
+                root.opacity = 0.2
+                root.y = -2
+                popupAnimation.start();
+            }
             AssistantButton {
                 Connections {
                     target: config
@@ -111,6 +116,7 @@ Rectangle {
                 highlight: config.highlight
             }
             Keys.onPressed: {
+                console.log("key pressed", event.key);
                 var triggerIndex = -1;
                 if ( event.key == Qt.Key_0 ) {
                     triggerIndex = model.length-1;

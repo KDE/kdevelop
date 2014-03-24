@@ -89,8 +89,6 @@ public:
 
     virtual void popUpAssistant(const KDevelop::IAssistant::Ptr& assistant);
 
-    virtual void hideAssistant(const KDevelop::IAssistant::Ptr& assistant);
-
     virtual void showErrorMessage(const QString& message, int timeout);
 
     /// Returns list of available view factories together with their ToolDocuments.
@@ -110,6 +108,7 @@ private Q_SLOTS:
     void assistantHide();
     void assistantActionsChanged();
     void addNewToolView(MainWindow* mw, QListWidgetItem* item);
+    void hideAssistant();
 
 private:
     void addToolViewIfWanted(IToolViewFactory* factory,

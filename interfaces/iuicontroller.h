@@ -137,7 +137,7 @@ public:
     /**
      * Hides the assistant if it is currently being shown
      */
-    virtual void hideAssistant(const KSharedPtr<IAssistant>& assistant) = 0;
+    virtual void hideAssistant() = 0;
     
     /**
      * This is meant to be used by IDocument subclasses to initialize the
