@@ -28,8 +28,8 @@ class UiControllerTest : public QObject {
     Q_OBJECT
 
 private slots:
-    void initTestSuite();
-    void cleanupTestSuite();
+    void initTestCase();
+    void cleanupTestCase();
 
     void showErrorMessage();
 };

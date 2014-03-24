@@ -32,13 +32,13 @@ QTEST_MAIN(UiControllerTest)
 
 using namespace KDevelop;
 
-void UiControllerTest::initTestSuite()
+void UiControllerTest::initTestCase()
 {
     AutoTestShell::init();
     TestCore::initialize();
 }
 
-void UiControllerTest::cleanupTestSuite()
+void UiControllerTest::cleanupTestCase()
 {
     TestCore::shutdown();
 }
