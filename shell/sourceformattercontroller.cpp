@@ -41,12 +41,13 @@ Boston, MA 02110-1301, USA.
 #include <qfile.h>
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
-#include <ktexteditor/commandinterface.h>
+
 #include <kactioncollection.h>
 #include <kaction.h>
 #include <KLocalizedString>
 #include <interfaces/idocument.h>
 #include <interfaces/idocumentcontroller.h>
+#include <ktexteditor/command.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/editor.h>
 #include <ktexteditor/configinterface.h>
@@ -445,11 +446,11 @@ void SourceFormatterController::adaptEditorIndentationMode(KTextEditor::Document
 	if(indentation.isValid())
 	{
 		struct CommandCaller {
-			CommandCaller(KTextEditor::Document* _doc) : doc(_doc), ci(qobject_cast<KTextEditor::CommandInterface*>(KTextEditor::Editor::instance())) {
-				Q_ASSERT(ci);
+			CommandCaller(KTextEditor::Document* _doc) : doc(_doc), editor(KTextEditor::Editor::instance()) {
+				Q_ASSERT(editor);
 			}
 			void operator()(QString cmd) {
-				KTextEditor::Command* command = ci->queryCommand( cmd );
+				KTextEditor::Command* command = editor->queryCommand( cmd );
 				Q_ASSERT(command);
 				QString msg;
 				kDebug() << "calling" << cmd;
@@ -459,7 +460,7 @@ void SourceFormatterController::adaptEditorIndentationMode(KTextEditor::Document
 			}
 			
 			KTextEditor::Document* doc;
-			KTextEditor::CommandInterface* ci;
+			KTextEditor::Editor* editor;
 		} call(doc);
 		
 		if( indentation.indentWidth ) // We know something about indentation-width
