@@ -19,13 +19,12 @@
 #ifndef KDEVPLATFORM_CODECOMPLETIONCONTEXT_H
 #define KDEVPLATFORM_CODECOMPLETIONCONTEXT_H
 
-#include <ktexteditor/cursor.h>
 #include <ksharedptr.h>
 
 #include "../duchain/duchainpointer.h"
 #include "../languageexport.h"
-#include "../editor/simplecursor.h"
 #include "../editor/cursorinrevision.h"
+#include "codecompletionitem.h"
 
 namespace KTextEditor {
   class View;

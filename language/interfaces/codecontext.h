@@ -37,6 +37,11 @@ Boston, MA 02110-1301, USA.
 #include <language/duchain/declaration.h>
 #include <language/duchain/ducontext.h>
 
+namespace KTextEditor
+{
+class View;
+}
+
 namespace KDevelop
 {
 

@@ -26,13 +26,9 @@
 #include <QtCore/QThread>
 #include <QtCore/QList>
 
-#include <KDE/KTextEditor/Cursor>
-#include <KDE/KTextEditor/Range>
-
 #include "../languageexport.h"
 #include "../duchain/duchainpointer.h"
 #include "../codecompletion/codecompletioncontext.h"
-#include "codecompletionitem.h"
 
 class QMutex;
 
@@ -45,7 +41,6 @@ namespace KTextEditor {
 namespace KDevelop
 {
 
-class CodeCompletion;
 class CompletionTreeElement;
 class CodeCompletionModel;
 

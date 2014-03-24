@@ -32,8 +32,8 @@
 #include <KDE/KAction>
 #include <KDE/KParts/Part>
 #include <KDE/KParts/PartManager>
-#include <KDE/KTextEditor/Document>
-#include <KDE/KTextEditor/MarkInterface>
+#include <KTextEditor/Document>
+#include <KTextEditor/MarkInterface>
 
 #include "../interfaces/idocument.h"
 #include "../interfaces/icore.h"

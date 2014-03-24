@@ -23,8 +23,8 @@
 
 #include <kurl.h>
 #include <kmimetype.h>
-#include <KDE/KTextEditor/Cursor>
-#include <KDE/KTextEditor/Range>
+#include <KTextEditor/Cursor>
+#include <KTextEditor/Range>
 
 #include "interfacesexport.h"
 namespace KParts { class Part; class MainWindow; }

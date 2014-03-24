@@ -25,6 +25,7 @@
 // KDE / KDevelop
 #include <KParts/MainWindow>
 #include <KTextEditor/Document>
+#include <KTextEditor/View>
 #include <kmessagebox.h>
 #include <interfaces/icore.h>
 #include <interfaces/idocument.h>

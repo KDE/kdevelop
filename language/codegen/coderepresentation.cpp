@@ -18,7 +18,7 @@
 
 #include "coderepresentation.h"
 #include <QtCore/qfile.h>
-#include <KDE/KTextEditor/Document>
+#include <KTextEditor/Document>
 #include <language/duchain/indexedstring.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/icore.h>

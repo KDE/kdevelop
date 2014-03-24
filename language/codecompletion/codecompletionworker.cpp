@@ -101,6 +101,7 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
       kDebug() << context->localScopeIdentifier().toString();
       range = KTextEditor::Range(context->rangeInCurrentRevision().start.textCursor(), position);
     }
+    
     else
       range = KTextEditor::Range(KTextEditor::Cursor(position.line(), 0), position);
 

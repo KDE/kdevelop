@@ -27,7 +27,7 @@
 #include <QtCore/QVariantList>
 #include <QWeakPointer>
 #include <KDE/KXMLGUIClient>
-#include <KDE/KTextEditor/MarkInterface>
+#include <KTextEditor/MarkInterface>
 
 #include "../interfaces/idebugcontroller.h"
 #include "../debugger/interfaces/idebugsession.h"

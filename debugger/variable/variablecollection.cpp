@@ -30,6 +30,7 @@
 #include <KDebug>
 #include <KTextEditor/TextHintInterface>
 #include <KTextEditor/Document>
+#include <KTextEditor/View>
 #include <KParts/PartManager>
 
 #include "../../interfaces/icore.h"

@@ -37,8 +37,6 @@ Boston, MA 02110-1301, USA.
 
 #include <KDE/KUrl>
 #include <KDE/KMimeType>
-#include <KDE/KTextEditor/Cursor>
-#include <KDE/KTextEditor/View>
 
 template <typename T> class QList;
 

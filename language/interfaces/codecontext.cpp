@@ -28,13 +28,16 @@ Boston, MA 02110-1301, USA.
 */
 
 #include "codecontext.h"
+
 #include <duchain/declaration.h>
 #include <duchain/ducontext.h>
 #include <duchain/duchainlock.h>
 #include <duchain/duchain.h>
 #include <duchain/duchainutils.h>
 #include <duchain/use.h>
+
 #include <ktexteditor/document.h>
+#include <ktexteditor/view.h>
 
 namespace KDevelop
 {

@@ -27,8 +27,6 @@
 #include <QtCore/QAbstractItemModel>
 #include <QtCore/QMap>
 
-#include <KDE/KTextEditor/Document>
-#include <KDE/KTextEditor/View>
 #include <KLocalizedString>
 #include <KTextEditor/TextHintInterface>
 

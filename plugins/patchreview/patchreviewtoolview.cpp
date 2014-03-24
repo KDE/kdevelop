@@ -35,6 +35,7 @@
 #include <sublime/mainwindow.h>
 #include <KLineEdit>
 #include <KTextEditor/Document>
+#include <KTextEditor/View>
 #include <QFileInfo>
 #include <QMenu>
 #include <KLocalizedString>
