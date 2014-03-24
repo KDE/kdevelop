@@ -277,7 +277,7 @@ void CMakeBuildDirChooser::setStatus(const QString& message, bool canApply)
 
     enableButtonOk(canApply);
     if (canApply) {
-        KPushButton* cancelbutton = button(Cancel);
+        QPushButton* cancelbutton = button(Cancel);
         if (cancelbutton) {
             cancelbutton->clearFocus();
         }

@@ -26,7 +26,6 @@
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
 #include <KTextEditor/ConfigInterface>
-#include <KTextEditor/HighlightInterface>
 
 #include <language/duchain/duchain.h>
 #include <interfaces/icore.h>

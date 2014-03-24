@@ -35,6 +35,7 @@
 #include "gdbvariable.h"
 
 #include <KDebug>
+#include <KTextEditor/Document>
 
 using namespace GDBDebugger;
 using namespace KDevelop;

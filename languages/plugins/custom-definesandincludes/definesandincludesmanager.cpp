@@ -65,12 +65,12 @@ namespace KDevelop
 {
 
 K_PLUGIN_FACTORY(DefinesAndIncludesManagerFactory, registerPlugin<DefinesAndIncludesManager>(); )
-K_EXPORT_PLUGIN(DefinesAndIncludesManagerFactory(KAboutData("kdevdefinesandincludesmanager",
-"kdevdefinesandincludesmanager", ki18n("Custom Defines and Includes Manager"), "0.1", ki18n(""),
-KAboutData::License_GPL)))
+//K_EXPORT_PLUGIN(DefinesAndIncludesManagerFactory(KAboutData("kdevdefinesandincludesmanager",
+//"kdevdefinesandincludesmanager", ki18n("Custom Defines and Includes Manager"), "0.1", ki18n(""),
+//KAboutData::License_GPL)))
 
 DefinesAndIncludesManager::DefinesAndIncludesManager( QObject* parent, const QVariantList& )
-    : IPlugin( DefinesAndIncludesManagerFactory::componentData(), parent )
+    : IPlugin("kdevdefinesandincludesmanager", parent )
 {
     KDEV_USE_EXTENSION_INTERFACE(IDefinesAndIncludesManager);
 }
@@ -112,3 +112,5 @@ void DefinesAndIncludesManager::writeSettings( KConfig* cfg, const QList<ConfigE
     SettingsManager::writeSettings( cfg, paths );
 }
 }
+
+#include "definesandincludesmanager.moc"
