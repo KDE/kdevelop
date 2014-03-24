@@ -329,6 +329,9 @@ void UiController::raiseToolView(QWidget* toolViewWidget)
 
 void UiController::addToolView(const QString & name, IToolViewFactory *factory)
 {
+    if (!factory)
+        return;
+
     kDebug() ;
     Sublime::ToolDocument *doc = new Sublime::ToolDocument(name, this, new UiToolViewFactory(factory));
     d->factoryDocuments[factory] = doc;
@@ -352,6 +355,9 @@ void KDevelop::UiController::raiseToolView(Sublime::View * view)
 
 void KDevelop::UiController::removeToolView(IToolViewFactory *factory)
 {
+    if (!factory)
+        return;
+
     kDebug() ;
     //delete the tooldocument
     Sublime::ToolDocument *doc = d->factoryDocuments[factory];
