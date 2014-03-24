@@ -27,6 +27,8 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/topducontext.h>
+#include <language/interfaces/idefinesandincludesmanager.h>
+
 #include "cppduchain/environmentmanager.h"
 
 #include <KLocalizedString>
@@ -101,13 +103,26 @@ void IncludePathComputer::computeForeground()
       m_effectiveBuildDirectory.clear();
     }
 
+    auto manager = IDefinesAndIncludesManager::manager();
+    if (manager) {
+      for(const auto& dir : manager->includes(file)){
+        addInclude(dir);
+      }
+      m_defines = manager->defines(file);
+    }
+
     m_gotPathsFromManager = !dirs.isEmpty();
     kDebug(9007) << "Got " << dirs.count() << " include-paths from build-manager";
     foreach (const Path& dir, dirs) {
       addInclude(dir);
     }
 
-    m_defines = buildManager->defines(file);
+    auto defines = buildManager->defines(file);
+    for (auto it = defines.constBegin(); it != defines.constEnd(); it++) {
+        if (!m_defines.contains(it.key())) {
+            m_defines[it.key()] = it.value();
+        }
+    }
   }
 
   if (!m_gotPathsFromManager) {

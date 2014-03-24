@@ -1,5 +1,4 @@
 /************************************************************************
- * KDevelop4 Custom Buildsystem Support                                 *
  *                                                                      *
  * Copyright 2010 Andreas Pakulat <apaku@gmx.de>                        *
  *                                                                      *
@@ -17,30 +16,28 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>. *
  ************************************************************************/
 
-#ifndef DEFINESMODEL_H
-#define DEFINESMODEL_H
+#ifndef INCLUDESMODEL_H
+#define INCLUDESMODEL_H
 
-#include <QAbstractTableModel>
-#include <QHash>
+#include <QAbstractListModel>
+#include <QStringList>
 
-#include "custombuildsystemconfig.h"
-
-class DefinesModel : public QAbstractTableModel
+class IncludesModel : public QAbstractListModel
 {
 Q_OBJECT
 public:
-    DefinesModel( QObject* parent = 0 );
-    void setDefines( const Defines&  );
-    Defines defines() const;
+    IncludesModel( QObject* parent = 0 );
+    void setIncludes( const QStringList&  );
+    QStringList includes() const;
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
     virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
     virtual Qt::ItemFlags flags(const QModelIndex& index) const;
-    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
-    virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
     virtual bool removeRows( int row, int count, const QModelIndex& parent = QModelIndex() );
+    void addInclude( const QString& );
 private:
-    QList<QPair<QString,QVariant> > m_defines;
+    QStringList m_includes;
+    void addIncludeInternal( const QString& includePath );
 };
 
-#endif // DEFINESMODEL_H
+#endif // INCLUDESMODEL_H

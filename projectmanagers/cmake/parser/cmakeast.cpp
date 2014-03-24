@@ -3826,7 +3826,7 @@ SetPropertyAst::~SetPropertyAst()
 
 bool SetPropertyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if(func.name.toLower()!="set_property" || func.arguments.count() < 4)
+    if(func.name.toLower()!="set_property" || func.arguments.count() < 3)
         return false;
     
     QString propName=func.arguments.first().value;

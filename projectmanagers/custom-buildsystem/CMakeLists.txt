@@ -14,24 +14,15 @@ target_link_libraries( kdevcustombuildsystem
     )
 
 ## KCM for the Plugin
-set( custom_kcm_SRCS 
-        projectpathsmodel.cpp 
-        definesmodel.cpp
-        includesmodel.cpp
-        includeswidget.cpp
-        defineswidget.cpp
+set( custom_kcm_SRCS
         configwidget.cpp
-        projectpathswidget.cpp
         custombuildsystemconfigwidget.cpp
         kcm_custombuildsystem.cpp
         debugarea.cpp
    )
 qt5_wrap_ui( custom_kcm_SRCS 
-                        includeswidget.ui
-                        defineswidget.ui
-                        projectpathswidget.ui
                         configwidget.ui
-                        custombuildsystemconfigwidget.ui 
+                        custombuildsystemconfigwidget.ui
                  )
 kconfig_add_kcfg_files( custom_kcm_SRCS kcfg_custombuildsystemconfig.kcfgc )
 add_library(kcm_kdevcustombuildsystem MODULE ${custom_kcm_SRCS} )

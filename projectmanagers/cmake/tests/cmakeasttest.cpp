@@ -2949,7 +2949,6 @@ void CMakeAstTest::testSetBadParse_data()
 
 void CMakeAstTest::testSetPropertyGoodParse()
 {
-    TDD_TODO;
     QFETCH( CMakeFunctionDesc, function );
     CMakeAst* ast = AstFactory::self()->createAst("set_property");
     QVERIFY( ast->parseFunctionInfo( function ) == true );
@@ -2958,6 +2957,12 @@ void CMakeAstTest::testSetPropertyGoodParse()
 
 void CMakeAstTest::testSetPropertyGoodParse_data()
 {
+    CMakeFunctionDesc func;
+    func.name = "set_property";
+    func.addArguments( QString("GLOBAL PROPERTY SIMPLE_PROPERTY_NOVALUE").split(" ") );
+
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow( "no value" ) << func;
 }
 
 void CMakeAstTest::testSetPropertyBadParse()

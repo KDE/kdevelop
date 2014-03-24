@@ -1,5 +1,4 @@
 /************************************************************************
- * KDevelop4 Custom Buildsystem Support                                 *
  *                                                                      *
  * Copyright 2010 Andreas Pakulat <apaku@gmx.de>                        *
  *                                                                      *
@@ -21,7 +20,6 @@
 
 #include <QToolButton>
 
-#include <KDebug>
 #include <KLineEdit>
 #include <KAction>
 #include <kfiledialog.h>
@@ -30,8 +28,7 @@
 
 #include "ui_defineswidget.h"
 #include "definesmodel.h"
-
-extern int cbsDebugArea(); // from debugarea.cpp
+#include "debugarea.h"
 
 DefinesWidget::DefinesWidget( QWidget* parent )
     : QWidget ( parent ), ui( new Ui::DefinesWidget )
@@ -63,7 +60,7 @@ void DefinesWidget::setDefines( const Defines& defines )
 
 void DefinesWidget::definesChanged()
 {
-    kDebug(cbsDebugArea()) << "defines changed";
+    definesAndIncludesDebug() << "defines changed";
     emit definesChanged( definesModel->defines() );
 }
 
@@ -74,7 +71,7 @@ void DefinesWidget::clear()
 
 void DefinesWidget::deleteDefine()
 {
-    kDebug(cbsDebugArea()) << "Deleting defines";
+    definesAndIncludesDebug() << "Deleting defines";
     QModelIndexList selection = ui->defines->selectionModel()->selectedRows();
     foreach( const QModelIndex& row, selection ) {
         definesModel->removeRow( row.row() );
@@ -82,4 +79,3 @@ void DefinesWidget::deleteDefine()
 }
 
 #include "defineswidget.moc"
-

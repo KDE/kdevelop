@@ -51,8 +51,6 @@ ConfigWidget::ConfigWidget( QWidget* parent )
     connect( ui->actionEnvironment, SIGNAL(activated(int)), SLOT(actionEnvironmentChanged(int)) );
     connect( ui->actionExecutable, SIGNAL(urlSelected(KUrl)), SLOT(actionExecutableChanged(KUrl)) );
     connect( ui->actionExecutable->lineEdit(), SIGNAL(textEdited(QString)), SLOT(actionExecutableChanged(QString)) );
-
-    connect( ui->projectPaths, SIGNAL(changed()), SIGNAL(changed()) );
 }
 
 CustomBuildSystemConfig ConfigWidget::config() const
@@ -60,7 +58,6 @@ CustomBuildSystemConfig ConfigWidget::config() const
     CustomBuildSystemConfig c;
     c.buildDir = ui->buildDir->url();
     c.tools = m_tools;
-    c.projectPaths = ui->projectPaths->paths();
     return c;
 }
 
@@ -69,7 +66,6 @@ void ConfigWidget::loadConfig( CustomBuildSystemConfig cfg )
     bool b = blockSignals( true );
     clear();
     ui->buildDir->setUrl( cfg.buildDir );
-    ui->projectPaths->setPaths( cfg.projectPaths );
     m_tools = cfg.tools;
     blockSignals( b );
     changeAction( ui->buildAction->currentIndex() );
@@ -138,15 +134,9 @@ void ConfigWidget::actionExecutableChanged(const QString& txt )
 
 void ConfigWidget::clear()  
 {
-    ui->projectPaths->clear();
     ui->buildAction->setCurrentIndex( int( CustomBuildSystemTool::Build ) );
     changeAction( ui->buildAction->currentIndex() );
     ui->buildDir->setText("");
-}
-
-void ConfigWidget::setProject(KDevelop::IProject* w_project)
-{
-    ui->projectPaths->setProject( w_project );
 }
 
 #include "configwidget.moc"

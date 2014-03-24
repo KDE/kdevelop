@@ -45,6 +45,7 @@ Name[hu]=Plasmoid indító
 Name[it]=Lanciatore di plasmoidi
 Name[kk]=Плазмоид жеккіші
 Name[nb]=Plasmoidestarter
+Name[nds]=Oproper för Plasma-Lüttprogrammen
 Name[nl]=Programmastarter van plasmoid
 Name[pl]=Program uruchamiający plazmoid
 Name[pt]=Lançamento de Plasmóides

@@ -1,5 +1,4 @@
 /************************************************************************
- * KDevelop4 Custom Buildsystem Support                                 *
  *                                                                      *
  * Copyright 2010 Andreas Pakulat <apaku@gmx.de>                        *
  *                                                                      *
@@ -23,7 +22,11 @@
 #include <QAbstractListModel>
 #include <QList>
 
-#include "custombuildsystemconfig.h"
+#include <KUrl>
+
+#include <language/interfaces/idefinesandincludesmanager.h>
+
+using KDevelop::ConfigEntry;
 
 namespace KDevelop
 {
@@ -41,19 +44,19 @@ public:
     };
     ProjectPathsModel( QObject* parent = 0 );
     void setProject( KDevelop::IProject* w_project );
-    void setPaths( const QList< CustomBuildSystemProjectPathConfig >& paths );
+    void setPaths( const QList< ConfigEntry >& paths );
     void addPath( const KUrl& url );
-    QList<CustomBuildSystemProjectPathConfig> paths() const;
+    QList<ConfigEntry> paths() const;
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
     virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
     virtual Qt::ItemFlags flags(const QModelIndex& index) const;
     virtual bool removeRows( int row, int count, const QModelIndex& parent = QModelIndex() );
 private:
-    QList<CustomBuildSystemProjectPathConfig> projectPaths;
+    QList<ConfigEntry> projectPaths;
     KDevelop::IProject* project;
 
-    void addPathInternal( const CustomBuildSystemProjectPathConfig& config, bool prepend );
+    void addPathInternal( const ConfigEntry& config, bool prepend );
     QString sanitizePath( const QString& path, bool expectRelative = true, bool needRelative = true ) const;
     QString sanitizeUrl( KUrl url, bool needRelative = true ) const;
 };

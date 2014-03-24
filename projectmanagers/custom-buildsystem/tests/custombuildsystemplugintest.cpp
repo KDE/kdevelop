@@ -67,13 +67,7 @@ void CustomBuildSystemPluginTest::loadSimpleProject()
     }
     IProject* project = ICore::self()->projectController()->findProjectByName( "SimpleProject" );
     QVERIFY( project );
-    Path::List includes = project->buildSystemManager()->includeDirectories( project->projectItem() );
-    
-    QHash<QString,QString> defines;
-    defines.insert( "_DEBUG", "" );
-    defines.insert( "VARIABLE", "VALUE" );
-    QCOMPARE( includes, Path::List() << Path( "/usr/include/mydir") );
-    QCOMPARE( project->buildSystemManager()->defines( project->projectItem() ), defines );
+
     QCOMPARE( project->buildSystemManager()->buildDirectory( project->projectItem() ),
               Path( "file:///home/andreas/projects/testcustom/build/" ) );
 }
@@ -115,12 +109,7 @@ void CustomBuildSystemPluginTest::loadMultiPathProject()
         }
     }
     QVERIFY(mainfile);
-    Path::List includes = project->buildSystemManager()->includeDirectories( mainfile );
 
-    QHash<QString,QString> defines;
-    defines.insert( "BUILD", "debug" );
-    QCOMPARE( includes, Path::List() << Path("/usr/local/include/mydir") );
-    QCOMPARE( project->buildSystemManager()->defines( mainfile ), defines );
     QCOMPARE( project->buildSystemManager()->buildDirectory( mainfile ),
               Path( "file:///home/andreas/projects/testcustom/build2/src" ) );
 }

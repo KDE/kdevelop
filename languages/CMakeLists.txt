@@ -1,2 +1,2 @@
-
+macro_optional_add_subdirectory(plugins)
 ecm_optional_add_subdirectory(cpp)

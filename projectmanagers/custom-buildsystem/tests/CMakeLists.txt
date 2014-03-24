@@ -13,20 +13,11 @@ target_link_libraries( custombuildsystemplugintest
 set( kcm_uitest_SRCS kcmuitestmain.cpp
                      ../custombuildsystemconfigwidget.cpp
                      ../configwidget.cpp
-                     ../projectpathswidget.cpp
-                     ../includesmodel.cpp
-                     ../definesmodel.cpp
-                     ../includeswidget.cpp
-                     ../defineswidget.cpp
-                     ../projectpathsmodel.cpp
                      ../debugarea.cpp
    )
 include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../)
 qt5_wrap_ui( kcm_uitest_SRCS
-                        ../projectpathswidget.ui
                         ../configwidget.ui
-                        ../includeswidget.ui
-                        ../defineswidget.ui
                         ../custombuildsystemconfigwidget.ui
                  )
 add_executable( kcm_uitest ${kcm_uitest_SRCS} )

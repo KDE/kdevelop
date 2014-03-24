@@ -1,5 +1,4 @@
 /************************************************************************
- * KDevelop4 Custom Buildsystem Support                                 *
  *                                                                      *
  * Copyright 2010 Andreas Pakulat <apaku@gmx.de>                        *
  *                                                                      *
@@ -17,54 +16,58 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>. *
  ************************************************************************/
 
-#ifndef KDEVELOP_PROJECTMANAGERS_CUSTOM_BUILDSYSTEM_INCLUDESWIDGET_H
-#define KDEVELOP_PROJECTMANAGERS_CUSTOM_BUILDSYSTEM_INCLUDESWIDGET_H
+#ifndef KDEVELOP_PROJECTMANAGERS_CUSTOM_BUILDSYSTEM_PROJECTPATHSWIDGET_H
+#define KDEVELOP_PROJECTMANAGERS_CUSTOM_BUILDSYSTEM_PROJECTPATHSWIDGET_H
 
 #include <QWidget>
 
 #include <qabstractitemmodel.h>
 
-class KFileDialog;
+#include <language/interfaces/idefinesandincludesmanager.h>
+
+using KDevelop::ConfigEntry;
+using KDevelop::Defines;
+
 class KUrlRequester;
 namespace Ui
 {
-class IncludesWidget;
+class ProjectPathsWidget;
 }
 
 namespace KDevelop
 {
     class IProject;
 }
-class KUrl;
+
 class ProjectPathsModel;
-class IncludesModel;
 class QItemSelection;
 
-class IncludesWidget : public QWidget
+class ProjectPathsWidget : public QWidget
 {
 Q_OBJECT
 public:
-    IncludesWidget( QWidget* parent = 0 );
+    ProjectPathsWidget( QWidget* parent = 0 );
     void setProject(KDevelop::IProject* w_project);
-    void setIncludes( const QStringList& );
+    void setPaths( const QList<ConfigEntry>& );
+    QList<ConfigEntry> paths() const;
     void clear();
 signals:
-    void includesChanged( const QStringList& );
+    void changed();
 private slots:
-    // Handling of include-path url-requester, add and remove buttons
-    void includePathSelected( const QModelIndex& selected );
-    void includePathEdited();
-    void includePathUrlSelected(const KUrl&);
-    void addIncludePath();
-    // Handles action and also Del-key in list
-    void deleteIncludePath();
+    // Handling of project-path combobox, add and remove buttons
+    void projectPathSelected( int index );
+    void addProjectPath();
+    void replaceProjectPath();
+    void deleteProjectPath();
 
-    // Forward includes model changes
-    void includesChanged();
+    // Forward includes model changes into the pathsModel
+    void includesChanged( const QStringList& includes );
+
+    // Forward defines model changes into the pathsModel
+    void definesChanged( const Defines& defines );
 private:
-    Ui::IncludesWidget* ui;
-    IncludesModel* includesModel;
-    QString makeIncludeDirAbsolute( const KUrl& url ) const;
+    Ui::ProjectPathsWidget* ui;
+    ProjectPathsModel* pathsModel;
     // Enables/Disables widgets based on UI state/selection
     void updateEnablements();
     void updatePathsModel( const QVariant& newData, int role );
