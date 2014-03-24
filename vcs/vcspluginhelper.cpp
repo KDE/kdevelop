@@ -406,7 +406,7 @@ void VcsPluginHelper::annotation()
         QColor foreground(Qt::black);
         QColor background(Qt::white);
         if (KTextEditor::View* view = doc->activeTextView()) {
-            KTextEditor::Attribute::Ptr style = view->defaultStyleAttribute(KTextEditor::DefaultStyle::dsNormal);
+            KTextEditor::Attribute::Ptr style = view->defaultStyleAttribute(KTextEditor::dsNormal);
             foreground = style->foreground().color();
             if (style->hasProperty(QTextFormat::BackgroundBrush)) {
                 background = style->background().color();

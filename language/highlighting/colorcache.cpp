@@ -182,7 +182,7 @@ void ColorCache::updateColorsFromView(KTextEditor::View* view)
   QColor foreground(QColor::Invalid);
   QColor background(QColor::Invalid);
 
-  KTextEditor::Attribute::Ptr style = view->defaultStyleAttribute(KTextEditor::DefaultStyle::dsNormal);
+  KTextEditor::Attribute::Ptr style = view->defaultStyleAttribute(KTextEditor::dsNormal);
   foreground = style->foreground().color();
   if (style->hasProperty(QTextFormat::BackgroundBrush)) {
     background = style->background().color();
