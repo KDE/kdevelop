@@ -70,7 +70,6 @@
 #include <interfaces/isession.h>
 #include "vcsevent.h"
 #include <KCompositeJob>
-#include <KTextEditor/HighlightInterface>
 #include <QClipboard>
 #include <QApplication>
 #include <ktexteditor/modificationinterface.h>
@@ -406,8 +405,8 @@ void VcsPluginHelper::annotation()
 
         QColor foreground(Qt::black);
         QColor background(Qt::white);
-        if ( KTextEditor::HighlightInterface* iface = qobject_cast<KTextEditor::HighlightInterface*>(doc->textDocument()) ) {
-            KTextEditor::Attribute::Ptr style = iface->defaultStyle(KTextEditor::HighlightInterface::dsNormal);
+        if (KTextEditor::View* view = doc->activeTextView()) {
+            KTextEditor::Attribute::Ptr style = view->defaultStyleAttribute(KTextEditor::DefaultStyle::dsNormal);
             foreground = style->foreground().color();
             if (style->hasProperty(QTextFormat::BackgroundBrush)) {
                 background = style->background().color();

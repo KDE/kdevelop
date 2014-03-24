@@ -37,7 +37,6 @@
 #include <KLocalizedString>
 #include <KParts/MainWindow>
 #include <KStandardDirs>
-#include <KTextEditor/HighlightInterface>
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
 #include <KTextEditor/ConfigInterface>

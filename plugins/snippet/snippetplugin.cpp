@@ -23,7 +23,6 @@
 
 #include <KActionCollection>
 
-#include <KTextEditor/HighlightInterface>
 #include <KTextEditor/Editor>
 
 #include <interfaces/ipartcontroller.h>

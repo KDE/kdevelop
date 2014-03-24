@@ -23,8 +23,6 @@
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
 
-#include <KTextEditor/HighlightInterface>
-
 #include "snippetstore.h"
 #include "snippetrepository.h"
 #include "snippet.h"
