@@ -36,8 +36,6 @@
 #include "../duchain/duchain.h"
 #include "../duchain/duchainlock.h"
 
-#include <KTextEditor/HighlightInterface>
-
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
 
@@ -184,29 +182,19 @@ void ColorCache::updateColorsFromView(KTextEditor::View* view)
   QColor foreground(QColor::Invalid);
   QColor background(QColor::Invalid);
 
-  // either the KDE 4.4 way with the HighlightInterface or fallback to the old way via global KDE color scheme
-
-  if ( KTextEditor::HighlightInterface* iface = qobject_cast<KTextEditor::HighlightInterface*>(doc) ) {
-    KTextEditor::Attribute::Ptr style = iface->defaultStyle(KTextEditor::HighlightInterface::dsNormal);
-    foreground = style->foreground().color();
-    if (style->hasProperty(QTextFormat::BackgroundBrush)) {
-      background = style->background().color();
-    }
-//     kDebug() << "got foreground:" << foreground.name() << "old is:" << m_foregroundColor.name();
-    //NOTE: this slot is defined in KatePart > 4.4, see ApiDocs of the ConfigInterface
-    if ( KTextEditor::View* view = m_view.data() ) {
-      // we only listen to a single view, i.e. the active one
-      disconnect(view, SIGNAL(configChanged()), this, SLOT(slotViewSettingsChanged()));
-    }
-    connect(view, SIGNAL(configChanged()), this, SLOT(slotViewSettingsChanged()));
-    m_view = view;
-
-    if(!background.isValid()) {
-      // fallback for Kate < 4.5.2 where the background was never set in styles returned by defaultStyle()
-      background = KColorScheme(QPalette::Normal, KColorScheme::View).background(KColorScheme::NormalBackground).color();
-    }
-    ifDebug(kDebug() << "has iface" << foreground << background;)
+  KTextEditor::Attribute::Ptr style = view->defaultStyleAttribute(KTextEditor::DefaultStyle::dsNormal);
+  foreground = style->foreground().color();
+  if (style->hasProperty(QTextFormat::BackgroundBrush)) {
+    background = style->background().color();
   }
+//     kDebug() << "got foreground:" << foreground.name() << "old is:" << m_foregroundColor.name();
+  //NOTE: this slot is defined in KatePart > 4.4, see ApiDocs of the ConfigInterface
+  if ( KTextEditor::View* view = m_view.data() ) {
+    // we only listen to a single view, i.e. the active one
+    disconnect(view, SIGNAL(configChanged()), this, SLOT(slotViewSettingsChanged()));
+  }
+  connect(view, SIGNAL(configChanged()), this, SLOT(slotViewSettingsChanged()));
+  m_view = view;
 
   if ( !foreground.isValid() ) {
     // fallback to colorscheme variant
