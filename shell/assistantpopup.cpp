@@ -79,8 +79,8 @@ void AssistantPopup::reset(KTextEditor::View* widget, const IAssistant::Ptr& ass
     m_assistant = assistant;
 
     m_config = std::unique_ptr<AssistantPopupConfig>(new AssistantPopupConfig);
-    auto doc = ICore::self()->documentController()->activeDocument();
-    m_config->setColorsFromView(doc->textDocument()->activeView());
+    auto view = ICore::self()->documentController()->activeTextDocumentView();
+    m_config->setColorsFromView(view);
     updateActions();
     rootContext()->setContextProperty("config", QVariant::fromValue<QObject*>(m_config.get()));
 
