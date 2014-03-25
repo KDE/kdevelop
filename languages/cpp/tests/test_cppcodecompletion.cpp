@@ -1275,7 +1275,7 @@ void TestCppCodeCompletion::testSignalSlotExecution()
         item->execute( v, Range( c, 0 ) );
         QCOMPARE( doc->line( 2 ), QString("void test() { connect( this, SIGNAL(signal1(void*,char)), SLOT() ); } };") );
 
-        doc->endEditing();
+        doc->finishEditing();
     }
 
     // Test 2: SLOT(<here>) parens balancing
@@ -1296,7 +1296,7 @@ void TestCppCodeCompletion::testSignalSlotExecution()
         item->execute( v, Range( c, 0 ) );
         QCOMPARE( doc->line( 2 ), QString("void test() { connect( this, SIGNAL(signal1(void*,char)), SLOT(slot2(void*)) ); } };") );
 
-        doc->endEditing();
+        doc->finishEditing();
     }
     // Test 3: Slot implementation helper: SLOT(<here>) parens balancing
     {
@@ -1320,7 +1320,7 @@ void TestCppCodeCompletion::testSignalSlotExecution()
         QEXPECT_FAIL("", "Slot is not replaced because the engine fails to create the declaration.", Continue);
         QCOMPARE( doc->line( 2 ), QString("void test() { connect( this, SIGNAL(signal1(void*,char)), SLOT(slot3(void*)) ); } };") );
 
-        doc->endEditing();
+        doc->finishEditing();
     }
 
     release(top);
@@ -3460,7 +3460,7 @@ void TestCppCodeCompletion::testExecuteKeepWord()
   QFETCH(QString, expectedCode);
   QCOMPARE(doc->line(3), expectedCode);
 
-  doc->endEditing();
+  doc->finishEditing();
 
   release(top);
 
@@ -3749,7 +3749,7 @@ void TestCppCodeCompletion::testNoQuadrupleColon()
   item->execute( v, Range( c, 0 ) );
   QCOMPARE( doc->line( 0 ), QString("Foobar::var;") );
 
-  doc->endEditing();
+  doc->finishEditing();
 }
 
 void TestCppCodeCompletion::testLookaheadMatches_data()

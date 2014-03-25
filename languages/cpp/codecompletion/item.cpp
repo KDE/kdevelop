@@ -41,6 +41,7 @@
 #include <language/codecompletion/codecompletionhelper.h>
 #include "context.h"
 #include <ktexteditor/codecompletioninterface.h>
+#include <ktexteditor/document.h>
 #include <ktexteditor/movingrange.h>
 #include <ktexteditor/movinginterface.h>
 #include <memory>
@@ -339,7 +340,7 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::View* view, const KTe
     if(!removeRange.isEmpty() && removeRange.end() > end && removeRange.end().line() == end.line() && removeRange.end().column() <= document->lineLength(removeRange.end().line()))
     {
       // We stop the editing sequence, which was initiated by kate, so the user can manually undo the removal
-      bool wasEditing = document->endEditing();
+      bool wasEditing = document->finishEditing();
       if(wasEditing)
         document->startEditing();
       else
