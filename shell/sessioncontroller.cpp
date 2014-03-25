@@ -67,8 +67,6 @@ Boston, MA 02110-1301, USA.
 #include <QSortFilterProxyModel>
 #include <QDBusConnectionInterface>
 
-#include <ktexteditor/recoveryinterface.h>
-
 const int recoveryStorageInterval = 10; ///@todo Make this configurable
 
 namespace KDevelop
@@ -413,7 +411,7 @@ private slots:
                                 kWarning() << "The document " << originalFile.prettyUrl() << " could not be opened as a text-document, creating a new document with the recovered contents";
                                 doc = ICore::self()->documentController()->openDocumentFromText(text);
                             }else{
-                                KTextEditor::RecoveryInterface* recovery = qobject_cast<KTextEditor::RecoveryInterface*>(doc->textDocument());
+                                KTextEditor::Document* recovery = doc->textDocument();
                                 
                                 if(recovery && recovery->isDataRecoveryAvailable())
                                     // Use the recovery from the kate swap-file if possible
