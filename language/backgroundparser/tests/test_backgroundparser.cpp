@@ -283,7 +283,7 @@ void TestBackgroundparser::benchmarkDocumentChanges()
         for ( int i = 0; i < 5000; i++ ) {
             doc->startEditing();
             doc->insertText(KTextEditor::Cursor(0, 0), "This is a test line.\n");
-            doc->endEditing();
+            doc->finishEditing();
             QApplication::processEvents();
         }
     }

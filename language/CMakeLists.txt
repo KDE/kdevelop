@@ -138,7 +138,7 @@ set(kdevplatformlanguage_LIB_SRCS
     checks/controlflowgraph.cpp checks/controlflownode.cpp
 )
 
-kde4_add_ui_files(kdevplatformlanguage_LIB_SRCS
+qt5_wrap_ui(kdevplatformlanguage_LIB_SRCS
     codegen/basicrefactoring.ui
     codegen/progressdialogs/refactoringdialog.ui)
 

@@ -153,7 +153,7 @@ class EditorCodeRepresentation : public DynamicCodeRepresentation {
   }
   
   void endEdit() {
-      m_document->endEditing();
+      m_document->finishEditing();
       m_replaceTabs.end();
   }
   
