@@ -10,7 +10,7 @@ set( kdevdefinesandincludesmanager_SRCS
         settingsmanager.cpp
         debugarea.cpp
     )
-kde4_add_plugin( kdevdefinesandincludesmanager
+add_library(kdevdefinesandincludesmanager MODULE
         ${kdevdefinesandincludesmanager_SRCS})
 target_link_libraries( kdevdefinesandincludesmanager LINK_PRIVATE
         ${KDEVPLATFORM_PROJECT_LIBRARIES}

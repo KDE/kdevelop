@@ -3,7 +3,9 @@ set( plugintest_SRCS
      projectsgenerator.cpp
    )
 
-kde4_add_unit_test( plugintest ${plugintest_SRCS} )
+add_executable(plugintest ${plugintest_SRCS})
+ecm_mark_as_test(plugintest)
+add_test(plugintest plugintest)
 target_link_libraries( plugintest
         ${QT_QTTEST_LIBRARY}
         ${KDEVPLATFORM_TESTS_LIBRARIES}

@@ -11,13 +11,13 @@ set( kcm_customdefinesandincludes_SRCS
         ../debugarea.cpp
    )
 
-kde4_add_ui_files( kcm_customdefinesandincludes_SRCS
+qt5_wrap_ui( kcm_customdefinesandincludes_SRCS
         includeswidget.ui
         defineswidget.ui
         projectpathswidget.ui )
-kde4_add_kcfg_files( kcm_customdefinesandincludes_SRCS
+kconfig_add_kcfg_files( kcm_customdefinesandincludes_SRCS
         customdefinesandincludes.kcfgc )
-kde4_add_plugin( kcm_kdevcustomdefinesandincludes
+add_library( kcm_kdevcustomdefinesandincludes MODULE
         ${kcm_customdefinesandincludes_SRCS} )
 
 target_link_libraries( kcm_kdevcustomdefinesandincludes LINK_PRIVATE
