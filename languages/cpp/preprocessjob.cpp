@@ -74,7 +74,7 @@ static QString pathsToString(const Path::List& paths)
 }
 
 PreprocessJob::PreprocessJob(CPPParseJob * parent)
-    : QObject(parent)
+    : m_parentJob(parent)
     , m_currentEnvironment(0)
     , m_firstEnvironmentFile( new Cpp::EnvironmentFile( parent->document(), 0 ) )
     , m_success(true)
@@ -96,7 +96,7 @@ KDevelop::ParsingEnvironment* PreprocessJob::createStandardEnvironment() {
 
 CPPParseJob * PreprocessJob::parentJob() const
 {
-    return static_cast<CPPParseJob*>(const_cast<QObject*>(parent()));
+    return m_parentJob;
 }
 
 void PreprocessJob::foundHeaderGuard(rpp::Stream& stream, KDevelop::IndexedString guardName)
@@ -680,6 +680,3 @@ const KDevelop::ParsingEnvironment * PreprocessJob::standardEnvironment()
 
   return m_standardEnvironment;
 }
-
-#include "preprocessjob.moc"
-

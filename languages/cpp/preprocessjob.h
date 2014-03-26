@@ -53,9 +53,8 @@ class CppPreprocessEnvironment;
  * and updatingContentContext will be filled.
  * */
 
-class PreprocessJob : public QObject, public ThreadWeaver::Job, public rpp::Preprocessor
+class PreprocessJob : public ThreadWeaver::Job, public rpp::Preprocessor
 {
-    Q_OBJECT
 public:
     PreprocessJob(CPPParseJob* parent);
     ~PreprocessJob();
@@ -89,6 +88,7 @@ private:
     bool checkAbort();
     bool readContents();
 
+    CPPParseJob* m_parentJob;
     CppPreprocessEnvironment* m_currentEnvironment;
     KSharedPtr<Cpp::EnvironmentFile> m_firstEnvironmentFile; //First environment-file. If simplified matching is used, this is the proxy.
     //If simplified matching is used, a separate EnvironmentFile is used for the content, as opposed to the #include statements.

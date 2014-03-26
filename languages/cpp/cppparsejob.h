@@ -230,7 +230,7 @@ private:
     bool m_needsUpdate;
 };
 
-class CPPInternalParseJob : public QObject, public ThreadWeaver::Job
+class CPPInternalParseJob : public ThreadWeaver::Job
 {
 public:
     CPPInternalParseJob(CPPParseJob* parent);
@@ -255,6 +255,7 @@ private:
     ReferencedTopDUContext updatingProxyContext;
     ReferencedTopDUContext updatingContentContext;
 
+    CPPParseJob* m_parentJob;
     bool m_initialized;
     int m_priority;
 };

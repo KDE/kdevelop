@@ -185,8 +185,8 @@ void CPPParseJob::parseForeground() {
 
     m_preprocessJob = ThreadWeaver::JobPointer(new PreprocessJob(this));
     m_parseJob = ThreadWeaver::JobPointer(new CPPInternalParseJob(this));
-    ThreadWeaver::Queue::instance()->enqueue(m_preprocessJob);
-    ThreadWeaver::Queue::instance()->enqueue(m_parseJob);
+    m_preprocessJob->blockingExecute();
+    m_parseJob->blockingExecute();
 }
 
 Path CPPParseJob::includedFromPath() const {
@@ -293,14 +293,14 @@ KDevelop::ModificationRevisionSet CPPParseJob::includePathDependencies() const {
 
 CPPParseJob* CPPParseJob::masterJob() {
     if( parentPreprocessor() )
-        return static_cast<CPPParseJob*>(parentPreprocessor()->parent())->masterJob();
+        return parentPreprocessor()->parentJob()->masterJob();
     else
         return this;
 }
 
 const CPPParseJob* CPPParseJob::masterJob() const {
     if( parentPreprocessor() )
-        return static_cast<CPPParseJob*>(parentPreprocessor()->parent())->masterJob();
+        return parentPreprocessor()->parentJob()->masterJob();
     else
         return this;
 }
@@ -368,8 +368,7 @@ const IncludeFileList& CPPParseJob::includedFiles() const {
 
 CPPParseJob * CPPInternalParseJob::parentJob() const
 {
-    Q_ASSERT(parent());
-    return static_cast<CPPParseJob*>(const_cast<QObject*>(parent()));
+    return m_parentJob;
 }
 
 const KTextEditor::Range& CPPParseJob::textRangeToParse() const
@@ -378,7 +377,7 @@ const KTextEditor::Range& CPPParseJob::textRangeToParse() const
 }
 
 CPPInternalParseJob::CPPInternalParseJob(CPPParseJob * parent)
-    : QObject(parent)
+    : m_parentJob(parent)
     , m_initialized(false)
     , m_priority(0)
 {
