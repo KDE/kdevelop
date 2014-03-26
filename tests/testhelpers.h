@@ -57,18 +57,6 @@ inline char* toString(const KDevelop::RangeInRevision& r)
 }
 
 template<>
-inline char* toString(const KTextEditor::Cursor& c)
-{
-    return qstrdup(qPrintable(QString("(%1, %2)").arg(c.line()).arg(c.column())));
-}
-
-template<>
-inline char* toString(const KTextEditor::Range& r)
-{
-    return qstrdup(qPrintable(QString("[%1, %2]").arg(toString(r.start())).arg(toString(r.end()))));
-}
-
-template<>
 inline char* toString(const KDevelop::QualifiedIdentifier& id)
 {
     return qstrdup(qPrintable(id.toString()));
