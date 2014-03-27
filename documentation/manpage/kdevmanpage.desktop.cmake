@@ -112,3 +112,5 @@ X-KDE-PluginInfo-License=GPL
 X-KDE-PluginInfo-Category=Documentation
 X-KDevelop-Mode=GUI
 X-KDevelop-Interfaces=org.kdevelop.IDocumentationProvider
+
+X-KDE-PluginInfo-EnabledByDefault=false
