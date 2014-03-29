@@ -44,6 +44,8 @@ find_package(KF5 CONFIG REQUIRED COMPONENTS
   Parts
   Service
   TextEditor
+  PrintUtils
+  Sonnet
   ThreadWeaver
   WindowSystem
   XmlGui
