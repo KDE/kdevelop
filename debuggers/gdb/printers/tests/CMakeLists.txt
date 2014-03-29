@@ -12,6 +12,8 @@ endfunction()
 
 configure_file(qtprintersconfig.h.in qtprintersconfig.h)
 
+include_directories(KF5::TextEditor)
+
 add_debuggable_executable(qstring SRCS qstring.cpp)
 target_link_libraries(qstring Qt5::Core)
 
@@ -67,7 +69,7 @@ add_debuggable_executable(ktexteditortypes SRCS ktexteditortypes.cpp)
 target_link_libraries(ktexteditortypes Qt5::Core KF5::TextEditor)
 
 add_debuggable_executable(kdeveloptypes SRCS kdeveloptypes.cpp)
-target_link_libraries(kdeveloptypes ${QT_QTCORE_LIBRARY} ${KDE4_KTEXTEDITOR_LIBS} ${KDEVPLATFORM_PROJECT_LIBRARIES})
+target_link_libraries(kdeveloptypes ${QT_QTCORE_LIBRARY} KF5::TextEditor ${KDEVPLATFORM_PROJECT_LIBRARIES})
 
 ecm_add_test(qtprinters
 LINK_LIBRARIES
