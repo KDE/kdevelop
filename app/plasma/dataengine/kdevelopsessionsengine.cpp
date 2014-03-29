@@ -24,6 +24,7 @@
 
 #include <KStandardDirs>
 #include <KDirWatch>
+#include <KConfig>
 #include <QFileInfo>
 #include <QDir>
 
