@@ -305,7 +305,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::replaceOldText(CodeRep
 {
     DynamicCodeRepresentation* dynamic = dynamic_cast<DynamicCodeRepresentation*>(repr);
     if(dynamic) {
-        dynamic->startEdit();
+        auto transaction = dynamic->makeEditTransaction();
         //Replay the changes one by one
 
         for(int pos = sortedChangesList.size()-1; pos >= 0; --pos) {
@@ -325,14 +325,11 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::replaceOldText(CodeRep
                 if(replacePolicy == DocumentChangeSet::WarnOnFailedChange) {
                     kWarning() << warningString;
                 } else if(replacePolicy == DocumentChangeSet::StopOnFailedChange) {
-                    dynamic->endEdit();
                     return DocumentChangeSet::ChangeResult(warningString);
                 }
                 //If set to ignore failed changes just continue with the others
             }
         }
-
-        dynamic->endEdit();
         return true;
     }
 

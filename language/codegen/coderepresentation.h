@@ -22,7 +22,11 @@
 #include "../languageexport.h"
 #include <language/duchain/indexedstring.h>
 
+#include <ktexteditor/configinterface.h>
+#include <ktexteditor/document.h>
+
 #include <ksharedptr.h>
+#include <memory>
 
 class QString;
 
@@ -32,9 +36,49 @@ namespace KTextEditor {
 
 namespace KDevelop {
 
-    class SimpleRange;
-    class IndexedString;
-    
+struct KDevEditingTransaction;
+
+class SimpleRange;
+class IndexedString;
+
+//NOTE: this is ugly, but otherwise kate might remove tabs again :-/
+// see also: https://bugs.kde.org/show_bug.cgi?id=291074
+struct EditorDisableReplaceTabs {
+    EditorDisableReplaceTabs(KTextEditor::Document* document) : m_iface(qobject_cast<KTextEditor::ConfigInterface*>(document)), m_count(0) {
+        ++m_count;
+        if( m_count > 1 )
+            return;
+        if ( m_iface ) {
+            m_oldReplaceTabs = m_iface->configValue( "replace-tabs" );
+            m_iface->setConfigValue( "replace-tabs", false );
+        }
+    }
+
+    ~EditorDisableReplaceTabs() {
+        --m_count;
+        if( m_count > 0 )
+            return;
+
+        Q_ASSERT( m_count == 0 );
+
+        if (m_iface)
+            m_iface->setConfigValue("replace-tabs", m_oldReplaceTabs);
+    }
+
+    KTextEditor::ConfigInterface* m_iface;
+    int m_count;
+    QVariant m_oldReplaceTabs;
+};
+
+struct KDevEditingTransaction {
+    KDevEditingTransaction(KTextEditor::Document* document)
+    : disableReplaceTabs(document)
+    , edit(document) { }
+    EditorDisableReplaceTabs disableReplaceTabs;
+    KTextEditor::Document::EditingTransaction edit;
+    typedef std::unique_ptr<KDevEditingTransaction> Ptr;
+};
+
 /**
   * Allows getting code-lines conveniently, either through an open editor, or from a disk-loaded file.
   */
@@ -82,12 +126,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeRepresentation : public QSharedData {
 class KDEVPLATFORMLANGUAGE_EXPORT DynamicCodeRepresentation : public CodeRepresentation {
   public:
       /** Used to group edit-history together. Call this optionally before a bunch
-       *  of replace() calls, and then call endEdit in the end, to group them together. */
-      virtual void startEdit() = 0;
+       *  of replace() calls, to group them together. */
+      virtual KDevEditingTransaction::Ptr makeEditTransaction() = 0;
       virtual bool replace(const KTextEditor::Range& range, const QString& oldText,
                            const QString& newText, bool ignoreOldText = false) = 0;
-      /** Must be called exactly once per startEdit() */
-      virtual void endEdit() = 0;
     
       typedef KSharedPtr<DynamicCodeRepresentation> Ptr;
 };

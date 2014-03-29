@@ -70,41 +70,9 @@ static void grepLine(const QString& identifier, const QString& lineText, int lin
     }
 }
 
-//NOTE: this is ugly, but otherwise kate might remove tabs again :-/
-// see also: https://bugs.kde.org/show_bug.cgi?id=291074
-struct EditorDisableReplaceTabs {
-  EditorDisableReplaceTabs(KTextEditor::Document* document) : m_iface(qobject_cast<KTextEditor::ConfigInterface*>(document)), m_count(0) {
-  }
-
-  void start() {
-    ++m_count;
-    if( m_count > 1 )
-      return;
-    if ( m_iface ) {
-      m_oldReplaceTabs = m_iface->configValue( "replace-tabs" );
-      m_iface->setConfigValue( "replace-tabs", false );
-    }
-  }
-
-  void end() {
-    --m_count;
-    if( m_count > 0 )
-      return;
-    
-    Q_ASSERT( m_count == 0 );
-    
-    if (m_iface)
-      m_iface->setConfigValue("replace-tabs", m_oldReplaceTabs);
-  }
-
-  KTextEditor::ConfigInterface* m_iface;
-  int m_count;
-  QVariant m_oldReplaceTabs;
-};
-
 class EditorCodeRepresentation : public DynamicCodeRepresentation {
   public:
-  EditorCodeRepresentation(KTextEditor::Document* document) : m_document(document), m_replaceTabs(document) {
+  EditorCodeRepresentation(KTextEditor::Document* document) : m_document(document) {
       m_url = IndexedString(m_document->url());
   }
   
@@ -118,6 +86,10 @@ class EditorCodeRepresentation : public DynamicCodeRepresentation {
         grepLine(identifier, m_document->line(line), line, ret, surroundedByBoundary);
 
       return ret;
+  }
+
+  virtual KDevEditingTransaction::Ptr makeEditTransaction() {
+    return KDevEditingTransaction::Ptr(new KDevEditingTransaction(m_document));
   }
   
   QString line(int line) const {
@@ -135,26 +107,17 @@ class EditorCodeRepresentation : public DynamicCodeRepresentation {
   }
   
   bool setText(const QString& text) {
-    
-    startEdit();
-    bool ret = m_document->setText(text);
-    endEdit();
+    bool ret;
+    {
+        KDevEditingTransaction t(m_document);
+        ret = m_document->setText(text);
+    }
     ModificationRevision::clearModificationCache(m_url);
     return ret;
   }
   
   bool fileExists(){
     return QFile(m_document->url().path()).exists();
-  }
-  
-  void startEdit() {
-      m_document->startEditing();
-      m_replaceTabs.start();
-  }
-  
-  void endEdit() {
-      m_document->finishEditing();
-      m_replaceTabs.end();
   }
   
   bool replace(const KTextEditor::Range& range, const QString& oldText,
@@ -164,9 +127,11 @@ class EditorCodeRepresentation : public DynamicCodeRepresentation {
           return false;
       }
 
-      startEdit();
-      bool ret = m_document->replaceText(range, newText);
-      endEdit();
+      bool ret;
+      {
+          KDevEditingTransaction t(m_document);
+          ret = m_document->replaceText(range, newText);
+      }
 
       ModificationRevision::clearModificationCache(m_url);
 
@@ -180,7 +145,6 @@ class EditorCodeRepresentation : public DynamicCodeRepresentation {
   private:
     KTextEditor::Document* m_document;
     IndexedString m_url;
-    EditorDisableReplaceTabs m_replaceTabs;
 };
 
 class FileCodeRepresentation : public CodeRepresentation {
@@ -409,3 +373,4 @@ QString InsertArtificialCodeRepresentation::text() {
 
 }
 
+// kate: indent-width 4;
