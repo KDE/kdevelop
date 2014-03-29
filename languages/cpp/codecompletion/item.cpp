@@ -340,11 +340,7 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::View* view, const KTe
     if(!removeRange.isEmpty() && removeRange.end() > end && removeRange.end().line() == end.line() && removeRange.end().column() <= document->lineLength(removeRange.end().line()))
     {
       // We stop the editing sequence, which was initiated by kate, so the user can manually undo the removal
-      bool wasEditing = document->finishEditing();
-      if(wasEditing)
-        document->startEditing();
-      else
-        kWarning() << "Was not editing";
+      // -- I removed this feature, it's unclear how/if it works with the new transactions and not worth porting
       document->removeText(removeRange);
     }
   }

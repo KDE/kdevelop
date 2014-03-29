@@ -1259,7 +1259,7 @@ void TestCppCodeCompletion::testSignalSlotExecution()
 
     // Test 1: SIGNAL(<here>signal2(void*)) parens balancing
     {
-        doc->startEditing();
+        KTextEditor::Document::EditingTransaction t(doc);
         KTextEditor::Cursor c( 2, 36 );
         v->setCursorPosition( c );
 
@@ -1274,13 +1274,11 @@ void TestCppCodeCompletion::testSignalSlotExecution()
 
         item->execute( v, Range( c, 0 ) );
         QCOMPARE( doc->line( 2 ), QString("void test() { connect( this, SIGNAL(signal1(void*,char)), SLOT() ); } };") );
-
-        doc->finishEditing();
     }
 
     // Test 2: SLOT(<here>) parens balancing
     {
-        doc->startEditing();
+      KTextEditor::Document::EditingTransaction t(doc);
         KTextEditor::Cursor c( 2, 58 );
         v->setCursorPosition( c );
 
@@ -1295,12 +1293,10 @@ void TestCppCodeCompletion::testSignalSlotExecution()
 
         item->execute( v, Range( c, 0 ) );
         QCOMPARE( doc->line( 2 ), QString("void test() { connect( this, SIGNAL(signal1(void*,char)), SLOT(slot2(void*)) ); } };") );
-
-        doc->finishEditing();
     }
     // Test 3: Slot implementation helper: SLOT(<here>) parens balancing
     {
-        doc->startEditing();
+      KTextEditor::Document::EditingTransaction t(doc);
         KTextEditor::Cursor c( 2, 58 );
         v->setCursorPosition( c );
 
@@ -1319,8 +1315,6 @@ void TestCppCodeCompletion::testSignalSlotExecution()
         lock.lock();
         QEXPECT_FAIL("", "Slot is not replaced because the engine fails to create the declaration.", Continue);
         QCOMPARE( doc->line( 2 ), QString("void test() { connect( this, SIGNAL(signal1(void*,char)), SLOT(slot3(void*)) ); } };") );
-
-        doc->finishEditing();
     }
 
     release(top);
@@ -3438,7 +3432,7 @@ void TestCppCodeCompletion::testExecuteKeepWord()
   KTextEditor::Document* doc = editor->createDocument(this);
   QVERIFY(doc);
   doc->setText(code);
-  doc->startEditing();
+  KTextEditor::Document::EditingTransaction t(doc);
 
   KTextEditor::View *v = doc->createView(0);
   v->setCursorPosition(KTextEditor::Cursor(3, 1));
@@ -3459,8 +3453,6 @@ void TestCppCodeCompletion::testExecuteKeepWord()
 
   QFETCH(QString, expectedCode);
   QCOMPARE(doc->line(3), expectedCode);
-
-  doc->finishEditing();
 
   release(top);
 
@@ -3735,7 +3727,7 @@ void TestCppCodeCompletion::testNoQuadrupleColon()
   doc->setText("");
   KTextEditor::View* v = doc->createView(0);
   
-  doc->startEditing();
+  KTextEditor::Document::EditingTransaction t(doc);
   KTextEditor::Cursor c( 0, 0 );
   v->setCursorPosition( c );
 
@@ -3748,8 +3740,6 @@ void TestCppCodeCompletion::testNoQuadrupleColon()
 
   item->execute( v, Range( c, 0 ) );
   QCOMPARE( doc->line( 0 ), QString("Foobar::var;") );
-
-  doc->finishEditing();
 }
 
 void TestCppCodeCompletion::testLookaheadMatches_data()
