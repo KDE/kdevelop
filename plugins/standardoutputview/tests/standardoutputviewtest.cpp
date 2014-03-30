@@ -113,8 +113,10 @@ void StandardOutputViewTest::testActions()
     QVERIFY(outputWidget);
 
     QList<QAction*> actions = outputWidget->actions();
-    QCOMPARE(actions.size(), 5);
+    QCOMPARE(actions.size(), 7);
     QCOMPARE(actions.takeFirst()->text(), i18n( "Close all other output views" ));
+    QCOMPARE(actions.takeFirst()->text(), i18n("Jump to Previous Outputmark"));
+    QCOMPARE(actions.takeFirst()->text(), i18n("Jump to Next Outputmark"));
     QCOMPARE(actions.takeFirst()->text(), i18n("Select activated Item"));
     QCOMPARE(actions.takeFirst()->text(), i18n("Focus when selecting Item"));
     QCOMPARE(actions.takeFirst()->text(), i18n("Select &All"));
@@ -134,9 +136,11 @@ void StandardOutputViewTest::testActions()
     QVERIFY(outputWidget);
 
     actions = outputWidget->actions();
-    QCOMPARE(actions.size(), 10);
+    QCOMPARE(actions.size(), 12);
     QCOMPARE(actions.takeFirst()->text(), i18n("Previous"));
     QCOMPARE(actions.takeFirst()->text(), i18n("Next"));
+    QCOMPARE(actions.takeFirst()->text(), i18n("Jump to Previous Outputmark"));
+    QCOMPARE(actions.takeFirst()->text(), i18n("Jump to Next Outputmark"));
     QCOMPARE(actions.takeFirst()->text(), i18n("Select activated Item"));
     QCOMPARE(actions.takeFirst()->text(), i18n("Focus when selecting Item"));
     QCOMPARE(actions.takeFirst()->text(), i18n("Select &All"));
