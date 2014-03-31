@@ -80,7 +80,7 @@ void StaticCodeAssistant::documentLoaded(IDocument* document)
   }
 }
 
-void StaticCodeAssistant::assistantHide()
+void StaticCodeAssistant::hideAssistant()
 {
   m_activeAssistant = KSharedPtr<KDevelop::IAssistant>();
   m_activeProblemAssistant = false;

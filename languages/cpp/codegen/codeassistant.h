@@ -53,8 +53,10 @@ class StaticCodeAssistant : public QObject {
     StaticCodeAssistant();
     KSharedPtr<KDevelop::IAssistant> activeAssistant() { return m_activeAssistant; }
 
+  public slots:
+    void hideAssistant();
+
   private slots:
-    void assistantHide();
     void documentLoaded(KDevelop::IDocument*);
     void textInserted(KTextEditor::Document*, const KTextEditor::Range&);
     void textRemoved(KTextEditor::Document*, const KTextEditor::Range&, const QString& removedText);

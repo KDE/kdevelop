@@ -36,6 +36,7 @@
 #include <ktexteditor/document.h>
 #include <language/backgroundparser/backgroundparser.h>
 #include <language/duchain/duchain.h>
+#include <language/duchain/duchainutils.h>
 #include <language/codegen/coderepresentation.h>
 #include <shell/documentcontroller.h>
 #include <interfaces/ilanguage.h>
@@ -106,6 +107,8 @@ public:
   {
     Core::self()->documentController()->documentForUrl(m_cppDocument.url)->close(KDevelop::IDocument::Discard);
     Core::self()->documentController()->documentForUrl(m_headerDocument.url)->close(KDevelop::IDocument::Discard);
+
+    staticCodeAssistant->hideAssistant();
   }
 
   void changeDocument(TestDoc which, Range where, const QString& what, bool waitForUpdate = false)
