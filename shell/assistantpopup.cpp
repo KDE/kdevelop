@@ -70,8 +70,8 @@ AssistantPopup::AssistantPopup(KTextEditor::View* parent, const IAssistant::Ptr&
 void AssistantPopup::reset(KTextEditor::View* widget, const IAssistant::Ptr& assistant)
 {
     disconnect(this);
-    if ( auto view = m_view.toStrongRef() ) {
-        view->removeEventFilter(this);
+    if ( m_view ) {
+        m_view->removeEventFilter(this);
     }
     m_view = widget;
     widget->installEventFilter(this);
@@ -168,9 +168,8 @@ QRect AssistantPopup::textWidgetGeometry(KTextEditor::View *view) const
 void AssistantPopup::keyReleaseEvent(QKeyEvent *event)
 {
     if ( event->key() == Qt::Key_Alt ) {
-        auto view = m_view.toStrongRef();
-        if ( view ) {
-            view->setFocus();
+        if ( m_view ) {
+            m_view->setFocus();
         }
         emit m_config->shouldShowHighlight(false);
     }
@@ -179,15 +178,14 @@ void AssistantPopup::keyReleaseEvent(QKeyEvent *event)
 
 bool AssistantPopup::eventFilter(QObject* object, QEvent* event)
 {
-    auto view = m_view.toStrongRef();
-    if ( ! view ) {
+    if ( ! m_view ) {
         // should never happen
         return false;
     }
-    Q_ASSERT(object == view);
+    Q_ASSERT(object == m_view.data());
     Q_UNUSED(object);
     if (event->type() == QEvent::Resize) {
-        updatePosition(view.data(), KTextEditor::Cursor::invalid());
+        updatePosition(m_view.data(), KTextEditor::Cursor::invalid());
     } else if (event->type() == QEvent::Hide) {
         executeHideAction();
     } else if (event->type() == QEvent::KeyPress) {
@@ -250,9 +248,8 @@ void AssistantPopup::executeHideAction()
 {
     if ( isVisible() ) {
         m_assistant->doHide();
-        auto view = m_view.toStrongRef();
-        if ( view ) {
-            view->setFocus();
+        if ( m_view ) {
+            m_view->setFocus();
         }
     }
 }

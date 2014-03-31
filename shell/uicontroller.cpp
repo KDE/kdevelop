@@ -695,6 +695,7 @@ void UiController::popUpAssistant(const KDevelop::IAssistant::Ptr& assistant)
     if( d->currentShownAssistant ) {
         // when the assistant was still open, avoid flickering
         d->currentShownAssistant->notifyReopened(wasVisible);
+        d->m_assistantTimer.stop();
     }
 }
 
