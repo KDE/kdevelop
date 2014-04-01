@@ -228,6 +228,11 @@ CMakeCommitChangesJob* CMakeImportJob::importDirectory(IProject* project, const 
             if (!m_manager->filterManager()->isValid(folder, true, project)) {
                 continue;
             }
+            Path newcmakeListsPath(folder, "CMakeLists.txt");
+            if(!QFile::exists(newcmakeListsPath.toLocalFile())) {
+               kWarning() << "Unable to open " << newcmakeListsPath.toLocalFile();
+               continue;
+            }
             CMakeCommitChangesJob* job = importDirectory(project, folder, ctx);
             job->setFindParentItem(false);
             connect(commitJob, SIGNAL(folderCreated(KDevelop::ProjectFolderItem*)),
