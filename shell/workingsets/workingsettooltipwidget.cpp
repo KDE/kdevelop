@@ -313,7 +313,7 @@ void WorkingSetToolTipWidget::updateFileButtons()
         connect(m_openButton, SIGNAL(clicked(bool)), m_setButton, SLOT(closeSet()));
         connect(m_openButton, SIGNAL(clicked(bool)), this, SIGNAL(shouldClose()));
         m_openButton->setIcon(KIcon("project-development-close"));
-        m_openButton->setText(i18n("Close"));
+        m_openButton->setText(i18n("Stash"));
     }else{
         disconnect(m_openButton, SIGNAL(clicked(bool)), m_setButton, SLOT(closeSet()));
         connect(m_openButton, SIGNAL(clicked(bool)), m_setButton, SLOT(loadSet()));
