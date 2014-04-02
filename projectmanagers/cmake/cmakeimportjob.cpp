@@ -27,7 +27,6 @@
 #include "cmakemodelitems.h"
 #include <project/projectmodel.h>
 #include <project/projectfiltermanager.h>
-#include <project/path.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/parsingenvironment.h>
@@ -225,7 +224,7 @@ CMakeCommitChangesJob* CMakeImportJob::importDirectory(IProject* project, const 
             if (!m_manager->filterManager()->isValid(folder, true, project)) {
                 continue;
             }
-            Path newcmakeListsPath(folder, "CMakeLists.txt");
+            KUrl newcmakeListsPath(folder, "CMakeLists.txt");
             if(!QFile::exists(newcmakeListsPath.toLocalFile())) {
                kWarning() << "Unable to open " << newcmakeListsPath.toLocalFile();
                continue;
