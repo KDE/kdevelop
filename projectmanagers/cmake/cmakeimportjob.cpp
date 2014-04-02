@@ -27,6 +27,7 @@
 #include "cmakemodelitems.h"
 #include <project/projectmodel.h>
 #include <project/projectfiltermanager.h>
+#include <project/path.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/parsingenvironment.h>
