@@ -99,12 +99,8 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
         addAction(nextAction);
     }
 
-    prevmarkAction = dynamic_cast<KAction*>(data->plugin->actionCollection()->action("prev_error"));
-    connect(prevmarkAction, SIGNAL(triggered()), this, SLOT(selectPrevItem()));
-    addAction(prevmarkAction);
-    nextmarkAction = dynamic_cast<KAction*>(data->plugin->actionCollection()->action("next_error"));
-    connect(nextmarkAction, SIGNAL(triggered()), this, SLOT(selectNextItem()));
-    addAction(nextmarkAction);
+    addAction(dynamic_cast<KAction*>(data->plugin->actionCollection()->action("prev_error")));
+    addAction(dynamic_cast<KAction*>(data->plugin->actionCollection()->action("next_error")));
 
     activateOnSelect = new KToggleAction( KIcon(), i18n("Select activated Item"), this );
     activateOnSelect->setChecked( true );
