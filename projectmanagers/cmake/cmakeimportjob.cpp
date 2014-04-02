@@ -224,7 +224,7 @@ CMakeCommitChangesJob* CMakeImportJob::importDirectory(IProject* project, const 
             if (!m_manager->filterManager()->isValid(folder, true, project)) {
                 continue;
             }
-            KUrl newcmakeListsPath(folder, "CMakeLists.txt");
+            Path newcmakeListsPath(folder, "CMakeLists.txt");
             if(!QFile::exists(newcmakeListsPath.toLocalFile())) {
                kWarning() << "Unable to open " << newcmakeListsPath.toLocalFile();
                continue;
