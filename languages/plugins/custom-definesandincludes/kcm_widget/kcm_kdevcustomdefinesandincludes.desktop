@@ -9,6 +9,7 @@ X-KDE-ParentApp=kdevplatformproject
 X-KDE-ParentComponents=KDevDefinesAndIncludesManager
 
 Name=Custom Defines And Includes
+Name[ca]=Personalitza les definicions i inclusions
 Name[da]=Brugertilpassede definitioner og inkluderingsfiler
 Name[de]=Benutzerdefinierte Definitionen und Includes
 Name[es]=Personalizar definiciones e inclusiones
@@ -24,6 +25,7 @@ Name[uk]=Нетипові визначення і включення
 Name[x-test]=xxCustom Defines And Includesxx
 
 Comment=Configure which macros and include directories/files will be added to the parser during project parsing.
+Comment[ca]=Configura quines macros i directoris/fitxers s'afegiran a l'analitzador durant l'anàlisi del projecte.
 Comment[da]=Indstil hvilke makroer og inkluderingsmapper/-filer der skal føjes til fortolkeren under fortolkning af projektet.
 Comment[de]=Einstellung der Makros und Include-Ordner/-Dateien, die zum für den Parser während des Einlesens des Projekts hinzugefügt werden.
 Comment[es]=Configurar las macros y los directorios/archivos a incluir que se añadirán al analizador sintáctico durante el análisis de los proyectos.

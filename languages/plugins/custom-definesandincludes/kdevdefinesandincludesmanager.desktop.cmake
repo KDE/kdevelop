@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=Custom Defines And Includes Manager
+Name[ca]=Gestor per personalitzar les definicions i inclusions
 Name[da]=Håndtering af brugertilpassede definitioner og inkluderingsfiler
 Name[de]=Verwaltung benutzerdefinierter Definitionen und Includes
 Name[es]=Gestor de definiciones e inclusiones personalizadas
@@ -16,6 +17,7 @@ Name[sv]=Hantering av egna definitioner och inkluderingar
 Name[uk]=Керування нетиповими визначеннями і включеннями
 Name[x-test]=xxCustom Defines And Includes Managerxx
 GenericName=Custom Defines And Includes Manager
+GenericName[ca]=Gestor per personalitzar les definicions i inclusions
 GenericName[da]=Håndtering af brugertilpassede definitioner og inkluderingsfiler
 GenericName[de]=Verwaltung benutzerdefinierter Definitionen und Includes
 GenericName[es]=Gestor de definiciones e inclusiones personalizadas
@@ -31,6 +33,7 @@ GenericName[sv]=Hantering av egna definitioner och inkluderingar
 GenericName[uk]=Керування нетиповими визначеннями і включеннями
 GenericName[x-test]=xxCustom Defines And Includes Managerxx
 Comment=Configure which macros and include directories/files will be added to the parser during project parsing.
+Comment[ca]=Configura quines macros i directoris/fitxers s'afegiran a l'analitzador durant l'anàlisi del projecte.
 Comment[da]=Indstil hvilke makroer og inkluderingsmapper/-filer der skal føjes til fortolkeren under fortolkning af projektet.
 Comment[de]=Einstellung der Makros und Include-Ordner/-Dateien, die zum für den Parser während des Einlesens des Projekts hinzugefügt werden.
 Comment[es]=Configurar las macros y los directorios/archivos a incluir que se añadirán al analizador sintáctico durante el análisis de los proyectos.
