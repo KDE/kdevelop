@@ -28,7 +28,7 @@ using namespace KDevelop;
 
 Path::List ClangUtils::defaultIncludeDirectories()
 {
-    Path::List includePaths;
+    static Path::List includePaths;
 
     if (!includePaths.isEmpty()) {
         return includePaths;
