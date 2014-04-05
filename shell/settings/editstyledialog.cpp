@@ -88,7 +88,7 @@ void EditStyleDialog::init()
 	}
 
 	if (m_sourceFormatter) {
-		QString text = m_sourceFormatter->previewText(&m_style, m_mimeType);
+		QString text = m_sourceFormatter->previewText(m_style, m_mimeType);
 		updatePreviewText(text);
 	}
 }

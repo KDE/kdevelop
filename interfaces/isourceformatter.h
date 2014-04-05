@@ -181,7 +181,7 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatter
 
 		/** \return The text used in the config dialog to preview the current style.
 		*/
-		virtual QString previewText(const SourceFormatterStyle* style, const KMimeType::Ptr &mime) = 0;
+		virtual QString previewText(const SourceFormatterStyle& style, const KMimeType::Ptr &mime) = 0;
 
 		struct Indentation {
 			Indentation() : indentationTabWidth(0), indentWidth(0) {
