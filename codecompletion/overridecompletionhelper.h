@@ -25,7 +25,6 @@
 #include <clang-c/Index.h>
 #include <language/editor/simplecursor.h>
 #include <QStringList>
-#include <../duchain/clangtypes.h>
 #include "codecompletionexport.h"
 
 struct FunctionInfo

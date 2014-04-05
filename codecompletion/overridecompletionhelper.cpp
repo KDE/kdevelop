@@ -21,6 +21,8 @@
 
 #include "overridecompletionhelper.h"
 
+#include "../duchain/clangtypes.h"
+
 struct OverrideInfo
 {
     FunctionInfoList* functions;
