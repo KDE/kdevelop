@@ -32,7 +32,7 @@ struct OverrideInfo
 
 //TODO replace this with clang_Type_getTemplateArgumentAsType when that
 //function makes it into the mainstream libclang release.
-void getTempalteTypes(CXCursor cursor, QStringList& types)
+void getTemplateTypes(CXCursor cursor, QStringList& types)
 {
     QString tStr = ClangString(clang_getTypeSpelling(clang_getCursorType(cursor))).toString();
     int depth = 0;
@@ -69,7 +69,7 @@ void processBaseClass(CXCursor cursor, FunctionInfoList* functionList)
     CXCursor ref = clang_getCursorReferenced(cursor);
     CXCursor isTemplate = clang_getSpecializedCursorTemplate(ref);
     if (!clang_Cursor_isNull(isTemplate)) {
-        getTempalteTypes(ref, concrete);
+        getTemplateTypes(ref, concrete);
         ref = isTemplate;
     }
 
