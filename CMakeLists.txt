@@ -54,6 +54,7 @@ add_subdirectory(tests)
 kde4_add_plugin(kdevclangsupport
     clangparsejob.cpp
     clangsupport.cpp
+    clangutils.cpp
     documentfinderhelpers.cpp
 )
 target_link_libraries(kdevclangsupport
