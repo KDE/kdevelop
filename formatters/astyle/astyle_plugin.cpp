@@ -141,7 +141,7 @@ KDevelop::SettingsWidget* AStylePlugin::editStyleWidget(const KMimeType::Ptr &mi
     return new AStylePreferences(lang);
 }
 
-QString AStylePlugin::previewText(const SourceFormatterStyle*, const KMimeType::Ptr&)
+QString AStylePlugin::previewText(const SourceFormatterStyle& style, const KMimeType::Ptr& mime)
 {
     return "// Indentation\n" + indentingSample() + "\t// Formatting\n"
         + formattingSample();

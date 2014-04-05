@@ -63,7 +63,7 @@ class CustomScriptPlugin : public KDevelop::IPlugin, public KDevelop::ISourceFor
 
 		/** \return The text used in the config dialog to preview the current style.
 		*/
-		virtual QString previewText(const KDevelop::SourceFormatterStyle* style, const KMimeType::Ptr &mime);
+		virtual QString previewText(const KDevelop::SourceFormatterStyle& style, const KMimeType::Ptr &mime);
 
 		/** \return The indentation of the currently selected style.
 		*/
