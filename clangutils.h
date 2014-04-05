@@ -33,6 +33,9 @@ namespace ClangUtils
      * /usr/bin/../lib/clang/3.4/include
      * ...
      * /usr/include
+     *
+     * @note This function internally runs "clang++" to retrieve the include directories.
+     * The result of the first run is cached, hence consecutive calls to this function are very cheap.
      */
     KDevelop::Path::List defaultIncludeDirectories();
 };

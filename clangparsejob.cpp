@@ -133,8 +133,7 @@ void ClangParseJob::run()
 
     // get user defined and default include paths in background thread
     m_includes += userDefinedIncludePathsForFile(document().str());
-    static const auto defaultIncludePaths = ClangUtils::defaultIncludeDirectories();
-    m_includes += defaultIncludePaths;
+    m_includes += ClangUtils::defaultIncludeDirectories();
 
     if (abortRequested()) {
         return;
