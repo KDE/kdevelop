@@ -31,7 +31,9 @@
 #include <QMouseEvent>
 #include <QHeaderView>
 #include <QLabel>
+#include <QPushButton>
 #include <QScrollBar>
+#include <QSignalMapper>
 #include <QDesktopWidget>
 #include <KTextEditor/View>
 #include <KLocale>
@@ -128,22 +130,24 @@ VariableToolTip::VariableToolTip(QWidget* parent, QPoint position,
                        QItemSelectionModel::Rows
                        | QItemSelectionModel::ClearAndSelect);
 
-    QHBoxLayout* labelL = new QHBoxLayout();
-    labelL->setContentsMargins(11, 0, 11, 6);
-    QLabel* label = new QLabel(i18n("<a href=\"add_watch\">Watch this</a>"), this);
-    labelL->addWidget(label);
-    QLabel* label2 = new QLabel(i18n("<a href=\"watchpoint\">Stop on change</a>"),
-                                this);
-    labelL->addWidget(label2);
-    connect(label, SIGNAL(linkActivated(QString)),
-            this, SLOT(slotLinkActivated(QString)));
-    connect(label2, SIGNAL(linkActivated(QString)),
-            this, SLOT(slotLinkActivated(QString)));    
+    QHBoxLayout* buttonBox = new QHBoxLayout();
+    buttonBox->setContentsMargins(11, 0, 11, 6);
+    QPushButton* watchThisButton = new QPushButton(i18n("Watch this"));
+    buttonBox->addWidget(watchThisButton);
+    QPushButton* stopOnChangeButton = new QPushButton(i18n("Stop on Change"));
+    buttonBox->addWidget(stopOnChangeButton);
+
+    QSignalMapper* mapper = new QSignalMapper(this);
+    connect(watchThisButton, SIGNAL(clicked(bool)), mapper, SLOT(map()));
+    mapper->setMapping(watchThisButton, "add_watch");
+    connect(stopOnChangeButton, SIGNAL(clicked(bool)), mapper, SLOT(map()));
+    mapper->setMapping(stopOnChangeButton, "add_watchpoint");
+    connect(mapper, SIGNAL(mapped(QString)), this, SLOT(slotLinkActivated(QString)));
 
     QHBoxLayout* inner = new QHBoxLayout();
     l->addLayout(inner);
     inner->setContentsMargins(0, 0, 0, 0);
-    inner->addLayout(labelL);
+    inner->addLayout(buttonBox);
     inner->addStretch();
 
     SizeGrip* g = new SizeGrip(this);
@@ -183,7 +187,7 @@ void VariableToolTip::slotLinkActivated(const QString& link)
     if (session && session->state() != IDebugSession::NotStartedState && session->state() != IDebugSession::EndedState) {
         if (link == "add_watch") {
             session->variableController()->addWatch(v);
-        } else if (link == "watchpoint") {
+        } else if (link == "add_watchpoint") {
             session->variableController()->addWatchpoint(v);
         }
     }
