@@ -29,20 +29,6 @@
 
 using namespace KDevelop;
 
-QString ClangFixit::description() const
-{
-    if (range.start == range.end) {
-        return i18n("Insert \"%1\" after column :%2",
-                    replacementText, range.start.column);
-    } else if (range.start.line == range.end.line) {
-        return i18n("Replace text at column: %1 with: \"%2\"",
-                    range.start.column, replacementText);
-    } else {
-        return i18n("Replace multiple lines starting at line: %1, column: %2 with: \"%3\"",
-                    range.start.line, range.start.column, replacementText);
-    }
-}
-
 KSharedPtr<IAssistant> ClangProblem::solutionAssistant() const
 {
     if (allFixits().isEmpty()) {
@@ -62,24 +48,21 @@ void ClangProblem::setFixits(const ClangFixits& fixits)
     m_fixits = fixits;
 }
 
-ClangProblem::FixitMap ClangProblem::allFixits() const
+ClangFixits ClangProblem::allFixits() const
 {
-    FixitMap result;
-    if (!m_fixits.isEmpty()) {
-        result[ConstPtr(this)] = m_fixits;
-    }
+    ClangFixits result;
+    result << m_fixits;
 
     for (const ProblemPointer& diagnostic : diagnostics()) {
         const Ptr problem = Ptr::staticCast(diagnostic);
         Q_ASSERT(problem);
-        result.unite(problem->allFixits());
+        result << problem->allFixits();
     }
     return result;
 }
 
-
-ClangFixitAssistant::ClangFixitAssistant(const ClangProblem::FixitMap& fixitMap)
-    : m_fixitMap(fixitMap)
+ClangFixitAssistant::ClangFixitAssistant(const ClangFixits& fixits)
+    : m_fixits(fixits)
 {
 }
 
@@ -87,29 +70,37 @@ void ClangFixitAssistant::createActions()
 {
     KDevelop::IAssistant::createActions();
 
-    for (auto it = m_fixitMap.constBegin(); it != m_fixitMap.constEnd(); ++it) {
-        for (const ClangFixit& fixit : it.value()) {
-            addAction(IAssistantAction::Ptr(new ClangFixitAction(it.key(), fixit)));
-        }
+    for (const ClangFixit& fixit : m_fixits) {
+        addAction(IAssistantAction::Ptr(new ClangFixitAction(fixit)));
     }
 }
 
-ClangFixitAction::ClangFixitAction(const ClangProblem::ConstPtr& problem, const ClangFixit& fixit)
-    : m_problem(problem)
-    , m_fixit(fixit)
+ClangFixitAction::ClangFixitAction(const ClangFixit& fixit)
+    : m_fixit(fixit)
 {
-    Q_ASSERT(problem);
 }
 
 QString ClangFixitAction::description() const
 {
-    // Clang doesn't really give out human-readable texts for the fixits alone
-    // Instead, they're part of the diagnostic message
-    if (m_problem->severity() == ProblemData::Hint) {
-        return m_problem->description();
-    }
+    if (!m_fixit.description.isEmpty())
+        return m_fixit.description;
+
     // fallback in case there's no hint for the diagnostic
-    return m_fixit.description();
+    // Make sure we don't break on a replacementText such as '#include <foobar>'
+    auto formattedReplacement = m_fixit.replacementText;
+    formattedReplacement.replace("<", "&amp;lt;").replace(">", "&amp;gt;");
+
+    const auto range = m_fixit.range;
+    if (range.start == range.end) {
+        return i18n("Insert \"%1\" at line: %2, column: %3",
+                    formattedReplacement, range.start.line, range.start.column);
+    } else if (range.start.line == range.end.line) {
+        return i18n("Replace text at line: %1, column: %2 with: \"%3\"",
+                    range.start.line, range.start.column, formattedReplacement);
+    } else {
+        return i18n("Replace multiple lines starting at line: %1, column: %2 with: \"%3\"",
+                    range.start.line, range.start.column, formattedReplacement);
+    }
 }
 
 void ClangFixitAction::execute()
@@ -118,7 +109,7 @@ void ClangFixitAction::execute()
     {
         DUChainReadLocker lock;
 
-        DocumentChange change(m_problem->url(), m_fixit.range,
+        DocumentChange change(m_fixit.range.document, m_fixit.range,
                     QString(), m_fixit.replacementText);
         // TODO: We probably don't want this
         change.m_ignoreOldText = true;

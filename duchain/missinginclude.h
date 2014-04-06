@@ -23,84 +23,24 @@
 #ifndef UNKNOWNDECLARATION_H
 #define UNKNOWNDECLARATION_H
 
-#include "duchainexport.h"
+#include "clangproblem.h"
 
-#include <language/duchain/problem.h>
 #include <language/duchain/identifier.h>
-#include <language/editor/simplerange.h>
-#include <interfaces/iassistant.h>
-#include <project/path.h>
 
-struct KDEVCLANGDUCHAIN_EXPORT UnknownDeclarationFixit
-{
-    QString replacementText;
-    KDevelop::SimpleRange range;
-
-    bool operator==(const UnknownDeclarationFixit& other) const
-    {
-        return replacementText == other.replacementText
-            && range == other.range;
-    }
-
-    /**
-     * Human-readable description of this object
-     *
-     * @example 'Insert \"#include <vector>\" at line 10'
-     */
-    QString description() const;
-};
-
-using UnknownDeclarationFixits = QVector<UnknownDeclarationFixit>;
-
-class KDEVCLANGDUCHAIN_EXPORT UnknownDeclarationProblem : public KDevelop::Problem
+class UnknownDeclarationProblem : public KDevelop::Problem
 {
 public:
     using Ptr = KSharedPtr<UnknownDeclarationProblem>;
     using ConstPtr = KSharedPtr<const UnknownDeclarationProblem>;
 
-    UnknownDeclarationProblem() = default;
-    UnknownDeclarationProblem( KDevelop::QualifiedIdentifier, KDevelop::Path );
+    UnknownDeclarationProblem();
+
+    void setSymbol(const KDevelop::QualifiedIdentifier& identifier);
 
     virtual KSharedPtr<KDevelop::IAssistant> solutionAssistant() const override;
 
-    UnknownDeclarationProblem& setSymbol( KDevelop::QualifiedIdentifier );
-    UnknownDeclarationProblem& setFile( KDevelop::Path arg );
-
 private:
     KDevelop::QualifiedIdentifier m_identifier;
-    KDevelop::Path m_file;
-};
-
-class KDEVCLANGDUCHAIN_EXPORT UnknownDeclarationFixitAssistant : public KDevelop::IAssistant
-{
-    Q_OBJECT
-
-public:
-    UnknownDeclarationFixitAssistant( UnknownDeclarationProblem::ConstPtr problem, const UnknownDeclarationFixits fixits);
-
-    virtual void createActions() override;
-
-private:
-    UnknownDeclarationProblem::ConstPtr m_problem;
-    UnknownDeclarationFixits m_fixits;
-};
-
-class KDEVCLANGDUCHAIN_EXPORT UnknownDeclarationFixitAction : public KDevelop::IAssistantAction
-{
-    Q_OBJECT
-
-public:
-    UnknownDeclarationFixitAction(const UnknownDeclarationProblem::ConstPtr& problem, const UnknownDeclarationFixit& fixit)
-    : m_problem( problem ), m_fixit( fixit ) {}
-
-    virtual QString description() const override;
-
-public Q_SLOTS:
-    virtual void execute() override;
-
-private:
-    UnknownDeclarationProblem::ConstPtr m_problem;
-    UnknownDeclarationFixit m_fixit;
 };
 
 #endif // UNKNOWNDECLARATION_H

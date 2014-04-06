@@ -102,7 +102,7 @@ static ClangFixits fixitsForDiagnostic(CXDiagnostic diagnostic)
         // TODO: Apparently there's no way to find out the raw text via the C API given a source range
         // Could be useful to pass that into ClangFixit to be sure to replace the correct text
         // cf. DocumentChangeSet.m_oldText
-        fixits << ClangFixit{replacementText, ClangRange(range).toSimpleRange()};
+        fixits << ClangFixit{replacementText, ClangRange(range).toDocumentRange()};
     }
     return fixits;
 }
@@ -152,13 +152,12 @@ static ClangProblem::Ptr problemForDiagnostic(CXDiagnostic diagnostic)
     return problem;
 }
 
-
 /**
- * Check whether @p diagnostic might be caused by a missing include
+ * Check whether the problem stated in @p description may be caused by a missing include
  *
  * @return True if this may be fixable by adding a include, false otherwise
  */
-bool isDeclarationProblem( const CXDiagnostic& diagnostic )
+bool isDeclarationProblem( const QString& description )
 {
     /* libclang does not currently expose an enum or any other way to query
      * what specific semantic error we're dealing with. Instead, we have to
@@ -173,11 +172,22 @@ bool isDeclarationProblem( const CXDiagnostic& diagnostic )
      * http://lists.cs.uiuc.edu/pipermail/cfe-dev/2014-March/036036.html
      */
 
-    const auto errmsg = ClangString( clang_getDiagnosticSpelling( diagnostic) ).toString();
-    return errmsg.contains( "use of undeclared identifier" )
-           || errmsg.contains( "no member named" )
-           || errmsg.contains( "unknown type name" )
-           || errmsg.contains( "variable has incomplete type" );
+    return description.startsWith( "use of undeclared identifier" )
+           || description.startsWith( "no member named" )
+           || description.startsWith( "unknown type name" )
+           || description.startsWith( "variable has incomplete type" );
+}
+
+QString symbolFromDiagnosticSpelling(const QString& str)
+{
+    /* in all error messages the symbol is in in the first pair of quotes */
+    const auto split = str.split( '\'' );
+    auto symbol = split.value( 1 );
+
+    if( str.startsWith( "no member named" ) ) {
+        symbol = split.value( 3 ) + "::" + split.value( 1 );
+    }
+    return symbol;
 }
 
 UnknownDeclarationProblem::Ptr unknownDeclaration( CXDiagnostic diagnostic )
@@ -193,31 +203,11 @@ UnknownDeclarationProblem::Ptr unknownDeclaration( CXDiagnostic diagnostic )
 
     DocumentRange docRange(IndexedString(fileName), KDevelop::SimpleRange(location, location));
 
-    /* in all error messages the symbol is in in the first pair of quotes */
-    const auto split = errmsg.split( '\'' );
-    auto symbol = split.value( 1 );
-
-    if( errmsg.contains( "no member name" ) ) {
-        symbol = split.value( 3 ) + "::" + split.value( 1 );
-    }
-
     problem->setDescription( prettyDiagnosticSpelling( description ) );
-    debug() << "Setting symbol:" << KDevelop::QualifiedIdentifier{ symbol };
-    problem->setSymbol( KDevelop::QualifiedIdentifier { symbol } );
-    problem->setFile( KDevelop::Path( fileName.toString() ) );
+    problem->setSymbol(QualifiedIdentifier(symbolFromDiagnosticSpelling(ClangString(description).toString())));
     problem->setFinalLocation( docRange );
     problem->setSource(ProblemData::SemanticAnalysis);
-
     return problem;
-}
-
-ProblemPointer createProblem(CXDiagnostic diagnostic)
-{
-    if( isDeclarationProblem(diagnostic) ) {
-        return ProblemPointer::staticCast(unknownDeclaration(diagnostic));
-    }
-
-    return ProblemPointer::staticCast(problemForDiagnostic(diagnostic));
 }
 
 }
@@ -322,7 +312,7 @@ QList<ProblemPointer> ParseSession::problemsForFile(CXFile file) const
             continue;
         }
 
-        ProblemPointer problem(createProblem(diagnostic));
+        ClangProblem::Ptr problem = problemForDiagnostic(diagnostic);
         problems << ProblemPointer::staticCast(problem);
 
         QList<ProblemPointer> diagnostics;
@@ -334,6 +324,10 @@ QList<ProblemPointer> ParseSession::problemsForFile(CXFile file) const
             diagnostics << ProblemPointer::staticCast(problem);
         }
         problem->setDiagnostics(diagnostics);
+
+        if (isDeclarationProblem(ClangString(clang_getDiagnosticSpelling(diagnostic)).toString())) {
+            problems << ProblemPointer::staticCast(unknownDeclaration(diagnostic));
+        }
 
         clang_disposeDiagnostic(diagnostic);
     }

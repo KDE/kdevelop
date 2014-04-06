@@ -375,9 +375,9 @@ QStringList forwardDeclarations( const QualifiedIdentifier& identifier )
     return { "class " + name + ";", "struct " + name + ";" };
 }
 
-UnknownDeclarationFixits fixUnknownDeclaration( const QualifiedIdentifier& identifier, const KDevelop::Path& file, const KDevelop::DocumentRange& docrange )
+ClangFixits fixUnknownDeclaration( const QualifiedIdentifier& identifier, const KDevelop::Path& file, const KDevelop::DocumentRange& docrange )
 {
-    UnknownDeclarationFixits fixits;
+    ClangFixits fixits;
 
     const auto forwardDeclRange = forwardDeclarationPosition( file );
     for( const auto& decl : forwardDeclarations( identifier ) ) {
@@ -385,7 +385,7 @@ UnknownDeclarationFixits fixUnknownDeclaration( const QualifiedIdentifier& ident
         if( !forwardDeclRange.isValid() ) {
             continue;
         }
-        fixits << UnknownDeclarationFixit{ decl, forwardDeclRange };
+        fixits << ClangFixit{ decl, DocumentRange(file.toIndexed(), forwardDeclRange), QString() };
     }
 
     const auto includepaths = includePaths( file );
@@ -405,7 +405,7 @@ UnknownDeclarationFixits fixUnknownDeclaration( const QualifiedIdentifier& ident
             continue;
         }
 
-        fixits << UnknownDeclarationFixit{ directive, range };
+        fixits << ClangFixit{ directive, DocumentRange(file.toIndexed(), range), QString() };
     }
 
     if( fixits.size() > maxSuggestions ) {
@@ -417,80 +417,21 @@ UnknownDeclarationFixits fixUnknownDeclaration( const QualifiedIdentifier& ident
 
 }
 
-UnknownDeclarationProblem::UnknownDeclarationProblem( KDevelop::QualifiedIdentifier id, KDevelop::Path path )
-    : m_identifier( id )
-    , m_file( path )
-{}
-
-UnknownDeclarationProblem& UnknownDeclarationProblem::setSymbol( KDevelop::QualifiedIdentifier id )
+UnknownDeclarationProblem::UnknownDeclarationProblem()
 {
-    m_identifier = id;
-    return *this;
+    setDescription(i18n("Unknown declaration"));
+    setSeverity(ProblemData::Error);
 }
 
-UnknownDeclarationProblem& UnknownDeclarationProblem::setFile( KDevelop::Path path )
+void UnknownDeclarationProblem::setSymbol(const QualifiedIdentifier& identifier)
 {
-    m_file = path;
-    return *this;
+    m_identifier = identifier;
+    setDescription(i18n("Unknown declaration: %1", identifier.toString()));
 }
 
-QString UnknownDeclarationFixit::description() const
+KSharedPtr<IAssistant> UnknownDeclarationProblem::solutionAssistant() const
 {
-    /* Because our text might containt < > we must escape it, otherwise the menu entry will break
-     *
-     * Transforms "Insert missing " into "Insert missing #include <header>
-     * This is only for display, so the actual replacementText is unmodified
-     */
-    auto formattedReplacement = replacementText;
-    formattedReplacement.replace( "<", "&amp;lt;" ).replace( ">", "&amp;gt;" );
-    return i18n( "Insert \"%1\" at line %2",
-                 formattedReplacement,
-                 range.start.line + 1 );
+    const Path path(finalLocation().document.str());
+    const auto fixits = fixUnknownDeclaration(m_identifier, path, finalLocation());
+    return KSharedPtr<IAssistant>(new ClangFixitAssistant(fixits));
 }
-
-KSharedPtr< IAssistant > UnknownDeclarationProblem::solutionAssistant() const
-{
-    return KSharedPtr< IAssistant >(
-               new UnknownDeclarationFixitAssistant(
-                   ConstPtr( this ),
-                   fixUnknownDeclaration( m_identifier, m_file, this->finalLocation() ) ) );
-}
-
-UnknownDeclarationFixitAssistant::UnknownDeclarationFixitAssistant( UnknownDeclarationProblem::ConstPtr ptr, const UnknownDeclarationFixits fixits) :
-    m_problem( ptr ),
-    m_fixits( fixits )
-{}
-
-void UnknownDeclarationFixitAssistant::createActions()
-{
-    KDevelop::IAssistant::createActions();
-
-    for( const auto& fixit : m_fixits )
-        addAction(IAssistantAction::Ptr(new UnknownDeclarationFixitAction(m_problem, fixit)));
-}
-
-QString UnknownDeclarationFixitAction::description() const
-{
-    if (m_problem->severity() == ProblemData::Hint)
-        return m_problem->description();
-    // fallback in case there's no hint for the diagnostic
-    return m_fixit.description();
-}
-
-void UnknownDeclarationFixitAction::execute()
-{
-
-    DocumentChangeSet changes;
-    {
-        DUChainReadLocker lock;
-
-        DocumentChange change(m_problem->url(), m_fixit.range,
-                              "", m_fixit.replacementText + "\n" );
-        changes.addChange(change);
-    }
-
-    changes.setReplacementPolicy(DocumentChangeSet::WarnOnFailedChange);
-    changes.applyAllChanges();
-}
-
-#include "moc_missinginclude.cpp"

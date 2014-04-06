@@ -32,20 +32,15 @@
 struct KDEVCLANGDUCHAIN_EXPORT ClangFixit
 {
     QString replacementText;
-    KDevelop::SimpleRange range;
+    KDevelop::DocumentRange range;
+    QString description;
 
     bool operator==(const ClangFixit& other) const
     {
         return replacementText == other.replacementText
-            && range == other.range;
+            && range == other.range
+            && description == other.description;
     }
-
-    /**
-     * Human-readable description of this object
-     *
-     * @example 'Insert " = 0" after col:1'
-     */
-    QString description() const;
 };
 
 using ClangFixits = QVector<ClangFixit>;
@@ -55,7 +50,7 @@ class KDEVCLANGDUCHAIN_EXPORT ClangProblem : public KDevelop::Problem
 public:
     using Ptr = KSharedPtr<ClangProblem>;
     using ConstPtr = KSharedPtr<const ClangProblem>;
-    using FixitMap = QHash<ClangProblem::ConstPtr, ClangFixits>;
+    using FixitMap = QHash<KDevelop::ProblemPointer, ClangFixits>;
 
     virtual KSharedPtr<KDevelop::IAssistant> solutionAssistant() const override;
 
@@ -67,23 +62,24 @@ public:
      *
      * @return A mapping of problem pointers to the list of associated fixits
      */
-    FixitMap allFixits() const;
+    ClangFixits allFixits() const;
 
 private:
     ClangFixits m_fixits;
 };
+
 
 class KDEVCLANGDUCHAIN_EXPORT ClangFixitAssistant : public KDevelop::IAssistant
 {
     Q_OBJECT
 
 public:
-    ClangFixitAssistant(const ClangProblem::FixitMap& fixitMap);
+    ClangFixitAssistant(const ClangFixits& fixits);
 
     virtual void createActions() override;
 
 private:
-    ClangProblem::FixitMap m_fixitMap;
+    ClangFixits m_fixits;
 };
 
 class KDEVCLANGDUCHAIN_EXPORT ClangFixitAction : public KDevelop::IAssistantAction
@@ -91,7 +87,7 @@ class KDEVCLANGDUCHAIN_EXPORT ClangFixitAction : public KDevelop::IAssistantActi
     Q_OBJECT
 
 public:
-    ClangFixitAction(const ClangProblem::ConstPtr& problem, const ClangFixit& fixit);
+    ClangFixitAction(const ClangFixit& fixit);
 
     virtual QString description() const override;
 
@@ -99,7 +95,6 @@ public Q_SLOTS:
     virtual void execute() override;
 
 private:
-    ClangProblem::ConstPtr m_problem;
     ClangFixit m_fixit;
 };
 

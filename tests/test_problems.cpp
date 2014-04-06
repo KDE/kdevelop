@@ -35,6 +35,12 @@
 
 using namespace KDevelop;
 
+namespace {
+
+const QString FileName = "/tmp/stdin.cpp";
+
+}
+
 QTEST_KDEMAIN(TestProblems, NoGUI)
 
 void TestProblems::initTestCase()
@@ -55,7 +61,7 @@ void TestProblems::cleanupTestCase()
 QList<ProblemPointer> TestProblems::parse(const QByteArray& code)
 {
     ClangIndex index;
-    ParseSession session(IndexedString("/tmp/stdin.cpp"), code, &index);
+    ParseSession session(IndexedString(FileName), code, &index);
     return session.problemsForFile(session.file());
 }
 
@@ -119,10 +125,10 @@ void TestProblems::testChildDiagnostics()
     QCOMPARE(range.end, SimpleCursor(2, 16));
     QCOMPARE(problems[0]->diagnostics().size(), 2);
     const ProblemPointer d1 = problems[0]->diagnostics()[0];
-    QCOMPARE(d1->url().str(), QString("/tmp/stdin.cpp"));
+    QCOMPARE(d1->url().str(), FileName);
     QCOMPARE(d1->rangeInCurrentRevision().start, SimpleCursor(0, 5));
     const ProblemPointer d2 = problems[0]->diagnostics()[1];
-    QCOMPARE(d2->url().str(), QString("/tmp/stdin.cpp"));
+    QCOMPARE(d2->url().str(), FileName);
     QCOMPARE(d2->rangeInCurrentRevision().start, SimpleCursor(1, 5));
 }
 
@@ -134,25 +140,26 @@ Q_DECLARE_METATYPE(QVector<ClangFixit>);
 void TestProblems::testFixits()
 {
     QFETCH(QString, code);
+    QFETCH(int, problemsCount);
     QFETCH(QVector<ClangFixit>, fixits);
 
     auto problems = parse(code.toAscii());
-    QCOMPARE(problems.size(), 1);
+
+    qDebug() << problems.last()->description();
+    QCOMPARE(problems.size(), problemsCount);
 
     const ClangProblem* p1 = dynamic_cast<ClangProblem*>(problems[0].data());
     QVERIFY(p1);
     ClangFixitAssistant* a1 = qobject_cast<ClangFixitAssistant*>(p1->solutionAssistant().data());
     QVERIFY(a1);
 
-    auto allFixits = p1->allFixits();
-    for (auto it = allFixits.constBegin(); it != allFixits.constEnd(); ++it) {
-        QCOMPARE(it.value(), fixits);
-    }
+    QCOMPARE(p1->allFixits(), fixits);
 }
 
 void TestProblems::testFixits_data()
 {
     QTest::addColumn<QString>("code"); // input
+    QTest::addColumn<int>("problemsCount");
     QTest::addColumn<QVector<ClangFixit>>("fixits");
 
     // expected:
@@ -163,7 +170,8 @@ void TestProblems::testFixits_data()
     //        //
     QTest::newRow("extra-tokens test")
         << "#ifdef FOO\n#endif FOO\n"
-        << QVector<ClangFixit>{ ClangFixit{"//", SimpleRange(1, 7, 1, 7)} };
+        << 1
+        << QVector<ClangFixit>{ ClangFixit{"//", DocumentRange(IndexedString(FileName), SimpleRange(1, 7, 1, 7)), QString()} };
 
     // expected:
     // test.cpp:1:19: warning: empty parentheses interpreted as a function declaration [-Wvexing-parse]
@@ -175,7 +183,8 @@ void TestProblems::testFixits_data()
     //           = 0
     QTest::newRow("vexing-parse test")
         << "int main() { int a(); }\n"
-        << QVector<ClangFixit>{ ClangFixit{" = 0", SimpleRange(0, 18, 0, 20)} };
+        << 1
+        << QVector<ClangFixit>{ ClangFixit{" = 0", DocumentRange(IndexedString(FileName), SimpleRange(0, 18, 0, 20)), QString()} };
 
     // expected:
     // test.cpp:2:21: error: no member named 'someVariablf' in 'C'; did you mean 'someVariable'?
@@ -185,7 +194,8 @@ void TestProblems::testFixits_data()
     QTest::newRow("spell-check test")
         << "class C{ int someVariable; };\n"
            "int main() { C c; c.someVariablf = 1; }\n"
-        << QVector<ClangFixit>{ ClangFixit{"someVariable", SimpleRange(1, 20, 1, 32)} };
+        << 2
+        << QVector<ClangFixit>{ ClangFixit{"someVariable", DocumentRange(IndexedString(FileName), SimpleRange(1, 20, 1, 32)), QString()} };
 }
 
 #include "test_problems.moc"
