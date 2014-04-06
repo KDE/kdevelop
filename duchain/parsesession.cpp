@@ -176,7 +176,8 @@ bool isDeclarationProblem( const CXDiagnostic& diagnostic )
     const auto errmsg = ClangString( clang_getDiagnosticSpelling( diagnostic) ).toString();
     return errmsg.contains( "use of undeclared identifier" )
            || errmsg.contains( "no member named" )
-           || errmsg.contains( "unknown type name" );
+           || errmsg.contains( "unknown type name" )
+           || errmsg.contains( "variable has incomplete type" );
 }
 
 UnknownDeclarationProblem::Ptr unknownDeclaration( CXDiagnostic diagnostic )
