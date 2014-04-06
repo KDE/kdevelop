@@ -1,5 +1,6 @@
 [Desktop Entry]
 Type=Service
+Icon=text-x-c++src
 Exec=blubb
 Comment=C/C++ Language Support
 Comment[bs]=C/C++  Jezička podrška
@@ -53,7 +54,6 @@ GenericName[sv]=Språkstöd
 GenericName[uk]=Підтримка мови
 GenericName[x-test]=xxLanguage Supportxx
 ServiceTypes=KDevelop/Plugin
-Icon=source-c
 X-KDE-Library=kdevclangsupport
 X-KDE-PluginInfo-Name=kdevclangsupport
 X-KDevelop-Version=@KDEV_PLUGIN_VERSION@
