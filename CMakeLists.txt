@@ -57,12 +57,12 @@ kde4_add_plugin(kdevclangsupport
     clangsupport.cpp
     documentfinderhelpers.cpp
 
+    $<TARGET_OBJECTS:kdevclangcodecompletion>
+    $<TARGET_OBJECTS:kdevclangcodegen>
     $<TARGET_OBJECTS:kdevclangutil>
 )
 target_link_libraries(kdevclangsupport
     kdevclangduchain
-    kdevclangcodecompletion
-    kdevclangcodegen
 
     ${KDE4_THREADWEAVER_LIBS}
     ${KDEVPLATFORM_PROJECT_LIBRARIES}

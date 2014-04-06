@@ -3,16 +3,9 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-kde4_add_library(kdevclangcodegen SHARED
+add_library(kdevclangcodegen OBJECT
     simplerefactoring.cpp
 )
-
-target_link_libraries(kdevclangcodegen LINK_PRIVATE
-    ${QT_QTCORE_LIBRARY}
-)
-
-target_link_libraries(kdevclangcodegen LINK_PUBLIC
-    kdevclangduchain
-)
-
-install(TARGETS kdevclangcodegen ${INSTALL_TARGETS_DEFAULT_ARGS})
+set_target_properties(kdevclangcodegen PROPERTIES
+    AUTOMOC TRUE
+    POSITION_INDEPENDENT_CODE TRUE)

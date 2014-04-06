@@ -23,12 +23,13 @@ target_link_libraries(clang-standalone-parser
 
 kde4_add_unit_test(codecompletiontest
     codecompletiontest.cpp
+    $<TARGET_OBJECTS:kdevclangcodecompletion>
 )
 
 target_link_libraries(codecompletiontest
     ${KDEVPLATFORM_TESTS_LIBRARIES}
     ${QT_QTTEST_LIBRARY}
-    kdevclangcodecompletion
+    kdevclangduchain
 )
 
 ########### next target ###############

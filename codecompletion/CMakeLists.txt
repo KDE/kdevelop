@@ -3,19 +3,12 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-kde4_add_library(kdevclangcodecompletion SHARED
+add_library(kdevclangcodecompletion OBJECT
     model.cpp
     context.cpp
     navigationwidget.cpp
     overridecompletionhelper.cpp
 )
-
-target_link_libraries(kdevclangcodecompletion LINK_PRIVATE
-    ${QT_QTCORE_LIBRARY}
-)
-
-target_link_libraries(kdevclangcodecompletion LINK_PUBLIC
-    kdevclangduchain
-)
-
-install(TARGETS kdevclangcodecompletion ${INSTALL_TARGETS_DEFAULT_ARGS})
+set_target_properties(kdevclangcodecompletion PROPERTIES
+    AUTOMOC TRUE
+    POSITION_INDEPENDENT_CODE TRUE)

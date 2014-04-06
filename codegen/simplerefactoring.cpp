@@ -78,4 +78,4 @@ void SimpleRefactoring::fillContextMenu(ContextMenuExtension& extension, Context
   }
 }
 
-#include "simplerefactoring.moc"
+#include "moc_simplerefactoring.cpp"
