@@ -40,9 +40,10 @@
 #include "duchain/clangtypes.h"
 #include "duchain/tuduchain.h"
 
+#include "util/clangutils.h"
+
 #include "debug.h"
 #include "clangsupport.h"
-#include "clangutils.h"
 
 #include <QFile>
 #include <QStringList>

@@ -50,12 +50,14 @@ add_subdirectory(duchain)
 add_subdirectory(codecompletion)
 add_subdirectory(codegen)
 add_subdirectory(tests)
+add_subdirectory(util)
 
 kde4_add_plugin(kdevclangsupport
     clangparsejob.cpp
     clangsupport.cpp
-    clangutils.cpp
     documentfinderhelpers.cpp
+
+    $<TARGET_OBJECTS:kdevclangutil>
 )
 target_link_libraries(kdevclangsupport
     kdevclangduchain
