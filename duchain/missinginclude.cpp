@@ -29,14 +29,14 @@
 using namespace KDevelop;
 
 namespace {
-    /* Under some conditions, such as when looking up suggestions
-     * for the undeclared namespace 'std' we will get an awful lot
-     * of suggestions. This parameter limits how many suggestions
-     * will pop up, as rarely more than a few will be relevant anyways
-     *
-     * Forward declaration suggestions are included in this number
-     */
-    const int maxSuggestions = 5;
+/* Under some conditions, such as when looking up suggestions
+ * for the undeclared namespace 'std' we will get an awful lot
+ * of suggestions. This parameter limits how many suggestions
+ * will pop up, as rarely more than a few will be relevant anyways
+ *
+ * Forward declaration suggestions are included in this number
+ */
+const int maxSuggestions = 5;
 
 /*
  * We don't want anything from the bits directory -
