@@ -289,7 +289,8 @@ KDevelop::IProjectBuilder * CMakeManager::builder() const
 bool CMakeManager::reload(KDevelop::ProjectFolderItem* folder)
 {
     kDebug(9032) << "reloading" << folder->path();
-    if(isReloading(folder->project()))
+    IProject* p = folder->project();
+    if(!p->isReady())
         return false;
     
     CMakeFolderItem* fi = dynamic_cast<CMakeFolderItem*>(folder);
@@ -299,10 +300,9 @@ bool CMakeManager::reload(KDevelop::ProjectFolderItem* folder)
     }
     Q_ASSERT(fi && "at least the root item should be a CMakeFolderItem");
 
-    m_busyProjects += fi->project();
-
     KJob *job=createImportJob(fi);
     connect(job, SIGNAL(result(KJob*)), SLOT(importFinished(KJob*)));
+    p->setReloadJob(job);
     ICore::self()->runController()->registerJob( job );
     return true;
 }
@@ -311,14 +311,7 @@ void CMakeManager::importFinished(KJob* j)
 {
     CMakeImportJob* job = qobject_cast<CMakeImportJob*>(j);
     Q_ASSERT(job);
-    m_busyProjects.remove(job->project());
     *m_projectsData[job->project()] = job->projectData();
-}
-
-bool CMakeManager::isReloading(IProject* p)
-{
-    Q_ASSERT(p);
-    return !p->isReady() || m_busyProjects.contains(p);
 }
 
 void CMakeManager::deletedWatchedDirectory(IProject* p, const KUrl& dir)
@@ -354,7 +347,7 @@ void CMakeManager::realDirectoryChanged(const QString& dir)
 {
     KUrl path(dir);
     IProject* p=ICore::self()->projectController()->findProjectForUrl(dir);
-    if(!p || isReloading(p)) {
+    if(!p || !p->isReady()) {
         if(p) {
             m_fileSystemChangedBuffer << dir;
             m_fileSystemChangeTimer->start();
@@ -374,7 +367,7 @@ void CMakeManager::dirtyFile(const QString & dirty)
     const KUrl dirtyFile(dirty);
     IProject* p=ICore::self()->projectController()->findProjectForUrl(dirtyFile);
 
-    kDebug() << "dirty FileSystem: " << dirty << (p ? isReloading(p) : 0);
+    kDebug() << "dirty FileSystem: " << dirty << (p ? p->isReady() : 0);
     if(p)
     {
         if(dirtyFile.fileName() == "CMakeLists.txt") {
@@ -395,7 +388,7 @@ void CMakeManager::dirtyFile(const QString & dirty)
 #endif
             reload(folderItem);
         }
-        else if(QFileInfo(dirty).isDir() && !isReloading(p))
+        else if(QFileInfo(dirty).isDir() && p->isReady())
         {
             QList<ProjectFolderItem*> folders=p->foldersForPath(IndexedString(dirty));
             Q_ASSERT(folders.isEmpty() || folders.size()==1);
