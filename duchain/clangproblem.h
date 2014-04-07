@@ -28,6 +28,7 @@
 #include <language/duchain/problem.h>
 #include <language/editor/simplerange.h>
 #include <interfaces/iassistant.h>
+
 #include <clang-c/Index.h>
 
 struct KDEVCLANGDUCHAIN_EXPORT ClangFixit
@@ -51,7 +52,6 @@ class KDEVCLANGDUCHAIN_EXPORT ClangProblem : public KDevelop::Problem
 public:
     using Ptr = KSharedPtr<ClangProblem>;
     using ConstPtr = KSharedPtr<const ClangProblem>;
-    using FixitMap = QHash<KDevelop::ProblemPointer, ClangFixits>;
 
     /**
      * Import @p diagnostic into a ClangProblem object

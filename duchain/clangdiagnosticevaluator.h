@@ -22,11 +22,13 @@
 #ifndef CLANGDIAGNOSTICEVALUATOR_H
 #define CLANGDIAGNOSTICEVALUATOR_H
 
+#include "duchainexport.h"
+
 #include <clang-c/Index.h>
 
 class ClangProblem;
 
-class ClangDiagnosticEvaluator
+class KDEVCLANGDUCHAIN_EXPORT ClangDiagnosticEvaluator
 {
 public:
     ClangProblem* createProblem(CXDiagnostic diagnostic) const;

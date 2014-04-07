@@ -23,11 +23,12 @@
 #ifndef UNKNOWNDECLARATION_H
 #define UNKNOWNDECLARATION_H
 
+#include "duchainexport.h"
 #include "clangproblem.h"
 
 #include <language/duchain/identifier.h>
 
-class UnknownDeclarationProblem : public ClangProblem
+class KDEVCLANGDUCHAIN_EXPORT UnknownDeclarationProblem : public ClangProblem
 {
 public:
     using Ptr = KSharedPtr<UnknownDeclarationProblem>;
