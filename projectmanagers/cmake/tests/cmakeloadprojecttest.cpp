@@ -63,6 +63,7 @@ void CMakeLoadProjectTest::testTinyCMakeProject()
     QCOMPARE(v.vm.value("CMAKE_INCLUDE_CURRENT_DIR"), QStringList("OFF"));
 }
 
+#if QT_VERSION <= 0x050000
 void CMakeLoadProjectTest::testSmallQt4Project()
 {
     CMakeProjectData v = parseProject(CMAKE_TESTS_PROJECTS_DIR "/qt4app");
@@ -105,6 +106,7 @@ void CMakeLoadProjectTest::testSmallKDE4Project()
     QCOMPARE(v.targets.at( uninstallIdx ).name, QString("uninstall") );
     QCOMPARE(v.vm.value("CMAKE_INCLUDE_CURRENT_DIR"), QStringList("ON"));
 }
+#endif
 
 void CMakeLoadProjectTest::testSmallProjectWithTests()
 {
@@ -120,6 +122,7 @@ void CMakeLoadProjectTest::testSmallProjectWithTests()
     QCOMPARE(v.testSuites.at(3).arguments.at(0), QString("4"));
 }
 
+#if QT_VERSION <= 0x050000
 void CMakeLoadProjectTest::testKDE4ProjectWithTests()
 {
     CMakeProjectData v = parseProject(CMAKE_TESTS_PROJECTS_DIR "/unit_tests_kde");
@@ -129,6 +132,7 @@ void CMakeLoadProjectTest::testKDE4ProjectWithTests()
     QCOMPARE(v.testSuites.at(0).name, QString("cmake-test-unittestskde"));
     QCOMPARE(v.testSuites.at(0).arguments.count(), 0);
 }
+#endif
 
 CMakeProjectData CMakeLoadProjectTest::parseProject( const QString& sourcedir )
 {
