@@ -49,7 +49,7 @@ void UiControllerTest::showErrorMessage()
 
     // must be shown otherwise resize has no effect
     c->activeMainWindow()->showMaximized();
-    QTest::qWait(100);
+    QTest::qWait(1000);
 
     int initialWidth = c->activeMainWindow()->width();
     for(int i = 0; i < 10; ++i) {
