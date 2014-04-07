@@ -166,6 +166,8 @@ public Q_SLOTS:
      */
     bool inProject(const IndexedString &url) const;
 
+    virtual void setReloadJob(KJob* job);
+
 signals:
     /**
      * Internal signal to make IProjectController::projectAboutToOpen useful.

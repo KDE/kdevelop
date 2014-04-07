@@ -79,6 +79,7 @@ public:
     Path path() const;
     QString name() const { return "Test Project"; }
     virtual bool inProject(const IndexedString& path) const;
+    virtual void setReloadJob(KJob* ) {}
 private:
     QSet<IndexedString> m_fileSet;
     Path m_path;

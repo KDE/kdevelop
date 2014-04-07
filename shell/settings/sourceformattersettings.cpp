@@ -484,7 +484,7 @@ void SourceFormatterSettings::updatePreview()
                 iface->setConfigValue("replace-tabs", false);
             }
 
-            m_document->setText( ifmt->formatSourceWithStyle( *style, ifmt->previewText( style, mime ), KUrl(), mime ) );
+            m_document->setText( ifmt->formatSourceWithStyle( *style, ifmt->previewText( *style, mime ), KUrl(), mime ) );
 
             if (iface) {
                 iface->setConfigValue("replace-tabs", oldReplaceTabs);

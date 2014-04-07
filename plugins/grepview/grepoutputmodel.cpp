@@ -161,7 +161,7 @@ GrepOutputItem::~GrepOutputItem()
 ///////////////////////////////////////////////////////////////
 
 GrepOutputModel::GrepOutputModel( QObject *parent )
-    : QStandardItemModel( parent ), m_regExp(""), m_replacement(""), m_replacementTemplate(""), m_finalReplacement(""),
+    : QStandardItemModel( parent ), m_regExp(), m_replacement(), m_replacementTemplate(), m_finalReplacement(),
       m_finalUpToDate(false), m_rootItem(0), m_fileCount(0), m_matchCount(0), m_itemsCheckable(false)
 {
     connect(this, SIGNAL(itemChanged(QStandardItem*)),

@@ -152,6 +152,7 @@ public:
     IProject *project;
     QSet<KDevelop::IndexedString> fileSet;
     bool loading;
+    bool fullReload;
     bool scheduleReload;
     ProjectProgress* progress;
 
@@ -162,7 +163,8 @@ public:
 
         ProjectController* projCtrl = Core::self()->projectControllerInternal();
         if (job->errorText().isEmpty() && !Core::self()->shuttingDown()) {
-            projCtrl->projectModel()->appendRow(topItem);
+            if(fullReload)
+                projCtrl->projectModel()->appendRow(topItem);
 
             if (scheduleReload) {
                 scheduleReload = false;
@@ -482,6 +484,7 @@ Path Project::path() const
 
 void Project::reloadModel()
 {
+    qDebug() << "reload!!!!!!!" << d->loading;
     if (d->loading) {
         d->scheduleReload = true;
         return;
@@ -502,10 +505,18 @@ void Project::reloadModel()
             return;
     }
 
-    d->progress->setBuzzy();
     KJob* importJob = iface->createImportJob(d->topItem );
-    connect(importJob, SIGNAL(finished(KJob*)), SLOT(reloadDone(KJob*)));
+    setReloadJob(importJob);
+    d->fullReload = true;
     Core::self()->runController()->registerJob( importJob );
+}
+
+void Project::setReloadJob(KJob* job)
+{
+    d->loading = true;
+    d->fullReload = false;
+    d->progress->setBuzzy();
+    connect(job, SIGNAL(finished(KJob*)), SLOT(reloadDone(KJob*)));
 }
 
 bool Project::open( const Path& projectFile )
