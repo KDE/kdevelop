@@ -18,7 +18,7 @@ macro_log_feature(CLANG_FOUND "libclang" "LibClang is a high level C interface t
 
 add_definitions(${LLVM_CFLAGS})
 include_directories(
-    ${LLVM_INCLUDE_DIR}
+    ${CLANG_INCLUDE_DIR}
 )
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
