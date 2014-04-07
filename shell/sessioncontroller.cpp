@@ -741,8 +741,8 @@ QString SessionController::cloneSession( const QString& nameOrid )
     Session* origSession = session( nameOrid );
     qsrand(QDateTime::currentDateTime().toTime_t());
     QUuid id = QUuid::createUuid();
-    KIO::NetAccess::dircopy( sessionDirectory( origSession->id().toString() ),
-                             sessionDirectory( id.toString() ),
+    KIO::NetAccess::dircopy( QUrl::fromLocalFile(sessionDirectory( origSession->id().toString() )),
+                             QUrl::fromLocalFile(sessionDirectory( id.toString() )),
                              Core::self()->uiController()->activeMainWindow() );
     Session* newSession = new Session( id.toString() );
     newSession->setName( i18n( "Copy of %1", origSession->name() ) );
