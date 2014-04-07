@@ -105,7 +105,7 @@ LocalPatchWidget::LocalPatchWidget(LocalPatchSource* lpatch, QWidget* parent)
 
     connect( m_ui->filename->lineEdit(), SIGNAL( returnPressed() ), this, SLOT( updatePatchFromEdit() ) );
     connect( m_ui->filename->lineEdit(), SIGNAL( editingFinished() ), this, SLOT( updatePatchFromEdit() ) );
-    connect( m_ui->filename, SIGNAL( urlSelected( KUrl ) ), this, SLOT( updatePatchFromEdit() ) );
+    connect( m_ui->filename, SIGNAL( urlSelected( QUrl ) ), this, SLOT( updatePatchFromEdit() ) );
     connect( m_ui->command, SIGNAL( textChanged( QString ) ), this, SLOT( updatePatchFromEdit() ) );
     //     connect( commandToFile, SIGNAL(clicked(bool)), m_plugin, SLOT(commandToFile()) );
 

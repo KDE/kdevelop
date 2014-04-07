@@ -29,7 +29,6 @@ class KUrlNavigator;
 class QAction;
 class QString;
 class QMenu;
-class KUrl;
 class KDevFileManagerPlugin;
 class BookmarkHandler;
 
@@ -44,8 +43,8 @@ public:
 
 private slots:
     void openFile(const KFileItem&);
-    void gotoUrl(const KUrl&);
-    void updateNav( const KUrl& url );
+    void gotoUrl(const QUrl&);
+    void updateNav( const QUrl& url );
     void syncCurrentDocumentDirectory();
     void fillContextMenu(KFileItem item, QMenu *menu);
     void createNewFile();

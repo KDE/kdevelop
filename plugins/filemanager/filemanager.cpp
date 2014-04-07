@@ -66,13 +66,13 @@ FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
     l->setMargin(0);
     l->setSpacing(0);
     KFilePlacesModel* model = new KFilePlacesModel( this );
-    urlnav = new KUrlNavigator(model, KUrl( QDir::homePath() ), this );
-    connect(urlnav, SIGNAL(urlChanged(KUrl)), SLOT(gotoUrl(KUrl)));
+    urlnav = new KUrlNavigator(model, QUrl::fromLocalFile(QDir::homePath()), this );
+    connect(urlnav, SIGNAL(urlChanged(QUrl)), SLOT(gotoUrl(QUrl)));
     l->addWidget(urlnav);
     dirop = new KDirOperator(QDir::homePath(), this);
     dirop->setView( KFile::Tree );
     dirop->setupMenu( KDirOperator::SortActions | KDirOperator::FileActions | KDirOperator::NavActions | KDirOperator::ViewActions );
-    connect(dirop, SIGNAL(urlEntered(KUrl)), SLOT(updateNav(KUrl)));
+    connect(dirop, SIGNAL(urlEntered(QUrl)), SLOT(updateNav(QUrl)));
     connect(dirop, SIGNAL(contextMenuAboutToShow(KFileItem,QMenu*)), SLOT(fillContextMenu(KFileItem,QMenu*)));
     l->addWidget(dirop);
 
@@ -86,8 +86,8 @@ FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
     setupActions();
 
     // Connect the bookmark handler
-    connect(m_bookmarkHandler, SIGNAL(openUrl(KUrl)), this, SLOT(gotoUrl(KUrl)));
-    connect(m_bookmarkHandler, SIGNAL(openUrl(KUrl)), this, SLOT(updateNav(KUrl)));
+    connect(m_bookmarkHandler, SIGNAL(openUrl(QUrl)), this, SLOT(gotoUrl(QUrl)));
+    connect(m_bookmarkHandler, SIGNAL(openUrl(QUrl)), this, SLOT(updateNav(QUrl)));
 }
 
 void FileManager::fillContextMenu(KFileItem item, QMenu* menu)
@@ -116,12 +116,12 @@ void FileManager::openFile(const KFileItem& file)
 }
 
 
-void FileManager::gotoUrl( const KUrl& url )
+void FileManager::gotoUrl( const QUrl& url )
 {
      dirop->setUrl( url, true );
 }
 
-void FileManager::updateNav( const KUrl& url )
+void FileManager::updateNav( const QUrl& url )
 {
     urlnav->setLocationUrl( url );
 }
