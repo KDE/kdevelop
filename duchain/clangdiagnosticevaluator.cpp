@@ -57,6 +57,10 @@ bool isDeclarationProblem(CXDiagnostic diagnostic)
 
 }
 
+ClangDiagnosticEvaluator::ClangDiagnosticEvaluator()
+{
+}
+
 ClangProblem* ClangDiagnosticEvaluator::createProblem(CXDiagnostic diagnostic) const
 {
     if (isDeclarationProblem(diagnostic)) {

@@ -31,6 +31,7 @@ class ClangProblem;
 class KDEVCLANGDUCHAIN_EXPORT ClangDiagnosticEvaluator
 {
 public:
+    ClangDiagnosticEvaluator();
     ClangProblem* createProblem(CXDiagnostic diagnostic) const;
 };
 
