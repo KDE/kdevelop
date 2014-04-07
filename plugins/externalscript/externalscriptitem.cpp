@@ -30,8 +30,12 @@
 #include <interfaces/iuicontroller.h>
 
 ExternalScriptItem::ExternalScriptItem()
-  : m_saveMode(SaveNone), m_outputMode(OutputNone), m_errorMode(ErrorNone),
-    m_inputMode(InputNone), m_action( 0 ), m_showOutput( true ), m_performReplacements(true)
+  : m_saveMode(SaveNone), m_outputMode(OutputNone)
+  , m_errorMode(ErrorNone), m_inputMode(InputNone)
+  , m_action(nullptr)
+  , m_showOutput(true)
+  , m_filterMode(0) // == no filter
+  , m_performReplacements(true)
 {
 
 }
