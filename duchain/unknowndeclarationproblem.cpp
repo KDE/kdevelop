@@ -1,4 +1,5 @@
-#include "missinginclude.h"
+#include "unknowndeclarationproblem.h"
+
 #include "clangtypes.h"
 #include "../debug.h"
 #include "../util/clangutils.h"

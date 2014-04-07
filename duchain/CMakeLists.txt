@@ -7,7 +7,7 @@ kde4_add_library(kdevclangduchain SHARED
     tuduchain.cpp
     clangpch.cpp
     clanghelpers.cpp
-    missinginclude.cpp
+    unknowndeclarationproblem.cpp
 
     $<TARGET_OBJECTS:kdevclangutil>
 )

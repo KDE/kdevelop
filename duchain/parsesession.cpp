@@ -24,7 +24,6 @@
 #include "parsesession.h"
 #include "clangproblem.h"
 #include "clangtypes.h"
-#include "missinginclude.h"
 #include "clangdiagnosticevaluator.h"
 #include "debug.h"
 
