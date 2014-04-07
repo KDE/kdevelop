@@ -118,9 +118,10 @@ CXChildVisitResult baseClassVisitor(CXCursor cursor, CXCursor /*parent*/, CXClie
             fp.params =  params;
             fp.isVirtual = clang_CXXMethod_isPureVirtual(cursor);
 
-            //FIXME The clang-c API currently doesn't provide access to a function declaration's
+            // The clang-c API currently doesn't provide access to a function declaration's
             //const qualifier. This parses the Unified Symbol Resolution to retrieve that information.
             //However, since the USR is undocumented, this might break in the future.
+            // TODO: Port when Clang 3.5 is required -- it offers clang_CXXMethod_isConst
             QString usr = ClangString(clang_getCursorUSR(cursor)).toString();
             if (usr.at(usr.length() - 2) == '#') {
                 fp.isConst = ((usr.at(usr.length() - 1).toAscii()) - '0') & 0x1;
