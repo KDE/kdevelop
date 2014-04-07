@@ -173,6 +173,13 @@ public:
      */
     virtual Q_SCRIPTABLE bool inProject(const IndexedString &path) const = 0;
 
+    /**
+     * @brief Tells the project what job is reloading it
+     *
+     * It's useful so that we can tell whether the project manager is busy or not.
+     */
+    virtual void setReloadJob(KJob* job) = 0;
+
 Q_SIGNALS:
     /**
      * Gets emitted whenever a file was added to the project.
