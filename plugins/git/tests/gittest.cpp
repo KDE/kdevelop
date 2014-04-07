@@ -22,7 +22,7 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#include "initTest.h"
+#include "gittest.h"
 
 #include <qtest_kde.h>
 #include <QtTest/QtTest>
