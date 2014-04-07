@@ -394,7 +394,6 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
 
         plugin = KServiceTypeTrader::createInstanceFromQuery<IPlugin>( QLatin1String( "KDevelop/Plugin" ),
                 QString::fromLatin1( "[X-KDE-PluginInfo-Name]=='%1'" ).arg( pluginId ), d->core, QVariantList(), &str_error );
-        qDebug() << "fuuuuuuuuuu" << info.name() << plugin << str_error;
     }
 
     if ( plugin )
