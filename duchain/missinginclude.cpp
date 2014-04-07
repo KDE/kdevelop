@@ -1,4 +1,5 @@
 #include "missinginclude.h"
+#include "clangtypes.h"
 #include "../debug.h"
 #include "../util/clangutils.h"
 
@@ -415,23 +416,34 @@ ClangFixits fixUnknownDeclaration( const QualifiedIdentifier& identifier, const 
     return fixits;
 }
 
+QString symbolFromDiagnosticSpelling(const QString& str)
+{
+    /* in all error messages the symbol is in in the first pair of quotes */
+    const auto split = str.split( '\'' );
+    auto symbol = split.value( 1 );
+
+    if( str.startsWith( "No member named" ) ) {
+        symbol = split.value( 3 ) + "::" + split.value( 1 );
+    }
+    return symbol;
 }
 
-UnknownDeclarationProblem::UnknownDeclarationProblem()
+}
+
+UnknownDeclarationProblem::UnknownDeclarationProblem(CXDiagnostic diagnostic)
+    : ClangProblem(diagnostic)
 {
-    setDescription(i18n("Unknown declaration"));
-    setSeverity(ProblemData::Error);
+    setSymbol(QualifiedIdentifier(symbolFromDiagnosticSpelling(description())));
 }
 
 void UnknownDeclarationProblem::setSymbol(const QualifiedIdentifier& identifier)
 {
     m_identifier = identifier;
-    setDescription(i18n("Unknown declaration: %1", identifier.toString()));
 }
 
 KSharedPtr<IAssistant> UnknownDeclarationProblem::solutionAssistant() const
 {
     const Path path(finalLocation().document.str());
-    const auto fixits = fixUnknownDeclaration(m_identifier, path, finalLocation());
+    const auto fixits = allFixits() + fixUnknownDeclaration(m_identifier, path, finalLocation());
     return KSharedPtr<IAssistant>(new ClangFixitAssistant(fixits));
 }

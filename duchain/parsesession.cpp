@@ -25,6 +25,7 @@
 #include "clangproblem.h"
 #include "clangtypes.h"
 #include "missinginclude.h"
+#include "clangdiagnosticevaluator.h"
 #include "debug.h"
 
 #include <KMimeType>
@@ -44,21 +45,6 @@ static std::map<QString, QVector<const char*>> mimeToArgs = {
 static QVector<const char*> defaultArgs = {"-std=c++11", "-xc++", "-Wall"};
 
 static QVector<const char*> pchArgs = {"-std=c++11", "-xc++-header", "-Wall"};
-
-/**
- * Clang diagnostic messages always start with a lowercase character
- *
- * @return Prettified version, starting with uppercase character
- */
-static inline QString prettyDiagnosticSpelling(const ClangString& str)
-{
-    auto ret = str.toString();
-    if (ret.isEmpty()) {
-      return {};
-    }
-    ret[0] = ret[0].toUpper();
-    return ret;
-}
 
 QVector<const char*> argsForSession(const QString& path, ParseSession::Options options)
 {
@@ -90,124 +76,6 @@ CXUnsavedFile fileForContents(const QByteArray& path, const QByteArray& contents
     }
     file.Filename = path.constData();
     return file;
-}
-
-static ClangFixits fixitsForDiagnostic(CXDiagnostic diagnostic)
-{
-    ClangFixits fixits;
-    auto numFixits = clang_getDiagnosticNumFixIts(diagnostic);
-    for (uint i = 0; i < numFixits; ++i) {
-        CXSourceRange range;
-        const QString replacementText = ClangString(clang_getDiagnosticFixIt(diagnostic, i, &range)).toString();
-        // TODO: Apparently there's no way to find out the raw text via the C API given a source range
-        // Could be useful to pass that into ClangFixit to be sure to replace the correct text
-        // cf. DocumentChangeSet.m_oldText
-        fixits << ClangFixit{replacementText, ClangRange(range).toDocumentRange()};
-    }
-    return fixits;
-}
-
-/**
- * Import @p diagnostic into a Problem object
- *
- * @param[in] diagnostic To-be-imported clang diagnostic
- */
-static ClangProblem::Ptr problemForDiagnostic(CXDiagnostic diagnostic)
-{
-    ClangProblem::Ptr problem(new ClangProblem);
-    switch (clang_getDiagnosticSeverity(diagnostic)) {
-        case CXDiagnostic_Fatal:
-        case CXDiagnostic_Error:
-            problem->setSeverity(ProblemData::Error);
-            break;
-        case CXDiagnostic_Warning:
-            problem->setSeverity(ProblemData::Warning);
-            break;
-        default:
-            problem->setSeverity(ProblemData::Hint);
-            break;
-    }
-
-    ClangLocation location(clang_getDiagnosticLocation(diagnostic));
-    CXFile diagnosticFile;
-    clang_getFileLocation(location, &diagnosticFile, nullptr, nullptr, nullptr);
-    const ClangString fileName(clang_getFileName(diagnosticFile));
-
-    ClangString description(clang_getDiagnosticSpelling(diagnostic));
-    problem->setDescription(prettyDiagnosticSpelling(description));
-    DocumentRange docRange(IndexedString(fileName), SimpleRange(location, location));
-    const uint numRanges = clang_getDiagnosticNumRanges(diagnostic);
-
-    for (uint i = 0; i < numRanges; ++i) {
-        auto range = ClangRange(clang_getDiagnosticRange(diagnostic, i)).toSimpleRange();
-        if (range.start.line == docRange.start.line) {
-            docRange.start.column = qMin(range.start.column, docRange.start.column);
-            docRange.end.column = qMax(range.end.column, docRange.end.column);
-        }
-    }
-
-    problem->setFixits(fixitsForDiagnostic(diagnostic));
-    problem->setFinalLocation(docRange);
-    problem->setSource(ProblemData::SemanticAnalysis);
-    return problem;
-}
-
-/**
- * Check whether the problem stated in @p description may be caused by a missing include
- *
- * @return True if this may be fixable by adding a include, false otherwise
- */
-bool isDeclarationProblem( const QString& description )
-{
-    /* libclang does not currently expose an enum or any other way to query
-     * what specific semantic error we're dealing with. Instead, we have to
-     * parse the clang error message and guess if a missing include could be
-     * the reason for the error
-     *
-     * There is no nice way of determining what identifier we're looking at either,
-     * so we have to read that from the diagnostic too. Hopefully libclang will
-     * get these features in the future.
-     *
-     * I have suggested this feature to clang devs. For reference, see:
-     * http://lists.cs.uiuc.edu/pipermail/cfe-dev/2014-March/036036.html
-     */
-
-    return description.startsWith( "use of undeclared identifier" )
-           || description.startsWith( "no member named" )
-           || description.startsWith( "unknown type name" )
-           || description.startsWith( "variable has incomplete type" );
-}
-
-QString symbolFromDiagnosticSpelling(const QString& str)
-{
-    /* in all error messages the symbol is in in the first pair of quotes */
-    const auto split = str.split( '\'' );
-    auto symbol = split.value( 1 );
-
-    if( str.startsWith( "no member named" ) ) {
-        symbol = split.value( 3 ) + "::" + split.value( 1 );
-    }
-    return symbol;
-}
-
-UnknownDeclarationProblem::Ptr unknownDeclaration( CXDiagnostic diagnostic )
-{
-    const auto description = clang_getDiagnosticSpelling( diagnostic );
-    const auto errmsg = ClangString{ description }.toString();
-    UnknownDeclarationProblem::Ptr problem( new UnknownDeclarationProblem );
-
-    ClangLocation location(clang_getDiagnosticLocation(diagnostic));
-    CXFile diagnosticFile;
-    clang_getFileLocation(location, &diagnosticFile, nullptr, nullptr, nullptr);
-    const ClangString fileName(clang_getFileName(diagnosticFile));
-
-    DocumentRange docRange(IndexedString(fileName), KDevelop::SimpleRange(location, location));
-
-    problem->setDescription( prettyDiagnosticSpelling( description ) );
-    problem->setSymbol(QualifiedIdentifier(symbolFromDiagnosticSpelling(ClangString(description).toString())));
-    problem->setFinalLocation( docRange );
-    problem->setSource(ProblemData::SemanticAnalysis);
-    return problem;
 }
 
 }
@@ -299,6 +167,8 @@ IndexedString ParseSession::url() const
 
 QList<ProblemPointer> ParseSession::problemsForFile(CXFile file) const
 {
+    const ClangDiagnosticEvaluator evaluator;
+
     QList<ProblemPointer> problems;
     const uint numDiagnostics = clang_getNumDiagnostics(m_unit);
     problems.reserve(numDiagnostics);
@@ -312,22 +182,8 @@ QList<ProblemPointer> ParseSession::problemsForFile(CXFile file) const
             continue;
         }
 
-        ClangProblem::Ptr problem = problemForDiagnostic(diagnostic);
-        problems << ProblemPointer::staticCast(problem);
-
-        QList<ProblemPointer> diagnostics;
-        auto childDiagnostics = clang_getChildDiagnostics(diagnostic);
-        auto numChildDiagnostics = clang_getNumDiagnosticsInSet(childDiagnostics);
-        for (uint j = 0; j < numChildDiagnostics; ++j) {
-            auto childDiagnostic = clang_getDiagnosticInSet(childDiagnostics, j);
-            ClangProblem::Ptr problem = problemForDiagnostic(childDiagnostic);
-            diagnostics << ProblemPointer::staticCast(problem);
-        }
-        problem->setDiagnostics(diagnostics);
-
-        if (isDeclarationProblem(ClangString(clang_getDiagnosticSpelling(diagnostic)).toString())) {
-            problems << ProblemPointer::staticCast(unknownDeclaration(diagnostic));
-        }
+        ProblemPointer problem(evaluator.createProblem(diagnostic));
+        problems << problem;
 
         clang_disposeDiagnostic(diagnostic);
     }

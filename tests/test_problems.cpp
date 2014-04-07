@@ -194,7 +194,7 @@ void TestProblems::testFixits_data()
     QTest::newRow("spell-check test")
         << "class C{ int someVariable; };\n"
            "int main() { C c; c.someVariablf = 1; }\n"
-        << 2
+        << 1
         << QVector<ClangFixit>{ ClangFixit{"someVariable", DocumentRange(IndexedString(FileName), SimpleRange(1, 20, 1, 32)), QString()} };
 }
 

@@ -21,6 +21,8 @@
 
 #include "clangproblem.h"
 
+#include "clangtypes.h"
+
 #include <language/duchain/duchainlock.h>
 #include <language/codegen/documentchangeset.h>
 
@@ -28,6 +30,91 @@
 #include <KLocale>
 
 using namespace KDevelop;
+
+namespace {
+
+ProblemData::Severity diagnosticSeverityToSeverity(CXDiagnosticSeverity severity)
+{
+    switch (severity) {
+    case CXDiagnostic_Fatal:
+    case CXDiagnostic_Error:
+        return ProblemData::Error;
+    case CXDiagnostic_Warning:
+        return ProblemData::Warning;
+        break;
+    default:
+        return ProblemData::Hint;
+    }
+}
+
+/**
+ * Clang diagnostic messages always start with a lowercase character
+ *
+ * @return Prettified version, starting with uppercase character
+ */
+inline QString prettyDiagnosticSpelling(const ClangString& str)
+{
+    auto ret = str.toString();
+    if (ret.isEmpty()) {
+      return {};
+    }
+    ret[0] = ret[0].toUpper();
+    return ret;
+}
+
+ClangFixits fixitsForDiagnostic(CXDiagnostic diagnostic)
+{
+    ClangFixits fixits;
+    auto numFixits = clang_getDiagnosticNumFixIts(diagnostic);
+    for (uint i = 0; i < numFixits; ++i) {
+        CXSourceRange range;
+        const QString replacementText = ClangString(clang_getDiagnosticFixIt(diagnostic, i, &range)).toString();
+        // TODO: Apparently there's no way to find out the raw text via the C API given a source range
+        // Could be useful to pass that into ClangFixit to be sure to replace the correct text
+        // cf. DocumentChangeSet.m_oldText
+        fixits << ClangFixit{replacementText, ClangRange(range).toDocumentRange(), QString()};
+    }
+    return fixits;
+}
+
+}
+
+ClangProblem::ClangProblem(CXDiagnostic diagnostic)
+{
+    auto severity = diagnosticSeverityToSeverity(clang_getDiagnosticSeverity(diagnostic));
+    setSeverity(severity);
+
+    ClangString description(clang_getDiagnosticSpelling(diagnostic));
+    setDescription(prettyDiagnosticSpelling(description));
+
+    ClangLocation location(clang_getDiagnosticLocation(diagnostic));
+    CXFile diagnosticFile;
+    clang_getFileLocation(location, &diagnosticFile, nullptr, nullptr, nullptr);
+    const ClangString fileName(clang_getFileName(diagnosticFile));
+    DocumentRange docRange(IndexedString(fileName), SimpleRange(location, location));
+    const uint numRanges = clang_getDiagnosticNumRanges(diagnostic);
+    for (uint i = 0; i < numRanges; ++i) {
+        auto range = ClangRange(clang_getDiagnosticRange(diagnostic, i)).toSimpleRange();
+        if (range.start.line == docRange.start.line) {
+            docRange.start.column = qMin(range.start.column, docRange.start.column);
+            docRange.end.column = qMax(range.end.column, docRange.end.column);
+        }
+    }
+
+    setFixits(fixitsForDiagnostic(diagnostic));
+    setFinalLocation(docRange);
+    setSource(ProblemData::SemanticAnalysis);
+
+    QList<ProblemPointer> diagnostics;
+    auto childDiagnostics = clang_getChildDiagnostics(diagnostic);
+    auto numChildDiagnostics = clang_getNumDiagnosticsInSet(childDiagnostics);
+    for (uint j = 0; j < numChildDiagnostics; ++j) {
+        auto childDiagnostic = clang_getDiagnosticInSet(childDiagnostics, j);
+        ClangProblem::Ptr problem(new ClangProblem(childDiagnostic));
+        diagnostics << ProblemPointer::staticCast(problem);
+    }
+    setDiagnostics(diagnostics);
+}
 
 KSharedPtr<IAssistant> ClangProblem::solutionAssistant() const
 {

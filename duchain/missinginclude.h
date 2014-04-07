@@ -27,13 +27,13 @@
 
 #include <language/duchain/identifier.h>
 
-class UnknownDeclarationProblem : public KDevelop::Problem
+class UnknownDeclarationProblem : public ClangProblem
 {
 public:
     using Ptr = KSharedPtr<UnknownDeclarationProblem>;
     using ConstPtr = KSharedPtr<const UnknownDeclarationProblem>;
 
-    UnknownDeclarationProblem();
+    UnknownDeclarationProblem(CXDiagnostic diagnostic);
 
     void setSymbol(const KDevelop::QualifiedIdentifier& identifier);
 
