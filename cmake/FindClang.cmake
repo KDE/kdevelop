@@ -86,7 +86,7 @@ if(CLANG_FOUND)
     list(APPEND CLANG_INCLUDE_DIR "${_llvmSourceRoot}/tools/clang/include")
   endif()
 
-  message(STATUS "Found Clang (LLVM version: ${LLVM_VERSION}")
+  message(STATUS "Found Clang (LLVM version: ${LLVM_VERSION})")
   message(STATUS "  Include dirs:  ${CLANG_INCLUDE_DIR}")
   message(STATUS "  Libraries:     ${CLANG_LIBS}")
 else()
