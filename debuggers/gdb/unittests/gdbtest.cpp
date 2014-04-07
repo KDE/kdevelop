@@ -570,8 +570,9 @@ void GdbTest::testInsertBreakpointWhileRunning()
     QTest::qWait(2000);
     kDebug() << "adding breakpoint";
     KDevelop::Breakpoint *b = breakpoints()->addCodeBreakpoint(fileName, 25);
-    QTest::qWait(100);
+    QTest::qWait(500);
     WAIT_FOR_STATE(session, DebugSession::PausedState);
+    QTest::qWait(500);
     QCOMPARE(session->line(), 25);
     b->setDeleted();
     session->run();
@@ -591,11 +592,13 @@ void GdbTest::testInsertBreakpointWhileRunningMultiple()
     kDebug() << "adding breakpoint";
     KDevelop::Breakpoint *b1 = breakpoints()->addCodeBreakpoint(fileName, 24);
     KDevelop::Breakpoint *b2 = breakpoints()->addCodeBreakpoint(fileName, 25);
-    QTest::qWait(100);
+    QTest::qWait(500);
     WAIT_FOR_STATE(session, DebugSession::PausedState);
+    QTest::qWait(500);
     QCOMPARE(session->line(), 24);
     session->run();
     WAIT_FOR_STATE(session, DebugSession::PausedState);
+    QTest::qWait(500);
     QCOMPARE(session->line(), 25);
     b1->setDeleted();
     b2->setDeleted();

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Helper module for pretty-printers
 
-# Copyright (C) 2013 Kevin Funk <kevin@kfunk.org>
+# Copyright (C) 2013 Kevin Funk <kfunk@kde.org>
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

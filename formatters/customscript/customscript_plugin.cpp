@@ -380,10 +380,10 @@ static QString indentingSample()
     "\tbarArg3);\n";
 }
 
-QString CustomScriptPlugin::previewText(const SourceFormatterStyle *style, const KMimeType::Ptr &mime)
+QString CustomScriptPlugin::previewText(const SourceFormatterStyle& style, const KMimeType::Ptr& mime)
 {
-	if ( ! style->overrideSample().isEmpty() ) {
-		return style->overrideSample();
+	if ( ! style.overrideSample().isEmpty() ) {
+		return style.overrideSample();
 	}
 	return formattingSample() + "\n\n" + indentingSample();
 }
@@ -479,7 +479,7 @@ CustomScriptPlugin::Indentation CustomScriptPlugin::indentation( const KUrl& url
 
 void CustomScriptPreferences::updateTimeout()
 {
-	const QString& text = indentPluginSingleton.data()->previewText ( &m_style, KMimeType::Ptr() );
+	const QString& text = indentPluginSingleton.data()->previewText ( m_style, KMimeType::Ptr() );
     QString formatted = indentPluginSingleton.data()->formatSourceWithStyle ( m_style, text, KUrl(), KMimeType::Ptr() );
     emit previewTextChanged ( formatted );
 }

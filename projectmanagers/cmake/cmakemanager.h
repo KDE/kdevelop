@@ -150,7 +150,6 @@ private slots:
 
 private:
     QStringList processGeneratorExpression(const QStringList& expr, KDevelop::IProject* project, KDevelop::ProjectTargetItem* target) const;
-    bool isReloading(KDevelop::IProject* p);
 
     bool renameFileOrFolder(KDevelop::ProjectBaseItem *item, const KDevelop::Path &newUrl);
     void realDirectoryChanged(const QString& dir);
@@ -159,8 +158,6 @@ private:
     QHash<KDevelop::IProject*, CMakeProjectData*> m_projectsData;
     QHash<KDevelop::IProject*, QFileSystemWatcher*> m_watchers;
     QHash<KDevelop::Path, CMakeFolderItem*> m_pending;
-    
-    QSet<KDevelop::IProject*> m_busyProjects;
     
     KDevelop::ICodeHighlighting *m_highlight;
     

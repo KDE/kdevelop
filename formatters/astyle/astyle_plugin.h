@@ -60,7 +60,7 @@ class AStylePlugin : public KDevelop::IPlugin, public KDevelop::ISourceFormatter
 
         /** \return The text used in the config dialog to preview the current style.
         */
-        virtual QString previewText(const KDevelop::SourceFormatterStyle* style, const KMimeType::Ptr &mime);
+        virtual QString previewText(const KDevelop::SourceFormatterStyle& style, const KMimeType::Ptr &mime);
         
         /** \return The indentation type of the currently selected style.
         */
