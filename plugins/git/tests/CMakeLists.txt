@@ -1,7 +1,3 @@
-# Due to the use of system() and some unix-style paths this test will only run
-# under Linux. (Maybe this can be fixed later)
-#
-
 # Running the test only makes sense if the git command line client
 # is present. So check for it before adding the test...
 FIND_PROGRAM(GIT_FOUND NAMES git)
