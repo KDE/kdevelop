@@ -16,7 +16,7 @@
 #   CMake variables or cache entries.
 
 #=============================================================================
-# Copyright 2014 Kevin Funk <kevin@kfunk.org>
+# Copyright 2014 Kevin Funk <kfunk@kde.org>
 #
 # Distributed under the OSI-approved BSD License (the "License");
 # see accompanying file Copyright.txt for details.

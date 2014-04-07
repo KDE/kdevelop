@@ -15,7 +15,7 @@
 # See http://clang.llvm.org/docs/InternalsManual.html for full list of libraries
 
 #=============================================================================
-# Copyright 2014 Kevin Funk <kevin@kfunk.org>
+# Copyright 2014 Kevin Funk <kfunk@kde.org>
 #
 # Distributed under the OSI-approved BSD License (the "License");
 # see accompanying file Copyright.txt for details.
