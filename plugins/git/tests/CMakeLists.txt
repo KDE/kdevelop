@@ -1,15 +1,11 @@
-# Due to the use of system() and some unix-style paths this test will only run
-# under Linux. (Maybe this can be fixed later)
-#
-
 # Running the test only makes sense if the git command line client
 # is present. So check for it before adding the test...
 find_program(GIT_FOUND NAMES git)
 
 if (GIT_FOUND)
 
-    set(gitInitTest_SRCS
-        initTest.cpp
+    set(gittest_SRCS
+        gittest.cpp
         ../gitplugin.cpp
         ../gitclonejob.cpp
         ../stashmanagerdialog.cpp
@@ -18,8 +14,8 @@ if (GIT_FOUND)
         ../gitmessagehighlighter.cpp
         ../gitplugincheckinrepositoryjob.cpp
     )
-    qt5_wrap_ui(gitInitTest_SRCS ../stashmanagerdialog.ui)
-    add_executable(kdevgit-test ${gitInitTest_SRCS})
+    qt5_wrap_ui(gittest_SRCS ../stashmanagerdialog.ui)
+    add_executable(kdevgit-test ${gittest_SRCS})
     add_test(kdevgit-test kdevgit-test)
 ecm_mark_as_test(kdevgit-test)
     target_link_libraries(kdevgit-test
