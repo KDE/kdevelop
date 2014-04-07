@@ -33,6 +33,7 @@ struct FunctionInfo
     QString name;
     QStringList params;
     bool isVirtual;
+    bool isConst;
 };
 
 Q_DECLARE_TYPEINFO(FunctionInfo, Q_MOVABLE_TYPE);

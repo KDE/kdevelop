@@ -366,6 +366,8 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(con
         for (int i = 0; i < overrideList.count(); i++) {
             FunctionInfo info = overrideList.at(i);
             QString nameAndParams = info.name + '(' + info.params.join(", ") + ')';
+            if(info.isConst)
+                nameAndParams = nameAndParams + " const";
             if(info.isVirtual)
                 nameAndParams = nameAndParams + " = 0";
             overrides << CompletionTreeItemPointer(new OverrideItem(nameAndParams, info.returnType));

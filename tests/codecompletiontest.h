@@ -37,6 +37,7 @@ private slots:
     void testVirtualOverrideMulti();
     void testVirtualOverrideDeep();
     void testVirtualOverridePure();
+    void testVirtualOverrideConst();
 };
 
 #endif // DUCHAINTEST_H

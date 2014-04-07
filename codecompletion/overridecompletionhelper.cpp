@@ -91,8 +91,6 @@ CXChildVisitResult baseClassVisitor(CXCursor cursor, CXCursor /*parent*/, CXClie
         processBaseClass(cursor, info->functions);
         return CXChildVisit_Continue;
     case CXCursor_CXXMethod:
-        //TODO Add support for const qualifier. The clang-c api currently doesn't provide a good
-        //method to do this. The USR can be parsed to get the information, but that seems unsafe.
 
         if (clang_CXXMethod_isVirtual(cursor)) {
             QStringList params;
@@ -119,6 +117,16 @@ CXChildVisitResult baseClassVisitor(CXCursor cursor, CXCursor /*parent*/, CXClie
             fp.name = ClangString(clang_getCursorSpelling(cursor)).toString();
             fp.params =  params;
             fp.isVirtual = clang_CXXMethod_isPureVirtual(cursor);
+
+            //FIXME The clang-c API currently doesn't provide access to a function declaration's
+            //const qualifier. This parses the Unified Symbol Resolution to retrieve that information.
+            //However, since the USR is undocumented, this might break in the future.
+            QString usr = ClangString(clang_getCursorUSR(cursor)).toString();
+            if (usr.at(usr.length() - 2) == '#') {
+                fp.isConst = ((usr.at(usr.length() - 1).toAscii()) - '0') & 0x1;
+            } else {
+                fp.isConst = false;
+            }
 
             info->functions->append(fp);
         }

@@ -50,7 +50,7 @@ void CodeCompletionTest::cleanupTestCase()
 QString formatFunctionInfo(const FunctionInfo& info)
 {
     return QString(info.returnType + ' ' + info.name + '(' + info.params.join(", ") +
-                    ')' + (info.isVirtual ? " = 0" : ""));
+                    ')' + (info.isConst ? " const" : "") + (info.isVirtual ? " = 0" : ""));
 }
 
 void CodeCompletionTest::testVirtualOverrideNonTemplate() {
@@ -140,6 +140,20 @@ void CodeCompletionTest::testVirtualOverridePure() {
 
     QCOMPARE(overrides.getOverrides().count(),1);
     QCOMPARE(formatFunctionInfo(overrides.getOverrides().at(0)),QString("void foo() = 0"));
+}
+
+void CodeCompletionTest::testVirtualOverrideConst() {
+    TestFile file("class Foo { virtual void foo(const int b) const; };"
+                  "class Bar : Foo \n{\n}","h");
+
+    ClangIndex index;
+    ParseSession session(IndexedString(file.url()), file.fileContents().toUtf8(), &index);
+
+    SimpleCursor position(2,1);
+    OverrideCompletionHelper overrides(session.unit(), position, file.url().c_str());
+
+    QCOMPARE(overrides.getOverrides().count(),1);
+    QCOMPARE(formatFunctionInfo(overrides.getOverrides().at(0)),QString("void foo(const int b) const"));
 }
 
 #include "codecompletiontest.moc"
