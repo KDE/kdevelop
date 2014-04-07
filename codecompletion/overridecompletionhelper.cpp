@@ -138,7 +138,19 @@ CXChildVisitResult findBaseVisitor(CXCursor cursor, CXCursor /*parent*/, CXClien
 
 OverrideCompletionHelper::OverrideCompletionHelper(const CXTranslationUnit& unit, const KDevelop::SimpleCursor& position, const char *file)
 {
-    CXSourceLocation location = clang_getLocation(unit, clang_getFile(unit, file), position.line, position.column);
+    CXFile clangFile = clang_getFile(unit, file);
+    if (!clangFile) {
+        kDebug() << "Override completion helper couldn't find file.";
+        return;
+    }
+
+    CXSourceLocation location = clang_getLocation(unit, clangFile, position.line + 1, position.column + 1);
+
+    if (clang_equalLocations(clang_getNullLocation(), location)) {
+        kDebug() << "Override completion helper given invalid position: " << file;
+        return;
+    }
+
     CXCursor cursor = clang_getCursor(unit, location);
     clang_visitChildren(cursor, findBaseVisitor, &m_overrides);
 }
