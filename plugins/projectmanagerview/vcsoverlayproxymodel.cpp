@@ -34,6 +34,9 @@
 
 using namespace KDevelop;
 
+using SafeProjectPointer = QPointer<KDevelop::IProject>;
+Q_DECLARE_METATYPE(SafeProjectPointer)
+
 VcsOverlayProxyModel::VcsOverlayProxyModel(QObject* parent): QIdentityProxyModel(parent)
 {
     connect(ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)),
@@ -77,7 +80,7 @@ void VcsOverlayProxyModel::repositoryBranchChanged(const KUrl& url)
             Q_ASSERT(branching);
             VcsJob* job = branching->currentBranch(url);
             connect(job, SIGNAL(resultsReady(KDevelop::VcsJob*)), SLOT(branchNameReady(KDevelop::VcsJob*)));
-            job->setProperty("project", QVariant::fromValue<QObject*>(project));
+            job->setProperty("project", QVariant::fromValue<SafeProjectPointer>(project));
             ICore::self()->runController()->registerJob(job);
         }
     }
@@ -86,10 +89,10 @@ void VcsOverlayProxyModel::repositoryBranchChanged(const KUrl& url)
 void VcsOverlayProxyModel::branchNameReady(KDevelop::VcsJob* job)
 {
     if(job->status()==VcsJob::JobSucceeded) {
-        QObject* p = job->property("project").value<QObject*>();
+        SafeProjectPointer p = job->property("project").value<SafeProjectPointer>();
         QModelIndex index = indexFromProject(p);
         if(index.isValid()) {
-            IProject* project = qobject_cast<IProject*>(p);
+            IProject* project = p.data();
             m_branchName[project] = job->fetchResults().toString();
             emit dataChanged(index, index);
         }
