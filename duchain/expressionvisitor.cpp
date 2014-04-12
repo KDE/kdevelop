@@ -84,6 +84,37 @@ bool ExpressionVisitor::visit(QmlJS::AST::ObjectLiteral*)
 /*
  * Identifiers and common expressions
  */
+bool ExpressionVisitor::visit(QmlJS::AST::BinaryExpression* node)
+{
+    switch (node->op) {
+    case QSOperator::BitAnd:
+    case QSOperator::BitOr:
+    case QSOperator::BitXor:
+    case QSOperator::LShift:
+    case QSOperator::RShift:
+    case QSOperator::URShift:
+        setType(IntegralType::TypeInt);
+        break;
+    case QSOperator::And:
+    case QSOperator::Equal:
+    case QSOperator::Ge:
+    case QSOperator::Gt:
+    case QSOperator::In:
+    case QSOperator::InstanceOf:
+    case QSOperator::Le:
+    case QSOperator::Lt:
+    case QSOperator::Or:
+    case QSOperator::StrictEqual:
+    case QSOperator::StrictNotEqual:
+        setType(IntegralType::TypeBoolean);
+        break;
+    default:
+        break;
+    }
+
+    return false;
+}
+
 bool ExpressionVisitor::visit(QmlJS::AST::IdentifierExpression* node)
 {
     setType(node->name.toString());

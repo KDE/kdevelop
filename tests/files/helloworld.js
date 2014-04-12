@@ -28,6 +28,21 @@ var d = 1.0;
 var array = [1, 2, 3];
 
 /**
+ * "type" : { "toString" : "bool" }
+ */
+var simple_compare = (a == 5.89);
+
+/**
+ * "type" : { "toString": "bool" }
+ */
+var nested_conditions = (simple_compare && b < 3);
+
+/**
+ * "type" : { "toString" : "int" }
+ */
+var simple_shift = (a << 2);
+
+/**
  * "EXPECT_FAIL" : { "type" : "function expressions not yet handled" },
  * "type" : { "toString" : "function mixed (mixed)" }
  */
