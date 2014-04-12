@@ -49,6 +49,7 @@ protected:
 
     virtual bool visit(QmlJS::AST::BinaryExpression* node);
     virtual bool visit(QmlJS::AST::IdentifierExpression* node);
+    virtual bool visit(QmlJS::AST::FunctionExpression* node);
     virtual bool visit(QmlJS::AST::CallExpression* node);
 
 private:

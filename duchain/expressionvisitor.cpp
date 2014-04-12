@@ -124,6 +124,24 @@ bool ExpressionVisitor::visit(QmlJS::AST::IdentifierExpression* node)
 /*
  * Functions
  */
+bool ExpressionVisitor::visit(QmlJS::AST::FunctionExpression* node)
+{
+    DUChainReadLocker lock;
+    QmlJS::AST::SourceLocation location = node->body->firstSourceLocation();
+
+    // Find the anonymous declaration corresponding to the function. This is
+    // the owner of the current context (function expressions create new contexts)
+    Declaration* dec = m_context->topContext()->findContextAt(
+        CursorInRevision(location.startLine-1, location.startColumn)
+    )->owner();
+
+    if (dec && dec->abstractType()) {
+        setType(dec->abstractType());
+    }
+
+    return false;
+}
+
 bool ExpressionVisitor::visit(QmlJS::AST::CallExpression* node)
 {
     // Find the type of the function called

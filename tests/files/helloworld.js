@@ -43,7 +43,6 @@ var nested_conditions = (simple_compare && b < 3);
 var simple_shift = (a << 2);
 
 /**
- * "EXPECT_FAIL" : { "type" : "function expressions not yet handled" },
  * "type" : { "toString" : "function mixed (mixed)" }
  */
 var c = function(a) {
@@ -52,6 +51,16 @@ var c = function(a) {
    */
   return a;
 };
+
+/**
+ * "type" : { "toString" : "function int (mixed, mixed)" }
+ */
+var function_in_nested_expression = (function(a, b) { return 2; });
+
+/**
+ * "type" : { "toString" : "string" }
+ */
+var this_is_not_a_function = /** */ (function() { return "this is!"; })();
 
 /**
  * "type" : { "toString" : "<class>" }
@@ -97,7 +106,6 @@ function testReturnMixedArg(arg)
 
 
 /**
- * "EXPECT_FAIL": { "type" : "function expressions not yet handled", "returnType" : "function expressions not yet handled" },
  * "type": { "toString" : "function void ()" },
  * "returnType" : { "toString" : "void" }
  */
@@ -107,4 +115,5 @@ var recurse = function() {
      * "type": { "toString" : "function void ()" }
      */
     var bla = recurse;
+    return;
 }

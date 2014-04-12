@@ -78,21 +78,37 @@ ReferencedTopDUContext DeclarationBuilder::build(const IndexedString& url,
 /*
  * Functions
  */
-bool DeclarationBuilder::visit(QmlJS::AST::FunctionDeclaration* node)
+void DeclarationBuilder::visitFunction(QmlJS::AST::FunctionExpression* node)
 {
     setComment(m_session->commentForLocation(node->firstSourceLocation()).toUtf8());
 
-    const QualifiedIdentifier name(node->name.toString());
-    const RangeInRevision range = m_session->locationToRange(node->identifierToken);
+    FunctionType::Ptr func(new FunctionType);
+    QualifiedIdentifier name;
+    RangeInRevision range;
 
-    FunctionType::Ptr type(new FunctionType);
-    type->setReturnType(AbstractType::Ptr(new IntegralType(IntegralType::TypeVoid)));
+    if (node->kind == QmlJS::AST::Node::Kind_FunctionDeclaration) {
+        // Only function declarations have an identifier. Expressions are anonymous
+        name = QualifiedIdentifier(node->name.toString());
+        range = m_session->locationToRange(node->identifierToken);
+    }
 
     {
         DUChainWriteLocker lock;
         openDeclaration<FunctionDeclaration>(name, range);
     }
-    openType(type);
+    openType(func);
+}
+
+bool DeclarationBuilder::visit(QmlJS::AST::FunctionDeclaration* node)
+{
+    visitFunction(node);
+
+    return DeclarationBuilderBase::visit(node);
+}
+
+bool DeclarationBuilder::visit(QmlJS::AST::FunctionExpression* node)
+{
+    visitFunction(node);
 
     return DeclarationBuilderBase::visit(node);
 }
@@ -120,20 +136,48 @@ bool DeclarationBuilder::visit(QmlJS::AST::FormalParameterList* node)
 bool DeclarationBuilder::visit(QmlJS::AST::ReturnStatement* node)
 {
     if (FunctionType::Ptr type = currentType<FunctionType>()) {
-        AbstractType::Ptr expressionType = findType(node->expression);
+        AbstractType::Ptr returnType;
+
+        if (node->expression) {
+            returnType = findType(node->expression);
+        } else {
+            returnType = new IntegralType(IntegralType::TypeVoid);
+        }
+
         DUChainWriteLocker lock;
 
-        type->setReturnType(expressionType);
+        type->setReturnType(returnType);
     }
 
     return false;   // findType has already explored node
+}
+
+void DeclarationBuilder::endVisitFunction(QmlJS::AST::FunctionExpression*)
+{
+    FunctionType::Ptr func = currentType<FunctionType>();
+
+    if (func && !func->returnType()) {
+        // A function that returns nothing returns void
+        DUChainWriteLocker lock;
+
+        func->setReturnType(AbstractType::Ptr(new IntegralType(IntegralType::TypeVoid)));
+    }
+
+    closeAndAssignType();
 }
 
 void DeclarationBuilder::endVisit(QmlJS::AST::FunctionDeclaration* node)
 {
     DeclarationBuilderBase::endVisit(node);
 
-    closeAndAssignType();
+    endVisitFunction(node);
+}
+
+void DeclarationBuilder::endVisit(QmlJS::AST::FunctionExpression* node)
+{
+    DeclarationBuilderBase::endVisit(node);
+
+    endVisitFunction(node);
 }
 
 /*

@@ -42,10 +42,15 @@ protected:
     using Visitor::endVisit;
 
     // Functions
+    void visitFunction(QmlJS::AST::FunctionExpression* node);
+    void endVisitFunction(QmlJS::AST::FunctionExpression*);
+
     virtual bool visit(QmlJS::AST::FunctionDeclaration* node);
+    virtual bool visit(QmlJS::AST::FunctionExpression* node);
     virtual bool visit(QmlJS::AST::FormalParameterList* node);
     virtual bool visit(QmlJS::AST::ReturnStatement* node);
     virtual void endVisit(QmlJS::AST::FunctionDeclaration* node);
+    virtual void endVisit(QmlJS::AST::FunctionExpression* node);
 
     // Variables
     virtual bool visit(QmlJS::AST::VariableDeclaration* node);
