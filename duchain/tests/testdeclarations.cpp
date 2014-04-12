@@ -202,7 +202,6 @@ void TestDeclarations::testProperty()
     QVERIFY(foo);
     QCOMPARE(foo->identifier().toString(), QString("foo"));
     QVERIFY(foo->abstractType());
-    QEXPECT_FAIL("", "type deduction not yet implemented", Continue);
     QCOMPARE(foo->abstractType()->toString(), QString("int"));
     QCOMPARE(QString::fromUtf8(foo->comment()), QString("some comment"));
 }

@@ -19,10 +19,12 @@
 #include "expressionvisitor.h"
 
 #include <language/duchain/declaration.h>
+#include <language/duchain/duchainlock.h>
 #include <language/duchain/types/structuretype.h>
 #include <language/duchain/types/functiontype.h>
 
 #include "helper.h"
+#include "parsesession.h"
 
 using namespace KDevelop;
 
@@ -31,61 +33,105 @@ ExpressionVisitor::ExpressionVisitor(DUContext* context) :
 {
 }
 
-void ExpressionVisitor::endVisit(QmlJS::AST::ArrayLiteral* /*node*/)
+/*
+ * Literals
+ */
+bool ExpressionVisitor::visit(QmlJS::AST::NumericLiteral* node)
 {
-    m_lastType.push(AbstractType::Ptr(new IntegralType(IntegralType::TypeArray)));
+    int num_int_digits = (int)std::log10(node->value) + 1;
+
+    setType(
+        num_int_digits == (int)node->literalToken.length ?
+            IntegralType::TypeInt :
+            IntegralType::TypeDouble
+    );
+    return false;
 }
 
-void ExpressionVisitor::endVisit(QmlJS::AST::FalseLiteral* /*node*/)
+bool ExpressionVisitor::visit(QmlJS::AST::StringLiteral*)
 {
-    m_lastType.push(AbstractType::Ptr(new IntegralType(IntegralType::TypeBoolean)));
+    setType(IntegralType::TypeString);
+    return false;
 }
 
-void ExpressionVisitor::endVisit(QmlJS::AST::IdentifierExpression* node)
+bool ExpressionVisitor::visit(QmlJS::AST::TrueLiteral*)
 {
-    const QualifiedIdentifier name(node->name.toString());
+    setType(IntegralType::TypeBoolean);
+    return false;
+}
+
+bool ExpressionVisitor::visit(QmlJS::AST::FalseLiteral*)
+{
+    setType(IntegralType::TypeBoolean);
+    return false;
+}
+
+/*
+ * Object and arrays
+ */
+bool ExpressionVisitor::visit(QmlJS::AST::ArrayLiteral*)
+{
+    setType(AbstractType::Ptr(new IntegralType(IntegralType::TypeArray)));
+    return false;
+}
+
+bool ExpressionVisitor::visit(QmlJS::AST::ObjectLiteral*)
+{
+    setType(AbstractType::Ptr(new StructureType));
+    return false;
+}
+
+/*
+ * Identifiers and common expressions
+ */
+bool ExpressionVisitor::visit(QmlJS::AST::IdentifierExpression* node)
+{
+    setType(node->name.toString());
+    return false;
+}
+
+/*
+ * Functions
+ */
+bool ExpressionVisitor::visit(QmlJS::AST::CallExpression* node)
+{
+    // Find the type of the function called
+    node->base->accept(this);
+
+    FunctionType::Ptr func = FunctionType::Ptr::dynamicCast(m_lastType);
+
+    if (func && func->returnType()) {
+        setType(func->returnType());
+    }
+
+    return false;
+}
+
+void ExpressionVisitor::setType(AbstractType::Ptr type)
+{
+    m_lastType = type;
+}
+
+void ExpressionVisitor::setType(IntegralType::CommonIntegralTypes type)
+{
+    m_lastType = AbstractType::Ptr(new IntegralType(type));
+}
+
+void ExpressionVisitor::setType(const QString& declaration)
+{
+    const QualifiedIdentifier name(declaration);
     DeclarationPointer dec = QmlJS::getDeclaration(name, DUContextPointer(m_context));
-    // TODO: the declaration won't have a type yet, if it is used recursively, we'd need to delay it then
-    //       or add proper reference/pointer semantics to Declaration::abstractType
+
     if (dec && dec->abstractType()) {
-        m_lastType.push(dec->abstractType());
-    }
-}
-
-void ExpressionVisitor::endVisit(QmlJS::AST::NumericLiteral* node)
-{
-    if (QString::number(node->value).contains('.')) {
-        m_lastType.push(AbstractType::Ptr(new IntegralType(IntegralType::TypeDouble)));
+        setType(dec->abstractType());
     } else {
-        m_lastType.push(AbstractType::Ptr(new IntegralType(IntegralType::TypeInt)));
+        m_lastType = NULL;
     }
 }
 
-void ExpressionVisitor::endVisit(QmlJS::AST::ObjectLiteral* /*node*/)
+AbstractType::Ptr ExpressionVisitor::lastType() const
 {
-    m_lastType.push(AbstractType::Ptr(new StructureType));
-}
-
-void ExpressionVisitor::endVisit(QmlJS::AST::StringLiteral* /*node*/)
-{
-    m_lastType.push(AbstractType::Ptr(new IntegralType(IntegralType::TypeString)));
-}
-
-void ExpressionVisitor::endVisit(QmlJS::AST::TrueLiteral* /*node*/)
-{
-    m_lastType.push(AbstractType::Ptr(new IntegralType(IntegralType::TypeBoolean)));
-}
-
-void ExpressionVisitor::endVisit(QmlJS::AST::FunctionExpression* /*node*/)
-{
-    FunctionType::Ptr type(new FunctionType);
-    type->setReturnType(AbstractType::Ptr(new IntegralType(IntegralType::TypeVoid)));
-    m_lastType.push(type.cast<AbstractType>());
-}
-
-AbstractType::Ptr ExpressionVisitor::lastType()
-{
-    return ( m_lastType.isEmpty() ?
-        AbstractType::Ptr(new IntegralType(IntegralType::TypeMixed)) :
-        m_lastType.last() );
+    return m_lastType ?
+        m_lastType :
+        AbstractType::Ptr(new IntegralType(IntegralType::TypeMixed));
 }

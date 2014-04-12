@@ -10,7 +10,7 @@ function helloWorld()
 /**
  * "type" : { "toString" : "int" }
  */
-var a = 5;
+var a = 50;
 
 /**
  * "type" : { "toString" : "int" }
@@ -20,7 +20,7 @@ var b = a;
 /**
  * "type" : { "toString" : "double" }
  */
-var d = 1.2;
+var d = 1.0;
 
 /**
  * "type" : { "toString" : "array" }
@@ -28,6 +28,7 @@ var d = 1.2;
 var array = [1, 2, 3];
 
 /**
+ * "EXPECT_FAIL" : { "type" : "function expressions not yet handled" },
  * "type" : { "toString" : "function mixed (mixed)" }
  */
 var c = function(a) {
@@ -63,6 +64,11 @@ function testVariables()
 var arg = "arg";
 
 /**
+ * "type" : { "toString" : "string" }
+ */
+var s = testVariables();
+
+/**
  * "type": { "toString" : "function mixed (mixed)" },
  * "returnType" : { "toString" : "mixed" }
  */
@@ -76,6 +82,7 @@ function testReturnMixedArg(arg)
 
 
 /**
+ * "EXPECT_FAIL": { "type" : "function expressions not yet handled", "returnType" : "function expressions not yet handled" },
  * "type": { "toString" : "function void ()" },
  * "returnType" : { "toString" : "void" }
  */

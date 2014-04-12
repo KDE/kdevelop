@@ -125,6 +125,7 @@ public:
 private:
     KDevelop::IndexedString m_url;
     QmlJS::Document::MutablePtr m_doc;
+
     typedef QHash<QmlJS::AST::Node*, KDevelop::DUContext*> NodeToContextHash;
     NodeToContextHash m_astToContext;
 };

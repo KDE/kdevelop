@@ -43,8 +43,16 @@ QualifiedIdentifier ContextBuilder::identifierForNode(QmlJS::AST::IdentifierProp
 
 AbstractType::Ptr ContextBuilder::findType(QmlJS::AST::Node* node)
 {
+    if (!node) {
+        return AbstractType::Ptr(new IntegralType(IntegralType::TypeMixed));
+    }
+
     ExpressionVisitor visitor(currentContext());
-    QmlJS::AST::Node::accept(node, &visitor);
+
+    // Build every needed declaration in node, and then try to guess its type
+    node->accept(this);
+    node->accept(&visitor);
+
     return visitor.lastType();
 }
 

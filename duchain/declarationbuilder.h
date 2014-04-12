@@ -41,16 +41,17 @@ protected:
     using Visitor::visit;
     using Visitor::endVisit;
 
+    // Functions
     virtual bool visit(QmlJS::AST::FunctionDeclaration* node);
+    virtual bool visit(QmlJS::AST::FormalParameterList* node);
+    virtual bool visit(QmlJS::AST::ReturnStatement* node);
     virtual void endVisit(QmlJS::AST::FunctionDeclaration* node);
 
+    // Variables
     virtual bool visit(QmlJS::AST::VariableDeclaration* node);
     virtual void endVisit(QmlJS::AST::VariableDeclaration* node);
 
-    virtual bool visit(QmlJS::AST::FormalParameterList* node);
-
-    virtual void endVisit(QmlJS::AST::ReturnStatement* node);
-
+    // UI
     virtual bool visit(QmlJS::AST::UiObjectDefinition* node);
     virtual void endVisit(QmlJS::AST::UiObjectDefinition* node);
 

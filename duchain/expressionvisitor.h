@@ -33,24 +33,31 @@ class KDEVQMLJSDUCHAIN_EXPORT ExpressionVisitor : public QmlJS::AST::Visitor
 public:
     explicit ExpressionVisitor(KDevelop::DUContext* context);
 
+    KDevelop::AbstractType::Ptr lastType() const;
+
     using Visitor::visit;
     using Visitor::endVisit;
 
-    KDevelop::AbstractType::Ptr lastType();
-
 protected:
-    virtual void endVisit(QmlJS::AST::ArrayLiteral* node);
-    virtual void endVisit(QmlJS::AST::FalseLiteral* node);
-    virtual void endVisit(QmlJS::AST::IdentifierExpression* node);
-    virtual void endVisit(QmlJS::AST::NumericLiteral* node);
-    virtual void endVisit(QmlJS::AST::ObjectLiteral* node);
-    virtual void endVisit(QmlJS::AST::StringLiteral* node);
-    virtual void endVisit(QmlJS::AST::TrueLiteral* node);
-    virtual void endVisit(QmlJS::AST::FunctionExpression* node);
+    virtual bool visit(QmlJS::AST::NumericLiteral* node);
+    virtual bool visit(QmlJS::AST::StringLiteral* node);
+    virtual bool visit(QmlJS::AST::TrueLiteral* node);
+    virtual bool visit(QmlJS::AST::FalseLiteral* node);
+
+    virtual bool visit(QmlJS::AST::ArrayLiteral* node);
+    virtual bool visit(QmlJS::AST::ObjectLiteral* node);
+
+    virtual bool visit(QmlJS::AST::IdentifierExpression* node);
+    virtual bool visit(QmlJS::AST::CallExpression* node);
 
 private:
-    QStack<KDevelop::AbstractType::Ptr> m_lastType;
+    void setType(KDevelop::AbstractType::Ptr type);
+    void setType(KDevelop::IntegralType::CommonIntegralTypes type);
+    void setType(const QString &declaration);
+
+private:
     KDevelop::DUContext* m_context;
+    KDevelop::AbstractType::Ptr m_lastType;
 
 };
 

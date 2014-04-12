@@ -75,6 +75,9 @@ ReferencedTopDUContext DeclarationBuilder::build(const IndexedString& url,
     return DeclarationBuilderBase::build(url, node, updateContext);
 }
 
+/*
+ * Functions
+ */
 bool DeclarationBuilder::visit(QmlJS::AST::FunctionDeclaration* node)
 {
     setComment(m_session->commentForLocation(node->firstSourceLocation()).toUtf8());
@@ -94,23 +97,18 @@ bool DeclarationBuilder::visit(QmlJS::AST::FunctionDeclaration* node)
     return DeclarationBuilderBase::visit(node);
 }
 
-void DeclarationBuilder::endVisit(QmlJS::AST::FunctionDeclaration* node)
-{
-    DeclarationBuilderBase::endVisit(node);
-
-    closeAndAssignType();
-}
-
 bool DeclarationBuilder::visit(QmlJS::AST::FormalParameterList* node)
 {
     for (QmlJS::AST::FormalParameterList *plist = node; plist; plist = plist->next) {
         const QualifiedIdentifier name(plist->name.toString());
         const RangeInRevision range = m_session->locationToRange(plist->identifierToken);
+
         DUChainWriteLocker lock;
         Declaration* dec = openDeclaration<Declaration>(name, range);
         IntegralType::Ptr type(new IntegralType(IntegralType::TypeMixed));
         dec->setType(type);
         closeDeclaration();
+
         if (FunctionType::Ptr funType = currentType<FunctionType>()) {
             funType->addArgument(type.cast<AbstractType>());
         }
@@ -119,16 +117,28 @@ bool DeclarationBuilder::visit(QmlJS::AST::FormalParameterList* node)
     return DeclarationBuilderBase::visit(node);
 }
 
-void DeclarationBuilder::endVisit(QmlJS::AST::ReturnStatement* node)
+bool DeclarationBuilder::visit(QmlJS::AST::ReturnStatement* node)
+{
+    if (FunctionType::Ptr type = currentType<FunctionType>()) {
+        AbstractType::Ptr expressionType = findType(node->expression);
+        DUChainWriteLocker lock;
+
+        type->setReturnType(expressionType);
+    }
+
+    return false;   // findType has already explored node
+}
+
+void DeclarationBuilder::endVisit(QmlJS::AST::FunctionDeclaration* node)
 {
     DeclarationBuilderBase::endVisit(node);
 
-    DUChainWriteLocker lock;
-    if (FunctionType::Ptr type = currentType<FunctionType>()) {
-        type->setReturnType(findType(node->expression));
-    }
+    closeAndAssignType();
 }
 
+/*
+ * Variables
+ */
 bool DeclarationBuilder::visit(QmlJS::AST::VariableDeclaration* node)
 {
     setComment(m_session->commentForLocation(node->firstSourceLocation()).toUtf8());
@@ -136,13 +146,14 @@ bool DeclarationBuilder::visit(QmlJS::AST::VariableDeclaration* node)
     const QualifiedIdentifier name(node->name.toString());
     const RangeInRevision range = m_session->locationToRange(node->identifierToken);
     const AbstractType::Ptr type = findType(node->expression);
+
     {
         DUChainWriteLocker lock;
         openDeclaration<Declaration>(name, range);
     }
     openType(type);
 
-    return DeclarationBuilderBase::visit(node);
+    return false;   // findType has already explored node
 }
 
 void DeclarationBuilder::endVisit(QmlJS::AST::VariableDeclaration* node)
@@ -152,24 +163,9 @@ void DeclarationBuilder::endVisit(QmlJS::AST::VariableDeclaration* node)
     closeAndAssignType();
 }
 
-void DeclarationBuilder::closeContext()
-{
-    {
-        DUChainWriteLocker lock;
-        FunctionDeclaration* function = dynamic_cast<FunctionDeclaration*>(currentDeclaration());
-        DUContext* ctx = currentContext();
-        if (function && ctx) {
-            if (ctx->type() == DUContext::Function) {
-                function->setInternalFunctionContext(ctx);
-            } else {
-                Q_ASSERT(ctx->type() == DUContext::Other);
-                function->setInternalContext(ctx);
-            }
-        }
-    }
-    DeclarationBuilderBase::closeContext();
-}
-
+/*
+ * UI
+ */
 bool DeclarationBuilder::visit(QmlJS::AST::UiObjectDefinition* node)
 {
     setComment(node);
@@ -217,14 +213,17 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiScriptBinding* node)
 
         const RangeInRevision& range = m_session->locationToRange(node->qualifiedId->identifierToken);
         const QualifiedIdentifier id(node->qualifiedId->name.toString());
-        const AbstractType::Ptr type(new IntegralType(IntegralType::TypeMixed));
+        const AbstractType::Ptr type(findType(node->statement));
 
         {
             DUChainWriteLocker lock;
             openDeclaration<ClassMemberDeclaration>(id, range);
         }
         openType(type);
+
+        return false;   // findType has already explored node->statement
     }
+
     return DeclarationBuilderBase::visit(node);
 }
 
@@ -259,6 +258,27 @@ void DeclarationBuilder::endVisit(QmlJS::AST::UiPublicMember* node)
     DeclarationBuilderBase::endVisit(node);
 
     closeAndAssignType();
+}
+
+/*
+ * Utils
+ */
+void DeclarationBuilder::closeContext()
+{
+    {
+        DUChainWriteLocker lock;
+        FunctionDeclaration* function = dynamic_cast<FunctionDeclaration*>(currentDeclaration());
+        DUContext* ctx = currentContext();
+        if (function && ctx) {
+            if (ctx->type() == DUContext::Function) {
+                function->setInternalFunctionContext(ctx);
+            } else {
+                Q_ASSERT(ctx->type() == DUContext::Other);
+                function->setInternalContext(ctx);
+            }
+        }
+    }
+    DeclarationBuilderBase::closeContext();
 }
 
 void DeclarationBuilder::setComment(QmlJS::AST::Node* node)
