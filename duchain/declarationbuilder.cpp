@@ -21,6 +21,7 @@
 
 #include <language/duchain/types/functiontype.h>
 #include <language/duchain/types/integraltype.h>
+#include <language/duchain/types/typeutils.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/classdeclaration.h>
@@ -147,7 +148,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::ReturnStatement* node)
 
         DUChainWriteLocker lock;
 
-        func->setReturnType(QmlJS::mergeTypes(func->returnType(), returnType));
+        func->setReturnType(TypeUtils::mergeTypes(func->returnType(), returnType));
     }
 
     return false;   // findType has already explored node
@@ -218,7 +219,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::BinaryExpression* node)
             // Merge the already-known type of the variable with the new one
             DUChainWriteLocker lock;
 
-            leftType.declaration->setAbstractType(QmlJS::mergeTypes(leftType.type, rightType));
+            leftType.declaration->setAbstractType(TypeUtils::mergeTypes(leftType.type, rightType));
         }
 
         return false;   // findType has already explored node
