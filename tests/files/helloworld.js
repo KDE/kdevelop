@@ -117,3 +117,47 @@ var recurse = function() {
     var bla = recurse;
     return;
 }
+
+/**
+ * "returnType" : { "toString" : "unsure (int, double)" }
+ */
+function two_types(a) {
+    if (a > 0) {
+        return 2;
+    } else {
+        return -0.15;
+    }
+}
+
+/**
+ * "returnType" : { "toString" : "bool" }
+ */
+function two_returns_same_type(a) {
+    if (a > 0) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/**
+ * "returnType" : { "toString" : "unsure (void, int)" }
+ */
+function may_return_void(a) {
+    if (a == 0) {
+        return;
+    }
+
+    return a << 2;
+}
+
+/**
+ * "returnType" : { "toString" : "double" }
+ */
+function ignore_mixed(a) {
+    if (a) {
+        return a;
+    } else {
+        return 3.14;
+    }
+}

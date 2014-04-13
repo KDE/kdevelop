@@ -40,6 +40,25 @@ using namespace KDevelop;
     KDEVQMLJSDUCHAIN_EXPORT DeclarationPointer getDeclaration(const QualifiedIdentifier& id,
                                                               const DUContextPointer& context);
 
+    /**
+     * Merge two types and return either an unsure type (if the types are different)
+     * or the first type if both are equals
+     *
+     * @param type Type already known. Can be NULL if @p newType is the only type information at hand
+     * @param newType Type to be merged to @p type
+     * @return A type representing the merge of the arguments. This can be an
+     *         unsure type, a mixed type (merging something with mixed will always
+     *         yield mixed) or a "normal" type is @p type and @p newType are equals
+     *
+     * @warning Although this looks symmetrical, it is NOT: the first argument might be modified, the second one won't be.
+     * So if you do something like a = mergeTypes(a, b) make sure you pass "a" as first argument.
+     *
+     * @note The implementation of this function is inspired by mergeTypes in
+     *       kdev-python, writtent by Sven Brauch <svenbrauch@googlemail.com>
+     */
+    KDEVQMLJSDUCHAIN_EXPORT AbstractType::Ptr mergeTypes(AbstractType::Ptr type,
+                                                         const AbstractType::Ptr newType);
+
 } // End of namespace QmlJS
 
 #endif /* QMLJSDUCHAINHELPERS_H_ */

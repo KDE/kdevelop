@@ -27,6 +27,7 @@
 
 #include "expressionvisitor.h"
 #include "parsesession.h"
+#include "helper.h"
 
 using namespace KDevelop;
 
@@ -135,7 +136,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::FormalParameterList* node)
 
 bool DeclarationBuilder::visit(QmlJS::AST::ReturnStatement* node)
 {
-    if (FunctionType::Ptr type = currentType<FunctionType>()) {
+    if (FunctionType::Ptr func = currentType<FunctionType>()) {
         AbstractType::Ptr returnType;
 
         if (node->expression) {
@@ -146,7 +147,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::ReturnStatement* node)
 
         DUChainWriteLocker lock;
 
-        type->setReturnType(returnType);
+        func->setReturnType(QmlJS::mergeTypes(func->returnType(), returnType));
     }
 
     return false;   // findType has already explored node
