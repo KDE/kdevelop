@@ -43,6 +43,14 @@ var nested_conditions = (simple_compare && b < 3);
 var simple_shift = (a << 2);
 
 /**
+ * "type" : { "toString" : "unsure (string, int)" }
+ */
+var hello;
+
+hello = "world";
+hello = 42;
+
+/**
  * "type" : { "toString" : "function mixed (mixed)" }
  */
 var c = function(a) {

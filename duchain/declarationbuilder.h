@@ -55,6 +55,7 @@ protected:
     // Variables
     virtual bool visit(QmlJS::AST::VariableDeclaration* node);
     virtual void endVisit(QmlJS::AST::VariableDeclaration* node);
+    virtual bool visit(QmlJS::AST::BinaryExpression* node);
 
     // UI
     virtual bool visit(QmlJS::AST::UiObjectDefinition* node);

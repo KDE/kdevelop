@@ -41,10 +41,14 @@ QualifiedIdentifier ContextBuilder::identifierForNode(QmlJS::AST::IdentifierProp
     return QualifiedIdentifier(node->id.toString());
 }
 
-AbstractType::Ptr ContextBuilder::findType(QmlJS::AST::Node* node)
+ContextBuilder::ExpressionType ContextBuilder::findType(QmlJS::AST::Node* node)
 {
+    ExpressionType ret;
+
     if (!node) {
-        return AbstractType::Ptr(new IntegralType(IntegralType::TypeMixed));
+        ret.type = AbstractType::Ptr(new IntegralType(IntegralType::TypeMixed));
+
+        return ret;
     }
 
     ExpressionVisitor visitor(currentContext());
@@ -53,7 +57,10 @@ AbstractType::Ptr ContextBuilder::findType(QmlJS::AST::Node* node)
     node->accept(this);
     node->accept(&visitor);
 
-    return visitor.lastType();
+    ret.type = visitor.lastType();
+    ret.declaration = visitor.lastDeclaration();
+
+    return ret;
 }
 
 void ContextBuilder::setContextOnNode(QmlJS::AST::Node* node, DUContext* context)

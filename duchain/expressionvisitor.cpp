@@ -18,6 +18,7 @@
 
 #include "expressionvisitor.h"
 
+#include <language/duchain/topducontext.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/types/structuretype.h>
@@ -173,8 +174,7 @@ void ExpressionVisitor::setType(const QString& declaration)
 
     if (dec && dec->abstractType()) {
         setType(dec->abstractType());
-    } else {
-        m_lastType = NULL;
+        m_lastDeclaration = dec;
     }
 }
 
@@ -183,4 +183,9 @@ AbstractType::Ptr ExpressionVisitor::lastType() const
     return m_lastType ?
         m_lastType :
         AbstractType::Ptr(new IntegralType(IntegralType::TypeMixed));
+}
+
+DeclarationPointer ExpressionVisitor::lastDeclaration() const
+{
+    return m_lastDeclaration;
 }

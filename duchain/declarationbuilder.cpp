@@ -140,7 +140,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::ReturnStatement* node)
         AbstractType::Ptr returnType;
 
         if (node->expression) {
-            returnType = findType(node->expression);
+            returnType = findType(node->expression).type;
         } else {
             returnType = new IntegralType(IntegralType::TypeVoid);
         }
@@ -190,7 +190,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::VariableDeclaration* node)
 
     const QualifiedIdentifier name(node->name.toString());
     const RangeInRevision range = m_session->locationToRange(node->identifierToken);
-    const AbstractType::Ptr type = findType(node->expression);
+    const AbstractType::Ptr type = findType(node->expression).type;
 
     {
         DUChainWriteLocker lock;
@@ -206,6 +206,25 @@ void DeclarationBuilder::endVisit(QmlJS::AST::VariableDeclaration* node)
     DeclarationBuilderBase::endVisit(node);
 
     closeAndAssignType();
+}
+
+bool DeclarationBuilder::visit(QmlJS::AST::BinaryExpression* node)
+{
+    if (node->op == QSOperator::Assign) {
+        ContextBuilder::ExpressionType leftType = findType(node->left);
+        AbstractType::Ptr rightType = findType(node->right).type;
+
+        if (leftType.declaration) {
+            // Merge the already-known type of the variable with the new one
+            DUChainWriteLocker lock;
+
+            leftType.declaration->setAbstractType(QmlJS::mergeTypes(leftType.type, rightType));
+        }
+
+        return false;   // findType has already explored node
+    }
+
+    return QmlJS::AST::Visitor::visit(node);
 }
 
 /*
@@ -258,7 +277,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiScriptBinding* node)
 
         const RangeInRevision& range = m_session->locationToRange(node->qualifiedId->identifierToken);
         const QualifiedIdentifier id(node->qualifiedId->name.toString());
-        const AbstractType::Ptr type(findType(node->statement));
+        const AbstractType::Ptr type(findType(node->statement).type);
 
         {
             DUChainWriteLocker lock;
@@ -287,7 +306,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiPublicMember* node)
 
     const RangeInRevision& range = m_session->locationToRange(node->identifierToken);
     const QualifiedIdentifier id(node->name.toString());
-    const AbstractType::Ptr type = findType(node->statement);
+    const AbstractType::Ptr type = findType(node->statement).type;
 
     {
         DUChainWriteLocker lock;

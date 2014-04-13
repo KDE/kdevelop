@@ -34,6 +34,7 @@ public:
     explicit ExpressionVisitor(KDevelop::DUContext* context);
 
     KDevelop::AbstractType::Ptr lastType() const;
+    KDevelop::DeclarationPointer lastDeclaration() const;
 
     using Visitor::visit;
     using Visitor::endVisit;
@@ -60,6 +61,7 @@ private:
 private:
     KDevelop::DUContext* m_context;
     KDevelop::AbstractType::Ptr m_lastType;
+    KDevelop::DeclarationPointer m_lastDeclaration;
 
 };
 

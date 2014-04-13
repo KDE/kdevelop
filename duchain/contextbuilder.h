@@ -22,6 +22,7 @@
 
 #include <language/duchain/builders/abstractcontextbuilder.h>
 #include <language/duchain/types/abstracttype.h>
+#include <language/duchain/declaration.h>
 
 #include <qmljs/parser/qmljsast_p.h>
 #include <qmljs/qmljsdocument.h>
@@ -51,6 +52,13 @@ private:
 class KDEVQMLJSDUCHAIN_EXPORT ContextBuilder : public ContextBuilderBase, public QmlJS::AST::Visitor
 {
 public:
+    struct ExpressionType
+    {
+        KDevelop::AbstractType::Ptr type;
+        KDevelop::DeclarationPointer declaration;
+    };
+
+public:
     ContextBuilder();
 
     virtual void startVisiting(QmlJS::AST::Node* node);
@@ -63,7 +71,7 @@ public:
     virtual KDevelop::TopDUContext* newTopContext(const KDevelop::RangeInRevision& range,
                                                   KDevelop::ParsingEnvironmentFile* file = 0);
 
-    KDevelop::AbstractType::Ptr findType(QmlJS::AST::Node* node);
+    ExpressionType findType(QmlJS::AST::Node* node);
     void setParseSession(ParseSession* session);
 
     using Visitor::visit;
