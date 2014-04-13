@@ -120,7 +120,7 @@ namespace TypeUtils {
       if ( isUsefulType(newType) ) {
         unsure->addType(newType->indexed());
       }
-      if ( ! unsure.count() ) {
+      if ( ! unsure->typesSize() ) {
         return AbstractType::Ptr(new IntegralType(IntegralType::TypeMixed));
       }
       ret = unsure;
