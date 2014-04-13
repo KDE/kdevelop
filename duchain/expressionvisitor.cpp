@@ -128,7 +128,7 @@ bool ExpressionVisitor::visit(QmlJS::AST::IdentifierExpression* node)
 bool ExpressionVisitor::visit(QmlJS::AST::FunctionExpression* node)
 {
     DUChainReadLocker lock;
-    QmlJS::AST::SourceLocation location = node->body->firstSourceLocation();
+    QmlJS::AST::SourceLocation location = node->lbraceToken;
 
     // Find the anonymous declaration corresponding to the function. This is
     // the owner of the current context (function expressions create new contexts)
