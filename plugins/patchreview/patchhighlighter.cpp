@@ -12,7 +12,10 @@
 ***************************************************************************/
 
 #include "patchhighlighter.h"
+
 #include "libdiff2/difference.h"
+#include "libdiff2/diffmodel.h"
+
 #include "patchreview.h"
 #include <language/highlighting/colorcache.h>
 #include <interfaces/idocument.h>
@@ -26,12 +29,16 @@
 #include <KTextEditor/View>
 #include <KMessageBox>
 #include <ktexteditor/movinginterface.h>
+#include <ktexteditor/markinterface.h>
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
+
+#include <QApplication>
 #include <QTextCharFormat>
 #include <QWidget>
 #include <QTextDocument>
 #include <QPointer>
+#include <QVBoxLayout>
 
 using namespace KDevelop;
 
@@ -158,7 +165,7 @@ void PatchHighlighter::showToolTipForMark( QPoint pos, KTextEditor::MovingRange*
     ActiveToolTip::showToolTip( tooltip );
 }
 
-void PatchHighlighter::markClicked( KTextEditor::Document* doc, KTextEditor::Mark mark, bool& handled ) {
+void PatchHighlighter::markClicked( KTextEditor::Document* doc, const KTextEditor::Mark& mark, bool& handled ) {
     m_applying = true;
     if( handled )
         return;
@@ -229,7 +236,7 @@ void PatchHighlighter::markClicked( KTextEditor::Document* doc, KTextEditor::Mar
     m_applying = false;
 }
 
-KTextEditor::MovingRange* PatchHighlighter::rangeForMark( KTextEditor::Mark mark ) {
+KTextEditor::MovingRange* PatchHighlighter::rangeForMark( const KTextEditor::Mark& mark ) {
     for( QMap<KTextEditor::MovingRange*, Diff2::Difference*>::const_iterator it = m_differencesForRanges.constBegin(); it != m_differencesForRanges.constEnd(); ++it ) {
         if( it.key()->start().line() == mark.line )
         {
@@ -240,7 +247,7 @@ KTextEditor::MovingRange* PatchHighlighter::rangeForMark( KTextEditor::Mark mark
     return 0;
 }
 
-void PatchHighlighter::markToolTipRequested( KTextEditor::Document*, KTextEditor::Mark mark, QPoint pos, bool& handled ) {
+void PatchHighlighter::markToolTipRequested( KTextEditor::Document*, const KTextEditor::Mark& mark, QPoint pos, bool& handled ) {
     if( handled )
         return;
 

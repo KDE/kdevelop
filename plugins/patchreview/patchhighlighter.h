@@ -18,8 +18,8 @@
 #include <QPoint>
 #include <QSet>
 #include <QMap>
+
 #include <ktexteditor/movingrangefeedback.h>
-#include <KTextEditor/MarkInterface>
 
 namespace Diff2 {
 class Difference;
@@ -27,16 +27,17 @@ class DiffModel;
 }
 
 class PatchReviewPlugin;
+
 namespace KDevelop
 {
 class IDocument;
-class VcsFileChangesModel;
 }
 
 namespace KTextEditor
 {
 class Document;
 class Range;
+class Mark;
 class MovingRange;
 }
 
@@ -59,7 +60,7 @@ private:
     QStringList splitAndAddNewlines( const QString& text ) const;
     void performContentChange( KTextEditor::Document* doc, const QStringList& oldLines, const QStringList& newLines, int editLineNumber );
 
-    KTextEditor::MovingRange* rangeForMark( KTextEditor::Mark mark );
+    KTextEditor::MovingRange* rangeForMark(const KTextEditor::Mark& mark);
 
     void clear();
     QSet< KTextEditor::MovingRange* > m_ranges;
@@ -69,11 +70,11 @@ private:
     Diff2::DiffModel* m_model;
     bool m_applying;
 public slots:
-    void markToolTipRequested( KTextEditor::Document*, KTextEditor::Mark, QPoint, bool & );
+    void markToolTipRequested( KTextEditor::Document*, const KTextEditor::Mark&, QPoint, bool & );
     void showToolTipForMark( QPoint arg1, KTextEditor::MovingRange* arg2, QPair< int, int > highlightMark = qMakePair( -1, -1 ) );
     bool isRemoval( Diff2::Difference* );
     bool isInsertion( Diff2::Difference* );
-    void markClicked( KTextEditor::Document*, KTextEditor::Mark, bool& );
+    void markClicked( KTextEditor::Document*, const KTextEditor::Mark&, bool& );
     void textInserted( KTextEditor::Document* doc, const KTextEditor::Range& range );
     void textRemoved( KTextEditor::Document*, const KTextEditor::Range&, const QString& oldText );
 };
