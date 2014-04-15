@@ -51,6 +51,11 @@ hello = "world";
 hello = 42;
 
 /**
+ * "type" : { "toString" : "function void ()" }
+ */
+var f = function () { }
+
+/**
  * "type" : { "toString" : "function mixed (mixed)" }
  */
 var c = function(a) {
