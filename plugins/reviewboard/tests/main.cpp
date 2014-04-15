@@ -21,6 +21,7 @@
 #include <KCmdLineArgs>
 #include <KMessageBox>
 #include <QDebug>
+#include <QDir>
 #include "reviewpatchdialog.h"
 #include "reviewboardjobs.h"
 
@@ -39,15 +40,13 @@ int main(int argc, char *argv[])
 
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
 
-    ReviewPatchDialog d;
+    ReviewPatchDialog d(QDir::currentPath());
 
     KUrl patch(args->arg(0));
     QString basedir=args->getOption("basedir");
 
     qDebug() << "patch:" << patch << ", basedir:" << basedir;
-    d.setServer(KUrl("https://git.reviewboard.kde.org"));
-    d.setBaseDir(basedir);
-    d.setRepository("kdevplatform");
+
     int ret=d.exec();
     if(ret==QDialog::Accepted) {
         KUrl url=d.server();

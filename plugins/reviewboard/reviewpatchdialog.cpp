@@ -26,7 +26,7 @@
 #include "ui_reviewpatch.h"
 #include "reviewboardjobs.h"
 
-ReviewPatchDialog::ReviewPatchDialog(QWidget* parent)
+ReviewPatchDialog::ReviewPatchDialog(const KUrl& dirUrl, QWidget* parent)
     : KDialog(parent)
 {
     m_ui = new Ui::ReviewPatch;
@@ -37,6 +37,16 @@ ReviewPatchDialog::ReviewPatchDialog(QWidget* parent)
     connect(m_ui->server, SIGNAL(textChanged(QString)), SLOT(serverChanged()));
     connect(m_ui->reviewCheckbox, SIGNAL(stateChanged(int)), SLOT(reviewCheckboxChanged(int)));
     enableButtonOk(false);
+
+    if (dirUrl.isLocalFile()) {
+        QDir d(dirUrl.toLocalFile());
+        while(!QFile::exists(d.filePath(".reviewboardrc"))) {
+            if(!d.cdUp())
+                break;
+        }
+        if(!d.isRoot())
+            initializeFromRC(d.filePath(".reviewboardrc"));
+    }
 }
 
 ReviewPatchDialog::~ReviewPatchDialog()
@@ -109,9 +119,13 @@ void ReviewPatchDialog::receivedProjects(KJob* job)
     QAbstractItemModel* model = m_ui->repositories->model();
     if(!m_preferredRepository.isEmpty()) {
         QModelIndexList idxs = model->match(model->index(0,0), Qt::UserRole, m_preferredRepository, 1, Qt::MatchExactly);
-        if(!idxs.isEmpty()) {
-          m_ui->repositories->setCurrentIndex(idxs.first().row());
+        if(idxs.isEmpty()) {
+            idxs = model->match(model->index(0,0), Qt::DisplayRole, KUrl(m_preferredRepository).fileName(), 1, Qt::MatchExactly);
         }
+        if(!idxs.isEmpty()) {
+            m_ui->repositories->setCurrentIndex(idxs.first().row());
+        } else
+            qDebug() << "couldn't fucking find it" << m_preferredRepository;
     }
     m_ui->repositoriesBox->setEnabled(job->error()==0);
 }
@@ -208,4 +222,29 @@ void ReviewPatchDialog::updateReviewsList()
     }
 
     enableButtonOk(m_ui->reviews->currentIndex() != -1);
+}
+
+void ReviewPatchDialog::initializeFromRC(const QString& filePath)
+{
+    //The .reviewboardrc files are python files, we'll read and if it doesn't work
+    //Well bad luck. See: http://www.reviewboard.org/docs/rbtools/dev/rbt/configuration/
+
+    QRegExp rx("([\\w_]+) *= *[\"'](.*)[\"']");
+    QFile f(filePath);
+    if(!f.open(QFile::ReadOnly | QFile::Text))
+        return;
+
+    QHash<QString, QString> values;
+    QTextStream stream(&f);
+    for(; !stream.atEnd(); ) {
+        if(rx.exactMatch(stream.readLine())) {
+            values.insert(rx.cap(1), rx.cap(2));
+        }
+    }
+
+    if(values.contains("REVIEWBOARD_URL"))
+        setServer(KUrl(values["REVIEWBOARD_URL"]));
+    if(values.contains("REPOSITORY"))
+        setRepository(values["REPOSITORY"]);
+    kDebug() << "found:" << values;
 }
