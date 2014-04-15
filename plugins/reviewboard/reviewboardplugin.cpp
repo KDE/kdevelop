@@ -59,7 +59,9 @@ void ReviewBoardPlugin::exportPatch(IPatchSource::Ptr source)
     m_source = source;
     ReviewPatchDialog d;
 
-    IProject* p = ICore::self()->projectController()->findProjectForUrl(source->baseDir());
+    KUrl dirUrl = source->baseDir();
+    dirUrl.adjustPath(KUrl::RemoveTrailingSlash);
+    IProject* p = ICore::self()->projectController()->findProjectForUrl(dirUrl);
 
     if(p) {
         KConfigGroup versionedConfig = p->projectConfiguration()->group("ReviewBoard");
