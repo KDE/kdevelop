@@ -54,23 +54,24 @@ public:
  *         pass
  *
  *     # in the user's code:
- *     a = []                    # (2)
+ *     a = []              # (2)
  *     a.append(3)         # (3)
  *
  * This type class can be used to determine the type of a as "list of int" as follows:
  *     (1) When creating the type for the List class,
- *             create a ListType instead of a structure type.
- *             (Your language plugin somehow needs to know
- *             which classes are list-like; Python does this
- *             through special comments for the class)
+ *         create a ListType instead of a structure type.
+ *         (Your language plugin somehow needs to know
+ *         which classes are list-like; Python does this
+ *         through special comments for the class)
  *     (2) Set the type of a to the type declared by the
- *             List class, as usual.
- *     (3) Call \code
- *                    static_cast<ListType*>(a->abstractType())->addContentType(int_type)
- *             \endcode
- *             (Your language plugin needs to know which methods
- *             add their argument's content to the type's content;
- *             Python does this through special comments for the method)
+ *         List class, as usual.
+ *     (3) Call
+ *         \code
+ *                static_cast<ListType*>(a->abstractType())->addContentType(int_type)
+ *         \endcode
+ *         (Your language plugin needs to know which methods
+ *         add their argument's content to the type's content;
+ *         Python does this through special comments for the method)
  */
 class KDEVPLATFORMLANGUAGE_EXPORT ListType : public KDevelop::StructureType {
 public:
