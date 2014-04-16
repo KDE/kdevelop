@@ -24,6 +24,8 @@ target_link_libraries(kdevelop
     ${KDEVPLATFORM_INTERFACES_LIBRARIES}
     ${KDEVPLATFORM_SHELL_LIBRARIES}
 
+    KF5::KDELibs4Support
+
     Qt5::Declarative
 )
 target_link_libraries(kdevelop ${KDECLARATIVE_LIBRARY})

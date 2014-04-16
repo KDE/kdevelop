@@ -49,7 +49,7 @@ find_package(KF5 CONFIG REQUIRED COMPONENTS
   XmlGui
 
   # TODO KF5: Port away from this
-  KDE4Support
+  KDELibs4Support
 )
 find_package(KDevPlatform ${KDEVPLATFORM_VERSION} REQUIRED)
 

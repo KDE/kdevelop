@@ -149,4 +149,4 @@ add_executable( cpp-parser cpp-parser.cpp )
 ecm_mark_as_test(cpp-parser)
 target_link_libraries(cpp-parser
     Qt5::Core ${KDEVPLATFORM_TESTS_LIBRARIES} ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-    kdev4cppparser kdev4cppduchain kdev4cpprpp KF5::KDE4Support)
+    kdev4cppparser kdev4cppduchain kdev4cpprpp KF5::KDELibs4Support)
