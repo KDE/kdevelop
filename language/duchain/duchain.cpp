@@ -1236,7 +1236,10 @@ void DUChain::addDocumentChain( TopDUContext * chain )
 
   //contextChanged(0L, DUChainObserver::Addition, DUChainObserver::ChildContexts, chain);
 
-  if(ICore::self() && ICore::self()->languageController()->backgroundParser()->trackerForUrl(chain->url()))
+  // This function might be called during shutdown by stale parse jobs
+  // Make sure we don't access null-pointers here
+  if (ICore::self() && ICore::self()->languageController() &&
+      ICore::self()->languageController()->backgroundParser()->trackerForUrl(chain->url()))
   {
     //Make sure the context stays alive at least as long as the context is open
     ReferencedTopDUContext ctx(chain);
