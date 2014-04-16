@@ -7,7 +7,8 @@ set(kdevplatformjsontests_LIB_SRCS
 )
 
 add_library(kdevplatformjsontests SHARED ${kdevplatformjsontests_LIB_SRCS})
-target_link_libraries(kdevplatformjsontests LINK_PUBLIC
+target_link_libraries(kdevplatformjsontests
+  LINK_PUBLIC
     Qt5::Core
     kdevplatformlanguage
 )
