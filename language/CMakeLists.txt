@@ -77,6 +77,7 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/types/typeutils.cpp
     duchain/types/typealiastype.cpp
     duchain/types/unsuretype.cpp
+    duchain/types/containertypes.cpp
 
     duchain/repositories/abstractitemrepository.cpp
     duchain/repositories/itemrepositoryregistry.cpp
@@ -285,6 +286,7 @@ install(FILES
     duchain/types/alltypes.h
     duchain/types/typeutils.h
     duchain/types/typealiastype.h
+    duchain/types/containertypes.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain/types COMPONENT Devel
 )
 

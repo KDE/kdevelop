@@ -1,5 +1,6 @@
 /*
    Copyright 2007 David Nolden <david.nolden.kdevelop@art-master.de>
+   Copyright 2014 Sven Brauch <svenbrauch@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,6 +21,8 @@
 #include "referencetype.h"
 #include "pointertype.h"
 #include "typealiastype.h"
+#include "unsuretype.h"
+#include "integraltype.h"
 
 namespace TypeUtils {
   using namespace KDevelop;
@@ -100,8 +103,28 @@ namespace TypeUtils {
 
     return base;
   }
-}
 
+  AbstractType::Ptr resolveAliasType(const AbstractType::Ptr eventualAlias)
+  {
+    if ( eventualAlias && eventualAlias->whichType() == KDevelop::AbstractType::TypeAlias ) {
+      return eventualAlias.cast<TypeAliasType>()->type();
+    }
+    return eventualAlias;
+  }
 
-
-
+  bool isUsefulType(AbstractType::Ptr type)
+  {
+    type = resolveAliasType(type);
+    if ( ! type ) {
+      return false;
+    }
+    if ( type->whichType() != AbstractType::TypeIntegral ) {
+      return true;
+    }
+    auto dtype = type.cast<IntegralType>()->dataType();
+    if ( dtype != IntegralType::TypeMixed && dtype != IntegralType::TypeNull ) {
+      return true;
+    }
+    return false;
+  }
+} // namespace TypeUtils

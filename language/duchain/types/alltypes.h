@@ -29,6 +29,7 @@
 #include "enumerationtype.h"
 #include "enumeratortype.h"
 #include "typealiastype.h"
+#include "containertypes.h"
 
 #endif
 

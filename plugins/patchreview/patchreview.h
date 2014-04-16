@@ -16,23 +16,21 @@
 
 #include <QObject>
 #include <QPointer>
-#include <qstandarditemmodel.h>
-#include <interfaces/iplugin.h>
-#include "localpatchsource.h"
-#include "ui_patchreview.h"
-#include <language/duchain/indexedstring.h>
-#include "libdiff2/diffmodel.h"
 
+#include <interfaces/iplugin.h>
+#include <interfaces/ipatchsource.h>
 
 class PatchHighlighter;
+class PatchReviewToolViewFactory;
+
+class QTimer;
+
 namespace KDevelop {
 class IDocument;
 }
 namespace Sublime {
 class Area;
 }
-
-class PatchReviewToolViewFactory;
 
 namespace Diff2
 {

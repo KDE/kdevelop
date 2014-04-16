@@ -13,17 +13,17 @@
 
 #include "patchreview.h"
 
-#include <kmimetype.h>
-#include <kmimetypechooser.h>
-#include <kmimetypetrader.h>
-#include <krandom.h>
 #include <QTabWidget>
 #include <QTimer>
-#include <QPersistentModelIndex>
-#include <kfiledialog.h>
+#include <QFileInfo>
+
 #include <interfaces/idocument.h>
 #include <interfaces/icore.h>
-#include <kde_terminal_interface.h>
+#include <interfaces/iplugincontroller.h>
+#include <interfaces/ipatchexporter.h>
+#include <interfaces/idocumentcontroller.h>
+#include <interfaces/iuicontroller.h>
+
 #include <kparts/part.h>
 #include <kparts/factory.h>
 #include <KDebug>
@@ -31,13 +31,10 @@
 
 #include "libdiff2/komparemodellist.h"
 #include "libdiff2/kompare.h"
+
 #include <kmessagebox.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
-#include <ktexteditor/markinterface.h>
-#include <ktexteditor/movinginterface.h>
-#include <interfaces/idocumentcontroller.h>
-#include <interfaces/iuicontroller.h>
 
 ///Whether arbitrary exceptions that occurred while diff-parsing within the library should be caught
 #define CATCHLIBDIFF
@@ -51,13 +48,11 @@
 #include <sublime/document.h>
 #include <sublime/view.h>
 #include "diffsettings.h"
-#include <interfaces/iplugincontroller.h>
-#include <interfaces/ipatchexporter.h>
 #include "patchhighlighter.h"
 #include "patchreviewtoolview.h"
-#include <vcs/models/vcsfilechangesmodel.h>
-#include <shell/core.h>
+#include "localpatchsource.h"
 #include <ktexteditor/modificationinterface.h>
+#include <ktexteditor/movingrange.h>
 #include <KIO/NetAccess>
 #include <KActionCollection>
 

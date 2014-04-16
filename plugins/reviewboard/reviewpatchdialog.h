@@ -37,7 +37,7 @@ class ReviewPatchDialog : public KDialog
 {
     Q_OBJECT
     public:
-        ReviewPatchDialog(QWidget* parent = 0);
+        ReviewPatchDialog(const KUrl& dirUrl, QWidget* parent = 0);
         virtual ~ReviewPatchDialog();
 
         void setBaseDir(const QString& dir);
@@ -63,6 +63,8 @@ class ReviewPatchDialog : public KDialog
         void receivedProjects(KJob* job);
 
     private:
+        void initializeFromRC(const QString& filePath);
+
         Ui::ReviewPatch* m_ui;
         QString m_preferredRepository;
         QMultiHash<QString, QPair<QString, QVariant> > m_reviews;

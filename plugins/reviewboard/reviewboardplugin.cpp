@@ -31,6 +31,7 @@
 #include <KIO/Job>
 #include <KUrl>
 #include <QFile>
+#include <QDir>
 #include <interfaces/icore.h>
 #include <interfaces/ipatchsource.h>
 #include <interfaces/iruncontroller.h>
@@ -57,18 +58,20 @@ ReviewBoardPlugin::~ReviewBoardPlugin()
 
 void ReviewBoardPlugin::exportPatch(IPatchSource::Ptr source)
 {
+    KUrl dirUrl = source->baseDir();
     m_source = source;
-    ReviewPatchDialog d;
+    ReviewPatchDialog d(dirUrl);
 
-    IProject* p = ICore::self()->projectController()->findProjectForUrl(source->baseDir());
+    dirUrl.adjustPath(KUrl::RemoveTrailingSlash);
+    IProject* p = ICore::self()->projectController()->findProjectForUrl(dirUrl);
 
     if(p) {
         KConfigGroup versionedConfig = p->projectConfiguration()->group("ReviewBoard");
 
-        d.setServer(versionedConfig.readEntry<QUrl>("server", QUrl("https://git.reviewboard.kde.org")));
-        d.setUsername(versionedConfig.readEntry("username", QString()));
-        d.setBaseDir(versionedConfig.readEntry("baseDir", "/"));
-        d.setRepository(versionedConfig.readEntry("repository", QString()));
+        if(versionedConfig.hasKey("server")) d.setServer(versionedConfig.readEntry<QUrl>("server", QUrl()));
+        if(versionedConfig.hasKey("username")) d.setUsername(versionedConfig.readEntry("username", QString()));
+        if(versionedConfig.hasKey("baseDir")) d.setBaseDir(versionedConfig.readEntry("baseDir", "/"));
+        if(versionedConfig.hasKey("repository")) d.setRepository(versionedConfig.readEntry("repository", QString()));
     }
 
     int ret = d.exec();
