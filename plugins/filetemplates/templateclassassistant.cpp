@@ -46,7 +46,7 @@
 #include <project/projectmodel.h>
 #include <project/interfaces/iprojectfilemanager.h>
 #include <project/interfaces/ibuildsystemmanager.h>
-#include <KDE4Support/KDE/KDialog>
+#include <KDELibs4Support/KDE/KDialog>
 
 #include <KLocalizedString>
 #include <KConfig>

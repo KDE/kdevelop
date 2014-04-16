@@ -103,7 +103,7 @@ LINK_PRIVATE
 
 LINK_PUBLIC
     kdevplatforminterfaces
-    KF5::KDE4Support
+    KF5::KDELibs4Support
 )
 set_target_properties(kdevplatformshell PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
 

@@ -57,7 +57,7 @@ LINK_PUBLIC
     KF5::Parts
     KF5::TextEditor
     KF5::I18n
-    KF5::KDE4Support
+    KF5::KDELibs4Support
 LINK_PRIVATE
     KF5::NotifyConfig
     KF5::KIOWidgets

@@ -152,7 +152,7 @@ LINK_PRIVATE
         KF5::Parts
         KF5::NewStuff
         KF5::Archive
-        KF5::KDE4Support
+        KF5::KDELibs4Support
         kdevplatformutil
 #         ${Grantlee_CORE_LIBRARIES}
 )

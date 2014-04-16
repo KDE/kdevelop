@@ -21,7 +21,7 @@ target_link_libraries(interactiveDiffTest
     Qt5::Test
     
     KF5::Parts
-    KF5::KDE4Support
+    KF5::KDELibs4Support
 )
 
 set(levenshteinTest_SRCS
@@ -36,5 +36,5 @@ ecm_mark_as_test(levenshteintest)
 target_link_libraries(levenshteintest
     Qt5::Test
     Qt5::Core
-    KF5::KDE4Support
+    KF5::KDELibs4Support
 )

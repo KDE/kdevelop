@@ -30,9 +30,9 @@
 #include <KZip>
 #include <KTar>
 #include <KConfigGroup>
+#include <kcomponentdata.h>
 
 #include <QFileInfo>
-#include <KDE4Support/kcomponentdata.h>
 #include <QDomDocument>
 #include <QStandardPaths>
 #include <QDir>

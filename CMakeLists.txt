@@ -58,7 +58,7 @@ find_package(KF5 CONFIG REQUIRED COMPONENTS
   XmlGui
 
   # TODO KF5: Port away from this
-  KDE4Support
+  KDELibs4Support
 )
 
 #TODO KF5: Re-enable Grantlee (currently GrantleeConfig.cmake calls find_package(Qt4) internall
