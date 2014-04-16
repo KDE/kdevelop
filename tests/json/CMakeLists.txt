@@ -7,9 +7,11 @@ set(kdevplatformjsontests_LIB_SRCS
 )
 
 kde4_add_library(kdevplatformjsontests SHARED ${kdevplatformjsontests_LIB_SRCS})
-target_link_libraries(kdevplatformjsontests LINK_PUBLIC
-    ${QT_QTCORE_LIBRARY}
+target_link_libraries(kdevplatformjsontests
+  LINK_PRIVATE
     ${QJSON_LIBRARIES}
+  LINK_PUBLIC
+    ${QT_QTCORE_LIBRARY}
     kdevplatformlanguage
 )
 set_target_properties(kdevplatformjsontests PROPERTIES
