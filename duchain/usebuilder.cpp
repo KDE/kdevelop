@@ -33,7 +33,7 @@ bool UseBuilder::visit(QmlJS::AST::IdentifierExpression* node)
 {
     const RangeInRevision range(m_session->locationToRange(node->identifierToken));
     const QualifiedIdentifier id(node->name.toString());
-    const DeclarationPointer decl(QmlJS::getDeclaration(id, DUContextPointer(currentContext())));
+    const DeclarationPointer decl(QmlJS::getDeclaration(id, currentContext()));
 
     newUse(node, range, decl);
     const bool ret = UseBuilderBase::visit(node);

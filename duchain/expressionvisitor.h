@@ -21,6 +21,7 @@
 
 #include <QStack>
 
+#include <language/duchain/builders/dynamiclanguageexpressionvisitor.h>
 #include <language/duchain/types/integraltype.h>
 #include <language/duchain/ducontext.h>
 
@@ -28,13 +29,10 @@
 
 #include "duchainexport.h"
 
-class KDEVQMLJSDUCHAIN_EXPORT ExpressionVisitor : public QmlJS::AST::Visitor
+class KDEVQMLJSDUCHAIN_EXPORT ExpressionVisitor : public KDevelop::DynamicLanguageExpressionVisitor, public QmlJS::AST::Visitor
 {
 public:
     explicit ExpressionVisitor(KDevelop::DUContext* context);
-
-    KDevelop::AbstractType::Ptr lastType() const;
-    KDevelop::DeclarationPointer lastDeclaration() const;
 
     using Visitor::visit;
     using Visitor::endVisit;
@@ -54,14 +52,10 @@ protected:
     virtual bool visit(QmlJS::AST::CallExpression* node);
 
 private:
-    void setType(KDevelop::AbstractType::Ptr type);
-    void setType(KDevelop::IntegralType::CommonIntegralTypes type);
-    void setType(const QString &declaration);
+    using KDevelop::DynamicLanguageExpressionVisitor::encounter;
 
-private:
-    KDevelop::DUContext* m_context;
-    KDevelop::AbstractType::Ptr m_lastType;
-    KDevelop::DeclarationPointer m_lastDeclaration;
+    void encounter(KDevelop::IntegralType::CommonIntegralTypes type);
+    void encounter(const QString &declaration);
 
 };
 

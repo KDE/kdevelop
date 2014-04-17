@@ -38,7 +38,7 @@ using namespace KDevelop;
      * @note This method already acquires a read lock for the DUChain.
      */
     KDEVQMLJSDUCHAIN_EXPORT DeclarationPointer getDeclaration(const QualifiedIdentifier& id,
-                                                              const DUContextPointer& context);
+                                                              const DUContext* context);
 
 } // End of namespace QmlJS
 

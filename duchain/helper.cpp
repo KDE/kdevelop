@@ -27,7 +27,7 @@ namespace QmlJS
 {
 using namespace KDevelop;
 
-DeclarationPointer getDeclaration(const QualifiedIdentifier& id, const DUContextPointer& context)
+DeclarationPointer getDeclaration(const QualifiedIdentifier& id, const DUContext* context)
 {
     DUChainReadLocker lock;
     if (context) {

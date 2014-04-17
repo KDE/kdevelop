@@ -29,8 +29,8 @@
 
 using namespace KDevelop;
 
-ExpressionVisitor::ExpressionVisitor(DUContext* context) :
-    m_context(context)
+ExpressionVisitor::ExpressionVisitor(DUContext* context)
+: DynamicLanguageExpressionVisitor(context)
 {
 }
 
@@ -41,7 +41,7 @@ bool ExpressionVisitor::visit(QmlJS::AST::NumericLiteral* node)
 {
     int num_int_digits = (int)std::log10(node->value) + 1;
 
-    setType(
+    encounter(
         num_int_digits == (int)node->literalToken.length ?
             IntegralType::TypeInt :
             IntegralType::TypeDouble
@@ -51,19 +51,19 @@ bool ExpressionVisitor::visit(QmlJS::AST::NumericLiteral* node)
 
 bool ExpressionVisitor::visit(QmlJS::AST::StringLiteral*)
 {
-    setType(IntegralType::TypeString);
+    encounter(IntegralType::TypeString);
     return false;
 }
 
 bool ExpressionVisitor::visit(QmlJS::AST::TrueLiteral*)
 {
-    setType(IntegralType::TypeBoolean);
+    encounter(IntegralType::TypeBoolean);
     return false;
 }
 
 bool ExpressionVisitor::visit(QmlJS::AST::FalseLiteral*)
 {
-    setType(IntegralType::TypeBoolean);
+    encounter(IntegralType::TypeBoolean);
     return false;
 }
 
@@ -72,13 +72,13 @@ bool ExpressionVisitor::visit(QmlJS::AST::FalseLiteral*)
  */
 bool ExpressionVisitor::visit(QmlJS::AST::ArrayLiteral*)
 {
-    setType(AbstractType::Ptr(new IntegralType(IntegralType::TypeArray)));
+    encounter(AbstractType::Ptr(new IntegralType(IntegralType::TypeArray)));
     return false;
 }
 
 bool ExpressionVisitor::visit(QmlJS::AST::ObjectLiteral*)
 {
-    setType(AbstractType::Ptr(new StructureType));
+    encounter(AbstractType::Ptr(new StructureType));
     return false;
 }
 
@@ -94,7 +94,7 @@ bool ExpressionVisitor::visit(QmlJS::AST::BinaryExpression* node)
     case QSOperator::LShift:
     case QSOperator::RShift:
     case QSOperator::URShift:
-        setType(IntegralType::TypeInt);
+        encounter(IntegralType::TypeInt);
         break;
     case QSOperator::And:
     case QSOperator::Equal:
@@ -107,7 +107,7 @@ bool ExpressionVisitor::visit(QmlJS::AST::BinaryExpression* node)
     case QSOperator::Or:
     case QSOperator::StrictEqual:
     case QSOperator::StrictNotEqual:
-        setType(IntegralType::TypeBoolean);
+        encounter(IntegralType::TypeBoolean);
         break;
     default:
         break;
@@ -118,7 +118,7 @@ bool ExpressionVisitor::visit(QmlJS::AST::BinaryExpression* node)
 
 bool ExpressionVisitor::visit(QmlJS::AST::IdentifierExpression* node)
 {
-    setType(node->name.toString());
+    encounter(node->name.toString());
     return false;
 }
 
@@ -137,7 +137,7 @@ bool ExpressionVisitor::visit(QmlJS::AST::FunctionExpression* node)
     )->owner();
 
     if (dec && dec->abstractType()) {
-        setType(dec->abstractType());
+        encounter(dec->abstractType());
     }
 
     return false;
@@ -151,41 +151,23 @@ bool ExpressionVisitor::visit(QmlJS::AST::CallExpression* node)
     FunctionType::Ptr func = FunctionType::Ptr::dynamicCast(m_lastType);
 
     if (func && func->returnType()) {
-        setType(func->returnType());
+        encounter(func->returnType());
     }
 
     return false;
 }
 
-void ExpressionVisitor::setType(AbstractType::Ptr type)
+void ExpressionVisitor::encounter(IntegralType::CommonIntegralTypes type)
 {
-    m_lastType = type;
+    encounter(AbstractType::Ptr(new IntegralType(type)));
 }
 
-void ExpressionVisitor::setType(IntegralType::CommonIntegralTypes type)
-{
-    m_lastType = AbstractType::Ptr(new IntegralType(type));
-}
-
-void ExpressionVisitor::setType(const QString& declaration)
+void ExpressionVisitor::encounter(const QString& declaration)
 {
     const QualifiedIdentifier name(declaration);
-    DeclarationPointer dec = QmlJS::getDeclaration(name, DUContextPointer(m_context));
+    DeclarationPointer dec = QmlJS::getDeclaration(name, m_context);
 
     if (dec && dec->abstractType()) {
-        setType(dec->abstractType());
-        m_lastDeclaration = dec;
+        encounterLvalue(dec);
     }
-}
-
-AbstractType::Ptr ExpressionVisitor::lastType() const
-{
-    return m_lastType ?
-        m_lastType :
-        AbstractType::Ptr(new IntegralType(IntegralType::TypeMixed));
-}
-
-DeclarationPointer ExpressionVisitor::lastDeclaration() const
-{
-    return m_lastDeclaration;
 }
