@@ -55,6 +55,8 @@ public:
       void modify();
       void selectionChanged();
       void knsUpdate(KNS3::Entry::List list);
+      void chooseSearchDir();
+      void searchDirChanged();
 
     private:
       Ui::QtHelpConfigUI* m_configWidget;

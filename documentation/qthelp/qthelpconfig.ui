@@ -23,43 +23,70 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
-         <widget class="QTreeWidget" name="qchTable">
-          <property name="editTriggers">
-           <set>QAbstractItemView::NoEditTriggers</set>
+         <layout class="QVBoxLayout" name="verticalLayout_5">
+          <property name="spacing">
+           <number>1</number>
           </property>
-          <property name="rootIsDecorated">
-           <bool>false</bool>
+          <property name="leftMargin">
+           <number>0</number>
           </property>
-          <property name="wordWrap">
-           <bool>false</bool>
-          </property>
-          <property name="showGrid" stdset="0">
-           <bool>false</bool>
-          </property>
-          <attribute name="headerVisible">
-           <bool>true</bool>
-          </attribute>
-          <column>
-           <property name="text">
-            <string>Name</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Path</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string notr="true">IconName</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string notr="true">Ghns</string>
-           </property>
-          </column>
-         </widget>
+          <item>
+           <widget class="QTreeWidget" name="qchTable">
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
+            <property name="rootIsDecorated">
+             <bool>false</bool>
+            </property>
+            <property name="wordWrap">
+             <bool>false</bool>
+            </property>
+            <property name="showGrid" stdset="0">
+             <bool>false</bool>
+            </property>
+            <attribute name="headerVisible">
+             <bool>true</bool>
+            </attribute>
+            <column>
+             <property name="text">
+              <string>Name</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Path</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string notr="true">IconName</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string notr="true">Ghns</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QLineEdit" name="qchSearchDir">
+              <property name="text">
+               <string/>
+              </property>
+              <property name="placeholderText">
+               <string>Search qch files in directory...</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
         </item>
         <item>
          <layout class="QVBoxLayout" name="verticalLayout">
@@ -110,6 +137,13 @@
              </size>
             </property>
            </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="qchSearchDirButton">
+            <property name="text">
+             <string>Choose dir</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>

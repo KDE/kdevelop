@@ -24,8 +24,10 @@
 #include <kpluginloader.h>
 #include <KAboutData>
 #include <KSettings/Dispatcher>
+#include <KDebug>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentationcontroller.h>
+#include <QDirIterator>
 #include "qthelpprovider.h"
 #include "qthelpqtdoc.h"
 #include "qthelp_config_shared.h"
@@ -59,8 +61,10 @@ void QtHelpPlugin::readConfig()
 {
     QStringList iconList, nameList, pathList, ghnsList;
     bool loadQtDoc;
-    qtHelpReadConfig(iconList, nameList, pathList, ghnsList, loadQtDoc);
+    QString searchDir;
+    qtHelpReadConfig(iconList, nameList, pathList, ghnsList, searchDir, loadQtDoc);
 
+    searchHelpDirectory(pathList, nameList, iconList, searchDir);
     loadQtHelpProvider(pathList, nameList, iconList);
     loadQtDocumentation(loadQtDoc);
 
@@ -76,6 +80,22 @@ void QtHelpPlugin::loadQtDocumentation(bool loadQtDoc)
         m_qtDoc = new QtHelpQtDoc(this, QVariantList());
     }
 }
+
+void QtHelpPlugin::searchHelpDirectory(QStringList& pathList, QStringList& nameList, QStringList& iconList, const QString& searchDir)
+{
+    kDebug() << "Searching qch files in: " << searchDir;
+    QDirIterator dirIt(searchDir, QStringList() << "*.qch", QDir::Files, QDirIterator::Subdirectories);
+    const QString logo("qtlogo");
+    while(dirIt.hasNext() == true)
+    {
+        dirIt.next();
+        kDebug() << "qch found: " << dirIt.filePath();
+        pathList.append(dirIt.filePath());
+        nameList.append(dirIt.fileInfo().baseName());
+        iconList.append(logo);
+    }
+}
+
 
 void QtHelpPlugin::loadQtHelpProvider(QStringList pathList, QStringList nameList, QStringList iconList)
 {
