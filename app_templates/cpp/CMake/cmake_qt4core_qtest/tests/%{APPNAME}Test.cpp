@@ -1,5 +1,4 @@
 #include "%{APPNAME}Test.h"
-#include <QtTest/QTest>
 
 void %{APPNAMEID}Test::initTestCase()
 {}
@@ -18,6 +17,6 @@ void %{APPNAMEID}Test::someTest()
     QCOMPARE(1,2);
 }
 
-
 QTEST_MAIN(%{APPNAMEID}Test)
+
 #include "%{APPNAME}Test.moc"

@@ -5,6 +5,6 @@
 int main(int argc, char** argv)
 {
     QCoreApplication app(argc, argv);
-    %{APPNAMEID} foo;
+    %{APPNAMEID} %{APPNAMELC};
     return app.exec();
 }

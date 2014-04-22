@@ -5,7 +5,8 @@
 
 class %{APPNAMEID} : public QMainWindow
 {
-Q_OBJECT
+    Q_OBJECT
+
 public:
     %{APPNAMEID}();
     virtual ~%{APPNAMEID}();
