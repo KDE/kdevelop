@@ -137,6 +137,7 @@ public:
     
     bool hasStashes(const QDir& repository);
     bool hasModifications(const QDir& repository);
+    bool hasModifications(const QDir& repo, const KUrl& file);
 
     virtual bool hasError() const;
     virtual QString errorDescription() const;
