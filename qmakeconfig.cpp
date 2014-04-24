@@ -44,6 +44,13 @@ using namespace KDevelop;
 ///NOTE: KConfig is not thread safe
 QMutex s_buildDirMutex;
 
+bool QMakeConfig::isConfigured(const IProject* project)
+{
+    QMutexLocker lock(&s_buildDirMutex);
+    KConfigGroup cg(project->projectConfiguration(), CONFIG_GROUP);
+    return cg.exists() && cg.hasKey(QMAKE_BINARY) && cg.hasKey(BUILD_FOLDER);
+}
+
 Path QMakeConfig::buildDirFromSrc(const IProject* project, const Path& srcDir)
 {
     QMutexLocker lock(&s_buildDirMutex);

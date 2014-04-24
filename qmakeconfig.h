@@ -40,6 +40,11 @@ public:
         *ALL_BUILDS;
 
     /**
+     * Returns true when the given project is sufficiently configured.
+     */
+    static bool isConfigured(const KDevelop::IProject* project);
+
+    /**
      * Returns the directory where srcDir will be built.
      * srcDir must contain a *.pro file !
      */

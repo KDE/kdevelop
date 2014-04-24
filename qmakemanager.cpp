@@ -532,6 +532,9 @@ void QMakeProjectManager::slotRunQMake()
 
 bool QMakeProjectManager::projectNeedsConfiguration(IProject* project)
 {
+    if (!QMakeConfig::isConfigured(project)) {
+        return true;
+    }
     const QString qmakeBinary = QMakeConfig::qmakeBinary( project );
     if (qmakeBinary.isEmpty()) {
         return true;
