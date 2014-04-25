@@ -7,7 +7,7 @@ add_library(kdevclangcodecompletion OBJECT
     model.cpp
     context.cpp
     navigationwidget.cpp
-    overridecompletionhelper.cpp
+    completionhelper.cpp
 )
 set_target_properties(kdevclangcodecompletion PROPERTIES
     AUTOMOC TRUE

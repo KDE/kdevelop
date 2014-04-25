@@ -19,15 +19,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef OVERRIDECOMPLETIONHELPER_H
-#define OVERRIDECOMPLETIONHELPER_H
+#ifndef COMPLETIONHELPER_H
+#define COMPLETIONHELPER_H
 
 #include <clang-c/Index.h>
-#include <language/editor/simplecursor.h>
 #include <QStringList>
+#include <QVector>
 #include "codecompletionexport.h"
 
-struct FunctionInfo
+struct FuncOverrideInfo
 {
     QString returnType;
     QString name;
@@ -36,19 +36,36 @@ struct FunctionInfo
     bool isConst;
 };
 
-Q_DECLARE_TYPEINFO(FunctionInfo, Q_MOVABLE_TYPE);
-using FunctionInfoList = QVector<FunctionInfo>;
-
-class KDEVCLANGCODECOMPLETION_EXPORT OverrideCompletionHelper
+struct FuncImplementInfo
 {
-public:
-    OverrideCompletionHelper(const CXTranslationUnit& unit,
-                             const KDevelop::SimpleCursor& position,
-                             const char *filename);
-
-    FunctionInfoList getOverrides();
-private:
-    FunctionInfoList m_overrides;
+    bool isConstructor;
+    bool isDestructor;
+    QString templatePrefix;
+    QString returnType;
+    QString prototype;
 };
 
-#endif //OVERRIDECOMPLETIONHELPER_H
+namespace KDevelop {
+    class SimpleCursor;
+}
+
+Q_DECLARE_TYPEINFO(FuncOverrideInfo, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(FuncImplementInfo, Q_MOVABLE_TYPE);
+using FunctionOverrideList = QVector<FuncOverrideInfo>;
+using FunctionImplementsList = QVector<FuncImplementInfo>;
+
+class KDEVCLANGCODECOMPLETION_EXPORT CompletionHelper
+{
+public:
+    CompletionHelper(const CXTranslationUnit& unit,
+                     const KDevelop::SimpleCursor& position,
+                     const char *filename);
+
+    FunctionOverrideList overrides() const;
+    FunctionImplementsList implements() const;
+private:
+    FunctionOverrideList m_overrides;
+    FunctionImplementsList m_implements;
+};
+
+#endif //COMPLETIONHELPER_H

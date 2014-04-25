@@ -36,6 +36,7 @@
 
 #include "../duchain/parsesession.h"
 #include "../duchain/clangtypes.h"
+#include "../duchain/cursorkindtraits.h"
 
 #include "../debug.h"
 
@@ -106,6 +107,31 @@ public:
         if (role == Qt::DecorationRole) {
             if (index.column() == KTextEditor::CodeCompletionModel::Icon) {
                 static QIcon icon(KIcon("CTparents"));
+                return icon;
+            }
+        }
+        return CompletionItem<CompletionTreeItem>::data(index, role, model);
+    }
+};
+
+class ImplementsItem : public CompletionItem<CompletionTreeItem>
+{
+public:
+    ImplementsItem(FuncImplementInfo& item)
+        : CompletionItem<KDevelop::CompletionTreeItem>(
+              item.prototype,
+              i18n("Implement %1", item.isConstructor ? "<constructor>" :
+                                   item.isDestructor ? "<destructor>" : item.returnType),
+              item.templatePrefix + (!item.isDestructor && !item.isConstructor ? item.returnType + ' ' : "") + item.prototype + "\n{\n}\n"
+          )
+    {
+    }
+
+    QVariant data(const QModelIndex& index, int role, const CodeCompletionModel* model) const override
+    {
+        if (role == Qt::DecorationRole) {
+            if (index.column() == KTextEditor::CodeCompletionModel::Icon) {
+                static QIcon icon(KIcon("CTsuppliers"));
                 return icon;
             }
         }
@@ -206,7 +232,7 @@ ClangCodeCompletionContext::ClangCodeCompletionContext(const ParseSession* const
                                                       )
     : CodeCompletionContext({}, QString(), {}, 0)
     , m_results(nullptr, clang_disposeCodeCompleteResults)
-    , m_overrides(session->unit(), position, ClangString(clang_getFileName(session->file())).c_str())
+    , m_completionHelper(session->unit(), position, ClangString(clang_getFileName(session->file())).c_str())
 {
     ClangString file(clang_getFileName(session->file()));
 
@@ -231,6 +257,7 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(con
 {
     QList<CompletionTreeItemPointer> items;
     QList<CompletionTreeItemPointer> overrides;
+    QList<CompletionTreeItemPointer> implements;
     QList<CompletionTreeItemPointer> macros;
     QList<CompletionTreeItemPointer> builtin;
 
@@ -360,11 +387,12 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(con
         }
     }
 
-    auto overrideList = m_overrides.getOverrides();
+    auto overrideList = m_completionHelper.overrides();
+    auto implementsList = m_completionHelper.implements();
 
     if (!overrideList.isEmpty()) {
         for (int i = 0; i < overrideList.count(); i++) {
-            FunctionInfo info = overrideList.at(i);
+            FuncOverrideInfo info = overrideList.at(i);
             QString nameAndParams = info.name + '(' + info.params.join(", ") + ')';
             if(info.isConst)
                 nameAndParams = nameAndParams + " const";
@@ -374,6 +402,15 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(con
         }
         KDevelop::CompletionCustomGroupNode* node = new KDevelop::CompletionCustomGroupNode(i18n("Virtual Override"), 600);
         node->appendChildren(overrides);
+        m_ungrouped << CompletionTreeElementPointer(node);
+    }
+
+    if (!implementsList.isEmpty()) {
+        foreach(FuncImplementInfo info, implementsList) {
+            implements << CompletionTreeItemPointer(new ImplementsItem(info));
+        }
+        KDevelop::CompletionCustomGroupNode* node = new KDevelop::CompletionCustomGroupNode(i18n("Implement Function"), 600);
+        node->appendChildren(implements);
         m_ungrouped << CompletionTreeElementPointer(node);
     }
 

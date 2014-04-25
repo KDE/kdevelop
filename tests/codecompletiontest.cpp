@@ -29,7 +29,7 @@
 #include <duchain/parsesession.h>
 #include <duchain/clangtypes.h>
 #include <language/codecompletion/codecompletiontesthelper.h>
-#include <codecompletion/overridecompletionhelper.h>
+#include <codecompletion/completionhelper.h>
 
 QTEST_KDEMAIN(CodeCompletionTest, NoGUI);
 
@@ -47,113 +47,260 @@ void CodeCompletionTest::cleanupTestCase()
     TestCore::shutdown();
 }
 
-QString formatFunctionInfo(const FunctionInfo& info)
+QString formatFuncOverrideInfo(const FuncOverrideInfo& info)
 {
     return QString(info.returnType + ' ' + info.name + '(' + info.params.join(", ") +
                     ')' + (info.isConst ? " const" : "") + (info.isVirtual ? " = 0" : ""));
 }
 
-void CodeCompletionTest::testVirtualOverrideNonTemplate() {
-    TestFile file("class Foo { virtual void foo(); virtual char foo(char c, int i, double d); };\n"
-                  "class Bar : Foo \n{\n}","h");
+QString formatFuncImplementInfo(const FuncImplementInfo& info)
+{
+    return QString(info.templatePrefix + (!info.isDestructor && !info.isConstructor ? info.returnType + ' ' : "") + info.prototype);
+}
+
+namespace {
+    struct TestInfo {
+        SimpleCursor position;
+        QStringList completions;
+    };
+}
+
+using TestList = QList<TestInfo>;
+Q_DECLARE_TYPEINFO(TestInfo, Q_MOVABLE_TYPE);
+
+void runOverrideTest(QString fileContents, QString extension, TestList expected)
+{
+    TestFile file(fileContents, extension);
 
     ClangIndex index;
     ParseSession session(IndexedString(file.url()), file.fileContents().toUtf8(), &index);
 
-    SimpleCursor position(2,1);
-    OverrideCompletionHelper overrides(session.unit(), position, file.url().c_str());
+    foreach(TestInfo test, expected) {
+        CompletionHelper overrides(session.unit(), test.position, file.url().c_str());
 
-    QCOMPARE(overrides.getOverrides().count(),2);
-    QCOMPARE(formatFunctionInfo(overrides.getOverrides().at(0)),QString("void foo()"));
-    QCOMPARE(formatFunctionInfo(overrides.getOverrides().at(1)),QString("char foo(char c, int i, double d)"));
+        foreach(FuncOverrideInfo info, overrides.overrides()) {
+            QString result = formatFuncOverrideInfo(info);
+            if(!test.completions.removeOne(result)) {
+                QFAIL(QString("Did not expect " + result).toStdString().c_str());
+            }
+        }
+        if(test.completions.count() != 0) {
+            QFAIL(QString("Did not find: " + test.completions.join(";")).toStdString().c_str());
+        }
+    }
+}
+
+void runImplementsTest(QString fileContents, QString extension, TestList expected)
+{
+    TestFile file(fileContents, extension);
+
+    ClangIndex index;
+    ParseSession session(IndexedString(file.url()), file.fileContents().toUtf8(), &index);
+
+    foreach(TestInfo test, expected) {
+        CompletionHelper overrides(session.unit(), test.position, file.url().c_str());
+
+        foreach(FuncImplementInfo info, overrides.implements()) {
+            QString result = formatFuncImplementInfo(info);
+            if(!test.completions.removeOne(result)) {
+                QFAIL(QString("Did not expect " + result).toStdString().c_str());
+            }
+        }
+        if(test.completions.count() != 0) {
+            QFAIL(QString("Did not find: " + test.completions.join(";")).toStdString().c_str());
+        }
+    }
+}
+
+void CodeCompletionTest::testVirtualOverrideNonTemplate() {
+    QString file("class Foo { virtual void foo(); virtual char foo(char c, int i, double d); };\n"
+                 "class Bar : Foo \n{\n}");
+    auto expected = {QString("void foo()"), QString("char foo(char c, int i, double d)")};
+    TestInfo info{SimpleCursor(3, 1), QStringList(expected)};
+    runOverrideTest(file, "h", QList<TestInfo>({info}));
 }
 
 void CodeCompletionTest::testVirtualOverrideTemplate() {
-    TestFile file("template<class T1, class T2> class Foo { virtual T2 foo(T1 a, T2 b, int i); } ;\n"
-                  "class Bar : Foo<char,double> \n{\n}","h");
-
-    ClangIndex index;
-    ParseSession session(IndexedString(file.url()), file.fileContents().toUtf8(), &index);
-
-    SimpleCursor position(2,1);
-    OverrideCompletionHelper overrides(session.unit(), position, file.url().c_str());
-
-    QCOMPARE(overrides.getOverrides().count(),1);
-    QCOMPARE(formatFunctionInfo(overrides.getOverrides().at(0)),QString("double foo(char a, double b, int i)"));
+    QString file("template<class T1, class T2> class Foo { virtual T2 foo(T1 a, T2 b, int i); } ;\n"
+                 "class Bar : Foo<char, double> \n{\n}");
+    auto expected = { QString("double foo(char a, double b, int i)") };
+    runOverrideTest(file, "h", QList<TestInfo>({TestInfo{SimpleCursor(3, 1), QStringList(expected)}}));
 }
 
 void CodeCompletionTest::testVirtualOverrideNestedTemplate() {
-    TestFile file("template<class T1, class T2> class Foo { virtual T2 foo(T1 a, T2 b, int i); } ; "
-                  "template<class T1, class T2> class Baz { };"
-                  "class Bar : Foo<char,Baz<char,double>> \n{\n}","h");
-
-    ClangIndex index;
-    ParseSession session(IndexedString(file.url()), file.fileContents().toUtf8(), &index);
-
-    SimpleCursor position(2,1);
-    OverrideCompletionHelper overrides(session.unit(), position, file.url().c_str());
-
-    QCOMPARE(overrides.getOverrides().count(),1);
-    QCOMPARE(formatFunctionInfo(overrides.getOverrides().at(0)),QString("Baz<char, double> foo(char a, Baz<char, double> b, int i)"));
+    QString file("template<class T1, class T2> class Foo { virtual T2 foo(T1 a, T2 b, int i); } ;\n"
+                 "template<class T1, class T2> class Baz { };\n"
+                 "class Bar : Foo<char, Baz<char, double>> \n{\n}");
+    auto expected = { QString("Baz<char, double> foo(char a, Baz<char, double> b, int i)") };
+    runOverrideTest(file, "h", QList<TestInfo>({TestInfo{SimpleCursor(4, 1), QStringList(expected)}}));
 }
 
 void CodeCompletionTest::testVirtualOverrideMulti() {
-    TestFile file("class Foo { virtual int foo(int i); } ;"
-                  "class Baz { virtual char baz(char c); };"
-                  "class Bar : Foo, Baz \n{\n}","h");
-
-    ClangIndex index;
-    ParseSession session(IndexedString(file.url()), file.fileContents().toUtf8(), &index);
-
-    SimpleCursor position(2,1);
-    OverrideCompletionHelper overrides(session.unit(), position, file.url().c_str());
-
-    QCOMPARE(overrides.getOverrides().count(),2);
-    QCOMPARE(formatFunctionInfo(overrides.getOverrides().at(0)),QString("int foo(int i)"));
-    QCOMPARE(formatFunctionInfo(overrides.getOverrides().at(1)),QString("char baz(char c)"));
+    QString file("class Foo { virtual int foo(int i); };\n"
+                 "class Baz { virtual char baz(char c); };\n"
+                 "class Bar : Foo, Baz \n{\n}");
+    auto expected = { QString("int foo(int i)"), QString("char baz(char c)") };
+    runOverrideTest(file, "h", QList<TestInfo>({TestInfo{SimpleCursor(4, 1), QStringList(expected)}}));
 }
 
 void CodeCompletionTest::testVirtualOverrideDeep() {
-    TestFile file("class Foo { virtual int foo(int i); } ;"
-                  "class Baz : Foo { };"
-                  "class Bar : Baz \n{\n}","h");
-
-    ClangIndex index;
-    ParseSession session(IndexedString(file.url()), file.fileContents().toUtf8(), &index);
-
-    SimpleCursor position(2,1);
-    OverrideCompletionHelper overrides(session.unit(), position, file.url().c_str());
-
-    QCOMPARE(overrides.getOverrides().count(),1);
-    QCOMPARE(formatFunctionInfo(overrides.getOverrides().at(0)),QString("int foo(int i)"));
+    QString file("class Foo { virtual int foo(int i); };\n"
+                 "class Baz : Foo { };\n"
+                 "class Bar : Baz \n{\n}");
+    auto expected = { QString("int foo(int i)") };
+    runOverrideTest(file, "h", QList<TestInfo>({TestInfo{SimpleCursor(4, 1), QStringList(expected)}}));
 }
 
 void CodeCompletionTest::testVirtualOverridePure() {
-    TestFile file("class Foo { virtual void foo() = 0; foo() {} };"
-                  "class Bar : Foo \n{\n}","h");
-
-    ClangIndex index;
-    ParseSession session(IndexedString(file.url()), file.fileContents().toUtf8(), &index);
-
-    SimpleCursor position(2,1);
-    OverrideCompletionHelper overrides(session.unit(), position, file.url().c_str());
-
-    QCOMPARE(overrides.getOverrides().count(),1);
-    QCOMPARE(formatFunctionInfo(overrides.getOverrides().at(0)),QString("void foo() = 0"));
+    QString file("class Foo { virtual void foo() = 0; foo() {} };\n"
+                 "class Bar : Foo \n{\n}");
+    auto expected = { QString("void foo() = 0") };
+    runOverrideTest(file, "h", QList<TestInfo>({TestInfo{SimpleCursor(3, 1), QStringList(expected)}}));
 }
 
 void CodeCompletionTest::testVirtualOverrideConst() {
-    TestFile file("class Foo { virtual void foo(const int b) const; };"
-                  "class Bar : Foo \n{\n}","h");
-
-    ClangIndex index;
-    ParseSession session(IndexedString(file.url()), file.fileContents().toUtf8(), &index);
-
-    SimpleCursor position(2,1);
-    OverrideCompletionHelper overrides(session.unit(), position, file.url().c_str());
-
-    QCOMPARE(overrides.getOverrides().count(),1);
-    QCOMPARE(formatFunctionInfo(overrides.getOverrides().at(0)),QString("void foo(const int b) const"));
+    QString file("class Foo { virtual void foo(const int b) const; }\n;"
+                 "class Bar : Foo \n{\n}");
+    auto expected = { QString("void foo(const int b) const") };
+    runOverrideTest(file, "h", QList<TestInfo>({TestInfo{SimpleCursor(3, 1), QStringList(expected)}}));
 }
+
+void CodeCompletionTest::testImplementBasic()
+{
+    QString file("int foo(char c, int i); \n"
+                 "\n");
+    auto expected = { QString("int foo(char c, int i)") };
+    runImplementsTest(file, "cpp", QList<TestInfo>({TestInfo{SimpleCursor(1, 0), QStringList(expected)}}));
+}
+
+void CodeCompletionTest::testImplementClass()
+{
+    QString file("class Foo { \n"
+                 "int bar(char c, int i); \n\n"
+                 "}; \n");
+    auto expected = { QString("int Foo::bar(char c, int i)") };
+    runImplementsTest(file, "cpp", QList<TestInfo>({TestInfo{SimpleCursor(2, 0), QStringList()},
+                                                    TestInfo{SimpleCursor(4, 0), QStringList(expected)}}));
+}
+
+void CodeCompletionTest::testImplementNamespace()
+{
+    QString file("namespace Foo { \n"
+                 "int bar(char c, int i); \n\n"
+                 "}; \n");
+    auto expected1 = { QString("int bar(char c, int i)") };
+    auto expected2 = { QString("int Foo::bar(char c, int i)") };
+    runImplementsTest(file, "cpp", QList<TestInfo>({TestInfo{SimpleCursor(2, 0), QStringList(expected1)},
+                                                    TestInfo{SimpleCursor(4, 0), QStringList(expected2)}}));
+}
+
+void CodeCompletionTest::testImplementTwoNamespace()
+{
+    QString file("namespace Foo { \n"
+                 "int bar(char c, int i); \n"
+                 "}; \n"
+                 "namespace Foo { \n\n"
+                 "}; \n\n");
+    auto expected = { QString("int bar(char c, int i)") };
+    runImplementsTest(file, "cpp", QList<TestInfo>({TestInfo{SimpleCursor(4, 0), QStringList(expected)}}));
+}
+
+void CodeCompletionTest::testImplementDestructor()
+{
+    QString file("class Foo { \n"
+                 "~Foo(); \n"
+                 "}; \n");
+    auto expected = { QString("Foo::~Foo()") };
+    runImplementsTest(file, "cpp", QList<TestInfo>({TestInfo{SimpleCursor(3, 1), QStringList(expected)}}));
+}
+
+void CodeCompletionTest::testImplementConstructor()
+{
+    QString file("class Foo { \n"
+                 "Foo(int i); \n"
+                 "}; \n");
+    auto expected = { QString("Foo::Foo(int i)") };
+    runImplementsTest(file, "cpp", QList<TestInfo>({TestInfo{ SimpleCursor(3, 1), QStringList(expected)}}));
+}
+
+void CodeCompletionTest::testImplementTemplate()
+{
+    QString file("template<typename T> class Foo { \n"
+                 "T bar(T t); \n"
+                 "}; \n");
+    auto expected = { QString("template<typename T> T Foo<T>::bar(T t)") };
+    runImplementsTest(file, "cpp", QList<TestInfo>({TestInfo{ SimpleCursor(3, 1), QStringList(expected)}}));
+}
+
+void CodeCompletionTest::testImplementSpecializedTemplate()
+{
+    QString file("template<typename T> class Foo { \n"
+                 "T bar(T t); \n"
+                 "}; \n"
+                 "template<typename T> T Foo<T>::bar(T t){} \n"
+                 "template<> class Foo<int> { \n"
+                 "int bar(int t); \n"
+                 "}\n");
+    auto expected = { QString("int Foo<int>::bar(int t)") };
+    runImplementsTest(file, "cpp", QList<TestInfo>({TestInfo{ SimpleCursor(6, 1), QStringList(expected)}}));
+}
+
+void CodeCompletionTest::testImplementNestedClass()
+{
+    QString file("class Foo { \n"
+                 "class Bar { \n"
+                 "int baz(char c, int i); \n\n"
+                 "}; \n\n"
+                 "}; \n\n");
+    auto expected = { QString("int Foo::Bar::baz(char c, int i)") };
+    runImplementsTest(file, "cpp", QList<TestInfo>({TestInfo{SimpleCursor(3, 1), QStringList()},
+                                                    TestInfo{SimpleCursor(5, 1), QStringList()},
+                                                    TestInfo{SimpleCursor(7, 1), QStringList(expected)}}));
+}
+
+void CodeCompletionTest::testImplementNestedNamespace()
+{
+    QString file("namespace Foo { \n"
+                 "namespace Bar { \n"
+                 "int baz(char c, int i); \n\n"
+                 "}; \n\n"
+                 "}; \n\n");
+    auto expected1 = { QString("int baz(char c, int i)") };
+    auto expected2 = { QString("int Bar::baz(char c, int i)") };
+    auto expected3 = { QString("int Foo::Bar::baz(char c, int i)") };
+    runImplementsTest(file, "cpp", QList<TestInfo>({TestInfo{SimpleCursor(3, 1), QStringList(expected1)},
+                                                    TestInfo{SimpleCursor(5, 1), QStringList(expected2)},
+                                                    TestInfo{SimpleCursor(7, 1), QStringList(expected3)}}));
+}
+
+void CodeCompletionTest::testImplementPartialTemplate()
+{
+    QString file("template<typename T> class Foo { \n"
+                 "template<typename U> class Bar; \n"
+                 "template<typename U> class Bar<U*> { \n"
+                 "void baz(T t, U u); \n"
+                 "}; \n"
+                 "}; \n");
+    auto expected = { QString("template<typename T> template<typename U> void Foo<T>::Bar<U *>::baz(T t, U u)") };
+    runImplementsTest(file, "cpp", QList<TestInfo>({TestInfo{ SimpleCursor(6, 1), QStringList(expected)}}));
+}
+
+void CodeCompletionTest::testImplementVariadic()
+{
+    QString file("int foo(...); \n"
+                 "int bar(int i, ...); \n");
+    auto expected = { QString("int foo(...)"), QString("int bar(int i, ...)") };
+    runImplementsTest(file, "cpp", QList<TestInfo>({TestInfo{ SimpleCursor(2, 1), QStringList(expected)}}));
+}
+
+void CodeCompletionTest::testImplementConst()
+{
+    QString file("class Foo { \n"
+                 "int bar() const; \n"
+                 "}; \n");
+    auto expected = { QString("int Foo::bar() const") };
+    runImplementsTest(file, "cpp", QList<TestInfo>({TestInfo{ SimpleCursor(3, 1), QStringList(expected)}}));
+}
+
 
 #include "codecompletiontest.moc"

@@ -38,6 +38,20 @@ private slots:
     void testVirtualOverrideDeep();
     void testVirtualOverridePure();
     void testVirtualOverrideConst();
+
+    void testImplementConstructor();
+    void testImplementDestructor();
+    void testImplementTemplate();
+    void testImplementSpecializedTemplate();
+    void testImplementPartialTemplate();
+    void testImplementNamespace();
+    void testImplementTwoNamespace();
+    void testImplementBasic();
+    void testImplementClass();
+    void testImplementNestedClass();
+    void testImplementNestedNamespace();
+    void testImplementConst();
+    void testImplementVariadic();
 };
 
 #endif // DUCHAINTEST_H
