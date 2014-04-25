@@ -28,6 +28,7 @@
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/parsingenvironment.h>
+#include <language/interfaces/idefinesandincludesmanager.h>
 #include <interfaces/ilanguage.h>
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
@@ -121,6 +122,10 @@ ClangParseJob::ClangParseJob(const IndexedString& url, ILanguageSupport* languag
         m_includes = bsm->includeDirectories(item);
         m_defines = bsm->defines(item);
     }
+
+    auto* idm = KDevelop::IDefinesAndIncludesManager::manager();
+    m_includes += idm->includes(item);
+    m_defines.unite(idm->defines(item));
 }
 
 ClangSupport* ClangParseJob::clang() const

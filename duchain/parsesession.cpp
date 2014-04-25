@@ -28,6 +28,7 @@
 #include "debug.h"
 
 #include <KMimeType>
+#include <QFileInfo>
 
 using namespace KDevelop;
 
@@ -114,7 +115,14 @@ ParseSession::ParseSession(const IndexedString& url, const QByteArray& contents,
     QVector<QByteArray> otherArgs;
     otherArgs.reserve(includes.size() + defines.size() + pchInclude.isValid());
     foreach (const Path& url, includes) {
-        QByteArray path = QString("-I" + url.toLocalFile()).toUtf8();
+        QFileInfo info(url.toLocalFile());
+        QByteArray path = url.toLocalFile().toUtf8();
+
+        if (info.isFile()) {
+            path.prepend("-include");
+        } else {
+            path.prepend("-I");
+        }
         otherArgs << path;
         args << path.constData();
     }
