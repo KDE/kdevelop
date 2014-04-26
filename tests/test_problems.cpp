@@ -28,7 +28,6 @@
 
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
-#include <tests/json/declarationvalidator.h>
 #include <interfaces/ilanguagecontroller.h>
 
 #include <qtest_kde.h>
