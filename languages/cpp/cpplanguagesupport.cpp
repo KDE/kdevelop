@@ -159,7 +159,7 @@ public:
 
 static QStringList mimeTypesList()
 {
-    KDesktopFile desktopFile(QStandardPaths::GenericDataLocation, QString("kde5/services/kdevcppsupport.desktop"));
+    KDesktopFile desktopFile(QStandardPaths::GenericDataLocation, QString("kservices5/kdevcppsupport.desktop"));
     const KConfigGroup& desktopGroup = desktopFile.desktopGroup();
     QString mimeTypesStr = desktopGroup.readEntry("X-KDevelop-SupportedMimeTypes", "");
     return mimeTypesStr.split(QChar(','), QString::SkipEmptyParts);
