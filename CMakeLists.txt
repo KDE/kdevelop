@@ -37,7 +37,7 @@ include(KDevPlatformMacros)
 set(QT_MIN_VERSION "5.2.0")
 find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Core Declarative DBus Widgets Script WebKitWidgets Concurrent Test)
 
-find_package(KF5 CONFIG REQUIRED COMPONENTS
+find_package(KF5 REQUIRED COMPONENTS
   Archive
   Config
   GuiAddons
