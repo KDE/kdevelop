@@ -96,7 +96,8 @@ void DeclarationBuilder::visitFunction(QmlJS::AST::FunctionExpression* node)
 
     {
         DUChainWriteLocker lock;
-        openDeclaration<FunctionDeclaration>(name, range);
+        FunctionDeclaration *decl = openDeclaration<FunctionDeclaration>(name, range);
+        decl->setKind(Declaration::Type);
     }
     openType(func);
 }
