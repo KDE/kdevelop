@@ -142,6 +142,7 @@ void DUChainTest::testReparse()
     for (int i = 0; i < 3; ++i) {
         QVERIFY(file.waitForParsed(500));
         DUChainReadLocker lock;
+        QVERIFY(file.topContext());
         QCOMPARE(file.topContext()->childContexts().size(), 1);
         QCOMPARE(file.topContext()->localDeclarations().size(), 1);
         QCOMPARE(file.topContext()->childContexts().first()->localDeclarations().size(), 1);
@@ -195,7 +196,7 @@ void DUChainTest::testTemplate()
     QVERIFY(file.parseAndWait());
 
     DUChainReadLocker lock;
-
+    QVERIFY(file.topContext());
     QCOMPARE(file.topContext()->localDeclarations().size(), 2);
     auto fooDecl = file.topContext()->localDeclarations().first();
     QVERIFY(fooDecl->internalContext());
@@ -212,7 +213,7 @@ void DUChainTest::testNamespace()
     QVERIFY(file.parseAndWait());
 
     DUChainReadLocker lock;
-
+    QVERIFY(file.topContext());
     QCOMPARE(file.topContext()->localDeclarations().size(), 2);
     auto fooDecl = file.topContext()->localDeclarations().first();
     QVERIFY(fooDecl->internalContext());
@@ -272,8 +273,8 @@ void DUChainTest::testTypeDeductionInTemplateInstantiation()
     DUChainReadLocker lock;
 
     DUContext* ctx = file.topContext().data();
-    QCOMPARE(ctx->localDeclarations().size(), 3);
     QVERIFY(ctx);
+    QCOMPARE(ctx->localDeclarations().size(), 3);
     Declaration* decl = 0;
 
     // check 'foo' declaration
