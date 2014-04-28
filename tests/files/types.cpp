@@ -33,6 +33,10 @@ int main(int argc, char** argv)
     void* const* v_ptr2;
     /// "toString" : "int[5] arr"
     int arr[5];
+    /// "toString" : "int[] arr2"
+    int arr2[argc];
+    /// "toString" : "int[] arr3"
+    int arr3[];
     /// "toString" : "unsigned int uint"
     unsigned int uint;
     /// "toString" : "long unsigned int ulong"

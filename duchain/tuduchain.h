@@ -239,11 +239,11 @@ private:
         return ptr;
     }
 
-    template<CXTypeKind TK, EnableIf<TK == CXType_ConstantArray> = dummy>
+    template<CXTypeKind TK, EnableIf<TK == CXType_ConstantArray || TK == CXType_IncompleteArray || TK == CXType_VariableArray> = dummy>
     AbstractType *createType(CXType type) const
     {
         auto arr = new ArrayType;
-        arr->setDimension(clang_getArraySize(type));
+        arr->setDimension((TK == CXType_IncompleteArray || TK == CXType_VariableArray) ? 0 : clang_getArraySize(type));
         arr->setElementType(makeAbsType(clang_getArrayElementType(type)));
         return arr;
     }

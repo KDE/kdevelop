@@ -285,6 +285,8 @@ AbstractType *TUDUChain::makeType(CXType type) const
     UseKind(CXType_Char32);
     UseKind(CXType_Pointer);
     UseKind(CXType_ConstantArray);
+    UseKind(CXType_VariableArray);
+    UseKind(CXType_IncompleteArray);
     UseKind(CXType_LValueReference);
     UseKind(CXType_RValueReference);
     UseKind(CXType_FunctionProto);
