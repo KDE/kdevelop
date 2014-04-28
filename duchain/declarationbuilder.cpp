@@ -264,8 +264,8 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiObjectDefinition* node)
     StructureType::Ptr type(new StructureType);
     type->setDeclarationId(id);
 
-    const RangeInRevision range = m_session->locationToRange(node->qualifiedTypeNameId->identifierToken);
-    const QualifiedIdentifier& identifier(QmlJS::getQMLAttribute(node->initializer->members, "id"));
+    RangeInRevision range = m_session->locationToRange(node->qualifiedTypeNameId->identifierToken);
+    QualifiedIdentifier identifier(QmlJS::getQMLAttribute(node->initializer->members, "id"));
 
     {
         DUChainWriteLocker lock;
