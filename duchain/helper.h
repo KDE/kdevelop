@@ -27,6 +27,8 @@ namespace QmlJS
 {
 using namespace KDevelop;
 
+namespace AST { class UiObjectMemberList; }
+
     /**
      * Find the declaration for the specified identifier.
      *
@@ -39,6 +41,13 @@ using namespace KDevelop;
      */
     KDEVQMLJSDUCHAIN_EXPORT DeclarationPointer getDeclaration(const QualifiedIdentifier& id,
                                                               const DUContext* context);
+
+    /**
+     * Find the string value of a QML attribute
+     */
+    KDEVQMLJSDUCHAIN_EXPORT QString getQMLAttribute(QmlJS::AST::UiObjectMemberList* members,
+                                                    const QString &attribute);
+
 
 } // End of namespace QmlJS
 

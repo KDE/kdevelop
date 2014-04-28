@@ -32,37 +32,6 @@
 
 using namespace KDevelop;
 
-namespace {
-
-/**
- * Find the 'id: <identifier>' in a given object member list.
- *
- * This is a bit ugly, and a Visitor is seemlingly more appropriate
- * for the task. But it is very hard to write it (lots of code) such
- * that it does not recurse into any other node...
- */
-static QualifiedIdentifier findIdentifier(QmlJS::AST::UiObjectMemberList* members)
-{
-    for (QmlJS::AST::UiObjectMemberList *it = members; it; it = it->next) {
-        QmlJS::AST::UiScriptBinding* binding = QmlJS::AST::cast<QmlJS::AST::UiScriptBinding*>(it->member);
-        if (!binding || !binding->qualifiedId || binding->qualifiedId->name != QLatin1String("id")) {
-            continue;
-        }
-        QmlJS::AST::ExpressionStatement* statement = QmlJS::AST::cast<QmlJS::AST::ExpressionStatement*>(binding->statement);
-        if (!statement) {
-            continue;
-        }
-        QmlJS::AST::IdentifierExpression* identifier = QmlJS::AST::cast<QmlJS::AST::IdentifierExpression*>(statement->expression);
-        if (!identifier) {
-            continue;
-        }
-        return QualifiedIdentifier(identifier->name.toString());
-    }
-    return QualifiedIdentifier();
-}
-
-}
-
 DeclarationBuilder::DeclarationBuilder(ParseSession* session)
 {
     m_session = session;
@@ -296,7 +265,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiObjectDefinition* node)
     type->setDeclarationId(id);
 
     const RangeInRevision range = m_session->locationToRange(node->qualifiedTypeNameId->identifierToken);
-    const QualifiedIdentifier& identifier = findIdentifier(node->initializer->members);
+    const QualifiedIdentifier& identifier(QmlJS::getQMLAttribute(node->initializer->members, "id"));
 
     {
         DUChainWriteLocker lock;

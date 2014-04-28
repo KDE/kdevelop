@@ -23,6 +23,8 @@
 #include <language/duchain/types/unsuretype.h>
 #include <language/duchain/types/integraltype.h>
 
+#include <qmljs/parser/qmljsast_p.h>
+
 namespace QmlJS
 {
 using namespace KDevelop;
@@ -36,6 +38,36 @@ DeclarationPointer getDeclaration(const QualifiedIdentifier& id, const DUContext
         }
     }
     return DeclarationPointer();
+}
+
+QString getQMLAttribute(QmlJS::AST::UiObjectMemberList* members, const QString& attribute)
+{
+    for (QmlJS::AST::UiObjectMemberList *it = members; it; it = it->next) {
+        // The member needs to be a script binding whose name matches attribute
+        QmlJS::AST::UiScriptBinding* binding = QmlJS::AST::cast<QmlJS::AST::UiScriptBinding*>(it->member);
+
+        if (!binding || !binding->qualifiedId || binding->qualifiedId->name != attribute) {
+            continue;
+        }
+
+        // The value of the binding must be an expression
+        QmlJS::AST::ExpressionStatement* statement = QmlJS::AST::cast<QmlJS::AST::ExpressionStatement*>(binding->statement);
+        if (!statement) {
+            continue;
+        }
+
+        // The expression must be an identifier or a string litera
+        QmlJS::AST::IdentifierExpression* identifier = QmlJS::AST::cast<QmlJS::AST::IdentifierExpression*>(statement->expression);
+        QmlJS::AST::StringLiteral* string = QmlJS::AST::cast<QmlJS::AST::StringLiteral*>(statement->expression);
+
+        if (identifier) {
+            return identifier->name.toString();
+        } else if (string) {
+            return string->value.toString();
+        }
+    }
+
+    return QString();
 }
 
 } // End of namespace QmlJS
