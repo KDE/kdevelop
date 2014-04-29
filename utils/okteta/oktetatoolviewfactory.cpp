@@ -38,7 +38,8 @@
 #include <Kasten/AbstractToolFactory>
 #include <Kasten/AbstractToolView>
 #endif
-// KDE
+
+#include <QIcon>
 
 namespace KDevelop
 {

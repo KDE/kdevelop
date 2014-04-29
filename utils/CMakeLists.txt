@@ -1,4 +1,5 @@
-find_package( LibOktetaKasten )
+# TODO KF5: Port me, currently the find script picks up the wrong okteta lib
+#find_package( LibOktetaKasten )
 
 set_package_properties(LibOktetaKasten PROPERTIES
     PURPOSE "Required for building Okteta KDevelop plugin."
