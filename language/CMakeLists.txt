@@ -79,6 +79,8 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/types/unsuretype.cpp
     duchain/types/containertypes.cpp
 
+    duchain/builders/dynamiclanguageexpressionvisitor.cpp
+
     duchain/repositories/abstractitemrepository.cpp
     duchain/repositories/itemrepositoryregistry.cpp
     duchain/repositories/typerepository.cpp
@@ -295,6 +297,7 @@ install(FILES
     duchain/builders/abstractdeclarationbuilder.h
     duchain/builders/abstracttypebuilder.h
     duchain/builders/abstractusebuilder.h
+    duchain/builders/dynamiclanguageexpressionvisitor.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain/builders COMPONENT Devel
 )
 

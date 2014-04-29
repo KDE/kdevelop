@@ -222,6 +222,11 @@ bool GitPlugin::hasModifications(const QDir& d)
     return !emptyOutput(lsFiles(d, QStringList("-m"), OutputJob::Silent));
 }
 
+bool GitPlugin::hasModifications(const QDir& repo, const KUrl& file)
+{
+    return !emptyOutput(lsFiles(repo, QStringList() << "-m" << file.path(), OutputJob::Silent));
+}
+
 void GitPlugin::additionalMenuEntries(QMenu* menu, const KUrl::List& urls)
 {
     m_urls = urls;
@@ -372,6 +377,21 @@ VcsJob* GitPlugin::revert(const KUrl::List& localLocations, IBasicVersionControl
     if(localLocations.isEmpty() )
         return errorsFound(i18n("Could not revert changes"), OutputJob::Verbose);
     
+    QDir repo = urlDir(repositoryRoot(localLocations.first()));
+    QString modified;
+    for (const auto& file: localLocations) {
+        if (hasModifications(repo, file)) {
+            modified.append(file.pathOrUrl() + "<br/>");
+        }
+    }
+    if (!modified.isEmpty()) {
+        auto res = KMessageBox::questionYesNo(nullptr, i18n("The following files have uncommited changes, "
+                                              "which will be lost. Continue?") + "<br/><br/>" + modified);
+        if (res != KMessageBox::Yes) {
+            return errorsFound(QString(), OutputJob::Silent);
+        }
+    }
+
     DVcsJob* job = new GitJob(dotGitDirectory(localLocations.front()), this);
     job->setType(VcsJob::Revert);
     *job << "git" << "checkout" << "--";

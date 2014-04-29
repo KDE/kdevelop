@@ -122,9 +122,8 @@ void VcsEventWidgetPrivate::eventViewClicked( const QModelIndex &index )
     }
 
     QHeaderView* header = m_ui->itemEventView->header();
-    for(int i=0, count=m_detailModel->columnCount(); i<count; i++) {
-        header->setResizeMode( i, (i==m_detailModel->columnCount()-1) ? QHeaderView::Stretch : QHeaderView::ResizeToContents);
-    }
+    header->setResizeMode(QHeaderView::ResizeToContents);
+    header->setStretchLastSection(true);
 }
 
 void VcsEventWidgetPrivate::copyRevision()
