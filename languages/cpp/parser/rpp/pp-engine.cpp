@@ -585,7 +585,7 @@ Value pp::eval_multiplicative(Stream& input)
       result *= value;
 
     } else if (token == '/') {
-      if (value.is_zero()) {
+      if (value.is_zero() || (!value.is_ulong() && !result.is_ulong() && value.l == -1 && result.l == LONG_LONG_MIN)) {
         KDevelop::ProblemPointer problem(new KDevelop::Problem);
         problem->setFinalLocation(KDevelop::DocumentRange(currentFileName(), KDevelop::SimpleRange(input.originalInputPosition().castToSimpleCursor(), 0)));
         problem->setDescription(i18n("Division by zero"));
@@ -598,7 +598,7 @@ Value pp::eval_multiplicative(Stream& input)
       }
 
     } else {
-      if (value.is_zero()) {
+      if (value.is_zero() || (!value.is_ulong() && !result.is_ulong() && value.l == -1 && result.l == LONG_LONG_MIN)) {
         KDevelop::ProblemPointer problem(new KDevelop::Problem);
         problem->setFinalLocation(KDevelop::DocumentRange(currentFileName(), KDevelop::SimpleRange(input.originalInputPosition().castToSimpleCursor(), 0)));
         problem->setDescription(i18n("Division by zero"));
