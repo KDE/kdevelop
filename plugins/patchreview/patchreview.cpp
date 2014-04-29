@@ -29,8 +29,9 @@
 #include <KDebug>
 #include <KLocalizedString>
 
-#include "libdiff2/komparemodellist.h"
-#include "libdiff2/kompare.h"
+#include <libkomparediff2/komparemodellist.h>
+#include <libkomparediff2/kompare.h>
+#include <libkomparediff2/diffsettings.h>
 
 #include <kmessagebox.h>
 #include <ktexteditor/document.h>
@@ -47,7 +48,6 @@
 #include <sublime/area.h>
 #include <sublime/document.h>
 #include <sublime/view.h>
-#include "diffsettings.h"
 #include "patchhighlighter.h"
 #include "patchreviewtoolview.h"
 #include "localpatchsource.h"

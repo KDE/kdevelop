@@ -15,8 +15,8 @@
 #include "localpatchsource.h"
 #include "patchreview.h"
 #include "standardpatchexport.h"
-#include "libdiff2/diffmodellist.h"
-#include "libdiff2/komparemodellist.h"
+#include <libkomparediff2/diffmodellist.h>
+#include <libkomparediff2/komparemodellist.h>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
 #include <vcs/models/vcsfilechangesmodel.h>

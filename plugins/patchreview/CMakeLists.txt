@@ -1,5 +1,7 @@
+
+find_package(LibKompareDiff2 REQUIRED)
 add_definitions( ${KDE4_ENABLE_EXCEPTIONS})
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/settings)
+include_directories(${LIBKOMPAREDIFF2_INCLUDE_DIR})
 
 set(patchreview_PART_SRCS
     patchreview.cpp
@@ -7,28 +9,13 @@ set(patchreview_PART_SRCS
     patchreviewtoolview.cpp
     localpatchsource.cpp
     standardpatchexport.cpp
-    settings/diffsettings.cpp
-    settings/settingsbase.cpp 
-
-    libdiff2/kompareprocess.cpp
-    libdiff2/komparemodellist.cpp
-    libdiff2/diffmodellist.cpp
-    libdiff2/diffmodel.cpp
-    libdiff2/difference.cpp
-    libdiff2/diffhunk.cpp
-    libdiff2/parser.cpp
-    libdiff2/parserbase.cpp
-    libdiff2/cvsdiffparser.cpp
-    libdiff2/diffparser.cpp
-    libdiff2/perforceparser.cpp
-    libdiff2/stringlistpair.cpp
 )
 
 qt5_wrap_ui(patchreview_PART_SRCS patchreview.ui localpatchwidget.ui)
 
 
 add_library(kdevpatchreview MODULE ${patchreview_PART_SRCS})
-target_link_libraries(kdevpatchreview KF5::TextEditor KF5::Parts kdevplatforminterfaces kdevplatformutil kdevplatformlanguage ${KDEVPLATFORM_VCS_LIBRARIES} sublime)
+target_link_libraries(kdevpatchreview KF5::TextEditor KF5::Parts kdevplatforminterfaces kdevplatformutil kdevplatformlanguage ${KDEVPLATFORM_VCS_LIBRARIES} sublime ${LIBKOMPAREDIFF2_LIBRARIES})
 
 install(TARGETS kdevpatchreview DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -38,5 +25,3 @@ install(TARGETS kdevpatchreview DESTINATION ${PLUGIN_INSTALL_DIR})
 configure_file(kdevpatchreview.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevpatchreview.desktop)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevpatchreview.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 install(FILES kdevpatchreview.rc DESTINATION ${DATA_INSTALL_DIR}/kdevpatchreview)
-
-add_subdirectory(libdiff2)

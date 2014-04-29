@@ -13,8 +13,8 @@
 
 #include "patchhighlighter.h"
 
-#include "libdiff2/difference.h"
-#include "libdiff2/diffmodel.h"
+#include <libkomparediff2/difference.h>
+#include <libkomparediff2/diffmodel.h>
 
 #include "patchreview.h"
 #include <language/highlighting/colorcache.h>
