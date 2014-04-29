@@ -24,6 +24,7 @@ Name[sl]=Določitve in vključitve po meri
 Name[sv]=Egna definitioner och inkluderingar
 Name[uk]=Нетипові визначення і включення
 Name[x-test]=xxCustom Defines And Includesxx
+Name[zh_TW]=自訂定義與引入
 
 Comment=Configure which macros and include directories/files will be added to the parser during project parsing.
 Comment[ca]=Configura quines macros i directoris/fitxers s'afegiran a l'analitzador durant l'anàlisi del projecte.
@@ -41,3 +42,4 @@ Comment[sl]=Nastavite, kateri makri in mape oz. datoteke z vključitvami bodo do
 Comment[sv]=Anpassa vilka makron och filer eller kataloger att inkludera som läggs till i tolken under projekttolkning
 Comment[uk]=Налаштувати макроси і включені каталоги або файли, які буде додано під час обробки проекту.
 Comment[x-test]=xxConfigure which macros and include directories/files will be added to the parser during project parsing.xx
+Comment[zh_TW]=設定在專案剖析時要加入哪些巨集與引入目錄/檔案等。

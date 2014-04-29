@@ -49,7 +49,7 @@ void TestQtHelpPlugin::init()
 {
     m_plugin = new QtHelpPlugin(m_testCore, QVariantList());
     // write default config and read it
-    qtHelpWriteConfig(QStringList(), QStringList(), QStringList(), QStringList(), true);
+    qtHelpWriteConfig(QStringList(), QStringList(), QStringList(), QStringList(), QString(), true);
     m_plugin->readConfig();
 }
 
@@ -73,7 +73,7 @@ void TestQtHelpPlugin::testDefaultValue()
 
 void TestQtHelpPlugin::testUnsetQtHelpDoc()
 {
-    qtHelpWriteConfig(QStringList(), QStringList(), QStringList(), QStringList(), false);
+    qtHelpWriteConfig(QStringList(), QStringList(), QStringList(), QStringList(), QString(), false);
     m_plugin->readConfig();
 
     QCOMPARE(m_plugin->providers().size(), 0);
@@ -86,7 +86,7 @@ void TestQtHelpPlugin::testAddOneValidProvider()
     name << "file1";
     icon << "myIcon";
     ghns << "0";
-    qtHelpWriteConfig(icon, name, path, ghns, true);
+    qtHelpWriteConfig(icon, name, path, ghns, QString(), true);
     m_plugin->readConfig();
 
     QCOMPARE(m_plugin->qtHelpProviderLoaded().size(), 1);
@@ -102,7 +102,7 @@ void TestQtHelpPlugin::testAddTwoDifferentValidProvider()
     name << "file1" << "file2";
     icon << "myIcon" << "myIcon";
     ghns << "0" << "0";
-    qtHelpWriteConfig(icon, name, path, ghns, true);
+    qtHelpWriteConfig(icon, name, path, ghns, QString(), true);
     m_plugin->readConfig();
 
     QCOMPARE(m_plugin->qtHelpProviderLoaded().size(), 2);
@@ -123,7 +123,7 @@ void TestQtHelpPlugin::testAddInvalidProvider()
     name << "file1";
     icon << "myIcon";
     ghns << "0";
-    qtHelpWriteConfig(icon, name, path, ghns, true);
+    qtHelpWriteConfig(icon, name, path, ghns, QString(), true);
     m_plugin->readConfig();
 
     QCOMPARE(m_plugin->qtHelpProviderLoaded().size(), 0);
@@ -136,7 +136,7 @@ void TestQtHelpPlugin::testAddTwiceSameProvider()
     name << "file1" << "file2";
     icon << "myIcon" << "myIcon";
     ghns << "0" << "0";
-    qtHelpWriteConfig(icon, name, path, ghns, true);
+    qtHelpWriteConfig(icon, name, path, ghns, QString(), true);
     m_plugin->readConfig();
 
     QCOMPARE(m_plugin->qtHelpProviderLoaded().size(), 1);
@@ -149,7 +149,7 @@ void TestQtHelpPlugin::testRemoveOneProvider()
     name << "file1" << "file2";
     icon << "myIcon" << "myIcon";
     ghns << "0" << "0";
-    qtHelpWriteConfig(icon, name, path, ghns, true);
+    qtHelpWriteConfig(icon, name, path, ghns, QString(), true);
     m_plugin->readConfig();
 
     QCOMPARE(m_plugin->qtHelpProviderLoaded().size(), 2);
@@ -159,7 +159,7 @@ void TestQtHelpPlugin::testRemoveOneProvider()
     name.removeAt(1);
     icon.removeAt(1);
     ghns.removeAt(1);
-    qtHelpWriteConfig(icon, name, path, ghns, true);
+    qtHelpWriteConfig(icon, name, path, ghns, QString(), true);
     m_plugin->readConfig();
 
     QCOMPARE(m_plugin->qtHelpProviderLoaded().size(), 1);

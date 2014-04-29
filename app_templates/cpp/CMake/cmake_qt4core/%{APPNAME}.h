@@ -5,10 +5,12 @@
 
 class %{APPNAMEID} : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
+
 public:
     %{APPNAMEID}();
     virtual ~%{APPNAMEID}();
+
 private slots:
     void output();
 };

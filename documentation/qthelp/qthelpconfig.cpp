@@ -30,6 +30,7 @@
 #include <KSettings/Dispatcher>
 #include <knewstuff3/knewstuffbutton.h>
 #include <qhelpenginecore.h>
+#include <QFileDialog>
 
 #include "ui_qthelpconfig.h"
 #include "ui_qthelpconfigeditdialog.h"
@@ -122,6 +123,8 @@ QtHelpConfig::QtHelpConfig(QWidget *parent, const QVariantList &args)
     m_configWidget->verticalLayout->insertWidget(1, knsButton);
     connect(knsButton, SIGNAL(dialogFinished(KNS3::Entry::List)), SLOT(knsUpdate(KNS3::Entry::List)));
     connect(m_configWidget->loadQtDocsCheckBox, SIGNAL(toggled(bool)), this, SLOT(changed()));
+    connect(m_configWidget->qchSearchDirButton, SIGNAL(clicked(bool)), this, SLOT(chooseSearchDir()));
+    connect(m_configWidget->qchSearchDir,SIGNAL(textChanged(QString)), this, SLOT(searchDirChanged()));
     l->addWidget( w );
     load();
     selectionChanged();
@@ -142,9 +145,10 @@ void QtHelpConfig::save()
         iconList << item->text(2);
         ghnsList << item->text(3);
     }
+    QString searchDir = m_configWidget->qchSearchDir->text();
     bool loadQtDoc = m_configWidget->loadQtDocsCheckBox->isChecked();
 
-    qtHelpWriteConfig(iconList, nameList, pathList, ghnsList, loadQtDoc);
+    qtHelpWriteConfig(iconList, nameList, pathList, ghnsList, searchDir, loadQtDoc);
 
     KSettings::Dispatcher::reparseConfiguration( componentData().componentName() );
 
@@ -156,8 +160,9 @@ void QtHelpConfig::load()
     m_configWidget->qchTable->clear();;
 
     QStringList iconList, nameList, pathList, ghnsList;
+    QString searchDir;
     bool loadQtDoc;
-    qtHelpReadConfig(iconList, nameList, pathList, ghnsList, loadQtDoc);
+    qtHelpReadConfig(iconList, nameList, pathList, ghnsList, searchDir, loadQtDoc);
 
     const int size = qMin(qMin(iconList.size(), nameList.size()), pathList.size());
     for(int i = 0; i < size; ++i) {
@@ -168,7 +173,7 @@ void QtHelpConfig::load()
         item->setText(IconColumn, iconList.at(i));
         item->setText(GhnsColumn, ghnsList.size()>i ? ghnsList.at(i) : "0");
     }
-
+    m_configWidget->qchSearchDir->setText(searchDir);
     m_configWidget->loadQtDocsCheckBox->setChecked(loadQtDoc);
 
     emit changed(false);
@@ -363,5 +368,17 @@ void QtHelpConfig::knsUpdate(KNS3::Entry::List list)
     }
     emit changed(true);
 }
+
+void QtHelpConfig::chooseSearchDir()
+{
+    m_configWidget->qchSearchDir->setText(QFileDialog::getExistingDirectory(this));
+}
+
+
+void QtHelpConfig::searchDirChanged()
+{
+    emit changed(true);
+}
+
 
 #include "qthelpconfig.moc"
