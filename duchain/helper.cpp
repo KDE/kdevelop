@@ -23,8 +23,6 @@
 #include <language/duchain/types/unsuretype.h>
 #include <language/duchain/types/integraltype.h>
 
-#include <qmljs/parser/qmljsast_p.h>
-
 namespace QmlJS
 {
 using namespace KDevelop;
@@ -40,8 +38,10 @@ DeclarationPointer getDeclaration(const QualifiedIdentifier& id, const DUContext
     return DeclarationPointer();
 }
 
-QString getQMLAttribute(QmlJS::AST::UiObjectMemberList* members, const QString& attribute)
+QMLAttributeValue getQMLAttribute(QmlJS::AST::UiObjectMemberList* members, const QString& attribute)
 {
+    QMLAttributeValue res;
+
     for (QmlJS::AST::UiObjectMemberList *it = members; it; it = it->next) {
         // The member needs to be a script binding whose name matches attribute
         QmlJS::AST::UiScriptBinding* binding = QmlJS::AST::cast<QmlJS::AST::UiScriptBinding*>(it->member);
@@ -59,15 +59,25 @@ QString getQMLAttribute(QmlJS::AST::UiObjectMemberList* members, const QString& 
         // The expression must be an identifier or a string litera
         QmlJS::AST::IdentifierExpression* identifier = QmlJS::AST::cast<QmlJS::AST::IdentifierExpression*>(statement->expression);
         QmlJS::AST::StringLiteral* string = QmlJS::AST::cast<QmlJS::AST::StringLiteral*>(statement->expression);
+        QmlJS::AST::TrueLiteral* true_literal = QmlJS::AST::cast<QmlJS::AST::TrueLiteral*>(statement->expression);
+        QmlJS::AST::FalseLiteral* false_literal = QmlJS::AST::cast<QmlJS::AST::FalseLiteral*>(statement->expression);
+
+        res.location = statement->expression->firstSourceLocation();
 
         if (identifier) {
-            return identifier->name.toString();
+            res.value = identifier->name.toString();
         } else if (string) {
-            return string->value.toString();
+            res.value = string->value.toString();
+        } else if (true_literal) {
+            res.value = QLatin1String("true");
+        } else if (false_literal) {
+            res.value = QLatin1String("false");
+        } else {
+            continue;
         }
     }
 
-    return QString();
+    return res;
 }
 
 } // End of namespace QmlJS

@@ -20,6 +20,7 @@
 #define QMLJSDUCHAINHELPERS_H_
 
 #include <language/duchain/declaration.h>
+#include <libs/qmljs/parser/qmljsast_p.h>
 
 #include "duchainexport.h"
 
@@ -27,7 +28,14 @@ namespace QmlJS
 {
 using namespace KDevelop;
 
-namespace AST { class UiObjectMemberList; }
+    /**
+     * QML attribute value, with its source location
+     */
+    struct QMLAttributeValue
+    {
+        QString value;
+        AST::SourceLocation location;
+    };
 
     /**
      * Find the declaration for the specified identifier.
@@ -45,8 +53,8 @@ namespace AST { class UiObjectMemberList; }
     /**
      * Find the string value of a QML attribute
      */
-    KDEVQMLJSDUCHAIN_EXPORT QString getQMLAttribute(QmlJS::AST::UiObjectMemberList* members,
-                                                    const QString &attribute);
+    KDEVQMLJSDUCHAIN_EXPORT QMLAttributeValue getQMLAttribute(AST::UiObjectMemberList* members,
+                                                              const QString& attribute);
 
 
 } // End of namespace QmlJS
