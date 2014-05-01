@@ -1426,17 +1426,11 @@ void DebugSession::programRunning()
 
 void DebugSession::handleVersion(const QStringList& s)
 {
-    const int minVersion1 = 7;
-    const int minVersion2 = 0;
-    const int minVersion3 = 0;
-
     kDebug() << s.first();
-    QRegExp rx("([0-9]+)\\.([0-9]+)(?:\\.([0-9]+))?");
-    rx.indexIn(s.first());
-    if (rx.cap(1).toInt() < minVersion1
-        || (rx.cap(1).toInt() == minVersion1 && (rx.cap(2).toInt() < minVersion2
-            || ( rx.cap(2).toInt() == minVersion2 && minVersion3 > 0 && rx.numCaptures() == 3
-                && rx.cap(3).toInt() < minVersion3))))
+    // minimal version is 7.0,0
+    QRegExp rx("([7-9]+)\\.([0-9]+)(\\.([0-9]+))?");
+    int idx = rx.indexIn(s.first());
+    if (idx == -1)
     {
         if (qApp->type() == QApplication::Tty)  {
             //for unittest
