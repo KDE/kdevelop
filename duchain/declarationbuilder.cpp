@@ -259,21 +259,106 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiObjectDefinition* node)
 {
     setComment(node);
 
-    const DeclarationId id(QualifiedIdentifier(node->qualifiedTypeNameId->name.toString()));
-    ///TODO: find type, potentially in C++
-    StructureType::Ptr type(new StructureType);
-    type->setDeclarationId(id);
-
-    QmlJS::QMLAttributeValue id_attribute = QmlJS::getQMLAttribute(node->initializer->members, "id");
-    RangeInRevision range = m_session->locationToRange(id_attribute.location);
-    QualifiedIdentifier identifier(id_attribute.value);
-
-    {
-        DUChainWriteLocker lock;
-        ClassDeclaration* decl = openDeclaration<ClassDeclaration>(identifier, range);
-        decl->setKind(Declaration::Type);
+    // Do not crash if the user has typed an empty object definition
+    if (!node->initializer || !node->initializer->members) {
+        return DeclarationBuilderBase::visit(node);
     }
-    openType(type);
+
+    // Instance of special class names may declare classes, enums, methods, etc
+    QString baseclass = node->qualifiedTypeNameId->name.toString();
+
+    RangeInRevision range(m_session->locationToRange(node->qualifiedTypeNameId->identifierToken));
+    QualifiedIdentifier name(QmlJS::getQMLAttribute(node->initializer->members, "name").value);
+
+    if (baseclass == QLatin1String("Component")) {
+        // QML component, equivalent to a QML class
+        QString inherits = QmlJS::getQMLAttribute(node->initializer->members, "prototype").value;
+
+        StructureType::Ptr type(new StructureType);
+        type->setDeclarationId(DeclarationId(name));
+
+        {
+            DUChainWriteLocker lock;
+            ClassDeclaration* decl = openDeclaration<ClassDeclaration>(name, range, DeclarationIsDefinition);
+
+            decl->setKind(Declaration::Type);
+            decl->clearBaseClasses();
+
+            if (!inherits.isNull()) {
+                BaseClassInstance baseclass;
+
+                baseclass.access = Declaration::Public;
+                baseclass.virtualInheritance = false;
+                baseclass.baseClass = typeFromClassName(inherits)->indexed();
+
+
+                decl->addBaseClass(baseclass);
+            }
+        }
+        openType(type);
+    } else if (baseclass == QLatin1String("Method") ||
+               baseclass == QLatin1String("Signal") ||
+               baseclass == QLatin1String("Slot")) {
+        // Method (that can also be a signal or a slot)
+        QString type_name = QmlJS::getQMLAttribute(node->initializer->members, "type").value;
+        FunctionType::Ptr type(new FunctionType);
+
+        if (type_name.isNull()) {
+            type->setReturnType(typeFromName("void"));
+        } else {
+            type->setReturnType(typeFromName(type_name));
+        }
+
+        {
+            DUChainWriteLocker lock;
+            ClassFunctionDeclaration* decl = openDeclaration<ClassFunctionDeclaration>(name, range);
+
+            decl->setIsSlot(baseclass == QLatin1String("Slot"));
+            decl->setIsSignal(baseclass == QLatin1String("Signal"));
+        }
+        openType(type);
+    } else if (baseclass == QLatin1String("Property")) {
+        // A property
+        AbstractType::Ptr type = typeFromName(QmlJS::getQMLAttribute(node->initializer->members, "type").value);
+
+        {
+            DUChainWriteLocker lock;
+            ClassMemberDeclaration* decl = openDeclaration<ClassMemberDeclaration>(name, range);
+
+            decl->setAbstractType(type);
+        }
+        openType(type);
+    } else if (baseclass == QLatin1String("Parameter")) {
+        // One parameter of a signal/slot/method
+        FunctionType::Ptr function = currentType<FunctionType>();
+
+        if (function) {
+            AbstractType::Ptr type = typeFromName(QmlJS::getQMLAttribute(node->initializer->members, "type").value);
+
+            function->addArgument(type);
+
+            {
+                DUChainWriteLocker lock;
+                openDeclaration<Declaration>(name, range);
+            }
+            openType(type);
+        }
+    } else {
+        // No special base class, so it is a normal instantiation
+        QmlJS::QMLAttributeValue id_attribute = QmlJS::getQMLAttribute(node->initializer->members, "id");
+        QualifiedIdentifier id(id_attribute.value);
+        RangeInRevision range(m_session->locationToRange(id_attribute.location));
+
+        StructureType::Ptr type(new StructureType);
+        type->setDeclarationId(DeclarationId(QualifiedIdentifier(baseclass)));
+
+        {
+            DUChainWriteLocker lock;
+            ClassDeclaration* decl = openDeclaration<ClassDeclaration>(id, range);
+            decl->setKind(Declaration::Instance);
+        }
+        openType(type);
+    }
 
     return DeclarationBuilderBase::visit(node);
 }
@@ -282,7 +367,10 @@ void DeclarationBuilder::endVisit(QmlJS::AST::UiObjectDefinition* node)
 {
     DeclarationBuilderBase::endVisit(node);
 
-    closeAndAssignType();
+    // Do not crash if the user has typed an empty object definition
+    if (node->initializer && node->initializer->members) {
+        closeAndAssignType();
+    }
 }
 
 bool DeclarationBuilder::visit(QmlJS::AST::UiObjectInitializer* node)
@@ -389,4 +477,43 @@ void DeclarationBuilder::closeAndAssignType()
         dec->setType(lastType());
     }
     closeDeclaration();
+}
+
+AbstractType::Ptr DeclarationBuilder::typeFromName(const QString& name)
+{
+    auto type = IntegralType::TypeVoid;
+
+    if (name == QLatin1String("string")) {
+        type = IntegralType::TypeString;
+    } else if (name == QLatin1String("bool")) {
+        type = IntegralType::TypeBoolean;
+    } else if (name == QLatin1String("int")) {
+        type = IntegralType::TypeInt;
+    } else if (name == QLatin1String("float")) {
+        type = IntegralType::TypeFloat;
+    } else if (name == QLatin1String("void")) {
+        type = IntegralType::TypeVoid;
+    }
+
+    if (type == IntegralType::TypeVoid) {
+        // Not a built-in type, but a class
+        return typeFromClassName(name);
+    } else {
+        return AbstractType::Ptr(new IntegralType(type));
+    }
+}
+
+AbstractType::Ptr DeclarationBuilder::typeFromClassName(const QString& name)
+{
+    DeclarationPointer decl = QmlJS::getDeclaration(QualifiedIdentifier(name), currentContext());
+
+    if (decl && decl->kind() == Declaration::Type) {
+        return decl->abstractType();
+    } else {
+        StructureType* rs = new StructureType;
+
+        rs->setDeclarationId(DeclarationId(IndexedQualifiedIdentifier(QualifiedIdentifier(name))));
+
+        return AbstractType::Ptr(rs);
+    }
 }

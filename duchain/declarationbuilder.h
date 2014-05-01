@@ -74,6 +74,8 @@ protected:
 
 private:
     void closeAndAssignType();
+    KDevelop::AbstractType::Ptr typeFromName(const QString& name);          /*!< @brief Type from a general name (int, string, or a class name) */
+    KDevelop::AbstractType::Ptr typeFromClassName(const QString& name);     /*!< @brief Type from a class name, built-in types are not supported here */
 
     using DeclarationBuilderBase::setComment;
     void setComment(QmlJS::AST::Node* node);
