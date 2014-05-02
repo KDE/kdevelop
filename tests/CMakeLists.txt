@@ -12,13 +12,6 @@ target_link_libraries(clang-parser
     kdevclangduchain
 )
 
-kde4_add_executable(clang-standalone-parser
-    clang-standalone-parser.c
-)
-target_link_libraries(clang-standalone-parser
-    ${CLANG_CLANG_LIB}
-)
-
 ########### next target ###############
 
 kde4_add_unit_test(codecompletiontest
