@@ -215,6 +215,7 @@ CXChildVisitResult TUDUChain::visitCursor(CXCursor cursor, CXCursor parent, CXCl
     UseCursorKind(CXCursor_VariableRef, cursor);
     UseCursorKind(CXCursor_DeclRefExpr, cursor);
     UseCursorKind(CXCursor_MemberRefExpr, cursor);
+    UseCursorKind(CXCursor_CompoundStmt, cursor);
     default: return CXChildVisit_Recurse;
     }
 }

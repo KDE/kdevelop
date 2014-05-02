@@ -72,6 +72,20 @@ private:
         return buildUse<CK>(cursor);
     }
 
+    template<CXCursorKind CK, EnableIf<CK == CXCursor_CompoundStmt> = dummy>
+    CXChildVisitResult dispatchCursor(CXCursor cursor)
+    {
+        if (m_parentContext->context->type() == DUContext::Function)
+        {
+            auto context = createContext<CK, DUContext::Other>(cursor, Identifier());
+            CurrentContext newParent(context);
+            PushValue<CurrentContext*> pushCurrent(m_parentContext, &newParent);
+            clang_visitChildren(cursor, &visitCursor, this);
+            return CXChildVisit_Continue;
+        }
+        return CXChildVisit_Recurse;
+    }
+
     template<
       CXCursorKind CK,
       Decision IsInClass = CursorKindTraits::isInClass(CK),
@@ -80,14 +94,14 @@ private:
     {
       const bool decision = CursorKindTraits::isClass(clang_getCursorKind(parent));
       return decision ?
-        dispatchCursor<CK, Decision::True, CursorKindTraits::isDefinition(CK, Decision::True)>(cursor, parent) :
-        dispatchCursor<CK, Decision::False, CursorKindTraits::isDefinition(CK, Decision::False)>(cursor, parent);
+        dispatchCursor<CK, Decision::True, CursorKindTraits::isDefinition(CK)>(cursor, parent) :
+        dispatchCursor<CK, Decision::False, CursorKindTraits::isDefinition(CK)>(cursor, parent);
     }
 
     template<
         CXCursorKind CK,
         Decision IsInClass = CursorKindTraits::isInClass(CK),
-        Decision IsDefinition = CursorKindTraits::isDefinition(CK, IsInClass),
+        Decision IsDefinition = CursorKindTraits::isDefinition(CK),
         EnableIf<IsDefinition == Decision::Maybe && IsInClass != Decision::Maybe> = dummy>
     CXChildVisitResult dispatchCursor(CXCursor cursor, CXCursor parent)
     {
@@ -100,7 +114,7 @@ private:
     template<
         CXCursorKind CK,
         Decision IsInClass = CursorKindTraits::isInClass(CK),
-        Decision IsDefinition = CursorKindTraits::isDefinition(CK, IsInClass),
+        Decision IsDefinition = CursorKindTraits::isDefinition(CK),
         EnableIf<IsInClass != Decision::Maybe && IsDefinition != Decision::Maybe> = dummy>
     CXChildVisitResult dispatchCursor(CXCursor cursor, CXCursor /*parent*/)
     {

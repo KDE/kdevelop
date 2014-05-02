@@ -93,11 +93,11 @@ constexpr bool isDeclaration(CXCursorKind CK)
     || CK == CXCursor_TypeAliasDecl;
 }
 
-constexpr Decision isDefinition(CXCursorKind CK, Decision isInClass)
+constexpr Decision isDefinition(CXCursorKind CK)
 {
-    return CK == CXCursor_Namespace || (isInClass == Decision::False && CK == CXCursor_CXXMethod) ?
+    return isFunction(CK) || CK == CXCursor_Namespace ?
         Decision::True :
-        isClass(CK) || isFunction(CK) || CK == CXCursor_EnumDecl ?
+        isClass(CK) || CK == CXCursor_EnumDecl ?
         Decision::Maybe :
         Decision::False;
 }
@@ -119,11 +119,9 @@ constexpr DUContext::ContextType contextType(CXCursorKind CK)
 {
     return CK == CXCursor_StructDecl                    ? DUContext::Class
     : CK == CXCursor_UnionDecl                          ? DUContext::Class
-    : CK == CXCursor_StructDecl                         ? DUContext::Class
-    : CK == CXCursor_UnionDecl                          ? DUContext::Class
     : CK == CXCursor_ClassDecl                          ? DUContext::Class
     : CK == CXCursor_EnumDecl                           ? DUContext::Enum
-    : CK == CXCursor_FunctionDecl                       ? DUContext::Other
+    : CK == CXCursor_FunctionDecl                       ? DUContext::Function
     : CK == CXCursor_CXXMethod                          ? DUContext::Other
     : CK == CXCursor_Namespace                          ? DUContext::Namespace
     : CK == CXCursor_Constructor                        ? DUContext::Other

@@ -145,17 +145,18 @@ void DUChainTest::testReparse()
         QVERIFY(file.topContext());
         QCOMPARE(file.topContext()->childContexts().size(), 1);
         QCOMPARE(file.topContext()->localDeclarations().size(), 1);
-        QCOMPARE(file.topContext()->childContexts().first()->localDeclarations().size(), 1);
+        DUContext *exprContext = file.topContext()->childContexts().first()->childContexts().first();
+        QCOMPARE(exprContext->localDeclarations().size(), 1);
 
         if (i) {
             QVERIFY(mainDecl);
             QCOMPARE(mainDecl.data(), file.topContext()->localDeclarations().first());
 
             QVERIFY(iDecl);
-            QCOMPARE(iDecl.data(), file.topContext()->childContexts().first()->localDeclarations().first());
+            QCOMPARE(iDecl.data(), exprContext->localDeclarations().first());
         }
         mainDecl = file.topContext()->localDeclarations().first();
-        iDecl = file.topContext()->childContexts().first()->localDeclarations().first();
+        iDecl = exprContext->localDeclarations().first();
 
         QVERIFY(mainDecl->uses().isEmpty());
         QCOMPARE(iDecl->uses().size(), 1);
@@ -404,8 +405,6 @@ void DUChainTest::testGlobalFunctionDeclaration()
 
     DUChainReadLocker lock;
     QVERIFY(file.topContext());
-    QEXPECT_FAIL("", "The function is not a definition and then no context for the arguments is created.\n"
-                     "Thus, the arguments land in the global context and will be added to the symbol table...", Abort);
     QCOMPARE(file.topContext()->localDeclarations().size(), 1);
 }
 
