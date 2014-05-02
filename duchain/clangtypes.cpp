@@ -25,6 +25,7 @@
 #include <QFileInfo>
 #include <QReadLocker>
 
+#include <language/editor/documentcursor.h>
 #include <language/editor/documentrange.h>
 #include <language/backgroundparser/urlparselock.h>
 #include <project/path.h>
@@ -32,6 +33,19 @@
 #include "clangpch.h"
 
 using namespace KDevelop;
+
+namespace {
+
+template<typename T>
+inline T cursorForCXSrcLoc(CXSourceLocation loc)
+{
+    uint line = 0;
+    uint column = 0;
+    clang_getFileLocation(loc, 0, &line, &column, 0);
+    return {static_cast<int>(line-1), static_cast<int>(column-1)};
+}
+
+}
 
 ClangIndex::ClangIndex()
     : m_index(clang_createIndex(1 /*Exclude PCH Decls*/, qgetenv("KDEV_CLANG_DISPLAY_DIAGS") == "1" /*Display diags*/))
@@ -104,12 +118,14 @@ ClangLocation::ClangLocation(CXSourceLocation location)
 
 }
 
-template<typename T> T cursorForCXSrcLoc(CXSourceLocation loc)
+ClangLocation::operator DocumentCursor() const
 {
     uint line = 0;
     uint column = 0;
-    clang_getFileLocation(loc, 0, &line, &column, 0);
-    return {static_cast<int>(line-1), static_cast<int>(column-1)};
+    CXFile file;
+    clang_getFileLocation(location, &file, &line, &column, 0);
+    ClangString fileName(clang_getFileName(file));
+    return {IndexedString(fileName), {static_cast<int>(line-1), static_cast<int>(column-1)}};
 }
 
 ClangLocation::operator SimpleCursor() const

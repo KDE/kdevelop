@@ -33,6 +33,7 @@
 #include "duchainexport.h"
 
 namespace KDevelop {
+class DocumentCursor;
 class DocumentRange;
 class SimpleRange;
 class SimpleCursor;
@@ -93,6 +94,8 @@ class KDEVCLANGDUCHAIN_EXPORT ClangLocation
 public:
     ClangLocation(CXSourceLocation cursor);
     ~ClangLocation();
+
+    operator KDevelop::DocumentCursor() const;
 
     operator KDevelop::SimpleCursor() const;
 
