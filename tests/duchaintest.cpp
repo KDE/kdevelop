@@ -396,4 +396,17 @@ void DUChainTest::testReparseBaseClassesTemplates()
     }
 }
 
+void DUChainTest::testGlobalFunctionDeclaration()
+{
+    TestFile file("void foo(int arg1, char arg2);\n", "cpp");
+    file.parse(TopDUContext::AllDeclarationsContextsAndUses);
+    file.waitForParsed();
+
+    DUChainReadLocker lock;
+    QVERIFY(file.topContext());
+    QEXPECT_FAIL("", "The function is not a definition and then no context for the arguments is created.\n"
+                     "Thus, the arguments land in the global context and will be added to the symbol table...", Abort);
+    QCOMPARE(file.topContext()->localDeclarations().size(), 1);
+}
+
 #include "duchaintest.moc"

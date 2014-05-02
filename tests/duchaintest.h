@@ -43,6 +43,7 @@ private slots:
     void testBaseClasses();
     void testReparseBaseClasses();
     void testReparseBaseClassesTemplates();
+    void testGlobalFunctionDeclaration();
 };
 
 #endif // DUCHAINTEST_H
