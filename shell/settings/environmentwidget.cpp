@@ -60,7 +60,10 @@ EnvironmentWidget::EnvironmentWidget( QWidget *parent )
 
     ui.variableTable->setModel( topProxyModel );
     ui.variableTable->horizontalHeader()->setResizeMode( 1, QHeaderView::Stretch );
+    ui.addgrpBtn->setIcon(QIcon::fromTheme("list-add"));
+    ui.removegrpBtn->setIcon(QIcon::fromTheme("list-remove"));
     ui.deleteButton->setIcon(QIcon::fromTheme("list-remove"));
+    ui.deleteButton->setShortcut(Qt::Key_Delete);
     ui.newMultipleButton->setIcon(QIcon::fromTheme("format-list-unordered"));
 
     connect( ui.deleteButton, SIGNAL(clicked()),
