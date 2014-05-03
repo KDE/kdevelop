@@ -31,12 +31,20 @@ UseBuilder::UseBuilder(ParseSession* session)
 
 bool UseBuilder::visit(QmlJS::AST::IdentifierExpression* node)
 {
-    const RangeInRevision range(m_session->locationToRange(node->identifierToken));
-    const QualifiedIdentifier id(node->name.toString());
+    newUse(node, node->identifierToken, node->name.toString());
+    return UseBuilderBase::visit(node);
+}
+
+bool UseBuilder::visit(QmlJS::AST::UiQualifiedId* node)
+{
+    newUse(node, node->identifierToken, node->name.toString());
+    return UseBuilderBase::visit(node);
+}
+
+void UseBuilder::newUse(QmlJS::AST::Node* node, const QmlJS::AST::SourceLocation& loc, const QString& name)
+{
+    const RangeInRevision range(m_session->locationToRange(loc));
+    const QualifiedIdentifier id(name);
     const DeclarationPointer decl(QmlJS::getDeclaration(id, currentContext()));
-
-    newUse(node, range, decl);
-    const bool ret = UseBuilderBase::visit(node);
-
-    return ret;
+    UseBuilderBase::newUse(node, range, decl);
 }

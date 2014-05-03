@@ -1,6 +1,7 @@
 Module {
      /**
-      * "toString" : "class QAbstractItemModel"
+      * "toString" : "class QAbstractItemModel",
+      * "useCount" : 1
       */
      Component {
          name: "QAbstractItemModel"

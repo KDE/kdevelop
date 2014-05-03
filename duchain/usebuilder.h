@@ -33,6 +33,10 @@ public:
 protected:
     using Visitor::visit;
     virtual bool visit(QmlJS::AST::IdentifierExpression* node);
+    virtual bool visit(QmlJS::AST::UiQualifiedId* node);
+
+private:
+    void newUse(QmlJS::AST::Node* node, const QmlJS::AST::SourceLocation& loc, const QString& name);
 };
 
 #endif // USEBUILDER_H
