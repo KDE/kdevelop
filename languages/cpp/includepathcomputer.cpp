@@ -32,8 +32,6 @@
 #include "cppduchain/environmentmanager.h"
 
 #include <KLocalizedString>
-#include <QThread>
-#include <QCoreApplication>
 
 using namespace KDevelop;
 
@@ -48,8 +46,6 @@ IncludePathComputer::IncludePathComputer(const QString& file)
 
 void IncludePathComputer::computeForeground()
 {
-  Q_ASSERT(QThread::currentThread() == qApp->thread());
-
   if (CppUtils::headerExtensions().contains(QFileInfo(m_source).suffix())) {
     // This file is a header. Since a header doesn't represent a target, we just try to get
     // the include-paths for the corresponding source-file, if there is one.
