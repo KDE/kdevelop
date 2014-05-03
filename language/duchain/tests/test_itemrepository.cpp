@@ -22,21 +22,26 @@ struct TestItem {
   unsigned int itemSize() const {
     return sizeof(TestItem) + m_dataSize;
   }
-  
-  void verifySame(const TestItem* rhs) {
-    QVERIFY(rhs->m_hash == m_hash);
-    QCOMPARE(itemSize(), rhs->itemSize());
-    QVERIFY(memcmp((char*)this, rhs, itemSize()) == 0);
+
+  bool equals(const TestItem* rhs) const
+  {
+    return rhs->m_hash == m_hash
+        && itemSize() == rhs->itemSize()
+        && memcmp((char*)this, rhs, itemSize()) == 0;
   }
-  
+
   uint m_hash;
   uint m_dataSize;
 };
 
 struct TestItemRequest {
   TestItem& m_item;
+  bool m_compareData;
 
-  TestItemRequest(TestItem& item) : m_item(item) {
+  TestItemRequest(TestItem& item, bool compareData = false)
+    : m_item(item)
+    , m_compareData(compareData)
+  {
   }
   enum {
     AverageSize = 700 //This should be the approximate average size of an Item
@@ -65,7 +70,7 @@ struct TestItemRequest {
   
   //Should return whether the here requested item equals the given item
   bool equals(const TestItem* item) const {
-    return hash() == item->hash();
+    return hash() == item->hash() && (!m_compareData || m_item.equals(item));
   }
 };
 
@@ -125,7 +130,7 @@ class TestItemRepository : public QObject {
             itemSize = (rand() % 1000) + sizeof(TestItem);
           TestItem* item = createItem(++itemId, itemSize);
           Q_ASSERT(item->hash() == itemId);
-          item->verifySame(item);
+          QVERIFY(item->equals(item));
           uint index = repository.index(TestItemRequest(*item));
           if(index > highestSeenIndex)
             highestSeenIndex = index;
@@ -145,7 +150,7 @@ class TestItemRepository : public QObject {
               uint index = repository.findIndex(*realItemsById[pick]);
               QVERIFY(index);
               QVERIFY(realItemsByIndex.contains(index));
-              realItemsByIndex[index]->verifySame(repository.itemFromIndex(index));
+              QVERIFY(realItemsByIndex[index]->equals(repository.itemFromIndex(index)));
               
               if((uint) (rand() % 100) < deletionProbability) {
                 ++totalDeletions;
@@ -154,7 +159,7 @@ class TestItemRepository : public QObject {
                 QVERIFY(!repository.findIndex(*realItemsById[pick]));
                 uint newIndex = repository.index(*realItemsById[pick]);
                 QVERIFY(newIndex);
-                realItemsByIndex[index]->verifySame(repository.itemFromIndex(newIndex));
+                QVERIFY(realItemsByIndex[index]->equals(repository.itemFromIndex(newIndex)));
                 
 #ifdef POSITION_TEST
                 //Since we have previously deleted the item, there must be enough space
@@ -207,6 +212,37 @@ class TestItemRepository : public QObject {
         strings[i] = indexedString.str();
         QCOMPARE(qString, strings[i]);
       }
+    }
+    void deleteClashingMonsterBucket()
+    {
+      KDevelop::ItemRepository<TestItem, TestItemRequest> repository("TestItemRepository");
+      const uint hash = 1235;
+
+      QScopedPointer<TestItem> monsterItem(createItem(hash, KDevelop::ItemRepositoryBucketSize + 10));
+      QScopedPointer<TestItem> smallItem(createItem(hash, 20));
+      QVERIFY(!monsterItem->equals(smallItem.data()));
+
+      uint smallIndex = repository.index(TestItemRequest(*smallItem, true));
+      uint monsterIndex = repository.index(TestItemRequest(*monsterItem, true));
+      QVERIFY(monsterIndex != smallIndex);
+
+      repository.deleteItem(smallIndex);
+      QVERIFY(!repository.findIndex(TestItemRequest(*smallItem, true)));
+      QCOMPARE(monsterIndex, repository.findIndex(TestItemRequest(*monsterItem, true)));
+      repository.deleteItem(monsterIndex);
+
+      // now in reverse order, with different data see: https://bugs.kde.org/show_bug.cgi?id=272408
+
+      monsterItem.reset(createItem(hash + 1, KDevelop::ItemRepositoryBucketSize + 10));
+      smallItem.reset(createItem(hash + 1, 20));
+      QVERIFY(!monsterItem->equals(smallItem.data()));
+      monsterIndex = repository.index(TestItemRequest(*monsterItem, true));
+      smallIndex = repository.index(TestItemRequest(*smallItem, true));
+
+      repository.deleteItem(monsterIndex);
+      QCOMPARE(smallIndex, repository.findIndex(TestItemRequest(*smallItem, true)));
+      QVERIFY(!repository.findIndex(TestItemRequest(*monsterItem, true)));
+      repository.deleteItem(smallIndex);
     }
 };
 

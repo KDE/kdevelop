@@ -1483,10 +1483,11 @@ class ItemRepository : public AbstractItemRepository {
       //Put the next item in the nextBucketForHash chain into m_firstBucketForHash that has a hash clashing in that array.
       Q_ASSERT(*bucketHashPosition == bucket);
       IF_ENSURE_REACHABLE(unsigned short previous = bucket;)
-      while(!bucketPtr->hasClashingItem(hash, bucketHashSize))
+      auto nextBucket = bucketPtr;
+      while(!nextBucket->hasClashingItem(hash, bucketHashSize))
       {
 //         Q_ASSERT(!bucketPtr->hasClashingItemReal(hash, bucketHashSize));
-        unsigned short next = bucketPtr->nextBucketForHash(hash);
+        unsigned short next = nextBucket->nextBucketForHash(hash);
         ENSURE_REACHABLE(next);
         ENSURE_REACHABLE(previous);
 
@@ -1498,12 +1499,12 @@ class ItemRepository : public AbstractItemRepository {
         IF_ENSURE_REACHABLE(previous = next;)
 
         if(next) {
-          bucketPtr = m_fastBuckets[next];
+          nextBucket = m_fastBuckets[next];
 
-          if(!bucketPtr)
+          if(!nextBucket)
           {
             initializeBucket(next);
-            bucketPtr = m_fastBuckets[next];
+            nextBucket = m_fastBuckets[next];
           }
         }else{
           break;
@@ -1536,6 +1537,13 @@ class ItemRepository : public AbstractItemRepository {
       //Convert the monster-bucket back to multiple normal buckets, and put them into the free list
       uint newBuckets = bucketPtr->monsterBucketExtent()+1;
       Q_ASSERT(bucketPtr->isEmpty());
+      if (!previousBucketNumber) {
+        // see https://bugs.kde.org/show_bug.cgi?id=272408
+        // the monster bucket will be deleted and new smaller ones created
+        // the next bucket for this hash is invalid anyways as done above
+        // but calling the below unconditionally leads to other issues...
+        bucketPtr->setNextBucketForHash(hash, 0);
+      }
       convertMonsterBucket(bucket, 0);
       for(uint created = bucket; created < bucket + newBuckets; ++created) {
         putIntoFreeList(created, bucketForIndex(created));
