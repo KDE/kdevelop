@@ -74,8 +74,12 @@ CXChildVisitResult visit(CXCursor cursor, CXCursor /*parent*/, CXClientData d)
     ClangString kindName(clang_getCursorKindSpelling(kind));
     (*data->out) << " of kind "  << kindName << " (" << kind << ")";
 
+    ClangRange range(clang_getCursorExtent(cursor));
+    KDevelop::SimpleRange simpleRange = range.toSimpleRange();
     ClangString fileName(clang_getFileName(file));
-    (*data->out) << " in " << fileName << '@' << line << ':' << column;
+    (*data->out) << " in " << fileName << '@' << '['
+        << '(' << simpleRange.start.line+1 << ',' << simpleRange.start.column+1 << "),"
+        << '(' << simpleRange.end.line+1 << ',' << simpleRange.end.column+1 << ")]";
 
     (*data->out) << endl;
 
