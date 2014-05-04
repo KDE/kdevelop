@@ -1718,7 +1718,7 @@ class ItemRepository : public AbstractItemRepository {
         ++loadedBuckets;
 
 #ifdef DEBUG_MONSTERBUCKETS
-    for(int a = 0; a < m_freeSpaceBucketsSize; ++a) {
+    for(uint a = 0; a < m_freeSpaceBucketsSize; ++a) {
       if(a > 0) {
         uint prev = a-1;
         uint prevLargestFree = bucketForIndex(m_freeSpaceBuckets[prev])->largestFreeSize();
@@ -2304,7 +2304,7 @@ class ItemRepository : public AbstractItemRepository {
   inline void initializeBucket(unsigned int bucketNumber) const {
     Q_ASSERT(bucketNumber);
 #ifdef DEBUG_MONSTERBUCKETS
-    for(int offset = 1; offset < 5; ++offset) {
+    for(uint offset = 1; offset < 5; ++offset) {
       int test = ((int)bucketNumber) - offset;
       if(test >= 0 && m_fastBuckets[test]) {
         Q_ASSERT(m_fastBuckets[test]->monsterBucketExtent() < offset);
