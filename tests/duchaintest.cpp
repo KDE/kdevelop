@@ -406,6 +406,8 @@ void DUChainTest::testGlobalFunctionDeclaration()
     DUChainReadLocker lock;
     QVERIFY(file.topContext());
     QCOMPARE(file.topContext()->localDeclarations().size(), 1);
+    QCOMPARE(file.topContext()->childContexts().size(), 1);
+    QVERIFY(!file.topContext()->childContexts().first()->inSymbolTable());
 }
 
 #include "duchaintest.moc"

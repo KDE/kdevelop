@@ -225,7 +225,7 @@ private:
         auto context = new KDevelop::DUContext(range, m_parentContext->context);
         context->setType(Type);
         context->setLocalScopeIdentifier(scopeId);
-        if (Type == KDevelop::DUContext::Other)
+        if (Type == KDevelop::DUContext::Other || Type == KDevelop::DUContext::Function)
             context->setInSymbolTable(false);
         if (CK == CXCursor_CXXMethod) {
             CXCursor semParent = clang_getCursorSemanticParent(cursor);
