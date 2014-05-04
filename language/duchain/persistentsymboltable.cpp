@@ -314,7 +314,6 @@ PersistentSymbolTable::Declarations PersistentSymbolTable::getDeclarations(const
   
   PersistentSymbolTableItem item;
   item.id = id;
-  PersistentSymbolTableRequestItem request(item);
   
   uint index = d->m_declarations.findIndex(item);
   
@@ -333,7 +332,6 @@ void PersistentSymbolTable::declarations(const IndexedQualifiedIdentifier& id, u
   
   PersistentSymbolTableItem item;
   item.id = id;
-  PersistentSymbolTableRequestItem request(item);
   
   uint index = d->m_declarations.findIndex(item);
   
