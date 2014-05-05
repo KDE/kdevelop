@@ -1332,7 +1332,8 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::memberAccessCompletionIt
   if (containers.isEmpty())
   {
     ifDebug( kDebug() << "missing-include completion for" << m_expression << m_expressionResult.toString(); )
-    eventuallyAddGroup(i18n("Not Included"), 700, missingIncludeCompletionItems(m_expression, QString(), m_expressionResult, m_duContext.data(), 0, true ));
+    lock.unlock();
+    eventuallyAddGroup(i18n("Not Included"), 700, missingIncludeCompletionItems(m_expression, QString(), m_expressionResult, m_duContext, 0, true ));
   }
 
   //Used to show only one namespace-declaration per namespace
@@ -1461,7 +1462,8 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::templateAccessCompletion
     item->m_isTemplateCompletion = true;
     items << CompletionTreeItemPointer( item );
   }else{
-    items += missingIncludeCompletionItems(m_expression, QString(), m_expressionResult, m_duContext.data(), depth(), true );
+    lock.unlock();
+    items += missingIncludeCompletionItems(m_expression, QString(), m_expressionResult, m_duContext, depth(), true );
   }
   return items;
 }
@@ -1473,9 +1475,11 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::commonFunctionAccessComp
   uint max = MoreArgumentHintsCompletionItem::resetMaxArgumentHints(!fullCompletion);
 
   if(functions().isEmpty() && m_accessType != BinaryOpFunctionCallAccess) {
-    items += missingIncludeCompletionItems(m_expression, QString(), m_expressionResult, m_duContext.data(), depth(), true );
+    items += missingIncludeCompletionItems(m_expression, QString(), m_expressionResult, m_duContext, depth(), true );
     return items;
   }
+
+  LOCKDUCHAIN; if (!m_duContext) return items;
 
   uint num = 0;
   foreach( const Cpp::CodeCompletionContext::Function &function, functions() ) {
@@ -1496,9 +1500,10 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::commonFunctionAccessComp
 QList< CompletionTreeItemPointer > CodeCompletionContext::binaryFunctionAccessCompletionItems( bool fullCompletion )
 {
   QList<CompletionTreeItemPointer> items;
-  LOCKDUCHAIN; if (!m_duContext) return items;
 
   items += commonFunctionAccessCompletionItems(fullCompletion);
+
+  LOCKDUCHAIN; if (!m_duContext) return items;
 
   //Argument-hints for builtin operators
   AbstractType::Ptr type = m_expressionResult.type.abstractType();
@@ -1544,9 +1549,10 @@ QList< CompletionTreeItemPointer > CodeCompletionContext::binaryFunctionAccessCo
 QList<CompletionTreeItemPointer> CodeCompletionContext::functionAccessCompletionItems(bool fullCompletion)
 {
   QList<CompletionTreeItemPointer> items;
-  LOCKDUCHAIN; if (!m_duContext) return items;
 
   items += commonFunctionAccessCompletionItems(fullCompletion);
+
+  LOCKDUCHAIN; if (!m_duContext) return items;
 
   if(!m_expressionResult.isValid() ||
      !m_expressionResult.type.abstractType() ||
@@ -1938,6 +1944,7 @@ void CodeCompletionContext::addImplementationHelpers()
 void CodeCompletionContext::addCPPBuiltin()
 {
   ///Eventually add a "this" item
+  LOCKDUCHAIN; if (!m_duContext) return;
   DUContext* functionContext = m_duContext.data();
   if(m_onlyShow != ShowSignals && m_onlyShow != ShowSlots && m_onlyShow != ShowTypes) {
     while(functionContext && functionContext->type() == DUContext::Other && functionContext->parentContext() && functionContext->parentContext()->type() == DUContext::Other)
@@ -2025,9 +2032,8 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& sh
         if(depth() == 0 && (m_onlyShow == ShowAll || m_onlyShow == ShowTypes || m_onlyShow == ShowIntegralConstants))
         {
           items += standardAccessCompletionItems();
-          LOCKDUCHAIN; if (!m_duContext) return items;
 #ifndef TEST_COMPLETION
-          eventuallyAddGroup(i18n("Not Included"), 700, missingIncludeCompletionItems(m_followingText + ':', {}, {}, m_duContext.data()));
+          eventuallyAddGroup(i18n("Not Included"), 700, missingIncludeCompletionItems(m_followingText + ':', {}, {}, m_duContext));
 #endif
           addCPPBuiltin();
         }

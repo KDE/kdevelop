@@ -18,24 +18,29 @@
 
 #include "missingincludeitem.h"
 
+
+#include <klocale.h>
+
+#include <ktexteditor/document.h>
+
 #include <language/duchain/namespacealiasdeclaration.h>
 #include <language/duchain/persistentsymboltable.h>
 #include <language/duchain/types/abstracttype.h>
 #include <language/duchain/types/delayedtype.h>
 #include <language/duchain/types/identifiedtype.h>
+#include <language/duchain/classdeclaration.h>
+#include <language/duchain/duchainutils.h>
+#include <language/duchain/aliasdeclaration.h>
+
 #include "../cppduchain/navigation/navigationwidget.h"
 #include "../cppduchain/typeutils.h"
 #include "../cppduchain/templateparameterdeclaration.h"
 #include "../cppduchain/expressionevaluationresult.h"
-#include "../cpplanguagesupport.h"
+
 #include "../cpputils.h"
+
 #include "model.h"
-#include <klocale.h>
-#include <ktexteditor/document.h>
-#include <language/duchain/classdeclaration.h>
-#include <language/duchain/duchainutils.h>
 #include "helpers.h"
-#include <language/duchain/aliasdeclaration.h>
 #include "sourcemanipulation.h"
 
 //Whether relative urls like "../bla" should be allowed. Even if this is false, they will be preferred over global urls.
@@ -217,9 +222,8 @@ QStringList candidateIncludeFiles(Declaration* decl) {
  *
  * @note DUChain must be locked
  */
-QStringList candidateIncludeFilesFromNameMatcher(const QString& source, const QualifiedIdentifier& id)
+QStringList candidateIncludeFilesFromNameMatcher(const QList<IncludeItem>& includeItems, const QualifiedIdentifier& id)
 {
-  const QList<IncludeItem> includeItems = CppUtils::allFilesInIncludePath(source, false, QString());
   QStringList result;
   for (const IncludeItem& item : includeItems) {
     // we never want to have directories in the result set
@@ -261,10 +265,14 @@ KSharedPtr<MissingIncludeCompletionItem> includeDirectiveFromUrl(const KUrl& fro
 QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(const QString& expression,
                                                                          const QString& displayTextPrefix,
                                                                          const Cpp::ExpressionEvaluationResult& expressionResult,
-                                                                         KDevelop::DUContext* context,
+                                                                         const KDevelop::DUContextPointer& context,
                                                                          int argumentHintDepth,
                                                                          bool needInstance)
 {
+  DUChainReadLocker lock;
+  if (!context)
+    return {};
+
   AbstractType::Ptr type = TypeUtils::targetType(expressionResult.type.abstractType(), context->topContext());
 
   //Collect all visible "using namespace" imports
@@ -389,7 +397,15 @@ QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(const Q
     }
   }
 
-  auto candidateFiles = candidateIncludeFilesFromNameMatcher(currentUrl.toLocalFile(), identifier);
+  lock.unlock();
+  // NOTE: this will acquire the foreground lock and thus we must not hold the duchain lock here
+  const QList<IncludeItem> includeItems = CppUtils::allFilesInIncludePath(currentUrl.toLocalFile(), false, QString());
+  lock.lock();
+
+  if (!context)
+    return ret;
+
+  auto candidateFiles = candidateIncludeFilesFromNameMatcher(includeItems, identifier);
   kDebug() << "candidates from name matching:" << candidateFiles;
   for (const QString& file : candidateFiles) {
     ret += itemsForFile(displayTextPrefix, file, includePaths, currentPath, IndexedDeclaration(), argumentHintDepth, directives);

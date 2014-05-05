@@ -29,11 +29,16 @@
 #include <language/codegen/coderepresentation.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/duchain.h>
+#include <language/duchain/duchainlock.h>
 #include <language/util/includeitem.h>
+
+#include "interfaces/foregroundlock.h"
 
 #include <project/projectmodel.h>
 
 #include <QDirIterator>
+#include <QThread>
+#include <QCoreApplication>
 
 template<class T>
 static QList<T> makeListUnique(const QList<T>& list)
@@ -288,10 +293,42 @@ bool needsUpdate(const Cpp::EnvironmentFilePointer& file, const Path& localPath,
   return false;
 }
 
+/**
+ * This is an ugly HACK but well... it works and doesn't require an extremely big API refactoring.
+ *
+ * Thing is, the findIncludePaths was potentially called from background threads, mostly during
+ * code completion. From there, it is not safe to call IncludePathComputer::computeForeground.
+ * To fix this, we now add another eventloop roundtrip, execute that function in the foreground
+ * and then afterwards compute the rest in the background. This does mean that the background thread
+ * is _blocked_ while we compute stuff in the foreground.
+ *
+ * This must be properly fixed when we port the MissingInclude feature to clang. There, the
+ * include paths must be queried in the foreground thread, before invoking code completion.
+ */
+class IncludePathForegroundComputer : public DoInForeground
+{
+public:
+    IncludePathForegroundComputer(IncludePathComputer* includePathComputer)
+      : m_includePathComputer(includePathComputer)
+    {}
+
+private:
+    void doInternal() override final
+    {
+      m_includePathComputer->computeForeground();
+    }
+
+    IncludePathComputer* m_includePathComputer;
+};
+
 Path::List findIncludePaths(const QString& source)
 {
+  Q_ASSERT(QThread::currentThread() == qApp->thread() ||
+           (!DUChain::lock()->currentThreadHasReadLock() && !DUChain::lock()->currentThreadHasWriteLock()));
+
   IncludePathComputer comp(source);
-  comp.computeForeground();
+  IncludePathForegroundComputer foreground(&comp);
+  foreground.doIt();
   comp.computeBackground();
   return comp.result();
 }

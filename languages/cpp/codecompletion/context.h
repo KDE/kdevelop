@@ -243,7 +243,7 @@ namespace Cpp {
       QList<CompletionTreeItemPointer> templateAccessCompletionItems();
       QList<CompletionTreeItemPointer> functionAccessCompletionItems(bool fullCompletion);
       QList<CompletionTreeItemPointer> binaryFunctionAccessCompletionItems(bool fullCompletion);
-      ///*DUChain must be locked*
+      ///*DUChain must _not_ be locked*
       QList<CompletionTreeItemPointer> commonFunctionAccessCompletionItems(bool fullCompletion);
       QList<CompletionTreeItemPointer> includeListAccessCompletionItems(const bool& shouldAbort);
       QList<CompletionTreeItemPointer> signalSlotAccessCompletionItems();
