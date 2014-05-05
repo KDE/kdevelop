@@ -38,6 +38,7 @@
 #include <interfaces/contextmenuextension.h>
 
 #include "codegen/simplerefactoring.h"
+#include "codegen/codeassistant.h"
 
 #include <language/codecompletion/codecompletion.h>
 #include <language/highlighting/codehighlighting.h>
@@ -58,6 +59,7 @@ ClangSupport::ClangSupport(QObject* parent, const QVariantList& )
 , ILanguageSupport()
 , m_highlighting(new KDevelop::CodeHighlighting(this))
 , m_index(new ClangIndex)
+, m_assistant(new CodeAssistant)
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::ILanguageSupport )
     setXMLFile( "kdevclangsupport.rc" );

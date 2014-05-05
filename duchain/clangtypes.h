@@ -117,6 +117,8 @@ public:
     ClangLocation start() const;
     ClangLocation end() const;
 
+    CXSourceRange range() const;
+
     KDevelop::DocumentRange toDocumentRange() const;
 
     KDevelop::SimpleRange toSimpleRange() const;
@@ -124,7 +126,7 @@ public:
     KDevelop::RangeInRevision toRangeInRevision() const;
 
 private:
-    CXSourceRange range;
+    CXSourceRange m_range;
 };
 
 #endif // CLANGTYPES_H

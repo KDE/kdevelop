@@ -148,24 +148,29 @@ ClangLocation::~ClangLocation()
 }
 
 ClangRange::ClangRange(CXSourceRange range)
-    : range(range)
+    : m_range(range)
 {
 
 }
 
 ClangLocation ClangRange::start() const
 {
-    return {clang_getRangeStart(range)};
+    return {clang_getRangeStart(m_range)};
 }
 
 ClangLocation ClangRange::end() const
 {
-    return {clang_getRangeEnd(range)};
+    return {clang_getRangeEnd(m_range)};
+}
+
+CXSourceRange ClangRange::range() const
+{
+    return m_range;
 }
 
 DocumentRange ClangRange::toDocumentRange() const
 {
-    auto start = clang_getRangeStart(range);
+    auto start = clang_getRangeStart(m_range);
     CXFile file;
     clang_getFileLocation(start, &file, 0, 0, 0);
     ClangString fileName(clang_getFileName(file));

@@ -17,6 +17,7 @@ target_link_libraries(clang-parser
 kde4_add_unit_test(codecompletiontest
     codecompletiontest.cpp
     $<TARGET_OBJECTS:kdevclangcodecompletion>
+    $<TARGET_OBJECTS:kdevclangutil>
 )
 
 target_link_libraries(codecompletiontest

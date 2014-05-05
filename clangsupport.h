@@ -31,6 +31,7 @@
 
 class ClangIndex;
 class SimpleRefactoring;
+class CodeAssistant;
 
 class ClangSupport : public KDevelop::IPlugin, public KDevelop::ILanguageSupport, public KDevelop::IBuddyDocumentFinder
 {
@@ -68,6 +69,7 @@ private:
     QScopedPointer<ClangIndex> m_index;
     SimpleRefactoring *m_refactoring;
 
+    QScopedPointer<CodeAssistant> m_assistant;
 };
 
 #endif

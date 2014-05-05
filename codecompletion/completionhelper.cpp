@@ -29,6 +29,8 @@
 
 #include <QLinkedList>
 
+#include "../util/clangutils.h"
+
 namespace {
 
 struct OverrideInfo
@@ -105,28 +107,6 @@ void processBaseClass(CXCursor cursor, FunctionOverrideList* functionList)
     clang_visitChildren(ref, baseClassVisitor, &info);
 }
 
-bool isConstMethod(CXCursor cursor)
-{
-
-    if (clang_getCursorKind(cursor) != CXCursor_CXXMethod) {
-        return false;
-    }
-
-#if CINDEX_VERSION_MINOR >= 24
-    return clang_CXXMethod_isConst(cursor);
-#else
-    // The clang-c API currently doesn't provide access to a function declaration's
-    //const qualifier. This parses the Unified Symbol Resolution to retrieve that information.
-    //However, since the USR is undocumented, this might break in the future.
-    QString usr = ClangString(clang_getCursorUSR(cursor)).toString();
-    if (usr.length() >= 2 && usr.at(usr.length() - 2) == '#') {
-        return ((usr.at(usr.length() - 1).toAscii()) - '0') & 0x1;
-    } else {
-        return false;
-    }
-#endif
-}
-
 CXChildVisitResult baseClassVisitor(CXCursor cursor, CXCursor /*parent*/, CXClientData data)
 {
     QString templateParam;
@@ -166,8 +146,7 @@ CXChildVisitResult baseClassVisitor(CXCursor cursor, CXCursor /*parent*/, CXClie
             fp.name = ClangString(clang_getCursorSpelling(cursor)).toString();
             fp.params =  params;
             fp.isVirtual = clang_CXXMethod_isPureVirtual(cursor);
-            fp.isConst = isConstMethod(cursor);
-
+            fp.isConst = ClangUtils::isConstMethod(cursor);
             info->functions->append(fp);
         }
         return CXChildVisit_Continue;
@@ -253,46 +232,23 @@ CXChildVisitResult declVisitor(CXCursor cursor, CXCursor parent, CXClientData d)
         return CXChildVisit_Continue;
     }
 
-    //Get the return type
-    QString returnType;
+    //TODO Add support for pure virtual functions
+    QString signature = ClangUtils::getCursorSignature(cursor, data->scopePrefix);
+
+    QString returnType, rest;
     if (kind != CXCursor_Constructor && kind != CXCursor_Destructor) {
-        returnType = ClangString(clang_getTypeSpelling(clang_getCursorResultType(cursor))).toString();
-    }
-
-    //Build the function name, with scope and parameters
-    QStringList parts(data->scopePrefix);
-    QString functionName = ClangString(clang_getCursorSpelling(cursor)).toString();
-    if (functionName.contains('<')) {
-        functionName = functionName.left(functionName.indexOf('<'));
-    }
-    parts.append(functionName);
-
-    //Add the parameters and such
-    parts.append(QString('('));
-    int numArgs = clang_Cursor_getNumArguments(cursor);
-    for (int i = 0; i < numArgs; i++)
-    {
-        CXCursor arg = clang_Cursor_getArgument(cursor, i);
-        QString id = ClangString(clang_getCursorDisplayName(arg)).toString();
-        QString type = ClangString(clang_getTypeSpelling(clang_getCursorType(arg))).toString();
-        parts.append(type + ' ' + id + (i < numArgs - 1 ? ", " : ""));
-    }
-
-    if (clang_Cursor_isVariadic(cursor)) {
-        parts.append(numArgs > 0 ? ", ..." : "...");
-    }
-
-    parts.append(QString(')'));
-
-    if (isConstMethod(cursor)) {
-        parts.append(" const");
+        int spaceIndex = signature.indexOf(" ");
+        returnType = signature.left(spaceIndex);
+        rest = signature.right(signature.count() - spaceIndex - 1);
+    } else {
+        rest = signature;
     }
 
     //TODO Add support for pure virtual functions
 
     data->prototypes->append(FuncImplementInfo{kind == CXCursor_Constructor,
                                                kind == CXCursor_Destructor,
-                                               data->templatePrefix,returnType, parts.join(QString())});
+                                               data->templatePrefix, returnType, rest});
 
     return CXChildVisit_Continue;
 }
@@ -303,14 +259,14 @@ CompletionHelper::CompletionHelper(const CXTranslationUnit& unit, const KDevelop
 {
     CXFile clangFile = clang_getFile(unit, file);
     if (!clangFile) {
-        kDebug() << "Override completion helper couldn't find file: " << file;
+        kDebug() << "Completion helper couldn't find file: " << file;
         return;
     }
 
     CXSourceLocation location = clang_getLocation(unit, clangFile, position.line + 1, position.column + 1);
 
     if (clang_equalLocations(clang_getNullLocation(), location)) {
-        kDebug() << "Override completion helper given invalid position " << position
+        kDebug() << "Completion helper given invalid position " << position
                  << " in file " << file;
         return;
     }
