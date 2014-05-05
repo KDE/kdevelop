@@ -23,7 +23,7 @@ set(kdevcpplanguagesupport_PART_SRCS
     cpputils.cpp
     includepathresolver.cpp
     setuphelpers.cpp
-    setuphelpers_gcc.cpp
+    setuphelpers_gcc_like.cpp
     quickopen.cpp
     
     codecompletion/model.cpp

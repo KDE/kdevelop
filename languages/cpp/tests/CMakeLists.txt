@@ -8,7 +8,7 @@ include_directories(
 set(setuphelpers_SRCS
 
   ../setuphelpers.cpp
-  ../setuphelpers_gcc.cpp
+  ../setuphelpers_gcc_like.cpp
 )
 if(MSVC)
     list(APPEND setuphelpers_SRCS ../setuphelpers_msvc.cpp)
