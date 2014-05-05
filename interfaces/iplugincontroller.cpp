@@ -68,11 +68,6 @@ QStringList IPluginController::argumentsFromService( const KService::Ptr &servic
     return args;
 }
 
-void IPluginController::pluginUnloading(IPlugin * plugin)
-{
-    emit pluginUnloaded(plugin);
-}
-
 KPluginInfo::List IPluginController::queryExtensionPlugins(const QString &extension, const QStringList &constraints)
 {
     QStringList c = constraints;

@@ -9,11 +9,6 @@ include_directories(
     ${KDevPlatform_SOURCE_DIR}/shell
     )
 
-# Disabled until I find out how to load plugins from builddir
-#set( plugincontrollertest_plugin_SRCS nonguiinterfaceplugin.cpp )
-#kde4_add_plugin( kdevnonguiinterfaceplugin ${plugincontrollertest_plugin_SRCS} )
-#target_link_libraries( kdevnonguiinterfaceplugin ${QT_QTCORE_LIBRARY} ${KDE4_KDECORE_LIBRARY} kdevplatforminterfaces )
-
 set(documentcontrollertest_SRCS documentcontrollertest.cpp)
 kde4_add_unit_test(shell-documentcontrollertest ${documentcontrollertest_SRCS})
 target_link_libraries( shell-documentcontrollertest ${QT_QTTEST_LIBRARY} ${KDEVPLATFORM_TESTS_LIBRARIES})
@@ -40,10 +35,16 @@ set( sessioncontrollertest_SRCS sessioncontrollertest.cpp )
 kde4_add_unit_test(shell-sessioncontrollertest ${sessioncontrollertest_SRCS})
 target_link_libraries(shell-sessioncontrollertest ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} kdevplatformtests kdevplatformshell kdevplatforminterfaces sublime )
 
+configure_file("testfilepaths.h.cmake" "testfilepaths.h" ESCAPE_QUOTES)
+configure_file(share/kde4/services/kdevnonguiinterfaceplugin.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/share/kde4/services/kdevnonguiinterfaceplugin.desktop)
+set( plugincontrollertest_plugin_SRCS nonguiinterfaceplugin.cpp )
+kde4_add_plugin( kdevnonguiinterfaceplugin ${plugincontrollertest_plugin_SRCS} )
+target_link_libraries( kdevnonguiinterfaceplugin ${QT_QTCORE_LIBRARY} ${KDE4_KDECORE_LIBRARY}  kdevplatforminterfaces )
+
 # Disabled for now, until I find a way of loading plugins from builddir/sourcedir
-#set( plugincontrollertest_SRCS plugincontrollertest.cpp )
-#kde4_add_unit_test(shell-plugincontrollertest ${plugincontrollertest_SRCS})
-#target_link_libraries(shell-plugincontrollertest ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS} kdevplatformshell kdevplatforminterfaces sublime )
+set( plugincontrollertest_SRCS plugincontrollertest.cpp )
+kde4_add_unit_test(shell-plugincontrollertest ${plugincontrollertest_SRCS})
+target_link_libraries(shell-plugincontrollertest ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS} kdevplatformtests kdevplatformshell kdevplatforminterfaces sublime )
 
 set( testcontrollertest_SRCS testcontrollertest.cpp )
 kde4_add_unit_test(shell-testcontrollertest ${testcontrollertest_SRCS})

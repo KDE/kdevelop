@@ -36,6 +36,8 @@
 #include "../core.h"
 #include "../plugincontroller.h"
 
+#include "testfilepaths.h"
+
 using namespace KDevelop;
 
 using QTest::kWaitForSignal;
@@ -45,8 +47,8 @@ using QTest::kWaitForSignal;
 void PluginControllerTest::initTestCase()
 {
     // This is needed so we don't have to install our test plugin, adds kdevplatform/shell/tests and builddir/lib to the KDEDIRS variable
-    KGlobal::mainComponent().dirs()->addResourceDir( "module", BUILD_DIR"/lib" );
-    KGlobal::mainComponent().dirs()->addResourceDir( "services", KDESRCDIR"/share/kde4/services" );
+    KGlobal::mainComponent().dirs()->addResourceDir( "module", TEST_BIN_DIR "/../../lib" );
+    KGlobal::mainComponent().dirs()->addResourceDir( "services", TEST_BIN_DIR);
 
     kDebug() << "module dirs:" << KGlobal::mainComponent().dirs()->resourceDirs("module");
     QString kdedirs = "";
@@ -60,7 +62,7 @@ void PluginControllerTest::initTestCase()
             break;
         }
     }
-    kdedirs = QString(KDESRCDIR":")+kdedirs;
+    kdedirs = QString(TEST_BIN_DIR":")+kdedirs;
     KProcess p;
     p.setEnv( "KDEDIRS", kdedirs, true );
     p.setProgram( "kbuildsycoca4" );
