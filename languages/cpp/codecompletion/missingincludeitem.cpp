@@ -35,7 +35,6 @@
 #include <language/duchain/classdeclaration.h>
 #include <language/duchain/duchainutils.h>
 #include "helpers.h"
-#include "missingincludemodel.h"
 #include <language/duchain/aliasdeclaration.h>
 #include "sourcemanipulation.h"
 
@@ -531,7 +530,8 @@ void MissingIncludeCompletionItem::execute(KTextEditor::Document* document, cons
   // TODO: skip first comment block, if it exists
 
   document->insertLine(line, lineToInsert());
-  MissingIncludeCompletionModel::startCompletionAfterParsing(IndexedString(document->url()));
+
+  CodeCompletionModel::self()->startCompletionAfterParsing(IndexedString(document->url()));
 }
 
 int MissingIncludeCompletionItem::inheritanceDepth() const {

@@ -56,7 +56,6 @@
 #include "missingincludeitem.h"
 #include "implementationhelperitem.h"
 #include <qtfunctiondeclaration.h>
-#include "missingincludemodel.h"
 #include <templateparameterdeclaration.h>
 #include <expressionparser.h>
 #include <language/duchain/classdeclaration.h>
@@ -442,9 +441,6 @@ CodeCompletionContext( KDevelop::DUContextPointer context, const QString& text,
     m_expressionIsTypePrefix( false ),
     m_doAccessFiltering( DO_ACCESS_FILTERING )
 {
-#ifndef TEST_COMPLETION
-  MissingIncludeCompletionModel::self().stop();
-#endif
   if ( doIncludeCompletion() )
     return;
   //We'll have to get a few expressionResults and do other DUChain processing during construction
@@ -529,17 +525,6 @@ void CodeCompletionContext::processAllMemberAccesses() {
 
   if(type.cast<PointerType>())
     replaceCurrentAccess( ".", "->" );
-
-#ifndef TEST_COMPLETION // hmzzz ?? :) ///FIXME: manually test for these cases and get rid of comment to the left
-  DelayedType::Ptr delayed = type.cast<DelayedType>();
-  if( delayed && delayed->kind() == DelayedType::Unresolved ) {
-    eventuallyAddGroup(
-      i18n( "Not Included" ), 1000,
-      missingIncludeCompletionItems( m_expression, m_followingText + ": ",
-                                     m_expressionResult, m_duContext.data(), 0, true )
-    );
-  }
-#endif
 }
 
 void CodeCompletionContext::processArrowMemberAccess() {
@@ -1347,7 +1332,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::memberAccessCompletionIt
   if (containers.isEmpty())
   {
     ifDebug( kDebug() << "missing-include completion for" << m_expression << m_expressionResult.toString(); )
-    eventuallyAddGroup(i18n("Not Included Container"), 700, missingIncludeCompletionItems(m_expression, QString(), m_expressionResult, m_duContext.data(), 0, true ));
+    eventuallyAddGroup(i18n("Not Included"), 700, missingIncludeCompletionItems(m_expression, QString(), m_expressionResult, m_duContext.data(), 0, true ));
   }
 
   //Used to show only one namespace-declaration per namespace
@@ -2042,7 +2027,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& sh
           items += standardAccessCompletionItems();
           LOCKDUCHAIN; if (!m_duContext) return items;
 #ifndef TEST_COMPLETION
-          MissingIncludeCompletionModel::self().startWithExpression(m_duContext, QString(), m_followingText);
+          eventuallyAddGroup(i18n("Not Included"), 700, missingIncludeCompletionItems(m_followingText + ':', {}, {}, m_duContext.data()));
 #endif
           addCPPBuiltin();
         }
@@ -2064,13 +2049,6 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& sh
 
     if(depth() == 0)
     {
-      //Eventually add missing include-completion in cases like SomeNamespace::NotIncludedClass|
-      if(m_accessType == StaticMemberChoose) {
-#ifndef TEST_COMPLETION
-        MissingIncludeCompletionModel::self().startWithExpression(m_duContext, m_expression + "::", m_followingText);
-#endif
-      }
-
       if (!parentContext())
         addOverridableItems();
       if (isImplementationHelperValid())

@@ -33,7 +33,6 @@ set(kdevcpplanguagesupport_PART_SRCS
     codecompletion/helpers.cpp
     codecompletion/missingincludeitem.cpp
     codecompletion/implementationhelperitem.cpp
-    codecompletion/missingincludemodel.cpp
 
 #    codegen/cppnewclass.cpp
     codegen/simplerefactoring.cpp

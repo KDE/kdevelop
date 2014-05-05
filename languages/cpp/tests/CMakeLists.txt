@@ -21,7 +21,6 @@ set(test_common_SRCS
   ../codecompletion/implementationhelperitem.cpp
   ../codecompletion/item.cpp
   ../codecompletion/missingincludeitem.cpp
-  ../codecompletion/missingincludemodel.cpp
   ../codecompletion/model.cpp
   ../codecompletion/worker.cpp
   ../codegen/simplerefactoring.cpp

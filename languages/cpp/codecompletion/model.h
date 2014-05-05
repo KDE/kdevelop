@@ -26,6 +26,7 @@
 #include <language/codecompletion/codecompletionmodel.h>
 #include <ksharedptr.h>
 #include <language/duchain/duchainpointer.h>
+#include <language/duchain/indexedstring.h>
 #include <language/codecompletion/codecompletioncontext.h>
 
 namespace KDevelop {
@@ -33,6 +34,7 @@ namespace KDevelop {
   class Declaration;
   class CodeCompletionContext;
   class CompletionTreeElement;
+  class ParseJob;
 }
 
 namespace Cpp {
@@ -49,6 +51,10 @@ class CodeCompletionModel : public KDevelop::CodeCompletionModel
     CodeCompletionModel(QObject* parent);
     virtual ~CodeCompletionModel();
 
+    static CodeCompletionModel* self();
+
+    void startCompletionAfterParsing(const KDevelop::IndexedString& path);
+
   protected:
     virtual KTextEditor::Range completionRange(KTextEditor::View* view, const KTextEditor::Cursor& position);
     virtual KTextEditor::Range updateCompletionRange(KTextEditor::View* view, const KTextEditor::Range& range);
@@ -58,6 +64,15 @@ class CodeCompletionModel : public KDevelop::CodeCompletionModel
     virtual KDevelop::CodeCompletionWorker* createCompletionWorker();
 
     virtual void foundDeclarations(QList< KSharedPtr< KDevelop::CompletionTreeElement > > item, KSharedPtr< KDevelop::CodeCompletionContext > completionContext);
+
+  private slots:
+    void parseJobFinished(KDevelop::ParseJob* job);
+
+  private:
+    static CodeCompletionModel* s_self;
+
+    // when a document with this path has finished its parse job, code-completion will be restarted
+    KDevelop::IndexedString m_awaitDocument;
 };
 
 }
