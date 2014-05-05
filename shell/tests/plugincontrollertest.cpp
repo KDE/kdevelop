@@ -110,11 +110,14 @@ void PluginControllerTest::loadUnloadPlugin()
     QCOMPARE( args.at(0).toString(), QString( "kdevnonguiinterface" ) );
 
     QSignalSpy spy2(m_pluginCtrl, SIGNAL(pluginUnloaded(KDevelop::IPlugin*)) );
+    QSignalSpy spy3(m_pluginCtrl, SIGNAL(unloadingPlugin(KDevelop::IPlugin*)) );
     QVERIFY(spy2.isValid());
+    QVERIFY(spy3.isValid());
     m_pluginCtrl->unloadPlugin( "kdevnonguiinterface" );
     QVERIFY( !m_pluginCtrl->plugin( "kdevnonguiinterface" ) );
 
     QCOMPARE(spy2.size(), 1);
+    QCOMPARE(spy3.size(), 1);
 }
 
 void PluginControllerTest::loadFromExtension()
