@@ -519,6 +519,15 @@ IPlugin* PluginController::pluginForExtension( const QString& extension, const Q
 IPlugin *PluginController::pluginForExtension(const QString &extension, const QStringList &constraints)
 {
     //kDebug() << "Finding Plugin for Extension:" << extension << "|" << constraints;
+    if (constraints.isEmpty()) {
+        // fast-path for already loaded plugins which bypasses the costly KPluginInfo::fromServices call
+        for(IPlugin* plugin : d->loadedPlugins) {
+            if (plugin->extensions().contains(extension)) {
+                return plugin;
+            }
+        }
+    }
+
     KPluginInfo::List infos = queryExtensionPlugins(extension, constraints);
 
     if( infos.isEmpty() )

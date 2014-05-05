@@ -127,5 +127,13 @@ void PluginControllerTest::loadFromExtension()
     QCOMPARE( plugin->extensions(), QStringList() << "org.kdevelop.ITestNonGuiInterface" );
 }
 
+void PluginControllerTest::benchPluginForExtension()
+{
+    QBENCHMARK {
+        IPlugin* plugin = m_pluginCtrl->pluginForExtension( "org.kdevelop.ITestNonGuiInterface" );
+        QVERIFY( plugin );
+    }
+}
+
 QTEST_KDEMAIN( PluginControllerTest, GUI)
 #include "plugincontrollertest.moc"
