@@ -43,6 +43,7 @@ Comment[da]=Indstil hvilke makroer og inkluderingsmapper/-filer der skal føjes 
 Comment[de]=Einstellung der Makros und Include-Ordner/-Dateien, die zum für den Parser während des Einlesens des Projekts hinzugefügt werden.
 Comment[es]=Configurar las macros y los directorios/archivos a incluir que se añadirán al analizador sintáctico durante el análisis de los proyectos.
 Comment[fi]=Määritä, mitkä makrot ja include-hakemistot/tiedostot lisätään jäsentimelle projektin jäsentämisen aikana.
+Comment[hu]=Annak beállítása, hogy mely makrók és beágyazási könyvtárak/fájlok legyenek hozzáadva a feldolgozóhoz a projektfeldolgozás közben.
 Comment[nl]=Stel in welke macro's en ingevoegde mappen/bestanden toegevoegd zullen worden aan de parser bij het ontleden van het project.
 Comment[pl]=Skonfiguruj jakie pliki/katalogi makr i plików dołączanych będą dodawanado przetwarzania przy przetwarzaniu projektu.
 Comment[pt]=Define quais as macros e ficheiros/pastas incluídos que serão adicionados ao processador durante o processamento do projecto.
