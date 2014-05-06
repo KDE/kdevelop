@@ -28,7 +28,7 @@
 #include <QSharedPointer>
 #include <QReadWriteLock>
 
-#include <project/path.h>
+#include <util/path.h>
 
 #include "duchainexport.h"
 

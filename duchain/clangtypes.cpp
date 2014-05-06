@@ -28,7 +28,7 @@
 #include <language/editor/documentcursor.h>
 #include <language/editor/documentrange.h>
 #include <language/backgroundparser/urlparselock.h>
-#include <project/path.h>
+#include <util/path.h>
 
 #include "clangpch.h"
 

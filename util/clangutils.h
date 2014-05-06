@@ -22,7 +22,7 @@
 #ifndef CLANGUTILS_H
 #define CLANGUTILS_H
 
-#include <project/path.h>
+#include <util/path.h>
 
 #include <clang-c/Index.h>
 

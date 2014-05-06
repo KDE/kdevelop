@@ -22,7 +22,7 @@
 #define CLANGPCH_H
 
 #include <language/duchain/topducontext.h>
-#include <project/path.h>
+#include <util/path.h>
 
 #include "parsesession.h"
 #include "clanghelpers.h"

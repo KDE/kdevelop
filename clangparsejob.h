@@ -24,7 +24,7 @@
 #define CLANGPARSEJOB_H
 
 #include <language/backgroundparser/parsejob.h>
-#include <project/path.h>
+#include <util/path.h>
 #include <clang-c/Index.h>
 
 #include "duchain/parsesession.h"

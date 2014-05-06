@@ -18,7 +18,7 @@
 
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/projectmodel.h>
-#include <project/path.h>
+#include <util/path.h>
 
 #include <QDir>
 #include <QProcess>
@@ -387,7 +387,7 @@ ClangFixits fixUnknownDeclaration( const QualifiedIdentifier& identifier, const 
         if( !forwardDeclRange.isValid() ) {
             continue;
         }
-        fixits << ClangFixit{ decl, DocumentRange(file.toIndexed(), forwardDeclRange), QString() };
+        fixits << ClangFixit{ decl, DocumentRange(IndexedString(file.pathOrUrl()), forwardDeclRange), QString() };
     }
 
     const auto includepaths = includePaths( file );
@@ -407,7 +407,7 @@ ClangFixits fixUnknownDeclaration( const QualifiedIdentifier& identifier, const 
             continue;
         }
 
-        fixits << ClangFixit{ directive, DocumentRange(file.toIndexed(), range), QString() };
+        fixits << ClangFixit{ directive, DocumentRange(IndexedString(file.pathOrUrl()), range), QString() };
     }
 
     if( fixits.size() > maxSuggestions ) {

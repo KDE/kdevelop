@@ -32,7 +32,7 @@
 #include <language/duchain/indexedstring.h>
 #include <language/duchain/problem.h>
 #include <language/interfaces/iastcontainer.h>
-#include <project/path.h>
+#include <util/path.h>
 
 #include "duchainexport.h"
 
