@@ -42,7 +42,7 @@
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
 #include <project/projectmodel.h>
-#include <project/path.h>
+#include <util/path.h>
 #include <language/interfaces/editorcontext.h>
 #include <outputview/ioutputview.h>
 

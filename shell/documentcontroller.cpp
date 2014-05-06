@@ -51,7 +51,7 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/context.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <project/projectmodel.h>
-#include <project/path.h>
+#include <util/path.h>
 
 #include "core.h"
 #include "mainwindow.h"

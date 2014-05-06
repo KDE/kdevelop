@@ -27,7 +27,7 @@
 
 #include "abbreviations.h"
 
-#include <project/path.h>
+#include <util/path.h>
 
 namespace KDevelop {
 

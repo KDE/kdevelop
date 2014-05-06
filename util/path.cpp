@@ -15,7 +15,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
+ * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
@@ -263,12 +263,6 @@ bool Path::operator<(const Path& other) const
     // when we reach this point, all elements that we compared where equal
     // thus return whether we have less items than the other Path
     return size < otherSize;
-}
-
-// NOTE: If we'd introduce an IndexedPath this could maybe be optimized
-IndexedString Path::toIndexed() const
-{
-    return IndexedString(pathOrUrl());
 }
 
 KUrl Path::toUrl() const

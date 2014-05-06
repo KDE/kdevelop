@@ -26,7 +26,7 @@
 #include <QVector>
 
 #include <project/interfaces/iprojectfilter.h>
-#include <project/path.h>
+#include <util/path.h>
 
 #include "filter.h"
 

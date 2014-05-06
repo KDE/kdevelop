@@ -35,7 +35,7 @@ Boston, MA 02110-1301, USA.
 #include "core.h"
 #include <ktexteditor/view.h>
 #include <project/projectmodel.h>
-#include <project/path.h>
+#include <util/path.h>
 #include <kio/netaccess.h>
 #include <kmessagebox.h>
 #include <qfile.h>

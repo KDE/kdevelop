@@ -38,7 +38,7 @@
 #include <outputview/outputmodel.h>
 
 #include <project/projectmodel.h>
-#include <project/path.h>
+#include <util/path.h>
 
 #include <language/interfaces/editorcontext.h>
 

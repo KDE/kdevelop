@@ -50,7 +50,7 @@
 #include <interfaces/iruncontroller.h>
 #include <interfaces/isession.h>
 #include <project/projectmodel.h>
-#include <project/path.h>
+#include <util/path.h>
 #include <language/duchain/indexedstring.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>
 

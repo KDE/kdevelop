@@ -27,7 +27,7 @@
 
 #include "../projectexport.h"
 
-#include "../path.h"
+#include <util/path.h>
 
 class KJob;
 

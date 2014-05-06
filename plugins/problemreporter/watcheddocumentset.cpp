@@ -120,7 +120,7 @@ void ProjectSet::fileRemoved(ProjectFileItem* file)
 
 void ProjectSet::fileRenamed(const Path& oldFile, ProjectFileItem* newFile)
 {
-    if (m_documents.remove(oldFile.toIndexed())) {
+    if (m_documents.remove(IndexedString(oldFile.pathOrUrl()))) {
         m_documents.insert(newFile->indexedPath());
     }
 }
@@ -161,7 +161,7 @@ void CurrentProjectSet::setCurrentDocumentInternal(const KDevelop::IndexedString
         m_currentProject = projectForUrl;
         QList<ProjectFileItem*> files = m_currentProject->files();
         foreach (ProjectFileItem* file, files) {
-            m_documents.insert(file->path().toIndexed());
+            m_documents.insert(file->indexedPath());
         }
         emit changed();
     }
@@ -177,7 +177,7 @@ AllProjectSet::AllProjectSet(ProblemModel* parent)
 {
     foreach(const IProject* project, model()->plugin()->core()->projectController()->projects()) {
         foreach (ProjectFileItem* file, project->files()) {
-            m_documents.insert(file->path().toIndexed());
+            m_documents.insert(file->indexedPath());
         }
         trackProjectFiles(project);
     }

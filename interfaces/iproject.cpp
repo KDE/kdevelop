@@ -26,9 +26,9 @@
 
 #include "iproject.h"
 
+#include <util/path.h>
+
 #include <QtDBus/QtDBus>
-#include <language/duchain/indexedstring.h>
-#include <project/path.h>
 
 namespace KDevelop
 {

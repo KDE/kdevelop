@@ -45,7 +45,7 @@
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
 #include <project/projectmodel.h>
-#include <project/path.h>
+#include <util/path.h>
 
 ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, const KUrl& url, ExternalScriptPlugin* parent )
     : KDevelop::OutputJob( parent ),

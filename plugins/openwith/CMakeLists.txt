@@ -5,7 +5,7 @@ set(kdevopenwith_PART_SRCS
 )
 
 kde4_add_plugin(kdevopenwith ${kdevopenwith_PART_SRCS})
-target_link_libraries(kdevopenwith kdevplatforminterfaces kdevplatformproject ${KDE4_KDEUI_LIBS})
+target_link_libraries(kdevopenwith kdevplatforminterfaces kdevplatformproject kdevplatformutil ${KDE4_KDEUI_LIBS})
 
 install(TARGETS kdevopenwith DESTINATION ${PLUGIN_INSTALL_DIR})
 

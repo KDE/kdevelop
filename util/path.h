@@ -15,14 +15,14 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
+ * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef KDEVELOP_PATH_H
 #define KDEVELOP_PATH_H
 
-#include "projectexport.h"
+#include "utilexport.h"
 
 #include <QMetaType>
 #include <QString>
@@ -65,7 +65,7 @@ class IndexedString;
  * Path foo2("/foo");
  * @endcode
  */
-class KDEVPLATFORMPROJECT_EXPORT Path
+class KDEVPLATFORMUTIL_EXPORT Path
 {
 public:
     typedef QVector<Path> List;
@@ -263,14 +263,6 @@ public:
     }
 
     /**
-     * @return the Path converted to an IndexedString.
-     *
-     * @note This is potentially expensive, try to cache this if you
-     *       need to access it often.
-     */
-    KDevelop::IndexedString toIndexed() const;
-
-    /**
      * @return the Path converted to a KUrl.
      */
     KUrl toUrl() const;
@@ -346,18 +338,18 @@ private:
     QVector<QString> m_data;
 };
 
-KDEVPLATFORMPROJECT_EXPORT uint qHash(const Path& path);
+KDEVPLATFORMUTIL_EXPORT uint qHash(const Path& path);
 
 /**
  * Convert the @p list of KUrls to a list of Paths.
  */
-KDEVPLATFORMPROJECT_EXPORT Path::List toPathList(const KUrl::List& list);
+KDEVPLATFORMUTIL_EXPORT Path::List toPathList(const KUrl::List& list);
 }
 
 /**
  * qDebug() stream operator.  Writes the string to the debug output.
  */
-KDEVPLATFORMPROJECT_EXPORT QDebug operator<<(QDebug s, const KDevelop::Path& string);
+KDEVPLATFORMUTIL_EXPORT QDebug operator<<(QDebug s, const KDevelop::Path& string);
 
 namespace QTest {
 
@@ -366,7 +358,7 @@ template<typename T> char* toString(const T&);
  * QTestLib integration to have nice output in e.g. QCOMPARE failures.
  */
 template<>
-KDEVPLATFORMPROJECT_EXPORT char* toString(const KDevelop::Path& path);
+KDEVPLATFORMUTIL_EXPORT char* toString(const KDevelop::Path& path);
 }
 
 Q_DECLARE_TYPEINFO(KDevelop::Path, Q_MOVABLE_TYPE);

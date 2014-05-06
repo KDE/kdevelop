@@ -16,7 +16,7 @@ set(kdevprojectdasboard_SRCS
 kde4_add_ui_files(kdevprojectdasboard_SRCS appletselector.ui)
 kde4_add_plugin(kdevprojectdashboard ${kdevprojectdasboard_SRCS})
 target_link_libraries(kdevprojectdashboard ${KDE4_KDECORE_LIBS} ${KDE4_PLASMA_LIBS}
-                        ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_SUBLIME_LIBRARIES})
+                        ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_UTIL_LIBRARIES} ${KDEVPLATFORM_SUBLIME_LIBRARIES})
 
 install(TARGETS kdevprojectdashboard DESTINATION ${PLUGIN_INSTALL_DIR} )
 configure_file(kdevprojectdashboard.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevprojectdashboard.desktop)

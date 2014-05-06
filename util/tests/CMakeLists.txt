@@ -8,3 +8,13 @@ target_link_libraries(embeddedfreetreetest ${KDE4_KDECORE_LIBS} ${KDE4_TEXTEDITO
 set(kdevvarlengtharray_SRC test_kdevvarlengtharray.cpp)
 kde4_add_unit_test(kdevvarlengtharraytest ${kdevvarlengtharray_SRC})
 target_link_libraries(kdevvarlengtharraytest ${KDE4_KDECORE_LIBS} ${QT_QTTEST_LIBRARY})
+
+kde4_add_unit_test(pathtest test_path.cpp)
+target_link_libraries(pathtest
+    ${QT_QTTEST_LIBRARY}
+    ${QT_QTCORE_LIBRARY}
+    ${KDE4_KDECORE_LIBS}
+    kdevplatformtests
+    kdevplatformlanguage
+    kdevplatformproject
+)

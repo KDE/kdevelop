@@ -23,7 +23,7 @@
 #include <language/interfaces/quickopenfilter.h>
 #include <language/duchain/indexedstring.h>
 
-#include <project/path.h>
+#include <util/path.h>
 
 namespace KDevelop {
 class IProject;

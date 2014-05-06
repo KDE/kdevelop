@@ -26,7 +26,7 @@
 #include <vcs/interfaces/ibranchingversioncontrol.h>
 #include <vcs/vcsjob.h>
 #include <project/projectmodel.h>
-#include <project/path.h>
+#include <util/path.h>
 
 #include <KLocale>
 
