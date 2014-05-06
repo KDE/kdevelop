@@ -33,11 +33,11 @@
 #include <QFile>
 #include <QDir>
 #include <interfaces/icore.h>
-#include <interfaces/ipatchsource.h>
 #include <interfaces/iruncontroller.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>
+#include <vcs/interfaces/ipatchsource.h>
 #include <vcs/vcsjob.h>
 #include "reviewpatchdialog.h"
 #include "reviewboardjobs.h"

@@ -20,14 +20,15 @@
 
 #ifndef KDEVPLATFORM_IPATCHEXPORTER_H
 #define KDEVPLATFORM_IPATCHEXPORTER_H
-#include "interfacesexport.h"
+
+#include "../vcsexport.h"
 #include "ipatchsource.h"
 
 class QWidget;
 namespace KDevelop
 {
 
-class KDEVPLATFORMINTERFACES_EXPORT IPatchExporter
+class KDEVPLATFORMVCS_EXPORT IPatchExporter
 {
     public:
         virtual ~IPatchExporter();

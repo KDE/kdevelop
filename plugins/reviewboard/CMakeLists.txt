@@ -9,7 +9,7 @@ set(kdevreviewboard_PART_SRCS
 qt5_wrap_ui(kdevreviewboard_PART_SRCS reviewpatch.ui)
 
 add_library(kdevreviewboard MODULE ${kdevreviewboard_PART_SRCS})
-target_link_libraries(kdevreviewboard ${KDEVPLATFORM_INTERFACES_LIBRARIES} KF5::I18n Qt5::Core)
+target_link_libraries(kdevreviewboard ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${KDEVPLATFORM_VCS_LIBRARIES} KF5::I18n KF5::KDELibs4Support Qt5::Core)
 
 install(TARGETS kdevreviewboard DESTINATION ${PLUGIN_INSTALL_DIR})
 configure_file(kdevreviewboard.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevreviewboard.desktop)

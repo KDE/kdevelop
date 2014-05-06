@@ -19,7 +19,7 @@
 #ifndef KDEVPLATFORM_IPATCHDOCUMENT_H
 #define KDEVPLATFORM_IPATCHDOCUMENT_H
 
-#include "interfacesexport.h"
+#include "../vcsexport.h"
 
 class KUrl;
 class QString;
@@ -27,7 +27,7 @@ class QString;
 namespace KDevelop
 {
 
-class KDEVPLATFORMINTERFACES_EXPORT IPatchDocument
+class KDEVPLATFORMVCS_EXPORT IPatchDocument
 {
     public:
         virtual ~IPatchDocument();

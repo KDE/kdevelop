@@ -19,16 +19,16 @@
 #ifndef KDEVPLATFORM_IPATCHSOURCE_H
 #define KDEVPLATFORM_IPATCHSOURCE_H
 
-#include <ksharedptr.h>
 #include <kurl.h>
 #include <qpointer.h>
-#include "interfacesexport.h"
+#include "../vcsexport.h"
 #include <vcs/vcsstatusinfo.h>
 
 namespace KDevelop {
 
 ///Any entity may delete an IPatchSource based object at will, so it must always be referenced through a QPointer (Just use IPatchSource::Ptr).
-class KDEVPLATFORMINTERFACES_EXPORT IPatchSource : public QObject {
+class KDEVPLATFORMVCS_EXPORT IPatchSource : public QObject
+{
     Q_OBJECT
     public:
         typedef QPointer<IPatchSource> Ptr;
@@ -92,7 +92,8 @@ class KDEVPLATFORMINTERFACES_EXPORT IPatchSource : public QObject {
         void patchChanged();
 };
 
-class KDEVPLATFORMINTERFACES_EXPORT IPatchReview {
+class KDEVPLATFORMVCS_EXPORT IPatchReview
+{
     public:
         virtual ~IPatchReview();
         

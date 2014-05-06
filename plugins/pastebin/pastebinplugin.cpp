@@ -21,11 +21,12 @@
 #include "pastebinplugin.h"
 #include <QVariantList>
 
+#include <vcs/interfaces/ipatchsource.h>
+
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 #include <kaboutdata.h>
 #include <klocale.h>
-#include <interfaces/ipatchsource.h>
 #include <kjobtrackerinterface.h>
 #include <KIO/Job>
 #include <KMessageBox>

@@ -42,6 +42,9 @@ set(kdevplatformvcs_LIB_SRCS
     dvcs/ui/revhistory/commitlogmodel.cpp
     interfaces/ibasicversioncontrol.cpp
     interfaces/icontentawareversioncontrol.cpp
+    interfaces/ipatchdocument.cpp
+    interfaces/ipatchexporter.cpp
+    interfaces/ipatchsource.cpp
 )
 
 qt5_wrap_ui(kdevplatformvcs_LIB_SRCS ${kdevplatformvcs_UIS})
@@ -100,6 +103,9 @@ install(FILES
     interfaces/ibranchingversioncontrol.h
     interfaces/ibrowsableversioncontrol.h
     interfaces/irepositoryversioncontrol.h
+    interfaces/ipatchdocument.h
+    interfaces/ipatchexporter.h
+    interfaces/ipatchsource.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/vcs/interfaces COMPONENT Devel
 )
 
