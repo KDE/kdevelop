@@ -29,7 +29,7 @@
 #include <language/duchain/topducontext.h>
 #include <parser/cmakelistsparser.h>
 #include <parser/cmaketypes.h>
-#include <project/path.h>
+#include <util/path.h>
 
 namespace KDevelop {
     class IProject;

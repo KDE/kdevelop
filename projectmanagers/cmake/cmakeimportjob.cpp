@@ -138,7 +138,7 @@ KDevelop::ReferencedTopDUContext CMakeImportJob::initializeProject(CMakeFolderIt
 
     KDevelop::ReferencedTopDUContext buildstrapContext;
     {
-        const IndexedString idxpath = Path(base, "buildstrap").toIndexed();
+        const IndexedString idxpath(Path(base, "buildstrap").pathOrUrl());
         DUChainWriteLocker lock;
         
         buildstrapContext = DUChain::self()->chainForDocument(idxpath);

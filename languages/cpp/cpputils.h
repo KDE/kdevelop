@@ -20,7 +20,7 @@
 #define CPPUTILS_H
 
 #include "environmentmanager.h"
-#include <project/path.h>
+#include <util/path.h>
 
 namespace KDevelop
 {
