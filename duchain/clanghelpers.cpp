@@ -141,6 +141,9 @@ DeclarationPointer findDeclaration(CXCursor cursor, const IncludeFileContexts& i
     DUChainReadLocker lock;
     Q_ASSERT(top);
     if (DUContext *local = top->findContextAt(refCursor)) {
+        if (local->owner() && local->owner()->range().contains(refCursor)) {
+           return DeclarationPointer(local->owner());
+        }
         return DeclarationPointer(local->findDeclarationAt(refCursor));
     }
     return {};

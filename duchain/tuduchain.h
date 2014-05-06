@@ -59,7 +59,6 @@ private:
     void setIdTypeDecl(CXCursor typeCursor, IdentifiedType *idType) const;
     void contextImportDecl(DUContext *context, const DeclarationPointer &decl) const;
 
-    KDevelop::RangeInRevision makeContextRange(CXCursor cursor) const;
     KDevelop::Identifier makeId(CXCursor cursor) const;
     QByteArray makeComment(CXComment comment) const;
     AbstractType *makeType(CXType type) const;
@@ -206,7 +205,7 @@ private:
         // wtf: why is the DUContext API requesting a QID when it needs a plain Id?!
         // see: testNamespace
         const QualifiedIdentifier scopeId(id);
-        auto range = makeContextRange(cursor);
+        auto range = ClangRange(clang_getCursorExtent(cursor)).toRangeInRevision();
         DUChainWriteLocker lock;
         if (m_update) {
             const KDevelop::IndexedQualifiedIdentifier indexedScopeId(scopeId);

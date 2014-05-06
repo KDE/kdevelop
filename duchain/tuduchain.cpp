@@ -236,13 +236,6 @@ void TUDUChain::contextImportDecl(DUContext* context, const DeclarationPointer& 
         context->addImportedParentContext(import);
 }
 
-KDevelop::RangeInRevision TUDUChain::makeContextRange(CXCursor cursor) const
-{
-    auto start = clang_getRangeEnd(clang_Cursor_getSpellingNameRange(cursor, 0, 0));
-    auto end = clang_getRangeEnd(clang_getCursorExtent(cursor));
-    return {ClangLocation(start), ClangLocation(end)};
-}
-
 KDevelop::Identifier TUDUChain::makeId(CXCursor cursor) const
 {
     return Identifier(IndexedString(ClangString(clang_getCursorSpelling(cursor))));
