@@ -112,7 +112,7 @@ void CMakeImportJob::initialize()
     ProjectBaseItem* parent = m_dom->parent();
     while (parent && !ctx) {
         DUChainReadLocker lock;
-        ctx = DUChain::self()->chainForDocument(Path(parent->path(), "CMakeLists.txt").toIndexed());
+        ctx = DUChain::self()->chainForDocument(IndexedString(Path(parent->path(), "CMakeLists.txt").pathOrUrl()));
         parent = parent->parent();
     }
     if (!ctx) {

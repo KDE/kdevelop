@@ -200,7 +200,7 @@ void CMakeCommitChangesJob::start()
         if(m_path == m_project->path()) {
             m_parentItem = m_project->projectItem()->folder();
         } else {
-            QList<ProjectFolderItem*> folders = m_project->foldersForPath(m_path.toIndexed());
+            QList<ProjectFolderItem*> folders = m_project->foldersForPath(IndexedString(m_path.pathOrUrl()));
             if(!folders.isEmpty())
                 m_parentItem = folders.first();
         }

@@ -77,7 +77,7 @@ remove_definitions( -DQT_NO_STL )
 kde4_add_ui_files( cmakecommon_SRCS ${cmakecommon_UI} )
 kde4_add_library( kdev4cmakecommon SHARED ${cmakecommon_SRCS} )
 target_link_libraries( kdev4cmakecommon LINK_PRIVATE ${KDE4_KDEUI_LIBS}
-                        ${KDE4_KTEXTEDITOR_LIBS} ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES}
+                        ${KDE4_KTEXTEDITOR_LIBS} ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_UTIL_LIBRARIES}
                         ${QT_QTSCRIPT_LIBRARY} ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
                         )
 

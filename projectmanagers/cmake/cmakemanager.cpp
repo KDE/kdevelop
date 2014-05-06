@@ -662,7 +662,7 @@ KDevelop::ProjectFileItem* CMakeManager::addFile( const Path& file, KDevelop::Pr
 {
     KDevelop::ProjectFileItem* created = 0;
     if ( KDevelop::createFile(file.toUrl()) ) {
-        QList< ProjectFileItem* > files = parent->project()->filesForPath(file.toIndexed());
+        QList< ProjectFileItem* > files = parent->project()->filesForPath(IndexedString(file.pathOrUrl()));
         if(!files.isEmpty())
             created = files.first();
         else
