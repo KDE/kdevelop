@@ -49,8 +49,8 @@ include_directories(
 add_subdirectory(duchain)
 add_subdirectory(codecompletion)
 add_subdirectory(codegen)
-add_subdirectory(tests)
 add_subdirectory(util)
+add_subdirectory(tests)
 
 kde4_add_plugin(kdevclangsupport
     clangparsejob.cpp
