@@ -44,7 +44,7 @@
 #include <interfaces/iruncontroller.h>
 #include <interfaces/idocumentcontroller.h>
 #include <project/interfaces/iprojectbuilder.h>
-#include <project/path.h>
+#include <util/path.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>

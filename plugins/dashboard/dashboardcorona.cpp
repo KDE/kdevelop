@@ -27,7 +27,7 @@
 #include <QFile>
 #include <QDir>
 #include <project/projectmodel.h>
-#include <project/path.h>
+#include <util/path.h>
 
 DashboardCorona::DashboardCorona(KDevelop::IProject *project, QObject* parent)
 	: Plasma::Corona(parent), m_project(project)

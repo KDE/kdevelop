@@ -34,7 +34,7 @@
 #include <interfaces/iruncontroller.h>
 #include <interfaces/idocumentcontroller.h>
 #include <project/projectmodel.h>
-#include <project/path.h>
+#include <util/path.h>
 
 #include <QDir>
 #include <QIcon>

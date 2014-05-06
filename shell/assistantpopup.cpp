@@ -97,8 +97,6 @@ void AssistantPopup::reset(KTextEditor::View* widget, const IAssistant::Ptr& ass
     // force recomputing the size hint
     resize(sizeHint());
     updatePosition(widget, KTextEditor::Cursor::invalid());
-    // For some reason the object loses focus after a reset, so fix that
-    rootObject()->findChild<QObject*>("items")->setProperty("focus", true);
 }
 
 bool AssistantPopup::viewportEvent(QEvent *event)
@@ -195,6 +193,7 @@ bool AssistantPopup::eventFilter(QObject* object, QEvent* event)
         if (modifiers == Qt::AltModifier) {
             setFocus();
             emit m_config->shouldShowHighlight(true);
+            rootObject()->findChild<QObject*>("items")->setProperty("focus", true);
             return true;
         }
         if (static_cast<QKeyEvent*>(event)->key() == Qt::Key_Escape) {

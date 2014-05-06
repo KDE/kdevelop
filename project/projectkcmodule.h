@@ -28,7 +28,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
 
-#include <project/path.h>
+#include <util/path.h>
 
 class KComponentData;
 class QWidget;

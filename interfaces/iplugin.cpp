@@ -125,7 +125,6 @@ IPlugin::~IPlugin()
 
 void IPlugin::unload()
 {
-    ICore::self()->pluginController()->pluginUnloading(this);
 }
 
 KIconLoader *IPlugin::iconLoader() const

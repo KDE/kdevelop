@@ -29,7 +29,7 @@
 #include <shell/projectcontroller.h>
 
 #include "kdevplatformtestsexport.h"
-#include <project/path.h>
+#include <util/path.h>
 
 namespace KDevelop {
 

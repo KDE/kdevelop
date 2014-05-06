@@ -10,3 +10,13 @@ add_executable(kdevvarlengtharraytest ${kdevvarlengtharray_SRC})
 add_test(kdevvarlengtharraytest kdevvarlengtharraytest)
 ecm_mark_as_test(kdevvarlengtharraytest)
 target_link_libraries(kdevvarlengtharraytest  Qt5::Test)
+
+kde4_add_unit_test(pathtest test_path.cpp)
+target_link_libraries(pathtest
+    ${QT_QTTEST_LIBRARY}
+    ${QT_QTCORE_LIBRARY}
+    ${KDE4_KDECORE_LIBS}
+    kdevplatformtests
+    kdevplatformlanguage
+    kdevplatformproject
+)

@@ -197,7 +197,6 @@ Q_SIGNALS:
 
 private:
     friend class IPlugin;
-    void pluginUnloading(IPlugin* plugin);
 };
 
 }

@@ -28,7 +28,7 @@
 
 #include <KConfigGroup>
 
-#include <project/path.h>
+#include <util/path.h>
 
 #include "../languageexport.h"
 

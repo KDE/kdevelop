@@ -39,6 +39,7 @@ private slots:
     void loadUnloadPlugin();
     void loadFromExtension();
     void pluginInfo();
+    void benchPluginForExtension();
 private:
 
     KDevelop::Core* m_core;

@@ -27,11 +27,11 @@
 #include "iproject.h"
 
 #include <QtDBus/QtDBus>
-#include <language/duchain/indexedstring.h>
-#include <project/path.h>
 
 namespace KDevelop
 {
+
+class Path;
 
 IProject::IProject(QObject *parent)
     : QObject(parent)

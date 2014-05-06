@@ -27,7 +27,7 @@
 
 #include "abbreviations.h"
 
-#include <project/path.h>
+#include <util/path.h>
 
 namespace KDevelop {
 
@@ -108,10 +108,18 @@ public:
         m_filtered.clear();
 
         QStringList typedFragments = text.split("::", QString::SkipEmptyParts);
+        if (typedFragments.isEmpty()) {
+            clearFilter();
+            return;
+        }
         if ( typedFragments.last().endsWith(':') ) {
             // remove the trailing colon if there's only one; otherwise,
             // this breaks incremental filtering
             typedFragments.last().chop(1);
+        }
+        if (typedFragments.size() == 1 && typedFragments.last().isEmpty()) {
+            clearFilter();
+            return;
         }
         foreach( const Item& data, filterBase ) {
             const QString& itemData = itemText( data );

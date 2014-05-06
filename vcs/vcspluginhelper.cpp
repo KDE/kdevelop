@@ -43,7 +43,7 @@
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/iproject.h>
 #include <project/projectmodel.h>
-#include <project/path.h>
+#include <util/path.h>
 #include <language/interfaces/codecontext.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>
 #include "interfaces/idistributedversioncontrol.h"

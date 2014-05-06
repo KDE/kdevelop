@@ -21,7 +21,7 @@
 #include "dashboarddataengine.h"
 #include <interfaces/iproject.h>
 #include <project/projectmodel.h>
-#include <project/path.h>
+#include <util/path.h>
 #include <QFile>
 
 using namespace KDevelop;

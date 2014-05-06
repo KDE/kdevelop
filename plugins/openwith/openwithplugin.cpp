@@ -30,7 +30,7 @@
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/context.h>
 #include <project/projectmodel.h>
-#include <project/path.h>
+#include <util/path.h>
 #include <kmimetype.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>

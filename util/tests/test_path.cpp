@@ -19,11 +19,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "testpath.h"
+#include "test_path.h"
 
-#include <project/path.h>
-
-#include <language/duchain/indexedstring.h>
+#include <util/path.h>
 
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
@@ -248,7 +246,6 @@ void TestPath::testPath()
         QCOMPARE(optUrl, Path(KUrl::fromPath(input)));
     }
 
-    QCOMPARE(optUrl.toIndexed(), IndexedString(url));
     QCOMPARE(optUrl, Path(url));
 
     if (url.isValid()) {
@@ -521,4 +518,4 @@ void TestPath::testPathCd_data()
     }
 }
 
-#include "testpath.moc"
+#include "test_path.moc"

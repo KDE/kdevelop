@@ -6,11 +6,6 @@ include_directories(
     ${KDevPlatform_SOURCE_DIR}/shell
     )
 
-# Disabled until I find out how to load plugins from builddir
-#set( plugincontrollertest_plugin_SRCS nonguiinterfaceplugin.cpp )
-#add_library( kdevnonguiinterfaceplugin MODULE ${plugincontrollertest_plugin_SRCS} )
-#target_link_libraries( kdevnonguiinterfaceplugin Qt5::Core ${KDE4_KDECORE_LIBRARY} kdevplatforminterfaces )
-
 set(documentcontrollertest_SRCS documentcontrollertest.cpp)
 add_executable(shell-documentcontrollertest ${documentcontrollertest_SRCS})
 add_test(shell-documentcontrollertest shell-documentcontrollertest)
@@ -46,13 +41,20 @@ set( sessioncontrollertest_SRCS sessioncontrollertest.cpp )
 add_executable(shell-sessioncontrollertest ${sessioncontrollertest_SRCS})
 add_test(shell-sessioncontrollertest shell-sessioncontrollertest)
 ecm_mark_as_test(shell-sessioncontrollertest)
-target_link_libraries(shell-sessioncontrollertest Qt5::Test KF5::KIOWidgets kdevplatformtests kdevplatformshell kdevplatforminterfaces sublime )
+target_link_libraries(shell-sessioncontrollertest Qt5::Test KF5::KDELibs4Support KF5::KIOWidgets kdevplatformtests kdevplatformshell kdevplatforminterfaces sublime )
+
+configure_file("testfilepaths.h.cmake" "testfilepaths.h" ESCAPE_QUOTES)
+configure_file(share/kde4/services/kdevnonguiinterfaceplugin.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/share/kde4/services/kdevnonguiinterfaceplugin.desktop)
+set( plugincontrollertest_plugin_SRCS nonguiinterfaceplugin.cpp )
+add_library( kdevnonguiinterfaceplugin MODULE ${plugincontrollertest_plugin_SRCS} )
+target_link_libraries( kdevnonguiinterfaceplugin ${QT_QTCORE_LIBRARY} ${KDE4_KDECORE_LIBRARY}  kdevplatforminterfaces )
 
 # Disabled for now, until I find a way of loading plugins from builddir/sourcedir
-#set( plugincontrollertest_SRCS plugincontrollertest.cpp )
-#add_executable(shell-plugincontrollertest ${plugincontrollertest_SRCS})\nadd_test(shell-plugincontrollertest shell-plugincontrollertest)
-#ecm_mark_as_test(shell-plugincontrollertest)
-#target_link_libraries(shell-plugincontrollertest Qt5::Test kdevplatformshell kdevplatforminterfaces sublime )
+set( plugincontrollertest_SRCS plugincontrollertest.cpp )
+add_executable(shell-plugincontrollertest ${plugincontrollertest_SRCS})
+add_test(shell-plugincontrollertest shell-plugincontrollertest)
+ecm_mark_as_test(shell-plugincontrollertest)
+target_link_libraries(shell-plugincontrollertest ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS} kdevplatformtests kdevplatformshell kdevplatforminterfaces sublime )
 
 set( testcontrollertest_SRCS testcontrollertest.cpp )
 add_executable(shell-testcontrollertest ${testcontrollertest_SRCS})

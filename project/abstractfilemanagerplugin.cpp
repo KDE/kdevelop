@@ -249,8 +249,8 @@ void AbstractFileManagerPlugin::Private::created(const QString &path_)
 
     ///FIXME: share memory with parent
     const Path path(KUrl::fromPath(path_));
-    const IndexedString indexedPath = path.toIndexed();
-    const IndexedString indexedParent = path.parent().toIndexed();
+    const IndexedString indexedPath(path.pathOrUrl());
+    const IndexedString indexedParent(path.parent().pathOrUrl());
 
     foreach ( IProject* p, m_watchers.keys() ) {
         if ( !p->projectItem()->model() ) {
@@ -309,7 +309,7 @@ void AbstractFileManagerPlugin::Private::deleted(const QString &path_)
     kDebug(9517) << "deleted:" << path_;
 
     const Path path(path_);
-    const IndexedString indexed = path.toIndexed();
+    const IndexedString indexed(path.pathOrUrl());
     foreach ( IProject* p, m_watchers.keys() ) {
         if (path == p->path()) {
             KMessageBox::error(qApp->activeWindow(),
@@ -348,7 +348,7 @@ bool AbstractFileManagerPlugin::Private::rename(ProjectBaseItem* item, const Pat
             return false;
         }
     }
-    foreach ( ProjectFolderItem* parent, item->project()->foldersForPath(newPath.parent().toIndexed()) ) {
+    foreach ( ProjectFolderItem* parent, item->project()->foldersForPath(IndexedString(newPath.parent().pathOrUrl())) ) {
         if ( parent->folder() ) {
             stopWatcher(parent);
             const Path source = item->path();

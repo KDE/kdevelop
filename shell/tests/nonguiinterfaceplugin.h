@@ -32,7 +32,7 @@ public:
     virtual ~ITestNonGuiInterface() {}
 };
 
-Q_DECLARE_INTERFACE( ITestNonGuiInterface, "org.kdevelop.tests.TestNonGuiInterface" )
+Q_DECLARE_INTERFACE( ITestNonGuiInterface, "org.kdevelop.ITestNonGuiInterface" )
 
 
 class NonGuiInterfacePlugin : public KDevelop::IPlugin, ITestNonGuiInterface

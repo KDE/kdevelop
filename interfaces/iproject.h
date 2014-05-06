@@ -31,7 +31,7 @@
 
 #include <kurl.h>
 #include <ksharedconfig.h>
-#include <project/path.h>
+#include <util/path.h>
 
 #include "interfacesexport.h"
 

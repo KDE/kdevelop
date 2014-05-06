@@ -22,6 +22,7 @@ set(kdevplatformutil_LIB_SRCS
     multilevellistview.cpp
     placeholderitemproxymodel.cpp
     projecttestjob.cpp
+    path.cpp
 )
 
 set (kdevplatformutil_LIB_UI
@@ -80,4 +81,5 @@ install( FILES
     multilevellistview.h
     placeholderitemproxymodel.h
     projecttestjob.h
+    path.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/util COMPONENT Devel)

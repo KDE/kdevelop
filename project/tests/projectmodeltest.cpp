@@ -475,7 +475,7 @@ void ProjectModelTest::testItemsForPath()
 
     model->appendRow(root);
 
-    QList< ProjectBaseItem* > items = model->itemsForPath(path.toIndexed());
+    QList< ProjectBaseItem* > items = model->itemsForPath(KDevelop::IndexedString(path.pathOrUrl()));
     QCOMPARE(items.size(), matches);
     foreach(ProjectBaseItem* item, items) {
         QVERIFY(item->path() == path);

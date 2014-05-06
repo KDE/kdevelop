@@ -41,7 +41,7 @@
 #include <interfaces/iproject.h>
 #include <project/projectproxymodel.h>
 #include <project/projectmodel.h>
-#include <project/path.h>
+#include <util/path.h>
 
 #include "../openwith/iopenwith.h"
 
