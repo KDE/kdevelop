@@ -1,6 +1,6 @@
 /**
  * "identifier" : "main",
- * "internalContext" : { "type" : "Other" },
+ * "internalContext" : { "type" : "Function" },
  * "range" : "[(5, 4), (5, 8)]"
  */
 int main()
@@ -42,7 +42,7 @@ namespace bar
 {
     /**
      * "identifier" : "foo",
-     * "internalContext" : { "null" : true }
+     * "internalContext" : { "null" : false }
      */
     void foo();
 
@@ -53,6 +53,40 @@ namespace bar
     struct foostruct
     {
         /**
+         * "identifier" : "foostruct",
+         * "internalContext" : { "type" : "Function" }
+         */
+        foostruct()
+        {
+        }
+
+        /**
+         * "identifier" : "~foostruct",
+         * "internalContext" : { "type" : "Function" }
+         */
+        ~foostruct()
+        {
+        }
+
+        /**
+         * "identifier" : "operator int",
+         * "internalContext" : { "type" : "Function" }
+         */
+        operator int()
+        {
+            return 0;
+        }
+
+        /**
+         * "identifier" : "templateFunction",
+         * "internalContext" : { "type" : "Function" }
+         */
+        template<class T>
+        void templateFunction()
+        {
+        }
+
+        /**
          * "identifier" : "fooenum",
          * "internalContext" : { "type" : "Enum" }
          */
@@ -62,15 +96,15 @@ namespace bar
 
         /**
          * "identifier" : "foomethod",
-         * "internalContext" : { "null" : true }
+         * "internalContext" : { "null" : false, "type" : "Function" }
          */
         int foomethod();
 
         /**
          * "identifier" : "deffoomethod",
-         * "internalContext" : { "type" : "Other" }
+         * "internalContext" : { "type" : "Function" }
          */
-        int deffoomethod()
+        void deffoomethod()
         {
         }
     };

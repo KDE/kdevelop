@@ -122,12 +122,12 @@ constexpr DUContext::ContextType contextType(CXCursorKind CK)
     : CK == CXCursor_ClassDecl                          ? DUContext::Class
     : CK == CXCursor_EnumDecl                           ? DUContext::Enum
     : CK == CXCursor_FunctionDecl                       ? DUContext::Function
-    : CK == CXCursor_CXXMethod                          ? DUContext::Other
+    : CK == CXCursor_CXXMethod                          ? DUContext::Function
     : CK == CXCursor_Namespace                          ? DUContext::Namespace
-    : CK == CXCursor_Constructor                        ? DUContext::Other
-    : CK == CXCursor_Destructor                         ? DUContext::Other
-    : CK == CXCursor_ConversionFunction                 ? DUContext::Other
-    : CK == CXCursor_FunctionTemplate                   ? DUContext::Other
+    : CK == CXCursor_Constructor                        ? DUContext::Function
+    : CK == CXCursor_Destructor                         ? DUContext::Function
+    : CK == CXCursor_ConversionFunction                 ? DUContext::Function
+    : CK == CXCursor_FunctionTemplate                   ? DUContext::Function
     : CK == CXCursor_ClassTemplate                      ? DUContext::Class
     : CK == CXCursor_ClassTemplatePartialSpecialization ? DUContext::Class
     : static_cast<DUContext::ContextType>(-1);
