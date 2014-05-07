@@ -103,7 +103,7 @@ void TestQMakeProject::testBuildDirectory()
     
     // path for files to build
     Path buildUrl(QString("%1/%2/%3").arg(QMAKE_TESTS_PROJECTS_DIR).arg(projectName).arg(target));
-    QList<ProjectFolderItem*> buidItem = project->foldersForPath(buildUrl.toIndexed());
+    QList<ProjectFolderItem*> buidItem = project->foldersForPath(IndexedString(buildUrl.pathOrUrl()));
     QCOMPARE(buidItem.size(), 1);
     IBuildSystemManager *buildManager = project->buildSystemManager();
     const Path actual = buildManager->buildDirectory(buidItem.first());

@@ -31,5 +31,6 @@ target_link_libraries(qmakeprojecttest
     ${QT_QTTEST_LIBRARY}
     ${KDE4_KDECORE_LIBS}
     ${KDEVPLATFORM_TESTS_LIBRARIES}
+    ${KDEVPLATFORM_UTIL_LIBRARIES}
     kdev4qmakeparser
     )

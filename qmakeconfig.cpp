@@ -28,7 +28,7 @@
 #include <KProcess>
 
 #include <interfaces/iproject.h>
-#include <project/path.h>
+#include <util/path.h>
 
 const char *QMakeConfig::CONFIG_GROUP = "QMake_Builder";
 

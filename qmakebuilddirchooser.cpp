@@ -26,7 +26,7 @@
 #include <KDebug>
 #include <KMessageWidget>
 
-#include <project/path.h>
+#include <util/path.h>
 
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/interfaces/iprojectbuilder.h>

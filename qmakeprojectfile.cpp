@@ -33,7 +33,7 @@
 #include "qmakeconfig.h"
 
 #include <interfaces/iproject.h>
-#include <project/path.h>
+#include <util/path.h>
 
 #define ifDebug(x)
 

@@ -42,7 +42,7 @@ set( qmakebuilder_cfg_UI
 kde4_add_ui_files( qmakebuilder_cfg_SRCS ${qmakebuilder_cfg_UI} )
 kde4_add_kcfg_files( qmakebuilder_cfg_SRCS qmakebuilderconfig.kcfgc )
 kde4_add_plugin( kcm_kdev_qmakebuilder ${qmakebuilder_cfg_SRCS} )
-target_link_libraries( kcm_kdev_qmakebuilder ${KDE4_KIO_LIBS} ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES} )
+target_link_libraries( kcm_kdev_qmakebuilder ${KDE4_KIO_LIBS} ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_UTIL_LIBRARIES} )
 
 ########### install files ###############
 configure_file(kdevqmakebuilder.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevqmakebuilder.desktop)
