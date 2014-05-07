@@ -15,8 +15,8 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchainutils.h>
 #include <language/codegen/documentchangeset.h>
+#include <language/interfaces/idefinesandincludesmanager.h>
 
-#include <project/interfaces/ibuildsystemmanager.h>
 #include <project/projectmodel.h>
 #include <util/path.h>
 
@@ -334,12 +334,7 @@ KDevelop::Path::List includePaths( const KDevelop::Path& file )
     const auto source = file.toLocalFile();
     const auto item = ICore::self()->projectController()->projectModel()->itemForPath( KDevelop::IndexedString( source ) );
 
-    /* Can't get include path information - bail out */
-    if( !item || !item->project()->buildSystemManager() ) {
-        return paths;
-    }
-
-    return paths + item->project()->buildSystemManager()->includeDirectories( item );
+    return paths + IDefinesAndIncludesManager::manager()->includes(item);
 }
 
 /*

@@ -34,7 +34,6 @@
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
 #include <project/projectmodel.h>
-#include <project/interfaces/ibuildsystemmanager.h>
 
 #include "duchain/clanghelpers.h"
 #include "duchain/clangpch.h"
@@ -115,17 +114,12 @@ Path userDefinedPchIncludeForFile(const QString& sourcefile)
 ClangParseJob::ClangParseJob(const IndexedString& url, ILanguageSupport* languageSupport)
 : ParseJob(url, languageSupport)
 {
-    // get defines and include paths from build system manager in foreground thread
+    // get defines and include paths in foreground thread
     auto item = ICore::self()->projectController()->projectModel()->itemForPath(url);
-    if (item && item->project()->buildSystemManager()) {
-        auto bsm = item->project()->buildSystemManager();
-        m_includes = bsm->includeDirectories(item);
-        m_defines = bsm->defines(item);
-    }
 
-    auto* idm = KDevelop::IDefinesAndIncludesManager::manager();
-    m_includes += idm->includes(item);
-    m_defines.unite(idm->defines(item));
+    auto idm = KDevelop::IDefinesAndIncludesManager::manager();
+    m_includes = idm->includes(item);
+    m_defines = idm->defines(item);
 }
 
 ClangSupport* ClangParseJob::clang() const
