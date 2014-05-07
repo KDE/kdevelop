@@ -240,7 +240,7 @@ DeclarationTest(toString)
 }
 
 ///JSON type: string
-///@returns stringified declaration
+///@returns stringified declaration range
 DeclarationTest(range)
 {
   if (!decl) {
@@ -252,7 +252,7 @@ DeclarationTest(range)
     .arg(range.start.column)
     .arg(range.end.line)
     .arg(range.end.column);
-  return compareValues(string, value, "Declaration's toString");
+  return compareValues(string, value, "Declaration's range");
 }
 
 ///JSON type: string
