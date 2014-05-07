@@ -141,6 +141,10 @@ public Q_SLOTS:
      */
     virtual void closeProject( IProject* ) = 0;
     virtual void configureProject( IProject* ) = 0;
+
+    /// Schedules all files of the @p project for reparsing by @see BackgroundParser
+    virtual void reparseProject( IProject* project, bool ForceUpdate = false ) = 0;
+
 //     virtual void changeCurrentProject( KDevelop::ProjectBaseItem* ) = 0;
 
 Q_SIGNALS:

@@ -103,6 +103,9 @@ public Q_SLOTS:
     void projectImportingFinished( IProject* );
     virtual void closeProject( IProject* );
     virtual void configureProject( IProject* );
+
+    virtual void reparseProject( IProject* project, bool forceUpdate = false  ) override;
+
     void eventuallyOpenProjectFile(KIO::Job*,KIO::UDSEntryList);
     void openProjectForUrlSlot(bool);
 //     void changeCurrentProject( ProjectBaseItem* );
