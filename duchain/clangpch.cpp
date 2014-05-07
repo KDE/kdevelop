@@ -43,7 +43,7 @@ ClangPCH::ClangPCH(const Path& pchInclude, const Path::List& includePaths, const
 
     const TopDUContext::Features pchFeatures = TopDUContext::AllDeclarationsContextsUsesAndAST;
     const IndexedString lang = ParseSession::languageString();
-    const IndexedString doc = pchInclude.toIndexed();
+    const IndexedString doc(pchInclude.pathOrUrl());
 
     m_session = new ParseSession(doc, QByteArray(), index, includePaths, Path(),
                                  defines, ParseSession::PrecompiledHeader);

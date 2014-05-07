@@ -63,7 +63,7 @@ QSharedPointer<const ClangPCH> ClangIndex::pch(const Path& pchInclude, const Pat
         return {};
     }
 
-    UrlParseLock pchLock(pchInclude.toIndexed());
+    UrlParseLock pchLock(IndexedString(pchInclude.pathOrUrl()));
 
     static const QString pchExt = QString::fromLatin1(".pch");
 
