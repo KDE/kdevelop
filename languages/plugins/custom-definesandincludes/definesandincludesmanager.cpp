@@ -24,6 +24,7 @@
 #include "settingsmanager.h"
 
 #include <interfaces/iproject.h>
+#include <project/interfaces/ibuildsystemmanager.h>
 #include <project/projectmodel.h>
 
 #include <KPluginFactory>
@@ -75,31 +76,74 @@ DefinesAndIncludesManager::DefinesAndIncludesManager( QObject* parent, const QVa
     KDEV_USE_EXTENSION_INTERFACE(IDefinesAndIncludesManager);
 }
 
-QHash<QString, QString> DefinesAndIncludesManager::defines( const ProjectBaseItem* item ) const
+QHash<QString, QString> DefinesAndIncludesManager::defines( ProjectBaseItem* item, Type type  ) const
 {
     if (!item) {
         return {};
     }
 
-    KConfig* cfg = item->project()->projectConfiguration().data();
-
-    const auto result = findConfigForItem(readSettings(cfg), item).defines;
     QHash<QString, QString> defines;
-    for (auto it = result.constBegin(); it != result.constEnd(); it++) {
-        defines[it.key()] = it.value().toString();
+
+    for (auto provider : m_providers) {
+        if (provider->type() & type) {
+            auto result = provider->defines(item);
+            for (auto it = result.constBegin(); it != result.constEnd(); it++) {
+                defines[it.key()] = it.value();
+            }
+        }
     }
+
+    if ( type & ProjectSpecific ) {
+        auto buildManager = item->project()->buildSystemManager();
+        if ( buildManager ) {
+            auto def = buildManager->defines(item);
+            for ( auto it = def.constBegin(); it != def.constEnd(); it++ ) {
+                defines[it.key()] = it.value();
+            }
+        }
+    }
+
+    // Manually set defines have the highest priority and overwrite values of all other types of defines.
+    if (type & UserDefined) {
+        auto cfg = item->project()->projectConfiguration().data();
+
+        const auto result = findConfigForItem(readSettings(cfg), item).defines;
+        for (auto it = result.constBegin(); it != result.constEnd(); it++) {
+            defines[it.key()] = it.value().toString();
+        }
+    }
+
     return defines;
 }
 
-Path::List DefinesAndIncludesManager::includes(const ProjectBaseItem* item) const
+Path::List DefinesAndIncludesManager::includes( ProjectBaseItem* item, Type type ) const
 {
     if (!item) {
         return {};
     }
 
-    KConfig* cfg = item->project()->projectConfiguration().data();
+    Path::List includes;
 
-    return KDevelop::toPathList(findConfigForItem(readSettings(cfg), item).includes);
+    for (auto provider : m_providers) {
+        if (provider->type() & type) {
+            includes += provider->includes(item);
+        }
+    }
+
+    if (type & UserDefined) {
+        auto cfg = item->project()->projectConfiguration().data();
+
+        includes += KDevelop::toPathList(findConfigForItem(readSettings(cfg), item).includes);
+    }
+
+    if ( type & ProjectSpecific ) {
+        auto buildManager = item->project()->buildSystemManager();
+        if ( buildManager ) {
+            includes += buildManager->includeDirectories(item);
+        }
+    }
+
+    return includes;
 }
 
 QList<ConfigEntry> DefinesAndIncludesManager::readSettings( KConfig* cfg ) const
@@ -110,5 +154,26 @@ QList<ConfigEntry> DefinesAndIncludesManager::readSettings( KConfig* cfg ) const
 void DefinesAndIncludesManager::writeSettings( KConfig* cfg, const QList<ConfigEntry>& paths ) const
 {
     SettingsManager::writeSettings( cfg, paths );
+}
+
+bool DefinesAndIncludesManager::unregisterProvider(IDefinesAndIncludesManager::Provider* provider)
+{
+    int idx = m_providers.indexOf(provider);
+    if (idx != -1) {
+        m_providers.remove(idx);
+        return true;
+    }
+
+    return false;
+}
+
+void DefinesAndIncludesManager::registerProvider(IDefinesAndIncludesManager::Provider* provider)
+{
+    Q_ASSERT(provider);
+    if (m_providers.contains(provider)) {
+        return;
+    }
+
+    m_providers.push_back(provider);
 }
 }

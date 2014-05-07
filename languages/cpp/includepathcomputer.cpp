@@ -78,6 +78,8 @@ void IncludePathComputer::computeForeground()
       continue;
     }
 
+    auto idm = IDefinesAndIncludesManager::manager();
+
     ProjectFileItem* file = files.last();
     Path::List dirs;
     // A file might be defined in different targets.
@@ -87,14 +89,14 @@ void IncludePathComputer::computeForeground()
         continue;
       }
       file = f;
-      dirs = buildManager->includeDirectories(f);
+      dirs = idm->includes(f, IDefinesAndIncludesManager::ProjectSpecific);
       if (!dirs.isEmpty()) {
         break;
       }
     }
     // otherwise we did not find a target, so just use any include paths provided by the manager
     if (dirs.isEmpty()) {
-      dirs = buildManager->includeDirectories(file);
+      dirs = idm->includes(file, IDefinesAndIncludesManager::ProjectSpecific);
     }
 
     m_projectName = project->name();
@@ -107,25 +109,15 @@ void IncludePathComputer::computeForeground()
       m_effectiveBuildDirectory.clear();
     }
 
-    auto manager = IDefinesAndIncludesManager::manager();
-    if (manager) {
-      for(const auto& dir : manager->includes(file)){
+      for(const auto& dir : idm->includes(file, IDefinesAndIncludesManager::UserDefined)){
         addInclude(dir);
       }
-      m_defines = manager->defines(file);
-    }
+      m_defines = idm->defines(file, IDefinesAndIncludesManager::Type(IDefinesAndIncludesManager::UserDefined | IDefinesAndIncludesManager::ProjectSpecific));
 
     m_gotPathsFromManager = !dirs.isEmpty();
     kDebug(9007) << "Got " << dirs.count() << " include-paths from build-manager";
     foreach (const Path& dir, dirs) {
       addInclude(dir);
-    }
-
-    auto defines = buildManager->defines(file);
-    for (auto it = defines.constBegin(); it != defines.constEnd(); it++) {
-        if (!m_defines.contains(it.key())) {
-            m_defines[it.key()] = it.value();
-        }
     }
   }
 
