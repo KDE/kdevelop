@@ -4,4 +4,10 @@
       xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
       http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
   <kcfgfile arg="true"/>
+
+  <group name="Custom Defines And Includes">
+    <entry name="reparse" key="reparse" type="Bool">
+        <default>true</default>
+    </entry>
+  </group>
 </kcfg>
