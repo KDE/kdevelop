@@ -1,6 +1,6 @@
 /**
  * "identifier" : "main",
- * "internalContext" : { "type" : "Function" },
+ * "internalContext" : { "type" : "Function", "range" : "[(5, 0), (8, 1)]" },
  * "range" : "[(5, 4), (5, 8)]"
  */
 int main()
@@ -10,7 +10,7 @@ int main()
 
 /**
  * "identifier" : "foo",
- * "internalContext" : { "type" : "Class" },
+ * "internalContext" : { "type" : "Class", "range" : "[(15, 0), (33, 1)]" },
  * "kind" : "Type"
  */
 class foo
@@ -35,26 +35,26 @@ class foo
 
 /**
  * "identifier" : "bar",
- * "internalContext" : { "type" : "Namespace" },
+ * "internalContext" : { "type" : "Namespace", "range" : "[(40, 0), (110, 1)]" },
  * "kind" : "Namespace"
  */
 namespace bar
 {
     /**
      * "identifier" : "foo",
-     * "internalContext" : { "null" : false }
+     * "internalContext" : { "null" : false, "range" : "[(46, 4), (46, 14)]" }
      */
     void foo();
 
     /**
      * "identifier" : "foostruct",
-     * "internalContext" : { "type" : "Class" }
+     * "internalContext" : { "type" : "Class", "range" : "[(52, 4), (109, 5)]" }
      */
     struct foostruct
     {
         /**
          * "identifier" : "foostruct",
-         * "internalContext" : { "type" : "Function" }
+         * "internalContext" : { "type" : "Function", "range" : "[(58, 8), (60, 9)]" }
          */
         foostruct()
         {
@@ -62,7 +62,7 @@ namespace bar
 
         /**
          * "identifier" : "~foostruct",
-         * "internalContext" : { "type" : "Function" }
+         * "internalContext" : { "type" : "Function", "range" : "[(66, 8), (68, 9)]" }
          */
         ~foostruct()
         {
@@ -70,7 +70,7 @@ namespace bar
 
         /**
          * "identifier" : "operator int",
-         * "internalContext" : { "type" : "Function" }
+         * "internalContext" : { "type" : "Function", "range" : "[(74, 8), (77, 9)]" }
          */
         operator int()
         {
@@ -79,7 +79,7 @@ namespace bar
 
         /**
          * "identifier" : "templateFunction",
-         * "internalContext" : { "type" : "Function" }
+         * "internalContext" : { "type" : "Function", "range" : "[(83, 8), (86, 9)]" }
          */
         template<class T>
         void templateFunction()
@@ -88,7 +88,7 @@ namespace bar
 
         /**
          * "identifier" : "fooenum",
-         * "internalContext" : { "type" : "Enum" }
+         * "internalContext" : { "type" : "Enum", "range" : "[(92, 8), (94, 9)]" }
          */
         enum fooenum
         {
@@ -96,13 +96,13 @@ namespace bar
 
         /**
          * "identifier" : "foomethod",
-         * "internalContext" : { "null" : false, "type" : "Function" }
+         * "internalContext" : { "type" : "Function", "range" : "[(100, 8), (100, 23)]" }
          */
         int foomethod();
 
         /**
          * "identifier" : "deffoomethod",
-         * "internalContext" : { "type" : "Function" }
+         * "internalContext" : { "type" : "Function", "range" : "[(106, 8), (108, 9)]" }
          */
         void deffoomethod()
         {
