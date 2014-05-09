@@ -46,7 +46,7 @@ private Q_SLOTS:
 private:
     int m_updated;
     int m_totalFiles;
-    bool m_foreUpdate;
+    bool m_forceUpdate;
     KDevelop::IProject* m_project;
     void updateProgress();
 };

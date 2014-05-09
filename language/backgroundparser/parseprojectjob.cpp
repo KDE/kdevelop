@@ -46,7 +46,7 @@ ParseProjectJob::ParseProjectJob(IProject* project, bool forceUpdate)
     connect(project, SIGNAL(destroyed(QObject*)), SLOT(deleteNow()));
     m_project = project;
     m_updated = 0;
-    m_foreUpdate = forceUpdate;
+    m_forceUpdate = forceUpdate;
     m_totalFiles = project->fileSet().size();
 
     setCapabilities(Killable);
@@ -84,7 +84,7 @@ void ParseProjectJob::start() {
     TopDUContext::Features processingLevel = files.size() < ICore::self()->languageController()->completionSettings()->minFilesForSimplifiedParsing() ?
                                     TopDUContext::VisibleDeclarationsAndContexts : TopDUContext::SimplifiedVisibleDeclarationsAndContexts;
 
-    if (m_foreUpdate) {
+    if (m_forceUpdate) {
         if (processingLevel & TopDUContext::VisibleDeclarationsAndContexts) {
             processingLevel = TopDUContext::AllDeclarationsContextsAndUses;
         }
