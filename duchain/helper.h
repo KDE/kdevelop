@@ -51,10 +51,16 @@ using namespace KDevelop;
                                                               const DUContext* context);
 
     /**
+     * Find an attribute of a QML object
+     */
+    KDEVQMLJSDUCHAIN_EXPORT AST::Statement* getQMLAttribute(AST::UiObjectMemberList* members,
+                                                            const QString &attribute);
+
+    /**
      * Find the string value of a QML attribute
      */
-    KDEVQMLJSDUCHAIN_EXPORT QMLAttributeValue getQMLAttribute(AST::UiObjectMemberList* members,
-                                                              const QString& attribute);
+    KDEVQMLJSDUCHAIN_EXPORT QMLAttributeValue getQMLAttributeValue(AST::UiObjectMemberList* members,
+                                                                   const QString& attribute);
 
 
 } // End of namespace QmlJS

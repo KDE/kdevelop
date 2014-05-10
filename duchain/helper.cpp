@@ -38,44 +38,51 @@ DeclarationPointer getDeclaration(const QualifiedIdentifier& id, const DUContext
     return DeclarationPointer();
 }
 
-QMLAttributeValue getQMLAttribute(QmlJS::AST::UiObjectMemberList* members, const QString& attribute)
+QmlJS::AST::Statement* getQMLAttribute(QmlJS::AST::UiObjectMemberList* members, const QString& attribute)
 {
-    QMLAttributeValue res;
-
     for (QmlJS::AST::UiObjectMemberList *it = members; it; it = it->next) {
         // The member needs to be a script binding whose name matches attribute
         QmlJS::AST::UiScriptBinding* binding = QmlJS::AST::cast<QmlJS::AST::UiScriptBinding*>(it->member);
 
-        if (!binding || !binding->qualifiedId || binding->qualifiedId->name != attribute) {
-            continue;
-        }
-
-        // The value of the binding must be an expression
-        QmlJS::AST::ExpressionStatement* statement = QmlJS::AST::cast<QmlJS::AST::ExpressionStatement*>(binding->statement);
-        if (!statement) {
-            continue;
-        }
-
-        // The expression must be an identifier or a string litera
-        QmlJS::AST::IdentifierExpression* identifier = QmlJS::AST::cast<QmlJS::AST::IdentifierExpression*>(statement->expression);
-        QmlJS::AST::StringLiteral* string = QmlJS::AST::cast<QmlJS::AST::StringLiteral*>(statement->expression);
-        QmlJS::AST::TrueLiteral* true_literal = QmlJS::AST::cast<QmlJS::AST::TrueLiteral*>(statement->expression);
-        QmlJS::AST::FalseLiteral* false_literal = QmlJS::AST::cast<QmlJS::AST::FalseLiteral*>(statement->expression);
-
-        res.location = statement->expression->firstSourceLocation();
-
-        if (identifier) {
-            res.value = identifier->name.toString();
-        } else if (string) {
-            res.value = string->value.toString();
-        } else if (true_literal) {
-            res.value = QLatin1String("true");
-        } else if (false_literal) {
-            res.value = QLatin1String("false");
-        } else {
-            continue;
+        if (binding && binding->qualifiedId && binding->qualifiedId->name == attribute) {
+            return binding->statement;
         }
     }
+
+    return NULL;
+}
+
+QMLAttributeValue getQMLAttributeValue(QmlJS::AST::UiObjectMemberList* members, const QString& attribute)
+{
+    QMLAttributeValue res;
+    QmlJS::AST::Statement* node = getQMLAttribute(members, attribute);
+
+    // The value of the binding must be an expression
+    QmlJS::AST::ExpressionStatement* statement = QmlJS::AST::cast<QmlJS::AST::ExpressionStatement*>(node);
+
+    if (!statement) {
+        return res;
+    }
+
+    // The expression must be an identifier or a string literal
+    QmlJS::AST::IdentifierExpression* identifier = QmlJS::AST::cast<QmlJS::AST::IdentifierExpression*>(statement->expression);
+    QmlJS::AST::StringLiteral* string = QmlJS::AST::cast<QmlJS::AST::StringLiteral*>(statement->expression);
+    QmlJS::AST::TrueLiteral* true_literal = QmlJS::AST::cast<QmlJS::AST::TrueLiteral*>(statement->expression);
+    QmlJS::AST::FalseLiteral* false_literal = QmlJS::AST::cast<QmlJS::AST::FalseLiteral*>(statement->expression);
+
+    if (identifier) {
+        res.value = identifier->name.toString();
+    } else if (string) {
+        res.value = string->value.toString();
+    } else if (true_literal) {
+        res.value = QLatin1String("true");
+    } else if (false_literal) {
+        res.value = QLatin1String("false");
+    } else {
+        return res;
+    }
+
+    res.location = statement->expression->firstSourceLocation();
 
     return res;
 }

@@ -269,11 +269,11 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiObjectDefinition* node)
     QString baseclass = node->qualifiedTypeNameId->name.toString();
 
     RangeInRevision range(m_session->locationToRange(node->qualifiedTypeNameId->identifierToken));
-    QualifiedIdentifier name(QmlJS::getQMLAttribute(node->initializer->members, "name").value);
+    QualifiedIdentifier name(QmlJS::getQMLAttributeValue(node->initializer->members, "name").value);
 
     if (baseclass == QLatin1String("Component")) {
         // QML component, equivalent to a QML class
-        QString inherits = QmlJS::getQMLAttribute(node->initializer->members, "prototype").value;
+        QString inherits = QmlJS::getQMLAttributeValue(node->initializer->members, "prototype").value;
 
         StructureType::Ptr type(new StructureType);
         type->setDeclarationId(DeclarationId(name));
@@ -301,7 +301,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiObjectDefinition* node)
                baseclass == QLatin1String("Signal") ||
                baseclass == QLatin1String("Slot")) {
         // Method (that can also be a signal or a slot)
-        QString type_name = QmlJS::getQMLAttribute(node->initializer->members, "type").value;
+        QString type_name = QmlJS::getQMLAttributeValue(node->initializer->members, "type").value;
         FunctionType::Ptr type(new FunctionType);
 
         if (type_name.isNull()) {
@@ -320,7 +320,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiObjectDefinition* node)
         openType(type);
     } else if (baseclass == QLatin1String("Property")) {
         // A property
-        AbstractType::Ptr type = typeFromName(QmlJS::getQMLAttribute(node->initializer->members, "type").value);
+        AbstractType::Ptr type = typeFromName(QmlJS::getQMLAttributeValue(node->initializer->members, "type").value);
 
         {
             DUChainWriteLocker lock;
@@ -334,7 +334,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiObjectDefinition* node)
         FunctionType::Ptr function = currentType<FunctionType>();
 
         if (function) {
-            AbstractType::Ptr type = typeFromName(QmlJS::getQMLAttribute(node->initializer->members, "type").value);
+            AbstractType::Ptr type = typeFromName(QmlJS::getQMLAttributeValue(node->initializer->members, "type").value);
 
             function->addArgument(type);
 
@@ -361,7 +361,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiObjectDefinition* node)
         openType(type);
     } else {
         // No special base class, so it is a normal instantiation
-        QmlJS::QMLAttributeValue id_attribute = QmlJS::getQMLAttribute(node->initializer->members, "id");
+        QmlJS::QMLAttributeValue id_attribute = QmlJS::getQMLAttributeValue(node->initializer->members, "id");
         QualifiedIdentifier id(id_attribute.value);
         RangeInRevision range(m_session->locationToRange(id_attribute.location));
 
