@@ -6,6 +6,12 @@ Module {
      Component {
          name: "QAbstractItemModel"
          prototype: "QObject"
+
+         /**
+          * "type" : { "toString" : "LayoutChangeHint" },
+          * "kind" : "Type",
+          * "internalContext" : { "type" : "Enum" }
+          */
          Enum {
              name: "LayoutChangeHint"
              values: {

@@ -21,6 +21,7 @@
 
 #include <language/duchain/types/functiontype.h>
 #include <language/duchain/types/integraltype.h>
+#include <language/duchain/types/enumerationtype.h>
 #include <language/duchain/types/typeutils.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/duchainlock.h>
@@ -343,6 +344,21 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiObjectDefinition* node)
             }
             openType(type);
         }
+    } else if (baseclass == QLatin1String("Enum")) {
+        // Enumeration. The "values" key contains a dictionary of name -> number entries.
+        EnumerationType::Ptr type(new EnumerationType);
+
+        type->setDeclarationId(DeclarationId(name));
+        type->setDataType(IntegralType::TypeEnumeration);
+
+        {
+            DUChainWriteLocker lock;
+            ClassMemberDeclaration* decl = openDeclaration<ClassMemberDeclaration>(name, range);
+
+            decl->setKind(Declaration::Type);
+            decl->setType(type);                // The type needs to be set here because closeContext is called before closeAndAssignType and needs to know the type of decl
+        }
+        openType(type);
     } else {
         // No special base class, so it is a normal instantiation
         QmlJS::QMLAttributeValue id_attribute = QmlJS::getQMLAttribute(node->initializer->members, "id");
@@ -445,8 +461,10 @@ void DeclarationBuilder::closeContext()
 {
     {
         DUChainWriteLocker lock;
-        FunctionDeclaration* function = dynamic_cast<FunctionDeclaration*>(currentDeclaration());
+        Declaration* decl = currentDeclaration();
+        FunctionDeclaration* function = dynamic_cast<FunctionDeclaration*>(decl);
         DUContext* ctx = currentContext();
+
         if (function && ctx) {
             if (ctx->type() == DUContext::Function) {
                 // This context contains the declarations of the arguments
@@ -456,6 +474,13 @@ void DeclarationBuilder::closeContext()
                 Q_ASSERT(ctx->type() == DUContext::Other);
                 function->setInternalContext(ctx);
             }
+        }
+
+        if (ctx && decl && decl->abstractType() && decl->abstractType()->whichType() == AbstractType::TypeEnumeration)
+        {
+            // We are closing an enumeration. Its internal context must be of type "Enum"
+            ctx->setType(DUContext::Enum);
+            decl->setInternalContext(ctx);
         }
     }
     DeclarationBuilderBase::closeContext();
