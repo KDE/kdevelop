@@ -57,6 +57,11 @@ using namespace KDevelop;
                                                             const QString &attribute);
 
     /**
+     * Get the value of a QML string, identifier or boolean expression
+     */
+    KDEVQMLJSDUCHAIN_EXPORT QString getNodeValue(AST::Node* node);
+
+    /**
      * Find the string value of a QML attribute
      */
     KDEVQMLJSDUCHAIN_EXPORT QMLAttributeValue getQMLAttributeValue(AST::UiObjectMemberList* members,

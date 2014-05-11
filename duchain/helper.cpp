@@ -52,6 +52,32 @@ QmlJS::AST::Statement* getQMLAttribute(QmlJS::AST::UiObjectMemberList* members, 
     return NULL;
 }
 
+QString getNodeValue(AST::Node* node)
+{
+    auto identifier = QmlJS::AST::cast<QmlJS::AST::IdentifierExpression*>(node);
+    auto identifier_name = QmlJS::AST::cast<QmlJS::AST::IdentifierPropertyName*>(node);
+    auto string = QmlJS::AST::cast<QmlJS::AST::StringLiteral*>(node);
+    auto string_name = QmlJS::AST::cast<QmlJS::AST::StringLiteralPropertyName*>(node);
+    auto true_literal = QmlJS::AST::cast<QmlJS::AST::TrueLiteral*>(node);
+    auto false_literal = QmlJS::AST::cast<QmlJS::AST::FalseLiteral*>(node);
+
+    if (identifier) {
+        return identifier->name.toString();
+    } else if (identifier_name) {
+        return identifier_name->id.toString();
+    } else if (string) {
+        return string->value.toString();
+    } else if (string_name) {
+        return string_name->id.toString();
+    } else if (true_literal) {
+        return QLatin1String("true");
+    } else if (false_literal) {
+        return QLatin1String("false");
+    } else {
+        return QString();
+    }
+}
+
 QMLAttributeValue getQMLAttributeValue(QmlJS::AST::UiObjectMemberList* members, const QString& attribute)
 {
     QMLAttributeValue res;
@@ -65,20 +91,9 @@ QMLAttributeValue getQMLAttributeValue(QmlJS::AST::UiObjectMemberList* members, 
     }
 
     // The expression must be an identifier or a string literal
-    QmlJS::AST::IdentifierExpression* identifier = QmlJS::AST::cast<QmlJS::AST::IdentifierExpression*>(statement->expression);
-    QmlJS::AST::StringLiteral* string = QmlJS::AST::cast<QmlJS::AST::StringLiteral*>(statement->expression);
-    QmlJS::AST::TrueLiteral* true_literal = QmlJS::AST::cast<QmlJS::AST::TrueLiteral*>(statement->expression);
-    QmlJS::AST::FalseLiteral* false_literal = QmlJS::AST::cast<QmlJS::AST::FalseLiteral*>(statement->expression);
+    res.value = getNodeValue(statement->expression);
 
-    if (identifier) {
-        res.value = identifier->name.toString();
-    } else if (string) {
-        res.value = string->value.toString();
-    } else if (true_literal) {
-        res.value = QLatin1String("true");
-    } else if (false_literal) {
-        res.value = QLatin1String("false");
-    } else {
+    if (res.value.isNull()) {
         return res;
     }
 
