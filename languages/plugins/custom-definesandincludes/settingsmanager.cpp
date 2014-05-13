@@ -149,3 +149,9 @@ QList<ConfigEntry> SettingsManager::readSettings( KConfig* cfg ) const
 
     return doReadSettings( grp );
 }
+
+QString SettingsManager::currentCompiler( KConfig* cfg )
+{
+    auto grp = cfg->group( "Custom Defines And Includes" );
+    return grp.readEntry( "compiler", "" );
+}

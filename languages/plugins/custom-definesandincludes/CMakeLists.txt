@@ -6,6 +6,7 @@ include_directories( ${KDE4_INCLUDES} ${KDEVPLATFORM_INCLUDE_DIR} )
 add_definitions( ${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 
 set( kdevdefinesandincludesmanager_SRCS
+        compilersprovider.cpp
         definesandincludesmanager.cpp
         settingsmanager.cpp
         debugarea.cpp

@@ -41,6 +41,9 @@ public:
 
     void writeSettings(KConfig* cfg, const QList<ConfigEntry>& paths) const;
 
+    /// @return name of the selected compiler, empty string if none is selected.
+    QString currentCompiler(KConfig* cfg);
+
     ~SettingsManager(){}
 };
 
