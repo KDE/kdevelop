@@ -31,8 +31,8 @@
 #include <KTar>
 #include <KZip>
 
-ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel, QWidget *parent)
-    : AppWizardPageWidget(parent), m_templatesModel(templatesModel)
+ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel, AppWizardDialog *wizardDialog)
+    : AppWizardPageWidget(wizardDialog), m_templatesModel(templatesModel)
 {
     ui = new Ui::ProjectSelectionPage();
     ui->setupUi(this);
@@ -75,6 +75,8 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
     loadButton->setIcon(KIcon("application-x-archive"));
     connect (loadButton, SIGNAL(clicked(bool)), this, SLOT(loadFileClicked()));
     m_listView->addWidget(0, loadButton);
+
+    m_wizardDialog = wizardDialog;
 }
 
 void ProjectSelectionPage::nameChanged()
@@ -191,12 +193,27 @@ void ProjectSelectionPage::validateData()
         return;
     }
 
-    if( appName() == "." || appName() == "..")
+    if( !appName().isEmpty() )
     {
-        ui->locationValidLabel->setText( i18n("Invalid project name") );
-        setForeground(ui->locationValidLabel, KColorScheme::NegativeText);
-        emit invalid();
-        return;
+        QString appname = appName();
+        QString templatefile = m_wizardDialog->appInfo().appTemplate;
+
+        // Read template file
+        KConfig config(templatefile);
+        KConfigGroup configgroup(&config, "General");
+        QString pattern = configgroup.readEntry( "ValidProjectName" ,  "^[a-zA-Z][a-zA-Z0-9_]+$" );
+
+        // Validation
+        int pos = 0;
+        QRegExp regex( pattern );
+        QRegExpValidator validator( regex );
+        if( validator.validate(appname, pos) == QValidator::Invalid )
+        {
+            ui->locationValidLabel->setText( i18n("Invalid project name") );
+            setForeground(ui->locationValidLabel, KColorScheme::NegativeText);
+            emit invalid();
+            return;
+        }
     }
 
     QDir tDir(url.toLocalFile( KUrl::RemoveTrailingSlash ));
