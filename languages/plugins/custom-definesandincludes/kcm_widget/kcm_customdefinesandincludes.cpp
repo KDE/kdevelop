@@ -22,10 +22,12 @@
 #include "projectpathswidget.h"
 #include "customdefinesandincludes.h"
 #include "definesandincludesmanager.h"
+#include "../compilerprovider/icompilerprovider.h"
 
 #include <interfaces/iruncontroller.h>
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
+#include <interfaces/iplugincontroller.h>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/idocument.h>
@@ -82,6 +84,13 @@ void DefinesAndIncludes::saveTo(KConfig* cfg, KDevelop::IProject*)
             }
         }
     }
+
+    auto compilerProvider = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ICompilerProvider");
+    if ( !compilerProvider || !compilerProvider->extension<ICompilerProvider>()) {
+        return;
+    }
+
+    compilerProvider->extension<ICompilerProvider>()->setCompiler(settings->currentCompiler(cfg));
 }
 
 void DefinesAndIncludes::load()

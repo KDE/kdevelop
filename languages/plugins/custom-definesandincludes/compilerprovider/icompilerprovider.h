@@ -21,31 +21,22 @@
  *
  */
 
-#ifndef COMPILERSPROVIDER_H
-#define COMPILERSPROVIDER_H
-
-#include "icompilerprovider.h"
-
-#include <QVariantList>
-#include <QVector>
-
-#include <interfaces/iplugin.h>
+#ifndef ICOMPILERPROVIDER_H
+#define ICOMPILERPROVIDER_H
 
 #include <QString>
-#include <QScopedPointer>
+#include <QObject>
 
-class CompilerProvider : public KDevelop::IPlugin, public ICompilerProvider
+class ICompilerProvider
 {
-    Q_OBJECT
-    Q_INTERFACES( ICompilerProvider )
 public:
-    explicit CompilerProvider(QObject* parent, const QVariantList& args = QVariantList() );
+    /// Sets the @param name compiler for providing standard includes/defines
+    /// @return true on success, false otherwise, e.g. if the compiler isn't available.
+    virtual bool setCompiler( const QString& name ) = 0;
 
-    /// TODO: support custom paths to compilers: /path/to/gcc
-    virtual bool setCompiler( const QString& name ) override;
-
-    class CompilerProviderPrivate;
-    QScopedPointer<CompilerProviderPrivate> d;
+    virtual ~ICompilerProvider() = default;
 };
 
-#endif // COMPILERSPROVIDER_H
+Q_DECLARE_INTERFACE( ICompilerProvider, "org.kdevelop.ICompilerProvider" )
+
+#endif // ICOMPILERPROVIDER_H

@@ -24,6 +24,8 @@
 
 #include "compilerprovider.h"
 
+#include "../debugarea.h"
+
 #include <language/interfaces/idefinesandincludesmanager.h>
 
 #include <QDir>
@@ -235,6 +237,7 @@ public:
         }
 
         IDefinesAndIncludesManager::manager()->registerProvider( m_providers[name].data() );
+        definesAndIncludesDebug() << "Registered new compiler provider: " << name;
         return true;
     }
 
@@ -250,18 +253,13 @@ CompilerProvider::CompilerProvider( QObject* parent, const QVariantList& )
     : IPlugin( CompilerProviderFactory::componentData(), parent ),
     d( new CompilerProviderPrivate )
 {
+    KDEV_USE_EXTENSION_INTERFACE(ICompilerProvider);
     d->selectCompiler();
 }
 
 bool CompilerProvider::setCompiler( const QString& name )
 {
     return d->setCompiler( name );
-}
-
-QString CompilerProvider::currentCompiler()
-{
-    //FIXME:
-    return {};
 }
 
 #include "compilerprovider.moc"

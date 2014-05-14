@@ -8,4 +8,5 @@ X-KDE-PluginInfo-Name=KDevCompilerProvider
 X-KDevelop-Category=Project
 X-KDevelop-Version=@KDEV_PLUGIN_VERSION@
 X-KDevelop-IRequired=org.kdevelop.IDefinesAndIncludesManager
+X-KDevelop-Interfaces=org.kdevelop.ICompilerProvider
 X-KDevelop-Mode=NoGUI

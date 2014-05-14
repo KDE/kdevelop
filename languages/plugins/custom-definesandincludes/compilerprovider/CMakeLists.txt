@@ -1,5 +1,6 @@
 set( compilerprovider_SRCS
         compilerprovider.cpp
+        ../debugarea.cpp
     )
 
 kde4_add_plugin( kdevcompilerprovider
