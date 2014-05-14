@@ -22,7 +22,7 @@
  *
  */
 
-#include "compilersprovider.h"
+#include "compilerprovider.h"
 
 #include <language/interfaces/idefinesandincludesmanager.h>
 
@@ -31,6 +31,9 @@
 #include <QProcess>
 #include <QRegExp>
 #include <QSharedPointer>
+
+#include <KPluginFactory>
+#include <KAboutData>
 
 using namespace KDevelop;
 
@@ -205,10 +208,10 @@ public:
     }
 };
 
-class CompilersProvider::CompilersProviderPrivate
+class CompilerProvider::CompilerProviderPrivate
 {
 public:
-    CompilersProviderPrivate()
+    CompilerProviderPrivate()
     {
         m_providers["clang"] = QSharedPointer<BaseProvider>( new ClangProvider() );
         m_providers["gcc"] = QSharedPointer<BaseProvider>( new GccProvider() );
@@ -238,20 +241,27 @@ public:
     QHash<QString, QSharedPointer<BaseProvider> > m_providers;
 };
 
-CompilersProvider::CompilersProvider()
-    : d( new CompilersProviderPrivate )
+K_PLUGIN_FACTORY(CompilerProviderFactory, registerPlugin<CompilerProvider>(); )
+K_EXPORT_PLUGIN(CompilerProviderFactory(KAboutData("kdevcompilerprovider",
+"kdevcompilerprovider", ki18n("Compiler Provider"), "0.1", ki18n(""),
+KAboutData::License_GPL)))
+
+CompilerProvider::CompilerProvider( QObject* parent, const QVariantList& )
+    : IPlugin( CompilerProviderFactory::componentData(), parent ),
+    d( new CompilerProviderPrivate )
 {
     d->selectCompiler();
 }
 
-bool CompilersProvider::setCompiler( const QString& name )
+bool CompilerProvider::setCompiler( const QString& name )
 {
     return d->setCompiler( name );
 }
 
-QString CompilersProvider::currentCompiler()
+QString CompilerProvider::currentCompiler()
 {
     //FIXME:
     return {};
 }
 
+#include "compilerprovider.moc"
