@@ -21,7 +21,6 @@
 
 #include "projectpathswidget.h"
 #include "customdefinesandincludes.h"
-
 #include "definesandincludesmanager.h"
 
 #include <interfaces/iruncontroller.h>
@@ -58,26 +57,21 @@ DefinesAndIncludes::~DefinesAndIncludes()
 {
 }
 
-void DefinesAndIncludes::loadFrom(KConfig* cfg)
+void DefinesAndIncludes::loadFrom( KConfig* cfg )
 {
     configWidget->clear();
-    auto IManager = KDevelop::IDefinesAndIncludesManager::manager();
-    if ( IManager ) {
-        auto manager = static_cast<KDevelop::DefinesAndIncludesManager*>(IManager);
-        configWidget->setPaths( manager->readSettings( cfg ) );
-    }
+    auto iadm = KDevelop::IDefinesAndIncludesManager::manager();
+    auto settings = static_cast<KDevelop::DefinesAndIncludesManager*>( iadm );
+    configWidget->setPaths( settings->readPaths( cfg ) );
 }
 
 void DefinesAndIncludes::saveTo(KConfig* cfg, KDevelop::IProject*)
 {
-    auto IManager = KDevelop::IDefinesAndIncludesManager::manager();
-    if ( IManager ) {
-        auto manager = static_cast<KDevelop::DefinesAndIncludesManager*>(IManager);
-        manager->writeSettings( cfg, configWidget->paths() );
-    }
+    auto iadm = KDevelop::IDefinesAndIncludesManager::manager();
+    auto settings = static_cast<KDevelop::DefinesAndIncludesManager*>( iadm );
+    settings->writePaths( cfg, configWidget->paths() );
 
-    auto grp = cfg->group("Custom Defines And Includes");
-    if (grp.readEntry("reparse", true)) {
+    if ( settings->needToReparseCurrentProject( cfg ) ) {
         using namespace KDevelop;
         ICore::self()->projectController()->reparseProject(project(), true);
 

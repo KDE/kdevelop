@@ -107,7 +107,7 @@ QHash<QString, QString> DefinesAndIncludesManager::defines( ProjectBaseItem* ite
     if (type & UserDefined) {
         auto cfg = item->project()->projectConfiguration().data();
 
-        const auto result = findConfigForItem(readSettings(cfg), item).defines;
+        const auto result = findConfigForItem(readPaths(cfg), item).defines;
         for (auto it = result.constBegin(); it != result.constEnd(); it++) {
             defines[it.key()] = it.value().toString();
         }
@@ -133,7 +133,7 @@ Path::List DefinesAndIncludesManager::includes( ProjectBaseItem* item, Type type
     if (type & UserDefined) {
         auto cfg = item->project()->projectConfiguration().data();
 
-        includes += KDevelop::toPathList(findConfigForItem(readSettings(cfg), item).includes);
+        includes += KDevelop::toPathList(findConfigForItem(readPaths(cfg), item).includes);
     }
 
     if ( type & ProjectSpecific ) {
@@ -144,16 +144,6 @@ Path::List DefinesAndIncludesManager::includes( ProjectBaseItem* item, Type type
     }
 
     return includes;
-}
-
-QList<ConfigEntry> DefinesAndIncludesManager::readSettings( KConfig* cfg ) const
-{
-    return SettingsManager::readSettings( cfg );
-}
-
-void DefinesAndIncludesManager::writeSettings( KConfig* cfg, const QList<ConfigEntry>& paths ) const
-{
-    SettingsManager::writeSettings( cfg, paths );
 }
 
 bool DefinesAndIncludesManager::unregisterProvider(IDefinesAndIncludesManager::Provider* provider)

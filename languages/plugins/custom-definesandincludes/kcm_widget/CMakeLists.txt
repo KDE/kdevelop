@@ -9,6 +9,7 @@ set( kcm_customdefinesandincludes_SRCS
         projectpathswidget.cpp
         kcm_customdefinesandincludes.cpp
         ../debugarea.cpp
+        ../settingsmanager.cpp
    )
 
 kde4_add_ui_files( kcm_customdefinesandincludes_SRCS

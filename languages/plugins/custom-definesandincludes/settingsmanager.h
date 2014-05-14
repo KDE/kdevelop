@@ -37,12 +37,14 @@ class SettingsManager
 public:
     SettingsManager();
 
-    QList<ConfigEntry> readSettings(KConfig* cfg) const;
+    QList<ConfigEntry> readPaths(KConfig* cfg) const;
 
-    void writeSettings(KConfig* cfg, const QList<ConfigEntry>& paths) const;
+    void writePaths(KConfig* cfg, const QList<ConfigEntry>& paths) const;
 
     /// @return name of the selected compiler, empty string if none is selected.
     QString currentCompiler(KConfig* cfg);
+
+    bool needToReparseCurrentProject( KConfig* cfg );
 
     ~SettingsManager(){}
 };

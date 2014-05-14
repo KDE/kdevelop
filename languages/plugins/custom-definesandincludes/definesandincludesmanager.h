@@ -50,10 +50,6 @@ public :
 
     virtual bool unregisterProvider( Provider* provider ) override;
 
-    virtual QList<ConfigEntry> readSettings( KConfig* cfg ) const;
-
-    virtual void writeSettings( KConfig* cfg, const QList<ConfigEntry>& paths ) const;
-
 private:
     QVector<Provider*> m_providers;
 };

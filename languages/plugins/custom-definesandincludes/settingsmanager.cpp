@@ -123,7 +123,7 @@ QList<ConfigEntry> convertedPaths( KConfig* cfg )
 }
 }
 
-void SettingsManager::writeSettings( KConfig* cfg, const QList<ConfigEntry>& paths ) const
+void SettingsManager::writePaths( KConfig* cfg, const QList<ConfigEntry>& paths ) const
 {
     KConfigGroup grp = cfg->group( ConfigConstants::configKey );
     if ( !grp.isValid() )
@@ -134,11 +134,11 @@ void SettingsManager::writeSettings( KConfig* cfg, const QList<ConfigEntry>& pat
     doWriteSettings( grp, paths );
 }
 
-QList<ConfigEntry> SettingsManager::readSettings( KConfig* cfg ) const
+QList<ConfigEntry> SettingsManager::readPaths( KConfig* cfg ) const
 {
     auto converted = convertedPaths( cfg );
     if ( !converted.isEmpty() ) {
-        writeSettings( cfg, converted );
+        writePaths( cfg, converted );
         return converted;
     }
 
@@ -154,4 +154,10 @@ QString SettingsManager::currentCompiler( KConfig* cfg )
 {
     auto grp = cfg->group( "Custom Defines And Includes" );
     return grp.readEntry( "compiler", "" );
+}
+
+bool SettingsManager::needToReparseCurrentProject( KConfig* cfg )
+{
+    auto grp = cfg->group( "Custom Defines And Includes" );
+    return grp.readEntry( "reparse", true );
 }
