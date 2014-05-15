@@ -27,6 +27,10 @@
 #include "../debugarea.h"
 
 #include <language/interfaces/idefinesandincludesmanager.h>
+#include <interfaces/icore.h>
+#include <interfaces/iproject.h>
+#include <interfaces/iprojectcontroller.h>
+#include <project/projectmodel.h>
 
 #include <QDir>
 #include <QHash>
@@ -45,34 +49,30 @@ using namespace KDevelop;
 #define NULL_DEVICE "/dev/null"
 #endif
 
-class BaseProvider : public IDefinesAndIncludesManager::Provider
+class BaseProvider
 {
 public:
-    virtual QHash<QString, QString> defines( ProjectBaseItem* ) const override
-    {
-        return {};
-    }
+    virtual QHash<QString, QString> defines() {return {}; }
+    virtual Path::List includes() {return {}; }
 
-    virtual Path::List includes( ProjectBaseItem* ) const override
+    virtual ~BaseProvider() = default;
+    void setPath( const QString& path )
     {
-        return {};
+        m_pathToCompiler = path;
     }
-
-    virtual IDefinesAndIncludesManager::Type type() const override
-    {
-        return IDefinesAndIncludesManager::CompilerSpecific;
-    }
-
 protected:
-    QString m_compilerName;
+    QString m_pathToCompiler;
+    QHash<QString, QString> definedMacros;
+    Path::List includePaths;
 };
+
+typedef QSharedPointer<BaseProvider> ProviderPointer;
 
 class GccLikeProvider : public BaseProvider
 {
 public:
-    virtual QHash<QString, QString> defines( ProjectBaseItem* ) const override
+    virtual QHash<QString, QString> defines() override
     {
-        static QHash<QString, QString> definedMacros;
         if ( !definedMacros.isEmpty() ) {
             return definedMacros;
         }
@@ -84,7 +84,7 @@ public:
         QProcess proc;
         proc.setProcessChannelMode( QProcess::MergedChannels );
 
-        proc.start( m_compilerName, {"-std=c++11", "-xc++", "-dM", "-E", NULL_DEVICE} );
+        proc.start( m_pathToCompiler, {"-std=c++11", "-xc++", "-dM", "-E", NULL_DEVICE} );
         if ( !proc.waitForStarted( 1000 ) || !proc.waitForFinished( 1000 ) ) {
             return {};
         }
@@ -100,10 +100,8 @@ public:
         return definedMacros;
     }
 
-    virtual Path::List includes( ProjectBaseItem* ) const override
+    virtual Path::List includes() override
     {
-        static Path::List includePaths;
-
         if ( !includePaths.isEmpty() ) {
             return includePaths;
         }
@@ -123,7 +121,7 @@ public:
         //  /usr/lib/gcc/i486-linux-gnu/4.1.2/include
         //  /usr/include
         // End of search list.
-        proc.start( m_compilerName, {"-std=c++11", "-xc++", "-E", "-v", NULL_DEVICE} );
+        proc.start( m_pathToCompiler, {"-std=c++11", "-xc++", "-E", "-v", NULL_DEVICE} );
         if ( !proc.waitForStarted( 1000 ) || !proc.waitForFinished( 1000 ) ) {
             return {};
         }
@@ -171,95 +169,134 @@ public:
     }
 };
 
-class ClangProvider : public GccLikeProvider
-{
-public:
-    ClangProvider()
-    {
-        m_compilerName = "clang++";
-    }
-};
-
-class GccProvider : public GccLikeProvider
-{
-public:
-    GccProvider()
-    {
-        m_compilerName = "gcc";
-    }
-};
-
 class MsvcProvider : public BaseProvider
 {
 public:
-    MsvcProvider()
-    {
-        m_compilerName = "msvc";
-    }
-
-    virtual QHash<QString, QString> defines( ProjectBaseItem* ) const override
+    virtual QHash<QString, QString> defines() override
     {
         //FIXME:
         return {};
     }
 
-    virtual Path::List includes( ProjectBaseItem* ) const override
+    virtual Path::List includes() override
     {
         //FIXME:
         return {};
     }
+};
+
+class IADCompilerProvider : public IDefinesAndIncludesManager::Provider
+{
+public:
+    virtual QHash<QString, QString> defines( ProjectBaseItem* item ) const override
+    {
+        if ( !m_providers.contains( item->project() ) ) {
+            return {};
+        }
+        return m_providers[item->project()]->defines();
+    }
+
+    virtual Path::List includes( ProjectBaseItem* item ) const override
+    {
+        if ( !m_providers.contains( item->project() ) ) {
+            return {};
+        }
+        return m_providers[item->project()]->includes();
+    }
+
+    virtual IDefinesAndIncludesManager::Type type() const override
+    {
+        return IDefinesAndIncludesManager::CompilerSpecific;
+    }
+
+    void addPoject( IProject* project, ProviderPointer provider )
+    {
+        m_providers[project] = provider;
+    }
+
+    void removePoject( IProject* project )
+    {
+        m_providers.remove( project );
+    }
+
+private:
+    //list of providers for each projects
+    QHash<IProject*, ProviderPointer> m_providers;
 };
 
 class CompilerProvider::CompilerProviderPrivate
 {
 public:
-    CompilerProviderPrivate()
+    CompilerProviderPrivate() : m_provider( new IADCompilerProvider )
     {
-        m_providers["clang"] = QSharedPointer<BaseProvider>( new ClangProvider() );
-        m_providers["gcc"] = QSharedPointer<BaseProvider>( new GccProvider() );
-        m_providers["msvc"] = QSharedPointer<BaseProvider>( new MsvcProvider() );
+        IDefinesAndIncludesManager::manager()->registerProvider( m_provider.data() );
     }
 
+    ~CompilerProviderPrivate()
+    {
+        IDefinesAndIncludesManager::manager()->unregisterProvider( m_provider.data() );
+    }
     /// Reads config, if compiler already set uses it, otherwise goes through all and checks if it available on the system.
 
     //FIXME: check if already chosen, if not go through all available and choose an appropriate.
-    void selectCompiler() {
-        IDefinesAndIncludesManager::manager()->registerProvider( new GccProvider );
+    void selectCompiler()
+    {
     }
 
-    bool setCompiler( const QString& name ) {
-        if ( !m_providers.contains( name ) ) {
+    bool setCompiler( KDevelop::IProject* project, const QString& name, const QString& path )
+    {
+        ProviderPointer provider;
+        if ( name == "gcc" ) {
+            provider = ProviderPointer( new GccLikeProvider() );
+        }else if ( name == "clang" ) {
+            provider = ProviderPointer( new GccLikeProvider() );
+        }else if ( name == "msvc" ) {
+            provider = ProviderPointer( new MsvcProvider() );
+        }else if ( name != "none" || path.isEmpty() ) {
             return false;
         }
-
-        for ( auto& p : m_providers ) {
-            IDefinesAndIncludesManager::manager()->unregisterProvider( p.data() );
+        if ( provider ) {
+            provider->setPath( path );
         }
 
-        IDefinesAndIncludesManager::manager()->registerProvider( m_providers[name].data() );
-        definesAndIncludesDebug() << "Registered new compiler provider: " << name;
+        m_provider->addPoject( project, provider );
         return true;
     }
 
-    QHash<QString, QSharedPointer<BaseProvider> > m_providers;
+    void projectOpened( IProject* project )
+    {
+        //FIXME: read values from settings
+    }
+
+    void projectClosed( IProject* project )
+    {
+        //FIXME: read values from settings
+    }
+
+private:
+    QScopedPointer<IADCompilerProvider> m_provider;
 };
 
-K_PLUGIN_FACTORY(CompilerProviderFactory, registerPlugin<CompilerProvider>(); )
-K_EXPORT_PLUGIN(CompilerProviderFactory(KAboutData("kdevcompilerprovider",
-"kdevcompilerprovider", ki18n("Compiler Provider"), "0.1", ki18n(""),
-KAboutData::License_GPL)))
+K_PLUGIN_FACTORY( CompilerProviderFactory, registerPlugin<CompilerProvider>(); )
+K_EXPORT_PLUGIN( CompilerProviderFactory( KAboutData( "kdevcompilerprovider",
+            "kdevcompilerprovider", ki18n( "Compiler Provider" ), "0.1", ki18n( "" ),
+            KAboutData::License_GPL ) ) )
 
 CompilerProvider::CompilerProvider( QObject* parent, const QVariantList& )
     : IPlugin( CompilerProviderFactory::componentData(), parent ),
     d( new CompilerProviderPrivate )
 {
-    KDEV_USE_EXTENSION_INTERFACE(ICompilerProvider);
+    KDEV_USE_EXTENSION_INTERFACE( ICompilerProvider );
+
+    connect( ICore::self()->projectController(), SIGNAL( projectAboutToBeOpened( KDevelop::IProject* ) ), SLOT( projectOpened( IProject* ) ) );
+    connect( ICore::self()->projectController(), SIGNAL( projectClosed( KDevelop::IProject* ) ), SLOT( projectClosed( IProject* ) ) );
+
     d->selectCompiler();
 }
 
-bool CompilerProvider::setCompiler( const QString& name )
+bool CompilerProvider::setCompiler( KDevelop::IProject* project, const QString& name, const QString& path )
 {
-    return d->setCompiler( name );
+    return d->setCompiler( project, name, path );
 }
 
 #include "compilerprovider.moc"

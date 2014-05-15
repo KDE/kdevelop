@@ -27,12 +27,16 @@
 #include <QString>
 #include <QObject>
 
+namespace KDevelop {
+    class IProject;
+}
+
 class ICompilerProvider
 {
 public:
-    /// Sets the @param name compiler for providing standard includes/defines
+    /// Set @p name compiler (one of gcc, clang e.t.c) located at @p path that provides standard includes/defines for @p project
     /// @return true on success, false otherwise, e.g. if the compiler isn't available.
-    virtual bool setCompiler( const QString& name ) = 0;
+    virtual bool setCompiler( KDevelop::IProject* project, const QString& name, const QString& path ) = 0;
 
     virtual ~ICompilerProvider() = default;
 };

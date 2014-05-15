@@ -41,8 +41,10 @@ class CompilerProvider : public KDevelop::IPlugin, public ICompilerProvider
 public:
     explicit CompilerProvider(QObject* parent, const QVariantList& args = QVariantList() );
 
-    /// TODO: support custom paths to compilers: /path/to/gcc
-    virtual bool setCompiler( const QString& name ) override;
+    virtual bool setCompiler( KDevelop::IProject* project, const QString& name, const QString& path ) override;
+
+    Q_PRIVATE_SLOT(d, void projectOpened( IProject* ))
+    Q_PRIVATE_SLOT(d, void projectClosed( IProject* ))
 
     class CompilerProviderPrivate;
     QScopedPointer<CompilerProviderPrivate> d;
