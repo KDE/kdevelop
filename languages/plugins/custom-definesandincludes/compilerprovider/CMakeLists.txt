@@ -9,7 +9,8 @@ kde4_add_plugin( kdevcompilerprovider
 target_link_libraries( kdevcompilerprovider LINK_PRIVATE
         ${KDEVPLATFORM_PROJECT_LIBRARIES}
         ${KDEVPLATFORM_UTIL_LIBRARIES}
-        ${KDEVPLATFORM_LANGUAGE_LIBRARIES} )
+        ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
+        kdev4includesdefinessettings )
 
 install( TARGETS kdevcompilerprovider
          DESTINATION ${PLUGIN_INSTALL_DIR} )

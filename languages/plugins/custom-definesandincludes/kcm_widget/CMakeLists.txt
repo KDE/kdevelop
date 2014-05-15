@@ -9,7 +9,6 @@ set( kcm_customdefinesandincludes_SRCS
         projectpathswidget.cpp
         kcm_customdefinesandincludes.cpp
         ../debugarea.cpp
-        ../settingsmanager.cpp
    )
 
 kde4_add_ui_files( kcm_customdefinesandincludes_SRCS
@@ -26,7 +25,8 @@ target_link_libraries( kcm_kdevcustomdefinesandincludes LINK_PRIVATE
         ${KDEVPLATFORM_INTERFACES_LIBRARIES}
         ${KDEVPLATFORM_PROJECT_LIBRARIES}
         ${KDEVPLATFORM_UTIL_LIBRARIES}
-        ${KDEVPLATFORM_LANGUAGE_LIBRARIES} )
+        ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
+        kdev4includesdefinessettings )
 
 install( TARGETS kcm_kdevcustomdefinesandincludes
          DESTINATION ${PLUGIN_INSTALL_DIR} )
