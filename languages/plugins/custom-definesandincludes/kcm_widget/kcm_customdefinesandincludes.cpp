@@ -90,8 +90,7 @@ void DefinesAndIncludes::saveTo(KConfig* cfg, KDevelop::IProject*)
         return;
     }
 
-    //FIXME: support custom paths for compilers.
-    compilerProvider->extension<ICompilerProvider>()->setCompiler(project(), settings->currentCompiler(cfg), "gcc");
+    compilerProvider->extension<ICompilerProvider>()->setCompiler(project(), settings->currentCompiler(cfg), settings->pathToCompiler(cfg));
 }
 
 void DefinesAndIncludes::load()

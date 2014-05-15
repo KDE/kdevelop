@@ -161,3 +161,9 @@ bool SettingsManager::needToReparseCurrentProject( KConfig* cfg )
     auto grp = cfg->group( "Custom Defines And Includes" );
     return grp.readEntry( "reparse", true );
 }
+
+QString SettingsManager::pathToCompiler( KConfig* cfg )
+{
+    auto grp = cfg->group( "Custom Defines And Includes" );
+    return grp.readEntry( "compiler", currentCompiler( cfg ) );
+}

@@ -46,6 +46,8 @@ public:
     /// @return name of the selected compiler, empty string if none is selected.
     QString currentCompiler(KConfig* cfg);
 
+    QString pathToCompiler(KConfig* cfg);
+
     bool needToReparseCurrentProject( KConfig* cfg );
 
     ~SettingsManager(){}

@@ -43,8 +43,8 @@ public:
 
     virtual bool setCompiler( KDevelop::IProject* project, const QString& name, const QString& path ) override;
 
-    Q_PRIVATE_SLOT(d, void projectOpened( IProject* ))
-    Q_PRIVATE_SLOT(d, void projectClosed( IProject* ))
+    Q_PRIVATE_SLOT(d, void projectOpened( KDevelop::IProject* ))
+    Q_PRIVATE_SLOT(d, void projectClosed( KDevelop::IProject* ))
 
     class CompilerProviderPrivate;
     QScopedPointer<CompilerProviderPrivate> d;

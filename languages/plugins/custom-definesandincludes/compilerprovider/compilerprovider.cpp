@@ -25,8 +25,8 @@
 #include "compilerprovider.h"
 
 #include "../debugarea.h"
+#include "../definesandincludesmanager.h"
 
-#include <language/interfaces/idefinesandincludesmanager.h>
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
@@ -253,6 +253,7 @@ public:
         }else if ( name == "msvc" ) {
             provider = ProviderPointer( new MsvcProvider() );
         }else if ( name != "none" || path.isEmpty() ) {
+            definesAndIncludesDebug() << "Invalid compiler: " << name << " " << path;
             return false;
         }
         if ( provider ) {
@@ -263,14 +264,19 @@ public:
         return true;
     }
 
-    void projectOpened( IProject* project )
+    void projectOpened( KDevelop::IProject* project )
     {
-        //FIXME: read values from settings
+        definesAndIncludesDebug() << "Adding project: " << project->name();
+        auto settings = static_cast<KDevelop::DefinesAndIncludesManager*>( KDevelop::IDefinesAndIncludesManager::manager() );
+        auto path = settings->pathToCompiler(project->projectConfiguration().data());
+        auto compiler = settings->currentCompiler(project->projectConfiguration().data());
+        setCompiler(project, compiler, path);
     }
 
-    void projectClosed( IProject* project )
+    void projectClosed( KDevelop::IProject* project )
     {
-        //FIXME: read values from settings
+        m_provider->removePoject(project);
+        definesAndIncludesDebug() << "Removed project: " << project->name();
     }
 
 private:
@@ -288,8 +294,8 @@ CompilerProvider::CompilerProvider( QObject* parent, const QVariantList& )
 {
     KDEV_USE_EXTENSION_INTERFACE( ICompilerProvider );
 
-    connect( ICore::self()->projectController(), SIGNAL( projectAboutToBeOpened( KDevelop::IProject* ) ), SLOT( projectOpened( IProject* ) ) );
-    connect( ICore::self()->projectController(), SIGNAL( projectClosed( KDevelop::IProject* ) ), SLOT( projectClosed( IProject* ) ) );
+    connect( ICore::self()->projectController(), SIGNAL( projectAboutToBeOpened( KDevelop::IProject* ) ), SLOT( projectOpened( KDevelop::IProject* ) ) );
+    connect( ICore::self()->projectController(), SIGNAL( projectClosed( KDevelop::IProject* ) ), SLOT( projectClosed( KDevelop::IProject* ) ) );
 
     d->selectCompiler();
 }
