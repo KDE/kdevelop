@@ -165,11 +165,13 @@ bool SettingsManager::needToReparseCurrentProject( KConfig* cfg )
 QString SettingsManager::pathToCompiler( KConfig* cfg )
 {
     auto grp = cfg->group( "Custom Defines And Includes" );
-    return grp.readEntry( "compiler", currentCompiler( cfg ) );
+    return grp.readEntry( "compilerPath", currentCompiler( cfg ) );
 }
 
 void SettingsManager::writeCompiler( KConfig* cfg, const QString& name )
 {
     auto grp = cfg->group( "Custom Defines And Includes" );
-    return grp.writeEntry( "compiler", name );
+    grp.writeEntry( "compiler", name );
+
+    grp.writeEntry("compilerPath", name);
 }

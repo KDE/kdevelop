@@ -213,6 +213,9 @@ public:
     void addPoject( IProject* project, ProviderPointer provider )
     {
         m_providers[project] = provider;
+        //cache includes/defines
+        m_providers[project]->includes();
+        m_providers[project]->defines();
     }
 
     void removePoject( IProject* project )
@@ -270,6 +273,7 @@ public:
         }
 
         m_provider->addPoject( project, provider );
+
         return true;
     }
 
@@ -280,11 +284,11 @@ public:
         auto path = settings->pathToCompiler(project->projectConfiguration().data());
         auto compiler = settings->currentCompiler(project->projectConfiguration().data());
 
-        if (compiler.isEmpty()) {
+        if ( compiler.isEmpty() || compiler == "none" ) {
             compiler = selectCompiler();
-            settings->writeCompiler(project->projectConfiguration().data(), compiler);
+            settings->writeCompiler( project->projectConfiguration().data(), compiler );
         }
-        setCompiler(project, compiler, path);
+        setCompiler( project, compiler, path );
     }
 
     void projectClosed( KDevelop::IProject* project )
