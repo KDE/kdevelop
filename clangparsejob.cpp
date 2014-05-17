@@ -40,8 +40,6 @@
 #include "duchain/clangtypes.h"
 #include "duchain/tuduchain.h"
 
-#include "util/clangutils.h"
-
 #include "debug.h"
 #include "clangsupport.h"
 
@@ -133,7 +131,6 @@ void ClangParseJob::run()
 
     // get user defined and default include paths in background thread
     m_includes += userDefinedIncludePathsForFile(document().str());
-    m_includes += ClangUtils::defaultIncludeDirectories();
 
     if (abortRequested()) {
         return;

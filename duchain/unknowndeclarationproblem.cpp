@@ -325,16 +325,13 @@ QString directiveForFile( const QString& includefile, const KDevelop::Path::List
 
 KDevelop::Path::List includePaths( const KDevelop::Path& file )
 {
-
-    KDevelop::Path::List paths = ClangUtils::defaultIncludeDirectories();
-
     /*
      * Find project's custom include paths
      */
     const auto source = file.toLocalFile();
     const auto item = ICore::self()->projectController()->projectModel()->itemForPath( KDevelop::IndexedString( source ) );
 
-    return paths + IDefinesAndIncludesManager::manager()->includes(item);
+    return IDefinesAndIncludesManager::manager()->includes(item);
 }
 
 /*

@@ -35,16 +35,14 @@ using namespace KDevelop;
 namespace {
 static std::map<QString, QVector<const char*>> mimeToArgs = {
     {
-        "text/x-csrc", { "-std=c11", "-Wall" }
+        "text/x-csrc", { "-std=c11", "-Wall", "-nostdinc", "-nostdinc++" }
     },
     {
-        "text/x-c++src", { "-std=c++11", "-xc++", "-Wall" }
+        "text/x-c++src", { "-std=c++11", "-xc++", "-Wall", "-nostdinc", "-nostdinc++" }
     }
 };
 
-static QVector<const char*> defaultArgs = {"-std=c++11", "-xc++", "-Wall"};
-
-static QVector<const char*> pchArgs = {"-std=c++11", "-xc++-header", "-Wall"};
+static QVector<const char*> pchArgs = {"-std=c++11", "-xc++-header", "-Wall", "-nostdinc", "-nostdinc++"};
 
 QVector<const char*> argsForSession(const QString& path, ParseSession::Options options)
 {
@@ -58,7 +56,7 @@ QVector<const char*> argsForSession(const QString& path, ParseSession::Options o
     if (res != mimeToArgs.end()) {
       return res->second;
     }
-    return defaultArgs;
+    return mimeToArgs.find("text/x-c++src")->second;
 }
 
 CXUnsavedFile fileForContents(const QByteArray& path, const QByteArray& contents)

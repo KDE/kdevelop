@@ -33,19 +33,6 @@ namespace KDevelop {
 namespace ClangUtils
 {
     /**
-     * Returns the default include directories for Clang
-     *
-     * Something along:
-     * /usr/bin/../lib/clang/3.4/include
-     * ...
-     * /usr/include
-     *
-     * @note This function internally runs "clang++" to retrieve the include directories.
-     * The result of the first run is cached, hence consecutive calls to this function are very cheap.
-     */
-    KDevelop::Path::List defaultIncludeDirectories();
-
-    /**
      * Finds the most specific CXCursor which applies to the the specified line and column
      * in the given translation unit and file.
      *
