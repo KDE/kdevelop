@@ -60,6 +60,8 @@ ProjectPathsWidget::ProjectPathsWidget( QWidget* parent )
 
     connect( ui->includesWidget, SIGNAL(includesChanged(QStringList)), SLOT(includesChanged(QStringList)) );
     connect( ui->definesWidget, SIGNAL(definesChanged(Defines)), SLOT(definesChanged(Defines)) );
+
+    connect( ui->kcfg_compiler, SIGNAL( activated( QString ) ), ui->kcfg_compilerPath, SLOT( setText( QString ) ) );
 }
 
 QList<ConfigEntry> ProjectPathsWidget::paths() const
