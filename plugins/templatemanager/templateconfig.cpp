@@ -35,8 +35,8 @@ K_PLUGIN_FACTORY(TemplateConfigFactory, registerPlugin<TemplateConfig>();)
 // K_EXPORT_PLUGIN(TemplateConfigFactory("kdevtemplates_config"))
 
 TemplateConfig::TemplateConfig(QWidget* parent, const QVariantList& args)
-    : KCModule(new KAboutData("kdevtemplates_config", "kdevplatform_templates", i18n("Template Provider")
-        , QString()), parent, args)
+    : KCModule(new KAboutData("kdevtemplates_config", i18n("Template Provider"), QString()
+        ), parent, args)
 {
     ui = new Ui::TemplateConfig;
     ui->setupUi(this);

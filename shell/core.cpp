@@ -95,11 +95,12 @@ namespace KDevelop {
 Core *Core::m_self = 0;
 KAboutData aboutData()
 {
-    KAboutData aboutData( "kdevplatform", "kdevplatform", 
+    KAboutData aboutData( "kdevplatform", 
                           i18n("KDevelop Platform"), KDEVPLATFORM_VERSION_STR,
                           i18n("Development Platform for IDE-like Applications"),
-                          KAboutData::License_LGPL_V2, i18n( "Copyright 2004-2014, The KDevelop developers" ),
+                          KAboutLicense::LGPL_V2, i18n( "Copyright 2004-2014, The KDevelop developers" ),
                           QString(), "http://www.kdevelop.org" );
+
     aboutData.addAuthor( i18n("Andreas Pakulat"), i18n( "Architecture, VCS Support, Project Management Support, QMake Projectmanager" ), "apaku@gmx.de" );
     aboutData.addAuthor( i18n("Alexander Dymo"), i18n( "Architecture, Sublime UI, Ruby support" ), "adymo@kdevelop.org" );
     aboutData.addAuthor( i18n("David Nolden"), i18n( "Definition-Use Chain, C++ Support" ), "david.nolden.kdevelop@art-master.de" );
