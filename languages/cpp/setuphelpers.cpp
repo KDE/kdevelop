@@ -35,20 +35,16 @@ namespace CppTools {
 #ifdef _MSC_VER
 QStringList msvcSetupStandardIncludePaths();
 const QVector<rpp::pp_macro*>& msvcStandardMacros();
-#else
-QStringList gccLikeSetupStandardIncludePaths();
-const QVector<rpp::pp_macro*>& gccLikeStandardMacros();
 #endif
 
 QStringList setupStandardIncludePaths()
 {
 //TODO: this should happen depending on the actual compiler used for the target and not on the compiler used for kdevelop itself.
 #ifdef _MSC_VER
-    QStringList includePaths = msvcSetupStandardIncludePaths();
+    return msvcSetupStandardIncludePaths();
 #else
-    QStringList includePaths = gccLikeSetupStandardIncludePaths();
+    return {};
 #endif
-    return includePaths;
 }
 
 void insertMacro(Cpp::ReferenceCountedMacroSet& macros, const rpp::pp_macro& macro)
@@ -184,12 +180,11 @@ Cpp::ReferenceCountedMacroSet setupStandardMacros()
     insertMacro( macros, rpp::pp_macro("__VA_ARGS__") );
 
 #ifdef _MSC_VER    
-    foreach(const rpp::pp_macro* macro, msvcStandardMacros())
-#else
-    foreach(const rpp::pp_macro* macro, gccLikeStandardMacros())
+    foreach(const rpp::pp_macro* macro, msvcStandardMacros()){
+      insertMacro(macros, *macro);
+    }
 #endif
-    insertMacro(macros, *macro);
-    
+
     return macros;
 }
 

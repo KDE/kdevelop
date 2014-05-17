@@ -109,10 +109,10 @@ void IncludePathComputer::computeForeground()
       m_effectiveBuildDirectory.clear();
     }
 
-      for(const auto& dir : idm->includes(file, IDefinesAndIncludesManager::UserDefined)){
+      for(const auto& dir : idm->includes(file, IDefinesAndIncludesManager::Type(IDefinesAndIncludesManager::UserDefined | IDefinesAndIncludesManager::CompilerSpecific))){
         addInclude(dir);
       }
-      m_defines = idm->defines(file, IDefinesAndIncludesManager::Type(IDefinesAndIncludesManager::UserDefined | IDefinesAndIncludesManager::ProjectSpecific));
+      m_defines = idm->defines(file);
 
     m_gotPathsFromManager = !dirs.isEmpty();
     kDebug(9007) << "Got " << dirs.count() << " include-paths from build-manager";
