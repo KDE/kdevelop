@@ -153,7 +153,7 @@ QList<ConfigEntry> SettingsManager::readPaths( KConfig* cfg ) const
 QString SettingsManager::currentCompiler( KConfig* cfg )
 {
     auto grp = cfg->group( "Custom Defines And Includes" );
-    return grp.readEntry( "compiler", "gcc" );
+    return grp.readEntry( "compiler", "" );
 }
 
 bool SettingsManager::needToReparseCurrentProject( KConfig* cfg )
@@ -166,4 +166,10 @@ QString SettingsManager::pathToCompiler( KConfig* cfg )
 {
     auto grp = cfg->group( "Custom Defines And Includes" );
     return grp.readEntry( "compiler", currentCompiler( cfg ) );
+}
+
+void SettingsManager::writeCompiler( KConfig* cfg, const QString& name )
+{
+    auto grp = cfg->group( "Custom Defines And Includes" );
+    return grp.writeEntry( "compiler", name );
 }

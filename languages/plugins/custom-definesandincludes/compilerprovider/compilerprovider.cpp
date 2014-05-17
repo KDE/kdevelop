@@ -40,6 +40,7 @@
 
 #include <KPluginFactory>
 #include <KAboutData>
+#include <KStandardDirs>
 
 using namespace KDevelop;
 
@@ -190,7 +191,7 @@ class IADCompilerProvider : public IDefinesAndIncludesManager::Provider
 public:
     virtual QHash<QString, QString> defines( ProjectBaseItem* item ) const override
     {
-        if ( !m_providers.contains( item->project() ) ) {
+        if ( !m_providers.contains( item->project() ) || !m_providers[item->project()] ) {
             return {};
         }
         return m_providers[item->project()]->defines();
@@ -198,7 +199,7 @@ public:
 
     virtual Path::List includes( ProjectBaseItem* item ) const override
     {
-        if ( !m_providers.contains( item->project() ) ) {
+        if ( !m_providers.contains( item->project() ) || !m_providers[item->project()] ) {
             return {};
         }
         return m_providers[item->project()]->includes();
@@ -236,11 +237,19 @@ public:
     {
         IDefinesAndIncludesManager::manager()->unregisterProvider( m_provider.data() );
     }
-    /// Reads config, if compiler already set uses it, otherwise goes through all and checks if it available on the system.
 
-    //FIXME: check if already chosen, if not go through all available and choose an appropriate.
-    void selectCompiler()
+    QString selectCompiler()
     {
+        //Note: keep in sync with .kcfg file.
+        QStringList compilers = {"clang", "gcc", "msvc"};
+        for ( auto& compiler : compilers ) {
+            if ( KStandardDirs::findExe( compiler ).isEmpty() ) {
+                continue;
+            }
+            return compiler;
+        }
+
+        return "none";
     }
 
     bool setCompiler( KDevelop::IProject* project, const QString& name, const QString& path )
@@ -270,6 +279,11 @@ public:
         auto settings = static_cast<KDevelop::DefinesAndIncludesManager*>( KDevelop::IDefinesAndIncludesManager::manager() );
         auto path = settings->pathToCompiler(project->projectConfiguration().data());
         auto compiler = settings->currentCompiler(project->projectConfiguration().data());
+
+        if (compiler.isEmpty()) {
+            compiler = selectCompiler();
+            settings->writeCompiler(project->projectConfiguration().data(), compiler);
+        }
         setCompiler(project, compiler, path);
     }
 
