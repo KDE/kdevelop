@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2012 Digia Plc and/or its subsidiary(-ies).
+** Copyright (C) 2014 Digia Plc and/or its subsidiary(-ies).
 ** Contact: http://www.qt-project.org/legal
 **
 ** This file is part of Qt Creator.
@@ -29,9 +29,12 @@
 
 #include "qmlerror.h"
 
+
 #include <QtCore/qdebug.h>
 #include <QtCore/qfile.h>
 #include <QtCore/qstringlist.h>
+
+
 
 QT_BEGIN_NAMESPACE
 
@@ -58,10 +61,16 @@ QT_BEGIN_NAMESPACE
                ^
     \endcode
 
-    Note that the QtQuick 1 version is named QDeclarativeError
+    Note that the \l {Qt Quick 1} version is named QDeclarativeError
 
     \sa QQuickView::errors(), QmlComponent::errors()
 */
+
+static quint16 qmlSourceCoordinate(int n)
+{
+    return (n > 0 && n <= static_cast<int>(USHRT_MAX)) ? static_cast<quint16>(n) : 0;
+}
+
 class QmlErrorPrivate
 {
 public:
@@ -69,12 +78,13 @@ public:
 
     QUrl url;
     QString description;
-    int line;
-    int column;
+    quint16 line;
+    quint16 column;
+    QObject *object;
 };
 
 QmlErrorPrivate::QmlErrorPrivate()
-: line(-1), column(-1)
+: line(0), column(0), object()
 {
 }
 
@@ -109,6 +119,7 @@ QmlError &QmlError::operator=(const QmlError &other)
         d->description = other.d->description;
         d->line = other.d->line;
         d->column = other.d->column;
+        d->object = other.d->object;
     }
     return *this;
 }
@@ -170,7 +181,7 @@ void QmlError::setDescription(const QString &description)
 */
 int QmlError::line() const
 {
-    if (d) return d->line;
+    if (d) return qmlSourceCoordinate(d->line);
     else return -1;
 }
 
@@ -180,7 +191,7 @@ int QmlError::line() const
 void QmlError::setLine(int line)
 {
     if (!d) d = new QmlErrorPrivate;
-    d->line = line;
+    d->line = qmlSourceCoordinate(line);
 }
 
 /*!
@@ -188,7 +199,7 @@ void QmlError::setLine(int line)
 */
 int QmlError::column() const
 {
-    if (d) return d->column;
+    if (d) return qmlSourceCoordinate(d->column);
     else return -1;
 }
 
@@ -198,7 +209,28 @@ int QmlError::column() const
 void QmlError::setColumn(int column)
 {
     if (!d) d = new QmlErrorPrivate;
-    d->column = column;
+    d->column = qmlSourceCoordinate(column);
+}
+
+/*!
+    Returns the nearest object where this error occurred.
+    Exceptions in bound property expressions set this to the object
+    to which the property belongs. It will be 0 for all
+    other exceptions.
+ */
+QObject *QmlError::object() const
+{
+    if (d) return d->object;
+    else return 0;
+}
+
+/*!
+    Sets the nearest \a object where this error occurred.
+ */
+void QmlError::setObject(QObject *object)
+{
+    if (!d) d = new QmlErrorPrivate;
+    d->object = object;
 }
 
 /*!
@@ -207,14 +239,20 @@ void QmlError::setColumn(int column)
 QString QmlError::toString() const
 {
     QString rv;
-    if (url().isEmpty()) {
+
+    QUrl u(url());
+    int l(line());
+
+    if (u.isEmpty()) {
         rv = QLatin1String("<Unknown File>");
-    } else if (line() != -1) {
-        rv = url().toString() + QLatin1Char(':') + QString::number(line());
-        if(column() != -1) 
-            rv += QLatin1Char(':') + QString::number(column());
+    } else if (l != -1) {
+        rv = u.toString() + QLatin1Char(':') + QString::number(l);
+
+        int c(column());
+        if (c != -1)
+            rv += QLatin1Char(':') + QString::number(c);
     } else {
-        rv = url().toString();
+        rv = u.toString();
     }
 
     rv += QLatin1String(": ") + description();

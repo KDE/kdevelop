@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2012 Digia Plc and/or its subsidiary(-ies).
+** Copyright (C) 2014 Digia Plc and/or its subsidiary(-ies).
 ** Contact: http://www.qt-project.org/legal
 **
 ** This file is part of Qt Creator.
@@ -27,44 +27,22 @@
 **
 ****************************************************************************/
 
-#include "qmljsmodelmanagerinterface.h"
+#ifndef QTC_FUNCTION_H
+#define QTC_FUNCTION_H
 
-using namespace QmlJS;
+#include <functional>
+#if !(__cplusplus > 199711L || __GXX_EXPERIMENTAL_CXX0X__ || _MSC_VER >= 1600 || defined( _LIBCPP_VERSION )) || \
+    (defined(__GNUC_LIBSTD__) && ((__GNUC_LIBSTD__-0) * 100 + __GNUC_LIBSTD_MINOR__-0 <= 402))
+#define USE_TR1
+#endif
 
-/*!
-    \class QmlJS::ModelManagerInterface
-    \brief Interface to the global state of the QmlJS code model.
-    \sa QmlJS::Document QmlJS::Snapshot QmlJSTools::Internal::ModelManager
+#ifdef USE_TR1
+#  ifdef __GNUC__
+#    include <tr1/functional>
+#  endif
+namespace Utils { using std::tr1::function; }
+#else
+namespace Utils { using std::function; }
+#endif
 
-    The ModelManagerInterface is an interface for global state and actions in
-    the QmlJS code model. It is implemented by \l{QmlJSTools::Internal::ModelManager}
-    and the instance can be accessed through ModelManagerInterface::instance().
-
-    One of its primary concerns is to keep the Snapshots it
-    maintains up to date by parsing documents and finding QML modules.
-
-    It has a Snapshot that contains only valid Documents,
-    accessible through ModelManagerInterface::snapshot() and a Snapshot with
-    potentially more recent, but invalid documents that is exposed through
-    ModelManagerInterface::newestSnapshot().
-*/
-
-static ModelManagerInterface *g_instance = 0;
-
-ModelManagerInterface::ModelManagerInterface(QObject *parent)
-    : QObject(parent)
-{
-    Q_ASSERT(! g_instance);
-    g_instance = this;
-}
-
-ModelManagerInterface::~ModelManagerInterface()
-{
-    Q_ASSERT(g_instance == this);
-    g_instance = 0;
-}
-
-ModelManagerInterface *ModelManagerInterface::instance()
-{
-    return g_instance;
-}
+#endif // QTC_FUNCTION_H

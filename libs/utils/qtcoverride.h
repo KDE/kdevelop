@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2012 Digia Plc and/or its subsidiary(-ies).
+** Copyright (C) 2014 Digia Plc and/or its subsidiary(-ies).
 ** Contact: http://www.qt-project.org/legal
 **
 ** This file is part of Qt Creator.
@@ -27,39 +27,15 @@
 **
 ****************************************************************************/
 
-#ifndef QMLJSICONTEXTPANE_H
-#define QMLJSICONTEXTPANE_H
+#ifndef QTC_OVERRIDE_H
+#define QTC_OVERRIDE_H
 
-#include <QObject>
+#include <qglobal.h>
 
-#include "qmljs_global.h"
+#ifdef Q_DECL_OVERRIDE
+#define QTC_OVERRIDE Q_DECL_OVERRIDE
+#else
+#define QTC_OVERRIDE
+#endif
 
-#include <qmljs/qmljsdocument.h>
-#include <qmljs/parser/qmljsastfwd_p.h>
-
-namespace TextEditor {
-class BaseTextEditor;
-} //TextEditor
-
-namespace QmlJS {
-
-class ScopeChain;
-
-class QMLJS_EXPORT IContextPane : public QObject
-{
-     Q_OBJECT
-
-public:
-    IContextPane(QObject *parent = 0) : QObject(parent) {}
-    virtual ~IContextPane() {}
-    virtual void apply(TextEditor::BaseTextEditor *editor, Document::Ptr document, const ScopeChain *scopeChain, AST::Node *node, bool update, bool force = false) = 0;
-    virtual void setEnabled(bool) = 0;
-    virtual bool isAvailable(TextEditor::BaseTextEditor *editor, Document::Ptr document, AST::Node *node) = 0;
-    virtual QWidget* widget() = 0;
-signals:
-    void closed();
-};
-
-} // namespace QmlJS
-
-#endif // QMLJSICONTEXTPANE_H
+#endif // QTC_OVERRIDE_H

@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2012 Digia Plc and/or its subsidiary(-ies).
+** Copyright (C) 2014 Digia Plc and/or its subsidiary(-ies).
 ** Contact: http://www.qt-project.org/legal
 **
 ** This file is part of Qt Creator.
@@ -63,7 +63,11 @@ public:
         validBuiltinPropertyNames.insert(QLatin1String("url"));
         validBuiltinPropertyNames.insert(QLatin1String("var"));
         validBuiltinPropertyNames.insert(QLatin1String("variant")); // obsolete in Qt 5
+        validBuiltinPropertyNames.insert(QLatin1String("vector2d"));
         validBuiltinPropertyNames.insert(QLatin1String("vector3d"));
+        validBuiltinPropertyNames.insert(QLatin1String("vector4d"));
+        validBuiltinPropertyNames.insert(QLatin1String("quaternion"));
+        validBuiltinPropertyNames.insert(QLatin1String("matrix4x4"));
         validBuiltinPropertyNames.insert(QLatin1String("alias"));
     }
 
@@ -190,7 +194,7 @@ UiQualifiedId *QmlJS::qualifiedTypeNameId(Node *node)
 
 DiagnosticMessage QmlJS::errorMessage(const AST::SourceLocation &loc, const QString &message)
 {
-    return DiagnosticMessage(DiagnosticMessage::Error, loc, message);
+    return DiagnosticMessage(Severity::Error, loc, message);
 }
 
 bool QmlJS::isValidBuiltinPropertyType(const QString &name)

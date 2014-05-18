@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2012 Digia Plc and/or its subsidiary(-ies).
+** Copyright (C) 2014 Digia Plc and/or its subsidiary(-ies).
 ** Contact: http://www.qt-project.org/legal
 **
 ** This file is part of Qt Creator.
@@ -44,6 +44,7 @@
 #include "qmljsglobal_p.h"
 #include "qmljsastfwd_p.h"
 #include "qmljsmemorypool_p.h"
+#include <qmljs/qmljsconstants.h>
 
 #include <QString>
 #include <QSet>
@@ -59,21 +60,19 @@ class MemoryPool;
 class QML_PARSER_EXPORT DiagnosticMessage
 {
 public:
-    enum Kind { Warning, Error };
-
     DiagnosticMessage()
-        : kind(Error) {}
+        : kind(Severity::Error) {}
 
-    DiagnosticMessage(Kind kind, const AST::SourceLocation &loc, const QString &message)
+    DiagnosticMessage(Severity::Enum kind, const AST::SourceLocation &loc, const QString &message)
         : kind(kind), loc(loc), message(message) {}
 
     bool isWarning() const
-    { return kind == Warning; }
+    { return kind == Severity::Warning; }
 
     bool isError() const
-    { return kind == Error; }
+    { return kind == Severity::Error; }
 
-    Kind kind;
+    Severity::Enum kind;
     AST::SourceLocation loc;
     QString message;
 };
@@ -92,6 +91,7 @@ public:
     ~Engine();
 
     void setCode(const QString &code);
+    const QString &code() const { return _code; }
 
     void addComment(int pos, int len, int line, int col);
     QList<AST::SourceLocation> comments() const;

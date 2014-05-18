@@ -80,8 +80,10 @@ QString DebugVisitor::stringForAstKind(int kind)
         case QmlJS::AST::Node::Kind_PreDecrementExpression: return "PreDecrementExpression";
         case QmlJS::AST::Node::Kind_PreIncrementExpression: return "PreIncrementExpression";
         case QmlJS::AST::Node::Kind_Program: return "Program";
+        case QmlJS::AST::Node::Kind_PropertyAssignmentList: return "PropertyAssignmentList";
+        case QmlJS::AST::Node::Kind_PropertyGetterSetter: return "PropertyGetterSetter";
         case QmlJS::AST::Node::Kind_PropertyName: return "PropertyName";
-        case QmlJS::AST::Node::Kind_PropertyNameAndValueList: return "PropertyNameAndValueList";
+        case QmlJS::AST::Node::Kind_PropertyNameAndValue: return "PropertyNameAndValue";
         case QmlJS::AST::Node::Kind_RegExpLiteral: return "RegExpLiteral";
         case QmlJS::AST::Node::Kind_ReturnStatement: return "ReturnStatement";
         case QmlJS::AST::Node::Kind_SourceElement: return "SourceElement";
@@ -108,7 +110,6 @@ QString DebugVisitor::stringForAstKind(int kind)
         case QmlJS::AST::Node::Kind_NestedExpression: return "NestedExpression";
         case QmlJS::AST::Node::Kind_UiArrayBinding: return "UiArrayBinding";
         case QmlJS::AST::Node::Kind_UiImport: return "UiImport";
-        case QmlJS::AST::Node::Kind_UiImportList: return "UiImportList";
         case QmlJS::AST::Node::Kind_UiObjectBinding: return "UiObjectBinding";
         case QmlJS::AST::Node::Kind_UiObjectDefinition: return "UiObjectDefinition";
         case QmlJS::AST::Node::Kind_UiObjectInitializer: return "UiObjectInitializer";

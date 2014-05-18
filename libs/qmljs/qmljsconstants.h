@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2012 Digia Plc and/or its subsidiary(-ies).
+** Copyright (C) 2014 Digia Plc and/or its subsidiary(-ies).
 ** Contact: http://www.qt-project.org/legal
 **
 ** This file is part of Qt Creator.
@@ -27,58 +27,64 @@
 **
 ****************************************************************************/
 
-#ifndef CONSOLEITEM_H
-#define CONSOLEITEM_H
-
-#include "qmljs_global.h"
-
-#include <QList>
-#include <QString>
+#ifndef QMLJSCONSTANTS_H
+#define QMLJSCONSTANTS_H
 
 namespace QmlJS {
 
-class QMLJS_EXPORT ConsoleItem
-{
-public:
-    enum ItemType
-    {
-        UndefinedType = 0x01, // Can be used for unknown and for Return values
-        DebugType     = 0x02,
-        WarningType   = 0x04,
-        ErrorType     = 0x08,
-        InputType     = 0x10,
-        DefaultTypes  = InputType | UndefinedType
-    };
-    Q_DECLARE_FLAGS(ItemTypes, ItemType)
-
-    ConsoleItem(ConsoleItem *parent,
-                   ConsoleItem::ItemType type = ConsoleItem::UndefinedType,
-                   const QString &data = QString());
-    ~ConsoleItem();
-
-    ConsoleItem *child(int number);
-    int childCount() const;
-    bool insertChildren(int position, int count);
-    void insertChild(ConsoleItem *item, bool sorted);
-    bool insertChild(int position, ConsoleItem *item);
-    ConsoleItem *parent();
-    bool removeChildren(int position, int count);
-    bool detachChild(int position);
-    int childNumber() const;
-    void setText(const QString &text);
-    const QString &text() const;
-
-private:
-    ConsoleItem *m_parentItem;
-    QList<ConsoleItem *> m_childItems;
-    QString m_text;
-
-public:
-    ConsoleItem::ItemType itemType;
-    QString file;
-    int line;
+namespace ImportType {
+enum Enum {
+    Invalid,
+    Library,
+    Directory,
+    ImplicitDirectory,
+    File,
+    UnknownFile, // refers a file/directory that wasn't found (or to an url)
+    QrcDirectory,
+    QrcFile
 };
+}
 
-} // QmlJS
+namespace ImportKind {
+enum Enum {
+    Invalid,
+    Library,
+    Path,
+    QrcPath
+};
+}
 
-#endif // CONSOLEITEM_H
+namespace Severity {
+enum Enum
+{
+    Hint,         // cosmetic or convention
+    MaybeWarning, // possibly a warning, insufficient information
+    Warning,      // could cause unintended behavior
+    MaybeError,   // possibly an error, insufficient information
+    Error         // definitely an error
+};
+}
+
+namespace Language {
+enum Enum
+{
+    Unknown = 0,
+    JavaScript = 1,
+    Json = 2,
+    Qml = 3,
+    QmlQtQuick1 = 4,
+    QmlQtQuick2 = 5,
+    QmlQbs = 6,
+    QmlProject = 7,
+    QmlTypeInfo = 8
+};
+}
+
+namespace Constants {
+
+const char TASK_INDEX[] = "QmlJSEditor.TaskIndex";
+const char TASK_IMPORT_SCAN[] = "QmlJSEditor.TaskImportScan";
+
+} // namespace Constants
+} // namespace QmlJS
+#endif // QMLJSCONSTANTS_H
