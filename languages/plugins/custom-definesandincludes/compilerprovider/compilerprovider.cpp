@@ -45,6 +45,13 @@ class IADCompilerProvider : public IDefinesAndIncludesManager::Provider
 public:
     virtual QHash<QString, QString> defines( ProjectBaseItem* item ) const override
     {
+        if ( !item ) {
+            if ( !m_providers[nullptr] ) {
+                return {};
+            }
+            return m_providers[nullptr]->defines();
+        }
+
         if ( !m_providers.contains( item->project() ) || !m_providers[item->project()] ) {
             return {};
         }
@@ -53,6 +60,13 @@ public:
 
     virtual Path::List includes( ProjectBaseItem* item ) const override
     {
+        if ( !item ) {
+            if ( !m_providers[nullptr] ) {
+                return {};
+            }
+            return m_providers[nullptr]->includes();
+        }
+
         if ( !m_providers.contains( item->project() ) || !m_providers[item->project()] ) {
             return {};
         }
@@ -173,7 +187,8 @@ CompilerProvider::CompilerProvider( QObject* parent, const QVariantList& )
     connect( ICore::self()->projectController(), SIGNAL( projectAboutToBeOpened( KDevelop::IProject* ) ), SLOT( projectOpened( KDevelop::IProject* ) ) );
     connect( ICore::self()->projectController(), SIGNAL( projectClosed( KDevelop::IProject* ) ), SLOT( projectClosed( KDevelop::IProject* ) ) );
 
-    d->selectCompiler();
+    //Add a provider for files without project
+    d->setCompiler( nullptr, d->selectCompiler(), d->selectCompiler() );
 }
 
 bool CompilerProvider::setCompiler( KDevelop::IProject* project, const QString& name, const QString& path )

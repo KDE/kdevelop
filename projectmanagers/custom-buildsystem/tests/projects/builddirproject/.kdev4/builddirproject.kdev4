@@ -1,6 +1,10 @@
 [Buildset]
 BuildItems=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x00)
 
+[Custom Defines And Includes]
+compiler=gcc
+compilerPath=gcc
+
 [CustomBuildSystem]
 CurrentConfiguration=BuildConfig0
 

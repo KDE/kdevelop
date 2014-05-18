@@ -166,4 +166,24 @@ void DefinesAndIncludesManager::registerProvider(IDefinesAndIncludesManager::Pro
 
     m_providers.push_back(provider);
 }
+
+QHash<QString, QString> DefinesAndIncludesManager::defines() const
+{
+    for ( auto provider : m_providers ) {
+        if ( provider->type() & IDefinesAndIncludesManager::CompilerSpecific ) {
+            return provider->defines( nullptr );
+        }
+    }
+    return {};
+}
+
+Path::List DefinesAndIncludesManager::includes() const
+{
+    for ( auto provider : m_providers ) {
+        if ( provider->type() & IDefinesAndIncludesManager::CompilerSpecific ) {
+            return provider->includes( nullptr );
+        }
+    }
+    return {};
+}
 }

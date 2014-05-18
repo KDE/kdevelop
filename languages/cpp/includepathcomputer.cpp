@@ -65,12 +65,14 @@ void IncludePathComputer::computeForeground()
   }
 
   const IndexedString indexedSource(m_source);
+  bool noProject = true;
   foreach (IProject *project, ICore::self()->projectController()->projects()) {
     QList<ProjectFileItem*> files = project->filesForPath(indexedSource);
     if (files.isEmpty()) {
       continue;
     }
 
+    noProject = false;
     IBuildSystemManager* buildManager = project->buildSystemManager();
     if (!buildManager) {
       // We found the project, but no build manager!!
@@ -121,7 +123,12 @@ void IncludePathComputer::computeForeground()
     }
   }
 
-  if (!m_gotPathsFromManager) {
+  if ( noProject ) {
+    for( const auto& dir : IDefinesAndIncludesManager::manager()->includes() ) {
+      addInclude( dir );
+    }
+    m_defines = IDefinesAndIncludesManager::manager()->defines();
+  }else if (!m_gotPathsFromManager) {
     kDebug(9007) << "Did not find any include paths from project manager for" << m_source;
   }
 }
