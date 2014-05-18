@@ -49,7 +49,6 @@ struct ConfigEntry
 
 /** An interface that provides language plugins with include directories/files and defines.
 * Call IDefinesAndIncludesManager::manager() to get the instance of the plugin.
-* NOTE: None of the methods in this interface is thread-safe.
 **/
 class KDEVPLATFORMLANGUAGE_EXPORT IDefinesAndIncludesManager
 {
@@ -78,10 +77,14 @@ public:
         virtual Type type() const = 0;
     };
 
+    ///@param item project item, use nullptr for files without project
     ///@return list of defines for @p item
+    ///NOTE: call it from the foreground thread only.
     virtual QHash<QString, QString> defines( ProjectBaseItem* item, Type type = All ) const = 0;
 
+    ///@param item project item, use nullptr for files without project
     ///@return list of include directories/files for @p item
+    ///NOTE: call it from the foreground thread only.
     virtual Path::List includes( ProjectBaseItem* item, Type type = All ) const = 0;
 
     ///@return the instance of the plugin.
