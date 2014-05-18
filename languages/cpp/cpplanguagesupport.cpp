@@ -185,7 +185,6 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
 //     Cpp::EnvironmentManager::self()->setMatchingLevel(Cpp::EnvironmentManager::Full);
 
     CppUtils::standardMacros();
-    CppUtils::standardIncludePaths();
 
     m_includeResolver = new CppTools::IncludePathResolver;
 

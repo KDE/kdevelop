@@ -126,26 +126,10 @@ void IncludePathComputer::computeForeground()
   }
 }
 
-static Path::List toPaths(const QStringList& paths)
-{
-  Path::List ret;
-  ret.reserve(paths.size());
-  foreach (const QString& path, paths) {
-    ret << Path(path);
-  }
-  return ret;
-}
-
 void IncludePathComputer::computeBackground()
 {
   if (m_ready) {
     return;
-  }
-
-  //Insert standard-paths
-  static const Path::List standardIncludePaths = toPaths(CppUtils::standardIncludePaths());
-  foreach (const Path& path, standardIncludePaths) {
-    addInclude(path);
   }
 
   if (!enableIncludePathResolution) {

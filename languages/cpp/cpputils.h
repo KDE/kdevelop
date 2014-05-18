@@ -42,8 +42,6 @@ QString sourceOrHeaderCandidate( const QString &path, bool fast = false );
 
 ///Returns true if the given url is a header, looking at he known file extensions
 bool isHeader(const KUrl &url);
-  
-QStringList standardIncludePaths();
 
 const Cpp::ReferenceCountedMacroSet& standardMacros();
 

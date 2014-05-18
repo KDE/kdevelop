@@ -1,7 +1,6 @@
 /*
  * This file is part of KDevelop
  *
- * Copyright 2013 Kevin Funk <kfunk@kde.org>
  * Copyright 2014 Sergey Kalinichev <kalinichev.so.0@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -27,164 +26,19 @@
 #include "../debugarea.h"
 #include "../definesandincludesmanager.h"
 
+#include "gcclikeprovider.h"
+#include "msvcprovider.h"
+
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
 #include <project/projectmodel.h>
-
-#include <QDir>
-#include <QHash>
-#include <QProcess>
-#include <QRegExp>
-#include <QSharedPointer>
 
 #include <KPluginFactory>
 #include <KAboutData>
 #include <KStandardDirs>
 
 using namespace KDevelop;
-
-#ifdef _WIN32
-#define NULL_DEVICE "NUL"
-#else
-#define NULL_DEVICE "/dev/null"
-#endif
-
-class BaseProvider
-{
-public:
-    virtual QHash<QString, QString> defines() {return {}; }
-    virtual Path::List includes() {return {}; }
-
-    virtual ~BaseProvider() = default;
-    void setPath( const QString& path )
-    {
-        m_pathToCompiler = path;
-    }
-protected:
-    QString m_pathToCompiler;
-    QHash<QString, QString> definedMacros;
-    Path::List includePaths;
-};
-
-typedef QSharedPointer<BaseProvider> ProviderPointer;
-
-class GccLikeProvider : public BaseProvider
-{
-public:
-    virtual QHash<QString, QString> defines() override
-    {
-        if ( !definedMacros.isEmpty() ) {
-            return definedMacros;
-        }
-
-        // #define a 1
-        // #define a
-        QRegExp defineExpression( "#define\\s+(\\S+)(\\s+(.*))?" );
-
-        QProcess proc;
-        proc.setProcessChannelMode( QProcess::MergedChannels );
-
-        proc.start( m_pathToCompiler, {"-std=c++11", "-xc++", "-dM", "-E", NULL_DEVICE} );
-        if ( !proc.waitForStarted( 1000 ) || !proc.waitForFinished( 1000 ) ) {
-            return {};
-        }
-
-        while ( proc.canReadLine() ) {
-            auto line = proc.readLine();
-
-            if ( defineExpression.indexIn( line ) != -1 ) {
-                definedMacros[defineExpression.cap( 1 )] = defineExpression.cap( 3 );
-            }
-        }
-
-        return definedMacros;
-    }
-
-    virtual Path::List includes() override
-    {
-        if ( !includePaths.isEmpty() ) {
-            return includePaths;
-        }
-
-        QProcess proc;
-        proc.setProcessChannelMode( QProcess::MergedChannels );
-
-        // The following command will spit out a bunch of information we don't care
-        // about before spitting out the include paths.  The parts we care about
-        // look like this:
-        // #include "..." search starts here:
-        // #include <...> search starts here:
-        //  /usr/lib/gcc/i486-linux-gnu/4.1.2/../../../../include/c++/4.1.2
-        //  /usr/lib/gcc/i486-linux-gnu/4.1.2/../../../../include/c++/4.1.2/i486-linux-gnu
-        //  /usr/lib/gcc/i486-linux-gnu/4.1.2/../../../../include/c++/4.1.2/backward
-        //  /usr/local/include
-        //  /usr/lib/gcc/i486-linux-gnu/4.1.2/include
-        //  /usr/include
-        // End of search list.
-        proc.start( m_pathToCompiler, {"-std=c++11", "-xc++", "-E", "-v", NULL_DEVICE} );
-        if ( !proc.waitForStarted( 1000 ) || !proc.waitForFinished( 1000 ) ) {
-            return {};
-        }
-
-        // We'll use the following constants to know what we're currently parsing.
-        enum Status {
-            Initial,
-            FirstSearch,
-            Includes,
-            Finished
-        };
-        Status mode = Initial;
-
-        foreach( const QString &line, QString::fromLocal8Bit( proc.readAllStandardOutput() ).split( '\n' ) ) {
-            switch ( mode ) {
-                case Initial:
-                    if ( line.indexOf( "#include \"...\"" ) != -1 ) {
-                        mode = FirstSearch;
-                    }
-                    break;
-                case FirstSearch:
-                    if ( line.indexOf( "#include <...>" ) != -1 ) {
-                        mode = Includes;
-                        break;
-                    }
-                case Includes:
-                    //Detect the include-paths by the first space that is prepended. Reason: The list may contain relative paths like "."
-                    if ( !line.startsWith( ' ' ) ) {
-                        // We've reached the end of the list.
-                        mode = Finished;
-                    } else {
-                        // This is an include path, add it to the list.
-                        includePaths << Path( QDir::cleanPath( line.trimmed() ) );
-                    }
-                    break;
-                default:
-                    break;
-            }
-            if ( mode == Finished ) {
-                break;
-            }
-        }
-
-        return includePaths;
-    }
-};
-
-class MsvcProvider : public BaseProvider
-{
-public:
-    virtual QHash<QString, QString> defines() override
-    {
-        //FIXME:
-        return {};
-    }
-
-    virtual Path::List includes() override
-    {
-        //FIXME:
-        return {};
-    }
-};
 
 class IADCompilerProvider : public IDefinesAndIncludesManager::Provider
 {
@@ -214,8 +68,10 @@ public:
     {
         m_providers[project] = provider;
         //cache includes/defines
-        m_providers[project]->includes();
-        m_providers[project]->defines();
+        if ( m_providers[project] ) {
+            m_providers[project]->includes();
+            m_providers[project]->defines();
+        }
     }
 
     void removePoject( IProject* project )
@@ -249,6 +105,7 @@ public:
             if ( KStandardDirs::findExe( compiler ).isEmpty() ) {
                 continue;
             }
+            definesAndIncludesDebug() << "Selected compiler: " << compiler;
             return compiler;
         }
 
@@ -264,12 +121,12 @@ public:
             provider = ProviderPointer( new GccLikeProvider() );
         }else if ( name == "msvc" ) {
             provider = ProviderPointer( new MsvcProvider() );
-        }else if ( name != "none" || path.isEmpty() ) {
+        }else if ( !name.isEmpty() || path.isEmpty() ) {
             definesAndIncludesDebug() << "Invalid compiler: " << name << " " << path;
             return false;
         }
         if ( provider ) {
-            provider->setPath( path );
+            provider->setPath( path.trimmed() );
         }
 
         m_provider->addPoject( project, provider );
@@ -281,19 +138,20 @@ public:
     {
         definesAndIncludesDebug() << "Adding project: " << project->name();
         auto settings = static_cast<KDevelop::DefinesAndIncludesManager*>( KDevelop::IDefinesAndIncludesManager::manager() );
-        auto path = settings->pathToCompiler(project->projectConfiguration().data());
-        auto compiler = settings->currentCompiler(project->projectConfiguration().data());
+        auto compiler = settings->currentCompiler( project->projectConfiguration().data() );
 
+        definesAndIncludesDebug() << " compiler is: " << compiler;
         if ( compiler.isEmpty() || compiler == "none" ) {
             compiler = selectCompiler();
             settings->writeCompiler( project->projectConfiguration().data(), compiler );
         }
+        auto path = settings->pathToCompiler( project->projectConfiguration().data() );
         setCompiler( project, compiler, path );
     }
 
     void projectClosed( KDevelop::IProject* project )
     {
-        m_provider->removePoject(project);
+        m_provider->removePoject( project );
         definesAndIncludesDebug() << "Removed project: " << project->name();
     }
 

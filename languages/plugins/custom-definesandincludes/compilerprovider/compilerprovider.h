@@ -31,8 +31,33 @@
 
 #include <interfaces/iplugin.h>
 
+#include <util/path.h>
+
+#include <QHash>
 #include <QString>
 #include <QScopedPointer>
+#include <QSharedPointer>
+
+using KDevelop::Path;
+
+class BaseProvider
+{
+public:
+    virtual QHash<QString, QString> defines() { return {}; }
+    virtual Path::List includes() { return {}; }
+
+    virtual ~BaseProvider() = default;
+    void setPath( const QString& path )
+    {
+        m_pathToCompiler = path;
+    }
+protected:
+    QString m_pathToCompiler;
+    QHash<QString, QString> definedMacros;
+    Path::List includePaths;
+};
+
+typedef QSharedPointer<BaseProvider> ProviderPointer;
 
 class CompilerProvider : public KDevelop::IPlugin, public ICompilerProvider
 {
