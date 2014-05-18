@@ -167,7 +167,6 @@ QList<Language::Enum> Document::companionLanguages(Language::Enum language)
 Document::Document(const QString &fileName, Language::Enum language)
     : _engine(0)
     , _ast(0)
-    , _bind(0)
     , _fileName(QDir::cleanPath(fileName))
     , _editorRevision(0)
     , _language(language)
@@ -190,9 +189,6 @@ Document::Document(const QString &fileName, Language::Enum language)
 
 Document::~Document()
 {
-    if (_bind)
-        delete _bind;
-
     if (_engine)
         delete _engine;
 }
@@ -310,7 +306,6 @@ bool Document::parse_helper(int startToken)
 {
     Q_ASSERT(! _engine);
     Q_ASSERT(! _ast);
-    Q_ASSERT(! _bind);
 
     _engine = new Engine();
 
@@ -365,7 +360,7 @@ bool Document::parseExpression()
 
 Bind *Document::bind() const
 {
-    return _bind;
+    return 0;
 }
 
 LibraryInfo::LibraryInfo(Status status)

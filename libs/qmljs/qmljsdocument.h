@@ -106,7 +106,6 @@ private:
 private:
     QmlJS::Engine *_engine;
     AST::Node *_ast;
-    Bind *_bind;
     QList<QmlJS::DiagnosticMessage> _diagnosticMessages;
     QString _fileName;
     QString _path;
