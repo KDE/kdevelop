@@ -386,21 +386,18 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiObjectDefinition* node)
             decl->setAbstractType(type);
         }
         openType(type);
-    } else if (baseclass == QLatin1String("Parameter")) {
+    } else if (baseclass == QLatin1String("Parameter") && currentType<FunctionType>()) {
         // One parameter of a signal/slot/method
         FunctionType::Ptr function = currentType<FunctionType>();
+        AbstractType::Ptr type = typeFromName(QmlJS::getQMLAttributeValue(node->initializer->members, "type").value);
 
-        if (function) {
-            AbstractType::Ptr type = typeFromName(QmlJS::getQMLAttributeValue(node->initializer->members, "type").value);
+        function->addArgument(type);
 
-            function->addArgument(type);
-
-            {
-                DUChainWriteLocker lock;
-                openDeclaration<Declaration>(name, range);
-            }
-            openType(type);
+        {
+            DUChainWriteLocker lock;
+            openDeclaration<Declaration>(name, range);
         }
+        openType(type);
     } else if (baseclass == QLatin1String("Enum")) {
         // Enumeration. The "values" key contains a dictionary of name -> number entries.
         EnumerationType::Ptr type(new EnumerationType);
