@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2012 Digia Plc and/or its subsidiary(-ies).
+** Copyright (C) 2014 Digia Plc and/or its subsidiary(-ies).
 ** Contact: http://www.qt-project.org/legal
 **
 ** This file is part of Qt Creator.
@@ -49,10 +49,13 @@ public:
 
     void setBackup(bool backup) { m_backup = backup; }
 
+    static void initializeUmask();
+
 private:
     const QString m_finalFileName;
     bool m_finalized;
     bool m_backup;
+    static QFile::Permissions m_umask;
 };
 
 } // namespace Utils

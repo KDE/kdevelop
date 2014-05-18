@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2012 Digia Plc and/or its subsidiary(-ies).
+** Copyright (C) 2014 Digia Plc and/or its subsidiary(-ies).
 ** Contact: http://www.qt-project.org/legal
 **
 ** This file is part of Qt Creator.
@@ -35,20 +35,29 @@
 
 #include <QDir>
 #include <QDebug>
-#include <QFileInfo>
-#include <QTemporaryFile>
 #include <QDateTime>
-#include <QDataStream>
-#include <QTextStream>
 #include <QMessageBox>
+
+#ifdef Q_OS_WIN
+#include <qt_windows.h>
+#include <shlobj.h>
+#endif
+
+QT_BEGIN_NAMESPACE
+QDebug operator<<(QDebug dbg, const Utils::FileName &c)
+{
+    return dbg << c.toString();
+}
+
+QT_END_NAMESPACE
 
 namespace Utils {
 
 /*! \class Utils::FileUtils
 
-  \brief File- and directory-related convenience functions.
+  \brief The FileUtils class contains file and directory related convenience
+  functions.
 
-  File- and directory-related convenience functions.
 */
 
 /*!
@@ -56,7 +65,7 @@ namespace Utils {
 
   \note The \a error parameter is optional.
 
-  \return Whether the operation succeeded.
+  Returns whether the operation succeeded.
 */
 bool FileUtils::removeRecursively(const FileName &filePath, QString *error)
 {
@@ -90,7 +99,7 @@ bool FileUtils::removeRecursively(const FileName &filePath, QString *error)
         }
         if (!QDir::root().rmdir(dir.path())) {
             if (error) {
-                *error = QCoreApplication::translate("Utils::FileUtils", "Failed to remove directory '%1'.")
+                *error = QCoreApplication::translate("Utils::FileUtils", "Failed to remove directory \"%1\".")
                         .arg(filePath.toUserOutput());
             }
             return false;
@@ -98,7 +107,7 @@ bool FileUtils::removeRecursively(const FileName &filePath, QString *error)
     } else {
         if (!QFile::remove(filePath.toString())) {
             if (error) {
-                *error = QCoreApplication::translate("Utils::FileUtils", "Failed to remove file '%1'.")
+                *error = QCoreApplication::translate("Utils::FileUtils", "Failed to remove file \"%1\".")
                         .arg(filePath.toUserOutput());
             }
             return false;
@@ -122,7 +131,7 @@ bool FileUtils::removeRecursively(const FileName &filePath, QString *error)
 
   \note The \a error parameter is optional.
 
-  \return Whether the operation succeeded.
+  Returns whether the operation succeeded.
 */
 bool FileUtils::copyRecursively(const FileName &srcFilePath, const FileName &tgtFilePath,
                                 QString *error)
@@ -133,7 +142,7 @@ bool FileUtils::copyRecursively(const FileName &srcFilePath, const FileName &tgt
         targetDir.cdUp();
         if (!targetDir.mkdir(tgtFilePath.toFileInfo().fileName())) {
             if (error) {
-                *error = QCoreApplication::translate("Utils::FileUtils", "Failed to create directory '%1'.")
+                *error = QCoreApplication::translate("Utils::FileUtils", "Failed to create directory \"%1\".")
                         .arg(tgtFilePath.toUserOutput());
             }
             return false;
@@ -152,7 +161,7 @@ bool FileUtils::copyRecursively(const FileName &srcFilePath, const FileName &tgt
     } else {
         if (!QFile::copy(srcFilePath.toString(), tgtFilePath.toString())) {
             if (error) {
-                *error = QCoreApplication::translate("Utils::FileUtils", "Could not copy file '%1' to '%2'.")
+                *error = QCoreApplication::translate("Utils::FileUtils", "Could not copy file \"%1\" to \"%2\".")
                         .arg(srcFilePath.toUserOutput(), tgtFilePath.toUserOutput());
             }
             return false;
@@ -164,9 +173,10 @@ bool FileUtils::copyRecursively(const FileName &srcFilePath, const FileName &tgt
 /*!
   If \a filePath is a directory, the function will recursively check all files and return
   true if one of them is newer than \a timeStamp. If \a filePath is a single file, true will
-  be returned if the file is newer than \timeStamp.
+  be returned if the file is newer than \a timeStamp.
 
-  \return Whether at least one file in \a filePath has a newer date than \a timeStamp.
+  Returns whether at least one file in \a filePath has a newer date than
+  \a timeStamp.
 */
 bool FileUtils::isFileNewerThan(const FileName &filePath, const QDateTime &timeStamp)
 {
@@ -185,13 +195,13 @@ bool FileUtils::isFileNewerThan(const FileName &filePath, const QDateTime &timeS
 }
 
 /*!
-  Recursively resolve possibly present symlinks in \a filePath.
+  Recursively resolves possibly present symlinks in \a filePath.
   Unlike QFileInfo::canonicalFilePath(), this function will still return the expected target file
   even if the symlink is dangling.
 
   \note Maximum recursion depth == 16.
 
-  return Symlink target file path.
+  Returns the symlink target file path.
 */
 FileName FileUtils::resolveSymlinks(const FileName &path)
 {
@@ -208,7 +218,7 @@ FileName FileUtils::resolveSymlinks(const FileName &path)
   Like QDir::toNativeSeparators(), but use prefix '~' instead of $HOME on unix systems when an
   absolute path is given.
 
-  return Possibly shortened path with native separators.
+  Returns the possibly shortened path with native separators.
 */
 QString FileUtils::shortNativePath(const FileName &path)
 {
@@ -221,6 +231,89 @@ QString FileUtils::shortNativePath(const FileName &path)
     }
     return path.toUserOutput();
 }
+
+QString FileUtils::fileSystemFriendlyName(const QString &name)
+{
+    QString result = name;
+    result.replace(QRegExp(QLatin1String("\\W")), QLatin1String("_"));
+    result.replace(QRegExp(QLatin1String("_+")), QLatin1String("_")); // compact _
+    result.remove(QRegExp(QLatin1String("^_*"))); // remove leading _
+    result.remove(QRegExp(QLatin1String("_+$"))); // remove trailing _
+    if (result.isEmpty())
+        result = QLatin1String("unknown");
+    return result;
+}
+
+int FileUtils::indexOfQmakeUnfriendly(const QString &name, int startpos)
+{
+    static QRegExp checkRegExp(QLatin1String("[^a-zA-Z0-9_.-]"));
+    return checkRegExp.indexIn(name, startpos);
+}
+
+QString FileUtils::qmakeFriendlyName(const QString &name)
+{
+    QString result = name;
+
+    // Remove characters that might trip up a build system (especially qmake):
+    int pos = indexOfQmakeUnfriendly(result);
+    while (pos >= 0) {
+        result[pos] = QLatin1Char('_');
+        pos = indexOfQmakeUnfriendly(result, pos);
+    }
+    return fileSystemFriendlyName(result);
+}
+
+bool FileUtils::makeWritable(const FileName &path)
+{
+    const QString fileName = path.toString();
+    return QFile::setPermissions(fileName, QFile::permissions(fileName) | QFile::WriteUser);
+}
+
+// makes sure that capitalization of directories is canonical on Windows.
+// This mimics the logic in QDeclarative_isFileCaseCorrect
+QString FileUtils::normalizePathName(const QString &name)
+{
+#ifdef Q_OS_WIN
+    const QString nativeSeparatorName(QDir::toNativeSeparators(name));
+    const LPCTSTR nameC = reinterpret_cast<LPCTSTR>(nativeSeparatorName.utf16()); // MinGW
+    PIDLIST_ABSOLUTE file;
+    HRESULT hr = SHParseDisplayName(nameC, NULL, &file, 0, NULL);
+    if (FAILED(hr))
+        return name;
+    TCHAR buffer[MAX_PATH];
+    if (!SHGetPathFromIDList(file, buffer))
+        return name;
+    return QDir::fromNativeSeparators(QString::fromUtf16(reinterpret_cast<const ushort *>(buffer)));
+#else // Filesystem is case-insensitive only on Windows
+    return name;
+#endif
+}
+
+bool FileUtils::isRelativePath(const QString &path)
+{
+    if (path.startsWith(QLatin1Char('/')))
+        return false;
+    if (HostOsInfo::isWindowsHost()) {
+        if (path.startsWith(QLatin1Char('\\')))
+            return false;
+        // Unlike QFileInfo, this won't accept a relative path with a drive letter.
+        // Such paths result in a royal mess anyway ...
+        if (path.length() >= 3 && path.at(1) == QLatin1Char(':') && path.at(0).isLetter()
+                && (path.at(2) == QLatin1Char('/') || path.at(2) == QLatin1Char('\\')))
+            return false;
+    }
+    return true;
+}
+
+QString FileUtils::resolvePath(const QString &baseDir, const QString &fileName)
+{
+    if (fileName.isEmpty())
+        return QString();
+    if (isAbsolutePath(fileName))
+        return QDir::cleanPath(fileName);
+    return QDir::cleanPath(baseDir + QLatin1Char('/') + fileName);
+}
+
 
 QByteArray FileReader::fetchQrc(const QString &fileName)
 {
@@ -332,33 +425,18 @@ bool FileSaverBase::setResult(bool ok)
 
 bool FileSaverBase::setResult(QTextStream *stream)
 {
-#if QT_VERSION >= QT_VERSION_CHECK(4, 8, 0)
     stream->flush();
     return setResult(stream->status() == QTextStream::Ok);
-#else
-    Q_UNUSED(stream)
-    return true;
-#endif
 }
 
 bool FileSaverBase::setResult(QDataStream *stream)
 {
-#if QT_VERSION >= QT_VERSION_CHECK(4, 8, 0)
     return setResult(stream->status() == QDataStream::Ok);
-#else
-    Q_UNUSED(stream)
-    return true;
-#endif
 }
 
 bool FileSaverBase::setResult(QXmlStreamWriter *stream)
 {
-#if QT_VERSION >= QT_VERSION_CHECK(4, 8, 0)
     return setResult(!stream->hasError());
-#else
-    Q_UNUSED(stream)
-    return true;
-#endif
 }
 
 
@@ -386,10 +464,12 @@ bool FileSaver::finalize()
         return FileSaverBase::finalize();
 
     SaveFile *sf = static_cast<SaveFile *>(m_file);
-    if (m_hasError)
-        sf->rollback();
-    else
+    if (m_hasError) {
+        if (sf->isOpen())
+            sf->rollback();
+    } else {
         setResult(sf->commit());
+    }
     delete sf;
     m_file = 0;
     return !m_hasError;
@@ -422,7 +502,7 @@ TempFileSaver::~TempFileSaver()
 
 /*! \class Utils::FileName
 
-    \brief A light-weight convenience class for filenames
+    \brief The FileName class is a light-weight convenience class for filenames.
 
     On windows filenames are compared case insensitively.
 */
@@ -460,7 +540,7 @@ QString FileName::toUserOutput() const
 
 /// Find the parent directory of a given directory.
 
-/// Returns an empty FileName if the current dirctory is already
+/// Returns an empty FileName if the current directory is already
 /// a root level directory.
 
 /// \returns \a FileName with the last segment removed.
@@ -488,11 +568,20 @@ FileName FileName::fromString(const QString &filename)
 }
 
 /// Constructs a FileName from \a fileName
+/// \a fileName is not checked for validity.
+FileName FileName::fromLatin1(const QByteArray &filename)
+{
+    return FileName(QString::fromLatin1(filename));
+}
+
+/// Constructs a FileName from \a fileName
 /// \a fileName is only passed through QDir::cleanPath
-/// and QDir::fromNativeSeparators
 FileName FileName::fromUserInput(const QString &filename)
 {
-    return FileName(QDir::cleanPath(QDir::fromNativeSeparators(filename)));
+    QString clean = QDir::cleanPath(filename);
+    if (clean.startsWith(QLatin1String("~/")))
+        clean = QDir::homePath() + clean.mid(1);
+    return FileName(clean);
 }
 
 FileName::FileName(const QString &string)
@@ -573,18 +662,18 @@ FileName FileName::relativeChildPath(const FileName &parent) const
 FileName &FileName::appendPath(const QString &s)
 {
     if (!isEmpty() && !QString::endsWith(QLatin1Char('/')))
-        append(QLatin1Char('/'));
-    append(s);
+        appendString(QLatin1Char('/'));
+    appendString(s);
     return *this;
 }
 
-FileName &FileName::append(const QString &str)
+FileName &FileName::appendString(const QString &str)
 {
     QString::append(str);
     return *this;
 }
 
-FileName &FileName::append(QChar str)
+FileName &FileName::appendString(QChar str)
 {
     QString::append(str);
     return *this;

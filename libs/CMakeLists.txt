@@ -47,73 +47,11 @@ kde4_add_library(kdevqtc-qmlsupport SHARED
 	qmljs/qmljstypedescriptionreader.cpp
 	qmljs/qmljsutils.cpp
 	qmljs/qmljsvalueowner.cpp
-# 	utils/annotateditemdelegate.cpp
-# 	utils/appmainwindow.cpp
-# 	utils/basetreeview.cpp
-# 	utils/basevalidatinglineedit.cpp
-# 	utils/bracematcher.cpp
-# 	utils/buildablehelperlibrary.cpp
 	utils/changeset.cpp
-# 	utils/checkablemessagebox.cpp
-# 	utils/classnamevalidatinglineedit.cpp
-# 	utils/codegeneration.cpp
-# 	utils/completingtextedit.cpp
-# 	utils/consoleprocess.cpp
-# 	utils/consoleprocess_unix.cpp
-# 	utils/crumblepath.cpp
-# 	utils/detailsbutton.cpp
-# 	utils/detailswidget.cpp
-# 	utils/elfreader.cpp
-# 	utils/environment.cpp
-# 	utils/environmentmodel.cpp
-# 	utils/faketooltip.cpp
-# 	utils/fancylineedit.cpp
-# 	utils/fancymainwindow.cpp
-# 	utils/fileinprojectfinder.cpp
-# 	utils/filenamevalidatinglineedit.cpp
-# 	utils/filesearch.cpp
-# 	utils/filesystemwatcher.cpp
 	utils/fileutils.cpp
-# 	utils/filewizarddialog.cpp
-# 	utils/filewizardpage.cpp
-# 	utils/filterlineedit.cpp
-# 	utils/flowlayout.cpp
-# 	utils/historycompleter.cpp
-# 	utils/htmldocextractor.cpp
-# 	utils/ipaddresslineedit.cpp
-# 	utils/iwelcomepage.cpp
 	utils/json.cpp
-# 	utils/linecolumnlabel.cpp
-# 	utils/navigationtreeview.cpp
-# 	utils/networkaccessmanager.cpp
-# 	utils/newclasswidget.cpp
-# 	utils/outputformatter.cpp
-# 	utils/parameteraction.cpp
-# 	utils/pathchooser.cpp
-# 	utils/pathlisteditor.cpp
-# 	utils/persistentsettings.cpp
-# 	utils/projectintropage.cpp
-# 	utils/projectnamevalidatinglineedit.cpp
-# 	utils/proxyaction.cpp
 	utils/qtcassert.cpp
-# 	utils/qtcolorbutton.cpp
-# 	utils/qtcprocess.cpp
-# 	utils/reloadpromptutils.cpp
-# 	utils/savedaction.cpp
 	utils/savefile.cpp
-# 	utils/settingsselector.cpp
-# 	utils/statuslabel.cpp
-# 	utils/stringutils.cpp
-# 	utils/styledbar.cpp
-# 	utils/stylehelper.cpp
-# 	utils/submiteditorwidget.cpp
-# 	utils/submitfieldwidget.cpp
-# 	utils/synchronousprocess.cpp
-# 	utils/tcpportsgatherer.cpp
-# 	utils/treewidgetcolumnstretcher.cpp
-# 	utils/uncommentselection.cpp
-# 	utils/unixutils.cpp
-# 	utils/wizard.cpp
 )
 target_link_libraries(kdevqtc-qmlsupport LINK_PRIVATE
     ${QT_QTCORE_LIBRARY}

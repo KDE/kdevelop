@@ -1,6 +1,6 @@
-/****************************************************************************
+/**************************************************************************
 **
-** Copyright (C) 2012 Digia Plc and/or its subsidiary(-ies).
+** Copyright (C) 2014 Digia Plc and/or its subsidiary(-ies).
 ** Contact: http://www.qt-project.org/legal
 **
 ** This file is part of Qt Creator.
@@ -27,53 +27,48 @@
 **
 ****************************************************************************/
 
-#ifndef OUTPUTFORMATTER_H
-#define OUTPUTFORMATTER_H
+#ifndef QTC_OSSPECIFICASPECTS_H
+#define QTC_OSSPECIFICASPECTS_H
 
 #include "utils_global.h"
-#include "outputformat.h"
 
-#include <QObject>
-#include <QFont>
+#include <QString>
 
-QT_BEGIN_NAMESPACE
-class QPlainTextEdit;
-class QTextCharFormat;
-class QColor;
-QT_END_NAMESPACE
+#define QTC_WIN_EXE_SUFFIX ".exe"
 
 namespace Utils {
 
-class QTCREATOR_UTILS_EXPORT OutputFormatter : public QObject
+// Add more as needed.
+enum OsType { OsTypeWindows, OsTypeLinux, OsTypeMac, OsTypeOtherUnix, OsTypeOther };
+
+class QTCREATOR_UTILS_EXPORT OsSpecificAspects
 {
-    Q_OBJECT
-
 public:
-    OutputFormatter();
-    virtual ~OutputFormatter();
+    OsSpecificAspects(OsType osType) : m_osType(osType) { }
 
-    QPlainTextEdit *plainTextEdit() const;
-    void setPlainTextEdit(QPlainTextEdit *plainText);
+    QString withExecutableSuffix(const QString &executable) const {
+        QString finalName = executable;
+        if (m_osType == OsTypeWindows)
+            finalName += QLatin1String(QTC_WIN_EXE_SUFFIX);
+        return finalName;
+    }
 
-    QFont font() const;
-    void setFont(const QFont &font);
+    Qt::CaseSensitivity fileNameCaseSensitivity() const {
+        return m_osType == OsTypeWindows ? Qt::CaseInsensitive : Qt::CaseSensitive;
+    }
 
-    virtual void appendMessage(const QString &text, OutputFormat format);
-    virtual void handleLink(const QString &href);
+    QChar pathListSeparator() const {
+        return QLatin1Char(m_osType == OsTypeWindows ? ';' : ':');
+    }
 
-protected:
-    void initFormats();
-    virtual void clearLastLine();
-    QTextCharFormat charFormat(OutputFormat format) const;
-
-    static QColor mixColors(const QColor &a, const QColor &b);
+    Qt::KeyboardModifier controlModifier() const {
+        return m_osType == OsTypeMac ? Qt::MetaModifier : Qt::ControlModifier;
+    }
 
 private:
-    QPlainTextEdit *m_plainTextEdit;
-    QTextCharFormat *m_formats;
-    QFont m_font;
+    const OsType m_osType;
 };
 
 } // namespace Utils
 
-#endif // OUTPUTFORMATTER_H
+#endif // Include guard.

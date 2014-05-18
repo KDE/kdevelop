@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2012 Digia Plc and/or its subsidiary(-ies).
+** Copyright (C) 2014 Digia Plc and/or its subsidiary(-ies).
 ** Contact: http://www.qt-project.org/legal
 **
 ** This file is part of Qt Creator.
@@ -30,12 +30,13 @@
 #ifndef UTILS_ENVIRONMENT_H
 #define UTILS_ENVIRONMENT_H
 
+#include "hostosinfo.h"
 #include "utils_global.h"
 
-#include <QList>
 #include <QMap>
-#include <QString>
 #include <QStringList>
+
+QT_FORWARD_DECLARE_CLASS(QProcessEnvironment)
 
 namespace Utils {
 
@@ -65,18 +66,19 @@ class QTCREATOR_UTILS_EXPORT Environment
 public:
     typedef QMap<QString, QString>::const_iterator const_iterator;
 
-    Environment() {}
-    explicit Environment(const QStringList &env);
+    explicit Environment(OsType osType = HostOsInfo::hostOs()) : m_osType(osType) {}
+    explicit Environment(const QStringList &env, OsType osType = HostOsInfo::hostOs());
     static Environment systemEnvironment();
 
     QStringList toStringList() const;
+    QProcessEnvironment toProcessEnvironment() const;
     QString value(const QString &key) const;
     void set(const QString &key, const QString &value);
     void unset(const QString &key);
     void modify(const QList<EnvironmentItem> &list);
     /// Return the Environment changes necessary to modify this into the other environment.
     QList<EnvironmentItem> diff(const Environment &other) const;
-    bool hasKey(const QString &key);
+    bool hasKey(const QString &key) const;
 
     QString userName() const;
 
@@ -111,6 +113,7 @@ public:
 private:
     QString searchInDirectory(const QStringList &execs, QString directory) const;
     QMap<QString, QString> m_values;
+    OsType m_osType;
 };
 
 } // namespace Utils
