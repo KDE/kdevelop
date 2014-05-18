@@ -22,6 +22,7 @@
 #include <language/duchain/types/functiontype.h>
 #include <language/duchain/types/integraltype.h>
 #include <language/duchain/types/enumerationtype.h>
+#include <language/duchain/types/enumeratortype.h>
 #include <language/duchain/types/typeutils.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/duchainlock.h>
@@ -251,6 +252,62 @@ bool DeclarationBuilder::visit(QmlJS::AST::CallExpression* node)
     func_declaration->setAbstractType(new_func_type.cast<AbstractType>());
 
     return false;   // findType has already explored node
+}
+
+/*
+ * Arrays
+ */
+bool DeclarationBuilder::visit(QmlJS::AST::PropertyNameAndValueList* node)
+{
+    while (node) {
+        setComment(node);
+
+        if (!node->name || !node->value) {
+            continue;
+        }
+
+        RangeInRevision range(m_session->locationToRange(node->name->propertyNameToken));
+        QualifiedIdentifier name(QmlJS::getNodeValue(node->name));
+
+        // The type of the declaration can either be an enumeration value or the type
+        // of its expression
+        Declaration* decl = currentDeclaration();
+        AbstractType::Ptr type;
+
+        if (decl && decl->abstractType() && decl->abstractType()->whichType() == AbstractType::TypeEnumeration) {
+            // This is an enumeration value
+            auto value = QmlJS::AST::cast<QmlJS::AST::NumericLiteral*>(node->value);
+            EnumeratorType::Ptr enumerator(new EnumeratorType);
+
+            enumerator->setDataType(IntegralType::TypeInt);
+
+            if (value) {
+                enumerator->setValue((int)value->value);
+            }
+
+            type = AbstractType::Ptr::staticCast(enumerator);
+        } else {
+            // Normal value
+            type = findType(node->value).type;
+        }
+
+        // Open the declaration
+        {
+            DUChainWriteLocker lock;
+            openDeclaration<ClassMemberDeclaration>(name, range);
+        }
+        openType(type);
+
+        // This visit() method is called only once for all the property names,
+        // so is endVisit(). It is therefore impossible to put closeAndAssignType()
+        // in endVisit() as the number of calls to this method would not match
+        // the number of declarations and types opened hereabove.
+        closeAndAssignType();
+
+        node = node->next;
+    }
+
+    return false;       // Calls to findType have already explored the values of this property list
 }
 
 /*

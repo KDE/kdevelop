@@ -15,6 +15,9 @@ Module {
          Enum {
              name: "LayoutChangeHint"
              values: {
+                 /**
+                  * "toString" : " NoLayoutChangeHint"
+                  */
                  "NoLayoutChangeHint": 0,
                  "VerticalSortHint": 1,
                  "HorizontalSortHint": 2

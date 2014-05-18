@@ -193,3 +193,15 @@ function type_still_unknown(a, b) {
 type_still_unknown("don't crash here, one argument is missing");
 type_still_unknown(3.14, false, "don't use these types, there are too many arguments");
 type_still_unknown("now I know my type", 3);
+
+var array = {
+    /**
+     * "type" : { "toString": "string" }
+     */
+    key: "foo",
+
+    /**
+     * "type": { "toString": "int" }
+     */
+    key2: 3
+};
