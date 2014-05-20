@@ -63,6 +63,8 @@ protected:
     virtual void endVisit(QmlJS::AST::PropertyNameAndValue* node);
 
     // plugin.qmltypes
+    void declareExports(QmlJS::AST::ExpressionStatement *exports,
+                        KDevelop::Declaration* classdecl);
     void declareComponent(QmlJS::AST::UiObjectDefinition* node,
                           const KDevelop::RangeInRevision &range,
                           const KDevelop::QualifiedIdentifier &name);

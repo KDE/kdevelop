@@ -25,6 +25,7 @@
 #include <language/duchain/types/enumeratortype.h>
 #include <language/duchain/types/typeutils.h>
 #include <language/duchain/declaration.h>
+#include <language/duchain/aliasdeclaration.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/classdeclaration.h>
 
@@ -310,18 +311,58 @@ void DeclarationBuilder::endVisit(QmlJS::AST::PropertyNameAndValue* node)
 /*
  * plugin.qmltypes files
  */
+void DeclarationBuilder::declareExports(QmlJS::AST::ExpressionStatement *exports,
+                                        Declaration* classdecl)
+{
+    if (!exports || !exports->expression) {
+        return;
+    }
+
+    auto exportslist = QmlJS::AST::cast<QmlJS::AST::ArrayLiteral*>(exports->expression);
+
+    if (!exportslist) {
+        return;
+    }
+
+    // Make an alias between each exported name of the component and the component itself
+    for (auto it = exportslist->elements; it && it->expression; ++it) {
+        auto stringliteral = QmlJS::AST::cast<QmlJS::AST::StringLiteral *>(it->expression);
+
+        if (!stringliteral) {
+            continue;
+        }
+
+        // String literal like "Namespace/Class version".
+        QString exportname = stringliteral->value.toString().section(' ', 0, 0).section('/', -1, -1);
+
+        {
+            DUChainWriteLocker lock;
+            AliasDeclaration* decl = openDeclaration<AliasDeclaration>(
+                QualifiedIdentifier(exportname),
+                m_session->locationToRange(stringliteral->literalToken)
+            );
+
+            decl->setKind(Declaration::Alias);
+            decl->setAliasedDeclaration(IndexedDeclaration(classdecl));
+        }
+        closeDeclaration();
+    }
+}
+
 void DeclarationBuilder::declareComponent(QmlJS::AST::UiObjectDefinition* node,
                                           const RangeInRevision &range,
                                           const QualifiedIdentifier &name)
 {
     QString inherits = QmlJS::getQMLAttributeValue(node->initializer->members, "prototype").value;
 
+    // Declare the component itself
     StructureType::Ptr type(new StructureType);
     type->setDeclarationId(DeclarationId(name));
 
+    ClassDeclaration* decl;
     {
         DUChainWriteLocker lock;
-        ClassDeclaration* decl = openDeclaration<ClassDeclaration>(name, range, DeclarationIsDefinition);
+        decl = openDeclaration<ClassDeclaration>(name, range, DeclarationIsDefinition);
 
         decl->setKind(Declaration::Type);
         decl->clearBaseClasses();
@@ -338,6 +379,12 @@ void DeclarationBuilder::declareComponent(QmlJS::AST::UiObjectDefinition* node,
         }
     }
     openType(type);
+
+    // The component may have exports (considered as type aliases)
+    declareExports(
+        QmlJS::AST::cast<QmlJS::AST::ExpressionStatement*>(QmlJS::getQMLAttribute(node->initializer->members, "exports")),
+        decl
+    );
 }
 
 void DeclarationBuilder::declareMethod(QmlJS::AST::UiObjectDefinition* node,
