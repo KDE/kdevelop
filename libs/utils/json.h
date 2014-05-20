@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2012 Digia Plc and/or its subsidiary(-ies).
+** Copyright (C) 2014 Digia Plc and/or its subsidiary(-ies).
 ** Contact: http://www.qt-project.org/legal
 **
 ** This file is part of Qt Creator.
@@ -49,6 +49,22 @@ class JsonArrayValue;
 class JsonBooleanValue;
 class JsonNullValue;
 
+class QTCREATOR_UTILS_EXPORT JsonMemoryPool
+{
+public:
+    ~JsonMemoryPool();
+
+    inline void *allocate(size_t size)
+    {
+        char *obj = new char[size];
+        _objs.append(obj);
+        return obj;
+    }
+
+private:
+    QVector<char *> _objs;
+};
+
 /*!
  * \brief The JsonValue class
  */
@@ -79,13 +95,16 @@ public:
     virtual JsonBooleanValue *toBoolean() { return 0; }
     virtual JsonNullValue *toNull() { return 0; }
 
-    static JsonValue *create(const QString &s);
+    static JsonValue *create(const QString &s, JsonMemoryPool *pool);
+    void *operator new(size_t size, JsonMemoryPool *pool);
+    void operator delete(void *);
+    void operator delete(void *, JsonMemoryPool *);
 
 protected:
     JsonValue(Kind kind);
 
 private:
-    static JsonValue *build(const QVariant &varixant);
+    static JsonValue *build(const QVariant &varixant, JsonMemoryPool *pool);
 
     Kind m_kind;
 };
@@ -244,7 +263,7 @@ class JsonSchemaManager;
  * corresponding nested schema. Afterwards, it's expected that one would "leave" such nested
  * schema.
  *
- * All methods assume that the current "context" is a valid schema. Once an instance of this
+ * All functions assume that the current "context" is a valid schema. Once an instance of this
  * class is created the root schema is put on top of the stack.
  *
  */
@@ -331,7 +350,7 @@ private:
 
     QStringList properties(JsonObjectValue *v) const;
     JsonObjectValue *propertySchema(const QString &property, JsonObjectValue *v) const;
-    // TODO: Similar methods for other attributes which require looking into base schemas.
+    // TODO: Similar functions for other attributes which require looking into base schemas.
 
     static bool maybeSchemaName(const QString &s);
 
@@ -398,6 +417,7 @@ private:
 
     QStringList m_searchPaths;
     mutable QHash<QString, JsonSchemaData> m_schemas;
+    mutable JsonMemoryPool m_pool;
 };
 
 } // namespace Utils

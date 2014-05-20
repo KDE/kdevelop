@@ -44,11 +44,22 @@ bool isSorted(const QList<QmlJS::AST::SourceLocation>& locations)
     return true;
 }
 
+QmlJS::Language::Enum guessLanguageFromSuffix(const QString& path)
+{
+    if (path.endsWith(".js")) {
+        return QmlJS::Language::JavaScript;
+    } else if (path.endsWith(".json")) {
+        return QmlJS::Language::Json;
+    } else {
+        return QmlJS::Language::Qml;
+    }
+}
+
 ParseSession::ParseSession(const IndexedString& url, const QString& contents)
 : m_url(url)
 {
     const QString path = m_url.str();
-    m_doc = QmlJS::Document::create(path, QmlJS::Document::guessLanguageFromSuffix(path));
+    m_doc = QmlJS::Document::create(path, guessLanguageFromSuffix(path));
     m_doc->setSource(contents);
     m_doc->parse();
     Q_ASSERT(isSorted(m_doc->engine()->comments()));
@@ -90,7 +101,7 @@ QString ParseSession::symbolAt(const QmlJS::AST::SourceLocation& location) const
     return m_doc->source().mid(location.offset, location.length);
 }
 
-QmlJS::Document::Language ParseSession::language() const
+QmlJS::Language::Enum ParseSession::language() const
 {
     return m_doc->language();
 }

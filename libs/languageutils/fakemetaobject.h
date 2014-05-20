@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2012 Digia Plc and/or its subsidiary(-ies).
+** Copyright (C) 2014 Digia Plc and/or its subsidiary(-ies).
 ** Contact: http://www.qt-project.org/legal
 **
 ** This file is part of Qt Creator.
@@ -39,6 +39,10 @@
 #include <QHash>
 #include <QSharedPointer>
 
+QT_BEGIN_NAMESPACE
+class QCryptographicHash;
+QT_END_NAMESPACE
+
 namespace LanguageUtils {
 
 class LANGUAGEUTILS_EXPORT FakeMetaEnum {
@@ -60,6 +64,7 @@ public:
     int keyCount() const;
     QStringList keys() const;
     bool hasKey(const QString &key) const;
+    void addToHash(QCryptographicHash &hash) const;
 };
 
 class LANGUAGEUTILS_EXPORT FakeMetaMethod {
@@ -96,6 +101,7 @@ public:
 
     int revision() const;
     void setRevision(int r);
+    void addToHash(QCryptographicHash &hash) const;
 
 private:
     QString m_name;
@@ -125,6 +131,7 @@ public:
     bool isWritable() const;
     bool isPointer() const;
     int revision() const;
+    void addToHash(QCryptographicHash &hash) const;
 };
 
 class LANGUAGEUTILS_EXPORT FakeMetaObject {
@@ -144,6 +151,7 @@ public:
         int metaObjectRevision;
 
         bool isValid() const;
+        void addToHash(QCryptographicHash &hash) const;
     };
 
 private:
@@ -157,6 +165,10 @@ private:
     QList<FakeMetaMethod> m_methods;
     QString m_defaultPropertyName;
     QString m_attachedTypeName;
+    QByteArray m_fingerprint;
+    bool m_isSingleton;
+    bool m_isCreatable;
+    bool m_isComposite;
 
 public:
     FakeMetaObject();
@@ -188,12 +200,23 @@ public:
     int methodCount() const;
     int methodOffset() const;
     FakeMetaMethod method(int index) const;
+    int methodIndex(const QString &name) const; // Note: Returns any method with that name in case of overloads
 
     QString defaultPropertyName() const;
     void setDefaultPropertyName(const QString &defaultPropertyName);
 
     QString attachedTypeName() const;
     void setAttachedTypeName(const QString &name);
+    QByteArray calculateFingerprint() const;
+    void updateFingerprint();
+    QByteArray fingerprint() const;
+
+    bool isSingleton() const;
+    bool isCreatable() const;
+    bool isComposite() const;
+    void setIsSingleton(bool value);
+    void setIsCreatable(bool value);
+    void setIsComposite(bool value);
 };
 
 } // namespace LanguageUtils

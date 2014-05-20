@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2012 Digia Plc and/or its subsidiary(-ies).
+** Copyright (C) 2014 Digia Plc and/or its subsidiary(-ies).
 ** Contact: http://www.qt-project.org/legal
 **
 ** This file is part of Qt Creator.
@@ -33,15 +33,17 @@
 #include <utils/fileutils.h>
 
 #include <QDir>
-#include <QFileInfo>
-#include <QFile>
 #include <QStringBuilder>
 #include <QDebug>
-#include <QVariant>
 #include <QScriptEngine>
 
 using namespace Utils;
 
+JsonMemoryPool::~JsonMemoryPool()
+{
+    foreach (char *obj, _objs)
+        delete[] obj;
+}
 
 JsonValue::JsonValue(Kind kind)
     : m_kind(kind)
@@ -50,7 +52,7 @@ JsonValue::JsonValue(Kind kind)
 JsonValue::~JsonValue()
 {}
 
-JsonValue *JsonValue::create(const QString &s)
+JsonValue *JsonValue::create(const QString &s, JsonMemoryPool *pool)
 {
     QScriptEngine engine;
     QScriptValue jsonParser = engine.evaluate(QLatin1String("JSON.parse"));
@@ -58,8 +60,17 @@ JsonValue *JsonValue::create(const QString &s)
     if (engine.hasUncaughtException() || !value.isValid())
         return 0;
 
-    return build(value.toVariant());
+    return build(value.toVariant(), pool);
 }
+
+void *JsonValue::operator new(size_t size, JsonMemoryPool *pool)
+{ return pool->allocate(size); }
+
+void JsonValue::operator delete(void *)
+{ }
+
+void JsonValue::operator delete(void *, JsonMemoryPool *)
+{ }
 
 QString JsonValue::kindToString(JsonValue::Kind kind)
 {
@@ -78,42 +89,42 @@ QString JsonValue::kindToString(JsonValue::Kind kind)
     if (kind == Null)
         return QLatin1String("null");
 
-    return QLatin1String("unkown");
+    return QLatin1String("unknown");
 }
 
-JsonValue *JsonValue::build(const QVariant &variant)
+JsonValue *JsonValue::build(const QVariant &variant, JsonMemoryPool *pool)
 {
     switch (variant.type()) {
 
     case QVariant::List: {
-        JsonArrayValue *newValue = new JsonArrayValue;
-        foreach (const QVariant element, variant.toList())
-            newValue->addElement(build(element));
+        JsonArrayValue *newValue = new (pool) JsonArrayValue;
+        foreach (const QVariant &element, variant.toList())
+            newValue->addElement(build(element, pool));
         return newValue;
     }
 
     case QVariant::Map: {
-        JsonObjectValue *newValue = new JsonObjectValue;
+        JsonObjectValue *newValue = new (pool) JsonObjectValue;
         const QVariantMap variantMap = variant.toMap();
         for (QVariantMap::const_iterator it = variantMap.begin(); it != variantMap.end(); ++it)
-            newValue->addMember(it.key(), build(it.value()));
+            newValue->addMember(it.key(), build(it.value(), pool));
         return newValue;
     }
 
     case QVariant::String:
-        return new JsonStringValue(variant.toString());
+        return new (pool) JsonStringValue(variant.toString());
 
     case QVariant::Int:
-        return new JsonIntValue(variant.toInt());
+        return new (pool) JsonIntValue(variant.toInt());
 
     case QVariant::Double:
-        return new JsonDoubleValue(variant.toDouble());
+        return new (pool) JsonDoubleValue(variant.toDouble());
 
     case QVariant::Bool:
-        return new JsonBooleanValue(variant.toBool());
+        return new (pool) JsonBooleanValue(variant.toBool());
 
     case QVariant::Invalid:
-        return new JsonNullValue;
+        return new (pool) JsonNullValue;
 
     default:
         break;
@@ -252,13 +263,15 @@ void JsonSchema::enterNestedTypeSchema()
 
 QStringList JsonSchema::properties(JsonObjectValue *v) const
 {
+    typedef QHash<QString, JsonValue *>::ConstIterator MemberConstIterator;
+
     QStringList all;
 
     if (JsonObjectValue *ov = getObjectValue(kProperties, v)) {
-        foreach (const QString &property, ov->members().keys()) {
-            if (hasPropertySchema(property))
-                all.append(property);
-        }
+        const MemberConstIterator cend = ov->members().constEnd();
+        for (MemberConstIterator it = ov->members().constBegin(); it != cend; ++it)
+            if (hasPropertySchema(it.key()))
+                all.append(it.key());
     }
 
     if (JsonObjectValue *base = resolveBase(v))
@@ -304,11 +317,12 @@ void JsonSchema::enterNestedPropertySchema(const QString &property)
 }
 
 /*!
- * An array schema is allowed to have its *items* specification in the form of another schema
- * or in the form of an array of schemas [Sec. 5.5]. This methods checks whether this is case
+ * An array schema is allowed to have its \e items specification in the form of
+ * another schema
+ * or in the form of an array of schemas [Sec. 5.5]. This functions checks whether this is case
  * in which the items are a schema.
  *
- * \return whether or not the items from the array are a schema
+ * Returns whether or not the items from the array are a schema.
  */
 bool JsonSchema::hasItemSchema() const
 {
@@ -325,11 +339,11 @@ void JsonSchema::enterNestedItemSchema()
 }
 
 /*!
- * An array schema is allowed to have its *items* specification in the form of another schema
- * or in the form of an array of schemas [Sec. 5.5]. This methods checks whether this is case
+ * An array schema is allowed to have its \e items specification in the form of another schema
+ * or in the form of an array of schemas [Sec. 5.5]. This functions checks whether this is case
  * in which the items are an array of schemas.
  *
- * \return whether or not the items from the array are a an array of schemas
+ * Returns whether or not the items from the array are a an array of schemas.
  */
 bool JsonSchema::hasItemArraySchema() const
 {
@@ -346,15 +360,16 @@ int JsonSchema::itemArraySchemaSize() const
 }
 
 /*!
- * When evaluating the items of an array it might be necessary to "enter" a particular schema,
+ * When evaluating the items of an array it might be necessary to \e enter a
+ * particular schema,
  * since this API assumes that there's always a valid schema in context (the one the user is
  * interested on). This shall only happen if the item at the supplied array index is of type
  * object, which is then assumed to be a schema.
  *
- * The method also marks the context as being inside an array evaluation.
+ * The function also marks the context as being inside an array evaluation.
  *
- * \param index
- * \return whether it was necessary to "enter" a schema for the supplied array index
+ * Returns whether it was necessary to enter a schema for the supplied
+ * array \a index, false if index is out of bounds.
  */
 bool JsonSchema::maybeEnterNestedArraySchema(int index)
 {
@@ -368,10 +383,10 @@ bool JsonSchema::maybeEnterNestedArraySchema(int index)
 
 /*!
  * The type of a schema can be specified in the form of a union type, which is basically an
- * array of allowed types for the particular instance [Sec. 5.1]. This method checks whether
+ * array of allowed types for the particular instance [Sec. 5.1]. This function checks whether
  * the current schema is one of such.
  *
- * \return whether or not the current schema specifies a union type
+ * Returns whether or not the current schema specifies a union type.
  */
 bool JsonSchema::hasUnionSchema() const
 {
@@ -384,15 +399,16 @@ int JsonSchema::unionSchemaSize() const
 }
 
 /*!
- * When evaluating union types it might be necessary to "enter" a particular schema, since this
+ * When evaluating union types it might be necessary to enter a particular
+ * schema, since this
  * API assumes that there's always a valid schema in context (the one the user is interested on).
- * This shall only happen if the item at the supplied union index, which is then assumed to be
+ * This shall only happen if the item at the supplied union \a index, which is then assumed to be
  * a schema.
  *
- * The method also marks the context as being inside an union evaluation.
+ * The function also marks the context as being inside an union evaluation.
  *
- * \param index
- * \return whether or not it was necessary to "enter" a schema for the supplied union index
+ * Returns whether or not it was necessary to enter a schema for the
+ * supplied union index.
  */
 bool JsonSchema::maybeEnterNestedUnionSchema(int index)
 {
@@ -675,16 +691,13 @@ JsonSchemaManager::~JsonSchemaManager()
 }
 
 /*!
- * \brief JsonManager::schemaForFile
- *
- * Try to find a JSON schema to which the supplied file can be validated against. According
+ * Tries to find a JSON schema to validate \a fileName against. According
  * to the specification, how the schema/instance association is done is implementation defined.
  * Currently we use a quite naive approach which is simply based on file names. Specifically,
  * if one opens a foo.json file we'll look for a schema named foo.json. We should probably
  * investigate alternative settings later.
  *
- * \param fileName - JSON file to be validated
- * \return a valid schema or 0
+ * Returns a valid schema or 0.
  */
 JsonSchema *JsonSchemaManager::schemaForFile(const QString &fileName) const
 {
@@ -729,10 +742,9 @@ JsonSchema *JsonSchemaManager::parseSchema(const QString &schemaFileName) const
     FileReader reader;
     if (reader.fetch(schemaFileName, QIODevice::Text)) {
         const QString &contents = QString::fromUtf8(reader.data());
-        JsonValue *json = JsonValue::create(contents);
-        if (json && json->kind() == JsonValue::Object) {
+        JsonValue *json = JsonValue::create(contents, &m_pool);
+        if (json && json->kind() == JsonValue::Object)
             return new JsonSchema(json->toObject(), this);
-        }
     }
 
     return 0;

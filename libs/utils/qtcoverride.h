@@ -27,17 +27,15 @@
 **
 ****************************************************************************/
 
-#ifndef LANGUAGEUTILS_GLOBAL_H
-#define LANGUAGEUTILS_GLOBAL_H
+#ifndef QTC_OVERRIDE_H
+#define QTC_OVERRIDE_H
 
 #include <qglobal.h>
 
-#if defined(LANGUAGEUTILS_BUILD_DIR)
-#  define LANGUAGEUTILS_EXPORT Q_DECL_EXPORT
-#elif defined(LANGUAGEUTILS_BUILD_STATIC_LIB)
-#  define LANGUAGEUTILS_EXPORT
+#ifdef Q_DECL_OVERRIDE
+#define QTC_OVERRIDE Q_DECL_OVERRIDE
 #else
-#  define LANGUAGEUTILS_EXPORT Q_DECL_IMPORT
+#define QTC_OVERRIDE
 #endif
 
-#endif // LANGUAGEUTILS_GLOBAL_H
+#endif // QTC_OVERRIDE_H

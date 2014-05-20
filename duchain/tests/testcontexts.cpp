@@ -54,7 +54,7 @@ void TestContexts::testFunctionContext()
     const IndexedString file(QString("%1-functionContext.js").arg(qrand()));
     ParseSession session(file, code);
     QVERIFY(session.ast());
-    QCOMPARE(session.language(), QmlJS::Document::JavaScriptLanguage);
+    QCOMPARE(session.language(), QmlJS::Language::JavaScript);
 
     ContextBuilder builder;
     builder.setParseSession(&session);
@@ -116,7 +116,7 @@ void TestContexts::testQMLContext()
                                "  }\n"
                                "}\n");
     QVERIFY(session.ast());
-    QCOMPARE(session.language(), QmlJS::Document::QmlLanguage);
+    QCOMPARE(session.language(), QmlJS::Language::Qml);
 
     ContextBuilder builder;
     builder.setParseSession(&session);

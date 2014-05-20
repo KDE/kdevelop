@@ -82,7 +82,7 @@ public:
     /**
      * @return the language of the parsed document.
      */
-    QmlJS::Document::Language language() const;
+    QmlJS::Language::Enum language() const;
 
     /**
      * @return the comment related to the given source location or an empty string

@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2012 Digia Plc and/or its subsidiary(-ies).
+** Copyright (C) 2014 Digia Plc and/or its subsidiary(-ies).
 ** Contact: http://www.qt-project.org/legal
 **
 ** This file is part of Qt Creator.
@@ -83,17 +83,18 @@ public:
     struct Component
     {
         Component()
-            : majorVersion(0), minorVersion(0), internal(false) {}
+            : majorVersion(0), minorVersion(0), internal(false), singleton(false) {}
 
         Component(const QString &typeName, const QString &fileName, int majorVersion, int minorVersion)
             : typeName(typeName), fileName(fileName), majorVersion(majorVersion), minorVersion(minorVersion),
-            internal(false) {}
+            internal(false), singleton(false) {}
 
         QString typeName;
         QString fileName;
         int majorVersion;
         int minorVersion;
         bool internal;
+        bool singleton;
     };
 
     struct Script
@@ -128,7 +129,7 @@ public:
 #endif
 
 private:
-    void reportError(int line, int column, const QString &message);
+    void reportError(quint16 line, quint16 column, const QString &message);
 
 private:
     QList<QmlError> _errors;

@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2012 Digia Plc and/or its subsidiary(-ies).
+** Copyright (C) 2014 Digia Plc and/or its subsidiary(-ies).
 ** Contact: http://www.qt-project.org/legal
 **
 ** This file is part of Qt Creator.
@@ -28,19 +28,23 @@
 ****************************************************************************/
 
 #include "qmljsdocument.h"
-#include "qmljsbind.h"
-#include <qmljs/parser/qmljsast_p.h>
+#include "qmljsconstants.h"
 #include <qmljs/parser/qmljslexer_p.h>
 #include <qmljs/parser/qmljsparser_p.h>
-#include <qmljs/parser/qmljsastfwd_p.h>
+
+#include <utils/qtcassert.h>
+
+#include <QCryptographicHash>
 #include <QDir>
+
+#include <algorithm>
 
 using namespace QmlJS;
 using namespace QmlJS::AST;
 
 /*!
     \class QmlJS::Document
-    \brief A Qml or JavaScript document.
+    \brief The Document class creates a QML or JavaScript document.
     \sa Snapshot
 
     Documents are usually created by the ModelManagerInterface
@@ -58,11 +62,11 @@ using namespace QmlJS::AST;
 
 /*!
     \class QmlJS::LibraryInfo
-    \brief A Qml library.
+    \brief The LibraryInfo class creates a QML library.
     \sa Snapshot
 
     A LibraryInfo is created when the ModelManagerInterface finds
-    a Qml library and parses the qmldir file. The instance holds information about
+    a QML library and parses the qmldir file. The instance holds information about
     which Components the library provides and which plugins to load.
 
     The ModelManager will try to extract detailed information about the types
@@ -72,10 +76,9 @@ using namespace QmlJS::AST;
 
 /*!
     \class QmlJS::Snapshot
-    \brief A set of Document::Ptr and LibraryInfo instances.
+    \brief The Snapshot class holds and offers access to a set of
+    Document::Ptr and LibraryInfo instances.
     \sa Document LibraryInfo
-
-    A Snapshot holds and offers access to a set of Document and LibraryInfo instances.
 
     Usually Snapshots are copies of the snapshot maintained and updated by the
     ModelManagerInterface that updates its instance as parsing
@@ -83,10 +86,87 @@ using namespace QmlJS::AST;
 */
 
 
-Document::Document(const QString &fileName, Language language)
+bool Document::isQmlLikeLanguage(Language::Enum language)
+{
+    switch (language) {
+    case Language::Qml:
+    case Language::QmlQtQuick1:
+    case Language::QmlQtQuick2:
+    case Language::QmlQbs:
+    case Language::QmlProject:
+    case Language::QmlTypeInfo:
+        return true;
+    default:
+        return false;
+    }
+}
+
+bool Document::isFullySupportedLanguage(Language::Enum language)
+{
+    switch (language) {
+    case Language::JavaScript:
+    case Language::Json:
+    case Language::Qml:
+    case Language::QmlQtQuick1:
+    case Language::QmlQtQuick2:
+        return true;
+    case Language::Unknown:
+    case Language::QmlQbs:
+    case Language::QmlProject:
+    case Language::QmlTypeInfo:
+        break;
+    }
+    return false;
+}
+
+bool Document::isQmlLikeOrJsLanguage(Language::Enum language)
+{
+    switch (language) {
+    case Language::Qml:
+    case Language::QmlQtQuick1:
+    case Language::QmlQtQuick2:
+    case Language::QmlQbs:
+    case Language::QmlProject:
+    case Language::QmlTypeInfo:
+    case Language::JavaScript:
+        return true;
+    default:
+        return false;
+    }
+}
+
+QList<Language::Enum> Document::companionLanguages(Language::Enum language)
+{
+    QList<Language::Enum> langs;
+    langs << language;
+    switch (language) {
+    case Language::JavaScript:
+    case Language::Json:
+    case Language::QmlProject:
+    case Language::QmlTypeInfo:
+        break;
+    case Language::QmlQbs:
+        langs << Language::JavaScript;
+        break;
+    case Language::Qml:
+        langs << Language::QmlQtQuick1 << Language::QmlQtQuick2 << Language::JavaScript;
+        break;
+    case Language::QmlQtQuick1:
+    case Language::QmlQtQuick2:
+        langs << Language::Qml << Language::JavaScript;
+        break;
+    case Language::Unknown:
+        langs << Language::JavaScript << Language::Json << Language::QmlProject << Language:: QmlQbs
+              << Language::QmlTypeInfo << Language::QmlQtQuick1 << Language::QmlQtQuick2
+              << Language::Qml;
+        break;
+    }
+    return langs;
+}
+
+Document::Document(const QString &fileName, Language::Enum language)
     : _engine(0)
     , _ast(0)
-    , _bind(0)
     , _fileName(QDir::cleanPath(fileName))
     , _editorRevision(0)
     , _language(language)
@@ -95,7 +175,7 @@ Document::Document(const QString &fileName, Language language)
     QFileInfo fileInfo(fileName);
     _path = QDir::cleanPath(fileInfo.absolutePath());
 
-    if (language == QmlLanguage) {
+    if (isQmlLikeLanguage(language)) {
         _componentName = fileInfo.baseName();
 
         if (! _componentName.isEmpty()) {
@@ -109,29 +189,15 @@ Document::Document(const QString &fileName, Language language)
 
 Document::~Document()
 {
-    if (_bind)
-        delete _bind;
-
     if (_engine)
         delete _engine;
 }
 
-Document::MutablePtr Document::create(const QString &fileName, Language language)
+Document::MutablePtr Document::create(const QString &fileName, Language::Enum language)
 {
     Document::MutablePtr doc(new Document(fileName, language));
     doc->_ptr = doc;
     return doc;
-}
-
-Document::Language Document::guessLanguageFromSuffix(const QString &fileName)
-{
-    if (fileName.endsWith(".qml", Qt::CaseInsensitive))
-        return QmlLanguage;
-    if (fileName.endsWith(".js", Qt::CaseInsensitive))
-        return JavaScriptLanguage;
-    if (fileName.endsWith(".json", Qt::CaseInsensitive))
-        return JsonLanguage;
-    return UnknownLanguage;
 }
 
 Document::Ptr Document::ptr() const
@@ -141,12 +207,27 @@ Document::Ptr Document::ptr() const
 
 bool Document::isQmlDocument() const
 {
-    return _language == QmlLanguage;
+    return isQmlLikeLanguage(_language);
 }
 
-Document::Language Document::language() const
+Language::Enum Document::language() const
 {
     return _language;
+}
+
+void Document::setLanguage(Language::Enum l)
+{
+    _language = l;
+}
+
+QString Document::importId() const
+{
+    return _fileName;
+}
+
+QByteArray Document::fingerprint() const
+{
+    return _fingerprint;
 }
 
 AST::UiProgram *Document::qmlProgram() const
@@ -190,6 +271,9 @@ QString Document::source() const
 void Document::setSource(const QString &source)
 {
     _source = source;
+    QCryptographicHash sha(QCryptographicHash::Sha1);
+    sha.addData(source.toUtf8());
+    _fingerprint = sha.result();
 }
 
 int Document::editorRevision() const
@@ -218,40 +302,10 @@ QString Document::componentName() const
     return _componentName;
 }
 
-namespace {
-class CollectDirectives : public Directives
-{
-    QString documentPath;
-public:
-    CollectDirectives(const QString &documentPath)
-        : documentPath(documentPath)
-        , isLibrary(false)
-
-    {}
-
-    virtual void pragmaLibrary() { isLibrary = true; }
-    virtual void importFile(const QString &jsfile, const QString &module)
-    {
-        imports += ImportInfo::pathImport(
-                    documentPath, jsfile, LanguageUtils::ComponentVersion(), module);
-    }
-
-    virtual void importModule(const QString &uri, const QString &version, const QString &module)
-    {
-        imports += ImportInfo::moduleImport(uri, LanguageUtils::ComponentVersion(version), module);
-    }
-
-    bool isLibrary;
-    QList<ImportInfo> imports;
-};
-
-} // anonymous namespace
-
 bool Document::parse_helper(int startToken)
 {
     Q_ASSERT(! _engine);
     Q_ASSERT(! _ast);
-    Q_ASSERT(! _bind);
 
     _engine = new Engine();
 
@@ -259,10 +313,7 @@ bool Document::parse_helper(int startToken)
     Parser parser(_engine);
 
     QString source = _source;
-    lexer.setCode(source, /*line = */ 1, /*qmlMode = */_language == QmlLanguage);
-
-    CollectDirectives collectDirectives(path());
-    _engine->setDirectives(&collectDirectives);
+    lexer.setCode(source, /*line = */ 1, /*qmlMode = */isQmlLikeLanguage(_language));
 
     switch (startToken) {
     case QmlJSGrammar::T_FEED_UI_PROGRAM:
@@ -280,8 +331,6 @@ bool Document::parse_helper(int startToken)
 
     _ast = parser.rootNode();
     _diagnosticMessages = parser.diagnosticMessages();
-
-    _bind = new Bind(this, &_diagnosticMessages, collectDirectives.isLibrary, collectDirectives.imports);
 
     return _parsedCorrectly;
 }
@@ -311,92 +360,102 @@ bool Document::parseExpression()
 
 Bind *Document::bind() const
 {
-    return _bind;
+    return 0;
 }
 
 LibraryInfo::LibraryInfo(Status status)
     : _status(status)
     , _dumpStatus(NoTypeInfo)
 {
+    updateFingerprint();
 }
 
-LibraryInfo::LibraryInfo(const QmlDirParser &parser)
+LibraryInfo::LibraryInfo(const QmlDirParser &parser, const QByteArray &fingerprint)
     : _status(Found)
     , _components(parser.components().values())
     , _plugins(parser.plugins())
     , _typeinfos(parser.typeInfos())
+    , _fingerprint(fingerprint)
     , _dumpStatus(NoTypeInfo)
 {
+    if (_fingerprint.isEmpty())
+        updateFingerprint();
 }
 
 LibraryInfo::~LibraryInfo()
 {
 }
 
-Snapshot::Snapshot()
+QByteArray LibraryInfo::calculateFingerprint() const
 {
-}
-
-Snapshot::~Snapshot()
-{
-}
-
-void Snapshot::insert(const Document::Ptr &document, bool allowInvalid)
-{
-    if (document && (allowInvalid || document->qmlProgram() || document->jsProgram())) {
-        const QString fileName = document->fileName();
-        const QString path = document->path();
-
-        remove(fileName);
-        _documentsByPath[path].append(document);
-        _documents.insert(fileName, document);
+    QCryptographicHash hash(QCryptographicHash::Sha1);
+    hash.addData(reinterpret_cast<const char *>(&_status), sizeof(_status));
+    int len = _components.size();
+    hash.addData(reinterpret_cast<const char *>(&len), sizeof(len));
+    foreach (const QmlDirParser::Component &component, _components) {
+        len = component.fileName.size();
+        hash.addData(reinterpret_cast<const char *>(&len), sizeof(len));
+        hash.addData(reinterpret_cast<const char *>(component.fileName.constData()), len * sizeof(QChar));
+        hash.addData(reinterpret_cast<const char *>(&component.majorVersion), sizeof(component.majorVersion));
+        hash.addData(reinterpret_cast<const char *>(&component.minorVersion), sizeof(component.minorVersion));
+        len = component.typeName.size();
+        hash.addData(reinterpret_cast<const char *>(&len), sizeof(len));
+        hash.addData(reinterpret_cast<const char *>(component.typeName.constData()), component.typeName.size() * sizeof(QChar));
+        int flags = (component.singleton ?  (1 << 0) : 0) + (component.internal ? (1 << 1) : 0);
+        hash.addData(reinterpret_cast<const char *>(&flags), sizeof(flags));
     }
-}
-
-void Snapshot::insertLibraryInfo(const QString &path, const LibraryInfo &info)
-{
-    _libraries.insert(QDir::cleanPath(path), info);
-}
-
-void Snapshot::remove(const QString &fileName)
-{
-    Document::Ptr doc = _documents.value(fileName);
-    if (!doc.isNull()) {
-        const QString &path = doc->path();
-
-        QList<Document::Ptr> docs = _documentsByPath.value(path);
-        docs.removeAll(doc);
-        _documentsByPath[path] = docs;
-
-        _documents.remove(fileName);
+    len = _plugins.size();
+    hash.addData(reinterpret_cast<const char *>(&len), sizeof(len));
+    foreach (const QmlDirParser::Plugin &plugin, _plugins) {
+        len = plugin.path.size();
+        hash.addData(reinterpret_cast<const char *>(&len), sizeof(len));
+        hash.addData(reinterpret_cast<const char *>(plugin.path.constData()), len * sizeof(QChar));
+        len = plugin.name.size();
+        hash.addData(reinterpret_cast<const char *>(&len), sizeof(len));
+        hash.addData(reinterpret_cast<const char *>(plugin.name.constData()), len * sizeof(QChar));
     }
-}
-
-Document::MutablePtr Snapshot::documentFromSource(
-        const QString &code, const QString &fileName,
-        Document::Language language) const
-{
-    Document::MutablePtr newDoc = Document::create(fileName, language);
-
-    if (Document::Ptr thisDocument = document(fileName)) {
-        newDoc->_editorRevision = thisDocument->_editorRevision;
+    len = _typeinfos.size();
+    hash.addData(reinterpret_cast<const char *>(&len), sizeof(len));
+    foreach (const QmlDirParser::TypeInfo &typeinfo, _typeinfos) {
+        len = typeinfo.fileName.size();
+        hash.addData(reinterpret_cast<const char *>(&len), sizeof(len));
+        hash.addData(reinterpret_cast<const char *>(typeinfo.fileName.constData()), len * sizeof(QChar));
     }
+    len = _metaObjects.size();
+    hash.addData(reinterpret_cast<const char *>(&len), sizeof(len));
+    QList<QByteArray> metaFingerprints;
+    foreach (const LanguageUtils::FakeMetaObject::ConstPtr &metaObject, _metaObjects)
+        metaFingerprints.append(metaObject->fingerprint());
+    std::sort(metaFingerprints.begin(), metaFingerprints.end());
+    foreach (const QByteArray &fp, metaFingerprints)
+        hash.addData(fp);
+    hash.addData(reinterpret_cast<const char *>(&_dumpStatus), sizeof(_dumpStatus));
+    len = _dumpError.size(); // localization dependent (avoid?)
+    hash.addData(reinterpret_cast<const char *>(&len), sizeof(len));
+    hash.addData(reinterpret_cast<const char *>(_dumpError.constData()), len * sizeof(QChar));
 
-    newDoc->setSource(code);
-    return newDoc;
+    len = _moduleApis.size();
+    hash.addData(reinterpret_cast<const char *>(&len), sizeof(len));
+    foreach (const ModuleApiInfo &moduleInfo, _moduleApis)
+        moduleInfo.addToHash(hash); // make it order independent?
+
+    QByteArray res(hash.result());
+    res.append('L');
+    return res;
 }
 
-Document::Ptr Snapshot::document(const QString &fileName) const
+void LibraryInfo::updateFingerprint()
 {
-    return _documents.value(QDir::cleanPath(fileName));
+    _fingerprint = calculateFingerprint();
 }
 
-QList<Document::Ptr> Snapshot::documentsInDirectory(const QString &path) const
+void ModuleApiInfo::addToHash(QCryptographicHash &hash) const
 {
-    return _documentsByPath.value(QDir::cleanPath(path));
-}
-
-LibraryInfo Snapshot::libraryInfo(const QString &path) const
-{
-    return _libraries.value(QDir::cleanPath(path));
+    int len = uri.length();
+    hash.addData(reinterpret_cast<const char *>(&len), sizeof(len));
+    hash.addData(reinterpret_cast<const char *>(uri.constData()), len * sizeof(QChar));
+    version.addToHash(hash);
+    len = cppName.length();
+    hash.addData(reinterpret_cast<const char *>(&len), sizeof(len));
+    hash.addData(reinterpret_cast<const char *>(cppName.constData()), len * sizeof(QChar));
 }

@@ -1,8 +1,25 @@
-diff --git a/src/libs/qmljs/parser/qmljs.g b/src/libs/qmljs/parser/qmljs.g
-index 069be3c..9cbdc23 100644
---- a/src/libs/qmljs/parser/qmljs.g
-+++ b/src/libs/qmljs/parser/qmljs.g
-@@ -111,7 +111,7 @@ double integerFromString(const QString &str, int radix)
+diff --git a/src/libs/qmljs/parser/qmlerror.cpp b/src/libs/qmljs/parser/qmlerror.cpp
+index d090a19..5ec311d 100644
+--- a/src/libs/qmljs/parser/qmlerror.cpp
++++ b/src/libs/qmljs/parser/qmlerror.cpp
+@@ -65,6 +65,12 @@ QT_BEGIN_NAMESPACE
+ 
+     \sa QQuickView::errors(), QmlComponent::errors()
+ */
++
++static quint16 qmlSourceCoordinate(int n)
++{
++    return (n > 0 && n <= static_cast<int>(USHRT_MAX)) ? static_cast<quint16>(n) : 0;
++}
++
+ class QmlErrorPrivate
+ {
+ public:
+diff --git a/src/libs/qmljs/parser/qmljsengine_p.cpp b/src/libs/qmljs/parser/qmljsengine_p.cpp
+index 1e22fa5..10fc3d1 100644
+--- a/src/libs/qmljs/parser/qmljsengine_p.cpp
++++ b/src/libs/qmljs/parser/qmljsengine_p.cpp
+@@ -110,7 +110,7 @@ double integerFromString(const QString &str, int radix)
  
  
  Engine::Engine()
@@ -11,7 +28,7 @@ index 069be3c..9cbdc23 100644
  { }
  
  Engine::~Engine()
-@@ -132,6 +132,12 @@ Lexer *Engine::lexer() const
+@@ -131,6 +131,12 @@ Lexer *Engine::lexer() const
  void Engine::setLexer(Lexer *lexer)
  { _lexer = lexer; }
  
@@ -24,11 +41,22 @@ index 069be3c..9cbdc23 100644
  MemoryPool *Engine::pool()
  { return &_pool; }
  
-diff --git b/src/libs/qmljs/parser/qmljsengine_p.h a/src/libs/qmljs/parser/qmljsengine_p.h
-index 5057ea0..487619e 100644
---- b/src/libs/qmljs/parser/qmljsengine_p.h
-+++ a/src/libs/qmljs/parser/qmljsengine_p.h
-@@ -54,6 +54,7 @@ QT_QML_BEGIN_NAMESPACE
+diff --git a/src/libs/qmljs/parser/qmljsengine_p.h b/src/libs/qmljs/parser/qmljsengine_p.h
+index b1f7e1a..29b69d1 100644
+--- a/src/libs/qmljs/parser/qmljsengine_p.h
++++ b/src/libs/qmljs/parser/qmljsengine_p.h
+@@ -44,36 +44,35 @@
+ #include "qmljsglobal_p.h"
+ #include "qmljsastfwd_p.h"
+ #include "qmljsmemorypool_p.h"
++#include <qmljs/qmljsconstants.h>
+ 
+ #include <QString>
+ #include <QSet>
+ 
+-#include <qmljs/qmljsconstants.h>
+ QT_QML_BEGIN_NAMESPACE
+ 
  namespace QmlJS {
  
  class Lexer;
@@ -36,7 +64,32 @@ index 5057ea0..487619e 100644
  class MemoryPool;
  
  class QML_PARSER_EXPORT DiagnosticMessage
-@@ -81,6 +82,7 @@ public:
+ {
+ public:
+-    enum Kind { Warning, Error };
+-
+     DiagnosticMessage()
+-        : kind(Error) {}
++        : kind(Severity::Error) {}
+ 
+-    DiagnosticMessage(Kind kind, const AST::SourceLocation &loc, const QString &message)
++    DiagnosticMessage(Severity::Enum kind, const AST::SourceLocation &loc, const QString &message)
+         : kind(kind), loc(loc), message(message) {}
+ 
+     bool isWarning() const
+-    { return kind == Warning; }
++    { return kind == Severity::Warning; }
+ 
+     bool isError() const
+-    { return kind == Error; }
++    { return kind == Severity::Error; }
+ 
+-    Kind kind;
++    Severity::Enum kind;
+     AST::SourceLocation loc;
+     QString message;
+ };
+@@ -81,6 +80,7 @@ public:
  class QML_PARSER_EXPORT Engine
  {
      Lexer *_lexer;
@@ -44,7 +97,7 @@ index 5057ea0..487619e 100644
      MemoryPool _pool;
      QList<AST::SourceLocation> _comments;
      QString _extraCode;
-@@ -98,6 +100,9 @@ public:
+@@ -99,6 +99,9 @@ public:
      Lexer *lexer() const;
      void setLexer(Lexer *lexer);
  
@@ -54,11 +107,33 @@ index 5057ea0..487619e 100644
      MemoryPool *pool();
  
      inline QStringRef midRef(int position, int size) { return _code.midRef(position, size); }
-diff --git b/src/libs/qmljs/parser/qmljsparser.cpp a/src/libs/qmljs/parser/qmljsparser.cpp
-index a731c1a..e986534 100644
---- b/src/libs/qmljs/parser/qmljsparser.cpp
-+++ a/src/libs/qmljs/parser/qmljsparser.cpp
-@@ -137,7 +137,20 @@ bool Parser::parse(int startToken)
+diff --git a/src/libs/qmljs/parser/qmljslexer.cpp b/src/libs/qmljs/parser/qmljslexer.cpp
+index 9698e9d..036be75 100644
+--- a/src/libs/qmljs/parser/qmljslexer.cpp
++++ b/src/libs/qmljs/parser/qmljslexer.cpp
+@@ -345,7 +345,7 @@ static inline bool isIdentifierStart(QChar ch)
+     // fast path for ascii
+     if ((ch.unicode() >= 'a' && ch.unicode() <= 'z') ||
+         (ch.unicode() >= 'A' && ch.unicode() <= 'Z') ||
+-        ch == '$' || ch == '_')
++        ch == QLatin1Char('$') || ch == QLatin1Char('_'))
+         return true;
+ 
+     switch (ch.category()) {
+@@ -368,7 +368,7 @@ static bool isIdentifierPart(QChar ch)
+     if ((ch.unicode() >= 'a' && ch.unicode() <= 'z') ||
+         (ch.unicode() >= 'A' && ch.unicode() <= 'Z') ||
+         (ch.unicode() >= '0' && ch.unicode() <= '9') ||
+-        ch == '$' || ch == '_' ||
++        ch == QLatin1Char('$') || ch == QLatin1Char('_') ||
+         ch.unicode() == 0x200c /* ZWNJ */ || ch.unicode() == 0x200d /* ZWJ */)
+         return true;
+ 
+diff --git a/src/libs/qmljs/parser/qmljsparser.cpp b/src/libs/qmljs/parser/qmljsparser.cpp
+index 6e61637..e016b91 100644
+--- a/src/libs/qmljs/parser/qmljsparser.cpp
++++ b/src/libs/qmljs/parser/qmljsparser.cpp
+@@ -157,7 +157,20 @@ bool Parser::parse(int startToken)
  
      token_buffer[0].token = startToken;
      first_token = &token_buffer[0];

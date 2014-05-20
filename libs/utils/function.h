@@ -27,17 +27,22 @@
 **
 ****************************************************************************/
 
-#ifndef LANGUAGEUTILS_GLOBAL_H
-#define LANGUAGEUTILS_GLOBAL_H
+#ifndef QTC_FUNCTION_H
+#define QTC_FUNCTION_H
 
-#include <qglobal.h>
-
-#if defined(LANGUAGEUTILS_BUILD_DIR)
-#  define LANGUAGEUTILS_EXPORT Q_DECL_EXPORT
-#elif defined(LANGUAGEUTILS_BUILD_STATIC_LIB)
-#  define LANGUAGEUTILS_EXPORT
-#else
-#  define LANGUAGEUTILS_EXPORT Q_DECL_IMPORT
+#include <functional>
+#if !(__cplusplus > 199711L || __GXX_EXPERIMENTAL_CXX0X__ || _MSC_VER >= 1600 || defined( _LIBCPP_VERSION )) || \
+    (defined(__GNUC_LIBSTD__) && ((__GNUC_LIBSTD__-0) * 100 + __GNUC_LIBSTD_MINOR__-0 <= 402))
+#define USE_TR1
 #endif
 
-#endif // LANGUAGEUTILS_GLOBAL_H
+#ifdef USE_TR1
+#  ifdef __GNUC__
+#    include <tr1/functional>
+#  endif
+namespace Utils { using std::tr1::function; }
+#else
+namespace Utils { using std::function; }
+#endif
+
+#endif // QTC_FUNCTION_H

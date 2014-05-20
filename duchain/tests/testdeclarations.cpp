@@ -58,7 +58,7 @@ void TestDeclarations::testFunction()
                                "function foo(arg1, arg2, arg3) { var i = 0; }");
     QVERIFY(session.ast());
     QVERIFY(session.problems().isEmpty());
-    QCOMPARE(session.language(), QmlJS::Document::JavaScriptLanguage);
+    QCOMPARE(session.language(), QmlJS::Language::JavaScript);
 
     DeclarationBuilder builder(&session);
     ReferencedTopDUContext top = builder.build(file, session.ast());
@@ -120,7 +120,7 @@ void TestDeclarations::testQMLId()
                                    "Text { id: test; Text { id: child; } }");
         QVERIFY(session.ast());
         QVERIFY(session.problems().isEmpty());
-        QCOMPARE(session.language(), QmlJS::Document::QmlLanguage);
+        QCOMPARE(session.language(), QmlJS::Language::Qml);
 
         DeclarationBuilder builder(&session);
         top = builder.build(file, session.ast());
@@ -151,7 +151,7 @@ void TestDeclarations::testQMLId()
                                    " Text {id: foo;} }");
         QVERIFY(session.ast());
         QVERIFY(session.problems().isEmpty());
-        QCOMPARE(session.language(), QmlJS::Document::QmlLanguage);
+        QCOMPARE(session.language(), QmlJS::Language::Qml);
 
         DeclarationBuilder builder(&session);
         ReferencedTopDUContext top2 = builder.build(file, session.ast(), top);
@@ -184,7 +184,7 @@ void TestDeclarations::testProperty()
                                "}");
     QVERIFY(session.ast());
     QVERIFY(session.problems().isEmpty());
-    QCOMPARE(session.language(), QmlJS::Document::QmlLanguage);
+    QCOMPARE(session.language(), QmlJS::Language::Qml);
 
     DeclarationBuilder builder(&session);
     ReferencedTopDUContext top = builder.build(file, session.ast());

@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2012 Digia Plc and/or its subsidiary(-ies).
+** Copyright (C) 2014 Digia Plc and/or its subsidiary(-ies).
 ** Contact: http://www.qt-project.org/legal
 **
 ** This file is part of Qt Creator.
@@ -34,7 +34,7 @@
 
 #if defined(QMLJS_BUILD_DIR)
 #  define QMLJS_EXPORT Q_DECL_EXPORT
-#elif QML_BUILD_STATIC_LIB==1
+#elif defined(QML_BUILD_STATIC_LIB)
 #  define QMLJS_EXPORT
 #else
 #  define QMLJS_EXPORT Q_DECL_IMPORT

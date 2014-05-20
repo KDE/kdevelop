@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2012 Digia Plc and/or its subsidiary(-ies).
+** Copyright (C) 2014 Digia Plc and/or its subsidiary(-ies).
 ** Contact: http://www.qt-project.org/legal
 **
 ** This file is part of Qt Creator.
@@ -43,7 +43,8 @@
 
 #include "qmljsglobal_p.h"
 #include "qmljsgrammar_p.h"
-#include <QtCore/QString>
+
+#include <QtCore/qstring.h>
 
 QT_QML_BEGIN_NAMESPACE
 
@@ -92,7 +93,6 @@ public:
         T_IMPLEMENTS = T_RESERVED_WORD,
         T_INT = T_RESERVED_WORD,
         T_INTERFACE = T_RESERVED_WORD,
-        T_LET = T_RESERVED_WORD,
         T_LONG = T_RESERVED_WORD,
         T_NATIVE = T_RESERVED_WORD,
         T_PACKAGE = T_RESERVED_WORD,
@@ -104,19 +104,20 @@ public:
         T_SYNCHRONIZED = T_RESERVED_WORD,
         T_THROWS = T_RESERVED_WORD,
         T_TRANSIENT = T_RESERVED_WORD,
-        T_VOLATILE = T_RESERVED_WORD,
-        T_YIELD = T_RESERVED_WORD
+        T_VOLATILE = T_RESERVED_WORD
     };
 
     enum Error {
         NoError,
         IllegalCharacter,
+        IllegalHexNumber,
         UnclosedStringLiteral,
         IllegalEscapeSequence,
         IllegalUnicodeEscapeSequence,
         UnclosedComment,
         IllegalExponentIndicator,
-        IllegalIdentifier
+        IllegalIdentifier,
+        IllegalHexadecimalEscapeSequence
     };
 
     enum RegExpBodyPrefix {
@@ -182,6 +183,7 @@ private:
     int scanNumber(QChar ch);
 
     bool isLineTerminator() const;
+    unsigned isLineTerminatorSequence() const;
     static bool isIdentLetter(QChar c);
     static bool isDecimalDigit(ushort c);
     static bool isHexDigit(QChar c);
@@ -190,6 +192,7 @@ private:
 
     void syncProhibitAutomaticSemicolon();
     QChar decodeUnicodeEscapeCharacter(bool *ok);
+    QChar decodeHexEscapeCharacter(bool *ok);
 
 private:
     Engine *_engine;
@@ -200,6 +203,7 @@ private:
     QStringRef _tokenSpell;
 
     const QChar *_codePtr;
+    const QChar *_endPtr;
     const QChar *_lastLinePtr;
     const QChar *_tokenLinePtr;
     const QChar *_tokenStartPtr;

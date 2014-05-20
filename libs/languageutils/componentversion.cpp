@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2012 Digia Plc and/or its subsidiary(-ies).
+** Copyright (C) 2014 Digia Plc and/or its subsidiary(-ies).
 ** Contact: http://www.qt-project.org/legal
 **
 ** This file is part of Qt Creator.
@@ -30,6 +30,7 @@
 #include "componentversion.h"
 
 #include <QString>
+#include <QCryptographicHash>
 
 #include <limits>
 
@@ -76,8 +77,14 @@ bool ComponentVersion::isValid() const
 
 QString ComponentVersion::toString() const
 {
-    return QString("%1.%2").arg(QString::number(_major),
-                                QString::number(_minor));
+    return QString::fromLatin1("%1.%2").arg(QString::number(_major),
+                                            QString::number(_minor));
+}
+
+void ComponentVersion::addToHash(QCryptographicHash &hash) const
+{
+    hash.addData(reinterpret_cast<const char *>(&_major), sizeof(_major));
+    hash.addData(reinterpret_cast<const char *>(&_minor), sizeof(_minor));
 }
 
 namespace LanguageUtils {

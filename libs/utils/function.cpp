@@ -27,17 +27,43 @@
 **
 ****************************************************************************/
 
-#ifndef LANGUAGEUTILS_GLOBAL_H
-#define LANGUAGEUTILS_GLOBAL_H
+#include "function.h"
 
-#include <qglobal.h>
+namespace {
+// just compilation tests
 
-#if defined(LANGUAGEUTILS_BUILD_DIR)
-#  define LANGUAGEUTILS_EXPORT Q_DECL_EXPORT
-#elif defined(LANGUAGEUTILS_BUILD_STATIC_LIB)
-#  define LANGUAGEUTILS_EXPORT
-#else
-#  define LANGUAGEUTILS_EXPORT Q_DECL_IMPORT
-#endif
+void test();
 
-#endif // LANGUAGEUTILS_GLOBAL_H
+void functionUser(Utils::function<int()> generator, Utils::function<void(int)> consumer)
+{
+    consumer(generator());
+}
+
+struct GenFunctor
+{
+    int operator()() { return 29; }
+};
+
+struct ConsumerFunctor
+{
+    void operator()(int) {}
+};
+
+int generatorF()
+{
+    return 42;
+}
+
+void consumerF(int i)
+{
+    if (i < 0)
+        test();
+}
+
+void test()
+{
+    functionUser(GenFunctor(), ConsumerFunctor());
+    functionUser(&generatorF, &consumerF);
+}
+
+} // end namespace

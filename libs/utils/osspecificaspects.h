@@ -1,4 +1,4 @@
-/****************************************************************************
+/**************************************************************************
 **
 ** Copyright (C) 2014 Digia Plc and/or its subsidiary(-ies).
 ** Contact: http://www.qt-project.org/legal
@@ -27,17 +27,48 @@
 **
 ****************************************************************************/
 
-#ifndef LANGUAGEUTILS_GLOBAL_H
-#define LANGUAGEUTILS_GLOBAL_H
+#ifndef QTC_OSSPECIFICASPECTS_H
+#define QTC_OSSPECIFICASPECTS_H
 
-#include <qglobal.h>
+#include "utils_global.h"
 
-#if defined(LANGUAGEUTILS_BUILD_DIR)
-#  define LANGUAGEUTILS_EXPORT Q_DECL_EXPORT
-#elif defined(LANGUAGEUTILS_BUILD_STATIC_LIB)
-#  define LANGUAGEUTILS_EXPORT
-#else
-#  define LANGUAGEUTILS_EXPORT Q_DECL_IMPORT
-#endif
+#include <QString>
 
-#endif // LANGUAGEUTILS_GLOBAL_H
+#define QTC_WIN_EXE_SUFFIX ".exe"
+
+namespace Utils {
+
+// Add more as needed.
+enum OsType { OsTypeWindows, OsTypeLinux, OsTypeMac, OsTypeOtherUnix, OsTypeOther };
+
+class QTCREATOR_UTILS_EXPORT OsSpecificAspects
+{
+public:
+    OsSpecificAspects(OsType osType) : m_osType(osType) { }
+
+    QString withExecutableSuffix(const QString &executable) const {
+        QString finalName = executable;
+        if (m_osType == OsTypeWindows)
+            finalName += QLatin1String(QTC_WIN_EXE_SUFFIX);
+        return finalName;
+    }
+
+    Qt::CaseSensitivity fileNameCaseSensitivity() const {
+        return m_osType == OsTypeWindows ? Qt::CaseInsensitive : Qt::CaseSensitive;
+    }
+
+    QChar pathListSeparator() const {
+        return QLatin1Char(m_osType == OsTypeWindows ? ';' : ':');
+    }
+
+    Qt::KeyboardModifier controlModifier() const {
+        return m_osType == OsTypeMac ? Qt::MetaModifier : Qt::ControlModifier;
+    }
+
+private:
+    const OsType m_osType;
+};
+
+} // namespace Utils
+
+#endif // Include guard.
