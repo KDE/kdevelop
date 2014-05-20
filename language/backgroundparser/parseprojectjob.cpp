@@ -41,10 +41,12 @@ ParseProjectJob::~ParseProjectJob() {
         ICore::self()->runController()->unregisterJob(this);
 }
 
-ParseProjectJob::ParseProjectJob(IProject* project) {
+ParseProjectJob::ParseProjectJob(IProject* project, bool forceUpdate)
+{
     connect(project, SIGNAL(destroyed(QObject*)), SLOT(deleteNow()));
     m_project = project;
     m_updated = 0;
+    m_forceUpdate = forceUpdate;
     m_totalFiles = project->fileSet().size();
 
     setCapabilities(Killable);
@@ -82,6 +84,12 @@ void ParseProjectJob::start() {
     TopDUContext::Features processingLevel = files.size() < ICore::self()->languageController()->completionSettings()->minFilesForSimplifiedParsing() ?
                                     TopDUContext::VisibleDeclarationsAndContexts : TopDUContext::SimplifiedVisibleDeclarationsAndContexts;
 
+    if (m_forceUpdate) {
+        if (processingLevel & TopDUContext::VisibleDeclarationsAndContexts) {
+            processingLevel = TopDUContext::AllDeclarationsContextsAndUses;
+        }
+        processingLevel = (TopDUContext::Features)(TopDUContext::ForceUpdate | processingLevel);
+    }
     // prevent UI-lockup by processing events after some files
     // esp. noticeable when dealing with huge projects
     const int processAfter = 1000;

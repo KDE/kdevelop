@@ -112,6 +112,7 @@ public:
     bool m_foundProjectFile; //Temporary flag used while searching the hierarchy for a project file
     bool m_cleaningUp; //Temporary flag enabled while destroying the project-controller
     QPointer<ProjectChangesModel> m_changesModel;
+    QHash< IProject*, QPointer<KJob> > m_parseJobs; // parse jobs that add files from the project to the background parser.
 
     ProjectControllerPrivate( ProjectController* p )
         : m_core(0), model(0), selectionModel(0), dialog(0), m_configuringProject(0), q(p), buildset(0), m_foundProjectFile(false), m_cleaningUp(false)
@@ -820,8 +821,7 @@ void ProjectController::projectImportingFinished( IProject* project )
 
     if (parseAllProjectSources())
     {
-        KJob* parseProjectJob = new KDevelop::ParseProjectJob(project);
-        ICore::self()->runController()->registerJob(parseProjectJob);
+        reparseProject(project);
     }
 
     // Add all currently open files that belong to the project to the background-parser,
@@ -1151,6 +1151,16 @@ QString ProjectController::mapSourceBuild( const QString& path_, bool reverse, b
         }
     }
     return QString();
+}
+
+void ProjectController::reparseProject( IProject* project, bool forceUpdate )
+{
+    if (auto job = d->m_parseJobs.value(project)) {
+        job->kill();
+    }
+
+    d->m_parseJobs[project] = new KDevelop::ParseProjectJob(project, forceUpdate);
+    ICore::self()->runController()->registerJob(d->m_parseJobs[project]);
 }
 
 }

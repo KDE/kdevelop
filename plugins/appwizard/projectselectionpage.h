@@ -11,7 +11,9 @@
 #define _PROJECTSELECTIONPAGE_H_
 
 #include "appwizardpagewidget.h"
+#include "appwizarddialog.h"
 #include <knewstuff3/entry.h>
+#include <QRegExpValidator>
 
 namespace KDevelop
 {
@@ -30,7 +32,7 @@ class KUrl;
 class ProjectSelectionPage : public AppWizardPageWidget {
 Q_OBJECT
 public:
-    explicit ProjectSelectionPage(ProjectTemplatesModel *templatesModel, QWidget *parent = 0);
+    explicit ProjectSelectionPage(ProjectTemplatesModel *templatesModel, AppWizardDialog *wizardDialog);
     ~ProjectSelectionPage();
 
     bool shouldContinue();
@@ -62,6 +64,7 @@ private:
     Ui::ProjectSelectionPage *ui;
     KDevelop::MultiLevelListView* m_listView;
     ProjectTemplatesModel *m_templatesModel;
+    AppWizardDialog *m_wizardDialog;
 };
 
 #endif

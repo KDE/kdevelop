@@ -112,46 +112,16 @@ void OpenProjectDialog::validateOpenUrl( const KUrl& url )
         }
     }
 
-    QString msgTemplate;
-    if ( layoutDirection() == Qt::LeftToRight ) {
-        msgTemplate = QString(
-            "<table width='100%' cellpadding='0' cellspacing='0'>"
-                "<tr>"
-                    "<td align='left'>%1</td>"
-                    "<td align='right'>%2</td>"
-                "</tr>"
-            "</table>"
-        );
-    } else {
-        msgTemplate = QString(
-            "<table width='100%' cellpadding='0' cellspacing='0'>"
-                "<tr>"
-                    "<td align='left'>%2</td>"
-                    "<td align='right'>%1</td>"
-                "</tr>"
-            "</table>"
-        );
-    }
     if ( isValid ) {
         // reset header
-        openPage->setHeader(
-            msgTemplate
-                .arg(openPage->name())
-                .arg("<span style='font-weight:normal'>"
-                        + i18n("open %1 as project", url.fileName())
-                     + "</span>")
-        );
+        openPage->setHeader(i18n("Open \"%1\" as project", url.fileName()));
     } else {
         // report error
         KColorScheme scheme(palette().currentColorGroup());
-        const QString errorMsg = i18n("Selected URL is invalid.");
-        openPage->setHeader(
-            msgTemplate
-                .arg(openPage->name())
-                .arg(QString("<font color='%1'>%2</font>")
-                    .arg(scheme.foreground(KColorScheme::NegativeText).color().name())
-                    .arg(errorMsg)
-                 )
+        const QString errorMsg = i18n("Selected URL is invalid");
+        openPage->setHeader(QString("<font color='%1'>%2</font>")
+            .arg(scheme.foreground(KColorScheme::NegativeText).color().name())
+            .arg(errorMsg)
         );
         setAppropriate( projectInfoPage, false );
         setAppropriate( openPage, true );

@@ -37,6 +37,7 @@
  *   null : bool
  *   owner : DeclTestObject
  *   importedParents : IndexCtxtObject
+ *   range : string
  */
 
 namespace KDevelop
@@ -159,6 +160,22 @@ ContextTest(importedParents)
             return CONTEXT_ERROR.arg(it.key());
     }
     return SUCCESS;
+}
+
+///JSON type: string
+///@returns stringified context range
+ContextTest(range)
+{
+    if (!ctxt) {
+        return "Invalid Context";
+    }
+    auto range = ctxt->range();
+    QString string = QString("[(%1, %2), (%3, %4)]")
+    .arg(range.start.line)
+    .arg(range.start.column)
+    .arg(range.end.line)
+    .arg(range.end.column);
+    return compareValues(string, value, "Contexts's range");
 }
 
 }

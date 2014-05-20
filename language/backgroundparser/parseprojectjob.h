@@ -34,7 +34,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParseProjectJob : public KJob
 {
     Q_OBJECT
 public:
-    ParseProjectJob(KDevelop::IProject* project);
+    ParseProjectJob(KDevelop::IProject* project, bool forceUpdate = false );
     virtual ~ParseProjectJob();
     virtual void start();
     virtual bool doKill();
@@ -46,6 +46,7 @@ private Q_SLOTS:
 private:
     int m_updated;
     int m_totalFiles;
+    bool m_forceUpdate;
     KDevelop::IProject* m_project;
     void updateProgress();
 };

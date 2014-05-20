@@ -35,6 +35,7 @@
 namespace KDevelop
 {
 class ProjectBaseItem;
+class IProject;
 
 typedef QHash<QString, QVariant> Defines;
 struct ConfigEntry
@@ -46,22 +47,57 @@ struct ConfigEntry
     ConfigEntry( const QString& path = QString() ) : path( path ) {}
 };
 
-/** An interface that provides language plugins with user specified include directories/files and defines.
+/** An interface that provides language plugins with include directories/files and defines.
 * Call IDefinesAndIncludesManager::manager() to get the instance of the plugin.
+* NOTE: None of the methods in this interface is thread-safe.
 **/
 class KDEVPLATFORMLANGUAGE_EXPORT IDefinesAndIncludesManager
 {
 public:
-    ///@return list of all custom defines for @p item
-    virtual QHash<QString, QString> defines( const ProjectBaseItem* item ) const = 0;
+    /// The type of includes/defines
+    enum Type {
+        CompilerSpecific = 1, ///< Those that compiler provides
+        ProjectSpecific = 2, ///< Those that project manager provides
+        UserDefined = 4,    ///< Those that user defines
+        All = CompilerSpecific | ProjectSpecific | UserDefined
+     };
 
-    ///@return list of all custom includes for @p item
-    virtual Path::List includes( const ProjectBaseItem* item ) const = 0;
+    /// Class that actually does all the work of calculating i/d.
+    /// Implement one in e.g. project manager and register it with @see registerProvider
+    /// To unregister it use @see unregisterProvider
+    class Provider
+    {
+    public:
+        virtual ~Provider() = default;
 
-    ///@return instance of the plugin if one is loaded, nullptr otherwise
+        virtual QHash<QString, QString> defines( ProjectBaseItem* item ) const = 0;
+
+        virtual Path::List includes( ProjectBaseItem* item ) const = 0;
+
+        /// @return the type of i/d this provider provides
+        virtual Type type() const = 0;
+    };
+
+    ///@return list of defines for @p item
+    virtual QHash<QString, QString> defines( ProjectBaseItem* item, Type type = All ) const = 0;
+
+    ///@return list of include directories/files for @p item
+    virtual Path::List includes( ProjectBaseItem* item, Type type = All ) const = 0;
+
+    ///@return the instance of the plugin.
     static IDefinesAndIncludesManager* manager();
 
     virtual ~IDefinesAndIncludesManager();
+
+    /// Register the @p provider
+    virtual void registerProvider(Provider* provider) = 0;
+
+     /**
+     * Unregister the provider
+     *
+     * @return true on success, false otherwise (e.g. if not registered)
+     */
+    virtual bool unregisterProvider(Provider* provider) = 0;
 };
 }
 
