@@ -29,6 +29,7 @@
 #include <language/codegen/coderepresentation.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/duchain.h>
+#include <language/duchain/duchainlock.h>
 #include <language/util/includeitem.h>
 
 #include "interfaces/foregroundlock.h"
@@ -36,6 +37,8 @@
 #include <project/projectmodel.h>
 
 #include <QDirIterator>
+#include <QThread>
+#include <QCoreApplication>
 
 template<class T>
 static QList<T> makeListUnique(const QList<T>& list)
@@ -320,6 +323,9 @@ private:
 
 Path::List findIncludePaths(const QString& source)
 {
+  Q_ASSERT(QThread::currentThread() == qApp->thread() ||
+           (!DUChain::lock()->currentThreadHasReadLock() && !DUChain::lock()->currentThreadHasWriteLock()));
+
   IncludePathComputer comp(source);
   IncludePathForegroundComputer foreground(&comp);
   foreground.doIt();

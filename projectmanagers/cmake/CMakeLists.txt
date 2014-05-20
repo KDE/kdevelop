@@ -76,7 +76,7 @@ remove_definitions( -DQT_NO_STL )
 qt5_wrap_ui( cmakecommon_SRCS ${cmakecommon_UI} )
 add_library( kdev4cmakecommon SHARED ${cmakecommon_SRCS} )
 target_link_libraries( kdev4cmakecommon LINK_PRIVATE ${KDE4_KDEUI_LIBS}
-                        KF5::TextEditor ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES}
+                        KF5::TextEditor ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_UTIL_LIBRARIES}
                         ${QT_QTSCRIPT_LIBRARY} ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
                         )
 

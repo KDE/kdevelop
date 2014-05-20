@@ -92,7 +92,6 @@
 #include "codegen/simplerefactoring.h"
 // #include "codegen/cppclasshelper.h"
 #include "includepathcomputer.h"
-#include "codecompletion/missingincludemodel.h"
 
 //#include <valgrind/callgrind.h>
 
@@ -178,7 +177,6 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
     m_highlights = new CppHighlighting( this );
     m_refactoring = new SimpleRefactoring(this);
     m_cc = new KDevelop::CodeCompletion( this, new Cpp::CodeCompletionModel(0), name() );
-    m_missingIncludeCompletion = new KDevelop::CodeCompletion( this, new Cpp::MissingIncludeCompletionModel(0), name() );
 
     Cpp::EnvironmentManager::init();
     Cpp::EnvironmentManager::self()->setSimplifiedMatching(true);

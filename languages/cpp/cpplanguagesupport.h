@@ -161,7 +161,7 @@ private:
 
     CppHighlighting *m_highlights;
     SimpleRefactoring *m_refactoring;
-    KDevelop::CodeCompletion *m_cc, *m_missingIncludeCompletion;
+    KDevelop::CodeCompletion *m_cc;
     
     CppTools::IncludePathResolver *m_includeResolver;
     IncludeFileDataProvider* m_quickOpenDataProvider;

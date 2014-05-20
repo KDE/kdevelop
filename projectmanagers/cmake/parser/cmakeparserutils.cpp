@@ -31,7 +31,7 @@
 #include "cmakeprojectvisitor.h"
 #include "cmakeprojectdata.h"
 #include "cmakecachereader.h"
-#include <project/path.h>
+#include <util/path.h>
 #include <ktempdir.h>
 
 namespace CMakeParserUtils

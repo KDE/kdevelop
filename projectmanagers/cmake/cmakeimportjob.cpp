@@ -112,7 +112,7 @@ void CMakeImportJob::initialize()
     ProjectBaseItem* parent = m_dom->parent();
     while (parent && !ctx) {
         DUChainReadLocker lock;
-        ctx = DUChain::self()->chainForDocument(Path(parent->path(), "CMakeLists.txt").toIndexed());
+        ctx = DUChain::self()->chainForDocument(IndexedString(Path(parent->path(), "CMakeLists.txt").pathOrUrl()));
         parent = parent->parent();
     }
     if (!ctx) {
@@ -138,7 +138,7 @@ KDevelop::ReferencedTopDUContext CMakeImportJob::initializeProject(CMakeFolderIt
 
     KDevelop::ReferencedTopDUContext buildstrapContext;
     {
-        const IndexedString idxpath = Path(base, "buildstrap").toIndexed();
+        const IndexedString idxpath(Path(base, "buildstrap").pathOrUrl());
         DUChainWriteLocker lock;
         
         buildstrapContext = DUChain::self()->chainForDocument(idxpath);

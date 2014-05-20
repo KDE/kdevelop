@@ -70,7 +70,7 @@ void CMakeManagerTest::testIncludePaths()
 
     Path fooCpp(sourceDir, "subdir/foo.cpp");
     QVERIFY(QFile::exists(fooCpp.toLocalFile()));
-    QList< ProjectBaseItem* > items = project->itemsForPath(fooCpp.toIndexed());
+    QList< ProjectBaseItem* > items = project->itemsForPath(IndexedString(fooCpp.pathOrUrl()));
     QCOMPARE(items.size(), 2); // once the target, once the plain file
     ProjectBaseItem* fooCppItem = items.first();
 
@@ -92,7 +92,7 @@ void CMakeManagerTest::testRelativePaths()
 
     Path codeCpp(project->path(), "../src/code.cpp");
     QVERIFY(QFile::exists( codeCpp.toLocalFile()));
-    QList< ProjectBaseItem* > items = project->itemsForPath( codeCpp.toIndexed() );
+    QList< ProjectBaseItem* > items = project->itemsForPath(IndexedString(codeCpp.pathOrUrl()));
     QCOMPARE(items.size(), 1); // once in the target
     ProjectBaseItem* fooCppItem = items.first();
 
@@ -108,7 +108,7 @@ void CMakeManagerTest::testTargetIncludePaths()
 
     Path mainCpp(project->path(), "main.cpp");
     QVERIFY(QFile::exists(mainCpp.toLocalFile()));
-    QList< ProjectBaseItem* > items = project->itemsForPath(mainCpp.toIndexed());
+    QList< ProjectBaseItem* > items = project->itemsForPath(IndexedString(mainCpp.pathOrUrl()));
     QCOMPARE(items.size(), 2); // once the plain file, once the target
 
     bool foundInTarget = false;
@@ -132,7 +132,7 @@ void CMakeManagerTest::testTargetIncludeDirectories()
 
     Path mainCpp(project->path(), "main.cpp");
     QVERIFY(QFile::exists(mainCpp.toLocalFile()));
-    QList< ProjectBaseItem* > items = project->itemsForPath(mainCpp.toIndexed());
+    QList< ProjectBaseItem* > items = project->itemsForPath(IndexedString(mainCpp.pathOrUrl()));
     QCOMPARE(items.size(), 2); // once the plain file, once the target
 
     bool foundInTarget = false;
@@ -160,7 +160,7 @@ void CMakeManagerTest::testQt5App()
 
     Path mainCpp(project->path(), "main.cpp");
     QVERIFY(QFile::exists(mainCpp.toLocalFile()));
-    QList< ProjectBaseItem* > items = project->itemsForPath(mainCpp.toIndexed());
+    QList< ProjectBaseItem* > items = project->itemsForPath(IndexedString(mainCpp.pathOrUrl()));
     QCOMPARE(items.size(), 2); // once the plain file, once the target
 
     bool foundCore = false, foundGui = false, foundWidgets = false;
@@ -188,7 +188,7 @@ void CMakeManagerTest::testKF5App()
 
     Path mainCpp(project->path(), "main.cpp");
     QVERIFY(QFile::exists(mainCpp.toLocalFile()));
-    QList< ProjectBaseItem* > items = project->itemsForPath(mainCpp.toIndexed());
+    QList< ProjectBaseItem* > items = project->itemsForPath(IndexedString(mainCpp.pathOrUrl()));
     QCOMPARE(items.size(), 2); // once the plain file, once the target
 
     bool foundCore = false, foundGui = false, foundWidgets = false, foundWidgetsAddons = false;
@@ -215,7 +215,7 @@ void CMakeManagerTest::testDefines()
 
     Path mainCpp(project->path(), "main.cpp");
     QVERIFY(QFile::exists(mainCpp.toLocalFile()));
-    QList< ProjectBaseItem* > items = project->itemsForPath(mainCpp.toIndexed());
+    QList< ProjectBaseItem* > items = project->itemsForPath(IndexedString(mainCpp.pathOrUrl()));
     QCOMPARE(items.size(), 2); // once the plain file, once the target
 
     bool foundInTarget = false;
@@ -273,12 +273,12 @@ void CMakeManagerTest::testConditionsInSubdirectoryBasedOnRootVariables()
 
     Path rootFooCpp(project->path(), "foo.cpp");
     QVERIFY(QFile::exists(rootFooCpp.toLocalFile()));
-    QList< ProjectBaseItem* > rootFooItems = project->itemsForPath(rootFooCpp.toIndexed());
+    QList< ProjectBaseItem* > rootFooItems = project->itemsForPath(IndexedString(rootFooCpp.pathOrUrl()));
     QCOMPARE(rootFooItems.size(), 4); // three items for the targets, one item for the plain file
 
     Path subdirectoryFooCpp(project->path(), "subdirectory/foo.cpp");
     QVERIFY(QFile::exists(subdirectoryFooCpp.toLocalFile()));
-    QList< ProjectBaseItem* > subdirectoryFooItems = project->itemsForPath(subdirectoryFooCpp.toIndexed());
+    QList< ProjectBaseItem* > subdirectoryFooItems = project->itemsForPath(IndexedString(subdirectoryFooCpp.pathOrUrl()));
     QCOMPARE(subdirectoryFooItems.size(), 4); // three items for the targets, one item for the plain file
 }
 

@@ -91,7 +91,7 @@ QList<IndexedString> convertFromPaths(const Path::List& paths) {
   QList<IndexedString> ret;
   ret.reserve(paths.size());
   foreach(const Path& path, paths) {
-    ret << path.toIndexed();
+    ret << IndexedString(path.pathOrUrl());
   }
   return ret;
 }

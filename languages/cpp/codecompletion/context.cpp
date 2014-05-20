@@ -56,7 +56,6 @@
 #include "missingincludeitem.h"
 #include "implementationhelperitem.h"
 #include <qtfunctiondeclaration.h>
-#include "missingincludemodel.h"
 #include <templateparameterdeclaration.h>
 #include <expressionparser.h>
 #include <language/duchain/classdeclaration.h>
@@ -442,9 +441,6 @@ CodeCompletionContext( KDevelop::DUContextPointer context, const QString& text,
     m_expressionIsTypePrefix( false ),
     m_doAccessFiltering( DO_ACCESS_FILTERING )
 {
-#ifndef TEST_COMPLETION
-  MissingIncludeCompletionModel::self().stop();
-#endif
   if ( doIncludeCompletion() )
     return;
   //We'll have to get a few expressionResults and do other DUChain processing during construction
@@ -529,17 +525,6 @@ void CodeCompletionContext::processAllMemberAccesses() {
 
   if(type.cast<PointerType>())
     replaceCurrentAccess( ".", "->" );
-
-#ifndef TEST_COMPLETION // hmzzz ?? :) ///FIXME: manually test for these cases and get rid of comment to the left
-  DelayedType::Ptr delayed = type.cast<DelayedType>();
-  if( delayed && delayed->kind() == DelayedType::Unresolved ) {
-    eventuallyAddGroup(
-      i18n( "Not Included" ), 1000,
-      missingIncludeCompletionItems( m_expression, m_followingText + ": ",
-                                     m_expressionResult, m_duContext.data(), 0, true )
-    );
-  }
-#endif
 }
 
 void CodeCompletionContext::processArrowMemberAccess() {
@@ -1347,7 +1332,8 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::memberAccessCompletionIt
   if (containers.isEmpty())
   {
     ifDebug( kDebug() << "missing-include completion for" << m_expression << m_expressionResult.toString(); )
-    eventuallyAddGroup(i18n("Not Included Container"), 700, missingIncludeCompletionItems(m_expression, QString(), m_expressionResult, m_duContext.data(), 0, true ));
+    lock.unlock();
+    eventuallyAddGroup(i18n("Not Included"), 700, missingIncludeCompletionItems(m_expression, QString(), m_expressionResult, m_duContext, 0, true ));
   }
 
   //Used to show only one namespace-declaration per namespace
@@ -1476,7 +1462,8 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::templateAccessCompletion
     item->m_isTemplateCompletion = true;
     items << CompletionTreeItemPointer( item );
   }else{
-    items += missingIncludeCompletionItems(m_expression, QString(), m_expressionResult, m_duContext.data(), depth(), true );
+    lock.unlock();
+    items += missingIncludeCompletionItems(m_expression, QString(), m_expressionResult, m_duContext, depth(), true );
   }
   return items;
 }
@@ -1488,9 +1475,11 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::commonFunctionAccessComp
   uint max = MoreArgumentHintsCompletionItem::resetMaxArgumentHints(!fullCompletion);
 
   if(functions().isEmpty() && m_accessType != BinaryOpFunctionCallAccess) {
-    items += missingIncludeCompletionItems(m_expression, QString(), m_expressionResult, m_duContext.data(), depth(), true );
+    items += missingIncludeCompletionItems(m_expression, QString(), m_expressionResult, m_duContext, depth(), true );
     return items;
   }
+
+  LOCKDUCHAIN; if (!m_duContext) return items;
 
   uint num = 0;
   foreach( const Cpp::CodeCompletionContext::Function &function, functions() ) {
@@ -1511,9 +1500,10 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::commonFunctionAccessComp
 QList< CompletionTreeItemPointer > CodeCompletionContext::binaryFunctionAccessCompletionItems( bool fullCompletion )
 {
   QList<CompletionTreeItemPointer> items;
-  LOCKDUCHAIN; if (!m_duContext) return items;
 
   items += commonFunctionAccessCompletionItems(fullCompletion);
+
+  LOCKDUCHAIN; if (!m_duContext) return items;
 
   //Argument-hints for builtin operators
   AbstractType::Ptr type = m_expressionResult.type.abstractType();
@@ -1559,9 +1549,10 @@ QList< CompletionTreeItemPointer > CodeCompletionContext::binaryFunctionAccessCo
 QList<CompletionTreeItemPointer> CodeCompletionContext::functionAccessCompletionItems(bool fullCompletion)
 {
   QList<CompletionTreeItemPointer> items;
-  LOCKDUCHAIN; if (!m_duContext) return items;
 
   items += commonFunctionAccessCompletionItems(fullCompletion);
+
+  LOCKDUCHAIN; if (!m_duContext) return items;
 
   if(!m_expressionResult.isValid() ||
      !m_expressionResult.type.abstractType() ||
@@ -1953,6 +1944,7 @@ void CodeCompletionContext::addImplementationHelpers()
 void CodeCompletionContext::addCPPBuiltin()
 {
   ///Eventually add a "this" item
+  LOCKDUCHAIN; if (!m_duContext) return;
   DUContext* functionContext = m_duContext.data();
   if(m_onlyShow != ShowSignals && m_onlyShow != ShowSlots && m_onlyShow != ShowTypes) {
     while(functionContext && functionContext->type() == DUContext::Other && functionContext->parentContext() && functionContext->parentContext()->type() == DUContext::Other)
@@ -2040,9 +2032,8 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& sh
         if(depth() == 0 && (m_onlyShow == ShowAll || m_onlyShow == ShowTypes || m_onlyShow == ShowIntegralConstants))
         {
           items += standardAccessCompletionItems();
-          LOCKDUCHAIN; if (!m_duContext) return items;
 #ifndef TEST_COMPLETION
-          MissingIncludeCompletionModel::self().startWithExpression(m_duContext, QString(), m_followingText);
+          eventuallyAddGroup(i18n("Not Included"), 700, missingIncludeCompletionItems(m_followingText + ':', {}, {}, m_duContext));
 #endif
           addCPPBuiltin();
         }
@@ -2064,13 +2055,6 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& sh
 
     if(depth() == 0)
     {
-      //Eventually add missing include-completion in cases like SomeNamespace::NotIncludedClass|
-      if(m_accessType == StaticMemberChoose) {
-#ifndef TEST_COMPLETION
-        MissingIncludeCompletionModel::self().startWithExpression(m_duContext, m_expression + "::", m_followingText);
-#endif
-      }
-
       if (!parentContext())
         addOverridableItems();
       if (isImplementationHelperValid())

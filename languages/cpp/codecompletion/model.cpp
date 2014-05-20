@@ -23,10 +23,18 @@
 #include "model.h"
 
 #include <kdebug.h>
+
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
+#include <ktexteditor/codecompletioninterface.h>
 
 #include <language/codecompletion/codecompletioncontext.h>
+#include <language/backgroundparser/backgroundparser.h>
+
+#include <interfaces/icore.h>
+#include <interfaces/ilanguagecontroller.h>
+#include <interfaces/idocumentcontroller.h>
+
 #include "worker.h"
 #include "context.h"
 #include "../cppduchain/typeconversion.h"
@@ -36,6 +44,8 @@ using namespace KDevelop;
 
 namespace Cpp {
 
+CodeCompletionModel* CodeCompletionModel::s_self = nullptr;
+
 bool useArgumentHintInAutomaticCompletion() {
   return false;
 }
@@ -44,6 +54,51 @@ CodeCompletionModel::CodeCompletionModel( QObject * parent )
   : KDevelop::CodeCompletionModel(parent)
 {
   setForceWaitForModel(true);
+  Q_ASSERT(!s_self);
+  s_self = this;
+
+  connect(ICore::self()->languageController()->backgroundParser(), SIGNAL(parseJobFinished(KDevelop::ParseJob*)),
+          this, SLOT(parseJobFinished(KDevelop::ParseJob*)));
+}
+
+CodeCompletionModel::~CodeCompletionModel()
+{
+  s_self = nullptr;
+}
+
+CodeCompletionModel* CodeCompletionModel::self()
+{
+  return s_self;
+}
+
+void CodeCompletionModel::startCompletionAfterParsing(const IndexedString& path)
+{
+  m_awaitDocument = path;
+}
+
+void CodeCompletionModel::parseJobFinished(ParseJob* job)
+{
+  if (job->document() != m_awaitDocument || ICore::self()->languageController()->backgroundParser()->isQueued(m_awaitDocument)) {
+    return;
+  }
+
+  IDocument* doc = ICore::self()->documentController()->documentForUrl(m_awaitDocument.toUrl());
+  m_awaitDocument = {};
+
+  if (!doc) {
+    return;
+  }
+
+  auto view = doc->activeTextView();
+  if (!view || !view->hasFocus()) {
+    return;
+  }
+
+  auto iface = dynamic_cast<KTextEditor::CodeCompletionInterface*>(view);
+  if (iface) {
+    ///@todo 1. This is a non-public interface, and 2. Completion should be started in "automatic invocation" mode
+    QMetaObject::invokeMethod(view, "userInvokedCompletion");
+  }
 }
 
 bool CodeCompletionModel::shouldStartCompletion(KTextEditor::View* view, const QString& inserted, bool userInsertion, const KTextEditor::Cursor& position) {
@@ -106,10 +161,6 @@ bool CodeCompletionModel::shouldAbortCompletion(KTextEditor::View* view, const K
 
 KDevelop::CodeCompletionWorker* CodeCompletionModel::createCompletionWorker() {
   return new CodeCompletionWorker(this);
-}
-
-CodeCompletionModel::~CodeCompletionModel()
-{
 }
 
 Range CodeCompletionModel::updateCompletionRange(View* view, const KTextEditor::Range& range) {

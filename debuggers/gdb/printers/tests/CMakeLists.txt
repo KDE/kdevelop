@@ -69,7 +69,7 @@ add_debuggable_executable(ktexteditortypes SRCS ktexteditortypes.cpp)
 target_link_libraries(ktexteditortypes Qt5::Core KF5::TextEditor)
 
 add_debuggable_executable(kdeveloptypes SRCS kdeveloptypes.cpp)
-target_link_libraries(kdeveloptypes ${QT_QTCORE_LIBRARY} KF5::TextEditor ${KDEVPLATFORM_PROJECT_LIBRARIES})
+target_link_libraries(kdeveloptypes Qt5::Core KF5::TextEditor ${KDEVPLATFORM_UTIL_LIBRARIES})
 
 ecm_add_test(qtprinters
 LINK_LIBRARIES

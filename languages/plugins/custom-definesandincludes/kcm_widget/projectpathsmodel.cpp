@@ -21,7 +21,7 @@
 #include <klocale.h>
 #include <interfaces/iproject.h>
 #include <language/duchain/indexedstring.h>
-#include <project/path.h>
+#include <util/path.h>
 
 namespace{
 //TODO: Port the model to the Path api.

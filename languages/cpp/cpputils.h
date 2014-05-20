@@ -20,7 +20,7 @@
 #define CPPUTILS_H
 
 #include "environmentmanager.h"
-#include <project/path.h>
+#include <util/path.h>
 
 namespace KDevelop
 {
@@ -61,7 +61,8 @@ QPair<KDevelop::Path, KDevelop::Path> findInclude(const KDevelop::Path::List& in
 bool needsUpdate(const Cpp::EnvironmentFilePointer& file, const KDevelop::Path& localPath, const KDevelop::Path::List& includePaths );
 
 ///Returns the include-path. Each dir has a trailing slash. Search should be iterated forward through the list
-///@param problems If this is nonzero, eventual problems will be added to the list
+// NOTE: _no_ lock must be held when calling this, otherwise you might deadlock since this is a very ugly hacky function
+// which must call stuff from the foreground thread...
 KDevelop::Path::List findIncludePaths(const QString& source);
 
 /**

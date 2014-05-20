@@ -26,6 +26,12 @@
 #include "definesandincludesmanager.h"
 
 #include <interfaces/iruncontroller.h>
+#include <interfaces/iproject.h>
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/icore.h>
+#include <interfaces/idocumentcontroller.h>
+#include <interfaces/idocument.h>
+#include <language/duchain/indexedstring.h>
 
 #include "kcm_customdefinesandincludes.h"
 
@@ -70,6 +76,19 @@ void DefinesAndIncludes::saveTo(KConfig* cfg, KDevelop::IProject*)
         auto manager = static_cast<KDevelop::DefinesAndIncludesManager*>(IManager);
         manager->writeSettings( cfg, configWidget->paths() );
     }
+
+    auto grp = cfg->group("Custom Defines And Includes");
+    if (grp.readEntry("reparse", true)) {
+        using namespace KDevelop;
+        ICore::self()->projectController()->reparseProject(project(), true);
+
+        //TODO: BackgroundParser should check whether a document is currently opened and prioritize it then. The _focused_ one should be prioritized even further.
+        for (auto document : ICore::self()->documentController()->openDocuments()) {
+            if (!project()->filesForPath(IndexedString(document->url())).isEmpty()) {
+                document->reload();
+            }
+        }
+    }
 }
 
 void DefinesAndIncludes::load()
@@ -80,8 +99,8 @@ void DefinesAndIncludes::load()
 
 void DefinesAndIncludes::save()
 {
-    saveTo( CustomDefinesAndIncludes::self()->config(), project() );
     KCModule::save();
+    saveTo( CustomDefinesAndIncludes::self()->config(), project() );
 }
 
 #include "kcm_customdefinesandincludes.moc"

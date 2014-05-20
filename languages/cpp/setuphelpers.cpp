@@ -36,8 +36,8 @@ namespace CppTools {
 QStringList msvcSetupStandardIncludePaths();
 const QVector<rpp::pp_macro*>& msvcStandardMacros();
 #else
-QStringList gccSetupStandardIncludePaths();
-const QVector<rpp::pp_macro*>& gccStandardMacros();
+QStringList gccLikeSetupStandardIncludePaths();
+const QVector<rpp::pp_macro*>& gccLikeStandardMacros();
 #endif
 
 QStringList setupStandardIncludePaths()
@@ -46,7 +46,7 @@ QStringList setupStandardIncludePaths()
 #ifdef _MSC_VER
     QStringList includePaths = msvcSetupStandardIncludePaths();
 #else
-    QStringList includePaths = gccSetupStandardIncludePaths();
+    QStringList includePaths = gccLikeSetupStandardIncludePaths();
 #endif
     return includePaths;
 }
@@ -186,9 +186,9 @@ Cpp::ReferenceCountedMacroSet setupStandardMacros()
 #ifdef _MSC_VER    
     foreach(const rpp::pp_macro* macro, msvcStandardMacros())
 #else
-    foreach(const rpp::pp_macro* macro, gccStandardMacros())
+    foreach(const rpp::pp_macro* macro, gccLikeStandardMacros())
 #endif
-      insertMacro(macros, *macro);
+    insertMacro(macros, *macro);
     
     return macros;
 }

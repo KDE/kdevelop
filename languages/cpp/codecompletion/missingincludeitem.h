@@ -62,7 +62,7 @@ class ForwardDeclarationItem : public NormalDeclarationCompletionItem {
 QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(const QString& expression,
                                                                          const QString& displayTextPrefix,
                                                                          const Cpp::ExpressionEvaluationResult& expressionResult,
-                                                                         KDevelop::DUContext* context,
+                                                                         const KDevelop::DUContextPointer& context,
                                                                          int argumentHintDepth = 0,
                                                                          bool needInstance = false);
 

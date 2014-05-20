@@ -23,7 +23,7 @@
 
 #include <KJob>
 #include <cmaketypes.h>
-#include <project/path.h>
+#include <util/path.h>
 
 namespace KDevelop {
     class IProject;

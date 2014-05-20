@@ -3,6 +3,7 @@
 *
 * Copyright 2007-2008 David Nolden <david.nolden.kdevelop@art-master.de>
 * Copyright 2007 Kris Wong <kris.p.wong@gmail.com>
+* Copyright 2014 Luis Felipe Domínguez Vega <lfdominguez@estudiantes.uci.cu>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU Library General Public License as
@@ -19,11 +20,14 @@
 * Free Software Foundation, Inc.,
 * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
+
 #include "setuphelpers.h"
 
 #include <QString>
 #include <QStringList>
 #include <QDir>
+#include <QRegExp>
+#include <string>
 
 #include <kprocess.h>
 #include <kdebug.h>
@@ -40,10 +44,15 @@ using namespace KDevelop;
 
 namespace CppTools {
 
-QStringList gccSetupStandardIncludePaths(bool withStdCpp0x)
+const QVector<QString> SUPPORTED_COMPILERS {
+    QLatin1String("gcc"),
+    QLatin1String("clang")
+};
+
+QStringList computeGccLikeSetupStandardIncludePaths(QString compiler, bool withStdCpp0x)
 {
     QStringList includePaths;
-    
+
     KProcess proc;
     proc.setOutputChannelMode(KProcess::MergedChannels);
 
@@ -59,27 +68,31 @@ QStringList gccSetupStandardIncludePaths(bool withStdCpp0x)
     //  /usr/lib/gcc/i486-linux-gnu/4.1.2/include
     //  /usr/include
     // End of search list.
-    proc << "gcc";
+    proc << compiler;
+
     if (withStdCpp0x) {
-        // see also: https://bugs.kde.org/show_bug.cgi?id=298252
         proc << "-std=c++0x";
     }
-    proc << "-xc++" << "-E" << "-v" << NULL_DEVICE;
 
-    // We'll use the following constants to know what we're currently parsing.
+    proc << "-x" << "c++" << "-fsyntax-only" << "-E" << "-v" << NULL_DEVICE;
+
+     // We'll use the following constants to know what we're currently parsing.
     const short parsingInitial = 0;
     const short parsedFirstSearch = 1;
     const short parsingIncludes = 2;
     const short parsingFinished = 3;
     short parsingMode = parsingInitial;
 
-    if (proc.execute(5000) == 0) {
+    if (proc.execute(5000) == 0){
         QString line;
-        while (proc.canReadLine() && parsingMode != parsingFinished) {
+
+        while (proc.canReadLine() && parsingMode != parsingFinished){
             QByteArray buff = proc.readLine();
-            if (!buff.isEmpty()) {
+
+            if (!buff.isEmpty()){
                 line = buff;
-                switch (parsingMode) {
+
+                switch (parsingMode){
                 case parsingInitial:
                     if (line.indexOf("#include \"...\"") != -1) {
                         parsingMode = parsedFirstSearch;
@@ -105,74 +118,87 @@ QStringList gccSetupStandardIncludePaths(bool withStdCpp0x)
                 }
             }
         }
-    } else if (withStdCpp0x) {
-        // fallback to include-path computation without -std=c++0x arg for old gcc versions
-        return gccSetupStandardIncludePaths(false);
-    } else {
-        kDebug(9007) <<"Unable to read standard c++ macro definitions from gcc:" <<QString(proc.readAll()) ;
+    }else if (withStdCpp0x){
+      includePaths = computeGccLikeSetupStandardIncludePaths (compiler, false);
+    }else{
+      kDebug(9007) << "Unable to read standard C++ include paths from " << compiler << ":" << QString(proc.readAll());
     }
-    
+
     return includePaths;
 }
 
-QStringList gccSetupStandardIncludePaths()
-{
-  return gccSetupStandardIncludePaths(true);
+QStringList gccLikeSetupStandardIncludePaths(){
+    foreach (const QString &compiler, SUPPORTED_COMPILERS){
+        const QStringList includePaths = computeGccLikeSetupStandardIncludePaths(compiler, true);
+
+        if (!includePaths.isEmpty()){
+          return includePaths;
+        }
+    }
+
+    kDebug(9007) << "Unable read the standard C++ include paths from any compiler";
+
+    return {};
 }
 
-QVector<rpp::pp_macro*> computeGccStandardMacros(bool withStdCpp0x = true)
+QVector<rpp::pp_macro*> computeGccLikeStandardMacros(QString compiler, bool withStdCpp0x)
 {
     QVector<rpp::pp_macro*> ret;
-    //Get standard macros from gcc
+
+    //This expression extract a definition: example: "#define __llvm__ 1"
+    QRegExp defineExpression ("#define ([^\\s]*)([ ]+(.*))*");
+
     KProcess proc;
     proc.setOutputChannelMode(KProcess::MergedChannels);
+    proc << compiler;
 
-    // The output of the following gcc commands is several line in the format:
-    // "#define MACRO [definition]", where definition may or may not be present.
-    // Parsing each line sequentially, we can easily build the macro set.
-    proc << "gcc";
     if (withStdCpp0x) {
-        // see also: https://bugs.kde.org/show_bug.cgi?id=298252
         proc << "-std=c++0x";
     }
-    proc << "-xc++" << "-E" << "-dM" <<NULL_DEVICE;
 
-    if (proc.execute(5000) == 0) {
+    proc << "-x" << "c++" << "-dM" << "-fsyntax-only" << "-E" << NULL_DEVICE;
+
+    if (proc.execute(5000) == 0){
         QString line;
-        while (proc.canReadLine()) {
+
+        while (proc.canReadLine()){
             QByteArray buff = proc.readLine();
-            if (!buff.isEmpty()) {
-                line = buff;
-                if (line.startsWith("#define ")) {
-                    line = line.right(line.length() - 8).trimmed();
-                    int pos = line.indexOf(' ');
-                    
-                    ret.append(new rpp::pp_macro);
-                    
-                    rpp::pp_macro& macro(*ret.back());
-                    if (pos != -1) {
-                        macro.name = IndexedString( line.left(pos) );
-                        macro.setDefinitionText( line.right(line.length() - pos - 1).toUtf8() );
-                    } else {
-                        macro.name = IndexedString( line );
-                    }
+
+            if (defineExpression.indexIn(buff) != -1){
+                rpp::pp_macro *macro = new rpp::pp_macro;
+                macro->name = IndexedString(defineExpression.cap(1));
+
+                if (defineExpression.captureCount() > 2){
+                    macro->setDefinitionText(defineExpression.cap(3));
                 }
+
+                ret.append(macro);
             }
         }
-    } else if (withStdCpp0x) {
-        // fallback to macro computation without -std=c++0x arg for old gcc versions
-        return computeGccStandardMacros(false);
-    } else {
-        kDebug(9007) <<"Unable to read standard c++ macro definitions from gcc:" <<QString(proc.readAll()) ;
+    }else if (withStdCpp0x){
+      ret = computeGccLikeStandardMacros (compiler, false);
+    }else{
+      kDebug(9007) << "Unable to read standard C++ macro definitions from " << compiler << ":" << QString(proc.readAll());
     }
+
     return ret;
 }
 
-const QVector<rpp::pp_macro*>& gccStandardMacros()
+const QVector<rpp::pp_macro*>& gccLikeStandardMacros()
 {
-  static QVector<rpp::pp_macro*> macros = computeGccStandardMacros();
-  return macros;
+    static QVector<rpp::pp_macro*> macros;
+
+    foreach (const QString &compiler, SUPPORTED_COMPILERS){
+        macros = computeGccLikeStandardMacros(compiler, true);
+
+        if (!macros.isEmpty()){
+          return macros;
+        }
+    }
+
+    kDebug(9007) << "Unable read the standard C++ macros from any compiler";
+
+    return macros;
 }
 
 }
-

@@ -23,6 +23,7 @@
 #define CUSTOMDEFINESANDINCLUDESMANAGER_H
 
 #include <QVariantList>
+#include <QVector>
 
 #include <interfaces/iplugin.h>
 
@@ -40,14 +41,21 @@ class DefinesAndIncludesManager : public IPlugin, public IDefinesAndIncludesMana
 public :
     explicit DefinesAndIncludesManager( QObject* parent, const QVariantList& args = QVariantList() );
     ///@return list of all custom defines for @p item
-    QHash<QString, QString> defines( const ProjectBaseItem* item ) const override;
+    QHash<QString, QString> defines( ProjectBaseItem* item, Type type ) const override;
 
     ///@return list of all custom includes for @p item
-    Path::List includes( const ProjectBaseItem* item ) const override;
+    Path::List includes( ProjectBaseItem* item, Type type  ) const override;
+
+    virtual void registerProvider( Provider* provider ) override;
+
+    virtual bool unregisterProvider( Provider* provider ) override;
 
     virtual QList<ConfigEntry> readSettings( KConfig* cfg ) const;
 
     virtual void writeSettings( KConfig* cfg, const QList<ConfigEntry>& paths ) const;
+
+private:
+    QVector<Provider*> m_providers;
 };
 }
 #endif // CUSTOMDEFINESANDINCLUDESMANAGER_H

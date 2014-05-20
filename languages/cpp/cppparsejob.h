@@ -24,7 +24,7 @@
 #define CPPPARSEJOB_H
 
 #include <language/backgroundparser/parsejob.h>
-#include <project/path.h>
+#include <util/path.h>
 
 #include <QStringList>
 #include <QWaitCondition>

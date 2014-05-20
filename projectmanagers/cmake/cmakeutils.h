@@ -24,7 +24,7 @@
 #include "cmakeexport.h"
 #include <KUrl>
 #include <QStringList>
-#include <project/path.h>
+#include <util/path.h>
 
 namespace KDevelop
 {

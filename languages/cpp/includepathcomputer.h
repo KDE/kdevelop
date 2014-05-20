@@ -17,7 +17,7 @@
 #ifndef INCLUDEPATHCOMPUTER_H
 #define INCLUDEPATHCOMPUTER_H
 
-#include <project/path.h>
+#include <util/path.h>
 
 #include "includepathresolver.h"
 

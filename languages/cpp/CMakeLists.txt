@@ -22,7 +22,7 @@ set(kdevcpplanguagesupport_PART_SRCS
     cpputils.cpp
     includepathresolver.cpp
     setuphelpers.cpp
-    setuphelpers_gcc.cpp
+    setuphelpers_gcc_like.cpp
     quickopen.cpp
     
     codecompletion/model.cpp
@@ -32,7 +32,6 @@ set(kdevcpplanguagesupport_PART_SRCS
     codecompletion/helpers.cpp
     codecompletion/missingincludeitem.cpp
     codecompletion/implementationhelperitem.cpp
-    codecompletion/missingincludemodel.cpp
 
 #    codegen/cppnewclass.cpp
     codegen/simplerefactoring.cpp
@@ -80,9 +79,10 @@ target_link_libraries(kdevcpplanguagesupport
     kdev4cppduchain
     kdev4cppparser
     ${KDEVPLATFORM_INTERFACES_LIBRARIES}
-    ${KDEVPLATFORM_PROJECT_LIBRARIES}
-    ${KDE4_THREADWEAVER_LIBRARIES}
     ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
+    ${KDEVPLATFORM_PROJECT_LIBRARIES}
+    ${KDEVPLATFORM_UTIL_LIBRARIES}
+    ${KDE4_THREADWEAVER_LIBRARIES}
     
     KF5::TextEditor
 )

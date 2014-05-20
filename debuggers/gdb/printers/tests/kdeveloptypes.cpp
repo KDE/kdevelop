@@ -1,4 +1,4 @@
-#include <project/path.h>
+#include <util/path.h>
 
 #include <QDebug>
 

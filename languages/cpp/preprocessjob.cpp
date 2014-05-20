@@ -452,7 +452,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
 
     Path includedFile = included.first;
     if (includedFile.isValid()) {
-        const IndexedString indexedFile = includedFile.toIndexed();
+        const IndexedString indexedFile(includedFile.pathOrUrl());
         
         {
           //Prevent recursion that may cause a crash
