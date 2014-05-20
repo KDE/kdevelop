@@ -308,6 +308,114 @@ void DeclarationBuilder::endVisit(QmlJS::AST::PropertyNameAndValue* node)
 }
 
 /*
+ * plugin.qmltypes files
+ */
+void DeclarationBuilder::declareComponent(QmlJS::AST::UiObjectDefinition* node,
+                                          const RangeInRevision &range,
+                                          const QualifiedIdentifier &name)
+{
+    QString inherits = QmlJS::getQMLAttributeValue(node->initializer->members, "prototype").value;
+
+    StructureType::Ptr type(new StructureType);
+    type->setDeclarationId(DeclarationId(name));
+
+    {
+        DUChainWriteLocker lock;
+        ClassDeclaration* decl = openDeclaration<ClassDeclaration>(name, range, DeclarationIsDefinition);
+
+        decl->setKind(Declaration::Type);
+        decl->clearBaseClasses();
+
+        if (!inherits.isNull()) {
+            BaseClassInstance baseclass;
+
+            baseclass.access = Declaration::Public;
+            baseclass.virtualInheritance = false;
+            baseclass.baseClass = typeFromClassName(inherits)->indexed();
+
+
+            decl->addBaseClass(baseclass);
+        }
+    }
+    openType(type);
+}
+
+void DeclarationBuilder::declareMethod(QmlJS::AST::UiObjectDefinition* node,
+                                       const RangeInRevision &range,
+                                       const QualifiedIdentifier &name,
+                                       bool isSlot,
+                                       bool isSignal)
+{
+    QString type_name = QmlJS::getQMLAttributeValue(node->initializer->members, "type").value;
+    FunctionType::Ptr type(new FunctionType);
+
+    if (type_name.isNull()) {
+        type->setReturnType(typeFromName("void"));
+    } else {
+        type->setReturnType(typeFromName(type_name));
+    }
+
+    {
+        DUChainWriteLocker lock;
+        ClassFunctionDeclaration* decl = openDeclaration<ClassFunctionDeclaration>(name, range);
+
+        decl->setIsSlot(isSlot);
+        decl->setIsSignal(isSignal);
+    }
+    openType(type);
+}
+
+void DeclarationBuilder::declareProperty(QmlJS::AST::UiObjectDefinition* node,
+                                         const RangeInRevision &range,
+                                         const QualifiedIdentifier &name)
+{
+    AbstractType::Ptr type = typeFromName(QmlJS::getQMLAttributeValue(node->initializer->members, "type").value);
+
+    {
+        DUChainWriteLocker lock;
+        ClassMemberDeclaration* decl = openDeclaration<ClassMemberDeclaration>(name, range);
+
+        decl->setAbstractType(type);
+    }
+    openType(type);
+}
+
+void DeclarationBuilder::declareParameter(QmlJS::AST::UiObjectDefinition* node,
+                                          const RangeInRevision &range,
+                                          const QualifiedIdentifier &name)
+{
+    FunctionType::Ptr function = currentType<FunctionType>();
+    AbstractType::Ptr type = typeFromName(QmlJS::getQMLAttributeValue(node->initializer->members, "type").value);
+
+    function->addArgument(type);
+
+    {
+        DUChainWriteLocker lock;
+        openDeclaration<Declaration>(name, range);
+    }
+    openType(type);
+}
+
+void DeclarationBuilder::declareEnum(QmlJS::AST::UiObjectDefinition* node,
+                                     const RangeInRevision &range,
+                                     const QualifiedIdentifier &name)
+{
+    EnumerationType::Ptr type(new EnumerationType);
+
+    type->setDeclarationId(DeclarationId(name));
+    type->setDataType(IntegralType::TypeEnumeration);
+
+    {
+        DUChainWriteLocker lock;
+        ClassMemberDeclaration* decl = openDeclaration<ClassMemberDeclaration>(name, range);
+
+        decl->setKind(Declaration::Type);
+        decl->setType(type);                // The type needs to be set here because closeContext is called before closeAndAssignType and needs to know the type of decl
+    }
+    openType(type);
+}
+
+/*
  * UI
  */
 bool DeclarationBuilder::visit(QmlJS::AST::UiObjectDefinition* node)
@@ -327,89 +435,21 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiObjectDefinition* node)
 
     if (baseclass == QLatin1String("Component")) {
         // QML component, equivalent to a QML class
-        QString inherits = QmlJS::getQMLAttributeValue(node->initializer->members, "prototype").value;
-
-        StructureType::Ptr type(new StructureType);
-        type->setDeclarationId(DeclarationId(name));
-
-        {
-            DUChainWriteLocker lock;
-            ClassDeclaration* decl = openDeclaration<ClassDeclaration>(name, range, DeclarationIsDefinition);
-
-            decl->setKind(Declaration::Type);
-            decl->clearBaseClasses();
-
-            if (!inherits.isNull()) {
-                BaseClassInstance baseclass;
-
-                baseclass.access = Declaration::Public;
-                baseclass.virtualInheritance = false;
-                baseclass.baseClass = typeFromClassName(inherits)->indexed();
-
-
-                decl->addBaseClass(baseclass);
-            }
-        }
-        openType(type);
+        declareComponent(node, range, name);
     } else if (baseclass == QLatin1String("Method") ||
                baseclass == QLatin1String("Signal") ||
                baseclass == QLatin1String("Slot")) {
         // Method (that can also be a signal or a slot)
-        QString type_name = QmlJS::getQMLAttributeValue(node->initializer->members, "type").value;
-        FunctionType::Ptr type(new FunctionType);
-
-        if (type_name.isNull()) {
-            type->setReturnType(typeFromName("void"));
-        } else {
-            type->setReturnType(typeFromName(type_name));
-        }
-
-        {
-            DUChainWriteLocker lock;
-            ClassFunctionDeclaration* decl = openDeclaration<ClassFunctionDeclaration>(name, range);
-
-            decl->setIsSlot(baseclass == QLatin1String("Slot"));
-            decl->setIsSignal(baseclass == QLatin1String("Signal"));
-        }
-        openType(type);
+        declareMethod(node, range, name, baseclass == QLatin1String("Slot"), baseclass == QLatin1String("Signal"));
     } else if (baseclass == QLatin1String("Property")) {
         // A property
-        AbstractType::Ptr type = typeFromName(QmlJS::getQMLAttributeValue(node->initializer->members, "type").value);
-
-        {
-            DUChainWriteLocker lock;
-            ClassMemberDeclaration* decl = openDeclaration<ClassMemberDeclaration>(name, range);
-
-            decl->setAbstractType(type);
-        }
-        openType(type);
+        declareProperty(node, range, name);
     } else if (baseclass == QLatin1String("Parameter") && currentType<FunctionType>()) {
         // One parameter of a signal/slot/method
-        FunctionType::Ptr function = currentType<FunctionType>();
-        AbstractType::Ptr type = typeFromName(QmlJS::getQMLAttributeValue(node->initializer->members, "type").value);
-
-        function->addArgument(type);
-
-        {
-            DUChainWriteLocker lock;
-            openDeclaration<Declaration>(name, range);
-        }
-        openType(type);
+        declareParameter(node, range, name);
     } else if (baseclass == QLatin1String("Enum")) {
         // Enumeration. The "values" key contains a dictionary of name -> number entries.
-        EnumerationType::Ptr type(new EnumerationType);
-
-        type->setDeclarationId(DeclarationId(name));
-        type->setDataType(IntegralType::TypeEnumeration);
-
-        {
-            DUChainWriteLocker lock;
-            ClassMemberDeclaration* decl = openDeclaration<ClassMemberDeclaration>(name, range);
-
-            decl->setKind(Declaration::Type);
-            decl->setType(type);                // The type needs to be set here because closeContext is called before closeAndAssignType and needs to know the type of decl
-        }
-        openType(type);
+        declareEnum(node, range, name);
     } else {
         // No special base class, so it is a normal instantiation
         QmlJS::QMLAttributeValue id_attribute = QmlJS::getQMLAttributeValue(node->initializer->members, "id");

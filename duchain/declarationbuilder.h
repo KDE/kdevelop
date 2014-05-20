@@ -62,6 +62,25 @@ protected:
     virtual bool visit(QmlJS::AST::PropertyNameAndValue* node);
     virtual void endVisit(QmlJS::AST::PropertyNameAndValue* node);
 
+    // plugin.qmltypes
+    void declareComponent(QmlJS::AST::UiObjectDefinition* node,
+                          const KDevelop::RangeInRevision &range,
+                          const KDevelop::QualifiedIdentifier &name);
+    void declareMethod(QmlJS::AST::UiObjectDefinition* node,
+                       const KDevelop::RangeInRevision &range,
+                       const KDevelop::QualifiedIdentifier &name,
+                       bool isSlot,
+                       bool isSignal);
+    void declareProperty(QmlJS::AST::UiObjectDefinition* node,
+                         const KDevelop::RangeInRevision &range,
+                         const KDevelop::QualifiedIdentifier &name);
+    void declareParameter(QmlJS::AST::UiObjectDefinition* node,
+                          const KDevelop::RangeInRevision &range,
+                          const KDevelop::QualifiedIdentifier &name);
+    void declareEnum(QmlJS::AST::UiObjectDefinition* node,
+                     const KDevelop::RangeInRevision &range,
+                     const KDevelop::QualifiedIdentifier &name);
+
     // UI
     virtual bool visit(QmlJS::AST::UiObjectDefinition* node);
     virtual void endVisit(QmlJS::AST::UiObjectDefinition* node);
