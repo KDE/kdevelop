@@ -22,6 +22,14 @@
 
 #include <language/editor/simplerange.h>
 #include <language/duchain/stringhelpers.h>
+#include <language/duchain/duchain.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/declaration.h>
+#include <language/backgroundparser/backgroundparser.h>
+#include <interfaces/ilanguagecontroller.h>
+#include <interfaces/icore.h>
+
+#include <kstandarddirs.h>
 
 using namespace KDevelop;
 
@@ -166,6 +174,45 @@ void ParseSession::setContextOnNode(QmlJS::AST::Node* node, DUContext* context)
 DUContext* ParseSession::contextFromNode(QmlJS::AST::Node* node) const
 {
     return m_astToContext.value(node);
+}
+
+DUContext* ParseSession::contextOfModule(const QString& module)
+{
+    // Find the .qml file corresponding to the module
+    QString moduleFile = KGlobal::dirs()->findResource("data",
+        QString("kdevqmljssupport/qmlplugins/%1").arg(module)
+    );
+
+    if (moduleFile.isNull()) {
+        return nullptr;
+    }
+
+    // Get the top context of this module file
+    DUChainReadLocker lock;
+    IndexedString moduleFileString(QLatin1String("file://") + moduleFile);
+    ReferencedTopDUContext moduleContext = DUChain::self()->chainForDocument(moduleFileString);
+
+    lock.unlock();
+
+    if (!moduleContext) {
+        // Ask KDevelop to parse the file
+        BackgroundParser* bgparser = KDevelop::ICore::self()->languageController()->backgroundParser();
+
+        if (!bgparser->isQueued(moduleFileString)) {
+            // Schedule the parsing of the imported file
+            bgparser->addDocument(moduleFileString, TopDUContext::ForceUpdate, 0,
+                                  0, ParseJob::FullSequentialProcessing);
+
+            if (!bgparser->isQueued(m_url)) {
+                bgparser->addDocument(m_url, TopDUContext::ForceUpdate, 1,
+                                      0, ParseJob::FullSequentialProcessing);
+            }
+        }
+
+        return nullptr;
+    } else {
+        return moduleContext->topContext();
+    }
 }
 
 void ParseSession::dumpNode(QmlJS::AST::Node* node) const

@@ -118,6 +118,13 @@ public:
     KDevelop::DUContext* contextFromNode(QmlJS::AST::Node* node) const;
 
     /**
+     * Return the context containing the definitions of a QML module
+     *
+     * @return NULL if the specified module does not exist
+     */
+    KDevelop::DUContext* contextOfModule(const QString &module);
+
+    /**
      * Dump AST tree to stdout.
      */
     void dumpNode(QmlJS::AST::Node* node) const;
