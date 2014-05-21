@@ -21,30 +21,22 @@
  *
  */
 
-#ifndef COMPILERSPROVIDER_H
-#define COMPILERSPROVIDER_H
-
-#include "icompilerprovider.h"
-
-#include <QVariantList>
-#include <QVector>
-
-#include <interfaces/iplugin.h>
-
-#include <util/path.h>
+#ifndef COMPILERPROVIDER_H
+#define COMPILERPROVIDER_H
 
 #include <QHash>
 #include <QString>
-#include <QScopedPointer>
 #include <QSharedPointer>
+
+#include <util/path.h>
 
 using KDevelop::Path;
 
 class BaseProvider
 {
 public:
-    virtual QHash<QString, QString> defines() { return {}; }
-    virtual Path::List includes() { return {}; }
+    virtual QHash<QString, QString> defines() const = 0;
+    virtual Path::List includes() const = 0;
 
     virtual ~BaseProvider() = default;
     void setPath( const QString& path )
@@ -53,32 +45,10 @@ public:
     }
 protected:
     QString m_pathToCompiler;
-    QHash<QString, QString> definedMacros;
-    Path::List includePaths;
+    mutable QHash<QString, QString> definedMacros;
+    mutable Path::List includePaths;
 };
 
 typedef QSharedPointer<BaseProvider> ProviderPointer;
 
-class IADCompilerProvider;
-
-class CompilerProvider : public KDevelop::IPlugin, public ICompilerProvider
-{
-    Q_OBJECT
-    Q_INTERFACES( ICompilerProvider )
-public:
-    explicit CompilerProvider(QObject* parent, const QVariantList& args = QVariantList() );
-
-    ~CompilerProvider();
-
-    virtual bool setCompiler( KDevelop::IProject* project, const QString& name, const QString& path ) override;
-
-    QString selectCompiler() const;
-
-private Q_SLOTS:
-    void projectOpened( KDevelop::IProject* );
-    void projectClosed( KDevelop::IProject* );
-private:
-    QScopedPointer<IADCompilerProvider> m_provider;
-};
-
-#endif // COMPILERSPROVIDER_H
+#endif // COMPILERPROVIDER_H

@@ -33,7 +33,7 @@
 #define NULL_DEVICE "/dev/null"
 #endif
 
-QHash<QString, QString> GccLikeProvider::defines()
+QHash<QString, QString> GccLikeProvider::defines() const
 {
     if ( !definedMacros.isEmpty() ) {
         return definedMacros;
@@ -62,7 +62,7 @@ QHash<QString, QString> GccLikeProvider::defines()
     return definedMacros;
 }
 
-Path::List GccLikeProvider::includes()
+Path::List GccLikeProvider::includes() const
 {
     if ( !includePaths.isEmpty() ) {
         return includePaths;

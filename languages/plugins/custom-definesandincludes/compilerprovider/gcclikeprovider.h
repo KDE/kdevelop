@@ -29,9 +29,9 @@
 class GccLikeProvider : public BaseProvider
 {
 public:
-    virtual QHash<QString, QString> defines() override;
+    virtual QHash<QString, QString> defines() const override;
 
-    virtual Path::List includes() override;
+    virtual Path::List includes() const override;
 };
 
 #endif // GCCLIKEPROVIDER_H

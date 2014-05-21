@@ -21,10 +21,9 @@
  *
  */
 
-#include "compilerprovider.h"
+#include "daicompilerprovider.h"
 
 #include "../debugarea.h"
-#include "../definesandincludesmanager.h"
 
 #include "gcclikeprovider.h"
 #include "msvcprovider.h"
@@ -40,69 +39,61 @@
 
 using namespace KDevelop;
 
-class IADCompilerProvider : public IDefinesAndIncludesManager::Provider
+QHash<QString, QString> DAICompilerProvider::defines( ProjectBaseItem* item ) const
 {
-public:
-    virtual QHash<QString, QString> defines( ProjectBaseItem* item ) const override
-    {
-        if ( !item ) {
-            if ( !m_providers[nullptr] ) {
-                return {};
-            }
-            return m_providers[nullptr]->defines();
-        }
-
-        if ( !m_providers.contains( item->project() ) || !m_providers[item->project()] ) {
+    if ( !item ) {
+        if ( !m_providers[nullptr] ) {
             return {};
         }
-        return m_providers[item->project()]->defines();
+        return m_providers[nullptr]->defines();
     }
 
-    virtual Path::List includes( ProjectBaseItem* item ) const override
-    {
-        if ( !item ) {
-            if ( !m_providers[nullptr] ) {
-                return {};
-            }
-            return m_providers[nullptr]->includes();
-        }
-
-        if ( !m_providers.contains( item->project() ) || !m_providers[item->project()] ) {
-            return {};
-        }
-        return m_providers[item->project()]->includes();
+    if ( !m_providers.contains( item->project() ) || !m_providers[item->project()] ) {
+        return {};
     }
-
-    virtual IDefinesAndIncludesManager::Type type() const override
-    {
-        return IDefinesAndIncludesManager::CompilerSpecific;
-    }
-
-    void addPoject( IProject* project, ProviderPointer provider )
-    {
-        m_providers[project] = provider;
-        //cache includes/defines
-        if ( m_providers[project] ) {
-            m_providers[project]->includes();
-            m_providers[project]->defines();
-        }
-    }
-
-    void removePoject( IProject* project )
-    {
-        m_providers.remove( project );
-    }
-
-private:
-    //list of providers for each projects
-    QHash<IProject*, ProviderPointer> m_providers;
-};
-
-CompilerProvider::~CompilerProvider() {
-    IDefinesAndIncludesManager::manager()->unregisterProvider( m_provider.data() );
+    return m_providers[item->project()]->defines();
 }
 
-QString CompilerProvider::selectCompiler() const
+Path::List DAICompilerProvider::includes( ProjectBaseItem* item ) const
+{
+    if ( !item ) {
+        if ( !m_providers[nullptr] ) {
+            return {};
+        }
+        return m_providers[nullptr]->includes();
+    }
+
+    if ( !m_providers.contains( item->project() ) || !m_providers[item->project()] ) {
+        return {};
+    }
+    return m_providers[item->project()]->includes();
+}
+
+IDefinesAndIncludesManager::Type DAICompilerProvider::type() const
+{
+    return IDefinesAndIncludesManager::CompilerSpecific;
+}
+
+void DAICompilerProvider::addPoject( IProject* project, ProviderPointer provider )
+{
+    m_providers[project] = provider;
+    //cache includes/defines
+    if ( m_providers[project] ) {
+        m_providers[project]->includes();
+        m_providers[project]->defines();
+    }
+}
+
+void DAICompilerProvider::removePoject( IProject* project )
+{
+    m_providers.remove( project );
+}
+
+DAICompilerProvider::~DAICompilerProvider() {
+    IDefinesAndIncludesManager::manager()->unregisterProvider( this );
+}
+
+QString DAICompilerProvider::selectCompiler() const
 {
     //Note: keep in sync with .kcfg file.
     QStringList compilers = {"clang", "gcc", "msvc"};
@@ -117,7 +108,7 @@ QString CompilerProvider::selectCompiler() const
     return "none";
 }
 
-bool CompilerProvider::setCompiler( KDevelop::IProject* project, const QString& name, const QString& path )
+bool DAICompilerProvider::setCompiler( KDevelop::IProject* project, const QString& name, const QString& path )
 {
     ProviderPointer provider;
     if ( name == "gcc" ) {
@@ -134,12 +125,12 @@ bool CompilerProvider::setCompiler( KDevelop::IProject* project, const QString& 
         provider->setPath( path.trimmed() );
     }
 
-    m_provider->addPoject( project, provider );
+    addPoject( project, provider );
 
     return true;
 }
 
-void CompilerProvider::projectOpened( KDevelop::IProject* project )
+void DAICompilerProvider::projectOpened( KDevelop::IProject* project )
 {
     definesAndIncludesDebug() << "Adding project: " << project->name();
     auto settings = static_cast<KDevelop::DefinesAndIncludesManager*>( KDevelop::IDefinesAndIncludesManager::manager() );
@@ -154,24 +145,23 @@ void CompilerProvider::projectOpened( KDevelop::IProject* project )
     setCompiler( project, compiler, path );
 }
 
-void CompilerProvider::projectClosed( KDevelop::IProject* project )
+void DAICompilerProvider::projectClosed( KDevelop::IProject* project )
 {
-    m_provider->removePoject( project );
+    removePoject( project );
     definesAndIncludesDebug() << "Removed project: " << project->name();
 }
 
-K_PLUGIN_FACTORY( CompilerProviderFactory, registerPlugin<CompilerProvider>(); )
+K_PLUGIN_FACTORY( CompilerProviderFactory, registerPlugin<DAICompilerProvider>(); )
 K_EXPORT_PLUGIN( CompilerProviderFactory( KAboutData( "kdevcompilerprovider",
             "kdevcompilerprovider", ki18n( "Compiler Provider" ), "0.1", ki18n( "" ),
             KAboutData::License_GPL ) ) )
 
-CompilerProvider::CompilerProvider( QObject* parent, const QVariantList& )
-    : IPlugin( CompilerProviderFactory::componentData(), parent ),
-    m_provider( new IADCompilerProvider )
+DAICompilerProvider::DAICompilerProvider( QObject* parent, const QVariantList& )
+    : IPlugin( CompilerProviderFactory::componentData(), parent )
 {
-    KDEV_USE_EXTENSION_INTERFACE( ICompilerProvider );
+    KDEV_USE_EXTENSION_INTERFACE( IDAICompilerProvider );
 
-    IDefinesAndIncludesManager::manager()->registerProvider( m_provider.data() );
+    IDefinesAndIncludesManager::manager()->registerProvider( this );
 
     connect( ICore::self()->projectController(), SIGNAL( projectAboutToBeOpened( KDevelop::IProject* ) ), SLOT( projectOpened( KDevelop::IProject* ) ) );
     connect( ICore::self()->projectController(), SIGNAL( projectClosed( KDevelop::IProject* ) ), SLOT( projectClosed( KDevelop::IProject* ) ) );
@@ -180,4 +170,4 @@ CompilerProvider::CompilerProvider( QObject* parent, const QVariantList& )
     setCompiler( nullptr, selectCompiler(), selectCompiler() );
 }
 
-#include "compilerprovider.moc"
+#include "daicompilerprovider.moc"

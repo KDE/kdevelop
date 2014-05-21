@@ -22,7 +22,7 @@
 #include "projectpathswidget.h"
 #include "customdefinesandincludes.h"
 #include "definesandincludesmanager.h"
-#include "../compilerprovider/icompilerprovider.h"
+#include "../compilerprovider/idaicompilerprovider.h"
 
 #include <interfaces/iruncontroller.h>
 #include <interfaces/iproject.h>
@@ -85,12 +85,12 @@ void DefinesAndIncludes::saveTo(KConfig* cfg, KDevelop::IProject*)
         }
     }
 
-    auto compilerProvider = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ICompilerProvider");
-    if ( !compilerProvider || !compilerProvider->extension<ICompilerProvider>()) {
+    auto compilerProvider = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IDAICompilerProvider");
+    if ( !compilerProvider || !compilerProvider->extension<IDAICompilerProvider>()) {
         return;
     }
 
-    compilerProvider->extension<ICompilerProvider>()->setCompiler(project(), settings->currentCompiler(cfg), settings->pathToCompiler(cfg));
+    compilerProvider->extension<IDAICompilerProvider>()->setCompiler(project(), settings->currentCompiler(cfg), settings->pathToCompiler(cfg));
 }
 
 void DefinesAndIncludes::load()

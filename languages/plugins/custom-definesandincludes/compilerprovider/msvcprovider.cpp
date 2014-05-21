@@ -31,7 +31,7 @@
 #include <KDebug>
 #include <KProcess>
 
-QHash<QString, QString> MsvcProvider::defines()
+QHash<QString, QString> MsvcProvider::defines() const
 {
     QHash<QString, QString> ret;
     //Get standard macros from kdevmsvcdefinehelpers
@@ -112,7 +112,7 @@ QHash<QString, QString> MsvcProvider::defines()
     return ret;
 }
 
-Path::List MsvcProvider::includes()
+Path::List MsvcProvider::includes() const
 {
     QStringList _includePaths = QProcessEnvironment::systemEnvironment().value( "INCLUDE" ).split( ";", QString::SkipEmptyParts );
     QStringList includePaths;

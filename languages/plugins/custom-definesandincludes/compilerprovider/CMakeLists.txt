@@ -1,5 +1,5 @@
 set( compilerprovider_SRCS
-        compilerprovider.cpp
+        daicompilerprovider.cpp
         gcclikeprovider.cpp
         msvcprovider.cpp
         ../debugarea.cpp
@@ -16,7 +16,6 @@ target_link_libraries( kdevcompilerprovider LINK_PRIVATE
 
 install( TARGETS kdevcompilerprovider
          DESTINATION ${PLUGIN_INSTALL_DIR} )
-install( FILES icompilerprovider.h DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/definesandincludes COMPONENT Devel)
 
 configure_file(kdevcompilerprovider.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevcompilerprovider.desktop)
 
