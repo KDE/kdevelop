@@ -84,6 +84,8 @@ protected:
                      const KDevelop::QualifiedIdentifier &name);
 
     // UI
+    virtual void endVisit(QmlJS::AST::UiImport* node);
+
     virtual bool visit(QmlJS::AST::UiObjectDefinition* node);
     virtual void endVisit(QmlJS::AST::UiObjectDefinition* node);
 

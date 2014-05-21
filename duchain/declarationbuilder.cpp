@@ -465,6 +465,25 @@ void DeclarationBuilder::declareEnum(QmlJS::AST::UiObjectDefinition* node,
 /*
  * UI
  */
+void DeclarationBuilder::endVisit(QmlJS::AST::UiImport* node)
+{
+    QmlJS::AST::UiQualifiedId *part = node->importUri;
+    QString uri;
+
+    while (part) {
+        uri.append(part->name.toString() + '.');
+        part = part->next;
+    }
+
+    // Import the file corresponding to the URI
+    DUContext *importedContext = m_session->contextOfModule(uri + "qml");
+
+    if (importedContext) {
+        qDebug() << "   " << importedContext->childContexts().count();
+        currentContext()->topContext()->addImportedParentContext(importedContext);
+    }
+}
+
 bool DeclarationBuilder::visit(QmlJS::AST::UiObjectDefinition* node)
 {
     setComment(node);
