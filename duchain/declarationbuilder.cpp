@@ -353,7 +353,7 @@ void DeclarationBuilder::declareComponent(QmlJS::AST::UiObjectDefinition* node,
                                           const RangeInRevision &range,
                                           const QualifiedIdentifier &name)
 {
-    QString inherits = QmlJS::getQMLAttributeValue(node->initializer->members, "prototype").value;
+    QString inherits = QmlJS::getQMLAttributeValue(node->initializer->members, "prototype").value.section('/', -1, -1);
 
     // Declare the component itself
     StructureType::Ptr type(new StructureType);
@@ -478,7 +478,9 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiObjectDefinition* node)
     QString baseclass = node->qualifiedTypeNameId->name.toString();
 
     RangeInRevision range(m_session->locationToRange(node->qualifiedTypeNameId->identifierToken));
-    QualifiedIdentifier name(QmlJS::getQMLAttributeValue(node->initializer->members, "name").value);
+    QualifiedIdentifier name(
+        QmlJS::getQMLAttributeValue(node->initializer->members, "name").value.section('/', -1, -1)
+    );
 
     if (baseclass == QLatin1String("Component")) {
         // QML component, equivalent to a QML class
