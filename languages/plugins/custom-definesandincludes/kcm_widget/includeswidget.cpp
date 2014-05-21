@@ -21,6 +21,8 @@
 #include <KAction>
 #include <kfiledialog.h>
 
+#include <QFileInfo>
+
 #include <interfaces/iproject.h>
 
 #include "ui_includeswidget.h"
@@ -42,6 +44,8 @@ IncludesWidget::IncludesWidget( QWidget* parent )
     // hack taken from kurlrequester, make the buttons a bit less in height so they better match the url-requester
     ui->addIncludePath->setFixedHeight( ui->includePathRequester->sizeHint().height() );
     ui->removeIncludePath->setFixedHeight( ui->includePathRequester->sizeHint().height() );
+
+    ui->errorLabel->setHidden(true);
 
     connect( ui->addIncludePath, SIGNAL(clicked(bool)), SLOT(addIncludePath()) );
     connect( ui->removeIncludePath, SIGNAL(clicked(bool)), SLOT(deleteIncludePath()) );
@@ -71,11 +75,13 @@ void IncludesWidget::setIncludes( const QStringList& paths )
     includesModel->setIncludes( paths );
     blockSignals( b );
     updateEnablements();
+    checkIfIncludePathExist();
 }
 void IncludesWidget::includesChanged()
 {
     definesAndIncludesDebug() << "includes changed";
     emit includesChanged( includesModel->includes() );
+    checkIfIncludePathExist();
 }
 
 void IncludesWidget::includePathSelected( const QModelIndex& /*selected*/ )
@@ -136,6 +142,21 @@ QString IncludesWidget::makeIncludeDirAbsolute(const KUrl& url) const
         localFile = ui->includePathRequester->startDir().toLocalFile( KUrl::AddTrailingSlash ) + url.path();
     }
     return localFile;
+}
+
+void IncludesWidget::checkIfIncludePathExist()
+{
+    QFileInfo info;
+    for (auto& include : includesModel->includes()) {
+        info.setFile(include);
+        if (!info.exists()) {
+            ui->errorLabel->setText(include + i18n(" doesn't exist"));
+            ui->errorLabel->setHidden(false);
+            return;
+        }
+    }
+    ui->errorLabel->setHidden(true);
+    ui->errorLabel->clear();
 }
 
 #include "includeswidget.moc"
