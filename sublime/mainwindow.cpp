@@ -391,6 +391,12 @@ void MainWindow::setTabBarLeftCornerWidget(QWidget* widget)
     d->setTabBarLeftCornerWidget(widget);
 }
 
+void MainWindow::tabDoubleClicked(View* view)
+{
+    Q_UNUSED(view);
+    d->toggleDocksShown();
+}
+
 void MainWindow::tabContextMenuRequested(View* , KMenu* )
 {
     // do nothing

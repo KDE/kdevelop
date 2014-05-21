@@ -238,6 +238,7 @@ Container::Container(QWidget *parent)
     connect(d->tabBar, SIGNAL(wheelDelta(int)), this, SLOT(wheelScroll(int)));
     connect(d->tabBar, SIGNAL(contextMenu(int,QPoint)), this, SLOT(contextMenu(int,QPoint)));
     connect(d->tabBar, SIGNAL(mouseMiddleClick(int)), this, SLOT(requestClose(int)));
+    connect(d->tabBar, SIGNAL(mouseDoubleClick(int)), this, SLOT(doubleClickTriggered(int)));
     connect(d->documentListMenu, SIGNAL(triggered(QAction*)), this, SLOT(documentListActionTriggered(QAction*)));
 
     KConfigGroup group = KGlobal::config()->group("UiSettings");
@@ -560,6 +561,11 @@ bool Container::isCurrentTab(int tab) const
 QRect Container::tabRect(int tab) const
 {
     return d->tabBar->tabRect(tab).translated(d->tabBar->mapToGlobal(QPoint(0, 0)));
+}
+
+void Container::doubleClickTriggered(int tab)
+{
+    emit tabDoubleClicked(viewForWidget(widget(tab)));
 }
 
 void Container::documentListActionTriggered(QAction* action)
