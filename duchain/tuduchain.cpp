@@ -162,6 +162,10 @@ TUDUChain::TUDUChain(CXTranslationUnit tu, CXFile file, const IncludeFileContext
                 continue;
             }
             auto useRange = ClangRange(clang_getCursorReferenceNameRange(cursor, CXNameRange_WantSinglePiece, 0)).toRangeInRevision();
+            //TODO: Fix in clang, happens for operator<<, operator<, probably more
+            if (!useRange.isValid()) {
+               useRange = ClangRange(clang_getCursorExtent(cursor)).toRangeInRevision();
+            }
             DUChainWriteLocker lock;
             auto usedIndex = top->indexForUsedDeclaration(used.data());
             contextUses.first->createUse(usedIndex, useRange);

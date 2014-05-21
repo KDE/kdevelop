@@ -50,3 +50,26 @@ class myClass
     /// "useCount" : 1
     int post_foo;
 };
+
+/// "useCount" : 7
+enum RandomEnum
+{
+   /// "useCount" : 4
+   Random_Random
+};
+/// "useRanges" : [ "[(72, 5), (72, 7)]", "[(72, 10), (72, 12)]" ]
+RandomEnum operator<<(RandomEnum, RandomEnum)
+{
+   return Random_Random;
+}
+/// "useRanges" : [ "[(73, 5), (73, 6)]", "[(73, 9), (73, 10)]" ]
+RandomEnum operator<(RandomEnum, RandomEnum)
+{
+   return Random_Random;
+}
+void operators()
+{
+   RandomEnum r = Random_Random, t = Random_Random;
+   r << t << r;
+   r < t < r;
+}
