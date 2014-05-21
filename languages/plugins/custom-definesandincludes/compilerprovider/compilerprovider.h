@@ -59,6 +59,8 @@ protected:
 
 typedef QSharedPointer<BaseProvider> ProviderPointer;
 
+class IADCompilerProvider;
+
 class CompilerProvider : public KDevelop::IPlugin, public ICompilerProvider
 {
     Q_OBJECT
@@ -66,13 +68,17 @@ class CompilerProvider : public KDevelop::IPlugin, public ICompilerProvider
 public:
     explicit CompilerProvider(QObject* parent, const QVariantList& args = QVariantList() );
 
+    ~CompilerProvider();
+
     virtual bool setCompiler( KDevelop::IProject* project, const QString& name, const QString& path ) override;
 
-    Q_PRIVATE_SLOT(d, void projectOpened( KDevelop::IProject* ))
-    Q_PRIVATE_SLOT(d, void projectClosed( KDevelop::IProject* ))
+    QString selectCompiler() const;
 
-    class CompilerProviderPrivate;
-    QScopedPointer<CompilerProviderPrivate> d;
+private Q_SLOTS:
+    void projectOpened( KDevelop::IProject* );
+    void projectClosed( KDevelop::IProject* );
+private:
+    QScopedPointer<IADCompilerProvider> m_provider;
 };
 
 #endif // COMPILERSPROVIDER_H

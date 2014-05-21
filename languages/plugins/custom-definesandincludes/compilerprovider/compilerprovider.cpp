@@ -98,80 +98,67 @@ private:
     QHash<IProject*, ProviderPointer> m_providers;
 };
 
-class CompilerProvider::CompilerProviderPrivate
+CompilerProvider::~CompilerProvider() {
+    IDefinesAndIncludesManager::manager()->unregisterProvider( m_provider.data() );
+}
+
+QString CompilerProvider::selectCompiler() const
 {
-public:
-    CompilerProviderPrivate() : m_provider( new IADCompilerProvider )
-    {
-        IDefinesAndIncludesManager::manager()->registerProvider( m_provider.data() );
-    }
-
-    ~CompilerProviderPrivate()
-    {
-        IDefinesAndIncludesManager::manager()->unregisterProvider( m_provider.data() );
-    }
-
-    QString selectCompiler()
-    {
-        //Note: keep in sync with .kcfg file.
-        QStringList compilers = {"clang", "gcc", "msvc"};
-        for ( auto& compiler : compilers ) {
-            if ( KStandardDirs::findExe( compiler ).isEmpty() ) {
-                continue;
-            }
-            definesAndIncludesDebug() << "Selected compiler: " << compiler;
-            return compiler;
+    //Note: keep in sync with .kcfg file.
+    QStringList compilers = {"clang", "gcc", "msvc"};
+    for ( auto& compiler : compilers ) {
+        if ( KStandardDirs::findExe( compiler ).isEmpty() ) {
+            continue;
         }
-
-        return "none";
+        definesAndIncludesDebug() << "Selected compiler: " << compiler;
+        return compiler;
     }
 
-    bool setCompiler( KDevelop::IProject* project, const QString& name, const QString& path )
-    {
-        ProviderPointer provider;
-        if ( name == "gcc" ) {
-            provider = ProviderPointer( new GccLikeProvider() );
-        }else if ( name == "clang" ) {
-            provider = ProviderPointer( new GccLikeProvider() );
-        }else if ( name == "msvc" ) {
-            provider = ProviderPointer( new MsvcProvider() );
-        }else if ( !name.isEmpty() || path.isEmpty() ) {
-            definesAndIncludesDebug() << "Invalid compiler: " << name << " " << path;
-            return false;
-        }
-        if ( provider ) {
-            provider->setPath( path.trimmed() );
-        }
+    return "none";
+}
 
-        m_provider->addPoject( project, provider );
-
-        return true;
+bool CompilerProvider::setCompiler( KDevelop::IProject* project, const QString& name, const QString& path )
+{
+    ProviderPointer provider;
+    if ( name == "gcc" ) {
+        provider = ProviderPointer( new GccLikeProvider() );
+    }else if ( name == "clang" ) {
+        provider = ProviderPointer( new GccLikeProvider() );
+    }else if ( name == "msvc" ) {
+        provider = ProviderPointer( new MsvcProvider() );
+    }else if ( !name.isEmpty() || path.isEmpty() ) {
+        definesAndIncludesDebug() << "Invalid compiler: " << name << " " << path;
+        return false;
+    }
+    if ( provider ) {
+        provider->setPath( path.trimmed() );
     }
 
-    void projectOpened( KDevelop::IProject* project )
-    {
-        definesAndIncludesDebug() << "Adding project: " << project->name();
-        auto settings = static_cast<KDevelop::DefinesAndIncludesManager*>( KDevelop::IDefinesAndIncludesManager::manager() );
-        auto compiler = settings->currentCompiler( project->projectConfiguration().data() );
+    m_provider->addPoject( project, provider );
 
-        definesAndIncludesDebug() << " compiler is: " << compiler;
-        if ( compiler.isEmpty() || compiler == "none" ) {
-            compiler = selectCompiler();
-            settings->writeCompiler( project->projectConfiguration().data(), compiler );
-        }
-        auto path = settings->pathToCompiler( project->projectConfiguration().data() );
-        setCompiler( project, compiler, path );
+    return true;
+}
+
+void CompilerProvider::projectOpened( KDevelop::IProject* project )
+{
+    definesAndIncludesDebug() << "Adding project: " << project->name();
+    auto settings = static_cast<KDevelop::DefinesAndIncludesManager*>( KDevelop::IDefinesAndIncludesManager::manager() );
+    auto compiler = settings->currentCompiler( project->projectConfiguration().data() );
+
+    definesAndIncludesDebug() << " compiler is: " << compiler;
+    if ( compiler.isEmpty() || compiler == "none" ) {
+        compiler = selectCompiler();
+        settings->writeCompiler( project->projectConfiguration().data(), compiler );
     }
+    auto path = settings->pathToCompiler( project->projectConfiguration().data() );
+    setCompiler( project, compiler, path );
+}
 
-    void projectClosed( KDevelop::IProject* project )
-    {
-        m_provider->removePoject( project );
-        definesAndIncludesDebug() << "Removed project: " << project->name();
-    }
-
-private:
-    QScopedPointer<IADCompilerProvider> m_provider;
-};
+void CompilerProvider::projectClosed( KDevelop::IProject* project )
+{
+    m_provider->removePoject( project );
+    definesAndIncludesDebug() << "Removed project: " << project->name();
+}
 
 K_PLUGIN_FACTORY( CompilerProviderFactory, registerPlugin<CompilerProvider>(); )
 K_EXPORT_PLUGIN( CompilerProviderFactory( KAboutData( "kdevcompilerprovider",
@@ -180,20 +167,17 @@ K_EXPORT_PLUGIN( CompilerProviderFactory( KAboutData( "kdevcompilerprovider",
 
 CompilerProvider::CompilerProvider( QObject* parent, const QVariantList& )
     : IPlugin( CompilerProviderFactory::componentData(), parent ),
-    d( new CompilerProviderPrivate )
+    m_provider( new IADCompilerProvider )
 {
     KDEV_USE_EXTENSION_INTERFACE( ICompilerProvider );
+
+    IDefinesAndIncludesManager::manager()->registerProvider( m_provider.data() );
 
     connect( ICore::self()->projectController(), SIGNAL( projectAboutToBeOpened( KDevelop::IProject* ) ), SLOT( projectOpened( KDevelop::IProject* ) ) );
     connect( ICore::self()->projectController(), SIGNAL( projectClosed( KDevelop::IProject* ) ), SLOT( projectClosed( KDevelop::IProject* ) ) );
 
     //Add a provider for files without project
-    d->setCompiler( nullptr, d->selectCompiler(), d->selectCompiler() );
-}
-
-bool CompilerProvider::setCompiler( KDevelop::IProject* project, const QString& name, const QString& path )
-{
-    return d->setCompiler( project, name, path );
+    setCompiler( nullptr, selectCompiler(), selectCompiler() );
 }
 
 #include "compilerprovider.moc"

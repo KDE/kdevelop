@@ -150,19 +150,19 @@ QList<ConfigEntry> SettingsManager::readPaths( KConfig* cfg ) const
     return doReadSettings( grp );
 }
 
-QString SettingsManager::currentCompiler( KConfig* cfg )
+QString SettingsManager::currentCompiler( KConfig* cfg ) const
 {
     auto grp = cfg->group( "Custom Defines And Includes" );
     return grp.readEntry( "compiler", "" );
 }
 
-bool SettingsManager::needToReparseCurrentProject( KConfig* cfg )
+bool SettingsManager::needToReparseCurrentProject( KConfig* cfg ) const
 {
     auto grp = cfg->group( "Custom Defines And Includes" );
     return grp.readEntry( "reparse", true );
 }
 
-QString SettingsManager::pathToCompiler( KConfig* cfg )
+QString SettingsManager::pathToCompiler( KConfig* cfg ) const
 {
     auto grp = cfg->group( "Custom Defines And Includes" );
     return grp.readEntry( "compilerPath", currentCompiler( cfg ) );
@@ -171,7 +171,7 @@ QString SettingsManager::pathToCompiler( KConfig* cfg )
 void SettingsManager::writeCompiler( KConfig* cfg, const QString& name )
 {
     auto grp = cfg->group( "Custom Defines And Includes" );
-    grp.writeEntry( "compiler", name );
 
+    grp.writeEntry( "compiler", name );
     grp.writeEntry("compilerPath", name);
 }

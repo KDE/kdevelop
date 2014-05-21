@@ -46,10 +46,6 @@ public :
     ///@return list of all custom includes for @p item
     Path::List includes( ProjectBaseItem* item, Type type  ) const override;
 
-    virtual QHash<QString, QString> defines() const;
-
-    virtual Path::List includes() const;
-
     virtual void registerProvider( Provider* provider ) override;
 
     virtual bool unregisterProvider( Provider* provider ) override;

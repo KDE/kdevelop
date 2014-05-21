@@ -44,13 +44,13 @@ public:
     void writePaths(KConfig* cfg, const QList<ConfigEntry>& paths) const;
 
     /// @return name of the selected compiler, empty string if none is selected.
-    QString currentCompiler(KConfig* cfg);
+    QString currentCompiler(KConfig* cfg) const;
 
     void writeCompiler(KConfig* cfg, const QString& name);
 
-    QString pathToCompiler(KConfig* cfg);
+    QString pathToCompiler(KConfig* cfg) const;
 
-    bool needToReparseCurrentProject( KConfig* cfg );
+    bool needToReparseCurrentProject( KConfig* cfg ) const;
 
     ~SettingsManager(){}
 };
