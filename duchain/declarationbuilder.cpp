@@ -325,7 +325,7 @@ void DeclarationBuilder::declareExports(QmlJS::AST::ExpressionStatement *exports
     }
 
     // Make an alias between each exported name of the component and the component itself
-    for (auto it = exportslist->elements; it && it->expression; ++it) {
+    for (auto it = exportslist->elements; it && it->expression; it = it->next) {
         auto stringliteral = QmlJS::AST::cast<QmlJS::AST::StringLiteral *>(it->expression);
 
         if (!stringliteral) {
