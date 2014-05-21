@@ -41,6 +41,7 @@
  *
  * Quick Reference:
  *   useCount : int
+ *   useRanges : string array
  *   identifier : string
  *   qualifiedIdentifier : string
  *   internalContext : CtxtTestObject
@@ -87,6 +88,20 @@ DeclarationTest(useCount)
     uses += useRanges.size();
   }
   return compareValues(uses, value, "Declaration's use count ");
+}
+///JSON type: string array
+///@returns whether the declaration's ranges match the given value
+DeclarationTest(useRanges)
+{
+  QStringList ranges;
+  foreach(const QList<RangeInRevision>& useRanges, decl->uses()) {
+    foreach(const RangeInRevision &range, useRanges) {
+      ranges << rangeStr(range);
+    }
+  }
+  const QStringList testValues = value.toStringList();
+  return ranges == testValues ? SUCCESS
+    : QString("Declaration's use ranges (\"%1\") don't match test data (\"%2\").").arg(ranges.join(", ")).arg(testValues.join(", "));
 }
 ///JSON type: string
 ///@returns whether the declaration's identifier matches the given value
@@ -246,13 +261,7 @@ DeclarationTest(range)
   if (!decl) {
     return "Invalid Declaration";
   }
-  auto range = decl->range();
-  QString string = QString("[(%1, %2), (%3, %4)]")
-    .arg(range.start.line)
-    .arg(range.start.column)
-    .arg(range.end.line)
-    .arg(range.end.column);
-  return compareValues(string, value, "Declaration's range");
+  return compareValues(rangeStr(decl->range()), value, "Declaration's range");
 }
 
 ///JSON type: string

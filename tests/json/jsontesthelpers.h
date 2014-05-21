@@ -63,6 +63,15 @@ inline QString testObject(Object obj, const QVariant &value, const QString &erro
   return KDevelop::TestSuite<Object>::get().runTests(value.toMap(), obj) ? SUCCESS : ERROR_MESSAGE.arg(errorDesc);
 }
 
+inline QString rangeStr(const KDevelop::RangeInRevision &range)
+{
+  return QString("[(%1, %2), (%3, %4)]")
+    .arg(range.start.line)
+    .arg(range.start.column)
+    .arg(range.end.line)
+    .arg(range.end.column);
+}
+
 }
 
 }
