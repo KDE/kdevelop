@@ -1,56 +1,4 @@
 /**
- * "type" : { "toString"  : "function void ()" },
- * "returnType" : { "toString"  : "void" }
- */
-function helloWorld()
-{
-  alert("Hello World!");
-}
-
-/**
- * "type" : { "toString" : "int" }
- */
-var a = 50;
-
-/**
- * "type" : { "toString" : "int" }
- */
-var b = a;
-
-/**
- * "type" : { "toString" : "double" }
- */
-var d = 1.0;
-
-/**
- * "type" : { "toString" : "array" }
- */
-var array = [1, 2, 3];
-
-/**
- * "type" : { "toString" : "bool" }
- */
-var simple_compare = (a == 5.89);
-
-/**
- * "type" : { "toString": "bool" }
- */
-var nested_conditions = (simple_compare && b < 3);
-
-/**
- * "type" : { "toString" : "int" }
- */
-var simple_shift = (a << 2);
-
-/**
- * "type" : { "toString" : "unsure (string, int)" }
- */
-var hello;
-
-hello = "world";
-hello = 42;
-
-/**
  * "type" : { "toString" : "function void ()" }
  */
 var f = function () { }
@@ -76,13 +24,6 @@ var function_in_nested_expression = (function(a, b) { return 2; });
 var this_is_not_a_function = /** */ (function() { return "this is!"; })();
 
 /**
- * "type" : { "toString" : "<class>" }
- */
-var obj = {
-  foo: "bar"
-};
-
-/**
  * "type" : { "toString"  : "function string ()" },
  * "returnType" : { "toString" : "string" }
  */
@@ -94,11 +35,6 @@ function testVariables()
   var b = "some text";
   return b;
 }
-
-/**
- * "type" : { "toString" : "string" }
- */
-var arg = "arg";
 
 /**
  * "type" : { "toString" : "string" }
@@ -174,34 +110,3 @@ function ignore_mixed(a) {
         return 3.14;
     }
 }
-
-/**
- * "type" : { "toString" : "function void (unsure (int, string), int)" }
- */
-function type_still_unknown(a, b) {
-    /**
-     * "type" : { "toString" : "unsure (int, string)" }
-     */
-    a = 3;
-
-    /**
-     * "type" : { "toString" : "int" }
-     */
-    b;
-}
-
-type_still_unknown("don't crash here, one argument is missing");
-type_still_unknown(3.14, false, "don't use these types, there are too many arguments");
-type_still_unknown("now I know my type", 3);
-
-var array = {
-    /**
-     * "type" : { "toString": "string" }
-     */
-    key: "foo",
-
-    /**
-     * "type": { "toString": "int" }
-     */
-    key2: 3
-};
