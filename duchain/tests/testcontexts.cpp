@@ -52,7 +52,7 @@ void TestContexts::testFunctionContext()
     QFETCH(RangeInRevision, bodyCtxRange);
 
     const IndexedString file(QString("%1-functionContext.js").arg(qrand()));
-    ParseSession session(file, code);
+    ParseSession session(file, code, 0);
     QVERIFY(session.ast());
     QCOMPARE(session.language(), QmlJS::Language::JavaScript);
 
@@ -114,7 +114,7 @@ void TestContexts::testQMLContext()
                                "  Text {\n"
                                "    id: child2\n"
                                "  }\n"
-                               "}\n");
+                               "}\n", 0);
     QVERIFY(session.ast());
     QCOMPARE(session.language(), QmlJS::Language::Qml);
 

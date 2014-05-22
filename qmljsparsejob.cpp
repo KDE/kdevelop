@@ -56,7 +56,7 @@ void QmlJsParseJob::run()
         return;
     }
 
-    ParseSession session(document(), contents().contents);
+    ParseSession session(document(), contents().contents, priority());
 
     if (abortRequested()) {
         return;

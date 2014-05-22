@@ -53,7 +53,7 @@ public:
      * @param url The url for the document you want to parse.
      * @param contents The contents of the document you want to parse.
      */
-    ParseSession(const KDevelop::IndexedString& url, const QString& contents);
+    ParseSession(const KDevelop::IndexedString& url, const QString& contents, int priority);
 
     /**
      * @return the URL of this session
@@ -133,6 +133,7 @@ public:
 private:
     KDevelop::IndexedString m_url;
     QmlJS::Document::MutablePtr m_doc;
+    int m_ownPriority;
 
     typedef QHash<QmlJS::AST::Node*, KDevelop::DUContext*> NodeToContextHash;
     NodeToContextHash m_astToContext;

@@ -63,8 +63,9 @@ QmlJS::Language::Enum guessLanguageFromSuffix(const QString& path)
     }
 }
 
-ParseSession::ParseSession(const IndexedString& url, const QString& contents)
-: m_url(url)
+ParseSession::ParseSession(const IndexedString& url, const QString& contents, int priority)
+: m_url(url),
+  m_ownPriority(priority)
 {
     const QString path = m_url.str();
     m_doc = QmlJS::Document::create(path, guessLanguageFromSuffix(path));
@@ -200,11 +201,11 @@ ReferencedTopDUContext ParseSession::contextOfModule(const QString& module)
 
         if (!bgparser->isQueued(moduleFileString)) {
             // Schedule the parsing of the imported file
-            bgparser->addDocument(moduleFileString, TopDUContext::ForceUpdate, 0,
+            bgparser->addDocument(moduleFileString, TopDUContext::ForceUpdate, m_ownPriority - 1,
                                   0, ParseJob::FullSequentialProcessing);
 
             if (!bgparser->isQueued(m_url)) {
-                bgparser->addDocument(m_url, TopDUContext::ForceUpdate, 1,
+                bgparser->addDocument(m_url, TopDUContext::ForceUpdate, m_ownPriority,
                                       0, ParseJob::FullSequentialProcessing);
             }
         }

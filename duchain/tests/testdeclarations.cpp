@@ -55,7 +55,7 @@ void TestDeclarations::testFunction()
     //                          0         1         2         3
     //                          01234567890123456789012345678901234567890
     ParseSession session(file, "/**\n * some comment\n */\n"
-                               "function foo(arg1, arg2, arg3) { var i = 0; }");
+                               "function foo(arg1, arg2, arg3) { var i = 0; }", 0);
     QVERIFY(session.ast());
     QVERIFY(session.problems().isEmpty());
     QCOMPARE(session.language(), QmlJS::Language::JavaScript);
@@ -117,7 +117,7 @@ void TestDeclarations::testQMLId()
         ParseSession session(file, "/** file comment **/\n"
                                    "import QtQuick 1.0\n"
                                    "/**\n * some comment\n */\n"
-                                   "Text { id: test; Text { id: child; } }");
+                                   "Text { id: test; Text { id: child; } }", 0);
         QVERIFY(session.ast());
         QVERIFY(session.problems().isEmpty());
         QCOMPARE(session.language(), QmlJS::Language::Qml);
@@ -148,7 +148,7 @@ void TestDeclarations::testQMLId()
                                    "import QtQuick 1.0\n"
                                    "/**\n * some comment\n */\n"
                                    "Text { id: test; Text { id: child;}\n"
-                                   " Text {id: foo;} }");
+                                   " Text {id: foo;} }", 0);
         QVERIFY(session.ast());
         QVERIFY(session.problems().isEmpty());
         QCOMPARE(session.language(), QmlJS::Language::Qml);
@@ -181,7 +181,7 @@ void TestDeclarations::testProperty()
     ParseSession session(file, "Text {\n"
                                " /// some comment\n"
                                " foo: 1;\n"
-                               "}");
+                               "}", 0);
     QVERIFY(session.ast());
     QVERIFY(session.problems().isEmpty());
     QCOMPARE(session.language(), QmlJS::Language::Qml);

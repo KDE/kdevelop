@@ -40,14 +40,14 @@ public:
     {
         QFile file(fileName);
         file.open(QIODevice::ReadOnly);
-        m_session.reset(new ParseSession(IndexedString(fileName), file.readAll()));
+        m_session.reset(new ParseSession(IndexedString(fileName), file.readAll(), 0));
         runSession();
     }
 
     /// parse code directly
     void parseCode( const QString &code )
     {
-        m_session.reset(new ParseSession(IndexedString("-"), code));
+        m_session.reset(new ParseSession(IndexedString("-"), code, 0));
         runSession();
     }
 
