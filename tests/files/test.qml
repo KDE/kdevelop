@@ -1,3 +1,5 @@
+import QtQuick 1.1
+
 /**
  * "toString" : "class someId",
  * "type" : { "toString" : "Text" }

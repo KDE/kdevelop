@@ -476,11 +476,14 @@ void DeclarationBuilder::endVisit(QmlJS::AST::UiImport* node)
     }
 
     // Import the file corresponding to the URI
-    DUContext *importedContext = m_session->contextOfModule(uri + "qml");
+    ReferencedTopDUContext importedContext = m_session->contextOfModule(uri + "qml");
 
     if (importedContext) {
-        qDebug() << "   " << importedContext->childContexts().count();
-        currentContext()->topContext()->addImportedParentContext(importedContext);
+        DUChainWriteLocker lock;
+        currentContext()->addImportedParentContext(
+            importedContext,
+            m_session->locationToRange(node->importToken).start
+        );
     }
 }
 

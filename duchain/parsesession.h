@@ -23,6 +23,7 @@
 
 #include <language/duchain/indexedstring.h>
 #include <language/duchain/problem.h>
+#include <language/duchain/topducontext.h>
 
 #include "duchainexport.h"
 
@@ -122,7 +123,7 @@ public:
      *
      * @return NULL if the specified module does not exist
      */
-    KDevelop::DUContext* contextOfModule(const QString &module);
+    KDevelop::ReferencedTopDUContext contextOfModule(const QString &module);
 
     /**
      * Dump AST tree to stdout.

@@ -176,7 +176,7 @@ DUContext* ParseSession::contextFromNode(QmlJS::AST::Node* node) const
     return m_astToContext.value(node);
 }
 
-DUContext* ParseSession::contextOfModule(const QString& module)
+ReferencedTopDUContext ParseSession::contextOfModule(const QString& module)
 {
     // Find the .qml file corresponding to the module
     QString moduleFile = KGlobal::dirs()->findResource("data",
@@ -184,7 +184,7 @@ DUContext* ParseSession::contextOfModule(const QString& module)
     );
 
     if (moduleFile.isNull()) {
-        return nullptr;
+        return ReferencedTopDUContext();
     }
 
     // Get the top context of this module file
@@ -209,9 +209,9 @@ DUContext* ParseSession::contextOfModule(const QString& module)
             }
         }
 
-        return nullptr;
+        return ReferencedTopDUContext();
     } else {
-        return moduleContext->topContext();
+        return moduleContext;
     }
 }
 
