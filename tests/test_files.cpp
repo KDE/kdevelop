@@ -73,6 +73,11 @@ void TestFiles::testFiles()
   const IndexedString indexedFileName(fileName);
   ReferencedTopDUContext top =
       DUChain::self()->waitForUpdate(indexedFileName, KDevelop::TopDUContext::AllDeclarationsContextsAndUses);
+
+  while ( ICore::self()->languageController()->backgroundParser()->queuedCount() != 0 ) {
+      QTest::qWait(10);
+  }
+
   QVERIFY(top);
   DUChainReadLocker lock;
   DeclarationValidator validator;
