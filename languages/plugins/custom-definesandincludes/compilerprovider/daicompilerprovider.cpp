@@ -107,6 +107,7 @@ DAICompilerProvider::Compiler DAICompilerProvider::selectCompiler( const QString
             definesAndIncludesDebug() << "Selected compiler: " << compiler->name();
             return {compiler, !path.isEmpty() ? path : compiler->name()};
         }
+        kWarning() << "No compiler found. Standard includes/defines won't be provided to the project parser!";
     }else{
         for ( auto it = m_providers.constBegin(); it != m_providers.constEnd(); it++ ) {
             if ( ( *it )->name() == compilerName ) {
@@ -176,11 +177,6 @@ DAICompilerProvider::DAICompilerProvider( QObject* parent, const QVariantList& )
 
     //Add a provider for files without project
     addPoject( nullptr, selectCompiler({}, {}));
-}
-
-QVector<ProviderPointer> DAICompilerProvider::providers()
-{
-    return m_providers;
 }
 
 #include "daicompilerprovider.moc"

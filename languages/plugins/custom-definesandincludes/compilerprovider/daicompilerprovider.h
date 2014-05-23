@@ -59,7 +59,6 @@ public :
 
     virtual bool setCompiler( IProject* project, const QString& name, const QString& path ) override;
 
-    virtual QVector<ProviderPointer> providers() override;
 private:
     struct Compiler {
         ProviderPointer compiler;

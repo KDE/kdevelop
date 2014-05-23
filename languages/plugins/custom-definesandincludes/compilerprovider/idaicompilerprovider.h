@@ -42,9 +42,6 @@ public:
     /// @return true on success, false otherwise, e.g. if the compiler isn't available.
     virtual bool setCompiler( KDevelop::IProject* project, const QString& name, const QString& path ) = 0;
 
-    /// @return list of all accessible compiler providers.
-    virtual QVector<ProviderPointer> providers() = 0;
-
     virtual ~IDAICompilerProvider() = default;
 };
 
