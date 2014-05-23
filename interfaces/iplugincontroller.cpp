@@ -42,13 +42,10 @@ IPluginController::~IPluginController()
 KPluginInfo::List IPluginController::query( const QString &serviceType,
         const QString &constraint )
 {
-
-    KPluginInfo::List infoList;
     KService::List serviceList = KServiceTypeTrader::self() ->query( serviceType,
             QString( "%1 and [X-KDevelop-Version] == %2" ).arg( constraint ).arg( KDEVELOP_PLUGIN_VERSION ) );
 
-    infoList = KPluginInfo::fromServices( serviceList );
-    return infoList;
+    return KPluginInfo::fromServices( serviceList );
 }
 
 KPluginInfo::List IPluginController::queryPlugins( const QString &constraint )
