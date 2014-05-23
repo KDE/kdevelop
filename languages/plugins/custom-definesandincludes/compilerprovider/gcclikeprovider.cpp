@@ -33,10 +33,10 @@
 #define NULL_DEVICE "/dev/null"
 #endif
 
-QHash<QString, QString> GccLikeProvider::defines() const
+QHash<QString, QString> GccLikeProvider::defines( const QString& path ) const
 {
-    if ( !definedMacros.isEmpty() ) {
-        return definedMacros;
+    if ( m_definesIncludes.contains( path ) && !m_definesIncludes[path].definedMacros.isEmpty() ) {
+        return m_definesIncludes[path].definedMacros;
     }
 
     // #define a 1
@@ -46,7 +46,7 @@ QHash<QString, QString> GccLikeProvider::defines() const
     QProcess proc;
     proc.setProcessChannelMode( QProcess::MergedChannels );
 
-    proc.start( m_pathToCompiler, {"-std=c++11", "-xc++", "-dM", "-E", NULL_DEVICE} );
+    proc.start( path, {"-std=c++11", "-xc++", "-dM", "-E", NULL_DEVICE} );
     if ( !proc.waitForStarted( 1000 ) || !proc.waitForFinished( 1000 ) ) {
         return {};
     }
@@ -55,17 +55,17 @@ QHash<QString, QString> GccLikeProvider::defines() const
         auto line = proc.readLine();
 
         if ( defineExpression.indexIn( line ) != -1 ) {
-            definedMacros[defineExpression.cap( 1 )] = defineExpression.cap( 3 );
+            m_definesIncludes[path].definedMacros[defineExpression.cap( 1 )] = defineExpression.cap( 3 );
         }
     }
 
-    return definedMacros;
+    return m_definesIncludes[path].definedMacros;
 }
 
-Path::List GccLikeProvider::includes() const
+Path::List GccLikeProvider::includes( const QString& path ) const
 {
-    if ( !includePaths.isEmpty() ) {
-        return includePaths;
+    if ( m_definesIncludes.contains( path ) && !m_definesIncludes[path].includePaths.isEmpty() ) {
+        return m_definesIncludes[path].includePaths;
     }
 
     QProcess proc;
@@ -83,7 +83,7 @@ Path::List GccLikeProvider::includes() const
     //  /usr/lib/gcc/i486-linux-gnu/4.1.2/include
     //  /usr/include
     // End of search list.
-    proc.start( m_pathToCompiler, {"-std=c++11", "-xc++", "-E", "-v", NULL_DEVICE} );
+    proc.start( path, {"-std=c++11", "-xc++", "-E", "-v", NULL_DEVICE} );
     if ( !proc.waitForStarted( 1000 ) || !proc.waitForFinished( 1000 ) ) {
         return {};
     }
@@ -116,7 +116,7 @@ Path::List GccLikeProvider::includes() const
                     mode = Finished;
                 } else {
                     // This is an include path, add it to the list.
-                    includePaths << Path( QDir::cleanPath( line.trimmed() ) );
+                    m_definesIncludes[path].includePaths << Path( QDir::cleanPath( line.trimmed() ) );
                 }
                 break;
             default:
@@ -127,5 +127,5 @@ Path::List GccLikeProvider::includes() const
         }
     }
 
-    return includePaths;
+    return m_definesIncludes[path].includePaths;
 }

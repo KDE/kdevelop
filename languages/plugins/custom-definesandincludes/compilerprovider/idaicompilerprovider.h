@@ -24,11 +24,15 @@
 #ifndef IADCOMPILERPROVIDER_H
 #define IADCOMPILERPROVIDER_H
 
-#include <QString>
 #include <QObject>
+#include <QString>
+#include <QVector>
 
-namespace KDevelop {
-    class IProject;
+#include "icompilerprovider.h"
+
+namespace KDevelop
+{
+class IProject;
 }
 
 class IDAICompilerProvider
@@ -37,6 +41,9 @@ public:
     /// Set @p name compiler (one of gcc, clang e.t.c) located at @p path that provides standard includes/defines for @p project
     /// @return true on success, false otherwise, e.g. if the compiler isn't available.
     virtual bool setCompiler( KDevelop::IProject* project, const QString& name, const QString& path ) = 0;
+
+    /// @return list of all accessible compiler providers.
+    virtual QVector<ProviderPointer> providers() = 0;
 
     virtual ~IDAICompilerProvider() = default;
 };

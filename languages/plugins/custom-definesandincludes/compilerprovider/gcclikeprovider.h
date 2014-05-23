@@ -24,14 +24,31 @@
 #ifndef GCCLIKEPROVIDER_H
 #define GCCLIKEPROVIDER_H
 
-#include "compilerprovider.h"
+#include "icompilerprovider.h"
 
-class GccLikeProvider : public BaseProvider
+class GccLikeProvider : public ICompilerProvider
 {
 public:
-    virtual QHash<QString, QString> defines() const override;
+    virtual QHash<QString, QString> defines( const QString& path ) const override;
 
-    virtual Path::List includes() const override;
+    virtual Path::List includes( const QString& path ) const override;
+};
+
+class ClangProvider : public GccLikeProvider
+{
+    virtual QString name() const
+    {
+        return "clang";
+    }
+};
+
+class GccProvider : public GccLikeProvider
+{
+    virtual QString name() const
+    {
+        return "gcc";
+    }
 };
 
 #endif // GCCLIKEPROVIDER_H
+

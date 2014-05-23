@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef COMPILERPROVIDER_H
-#define COMPILERPROVIDER_H
+#ifndef ICOMPILERPROVIDER_H
+#define ICOMPILERPROVIDER_H
 
 #include <QHash>
 #include <QString>
@@ -32,23 +32,24 @@
 
 using KDevelop::Path;
 
-class BaseProvider
+class ICompilerProvider
 {
 public:
-    virtual QHash<QString, QString> defines() const = 0;
-    virtual Path::List includes() const = 0;
+    virtual QHash<QString, QString> defines( const QString& path ) const = 0;
+    virtual Path::List includes( const QString& path ) const = 0;
 
-    virtual ~BaseProvider() = default;
-    void setPath( const QString& path )
-    {
-        m_pathToCompiler = path;
-    }
+    virtual QString name() const = 0;
+
+    virtual ~ICompilerProvider() = default;
 protected:
-    QString m_pathToCompiler;
-    mutable QHash<QString, QString> definedMacros;
-    mutable Path::List includePaths;
+    struct DefinesIncludes {
+        QHash<QString, QString> definedMacros;
+        Path::List includePaths;
+    };
+    // list of defines/includes for the compiler with selected path
+    mutable QHash<QString, DefinesIncludes> m_definesIncludes;
 };
 
-typedef QSharedPointer<BaseProvider> ProviderPointer;
+typedef QSharedPointer<ICompilerProvider> ProviderPointer;
 
-#endif // COMPILERPROVIDER_H
+#endif // ICOMPILERPROVIDER_H

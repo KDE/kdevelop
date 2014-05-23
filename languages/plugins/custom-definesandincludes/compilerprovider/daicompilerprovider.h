@@ -27,7 +27,7 @@
 #include "idaicompilerprovider.h"
 
 #include "../definesandincludesmanager.h"
-#include "compilerprovider.h"
+#include "icompilerprovider.h"
 
 #include <QVariantList>
 #include <QVector>
@@ -57,13 +57,18 @@ public :
 
     virtual IDefinesAndIncludesManager::Type type() const override;
 
-private:
     virtual bool setCompiler( IProject* project, const QString& name, const QString& path ) override;
 
+    virtual QVector<ProviderPointer> providers() override;
+private:
+    struct Compiler {
+        ProviderPointer compiler;
+        QString path;
+    };
     ///Goes through the list of available compilers and automatically selects an appropriate one.
-    QString selectCompiler() const;
+    Compiler selectCompiler( const QString& compilerName, const QString& path ) const;
 
-    void addPoject( IProject* project, ProviderPointer provider );
+    void addPoject( IProject* project, Compiler compiler );
 
     void removePoject( IProject* project );
 
@@ -71,8 +76,9 @@ private Q_SLOTS:
     void projectOpened( KDevelop::IProject* );
     void projectClosed( KDevelop::IProject* );
 private:
-    //list of providers for each projects
-    QHash<IProject*, ProviderPointer> m_providers;
+    //list of compilers for each projects
+    QHash<IProject*, Compiler> m_projects;
+    QVector<ProviderPointer> m_providers;
 };
 
 #endif // COMPILERSPROVIDER_H

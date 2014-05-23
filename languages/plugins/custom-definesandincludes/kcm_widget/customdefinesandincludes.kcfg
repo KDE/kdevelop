@@ -18,7 +18,6 @@
             <choice name="msvc" />
             <choice name="none" />
         </choices>
-        <default>none</default>
     </entry>
   </group>
 </kcfg>
