@@ -30,6 +30,9 @@
 #include <KPluginFactory>
 #include <KAboutData>
 
+#include <QThread>
+#include <QCoreApplication>
+
 namespace
 {
 ///@return: The ConfigEntry, with includes/defines from @p paths for all parent folders of @p item.
@@ -78,6 +81,8 @@ DefinesAndIncludesManager::DefinesAndIncludesManager( QObject* parent, const QVa
 
 QHash<QString, QString> DefinesAndIncludesManager::defines( ProjectBaseItem* item, Type type  ) const
 {
+    Q_ASSERT(QThread::currentThread() == qApp->thread());
+
     if ( !item ) {
         for ( auto provider : m_providers ) {
             if ( provider->type() & IDefinesAndIncludesManager::CompilerSpecific ) {
@@ -123,6 +128,8 @@ QHash<QString, QString> DefinesAndIncludesManager::defines( ProjectBaseItem* ite
 
 Path::List DefinesAndIncludesManager::includes( ProjectBaseItem* item, Type type ) const
 {
+    Q_ASSERT(QThread::currentThread() == qApp->thread());
+
     if ( !item ) {
         for ( auto provider : m_providers ) {
             if ( provider->type() & IDefinesAndIncludesManager::CompilerSpecific ) {
