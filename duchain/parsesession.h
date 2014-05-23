@@ -137,6 +137,9 @@ private:
 
     typedef QHash<QmlJS::AST::Node*, KDevelop::DUContext*> NodeToContextHash;
     NodeToContextHash m_astToContext;
+
+    typedef QHash<QString, KDevelop::ReferencedTopDUContext> ModuleToContextHash;
+    ModuleToContextHash m_moduleToContext;
 };
 
 #endif // PARSESESSION_H

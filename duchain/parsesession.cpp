@@ -179,6 +179,12 @@ DUContext* ParseSession::contextFromNode(QmlJS::AST::Node* node) const
 
 ReferencedTopDUContext ParseSession::contextOfModule(const QString& module)
 {
+    if (m_moduleToContext.contains(module)) {
+        // The TopDUContext of this module has been cached in the parse session,
+        // return it immediately without calling potentially slow KStandardDirs methods
+        return m_moduleToContext.value(module);
+    }
+
     // Find the .qml file corresponding to the module
     QString moduleFile = KGlobal::dirs()->findResource("data",
         QString("kdevqmljssupport/qmlplugins/%1").arg(module)
@@ -212,6 +218,8 @@ ReferencedTopDUContext ParseSession::contextOfModule(const QString& module)
 
         return ReferencedTopDUContext();
     } else {
+        m_moduleToContext.insert(module, moduleContext);
+
         return moduleContext;
     }
 }
