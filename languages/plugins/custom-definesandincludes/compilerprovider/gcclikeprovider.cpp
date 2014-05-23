@@ -27,6 +27,8 @@
 #include <QProcess>
 #include <QRegExp>
 
+#include "../debugarea.h"
+
 #ifdef _WIN32
 #define NULL_DEVICE "NUL"
 #else
@@ -48,6 +50,7 @@ QHash<QString, QString> GccLikeProvider::defines( const QString& path ) const
 
     proc.start( path, {"-std=c++11", "-xc++", "-dM", "-E", NULL_DEVICE} );
     if ( !proc.waitForStarted( 1000 ) || !proc.waitForFinished( 1000 ) ) {
+        definesAndIncludesDebug() <<  "Unable to read standard macro definitions from "<< path;
         return {};
     }
 
@@ -85,6 +88,7 @@ Path::List GccLikeProvider::includes( const QString& path ) const
     // End of search list.
     proc.start( path, {"-std=c++11", "-xc++", "-E", "-v", NULL_DEVICE} );
     if ( !proc.waitForStarted( 1000 ) || !proc.waitForFinished( 1000 ) ) {
+        definesAndIncludesDebug() <<  "Unable to read standard include paths from " << path;
         return {};
     }
 
@@ -128,4 +132,14 @@ Path::List GccLikeProvider::includes( const QString& path ) const
     }
 
     return m_definesIncludes[path].includePaths;
+}
+
+QString ClangProvider::name() const
+{
+    return "clang";
+}
+
+QString GccProvider::name() const
+{
+    return "gcc";
 }

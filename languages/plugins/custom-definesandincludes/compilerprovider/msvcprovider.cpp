@@ -28,8 +28,9 @@
 #include <QDir>
 #include <QProcessEnvironment>
 
-#include <KDebug>
 #include <KProcess>
+
+#include "../debugarea.h"
 
 QHash<QString, QString> MsvcProvider::defines( const QString& ) const
 {
@@ -50,7 +51,7 @@ QHash<QString, QString> MsvcProvider::defines( const QString& ) const
 
         while ( proc.canReadLine() ) {
             QByteArray buff = proc.readLine();
-            kDebug( 9007 ) << "msvcstandardmacros:" << buff;
+            definesAndIncludesDebug() << "msvcstandardmacros:" << buff;
             if ( !buff.isEmpty() ) {
                 line = buff;
                 if ( line.startsWith( "#define " ) ) {
@@ -63,14 +64,14 @@ QHash<QString, QString> MsvcProvider::defines( const QString& ) const
                         ret[line] = "";
                     }
                 }
-            } else {
-                kDebug( 9007 ) << "buff is empty!";
             }
         }
     } else {
-        kDebug( 9007 ) << "Unable to read standard c++ macro definitions from cl.exe;";
-        while ( proc.canReadLine() ) kDebug() << proc.readLine();
-        kDebug() << proc.exitCode();
+        definesAndIncludesDebug() << "Unable to read standard c++ macro definitions from cl.exe;";
+        while ( proc.canReadLine() ){
+            definesAndIncludesDebug()  << proc.readLine();
+        }
+        definesAndIncludesDebug()  << proc.exitCode();
     }
 
     // MSVC builtin attributes

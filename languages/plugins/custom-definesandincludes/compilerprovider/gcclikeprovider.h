@@ -36,18 +36,12 @@ public:
 
 class ClangProvider : public GccLikeProvider
 {
-    virtual QString name() const
-    {
-        return "clang";
-    }
+    virtual QString name() const;
 };
 
 class GccProvider : public GccLikeProvider
 {
-    virtual QString name() const
-    {
-        return "gcc";
-    }
+    virtual QString name() const;
 };
 
 #endif // GCCLIKEPROVIDER_H
