@@ -140,7 +140,7 @@ void DAICompilerProvider::projectOpened( KDevelop::IProject* project )
 
     auto path = settings->pathToCompiler( projectConfig );
     auto name = settings->currentCompiler( projectConfig );
-    auto compiler = selectCompiler( name, path );
+    auto compiler = selectCompiler( !name.isEmpty() ? name : path, path );
 
     if ( compiler.compiler && ( compiler.compiler->name() != name ) ) {
         settings->writeCompiler( projectConfig, compiler.compiler->name() );
