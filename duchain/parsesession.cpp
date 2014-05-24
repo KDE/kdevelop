@@ -196,7 +196,7 @@ ReferencedTopDUContext ParseSession::contextOfModule(const QString& module)
 
     // Get the top context of this module file
     DUChainReadLocker lock;
-    IndexedString moduleFileString(QLatin1String("file://") + moduleFile);
+    IndexedString moduleFileString(moduleFile);
     ReferencedTopDUContext moduleContext = DUChain::self()->chainForDocument(moduleFileString);
 
     lock.unlock();
