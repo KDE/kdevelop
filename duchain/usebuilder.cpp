@@ -45,6 +45,16 @@ void UseBuilder::newUse(QmlJS::AST::Node* node, const QmlJS::AST::SourceLocation
 {
     const RangeInRevision range(m_session->locationToRange(loc));
     const QualifiedIdentifier id(name);
-    const DeclarationPointer decl(QmlJS::getDeclaration(id, currentContext()));
+
+    // Find the context of node
+    DUContext* ctx;
+
+    {
+        DUChainReadLocker lock;
+        ctx = topContext()->findContextAt(range.start);
+    }
+
+    // Build the use
+    const DeclarationPointer decl(QmlJS::getDeclaration(id, ctx));
     UseBuilderBase::newUse(node, range, decl);
 }
