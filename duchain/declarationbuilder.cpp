@@ -540,6 +540,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiObjectDefinition* node)
     QualifiedIdentifier name(
         QmlJS::getQMLAttributeValue(node->initializer->members, "name").value.section('/', -1, -1)
     );
+    DUContext::ContextType contextType = DUContext::Class;
 
     if (baseclass == QLatin1String("Component")) {
         // QML component, equivalent to a QML class
@@ -558,22 +559,32 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiObjectDefinition* node)
     } else if (baseclass == QLatin1String("Enum")) {
         // Enumeration. The "values" key contains a dictionary of name -> number entries.
         declareEnum(node, range, name);
+        contextType = DUContext::Enum;
     } else {
         // No special base class, so it is a normal instantiation
         QmlJS::QMLAttributeValue id_attribute = QmlJS::getQMLAttributeValue(node->initializer->members, "id");
-        QualifiedIdentifier id(id_attribute.value);
         RangeInRevision range(m_session->locationToRange(id_attribute.location));
+
+        name = QualifiedIdentifier(id_attribute.value);
 
         StructureType::Ptr type(new StructureType);
         type->setDeclarationId(DeclarationId(QualifiedIdentifier(baseclass)));
 
         {
             DUChainWriteLocker lock;
-            ClassDeclaration* decl = openDeclaration<ClassDeclaration>(id, range);
+            ClassDeclaration* decl = openDeclaration<ClassDeclaration>(name, range);
             decl->setKind(Declaration::Instance);
         }
         openType(type);
     }
+
+    // Open a context of the proper type and identifier
+    openContext(
+        node,
+        m_session->locationsToInnerRange(node->initializer->lbraceToken, node->initializer->rbraceToken),
+        contextType,
+        name
+    );
 
     return DeclarationBuilderBase::visit(node);
 }
@@ -584,6 +595,12 @@ void DeclarationBuilder::endVisit(QmlJS::AST::UiObjectDefinition* node)
 
     // Do not crash if the user has typed an empty object definition
     if (node->initializer && node->initializer->members) {
+        {
+            DUChainWriteLocker lock;
+            currentDeclaration()->setInternalContext(currentContext());
+        }
+
+        closeContext();
         closeAndAssignType();
     }
 }
@@ -656,23 +673,6 @@ void DeclarationBuilder::endVisit(QmlJS::AST::UiPublicMember* node)
 /*
  * Utils
  */
-void DeclarationBuilder::closeContext()
-{
-    {
-        DUChainWriteLocker lock;
-        Declaration* decl = currentDeclaration();
-        DUContext* ctx = currentContext();
-
-        if (ctx && decl && decl->abstractType() && decl->abstractType()->whichType() == AbstractType::TypeEnumeration)
-        {
-            // We are closing an enumeration. Its internal context must be of type "Enum"
-            ctx->setType(DUContext::Enum);
-            decl->setInternalContext(ctx);
-        }
-    }
-    DeclarationBuilderBase::closeContext();
-}
-
 void DeclarationBuilder::setComment(QmlJS::AST::Node* node)
 {
     setComment(m_session->commentForLocation(node->firstSourceLocation()).toUtf8());

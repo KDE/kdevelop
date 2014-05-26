@@ -97,17 +97,3 @@ Editor* ContextBuilder::editor() const
 {
     return m_editor.data();
 }
-
-bool ContextBuilder::visit(QmlJS::AST::UiObjectInitializer* node)
-{
-    const RangeInRevision range(m_session->locationToRange(node->lbraceToken).end,
-                                m_session->locationToRange(node->rbraceToken).start);
-    openContext(node, range, DUContext::Class);
-
-    return true;
-}
-
-void ContextBuilder::endVisit(QmlJS::AST::UiObjectInitializer* /*node*/)
-{
-    closeContext();
-}

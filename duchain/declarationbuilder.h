@@ -97,8 +97,6 @@ protected:
     virtual bool visit(QmlJS::AST::UiPublicMember* node);
     virtual void endVisit(QmlJS::AST::UiPublicMember* node);
 
-    virtual void closeContext();
-
 private:
     void closeAndAssignType();
     KDevelop::AbstractType::Ptr typeFromName(const QString& name);          /*!< @brief Type from a general name (int, string, or a class name) */
