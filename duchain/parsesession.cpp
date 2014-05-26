@@ -162,6 +162,13 @@ RangeInRevision ParseSession::locationsToRange(const QmlJS::AST::SourceLocation&
                            locationToRange(locationTo).end);
 }
 
+RangeInRevision ParseSession::locationsToInnerRange(const QmlJS::AST::SourceLocation& locationFrom,
+                                                    const QmlJS::AST::SourceLocation& locationTo) const
+{
+    return RangeInRevision(locationToRange(locationFrom).end,
+                           locationToRange(locationTo).start);
+}
+
 RangeInRevision ParseSession::editorFindRange(QmlJS::AST::Node* fromNode, QmlJS::AST::Node* toNode) const
 {
     return locationsToRange(fromNode->firstSourceLocation(), toNode->lastSourceLocation());

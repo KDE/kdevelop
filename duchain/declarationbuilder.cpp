@@ -60,32 +60,69 @@ void DeclarationBuilder::visitFunction(QmlJS::AST::FunctionExpression* node)
     QualifiedIdentifier name;
     RangeInRevision range;
 
+    // Function declaration
     if (node->kind == QmlJS::AST::Node::Kind_FunctionDeclaration) {
         // Only function declarations have an identifier. Expressions are anonymous
         name = QualifiedIdentifier(node->name.toString());
         range = m_session->locationToRange(node->identifierToken);
     }
 
+    FunctionDeclaration* decl;
     {
         DUChainWriteLocker lock;
-        FunctionDeclaration *decl = openDeclaration<FunctionDeclaration>(name, range);
+
+        decl = openDeclaration<FunctionDeclaration>(name, range);
         decl->setKind(Declaration::Type);
     }
     openType(func);
+
+    // Formal parameters
+    DUContext* parameters = openContext(
+        node,
+        m_session->locationsToInnerRange(node->lparenToken, node->rparenToken),
+        DUContext::Function,
+        name
+    );
+
+    QmlJS::AST::Node::accept(node->formals, this);
+    closeContext();
+
+    // Inner context
+    DUContext* body = openContext(
+        node,
+        m_session->locationsToInnerRange(node->lbraceToken, node->rbraceToken),
+        DUContext::Other,
+        name
+    );
+
+    if (compilingContexts()) {
+        DUChainWriteLocker lock;
+        body->addImportedParentContext(parameters);
+    }
+
+    QmlJS::AST::Node::accept(node->body, this);
+    closeContext();
+
+    // Set the inner contexts of the function
+    {
+        DUChainWriteLocker lock;
+        decl->setInternalFunctionContext(parameters);
+        decl->setInternalContext(body);
+    }
 }
 
 bool DeclarationBuilder::visit(QmlJS::AST::FunctionDeclaration* node)
 {
     visitFunction(node);
 
-    return DeclarationBuilderBase::visit(node);
+    return false;
 }
 
 bool DeclarationBuilder::visit(QmlJS::AST::FunctionExpression* node)
 {
     visitFunction(node);
 
-    return DeclarationBuilderBase::visit(node);
+    return false;
 }
 
 bool DeclarationBuilder::visit(QmlJS::AST::FormalParameterList* node)
@@ -624,19 +661,7 @@ void DeclarationBuilder::closeContext()
     {
         DUChainWriteLocker lock;
         Declaration* decl = currentDeclaration();
-        FunctionDeclaration* function = dynamic_cast<FunctionDeclaration*>(decl);
         DUContext* ctx = currentContext();
-
-        if (function && ctx) {
-            if (ctx->type() == DUContext::Function) {
-                // This context contains the declarations of the arguments
-                function->setInternalFunctionContext(ctx);
-            } else {
-                // This one contains the body of the function
-                Q_ASSERT(ctx->type() == DUContext::Other);
-                function->setInternalContext(ctx);
-            }
-        }
 
         if (ctx && decl && decl->abstractType() && decl->abstractType()->whichType() == AbstractType::TypeEnumeration)
         {

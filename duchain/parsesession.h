@@ -102,6 +102,12 @@ public:
                                                const QmlJS::AST::SourceLocation& locationTo) const;
 
     /**
+     * Range that starts at the end of the first token, and ends at the beginning of the second token
+     */
+    KDevelop::RangeInRevision locationsToInnerRange(const QmlJS::AST::SourceLocation& locationFrom,
+                                                    const QmlJS::AST::SourceLocation& locationTo) const;
+
+    /**
      * @return a range that spans @p fromNode and @p toNode.
      */
     KDevelop::RangeInRevision editorFindRange(QmlJS::AST::Node* fromNode, QmlJS::AST::Node* toNode) const;

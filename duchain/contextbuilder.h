@@ -76,16 +76,12 @@ public:
 
     using Visitor::visit;
     using Visitor::endVisit;
-    virtual bool visit(QmlJS::AST::FunctionDeclaration* node);
-    virtual bool visit(QmlJS::AST::FunctionExpression* node);
     virtual bool visit(QmlJS::AST::UiObjectInitializer* node);
     virtual void endVisit(QmlJS::AST::UiObjectInitializer* node);
 
     Editor* editor() const;
 
 protected:
-    bool visitFunction(QmlJS::AST::FunctionExpression* node);
-
     ParseSession* m_session;
     bool m_mapAst; // make KDevelop::AbstractContextBuilder happy
     QScopedPointer<Editor> m_editor; // make KDevelop::AbstractUseBuilder happy

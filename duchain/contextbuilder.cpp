@@ -98,40 +98,6 @@ Editor* ContextBuilder::editor() const
     return m_editor.data();
 }
 
-bool ContextBuilder::visit(QmlJS::AST::FunctionDeclaration* node)
-{
-    return visitFunction(node);
-}
-
-bool ContextBuilder::visit(QmlJS::AST::FunctionExpression* node)
-{
-    return visitFunction(node);
-}
-
-bool ContextBuilder::visitFunction(QmlJS::AST::FunctionExpression* node)
-{
-    const QualifiedIdentifier functionName(node->name.toString());
-
-    const RangeInRevision pRange(m_session->locationToRange(node->lparenToken).end,
-                                 m_session->locationToRange(node->rparenToken).start);
-    DUContext* parameters = openContext(node, pRange, DUContext::Function, functionName);
-    QmlJS::AST::Node::accept(node->formals, this);
-    closeContext();
-
-    const RangeInRevision bRange(m_session->locationToRange(node->lbraceToken).end,
-                                 m_session->locationToRange(node->rbraceToken).start);
-    DUContext* body = openContext(node, bRange, DUContext::Other, functionName);
-    if (compilingContexts()) {
-        DUChainWriteLocker lock;
-        body->addImportedParentContext(parameters);
-    }
-    QmlJS::AST::Node::accept(node->body, this);
-    closeContext();
-
-    // return false, we visited the children manually
-    return false;
-}
-
 bool ContextBuilder::visit(QmlJS::AST::UiObjectInitializer* node)
 {
     const RangeInRevision range(m_session->locationToRange(node->lbraceToken).end,

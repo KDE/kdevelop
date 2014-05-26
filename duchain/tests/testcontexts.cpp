@@ -22,7 +22,7 @@
 #include "testcontexts.h"
 
 #include "../parsesession.h"
-#include "../contextbuilder.h"
+#include "../declarationbuilder.h"
 
 #include <qtest_kde.h>
 
@@ -56,8 +56,7 @@ void TestContexts::testFunctionContext()
     QVERIFY(session.ast());
     QCOMPARE(session.language(), QmlJS::Language::JavaScript);
 
-    ContextBuilder builder;
-    builder.setParseSession(&session);
+    DeclarationBuilder builder(&session);
     ReferencedTopDUContext top = builder.build(file, session.ast());
     QVERIFY(top);
 
@@ -118,8 +117,7 @@ void TestContexts::testQMLContext()
     QVERIFY(session.ast());
     QCOMPARE(session.language(), QmlJS::Language::Qml);
 
-    ContextBuilder builder;
-    builder.setParseSession(&session);
+    DeclarationBuilder builder(&session);
     ReferencedTopDUContext top = builder.build(file, session.ast());
     QVERIFY(top);
 
