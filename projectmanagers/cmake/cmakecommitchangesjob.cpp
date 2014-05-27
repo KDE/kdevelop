@@ -126,6 +126,8 @@ CMakeCommitChangesJob::CMakeCommitChangesJob(const Path& path, CMakeManager* man
 
 void processDependencies(ProcessedTarget &target, const QString& dep, const CMakeProjectData& data)
 {
+    if(dep.isEmpty())
+        return;
 //     kDebug() << "processing..." << target.target.name << dep;
     QMap<QString, QStringList> depData = data.properties.value(TargetProperty).value(dep);
     if(depData.isEmpty()) {
