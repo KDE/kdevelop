@@ -57,8 +57,8 @@ private slots:
     // Handling of project-path combobox, add and remove buttons
     void projectPathSelected( int index );
     void addProjectPath();
-    void replaceProjectPath();
     void deleteProjectPath();
+    void batchEdit();
 
     // Forward includes model changes into the pathsModel
     void includesChanged( const QStringList& includes );

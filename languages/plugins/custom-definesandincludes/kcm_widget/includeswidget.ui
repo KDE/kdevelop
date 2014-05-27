@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1030</width>
-    <height>817</height>
+    <width>545</width>
+    <height>298</height>
    </rect>
   </property>
-  <layout class="QVBoxLayout" name="widgetLayout">
+  <layout class="QGridLayout" name="gridLayout">
    <property name="margin">
     <number>0</number>
    </property>
-   <item>
+   <item row="0" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
       <widget class="KUrlRequester" name="includePathRequester">
@@ -35,7 +35,7 @@
         <string>Create a new include path entry from this URL.</string>
        </property>
        <property name="text">
-        <string>Add</string>
+        <string/>
        </property>
        <property name="icon">
         <iconset theme="list-add">
@@ -53,7 +53,7 @@
         <string>Delete current include path entry.</string>
        </property>
        <property name="text">
-        <string>Remove</string>
+        <string/>
        </property>
        <property name="icon">
         <iconset theme="list-remove">
@@ -64,7 +64,7 @@
      </item>
     </layout>
    </item>
-   <item>
+   <item row="1" column="0">
     <widget class="QListView" name="includePaths">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
