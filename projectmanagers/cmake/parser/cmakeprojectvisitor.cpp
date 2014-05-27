@@ -1140,12 +1140,18 @@ int CMakeProjectVisitor::visit(const TargetIncludeDirectoriesAst* tid)
     CategoryType::iterator it = targetProps.find(m_targetAlias.value(tid->target(), tid->target()));
     //TODO: we can add a problem if the target is not found
     if(it != targetProps.end()) {
-        QStringList includes;
+        QStringList interfaceIncludes, includes;
         foreach(const TargetIncludeDirectoriesAst::Item& item, tid->items()) {
-            includes += item.item;
+            if(item.visibility == TargetIncludeDirectoriesAst::Public || item.visibility == TargetIncludeDirectoriesAst::Interface)
+                interfaceIncludes += item.item;
+            if(item.visibility == TargetIncludeDirectoriesAst::Public || item.visibility == TargetIncludeDirectoriesAst::Private)
+                includes += item.item;
         }
-        //TODO implement visibility
-        (*it)["INCLUDE_DIRECTORIES"] += includes;
+
+        if(!interfaceIncludes.isEmpty())
+            (*it)["INTERFACE_INCLUDE_DIRECTORIES"] += interfaceIncludes;
+        if(!includes.isEmpty())
+            (*it)["INCLUDE_DIRECTORIES"] += includes;
     }
     return 1;
 }
