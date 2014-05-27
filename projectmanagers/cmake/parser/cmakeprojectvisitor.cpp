@@ -471,6 +471,8 @@ void CMakeProjectVisitor::defineTarget(const QString& _id, const QStringList& so
     target.desc=p.code->at(p.line);
     m_targetForId[target.name]=target;
     
+    if(CMakeCondition::textIsTrue(m_vars->value("CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE").join(QString())))
+        targetProps["INTERFACE_INCLUDE_DIRECTORIES"] = (m_vars->value("CMAKE_CURRENT_BINARY_DIR") + m_vars->value("CMAKE_CURRENT_SOURCE_DIR"));
     targetProps["OUTPUT_NAME"] = QStringList(exe);
     targetProps["LOCATION"] = QStringList(locationDir+'/'+exe);
 }

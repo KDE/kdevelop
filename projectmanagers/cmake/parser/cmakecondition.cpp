@@ -83,6 +83,12 @@ CMakeCondition::conditionToken CMakeCondition::typeName(const QString& _name)
         return variable;
 }
 
+bool CMakeCondition::textIsTrue(const QString& text)
+{
+    QString valUpper = text.toUpper();
+    return s_trueDefinitions.contains(valUpper);
+}
+
 bool CMakeCondition::isTrue(const QStringList::const_iterator& it)
 {
     QString val = *it;
