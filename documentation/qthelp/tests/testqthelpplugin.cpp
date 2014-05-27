@@ -213,6 +213,6 @@ void TestQtHelpPlugin::testDeclarationLookup_OperatorFunction()
     IDocumentationProvider* provider = m_plugin->providers().at(0);
     auto doc = provider->documentationForDeclaration(decl);
     // TODO: We should never find a documentation entry for this (but instead, the operator< for QChar is found here)
-    QEXPECT_FAIL("", "doc should be null here", Continue);
+    QEXPECT_FAIL("", "doc should be null here", Abort);
     QVERIFY(!doc);
 }
