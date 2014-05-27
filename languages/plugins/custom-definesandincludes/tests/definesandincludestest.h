@@ -16,8 +16,8 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>. *
  ************************************************************************/
 
-#ifndef PLUGINTEST_H
-#define PLUGINTEST_H
+#ifndef DEFINESANDINCLUDESTEST_H
+#define DEFINESANDINCLUDESTEST_H
 
 #include <QtCore/QObject>
 
@@ -26,7 +26,7 @@ namespace KDevelop
 class TestCore;
 }
 
-class PluginTest : public QObject
+class DefinesAndIncludesTest : public QObject
 {
     Q_OBJECT
 private slots:
