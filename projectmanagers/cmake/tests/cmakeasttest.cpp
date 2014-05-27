@@ -1553,10 +1553,8 @@ void CMakeAstTest::testFindPackageGoodParse_data()
 {
     QTest::addColumn<CMakeFunctionDesc>("function");
     
-    CMakeFunctionDesc l;
-    l.name = "find_package";
-    l.addArguments(QString("PolkitQt-1 0.99.0 QUIET NO_MODULE PATHS /home/kde-devel/kde/lib/PolkitQt-1/cmake").split(' '));
-    QTest::newRow("complex") << l;
+    QTest::newRow( "complex" ) << CMakeFunctionDesc("find_package", QString("PolkitQt-1 0.99.0 QUIET NO_MODULE PATHS /home/kde-devel/kde/lib/PolkitQt-1/cmake").split(' '));
+    QTest::newRow( "components" ) << CMakeFunctionDesc("find_package", QString("Qt5 5.2 CONFIG REQUIRED Concurrent Test").split(' '));
 }
 
 void CMakeAstTest::testFindPackageBadParse()

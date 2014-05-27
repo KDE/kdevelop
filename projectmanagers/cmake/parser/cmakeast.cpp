@@ -1466,7 +1466,7 @@ bool FindPackageAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         {}
         else if(it->value[0].isNumber()) m_version=it->value;
         else if(it->value=="QUIET") m_isQuiet=true;
-        else if(it->value=="NO_MODULE") m_noModule=true;
+        else if(it->value=="NO_MODULE" || it->value=="CONFIG") m_noModule=true;
         else if(it->value=="REQUIRED") { m_isRequired=true; s=Components; }
         else if(it->value=="COMPONENTS") s=Components;
         else if(it->value=="PATHS") s=Paths;
@@ -1474,8 +1474,10 @@ bool FindPackageAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             m_components.append(it->value);
         else if(s==Paths)
             m_paths.append(it->value);
-        else
+        else {
+            kWarning() << "found error" << it->value;
             ret=false;
+        }
     }
     return ret;
 }
