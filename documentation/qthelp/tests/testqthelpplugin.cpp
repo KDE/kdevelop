@@ -181,7 +181,6 @@ void TestQtHelpPlugin::testDeclarationLookup_Class()
     TestFile file("class QObject; QObject* o;", "cpp");
     QVERIFY(file.parseAndWait());
 
-    QObject o;
     DUChainReadLocker lock;
     auto ctx = file.topContext();
     auto decl = ctx->findDeclarations(QualifiedIdentifier("o")).first();
@@ -206,7 +205,6 @@ void TestQtHelpPlugin::testDeclarationLookup_OperatorFunction()
     TestFile file("class C {}; bool operator<(const C& a, const C& b) { return true; }", "cpp");
     QVERIFY(file.parseAndWait());
 
-    QObject o;
     DUChainReadLocker lock;
     auto ctx = file.topContext();
     auto decl = ctx->findDeclarations(QualifiedIdentifier("operator<")).first();
