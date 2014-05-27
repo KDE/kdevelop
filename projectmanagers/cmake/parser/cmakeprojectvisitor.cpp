@@ -655,8 +655,7 @@ int CMakeProjectVisitor::visit(const IncludeAst *inc)
 
 int CMakeProjectVisitor::visit(const FindPackageAst *pack)
 {
-    if(!haveToFind(pack->name()))
-        return 1;
+    m_vars->remove(pack->name()+"-NOTFOUND");
     kDebug(9042) << "Find:" << pack->name() << "package." << pack->version() << m_modulePath << "No module: " << pack->noModule();
 
     QStringList possibleModuleNames;
