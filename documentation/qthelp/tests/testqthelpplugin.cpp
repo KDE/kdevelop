@@ -188,12 +188,14 @@ void TestQtHelpPlugin::testDeclarationLookup_Class()
     auto typeDecl = dynamic_cast<const IdentifiedType*>(decl->type<PointerType>()->baseType().unsafeData())->declaration(0);
     QVERIFY(typeDecl);
 
-    IDocumentationProvider* provider = m_plugin->providers().at(0);
-    auto doc = provider->documentationForDeclaration(typeDecl);
-    if (!doc) {
+    auto provider = dynamic_cast<QtHelpProviderAbstract*>(m_plugin->providers().at(0));
+    QVERIFY(provider);
+    if (!provider->isValid()) {
         QSKIP("Qt help not available", SkipSingle);
     }
 
+    auto doc = provider->documentationForDeclaration(typeDecl);
+    QVERIFY(doc);
     QCOMPARE(doc->name(), QString("QObject"));
     QVERIFY(doc->description().contains("The QObject class"));
 }
@@ -210,9 +212,14 @@ void TestQtHelpPlugin::testDeclarationLookup_OperatorFunction()
     auto decl = ctx->findDeclarations(QualifiedIdentifier("operator<")).first();
     QVERIFY(decl);
 
-    IDocumentationProvider* provider = m_plugin->providers().at(0);
+    auto provider = dynamic_cast<QtHelpProviderAbstract*>(m_plugin->providers().at(0));
+    QVERIFY(provider);
+    if (!provider->isValid()) {
+        QSKIP("Qt help not available", SkipSingle);
+    }
+
     auto doc = provider->documentationForDeclaration(decl);
     // TODO: We should never find a documentation entry for this (but instead, the operator< for QChar is found here)
-    QEXPECT_FAIL("", "doc should be null here", Abort);
+    QEXPECT_FAIL("", "doc should be null here", Continue);
     QVERIFY(!doc);
 }

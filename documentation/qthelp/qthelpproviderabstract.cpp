@@ -110,3 +110,8 @@ KSharedPtr<KDevelop::IDocumentation> QtHelpProviderAbstract::homePage() const
     QtHelpDocumentation::s_provider = const_cast<QtHelpProviderAbstract*>(this);
     return KSharedPtr<KDevelop::IDocumentation>(new HomeDocumentation);
 }
+
+bool QtHelpProviderAbstract::isValid() const
+{
+    return !m_engine.registeredDocumentations().isEmpty();
+}
