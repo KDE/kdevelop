@@ -24,7 +24,7 @@
 
 #include <language/interfaces/idefinesandincludesmanager.h>
 
-#include <kdemacros.h>
+#include "definesandincludesexport.h"
 
 class KConfig;
 namespace KDevelop
@@ -34,7 +34,7 @@ class IProject;
 
 using KDevelop::ConfigEntry;
 /// @brief: Class responsible for reading/writing custom defines and includes from/to the disk.
-class KDE_EXPORT SettingsManager
+class KDEVDEFINESANDINCLUDESMANAGER_EXPORT SettingsManager
 {
 public:
     SettingsManager();
