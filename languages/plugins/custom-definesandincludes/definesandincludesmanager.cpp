@@ -63,6 +63,16 @@ static ConfigEntry findConfigForItem(const QList<ConfigEntry>& paths, const KDev
     ret.includes.removeDuplicates();
     return ret;
 }
+
+KDevelop::IDefinesAndIncludesManager::Provider* compilerProvider(QVector<KDevelop::IDefinesAndIncludesManager::Provider*> providers)
+{
+    for (auto provider : providers) {
+        if (provider->type() & KDevelop::IDefinesAndIncludesManager::CompilerSpecific) {
+            return provider;
+        }
+    }
+    return {};
+}
 }
 
 namespace KDevelop
@@ -83,13 +93,9 @@ QHash<QString, QString> DefinesAndIncludesManager::defines( ProjectBaseItem* ite
 {
     Q_ASSERT(QThread::currentThread() == qApp->thread());
 
-    if ( !item ) {
-        for ( auto provider : m_providers ) {
-            if ( provider->type() & IDefinesAndIncludesManager::CompilerSpecific ) {
-                return provider->defines( nullptr );
-            }
-        }
-        return {};
+    if (!item) {
+        auto cp = compilerProvider(m_providers);
+        return cp ? cp->defines(nullptr) : QHash<QString, QString>();
     }
 
     QHash<QString, QString> defines;
@@ -130,13 +136,9 @@ Path::List DefinesAndIncludesManager::includes( ProjectBaseItem* item, Type type
 {
     Q_ASSERT(QThread::currentThread() == qApp->thread());
 
-    if ( !item ) {
-        for ( auto provider : m_providers ) {
-            if ( provider->type() & IDefinesAndIncludesManager::CompilerSpecific ) {
-                return provider->includes( nullptr );
-            }
-        }
-        return {};
+    if (!item) {
+        auto cp = compilerProvider(m_providers);
+        return cp ? cp->includes(nullptr) : Path::List();
     }
 
     Path::List includes;
