@@ -36,12 +36,16 @@ public:
 
 class ClangProvider : public GccLikeProvider
 {
-    virtual QString name() const;
+    virtual QString name() const override;
+
+    virtual QString defaultPath() const override;
 };
 
 class GccProvider : public GccLikeProvider
 {
-    virtual QString name() const;
+    virtual QString name() const override;
+
+    virtual QString defaultPath() const override;
 };
 
 #endif // GCCLIKEPROVIDER_H

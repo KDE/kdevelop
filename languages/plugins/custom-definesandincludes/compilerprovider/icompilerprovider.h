@@ -40,6 +40,8 @@ public:
 
     virtual QString name() const = 0;
 
+    virtual QString defaultPath() const = 0;
+
     virtual ~ICompilerProvider() = default;
 protected:
     struct DefinesIncludes {

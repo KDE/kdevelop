@@ -125,5 +125,10 @@ Path::List MsvcProvider::includes( const QString& ) const
 
 QString MsvcProvider::name() const
 {
-    return "msvc";
+    return "MSVC";
+}
+
+QString MsvcProvider::defaultPath() const
+{
+    return "cl.exe";
 }

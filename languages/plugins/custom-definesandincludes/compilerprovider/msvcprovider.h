@@ -33,7 +33,9 @@ public:
 
     virtual Path::List includes( const QString& path ) const override;
 
-    virtual QString name() const;
+    virtual QString name() const override;
+
+    virtual QString defaultPath() const override;
 };
 
 #endif // MSVCPROVIDER_H

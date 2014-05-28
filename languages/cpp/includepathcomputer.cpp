@@ -111,7 +111,7 @@ void IncludePathComputer::computeForeground()
       m_effectiveBuildDirectory.clear();
     }
 
-      for(const auto& dir : idm->includes(file, IDefinesAndIncludesManager::Type(IDefinesAndIncludesManager::UserDefined | IDefinesAndIncludesManager::CompilerSpecific))){
+      for (const auto& dir : idm->includes(file, IDefinesAndIncludesManager::Type(IDefinesAndIncludesManager::UserDefined | IDefinesAndIncludesManager::CompilerSpecific))){
         addInclude(dir);
       }
       m_defines = idm->defines(file);
@@ -123,12 +123,12 @@ void IncludePathComputer::computeForeground()
     }
   }
 
-  if ( noProject ) {
-    for( const auto& dir : IDefinesAndIncludesManager::manager()->includes(nullptr) ) {
+  if (noProject) {
+    for (const auto& dir : IDefinesAndIncludesManager::manager()->includes(nullptr)) {
       addInclude( dir );
     }
     m_defines = IDefinesAndIncludesManager::manager()->defines(nullptr);
-  }else if (!m_gotPathsFromManager) {
+  } else if (!m_gotPathsFromManager) {
     kDebug(9007) << "Did not find any include paths from project manager for" << m_source;
   }
 }

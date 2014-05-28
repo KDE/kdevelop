@@ -39,38 +39,51 @@
 
 using namespace KDevelop;
 
-QHash<QString, QString> DAICompilerProvider::defines( ProjectBaseItem* item ) const
+namespace
 {
-    if ( !item ) {
-        Q_ASSERT( m_projects.contains( nullptr ) );
-        if ( !m_projects[nullptr].compiler ) {
-            return {};
-        }
-        return m_projects[nullptr].compiler->defines( m_projects[nullptr].path );
-    }
-
-    auto project = item->project();
-    if ( !m_projects.contains( project ) || !m_projects[project].compiler ) {
+class DummyCompiler : public ICompilerProvider
+{
+    virtual QHash< QString, QString > defines(const QString&) const override
+    {
         return {};
     }
-    return m_projects[project].compiler->defines( m_projects[project].path );
+
+    virtual Path::List includes(const QString&) const override
+    {
+        return {};
+    }
+
+    virtual QString name() const override
+    {
+        return i18n("None");
+    }
+
+    virtual QString defaultPath() const override
+    {
+        return {};
+    }
+};
+}
+
+DAICompilerProvider::Compiler DAICompilerProvider::compilerForItem(ProjectBaseItem* item) const
+{
+    auto project = item ? item->project() : nullptr;
+    Q_ASSERT(m_projects.contains(project));
+    auto info = m_projects[project];
+    Q_ASSERT(info.compiler);
+    return info;
+}
+
+QHash<QString, QString> DAICompilerProvider::defines( ProjectBaseItem* item ) const
+{
+    auto info = compilerForItem(item);
+    return info.compiler->defines(info.path);
 }
 
 Path::List DAICompilerProvider::includes( ProjectBaseItem* item ) const
 {
-    if ( !item ) {
-        Q_ASSERT( m_projects.contains( nullptr ) );
-        if ( !m_projects[nullptr].compiler ) {
-            return {};
-        }
-        return m_projects[nullptr].compiler->includes( m_projects[nullptr].path );
-    }
-
-    auto project = item->project();
-    if ( !m_projects.contains( project ) || !m_projects[project].compiler ) {
-        return {};
-    }
-    return m_projects[project].compiler->includes( m_projects[project].path );
+    auto info = compilerForItem(item);
+    return info.compiler->includes(info.path);
 }
 
 IDefinesAndIncludesManager::Type DAICompilerProvider::type() const
@@ -80,12 +93,11 @@ IDefinesAndIncludesManager::Type DAICompilerProvider::type() const
 
 void DAICompilerProvider::addPoject( IProject* project, Compiler compiler )
 {
-    m_projects[project] = compiler;
+    Q_ASSERT(compiler.compiler);
     //cache includes/defines
-    if ( m_projects[project].compiler ) {
-        m_projects[project].compiler->includes( compiler.path );
-        m_projects[project].compiler->defines( compiler.path );
-    }
+    compiler.compiler->includes(compiler.path);
+    compiler.compiler->defines(compiler.path);
+    m_projects[project] = compiler;
 }
 
 void DAICompilerProvider::removePoject( IProject* project )
@@ -99,33 +111,31 @@ DAICompilerProvider::~DAICompilerProvider() {
 
 DAICompilerProvider::Compiler DAICompilerProvider::selectCompiler( const QString& compilerName, const QString& path ) const
 {
+    //This may happen for opened for the first time projects
     if ( compilerName.isEmpty() ) {
         for ( auto& compiler : m_providers ) {
-            if ( KStandardDirs::findExe( compiler->name() ).isEmpty() ) {
+            if ( KStandardDirs::findExe( compiler->defaultPath() ).isEmpty() ) {
                 continue;
             }
             definesAndIncludesDebug() << "Selected compiler: " << compiler->name();
-            return {compiler, !path.isEmpty() ? path : compiler->name()};
+            return {compiler, !path.isEmpty() ? path : compiler->defaultPath()};
         }
         kWarning() << "No compiler found. Standard includes/defines won't be provided to the project parser!";
     }else{
         for ( auto it = m_providers.constBegin(); it != m_providers.constEnd(); it++ ) {
             if ( ( *it )->name() == compilerName ) {
-                return {*it, !path.isEmpty() ? path : ( *it )->name()};
+                return {*it, !path.isEmpty() ? path : ( *it )->defaultPath()};
             }
         }
     }
-    return {};
+
+    return {ProviderPointer(new DummyCompiler()), QString()};
 }
 
 bool DAICompilerProvider::setCompiler( KDevelop::IProject* project, const QString& name, const QString& path )
 {
     auto compiler = selectCompiler( name, path );
-
-    if ( !compiler.compiler && name != "none" ) {
-        definesAndIncludesDebug() << "Invalid compiler: " << name << " " << path;
-        return false;
-    }
+    Q_ASSERT(compiler.compiler);
 
     addPoject( project, compiler );
 

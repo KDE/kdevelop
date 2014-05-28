@@ -64,6 +64,9 @@ private:
         ProviderPointer compiler;
         QString path;
     };
+
+    Compiler compilerForItem( ProjectBaseItem* item ) const;
+
     ///Goes through the list of available compilers and automatically selects an appropriate one.
     Compiler selectCompiler( const QString& compilerName, const QString& path ) const;
 
@@ -74,6 +77,7 @@ private:
 private Q_SLOTS:
     void projectOpened( KDevelop::IProject* );
     void projectClosed( KDevelop::IProject* );
+
 private:
     //list of compilers for each projects
     QHash<IProject*, Compiler> m_projects;

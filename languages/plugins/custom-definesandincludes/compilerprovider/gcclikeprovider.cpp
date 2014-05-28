@@ -136,10 +136,20 @@ Path::List GccLikeProvider::includes( const QString& path ) const
 
 QString ClangProvider::name() const
 {
-    return "clang";
+    return "Clang";
 }
 
 QString GccProvider::name() const
+{
+    return "GCC";
+}
+
+QString ClangProvider::defaultPath() const
+{
+    return "clang";
+}
+
+QString GccProvider::defaultPath() const
 {
     return "gcc";
 }
