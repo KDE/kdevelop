@@ -35,6 +35,7 @@ const QString projectPathPrefix = QLatin1String( "ProjectPath" );
 const QString projectPathKey = QLatin1String( "Path" );
 
 const QString customBuildSystemGroup = QLatin1String( "CustomBuildSystem" );
+const QString definesAndIncludesGroup = QLatin1String( "Defines And Includes" );
 }
 
 SettingsManager::SettingsManager()
@@ -152,25 +153,25 @@ QList<ConfigEntry> SettingsManager::readPaths( KConfig* cfg ) const
 
 QString SettingsManager::currentCompiler( KConfig* cfg ) const
 {
-    auto grp = cfg->group( "Custom Defines And Includes" );
+    auto grp = cfg->group( ConfigConstants::definesAndIncludesGroup );
     return grp.readEntry( "compiler", QString() );
 }
 
 bool SettingsManager::needToReparseCurrentProject( KConfig* cfg ) const
 {
-    auto grp = cfg->group( "Custom Defines And Includes" );
+    auto grp = cfg->group( ConfigConstants::definesAndIncludesGroup );
     return grp.readEntry( "reparse", true );
 }
 
 QString SettingsManager::pathToCompiler( KConfig* cfg ) const
 {
-    auto grp = cfg->group( "Custom Defines And Includes" );
+    auto grp = cfg->group( ConfigConstants::definesAndIncludesGroup );
     return grp.readEntry( "compilerPath", currentCompiler( cfg ) );
 }
 
 void SettingsManager::writeCompiler( KConfig* cfg, const QString& name )
 {
-    auto grp = cfg->group( "Custom Defines And Includes" );
+    auto grp = cfg->group( ConfigConstants::definesAndIncludesGroup );
 
     grp.writeEntry( "compiler", name );
     grp.writeEntry("compilerPath", name);
