@@ -126,6 +126,7 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent)
     m_contextMenuActions << runSelected;
 
     addAction(plugin->actionCollection()->action("run_all_tests"));
+    addAction(plugin->actionCollection()->action("stop_running_tests"));
 
     QString filterText;
     KConfigGroup config(ICore::self()->activeSession()->config(), sessionConfigGroup);
@@ -298,6 +299,7 @@ void TestView::runSelectedTests()
     {
         KDevelop::ExecuteCompositeJob* compositeJob = new KDevelop::ExecuteCompositeJob(this, jobs);
         compositeJob->setObjectName(i18np("Run 1 test", "Run %1 tests", jobs.size()));
+        compositeJob->setProperty("test_job", true);
         ICore::self()->runController()->registerJob(compositeJob);
     }
 }
