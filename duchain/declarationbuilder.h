@@ -63,8 +63,6 @@ protected:
     virtual void endVisit(QmlJS::AST::PropertyNameAndValue* node);
 
     // plugin.qmltypes
-    void declareExports(QmlJS::AST::ExpressionStatement *exports,
-                        KDevelop::Declaration* classdecl);
     void declareComponent(QmlJS::AST::UiObjectDefinition* node,
                           const KDevelop::RangeInRevision &range,
                           const KDevelop::QualifiedIdentifier &name);
@@ -82,6 +80,8 @@ protected:
     void declareEnum(QmlJS::AST::UiObjectDefinition* node,
                      const KDevelop::RangeInRevision &range,
                      const KDevelop::QualifiedIdentifier &name);
+    void declareExports(QmlJS::AST::ExpressionStatement *exports,
+                        KDevelop::Declaration* classdecl);
 
     // UI
     virtual void endVisit(QmlJS::AST::UiImport* node);

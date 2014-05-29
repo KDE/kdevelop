@@ -348,44 +348,6 @@ void DeclarationBuilder::endVisit(QmlJS::AST::PropertyNameAndValue* node)
 /*
  * plugin.qmltypes files
  */
-void DeclarationBuilder::declareExports(QmlJS::AST::ExpressionStatement *exports,
-                                        Declaration* classdecl)
-{
-    if (!exports || !exports->expression) {
-        return;
-    }
-
-    auto exportslist = QmlJS::AST::cast<QmlJS::AST::ArrayLiteral*>(exports->expression);
-
-    if (!exportslist) {
-        return;
-    }
-
-    // Make an alias between each exported name of the component and the component itself
-    for (auto it = exportslist->elements; it && it->expression; it = it->next) {
-        auto stringliteral = QmlJS::AST::cast<QmlJS::AST::StringLiteral *>(it->expression);
-
-        if (!stringliteral) {
-            continue;
-        }
-
-        // String literal like "Namespace/Class version".
-        QString exportname = stringliteral->value.toString().section(' ', 0, 0).section('/', -1, -1);
-
-        {
-            DUChainWriteLocker lock;
-            AliasDeclaration* decl = openDeclaration<AliasDeclaration>(
-                QualifiedIdentifier(exportname),
-                m_session->locationToRange(stringliteral->literalToken)
-            );
-
-            decl->setKind(Declaration::Alias);
-            decl->setAliasedDeclaration(IndexedDeclaration(classdecl));
-        }
-        closeDeclaration();
-    }
-}
-
 void DeclarationBuilder::declareComponent(QmlJS::AST::UiObjectDefinition* node,
                                           const RangeInRevision &range,
                                           const QualifiedIdentifier &name)
@@ -497,6 +459,44 @@ void DeclarationBuilder::declareEnum(QmlJS::AST::UiObjectDefinition* node,
         decl->setType(type);                // The type needs to be set here because closeContext is called before closeAndAssignType and needs to know the type of decl
     }
     openType(type);
+}
+
+void DeclarationBuilder::declareExports(QmlJS::AST::ExpressionStatement *exports,
+                                        Declaration* classdecl)
+{
+    if (!exports || !exports->expression) {
+        return;
+    }
+
+    auto exportslist = QmlJS::AST::cast<QmlJS::AST::ArrayLiteral*>(exports->expression);
+
+    if (!exportslist) {
+        return;
+    }
+
+    // Make an alias between each exported name of the component and the component itself
+    for (auto it = exportslist->elements; it && it->expression; it = it->next) {
+        auto stringliteral = QmlJS::AST::cast<QmlJS::AST::StringLiteral *>(it->expression);
+
+        if (!stringliteral) {
+            continue;
+        }
+
+        // String literal like "Namespace/Class version".
+        QString exportname = stringliteral->value.toString().section(' ', 0, 0).section('/', -1, -1);
+
+        {
+            DUChainWriteLocker lock;
+            AliasDeclaration* decl = openDeclaration<AliasDeclaration>(
+                QualifiedIdentifier(exportname),
+                m_session->locationToRange(stringliteral->literalToken)
+            );
+
+            decl->setKind(Declaration::Alias);
+            decl->setAliasedDeclaration(IndexedDeclaration(classdecl));
+        }
+        closeDeclaration();
+    }
 }
 
 /*
