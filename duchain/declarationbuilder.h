@@ -25,6 +25,11 @@
 
 #include "contextbuilder.h"
 
+namespace KDevelop
+{
+    class ClassDeclaration;
+}
+
 typedef KDevelop::AbstractTypeBuilder<QmlJS::AST::Node, QmlJS::AST::IdentifierPropertyName, ContextBuilder> TypeBuilder;
 typedef KDevelop::AbstractDeclarationBuilder<QmlJS::AST::Node, QmlJS::AST::IdentifierPropertyName, TypeBuilder> DeclarationBuilderBase;
 
@@ -80,16 +85,15 @@ protected:
     void declareEnum(QmlJS::AST::UiObjectDefinition* node,
                      const KDevelop::RangeInRevision &range,
                      const KDevelop::QualifiedIdentifier &name);
+    void declareComponentInstance(QmlJS::AST::ExpressionStatement *expression);
     void declareExports(QmlJS::AST::ExpressionStatement *exports,
-                        KDevelop::Declaration* classdecl);
+                        KDevelop::ClassDeclaration* classdecl);
 
     // UI
     virtual void endVisit(QmlJS::AST::UiImport* node);
 
     virtual bool visit(QmlJS::AST::UiObjectDefinition* node);
     virtual void endVisit(QmlJS::AST::UiObjectDefinition* node);
-
-    virtual bool visit(QmlJS::AST::UiObjectInitializer* node);
 
     virtual bool visit(QmlJS::AST::UiScriptBinding* node);
     virtual void endVisit(QmlJS::AST::UiScriptBinding* node);
@@ -99,6 +103,9 @@ protected:
 
 private:
     void closeAndAssignType();
+    void registerBaseClasses();              /*!< @brief Enumerates the base classes of the current class and import their inner contexts */
+    void addBaseClass(KDevelop::ClassDeclaration* classDecl, const QString &name);    /*!< @brief Add a base class to a class declaration */
+    void addBaseClass(KDevelop::ClassDeclaration* classDecl, const KDevelop::IndexedType& type);
     KDevelop::AbstractType::Ptr typeFromName(const QString& name);          /*!< @brief Type from a general name (int, string, or a class name) */
     KDevelop::AbstractType::Ptr typeFromClassName(const QString& name);     /*!< @brief Type from a class name, built-in types are not supported here */
 

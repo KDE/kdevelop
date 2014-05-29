@@ -128,14 +128,20 @@ void TestDeclarations::testQMLId()
 
         DUChainReadLocker lock;
 
-        QCOMPARE(top->localDeclarations().size(), 1);
-        ClassDeclaration* dec = dynamic_cast<ClassDeclaration*>(top->localDeclarations().first());
+        QCOMPARE(top->localDeclarations().size(), 3);       // Text, test and child are all in the global scope
+
+        // First declaration, the anonymous class
+        ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration *>(top->localDeclarations().first());
+        QVERIFY(classDecl);
+        QCOMPARE(classDecl->abstractType()->toString(), QString("<class>"));
+        QVERIFY(classDecl->internalContext());
+        QCOMPARE(classDecl->internalContext()->range(), RangeInRevision(5, 6, 5, 37));
+
+        // Second declaration: test
+        Declaration* dec = top->localDeclarations().at(1);
         QVERIFY(dec);
         QCOMPARE(dec->identifier().toString(), QString("test"));
-        QCOMPARE(dec->abstractType()->toString(), QString("Text"));
-        QCOMPARE(QString::fromUtf8(dec->comment()), QString("some comment"));
-        QVERIFY(dec->internalContext());
-        QCOMPARE(dec->internalContext()->range(), RangeInRevision(5, 6, 5, 37));
+        QCOMPARE(dec->abstractType()->toString(), QString("<class>"));
 
         oldDec = dec;
     }
@@ -160,16 +166,19 @@ void TestDeclarations::testQMLId()
 
         DUChainReadLocker lock;
 
-        QCOMPARE(top->localDeclarations().size(), 1);
-        ClassDeclaration* dec = dynamic_cast<ClassDeclaration*>(top->localDeclarations().first());
+        QCOMPARE(top->localDeclarations().size(), 4); // Text, test, child and foo
+        // First declaration, the anonymous class
+        ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration *>(top->localDeclarations().first());
+        QVERIFY(classDecl);
+        QCOMPARE(classDecl->abstractType()->toString(), QString("<class>"));
+        QVERIFY(classDecl->internalContext());
+        QCOMPARE(classDecl->internalContext()->range(), RangeInRevision(5, 6, 6, 17));
+
+        // Second declaration: test
+        Declaration* dec = top->localDeclarations().at(1);
         QVERIFY(dec);
-        QVERIFY(oldDec);
-        QVERIFY(oldDec.data() == dec);
         QCOMPARE(dec->identifier().toString(), QString("test"));
-        QCOMPARE(dec->abstractType()->toString(), QString("Text"));
-        QCOMPARE(QString::fromUtf8(dec->comment()), QString("some comment"));
-        QVERIFY(dec->internalContext());
-        QCOMPARE(dec->internalContext()->range(), RangeInRevision(5, 6, 6, 17));
+        QCOMPARE(dec->abstractType()->toString(), QString("<class>"));
     }
 }
 

@@ -1,10 +1,12 @@
 import QtQuick 1.1
 
 /**
- * "toString" : "class someId",
- * "type" : { "toString" : "Text" }
+ * "type" : { "toString" : "<class>" }
  */
 Text {
+    /*
+     * "toString" : "<class> someId"
+     */
     id: someId
     text: "asdf"
 
@@ -19,15 +21,16 @@ Text {
     property bool bar: false
 
     /**
-     * "toString" : "class ",
-     * "type" : { "toString" : "Foo" }
+     * "type" : { "toString" : "<class>" }
      */
     Foo {
         /**
-         * "toString" : "class bar",
-         * "type" : { "toString" : "Bar" }
+         * "type" : { "toString" : "<class>" }
          */
         Bar {
+            /**
+             * "toString" : "<class> bar"
+             */
             id: bar
         }
     }

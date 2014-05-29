@@ -1,12 +1,18 @@
 Module {
      /**
       * "toString" : "class QAbstractItemModel",
-      * "useCount" : 2
+      * "kind": "Type",
+      * "useCount" : 1
       */
      Component {
          name: "QAbstractItemModel"
          prototype: "QObject"
-         exports: ["QtQuick/AbstractItemModel 1.0"]
+         exports: [
+            /**
+             * "toString" : "class AbstractItemModel"
+             */
+            "QtQuick/AbstractItemModel 1.0"
+        ]
 
          /**
           * "type" : { "toString" : "LayoutChangeHint" },
@@ -57,18 +63,18 @@ Module {
      }
 
      /**
-      * "toString" : "class foo"
+      * "kind" : "Type"
       */
      QAbstractItemModel
      {
          /**
-         * "toString" : "class foo"
-         */
+          * "kind": "Instance"
+          */
          id: foo
      }
 
      /**
-      * "type" : { "toString" : "AbstractItemModel" }
+      * "kind" : "Type"
       */
      AbstractItemModel
      {

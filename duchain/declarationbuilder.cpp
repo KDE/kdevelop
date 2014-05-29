@@ -378,12 +378,6 @@ void DeclarationBuilder::declareComponent(QmlJS::AST::UiObjectDefinition* node,
         }
     }
     openType(type);
-
-    // The component may have exports (considered as type aliases)
-    declareExports(
-        QmlJS::AST::cast<QmlJS::AST::ExpressionStatement*>(QmlJS::getQMLAttribute(node->initializer->members, "exports")),
-        decl
-    );
 }
 
 void DeclarationBuilder::declareMethod(QmlJS::AST::UiObjectDefinition* node,
@@ -461,10 +455,37 @@ void DeclarationBuilder::declareEnum(QmlJS::AST::UiObjectDefinition* node,
     openType(type);
 }
 
-void DeclarationBuilder::declareExports(QmlJS::AST::ExpressionStatement *exports,
-                                        Declaration* classdecl)
+void DeclarationBuilder::declareComponentInstance(QmlJS::AST::ExpressionStatement* expression)
 {
-    if (!exports || !exports->expression) {
+    if (!expression) {
+        return;
+    }
+
+    auto identifier = QmlJS::AST::cast<QmlJS::AST::IdentifierExpression *>(expression->expression);
+
+    if (!identifier) {
+        return;
+    }
+
+    {
+        DUChainWriteLocker lock;
+        Declaration* decl = openDeclaration<Declaration>(
+            QualifiedIdentifier(identifier->name.toString()),
+            m_session->locationToRange(identifier->identifierToken)
+        );
+
+        // Put the declaration in the global scope
+        decl->setKind(Declaration::Instance);
+        decl->setType(currentAbstractType());
+        decl->setContext(topContext());
+    }
+    closeDeclaration();
+}
+
+void DeclarationBuilder::declareExports(QmlJS::AST::ExpressionStatement *exports,
+                                        ClassDeclaration* classdecl)
+{
+    if (!exports) {
         return;
     }
 
@@ -474,7 +495,7 @@ void DeclarationBuilder::declareExports(QmlJS::AST::ExpressionStatement *exports
         return;
     }
 
-    // Make an alias between each exported name of the component and the component itself
+    // Declare a new class that has the exported name, but whose type is the original component name
     for (auto it = exportslist->elements; it && it->expression; it = it->next) {
         auto stringliteral = QmlJS::AST::cast<QmlJS::AST::StringLiteral *>(it->expression);
 
@@ -484,18 +505,35 @@ void DeclarationBuilder::declareExports(QmlJS::AST::ExpressionStatement *exports
 
         // String literal like "Namespace/Class version".
         QString exportname = stringliteral->value.toString().section(' ', 0, 0).section('/', -1, -1);
+        StructureType::Ptr type(new StructureType);
 
         {
             DUChainWriteLocker lock;
-            AliasDeclaration* decl = openDeclaration<AliasDeclaration>(
+            ClassDeclaration* decl = openDeclaration<ClassDeclaration>(
                 QualifiedIdentifier(exportname),
                 m_session->locationToRange(stringliteral->literalToken)
             );
 
-            decl->setKind(Declaration::Alias);
-            decl->setAliasedDeclaration(IndexedDeclaration(classdecl));
+            // The exported version inherits from the C++ component
+            decl->setKind(Declaration::Type);
+            decl->setClassType(ClassDeclarationData::Class);
+            decl->setContext(currentContext()->parentContext());        // Don't declare the export in its C++-ish component, but in the scope above
+            decl->clearBaseClasses();
+            type->setDeclaration(decl);
+
+            addBaseClass(decl, classdecl->indexedType());
+
+            // Open a context for the exported class, and register its base class in it
+            decl->setInternalContext(openContext(
+                stringliteral,
+                DUContext::Class,
+                QualifiedIdentifier(exportname)
+            ));
+            registerBaseClasses();
+            closeContext();
         }
-        closeDeclaration();
+        openType(type);
+        closeAndAssignType();
     }
 }
 
@@ -561,19 +599,24 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiObjectDefinition* node)
         declareEnum(node, range, name);
         contextType = DUContext::Enum;
     } else {
-        // No special base class, so it is a normal instantiation
-        QmlJS::QMLAttributeValue id_attribute = QmlJS::getQMLAttributeValue(node->initializer->members, "id");
-        RangeInRevision range(m_session->locationToRange(id_attribute.location));
-
-        name = QualifiedIdentifier(id_attribute.value);
+        // Define an anonymous subclass of the baseclass. This subclass will
+        // be instantiated when "id:" is encountered
+        name = QualifiedIdentifier();
+        range = RangeInRevision();
 
         StructureType::Ptr type(new StructureType);
-        type->setDeclarationId(DeclarationId(QualifiedIdentifier(baseclass)));
 
         {
             DUChainWriteLocker lock;
             ClassDeclaration* decl = openDeclaration<ClassDeclaration>(name, range);
-            decl->setKind(Declaration::Instance);
+
+            decl->clearBaseClasses();
+            decl->setAlwaysForceDirect(true);   // This declaration has no name, so type->setDeclaration is obliged to store a direct pointer to the declaration.
+            decl->setKind(Declaration::Type);
+            decl->setType(type);                // The class needs to know its type early because it contains definitions that depend on that type
+            type->setDeclaration(decl);
+
+            addBaseClass(decl, baseclass);
         }
         openType(type);
     }
@@ -586,6 +629,18 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiObjectDefinition* node)
         name
     );
 
+    // Set the inner context of the current declaration, because nested classes
+    // need to know the inner context of their parents
+    DUContext* ctx = currentContext();
+
+    {
+        DUChainWriteLocker lock;
+        currentDeclaration()->setInternalContext(ctx);
+    }
+
+    // If we have have declared a class, import the context of its base classes
+    registerBaseClasses();
+
     return DeclarationBuilderBase::visit(node);
 }
 
@@ -595,53 +650,55 @@ void DeclarationBuilder::endVisit(QmlJS::AST::UiObjectDefinition* node)
 
     // Do not crash if the user has typed an empty object definition
     if (node->initializer && node->initializer->members) {
-        {
-            DUChainWriteLocker lock;
-            currentDeclaration()->setInternalContext(currentContext());
-        }
-
         closeContext();
         closeAndAssignType();
     }
 }
 
-bool DeclarationBuilder::visit(QmlJS::AST::UiObjectInitializer* node)
-{
-    const bool ret = DeclarationBuilderBase::visit(node);
-    DUChainWriteLocker lock;
-    if (currentDeclaration<ClassDeclaration>()) {
-        Q_ASSERT(currentContext());
-        currentDeclaration()->setInternalContext(currentContext());
-    }
-    return ret;
-}
-
 bool DeclarationBuilder::visit(QmlJS::AST::UiScriptBinding* node)
 {
-    if (node->qualifiedId && node->qualifiedId->name != QLatin1String("id")) {
-        setComment(node);
+    setComment(node);
 
-        const RangeInRevision& range = m_session->locationToRange(node->qualifiedId->identifierToken);
-        const QualifiedIdentifier id(node->qualifiedId->name.toString());
-        const AbstractType::Ptr type(findType(node->statement).type);
-
-        {
-            DUChainWriteLocker lock;
-            openDeclaration<ClassMemberDeclaration>(id, range);
-        }
-        openType(type);
-
-        return false;   // findType has already explored node->statement
+    if (!node->qualifiedId) {
+        return DeclarationBuilderBase::visit(node);
     }
 
-    return DeclarationBuilderBase::visit(node);
+    // Special-case some binding names
+    QString bindingName = node->qualifiedId->name.toString();
+
+    if (bindingName == QLatin1String("id")) {
+        // Instantiate a QML component: its type is the current type (the anonymous
+        // QML class that surrounds the declaration)
+        declareComponentInstance(QmlJS::AST::cast<QmlJS::AST::ExpressionStatement *>(node->statement));
+    } else if (bindingName == QLatin1String("exports")) {
+        // Declare sub-classes of the current QML component: they are its exported
+        // class names
+        ClassDeclaration* classDecl = currentDeclaration<ClassDeclaration>();
+
+        if (classDecl && classDecl->classType() == ClassDeclarationData::Interface) {
+            declareExports(QmlJS::AST::cast<QmlJS::AST::ExpressionStatement *>(node->statement), classDecl);
+        }
+    }
+
+    // Declare the script binding
+    RangeInRevision range = m_session->locationToRange(node->qualifiedId->identifierToken);
+    QualifiedIdentifier id(node->qualifiedId->name.toString());
+    AbstractType::Ptr type(findType(node->statement).type);
+
+    {
+        DUChainWriteLocker lock;
+        openDeclaration<ClassMemberDeclaration>(id, range);
+    }
+    openType(type);
+
+    return false;   // findType has already explored node->statement
 }
 
 void DeclarationBuilder::endVisit(QmlJS::AST::UiScriptBinding* node)
 {
     DeclarationBuilderBase::endVisit(node);
 
-    if (node->qualifiedId && node->qualifiedId->name != QLatin1String("id")) {
+    if (node->qualifiedId) {
         closeAndAssignType();
     }
 }
@@ -727,5 +784,42 @@ AbstractType::Ptr DeclarationBuilder::typeFromClassName(const QString& name)
         rs->setDeclarationId(DeclarationId(IndexedQualifiedIdentifier(QualifiedIdentifier(name))));
 
         return AbstractType::Ptr(rs);
+    }
+}
+
+void DeclarationBuilder::addBaseClass(ClassDeclaration* classDecl, const QString& name)
+{
+    addBaseClass(classDecl, typeFromClassName(name)->indexed());
+}
+
+void DeclarationBuilder::addBaseClass(ClassDeclaration* classDecl, const IndexedType& type)
+{
+    BaseClassInstance baseClass;
+
+    baseClass.access = Declaration::Public;
+    baseClass.virtualInheritance = false;
+    baseClass.baseClass = type;
+
+    classDecl->addBaseClass(baseClass);
+}
+
+void DeclarationBuilder::registerBaseClasses()
+{
+    ClassDeclaration* classdecl = currentDeclaration<ClassDeclaration>();
+    DUContext *ctx = currentContext();
+
+    if (classdecl) {
+        DUChainWriteLocker lock;
+
+        for (uint i=0; i<classdecl->baseClassesSize(); ++i)
+        {
+            const BaseClassInstance &baseClass = classdecl->baseClasses()[i];
+            StructureType::Ptr baseType = StructureType::Ptr::dynamicCast(baseClass.baseClass.abstractType());
+            TopDUContext* topctx = topContext();
+
+            if (baseType && baseType->declaration(topctx)) {
+                ctx->addImportedParentContext(baseType->declaration(topctx)->logicalInternalContext(topctx));
+            }
+        }
     }
 }
