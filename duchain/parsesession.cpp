@@ -89,6 +89,13 @@ IndexedString ParseSession::url() const
     return m_url;
 }
 
+QString ParseSession::urlBaseName() const
+{
+    return QString::fromUtf8(m_url.byteArray())
+        .section('/', -1, -1)                   // Base name
+        .section('.', 0, -2);                   // Without its extension
+}
+
 QList<ProblemPointer> ParseSession::problems() const
 {
     QList<ProblemPointer> problems;

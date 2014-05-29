@@ -25,7 +25,7 @@
 #include <language/duchain/types/enumeratortype.h>
 #include <language/duchain/types/typeutils.h>
 #include <language/duchain/declaration.h>
-#include <language/duchain/aliasdeclaration.h>
+#include <language/duchain/namespacealiasdeclaration.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/classdeclaration.h>
 
@@ -348,34 +348,48 @@ void DeclarationBuilder::endVisit(QmlJS::AST::PropertyNameAndValue* node)
 /*
  * plugin.qmltypes files
  */
+QualifiedIdentifier DeclarationBuilder::declareModule(const RangeInRevision& range)
+{
+    // Declare a namespace whose name is the base name of the current file
+    QualifiedIdentifier name(m_session->urlBaseName());
+    StructureType::Ptr type(new StructureType);
+
+    {
+        DUChainWriteLocker lock;
+        Declaration* decl = openDefinition<Declaration>(name, range);
+
+        decl->setKind(Declaration::Namespace);
+        type->setDeclaration(decl);
+    }
+    openType(type);
+
+    return name;
+}
+
 void DeclarationBuilder::declareComponent(QmlJS::AST::UiObjectDefinition* node,
                                           const RangeInRevision &range,
                                           const QualifiedIdentifier &name)
 {
-    QString inherits = QmlJS::getQMLAttributeValue(node->initializer->members, "prototype").value.section('/', -1, -1);
+    QString baseClass = QmlJS::getQMLAttributeValue(node->initializer->members, "prototype").value.section('/', -1, -1);
 
     // Declare the component itself
     StructureType::Ptr type(new StructureType);
-    type->setDeclarationId(DeclarationId(name));
 
     ClassDeclaration* decl;
     {
         DUChainWriteLocker lock;
-        decl = openDeclaration<ClassDeclaration>(name, range, DeclarationIsDefinition);
+        decl = openDeclaration<ClassDeclaration>(name, range);
 
         decl->setKind(Declaration::Type);
+        decl->setClassType(ClassDeclarationData::Interface);
         decl->clearBaseClasses();
 
-        if (!inherits.isNull()) {
-            BaseClassInstance baseclass;
-
-            baseclass.access = Declaration::Public;
-            baseclass.virtualInheritance = false;
-            baseclass.baseClass = typeFromClassName(inherits)->indexed();
-
-
-            decl->addBaseClass(baseclass);
+        if (!baseClass.isNull()) {
+            addBaseClass(decl, baseClass);
         }
+
+        type->setDeclaration(decl);
+        decl->setType(type);            // declareExports needs to know the type of decl
     }
     openType(type);
 }
@@ -442,15 +456,15 @@ void DeclarationBuilder::declareEnum(QmlJS::AST::UiObjectDefinition* node,
 {
     EnumerationType::Ptr type(new EnumerationType);
 
-    type->setDeclarationId(DeclarationId(name));
-    type->setDataType(IntegralType::TypeEnumeration);
-
     {
         DUChainWriteLocker lock;
         ClassMemberDeclaration* decl = openDeclaration<ClassMemberDeclaration>(name, range);
 
         decl->setKind(Declaration::Type);
         decl->setType(type);                // The type needs to be set here because closeContext is called before closeAndAssignType and needs to know the type of decl
+
+        type->setDataType(IntegralType::TypeEnumeration);
+        type->setDeclaration(decl);
     }
     openType(type);
 }
@@ -540,7 +554,7 @@ void DeclarationBuilder::declareExports(QmlJS::AST::ExpressionStatement *exports
 /*
  * UI
  */
-void DeclarationBuilder::endVisit(QmlJS::AST::UiImport* node)
+bool DeclarationBuilder::visit(QmlJS::AST::UiImport* node)
 {
     QmlJS::AST::UiQualifiedId *part = node->importUri;
     QString uri;
@@ -554,12 +568,40 @@ void DeclarationBuilder::endVisit(QmlJS::AST::UiImport* node)
     ReferencedTopDUContext importedContext = m_session->contextOfModule(uri + "qml");
 
     if (importedContext) {
-        DUChainWriteLocker lock;
-        currentContext()->addImportedParentContext(
-            importedContext,
-            m_session->locationToRange(node->importToken).start
-        );
+        {
+            DUChainWriteLocker lock;
+            currentContext()->addImportedParentContext(
+                importedContext,
+                m_session->locationToRange(node->importToken).start
+            );
+        }
+
+        // Create a namespace import statement
+        StructureType::Ptr type(new StructureType);
+        QualifiedIdentifier importedNamespaceName(uri.left(uri.length() - 1));  // QtQuick.Controls. -> QtQuick.Controls
+
+        {
+            DUChainWriteLocker lock;
+            NamespaceAliasDeclaration* decl = openDefinition<NamespaceAliasDeclaration>(
+                QualifiedIdentifier(globalImportIdentifier()),
+                m_session->locationToRange(node->importIdToken)
+            );
+
+            decl->setImportIdentifier(importedNamespaceName);
+        }
+        openType(type);
     }
+
+    return DeclarationBuilderBase::visit(node);
+}
+
+void DeclarationBuilder::endVisit(QmlJS::AST::UiImport* node)
+{
+    if (currentDeclaration<NamespaceAliasDeclaration>()) {
+        closeAndAssignType();
+    }
+
+    return DeclarationBuilderBase::endVisit(node);
 }
 
 bool DeclarationBuilder::visit(QmlJS::AST::UiObjectDefinition* node)
@@ -598,6 +640,10 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiObjectDefinition* node)
         // Enumeration. The "values" key contains a dictionary of name -> number entries.
         declareEnum(node, range, name);
         contextType = DUContext::Enum;
+    } else if (baseclass == QLatin1String("Module")) {
+        // QML Module, that declares a namespace
+        name = declareModule(range);
+        contextType = DUContext::Namespace;
     } else {
         // Define an anonymous subclass of the baseclass. This subclass will
         // be instantiated when "id:" is encountered
@@ -632,10 +678,18 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiObjectDefinition* node)
     // Set the inner context of the current declaration, because nested classes
     // need to know the inner context of their parents
     DUContext* ctx = currentContext();
+    Declaration* decl = currentDeclaration();
 
     {
         DUChainWriteLocker lock;
-        currentDeclaration()->setInternalContext(ctx);
+        decl->setInternalContext(ctx);
+    }
+
+    // If we opened a namespace, ensure that its internal context is of namespace type
+    if (decl->kind() == Declaration::Namespace) {
+        DUChainWriteLocker lock;
+        ctx->setType(DUContext::Namespace);
+        ctx->setLocalScopeIdentifier(decl->qualifiedIdentifier());
     }
 
     // If we have have declared a class, import the context of its base classes

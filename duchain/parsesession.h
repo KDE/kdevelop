@@ -61,6 +61,11 @@ public:
     KDevelop::IndexedString url() const;
 
     /**
+     * @return the basename, without its extension, of url()
+     */
+    QString urlBaseName() const;
+
+    /**
      * @return true if the document was properly parsed, false otherwise.
      */
     bool isParsedCorrectly() const;

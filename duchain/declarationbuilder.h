@@ -68,6 +68,7 @@ protected:
     virtual void endVisit(QmlJS::AST::PropertyNameAndValue* node);
 
     // plugin.qmltypes
+    KDevelop::QualifiedIdentifier declareModule(const KDevelop::RangeInRevision &range);
     void declareComponent(QmlJS::AST::UiObjectDefinition* node,
                           const KDevelop::RangeInRevision &range,
                           const KDevelop::QualifiedIdentifier &name);
@@ -90,6 +91,7 @@ protected:
                         KDevelop::ClassDeclaration* classdecl);
 
     // UI
+    virtual bool visit(QmlJS::AST::UiImport* node);
     virtual void endVisit(QmlJS::AST::UiImport* node);
 
     virtual bool visit(QmlJS::AST::UiObjectDefinition* node);

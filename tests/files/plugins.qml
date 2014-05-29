@@ -1,6 +1,10 @@
+/**
+ * "toString" : "plugins plugins",
+ * "kind" : "Namespace"
+ */
 Module {
      /**
-      * "toString" : "class QAbstractItemModel",
+      * "toString" : "interface QAbstractItemModel",
       * "kind": "Type",
       * "useCount" : 1
       */
@@ -15,7 +19,7 @@ Module {
         ]
 
          /**
-          * "type" : { "toString" : "LayoutChangeHint" },
+          * "type" : { "toString" : "plugins::QAbstractItemModel::LayoutChangeHint" },
           * "kind" : "Type",
           * "internalContext" : { "type" : "Enum" }
           */
