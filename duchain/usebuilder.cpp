@@ -41,6 +41,11 @@ bool UseBuilder::visit(QmlJS::AST::UiQualifiedId* node)
     return UseBuilderBase::visit(node);
 }
 
+bool UseBuilder::visit(QmlJS::AST::UiImport* node)
+{
+    return false;   // Don't highlight the identifiers that appear in import statements
+}
+
 void UseBuilder::newUse(QmlJS::AST::Node* node, const QmlJS::AST::SourceLocation& loc, const QString& name)
 {
     const RangeInRevision range(m_session->locationToRange(loc));
