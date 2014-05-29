@@ -11,7 +11,7 @@ add_subdirectory(icons)
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9042 -DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
 
 set( cmakecommon_SRCS
-  parser/cmListFileLexer.c
+  parser/cmListFileLexer.cpp
   parser/astfactory.cpp
   parser/cmakelistsparser.cpp
   parser/cmakeast.cpp

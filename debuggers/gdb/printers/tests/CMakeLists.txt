@@ -66,7 +66,7 @@ add_debuggable_executable(qlistpod SRCS qlistpod.cpp)
 target_link_libraries(qlistpod Qt5::Core)
 
 add_debuggable_executable(ktexteditortypes SRCS ktexteditortypes.cpp)
-target_link_libraries(ktexteditortypes Qt5::Core KF5::TextEditor)
+target_link_libraries(ktexteditortypes Qt5::Core KF5::TextEditor ${KDEVPLATFORM_UTIL_LIBRARIES})
 
 add_debuggable_executable(kdeveloptypes SRCS kdeveloptypes.cpp)
 target_link_libraries(kdeveloptypes Qt5::Core KF5::TextEditor ${KDEVPLATFORM_UTIL_LIBRARIES})
