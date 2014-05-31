@@ -55,6 +55,13 @@ QVariant CompletionItem::data(const QModelIndex& index, int role, const CodeComp
             }
         }
 
+        if (decl && decl->abstractType() &&
+            decl->kind() == Declaration::Type &&
+            decl->abstractType()->whichType() == AbstractType::TypeEnumeration) {
+            // Enum
+            return QString("enum");
+        }
+
         if (declType &&
             decl->kind() == Declaration::Instance &&
             declType->declarationId().qualifiedIdentifier().isEmpty()) {
