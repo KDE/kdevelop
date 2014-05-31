@@ -1,10 +1,6 @@
 [Buildset]
 BuildItems=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x00)
 
-[Custom Defines And Includes]
-compiler=gcc
-compilerPath=gcc
-
 [CustomBuildSystem]
 CurrentConfiguration=BuildConfig0
 
@@ -46,6 +42,10 @@ Enabled=false
 Environment=
 Executable=
 Type=4
+
+[Defines And Includes]
+compiler=GCC
+compilerPath=gcc
 
 [MakeBuilder]
 Number Of Jobs=1

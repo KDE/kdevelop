@@ -1,10 +1,6 @@
 [Buildset]
 BuildItems=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x01\x00\x00\x00\x0b\x00\x00\x00\x00\x01\x00\x00\x00 \x00M\x00u\x00l\x00t\x00i\x00P\x00a\x00t\x00h\x00P\x00r\x00o\x00j\x00e\x00c\x00t)
 
-[Custom Defines And Includes]
-compiler=gcc
-compilerPath=gcc
-
 [CustomBuildSystem]
 CurrentConfiguration=BuildConfig0
 
@@ -39,6 +35,10 @@ Enabled=false
 Environment=
 Executable=
 Type=2
+
+[Defines And Includes]
+compiler=GCC
+compilerPath=gcc
 
 [Project]
 VersionControlSupport=
