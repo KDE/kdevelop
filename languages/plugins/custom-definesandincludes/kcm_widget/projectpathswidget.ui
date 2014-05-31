@@ -133,30 +133,10 @@
         </widget>
        </item>
        <item>
-        <widget class="QComboBox" name="kcfg_compiler">
+        <widget class="QComboBox" name="compiler">
          <property name="toolTip">
           <string>Select a compiler that will be used to determine standart include directories and macros. </string>
          </property>
-         <item>
-          <property name="text">
-           <string>gcc</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>clang</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>msvc</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>none</string>
-          </property>
-         </item>
         </widget>
        </item>
       </layout>

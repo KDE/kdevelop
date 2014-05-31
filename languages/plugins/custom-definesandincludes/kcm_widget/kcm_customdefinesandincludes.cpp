@@ -35,6 +35,28 @@
 
 #include "kcm_customdefinesandincludes.h"
 
+namespace
+{
+IDAICompilerProvider* compilerProvider()
+{
+    auto compilerProvider = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IDAICompilerProvider");
+    if (!compilerProvider || !compilerProvider->extension<IDAICompilerProvider>()) {
+        return {};
+    }
+
+    return compilerProvider->extension<IDAICompilerProvider>();
+}
+
+QStringList compilerNames(QVector<ProviderPointer> compilers)
+{
+    QStringList names;
+    for (const auto& compiler : compilers) {
+        names << compiler->name();
+    }
+    return names;
+}
+}
+
 K_PLUGIN_FACTORY(DefinesAndIncludesFactory, registerPlugin<DefinesAndIncludes>(); )
 K_EXPORT_PLUGIN(DefinesAndIncludesFactory("kcm_kdevcustomdefinesandincludes", "kdevcustomdefinesandincludes"))
 
@@ -52,6 +74,15 @@ DefinesAndIncludes::DefinesAndIncludes( QWidget* parent, const QVariantList& arg
 
 void DefinesAndIncludes::dataChanged()
 {
+    if (auto cp = compilerProvider()) {
+        auto name = configWidget->currentCompilerName();
+        for (auto& c : cp->compilers()) {
+            if (c->name() == name) {
+                configWidget->setCompilerPath(c->defaultPath());
+            }
+        }
+    }
+
     emit changed(true);
 }
 
@@ -65,6 +96,12 @@ void DefinesAndIncludes::loadFrom( KConfig* cfg )
     auto iadm = KDevelop::IDefinesAndIncludesManager::manager();
     auto settings = static_cast<KDevelop::DefinesAndIncludesManager*>( iadm );
     configWidget->setPaths( settings->readPaths( cfg ) );
+
+    if (auto cp = compilerProvider()) {
+        configWidget->setCompilers(compilerNames(cp->compilers()));
+        configWidget->setCurrentCompiler(cp->currentCompiler(project())->name());
+        configWidget->setCompilerPath(!settings->pathToCompiler(cfg).isEmpty() ? settings->pathToCompiler(cfg) : cp->currentCompiler(project())->defaultPath());
+    }
 }
 
 void DefinesAndIncludes::saveTo(KConfig* cfg, KDevelop::IProject*)
@@ -72,6 +109,12 @@ void DefinesAndIncludes::saveTo(KConfig* cfg, KDevelop::IProject*)
     auto iadm = KDevelop::IDefinesAndIncludesManager::manager();
     auto settings = static_cast<KDevelop::DefinesAndIncludesManager*>( iadm );
     settings->writePaths( cfg, configWidget->paths() );
+
+    if (auto cp = compilerProvider()) {
+        settings->writeCompiler(cfg ,configWidget->currentCompilerName());
+
+        cp->setCompiler(project(), settings->currentCompiler(cfg), settings->pathToCompiler(cfg));
+    }
 
     if ( settings->needToReparseCurrentProject( cfg ) ) {
         using namespace KDevelop;
@@ -84,13 +127,6 @@ void DefinesAndIncludes::saveTo(KConfig* cfg, KDevelop::IProject*)
             }
         }
     }
-
-    auto compilerProvider = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IDAICompilerProvider");
-    if ( !compilerProvider || !compilerProvider->extension<IDAICompilerProvider>()) {
-        return;
-    }
-
-    compilerProvider->extension<IDAICompilerProvider>()->setCompiler(project(), settings->currentCompiler(cfg), settings->pathToCompiler(cfg));
 }
 
 void DefinesAndIncludes::load()

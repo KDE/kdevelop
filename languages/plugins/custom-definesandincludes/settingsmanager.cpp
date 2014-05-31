@@ -166,13 +166,17 @@ bool SettingsManager::needToReparseCurrentProject( KConfig* cfg ) const
 QString SettingsManager::pathToCompiler( KConfig* cfg ) const
 {
     auto grp = cfg->group( ConfigConstants::definesAndIncludesGroup );
-    return grp.readEntry( "compilerPath", currentCompiler( cfg ) );
+    return grp.readEntry( "compilerPath", QString() );
 }
 
 void SettingsManager::writeCompiler( KConfig* cfg, const QString& name )
 {
-    auto grp = cfg->group( ConfigConstants::definesAndIncludesGroup );
+    auto grp = cfg->group(ConfigConstants::definesAndIncludesGroup);
+    grp.writeEntry("compiler", name);
+}
 
-    grp.writeEntry( "compiler", name );
+void SettingsManager::writePathToCompiler( KConfig* cfg, const QString& name )
+{
+    auto grp = cfg->group(ConfigConstants::definesAndIncludesGroup);
     grp.writeEntry("compilerPath", name);
 }

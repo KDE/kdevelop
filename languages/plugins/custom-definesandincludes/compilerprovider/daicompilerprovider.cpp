@@ -134,7 +134,7 @@ DAICompilerProvider::Compiler DAICompilerProvider::selectCompiler( const QString
 
 bool DAICompilerProvider::setCompiler( KDevelop::IProject* project, const QString& name, const QString& path )
 {
-    auto compiler = selectCompiler( name, path );
+    auto compiler = selectCompiler( name, path.trimmed() );
     Q_ASSERT(compiler.compiler);
 
     addPoject( project, compiler );
@@ -150,10 +150,11 @@ void DAICompilerProvider::projectOpened( KDevelop::IProject* project )
 
     auto path = settings->pathToCompiler( projectConfig );
     auto name = settings->currentCompiler( projectConfig );
-    auto compiler = selectCompiler( !name.isEmpty() ? name : path, path );
+    auto compiler = selectCompiler( name, path.trimmed() );
 
     if ( compiler.compiler && ( compiler.compiler->name() != name ) ) {
         settings->writeCompiler( projectConfig, compiler.compiler->name() );
+        settings->writePathToCompiler( projectConfig, compiler.path );
     }
     definesAndIncludesDebug() << " compiler is: " << ( compiler.compiler ? compiler.compiler->name() : nullptr );
 
@@ -179,6 +180,7 @@ DAICompilerProvider::DAICompilerProvider( QObject* parent, const QVariantList& )
     m_providers.append( ProviderPointer( new ClangProvider() ) );
     m_providers.append( ProviderPointer( new GccProvider() ) );
     m_providers.append( ProviderPointer( new MsvcProvider() ) );
+    m_providers.append( ProviderPointer( new DummyCompiler() ) );
 
     IDefinesAndIncludesManager::manager()->registerProvider( this );
 
@@ -187,6 +189,17 @@ DAICompilerProvider::DAICompilerProvider( QObject* parent, const QVariantList& )
 
     //Add a provider for files without project
     addPoject( nullptr, selectCompiler({}, {}));
+}
+
+QVector< ProviderPointer > DAICompilerProvider::compilers() const
+{
+    return m_providers;
+}
+
+ProviderPointer DAICompilerProvider::currentCompiler(IProject* project) const
+{
+    Q_ASSERT(m_projects.contains(project));
+    return m_projects[project].compiler;
 }
 
 #include "daicompilerprovider.moc"

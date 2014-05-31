@@ -5,20 +5,11 @@
       http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
   <kcfgfile arg="true"/>
 
-  <group name="Custom Defines And Includes">
+  <group name="Defines And Includes">
     <entry name="reparse" key="reparse" type="Bool">
         <default>true</default>
     </entry>
     <entry name="compilerPath" key="compilerPath" type="String">
-    </entry>
-    <entry name="compiler" key="compiler" type="Enum">
-        <choices>
-            <choice name="gcc" />
-            <choice name="clang" />
-            <choice name="msvc" />
-            <choice name="none" />
-        </choices>
-        <default>none</default>
     </entry>
   </group>
 </kcfg>

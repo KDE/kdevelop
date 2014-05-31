@@ -57,11 +57,10 @@ ProjectPathsWidget::ProjectPathsWidget( QWidget* parent )
     connect( pathsModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SIGNAL(changed()) );
     connect( pathsModel, SIGNAL(rowsInserted(QModelIndex,int,int)), SIGNAL(changed()) );
     connect( pathsModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), SIGNAL(changed()) );
+    connect( ui->compiler, SIGNAL(activated(QString)), SIGNAL(changed()) );
 
     connect( ui->includesWidget, SIGNAL(includesChanged(QStringList)), SLOT(includesChanged(QStringList)) );
     connect( ui->definesWidget, SIGNAL(definesChanged(Defines)), SLOT(definesChanged(Defines)) );
-
-    connect( ui->kcfg_compiler, SIGNAL( activated( QString ) ), ui->kcfg_compilerPath, SLOT( setText( QString ) ) );
 }
 
 QList<ConfigEntry> ProjectPathsWidget::paths() const
@@ -216,4 +215,36 @@ void ProjectPathsWidget::batchEdit()
     projectPathSelected(index);
 }
 
+void ProjectPathsWidget::setCurrentCompiler(const QString& name)
+{
+    for (int i = 0 ; i < ui->compiler->count(); ++i) {
+        if(ui->compiler->itemText(i) == name)
+        {
+            ui->compiler->setCurrentIndex(i);
+        }
+    }
+}
+
+void ProjectPathsWidget::setCompilerPath(const QString& path)
+{
+    ui->kcfg_compilerPath->setText(path);
+}
+
+QString ProjectPathsWidget::currentCompilerName()
+{
+    return ui->compiler->currentText();
+}
+
+QString ProjectPathsWidget::compilerPath()
+{
+    return ui->kcfg_compilerPath->text();
+}
+
+void ProjectPathsWidget::setCompilers(const QStringList& compilerNames)
+{
+    ui->compiler->clear();
+    ui->compiler->addItems(compilerNames);
+}
+
 #include "projectpathswidget.moc"
+

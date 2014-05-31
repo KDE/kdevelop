@@ -50,6 +50,8 @@ public:
 
     QString pathToCompiler(KConfig* cfg) const;
 
+    void writePathToCompiler(KConfig* cfg, const QString& name);
+
     bool needToReparseCurrentProject( KConfig* cfg ) const;
 
     ~SettingsManager(){}
