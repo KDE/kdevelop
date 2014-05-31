@@ -4,6 +4,7 @@ include_directories(
 )
 
 set(completion_SRCS
+    completionitem.cpp
     context.cpp
     model.cpp
     worker.cpp

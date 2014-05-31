@@ -1,6 +1,6 @@
 /*
  * This file is part of qmljs, the QML/JS language support plugin for KDevelop
- * Copyright (c) 2013 Sven Brauch <svenbrauch@googlemail.com>
+ * Copyright (c) 2014 Denis Steckelmacher <steckdenis@yahoo.fr>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -20,26 +20,21 @@
  *
  */
 
-#ifndef QMLJS_CONTEXT_H
-#define QMLJS_CONTEXT_H
+#ifndef __COMPLETIONITEM_H__
+#define __COMPLETIONITEM_H__
 
-#include <language/codecompletion/codecompletioncontext.h>
-#include <language/duchain/ducontext.h>
+#include <language/codecompletion/normaldeclarationcompletionitem.h>
 
 namespace QmlJS {
 
-class CodeCompletionContext : public KDevelop::CodeCompletionContext
+class CompletionItem : public KDevelop::NormalDeclarationCompletionItem
 {
 public:
-    CodeCompletionContext(const KDevelop::DUContextPointer& context, const QString& text,
-                          const KDevelop::CursorInRevision& position, int depth = 0);
-    virtual QList<KDevelop::CompletionTreeItemPointer> completionItems(bool& abort, bool fullCompletion = true);
+    CompletionItem(KDevelop::DeclarationPointer decl, int inheritanceDepth);
 
-private:
-    QList<KDevelop::CompletionTreeItemPointer> completionsInContext(const KDevelop::DUContextPointer& context);
-    QList<KDevelop::CompletionTreeItemPointer> globalCompletions();
+    virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const;
 };
 
 }
 
-#endif // QMLJS_CONTEXT_H
+#endif

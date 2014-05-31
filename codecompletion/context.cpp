@@ -21,12 +21,14 @@
  */
 
 #include "context.h"
+#include "completionitem.h"
 
 #include <language/codecompletion/codecompletionitem.h>
 #include <language/codecompletion/normaldeclarationcompletionitem.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/classdeclaration.h>
+#include <language/duchain/namespacealiasdeclaration.h>
 #include <language/duchain/codemodel.h>
 
 using namespace KDevelop;
@@ -34,19 +36,6 @@ using namespace KDevelop;
 typedef QPair<Declaration*, int> DeclarationDepthPair;
 
 namespace QmlJS {
-
-class UiObjectDefinitionItem : public NormalDeclarationCompletionItem
-{
-public:
-    UiObjectDefinitionItem(const DeclarationPointer& decl)
-    : NormalDeclarationCompletionItem(decl)
-    {
-    }
-    virtual KTextEditor::CodeCompletionModel::CompletionProperties completionProperties() const
-    {
-        return KTextEditor::CodeCompletionModel::GlobalScope | KTextEditor::CodeCompletionModel::Class;
-    }
-};
 
 CodeCompletionContext::CodeCompletionContext(const DUContextPointer& context, const QString& text,
                                              const CursorInRevision& position, int depth)
@@ -56,7 +45,7 @@ CodeCompletionContext::CodeCompletionContext(const DUContextPointer& context, co
     // ...
 }
 
-QList< CompletionTreeItemPointer > CodeCompletionContext::completionItems(bool& abort, bool fullCompletion)
+QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& abort, bool fullCompletion)
 {
     Q_UNUSED (fullCompletion);
 
@@ -65,47 +54,68 @@ QList< CompletionTreeItemPointer > CodeCompletionContext::completionItems(bool& 
 
     QList<CompletionTreeItemPointer> items;
 
-    if ( abort ) {
+    if (abort) {
         return items;
     }
 
-    DUChainReadLocker lock;
-    if ( m_duContext ) {
-        items += globalItems();
+    items << completionsInContext(m_duContext);
+    items << globalCompletions();
 
-        const QList<DeclarationDepthPair>& locals = m_duContext->allDeclarations(m_position, duContext()->topContext());
-        foreach ( const DeclarationDepthPair& decl, locals ) {
-            if (dynamic_cast<ClassDeclaration*>(decl.first)) {
-                continue;
-            }
-            DeclarationPointer declaration(decl.first);
-            items << CompletionTreeItemPointer(new NormalDeclarationCompletionItem(declaration));
-        }
-    }
     return items;
 }
 
-QList<CompletionTreeItemPointer> CodeCompletionContext::globalItems() const
+QList<CompletionTreeItemPointer> CodeCompletionContext::completionsInContext(const DUContextPointer& context)
 {
-    QList<CompletionTreeItemPointer> ret;
+    QList<CompletionTreeItemPointer> items;
+    DUChainReadLocker lock;
 
-    uint itemCount = 0;
-    const CodeModelItem* items = 0;
-    CodeModel::self().items(m_duContext->url(), itemCount, items);
-    for (uint i = 0; i < itemCount; ++i) {
-        const CodeModelItem& item = items[i];
-        if (item.kind & CodeModelItem::Class && item.id.isValid()) {
-            foreach (Declaration* dec, m_duContext->findDeclarations(item.id.identifier())) {
-                if (dynamic_cast<ClassDeclaration*>(dec)) {
-                    ret << CompletionTreeItemPointer(new UiObjectDefinitionItem(DeclarationPointer(dec)));
-                    break;
-                }
+    if (context) {
+        const QList<DeclarationDepthPair>& declarations = context->allDeclarations(
+            context == m_duContext ? m_position : CursorInRevision::invalid(),
+            context->topContext()
+        );
+
+        foreach (const DeclarationDepthPair& decl, declarations) {
+            DeclarationPointer declaration(decl.first);
+
+            if (decl.first->kind() == Declaration::NamespaceAlias) {
+                continue;
+            } else if (decl.first->qualifiedIdentifier().isEmpty()) {
+                continue;
             }
+
+            items << CompletionTreeItemPointer(new CompletionItem(declaration, decl.second));
         }
     }
 
-    return ret;
+    return items;
 }
 
+QList<CompletionTreeItemPointer> CodeCompletionContext::globalCompletions()
+{
+    QList<CompletionTreeItemPointer> items;
+
+    // Iterate over all the imported namespaces and add their definitions
+    DUChainReadLocker lock;
+    QList<Declaration*> imports = m_duContext->findDeclarations(globalImportIdentifier());
+    QList<Declaration*> realImports;
+
+    foreach (Declaration* import, imports) {
+        if (import->kind() != Declaration::NamespaceAlias) {
+            continue;
+        }
+
+        NamespaceAliasDeclaration* decl = static_cast<NamespaceAliasDeclaration *>(import);
+        realImports << m_duContext->findDeclarations(decl->importIdentifier());
+    }
+
+    lock.unlock();
+
+    foreach (Declaration* import, realImports) {
+        items << completionsInContext(DUContextPointer(import->internalContext()));
+    }
+
+    return items;
+}
 
 }
