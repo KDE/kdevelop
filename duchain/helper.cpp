@@ -22,6 +22,7 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/types/unsuretype.h>
 #include <language/duchain/types/integraltype.h>
+#include <language/duchain/types/structuretype.h>
 
 namespace QmlJS
 {
@@ -100,6 +101,31 @@ QMLAttributeValue getQMLAttributeValue(QmlJS::AST::UiObjectMemberList* members, 
     res.location = statement->expression->firstSourceLocation();
 
     return res;
+}
+
+DUContext* getInternalContext(const DeclarationPointer& declaration)
+{
+    DUChainReadLocker lock;
+
+    if (!declaration) {
+        return nullptr;
+    }
+
+    StructureType::Ptr type = StructureType::Ptr::dynamicCast(declaration->abstractType());
+
+    if (!type) {
+        return nullptr;
+    }
+
+    // The declaration can either be a class definition (its internal context
+    // can be used) or an instance (use the internal context of its type)
+    if (declaration->kind() == Declaration::Type) {
+        return declaration->internalContext();
+    } else {
+        return getInternalContext(
+            DeclarationPointer(type->declaration(declaration->topContext()))
+        );
+    }
 }
 
 } // End of namespace QmlJS

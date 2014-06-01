@@ -67,6 +67,8 @@ using namespace KDevelop;
     KDEVQMLJSDUCHAIN_EXPORT QMLAttributeValue getQMLAttributeValue(AST::UiObjectMemberList* members,
                                                                    const QString& attribute);
 
+    KDEVQMLJSDUCHAIN_EXPORT DUContext* getInternalContext(const DeclarationPointer &declaration);
+
 
 } // End of namespace QmlJS
 

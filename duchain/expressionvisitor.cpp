@@ -82,6 +82,24 @@ bool ExpressionVisitor::visit(QmlJS::AST::ObjectLiteral*)
     return false;
 }
 
+bool ExpressionVisitor::visit(QmlJS::AST::FieldMemberExpression* node)
+{
+    // Find the type of the base, and if this type has a declaration, use
+    // its inner context to get the type of the field member
+    node->base->accept(this);
+
+    DeclarationPointer declaration = lastDeclaration();
+    DUContext* context = QmlJS::getInternalContext(declaration);
+
+    if (context) {
+        encounter(node->name.toString(), context);
+    } else {
+        encounter(AbstractType::Ptr());
+    }
+
+    return false;
+}
+
 /*
  * Identifiers and common expressions
  */
@@ -162,10 +180,10 @@ void ExpressionVisitor::encounter(IntegralType::CommonIntegralTypes type)
     encounter(AbstractType::Ptr(new IntegralType(type)));
 }
 
-void ExpressionVisitor::encounter(const QString& declaration)
+void ExpressionVisitor::encounter(const QString& declaration, KDevelop::DUContext* context)
 {
     const QualifiedIdentifier name(declaration);
-    DeclarationPointer dec = QmlJS::getDeclaration(name, m_context);
+    DeclarationPointer dec = QmlJS::getDeclaration(name, context ? context : m_context);
 
     if (dec && dec->abstractType()) {
         encounterLvalue(dec);

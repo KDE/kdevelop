@@ -8,6 +8,11 @@ Text {
      * "toString" : "<class> someId"
      */
     id: someId
+
+    /**
+     * "type" : { "toString" : "string" },
+     * "useCount" : 2
+     */
     text: "asdf"
 
     /**

@@ -17,6 +17,7 @@
  *************************************************************************************/
 
 #include "usebuilder.h"
+#include "expressionvisitor.h"
 
 #include "helper.h"
 #include "parsesession.h"
@@ -27,6 +28,23 @@ UseBuilder::UseBuilder(ParseSession* session)
 : UseBuilderBase()
 {
     m_session = session;
+}
+
+bool UseBuilder::visit(QmlJS::AST::FieldMemberExpression* node)
+{
+    ExpressionVisitor visitor(contextOnNode(node));
+
+    node->accept(&visitor);
+
+    // ExpressionVisitor, when given a field member expression, can find the
+    // declaration corresponding to its identifier
+    RangeInRevision range(m_session->locationToRange(node->identifierToken));
+
+    if (visitor.lastDeclaration()) {
+        UseBuilderBase::newUse(node, range, visitor.lastDeclaration());
+    }
+
+    return UseBuilderBase::visit(node);
 }
 
 bool UseBuilder::visit(QmlJS::AST::IdentifierExpression* node)
@@ -43,6 +61,7 @@ bool UseBuilder::visit(QmlJS::AST::UiQualifiedId* node)
 
 bool UseBuilder::visit(QmlJS::AST::UiImport* node)
 {
+    Q_UNUSED(node);
     return false;   // Don't highlight the identifiers that appear in import statements
 }
 
@@ -51,15 +70,16 @@ void UseBuilder::newUse(QmlJS::AST::Node* node, const QmlJS::AST::SourceLocation
     const RangeInRevision range(m_session->locationToRange(loc));
     const QualifiedIdentifier id(name);
 
-    // Find the context of node
-    DUContext* ctx;
-
-    {
-        DUChainReadLocker lock;
-        ctx = topContext()->findContextAt(range.start);
-    }
-
     // Build the use
-    const DeclarationPointer decl(QmlJS::getDeclaration(id, ctx));
+    const DeclarationPointer decl(QmlJS::getDeclaration(id, contextOnNode(node)));
     UseBuilderBase::newUse(node, range, decl);
+}
+
+DUContext* UseBuilder::contextOnNode(QmlJS::AST::Node* node) const
+{
+    DUChainReadLocker lock;
+
+    return topContext()->findContextAt(
+        m_session->locationToRange(node->firstSourceLocation()).start
+    );
 }
