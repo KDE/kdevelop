@@ -188,7 +188,6 @@ void TestView::updateTestSuite(ITestSuite* suite, const TestResult& result)
 
 KIcon TestView::iconForTestResult(TestResult::TestCaseResult result)
 {
-    debug() << result;
     switch (result)
     {
         case TestResult::NotRun:
