@@ -41,6 +41,11 @@ QVariant CompletionItem::data(const QModelIndex& index, int role, const CodeComp
 {
     DUChainReadLocker lock;
     Declaration* decl = declaration().data();
+
+    if (!decl) {
+        return QVariant();
+    }
+
     ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration *>(decl);
     StructureType::Ptr declType = StructureType::Ptr::dynamicCast(decl->abstractType());
 
