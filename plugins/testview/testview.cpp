@@ -150,6 +150,8 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent)
              SLOT(removeTestSuite(KDevelop::ITestSuite*)));
     connect (tc, SIGNAL(testRunFinished(KDevelop::ITestSuite*, KDevelop::TestResult)),
              SLOT(updateTestSuite(KDevelop::ITestSuite*, KDevelop::TestResult)));
+    connect (tc, SIGNAL(testRunStarted(KDevelop::ITestSuite*, QStringList)),
+             SLOT(notifyTestCaseStarted(KDevelop::ITestSuite*, QStringList)));
 
     foreach (ITestSuite* suite, tc->testSuites())
     {
@@ -185,6 +187,32 @@ void TestView::updateTestSuite(ITestSuite* suite, const TestResult& result)
         }
     }
 }
+
+void TestView::notifyTestCaseStarted(ITestSuite* suite, const QStringList& test_cases)
+{
+    QStandardItem* item = itemForSuite(suite);
+    if (!item)
+    {
+        return;
+    }
+    
+    debug() << "Notify a test of the suite " << suite->name() << " has started";
+    
+    // Global test suite icon
+    item->setIcon(KIcon("process-idle"));
+    
+    for (int i = 0; i < item->rowCount(); ++i)
+    {
+        debug() << "Found a test case" << item->child(i)->text();
+        QStandardItem* caseItem = item->child(i);
+        if (test_cases.contains(caseItem->text()))
+        {
+            // Each test case icon
+            caseItem->setIcon(KIcon("process-idle"));
+        }
+    }
+}
+
 
 KIcon TestView::iconForTestResult(TestResult::TestCaseResult result)
 {
