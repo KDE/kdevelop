@@ -82,20 +82,25 @@ bool ExpressionVisitor::visit(QmlJS::AST::ObjectLiteral*)
     return false;
 }
 
+bool ExpressionVisitor::visit(QmlJS::AST::ArrayMemberExpression* node)
+{
+    // array["string_literal"] is equivalent to array.string_literal
+    auto literal = QmlJS::AST::cast<QmlJS::AST::StringLiteral*>(node->expression);
+
+    if (literal) {
+        node->base->accept(this);
+        encounterFieldMember(literal->value.toString());
+    }
+
+    return false;
+}
+
 bool ExpressionVisitor::visit(QmlJS::AST::FieldMemberExpression* node)
 {
     // Find the type of the base, and if this type has a declaration, use
     // its inner context to get the type of the field member
     node->base->accept(this);
-
-    DeclarationPointer declaration = lastDeclaration();
-    DUContext* context = QmlJS::getInternalContext(declaration);
-
-    if (context) {
-        encounter(node->name.toString(), context);
-    } else {
-        encounter(AbstractType::Ptr());
-    }
+    encounterFieldMember(node->name.toString());
 
     return false;
 }
@@ -187,5 +192,17 @@ void ExpressionVisitor::encounter(const QString& declaration, KDevelop::DUContex
 
     if (dec && dec->abstractType()) {
         encounterLvalue(dec);
+    }
+}
+
+void ExpressionVisitor::encounterFieldMember(const QString& name)
+{
+    DeclarationPointer declaration = lastDeclaration();
+    DUContext* context = QmlJS::getInternalContext(declaration);
+
+    if (context) {
+        encounter(name, context);
+    } else {
+        encounter(AbstractType::Ptr(), DeclarationPointer());
     }
 }

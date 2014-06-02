@@ -45,6 +45,7 @@ protected:
 
     virtual bool visit(QmlJS::AST::ArrayLiteral* node);
     virtual bool visit(QmlJS::AST::ObjectLiteral* node);
+    virtual bool visit(QmlJS::AST::ArrayMemberExpression* node);
     virtual bool visit(QmlJS::AST::FieldMemberExpression* node);
 
     virtual bool visit(QmlJS::AST::BinaryExpression* node);
@@ -57,6 +58,7 @@ private:
 
     void encounter(KDevelop::IntegralType::CommonIntegralTypes type);
     void encounter(const QString &declaration, KDevelop::DUContext* context = nullptr);
+    void encounterFieldMember(const QString &name);
 
 };
 
