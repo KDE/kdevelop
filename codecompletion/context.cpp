@@ -31,6 +31,11 @@
 #include <language/duchain/namespacealiasdeclaration.h>
 #include <language/duchain/codemodel.h>
 
+#include <qmljs/qmljsdocument.h>
+#include <qmljs/parser/qmljslexer_p.h>
+#include <duchain/expressionvisitor.h>
+#include <duchain/helper.h>
+
 using namespace KDevelop;
 
 typedef QPair<Declaration*, int> DeclarationDepthPair;
@@ -58,8 +63,12 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& ab
         return items;
     }
 
-    items << completionsInContext(m_duContext);
-    items << globalCompletions();
+    if (m_text.endsWith(QLatin1Char('.'))) {
+        items << fieldCompletions(m_text.left(m_text.size() - 1));
+    } else {
+        items << completionsInContext(m_duContext);
+        items << globalCompletions();
+    }
 
     return items;
 }
@@ -116,6 +125,68 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::globalCompletions()
     }
 
     return items;
+}
+
+QList<CompletionTreeItemPointer> CodeCompletionContext::fieldCompletions(const QString& expression)
+{
+    QString line = extractLastLine(expression);
+
+    // expression is an incomplete expression. Try to parse as much as possible
+    // of it, in order to get the most complete AST possible.
+    // For instance, if expression is "test(foo.bar", test(foo.bar is invalid,
+    // but foo.bar is valid and should be used (bar is also valid, but too small
+    // to provide any useful context)
+    QStack<int> bracketPositions;
+    QmlJS::Lexer lexer(nullptr);
+    bool atEnd = false;
+
+    lexer.setCode(line, 1, false);
+    bracketPositions.push(0);
+
+    while (!atEnd) {
+        switch (lexer.lex()) {
+        case QmlJSGrammar::EOF_SYMBOL:
+            atEnd = true;
+            break;
+        case QmlJSGrammar::T_LBRACE:
+        case QmlJSGrammar::T_LBRACKET:
+        case QmlJSGrammar::T_LPAREN:
+            bracketPositions.push(lexer.tokenStartColumn());
+            break;
+        case QmlJSGrammar::T_RBRACE:
+        case QmlJSGrammar::T_RBRACKET:
+        case QmlJSGrammar::T_RPAREN:
+            bracketPositions.pop();
+            break;
+        default:
+            break;
+        }
+    }
+
+    // The last un-matched paren/brace/bracket correspond to the start of something
+    // that should be a valid expression.
+    QmlJS::Document::MutablePtr doc = QmlJS::Document::create("inline", Language::JavaScript);
+
+    doc->setSource(line.mid(bracketPositions.top()));
+    doc->parseExpression();
+
+    if (!doc || !doc->isParsedCorrectly()) {
+        return QList<CompletionTreeItemPointer>();
+    }
+
+    // Use ExpressionVisitor to find the type (and associated declaration) of
+    // the snippet that has been parsed. The inner context of the declaration
+    // can be used to get the list of completions
+    ExpressionVisitor visitor(m_duContext.data());
+    doc->ast()->accept(&visitor);
+
+    DUContext* context = getInternalContext(visitor.lastDeclaration());
+
+    if (context) {
+        return completionsInContext(DUContextPointer(context));
+    } else {
+        return QList<CompletionTreeItemPointer>();
+    }
 }
 
 }

@@ -17,6 +17,8 @@ target_link_libraries(kdevqmljscompletion LINK_PRIVATE
     ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
     ${KDEVPLATFORM_INTERFACES_LIBRARIES}
     ${KDEVPLATFORM_PROJECT_LIBRARIES}
+    kdevqmljsduchain
+    kdevqtc-qmlsupport
 )
 
 install(TARGETS kdevqmljscompletion DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS})
