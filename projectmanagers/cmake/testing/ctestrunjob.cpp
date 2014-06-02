@@ -116,6 +116,7 @@ void CTestRunJob::start()
         arguments = m_suite->arguments();
     }
 
+    QStringList cases_selected = arguments;
     arguments.prepend(m_suite->executable().toLocalFile());
     m_job = createTestJob("execute", arguments);
 
@@ -126,6 +127,8 @@ void CTestRunJob::start()
         connect(m_outputJob->model(), SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(rowsInserted(QModelIndex,int,int)));
     }
     connect(m_job, SIGNAL(finished(KJob*)), SLOT(processFinished(KJob*)));
+    
+    ICore::self()->testController()->notifyTestRunStarted(m_suite, cases_selected);
 }
 
 bool CTestRunJob::doKill()
