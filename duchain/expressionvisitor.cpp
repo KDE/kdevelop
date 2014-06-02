@@ -155,7 +155,7 @@ bool ExpressionVisitor::visit(QmlJS::AST::FunctionExpression* node)
     )->owner();
 
     if (dec && dec->abstractType()) {
-        encounter(dec->abstractType());
+        encounterLvalue(DeclarationPointer(dec));
     }
 
     return false;
