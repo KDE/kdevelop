@@ -150,19 +150,7 @@ bool ExpressionVisitor::visit(QmlJS::AST::IdentifierExpression* node)
  */
 bool ExpressionVisitor::visit(QmlJS::AST::FunctionExpression* node)
 {
-    DUChainReadLocker lock;
-    QmlJS::AST::SourceLocation location = node->lbraceToken;
-
-    // Find the anonymous declaration corresponding to the function. This is
-    // the owner of the current context (function expressions create new contexts)
-    Declaration* dec = m_context->topContext()->findContextAt(
-        CursorInRevision(location.startLine-1, location.startColumn)
-    )->owner();
-
-    if (dec && dec->abstractType()) {
-        encounterLvalue(DeclarationPointer(dec));
-    }
-
+    encounterObjectAtLocation(node->lbraceToken);
     return false;
 }
 
@@ -204,5 +192,20 @@ void ExpressionVisitor::encounterFieldMember(const QString& name)
         encounter(name, context);
     } else {
         encounter(AbstractType::Ptr(), DeclarationPointer());
+    }
+}
+
+void ExpressionVisitor::encounterObjectAtLocation(const QmlJS::AST::SourceLocation& location)
+{
+    DUChainReadLocker lock;
+
+    // Find the anonymous declaration corresponding to the function. This is
+    // the owner of the current context (function expressions create new contexts)
+    Declaration* dec = m_context->topContext()->findContextAt(
+        CursorInRevision(location.startLine-1, location.startColumn)
+    )->owner();
+
+    if (dec && dec->abstractType()) {
+        encounterLvalue(DeclarationPointer(dec));
     }
 }

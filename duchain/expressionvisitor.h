@@ -59,6 +59,7 @@ private:
     void encounter(KDevelop::IntegralType::CommonIntegralTypes type);
     void encounter(const QString &declaration, KDevelop::DUContext* context = nullptr);
     void encounterFieldMember(const QString &name);
+    void encounterObjectAtLocation(const QmlJS::AST::SourceLocation &location);
 
 };
 
