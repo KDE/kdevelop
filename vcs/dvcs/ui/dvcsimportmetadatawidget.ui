@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>ImportMetadataWidget</class>
- <widget class="QWidget" name="ImportMetadataWidget" >
+ <class>DvcsImportMetadataWidget</class>
+ <widget class="QWidget" name="DvcsImportMetadataWidget" >
   <property name="geometry" >
    <rect>
     <x>0</x>

@@ -7,7 +7,7 @@ set(kdevplatformvcs_UIS
     widgets/vcscommitdialog.ui
     widgets/vcseventwidget.ui
     widgets/vcsdiffwidget.ui
-    dvcs/ui/importmetadatawidget.ui
+    dvcs/ui/dvcsimportmetadatawidget.ui
     dvcs/ui/branchmanager.ui
 )
 
@@ -36,7 +36,7 @@ set(kdevplatformvcs_LIB_SRCS
     models/brancheslistmodel.cpp
     dvcs/dvcsjob.cpp
     dvcs/dvcsplugin.cpp
-    dvcs/ui/importmetadatawidget.cpp
+    dvcs/ui/dvcsimportmetadatawidget.cpp
     dvcs/ui/branchmanager.cpp
     dvcs/ui/revhistory/commitView.cpp
     dvcs/ui/revhistory/commitlogmodel.cpp
@@ -114,4 +114,9 @@ install(FILES
     dvcs/dvcsplugin.h
     dvcs/dvcsevent.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/vcs/dvcs COMPONENT Devel
+)
+
+install(FILES
+    dvcs/ui/dvcsimportmetadatawidget.h
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/vcs/dvcs/ui COMPONENT Devel
 )
