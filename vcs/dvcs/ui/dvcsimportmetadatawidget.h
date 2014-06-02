@@ -5,6 +5,9 @@
  *   Adapted for Git                                                       *
  *   Copyright 2008 Evgeniy Ivanov <powerfox@kde.ru>                       *
  *                                                                         *
+ *   Pimpl-ed and exported                                                 *
+ *   Copyright 2014 Maciej Poleski                                         *
+ *                                                                         *
  *   This program is free software; you can redistribute it and/or         *
  *   modify it under the terms of the GNU General Public License as        *
  *   published by the Free Software Foundation; either version 2 of        *
@@ -22,61 +25,40 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#include "importmetadatawidget.h"
+#ifndef KDEVPLATFORM_DVCSIMPORTMETADATAWIDGET_H
+#define KDEVPLATFORM_DVCSIMPORTMETADATAWIDGET_H
 
-#include <KMessageBox>
-#include <KDebug>
+#include <vcs/widgets/vcsimportmetadatawidget.h>
 
-#include <vcslocation.h>
-#include "ui_importmetadatawidget.h"
-
-ImportMetadataWidget::ImportMetadataWidget(QWidget *parent)
-    : KDevelop::VcsImportMetadataWidget(parent), m_ui( new Ui::ImportMetadataWidget )
-{
-    m_ui->setupUi(this);
-
-    m_ui->sourceLoc->setEnabled( false );
-    m_ui->sourceLoc->setMode( KFile::Directory );
-    connect( m_ui->sourceLoc, SIGNAL(textChanged(QString)), this, SIGNAL(changed()) );
-    connect( m_ui->sourceLoc, SIGNAL(urlSelected(KUrl)), this, SIGNAL(changed()) );
+namespace Ui {
+class DvcsImportMetadataWidget;
 }
 
-ImportMetadataWidget::~ImportMetadataWidget()
-{
-    delete m_ui;
-}
+class DvcsImportMetadataWidgetPrivate;
 
-KUrl ImportMetadataWidget::source() const
+/**
+ * Asks the user for all options needed to import an existing directory into
+ * a Git repository
+ * @author Robert Gruber <rgruber@users.sourceforge.net>
+ */
+class KDEVPLATFORMVCS_EXPORT DvcsImportMetadataWidget : public KDevelop::VcsImportMetadataWidget
 {
-    return m_ui->sourceLoc->url();
-}
+    Q_OBJECT
+    Q_DECLARE_PRIVATE(DvcsImportMetadataWidget)
+    
+public:
+    DvcsImportMetadataWidget(QWidget* parent=0);
+    virtual ~DvcsImportMetadataWidget();
 
-KDevelop::VcsLocation ImportMetadataWidget::destination() const
-{
-    // Used for compatibility with import
-    KDevelop::VcsLocation dest;
-    dest.setRepositoryServer(m_ui->sourceLoc->url().url());
-    return dest;
-}
+    virtual KUrl source() const;
+    virtual KDevelop::VcsLocation destination() const;
+    virtual QString message() const; //Is not used, it returns QString("")
+    virtual void setSourceLocation( const KDevelop::VcsLocation& );
+    virtual void setSourceLocationEditable( bool );
+    virtual bool hasValidData() const;
 
-QString ImportMetadataWidget::message( ) const
-{
-    return QString();
-}
+private:
+    DvcsImportMetadataWidgetPrivate *const d_ptr;
+};
 
-void ImportMetadataWidget::setSourceLocation( const KDevelop::VcsLocation& url )
-{
-    m_ui->sourceLoc->setUrl( url.localUrl() );
-}
-
-void ImportMetadataWidget::setSourceLocationEditable( bool enable )
-{
-    m_ui->sourceLoc->setEnabled( enable );
-}
-
-bool ImportMetadataWidget::hasValidData() const
-{
-    return !m_ui->sourceLoc->text().isEmpty();
-}
-
-#include "importmetadatawidget.moc"
+#endif

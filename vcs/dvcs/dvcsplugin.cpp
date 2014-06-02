@@ -44,7 +44,7 @@
 #include <interfaces/idocumentcontroller.h>
 
 #include "dvcsjob.h"
-#include "ui/importmetadatawidget.h"
+#include "ui/dvcsimportmetadatawidget.h"
 #include "ui/branchmanager.h"
 #include "ui/revhistory/commitlogmodel.h"
 #include "ui/revhistory/commitView.h"
@@ -84,7 +84,7 @@ DistributedVersionControlPlugin::~DistributedVersionControlPlugin()
 KDevelop::VcsImportMetadataWidget*
 DistributedVersionControlPlugin::createImportMetadataWidget(QWidget* parent)
 {
-    return new ImportMetadataWidget(parent);
+    return new DvcsImportMetadataWidget(parent);
 }
 
 KDevelop::ContextMenuExtension
