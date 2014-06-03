@@ -37,14 +37,28 @@
 #include <language/duchain/navigation/abstractnavigationwidget.h>
 #include <language/codegen/basicrefactoring.h>
 #include <language/interfaces/codecontext.h>
+#include <duchain/classdeclaration.h>
+#include <duchain/classfunctiondeclaration.h>
 #include <duchain/use.h>
 
 #include "progressdialogs/refactoringdialog.h"
 
 #include "ui_basicrefactoring.h"
 
-namespace KDevelop
+namespace {
+
+QPair<QString, QString> splitFileAtExtension(const QString& fileName)
 {
+  int idx = fileName.indexOf('.');
+  if (idx == -1) {
+    return qMakePair(fileName, QString());
+  }
+  return qMakePair(fileName.left(idx), fileName.mid(idx));
+}
+
+}
+
+using namespace KDevelop;
 
 //BEGIN: BasicRefactoringCollector
 
@@ -95,6 +109,50 @@ void BasicRefactoring::fillContextMenu(ContextMenuExtension &extension, Context 
             extension.addAction(ContextMenuExtension::RefactorGroup, action);
         }
     }
+}
+
+bool BasicRefactoring::shouldRenameUses(KDevelop::Declaration* declaration) const
+{
+    // Now we know we're editing a declaration, but some declarations we don't offer a rename for
+    // basically that's any declaration that wouldn't be fully renamed just by renaming its uses().
+    if (declaration->internalContext() || declaration->isForwardDeclaration()) {
+    //make an exception for non-class functions
+        if (!declaration->isFunctionDeclaration() || dynamic_cast<ClassFunctionDeclaration*>(declaration))
+            return false;
+    }
+    return true;
+}
+
+QString BasicRefactoring::newFileName(const KUrl& current, const QString& newName)
+{
+    QPair<QString, QString> nameExtensionPair = splitFileAtExtension(current.fileName());
+    // if current file is lowercased, keep that
+    if (nameExtensionPair.first == nameExtensionPair.first.toLower()) {
+        return newName.toLower() + nameExtensionPair.second;
+    } else {
+        return newName + nameExtensionPair.second;
+    }
+}
+
+DocumentChangeSet::ChangeResult BasicRefactoring::addRenameFileChanges(const KUrl& current,
+                                                                        const QString& newName,
+                                                                        DocumentChangeSet* changes)
+{
+    return changes->addDocumentRenameChange(
+        IndexedString(current), IndexedString(newFileName(current, newName)));
+}
+
+bool BasicRefactoring::shouldRenameFile(Declaration* declaration)
+{
+    // only try to rename files when we renamed a class/struct
+    if (!dynamic_cast<ClassDeclaration*>(declaration)) {
+        return false;
+    }
+    const KUrl currUrl = declaration->topContext()->url().toUrl();
+    const QString fileName = currUrl.fileName();
+    const QPair<QString, QString> nameExtensionPair = splitFileAtExtension(fileName);
+    // check whether we renamed something that is called like the document it lives in
+    return nameExtensionPair.first.compare(declaration->identifier().toString(), Qt::CaseInsensitive) == 0;
 }
 
 DocumentChangeSet::ChangeResult BasicRefactoring::applyChanges(const QString &oldName, const QString &newName,
@@ -293,7 +351,5 @@ DocumentChangeSet BasicRefactoring::renameCollectedDeclarations(KDevelop::BasicR
 }
 
 //END: BasicRefactoring
-
-} // End of namespace KDevelop
 
 #include "basicrefactoring.moc"

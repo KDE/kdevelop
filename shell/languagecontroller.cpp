@@ -28,6 +28,7 @@
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/iplugin.h>
 #include <interfaces/iplugincontroller.h>
+#include <language/assistant/staticassistantsmanager.h>
 #include <language/interfaces/ilanguagesupport.h>
 #include <language/backgroundparser/backgroundparser.h>
 #include <language/duchain/duchain.h>
@@ -56,7 +57,12 @@ typedef QHash<QString, QList<ILanguage*> > LanguageCache;
 
 struct LanguageControllerPrivate {
     LanguageControllerPrivate(LanguageController *controller)
-        : dataMutex(QMutex::Recursive), backgroundParser(new BackgroundParser(controller)), m_cleanedUp(false), m_controller(controller) {}
+        : dataMutex(QMutex::Recursive)
+        , backgroundParser(new BackgroundParser(controller))
+        , staticAssistantsManager(new StaticAssistantsManager(controller))
+        , m_cleanedUp(false)
+        , m_controller(controller)
+    {}
 
     void documentActivated(KDevelop::IDocument *document)
     {
@@ -91,6 +97,7 @@ struct LanguageControllerPrivate {
     FileExtensionCache fileExtensionCache;
 
     BackgroundParser *backgroundParser;
+    StaticAssistantsManager* staticAssistantsManager;
     bool m_cleanedUp;
     
     ILanguage* addLanguageForSupport(ILanguageSupport* support, const QStringList& mimetypes);
@@ -168,6 +175,11 @@ QList<ILanguage*> LanguageController::activeLanguages()
     QMutexLocker lock(&d->dataMutex);
     
     return d->activeLanguages;
+}
+
+StaticAssistantsManager* LanguageController::staticAssistantsManager() const
+{
+    return d->staticAssistantsManager;
 }
 
 ICompletionSettings *LanguageController::completionSettings() const {

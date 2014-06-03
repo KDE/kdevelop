@@ -31,6 +31,7 @@ namespace KDevelop {
 class ILanguage;
 class BackgroundParser;
 class ICompletionSettings;
+class StaticAssistantsManager;
 
 /**
  * @class ILanguageController
@@ -58,6 +59,9 @@ public:
 
     /** @return the background parser used to parse source files */
     Q_SCRIPTABLE virtual BackgroundParser *backgroundParser() const = 0;
+
+    /** @return The global code assistant manager (manages assistants such as the RenameAssistant) */
+    Q_SCRIPTABLE virtual StaticAssistantsManager *staticAssistantsManager() const = 0;
 
     /** Access to the completion settings */
     Q_SCRIPTABLE virtual ICompletionSettings *completionSettings() const = 0;

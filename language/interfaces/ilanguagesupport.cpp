@@ -54,6 +54,11 @@ ICodeHighlighting* ILanguageSupport::codeHighlighting() const {
     return 0;
 }
 
+BasicRefactoring* ILanguageSupport::refactoring() const
+{
+    return nullptr;
+}
+
 ICreateClassHelper* ILanguageSupport::createClassHelper() const {
     return 0;
 }

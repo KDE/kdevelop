@@ -6,10 +6,17 @@ add_subdirectory(backgroundparser/tests)
 add_subdirectory(codegen/tests)
 
 set(kdevplatformlanguage_LIB_SRCS
+    assistant/staticassistantsmanager.cpp
+    assistant/renameaction.cpp
+    assistant/renameassistant.cpp
+    assistant/renamefileaction.cpp
+    assistant/staticassistant.cpp
+
     editor/persistentmovingrangeprivate.cpp
     editor/persistentmovingrange.cpp
     editor/modificationrevisionset.cpp
     editor/modificationrevision.cpp
+
     backgroundparser/backgroundparser.cpp
     backgroundparser/parsejob.cpp
     backgroundparser/parserdependencypolicy.cpp
@@ -166,6 +173,15 @@ install(TARGETS kdevplatformlanguage EXPORT KDevPlatformTargets ${INSTALL_TARGET
 install(FILES
     languageexport.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language COMPONENT Devel
+)
+
+
+install(FILES
+    assistant/renameaction.h
+    assistant/renameassistant.h
+    assistant/staticassistant.h
+    assistant/staticassistantsmanager.h
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/assistant COMPONENT Devel
 )
 
 install(FILES

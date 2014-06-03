@@ -52,8 +52,10 @@ public:
     /** @copydoc ILanguageController::backgroundParser() */
     Q_SCRIPTABLE virtual BackgroundParser *backgroundParser() const;
 
+    virtual StaticAssistantsManager *staticAssistantsManager() const;
+
     virtual QList<ILanguage*> loadedLanguages() const;
-    
+
     virtual ICompletionSettings *completionSettings() const;
 
     QList<ILanguage*> languagesForMimetype(const QString& mime);
