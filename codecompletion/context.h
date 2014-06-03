@@ -38,9 +38,9 @@ public:
     virtual QList<KDevelop::CompletionTreeItemPointer> completionItems(bool& abort, bool fullCompletion = true);
 
 private:
-    QList<KDevelop::CompletionTreeItemPointer> completionsInContext(const KDevelop::DUContextPointer& context, bool onlyLocal);
+    QList<KDevelop::CompletionTreeItemPointer> completionsInContext(const KDevelop::DUContextPointer& context, bool onlyLocal, bool quote = false);
     QList<KDevelop::CompletionTreeItemPointer> globalCompletions();
-    QList<KDevelop::CompletionTreeItemPointer> fieldCompletions(const QString &expression);
+    QList<KDevelop::CompletionTreeItemPointer> fieldCompletions(const QString &expression, bool quote);
 };
 
 }

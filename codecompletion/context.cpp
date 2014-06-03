@@ -63,9 +63,16 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& ab
         return items;
     }
 
-    if (m_text.endsWith(QLatin1Char('.'))) {
-        items << fieldCompletions(m_text.left(m_text.size() - 1));
-    } else {
+    QChar lastChar = m_text.at(m_text.size() - 1);
+
+    if (lastChar == QLatin1Char('.') || lastChar == QLatin1Char('[')) {
+        // Offer completions for object members and array subscripts
+        items << fieldCompletions(m_text.left(m_text.size() - 1), lastChar == QLatin1Char('['));
+    }
+
+    // "object." must only display the members of object, the declarations
+    // available in the current context.
+    if (lastChar != QLatin1Char('.')) {
         items << completionsInContext(m_duContext, false);
         items << globalCompletions();
     }
@@ -73,7 +80,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& ab
     return items;
 }
 
-QList<CompletionTreeItemPointer> CodeCompletionContext::completionsInContext(const DUContextPointer& context, bool onlyLocal)
+QList<CompletionTreeItemPointer> CodeCompletionContext::completionsInContext(const DUContextPointer& context, bool onlyLocal, bool quote)
 {
     QList<CompletionTreeItemPointer> items;
     DUChainReadLocker lock;
@@ -94,7 +101,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionsInContext(con
                 continue;
             }
 
-            items << CompletionTreeItemPointer(new CompletionItem(declaration, decl.second));
+            items << CompletionTreeItemPointer(new CompletionItem(declaration, decl.second, quote));
         }
     }
 
@@ -128,7 +135,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::globalCompletions()
     return items;
 }
 
-QList<CompletionTreeItemPointer> CodeCompletionContext::fieldCompletions(const QString& expression)
+QList<CompletionTreeItemPointer> CodeCompletionContext::fieldCompletions(const QString& expression, bool quote)
 {
     QString line = extractLastLine(expression);
 
@@ -184,7 +191,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::fieldCompletions(const Q
     DUContext* context = getInternalContext(visitor.lastDeclaration());
 
     if (context) {
-        return completionsInContext(DUContextPointer(context), true);
+        return completionsInContext(DUContextPointer(context), true, quote);
     } else {
         return QList<CompletionTreeItemPointer>();
     }

@@ -29,11 +29,14 @@
 #include <language/duchain/types/abstracttype.h>
 #include <language/duchain/types/structuretype.h>
 
+#include <ktexteditor/document.h>
+
 using namespace QmlJS;
 using namespace KDevelop;
 
-CompletionItem::CompletionItem(DeclarationPointer decl, int inheritanceDepth)
-: NormalDeclarationCompletionItem(decl, KSharedPtr<CodeCompletionContext>(), inheritanceDepth)
+CompletionItem::CompletionItem(DeclarationPointer decl, int inheritanceDepth, bool quote)
+: NormalDeclarationCompletionItem(decl, KSharedPtr<CodeCompletionContext>(), inheritanceDepth),
+  m_quote(quote)
 {
 }
 
@@ -81,4 +84,12 @@ QVariant CompletionItem::data(const QModelIndex& index, int role, const CodeComp
     }
 
     return NormalDeclarationCompletionItem::data(index, role, model);
+}
+
+void CompletionItem::executed(KTextEditor::Document* document, const KTextEditor::Range& word)
+{
+    if (m_quote) {
+        QString unquoted = document->text(word);
+        document->replaceText(word, "\"" + unquoted + "\"]");
+    }
 }

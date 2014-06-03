@@ -179,6 +179,7 @@ void QmlCompletionTest::testContainsDeclaration_data()
 
     // Object members
     QTest::newRow("js_object_members") << "var a = {b: 0};\n %INVOKE" << "a.%CURSOR" << "b" << false;
+    QTest::newRow("js_array_subscript") << "var a = {b: 0};\n %INVOKE" << "a[%CURSOR" << "b" << false;
 
     // Basic QML tests
     QTest::newRow("qml_basic_property") << "Item { id: foo\n %INVOKE }" << "%CURSOR" << "id" << true;

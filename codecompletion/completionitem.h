@@ -30,9 +30,15 @@ namespace QmlJS {
 class CompletionItem : public KDevelop::NormalDeclarationCompletionItem
 {
 public:
-    CompletionItem(KDevelop::DeclarationPointer decl, int inheritanceDepth);
+    CompletionItem(KDevelop::DeclarationPointer decl, int inheritanceDepth, bool quote);
 
     virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const;
+
+protected:
+    virtual void executed(KTextEditor::Document* document, const KTextEditor::Range& word);
+
+private:
+    bool m_quote;
 };
 
 }
