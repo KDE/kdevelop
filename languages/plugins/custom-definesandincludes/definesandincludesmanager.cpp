@@ -33,6 +33,8 @@
 #include <QThread>
 #include <QCoreApplication>
 
+using KDevelop::ConfigEntry;
+
 namespace
 {
 ///@return: The ConfigEntry, with includes/defines from @p paths for all parent folders of @p item.

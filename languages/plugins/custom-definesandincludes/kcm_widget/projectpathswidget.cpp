@@ -230,12 +230,12 @@ void ProjectPathsWidget::setCompilerPath(const QString& path)
     ui->kcfg_compilerPath->setText(path);
 }
 
-QString ProjectPathsWidget::currentCompilerName()
+QString ProjectPathsWidget::currentCompilerName() const
 {
     return ui->compiler->currentText();
 }
 
-QString ProjectPathsWidget::compilerPath()
+QString ProjectPathsWidget::compilerPath() const
 {
     return ui->kcfg_compilerPath->text();
 }

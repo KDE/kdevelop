@@ -37,30 +37,27 @@
 
 #include <QScopedPointer>
 
-using KDevelop::Path;
-
-using namespace KDevelop;
-
-class CompilerProvider : public IPlugin, public ICompilerProvider, public IDefinesAndIncludesManager::Provider
+class CompilerProvider : public KDevelop::IPlugin, public ICompilerProvider, public KDevelop::IDefinesAndIncludesManager::Provider
 {
     Q_OBJECT
     Q_INTERFACES( ICompilerProvider )
+
 public :
     explicit CompilerProvider( QObject* parent, const QVariantList& args = QVariantList() );
 
     ~CompilerProvider();
 
-    virtual QHash<QString, QString> defines( ProjectBaseItem* item ) const override;
+    virtual QHash<QString, QString> defines( KDevelop::ProjectBaseItem* item ) const override;
 
-    virtual Path::List includes( ProjectBaseItem* item ) const override;
+    virtual Path::List includes( KDevelop::ProjectBaseItem* item ) const override;
 
-    virtual IDefinesAndIncludesManager::Type type() const override;
+    virtual KDevelop::IDefinesAndIncludesManager::Type type() const override;
 
-    virtual bool setCompiler( IProject* project, const QString& name, const QString& path ) override;
+    virtual bool setCompiler( KDevelop::IProject* project, const QString& name, const QString& path ) override;
 
     virtual QVector<CompilerPointer> compilers() const override;
 
-    virtual CompilerPointer currentCompiler( IProject* project ) const override;
+    virtual CompilerPointer currentCompiler( KDevelop::IProject* project ) const override;
 
 private:
     struct Compiler {
@@ -68,13 +65,13 @@ private:
         QString path;
     };
 
-    Compiler compilerForItem( ProjectBaseItem* item ) const;
+    Compiler compilerForItem( KDevelop::ProjectBaseItem* item ) const;
 
     Compiler selectCompiler( const QString& compilerName, const QString& path ) const;
 
-    void addPoject( IProject* project, Compiler compiler );
+    void addPoject( KDevelop::IProject* project, Compiler compiler );
 
-    void removePoject( IProject* project );
+    void removePoject( KDevelop::IProject* project );
 
 private Q_SLOTS:
     void projectOpened( KDevelop::IProject* );
@@ -82,7 +79,7 @@ private Q_SLOTS:
 
 private:
     //list of compilers for each projects
-    QHash<IProject*, Compiler> m_projects;
+    QHash<KDevelop::IProject*, Compiler> m_projects;
     QVector<CompilerPointer> m_compilers;
 };
 

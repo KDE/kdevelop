@@ -38,6 +38,7 @@
 #include <KStandardDirs>
 
 using namespace KDevelop;
+using KDevelop::Path;
 
 namespace
 {
@@ -105,7 +106,8 @@ void CompilerProvider::removePoject( IProject* project )
     m_projects.remove( project );
 }
 
-CompilerProvider::~CompilerProvider() {
+CompilerProvider::~CompilerProvider()
+{
     IDefinesAndIncludesManager::manager()->unregisterProvider( this );
 }
 
@@ -132,7 +134,7 @@ CompilerProvider::Compiler CompilerProvider::selectCompiler( const QString& comp
     return {CompilerPointer(new DummyCompiler()), QString()};
 }
 
-bool CompilerProvider::setCompiler( KDevelop::IProject* project, const QString& name, const QString& path )
+bool CompilerProvider::setCompiler( IProject* project, const QString& name, const QString& path )
 {
     auto compiler = selectCompiler( name, path.trimmed() );
     Q_ASSERT(compiler.compiler);
@@ -145,7 +147,7 @@ bool CompilerProvider::setCompiler( KDevelop::IProject* project, const QString& 
 void CompilerProvider::projectOpened( KDevelop::IProject* project )
 {
     definesAndIncludesDebug() << "Adding project: " << project->name();
-    auto settings = static_cast<KDevelop::DefinesAndIncludesManager*>( KDevelop::IDefinesAndIncludesManager::manager() );
+    auto settings = static_cast<DefinesAndIncludesManager*>( IDefinesAndIncludesManager::manager() );
     auto projectConfig =  project->projectConfiguration().data();
 
     auto path = settings->pathToCompiler( projectConfig );

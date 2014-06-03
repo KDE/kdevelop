@@ -32,16 +32,14 @@ namespace KDevelop
 class IProject;
 }
 
-using KDevelop::ConfigEntry;
-/// @brief: Class responsible for reading/writing custom defines and includes from/to the disk.
 class KDEVDEFINESANDINCLUDESMANAGER_EXPORT SettingsManager
 {
 public:
     SettingsManager();
 
-    QList<ConfigEntry> readPaths(KConfig* cfg) const;
+    QList<KDevelop::ConfigEntry> readPaths(KConfig* cfg) const;
 
-    void writePaths(KConfig* cfg, const QList<ConfigEntry>& paths) const;
+    void writePaths(KConfig* cfg, const QList<KDevelop::ConfigEntry>& paths);
 
     /// @return name of the selected compiler, empty string if none is selected.
     QString currentCompiler(KConfig* cfg) const;

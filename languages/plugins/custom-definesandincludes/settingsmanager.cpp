@@ -26,6 +26,8 @@
 
 #include <interfaces/iproject.h>
 
+using KDevelop::ConfigEntry;
+
 namespace ConfigConstants
 {
 const QString configKey = QLatin1String( "CustomDefinesAndIncludes" );
@@ -124,7 +126,7 @@ QList<ConfigEntry> convertedPaths( KConfig* cfg )
 }
 }
 
-void SettingsManager::writePaths( KConfig* cfg, const QList<ConfigEntry>& paths ) const
+void SettingsManager::writePaths( KConfig* cfg, const QList< ConfigEntry >& paths )
 {
     KConfigGroup grp = cfg->group( ConfigConstants::configKey );
     if ( !grp.isValid() )
@@ -139,7 +141,7 @@ QList<ConfigEntry> SettingsManager::readPaths( KConfig* cfg ) const
 {
     auto converted = convertedPaths( cfg );
     if ( !converted.isEmpty() ) {
-        writePaths( cfg, converted );
+        const_cast<SettingsManager*>(this)->writePaths( cfg, converted );
         return converted;
     }
 

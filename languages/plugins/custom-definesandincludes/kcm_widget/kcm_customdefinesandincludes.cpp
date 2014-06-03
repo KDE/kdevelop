@@ -47,9 +47,10 @@ ICompilerProvider* compilerProvider()
     return compilerProvider->extension<ICompilerProvider>();
 }
 
-QStringList compilerNames(QVector<CompilerPointer> compilers)
+QStringList compilerNames(const QVector<CompilerPointer>& compilers)
 {
     QStringList names;
+    names.reserve(compilers.size());
     for (const auto& compiler : compilers) {
         names << compiler->name();
     }
@@ -76,7 +77,7 @@ void DefinesAndIncludes::dataChanged()
 {
     if (auto cp = compilerProvider()) {
         auto name = configWidget->currentCompilerName();
-        for (auto& c : cp->compilers()) {
+        for (const auto& c : cp->compilers()) {
             if (c->name() == name) {
                 configWidget->setCompilerPath(c->defaultPath());
             }

@@ -57,8 +57,8 @@ public:
     void setCurrentCompiler(const QString& name);
     void setCompilerPath(const QString& path);
 
-    QString currentCompilerName();
-    QString compilerPath();
+    QString currentCompilerName() const;
+    QString compilerPath() const;
 
 signals:
     void changed();
