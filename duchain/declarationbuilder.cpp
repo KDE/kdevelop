@@ -780,7 +780,9 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiScriptBinding* node)
 
     {
         DUChainWriteLocker lock;
-        openDeclaration<ClassMemberDeclaration>(id, range);
+        ClassMemberDeclaration* decl = openDeclaration<ClassMemberDeclaration>(id, range);
+
+        decl->setInSymbolTable(false);
     }
     openType(type);
 
