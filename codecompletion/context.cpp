@@ -66,14 +66,14 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& ab
     if (m_text.endsWith(QLatin1Char('.'))) {
         items << fieldCompletions(m_text.left(m_text.size() - 1));
     } else {
-        items << completionsInContext(m_duContext);
+        items << completionsInContext(m_duContext, false);
         items << globalCompletions();
     }
 
     return items;
 }
 
-QList<CompletionTreeItemPointer> CodeCompletionContext::completionsInContext(const DUContextPointer& context)
+QList<CompletionTreeItemPointer> CodeCompletionContext::completionsInContext(const DUContextPointer& context, bool onlyLocal)
 {
     QList<CompletionTreeItemPointer> items;
     DUChainReadLocker lock;
@@ -81,7 +81,8 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionsInContext(con
     if (context) {
         const QList<DeclarationDepthPair>& declarations = context->allDeclarations(
             context == m_duContext ? m_position : CursorInRevision::invalid(),
-            context->topContext()
+            context->topContext(),
+            !onlyLocal
         );
 
         foreach (const DeclarationDepthPair& decl, declarations) {
@@ -121,7 +122,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::globalCompletions()
     lock.unlock();
 
     foreach (Declaration* import, realImports) {
-        items << completionsInContext(DUContextPointer(import->internalContext()));
+        items << completionsInContext(DUContextPointer(import->internalContext()), false);
     }
 
     return items;
@@ -183,7 +184,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::fieldCompletions(const Q
     DUContext* context = getInternalContext(visitor.lastDeclaration());
 
     if (context) {
-        return completionsInContext(DUContextPointer(context));
+        return completionsInContext(DUContextPointer(context), true);
     } else {
         return QList<CompletionTreeItemPointer>();
     }
