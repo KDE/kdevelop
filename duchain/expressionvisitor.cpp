@@ -76,9 +76,9 @@ bool ExpressionVisitor::visit(QmlJS::AST::ArrayLiteral*)
     return false;
 }
 
-bool ExpressionVisitor::visit(QmlJS::AST::ObjectLiteral*)
+bool ExpressionVisitor::visit(QmlJS::AST::ObjectLiteral* node)
 {
-    encounter(AbstractType::Ptr(new StructureType));
+    encounterObjectAtLocation(node->lbraceToken);
     return false;
 }
 

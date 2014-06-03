@@ -295,6 +295,35 @@ bool DeclarationBuilder::visit(QmlJS::AST::CallExpression* node)
 /*
  * Arrays
  */
+bool DeclarationBuilder::visit(QmlJS::AST::ObjectLiteral* node)
+{
+    setComment(m_session->commentForLocation(node->firstSourceLocation()).toUtf8());
+
+    StructureType::Ptr type(new StructureType);
+
+    // Open an anonymous class declaration, with its internal context
+    {
+        DUChainWriteLocker lock;
+        ClassDeclaration* decl = openDeclaration<ClassDeclaration>(
+            QualifiedIdentifier(),
+            RangeInRevision()
+        );
+
+        decl->setKind(Declaration::Type);
+        decl->setAlwaysForceDirect(true);   // This declaration has no name, so type->setDeclaration is obliged to store a direct pointer to the declaration.
+        decl->setInternalContext(openContext(
+            node,
+            m_session->locationsToInnerRange(node->lbraceToken, node->rbraceToken),
+            DUContext::Class
+        ));
+
+        type->setDeclaration(decl);
+    }
+    openType(type);
+
+    return DeclarationBuilderBase::visit(node);
+}
+
 bool DeclarationBuilder::visit(QmlJS::AST::PropertyNameAndValue* node)
 {
     setComment(node);
@@ -331,7 +360,9 @@ bool DeclarationBuilder::visit(QmlJS::AST::PropertyNameAndValue* node)
     // Open the declaration
     {
         DUChainWriteLocker lock;
-        openDeclaration<ClassMemberDeclaration>(name, range);
+        ClassMemberDeclaration* decl = openDeclaration<ClassMemberDeclaration>(name, range);
+
+        decl->setInSymbolTable(false);
     }
     openType(type);
 
@@ -342,6 +373,14 @@ void DeclarationBuilder::endVisit(QmlJS::AST::PropertyNameAndValue* node)
 {
     DeclarationBuilderBase::endVisit(node);
 
+    closeAndAssignType();
+}
+
+void DeclarationBuilder::endVisit(QmlJS::AST::ObjectLiteral* node)
+{
+    DeclarationBuilderBase::endVisit(node);
+
+    closeContext();
     closeAndAssignType();
 }
 

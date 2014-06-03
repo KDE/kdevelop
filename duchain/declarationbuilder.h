@@ -64,8 +64,10 @@ protected:
     virtual bool visit(QmlJS::AST::CallExpression* node);
 
     // Arrays
+    virtual bool visit(QmlJS::AST::ObjectLiteral* node);
     virtual bool visit(QmlJS::AST::PropertyNameAndValue* node);
     virtual void endVisit(QmlJS::AST::PropertyNameAndValue* node);
+    virtual void endVisit(QmlJS::AST::ObjectLiteral* node);
 
     // plugin.qmltypes
     KDevelop::QualifiedIdentifier declareModule(const KDevelop::RangeInRevision &range);
