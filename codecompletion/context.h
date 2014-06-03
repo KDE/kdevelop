@@ -23,12 +23,14 @@
 #ifndef QMLJS_CONTEXT_H
 #define QMLJS_CONTEXT_H
 
+#include "codecompletionexport.h"
+
 #include <language/codecompletion/codecompletioncontext.h>
 #include <language/duchain/ducontext.h>
 
 namespace QmlJS {
 
-class CodeCompletionContext : public KDevelop::CodeCompletionContext
+class KDEVQMLJSCOMPLETION_EXPORT CodeCompletionContext : public KDevelop::CodeCompletionContext
 {
 public:
     CodeCompletionContext(const KDevelop::DUContextPointer& context, const QString& text,

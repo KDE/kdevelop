@@ -22,3 +22,5 @@ target_link_libraries(kdevqmljscompletion LINK_PRIVATE
 )
 
 install(TARGETS kdevqmljscompletion DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS})
+
+add_subdirectory(tests)
