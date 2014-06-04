@@ -226,47 +226,9 @@ void SimpleRefactoring::executeMoveIntoSourceAction() {
 
 }
 
-
-
-QPair<QString, QString> splitFileAtExtension(const QString& fileName)
+DocumentChangeSet::ChangeResult SimpleRefactoring::addRenameFileChanges(const KUrl& current, const QString& newName, DocumentChangeSet* changes)
 {
-  int idx = fileName.indexOf('.');
-  if (idx == -1) {
-    return qMakePair(fileName, QString());
-  }
-  return qMakePair(fileName.left(idx), fileName.mid(idx));
-}
-
-bool SimpleRefactoring::shouldRenameFile(Declaration* declaration)
-{
-  // only try to rename files when we renamed a class/struct
-  if (!dynamic_cast<ClassDeclaration*>(declaration)) {
-    return false;
-  }
-  const KUrl currUrl = declaration->topContext()->url().toUrl();
-  const QString fileName = currUrl.fileName();
-  const QPair<QString, QString> nameExtensionPair = splitFileAtExtension(fileName);
-  // check whether we renamed something that is called like the document it lives in
-  return nameExtensionPair.first.compare(declaration->identifier().toString(), Qt::CaseInsensitive) == 0;
-}
-
-QString SimpleRefactoring::newFileName(const KUrl& current, const QString& newName)
-{
-  QPair<QString, QString> nameExtensionPair = splitFileAtExtension(current.fileName());
-  // if current file is lowercased, keep that
-  if (nameExtensionPair.first == nameExtensionPair.first.toLower()) {
-    return newName.toLower() + nameExtensionPair.second;
-  } else {
-    return newName + nameExtensionPair.second;
-  }
-}
-
-DocumentChangeSet::ChangeResult SimpleRefactoring::addRenameFileChanges(const KUrl& current,
-                                                                        const QString& newName,
-                                                                        DocumentChangeSet* changes)
-{
-  DocumentChangeSet::ChangeResult result = changes->addDocumentRenameChange(
-    IndexedString(current), IndexedString(newFileName(current, newName)));
+  auto result = KDevelop::BasicRefactoring::addRenameFileChanges(current, newName, changes);
   if (!result) {
     return result;
   }

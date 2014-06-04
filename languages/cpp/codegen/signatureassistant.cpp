@@ -20,6 +20,7 @@
 
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
+#include <language/assistant/renameaction.h>
 #include <language/duchain/duchainutils.h>
 #include <language/backgroundparser/backgroundparser.h>
 #include <language/backgroundparser/parsejob.h>
@@ -30,11 +31,12 @@
 #include <KTextEditor/View>
 
 #include "cppduchain.h"
-#include "renameaction.h"
 #include "qtfunctiondeclaration.h"
 
 using namespace KDevelop;
 using namespace Cpp;
+
+namespace {
 
 Declaration *getDeclarationAtCursor(const SimpleCursor &cursor, const KUrl &documentUrl)
 {
@@ -67,9 +69,48 @@ Signature getDeclarationSignature(const Declaration *functionDecl, const DUConte
   return signature;
 }
 
-AdaptDefinitionSignatureAssistant::AdaptDefinitionSignatureAssistant(KTextEditor::View* view, const KTextEditor::Range& inserted)
-: m_editingDefinition(false), m_view(view)
+}
+
+AdaptDefinitionSignatureAssistant::AdaptDefinitionSignatureAssistant(ILanguageSupport* supportedLanguage)
+  : StaticAssistant(supportedLanguage)
 {
+  connect(ICore::self()->languageController()->backgroundParser(),
+          SIGNAL(parseJobFinished(KDevelop::ParseJob*)),
+          SLOT(parseJobFinished(KDevelop::ParseJob*)));
+}
+
+QString AdaptDefinitionSignatureAssistant::title() const
+{
+  return tr("Adapt Signature");
+}
+
+void AdaptDefinitionSignatureAssistant::reset()
+{
+  doHide();
+  clearActions();
+
+  m_editingDefinition = {};
+  m_declarationName = {};
+  m_otherSideId = {};
+  m_otherSideTopContext = {};
+  m_otherSideContext = {};
+  m_oldSignature = {};
+  m_document = {};
+  m_view.clear();
+}
+
+void AdaptDefinitionSignatureAssistant::textChanged(KTextEditor::View* view, const KTextEditor::Range& invocationRange, const QString& removedText)
+{
+  reset();
+
+  m_view = view;
+
+  //FIXME: update signature assistant to play well with the rename assistant
+  KTextEditor::Range sigAssistRange = invocationRange;
+  if (!removedText.isEmpty()) {
+    sigAssistRange.setRange(sigAssistRange.start(), sigAssistRange.start());
+  }
+
   m_document = view->document()->url();
 
   DUChainReadLocker lock(DUChain::lock(), 300);
@@ -78,8 +119,8 @@ AdaptDefinitionSignatureAssistant::AdaptDefinitionSignatureAssistant(KTextEditor
     return;
   }
 
-  SimpleRange invocationRange = SimpleRange(inserted);
-  Declaration* funDecl = getDeclarationAtCursor(invocationRange.start, m_document);
+  SimpleRange simpleInvocationRange = SimpleRange(sigAssistRange);
+  Declaration* funDecl = getDeclarationAtCursor(simpleInvocationRange.start, m_document);
   if(!funDecl || !funDecl->type<FunctionType>())
     return;
 
@@ -115,13 +156,11 @@ AdaptDefinitionSignatureAssistant::AdaptDefinitionSignatureAssistant(KTextEditor
   m_otherSideTopContext = ReferencedTopDUContext(otherSide->topContext());
   m_oldSignature = getDeclarationSignature(otherSide, m_otherSideContext.data(), true);
 
-  connect(ICore::self()->languageController()->backgroundParser(), SIGNAL(parseJobFinished(KDevelop::ParseJob*)),
-                                                                    SLOT(parseJobFinished(KDevelop::ParseJob*)));
   //Schedule an update, to make sure the ranges match
   DUChain::self()->updateContextForUrl(m_otherSideTopContext->url(), TopDUContext::AllDeclarationsAndContexts);
 }
 
-bool AdaptDefinitionSignatureAssistant::isUseful()
+bool AdaptDefinitionSignatureAssistant::isUseful() const
 {
   return !m_declarationName.isEmpty() && m_otherSideId.isValid();
 }
@@ -234,8 +273,10 @@ void AdaptDefinitionSignatureAssistant::parseJobFinished(KDevelop::ParseJob* job
 
   //Check for changes between m_oldSignature and newSignature, use oldPositions to store old<->new param index mapping
   QList<int> oldPositions;
-  if (!getSignatureChanges(newSignature, oldPositions))
+  if (!getSignatureChanges(newSignature, oldPositions)) {
+    reset();
     return; //No changes to signature
+  }
 
   QList<RenameAction*> renameActions;
   if (m_editingDefinition)
@@ -243,10 +284,11 @@ void AdaptDefinitionSignatureAssistant::parseJobFinished(KDevelop::ParseJob* job
   else
     renameActions = getRenameActions(newSignature, oldPositions); //rename as needed when updating the definition
 
-  addAction(IAssistantAction::Ptr(new AdaptSignatureAction(m_otherSideId, m_otherSideTopContext,
-                                                           m_oldSignature, newSignature,
-                                                           m_editingDefinition, renameActions)));
-
+  IAssistantAction::Ptr action(new AdaptSignatureAction(m_otherSideId, m_otherSideTopContext,
+                                                        m_oldSignature, newSignature,
+                                                        m_editingDefinition, renameActions));
+  connect(action.data(), SIGNAL(executed(IAssistantAction*)), SLOT(reset()));
+  addAction(action);
   emit actionsChanged();
 }
 

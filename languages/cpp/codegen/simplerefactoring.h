@@ -45,24 +45,7 @@ public:
                                                                        KDevelop::DocumentChangeSet& changes,
                                                                        const QList<KDevelop::IndexedDeclaration>& declarations);
 
-  /**
-   * @return true if the declaration's file should be renamed if the declaration
-   *         was renamed.
-   */
-  static bool shouldRenameFile(KDevelop::Declaration* declaration);
-
-  /**
-   * Add the change(s) related to renaming @p file to @p newName to @p changes and return the result.
-   *
-   * @param current The URL for the file you want to rename.
-   * @param newName The new name of the file *without* the file extension.
-   * @param changes The change set to add the rename changes to.
-   */
-  static KDevelop::DocumentChangeSet::ChangeResult addRenameFileChanges(const KUrl& current,
-                                                                        const QString& newName,
-                                                                        KDevelop::DocumentChangeSet* changes);
-
-  static QString newFileName(const KUrl& current, const QString& newName);
+  virtual KDevelop::DocumentChangeSet::ChangeResult addRenameFileChanges(const KUrl& current, const QString& newName, KDevelop::DocumentChangeSet* changes) override;
 
   /**
    * Move the given inline declaration to the .cpp implementation file.
