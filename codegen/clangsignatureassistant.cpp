@@ -279,7 +279,9 @@ QString ClangAdaptSignatureAction::toolTip() const
             m_newSig, m_oldSig);
 }
 
-ClangSignatureAssistant::ClangSignatureAssistant(KTextEditor::View* view) : m_view(view), m_onNextParse(false)
+ClangSignatureAssistant::ClangSignatureAssistant(ILanguageSupport* languageSupport)
+    : StaticAssistant(languageSupport)
+    , m_onNextParse(false)
 {
     connect(ICore::self()->languageController()->backgroundParser(), SIGNAL(parseJobFinished(KDevelop::ParseJob*)),
             this, SLOT(parseJobFinished(KDevelop::ParseJob*)));
@@ -298,9 +300,15 @@ void ClangSignatureAssistant::reset()
     m_onNextParse = false;
 }
 
-void ClangSignatureAssistant::textChanged(const KTextEditor::Range& change)
+
+void ClangSignatureAssistant::textChanged(KTextEditor::View* view, const KTextEditor::Range& invocationRange,
+                                          const QString& removedText)
 {
+    Q_UNUSED(removedText);
+
     reset();
+
+    m_view = view;
 
     KUrl fileUrl = m_view.data()->document()->url();
     KSharedPtr<ParseSession> session = getSession(fileUrl);
@@ -308,7 +316,8 @@ void ClangSignatureAssistant::textChanged(const KTextEditor::Range& change)
         return;
     }
 
-    CXCursor cursor = getFunctionCursor(SimpleCursor(change.start()), session->unit(), session->file());
+    const SimpleCursor simpleCursor(invocationRange.start());
+    CXCursor cursor = getFunctionCursor(simpleCursor, session->unit(), session->file());
     if (clang_Cursor_isNull(cursor)) {
         return;
     }
@@ -343,7 +352,7 @@ void ClangSignatureAssistant::textChanged(const KTextEditor::Range& change)
         //the function could be defined in any file which includes us, but that
         //information is not available to use through clang's translation unit model. The
         //best we can do is guess at similar file names.
-        m_targetUnit = findCompanionFile(fileUrl, SimpleCursor(change.start()), session->file(), otherSide);
+        m_targetUnit = findCompanionFile(fileUrl, simpleCursor, session->file(), otherSide);
 
         if (m_targetUnit.isEmpty()) {
             kDebug() << "Cound not find candidate target for " << fileUrl;
@@ -371,7 +380,7 @@ void ClangSignatureAssistant::textChanged(const KTextEditor::Range& change)
     m_onNextParse = true;
 }
 
-bool ClangSignatureAssistant::isUseful()
+bool ClangSignatureAssistant::isUseful() const
 {
     return !m_oldSig.isEmpty() && !m_oldName.isEmpty();
 }
@@ -440,7 +449,9 @@ void ClangSignatureAssistant::parseJobFinished(ParseJob* job)
     SimpleRange range = ClangRange(clang_getCursorExtent(otherCursor)).toSimpleRange();
     range.end = end;
 
-    addAction(IAssistantAction::Ptr(new ClangAdaptSignatureAction(m_targetDecl, targetUrl, range, newSig, m_oldSig)));
+    IAssistantAction::Ptr action(new ClangAdaptSignatureAction(m_targetDecl, targetUrl, range, newSig, m_oldSig));
+    connect(action.data(), SIGNAL(executed(IAssistantAction*)), SLOT(reset()));
+    addAction(action);
 
     emit actionsChanged();
 }

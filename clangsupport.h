@@ -31,7 +31,6 @@
 
 class ClangIndex;
 class SimpleRefactoring;
-class CodeAssistant;
 
 class ClangSupport : public KDevelop::IPlugin, public KDevelop::ILanguageSupport, public KDevelop::IBuddyDocumentFinder
 {
@@ -50,6 +49,7 @@ public:
 
     /** the code highlighter */
     virtual KDevelop::ICodeHighlighting* codeHighlighting() const;
+    virtual KDevelop::BasicRefactoring* refactoring() const override;
 
     virtual void createActionsForMainWindow(Sublime::MainWindow* window, QString& xmlFile, KActionCollection& actions);
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
@@ -66,10 +66,8 @@ public:
 
 private:
     KDevelop::ICodeHighlighting *const m_highlighting;
-    QScopedPointer<ClangIndex> m_index;
     SimpleRefactoring *m_refactoring;
-
-    QScopedPointer<CodeAssistant> m_assistant;
+    QScopedPointer<ClangIndex> m_index;
 };
 
 #endif

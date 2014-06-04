@@ -5,7 +5,6 @@ include_directories(
 
 add_library(kdevclangcodegen OBJECT
     simplerefactoring.cpp
-    codeassistant.cpp
     clangsignatureassistant.cpp
 )
 set_target_properties(kdevclangcodegen PROPERTIES

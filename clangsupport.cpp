@@ -38,8 +38,10 @@
 #include <interfaces/contextmenuextension.h>
 
 #include "codegen/simplerefactoring.h"
-#include "codegen/codeassistant.h"
+#include "codegen/clangsignatureassistant.h"
 
+#include <language/assistant/staticassistantsmanager.h>
+#include <language/assistant/renameassistant.h>
 #include <language/codecompletion/codecompletion.h>
 #include <language/highlighting/codehighlighting.h>
 #include <language/interfaces/editorcontext.h>
@@ -58,17 +60,20 @@ ClangSupport::ClangSupport(QObject* parent, const QVariantList& )
 : IPlugin( KDevClangSupportFactory::componentData(), parent )
 , ILanguageSupport()
 , m_highlighting(new KDevelop::CodeHighlighting(this))
+, m_refactoring(new SimpleRefactoring(this))
 , m_index(new ClangIndex)
-, m_assistant(new CodeAssistant)
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::ILanguageSupport )
     setXMLFile( "kdevclangsupport.rc" );
 
-    m_refactoring = new SimpleRefactoring(this);
     new KDevelop::CodeCompletion( this, new ClangCodeCompletionModel(this), name() );
     for(const auto& type : DocumentFinderHelpers::mimeTypesList()){
         KDevelop::IBuddyDocumentFinder::addFinder(type, this);
     }
+
+    auto assistantsManager = core()->languageController()->staticAssistantsManager();
+    assistantsManager->registerAssistant(StaticAssistant::Ptr(new RenameAssistant(this)));
+    assistantsManager->registerAssistant(StaticAssistant::Ptr(new ClangSignatureAssistant(this)));
 }
 
 ClangSupport::~ClangSupport()
@@ -91,6 +96,11 @@ QString ClangSupport::name() const
 ICodeHighlighting* ClangSupport::codeHighlighting() const
 {
     return m_highlighting;
+}
+
+BasicRefactoring* ClangSupport::refactoring() const
+{
+    return m_refactoring;
 }
 
 ClangIndex* ClangSupport::index()

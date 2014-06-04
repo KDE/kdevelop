@@ -27,6 +27,7 @@
 #include <KTextEditor/View>
 #include <KTextEditor/Range>
 
+#include <language/assistant/staticassistant.h>
 #include <language/backgroundparser/parsejob.h>
 #include <language/editor/documentcursor.h>
 
@@ -64,15 +65,17 @@ private:
     QString m_oldSig;
 };
 
-class ClangSignatureAssistant : public KDevelop::IAssistant
+class ClangSignatureAssistant : public KDevelop::StaticAssistant
 {
     Q_OBJECT
 public:
-    ClangSignatureAssistant(KTextEditor::View* view);
+    ClangSignatureAssistant(KDevelop::ILanguageSupport* languageSupport);
     virtual ~ClangSignatureAssistant();
-    bool isUseful();
 
-    void textChanged(const KTextEditor::Range& inserted);
+    virtual bool isUseful() const override;
+
+    virtual void textChanged(KTextEditor::View* view, const KTextEditor::Range& invocationRange,
+                             const QString& removedText = QString()) override;
 
 private slots:
     void parseJobFinished(KDevelop::ParseJob*);
