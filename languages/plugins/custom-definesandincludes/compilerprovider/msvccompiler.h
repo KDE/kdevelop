@@ -21,32 +21,21 @@
  *
  */
 
-#ifndef GCCLIKEPROVIDER_H
-#define GCCLIKEPROVIDER_H
+#ifndef MSVCCOMPILER_H
+#define MSVCCOMPILER_H
 
-#include "icompilerprovider.h"
+#include "icompiler.h"
 
-class GccLikeProvider : public ICompilerProvider
+class MsvcCompiler : public ICompiler
 {
 public:
     virtual QHash<QString, QString> defines( const QString& path ) const override;
 
     virtual Path::List includes( const QString& path ) const override;
-};
 
-class ClangProvider : public GccLikeProvider
-{
     virtual QString name() const override;
 
     virtual QString defaultPath() const override;
 };
 
-class GccProvider : public GccLikeProvider
-{
-    virtual QString name() const override;
-
-    virtual QString defaultPath() const override;
-};
-
-#endif // GCCLIKEPROVIDER_H
-
+#endif // MSVCCOMPILER_H

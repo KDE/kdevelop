@@ -24,34 +24,33 @@
 #ifndef ICOMPILERPROVIDER_H
 #define ICOMPILERPROVIDER_H
 
-#include <QHash>
+#include <QObject>
 #include <QString>
-#include <QSharedPointer>
+#include <QVector>
 
-#include <util/path.h>
+#include "icompiler.h"
 
-using KDevelop::Path;
+namespace KDevelop
+{
+class IProject;
+}
 
 class ICompilerProvider
 {
 public:
-    virtual QHash<QString, QString> defines( const QString& path ) const = 0;
-    virtual Path::List includes( const QString& path ) const = 0;
+    /// Select compiler with the @p name (one of GCC, Clang e.t.c) located at the @p path that provides standard includes/defines for the @p project
+    /// @return true on success, false otherwise, e.g. if the compiler isn't available.
+    virtual bool setCompiler( KDevelop::IProject* project, const QString& name, const QString& path ) = 0;
 
-    virtual QString name() const = 0;
+    /// @return current compiler for the @P project
+    virtual CompilerPointer currentCompiler( KDevelop::IProject* project ) const = 0;
 
-    virtual QString defaultPath() const = 0;
+    /// @return list of all available compilers
+    virtual QVector<CompilerPointer> compilers() const = 0;
 
     virtual ~ICompilerProvider() = default;
-protected:
-    struct DefinesIncludes {
-        QHash<QString, QString> definedMacros;
-        Path::List includePaths;
-    };
-    // list of defines/includes for the compiler with selected path
-    mutable QHash<QString, DefinesIncludes> m_definesIncludes;
 };
 
-typedef QSharedPointer<ICompilerProvider> ProviderPointer;
+Q_DECLARE_INTERFACE( ICompilerProvider, "org.kdevelop.ICompilerProvider" )
 
 #endif // ICOMPILERPROVIDER_H

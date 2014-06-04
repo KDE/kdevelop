@@ -21,7 +21,7 @@
  *
  */
 
-#include "gcclikeprovider.h"
+#include "gcclikecompiler.h"
 
 #include <QDir>
 #include <QProcess>
@@ -35,7 +35,7 @@
 #define NULL_DEVICE "/dev/null"
 #endif
 
-QHash<QString, QString> GccLikeProvider::defines( const QString& path ) const
+QHash<QString, QString> GccLikeCompiler::defines( const QString& path ) const
 {
     if ( m_definesIncludes.contains( path ) && !m_definesIncludes[path].definedMacros.isEmpty() ) {
         return m_definesIncludes[path].definedMacros;
@@ -65,7 +65,7 @@ QHash<QString, QString> GccLikeProvider::defines( const QString& path ) const
     return m_definesIncludes[path].definedMacros;
 }
 
-Path::List GccLikeProvider::includes( const QString& path ) const
+Path::List GccLikeCompiler::includes( const QString& path ) const
 {
     if ( m_definesIncludes.contains( path ) && !m_definesIncludes[path].includePaths.isEmpty() ) {
         return m_definesIncludes[path].includePaths;
@@ -134,22 +134,22 @@ Path::List GccLikeProvider::includes( const QString& path ) const
     return m_definesIncludes[path].includePaths;
 }
 
-QString ClangProvider::name() const
+QString ClangCompiler::name() const
 {
     return "Clang";
 }
 
-QString GccProvider::name() const
+QString GccCompiler::name() const
 {
     return "GCC";
 }
 
-QString ClangProvider::defaultPath() const
+QString ClangCompiler::defaultPath() const
 {
     return "clang";
 }
 
-QString GccProvider::defaultPath() const
+QString GccCompiler::defaultPath() const
 {
     return "gcc";
 }

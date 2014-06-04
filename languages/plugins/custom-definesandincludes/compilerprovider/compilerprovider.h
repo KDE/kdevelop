@@ -24,10 +24,9 @@
 #ifndef COMPILERSPROVIDER_H
 #define COMPILERSPROVIDER_H
 
-#include "idaicompilerprovider.h"
+#include "icompilerprovider.h"
 
 #include "../definesandincludesmanager.h"
-#include "icompilerprovider.h"
 
 #include <QVariantList>
 #include <QVector>
@@ -42,14 +41,14 @@ using KDevelop::Path;
 
 using namespace KDevelop;
 
-class DAICompilerProvider : public IPlugin, public IDAICompilerProvider, public IDefinesAndIncludesManager::Provider
+class CompilerProvider : public IPlugin, public ICompilerProvider, public IDefinesAndIncludesManager::Provider
 {
     Q_OBJECT
-    Q_INTERFACES( IDAICompilerProvider )
+    Q_INTERFACES( ICompilerProvider )
 public :
-    explicit DAICompilerProvider( QObject* parent, const QVariantList& args = QVariantList() );
+    explicit CompilerProvider( QObject* parent, const QVariantList& args = QVariantList() );
 
-    ~DAICompilerProvider();
+    ~CompilerProvider();
 
     virtual QHash<QString, QString> defines( ProjectBaseItem* item ) const override;
 
@@ -59,19 +58,18 @@ public :
 
     virtual bool setCompiler( IProject* project, const QString& name, const QString& path ) override;
 
-    virtual QVector<ProviderPointer> compilers() const override;
+    virtual QVector<CompilerPointer> compilers() const override;
 
-    virtual ProviderPointer currentCompiler( IProject* project ) const override;
+    virtual CompilerPointer currentCompiler( IProject* project ) const override;
 
 private:
     struct Compiler {
-        ProviderPointer compiler;
+        CompilerPointer compiler;
         QString path;
     };
 
     Compiler compilerForItem( ProjectBaseItem* item ) const;
 
-    ///Goes through the list of available compilers and automatically selects an appropriate one.
     Compiler selectCompiler( const QString& compilerName, const QString& path ) const;
 
     void addPoject( IProject* project, Compiler compiler );
@@ -85,7 +83,7 @@ private Q_SLOTS:
 private:
     //list of compilers for each projects
     QHash<IProject*, Compiler> m_projects;
-    QVector<ProviderPointer> m_providers;
+    QVector<CompilerPointer> m_compilers;
 };
 
 #endif // COMPILERSPROVIDER_H

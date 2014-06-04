@@ -21,36 +21,32 @@
  *
  */
 
-#ifndef IADCOMPILERPROVIDER_H
-#define IADCOMPILERPROVIDER_H
+#ifndef GCCLIKECOMPILER_H
+#define GCCLIKECOMPILER_H
 
-#include <QObject>
-#include <QString>
-#include <QVector>
+#include "icompiler.h"
 
-#include "icompilerprovider.h"
-
-namespace KDevelop
-{
-class IProject;
-}
-
-class IDAICompilerProvider
+class GccLikeCompiler : public ICompiler
 {
 public:
-    /// Set @p name compiler (one of gcc, clang e.t.c) located at @p path that provides standard includes/defines for @p project
-    /// @return true on success, false otherwise, e.g. if the compiler isn't available.
-    virtual bool setCompiler( KDevelop::IProject* project, const QString& name, const QString& path ) = 0;
+    virtual QHash<QString, QString> defines( const QString& path ) const override;
 
-    /// @return current compiler for the @P project
-    virtual ProviderPointer currentCompiler( KDevelop::IProject* project ) const = 0;
-
-    /// @return list of all available compilers
-    virtual QVector<ProviderPointer> compilers() const = 0;
-
-    virtual ~IDAICompilerProvider() = default;
+    virtual Path::List includes( const QString& path ) const override;
 };
 
-Q_DECLARE_INTERFACE( IDAICompilerProvider, "org.kdevelop.IDAICompilerProvider" )
+class ClangCompiler : public GccLikeCompiler
+{
+    virtual QString name() const override;
 
-#endif // IADCOMPILERPROVIDER_H
+    virtual QString defaultPath() const override;
+};
+
+class GccCompiler : public GccLikeCompiler
+{
+    virtual QString name() const override;
+
+    virtual QString defaultPath() const override;
+};
+
+#endif // GCCLIKECOMPILER_H
+

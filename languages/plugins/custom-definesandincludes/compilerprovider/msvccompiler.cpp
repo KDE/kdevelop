@@ -23,7 +23,7 @@
  *
  */
 
-#include "msvcprovider.h"
+#include "msvccompiler.h"
 
 #include <QDir>
 #include <QProcessEnvironment>
@@ -32,7 +32,7 @@
 
 #include "../debugarea.h"
 
-QHash<QString, QString> MsvcProvider::defines( const QString& ) const
+QHash<QString, QString> MsvcCompiler::defines( const QString& path ) const
 {
     QHash<QString, QString> ret;
     //Get standard macros from kdevmsvcdefinehelpers
@@ -42,7 +42,7 @@ QHash<QString, QString> MsvcProvider::defines( const QString& ) const
 
     // we want to use kdevmsvcdefinehelper as a pseudo compiler backend which
     // returns the defines used in msvc. there is no such thing as -dM with cl.exe
-    proc << "cl.exe" << "/nologo" << "/Bxkdevmsvcdefinehelper" << "empty.cpp";
+    proc << path << "/nologo" << "/Bxkdevmsvcdefinehelper" << "empty.cpp";
 
     // this will fail, so check on that as well
     if ( proc.execute( 5000 ) == 2 ) {
@@ -67,7 +67,7 @@ QHash<QString, QString> MsvcProvider::defines( const QString& ) const
             }
         }
     } else {
-        definesAndIncludesDebug() << "Unable to read standard c++ macro definitions from cl.exe;";
+        definesAndIncludesDebug() << "Unable to read standard c++ macro definitions from " + path;
         while ( proc.canReadLine() ){
             definesAndIncludesDebug()  << proc.readLine();
         }
@@ -113,7 +113,7 @@ QHash<QString, QString> MsvcProvider::defines( const QString& ) const
     return ret;
 }
 
-Path::List MsvcProvider::includes( const QString& ) const
+Path::List MsvcCompiler::includes( const QString& ) const
 {
     QStringList _includePaths = QProcessEnvironment::systemEnvironment().value( "INCLUDE" ).split( ";", QString::SkipEmptyParts );
     QStringList includePaths;
@@ -123,12 +123,12 @@ Path::List MsvcProvider::includes( const QString& ) const
     return KDevelop::toPathList( includePaths );
 }
 
-QString MsvcProvider::name() const
+QString MsvcCompiler::name() const
 {
     return "MSVC";
 }
 
-QString MsvcProvider::defaultPath() const
+QString MsvcCompiler::defaultPath() const
 {
     return "cl.exe";
 }

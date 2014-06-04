@@ -22,7 +22,7 @@
 #include "projectpathswidget.h"
 #include "customdefinesandincludes.h"
 #include "definesandincludesmanager.h"
-#include "../compilerprovider/idaicompilerprovider.h"
+#include "../compilerprovider/icompilerprovider.h"
 
 #include <interfaces/iruncontroller.h>
 #include <interfaces/iproject.h>
@@ -37,17 +37,17 @@
 
 namespace
 {
-IDAICompilerProvider* compilerProvider()
+ICompilerProvider* compilerProvider()
 {
-    auto compilerProvider = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IDAICompilerProvider");
-    if (!compilerProvider || !compilerProvider->extension<IDAICompilerProvider>()) {
+    auto compilerProvider = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ICompilerProvider");
+    if (!compilerProvider || !compilerProvider->extension<ICompilerProvider>()) {
         return {};
     }
 
-    return compilerProvider->extension<IDAICompilerProvider>();
+    return compilerProvider->extension<ICompilerProvider>();
 }
 
-QStringList compilerNames(QVector<ProviderPointer> compilers)
+QStringList compilerNames(QVector<CompilerPointer> compilers)
 {
     QStringList names;
     for (const auto& compiler : compilers) {

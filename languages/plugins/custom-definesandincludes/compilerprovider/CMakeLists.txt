@@ -1,7 +1,7 @@
 set( compilerprovider_SRCS
-        daicompilerprovider.cpp
-        gcclikeprovider.cpp
-        msvcprovider.cpp
+        compilerprovider.cpp
+        gcclikecompiler.cpp
+        msvccompiler.cpp
         ../debugarea.cpp
     )
 
