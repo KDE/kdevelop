@@ -30,6 +30,11 @@
 #include <KPluginFactory>
 #include <KAboutData>
 
+#include <QThread>
+#include <QCoreApplication>
+
+using KDevelop::ConfigEntry;
+
 namespace
 {
 ///@return: The ConfigEntry, with includes/defines from @p paths for all parent folders of @p item.
@@ -60,6 +65,16 @@ static ConfigEntry findConfigForItem(const QList<ConfigEntry>& paths, const KDev
     ret.includes.removeDuplicates();
     return ret;
 }
+
+KDevelop::IDefinesAndIncludesManager::Provider* compilerProvider(QVector<KDevelop::IDefinesAndIncludesManager::Provider*> providers)
+{
+    for (auto provider : providers) {
+        if (provider->type() & KDevelop::IDefinesAndIncludesManager::CompilerSpecific) {
+            return provider;
+        }
+    }
+    return {};
+}
 }
 
 namespace KDevelop
@@ -78,8 +93,11 @@ DefinesAndIncludesManager::DefinesAndIncludesManager( QObject* parent, const QVa
 
 QHash<QString, QString> DefinesAndIncludesManager::defines( ProjectBaseItem* item, Type type  ) const
 {
+    Q_ASSERT(QThread::currentThread() == qApp->thread());
+
     if (!item) {
-        return {};
+        auto cp = compilerProvider(m_providers);
+        return cp ? cp->defines(nullptr) : QHash<QString, QString>();
     }
 
     QHash<QString, QString> defines;
@@ -107,7 +125,7 @@ QHash<QString, QString> DefinesAndIncludesManager::defines( ProjectBaseItem* ite
     if (type & UserDefined) {
         auto cfg = item->project()->projectConfiguration().data();
 
-        const auto result = findConfigForItem(readSettings(cfg), item).defines;
+        const auto result = findConfigForItem(readPaths(cfg), item).defines;
         for (auto it = result.constBegin(); it != result.constEnd(); it++) {
             defines[it.key()] = it.value().toString();
         }
@@ -118,8 +136,11 @@ QHash<QString, QString> DefinesAndIncludesManager::defines( ProjectBaseItem* ite
 
 Path::List DefinesAndIncludesManager::includes( ProjectBaseItem* item, Type type ) const
 {
+    Q_ASSERT(QThread::currentThread() == qApp->thread());
+
     if (!item) {
-        return {};
+        auto cp = compilerProvider(m_providers);
+        return cp ? cp->includes(nullptr) : Path::List();
     }
 
     Path::List includes;
@@ -133,7 +154,7 @@ Path::List DefinesAndIncludesManager::includes( ProjectBaseItem* item, Type type
     if (type & UserDefined) {
         auto cfg = item->project()->projectConfiguration().data();
 
-        includes += KDevelop::toPathList(findConfigForItem(readSettings(cfg), item).includes);
+        includes += KDevelop::toPathList(findConfigForItem(readPaths(cfg), item).includes);
     }
 
     if ( type & ProjectSpecific ) {
@@ -144,16 +165,6 @@ Path::List DefinesAndIncludesManager::includes( ProjectBaseItem* item, Type type
     }
 
     return includes;
-}
-
-QList<ConfigEntry> DefinesAndIncludesManager::readSettings( KConfig* cfg ) const
-{
-    return SettingsManager::readSettings( cfg );
-}
-
-void DefinesAndIncludesManager::writeSettings( KConfig* cfg, const QList<ConfigEntry>& paths ) const
-{
-    SettingsManager::writeSettings( cfg, paths );
 }
 
 bool DefinesAndIncludesManager::unregisterProvider(IDefinesAndIncludesManager::Provider* provider)
@@ -176,4 +187,5 @@ void DefinesAndIncludesManager::registerProvider(IDefinesAndIncludesManager::Pro
 
     m_providers.push_back(provider);
 }
+
 }

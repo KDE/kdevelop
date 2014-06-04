@@ -23,7 +23,6 @@ set(kdevcpplanguagesupport_PART_SRCS
     cpputils.cpp
     includepathresolver.cpp
     setuphelpers.cpp
-    setuphelpers_gcc_like.cpp
     quickopen.cpp
     
     codecompletion/model.cpp
@@ -47,10 +46,6 @@ set(kdevcpplanguagesupport_PART_SRCS
     codegen/cppclasshelper.cpp
 #     codegen/makeimplementationprivate.cpp
 )
-
-if(MSVC)
-    set(kdevcpplanguagesupport_PART_SRCS ${kdevcpplanguagesupport_PART_SRCS} setuphelpers_msvc.cpp)
-endif(MSVC)
 
 set(kdevcpplanguagesupport_LIB_UI
     codegen/ui/custom_include_paths.ui
@@ -96,11 +91,3 @@ install(TARGETS kdevcpplanguagesupport DESTINATION ${PLUGIN_INSTALL_DIR})
 configure_file(kdevcppsupport.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevcppsupport.desktop)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevcppsupport.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 install(FILES kdevcppsupport.rc DESTINATION ${DATA_INSTALL_DIR}/kdevcppsupport)
-
-########### only Windows and only for the MSVC ################
-if(MSVC)
-    set(kdevmsvcdefinehelper_SRCS msvcdefinehelper.cpp)
-    add_executable(kdevmsvcdefinehelper ${kdevmsvcdefinehelper_SRCS})
-    install(TARGETS kdevmsvcdefinehelper RUNTIME DESTINATION bin
-                                         LIBRARY DESTINATION lib)
-endif(MSVC)

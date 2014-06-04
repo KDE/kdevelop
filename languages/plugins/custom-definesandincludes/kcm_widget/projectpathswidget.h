@@ -51,6 +51,15 @@ public:
     void setPaths( const QList<ConfigEntry>& );
     QList<ConfigEntry> paths() const;
     void clear();
+
+    void setCompilers(const QStringList& compilerNames);
+
+    void setCurrentCompiler(const QString& name);
+    void setCompilerPath(const QString& path);
+
+    QString currentCompilerName() const;
+    QString compilerPath() const;
+
 signals:
     void changed();
 private slots:
@@ -74,3 +83,4 @@ private:
 };
 
 #endif
+

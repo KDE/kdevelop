@@ -28,16 +28,8 @@
 class QStringList;
 
 namespace CppTools {
-
     /**
-    * This function attempts to run a gcc command to retrieve the standard
-    * c++ include paths for this machine.
-    */
-    QStringList setupStandardIncludePaths();
-
-    /**
-    * This function attempts to run a gcc command to retrieve the standard
-    * c++ macro definitions.
+    * This function returns built-in macro definitions
     */
     Cpp::ReferenceCountedMacroSet setupStandardMacros();
 

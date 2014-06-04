@@ -21,18 +21,42 @@
 
 #include "projectpathswidget.h"
 #include "customdefinesandincludes.h"
-
 #include "definesandincludesmanager.h"
+#include "../compilerprovider/icompilerprovider.h"
 
 #include <interfaces/iruncontroller.h>
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
+#include <interfaces/iplugincontroller.h>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/idocument.h>
 #include <language/duchain/indexedstring.h>
 
 #include "kcm_customdefinesandincludes.h"
+
+namespace
+{
+ICompilerProvider* compilerProvider()
+{
+    auto compilerProvider = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ICompilerProvider");
+    if (!compilerProvider || !compilerProvider->extension<ICompilerProvider>()) {
+        return {};
+    }
+
+    return compilerProvider->extension<ICompilerProvider>();
+}
+
+QStringList compilerNames(const QVector<CompilerPointer>& compilers)
+{
+    QStringList names;
+    names.reserve(compilers.size());
+    for (const auto& compiler : compilers) {
+        names << compiler->name();
+    }
+    return names;
+}
+}
 
 K_PLUGIN_FACTORY(DefinesAndIncludesFactory, registerPlugin<DefinesAndIncludes>(); )
 K_EXPORT_PLUGIN(DefinesAndIncludesFactory("kcm_kdevcustomdefinesandincludes", "kdevcustomdefinesandincludes"))
@@ -51,6 +75,15 @@ DefinesAndIncludes::DefinesAndIncludes( QWidget* parent, const QVariantList& arg
 
 void DefinesAndIncludes::dataChanged()
 {
+    if (auto cp = compilerProvider()) {
+        auto name = configWidget->currentCompilerName();
+        for (const auto& c : cp->compilers()) {
+            if (c->name() == name) {
+                configWidget->setCompilerPath(c->defaultPath());
+            }
+        }
+    }
+
     emit changed(true);
 }
 
@@ -58,26 +91,33 @@ DefinesAndIncludes::~DefinesAndIncludes()
 {
 }
 
-void DefinesAndIncludes::loadFrom(KConfig* cfg)
+void DefinesAndIncludes::loadFrom( KConfig* cfg )
 {
     configWidget->clear();
-    auto IManager = KDevelop::IDefinesAndIncludesManager::manager();
-    if ( IManager ) {
-        auto manager = static_cast<KDevelop::DefinesAndIncludesManager*>(IManager);
-        configWidget->setPaths( manager->readSettings( cfg ) );
+    auto iadm = KDevelop::IDefinesAndIncludesManager::manager();
+    auto settings = static_cast<KDevelop::DefinesAndIncludesManager*>( iadm );
+    configWidget->setPaths( settings->readPaths( cfg ) );
+
+    if (auto cp = compilerProvider()) {
+        configWidget->setCompilers(compilerNames(cp->compilers()));
+        configWidget->setCurrentCompiler(cp->currentCompiler(project())->name());
+        configWidget->setCompilerPath(!settings->pathToCompiler(cfg).isEmpty() ? settings->pathToCompiler(cfg) : cp->currentCompiler(project())->defaultPath());
     }
 }
 
 void DefinesAndIncludes::saveTo(KConfig* cfg, KDevelop::IProject*)
 {
-    auto IManager = KDevelop::IDefinesAndIncludesManager::manager();
-    if ( IManager ) {
-        auto manager = static_cast<KDevelop::DefinesAndIncludesManager*>(IManager);
-        manager->writeSettings( cfg, configWidget->paths() );
+    auto iadm = KDevelop::IDefinesAndIncludesManager::manager();
+    auto settings = static_cast<KDevelop::DefinesAndIncludesManager*>( iadm );
+    settings->writePaths( cfg, configWidget->paths() );
+
+    if (auto cp = compilerProvider()) {
+        settings->writeCompiler(cfg ,configWidget->currentCompilerName());
+
+        cp->setCompiler(project(), settings->currentCompiler(cfg), settings->pathToCompiler(cfg));
     }
 
-    auto grp = cfg->group("Custom Defines And Includes");
-    if (grp.readEntry("reparse", true)) {
+    if ( settings->needToReparseCurrentProject( cfg ) ) {
         using namespace KDevelop;
         ICore::self()->projectController()->reparseProject(project(), true);
 

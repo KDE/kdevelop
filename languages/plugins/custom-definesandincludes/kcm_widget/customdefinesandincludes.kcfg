@@ -5,9 +5,11 @@
       http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
   <kcfgfile arg="true"/>
 
-  <group name="Custom Defines And Includes">
+  <group name="Defines And Includes">
     <entry name="reparse" key="reparse" type="Bool">
         <default>true</default>
+    </entry>
+    <entry name="compilerPath" key="compilerPath" type="String">
     </entry>
   </group>
 </kcfg>

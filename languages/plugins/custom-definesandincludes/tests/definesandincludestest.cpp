@@ -66,13 +66,13 @@ void DefinesAndIncludesTest::loadSimpleProject()
 
     auto manager = KDevelop::IDefinesAndIncludesManager::manager();
     QVERIFY( manager );
-    Path::List includes = manager->includes( s_currentProject->projectItem() );
+    Path::List includes = manager->includes( s_currentProject->projectItem(), IDefinesAndIncludesManager::UserDefined );
 
     QHash<QString,QString> defines;
     defines.insert( "_DEBUG", "" );
     defines.insert( "VARIABLE", "VALUE" );
     QCOMPARE( includes, Path::List() << Path( "/usr/include/mydir") );
-    QCOMPARE( manager->defines( s_currentProject->projectItem() ), defines );
+    QCOMPARE( manager->defines( s_currentProject->projectItem(), IDefinesAndIncludesManager::UserDefined ), defines );
 }
 
 void DefinesAndIncludesTest::loadMultiPathProject()
@@ -88,8 +88,8 @@ void DefinesAndIncludesTest::loadMultiPathProject()
     defines.insert("SOURCE", "CONTENT");
     defines.insert("_COPY", "");
 
-    QCOMPARE( manager->includes( s_currentProject->projectItem()), includes );
-    QCOMPARE( manager->defines( s_currentProject->projectItem()), defines );
+    QCOMPARE( manager->includes( s_currentProject->projectItem(), IDefinesAndIncludesManager::UserDefined ), includes );
+    QCOMPARE( manager->defines( s_currentProject->projectItem(), IDefinesAndIncludesManager::UserDefined ), defines );
 
     KDevelop::ProjectBaseItem* mainfile = 0;
     foreach( KDevelop::ProjectBaseItem* i, s_currentProject->files() ) {
@@ -102,8 +102,8 @@ void DefinesAndIncludesTest::loadMultiPathProject()
 
     includes << Path("/usr/local/include/mydir");
     defines.insert("BUILD", "debug");
-    QCOMPARE(manager->includes( mainfile ), includes);
-    QCOMPARE(defines, manager->defines( mainfile ));
+    QCOMPARE(manager->includes( mainfile, IDefinesAndIncludesManager::UserDefined ), includes);
+    QCOMPARE(defines, manager->defines( mainfile, IDefinesAndIncludesManager::UserDefined ));
 }
 
 QTEST_KDEMAIN(DefinesAndIncludesTest, GUI)

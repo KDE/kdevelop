@@ -26,6 +26,8 @@
 
 #include <interfaces/iproject.h>
 
+using KDevelop::ConfigEntry;
+
 namespace ConfigConstants
 {
 const QString configKey = QLatin1String( "CustomDefinesAndIncludes" );
@@ -35,6 +37,7 @@ const QString projectPathPrefix = QLatin1String( "ProjectPath" );
 const QString projectPathKey = QLatin1String( "Path" );
 
 const QString customBuildSystemGroup = QLatin1String( "CustomBuildSystem" );
+const QString definesAndIncludesGroup = QLatin1String( "Defines And Includes" );
 }
 
 SettingsManager::SettingsManager()
@@ -123,7 +126,7 @@ QList<ConfigEntry> convertedPaths( KConfig* cfg )
 }
 }
 
-void SettingsManager::writeSettings( KConfig* cfg, const QList<ConfigEntry>& paths ) const
+void SettingsManager::writePaths( KConfig* cfg, const QList< ConfigEntry >& paths )
 {
     KConfigGroup grp = cfg->group( ConfigConstants::configKey );
     if ( !grp.isValid() )
@@ -134,11 +137,11 @@ void SettingsManager::writeSettings( KConfig* cfg, const QList<ConfigEntry>& pat
     doWriteSettings( grp, paths );
 }
 
-QList<ConfigEntry> SettingsManager::readSettings( KConfig* cfg ) const
+QList<ConfigEntry> SettingsManager::readPaths( KConfig* cfg ) const
 {
     auto converted = convertedPaths( cfg );
     if ( !converted.isEmpty() ) {
-        writeSettings( cfg, converted );
+        const_cast<SettingsManager*>(this)->writePaths( cfg, converted );
         return converted;
     }
 
@@ -148,4 +151,34 @@ QList<ConfigEntry> SettingsManager::readSettings( KConfig* cfg ) const
     }
 
     return doReadSettings( grp );
+}
+
+QString SettingsManager::currentCompiler( KConfig* cfg ) const
+{
+    auto grp = cfg->group( ConfigConstants::definesAndIncludesGroup );
+    return grp.readEntry( "compiler", QString() );
+}
+
+bool SettingsManager::needToReparseCurrentProject( KConfig* cfg ) const
+{
+    auto grp = cfg->group( ConfigConstants::definesAndIncludesGroup );
+    return grp.readEntry( "reparse", true );
+}
+
+QString SettingsManager::pathToCompiler( KConfig* cfg ) const
+{
+    auto grp = cfg->group( ConfigConstants::definesAndIncludesGroup );
+    return grp.readEntry( "compilerPath", QString() );
+}
+
+void SettingsManager::writeCompiler( KConfig* cfg, const QString& name )
+{
+    auto grp = cfg->group(ConfigConstants::definesAndIncludesGroup);
+    grp.writeEntry("compiler", name);
+}
+
+void SettingsManager::writePathToCompiler( KConfig* cfg, const QString& name )
+{
+    auto grp = cfg->group(ConfigConstants::definesAndIncludesGroup);
+    grp.writeEntry("compilerPath", name);
 }
