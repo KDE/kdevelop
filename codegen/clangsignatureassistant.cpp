@@ -43,6 +43,8 @@
 
 #include "../util/clangutils.h"
 
+using namespace KDevelop;
+
 namespace {
 
 struct DeclSearchInfo
@@ -54,7 +56,7 @@ struct DeclSearchInfo
 KSharedPtr<ParseSession> getSession(const KUrl& url)
 {
     DUChainReadLocker lock;
-    auto top = KDevelop::DUChainUtils::standardContextForUrl(url);
+    auto top = DUChainUtils::standardContextForUrl(url);
     if (!top) {
         kWarning() << "No context found for" << url;
         return KSharedPtr<ParseSession>();
@@ -242,7 +244,7 @@ bool fixDefaults(QVector<QString>& defaults, const CXCursor& cursor, const QList
 }
 
 ClangAdaptSignatureAction::ClangAdaptSignatureAction(bool targetDecl, const KUrl& url,
-                                                     const KDevelop::SimpleRange& range,
+                                                     const SimpleRange& range,
                                                      const QString& newSig, const QString& oldSig):
     m_targetDecl(targetDecl), m_url(url), m_range(range), m_newSig(newSig), m_oldSig(oldSig)
 {
@@ -256,7 +258,7 @@ QString ClangAdaptSignatureAction::description() const
 void ClangAdaptSignatureAction::execute()
 {
     DUChainLock lock;
-    DocumentChange changeParameters(KDevelop::DUChainUtils::standardContextForUrl(m_url)->url(), m_range, QString(), m_newSig);
+    DocumentChange changeParameters(DUChainUtils::standardContextForUrl(m_url)->url(), m_range, QString(), m_newSig);
     changeParameters.m_ignoreOldText = true;
     DocumentChangeSet changes;
     changes.addChange(changeParameters);
@@ -279,7 +281,7 @@ QString ClangAdaptSignatureAction::toolTip() const
 
 ClangSignatureAssistant::ClangSignatureAssistant(KTextEditor::View* view) : m_view(view), m_onNextParse(false)
 {
-    connect(KDevelop::ICore::self()->languageController()->backgroundParser(), SIGNAL(parseJobFinished(KDevelop::ParseJob*)),
+    connect(ICore::self()->languageController()->backgroundParser(), SIGNAL(parseJobFinished(KDevelop::ParseJob*)),
             this, SLOT(parseJobFinished(KDevelop::ParseJob*)));
 }
 
@@ -374,7 +376,7 @@ bool ClangSignatureAssistant::isUseful()
     return !m_oldSig.isEmpty() && !m_oldName.isEmpty();
 }
 
-void ClangSignatureAssistant::parseJobFinished(KDevelop::ParseJob* job)
+void ClangSignatureAssistant::parseJobFinished(ParseJob* job)
 {
     if (!m_onNextParse) {
         return;
@@ -428,7 +430,7 @@ void ClangSignatureAssistant::parseJobFinished(KDevelop::ParseJob* job)
     }
 
     KUrl targetUrl = m_otherLoc.document.toUrl();
-    KTextEditor::Document *targetDoc = KDevelop::ICore::self()->documentController()->documentForUrl(targetUrl)->textDocument();
+    KTextEditor::Document *targetDoc = ICore::self()->documentController()->documentForUrl(targetUrl)->textDocument();
 
     SimpleCursor end = findSignatureEnd(targetDoc, otherCursor);
     if (!end.isValid()) {
