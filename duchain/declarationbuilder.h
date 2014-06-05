@@ -71,24 +71,25 @@ protected:
 
     // plugin.qmltypes
     KDevelop::QualifiedIdentifier declareModule(const KDevelop::RangeInRevision &range);
-    void declareComponent(QmlJS::AST::UiObjectDefinition* node,
+    void declareComponent(QmlJS::AST::UiObjectInitializer* node,
                           const KDevelop::RangeInRevision &range,
                           const KDevelop::QualifiedIdentifier &name);
-    void declareMethod(QmlJS::AST::UiObjectDefinition* node,
+    void declareMethod(QmlJS::AST::UiObjectInitializer* node,
                        const KDevelop::RangeInRevision &range,
                        const KDevelop::QualifiedIdentifier &name,
                        bool isSlot,
                        bool isSignal);
-    void declareProperty(QmlJS::AST::UiObjectDefinition* node,
+    void declareProperty(QmlJS::AST::UiObjectInitializer* node,
                          const KDevelop::RangeInRevision &range,
                          const KDevelop::QualifiedIdentifier &name);
-    void declareParameter(QmlJS::AST::UiObjectDefinition* node,
+    void declareParameter(QmlJS::AST::UiObjectInitializer* node,
                           const KDevelop::RangeInRevision &range,
                           const KDevelop::QualifiedIdentifier &name);
-    void declareEnum(QmlJS::AST::UiObjectDefinition* node,
-                     const KDevelop::RangeInRevision &range,
+    void declareEnum(const KDevelop::RangeInRevision &range,
                      const KDevelop::QualifiedIdentifier &name);
-    void declareComponentSubclass(const QString& baseclass);
+    void declareComponentSubclass(QmlJS::AST::UiObjectInitializer* node,
+                                  const KDevelop::RangeInRevision& range,
+                                  const QString& baseclass);
     void declareComponentInstance(QmlJS::AST::ExpressionStatement *expression);
     void declareExports(QmlJS::AST::ExpressionStatement *exports,
                         KDevelop::ClassDeclaration* classdecl);

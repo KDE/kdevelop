@@ -405,11 +405,11 @@ QualifiedIdentifier DeclarationBuilder::declareModule(const RangeInRevision& ran
     return name;
 }
 
-void DeclarationBuilder::declareComponent(QmlJS::AST::UiObjectDefinition* node,
+void DeclarationBuilder::declareComponent(QmlJS::AST::UiObjectInitializer* node,
                                           const RangeInRevision &range,
                                           const QualifiedIdentifier &name)
 {
-    QString baseClass = QmlJS::getQMLAttributeValue(node->initializer->members, "prototype").value.section('/', -1, -1);
+    QString baseClass = QmlJS::getQMLAttributeValue(node->members, "prototype").value.section('/', -1, -1);
 
     // Declare the component itself
     StructureType::Ptr type(new StructureType);
@@ -433,13 +433,13 @@ void DeclarationBuilder::declareComponent(QmlJS::AST::UiObjectDefinition* node,
     openType(type);
 }
 
-void DeclarationBuilder::declareMethod(QmlJS::AST::UiObjectDefinition* node,
+void DeclarationBuilder::declareMethod(QmlJS::AST::UiObjectInitializer* node,
                                        const RangeInRevision &range,
                                        const QualifiedIdentifier &name,
                                        bool isSlot,
                                        bool isSignal)
 {
-    QString type_name = QmlJS::getQMLAttributeValue(node->initializer->members, "type").value;
+    QString type_name = QmlJS::getQMLAttributeValue(node->members, "type").value;
     FunctionType::Ptr type(new FunctionType);
 
     if (type_name.isNull()) {
@@ -458,11 +458,11 @@ void DeclarationBuilder::declareMethod(QmlJS::AST::UiObjectDefinition* node,
     openType(type);
 }
 
-void DeclarationBuilder::declareProperty(QmlJS::AST::UiObjectDefinition* node,
+void DeclarationBuilder::declareProperty(QmlJS::AST::UiObjectInitializer* node,
                                          const RangeInRevision &range,
                                          const QualifiedIdentifier &name)
 {
-    AbstractType::Ptr type = typeFromName(QmlJS::getQMLAttributeValue(node->initializer->members, "type").value);
+    AbstractType::Ptr type = typeFromName(QmlJS::getQMLAttributeValue(node->members, "type").value);
 
     {
         DUChainWriteLocker lock;
@@ -473,12 +473,12 @@ void DeclarationBuilder::declareProperty(QmlJS::AST::UiObjectDefinition* node,
     openType(type);
 }
 
-void DeclarationBuilder::declareParameter(QmlJS::AST::UiObjectDefinition* node,
+void DeclarationBuilder::declareParameter(QmlJS::AST::UiObjectInitializer* node,
                                           const RangeInRevision &range,
                                           const QualifiedIdentifier &name)
 {
     FunctionType::Ptr function = currentType<FunctionType>();
-    AbstractType::Ptr type = typeFromName(QmlJS::getQMLAttributeValue(node->initializer->members, "type").value);
+    AbstractType::Ptr type = typeFromName(QmlJS::getQMLAttributeValue(node->members, "type").value);
 
     function->addArgument(type);
 
@@ -489,8 +489,7 @@ void DeclarationBuilder::declareParameter(QmlJS::AST::UiObjectDefinition* node,
     openType(type);
 }
 
-void DeclarationBuilder::declareEnum(QmlJS::AST::UiObjectDefinition* node,
-                                     const RangeInRevision &range,
+void DeclarationBuilder::declareEnum(const RangeInRevision &range,
                                      const QualifiedIdentifier &name)
 {
     EnumerationType::Ptr type(new EnumerationType);
@@ -508,26 +507,86 @@ void DeclarationBuilder::declareEnum(QmlJS::AST::UiObjectDefinition* node,
     openType(type);
 }
 
-void DeclarationBuilder::declareComponentSubclass(const QString& baseclass)
+void DeclarationBuilder::declareComponentSubclass(QmlJS::AST::UiObjectInitializer* node,
+                                                  const KDevelop::RangeInRevision& range,
+                                                  const QString& baseclass)
 {
-    StructureType::Ptr type(new StructureType);
+    QualifiedIdentifier name(
+        QmlJS::getQMLAttributeValue(node->members, "name").value.section('/', -1, -1)
+    );
+    DUContext::ContextType contextType = DUContext::Class;
+
+    if (baseclass == QLatin1String("Component")) {
+        // QML component, equivalent to a QML class
+        declareComponent(node, range, name);
+    } else if (baseclass == QLatin1String("Method") ||
+               baseclass == QLatin1String("Signal") ||
+               baseclass == QLatin1String("Slot")) {
+        // Method (that can also be a signal or a slot)
+        declareMethod(node, range, name, baseclass == QLatin1String("Slot"), baseclass == QLatin1String("Signal"));
+    } else if (baseclass == QLatin1String("Property")) {
+        // A property
+        declareProperty(node, range, name);
+    } else if (baseclass == QLatin1String("Parameter") && currentType<FunctionType>()) {
+        // One parameter of a signal/slot/method
+        declareParameter(node, range, name);
+    } else if (baseclass == QLatin1String("Enum")) {
+        // Enumeration. The "values" key contains a dictionary of name -> number entries.
+        declareEnum(range, name);
+        contextType = DUContext::Enum;
+    } else if (baseclass == QLatin1String("Module")) {
+        // QML Module, that declares a namespace
+        name = declareModule(range);
+        contextType = DUContext::Namespace;
+    } else {
+        // Define an anonymous subclass of the baseclass. This subclass will
+        // be instantiated when "id:" is encountered
+        name = QualifiedIdentifier();
+
+        StructureType::Ptr type(new StructureType);
+
+        {
+            DUChainWriteLocker lock;
+            ClassDeclaration* decl = openDeclaration<ClassDeclaration>(name, RangeInRevision());
+
+            decl->clearBaseClasses();
+            decl->setAlwaysForceDirect(true);   // This declaration has no name, so type->setDeclaration is obliged to store a direct pointer to the declaration.
+            decl->setKind(Declaration::Type);
+            decl->setType(type);                // The class needs to know its type early because it contains definitions that depend on that type
+            type->setDeclaration(decl);
+
+            addBaseClass(decl, baseclass);
+        }
+        openType(type);
+    }
+
+    // Open a context of the proper type and identifier
+    openContext(
+        node,
+        m_session->locationsToInnerRange(node->lbraceToken, node->rbraceToken),
+        contextType,
+        name
+    );
+
+    // Set the inner context of the current declaration, because nested classes
+    // need to know the inner context of their parents
+    DUContext* ctx = currentContext();
+    Declaration* decl = currentDeclaration();
 
     {
         DUChainWriteLocker lock;
-        ClassDeclaration* decl = openDeclaration<ClassDeclaration>(
-            QualifiedIdentifier(),
-            RangeInRevision()
-        );
-
-        decl->clearBaseClasses();
-        decl->setAlwaysForceDirect(true);   // This declaration has no name, so type->setDeclaration is obliged to store a direct pointer to the declaration.
-        decl->setKind(Declaration::Type);
-        decl->setType(type);                // The class needs to know its type early because it contains definitions that depend on that type
-        type->setDeclaration(decl);
-
-        addBaseClass(decl, baseclass);
+        decl->setInternalContext(ctx);
     }
-    openType(type);
+
+    // If we opened a namespace, ensure that its internal context is of namespace type
+    if (decl->kind() == Declaration::Namespace) {
+        DUChainWriteLocker lock;
+        ctx->setType(DUContext::Namespace);
+        ctx->setLocalScopeIdentifier(decl->qualifiedIdentifier());
+    }
+
+    // If we have have declared a class, import the context of its base classes
+    registerBaseClasses();
 }
 
 void DeclarationBuilder::declareComponentInstance(QmlJS::AST::ExpressionStatement* expression)
@@ -674,73 +733,11 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiObjectDefinition* node)
         return DeclarationBuilderBase::visit(node);
     }
 
-    // Instance of special class names may declare classes, enums, methods, etc
+    // Declare the component subclass
+    RangeInRevision range(m_session->locationToRange(node->qualifiedTypeNameId->identifierToken));
     QString baseclass = node->qualifiedTypeNameId->name.toString();
 
-    RangeInRevision range(m_session->locationToRange(node->qualifiedTypeNameId->identifierToken));
-    QualifiedIdentifier name(
-        QmlJS::getQMLAttributeValue(node->initializer->members, "name").value.section('/', -1, -1)
-    );
-    DUContext::ContextType contextType = DUContext::Class;
-
-    if (baseclass == QLatin1String("Component")) {
-        // QML component, equivalent to a QML class
-        declareComponent(node, range, name);
-    } else if (baseclass == QLatin1String("Method") ||
-               baseclass == QLatin1String("Signal") ||
-               baseclass == QLatin1String("Slot")) {
-        // Method (that can also be a signal or a slot)
-        declareMethod(node, range, name, baseclass == QLatin1String("Slot"), baseclass == QLatin1String("Signal"));
-    } else if (baseclass == QLatin1String("Property")) {
-        // A property
-        declareProperty(node, range, name);
-    } else if (baseclass == QLatin1String("Parameter") && currentType<FunctionType>()) {
-        // One parameter of a signal/slot/method
-        declareParameter(node, range, name);
-    } else if (baseclass == QLatin1String("Enum")) {
-        // Enumeration. The "values" key contains a dictionary of name -> number entries.
-        declareEnum(node, range, name);
-        contextType = DUContext::Enum;
-    } else if (baseclass == QLatin1String("Module")) {
-        // QML Module, that declares a namespace
-        name = declareModule(range);
-        contextType = DUContext::Namespace;
-    } else {
-        // Define an anonymous subclass of the baseclass. This subclass will
-        // be instantiated when "id:" is encountered
-        name = QualifiedIdentifier();
-        range = RangeInRevision();
-
-        declareComponentSubclass(baseclass);
-    }
-
-    // Open a context of the proper type and identifier
-    openContext(
-        node,
-        m_session->locationsToInnerRange(node->initializer->lbraceToken, node->initializer->rbraceToken),
-        contextType,
-        name
-    );
-
-    // Set the inner context of the current declaration, because nested classes
-    // need to know the inner context of their parents
-    DUContext* ctx = currentContext();
-    Declaration* decl = currentDeclaration();
-
-    {
-        DUChainWriteLocker lock;
-        decl->setInternalContext(ctx);
-    }
-
-    // If we opened a namespace, ensure that its internal context is of namespace type
-    if (decl->kind() == Declaration::Namespace) {
-        DUChainWriteLocker lock;
-        ctx->setType(DUContext::Namespace);
-        ctx->setLocalScopeIdentifier(decl->qualifiedIdentifier());
-    }
-
-    // If we have have declared a class, import the context of its base classes
-    registerBaseClasses();
+    declareComponentSubclass(node->initializer, range, baseclass);
 
     return DeclarationBuilderBase::visit(node);
 }
@@ -814,23 +811,12 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiObjectBinding* node)
         return DeclarationBuilderBase::visit(node);
     }
 
-    // Open a subclass of the qualified type name id ("Behavior on ..." subclasses
-    // Behavior)
-    declareComponentSubclass(node->qualifiedTypeNameId->name.toString());
+    // Declare the component subclass. "Behavior on ... {}" is treated exactly
+    // like "Behavior {}".
+    RangeInRevision range = m_session->locationToRange(node->qualifiedTypeNameId->identifierToken);
+    QString baseclass = node->qualifiedTypeNameId->name.toString();
 
-    // Open the inner context of the class
-    {
-        DUChainWriteLocker lock;
-
-        currentDeclaration()->setInternalContext(openContext(
-            node,
-            m_session->locationsToInnerRange(node->initializer->lbraceToken, node->initializer->rbraceToken),
-            DUContext::Class,
-            QualifiedIdentifier()
-        ));
-    }
-
-    registerBaseClasses();
+    declareComponentSubclass(node->initializer, range, baseclass);
 
     return DeclarationBuilderBase::visit(node);
 }
