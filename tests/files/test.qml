@@ -21,6 +21,16 @@ Text {
     property int foo: 1
 
     /**
+     * "type" : { "toString" : "<class>" }
+     */
+    Behavior on foo {
+        /**
+        * "toString" : "<class> behavior"
+        */
+        id: behavior
+    }
+
+    /**
      * "toString" : "bool bar"
      */
     property bool bar: false

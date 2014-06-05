@@ -508,6 +508,28 @@ void DeclarationBuilder::declareEnum(QmlJS::AST::UiObjectDefinition* node,
     openType(type);
 }
 
+void DeclarationBuilder::declareComponentSubclass(const QString& baseclass)
+{
+    StructureType::Ptr type(new StructureType);
+
+    {
+        DUChainWriteLocker lock;
+        ClassDeclaration* decl = openDeclaration<ClassDeclaration>(
+            QualifiedIdentifier(),
+            RangeInRevision()
+        );
+
+        decl->clearBaseClasses();
+        decl->setAlwaysForceDirect(true);   // This declaration has no name, so type->setDeclaration is obliged to store a direct pointer to the declaration.
+        decl->setKind(Declaration::Type);
+        decl->setType(type);                // The class needs to know its type early because it contains definitions that depend on that type
+        type->setDeclaration(decl);
+
+        addBaseClass(decl, baseclass);
+    }
+    openType(type);
+}
+
 void DeclarationBuilder::declareComponentInstance(QmlJS::AST::ExpressionStatement* expression)
 {
     if (!expression) {
@@ -689,21 +711,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiObjectDefinition* node)
         name = QualifiedIdentifier();
         range = RangeInRevision();
 
-        StructureType::Ptr type(new StructureType);
-
-        {
-            DUChainWriteLocker lock;
-            ClassDeclaration* decl = openDeclaration<ClassDeclaration>(name, range);
-
-            decl->clearBaseClasses();
-            decl->setAlwaysForceDirect(true);   // This declaration has no name, so type->setDeclaration is obliged to store a direct pointer to the declaration.
-            decl->setKind(Declaration::Type);
-            decl->setType(type);                // The class needs to know its type early because it contains definitions that depend on that type
-            type->setDeclaration(decl);
-
-            addBaseClass(decl, baseclass);
-        }
-        openType(type);
+        declareComponentSubclass(baseclass);
     }
 
     // Open a context of the proper type and identifier
@@ -794,6 +802,45 @@ void DeclarationBuilder::endVisit(QmlJS::AST::UiScriptBinding* node)
     DeclarationBuilderBase::endVisit(node);
 
     if (node->qualifiedId) {
+        closeAndAssignType();
+    }
+}
+
+bool DeclarationBuilder::visit(QmlJS::AST::UiObjectBinding* node)
+{
+    setComment(node);
+
+    if (!node->qualifiedId || !node->qualifiedTypeNameId || !node->initializer) {
+        return DeclarationBuilderBase::visit(node);
+    }
+
+    // Open a subclass of the qualified type name id ("Behavior on ..." subclasses
+    // Behavior)
+    declareComponentSubclass(node->qualifiedTypeNameId->name.toString());
+
+    // Open the inner context of the class
+    {
+        DUChainWriteLocker lock;
+
+        currentDeclaration()->setInternalContext(openContext(
+            node,
+            m_session->locationsToInnerRange(node->initializer->lbraceToken, node->initializer->rbraceToken),
+            DUContext::Class,
+            QualifiedIdentifier()
+        ));
+    }
+
+    registerBaseClasses();
+
+    return DeclarationBuilderBase::visit(node);
+}
+
+void DeclarationBuilder::endVisit(QmlJS::AST::UiObjectBinding* node)
+{
+    DeclarationBuilderBase::endVisit(node);
+
+    if (node->qualifiedId && node->qualifiedTypeNameId && node->initializer) {
+        closeContext();
         closeAndAssignType();
     }
 }

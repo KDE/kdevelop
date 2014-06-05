@@ -88,6 +88,7 @@ protected:
     void declareEnum(QmlJS::AST::UiObjectDefinition* node,
                      const KDevelop::RangeInRevision &range,
                      const KDevelop::QualifiedIdentifier &name);
+    void declareComponentSubclass(const QString& baseclass);
     void declareComponentInstance(QmlJS::AST::ExpressionStatement *expression);
     void declareExports(QmlJS::AST::ExpressionStatement *exports,
                         KDevelop::ClassDeclaration* classdecl);
@@ -101,6 +102,8 @@ protected:
 
     virtual bool visit(QmlJS::AST::UiScriptBinding* node);
     virtual void endVisit(QmlJS::AST::UiScriptBinding* node);
+    virtual bool visit(QmlJS::AST::UiObjectBinding* node);
+    virtual void endVisit(QmlJS::AST::UiObjectBinding* node);
 
     virtual bool visit(QmlJS::AST::UiPublicMember* node);
     virtual void endVisit(QmlJS::AST::UiPublicMember* node);
