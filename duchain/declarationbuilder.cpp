@@ -954,7 +954,11 @@ void DeclarationBuilder::registerBaseClasses()
             TopDUContext* topctx = topContext();
 
             if (baseType && baseType->declaration(topctx)) {
-                ctx->addImportedParentContext(baseType->declaration(topctx)->logicalInternalContext(topctx));
+                ctx->addImportedParentContext(
+                    baseType->declaration(topctx)->logicalInternalContext(topctx),
+                    CursorInRevision::invalid(),
+                    ctx->localScopeIdentifier().isEmpty()   // Don't register anonymous classes to their base classes. This avoids "Inherited by , , , , ".
+                );
             }
         }
     }
