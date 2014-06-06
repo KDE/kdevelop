@@ -45,6 +45,8 @@ private:
     QList<KDevelop::CompletionTreeItemPointer> globalCompletions();
     QList<KDevelop::CompletionTreeItemPointer> fieldCompletions(const QString &expression,
                                                                 CompletionItem::Decoration decoration);
+
+    bool containsOnlySpaces(const QString &str);
 };
 
 }

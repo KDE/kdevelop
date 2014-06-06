@@ -44,7 +44,7 @@ namespace QmlJS {
 
 CodeCompletionContext::CodeCompletionContext(const DUContextPointer& context, const QString& text,
                                              const CursorInRevision& position, int depth)
-    : KDevelop::CodeCompletionContext(context, text, position, depth)
+    : KDevelop::CodeCompletionContext(context, extractLastLine(text), position, depth)
 {
     // Determine which kind of completion should be offered
     // ...
@@ -79,7 +79,9 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& ab
         items << completionsInContext(
             m_duContext,
             false,
-            CompletionItem::NoDecoration
+            m_duContext->type() == DUContext::Class && containsOnlySpaces(m_text) ?
+                CompletionItem::Colon :
+                CompletionItem::NoDecoration
         );
         items << globalCompletions();
     }
@@ -151,8 +153,6 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::globalCompletions()
 QList<CompletionTreeItemPointer> CodeCompletionContext::fieldCompletions(const QString& expression,
                                                                          CompletionItem::Decoration decoration)
 {
-    QString line = extractLastLine(expression);
-
     // expression is an incomplete expression. Try to parse as much as possible
     // of it, in order to get the most complete AST possible.
     // For instance, if expression is "test(foo.bar", test(foo.bar is invalid,
@@ -162,7 +162,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::fieldCompletions(const Q
     QmlJS::Lexer lexer(nullptr);
     bool atEnd = false;
 
-    lexer.setCode(line, 1, false);
+    lexer.setCode(expression, 1, false);
     bracketPositions.push(0);
 
     while (!atEnd) {
@@ -189,7 +189,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::fieldCompletions(const Q
     // that should be a valid expression.
     QmlJS::Document::MutablePtr doc = QmlJS::Document::create("inline", Language::JavaScript);
 
-    doc->setSource(line.mid(bracketPositions.top()));
+    doc->setSource(expression.mid(bracketPositions.top()));
     doc->parseExpression();
 
     if (!doc || !doc->isParsedCorrectly()) {
@@ -209,6 +209,17 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::fieldCompletions(const Q
     } else {
         return QList<CompletionTreeItemPointer>();
     }
+}
+
+bool CodeCompletionContext::containsOnlySpaces(const QString& str)
+{
+    for (int i=0; i<str.size(); ++i) {
+        if (!str.at(i).isSpace()) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 }
