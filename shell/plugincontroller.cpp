@@ -60,32 +60,46 @@ Boston, MA 02110-1301, USA.
 #include "sourceformattercontroller.h"
 #include "projectcontroller.h"
 
-namespace KDevelop
-{
+namespace {
 
-static const QString pluginControllerGrp("Plugins");
+// TODO kf5: use QStringLiteral
+const QString KEY_Plugins = "Plugins";
+
+const QString KEY_LoadMode = "X-KDevelop-LoadMode";
+const QString KEY_Category = "X-KDevelop-Category";
+const QString KEY_Mode = "X-KDevelop-Mode";
+const QString KEY_Version = "X-KDevelop-Version";
+const QString KEY_Interfaces = "X-KDevelop-Interfaces";
+const QString KEY_Required = "X-KDevelop-IRequired";
+const QString KEY_Optional = "X-KDevelop-IOptional";
+
+const QString KEY_Global = "Global";
+const QString KEY_Project = "Project";
+const QString KEY_Gui = "Gui";
+const QString KEY_AlwaysOn = "AlwaysOn";
+const QString KEY_UserSelectable = "UserSelectable";
 
 bool isUserSelectable( const KPluginInfo& info )
 {
-    QString loadMode = info.property( "X-KDevelop-LoadMode").toString();
-    return loadMode.isEmpty() || loadMode == "UserSelectable";
+    QString loadMode = info.property( KEY_LoadMode ).toString();
+    return loadMode.isEmpty() || loadMode == KEY_UserSelectable;
 }
 
 bool isGlobalPlugin( const KPluginInfo& info )
 {
-    return info.property( "X-KDevelop-Category" ).toString() == "Global";
+    return info.property( KEY_Category ).toString() == KEY_Global;
 }
 
 bool hasMandatoryProperties( const KPluginInfo& info )
 {
-    QVariant mode = info.property( "X-KDevelop-Mode" );
-    QVariant version = info.property( "X-KDevelop-Version" );
+    QVariant mode = info.property( KEY_Mode );
+    QVariant version = info.property( KEY_Version );
 
     return mode.isValid() && mode.canConvert( QVariant::String )
            && version.isValid() && version.canConvert( QVariant::String );
 }
 
-static bool constraintsMatch( const KPluginInfo& info, const QVariantMap& constraints)
+bool constraintsMatch( const KPluginInfo& info, const QVariantMap& constraints)
 {
     for (auto it = constraints.begin(); it != constraints.end(); ++it) {
         const auto property = info.property(it.key());
@@ -104,6 +118,10 @@ static bool constraintsMatch( const KPluginInfo& info, const QVariantMap& constr
     }
     return true;
 }
+
+}
+
+namespace KDevelop {
 
 class PluginControllerPrivate
 {
@@ -128,19 +146,19 @@ public:
 
     bool canUnload( const KPluginInfo& plugin )
     {
-        kDebug() << "checking can unload for:" << plugin.name() << plugin.property("X-KDevelop-LoadMode");
-        if( plugin.property( "X-KDevelop-LoadMode" ).toString() == "AlwaysOn" )
+        kDebug() << "checking can unload for:" << plugin.name() << plugin.property(KEY_LoadMode);
+        if( plugin.property( KEY_LoadMode ).toString() == KEY_AlwaysOn )
         {
             return false;
         }
-        QStringList interfaces = plugin.property( "X-KDevelop-Interfaces" ).toStringList();
+        QStringList interfaces = plugin.property( KEY_Interfaces ).toStringList();
         kDebug() << "checking dependencies:" << interfaces;
         foreach( const KPluginInfo& info, loadedPlugins.keys() )
         {
             if( info.pluginName() != plugin.pluginName() )
             {
-                QStringList dependencies = info.property( "X-KDevelop-IRequired" ).toStringList();
-                dependencies += info.property( "X-KDevelop-IOptional" ).toStringList();
+                QStringList dependencies = info.property( KEY_Required ).toStringList();
+                dependencies += info.property( KEY_Optional ).toStringList();
                 foreach( const QString& dep, dependencies )
                 {
                     if( interfaces.contains( dep ) && !canUnload( info ) )
@@ -177,13 +195,12 @@ public:
     template<typename F>
     void foreachEnabledPlugin(F func, const QString &extension = {}, const QVariantMap& constraints = {}, const QString &pluginName = {})
     {
-        static const QString interfaceKey("X-KDevelop-Interfaces");
         foreach (const auto& info, plugins) {
             if( !isEnabled(info) ) {
                 continue;
             }
             if ((pluginName.isEmpty() || info.pluginName() == pluginName)
-                && (extension.isEmpty() || info.property(interfaceKey).toStringList().contains(extension))
+                && (extension.isEmpty() || info.property(KEY_Interfaces).toStringList().contains(extension))
                 && constraintsMatch(info, constraints))
             {
                 if (!func(info)) {
@@ -200,7 +217,7 @@ public:
             return false;
         }
 
-        KConfigGroup grp = Core::self()->activeSession()->config()->group( pluginControllerGrp );
+        KConfigGroup grp = Core::self()->activeSession()->config()->group( KEY_Plugins );
         bool isEnabled = grp.readEntry( info.pluginName()+"Enabled", ShellExtension::getInstance()->defaultPlugins().isEmpty() || ShellExtension::getInstance()->defaultPlugins().contains( info.pluginName() ) );
         //kDebug() << "read config:" << isEnabled << "is global plugin:" << isGlobalPlugin( info ) << "default:" << ShellExtension::getInstance()->defaultPlugins().isEmpty()  << ShellExtension::getInstance()->defaultPlugins().contains( info.pluginName() );
         return !isGlobalPlugin( info ) || !isUserSelectable( info ) || isEnabled;
@@ -285,7 +302,7 @@ void PluginController::initialize()
         }
     }
 
-    KConfigGroup grp = Core::self()->activeSession()->config()->group( pluginControllerGrp );
+    KConfigGroup grp = Core::self()->activeSession()->config()->group( KEY_Plugins );
     QMap<QString, QString> entries = grp.entryMap();
 
     QMap<QString, QString>::Iterator it;
@@ -419,7 +436,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
         return 0;
     }
 
-    if( info.property("X-KDevelop-Mode") == "GUI"
+    if( info.property(KEY_Mode) == KEY_Gui
         && Core::self()->setupFlags() == Core::NoUi )
     {
         kDebug() << "Unable to load plugin named" << pluginId << ". Running in No-Ui mode, but the plugin says it needs a GUI";
@@ -449,7 +466,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
         if ( plugin->hasError() ) {
             kWarning() << i18n("Plugin '%1' could not be loaded correctly and was disabled.\nReason: %2.", info.name(), plugin->errorDescription());
             info.setPluginEnabled(false);
-            info.save(Core::self()->activeSession()->config()->group(pluginControllerGrp));
+            info.save(Core::self()->activeSession()->config()->group(KEY_Plugins));
             unloadPlugin(pluginId);
             return 0;
         }
@@ -487,12 +504,12 @@ IPlugin* PluginController::plugin( const QString& pluginId )
 
 bool PluginController::checkForDependencies( const KPluginInfo& info, QStringList& missing ) const
 {
-    QVariant prop = info.property( "X-KDevelop-IRequired" );
+    QVariant prop = info.property( KEY_Required );
     if( prop.canConvert<QStringList>() ) {
         QSet<QString> required = prop.toStringList().toSet();
         if (!required.isEmpty()) {
             d->foreachEnabledPlugin([&required] (const KPluginInfo& plugin) -> bool {
-                foreach(const QString& iface, plugin.property( "X-KDevelop-Interfaces" ).toStringList()) {
+                foreach(const QString& iface, plugin.property( KEY_Interfaces ).toStringList()) {
                     required.remove(iface);
                 }
                 return !required.isEmpty();
@@ -508,7 +525,7 @@ bool PluginController::checkForDependencies( const KPluginInfo& info, QStringLis
 
 void PluginController::loadOptionalDependencies( const KPluginInfo& info )
 {
-    QVariant prop = info.property( "X-KDevelop-IOptional" );
+    QVariant prop = info.property( KEY_Optional );
     if( prop.canConvert<QStringList>() ) {
         foreach( const QString &iface, prop.toStringList() ) {
             if (!pluginForExtension(iface)) {
@@ -520,7 +537,7 @@ void PluginController::loadOptionalDependencies( const KPluginInfo& info )
 
 bool PluginController::loadDependencies( const KPluginInfo& info, QString& failedDependency )
 {
-    QVariant prop = info.property( "X-KDevelop-IRequired" );
+    QVariant prop = info.property( KEY_Required );
     if( prop.canConvert<QStringList>() ) {
         foreach( const QString &iface, prop.toStringList() ) {
             if (!pluginForExtension(iface)) {
@@ -603,7 +620,7 @@ QStringList PluginController::projectPlugins()
     QStringList names;
     Q_FOREACH( const KPluginInfo& info , d->plugins )
     {
-        if( info.property("X-KDevelop-Category").toString() == "Project" )
+        if( info.property(KEY_Category).toString() == KEY_Project )
             names << info.pluginName();
     }
     return names;
@@ -633,7 +650,7 @@ QList<KPluginInfo> PluginController::allPluginInfos() const
 void PluginController::updateLoadedPlugins()
 {
     QStringList defaultPlugins = ShellExtension::getInstance()->defaultPlugins();
-    KConfigGroup grp = Core::self()->activeSession()->config()->group( pluginControllerGrp );
+    KConfigGroup grp = Core::self()->activeSession()->config()->group( KEY_Plugins );
     foreach( const KPluginInfo& info, d->plugins )
     {
         if( isGlobalPlugin( info ) )
@@ -657,9 +674,9 @@ void PluginController::updateLoadedPlugins()
 void PluginController::resetToDefaults()
 {
     KSharedConfig::Ptr cfg = Core::self()->activeSession()->config();
-    cfg->deleteGroup( pluginControllerGrp );
+    cfg->deleteGroup( KEY_Plugins );
     cfg->sync();
-    KConfigGroup grp = cfg->group( pluginControllerGrp );
+    KConfigGroup grp = cfg->group( KEY_Plugins );
     QStringList plugins = ShellExtension::getInstance()->defaultPlugins();
     if( plugins.isEmpty() )
     {

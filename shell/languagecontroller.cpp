@@ -38,9 +38,15 @@
 #include "completionsettings.h"
 #include <QThread>
 
+namespace {
 // Maximum length of a string to still consider it as a file extension which we cache
 // This has to be a slow value, so that we don't fill our file extension cache with crap
-static const int maximumCacheExtensionLength = 3;
+const int maximumCacheExtensionLength = 3;
+
+// TODO: kf5, use QStringLiteral
+const QString KEY_SupportedMimeTypes = "X-KDevelop-SupportedMimeTypes";
+const QString KEY_ILanguageSupport = "ILanguageSupport";
+}
 
 namespace KDevelop {
 
@@ -123,7 +129,7 @@ ILanguage* LanguageControllerPrivate::addLanguageForSupport(KDevelop::ILanguageS
 
     Q_ASSERT(dynamic_cast<IPlugin*>(languageSupport));
 
-    QVariant mimetypes = Core::self()->pluginController()->pluginInfo(dynamic_cast<IPlugin*>(languageSupport)).property("X-KDevelop-SupportedMimeTypes");
+    QVariant mimetypes = Core::self()->pluginController()->pluginInfo(dynamic_cast<IPlugin*>(languageSupport)).property(KEY_SupportedMimeTypes);
 
     return addLanguageForSupport(languageSupport, mimetypes.toStringList());
 }
@@ -194,7 +200,7 @@ ILanguage *LanguageController::language(const QString &name) const
         ILanguage* ret = 0;
         QVariantMap constraints;
         constraints.insert("X-KDevelop-Language", name);
-        QList<IPlugin*> supports = Core::self()->pluginController()->allPluginsForExtension("ILanguageSupport", constraints);
+        QList<IPlugin*> supports = Core::self()->pluginController()->allPluginsForExtension(KEY_ILanguageSupport, constraints);
         if(!supports.isEmpty()) {
             ILanguageSupport *languageSupport = supports[0]->extension<ILanguageSupport>();
             if(supports[0])
@@ -317,8 +323,8 @@ QList<ILanguage*> LanguageController::languagesForMimetype(const QString& mimety
         languages = it.value();
     } else {
         QVariantMap constraints;
-        constraints.insert("X-KDevelop-SupportedMimeTypes", mimetype);
-        QList<IPlugin*> supports = Core::self()->pluginController()->allPluginsForExtension("ILanguageSupport", constraints);
+        constraints.insert(KEY_SupportedMimeTypes, mimetype);
+        QList<IPlugin*> supports = Core::self()->pluginController()->allPluginsForExtension(KEY_ILanguageSupport, constraints);
 
         if (supports.isEmpty()) {
             kDebug(9505) << "no languages for mimetype:" << mimetype;
