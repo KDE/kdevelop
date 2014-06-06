@@ -223,6 +223,17 @@ void QmlCompletionTest::testDoesNotContainDeclaration_data()
     // Don't show unreachable declarations when providing code-completions for object members
     QTest::newRow("js_object_member_not_surrounding") << "var a; var b = {c: 0};%INVOKE" << "b.%CURSOR" << "a" << false;
     QTest::newRow("js_object_member_local") << "var a = {b: 0};%INVOKE" << "%CURSOR" << "b" << false;
+
+    // A QML component cannot directly access the properties of its parent
+    QTest::newRow("qml_objects_dont_see_their_parents") <<
+        "Item {\n"
+        " id: item1\n"
+        " prop: 3\n"
+        " Item {\n"
+        "  id: item2\n"
+        "  %INVOKE\n"
+        " }\n"
+        "}" << "%CURSOR" << "prop" << true;
 }
 
 }

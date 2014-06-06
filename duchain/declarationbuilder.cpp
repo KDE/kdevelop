@@ -18,6 +18,7 @@
  *************************************************************************************/
 
 #include "declarationbuilder.h"
+#include "qmlducontext.h"
 
 #include <language/duchain/types/functiontype.h>
 #include <language/duchain/types/integraltype.h>
@@ -568,21 +569,23 @@ void DeclarationBuilder::declareComponentSubclass(QmlJS::AST::UiObjectInitialize
         name
     );
 
-    // Set the inner context of the current declaration, because nested classes
-    // need to know the inner context of their parents
-    DUContext* ctx = currentContext();
+    QmlDUContext* ctx = static_cast<QmlDUContext *>(currentContext());
     Declaration* decl = currentDeclaration();
 
     {
+        // Set the inner context of the current declaration, because nested classes
+        // need to know the inner context of their parents
         DUChainWriteLocker lock;
         decl->setInternalContext(ctx);
-    }
 
-    // If we opened a namespace, ensure that its internal context is of namespace type
-    if (decl->kind() == Declaration::Namespace) {
-        DUChainWriteLocker lock;
-        ctx->setType(DUContext::Namespace);
-        ctx->setLocalScopeIdentifier(decl->qualifiedIdentifier());
+        if (decl->kind() == Declaration::Namespace) {
+            // If we opened a namespace, ensure that its internal context is of namespace type
+            ctx->setType(DUContext::Namespace);
+            ctx->setLocalScopeIdentifier(decl->qualifiedIdentifier());
+        } else {
+            // QML classes cannot see the declarations of their parent contexts
+            ctx->disableSearchInParents();
+        }
     }
 
     // If we have have declared a class, import the context of its base classes
@@ -861,6 +864,11 @@ void DeclarationBuilder::endVisit(QmlJS::AST::UiPublicMember* node)
 void DeclarationBuilder::setComment(QmlJS::AST::Node* node)
 {
     setComment(m_session->commentForLocation(node->firstSourceLocation()).toUtf8());
+}
+
+DUContext* DeclarationBuilder::newContext(const RangeInRevision& range)
+{
+    return new QmlDUContext(range, currentContext());
 }
 
 void DeclarationBuilder::closeAndAssignType()

@@ -6,6 +6,7 @@ kde4_add_library(kdevqmljsduchain SHARED
     declarationbuilder.cpp
     expressionvisitor.cpp
     usebuilder.cpp
+    qmlducontext.cpp
 )
 
 target_link_libraries(kdevqmljsduchain LINK_PRIVATE

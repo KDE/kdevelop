@@ -16,6 +16,12 @@ Text {
     text: "asdf"
 
     /**
+     * "type" : { "toString" : "string" },
+     * "useCount" : 1
+     */
+    dont_use_me: "I'm used only here, and Behavior on foo.onLoad cannot see me"
+
+    /**
      * "toString" : "int foo"
      */
     property int foo: 1
@@ -28,6 +34,9 @@ Text {
         * "toString" : "<class> behavior"
         */
         id: behavior
+        onLoad: {
+            dont_use_me = 2;
+        }
     }
 
     /**
