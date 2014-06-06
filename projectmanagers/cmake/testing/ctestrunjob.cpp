@@ -124,6 +124,16 @@ void CTestRunJob::start()
         m_outputJob = qobject_cast<OutputJob*>(cjob->subjobs().last());
         Q_ASSERT(m_outputJob);
         m_outputJob->setVerbosity(m_verbosity);
+
+        QString testName = arguments.value(0).split('/').last();
+        QString title;
+        if (cases_selected.count() == 1)
+            title = i18nc("running test %1, %2 test case", "CTest %1: %2", testName, cases_selected.value(0));
+        else
+            title = i18ncp("running test %1, %2 number of test cases", "CTest %2 (%1)", "CTest %2 (%1)", cases_selected.count(), testName);
+
+        m_outputJob->setTitle(title);
+
         connect(m_outputJob->model(), SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(rowsInserted(QModelIndex,int,int)));
     }
     connect(m_job, SIGNAL(finished(KJob*)), SLOT(processFinished(KJob*)));
