@@ -43,7 +43,6 @@ public slots:
 
 private:
     QScopedPointer<QDeclarativeView> m_view;
-    int m_progress;
 };
 
 #endif
