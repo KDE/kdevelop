@@ -18,7 +18,6 @@
  *************************************************************************************/
 
 #include "declarationbuilder.h"
-#include "qmlducontext.h"
 
 #include <language/duchain/types/functiontype.h>
 #include <language/duchain/types/integraltype.h>
@@ -516,7 +515,6 @@ void DeclarationBuilder::declareComponentSubclass(QmlJS::AST::UiObjectInitialize
         QmlJS::getQMLAttributeValue(node->members, "name").value.section('/', -1, -1)
     );
     DUContext::ContextType contextType = DUContext::Class;
-    bool disableParents = false;
 
     if (baseclass == QLatin1String("Component")) {
         // QML component, equivalent to a QML class
@@ -544,7 +542,6 @@ void DeclarationBuilder::declareComponentSubclass(QmlJS::AST::UiObjectInitialize
         // Define an anonymous subclass of the baseclass. This subclass will
         // be instantiated when "id:" is encountered
         name = QualifiedIdentifier();
-        disableParents = true;
 
         StructureType::Ptr type(new StructureType);
 
@@ -571,7 +568,7 @@ void DeclarationBuilder::declareComponentSubclass(QmlJS::AST::UiObjectInitialize
         name
     );
 
-    QmlDUContext* ctx = static_cast<QmlDUContext *>(currentContext());
+    DUContext* ctx = currentContext();
     Declaration* decl = currentDeclaration();
 
     {
@@ -584,11 +581,6 @@ void DeclarationBuilder::declareComponentSubclass(QmlJS::AST::UiObjectInitialize
             // If we opened a namespace, ensure that its internal context is of namespace type
             ctx->setType(DUContext::Namespace);
             ctx->setLocalScopeIdentifier(decl->qualifiedIdentifier());
-        }
-
-        if (disableParents) {
-            // QML classes cannot see the declarations of their parent contexts
-            ctx->disableSearchInParents();
         }
     }
 
@@ -848,11 +840,6 @@ void DeclarationBuilder::endVisit(QmlJS::AST::UiPublicMember* node)
 void DeclarationBuilder::setComment(QmlJS::AST::Node* node)
 {
     setComment(m_session->commentForLocation(node->firstSourceLocation()).toUtf8());
-}
-
-DUContext* DeclarationBuilder::newContext(const RangeInRevision& range)
-{
-    return new QmlDUContext(range, currentContext());
 }
 
 void DeclarationBuilder::closeAndAssignType()
