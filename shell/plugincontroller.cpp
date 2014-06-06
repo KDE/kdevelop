@@ -459,7 +459,10 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
         loadOptionalDependencies( info );
 
         KPluginLoader loader(*info.service());
-        plugin = loader.factory()->create<IPlugin>(d->core);
+        auto factory = loader.factory();
+        if (factory) {
+            plugin = factory->create<IPlugin>(d->core);
+        }
     }
 
     if ( plugin ) {
