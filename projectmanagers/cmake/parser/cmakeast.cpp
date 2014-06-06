@@ -739,6 +739,10 @@ bool CMakeMinimumRequiredAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 }
 
 ConfigureFileAst::ConfigureFileAst()
+    : m_copyOnly(false)
+    , m_escapeQuotes(false)
+    , m_atsOnly(false)
+    , m_immediate(false)
 {
 }
 
@@ -1057,7 +1061,10 @@ bool ExportLibraryDepsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 }
 
 FileAst::FileAst()
-    : m_isFollowingSymlinks(false), m_newlineConsume(false), m_noHexConversion(false)
+    : m_type(Write)
+    , m_isFollowingSymlinks(false)
+    , m_newlineConsume(false)
+    , m_noHexConversion(false)
 {
 }
 
@@ -1274,6 +1281,10 @@ bool FileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 
 FindFileAst::FindFileAst()
     : m_noDefaultPath(false)
+    , m_noCmakeEnvironmentPath(false)
+    , m_noCmakePath(false)
+    , m_noSystemEnvironmentPath(false)
+    , m_noCmakeSystemPath(false)
 {
 }
 
@@ -1364,7 +1375,12 @@ bool MacroCallAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 }
 
 FindLibraryAst::FindLibraryAst()
-    : m_noDefaultPath(false), m_cmakeFindRootPath(false)
+    : m_noDefaultPath(false)
+    , m_noCmakeEnvironmentPath(false)
+    , m_noCmakePath(false)
+    , m_noSystemEnvironmentPath(false)
+    , m_noCmakeSystemPath(false)
+    , m_noCmakeFindRootPath(false)
 {
 }
 
@@ -1401,7 +1417,7 @@ bool FindLibraryAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         else if(it->value=="NO_CMAKE_PATH")
             m_noSystemEnvironmentPath = true;
         else if(it->value=="NO_CMAKE_FIND_ROOT_PATH")
-            m_cmakeFindRootPath = true;
+            m_noCmakeFindRootPath = true;
         else if(it->value=="DOC") {
             ++it;
             if(it==itEnd)
@@ -1434,6 +1450,9 @@ bool FindLibraryAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 }
 
 FindPackageAst::FindPackageAst()
+    : m_isQuiet(false)
+    , m_noModule(false)
+    , m_isRequired(false)
 {
 }
 
@@ -1560,9 +1579,13 @@ bool FindPathAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 }
 
 FindProgramAst::FindProgramAst()
+    : m_noDefaultPath(false)
+    , m_noCmakeEnvironmentPath(false)
+    , m_noCmakePath(false)
+    , m_noSystemEnvironmentPath(false)
+    , m_noCmakeSystemPath(false)
+    , m_noCMakeFindRootPath(false)
 {
-        m_noDefaultPath = m_noCmakeEnvironmentPath = m_noCmakePath =
-        m_noSystemEnvironmentPath = m_noCMakeFindRootPath = false;
 }
 
 FindProgramAst::~FindProgramAst()
@@ -1643,6 +1666,8 @@ bool FltkWrapUiAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 }
 
 ForeachAst::ForeachAst()
+    : m_ranges{}
+    , m_type(Range)
 {
 }
 
@@ -1699,6 +1724,7 @@ bool ForeachAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 }
 
 GetCMakePropertyAst::GetCMakePropertyAst()
+    : m_type(Variables)
 {
 }
 
@@ -1758,6 +1784,8 @@ bool GetDirPropertyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 }
 
 GetFilenameComponentAst::GetFilenameComponentAst()
+    : m_type(Path)
+    , m_cache(false)
 {
 }
 
@@ -1915,7 +1943,9 @@ bool IncludeAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     return !m_includeFile.isEmpty();
 }
 
- IncludeDirectoriesAst::IncludeDirectoriesAst()
+IncludeDirectoriesAst::IncludeDirectoriesAst()
+    : m_includeType(Default)
+    , m_isSystem(false)
 {
 }
 
@@ -2154,6 +2184,7 @@ bool LinkLibrariesAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 }
 
 ListAst::ListAst()
+    : m_type(Length)
 {
 }
 
@@ -2442,6 +2473,8 @@ bool MakeDirectoryAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 }
 
 MarkAsAdvancedAst::MarkAsAdvancedAst()
+    : m_isClear(false)
+    , m_isForce(false)
 {
 }
 
@@ -2498,6 +2531,7 @@ bool MathAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 }
 
 MessageAst::MessageAst()
+    : m_type(SendError)
 {
 }
 
@@ -2564,6 +2598,9 @@ bool OutputRequiredFilesAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 }
 
 ProjectAst::ProjectAst()
+    : m_useCpp(false)
+    , m_useC(false)
+    , m_useJava(false)
 {
 }
 
@@ -2696,7 +2733,9 @@ bool SeparateArgumentsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 }
 
 SetAst::SetAst()
-    : m_parentScope(false)
+    : m_storeInCache(false)
+    , m_forceStoring(false)
+    , m_parentScope(false)
 {
 }
 
@@ -2970,6 +3009,12 @@ bool SourceGroupAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 }
 
 StringAst::StringAst()
+    : m_type(Regex)
+    , m_cmdType(Match)
+    , m_only(false)
+    , m_escapeQuotes(false)
+    , m_begin(0)
+    , m_length(0)
 {
 }
 
@@ -3505,6 +3550,8 @@ bool UtilitySourceAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 }
 
 UnsetAst::UnsetAst()
+    : m_cache(false)
+    , m_env(false)
 {
 }
 
@@ -3696,6 +3743,9 @@ bool BreakAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 }
 
 CMakePolicyAst::CMakePolicyAst()
+    : m_action(Version)
+    , m_policyNum(0)
+    , m_isNew(false)
 {
 }
 
@@ -3748,6 +3798,7 @@ bool CMakePolicyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 }
 
 ExportAst::ExportAst()
+    : m_append(false)
 {
 }
 
@@ -3818,6 +3869,8 @@ bool ReturnAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 }
 
 SetPropertyAst::SetPropertyAst()
+    : m_type(GlobalProperty)
+    , m_append(false)
 {
 }
 
@@ -3865,9 +3918,8 @@ bool SetPropertyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     return !m_name.isEmpty();
 }
 
-
-
 GetPropertyAst::GetPropertyAst()
+    : m_type(GlobalProperty)
 {}
 
 GetPropertyAst::~GetPropertyAst()
