@@ -75,7 +75,7 @@ const QString KEY_Optional = "X-KDevelop-IOptional";
 
 const QString KEY_Global = "Global";
 const QString KEY_Project = "Project";
-const QString KEY_Gui = "Gui";
+const QString KEY_Gui = "GUI";
 const QString KEY_AlwaysOn = "AlwaysOn";
 const QString KEY_UserSelectable = "UserSelectable";
 
