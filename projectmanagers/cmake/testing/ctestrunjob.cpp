@@ -165,27 +165,22 @@ void CTestRunJob::processFinished(KJob* job)
 
 void CTestRunJob::rowsInserted(const QModelIndex &parent, int startRow, int endRow)
 {
+    // This regular expresion matches the name of the testcase (whatever between "::" and "(", indeed )
+    // For example, from:
+    //      PASS   : ExpTest::testExp(sum)
+    // matches "testExp"
+    static QRegExp caseRx("::(.*)\\(", Qt::CaseSensitive, QRegExp::RegExp2);
     for (int row = startRow; row <= endRow; ++row)
     {
         QString line = m_outputJob->model()->data(m_outputJob->model()->index(row, 0, parent), Qt::DisplayRole).toString();
 
-        if (!line.contains("()"))
-        {
-            continue;
+        QString testCase;
+        if (caseRx.indexIn(line) >= 0) {
+            testCase = caseRx.cap(1);
         }
 
-        QString testCase = line.split("()").first();
-        if (line.contains("::"))
-        {
-            testCase = testCase.split("::").last();
-        }
-        else
-        {
-            testCase = testCase.split(' ').last();
-        }
-        testCase = testCase.left(testCase.indexOf('('));
-
-        if (m_suite->cases().contains(testCase))
+        TestResult::TestCaseResult prevResult = m_caseResults.value(testCase, TestResult::NotRun);
+        if (prevResult == TestResult::Passed || prevResult == TestResult::NotRun)
         {
             TestResult::TestCaseResult result = TestResult::NotRun;
             if (line.startsWith("PASS   :"))
