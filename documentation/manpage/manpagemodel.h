@@ -38,11 +38,7 @@ namespace KDevelop
 }
 
 // id and name for man section
-typedef QPair<QString, QString> ManSection ;
-
-// name and url for man page
-typedef QPair<QString, KUrl> ManPage;
-
+typedef QPair<QString, QString> ManSection;
 
 class ManPageModel : public QAbstractItemModel
 {
@@ -81,8 +77,7 @@ private slots:
     void readDataFromMainIndex(KIO::Job * job, const QByteArray &data);
 
 private:
-    QList<ManPage> manPageList(const QString &sectionId) const;
-    ManPage manPage(const QString &sectionId, int position) const;
+    QString manPage(const QString &sectionId, int position) const;
     void initSection();
     void sectionParser(const QString &sectionId, const QString &data);
     QList<ManSection> indexParser();
@@ -92,7 +87,7 @@ private:
 
     QListIterator<ManSection> *iterator;
     QList<ManSection> m_sectionList;
-    QHash<QString, QList<ManPage> > m_manMap;
+    QHash<QString, QVector<QString> > m_manMap;
     QStringList m_index;
     QStringListModel* m_indexModel;
 

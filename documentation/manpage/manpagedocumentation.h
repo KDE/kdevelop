@@ -41,7 +41,7 @@ class ManPageDocumentation : public KDevelop::IDocumentation
 {
     Q_OBJECT
     public:
-        ManPageDocumentation(ManPage page);
+        ManPageDocumentation(const QString& name, const KUrl& url);
         virtual QString name() const { return m_name; }
         virtual QString description() const;
         virtual bool providesWidget() const;

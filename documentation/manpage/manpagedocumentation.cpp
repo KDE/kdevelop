@@ -39,8 +39,8 @@
 ManPagePlugin* ManPageDocumentation::s_provider=0;
 
 
-ManPageDocumentation::ManPageDocumentation(ManPage page)
-    : m_url(page.second), m_name(page.first)
+ManPageDocumentation::ManPageDocumentation(const QString& name, const KUrl& url)
+    : m_url(url), m_name(name)
 {
     KIO::StoredTransferJob* transferJob = KIO::storedGet(m_url, KIO::NoReload, KIO::HideProgressInfo);
     connect( transferJob, SIGNAL(finished(KJob*)), SLOT(finished(KJob*)));

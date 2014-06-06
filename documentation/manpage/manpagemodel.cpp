@@ -53,6 +53,16 @@
 
 using namespace KDevelop;
 
+namespace {
+
+KUrl urlForSection(const QString& section, const QString& page = {})
+{
+    KUrl ret("man:(" + section  + ")/" + page);
+    return ret;
+}
+
+}
+
 ManPageModel::ManPageModel(QObject* parent)
     : QAbstractItemModel(parent)
     , m_indexModel(new QStringListModel)
@@ -93,7 +103,7 @@ QVariant ManPageModel::data(const QModelIndex& index, int role) const
             if(internal>=0){
                 int position = index.row();
                 QString sectionId = m_sectionList.at(index.internalId()).first;
-                return manPage(sectionId, position).first;
+                return manPage(sectionId, position);
             } else {
                 return m_sectionList.at(index.row()).second;
             }
@@ -108,17 +118,13 @@ int ManPageModel::rowCount(const QModelIndex& parent) const
         return m_sectionList.count();
     }else if(int(parent.internalId())<0) {
         QString sectionId = m_sectionList.at(parent.row()).first;
-        return manPageList(sectionId).count();
+        return m_manMap.value(sectionId).count();
     }
     return 0;
 }
 
-QList<ManPage> ManPageModel::manPageList(const QString &sectionId) const{
-    return m_manMap.value(sectionId);
-}
-
-ManPage ManPageModel::manPage(const QString &sectionId, int position) const{
-    return manPageList(sectionId).at(position);
+QString ManPageModel::manPage(const QString &sectionId, int position) const{
+    return m_manMap.value(sectionId).at(position);
 }
 
 void ManPageModel::initModel(){
@@ -143,7 +149,7 @@ void ManPageModel::indexDataReceived(KJob *job){
 }
 
 void ManPageModel::initSection(){
-    KIO::StoredTransferJob  * transferJob = KIO::storedGet(KUrl("man:(" + iterator->peekNext().first + ")"), KIO::NoReload, KIO::HideProgressInfo);
+    KIO::StoredTransferJob  * transferJob = KIO::storedGet(urlForSection(iterator->peekNext().first), KIO::NoReload, KIO::HideProgressInfo);
     connect(transferJob, SIGNAL(result(KJob*)), this, SLOT(sectionDataReceived(KJob*)));
 }
 
@@ -190,12 +196,12 @@ QList<ManSection> ManPageModel::indexParser(){
 
 void ManPageModel::sectionParser(const QString &sectionId, const QString &data){
     // the regex version is much faster than using QWebKit for parsing...
-    static QRegExp linkRegex("<a href=\"(man:[^\"#]+)\">([^<]+)</a>", Qt::CaseSensitive, QRegExp::RegExp2);
+    static QRegExp linkRegex("<a href=\"man:[^\"#]+\">\\s*([^<]+)\\s*</a>", Qt::CaseSensitive, QRegExp::RegExp2);
     int pos = 0;
-    QList<ManPage> pageList;
+    QVector<QString> pageList;
     while (-1 != (pos = data.indexOf(linkRegex, pos))) {
-        const QString text = linkRegex.cap(2).trimmed();
-        pageList.append(qMakePair(text, KUrl(linkRegex.cap(1))));
+        const QString text = linkRegex.cap(1);
+        pageList.append(text);
         m_index.append(text);
         pos++;
     }
@@ -205,15 +211,15 @@ void ManPageModel::sectionParser(const QString &sectionId, const QString &data){
 void ManPageModel::showItem(const QModelIndex& idx){
     if(idx.isValid() && int(idx.internalId())>=0) {
         QString sectionId = m_sectionList.at(idx.internalId()).first;
-        ManPage page = manPage(sectionId, idx.row());
-        KSharedPtr<KDevelop::IDocumentation> newDoc(new ManPageDocumentation(page));
+        QString page = manPage(sectionId, idx.row());
+        KSharedPtr<KDevelop::IDocumentation> newDoc(new ManPageDocumentation(page, urlForSection(sectionId, page)));
         KDevelop::ICore::self()->documentationController()->showDocumentation(newDoc);
     }
 }
 
 void ManPageModel::showItemFromUrl(const QUrl& url){
     if(url.toString().startsWith("man")){
-        KSharedPtr<KDevelop::IDocumentation> newDoc(new ManPageDocumentation(qMakePair(url.path(), KUrl(url))));
+        KSharedPtr<KDevelop::IDocumentation> newDoc(new ManPageDocumentation(url.path(), KUrl(url)));
         KDevelop::ICore::self()->documentationController()->showDocumentation(newDoc);
     }
 }
@@ -244,13 +250,7 @@ int ManPageModel::nbSectionLoaded() const
 
 bool ManPageModel::identifierInSection(const QString &identifier, const QString& section) const
 {
-    QList<ManPage> list = m_manMap.value(section);
-    foreach(ManPage page, list){
-        if(page.first == identifier){
-            return true;
-        }
-    }
-    return false;
+    return m_manMap.value(section).indexOf(identifier) != -1;
 }
 
 #include "manpagemodel.moc"
