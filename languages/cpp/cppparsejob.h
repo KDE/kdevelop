@@ -130,9 +130,6 @@ public:
      */
     TopDUContext::Features slaveMinimumFeatures() const;
     
-    void setKeepEverything(bool);
-    bool keepEverything() const;
-    
     ///Set this to true if the existing du-chain of the parsed file should be left as it is, without updating.
     void setKeepDuchain(bool b);
     bool keepDuchain() const;
@@ -222,7 +219,7 @@ private:
     mutable IncludePathComputer* m_includePathsComputed;
     mutable QList<IndexedString> m_includePaths; //Only a master-job has this set
     mutable KDevelop::Path::List m_includePathUrls; //Only a master-job has this set
-    bool m_keepDuchain, m_keepEverything;
+    bool m_keepDuchain;
     QSet<const KDevelop::DUContext*> m_updated;
     int m_parsedIncludes;
     mutable QMutex m_waitForIncludePathsMutex;
