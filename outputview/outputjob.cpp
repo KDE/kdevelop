@@ -98,6 +98,17 @@ void OutputJob::outputViewRemoved(int toolViewId, int id)
 void KDevelop::OutputJob::setTitle(const QString & title)
 {
     m_title = title;
+    if (m_outputId >= 0 && m_standardToolView >= 0) {
+        IPlugin* i = ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IOutputView");
+        if( i )
+        {
+            KDevelop::IOutputView* view = i->extension<KDevelop::IOutputView>();
+            if( view )
+            {
+                view->setTitle(m_outputId, title);
+            }
+        }
+    }
 }
 
 void KDevelop::OutputJob::setViewType(IOutputView::ViewType type)

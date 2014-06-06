@@ -65,6 +65,7 @@ public Q_SLOTS:
     void selectPrevItem();
     void activate(const QModelIndex&);
     void scrollToIndex( const QModelIndex& );
+    void setTitle(int outputId, const QString& title);
 
 Q_SIGNALS:
     void outputRemoved( int, int );

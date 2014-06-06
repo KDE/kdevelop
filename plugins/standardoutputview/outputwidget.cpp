@@ -630,4 +630,11 @@ void OutputWidget::updateFilter(int index)
     }
 }
 
+void OutputWidget::setTitle(int outputId, const QString& title)
+{
+    if( data->type & KDevelop::IOutputView::MultipleView ) {
+        tabwidget->setTabText(outputId - 1, title);
+    }
+}
+
 #include "outputwidget.moc"
