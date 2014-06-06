@@ -777,7 +777,31 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiScriptBinding* node)
         }
     }
 
+    // If a Javascript block is used as expression, open a context for it, so
+    // that variables declared in one block don't become visible to the other blocks
+    auto block = QmlJS::AST::cast<QmlJS::AST::Block*>(node->statement);
+
+    if (block) {
+        openContext(
+            block,
+            m_session->locationsToInnerRange(block->lbraceToken, block->rbraceToken),
+            DUContext::Other
+        );
+    }
+
     return DeclarationBuilderBase::visit(node);
+}
+
+void DeclarationBuilder::endVisit(QmlJS::AST::UiScriptBinding* node)
+{
+    QmlJS::AST::Visitor::endVisit(node);
+
+    // If the script binding opened a code block, close it
+    auto block = QmlJS::AST::cast<QmlJS::AST::Block*>(node->statement);
+
+    if (block) {
+        closeContext();
+    }
 }
 
 bool DeclarationBuilder::visit(QmlJS::AST::UiObjectBinding* node)

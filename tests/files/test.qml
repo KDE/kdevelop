@@ -58,4 +58,16 @@ Text {
     {
         someId.text = arg
     }
+
+    onFontChanged: {
+        /**
+         * "type" : { "toString" : "int" },
+         * "useCount": 0
+         */
+        var im_not_visible_outside_this_slot = 2;
+    }
+
+    onElideModeChanged: {
+        im_not_visible_outside_this_slot = "fail";
+    }
 }

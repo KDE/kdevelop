@@ -102,6 +102,7 @@ protected:
     virtual void endVisit(QmlJS::AST::UiObjectDefinition* node);
 
     virtual bool visit(QmlJS::AST::UiScriptBinding* node);
+    virtual void endVisit(QmlJS::AST::UiScriptBinding* node);
     virtual bool visit(QmlJS::AST::UiObjectBinding* node);
     virtual void endVisit(QmlJS::AST::UiObjectBinding* node);
 
