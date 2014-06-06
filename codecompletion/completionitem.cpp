@@ -25,6 +25,7 @@
 #include <language/codecompletion/codecompletionmodel.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/classdeclaration.h>
+#include <language/duchain/classfunctiondeclaration.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/types/abstracttype.h>
 #include <language/duchain/types/structuretype.h>
@@ -84,6 +85,22 @@ QVariant CompletionItem::data(const QModelIndex& index, int role, const CodeComp
     }
 
     return NormalDeclarationCompletionItem::data(index, role, model);
+}
+
+QString CompletionItem::declarationName() const
+{
+    ClassFunctionDeclaration* classFuncDecl = dynamic_cast<ClassFunctionDeclaration *>(declaration().data());
+
+    if (classFuncDecl && classFuncDecl->isSignal() && m_decoration == QmlJS::CompletionItem::Colon) {
+        // Signals, when completed in a QML component context, are transformed into slots
+        QString signal = classFuncDecl->identifier().toString();
+
+        if (signal.size() > 0) {
+            return QLatin1String("on") + signal.at(0).toUpper() + signal.mid(1);
+        }
+    }
+
+    return NormalDeclarationCompletionItem::declarationName();
 }
 
 void CompletionItem::executed(KTextEditor::Document* document, const KTextEditor::Range& word)

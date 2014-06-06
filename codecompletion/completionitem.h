@@ -44,6 +44,7 @@ public:
     CompletionItem(KDevelop::DeclarationPointer decl, int inheritanceDepth, Decoration decoration);
 
     virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const;
+    virtual QString declarationName() const;
 
 protected:
     virtual void executed(KTextEditor::Document* document, const KTextEditor::Range& word);
