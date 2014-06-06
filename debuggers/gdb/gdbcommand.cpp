@@ -33,7 +33,7 @@ GDBCommand::GDBCommand(GDBMI::CommandType type, int index)
 }
 
 GDBCommand::GDBCommand(CommandType type, const QString& arguments, GDBCommandHandler* handler)
-: type_(type), command_(arguments), commandHandler_(handler),
+: type_(type), command_(arguments), handler_method(0), commandHandler_(handler),
   run(false), stateReloading_(false), m_thread(-1), m_frame(-1)
 {
     handlesError_ = handler->handlesError();

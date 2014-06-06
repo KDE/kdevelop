@@ -48,6 +48,7 @@ QStringList CMakeCodeCompletionModel::s_commands;
 
 CMakeCodeCompletionModel::CMakeCodeCompletionModel(QObject* parent)
     : CodeCompletionModel(parent)
+    , m_inside(false)
 {}
 
 bool isFunction(const Declaration* decl)

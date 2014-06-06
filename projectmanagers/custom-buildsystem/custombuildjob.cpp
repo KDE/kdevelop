@@ -36,7 +36,11 @@
 #include "configconstants.h"
 
 CustomBuildJob::CustomBuildJob( CustomBuildSystem* plugin, KDevelop::ProjectBaseItem* item, CustomBuildSystemTool::ActionType t )
-    : OutputJob( plugin ), type( t ), killed( false ), enabled( false )
+    : OutputJob( plugin )
+    , type( t )
+    , exec(nullptr)
+    , killed( false )
+    , enabled( false )
 {
     setCapabilities( Killable );
     QString subgrpname;

@@ -61,7 +61,8 @@ static bool isGenerated(const QString& name)
 CMakeProjectVisitor::message_callback CMakeProjectVisitor::s_msgcallback=debugMsgs;
 
 CMakeProjectVisitor::CMakeProjectVisitor(const QString& root, ReferencedTopDUContext parent)
-    : m_root(root), m_vars(0), m_macros(0), m_topctx(0), m_parentCtx(parent), m_hitBreak(false), m_hitReturn(false)
+    : m_root(root), m_vars(0), m_macros(0), m_cache(0)
+    , m_topctx(0), m_parentCtx(parent), m_hitBreak(false), m_hitReturn(false)
 {
 }
 

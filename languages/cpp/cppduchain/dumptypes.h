@@ -56,7 +56,6 @@ protected:
 private:
   bool seen(const KDevelop::AbstractType* type);
 
-  class CppEditorIntegrator* m_editor;
   int indent;
   QSet<const KDevelop::AbstractType*> m_encountered;
 };

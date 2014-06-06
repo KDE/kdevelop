@@ -105,7 +105,11 @@ struct Register {
 };
 ///List of @p registers for @p groupName in @p format
 struct RegistersGroup {
-    RegistersGroup(): flag(false) {}
+    RegistersGroup()
+        : format(Binary)
+        , flag(false)
+    {}
+
     GroupsName groupName;
     QVector<Register> registers;
     Format format; ///<Current format

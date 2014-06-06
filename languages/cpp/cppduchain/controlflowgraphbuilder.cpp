@@ -36,6 +36,7 @@ ControlFlowGraphBuilder::ControlFlowGraphBuilder(const KDevelop::ReferencedTopDU
   , m_returnNode(0)
   , m_breakNode(0)
   , m_continueNode(0)
+  , m_defaultNode(0)
   , m_top(top)
 {}
 

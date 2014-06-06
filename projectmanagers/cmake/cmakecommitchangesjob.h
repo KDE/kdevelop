@@ -80,7 +80,6 @@ private:
     bool m_projectDataAdded;
     KDevelop::ProjectFolderItem* m_parentItem;
     bool m_waiting;
-    bool m_reloadFiles;
     bool m_findParent;
 };
 

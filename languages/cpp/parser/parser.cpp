@@ -91,10 +91,16 @@ void Parser::moveComments( CommentAST* ast ) {
 }
 
 Parser::Parser(Control *c)
-  : control(c), lexer(control), session(0), _M_last_valid_token(0), _M_last_parsed_comment(0), _M_hadMismatchingCompoundTokens(false), m_primaryExpressionWithTemplateParamsNeedsFunctionCall(true)
+  : control(c), lexer(control)
+  , _M_problem_count(0)
+  , _M_max_problem_count(5)
+  , session(0)
+  , _M_hold_errors(false)
+  , _M_last_valid_token(0)
+  , _M_last_parsed_comment(0)
+  , _M_hadMismatchingCompoundTokens(false)
+  , m_primaryExpressionWithTemplateParamsNeedsFunctionCall(true)
 {
-  _M_max_problem_count = 5;
-  _M_hold_errors = false;
 }
 
 Parser::~Parser()
