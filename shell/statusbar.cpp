@@ -53,7 +53,7 @@ StatusBar::StatusBar(QWidget* parent)
     connect(m_timer, SIGNAL(timeout()), SLOT(slotTimeout()));
     connect(Core::self()->pluginController(), SIGNAL(pluginLoaded(KDevelop::IPlugin*)), SLOT(pluginLoaded(KDevelop::IPlugin*)));
 
-    foreach (IPlugin* plugin, Core::self()->pluginControllerInternal()->allPluginsForExtension("IStatus", QStringList()))
+    foreach (IPlugin* plugin, Core::self()->pluginControllerInternal()->allPluginsForExtension("IStatus"))
         registerStatus(plugin);
 
     registerStatus(Core::self()->languageController()->backgroundParser());

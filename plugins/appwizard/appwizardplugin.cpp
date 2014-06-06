@@ -343,7 +343,7 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
         QString manager = "KDevGenericManager";
 
         QDir d( dest.toLocalFile() );
-        foreach(const KPluginInfo& info, KDevelop::IPluginController::queryExtensionPlugins( "org.kdevelop.IProjectFileManager" ) )
+        foreach(const KPluginInfo& info, ICore::self()->pluginController()->queryExtensionPlugins( "org.kdevelop.IProjectFileManager" ) )
         {
             QVariant filter = info.property("X-KDevelop-ProjectFilesFilter");
             if( filter.isValid() )

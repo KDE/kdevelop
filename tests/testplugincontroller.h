@@ -39,12 +39,13 @@ class KDEVPLATFORMTESTS_EXPORT TestPluginController : public PluginController
 public:
     TestPluginController(KDevelop::Core* core);
     virtual QList< KDevelop::IPlugin* > allPluginsForExtension(const QString& extension,
-                                                               const QStringList& constraints = QStringList());
+                                                               const QVariantMap& constraints = {}) override;
     virtual QList< KDevelop::IPlugin* > loadedPlugins() const;
-    virtual KDevelop::IPlugin* pluginForExtension(const QString& extension, const QString& pluginname = "");
+    virtual KDevelop::IPlugin* pluginForExtension(const QString& extension, const QString& pluginName = {}, const QVariantMap& constraints = {}) override;
     virtual KDevelop::IPlugin* loadPlugin(const QString& pluginName);
     virtual KPluginInfo pluginInfo(const KDevelop::IPlugin* ) const;
     virtual QList< KDevelop::ContextMenuExtension > queryPluginsForContextMenuExtensions(KDevelop::Context* context)const ;
+    virtual KPluginInfo::List queryExtensionPlugins(const QString& extension, const QVariantMap& constraints = {}) const override;
     virtual bool unloadPlugin(const QString& plugin);
     virtual void initialize();
 };

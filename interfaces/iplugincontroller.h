@@ -57,7 +57,7 @@ class ProfileEngine;
  * of the plugin as declared in the \c .desktop file under the
  * \c X-KDE-PluginInfo-Name property. This should be used only very seldomly in
  * real code and is mostly meant for testing and for implementation in the
- * shell as it makes the code dependent on the pluginname which may change and
+ * shell as it makes the code dependent on the plugin name which may change and
  * also the actual plugin implementation so users cannot exchange one plugin
  * with another also implementing the same interface.
  *
@@ -100,7 +100,7 @@ public:
     Q_SCRIPTABLE virtual bool unloadPlugin( const QString & plugin ) = 0;
 
     /**
-     * @brief Loads the plugin specified by @p pluginname
+     * @brief Loads the plugin specified by @p pluginName
      *
      * @param pluginName the name of the plugin, as given in the X-KDE-PluginInfo-Name property
      * @returns a pointer to the plugin instance or 0
@@ -109,14 +109,21 @@ public:
 
      /**
      * Retrieve a plugin which supports the given extension interface.
+     *
      * All already loaded plugins will be queried and the first one to support the extension interface
      * will be returned. Any plugin can be an extension, only the "ServiceTypes=..." entry is
      * required in .desktop file for that plugin.
-     * @param extension The extension interface
-     * @param pluginname The name of the plugin to load if multiple plugins for the extension exist, corresponds to the X-KDE-PluginInfo-Name
+     *
+     * If no already-loaded plugin was found, we try to load a plugin for the given extension.
+     *
+     * If no plugin was found, a nullptr will be returned.
+     *
+     * @param extension The extension interface. Can be empty if you want to find a plugin by name or other constraint.
+     * @param pluginName The name of the plugin to load if multiple plugins for the extension exist, corresponds to the X-KDE-PluginInfo-Name
+     * @param constraints A map of constraints on other plugin info properties.
      * @return A KDevelop extension plugin for given service type or 0 if no plugin supports it
      */
-    Q_SCRIPTABLE virtual IPlugin *pluginForExtension(const QString &extension, const QString& pluginname = "" ) = 0;
+    Q_SCRIPTABLE virtual IPlugin *pluginForExtension(const QString &extension, const QString& pluginName = {}, const QVariantMap& constraints = {} ) = 0;
 
      /**
      * Retrieve a list of plugins which supports the given extension interface.
@@ -124,9 +131,10 @@ public:
      * will be returned. Any plugin can be an extension, only the "ServiceTypes=..." entry is
      * required in .desktop file for that plugin.
      * @param extension The extension interface
+     * @param constraints A map of constraints on other plugin info properties.
      * @return A KDevelop extension plugin for given service type or 0 if no plugin supports it
      */
-    virtual QList<IPlugin*> allPluginsForExtension(const QString &extension, const QStringList &constraints = QStringList()) = 0;
+    virtual QList<IPlugin*> allPluginsForExtension(const QString &extension, const QVariantMap& constraints = {}) = 0;
 
      /**
      * Retrieve the plugin which supports given extension interface and
@@ -136,50 +144,34 @@ public:
      * will be returned. Any plugin can be an extension, only "ServiceTypes=..." entry is
      * required in .desktop file for that plugin.
      * @param extension The extension interface
-     * @param pluginname The name of the plugin to load if multiple plugins for the extension exist, corresponds to the X-KDE-PluginInfo-Name
+     * @param pluginName The name of the plugin to load if multiple plugins for the extension exist, corresponds to the X-KDE-PluginInfo-Name
      * @return Pointer to the extension interface or 0 if no plugin supports it
       */
-    template<class Extension> Extension* extensionForPlugin( const QString &extension = "", const QString &pluginname = "") {
+    template<class Extension> Extension* extensionForPlugin( const QString &extension = "", const QString &pluginName = "") {
         QString ext;
         if( extension.isEmpty() ) {
             ext = qobject_interface_iid<Extension*>();
         } else {
             ext = extension;
         }
-        IPlugin *plugin = pluginForExtension(ext, pluginname);
+        IPlugin *plugin = pluginForExtension(ext, pluginName);
         if (plugin) {
             return plugin->extension<Extension>();
         }
         return 0L;
     }
 
-
     /**
-     * Query for a KDevelop service.
-     *
-     * The service version is checked for automatically
-     * @param serviceType The service type to query for. Examples include:
-     * "KDevelop/Plugin" or "KDevelop/SourceFormatter."
-     * @param constraint A constraint for the service. Do not include plugin
-     * version number - it is done automatically.
-     * @return The list of plugin offers.
-     */
-    static KPluginInfo::List query( const QString &serviceType, const QString &constraint );
-
-    /**
-     * Query for a KDevelop plugin.
+     * Query for plugin information on KDevelop plugins implementing the given extension.
      *
      * The service version is checked for automatically and the only serviceType
      * searched for is "KDevelop/Plugin"
-     * @param constraint A constraint for the service. Do not include plugin
-     * version number - it is done automatically.
+     *
+     * @param extension The extension that should be implemented by the plugin, i.e. listed in X-KDevelop-Interfaces.
+     * @param constraints A map of constraints on other plugin info properties.
      * @return The list of plugin offers.
      */
-    static KPluginInfo::List queryPlugins( const QString &constraint );
-
-    static QStringList argumentsFromService( const KService::Ptr &service );
-
-    static KPluginInfo::List queryExtensionPlugins(const QString &extension, const QStringList &constraints = QStringList());
+    virtual KPluginInfo::List queryExtensionPlugins(const QString &extension, const QVariantMap& constraints = {}) const = 0;
 
     virtual QList<ContextMenuExtension> queryPluginsForContextMenuExtensions( KDevelop::Context* context ) const = 0;
 

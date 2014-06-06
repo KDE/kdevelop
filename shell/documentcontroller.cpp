@@ -290,14 +290,9 @@ struct DocumentControllerPrivate {
             if( prefName.isEmpty() )
             {
                 // Try to find a plugin that handles this mimetype
-                QString constraint = QString("'%1' in [X-KDevelop-SupportedMimeTypes]").arg(mimeType->name());
-                KPluginInfo::List plugins = IPluginController::queryPlugins( constraint );
-
-                if( !plugins.isEmpty() )
-                {
-                    KPluginInfo info = plugins.first();
-                    Core::self()->pluginController()->loadPlugin( info.pluginName() );
-                }
+                QVariantMap constraints;
+                constraints.insert("X-KDevelop-SupportedMimeTypes", mimeType->name());
+                Core::self()->pluginController()->pluginForExtension(QString(), QString(), constraints);
             }
             
             if( factories.contains( mimeType->name() ) )
