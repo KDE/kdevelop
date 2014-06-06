@@ -836,10 +836,21 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiPublicMember* node)
 {
     setComment(node);
 
-    const RangeInRevision& range = m_session->locationToRange(node->identifierToken);
-    const QualifiedIdentifier id(node->name.toString());
-    const AbstractType::Ptr type = typeFromName(node->memberType.toString());
+    RangeInRevision range = m_session->locationToRange(node->identifierToken);
+    QualifiedIdentifier id(node->name.toString());
+    QString typeName = node->memberType.toString();
+    AbstractType::Ptr type;
+    bool res = DeclarationBuilderBase::visit(node);
 
+    // Build the type of the public member
+    if (typeName == "alias") {
+        type = findType(node->statement).type;
+        res = false;        // findType has already explored node->statement
+    } else {
+        type = typeFromName(typeName);
+    }
+
+    // Create its declaration
     {
         DUChainWriteLocker lock;
         Declaration* decl = openDeclaration<ClassMemberDeclaration>(id, range);
@@ -848,7 +859,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiPublicMember* node)
     }
     openType(type);
 
-    return DeclarationBuilderBase::visit(node);
+    return res;
 }
 
 void DeclarationBuilder::endVisit(QmlJS::AST::UiPublicMember* node)

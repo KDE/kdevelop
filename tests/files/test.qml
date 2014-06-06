@@ -31,6 +31,11 @@ Text {
     }
 
     /**
+     * "type" : { "toString" : "bool" }
+     */
+    property alias behaviorEnabled: behavior.enabled
+
+    /**
      * "toString" : "bool bar"
      */
     property bool bar: false
