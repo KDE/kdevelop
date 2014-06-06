@@ -516,6 +516,7 @@ void DeclarationBuilder::declareComponentSubclass(QmlJS::AST::UiObjectInitialize
         QmlJS::getQMLAttributeValue(node->members, "name").value.section('/', -1, -1)
     );
     DUContext::ContextType contextType = DUContext::Class;
+    bool disableParents = false;
 
     if (baseclass == QLatin1String("Component")) {
         // QML component, equivalent to a QML class
@@ -543,6 +544,7 @@ void DeclarationBuilder::declareComponentSubclass(QmlJS::AST::UiObjectInitialize
         // Define an anonymous subclass of the baseclass. This subclass will
         // be instantiated when "id:" is encountered
         name = QualifiedIdentifier();
+        disableParents = true;
 
         StructureType::Ptr type(new StructureType);
 
@@ -582,7 +584,9 @@ void DeclarationBuilder::declareComponentSubclass(QmlJS::AST::UiObjectInitialize
             // If we opened a namespace, ensure that its internal context is of namespace type
             ctx->setType(DUContext::Namespace);
             ctx->setLocalScopeIdentifier(decl->qualifiedIdentifier());
-        } else {
+        }
+
+        if (disableParents) {
             // QML classes cannot see the declarations of their parent contexts
             ctx->disableSearchInParents();
         }
@@ -886,7 +890,7 @@ void DeclarationBuilder::closeAndAssignType()
 
 AbstractType::Ptr DeclarationBuilder::typeFromName(const QString& name)
 {
-    auto type = IntegralType::TypeVoid;
+    auto type = IntegralType::TypeMixed;
 
     if (name == QLatin1String("string")) {
         type = IntegralType::TypeString;
@@ -900,7 +904,7 @@ AbstractType::Ptr DeclarationBuilder::typeFromName(const QString& name)
         type = IntegralType::TypeVoid;
     }
 
-    if (type == IntegralType::TypeVoid) {
+    if (type == IntegralType::TypeMixed) {
         // Not a built-in type, but a class
         return typeFromClassName(name);
     } else {
@@ -915,11 +919,7 @@ AbstractType::Ptr DeclarationBuilder::typeFromClassName(const QString& name)
     if (decl && decl->kind() == Declaration::Type) {
         return decl->abstractType();
     } else {
-        StructureType* rs = new StructureType;
-
-        rs->setDeclarationId(DeclarationId(IndexedQualifiedIdentifier(QualifiedIdentifier(name))));
-
-        return AbstractType::Ptr(rs);
+        return AbstractType::Ptr(new StructureType);
     }
 }
 

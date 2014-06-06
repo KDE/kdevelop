@@ -3,6 +3,10 @@
  * "kind" : "Namespace"
  */
 Module {
+     Component {
+         name: "QModelIndex"
+     }
+
      /**
       * "toString" : "interface QAbstractItemModel",
       * "kind": "Type",
@@ -35,18 +39,18 @@ Module {
              }
          }
          /**
-          * "toString" : "void dataChanged (QModelIndex, QModelIndex, int)"
+          * "toString" : "void dataChanged (plugins::QModelIndex, plugins::QModelIndex, int)"
           */
          Signal {
              name: "dataChanged"
 
              /**
-              * "toString" : "QModelIndex topLeft"
+              * "toString" : "plugins::QModelIndex topLeft"
               */
              Parameter /* */ { name: "topLeft"; type: "QModelIndex" }
 
              /**
-              * "toString" : "QModelIndex bottomRight"
+              * "toString" : "plugins::QModelIndex bottomRight"
               */
              Parameter /* */ { name: "bottomRight"; type: "QModelIndex" }
 
@@ -57,12 +61,12 @@ Module {
          }
 
          /**
-          * "toString" : "bool isFocusPointModeSupported (QDeclarativeCamera::FocusPointMode)"
+          * "toString" : "bool isItemValid (plugins::QModelIndex)"
           */
          Method {
-             name: "isFocusPointModeSupported"
+             name: "isItemValid"
              type: "bool"
-             Parameter { name: "mode"; type: "QDeclarativeCamera::FocusPointMode" }
+             Parameter { name: "item"; type: "QModelIndex" }
          }
      }
 
