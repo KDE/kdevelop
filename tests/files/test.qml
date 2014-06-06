@@ -11,15 +11,15 @@ Text {
 
     /**
      * "type" : { "toString" : "string" },
-     * "useCount" : 2
+     * "useCount" : 1
      */
-    text: "asdf"
+    property string text: "Hello"
 
     /**
      * "type" : { "toString" : "string" },
-     * "useCount" : 1
+     * "useCount" : 0
      */
-    dont_use_me: "I'm used only here, and Behavior on foo.onLoad cannot see me"
+    property string dont_use_me: "I'm used only here, and Behavior on foo.onLoad cannot see me"
 
     /**
      * "toString" : "int foo"

@@ -189,7 +189,7 @@ void TestDeclarations::testProperty()
     //                          01234567890123456789012345678901234567890
     ParseSession session(file, "Text {\n"
                                " /// some comment\n"
-                               " foo: 1;\n"
+                               " property int foo;\n"
                                "}", 0);
     QVERIFY(session.ast());
     QVERIFY(session.problems().isEmpty());

@@ -182,9 +182,8 @@ void QmlCompletionTest::testContainsDeclaration_data()
     QTest::newRow("js_array_subscript") << "var a = {b: 0};\n %INVOKE" << "a[%CURSOR" << "b" << false;
 
     // Basic QML tests
-    QTest::newRow("qml_basic_property") << "Item { id: foo\n %INVOKE }" << "%CURSOR" << "id" << true;
+    QTest::newRow("qml_basic_property") << "Item { id: foo\n property int prop\n %INVOKE }" << "%CURSOR" << "prop" << true;
     QTest::newRow("qml_basic_instance") << "Item { id: foo\n %INVOKE }" << "%CURSOR" << "foo" << true;
-    QTest::newRow("qml_basic_nesting") << "Item { id: foo\n name: %INVOKE }" << "%CURSOR" << "id" << true;
 
     // QML inheritance
     QTest::newRow("qml_inheritance") <<
@@ -228,7 +227,7 @@ void QmlCompletionTest::testDoesNotContainDeclaration_data()
     QTest::newRow("qml_objects_dont_see_their_parents") <<
         "Item {\n"
         " id: item1\n"
-        " prop: 3\n"
+        " property int prop\n"
         " Item {\n"
         "  id: item2\n"
         "  %INVOKE\n"

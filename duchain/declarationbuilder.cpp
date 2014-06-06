@@ -785,29 +785,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiScriptBinding* node)
         }
     }
 
-    // Declare the script binding
-    RangeInRevision range = m_session->locationToRange(node->qualifiedId->identifierToken);
-    QualifiedIdentifier id(node->qualifiedId->name.toString());
-    AbstractType::Ptr type(findType(node->statement).type);
-
-    {
-        DUChainWriteLocker lock;
-        ClassMemberDeclaration* decl = openDeclaration<ClassMemberDeclaration>(id, range);
-
-        decl->setInSymbolTable(false);
-    }
-    openType(type);
-
-    return false;   // findType has already explored node->statement
-}
-
-void DeclarationBuilder::endVisit(QmlJS::AST::UiScriptBinding* node)
-{
-    DeclarationBuilderBase::endVisit(node);
-
-    if (node->qualifiedId) {
-        closeAndAssignType();
-    }
+    return DeclarationBuilderBase::visit(node);
 }
 
 bool DeclarationBuilder::visit(QmlJS::AST::UiObjectBinding* node)
@@ -844,11 +822,13 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiPublicMember* node)
 
     const RangeInRevision& range = m_session->locationToRange(node->identifierToken);
     const QualifiedIdentifier id(node->name.toString());
-    const AbstractType::Ptr type = findType(node->statement).type;
+    const AbstractType::Ptr type = typeFromName(node->memberType.toString());
 
     {
         DUChainWriteLocker lock;
-        openDeclaration<ClassMemberDeclaration>(id, range);
+        Declaration* decl = openDeclaration<ClassMemberDeclaration>(id, range);
+
+        decl->setInSymbolTable(false);
     }
     openType(type);
 
