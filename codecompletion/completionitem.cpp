@@ -34,9 +34,9 @@
 using namespace QmlJS;
 using namespace KDevelop;
 
-CompletionItem::CompletionItem(DeclarationPointer decl, int inheritanceDepth, bool quote)
+CompletionItem::CompletionItem(DeclarationPointer decl, int inheritanceDepth, Decoration decoration)
 : NormalDeclarationCompletionItem(decl, KSharedPtr<CodeCompletionContext>(), inheritanceDepth),
-  m_quote(quote)
+  m_decoration(decoration)
 {
 }
 
@@ -88,8 +88,23 @@ QVariant CompletionItem::data(const QModelIndex& index, int role, const CodeComp
 
 void CompletionItem::executed(KTextEditor::Document* document, const KTextEditor::Range& word)
 {
-    if (m_quote) {
-        QString unquoted = document->text(word);
-        document->replaceText(word, "\"" + unquoted + "\"]");
+    QString base = document->text(word);
+
+    switch (m_decoration)
+    {
+    case QmlJS::CompletionItem::NoDecoration:
+        break;
+
+    case QmlJS::CompletionItem::Quotes:
+        document->replaceText(word, "\"" + base + "\"");
+        break;
+
+    case QmlJS::CompletionItem::QuotesAndBracket:
+        document->replaceText(word, "\"" + base + "\"]");
+        break;
+
+    case QmlJS::CompletionItem::Colon:
+        document->replaceText(word, base + ": ");
+        break;
     }
 }

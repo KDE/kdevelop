@@ -30,7 +30,18 @@ namespace QmlJS {
 class CompletionItem : public KDevelop::NormalDeclarationCompletionItem
 {
 public:
-    CompletionItem(KDevelop::DeclarationPointer decl, int inheritanceDepth, bool quote);
+    /**
+     * @brief Decoration to put around an item when it is inserted into the code editor
+     */
+    enum Decoration
+    {
+        NoDecoration,       /*!< @brief No decoration at all */
+        Quotes,             /*!< @brief Wrap the item in quotes: item becomes "item" */
+        QuotesAndBracket,   /*!< @brief Wrap the item as in array subscripts: item becomes "item"] */
+        Colon,              /*!< @brief Append a colon after the item: item becomes item: */
+    };
+
+    CompletionItem(KDevelop::DeclarationPointer decl, int inheritanceDepth, Decoration decoration);
 
     virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const;
 
@@ -38,7 +49,7 @@ protected:
     virtual void executed(KTextEditor::Document* document, const KTextEditor::Range& word);
 
 private:
-    bool m_quote;
+    Decoration m_decoration;
 };
 
 }

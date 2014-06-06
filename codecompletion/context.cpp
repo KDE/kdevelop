@@ -67,20 +67,29 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& ab
 
     if (lastChar == QLatin1Char('.') || lastChar == QLatin1Char('[')) {
         // Offer completions for object members and array subscripts
-        items << fieldCompletions(m_text.left(m_text.size() - 1), lastChar == QLatin1Char('['));
+        items << fieldCompletions(
+            m_text.left(m_text.size() - 1),
+            lastChar == QLatin1Char('[') ? CompletionItem::QuotesAndBracket : CompletionItem::NoDecoration
+        );
     }
 
     // "object." must only display the members of object, the declarations
     // available in the current context.
     if (lastChar != QLatin1Char('.')) {
-        items << completionsInContext(m_duContext, false);
+        items << completionsInContext(
+            m_duContext,
+            false,
+            CompletionItem::NoDecoration
+        );
         items << globalCompletions();
     }
 
     return items;
 }
 
-QList<CompletionTreeItemPointer> CodeCompletionContext::completionsInContext(const DUContextPointer& context, bool onlyLocal, bool quote)
+QList<CompletionTreeItemPointer> CodeCompletionContext::completionsInContext(const DUContextPointer& context,
+                                                                             bool onlyLocal,
+                                                                             CompletionItem::Decoration decoration)
 {
     QList<CompletionTreeItemPointer> items;
     DUChainReadLocker lock;
@@ -101,7 +110,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionsInContext(con
                 continue;
             }
 
-            items << CompletionTreeItemPointer(new CompletionItem(declaration, decl.second, quote));
+            items << CompletionTreeItemPointer(new CompletionItem(declaration, decl.second, decoration));
         }
     }
 
@@ -129,13 +138,18 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::globalCompletions()
     lock.unlock();
 
     foreach (Declaration* import, realImports) {
-        items << completionsInContext(DUContextPointer(import->internalContext()), false);
+        items << completionsInContext(
+            DUContextPointer(import->internalContext()),
+            false,
+            CompletionItem::NoDecoration
+        );
     }
 
     return items;
 }
 
-QList<CompletionTreeItemPointer> CodeCompletionContext::fieldCompletions(const QString& expression, bool quote)
+QList<CompletionTreeItemPointer> CodeCompletionContext::fieldCompletions(const QString& expression,
+                                                                         CompletionItem::Decoration decoration)
 {
     QString line = extractLastLine(expression);
 
@@ -191,7 +205,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::fieldCompletions(const Q
     DUContext* context = getInternalContext(visitor.lastDeclaration());
 
     if (context) {
-        return completionsInContext(DUContextPointer(context), true, quote);
+        return completionsInContext(DUContextPointer(context), true, decoration);
     } else {
         return QList<CompletionTreeItemPointer>();
     }

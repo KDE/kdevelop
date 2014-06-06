@@ -24,6 +24,7 @@
 #define QMLJS_CONTEXT_H
 
 #include "codecompletionexport.h"
+#include "completionitem.h"
 
 #include <language/codecompletion/codecompletioncontext.h>
 #include <language/duchain/ducontext.h>
@@ -38,9 +39,12 @@ public:
     virtual QList<KDevelop::CompletionTreeItemPointer> completionItems(bool& abort, bool fullCompletion = true);
 
 private:
-    QList<KDevelop::CompletionTreeItemPointer> completionsInContext(const KDevelop::DUContextPointer& context, bool onlyLocal, bool quote = false);
+    QList<KDevelop::CompletionTreeItemPointer> completionsInContext(const KDevelop::DUContextPointer& context,
+                                                                    bool onlyLocal,
+                                                                    CompletionItem::Decoration decoration);
     QList<KDevelop::CompletionTreeItemPointer> globalCompletions();
-    QList<KDevelop::CompletionTreeItemPointer> fieldCompletions(const QString &expression, bool quote);
+    QList<KDevelop::CompletionTreeItemPointer> fieldCompletions(const QString &expression,
+                                                                CompletionItem::Decoration decoration);
 };
 
 }
