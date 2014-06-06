@@ -71,7 +71,7 @@ void UseBuilder::newUse(QmlJS::AST::Node* node, const QmlJS::AST::SourceLocation
     const QualifiedIdentifier id(name);
 
     // Build the use
-    const DeclarationPointer decl(QmlJS::getDeclaration(id, contextOnNode(node)));
+    const DeclarationPointer decl(QmlJS::getDeclarationOrSignal(id, contextOnNode(node)));
     UseBuilderBase::newUse(node, range, decl);
 }
 

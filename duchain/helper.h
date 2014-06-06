@@ -51,6 +51,16 @@ using namespace KDevelop;
                                                               const DUContext* context);
 
     /**
+     * Find the declaration for the specified identifier, with "onFoo" replaced
+     * with "Foo".
+     *
+     * This function is an extended version of getDeclaration and can resolve
+     * QML slots to their corresponding signals.
+     */
+    KDEVQMLJSDUCHAIN_EXPORT DeclarationPointer getDeclarationOrSignal(const QualifiedIdentifier& id,
+                                                                      const DUContext* context);
+
+    /**
      * Find an attribute of a QML object
      */
     KDEVQMLJSDUCHAIN_EXPORT AST::Statement* getQMLAttribute(AST::UiObjectMemberList* members,

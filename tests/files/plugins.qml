@@ -39,7 +39,8 @@ Module {
              }
          }
          /**
-          * "toString" : "void dataChanged (plugins::QModelIndex, plugins::QModelIndex, int)"
+          * "toString" : "void dataChanged (plugins::QModelIndex, plugins::QModelIndex, int)",
+          * "useCount" : 1
           */
          Signal {
              name: "dataChanged"
@@ -79,6 +80,10 @@ Module {
           * "kind": "Instance"
           */
          id: foo
+
+         onDataChanged: {
+             return;
+         }
      }
 
      /**

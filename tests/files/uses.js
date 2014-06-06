@@ -16,3 +16,9 @@ function func(arg) {
  */
 var i = global;
 func(global, i);
+
+/**
+ * "useCount" : 0
+ */
+var line;
+online = false;     // onFoo replaced by foo when foo is a QML signal

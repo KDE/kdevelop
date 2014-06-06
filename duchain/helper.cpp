@@ -20,6 +20,7 @@
 
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
+#include <language/duchain/classfunctiondeclaration.h>
 #include <language/duchain/types/unsuretype.h>
 #include <language/duchain/types/integraltype.h>
 #include <language/duchain/types/structuretype.h>
@@ -37,6 +38,31 @@ DeclarationPointer getDeclaration(const QualifiedIdentifier& id, const DUContext
         }
     }
     return DeclarationPointer();
+}
+
+DeclarationPointer getDeclarationOrSignal(const QualifiedIdentifier& id, const DUContext* context)
+{
+    QString identifier = id.last().toString();
+
+    if (identifier.startsWith(QLatin1String("on")) && identifier.size() > 2) {
+        // The use may have typed the name of a QML slot (onFoo), try to get
+        // the declaration of its corresponding signal (foo)
+        identifier = identifier.at(2).toLower() + identifier.mid(3);
+        DeclarationPointer decl = getDeclaration(QualifiedIdentifier(identifier), context);
+
+        if (decl) {
+            ClassFunctionDeclaration* classFuncDecl = dynamic_cast<ClassFunctionDeclaration *>(decl.data());
+
+            if (classFuncDecl && classFuncDecl->isSignal()) {
+                // Removing "on" has given the identifier of a QML signal, return
+                // it instead of the name of its slot
+                return decl;
+            }
+        }
+    }
+
+    // No signal found, fall back to normal behavior
+    return getDeclaration(id, context);
 }
 
 QmlJS::AST::Statement* getQMLAttribute(QmlJS::AST::UiObjectMemberList* members, const QString& attribute)
