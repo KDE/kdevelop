@@ -178,11 +178,9 @@ QString IncludeFileData::htmlDescription() const
   
   if( m_item.isDirectory ) {
     return QString( i18n("Directory %1", path.pathOrUrl()) );
-  } else {
-    return i18n( "In %1th include path", m_item.pathNumber );
   }
 
-  return " ";
+  return i18n( "In %1th include path", m_item.pathNumber );
 }
 
 IncludeFileDataProvider::IncludeFileDataProvider() : m_allowImports(true), m_allowPossibleImports(true), m_allowImporters(true) {
