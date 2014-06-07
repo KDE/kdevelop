@@ -1,17 +1,21 @@
 [Desktop Entry]
 Type=Service
 Name=Compiler Provider
+Name[ca]=Proveïdor del compilador
 Name[nl]=Leverancier van compiler
 Name[pl]=Dostawca kompilatora
 Name[pt]=Fornecedor de Compilador
+Name[pt_BR]=Fornecedor do Compilador
 Name[sk]=Poskytovateľ prekladača
 Name[sv]=Kompilatorleverantör
 Name[uk]=Надавач даних компілятора
 Name[x-test]=xxCompiler Providerxx
 GenericName=Compiler Provider
+GenericName[ca]=Proveïdor del compilador
 GenericName[nl]=Leverancier van compiler
 GenericName[pl]=Dostawca kompilatora
 GenericName[pt]=Fornecedor de Compilador
+GenericName[pt_BR]=Fornecedor do Compilador
 GenericName[sk]=Poskytovateľ prekladača
 GenericName[sv]=Kompilatorleverantör
 GenericName[uk]=Надавач даних компілятора
