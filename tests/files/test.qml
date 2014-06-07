@@ -42,6 +42,11 @@ Text {
     property var bar: "I can contain anything"
 
     /**
+     * "toString" : "int[] ints"
+     */
+    property list<int> ints
+
+    /**
      * "toString" : "void test (int, int)",
      * "useCount" : 1
      */

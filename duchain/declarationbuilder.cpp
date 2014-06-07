@@ -23,6 +23,7 @@
 #include <language/duchain/types/integraltype.h>
 #include <language/duchain/types/enumerationtype.h>
 #include <language/duchain/types/enumeratortype.h>
+#include <language/duchain/types/arraytype.h>
 #include <language/duchain/types/typeutils.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/namespacealiasdeclaration.h>
@@ -915,6 +916,14 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiPublicMember* node)
             res = false;        // findType has already explored node->statement
         } else {
             type = typeFromName(typeName);
+
+            if (node->typeModifier == QLatin1String("list")) {
+                // QML list, noted "list<type>" in the source file
+                ArrayType::Ptr array(new ArrayType);
+
+                array->setElementType(type);
+                type = array.cast<AbstractType>();
+            }
         }
 
         {
