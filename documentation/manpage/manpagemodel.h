@@ -26,9 +26,9 @@
 
 #include <language/duchain/indexedstring.h>
 #include <language/duchain/declaration.h>
-#include <KIO/FileJob>
-#include <QMap>
-#include <KUrl>
+
+#include <KIO/Job>
+
 #include <QListIterator>
 
 namespace KDevelop
@@ -70,20 +70,17 @@ signals:
 public slots:
     void showItem(const QModelIndex& idx);
     void showItemFromUrl(const QUrl& url);
+
 private slots:
     void indexDataReceived(KJob *job);
-    void sectionDataReceived(KJob *job);
     void initModel();
-    void readDataFromMainIndex(KIO::Job * job, const QByteArray &data);
+
+    void sectionEntries(KIO::Job* job, const KIO::UDSEntryList& entries);
+    void sectionLoaded();
 
 private:
     QString manPage(const QString &sectionId, int position) const;
     void initSection();
-    void sectionParser(const QString &sectionId, const QString &data);
-    QList<ManSection> indexParser();
-
-    /// Slave buffers
-    QString m_manMainIndexBuffer;
 
     QListIterator<ManSection> *iterator;
     QList<ManSection> m_sectionList;

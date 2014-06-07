@@ -61,6 +61,22 @@ KUrl urlForSection(const QString& section, const QString& page = {})
     return ret;
 }
 
+QList<ManSection> parseIndex(const QString& contents)
+{
+     QWebPage page;
+     QWebFrame * frame = page.mainFrame();
+     frame->setHtml(contents);
+     QWebElement document = frame->documentElement();
+     QWebElementCollection links = document.findAll("a");
+     QList<ManSection> list;
+     foreach(QWebElement e, links){
+         QString sectionId = e.attribute("href");
+         sectionId = sectionId.mid(5,sectionId.size()-6);
+         list.append(qMakePair(sectionId, e.parent().parent().findAll("td").at(2).toPlainText()));
+     }
+     return list;
+}
+
 }
 
 ManPageModel::ManPageModel(QObject* parent)
@@ -127,37 +143,48 @@ QString ManPageModel::manPage(const QString &sectionId, int position) const{
     return m_manMap.value(sectionId).at(position);
 }
 
-void ManPageModel::initModel(){
-    m_manMainIndexBuffer.clear();
-    KIO::TransferJob  * transferJob = 0;
-
-    transferJob = KIO::get(KUrl("man://"), KIO::NoReload, KIO::HideProgressInfo);
-    connect( transferJob, SIGNAL(data(KIO::Job*,QByteArray)),
-             this, SLOT(readDataFromMainIndex(KIO::Job*,QByteArray)) );
+void ManPageModel::initModel()
+{
+    auto transferJob = KIO::storedGet(KUrl("man://"), KIO::NoReload, KIO::HideProgressInfo);
     connect(transferJob, SIGNAL(result(KJob*)), this, SLOT(indexDataReceived(KJob*)));
 }
 
-void ManPageModel::indexDataReceived(KJob *job){
-    if (!job->error()){
-        m_sectionList = indexParser();
+void ManPageModel::indexDataReceived(KJob *job)
+{
+    if (!job->error()) {
+        KIO::StoredTransferJob *stjob = dynamic_cast<KIO::StoredTransferJob*>(job);
+        m_sectionList = parseIndex(QString::fromUtf8(stjob->data()));
     }
+
     emit sectionListUpdated();
+
     iterator = new QListIterator<ManSection>(m_sectionList);
     if(iterator->hasNext()){
         initSection();
     }
 }
 
-void ManPageModel::initSection(){
-    KIO::StoredTransferJob  * transferJob = KIO::storedGet(urlForSection(iterator->peekNext().first), KIO::NoReload, KIO::HideProgressInfo);
-    connect(transferJob, SIGNAL(result(KJob*)), this, SLOT(sectionDataReceived(KJob*)));
+void ManPageModel::initSection()
+{
+    const QString sectionId = iterator->peekNext().first;
+    m_manMap[sectionId].clear();
+    auto list = KIO::listDir(urlForSection(sectionId), KIO::HideProgressInfo);
+    connect(list, SIGNAL(entries(KIO::Job*,KIO::UDSEntryList)), SLOT(sectionEntries(KIO::Job*,KIO::UDSEntryList)));
+    connect(list, SIGNAL(result(KJob*)), SLOT(sectionLoaded()));
 }
 
-void ManPageModel::sectionDataReceived(KJob *job){
-    if (!job->error()){
-        KIO::StoredTransferJob *stjob = dynamic_cast<KIO::StoredTransferJob*>(job);
-        sectionParser(iterator->peekNext().first, QString::fromUtf8(stjob->data()));
+void ManPageModel::sectionEntries(KIO::Job* /*job*/, const KIO::UDSEntryList& entries)
+{
+    const QString sectionId = iterator->peekNext().first;
+    auto& pages = m_manMap[sectionId];
+    pages.reserve(pages.size() + entries.size());
+    for (const KIO::UDSEntry& entry : entries) {
+        pages << entry.stringValue(KIO::UDSEntry::UDS_NAME);
     }
+}
+
+void ManPageModel::sectionLoaded()
+{
     iterator->next();
     m_nbSectionLoaded++;
     emit sectionParsed();
@@ -166,46 +193,16 @@ void ManPageModel::sectionDataReceived(KJob *job){
     } else {
         // End of init
         m_loaded = true;
-        m_index.removeDuplicates();
+        m_index.clear();
+        foreach (const auto& entries, m_manMap) {
+            m_index += entries.toList();
+        }
         m_index.sort();
+        m_index.removeDuplicates();
         m_indexModel->setStringList(m_index);
         delete iterator;
         emit manPagesLoaded();
     }
-}
-
-void ManPageModel::readDataFromMainIndex(KIO::Job * job, const QByteArray &data){
-    Q_UNUSED(job);
-    m_manMainIndexBuffer.append(QString::fromUtf8(data));
-}
-
-QList<ManSection> ManPageModel::indexParser(){
-     QWebPage page;
-     QWebFrame * frame = page.mainFrame();
-     frame->setHtml(m_manMainIndexBuffer);
-     QWebElement document = frame->documentElement();
-     QWebElementCollection links = document.findAll("a");
-     QList<ManSection> list;
-     foreach(QWebElement e, links){
-         QString sectionId = e.attribute("href");
-         sectionId = sectionId.mid(5,sectionId.size()-6);
-         list.append(qMakePair(sectionId, e.parent().parent().findAll("td").at(2).toPlainText()));
-     }
-     return list;
-}
-
-void ManPageModel::sectionParser(const QString &sectionId, const QString &data){
-    // the regex version is much faster than using QWebKit for parsing...
-    static QRegExp linkRegex("<a href=\"man:[^\"#]+\">\\s*([^<]+)\\s*</a>", Qt::CaseSensitive, QRegExp::RegExp2);
-    int pos = 0;
-    QVector<QString> pageList;
-    while (-1 != (pos = data.indexOf(linkRegex, pos))) {
-        const QString text = linkRegex.cap(1);
-        pageList.append(text);
-        m_index.append(text);
-        pos++;
-    }
-    m_manMap.insert(sectionId, pageList);
 }
 
 void ManPageModel::showItem(const QModelIndex& idx){
