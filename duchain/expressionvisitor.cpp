@@ -133,6 +133,7 @@ bool ExpressionVisitor::visit(QmlJS::AST::BinaryExpression* node)
         encounter(IntegralType::TypeBoolean);
         break;
     default:
+        encounterNothing();
         break;
     }
 
@@ -163,9 +164,16 @@ bool ExpressionVisitor::visit(QmlJS::AST::CallExpression* node)
 
     if (func && func->returnType()) {
         encounter(func->returnType());
+    } else {
+        encounterNothing();
     }
 
     return false;
+}
+
+void ExpressionVisitor::encounterNothing()
+{
+    encounter(AbstractType::Ptr(), DeclarationPointer());
 }
 
 void ExpressionVisitor::encounter(IntegralType::CommonIntegralTypes type)
@@ -180,6 +188,8 @@ void ExpressionVisitor::encounter(const QString& declaration, KDevelop::DUContex
 
     if (dec && dec->abstractType()) {
         encounterLvalue(dec);
+    } else {
+        encounterNothing();
     }
 }
 
@@ -191,7 +201,7 @@ void ExpressionVisitor::encounterFieldMember(const QString& name)
     if (context) {
         encounter(name, context);
     } else {
-        encounter(AbstractType::Ptr(), DeclarationPointer());
+        encounterNothing();
     }
 }
 
@@ -207,5 +217,7 @@ void ExpressionVisitor::encounterObjectAtLocation(const QmlJS::AST::SourceLocati
 
     if (dec && dec->abstractType()) {
         encounterLvalue(DeclarationPointer(dec));
+    } else {
+        encounterNothing();
     }
 }

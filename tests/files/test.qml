@@ -5,7 +5,8 @@ import QtQuick 1.1
  */
 Text {
     /*
-     * "toString" : "<class> someId"
+     * "toString" : "<class> someId",
+     * "useCount" : 3
      */
     id: someId
 
@@ -68,7 +69,8 @@ Text {
      */
     function foo(arg)
     {
-        someId.text = arg
+        someId.text = arg;
+        someId.inexistant = false;  // Don't use "someId" at "inexistant". someId must be used only 3 times (declaration, this line and the above one)
     }
 
     onFontChanged: {

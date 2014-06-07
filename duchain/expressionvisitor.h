@@ -56,6 +56,7 @@ protected:
 private:
     using KDevelop::DynamicLanguageExpressionVisitor::encounter;
 
+    void encounterNothing();
     void encounter(KDevelop::IntegralType::CommonIntegralTypes type);
     void encounter(const QString &declaration, KDevelop::DUContext* context = nullptr);
     void encounterFieldMember(const QString &name);
