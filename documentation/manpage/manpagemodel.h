@@ -2,6 +2,7 @@
 
     Copyright 2010 Yannick Motta <yannick.motta@gmail.com>
     Copyright 2010 Benjamin Port <port.benjamin@gmail.com>
+    Copyright 2014 Milian Wolff <mail@milianw.de>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -24,18 +25,9 @@
 
 #include <QtGui/QStringListModel>
 
-#include <language/duchain/indexedstring.h>
-#include <language/duchain/declaration.h>
-
 #include <KIO/Job>
 
 #include <QListIterator>
-
-namespace KDevelop
-{
-    class Declaration;
-    class ParseJob;
-}
 
 // id and name for man section
 typedef QPair<QString, QString> ManSection;
@@ -72,14 +64,16 @@ public slots:
     void showItemFromUrl(const QUrl& url);
 
 private slots:
-    void indexDataReceived(KJob *job);
     void initModel();
+
+    void indexEntries(KIO::Job* job, const KIO::UDSEntryList& entries);
+    void indexLoaded();
 
     void sectionEntries(KIO::Job* job, const KIO::UDSEntryList& entries);
     void sectionLoaded();
 
 private:
-    QString manPage(const QString &sectionId, int position) const;
+    QString manPage(const QString &sectionUrl, int position) const;
     void initSection();
 
     QListIterator<ManSection> *iterator;
