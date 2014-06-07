@@ -41,6 +41,13 @@ Text {
     property bool bar: false
 
     /**
+     * "toString" : "void test (int, int)",
+     * "useCount" : 1
+     */
+    signal test(int a, int b)
+    signal test2
+
+    /**
      * "type" : { "toString" : "<class>" }
      */
     Foo {
@@ -74,5 +81,8 @@ Text {
 
     onElideModeChanged: {
         im_not_visible_outside_this_slot = "fail";
+    }
+
+    onTest: {
     }
 }

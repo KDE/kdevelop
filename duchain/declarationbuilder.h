@@ -47,12 +47,22 @@ protected:
     using Visitor::endVisit;
 
     // Functions
-    void visitFunction(QmlJS::AST::FunctionExpression* node);
-    void endVisitFunction(QmlJS::AST::FunctionExpression*);
+    template<typename Decl>
+    void declareFunction(QmlJS::AST::Node* node,
+                         const KDevelop::QualifiedIdentifier& name,
+                         const KDevelop::RangeInRevision& nameRange,
+                         QmlJS::AST::Node* parameters,
+                         const KDevelop::RangeInRevision& parametersRange,
+                         QmlJS::AST::Node* body,
+                         const KDevelop::RangeInRevision& bodyRange);
+    template<typename Node>
+    void declareParameters(Node* node, QStringRef Node::*typeAttribute);
+    void endVisitFunction();    // Set the return type of the function to void if no return statement has been encountered
 
     virtual bool visit(QmlJS::AST::FunctionDeclaration* node);
     virtual bool visit(QmlJS::AST::FunctionExpression* node);
     virtual bool visit(QmlJS::AST::FormalParameterList* node);
+    virtual bool visit(QmlJS::AST::UiParameterList* node);
     virtual bool visit(QmlJS::AST::ReturnStatement* node);
     virtual void endVisit(QmlJS::AST::FunctionDeclaration* node);
     virtual void endVisit(QmlJS::AST::FunctionExpression* node);

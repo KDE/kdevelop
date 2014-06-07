@@ -52,95 +52,140 @@ ReferencedTopDUContext DeclarationBuilder::build(const IndexedString& url,
 /*
  * Functions
  */
-void DeclarationBuilder::visitFunction(QmlJS::AST::FunctionExpression* node)
+template<typename Decl>
+void DeclarationBuilder::declareFunction(QmlJS::AST::Node* node,
+                                         const QualifiedIdentifier& name,
+                                         const RangeInRevision& nameRange,
+                                         QmlJS::AST::Node* parameters,
+                                         const RangeInRevision& parametersRange,
+                                         QmlJS::AST::Node* body,
+                                         const RangeInRevision& bodyRange)
 {
-    setComment(m_session->commentForLocation(node->firstSourceLocation()).toUtf8());
+    setComment(node);
 
+    // Declare the function
     FunctionType::Ptr func(new FunctionType);
-    QualifiedIdentifier name;
-    RangeInRevision range;
+    Decl* decl;
 
-    // Function declaration
-    if (node->kind == QmlJS::AST::Node::Kind_FunctionDeclaration) {
-        // Only function declarations have an identifier. Expressions are anonymous
-        name = QualifiedIdentifier(node->name.toString());
-        range = m_session->locationToRange(node->identifierToken);
-    }
-
-    FunctionDeclaration* decl;
     {
         DUChainWriteLocker lock;
 
-        decl = openDeclaration<FunctionDeclaration>(name, range);
+        decl = openDeclaration<Decl>(name, nameRange);
         decl->setKind(Declaration::Type);
     }
     openType(func);
 
-    // Formal parameters
-    DUContext* parameters = openContext(
+    // Parameters, if any (a function must always have an interal function context,
+    // so always open a context here even if there are no parameters)
+    DUContext* parametersContext = openContext(
         node,
-        m_session->locationsToInnerRange(node->lparenToken, node->rparenToken),
+        parametersRange,
         DUContext::Function,
         name
     );
 
-    QmlJS::AST::Node::accept(node->formals, this);
-    closeContext();
-
-    // Inner context
-    DUContext* body = openContext(
-        node,
-        m_session->locationsToInnerRange(node->lbraceToken, node->rbraceToken),
-        DUContext::Other,
-        name
-    );
-
-    if (compilingContexts()) {
-        DUChainWriteLocker lock;
-        body->addImportedParentContext(parameters);
+    if (parameters) {
+        QmlJS::AST::Node::accept(parameters, this);
     }
-
-    QmlJS::AST::Node::accept(node->body, this);
     closeContext();
+
+    // Body, if any
+    DUContext* bodyContext = nullptr;
+
+    if (body) {
+        bodyContext = openContext(
+            node,
+            bodyRange,
+            DUContext::Other,
+            name
+        );
+
+        if (compilingContexts()) {
+            DUChainWriteLocker lock;
+            bodyContext->addImportedParentContext(parametersContext);
+        }
+
+        QmlJS::AST::Node::accept(body, this);
+        closeContext();
+    }
 
     // Set the inner contexts of the function
     {
         DUChainWriteLocker lock;
-        decl->setInternalFunctionContext(parameters);
-        decl->setInternalContext(body);
+
+        decl->setInternalFunctionContext(parametersContext);
+
+        if (bodyContext) {
+            decl->setInternalContext(bodyContext);
+        }
+    }
+}
+
+template<typename Node>
+void DeclarationBuilder::declareParameters(Node* node, QStringRef Node::*typeAttribute)
+{
+    for (Node *plist = node; plist; plist = plist->next) {
+        const QualifiedIdentifier name(plist->name.toString());
+        const RangeInRevision range = m_session->locationToRange(plist->identifierToken);
+
+        AbstractType::Ptr type = (typeAttribute ?
+            typeFromName((plist->*typeAttribute).toString()) :              // The typeAttribute attribute of plist contains the type name of the argument
+            AbstractType::Ptr(new IntegralType(IntegralType::TypeMixed))    // No type information, use mixed
+        );
+
+        {
+            DUChainWriteLocker lock;
+            openDeclaration<Declaration>(name, range);
+        }
+        openType(type);
+        closeAndAssignType();
+
+        if (FunctionType::Ptr funType = currentType<FunctionType>()) {
+            funType->addArgument(type);
+        }
     }
 }
 
 bool DeclarationBuilder::visit(QmlJS::AST::FunctionDeclaration* node)
 {
-    visitFunction(node);
+    declareFunction<FunctionDeclaration>(
+        node,
+        QualifiedIdentifier(node->name.toString()),
+        m_session->locationToRange(node->identifierToken),
+        node->formals,
+        m_session->locationsToInnerRange(node->lparenToken, node->rparenToken),
+        node->body,
+        m_session->locationsToInnerRange(node->lbraceToken, node->rbraceToken)
+    );
 
     return false;
 }
 
 bool DeclarationBuilder::visit(QmlJS::AST::FunctionExpression* node)
 {
-    visitFunction(node);
+    declareFunction<FunctionDeclaration>(
+        node,
+        QualifiedIdentifier(),
+        RangeInRevision(),
+        node->formals,
+        m_session->locationsToInnerRange(node->lparenToken, node->rparenToken),
+        node->body,
+        m_session->locationsToInnerRange(node->lbraceToken, node->rbraceToken)
+    );
 
     return false;
 }
 
 bool DeclarationBuilder::visit(QmlJS::AST::FormalParameterList* node)
 {
-    for (QmlJS::AST::FormalParameterList *plist = node; plist; plist = plist->next) {
-        const QualifiedIdentifier name(plist->name.toString());
-        const RangeInRevision range = m_session->locationToRange(plist->identifierToken);
+    declareParameters(node, (QStringRef QmlJS::AST::FormalParameterList::*)nullptr);
 
-        DUChainWriteLocker lock;
-        Declaration* dec = openDeclaration<Declaration>(name, range);
-        IntegralType::Ptr type(new IntegralType(IntegralType::TypeMixed));
-        dec->setType(type);
-        closeDeclaration();
+    return DeclarationBuilderBase::visit(node);
+}
 
-        if (FunctionType::Ptr funType = currentType<FunctionType>()) {
-            funType->addArgument(type.cast<AbstractType>());
-        }
-    }
+bool DeclarationBuilder::visit(QmlJS::AST::UiParameterList* node)
+{
+    declareParameters(node, &QmlJS::AST::UiParameterList::type);
 
     return DeclarationBuilderBase::visit(node);
 }
@@ -164,7 +209,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::ReturnStatement* node)
     return false;   // findType has already explored node
 }
 
-void DeclarationBuilder::endVisitFunction(QmlJS::AST::FunctionExpression*)
+void DeclarationBuilder::endVisitFunction()
 {
     FunctionType::Ptr func = currentType<FunctionType>();
 
@@ -182,14 +227,14 @@ void DeclarationBuilder::endVisit(QmlJS::AST::FunctionDeclaration* node)
 {
     DeclarationBuilderBase::endVisit(node);
 
-    endVisitFunction(node);
+    endVisitFunction();
 }
 
 void DeclarationBuilder::endVisit(QmlJS::AST::FunctionExpression* node)
 {
     DeclarationBuilderBase::endVisit(node);
 
-    endVisitFunction(node);
+    endVisitFunction();
 }
 
 /*
@@ -839,25 +884,47 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiPublicMember* node)
     RangeInRevision range = m_session->locationToRange(node->identifierToken);
     QualifiedIdentifier id(node->name.toString());
     QString typeName = node->memberType.toString();
-    AbstractType::Ptr type;
     bool res = DeclarationBuilderBase::visit(node);
 
     // Build the type of the public member
-    if (typeName == "alias") {
-        type = findType(node->statement).type;
-        res = false;        // findType has already explored node->statement
+    if (node->type == QmlJS::AST::UiPublicMember::Signal) {
+        // Open a function declaration corresponding to this signal
+        declareFunction<ClassFunctionDeclaration>(
+            node,
+            QualifiedIdentifier(node->name.toString()),
+            m_session->locationToRange(node->identifierToken),
+            node->parameters,
+            m_session->locationToRange(node->identifierToken),  // The AST does not provide the location of the parens
+            nullptr,
+            RangeInRevision()
+        );
+
+        // This declaration is a signal and its return type is void
+        {
+            DUChainWriteLocker lock;
+
+            currentDeclaration<ClassFunctionDeclaration>()->setIsSignal(true);
+            currentType<FunctionType>()->setReturnType(typeFromName("void"));
+        }
     } else {
-        type = typeFromName(typeName);
-    }
+        AbstractType::Ptr type;
 
-    // Create its declaration
-    {
-        DUChainWriteLocker lock;
-        Declaration* decl = openDeclaration<ClassMemberDeclaration>(id, range);
+        if (typeName == "alias") {
+            // Property aliases take the type of their aliased property
+            type = findType(node->statement).type;
+            res = false;        // findType has already explored node->statement
+        } else {
+            type = typeFromName(typeName);
+        }
 
-        decl->setInSymbolTable(false);
+        {
+            DUChainWriteLocker lock;
+            Declaration* decl = openDeclaration<ClassMemberDeclaration>(id, range);
+
+            decl->setInSymbolTable(false);
+        }
+        openType(type);
     }
-    openType(type);
 
     return res;
 }

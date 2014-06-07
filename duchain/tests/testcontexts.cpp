@@ -85,19 +85,19 @@ void TestContexts::testFunctionContext_data()
     QTest::addColumn<RangeInRevision>("bodyCtxRange");
     //                         0         1
     //                         012345678901234567890
-    QTest::newRow("empty") << "function foo() {}"
+    QTest::newRow("empty") << "function foo() {;}"
                            << RangeInRevision(0, 13, 0, 13)
-                           << RangeInRevision(0, 16, 0, 16);
+                           << RangeInRevision(0, 16, 0, 17);
 
     //                        0         1         2         3
     //                        01234567890123456789012345678901234567890
-    QTest::newRow("args") << "function foo(arg1, arg2, arg3) {}"
+    QTest::newRow("args") << "function foo(arg1, arg2, arg3) {;}"
                            << RangeInRevision(0, 13, 0, 29)
-                           << RangeInRevision(0, 32, 0, 32);
+                           << RangeInRevision(0, 32, 0, 33);
 
     //                           0         1         2
     //                           0123456789012345678901234567890
-    QTest::newRow("newline") << "function foo() {\n}"
+    QTest::newRow("newline") << "function foo() {;\n}"
                            << RangeInRevision(0, 13, 0, 13)
                            << RangeInRevision(0, 16, 1, 0);
 }
