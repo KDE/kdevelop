@@ -55,7 +55,7 @@ do
     done
 
     # Add the import statements to the beginning of the QML file
-    cat "/tmp/$package.imports" | grep -v " Builtins" | grep -v " $package " | sort | uniq > "/tmp/$package.header"
+    cat "/tmp/$package.imports" | grep -v " $package " | sort | uniq > "/tmp/$package.header"
     cat "$qmlfile" | grep -v "^import" > "/tmp/$package.body"
     cat "/tmp/$package.header" "/tmp/$package.body" > "$qmlfile"
 done
