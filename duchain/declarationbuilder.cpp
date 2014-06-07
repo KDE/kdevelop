@@ -978,6 +978,8 @@ AbstractType::Ptr DeclarationBuilder::typeFromName(const QString& name)
         type = IntegralType::TypeInt;
     } else if (name == QLatin1String("float")) {
         type = IntegralType::TypeFloat;
+    } else if (name == QLatin1String("double")) {
+        type = IntegralType::TypeDouble;
     } else if (name == QLatin1String("void")) {
         type = IntegralType::TypeVoid;
     } else if (name == QLatin1String("var")) {
