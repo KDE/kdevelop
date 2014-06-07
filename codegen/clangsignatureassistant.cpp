@@ -257,7 +257,7 @@ QString ClangAdaptSignatureAction::description() const
 
 void ClangAdaptSignatureAction::execute()
 {
-    DUChainLock lock;
+    DUChainReadLocker lock;
     DocumentChange changeParameters(DUChainUtils::standardContextForUrl(m_url)->url(), m_range, QString(), m_newSig);
     changeParameters.m_ignoreOldText = true;
     DocumentChangeSet changes;
