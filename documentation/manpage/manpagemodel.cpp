@@ -63,18 +63,18 @@ KUrl urlForSection(const QString& section, const QString& page = {})
 
 QList<ManSection> parseIndex(const QString& contents)
 {
-     QWebPage page;
-     QWebFrame * frame = page.mainFrame();
-     frame->setHtml(contents);
-     QWebElement document = frame->documentElement();
-     QWebElementCollection links = document.findAll("a");
-     QList<ManSection> list;
-     foreach(QWebElement e, links){
-         QString sectionId = e.attribute("href");
-         sectionId = sectionId.mid(5,sectionId.size()-6);
-         list.append(qMakePair(sectionId, e.parent().parent().findAll("td").at(2).toPlainText()));
-     }
-     return list;
+    QWebPage page;
+    QWebFrame* frame = page.mainFrame();
+    frame->setHtml(contents);
+    QWebElement document = frame->documentElement();
+    QWebElementCollection links = document.findAll("a");
+    QList<ManSection> list;
+    foreach (QWebElement e, links) {
+        QString sectionId = e.attribute("href");
+        sectionId = sectionId.mid(5, sectionId.size() - 6);
+        list.append(qMakePair(sectionId, e.parent().parent().findAll("td").at(2).toPlainText()));
+    }
+    return list;
 }
 
 }
@@ -93,30 +93,31 @@ ManPageModel::~ManPageModel()
     delete m_indexModel;
 }
 
-
 QModelIndex ManPageModel::parent(const QModelIndex& child) const
 {
-    if(child.isValid() && child.column()==0 && int(child.internalId())>=0)
-        return createIndex(child.internalId(),0, -1);
+    if (child.isValid() && child.column() == 0 && child.internalId() >= 0) {
+        return createIndex(child.internalId(), 0, -1);
+    }
     return QModelIndex();
 }
 
 QModelIndex ManPageModel::index(int row, int column, const QModelIndex& parent) const
 {
-    if(row<0 || column!=0)
+    if (row < 0 || column != 0) {
         return QModelIndex();
-    if(!parent.isValid() && row==m_sectionList.count())
+    } else if (!parent.isValid() && row == m_sectionList.count()) {
         return QModelIndex();
+    }
 
-    return createIndex(row,column, int(parent.isValid() ? parent.row() : -1));
+    return createIndex(row, column, parent.isValid() ? parent.row() : -1);
 }
 
 QVariant ManPageModel::data(const QModelIndex& index, int role) const
 {
-    if(index.isValid()){
-        if(role==Qt::DisplayRole) {
+    if (index.isValid()) {
+        if (role == Qt::DisplayRole) {
             int internal(index.internalId());
-            if(internal>=0){
+            if (internal >= 0) {
                 int position = index.row();
                 QString sectionId = m_sectionList.at(index.internalId()).first;
                 return manPage(sectionId, position);
@@ -130,16 +131,17 @@ QVariant ManPageModel::data(const QModelIndex& index, int role) const
 
 int ManPageModel::rowCount(const QModelIndex& parent) const
 {
-    if(!parent.isValid()){
+    if (!parent.isValid()) {
         return m_sectionList.count();
-    }else if(int(parent.internalId())<0) {
+    } else if (parent.internalId() < 0) {
         QString sectionId = m_sectionList.at(parent.row()).first;
         return m_manMap.value(sectionId).count();
     }
     return 0;
 }
 
-QString ManPageModel::manPage(const QString &sectionId, int position) const{
+QString ManPageModel::manPage(const QString& sectionId, int position) const
+{
     return m_manMap.value(sectionId).at(position);
 }
 
@@ -149,17 +151,17 @@ void ManPageModel::initModel()
     connect(transferJob, SIGNAL(result(KJob*)), this, SLOT(indexDataReceived(KJob*)));
 }
 
-void ManPageModel::indexDataReceived(KJob *job)
+void ManPageModel::indexDataReceived(KJob* job)
 {
     if (!job->error()) {
-        KIO::StoredTransferJob *stjob = dynamic_cast<KIO::StoredTransferJob*>(job);
+        KIO::StoredTransferJob* stjob = dynamic_cast<KIO::StoredTransferJob*>(job);
         m_sectionList = parseIndex(QString::fromUtf8(stjob->data()));
     }
 
     emit sectionListUpdated();
 
     iterator = new QListIterator<ManSection>(m_sectionList);
-    if(iterator->hasNext()){
+    if (iterator->hasNext()) {
         initSection();
     }
 }
@@ -169,7 +171,7 @@ void ManPageModel::initSection()
     const QString sectionId = iterator->peekNext().first;
     m_manMap[sectionId].clear();
     auto list = KIO::listDir(urlForSection(sectionId), KIO::HideProgressInfo);
-    connect(list, SIGNAL(entries(KIO::Job*,KIO::UDSEntryList)), SLOT(sectionEntries(KIO::Job*,KIO::UDSEntryList)));
+    connect(list, SIGNAL(entries(KIO::Job*, KIO::UDSEntryList)), SLOT(sectionEntries(KIO::Job*, KIO::UDSEntryList)));
     connect(list, SIGNAL(result(KJob*)), SLOT(sectionLoaded()));
 }
 
@@ -178,7 +180,7 @@ void ManPageModel::sectionEntries(KIO::Job* /*job*/, const KIO::UDSEntryList& en
     const QString sectionId = iterator->peekNext().first;
     auto& pages = m_manMap[sectionId];
     pages.reserve(pages.size() + entries.size());
-    for (const KIO::UDSEntry& entry : entries) {
+    for (const KIO::UDSEntry & entry : entries) {
         pages << entry.stringValue(KIO::UDSEntry::UDS_NAME);
     }
 }
@@ -188,13 +190,13 @@ void ManPageModel::sectionLoaded()
     iterator->next();
     m_nbSectionLoaded++;
     emit sectionParsed();
-    if(iterator->hasNext()){
+    if (iterator->hasNext()) {
         initSection();
     } else {
         // End of init
         m_loaded = true;
         m_index.clear();
-        foreach (const auto& entries, m_manMap) {
+        foreach (const auto & entries, m_manMap) {
             m_index += entries.toList();
         }
         m_index.sort();
@@ -205,8 +207,9 @@ void ManPageModel::sectionLoaded()
     }
 }
 
-void ManPageModel::showItem(const QModelIndex& idx){
-    if(idx.isValid() && int(idx.internalId())>=0) {
+void ManPageModel::showItem(const QModelIndex& idx)
+{
+    if (idx.isValid() && idx.internalId() >= 0) {
         QString sectionId = m_sectionList.at(idx.internalId()).first;
         QString page = manPage(sectionId, idx.row());
         KSharedPtr<KDevelop::IDocumentation> newDoc(new ManPageDocumentation(page, urlForSection(sectionId, page)));
@@ -214,14 +217,16 @@ void ManPageModel::showItem(const QModelIndex& idx){
     }
 }
 
-void ManPageModel::showItemFromUrl(const QUrl& url){
-    if(url.toString().startsWith("man")){
+void ManPageModel::showItemFromUrl(const QUrl& url)
+{
+    if (url.toString().startsWith("man")) {
         KSharedPtr<KDevelop::IDocumentation> newDoc(new ManPageDocumentation(url.path(), KUrl(url)));
         KDevelop::ICore::self()->documentationController()->showDocumentation(newDoc);
     }
 }
 
-QStringListModel* ManPageModel::indexList(){
+QStringListModel* ManPageModel::indexList()
+{
     return m_indexModel;
 }
 
@@ -245,7 +250,7 @@ int ManPageModel::nbSectionLoaded() const
     return m_nbSectionLoaded;
 }
 
-bool ManPageModel::identifierInSection(const QString &identifier, const QString& section) const
+bool ManPageModel::identifierInSection(const QString& identifier, const QString& section) const
 {
     return m_manMap.value(section).indexOf(identifier) != -1;
 }
