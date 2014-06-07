@@ -959,7 +959,7 @@ void DeclarationBuilder::closeAndAssignType()
 
 AbstractType::Ptr DeclarationBuilder::typeFromName(const QString& name)
 {
-    auto type = IntegralType::TypeMixed;
+    auto type = IntegralType::TypeNone;
 
     if (name == QLatin1String("string")) {
         type = IntegralType::TypeString;
@@ -971,9 +971,11 @@ AbstractType::Ptr DeclarationBuilder::typeFromName(const QString& name)
         type = IntegralType::TypeFloat;
     } else if (name == QLatin1String("void")) {
         type = IntegralType::TypeVoid;
+    } else if (name == QLatin1String("var")) {
+        type = IntegralType::TypeMixed;
     }
 
-    if (type == IntegralType::TypeMixed) {
+    if (type == IntegralType::TypeNone) {
         // Not a built-in type, but a class
         return typeFromClassName(name);
     } else {

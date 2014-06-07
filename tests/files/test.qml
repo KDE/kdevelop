@@ -37,9 +37,9 @@ Text {
     property alias behaviorEnabled: behavior.enabled
 
     /**
-     * "toString" : "bool bar"
+     * "toString" : "mixed bar"
      */
-    property bool bar: false
+    property var bar: "I can contain anything"
 
     /**
      * "toString" : "void test (int, int)",
