@@ -1,4 +1,5 @@
-import QtQuick.tooling 1.1
+// Needed only for the windowChanged signal. It is a huge dependency for just one signal
+// import QtQuick.Controls 1.0
 
 // This file describes the plugin-supplied types contained in the library.
 // It is used for QML tooling purposes only.

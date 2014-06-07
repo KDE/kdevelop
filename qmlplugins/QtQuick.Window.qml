@@ -1,4 +1,4 @@
-import QtQuick.tooling 1.1
+import QtQuick.Controls 1.0
 
 // This file describes the plugin-supplied types contained in the library.
 // It is used for QML tooling purposes only.
