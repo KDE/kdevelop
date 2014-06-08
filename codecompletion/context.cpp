@@ -184,6 +184,15 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::fieldCompletions(const Q
         case QmlJSGrammar::T_RPAREN:
             bracketPositions.pop();
             break;
+        case QmlJSGrammar::T_COLON:
+        case QmlJSGrammar::T_COMMA:
+        case QmlJSGrammar::T_SEMICOLON:
+        case QmlJSGrammar::T_QUESTION:
+            // In "foo(a, b", "a, b" is not a valid expression but "b" is. Shift
+            // the current position so that everything before the separator is
+            // ignored. Because a stack is used, "foo(a, b)" will still correctly
+            // be identified a an expression if the closing brace in present
+            bracketPositions.top() = lexer.tokenStartColumn();
         default:
             break;
         }

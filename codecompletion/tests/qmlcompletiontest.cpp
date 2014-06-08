@@ -180,10 +180,12 @@ void QmlCompletionTest::testContainsDeclaration_data()
     // Object members
     QTest::newRow("js_object_members") << "var a = {b: 0};\n %INVOKE" << "a.%CURSOR" << "b" << false;
     QTest::newRow("js_array_subscript") << "var a = {b: 0};\n %INVOKE" << "a[%CURSOR" << "b" << false;
+    QTest::newRow("js_skip_separators") << "var a = {b: 0};\n %INVOKE" << "foo(false, a.%CURSOR" << "b" << false;
 
     // Basic QML tests
     QTest::newRow("qml_basic_property") << "Item { id: foo\n property int prop\n %INVOKE }" << "%CURSOR" << "prop" << true;
     QTest::newRow("qml_basic_instance") << "Item { id: foo\n onTest: %INVOKE }" << "%CURSOR" << "foo" << true;
+    QTest::newRow("qml_skip_separators") << "Item { id: foo\n Item { id: bar\n property int prop }\n %INVOKE" << "onTest: bar.%CURSOR" << "prop" << true;
 
     // QML inheritance
     QTest::newRow("qml_inheritance") <<
