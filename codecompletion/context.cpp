@@ -184,8 +184,18 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::fieldCompletions(const Q
         case QmlJSGrammar::T_RPAREN:
             bracketPositions.pop();
             break;
-        default:
+        case QmlJSGrammar::T_IDENTIFIER:
+        case QmlJSGrammar::T_DOT:
             break;
+        default:
+            // "a == b", "a + b", "a && b", "typeof b", etc are not expressions
+            // whose type is interesting for code-completion, but "b" is.
+            // "foo(a, b", is not a valid expression, "b" is. "var a = b" is not
+            // understood by ExpressionVisitor, b is.
+            // Shift the current position so that everything before the unwanted char is
+            // ignored. Because a stack is used, "foo(a, b)" will still correctly
+            // be identified a an expression if the closing brace in present
+            bracketPositions.top() = lexer.tokenStartColumn();
         }
     }
 
