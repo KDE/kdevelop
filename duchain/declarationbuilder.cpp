@@ -37,6 +37,7 @@
 using namespace KDevelop;
 
 DeclarationBuilder::DeclarationBuilder(ParseSession* session)
+: m_prebuilding(false)
 {
     m_session = session;
 }
@@ -45,8 +46,23 @@ ReferencedTopDUContext DeclarationBuilder::build(const IndexedString& url,
                                                  QmlJS::AST::Node* node,
                                                  ReferencedTopDUContext updateContext)
 {
-    ///TODO: cleanup
     Q_ASSERT(m_session->url() == url);
+
+    // The declaration builder needs to run twice, so it can resolve uses of e.g. functions
+    // which are called before they are defined (which is easily possible, due to python's dynamic nature).
+    if (!m_prebuilding) {
+        kDebug() << "building, but running pre-builder first";
+        DeclarationBuilder* prebuilder = new DeclarationBuilder(m_session);
+
+        prebuilder->m_prebuilding = true;
+        updateContext = prebuilder->build(url, node, updateContext);
+
+        kDebug() << "pre-builder finished";
+        delete prebuilder;
+    } else {
+        kDebug() << "prebuilding";
+    }
+
     return DeclarationBuilderBase::build(url, node, updateContext);
 }
 

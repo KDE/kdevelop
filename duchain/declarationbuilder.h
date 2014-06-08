@@ -129,6 +129,9 @@ private:
 
     using DeclarationBuilderBase::setComment;
     void setComment(QmlJS::AST::Node* node);
+
+private:
+    bool m_prebuilding;
 };
 
 #endif // DECLARATIONBUILDER_H

@@ -60,7 +60,6 @@ function testReturnMixedArg(arg)
  */
 var recurse = function() {
     /**
-     * "EXPECT_FAIL": { "type" : "Type recursion is not handled properly, as Declaration::abstractType has no pointer semantics (its indexed directly)" },
      * "type": { "toString" : "function void ()" }
      */
     var bla = recurse;
