@@ -31,7 +31,7 @@ Module {
              name: "LayoutChangeHint"
              values: {
                  /**
-                  * "toString" : "double NoLayoutChangeHint"
+                  * "toString" : " NoLayoutChangeHint"
                   */
                  "NoLayoutChangeHint": 0,
                  "VerticalSortHint": 1,
