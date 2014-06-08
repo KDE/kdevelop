@@ -76,13 +76,17 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& ab
     // "object." must only display the members of object, the declarations
     // available in the current context.
     if (lastChar != QLatin1Char('.')) {
-        items << completionsInContext(
-            m_duContext,
-            false,
-            m_duContext->type() == DUContext::Class && containsOnlySpaces(m_text) ?
-                CompletionItem::Colon :
-                CompletionItem::NoDecoration
-        );
+        bool inQmlObjectScope = (m_duContext->type() == DUContext::Class && containsOnlySpaces(m_text));
+
+        if (inQmlObjectScope) {
+            // The cursor is in a QML object and there is nothing before it. Display
+            // a list of properties and signals that can be used in a script binding.
+            // Note that the properties/signals of parent QML objects are not displayed here
+            items << completionsInContext(m_duContext, true, CompletionItem::Colon);
+        } else {
+            items << completionsInContext(m_duContext, false, CompletionItem::NoDecoration);
+        }
+
         items << globalCompletions();
     }
 

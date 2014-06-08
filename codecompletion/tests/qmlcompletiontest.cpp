@@ -183,7 +183,7 @@ void QmlCompletionTest::testContainsDeclaration_data()
 
     // Basic QML tests
     QTest::newRow("qml_basic_property") << "Item { id: foo\n property int prop\n %INVOKE }" << "%CURSOR" << "prop" << true;
-    QTest::newRow("qml_basic_instance") << "Item { id: foo\n %INVOKE }" << "%CURSOR" << "foo" << true;
+    QTest::newRow("qml_basic_instance") << "Item { id: foo\n onTest: %INVOKE }" << "%CURSOR" << "foo" << true;
 
     // QML inheritance
     QTest::newRow("qml_inheritance") <<
@@ -222,6 +222,10 @@ void QmlCompletionTest::testDoesNotContainDeclaration_data()
     // Don't show unreachable declarations when providing code-completions for object members
     QTest::newRow("js_object_member_not_surrounding") << "var a; var b = {c: 0};%INVOKE" << "b.%CURSOR" << "a" << false;
     QTest::newRow("js_object_member_local") << "var a = {b: 0};%INVOKE" << "%CURSOR" << "b" << false;
+
+    // When providing completions for script bindings, don't propose script bindings
+    // for properties/signals of the surrounding components
+    QTest::newRow("qml_script_binding_not_surrounding") << "Item { property int foo; Item { %INVOKE } }" << "%CURSOR" << "foo" << false;
 }
 
 }
