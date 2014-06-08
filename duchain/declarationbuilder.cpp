@@ -345,9 +345,14 @@ bool DeclarationBuilder::visit(QmlJS::AST::ObjectLiteral* node)
 {
     setComment(m_session->commentForLocation(node->firstSourceLocation()).toUtf8());
 
-    StructureType::Ptr type(new StructureType);
+    // Object literals can appear in the "values" property of enumerations. Their
+    // keys must be declared in the enumeration, not in an anonymous class
+    if (currentContext()->type() == DUContext::Enum) {
+        return DeclarationBuilderBase::visit(node);
+    }
 
     // Open an anonymous class declaration, with its internal context
+    StructureType::Ptr type(new StructureType);
     {
         DUChainWriteLocker lock;
         ClassDeclaration* decl = openDeclaration<ClassDeclaration>(
@@ -383,10 +388,9 @@ bool DeclarationBuilder::visit(QmlJS::AST::PropertyNameAndValue* node)
 
     // The type of the declaration can either be an enumeration value or the type
     // of its expression
-    Declaration* decl = currentDeclaration();
     AbstractType::Ptr type;
 
-    if (decl && decl->abstractType() && decl->abstractType()->whichType() == AbstractType::TypeEnumeration) {
+    if (currentContext()->type() == DUContext::Enum) {
         // This is an enumeration value
         auto value = QmlJS::AST::cast<QmlJS::AST::NumericLiteral*>(node->value);
         EnumeratorType::Ptr enumerator(new EnumeratorType);
@@ -426,8 +430,11 @@ void DeclarationBuilder::endVisit(QmlJS::AST::ObjectLiteral* node)
 {
     DeclarationBuilderBase::endVisit(node);
 
-    closeContext();
-    closeAndAssignType();
+    if (currentContext()->type() != DUContext::Enum) {
+        // Enums are special-cased in visit(ObjectLiteral)
+        closeContext();
+        closeAndAssignType();
+    }
 }
 
 /*
@@ -623,10 +630,11 @@ void DeclarationBuilder::declareComponentSubclass(QmlJS::AST::UiObjectInitialize
         DUChainWriteLocker lock;
         decl->setInternalContext(ctx);
 
-        if (decl->kind() == Declaration::Namespace) {
+        if (contextType == DUContext::Namespace) {
             // If we opened a namespace, ensure that its internal context is of namespace type
-            ctx->setType(DUContext::Namespace);
             ctx->setLocalScopeIdentifier(decl->qualifiedIdentifier());
+        } else if (contextType == DUContext::Enum) {
+            ctx->setPropagateDeclarations(true);
         }
     }
 
