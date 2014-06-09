@@ -5,6 +5,12 @@
 Module {
      Component {
          name: "QModelIndex"
+
+         /**
+          * "toString" : "int childCount",
+          * "useCount" : 1
+          */
+         Property { name: "childCount"; type: "int" }
      }
 
      /**
@@ -20,7 +26,12 @@ Module {
              * "toString" : "class AbstractItemModel"
              */
             "QtQuick/AbstractItemModel 1.0"
-        ]
+         ]
+
+         /**
+          * "toString" : "plugins::QModelIndex rootItem"
+          */
+         Property { name: "rootItem"; type: "QModelIndex" }
 
          /**
           * "type" : { "toString" : "plugins::QAbstractItemModel::LayoutChangeHint" },
@@ -92,5 +103,7 @@ Module {
      AbstractItemModel
      {
          id: bar
+
+         rootItem.childCount: "foo"
      }
 }

@@ -55,8 +55,28 @@ bool UseBuilder::visit(QmlJS::AST::IdentifierExpression* node)
 
 bool UseBuilder::visit(QmlJS::AST::UiQualifiedId* node)
 {
-    newUse(node, node->identifierToken, node->name.toString());
-    return UseBuilderBase::visit(node);
+    ExpressionVisitor visitor(contextOnNode(node));
+
+    node->accept(&visitor);
+
+    // UiQualifiedId is also used for strings like "anchors.parent" (in a script
+    // binding for instance). ExpressionVisitor can be used to get its corresponding
+    // declaration.
+    QmlJS::AST::UiQualifiedId* lastNode = node;
+
+    while (lastNode->next) {
+        lastNode = lastNode->next;
+    }
+
+    if (visitor.lastDeclaration()) {
+        UseBuilderBase::newUse(
+            node,
+            m_session->locationsToRange(node->firstSourceLocation(), lastNode->lastSourceLocation()),
+            visitor.lastDeclaration()
+        );
+    }
+
+    return false;
 }
 
 bool UseBuilder::visit(QmlJS::AST::UiImport* node)

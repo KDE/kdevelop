@@ -146,6 +146,19 @@ bool ExpressionVisitor::visit(QmlJS::AST::IdentifierExpression* node)
     return false;
 }
 
+bool ExpressionVisitor::visit(QmlJS::AST::UiQualifiedId* node)
+{
+    // "anchors.parent" results in an UiQualifiedId id having a "next" attribute.
+    // This node reprensents "anchors", the next one is for "parent"
+    encounter(node->name.toString());
+
+    for (node = node->next; node && lastDeclaration(); node = node->next) {
+        encounterFieldMember(node->name.toString());
+    }
+
+    return false;
+}
+
 /*
  * Functions
  */
@@ -184,7 +197,7 @@ void ExpressionVisitor::encounter(IntegralType::CommonIntegralTypes type)
 void ExpressionVisitor::encounter(const QString& declaration, KDevelop::DUContext* context)
 {
     const QualifiedIdentifier name(declaration);
-    DeclarationPointer dec = QmlJS::getDeclaration(name, context ? context : m_context);
+    DeclarationPointer dec = QmlJS::getDeclarationOrSignal(name, context ? context : m_context);
 
     if (dec && dec->abstractType()) {
         encounterLvalue(dec);
