@@ -50,7 +50,19 @@ Text {
      * "toString" : "void test (int, int)",
      * "useCount" : 1
      */
-    signal test(int a, int b)
+    signal test(
+        /**
+         * "toString" : "int a",
+         * "useCount" : 1
+         */
+        int a,
+
+        /**
+         * "toString" : "int b",
+         * "useCount" : 0
+         */
+        int b
+    )
     signal test2
 
     /**
@@ -91,5 +103,6 @@ Text {
     }
 
     onTest: {
+        a = 3;
     }
 }

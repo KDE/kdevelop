@@ -861,6 +861,22 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiScriptBinding* node)
             m_session->locationsToInnerRange(block->lbraceToken, block->rbraceToken),
             DUContext::Other
         );
+
+        // If this script binding is a slot, import the parameters of its signal
+        DeclarationPointer bindingDecl = QmlJS::getDeclarationOrSignal(
+            QualifiedIdentifier(bindingName),
+            currentContext()
+        );
+
+        if (bindingDecl) {
+            auto signal = bindingDecl.dynamicCast<ClassFunctionDeclaration>();
+
+            if (signal && signal->isSignal() && signal->internalFunctionContext()) {
+                DUChainWriteLocker lock;
+
+                currentContext()->addImportedParentContext(signal->internalFunctionContext());
+            }
+        }
     }
 
     return DeclarationBuilderBase::visit(node);
