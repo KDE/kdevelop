@@ -34,11 +34,15 @@ public:
     virtual QString name() const;
 
     virtual KDevelop::ICodeHighlighting* codeHighlighting() const;
+    virtual KDevelop::BasicRefactoring* refactoring() const;
+
+    virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
     virtual KDevelop::SimpleRange specialLanguageObjectRange(const KUrl& url, const KDevelop::SimpleCursor& position);
     virtual QWidget* specialLanguageObjectNavigationWidget(const KUrl& url, const KDevelop::SimpleCursor& position);
 
 private:
     KDevelop::ICodeHighlighting* m_highlighting;
+    KDevelop::BasicRefactoring* m_refactoring;
 };
 
 #endif // KDEVQMLJSPLUGIN_H

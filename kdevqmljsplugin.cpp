@@ -32,9 +32,15 @@
 #include <KAboutData>
 
 #include <language/codecompletion/codecompletion.h>
+#include <language/assistant/renameassistant.h>
+#include <language/assistant/staticassistantsmanager.h>
+#include <language/codegen/basicrefactoring.h>
 #include <language/duchain/duchain.h>
+#include <language/interfaces/editorcontext.h>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
+#include <interfaces/ilanguagecontroller.h>
+#include <interfaces/contextmenuextension.h>
 
 K_PLUGIN_FACTORY(KDevQmlJsSupportFactory, registerPlugin<KDevQmlJsPlugin>(); )
 K_EXPORT_PLUGIN(KDevQmlJsSupportFactory(
@@ -47,11 +53,15 @@ KDevQmlJsPlugin::KDevQmlJsPlugin(QObject* parent, const QVariantList& )
 : IPlugin( KDevQmlJsSupportFactory::componentData(), parent )
 , ILanguageSupport()
 , m_highlighting(new QmlJsHighlighting(this))
+, m_refactoring(new BasicRefactoring(this))
 {
     KDEV_USE_EXTENSION_INTERFACE(ILanguageSupport)
 
     CodeCompletionModel* codeCompletion = new QmlJS::CodeCompletionModel(this);
     new KDevelop::CodeCompletion(this, codeCompletion, name());
+
+    auto assistantsManager = core()->languageController()->staticAssistantsManager();
+    assistantsManager->registerAssistant(StaticAssistant::Ptr(new RenameAssistant(this)));
 }
 
 ParseJob* KDevQmlJsPlugin::createParseJob(const IndexedString& url)
@@ -67,6 +77,24 @@ QString KDevQmlJsPlugin::name() const
 ICodeHighlighting* KDevQmlJsPlugin::codeHighlighting() const
 {
     return m_highlighting;
+}
+
+BasicRefactoring* KDevQmlJsPlugin::refactoring() const
+{
+    return m_refactoring;
+}
+
+ContextMenuExtension KDevQmlJsPlugin::contextMenuExtension(Context* context)
+{
+    ContextMenuExtension cm;
+    EditorContext *ec = dynamic_cast<KDevelop::EditorContext *>(context);
+
+    if (ec && ICore::self()->languageController()->languagesForUrl(ec->url()).contains(language())) {
+        // It's a QML/JS file, let's add our context menu.
+        m_refactoring->fillContextMenu(cm, context);
+    }
+
+    return cm;
 }
 
 const QColor stringToColor(const QString& text) {
