@@ -1049,7 +1049,7 @@ AbstractType::Ptr DeclarationBuilder::typeFromClassName(const QString& name)
 {
     DeclarationPointer decl = QmlJS::getDeclaration(QualifiedIdentifier(name), currentContext());
 
-    if (decl && decl->kind() == Declaration::Type) {
+    if (decl) {
         return decl->abstractType();
     } else {
         return AbstractType::Ptr(new StructureType);

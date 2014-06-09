@@ -8,7 +8,7 @@ Module {
 
          /**
           * "toString" : "int childCount",
-          * "useCount" : 1
+          * "useCount" : 2
           */
          Property { name: "childCount"; type: "int" }
      }
@@ -94,6 +94,10 @@ Module {
          id: foo
 
          onDataChanged: console.log(topLeft);
+
+         rootItem {
+             childCount: 8
+         }
      }
 
      /**
