@@ -77,14 +77,8 @@ Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             anchors.verticalCenterOffset: 1
             color: config.foreground
-            text: {
-                if ( typeof config.title !== 'undefined' ) {
-                    return "<style type=\"text/css\">" +
-                           "code { font-weight: bold; }\n" +
-                           "</style><html>" + config.title + "</html>";
-                }
-                return ""
-            }
+            font.bold: true
+            text: config.title
         }
         Repeater {
             // Buttons
