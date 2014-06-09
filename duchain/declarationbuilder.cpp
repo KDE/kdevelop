@@ -593,6 +593,7 @@ void DeclarationBuilder::declareComponentSubclass(QmlJS::AST::UiObjectInitialize
                baseclass == QLatin1String("Slot")) {
         // Method (that can also be a signal or a slot)
         declareMethod(node, range, name, baseclass == QLatin1String("Slot"), baseclass == QLatin1String("Signal"));
+        contextType = DUContext::Function;
     } else if (baseclass == QLatin1String("Property")) {
         // A property
         declareProperty(node, range, name);
@@ -603,6 +604,7 @@ void DeclarationBuilder::declareComponentSubclass(QmlJS::AST::UiObjectInitialize
         // Enumeration. The "values" key contains a dictionary of name -> number entries.
         declareEnum(range, name);
         contextType = DUContext::Enum;
+        name = QualifiedIdentifier();   // Enum contexts should have no name so that their members have the correct scope
     } else if (baseclass == QLatin1String("Module")) {
         // QML Module, that declares a namespace
         name = declareModule(range);
@@ -670,6 +672,7 @@ void DeclarationBuilder::declareComponentInstance(QmlJS::AST::ExpressionStatemen
         return;
     }
 
+    injectContext(topContext());
     {
         DUChainWriteLocker lock;
         Declaration* decl = openDeclaration<Declaration>(
@@ -680,9 +683,9 @@ void DeclarationBuilder::declareComponentInstance(QmlJS::AST::ExpressionStatemen
         // Put the declaration in the global scope
         decl->setKind(Declaration::Instance);
         decl->setType(currentAbstractType());
-        decl->setContext(topContext());
     }
     closeDeclaration();
+    closeInjectedContext();
 }
 
 void DeclarationBuilder::declareExports(QmlJS::AST::ExpressionStatement *exports,
@@ -710,6 +713,7 @@ void DeclarationBuilder::declareExports(QmlJS::AST::ExpressionStatement *exports
         QString exportname = stringliteral->value.toString().section(' ', 0, 0).section('/', -1, -1);
         StructureType::Ptr type(new StructureType);
 
+        injectContext(currentContext()->parentContext());   // Don't declare the export in its C++-ish component, but in the scope above
         {
             DUChainWriteLocker lock;
             ClassDeclaration* decl = openDeclaration<ClassDeclaration>(
@@ -720,7 +724,6 @@ void DeclarationBuilder::declareExports(QmlJS::AST::ExpressionStatement *exports
             // The exported version inherits from the C++ component
             decl->setKind(Declaration::Type);
             decl->setClassType(ClassDeclarationData::Class);
-            decl->setContext(currentContext()->parentContext());        // Don't declare the export in its C++-ish component, but in the scope above
             decl->clearBaseClasses();
             type->setDeclaration(decl);
 
@@ -737,6 +740,7 @@ void DeclarationBuilder::declareExports(QmlJS::AST::ExpressionStatement *exports
         }
         openType(type);
         closeAndAssignType();
+        closeInjectedContext();
     }
 }
 
