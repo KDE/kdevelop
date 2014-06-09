@@ -380,6 +380,11 @@ void ClangSignatureAssistant::textChanged(KTextEditor::View* view, const KTextEd
     m_onNextParse = true;
 }
 
+QString ClangSignatureAssistant::title() const
+{
+    return tr("Adapt Signature");
+}
+
 bool ClangSignatureAssistant::isUseful() const
 {
     return !m_oldSig.isEmpty() && !m_oldName.isEmpty();

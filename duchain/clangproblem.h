@@ -83,10 +83,14 @@ class KDEVCLANGDUCHAIN_EXPORT ClangFixitAssistant : public KDevelop::IAssistant
 
 public:
     ClangFixitAssistant(const ClangFixits& fixits);
+    ClangFixitAssistant(const QString& title, const ClangFixits& fixits);
+
+    virtual QString title() const override;
 
     virtual void createActions() override;
 
 private:
+    QString m_title;
     ClangFixits m_fixits;
 };
 

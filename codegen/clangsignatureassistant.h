@@ -72,6 +72,8 @@ public:
     ClangSignatureAssistant(KDevelop::ILanguageSupport* languageSupport);
     virtual ~ClangSignatureAssistant();
 
+    virtual QString title() const override;
+
     virtual bool isUseful() const override;
 
     virtual void textChanged(KTextEditor::View* view, const KTextEditor::Range& invocationRange,

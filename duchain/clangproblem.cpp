@@ -149,8 +149,20 @@ ClangFixits ClangProblem::allFixits() const
 }
 
 ClangFixitAssistant::ClangFixitAssistant(const ClangFixits& fixits)
-    : m_fixits(fixits)
+    : m_title(tr("Fix-it Hints"))
+    , m_fixits(fixits)
 {
+}
+
+ClangFixitAssistant::ClangFixitAssistant(const QString& title, const ClangFixits& fixits)
+    : m_title(title)
+    , m_fixits(fixits)
+{
+}
+
+QString ClangFixitAssistant::title() const
+{
+    return m_title;
 }
 
 void ClangFixitAssistant::createActions()
