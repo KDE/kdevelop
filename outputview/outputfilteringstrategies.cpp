@@ -96,6 +96,8 @@ struct CompilerFilterStrategyPrivate
 namespace {
 // All the possible string that indicate an error if we via Regex have been able to
 // extract file and linenumber from a given outputline
+// TODO: This seems clumsy -- and requires another scan of the line.
+// Merge this information into ErrorFormat? --Kevin
 typedef QPair<QString, FilteredItem::FilteredOutputItemType> Indicator;
 const QVector<Indicator> INDICATORS {
     // ld
