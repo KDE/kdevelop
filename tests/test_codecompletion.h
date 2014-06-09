@@ -18,8 +18,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DUCHAINTEST_H
-#define DUCHAINTEST_H
+#ifndef TESTCODECOMPLETION_H
+#define TESTCODECOMPLETION_H
 
 #include <QObject>
 
@@ -54,4 +54,4 @@ private slots:
     void testImplementVariadic();
 };
 
-#endif // DUCHAINTEST_H
+#endif // TESTCODECOMPLETION_H

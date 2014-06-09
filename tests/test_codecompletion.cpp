@@ -112,7 +112,8 @@ void runImplementsTest(QString fileContents, QString extension, TestList expecte
     }
 }
 
-void TestCodeCompletion::testVirtualOverrideNonTemplate() {
+void TestCodeCompletion::testVirtualOverrideNonTemplate()
+{
     QString file("class Foo { virtual void foo(); virtual char foo(char c, int i, double d); };\n"
                  "class Bar : Foo \n{\n}");
     auto expected = {QString("void foo()"), QString("char foo(char c, int i, double d)")};
@@ -120,14 +121,16 @@ void TestCodeCompletion::testVirtualOverrideNonTemplate() {
     runOverrideTest(file, "h", QList<TestInfo>({info}));
 }
 
-void TestCodeCompletion::testVirtualOverrideTemplate() {
+void TestCodeCompletion::testVirtualOverrideTemplate()
+{
     QString file("template<class T1, class T2> class Foo { virtual T2 foo(T1 a, T2 b, int i); } ;\n"
                  "class Bar : Foo<char, double> \n{\n}");
     auto expected = { QString("double foo(char a, double b, int i)") };
     runOverrideTest(file, "h", QList<TestInfo>({TestInfo{SimpleCursor(3, 1), QStringList(expected)}}));
 }
 
-void TestCodeCompletion::testVirtualOverrideNestedTemplate() {
+void TestCodeCompletion::testVirtualOverrideNestedTemplate()
+{
     QString file("template<class T1, class T2> class Foo { virtual T2 foo(T1 a, T2 b, int i); } ;\n"
                  "template<class T1, class T2> class Baz { };\n"
                  "class Bar : Foo<char, Baz<char, double>> \n{\n}");
@@ -135,7 +138,8 @@ void TestCodeCompletion::testVirtualOverrideNestedTemplate() {
     runOverrideTest(file, "h", QList<TestInfo>({TestInfo{SimpleCursor(4, 1), QStringList(expected)}}));
 }
 
-void TestCodeCompletion::testVirtualOverrideMulti() {
+void TestCodeCompletion::testVirtualOverrideMulti()
+{
     QString file("class Foo { virtual int foo(int i); };\n"
                  "class Baz { virtual char baz(char c); };\n"
                  "class Bar : Foo, Baz \n{\n}");
@@ -143,7 +147,8 @@ void TestCodeCompletion::testVirtualOverrideMulti() {
     runOverrideTest(file, "h", QList<TestInfo>({TestInfo{SimpleCursor(4, 1), QStringList(expected)}}));
 }
 
-void TestCodeCompletion::testVirtualOverrideDeep() {
+void TestCodeCompletion::testVirtualOverrideDeep()
+{
     QString file("class Foo { virtual int foo(int i); };\n"
                  "class Baz : Foo { };\n"
                  "class Bar : Baz \n{\n}");
@@ -151,14 +156,16 @@ void TestCodeCompletion::testVirtualOverrideDeep() {
     runOverrideTest(file, "h", QList<TestInfo>({TestInfo{SimpleCursor(4, 1), QStringList(expected)}}));
 }
 
-void TestCodeCompletion::testVirtualOverridePure() {
+void TestCodeCompletion::testVirtualOverridePure()
+{
     QString file("class Foo { virtual void foo() = 0; foo() {} };\n"
                  "class Bar : Foo \n{\n}");
     auto expected = { QString("void foo() = 0") };
     runOverrideTest(file, "h", QList<TestInfo>({TestInfo{SimpleCursor(3, 1), QStringList(expected)}}));
 }
 
-void TestCodeCompletion::testVirtualOverrideConst() {
+void TestCodeCompletion::testVirtualOverrideConst()
+{
     QString file("class Foo { virtual void foo(const int b) const; }\n;"
                  "class Bar : Foo \n{\n}");
     auto expected = { QString("void foo(const int b) const") };
@@ -301,6 +308,5 @@ void TestCodeCompletion::testImplementConst()
     auto expected = { QString("int Foo::bar() const") };
     runImplementsTest(file, "cpp", QList<TestInfo>({TestInfo{ SimpleCursor(3, 1), QStringList(expected)}}));
 }
-
 
 #include "test_codecompletion.moc"
