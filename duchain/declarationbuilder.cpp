@@ -641,12 +641,18 @@ void DeclarationBuilder::declareComponentSubclass(QmlJS::AST::UiObjectInitialize
 
     DUContext* ctx = currentContext();
     Declaration* decl = currentDeclaration();
+    ClassFunctionDeclaration* classDecl = dynamic_cast<ClassFunctionDeclaration*>(decl);
 
     {
         // Set the inner context of the current declaration, because nested classes
         // need to know the inner context of their parents
         DUChainWriteLocker lock;
-        decl->setInternalContext(ctx);
+
+        if (classDecl) {
+            classDecl->setInternalFunctionContext(ctx);
+        } else {
+            decl->setInternalContext(ctx);
+        }
 
         if (contextType == DUContext::Namespace) {
             // If we opened a namespace, ensure that its internal context is of namespace type
