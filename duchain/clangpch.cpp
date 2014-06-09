@@ -52,8 +52,8 @@ ClangPCH::ClangPCH(const Path& pchInclude, const Path::List& includePaths, const
         return;
     }
 
-    auto imports = tuImports(m_session->unit());
-    m_context = buildDUChain(m_session->file(), imports, m_session.data(), pchFeatures, m_includes);
+    auto imports = ClangHelpers::tuImports(m_session->unit());
+    m_context = ClangHelpers::buildDUChain(m_session->file(), imports, m_session.data(), pchFeatures, m_includes);
 }
 
 IncludeFileContexts ClangPCH::mapIncludes(CXTranslationUnit tu) const

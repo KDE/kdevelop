@@ -30,7 +30,6 @@
 #include "tuduchain.h"
 #include "parsesession.h"
 
-
 using namespace KDevelop;
 
 namespace {
@@ -57,14 +56,14 @@ ReferencedTopDUContext createTopContext(const IndexedString& path)
 
 }
 
-Imports tuImports(CXTranslationUnit tu)
+Imports ClangHelpers::tuImports(CXTranslationUnit tu)
 {
     Imports imports;
     clang_getInclusions(tu, &::visitInclusions, &imports);
     return imports;
 }
 
-ReferencedTopDUContext buildDUChain(CXFile file, const Imports& imports, const ParseSession* session,
+ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& imports, const ParseSession* session,
                                     TopDUContext::Features features, IncludeFileContexts& includedFiles)
 {
     if (includedFiles.contains(file)) {
@@ -122,7 +121,7 @@ ReferencedTopDUContext buildDUChain(CXFile file, const Imports& imports, const P
     return context;
 }
 
-DeclarationPointer findDeclaration(CXCursor cursor, const IncludeFileContexts& includes)
+DeclarationPointer ClangHelpers::findDeclaration(CXCursor cursor, const IncludeFileContexts& includes)
 {
     auto refLoc = clang_getCursorLocation(cursor);
     CXFile file = nullptr;
@@ -149,19 +148,19 @@ DeclarationPointer findDeclaration(CXCursor cursor, const IncludeFileContexts& i
     return {};
 }
 
-DeclarationPointer findDeclaration(CXType type, const IncludeFileContexts& includes)
+DeclarationPointer ClangHelpers::findDeclaration(CXType type, const IncludeFileContexts& includes)
 {
     CXCursor cursor = clang_getTypeDeclaration(type);
     return findDeclaration(cursor, includes);
 }
 
-QStringList headerExtensions()
+QStringList ClangHelpers::headerExtensions()
 {
     static const QStringList headerExtensions = QString("h,H,hh,hxx,hpp,tlh,h++").split(',');
     return headerExtensions;
 }
 
-QStringList sourceExtensions()
+QStringList ClangHelpers::sourceExtensions()
 {
     static const QStringList sourceExtensions = QString("c,cc,cpp,c++,cxx,C,m,mm,M,inl,_impl.h").split(',');
     return sourceExtensions;

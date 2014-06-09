@@ -43,7 +43,7 @@ const int maxSuggestions = 5;
 
 bool isSource(const QString& path)
 {
-    foreach(const QString& ext, sourceExtensions()) {
+    foreach(const QString& ext, ClangHelpers::sourceExtensions()) {
         if (path.endsWith(ext)) {
             return true;
         }

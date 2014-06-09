@@ -182,7 +182,7 @@ void ClangParseJob::run()
         return;
     }
 
-    Imports imports = tuImports(m_session->unit());
+    Imports imports = ClangHelpers::tuImports(m_session->unit());
 
     IncludeFileContexts includedFiles;
     if (pch) {
@@ -196,7 +196,7 @@ void ClangParseJob::run()
         return;
     }
 
-    auto context = buildDUChain(m_session->file(), imports, m_session.data(), minimumFeatures(), includedFiles);
+    auto context = ClangHelpers::buildDUChain(m_session->file(), imports, m_session.data(), minimumFeatures(), includedFiles);
     setDuChain(context);
 
     if (abortRequested()) {

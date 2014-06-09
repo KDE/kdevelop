@@ -39,6 +39,8 @@ struct Import
 using Imports = QMultiHash<CXFile, Import>;
 using IncludeFileContexts = QHash<CXFile, KDevelop::ReferencedTopDUContext>;
 
+namespace ClangHelpers {
+
 KDevelop::DeclarationPointer findDeclaration(CXCursor cursor, const IncludeFileContexts& includes);
 KDevelop::DeclarationPointer findDeclaration(CXType type, const IncludeFileContexts& includes);
 
@@ -66,5 +68,7 @@ QStringList headerExtensions();
  * @return List of possible source extensions used for definition/declaration fallback switching
  */
 QStringList sourceExtensions();
+
+}
 
 #endif //CLANGHELPERS_H

@@ -229,7 +229,7 @@ private:
         if (CK == CXCursor_CXXMethod) {
             CXCursor semParent = clang_getCursorSemanticParent(cursor);
             if (!clang_Cursor_isNull(semParent)) {
-                DeclarationPointer semParentDecl = findDeclaration(semParent, m_includes);
+                DeclarationPointer semParentDecl = ClangHelpers::findDeclaration(semParent, m_includes);
                 if (semParentDecl) {
                     contextImportDecl(context, semParentDecl);
                 }
@@ -439,7 +439,7 @@ void setDeclInCtxtData(CXCursor cursor, FunctionDefinition *def)
     if (clang_equalCursors(canon, cursor)) {
         def->setDeclarationIsDefinition(true);
     }
-    else if (auto decl = findDeclaration(canon, m_includes)) {
+    else if (auto decl = ClangHelpers::findDeclaration(canon, m_includes)) {
         def->setDeclaration(decl.data());
     }
 }
