@@ -857,31 +857,34 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiScriptBinding* node)
         }
     }
 
-    // If a Javascript block is used as expression, open a context for it, so
-    // that variables declared in one block don't become visible to the other blocks
-    auto block = QmlJS::AST::cast<QmlJS::AST::Block*>(node->statement);
+    // Use ExpressionVisitor to find the signal/property bound
+    DeclarationPointer bindingDecl = findType(node->qualifiedId).declaration;
+    DUChainPointer<ClassFunctionDeclaration> signal;
 
-    if (block) {
+    // If a Javascript block is used as expression or if the script binding is a
+    // slot, open a subcontext so that variables declared in the binding are kept
+    // local, and the signal parameters can be visible to the slot
+    if ((
+            bindingDecl &&
+            (signal = bindingDecl.dynamicCast<ClassFunctionDeclaration>()) &&
+            signal->isSignal()
+        ) ||
+        node->statement->kind == QmlJS::AST::Node::Kind_Block) {
+
         openContext(
-            block,
-            m_session->locationsToInnerRange(block->lbraceToken, block->rbraceToken),
+            node->statement,
+            m_session->locationsToInnerRange(
+                node->statement->firstSourceLocation(),
+                node->statement->lastSourceLocation()
+            ),
             DUContext::Other
         );
 
         // If this script binding is a slot, import the parameters of its signal
-        DeclarationPointer bindingDecl = QmlJS::getDeclarationOrSignal(
-            QualifiedIdentifier(bindingName),
-            currentContext()
-        );
+        if (signal && signal->isSignal() && signal->internalFunctionContext()) {
+            DUChainWriteLocker lock;
 
-        if (bindingDecl) {
-            auto signal = bindingDecl.dynamicCast<ClassFunctionDeclaration>();
-
-            if (signal && signal->isSignal() && signal->internalFunctionContext()) {
-                DUChainWriteLocker lock;
-
-                currentContext()->addImportedParentContext(signal->internalFunctionContext());
-            }
+            currentContext()->addImportedParentContext(signal->internalFunctionContext());
         }
     }
 
@@ -892,10 +895,8 @@ void DeclarationBuilder::endVisit(QmlJS::AST::UiScriptBinding* node)
 {
     QmlJS::AST::Visitor::endVisit(node);
 
-    // If the script binding opened a code block, close it
-    auto block = QmlJS::AST::cast<QmlJS::AST::Block*>(node->statement);
-
-    if (block) {
+    // If visit(UiScriptBinding) has opened a context, close it
+    if (currentContext()->type() == DUContext::Other) {
         closeContext();
     }
 }

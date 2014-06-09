@@ -51,13 +51,14 @@ Module {
          }
          /**
           * "toString" : "void dataChanged (plugins::QModelIndex, plugins::QModelIndex, int)",
-          * "useCount" : 1
+          * "useCount" : 2
           */
          Signal {
              name: "dataChanged"
 
              /**
-              * "toString" : "plugins::QModelIndex topLeft"
+              * "toString" : "plugins::QModelIndex topLeft",
+              * "useCount" : 1
               */
              Parameter /* */ { name: "topLeft"; type: "QModelIndex" }
 
@@ -92,9 +93,7 @@ Module {
           */
          id: foo
 
-         onDataChanged: {
-             return;
-         }
+         onDataChanged: console.log(topLeft);
      }
 
      /**
@@ -105,5 +104,9 @@ Module {
          id: bar
 
          rootItem.childCount: "foo"
+
+         AbstractItemModel.onDataChanged: {
+             return;
+         }
      }
 }
