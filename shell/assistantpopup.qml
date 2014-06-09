@@ -34,7 +34,12 @@ Rectangle {
     width: flow.width + 16
     height: flow.height + 7
 
-    color: config.background
+    border.width: 1
+    border.color: Qt.lighter(config.foreground)
+    gradient: Gradient {
+        GradientStop { position: 0.0; color: Qt.lighter(config.background) }
+        GradientStop { position: 1.0; color: config.background }
+    }
 
     Connections {
         id: configConnections
