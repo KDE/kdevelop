@@ -136,6 +136,9 @@ const QVector<ErrorFormat> ERROR_FILTERS {
     // example: AUTOGEN: error: /foo/bar.cpp: The file includes (...)
     // note: AUTOMOC got renamed to AUTOGEN at some point
     ErrorFormat( "^(AUTOMOC|AUTOGEN): error: ([^:]+):? (The file .*)$", 2, 0, 0 ),
+    // via qt4_automoc
+    // example: automoc4: The file "/foo/bar.cpp" includes the moc file "bar1.moc", but ...
+    ErrorFormat( "^automoc4: The file \"([^\"]+)\" includes the moc file", 1, 0, 0 ),
     // Fortran
     ErrorFormat( "\"(.*)\", line ([0-9]+):(.*)", 1, 2, 3 ),
     // GFortran
