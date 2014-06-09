@@ -49,7 +49,7 @@ ReferencedTopDUContext DeclarationBuilder::build(const IndexedString& url,
     Q_ASSERT(m_session->url() == url);
 
     // The declaration builder needs to run twice, so it can resolve uses of e.g. functions
-    // which are called before they are defined (which is easily possible, due to python's dynamic nature).
+    // which are called before they are defined (which is easily possible, due to JS's dynamic nature).
     if (!m_prebuilding) {
         kDebug() << "building, but running pre-builder first";
         DeclarationBuilder* prebuilder = new DeclarationBuilder(m_session);

@@ -74,7 +74,7 @@ void TestFiles::testFiles()
   ReferencedTopDUContext top =
       DUChain::self()->waitForUpdate(indexedFileName, KDevelop::TopDUContext::AllDeclarationsContextsAndUses);
 
-  while (ICore::self()->languageController()->backgroundParser()->queuedCount() != 0) {
+  while (!ICore::self()->languageController()->backgroundParser()->isIdle()) {
       QTest::qWait(500);
   }
 
