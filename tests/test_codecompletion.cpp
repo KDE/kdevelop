@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "codecompletiontest.h"
+#include "test_codecompletion.h"
 
 #include <qtest_kde.h>
 
@@ -31,18 +31,18 @@
 #include <language/codecompletion/codecompletiontesthelper.h>
 #include <codecompletion/completionhelper.h>
 
-QTEST_KDEMAIN(CodeCompletionTest, NoGUI);
+QTEST_KDEMAIN(TestCodeCompletion, NoGUI);
 
 using namespace KDevelop;
 
-void CodeCompletionTest::initTestCase()
+void TestCodeCompletion::initTestCase()
 {
     QVERIFY(qputenv("KDEV_DISABLE_PLUGINS", "kdevcppsupport"));
     AutoTestShell::init();
     TestCore::initialize(Core::NoUi);
 }
 
-void CodeCompletionTest::cleanupTestCase()
+void TestCodeCompletion::cleanupTestCase()
 {
     TestCore::shutdown();
 }
@@ -112,7 +112,7 @@ void runImplementsTest(QString fileContents, QString extension, TestList expecte
     }
 }
 
-void CodeCompletionTest::testVirtualOverrideNonTemplate() {
+void TestCodeCompletion::testVirtualOverrideNonTemplate() {
     QString file("class Foo { virtual void foo(); virtual char foo(char c, int i, double d); };\n"
                  "class Bar : Foo \n{\n}");
     auto expected = {QString("void foo()"), QString("char foo(char c, int i, double d)")};
@@ -120,14 +120,14 @@ void CodeCompletionTest::testVirtualOverrideNonTemplate() {
     runOverrideTest(file, "h", QList<TestInfo>({info}));
 }
 
-void CodeCompletionTest::testVirtualOverrideTemplate() {
+void TestCodeCompletion::testVirtualOverrideTemplate() {
     QString file("template<class T1, class T2> class Foo { virtual T2 foo(T1 a, T2 b, int i); } ;\n"
                  "class Bar : Foo<char, double> \n{\n}");
     auto expected = { QString("double foo(char a, double b, int i)") };
     runOverrideTest(file, "h", QList<TestInfo>({TestInfo{SimpleCursor(3, 1), QStringList(expected)}}));
 }
 
-void CodeCompletionTest::testVirtualOverrideNestedTemplate() {
+void TestCodeCompletion::testVirtualOverrideNestedTemplate() {
     QString file("template<class T1, class T2> class Foo { virtual T2 foo(T1 a, T2 b, int i); } ;\n"
                  "template<class T1, class T2> class Baz { };\n"
                  "class Bar : Foo<char, Baz<char, double>> \n{\n}");
@@ -135,7 +135,7 @@ void CodeCompletionTest::testVirtualOverrideNestedTemplate() {
     runOverrideTest(file, "h", QList<TestInfo>({TestInfo{SimpleCursor(4, 1), QStringList(expected)}}));
 }
 
-void CodeCompletionTest::testVirtualOverrideMulti() {
+void TestCodeCompletion::testVirtualOverrideMulti() {
     QString file("class Foo { virtual int foo(int i); };\n"
                  "class Baz { virtual char baz(char c); };\n"
                  "class Bar : Foo, Baz \n{\n}");
@@ -143,7 +143,7 @@ void CodeCompletionTest::testVirtualOverrideMulti() {
     runOverrideTest(file, "h", QList<TestInfo>({TestInfo{SimpleCursor(4, 1), QStringList(expected)}}));
 }
 
-void CodeCompletionTest::testVirtualOverrideDeep() {
+void TestCodeCompletion::testVirtualOverrideDeep() {
     QString file("class Foo { virtual int foo(int i); };\n"
                  "class Baz : Foo { };\n"
                  "class Bar : Baz \n{\n}");
@@ -151,21 +151,21 @@ void CodeCompletionTest::testVirtualOverrideDeep() {
     runOverrideTest(file, "h", QList<TestInfo>({TestInfo{SimpleCursor(4, 1), QStringList(expected)}}));
 }
 
-void CodeCompletionTest::testVirtualOverridePure() {
+void TestCodeCompletion::testVirtualOverridePure() {
     QString file("class Foo { virtual void foo() = 0; foo() {} };\n"
                  "class Bar : Foo \n{\n}");
     auto expected = { QString("void foo() = 0") };
     runOverrideTest(file, "h", QList<TestInfo>({TestInfo{SimpleCursor(3, 1), QStringList(expected)}}));
 }
 
-void CodeCompletionTest::testVirtualOverrideConst() {
+void TestCodeCompletion::testVirtualOverrideConst() {
     QString file("class Foo { virtual void foo(const int b) const; }\n;"
                  "class Bar : Foo \n{\n}");
     auto expected = { QString("void foo(const int b) const") };
     runOverrideTest(file, "h", QList<TestInfo>({TestInfo{SimpleCursor(3, 1), QStringList(expected)}}));
 }
 
-void CodeCompletionTest::testImplementBasic()
+void TestCodeCompletion::testImplementBasic()
 {
     QString file("int foo(char c, int i); \n"
                  "\n");
@@ -173,7 +173,7 @@ void CodeCompletionTest::testImplementBasic()
     runImplementsTest(file, "cpp", QList<TestInfo>({TestInfo{SimpleCursor(1, 0), QStringList(expected)}}));
 }
 
-void CodeCompletionTest::testImplementClass()
+void TestCodeCompletion::testImplementClass()
 {
     QString file("class Foo { \n"
                  "int bar(char c, int i); \n\n"
@@ -183,7 +183,7 @@ void CodeCompletionTest::testImplementClass()
                                                     TestInfo{SimpleCursor(4, 0), QStringList(expected)}}));
 }
 
-void CodeCompletionTest::testImplementNamespace()
+void TestCodeCompletion::testImplementNamespace()
 {
     QString file("namespace Foo { \n"
                  "int bar(char c, int i); \n\n"
@@ -194,7 +194,7 @@ void CodeCompletionTest::testImplementNamespace()
                                                     TestInfo{SimpleCursor(4, 0), QStringList(expected2)}}));
 }
 
-void CodeCompletionTest::testImplementTwoNamespace()
+void TestCodeCompletion::testImplementTwoNamespace()
 {
     QString file("namespace Foo { \n"
                  "int bar(char c, int i); \n"
@@ -205,7 +205,7 @@ void CodeCompletionTest::testImplementTwoNamespace()
     runImplementsTest(file, "cpp", QList<TestInfo>({TestInfo{SimpleCursor(4, 0), QStringList(expected)}}));
 }
 
-void CodeCompletionTest::testImplementDestructor()
+void TestCodeCompletion::testImplementDestructor()
 {
     QString file("class Foo { \n"
                  "~Foo(); \n"
@@ -214,7 +214,7 @@ void CodeCompletionTest::testImplementDestructor()
     runImplementsTest(file, "cpp", QList<TestInfo>({TestInfo{SimpleCursor(3, 1), QStringList(expected)}}));
 }
 
-void CodeCompletionTest::testImplementConstructor()
+void TestCodeCompletion::testImplementConstructor()
 {
     QString file("class Foo { \n"
                  "Foo(int i); \n"
@@ -223,7 +223,7 @@ void CodeCompletionTest::testImplementConstructor()
     runImplementsTest(file, "cpp", QList<TestInfo>({TestInfo{ SimpleCursor(3, 1), QStringList(expected)}}));
 }
 
-void CodeCompletionTest::testImplementTemplate()
+void TestCodeCompletion::testImplementTemplate()
 {
     QString file("template<typename T> class Foo { \n"
                  "T bar(T t); \n"
@@ -232,7 +232,7 @@ void CodeCompletionTest::testImplementTemplate()
     runImplementsTest(file, "cpp", QList<TestInfo>({TestInfo{ SimpleCursor(3, 1), QStringList(expected)}}));
 }
 
-void CodeCompletionTest::testImplementSpecializedTemplate()
+void TestCodeCompletion::testImplementSpecializedTemplate()
 {
     QString file("template<typename T> class Foo { \n"
                  "T bar(T t); \n"
@@ -245,7 +245,7 @@ void CodeCompletionTest::testImplementSpecializedTemplate()
     runImplementsTest(file, "cpp", QList<TestInfo>({TestInfo{ SimpleCursor(6, 1), QStringList(expected)}}));
 }
 
-void CodeCompletionTest::testImplementNestedClass()
+void TestCodeCompletion::testImplementNestedClass()
 {
     QString file("class Foo { \n"
                  "class Bar { \n"
@@ -258,7 +258,7 @@ void CodeCompletionTest::testImplementNestedClass()
                                                     TestInfo{SimpleCursor(7, 1), QStringList(expected)}}));
 }
 
-void CodeCompletionTest::testImplementNestedNamespace()
+void TestCodeCompletion::testImplementNestedNamespace()
 {
     QString file("namespace Foo { \n"
                  "namespace Bar { \n"
@@ -273,7 +273,7 @@ void CodeCompletionTest::testImplementNestedNamespace()
                                                     TestInfo{SimpleCursor(7, 1), QStringList(expected3)}}));
 }
 
-void CodeCompletionTest::testImplementPartialTemplate()
+void TestCodeCompletion::testImplementPartialTemplate()
 {
     QString file("template<typename T> class Foo { \n"
                  "template<typename U> class Bar; \n"
@@ -285,7 +285,7 @@ void CodeCompletionTest::testImplementPartialTemplate()
     runImplementsTest(file, "cpp", QList<TestInfo>({TestInfo{ SimpleCursor(6, 1), QStringList(expected)}}));
 }
 
-void CodeCompletionTest::testImplementVariadic()
+void TestCodeCompletion::testImplementVariadic()
 {
     QString file("int foo(...); \n"
                  "int bar(int i, ...); \n");
@@ -293,7 +293,7 @@ void CodeCompletionTest::testImplementVariadic()
     runImplementsTest(file, "cpp", QList<TestInfo>({TestInfo{ SimpleCursor(2, 1), QStringList(expected)}}));
 }
 
-void CodeCompletionTest::testImplementConst()
+void TestCodeCompletion::testImplementConst()
 {
     QString file("class Foo { \n"
                  "int bar() const; \n"
@@ -303,4 +303,4 @@ void CodeCompletionTest::testImplementConst()
 }
 
 
-#include "codecompletiontest.moc"
+#include "test_codecompletion.moc"

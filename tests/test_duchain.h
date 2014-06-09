@@ -1,5 +1,5 @@
 /*
- * Copyright 2014  David Stevens <dgedstevens@gmail.com>
+ * Copyright 2014  Milian Wolff <mail@milianw.de>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -23,7 +23,7 @@
 
 #include <QObject>
 
-class CodeCompletionTest : public QObject
+class TestDUChain : public QObject
 {
     Q_OBJECT
 
@@ -31,27 +31,19 @@ private slots:
     void initTestCase();
     void cleanupTestCase();
 
-    void testVirtualOverrideNonTemplate();
-    void testVirtualOverrideTemplate();
-    void testVirtualOverrideNestedTemplate();
-    void testVirtualOverrideMulti();
-    void testVirtualOverrideDeep();
-    void testVirtualOverridePure();
-    void testVirtualOverrideConst();
-
-    void testImplementConstructor();
-    void testImplementDestructor();
-    void testImplementTemplate();
-    void testImplementSpecializedTemplate();
-    void testImplementPartialTemplate();
-    void testImplementNamespace();
-    void testImplementTwoNamespace();
-    void testImplementBasic();
-    void testImplementClass();
-    void testImplementNestedClass();
-    void testImplementNestedNamespace();
-    void testImplementConst();
-    void testImplementVariadic();
+    void testInclude();
+    void testIncludeLocking();
+    void testReparse();
+    void testReparseError();
+    void testTemplate();
+    void testNamespace();
+    void testAutoTypeDeduction();
+    void testTypeDeductionInTemplateInstantiation();
+    void testVirtualMemberFunction();
+    void testBaseClasses();
+    void testReparseBaseClasses();
+    void testReparseBaseClassesTemplates();
+    void testGlobalFunctionDeclaration();
 };
 
 #endif // DUCHAINTEST_H

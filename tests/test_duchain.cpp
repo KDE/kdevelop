@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "duchaintest.h"
+#include "test_duchain.h"
 
 #include <qtest_kde.h>
 
@@ -38,23 +38,23 @@
 #include <language/backgroundparser/backgroundparser.h>
 #include <interfaces/ilanguagecontroller.h>
 
-QTEST_KDEMAIN(DUChainTest, NoGUI);
+QTEST_KDEMAIN(TestDUChain, NoGUI);
 
 using namespace KDevelop;
 
-void DUChainTest::initTestCase()
+void TestDUChain::initTestCase()
 {
     QVERIFY(qputenv("KDEV_DISABLE_PLUGINS", "kdevcppsupport"));
     AutoTestShell::init();
     TestCore::initialize(Core::NoUi);
 }
 
-void DUChainTest::cleanupTestCase()
+void TestDUChain::cleanupTestCase()
 {
     TestCore::shutdown();
 }
 
-void DUChainTest::testInclude()
+void TestDUChain::testInclude()
 {
     TestFile header("int foo() { return 42; }\n", "h");
     // NOTE: header is _not_ explictly being parsed, instead the impl job does that
@@ -95,7 +95,7 @@ QByteArray createCode(const QByteArray& prefix, const int functions)
     return code;
 }
 
-void DUChainTest::testIncludeLocking()
+void TestDUChain::testIncludeLocking()
 {
     TestFile header1(createCode("Header1", 1000), "h");
     TestFile header2(createCode("Header2", 1000), "h");
@@ -132,7 +132,7 @@ void DUChainTest::testIncludeLocking()
     QVERIFY(DUChain::self()->chainForDocument(header3.url()));
 }
 
-void DUChainTest::testReparse()
+void TestDUChain::testReparse()
 {
     TestFile file("int main() { int i = 42; return i; }", "cpp");
     file.parse(TopDUContext::AllDeclarationsContextsAndUses);
@@ -170,7 +170,7 @@ void DUChainTest::testReparse()
     }
 }
 
-void DUChainTest::testReparseError()
+void TestDUChain::testReparseError()
 {
     TestFile file("int i = 1 / 0;\n", "cpp");
     file.parse(TopDUContext::AllDeclarationsContextsAndUses);
@@ -190,7 +190,7 @@ void DUChainTest::testReparseError()
     }
 }
 
-void DUChainTest::testTemplate()
+void TestDUChain::testTemplate()
 {
     TestFile file("template<typename T> struct foo { T bar; };\n"
                   "int main() { foo<int> myFoo; return myFoo.bar; }\n", "cpp");
@@ -207,7 +207,7 @@ void DUChainTest::testTemplate()
     QCOMPARE(file.topContext()->findDeclarations(QualifiedIdentifier("foo::bar")).size(), 1);
 }
 
-void DUChainTest::testNamespace()
+void TestDUChain::testNamespace()
 {
     TestFile file("namespace foo { struct bar { int baz; }; }\n"
                   "int main() { foo::bar myBar; }\n", "cpp");
@@ -248,7 +248,7 @@ void DUChainTest::testNamespace()
     }
 }
 
-void DUChainTest::testAutoTypeDeduction()
+void TestDUChain::testAutoTypeDeduction()
 {
     TestFile file("auto foo = 5;\n", "cpp");
     QVERIFY(file.parseAndWait());
@@ -265,7 +265,7 @@ void DUChainTest::testAutoTypeDeduction()
     QVERIFY(decl->type<IntegralType>());
 }
 
-void DUChainTest::testTypeDeductionInTemplateInstantiation()
+void TestDUChain::testTypeDeductionInTemplateInstantiation()
 {
     // see: http://clang-developers.42468.n3.nabble.com/RFC-missing-libclang-query-functions-features-td2504253.html
     TestFile file("template<typename T> struct foo { T member; } foo<int> f; auto i = f.member;", "cpp");
@@ -301,7 +301,7 @@ void DUChainTest::testTypeDeductionInTemplateInstantiation()
     QVERIFY(decl->type<IntegralType>());
 }
 
-void DUChainTest::testVirtualMemberFunction()
+void TestDUChain::testVirtualMemberFunction()
 {
     //Forward-declarations with "struct" or "class" are considered equal, so make sure the override is detected correctly.
     TestFile file("struct S {}; struct A { virtual S* ret(); }; struct B : public A { virtual S* ret(); };", "cpp");
@@ -319,7 +319,7 @@ void DUChainTest::testVirtualMemberFunction()
     QVERIFY(DUChainUtils::getOverridden(decl));
 }
 
-void DUChainTest::testBaseClasses()
+void TestDUChain::testBaseClasses()
 {
     TestFile file("class Base {}; class Inherited : public Base {};", "cpp");
     QVERIFY(file.parseAndWait());
@@ -339,7 +339,7 @@ void DUChainTest::testBaseClasses()
     QCOMPARE(inheritedDecl->baseClassesSize(), 1u);
 }
 
-void DUChainTest::testReparseBaseClasses()
+void TestDUChain::testReparseBaseClasses()
 {
     TestFile file("struct a{}; struct b : a {};\n", "cpp");
     file.parse(TopDUContext::AllDeclarationsContextsAndUses);
@@ -368,7 +368,7 @@ void DUChainTest::testReparseBaseClasses()
     }
 }
 
-void DUChainTest::testReparseBaseClassesTemplates()
+void TestDUChain::testReparseBaseClassesTemplates()
 {
     TestFile file("template<typename T> struct a{}; struct b : a<int> {};\n", "cpp");
     file.parse(TopDUContext::AllDeclarationsContextsAndUses);
@@ -397,7 +397,7 @@ void DUChainTest::testReparseBaseClassesTemplates()
     }
 }
 
-void DUChainTest::testGlobalFunctionDeclaration()
+void TestDUChain::testGlobalFunctionDeclaration()
 {
     TestFile file("void foo(int arg1, char arg2);\n", "cpp");
     file.parse(TopDUContext::AllDeclarationsContextsAndUses);
@@ -410,4 +410,4 @@ void DUChainTest::testGlobalFunctionDeclaration()
     QVERIFY(!file.topContext()->childContexts().first()->inSymbolTable());
 }
 
-#include "duchaintest.moc"
+#include "test_duchain.moc"
