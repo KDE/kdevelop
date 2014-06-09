@@ -45,6 +45,8 @@ struct KDEVCLANGDUCHAIN_EXPORT ClangFixit
     }
 };
 
+QDebug KDEVCLANGDUCHAIN_EXPORT operator<<(QDebug debug, const ClangFixit& fixit);
+
 using ClangFixits = QVector<ClangFixit>;
 
 class KDEVCLANGDUCHAIN_EXPORT ClangProblem : public KDevelop::Problem
@@ -88,6 +90,8 @@ public:
     virtual QString title() const override;
 
     virtual void createActions() override;
+
+    ClangFixits fixits() const;
 
 private:
     QString m_title;

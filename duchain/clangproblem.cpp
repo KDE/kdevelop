@@ -79,6 +79,16 @@ ClangFixits fixitsForDiagnostic(CXDiagnostic diagnostic)
 
 }
 
+QDebug operator<<(QDebug debug, const ClangFixit& fixit)
+{
+    debug.nospace() << "ClangFixit["
+        << "replacementText=" << fixit.replacementText
+        << ", range=" << fixit.range
+        << ", description=" << fixit.description
+        << "]";
+    return debug;
+}
+
 ClangProblem::ClangProblem(CXDiagnostic diagnostic)
 {
     auto severity = diagnosticSeverityToSeverity(clang_getDiagnosticSeverity(diagnostic));
@@ -172,6 +182,11 @@ void ClangFixitAssistant::createActions()
     for (const ClangFixit& fixit : m_fixits) {
         addAction(IAssistantAction::Ptr(new ClangFixitAction(fixit)));
     }
+}
+
+ClangFixits ClangFixitAssistant::fixits() const
+{
+    return m_fixits;
 }
 
 ClangFixitAction::ClangFixitAction(const ClangFixit& fixit)
