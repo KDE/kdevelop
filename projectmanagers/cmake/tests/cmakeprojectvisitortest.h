@@ -46,7 +46,7 @@ private slots:
 
     void testRun();
     void testRun_data();
-    
+
     void testFinder_init();
     void testFinder();
     void testFinder_data();
@@ -58,6 +58,10 @@ private slots:
 
     void testTargetProperties();
     void testTargetProperties_data();
+
+    // function scope variables not being unset at exit
+    void testBug335803_data();
+    void testBug335803();
 private:
     QStringList modulePath;    
     QStringList buildstrap;
