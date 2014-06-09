@@ -46,7 +46,7 @@ private slots:
     void testSmallKDE4Project();
     void testSmallProjectWithTests();
     void testKDE4ProjectWithTests();
-    
+    void testBug335803();
 private:
     CMakeProjectData parseProject( const QString& sourcedir );
 };

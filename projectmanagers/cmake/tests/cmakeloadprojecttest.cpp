@@ -64,6 +64,26 @@ void CMakeLoadProjectTest::testTinyCMakeProject()
     QCOMPARE(v.vm.value("CMAKE_INCLUDE_CURRENT_DIR"), QStringList("OFF"));
 }
 
+void CMakeLoadProjectTest::testBug335803()
+{
+    CMakeProjectData v = parseProject(CMAKE_TESTS_PROJECTS_DIR "/bug335803");
+    QCOMPARE(v.projectName, QString("bug335803"));
+    QStringList names;
+    foreach(const Target& t, v.targets) {
+        names << t.name;
+    }
+    QCOMPARE(v.targets.count(), 8);
+    names.sort();
+    QCOMPARE(names[0], QLatin1String("echo-a"));
+    QCOMPARE(names[1], QLatin1String("echo-b"));
+    QCOMPARE(names[2], QLatin1String("echo-custom_name"));
+    QCOMPARE(names[3], QLatin1String("echo-d"));
+    QCOMPARE(names[4], QLatin1String("echo2-a"));
+    QCOMPARE(names[5], QLatin1String("echo2-b"));
+    QCOMPARE(names[6], QLatin1String("echo2-custom_name"));
+    QCOMPARE(names[7], QLatin1String("echo2-d")); // This one was missing before bug #335803 got fixed
+}
+
 void CMakeLoadProjectTest::testSmallQt4Project()
 {
     CMakeProjectData v = parseProject(CMAKE_TESTS_PROJECTS_DIR "/qt4app");
