@@ -38,6 +38,8 @@ private slots:
     void testFixits();
     void testFixits_data();
 
+    void testMissingInclude();
+
 private:
     QList<KDevelop::ProblemPointer> parse(const QByteArray& code);
 };

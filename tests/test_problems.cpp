@@ -21,13 +21,18 @@
 #include "../duchain/clangproblem.h"
 #include "../duchain/clangtypes.h"
 #include "../duchain/parsesession.h"
+#include "../duchain/unknowndeclarationproblem.h"
 
 #include <language/duchain/duchain.h>
+#include <language/duchain/duchainutils.h>
+#include <language/duchain/duchainlock.h>
 #include <language/codegen/coderepresentation.h>
 #include <language/backgroundparser/backgroundparser.h>
 
-#include <tests/testcore.h>
 #include <tests/autotestshell.h>
+#include <tests/testcore.h>
+#include <tests/testfile.h>
+#include <tests/testproject.h>
 #include <interfaces/ilanguagecontroller.h>
 
 #include <qtest_kde.h>
@@ -195,6 +200,42 @@ void TestProblems::testFixits_data()
            "int main() { C c; c.someVariablf = 1; }\n"
         << 1
         << QVector<ClangFixit>{ ClangFixit{"someVariable", DocumentRange(IndexedString(FileName), SimpleRange(1, 20, 1, 32)), QString()} };
+}
+
+void TestProblems::testMissingInclude()
+{
+    TestFile include("class A {};\n", "h");
+    include.parse(TopDUContext::AllDeclarationsAndContexts);
+
+    TestFile workingFile("int main() { A a; }", "cpp");
+    workingFile.parse(TopDUContext::AllDeclarationsAndContexts);
+
+    QCOMPARE(include.url().toUrl().upUrl(), workingFile.url().toUrl().upUrl());
+    QVERIFY(include.waitForParsed());
+    QVERIFY(workingFile.waitForParsed());
+
+    DUChainReadLocker lock;
+
+    QVERIFY(include.topContext());
+    TopDUContext* includeTop = DUChainUtils::contentContextFromProxyContext(include.topContext().data());
+    QVERIFY(includeTop);
+    QVERIFY(includeTop->problems().isEmpty());
+
+    QVERIFY(workingFile.topContext());
+    TopDUContext* top = DUChainUtils::contentContextFromProxyContext(workingFile.topContext());
+    QVERIFY(top);
+    QCOMPARE(top->problems().size(), 1);
+
+    auto problem = dynamic_cast<UnknownDeclarationProblem*>(top->problems().first().data());
+    auto assistant = problem->solutionAssistant();
+    auto clangFixitAssistant = qobject_cast<ClangFixitAssistant*>(assistant.data());
+    QVERIFY(clangFixitAssistant);
+
+    auto fixits = clangFixitAssistant->fixits();
+    QCOMPARE(fixits.size(), 3);
+    QCOMPARE(fixits[0].replacementText, QString("class A;"));
+    QCOMPARE(fixits[1].replacementText, QString("struct A;")); // TODO: We shouldn't show this
+    QCOMPARE(fixits[2].replacementText, QString("#include \"%1\"").arg(include.url().toUrl().fileName()));
 }
 
 #include "test_problems.moc"

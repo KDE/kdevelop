@@ -294,11 +294,16 @@ QStringList duchainCandidates( const QualifiedIdentifier& identifier, const KDev
  */
 QString directiveForFile( const QString& includefile, const KDevelop::Path::List& includepaths, const KDevelop::Path& source )
 {
+    const auto sourceFolder = source.parent();
+    const Path canonicalFile( QFileInfo( includefile ).canonicalFilePath() );
+    // if the include file and the source file are from the same directory
+    // we can include the file directly
+    if (sourceFolder == canonicalFile.parent()) {
+        return QString("#include \"%1\"").arg(canonicalFile.lastPathSegment());
+    }
+
     QString shortestDirective;
     bool isRelative = false;
-    const auto current = source.parent();
-
-    const Path canonicalFile( QFileInfo( includefile ).canonicalFilePath() );
 
     for( const auto& includePath : includepaths ) {
         QString relative = includePath.relativePath( canonicalFile );
@@ -307,7 +312,7 @@ QString directiveForFile( const QString& includefile, const KDevelop::Path::List
 
         if( shortestDirective.isEmpty() || relative.length() < shortestDirective.length() ) {
             shortestDirective = relative;
-            isRelative = includePath == current;
+            isRelative = includePath == sourceFolder;
         }
     }
 
