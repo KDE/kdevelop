@@ -12,6 +12,13 @@ target_link_libraries(clang-parser
     kdevclangduchain
 )
 
+kde4_add_unit_test(test_buddies
+    test_buddies.cpp)
+target_link_libraries(test_buddies
+    ${KDEVPLATFORM_TESTS_LIBRARIES}
+    ${QT_QTTEST_LIBRARY}
+)
+
 ########### next target ###############
 
 kde4_add_unit_test(test_codecompletion
