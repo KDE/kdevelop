@@ -60,9 +60,9 @@ target_link_libraries(test_problems
 
 if(KDEVPLATFORM_JSONTESTS_LIBRARIES)
   set(filestest_SRCS test_files.cpp)
-  kde4_add_unit_test(filestest ${filestest_SRCS})
+  kde4_add_unit_test(test_files ${filestest_SRCS})
   configure_file("testfilepaths.h.cmake" "testfilepaths.h" ESCAPE_QUOTES)
-  target_link_libraries(filestest
+  target_link_libraries(test_files
       ${QT_QTTEST_LIBRARY}
       ${QT_QTCORE_LIBRARY}
       ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
