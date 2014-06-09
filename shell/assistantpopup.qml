@@ -26,8 +26,8 @@ Rectangle {
 
     color: config.background
 
-    width: row.width + 16
-    height: row.height + 7
+    width: flow.width + 16
+    height: flow.height + 7
 
     Connections {
         id: configConnections
@@ -56,10 +56,12 @@ Rectangle {
                                     Qt.Key_6, Qt.Key_7, Qt.Key_8, Qt.Key_9]
 
     // Layout for the buttons and the title
-    Row {
-        id: row
+    Flow {
+        id: flow
         anchors.centerIn: parent
+        flow: items.count >= 3 ? Flow.TopToBottom : Flow.LeftToRight
         spacing: 8
+
         function doTriggerButton(triggerIndex) {
             config.model[triggerIndex].trigger();
             // highlight the triggered button
@@ -72,15 +74,17 @@ Rectangle {
                 }
             }
         }
+
         Text {
             // Title of the assistant
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenter: parent.flow == Flow.LeftToRight ? parent.verticalCenter : undefined
             anchors.verticalCenterOffset: 1
             color: config.foreground
             font.bold: true
             text: config.title
         }
         Repeater {
+
             // Buttons
             focus: true
             y: 5
@@ -104,7 +108,7 @@ Rectangle {
                 // what is displayed in the hotkey field of the button
                 button: index == items.model.length - 1 ? 0 : index + 1
                 buttonIndex: index
-                onTriggered: row.doTriggerButton(buttonIndex)
+                onTriggered: flow.doTriggerButton(buttonIndex)
                 foreground: config.foreground
                 background: config.background
                 highlight: config.highlight
@@ -125,7 +129,7 @@ Rectangle {
                     return;
                 }
                 event.accepted = true;
-                row.doTriggerButton(triggerIndex);
+                flow.doTriggerButton(triggerIndex);
             }
         }
     }
