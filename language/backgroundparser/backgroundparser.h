@@ -202,8 +202,11 @@ public Q_SLOTS:
     ///You need to check whether @param url is queued before calling this function.
     int priorityForDocument(const IndexedString& url) const;
 
-    ///Returns the number of currently active or queued jobs
+    ///Returns the number of queued jobs (not yet running nor submitted to ThreadWeaver)
     int queuedCount() const;
+
+    ///Returns true if there are no jobs running nor queued anywhere
+    bool isIdle() const;
 
     void documentClosed(KDevelop::IDocument*);
     void documentLoaded(KDevelop::IDocument*);
