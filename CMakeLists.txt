@@ -25,6 +25,12 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_C
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 endif()
 
+# Turn off missing-field-initializers warning for GCC to avoid noise from false positives with empty {}
+# See discussion: http://mail.kde.org/pipermail/kdevelop-devel/2014-February/046910.html
+if (CMAKE_COMPILER_IS_GNUCXX)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-missing-field-initializers")
+endif()
+
 if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     # in Qt 4, clang support is lacking...
     add_definitions("-DQ_COMPILER_INITIALIZER_LISTS=1")
