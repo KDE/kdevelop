@@ -118,13 +118,13 @@ int sharedPathLevel(const QString& a, const QString& b)
 *
 * TODO: Implement a fallback scheme
 */
-KDevelop::SimpleRange includeDirectivePosition( const KDevelop::Path& source, const QString& includeFile )
+KDevelop::DocumentRange includeDirectivePosition(const KDevelop::Path& source, const QString& includeFile)
 {
     DUChainReadLocker lock;
     const TopDUContext* top = DUChainUtils::standardContextForUrl( source.toUrl() );
     if( !top ) {
         debug() << "unable to find standard context for" << source.toLocalFile() << "Creating null range";
-        return KDevelop::SimpleRange::invalid();
+        return KDevelop::DocumentRange::invalid();
     }
 
     int line = -1;
@@ -144,19 +144,19 @@ KDevelop::SimpleRange includeDirectivePosition( const KDevelop::Path& source, co
 
     if( line == -1 ) {
         /* Insert at the top of the document */
-        return KDevelop::SimpleRange{ 0, 0, 0, 0 };
+        return {IndexedString(source.pathOrUrl()), {0, 0, 0, 0}};
     }
 
-    return KDevelop::SimpleRange{ line, 0, line, 0 };
+    return {IndexedString(source.pathOrUrl()), {line, 0, line, 0}};
 }
 
-KDevelop::SimpleRange forwardDeclarationPosition( const KDevelop::Path& source )
+KDevelop::DocumentRange forwardDeclarationPosition( const KDevelop::Path& source )
 {
     DUChainReadLocker lock;
     const TopDUContext* top = DUChainUtils::standardContextForUrl( source.toUrl() );
     if( !top ) {
         debug() << "unable to find standard context for" << source.toLocalFile() << "Creating null range";
-        return KDevelop::SimpleRange::invalid();
+        return KDevelop::DocumentRange::invalid();
     }
 
     int line = std::numeric_limits< int >::max();
@@ -165,13 +165,13 @@ KDevelop::SimpleRange forwardDeclarationPosition( const KDevelop::Path& source )
     }
 
     if( line == std::numeric_limits< int >::max() ) {
-        return KDevelop::SimpleRange::invalid();
+        return KDevelop::DocumentRange::invalid();
     }
 
     // We want it one line above the first declaration
     line = std::max( line - 1, 0 );
 
-    return KDevelop::SimpleRange{ line, 0, line, 0 };
+    return {IndexedString(source.pathOrUrl()), {line, 0, line, 0}};
 }
 
 QVector<KDevelop::QualifiedIdentifier> possibleDeclarations( const QualifiedIdentifier& identifier, const KDevelop::Path& file, const KDevelop::CursorInRevision& cursor )
@@ -292,27 +292,29 @@ QStringList duchainCandidates( const QualifiedIdentifier& identifier, const KDev
 /*
  * Takes a filepath and the include paths and determines what directive to use.
  */
-QString directiveForFile( const QString& includefile, const KDevelop::Path::List& includepaths, const KDevelop::Path& source )
+ClangFixit directiveForFile( const QString& includefile, const KDevelop::Path::List& includepaths, const KDevelop::Path& source )
 {
     const auto sourceFolder = source.parent();
     const Path canonicalFile( QFileInfo( includefile ).canonicalFilePath() );
-    // if the include file and the source file are from the same directory
-    // we can include the file directly
-    if (sourceFolder == canonicalFile.parent()) {
-        return QString("#include \"%1\"").arg(canonicalFile.lastPathSegment());
-    }
 
     QString shortestDirective;
     bool isRelative = false;
 
-    for( const auto& includePath : includepaths ) {
-        QString relative = includePath.relativePath( canonicalFile );
-        if( relative.startsWith( "./" ) )
-            relative = relative.mid( 2 );
+    // we can include the file directly
+    if (sourceFolder == canonicalFile.parent()) {
+        shortestDirective = canonicalFile.lastPathSegment();
+        isRelative = true;
+    } else {
+        // find the include directive with the shortest length
+        for( const auto& includePath : includepaths ) {
+            QString relative = includePath.relativePath( canonicalFile );
+            if( relative.startsWith( "./" ) )
+                relative = relative.mid( 2 );
 
-        if( shortestDirective.isEmpty() || relative.length() < shortestDirective.length() ) {
-            shortestDirective = relative;
-            isRelative = includePath == sourceFolder;
+            if( shortestDirective.isEmpty() || relative.length() < shortestDirective.length() ) {
+                shortestDirective = relative;
+                isRelative = includePath == sourceFolder;
+            }
         }
     }
 
@@ -321,11 +323,19 @@ QString directiveForFile( const QString& includefile, const KDevelop::Path::List
         return {};
     }
 
-    if( isRelative ) {
-        return QString{ "#include \"%1\"" }.arg( shortestDirective );
+    const auto range = DocumentRange(IndexedString(source.pathOrUrl()), includeDirectivePosition(source, canonicalFile.lastPathSegment()));
+    if( !range.isValid() ) {
+        debug() << "unable to determine valid position for" << includefile << "in" << source.pathOrUrl();
+        return {};
     }
 
-    return QString{ "#include <%1>" }.arg( shortestDirective );
+    QString directive;
+    if( isRelative ) {
+        directive = QString{"#include \"%1\""}.arg(shortestDirective);
+    } else {
+        directive = QString{"#include <%1>"}.arg(shortestDirective);
+    }
+    return ClangFixit{directive + '\n', range, QObject::tr("Insert \'%1\'").arg(directive)};
 }
 
 KDevelop::Path::List includePaths( const KDevelop::Path& file )
@@ -367,23 +377,26 @@ QStringList includeFiles( const QualifiedIdentifier& identifier, const KDevelop:
  * Currently we're not able to determine what is namespaces, class names etc
  * and makes a suitable forward declaration, so just suggest "vanilla" declarations.
  */
-QStringList forwardDeclarations( const QualifiedIdentifier& identifier )
+ClangFixits forwardDeclarations(const QualifiedIdentifier& identifier, const Path& source)
 {
+    const auto range = forwardDeclarationPosition(source);
+    if (!range.isValid()) {
+        return {};
+    }
+
     const auto name = identifier.last().toString();
-    return { "class " + name + ";", "struct " + name + ";" };
+    return {
+        {"class " + name + ";\n", range, QObject::tr("Forward declare as 'class'")},
+        {"struct " + name + ";\n", range, QObject::tr("Forward declare as 'struct'")}
+    };
 }
 
 ClangFixits fixUnknownDeclaration( const QualifiedIdentifier& identifier, const KDevelop::Path& file, const KDevelop::DocumentRange& docrange )
 {
     ClangFixits fixits;
 
-    const auto forwardDeclRange = forwardDeclarationPosition( file );
-    for( const auto& decl : forwardDeclarations( identifier ) ) {
-        /* Determine some location for forward decls */
-        if( !forwardDeclRange.isValid() ) {
-            continue;
-        }
-        fixits << ClangFixit{ decl, DocumentRange(IndexedString(file.pathOrUrl()), forwardDeclRange), QString() };
+    for( const auto& fixit : forwardDeclarations(identifier, file) ) {
+        fixits << fixit;
     }
 
     const auto includepaths = includePaths( file );
@@ -391,19 +404,13 @@ ClangFixits fixUnknownDeclaration( const QualifiedIdentifier& identifier, const 
 
     /* create fixits for candidates */
     for( const auto& includeFile : includefiles ) {
-        const auto directive = directiveForFile( includeFile, includepaths, file /* UP */ );
-        if( directive.isEmpty() ) {
+        const auto fixit = directiveForFile( includeFile, includepaths, file /* UP */ );
+        if (!fixit.range.isValid()) {
             debug() << "unable to create directive for" << includeFile << "in" << file.toLocalFile();
             continue;
         }
 
-        const auto range = includeDirectivePosition( file, includeFile );
-        if( !range.isValid() ) {
-            debug() << "unable to determine valid position for" << directive << "in" << file.toLocalFile();
-            continue;
-        }
-
-        fixits << ClangFixit{ directive, DocumentRange(IndexedString(file.pathOrUrl()), range), QString() };
+        fixits << fixit;
     }
 
     if( fixits.size() > maxSuggestions ) {

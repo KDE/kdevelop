@@ -233,9 +233,9 @@ void TestProblems::testMissingInclude()
 
     auto fixits = clangFixitAssistant->fixits();
     QCOMPARE(fixits.size(), 3);
-    QCOMPARE(fixits[0].replacementText, QString("class A;"));
-    QCOMPARE(fixits[1].replacementText, QString("struct A;")); // TODO: We shouldn't show this
-    QCOMPARE(fixits[2].replacementText, QString("#include \"%1\"").arg(include.url().toUrl().fileName()));
+    QCOMPARE(fixits[0].replacementText, QString("class A;\n"));
+    QCOMPARE(fixits[1].replacementText, QString("struct A;\n")); // TODO: We shouldn't show this
+    QCOMPARE(fixits[2].replacementText, QString("#include \"%1\"\n").arg(include.url().toUrl().fileName()));
 }
 
 #include "test_problems.moc"
