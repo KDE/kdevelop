@@ -19,10 +19,11 @@
 #ifndef CPP_SIGNATUREASSISTANT_H
 #define CPP_SIGNATUREASSISTANT_H
 
+#include "adaptsignatureaction.h"
+
 #include <language/assistant/staticassistant.h>
 #include <language/duchain/identifier.h>
 #include <language/duchain/topducontext.h>
-#include "adaptsignatureaction.h"
 
 #include <KUrl>
 
@@ -37,11 +38,11 @@ class ParseJob;
 using namespace KDevelop;
 namespace Cpp {
 
-class AdaptDefinitionSignatureAssistant : public StaticAssistant
+class AdaptSignatureAssistant : public StaticAssistant
 {
   Q_OBJECT
   public:
-    AdaptDefinitionSignatureAssistant(ILanguageSupport* supportedLanguage);
+    AdaptSignatureAssistant(ILanguageSupport* supportedLanguage);
 
     virtual QString title() const;
     virtual void textChanged(KTextEditor::View* view, const KTextEditor::Range& invocationRange, const QString& removedText = QString());

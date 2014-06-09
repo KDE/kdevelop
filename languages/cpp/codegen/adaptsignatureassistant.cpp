@@ -16,7 +16,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "signatureassistant.h"
+#include "adaptsignatureassistant.h"
 
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
@@ -71,7 +71,7 @@ Signature getDeclarationSignature(const Declaration *functionDecl, const DUConte
 
 }
 
-AdaptDefinitionSignatureAssistant::AdaptDefinitionSignatureAssistant(ILanguageSupport* supportedLanguage)
+AdaptSignatureAssistant::AdaptSignatureAssistant(ILanguageSupport* supportedLanguage)
   : StaticAssistant(supportedLanguage)
 {
   connect(ICore::self()->languageController()->backgroundParser(),
@@ -79,12 +79,12 @@ AdaptDefinitionSignatureAssistant::AdaptDefinitionSignatureAssistant(ILanguageSu
           SLOT(parseJobFinished(KDevelop::ParseJob*)));
 }
 
-QString AdaptDefinitionSignatureAssistant::title() const
+QString AdaptSignatureAssistant::title() const
 {
   return tr("Adapt Signature");
 }
 
-void AdaptDefinitionSignatureAssistant::reset()
+void AdaptSignatureAssistant::reset()
 {
   doHide();
   clearActions();
@@ -99,7 +99,7 @@ void AdaptDefinitionSignatureAssistant::reset()
   m_view.clear();
 }
 
-void AdaptDefinitionSignatureAssistant::textChanged(KTextEditor::View* view, const KTextEditor::Range& invocationRange, const QString& removedText)
+void AdaptSignatureAssistant::textChanged(KTextEditor::View* view, const KTextEditor::Range& invocationRange, const QString& removedText)
 {
   reset();
 
@@ -160,12 +160,12 @@ void AdaptDefinitionSignatureAssistant::textChanged(KTextEditor::View* view, con
   DUChain::self()->updateContextForUrl(m_otherSideTopContext->url(), TopDUContext::AllDeclarationsAndContexts);
 }
 
-bool AdaptDefinitionSignatureAssistant::isUseful() const
+bool AdaptSignatureAssistant::isUseful() const
 {
   return !m_declarationName.isEmpty() && m_otherSideId.isValid();
 }
 
-bool AdaptDefinitionSignatureAssistant::getSignatureChanges(const Signature& newSignature, QList< int >& oldPositions) const
+bool AdaptSignatureAssistant::getSignatureChanges(const Signature& newSignature, QList< int >& oldPositions) const
 {
   bool changed = false;
   for (int i = 0; i < newSignature.parameters.size(); ++i)
@@ -211,7 +211,7 @@ bool AdaptDefinitionSignatureAssistant::getSignatureChanges(const Signature& new
   return changed;
 }
 
-void AdaptDefinitionSignatureAssistant::setDefaultParams(Signature& newSignature, const QList< int >& oldPositions) const
+void AdaptSignatureAssistant::setDefaultParams(Signature& newSignature, const QList< int >& oldPositions) const
 {
   for(int i = newSignature.parameters.size() - 1; i >= 0; --i)
   {
@@ -223,7 +223,7 @@ void AdaptDefinitionSignatureAssistant::setDefaultParams(Signature& newSignature
   }
 }
 
-QList< RenameAction* > AdaptDefinitionSignatureAssistant::getRenameActions(const Signature &newSignature, const QList<int> &oldPositions) const
+QList< RenameAction* > AdaptSignatureAssistant::getRenameActions(const Signature &newSignature, const QList<int> &oldPositions) const
 {
   Q_ASSERT(DUChain::lock()->currentThreadHasReadLock());
   QList<RenameAction*> renameActions;
@@ -247,7 +247,7 @@ QList< RenameAction* > AdaptDefinitionSignatureAssistant::getRenameActions(const
   return renameActions;
 }
 
-void AdaptDefinitionSignatureAssistant::parseJobFinished(KDevelop::ParseJob* job)
+void AdaptSignatureAssistant::parseJobFinished(KDevelop::ParseJob* job)
 {
   if (job->document().toUrl() != m_document || !m_view)
     return;
@@ -292,4 +292,4 @@ void AdaptDefinitionSignatureAssistant::parseJobFinished(KDevelop::ParseJob* job
   emit actionsChanged();
 }
 
-#include "signatureassistant.moc"
+#include "adaptsignatureassistant.moc"

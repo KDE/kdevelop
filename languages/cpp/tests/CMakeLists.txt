@@ -94,7 +94,7 @@ set(cppassistantstest_SRCS
   ${test_common_SRCS}
 
   test_cppassistants.cpp
-  ../codegen/signatureassistant.cpp
+  ../codegen/adaptsignatureassistant.cpp
   ../codegen/adaptsignatureaction.cpp
 )
 

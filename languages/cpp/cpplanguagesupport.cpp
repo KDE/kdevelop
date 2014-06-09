@@ -86,7 +86,7 @@
 #include "cppduchain/cppduchain.h"
 #include <interfaces/foregroundlock.h>
 //#include "codegen/makeimplementationprivate.h"
-#include "codegen/signatureassistant.h"
+#include "codegen/adaptsignatureassistant.h"
 
 #include "includepathresolver.h"
 #include "setuphelpers.h"
@@ -204,7 +204,7 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
 #endif
 
     core()->languageController()->staticAssistantsManager()->registerAssistant(StaticAssistant::Ptr(new RenameAssistant(this)));
-    core()->languageController()->staticAssistantsManager()->registerAssistant(StaticAssistant::Ptr(new Cpp::AdaptDefinitionSignatureAssistant(this)));
+    core()->languageController()->staticAssistantsManager()->registerAssistant(StaticAssistant::Ptr(new Cpp::AdaptSignatureAssistant(this)));
 
     foreach(QString mimeType, m_mimeTypes){
         KDevelop::IBuddyDocumentFinder::addFinder(mimeType,this);

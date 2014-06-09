@@ -35,7 +35,7 @@ set(kdevcpplanguagesupport_PART_SRCS
 
 #    codegen/cppnewclass.cpp
     codegen/simplerefactoring.cpp
-    codegen/signatureassistant.cpp
+    codegen/adaptsignatureassistant.cpp
     codegen/adaptsignatureaction.cpp
     codegen/unresolvedincludeassistant.cpp
     codegen/customincludepaths.cpp
