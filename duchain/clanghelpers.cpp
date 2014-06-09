@@ -154,3 +154,15 @@ DeclarationPointer findDeclaration(CXType type, const IncludeFileContexts& inclu
     CXCursor cursor = clang_getTypeDeclaration(type);
     return findDeclaration(cursor, includes);
 }
+
+QStringList headerExtensions()
+{
+    static const QStringList headerExtensions = QString("h,H,hh,hxx,hpp,tlh,h++").split(',');
+    return headerExtensions;
+}
+
+QStringList sourceExtensions()
+{
+    static const QStringList sourceExtensions = QString("c,cc,cpp,c++,cxx,C,m,mm,M,inl,_impl.h").split(',');
+    return sourceExtensions;
+}

@@ -1,5 +1,6 @@
 #include "unknowndeclarationproblem.h"
 
+#include "clanghelpers.h"
 #include "clangtypes.h"
 #include "../debug.h"
 #include "../util/clangutils.h"
@@ -40,12 +41,31 @@ namespace {
  */
 const int maxSuggestions = 5;
 
-/*
+bool isSource(const QString& path)
+{
+    foreach(const QString& ext, sourceExtensions()) {
+        if (path.endsWith(ext)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
  * We don't want anything from the bits directory -
  * we'd rather prefer forwarding includes, such as <vector>
  */
-bool isBlacklisted( const QString& path ) {
-    return path.contains( "bits" ) && path.contains( "/include/c++/" );
+bool isBlacklisted(const QString& path)
+{
+    if (isSource(path))
+        return true;
+
+    // Do not allow including directly from the bits directory.
+    // Instead use one of the forwarding headers in other directories, when possible.
+    if (path.contains( "bits" ) && path.contains( "/include/c++/"))
+        return true;
+
+    return false;
 }
 
 QStringList scanIncludePaths( const QString& identifier, const QDir& dir )

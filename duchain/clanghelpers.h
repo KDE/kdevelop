@@ -57,4 +57,14 @@ KDEVCLANGDUCHAIN_EXPORT KDevelop::ReferencedTopDUContext buildDUChain(
     CXFile file, const Imports& imports, const ParseSession* session,
     KDevelop::TopDUContext::Features features, IncludeFileContexts& includedFiles);
 
+/**
+ * @return List of possible header extensions used for definition/declaration fallback switching
+ */
+QStringList headerExtensions();
+
+/**
+ * @return List of possible source extensions used for definition/declaration fallback switching
+ */
+QStringList sourceExtensions();
+
 #endif //CLANGHELPERS_H
