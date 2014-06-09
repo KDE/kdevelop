@@ -361,16 +361,15 @@ QStringList includeFiles( const QualifiedIdentifier& identifier, const KDevelop:
     return scanIncludePaths( identifier, includes );
 }
 
+/*
+ * Construct viable forward declarations for the type name.
+ *
+ * Currently we're not able to determine what is namespaces, class names etc
+ * and makes a suitable forward declaration, so just suggest "vanilla" declarations.
+ */
 QStringList forwardDeclarations( const QualifiedIdentifier& identifier )
 {
-    /*
-     *  Construct viable forward declarations for the type name.
-     *
-     * Currently we're not able to determine what is namespaces, class names etc
-     * and makes a suitable forward declaration, so just suggest "vanilla" declarations.
-     */
     const auto name = identifier.last().toString();
-    //return QStringList{} << "class " + name + ";" << "struct " + name + ";";
     return { "class " + name + ";", "struct " + name + ";" };
 }
 
