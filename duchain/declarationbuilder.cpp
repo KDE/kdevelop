@@ -678,20 +678,21 @@ void DeclarationBuilder::declareComponentInstance(QmlJS::AST::ExpressionStatemen
         return;
     }
 
-    injectContext(topContext());
     {
         DUChainWriteLocker lock;
+
+        injectContext(topContext());
         Declaration* decl = openDeclaration<Declaration>(
             QualifiedIdentifier(identifier->name.toString()),
             m_session->locationToRange(identifier->identifierToken)
         );
+        closeInjectedContext();
 
         // Put the declaration in the global scope
         decl->setKind(Declaration::Instance);
         decl->setType(currentAbstractType());
     }
     closeDeclaration();
-    closeInjectedContext();
 }
 
 void DeclarationBuilder::declareExports(QmlJS::AST::ExpressionStatement *exports,
@@ -719,13 +720,15 @@ void DeclarationBuilder::declareExports(QmlJS::AST::ExpressionStatement *exports
         QString exportname = stringliteral->value.toString().section(' ', 0, 0).section('/', -1, -1);
         StructureType::Ptr type(new StructureType);
 
-        injectContext(currentContext()->parentContext());   // Don't declare the export in its C++-ish component, but in the scope above
         {
             DUChainWriteLocker lock;
+
+            injectContext(currentContext()->parentContext());   // Don't declare the export in its C++-ish component, but in the scope above
             ClassDeclaration* decl = openDeclaration<ClassDeclaration>(
                 QualifiedIdentifier(exportname),
                 m_session->locationToRange(stringliteral->literalToken)
             );
+            closeInjectedContext();
 
             // The exported version inherits from the C++ component
             decl->setKind(Declaration::Type);
@@ -746,7 +749,6 @@ void DeclarationBuilder::declareExports(QmlJS::AST::ExpressionStatement *exports
         }
         openType(type);
         closeAndAssignType();
-        closeInjectedContext();
     }
 }
 
