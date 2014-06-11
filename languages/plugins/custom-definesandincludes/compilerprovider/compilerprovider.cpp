@@ -179,9 +179,11 @@ CompilerProvider::CompilerProvider( QObject* parent, const QVariantList& )
 {
     KDEV_USE_EXTENSION_INTERFACE( ICompilerProvider );
 
-    m_compilers.append( CompilerPointer( new ClangCompiler() ) );
     m_compilers.append( CompilerPointer( new GccCompiler() ) );
+    m_compilers.append( CompilerPointer( new ClangCompiler() ) );
+#ifdef _WIN32
     m_compilers.append( CompilerPointer( new MsvcCompiler() ) );
+#endif
     m_compilers.append( CompilerPointer( new DummyCompiler() ) );
 
     IDefinesAndIncludesManager::manager()->registerProvider( this );
