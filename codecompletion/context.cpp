@@ -102,7 +102,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionsInContext(con
 
     if (context) {
         const QList<DeclarationDepthPair>& declarations = context->allDeclarations(
-            context == m_duContext ? m_position : CursorInRevision::invalid(),
+            CursorInRevision::invalid(),
             context->topContext(),
             !onlyLocal
         );

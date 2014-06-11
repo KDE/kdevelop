@@ -3,16 +3,6 @@
  * "kind" : "Namespace"
  */
 Module {
-     Component {
-         name: "QModelIndex"
-
-         /**
-          * "toString" : "int childCount",
-          * "useCount" : 2
-          */
-         Property { name: "childCount"; type: "int" }
-     }
-
      /**
       * "toString" : "interface QAbstractItemModel",
       * "kind": "Type",
@@ -81,6 +71,16 @@ Module {
              type: "bool"
              Parameter { name: "item"; type: "QModelIndex" }
          }
+     }
+
+     Component {
+         name: "QModelIndex"
+
+         /**
+          * "toString" : "int childCount",
+          * "useCount" : 2
+          */
+         Property { name: "childCount"; type: "int" }
      }
 
      /**
