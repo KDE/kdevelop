@@ -301,7 +301,7 @@ CMAKE_ADD_AST_MEMBER( bool, noCmakeEnvironmentPath )
 CMAKE_ADD_AST_MEMBER( bool, noCmakePath )
 CMAKE_ADD_AST_MEMBER( bool, noSystemEnvironmentPath )
 CMAKE_ADD_AST_MEMBER( bool, noCmakeSystemPath )
-CMAKE_ADD_AST_MEMBER( bool, cmakeFindRootPath )
+CMAKE_ADD_AST_MEMBER( bool, noCmakeFindRootPath )
 CMAKE_END_AST_CLASS( FindLibraryAst )
 
 

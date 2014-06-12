@@ -29,6 +29,7 @@ private slots:
   void cleanupTestCase();
   void testRenameAssistant_data();
   void testRenameAssistant();
+  void testRenameAssistantUndoRename();
   void testSignatureAssistant_data();
   void testSignatureAssistant();
   void testMacroExpansion();

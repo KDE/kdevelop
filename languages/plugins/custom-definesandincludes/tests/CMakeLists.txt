@@ -1,12 +1,10 @@
-set( plugintest_SRCS
-     plugintest.cpp
+set( definesandincludestest_SRCS
+     definesandincludestest.cpp
      projectsgenerator.cpp
    )
 
-add_executable(plugintest ${plugintest_SRCS})
-ecm_mark_as_test(plugintest)
-add_test(plugintest plugintest)
-target_link_libraries( plugintest
+kde4_add_unit_test( definesandincludestest ${definesandincludestest_SRCS} )
+target_link_libraries( definesandincludestest
         ${QT_QTTEST_LIBRARY}
         ${KDEVPLATFORM_TESTS_LIBRARIES}
         ${KDEVPLATFORM_PROJECT_LIBRARIES}

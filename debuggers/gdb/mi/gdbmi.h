@@ -230,7 +230,9 @@ namespace GDBMI
      */
     struct Value
     {
-        Value() {}
+        Value()
+            : kind(StringLiteral)
+        {}
     private: // Copy disabled to prevent slicing.
         Value(const Value&);
         Value& operator=(const Value&);
@@ -349,7 +351,11 @@ namespace GDBMI
 
     struct ResultRecord : public Record, public TupleValue
     {
-        ResultRecord() { Record::kind = Result; }
+        ResultRecord()
+            : subkind(CommandResult)
+        {
+            Record::kind = Result;
+        }
         
         enum { CommandResult, ExecNotification, StatusNotification, GeneralNotification } subkind;
 

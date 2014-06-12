@@ -51,14 +51,23 @@ public:
     void setPaths( const QList<ConfigEntry>& );
     QList<ConfigEntry> paths() const;
     void clear();
+
+    void setCompilers(const QStringList& compilerNames);
+
+    void setCurrentCompiler(const QString& name);
+    void setCompilerPath(const QString& path);
+
+    QString currentCompilerName() const;
+    QString compilerPath() const;
+
 signals:
     void changed();
 private slots:
     // Handling of project-path combobox, add and remove buttons
     void projectPathSelected( int index );
     void addProjectPath();
-    void replaceProjectPath();
     void deleteProjectPath();
+    void batchEdit();
 
     // Forward includes model changes into the pathsModel
     void includesChanged( const QStringList& includes );
@@ -74,3 +83,4 @@ private:
 };
 
 #endif
+

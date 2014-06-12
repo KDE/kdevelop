@@ -547,7 +547,9 @@ void MissingIncludeCompletionItem::execute(KTextEditor::Document* document, cons
 
   document->insertLine(line, lineToInsert());
 
+#ifndef TEST_COMPLETION
   CodeCompletionModel::self()->startCompletionAfterParsing(IndexedString(document->url()));
+#endif
 }
 
 int MissingIncludeCompletionItem::inheritanceDepth() const {

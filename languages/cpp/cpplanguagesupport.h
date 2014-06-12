@@ -100,6 +100,7 @@ public:
     QString name() const;
 
     KDevelop::ICodeHighlighting *codeHighlighting() const;
+    KDevelop::BasicRefactoring* refactoring() const;
     KDevelop::ILanguage *language();
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
     KDevelop::ParseJob *createParseJob( const KDevelop::IndexedString &url );
@@ -166,8 +167,6 @@ private:
     CppTools::IncludePathResolver *m_includeResolver;
     IncludeFileDataProvider* m_quickOpenDataProvider;
     
-    Cpp::StaticCodeAssistant * m_assistant;
-
     const QStringList m_mimeTypes;
 };
 

@@ -44,6 +44,9 @@ private slots:
     void testAddTwiceSameProvider();
     void testRemoveOneProvider();
 
+    void testDeclarationLookup_Class();
+    void testDeclarationLookup_OperatorFunction();
+
     void cleanup();
     void cleanupTestCase();
 };

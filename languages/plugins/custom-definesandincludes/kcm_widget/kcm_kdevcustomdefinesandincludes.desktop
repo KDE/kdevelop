@@ -6,7 +6,7 @@ ServiceTypes=KCModule
 X-KDE-ModuleType=Library
 X-KDE-Library=kcm_kdevcustomdefinesandincludes
 X-KDE-ParentApp=kdevplatformproject
-X-KDE-ParentComponents=KDevDefinesAndIncludesManager
+X-KDE-ParentComponents=kdevplatformproject
 
 Name=Custom Defines And Includes
 Name[ca]=Personalitza les definicions i inclusions

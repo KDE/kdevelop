@@ -17,7 +17,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>. *
  ************************************************************************/
 
-#include "plugintest.h"
+#include "definesandincludestest.h"
 #include "projectsgenerator.h"
 
 #include <QtTest/QtTest>
@@ -43,39 +43,39 @@ using KDevelop::Path;
 
 static IProject* s_currentProject = nullptr;
 
-void PluginTest::cleanupTestCase()
+void DefinesAndIncludesTest::cleanupTestCase()
 {
     TestCore::shutdown();
 }
 
-void PluginTest::initTestCase()
+void DefinesAndIncludesTest::initTestCase()
 {
     AutoTestShell::init();
     TestCore::initialize();
 }
 
-void PluginTest::cleanup()
+void DefinesAndIncludesTest::cleanup()
 {
     ICore::self()->projectController()->closeProject( s_currentProject );
 }
 
-void PluginTest::loadSimpleProject()
+void DefinesAndIncludesTest::loadSimpleProject()
 {
     s_currentProject = ProjectsGenerator::GenerateSimpleProject();
     QVERIFY( s_currentProject );
 
     auto manager = KDevelop::IDefinesAndIncludesManager::manager();
     QVERIFY( manager );
-    Path::List includes = manager->includes( s_currentProject->projectItem() );
+    Path::List includes = manager->includes( s_currentProject->projectItem(), IDefinesAndIncludesManager::UserDefined );
 
     QHash<QString,QString> defines;
     defines.insert( "_DEBUG", "" );
     defines.insert( "VARIABLE", "VALUE" );
     QCOMPARE( includes, Path::List() << Path( "/usr/include/mydir") );
-    QCOMPARE( manager->defines( s_currentProject->projectItem() ), defines );
+    QCOMPARE( manager->defines( s_currentProject->projectItem(), IDefinesAndIncludesManager::UserDefined ), defines );
 }
 
-void PluginTest::loadMultiPathProject()
+void DefinesAndIncludesTest::loadMultiPathProject()
 {
     s_currentProject = ProjectsGenerator::GenerateMultiPathProject();
     QVERIFY( s_currentProject );
@@ -88,8 +88,8 @@ void PluginTest::loadMultiPathProject()
     defines.insert("SOURCE", "CONTENT");
     defines.insert("_COPY", "");
 
-    QCOMPARE( manager->includes( s_currentProject->projectItem()), includes );
-    QCOMPARE( manager->defines( s_currentProject->projectItem()), defines );
+    QCOMPARE( manager->includes( s_currentProject->projectItem(), IDefinesAndIncludesManager::UserDefined ), includes );
+    QCOMPARE( manager->defines( s_currentProject->projectItem(), IDefinesAndIncludesManager::UserDefined ), defines );
 
     KDevelop::ProjectBaseItem* mainfile = 0;
     foreach( KDevelop::ProjectBaseItem* i, s_currentProject->files() ) {
@@ -102,11 +102,11 @@ void PluginTest::loadMultiPathProject()
 
     includes << Path("/usr/local/include/mydir");
     defines.insert("BUILD", "debug");
-    QCOMPARE(manager->includes( mainfile ), includes);
-    QCOMPARE(defines, manager->defines( mainfile ));
+    QCOMPARE(manager->includes( mainfile, IDefinesAndIncludesManager::UserDefined ), includes);
+    QCOMPARE(defines, manager->defines( mainfile, IDefinesAndIncludesManager::UserDefined ));
 }
 
-QTEST_KDEMAIN(PluginTest, GUI)
+QTEST_KDEMAIN(DefinesAndIncludesTest, GUI)
 
 
-#include "plugintest.moc"
+#include "definesandincludestest.moc"

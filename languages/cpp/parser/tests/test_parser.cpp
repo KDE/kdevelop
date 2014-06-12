@@ -55,6 +55,11 @@ QString preprocess(const QString& contents) {
     return "*ERROR*";
 }
 
+TestParser::TestParser()
+  : lastSession(nullptr)
+{
+}
+
 void TestParser::initTestCase()
 {
   KDevelop::AutoTestShell::init(QStringList() << "kdevcppsupport");

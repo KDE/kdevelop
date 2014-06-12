@@ -1005,3 +1005,85 @@ void CMakeProjectVisitorTest::testTargetProperties()
     foreach(const StringPair& vp, results)
         QCOMPARE(v.properties()[TargetProperty][target][vp.first].join(QString(";")), vp.second);
 }
+
+void CMakeProjectVisitorTest::testBug335803_data()
+{
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<QStringList>("targetNames");
+    // variables inside functions from cmake_parse_arguments are not unset correctly
+    // this seems to boil down to set(${prefix}_${name} ${${prefix}_${name}} PARENT_SCOPE)
+    // not being handled correctly
+    const QLatin1String input(
+        "project(cmake_parse_arguments_bug)\n"
+        "%%GET_SINGLE_ARG_FUNC%%\n"
+        "# this bug prevents ecm_add_test(s) from working\n"
+        "function(echo _arg)\n"
+        "  get_single_arg(ECHO \"TARGET_NAME\" ${ARGN})\n"
+        "  if(ECHO_TARGET_NAME)\n"
+        "    set(_target ${ECHO_TARGET_NAME})\n"
+        "  else()\n"
+        "    set(_target ${_arg})\n"
+        "  endif()\n"
+        "  add_custom_target(echo-${_target} ALL VERBATIM COMMAND \"echo\" \"${_arg}\")\n"
+        "endfunction()\n"
+        "echo(a)\n"
+        "echo(b)\n"
+        "echo(c TARGET_NAME custom_name)\n"
+        "echo(d)\n"
+    );
+    // this one works since it uses set(${prefix}_${name} ${_result} PARENT_SCOPE)
+    const QLatin1String getSingleArg1(
+        "function(get_single_arg _prefix _arg)\n"
+        "  set(_result)\n"
+        "  if(\"${ARGV2}\" STREQUAL \"${_arg}\")\n"
+        "    set(_result ${ARGV3})\n"
+        "  endif()\n"
+        "  set(${_prefix}_TARGET_NAME ${_result} PARENT_SCOPE)\n"
+        "endfunction()\n"
+    );
+    // this one didn't work before Bug 335803 was fixed because set(${prefix}_${name} ${${prefix}_${name}} PARENT_SCOPE)
+    const QLatin1String getSingleArg2(
+        "function(get_single_arg _prefix _arg)\n"
+        "  set(${_prefix}_${_arg})\n"
+        "  if(\"${ARGV2}\" STREQUAL \"${_arg}\")\n"
+        "    set(${_prefix}_${_arg} ${ARGV3})\n"
+        "  endif()\n"
+        "  set(${_prefix}_${_arg} ${${_prefix}_${_arg}} PARENT_SCOPE)\n"
+        "endfunction()"
+    );
+    QStringList targetNames;
+    targetNames << QLatin1String("echo-a") << QLatin1String("echo-b") << QLatin1String("echo-custom_name") << QLatin1String("echo-d");
+
+    QTest::newRow("okay-before-fix") << QString(input).replace(QLatin1String("%%GET_SINGLE_ARG_FUNC%%"), getSingleArg1) << targetNames;
+    QTest::newRow("okay-after-fix") << QString(input).replace(QLatin1String("%%GET_SINGLE_ARG_FUNC%%"), getSingleArg2) << targetNames;
+}
+
+
+void CMakeProjectVisitorTest::testBug335803()
+{
+    QFETCH(QString, input);
+    QFETCH(QStringList, targetNames);
+
+    QSharedPointer<KTemporaryFile> file = prepareVisitoTestScript(input);
+    QVERIFY(!file.isNull());
+    CMakeFileContent code = CMakeListsParser::readCMakeFile(file->fileName());
+    QVERIFY(code.count() != 0);
+
+    MacroMap mm;
+    VariableMap vm;
+    CacheValues val;
+
+    CMakeProjectVisitor v(file->fileName(), fakeContext);
+    v.setVariableMap(&vm);
+    v.setMacroMap(&mm);
+    v.setCacheValues(&val);
+    v.walk(code, 0);
+
+    QStringList foundTargets;
+    foreach(const Target& t, v.targets()) {
+        foundTargets << t.name;
+    }
+    foundTargets.sort();
+    targetNames.sort();
+    QCOMPARE(foundTargets, targetNames);
+}

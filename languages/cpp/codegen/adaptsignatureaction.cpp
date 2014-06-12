@@ -16,6 +16,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include "adaptsignatureaction.h"
+
+#include <language/assistant/renameaction.h>
 #include <language/codegen/documentchangeset.h>
 #include <language/duchain/types/arraytype.h>
 #include <language/duchain/duchain.h>
@@ -24,8 +27,6 @@
 #include <KLocalizedString>
 #include <KMessageBox>
 
-#include "adaptsignatureaction.h"
-#include "renameaction.h"
 #include "languages/cpp/cppduchain/cppduchain.h"
 
 using namespace KDevelop;
@@ -188,3 +189,5 @@ void AdaptSignatureAction::execute() {
   foreach(RenameAction *renAct, m_renameActions)
     renAct->execute();
 }
+
+#include "adaptsignatureaction.moc"

@@ -19,10 +19,11 @@
 #ifndef CPP_SIGNATUREASSISTANT_H
 #define CPP_SIGNATUREASSISTANT_H
 
-#include <interfaces/iassistant.h>
+#include "adaptsignatureaction.h"
+
+#include <language/assistant/staticassistant.h>
 #include <language/duchain/identifier.h>
 #include <language/duchain/topducontext.h>
-#include "adaptsignatureaction.h"
 
 #include <KUrl>
 
@@ -37,12 +38,15 @@ class ParseJob;
 using namespace KDevelop;
 namespace Cpp {
 
-class AdaptDefinitionSignatureAssistant : public IAssistant {
+class AdaptSignatureAssistant : public StaticAssistant
+{
   Q_OBJECT
   public:
-    AdaptDefinitionSignatureAssistant(KTextEditor::View* view, const KTextEditor::Range& inserted);
+    AdaptSignatureAssistant(ILanguageSupport* supportedLanguage);
 
-    bool isUseful();
+    virtual QString title() const;
+    virtual void textChanged(KTextEditor::View* view, const KTextEditor::Range& invocationRange, const QString& removedText = QString());
+    virtual bool isUseful() const;
 
   private:
     DUContext* findFunctionContext(const KUrl& url, const SimpleRange& position) const;
@@ -57,7 +61,7 @@ class AdaptDefinitionSignatureAssistant : public IAssistant {
 
     // If this is true, the user is editing on the definition side,
     // and the declaration should be updated
-    bool m_editingDefinition;
+    bool m_editingDefinition = false;
     Identifier m_declarationName;
     DeclarationId m_otherSideId;
     ReferencedTopDUContext m_otherSideTopContext;
@@ -69,6 +73,7 @@ class AdaptDefinitionSignatureAssistant : public IAssistant {
 
   private slots:
     void parseJobFinished(KDevelop::ParseJob*);
+    void reset();
 };
 
 }

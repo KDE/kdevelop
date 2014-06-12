@@ -202,12 +202,18 @@ bool CMakeListsParser::readCMakeFunction(cmListFileLexer *lexer, CMakeFunctionDe
 CMakeFunctionDesc::CMakeFunctionDesc(const QString& name, const QStringList& args)
     : name(name)
     , line(0)
+    , column(0)
     , endLine(0)
+    , endColumn(0)
 {
     addArguments(args);
 }
 
 CMakeFunctionDesc::CMakeFunctionDesc()
+    : line(0)
+    , column(0)
+    , endLine(0)
+    , endColumn(0)
 {}
 
 bool CMakeFunctionDesc::operator==(const CMakeFunctionDesc & other) const

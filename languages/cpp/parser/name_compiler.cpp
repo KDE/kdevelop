@@ -115,7 +115,9 @@ IndexedTypeIdentifier typeIdentifierFromTemplateArgument(ParseSession* session, 
 }
 
 NameCompiler::NameCompiler(ParseSession* session)
-  : m_session(session), _M_name(&m_localName)
+  : m_session(session)
+  , m_typeSpecifier(nullptr)
+  , _M_name(&m_localName)
 {
 }
 

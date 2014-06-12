@@ -33,6 +33,8 @@ class KDEVCMAKECOMMON_EXPORT CMakeCondition
         
         enum conditionToken { None=0, variable, NOT, AND, OR, COMMAND, EXISTS, IS_NEWER_THAN, IS_DIRECTORY, IS_ABSOLUTE, MATCHES,
             LESS, GREATER, EQUAL, STRLESS, STRGREATER, STREQUAL, DEFINED, LPR, RPR, VERSION_LESS, VERSION_EQUAL, VERSION_GREATER, Last };
+
+        static bool textIsTrue(const QString& text);
     private:
         static conditionToken typeName(const QString& name);
         QStringList::const_iterator prevOperator(QStringList::const_iterator it, QStringList::const_iterator itStop) const;

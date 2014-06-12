@@ -61,7 +61,8 @@ static bool isGenerated(const QString& name)
 CMakeProjectVisitor::message_callback CMakeProjectVisitor::s_msgcallback=debugMsgs;
 
 CMakeProjectVisitor::CMakeProjectVisitor(const QString& root, ReferencedTopDUContext parent)
-    : m_root(root), m_vars(0), m_macros(0), m_topctx(0), m_parentCtx(parent), m_hitBreak(false), m_hitReturn(false)
+    : m_root(root), m_vars(0), m_macros(0), m_cache(0)
+    , m_topctx(0), m_parentCtx(parent), m_hitBreak(false), m_hitReturn(false)
 {
 }
 
@@ -471,6 +472,8 @@ void CMakeProjectVisitor::defineTarget(const QString& _id, const QStringList& so
     target.desc=p.code->at(p.line);
     m_targetForId[target.name]=target;
     
+    if(CMakeCondition::textIsTrue(m_vars->value("CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE").join(QString())))
+        targetProps["INTERFACE_INCLUDE_DIRECTORIES"] = (m_vars->value("CMAKE_CURRENT_BINARY_DIR") + m_vars->value("CMAKE_CURRENT_SOURCE_DIR"));
     targetProps["OUTPUT_NAME"] = QStringList(exe);
     targetProps["LOCATION"] = QStringList(locationDir+'/'+exe);
 }
@@ -655,8 +658,7 @@ int CMakeProjectVisitor::visit(const IncludeAst *inc)
 
 int CMakeProjectVisitor::visit(const FindPackageAst *pack)
 {
-    if(!haveToFind(pack->name()))
-        return 1;
+    m_vars->remove(pack->name()+"-NOTFOUND");
     kDebug(9042) << "Find:" << pack->name() << "package." << pack->version() << m_modulePath << "No module: " << pack->noModule();
 
     QStringList possibleModuleNames;
@@ -1139,12 +1141,18 @@ int CMakeProjectVisitor::visit(const TargetIncludeDirectoriesAst* tid)
     CategoryType::iterator it = targetProps.find(m_targetAlias.value(tid->target(), tid->target()));
     //TODO: we can add a problem if the target is not found
     if(it != targetProps.end()) {
-        QStringList includes;
+        QStringList interfaceIncludes, includes;
         foreach(const TargetIncludeDirectoriesAst::Item& item, tid->items()) {
-            includes += item.item;
+            if(item.visibility == TargetIncludeDirectoriesAst::Public || item.visibility == TargetIncludeDirectoriesAst::Interface)
+                interfaceIncludes += item.item;
+            if(item.visibility == TargetIncludeDirectoriesAst::Public || item.visibility == TargetIncludeDirectoriesAst::Private)
+                includes += item.item;
         }
-        //TODO implement visibility
-        (*it)["INCLUDE_DIRECTORIES"] += includes;
+
+        if(!interfaceIncludes.isEmpty())
+            (*it)["INTERFACE_INCLUDE_DIRECTORIES"] += interfaceIncludes;
+        if(!includes.isEmpty())
+            (*it)["INCLUDE_DIRECTORIES"] += includes;
     }
     return 1;
 }

@@ -62,7 +62,8 @@ public:
 
 void TestCppFiles::initTestCase()
 {
-  AutoTestShell::init(QStringList() << "kdevcppsupport");
+  //Intentionally load all plugins, otherwise for some reasons kdevcompilerprovider won't be loaded even if write it name here...
+  AutoTestShell::init();
   TestCore::initialize(KDevelop::Core::NoUi);
   DUChain::self()->disablePersistentStorage();
   Core::self()->languageController()->backgroundParser()->setDelay(0);

@@ -188,12 +188,6 @@ bool isHeader(const KUrl &url) {
   return headerExtensions().contains(ext);
 }
 
-QStringList standardIncludePaths()
-{
-  static QStringList list = CppTools::setupStandardIncludePaths();
-  return list;
-}
-
 const Cpp::ReferenceCountedMacroSet& standardMacros()
 {
   static Cpp::ReferenceCountedMacroSet macros = CppTools::setupStandardMacros();

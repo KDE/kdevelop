@@ -48,8 +48,7 @@ CMakeBuilderPreferences::CMakeBuilderPreferences(QWidget* parent, const QVariant
 #else
     m_prefsUi->generator->addItem("Unix Makefiles");
 #endif
-    bool hasNinja = !KDevelop::ICore::self()->pluginController()->queryExtensionPlugins("org.kdevelop.IProjectBuilder",
-                                                                                       QStringList("[X-KDE-PluginInfo-Name]=='KDevNinjaBuilder'")).isEmpty();
+    bool hasNinja = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IProjectBuilder", "KDevNinjaBuilder");
     if(hasNinja)
         m_prefsUi->generator->addItem("Ninja");
     

@@ -6,7 +6,6 @@ include_directories(
 set(setuphelpers_SRCS
 
   ../setuphelpers.cpp
-  ../setuphelpers_gcc_like.cpp
 )
 if(MSVC)
     list(APPEND setuphelpers_SRCS ../setuphelpers_msvc.cpp)
@@ -73,11 +72,7 @@ set(cppassistantstest_SRCS
   ${test_common_SRCS}
 
   test_cppassistants.cpp
-  ../codegen/renameassistant.cpp
-  ../codegen/renameaction.cpp
-  ../codegen/renamefileaction.cpp
-  ../codegen/codeassistant.cpp
-  ../codegen/signatureassistant.cpp
+  ../codegen/adaptsignatureassistant.cpp
   ../codegen/adaptsignatureaction.cpp
 )
 

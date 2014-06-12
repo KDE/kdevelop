@@ -79,7 +79,10 @@ void TypeConversion::stopCache() {
   }
 }
 
-TypeConversion::TypeConversion(const TopDUContext* topContext) : m_topContext(topContext) {
+TypeConversion::TypeConversion(const TopDUContext* topContext)
+  : m_baseConversionLevels(0)
+  , m_topContext(topContext)
+{
 
   QMutexLocker lock(&typeConversionCacheMutex);
   QHash<Qt::HANDLE, TypeConversionCache*>::iterator it = typeConversionCaches.find(QThread::currentThreadId());

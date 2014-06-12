@@ -38,13 +38,11 @@ class CMakeCodeCompletionModel : public KTextEditor::CodeCompletionModel
         QVariant data ( const QModelIndex & index, int role = Qt::DisplayRole ) const;
         void executeCompletionItem(KTextEditor::Document* document, const KTextEditor::Range& word, int row) const;
     private:
-        const CMakeDocumentation* doc() const;
         enum Type { Command, Variable, Macro, Path, Target };
         Type indexType(int row) const;
         static QStringList s_commands;
         QList< KDevelop::IndexedDeclaration > m_declarations;
         bool m_inside;
-        CMakeDocumentation* m_doc;
         QStringList m_paths;
 };
 

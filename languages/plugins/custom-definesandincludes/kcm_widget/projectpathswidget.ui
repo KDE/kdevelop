@@ -10,70 +10,59 @@
     <height>627</height>
    </rect>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_4">
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="KComboBox" name="projectPaths">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="KPushButton" name="addPath">
-       <property name="toolTip">
-        <string>Add a new sub-project path entry.</string>
-       </property>
-       <property name="text">
-        <string>Add</string>
-       </property>
-       <property name="icon">
-        <iconset theme="list-add">
-         <normaloff/>
-        </iconset>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="KPushButton" name="replacePath">
-       <property name="toolTip">
-        <string>Replace the currently selected path with a new value keeping the includes and defines currently set for the selected path.</string>
-       </property>
-       <property name="text">
-        <string>Replace</string>
-       </property>
-       <property name="icon">
-        <iconset theme="document-properties">
-         <normaloff/>
-        </iconset>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="KPushButton" name="removePath">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="toolTip">
-        <string>Delete current sub-project path entry.</string>
-       </property>
-       <property name="text">
-        <string>Remove</string>
-       </property>
-       <property name="icon">
-        <iconset theme="list-remove">
-         <normaloff/>
-        </iconset>
-       </property>
-      </widget>
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <item>
+        <widget class="KComboBox" name="projectPaths">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="KPushButton" name="addPath">
+         <property name="toolTip">
+          <string>Add a new sub-project path entry.</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset theme="list-add">
+           <normaloff/>
+          </iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="KPushButton" name="removePath">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="toolTip">
+          <string>Delete current sub-project path entry.</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset theme="list-remove">
+           <normaloff/>
+          </iconset>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
     </layout>
    </item>
-   <item>
+   <item row="1" column="0">
     <widget class="KTabWidget" name="languageParameters">
      <property name="enabled">
       <bool>true</bool>
@@ -91,22 +80,21 @@
       <attribute name="title">
        <string>Includes/Imports</string>
       </attribute>
-      <widget class="IncludesWidget" name="includesWidget" native="true">
-       <property name="geometry">
-        <rect>
-         <x>6</x>
-         <y>6</y>
-         <width>669</width>
-         <height>556</height>
-        </rect>
+      <layout class="QGridLayout" name="gridLayout_3">
+       <property name="margin">
+        <number>0</number>
        </property>
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-         <horstretch>0</horstretch>
-         <verstretch>8</verstretch>
-        </sizepolicy>
-       </property>
-      </widget>
+       <item row="0" column="0">
+        <widget class="IncludesWidget" name="includesWidget" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>8</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
      <widget class="QWidget" name="definesPage">
       <attribute name="title">
@@ -133,18 +121,84 @@
      </widget>
     </widget>
    </item>
-   <item>
-    <widget class="QCheckBox" name="kcfg_reparse">
-     <property name="toolTip">
-      <string>Check this if you want the project to be reparsed to apply the changes.</string>
-     </property>
-     <property name="text">
-      <string>Reparse the project</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
+   <item row="2" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout_5">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Compiler</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="compiler">
+         <property name="toolTip">
+          <string>Select a compiler that will be used to determine standart include directories and macros. </string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Path</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="kcfg_compilerPath"/>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="kcfg_reparse">
+       <property name="toolTip">
+        <string>Check this if you want the project to be reparsed to apply the changes.</string>
+       </property>
+       <property name="text">
+        <string>Reparse the project</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="Line" name="line">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="batchEdit">
+       <property name="toolTip">
+        <string>Edit multiply includes/defines at the same time.</string>
+       </property>
+       <property name="text">
+        <string>&amp;Batch edit...</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>

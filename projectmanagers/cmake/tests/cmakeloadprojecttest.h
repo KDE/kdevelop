@@ -45,12 +45,12 @@ private slots:
     void testSmallProjectWithTests();
 
 //  TODO KF5: Port me?
-#if QT_VERSION <= 0x050000
     void testSmallQt4Project();
     void testSmallKDE4Project();
     void testKDE4ProjectWithTests();
 #endif
     
+    void testBug335803();
 private:
     CMakeProjectData parseProject( const QString& sourcedir );
 };

@@ -116,6 +116,7 @@ void CTestRunJob::start()
         arguments = m_suite->arguments();
     }
 
+    QStringList cases_selected = arguments;
     arguments.prepend(m_suite->executable().toLocalFile());
     m_job = createTestJob("execute", arguments);
 
@@ -123,9 +124,21 @@ void CTestRunJob::start()
         m_outputJob = qobject_cast<OutputJob*>(cjob->subjobs().last());
         Q_ASSERT(m_outputJob);
         m_outputJob->setVerbosity(m_verbosity);
+
+        QString testName = arguments.value(0).split('/').last();
+        QString title;
+        if (cases_selected.count() == 1)
+            title = i18nc("running test %1, %2 test case", "CTest %1: %2", testName, cases_selected.value(0));
+        else
+            title = i18ncp("running test %1, %2 number of test cases", "CTest %2 (%1)", "CTest %2 (%1)", cases_selected.count(), testName);
+
+        m_outputJob->setTitle(title);
+
         connect(m_outputJob->model(), SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(rowsInserted(QModelIndex,int,int)));
     }
     connect(m_job, SIGNAL(finished(KJob*)), SLOT(processFinished(KJob*)));
+    
+    ICore::self()->testController()->notifyTestRunStarted(m_suite, cases_selected);
 }
 
 bool CTestRunJob::doKill()
@@ -162,27 +175,22 @@ void CTestRunJob::processFinished(KJob* job)
 
 void CTestRunJob::rowsInserted(const QModelIndex &parent, int startRow, int endRow)
 {
+    // This regular expresion matches the name of the testcase (whatever between "::" and "(", indeed )
+    // For example, from:
+    //      PASS   : ExpTest::testExp(sum)
+    // matches "testExp"
+    static QRegExp caseRx("::(.*)\\(", Qt::CaseSensitive, QRegExp::RegExp2);
     for (int row = startRow; row <= endRow; ++row)
     {
         QString line = m_outputJob->model()->data(m_outputJob->model()->index(row, 0, parent), Qt::DisplayRole).toString();
 
-        if (!line.contains("()"))
-        {
-            continue;
+        QString testCase;
+        if (caseRx.indexIn(line) >= 0) {
+            testCase = caseRx.cap(1);
         }
 
-        QString testCase = line.split("()").first();
-        if (line.contains("::"))
-        {
-            testCase = testCase.split("::").last();
-        }
-        else
-        {
-            testCase = testCase.split(' ').last();
-        }
-        testCase = testCase.left(testCase.indexOf('('));
-
-        if (m_suite->cases().contains(testCase))
+        TestResult::TestCaseResult prevResult = m_caseResults.value(testCase, TestResult::NotRun);
+        if (prevResult == TestResult::Passed || prevResult == TestResult::NotRun)
         {
             TestResult::TestCaseResult result = TestResult::NotRun;
             if (line.startsWith("PASS   :"))

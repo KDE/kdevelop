@@ -18,13 +18,7 @@
 
 #include "defineswidget.h"
 
-#include <QToolButton>
-
-#include <KLineEdit>
 #include <KAction>
-#include <kfiledialog.h>
-#include <KLocalizedString>
-#include <QtWidgets/QShortcut>
 
 #include "ui_defineswidget.h"
 #include "definesmodel.h"

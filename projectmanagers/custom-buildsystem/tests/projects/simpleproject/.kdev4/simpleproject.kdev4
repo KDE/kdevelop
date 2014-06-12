@@ -36,5 +36,9 @@ Environment=
 Executable=
 Type=2
 
+[Defines And Includes]
+compiler=GCC
+compilerPath=gcc
+
 [Project]
 VersionControlSupport=

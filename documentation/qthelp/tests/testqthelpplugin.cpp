@@ -22,7 +22,13 @@
 #include "../qthelpprovider.h"
 #include "../qthelp_config_shared.h"
 
+#include <interfaces/idocumentation.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/declaration.h>
+#include <language/duchain/types/identifiedtype.h>
+#include <language/duchain/types/pointertype.h>
 #include <tests/autotestshell.h>
+#include <tests/testfile.h>
 
 #include <kdebug.h>
 
@@ -33,6 +39,7 @@ const QString VALID2 = QTHELP_FILES + QString("/valid2.qch");
 const QString INVALID = QTHELP_FILES + QString("/invalid.qch");
 
 QTEST_MAIN(TestQtHelpPlugin)
+using namespace KDevelop;
 
 TestQtHelpPlugin::TestQtHelpPlugin()
 {
@@ -164,4 +171,54 @@ void TestQtHelpPlugin::testRemoveOneProvider()
 
     QCOMPARE(m_plugin->qtHelpProviderLoaded().size(), 1);
     QCOMPARE(m_plugin->qtHelpProviderLoaded().at(0), provider);
+}
+
+void TestQtHelpPlugin::testDeclarationLookup_Class()
+{
+    init();
+
+    TestFile file("class QObject; QObject* o;", "cpp");
+    QVERIFY(file.parseAndWait());
+
+    DUChainReadLocker lock;
+    auto ctx = file.topContext();
+    auto decl = ctx->findDeclarations(QualifiedIdentifier("o")).first();
+    QVERIFY(decl);
+    auto typeDecl = dynamic_cast<const IdentifiedType*>(decl->type<PointerType>()->baseType().unsafeData())->declaration(0);
+    QVERIFY(typeDecl);
+
+    auto provider = dynamic_cast<QtHelpProviderAbstract*>(m_plugin->providers().at(0));
+    QVERIFY(provider);
+    if (!provider->isValid()) {
+        QSKIP("Qt help not available", SkipSingle);
+    }
+
+    auto doc = provider->documentationForDeclaration(typeDecl);
+    QVERIFY(doc);
+    QCOMPARE(doc->name(), QString("QObject"));
+    QVERIFY(doc->description().contains("The QObject class"));
+}
+
+void TestQtHelpPlugin::testDeclarationLookup_OperatorFunction()
+{
+    init();
+
+    TestFile file("class C {}; bool operator<(const C& a, const C& b) { return true; }", "cpp");
+    QVERIFY(file.parseAndWait());
+
+    DUChainReadLocker lock;
+    auto ctx = file.topContext();
+    auto decl = ctx->findDeclarations(QualifiedIdentifier("operator<")).first();
+    QVERIFY(decl);
+
+    auto provider = dynamic_cast<QtHelpProviderAbstract*>(m_plugin->providers().at(0));
+    QVERIFY(provider);
+    if (!provider->isValid()) {
+        QSKIP("Qt help not available", SkipSingle);
+    }
+
+    auto doc = provider->documentationForDeclaration(decl);
+    // TODO: We should never find a documentation entry for this (but instead, the operator< for QChar is found here)
+    QEXPECT_FAIL("", "doc should be null here", Continue);
+    QVERIFY(!doc);
 }

@@ -18,10 +18,6 @@
 
 #include "test_cppassistants.h"
 
-#include "../codegen/renameassistant.h"
-#include "../codegen/renameaction.h"
-#include "../codegen/codeassistant.h"
-
 #include <QtTest/QtTest>
 #include <KTempDir>
 
@@ -34,6 +30,8 @@
 #include <interfaces/isourceformattercontroller.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
+#include <language/assistant/renameaction.h>
+#include <language/assistant/staticassistantsmanager.h>
 #include <language/backgroundparser/backgroundparser.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainutils.h>
@@ -49,7 +47,12 @@ using namespace KTextEditor;
 QTEST_MAIN(TestCppAssistants)
 
 ForegroundLock *globalTestLock = 0;
-Cpp::StaticCodeAssistant *staticCodeAssistant = 0;
+
+namespace {
+
+StaticAssistantsManager* staticAssistantsManager() { return Core::self()->languageController()->staticAssistantsManager(); }
+
+}
 
 void TestCppAssistants::initTestCase()
 {
@@ -60,13 +63,11 @@ void TestCppAssistants::initTestCase()
   Core::self()->sourceFormatterController()->disableSourceFormatting(true);
   CodeRepresentation::setDiskChangesForbidden(true);
 
-  staticCodeAssistant = new Cpp::StaticCodeAssistant();
   globalTestLock = new ForegroundLock;
 }
 
 void TestCppAssistants::cleanupTestCase()
 {
-  delete staticCodeAssistant;
   Core::self()->cleanup();
   delete globalTestLock;
   globalTestLock = 0;
@@ -108,7 +109,7 @@ public:
     Core::self()->documentController()->documentForUrl(m_cppDocument.url)->close(KDevelop::IDocument::Discard);
     Core::self()->documentController()->documentForUrl(m_headerDocument.url)->close(KDevelop::IDocument::Discard);
 
-    staticCodeAssistant->hideAssistant();
+        staticAssistantsManager()->hideAssistant();
   }
 
   void changeDocument(TestDoc which, Range where, const QString& what, bool waitForUpdate = false)
@@ -255,20 +256,35 @@ void TestCppAssistants::testRenameAssistant()
     testbed.changeDocument(Testbed::CppDoc, stateChange.range, stateChange.newText);
     if (stateChange.result.isEmpty())
     {
-      QVERIFY(!staticCodeAssistant->activeAssistant() || !staticCodeAssistant->activeAssistant()->actions().size());
+      QVERIFY(!staticAssistantsManager()->activeAssistant() || !staticAssistantsManager()->activeAssistant()->actions().size());
     }
     else
     {
-      QVERIFY(staticCodeAssistant->activeAssistant() && staticCodeAssistant->activeAssistant()->actions().size());
-      Cpp::RenameAction *r = dynamic_cast<Cpp::RenameAction*>(staticCodeAssistant->activeAssistant()->actions().first().data());
+      QVERIFY(staticAssistantsManager()->activeAssistant() && staticAssistantsManager()->activeAssistant()->actions().size());
+      RenameAction *r = dynamic_cast<RenameAction*>(staticAssistantsManager()->activeAssistant()->actions().first().data());
       QCOMPARE(r->oldDeclarationName(), oldDeclarationName);
       QCOMPARE(r->newDeclarationName(), stateChange.result);
     }
   }
-  if (staticCodeAssistant->activeAssistant() && staticCodeAssistant->activeAssistant()->actions().size())
-    staticCodeAssistant->activeAssistant()->actions().first()->execute();
+  if (staticAssistantsManager()->activeAssistant() && staticAssistantsManager()->activeAssistant()->actions().size())
+        staticAssistantsManager()->activeAssistant()->actions().first()->execute();
   QFETCH(QString, finalFileContents);
   QCOMPARE(testbed.documentText(Testbed::CppDoc), finalFileContents);
+}
+
+void TestCppAssistants::testRenameAssistantUndoRename()
+{
+  Testbed testbed("", "int foo(int i)\n { i = 0; return i; }");
+  testbed.changeDocument(Testbed::CppDoc, Range(0,13,0,13), "d");
+  QVERIFY(staticAssistantsManager()->activeAssistant());
+  QVERIFY(staticAssistantsManager()->activeAssistant()->actions().size() > 0);
+  RenameAction *r = dynamic_cast<RenameAction*>(staticAssistantsManager()->activeAssistant()->actions().first().data());
+  QVERIFY(r);
+
+  // now rename the variable back to its original identifier
+  testbed.changeDocument(Testbed::CppDoc, Range(0,13,0,14), "");
+  // there should be no assistant anymore
+  QVERIFY(!staticAssistantsManager()->activeAssistant());
 }
 
 const QString SHOULD_ASSIST = "SHOULD_ASSIST"; //An assistant will be visible
@@ -314,15 +330,25 @@ void TestCppAssistants::testSignatureAssistant_data()
        )
     << "class Foo {\nint bar(char* b, int a, int c = 10); \n};"
     << "int Foo::bar(char* b, int a, int c)\n{ a = c; b = new char; return a + *b; }";
-
   // see https://bugs.kde.org/show_bug.cgi?id=299393
   // actually related to the whitespaces in the header...
+
   QTest::newRow("Change Function Constness")
     << "class Foo {\nvoid bar( const Foo& ) const;\n};"
     << "void Foo::bar(const Foo&) const\n{}"
     << (QList<StateChange>() << StateChange(Testbed::CppDoc, Range(0,25,0,31), "", SHOULD_ASSIST))
     << "class Foo {\nvoid bar( const Foo& );\n};"
     << "void Foo::bar(const Foo&)\n{}";
+
+  QTest::newRow("Undo Change")
+    << "class Foo {\nint bar(int a, char* b, int c = 10); \n};"
+    << "int Foo::bar(int a, char* b, int c)\n{ a = c; b = new char; return a + *b; }"
+    << (QList<StateChange>()
+          << StateChange(Testbed::HeaderDoc, Range(1,8,1,11), "char", SHOULD_ASSIST)
+          << StateChange(Testbed::HeaderDoc, Range(1,8,1,12), "int", NO_ASSIST)
+       )
+    << "class Foo {\nint bar(int a, char* b, int c = 10); \n};"
+    << "int Foo::bar(int a, char* b, int c)\n{ a = c; b = new char; return a + *b; }";
 }
 
 void TestCppAssistants::testSignatureAssistant()
@@ -336,13 +362,15 @@ void TestCppAssistants::testSignatureAssistant()
   {
     testbed.changeDocument(stateChange.document, stateChange.range, stateChange.newText, true);
 
-    if (stateChange.result == SHOULD_ASSIST)
-      QVERIFY(staticCodeAssistant->activeAssistant() && staticCodeAssistant->activeAssistant()->actions().size());
-    else
-      QVERIFY(!staticCodeAssistant->activeAssistant() || !staticCodeAssistant->activeAssistant()->actions().size());
+    if (stateChange.result == SHOULD_ASSIST) {
+      QVERIFY(staticAssistantsManager()->activeAssistant());
+      QVERIFY(staticAssistantsManager()->activeAssistant()->actions().size());
+    } else {
+      QVERIFY(!staticAssistantsManager()->activeAssistant() || !staticAssistantsManager()->activeAssistant()->actions().size());
+    }
   }
-  if (staticCodeAssistant->activeAssistant() && staticCodeAssistant->activeAssistant()->actions().size())
-    staticCodeAssistant->activeAssistant()->actions().first()->execute();
+  if (staticAssistantsManager()->activeAssistant() && staticAssistantsManager()->activeAssistant()->actions().size())
+        staticAssistantsManager()->activeAssistant()->actions().first()->execute();
 
   QFETCH(QString, finalHeaderContents);
   QFETCH(QString, finalCppContents);

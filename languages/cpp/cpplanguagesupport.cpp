@@ -59,6 +59,8 @@
 #include <interfaces/iplugincontroller.h>
 #include <language/interfaces/editorcontext.h>
 #include <project/projectmodel.h>
+#include <language/assistant/renameassistant.h>
+#include <language/assistant/staticassistantsmanager.h>
 #include <language/backgroundparser/backgroundparser.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainutils.h>
@@ -67,6 +69,7 @@
 #include <language/duchain/topducontext.h>
 #include <language/duchain/functiondefinition.h>
 #include <language/codegen/coderepresentation.h>
+
 #include <interfaces/contextmenuextension.h>
 
 #include "preprocessjob.h"
@@ -81,9 +84,9 @@
 #include "environmentmanager.h"
 #include "cppduchain/navigation/navigationwidget.h"
 #include "cppduchain/cppduchain.h"
-#include "codegen/codeassistant.h"
 #include <interfaces/foregroundlock.h>
 //#include "codegen/makeimplementationprivate.h"
+#include "codegen/adaptsignatureassistant.h"
 
 #include "includepathresolver.h"
 #include "setuphelpers.h"
@@ -185,7 +188,6 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
 //     Cpp::EnvironmentManager::self()->setMatchingLevel(Cpp::EnvironmentManager::Full);
 
     CppUtils::standardMacros();
-    CppUtils::standardIncludePaths();
 
     m_includeResolver = new CppTools::IncludePathResolver;
 
@@ -201,7 +203,8 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
     new UIBlockTester(LOCKUP_INTERVAL, this);
 #endif
 
-    m_assistant = new Cpp::StaticCodeAssistant;
+    core()->languageController()->staticAssistantsManager()->registerAssistant(StaticAssistant::Ptr(new RenameAssistant(this)));
+    core()->languageController()->staticAssistantsManager()->registerAssistant(StaticAssistant::Ptr(new Cpp::AdaptSignatureAssistant(this)));
 
     foreach(QString mimeType, m_mimeTypes){
         KDevelop::IBuddyDocumentFinder::addFinder(mimeType,this);
@@ -400,7 +403,6 @@ CppLanguageSupport::~CppLanguageSupport()
 #ifdef DEBUG_UI_LOCKUP
     delete m_blockTester;
 #endif
-    delete m_assistant;
 
     foreach(QString mimeType, m_mimeTypes){
         KDevelop::IBuddyDocumentFinder::removeFinder(mimeType);
@@ -419,6 +421,11 @@ KDevelop::ParseJob *CppLanguageSupport::createParseJob( const IndexedString &url
 KDevelop::ICodeHighlighting *CppLanguageSupport::codeHighlighting() const
 {
     return m_highlights;
+}
+
+BasicRefactoring* CppLanguageSupport::refactoring() const
+{
+    return m_refactoring;
 }
 
 ICreateClassHelper* CppLanguageSupport::createClassHelper() const

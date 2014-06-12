@@ -57,6 +57,7 @@ private slots:
     void addIncludePath();
     // Handles action and also Del-key in list
     void deleteIncludePath();
+    void checkIfIncludePathExist();
 
     // Forward includes model changes
     void includesChanged();

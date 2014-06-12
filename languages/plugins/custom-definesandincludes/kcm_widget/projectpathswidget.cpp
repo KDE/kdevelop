@@ -1,10 +1,11 @@
 /************************************************************************
  *                                                                      *
  * Copyright 2010 Andreas Pakulat <apaku@gmx.de>                        *
+ * Copyright 2014 Sergey Kalinichev <kalinichev.so.0@gmail.com>         *
  *                                                                      *
  * This program is free software; you can redistribute it and/or modify *
  * it under the terms of the GNU General Public License as published by *
- * the Free Software Foundation; either version 2 or version 3 of the License, or    *
+ * the Free Software Foundation; either version 2 of the License, or    *
  * (at your option) any later version.                                  *
  *                                                                      *
  * This program is distributed in the hope that it will be useful, but  *
@@ -18,30 +19,27 @@
 
 #include "projectpathswidget.h"
 
-#include <QToolButton>
-
-#include <KLineEdit>
-#include <KAction>
 #include <kfiledialog.h>
 #include <kmessagebox.h>
-#include <assert.h>
+
+#include <QRegExp>
 
 #include <util/environmentgrouplist.h>
 #include <interfaces/iproject.h>
 #include <KLocalizedString>
 
 #include "ui_projectpathswidget.h"
+#include "ui_batchedit.h"
 #include "projectpathsmodel.h"
 #include "debugarea.h"
 
 ProjectPathsWidget::ProjectPathsWidget( QWidget* parent )
-    : QWidget ( parent ), ui( new Ui::ProjectPathsWidget )
-    , pathsModel( new ProjectPathsModel( this ) )
+    : QWidget(parent),
+      ui(new Ui::ProjectPathsWidget),
+      pathsModel(new ProjectPathsModel(this))
 {
     ui->setupUi( this );
 
-    // Hack to workaround broken setIcon(QIcon) overload in KPushButton, the function does not set the icon at all
-    // So need to explicitly use the QIcon overload
     ui->addPath->setIcon(QIcon::fromTheme("list-add"));
     ui->replacePath->setIcon(QIcon::fromTheme("document-edit"));
     ui->removePath->setIcon(QIcon::fromTheme("list-remove"));
@@ -49,17 +47,17 @@ ProjectPathsWidget::ProjectPathsWidget( QWidget* parent )
     // hack taken from kurlrequester, make the buttons a bit less in height so they better match the url-requester
     ui->addPath->setFixedHeight( ui->projectPaths->sizeHint().height() );
     ui->removePath->setFixedHeight( ui->projectPaths->sizeHint().height() );
-    ui->replacePath->setFixedHeight( ui->projectPaths->sizeHint().height() );
 
     connect( ui->addPath, SIGNAL(clicked(bool)), SLOT(addProjectPath()) );
-    connect( ui->replacePath, SIGNAL(clicked(bool)), SLOT(replaceProjectPath()) );
     connect( ui->removePath, SIGNAL(clicked(bool)), SLOT(deleteProjectPath()) );
+    connect( ui->batchEdit, SIGNAL(clicked(bool)), SLOT(batchEdit()) );
 
     ui->projectPaths->setModel( pathsModel );
     connect( ui->projectPaths, SIGNAL(currentIndexChanged(int)), SLOT(projectPathSelected(int)) );
     connect( pathsModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SIGNAL(changed()) );
     connect( pathsModel, SIGNAL(rowsInserted(QModelIndex,int,int)), SIGNAL(changed()) );
     connect( pathsModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), SIGNAL(changed()) );
+    connect( ui->compiler, SIGNAL(activated(QString)), SIGNAL(changed()) );
 
     connect( ui->includesWidget, SIGNAL(includesChanged(QStringList)), SLOT(includesChanged(QStringList)) );
     connect( ui->definesWidget, SIGNAL(definesChanged(Defines)), SLOT(definesChanged(Defines)) );
@@ -110,7 +108,7 @@ void ProjectPathsWidget::projectPathSelected( int index )
     if( index < 0 && pathsModel->rowCount() > 0 ) {
         index = 0;
     }
-    assert(index >= 0);
+    Q_ASSERT(index >= 0);
     const QModelIndex midx = pathsModel->index( index, 0 );
     ui->includesWidget->setIncludes( pathsModel->data( midx, ProjectPathsModel::IncludesDataRole ).toStringList() );
     ui->definesWidget->setDefines( pathsModel->data( midx, ProjectPathsModel::DefinesDataRole ).toHash() );
@@ -137,18 +135,6 @@ void ProjectPathsWidget::addProjectPath()
     updateEnablements();
 }
 
-void ProjectPathsWidget::replaceProjectPath()
-{
-    KFileDialog dlg(pathsModel->data(pathsModel->index(0, 0), ProjectPathsModel::FullUrlDataRole).value<KUrl>(), "", this);
-    dlg.setMode( KFile::LocalOnly | KFile::ExistingOnly | KFile::File | KFile::Directory );
-    dlg.exec();
-    definesAndIncludesDebug() << "adding url:" << dlg.selectedUrl();
-
-    pathsModel->setData( pathsModel->index( ui->projectPaths->currentIndex(), 0 ), QVariant::fromValue<KUrl>(dlg.selectedUrl()), ProjectPathsModel::FullUrlDataRole );
-    definesAndIncludesDebug() << "added url:" << pathsModel->rowCount();
-    updateEnablements();
-}
-
 void ProjectPathsWidget::deleteProjectPath()
 {
     const QModelIndex idx = pathsModel->index( ui->projectPaths->currentIndex(), 0 );
@@ -166,7 +152,99 @@ void ProjectPathsWidget::setProject(KDevelop::IProject* w_project)
 void ProjectPathsWidget::updateEnablements() {
     // Disable removal of the project root entry which is always first in the list
     ui->removePath->setEnabled( ui->projectPaths->currentIndex() > 0 );
-    ui->replacePath->setEnabled( ui->projectPaths->currentIndex() > 0 );
+}
+
+void ProjectPathsWidget::batchEdit()
+{
+    Ui::BatchEdit be;
+    QDialog dialog(this);
+    be.setupUi(&dialog);
+
+    const int index = qMax(ui->projectPaths->currentIndex(), 0);
+
+    const QModelIndex midx = pathsModel->index(index, 0);
+
+    if (!midx.isValid()) {
+        return;
+    }
+
+    bool includesTab = ui->languageParameters->currentIndex() == 0;
+    if (includesTab) {
+        auto includes = pathsModel->data(midx, ProjectPathsModel::IncludesDataRole).toStringList();
+        be.textEdit->setPlainText(includes.join("\n"));
+
+        dialog.setWindowTitle(i18n("Edit include directories/files"));
+    } else {
+        auto defines = pathsModel->data(midx, ProjectPathsModel::DefinesDataRole).value<Defines>();
+
+        for (auto it = defines.constBegin(); it != defines.constEnd(); it++) {
+            be.textEdit->append(it.key() + "=" + it.value().toString());
+        }
+
+        dialog.setWindowTitle(i18n("Edit defined macros"));
+    }
+
+    if (dialog.exec() != QDialog::Accepted) {
+        return;
+    }
+
+    if (includesTab) {
+        auto includes = be.textEdit->toPlainText().split('\n', QString::SkipEmptyParts);
+        for (auto& s : includes) {
+            s = s.trimmed();
+        }
+
+        pathsModel->setData(midx, includes, ProjectPathsModel::IncludesDataRole);
+    } else {
+        auto list = be.textEdit->toPlainText().split('\n', QString::SkipEmptyParts);
+        Defines defines;
+
+        for (auto& d : list) {
+            //This matches: a=b, a=, a
+            QRegExp r("^([^=]+)(=(.*))?$");
+
+            if (!r.exactMatch(d)) {
+                continue;
+            }
+            defines[r.cap(1).trimmed()] = r.cap(3).trimmed();
+        }
+
+        pathsModel->setData(midx, defines, ProjectPathsModel::DefinesDataRole);
+    }
+
+    projectPathSelected(index);
+}
+
+void ProjectPathsWidget::setCurrentCompiler(const QString& name)
+{
+    for (int i = 0 ; i < ui->compiler->count(); ++i) {
+        if(ui->compiler->itemText(i) == name)
+        {
+            ui->compiler->setCurrentIndex(i);
+        }
+    }
+}
+
+void ProjectPathsWidget::setCompilerPath(const QString& path)
+{
+    ui->kcfg_compilerPath->setText(path);
+}
+
+QString ProjectPathsWidget::currentCompilerName() const
+{
+    return ui->compiler->currentText();
+}
+
+QString ProjectPathsWidget::compilerPath() const
+{
+    return ui->kcfg_compilerPath->text();
+}
+
+void ProjectPathsWidget::setCompilers(const QStringList& compilerNames)
+{
+    ui->compiler->clear();
+    ui->compiler->addItems(compilerNames);
 }
 
 #include "projectpathswidget.moc"
+

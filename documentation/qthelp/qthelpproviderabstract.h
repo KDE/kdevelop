@@ -46,6 +46,9 @@ public:
 
     virtual KSharedPtr< KDevelop::IDocumentation > homePage() const;
 
+    /// @return False in case we failed to load any documentation files, else true
+    bool isValid() const;
+
     QHelpEngine* engine() { return &m_engine; }
 public slots:
     void jumpedTo(const QUrl& newUrl) const;

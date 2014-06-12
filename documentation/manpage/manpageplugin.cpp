@@ -111,11 +111,11 @@ KSharedPtr< IDocumentation > ManPagePlugin::documentationForDeclaration( Declara
         KDevelop::QualifiedIdentifier qid = dec->qualifiedIdentifier();
         if(qid.count() == 1){
             if(m_model->identifierInSection(identifier, "3")){
-                return KSharedPtr<IDocumentation>(new ManPageDocumentation(qMakePair(identifier, KUrl("man:(3)/"+identifier))));
+                return KSharedPtr<IDocumentation>(new ManPageDocumentation(identifier, KUrl("man:(3)/"+identifier)));
             } else if(m_model->identifierInSection(identifier, "2")){
-                return KSharedPtr<IDocumentation>(new ManPageDocumentation(qMakePair(identifier, KUrl("man:(2)/"+identifier))));
+                return KSharedPtr<IDocumentation>(new ManPageDocumentation(identifier, KUrl("man:(2)/"+identifier)));
             } else {
-                return KSharedPtr<IDocumentation>(new ManPageDocumentation(qMakePair(identifier, KUrl("man:"+identifier))));
+                return KSharedPtr<IDocumentation>(new ManPageDocumentation(identifier, KUrl("man:"+identifier)));
             }
         }
     }
@@ -130,7 +130,7 @@ QAbstractListModel* ManPagePlugin::indexModel() const
 KSharedPtr< IDocumentation > ManPagePlugin::documentationForIndex(const QModelIndex& index) const
 {
     QString name = index.data().toString();
-    return KSharedPtr<IDocumentation>(new ManPageDocumentation(qMakePair(name, KUrl("man:"+name))));
+    return KSharedPtr<IDocumentation>(new ManPageDocumentation(name, KUrl("man:"+name)));
 }
 
 KSharedPtr< IDocumentation > ManPagePlugin::homePage() const

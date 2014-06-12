@@ -52,7 +52,7 @@ bool IncludesModel::setData( const QModelIndex& index, const QVariant& value, in
         return false;
     }
 
-    m_includes[index.row()] = value.toString();
+    m_includes[index.row()] = value.toString().trimmed();
     emit dataChanged( index, index );
     return true;
 }
@@ -76,7 +76,7 @@ void IncludesModel::setIncludes(const QStringList& includes )
     beginResetModel();
     m_includes.clear();
     foreach( const QString includePath, includes ) {
-        addIncludeInternal( includePath );
+        addIncludeInternal( includePath.trimmed() );
     }
     endResetModel();
 }
@@ -103,16 +103,20 @@ void IncludesModel::addInclude( const QString& includePath )
     }
 }
 
-void IncludesModel::addIncludeInternal(const QString& includePath)
+void IncludesModel::addIncludeInternal( const QString& includePath )
 {
-        // Do not allow duplicates
-        foreach( const QString & include, m_includes ) {
-            if( include == includePath ) {
-                return;
-            }
-        }
+    if ( includePath.isEmpty() ) {
+        return;
+    }
 
-        m_includes << includePath;
+    // Do not allow duplicates
+    foreach( const QString &include, m_includes ) {
+        if( include == includePath ) {
+            return;
+        }
+    }
+
+    m_includes << includePath;
 }
 
 

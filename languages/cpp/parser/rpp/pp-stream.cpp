@@ -56,6 +56,7 @@ Stream::Stream()
   , m_locationTable(0L)
   , m_originalInputPosition(KDevelop::CursorInRevision::invalid())
 {
+  c = nullptr;
   end = 0;
 }
 

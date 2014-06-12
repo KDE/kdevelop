@@ -2,6 +2,7 @@
 
     Copyright 2010 Yannick Motta <yannick.motta@gmail.com>
     Copyright 2010 Benjamin Port <port.benjamin@gmail.com>
+    Copyright 2014 Milian Wolff <mail@milianw.de>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -24,25 +25,12 @@
 
 #include <QStringListModel>
 
-#include <language/duchain/indexedstring.h>
-#include <language/duchain/declaration.h>
-#include <KIO/FileJob>
-#include <QMap>
-#include <KUrl>
+#include <KIO/Job>
+
 #include <QListIterator>
 
-namespace KDevelop
-{
-    class Declaration;
-    class ParseJob;
-}
-
 // id and name for man section
-typedef QPair<QString, QString> ManSection ;
-
-// name and url for man page
-typedef QPair<QString, KUrl> ManPage;
-
+typedef QPair<QString, QString> ManSection;
 
 class ManPageModel : public QAbstractItemModel
 {
@@ -74,25 +62,23 @@ signals:
 public slots:
     void showItem(const QModelIndex& idx);
     void showItemFromUrl(const QUrl& url);
+
 private slots:
-    void indexDataReceived(KJob *job);
-    void sectionDataReceived(KJob *job);
     void initModel();
-    void readDataFromMainIndex(KIO::Job * job, const QByteArray &data);
+
+    void indexEntries(KIO::Job* job, const KIO::UDSEntryList& entries);
+    void indexLoaded();
+
+    void sectionEntries(KIO::Job* job, const KIO::UDSEntryList& entries);
+    void sectionLoaded();
 
 private:
-    QList<ManPage> manPageList(const QString &sectionId) const;
-    ManPage manPage(const QString &sectionId, int position) const;
+    QString manPage(const QString &sectionUrl, int position) const;
     void initSection();
-    void sectionParser(const QString &sectionId, const QString &data);
-    QList<ManSection> indexParser();
-
-    /// Slave buffers
-    QString m_manMainIndexBuffer;
 
     QListIterator<ManSection> *iterator;
     QList<ManSection> m_sectionList;
-    QHash<QString, QList<ManPage> > m_manMap;
+    QHash<QString, QVector<QString> > m_manMap;
     QStringList m_index;
     QStringListModel* m_indexModel;
 

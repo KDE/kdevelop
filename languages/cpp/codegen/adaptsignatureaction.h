@@ -21,12 +21,15 @@
 
 #include <interfaces/iassistant.h>
 #include <language/duchain/declaration.h>
+#include <language/duchain/topducontext.h>
+
+namespace KDevelop {
+class RenameAction;
+}
 
 using namespace KDevelop;
 namespace Cpp
 {
-
-class RenameAction;
 
 typedef QPair<IndexedType, QString> ParameterItem;
 struct Signature
@@ -37,7 +40,10 @@ struct Signature
     bool isConst;
 };
 
-class AdaptSignatureAction : public IAssistantAction {
+class AdaptSignatureAction : public IAssistantAction
+{
+  Q_OBJECT
+
 public:
     AdaptSignatureAction(
         const DeclarationId& definitionId,

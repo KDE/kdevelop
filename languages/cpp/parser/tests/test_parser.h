@@ -32,7 +32,7 @@ class TestParser : public QObject {
   Q_OBJECT
 
 public:
-  TestParser() { }
+  TestParser();
 
 private slots:
   void initTestCase();

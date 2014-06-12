@@ -18,13 +18,11 @@
 
 #include "includeswidget.h"
 
-#include <QToolButton>
-
-#include <KLineEdit>
 #include <KAction>
 #include <KLocalizedString>
 #include <kfiledialog.h>
-#include <kmessagebox.h>
+
+#include <QFileInfo>
 
 #include <interfaces/iproject.h>
 
@@ -48,6 +46,8 @@ IncludesWidget::IncludesWidget( QWidget* parent )
     // hack taken from kurlrequester, make the buttons a bit less in height so they better match the url-requester
     ui->addIncludePath->setFixedHeight( ui->includePathRequester->sizeHint().height() );
     ui->removeIncludePath->setFixedHeight( ui->includePathRequester->sizeHint().height() );
+
+    ui->errorLabel->setHidden(true);
 
     connect( ui->addIncludePath, SIGNAL(clicked(bool)), SLOT(addIncludePath()) );
     connect( ui->removeIncludePath, SIGNAL(clicked(bool)), SLOT(deleteIncludePath()) );
@@ -77,11 +77,13 @@ void IncludesWidget::setIncludes( const QStringList& paths )
     includesModel->setIncludes( paths );
     blockSignals( b );
     updateEnablements();
+    checkIfIncludePathExist();
 }
 void IncludesWidget::includesChanged()
 {
     definesAndIncludesDebug() << "includes changed";
     emit includesChanged( includesModel->includes() );
+    checkIfIncludePathExist();
 }
 
 void IncludesWidget::includePathSelected( const QModelIndex& /*selected*/ )
@@ -111,10 +113,8 @@ void IncludesWidget::deleteIncludePath()
 {
     definesAndIncludesDebug() << "deleting include path" << ui->includePaths->currentIndex();
     const QModelIndex curidx = ui->includePaths->currentIndex();
-    if( curidx.isValid() ) {
-        if( KMessageBox::questionYesNo( this, i18n("Are you sure you want to remove the selected include path '%1'?", includesModel->data(curidx, Qt::DisplayRole).toString() ), i18n("Delete Include Path") ) == KMessageBox::Yes ) {
-            includesModel->removeRows( curidx.row(), 1 );
-        }
+    if (curidx.isValid()) {
+        includesModel->removeRows(curidx.row(), 1);
     }
     updateEnablements();
 }
@@ -144,6 +144,21 @@ QString IncludesWidget::makeIncludeDirAbsolute(const KUrl& url) const
         localFile = ui->includePathRequester->startDir().toLocalFile() + '/' + url.path();
     }
     return localFile;
+}
+
+void IncludesWidget::checkIfIncludePathExist()
+{
+    QFileInfo info;
+    for (auto& include : includesModel->includes()) {
+        info.setFile(include);
+        if (!info.exists()) {
+            ui->errorLabel->setText(include + i18n(" doesn't exist"));
+            ui->errorLabel->setHidden(false);
+            return;
+        }
+    }
+    ui->errorLabel->setHidden(true);
+    ui->errorLabel->clear();
 }
 
 #include "includeswidget.moc"

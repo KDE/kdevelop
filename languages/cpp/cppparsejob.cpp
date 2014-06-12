@@ -149,14 +149,6 @@ bool CPPParseJob::keepDuchain() const {
     return m_keepDuchain;
 }
 
-void CPPParseJob::setKeepEverything(bool b) {
-    m_keepEverything = b;
-}
-
-bool CPPParseJob::keepEverything() const {
-    return m_keepEverything;
-}
-
 void CPPParseJob::includedFileParsed() {
   ++m_parsedIncludes;
   const int estimateIncludes = 450;

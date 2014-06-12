@@ -65,12 +65,14 @@ void IncludePathComputer::computeForeground()
   }
 
   const IndexedString indexedSource(m_source);
+  bool noProject = true;
   foreach (IProject *project, ICore::self()->projectController()->projects()) {
     QList<ProjectFileItem*> files = project->filesForPath(indexedSource);
     if (files.isEmpty()) {
       continue;
     }
 
+    noProject = false;
     IBuildSystemManager* buildManager = project->buildSystemManager();
     if (!buildManager) {
       // We found the project, but no build manager!!
@@ -109,10 +111,10 @@ void IncludePathComputer::computeForeground()
       m_effectiveBuildDirectory.clear();
     }
 
-      for(const auto& dir : idm->includes(file, IDefinesAndIncludesManager::UserDefined)){
+      for (const auto& dir : idm->includes(file, IDefinesAndIncludesManager::Type(IDefinesAndIncludesManager::UserDefined | IDefinesAndIncludesManager::CompilerSpecific))){
         addInclude(dir);
       }
-      m_defines = idm->defines(file, IDefinesAndIncludesManager::Type(IDefinesAndIncludesManager::UserDefined | IDefinesAndIncludesManager::ProjectSpecific));
+      m_defines = idm->defines(file);
 
     m_gotPathsFromManager = !dirs.isEmpty();
     kDebug(9007) << "Got " << dirs.count() << " include-paths from build-manager";
@@ -121,31 +123,20 @@ void IncludePathComputer::computeForeground()
     }
   }
 
-  if (!m_gotPathsFromManager) {
+  if (noProject) {
+    for (const auto& dir : IDefinesAndIncludesManager::manager()->includes(nullptr)) {
+      addInclude( dir );
+    }
+    m_defines = IDefinesAndIncludesManager::manager()->defines(nullptr);
+  } else if (!m_gotPathsFromManager) {
     kDebug(9007) << "Did not find any include paths from project manager for" << m_source;
   }
-}
-
-static Path::List toPaths(const QStringList& paths)
-{
-  Path::List ret;
-  ret.reserve(paths.size());
-  foreach (const QString& path, paths) {
-    ret << Path(path);
-  }
-  return ret;
 }
 
 void IncludePathComputer::computeBackground()
 {
   if (m_ready) {
     return;
-  }
-
-  //Insert standard-paths
-  static const Path::List standardIncludePaths = toPaths(CppUtils::standardIncludePaths());
-  foreach (const Path& path, standardIncludePaths) {
-    addInclude(path);
   }
 
   if (!enableIncludePathResolution) {
