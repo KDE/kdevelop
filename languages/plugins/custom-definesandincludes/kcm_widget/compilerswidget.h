@@ -45,12 +45,11 @@ class CompilersWidget : public QDialog
 
 public:
     CompilersWidget( QWidget* parent = 0 );
-    void setCompilers( const QVector<Compiler>& compilers );
-    QVector<Compiler> compilers() const;
+    void setCompilers( const QVector<CompilerPointer>& compilers );
+    QVector<CompilerPointer> compilers() const;
     void clear();
 
 private slots:
-    // Handle Del key
     void deleteCompiler();
     void addCompiler(const QString& factoryName);
 

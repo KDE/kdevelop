@@ -21,19 +21,40 @@
  *
  */
 
-#ifndef MSVCCOMPILER_H
-#define MSVCCOMPILER_H
+#include "compilerfactories.h"
 
-#include "icompiler.h"
+#include "gcclikecompiler.h"
+#include "msvccompiler.h"
 
-class MsvcCompiler : public ICompiler
+QString ClangFactory::name() const
 {
-public:
-    MsvcCompiler(const QString& name, const QString& path, bool editable, const QString& factoryName);
+    // TODO KF5: use QStringLiteral
+    return "Clang";
+}
 
-    virtual QHash<QString, QString> defines() const override;
+CompilerPointer ClangFactory::createCompiler(const QString& name, const QString& path, bool editable ) const
+{
+    return CompilerPointer(new GccLikeCompiler(name, path, editable, this->name()));
+}
 
-    virtual Path::List includes() const override;
-};
+QString GccFactory::name() const
+{
+    // TODO KF5: use QStringLiteral
+    return "GCC";
+}
 
-#endif // MSVCCOMPILER_H
+CompilerPointer GccFactory::createCompiler(const QString& name, const QString& path, bool editable ) const
+{
+    return CompilerPointer(new GccLikeCompiler(name, path, editable, this->name()));
+}
+
+QString MsvcFactory::name() const
+{
+    // TODO KF5: use QStringLiteral
+    return "MSVC";
+}
+
+CompilerPointer MsvcFactory::createCompiler(const QString& name, const QString& path, bool editable ) const
+{
+   return CompilerPointer(new MsvcCompiler(name, path, editable, this->name()));
+}

@@ -65,9 +65,6 @@ CompilersWidget::CompilersWidget(QWidget* parent)
 
     if (auto cp = compilerProvider()) {
         foreach (const auto& factory, cp->compilerFactories()) {
-            if (factory->name().isEmpty()) {
-                continue;
-            }
             QAction* action = new QAction(m_addMenu);
             action->setText(factory->name());
             connect(action, SIGNAL(triggered()), m_mapper, SLOT(map()));
@@ -78,14 +75,17 @@ CompilersWidget::CompilersWidget(QWidget* parent)
     }
 
     connect(m_ui->removeButton, SIGNAL(clicked()), SLOT(deleteCompiler()));
+
+    auto delAction = new KAction( i18n("Delete compiler"), this );
+    delAction->setShortcut( KShortcut( "Del" ) );
+    delAction->setShortcutContext( Qt::WidgetWithChildrenShortcut );
+    m_ui->compilers->addAction( delAction );
+    connect( delAction, SIGNAL(triggered()), SLOT(deleteCompiler()) );
 }
 
-void CompilersWidget::setCompilers(const QVector<Compiler>& compilers)
+void CompilersWidget::setCompilers(const QVector< CompilerPointer >& compilers)
 {
-    bool b = blockSignals(true);
-    clear();
     m_compilersModel->setCompilers(compilers);
-    blockSignals(b);
 }
 
 void CompilersWidget::clear()
@@ -106,15 +106,14 @@ void CompilersWidget::addCompiler(const QString& factoryName)
 {
    foreach (const auto& factory, compilerProvider()->compilerFactories()) {
         if (factoryName == factory->name()) {
-            auto cmplrs = m_compilersModel->Compilers();
-            cmplrs.append(factory->createCompiler("", ""));
-            m_compilersModel->setCompilers(cmplrs);
+            //add compiler without any information, the user will fill the data in later
+            m_compilersModel->addCompiler(factory->createCompiler(QString(), QString()));
             break;
         }
     }
 }
 
-QVector<Compiler> CompilersWidget::compilers() const
+QVector< CompilerPointer > CompilersWidget::compilers() const
 {
-    return m_compilersModel->Compilers();
+    return m_compilersModel->compilers();
 }

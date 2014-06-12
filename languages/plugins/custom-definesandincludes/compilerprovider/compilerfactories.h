@@ -21,17 +21,33 @@
  *
  */
 
-#ifndef CLANGFACTORY_H
-#define CLANGFACTORY_H
+#ifndef COMPILERFACTORIES_H
+#define COMPILERFACTORIES_H
 
 #include "icompilerfactory.h"
 
 class ClangFactory : public ICompilerFactory
 {
 public:
-    virtual Compiler createCompiler( const QString& name, const QString& path, bool editable = true ) override;
+    virtual CompilerPointer createCompiler( const QString& name, const QString& path, bool editable = true ) const override;
 
     virtual QString name() const override;
 };
 
-#endif // CLANGFACTORY_H
+class GccFactory : public ICompilerFactory
+{
+public:
+    virtual CompilerPointer createCompiler( const QString& name, const QString& path, bool editable = true ) const override;
+
+    virtual QString name() const override;
+};
+
+class MsvcFactory : public ICompilerFactory
+{
+public:
+    virtual CompilerPointer createCompiler( const QString& name, const QString& path, bool editable = true ) const override;
+
+    virtual QString name() const override;
+};
+
+#endif // COMPILERFACTORIES_H

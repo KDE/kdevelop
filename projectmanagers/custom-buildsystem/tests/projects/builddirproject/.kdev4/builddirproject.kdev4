@@ -43,9 +43,10 @@ Environment=
 Executable=
 Type=4
 
-[Defines And Includes]
-compiler=GCC
-compilerPath=gcc
+[Defines And Includes][Compiler]
+Name=GCC
+Path=gcc
+Type=GCC
 
 [MakeBuilder]
 Number Of Jobs=1

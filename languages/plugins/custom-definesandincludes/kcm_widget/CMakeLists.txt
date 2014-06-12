@@ -9,6 +9,7 @@ set( kcm_customdefinesandincludes_SRCS
         projectpathswidget.cpp
         kcm_customdefinesandincludes.cpp
         ../debugarea.cpp
+        ../compilerprovider/icompiler.cpp
         compilersmodel.cpp
         compilerswidget.cpp
    )

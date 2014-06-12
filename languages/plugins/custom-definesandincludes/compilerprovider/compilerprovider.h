@@ -53,35 +53,36 @@ public :
 
     virtual KDevelop::IDefinesAndIncludesManager::Type type() const override;
 
-    virtual bool setCompiler( KDevelop::IProject* project, Compiler compiler ) override;
+    virtual void setCompiler( KDevelop::IProject* project, const CompilerPointer& compiler ) override;
 
-    virtual QVector<Compiler> compilers() const override;
+    virtual QVector<CompilerPointer> compilers() const override;
 
-    virtual Compiler currentCompiler( KDevelop::IProject* project ) const override;
+    virtual CompilerPointer currentCompiler( KDevelop::IProject* project ) const override;
 
-    virtual bool registerCompiler(const Compiler& compiler) override;
+    virtual bool registerCompiler(const CompilerPointer& compiler) override;
 
-    void unregisterCompiler( const Compiler& compiler ) override;
+    virtual void unregisterCompiler( const CompilerPointer& compiler ) override;
 
     virtual QVector<CompilerFactoryPointer> compilerFactories() const override;
 
 private:
-    Compiler compilerForItem( KDevelop::ProjectBaseItem* item ) const;
+    CompilerPointer compilerForItem( KDevelop::ProjectBaseItem* item ) const;
 
-    Compiler CheckCompiler( Compiler compiler ) const;
+    CompilerPointer checkCompilerExists( const CompilerPointer& compiler ) const;
 
-    void addPoject( KDevelop::IProject* project, Compiler compiler );
+    void addPoject( KDevelop::IProject* project, const CompilerPointer& compiler );
 
     void removePoject( KDevelop::IProject* project );
 
 private Q_SLOTS:
     void projectOpened( KDevelop::IProject* );
     void projectClosed( KDevelop::IProject* );
+    void retrieveUserDefinedCompilers();
 
 private:
     //list of compilers for each projects
-    QHash<KDevelop::IProject*, Compiler> m_projects;
-    QVector<Compiler> m_compilers;
+    QHash<KDevelop::IProject*, CompilerPointer> m_projects;
+    QVector<CompilerPointer> m_compilers;
     QVector<CompilerFactoryPointer> m_factories;
 };
 

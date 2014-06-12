@@ -25,6 +25,17 @@
 
 #include <KLocale>
 
+#include "../compilerprovider/icompilerprovider.h"
+
+namespace
+{
+enum Columns {
+    NameColumn,
+    PathColumn,
+    NUM_COLUMNS
+};
+}
+
 CompilersModel::CompilersModel(QObject* parent)
     : QAbstractTableModel(parent)
 {
@@ -42,10 +53,10 @@ QVariant CompilersModel::data(const QModelIndex& index, int role) const
 
     if (index.row() < m_compilers.count()) {
         switch (index.column()) {
-        case 0:
-            return m_compilers.at(index.row()).name;
-        case 1:
-            return m_compilers.at(index.row()).path;
+        case NameColumn:
+            return m_compilers.at(index.row())->name();
+        case PathColumn:
+            return m_compilers.at(index.row())->path();
         default:
             Q_ASSERT(0);
             break;
@@ -74,9 +85,9 @@ QVariant CompilersModel::headerData(int section, Qt::Orientation orientation, in
 {
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
         switch (section) {
-        case 0:
+        case NameColumn:
             return i18n("Name");
-        case 1:
+        case PathColumn:
             return i18n("Path");
         default:
             Q_ASSERT(0);
@@ -85,7 +96,6 @@ QVariant CompilersModel::headerData(int section, Qt::Orientation orientation, in
     }
     return QVariant();
 }
-
 
 Qt::ItemFlags CompilersModel::flags(const QModelIndex& index) const
 {
@@ -98,18 +108,30 @@ Qt::ItemFlags CompilersModel::flags(const QModelIndex& index) const
     }
     auto flgs = Qt::ItemIsSelectable;
 
-    return m_compilers[index.row()].editable ? Qt::ItemFlags(flgs | Qt::ItemIsEditable | Qt::ItemIsEnabled) : flgs;
+    return m_compilers[index.row()]->editable() ? Qt::ItemFlags(flgs | Qt::ItemIsEditable | Qt::ItemIsEnabled) : flgs;
 }
 
-QVector<Compiler> CompilersModel::Compilers() const
+QVector< CompilerPointer > CompilersModel::compilers() const
 {
-    return m_compilers;
+    QVector<CompilerPointer> compilers;
+    for (auto c: m_compilers) {
+        if (!c->name().isEmpty() && !c->path().isEmpty()) {
+            compilers.append(c);
+        }
+    }
+    return compilers;
 }
 
-void CompilersModel::setCompilers(const QVector<Compiler>& compilers)
+void CompilersModel::setCompilers(const QVector< CompilerPointer >& compilers)
 {
     beginResetModel();
-    m_compilers = compilers;
+    m_compilers.clear();
+    for (auto c: compilers) {
+        if (c->factoryName().isEmpty()) {
+            continue;
+        }
+        m_compilers.append(c);
+    }
     endResetModel();
 }
 
@@ -136,11 +158,11 @@ bool CompilersModel::setData(const QModelIndex& index, const QVariant& value, in
     }
 
     switch (index.column()) {
-    case 0:
-        m_compilers[ index.row() ].name = value.toString();
+    case NameColumn:
+        m_compilers[index.row()]->setName(value.toString());
         break;
-    case 1:
-        m_compilers[ index.row() ].path = value.toString();
+    case PathColumn:
+        m_compilers[index.row()]->setPath(value.toString());
         break;
     default:
         Q_ASSERT(0);
@@ -149,4 +171,12 @@ bool CompilersModel::setData(const QModelIndex& index, const QVariant& value, in
 
     emit dataChanged(index, index);
     return true;
+}
+
+void CompilersModel::addCompiler(const CompilerPointer& compiler)
+{
+    beginInsertRows({}, m_compilers.size(), m_compilers.size());
+    Q_ASSERT(!compiler->factoryName().isEmpty());
+    m_compilers.append(compiler);
+    endInsertRows();
 }

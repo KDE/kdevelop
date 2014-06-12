@@ -32,8 +32,9 @@ class ICompilerFactory
 public:
     virtual QString name() const = 0;
 
-    ///@return new compiler with @p path and @p name
-    virtual Compiler createCompiler( const QString& name, const QString& path, bool editable = true ) = 0;
+    ///@return new compiler
+    ///@see ICompiler
+    virtual CompilerPointer createCompiler( const QString& name, const QString& path, bool editable = true ) const = 0;
 
     virtual ~ICompilerFactory() = default;
 };

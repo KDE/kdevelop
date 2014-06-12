@@ -32,18 +32,39 @@
 
 using KDevelop::Path;
 
-class ICompilerFactory;
-class ICompilerProvider;
-
 /// An interface that represents a compiler. Compiler provides standard include directories and standard defined macros.
 class ICompiler
 {
 public:
-    /// @return list of defined macros for the compiler at the @p path
-    virtual QHash<QString, QString> defines( const QString& path ) const = 0;
+    /**
+     * @param name The user visible name
+     * @param path path to the compiler
+     * @param factoryName name of the factory that created this compiler
+     * @param editable whether user can change the name and the path to the compiler (should be set to false for automatically detected compilers)
+    **/
+    ICompiler( const QString& name, const QString& path, const QString& factoryName, bool editable );
 
-    /// @return list of include directories for the compiler at the @p path
-    virtual Path::List includes( const QString& path ) const = 0;
+    /// @return list of defined macros for the compiler
+    virtual QHash<QString, QString> defines() const = 0;
+
+    /// @return list of include directories for the compiler
+    virtual Path::List includes() const = 0;
+
+    void setPath( const QString &path );
+
+    /// @return path to the compiler
+    QString path() const;
+
+    void setName( const QString &name );
+
+    /// @return user visible name
+    QString name() const;
+
+    /// Indicates if the compiler name/path can be set manually
+    bool editable() const;
+
+    /// @return name of the factory that created this compiler
+    QString factoryName() const;
 
     virtual ~ICompiler() = default;
 
@@ -52,18 +73,17 @@ protected:
         QHash<QString, QString> definedMacros;
         Path::List includePaths;
     };
-    // list of defines/includes for the compiler at the path. Use it for caching purposes
-    mutable QHash<QString, DefinesIncludes> m_definesIncludes;
+    // list of defines/includes for the compiler. Use it for caching purposes
+    mutable DefinesIncludes m_definesIncludes;
+
+    bool m_editable;
+    QString m_name;
+    QString m_path;
+    QString m_factoryName;
 };
 
 typedef QSharedPointer<ICompiler> CompilerPointer;
 
-struct Compiler {
-    CompilerPointer compiler;
-    QString name; ///< User visible name
-    QString path; ///< Path to the compiler
-    bool editable; ///< shows if compiler name and path can be edited
-};
-Q_DECLARE_METATYPE(Compiler)
+Q_DECLARE_METATYPE(CompilerPointer)
 
 #endif // ICOMPILER_H

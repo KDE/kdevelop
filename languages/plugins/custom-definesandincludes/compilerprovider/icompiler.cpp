@@ -21,21 +21,47 @@
  *
  */
 
-#include "clangfactory.h"
+#include "icompiler.h"
 
-#include "gcclikecompiler.h"
+ICompiler::ICompiler(const QString& name, const QString& path, const QString& factoryName, bool editable):
+    m_editable(editable),
+    m_name(name),
+    m_path(path),
+    m_factoryName(factoryName)
+{}
 
-QString ClangFactory::name() const
+void ICompiler::setPath(const QString& path)
 {
-    return "Clang";
+    if (editable()) {
+        m_definesIncludes.definedMacros.clear();
+        m_definesIncludes.includePaths.clear();
+        m_path = path;
+    }
 }
 
-Compiler ClangFactory::createCompiler(const QString& name, const QString& path, bool editable )
+QString ICompiler::path() const
 {
-    static Compiler compiler = {CompilerPointer(new GccLikeCompiler()), "", "", true};
-    compiler.name = name;
-    compiler.path = path;
-    compiler.editable = editable;
+    return m_path;
+}
 
-    return compiler;
+void ICompiler::setName(const QString& name)
+{
+    if (editable()) {
+        m_name = name;
+    }
+}
+
+QString ICompiler::name() const
+{
+    return m_name;
+}
+
+bool ICompiler::editable() const
+{
+    return m_editable;
+}
+
+QString ICompiler::factoryName() const
+{
+    return m_factoryName;
 }

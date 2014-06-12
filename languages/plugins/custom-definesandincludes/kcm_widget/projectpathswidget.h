@@ -53,11 +53,13 @@ public:
     QList<ConfigEntry> paths() const;
     void clear();
 
-    void setCompilers(const QVector<Compiler>& compilers);
+    void setCompilers(const QVector<CompilerPointer>& compilers);
 
     void setCurrentCompiler(const QString& name);
 
-    Compiler currentCompiler() const;
+    CompilerPointer currentCompiler() const;
+
+    QVector<CompilerPointer> compilers() const;
 
 signals:
     void changed();
@@ -77,7 +79,8 @@ private slots:
 private:
     Ui::ProjectPathsWidget* ui;
     ProjectPathsModel* pathsModel;
-    QVector<Compiler> m_compilers;
+    QVector<CompilerPointer> m_compilers;
+    KDevelop::IProject* m_project;
     // Enables/Disables widgets based on UI state/selection
     void updateEnablements();
     void updatePathsModel( const QVariant& newData, int role );

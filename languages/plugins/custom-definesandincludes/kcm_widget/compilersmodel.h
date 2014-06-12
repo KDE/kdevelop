@@ -35,8 +35,9 @@ class CompilersModel : public QAbstractTableModel
 
 public:
     CompilersModel( QObject* parent = 0 );
-    void setCompilers( const QVector<Compiler>& compilers );
-    QVector<Compiler> Compilers() const;
+    void setCompilers( const QVector<CompilerPointer>& compilers );
+    QVector<CompilerPointer> compilers() const;
+    void addCompiler(const CompilerPointer& compiler);
 
     virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const override;
     virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const override;
@@ -47,7 +48,7 @@ public:
     virtual bool removeRows( int row, int count, const QModelIndex& parent = QModelIndex() ) override;
 
 private:
-    QVector<Compiler> m_compilers;
+    QVector<CompilerPointer> m_compilers;
 };
 
 #endif // COMPILERMODEL_H

@@ -26,6 +26,10 @@
 
 #include <util/environmentgrouplist.h>
 #include <interfaces/iproject.h>
+#include <interfaces/icore.h>
+#include <interfaces/iplugincontroller.h>
+
+#include "../compilerprovider/icompilerprovider.h"
 
 #include "compilerswidget.h"
 
@@ -33,6 +37,19 @@
 #include "ui_batchedit.h"
 #include "projectpathsmodel.h"
 #include "debugarea.h"
+
+namespace
+{
+ICompilerProvider* compilerProvider()
+{
+    auto compilerProvider = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ICompilerProvider");
+    if (!compilerProvider || !compilerProvider->extension<ICompilerProvider>()) {
+        return {};
+    }
+
+    return compilerProvider->extension<ICompilerProvider>();
+}
+}
 
 ProjectPathsWidget::ProjectPathsWidget( QWidget* parent )
     : QWidget(parent),
@@ -147,10 +164,12 @@ void ProjectPathsWidget::deleteProjectPath()
     }
     updateEnablements();
 }
+
 void ProjectPathsWidget::setProject(KDevelop::IProject* w_project)
 {
-    pathsModel->setProject( w_project );
-    ui->includesWidget->setProject( w_project );
+    m_project = w_project;
+    pathsModel->setProject( m_project );
+    ui->includesWidget->setProject( m_project );
 }
 
 void ProjectPathsWidget::updateEnablements() {
@@ -229,17 +248,16 @@ void ProjectPathsWidget::setCurrentCompiler(const QString& name)
     }
 }
 
-Compiler ProjectPathsWidget::currentCompiler() const
+CompilerPointer ProjectPathsWidget::currentCompiler() const
 {
-    return ui->compiler->itemData(ui->compiler->currentIndex()).value<Compiler>();
+    return ui->compiler->itemData(ui->compiler->currentIndex()).value<CompilerPointer>();
 }
 
-
-void ProjectPathsWidget::setCompilers(const QVector<Compiler>& compilers)
+void ProjectPathsWidget::setCompilers(const QVector<CompilerPointer>& compilers)
 {
     ui->compiler->clear();
     for (int i = 0 ; i < compilers.count(); ++i) {
-        ui->compiler->addItem(compilers[i].name);
+        ui->compiler->addItem(compilers[i]->name());
         QVariant val; val.setValue(compilers[i]);
         ui->compiler->setItemData(i, val);
     }
@@ -255,7 +273,29 @@ void ProjectPathsWidget::configureCompilers()
         return;
     }
 
-    setCompilers(cw.compilers());
+    auto compilers = compilerProvider()->compilers();
+
+    for (auto c: cw.compilers()) {
+        if (!compilers.contains(c)) {
+            compilerProvider()->registerCompiler(c);
+        }
+    }
+
+    compilers = compilerProvider()->compilers();
+    for (auto c: compilers) {
+        if (!cw.compilers().contains(c)) {
+            compilerProvider()->unregisterCompiler(c);
+        }
+    }
+
+    setCompilers(compilerProvider()->compilers());
+    setCurrentCompiler(compilerProvider()->currentCompiler(m_project)->name());
+    emit changed();
+}
+
+QVector< CompilerPointer > ProjectPathsWidget::compilers() const
+{
+    return m_compilers;
 }
 
 #include "projectpathswidget.moc"

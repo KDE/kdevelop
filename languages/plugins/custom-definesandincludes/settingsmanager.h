@@ -43,13 +43,15 @@ public:
 
     void writePaths(KConfig* cfg, const QList<KDevelop::ConfigEntry>& paths);
 
-    void writeCurrentCompiler(KConfig* cfg, Compiler compiler);
+    void writeCurrentCompiler(KConfig* cfg, const CompilerPointer& compiler);
 
-    Compiler currentCompiler(KConfig* cfg) const;
+    /// @param defaultCompiler the compiler that will be returned, if the @see ICompilerProvider doesn't have a factory to create the needed type of compiler
+    /// @return stored compiler or nullptr if the project is opened for the first time.
+    CompilerPointer currentCompiler(KConfig* cfg, const CompilerPointer& defaultCompiler = {}) const;
 
-    void writeUserDefinedCompilers(const QVector<Compiler>& compilers);
+    void writeUserDefinedCompilers(const QVector<CompilerPointer>& compilers);
 
-    QVector<Compiler> userDefinedCompilers() const;
+    QVector<CompilerPointer> userDefinedCompilers() const;
 
     bool needToReparseCurrentProject( KConfig* cfg ) const;
 

@@ -81,7 +81,7 @@ void DefinesAndIncludes::loadFrom( KConfig* cfg )
 
     if (auto cp = compilerProvider()) {
         configWidget->setCompilers(cp->compilers());
-        configWidget->setCurrentCompiler(cp->currentCompiler(project()).name);
+        configWidget->setCurrentCompiler(cp->currentCompiler(project())->name());
     }
 }
 
@@ -95,6 +95,8 @@ void DefinesAndIncludes::saveTo(KConfig* cfg, KDevelop::IProject*)
         settings->writeCurrentCompiler(cfg ,configWidget->currentCompiler());
 
         cp->setCompiler(project(), settings->currentCompiler(cfg));
+
+        settings->writeUserDefinedCompilers(configWidget->compilers());
     }
 
     if ( settings->needToReparseCurrentProject( cfg ) ) {

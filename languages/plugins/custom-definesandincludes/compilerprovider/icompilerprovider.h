@@ -40,24 +40,23 @@ class ICompilerProvider
 {
 public:
     /// Select the @p compiler that provides standard includes/defines for the @p project
-    /// @return true on success, false otherwise, e.g. if the compiler isn't available.
-    virtual bool setCompiler( KDevelop::IProject* project, Compiler compiler ) = 0;
+    virtual void setCompiler( KDevelop::IProject* project, const CompilerPointer& compiler ) = 0;
 
     /// @return current compiler for the @P project
-    virtual Compiler currentCompiler( KDevelop::IProject* project ) const = 0;
+    virtual CompilerPointer currentCompiler( KDevelop::IProject* project ) const = 0;
 
     /// @return list of all available compilers
-    virtual QVector<Compiler> compilers() const = 0;
+    virtual QVector<CompilerPointer> compilers() const = 0;
 
     /// @return All available factories
     virtual QVector<CompilerFactoryPointer> compilerFactories() const = 0;
 
     /// Adds compiler to the list of available compilers
-    /// @return true on success
-    virtual bool registerCompiler(const Compiler& compiler) = 0;
+    /// @return true on success (if there is no compiler with the same name registered).
+    virtual bool registerCompiler(const CompilerPointer& compiler) = 0;
 
     /// Removes compiler from the list of available compilers
-    virtual void unregisterCompiler(const Compiler& compiler) = 0;
+    virtual void unregisterCompiler(const CompilerPointer& compiler) = 0;
 
     virtual ~ICompilerProvider() = default;
 };
