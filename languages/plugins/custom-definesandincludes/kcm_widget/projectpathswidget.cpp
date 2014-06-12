@@ -41,7 +41,6 @@ ProjectPathsWidget::ProjectPathsWidget( QWidget* parent )
     ui->setupUi( this );
 
     ui->addPath->setIcon(QIcon::fromTheme("list-add"));
-    ui->replacePath->setIcon(QIcon::fromTheme("document-edit"));
     ui->removePath->setIcon(QIcon::fromTheme("list-remove"));
 
     // hack taken from kurlrequester, make the buttons a bit less in height so they better match the url-requester

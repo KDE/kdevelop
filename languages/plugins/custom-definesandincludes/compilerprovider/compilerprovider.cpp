@@ -35,6 +35,7 @@
 
 #include <KPluginFactory>
 #include <KAboutData>
+#include <KLocalizedString>
 #include <KStandardDirs>
 
 using namespace KDevelop;
@@ -175,7 +176,7 @@ K_EXPORT_PLUGIN( CompilerProviderFactory( KAboutData( "kdevcompilerprovider",
             KAboutData::License_GPL ) ) )
 
 CompilerProvider::CompilerProvider( QObject* parent, const QVariantList& )
-    : IPlugin( CompilerProviderFactory::componentData(), parent )
+    : IPlugin( "kdevcompilerprovider", parent )
 {
     KDEV_USE_EXTENSION_INTERFACE( ICompilerProvider );
 

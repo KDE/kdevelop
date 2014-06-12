@@ -18,6 +18,7 @@
 
 #include "defineswidget.h"
 
+#include <KLocalizedString>
 #include <KAction>
 
 #include "ui_defineswidget.h"
