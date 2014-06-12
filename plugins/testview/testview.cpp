@@ -199,7 +199,7 @@ void TestView::notifyTestCaseStarted(ITestSuite* suite, const QStringList& test_
     debug() << "Notify a test of the suite " << suite->name() << " has started";
     
     // Global test suite icon
-    item->setIcon(KIcon("process-idle"));
+    item->setIcon(QIcon::fromTheme("process-idle"));
     
     for (int i = 0; i < item->rowCount(); ++i)
     {
@@ -208,7 +208,7 @@ void TestView::notifyTestCaseStarted(ITestSuite* suite, const QStringList& test_
         if (test_cases.contains(caseItem->text()))
         {
             // Each test case icon
-            caseItem->setIcon(KIcon("process-idle"));
+            caseItem->setIcon(QIcon::fromTheme("process-idle"));
         }
     }
 }

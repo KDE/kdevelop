@@ -107,6 +107,10 @@ RenameAssistant::RenameAssistant(ILanguageSupport* supportedLanguage)
 {
 }
 
+RenameAssistant::~RenameAssistant()
+{
+}
+
 QString RenameAssistant::title() const
 {
     return tr("Rename");
@@ -217,4 +221,4 @@ void RenameAssistant::textChanged(KTextEditor::View* view, const KTextEditor::Ra
     emit actionsChanged();
 }
 
-#include "renameassistant.moc"
+#include "moc_renameassistant.cpp"

@@ -78,7 +78,7 @@ TestViewPlugin::TestViewPlugin(QObject* parent, const QVariantList& args)
     connect(runAll, SIGNAL(triggered(bool)), SLOT(runAllTests()));
     actionCollection()->addAction("run_all_tests", runAll);
     
-    KAction* stopTest = new KAction( KIcon("process-stop"), i18n("Stop Running Tests"), this );
+    QAction* stopTest = new QAction( QIcon::fromTheme("process-stop"), i18n("Stop Running Tests"), this );
     connect(stopTest, SIGNAL(triggered(bool)), SLOT(stopRunningTests()));
     actionCollection()->addAction("stop_running_tests", stopTest);
 

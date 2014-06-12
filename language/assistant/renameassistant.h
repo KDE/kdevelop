@@ -39,6 +39,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT RenameAssistant : public StaticAssistant
 
 public:
     RenameAssistant(ILanguageSupport* supportedLanguage);
+    virtual ~RenameAssistant();
 
     virtual void textChanged(KTextEditor::View* view, const KTextEditor::Range& invocationRange, const QString& removedText = QString()) override;
     virtual bool isUseful() const override;

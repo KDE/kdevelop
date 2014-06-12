@@ -165,7 +165,7 @@ void StaticAssistantsManager::Private::eventuallyStartAssistant()
         return;
     }
 
-    View* view = m_eventualDocument.data()->activeView();
+    View* view = ICore::self()->documentController()->activeTextDocumentView();
     if (!view) {
         return;
     }
@@ -267,13 +267,12 @@ void StaticAssistantsManager::Private::documentActivated(IDocument* doc)
         m_currentView.clear();
     }
 
-    if (doc->textDocument()) {
-        m_currentView = doc->textDocument()->activeView();
-        if (m_currentView) {
-            connect(m_currentView.data(),
-                    SIGNAL(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)), q,
-                    SLOT(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)));
-        }
+    m_currentView = ICore::self()->documentController()->activeTextDocumentView();
+
+    if (m_currentView) {
+        connect(m_currentView.data(),
+                SIGNAL(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)), q,
+                SLOT(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)));
     }
 }
 
@@ -306,4 +305,4 @@ void StaticAssistantsManager::Private::timeout()
     }
 }
 
-#include "staticassistantsmanager.moc"
+#include "moc_staticassistantsmanager.cpp"
