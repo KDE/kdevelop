@@ -2757,7 +2757,7 @@ bool SetAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     //look for the FORCE argument. Thanks to the CMake folks for letting
     //me read their code
     m_forceStoring = ( argSize > 4 && func.arguments.last().value == "FORCE" );
-    m_parentScope  = ( argSize > 2 && func.arguments.last().value == "PARENT_SCOPE" );
+    m_parentScope  = ( argSize > 1 && func.arguments.last().value == "PARENT_SCOPE" );
     m_storeInCache = ( argSize > 3 &&
         func.arguments[argSize - 3 - ( m_forceStoring || m_parentScope ? 1 : 0 )].value == "CACHE" );
 
