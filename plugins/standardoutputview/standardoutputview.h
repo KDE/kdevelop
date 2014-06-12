@@ -74,6 +74,7 @@ public:
     virtual void removeOutput( int outputId );
 
     virtual void scrollOutputTo( int outputId, const QModelIndex& idx );
+    virtual void setTitle(int outputId, const QString& title);
 
 public Q_SLOTS:
     void removeSublimeView( Sublime::View* );

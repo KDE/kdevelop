@@ -122,6 +122,8 @@ public:
     bool autoAreaSettingsSave;
 
 public slots:
+    void toggleDocksShown();
+
     void viewAdded(Sublime::AreaIndex *index, Sublime::View *view);
     void viewRemovedInternal(Sublime::AreaIndex *index, Sublime::View *view);
     void raiseToolView(Sublime::View* view);
@@ -143,7 +145,6 @@ private slots:
     void showRightDock(bool b);
     void showBottomDock(bool b);
     void focusEditor();
-    void toggleDocksShown();
     void selectNextDock();
     void selectPreviousDock();
 

@@ -28,6 +28,7 @@
 
 namespace KDevelop {
 
+class BasicRefactoring;
 class IndexedString;
 class ParseJob;
 class ILanguage;
@@ -70,6 +71,11 @@ public:
       * Should return a code-highlighting instance for this language, or zero.
       */
     virtual ICodeHighlighting* codeHighlighting() const;
+
+    /**
+      * Should return a BasicRefactoring instance that controls the language-agnostic refactoring rules, or zero
+      */
+    virtual BasicRefactoring* refactoring() const;
 
     /**
      * Should return a document change-tracker for this language that tracks the changes in the given document 

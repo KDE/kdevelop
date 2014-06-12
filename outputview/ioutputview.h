@@ -136,6 +136,11 @@ public:
     virtual void setDelegate( int outputId, QAbstractItemDelegate* model ) = 0;
 
     /**
+     * Sets a @p title for the specified @p outputIds
+     */
+    virtual void setTitle( int outputId, const QString& title ) = 0;
+
+    /**
      * remove a toolview, don't forget to emit toolViewRemoved when you implement this
      *
      * @param id identifies the view to remove

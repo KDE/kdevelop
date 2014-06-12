@@ -39,44 +39,6 @@ IPluginController::~IPluginController()
 {
 }
 
-KPluginInfo::List IPluginController::query( const QString &serviceType,
-        const QString &constraint )
-{
-
-    KPluginInfo::List infoList;
-    KService::List serviceList = KServiceTypeTrader::self() ->query( serviceType,
-            QString( "%1 and [X-KDevelop-Version] == %2" ).arg( constraint ).arg( KDEVELOP_PLUGIN_VERSION ) );
-
-    infoList = KPluginInfo::fromServices( serviceList );
-    return infoList;
-}
-
-KPluginInfo::List IPluginController::queryPlugins( const QString &constraint )
-{
-    return query( "KDevelop/Plugin", constraint );
-}
-
-QStringList IPluginController::argumentsFromService( const KService::Ptr &service )
-{
-    QStringList args;
-    if ( !service )
-        // service is a reference to a pointer, so a check whether it is 0 is still required
-        return args;
-    QVariant prop = service->property( "X-KDevelop-Args" );
-    if ( prop.isValid() )
-        args = prop.toString().split( ' ' );
-    return args;
-}
-
-KPluginInfo::List IPluginController::queryExtensionPlugins(const QString &extension, const QStringList &constraints)
-{
-    QStringList c = constraints;
-    c << QString("'%1' in [X-KDevelop-Interfaces]").arg( extension );
-    return queryPlugins( c.join(" and ") );
-}
-
-
-
 }
 
 #include "iplugincontroller.moc"

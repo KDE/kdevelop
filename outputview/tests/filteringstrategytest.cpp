@@ -115,6 +115,8 @@ void FilteringStrategyTest::testCompilerFilterStrategy_data()
     << "CMake Warning (dev) in CMakeLists.txt:" << FilteredItem::WarningItem << FilteredItem::InvalidItem;
     QTest::newRow("cmake-automoc-error")
     << "AUTOMOC: error: /foo/bar.cpp The file includes the moc file \"moc_bar1.cpp\"" << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
+    QTest::newRow("cmake-automoc4-error")
+    << "automoc4: The file \"/foo/bar.cpp\" includes the moc file \"bar1.moc\"" << FilteredItem::InformationItem << FilteredItem::InvalidItem;
     QTest::newRow("cmake-autogen-error")
     << "AUTOGEN: error: /foo/bar.cpp The file includes the moc file \"moc_bar1.cpp\"" << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
     QTest::newRow("linker-action-line")

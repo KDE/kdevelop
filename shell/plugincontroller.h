@@ -106,21 +106,24 @@ public:
     void updateLoadedPlugins();
 
 
-       /**
+    /**
      * Queries for the plugin which supports given extension interface.
+     *
      * All already loaded plugins will be queried and the first one to support the extension interface
      * will be returned. Any plugin can be an extension, only "ServiceTypes=..." entry is
      * required in .desktop file for that plugin.
+     *
      * @param extension The extension interface
      * @param pluginname The name of the plugin to load if multiple plugins for the extension exist, corresponds to the X-KDE-PluginInfo-Name
      * @return A KDevelop extension plugin for given service type or 0 if no plugin supports it
      */
-    IPlugin *pluginForExtension(const QString &extension, const QString &pluginname = "");
-    IPlugin *pluginForExtension(const QString &extension, const QStringList &constraints);
+    IPlugin *pluginForExtension(const QString &extension, const QString &pluginName = {}, const QVariantMap& constraints = {}) override;
 
-    QList<IPlugin*> allPluginsForExtension(const QString &extension, const QStringList &constraints = QStringList());
+    QList<IPlugin*> allPluginsForExtension(const QString &extension, const QVariantMap& constraints = {}) override;
 
     QStringList allPluginNames();
+
+    KPluginInfo::List queryExtensionPlugins(const QString& extension, const QVariantMap& constraints = {}) const override;
 
     QList<ContextMenuExtension> queryPluginsForContextMenuExtensions( KDevelop::Context* context ) const;
 

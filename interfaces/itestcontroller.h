@@ -25,6 +25,7 @@
 #include <QtCore/QList>
 #include <QtCore/QObject>
 #include <QtCore/QHash>
+#include <QtCore/QStringList>
 
 class KJob;
 
@@ -109,6 +110,11 @@ public:
      */
     virtual void notifyTestRunFinished(ITestSuite* suite, const KDevelop::TestResult& result) = 0;
 
+    /**
+     * Notify the controller that a test run for @p suite was started
+     */
+    virtual void notifyTestRunStarted(KDevelop::ITestSuite* suite, const QStringList& test_cases) = 0;
+
 Q_SIGNALS:
     /**
      * Emitted whenever a new test suite gets added.
@@ -122,6 +128,10 @@ Q_SIGNALS:
      * Emitted after a test suite was run.
      */
     void testRunFinished(KDevelop::ITestSuite* suite, const KDevelop::TestResult& result) const;
+     /**
+     * Emitted when a test suite starts.
+     */
+    void testRunStarted(KDevelop::ITestSuite* suite, const QStringList& test_cases) const;
 };
 
 }

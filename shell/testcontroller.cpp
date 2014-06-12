@@ -112,4 +112,11 @@ void TestController::notifyTestRunFinished(ITestSuite* suite, const TestResult& 
     emit testRunFinished(suite, result);
 }
 
+void TestController::notifyTestRunStarted(ITestSuite* suite, const QStringList& test_cases)
+{
+    kDebug() << "Test run started for suite" << suite->name();
+    emit testRunStarted(suite, test_cases);
+}
+
+
 #include "testcontroller.moc"

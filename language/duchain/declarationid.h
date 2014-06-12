@@ -60,9 +60,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
      * \param additionalId Additional index to disambiguate
      * \param specialization Specialization index (see class documentation).
      */
-    explicit DeclarationId(const IndexedQualifiedIdentifier& id = IndexedQualifiedIdentifier(),
-                           uint additionalId = 0,
-                           const IndexedInstantiationInformation& specialization = IndexedInstantiationInformation());
+    DeclarationId(const IndexedQualifiedIdentifier& id = IndexedQualifiedIdentifier(),
+                  uint additionalId = 0,
+                  const IndexedInstantiationInformation& specialization = IndexedInstantiationInformation());
 
     /**
      * Constructor for direct access to a declaration.  The resulting DeclarationId will

@@ -82,6 +82,7 @@ Q_SIGNALS:
      * @p idx The index of the tab that was hovered
      */
     void tabToolTipRequested(Sublime::View* view, Sublime::Container* container, int idx);
+    void tabDoubleClicked(Sublime::View* view);
 
 private Q_SLOTS:
     void widgetActivated(int idx);
@@ -92,6 +93,7 @@ private Q_SLOTS:
     void tabMoved(int from, int to);
     void wheelScroll(int);
     void contextMenu(int, const QPoint&);
+    void doubleClickTriggered(int tab);
     void documentListActionTriggered(QAction*);
 
 private:

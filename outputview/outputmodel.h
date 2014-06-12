@@ -72,6 +72,10 @@ public:
 public Q_SLOTS:
     void appendLine( const QString& );
     void appendLines( const QStringList& );
+    void ensureAllDone();
+
+signals:
+    void allDone();
 
 private:
     OutputModelPrivate* const d;

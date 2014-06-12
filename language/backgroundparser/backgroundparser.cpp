@@ -661,6 +661,12 @@ int BackgroundParser::queuedCount() const
     return d->m_documents.count();
 }
 
+bool BackgroundParser::isIdle() const
+{
+    QMutexLocker lock(&d->m_mutex);
+    return d->m_documents.isEmpty() && d->m_weaver.isIdle();
+}
+
 void BackgroundParser::setNeededPriority(int priority)
 {
     QMutexLocker lock(&d->m_mutex);

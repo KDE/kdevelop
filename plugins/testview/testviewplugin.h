@@ -37,8 +37,10 @@ public:
 private:
     TestToolViewFactory* m_viewFactory;
 
-public slots:
+private slots:
     void runAllTests();
+    void stopRunningTests();
+    void jobStateChanged();
 };
 
 #endif // KDEVPLATFORM_PLUGIN_TESTVIEWPLUGIN_H

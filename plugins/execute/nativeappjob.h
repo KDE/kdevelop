@@ -43,6 +43,8 @@ public:
 private slots:
     void processError(QProcess::ProcessError);
     void processFinished(int,QProcess::ExitStatus);
+    void outputDone();
+
 private:
     void appendLine(const QString &l);
     KProcess* proc;

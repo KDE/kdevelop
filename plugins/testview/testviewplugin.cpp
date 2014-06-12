@@ -77,11 +77,20 @@ TestViewPlugin::TestViewPlugin(QObject* parent, const QVariantList& args)
     QAction* runAll = new QAction( QIcon::fromTheme("system-run"), i18n("Run All Tests"), this );
     connect(runAll, SIGNAL(triggered(bool)), SLOT(runAllTests()));
     actionCollection()->addAction("run_all_tests", runAll);
+    
+    KAction* stopTest = new KAction( KIcon("process-stop"), i18n("Stop Running Tests"), this );
+    connect(stopTest, SIGNAL(triggered(bool)), SLOT(stopRunningTests()));
+    actionCollection()->addAction("stop_running_tests", stopTest);
 
     setXMLFile("kdevtestview.rc");
 
     m_viewFactory = new TestToolViewFactory(this);
     core()->uiController()->addToolView(i18n("Unit Tests"), m_viewFactory);
+    
+    connect(core()->runController(),SIGNAL(jobRegistered(KJob*)), this, SLOT(jobStateChanged()));
+    connect(core()->runController(),SIGNAL(jobUnregistered(KJob*)), this, SLOT(jobStateChanged()));
+    
+    jobStateChanged();
 }
 
 TestViewPlugin::~TestViewPlugin()
@@ -113,9 +122,36 @@ void TestViewPlugin::runAllTests()
             KDevelop::ExecuteCompositeJob* compositeJob = new KDevelop::ExecuteCompositeJob(this, jobs);
             compositeJob->setObjectName(i18np("Run 1 test in %2", "Run %1 tests in %2",
                                               jobs.size(), project->name()));
+            compositeJob->setProperty("test_job", true);
             core()->runController()->registerJob(compositeJob);
         }
     }
+}
+
+void TestViewPlugin::stopRunningTests()
+{
+    foreach (KJob* job, core()->runController()->currentJobs())
+    {
+        if (job->property("test_job").toBool())
+        {
+            job->kill();
+        }
+    }
+}
+
+void TestViewPlugin::jobStateChanged()
+{
+    bool found = false;
+    foreach (KJob* job, core()->runController()->currentJobs())
+    {
+        if (job->property("test_job").toBool())
+        {
+            found = true;
+            break;
+        }
+    }
+    actionCollection()->action("run_all_tests")->setEnabled(!found);
+    actionCollection()->action("stop_running_tests")->setEnabled(found);
 }
 
 #include "testviewplugin.moc"

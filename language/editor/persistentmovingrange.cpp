@@ -36,6 +36,11 @@ KDevelop::PersistentMovingRange::PersistentMovingRange(const SimpleRange& range,
   m_p->connectTracker();
 }
 
+KDevelop::IndexedString KDevelop::PersistentMovingRange::document() const
+{
+  return m_p->m_document;
+}
+
 void KDevelop::PersistentMovingRange::setZDepth(float depth) const
 {
   VERIFY_FOREGROUND_LOCKED;

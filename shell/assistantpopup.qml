@@ -1,5 +1,6 @@
 /*
    Copyright 2014 Sven Brauch <svenbrauch@gmail.com>
+   Copyright 2014 Kevin Funk <kfunk@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,14 +21,25 @@
 
 import QtQuick 1.0
 
-// Rectangle for the background
 Rectangle {
     id: root
 
-    color: config.background
+    /**
+     * Keys which are assigned to the action buttons, in this order.
+     * The hide button is always Key_0, which is handled below.
+     */
+    property variant keysForIndex: [Qt.Key_1, Qt.Key_2, Qt.Key_3, Qt.Key_4, Qt.Key_5,
+                                    Qt.Key_6, Qt.Key_7, Qt.Key_8, Qt.Key_9]
 
-    width: row.width + 16
-    height: row.height + 7
+    width: flow.width + 16
+    height: flow.height + 7
+
+    border.width: 1
+    border.color: Qt.lighter(config.foreground)
+    gradient: Gradient {
+        GradientStop { position: 0.0; color: Qt.lighter(config.background) }
+        GradientStop { position: 1.0; color: config.background }
+    }
 
     Connections {
         id: configConnections
@@ -43,6 +55,7 @@ Rectangle {
     // start values for the popup animation; change y to 0 to disable the slight move animation
     opacity: 0.2
     y: -2
+
     ParallelAnimation {
         id: popupAnimation
         running: true
@@ -50,16 +63,13 @@ Rectangle {
         NumberAnimation { target: root; properties: "y"; to: 0; duration: 100 }
     }
 
-    // Keys which are assigned to the action buttons, in this order.
-    // The hide button is always Key_0, which is handled below.
-    property variant keysForIndex: [Qt.Key_1, Qt.Key_2, Qt.Key_3, Qt.Key_4, Qt.Key_5,
-                                    Qt.Key_6, Qt.Key_7, Qt.Key_8, Qt.Key_9]
-
     // Layout for the buttons and the title
-    Row {
-        id: row
+    Flow {
+        id: flow
         anchors.centerIn: parent
+        flow: items.count >= 3 ? Flow.TopToBottom : Flow.LeftToRight
         spacing: 8
+
         function doTriggerButton(triggerIndex) {
             config.model[triggerIndex].trigger();
             // highlight the triggered button
@@ -72,26 +82,23 @@ Rectangle {
                 }
             }
         }
+
         Text {
-            // Title of the assistant
-            anchors.verticalCenter: parent.verticalCenter
+            id: title
+            anchors.verticalCenter: parent.flow == Flow.LeftToRight ? parent.verticalCenter : undefined
             anchors.verticalCenterOffset: 1
             color: config.foreground
-            text: {
-                if ( typeof config.title !== 'undefined' ) {
-                    return "<style type=\"text/css\">" +
-                           "code { font-weight: bold; }\n" +
-                           "</style><html>" + config.title + "</html>";
-                }
-                return ""
-            }
+            font.bold: true
+            text: config.title
         }
+
         Repeater {
+            id: items
+            objectName: "items"
+
             // Buttons
             focus: true
             y: 5
-            id: items
-            objectName: "items"
             // config.model contains a list of buttons to be displayed, set from C++
             model: config.model
             onModelChanged: {
@@ -99,6 +106,7 @@ Rectangle {
                 root.y = -2
                 popupAnimation.start();
             }
+
             AssistantButton {
                 Connections {
                     target: config
@@ -110,11 +118,12 @@ Rectangle {
                 // what is displayed in the hotkey field of the button
                 button: index == items.model.length - 1 ? 0 : index + 1
                 buttonIndex: index
-                onTriggered: row.doTriggerButton(buttonIndex)
+                onTriggered: flow.doTriggerButton(buttonIndex)
                 foreground: config.foreground
                 background: config.background
                 highlight: config.highlight
             }
+
             Keys.onPressed: {
                 console.log("key pressed", event.key);
                 var triggerIndex = -1;
@@ -131,7 +140,7 @@ Rectangle {
                     return;
                 }
                 event.accepted = true;
-                row.doTriggerButton(triggerIndex);
+                flow.doTriggerButton(triggerIndex);
             }
         }
     }

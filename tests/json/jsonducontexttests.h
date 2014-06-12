@@ -169,13 +169,7 @@ ContextTest(range)
     if (!ctxt) {
         return "Invalid Context";
     }
-    auto range = ctxt->range();
-    QString string = QString("[(%1, %2), (%3, %4)]")
-    .arg(range.start.line)
-    .arg(range.start.column)
-    .arg(range.end.line)
-    .arg(range.end.column);
-    return compareValues(string, value, "Contexts's range");
+    return compareValues(rangeStr(ctxt->range()), value, "Contexts's range");
 }
 
 }

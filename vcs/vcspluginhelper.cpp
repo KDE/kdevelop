@@ -15,9 +15,7 @@
 #include <QVariant>
 #include <QMenu>
 
-#include <kpluginfactory.h>
 #include <kaboutdata.h>
-#include <kpluginloader.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kconfig.h>

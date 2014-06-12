@@ -162,11 +162,11 @@ bool NativeAppJob::doKill()
     return true;
 }
 
-
 void NativeAppJob::processFinished( int exitCode , QProcess::ExitStatus status ) 
 {
+    connect(model(), SIGNAL(allDone()), SLOT(outputDone()));
     lineMaker->flushBuffers();
-    
+
     if (exitCode == 0 && status == QProcess::NormalExit) {
         appendLine( i18n("*** Exited normally ***") );
     } else if (status == QProcess::NormalExit) {
@@ -179,7 +179,12 @@ void NativeAppJob::processFinished( int exitCode , QProcess::ExitStatus status )
         appendLine( i18n("*** Crashed with return code: %1 ***", QString::number(exitCode)) );
         setError(OutputJob::FailedShownError);
     }
-    kDebug() << "Process done";
+
+    model()->ensureAllDone();
+}
+
+void NativeAppJob::outputDone()
+{
     emitResult();
 }
 

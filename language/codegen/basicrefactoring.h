@@ -73,6 +73,30 @@ public:
         QSharedPointer<BasicRefactoringCollector> collector;
     };
 
+    /**
+     * @return Suggestion for new filename based on the current file's name @p current and new identifer @p newName
+     */
+    virtual QString newFileName(const KUrl& current, const QString& newName);
+
+    /**
+     * Add the change(s) related to renaming @p file to @p newName to @p changes and return the result.
+     *
+     * @param current The URL for the file you want to rename.
+     * @param newName The new name of the file *without* the file extension.
+     * @param changes The change set to add the rename changes to.
+     */
+    virtual KDevelop::DocumentChangeSet::ChangeResult addRenameFileChanges(const KUrl& current,
+                                                                           const QString& newName,
+                                                                           KDevelop::DocumentChangeSet* changes);
+
+    virtual bool shouldRenameUses(Declaration* declaration) const;
+
+    /**
+     * @return true if the declaration's file should be renamed if the declaration
+     *         was renamed.
+     */
+    virtual bool shouldRenameFile(KDevelop::Declaration* declaration);
+
 protected:
     /**
      * Apply the changes to the uses that can be found inside the given

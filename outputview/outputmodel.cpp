@@ -92,8 +92,16 @@ public slots:
         }
     }
 
+    void flushBuffers()
+    {
+        m_timer->stop();
+        process();
+        emit allDone();
+    }
+
 signals:
     void parsedBatch(const QVector<KDevelop::FilteredItem>& filteredItems);
+    void allDone();
 
 private slots:
     /**
@@ -199,6 +207,7 @@ OutputModelPrivate::OutputModelPrivate( OutputModel* model_, const KUrl& builddi
     s_parsingThread->addWorker(worker);
     model->connect(worker, SIGNAL(parsedBatch(QVector<KDevelop::FilteredItem>)),
                    model, SLOT(linesParsed(QVector<KDevelop::FilteredItem>)));
+    model->connect(worker, SIGNAL(allDone()), model, SIGNAL(allDone()));
 }
 
 bool OutputModelPrivate::isValidIndex( const QModelIndex& idx, int currentRowCount ) const
@@ -388,6 +397,11 @@ void OutputModel::appendLines( const QStringList& lines )
 void OutputModel::appendLine( const QString& l )
 {
     appendLines( QStringList() << l );
+}
+
+void OutputModel::ensureAllDone()
+{
+    QMetaObject::invokeMethod(d->worker, "flushBuffers");
 }
 
 }

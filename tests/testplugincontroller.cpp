@@ -34,7 +34,7 @@ void TestPluginController::initialize()
 }
 
 QList<IPlugin*> TestPluginController::allPluginsForExtension(const QString& extension,
-                                                             const QStringList& constraints)
+                                                             const QVariantMap& constraints)
 {
     Q_UNUSED(extension);
     Q_UNUSED(constraints);
@@ -46,12 +46,20 @@ QList<IPlugin*> TestPluginController::loadedPlugins() const
     return QList<IPlugin*>();
 }
 
-IPlugin* TestPluginController::pluginForExtension(const QString& extension,
-                                                  const QString& pluginname)
+IPlugin* TestPluginController::pluginForExtension(const QString& extension, const QString& pluginname,
+                                                  const QVariantMap& constraints)
 {
     Q_UNUSED(extension);
     Q_UNUSED(pluginname);
+    Q_UNUSED(constraints);
     return 0;
+}
+
+KPluginInfo::List TestPluginController::queryExtensionPlugins(const QString& extension, const QVariantMap& constraints) const
+{
+    Q_UNUSED(extension);
+    Q_UNUSED(constraints);
+    return {};
 }
 
 IPlugin* TestPluginController::loadPlugin(const QString& pluginName)
