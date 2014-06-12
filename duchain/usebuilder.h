@@ -38,7 +38,7 @@ protected:
     virtual bool visit(QmlJS::AST::UiImport* node);
 
 private:
-    void newUse(QmlJS::AST::Node* node, const QmlJS::AST::SourceLocation& loc, const QString& name);
+    void useForExpression(QmlJS::AST::Node* node, const KDevelop::RangeInRevision &range = KDevelop::RangeInRevision::invalid());
     KDevelop::DUContext* contextOnNode(QmlJS::AST::Node* node) const;
 };
 

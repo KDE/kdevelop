@@ -32,50 +32,19 @@ UseBuilder::UseBuilder(ParseSession* session)
 
 bool UseBuilder::visit(QmlJS::AST::FieldMemberExpression* node)
 {
-    ExpressionVisitor visitor(contextOnNode(node));
-
-    node->accept(&visitor);
-
-    // ExpressionVisitor, when given a field member expression, can find the
-    // declaration corresponding to its identifier
-    RangeInRevision range(m_session->locationToRange(node->identifierToken));
-
-    if (visitor.lastDeclaration()) {
-        UseBuilderBase::newUse(node, range, visitor.lastDeclaration());
-    }
-
+    useForExpression(node, m_session->locationToRange(node->identifierToken));
     return UseBuilderBase::visit(node);
 }
 
 bool UseBuilder::visit(QmlJS::AST::IdentifierExpression* node)
 {
-    newUse(node, node->identifierToken, node->name.toString());
+    useForExpression(node);
     return UseBuilderBase::visit(node);
 }
 
 bool UseBuilder::visit(QmlJS::AST::UiQualifiedId* node)
 {
-    ExpressionVisitor visitor(contextOnNode(node));
-
-    node->accept(&visitor);
-
-    // UiQualifiedId is also used for strings like "anchors.parent" (in a script
-    // binding for instance). ExpressionVisitor can be used to get its corresponding
-    // declaration.
-    QmlJS::AST::UiQualifiedId* lastNode = node;
-
-    while (lastNode->next) {
-        lastNode = lastNode->next;
-    }
-
-    if (visitor.lastDeclaration()) {
-        UseBuilderBase::newUse(
-            node,
-            m_session->locationsToRange(node->firstSourceLocation(), lastNode->lastSourceLocation()),
-            visitor.lastDeclaration()
-        );
-    }
-
+    useForExpression(node);
     return false;
 }
 
@@ -85,14 +54,25 @@ bool UseBuilder::visit(QmlJS::AST::UiImport* node)
     return false;   // Don't highlight the identifiers that appear in import statements
 }
 
-void UseBuilder::newUse(QmlJS::AST::Node* node, const QmlJS::AST::SourceLocation& loc, const QString& name)
+void UseBuilder::useForExpression(QmlJS::AST::Node* node, const KDevelop::RangeInRevision &range)
 {
-    const RangeInRevision range(m_session->locationToRange(loc));
-    const QualifiedIdentifier id(name);
+    // ExpressionVisitor can find the type and corresponding declaration of many
+    // kinds of expressions (identifiers, field members, special identifiers like
+    // this or parent, etc).
+    ExpressionVisitor visitor(contextOnNode(node));
 
-    // Build the use
-    const DeclarationPointer decl(QmlJS::getDeclarationOrSignal(id, contextOnNode(node)));
-    UseBuilderBase::newUse(node, range, decl);
+    node->accept(&visitor);
+
+    if (visitor.lastDeclaration()) {
+        newUse(
+            node,
+            range.isValid() ? range : m_session->locationsToRange(
+                node->firstSourceLocation(),
+                node->lastSourceLocation()
+            ),
+            visitor.lastDeclaration()
+        );
+    }
 }
 
 DUContext* UseBuilder::contextOnNode(QmlJS::AST::Node* node) const
