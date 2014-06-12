@@ -32,10 +32,6 @@ public:
     virtual QHash<QString, QString> defines( const QString& path ) const override;
 
     virtual Path::List includes( const QString& path ) const override;
-
-    virtual QString name() const override;
-
-    virtual QString defaultPath() const override;
 };
 
 #endif // MSVCCOMPILER_H

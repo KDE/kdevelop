@@ -133,23 +133,3 @@ Path::List GccLikeCompiler::includes( const QString& path ) const
 
     return m_definesIncludes[path].includePaths;
 }
-
-QString ClangCompiler::name() const
-{
-    return "Clang";
-}
-
-QString GccCompiler::name() const
-{
-    return "GCC";
-}
-
-QString ClangCompiler::defaultPath() const
-{
-    return "clang";
-}
-
-QString GccCompiler::defaultPath() const
-{
-    return "gcc";
-}

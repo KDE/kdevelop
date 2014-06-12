@@ -32,6 +32,9 @@
 
 using KDevelop::Path;
 
+class ICompilerFactory;
+class ICompilerProvider;
+
 /// An interface that represents a compiler. Compiler provides standard include directories and standard defined macros.
 class ICompiler
 {
@@ -42,13 +45,8 @@ public:
     /// @return list of include directories for the compiler at the @p path
     virtual Path::List includes( const QString& path ) const = 0;
 
-    /// @return user visible name
-    virtual QString name() const = 0;
-
-    /// @return default compiler path
-    virtual QString defaultPath() const = 0;
-
     virtual ~ICompiler() = default;
+
 protected:
     struct DefinesIncludes {
         QHash<QString, QString> definedMacros;
@@ -59,5 +57,13 @@ protected:
 };
 
 typedef QSharedPointer<ICompiler> CompilerPointer;
+
+struct Compiler {
+    CompilerPointer compiler;
+    QString name; ///< User visible name
+    QString path; ///< Path to the compiler
+    bool editable; ///< shows if compiler name and path can be edited
+};
+Q_DECLARE_METATYPE(Compiler)
 
 #endif // ICOMPILER_H

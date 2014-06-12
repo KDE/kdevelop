@@ -24,6 +24,7 @@
 #include <qabstractitemmodel.h>
 
 #include <language/interfaces/idefinesandincludesmanager.h>
+#include "../compilerprovider/icompiler.h"
 
 using KDevelop::ConfigEntry;
 using KDevelop::Defines;
@@ -52,13 +53,11 @@ public:
     QList<ConfigEntry> paths() const;
     void clear();
 
-    void setCompilers(const QStringList& compilerNames);
+    void setCompilers(const QVector<Compiler>& compilers);
 
     void setCurrentCompiler(const QString& name);
-    void setCompilerPath(const QString& path);
 
-    QString currentCompilerName() const;
-    QString compilerPath() const;
+    Compiler currentCompiler() const;
 
 signals:
     void changed();
@@ -68,6 +67,7 @@ private slots:
     void addProjectPath();
     void deleteProjectPath();
     void batchEdit();
+    void configureCompilers();
 
     // Forward includes model changes into the pathsModel
     void includesChanged( const QStringList& includes );
@@ -77,6 +77,7 @@ private slots:
 private:
     Ui::ProjectPathsWidget* ui;
     ProjectPathsModel* pathsModel;
+    QVector<Compiler> m_compilers;
     // Enables/Disables widgets based on UI state/selection
     void updateEnablements();
     void updatePathsModel( const QVariant& newData, int role );

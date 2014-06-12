@@ -21,18 +21,17 @@
  *
  */
 
-#ifndef GCCLIKECOMPILER_H
-#define GCCLIKECOMPILER_H
+#ifndef CLANGFACTORY_H
+#define CLANGFACTORY_H
 
-#include "icompiler.h"
+#include "icompilerfactory.h"
 
-class GccLikeCompiler : public ICompiler
+class ClangFactory : public ICompilerFactory
 {
 public:
-    virtual QHash<QString, QString> defines( const QString& path ) const override;
+    virtual Compiler createCompiler( const QString& name, const QString& path, bool editable = true ) override;
 
-    virtual Path::List includes( const QString& path ) const override;
+    virtual QString name() const override;
 };
 
-#endif // GCCLIKECOMPILER_H
-
+#endif // CLANGFACTORY_H

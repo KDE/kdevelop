@@ -53,21 +53,22 @@ public :
 
     virtual KDevelop::IDefinesAndIncludesManager::Type type() const override;
 
-    virtual bool setCompiler( KDevelop::IProject* project, const QString& name, const QString& path ) override;
+    virtual bool setCompiler( KDevelop::IProject* project, Compiler compiler ) override;
 
-    virtual QVector<CompilerPointer> compilers() const override;
+    virtual QVector<Compiler> compilers() const override;
 
-    virtual CompilerPointer currentCompiler( KDevelop::IProject* project ) const override;
+    virtual Compiler currentCompiler( KDevelop::IProject* project ) const override;
+
+    virtual bool registerCompiler(const Compiler& compiler) override;
+
+    void unregisterCompiler( const Compiler& compiler ) override;
+
+    virtual QVector<CompilerFactoryPointer> compilerFactories() const override;
 
 private:
-    struct Compiler {
-        CompilerPointer compiler;
-        QString path;
-    };
-
     Compiler compilerForItem( KDevelop::ProjectBaseItem* item ) const;
 
-    Compiler selectCompiler( const QString& compilerName, const QString& path ) const;
+    Compiler CheckCompiler( Compiler compiler ) const;
 
     void addPoject( KDevelop::IProject* project, Compiler compiler );
 
@@ -80,7 +81,8 @@ private Q_SLOTS:
 private:
     //list of compilers for each projects
     QHash<KDevelop::IProject*, Compiler> m_projects;
-    QVector<CompilerPointer> m_compilers;
+    QVector<Compiler> m_compilers;
+    QVector<CompilerFactoryPointer> m_factories;
 };
 
 #endif // COMPILERSPROVIDER_H

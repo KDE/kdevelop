@@ -122,13 +122,3 @@ Path::List MsvcCompiler::includes( const QString& ) const
     }
     return KDevelop::toPathList( includePaths );
 }
-
-QString MsvcCompiler::name() const
-{
-    return "MSVC";
-}
-
-QString MsvcCompiler::defaultPath() const
-{
-    return "cl.exe";
-}

@@ -9,7 +9,5 @@
     <entry name="reparse" key="reparse" type="Bool">
         <default>true</default>
     </entry>
-    <entry name="compilerPath" key="compilerPath" type="String">
-    </entry>
   </group>
 </kcfg>

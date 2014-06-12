@@ -21,18 +21,44 @@
  *
  */
 
-#ifndef GCCLIKECOMPILER_H
-#define GCCLIKECOMPILER_H
+#ifndef COMPILERWIDGET_H
+#define COMPILERWIDGET_H
 
-#include "icompiler.h"
+#include <QAbstractItemModel>
+#include <QVector>
+#include <QDialog>
 
-class GccLikeCompiler : public ICompiler
+#include "../compilerprovider/icompiler.h"
+
+namespace Ui
 {
-public:
-    virtual QHash<QString, QString> defines( const QString& path ) const override;
+class CompilersWidget;
+}
 
-    virtual Path::List includes( const QString& path ) const override;
+class CompilersModel;
+class QMenu;
+class QSignalMapper;
+
+class CompilersWidget : public QDialog
+{
+    Q_OBJECT
+
+public:
+    CompilersWidget( QWidget* parent = 0 );
+    void setCompilers( const QVector<Compiler>& compilers );
+    QVector<Compiler> compilers() const;
+    void clear();
+
+private slots:
+    // Handle Del key
+    void deleteCompiler();
+    void addCompiler(const QString& factoryName);
+
+private:
+    Ui::CompilersWidget* m_ui;
+    CompilersModel* m_compilersModel;
+    QMenu *m_addMenu;
+    QSignalMapper *m_mapper;
 };
 
-#endif // GCCLIKECOMPILER_H
-
+#endif

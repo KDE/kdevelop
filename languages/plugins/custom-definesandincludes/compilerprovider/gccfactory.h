@@ -1,7 +1,6 @@
 /*
- * This file is part of KDevelop
- *
- * Copyright 2014 Sergey Kalinichev <kalinichev.so.0@gmail.com>
+ * <one line to give the library's name and an idea of what it does.>
+ * Copyright 2014  <copyright holder> <mail_subscriber@mail.ru>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -21,18 +20,17 @@
  *
  */
 
-#ifndef GCCLIKECOMPILER_H
-#define GCCLIKECOMPILER_H
+#ifndef GCCFACTORY_H
+#define GCCFACTORY_H
 
-#include "icompiler.h"
+#include "icompilerfactory.h"
 
-class GccLikeCompiler : public ICompiler
+class GccFactory : public ICompilerFactory
 {
 public:
-    virtual QHash<QString, QString> defines( const QString& path ) const override;
+    virtual Compiler createCompiler( const QString& name, const QString& path, bool editable = true ) override;
 
-    virtual Path::List includes( const QString& path ) const override;
+    virtual QString name() const override;
 };
 
-#endif // GCCLIKECOMPILER_H
-
+#endif // GCCFACTORY_H

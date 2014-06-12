@@ -21,18 +21,21 @@
  *
  */
 
-#ifndef GCCLIKECOMPILER_H
-#define GCCLIKECOMPILER_H
+#include "clangfactory.h"
 
-#include "icompiler.h"
+#include "gcclikecompiler.h"
 
-class GccLikeCompiler : public ICompiler
+QString ClangFactory::name() const
 {
-public:
-    virtual QHash<QString, QString> defines( const QString& path ) const override;
+    return "Clang";
+}
 
-    virtual Path::List includes( const QString& path ) const override;
-};
+Compiler ClangFactory::createCompiler(const QString& name, const QString& path, bool editable )
+{
+    static Compiler compiler = {CompilerPointer(new GccLikeCompiler()), "", "", true};
+    compiler.name = name;
+    compiler.path = path;
+    compiler.editable = editable;
 
-#endif // GCCLIKECOMPILER_H
-
+    return compiler;
+}

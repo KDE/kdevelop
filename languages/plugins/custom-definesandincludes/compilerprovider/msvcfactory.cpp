@@ -1,7 +1,6 @@
 /*
- * This file is part of KDevelop
- *
- * Copyright 2014 Sergey Kalinichev <kalinichev.so.0@gmail.com>
+ * <one line to give the library's name and an idea of what it does.>
+ * Copyright 2014  <copyright holder> <mail_subscriber@mail.ru>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -21,18 +20,21 @@
  *
  */
 
-#ifndef GCCLIKECOMPILER_H
-#define GCCLIKECOMPILER_H
+#include "msvcfactory.h"
 
-#include "icompiler.h"
+#include "msvccompiler.h"
 
-class GccLikeCompiler : public ICompiler
+QString MsvcFactory::name() const
 {
-public:
-    virtual QHash<QString, QString> defines( const QString& path ) const override;
+    return "MSVC";
+}
 
-    virtual Path::List includes( const QString& path ) const override;
-};
+Compiler MsvcFactory::createCompiler(const QString& name, const QString& path, bool editable )
+{
+    static Compiler compiler = {CompilerPointer(new MsvcCompiler()), "", "", true};
+    compiler.name = name;
+    compiler.path = path;
+    compiler.editable = editable;
 
-#endif // GCCLIKECOMPILER_H
-
+    return compiler;
+}

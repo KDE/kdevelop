@@ -2,6 +2,9 @@ set( compilerprovider_SRCS
         compilerprovider.cpp
         gcclikecompiler.cpp
         msvccompiler.cpp
+        gccfactory.cpp
+        clangfactory.cpp
+        msvcfactory.cpp
         ../debugarea.cpp
     )
 

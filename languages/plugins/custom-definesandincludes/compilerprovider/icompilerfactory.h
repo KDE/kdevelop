@@ -21,18 +21,23 @@
  *
  */
 
-#ifndef GCCLIKECOMPILER_H
-#define GCCLIKECOMPILER_H
+#ifndef ICOMPILERFACTORY_H
+#define ICOMPILERFACTORY_H
 
 #include "icompiler.h"
 
-class GccLikeCompiler : public ICompiler
+/// Interface that represents a factory for creating compilers
+class ICompilerFactory
 {
 public:
-    virtual QHash<QString, QString> defines( const QString& path ) const override;
+    virtual QString name() const = 0;
 
-    virtual Path::List includes( const QString& path ) const override;
+    ///@return new compiler with @p path and @p name
+    virtual Compiler createCompiler( const QString& name, const QString& path, bool editable = true ) = 0;
+
+    virtual ~ICompilerFactory() = default;
 };
 
-#endif // GCCLIKECOMPILER_H
+typedef QSharedPointer<ICompilerFactory> CompilerFactoryPointer;
 
+#endif // ICOMPILERFACTORY_H

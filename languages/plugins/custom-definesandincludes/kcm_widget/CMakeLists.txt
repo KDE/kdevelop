@@ -9,13 +9,16 @@ set( kcm_customdefinesandincludes_SRCS
         projectpathswidget.cpp
         kcm_customdefinesandincludes.cpp
         ../debugarea.cpp
+        compilersmodel.cpp
+        compilerswidget.cpp
    )
 
 kde4_add_ui_files( kcm_customdefinesandincludes_SRCS
         batchedit.ui
         includeswidget.ui
         defineswidget.ui
-        projectpathswidget.ui )
+        projectpathswidget.ui
+        compilerswidget.ui )
 kde4_add_kcfg_files( kcm_customdefinesandincludes_SRCS
         customdefinesandincludes.kcfgc )
 kde4_add_plugin( kcm_kdevcustomdefinesandincludes

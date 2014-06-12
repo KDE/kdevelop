@@ -27,6 +27,8 @@
 #include <util/environmentgrouplist.h>
 #include <interfaces/iproject.h>
 
+#include "compilerswidget.h"
+
 #include "ui_projectpathswidget.h"
 #include "ui_batchedit.h"
 #include "projectpathsmodel.h"
@@ -61,6 +63,8 @@ ProjectPathsWidget::ProjectPathsWidget( QWidget* parent )
 
     connect( ui->includesWidget, SIGNAL(includesChanged(QStringList)), SLOT(includesChanged(QStringList)) );
     connect( ui->definesWidget, SIGNAL(definesChanged(Defines)), SLOT(definesChanged(Defines)) );
+
+    connect(ui->configureCompilers, SIGNAL(clicked(bool)), SLOT(configureCompilers()));
 }
 
 QList<ConfigEntry> ProjectPathsWidget::paths() const
@@ -225,25 +229,33 @@ void ProjectPathsWidget::setCurrentCompiler(const QString& name)
     }
 }
 
-void ProjectPathsWidget::setCompilerPath(const QString& path)
+Compiler ProjectPathsWidget::currentCompiler() const
 {
-    ui->kcfg_compilerPath->setText(path);
+    return ui->compiler->itemData(ui->compiler->currentIndex()).value<Compiler>();
 }
 
-QString ProjectPathsWidget::currentCompilerName() const
-{
-    return ui->compiler->currentText();
-}
 
-QString ProjectPathsWidget::compilerPath() const
-{
-    return ui->kcfg_compilerPath->text();
-}
-
-void ProjectPathsWidget::setCompilers(const QStringList& compilerNames)
+void ProjectPathsWidget::setCompilers(const QVector<Compiler>& compilers)
 {
     ui->compiler->clear();
-    ui->compiler->addItems(compilerNames);
+    for (int i = 0 ; i < compilers.count(); ++i) {
+        ui->compiler->addItem(compilers[i].name);
+        QVariant val; val.setValue(compilers[i]);
+        ui->compiler->setItemData(i, val);
+    }
+
+    m_compilers = compilers;
+}
+
+void ProjectPathsWidget::configureCompilers()
+{
+    CompilersWidget cw;
+    cw.setCompilers(m_compilers);
+    if (cw.exec() != QDialog::Accepted) {
+        return;
+    }
+
+    setCompilers(cw.compilers());
 }
 
 #include "projectpathswidget.moc"

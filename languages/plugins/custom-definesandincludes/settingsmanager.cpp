@@ -25,6 +25,10 @@
 #include <KConfig>
 
 #include <interfaces/iproject.h>
+#include <interfaces/icore.h>
+#include <interfaces/iplugincontroller.h>
+
+#include "compilerprovider/icompilerprovider.h"
 
 using KDevelop::ConfigEntry;
 
@@ -124,6 +128,16 @@ QList<ConfigEntry> convertedPaths( KConfig* cfg )
 
     return paths;
 }
+
+ICompilerProvider* currentCompilerProvider()
+{
+    auto compilerProvider = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ICompilerProvider");
+    if (!compilerProvider || !compilerProvider->extension<ICompilerProvider>()) {
+        return {};
+    }
+
+    return compilerProvider->extension<ICompilerProvider>();
+}
 }
 
 void SettingsManager::writePaths( KConfig* cfg, const QList< ConfigEntry >& paths )
@@ -153,10 +167,22 @@ QList<ConfigEntry> SettingsManager::readPaths( KConfig* cfg ) const
     return doReadSettings( grp );
 }
 
-QString SettingsManager::currentCompiler( KConfig* cfg ) const
+Compiler SettingsManager::currentCompiler( KConfig* cfg ) const
 {
     auto grp = cfg->group( ConfigConstants::definesAndIncludesGroup );
-    return grp.readEntry( "compiler", QString() );
+    auto name = grp.readEntry( "compilerName", QString() );
+    auto path = grp.readEntry( "compilerPath", QString() );
+    auto type = grp.readEntry( "compilerType", QString() );
+    auto editable = grp.readEntry( "compilerEditable", true );
+
+    auto cf = currentCompilerProvider()->compilerFactories();
+    for (auto f : cf) {
+        if (f->name() == type) {
+            return f->createCompiler(name, path, editable);
+        }
+    }
+
+    return {};
 }
 
 bool SettingsManager::needToReparseCurrentProject( KConfig* cfg ) const
@@ -165,20 +191,28 @@ bool SettingsManager::needToReparseCurrentProject( KConfig* cfg ) const
     return grp.readEntry( "reparse", true );
 }
 
-QString SettingsManager::pathToCompiler( KConfig* cfg ) const
-{
-    auto grp = cfg->group( ConfigConstants::definesAndIncludesGroup );
-    return grp.readEntry( "compilerPath", QString() );
-}
-
-void SettingsManager::writeCompiler( KConfig* cfg, const QString& name )
+void SettingsManager::writeCurrentCompiler(KConfig* cfg, Compiler compiler)
 {
     auto grp = cfg->group(ConfigConstants::definesAndIncludesGroup);
-    grp.writeEntry("compiler", name);
+    grp.writeEntry("compilerName", compiler.name);
+    grp.writeEntry("compilerPath", compiler.path);
+    grp.writeEntry("compilerEditable", compiler.editable);
+    auto cf = currentCompilerProvider()->compilerFactories();
+    for (auto f : cf) {
+        if (f->createCompiler("","").compiler == compiler.compiler) {
+            grp.writeEntry("compilerType", f->name());
+            return;
+        }
+    }
+    Q_ASSERT(0);
 }
-
-void SettingsManager::writePathToCompiler( KConfig* cfg, const QString& name )
+//FIXME:
+void SettingsManager::writeUserDefinedCompilers(const QVector< Compiler >& compilers)
 {
-    auto grp = cfg->group(ConfigConstants::definesAndIncludesGroup);
-    grp.writeEntry("compilerPath", name);
+
+}
+//FIXME:
+QVector< Compiler > SettingsManager::userDefinedCompilers() const
+{
+    return {};
 }
