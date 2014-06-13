@@ -196,6 +196,24 @@ void ExpressionVisitor::encounter(IntegralType::CommonIntegralTypes type)
 
 void ExpressionVisitor::encounter(const QString& declaration, KDevelop::DUContext* context)
 {
+    DUChainReadLocker lock;
+
+    // Special-case some special names (this, parent, etc)
+    if (declaration == QLatin1String("parent") &&
+        ParseSession::guessLanguageFromSuffix(m_context->topContext()->url().str()) == QmlJS::Language::Qml) {
+
+        DUContext* parent = m_context->parentContext();
+
+        if (parent &&
+            parent->owner() &&
+            parent->owner()->abstractType()) {
+            // Parent is difficult to resolve, but most of the time the enclosing QML
+            // component can be used as parent.
+            encounterLvalue(DeclarationPointer(m_context->parentContext()->owner()));
+            return;
+        }
+    }
+
     const QualifiedIdentifier name(declaration);
     DeclarationPointer dec = QmlJS::getDeclarationOrSignal(name, context ? context : m_context);
 

@@ -12,7 +12,7 @@ Text {
 
     /**
      * "type" : { "toString" : "string" },
-     * "useCount" : 1
+     * "useCount" : 2
      */
     property string text: "Hello"
 
@@ -77,6 +77,10 @@ Text {
              * "toString" : "<class> bar"
              */
             id: bar
+        }
+
+        onLoad: {
+            console.log(parent.text);
         }
     }
 

@@ -202,6 +202,17 @@ void QmlCompletionTest::testContainsDeclaration_data()
         "  %INVOKE\n"
         " }\n"
         "}" << "%CURSOR" << "prop" << true;
+
+    // QML parent
+    QTest::newRow("qml_parent") <<
+        "Item {\n"
+        " id: a\n"
+        " property var prop\n"
+        " Item {\n"
+        "  id: b\n"
+        "  %INVOKE\n"
+        " }\n"
+        "}\n" << "onTest: parent.%CURSOR" << "prop" << true;
 }
 
 void QmlCompletionTest::testDoesNotContainDeclaration()

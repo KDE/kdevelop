@@ -52,7 +52,7 @@ bool isSorted(const QList<QmlJS::AST::SourceLocation>& locations)
     return true;
 }
 
-QmlJS::Language::Enum guessLanguageFromSuffix(const QString& path)
+QmlJS::Language::Enum ParseSession::guessLanguageFromSuffix(const QString& path)
 {
     if (path.endsWith(".js")) {
         return QmlJS::Language::JavaScript;

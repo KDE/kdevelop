@@ -48,6 +48,11 @@ public:
     static KDevelop::IndexedString languageString();
 
     /**
+     * @return the QML/JS language corresponding to a file suffix
+     */
+    static QmlJS::Language::Enum guessLanguageFromSuffix(const QString& path);
+
+    /**
      * Parse the given @p contents.
      *
      * @param url The url for the document you want to parse.
