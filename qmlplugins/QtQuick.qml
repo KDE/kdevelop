@@ -523,7 +523,7 @@ Module {
         name: "QDeclarativeGraphicsWidget"
         defaultProperty: "children"
         prototype: "QGraphicsWidget"
-        exports: ["QtQuick/QGraphicsWidget 1.0"]
+        exports: ["QtQuick/GraphicsWidget 1.0"]
         Property { name: "anchors"; type: "QDeclarativeAnchors"; isReadonly: true; isPointer: true }
         Property { name: "left"; type: "QDeclarativeAnchorLine"; isReadonly: true }
         Property { name: "right"; type: "QDeclarativeAnchorLine"; isReadonly: true }
