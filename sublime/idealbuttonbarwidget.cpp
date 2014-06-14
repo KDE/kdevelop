@@ -147,6 +147,9 @@ void IdealButtonBarWidget::showWidget(QAction *widgetAction, bool checked)
     IdealDockWidget *widget = _widgets.value(widgetAction);
     Q_ASSERT(widget);
 
+    IdealToolButton* button = _buttons.value(widgetAction);
+    Q_ASSERT(button);
+
     if (checked) {
         IdealController::RaiseMode mode = IdealController::RaiseMode(widgetAction->property("raise").toInt());
         if ( mode == IdealController::HideOtherViews ) {
@@ -159,10 +162,13 @@ void IdealButtonBarWidget::showWidget(QAction *widgetAction, bool checked)
                     otherAction->setChecked(false);
             }
         }
+
+        _controller->lastDockWidget[_area] = widget;
     }
 
     _controller->showDockWidget(widget, checked);
     widgetAction->setChecked(checked);
+    button->setChecked(checked);
 }
 
 
@@ -194,7 +200,6 @@ void IdealButtonBarWidget::actionEvent(QActionEvent *event)
             _widgets[action]->setWindowTitle(action->text());
 
             layout()->addWidget(button);
-            connect(action, SIGNAL(toggled(bool)), SLOT(actionToggled(bool)));
             connect(action, SIGNAL(toggled(bool)), SLOT(showWidget(bool)));
             connect(button, SIGNAL(clicked(bool)), SLOT(buttonPressed(bool)));
             connect(button, SIGNAL(customContextMenuRequested(QPoint)),
@@ -232,20 +237,6 @@ void IdealButtonBarWidget::actionEvent(QActionEvent *event)
     default:
         break;
     }
-}
-
-void IdealButtonBarWidget::actionToggled(bool state)
-{
-    QAction* action = qobject_cast<QAction*>(sender());
-    Q_ASSERT(action);
-    
-    IdealToolButton* button = _buttons.value(action);
-    Q_ASSERT(button);
-
-    button->setChecked(state);
-
-    if (state)
-        _controller->lastDockWidget[_area] = widgetForAction(action);
 }
 
 MainWindow* IdealButtonBarWidget::parentWidget() const

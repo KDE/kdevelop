@@ -61,7 +61,6 @@ public:
 
 private Q_SLOTS:
     void showWidget(bool checked);
-    void actionToggled(bool state);
     void buttonPressed(bool state);
 
 signals:
