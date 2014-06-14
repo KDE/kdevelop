@@ -56,7 +56,7 @@ public:
 
     QWidget* corner();
 
-    void showWidget(QAction *widgetAction, bool checked, bool forceGrouping = false);
+    void showWidget(QAction *widgetAction, bool checked);
     bool isEmpty();
 
 private Q_SLOTS:

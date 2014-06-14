@@ -27,11 +27,14 @@
 #include "idealtoolbutton.h"
 #include "document.h"
 #include "view.h"
+
 #include <KLocalizedString>
 #include <KSharedConfig>
 #include <KConfigGroup>
+
 #include <QBoxLayout>
 #include <QApplication>
+#include <QDebug>
 
 using namespace Sublime;
 
@@ -139,22 +142,13 @@ void IdealButtonBarWidget::showWidget(bool checked)
     showWidget(action, checked);
 }
 
-void IdealButtonBarWidget::showWidget(QAction *widgetAction, bool checked, bool forceGrouping)
+void IdealButtonBarWidget::showWidget(QAction *widgetAction, bool checked)
 {
     IdealDockWidget *widget = _widgets.value(widgetAction);
     Q_ASSERT(widget);
 
     if (checked) {
         IdealController::RaiseMode mode = IdealController::RaiseMode(widgetAction->property("raise").toInt());
-        if ( forceGrouping ) {
-            mode = IdealController::GroupWithOtherViews;
-        }
-        if ( mode == IdealController::GroupWithOtherViews ) {
-            // need to reset the raise property so that subsequent
-            // showWidget()'s will not do grouping unless explicitly asked
-            widgetAction->setProperty("raise", IdealController::HideOtherViews);
-        }
-
         if ( mode == IdealController::HideOtherViews ) {
             // Make sure only one widget is visible at any time.
             // The alternative to use a QActionCollection and setting that to "exclusive"
@@ -260,10 +254,28 @@ MainWindow* IdealButtonBarWidget::parentWidget() const
 }
 
 IdealDockWidget * IdealButtonBarWidget::widgetForAction(QAction *action) const
-{ return _widgets.value(action); }
+{
+    return _widgets.value(action);
+}
 
 void IdealButtonBarWidget::buttonPressed(bool state)
 {
-    bool forceGrouping = QApplication::keyboardModifiers().testFlag(Qt::ControlModifier);
-    showWidget(_buttons.key(qobject_cast<IdealToolButton*>(sender())), state, forceGrouping);
+    auto button = qobject_cast<IdealToolButton*>(sender());
+    Q_ASSERT(button);
+    auto action = _buttons.key(button);
+    Q_ASSERT(action);
+
+    const bool forceGrouping = QApplication::keyboardModifiers().testFlag(Qt::ControlModifier);
+
+    if (forceGrouping) {
+        action->setProperty("raise", IdealController::GroupWithOtherViews);
+    }
+
+    action->setChecked(state);
+
+    if (forceGrouping) {
+        // need to reset the raise property so that subsequent
+        // showWidget()'s will not do grouping unless explicitly asked
+        action->setProperty("raise", IdealController::HideOtherViews);
+    }
 }
