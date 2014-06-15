@@ -62,6 +62,7 @@ AssistantPopup::AssistantPopup(KTextEditor::View* parent, const IAssistant::Ptr&
     setBackgroundRole(QPalette::Window);
     setBackgroundBrush(QBrush(QColor(0, 0, 0, 0)));
     setResizeMode(QDeclarativeView::SizeViewToRootObject);
+    setAttribute(Qt::WA_ShowWithoutActivating);
 
     reset(parent, assistant);
 }
