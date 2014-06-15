@@ -41,6 +41,7 @@ public:
     virtual KDevelop::ReferencedTopDUContext build(const KDevelop::IndexedString& url,
                                                    QmlJS::AST::Node* node,
                                                    KDevelop::ReferencedTopDUContext updateContext = KDevelop::ReferencedTopDUContext());
+    virtual void startVisiting(QmlJS::AST::Node* node);
 
 protected:
     using Visitor::visit;

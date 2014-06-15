@@ -41,3 +41,5 @@ var nested_conditions = (simple_compare && b < 3);
  * "type" : { "toString" : "int" }
  */
 var simple_shift = (a << 2);
+
+im_used_in_types_js = "and I'm a string";

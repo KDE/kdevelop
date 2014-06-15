@@ -142,6 +142,16 @@ public:
     KDevelop::ReferencedTopDUContext contextOfModule(const QString &module);
 
     /**
+     * Return the context of a given QML file, NULL if this file is not yet known
+     * to the DUChain.
+     *
+     * When a file that exists is passed to this method and the file hasn't yet
+     * been parsed, it is queued for parsing, and the current file will also be
+     * re-parsed after it.
+     */
+    KDevelop::ReferencedTopDUContext contextOfFile(const QString &fileName);
+
+    /**
      * Dump AST tree to stdout.
      */
     void dumpNode(QmlJS::AST::Node* node) const;

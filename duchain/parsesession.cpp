@@ -209,8 +209,20 @@ ReferencedTopDUContext ParseSession::contextOfModule(const QString& module)
     }
 
     // Get the top context of this module file
+    ReferencedTopDUContext moduleContext = contextOfFile(moduleFile);
+
+    if (moduleContext) {
+        m_moduleToContext.insert(module, moduleContext);
+    }
+
+    return moduleContext;
+}
+
+ReferencedTopDUContext ParseSession::contextOfFile(const QString& fileName)
+{
+    // Get the top context of this module file
     DUChainReadLocker lock;
-    IndexedString moduleFileString(moduleFile);
+    IndexedString moduleFileString(fileName);
     ReferencedTopDUContext moduleContext = DUChain::self()->chainForDocument(moduleFileString);
 
     lock.unlock();
@@ -232,8 +244,6 @@ ReferencedTopDUContext ParseSession::contextOfModule(const QString& module)
 
         return ReferencedTopDUContext();
     } else {
-        m_moduleToContext.insert(module, moduleContext);
-
         return moduleContext;
     }
 }

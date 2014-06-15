@@ -1,11 +1,12 @@
 import QtQuick 1.1
 
 /**
- * "type" : { "toString" : "<class>" }
+ * "type" : { "toString" : "test" },
+ * "useCount" : 1
  */
 Text {
     /*
-     * "toString" : "<class> someId",
+     * "toString" : "test someId",
      * "useCount" : 3
      */
     id: someId

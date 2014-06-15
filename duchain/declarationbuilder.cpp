@@ -34,6 +34,9 @@
 #include "parsesession.h"
 #include "helper.h"
 
+#include <QtCore/QDirIterator>
+#include <QtCore/QFileInfo>
+
 using namespace KDevelop;
 
 DeclarationBuilder::DeclarationBuilder(ParseSession* session)
@@ -64,6 +67,28 @@ ReferencedTopDUContext DeclarationBuilder::build(const IndexedString& url,
     }
 
     return DeclarationBuilderBase::build(url, node, updateContext);
+}
+
+void DeclarationBuilder::startVisiting(QmlJS::AST::Node* node)
+{
+    QFileInfo file(m_session->url().str());
+
+    if (file.exists() && !file.absolutePath().contains(QLatin1String("kdevqmljssupport"))) {
+        // Explore all the files in the same directory as the current file, parse
+        // them and import their context.
+        QDirIterator dir(file.absolutePath(), QDir::Files);
+        DUChainWriteLocker lock;
+
+        while (dir.hasNext() && dir.next() != file.absoluteFilePath()) {
+            ReferencedTopDUContext context = m_session->contextOfFile(dir.filePath());
+
+            if (context && context != currentContext()) {
+                currentContext()->addImportedParentContext(context, CursorInRevision(), true);
+            }
+        }
+    }
+
+    DeclarationBuilderBase::startVisiting(node);
 }
 
 /*
@@ -618,7 +643,12 @@ void DeclarationBuilder::declareComponentSubclass(QmlJS::AST::UiObjectInitialize
 
         {
             DUChainWriteLocker lock;
-            ClassDeclaration* decl = openDeclaration<ClassDeclaration>(name, RangeInRevision());
+            ClassDeclaration* decl = openDeclaration<ClassDeclaration>(
+                currentContext()->type() == DUContext::Global ?
+                    QualifiedIdentifier(m_session->urlBaseName()) :
+                    name,
+                RangeInRevision()
+            );
 
             decl->clearBaseClasses();
             decl->setAlwaysForceDirect(true);   // This declaration has no name, so type->setDeclaration is obliged to store a direct pointer to the declaration.

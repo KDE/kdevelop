@@ -92,6 +92,10 @@ const CompletionParameters QmlCompletionTest::prepareCompletion(const QString& i
 
     Q_ASSERT(topContext);
 
+    // Now that it has been parsed, the file can be deleted (this avoids problems
+    // with files automatically including each other)
+    fileptr.remove();
+
     // Simulate that the user has entered invokeCode where %INVOKE is, put
     // the cursor where %CURRSOR is, and then asked for completions
     Q_ASSERT(initCode.indexOf("%INVOKE") != -1);
