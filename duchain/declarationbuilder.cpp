@@ -26,6 +26,7 @@
 #include <language/duchain/types/arraytype.h>
 #include <language/duchain/types/typeutils.h>
 #include <language/duchain/declaration.h>
+#include <language/duchain/aliasdeclaration.h>
 #include <language/duchain/namespacealiasdeclaration.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/classdeclaration.h>
@@ -82,8 +83,28 @@ void DeclarationBuilder::startVisiting(QmlJS::AST::Node* node)
         while (dir.hasNext() && dir.next() != file.absoluteFilePath()) {
             ReferencedTopDUContext context = m_session->contextOfFile(dir.filePath());
 
-            if (context && context != currentContext()) {
-                currentContext()->addImportedParentContext(context, CursorInRevision(), true);
+            if (!context) {
+                continue;
+            }
+
+            // Add in this context one alias declaration for each local declaration
+            // of context. This way, this context can see the declarations of
+            // the other one, but not its imported parent contexts. This keeps
+            // things simple and fast for the user.
+            for (Declaration* decl : context->localDeclarations(currentContext()->topContext())) {
+                if (decl->kind() != Declaration::Instance &&
+                    decl->kind() != Declaration::Type) {
+                    // Only import the top-level classes and instances, not the
+                    // import statements or namespace aliases
+                    continue;
+                }
+                AliasDeclaration* alias = openDeclaration<AliasDeclaration>(
+                    decl->qualifiedIdentifier(),
+                    RangeInRevision()
+                );
+
+                alias->setAliasedDeclaration(IndexedDeclaration(decl));
+                closeDeclaration();
             }
         }
     }
