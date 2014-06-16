@@ -48,38 +48,38 @@ QString BazaarUtils::getRevisionSpec(const KDevelop::VcsRevision& revision)
         if (revision.specialType() == KDevelop::VcsRevision::Head)
             return "-rlast:1";
         else if (revision.specialType() == KDevelop::VcsRevision::Base)
-            return "";  // Workaround strange KDevelop behaviour
+            return QString();  // Workaround strange KDevelop behaviour
         else if (revision.specialType() == KDevelop::VcsRevision::Working)
-            return "";
+            return QString();
         else if (revision.specialType() == KDevelop::VcsRevision::Start)
             return "-r1";
         else
-            return "";  // Don't know how to handle this situation
+            return QString(); // Don't know how to handle this situation
     } else if (revision.revisionType() == KDevelop::VcsRevision::GlobalNumber)
         return QString("-r") + QString::number(revision.revisionValue().toLongLong());
     else
-        return "";      // Don't know how to handle this situation
+        return QString(); // Don't know how to handle this situation
 }
 
 QString BazaarUtils::getRevisionSpecRange(const KDevelop::VcsRevision& end)
 {
-    QString revisionPart;
     if (end.revisionType() == KDevelop::VcsRevision::Special) {
-        if (end.specialType() == KDevelop::VcsRevision::Head)
-            revisionPart = "-r..last:1";
-        else if (end.specialType() == KDevelop::VcsRevision::Base)
-            revisionPart = "-r..last:1"; // Workaround strange KDevelop behaviour
-        else if (end.specialType() == KDevelop::VcsRevision::Working)
-            revisionPart = "";
-        else if (end.specialType() == KDevelop::VcsRevision::Start)
-            revisionPart = "-..r1";
-        else
-            revisionPart = ""; // Don't know how to handle this situation
-    } else if (end.revisionType() == KDevelop::VcsRevision::GlobalNumber)
-        revisionPart = QString("-r") + QString::number(end.revisionValue().toLongLong());
-    else
-        revisionPart = "";    // Don't know how to handle this situation
-    return revisionPart;
+        if (end.specialType() == KDevelop::VcsRevision::Head) {
+            return "-r..last:1";
+        } else if (end.specialType() == KDevelop::VcsRevision::Base) {
+            return "-r..last:1"; // Workaround strange KDevelop behaviour
+        } else if (end.specialType() == KDevelop::VcsRevision::Working) {
+            return QString();
+        } else if (end.specialType() == KDevelop::VcsRevision::Start) {
+            return "-..r1";
+        } else {
+            return QString(); // Don't know how to handle this situation
+        }
+    } else if (end.revisionType() == KDevelop::VcsRevision::GlobalNumber) {
+        return QString("-r") + QString::number(end.revisionValue().toLongLong());
+    }
+
+    return QString();    // Don't know how to handle this situation
 }
 
 QString BazaarUtils::getRevisionSpecRange(const KDevelop::VcsRevision& begin,
@@ -92,7 +92,7 @@ QString BazaarUtils::getRevisionSpecRange(const KDevelop::VcsRevision& begin,
                         end.specialType() == KDevelop::VcsRevision::Head)
                     return "-rlast:2..last:1";
                 else if (end.specialType() == KDevelop::VcsRevision::Working)
-                    return "";
+                    return QString();
                 else if (end.specialType() == KDevelop::VcsRevision::Start)
                     return "-r0..1";        // That's wrong revision range
             } else if (end.revisionType() == KDevelop::VcsRevision::GlobalNumber)
@@ -100,11 +100,11 @@ QString BazaarUtils::getRevisionSpecRange(const KDevelop::VcsRevision& begin,
                        QString::number(end.revisionValue().toLongLong() - 1)
                        + ".." + QString::number(end.revisionValue().toLongLong());
             else
-                return "";  // Don't know how to handle this situation
+                return QString(); // Don't know how to handle this situation
         } else if (begin.specialType() == KDevelop::VcsRevision::Base ||
                    begin.specialType() == KDevelop::VcsRevision::Head) {
             // Only one possibility: comparing working copy to last commit
-            return "";
+            return QString();
         }
     } else if (begin.revisionType() == KDevelop::VcsRevision::GlobalNumber) {
         if (end.revisionType() == KDevelop::VcsRevision::Special) {
@@ -115,7 +115,7 @@ QString BazaarUtils::getRevisionSpecRange(const KDevelop::VcsRevision& begin,
                    + ".." + QString::number(end.revisionValue().toLongLong());
         }
     }
-    return "";      // Don't know how to handle this situation
+    return QString(); // Don't know how to handle this situation
 }
 
 bool BazaarUtils::isValidDirectory(const KUrl& dirPath)
