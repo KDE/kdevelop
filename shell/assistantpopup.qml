@@ -125,7 +125,11 @@ Rectangle {
             }
 
             Keys.onPressed: {
-                console.log("key pressed", event.key);
+                if (event.modifiers !== Qt.AltModifier) {
+                    console.warn("Keys.onPressed called in assistantpopup without the alt modifier: " + JSON.stringify(event));
+                    return;
+                }
+
                 var triggerIndex = -1;
                 if ( event.key == Qt.Key_0 ) {
                     triggerIndex = model.length-1;
