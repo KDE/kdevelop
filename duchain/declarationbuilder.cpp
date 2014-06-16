@@ -76,7 +76,7 @@ void DeclarationBuilder::startVisiting(QmlJS::AST::Node* node)
     if (file.exists() && !file.absolutePath().contains(QLatin1String("kdevqmljssupport"))) {
         // Explore all the files in the same directory as the current file, parse
         // them and import their context.
-        QDirIterator dir(file.absolutePath(), QDir::Files);
+        QDirIterator dir(file.absolutePath(), QStringList() << "*.qml" << "*.js", QDir::Files);
         DUChainWriteLocker lock;
 
         while (dir.hasNext() && dir.next() != file.absoluteFilePath()) {
