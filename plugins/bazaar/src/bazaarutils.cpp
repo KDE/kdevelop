@@ -225,8 +225,7 @@ KDevelop::VcsItemEvent::Action BazaarUtils::parseActionDescription(const QString
     } else if (action.startsWith("renamed")) {
         return KDevelop::VcsItemEvent::Modified; // Best approximation
     } else {
-        qCritical("Unsupported action: %s at line %{line} in file %{file}."
-                  " Please report this.", action.toLocal8Bit().constData());
+        qCritical("Unsupported action: %s", action.toLocal8Bit().constData());
         return KDevelop::VcsItemEvent::Action();
     }
 }
