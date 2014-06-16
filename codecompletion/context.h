@@ -38,16 +38,24 @@ public:
                           const KDevelop::CursorInRevision& position, int depth = 0);
     virtual QList<KDevelop::CompletionTreeItemPointer> completionItems(bool& abort, bool fullCompletion = true);
 
+    enum CompletionInContextFlag {
+        CompletionOnlyLocal = 1,        /*!< @brief Don't list the items available in parent contexts */
+        CompletionHideWrappers = 2,     /*!< @brief Filter out QML component wrappers (Q... C++ classes) */
+    };
+    Q_DECLARE_FLAGS(CompletionInContextFlags, CompletionInContextFlag)
+
 private:
     QList<KDevelop::CompletionTreeItemPointer> completionsInContext(const KDevelop::DUContextPointer& context,
-                                                                    bool onlyLocal,
+                                                                    CompletionInContextFlags flags,
                                                                     CompletionItem::Decoration decoration);
-    QList<KDevelop::CompletionTreeItemPointer> globalCompletions();
+    QList<KDevelop::CompletionTreeItemPointer> globalCompletions(CompletionInContextFlags flags = 0);
     QList<KDevelop::CompletionTreeItemPointer> fieldCompletions(const QString &expression,
                                                                 CompletionItem::Decoration decoration);
 
     bool containsOnlySpaces(const QString &str);
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(CodeCompletionContext::CompletionInContextFlags)
 
 }
 

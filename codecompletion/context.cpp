@@ -82,19 +82,22 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& ab
             // The cursor is in a QML object and there is nothing before it. Display
             // a list of properties and signals that can be used in a script binding.
             // Note that the properties/signals of parent QML objects are not displayed here
-            items << completionsInContext(m_duContext, true, CompletionItem::Colon);
+            items << completionsInContext(m_duContext,
+                                          CompletionOnlyLocal | CompletionHideWrappers,
+                                          CompletionItem::Colon);
+            items << globalCompletions(CompletionHideWrappers);
         } else {
-            items << completionsInContext(m_duContext, false, CompletionItem::NoDecoration);
+            items << completionsInContext(m_duContext,
+                                          0,
+                                          CompletionItem::NoDecoration);
         }
-
-        items << globalCompletions();
     }
 
     return items;
 }
 
 QList<CompletionTreeItemPointer> CodeCompletionContext::completionsInContext(const DUContextPointer& context,
-                                                                             bool onlyLocal,
+                                                                             CompletionInContextFlags flags,
                                                                              CompletionItem::Decoration decoration)
 {
     QList<CompletionTreeItemPointer> items;
@@ -104,16 +107,22 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionsInContext(con
         const QList<DeclarationDepthPair>& declarations = context->allDeclarations(
             CursorInRevision::invalid(),
             context->topContext(),
-            !onlyLocal
+            !flags.testFlag(CompletionOnlyLocal)
         );
 
         foreach (const DeclarationDepthPair& decl, declarations) {
             DeclarationPointer declaration(decl.first);
 
-            if (decl.first->kind() == Declaration::NamespaceAlias) {
+            if (declaration->kind() == Declaration::NamespaceAlias) {
                 continue;
-            } else if (decl.first->qualifiedIdentifier().isEmpty()) {
+            } else if (declaration->qualifiedIdentifier().isEmpty()) {
                 continue;
+            } else if (flags.testFlag(CompletionHideWrappers)) {
+                ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration*>(declaration.data());
+
+                if (classDecl && classDecl->classType() == ClassDeclarationData::Interface) {
+                    continue;
+                }
             }
 
             items << CompletionTreeItemPointer(new CompletionItem(declaration, decl.second, decoration));
@@ -123,7 +132,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionsInContext(con
     return items;
 }
 
-QList<CompletionTreeItemPointer> CodeCompletionContext::globalCompletions()
+QList<CompletionTreeItemPointer> CodeCompletionContext::globalCompletions(CompletionInContextFlags flags)
 {
     QList<CompletionTreeItemPointer> items;
 
@@ -146,7 +155,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::globalCompletions()
     foreach (Declaration* import, realImports) {
         items << completionsInContext(
             DUContextPointer(import->internalContext()),
-            false,
+            flags,
             CompletionItem::NoDecoration
         );
     }
@@ -219,7 +228,9 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::fieldCompletions(const Q
     DUContext* context = getInternalContext(visitor.lastDeclaration());
 
     if (context) {
-        return completionsInContext(DUContextPointer(context), true, decoration);
+        return completionsInContext(DUContextPointer(context),
+                                    CompletionOnlyLocal,
+                                    decoration);
     } else {
         return QList<CompletionTreeItemPointer>();
     }
