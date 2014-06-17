@@ -43,7 +43,7 @@ static QFSFileEngine fileEngine;
 namespace QmlJS {
 
 QString filenameForTestId(const int id, bool qml) {
-    return basepath + "test_" + QString::number(id) + (qml ? ".qml" : ".js");
+    return basepath + "test" + QString::number(id) + (qml ? ".qml" : ".js");
 }
 
 QString nextFilename(bool qml) {
@@ -141,6 +141,8 @@ const QList<CompletionTreeItem*> QmlCompletionTest::runCompletion(const Completi
 
 bool QmlCompletionTest::containsItemForDeclarationNamed(const QList<CompletionTreeItem*> items, QString itemName)
 {
+    DUChainReadLocker lock;
+
     foreach (const CompletionTreeItem* ptr, items) {
         if (ptr->declaration()) {
             if (ptr->declaration()->identifier().toString() == itemName) {
