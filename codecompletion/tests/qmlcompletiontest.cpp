@@ -90,6 +90,10 @@ const CompletionParameters QmlCompletionTest::prepareCompletion(const QString& i
     ReferencedTopDUContext topContext = DUChain::self()->waitForUpdate(IndexedString(filename),
                                                                        KDevelop::TopDUContext::AllDeclarationsAndContexts);
 
+    while (!ICore::self()->languageController()->backgroundParser()->isIdle()) {
+        QTest::qWait(500);
+    }
+
     Q_ASSERT(topContext);
 
     // Now that it has been parsed, the file can be deleted (this avoids problems
@@ -219,6 +223,9 @@ void QmlCompletionTest::testContainsDeclaration_data()
         "  %INVOKE\n"
         " }\n"
         "}\n" << "onTest: parent.%CURSOR" << "prop" << true;
+
+    // This declaration must be in QtQuick 2.2 but not 2.0 (tested in testDoesNotContainDeclaration)
+    QTest::newRow("qml_module_version_2.2") << "import QtQuick 2.2\n Item { id: a\n %INVOKE }" << "%CURSOR" << "OpacityAnimator" << true;
 }
 
 void QmlCompletionTest::testDoesNotContainDeclaration()
@@ -245,6 +252,9 @@ void QmlCompletionTest::testDoesNotContainDeclaration_data()
     // When providing completions for script bindings, don't propose script bindings
     // for properties/signals of the surrounding components
     QTest::newRow("qml_script_binding_not_surrounding") << "Item { property int foo; Item { %INVOKE } }" << "%CURSOR" << "foo" << false;
+
+    // Some QML components are only available in specific versions of their module
+    QTest::newRow("qml_module_version_2.0") << "import QtQuick 2.0\n Item { id: a\n %INVOKE }" << "%CURSOR" << "OpacityAnimator" << true;
 }
 
 }

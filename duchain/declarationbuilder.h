@@ -47,6 +47,8 @@ protected:
     using Visitor::visit;
     using Visitor::endVisit;
 
+    typedef QList<QPair<QmlJS::AST::StringLiteral*, QString>> ExportLiteralsAndNames;
+
     // Functions
     template<typename Decl>
     void declareFunction(QmlJS::AST::Node* node,
@@ -101,7 +103,8 @@ protected:
                                   const KDevelop::RangeInRevision& range,
                                   const QString& baseclass);
     void declareComponentInstance(QmlJS::AST::ExpressionStatement *expression);
-    void declareExports(QmlJS::AST::ExpressionStatement *exports,
+    ExportLiteralsAndNames exportedNames(QmlJS::AST::ExpressionStatement *exports);
+    void declareExports(const ExportLiteralsAndNames& exports,
                         KDevelop::ClassDeclaration* classdecl);
 
     // UI

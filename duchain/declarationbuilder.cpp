@@ -27,7 +27,6 @@
 #include <language/duchain/types/typeutils.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/aliasdeclaration.h>
-#include <language/duchain/namespacealiasdeclaration.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/classdeclaration.h>
 
@@ -728,20 +727,24 @@ void DeclarationBuilder::declareComponentInstance(QmlJS::AST::ExpressionStatemen
     closeDeclaration();
 }
 
-void DeclarationBuilder::declareExports(QmlJS::AST::ExpressionStatement *exports,
-                                        ClassDeclaration* classdecl)
+DeclarationBuilder::ExportLiteralsAndNames DeclarationBuilder::exportedNames(QmlJS::AST::ExpressionStatement* exports)
 {
+    ExportLiteralsAndNames res;
+
     if (!exports) {
-        return;
+        return res;
     }
 
     auto exportslist = QmlJS::AST::cast<QmlJS::AST::ArrayLiteral*>(exports->expression);
 
     if (!exportslist) {
-        return;
+        return res;
     }
 
-    // Declare a new class that has the exported name, but whose type is the original component name
+    // Explore all the exported symbols for this component and keep only those
+    // having a version compatible with the one of this module
+    QSet<QString> knownNames;
+
     for (auto it = exportslist->elements; it && it->expression; it = it->next) {
         auto stringliteral = QmlJS::AST::cast<QmlJS::AST::StringLiteral *>(it->expression);
 
@@ -750,36 +753,63 @@ void DeclarationBuilder::declareExports(QmlJS::AST::ExpressionStatement *exports
         }
 
         // String literal like "Namespace/Class version".
-        QString exportname = stringliteral->value.toString().section(' ', 0, 0).section('/', -1, -1);
+        QStringList nameAndVersion = stringliteral->value.toString().section('/', -1, -1).split(' ');
+        QString name = nameAndVersion.at(0);
+        QString version = (nameAndVersion.count() > 1 ? nameAndVersion.at(1) : QLatin1String("1.0"));
+
+        if (!knownNames.contains(name)) {
+            knownNames.insert(name);
+
+            // Verions of a given name are given in ascending order. This module
+            // "declares" the export only if it has the version in which the export
+            // appeared for the first time. We come here if the symbol appears for
+            // the first time in the exports list, and this check keeps it only
+            // if this module has the correct version
+            if (version == m_session->moduleVersion()) {
+                res.append(qMakePair(stringliteral, name));
+            }
+        }
+    }
+
+    return res;
+}
+
+
+void DeclarationBuilder::declareExports(const ExportLiteralsAndNames& exports,
+                                        ClassDeclaration* classdecl)
+{
+    DUChainWriteLocker lock;
+
+    // Create the exported versions of the component
+    for (auto exp : exports) {
+        QmlJS::AST::StringLiteral* literal = exp.first;
+        QString name = exp.second;
         StructureType::Ptr type(new StructureType);
 
-        {
-            DUChainWriteLocker lock;
+        injectContext(currentContext()->parentContext());   // Don't declare the export in its C++-ish component, but in the scope above
+        ClassDeclaration* decl = openDeclaration<ClassDeclaration>(
+            QualifiedIdentifier(name),
+            m_session->locationToRange(literal->literalToken)
+        );
+        closeInjectedContext();
 
-            injectContext(currentContext()->parentContext());   // Don't declare the export in its C++-ish component, but in the scope above
-            ClassDeclaration* decl = openDeclaration<ClassDeclaration>(
-                QualifiedIdentifier(exportname),
-                m_session->locationToRange(stringliteral->literalToken)
-            );
-            closeInjectedContext();
+        // The exported version inherits from the C++ component
+        decl->setKind(Declaration::Type);
+        decl->setClassType(ClassDeclarationData::Class);
+        decl->clearBaseClasses();
+        type->setDeclaration(decl);
 
-            // The exported version inherits from the C++ component
-            decl->setKind(Declaration::Type);
-            decl->setClassType(ClassDeclarationData::Class);
-            decl->clearBaseClasses();
-            type->setDeclaration(decl);
+        addBaseClass(decl, classdecl->indexedType());
 
-            addBaseClass(decl, classdecl->indexedType());
+        // Open a context for the exported class, and register its base class in it
+        decl->setInternalContext(openContext(
+            literal,
+            DUContext::Class,
+            QualifiedIdentifier(name)
+        ));
+        registerBaseClasses();
+        closeContext();
 
-            // Open a context for the exported class, and register its base class in it
-            decl->setInternalContext(openContext(
-                stringliteral,
-                DUContext::Class,
-                QualifiedIdentifier(exportname)
-            ));
-            registerBaseClasses();
-            closeContext();
-        }
         openType(type);
         closeAndAssignType();
     }
@@ -794,12 +824,19 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiImport* node)
     QString uri;
 
     while (part) {
-        uri.append(part->name.toString() + '.');
+        if (!uri.isEmpty()) {
+            uri.append('.');
+        }
+
+        uri.append(part->name.toString());
         part = part->next;
     }
 
+    // Version of the import
+    QString version = m_session->symbolAt(node->versionToken);
+
     // Import the file corresponding to the URI
-    ReferencedTopDUContext importedContext = m_session->contextOfModule(uri + "qml");
+    ReferencedTopDUContext importedContext = m_session->contextOfModule(QString("%1_%2.qml").arg(uri, version));
 
     if (importedContext) {
         DUChainWriteLocker lock;
@@ -822,9 +859,13 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiObjectDefinition* node)
         return DeclarationBuilderBase::visit(node);
     }
 
-    // Declare the component subclass
     RangeInRevision range(m_session->locationToRange(node->qualifiedTypeNameId->identifierToken));
     QString baseclass = node->qualifiedTypeNameId->name.toString();
+
+    // "Component" needs special care: a component that appears only in a future
+    // version of this module, or that already appeared in a former version, must
+    // be skipped because it is useless
+    ExportLiteralsAndNames exports;
 
     if (baseclass == QLatin1String("Module")) {
         // Don't build any declaration or context for Modules, but explore them.
@@ -832,9 +873,33 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiObjectDefinition* node)
         // imported by other files.
         m_skipEndVisit.push(true);
         return true;            // Don't declare anything for the module, but explore it
+    } else if (baseclass == QLatin1String("Component")) {
+        QmlJS::AST::Statement* statement = QmlJS::getQMLAttribute(node->initializer->members, QLatin1String("exports"));
+
+        exports = exportedNames(QmlJS::AST::cast<QmlJS::AST::ExpressionStatement *>(statement));
+
+        if (exports.count() == 0 &&
+            (statement || !m_session->moduleVersion().endsWith(QLatin1String(".0")))) {
+            // No exported version of this component. The second part of the
+            // condition allows non-exported components to still be processed
+            // in the .0 revision of the module (so that QObject, not exported
+            // in QML, is still accessible and declared in QtQuick 1.0 and 2.0)
+            m_skipEndVisit.push(true);
+            return false;
+        }
     }
 
+    // Declare the component subclass
     declareComponentSubclass(node->initializer, range, baseclass);
+
+    // If we had a component with exported names, declare these exports
+    if (baseclass == QLatin1String("Component")) {
+        ClassDeclaration* classDecl = currentDeclaration<ClassDeclaration>();
+
+        if (classDecl) {
+            declareExports(exports, classDecl);
+        }
+    }
 
     m_skipEndVisit.push(false);
     return DeclarationBuilderBase::visit(node);
@@ -866,14 +931,6 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiScriptBinding* node)
         // Instantiate a QML component: its type is the current type (the anonymous
         // QML class that surrounds the declaration)
         declareComponentInstance(QmlJS::AST::cast<QmlJS::AST::ExpressionStatement *>(node->statement));
-    } else if (bindingName == QLatin1String("exports")) {
-        // Declare sub-classes of the current QML component: they are its exported
-        // class names
-        ClassDeclaration* classDecl = currentDeclaration<ClassDeclaration>();
-
-        if (classDecl && classDecl->classType() == ClassDeclarationData::Interface) {
-            declareExports(QmlJS::AST::cast<QmlJS::AST::ExpressionStatement *>(node->statement), classDecl);
-        }
     }
 
     // Use ExpressionVisitor to find the signal/property bound

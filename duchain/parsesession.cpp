@@ -100,7 +100,7 @@ IndexedString ParseSession::url() const
 }
 
 QString ParseSession::moduleName() const
- {
+{
     return m_baseNameWithoutVersion;
 }
 
