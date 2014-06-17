@@ -45,6 +45,7 @@ class BazaarTest: public QObject
 private:
     void repoInit();
     void addFiles();
+    void prepareWhoamiInformations();
     void commitFiles();
 
 private slots:

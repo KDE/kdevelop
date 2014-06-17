@@ -157,8 +157,16 @@ void BazaarTest::addFiles()
     VERIFYJOB(j);
 }
 
+void BazaarTest::prepareWhoamiInformations()
+{
+    DVcsJob *whoamiJob = new DVcsJob(bazaarTest_BaseDir, m_plugin);
+    *whoamiJob<<"bzr"<<"whoami"<<"--branch"<<"kdevbazaar-test identity <>";
+    VERIFYJOB(whoamiJob);
+}
+
 void BazaarTest::commitFiles()
 {
+    prepareWhoamiInformations();
     kDebug() << "Committing...";
     //we start it after addFiles, so we just have to commit
     VcsJob* j = m_plugin->commit(QString("Test commit"), KUrl::List(bazaarTest_BaseDir));
@@ -314,6 +322,7 @@ void BazaarTest::testRemoveFolderContainingUnversionedFiles()
     }
     VcsJob* j = m_plugin->add(KUrl::List(KUrl::fromLocalFile(bazaarTest_BaseDir+"dir")),IBasicVersionControl::NonRecursive);
     VERIFYJOB(j);
+    prepareWhoamiInformations();
     j = m_plugin->commit("initial commit", KUrl::List(KUrl::fromLocalFile(bazaarTest_BaseDir)));
     VERIFYJOB(j);
 
