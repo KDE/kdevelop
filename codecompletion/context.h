@@ -48,7 +48,6 @@ private:
     QList<KDevelop::CompletionTreeItemPointer> completionsInContext(const KDevelop::DUContextPointer& context,
                                                                     CompletionInContextFlags flags,
                                                                     CompletionItem::Decoration decoration);
-    QList<KDevelop::CompletionTreeItemPointer> globalCompletions(CompletionInContextFlags flags = 0);
     QList<KDevelop::CompletionTreeItemPointer> fieldCompletions(const QString &expression,
                                                                 CompletionItem::Decoration decoration);
 

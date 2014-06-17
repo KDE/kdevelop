@@ -79,13 +79,17 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& ab
         bool inQmlObjectScope = (m_duContext->type() == DUContext::Class && containsOnlySpaces(m_text));
 
         if (inQmlObjectScope) {
+            DUChainReadLocker lock;
+
             // The cursor is in a QML object and there is nothing before it. Display
             // a list of properties and signals that can be used in a script binding.
             // Note that the properties/signals of parent QML objects are not displayed here
             items << completionsInContext(m_duContext,
                                           CompletionOnlyLocal | CompletionHideWrappers,
                                           CompletionItem::Colon);
-            items << globalCompletions(CompletionHideWrappers);
+            items << completionsInContext(DUContextPointer(m_duContext->topContext()),
+                                          CompletionHideWrappers,
+                                          CompletionItem::NoDecoration);
         } else {
             items << completionsInContext(m_duContext,
                                           0,
@@ -127,37 +131,6 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionsInContext(con
 
             items << CompletionTreeItemPointer(new CompletionItem(declaration, decl.second, decoration));
         }
-    }
-
-    return items;
-}
-
-QList<CompletionTreeItemPointer> CodeCompletionContext::globalCompletions(CompletionInContextFlags flags)
-{
-    QList<CompletionTreeItemPointer> items;
-
-    // Iterate over all the imported namespaces and add their definitions
-    DUChainReadLocker lock;
-    QList<Declaration*> imports = m_duContext->findDeclarations(globalImportIdentifier());
-    QList<Declaration*> realImports;
-
-    foreach (Declaration* import, imports) {
-        if (import->kind() != Declaration::NamespaceAlias) {
-            continue;
-        }
-
-        NamespaceAliasDeclaration* decl = static_cast<NamespaceAliasDeclaration *>(import);
-        realImports << m_duContext->findDeclarations(decl->importIdentifier());
-    }
-
-    lock.unlock();
-
-    foreach (Declaration* import, realImports) {
-        items << completionsInContext(
-            DUContextPointer(import->internalContext()),
-            flags,
-            CompletionItem::NoDecoration
-        );
     }
 
     return items;

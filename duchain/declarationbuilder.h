@@ -81,7 +81,6 @@ protected:
     virtual void endVisit(QmlJS::AST::ObjectLiteral* node);
 
     // plugin.qmltypes
-    KDevelop::QualifiedIdentifier declareModule(const KDevelop::RangeInRevision &range);
     void declareComponent(QmlJS::AST::UiObjectInitializer* node,
                           const KDevelop::RangeInRevision &range,
                           const KDevelop::QualifiedIdentifier &name);
@@ -107,7 +106,6 @@ protected:
 
     // UI
     virtual bool visit(QmlJS::AST::UiImport* node);
-    virtual void endVisit(QmlJS::AST::UiImport* node);
 
     virtual bool visit(QmlJS::AST::UiObjectDefinition* node);
     virtual void endVisit(QmlJS::AST::UiObjectDefinition* node);
@@ -133,6 +131,7 @@ private:
 
 private:
     bool m_prebuilding;
+    QStack<bool> m_skipEndVisit;
 };
 
 #endif // DECLARATIONBUILDER_H

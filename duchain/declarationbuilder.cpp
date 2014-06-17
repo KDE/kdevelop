@@ -109,6 +109,13 @@ void DeclarationBuilder::startVisiting(QmlJS::AST::Node* node)
         }
     }
 
+    // Remove all the imported parent contexts: imports may have been edited
+    // and there musn't be any leftover parent context
+    {
+        DUChainWriteLocker lock;
+        currentContext()->topContext()->clearImportedParentContexts();
+    }
+
     DeclarationBuilderBase::startVisiting(node);
 }
 
@@ -502,24 +509,6 @@ void DeclarationBuilder::endVisit(QmlJS::AST::ObjectLiteral* node)
 /*
  * plugin.qmltypes files
  */
-QualifiedIdentifier DeclarationBuilder::declareModule(const RangeInRevision& range)
-{
-    // Declare a namespace whose name is the base name of the current file
-    QualifiedIdentifier name(m_session->urlBaseName());
-    StructureType::Ptr type(new StructureType);
-
-    {
-        DUChainWriteLocker lock;
-        Declaration* decl = openDefinition<Declaration>(name, range);
-
-        decl->setKind(Declaration::Namespace);
-        type->setDeclaration(decl);
-    }
-    openType(type);
-
-    return name;
-}
-
 void DeclarationBuilder::declareComponent(QmlJS::AST::UiObjectInitializer* node,
                                           const RangeInRevision &range,
                                           const QualifiedIdentifier &name)
@@ -651,10 +640,6 @@ void DeclarationBuilder::declareComponentSubclass(QmlJS::AST::UiObjectInitialize
         declareEnum(range, name);
         contextType = DUContext::Enum;
         name = QualifiedIdentifier();   // Enum contexts should have no name so that their members have the correct scope
-    } else if (baseclass == QLatin1String("Module")) {
-        // QML Module, that declares a namespace
-        name = declareModule(range);
-        contextType = DUContext::Namespace;
     } else {
         // Define an anonymous subclass of the baseclass. This subclass will
         // be instantiated when "id:" is encountered
@@ -705,10 +690,7 @@ void DeclarationBuilder::declareComponentSubclass(QmlJS::AST::UiObjectInitialize
             decl->setInternalContext(ctx);
         }
 
-        if (contextType == DUContext::Namespace) {
-            // If we opened a namespace, ensure that its internal context is of namespace type
-            ctx->setLocalScopeIdentifier(decl->qualifiedIdentifier());
-        } else if (contextType == DUContext::Enum) {
+        if (contextType == DUContext::Enum) {
             ctx->setPropagateDeclarations(true);
         }
     }
@@ -820,40 +802,14 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiImport* node)
     ReferencedTopDUContext importedContext = m_session->contextOfModule(uri + "qml");
 
     if (importedContext) {
-        {
-            DUChainWriteLocker lock;
-            currentContext()->addImportedParentContext(
-                importedContext,
-                m_session->locationToRange(node->importToken).start
-            );
-        }
-
-        // Create a namespace import statement
-        StructureType::Ptr type(new StructureType);
-        QualifiedIdentifier importedNamespaceName(uri.left(uri.length() - 1));  // QtQuick.Controls. -> QtQuick.Controls
-
-        {
-            DUChainWriteLocker lock;
-            NamespaceAliasDeclaration* decl = openDefinition<NamespaceAliasDeclaration>(
-                QualifiedIdentifier(globalImportIdentifier()),
-                m_session->locationToRange(node->importIdToken)
-            );
-
-            decl->setImportIdentifier(importedNamespaceName);
-        }
-        openType(type);
+        DUChainWriteLocker lock;
+        currentContext()->addImportedParentContext(
+            importedContext,
+            m_session->locationToRange(node->importToken).start
+        );
     }
 
     return DeclarationBuilderBase::visit(node);
-}
-
-void DeclarationBuilder::endVisit(QmlJS::AST::UiImport* node)
-{
-    if (currentDeclaration<NamespaceAliasDeclaration>()) {
-        closeAndAssignType();
-    }
-
-    return DeclarationBuilderBase::endVisit(node);
 }
 
 bool DeclarationBuilder::visit(QmlJS::AST::UiObjectDefinition* node)
@@ -862,6 +818,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiObjectDefinition* node)
 
     // Do not crash if the user has typed an empty object definition
     if (!node->initializer || !node->initializer->members) {
+        m_skipEndVisit.push(true);
         return DeclarationBuilderBase::visit(node);
     }
 
@@ -869,8 +826,17 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiObjectDefinition* node)
     RangeInRevision range(m_session->locationToRange(node->qualifiedTypeNameId->identifierToken));
     QString baseclass = node->qualifiedTypeNameId->name.toString();
 
+    if (baseclass == QLatin1String("Module")) {
+        // Don't build any declaration or context for Modules, but explore them.
+        // This way, their declarations are in the global scope, ready to be
+        // imported by other files.
+        m_skipEndVisit.push(true);
+        return true;            // Don't declare anything for the module, but explore it
+    }
+
     declareComponentSubclass(node->initializer, range, baseclass);
 
+    m_skipEndVisit.push(false);
     return DeclarationBuilderBase::visit(node);
 }
 
@@ -879,7 +845,7 @@ void DeclarationBuilder::endVisit(QmlJS::AST::UiObjectDefinition* node)
     DeclarationBuilderBase::endVisit(node);
 
     // Do not crash if the user has typed an empty object definition
-    if (node->initializer && node->initializer->members) {
+    if (!m_skipEndVisit.pop()) {
         closeContext();
         closeAndAssignType();
     }

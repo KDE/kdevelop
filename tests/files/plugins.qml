@@ -1,7 +1,3 @@
-/**
- * "toString" : "plugins plugins",
- * "kind" : "Namespace"
- */
 Module {
      /**
       * "toString" : "interface QAbstractItemModel",
@@ -19,12 +15,12 @@ Module {
          ]
 
          /**
-          * "toString" : "plugins::QModelIndex rootItem"
+          * "toString" : "QModelIndex rootItem"
           */
          Property { name: "rootItem"; type: "QModelIndex" }
 
          /**
-          * "type" : { "toString" : "plugins::QAbstractItemModel::LayoutChangeHint" },
+          * "type" : { "toString" : "QAbstractItemModel::LayoutChangeHint" },
           * "kind" : "Type",
           * "internalContext" : { "type" : "Enum" }
           */
@@ -40,20 +36,20 @@ Module {
              }
          }
          /**
-          * "toString" : "void dataChanged (plugins::QModelIndex, plugins::QModelIndex, int)",
+          * "toString" : "void dataChanged (QModelIndex, QModelIndex, int)",
           * "useCount" : 2
           */
          Signal {
              name: "dataChanged"
 
              /**
-              * "toString" : "plugins::QModelIndex topLeft",
+              * "toString" : "QModelIndex topLeft",
               * "useCount" : 1
               */
              Parameter /* */ { name: "topLeft"; type: "QModelIndex" }
 
              /**
-              * "toString" : "plugins::QModelIndex bottomRight"
+              * "toString" : "QModelIndex bottomRight"
               */
              Parameter /* */ { name: "bottomRight"; type: "QModelIndex" }
 
@@ -64,7 +60,7 @@ Module {
          }
 
          /**
-          * "toString" : "bool isItemValid (plugins::QModelIndex)"
+          * "toString" : "bool isItemValid (QModelIndex)"
           */
          Method {
              name: "isItemValid"
