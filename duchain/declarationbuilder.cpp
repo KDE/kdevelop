@@ -651,7 +651,7 @@ void DeclarationBuilder::declareComponentSubclass(QmlJS::AST::UiObjectInitialize
             DUChainWriteLocker lock;
             ClassDeclaration* decl = openDeclaration<ClassDeclaration>(
                 currentContext()->type() == DUContext::Global ?
-                    QualifiedIdentifier(m_session->urlBaseName()) :
+                    QualifiedIdentifier(m_session->moduleName()) :
                     name,
                 RangeInRevision()
             );
