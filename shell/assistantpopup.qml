@@ -24,13 +24,6 @@ import QtQuick 1.0
 Rectangle {
     id: root
 
-    /**
-     * Keys which are assigned to the action buttons, in this order.
-     * The hide button is always Key_0, which is handled below.
-     */
-    property variant keysForIndex: [Qt.Key_1, Qt.Key_2, Qt.Key_3, Qt.Key_4, Qt.Key_5,
-                                    Qt.Key_6, Qt.Key_7, Qt.Key_8, Qt.Key_9]
-
     width: flow.width + 16
     height: flow.height + 7
 
@@ -39,17 +32,6 @@ Rectangle {
     gradient: Gradient {
         GradientStop { position: 0.0; color: Qt.lighter(config.background) }
         GradientStop { position: 1.0; color: config.background }
-    }
-
-    Connections {
-        id: configConnections
-        target: config
-        // Allow cancelling the popup animation from outside
-        onShouldCancelAnimation: {
-            popupAnimation.running = false;
-            root.opacity = 1;
-            root.y = 0;
-        }
     }
 
     // start values for the popup animation; change y to 0 to disable the slight move animation
@@ -70,19 +52,6 @@ Rectangle {
         flow: items.count >= 3 ? Flow.TopToBottom : Flow.LeftToRight
         spacing: 8
 
-        function doTriggerButton(triggerIndex) {
-            config.model[triggerIndex].trigger();
-            // highlight the triggered button
-            for ( var i = 0; i < config.model.length; i++ ) {
-                if ( i == triggerIndex ) {
-                    items.itemAt(i).highlightTrigger();
-                }
-                else {
-                    items.itemAt(i).opacity = 0.25;
-                }
-            }
-        }
-
         Text {
             id: title
             anchors.verticalCenter: parent.flow == Flow.LeftToRight ? parent.verticalCenter : undefined
@@ -96,10 +65,7 @@ Rectangle {
             id: items
             objectName: "items"
 
-            // Buttons
-            focus: true
             y: 5
-            // config.model contains a list of buttons to be displayed, set from C++
             model: config.model
             onModelChanged: {
                 root.opacity = 0.2
@@ -108,43 +74,15 @@ Rectangle {
             }
 
             AssistantButton {
-                Connections {
-                    target: config
-                    onShouldShowHighlight: {
-                        highlightKey(show);
-                    }
-                }
-                text: modelData.name
+                text: modelData.text
+                highlighted: config.active
                 // what is displayed in the hotkey field of the button
                 button: index == items.model.length - 1 ? 0 : index + 1
-                buttonIndex: index
-                onTriggered: flow.doTriggerButton(buttonIndex)
                 foreground: config.foreground
                 background: config.background
                 highlight: config.highlight
-            }
 
-            Keys.onPressed: {
-                if (event.modifiers !== Qt.AltModifier) {
-                    console.warn("Keys.onPressed called in assistantpopup without the alt modifier: " + JSON.stringify(event));
-                    return;
-                }
-
-                var triggerIndex = -1;
-                if ( event.key == Qt.Key_0 ) {
-                    triggerIndex = model.length-1;
-                }
-                else {
-                    var buttonIndex = root.keysForIndex.indexOf(event.key);
-                    if ( buttonIndex < model.length ) {
-                        triggerIndex = buttonIndex;
-                    }
-                }
-                if ( triggerIndex == -1 ) {
-                    return;
-                }
-                event.accepted = true;
-                flow.doTriggerButton(triggerIndex);
+                onTriggered: { modelData.trigger() }
             }
         }
     }

@@ -47,6 +47,21 @@
 
 using namespace KDevelop;
 
+bool AssistantPopupConfig::isActive() const
+{
+    return m_active;
+}
+
+void AssistantPopupConfig::setActive(bool active)
+{
+    if (m_active == active) {
+        return;
+    }
+
+    m_active = active;
+    emit activeChanged(m_active);
+}
+
 AssistantPopup::AssistantPopup(KTextEditor::View* parent, const IAssistant::Ptr& assistant)
 // main window as parent to use maximal space available in worst case
     : QDeclarativeView(ICore::self()->uiController()->activeMainWindow())
@@ -81,6 +96,7 @@ void AssistantPopup::reset(KTextEditor::View* widget, const IAssistant::Ptr& ass
     auto doc = ICore::self()->documentController()->activeDocument();
     m_config->setColorsFromView(doc->textDocument()->activeView());
     updateActions();
+
     rootContext()->setContextProperty("config", QVariant::fromValue<QObject*>(m_config.get()));
 
     if ( source() == QUrl() ) {
@@ -111,9 +127,10 @@ bool AssistantPopup::viewportEvent(QEvent *event)
     return QGraphicsView::viewportEvent(event);
 }
 
-AssistantPopupConfig::AssistantPopupConfig(QObject *parent): QObject(parent)
+AssistantPopupConfig::AssistantPopupConfig(QObject *parent)
+    : QObject(parent)
+    , m_active(false)
 {
-
 }
 
 void AssistantPopupConfig::setColorsFromView(QObject *view)
@@ -163,15 +180,35 @@ QRect AssistantPopup::textWidgetGeometry(KTextEditor::View *view) const
     return geom;
 }
 
+void AssistantPopup::keyPressEvent(QKeyEvent* event)
+{
+    if (event->key() >= Qt::Key_0 && event->key() <= Qt::Key_9) {
+        auto actions = m_config->model();
+        const int field = event->key() - Qt::Key_0;
+        if (field == 0) {
+            executeHideAction();
+        } else {
+            auto action = m_assistantActions.value(field - 1);
+            if (action) {
+                action->execute();
+            }
+        }
+    } else {
+        QDeclarativeView::keyPressEvent(event);
+    }
+}
+
+
 void AssistantPopup::keyReleaseEvent(QKeyEvent *event)
 {
-    if ( event->key() == Qt::Key_Alt ) {
-        if ( m_view ) {
+    if (event->key() == Qt::Key_Alt || event->modifiers() == Qt::AltModifier) {
+        m_config->setActive(false);
+        if (m_view) {
             m_view->setFocus();
         }
-        emit m_config->shouldShowHighlight(false);
+    } else {
+        QDeclarativeView::keyReleaseEvent(event);
     }
-    QGraphicsView::keyReleaseEvent(event);
 }
 
 bool AssistantPopup::eventFilter(QObject* object, QEvent* event)
@@ -187,14 +224,10 @@ bool AssistantPopup::eventFilter(QObject* object, QEvent* event)
     } else if (event->type() == QEvent::Hide) {
         executeHideAction();
     } else if (event->type() == QEvent::KeyPress) {
-        // While the Alt key is pressed, give focus to the assistant widget
-        // and notify it about that.
-        auto modifiers = static_cast<QKeyEvent*>(event)->modifiers();
-        if (modifiers == Qt::AltModifier) {
+        auto keyEvent = static_cast<QKeyEvent*>(event);
+        if (keyEvent->modifiers() == Qt::AltModifier) {
             setFocus();
-            emit m_config->shouldShowHighlight(true);
-            rootObject()->findChild<QObject*>("items")->setProperty("focus", true);
-            return true;
+            m_config->setActive(true);
         }
         if (static_cast<QKeyEvent*>(event)->key() == Qt::Key_Escape) {
             executeHideAction();
@@ -247,7 +280,7 @@ void AssistantPopup::executeHideAction()
 {
     if ( isVisible() ) {
         m_assistant->doHide();
-        if ( m_view ) {
+        if (m_view) {
             m_view->setFocus();
         }
     }
@@ -255,23 +288,21 @@ void AssistantPopup::executeHideAction()
 
 void AssistantPopup::notifyReopened(bool reopened)
 {
-    if ( reopened ) {
-        emit m_config->shouldCancelAnimation();
-    }
     m_reopening = reopened;
 }
 
 void AssistantPopup::updateActions()
 {
     m_assistantActions = m_assistant->actions();
+
     QList<QObject*> items;
-    foreach(IAssistantAction::Ptr action, m_assistantActions)
-    {
-        items << new AssistantButton(action->toKAction(), action->description(), m_assistant.data());
+    foreach (IAssistantAction::Ptr action, m_assistantActions) {
+        items << action->toKAction();
     }
     auto hideAction = new KAction(i18n("Hide"), m_assistant.data());
     connect(hideAction, SIGNAL(triggered()), this, SLOT(executeHideAction()));
-    items << new AssistantButton(hideAction, hideAction->text(), m_assistant.data());
+    items << hideAction;
+
     m_config->setModel(items);
     m_config->setTitle(m_assistant->title());
 }

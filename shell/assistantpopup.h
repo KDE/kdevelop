@@ -34,26 +34,6 @@ class View;
 class Cursor;
 }
 
-class AssistantButton : public QObject
-{
-    Q_OBJECT
-    Q_PROPERTY(QString name READ name CONSTANT)
-
-public:
-    AssistantButton(KAction* action, const QString& text, QObject* parent)
-        : QObject(parent)
-        , m_name(text)
-        , m_action(action)
-    { }
-
-    QString name() const { return m_name; }
-    Q_INVOKABLE void trigger() { m_action->trigger(); }
-
-private:
-    QString m_name;
-    KAction* m_action;
-};
-
 class AssistantPopupConfig : public QObject
 {
     Q_OBJECT
@@ -62,6 +42,7 @@ class AssistantPopupConfig : public QObject
     Q_PROPERTY(QColor highlight READ highlight CONSTANT)
     Q_PROPERTY(QString title READ title CONSTANT)
     Q_PROPERTY(QList<QObject*> model READ model CONSTANT)
+    Q_PROPERTY(bool active READ isActive WRITE setActive NOTIFY activeChanged)
 
 public:
     explicit AssistantPopupConfig(QObject *parent = 0);
@@ -75,9 +56,11 @@ public:
 
     void setColorsFromView(QObject *view);
 
+    bool isActive() const;
+    void setActive(bool active);
+
 signals:
-    void shouldShowHighlight(bool show);
-    void shouldCancelAnimation();
+    void activeChanged(bool active);
 
 private:
     QColor m_foreground;
@@ -85,6 +68,7 @@ private:
     QColor m_highlight;
     QString m_title;
     QList<QObject*> m_model;
+    bool m_active;
 
     friend class AssistantPopup;
 };
@@ -119,15 +103,18 @@ private slots:
     void updatePosition(KTextEditor::View* view, const KTextEditor::Cursor& newPos);
 
 private:
+
     virtual bool eventFilter(QObject* object, QEvent* event);
+
+    virtual void keyPressEvent(QKeyEvent* event);
     virtual void keyReleaseEvent(QKeyEvent* event);
+
+    void updateActions();
     /**
      * @brief Get the geometry of the inner part (with the text) of the KTextEditor::View being used.
      */
     QRect textWidgetGeometry(KTextEditor::View *view) const;
 
-    void updateActions();
-    QWidget* widgetForAction(const KDevelop::IAssistantAction::Ptr& action, int& mnemonic);
     KDevelop::IAssistant::Ptr m_assistant;
     QList<KDevelop::IAssistantAction::Ptr> m_assistantActions;
     QPointer<KTextEditor::View> m_view;
