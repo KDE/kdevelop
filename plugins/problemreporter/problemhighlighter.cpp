@@ -39,8 +39,28 @@
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/topducontext.h>
 
+#include <kcolorscheme.h>
+
 using namespace KTextEditor;
 using namespace KDevelop;
+
+namespace {
+
+QColor colorForSeverity(ProblemData::Severity severity)
+{
+    KColorScheme scheme(QPalette::Active);
+    switch (severity) {
+    case ProblemData::Error:
+        return scheme.foreground(KColorScheme::NegativeText).color();
+    case ProblemData::Warning:
+        return scheme.foreground(KColorScheme::NeutralText).color();
+    case ProblemData::Hint:
+    default:
+        return scheme.foreground(KColorScheme::PositiveText).color();
+    }
+}
+
+}
 
 ProblemHighlighter::ProblemHighlighter(KTextEditor::Document* document)
     : m_document(document)
@@ -176,12 +196,7 @@ void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& prob
         {
             KTextEditor::Attribute::Ptr attribute(new KTextEditor::Attribute());
             attribute->setUnderlineStyle(QTextCharFormat::WaveUnderline);
-            if(problem->severity() == ProblemData::Error)
-                attribute->setUnderlineColor(Qt::red);
-            else if(problem->severity() == ProblemData::Warning)
-                attribute->setUnderlineColor(Qt::darkYellow);
-            else if(problem->severity() == ProblemData::Hint)
-                attribute->setUnderlineColor(Qt::yellow);
+            attribute->setUnderlineColor(colorForSeverity(problem->severity()));
             problemRange->setAttribute(attribute);
         }
 
