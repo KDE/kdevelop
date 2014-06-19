@@ -178,7 +178,7 @@ void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& prob
             if(problem->severity() == ProblemData::Error)
                 error->setUnderlineColor(Qt::red);
             else if(problem->severity() == ProblemData::Warning)
-                error->setUnderlineColor(Qt::magenta);
+                error->setUnderlineColor(Qt::darkYellow);
             else if(problem->severity() == ProblemData::Hint)
                 error->setUnderlineColor(Qt::yellow);
 
