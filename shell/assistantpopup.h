@@ -1,6 +1,8 @@
 /*
    Copyright 2009 David Nolden <david.nolden.kdevelop@art-master.de>
    Copyright 2012 Milian Wolff <mail@milianw.de>
+   Copyright 2014 Sven Brauch <svenbrauch@gmail.com>
+   Copyright 2014 Kevin Funk <kfunk@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,10 +25,6 @@
 #include <QDeclarativeView>
 #include <interfaces/iassistant.h>
 #include <ksharedptr.h>
-#include <QDebug>
-#include <KAction>
-
-#include <memory>
 
 namespace KTextEditor
 {
@@ -93,7 +91,6 @@ public:
      */
     void reset(KTextEditor::View *widget, const KDevelop::IAssistant::Ptr &assistant);
     KDevelop::IAssistant::Ptr assistant() const;
-    virtual bool viewportEvent(QEvent *event);
 
 public slots:
     void executeHideAction();
@@ -102,14 +99,15 @@ public slots:
 private slots:
     void updatePosition(KTextEditor::View* view, const KTextEditor::Cursor& newPos);
 
-private:
-
+protected:
     virtual bool eventFilter(QObject* object, QEvent* event);
-
     virtual void keyPressEvent(QKeyEvent* event);
     virtual void keyReleaseEvent(QKeyEvent* event);
+    virtual bool viewportEvent(QEvent *event);
 
+private:
     void updateActions();
+
     /**
      * @brief Get the geometry of the inner part (with the text) of the KTextEditor::View being used.
      */
@@ -118,7 +116,7 @@ private:
     KDevelop::IAssistant::Ptr m_assistant;
     QList<KDevelop::IAssistantAction::Ptr> m_assistantActions;
     QPointer<KTextEditor::View> m_view;
-    std::unique_ptr<AssistantPopupConfig> m_config;
+    QScopedPointer<AssistantPopupConfig> m_config;
     bool m_shownAtBottom;
     bool m_reopening;
 };

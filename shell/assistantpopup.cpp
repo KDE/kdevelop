@@ -2,6 +2,7 @@
    Copyright 2009 David Nolden <david.nolden.kdevelop@art-master.de>
    Copyright 2012 Milian Wolff <mail@milianw.de>
    Copyright 2014 Sven Brauch <svenbrauch@gmail.com>
+   Copyright 2014 Kevin Funk <kfunk@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,14 +21,8 @@
 
 #include "assistantpopup.h"
 #include "sublime/holdupdates.h"
-#include <cmath>
 
-#include <QVBoxLayout>
-#include <QLabel>
 #include <QKeyEvent>
-#include <QScrollBar>
-#include <QStyle>
-#include <QGraphicsObject>
 #include <QDebug>
 #include <QDeclarativeContext>
 
@@ -92,12 +87,12 @@ void AssistantPopup::reset(KTextEditor::View* widget, const IAssistant::Ptr& ass
     widget->installEventFilter(this);
     m_assistant = assistant;
 
-    m_config = std::unique_ptr<AssistantPopupConfig>(new AssistantPopupConfig);
+    m_config.reset(new AssistantPopupConfig);
     auto doc = ICore::self()->documentController()->activeDocument();
     m_config->setColorsFromView(doc->textDocument()->activeView());
     updateActions();
 
-    rootContext()->setContextProperty("config", QVariant::fromValue<QObject*>(m_config.get()));
+    rootContext()->setContextProperty("config", m_config.data());
 
     if ( source() == QUrl() ) {
         setSource(QUrl(KStandardDirs::locate("data", "kdevelop/assistantpopup.qml")));
@@ -144,7 +139,7 @@ void AssistantPopupConfig::setColorsFromView(QObject *view)
         m_foreground = KColorUtils::lighten(m_foreground, 0.7);
     }
     const float lumaDiff = KColorUtils::luma(m_highlight) - KColorUtils::luma(m_background);
-    if ( fabs(lumaDiff) < 0.5 ) {
+    if ( qAbs(lumaDiff) < 0.5 ) {
         m_highlight = QColor::fromHsv(m_highlight.hue(),
                                     qMin(255, m_highlight.saturation() + 80),
                                     lumaDiff > 0 ? qMin(255, m_highlight.value() + 120)
