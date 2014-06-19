@@ -207,13 +207,13 @@ QString ClangFixitAction::description() const
     const auto range = m_fixit.range;
     if (range.start == range.end) {
         return i18n("Insert \"%1\" at line: %2, column: %3",
-                    formattedReplacement, range.start.line, range.start.column);
+                    formattedReplacement, range.start.line+1, range.start.column+1);
     } else if (range.start.line == range.end.line) {
         return i18n("Replace text at line: %1, column: %2 with: \"%3\"",
-                    range.start.line, range.start.column, formattedReplacement);
+                    range.start.line+1, range.start.column+1, formattedReplacement);
     } else {
         return i18n("Replace multiple lines starting at line: %1, column: %2 with: \"%3\"",
-                    range.start.line, range.start.column, formattedReplacement);
+                    range.start.line+1, range.start.column+1, formattedReplacement);
     }
 }
 
