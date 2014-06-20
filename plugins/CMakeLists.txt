@@ -1,5 +1,4 @@
-# TODO KF5: Re-enable, konsole-frameworks is broken atm, see bug 331724
-#ecm_optional_add_subdirectory(konsole)
+ecm_optional_add_subdirectory(konsole)
 add_subdirectory(filemanager)
 # add_subdirectory(appwizard) # TODO Grantlee Qt5 is needed for this
 add_subdirectory(projectmanagerview)
