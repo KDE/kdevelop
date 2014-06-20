@@ -426,9 +426,10 @@ void TypeBuilder::createIntegralTypeForExpression(ExpressionAST* expression)
 
   IntegralType::Ptr integral = lastType().cast<IntegralType>();
   if (!integral && m_lastTypeWasAuto) {
-    ReferenceType::Ptr ref = lastType().cast<ReferenceType>();
-    if (ref) {
+    if (ReferenceType::Ptr ref = lastType().cast<ReferenceType>()) {
       integral = ref->baseType().cast<IntegralType>();
+    } else if (PointerType::Ptr ptr = lastType().cast<PointerType>()) {
+      integral = ptr->baseType().cast<IntegralType>();
     }
   }
 
