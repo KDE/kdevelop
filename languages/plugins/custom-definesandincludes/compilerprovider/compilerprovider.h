@@ -45,7 +45,7 @@ class CompilerProvider : public KDevelop::IPlugin, public ICompilerProvider, pub
 public :
     explicit CompilerProvider( QObject* parent, const QVariantList& args = QVariantList() );
 
-    ~CompilerProvider();
+    ~CompilerProvider() noexcept;
 
     virtual QHash<QString, QString> defines( KDevelop::ProjectBaseItem* item ) const override;
 
