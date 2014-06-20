@@ -43,7 +43,7 @@ QHash<QString, QString> GccLikeCompiler::defines( const QString& path ) const
 
     // #define a 1
     // #define a
-    QRegExp defineExpression( "#define\\s+(\\S+)(\\s+(.*))?" );
+    QRegExp defineExpression( "#define\\s+(\\S+)(?:\\s+(.*)\\s*)?");
 
     QProcess proc;
     proc.setProcessChannelMode( QProcess::MergedChannels );
@@ -58,7 +58,7 @@ QHash<QString, QString> GccLikeCompiler::defines( const QString& path ) const
         auto line = proc.readLine();
 
         if ( defineExpression.indexIn( line ) != -1 ) {
-            m_definesIncludes[path].definedMacros[defineExpression.cap( 1 )] = defineExpression.cap( 3 );
+            m_definesIncludes[path].definedMacros[defineExpression.cap( 1 )] = defineExpression.cap( 2 ).trimmed();
         }
     }
 
