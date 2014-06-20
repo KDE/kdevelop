@@ -59,7 +59,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& ab
 
     QList<CompletionTreeItemPointer> items;
 
-    if (abort) {
+    if (abort || m_text.isEmpty()) {
         return items;
     }
 
