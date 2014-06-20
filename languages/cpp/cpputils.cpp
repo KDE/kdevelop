@@ -254,6 +254,13 @@ restart:
         goto restart;
     }
 
+    const int idx = includeName.indexOf('/');
+    if ( idx != -1 ) {
+      // HACK: parse Qt4 includes and similar even without the full include paths from the project manager
+      // there, a file in /usr/include/qt4/QtCore/ tries to include sibling files via QtCore/file
+      ret = findInclude(includePaths, localPath, includeName.mid(idx + 1), rpp::Preprocessor::IncludeLocal, skipPath, false);
+    }
+
     if( !ret.first.isValid())
     {
         //Check if there is an available artificial representation
