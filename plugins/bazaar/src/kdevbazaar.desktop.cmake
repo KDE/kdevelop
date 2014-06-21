@@ -40,6 +40,7 @@ Name=Bazaar Support
 Name[bg]=Поддръжка на Bazaar
 Name[bs]=Bazaar podrška
 Name[ca]=Implementació de Bazaar
+Name[cs]=Podpora Bazaar
 Name[da]=Bazaar-understøttelse
 Name[de]=Bazaar-Unterstützung
 Name[el]=Υποστήριξη Bazaar
