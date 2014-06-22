@@ -20,4 +20,5 @@ install(TARGETS kdevbazaar DESTINATION ${PLUGIN_INSTALL_DIR})
 configure_file(kdevbazaar.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevbazaar.desktop)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevbazaar.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 
+add_subdirectory(icons)
 add_subdirectory(tests)

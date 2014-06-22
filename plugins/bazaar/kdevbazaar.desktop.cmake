@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Exec=blubb
+Icon=bazaar
 Comment=This plugin integrates Bazaar to KDevelop
 Comment[bg]=Тази приставка вгражда Bazaar в KDevelop
 Comment[bs]=Ovaj dodatak integriše Bazaar u KDevelopu.
