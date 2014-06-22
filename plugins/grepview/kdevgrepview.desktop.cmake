@@ -8,6 +8,7 @@ Comment[ca@valencia]=Permet la cerca ràpida de múltiples fitxers usant patrons
 Comment[da]=Muliggør hurtig søgning af flere filer med brug af mønstre eller regulære udtryk - og muliggør også erstatning.
 Comment[de]=Ermöglicht es, Dateien mit Hilfe von Mustern und regulären Ausdrücken zu durchsuchen bzw. Ersetzungen vorzunehmen.
 Comment[el]=Επιτρέπει γρήγορη αναζήτηση πολλών αρχείων με χρήση προτύπων ή κανονικών εκφράσεων. Επιτρέπει και την αντικατάστασή τους επίσης.
+Comment[en_GB]=Allows fast searching of multiple files using patterns or regular expressions. And allow to replace it too.
 Comment[es]=Permite búsquedas rápidas de múltiples archivos usando patrones o expresiones regulares. También permite sustituciones.
 Comment[et]=Lubab mustreid või regulaaravaldisi kasutades kiiresti paljudes failides teksti otsida, samuti asendada.
 Comment[fi]=Mahdollistaa nopean useiden tiedostojen etsinnän käyttäen malleja tai säännöllisiä lausekkeita. Sallii myös korvauksen.
