@@ -18,3 +18,5 @@ install(FILES
     manpagedocumentation.css
     DESTINATION ${DATA_INSTALL_DIR}/kdevmanpage
 )
+
+add_subdirectory(tests)
