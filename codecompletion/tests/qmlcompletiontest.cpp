@@ -80,6 +80,7 @@ CompletionParameters prepareCompletion(const QString& initCode, const QString& i
                                                     qml ? "qml" : "js"));
 
     completion_data.file->parse();
+    completion_data.file->waitForParsed();
     // wait for this fail and all dependencies, like modules and such
     while (!ICore::self()->languageController()->backgroundParser()->isIdle()) {
         QTest::qWait(100);
