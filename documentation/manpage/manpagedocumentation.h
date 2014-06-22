@@ -21,6 +21,8 @@
 #ifndef MANPAGEDOCUMENTATION_H
 #define MANPAGEDOCUMENTATION_H
 
+#include "manpagemodel.h"
+
 #include <interfaces/idocumentation.h>
 
 #include <KUrl>
@@ -28,7 +30,6 @@
 #include <QtCore/QObject>
 #include <QtCore/QString>
 #include <QIODevice>
-#include <manpagemodel.h>
 
 class QWidget;
 class QStackedWidget;
