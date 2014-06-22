@@ -105,47 +105,16 @@ public:
     KTextEditor::View *textView() const;
 
     virtual QString viewStatus() const;
-
     virtual QString viewState() const;
     virtual void setState(const QString& state);
 
     void setInitialRange(const KTextEditor::Range& range);
     KTextEditor::Range initialRange() const;
 
-private Q_SLOTS:
-    void sendStatusChanged();
-    void editorDestroyed(QObject* obj);
-
 private:
     class TextViewPrivate* const d;
-};
 
-class KDEVPLATFORMSHELL_EXPORT TextEditorWidget : public QWidget, public KXMLGUIClient
-{
-    Q_OBJECT
-public:
-    TextEditorWidget(const KDevelop::TextView* view, QWidget* parent = 0);
-    virtual ~TextEditorWidget();
-
-    KTextEditor::View* editorView();
-
-    QString status() const;
-    bool isInitialized() const;
-    virtual void showEvent(QShowEvent* event);
-
-Q_SIGNALS:
-    void statusChanged();
-
-public Q_SLOTS:
-    void initialize();
-    void viewStatusChanged(KTextEditor::View*, const KTextEditor::Cursor& newPosition);
-
-private:
-    void setEditorView(KTextEditor::View* view);
-    class TextEditorWidgetPrivate* const d;
-
-    Q_PRIVATE_SLOT(d, void viewInputModeChanged(KTextEditor::View*, KTextEditor::View::InputMode));
-
+    Q_PRIVATE_SLOT(d, void sendStatusChanged());
 };
 
 }

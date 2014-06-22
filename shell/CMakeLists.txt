@@ -58,14 +58,6 @@ set(kdevplatformshell_LIB_SRCS
     areadisplay.cpp
 )
 
-# Check if KTE is new enough to have the EditVIMode view mode flag
-try_compile( HAVE_EDITVIMODE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/testeditvimode.cpp
-             CMAKE_FLAGS "-DINCLUDE_DIRECTORIES=${KDE4_KTEXTEDITOR_INCLUDES}"
-             LINK_LIBRARIES KF5::TextEditor )
-if(HAVE_EDITVIMODE)
-    add_definitions("-DKTEXTEDITOR_HAS_VIMODE=1")
-endif()
-
 set(kdevplatformshell_UI
     sessiondialog.ui
     projectinfopage.ui

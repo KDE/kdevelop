@@ -674,13 +674,15 @@ void UiController::popUpAssistant(const KDevelop::IAssistant::Ptr& assistant)
         kDebug() << "no active view in mainwindow";
         return;
     }
-    TextEditorWidget* textWidget = dynamic_cast<TextEditorWidget*>(view->widget());
+
+    auto editorView = qobject_cast<KTextEditor::View*>(view->widget());
+    Q_ASSERT(editorView);
     bool wasVisible = d->currentShownAssistant && d->currentShownAssistant->isVisible();
-    if(textWidget && textWidget->editorView()) {
+    if (editorView) {
         if ( ! d->currentShownAssistant ) {
-            d->currentShownAssistant = new AssistantPopup(textWidget->editorView(), assistant);
+            d->currentShownAssistant = new AssistantPopup(editorView, assistant);
         } else {
-            d->currentShownAssistant->reset(textWidget->editorView(), assistant);
+            d->currentShownAssistant->reset(editorView, assistant);
         }
         if(assistant->actions().count() && !wasVisible) {
             Sublime::HoldUpdates hold(ICore::self()->uiController()->activeMainWindow());

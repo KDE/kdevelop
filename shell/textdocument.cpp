@@ -338,51 +338,15 @@ private:
     QMenu* m_addedContextMenu;
 };
 
-class TextViewPrivate
+struct TextViewPrivate
 {
-public:
-    TextViewPrivate() : editor(0) {}
-    TextEditorWidget* editor;
-    KTextEditor::Range initialRange;
-};
+    TextViewPrivate(TextView* q) : q(q) {}
 
-class TextEditorWidgetPrivate
-{
-public:
-    TextEditorWidgetPrivate()
-    {
-        widget = 0;
-        widgetLayout = 0;
-        view = 0;
-        statusLabel = 0;
-    }
+    void sendStatusChanged();
 
-    void viewInputModeChanged(KTextEditor::View* view, KTextEditor::View::InputMode mode)
-    {
-#ifdef KTEXTEDITOR_HAS_VIMODE
-        if ( ! statusLabel ) {
-            statusLabel = new QLabel();
-            view->layout()->addWidget(statusLabel);
-        }
-        if ( mode == KTextEditor::View::EditViMode ) {
-            statusLabel->setText(view->viewMode() + "    <i>" + view->document()->url().fileName() + "</i>");
-            statusLabel->setHidden(false);
-        }
-        else {
-            statusLabel->setHidden(true);
-        }
-#else
-        Q_UNUSED(view);
-        Q_UNUSED(mode);
-#endif
-    }
-    QWidget* widget;
-    QVBoxLayout* widgetLayout;
+    TextView* const q;
     QPointer<KTextEditor::View> view;
-    QLabel* statusLabel;
-    QString status;
-    const TextView* textView;
-
+    KTextEditor::Range initialRange;
 };
 
 TextDocument::TextDocument(const KUrl &url, ICore* core, const QString& encoding)
@@ -711,50 +675,44 @@ Sublime::View* TextDocument::newView(Sublime::Document* doc)
 }
 
 KDevelop::TextView::TextView(TextDocument * doc)
-    : View(doc, View::TakeOwnership), d( new TextViewPrivate )
+    : View(doc, View::TakeOwnership), d(new TextViewPrivate(this))
 {
 }
 
 KDevelop::TextView::~TextView()
 {
-    delete d->editor; //We have to delete the view right now, to prevent random crashes in the event handler
-    d->editor = 0;
     delete d;
 }
 
 QWidget * KDevelop::TextView::createWidget(QWidget * parent)
 {
-    TextEditorWidget* teWidget = new TextEditorWidget(this, parent);
-    connect(teWidget, SIGNAL(statusChanged()), this, SLOT(sendStatusChanged()));
-
-    d->editor = teWidget;
-    connect(d->editor, SIGNAL(destroyed(QObject*)), this, SLOT(editorDestroyed(QObject*)));
-    
-    return teWidget;
-}
-
-void KDevelop::TextView::editorDestroyed(QObject* obj) {
-    if(obj == d->editor)
-        d->editor = 0;
+    auto textDocument = qobject_cast<TextDocument*>(document());
+    Q_ASSERT(textDocument);
+    QWidget* widget = textDocument->createViewWidget(parent);
+    d->view = qobject_cast<KTextEditor::View*>(widget);
+    Q_ASSERT(d->view);
+    if (d->view) {
+        connect(d->view, SIGNAL(cursorPositionChanged(KTextEditor::View*, KTextEditor::Cursor)),
+                this, SLOT(sendStatusChanged()));
+    }
+    return widget;
 }
 
 QString KDevelop::TextView::viewState() const
 {
-    if( d->editor && d->editor->editorView() )
-    {
-        if (d->editor->editorView()->selection()) {
-            KTextEditor::Range selection = d->editor->editorView()->selectionRange();
+    if (d->view) {
+        if (d->view->selection()) {
+            KTextEditor::Range selection = d->view->selectionRange();
             return QString("Selection=%1,%2,%3,%4").arg(selection.start().line())
                                                    .arg(selection.start().column())
                                                    .arg(selection.end().line())
                                                    .arg(selection.end().column());
         } else {
-            KTextEditor::Cursor cursor = d->editor->editorView()->cursorPosition();
+            KTextEditor::Cursor cursor = d->view->cursorPosition();
             return QString("Cursor=%1,%2").arg(cursor.line()).arg(cursor.column());
         }
     }
-    else
-    {
+    else {
         kDebug() << "TextView's internal KTE view disappeared!";
         return QString();
     }
@@ -762,8 +720,8 @@ QString KDevelop::TextView::viewState() const
 
 void KDevelop::TextView::setInitialRange(const KTextEditor::Range& range)
 {
-    if(d->editor && d->editor->isInitialized()) {
-        selectAndReveal(d->editor->editorView(), range);
+    if (d->view) {
+        selectAndReveal(d->view, range);
     } else {
         d->initialRange = range;
     }
@@ -805,107 +763,18 @@ QIcon KDevelop::TextDocument::defaultIcon() const
 
 KTextEditor::View *KDevelop::TextView::textView() const
 {  
-    if (d->editor)
-        return d->editor->editorView();
-
-    return 0;
+    return d->view;
 }
 
 QString KDevelop::TextView::viewStatus() const
 {
-    if (d->editor)
-        return d->editor->status();
-
-    return QString();
+    const KTextEditor::Cursor pos = d->view ? d->view->cursorPosition() : KTextEditor::Cursor::invalid();
+    return i18n(" Line: %1 Col: %2 ", KGlobal::locale()->formatNumber(pos.line() + 1, 0), KGlobal::locale()->formatNumber(pos.column() + 1, 0));
 }
 
-void KDevelop::TextView::sendStatusChanged()
+void KDevelop::TextViewPrivate::sendStatusChanged()
 {
-    emit statusChanged(this);
-}
-
-KDevelop::TextEditorWidget::TextEditorWidget(const TextView* view, QWidget* parent)
-: QWidget(parent), KXMLGUIClient(), d(new TextEditorWidgetPrivate)
-{
-    d->widgetLayout = new QVBoxLayout(this);
-    d->widgetLayout->setMargin(0);
-    d->widgetLayout->setSpacing(0);
-    d->textView = view;
-    d->view = 0;
-
-    setLayout(d->widgetLayout);
-    initialize();
-}
-
-KDevelop::TextEditorWidget::~TextEditorWidget()
-{
-    delete d;
-}
-
-void KDevelop::TextEditorWidget::initialize()
-{
-    if(d->view)
-        return;
-    TextDocument* doc = static_cast<TextDocument*>(d->textView->document());
-    KTextEditor::View* view = qobject_cast<KTextEditor::View*>(doc->createViewWidget(this));
-    KTextEditor::Range ir = d->textView->initialRange();
-    selectAndReveal(view, ir);
-    setEditorView(view);
-}
-
-void KDevelop::TextEditorWidget::viewStatusChanged(KTextEditor::View* view, const KTextEditor::Cursor& )
-{
-    // This fetches the virtual cursor, which expands tab characters properly, i.e. instead of col == 1
-    // you'll get col == 9 with this when a tab is at the start of the line.
-    KTextEditor::Cursor pos = view->cursorPositionVirtual();
-    d->status = i18n(" Line: %1 Col: %2 ", KGlobal::locale()->formatNumber(pos.line() + 1, 0), KGlobal::locale()->formatNumber(pos.column() + 1, 0));
-    emit statusChanged();
-}
-
-void KDevelop::TextEditorWidget::setEditorView(KTextEditor::View* view)
-{
-    if (d->view)
-    {
-        disconnect(view, SIGNAL(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)));
-        removeChildClient(view);
-    }
-
-    d->view = view;
-    insertChildClient(d->view);
-    connect(view, SIGNAL(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)), 
-            this, SLOT(viewStatusChanged(KTextEditor::View*,KTextEditor::Cursor)));
-    
-    viewStatusChanged(view, view->cursorPosition());
-
-    connect(view, SIGNAL(viewInputModeChanged(KTextEditor::View*,KTextEditor::View::InputMode)),
-            this, SLOT(viewInputModeChanged(KTextEditor::View*,KTextEditor::View::InputMode)));
-
-    d->widgetLayout->insertWidget(0, d->view);
-    setFocusProxy(view);
-}
-
-QString KDevelop::TextEditorWidget::status() const
-{
-    return d->status;
-}
-
-KTextEditor::View* KDevelop::TextEditorWidget::editorView()
-{
-    if(!d->view)
-        initialize();
-    return d->view;
-}
-
-bool KDevelop::TextEditorWidget::isInitialized() const
-{
-    return d->view!=0;
-}
-
-void KDevelop::TextEditorWidget::showEvent(QShowEvent* event)
-{
-    if(!d->view)
-        initialize();
-    QWidget::showEvent(event);
+    emit q->statusChanged(q);
 }
 
 KTextEditor::View* KDevelop::TextDocument::activeTextView() const
