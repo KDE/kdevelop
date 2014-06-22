@@ -19,6 +19,7 @@
 #include "language/duchain/declaration.h"
 #include "declarationvalidator.h"
 #include "testsuite.h"
+#include "jsondeclarationtests.h"
 
 namespace KDevelop {
 
