@@ -63,6 +63,7 @@ Comment[cs]=Nastavit globální možnosti CMake
 Comment[da]=Sæt globale CMake-indstillinger
 Comment[de]=Globale CMake-Einstellungen einrichten
 Comment[el]=Διαμόρφωση καθολικών ρυθμίσεων CMake
+Comment[en_GB]=Configure global CMake settings
 Comment[es]=Configurar las preferencias globales de CMake
 Comment[et]=CMake'i globaalsete valikute seadistamine
 Comment[fi]=Yleiset CMake-asetukset
