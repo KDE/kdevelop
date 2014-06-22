@@ -27,12 +27,14 @@
 #include "idealtoolbutton.h"
 #include "document.h"
 #include "view.h"
-#include <KGlobal>
+
 #include <KLocalizedString>
 #include <KSharedConfig>
 #include <KConfigGroup>
+
 #include <QBoxLayout>
 #include <QApplication>
+#include <QDebug>
 
 using namespace Sublime;
 
@@ -139,22 +141,16 @@ void IdealButtonBarWidget::showWidget(bool checked)
     showWidget(action, checked);
 }
 
-void IdealButtonBarWidget::showWidget(QAction *widgetAction, bool checked, bool forceGrouping)
+void IdealButtonBarWidget::showWidget(QAction *widgetAction, bool checked)
 {
     IdealDockWidget *widget = _widgets.value(widgetAction);
     Q_ASSERT(widget);
 
+    IdealToolButton* button = _buttons.value(widgetAction);
+    Q_ASSERT(button);
+
     if (checked) {
         IdealController::RaiseMode mode = IdealController::RaiseMode(widgetAction->property("raise").toInt());
-        if ( forceGrouping ) {
-            mode = IdealController::GroupWithOtherViews;
-        }
-        if ( mode == IdealController::GroupWithOtherViews ) {
-            // need to reset the raise property so that subsequent
-            // showWidget()'s will not do grouping unless explicitly asked
-            widgetAction->setProperty("raise", IdealController::HideOtherViews);
-        }
-
         if ( mode == IdealController::HideOtherViews ) {
             // Make sure only one widget is visible at any time.
             // The alternative to use a QActionCollection and setting that to "exclusive"
@@ -165,10 +161,13 @@ void IdealButtonBarWidget::showWidget(QAction *widgetAction, bool checked, bool 
                     otherAction->setChecked(false);
             }
         }
+
+        _controller->lastDockWidget[_area] = widget;
     }
 
     _controller->showDockWidget(widget, checked);
     widgetAction->setChecked(checked);
+    button->setChecked(checked);
 }
 
 
@@ -200,7 +199,6 @@ void IdealButtonBarWidget::actionEvent(QActionEvent *event)
             _widgets[action]->setWindowTitle(action->text());
 
             layout()->addWidget(button);
-            connect(action, SIGNAL(toggled(bool)), SLOT(actionToggled(bool)));
             connect(action, SIGNAL(toggled(bool)), SLOT(showWidget(bool)));
             connect(button, SIGNAL(clicked(bool)), SLOT(buttonPressed(bool)));
             connect(button, SIGNAL(customContextMenuRequested(QPoint)),
@@ -240,30 +238,34 @@ void IdealButtonBarWidget::actionEvent(QActionEvent *event)
     }
 }
 
-void IdealButtonBarWidget::actionToggled(bool state)
-{
-    QAction* action = qobject_cast<QAction*>(sender());
-    Q_ASSERT(action);
-    
-    IdealToolButton* button = _buttons.value(action);
-    Q_ASSERT(button);
-
-    button->setChecked(state);
-
-    if (state)
-        _controller->lastDockWidget[_area] = widgetForAction(action);
-}
-
 MainWindow* IdealButtonBarWidget::parentWidget() const
 {
     return static_cast<Sublime::MainWindow*>(QWidget::parentWidget());
 }
 
 IdealDockWidget * IdealButtonBarWidget::widgetForAction(QAction *action) const
-{ return _widgets.value(action); }
+{
+    return _widgets.value(action);
+}
 
 void IdealButtonBarWidget::buttonPressed(bool state)
 {
-    bool forceGrouping = QApplication::keyboardModifiers().testFlag(Qt::ControlModifier);
-    showWidget(_buttons.key(qobject_cast<IdealToolButton*>(sender())), state, forceGrouping);
+    auto button = qobject_cast<IdealToolButton*>(sender());
+    Q_ASSERT(button);
+    auto action = _buttons.key(button);
+    Q_ASSERT(action);
+
+    const bool forceGrouping = QApplication::keyboardModifiers().testFlag(Qt::ControlModifier);
+
+    if (forceGrouping) {
+        action->setProperty("raise", IdealController::GroupWithOtherViews);
+    }
+
+    action->setChecked(state);
+
+    if (forceGrouping) {
+        // need to reset the raise property so that subsequent
+        // showWidget()'s will not do grouping unless explicitly asked
+        action->setProperty("raise", IdealController::HideOtherViews);
+    }
 }

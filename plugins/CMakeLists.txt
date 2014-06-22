@@ -22,6 +22,7 @@ add_subdirectory(pastebin)
 # TODO KF5: Re-enable at some point? TemplateInterface* is no longer installed by KTE
 #add_subdirectory(codeutils)
 add_subdirectory(git)
+add_subdirectory(bazaar)
 add_subdirectory(vcschangesview)
 add_subdirectory(templatemanager)
 # add_subdirectory(filetemplates)

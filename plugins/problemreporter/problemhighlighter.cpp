@@ -24,23 +24,43 @@
 
 #include <KTextEditor/Document>
 #include <KTextEditor/MarkInterface>
+#include <ktexteditor/texthintinterface.h>
+#include <ktexteditor/view.h>
+#include <ktexteditor/movinginterface.h>
 
 #include <language/duchain/indexedstring.h>
-#include <ktexteditor/texthintinterface.h>
 #include <language/duchain/navigation/abstractnavigationwidget.h>
 #include <language/duchain/navigation/problemnavigationcontext.h>
 #include <language/util/navigationtooltip.h>
-#include <ktexteditor/view.h>
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/icompletionsettings.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/topducontext.h>
-#include <ktexteditor/movinginterface.h>
+
+#include <kcolorscheme.h>
 
 using namespace KTextEditor;
 using namespace KDevelop;
+
+namespace {
+
+QColor colorForSeverity(ProblemData::Severity severity)
+{
+    KColorScheme scheme(QPalette::Active);
+    switch (severity) {
+    case ProblemData::Error:
+        return scheme.foreground(KColorScheme::NegativeText).color();
+    case ProblemData::Warning:
+        return scheme.foreground(KColorScheme::NeutralText).color();
+    case ProblemData::Hint:
+    default:
+        return scheme.foreground(KColorScheme::PositiveText).color();
+    }
+}
+
+}
 
 ProblemHighlighter::ProblemHighlighter(KTextEditor::Document* document)
     : m_document(document)
@@ -177,26 +197,10 @@ void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& prob
         if(problem->source() != ProblemData::ToDo && (problem->severity() != ProblemData::Hint
             || ICore::self()->languageController()->completionSettings()->highlightSemanticProblems()))
         {
-            KTextEditor::Attribute::Ptr error(new KTextEditor::Attribute());
-            if(problem->severity() == ProblemData::Error)
-                error->setUnderlineColor(Qt::red);
-            else if(problem->severity() == ProblemData::Warning)
-                error->setUnderlineColor(Qt::magenta);
-            else if(problem->severity() == ProblemData::Hint)
-                error->setUnderlineColor(Qt::yellow);
-
-            error->setUnderlineStyle(QTextCharFormat::WaveUnderline);
-
-#if 0
-            KTextEditor::Attribute::Ptr dyn(new KTextEditor::Attribute());
-            QColor col(Qt::red);
-            col.setAlpha(40);
-            dyn->setBackground(col);
-            error->setDynamicAttribute(Attribute::ActivateMouseIn, dyn);
-            error->setDynamicAttribute(Attribute::ActivateCaretIn, dyn);
-#endif
-
-            problemRange->setAttribute(error);
+            KTextEditor::Attribute::Ptr attribute(new KTextEditor::Attribute());
+            attribute->setUnderlineStyle(QTextCharFormat::WaveUnderline);
+            attribute->setUnderlineColor(colorForSeverity(problem->severity()));
+            problemRange->setAttribute(attribute);
         }
 
         if (markIface && ICore::self()->languageController()->completionSettings()->highlightProblematicLines()) {

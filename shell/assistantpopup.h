@@ -1,6 +1,8 @@
 /*
    Copyright 2009 David Nolden <david.nolden.kdevelop@art-master.de>
    Copyright 2012 Milian Wolff <mail@milianw.de>
+   Copyright 2014 Sven Brauch <svenbrauch@gmail.com>
+   Copyright 2014 Kevin Funk <kfunk@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,36 +25,12 @@
 #include <QDeclarativeView>
 #include <interfaces/iassistant.h>
 #include <ksharedptr.h>
-#include <QDebug>
-#include <KAction>
-
-#include <memory>
 
 namespace KTextEditor
 {
 class View;
 class Cursor;
 }
-
-class AssistantButton : public QObject
-{
-    Q_OBJECT
-    Q_PROPERTY(QString name READ name CONSTANT)
-
-public:
-    AssistantButton(QAction* action, const QString& text, QObject* parent)
-        : QObject(parent)
-        , m_name(text)
-        , m_action(action)
-    { }
-
-    QString name() const { return m_name; }
-    Q_INVOKABLE void trigger() { m_action->trigger(); }
-
-private:
-    QString m_name;
-    QAction* m_action;
-};
 
 class AssistantPopupConfig : public QObject
 {
@@ -62,6 +40,7 @@ class AssistantPopupConfig : public QObject
     Q_PROPERTY(QColor highlight READ highlight CONSTANT)
     Q_PROPERTY(QString title READ title CONSTANT)
     Q_PROPERTY(QList<QObject*> model READ model CONSTANT)
+    Q_PROPERTY(bool active READ isActive WRITE setActive NOTIFY activeChanged)
 
 public:
     explicit AssistantPopupConfig(QObject *parent = 0);
@@ -75,9 +54,11 @@ public:
 
     void setColorsFromView(QObject *view);
 
+    bool isActive() const;
+    void setActive(bool active);
+
 signals:
-    void shouldShowHighlight(bool show);
-    void shouldCancelAnimation();
+    void activeChanged(bool active);
 
 private:
     QColor m_foreground;
@@ -85,6 +66,7 @@ private:
     QColor m_highlight;
     QString m_title;
     QList<QObject*> m_model;
+    bool m_active;
 
     friend class AssistantPopup;
 };
@@ -109,7 +91,6 @@ public:
      */
     void reset(KTextEditor::View *widget, const KDevelop::IAssistant::Ptr &assistant);
     KDevelop::IAssistant::Ptr assistant() const;
-    virtual bool viewportEvent(QEvent *event);
 
 public slots:
     void executeHideAction();
@@ -118,20 +99,24 @@ public slots:
 private slots:
     void updatePosition(KTextEditor::View* view, const KTextEditor::Cursor& newPos);
 
-private:
+protected:
     virtual bool eventFilter(QObject* object, QEvent* event);
+    virtual void keyPressEvent(QKeyEvent* event);
     virtual void keyReleaseEvent(QKeyEvent* event);
+    virtual bool viewportEvent(QEvent *event);
+
+private:
+    void updateActions();
+
     /**
      * @brief Get the geometry of the inner part (with the text) of the KTextEditor::View being used.
      */
     QRect textWidgetGeometry(KTextEditor::View *view) const;
 
-    void updateActions();
-    QWidget* widgetForAction(const KDevelop::IAssistantAction::Ptr& action, int& mnemonic);
     KDevelop::IAssistant::Ptr m_assistant;
     QList<KDevelop::IAssistantAction::Ptr> m_assistantActions;
     QPointer<KTextEditor::View> m_view;
-    std::unique_ptr<AssistantPopupConfig> m_config;
+    QScopedPointer<AssistantPopupConfig> m_config;
     bool m_shownAtBottom;
     bool m_reopening;
 };

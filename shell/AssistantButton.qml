@@ -1,5 +1,6 @@
 /*
    Copyright 2014 Sven Brauch <svenbrauch@gmail.com>
+   Copyright 2014 Kevin Funk <kfunk@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,60 +22,38 @@ import QtQuick 1.0
 // Component which provides a single button for the assistant widget.
 
 Rectangle {
-    y: -1
-    clip: true
     id: root
+
     property color foreground
     property color background
     property color highlight
-    color: {
-        var v = rgb(background)
-        // make the color a bit lighter
-        return Qt.rgba(Math.min(1, v[0]+0.15), Math.min(1, v[1]+0.15), Math.min(1, v[2]+0.15), 1.0)
-    }
+
+    property bool highlighted: false
     // text on the button
     property string text
-    // index of the button
-    property int buttonIndex
     // text in the shortcut field
     property int button
     // emitted when the button is clicked with the mouse
     signal triggered()
+
+    y: -1
     width: text.width + 4
     height: number.height + 4
-    border {
-        color: {
-            var v = rgb(root.foreground)
-            return Qt.rgba(v[0], v[1], v[2], 0.4)
-        }
-        width: 1
-    }
-    // TODO remove Qt5; in Qt4 you can't get the rgb components
-    function rgb(color) {
-        var res = Array();
-        color = String(color)
-        for ( var i = 0; i < 3; i++ ) {
-            res[i] = (parseInt(color[i*2+1], 16) * 16 + parseInt(color[i*2+2], 16)) / 255.0;
-        }
-        return res;
-    }
-    function highlightKey(doHighlight) {
-        highlight.opacity = doHighlight ? 0.5 : 0;
-    }
-    function highlightTrigger() {
-        highlight.opacity = 1.0
-    }
+
+    color: Qt.lighter(root.background, 1.5)
+    border.color: Qt.lighter(root.foreground, 1.5)
+
     Behavior on opacity {
         NumberAnimation { duration: 150; }
     }
     MouseArea {
-        hoverEnabled: true
-        property bool wasClicked: false
         id: mouseArea
+
         anchors.fill: parent
-        onClicked: { root.triggered(); mouseArea.wasClicked = true }
-        onEntered: highlight.opacity = 0.5
-        onExited: if ( ! mouseArea.wasClicked ) highlight.opacity = 0.0
+        onClicked: root.triggered()
+
+        hoverEnabled: true
+
         Row {
             // row containing the separators, shortcut text, and button text
             z: 3
@@ -105,11 +84,11 @@ Rectangle {
         }
         Rectangle {
             // the background color for the shortcut key box, invisible by default.
-            id: highlight
+            id: highlightArea
             Behavior on opacity {
                 NumberAnimation { duration: 200 }
             }
-            opacity: 0
+            opacity: (root.highlighted || mouseArea.containsMouse) ? 0.5 : 0.0
             x: 1
             y: 1
             z: 1
