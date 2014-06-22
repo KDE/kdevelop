@@ -35,6 +35,7 @@ install(TARGETS kdevplatformtests EXPORT KDevPlatformTargets ${INSTALL_TARGETS_D
 install(FILES
     autotestshell.h
     kdevsignalspy.h
+    modeltest.h
     testcore.h
     testproject.h
     testfile.h
