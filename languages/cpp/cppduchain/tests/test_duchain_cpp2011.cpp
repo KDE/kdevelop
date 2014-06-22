@@ -943,6 +943,10 @@ void TestDUChain::testAuto()
     "struct FOO {};\n"
     "auto a15 = FOO{};\n"
     "auto a16 = FOO{1};\n"
+    "auto a17 = new int;\n"
+    "auto* a18 = new int;\n"
+    "auto a19 = new FOO;\n"
+    "auto* a20 = new FOO;\n"
 
   );
   LockedTopDUContext top = parse(code, DumpAll);
@@ -950,7 +954,7 @@ void TestDUChain::testAuto()
   DUChainReadLocker lock;
   QVERIFY(top->problems().isEmpty());
 
-  QCOMPARE(top->localDeclarations().count(), 19);
+  QCOMPARE(top->localDeclarations().count(), 23);
 
   Declaration* dec = top->localDeclarations().at(1);
   QVERIFY(dec->type<IntegralType>());
@@ -1010,6 +1014,23 @@ void TestDUChain::testAuto()
 
   dec = top->localDeclarations().at(18);
   QVERIFY(dec->abstractType()->equals(foo.constData()));
+
+  dec = top->localDeclarations().at(19);
+  QVERIFY(dec->abstractType().cast<PointerType>());
+  QVERIFY(dec->abstractType().cast<PointerType>()->baseType().cast<IntegralType>());
+
+  dec = top->localDeclarations().at(20);
+  QVERIFY(dec->abstractType().cast<PointerType>());
+  QVERIFY(dec->abstractType().cast<PointerType>()->baseType().cast<IntegralType>());
+
+  dec = top->localDeclarations().at(21);
+  QVERIFY(dec->abstractType().cast<PointerType>());
+  QVERIFY(dec->abstractType().cast<PointerType>()->baseType()->equals(foo.constData()));
+
+  dec = top->localDeclarations().at(22);
+  qDebug() << dec->toString();
+  QVERIFY(dec->abstractType().cast<PointerType>());
+  QVERIFY(dec->abstractType().cast<PointerType>()->baseType()->equals(foo.constData()));
 }
 
 void TestDUChain::testNoexcept()

@@ -6,7 +6,7 @@ ServiceTypes=KCModule
 X-KDE-ModuleType=Library
 X-KDE-Library=kcm_kdevcustombuildsystem
 X-KDE-ParentApp=kdevplatformproject
-X-KDE-ParentComponents=KDevCustomBuildSystem,KDevGenericManager
+X-KDE-ParentComponents=KDevCustomBuildSystem
 X-KDE-CfgDlgHierarchy=BUILDTOOL
 
 Name=Custom BuildSystem

@@ -518,11 +518,9 @@ void CMakeProjectVisitorTest::testRun_data()
                             "get_target_property(result My::Lib fu)\n"
                             << cacheValues << results;
     results.clear();
-    results << StringPair("result", "hell\\o");
-    QTest::newRow("escaping") <<
-                            "set(resultA \"hell\\\\o\")\n"
-                            "set(resultB \"${resultA}\")\n"
-                            "set(result \"${resultB}\")\n"
+    results << StringPair("result", "");
+    QTest::newRow("empty set with scope") <<
+                            "set(result ${nonexistant} PARENT_SCOPE)\n"
                             << cacheValues << results;
 }
 
