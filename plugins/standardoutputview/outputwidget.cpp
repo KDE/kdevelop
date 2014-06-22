@@ -534,12 +534,23 @@ void OutputWidget::enableActions()
 }
 
 void OutputWidget::rowsInserted(const QModelIndex& parent, int from, int to) {
-    Q_UNUSED(parent);
-    for( QMap< int, QTreeView* >::const_iterator it = views.constBegin(); it != views.constEnd(); ++it) {
-        if((*it)->model() == sender()) {
-            QModelIndex pre = (*it)->model()->index(from-1, 0);
-            if(!pre.isValid() || ((*it)->visualRect(pre).isValid() && (*it)->viewport()->rect().intersects((*it)->visualRect(pre)) && to == (*it)->model()->rowCount()-1)) {
-                (*it)->scrollToBottom();
+    if (parent.isValid()) {
+        return;
+    }
+
+    auto model = qobject_cast<QAbstractItemModel*>(sender());
+    Q_ASSERT(model);
+
+    foreach (QTreeView* view, views) {
+        if (view->model() == model) {
+            QModelIndex pre = model->index(from - 1, 0);
+            bool scroll = !pre.isValid();
+            if (!scroll && to == model->rowCount() - 1) {
+                auto rect = view->visualRect(pre);
+                scroll = rect.isValid() && view->viewport()->rect().intersects(rect);
+            }
+            if (scroll) {
+                view->scrollToBottom();
             }
         }
     }
