@@ -156,7 +156,7 @@ QVariant DVcsJob::fetchResults()
 
 void DVcsJob::start()
 {
-    Q_ASSERT_X(!d->status==JobRunning, "DVCSjob::start", "Another proccess was started using this job class");
+    Q_ASSERT_X(d->status != JobRunning, "DVCSjob::start", "Another proccess was started using this job class");
 
     const QDir& workingdir = directory();
     if( !workingdir.exists() ) {

@@ -81,4 +81,3 @@ private:
 };
 
 #endif // BAZAAR_BAZAARPLUGIN_H
-

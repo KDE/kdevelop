@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Exec=blubb
+Icon=bazaar
 Comment=This plugin integrates Bazaar to KDevelop
 Comment[bg]=Тази приставка вгражда Bazaar в KDevelop
 Comment[bs]=Ovaj dodatak integriše Bazaar u KDevelopu.
@@ -90,7 +91,7 @@ GenericName[hu]=Verziókezelő támogatás
 GenericName[it]=Supporto controllo versione
 GenericName[ja]=バージョン管理のサポート
 GenericName[kk]=Нұсқаларын қадағалауды қолдау
-GenericName[nb]=Støtte for versjonskontroll 
+GenericName[nb]=Støtte for versjonskontroll
 GenericName[nds]=Verschoonkuntrull-Ünnerstütten
 GenericName[nl]=Ondersteuning voor versiecontrole
 GenericName[pl]=Obsługa kontroli wersji

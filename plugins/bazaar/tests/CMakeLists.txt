@@ -6,11 +6,11 @@ if (BZR_FOUND)
     set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
     set(bazaartest_SRCS
         bazaartest.cpp
-        ../src/diffjob.cpp
-        ../src/bzrannotatejob.cpp
-        ../src/bazaarplugin.cpp
-        ../src/bazaarutils.cpp
-        ../src/copyjob.cpp
+        ../diffjob.cpp
+        ../bzrannotatejob.cpp
+        ../bazaarplugin.cpp
+        ../bazaarutils.cpp
+        ../copyjob.cpp
     )
 
     kde4_add_unit_test(kdevbazaar-test ${bazaartest_SRCS})
