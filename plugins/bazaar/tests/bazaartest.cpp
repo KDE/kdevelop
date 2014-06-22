@@ -37,7 +37,7 @@
 
 #include <vcs/dvcs/dvcsjob.h>
 #include <vcs/vcsannotation.h>
-#include "../src/bazaarplugin.h"
+#include "../bazaarplugin.h"
 
 #define VERIFYJOB(j) \
 do { QVERIFY(j); QVERIFY(j->exec()); QVERIFY((j)->status() == KDevelop::VcsJob::JobSucceeded); } while(0)
