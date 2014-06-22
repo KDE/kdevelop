@@ -51,6 +51,8 @@
 
 #include "toolviewdata.h"
 
+Q_DECLARE_METATYPE(QTreeView*)
+
 OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
     : QWidget( parent )
     , tabwidget(0)
@@ -227,12 +229,12 @@ void OutputWidget::removeOutput( int id )
 {
     if( data->outputdata.contains( id ) && views.contains( id ) )
     {
+        QTreeView* view = views.value(id);
         if( data->type & KDevelop::IOutputView::MultipleView || data->type & KDevelop::IOutputView::HistoryView )
         {
-            QTreeView* w = views.value(id);
             if( data->type & KDevelop::IOutputView::MultipleView )
             {
-                int idx = tabwidget->indexOf( w );
+                int idx = tabwidget->indexOf( view );
                 if( idx != -1 )
                 {
                     tabwidget->removeTab( idx );
@@ -244,16 +246,15 @@ void OutputWidget::removeOutput( int id )
                 }
             } else
             {
-                int idx = stackwidget->indexOf( w );
+                int idx = stackwidget->indexOf( view );
                 if( idx != -1 && proxyModels.contains( idx ) )
                 {
                     delete proxyModels.take( idx );
                     filters.remove( idx );
                 }
-                stackwidget->removeWidget( w );
+                stackwidget->removeWidget( view );
             }
-            delete w;
-            views.remove( id );
+            delete view;
         } else
         {
             views.value( id )->setModel( 0 );
@@ -265,8 +266,9 @@ void OutputWidget::removeOutput( int id )
         }
         disconnect( data->outputdata.value( id )->model,SIGNAL(rowsInserted(QModelIndex,int,int)),
                     this, SLOT(rowsInserted(QModelIndex,int,int)) );
-        
+
         views.remove( id );
+        m_scrollDelay.remove( view );
         emit outputRemoved( data->toolViewId, id );
     }
     enableActions();
@@ -432,6 +434,7 @@ static QTreeView* createFocusedTreeView( QWidget* parent )
 QTreeView* OutputWidget::createListView(int id)
 {
     QTreeView* listview = 0;
+    bool newView = true;
     if( !views.contains(id) )
     {
         if( data->type & KDevelop::IOutputView::MultipleView || data->type & KDevelop::IOutputView::HistoryView )
@@ -467,9 +470,20 @@ QTreeView* OutputWidget::createListView(int id)
             } else
             {
                 listview = views.begin().value();
+                newView = false;
             }
             views[id] = listview;
         }
+
+        if (newView) {
+            auto timer = new QTimer(listview);
+            timer->setSingleShot(true);
+            timer->setInterval(300);
+            timer->setProperty("view", QVariant::fromValue(listview));
+            m_scrollDelay[listview] = {timer, -1, -1};
+            connect(timer, SIGNAL(timeout()), SLOT(delayedScroll()));
+        }
+
         changeModel( id );
         changeDelegate( id );
     } else
@@ -543,16 +557,39 @@ void OutputWidget::rowsInserted(const QModelIndex& parent, int from, int to) {
 
     foreach (QTreeView* view, views) {
         if (view->model() == model) {
-            QModelIndex pre = model->index(from - 1, 0);
-            bool scroll = !pre.isValid();
-            if (!scroll && to == model->rowCount() - 1) {
-                auto rect = view->visualRect(pre);
-                scroll = rect.isValid() && view->viewport()->rect().intersects(rect);
+            auto data = m_scrollDelay[view];
+            if (data.from == -1) {
+                data.from = from;
             }
-            if (scroll) {
-                view->scrollToBottom();
+            data.to = to;
+            if (!data.timer->isActive()) {
+                data.timer->start();
             }
         }
+    }
+}
+
+void OutputWidget::delayedScroll()
+{
+    auto timer = qobject_cast<QTimer*>(sender());
+    Q_ASSERT(timer);
+    auto view = timer->property("view").value<QTreeView*>();
+    Q_ASSERT(view);
+    delayedScroll(view);
+}
+
+void OutputWidget::delayedScroll(QTreeView* view)
+{
+    auto data = m_scrollDelay[view];
+
+    QModelIndex pre = view->model()->index(data.from - 1, 0);
+    bool scroll = !pre.isValid();
+    if (!scroll && data.to == view->model()->rowCount() - 1) {
+        auto rect = view->visualRect(pre);
+        scroll = rect.isValid() && view->viewport()->rect().intersects(rect);
+    }
+    if (scroll) {
+        view->scrollToBottom();
     }
 }
 
