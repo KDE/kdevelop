@@ -82,7 +82,7 @@ CompletionParameters prepareCompletion(const QString& initCode, const QString& i
     completion_data.file->parse();
     // wait for this fail and all dependencies, like modules and such
     while (!ICore::self()->languageController()->backgroundParser()->isIdle()) {
-        QTest::qWait(500);
+        QTest::qWait(100);
     }
 
     if (!completion_data.file->topContext()) {
