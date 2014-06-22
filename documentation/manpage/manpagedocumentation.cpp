@@ -39,7 +39,7 @@
 ManPagePlugin* ManPageDocumentation::s_provider=0;
 
 
-ManPageDocumentation::ManPageDocumentation(const QString& name, const KUrl& url)
+ManPageDocumentation::ManPageDocumentation(const QString& name, const QUrl& url)
     : m_url(url), m_name(name)
 {
     KIO::StoredTransferJob* transferJob = KIO::storedGet(m_url, KIO::NoReload, KIO::HideProgressInfo);

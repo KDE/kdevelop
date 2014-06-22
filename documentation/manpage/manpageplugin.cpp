@@ -19,11 +19,7 @@
 */
 
 #include <KPluginFactory>
-#include <KPluginLoader>
-#include <KAboutData>
 #include <KMimeType>
-#include <KSettings/Dispatcher>
-#include <KUrl>
 
 #include <interfaces/idocumentation.h>
 
@@ -43,8 +39,6 @@
 #include <interfaces/icore.h>
 #include <interfaces/idocumentationcontroller.h>
 #include <interfaces/iprojectcontroller.h>
-
-#include <QProgressBar>
 
 #include "manpageplugin.h"
 #include "manpagedocumentation.h"
@@ -111,11 +105,11 @@ KSharedPtr< IDocumentation > ManPagePlugin::documentationForDeclaration( Declara
         KDevelop::QualifiedIdentifier qid = dec->qualifiedIdentifier();
         if(qid.count() == 1){
             if(m_model->identifierInSection(identifier, "3")){
-                return KSharedPtr<IDocumentation>(new ManPageDocumentation(identifier, KUrl("man:(3)/"+identifier)));
+                return KSharedPtr<IDocumentation>(new ManPageDocumentation(identifier, QUrl("man:(3)/"+identifier)));
             } else if(m_model->identifierInSection(identifier, "2")){
-                return KSharedPtr<IDocumentation>(new ManPageDocumentation(identifier, KUrl("man:(2)/"+identifier)));
+                return KSharedPtr<IDocumentation>(new ManPageDocumentation(identifier, QUrl("man:(2)/"+identifier)));
             } else {
-                return KSharedPtr<IDocumentation>(new ManPageDocumentation(identifier, KUrl("man:"+identifier)));
+                return KSharedPtr<IDocumentation>(new ManPageDocumentation(identifier, QUrl("man:"+identifier)));
             }
         }
     }
@@ -130,7 +124,7 @@ QAbstractListModel* ManPagePlugin::indexModel() const
 KSharedPtr< IDocumentation > ManPagePlugin::documentationForIndex(const QModelIndex& index) const
 {
     QString name = index.data().toString();
-    return KSharedPtr<IDocumentation>(new ManPageDocumentation(name, KUrl("man:"+name)));
+    return KSharedPtr<IDocumentation>(new ManPageDocumentation(name, QUrl("man:"+name)));
 }
 
 KSharedPtr< IDocumentation > ManPagePlugin::homePage() const

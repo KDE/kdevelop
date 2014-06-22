@@ -25,8 +25,7 @@
 
 #include <interfaces/idocumentation.h>
 
-#include <KUrl>
-
+#include <QUrl>
 #include <QtCore/QObject>
 #include <QtCore/QString>
 #include <QIODevice>
@@ -42,7 +41,7 @@ class ManPageDocumentation : public KDevelop::IDocumentation
 {
     Q_OBJECT
     public:
-        ManPageDocumentation(const QString& name, const KUrl& url);
+        ManPageDocumentation(const QString& name, const QUrl& url);
         virtual QString name() const { return m_name; }
         virtual QString description() const;
         virtual bool providesWidget() const;
@@ -54,7 +53,7 @@ class ManPageDocumentation : public KDevelop::IDocumentation
         void finished(KJob*);
 
     private:
-        const KUrl m_url;
+        const QUrl m_url;
         const QString m_name;
         QString m_description;
 

@@ -107,7 +107,7 @@ void ManPageModel::initModel()
 {
     m_sectionList.clear();
     m_manMap.clear();
-    auto list = KIO::listDir(KUrl("man://"), KIO::HideProgressInfo);
+    auto list = KIO::listDir(QUrl("man://"), KIO::HideProgressInfo);
     connect(list, SIGNAL(entries(KIO::Job*, KIO::UDSEntryList)), SLOT(indexEntries(KIO::Job*, KIO::UDSEntryList)));
     connect(list, SIGNAL(result(KJob*)), this, SLOT(indexLoaded()));
 }
@@ -177,7 +177,7 @@ void ManPageModel::showItem(const QModelIndex& idx)
     if (idx.isValid() && idx.internalId() != INVALID_ID) {
         QString sectionUrl = m_sectionList.at(idx.internalId()).first;
         QString page = manPage(sectionUrl, idx.row());
-        KSharedPtr<KDevelop::IDocumentation> newDoc(new ManPageDocumentation(page, KUrl(sectionUrl + '/' + page)));
+        KSharedPtr<KDevelop::IDocumentation> newDoc(new ManPageDocumentation(page, QUrl(sectionUrl + '/' + page)));
         KDevelop::ICore::self()->documentationController()->showDocumentation(newDoc);
     }
 }
@@ -185,7 +185,7 @@ void ManPageModel::showItem(const QModelIndex& idx)
 void ManPageModel::showItemFromUrl(const QUrl& url)
 {
     if (url.toString().startsWith("man")) {
-        KSharedPtr<KDevelop::IDocumentation> newDoc(new ManPageDocumentation(url.path(), KUrl(url)));
+        KSharedPtr<KDevelop::IDocumentation> newDoc(new ManPageDocumentation(url.path(), QUrl(url)));
         KDevelop::ICore::self()->documentationController()->showDocumentation(newDoc);
     }
 }

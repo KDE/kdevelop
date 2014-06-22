@@ -44,7 +44,7 @@ void TestManPageModel::testModel()
 
 void TestManPageModel::testDocumentation()
 {
-    ManPageDocumentation documentation("dlopen", KUrl("man: (3)/dlopen"));
+    ManPageDocumentation documentation("dlopen", QUrl("man: (3)/dlopen"));
     QVERIFY(QTest::kWaitForSignal(&documentation, SIGNAL(descriptionChanged())));
     const QString description = documentation.description();
     // check that we've found the correct page by checking some references

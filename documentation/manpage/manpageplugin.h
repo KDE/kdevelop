@@ -31,8 +31,6 @@
 
 class ManPageDocumentation;
 
-class KUrl;
-
 class ManPagePlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationProvider
 {
     Q_OBJECT
