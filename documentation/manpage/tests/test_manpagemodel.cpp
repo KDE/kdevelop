@@ -23,7 +23,8 @@
 #include <tests/modeltest.h>
 
 #include <QDebug>
-#include <qtest_kde.h>
+#include <QSignalSpy>
+#include <QtTest>
 
 class TestManPageModel : public QObject
 {
@@ -37,7 +38,8 @@ private Q_SLOTS:
 void TestManPageModel::testModel()
 {
     ManPageModel model;
-    QVERIFY(QTest::kWaitForSignal(&model, SIGNAL(manPagesLoaded())));
+    QSignalSpy spy(&model, SIGNAL(manPagesLoaded()));
+    QVERIFY(spy.wait());
     QVERIFY(model.rowCount() > 0);
     new ModelTest(&model);
 }
@@ -45,7 +47,8 @@ void TestManPageModel::testModel()
 void TestManPageModel::testDocumentation()
 {
     ManPageDocumentation documentation("dlopen", QUrl("man: (3)/dlopen"));
-    QVERIFY(QTest::kWaitForSignal(&documentation, SIGNAL(descriptionChanged())));
+    QSignalSpy spy(&documentation, SIGNAL(descriptionChanged()));
+    QVERIFY(spy.wait());
     const QString description = documentation.description();
     // check that we've found the correct page by checking some references
     QVERIFY(description.contains("dlclose"));
