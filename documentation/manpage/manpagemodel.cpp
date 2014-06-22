@@ -27,6 +27,14 @@
 #include <interfaces/icore.h>
 #include <interfaces/idocumentationcontroller.h>
 
+#include <limits>
+
+namespace {
+
+const int INVALID_ID = std::numeric_limits<quintptr>::max();
+
+}
+
 using namespace KDevelop;
 
 ManPageModel::ManPageModel(QObject* parent)
@@ -45,8 +53,8 @@ ManPageModel::~ManPageModel()
 
 QModelIndex ManPageModel::parent(const QModelIndex& child) const
 {
-    if (child.isValid() && child.column() == 0 && child.internalId() >= 0) {
-        return createIndex(child.internalId(), 0, -1);
+    if (child.isValid() && child.column() == 0 && child.internalId() != INVALID_ID) {
+        return createIndex(child.internalId(), 0, INVALID_ID);
     }
     return QModelIndex();
 }
@@ -59,7 +67,7 @@ QModelIndex ManPageModel::index(int row, int column, const QModelIndex& parent) 
         return QModelIndex();
     }
 
-    return createIndex(row, column, parent.isValid() ? parent.row() : -1);
+    return createIndex(row, column, parent.isValid() ? parent.row() : INVALID_ID);
 }
 
 QVariant ManPageModel::data(const QModelIndex& index, int role) const
@@ -83,7 +91,7 @@ int ManPageModel::rowCount(const QModelIndex& parent) const
 {
     if (!parent.isValid()) {
         return m_sectionList.count();
-    } else if (parent.internalId() < 0) {
+    } else if (parent.internalId() == INVALID_ID) {
         const QString sectionUrl = m_sectionList.at(parent.row()).first;
         return m_manMap.value(sectionUrl).count();
     }
@@ -166,7 +174,7 @@ void ManPageModel::sectionLoaded()
 
 void ManPageModel::showItem(const QModelIndex& idx)
 {
-    if (idx.isValid() && idx.internalId() >= 0) {
+    if (idx.isValid() && idx.internalId() != INVALID_ID) {
         QString sectionUrl = m_sectionList.at(idx.internalId()).first;
         QString page = manPage(sectionUrl, idx.row());
         KSharedPtr<KDevelop::IDocumentation> newDoc(new ManPageDocumentation(page, KUrl(sectionUrl + '/' + page)));
