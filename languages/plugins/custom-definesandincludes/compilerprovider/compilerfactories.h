@@ -21,19 +21,33 @@
  *
  */
 
-#ifndef MSVCCOMPILER_H
-#define MSVCCOMPILER_H
+#ifndef COMPILERFACTORIES_H
+#define COMPILERFACTORIES_H
 
-#include "icompiler.h"
+#include "icompilerfactory.h"
 
-class MsvcCompiler : public ICompiler
+class ClangFactory : public ICompilerFactory
 {
 public:
-    MsvcCompiler(const QString& name, const QString& path, bool editable, const QString& factoryName);
+    virtual CompilerPointer createCompiler( const QString& name, const QString& path, bool editable = true ) const override;
 
-    virtual QHash<QString, QString> defines() const override;
-
-    virtual Path::List includes() const override;
+    virtual QString name() const override;
 };
 
-#endif // MSVCCOMPILER_H
+class GccFactory : public ICompilerFactory
+{
+public:
+    virtual CompilerPointer createCompiler( const QString& name, const QString& path, bool editable = true ) const override;
+
+    virtual QString name() const override;
+};
+
+class MsvcFactory : public ICompilerFactory
+{
+public:
+    virtual CompilerPointer createCompiler( const QString& name, const QString& path, bool editable = true ) const override;
+
+    virtual QString name() const override;
+};
+
+#endif // COMPILERFACTORIES_H

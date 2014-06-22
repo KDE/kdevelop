@@ -21,19 +21,24 @@
  *
  */
 
-#ifndef MSVCCOMPILER_H
-#define MSVCCOMPILER_H
+#ifndef ICOMPILERFACTORY_H
+#define ICOMPILERFACTORY_H
 
 #include "icompiler.h"
 
-class MsvcCompiler : public ICompiler
+/// Interface that represents a factory for creating compilers
+class ICompilerFactory
 {
 public:
-    MsvcCompiler(const QString& name, const QString& path, bool editable, const QString& factoryName);
+    virtual QString name() const = 0;
 
-    virtual QHash<QString, QString> defines() const override;
+    ///@return new compiler
+    ///@see ICompiler
+    virtual CompilerPointer createCompiler( const QString& name, const QString& path, bool editable = true ) const = 0;
 
-    virtual Path::List includes() const override;
+    virtual ~ICompilerFactory() = default;
 };
 
-#endif // MSVCCOMPILER_H
+typedef QSharedPointer<ICompilerFactory> CompilerFactoryPointer;
+
+#endif // ICOMPILERFACTORY_H

@@ -35,10 +35,10 @@
 #define NULL_DEVICE "/dev/null"
 #endif
 
-QHash<QString, QString> GccLikeCompiler::defines( const QString& path ) const
+QHash<QString, QString> GccLikeCompiler::defines() const
 {
-    if ( m_definesIncludes.contains( path ) && !m_definesIncludes[path].definedMacros.isEmpty() ) {
-        return m_definesIncludes[path].definedMacros;
+    if (!m_definesIncludes.definedMacros.isEmpty() ) {
+        return m_definesIncludes.definedMacros;
     }
 
     // #define a 1
@@ -48,9 +48,9 @@ QHash<QString, QString> GccLikeCompiler::defines( const QString& path ) const
     QProcess proc;
     proc.setProcessChannelMode( QProcess::MergedChannels );
 
-    proc.start( path, {"-std=c++11", "-xc++", "-dM", "-E", NULL_DEVICE} );
+    proc.start( path(), {"-std=c++11", "-xc++", "-dM", "-E", NULL_DEVICE} );
     if ( !proc.waitForStarted( 1000 ) || !proc.waitForFinished( 1000 ) ) {
-        definesAndIncludesDebug() <<  "Unable to read standard macro definitions from "<< path;
+        definesAndIncludesDebug() <<  "Unable to read standard macro definitions from "<< path();
         return {};
     }
 
@@ -58,17 +58,17 @@ QHash<QString, QString> GccLikeCompiler::defines( const QString& path ) const
         auto line = proc.readLine();
 
         if ( defineExpression.indexIn( line ) != -1 ) {
-            m_definesIncludes[path].definedMacros[defineExpression.cap( 1 )] = defineExpression.cap( 2 ).trimmed();
+            m_definesIncludes.definedMacros[defineExpression.cap( 1 )] = defineExpression.cap( 2 ).trimmed();
         }
     }
 
-    return m_definesIncludes[path].definedMacros;
+    return m_definesIncludes.definedMacros;
 }
 
-Path::List GccLikeCompiler::includes( const QString& path ) const
+Path::List GccLikeCompiler::includes() const
 {
-    if ( m_definesIncludes.contains( path ) && !m_definesIncludes[path].includePaths.isEmpty() ) {
-        return m_definesIncludes[path].includePaths;
+    if ( !m_definesIncludes.includePaths.isEmpty() ) {
+        return m_definesIncludes.includePaths;
     }
 
     QProcess proc;
@@ -86,9 +86,9 @@ Path::List GccLikeCompiler::includes( const QString& path ) const
     //  /usr/lib/gcc/i486-linux-gnu/4.1.2/include
     //  /usr/include
     // End of search list.
-    proc.start( path, {"-std=c++11", "-xc++", "-E", "-v", NULL_DEVICE} );
+    proc.start( path(), {"-std=c++11", "-xc++", "-E", "-v", NULL_DEVICE} );
     if ( !proc.waitForStarted( 1000 ) || !proc.waitForFinished( 1000 ) ) {
-        definesAndIncludesDebug() <<  "Unable to read standard include paths from " << path;
+        definesAndIncludesDebug() <<  "Unable to read standard include paths from " << path();
         return {};
     }
 
@@ -120,7 +120,7 @@ Path::List GccLikeCompiler::includes( const QString& path ) const
                     mode = Finished;
                 } else {
                     // This is an include path, add it to the list.
-                    m_definesIncludes[path].includePaths << Path( QDir::cleanPath( line.trimmed() ) );
+                    m_definesIncludes.includePaths << Path( QDir::cleanPath( line.trimmed() ) );
                 }
                 break;
             default:
@@ -131,25 +131,9 @@ Path::List GccLikeCompiler::includes( const QString& path ) const
         }
     }
 
-    return m_definesIncludes[path].includePaths;
+    return m_definesIncludes.includePaths;
 }
 
-QString ClangCompiler::name() const
-{
-    return "Clang";
-}
-
-QString GccCompiler::name() const
-{
-    return "GCC";
-}
-
-QString ClangCompiler::defaultPath() const
-{
-    return "clang";
-}
-
-QString GccCompiler::defaultPath() const
-{
-    return "gcc";
-}
+GccLikeCompiler::GccLikeCompiler(const QString& name, const QString& path, bool editable, const QString& factoryName):
+    ICompiler(name, path, factoryName, editable)
+{}

@@ -21,19 +21,20 @@
  *
  */
 
-#ifndef MSVCCOMPILER_H
-#define MSVCCOMPILER_H
+#ifndef TESTCOMPILERPROVIDER_H
+#define TESTCOMPILERPROVIDER_H
 
-#include "icompiler.h"
+#include <QtCore/QObject>
 
-class MsvcCompiler : public ICompiler
+class TestCompilerProvider : public QObject
 {
-public:
-    MsvcCompiler(const QString& name, const QString& path, bool editable, const QString& factoryName);
-
-    virtual QHash<QString, QString> defines() const override;
-
-    virtual Path::List includes() const override;
+    Q_OBJECT
+private slots:
+    void initTestCase();
+    void cleanupTestCase();
+    void testRegisterCompiler();
+    void testSetCompiler();
+    void testCompilerIncludesAndDefines();
 };
 
-#endif // MSVCCOMPILER_H
+#endif

@@ -26,6 +26,8 @@
 
 #include "definesandincludesexport.h"
 
+#include "compilerprovider/icompiler.h"
+
 class KConfig;
 namespace KDevelop
 {
@@ -41,14 +43,15 @@ public:
 
     void writePaths(KConfig* cfg, const QList<KDevelop::ConfigEntry>& paths);
 
-    /// @return name of the selected compiler, empty string if none is selected.
-    QString currentCompiler(KConfig* cfg) const;
+    void writeCurrentCompiler(KConfig* cfg, const CompilerPointer& compiler);
 
-    void writeCompiler(KConfig* cfg, const QString& name);
+    /// @param defaultCompiler the compiler that will be returned, if the @see ICompilerProvider doesn't have a factory to create the needed type of compiler
+    /// @return stored compiler or nullptr if the project is opened for the first time.
+    CompilerPointer currentCompiler(KConfig* cfg, const CompilerPointer& defaultCompiler = {}) const;
 
-    QString pathToCompiler(KConfig* cfg) const;
+    void writeUserDefinedCompilers(const QVector<CompilerPointer>& compilers);
 
-    void writePathToCompiler(KConfig* cfg, const QString& name);
+    QVector<CompilerPointer> userDefinedCompilers() const;
 
     bool needToReparseCurrentProject( KConfig* cfg ) const;
 

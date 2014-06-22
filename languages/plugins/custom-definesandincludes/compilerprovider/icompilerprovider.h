@@ -29,6 +29,7 @@
 #include <QVector>
 
 #include "icompiler.h"
+#include "icompilerfactory.h"
 
 namespace KDevelop
 {
@@ -38,15 +39,24 @@ class IProject;
 class ICompilerProvider
 {
 public:
-    /// Select compiler with the @p name (one of GCC, Clang e.t.c) located at the @p path that provides standard includes/defines for the @p project
-    /// @return true on success, false otherwise, e.g. if the compiler isn't available.
-    virtual bool setCompiler( KDevelop::IProject* project, const QString& name, const QString& path ) = 0;
+    /// Select the @p compiler that provides standard includes/defines for the @p project
+    virtual void setCompiler( KDevelop::IProject* project, const CompilerPointer& compiler ) = 0;
 
     /// @return current compiler for the @P project
     virtual CompilerPointer currentCompiler( KDevelop::IProject* project ) const = 0;
 
     /// @return list of all available compilers
     virtual QVector<CompilerPointer> compilers() const = 0;
+
+    /// @return All available factories
+    virtual QVector<CompilerFactoryPointer> compilerFactories() const = 0;
+
+    /// Adds compiler to the list of available compilers
+    /// @return true on success (if there is no compiler with the same name registered).
+    virtual bool registerCompiler(const CompilerPointer& compiler) = 0;
+
+    /// Removes compiler from the list of available compilers
+    virtual void unregisterCompiler(const CompilerPointer& compiler) = 0;
 
     virtual ~ICompilerProvider() = default;
 };

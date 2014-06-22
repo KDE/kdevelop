@@ -25,8 +25,7 @@
 
 #include "../debugarea.h"
 
-#include "gcclikecompiler.h"
-#include "msvccompiler.h"
+#include "compilerfactories.h"
 
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>
@@ -43,49 +42,42 @@ using KDevelop::Path;
 
 namespace
 {
-class DummyCompiler : public ICompiler
+class NoCompiler : public ICompiler
 {
-    virtual QHash< QString, QString > defines(const QString&) const override
+public:
+    NoCompiler():
+        ICompiler(i18n("None"), QString(), QString(), false)
+    {}
+
+    virtual QHash< QString, QString > defines() const override
     {
         return {};
     }
 
-    virtual Path::List includes(const QString&) const override
-    {
-        return {};
-    }
-
-    virtual QString name() const override
-    {
-        return i18n("None");
-    }
-
-    virtual QString defaultPath() const override
+    virtual Path::List includes() const override
     {
         return {};
     }
 };
 }
 
-CompilerProvider::Compiler CompilerProvider::compilerForItem(ProjectBaseItem* item) const
+CompilerPointer CompilerProvider::compilerForItem(ProjectBaseItem* item) const
 {
     auto project = item ? item->project() : nullptr;
     Q_ASSERT(m_projects.contains(project));
-    auto info = m_projects[project];
-    Q_ASSERT(info.compiler);
-    return info;
+    auto compiler = m_projects[project];
+    Q_ASSERT(compiler);
+    return compiler;
 }
 
 QHash<QString, QString> CompilerProvider::defines( ProjectBaseItem* item ) const
 {
-    auto info = compilerForItem(item);
-    return info.compiler->defines(info.path);
+    return compilerForItem(item)->defines();
 }
 
 Path::List CompilerProvider::includes( ProjectBaseItem* item ) const
 {
-    auto info = compilerForItem(item);
-    return info.compiler->includes(info.path);
+    return compilerForItem(item)->includes();
 }
 
 IDefinesAndIncludesManager::Type CompilerProvider::type() const
@@ -93,12 +85,12 @@ IDefinesAndIncludesManager::Type CompilerProvider::type() const
     return IDefinesAndIncludesManager::CompilerSpecific;
 }
 
-void CompilerProvider::addPoject( IProject* project, Compiler compiler )
+void CompilerProvider::addPoject( IProject* project, const CompilerPointer& compiler )
 {
-    Q_ASSERT(compiler.compiler);
+    Q_ASSERT(compiler);
     //cache includes/defines
-    compiler.compiler->includes(compiler.path);
-    compiler.compiler->defines(compiler.path);
+    compiler->includes();
+    compiler->defines();
     m_projects[project] = compiler;
 }
 
@@ -107,42 +99,40 @@ void CompilerProvider::removePoject( IProject* project )
     m_projects.remove( project );
 }
 
-CompilerProvider::~CompilerProvider()
+CompilerProvider::~CompilerProvider() noexcept
 {
     IDefinesAndIncludesManager::manager()->unregisterProvider( this );
 }
 
-CompilerProvider::Compiler CompilerProvider::selectCompiler( const QString& compilerName, const QString& path ) const
+CompilerPointer CompilerProvider::checkCompilerExists( const CompilerPointer& compiler ) const
 {
     //This may happen for opened for the first time projects
-    if ( compilerName.isEmpty() ) {
+    if ( !compiler ) {
         for ( auto& compiler : m_compilers ) {
-            if ( KStandardDirs::findExe( compiler->defaultPath() ).isEmpty() ) {
+            if ( KStandardDirs::findExe( compiler->path() ).isEmpty() ) {
                 continue;
             }
             definesAndIncludesDebug() << "Selected compiler: " << compiler->name();
-            return {compiler, !path.isEmpty() ? path : compiler->defaultPath()};
+            return compiler;
         }
         kWarning() << "No compiler found. Standard includes/defines won't be provided to the project parser!";
     }else{
         for ( auto it = m_compilers.constBegin(); it != m_compilers.constEnd(); it++ ) {
-            if ( ( *it )->name() == compilerName ) {
-                return {*it, !path.isEmpty() ? path : ( *it )->defaultPath()};
+            if ( (*it)->name() == compiler->name() ) {
+                return *it;
             }
         }
     }
 
-    return {CompilerPointer(new DummyCompiler()), QString()};
+    return CompilerPointer(new NoCompiler());
 }
 
-bool CompilerProvider::setCompiler( IProject* project, const QString& name, const QString& path )
+void CompilerProvider::setCompiler( IProject* project, const CompilerPointer& compiler )
 {
-    auto compiler = selectCompiler( name, path.trimmed() );
-    Q_ASSERT(compiler.compiler);
+    auto c = checkCompilerExists( compiler );
+    Q_ASSERT(c);
 
-    addPoject( project, compiler );
-
-    return true;
+    addPoject( project, c );
 }
 
 void CompilerProvider::projectOpened( KDevelop::IProject* project )
@@ -151,15 +141,14 @@ void CompilerProvider::projectOpened( KDevelop::IProject* project )
     auto settings = static_cast<DefinesAndIncludesManager*>( IDefinesAndIncludesManager::manager() );
     auto projectConfig =  project->projectConfiguration().data();
 
-    auto path = settings->pathToCompiler( projectConfig );
-    auto name = settings->currentCompiler( projectConfig );
-    auto compiler = selectCompiler( name, path.trimmed() );
+    auto compiler = settings->currentCompiler( projectConfig, CompilerPointer(new NoCompiler()) );
+    auto name = compiler ? compiler->name() : QString();
+    compiler = checkCompilerExists( compiler );
 
-    if ( compiler.compiler && ( compiler.compiler->name() != name ) ) {
-        settings->writeCompiler( projectConfig, compiler.compiler->name() );
-        settings->writePathToCompiler( projectConfig, compiler.path );
+    if ( compiler && ( compiler->name() != name ) ) {
+        settings->writeCurrentCompiler(projectConfig, compiler);
     }
-    definesAndIncludesDebug() << " compiler is: " << ( compiler.compiler ? compiler.compiler->name() : nullptr );
+    definesAndIncludesDebug() << " compiler is: " << compiler->name();
 
     addPoject( project, compiler );
 }
@@ -180,12 +169,28 @@ CompilerProvider::CompilerProvider( QObject* parent, const QVariantList& )
 {
     KDEV_USE_EXTENSION_INTERFACE( ICompilerProvider );
 
-    m_compilers.append( CompilerPointer( new GccCompiler() ) );
-    m_compilers.append( CompilerPointer( new ClangCompiler() ) );
+    m_factories.append(CompilerFactoryPointer(new GccFactory()));
+    m_factories.append(CompilerFactoryPointer(new ClangFactory()));
 #ifdef _WIN32
-    m_compilers.append( CompilerPointer( new MsvcCompiler() ) );
+    m_factories.append(CompilerFactoryPointer(new MsvcFactory()));
 #endif
-    m_compilers.append( CompilerPointer( new DummyCompiler() ) );
+
+    if (!KStandardDirs::findExe( "gcc" ).isEmpty()) {
+        registerCompiler( m_factories[0]->createCompiler("GCC", "gcc", false) );
+    }
+    if (!KStandardDirs::findExe( "clang" ).isEmpty()) {
+        registerCompiler( m_factories[1]->createCompiler("Clang", "clang", false) );
+    }
+#ifdef _WIN32
+    if (!KStandardDirs::findExe("cl.exe").isEmpty()) {
+        registerCompiler(m_factories[2]->createCompiler("MSVC", "cl.exe", false));
+    }
+#endif
+
+    registerCompiler(CompilerPointer(new NoCompiler()));
+
+    ///NOTE: this is required to stop endless recursion
+    QMetaObject::invokeMethod(this, "retrieveUserDefinedCompilers", Qt::QueuedConnection);
 
     IDefinesAndIncludesManager::manager()->registerProvider( this );
 
@@ -193,7 +198,7 @@ CompilerProvider::CompilerProvider( QObject* parent, const QVariantList& )
     connect( ICore::self()->projectController(), SIGNAL( projectClosed( KDevelop::IProject* ) ), SLOT( projectClosed( KDevelop::IProject* ) ) );
 
     //Add a provider for files without project
-    addPoject( nullptr, selectCompiler({}, {}));
+    addPoject( nullptr, checkCompilerExists({}));
 }
 
 QVector< CompilerPointer > CompilerProvider::compilers() const
@@ -204,7 +209,53 @@ QVector< CompilerPointer > CompilerProvider::compilers() const
 CompilerPointer CompilerProvider::currentCompiler(IProject* project) const
 {
     Q_ASSERT(m_projects.contains(project));
-    return m_projects[project].compiler;
+    return m_projects[project];
+}
+
+bool CompilerProvider::registerCompiler(const CompilerPointer& compiler)
+{
+    for(auto c: m_compilers){
+        if (c->name() == compiler->name()) {
+            return false;
+        }
+    }
+    m_compilers.append(compiler);
+    return true;
+}
+
+void CompilerProvider::unregisterCompiler(const CompilerPointer& compiler)
+{
+    if (!compiler->editable()) {
+        return;
+    }
+
+    for (auto it = m_projects.constBegin(); it != m_projects.constEnd(); it++) {
+        if (it.value() == compiler) {
+            //Set empty compiler for opened projects that use the compiler that is being unregistered
+            setCompiler(it.key(), CompilerPointer(new NoCompiler()));
+        }
+    }
+
+    for (int i = 0; i < m_compilers.count(); i++) {
+        if (m_compilers[i]->name() == compiler->name()) {
+            m_compilers.remove(i);
+            break;
+        }
+    }
+}
+
+QVector< CompilerFactoryPointer > CompilerProvider::compilerFactories() const
+{
+    return m_factories;
+}
+
+void CompilerProvider::retrieveUserDefinedCompilers()
+{
+    auto settings = static_cast<DefinesAndIncludesManager*>(IDefinesAndIncludesManager::manager());
+    auto compilers = settings->userDefinedCompilers();
+    for (auto c : compilers) {
+        registerCompiler(c);
+    }
 }
 
 #include "compilerprovider.moc"

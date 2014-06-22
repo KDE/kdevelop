@@ -21,19 +21,43 @@
  *
  */
 
-#ifndef MSVCCOMPILER_H
-#define MSVCCOMPILER_H
+#ifndef COMPILERWIDGET_H
+#define COMPILERWIDGET_H
 
-#include "icompiler.h"
+#include <QAbstractItemModel>
+#include <QVector>
+#include <QDialog>
 
-class MsvcCompiler : public ICompiler
+#include "../compilerprovider/icompiler.h"
+
+namespace Ui
 {
+class CompilersWidget;
+}
+
+class CompilersModel;
+class QMenu;
+class QSignalMapper;
+
+class CompilersWidget : public QDialog
+{
+    Q_OBJECT
+
 public:
-    MsvcCompiler(const QString& name, const QString& path, bool editable, const QString& factoryName);
+    CompilersWidget( QWidget* parent = 0 );
+    void setCompilers( const QVector<CompilerPointer>& compilers );
+    QVector<CompilerPointer> compilers() const;
+    void clear();
 
-    virtual QHash<QString, QString> defines() const override;
+private slots:
+    void deleteCompiler();
+    void addCompiler(const QString& factoryName);
 
-    virtual Path::List includes() const override;
+private:
+    Ui::CompilersWidget* m_ui;
+    CompilersModel* m_compilersModel;
+    QMenu *m_addMenu;
+    QSignalMapper *m_mapper;
 };
 
-#endif // MSVCCOMPILER_H
+#endif

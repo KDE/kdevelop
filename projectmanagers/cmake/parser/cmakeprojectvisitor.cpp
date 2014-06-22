@@ -409,7 +409,7 @@ void CMakeProjectVisitor::printBacktrace(const QStack<VisitorState> &backtrace)
 
 CMakeProjectVisitor::VisitorState CMakeProjectVisitor::stackTop() const
 {
-    VisitorState p;
+    VisitorState p = {};
     QString filename=m_backtrace.front().code->at(m_backtrace.front().line).filePath;
     QStack<VisitorState>::const_iterator it=m_backtrace.constBegin();
 

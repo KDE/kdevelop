@@ -1,7 +1,9 @@
 set( compilerprovider_SRCS
         compilerprovider.cpp
+        icompiler.cpp
         gcclikecompiler.cpp
         msvccompiler.cpp
+        compilerfactories.cpp
         ../debugarea.cpp
     )
 
@@ -29,3 +31,5 @@ if(BUILD_kdev_msvcdefinehelper)
     install(TARGETS kdevmsvcdefinehelper RUNTIME DESTINATION bin
                                          LIBRARY DESTINATION lib)
 endif(BUILD_kdev_msvcdefinehelper)
+
+add_subdirectory(tests)

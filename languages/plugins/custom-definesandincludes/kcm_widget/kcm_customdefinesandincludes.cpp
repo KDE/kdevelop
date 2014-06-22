@@ -47,16 +47,6 @@ ICompilerProvider* compilerProvider()
 
     return compilerProvider->extension<ICompilerProvider>();
 }
-
-QStringList compilerNames(const QVector<CompilerPointer>& compilers)
-{
-    QStringList names;
-    names.reserve(compilers.size());
-    for (const auto& compiler : compilers) {
-        names << compiler->name();
-    }
-    return names;
-}
 }
 
 K_PLUGIN_FACTORY(DefinesAndIncludesFactory, registerPlugin<DefinesAndIncludes>(); )
@@ -76,15 +66,6 @@ DefinesAndIncludes::DefinesAndIncludes( QWidget* parent, const QVariantList& arg
 
 void DefinesAndIncludes::dataChanged()
 {
-    if (auto cp = compilerProvider()) {
-        auto name = configWidget->currentCompilerName();
-        for (const auto& c : cp->compilers()) {
-            if (c->name() == name) {
-                configWidget->setCompilerPath(c->defaultPath());
-            }
-        }
-    }
-
     emit changed(true);
 }
 
@@ -100,9 +81,8 @@ void DefinesAndIncludes::loadFrom( KConfig* cfg )
     configWidget->setPaths( settings->readPaths( cfg ) );
 
     if (auto cp = compilerProvider()) {
-        configWidget->setCompilers(compilerNames(cp->compilers()));
+        configWidget->setCompilers(cp->compilers());
         configWidget->setCurrentCompiler(cp->currentCompiler(project())->name());
-        configWidget->setCompilerPath(!settings->pathToCompiler(cfg).isEmpty() ? settings->pathToCompiler(cfg) : cp->currentCompiler(project())->defaultPath());
     }
 }
 
@@ -113,9 +93,11 @@ void DefinesAndIncludes::saveTo(KConfig* cfg, KDevelop::IProject*)
     settings->writePaths( cfg, configWidget->paths() );
 
     if (auto cp = compilerProvider()) {
-        settings->writeCompiler(cfg ,configWidget->currentCompilerName());
+        settings->writeCurrentCompiler(cfg ,configWidget->currentCompiler());
 
-        cp->setCompiler(project(), settings->currentCompiler(cfg), settings->pathToCompiler(cfg));
+        cp->setCompiler(project(), settings->currentCompiler(cfg));
+
+        settings->writeUserDefinedCompilers(configWidget->compilers());
     }
 
     if ( settings->needToReparseCurrentProject( cfg ) ) {

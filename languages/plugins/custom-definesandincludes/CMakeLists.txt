@@ -11,7 +11,7 @@ set( kdevdefinesandincludesmanager_SRCS
         debugarea.cpp
     )
 
-add_library(kdev4includesdefinessettings settingsmanager.cpp)
+add_library(kdev4includesdefinessettings settingsmanager.cpp compilerprovider/icompiler.cpp)
 target_link_libraries( kdev4includesdefinessettings LINK_PRIVATE
         ${KDEVPLATFORM_PROJECT_LIBRARIES}
         ${KDEVPLATFORM_UTIL_LIBRARIES} )

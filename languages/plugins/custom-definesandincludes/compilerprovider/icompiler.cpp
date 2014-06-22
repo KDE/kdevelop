@@ -21,19 +21,47 @@
  *
  */
 
-#ifndef MSVCCOMPILER_H
-#define MSVCCOMPILER_H
-
 #include "icompiler.h"
 
-class MsvcCompiler : public ICompiler
+ICompiler::ICompiler(const QString& name, const QString& path, const QString& factoryName, bool editable):
+    m_editable(editable),
+    m_name(name),
+    m_path(path),
+    m_factoryName(factoryName)
+{}
+
+void ICompiler::setPath(const QString& path)
 {
-public:
-    MsvcCompiler(const QString& name, const QString& path, bool editable, const QString& factoryName);
+    if (editable()) {
+        m_definesIncludes.definedMacros.clear();
+        m_definesIncludes.includePaths.clear();
+        m_path = path;
+    }
+}
 
-    virtual QHash<QString, QString> defines() const override;
+QString ICompiler::path() const
+{
+    return m_path;
+}
 
-    virtual Path::List includes() const override;
-};
+void ICompiler::setName(const QString& name)
+{
+    if (editable()) {
+        m_name = name;
+    }
+}
 
-#endif // MSVCCOMPILER_H
+QString ICompiler::name() const
+{
+    return m_name;
+}
+
+bool ICompiler::editable() const
+{
+    return m_editable;
+}
+
+QString ICompiler::factoryName() const
+{
+    return m_factoryName;
+}
