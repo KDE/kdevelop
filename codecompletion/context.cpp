@@ -59,11 +59,11 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& ab
 
     QList<CompletionTreeItemPointer> items;
 
-    if (abort || m_text.isEmpty()) {
+    if (abort) {
         return items;
     }
 
-    QChar lastChar = m_text.at(m_text.size() - 1);
+    QChar lastChar = m_text.size() > 0 ? m_text.at(m_text.size() - 1) : QLatin1Char('\0');
 
     if (lastChar == QLatin1Char('.') || lastChar == QLatin1Char('[')) {
         // Offer completions for object members and array subscripts
