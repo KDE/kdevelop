@@ -23,6 +23,9 @@
 #include <language/codegen/coderepresentation.h>
 #include <language/codecompletion/codecompletiontesthelper.h>
 #include <language/codecompletion/codecompletioncontext.h>
+#include <language/backgroundparser/backgroundparser.h>
+
+#include <interfaces/ilanguagecontroller.h>
 
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
@@ -77,7 +80,12 @@ CompletionParameters prepareCompletion(const QString& initCode, const QString& i
                                                     qml ? "qml" : "js"));
 
     completion_data.file->parse();
-    if (!completion_data.file->waitForParsed(2000)) {
+    // wait for this fail and all dependencies, like modules and such
+    while (!ICore::self()->languageController()->backgroundParser()->isIdle()) {
+        QTest::qWait(500);
+    }
+
+    if (!completion_data.file->topContext()) {
       qWarning() << "file contents are: " << completion_data.file->fileContents();
       Q_ASSERT_X(false, Q_FUNC_INFO, "Failed to parse initCode.");
     }
