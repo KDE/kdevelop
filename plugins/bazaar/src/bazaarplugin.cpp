@@ -22,7 +22,7 @@
 
 #include <QtCore/QDir>
 #include <QtCore/QDateTime>
-#include <QtGui/QMenu>
+#include <QMenu>
 
 #include <KPluginFactory>
 #include <KLocale>
@@ -44,16 +44,9 @@
 using namespace KDevelop;
 
 K_PLUGIN_FACTORY(KDevBazaarFactory, registerPlugin<BazaarPlugin>();)
-K_EXPORT_PLUGIN(KDevBazaarFactory(
-                    KAboutData("kdevbazaar",
-                               "kdevbazaar",
-                               ki18n("Bazaar"),
-                               "1.0",
-                               ki18n("A plugin to support Bazaar version control system"),
-                               KAboutData::KAboutData::License_GPL)))
 
 BazaarPlugin::BazaarPlugin(QObject* parent, const QVariantList& args) :
-    IPlugin(KDevBazaarFactory::componentData(), parent),
+    IPlugin("kdevbazaar", parent),
     m_vcsPluginHelper(new KDevelop::VcsPluginHelper(this, this)), m_hasError(false)
 {
     Q_UNUSED(args); // What is this?
@@ -357,3 +350,5 @@ QString BazaarPlugin::errorDescription() const
 {
     return m_errorDescription;
 }
+
+#include "bazaarplugin.moc"

@@ -1,4 +1,3 @@
-
 set(kdevbazaar_PART_SRCS
     diffjob.cpp
     bzrannotatejob.cpp
@@ -7,10 +6,9 @@ set(kdevbazaar_PART_SRCS
     copyjob.cpp
 )
 
-kde4_add_plugin(kdevbazaar ${kdevbazaar_PART_SRCS})
+add_library(kdevbazaar MODULE ${kdevbazaar_PART_SRCS})
 
 target_link_libraries(kdevbazaar
-    ${KDE4_KDEUI_LIBS}
     ${KDEVPLATFORM_VCS_LIBRARIES}
 )
 
