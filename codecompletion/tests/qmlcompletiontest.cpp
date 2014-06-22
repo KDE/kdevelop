@@ -18,93 +18,71 @@
 
 #include "qmlcompletiontest.h"
 
-#include <language/backgroundparser/backgroundparser.h>
-#include <language/codecompletion/codecompletiontesthelper.h>
 #include <language/duchain/declaration.h>
-#include <language/codegen/coderepresentation.h>
 #include <language/duchain/duchain.h>
-#include <interfaces/ilanguagecontroller.h>
+#include <language/codegen/coderepresentation.h>
+#include <language/codecompletion/codecompletiontesthelper.h>
+#include <language/codecompletion/codecompletioncontext.h>
 
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
+#include <tests/testfile.h>
 
 #include <QtTest/QTest>
 
 #include "codecompletion/context.h"
+#include "codecompletion/model.h"
 
 using namespace KDevelop;
+using namespace QmlJS;
 
 QTEST_MAIN(QmlJS::QmlCompletionTest)
 
-static int testId = 0;
-static QString basepath = "/tmp/__kdevqmljscompletiontest.dir/";
-static QFSFileEngine fileEngine;
+using CompletionContextPtr = QSharedPointer<QmlJS::CodeCompletionContext>;
 
-namespace QmlJS {
+namespace {
 
-QString filenameForTestId(const int id, bool qml) {
-    return basepath + "test" + QString::number(id) + (qml ? ".qml" : ".js");
-}
-
-QString nextFilename(bool qml) {
-    testId += 1;
-    return filenameForTestId(testId, qml);
-}
-
-QmlCompletionTest::QmlCompletionTest(QObject* parent)
-: QObject(parent)
+struct CompletionParameters
 {
-    initShell();
+    QSharedPointer<TestFile> file;
+    DUContextPointer contextAtCursor;
+    QString snip;
+    QString remaining;
+    CursorInRevision cursorAt;
 
-    QDir::root().mkpath(basepath);
-}
+    CompletionContextPtr completionContext;
+    QList<CompletionTreeItemPointer> completionItems;
+};
 
-void QmlCompletionTest::initShell()
+void runCompletion(CompletionParameters* parameters)
 {
-    AutoTestShell::init();
-    TestCore* core = new TestCore();
-    core->initialize(KDevelop::Core::NoUi);
-    DUChain::self()->disablePersistentStorage();
-    KDevelop::CodeRepresentation::setDiskChangesForbidden(true);
+    parameters->completionContext = CompletionContextPtr(new QmlJS::CodeCompletionContext(parameters->contextAtCursor,
+                                                               parameters->snip,
+                                                               parameters->cursorAt));
+    bool abort = false;
+
+    parameters->completionItems = parameters->completionContext->completionItems(abort, true);
 }
 
-const QList<CompletionTreeItem*> QmlCompletionTest::invokeCompletionOn(const QString& initCode, const QString& invokeCode, bool qml)
-{
-    CompletionParameters data = prepareCompletion(initCode, invokeCode, qml);
-    return runCompletion(data);
-}
-
-const CompletionParameters QmlCompletionTest::prepareCompletion(const QString& initCode, const QString& invokeCode, bool qml)
+CompletionParameters prepareCompletion(const QString& initCode, const QString& invokeCode, bool qml)
 {
     CompletionParameters completion_data;
-
-    // Create a file containing the given code, with "%INVOKE" removed
-    QString filename = nextFilename(qml);
-    QFile fileptr(filename);
-    fileptr.open(QIODevice::WriteOnly);
-    fileptr.write(initCode.toAscii().replace("%INVOKE", ""));
-    fileptr.close();
-
-    DUChain::self()->updateContextForUrl(IndexedString(filename), KDevelop::TopDUContext::ForceUpdate);
-    ICore::self()->languageController()->backgroundParser()->parseDocuments();
-    ReferencedTopDUContext topContext = DUChain::self()->waitForUpdate(IndexedString(filename),
-                                                                       KDevelop::TopDUContext::AllDeclarationsAndContexts);
-
-    while (!ICore::self()->languageController()->backgroundParser()->isIdle()) {
-        QTest::qWait(500);
-    }
-
-    Q_ASSERT(topContext);
-
-    // Now that it has been parsed, the file can be deleted (this avoids problems
-    // with files automatically including each other)
-    fileptr.remove();
 
     // Simulate that the user has entered invokeCode where %INVOKE is, put
     // the cursor where %CURRSOR is, and then asked for completions
     Q_ASSERT(initCode.indexOf("%INVOKE") != -1);
-    QString copy = initCode;
-    QString allCode = copy.replace("%INVOKE", invokeCode);
+
+    // Create a file containing the given code, with "%INVOKE" removed
+    completion_data.file = QSharedPointer<TestFile>(new TestFile(QString(initCode).replace("%INVOKE", ""),
+                                                    qml ? "qml" : "js"));
+
+    completion_data.file->parse();
+    if (!completion_data.file->waitForParsed(2000)) {
+      qWarning() << "file contents are: " << completion_data.file->fileContents();
+      Q_ASSERT_X(false, Q_FUNC_INFO, "Failed to parse initCode.");
+    }
+
+    QString allCode = QString(initCode).replace("%INVOKE", invokeCode);
 
     QStringList lines = allCode.split('\n');
     completion_data.cursorAt = CursorInRevision::invalid();
@@ -122,32 +100,19 @@ const CompletionParameters QmlCompletionTest::prepareCompletion(const QString& i
     completion_data.remaining = allCode.mid(allCode.indexOf("%CURSOR") + 7);
 
     DUChainReadLocker lock;
-    completion_data.contextAtCursor = DUContextPointer(topContext->findContextAt(completion_data.cursorAt, true));
+    completion_data.contextAtCursor = DUContextPointer(completion_data.file->topContext()->findContextAt(completion_data.cursorAt, true));
     Q_ASSERT(completion_data.contextAtCursor);
+
+    runCompletion(&completion_data);
 
     return completion_data;
 }
 
-const QList<CompletionTreeItem*> QmlCompletionTest::runCompletion(const CompletionParameters parameters)
-{
-    CodeCompletionContext* context = new CodeCompletionContext(parameters.contextAtCursor, parameters.snip, parameters.cursorAt);
-    QList<CompletionTreeItem*> items;
-    bool abort = false;
-
-    foreach (CompletionTreeItemPointer ptr, context->completionItems(abort, true)) {
-        items << ptr.data();
-        // those are leaked, but it's only a few kb while the tests are running. who cares.
-        m_ptrs << ptr;
-    }
-
-    return items;
-}
-
-bool QmlCompletionTest::containsItemForDeclarationNamed(const QList<CompletionTreeItem*> items, QString itemName)
+bool containsItemForDeclarationNamed(const CompletionParameters& params, const QString& itemName)
 {
     DUChainReadLocker lock;
 
-    foreach (const CompletionTreeItem* ptr, items) {
+    foreach (const CompletionTreeItemPointer& ptr, params.completionItems) {
         if (ptr->declaration()) {
             if (ptr->declaration()->identifier().toString() == itemName) {
                 return true;
@@ -155,15 +120,33 @@ bool QmlCompletionTest::containsItemForDeclarationNamed(const QList<CompletionTr
         }
     }
 
+    qWarning() << "could not find declaration with name" << itemName;
     return false;
 }
 
-bool QmlCompletionTest::declarationInCompletionList(const QString& initCode, const QString& invokeCode, QString itemName, bool qml)
+bool declarationInCompletionList(const QString& initCode, const QString& invokeCode, QString itemName, bool qml)
 {
     return containsItemForDeclarationNamed(
-        invokeCompletionOn(initCode, invokeCode, qml),
+        prepareCompletion(initCode, invokeCode, qml),
         itemName
     );
+}
+
+}
+
+namespace QmlJS {
+
+void QmlCompletionTest::initTestCase()
+{
+    AutoTestShell::init();
+    TestCore::initialize(Core::NoUi);
+    DUChain::self()->disablePersistentStorage();
+    CodeRepresentation::setDiskChangesForbidden(true);
+}
+
+void QmlCompletionTest::cleanupTestCase()
+{
+  TestCore::shutdown();
 }
 
 void QmlCompletionTest::testContainsDeclaration()

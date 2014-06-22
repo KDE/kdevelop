@@ -20,44 +20,19 @@
 
 #include <QtCore/QObject>
 
-#include <language/editor/cursorinrevision.h>
-#include <language/codecompletion/codecompletioncontext.h>
-
-#include "codecompletion/model.h"
-
-using namespace KDevelop;
-
 namespace QmlJS {
-
-struct CompletionParameters {
-    DUContextPointer contextAtCursor;
-    QString snip;
-    QString remaining;
-    CursorInRevision cursorAt;
-};
 
 class QmlCompletionTest : public QObject
 {
     Q_OBJECT
-    public:
-        explicit QmlCompletionTest(QObject* parent = 0);
-        void initShell();
+private slots:
+    void initTestCase();
+    void cleanupTestCase();
 
-        const QList<CompletionTreeItem*> invokeCompletionOn(const QString& initCode, const QString& invokeCode, bool qml);
-        const CompletionParameters prepareCompletion(const QString& initCode, const QString& invokeCode, bool qml);
-        const QList<CompletionTreeItem*> runCompletion(const CompletionParameters data);
-
-        bool containsItemForDeclarationNamed(const QList< CompletionTreeItem* > items, QString itemName);
-        bool declarationInCompletionList(const QString& initCode, const QString& invokeCode, QString itemName, bool qml);
-
-    private slots:
-        void testContainsDeclaration();
-        void testContainsDeclaration_data();
-        void testDoesNotContainDeclaration();
-        void testDoesNotContainDeclaration_data();
-
-    private:
-        QList<CompletionTreeItemPointer> m_ptrs;
+    void testContainsDeclaration();
+    void testContainsDeclaration_data();
+    void testDoesNotContainDeclaration();
+    void testDoesNotContainDeclaration_data();
 };
 
 }
