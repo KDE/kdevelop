@@ -1,5 +1,6 @@
 /*
  * Copyright 2014  David Stevens <dgedstevens@gmail.com>
+ * Copyright 2014  Kevin Funk <kfunk@kde.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -64,24 +65,27 @@ ParseSessionData::Ptr sessionData(const TestFile& file, ClangIndex* index)
     return ParseSessionData::Ptr(new ParseSessionData(file.url(), file.fileContents().toUtf8(), index));
 }
 
-struct TestInfo {
+struct CompletionItems {
     SimpleCursor position;
     QStringList completions;
 };
 
 }
+Q_DECLARE_TYPEINFO(CompletionItems, Q_MOVABLE_TYPE);
+using CompletionItemsList = QList<CompletionItems>;
+Q_DECLARE_METATYPE(CompletionItemsList);
 
-using TestList = QList<TestInfo>;
-Q_DECLARE_TYPEINFO(TestInfo, Q_MOVABLE_TYPE);
-
-void runOverrideTest(QString fileContents, QString extension, TestList expected)
+void TestCodeCompletion::testVirtualOverride()
 {
-    TestFile file(fileContents, extension);
+    QFETCH(QString, code);
+    QFETCH(CompletionItemsList, expectedItems);
+
+    TestFile file(code, "cpp");
 
     ClangIndex index;
     ParseSession session(sessionData(file, &index));
 
-    foreach(TestInfo test, expected) {
+    foreach(CompletionItems test, expectedItems) {
         CompletionHelper overrides(session.unit(), test.position, file.url().c_str());
 
         foreach(FuncOverrideInfo info, overrides.overrides()) {
@@ -96,14 +100,61 @@ void runOverrideTest(QString fileContents, QString extension, TestList expected)
     }
 }
 
-void runImplementsTest(QString fileContents, QString extension, TestList expected)
+void TestCodeCompletion::testVirtualOverride_data()
 {
-    TestFile file(fileContents, extension);
+    QTest::addColumn<QString>("code");
+    QTest::addColumn<CompletionItemsList>("expectedItems");
+
+    QTest::newRow("basic")
+        <<  "class Foo { virtual void foo(); virtual char foo(char c, int i, double d); };\n"
+            "class Bar : Foo \n{\n}"
+        << CompletionItemsList{{SimpleCursor(3, 1), {QString("void foo()"), QString("char foo(char c, int i, double d)")}}};
+
+    QTest::newRow("template")
+        << "template<class T1, class T2> class Foo { virtual T2 foo(T1 a, T2 b, int i); } ;\n"
+           "class Bar : Foo<char, double> \n{\n}"
+        << CompletionItemsList{{SimpleCursor(3, 1), {"double foo(char a, double b, int i)"}}};
+
+    QTest::newRow("nested-template")
+        << "template<class T1, class T2> class Foo { virtual T2 foo(T1 a, T2 b, int i); } ;\n"
+           "template<class T1, class T2> class Baz { };\n"
+           "class Bar : Foo<char, Baz<char, double>> \n{\n}"
+        << CompletionItemsList{{SimpleCursor(4, 1), {"Baz<char, double> foo(char a, Baz<char, double> b, int i)"}}};
+
+    QTest::newRow("multi")
+        << "class Foo { virtual int foo(int i); };\n"
+           "class Baz { virtual char baz(char c); };\n"
+           "class Bar : Foo, Baz \n{\n}"
+        << CompletionItemsList{{SimpleCursor(4, 1), {"int foo(int i)", "char baz(char c)"}}};
+
+    QTest::newRow("deep")
+        << "class Foo { virtual int foo(int i); };\n"
+           "class Baz : Foo { };\n"
+           "class Bar : Baz \n{\n}"
+        << CompletionItemsList{{SimpleCursor(4, 1), {"int foo(int i)"}}};
+
+    QTest::newRow("pure")
+        << "class Foo { virtual void foo() = 0; foo() {} };\n"
+           "class Bar : Foo \n{\n}"
+        << CompletionItemsList{{SimpleCursor(3, 1), {"void foo() = 0"}}};
+
+    QTest::newRow("const")
+        << "class Foo { virtual void foo(const int b) const; }\n;"
+           "class Bar : Foo \n{\n}"
+        << CompletionItemsList{{SimpleCursor(3, 1), {"void foo(const int b) const"}}};
+}
+
+void TestCodeCompletion::testImplement()
+{
+    QFETCH(QString, code);
+    QFETCH(CompletionItemsList, expectedItems);
+
+    TestFile file(code, "cpp");
 
     ClangIndex index;
     ParseSession session(sessionData(file, &index));
 
-    foreach(TestInfo test, expected) {
+    foreach(CompletionItems test, expectedItems) {
         CompletionHelper overrides(session.unit(), test.position, file.url().c_str());
 
         foreach(FuncImplementInfo info, overrides.implements()) {
@@ -118,201 +169,101 @@ void runImplementsTest(QString fileContents, QString extension, TestList expecte
     }
 }
 
-void TestCodeCompletion::testVirtualOverrideNonTemplate()
+void TestCodeCompletion::testImplement_data()
 {
-    QString file("class Foo { virtual void foo(); virtual char foo(char c, int i, double d); };\n"
-                 "class Bar : Foo \n{\n}");
-    auto expected = {QString("void foo()"), QString("char foo(char c, int i, double d)")};
-    TestInfo info{SimpleCursor(3, 1), QStringList(expected)};
-    runOverrideTest(file, "h", QList<TestInfo>({info}));
-}
+    QTest::addColumn<QString>("code");
+    QTest::addColumn<CompletionItemsList>("expectedItems");
 
-void TestCodeCompletion::testVirtualOverrideTemplate()
-{
-    QString file("template<class T1, class T2> class Foo { virtual T2 foo(T1 a, T2 b, int i); } ;\n"
-                 "class Bar : Foo<char, double> \n{\n}");
-    auto expected = { QString("double foo(char a, double b, int i)") };
-    runOverrideTest(file, "h", QList<TestInfo>({TestInfo{SimpleCursor(3, 1), QStringList(expected)}}));
-}
+    QTest::newRow("basic")
+        << "int foo(char c, int i); \n"
+        << CompletionItemsList{{SimpleCursor(1, 0), {"int foo(char c, int i)"}}};
 
-void TestCodeCompletion::testVirtualOverrideNestedTemplate()
-{
-    QString file("template<class T1, class T2> class Foo { virtual T2 foo(T1 a, T2 b, int i); } ;\n"
-                 "template<class T1, class T2> class Baz { };\n"
-                 "class Bar : Foo<char, Baz<char, double>> \n{\n}");
-    auto expected = { QString("Baz<char, double> foo(char a, Baz<char, double> b, int i)") };
-    runOverrideTest(file, "h", QList<TestInfo>({TestInfo{SimpleCursor(4, 1), QStringList(expected)}}));
-}
+    QTest::newRow("class")
+        << "class Foo { \n"
+           "int bar(char c, int i); \n\n"
+           "}; \n"
+        << CompletionItemsList{
+                {SimpleCursor(2, 0), {}},
+                {SimpleCursor(4, 0), {"int Foo::bar(char c, int i)"}}
+        };
 
-void TestCodeCompletion::testVirtualOverrideMulti()
-{
-    QString file("class Foo { virtual int foo(int i); };\n"
-                 "class Baz { virtual char baz(char c); };\n"
-                 "class Bar : Foo, Baz \n{\n}");
-    auto expected = { QString("int foo(int i)"), QString("char baz(char c)") };
-    runOverrideTest(file, "h", QList<TestInfo>({TestInfo{SimpleCursor(4, 1), QStringList(expected)}}));
-}
+    QTest::newRow("namespace")
+        << "namespace Foo { \n"
+           "int bar(char c, int i); \n\n"
+           "}; \n"
+        << CompletionItemsList{
+                {SimpleCursor(2, 0), {"int bar(char c, int i)"}},
+                {SimpleCursor(4, 0), {"int Foo::bar(char c, int i)"}}
+        };
 
-void TestCodeCompletion::testVirtualOverrideDeep()
-{
-    QString file("class Foo { virtual int foo(int i); };\n"
-                 "class Baz : Foo { };\n"
-                 "class Bar : Baz \n{\n}");
-    auto expected = { QString("int foo(int i)") };
-    runOverrideTest(file, "h", QList<TestInfo>({TestInfo{SimpleCursor(4, 1), QStringList(expected)}}));
-}
+    QTest::newRow("two-namespace")
+        << "namespace Foo { int bar(char c, int i); };\n"
+           "namespace Foo {\n"
+           "};\n"
+        << CompletionItemsList{{SimpleCursor(2, 0), {"int bar(char c, int i)"}}};
 
-void TestCodeCompletion::testVirtualOverridePure()
-{
-    QString file("class Foo { virtual void foo() = 0; foo() {} };\n"
-                 "class Bar : Foo \n{\n}");
-    auto expected = { QString("void foo() = 0") };
-    runOverrideTest(file, "h", QList<TestInfo>({TestInfo{SimpleCursor(3, 1), QStringList(expected)}}));
-}
+    QTest::newRow("destructor")
+        << "class Foo { ~Foo(); }\n"
+        << CompletionItemsList{{SimpleCursor(1, 0), {"Foo::~Foo()"}}};
 
-void TestCodeCompletion::testVirtualOverrideConst()
-{
-    QString file("class Foo { virtual void foo(const int b) const; }\n;"
-                 "class Bar : Foo \n{\n}");
-    auto expected = { QString("void foo(const int b) const") };
-    runOverrideTest(file, "h", QList<TestInfo>({TestInfo{SimpleCursor(3, 1), QStringList(expected)}}));
-}
-
-void TestCodeCompletion::testImplementBasic()
-{
-    QString file("int foo(char c, int i); \n"
-                 "\n");
-    auto expected = { QString("int foo(char c, int i)") };
-    runImplementsTest(file, "cpp", QList<TestInfo>({TestInfo{SimpleCursor(1, 0), QStringList(expected)}}));
-}
-
-void TestCodeCompletion::testImplementClass()
-{
-    QString file("class Foo { \n"
-                 "int bar(char c, int i); \n\n"
-                 "}; \n");
-    auto expected = { QString("int Foo::bar(char c, int i)") };
-    runImplementsTest(file, "cpp", QList<TestInfo>({TestInfo{SimpleCursor(2, 0), QStringList()},
-                                                    TestInfo{SimpleCursor(4, 0), QStringList(expected)}}));
-}
-
-void TestCodeCompletion::testImplementNamespace()
-{
-    QString file("namespace Foo { \n"
-                 "int bar(char c, int i); \n\n"
-                 "}; \n");
-    auto expected1 = { QString("int bar(char c, int i)") };
-    auto expected2 = { QString("int Foo::bar(char c, int i)") };
-    runImplementsTest(file, "cpp", QList<TestInfo>({TestInfo{SimpleCursor(2, 0), QStringList(expected1)},
-                                                    TestInfo{SimpleCursor(4, 0), QStringList(expected2)}}));
-}
-
-void TestCodeCompletion::testImplementTwoNamespace()
-{
-    QString file("namespace Foo { \n"
-                 "int bar(char c, int i); \n"
-                 "}; \n"
-                 "namespace Foo { \n\n"
-                 "}; \n\n");
-    auto expected = { QString("int bar(char c, int i)") };
-    runImplementsTest(file, "cpp", QList<TestInfo>({TestInfo{SimpleCursor(4, 0), QStringList(expected)}}));
-}
-
-void TestCodeCompletion::testImplementDestructor()
-{
-    QString file("class Foo { \n"
-                 "~Foo(); \n"
-                 "}; \n");
-    auto expected = { QString("Foo::~Foo()") };
-    runImplementsTest(file, "cpp", QList<TestInfo>({TestInfo{SimpleCursor(3, 1), QStringList(expected)}}));
-}
-
-void TestCodeCompletion::testImplementConstructor()
-{
-    QString file("class Foo { \n"
+    QTest::newRow("constructor")
+        << "class Foo { \n"
                  "Foo(int i); \n"
-                 "}; \n");
-    auto expected = { QString("Foo::Foo(int i)") };
-    runImplementsTest(file, "cpp", QList<TestInfo>({TestInfo{ SimpleCursor(3, 1), QStringList(expected)}}));
-}
-
-void TestCodeCompletion::testImplementTemplate()
-{
-    QString file("template<typename T> class Foo { \n"
-                 "T bar(T t); \n"
-                 "}; \n");
-    auto expected = { QString("template<typename T> T Foo<T>::bar(T t)") };
-    runImplementsTest(file, "cpp", QList<TestInfo>({TestInfo{ SimpleCursor(3, 1), QStringList(expected)}}));
-}
-
-void TestCodeCompletion::testImplementSpecializedTemplate()
-{
-    QString file("template<typename T> class Foo { \n"
-                 "T bar(T t); \n"
                  "}; \n"
-                 "template<typename T> T Foo<T>::bar(T t){} \n"
-                 "template<> class Foo<int> { \n"
-                 "int bar(int t); \n"
-                 "}\n");
-    auto expected = { QString("int Foo<int>::bar(int t)") };
-    runImplementsTest(file, "cpp", QList<TestInfo>({TestInfo{ SimpleCursor(6, 1), QStringList(expected)}}));
-}
+        << CompletionItemsList{{SimpleCursor(3, 1), {"Foo::Foo(int i)"}}};
 
-void TestCodeCompletion::testImplementNestedClass()
-{
-    QString file("class Foo { \n"
-                 "class Bar { \n"
-                 "int baz(char c, int i); \n\n"
-                 "}; \n\n"
-                 "}; \n\n");
-    auto expected = { QString("int Foo::Bar::baz(char c, int i)") };
-    runImplementsTest(file, "cpp", QList<TestInfo>({TestInfo{SimpleCursor(3, 1), QStringList()},
-                                                    TestInfo{SimpleCursor(5, 1), QStringList()},
-                                                    TestInfo{SimpleCursor(7, 1), QStringList(expected)}}));
-}
+    QTest::newRow("template")
+        << "template<typename T> class Foo { T bar(T t); };\n"
+        << CompletionItemsList{{SimpleCursor(1, 1), {"template<typename T> T Foo<T>::bar(T t)"}}};
 
-void TestCodeCompletion::testImplementNestedNamespace()
-{
-    QString file("namespace Foo { \n"
-                 "namespace Bar { \n"
-                 "int baz(char c, int i); \n\n"
-                 "}; \n\n"
-                 "}; \n\n");
-    auto expected1 = { QString("int baz(char c, int i)") };
-    auto expected2 = { QString("int Bar::baz(char c, int i)") };
-    auto expected3 = { QString("int Foo::Bar::baz(char c, int i)") };
-    runImplementsTest(file, "cpp", QList<TestInfo>({TestInfo{SimpleCursor(3, 1), QStringList(expected1)},
-                                                    TestInfo{SimpleCursor(5, 1), QStringList(expected2)},
-                                                    TestInfo{SimpleCursor(7, 1), QStringList(expected3)}}));
-}
+    QTest::newRow("specialized-template")
+        << "template<typename T> class Foo { \n"
+           "T bar(T t); \n"
+           "}; \n"
+           "template<typename T> T Foo<T>::bar(T t){} \n"
+           "template<> class Foo<int> { \n"
+           "int bar(int t); \n"
+           "}\n"
+        << CompletionItemsList{{SimpleCursor(6, 1), {"int Foo<int>::bar(int t)"}}};
 
-void TestCodeCompletion::testImplementPartialTemplate()
-{
-    QString file("template<typename T> class Foo { \n"
-                 "template<typename U> class Bar; \n"
-                 "template<typename U> class Bar<U*> { \n"
-                 "void baz(T t, U u); \n"
-                 "}; \n"
-                 "}; \n");
-    auto expected = { QString("template<typename T> template<typename U> void Foo<T>::Bar<U *>::baz(T t, U u)") };
-    runImplementsTest(file, "cpp", QList<TestInfo>({TestInfo{ SimpleCursor(6, 1), QStringList(expected)}}));
-}
+    QTest::newRow("nested-class")
+        << "class Foo { \n"
+           "class Bar { \n"
+           "int baz(char c, int i); \n\n"
+           "}; \n\n"
+           "}; \n\n"
+        << CompletionItemsList{
+            {SimpleCursor(3, 1), {}},
+            {SimpleCursor(5, 1), {}},
+            {SimpleCursor(7, 1), {"int Foo::Bar::baz(char c, int i)"}}
+        };
 
-void TestCodeCompletion::testImplementVariadic()
-{
-    QString file("int foo(...); \n"
-                 "int bar(int i, ...); \n");
-    auto expected = { QString("int foo(...)"), QString("int bar(int i, ...)") };
-    runImplementsTest(file, "cpp", QList<TestInfo>({TestInfo{ SimpleCursor(2, 1), QStringList(expected)}}));
-}
+    QTest::newRow("nested-namespace")
+        << "namespace Foo { \n"
+           "namespace Bar { \n"
+           "int baz(char c, int i); \n\n"
+           "}; \n\n"
+           "}; \n\n"
+        << CompletionItemsList{
+            {SimpleCursor(3, 1), {"int baz(char c, int i)"}},
+            {SimpleCursor(5, 1), {"int Bar::baz(char c, int i)"}},
+            {SimpleCursor(7, 1), {"int Foo::Bar::baz(char c, int i)"}}
+        };
 
-void TestCodeCompletion::testImplementConst()
-{
-    QString file("class Foo { \n"
-                 "int bar() const; \n"
-                 "}; \n");
-    auto expected = { QString("int Foo::bar() const") };
-    runImplementsTest(file, "cpp", QList<TestInfo>({TestInfo{ SimpleCursor(3, 1), QStringList(expected)}}));
+    QTest::newRow("partial-template")
+        << "template<typename T> class Foo { \n"
+           "template<typename U> class Bar;\n"
+           "template<typename U> class Bar<U*> { void baz(T t, U u); }\n"
+           "}\n"
+        << CompletionItemsList{{SimpleCursor(5,1), {"template<typename T> template<typename U> void Foo<T>::Bar<U *>::baz(T t, U u)"}}};
+
+    QTest::newRow("variadic")
+        << "int foo(...); int bar(int i, ...); \n"
+        << CompletionItemsList{{SimpleCursor(1, 1), {"int foo(...)", "int bar(int i, ...)"}}};
+
+    QTest::newRow("const")
+        << "class Foo { int bar() const; };"
+        << CompletionItemsList{{SimpleCursor(3, 1), {"int Foo::bar() const"}}};
 }
 
 #include "test_codecompletion.moc"

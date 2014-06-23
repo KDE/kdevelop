@@ -1,5 +1,6 @@
 /*
  * Copyright 2014  David Stevens <dgedstevens@gmail.com>
+ * Copyright 2014  Kevin Funk <kfunk@kde.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -31,27 +32,10 @@ private slots:
     void initTestCase();
     void cleanupTestCase();
 
-    void testVirtualOverrideNonTemplate();
-    void testVirtualOverrideTemplate();
-    void testVirtualOverrideNestedTemplate();
-    void testVirtualOverrideMulti();
-    void testVirtualOverrideDeep();
-    void testVirtualOverridePure();
-    void testVirtualOverrideConst();
-
-    void testImplementConstructor();
-    void testImplementDestructor();
-    void testImplementTemplate();
-    void testImplementSpecializedTemplate();
-    void testImplementPartialTemplate();
-    void testImplementNamespace();
-    void testImplementTwoNamespace();
-    void testImplementBasic();
-    void testImplementClass();
-    void testImplementNestedClass();
-    void testImplementNestedNamespace();
-    void testImplementConst();
-    void testImplementVariadic();
+    void testVirtualOverride();
+    void testVirtualOverride_data();
+    void testImplement();
+    void testImplement_data();
 };
 
 #endif // TESTCODECOMPLETION_H
