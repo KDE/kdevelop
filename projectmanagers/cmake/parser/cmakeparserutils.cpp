@@ -145,7 +145,6 @@ namespace CMakeParserUtils
         QByteArray b = p.readAllStandardOutput();
         QString t;
         t.prepend(b.trimmed());
-        kDebug(9042) << "executed" << execName << "<" << t;
         tmp.unlink();
         return t;
     }
