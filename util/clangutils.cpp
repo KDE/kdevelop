@@ -57,6 +57,7 @@ namespace {
 
 struct FunctionInfo {
     SimpleRange range;
+    QString fileName;
     CXTranslationUnit unit;
     QStringList stringParts;
 };
@@ -74,10 +75,19 @@ CXChildVisitResult paramVisitor(CXCursor cursor, CXCursor /*parent*/, CXClientDa
     unsigned int numTokens;
     ClangRange range(clang_getCursorExtent(cursor));
 
+    CXFile file;
+    clang_getFileLocation(clang_getCursorLocation(cursor),&file,nullptr,nullptr,nullptr);
+    if (!file) {
+        kDebug() << "Couldn't find file associated with default parameter cursor!";
+        //We keep going, because getting an error because we accidentally duplicated
+        //a default parameter is better than deleting a default parameter
+    }
+    QString fileName = ClangString(clang_getFileName(file)).toString();
+
     //Clang doesn't make a distinction between the default arguments being in
     //the declaration or definition, and the default arguments don't have lexical
-    //parents. So this is the only thing that really works.
-    if (info->range.contains(range.toSimpleRange())) {
+    //parents. So this range check is the only thing that really works.
+    if ((info->fileName.isEmpty() || fileName == info->fileName) && info->range.contains(range.toSimpleRange())) {
         clang_tokenize(info->unit, range.range(), &tokens, &numTokens);
         for (unsigned int i = 0; i < numTokens; i++) {
             info->stringParts.append(ClangString(clang_getTokenSpelling(info->unit, tokens[i])).toString());
@@ -98,7 +108,19 @@ QVector<QString> ClangUtils::getDefaultArguments(CXCursor cursor)
 
     int numArgs = clang_Cursor_getNumArguments(cursor);
     QVector<QString> res(numArgs);
-    FunctionInfo info{ClangRange(clang_getCursorExtent(cursor)).toSimpleRange(), clang_Cursor_getTranslationUnit(cursor), QStringList()};
+    QString fileName;
+    CXFile file;
+    clang_getFileLocation(clang_getCursorLocation(cursor),&file,nullptr,nullptr,nullptr);
+    if (!file) {
+        kDebug() << "Couldn't find file associated with default parameter cursor!";
+        //The empty string serves as a wildcard string, because it's better to
+        //duplicate a default parameter than delete one
+    } else {
+        fileName = ClangString(clang_getFileName(file)).toString();
+    }
+
+    FunctionInfo info{ClangRange(clang_getCursorExtent(cursor)).toSimpleRange(), fileName,
+                      clang_Cursor_getTranslationUnit(cursor), QStringList()};
 
     for (int i = 0; i < numArgs; i++) {
         CXCursor arg = clang_Cursor_getArgument(cursor, i);
@@ -149,20 +171,16 @@ constexpr bool isScopeKind(CXCursorKind kind)
            kind == CXCursor_ClassTemplate || kind == CXCursor_ClassTemplatePartialSpecialization;
 }
 
-
-QString ClangUtils::getCursorSignature(CXCursor cursor, CXCursor destContext, QVector<QString> defaultArgs)
-{
+QString ClangUtils::getScope(CXCursor cursor) {
     QStringList scope;
+    CXCursor destContext = clang_getCursorLexicalParent(cursor);
     CXCursor search = clang_getCursorSemanticParent(cursor);
     while (isScopeKind(clang_getCursorKind(search)) && !clang_equalCursors(search, destContext)) {
         scope.prepend(ClangString(clang_getCursorSpelling(search)).toString() + QString("::"));
         search = clang_getCursorSemanticParent(search);
     }
-
-    QString prefix = scope.join(QString());
-    return ClangUtils::getCursorSignature(cursor, prefix, defaultArgs);
+    return scope.join(QString());
 }
-
 
 QString ClangUtils::getCursorSignature(CXCursor cursor, QString& prefix, QVector<QString> defaultArgs)
 {
@@ -189,8 +207,16 @@ QString ClangUtils::getCursorSignature(CXCursor cursor, QString& prefix, QVector
         CXCursor arg = clang_Cursor_getArgument(cursor, i);
         QString id = ClangString(clang_getCursorDisplayName(arg)).toString();
         QString type = ClangString(clang_getTypeSpelling(clang_getCursorType(arg))).toString();
+
+        //Clang formats pointer types as "t *x" and reference types as "t &x", while
+        //KDevelop formats them as "t* x" and "t& x". Make that adjustment.
+        if (type.length() > 2 && type.at(type.length()-2) == QChar(' ') &&
+            (type.at(type.length()-1) == QChar('*') || type.at(type.length()-1) == QChar('&')))
+        {
+            type = type.left(type.length() - 2) + type.at(type.length()-1);
+        }
         QString defaultArg = (i < defaultArgs.count() && !defaultArgs.at(i).isEmpty()) ? " = " + defaultArgs.at(i) : QString();
-        parts.append(type + ' ' + id + defaultArg + (i < numArgs - 1 ? ", " : ""));
+        parts.append(type + (id.isEmpty() ? QString() : ' ' + id) + defaultArg + (i < numArgs - 1 ? ", " : ""));
     }
 
     if (clang_Cursor_isVariadic(cursor)) {

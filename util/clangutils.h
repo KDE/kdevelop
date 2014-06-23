@@ -46,11 +46,6 @@ namespace ClangUtils
     CXCursor getCXCursor(int line, int column, const CXTranslationUnit& unit, const CXFile& file);
 
     /**
-     * Same as above, but file is the CXFile in which to search.
-     */
-//     bool getCXCursor(int line, int column, CXTranslationUnit unit, KDevelop::IndexedString file, CXCursor& cursor);
-
-    /**
      * Given a cursor representing a function, returns a vector containing the string
      * representations of the default arguments of the function which are defined at
      * the occurance of the cursor. Note that this is not necessarily all of the default
@@ -65,15 +60,13 @@ namespace ClangUtils
     QVector<QString> getDefaultArguments(CXCursor cursor);
 
     /**
-     * Given a cursor representing some sort of function, returns its signature. The
-     * effect of this function when passed a non-function cursor is undefined.
+     * Given a cursor and destination context, returns the string representing the
+     * cursor's scope at its current location.
      *
-     * @param cursor The cursor to work with
-     * @param destContext The destination context of the cursor. Used for
-     *        determining the scope of the cursor
-     * @return A QString of the function's signature
+     * @param cursor The cursor to examine
+     * @return the cursor's scope as a string
      */
-    QString getCursorSignature(CXCursor cursor, CXCursor destContext, QVector<QString> defaultArgs = QVector<QString>());
+    QString getScope(CXCursor cursor);
 
     /**
      * Given a cursor representing some sort of function, returns its signature. The

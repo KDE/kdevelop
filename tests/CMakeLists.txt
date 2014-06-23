@@ -23,15 +23,33 @@ kde4_add_unit_test(test_codecompletion
     $<TARGET_OBJECTS:kdevclangcodecompletion>
     $<TARGET_OBJECTS:kdevclangutil>
 )
+
 target_link_libraries(test_codecompletion
     ${KDEVPLATFORM_TESTS_LIBRARIES}
     ${QT_QTTEST_LIBRARY}
     kdevclangduchain
 )
 
+########### next target ###############
+
+kde4_add_unit_test(test_assistants
+    test_assistants.cpp
+    $<TARGET_OBJECTS:kdevclangcodegen>
+    $<TARGET_OBJECTS:kdevclangutil>
+)
+
+target_link_libraries(test_assistants
+    ${KDEVPLATFORM_TESTS_LIBRARIES}
+    ${QT_QTTEST_LIBRARY}
+    kdevclangduchain
+)
+
+########### next target ###############
+
 kde4_add_unit_test(test_duchain
     test_duchain.cpp
 )
+
 target_link_libraries(test_duchain
     ${KDEVPLATFORM_TESTS_LIBRARIES}
     ${QT_QTTEST_LIBRARY}

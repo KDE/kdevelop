@@ -149,37 +149,49 @@ SimpleCursor findSignatureEnd(KTextEditor::Document *targetDoc, CXCursor cursor)
 
 KUrl findCompanionFile(const KUrl& fileUrl, const SimpleCursor& sc, const CXFile& file, CXCursor& otherSide)
 {
-    if (KMimeType::findByUrl(fileUrl)->name() == QString("text/x-chdr")) {
-        IBuddyDocumentFinder* buddyFinder = IBuddyDocumentFinder::finderForMimeType(KMimeType::findByUrl(fileUrl)->name());
-        if (!buddyFinder) {
-            kDebug() << "Could not create buddy finder for " << fileUrl;
-            return KUrl();
+    static QStringList headerMime({"text/x-c++hdr", "text/x-chdr"});
+    static QStringList srcMime({"text/x-c++src", "text/x-csrc"});
+
+    QString me = KMimeType::findByUrl(fileUrl)->name();
+    QStringList targetTypes;
+    if (headerMime.contains(me)) {
+        targetTypes = srcMime;
+    } else if (srcMime.contains(me)) {
+        targetTypes = headerMime;
+    } else {
+        kDebug() << "Unrecgonized file extension";
+        return KUrl();
+    }
+
+    IBuddyDocumentFinder* buddyFinder = IBuddyDocumentFinder::finderForMimeType(KMimeType::findByUrl(fileUrl)->name());
+    if (!buddyFinder) {
+        kDebug() << "Could not create buddy finder for " << fileUrl;
+        return KUrl();
+    }
+    foreach (KUrl potentialUrl, buddyFinder->getPotentialBuddies(fileUrl)) {
+        QString potentialMime = KMimeType::findByUrl(potentialUrl.url())->name();
+        if (!QFile::exists(potentialUrl.toLocalFile()) || !targetTypes.contains(potentialMime)) {
+            continue;
         }
-        foreach (KUrl potentialUrl, buddyFinder->getPotentialBuddies(fileUrl)) {
-            QString potentialMime = KMimeType::findByUrl(potentialUrl.url())->name();
-            if (!QFile::exists(potentialUrl.toLocalFile()) || (potentialMime != QString("text/x-c++src") && potentialMime != QString("text/x-csrc"))) {
-                continue;
-            }
 
-            KSharedPtr<ParseSession> altSession = getSession(potentialUrl);
-            if (!altSession) {
-                continue;
-            }
-
-            //TODO name collisions? Comparing the USR doesn't work because of including
-            //Unfortunately, CXFiles of the same name aren't the same across translation units
-            CXFile altFile = clang_getFile(altSession->unit(), ClangString(clang_getFileName(file)).c_str());
-            CXCursor altCursor = getFunctionCursor(sc, altSession->unit(), altFile);
-            if (clang_Cursor_isNull(altCursor)) {
-                continue;
-            }
-            otherSide = clang_getCursorDefinition(altCursor);
-            if (clang_Cursor_isNull(otherSide)) {
-                continue;
-            }
-
-            return potentialUrl;
+        KSharedPtr<ParseSession> altSession = getSession(potentialUrl);
+        if (!altSession) {
+            continue;
         }
+
+        //TODO name collisions? Comparing the USR doesn't work because of including
+        //Unfortunately, CXFiles of the same name aren't the same across translation units
+        CXFile altFile = clang_getFile(altSession->unit(), ClangString(clang_getFileName(file)).c_str());
+        CXCursor altCursor = getFunctionCursor(sc, altSession->unit(), altFile);
+        if (clang_Cursor_isNull(altCursor)) {
+            continue;
+        }
+        otherSide = clang_getCursorDefinition(altCursor);
+        if (clang_Cursor_isNull(otherSide)) {
+            continue;
+        }
+
+        return potentialUrl;
     }
     return KUrl();
 }
@@ -281,7 +293,6 @@ QString ClangAdaptSignatureAction::toolTip() const
 
 ClangSignatureAssistant::ClangSignatureAssistant(ILanguageSupport* languageSupport)
     : StaticAssistant(languageSupport)
-    , m_onNextParse(false)
 {
     connect(ICore::self()->languageController()->backgroundParser(), SIGNAL(parseJobFinished(KDevelop::ParseJob*)),
             this, SLOT(parseJobFinished(KDevelop::ParseJob*)));
@@ -297,7 +308,7 @@ void ClangSignatureAssistant::reset()
     m_oldName.clear();
     m_targetUnit.clear();
     m_oldParamInfo.clear();
-    m_onNextParse = false;
+    hide();
 }
 
 
@@ -307,7 +318,6 @@ void ClangSignatureAssistant::textChanged(KTextEditor::View* view, const KTextEd
     Q_UNUSED(removedText);
 
     reset();
-
     m_view = view;
 
     KUrl fileUrl = m_view.data()->document()->url();
@@ -341,8 +351,23 @@ void ClangSignatureAssistant::textChanged(KTextEditor::View* view, const KTextEd
         if (clang_Cursor_isNull(info.decl)) {
             return;
         }
-
         otherSide = info.decl;
+
+        if (!clang_Location_isFromMainFile(clang_getCursorLocation(otherSide))) {
+            CXFile otherFile;
+            clang_getFileLocation(clang_getCursorLocation(otherSide), &otherFile, nullptr, nullptr, nullptr);
+            if (!otherFile) {
+                kDebug() << "Could not find file corresponding to other side of definition";
+                return;
+            }
+
+            m_targetUnit = KUrl(ClangString(clang_getFileName(otherFile)).toString());
+            if (m_targetUnit.isEmpty()) {
+                kDebug() << "Could not access file " << ClangString(clang_getFileName(otherFile));
+                return;
+            }
+        }
+
         m_targetDecl = true;
     } else if (!clang_Cursor_isNull(otherSide)) {
         //If otherside is not null or us, then it's our definition
@@ -355,7 +380,7 @@ void ClangSignatureAssistant::textChanged(KTextEditor::View* view, const KTextEd
         m_targetUnit = findCompanionFile(fileUrl, simpleCursor, session->file(), otherSide);
 
         if (m_targetUnit.isEmpty()) {
-            kDebug() << "Cound not find candidate target for " << fileUrl;
+            kDebug() << "Could not find candidate target for " << fileUrl;
             return;
         }
         m_targetDecl = false;
@@ -376,8 +401,8 @@ void ClangSignatureAssistant::textChanged(KTextEditor::View* view, const KTextEd
     }
 
     m_oldName = ClangString(clang_getCursorSpelling(cursor)).toString();
-    m_oldSig = ClangUtils::getCursorSignature(otherSide, clang_getCursorLexicalParent(otherSide));
-    m_onNextParse = true;
+    QString scope = ClangUtils::getScope(otherSide);
+    m_oldSig = ClangUtils::getCursorSignature(otherSide, scope);
 }
 
 QString ClangSignatureAssistant::title() const
@@ -392,12 +417,8 @@ bool ClangSignatureAssistant::isUseful() const
 
 void ClangSignatureAssistant::parseJobFinished(ParseJob* job)
 {
-    if (!m_onNextParse) {
-        return;
-    }
-    m_onNextParse = false;
-
-    if (!m_view || job->document().toUrl() != m_view.data()->document()->url()) {
+    if (!isUseful() || !m_view || job->document().toUrl() != m_view.data()->document()->url()) {
+        //If we're here, we're not the active assistant, so there's no reason to reset
         return;
     }
     clearActions();
@@ -407,12 +428,14 @@ void ClangSignatureAssistant::parseJobFinished(ParseJob* job)
 
     KSharedPtr<ParseSession> sourceSession = getSession(m_view.data()->document()->url());
     if (!sourceSession) {
+        reset();
         return;
     }
     KSharedPtr<ParseSession> targetSession;
     if (!m_targetUnit.isEmpty()) {
         targetSession = getSession(m_targetUnit);
         if (!targetSession) {
+            reset();
             return;
         }
     } else {
@@ -422,24 +445,30 @@ void ClangSignatureAssistant::parseJobFinished(ParseJob* job)
     CXFile otherFile = clang_getFile(targetSession->unit(), m_otherLoc.document.byteArray().constData());
     CXCursor cursor = getFunctionCursor(c, sourceSession->unit(), sourceSession->file());
     CXCursor otherCursor = getFunctionCursor(m_otherLoc, targetSession->unit(), otherFile);
-    if (clang_Cursor_isNull(cursor) || clang_Cursor_isNull(otherCursor))
-    {
-        kDebug() << "Couldn't get source and/or target cursor";
+    if (clang_Cursor_isNull(cursor)) {
+        kDebug() << "Couldn't get source cursor " << ClangString(clang_getFileName(sourceSession->file())) << ":" << c;
+        reset();
+        return;
+    }
+
+    if (clang_Cursor_isNull(otherCursor)) {
+        kDebug() << "Couldn't get target cursor " << ClangString(clang_getFileName(otherFile)) << ":" << m_otherLoc;
+        reset();
         return;
     }
 
     auto defaults = ClangUtils::getDefaultArguments(otherCursor);
 
     if (!fixDefaults(defaults, cursor, m_oldParamInfo)) {
+        reset();
         return;
     }
 
-    QString newSig = ClangUtils::getCursorSignature(cursor, clang_getCursorLexicalParent(otherCursor), defaults);
-    if (newSig == m_oldSig) {
-        return;
-    }
+    QString scope = ClangUtils::getScope(otherCursor);
+    QString newSig = ClangUtils::getCursorSignature(cursor, scope, defaults);
 
-    if (m_oldName != ClangString(clang_getCursorSpelling(cursor)).toString()) {
+    if (newSig == m_oldSig || m_oldName != ClangString(clang_getCursorSpelling(cursor)).toString()) {
+        reset();
         return;
     }
 
@@ -448,6 +477,7 @@ void ClangSignatureAssistant::parseJobFinished(ParseJob* job)
 
     SimpleCursor end = findSignatureEnd(targetDoc, otherCursor);
     if (!end.isValid()) {
+        reset();
         return;
     }
 
@@ -457,7 +487,6 @@ void ClangSignatureAssistant::parseJobFinished(ParseJob* job)
     IAssistantAction::Ptr action(new ClangAdaptSignatureAction(m_targetDecl, targetUrl, range, newSig, m_oldSig));
     connect(action.data(), SIGNAL(executed(IAssistantAction*)), SLOT(reset()));
     addAction(action);
-
     emit actionsChanged();
 }
 

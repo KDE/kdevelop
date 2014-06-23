@@ -96,8 +96,6 @@ private:
     QString m_oldSig;
 
     QList<ParamInfo> m_oldParamInfo;
-
-    bool m_onNextParse;
 };
 
 #endif //CLANG_SIGNATUREASSISTANT_H
