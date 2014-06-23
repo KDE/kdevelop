@@ -44,7 +44,7 @@ private:
 
     IncludeFileContexts m_includes;
     KDevelop::ReferencedTopDUContext m_context;
-    KSharedPtr<ParseSession> m_session;
+    ParseSession m_session;
 };
 
 #endif //CLANGPCH_H

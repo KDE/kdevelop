@@ -53,18 +53,18 @@ struct DeclSearchInfo
     CXCursor decl;
 };
 
-KSharedPtr<ParseSession> getSession(const KUrl& url)
+ParseSessionData::Ptr getSession(const KUrl& url)
 {
     DUChainReadLocker lock;
     auto top = DUChainUtils::standardContextForUrl(url);
     if (!top) {
         kWarning() << "No context found for" << url;
-        return KSharedPtr<ParseSession>();
+        return {};
     }
-    KSharedPtr<ParseSession> session = KSharedPtr<ParseSession>::dynamicCast(top->ast());
+    auto session = ParseSessionData::Ptr::dynamicCast(top->ast());
     if (!session) {
         kWarning() << "No parse session / AST attached to context for url" << url;
-        return session;
+        return {};
     }
     return session;
 }
@@ -174,15 +174,15 @@ KUrl findCompanionFile(const KUrl& fileUrl, const SimpleCursor& sc, const CXFile
             continue;
         }
 
-        KSharedPtr<ParseSession> altSession = getSession(potentialUrl);
-        if (!altSession) {
+        const ParseSession altSession(getSession(potentialUrl));
+            if (!altSession.data()) {
             continue;
         }
 
         //TODO name collisions? Comparing the USR doesn't work because of including
         //Unfortunately, CXFiles of the same name aren't the same across translation units
-        CXFile altFile = clang_getFile(altSession->unit(), ClangString(clang_getFileName(file)).c_str());
-        CXCursor altCursor = getFunctionCursor(sc, altSession->unit(), altFile);
+        CXFile altFile = clang_getFile(altSession.unit(), ClangString(clang_getFileName(file)).c_str());
+        CXCursor altCursor = getFunctionCursor(sc, altSession.unit(), altFile);
         if (clang_Cursor_isNull(altCursor)) {
             continue;
         }
@@ -321,13 +321,13 @@ void ClangSignatureAssistant::textChanged(KTextEditor::View* view, const KTextEd
     m_view = view;
 
     KUrl fileUrl = m_view.data()->document()->url();
-    KSharedPtr<ParseSession> session = getSession(fileUrl);
-    if (!session) {
+    const ParseSession session(getSession(fileUrl));
+    if (!session.data()) {
         return;
     }
 
     const SimpleCursor simpleCursor(invocationRange.start());
-    CXCursor cursor = getFunctionCursor(simpleCursor, session->unit(), session->file());
+    CXCursor cursor = getFunctionCursor(simpleCursor, session.unit(), session.file());
     if (clang_Cursor_isNull(cursor)) {
         return;
     }
@@ -377,7 +377,7 @@ void ClangSignatureAssistant::textChanged(KTextEditor::View* view, const KTextEd
         //the function could be defined in any file which includes us, but that
         //information is not available to use through clang's translation unit model. The
         //best we can do is guess at similar file names.
-        m_targetUnit = findCompanionFile(fileUrl, simpleCursor, session->file(), otherSide);
+        m_targetUnit = findCompanionFile(fileUrl, simpleCursor, session.file(), otherSide);
 
         if (m_targetUnit.isEmpty()) {
             kDebug() << "Could not find candidate target for " << fileUrl;
@@ -426,27 +426,29 @@ void ClangSignatureAssistant::parseJobFinished(ParseJob* job)
     DUChainReadLocker lock;
     SimpleCursor c = SimpleCursor(m_view.data()->cursorPosition());
 
-    KSharedPtr<ParseSession> sourceSession = getSession(m_view.data()->document()->url());
-    if (!sourceSession) {
+    const ParseSession sourceSession(getSession(m_view.data()->document()->url()));
+    if (!sourceSession.data()) {
         reset();
         return;
     }
-    KSharedPtr<ParseSession> targetSession;
+    ParseSession targetSession({});
+    CXTranslationUnit targetUnit = nullptr;
     if (!m_targetUnit.isEmpty()) {
-        targetSession = getSession(m_targetUnit);
-        if (!targetSession) {
+        targetSession.setData(getSession(m_targetUnit));
+        if (!targetSession.data()) {
             reset();
             return;
         }
+        targetUnit = targetSession.unit();
     } else {
-        targetSession = sourceSession;
+        targetUnit = sourceSession.unit();
     }
 
-    CXFile otherFile = clang_getFile(targetSession->unit(), m_otherLoc.document.byteArray().constData());
-    CXCursor cursor = getFunctionCursor(c, sourceSession->unit(), sourceSession->file());
-    CXCursor otherCursor = getFunctionCursor(m_otherLoc, targetSession->unit(), otherFile);
+    CXFile otherFile = clang_getFile(targetUnit, m_otherLoc.document.byteArray().constData());
+    CXCursor cursor = getFunctionCursor(c, sourceSession.unit(), sourceSession.file());
+    CXCursor otherCursor = getFunctionCursor(m_otherLoc, targetUnit, otherFile);
     if (clang_Cursor_isNull(cursor)) {
-        kDebug() << "Couldn't get source cursor " << ClangString(clang_getFileName(sourceSession->file())) << ":" << c;
+        kDebug() << "Couldn't get source cursor " << ClangString(clang_getFileName(sourceSession.file())) << ":" << c;
         reset();
         return;
     }

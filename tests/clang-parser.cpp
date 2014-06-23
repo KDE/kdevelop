@@ -33,7 +33,9 @@ using namespace KDevelopUtils;
 class ClangParser {
 public:
     ClangParser(const bool printAst, const bool printTokens)
-      : m_printAst(printAst), m_printTokens(printTokens)
+      : m_session({})
+      , m_printAst(printAst)
+      , m_printTokens(printTokens)
     {
     }
 
@@ -47,14 +49,14 @@ public:
         }
 
         file.open(QIODevice::ReadOnly);
-        m_session.reset(new ParseSession(IndexedString(fileName), file.readAll(), &m_index));
+        m_session.setData(ParseSessionData::Ptr(new ParseSessionData(IndexedString(fileName), file.readAll(), &m_index)));
         runSession();
     }
 
     /// parse code directly
     void parseCode( const QString &code )
     {
-        m_session.reset(new ParseSession(IndexedString("stdin.cpp"), code.toUtf8(), &m_index));
+        m_session.setData(ParseSessionData::Ptr(new ParseSessionData(IndexedString("stdin.cpp"), code.toUtf8(), &m_index)));
         runSession();
     }
 
@@ -64,11 +66,11 @@ private:
      */
     void runSession()
     {
-        if (!m_session->unit()) {
+        if (!m_session.unit()) {
             qerr << "failed to parse code" << endl;
         }
         if (m_printTokens) {
-            CXTranslationUnit TU = m_session->unit();
+            CXTranslationUnit TU = m_session.unit();
             auto cursor = clang_getTranslationUnitCursor(TU);
             CXSourceRange range = clang_getCursorExtent(cursor);
             CXToken *tokens = 0;
@@ -83,16 +85,16 @@ private:
             clang_disposeTokens(TU, tokens, nTokens);
         }
 
-        if (!m_session->unit()) {
+        if (!m_session.unit()) {
             qerr << "no AST tree could be generated" << endl;
         } else {
             qout << "AST tree successfully generated" << endl;
             if (m_printAst) {
-                DebugVisitor visitor(m_session.data());
-                visitor.visit(m_session->unit());
+                DebugVisitor visitor(&m_session);
+                visitor.visit(m_session.unit());
             }
         }
-        const auto problems = m_session->problemsForFile(m_session->file());
+        const auto problems = m_session.problemsForFile(m_session.file());
         if (!problems.isEmpty()) {
             qerr << endl << "problems encountered during parsing:" << endl;
             foreach(const ProblemPointer problem, problems) {
@@ -102,12 +104,12 @@ private:
             qout << "no problems encountered during parsing" << endl;
         }
 
-        if (!m_session->unit()) {
+        if (!m_session.unit()) {
             exit(255);
         }
     }
 
-    QScopedPointer<ParseSession> m_session;
+    ParseSession m_session;
     const bool m_printAst;
     const bool m_printTokens;
     ClangIndex m_index;

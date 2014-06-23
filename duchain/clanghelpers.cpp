@@ -63,8 +63,8 @@ Imports ClangHelpers::tuImports(CXTranslationUnit tu)
     return imports;
 }
 
-ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& imports, const ParseSession* session,
-                                    TopDUContext::Features features, IncludeFileContexts& includedFiles)
+ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& imports, const ParseSession& session,
+                                                  TopDUContext::Features features, IncludeFileContexts& includedFiles)
 {
     if (includedFiles.contains(file)) {
         return {};
@@ -93,7 +93,7 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
         }
 
         context->setFeatures(features);
-        context->setProblems(session->problemsForFile(file));
+        context->setProblems(session.problemsForFile(file));
 
         includedFiles.insert(file, context);
         if (update) {
@@ -116,7 +116,7 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
         }
     }
 
-    TUDUChain tuduchain(session->unit(), file, includedFiles, update);
+    TUDUChain tuduchain(session.unit(), file, includedFiles, update);
 
     return context;
 }

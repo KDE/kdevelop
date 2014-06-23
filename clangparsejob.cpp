@@ -39,6 +39,7 @@
 #include "duchain/clangpch.h"
 #include "duchain/clangtypes.h"
 #include "duchain/tuduchain.h"
+#include "duchain/parsesession.h"
 
 #include "debug.h"
 #include "clangsupport.h"
@@ -143,6 +144,7 @@ void ClangParseJob::run()
         return;
     }
 
+    ParseSessionData::Ptr sessionData;
     {
         UrlParseLock urlLock(document());
         if (abortRequested() || !isUpdateRequired(ParseSession::languageString())) {
@@ -152,9 +154,7 @@ void ClangParseJob::run()
             DUChainWriteLocker lock;
             const auto& context = DUChainUtils::standardContextForUrl(document().toUrl());
             if (context) {
-                m_session = KSharedPtr<ParseSession>::dynamicCast(context->ast());
-                // ensure that other threads don't access the TU while we parse it
-                context->setAst({});
+                sessionData = ParseSessionData::Ptr::dynamicCast(context->ast());
             }
         }
     }
@@ -169,34 +169,48 @@ void ClangParseJob::run()
         return;
     }
 
-    if (!m_session || !m_session->reparse(contents().contents)) {
-        const bool skipFunctionBodies = (minimumFeatures() <= TopDUContext::VisibleDeclarationsAndContexts);
-        m_session = new ParseSession(document(), contents().contents, clang()->index(), m_includes, pchInclude, m_defines,
-                                     (skipFunctionBodies ? ParseSession::SkipFunctionBodies : ParseSession::NoOption));
-    } else {
-        Q_ASSERT(m_session->url() == document());
-        Q_ASSERT(m_session->unit());
-    }
-
-    if (abortRequested() || !m_session->unit()) {
+    if (abortRequested()) {
         return;
     }
 
-    Imports imports = ClangHelpers::tuImports(m_session->unit());
+    bool needsUpdate = true;
+    if (!sessionData) {
+        sessionData = createSessionData(pchInclude);
+        needsUpdate = false;
+    }
+
+    ParseSession session(sessionData);
+
+    if (abortRequested()) {
+        return;
+    }
+
+    if (needsUpdate && !session.reparse(contents().contents)) {
+        session.setData(createSessionData(pchInclude));
+    } else {
+        Q_ASSERT(session.url() == document());
+        Q_ASSERT(session.unit());
+    }
+
+    if (abortRequested() || !session.unit()) {
+        return;
+    }
+
+    Imports imports = ClangHelpers::tuImports(session.unit());
 
     IncludeFileContexts includedFiles;
     if (pch) {
-        auto pchFile = pch->mapFile(m_session->unit());
-        includedFiles = pch->mapIncludes(m_session->unit());
+        auto pchFile = pch->mapFile(session.unit());
+        includedFiles = pch->mapIncludes(session.unit());
         includedFiles.insert(pchFile, pch->context());
-        imports.insert(m_session->file(), { pchFile, CursorInRevision(0, 0) } );
+        imports.insert(session.file(), { pchFile, CursorInRevision(0, 0) } );
     }
 
     if (abortRequested()) {
         return;
     }
 
-    auto context = ClangHelpers::buildDUChain(m_session->file(), imports, m_session.data(), minimumFeatures(), includedFiles);
+    auto context = ClangHelpers::buildDUChain(session.file(), imports, session, minimumFeatures(), includedFiles);
     setDuChain(context);
 
     if (abortRequested()) {
@@ -211,7 +225,7 @@ void ClangParseJob::run()
             // the user
             // otherwise no editor component is open for this document and we can dispose
             // the TU to save memory
-            context->setAst(KSharedPtr<IAstContainer>::staticCast(m_session));
+            context->setAst(KSharedPtr<IAstContainer>::staticCast(session.data()));
         }
         context->setFeatures(minimumFeatures());
         ParsingEnvironmentFilePointer file = context->parsingEnvironmentFile();
@@ -219,5 +233,15 @@ void ClangParseJob::run()
         file->setModificationRevision(contents().modification);
     }
 
+    // release the data here, so we don't lock it while highlighting
+    session.setData({});
+
     highlightDUChain();
+}
+
+ParseSessionData::Ptr ClangParseJob::createSessionData(const Path& pchInclude)
+{
+    const bool skipFunctionBodies = (minimumFeatures() <= TopDUContext::VisibleDeclarationsAndContexts);
+    return ParseSessionData::Ptr(new ParseSessionData(document(), contents().contents, clang()->index(), m_includes, pchInclude, m_defines,
+                                 (skipFunctionBodies ? ParseSessionData::SkipFunctionBodies : ParseSessionData::NoOption)));
 }

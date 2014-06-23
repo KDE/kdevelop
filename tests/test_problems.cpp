@@ -65,7 +65,7 @@ void TestProblems::cleanupTestCase()
 QList<ProblemPointer> TestProblems::parse(const QByteArray& code)
 {
     ClangIndex index;
-    ParseSession session(IndexedString(FileName), code, &index);
+    ParseSession session(ParseSessionData::Ptr(new ParseSessionData(IndexedString(FileName), code, &index)));
     return session.problemsForFile(session.file());
 }
 

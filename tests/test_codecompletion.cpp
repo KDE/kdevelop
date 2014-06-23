@@ -47,6 +47,7 @@ void TestCodeCompletion::cleanupTestCase()
     TestCore::shutdown();
 }
 
+namespace {
 QString formatFuncOverrideInfo(const FuncOverrideInfo& info)
 {
     return QString(info.returnType + ' ' + info.name + '(' + info.params.join(", ") +
@@ -58,11 +59,16 @@ QString formatFuncImplementInfo(const FuncImplementInfo& info)
     return QString(info.templatePrefix + (!info.isDestructor && !info.isConstructor ? info.returnType + ' ' : "") + info.prototype);
 }
 
-namespace {
-    struct TestInfo {
-        SimpleCursor position;
-        QStringList completions;
-    };
+ParseSessionData::Ptr sessionData(const TestFile& file, ClangIndex* index)
+{
+    return ParseSessionData::Ptr(new ParseSessionData(file.url(), file.fileContents().toUtf8(), index));
+}
+
+struct TestInfo {
+    SimpleCursor position;
+    QStringList completions;
+};
+
 }
 
 using TestList = QList<TestInfo>;
@@ -73,7 +79,7 @@ void runOverrideTest(QString fileContents, QString extension, TestList expected)
     TestFile file(fileContents, extension);
 
     ClangIndex index;
-    ParseSession session(IndexedString(file.url()), file.fileContents().toUtf8(), &index);
+    ParseSession session(sessionData(file, &index));
 
     foreach(TestInfo test, expected) {
         CompletionHelper overrides(session.unit(), test.position, file.url().c_str());
@@ -95,7 +101,7 @@ void runImplementsTest(QString fileContents, QString extension, TestList expecte
     TestFile file(fileContents, extension);
 
     ClangIndex index;
-    ParseSession session(IndexedString(file.url()), file.fileContents().toUtf8(), &index);
+    ParseSession session(sessionData(file, &index));
 
     foreach(TestInfo test, expected) {
         CompletionHelper overrides(session.unit(), test.position, file.url().c_str());

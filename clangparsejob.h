@@ -27,9 +27,8 @@
 #include <util/path.h>
 #include <clang-c/Index.h>
 
-#include "duchain/parsesession.h"
-
 class ClangSupport;
+class ParseSessionData;
 
 class ClangParseJob : public KDevelop::ParseJob
 {
@@ -43,9 +42,10 @@ protected:
     virtual void run();
 
 private:
+    KSharedPtr<ParseSessionData> createSessionData(const KDevelop::Path& pchInclude);
+
     KDevelop::Path::List m_includes;
     QHash<QString, QString> m_defines;
-    KSharedPtr<ParseSession> m_session;
 };
 
 #endif // CLANGPARSEJOB_H

@@ -38,9 +38,11 @@
 
 class ClangIndex;
 
-class KDEVCLANGDUCHAIN_EXPORT ParseSession : public KDevelop::IAstContainer
+class KDEVCLANGDUCHAIN_EXPORT ParseSessionData : public KDevelop::IAstContainer
 {
 public:
+    using Ptr = KSharedPtr<ParseSessionData>;
+
     enum Option {
         NoOption,
         DisableSpellChecking,
@@ -50,20 +52,60 @@ public:
     Q_DECLARE_FLAGS(Options, Option)
 
     /**
-     * @return a unique identifier for Clang documents.
-     */
-    static KDevelop::IndexedString languageString();
-
-    /**
      * Parse the given @p contents.
      *
      * @param url The url for the document you want to parse.
      * @param contents The contents of the document you want to parse.
      */
-    ParseSession(const KDevelop::IndexedString& url, const QByteArray& contents, ClangIndex* index,
-                 const KDevelop::Path::List& includes = {}, const KDevelop::Path& pchInclude = {},
-                 const QHash<QString, QString>& defines = {}, Options options = Options());
+    ParseSessionData(const KDevelop::IndexedString& url, const QByteArray& contents, ClangIndex* index,
+                     const KDevelop::Path::List& includes = {}, const KDevelop::Path& pchInclude = {},
+                     const QHash<QString, QString>& defines = {}, Options options = Options());
+
+    ~ParseSessionData();
+
+private:
+    friend class ParseSession;
+
+    void setUnit(CXTranslationUnit unit, const char* fileName);
+
+    QMutex m_mutex;
+
+    KDevelop::IndexedString m_url;
+    CXTranslationUnit m_unit;
+    CXFile m_file;
+
+    KDevelop::Path::List m_includes;
+    QHash<QString, QString> m_defines;
+};
+
+/**
+ * Thread-safe utility class around a CXTranslationUnit.
+ *
+ * It will lock the mutex of the currently set ParseSessionData and thereby ensure
+ * only one ParseSession can operate on a given CXTranslationUnit stored therein.
+ */
+class KDEVCLANGDUCHAIN_EXPORT ParseSession
+{
+public:
+    /**
+     * @return a unique identifier for Clang documents.
+     */
+    static KDevelop::IndexedString languageString();
+
+    /**
+     * Initialize a parse session with the given data and, if that data is valid, lock its mutex.
+     */
+    ParseSession(ParseSessionData::Ptr data);
+    /**
+     * Unlocks the mutex of the currently set ParseSessionData.
+     */
     ~ParseSession();
+
+    /**
+     * Unlocks the mutex of the currently set ParseSessionData, and instead acquire the lock in @p data.
+     */
+    void setData(ParseSessionData::Ptr data);
+    ParseSessionData::Ptr data() const;
 
     /**
      * @return the URL of this session
@@ -82,14 +124,8 @@ public:
     using TopAstNode = CXTranslationUnit;
 
 private:
-    void setUnit(CXTranslationUnit unit, const char* fileName);
+    ParseSessionData::Ptr d;
 
-    KDevelop::IndexedString m_url;
-    CXTranslationUnit m_unit;
-    CXFile m_file;
-
-    KDevelop::Path::List m_includes;
-    QHash<QString, QString> m_defines;
 };
 
 #endif // PARSESESSION_H

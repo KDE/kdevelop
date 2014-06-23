@@ -226,15 +226,15 @@ QByteArray concatenate(const QStringList& contents)
 
 }
 
-ClangCodeCompletionContext::ClangCodeCompletionContext(const ParseSession* const session,
+ClangCodeCompletionContext::ClangCodeCompletionContext(const ParseSession& session,
                                                        const SimpleCursor& position,
                                                        const QStringList& contents
                                                       )
     : CodeCompletionContext({}, QString(), {}, 0)
     , m_results(nullptr, clang_disposeCodeCompleteResults)
-    , m_completionHelper(session->unit(), position, ClangString(clang_getFileName(session->file())).c_str())
+    , m_completionHelper(session.unit(), position, ClangString(clang_getFileName(session.file())).c_str())
 {
-    ClangString file(clang_getFileName(session->file()));
+    ClangString file(clang_getFileName(session.file()));
 
     CXUnsavedFile unsaved;
     const QByteArray fileContents = concatenate(contents);
@@ -242,7 +242,7 @@ ClangCodeCompletionContext::ClangCodeCompletionContext(const ParseSession* const
     unsaved.Length = fileContents.size();
     unsaved.Filename = file;
 
-    m_results.reset( clang_codeCompleteAt(session->unit(), file,
+    m_results.reset( clang_codeCompleteAt(session.unit(), file,
                         position.line + 1, position.column + 1,
                         &unsaved, 1,
                         clang_defaultCodeCompleteOptions()) );

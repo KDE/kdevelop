@@ -34,7 +34,7 @@ class ParseSession;
 class ClangCodeCompletionContext : public KDevelop::CodeCompletionContext
 {
 public:
-    ClangCodeCompletionContext(const ParseSession* const session,
+    ClangCodeCompletionContext(const ParseSession& session,
                                const KDevelop::SimpleCursor& position,
                                const QStringList& contents);
     ~ClangCodeCompletionContext();

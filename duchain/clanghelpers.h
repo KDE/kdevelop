@@ -56,7 +56,7 @@ KDEVCLANGDUCHAIN_EXPORT Imports tuImports(CXTranslationUnit tu);
  * @returns the context created for @param file
  */
 KDEVCLANGDUCHAIN_EXPORT KDevelop::ReferencedTopDUContext buildDUChain(
-    CXFile file, const Imports& imports, const ParseSession* session,
+    CXFile file, const Imports& imports, const ParseSession& session,
     KDevelop::TopDUContext::Features features, IncludeFileContexts& includedFiles);
 
 /**

@@ -44,9 +44,9 @@ static std::map<QString, QVector<const char*>> mimeToArgs = {
 
 static QVector<const char*> pchArgs = {"-std=c++11", "-xc++-header", "-Wall", "-nostdinc", "-nostdinc++"};
 
-QVector<const char*> argsForSession(const QString& path, ParseSession::Options options)
+QVector<const char*> argsForSession(const QString& path, ParseSessionData::Options options)
 {
-    if (options & ParseSession::PrecompiledHeader) {
+    if (options & ParseSessionData::PrecompiledHeader) {
         return pchArgs;
     }
 
@@ -78,13 +78,7 @@ CXUnsavedFile fileForContents(const QByteArray& path, const QByteArray& contents
 
 }
 
-IndexedString ParseSession::languageString()
-{
-    static const IndexedString lang("Clang");
-    return lang;
-}
-
-ParseSession::ParseSession(const IndexedString& url, const QByteArray& contents, ClangIndex* index,
+ParseSessionData::ParseSessionData(const IndexedString& url, const QByteArray& contents, ClangIndex* index,
                            const Path::List& includes, const Path& pchInclude,
                            const QHash<QString, QString>& defines, Options options)
     : m_url(url)
@@ -160,25 +154,80 @@ ParseSession::ParseSession(const IndexedString& url, const QByteArray& contents,
     }
 }
 
-ParseSession::~ParseSession()
+ParseSessionData::~ParseSessionData()
 {
     clang_disposeTranslationUnit(m_unit);
 }
 
+void ParseSessionData::setUnit(CXTranslationUnit unit, const char* fileName)
+{
+    Q_ASSERT(!m_unit || unit == m_unit);
+
+    m_unit = unit;
+    m_file = clang_getFile(m_unit, fileName);
+}
+
+ParseSession::ParseSession(ParseSessionData::Ptr data)
+    : d(data)
+{
+    if (d) {
+        d->m_mutex.lockInline();
+    }
+}
+
+ParseSession::~ParseSession()
+{
+    if (d) {
+        d->m_mutex.unlockInline();
+    }
+}
+
+void ParseSession::setData(ParseSessionData::Ptr data)
+{
+    if (data == d) {
+        return;
+    }
+
+    if (d) {
+        d->m_mutex.unlockInline();
+    }
+
+    d = data;
+
+    if (d) {
+        d->m_mutex.lockInline();
+    }
+}
+
+ParseSessionData::Ptr ParseSession::data() const
+{
+    return d;
+}
+
+IndexedString ParseSession::languageString()
+{
+    static const IndexedString lang("Clang");
+    return lang;
+}
+
 IndexedString ParseSession::url() const
 {
-    return m_url;
+    return d ? d->m_url : IndexedString();
 }
 
 QList<ProblemPointer> ParseSession::problemsForFile(CXFile file) const
 {
+    if (!d) {
+        return {};
+    }
+
     const ClangDiagnosticEvaluator evaluator;
 
     QList<ProblemPointer> problems;
-    const uint numDiagnostics = clang_getNumDiagnostics(m_unit);
+    const uint numDiagnostics = clang_getNumDiagnostics(d->m_unit);
     problems.reserve(numDiagnostics);
     for (uint i = 0; i < numDiagnostics; ++i) {
-        auto diagnostic = clang_getDiagnostic(m_unit, i);
+        auto diagnostic = clang_getDiagnostic(d->m_unit, i);
 
         CXSourceLocation location = clang_getDiagnosticLocation(diagnostic);
         CXFile diagnosticFile;
@@ -197,36 +246,28 @@ QList<ProblemPointer> ParseSession::problemsForFile(CXFile file) const
 
 CXTranslationUnit ParseSession::unit() const
 {
-    return m_unit;
+    return d ? d->m_unit : nullptr;
 }
 
 CXFile ParseSession::file() const
 {
-    return m_file;
+    return d ? d->m_file : nullptr;
 }
 
 bool ParseSession::reparse(const QByteArray& contents, const Path::List& includes, const QHash<QString, QString>& defines)
 {
-    if (includes != m_includes || defines != m_defines) {
+    if (!d || includes != d->m_includes || defines != d->m_defines) {
         return false;
     }
 
     // TODO: track other open unsaved files and add them here
-    const auto path = m_url.byteArray();
+    const auto path = d->m_url.byteArray();
     auto file = fileForContents(path, contents);
 
-    if (clang_reparseTranslationUnit(m_unit, 1, &file, clang_defaultReparseOptions(m_unit)) == 0) {
-        setUnit(m_unit, file.Filename);
+    if (clang_reparseTranslationUnit(d->m_unit, 1, &file, clang_defaultReparseOptions(d->m_unit)) == 0) {
+        d->setUnit(d->m_unit, file.Filename);
         return true;
     } else {
         return false;
     }
-}
-
-void ParseSession::setUnit(CXTranslationUnit unit, const char* fileName)
-{
-    Q_ASSERT(!m_unit || unit == m_unit);
-
-    m_unit = unit;
-    m_file = clang_getFile(m_unit, fileName);
 }

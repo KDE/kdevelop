@@ -58,14 +58,19 @@ public slots:
             kWarning() << "No context found for" << url;
             return;
         }
-        const auto session = KSharedPtr<ParseSession>::dynamicCast(top->ast());
-        if (!session) {
+        const ParseSession session(ParseSessionData::Ptr::dynamicCast(top->ast()));
+        if (!session.data()) {
             // TODO: trigger reparse and re-request code completion
             kWarning() << "No parse session / AST attached to context for url" << url;
             return;
         }
 
-        ClangCodeCompletionContext completionContext( session.data(), position, contents );
+        if (aborting()) {
+            failed();
+            return;
+        }
+
+        ClangCodeCompletionContext completionContext( session, position, contents );
 
         if (aborting()) {
             failed();

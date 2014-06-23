@@ -38,22 +38,22 @@ inline CXFile mapFile(CXFile file, CXTranslationUnit tu)
 }
 
 ClangPCH::ClangPCH(const Path& pchInclude, const Path::List& includePaths, const QHash<QString, QString>& defines, ClangIndex* index)
+    : m_session({})
 {
     Q_ASSERT(pchInclude.isValid());
 
     const TopDUContext::Features pchFeatures = TopDUContext::AllDeclarationsContextsUsesAndAST;
-    const IndexedString lang = ParseSession::languageString();
     const IndexedString doc(pchInclude.pathOrUrl());
 
-    m_session = new ParseSession(doc, QByteArray(), index, includePaths, Path(),
-                                 defines, ParseSession::PrecompiledHeader);
+    m_session.setData(ParseSessionData::Ptr(new ParseSessionData(doc, QByteArray(), index, includePaths, Path(),
+                                            defines, ParseSessionData::PrecompiledHeader)));
 
-    if (!m_session->unit()) {
+    if (!m_session.unit()) {
         return;
     }
 
-    auto imports = ClangHelpers::tuImports(m_session->unit());
-    m_context = ClangHelpers::buildDUChain(m_session->file(), imports, m_session.data(), pchFeatures, m_includes);
+    auto imports = ClangHelpers::tuImports(m_session.unit());
+    m_context = ClangHelpers::buildDUChain(m_session.file(), imports, m_session.data(), pchFeatures, m_includes);
 }
 
 IncludeFileContexts ClangPCH::mapIncludes(CXTranslationUnit tu) const
@@ -68,7 +68,7 @@ IncludeFileContexts ClangPCH::mapIncludes(CXTranslationUnit tu) const
 
 CXFile ClangPCH::mapFile(CXTranslationUnit tu) const
 {
-    return ::mapFile(m_session->file(), tu);
+    return ::mapFile(m_session.file(), tu);
 }
 
 ReferencedTopDUContext ClangPCH::context() const
