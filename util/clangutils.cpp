@@ -100,14 +100,14 @@ CXChildVisitResult paramVisitor(CXCursor cursor, CXCursor /*parent*/, CXClientDa
 
 }
 
-QVector<QString> ClangUtils::getDefaultArguments(CXCursor cursor)
+QVector<QString> ClangUtils::getDefaultArguments(CXCursor cursor, DefaultArgumentsMode mode)
 {
     if (!CursorKindTraits::isFunction(clang_getCursorKind(cursor))) {
         return QVector<QString>();
     }
 
     int numArgs = clang_Cursor_getNumArguments(cursor);
-    QVector<QString> res(numArgs);
+    QVector<QString> arguments(mode == FixedSize ? numArgs : 0);
     QString fileName;
     CXFile file;
     clang_getFileLocation(clang_getCursorLocation(cursor),&file,nullptr,nullptr,nullptr);
@@ -136,10 +136,14 @@ QVector<QString> ClangUtils::getDefaultArguments(CXCursor cursor)
             info.stringParts.removeLast();
         }
 
-        res.replace(i, info.stringParts.join(QString()));
+        const QString result = info.stringParts.join(QString());
+        if (mode == FixedSize) {
+            arguments.replace(i, result);
+        } else if (!result.isEmpty()) {
+            arguments << result;
+        }
     }
-
-    return res;
+    return arguments;
 }
 
 

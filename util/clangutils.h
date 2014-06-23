@@ -45,19 +45,24 @@ namespace ClangUtils
      */
     CXCursor getCXCursor(int line, int column, const CXTranslationUnit& unit, const CXFile& file);
 
+    enum DefaultArgumentsMode
+    {
+        FixedSize, ///< The vector will have length equal to the number of arguments to the function
+                   /// and any arguments without a default parameter will be represented with an empty string.
+        MinimumSize ///< The vector will have a length equal to the number of default values
+    };
+
     /**
      * Given a cursor representing a function, returns a vector containing the string
      * representations of the default arguments of the function which are defined at
      * the occurance of the cursor. Note that this is not necessarily all of the default
-     * arguments of the function. The vector will have length equal to the number of
-     * arguments to the function, and any arguments without a default parameter will be
-     * represented with an empty string.
+     * arguments of the function.
      *
      * @param cursor The cursor to examine
      * @return a vector of QStrings representing the default arguments, or an empty
      *         vector if cursor does not represent a function
      */
-    QVector<QString> getDefaultArguments(CXCursor cursor);
+    QVector<QString> getDefaultArguments(CXCursor cursor, DefaultArgumentsMode mode = FixedSize);
 
     /**
      * Given a cursor and destination context, returns the string representing the
