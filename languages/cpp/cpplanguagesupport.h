@@ -163,8 +163,7 @@ private:
     CppHighlighting *m_highlights;
     SimpleRefactoring *m_refactoring;
     KDevelop::CodeCompletion *m_cc;
-    
-    CppTools::IncludePathResolver *m_includeResolver;
+
     IncludeFileDataProvider* m_quickOpenDataProvider;
     
     const QStringList m_mimeTypes;

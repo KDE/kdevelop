@@ -210,8 +210,6 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
 
     CppUtils::standardMacros();
 
-    m_includeResolver = new CppTools::IncludePathResolver;
-
     m_quickOpenDataProvider = new IncludeFileDataProvider();
 
     IQuickOpen* quickOpen = core()->pluginController()->extensionForPlugin<IQuickOpen>("org.kdevelop.IQuickOpen");
@@ -427,8 +425,6 @@ CppLanguageSupport::~CppLanguageSupport()
     // Remove any documents waiting to be parsed from the background parser.
     core()->languageController()->backgroundParser()->clear(this);
 
-
-    delete m_includeResolver;
 #ifdef DEBUG_UI_LOCKUP
     delete m_blockTester;
 #endif
