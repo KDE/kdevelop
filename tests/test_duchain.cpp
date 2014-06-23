@@ -35,6 +35,7 @@
 #include <language/duchain/types/integraltype.h>
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/classdeclaration.h>
+#include <language/duchain/abstractfunctiondeclaration.h>
 #include <language/backgroundparser/backgroundparser.h>
 #include <interfaces/ilanguagecontroller.h>
 
@@ -408,6 +409,21 @@ void TestDUChain::testGlobalFunctionDeclaration()
     QCOMPARE(file.topContext()->localDeclarations().size(), 1);
     QCOMPARE(file.topContext()->childContexts().size(), 1);
     QVERIFY(!file.topContext()->childContexts().first()->inSymbolTable());
+}
+
+void TestDUChain::testFunctionDefaultArguments()
+{
+    TestFile file("void foo(int a = 0);\n", "cpp");
+    QVERIFY(file.parseAndWait());
+
+    DUChainReadLocker lock;
+    DUContext* top = file.topContext().data();
+    QVERIFY(top);
+
+    auto functionDecl = dynamic_cast<AbstractFunctionDeclaration*>(top->localDeclarations()[0]);
+    QVERIFY(functionDecl);
+    QCOMPARE(functionDecl->defaultParametersSize(), 1u);
+    QCOMPARE(functionDecl->defaultParameters()[0].str(), QString("0"));
 }
 
 #include "test_duchain.moc"
