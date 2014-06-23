@@ -9,52 +9,27 @@ int main()
 }
 
 /**
- * "identifier" : "foo",
- * "internalContext" : { "type" : "Class", "range" : "[(15, 0), (33, 1)]" },
- * "kind" : "Type"
- */
-class foo
-{
-    /// "isStatic" : true
-    static int m;
-    /// "isStatic" : false
-    int b;
-    /// "isStatic" : false,
-    /// "isVirtual" : true
-    virtual void bla() {}
-    /// "isStatic" : false,
-    /// "isVirtual" : true
-    virtual void bar();
-    /// "isStatic" : true,
-    /// "isVirtual" : false
-    static void bla2() {}
-    /// "isStatic" : true,
-    /// "isVirtual" : false
-    static void bar2();
-};
-
-/**
  * "identifier" : "bar",
- * "internalContext" : { "type" : "Namespace", "range" : "[(40, 0), (110, 1)]" },
+ * "internalContext" : { "type" : "Namespace", "range" : "[(15, 0), (85, 1)]" },
  * "kind" : "Namespace"
  */
 namespace bar
 {
     /**
      * "identifier" : "foo",
-     * "internalContext" : { "null" : false, "range" : "[(46, 4), (46, 14)]" }
+     * "internalContext" : { "null" : false, "range" : "[(21, 4), (21, 14)]" }
      */
     void foo();
 
     /**
      * "identifier" : "foostruct",
-     * "internalContext" : { "type" : "Class", "range" : "[(52, 4), (109, 5)]" }
+     * "internalContext" : { "type" : "Class", "range" : "[(27, 4), (84, 5)]" }
      */
     struct foostruct
     {
         /**
          * "identifier" : "foostruct",
-         * "internalContext" : { "type" : "Function", "range" : "[(58, 8), (60, 9)]" }
+         * "internalContext" : { "type" : "Function", "range" : "[(33, 8), (35, 9)]" }
          */
         foostruct()
         {
@@ -62,7 +37,7 @@ namespace bar
 
         /**
          * "identifier" : "~foostruct",
-         * "internalContext" : { "type" : "Function", "range" : "[(66, 8), (68, 9)]" }
+         * "internalContext" : { "type" : "Function", "range" : "[(41, 8), (43, 9)]" }
          */
         ~foostruct()
         {
@@ -70,7 +45,7 @@ namespace bar
 
         /**
          * "identifier" : "operator int",
-         * "internalContext" : { "type" : "Function", "range" : "[(74, 8), (77, 9)]" }
+         * "internalContext" : { "type" : "Function", "range" : "[(49, 8), (52, 9)]" }
          */
         operator int()
         {
@@ -79,7 +54,7 @@ namespace bar
 
         /**
          * "identifier" : "templateFunction",
-         * "internalContext" : { "type" : "Function", "range" : "[(83, 8), (86, 9)]" }
+         * "internalContext" : { "type" : "Function", "range" : "[(58, 8), (61, 9)]" }
          */
         template<class T>
         void templateFunction()
@@ -88,7 +63,7 @@ namespace bar
 
         /**
          * "identifier" : "fooenum",
-         * "internalContext" : { "type" : "Enum", "range" : "[(92, 8), (94, 9)]" }
+         * "internalContext" : { "type" : "Enum", "range" : "[(67, 8), (69, 9)]" }
          */
         enum fooenum
         {
@@ -96,13 +71,13 @@ namespace bar
 
         /**
          * "identifier" : "foomethod",
-         * "internalContext" : { "type" : "Function", "range" : "[(100, 8), (100, 23)]" }
+         * "internalContext" : { "type" : "Function", "range" : "[(75, 8), (75, 23)]" }
          */
         int foomethod();
 
         /**
          * "identifier" : "deffoomethod",
-         * "internalContext" : { "type" : "Function", "range" : "[(106, 8), (108, 9)]" }
+         * "internalContext" : { "type" : "Function", "range" : "[(81, 8), (83, 9)]" }
          */
         void deffoomethod()
         {
@@ -110,39 +85,5 @@ namespace bar
     };
 }
 
-/// "toString" : "struct myStruct",
-/// "kind" : "Type"
-struct myStruct {};
 
-/// "toString" : "class myClass",
-/// "kind" : "Type"
-class myClass {};
 
-/// "toString" : "union myUnion",
-/// "kind" : "Type"
-union myUnion {};
-
-/// "toString" : "myEnum myEnum",
-/// "kind" : "Type"
-enum myEnum {
-    /// "toString" : "myEnum myEnumerator",
-    /// "kind" : "Type"
-    myEnumerator
-};
-
-/// "toString" : "Import of bar",
-/// "kind" : "NamespaceAlias"
-using namespace bar;
-
-/// "toString" : "Import bar as blub",
-/// "kind" : "NamespaceAlias"
-namespace blub = bar;
-
-/// "toString" : "struct myTemplate",
-/// "kind" : "Type"
-template<class T>
-struct myTemplate {};
-
-/// "toString" : "struct myTemplateChild",
-/// "kind" : "Type"
-struct myTemplateChild : myTemplate<int> { };
