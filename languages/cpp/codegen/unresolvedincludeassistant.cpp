@@ -125,13 +125,27 @@ Cpp::MissingIncludePathAssistant::MissingIncludePathAssistant(KDevelop::IndexedS
 
 void MissingIncludePathAssistant::createActions()
 {
-  MissingIncludePathAssistant* nonConst = const_cast<MissingIncludePathAssistant*>(this);
+    auto project = KDevelop::ICore::self()->projectController()->findProjectForUrl(m_url.toUrl());
 
-  KDevelop::IProject* project = KDevelop::ICore::self()->projectController()->findProjectForUrl(m_url.toUrl());
-
-  if(!project)
-    nonConst->addAction(KDevelop::IAssistantAction::Ptr(new OpenProjectForFileAssistant(m_url.toUrl())));
-
-  nonConst->addAction(KDevelop::IAssistantAction::Ptr(new AddCustomIncludePathAction(m_url, m_directive)));
+    if (!project) {
+        addAction(KDevelop::IAssistantAction::Ptr(new OpenProjectForFileAssistant(m_url.toUrl())));
+        addAction(KDevelop::IAssistantAction::Ptr(new AddCustomIncludePathAction(m_url, m_directive)));
+    } else {
+        addAction(KDevelop::IAssistantAction::Ptr(new OpenProjectConfigurationAction(project)));
+    }
 }
 
+OpenProjectConfigurationAction::OpenProjectConfigurationAction(KDevelop::IProject* project)
+    : m_project(project)
+{}
+
+QString OpenProjectConfigurationAction::description() const
+{
+    return i18n("Add Custom Include Path");
+}
+
+void OpenProjectConfigurationAction::execute()
+{
+    KDevelop::ICore::self()->projectController()->configureProject(m_project);
+    emit executed(this);
+}
