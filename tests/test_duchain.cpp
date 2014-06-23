@@ -36,6 +36,7 @@
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/classdeclaration.h>
 #include <language/duchain/abstractfunctiondeclaration.h>
+#include <language/duchain/functiondefinition.h>
 #include <language/backgroundparser/backgroundparser.h>
 #include <interfaces/ilanguagecontroller.h>
 
@@ -409,6 +410,21 @@ void TestDUChain::testGlobalFunctionDeclaration()
     QCOMPARE(file.topContext()->localDeclarations().size(), 1);
     QCOMPARE(file.topContext()->childContexts().size(), 1);
     QVERIFY(!file.topContext()->childContexts().first()->inSymbolTable());
+}
+
+void TestDUChain::testFunctionDefinitionVsDeclaration()
+{
+    TestFile file("void funcDecl(); void funcDef() {}\n", "cpp");
+    file.parse(TopDUContext::AllDeclarationsContextsAndUses);
+    QVERIFY(file.waitForParsed());
+
+    DUChainReadLocker lock;
+    QVERIFY(file.topContext());
+    QCOMPARE(file.topContext()->localDeclarations().size(), 2);
+    auto funcDecl = file.topContext()->localDeclarations()[0];
+    QVERIFY(!dynamic_cast<FunctionDefinition*>(funcDecl));
+    auto funcDef = file.topContext()->localDeclarations()[1];
+    QVERIFY(dynamic_cast<FunctionDefinition*>(funcDef));
 }
 
 #include "test_duchain.moc"
