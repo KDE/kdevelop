@@ -580,7 +580,7 @@ void OutputWidget::delayedScroll()
 
 void OutputWidget::delayedScroll(QTreeView* view)
 {
-    auto data = m_scrollDelay[view];
+    auto& data = m_scrollDelay[view];
 
     QModelIndex pre = view->model()->index(data.from - 1, 0);
     bool scroll = !pre.isValid();
@@ -591,6 +591,8 @@ void OutputWidget::delayedScroll(QTreeView* view)
     if (scroll) {
         view->scrollToBottom();
     }
+
+    data.from = -1;
 }
 
 void OutputWidget::scrollToIndex( const QModelIndex& idx )
