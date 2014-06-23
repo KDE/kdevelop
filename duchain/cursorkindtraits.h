@@ -95,9 +95,9 @@ constexpr bool isDeclaration(CXCursorKind CK)
 
 constexpr Decision isDefinition(CXCursorKind CK)
 {
-    return isFunction(CK) || CK == CXCursor_Namespace ?
+    return CK == CXCursor_Namespace ?
         Decision::True :
-        isClass(CK) || CK == CXCursor_EnumDecl ?
+        isClass(CK) || isFunction(CK) || CK == CXCursor_EnumDecl ?
         Decision::Maybe :
         Decision::False;
 }
