@@ -120,8 +120,7 @@ private:
     {
         constexpr bool isClassMember = IsInClass == Decision::True;
         constexpr bool isDefinition = IsDefinition == Decision::True;
-        //Currently, but not technically, hasContext and IsDefinition are synonyms
-        constexpr bool hasContext = IsDefinition == Decision::True;
+        constexpr bool hasContext = CursorKindTraits::isFunction(CK) || (IsDefinition == Decision::True);
         return buildDeclaration<CK, typename DeclType<CK, isDefinition, isClassMember>::Type, hasContext>(cursor);
     }
 
