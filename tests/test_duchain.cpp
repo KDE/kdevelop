@@ -411,19 +411,4 @@ void TestDUChain::testGlobalFunctionDeclaration()
     QVERIFY(!file.topContext()->childContexts().first()->inSymbolTable());
 }
 
-void TestDUChain::testFunctionDefaultArguments()
-{
-    TestFile file("void foo(int a = 0);\n", "cpp");
-    QVERIFY(file.parseAndWait());
-
-    DUChainReadLocker lock;
-    DUContext* top = file.topContext().data();
-    QVERIFY(top);
-
-    auto functionDecl = dynamic_cast<AbstractFunctionDeclaration*>(top->localDeclarations()[0]);
-    QVERIFY(functionDecl);
-    QCOMPARE(functionDecl->defaultParametersSize(), 1u);
-    QCOMPARE(functionDecl->defaultParameters()[0].str(), QString("0"));
-}
-
 #include "test_duchain.moc"
