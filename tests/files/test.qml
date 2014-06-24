@@ -1,9 +1,5 @@
 import QtQuick 2.0
 
-/**
- * "type" : { "toString" : "test" },
- * "useCount" : 1
- */
 Text {
     /*
      * "toString" : "test someId",

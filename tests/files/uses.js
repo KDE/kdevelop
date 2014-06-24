@@ -22,8 +22,3 @@ func(global, i);
  */
 var line;
 online = false;     // onFoo replaced by foo when foo is a QML signal
-
-/**
- * "useCount" : 1
- */
-var im_used_in_types_js;

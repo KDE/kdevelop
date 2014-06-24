@@ -109,8 +109,4 @@ Module {
              return;
          }
      }
-
-     test {
-         id: i_come_from_test_qml
-     }
 }

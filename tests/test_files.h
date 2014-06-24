@@ -28,8 +28,13 @@ class TestFiles : public QObject
 private slots:
     void initTestCase();
     void cleanupTestCase();
+    void testQMLCustomComponent();
+    void testJSUsesBetweenFiles();
     void testFiles_data();
     void testFiles();
+
+private:
+    void parseAndCheck(const QString& fileName);
 };
 
 #endif // TEST_FILES_H

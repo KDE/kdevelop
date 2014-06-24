@@ -57,6 +57,18 @@ void TestFiles::cleanupTestCase()
   TestCore::shutdown();
 }
 
+void TestFiles::testQMLCustomComponent()
+{
+    parseAndCheck(TEST_FILES_DIR "/custom_component/CustomComponentUser.qml");
+    parseAndCheck(TEST_FILES_DIR "/custom_component/CustomComponent.qml");
+}
+
+void TestFiles::testJSUsesBetweenFiles()
+{
+    parseAndCheck(TEST_FILES_DIR "/js_cross_file_uses/js_variable_use.js");
+    parseAndCheck(TEST_FILES_DIR "/js_cross_file_uses/js_variable_definition.js");
+}
+
 void TestFiles::testFiles_data()
 {
   QTest::addColumn<QString>("fileName");
@@ -70,6 +82,11 @@ void TestFiles::testFiles_data()
 void TestFiles::testFiles()
 {
   QFETCH(QString, fileName);
+  parseAndCheck(fileName);
+}
+
+void TestFiles::parseAndCheck(const QString& fileName)
+{
   const IndexedString indexedFileName(fileName);
   ReferencedTopDUContext top =
       DUChain::self()->waitForUpdate(indexedFileName, KDevelop::TopDUContext::AllDeclarationsContextsAndUses);

@@ -129,7 +129,6 @@ bool containsItemForDeclarationNamed(const CompletionParameters& params, const Q
         }
     }
 
-    qWarning() << "could not find declaration with name" << itemName;
     return false;
 }
 
@@ -186,7 +185,7 @@ void QmlCompletionTest::testContainsDeclaration_data()
 
     // Basic QML tests
     QTest::newRow("qml_basic_property") << "Item { id: foo\n property int prop\n %INVOKE }" << "%CURSOR" << "prop" << true;
-    QTest::newRow("qml_basic_instance") << "Item { id: foo\n onTest: %INVOKE }" << "%CURSOR" << "foo" << true;
+    QTest::newRow("qml_basic_instance") << "Item { id: foo\n %INVOKE }" << "onTest: %CURSOR" << "foo" << true;
     QTest::newRow("qml_skip_separators") << "Item { id: foo\n Item { id: bar\n property int prop }\n %INVOKE" << "onTest: bar.%CURSOR" << "prop" << true;
 
     // QML inheritance
