@@ -2,6 +2,7 @@
 Type=Service
 Name=Compiler Provider
 Name[ca]=Proveïdor del compilador
+Name[cs]=Poskytovatel překladače
 Name[da]=Compiler-udbyder
 Name[es]=Proveedor del compilador
 Name[fi]=Käännintarjoaja
@@ -16,6 +17,7 @@ Name[uk]=Надавач даних компілятора
 Name[x-test]=xxCompiler Providerxx
 GenericName=Compiler Provider
 GenericName[ca]=Proveïdor del compilador
+GenericName[cs]=Poskytovatel překladače
 GenericName[da]=Compiler-udbyder
 GenericName[es]=Proveedor del compilador
 GenericName[fi]=Käännintarjoaja
