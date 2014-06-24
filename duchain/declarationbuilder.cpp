@@ -79,7 +79,11 @@ void DeclarationBuilder::startVisiting(QmlJS::AST::Node* node)
         QDirIterator dir(file.absolutePath(), QStringList() << "*.qml" << "*.js", QDir::Files);
         DUChainWriteLocker lock;
 
-        while (dir.hasNext() && dir.next() != file.absoluteFilePath()) {
+        while (dir.hasNext()) {
+            if (dir.next() == file.absoluteFilePath()) {
+                continue;
+            }
+
             ReferencedTopDUContext context = m_session->contextOfFile(dir.filePath());
 
             if (!context) {
