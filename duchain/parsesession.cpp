@@ -245,13 +245,22 @@ ReferencedTopDUContext ParseSession::contextOfFile(const QString& fileName)
         BackgroundParser* bgparser = KDevelop::ICore::self()->languageController()->backgroundParser();
 
         if (!bgparser->isQueued(moduleFileString)) {
+            TopDUContext::Features features = (TopDUContext::Features)
+                (TopDUContext::ForceUpdate | TopDUContext::AllDeclarationsContextsAndUses);
+
             // Schedule the parsing of the imported file
-            bgparser->addDocument(moduleFileString, TopDUContext::ForceUpdate, m_ownPriority - 1,
-                                  0, ParseJob::FullSequentialProcessing);
+            bgparser->addDocument(moduleFileString,
+                                  features,
+                                  m_ownPriority - 1,
+                                  0,
+                                  ParseJob::FullSequentialProcessing);
 
             if (!bgparser->isQueued(m_url)) {
-                bgparser->addDocument(m_url, TopDUContext::ForceUpdate, m_ownPriority,
-                                      0, ParseJob::FullSequentialProcessing);
+                bgparser->addDocument(m_url,
+                                      features,
+                                      m_ownPriority,
+                                      0,
+                                      ParseJob::FullSequentialProcessing);
             }
         }
 
