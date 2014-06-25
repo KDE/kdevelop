@@ -21,7 +21,7 @@ set(kdevcpplanguagesupport_PART_SRCS
     preprocessjob.cpp
     cpphighlighting.cpp
     cpputils.cpp
-    includepathresolver.cpp
+    makefileresolver.cpp
     setuphelpers.cpp
     quickopen.cpp
     
@@ -38,17 +38,9 @@ set(kdevcpplanguagesupport_PART_SRCS
     codegen/adaptsignatureassistant.cpp
     codegen/adaptsignatureaction.cpp
     codegen/unresolvedincludeassistant.cpp
-    codegen/customincludepaths.cpp
     codegen/cppclasshelper.cpp
 #     codegen/makeimplementationprivate.cpp
 )
-
-set(kdevcpplanguagesupport_LIB_UI
-    codegen/ui/custom_include_paths.ui
-#     codegen/ui/privateimplementation.ui
-)
-
-kde4_add_ui_files(kdevcpplanguagesupport_PART_SRCS ${kdevcpplanguagesupport_LIB_UI})
 
 option(BUILD_kdev_includepathresolver "Build the includepath resolver debugging tool" OFF)
 if(BUILD_kdev_includepathresolver)

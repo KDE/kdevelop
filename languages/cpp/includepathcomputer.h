@@ -19,7 +19,7 @@
 
 #include <util/path.h>
 
-#include "includepathresolver.h"
+#include "makefileresolver.h"
 
 class IncludePathComputer
 {
@@ -56,6 +56,6 @@ private:
   KDevelop::Path m_projectDirectory;
   QString m_projectName;
   bool m_gotPathsFromManager;
-  CppTools::IncludePathResolver m_includeResolver;
+  CppTools::MakeFileResolver m_includeResolver;
 };
 #endif // INCLUDEPATHCOMPUTER_H

@@ -188,4 +188,14 @@ void DefinesAndIncludesManager::registerProvider(IDefinesAndIncludesManager::Pro
     m_providers.push_back(provider);
 }
 
+QHash< QString, QString > DefinesAndIncludesManager::defines(const Path&) const
+{
+    return {};
+}
+
+Path::List DefinesAndIncludesManager::includes(const Path&) const
+{
+    return {};
+}
+
 }

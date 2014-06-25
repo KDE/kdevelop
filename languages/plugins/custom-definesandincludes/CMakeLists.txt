@@ -1,6 +1,7 @@
 add_subdirectory(kcm_widget)
 add_subdirectory(tests)
 add_subdirectory(compilerprovider)
+add_subdirectory(outofprojectincludesanddefines)
 
 include_directories( ${KDE4_INCLUDES} ${KDEVPLATFORM_INCLUDE_DIR} )
 
