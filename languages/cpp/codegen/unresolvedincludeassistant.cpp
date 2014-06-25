@@ -26,18 +26,27 @@
 #include <makefileresolver.h>
 #include <language/backgroundparser/backgroundparser.h>
 #include <interfaces/ilanguagecontroller.h>
+#include <language/interfaces/idefinesandincludesmanager.h>
 
 using namespace Cpp;
 
-Cpp::AddCustomIncludePathAction::AddCustomIncludePathAction(KDevelop::IndexedString url, QString directive) {
+namespace
+{
+void openConfigurationPage(const QString& path)
+{
+    KDevelop::IDefinesAndIncludesManager::manager()->openConfigurationDialog(path);
+}
+}
+
+Cpp::AddCustomIncludePathAction::AddCustomIncludePathAction(KDevelop::IndexedString url) {
   m_url = url;
-  m_directive = directive;
 }
 
-//FIXME:
-void Cpp::AddCustomIncludePathAction::execute() {
+void Cpp::AddCustomIncludePathAction::execute()
+{
+    openConfigurationPage(m_url.str());
+    emit executed(this);
 }
-
 
 QString Cpp::AddCustomIncludePathAction::description() const {
   return i18n("Add Custom Include Path");
@@ -71,23 +80,6 @@ void MissingIncludePathAssistant::createActions()
 
     if (!project) {
         addAction(KDevelop::IAssistantAction::Ptr(new OpenProjectForFileAssistant(m_url.toUrl())));
-        addAction(KDevelop::IAssistantAction::Ptr(new AddCustomIncludePathAction(m_url, m_directive)));
-    } else {
-        addAction(KDevelop::IAssistantAction::Ptr(new OpenProjectConfigurationAction(project)));
     }
-}
-
-OpenProjectConfigurationAction::OpenProjectConfigurationAction(KDevelop::IProject* project)
-    : m_project(project)
-{}
-
-QString OpenProjectConfigurationAction::description() const
-{
-    return i18n("Add Custom Include Path");
-}
-
-void OpenProjectConfigurationAction::execute()
-{
-    KDevelop::ICore::self()->projectController()->configureProject(m_project);
-    emit executed(this);
+    addAction(KDevelop::IAssistantAction::Ptr(new AddCustomIncludePathAction(m_url)));
 }

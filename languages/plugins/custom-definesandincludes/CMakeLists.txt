@@ -1,7 +1,7 @@
 add_subdirectory(kcm_widget)
 add_subdirectory(tests)
 add_subdirectory(compilerprovider)
-add_subdirectory(outofprojectincludesanddefines)
+add_subdirectory(noprojectincludesanddefines)
 
 include_directories( ${KDE4_INCLUDES} ${KDEVPLATFORM_INCLUDE_DIR} )
 
@@ -17,12 +17,13 @@ target_link_libraries( kdev4includesdefinessettings LINK_PRIVATE
         ${KDEVPLATFORM_UTIL_LIBRARIES} )
 
 kde4_add_plugin( kdevdefinesandincludesmanager
-        ${kdevdefinesandincludesmanager_SRCS})
+        ${kdevdefinesandincludesmanager_SRCS} )
 target_link_libraries( kdevdefinesandincludesmanager LINK_PRIVATE
         ${KDEVPLATFORM_PROJECT_LIBRARIES}
         ${KDEVPLATFORM_UTIL_LIBRARIES}
         ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-        kdev4includesdefinessettings )
+        kdev4includesdefinessettings
+        kdev4noprojectincludesanddefines )
 
 install( TARGETS kdevdefinesandincludesmanager
          DESTINATION ${PLUGIN_INSTALL_DIR} )

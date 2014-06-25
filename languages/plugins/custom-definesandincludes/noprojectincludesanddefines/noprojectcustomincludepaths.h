@@ -19,8 +19,8 @@
  *
  */
 
-#ifndef CUSTOMINCLUDEPATHS_H
-#define CUSTOMINCLUDEPATHS_H
+#ifndef NOPROJECTCUSTOMINCLUDEPATHS_H
+#define NOPROJECTCUSTOMINCLUDEPATHS_H
 
 #include <QDialog>
 
@@ -29,12 +29,12 @@ namespace Ui
 class CustomIncludePaths;
 }
 
-class OutOfProjectCustomIncludePaths : public QDialog
+class NoProjectCustomIncludePaths : public QDialog
 {
     Q_OBJECT
 
 public:
-    OutOfProjectCustomIncludePaths( QWidget* parent = 0 );
+    NoProjectCustomIncludePaths( QWidget* parent = 0 );
 
     void setStorageDirectory( const QString& path );
     QString storageDirectory() const;

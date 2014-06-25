@@ -124,10 +124,10 @@ void IncludePathComputer::computeForeground()
   }
 
   if (noProject) {
-    for (const auto& dir : IDefinesAndIncludesManager::manager()->includes(nullptr)) {
+    for (const auto& dir : IDefinesAndIncludesManager::manager()->includes(m_source)) {
       addInclude( dir );
     }
-    m_defines = IDefinesAndIncludesManager::manager()->defines(nullptr);
+    m_defines = IDefinesAndIncludesManager::manager()->defines(m_source);
   } else if (!m_gotPathsFromManager) {
     kDebug(9007) << "Did not find any include paths from project manager for" << m_source;
   }

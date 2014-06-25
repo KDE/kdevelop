@@ -19,17 +19,16 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef OUTOFPROJECTINCLUDEPATHSMANAGER_H
-#define OUTOFPROJECTINCLUDEPATHSMANAGER_H
+#ifndef NOPROJECTINCLUDEPATHSMANAGER_H
+#define NOPROJECTINCLUDEPATHSMANAGER_H
 
 #include <QString>
 
 #include <util/path.h>
 
-class QDir;
 using KDevelop::Path;
 
-class OutOfProjectIncludePathsManager
+class NoProjectIncludePathsManager
 {
 public:
     /// @return list of include directories for @p oath
@@ -45,4 +44,4 @@ private:
     QString findConfigurationFile( const QString& path );
 };
 
-#endif // OUTOFPROJECTINCLUDEPATHSMANAGER_H
+#endif // NOPROJECTINCLUDEPATHSMANAGER_H

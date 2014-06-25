@@ -19,14 +19,14 @@
  *
  */
 
-#include "outofprojectcustomincludepaths.h"
+#include "noprojectcustomincludepaths.h"
 
-#include "ui_outofprojectcustomincludepaths.h"
+#include "ui_noprojectcustomincludepaths.h"
 
 #include <kfiledialog.h>
 #include <klocalizedstring.h>
 
-OutOfProjectCustomIncludePaths::OutOfProjectCustomIncludePaths(QWidget* parent)
+NoProjectCustomIncludePaths::NoProjectCustomIncludePaths(QWidget* parent)
     : QDialog(parent),
       m_ui(new Ui::CustomIncludePaths)
 {
@@ -38,34 +38,34 @@ OutOfProjectCustomIncludePaths::OutOfProjectCustomIncludePaths(QWidget* parent)
     connect(m_ui->directorySelector, SIGNAL(clicked()), this, SLOT(openAddIncludeDirectoryDialog()));
 }
 
-void OutOfProjectCustomIncludePaths::setStorageDirectory(const QString& path)
+void NoProjectCustomIncludePaths::setStorageDirectory(const QString& path)
 {
     m_ui->storageDirectory->setUrl(path);
 }
 
-QString OutOfProjectCustomIncludePaths::storageDirectory() const
+QString NoProjectCustomIncludePaths::storageDirectory() const
 {
     return m_ui->storageDirectory->url().toLocalFile();
 }
 
-void OutOfProjectCustomIncludePaths::appendCustomIncludePath(const QString& path)
+void NoProjectCustomIncludePaths::appendCustomIncludePath(const QString& path)
 {
     m_ui->customIncludePaths->appendPlainText(path);
 }
 
-QStringList OutOfProjectCustomIncludePaths::customIncludePaths() const
+QStringList NoProjectCustomIncludePaths::customIncludePaths() const
 {
     const QString pathsText = m_ui->customIncludePaths->document()->toPlainText();
     const QStringList paths = pathsText.split('\n', QString::SkipEmptyParts);
     return paths;
 }
 
-void OutOfProjectCustomIncludePaths::setCustomIncludePaths(const QStringList& paths)
+void NoProjectCustomIncludePaths::setCustomIncludePaths(const QStringList& paths)
 {
     m_ui->customIncludePaths->setPlainText(paths.join("\n"));
 }
 
-void OutOfProjectCustomIncludePaths::openAddIncludeDirectoryDialog()
+void NoProjectCustomIncludePaths::openAddIncludeDirectoryDialog()
 {
     const QString dirName = KFileDialog::getExistingDirectory(KUrl(), this, tr("Select directory to include"));
     if (dirName.isEmpty())

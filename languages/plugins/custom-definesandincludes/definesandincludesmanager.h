@@ -24,12 +24,15 @@
 
 #include <QVariantList>
 #include <QVector>
+#include <QScopedPointer>
 
 #include <interfaces/iplugin.h>
 
 #include <language/interfaces/idefinesandincludesmanager.h>
 
 #include "settingsmanager.h"
+
+class NoProjectIncludePathsManager;
 
 namespace KDevelop
 {
@@ -46,16 +49,19 @@ public :
     ///@return list of all custom includes for @p item
     Path::List includes( ProjectBaseItem* item, Type type  ) const override;
 
-    virtual QHash<QString, QString> defines( const Path& ) const override;
+    virtual QHash<QString, QString> defines( const QString& path ) const override;
 
-    virtual Path::List includes( const Path& ) const override;
+    virtual Path::List includes( const QString& path ) const override;
 
     virtual void registerProvider( Provider* provider ) override;
 
     virtual bool unregisterProvider( Provider* provider ) override;
 
+    virtual void openConfigurationDialog( const QString& pathToFile );
+
 private:
     QVector<Provider*> m_providers;
+    QScopedPointer<NoProjectIncludePathsManager> m_noProjectIPM;
 };
 }
 #endif // CUSTOMDEFINESANDINCLUDESMANAGER_H

@@ -35,24 +35,12 @@ class AddCustomIncludePathAction : public KDevelop::IAssistantAction {
   Q_OBJECT
 
 public:
-  AddCustomIncludePathAction(KDevelop::IndexedString url, QString directive);
+  AddCustomIncludePathAction(KDevelop::IndexedString url);
   virtual QString description() const;
   virtual void execute();
 
 private:
   KDevelop::IndexedString m_url;
-  QString m_directive;
-};
-
-class OpenProjectConfigurationAction : public KDevelop::IAssistantAction
-{
-public:
-  OpenProjectConfigurationAction( KDevelop::IProject* project );
-  virtual QString description() const;
-  virtual void execute();
-
-private:
-  KDevelop::IProject* m_project;
 };
 
 class OpenProjectForFileAssistant : public KDevelop::IAssistantAction {

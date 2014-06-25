@@ -19,7 +19,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "outofprojectincludepathsmanager.h"
+#include "noprojectincludepathsmanager.h"
 
 #include <QFile>
 #include <QDir>
@@ -33,7 +33,7 @@
 #include <language/backgroundparser/backgroundparser.h>
 #include <language/duchain/indexedstring.h>
 
-#include "outofprojectcustomincludepaths.h"
+#include "noprojectcustomincludepaths.h"
 
 namespace
 {
@@ -56,7 +56,7 @@ QStringList pathListToStringList(const Path::List& paths)
 }
 }
 
-QString OutOfProjectIncludePathsManager::findConfigurationFile(const QString& path)
+QString NoProjectIncludePathsManager::findConfigurationFile(const QString& path)
 {
     QDir dir(path);
     while (dir.exists()) {
@@ -72,7 +72,7 @@ QString OutOfProjectIncludePathsManager::findConfigurationFile(const QString& pa
     return {};
 }
 
-Path::List OutOfProjectIncludePathsManager::includes(const QString& path)
+Path::List NoProjectIncludePathsManager::includes(const QString& path)
 {
     QFileInfo fi(path);
 
@@ -84,12 +84,17 @@ Path::List OutOfProjectIncludePathsManager::includes(const QString& path)
 
     QFile f(pathToFile);
     if (f.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        QString read = QString::fromLocal8Bit(f.readAll());
-        QStringList lines = read.split(QChar(QChar::LineSeparator), QString::SkipEmptyParts);
-        for (const auto & line : lines) {
+        auto lines = QString::fromLocal8Bit(f.readAll()).split(QChar(QChar::LineSeparator), QString::SkipEmptyParts);
+        QFileInfo dir(pathToFile);
+        for (const auto& line : lines) {
             auto textLine = line.trimmed();
             if (!textLine.isEmpty()) {
-                ret << Path(textLine);
+                QFileInfo pathInfo(textLine);
+                if (pathInfo.isRelative()) {
+                    ret << Path(dir.canonicalPath() + QDir::separator() + textLine);
+                } else {
+                    ret << Path(textLine);
+                }
             }
         }
         f.close();
@@ -97,18 +102,19 @@ Path::List OutOfProjectIncludePathsManager::includes(const QString& path)
     return ret;
 }
 
-bool OutOfProjectIncludePathsManager::writeIncludePaths(const QString& storageDirectory, const Path::List& includePaths)
+bool NoProjectIncludePathsManager::writeIncludePaths(const QString& storageDirectory, const Path::List& includePaths)
 {
-    removeSettings(storageDirectory);
-
     QDir dir(storageDirectory);
     QFileInfo customIncludePaths(dir, includePathsFile);
     QFile f(customIncludePaths.filePath());
-    if (f.open(QIODevice::WriteOnly | QIODevice::Text)) {
+    if (f.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)) {
         QTextStream out(&f);
-        for (const auto & customPath : includePaths) {
+        for (const auto& customPath : includePaths) {
             out << customPath.path();
             out << QChar(QChar::LineSeparator);
+        }
+        if (includePaths.isEmpty()) {
+            removeSettings(storageDirectory);
         }
         return true;
     } else {
@@ -116,9 +122,9 @@ bool OutOfProjectIncludePathsManager::writeIncludePaths(const QString& storageDi
     }
 }
 
-void OutOfProjectIncludePathsManager::openConfigurationDialog(const QString& path)
+void NoProjectIncludePathsManager::openConfigurationDialog(const QString& path)
 {
-    OutOfProjectCustomIncludePaths cip;
+    NoProjectCustomIncludePaths cip;
 
     QFileInfo fi(path);
     auto dir = fi.absoluteDir().absolutePath();
@@ -130,8 +136,8 @@ void OutOfProjectIncludePathsManager::openConfigurationDialog(const QString& pat
 
     if (cip.exec() == QDialog::Accepted) {
         if (!writeIncludePaths(cip.storageDirectory(), KDevelop::toPathList(cip.customIncludePaths()))) {
-            kDebug() << i18n("Failed to save custom include paths in directory: %1", cip.storageDirectory());
+            kWarning() << i18n("Failed to save custom include paths in directory: %1", cip.storageDirectory());
         }
+        KDevelop::ICore::self()->languageController()->backgroundParser()->addDocument(KDevelop::IndexedString(path));
     }
-    KDevelop::ICore::self()->languageController()->backgroundParser()->addDocument(KDevelop::IndexedString(path));
 }
