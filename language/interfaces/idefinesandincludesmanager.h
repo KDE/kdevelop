@@ -77,15 +77,25 @@ public:
         virtual Type type() const = 0;
     };
 
-    ///@param item project item, use nullptr for files without project
+    ///@param item project item
     ///@return list of defines for @p item
     ///NOTE: call it from the foreground thread only.
     virtual QHash<QString, QString> defines( ProjectBaseItem* item, Type type = All ) const = 0;
 
-    ///@param item project item, use nullptr for files without project
+    ///@param item project item
     ///@return list of include directories/files for @p item
     ///NOTE: call it from the foreground thread only.
     virtual Path::List includes( ProjectBaseItem* item, Type type = All ) const = 0;
+
+    ///@param path path to an out-of-project file.
+    ///@return list of defines for @p path
+    ///NOTE: call it from the foreground thread only.
+    virtual QHash<QString, QString> defines( const QString& path ) const = 0;
+
+    ///@param path path to an out-of-project file.
+    ///@return list of include directories/files for @p path
+    ///NOTE: call it from the foreground thread only.
+    virtual Path::List includes( const QString& path ) const = 0;
 
     ///@return the instance of the plugin.
     static IDefinesAndIncludesManager* manager();
@@ -101,6 +111,9 @@ public:
      * @return true on success, false otherwise (e.g. if not registered)
      */
     virtual bool unregisterProvider(Provider* provider) = 0;
+
+    /// Opens a configuration dialog for @p pathToFile to modify include directories/files and defined macros.
+    virtual void openConfigurationDialog(const QString& pathToFile) = 0;
 };
 }
 
