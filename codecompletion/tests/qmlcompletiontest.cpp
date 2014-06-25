@@ -217,6 +217,15 @@ void QmlCompletionTest::testContainsDeclaration_data()
 
     // This declaration must be in QtQuick 2.2 but not 2.0 (tested in testDoesNotContainDeclaration)
     QTest::newRow("qml_module_version_2.2") << "import QtQuick 2.2\n Item { id: a\n %INVOKE }" << "%CURSOR" << "OpacityAnimator" << true;
+
+    // Built-in QML types
+    QTest::newRow("qml_builtin_types") <<
+        "import QtQuick 2.0\n"
+        "\n"
+        "Text {\n"
+        " id: foo\n"
+        " %INVOKE\n"
+        "}\n" << "font.%CURSOR" << "family" << true;
 }
 
 void QmlCompletionTest::testDoesNotContainDeclaration()

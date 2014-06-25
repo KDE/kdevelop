@@ -39,6 +39,11 @@ Text {
     property var bar: "I can contain anything"
 
     /**
+     * "toString" : "mixed baz"
+     */
+    property variant baz
+
+    /**
      * "toString" : "int[] ints"
      */
     property list<int> ints

@@ -1100,7 +1100,9 @@ void DeclarationBuilder::closeAndAssignType()
 AbstractType::Ptr DeclarationBuilder::typeFromName(const QString& name)
 {
     auto type = IntegralType::TypeNone;
+    QString realName = name;
 
+    // Built-in types
     if (name == QLatin1String("string")) {
         type = IntegralType::TypeString;
     } else if (name == QLatin1String("bool")) {
@@ -1109,17 +1111,40 @@ AbstractType::Ptr DeclarationBuilder::typeFromName(const QString& name)
         type = IntegralType::TypeInt;
     } else if (name == QLatin1String("float")) {
         type = IntegralType::TypeFloat;
-    } else if (name == QLatin1String("double")) {
+    } else if (name == QLatin1String("double") || name == QLatin1String("real")) {
         type = IntegralType::TypeDouble;
     } else if (name == QLatin1String("void")) {
         type = IntegralType::TypeVoid;
-    } else if (name == QLatin1String("var")) {
+    } else if (name == QLatin1String("var") || name == QLatin1String("variant")) {
         type = IntegralType::TypeMixed;
+    } else if (m_session->language() == QmlJS::Language::Qml) {
+        // In QML files, some Qt type names need to be renamed to the QML equivalent
+        if (name == QLatin1String("QFont")) {
+            realName = QLatin1String("Font");
+        } else if (name == QLatin1String("QColor")) {
+            realName = QLatin1String("color");
+        } else if (name == QLatin1String("QDateTime")) {
+            realName = QLatin1String("date");
+        } else if (name == QLatin1String("QDate")) {
+            realName = QLatin1String("date");
+        } else if (name == QLatin1String("QTime")) {
+            realName = QLatin1String("time");
+        } else if (name == QLatin1String("QRect") || name == QLatin1String("QRectF")) {
+            realName = QLatin1String("rect");
+        } else if (name == QLatin1String("QPoint") || name == QLatin1String("QPointF")) {
+            realName = QLatin1String("point");
+        } else if (name == QLatin1String("QSize") || name == QLatin1String("QSizeF")) {
+            realName = QLatin1String("size");
+        } else if (name == QLatin1String("QUrl")) {
+            realName = QLatin1String("url");
+        } else if (name == QLatin1String("QVector3D")) {
+            realName = QLatin1String("vector3d");
+        }
     }
 
     if (type == IntegralType::TypeNone) {
         // Not a built-in type, but a class
-        return typeFromClassName(name);
+        return typeFromClassName(realName);
     } else {
         return AbstractType::Ptr(new IntegralType(type));
     }
