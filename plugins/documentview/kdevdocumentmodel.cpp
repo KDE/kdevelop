@@ -22,9 +22,11 @@
 #include <KFileItem>
 #include <QtCore/qdebug.h>
 
+using namespace KDevelop;
+
 KDevDocumentItem::KDevDocumentItem( const QString &name )
-    : QStandardItem( name ),
-        m_documentState( KDevelop::IDocument::Clean )
+    : QStandardItem(name)
+    , m_documentState(IDocument::Clean)
 {
     setIcon( icon() );
 }
@@ -32,8 +34,46 @@ KDevDocumentItem::KDevDocumentItem( const QString &name )
 KDevDocumentItem::~KDevDocumentItem()
 {}
 
+QIcon KDevDocumentItem::icon() const
+{
+    switch(m_documentState)
+    {
+    case IDocument::Clean:
+        return  KIcon(m_fileIcon);
+    case IDocument::Modified:
+        return KIcon("document-save");
+    case IDocument::Dirty:
+        return KIcon("document-revert");
+    case IDocument::DirtyAndModified:
+        return KIcon("edit-delete");
+    default:
+        return QIcon();
+    }
+}
+
+IDocument::DocumentState KDevDocumentItem::documentState() const
+{
+    return m_documentState;
+}
+
+void KDevDocumentItem::setDocumentState(IDocument::DocumentState state)
+{
+    m_documentState = state;
+    setIcon(icon());
+}
+
+const KUrl KDevDocumentItem::url() const
+{
+    return m_url;
+}
+
+void KDevDocumentItem::setUrl(const KUrl& url)
+{
+    m_url = url;
+}
+
 KDevCategoryItem::KDevCategoryItem( const QString &name )
-        : KDevDocumentItem( name )
+    : KDevDocumentItem( name )
 {
     setFlags(Qt::ItemIsEnabled);
     setToolTip( name );
@@ -92,7 +132,6 @@ KDevDocumentModel::~KDevDocumentModel()
 
 QList<KDevCategoryItem*> KDevDocumentModel::categoryList() const
 {
-
     QList<KDevCategoryItem*> lst;
     for ( int i = 0; i < rowCount() ; ++i )
     {
@@ -118,4 +157,3 @@ KDevCategoryItem* KDevDocumentModel::category( const QString& category ) const
 }
 
 #include "kdevdocumentmodel.moc"
-

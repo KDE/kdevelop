@@ -23,7 +23,7 @@
 
 #include <QStandardItem>
 #include <QStandardItemModel>
-#include <interfaces/idocumentcontroller.h>
+
 #include <interfaces/idocument.h>
 
 #include <kurl.h>
@@ -49,43 +49,13 @@ public:
         return 0;
     }
 
-    QIcon icon() const
-    {
-        switch ( m_documentState )
-        {
-        case KDevelop::IDocument::Clean:
-            return  KIcon ( m_fileIcon );
-        case KDevelop::IDocument::Modified:
-            return KIcon( "document-save" );
-        case KDevelop::IDocument::Dirty:
-            return KIcon( "document-revert" );
-        case KDevelop::IDocument::DirtyAndModified:
-            return KIcon( "edit-delete" );
-        default:
-            return QIcon();
-        }
-    }
+    QIcon icon() const;
 
-    KDevelop::IDocument::DocumentState documentState() const
-    {
-        return m_documentState;
-    }
+    KDevelop::IDocument::DocumentState documentState() const;
+    void setDocumentState( KDevelop::IDocument::DocumentState state );
 
-    void setDocumentState( KDevelop::IDocument::DocumentState state )
-    {
-        m_documentState = state;
-        setIcon(icon());
-    }
-
-    const KUrl &url() const
-    {
-        return m_url;
-    }
-
-    void setUrl( const KUrl &url )
-    {
-        m_url = url;
-    }
+    const KUrl url() const;
+    void setUrl(const KUrl &url);
 
 protected:
     QString m_fileIcon;
@@ -125,6 +95,7 @@ public:
 class KDevDocumentModel: public QStandardItemModel
 {
     Q_OBJECT
+
 public:
     KDevDocumentModel( QObject *parent = 0 );
     virtual ~KDevDocumentModel();
@@ -134,4 +105,3 @@ public:
 };
 
 #endif // KDEVPLATFORM_PLUGIN_KDEVDOCUMENTMODEL_H
-
