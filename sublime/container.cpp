@@ -89,6 +89,7 @@ bool sortViews(const View* const lhs, const View* const rhs)
 }
 
 struct ContainerPrivate {
+    QBoxLayout* layout;
     QMap<QWidget*, View*> viewForWidget;
 
     ContainerTabBar *tabBar;
@@ -204,9 +205,9 @@ Container::Container(QWidget *parent)
     l->setMargin(0);
     l->setSpacing(0);
 
-    m_tabBarLayout = new QBoxLayout(QBoxLayout::LeftToRight);
-    m_tabBarLayout->setMargin(0);
-    m_tabBarLayout->setSpacing(0);
+    d->layout = new QBoxLayout(QBoxLayout::LeftToRight);
+    d->layout->setMargin(0);
+    d->layout->setSpacing(0);
 
     d->documentListMenu = new QMenu(this);
     d->documentListButton = new QToolButton(this);
@@ -216,18 +217,18 @@ Container::Container(QWidget *parent)
     d->documentListButton->setAutoRaise(true);
     d->documentListButton->setToolTip(i18n("Show sorted list of opened documents"));
     d->documentListButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
-    m_tabBarLayout->addWidget(d->documentListButton);
+    d->layout->addWidget(d->documentListButton);
     d->tabBar = new ContainerTabBar(this);
     d->tabBar->setContextMenuPolicy(Qt::CustomContextMenu);
-    m_tabBarLayout->addWidget(d->tabBar);
+    d->layout->addWidget(d->tabBar);
     d->fileStatus = new QLabel( this );
     d->fileStatus->setFixedSize( QSize( 16, 16 ) );
-    m_tabBarLayout->addWidget(d->fileStatus);
+    d->layout->addWidget(d->fileStatus);
     d->fileNameCorner = new UnderlinedLabel(d->tabBar, this);
-    m_tabBarLayout->addWidget(d->fileNameCorner);
+    d->layout->addWidget(d->fileNameCorner);
     d->statusCorner = new StatusLabel(d->tabBar, this);
-    m_tabBarLayout->addWidget(d->statusCorner);
-    l->addLayout(m_tabBarLayout);
+    d->layout->addWidget(d->statusCorner);
+    l->addLayout(d->layout);
 
     d->stack = new QStackedWidget(this);
     l->addWidget(d->stack);
@@ -262,7 +263,7 @@ void Container::setLeftCornerWidget(QWidget* widget)
     if(!widget)
         return;
     widget->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
-    m_tabBarLayout->insertWidget(0, widget);
+    d->layout->insertWidget(0, widget);
     widget->show();
 }
 

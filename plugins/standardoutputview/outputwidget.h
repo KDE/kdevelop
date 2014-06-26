@@ -79,6 +79,7 @@ private slots:
     void selectAll();
     void outputFilter(const QString filter);
     void updateFilter(int index);
+    void delayedScroll();
 
 private:
     QTreeView* createListView(int id);
@@ -90,9 +91,16 @@ private:
     void activateIndex(const QModelIndex& index, QAbstractItemView* view, KDevelop::IOutputViewModel* iface);
     void eventuallyDoFocus();
     int currentOutputIndex();
+    void delayedScroll(QTreeView* view);
 
     QMap<int, QTreeView*> views;
-    QMap<int, QTimer*> scrollTimers;
+    struct DelayData
+    {
+        QTimer* timer;
+        int from;
+        int to;
+    };
+    QMap<QTreeView*, DelayData> m_scrollDelay;
     QMap<int, QSortFilterProxyModel*> proxyModels;
     QMap<int, QString> filters;
     KTabWidget* tabwidget;

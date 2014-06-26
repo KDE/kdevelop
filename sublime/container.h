@@ -97,10 +97,7 @@ private Q_SLOTS:
     void documentListActionTriggered(QAction*);
 
 private:
-
     struct ContainerPrivate * const d;
-
-    QBoxLayout* m_tabBarLayout;
 };
 
 }

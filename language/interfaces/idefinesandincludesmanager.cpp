@@ -32,6 +32,7 @@ IDefinesAndIncludesManager::~IDefinesAndIncludesManager()
 IDefinesAndIncludesManager* IDefinesAndIncludesManager::manager()
 {
     auto manager = KDevelop::ICore::self()->pluginController()->pluginForExtension( "org.kdevelop.IDefinesAndIncludesManager" );
+    Q_ASSERT(manager);
     if ( !manager ) {
         return nullptr;
     }
