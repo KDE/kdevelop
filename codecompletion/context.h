@@ -45,6 +45,10 @@ public:
     Q_DECLARE_FLAGS(CompletionInContextFlags, CompletionInContextFlag)
 
 private:
+    QList<KDevelop::CompletionTreeItemPointer> normalCompletion();
+    QList<KDevelop::CompletionTreeItemPointer> commentCompletion();
+    QList<KDevelop::CompletionTreeItemPointer> importCompletion();
+
     QList<KDevelop::CompletionTreeItemPointer> completionsInContext(const KDevelop::DUContextPointer& context,
                                                                     CompletionInContextFlags flags,
                                                                     CompletionItem::Decoration decoration);
@@ -57,6 +61,7 @@ private:
     enum CompletionKind {
         NormalCompletion,   /*!< @brief Completion in a code context */
         CommentCompletion,  /*!< @brief Completion in comments */
+        ImportCompletion,   /*!< @brief Completion for import statements */
     };
 
     CompletionKind m_completionKind;

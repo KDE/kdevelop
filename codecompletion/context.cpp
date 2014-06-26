@@ -22,6 +22,7 @@
 
 #include "context.h"
 #include "completionitem.h"
+#include "modulecompletionitem.h"
 
 #include <language/codecompletion/codecompletionitem.h>
 #include <language/codecompletion/normaldeclarationcompletionitem.h>
@@ -30,11 +31,14 @@
 #include <language/duchain/classdeclaration.h>
 #include <language/duchain/namespacealiasdeclaration.h>
 #include <language/duchain/codemodel.h>
+#include <kstandarddirs.h>
 
 #include <qmljs/qmljsdocument.h>
 #include <qmljs/parser/qmljslexer_p.h>
 #include <duchain/expressionvisitor.h>
 #include <duchain/helper.h>
+
+#include <QtCore/QDir>
 
 using namespace KDevelop;
 
@@ -47,6 +51,11 @@ CodeCompletionContext::CodeCompletionContext(const DUContextPointer& context, co
 : KDevelop::CodeCompletionContext(context, extractLastLine(text), position, depth),
   m_completionKind(NormalCompletion)
 {
+    // Detect "import ..." and provide import completions
+    if (m_text.startsWith("import ")) {
+        m_completionKind = ImportCompletion;
+    }
+
     // Detect whether the cursor is in a comment
     bool isLastLine = true;
 
@@ -77,15 +86,23 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& ab
 {
     Q_UNUSED (fullCompletion);
 
-    // Compute the completion items, based on the surrounding text and the
-    // type of completion to offer in the constructor
-
-    QList<CompletionTreeItemPointer> items;
-
-    if (abort || m_completionKind == CommentCompletion) {
-        return items;
+    if (abort) {
+        return QList<CompletionTreeItemPointer>();
     }
 
+    switch (m_completionKind) {
+    case NormalCompletion:
+        return normalCompletion();
+    case CommentCompletion:
+        return commentCompletion();
+    case ImportCompletion:
+        return importCompletion();
+    }
+}
+
+QList<KDevelop::CompletionTreeItemPointer> CodeCompletionContext::normalCompletion()
+{
+    QList<CompletionTreeItemPointer> items;
     QChar lastChar = m_text.size() > 0 ? m_text.at(m_text.size() - 1) : QLatin1Char('\0');
 
     if (lastChar == QLatin1Char('.') || lastChar == QLatin1Char('[')) {
@@ -118,6 +135,29 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& ab
                                           0,
                                           CompletionItem::NoDecoration);
         }
+    }
+
+    return items;
+}
+
+QList<CompletionTreeItemPointer> CodeCompletionContext::commentCompletion()
+{
+    return QList<CompletionTreeItemPointer>();
+}
+
+QList<CompletionTreeItemPointer> CodeCompletionContext::importCompletion()
+{
+    QList<CompletionTreeItemPointer> items;
+
+    // List $KDEDATA/kdevqmljssupport/qmlplugins/ and add one completion item
+    // per file found there
+    QString dataDir = KGlobal::dirs()->findDirs("data",
+        QLatin1String("kdevqmljssupport/qmlplugins")
+    ).at(0);
+    QDir dir(dataDir);
+
+    for (const QString &entry : dir.entryList(QDir::Files, QDir::Name)) {
+        items.append(CompletionTreeItemPointer(new ModuleCompletionItem(entry)));
     }
 
     return items;
