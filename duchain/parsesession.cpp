@@ -91,7 +91,8 @@ ParseSessionData::ParseSessionData(const IndexedString& url, const QByteArray& c
     , m_unit(nullptr)
     , m_file(nullptr)
 {
-    unsigned int flags = CXTranslationUnit_CXXChainedPCH;
+    unsigned int flags = CXTranslationUnit_CXXChainedPCH
+        | CXTranslationUnit_DetailedPreprocessingRecord;
     if (options.testFlag(SkipFunctionBodies)) {
         flags |= CXTranslationUnit_SkipFunctionBodies;
     }

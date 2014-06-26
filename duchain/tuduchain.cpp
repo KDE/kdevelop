@@ -20,6 +20,7 @@
  */
 
 #include "tuduchain.h"
+
 #include "debug.h"
 
 #include <language/duchain/types/indexedtype.h>
@@ -92,6 +93,13 @@ struct IdType<CK, typename std::enable_if<CK == CXCursor_EnumConstantDecl>::type
 template<CXCursorKind CK, bool isDefinition, bool isInClass>
 struct DeclType<CK, isDefinition, isInClass,
     typename std::enable_if<CursorKindTraits::isKDevDeclaration(CK, isInClass)>::type>
+{
+    typedef Declaration Type;
+};
+
+template<CXCursorKind CK, bool isDefinition, bool isInClass>
+struct DeclType<CK, isDefinition, isInClass,
+    typename std::enable_if<CK == CXCursor_MacroDefinition>::type>
 {
     typedef Declaration Type;
 };
@@ -276,6 +284,8 @@ CXChildVisitResult TUDUChain::visitCursor(CXCursor cursor, CXCursor parent, CXCl
     UseCursorKind(CXCursor_FunctionTemplate, cursor, parent);
     UseCursorKind(CXCursor_ClassTemplate, cursor, parent);
     UseCursorKind(CXCursor_ClassTemplatePartialSpecialization, cursor, parent);
+    UseCursorKind(CXCursor_MacroDefinition, cursor, parent);
+    UseCursorKind(CXCursor_MacroExpansion, cursor);
     UseCursorKind(CXCursor_TypeRef, cursor);
     UseCursorKind(CXCursor_CXXBaseSpecifier, cursor);
     UseCursorKind(CXCursor_TemplateRef, cursor);

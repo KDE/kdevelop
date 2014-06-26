@@ -27,6 +27,7 @@
 #include "cursorkindtraits.h"
 #include "clanghelpers.h"
 #include "clangducontext.h"
+#include "util/clangdebug.h"
 #include "util/clangutils.h"
 #include "util/clangtypes.h"
 

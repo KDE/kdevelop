@@ -49,7 +49,8 @@ constexpr bool isUse(CXCursorKind CK)
     || CK == CXCursor_OverloadedDeclRef
     || CK == CXCursor_VariableRef
     || CK == CXCursor_DeclRefExpr
-    || CK == CXCursor_MemberRefExpr;
+    || CK == CXCursor_MemberRefExpr
+    || CK == CXCursor_MacroExpansion;
 }
 
 constexpr bool isClassTemplate(CXCursorKind CK)
@@ -95,7 +96,7 @@ constexpr bool isDeclaration(CXCursorKind CK)
 
 constexpr Decision isDefinition(CXCursorKind CK)
 {
-    return CK == CXCursor_Namespace ?
+    return CK == CXCursor_Namespace || CK == CXCursor_MacroDefinition ?
         Decision::True :
         isClass(CK) || isFunction(CK) || CK == CXCursor_EnumDecl ?
         Decision::Maybe :
@@ -110,7 +111,9 @@ constexpr Decision isInClass(CXCursorKind CK)
         || CK == CXCursor_TemplateTypeParameter
         || CK == CXCursor_FunctionDecl
         || CK == CXCursor_TemplateTemplateParameter
-        || CK == CXCursor_NonTypeTemplateParameter ?
+        || CK == CXCursor_NonTypeTemplateParameter
+        || CK == CXCursor_MacroDefinition
+        || CK == CXCursor_MacroExpansion ?
         Decision::False :
         Decision::Maybe;
 }
@@ -130,6 +133,7 @@ constexpr DUContext::ContextType contextType(CXCursorKind CK)
     : CK == CXCursor_FunctionTemplate                   ? DUContext::Function
     : CK == CXCursor_ClassTemplate                      ? DUContext::Class
     : CK == CXCursor_ClassTemplatePartialSpecialization ? DUContext::Class
+    : CK == CXCursor_MacroDefinition                    ? DUContext::Other
     : static_cast<DUContext::ContextType>(-1);
 }
 
