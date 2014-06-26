@@ -39,6 +39,7 @@ public:
         Quotes,             /*!< @brief Wrap the item in quotes: item becomes "item" */
         QuotesAndBracket,   /*!< @brief Wrap the item as in array subscripts: item becomes "item"] */
         Colon,              /*!< @brief Append a colon after the item: item becomes item: */
+        Brackets,           /*!< @brief Append brackets after the item and put the cursor in-between them: item becomes item(|) */
     };
 
     CompletionItem(KDevelop::DeclarationPointer decl, int inheritanceDepth, Decoration decoration);

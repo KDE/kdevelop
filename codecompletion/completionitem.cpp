@@ -31,6 +31,7 @@
 #include <language/duchain/types/structuretype.h>
 
 #include <ktexteditor/document.h>
+#include <ktexteditor/view.h>
 
 using namespace QmlJS;
 using namespace KDevelop;
@@ -123,5 +124,12 @@ void CompletionItem::executed(KTextEditor::Document* document, const KTextEditor
     case QmlJS::CompletionItem::Colon:
         document->replaceText(word, base + ": ");
         break;
+
+    case QmlJS::CompletionItem::Brackets:
+        document->replaceText(word, base + "()");
+
+        if (document->activeView()) {
+            document->activeView()->setCursorPosition(word.end() + KTextEditor::Cursor(0, 1));
+        }
     }
 }

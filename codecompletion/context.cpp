@@ -121,6 +121,11 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionsInContext(con
                 continue;
             } else if (declaration->qualifiedIdentifier().isEmpty()) {
                 continue;
+            } else if (decoration == CompletionItem::NoDecoration &&
+                       declaration->abstractType() &&
+                       declaration->abstractType()->whichType() == AbstractType::TypeFunction) {
+                // Decorate function calls with brackets
+                decoration = CompletionItem::Brackets;
             } else if (flags.testFlag(CompletionHideWrappers)) {
                 ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration*>(declaration.data());
 
