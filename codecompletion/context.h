@@ -52,6 +52,14 @@ private:
                                                                 CompletionItem::Decoration decoration);
 
     bool containsOnlySpaces(const QString &str);
+
+private:
+    enum CompletionKind {
+        NormalCompletion,   /*!< @brief Completion in a code context */
+        CommentCompletion,  /*!< @brief Completion in comments */
+    };
+
+    CompletionKind m_completionKind;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(CodeCompletionContext::CompletionInContextFlags)

@@ -44,10 +44,33 @@ namespace QmlJS {
 
 CodeCompletionContext::CodeCompletionContext(const DUContextPointer& context, const QString& text,
                                              const CursorInRevision& position, int depth)
-    : KDevelop::CodeCompletionContext(context, extractLastLine(text), position, depth)
+: KDevelop::CodeCompletionContext(context, extractLastLine(text), position, depth),
+  m_completionKind(NormalCompletion)
 {
-    // Determine which kind of completion should be offered
-    // ...
+    // Detect whether the cursor is in a comment
+    bool isLastLine = true;
+
+    for (int index = text.size()-1; index > 0; --index) {
+        const QChar c = text.at(index);
+        const QChar prev = text.at(index - 1);
+
+        if (c == QLatin1Char('\n')) {
+            isLastLine = false;
+        } else if (isLastLine && prev == QLatin1Char('/') && c == QLatin1Char('/')) {
+            // Single-line comment on the current line, we are in a comment
+            m_completionKind = CommentCompletion;
+            break;
+        } else if (prev == QLatin1Char('/') && c == QLatin1Char('*')) {
+            // Start of a multi-line comment encountered
+            m_completionKind = CommentCompletion;
+            break;
+        } else if (prev == QLatin1Char('*') && c == QLatin1Char('/')) {
+            // End of a multi-line comment. Because /* and */ cannot be nested,
+            // encountering a */ is enough to know that the cursor is outside a
+            // comment
+            break;
+        }
+    }
 }
 
 QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& abort, bool fullCompletion)
@@ -59,7 +82,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& ab
 
     QList<CompletionTreeItemPointer> items;
 
-    if (abort) {
+    if (abort || m_completionKind == CommentCompletion) {
         return items;
     }
 

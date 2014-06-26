@@ -174,6 +174,10 @@ void QmlCompletionTest::testContainsDeclaration_data()
     QTest::addColumn<QString>("expectedItem");
     QTest::addColumn<bool>("qml");
 
+    // Comments
+    QTest::newRow("js_outside_single_line_comment") << "var a // this is a comment;\n%INVOKE" << "%CURSOR" << "a" << false;
+    QTest::newRow("js_outside_multi_line_comment") << "var a;\n%INVOKE" << "/* comment */ %CURSOR" << "a" << false;
+
     // Basic JS tests
     QTest::newRow("js_basic_variable") << "var a;\n %INVOKE" << "%CURSOR" << "a" << false;
     QTest::newRow("js_basic_function") << "function f();\n %INVOKE" << "%CURSOR" << "f" << false;
@@ -244,6 +248,10 @@ void QmlCompletionTest::testDoesNotContainDeclaration_data()
     QTest::addColumn<QString>("completionCode");
     QTest::addColumn<QString>("item");
     QTest::addColumn<bool>("qml");
+
+    // Comments
+    QTest::newRow("js_in_single_line_comment") << "var a;\n%INVOKE" << "// %CURSOR" << "a" << false;
+    QTest::newRow("js_in_multi_line_comment") << "var a;\n%INVOKE" << "/* %CURSOR" << "a" << false;
 
     // Don't show unreachable declarations when providing code-completions for object members
     QTest::newRow("js_object_member_not_surrounding") << "var a; var b = {c: 0};%INVOKE" << "b.%CURSOR" << "a" << false;
