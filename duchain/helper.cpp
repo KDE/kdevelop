@@ -154,4 +154,9 @@ DUContext* getInternalContext(const DeclarationPointer& declaration)
     }
 }
 
+RangeInRevision emptyRangeOnLine(const AST::SourceLocation& location)
+{
+    return RangeInRevision(location.startLine - 1, 0, location.startLine - 1, 0);
+}
+
 } // End of namespace QmlJS

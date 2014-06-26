@@ -239,7 +239,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::FunctionExpression* node)
     declareFunction<FunctionDeclaration>(
         node,
         QualifiedIdentifier(),
-        RangeInRevision(),
+        QmlJS::emptyRangeOnLine(node->functionToken),
         node->formals,
         m_session->locationsToInnerRange(node->lparenToken, node->rparenToken),
         node->body,
@@ -429,7 +429,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::ObjectLiteral* node)
         DUChainWriteLocker lock;
         ClassDeclaration* decl = openDeclaration<ClassDeclaration>(
             QualifiedIdentifier(),
-            RangeInRevision()
+            QmlJS::emptyRangeOnLine(node->lbraceToken)
         );
 
         decl->setKind(Declaration::Type);
@@ -656,7 +656,7 @@ void DeclarationBuilder::declareComponentSubclass(QmlJS::AST::UiObjectInitialize
                 currentContext()->type() == DUContext::Global ?
                     QualifiedIdentifier(m_session->moduleName()) :
                     name,
-                RangeInRevision()
+                QmlJS::emptyRangeOnLine(node->lbraceToken)
             );
 
             decl->clearBaseClasses();
@@ -1028,7 +1028,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiPublicMember* node)
             node->parameters,
             m_session->locationToRange(node->identifierToken),  // The AST does not provide the location of the parens
             nullptr,
-            RangeInRevision()
+            RangeInRevision::invalid()
         );
 
         // This declaration is a signal and its return type is void

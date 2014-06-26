@@ -79,6 +79,11 @@ using namespace KDevelop;
 
     KDEVQMLJSDUCHAIN_EXPORT DUContext* getInternalContext(const DeclarationPointer &declaration);
 
+    /**
+     * Build a zero-length range on the line of the given SourceLocation
+     */
+    KDEVQMLJSDUCHAIN_EXPORT RangeInRevision emptyRangeOnLine(const AST::SourceLocation& location);
+
 
 } // End of namespace QmlJS
 
