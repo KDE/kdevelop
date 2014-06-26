@@ -28,11 +28,11 @@
 #include <type_traits>
 
 namespace KDevelop {
-  class TopDUContext;
+class TopDUContext;
 }
 
 namespace TypeUtils {
-  using namespace KDevelop;
+
   /**
    * Returns the completely dereferenced and un-aliased type, pointers are also dereferenced(example: ReferenceType(PointerType(int)) -> int)
    * All modifiers are pushed from the aliases into the targets.
@@ -56,13 +56,13 @@ namespace TypeUtils {
   /**
    * @brief If @p eventualAlias is an AliasType, return its aliasedType(), otherwise return @p eventualAlias.
    */
-  KDEVPLATFORMLANGUAGE_EXPORT AbstractType::Ptr resolveAliasType(const AbstractType::Ptr eventualAlias);
+  KDEVPLATFORMLANGUAGE_EXPORT KDevelop::AbstractType::Ptr resolveAliasType(const KDevelop::AbstractType::Ptr eventualAlias);
 
   /**
    * @brief Check whether the passed type is a null or mixed type.
    * @param type The type to check. Can be null, in which case the function returns false.
    */
-  KDEVPLATFORMLANGUAGE_EXPORT bool isUsefulType(AbstractType::Ptr type);
+  KDEVPLATFORMLANGUAGE_EXPORT bool isUsefulType(KDevelop::AbstractType::Ptr type);
 
   /**
   * @brief Merge the second type into the first one
@@ -81,9 +81,9 @@ namespace TypeUtils {
   * @warning: If your language has its own specialized UnsureType, make sure to pass it
   * as a template parameter.
   **/
-  template <typename LanguageUnsureType=UnsureType>
-  KDEVPLATFORMLANGUAGE_EXPORT AbstractType::Ptr mergeTypes(AbstractType::Ptr type, const AbstractType::Ptr newType) {
-    static_assert(std::is_base_of<UnsureType, LanguageUnsureType>::value,
+  template <typename LanguageUnsureType=KDevelop::UnsureType>
+  KDEVPLATFORMLANGUAGE_EXPORT KDevelop::AbstractType::Ptr mergeTypes(KDevelop::AbstractType::Ptr type, const KDevelop::AbstractType::Ptr newType) {
+    static_assert(std::is_base_of<KDevelop::UnsureType, LanguageUnsureType>::value,
                   "LanguageUnsureType must inherit from KDevelop::UnsureType");
 
     auto unsure = LanguageUnsureType::Ptr::dynamicCast(type);
@@ -106,7 +106,7 @@ namespace TypeUtils {
       ret = unsure;
     }
     else if ( newUnsure ) {
-      UnsureType::Ptr createdUnsureType = UnsureType::Ptr(static_cast<UnsureType*>(newUnsure->clone()));
+      KDevelop::UnsureType::Ptr createdUnsureType(static_cast<KDevelop::UnsureType*>(newUnsure->clone()));
       if ( isUsefulType(type) ) {
         createdUnsureType->addType(type->indexed());
       }
@@ -121,7 +121,7 @@ namespace TypeUtils {
         unsure->addType(newType->indexed());
       }
       if ( ! unsure->typesSize() ) {
-        return AbstractType::Ptr(new IntegralType(IntegralType::TypeMixed));
+        return KDevelop::AbstractType::Ptr(new KDevelop::IntegralType(KDevelop::IntegralType::TypeMixed));
       }
       ret = unsure;
     }
@@ -129,7 +129,7 @@ namespace TypeUtils {
       return ret->types()[0].abstractType();
     }
     else {
-      return AbstractType::Ptr::staticCast(ret);
+      return KDevelop::AbstractType::Ptr::staticCast(ret);
     }
   }
 }
