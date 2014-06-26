@@ -98,6 +98,8 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& ab
     case ImportCompletion:
         return importCompletion();
     }
+
+    return QList<CompletionTreeItemPointer>();
 }
 
 QList<KDevelop::CompletionTreeItemPointer> CodeCompletionContext::normalCompletion()
