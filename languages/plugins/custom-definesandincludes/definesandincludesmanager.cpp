@@ -145,12 +145,6 @@ Path::List DefinesAndIncludesManager::includes( ProjectBaseItem* item, Type type
 
     Path::List includes;
 
-    for (auto provider : m_providers) {
-        if (provider->type() & type) {
-            includes += provider->includes(item);
-        }
-    }
-
     if (type & UserDefined) {
         auto cfg = item->project()->projectConfiguration().data();
 
@@ -161,6 +155,12 @@ Path::List DefinesAndIncludesManager::includes( ProjectBaseItem* item, Type type
         auto buildManager = item->project()->buildSystemManager();
         if ( buildManager ) {
             includes += buildManager->includeDirectories(item);
+        }
+    }
+
+    for (auto provider : m_providers) {
+        if (provider->type() & type) {
+            includes += provider->includes(item);
         }
     }
 

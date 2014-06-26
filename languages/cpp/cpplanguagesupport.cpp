@@ -87,6 +87,7 @@
 #include <interfaces/foregroundlock.h>
 //#include "codegen/makeimplementationprivate.h"
 #include "codegen/adaptsignatureassistant.h"
+#include "codegen/unresolvedincludeassistant.h"
 
 #include "includepathresolver.h"
 #include "setuphelpers.h"
@@ -122,6 +123,25 @@ using namespace KDevelop;
 
 CppLanguageSupport* CppLanguageSupport::m_self = 0;
 
+namespace
+{
+void fillEditIncludeDirectoriesContextMenu(ContextMenuExtension& extension, KDevelop::Context* context)
+{
+    auto ec = dynamic_cast<KDevelop::EditorContext*>(context);
+    if (ec && ec->currentLine().contains(QRegExp("^\\s*#include"))) {
+        KDevelop::IAssistantAction::Ptr assistantAction;
+        if (auto project = ICore::self()->projectController()->findProjectForUrl(ec->url())) {
+            assistantAction.attach(new Cpp::OpenProjectConfigurationAction(project));
+        } else {
+            assistantAction.attach(new Cpp::AddCustomIncludePathAction(IndexedString(ec->url()), QString()));
+        }
+        auto action = assistantAction->toKAction();
+        action->setText(i18n("Edit include directories"));
+        extension.addAction(extension.ExtensionGroup, action);
+    }
+}
+}
+
 KDevelop::ContextMenuExtension CppLanguageSupport::contextMenuExtension(KDevelop::Context* context)
 {
   ContextMenuExtension cm;
@@ -130,6 +150,7 @@ KDevelop::ContextMenuExtension CppLanguageSupport::contextMenuExtension(KDevelop
   if (ec && ICore::self()->languageController()->languagesForUrl(ec->url()).contains(language())) {
     // It's a C++ file, let's add our context menu.
     m_refactoring->fillContextMenu(cm, context);
+    fillEditIncludeDirectoriesContextMenu(cm, context);
   }
   return cm;
 }
@@ -188,8 +209,6 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
 //     Cpp::EnvironmentManager::self()->setMatchingLevel(Cpp::EnvironmentManager::Full);
 
     CppUtils::standardMacros();
-
-    m_includeResolver = new CppTools::IncludePathResolver;
 
     m_quickOpenDataProvider = new IncludeFileDataProvider();
 
@@ -399,7 +418,6 @@ CppLanguageSupport::~CppLanguageSupport()
     }
 
     delete m_quickOpenDataProvider;
-    delete m_includeResolver;
 #ifdef DEBUG_UI_LOCKUP
     delete m_blockTester;
 #endif
