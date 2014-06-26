@@ -225,8 +225,6 @@ void CPPParseJob::mergeDefines(CppPreprocessEnvironment& env) const
   ///@todo Most probably, the same macro-sets will be calculated again and again.
   ///           One ReferenceCountedMacroSet would be enough.
   
-  kDebug() << "DEFINES:" << defines;
-  
   for(QHash<QString, QString>::const_iterator it = defines.constBegin(); it != defines.constEnd(); ++it)
   {
     rpp::pp_macro* m = new rpp::pp_macro(IndexedString(it.key()));
