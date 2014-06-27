@@ -20,6 +20,7 @@
 #include "contextbuilder.h"
 #include "expressionvisitor.h"
 #include "parsesession.h"
+#include "qmljsducontext.h"
 
 using namespace KDevelop;
 
@@ -85,7 +86,13 @@ TopDUContext* ContextBuilder::newTopContext(const RangeInRevision& range, Parsin
         /// identify environment files from this language plugin
         file->setLanguage(m_session->languageString());
     }
-    return ContextBuilderBase::newTopContext(range, file);
+
+    return new QmlJS::QmlJSTopDUContext(m_session->url(), range, file);
+}
+
+DUContext* ContextBuilder::newContext(const RangeInRevision& range)
+{
+    return new QmlJS::QmlJSNormalDUContext(range, currentContext());
 }
 
 void ContextBuilder::setParseSession(ParseSession* session)

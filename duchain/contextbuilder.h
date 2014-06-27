@@ -70,6 +70,7 @@ public:
 
     virtual KDevelop::TopDUContext* newTopContext(const KDevelop::RangeInRevision& range,
                                                   KDevelop::ParsingEnvironmentFile* file = 0);
+    virtual KDevelop::DUContext* newContext(const KDevelop::RangeInRevision& range);
 
     ExpressionType findType(QmlJS::AST::Node* node);
     void setParseSession(ParseSession* session);

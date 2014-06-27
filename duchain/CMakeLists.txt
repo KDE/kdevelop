@@ -6,6 +6,10 @@ kde4_add_library(kdevqmljsduchain SHARED
     declarationbuilder.cpp
     expressionvisitor.cpp
     usebuilder.cpp
+    qmljsducontext.cpp
+
+    navigation/declarationnavigationcontext.cpp
+    navigation/navigationwidget.cpp
 )
 
 target_link_libraries(kdevqmljsduchain LINK_PRIVATE
