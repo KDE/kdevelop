@@ -87,6 +87,8 @@ void QmlJsParseJob::run()
             return;
         }
 
+        session.reparseImporters(context);
+
         if ( context && minimumFeatures() & TopDUContext::AllDeclarationsContextsAndUses ) {
             UseBuilder useBuilder(&session);
             useBuilder.buildUses(session.ast());

@@ -157,6 +157,16 @@ public:
     KDevelop::ReferencedTopDUContext contextOfFile(const QString &fileName);
 
     /**
+     * Schedule for update all the files importing @p context
+     */
+    void reparseImporters(KDevelop::DUContext* context);
+
+    /**
+     * Schedule a document for update using the default flags of QML/JS
+     */
+    void scheduleForParsing(const KDevelop::IndexedString& url, int priority);
+
+    /**
      * Dump AST tree to stdout.
      */
     void dumpNode(QmlJS::AST::Node* node) const;
