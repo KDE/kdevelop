@@ -181,16 +181,17 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionsInContext(con
 
         foreach (const DeclarationDepthPair& decl, declarations) {
             DeclarationPointer declaration(decl.first);
+            CompletionItem::Decoration decorationOfThisItem = decoration;
 
             if (declaration->kind() == Declaration::NamespaceAlias) {
                 continue;
             } else if (declaration->qualifiedIdentifier().isEmpty()) {
                 continue;
-            } else if (decoration == CompletionItem::NoDecoration &&
+            } else if (decorationOfThisItem == CompletionItem::NoDecoration &&
                        declaration->abstractType() &&
                        declaration->abstractType()->whichType() == AbstractType::TypeFunction) {
                 // Decorate function calls with brackets
-                decoration = CompletionItem::Brackets;
+                decorationOfThisItem = CompletionItem::Brackets;
             } else if (flags.testFlag(CompletionHideWrappers)) {
                 ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration*>(declaration.data());
 
@@ -199,7 +200,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionsInContext(con
                 }
             }
 
-            items << CompletionTreeItemPointer(new CompletionItem(declaration, decl.second, decoration));
+            items << CompletionTreeItemPointer(new CompletionItem(declaration, decl.second, decorationOfThisItem));
         }
     }
 
