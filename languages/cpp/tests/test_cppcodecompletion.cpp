@@ -1767,7 +1767,7 @@ void TestCppCodeCompletion::testTemplateMemberAccess() {
     QCOMPARE(top->localDeclarations().count(), 4);
     AbstractType::Ptr type = TypeUtils::unAliasedType(top->localDeclarations()[3]->abstractType());
     QVERIFY(type);
-    IdentifiedType* identified = dynamic_cast<IdentifiedType*>(type.unsafeData());
+    IdentifiedType* identified = dynamic_cast<IdentifiedType*>(type.data());
     QVERIFY(identified);
     QVERIFY(!identified->declarationId().isDirect());
     QString specializationString = IndexedInstantiationInformation(identified->declarationId().specialization()).information().toString();
@@ -2481,7 +2481,7 @@ void TestCppCodeCompletion::testForwardDeclaration()
   QVERIFY(decl);
   QVERIFY(decl->abstractType());
   AbstractType::Ptr t(decl->abstractType());
-  QVERIFY(dynamic_cast<const IdentifiedType*>(t.unsafeData()));
+  QVERIFY(dynamic_cast<const IdentifiedType*>(t.data()));
   QVERIFY(!decl->isForwardDeclaration());
 
   release(top);
@@ -2603,7 +2603,7 @@ void TestCppCodeCompletion::testAcrossHeaderReferences()
   QVERIFY(decl);
   QVERIFY(decl->abstractType());
   AbstractType::Ptr t(decl->abstractType());
-  QVERIFY(dynamic_cast<const IdentifiedType*>(t.unsafeData()));
+  QVERIFY(dynamic_cast<const IdentifiedType*>(t.data()));
 
   release(top);
 }
@@ -2642,7 +2642,7 @@ void TestCppCodeCompletion::testAcrossHeaderTemplateReferences()
     QVERIFY(decl);
     QVERIFY(decl->abstractType());
     AbstractType::Ptr t(decl->abstractType());
-    QVERIFY(dynamic_cast<const IdentifiedType*>(t.unsafeData()));
+    QVERIFY(dynamic_cast<const IdentifiedType*>(t.data()));
     QCOMPARE(decl->abstractType()->toString(), QString("Dummy"));
   }
   {
@@ -2650,7 +2650,7 @@ void TestCppCodeCompletion::testAcrossHeaderTemplateReferences()
     QVERIFY(decl);
     QVERIFY(decl->abstractType());
     AbstractType::Ptr t(decl->abstractType());
-    QVERIFY(dynamic_cast<const IdentifiedType*>(t.unsafeData()));
+    QVERIFY(dynamic_cast<const IdentifiedType*>(t.data()));
     QCOMPARE(decl->abstractType()->toString(), QString("Test< Dummy >"));
   }
   {
@@ -2658,7 +2658,7 @@ void TestCppCodeCompletion::testAcrossHeaderTemplateReferences()
     QVERIFY(decl);
     QVERIFY(decl->abstractType());
     AbstractType::Ptr t(decl->abstractType());
-    QVERIFY(dynamic_cast<const IdentifiedType*>(t.unsafeData()));
+    QVERIFY(dynamic_cast<const IdentifiedType*>(t.data()));
     QCOMPARE(decl->abstractType()->toString(), QString("Test< Dummy >"));
   }
   {

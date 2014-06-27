@@ -433,12 +433,12 @@ uint OverloadResolver::matchParameterTypes( const AbstractType::Ptr& argumentTyp
     if ( decl )
     {
       IndexedString id = decl->identifier().identifier();
-      if ( instantiatedTypes[id].isNull() )
+      if ( instantiatedTypes[id] )
       {
         instantiatedTypes[id] = argumentType;
         return 1;
       }
-      else if ( instantiatedTypes[id]->equals( argumentType.unsafeData() ) )
+      else if ( instantiatedTypes[id]->equals( argumentType.data() ) )
       {
         return 1;
       }
@@ -451,8 +451,8 @@ uint OverloadResolver::matchParameterTypes( const AbstractType::Ptr& argumentTyp
   }
 
   ///Match assigned template-parameters, for example when matching QList<int> to QList<T>, assign int to T.
-  const IdentifiedType* identifiedArgument = dynamic_cast<const IdentifiedType*>( argumentType.unsafeData() );
-  const IdentifiedType* identifiedParameter = dynamic_cast<const IdentifiedType*>( parameterType.unsafeData() );
+  const IdentifiedType* identifiedArgument = dynamic_cast<const IdentifiedType*>( argumentType.data() );
+  const IdentifiedType* identifiedParameter = dynamic_cast<const IdentifiedType*>( parameterType.data() );
 
   if ( identifiedArgument && identifiedParameter )
   {
@@ -498,7 +498,7 @@ QList<Declaration *> OverloadResolver::computeADLCandidates( const ParameterList
   // Don't try to do ADL if there are delayed/unresolved types involved,
   // because then we cannot get a proper match as to ViableFunction anyway
   foreach( const Parameter & param, params.parameters ) {
-      if( fastCast<DelayedType*>(param.type.unsafeData()) ) {
+      if( fastCast<DelayedType*>(param.type.data()) ) {
           ifDebugOverloadResolution(qDebug() << "Skipping ADL due to delayed types" << identifier << params; )
           return QList<Declaration *>();
       }
@@ -553,7 +553,7 @@ AbstractType::Ptr getContainerType( AbstractType::Ptr type, int depth, TopDUCont
   for ( int a = 0; a < depth; a++ )
   {
     AbstractType::Ptr real = TypeUtils::realType( type, topContext );
-    IdentifiedType* idType = dynamic_cast<IdentifiedType*>( real.unsafeData() );
+    IdentifiedType* idType = dynamic_cast<IdentifiedType*>( real.data() );
     if ( !idType )
       return AbstractType::Ptr();
 
@@ -645,7 +645,7 @@ uint OverloadResolver::matchParameterTypes( AbstractType::Ptr argumentType, cons
     return 1;
   }
 
-  IdentifiedType* identifiedArgument = dynamic_cast<IdentifiedType*>( argumentType.unsafeData() );
+  IdentifiedType* identifiedArgument = dynamic_cast<IdentifiedType*>( argumentType.data() );
   if ( !identifiedArgument )
     return 0;
 

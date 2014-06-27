@@ -31,11 +31,11 @@ IndexedTypeIdentifier ExpressionEvaluationResult::identifier() const {
   static IndexedTypeIdentifier noIdentifier("(no type)");
 
   AbstractType::Ptr t(type.abstractType());
-  IdentifiedType* idType = dynamic_cast<IdentifiedType*>(t.unsafeData());
+  IdentifiedType* idType = dynamic_cast<IdentifiedType*>(t.data());
   if( idType )
     return IndexedTypeIdentifier(idType->qualifiedIdentifier());
 
-  DelayedType* delayedType = dynamic_cast<DelayedType*>(t.unsafeData());
+  DelayedType* delayedType = dynamic_cast<DelayedType*>(t.data());
   if( delayedType )
     return delayedType->identifier();
 

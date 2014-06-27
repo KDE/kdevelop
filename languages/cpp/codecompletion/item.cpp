@@ -80,7 +80,7 @@ namespace Cpp {
 
 AbstractType::Ptr applyPointerConversions(AbstractType::Ptr type, int pointerConversions, TopDUContext *top)
 {
-  if(pointerConversions == 0 || type.isNull())
+  if(pointerConversions == 0 || type)
     return type;
 
   if(pointerConversions > 0) {
@@ -491,7 +491,7 @@ KDevelop::QualifiedIdentifier NormalDeclarationCompletionItem::stripPrefix() con
     if(completionContext()->memberAccessContainer().allDeclarations.size())
       if( Declaration * const decl = completionContext()->memberAccessContainer().allDeclarations[0].getDeclaration(top) ) {
         AbstractType::Ptr t = decl->abstractType();
-        IdentifiedType* idType = dynamic_cast<IdentifiedType*>(t.unsafeData());
+        IdentifiedType* idType = dynamic_cast<IdentifiedType*>(t.data());
         if(idType)
           return idType->qualifiedIdentifier();
       }

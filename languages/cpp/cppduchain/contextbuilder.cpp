@@ -138,7 +138,7 @@ void ContextBuilder::addBaseType( KDevelop::BaseClassInstance base, BaseSpecifie
 
   Q_ASSERT(currentContext()->type() == DUContext::Class);
   AbstractType::Ptr baseClass = base.baseClass.abstractType();
-  IdentifiedType* idType = dynamic_cast<IdentifiedType*>(baseClass.unsafeData());
+  IdentifiedType* idType = dynamic_cast<IdentifiedType*>(baseClass.data());
   Declaration* idDecl = 0;
   if( idType && (idDecl = idType->declaration(currentContext()->topContext())) ) {
     DUContext* ctx = idDecl->logicalInternalContext(currentContext()->topContext());

@@ -512,7 +512,7 @@ class CppDUContext : public BaseContext {
         id.clearTemplateIdentifiers();
         FOREACH_FUNCTION(const IndexedType& arg, templateArguments.templateParameters) {
           AbstractType::Ptr type(arg.abstractType());
-          IdentifiedType* identified = dynamic_cast<IdentifiedType*>(type.unsafeData());
+          IdentifiedType* identified = dynamic_cast<IdentifiedType*>(type.data());
           if(identified)
             id.appendTemplateIdentifier( IndexedTypeIdentifier(identified->qualifiedIdentifier()) );
           else if(type)

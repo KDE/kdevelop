@@ -94,7 +94,7 @@ protected:
   
   inline void clearLastType()
   {
-    m_lastType = 0;
+    m_lastType.reset();
   }
 
   /// Sets the given \a type as the current type.

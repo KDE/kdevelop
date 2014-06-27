@@ -416,7 +416,7 @@ Declaration* containerDeclForType(const AbstractType::Ptr& givenType, TopDUConte
   if (TypeAliasType::Ptr typeAliasType = givenType.cast<TypeAliasType>())
     return containerDeclForType(typeAliasType->type(), top, typeIsPointer);
 
-  if (const IdentifiedType* identifiedType = dynamic_cast<const IdentifiedType*>(givenType.unsafeData()))
+  if (const IdentifiedType* identifiedType = dynamic_cast<const IdentifiedType*>(givenType.data()))
   {
     if (Declaration *ret = identifiedType->declaration(top))
     {
@@ -540,7 +540,7 @@ void CodeCompletionContext::processArrowMemberAccess() {
 
   //Look for "->" operator
   AbstractType::Ptr realContainer = TypeUtils::realType( containerType, m_duContext->topContext() );
-  IdentifiedType* idType = dynamic_cast<IdentifiedType*>( realContainer.unsafeData() );
+  IdentifiedType* idType = dynamic_cast<IdentifiedType*>( realContainer.data() );
   if ( !idType ) {
     m_valid = false;
     return;
@@ -1177,7 +1177,7 @@ QSet<DUContext*> CodeCompletionContext::memberAccessContainers() const {
 
   if(m_expressionResult.isValid() ) {
     AbstractType::Ptr expressionTarget = TypeUtils::targetType(m_expressionResult.type.abstractType(), m_duContext->topContext());
-    const IdentifiedType* idType = dynamic_cast<const IdentifiedType*>( expressionTarget.unsafeData() );
+    const IdentifiedType* idType = dynamic_cast<const IdentifiedType*>( expressionTarget.data() );
       Declaration* idDecl = 0;
     if( idType && (idDecl = idType->declaration(m_duContext->topContext())) ) {
       DUContext* ctx = idDecl->logicalInternalContext(m_duContext->topContext());
@@ -1451,7 +1451,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::templateAccessCompletion
   LOCKDUCHAIN; if (!m_duContext) return items;
 
   AbstractType::Ptr type = m_expressionResult.type.abstractType();
-  IdentifiedType* identified = dynamic_cast<IdentifiedType*>(type.unsafeData());
+  IdentifiedType* identified = dynamic_cast<IdentifiedType*>(type.data());
   Declaration* decl = 0;
   if(identified)
     decl = identified->declaration( m_duContext->topContext());
@@ -1625,7 +1625,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::signalSlotAccessCompleti
     QList<CompletionTreeItemPointer> signalSlots;
     ///Collect all slots/signals to show
     AbstractType::Ptr type = memberAccessContainer().type.abstractType();
-    IdentifiedType* identified = dynamic_cast<IdentifiedType*>(type.unsafeData());
+    IdentifiedType* identified = dynamic_cast<IdentifiedType*>(type.data());
     if(identified) {
       Declaration* decl = identified->declaration(m_duContext->topContext());
       if(decl && decl->internalContext() /*&& Cpp::findLocalDeclarations(decl->internalContext(), Identifier("QObject"), m_duContext->topContext()).count()*/) { //hacky test whether it's a QObject

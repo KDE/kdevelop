@@ -178,7 +178,7 @@ void ADLHelper::addArgument(const OverloadResolver::Parameter & argument)
 
 void ADLHelper::addArgumentType(const AbstractType::Ptr typePtr)
 {
-    if(m_alreadyProcessed.contains(typePtr.unsafeData()))
+    if(m_alreadyProcessed.contains(typePtr.data()))
       return;
     
     if (typePtr)
@@ -191,7 +191,7 @@ void ADLHelper::addArgumentType(const AbstractType::Ptr typePtr)
         {
         case AbstractType::TypeEnumeration:
         {
-            EnumerationType* specificType = fastCast<EnumerationType*>(typePtr.unsafeData());
+            EnumerationType* specificType = fastCast<EnumerationType*>(typePtr.data());
             if (specificType)
             {
                 Declaration * enumDecl = specificType->declaration(m_topContext.data());
@@ -203,7 +203,7 @@ void ADLHelper::addArgumentType(const AbstractType::Ptr typePtr)
         {
             if (m_templateArgsDepth == 0)
             {
-                EnumeratorType* specificType = fastCast<EnumeratorType*>(typePtr.unsafeData());
+                EnumeratorType* specificType = fastCast<EnumeratorType*>(typePtr.data());
                 if (specificType)
                 {
                     // use the enumeration context for the enumerator value declaration to find out the namespace
@@ -223,7 +223,7 @@ void ADLHelper::addArgumentType(const AbstractType::Ptr typePtr)
         }
     }
     
-    m_alreadyProcessed.insert(typePtr.unsafeData());
+    m_alreadyProcessed.insert(typePtr.data());
 }
 
 QSet< QualifiedIdentifier > ADLHelper::associatedNamespaces() const

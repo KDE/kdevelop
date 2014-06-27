@@ -407,7 +407,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
   Declaration* ExpressionVisitor::getDeclaration( const AbstractType::Ptr& base ) {
     if( !base ) return 0;
 
-    const IdentifiedType* idType = dynamic_cast<const IdentifiedType*>(base.unsafeData());
+    const IdentifiedType* idType = dynamic_cast<const IdentifiedType*>(base.data());
     if( idType ) {
       LOCKDUCHAIN;
       return idType->declaration(topContext());
@@ -494,7 +494,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
         if(Cpp::isTemplateDependent(m_currentContext) ) {
           if(m_memberAccess || (node->qualified_names && nameV.foundSomething() && Cpp::isTemplateDependent(nameV.foundSomething().data()))) {
           //Do nothing. Within a not instantiated template, we cannot be that sure
-          m_lastType.clear();
+          m_lastType.reset();
           return;
           }
         }
@@ -1735,7 +1735,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     if(!m_lastInstance) {
       LOCKDUCHAIN;
       if(m_lastDeclarations.isEmpty() && m_lastType && !m_lastInstance) {
-        IdentifiedType* idType = dynamic_cast<IdentifiedType*>(m_lastType.unsafeData());
+        IdentifiedType* idType = dynamic_cast<IdentifiedType*>(m_lastType.data());
         if(idType) {
           Declaration* decl = idType->declaration(m_source);
           if(decl)
@@ -1867,7 +1867,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         LOCKDUCHAIN;
         //The function-call operator may also be applied on instances that don't have an explicit declaration, like return-values
         AbstractType::Ptr type = realType(m_lastType);
-        IdentifiedType* identified = dynamic_cast<IdentifiedType*>(type.unsafeData());
+        IdentifiedType* identified = dynamic_cast<IdentifiedType*>(type.data());
         if(identified) {
           DeclarationPointer decl(identified->declaration(m_source));
           if(decl) {

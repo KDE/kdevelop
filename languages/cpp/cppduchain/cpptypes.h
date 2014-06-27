@@ -78,7 +78,7 @@ public:
   CppClassType(CppClassTypeData& data) : KDevelop::StructureType(data) {
   }
 
-  typedef TypePtr<CppClassType> Ptr;
+  typedef KDevelop::TypePtr<CppClassType> Ptr;
 
   CppClassType();
 
@@ -127,7 +127,7 @@ public:
   CppTemplateParameterType() : CppTemplateParameterTypeBase(createData<CppTemplateParameterType>()) {
   }
 
-  typedef TypePtr<CppTemplateParameterType> Ptr;
+  typedef KDevelop::TypePtr<CppTemplateParameterType> Ptr;
 
   TemplateParameterDeclaration* declaration(const KDevelop::TopDUContext* top) const;
 

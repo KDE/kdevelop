@@ -153,15 +153,15 @@ AbstractType::Ptr binaryOperatorReturnType(AbstractType::Ptr left, AbstractType:
   if(!left || !right)
     return AbstractType::Ptr();
 
-  IntegralType* leftIntegral = dynamic_cast<IntegralType*>(left.unsafeData());
-  IntegralType* rightIntegral = dynamic_cast<IntegralType*>(right.unsafeData());
-  PointerType* leftPointer = dynamic_cast<PointerType*>(right.unsafeData());
+  IntegralType* leftIntegral = dynamic_cast<IntegralType*>(left.data());
+  IntegralType* rightIntegral = dynamic_cast<IntegralType*>(right.data());
+  PointerType* leftPointer = dynamic_cast<PointerType*>(right.data());
 
   AbstractType::Ptr ret;
 
   //Constantly evaluate integral expressions
-  ConstantIntegralType* leftConstantIntegral = dynamic_cast<ConstantIntegralType*>(left.unsafeData());
-  ConstantIntegralType* rightConstantIntegral = dynamic_cast<ConstantIntegralType*>(right.unsafeData());
+  ConstantIntegralType* leftConstantIntegral = dynamic_cast<ConstantIntegralType*>(left.data());
+  ConstantIntegralType* rightConstantIntegral = dynamic_cast<ConstantIntegralType*>(right.data());
 
   if(leftIntegral && rightIntegral) {
     if(tokenKind == '+' || tokenKind == '-' || tokenKind == '*' || tokenKind == '/' || tokenKind == '%' || tokenKind == '^' || tokenKind == '&' || tokenKind == '|' || tokenKind == '~' || tokenKind == Token_leftshift || tokenKind == Token_rightshift) {
@@ -178,7 +178,7 @@ AbstractType::Ptr binaryOperatorReturnType(AbstractType::Ptr left, AbstractType:
   if(leftPointer && rightIntegral && (tokenKind == '+' || tokenKind == '-'))
     ret = left;
 
-  IntegralType* retIntegral = dynamic_cast<IntegralType*>(ret.unsafeData());
+  IntegralType* retIntegral = dynamic_cast<IntegralType*>(ret.data());
 
   ///We have determined the resulting type now. If both sides are constant, also evaluate the resulting value.
   if(ret && retIntegral && leftConstantIntegral && rightConstantIntegral) {

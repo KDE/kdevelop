@@ -247,7 +247,7 @@ KDevelop::AbstractType::Ptr matchingClassPointer(const KDevelop::AbstractType::P
 Declaration* getDeclaration( const AbstractType::Ptr& type, TopDUContext* top ) {
   if( !type) return 0;
 
-  const IdentifiedType* idType = dynamic_cast<const IdentifiedType*>(type.unsafeData());
+  const IdentifiedType* idType = dynamic_cast<const IdentifiedType*>(type.data());
   if( idType ) {
     return idType->declaration(top);
   } else {

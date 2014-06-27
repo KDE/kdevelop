@@ -301,7 +301,7 @@ QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(const Q
     if(delayed)
       //Remove all template parameters, because the symbol-table doesn't know about those
       identifier = removeTemplateParameters(delayed->identifier().identifier().identifier());
-    IdentifiedType* idType = dynamic_cast<IdentifiedType*>(type.unsafeData());
+    IdentifiedType* idType = dynamic_cast<IdentifiedType*>(type.data());
     if(idType) {
       identifier = removeTemplateParameters(idType->qualifiedIdentifier());
     }

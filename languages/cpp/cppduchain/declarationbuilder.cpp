@@ -802,7 +802,7 @@ void DeclarationBuilder::classTypeOpened(AbstractType::Ptr type) {
   //We override this so we can get the class-declaration into a usable state(with filled type) earlier
     DUChainWriteLocker lock(DUChain::lock());
 
-    IdentifiedType* idType = dynamic_cast<IdentifiedType*>(type.unsafeData());
+    IdentifiedType* idType = dynamic_cast<IdentifiedType*>(type.data());
 
     if( idType && !idType->declarationId().isValid() ) //When the given type has no declaration yet, assume we are declaring it now
         idType->setDeclaration( currentDeclaration() );
@@ -818,7 +818,7 @@ void DeclarationBuilder::closeDeclaration(bool forceInstance)
     if (lastType()) {
 
       AbstractType::Ptr type = typeForCurrentDeclaration();
-      IdentifiedType* idType = dynamic_cast<IdentifiedType*>(type.unsafeData());
+      IdentifiedType* idType = dynamic_cast<IdentifiedType*>(type.data());
       DelayedType::Ptr delayed = type.cast<DelayedType>();
 
       //When the given type has no declaration yet, assume we are declaring it now.
@@ -1011,7 +1011,7 @@ void DeclarationBuilder::visitEnumerator(EnumeratorAST* node)
     decl->setAbstractType(enumeratorType.cast<AbstractType>());
   }else if(!lastType().cast<DelayedType>()){ //If it's in a template, it may be DelayedType
     AbstractType::Ptr type = lastType();
-    kWarning() << "not assigned enumerator type:" << typeid(*type.unsafeData()).name() << type->toString();
+    kWarning() << "not assigned enumerator type:" << typeid(*type.data()).name() << type->toString();
   }
 }
 

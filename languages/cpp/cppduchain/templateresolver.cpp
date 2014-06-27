@@ -245,8 +245,8 @@ bool TemplateResolver::templateHandleArrayType(const AbstractType::Ptr& argument
 bool TemplateResolver::templateHandleIdentifiedType(const AbstractType::Ptr& argumentType, const AbstractType::Ptr& parameterType, QMap< IndexedString, AbstractType::Ptr >& instantiatedTypes, TemplateMatchType& res) const
 {
   ///Match assigned template-parameters, for example when matching QList<int> to QList<T>, assign int to T.
-  const IdentifiedType* identifiedArgument = dynamic_cast<const IdentifiedType*>( argumentType.unsafeData() );
-  const IdentifiedType* identifiedParameter = dynamic_cast<const IdentifiedType*>( parameterType.unsafeData() );
+  const IdentifiedType* identifiedArgument = dynamic_cast<const IdentifiedType*>( argumentType.data() );
+  const IdentifiedType* identifiedParameter = dynamic_cast<const IdentifiedType*>( parameterType.data() );
 
   if ( identifiedArgument && identifiedParameter )
   {
