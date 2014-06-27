@@ -519,7 +519,7 @@ void AbstractDeclarationNavigationContext::htmlIdentifiedType(AbstractType::Ptr 
       
       //Also create full type-links for the context around
       AbstractType::Ptr contextType = decl->context()->owner()->abstractType();
-      IdentifiedType* contextIdType = dynamic_cast<IdentifiedType*>(contextType.unsafeData());
+      IdentifiedType* contextIdType = dynamic_cast<IdentifiedType*>(contextType.data());
       if(contextIdType && !contextIdType->equals(idType)) {
         //Create full type information for the context
         if(!id.isEmpty())
@@ -547,7 +547,7 @@ void AbstractDeclarationNavigationContext::eventuallyMakeTypeLinks( AbstractType
   }
 
   AbstractType::Ptr target = TypeUtils::targetTypeKeepAliases( type, m_topContext.data() );
-  const IdentifiedType* idType = dynamic_cast<const IdentifiedType*>( target.unsafeData() );
+  const IdentifiedType* idType = dynamic_cast<const IdentifiedType*>( target.data() );
 
   kDebug() << "making type-links for" << type->toString() << typeid(*type).name();
   

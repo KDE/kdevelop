@@ -79,7 +79,7 @@ inline char* toString(const KDevelop::Declaration& dec)
 }
 
 template<>
-inline char* toString(const TypePtr<KDevelop::AbstractType>& type)
+inline char* toString(const KDevelop::AbstractType::Ptr& type)
 {
     QString s = QString("Type: %1")
         .arg(type ? type->toString() : QString("<null>"));

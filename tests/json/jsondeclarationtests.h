@@ -173,7 +173,7 @@ DeclarationTest(identifiedTypeQid)
   VERIFY_TYPE(QString);
   const QString UN_ID_ERROR = "Unable to identify declaration of type \"%1\".";
   AbstractType::Ptr type = decl->abstractType();
-  IdentifiedType* idType = dynamic_cast<IdentifiedType*>(type.unsafeData());
+  IdentifiedType* idType = dynamic_cast<IdentifiedType*>(type.data());
   Declaration* idDecl = idType ? idType->declaration(decl->topContext()) : 0;
   if (!idDecl)
     return UN_ID_ERROR.arg(type->toString());

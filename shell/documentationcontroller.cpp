@@ -73,7 +73,7 @@ Declaration* usefulDeclaration(Declaration* decl)
     // it makes no sense to pass the declaration pointer of instances of types
     if (decl->kind() == Declaration::Instance) {
         AbstractType::Ptr type = TypeUtils::targetTypeKeepAliases(decl->abstractType(), decl->topContext());
-        IdentifiedType* idType = dynamic_cast<IdentifiedType*>(type.unsafeData());
+        IdentifiedType* idType = dynamic_cast<IdentifiedType*>(type.data());
         Declaration* idDecl = idType ? idType->declaration(decl->topContext()) : 0;
         if (idDecl) {
             decl = idDecl;

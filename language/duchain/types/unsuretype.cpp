@@ -34,7 +34,7 @@ UnsureType::UnsureType() : AbstractType(createData<UnsureType>()) {
 void UnsureType::accept0(KDevelop::TypeVisitor* v) const {
   FOREACH_FUNCTION(const IndexedType& type, d_func()->m_types) {
     AbstractType::Ptr t = type.abstractType();
-    v->visit(t.unsafeData());
+    v->visit(t.data());
   }
 }
 

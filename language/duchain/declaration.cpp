@@ -434,7 +434,7 @@ DUContext * Declaration::logicalInternalContext(const TopDUContext* topContext) 
     if(t) {
       AbstractType::Ptr target = t->type();
       
-      IdentifiedType* idType = dynamic_cast<IdentifiedType*>(target.unsafeData());
+      IdentifiedType* idType = dynamic_cast<IdentifiedType*>(target.data());
       if( idType ) {
         Declaration* decl = idType->declaration(topContext);
         if(decl && decl != this) {

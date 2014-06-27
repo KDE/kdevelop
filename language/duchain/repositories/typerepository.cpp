@@ -80,7 +80,7 @@ class AbstractTypeDataRequest {
     AbstractType::Ptr otherType( TypeSystem::self().create(const_cast<AbstractTypeData*>(item)) );
     if(!otherType)
       return false;
-    return m_item.equals(otherType.unsafeData());
+    return m_item.equals(otherType.data());
   }
 
   const AbstractType& m_item;
@@ -107,13 +107,13 @@ uint TypeRepository::indexForType(AbstractType::Ptr input) {
   uint i = typeRepository()->index(AbstractTypeDataRequest(*input));
 #ifdef DEBUG_TYPE_REPOSITORY
   AbstractType::Ptr t = typeForIndex(i);
-  if(!t->equals(input.unsafeData())) {
+  if(!t->equals(input.data())) {
       kWarning() << "found type in repository does not equal source type:" << input->toString() << t->toString();
-      t->equals(input.unsafeData());
+      t->equals(input.data());
   }
 #ifdef ASSERT_ON_PROBLEM
-  Q_ASSERT(t->equals(input.unsafeData()));
-  Q_ASSERT(input->equals(t.unsafeData()));
+  Q_ASSERT(t->equals(input.data()));
+  Q_ASSERT(input->equals(t.data()));
 #endif
 #endif
   return i;

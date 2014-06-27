@@ -209,12 +209,12 @@ TypeVisitor::~TypeVisitor()
 }
 
 TypePtr< KDevelop::AbstractType > TypeExchanger::exchange(const TypePtr< KDevelop::AbstractType >& type) {
-  const_cast<AbstractType*>(type.unsafeData())->exchangeTypes(this);
+  const_cast<AbstractType*>(type.data())->exchangeTypes(this);
   return type;
 }
 
 TypePtr< KDevelop::AbstractType > SimpleTypeExchanger::exchange(const TypePtr< KDevelop::AbstractType >& type) {
-  if(type && type->equals(m_replace.unsafeData()))
+  if(type && type->equals(m_replace.data()))
     return m_replaceWith;
   else
     return TypeExchanger::exchange(type);

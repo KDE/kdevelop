@@ -234,7 +234,7 @@ QString cursorItemText() {
   }
 
   AbstractType::Ptr t = decl->abstractType();
-  IdentifiedType* idType = dynamic_cast<IdentifiedType*>(t.unsafeData());
+  IdentifiedType* idType = dynamic_cast<IdentifiedType*>(t.data());
   if( idType && idType->declaration(context) )
     decl = idType->declaration(context);
 

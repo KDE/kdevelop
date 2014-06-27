@@ -85,7 +85,7 @@ class TypeExchanger;
  *
  *  \sa appendedlist.h
  */
-class KDEVPLATFORMLANGUAGE_EXPORT AbstractType : public TypeShared
+class KDEVPLATFORMLANGUAGE_EXPORT AbstractType : public QSharedData
 {
 public:
   typedef TypePtr<AbstractType> Ptr;
@@ -290,7 +290,7 @@ private:
 };
 
 template <class T>
-uint qHash(const TypePtr<T>& type) { return (uint)((size_t)type.unsafeData()); }
+uint qHash(const TypePtr<T>& type) { return (uint)((size_t)type.data()); }
 
 
 /**
