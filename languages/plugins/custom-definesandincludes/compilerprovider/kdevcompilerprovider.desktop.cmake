@@ -1,7 +1,23 @@
 [Desktop Entry]
 Type=Service
 Name=Compiler Provider
+Name[ca]=Proveïdor del compilador
+Name[en_GB]=Compiler Provider
+Name[nl]=Leverancier van compiler
+Name[pt_BR]=Fornecedor do Compilador
+Name[sk]=Poskytovateľ prekladača
+Name[sv]=Kompilatorleverantör
+Name[uk]=Надавач даних компілятора
+Name[x-test]=xxCompiler Providerxx
 GenericName=Compiler Provider
+GenericName[ca]=Proveïdor del compilador
+GenericName[en_GB]=Compiler Provider
+GenericName[nl]=Leverancier van compiler
+GenericName[pt_BR]=Fornecedor do Compilador
+GenericName[sk]=Poskytovateľ prekladača
+GenericName[sv]=Kompilatorleverantör
+GenericName[uk]=Надавач даних компілятора
+GenericName[x-test]=xxCompiler Providerxx
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevcompilerprovider
 X-KDE-PluginInfo-Name=KDevCompilerProvider
