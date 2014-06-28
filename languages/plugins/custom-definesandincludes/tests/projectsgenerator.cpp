@@ -53,6 +53,7 @@ IProject* loadProject( const QString& projectFile, const QString& projectName )
 
 void createFile( QFile& file )
 {
+    file.remove();
     if ( !file.open( QIODevice::ReadWrite ) ) {
         kFatal() << "Cannot create the file " << file.fileName();
     }
@@ -95,7 +96,7 @@ IProject* ProjectsGenerator::GenerateSimpleProject()
         "Includes=\\x00\\x00\\x00\\x01\\x00\\x00\\x00$\\x00/\\x00u\\x00s\\x00r\\x00/\\x00i\\x00n\\x00c\\x00l\\x00u\\x00d\\x00e\\x00/\\x00m\\x00y\\x00d\\x00i\\x00r\n" <<
         "Path=/\n" <<
         "[Project]\n" <<
-        "VersionControlSupport=";
+        "VersionControlSupport=\n";
     }
     return loadProject( QDir::tempPath() + "/simpleproject/simpleproject.kdev4", "SimpleProject" );
 }
@@ -149,7 +150,7 @@ IProject* ProjectsGenerator::GenerateMultiPathProject()
         "Defines=\\x00\\x00\\x00\\x01\\x00\\x00\\x00\\x0c\\x00H\\x00I\\x00D\\x00D\\x00E\\x00N\\x00\\x00\\x00\\n\\x00\\x00\\x00\\x00\\x00\n" <<
         "Path=anotherFolder\n" <<
         "[Project]\n" <<
-        "VersionControlSupport=";
+        "VersionControlSupport=\n";
     }
     return loadProject( QDir::tempPath() + "/multipathproject/multipathproject.kdev4", "MultiPathProject" );
 }
