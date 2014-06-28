@@ -461,6 +461,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::PropertyNameAndValue* node)
     // The type of the declaration can either be an enumeration value or the type
     // of its expression
     AbstractType::Ptr type;
+    bool inSymbolTable = false;
 
     if (currentContext()->type() == DUContext::Enum) {
         // This is an enumeration value
@@ -474,6 +475,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::PropertyNameAndValue* node)
         }
 
         type = AbstractType::Ptr::staticCast(enumerator);
+        inSymbolTable = true;
     } else {
         // Normal value
         type = findType(node->value).type;
@@ -484,7 +486,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::PropertyNameAndValue* node)
         DUChainWriteLocker lock;
         ClassMemberDeclaration* decl = openDeclaration<ClassMemberDeclaration>(name, range);
 
-        decl->setInSymbolTable(false);
+        decl->setInSymbolTable(inSymbolTable);
     }
     openType(type);
 
