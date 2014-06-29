@@ -576,9 +576,6 @@ private:
   int m_indexInTopContext;
 };
 
-inline uint qHash(const IndexedDeclaration& decl) {
-  return decl.hash();
-}
 }
 
 #endif // KDEVPLATFORM_DECLARATION_H
