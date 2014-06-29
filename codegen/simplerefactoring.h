@@ -21,14 +21,13 @@
 #ifndef SIMPLEREFACTORING_H
 #define SIMPLEREFACTORING_H
 
-#include <interfaces/context.h>
-#include <language/codegen/documentchangeset.h>
-#include <language/codegen/basicrefactoring.h>
 #include "codegenexport.h"
+
+#include <interfaces/context.h>
+#include <language/codegen/basicrefactoring.h>
 
 namespace KDevelop {
 class ContextMenuExtension;
-class IndexedDeclaration;
 class Declaration;
 }
 
@@ -37,10 +36,9 @@ class KDEVCLANGCODEGEN_EXPORT SimpleRefactoring : public KDevelop::BasicRefactor
   Q_OBJECT
 
 public:
-  explicit SimpleRefactoring(QObject* parent = 0);
-  void fillContextMenu(KDevelop::ContextMenuExtension& extension, KDevelop::Context* context);
-private:
-  KDevelop::DocumentChangeSet m_pendingChanges;
+    explicit SimpleRefactoring(QObject* parent = 0);
+
+    void fillContextMenu(KDevelop::ContextMenuExtension& extension, KDevelop::Context* context);
 };
 
 #endif
