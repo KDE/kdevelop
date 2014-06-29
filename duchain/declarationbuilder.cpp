@@ -637,7 +637,8 @@ void DeclarationBuilder::declareEnum(const RangeInRevision &range,
 
 void DeclarationBuilder::declareComponentSubclass(QmlJS::AST::UiObjectInitializer* node,
                                                   const KDevelop::RangeInRevision& range,
-                                                  const QString& baseclass)
+                                                  const QString& baseclass,
+                                                  QmlJS::AST::UiQualifiedId* qualifiedId)
 {
     QualifiedIdentifier name(
         QmlJS::getQMLAttributeValue(node->members, "name").value.section('/', -1, -1)
@@ -673,6 +674,8 @@ void DeclarationBuilder::declareComponentSubclass(QmlJS::AST::UiObjectInitialize
         // be instantiated when "id:" is encountered
         name = QualifiedIdentifier();
 
+        // Use ExpressionVisitor to find the declaration of the base class
+        DeclarationPointer baseClass = findType(qualifiedId).declaration;
         StructureType::Ptr type(new StructureType);
 
         {
@@ -690,7 +693,9 @@ void DeclarationBuilder::declareComponentSubclass(QmlJS::AST::UiObjectInitialize
             decl->setType(type);                // The class needs to know its type early because it contains definitions that depend on that type
             type->setDeclaration(decl);
 
-            addBaseClass(decl, baseclass);
+            if (baseClass) {
+                addBaseClass(decl, baseClass->indexedType());
+            }
         }
         openType(type);
     }
@@ -792,12 +797,10 @@ DeclarationBuilder::ExportLiteralsAndNames DeclarationBuilder::exportedNames(Qml
         if (!knownNames.contains(name)) {
             knownNames.insert(name);
 
-            // Verions of a given name are given in ascending order. This module
-            // "declares" the export only if it has the version in which the export
-            // appeared for the first time. We come here if the symbol appears for
-            // the first time in the exports list, and this check keeps it only
-            // if this module has the correct version
-            if (version == m_session->moduleVersion()) {
+            // Declare the components that appeared in a version lower or equal
+            // to the version of this module. Lexicographic order can be used
+            // because only the last digit of the version changes.
+            if (version <= m_session->moduleVersion()) {
                 res.append(qMakePair(stringliteral, name));
             }
         }
@@ -935,7 +938,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiObjectDefinition* node)
     }
 
     // Declare the component subclass
-    declareComponentSubclass(node->initializer, range, baseclass);
+    declareComponentSubclass(node->initializer, range, baseclass, node->qualifiedTypeNameId);
 
     // If we had a component with exported names, declare these exports
     if (baseclass == QLatin1String("Component")) {
@@ -1035,7 +1038,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiObjectBinding* node)
     RangeInRevision range = m_session->locationToRange(node->qualifiedTypeNameId->identifierToken);
     QString baseclass = node->qualifiedTypeNameId->name.toString();
 
-    declareComponentSubclass(node->initializer, range, baseclass);
+    declareComponentSubclass(node->initializer, range, baseclass, node->qualifiedTypeNameId);
 
     return DeclarationBuilderBase::visit(node);
 }

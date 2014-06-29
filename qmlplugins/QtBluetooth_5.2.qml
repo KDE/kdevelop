@@ -1,4 +1,4 @@
-import QtBluetooth 5.0
+import QtQuick 2.0
 
 // This file describes the plugin-supplied types contained in the library.
 // It is used for QML tooling purposes only.

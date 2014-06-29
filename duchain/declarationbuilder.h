@@ -102,7 +102,8 @@ protected:
                      const KDevelop::QualifiedIdentifier &name);
     void declareComponentSubclass(QmlJS::AST::UiObjectInitializer* node,
                                   const KDevelop::RangeInRevision& range,
-                                  const QString& baseclass);
+                                  const QString& baseclass,
+                                  QmlJS::AST::UiQualifiedId* qualifiedId);
     void declareComponentInstance(QmlJS::AST::ExpressionStatement *expression);
     ExportLiteralsAndNames exportedNames(QmlJS::AST::ExpressionStatement *exports);
     void declareExports(const ExportLiteralsAndNames& exports,
